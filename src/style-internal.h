@@ -22,6 +22,7 @@
 #include <vector>
 #include <map>
 
+#include "attributes.h"
 #include "style-enums.h"
 
 #include "color.h"
@@ -207,7 +208,8 @@ public:
         return !(*this == rhs);
     }
 
-    Glib::ustring const &name() const { return _name; }
+    virtual SPAttributeEnum id() const { return SP_ATTR_INVALID; }
+    Glib::ustring const &name() const;
 
 private:
     Glib::ustring _name;
@@ -224,6 +226,29 @@ public:
 public:
     SPStyle* style;       // Used by SPIPaint, SPIFilter... to find values of other properties
 };
+
+
+/**
+ * Decorator which overrides SPIBase::id()
+ */
+template <SPAttributeEnum Id, class Base>
+class TypedSPI : public Base {
+  public:
+    using Base::Base;
+
+    /**
+     * Get the attribute enum
+     */
+    SPAttributeEnum id() const override { return Id; }
+    static SPAttributeEnum static_id() { return Id; }
+
+    /**
+     * Upcast to the base class
+     */
+    Base *upcast() { return static_cast<Base *>(this); }
+    Base const *upcast() const { return static_cast<Base const *>(this); }
+};
+
 
 /// Float type internal to SPStyle. (Only 'stroke-miterlimit')
 class SPIFloat : public SPIBase

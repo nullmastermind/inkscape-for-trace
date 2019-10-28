@@ -54,8 +54,8 @@ const char *href_like_attributes[] = {
 
 const SPIPaint SPStyle::* SPIPaint_members[] = {
     //&SPStyle::color,
-    &SPStyle::fill,
-    &SPStyle::stroke,
+    reinterpret_cast<SPIPaint SPStyle::*>(&SPStyle::fill),
+    reinterpret_cast<SPIPaint SPStyle::*>(&SPStyle::stroke),
 };
 const char* SPIPaint_properties[] = {
     //"color",

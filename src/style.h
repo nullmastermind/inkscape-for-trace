@@ -89,6 +89,10 @@ private:
     /// Pointers to all the properties (for looping through them)
     std::vector<SPIBase *> _properties;
 
+    // Shorthand for better readability
+    template <SPAttributeEnum Id, class Base>
+    using T = TypedSPI<Id, Base>;
+
 public:
 
     /* ----------------------- THE PROPERTIES ------------------------- */
@@ -97,197 +101,197 @@ public:
     /* SVG 2 attributes promoted to properties. */
 
     /** Path data */
-    SPIString d;
+    T<SP_ATTR_D, SPIString> d;
 
     /* Font ---------------------------- */
 
     /** Font style */
-    SPIEnum<SPCSSFontStyle> font_style;
+    T<SP_PROP_FONT_STYLE, SPIEnum<SPCSSFontStyle>> font_style;
     /** Which substyle of the font (CSS 2. CSS 3 redefines as shorthand) */
-    SPIEnum<SPCSSFontVariant> font_variant;
+    T<SP_PROP_FONT_VARIANT, SPIEnum<SPCSSFontVariant>> font_variant;
     /** Weight of the font */
-    SPIEnum<SPCSSFontWeight> font_weight;
+    T<SP_PROP_FONT_WEIGHT, SPIEnum<SPCSSFontWeight>> font_weight;
     /** Stretch of the font */
-    SPIEnum<SPCSSFontStretch> font_stretch;
+    T<SP_PROP_FONT_STRETCH, SPIEnum<SPCSSFontStretch>> font_stretch;
     /** Size of the font */
-    SPIFontSize font_size;
+    T<SP_PROP_FONT_SIZE, SPIFontSize> font_size;
     /** Line height (css2 10.8.1) */
-    SPILengthOrNormal line_height;
+    T<SP_PROP_LINE_HEIGHT, SPILengthOrNormal> line_height;
     /** Font family */
-    SPIString font_family;
+    T<SP_PROP_FONT_FAMILY, SPIString> font_family;
     /** Font shorthand */
-    SPIFont font;
+    T<SP_PROP_FONT, SPIFont> font;
     /** Full font name, as font_factory::ConstructFontSpecification would give, for internal use. */
-    SPIString font_specification;
+    T<SP_PROP_INKSCAPE_FONT_SPEC, SPIString> font_specification;
 
     /* Font variants -------------------- */
     /** Font variant ligatures */
-    SPILigatures font_variant_ligatures;
+    T<SP_PROP_FONT_VARIANT_LIGATURES, SPILigatures> font_variant_ligatures;
     /** Font variant position (subscript/superscript) */
-    SPIEnum<SPCSSFontVariantPosition> font_variant_position;
+    T<SP_PROP_FONT_VARIANT_POSITION, SPIEnum<SPCSSFontVariantPosition>> font_variant_position;
     /** Font variant caps (small caps) */
-    SPIEnum<SPCSSFontVariantCaps> font_variant_caps;
+    T<SP_PROP_FONT_VARIANT_CAPS, SPIEnum<SPCSSFontVariantCaps>> font_variant_caps;
     /** Font variant numeric (numerical formatting) */
-    SPINumeric font_variant_numeric;
+    T<SP_PROP_FONT_VARIANT_NUMERIC, SPINumeric> font_variant_numeric;
     /** Font variant alternates (alternates/swatches) */
-    SPIEnum<SPCSSFontVariantAlternates> font_variant_alternates;
+    T<SP_PROP_FONT_VARIANT_ALTERNATES, SPIEnum<SPCSSFontVariantAlternates>> font_variant_alternates;
     /** Font variant East Asian */
-    SPIEastAsian font_variant_east_asian;
+    T<SP_PROP_FONT_VARIANT_EAST_ASIAN, SPIEastAsian> font_variant_east_asian;
     /** Font feature settings (Low level access to TrueType tables) */
-    SPIString font_feature_settings;
+    T<SP_PROP_FONT_FEATURE_SETTINGS, SPIString> font_feature_settings;
 
     /** Font variation settings (Low level access to OpenType variable font design-coordinate values) */
-    SPIFontVariationSettings font_variation_settings;
+    T<SP_PROP_FONT_VARIATION_SETTINGS, SPIFontVariationSettings> font_variation_settings;
 
     /* Text ----------------------------- */
 
     /** First line indent of paragraphs (css2 16.1) */
-    SPILength text_indent;
+    T<SP_PROP_TEXT_INDENT, SPILength> text_indent;
     /** text alignment (css2 16.2) (not to be confused with text-anchor) */
-    SPIEnum<SPCSSTextAlign> text_align;
+    T<SP_PROP_TEXT_ALIGN, SPIEnum<SPCSSTextAlign>> text_align;
 
     /** letter spacing (css2 16.4) */
-    SPILengthOrNormal letter_spacing;
+    T<SP_PROP_LETTER_SPACING, SPILengthOrNormal> letter_spacing;
     /** word spacing (also css2 16.4) */
-    SPILengthOrNormal word_spacing;
+    T<SP_PROP_WORD_SPACING, SPILengthOrNormal> word_spacing;
     /** capitalization (css2 16.5) */
-    SPIEnum<SPCSSTextTransform> text_transform;
+    T<SP_PROP_TEXT_TRANSFORM, SPIEnum<SPCSSTextTransform>> text_transform;
 
     /* CSS3 Text */
     /** text direction (svg1.1) */
-    SPIEnum<SPCSSDirection> direction;
+    T<SP_PROP_DIRECTION, SPIEnum<SPCSSDirection>> direction;
     /** Writing mode (svg1.1 10.7.2, CSS Writing Modes 3) */
-    SPIEnum<SPCSSWritingMode> writing_mode;
+    T<SP_PROP_WRITING_MODE, SPIEnum<SPCSSWritingMode>> writing_mode;
     /** Text orientation (CSS Writing Modes 3) */
-    SPIEnum<SPCSSTextOrientation> text_orientation;
+    T<SP_PROP_TEXT_ORIENTATION, SPIEnum<SPCSSTextOrientation>> text_orientation;
     /** Dominant baseline (svg1.1) */
-    SPIEnum<SPCSSBaseline> dominant_baseline;
+    T<SP_PROP_DOMINANT_BASELINE, SPIEnum<SPCSSBaseline>> dominant_baseline;
     /** Baseline shift (svg1.1 10.9.2) */
-    SPIBaselineShift baseline_shift;
+    T<SP_PROP_BASELINE_SHIFT, SPIBaselineShift> baseline_shift;
 
     /* SVG */
     /** Anchor of the text (svg1.1 10.9.1) */
-    SPIEnum<SPTextAnchor> text_anchor;
+    T<SP_PROP_TEXT_ANCHOR, SPIEnum<SPTextAnchor>> text_anchor;
 
     /** white space (svg2) */
-    SPIEnum<SPWhiteSpace> white_space;
+    T<SP_PROP_WHITE_SPACE, SPIEnum<SPWhiteSpace>> white_space;
 
     /** SVG2 Text Wrapping */
-    SPIShapes shape_inside;
-    SPIShapes shape_subtract;
-    SPILength shape_padding;
-    SPILength shape_margin;
-    SPILength inline_size;
+    T<SP_PROP_SHAPE_INSIDE, SPIShapes> shape_inside;
+    T<SP_PROP_SHAPE_SUBTRACT, SPIShapes> shape_subtract;
+    T<SP_PROP_SHAPE_PADDING, SPILength> shape_padding;
+    T<SP_PROP_SHAPE_MARGIN, SPILength> shape_margin;
+    T<SP_PROP_INLINE_SIZE, SPILength> inline_size;
 
     /* Text Decoration ----------------------- */
 
     /** text decoration (css2 16.3.1) */
-    SPITextDecoration      text_decoration; 
+    T<SP_PROP_TEXT_DECORATION, SPITextDecoration> text_decoration; 
     /** CSS 3 2.1, 2.2, 2.3 */
     /** Not done yet, test_decoration3        = css3 2.4*/
-    SPITextDecorationLine  text_decoration_line;
-    SPITextDecorationStyle text_decoration_style;  // SPIEnum? Only one can be set at time.
-    SPIColor               text_decoration_color;
-    SPIPaint               text_decoration_fill;
-    SPIPaint               text_decoration_stroke;
+    T<SP_PROP_TEXT_DECORATION_LINE, SPITextDecorationLine> text_decoration_line;
+    T<SP_PROP_TEXT_DECORATION_STYLE, SPITextDecorationStyle> text_decoration_style;  // SPIEnum? Only one can be set at time.
+    T<SP_PROP_TEXT_DECORATION_COLOR, SPIColor> text_decoration_color;
+    T<SP_PROP_TEXT_DECORATION_FILL, SPIPaint> text_decoration_fill;
+    T<SP_PROP_TEXT_DECORATION_STROKE, SPIPaint> text_decoration_stroke;
     // used to implement text_decoration, not saved to or read from SVG file
-    SPITextDecorationData  text_decoration_data;
+    SPITextDecorationData text_decoration_data;
 
     // 16.3.2 is text-shadow. That's complicated.
 
     /* General visual properties ------------- */
 
     /** clip-rule: 0 nonzero, 1 evenodd */
-    SPIEnum<SPWindRule> clip_rule;
+    T<SP_PROP_CLIP_RULE, SPIEnum<SPWindRule>> clip_rule;
 
     /** display */
-    SPIEnum<SPCSSDisplay> display;
+    T<SP_PROP_DISPLAY, SPIEnum<SPCSSDisplay>> display;
 
     /** overflow */
-    SPIEnum<SPOverflow> overflow;
+    T<SP_PROP_OVERFLOW, SPIEnum<SPOverflow>> overflow;
 
     /** visibility */
-    SPIEnum<SPVisibility> visibility;
+    T<SP_PROP_VISIBILITY, SPIEnum<SPVisibility>> visibility;
 
     /** opacity */
-    SPIScale24 opacity;
+    T<SP_PROP_OPACITY, SPIScale24> opacity;
 
     /** mix-blend-mode:  CSS Compositing and Blending Level 1 */
-    SPIEnum<SPIsolation> isolation;
-    SPIEnum<SPBlendMode> mix_blend_mode;
+    T<SP_PROP_ISOLATION, SPIEnum<SPIsolation>> isolation;
+    T<SP_PROP_MIX_BLEND_MODE, SPIEnum<SPBlendMode>> mix_blend_mode;
 
-    SPIPaintOrder paint_order;
+    T<SP_PROP_PAINT_ORDER, SPIPaintOrder> paint_order;
 
     /** color */
-    SPIColor color;
+    T<SP_PROP_COLOR, SPIColor> color;
     /** color-interpolation */
-    SPIEnum<SPColorInterpolation> color_interpolation;
+    T<SP_PROP_COLOR_INTERPOLATION, SPIEnum<SPColorInterpolation>> color_interpolation;
     /** color-interpolation-filters */
-    SPIEnum<SPColorInterpolation> color_interpolation_filters;
+    T<SP_PROP_COLOR_INTERPOLATION_FILTERS, SPIEnum<SPColorInterpolation>> color_interpolation_filters;
 
     /** solid-color */
-    SPIColor solid_color;
+    T<SP_PROP_SOLID_COLOR, SPIColor> solid_color;
     /** solid-opacity */
-    SPIScale24 solid_opacity;
+    T<SP_PROP_SOLID_OPACITY, SPIScale24> solid_opacity;
 
     /** vector effect */
-    SPIVectorEffect vector_effect;
+    T<SP_PROP_VECTOR_EFFECT, SPIVectorEffect> vector_effect;
 
     /** fill */
-    SPIPaint fill;
+    T<SP_PROP_FILL, SPIPaint> fill;
     /** fill-opacity */
-    SPIScale24 fill_opacity;
+    T<SP_PROP_FILL_OPACITY, SPIScale24> fill_opacity;
     /** fill-rule: 0 nonzero, 1 evenodd */
-    SPIEnum<SPWindRule> fill_rule;
+    T<SP_PROP_FILL_RULE, SPIEnum<SPWindRule>> fill_rule;
 
     /** stroke */
-    SPIPaint stroke;
+    T<SP_PROP_STROKE, SPIPaint> stroke;
     /** stroke-width */
-    SPILength stroke_width;
+    T<SP_PROP_STROKE_WIDTH, SPILength> stroke_width;
     /** stroke-linecap */
-    SPIEnum<SPStrokeCapType> stroke_linecap;
+    T<SP_PROP_STROKE_LINECAP, SPIEnum<SPStrokeCapType>> stroke_linecap;
     /** stroke-linejoin */
-    SPIEnum<SPStrokeJoinType> stroke_linejoin;
+    T<SP_PROP_STROKE_LINEJOIN, SPIEnum<SPStrokeJoinType>> stroke_linejoin;
     /** stroke-miterlimit */
-    SPIFloat stroke_miterlimit;
+    T<SP_PROP_STROKE_MITERLIMIT, SPIFloat> stroke_miterlimit;
     /** stroke-dasharray */
-    SPIDashArray stroke_dasharray;
+    T<SP_PROP_STROKE_DASHARRAY, SPIDashArray> stroke_dasharray;
     /** stroke-dashoffset */
-    SPILength stroke_dashoffset;
+    T<SP_PROP_STROKE_DASHOFFSET, SPILength> stroke_dashoffset;
     /** stroke-opacity */
-    SPIScale24 stroke_opacity;
+    T<SP_PROP_STROKE_OPACITY, SPIScale24> stroke_opacity;
 
     /** Marker list */
-    SPIString marker;
-    SPIString marker_start;
-    SPIString marker_mid;
-    SPIString marker_end;
+    T<SP_PROP_MARKER, SPIString> marker;
+    T<SP_PROP_MARKER_START, SPIString> marker_start;
+    T<SP_PROP_MARKER_MID, SPIString> marker_mid;
+    T<SP_PROP_MARKER_END, SPIString> marker_end;
     SPIString* marker_ptrs[SP_MARKER_LOC_QTY]; 
 
     /* Filter effects ------------------------ */
 
     /** Filter effect */
-    SPIFilter filter;
+    T<SP_PROP_FILTER, SPIFilter> filter;
     /** Filter blend mode */
-    SPIEnum<SPBlendMode> filter_blend_mode;
+    T<SP_ATTR_INVALID, SPIEnum<SPBlendMode>> filter_blend_mode;
     /** normally not used, but duplicates the Gaussian blur deviation (if any) from the attached
         filter when the style is used for querying */
-    SPILength filter_gaussianBlur_deviation;
+    T<SP_ATTR_INVALID, SPILength> filter_gaussianBlur_deviation;
     /** enable-background, used for defining where filter effects get their background image */
-    SPIEnum<SPEnableBackground> enable_background;
+    T<SP_PROP_ENABLE_BACKGROUND, SPIEnum<SPEnableBackground>> enable_background;
 
     /** gradient-stop */
-    SPIColor stop_color;
-    SPIScale24 stop_opacity;
+    T<SP_PROP_STOP_COLOR, SPIColor> stop_color;
+    T<SP_PROP_STOP_OPACITY, SPIScale24> stop_opacity;
 
     /* Rendering hints ----------------------- */
 
     /** hints on how to render: e.g. speed vs. accuracy.
      * As of April, 2013, only image_rendering used. */
-    SPIEnum<SPColorRendering> color_rendering;
-    SPIEnum<SPImageRendering> image_rendering;
-    SPIEnum<SPShapeRendering> shape_rendering;
-    SPIEnum<SPTextRendering> text_rendering;
+    T<SP_PROP_COLOR_RENDERING, SPIEnum<SPColorRendering>> color_rendering;
+    T<SP_PROP_IMAGE_RENDERING, SPIEnum<SPImageRendering>> image_rendering;
+    T<SP_PROP_SHAPE_RENDERING, SPIEnum<SPShapeRendering>> shape_rendering;
+    T<SP_PROP_TEXT_RENDERING, SPIEnum<SPTextRendering>> text_rendering;
 
     /* ----------------------- END PROPERTIES ------------------------- */
 
@@ -333,6 +337,11 @@ public:
      */
     std::string getFontFeatureString();
 
+    /**
+     * Get either the fill or the stroke property
+     */
+    SPIPaint       *getFillOrStroke(bool fill_)       { return fill_ ? fill.upcast() : stroke.upcast(); }
+    SPIPaint const *getFillOrStroke(bool fill_) const { return fill_ ? fill.upcast() : stroke.upcast(); }
 };
 
 SPStyle *sp_style_ref(SPStyle *style); // SPStyle::ref();

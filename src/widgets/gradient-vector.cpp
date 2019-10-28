@@ -346,7 +346,7 @@ static void get_all_doc_items(std::vector<SPItem*> &list, SPObject *from)
  */
 static SPGradient * gr_item_get_gradient(SPItem *item, gboolean fillorstroke)
 {
-    SPIPaint *item_paint = (fillorstroke) ? &(item->style->fill) : &(item->style->stroke);
+    SPIPaint *item_paint = item->style->getFillOrStroke(fillorstroke);
     if (item_paint->isPaintserver()) {
 
         SPPaintServer *item_server = (fillorstroke) ?

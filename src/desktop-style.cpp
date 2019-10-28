@@ -503,7 +503,7 @@ objects_query_fillstroke (const std::vector<SPItem*> &objects, SPStyle *style_re
         return QUERY_STYLE_NOTHING;
     }
 
-    SPIPaint *paint_res = isfill? &style_res->fill : &style_res->stroke;
+    SPIPaint *paint_res = style_res->getFillOrStroke(isfill);
     bool paintImpossible = true;
     paint_res->set = true;
 
@@ -527,7 +527,7 @@ objects_query_fillstroke (const std::vector<SPItem*> &objects, SPStyle *style_re
             continue;
         }
 
-        SPIPaint *paint = isfill? &style->fill : &style->stroke;
+        SPIPaint *paint = style->getFillOrStroke(isfill);
         if (!paint) {
             continue;
         }

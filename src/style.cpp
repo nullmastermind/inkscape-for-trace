@@ -76,6 +76,7 @@ static CRSelEng *sp_repr_sel_eng();
 class SPStylePropHelper {
     SPStylePropHelper() {
 #define REGISTER_PROPERTY(id, member, name) \
+        g_assert(decltype(SPStyle::member)::static_id() == id); \
         _register(reinterpret_cast<SPIBasePtr>(&SPStyle::member), id) /* name unused */
 
         // SVG 2: Attributes promoted to properties
@@ -1289,7 +1290,7 @@ sp_style_set_ipaint_to_uri_string (SPStyle *style, SPIPaint *paint, const gchar 
 // Called in: desktop-style.cpp
 void sp_style_set_to_uri(SPStyle *style, bool isfill, Inkscape::URI const *uri)
 {
-    sp_style_set_ipaint_to_uri(style, isfill ? &style->fill : &style->stroke, uri, style->document);
+    sp_style_set_ipaint_to_uri(style, style->getFillOrStroke(isfill), uri, style->document);
 }
 
 // Called in: widgets/font-selector.cpp, widgets/text-toolbar.cpp, ui/dialog/text-edit.cpp

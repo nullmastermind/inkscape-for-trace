@@ -1545,7 +1545,7 @@ void SPPaintSelector::setFlatColor( SPDesktop *desktop, gchar const *color_prope
 SPPaintSelector::Mode SPPaintSelector::getModeForStyle(SPStyle const & style, FillOrStroke kind)
 {
     Mode mode = MODE_UNSET;
-    SPIPaint const & target = (kind == FILL) ? style.fill : style.stroke;
+    SPIPaint const &target = *style.getFillOrStroke(kind == FILL);
 
     if ( !target.set ) {
         mode = MODE_UNSET;

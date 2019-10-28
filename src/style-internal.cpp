@@ -54,6 +54,8 @@ using Inkscape::CSSOStringStream;
 
 // SPIBase --------------------------------------------------------------
 
+Glib::ustring const &SPIBase::name() const { return _name; }
+
 // Standard criteria for writing a property
 // dfp == different from parent
 inline bool should_write( guint const flags, bool set, bool dfp, bool src) {
@@ -2272,7 +2274,7 @@ SPIFont::read( gchar const *str ) {
             } else {
                 // Try to parse each property in turn
 
-                SPIEnum<SPCSSFontStyle> test_style("font-style", enum_font_style);
+                decltype(style->font_style) test_style("font-style", enum_font_style);
                 test_style.read( lparam.c_str() );
                 if( test_style.set ) {
                     style->font_style = test_style;
@@ -2280,7 +2282,7 @@ SPIFont::read( gchar const *str ) {
                 }
 
                 // font-variant (Note: only CSS2.1 value small-caps is valid in shortcut.)
-                SPIEnum<SPCSSFontVariant> test_variant("font-variant", enum_font_variant);
+                decltype(style->font_variant) test_variant("font-variant", enum_font_variant);
                 test_variant.read( lparam.c_str() );
                 if( test_variant.set ) {
                     style->font_variant = test_variant;
@@ -2288,7 +2290,7 @@ SPIFont::read( gchar const *str ) {
                 }
 
                 // font-weight
-                SPIEnum<SPCSSFontWeight> test_weight("font-weight", enum_font_weight);
+                decltype(style->font_weight) test_weight("font-weight", enum_font_weight);
                 test_weight.read( lparam.c_str() );
                 if( test_weight.set ) {
                     style->font_weight = test_weight;
@@ -2296,7 +2298,7 @@ SPIFont::read( gchar const *str ) {
                 }
 
                 // font-stretch (added in CSS 3 Fonts)
-                SPIEnum<SPCSSFontStretch> test_stretch("font-stretch", enum_font_stretch);
+                decltype(style->font_stretch) test_stretch("font-stretch", enum_font_stretch);
                 test_stretch.read( lparam.c_str() );
                 if( test_stretch.set ) {
                     style->font_stretch = test_stretch;
@@ -2304,7 +2306,7 @@ SPIFont::read( gchar const *str ) {
                 }
 
                 // font-size
-                SPIFontSize test_size;
+                decltype(style->font_size) test_size;
                 test_size.read( lparam.c_str() );
                 if( test_size.set ) {
                     style->font_size = test_size;
@@ -2792,13 +2794,13 @@ SPITextDecoration::read( gchar const *str ) {
 
     bool is_css3 = false;
 
-    SPITextDecorationLine test_line;
+    decltype(style->text_decoration_line) test_line;
     test_line.read( str );
     if( test_line.set ) {
         style->text_decoration_line = test_line;
     }
 
-    SPITextDecorationStyle test_style;
+    decltype(style->text_decoration_style) test_style;
     test_style.read( str );
     if( test_style.set ) {
         style->text_decoration_style = test_style;
@@ -2809,7 +2811,7 @@ SPITextDecoration::read( gchar const *str ) {
     // one is used  ???? then why break on set?
 
     // This could certainly be designed better
-    SPIColor test_color("text-decoration-color");
+    decltype(style->text_decoration_color) test_color("text-decoration-color");
     test_color.setStylePointer( style );
     test_color.read( "currentColor" );  // Default value
     test_color.set = false;

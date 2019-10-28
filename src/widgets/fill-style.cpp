@@ -248,8 +248,8 @@ void FillNStroke::performUpdate()
     // query style from desktop into it. This returns a result flag and fills query with the style of subselection, if any, or selection
     int result = sp_desktop_query_style(desktop, &query, (kind == FILL) ? QUERY_STYLE_PROPERTY_FILL : QUERY_STYLE_PROPERTY_STROKE);
 
-    SPIPaint &targPaint = (kind == FILL) ? query.fill : query.stroke;
-    SPIScale24 &targOpacity = (kind == FILL) ? query.fill_opacity : query.stroke_opacity;
+    SPIPaint &targPaint = *query.getFillOrStroke(kind == FILL);
+    SPIScale24 &targOpacity = *(kind == FILL ? query.fill_opacity.upcast() : query.stroke_opacity.upcast());
 
     switch (result) {
         case QUERY_STYLE_NOTHING:
@@ -561,7 +561,7 @@ void FillNStroke::updateFromPaint()
                     SPStyle query(desktop->doc());
                     int result = objects_query_fillstroke(items, &query, kind == FILL);
                     if (result == QUERY_STYLE_MULTIPLE_SAME) {
-                        SPIPaint &targPaint = (kind == FILL) ? query.fill : query.stroke;
+                        SPIPaint &targPaint = *query.getFillOrStroke(kind == FILL);
                         SPColor common;
                         if (!targPaint.isColor()) {
                             common = sp_desktop_get_color(desktop, kind == FILL);
@@ -755,7 +755,7 @@ void FillNStroke::updateFromPaint()
                         SPObject *selobj = item;
 
                         SPStyle *style = selobj->style;
-                        if (style && ((kind == FILL) ? style->fill : style->stroke).isPaintserver()) {
+                        if (style && ((kind == FILL) ? style->fill.isPaintserver() : style->stroke.isPaintserver())) {
                             SPPaintServer *server = (kind == FILL) ?
                                 selobj->style->getFillPaintServer() :
                                 selobj->style->getStrokePaintServer();

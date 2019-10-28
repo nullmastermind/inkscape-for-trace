@@ -2007,12 +2007,12 @@ std::vector<SPItem*> sp_get_same_fill_or_stroke_color(SPItem *sel, std::vector<S
     std::vector<SPItem*> matches ;
     gboolean match = false;
 
-    SPIPaint *sel_paint = (type == SP_FILL_COLOR) ? &(sel->style->fill) : &(sel->style->stroke);
+    SPIPaint *sel_paint = sel->style->getFillOrStroke(type == SP_FILL_COLOR);
 
     for (std::vector<SPItem*>::const_reverse_iterator i=src.rbegin();i!=src.rend();++i) {
         SPItem *iter = *i;
         if (iter) {
-            SPIPaint *iter_paint = (type == SP_FILL_COLOR) ? &(iter->style->fill) : &(iter->style->stroke);
+            SPIPaint *iter_paint = iter->style->getFillOrStroke(type == SP_FILL_COLOR);
             match = false;
             if (sel_paint->isColor() && iter_paint->isColor() // color == color comparison doesn't seem to work here.
                 && (sel_paint->value.color.toRGBA32(1.0) == iter_paint->value.color.toRGBA32(1.0))) {

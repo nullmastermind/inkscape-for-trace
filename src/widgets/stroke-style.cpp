@@ -877,7 +877,7 @@ StrokeStyle::updateLine()
 
     int result_order = sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_PAINTORDER);
 
-    SPIPaint &targPaint = (kind == FILL) ? query.fill : query.stroke;
+    SPIPaint &targPaint = *query.getFillOrStroke(kind == FILL);
 
     if (!sel || sel->isEmpty()) {
         // Nothing selected, grey-out all controls in the stroke-style dialog
