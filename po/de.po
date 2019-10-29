@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2019-10-10 21:27+0200\n"
-"PO-Revision-Date: 2019-10-26 23:55+0100\n"
+"PO-Revision-Date: 2019-10-29 01:21+0100\n"
 "Last-Translator: Maren Hachmann <marenhachmann@yahoo.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -34163,6 +34163,8 @@ msgstr ""
 #: ../share/extensions/embedimage.py:78
 msgid "File not found \"{}\". Unable to embed image."
 msgstr ""
+"Die Datei \"{}\" konnte nicht gefunden werden. Bild kann nicht eingebettet"
+" werden."
 
 #: ../share/extensions/embedimage.py:92
 #, python-format
@@ -34206,10 +34208,9 @@ msgstr ""
 "fehlen Teile des Inhalts der Zeichnung."
 
 #: ../share/extensions/hpgl_output.py:55
-#, fuzzy
 msgid "No paths were found. Please convert objects you want into paths."
 msgstr ""
-"Keine Pfade gefunden. Bitte alle zu plottenden Objekte in Pfade umwandeln."
+"Keine Pfade gefunden. Bitte alle gewünschten Objekte in Pfade umwandeln."
 
 #: ../share/extensions/inkex/bezier.py:406
 msgid "Area is zero, cannot calculate Center of Mass"
@@ -34217,7 +34218,7 @@ msgstr "Fläche ist null, kann den Flächenmittelpunkt nicht berechnen"
 
 #: ../share/extensions/inkex/deprecated.py:84
 msgid "{} is deprecated and should be removed"
-msgstr ""
+msgstr "{} ist veraltet und sollte entfernt werden"
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 93
@@ -34227,6 +34228,9 @@ msgid ""
 "change `self.OptionParser.add_option` to `self.arg_parser.add_argument`; the "
 "arguments are similar."
 msgstr ""
+"{} oder `optparse` ist veraltet und wurde durch `argparser` ersetzt. "
+" `self.OptionParser.add_option` muss durch `self.arg_parser.add_argument`"
+" ersetzt werden. Die Argumente sind dabei ähnlich."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 108
@@ -34235,6 +34239,8 @@ msgid ""
 "{} method is now a required method. It should be created on {cls}, even if "
 "it does nothing."
 msgstr ""
+"Die Methode {} muss jetzt definiert werden. Sie sollte für die Klasse {cls}"
+" erstellt werden, auch wenn sie nichts tut."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 114
@@ -34242,6 +34248,8 @@ msgstr ""
 msgid ""
 "{} is now a method in the svg. Use `self.svg.get_current_layer()` instead."
 msgstr ""
+"{} ist jetzt eine Methode der Klasse `SvgDocumentElement`. Stattdessen sollte"
+" `self.svg.get_current_layer()` verwendet werden."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 120
@@ -34249,29 +34257,35 @@ msgstr ""
 msgid ""
 "{} is now a method in the svg. Use `self.svg.get_center_position()` instead."
 msgstr ""
+"{} ist jetzt eine Methode der Klasse `SvgDocumentElement`. Stattdessen sollte"
+" `self.svg.get_center_position()` verwendet werden."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 125
 #: ../share/extensions/inkex/deprecated.py:132
 msgid "{} is now a dict in the svg. Use `self.svg.selected`."
 msgstr ""
+"{} ist jetzt ein `dict`-Objekt der Klasse `SvgDocumentElement`. Stattdessen"
+" sollte `self.svg.selected` verwendet werden."
 
 #: ../share/extensions/inkex/deprecated.py:137
 msgid ""
 "{} is now a method in the svg document. Use `self.svg.get_ids()` instead."
 msgstr ""
+"{} ist jetzt eine Methode der Klasse `SvgDocumentElement`. Stattdessen sollte"
+" `self.svg.get_ids()` verwendet werden."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 143
 #: ../share/extensions/inkex/deprecated.py:144
 msgid "Use `self.svg.get_ids()` instead of {} and `doc_ids`."
-msgstr ""
+msgstr "Statt {} and `doc_ids` sollte `self.svg.get_ids()` verwendet werden."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 148
 #: ../share/extensions/inkex/deprecated.py:149
 msgid "{} has been removed"
-msgstr ""
+msgstr "{} ist nicht mehr verfügbar."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 136
@@ -34279,18 +34293,24 @@ msgstr ""
 msgid ""
 "{} is now a method in the svg. Use `self.svg.getElementById(eid)` instead."
 msgstr ""
+"{} ist jetzt eine Methode der Klasse `SvgDocumentElement`. Stattdessen sollte"
+" `self.svg.getElementById(eid)` verwendet werden."
 
 #: ../share/extensions/inkex/deprecated.py:157
 msgid ""
 "{} is now a new method in the svg document. Use `self.svg.getElement(path)` "
 "instead.`"
 msgstr ""
+"{} ist jetzt eine neue Methode der Klasse `SvgDocumentElement`. Stattdessen"
+" sollte `self.svg.getElement(path)` verwendet werden."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 162
 #: ../share/extensions/inkex/deprecated.py:163
 msgid "{} is no longer in use. Use the lxml .getparent() method instead."
 msgstr ""
+"{} wird nicht mehr verwendet. Stattdessen kann die lxml-Methode `getparent()`"
+" verwendet werden."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 152
@@ -34299,77 +34319,99 @@ msgid ""
 "{} is now a property of the svg. Use `self.svg.namedview` to access this "
 "element"
 msgstr ""
+"{} ist jetzt eine Eigenschaft der Klasse `SvgDocumentElement`."
+" `self.svg.namedview` kann verwendet werden, um auf dieses Element"
+" zuzugreifen."
 
 #: ../share/extensions/inkex/deprecated.py:173
 msgid ""
 "{} is now a method of the namedview element object. Use `self.svg.namedview."
 "add(Guide().move_to(x, y, a))` instead"
 msgstr ""
+"{} ist jetzt eine Methode des `namedview`-Objektes. Stattdessen kann"
+" `self.svg.namedview."
+"add(Guide().move_to(x, y, a))` verwendet werden."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 178
 #: ../share/extensions/inkex/deprecated.py:179
 msgid "{} is now `Effect.run()`. The `output` argument has changed."
-msgstr ""
+msgstr "{} heißt jetzt `Effect.run()`. Das Argument `output` wurde geändert."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 184
 #: ../share/extensions/inkex/deprecated.py:185
 msgid "self.args[-1] is now self.options.input_file"
-msgstr ""
+msgstr "`self.args[-1]` wurde durch `self.options.input_file` ersetzt."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 189
 #: ../share/extensions/inkex/deprecated.py:190
 msgid "self.svg_file is now self.options.input_file"
-msgstr ""
+msgstr "`self.svg_file` wurde durch `self.options.input_file` ersetzt."
 
 #: ../share/extensions/inkex/deprecated.py:202
 msgid ""
 "{} is now a method in the svg document.  Use `self.svg."
 "get_unique_id(old_id)` instead."
 msgstr ""
+"{} ist jetzt eine Methode der Klasse `SvgDocumentElement`. Stattdessen sollte"
+" `self.svg."
+"get_unique_id(old_id)` verwendet werden."
 
 #: ../share/extensions/inkex/deprecated.py:207
 msgid "{} is now a property of the svg document. Use `self.svg.width` instead."
 msgstr ""
+"{} ist jetzt eine Eigenschaft der Klasse `SvgDocumentElement`. Stattdessen"
+" sollte `self.svg.width` verwendet werden."
 
 #: ../share/extensions/inkex/deprecated.py:212
 msgid ""
 "{} is now a property of the svg document. Use `self.svg.height` instead."
 msgstr ""
+"{} ist jetzt eine Eigenschaft der Klasse `SvgDocumentElement`. Stattdessen"
+" sollte `self.svg.height` verwendet werden."
 
 #: ../share/extensions/inkex/deprecated.py:217
 msgid "{} is now a property of the svg document. Use `self.svg.unit` instead."
 msgstr ""
+"{} ist jetzt eine Eigenschaft der Klasse `SvgDocumentElement`. Stattdessen"
+" sollte `self.svg.unit` verwendet werden."
 
 #: ../share/extensions/inkex/deprecated.py:222
 msgid ""
 "{} is now a method in the svg document. Use `self.svg.unittouu(str)` instead."
 msgstr ""
+"{} ist jetzt eine Methode der Klasse `SvgDocumentElement`. Stattdessen sollte"
+" `self.svg.unittouu(str)` verwendet werden."
 
 #: ../share/extensions/inkex/deprecated.py:227
 msgid ""
 "{} is now a method in the svg document. Use `self.svg.uutounit(value, unit)` "
 "instead."
 msgstr ""
+"{} ist jetzt eine Methode der Klasse `SvgDocumentElement`. Stattdessen sollte"
+" `self.svg.uutounit(value, unit)` verwendet werden."
 
 #: ../share/extensions/inkex/deprecated.py:232
 msgid ""
 "{} is now a method in the svg document. Use `self.svg.add_unit(value)` "
 "instead."
 msgstr ""
+"{} ist jetzt eine Methode der Klasse `SvgDocumentElement`. Stattdessen sollte"
+" `self.svg.add_unit(value)` verwendet werden."
 
 #
 # File: ../share/extensions/interp_att_g.py, line: 92
 #: ../share/extensions/interp_att_g.py:88
 msgid "Bad values for a number field: {}, {}."
-msgstr ""
+msgstr "Ungeeignete Werte in einem Zahleneingabefeld: {}, {}."
 
 #: ../share/extensions/interp_att_g.py:114
-#, fuzzy
 msgid "You selected 'Other'. Please enter an attribute to interpolate."
-msgstr "Alle ausgewählten setzen ein Attribut in dem Letzten"
+msgstr ""
+"'Andere' wurde ausgewählt. Geben Sie bitte ein Attribut ein, das interpoliert"
+" werden soll."
 
 #: ../share/extensions/interp_att_g.py:135
 msgid "There is no selection to interpolate"
@@ -34621,20 +34663,18 @@ msgstr ""
 "folgenden Befehl nutzen: sudo apt-get install python-numpy"
 
 #: ../share/extensions/perspective.py:58
-#, fuzzy
 msgid "This extension requires that the second path be four nodes long."
 msgstr ""
-"Diese Erweiterung erwartet, dass der als zweites gewählte Pfad vier Knoten "
-"lang ist."
+"Der als zweites gewählte Pfad muss bei dieser Erweiterung aus vier Knoten "
+"bestehen."
 
 #: ../share/extensions/perspective.py:75
-#, fuzzy
 msgid ""
 "The second selected object is a group, not a path.\n"
 "Try using Object->Ungroup."
 msgstr ""
 "Das als zweites gewählte Objekt ist eine Gruppe, kein Pfad.\n"
-" Versuchen Sie den Befehl Objekt | Gruppierung aufheben."
+"Versuchen Sie den Befehl Objekt -> Gruppierung aufheben."
 
 #: ../share/extensions/perspective.py:77 ../share/extensions/summersnight.py:69
 msgid ""
@@ -34653,11 +34693,8 @@ msgstr ""
 " Versuchen sie den Befehl Pfad | Objekt in Pfad umwandeln."
 
 #: ../share/extensions/plotter.py:69
-#, fuzzy
 msgid "No paths where found. Please convert objects into paths."
-msgstr ""
-"Kein Pfad gefunden. Bitte alle Objekte die Sie speichern möchten "
-"konvertieren."
+msgstr "Keine Pfade gefunden. Bitte Objekte in Pfade umwandeln."
 
 #: ../share/extensions/plotter.py:194
 msgid ""
