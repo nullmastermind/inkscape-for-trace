@@ -37,6 +37,7 @@ if(WIN32)
     ${MINGW_BIN}/libenchant-[0-9]*.dll
     ${MINGW_BIN}/libepoxy-[0-9]*.dll
     ${MINGW_BIN}/libexpat-[0-9]*.dll
+    ${MINGW_BIN}/libexslt-[0-9]*.dll
     ${MINGW_BIN}/libffi-[0-9]*.dll
     ${MINGW_BIN}/libfftw3-[0-9]*.dll
     ${MINGW_BIN}/libfontconfig-[0-9]*.dll
