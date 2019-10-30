@@ -12,12 +12,13 @@
 
 #include <climits>
 
-#include "display/drawing.h"
 #include "display/drawing-context.h"
-#include "display/drawing-item.h"
 #include "display/drawing-group.h"
+#include "display/drawing-item.h"
 #include "display/drawing-pattern.h"
 #include "display/drawing-surface.h"
+#include "display/drawing-text.h"
+#include "display/drawing.h"
 #include "nr-filter.h"
 #include "preferences.h"
 #include "style.h"
@@ -997,6 +998,10 @@ DrawingItem::pick(Geom::Point const &p, double delta, unsigned flags)
 
     Geom::Rect expanded = *box;
     expanded.expandBy(delta);
+    DrawingGlyphs *dglyps = dynamic_cast<DrawingGlyphs *>(this);
+    if (dglyps && !(flags & PICK_AS_CLIP) && _drawbox) {
+        expanded = (Geom::Rect)dglyps->getPickBox();
+    }
 
     if (expanded.contains(p)) {
         return _pickItem(p, delta, flags);

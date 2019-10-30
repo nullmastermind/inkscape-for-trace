@@ -123,13 +123,21 @@ unsigned DrawingGlyphs::_updateItem(Geom::IntRect const &/*area*/, UpdateContext
 
     Geom::OptRect pb;
     if (_drawable) {
-        Geom::PathVector *glyphv = _font->PathVector(42); //we fix to "X" char to allow always a reasonable bbox
-        if (glyphv && !glyphv->empty()) { 
-            pb  = bounds_exact_transformed(*glyphv, ctx.ctm);
-            pb->expandBy(pb->height()/10.0);  //we scale a bit the area to in between char gaps mainly
+        Geom::PathVector *glyphv = _font->PathVector(_glyph);
+        if (glyphv && !glyphv->empty()) {
+            pb = bounds_exact_transformed(*glyphv, ctx.ctm);
+        }
+        glyphv = _font->PathVector(42);
+        if (glyphv && !glyphv->empty()) {
+            if (pb) {
+                pb.unionWith(bounds_exact_transformed(*glyphv, ctx.ctm));
+            } else {
+                pb = bounds_exact_transformed(*glyphv, ctx.ctm);
+            }
+            pb.expandTo(Geom::Point((*pb).right() + (_width * ctx.ctm.descrim()), (*pb).bottom()));
         }
     }
-    if(!pb){ // Fallback, spaces mostly, this never happendd with fixed gliph
+    if (!pb) { // Fallback
         Geom::Rect pbigbox(Geom::Point(0.0, _asc*scale_bigbox*0.66),Geom::Point(_width*scale_bigbox, 0.0));
         pb = pbigbox * ctx.ctm;
     }

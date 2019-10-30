@@ -30,8 +30,9 @@ public:
 
     void setGlyph(font_instance *font, int glyph, Geom::Affine const &trans);
     void setStyle(SPStyle *style, SPStyle *context_style = nullptr) override; // Not to be used
+    Geom::IntRect getPickBox() const { return _pick_bbox; };
 
-protected:
+  protected:
     unsigned _updateItem(Geom::IntRect const &area, UpdateContext const &ctx,
                                  unsigned flags, unsigned reset) override;
     DrawingItem *_pickItem(Geom::Point const &p, double delta, unsigned flags) override;
