@@ -25,12 +25,13 @@ else()
 endif()
 
 # Errors for common mistakes
+list(APPEND INKSCAPE_CXX_FLAGS "-fstack-protector-strong")
 list(APPEND INKSCAPE_CXX_FLAGS "-Werror=format")                # e.g.: printf("%s", std::string("foo"))
 list(APPEND INKSCAPE_CXX_FLAGS "-Werror=format-security")       # e.g.: printf(variable);
 list(APPEND INKSCAPE_CXX_FLAGS_DEBUG "-Og")                     # -Og for _FORTIFY_SOURCE. One could add -Weffc++ here to see approx. 6000 warnings
 list(APPEND INKSCAPE_CXX_FLAGS_DEBUG "-D_GLIBCXX_ASSERTIONS")
 if (CMAKE_COMPILER_IS_GNUCC)
-    list(APPEND INKSCAPE_CXX_FLAGS_DEBUG "-fexceptions -fstack-protector-strong -grecord-gcc-switches -fasynchronous-unwind-tables")
+    list(APPEND INKSCAPE_CXX_FLAGS_DEBUG "-fexceptions -grecord-gcc-switches -fasynchronous-unwind-tables")
     if(CXX_COMPILER_VERSION VERSION_GREATER 8.0)
         list(APPEND INKSCAPE_CXX_FLAGS_DEBUG "-fstack-clash-protection -fcf-protection")
     endif()
@@ -71,7 +72,6 @@ if(WIN32)
 
     list(APPEND INKSCAPE_LIBS "-lgomp")
     list(APPEND INKSCAPE_LIBS "-lwinpthread")
-    list(APPEND INKSCAPE_LIBS "-lssp") # required for support of _FORTIFY_SOURCE with mingw-w64
 
     if(HAVE_MINGW64)
         list(APPEND INKSCAPE_CXX_FLAGS "-m64")
