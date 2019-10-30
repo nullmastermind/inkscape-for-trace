@@ -21,10 +21,12 @@
 #include <csignal>
 #include <cerrno>
 
+#include <glibmm/i18n.h>
+#include <glibmm/regex.h>
+
 #include "libnrtype/Layout-TNG.h"
 #include <2geom/transforms.h>
 #include <2geom/rect.h>
-#include <glibmm/i18n.h>
 
 #include "object/sp-item.h"
 #include "object/sp-item-group.h"
@@ -364,6 +366,10 @@ void LaTeXTextRenderer::sp_text_render(SPText *textobj)
             Inkscape::Text::Layout::iterator ln = li; 
             ln.nextStartOfSpan();
             Glib::ustring uspanstr = sp_te_get_string_multiline (textobj, li, ln);
+
+            // escape ampersands
+            uspanstr = Glib::Regex::create("&")->replace_literal(uspanstr, 0, "\\&", (Glib::RegexMatchFlags)0);
+
             const gchar *spanstr = uspanstr.c_str();
             if (!spanstr) {
                 continue;
