@@ -999,7 +999,7 @@ DrawingItem::pick(Geom::Point const &p, double delta, unsigned flags)
     Geom::Rect expanded = *box;
     expanded.expandBy(delta);
     DrawingGlyphs *dglyps = dynamic_cast<DrawingGlyphs *>(this);
-    if (dglyps && !(flags & PICK_AS_CLIP) && _drawbox) {
+    if (dglyps && !(flags & PICK_AS_CLIP)) {
         expanded = (Geom::Rect)dglyps->getPickBox();
     }
 
