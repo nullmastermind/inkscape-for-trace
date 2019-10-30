@@ -90,6 +90,9 @@ private:
     sigc::connection _blendConnection;
     sigc::connection _blurConnection;
     
+    sigc::connection _processQueue_sig;
+    sigc::connection _executeUpdate_sig;
+
     //Desktop tracker for grabbing the desktop changed connection
     DesktopTracker _deskTrack;
     
@@ -109,7 +112,6 @@ private:
     
     //
     InternalUIBounce* _pending;
-    bool _pendingUpdateTree;
     
     //Whether the drag & drop was dragged into an item
     gboolean _dnd_into;
@@ -133,6 +135,13 @@ private:
     Gtk::TreeModel::Path _defer_target;
 
     Glib::RefPtr<Gtk::TreeStore> _store;
+    std::list<std::tuple<SPItem*, Gtk::TreeModel::iterator, bool> > _tree_update_queue;
+    //When the user selects an item in the document, we need to find that item in the tree view
+    //and highlight it. When looking up a specific item in the tree though, we don't want to have
+    //to iterate through the whole list, as this would take too long if the list is very long. So
+    //we will use a std::map for this instead, which is much faster (and call it _tree_cache). It
+    //would have been cleaner to create our own custom tree model, as described here
+    //https://en.wikibooks.org/wiki/GTK%2B_By_Example/Tree_View/Tree_Models
     std::map<SPItem*, Gtk::TreeModel::iterator> _tree_cache;
 
     std::vector<Gtk::Widget*> _watching;
@@ -217,7 +226,9 @@ private:
     void _removeWatchers();
     void _objectsChangedWrapper(SPObject *obj);
     void _objectsChanged(SPObject *obj);
-    void _addObject( SPObject* obj, Gtk::TreeModel::Row* parentRow );
+    bool _processQueue();
+    void _queueObject(SPObject* obj, Gtk::TreeModel::Row* parentRow);
+    void _addObject(SPItem* item, const Gtk::TreeModel::Row &parentRow, bool expanded);
 
     void _isolationChangedIter(const Gtk::TreeIter &iter);
     void _isolationValueChanged();

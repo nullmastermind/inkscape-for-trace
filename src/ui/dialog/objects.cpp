@@ -288,7 +288,10 @@ void ObjectsPanel::_removeWatchers() {
     }
 }
 
-void ObjectsPanel::_objectsChangedWrapper(SPObject *obj) {
+/**
+ * Call function for asynchronous invocation of _objectsChanged
+ */
+void ObjectsPanel::_objectsChangedWrapper(SPObject */*obj*/) {
     // We used to call _objectsChanged with a reference to _obj,
     // but since _obj wasn't used, I'm dropping that for now
     _takeAction(UPDATE_TREE);
@@ -298,10 +301,9 @@ void ObjectsPanel::_objectsChangedWrapper(SPObject *obj) {
  * Callback function for when an object changes.  Essentially refreshes the entire tree
  * @param obj Object which was changed (currently not used as the entire tree is recreated)
  */
-
 void ObjectsPanel::_objectsChanged(SPObject */*obj*/)
 {
-    //First, unattach the watchers
+    //First, detach the watchers
     _removeWatchers();
 
     if (_desktop) {
@@ -309,19 +311,24 @@ void ObjectsPanel::_objectsChanged(SPObject */*obj*/)
         SPDocument* document = _desktop->doc();
         SPRoot* root = document->getRoot();
         if ( root ) {
-            _selectedConnection.block();
+            _selectedConnection.block(); // Will be unblocked after the queue has been processed fully
             _documentChangedCurrentLayer.block();
+
             //Clear the tree store
-            _store->clear();
-            _tree_cache.clear();
-            //Add all items recursively
-            _addObject( root, nullptr );
-            _selectedConnection.unblock();
-            _documentChangedCurrentLayer.unblock();
-            //Set the tree selection
-            _objectsSelected(_desktop->selection);
-            //Handle button sensitivity
-            _checkTreeSelection();
+            _store->clear(); // This will increment it's stamp, making all old iterators
+            _tree_cache.clear(); // invalid. So we will also clear our own cache, as well
+            _tree_update_queue.clear(); // as any remaining update queue
+
+            _tree.unset_model(); // temporarily detach the TreeStore from the TreeView for prevent flickering, and to speed up
+
+            //Add all items recursively; we will do this asynchronously, by first filling a queue, which is rather fast
+            _queueObject( root, nullptr );
+            //However, the processing of this queue is slow, so this is done at a low priority and in small chunks. Using
+            //only small chunks keeps Inkscape responsive, for example while using the spray tool. After processing each
+            //of the chunks, Inkscape will check if there are other tasks with a high priority, for example when user is
+            //spraying. If so, the sprayed objects will be added first, and the whole updating will be restarted before
+            //it even finished.
+            _processQueue_sig = Glib::signal_timeout().connect( sigc::mem_fun(*this, &ObjectsPanel::_processQueue), 0, Glib::PRIORITY_DEFAULT_IDLE+100);
         }
     }
 }
@@ -331,59 +338,98 @@ void ObjectsPanel::_objectsChanged(SPObject */*obj*/)
  * @param obj Root object to add to the tree
  * @param parentRow Parent tree row (or NULL if adding to tree root)
  */
-void ObjectsPanel::_addObject(SPObject* obj, Gtk::TreeModel::Row* parentRow)
+void ObjectsPanel::_queueObject(SPObject* obj, Gtk::TreeModel::Row* parentRow)
 {
-    if ( _desktop && obj ) {
-        for(auto& child: obj->children) {
-            if (SP_IS_ITEM(&child))
-            {
-                SPItem * item = SP_ITEM(&child);
-                SPGroup * group = SP_IS_GROUP(&child) ? SP_GROUP(&child) : nullptr;
+    for(auto& child: obj->children) {
+        if (SP_IS_ITEM(&child)) {
+            //Add the item to the tree, basically only creating an empty row in the tree view
+            Gtk::TreeModel::iterator iter = parentRow ? _store->prepend(parentRow->children()) : _store->prepend();
 
-                //Add the item to the tree and set the column information
-                Gtk::TreeModel::iterator iter = parentRow ? _store->prepend(parentRow->children()) : _store->prepend();
+            //Add the item to a queue, so we can fill in the data in each row asynchronously
+            //at a later stage. See the comments in _objectsChanged() for more details
+            bool expanded = SP_IS_GROUP(obj) && SP_GROUP(obj)->expanded();
+            _tree_update_queue.emplace_back(SP_ITEM(&child), iter, expanded);
+
+            //If the item is a group, recursively add its children
+            if (SP_IS_GROUP(&child)) {
                 Gtk::TreeModel::Row row = *iter;
-                row[_model->_colObject] = item;
-
-                //g_assert(_store->get_flags() & Gtk::TREE_MODEL_ITERS_PERSIST);
-                _tree_cache.emplace(item, iter); // Use a row reference instead of an iter maybe?
-
-                //this seems to crash on convert stroke to path then undo (probably no ID?)
-                try {
-                    row[_model->_colLabel] = item->label() ? item->label() : item->getId();
-                } catch (...) {
-                    row[_model->_colLabel] = Glib::ustring("getId_failure");
-                    g_critical("item->getId() failed, using \"getId_failure\"");
-                }
-                row[_model->_colVisible] = !item->isHidden();
-                row[_model->_colLocked] = !item->isSensitive();
-                row[_model->_colType] = group ? (group->layerMode() == SPGroup::LAYER ? 2 : 1) : 0;
-                row[_model->_colHighlight] = item->isHighlightSet() ? item->highlight_color() : item->highlight_color() & 0xffffff00;
-                row[_model->_colClipMask] = item ? (
-                    (item->clip_ref && item->clip_ref->getObject() ? 1 : 0) |
-                    (item->mask_ref && item->mask_ref->getObject() ? 2 : 0)
-                ) : 0;
-                //row[_model->_colInsertOrder] = group ? (group->insertBottom() ? 2 : 1) : 0;
-
-                //If our parent object is a group and it's expanded, expand the tree
-                if (SP_IS_GROUP(obj) && SP_GROUP(obj)->expanded())
-                {
-                    _tree.expand_to_path( _store->get_path(iter) );
-                    _tree.collapse_row( _store->get_path(iter) );
-                }
-
-                //Add an object watcher to the item
-                ObjectsPanel::ObjectWatcher *w = new ObjectsPanel::ObjectWatcher(this, &child);
-                child.getRepr()->addObserver(*w);
-                _objectWatchers.push_back(w);
-
-                //If the item is a group, recursively add its children
-                if (group)
-                {
-                    _addObject( &child, &row );
-                }
+                _queueObject(&child, &row);
             }
         }
+    }
+}
+
+/**
+ * Walks through the queue in small chunks, and fills in the rows in the tree view accordingly
+ * @return False if the queue has been fully emptied
+ */
+bool ObjectsPanel::_processQueue() {
+    auto queue_iter = _tree_update_queue.begin();
+    auto queue_end  = _tree_update_queue.end();
+    int count = 0;
+
+    while (queue_iter != queue_end) {
+        //The queue is a list of tuples; expand the tuples
+        SPItem *item                    = std::get<0>(*queue_iter);
+        Gtk::TreeModel::iterator iter   = std::get<1>(*queue_iter);
+        bool expanded                   = std::get<2>(*queue_iter);
+        //Add the object to the tree view and tree cache
+        _addObject(item, *iter, expanded);
+        _tree_cache.emplace(item, *iter);
+
+        //Add an object watcher to the item
+        ObjectsPanel::ObjectWatcher *w = new ObjectsPanel::ObjectWatcher(this, item);
+        item->getRepr()->addObserver(*w);
+        _objectWatchers.push_back(w);
+
+        queue_iter = _tree_update_queue.erase(queue_iter);
+        count++;
+        if (count == 100) {
+            return true; // we have not yet reached the end, so return true to keep the timeout signal alive
+        }
+    }
+
+    //We have reached the end of the queue, so we can now bring the tree view back to life safely
+    _tree.set_model(_store); // Attach the store again to the tree view
+    _blockAllSignals(false);
+    _objectsSelected(_desktop->selection); //Set the tree selection
+    _checkTreeSelection(); //Handle button sensitivity
+    return false; // Return false to kill the timeout signal that kept calling _processQueue
+}
+
+/**
+ * Fills in the details of an item in the already existing row of the tree view
+ * @param item Item of which the name, visibility, lock status, etc, will be filled in
+ * @param row Row where the item is residing
+ * @param expanded True if the item is part of a group that is shown as expanded in the tree view
+ */
+void ObjectsPanel::_addObject(SPItem* item, const Gtk::TreeModel::Row &row, bool expanded)
+{
+    SPGroup * group = SP_IS_GROUP(item) ? SP_GROUP(item) : nullptr;
+
+    row[_model->_colObject] = item;
+
+    //this seems to crash on convert stroke to path then undo (probably no ID?)
+    try {
+        row[_model->_colLabel] = item->label() ? item->label() : item->getId();
+    } catch (...) {
+        row[_model->_colLabel] = Glib::ustring("getId_failure");
+        g_critical("item->getId() failed, using \"getId_failure\"");
+    }
+    row[_model->_colVisible] = !item->isHidden();
+    row[_model->_colLocked] = !item->isSensitive();
+    row[_model->_colType] = group ? (group->layerMode() == SPGroup::LAYER ? 2 : 1) : 0;
+    row[_model->_colHighlight] = item->isHighlightSet() ? item->highlight_color() : item->highlight_color() & 0xffffff00;
+    row[_model->_colClipMask] = item ? (
+        (item->clip_ref && item->clip_ref->getObject() ? 1 : 0) |
+        (item->mask_ref && item->mask_ref->getObject() ? 2 : 0)
+    ) : 0;
+    //row[_model->_colInsertOrder] = group ? (group->insertBottom() ? 2 : 1) : 0;
+
+    //If our parent object is a group and it's expanded, expand the tree
+    if (expanded) {
+        _tree.expand_to_path( _store->get_path(row) );
+        _tree.collapse_row( _store->get_path(row) );
     }
 }
 
@@ -544,6 +590,13 @@ void ObjectsPanel::_setCompositingValues(SPItem *item)
     _opacityConnection.unblock();
 }
 
+// See the comment in objects.h for _tree_cache
+/**
+ * Find the specified item in the tree cache
+ * @param iter Current tree item
+ * @param tree_iter Tree_iter will point to the row in which the tree item was found
+ * @return True if found
+ */
 bool ObjectsPanel::_findInTreeCache(SPItem* item, Gtk::TreeModel::iterator &tree_iter) {
     if (not item) {
         return false;
@@ -553,8 +606,10 @@ bool ObjectsPanel::_findInTreeCache(SPItem* item, Gtk::TreeModel::iterator &tree
         tree_iter = _tree_cache.at(item);
     }
     catch (std::out_of_range) {
-        // Apparently, item cannot be found in the tree_cache, which could mean that the tree and/or tree_cache
-        // are out-dated? Could this happen when a tree update is pending?
+        // Apparently, item cannot be found in the tree_cache, which could mean that
+        // - the tree and/or tree_cache are out-dated or in the process of being updated.
+        // - a layer is selected, which is not visible in the objects panel (see _objectsSelected())
+        // Anyway, this doesn't seem all that critical, so no warnings; just return false
         return false;
     }
 
@@ -574,10 +629,9 @@ bool ObjectsPanel::_findInTreeCache(SPItem* item, Gtk::TreeModel::iterator &tree
 
 /**
  * Find the specified item in the tree store and (de)select it, optionally scrolling to the item
- * @param path Current tree path
- * @param iter Current tree item
  * @param item Item to select in the tree
  * @param scrollto Whether to scroll to the item
+ * @param expand If true, the path in the tree towards item will be expanded
  */
 void ObjectsPanel::_updateObjectSelected(SPItem* item, bool scrollto, bool expand)
 {
@@ -1130,6 +1184,9 @@ void ObjectsPanel::_doTreeMove( )
                                             _("Moved objects"));
 }
 
+/**
+ * Prevents the treeview from emiting and responding to most signals; needed when it's not up to date
+ */
 void ObjectsPanel::_blockAllSignals(bool should_block = true) {
 
     // incoming signals
@@ -1143,14 +1200,13 @@ void ObjectsPanel::_blockAllSignals(bool should_block = true) {
         // become unpredictable after the tree has been updated
         _pending->_signal.disconnect();
     }
-    _removeWatchers();
 
     _selectionChangedConnection.block(should_block);
 
     // outgoing signal
     _selectedConnection.block(should_block);
 
-    // These are not blocked
+    // These are not blocked; this is ok because they will invoke _objectsChanged immediately (synchronously), and update the tree
     // desktopChangeConn, _documentChangedConnection;
 }
 
@@ -1171,9 +1227,7 @@ void ObjectsPanel::_fireAction( unsigned int code )
 }
 
 bool ObjectsPanel::_executeUpdate() {
-    _blockAllSignals(false);
     _objectsChanged(nullptr);
-    _pendingUpdateTree = false;
     return false;
 }
 
@@ -1183,11 +1237,20 @@ bool ObjectsPanel::_executeUpdate() {
 void ObjectsPanel::_takeAction( int val )
 {
     if (val == UPDATE_TREE) {
-        if (not _pendingUpdateTree) {
-            _pendingUpdateTree = true;
-            _blockAllSignals(true);
-            Glib::signal_timeout().connect( sigc::mem_fun(*this, &ObjectsPanel::_executeUpdate), 0 );
-        }
+        // We might already have been updating the tree, but new data is available now
+        // so we will then first cancel the old update before scheduling a new one
+        _processQueue_sig.disconnect();
+        _executeUpdate_sig.disconnect();
+        _blockAllSignals(true);
+        _removeWatchers();
+        _store->clear();
+        _tree_cache.clear();
+        _executeUpdate_sig = Glib::signal_timeout().connect( sigc::mem_fun(*this, &ObjectsPanel::_executeUpdate), 500, Glib::PRIORITY_DEFAULT_IDLE+50);
+        // In the spray tool, updating the tree competes in priority with the redrawing of the canvas,
+        // see SPCanvas::addIdle(), which is set to UPDATE_PRIORITY (=G_PRIORITY_DEFAULT_IDLE). We
+        // should take a lower priority (= higher value) to keep the spray tool updating longer, and to prevent
+        // the objects-panel from clogging the processor; however, once the spraying slows down, the tree might
+        // get updated anyway.
     } else if ( !_pending ) {
         _pending = new InternalUIBounce();
         _pending->_actionCode = val;
@@ -1686,7 +1749,6 @@ ObjectsPanel::ObjectsPanel() :
     _document(nullptr),
     _model(nullptr),
     _pending(nullptr),
-    _pendingUpdateTree(false),
     _toggleEvent(nullptr),
     _defer_target(),
     _visibleHeader(C_("Visibility", "V")),
@@ -2043,14 +2105,8 @@ ObjectsPanel::~ObjectsPanel()
 void ObjectsPanel::setDocument(SPDesktop* /*desktop*/, SPDocument* document)
 {
     //Clear all object watchers
-    while (!_objectWatchers.empty())
-    {
-        ObjectsPanel::ObjectWatcher *w = _objectWatchers.back();
-        w->_repr->removeObserver(*w);
-        _objectWatchers.pop_back();
-        delete w;
-    }
-    
+    _removeWatchers();
+
     //Delete the root watcher
     if (_rootWatcher)
     {
@@ -2058,7 +2114,7 @@ void ObjectsPanel::setDocument(SPDesktop* /*desktop*/, SPDocument* document)
         delete _rootWatcher;
         _rootWatcher = nullptr;
     }
-    
+
     _document = document;
 
     if (document && document->getRoot() && document->getRoot()->getRepr())
