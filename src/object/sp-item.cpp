@@ -791,7 +791,7 @@ Geom::OptRect SPItem::geometricBounds(Geom::Affine const &transform) const
     return bbox;
 }
 
-Geom::OptRect SPItem::visualBounds(Geom::Affine const &transform) const
+Geom::OptRect SPItem::visualBounds(Geom::Affine const &transform, bool wfilter, bool wclip, bool wmask) const
 {
     using Geom::X;
     using Geom::Y;
@@ -800,7 +800,7 @@ Geom::OptRect SPItem::visualBounds(Geom::Affine const &transform) const
 
 
     SPFilter *filter = (style && style->filter.href) ? dynamic_cast<SPFilter *>(style->getFilter()) : nullptr;
-    if ( filter ) {
+    if (filter && wfilter) {
         // call the subclass method
     	// CPPIFY
     	//bbox = this->bbox(Geom::identity(), SPItem::VISUAL_BBOX);
@@ -851,13 +851,13 @@ Geom::OptRect SPItem::visualBounds(Geom::Affine const &transform) const
     	//bbox = this->bbox(transform, SPItem::VISUAL_BBOX);
     	bbox = const_cast<SPItem*>(this)->bbox(transform, SPItem::VISUAL_BBOX);
     }
-    if (clip_ref->getObject()) {
+    if (clip_ref->getObject() && wclip) {
         SPItem *ownerItem = dynamic_cast<SPItem *>(clip_ref->getOwner());
         g_assert(ownerItem != nullptr);
         ownerItem->bbox_valid = FALSE;  // LP Bug 1349018
         bbox.intersectWith(clip_ref->getObject()->geometricBounds(transform));
     }
-    if (mask_ref->getObject()) {
+    if (mask_ref->getObject() && wmask) {
         bbox_valid = false;  // LP Bug 1349018
         bbox.intersectWith(mask_ref->getObject()->visualBounds(transform));
     }

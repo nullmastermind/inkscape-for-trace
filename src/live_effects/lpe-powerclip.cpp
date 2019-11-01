@@ -3,24 +3,21 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 #include "live_effects/lpe-powerclip.h"
-#include "live_effects/lpeobject.h"
-#include "live_effects/lpeobject-reference.h"
-#include <2geom/path-intersection.h>
-#include <2geom/intersection-graph.h>
 #include "display/curve.h"
-#include "helper/geom.h"
-#include "path-chemistry.h"
-#include "extract-uri.h"
-#include <bad-uri-exception.h>
-
+#include "live_effects/lpeobject-reference.h"
+#include "live_effects/lpeobject.h"
 #include "object/sp-clippath.h"
+#include "object/sp-defs.h"
+#include "object/sp-item-group.h"
+#include "object/sp-item.h"
 #include "object/sp-path.h"
 #include "object/sp-shape.h"
-#include "object/sp-item.h"
-#include "object/sp-item-group.h"
 #include "object/sp-use.h"
-#include "object/uri.h"
+#include "style.h"
+#include "svg/svg.h"
 
+#include <2geom/intersection-graph.h>
+#include <2geom/path-intersection.h>
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 
@@ -28,264 +25,218 @@ namespace Inkscape {
 namespace LivePathEffect {
 
 LPEPowerClip::LPEPowerClip(LivePathEffectObject *lpeobject)
-    : Effect(lpeobject),
-    hide_clip(_("Hide clip"), _("Hide clip"), "hide_clip", &wr, this, false),
-    is_inverse("Store the last inverse apply", "", "is_inverse", &wr, this, "false", false),
-    uri("Store the uri of clip", "", "uri", &wr, this, "false", false),
-    inverse(_("Inverse clip"), _("Inverse clip"), "inverse", &wr, this, false),
-    flatten(_("Flatten clip"), _("Flatten clip, see fill rule once convert to paths"), "flatten", &wr, this, false),
-    message(_("Info Box"), _("Important messages"), "message", &wr, this, _("Use fill-rule evenodd on <b>fill and stroke</b> dialog if no flatten result after convert clip to paths."))
+    : Effect(lpeobject)
+    , hide_clip(_("Hide clip"), _("Hide clip"), "hide_clip", &wr, this, false)
+    , inverse(_("Inverse clip"), _("Inverse clip"), "inverse", &wr, this, true)
+    , flatten(_("Flatten clip"), _("Flatten clip, see fill rule once convert to paths"), "flatten", &wr, this, false)
+    , message(
+          _("Info Box"), _("Important messages"), "message", &wr, this,
+          _("Use fill-rule evenodd on <b>fill and stroke</b> dialog if no flatten result after convert clip to paths."))
 {
-    registerParameter(&uri);
     registerParameter(&inverse);
     registerParameter(&flatten);
     registerParameter(&hide_clip);
-    registerParameter(&is_inverse);
     registerParameter(&message);
     message.param_set_min_height(55);
+    _updating = false;
+    _legacy = false;
+    // legazy fix between 0.92.4 launch and 1.0beta1
+    if (this->getRepr()->attribute("is_inverse")) {
+        this->getRepr()->setAttribute("is_inverse", nullptr);
+        _legacy = true;
+    }
 }
 
 LPEPowerClip::~LPEPowerClip() = default;
 
-void
-LPEPowerClip::doOnApply (SPLPEItem const * lpeitem)
+Geom::Path sp_bbox_without_clip(SPLPEItem *lpeitem)
 {
-    SPLPEItem * item = const_cast<SPLPEItem*>(lpeitem);
-    SPObject * clip_path = item->clip_ref->getObject();
-    if (!clip_path) {
-        item->removeCurrentPathEffect(false);
+    Geom::OptRect bbox = lpeitem->visualBounds(Geom::identity(), true, false, true);
+    if (bbox) {
+        (*bbox).expandBy(5);
+        return Geom::Path(*bbox);
     }
+    return Geom::Path();
 }
 
-void
-LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){
-    SPObject * clip_path = SP_ITEM(sp_lpe_item)->clip_ref->getObject();
-    gchar * uri_str = uri.param_getSVGValue();
-    if(hide_clip && clip_path) {
-        SP_ITEM(sp_lpe_item)->clip_ref->detach();
-    } else if (!hide_clip && !clip_path && uri_str) {
-        try {
-            SP_ITEM(sp_lpe_item)->clip_ref->attach(Inkscape::URI(uri_str));
-        } catch (Inkscape::BadURIException &e) {
-            g_warning("%s", e.what());
-            SP_ITEM(sp_lpe_item)->clip_ref->detach();
+Geom::PathVector sp_get_recursive_pathvector(SPLPEItem *item, Geom::PathVector res, bool dir, bool inverse)
+{
+    SPGroup *group = dynamic_cast<SPGroup *>(item);
+    if (group) {
+        std::vector<SPItem *> item_list = sp_item_group_item_list(group);
+        for (auto child : item_list) {
+            if (child) {
+                SPLPEItem *childitem = dynamic_cast<SPLPEItem *>(child);
+                if (childitem) {
+                    res = sp_get_recursive_pathvector(childitem, res, dir, inverse);
+                }
+            }
         }
     }
-    clip_path = SP_ITEM(sp_lpe_item)->clip_ref->getObject();
+    SPShape *shape = dynamic_cast<SPShape *>(item);
+    if (shape && shape->getCurve()) {
+        for (auto path : shape->getCurve()->get_pathvector()) {
+            if (!path.empty()) {
+                bool pathdir = Geom::path_direction(path);
+                if (pathdir == dir && inverse) {
+                    path = path.reversed();
+                }
+                res.push_back(path);
+            }
+        }
+    }
+    return res;
+}
+
+Geom::PathVector LPEPowerClip::getClipPathvector()
+{
+    Geom::PathVector res;
+    Geom::PathVector res_hlp;
+    if (!sp_lpe_item) {
+        return res;
+    }
+
+    SPObject *clip_path = sp_lpe_item->clip_ref->getObject();
     if (clip_path) {
-        uri.param_setValue(Glib::ustring(extract_uri(sp_lpe_item->getRepr()->attribute("clip-path"))), true);
-        SP_ITEM(sp_lpe_item)->clip_ref->detach();
-        Geom::OptRect bbox = sp_lpe_item->visualBounds();
-        if(!bbox) {
-            return;
-        }
-        uri_str = uri.param_getSVGValue();
-        if (uri_str) {
-            try {
-                SP_ITEM(sp_lpe_item)->clip_ref->attach(Inkscape::URI(uri_str));
-            } catch (Inkscape::BadURIException &e) {
-                g_warning("%s", e.what());
-                SP_ITEM(sp_lpe_item)->clip_ref->detach();
-            }
-        } else {
-            SP_ITEM(sp_lpe_item)->clip_ref->detach();
-        }
-        g_free(uri_str);
-        Geom::Rect bboxrect = (*bbox);
-        bboxrect.expandBy(1);
-        Geom::Point topleft      = bboxrect.corner(0);
-        Geom::Point topright     = bboxrect.corner(1);
-        Geom::Point bottomright  = bboxrect.corner(2);
-        Geom::Point bottomleft   = bboxrect.corner(3);
-        clip_box.clear();
-        clip_box.start(topleft);
-        clip_box.appendNew<Geom::LineSegment>(topright);
-        clip_box.appendNew<Geom::LineSegment>(bottomright);
-        clip_box.appendNew<Geom::LineSegment>(bottomleft);
-        clip_box.close();
-
         std::vector<SPObject*> clip_path_list = clip_path->childList(true);
-        for ( std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
-            SPObject * clip_data = *iter;
-            gchar * is_inverse_str = is_inverse.param_getSVGValue();
-            if(!strcmp(is_inverse_str,"false") && inverse && isVisible()) {
-                SPCurve * clipcurve = new SPCurve();
-                addInverse(SP_ITEM(clip_data), clipcurve, Geom::Affine::identity(), true);     
-	        clipcurve->unref();
-            } else if((!strcmp(is_inverse_str,"true") && !inverse && isVisible()) ||
-                (inverse && !is_visible && is_inverse_str == (Glib::ustring)"true"))
-            {
-                removeInverse(SP_ITEM(clip_data));    
-            } else if(inverse && isVisible()) {
-                updateInverse(SP_ITEM(clip_data));
+        clip_path_list.pop_back();
+        if (clip_path_list.size()) {
+            for (auto clip : clip_path_list) {
+                SPLPEItem *childitem = dynamic_cast<SPLPEItem *>(clip);
+                if (childitem) {
+                    res_hlp = sp_get_recursive_pathvector(childitem, res_hlp, false, inverse);
+                    if (is_load && _legacy) {
+                        childitem->doWriteTransform(Geom::Translate(0, -999999));
+                    }
+                    if (!childitem->style || !childitem->style->display.set ||
+                        childitem->style->display.value != SP_CSS_DISPLAY_NONE) {
+                        childitem->style->display.set = TRUE;
+                        childitem->style->display.value = SP_CSS_DISPLAY_NONE;
+                        childitem->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
+                    }
+                }
             }
-            g_free(is_inverse_str);
+            if (is_load && _legacy) {
+                res_hlp *= Geom::Translate(0, -999999);
+                _legacy = false;
+            }
         }
-    } else if(!hide_clip) {
-        SPLPEItem * item = const_cast<SPLPEItem*>(lpeitem);
-        item->removeCurrentPathEffect(false);
     }
+    Geom::Path bbox = sp_bbox_without_clip(sp_lpe_item);
+    if (hide_clip) {
+        return bbox;
+    }
+    if (inverse && isVisible()) {
+        res.push_back(bbox);
+    }
+    for (auto path : res_hlp) {
+        res.push_back(path);
+    }
+    return res;
 }
 
-void
-LPEPowerClip::doAfterEffect (SPLPEItem const* lpeitem){
-    is_load = false;
-    if (!hide_clip && flatten && isVisible()) {
-        SP_ITEM(sp_lpe_item)->clip_ref->detach();
-    }
-}
-
-void
-LPEPowerClip::addInverse (SPItem * clip_data, SPCurve * clipcurve, Geom::Affine affine, bool root){
-    gchar * is_inverse_str = is_inverse.param_getSVGValue();
+void LPEPowerClip::add()
+{
     SPDocument *document = getSPDoc();
-    if (!document) {
+    if (!document || !sp_lpe_item) {
         return;
     }
+    SPObject *clip_path = sp_lpe_item->clip_ref->getObject();
     SPObject *elemref = NULL;
-    if(root) {
+    if (clip_path) {
         Inkscape::XML::Document *xml_doc = document->getReprDoc();
-        SP_LPE_ITEM(clip_data)->removeAllPathEffects(true);
+        Inkscape::XML::Node *parent = clip_path->getRepr();
+        SPLPEItem *childitem = dynamic_cast<SPLPEItem *>(clip_path->childList(true).back());
+        if (childitem) {
+            if (const gchar *powerclip = childitem->getRepr()->attribute("class")) {
+                if (!strcmp(powerclip, "powerclip")) {
+                    Glib::ustring newclip = Glib::ustring("clipath_") + getId();
+                    Glib::ustring uri = Glib::ustring("url(#") + newclip + Glib::ustring(")");
+                    parent = clip_path->getRepr()->duplicate(xml_doc);
+                    parent->setAttribute("id", newclip.c_str());
+                    Inkscape::XML::Node *defs = clip_path->getRepr()->parent();
+                    clip_path = SP_OBJECT(document->getDefs()->appendChildRepr(parent));
+                    Inkscape::GC::release(parent);
+                    sp_lpe_item->setAttribute("clip-path", uri.c_str());
+                    SPLPEItem *childitemdel = dynamic_cast<SPLPEItem *>(clip_path->childList(true).back());
+                    if (childitemdel) {
+                        childitemdel->setAttribute("id", getId().c_str());
+                        return;
+                    }
+                }
+            }
+        }
         Inkscape::XML::Node *clip_path_node = xml_doc->createElement("svg:path");
-        Inkscape::XML::Node *parent = clip_data->getRepr()->parent();
         parent->appendChild(clip_path_node);
+        Inkscape::GC::release(clip_path_node);
         elemref = document->getObjectByRepr(clip_path_node);
-        elemref->setAttribute("style","fill-rule:evenodd");
-        elemref->setAttribute("id", (Glib::ustring("lpe_") + Glib::ustring(this->getLPEObj()->getId())).c_str());
-    }
-    if(!strcmp(is_inverse_str,"false")) {
-        if (SP_IS_GROUP(clip_data)) {
-            std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(clip_data));
-            for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
-                SPItem *subitem = *iter;
-                Geom::Affine affine_group = SP_ITEM(clip_data)->transform;
-                addInverse(subitem, clipcurve, affine_group, false);
-                if (root) {
-                     clip_box *= affine_group;
-                }
-            }
-        } else if (SP_IS_SHAPE(clip_data)) {
-            SPCurve * c = nullptr;
-            c = SP_SHAPE(clip_data)->getCurve();
-            c->transform(affine);
-            if (c) {
-                Geom::PathVector c_pv = c->get_pathvector();
-                //TODO: this can be not correct but no better way
-                bool dir_a = Geom::path_direction(c_pv[0]);
-                bool dir_b = Geom::path_direction(clip_box);
-                if (dir_a == dir_b) {
-                   clip_box = clip_box.reversed();
-                }
-                clipcurve->append(c, false);
-                gchar * is_inverse_str = is_inverse.param_getSVGValue();
-                if (strcmp(is_inverse_str, "true") != 0) {
-                    is_inverse.param_setValue((Glib::ustring)"true", true);
-                }
-                c->reset();
-                delete c;
-            }  
-            Geom::Affine hidetrans = (Geom::Affine)Geom::Translate(0,999999);    
-            SP_ITEM(clip_data)->doWriteTransform(hidetrans); 
-        }
-    }
-    if(root) {
-        SPCurve * container = new SPCurve;
-        container->set_pathvector(clip_box);
-        clipcurve->append(container, false);
-        SP_SHAPE(elemref)->setCurve(clipcurve);
-        container->reset();
-        delete container;
-    }
-    g_free(is_inverse_str);
-}
-
-void
-LPEPowerClip::updateInverse (SPItem * clip_data) {
-    SPDocument *document = getSPDoc();
-    if (!document) {
-        return;
-    }
-    if(inverse && isVisible()) {
-        if (SP_IS_GROUP(clip_data)) {
-            std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(clip_data));
-            for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
-                SPItem *subitem = *iter;
-                updateInverse(subitem);
-            }
-        } else if (SP_IS_SHAPE(clip_data)) {
-            SPObject *elemref = document->getObjectById(Glib::ustring("lpe_") + Glib::ustring(this->getLPEObj()->getId()));
-            if (elemref) {
-                SPCurve * c = nullptr;
-                c = SP_SHAPE(elemref)->getCurve();
-                if (c) {
-                    Geom::PathVector c_pv = c->get_pathvector();
-                    //TODO: this can be not correct but no better way
-                    bool dir_a = Geom::path_direction(c_pv[0]);
-                    bool dir_b = Geom::path_direction(clip_box);
-                    if (dir_a == dir_b) {
-                        clip_box = clip_box.reversed();
-                    }
-                    if(c_pv.size() > 1) {
-                        c_pv.pop_back();
-                    }
-                    c_pv.push_back(clip_box);
-                    c->set_pathvector(c_pv);
-                    SP_SHAPE(elemref)->setCurve(c);
-                    c->unref();
-                }
-            }
-        }
-    }
-}
-
-void
-LPEPowerClip::removeInverse (SPItem * clip_data){
-    SPDocument *document = getSPDoc();
-    if (!document) {
-        return;
-    }
-    gchar * is_inverse_str = is_inverse.param_getSVGValue();
-    if(!strcmp(is_inverse_str,"true")) {
-        if (SP_IS_GROUP(clip_data)) {
-             std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(clip_data));
-             for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
-                 SPItem *subitem = *iter;
-                 removeInverse(subitem);
-             }
-        } else if (SP_IS_SHAPE(clip_data)) {
-            Geom::Affine unhidetrans = (Geom::Affine)Geom::Translate(0,-999999); 
-            SP_ITEM(clip_data)->doWriteTransform(unhidetrans);  
-            gchar * is_inverse_str = is_inverse.param_getSVGValue();
-            if (strcmp(is_inverse_str, "false") != 0) {
-                is_inverse.param_setValue((Glib::ustring)"false", true);
-            }
-        }
-        SPObject *elemref = document->getObjectById(Glib::ustring("lpe_") + Glib::ustring(this->getLPEObj()->getId()));
         if (elemref) {
-            elemref ->deleteObject(false);
-        } 
+            elemref->setAttribute("style", "fill-rule:evenodd");
+            elemref->setAttribute("class", "powerclip");
+            elemref->setAttribute("id", getId().c_str());
+            gchar *str = sp_svg_write_path(getClipPathvector());
+            elemref->setAttribute("d", str);
+            g_free(str);
+        } else {
+            sp_lpe_item->removeCurrentPathEffect(false);
+        }
+    } else {
+        sp_lpe_item->removeCurrentPathEffect(false);
     }
-    g_free(is_inverse_str);
+}
+
+Glib::ustring LPEPowerClip::getId() { return Glib::ustring("lpe_") + Glib::ustring(getLPEObj()->getId()); }
+
+void LPEPowerClip::upd()
+{
+    SPDocument *document = getSPDoc();
+    if (!document || !sp_lpe_item) {
+        return;
+    }
+    SPObject *elemref = document->getObjectById(getId().c_str());
+    if (elemref && sp_lpe_item) {
+        gchar *str = sp_svg_write_path(getClipPathvector());
+        elemref->setAttribute("d", str);
+        g_free(str);
+        elemref->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
+    } else {
+        add();
+    }
+}
+
+
+void LPEPowerClip::doBeforeEffect(SPLPEItem const *lpeitem)
+{
+    if (!_updating) {
+        upd();
+    }
 }
 
 void 
 LPEPowerClip::doOnRemove (SPLPEItem const* /*lpeitem*/)
 {
-    SPClipPath *clip_path = SP_ITEM(sp_lpe_item)->clip_ref->getObject();
-    if(clip_path) {
-        if(!keep_paths) {
-            gchar * is_inverse_str = is_inverse.param_getSVGValue();
-            std::vector<SPObject*> clip_path_list = clip_path->childList(true);
-            for ( std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
-                SPObject * clip_data = *iter;
-                if(!strcmp(is_inverse_str,"true")) {
-                    removeInverse(SP_ITEM(clip_data));
+    SPDocument *document = getSPDoc();
+    if (!document) {
+        return;
+    }
+    _updating = true;
+    SPObject *elemref = document->getObjectById(getId().c_str());
+    if (elemref) {
+        elemref->deleteObject();
+    }
+    SPObject *clip_path = sp_lpe_item->clip_ref->getObject();
+    if (clip_path) {
+        std::vector<SPObject *> clip_path_list = clip_path->childList(true);
+        for (auto clip : clip_path_list) {
+            SPLPEItem *childitem = dynamic_cast<SPLPEItem *>(clip);
+            if (childitem) {
+                if (!childitem->style || childitem->style->display.set ||
+                    childitem->style->display.value == SP_CSS_DISPLAY_NONE) {
+                    childitem->style->display.set = TRUE;
+                    childitem->style->display.value = SP_CSS_DISPLAY_BLOCK;
+                    childitem->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
                 }
             }
-            g_free(is_inverse_str);
-        
-        } else if (flatten) {
-            clip_path->deleteObject();
         }
     }
 }
@@ -293,66 +244,46 @@ LPEPowerClip::doOnRemove (SPLPEItem const* /*lpeitem*/)
 Geom::PathVector
 LPEPowerClip::doEffect_path(Geom::PathVector const & path_in){
     Geom::PathVector path_out = path_in;
-    SPClipPath *clip_path = SP_ITEM(sp_lpe_item)->clip_ref->getObject();
-    if (!hide_clip && flatten && isVisible()) {
-        path_out *= sp_item_transform_repr (sp_lpe_item).inverse();
-        SPDocument *document = getSPDoc();
-        if (!document) {
-            return path_out;
+    if (flatten) {
+        Geom::PathVector c_pv = getClipPathvector();
+        std::unique_ptr<Geom::PathIntersectionGraph> pig(new Geom::PathIntersectionGraph(c_pv, path_out));
+        if (pig && !c_pv.empty() && !path_out.empty()) {
+            path_out = pig->getIntersection();
         }
-        SPObject *elemref = document->getObjectById(Glib::ustring("lpe_") + Glib::ustring(this->getLPEObj()->getId()));
-        if (elemref) {
-            SPCurve * c = nullptr;
-            c = SP_SHAPE(elemref)->getCurve();
-            if (c) {
-                Geom::PathVector c_pv = c->get_pathvector();
-                c_pv *= sp_item_transform_repr (sp_lpe_item).inverse();
-                std::unique_ptr<Geom::PathIntersectionGraph> pig(new Geom::PathIntersectionGraph(c_pv, path_out));
-                if (pig && !c_pv.empty() && !path_in.empty()) {
-                    path_out = pig->getIntersection();
-                }
-                c->unref();
-            }
-        } else {
-            if(clip_path) {
-                std::vector<SPObject*> clip_path_list = clip_path->childList(true);
-                for ( std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
-                    SPObject * clip_data = *iter;
-                    flattenClip(SP_ITEM(clip_data), path_out);
-                }
-            }
-        }
-        path_out *= sp_item_transform_repr (sp_lpe_item);
     }
     return path_out;
 }
 
-void 
-LPEPowerClip::doOnVisibilityToggled(SPLPEItem const* lpeitem)
-{
-    doBeforeEffect(lpeitem);
-}
+void LPEPowerClip::doOnVisibilityToggled(SPLPEItem const *lpeitem) { upd(); }
 
-void
-LPEPowerClip::flattenClip(SPItem * clip_data, Geom::PathVector &path_in)
+void sp_remove_powerclip(Inkscape::Selection *sel)
 {
-    if (SP_IS_GROUP(clip_data)) {
-        std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(clip_data));
-        for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
-            SPItem *subitem = *iter;
-            flattenClip(subitem, path_in);
-        }
-    } else if (SP_IS_SHAPE(clip_data)) {
-        SPCurve * c = nullptr;
-        c = SP_SHAPE(clip_data)->getCurve();
-        if (c) {
-            Geom::PathVector c_pv = c->get_pathvector();
-            c_pv *= sp_item_transform_repr (sp_lpe_item).inverse();
-            std::unique_ptr<Geom::PathIntersectionGraph> pig(new Geom::PathIntersectionGraph(c_pv, path_in));
-            if (pig && !c_pv.empty() && !path_in.empty()) {
-                path_in = pig->getIntersection();
+    if (!sel->isEmpty()) {
+        auto selList = sel->items();
+        for (auto i = boost::rbegin(selList); i != boost::rend(selList); ++i) {
+            SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(*i);
+            if (lpeitem) {
+                if (lpeitem->hasPathEffect() && lpeitem->pathEffectsEnabled()) {
+                    for (PathEffectList::iterator it = lpeitem->path_effect_list->begin();
+                         it != lpeitem->path_effect_list->end(); ++it) {
+                        LivePathEffectObject *lpeobj = (*it)->lpeobject;
+                        if (!lpeobj) {
+                            /** \todo Investigate the cause of this.
+                             * For example, this happens when copy pasting an object with LPE applied. Probably because
+                             * the object is pasted while the effect is not yet pasted to defs, and cannot be found.
+                             */
+                            g_warning("SPLPEItem::performPathEffect - NULL lpeobj in list!");
+                            return;
+                        }
+                        Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
+                        if (lpe->getName() == "Power clip") {
+                            lpeitem->setCurrentPathEffect(*it);
+                            lpeitem->removeCurrentPathEffect(false);
+                            break;
+                        }
+                    }
+                }
             }
-            c->unref();
         }
     }
 }
@@ -375,40 +306,7 @@ void sp_inverse_powerclip(Inkscape::Selection *sel) {
                     }
                     Effect::createAndApply(POWERCLIP, SP_ACTIVE_DOCUMENT, lpeitem);
                     Effect* lpe = lpeitem->getCurrentLPE();
-                    lpe->getRepr()->setAttribute("is_inverse", "false");
-                    lpe->getRepr()->setAttribute("is_visible", "true");
                     lpe->getRepr()->setAttribute("inverse", "true");
-                    lpe->getRepr()->setAttribute("flatten", "false");
-                    lpe->getRepr()->setAttribute("hide_clip", "false");
-                }
-            }
-        }
-    }
-}
-
-void sp_remove_powerclip(Inkscape::Selection *sel) {
-    if (!sel->isEmpty()) {
-        auto selList = sel->items();
-        for(auto i = boost::rbegin(selList); i != boost::rend(selList); ++i) {
-            SPLPEItem* lpeitem = dynamic_cast<SPLPEItem*>(*i);
-            if (lpeitem) {
-                if (lpeitem->hasPathEffect() && lpeitem->pathEffectsEnabled()) {
-                    for (PathEffectList::iterator it = lpeitem->path_effect_list->begin(); it != lpeitem->path_effect_list->end(); ++it)
-                    {
-                        LivePathEffectObject *lpeobj = (*it)->lpeobject;
-                        if (!lpeobj) {
-                            /** \todo Investigate the cause of this.
-                             * For example, this happens when copy pasting an object with LPE applied. Probably because the object is pasted while the effect is not yet pasted to defs, and cannot be found.
-                            */
-                            g_warning("SPLPEItem::performPathEffect - NULL lpeobj in list!");
-                            return;
-                        }
-                        Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
-                        if (lpe->getName() == "powerclip") {
-                            lpe->doOnRemove(lpeitem);
-                            break;
-                        }
-                    }
                 }
             }
         }

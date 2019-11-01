@@ -2,8 +2,12 @@ HOWTO
 
 # Add a rendering test: 
   - create the svg file
-  - inkscape <yourfile>.svg -d 96  -e expected_rendering/<yourfile>.png
-  - inkscape <yourfile>.svg -d 384 -e expected_rendering/<yourfile>-large.png
+  - 0.92:
+  	- inkscape <yourfile>.svg -d 96  -e expected_rendering/<yourfile>.png
+  	- inkscape <yourfile>.svg -d 384 -e expected_rendering/<yourfile>-large.png
+  - 1.0:
+	- inkscape -d  96 --export-file=expected_rendering/<yourfile>.png <yourfile>.svg
+	- inkscape -d 384 --export-file=expected_rendering/<yourfile>-large.png <yourfile>.svg
   - add the test in CMakeLists.txt
   - use stable if possible to generate the reference png files
   - git add <yourfile>.svg expected_rendering/<yourfile>-large.png expected_rendering/<yourfile>.png

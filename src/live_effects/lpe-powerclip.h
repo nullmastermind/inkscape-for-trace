@@ -10,7 +10,6 @@
 
 #include "live_effects/effect.h"
 #include "live_effects/parameter/message.h"
-#include "live_effects/parameter/hidden.h"
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -19,26 +18,23 @@ class LPEPowerClip : public Effect {
 public:
     LPEPowerClip(LivePathEffectObject *lpeobject);
     ~LPEPowerClip() override;
-    void doOnApply (SPLPEItem const * lpeitem) override;
     void doBeforeEffect (SPLPEItem const* lpeitem) override;
     Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
     void doOnRemove (SPLPEItem const* /*lpeitem*/) override;
     void doOnVisibilityToggled(SPLPEItem const* lpeitem) override;
-    void doAfterEffect (SPLPEItem const* lpeitem) override;
-    void addInverse (SPItem * clip_data, SPCurve * clipcurve, Geom::Affine affine, bool root);
-    void updateInverse (SPItem * clip_data);
-    void removeInverse (SPItem * clip_data);
-    void flattenClip(SPItem * clip_data, Geom::PathVector &path_in);
-private:
-    HiddenParam is_inverse;
-    HiddenParam uri;
+    Glib::ustring getId();
+    void add();
+    void upd();
+    void del();
+    Geom::PathVector getClipPathvector();
+
+  private:
     BoolParam inverse;
     BoolParam flatten;
     BoolParam hide_clip;
     MessageParam message;
-    Geom::Path clip_box;
-    Geom::Affine base;
-    Geom::Affine lastapplied;
+    bool _updating;
+    bool _legacy;
 };
 
 void sp_remove_powerclip(Inkscape::Selection *sel);

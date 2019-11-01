@@ -246,8 +246,12 @@ public:
      * Get item's visual bounding box in this item's coordinate system.
      *
      * The visual bounding box includes the stroke and the filter region.
+     * @param wfilter use filter expand in bbox calculation
+     * @param wclip use clip data in bbox calculation
+     * @param wmask use mask data in bbox calculation
      */
-    Geom::OptRect visualBounds(Geom::Affine const &transform = Geom::identity()) const;
+    Geom::OptRect visualBounds(Geom::Affine const &transform = Geom::identity(), bool wfilter = true, bool wclip = true,
+                               bool wmask = true) const;
 
     Geom::OptRect bounds(BBoxType type, Geom::Affine const &transform = Geom::identity()) const;
 
