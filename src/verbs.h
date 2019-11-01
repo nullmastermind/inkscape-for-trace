@@ -56,8 +56,6 @@ enum {
     SP_VERB_FILE_VACUUM,
     SP_VERB_FILE_IMPORT,
     //    SP_VERB_FILE_EXPORT,
-    SP_VERB_FILE_IMPORT_FROM_OCAL, /**< Import the file from Open Clip Art Library */
-                                   //    SP_VERB_FILE_EXPORT_TO_OCAL, /**< Export the file to Open Clip Art  Library */
     SP_VERB_FILE_NEXT_DESKTOP,
     SP_VERB_FILE_PREV_DESKTOP,
     SP_VERB_FILE_CLOSE_VIEW,

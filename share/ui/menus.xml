@@ -16,8 +16,6 @@
        <separator/>
        <verb verb-id="FileImport" />
        <verb verb-id="DialogExport" />
-       <verb verb-id="FileImportFromOCAL" />
-       <!--verb verb-id="FileExportToOCAL" /-->
        <separator/>
        <verb verb-id="FilePrint" />
        <separator/>

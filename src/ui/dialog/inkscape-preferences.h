@@ -176,7 +176,6 @@ protected:
     UI::Widget::DialogPage _page_svgexport;
     UI::Widget::DialogPage _page_cms;
     UI::Widget::DialogPage _page_autosave;
-    UI::Widget::DialogPage _page_openclipart;
 
     UI::Widget::DialogPage _page_rendering;
     UI::Widget::DialogPage _page_system;
@@ -485,10 +484,6 @@ protected:
     UI::Widget::PrefCheckButton   _svgexport_remove_marker_auto_start_reverse;
     UI::Widget::PrefCheckButton   _svgexport_remove_marker_context_paint;
 
-
-    UI::Widget::PrefEntryButtonHBox _importexport_ocal_url;
-    UI::Widget::PrefEntry           _importexport_ocal_username;
-    UI::Widget::PrefEntry           _importexport_ocal_password;
 
     /*
      * Keyboard shortcut members

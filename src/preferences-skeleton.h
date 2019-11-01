@@ -319,9 +319,6 @@ R"=====(
     <group id="showfiltersinfobox" value="1" />
     <group id="startmode" outline="0"/>
     <group id="outlinemode" value="0"/>
-    <group id="ocalurl" str="openclipart.org"/>
-    <group id="ocalusername" str=""/>
-    <group id="ocalpassword" str=""/>
 
     <group id="wireframecolors"
            onlight="0x000000ff"

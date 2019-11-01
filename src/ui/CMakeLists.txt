@@ -130,7 +130,6 @@ set(ui_SRC
 	dialog/object-attributes.cpp
 	dialog/object-properties.cpp
 	dialog/objects.cpp
-	dialog/ocaldialogs.cpp
 	dialog/polar-arrange-tab.cpp
 	dialog/print-colors-preview-dialog.cpp
 	dialog/print.cpp
@@ -297,7 +296,6 @@ set(ui_SRC
 	dialog/object-attributes.h
 	dialog/object-properties.h
 	dialog/objects.h
-	dialog/ocaldialogs.h
 	dialog/panel-dialog.h
 	dialog/polar-arrange-tab.h
 	dialog/print-colors-preview-dialog.h

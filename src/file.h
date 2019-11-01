@@ -142,37 +142,6 @@ SPObject* file_import(SPDocument *in_doc, const Glib::ustring &uri,
 
 
 /*######################
-## E X P O R T  T O  O C A L
-######################*/
-
-/**
- * Export the current document to OCAL
- */
-//void sp_file_export_to_ocal (Gtk::Window &parentWindow );
-
-
-/**
- * Export the current document to OCAL
- */
-//bool sp_file_export_to_ocal_dialog (void *widget);
-
-
-/*######################
-## I M P O R T  F R O M  O C A L
-######################*/
-
-/**
- * Import a document from OCAL
- */
-void on_import_from_ocal_response(Glib::ustring filename);
-
-/**
- * Import a document from OCAL
- */
-void sp_file_import_from_ocal (Gtk::Window &parentWindow );
-
-
-/*######################
 ## P R I N T
 ######################*/
 

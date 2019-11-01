@@ -1720,18 +1720,6 @@ void InkscapePreferences::initPageIO()
 
     // -----------
     this->AddPage(_page_autosave, _("Autosave"), iter_io, PREFS_PAGE_IO_AUTOSAVE);
-
-    // Open Clip Art options
-    _importexport_ocal_url.init("/options/ocalurl/str", true, g_strdup_printf("openclipart.org"));
-    _page_openclipart.add_line( false, _("Open Clip Art Library _Server Name:"), _importexport_ocal_url, "",
-        _("The server name of the Open Clip Art Library webdav server; it's used by the Import and Export to OCAL function"), true);
-    _importexport_ocal_username.init("/options/ocalusername/str", true);
-    _page_openclipart.add_line( false, _("Open Clip Art Library _Username:"), _importexport_ocal_username, "",
-            _("The username used to log into Open Clip Art Library"), true);
-    _importexport_ocal_password.init("/options/ocalpassword/str", false);
-    _page_openclipart.add_line( false, _("Open Clip Art Library _Password:"), _importexport_ocal_password, "",
-            _("The password used to log into Open Clip Art Library"), true);
-    this->AddPage(_page_openclipart, _("Open Clip Art"), iter_io, PREFS_PAGE_IO_OPENCLIPART);
 }
 
 void InkscapePreferences::initPageBehavior()
