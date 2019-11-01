@@ -124,6 +124,10 @@
               <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="margin_left">5</property>
+                <property name="margin_right">5</property>
+                <property name="margin_top">5</property>
+                <property name="margin_bottom">5</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkStackSwitcher">
@@ -131,6 +135,7 @@
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Create a single path or create a group of paths</property>
                     <property name="halign">center</property>
+                    <property name="margin_bottom">5</property>
                     <property name="stack">choice_scan</property>
                   </object>
                   <packing>
