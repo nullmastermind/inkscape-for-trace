@@ -1099,6 +1099,7 @@ SPIString::read( gchar const *str ) {
         Glib::ustring str_temp(str);
         if (id() == SP_ATTR_D && style_src == SP_STYLE_SRC_ATTRIBUTE) {
             set = false;
+            return;
         }
         if (id() == SP_PROP_FONT_FAMILY) {
             // Family names may be quoted in CSS, internally we use unquoted names.

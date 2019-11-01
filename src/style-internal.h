@@ -150,9 +150,9 @@ public:
         }
 
         if ( !set || (has_important && !important) ) {
+            style_src = source;
             read( stripped.c_str() );
             if ( set ) {
-                style_src = source;
                 if (has_important) {
                     important = true;
                 }
