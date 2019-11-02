@@ -57,7 +57,26 @@ LPEPowerMask::doOnApply (SPLPEItem const * lpeitem)
 {
     SPLPEItem *item = const_cast<SPLPEItem*>(lpeitem);
     SPObject * mask = item->mask_ref->getObject();
-    if (!mask) {
+    bool hasit = false;
+    if (lpeitem->hasPathEffect() && lpeitem->pathEffectsEnabled()) {
+        for (auto & it : *lpeitem->path_effect_list)
+        {
+            LivePathEffectObject *lpeobj = it->lpeobject;;
+            if (!lpeobj) {
+                /** \todo Investigate the cause of this.
+                 * For example, this happens when copy pasting an object with LPE applied. Probably because the object is pasted while the effect is not yet pasted to defs, and cannot be found.
+                */
+                g_warning("SPLPEItem::performPathEffect - NULL lpeobj in list!");
+                return;
+            }
+            Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
+            if (lpe->getName() == "powermask") {
+                hasit = true;
+                break;
+            }
+        }
+    }
+    if (!mask || hasit) {
         item->removeCurrentPathEffect(false);
     } else {
         Glib::ustring newmask = getId();
@@ -181,7 +200,7 @@ LPEPowerMask::setMask(){
         Glib::ustring primitive2_id = (mask_id + (Glib::ustring)"_primitive2").c_str();
         primitive2->setAttribute("id", primitive2_id.c_str());
         primitive2->setAttribute("values", "-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 1 0 ");
-        primitive2->setAttribute("in", "fbSourceGraphic");
+        primitive2->setAttribute("for (auto & it : *lpeitem->path_effect_list)in", "fbSourceGraphic");
         elemref = defs->appendChildRepr(filter);
         Inkscape::GC::release(filter);
         filter->appendChild(primitive1);
@@ -284,20 +303,18 @@ LPEPowerMask::doEffect (SPCurve * curve)
 void 
 LPEPowerMask::doOnRemove (SPLPEItem const* lpeitem)
 {
-    if(!keep_paths) {
-        SPMask *mask = lpeitem->mask_ref->getObject();
-        if (mask) {
-            invert.param_setValue(false);
-            //wrap.param_setValue(false);
-            background.param_setValue(false);
-            setMask();
-            SPObject *elemref = nullptr;
-            SPDocument *document = getSPDoc();
-            Glib::ustring mask_id = getId();
-            Glib::ustring filter_id = mask_id + (Glib::ustring)"_inverse";
-            if ((elemref = document->getObjectById(filter_id))) {
-                elemref->deleteObject(true);
-            }
+    SPMask *mask = lpeitem->mask_ref->getObject();
+    if (mask) {
+        invert.param_setValue(false);
+        //wrap.param_setValue(false);
+        background.param_setValue(false);
+        setMask();
+        SPObject *elemref = nullptr;
+        SPDocument *document = getSPDoc();
+        Glib::ustring mask_id = getId();
+        Glib::ustring filter_id = mask_id + (Glib::ustring)"_inverse";
+        if ((elemref = document->getObjectById(filter_id))) {
+            elemref->deleteObject(true);
         }
     }
 }
@@ -312,7 +329,6 @@ void sp_inverse_powermask(Inkscape::Selection *sel) {
         for(auto i = boost::rbegin(selList); i != boost::rend(selList); ++i) {
             SPLPEItem* lpeitem = dynamic_cast<SPLPEItem*>(*i);
             if (lpeitem) {
-
                 SPMask *mask = lpeitem->mask_ref->getObject();
                 if (mask) {
                     Inkscape::XML::Document *xml_doc = document->getReprDoc();
@@ -321,7 +337,6 @@ void sp_inverse_powermask(Inkscape::Selection *sel) {
                     Effect* lpe = lpeitem->getCurrentLPE();
                     LPEPowerMask *powermask = dynamic_cast<LPEPowerMask *>(lpe);
                     if (powermask) {
-                        std::cout << "gsdgdgdgsd" << std::endl;
                         lpe->getRepr()->setAttribute("invert", "false");
                         lpe->getRepr()->setAttribute("is_visible", "true");
                         lpe->getRepr()->setAttribute("hide_mask", "false");
@@ -341,9 +356,9 @@ void sp_remove_powermask(Inkscape::Selection *sel) {
             SPLPEItem* lpeitem = dynamic_cast<SPLPEItem*>(*i);
             if (lpeitem) {
                 if (lpeitem->hasPathEffect() && lpeitem->pathEffectsEnabled()) {
-                    for (PathEffectList::iterator it = lpeitem->path_effect_list->begin(); it != lpeitem->path_effect_list->end(); ++it)
+                    for (auto & it : *lpeitem->path_effect_list)
                     {
-                        LivePathEffectObject *lpeobj = (*it)->lpeobject;
+                        LivePathEffectObject *lpeobj = it->lpeobject;
                         if (!lpeobj) {
                             /** \todo Investigate the cause of this.
                              * For example, this happens when copy pasting an object with LPE applied. Probably because the object is pasted while the effect is not yet pasted to defs, and cannot be found.
