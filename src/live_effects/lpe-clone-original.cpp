@@ -79,7 +79,7 @@ LPECloneOriginal::syncOriginal()
         // TODO remove the tools_switch atrocity.
         sp_lpe_item_update_patheffect (sp_lpe_item, false, true);
         method.param_set_value(CLM_NONE);
-        upd_params = true;
+        refresh_widgets = true;
         SPDesktop *desktop = SP_ACTIVE_DESKTOP;
         sp_lpe_item_update_patheffect (sp_lpe_item, false, true);
         if (desktop && tools_isactive(desktop, TOOLS_NODES)) {

@@ -69,7 +69,7 @@ UnitParam::param_update_default(const gchar * default_unit)
 void
 UnitParam::param_set_value(Inkscape::Util::Unit const &val)
 {
-    param_effect->upd_params = true;
+    param_effect->refresh_widgets = true;
     unit = new Inkscape::Util::Unit(val);
 }
 

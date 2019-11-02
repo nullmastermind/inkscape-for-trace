@@ -54,9 +54,7 @@ public:
         
         return dynamic_cast<Gtk::Widget *> (regenum);
     };
-    void _on_change_combo() {
-        param_effect->upd_params = true;
-    }
+    void _on_change_combo() { param_effect->refresh_widgets = true; }
     bool param_readSVGValue(const gchar * strvalue) override {
         if (!strvalue) {
             param_set_default();

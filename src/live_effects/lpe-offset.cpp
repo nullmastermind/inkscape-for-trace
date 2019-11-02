@@ -456,7 +456,7 @@ namespace OfS {
 void KnotHolderEntityOffsetPoint::knot_ungrabbed(Geom::Point const &p, Geom::Point const& /*origin*/, guint state)
 {
     LPEOffset* lpe = dynamic_cast<LPEOffset *>(_effect);
-    lpe->upd_params = true;
+    lpe->refresh_widgets = true;
 }
 
 void KnotHolderEntityOffsetPoint::knot_set(Geom::Point const &p, Geom::Point const& /*origin*/, guint state)

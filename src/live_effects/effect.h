@@ -138,7 +138,7 @@ public:
     bool apply_to_clippath_and_mask;
     bool keep_paths; // set this to false allow retain extra generated objects, see measure line LPE
     bool is_load;
-    bool upd_params;
+    bool refresh_widgets;
     BoolParam is_visible;
     Geom::PathVector pathvector_before_effect;
     Geom::PathVector pathvector_after_effect;

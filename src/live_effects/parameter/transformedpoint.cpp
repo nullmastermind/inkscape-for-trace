@@ -167,14 +167,16 @@ public:
     ~TransformedPointParamKnotHolderEntity_Vector() override = default;
 
     void knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint /*state*/) override {
-        param->param_effect->upd_params = true;
         Geom::Point const s = p - param->origin;
         /// @todo implement angle snapping when holding CTRL
         param->setVector(s);
         param->set_and_write_new_values(param->origin, param->vector);
         sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);
     };
-    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override
+    {
+        param->param_effect->refresh_widgets = true;
+    };
     Geom::Point knot_get() const override{
         return param->origin + param->vector;
     };

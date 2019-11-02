@@ -170,7 +170,7 @@ PointParam::param_newWidget()
 }
 
 bool PointParam::on_button_release(GdkEventButton* button_event) {
-    param_effect->upd_params = true;
+    param_effect->refresh_widgets = true;
     return false;
 }
 
@@ -189,7 +189,7 @@ public:
 
     void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
     Geom::Point knot_get() const override;
-    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override;
     void knot_click(guint state) override;
 
 private:
@@ -211,7 +211,6 @@ PointParamKnotHolderEntity::knot_set(Geom::Point const &p, Geom::Point const &or
             s = A;
         }
     }
-    pparam->param_effect->upd_params = true;
     if(this->pparam->liveupdate){
         pparam->param_setValue(s, true);
     } else {
@@ -234,6 +233,11 @@ PointParamKnotHolderEntity::knot_click(guint state)
             pparam->param_setValue(*pparam,true);
         }
     }
+}
+
+void PointParamKnotHolderEntity::knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state)
+{
+    pparam->param_effect->refresh_widgets = true;
 }
 
 void

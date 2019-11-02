@@ -159,7 +159,7 @@ RandomParam::param_newWidget()
 }
 
 bool RandomParam::on_button_release(GdkEventButton* button_event) {
-    param_effect->upd_params = true;
+    param_effect->refresh_widgets = true;
     return false;
 }
 

@@ -180,7 +180,6 @@ PowerStrokePointArrayParamKnotHolderEntity::knot_set(Geom::Point const &p, Geom:
     if (!valid_index(_index)) {
         return;
     }
-    _pparam->param_effect->upd_params = true;
     /// @todo how about item transforms???
     Piecewise<D2<SBasis> > const & pwd2 = _pparam->get_pwd2();
     Piecewise<D2<SBasis> > const & n = _pparam->get_pwd2_normal();
@@ -217,9 +216,14 @@ PowerStrokePointArrayParamKnotHolderEntity::knot_get() const
     return canvas_point;
 }
 
+void PowerStrokePointArrayParamKnotHolderEntity::knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin,
+                                                                guint state)
+{
+    _pparam->param_effect->refresh_widgets = true;
+}
+
 void PowerStrokePointArrayParamKnotHolderEntity::knot_set_offset(Geom::Point offset)
 {
-	_pparam->param_effect->upd_params = true;
     _pparam->_vector.at(_index) = Geom::Point(offset.x(), offset.y() / 2);
 	this->parent_holder->knot_ungrabbed_handler(this->knot, 0);
 }

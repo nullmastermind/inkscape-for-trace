@@ -174,7 +174,6 @@ public:
     ~VectorParamKnotHolderEntity_Origin() override = default;
 
     void knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint state) override {
-        param->param_effect->upd_params = true;
         Geom::Point const s = snap_knot_position(p, state);
         param->setOrigin(s);
         param->set_and_write_new_values(param->origin, param->vector);
@@ -183,7 +182,10 @@ public:
     Geom::Point knot_get() const override {
         return param->origin;
     };
-    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override
+    {
+        param->param_effect->refresh_widgets = true;
+    };
     void knot_click(guint /*state*/) override{
         g_print ("This is the origin handle associated to parameter '%s'\n", param->param_key.c_str());
     };
@@ -199,7 +201,6 @@ public:
 
     void knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint /*state*/) override {
         Geom::Point const s = p - param->origin;
-        param->param_effect->upd_params = true;
         /// @todo implement angle snapping when holding CTRL
         param->setVector(s);
         param->set_and_write_new_values(param->origin, param->vector);
@@ -208,7 +209,10 @@ public:
     Geom::Point knot_get() const override {
         return param->origin + param->vector;
     };
-    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override
+    {
+        param->param_effect->refresh_widgets = true;
+    };
     void knot_click(guint /*state*/) override{
         g_print ("This is the vector handle associated to parameter '%s'\n", param->param_key.c_str());
     };

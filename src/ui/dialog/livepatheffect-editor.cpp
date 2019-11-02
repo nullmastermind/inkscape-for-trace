@@ -209,7 +209,7 @@ bool LivePathEffectEditor::_on_button_release(GdkEventButton* button_event) {
         if (lperef->getObject()) {
             LivePathEffect::Effect * effect = lperef->lpeobject->get_lpe();
             if (effect) {
-                effect->upd_params = true;
+                effect->refresh_widgets = true;
                 showParams(*effect);
             }
         }
@@ -220,7 +220,7 @@ bool LivePathEffectEditor::_on_button_release(GdkEventButton* button_event) {
 void
 LivePathEffectEditor::showParams(LivePathEffect::Effect& effect)
 {
-    if (effectwidget && !effect.upd_params) {
+    if (effectwidget && !effect.refresh_widgets) {
         return;
     }
     if (effectwidget) {
@@ -237,7 +237,7 @@ LivePathEffectEditor::showParams(LivePathEffect::Effect& effect)
     effectcontrol_frame.show();
     effectcontrol_vbox.show_all_children();
     // fixme: add resizing of dialog
-    effect.upd_params = false;
+    effect.refresh_widgets = false;
 }
 
 void
@@ -561,7 +561,7 @@ void LivePathEffectEditor::on_effect_selection_changed()
             current_lperef = lperef;
             LivePathEffect::Effect * effect = lperef->lpeobject->get_lpe();
             if (effect) {
-                effect->upd_params = true;
+                effect->refresh_widgets = true;
                 showParams(*effect);
                 //To reload knots and helper paths
                 Inkscape::Selection *sel = _getSelection();

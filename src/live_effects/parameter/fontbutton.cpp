@@ -84,7 +84,7 @@ void
 FontButtonParam::param_setValue(const Glib::ustring newvalue)
 {
     if (value != newvalue) {
-        param_effect->upd_params = true;
+        param_effect->refresh_widgets = true;
     }
     value = newvalue;
 }

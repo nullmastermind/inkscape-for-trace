@@ -105,7 +105,7 @@ void
 MessageParam::param_setValue(const gchar * strvalue)
 {
     if (strcmp(strvalue, message) != 0) {
-        param_effect->upd_params = true;
+        param_effect->refresh_widgets = true;
     }
     message = strvalue;
 }

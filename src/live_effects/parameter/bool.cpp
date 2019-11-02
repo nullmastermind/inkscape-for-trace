@@ -92,7 +92,7 @@ void
 BoolParam::param_setValue(bool newvalue)
 {
     if (value != newvalue) {
-        param_effect->upd_params = true;
+        param_effect->refresh_widgets = true;
     }
     value = newvalue;
 }

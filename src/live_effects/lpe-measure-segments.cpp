@@ -1069,13 +1069,10 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                             items.emplace_back("ArrowDIN-end");
                         }
                     }
-                    if (((Geom::are_near(prev, prev_stored, 0.01) && Geom::are_near(next, next_stored, 0.01)) || 
+                    if (((Geom::are_near(prev, prev_stored, 0.01) && Geom::are_near(next, next_stored, 0.01)) ||
                          fix_overlaps_degree == 180) &&
-                        Geom::are_near(start, start_stored, 0.01) && 
-                        Geom::are_near(end, end_stored, 0.01) && 
-                        !this->upd_params &&
-                        !colorchanged)
-                    {
+                        Geom::are_near(start, start_stored, 0.01) && Geom::are_near(end, end_stored, 0.01) &&
+                        !this->refresh_widgets && !colorchanged) {
                         continue;
                     }
                     Geom::Point hstart = start;

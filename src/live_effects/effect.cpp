@@ -1110,7 +1110,7 @@ Effect::Effect(LivePathEffectObject *lpeobject)
       concatenate_before_pwd2(false),
       sp_lpe_item(nullptr),
       current_zoom(1),
-      upd_params(false),
+      refresh_widgets(false),
       current_shape(nullptr),
       provides_own_flash_paths(true), // is automatically set to false if providesOwnFlashPaths() is not overridden
       defaultsopen(false),
