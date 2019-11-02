@@ -26,6 +26,8 @@ public:
     void doOnRemove (SPLPEItem const* /*lpeitem*/) override;
     void doOnVisibilityToggled(SPLPEItem const* lpeitem) override;
     void toggleMaskVisibility();
+    void tryForkMask();
+    Glib::ustring getId();
     void setMask();
 private:
     HiddenParam uri;
