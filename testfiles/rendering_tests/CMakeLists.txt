@@ -14,8 +14,6 @@ set(RENDERING_TESTS
     selector-important-002
     selector-important-003
     test-dont-crash
-    test-lpe-0.92
-    test-lpe-1.0
 )
 
 
