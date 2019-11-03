@@ -13,6 +13,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <algorithm>
 #include <cstring>
 #include <string>
 
@@ -320,6 +321,9 @@ void
 SimpleNode::setAttribute(gchar const *name, gchar const *value, bool const /*is_interactive*/)
 {
     g_return_if_fail(name && *name);
+
+    // sanity check: `name` must not contain whitespace
+    g_assert(std::none_of(name, name + strlen(name), [](char c) { return g_ascii_isspace(c); }));
 
     // Check usefulness of attributes on elements in the svg namespace, optionally don't add them to tree.
     Glib::ustring element = g_quark_to_string(_name);
