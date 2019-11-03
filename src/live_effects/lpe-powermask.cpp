@@ -200,7 +200,7 @@ LPEPowerMask::setMask(){
         Glib::ustring primitive2_id = (mask_id + (Glib::ustring)"_primitive2").c_str();
         primitive2->setAttribute("id", primitive2_id.c_str());
         primitive2->setAttribute("values", "-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 1 0 ");
-        primitive2->setAttribute("for (auto & it : *lpeitem->path_effect_list)in", "fbSourceGraphic");
+        primitive2->setAttribute("in", "fbSourceGraphic");
         elemref = defs->appendChildRepr(filter);
         Inkscape::GC::release(filter);
         filter->appendChild(primitive1);
