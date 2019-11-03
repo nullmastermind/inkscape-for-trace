@@ -17,12 +17,6 @@
 #include <glibmm/value.h>
 #include <vector>
 
-/**
- * True iff k is a property in SVG, i.e. something that can be written either in a style attribute
- * or as its own XML attribute. This must be kept in sync with SPAttributeEnum.
- */
-#define SP_ATTRIBUTE_IS_CSS(k) (((k) >= SP_ATTR_D) && ((k) < SP_PROP_SYSTEM_LANGUAGE))
-
 /*
  * Do not change order of attributes and properties. Attribute and
  * order in an SVG file is  (optionally) determined by the order here.
@@ -570,6 +564,12 @@ enum SPAttributeEnum : unsigned {
 };
 
 /**
+ * True iff k is a property in SVG, i.e. something that can be written either in a style attribute
+ * or as its own XML attribute. This must be kept in sync with SPAttributeEnum.
+ */
+bool SP_ATTRIBUTE_IS_CSS(SPAttributeEnum k);
+
+/**
  * Get attribute id by name. Return SP_ATTR_INVALID for invalid names.
  */
 SPAttributeEnum sp_attribute_lookup(gchar const *key);
@@ -580,9 +580,10 @@ SPAttributeEnum sp_attribute_lookup(gchar const *key);
 gchar const *sp_attribute_name(SPAttributeEnum id);
 
 /**
- * Get attribute name css list.
+ * Get sorted attribute name list.
+ * @param css_only If true, only return CSS properties
  */
-std::vector<Glib::ustring> sp_attribute_name_list(bool cssattr = false, bool attr = false);
+std::vector<Glib::ustring> sp_attribute_name_list(bool css_only = false);
 
 #endif
 

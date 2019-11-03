@@ -566,7 +566,9 @@ static_assert(n_attrs == SPAttributeEnum_SIZE, "");
 /**
  * Inverse to the \c props array for lookup by name.
  */
-struct AttributeLookupImpl {
+class AttributeLookupImpl {
+    friend SPAttributeEnum sp_attribute_lookup(gchar const *key);
+
     struct cstrless {
         bool operator()(char const *lhs, char const *rhs) const { return std::strcmp(lhs, rhs) < 0; }
     };
@@ -607,20 +609,11 @@ sp_attribute_name(SPAttributeEnum id)
     return props[id].name;
 }
 
-std::vector<Glib::ustring> sp_attribute_name_list(bool cssattr, bool attr)
+std::vector<Glib::ustring> sp_attribute_name_list(bool css_only)
 {
     std::vector<Glib::ustring> result;
-    static AttributeLookupImpl const _instance;
-    bool add = attr;
     for (auto prop : props) {
-        if (prop.code == SP_ATTR_D) {
-            if (cssattr) {
-                add = true;
-            } else if (attr) {
-                add = false;
-            }
-        }
-        if (add) {
+        if (!css_only || SP_ATTRIBUTE_IS_CSS(prop.code)) {
             result.emplace_back(prop.name);
         }
     }
@@ -628,6 +621,9 @@ std::vector<Glib::ustring> sp_attribute_name_list(bool cssattr, bool attr)
     return result;
 }
 
+bool SP_ATTRIBUTE_IS_CSS(SPAttributeEnum k) { //
+    return (k >= SP_ATTR_D) && (k < SP_PROP_SYSTEM_LANGUAGE);
+}
 
 /*
   Local Variables:
