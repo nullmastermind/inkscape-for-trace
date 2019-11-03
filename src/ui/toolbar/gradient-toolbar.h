@@ -45,8 +45,7 @@ private:
     std::vector<Gtk::RadioToolButton *> _new_type_buttons;
     std::vector<Gtk::RadioToolButton *> _new_fillstroke_buttons;
     UI::Widget::ComboToolItem *_select_cb;
-    Gtk::ToolItem             *_spread_lbl;
-    Gtk::ComboBoxText         *_spread_cb;
+    UI::Widget::ComboToolItem *_spread_cb;
     UI::Widget::ComboToolItem *_stop_cb;
 
     Gtk::ToolButton *_stops_add_item;
@@ -62,7 +61,7 @@ private:
     void new_fillstroke_changed(int mode);
     void gradient_changed(int active);
     SPGradient * get_selected_gradient();
-    void spread_changed();
+    void spread_changed(int active);
     void stop_changed(int active);
     void select_dragger_by_stop(SPGradient          *gradient,
                                 UI::Tools::ToolBase *ev);

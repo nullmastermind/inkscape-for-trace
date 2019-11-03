@@ -41,8 +41,8 @@ class Node;
 
 namespace UI {
 namespace Widget {
-class LabelToolItem;
 class SpinButtonToolItem;
+class ComboToolItem;
 }
 
 namespace Toolbar {
@@ -58,12 +58,8 @@ private:
     Gtk::ToolButton *_flatten_spiro_bspline;
     Gtk::ToolButton *_flatten_simplify;
 
-    Gtk::ToolItem *_shape_item;
-    Gtk::ComboBoxText *_shape_combo;
-
-    Gtk::ToolItem *_cap_item;
-    Gtk::ComboBoxText *_cap_combo;
-
+    UI::Widget::ComboToolItem *_shape_item;
+    UI::Widget::ComboToolItem *_cap_item;
 
     Gtk::ToggleToolButton *_simplify;
 
@@ -82,8 +78,8 @@ private:
     void tolerance_value_changed();
     void add_advanced_shape_options(bool tool_is_pencil);
     void add_powerstroke_cap(bool tool_is_pencil);
-    void change_shape();
-    void change_cap();
+    void change_shape(int shape);
+    void change_cap(int cap);
     void simplify_lpe();
     void simplify_flatten();
     void flatten_spiro_bspline();

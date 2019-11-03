@@ -34,31 +34,28 @@
 
 class SPDesktop;
 
-namespace Gtk {
-class ComboBoxText;
-}
-
 namespace Inkscape {
 namespace UI {
 namespace Widget {
 class UnitTracker;
+class ComboToolItem;
 }
 
 namespace Toolbar {
 class PaintbucketToolbar : public Toolbar {
 private:
-    Gtk::ComboBoxText *_channels_cbt;
-    Gtk::ComboBoxText *_autogap_cbt;
+    UI::Widget::ComboToolItem *_channels_item;
+    UI::Widget::ComboToolItem *_autogap_item;
 
     Glib::RefPtr<Gtk::Adjustment> _threshold_adj;
     Glib::RefPtr<Gtk::Adjustment> _offset_adj;
 
     UI::Widget::UnitTracker *_tracker;
 
-    void channels_changed();
+    void channels_changed(int channels);
     void threshold_changed();
     void offset_changed();
-    void autogap_changed();
+    void autogap_changed(int autogap);
     void defaults();
 
 protected:

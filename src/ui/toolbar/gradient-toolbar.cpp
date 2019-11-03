@@ -444,29 +444,38 @@ GradientToolbar::GradientToolbar(SPDesktop *desktop)
         add(*_stops_reverse_item);
         _stops_reverse_item->set_sensitive(false);
     }
-   
+
     // Gradient Spread type (how a gradient is drawn outside its nominal area)
     {
-        _spread_lbl = add_label(_("Repeat: "));
+        UI::Widget::ComboToolItemColumns columns;
+        Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
 
-        _spread_cb = Gtk::manage(new Gtk::ComboBoxText());
-        _spread_cb->append(C_("Gradient repeat type", "None"));
-        _spread_cb->append(_("Reflected"));
-        _spread_cb->append(_("Direct"));
+        std::vector<gchar*> spread_dropdown_items_list = {
+            const_cast<gchar *>(C_("Gradient repeat type", "None")),
+            _("Reflected"),
+            _("Direct")
+        };
 
-        auto spread_item = Gtk::manage(new Gtk::ToolItem());
-        spread_item->set_tooltip_text(
+        for (auto item: spread_dropdown_items_list) {
+            Gtk::TreeModel::Row row = *(store->append());
+            row[columns.col_label    ] = item;
+            row[columns.col_sensitive] = true;
+        }
+
+        _spread_cb = Gtk::manage(UI::Widget::ComboToolItem::create(_("Repeat: "),
                                         // TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/pservers.html#LinearGradientSpreadMethodAttribute
                                         _("Whether to fill with flat color beyond the ends of the gradient vector "
                                           "(spreadMethod=\"pad\"), or repeat the gradient in the same direction "
                                           "(spreadMethod=\"repeat\"), or repeat the gradient in alternating opposite "
-                                          "directions (spreadMethod=\"reflect\")"));
-        _spread_lbl->set_sensitive(false);
+                                          "directions (spreadMethod=\"reflect\")"),
+                                          "Not Used", store));
+        _spread_cb->use_group_label(true);
+
+        _spread_cb->set_active(0);
         _spread_cb->set_sensitive(false);
-        spread_item->add(*_spread_cb);
-        add(*spread_item);
 
         _spread_cb->signal_changed().connect(sigc::mem_fun(*this, &GradientToolbar::spread_changed));
+        add(*_spread_cb);
     }
 
     add(* Gtk::manage(new Gtk::SeparatorToolItem()));
@@ -620,7 +629,7 @@ GradientToolbar::get_selected_gradient()
  * \brief User selected a spread method from the combobox
  */
 void
-GradientToolbar::spread_changed()
+GradientToolbar::spread_changed(int active)
 {
     if (blocked) {
         return;
@@ -628,7 +637,6 @@ GradientToolbar::spread_changed()
 
     blocked = true;
 
-    int active = _spread_cb->get_active_row_number();
     Inkscape::Selection *selection = _desktop->getSelection();
     SPGradient *gradient = nullptr;
     gr_get_dt_selected_gradient(selection, gradient);
@@ -934,7 +942,6 @@ GradientToolbar::selection_changed(Inkscape::Selection * /*selection*/)
         }
 
         // Spread menu
-        _spread_lbl->set_sensitive( gr_selected && !gr_multi );
         _spread_cb->set_sensitive( gr_selected && !gr_multi );
         _spread_cb->set_active( gr_selected ? (int)spr_selected : 0 );
 

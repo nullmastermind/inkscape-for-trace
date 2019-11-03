@@ -23,7 +23,6 @@ class SPDesktop;
 class SPObject;
 
 namespace Gtk {
-class ComboBoxText;
 class RadioToolButton;
 }
 
@@ -38,6 +37,7 @@ class ToolBase;
 }
 
 namespace Widget {
+class ComboToolItem;
 class SpinButtonToolItem;
 }
 
@@ -46,7 +46,7 @@ class MeshToolbar : public Toolbar {
 private:
     std::vector<Gtk::RadioToolButton *> _new_type_buttons;
     std::vector<Gtk::RadioToolButton *> _new_fillstroke_buttons;
-    Gtk::ComboBoxText *_select_type_combo;
+    UI::Widget::ComboToolItem *_select_type_item;
 
     Gtk::ToggleToolButton *_edit_fill_item;
     Gtk::ToggleToolButton *_edit_stroke_item;
@@ -77,7 +77,7 @@ private:
     void defs_release(SPObject *defs);
     void defs_modified(SPObject *defs, guint flags);
     void warning_popup();
-    void type_changed();
+    void type_changed(int mode);
     void toggle_sides();
     void make_elliptical();
     void pick_colors();

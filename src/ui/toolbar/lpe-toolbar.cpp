@@ -123,18 +123,29 @@ LPEToolbar::LPEToolbar(SPDesktop *desktop)
 
     /* Combo box to choose line segment type */
     {
-        _line_segment_combo = Gtk::manage(new Gtk::ComboBoxText());
-        _line_segment_combo->append(_("Closed"));
-        _line_segment_combo->append(_("Open start"));
-        _line_segment_combo->append(_("Open end"));
-        _line_segment_combo->append(_("Open both"));
+        UI::Widget::ComboToolItemColumns columns;
+        Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
 
-        _line_segment_combo->set_tooltip_text(_("Choose a line segment type"));
+        std::vector<gchar*> line_segment_dropdown_items_list = {
+            _("Closed"),
+            _("Open start"),
+            _("Open end"),
+            _("Open both")
+        };
 
-        auto line_segment_ti = Gtk::manage(new Gtk::ToolItem());
-        line_segment_ti->add(*_line_segment_combo);
-        add(*line_segment_ti);
+        for (auto item: line_segment_dropdown_items_list) {
+            Gtk::TreeModel::Row row = *(store->append());
+            row[columns.col_label    ] = item;
+            row[columns.col_sensitive] = true;
+        }
+
+        _line_segment_combo = Gtk::manage(UI::Widget::ComboToolItem::create(_("Line Type"), _("Choose a line segment type"), "Not Used", store));
+        _line_segment_combo->use_group_label(false);
+
+        _line_segment_combo->set_active(0);
+
         _line_segment_combo->signal_changed().connect(sigc::mem_fun(*this, &LPEToolbar::change_line_segment_type));
+        add(*_line_segment_combo);
     }
 
     add(* Gtk::manage(new Gtk::SeparatorToolItem()));
@@ -265,9 +276,8 @@ LPEToolbar::toggle_set_bbox()
 }
 
 void
-LPEToolbar::change_line_segment_type()
+LPEToolbar::change_line_segment_type(int mode)
 {
-    int mode = _line_segment_combo->get_active_row_number();
     using namespace Inkscape::LivePathEffect;
 
     // quit if run by the attr_changed listener

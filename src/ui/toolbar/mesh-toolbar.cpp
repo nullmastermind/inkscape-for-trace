@@ -44,6 +44,7 @@
 #include "ui/tools/gradient-tool.h"
 #include "ui/tools/mesh-tool.h"
 #include "ui/widget/color-preview.h"
+#include "ui/widget/combo-tool-item.h"
 #include "ui/widget/spin-button-tool-item.h"
 
 #include "widgets/gradient-image.h"
@@ -320,21 +321,28 @@ MeshToolbar::MeshToolbar(SPDesktop *desktop)
 
     /* Type */
     {
-        add_label(_("Smoothing:"));
-        _select_type_combo = Gtk::manage(new Gtk::ComboBoxText());
-        _select_type_combo->append(C_("Type", "Coons"));
-        _select_type_combo->append(_("Bicubic"));
+        UI::Widget::ComboToolItemColumns columns;
+        Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
+        Gtk::TreeModel::Row row;
 
-        // TRANSLATORS: Type of Smoothing. See https://en.wikipedia.org/wiki/Coons_patch
-        _select_type_combo->set_tooltip_text(_("Coons: no smoothing. Bicubic: smoothing across patch boundaries."));
-        _select_type_combo->set_sensitive( false );
-        _select_type_combo->set_active( 0 );
+        row = *(store->append());
+        row[columns.col_label    ] = C_("Type", "Coons");
+        row[columns.col_sensitive] = true;
 
-        auto item = Gtk::manage(new Gtk::ToolItem());
-        item->add(*_select_type_combo);
-        add(*item);
+        row = *(store->append());
+        row[columns.col_label    ] = _("Bicubic");
+        row[columns.col_sensitive] = true;
 
-        _select_type_combo->signal_changed().connect(sigc::mem_fun(*this, &MeshToolbar::type_changed));
+        _select_type_item = Gtk::manage(UI::Widget::ComboToolItem::create(_("Smoothing:"),
+            // TRANSLATORS: Type of Smoothing. See https://en.wikipedia.org/wiki/Coons_patch
+            _("Coons: no smoothing. Bicubic: smoothing across patch boundaries."),
+            "Not Used", store));
+        _select_type_item->use_group_label(true);
+
+        _select_type_item->set_active(0);
+
+        _select_type_item->signal_changed().connect(sigc::mem_fun(*this, &MeshToolbar::type_changed));
+        add(*_select_type_item);
     }
 
     show_all();
@@ -513,10 +521,10 @@ MeshToolbar::selection_changed(Inkscape::Selection * /* selection */)
         ms_read_selection( selection, ms_selected, ms_selected_multi, ms_type, ms_type_multi );
         // std::cout << "   type: " << ms_type << std::endl;
         
-        if (_select_type_combo) {
-            _select_type_combo->set_sensitive(!ms_type_multi);
+        if (_select_type_item) {
+            _select_type_item->set_sensitive(!ms_type_multi);
             blocked = TRUE;
-            _select_type_combo->set_active(ms_type);
+            _select_type_item->set_active(ms_type);
             blocked = FALSE;
         }
     }
@@ -540,10 +548,8 @@ MeshToolbar::warning_popup()
  * Sets mesh type: Coons, Bicubic
  */
 void
-MeshToolbar::type_changed()
+MeshToolbar::type_changed(int mode)
 {
-    int mode = _select_type_combo->get_active_row_number();
-
     if (blocked) {
         return;
     }

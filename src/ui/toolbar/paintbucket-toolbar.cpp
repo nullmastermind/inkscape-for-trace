@@ -29,7 +29,6 @@
 
 #include <glibmm/i18n.h>
 
-#include <gtkmm/comboboxtext.h>
 #include <gtkmm/separatortoolitem.h>
 
 #include "desktop.h"
@@ -57,21 +56,24 @@ PaintbucketToolbar::PaintbucketToolbar(SPDesktop *desktop)
 
     // Channel
     {
-        add_label(_("Fill by:"));
+        UI::Widget::ComboToolItemColumns columns;
 
-        _channels_cbt = Gtk::manage(new Gtk::ComboBoxText());
-        
+        Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
+
         for (auto item: Inkscape::UI::Tools::FloodTool::channel_list) {
-            _channels_cbt->append(item);
+            Gtk::TreeModel::Row row = *(store->append());
+            row[columns.col_label    ] = item;
+            row[columns.col_sensitive] = true;
         }
 
-        int channels = prefs->getInt("/tools/paintbucket/channels", 0);
-        _channels_cbt->set_active( channels );
-        _channels_cbt->signal_changed().connect(sigc::mem_fun(*this, &PaintbucketToolbar::channels_changed));
+        _channels_item = Gtk::manage(UI::Widget::ComboToolItem::create(_("Fill by:"), Glib::ustring(), "Not Used", store));
+        _channels_item->use_group_label(true);
 
-        auto channels_item = Gtk::manage(new Gtk::ToolItem());
-        channels_item->add(*_channels_cbt);
-        add(*channels_item);
+        int channels = prefs->getInt("/tools/paintbucket/channels", 0);
+        _channels_item->set_active(channels);
+
+        _channels_item->signal_changed().connect(sigc::mem_fun(*this, &PaintbucketToolbar::channels_changed));
+        add(*_channels_item);
     }
 
     // Spacing spinbox
@@ -116,20 +118,24 @@ PaintbucketToolbar::PaintbucketToolbar(SPDesktop *desktop)
 
     /* Auto Gap */
     {
-        add_label(_("Close gaps:"));
+        UI::Widget::ComboToolItemColumns columns;
 
-        _autogap_cbt = Gtk::manage(new Gtk::ComboBoxText());
+        Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
 
         for (auto item: Inkscape::UI::Tools::FloodTool::gap_list) {
-            _autogap_cbt->append(item);
+            Gtk::TreeModel::Row row = *(store->append());
+            row[columns.col_label    ] = item;
+            row[columns.col_sensitive] = true;
         }
 
-        int autogap = prefs->getInt("/tools/paintbucket/autogap");
-        _autogap_cbt->set_active( autogap );
-        auto autogap_item = Gtk::manage(new Gtk::ToolItem());
-        autogap_item->add(*_autogap_cbt);
-        add(*autogap_item);
-        _autogap_cbt->signal_changed().connect(sigc::mem_fun(*this, &PaintbucketToolbar::autogap_changed));
+        _autogap_item = Gtk::manage(UI::Widget::ComboToolItem::create(_("Close gaps:"), Glib::ustring(), "Not Used", store));
+        _autogap_item->use_group_label(true);
+
+        int autogap = prefs->getInt("/tools/paintbucket/autogap", 0);
+        _autogap_item->set_active(autogap);
+
+        _autogap_item->signal_changed().connect(sigc::mem_fun(*this, &PaintbucketToolbar::autogap_changed));
+        add(*_autogap_item);
     }
 
     add(* Gtk::manage(new Gtk::SeparatorToolItem()));
@@ -155,9 +161,8 @@ PaintbucketToolbar::create(SPDesktop *desktop)
 }
 
 void
-PaintbucketToolbar::channels_changed()
+PaintbucketToolbar::channels_changed(int channels)
 {
-    auto channels = _channels_cbt->get_active_row_number();
     Inkscape::UI::Tools::FloodTool::set_channels(channels);
 }
 
@@ -183,9 +188,8 @@ PaintbucketToolbar::offset_changed()
 }
 
 void
-PaintbucketToolbar::autogap_changed()
+PaintbucketToolbar::autogap_changed(int autogap)
 {
-    int autogap = _autogap_cbt->get_active_row_number();
     auto prefs = Inkscape::Preferences::get();
     prefs->setInt("/tools/paintbucket/autogap", autogap);
 }
@@ -197,8 +201,8 @@ PaintbucketToolbar::defaults()
     _threshold_adj->set_value(15);
     _offset_adj->set_value(0.0);
 
-    _channels_cbt->set_active( Inkscape::UI::Tools::FLOOD_CHANNELS_RGB );
-    _autogap_cbt->set_active( 0 );
+    _channels_item->set_active(Inkscape::UI::Tools::FLOOD_CHANNELS_RGB);
+    _autogap_item->set_active(0);
 }
 
 }

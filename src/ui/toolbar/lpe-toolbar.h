@@ -34,7 +34,6 @@ class SPDesktop;
 class SPLPEItem;
 
 namespace Gtk {
-class ComboBoxText;
 class RadioToolButton;
 }
 
@@ -64,7 +63,7 @@ private:
     Gtk::ToggleToolButton *_bbox_from_selection_item;
     Gtk::ToggleToolButton *_measuring_item;
     Gtk::ToggleToolButton *_open_lpe_dialog_item;
-    Gtk::ComboBoxText     *_line_segment_combo;
+    UI::Widget::ComboToolItem *_line_segment_combo;
     UI::Widget::ComboToolItem *_units_item;
 
     bool _freeze;
@@ -79,7 +78,7 @@ private:
     void unit_changed(int not_used);
     void sel_modified(Inkscape::Selection *selection, guint flags);
     void sel_changed(Inkscape::Selection *selection);
-    void change_line_segment_type();
+    void change_line_segment_type(int mode);
     void watch_ec(SPDesktop* desktop, UI::Tools::ToolBase* ec);
 
     void toggle_show_bbox();
