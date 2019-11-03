@@ -657,7 +657,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                             SPItem *text = create_text_with_rectangle (desktop, this->p0, p1);
 
                             /* Get "shape-inside" */
-                            gchar* shape_inside = g_strdup(text->style->shape_inside.value);
+                            auto shape_inside = text->style->shape_inside;
 
                             /* Set style */
                             sp_desktop_apply_style_tool(desktop, text->getRepr(), "/tools/text", true);
@@ -670,8 +670,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                             text->setCSS(css,"style");
                             sp_repr_css_attr_unref(css);
                             /* Restore "shape-inside" */
-                            text->style->shape_inside.read( shape_inside );
-                            g_free( shape_inside );
+                            text->style->shape_inside = shape_inside;
                             text->updateRepr();
 
                             desktop->getSelection()->set(text);

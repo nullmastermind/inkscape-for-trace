@@ -141,7 +141,7 @@ void fix_font_name(SPObject *o)
     std::vector<SPObject *> cl = o->childList(false);
     for (std::vector<SPObject *>::const_iterator ci = cl.begin(); ci != cl.end(); ++ci)
         fix_font_name(*ci);
-    std::string prev = o->style->font_family.value ? o->style->font_family.value : o->style->font_family.value_default;
+    std::string prev = o->style->font_family.value();
     if (prev == "Sans")
         o->style->font_family.read("sans-serif");
     else if (prev == "Serif")

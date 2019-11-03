@@ -180,7 +180,7 @@ void graphlayout(std::vector<SPItem*> const & items) {
                 //cout << "Edge: (" << u <<","<<v<<")"<<endl;
                 es.emplace_back(u, v);
                 if (conn->style->marker_end.set) {
-                    if (directed && strcmp(conn->style->marker_end.value, "none")) {
+                    if (directed && strcmp(conn->style->marker_end.value(), "none")) {
                         constraints.push_back(new SeparationConstraint(YDIM, v, u,
                                 ideal_connector_length * directed_edge_height_modifier));
                     }

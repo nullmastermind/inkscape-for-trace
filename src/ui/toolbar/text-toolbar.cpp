@@ -181,11 +181,11 @@ static void sp_text_toolbox_select_cb( GtkEntry* entry, GtkEntryIconPosition /*p
 
       Glib::ustring family_style;
       if (style->font_family.set) {
-	family_style = style->font_family.value;
+	family_style = style->font_family.value();
 	//std::cout << " family style from font_family: " << family_style << std::endl;
       }
       else if (style->font_specification.set) {
-	family_style = style->font_specification.value;
+	family_style = style->font_specification.value();
 	//std::cout << " family style from font_spec: " << family_style << std::endl;
       }
 

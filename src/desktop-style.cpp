@@ -1447,11 +1447,7 @@ objects_query_fontfeaturesettings (const std::vector<SPItem*> &objects, SPStyle 
     bool different = false;
     int texts = 0;
 
-    if (style_res->font_feature_settings.value) {
-        g_free(style_res->font_feature_settings.value);
-        style_res->font_feature_settings.value = nullptr;
-    }
-    style_res->font_feature_settings.set = FALSE;
+    style_res->font_feature_settings.clear();
 
     for (auto obj : objects) {
         // std::cout << "  " << reinterpret_cast<SPObject*>(i->data)->getId() << std::endl;
@@ -1466,18 +1462,14 @@ objects_query_fontfeaturesettings (const std::vector<SPItem*> &objects, SPStyle 
 
         texts ++;
 
-        if (style_res->font_feature_settings.value && style->font_feature_settings.value &&
-            strcmp (style_res->font_feature_settings.value, style->font_feature_settings.value)) {
+        if (style_res->font_feature_settings.set && //
+            strcmp(style_res->font_feature_settings.value(),
+                   style->font_feature_settings.value())) {
             different = true;  // different fonts
         }
 
-        if (style_res->font_feature_settings.value) {
-            g_free(style_res->font_feature_settings.value);
-            style_res->font_feature_settings.value = nullptr;
-        }
-
+        style_res->font_feature_settings = style->font_feature_settings;
         style_res->font_feature_settings.set = true;
-        style_res->font_feature_settings.value = g_strdup(style->font_feature_settings.value);
     }
 
     if (texts == 0 || !style_res->font_feature_settings.set) {
@@ -1599,11 +1591,7 @@ objects_query_fontfamily (const std::vector<SPItem*> &objects, SPStyle *style_re
     bool different = false;
     int texts = 0;
 
-    if (style_res->font_family.value) {
-        g_free(style_res->font_family.value);
-        style_res->font_family.value = nullptr;
-    }
-    style_res->font_family.set = FALSE;
+    style_res->font_family.clear();
 
     for (auto obj : objects) {
         // std::cout << "  " << reinterpret_cast<SPObject*>(i->data)->getId() << std::endl;
@@ -1618,18 +1606,13 @@ objects_query_fontfamily (const std::vector<SPItem*> &objects, SPStyle *style_re
 
         texts ++;
 
-        if (style_res->font_family.value && style->font_family.value &&
-            strcmp (style_res->font_family.value, style->font_family.value)) {
+        if (style_res->font_family.set && //
+            strcmp(style_res->font_family.value(), style->font_family.value())) {
             different = true;  // different fonts
         }
 
-        if (style_res->font_family.value) {
-            g_free(style_res->font_family.value);
-            style_res->font_family.value = nullptr;
-        }
-
+        style_res->font_family = style->font_family;
         style_res->font_family.set = true;
-        style_res->font_family.value = g_strdup(style->font_family.value);
     }
 
     if (texts == 0 || !style_res->font_family.set) {
@@ -1653,11 +1636,7 @@ objects_query_fontspecification (const std::vector<SPItem*> &objects, SPStyle *s
     bool different = false;
     int texts = 0;
 
-    if (style_res->font_specification.value) {
-        g_free(style_res->font_specification.value);
-        style_res->font_specification.value = nullptr;
-    }
-    style_res->font_specification.set = FALSE;
+    style_res->font_specification.clear();
 
     for (auto obj : objects) {
         // std::cout << "  " << reinterpret_cast<SPObject*>(i->data)->getId() << std::endl;
@@ -1672,21 +1651,14 @@ objects_query_fontspecification (const std::vector<SPItem*> &objects, SPStyle *s
 
         texts ++;
 
-        if (style_res->font_specification.value && style_res->font_specification.set &&
-            style->font_specification.value && style->font_specification.set &&
-            strcmp (style_res->font_specification.value, style->font_specification.value)) {
+        if (style_res->font_specification.set &&
+            g_strcmp0(style_res->font_specification.value(), style->font_specification.value())) {
             different = true;  // different fonts
         }
 
         if (style->font_specification.set) {
-
-            if (style_res->font_specification.value) {
-                g_free(style_res->font_specification.value);
-                style_res->font_specification.value = nullptr;
-            }
-
+            style_res->font_specification = style->font_specification;
             style_res->font_specification.set = true;
-            style_res->font_specification.value = g_strdup(style->font_specification.value);
         }
     }
 

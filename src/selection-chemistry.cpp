@@ -2175,9 +2175,8 @@ std::vector<SPItem*> sp_get_same_style(SPItem *sel, std::vector<SPItem*> &src, S
                 match = true;
                 int len = sizeof(sel_style->marker)/sizeof(SPIString);
                 for (int i = 0; i < len; i++) {
-                    match = (sel_style->marker_ptrs[i]->set == iter_style->marker_ptrs[i]->set);
-                    if (sel_style->marker_ptrs[i]->set && iter_style->marker_ptrs[i]->set &&
-                        (strcmp(sel_style->marker_ptrs[i]->value, iter_style->marker_ptrs[i]->value))) {
+                    if (g_strcmp0(sel_style->marker_ptrs[i]->value(),
+                                  iter_style->marker_ptrs[i]->value())) {
                         match = false;
                         break;
                     }

@@ -352,7 +352,7 @@ gchar* SPText::description() const {
 
     SPStyle *style = this->style;
 
-    char *n = xml_quote_strdup( style->font_family.value );
+    char *n = xml_quote_strdup(style->font_family.value());
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int unit = prefs->getInt("/options/font/unitType", SP_CSS_UNIT_PT);
@@ -1024,7 +1024,7 @@ Inkscape::XML::Node* SPText::get_first_rectangle()
 
     Inkscape::XML::Node *our_ref = getRepr();
 
-    if (style->shape_inside.set && style->shape_inside.value) {
+    if (style->shape_inside.set) {
 
         std::vector<Glib::ustring> shapes = get_shapes();
 
@@ -1047,11 +1047,11 @@ Inkscape::XML::Node* SPText::get_first_rectangle()
 std::vector<Glib::ustring> SPText::get_shapes() const
 {
     std::vector<Glib::ustring> shapes;
-    if (style->shape_inside.set && style->shape_inside.value) {
-
+    char const *val;
+    if (style->shape_inside.set && (val = style->shape_inside.value())) {
         static Glib::RefPtr<Glib::Regex> regex = Glib::Regex::create("url\\(#([A-z0-9#]*)\\)");
         Glib::MatchInfo matchInfo;
-        regex->match(style->shape_inside.value, matchInfo);
+        regex->match(val, matchInfo);
 
         while (matchInfo.matches()) {
             shapes.push_back(matchInfo.fetch(1));

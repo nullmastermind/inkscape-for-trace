@@ -542,7 +542,7 @@ std::pair<Glib::ustring, Glib::ustring> FontLister::selection_update()
 
     //std::cout << "  Attempting selected style" << std::endl;
     if (result != QUERY_STYLE_NOTHING && query.font_specification.set) {
-        fontspec = query.font_specification.value;
+        fontspec = query.font_specification.value();
         //std::cout << "   fontspec from query   :" << fontspec << ":" << std::endl;
     }
 

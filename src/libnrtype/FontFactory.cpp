@@ -79,7 +79,7 @@ PangoFontDescription* ink_font_description_from_style(SPStyle const *style)
 {
     PangoFontDescription *descr = pango_font_description_new();
 
-    pango_font_description_set_family(descr, style->font_family.value);
+    pango_font_description_set_family(descr, style->font_family.value());
 
     // This duplicates Layout::EnumConversionItem... perhaps we can share code?
     switch ( style->font_style.computed ) {
@@ -572,11 +572,12 @@ font_instance* font_factory::FaceFromStyle(SPStyle const *style)
     if (style) {
 
         //  First try to use the font specification if it is set
+        char const *val;
         if (style->font_specification.set
-            && style->font_specification.value
-            && *style->font_specification.value) {
+            && (val = style->font_specification.value())
+            && val[0]) {
 
-            font = FaceFromFontSpecification(style->font_specification.value);
+            font = FaceFromFontSpecification(val);
         }
 
         // If that failed, try using the CSS information in the style

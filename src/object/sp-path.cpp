@@ -133,14 +133,14 @@ void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
         (d_source == SP_STYLE_SRC_STYLE_PROP || d_source == SP_STYLE_SRC_STYLE_SHEET) ) {
 
-        if (style->d.value) {
+        if (char const *d_val = style->d.value()) {
             // Chrome shipped with a different syntax for property vs attribute.
             // The SVG Working group decided to follow the Chrome syntax (which may
             // allow future extensions of the 'd' property). The property syntax
             // wraps the path data with "path(...)". We must strip that!
 
             // Must be Glib::ustring or we get conversion errors!
-            Glib::ustring input = style->d.value;
+            Glib::ustring input = d_val;
             Glib::ustring expression = R"A(path\("(.*)"\))A";
             Glib::RefPtr<Glib::Regex> regex = Glib::Regex::create(expression);
             Glib::MatchInfo matchInfo;

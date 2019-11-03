@@ -591,7 +591,7 @@ StrokeStyle::forkMarker(SPObject *marker, int loc, SPItem *item)
     unsigned int refs = 0;
     for (int i = SP_MARKER_LOC_START; i < SP_MARKER_LOC_QTY; i++) {
         if (item->style->marker_ptrs[i]->set &&
-            !strcmp(urlId.c_str(), item->style->marker_ptrs[i]->value)) {
+            !strcmp(urlId.c_str(), item->style->marker_ptrs[i]->value())) {
             refs++;
         }
     }
@@ -1277,12 +1277,14 @@ StrokeStyle::updateAllMarkers(std::vector<SPItem*> const &objects, bool skip_und
 
         if (!all_texts) {
             for (SPObject *object : simplified_list) {
+                char const *value = object->style->marker_ptrs[markertype.loc]->value();
+
                 // If the object has this type of markers,
-                if (object->style->marker_ptrs[markertype.loc]->value == nullptr)
+                if (value == nullptr)
                     continue;
 
                 // Extract the name of the marker that the object uses
-                marker = getMarkerObj(object->style->marker_ptrs[markertype.loc]->value, object->document);
+                marker = getMarkerObj(value, object->document);
 
                 // Set the marker color
                 if (update < 0) {

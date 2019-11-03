@@ -67,7 +67,7 @@ void SPShape::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPLPEItem::build(document, repr);
 
     for (int i = 0 ; i < SP_MARKER_LOC_QTY ; i++) {
-        sp_shape_set_marker (this, i, this->style->marker_ptrs[i]->value);
+        sp_shape_set_marker (this, i, this->style->marker_ptrs[i]->value());
     }
 }
 
@@ -133,7 +133,7 @@ void SPShape::update(SPCtx* ctx, guint flags) {
      * match the style.
      */
     for (int i = 0 ; i < SP_MARKER_LOC_QTY ; i++) {
-        sp_shape_set_marker (this, i, this->style->marker_ptrs[i]->value);
+        sp_shape_set_marker (this, i, this->style->marker_ptrs[i]->value());
     }
 
     if (flags & (SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
@@ -856,7 +856,7 @@ Inkscape::DrawingItem* SPShape::show(Inkscape::Drawing &drawing, unsigned int /*
      * match the style.
      */
     for (int i = 0 ; i < SP_MARKER_LOC_QTY ; i++) {
-        sp_shape_set_marker (this, i, this->style->marker_ptrs[i]->value);
+        sp_shape_set_marker (this, i, this->style->marker_ptrs[i]->value());
     }
 
     if (has_markers) {

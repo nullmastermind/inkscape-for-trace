@@ -271,7 +271,7 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
 
 
     // SVG 2 attributes promoted to properties. (When geometry properties are added, move after font.)
-    d(                      nullptr,    false),  // SPIString Not inherited!
+    d(                      false),  // SPIString Not inherited!
 
     // Font related properties and 'font' shorthand
     font_style(             SP_CSS_FONT_STYLE_NORMAL),
@@ -280,7 +280,7 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     font_stretch(           SP_CSS_FONT_STRETCH_NORMAL),
     font_size(),
     line_height(            1.25 ),         // SPILengthOrNormal
-    font_family(            "sans-serif"),  // SPIString w/default
+    font_family(            ),  // SPIString w/default
     font(),                                                      // SPIFont
     font_specification(     ),              // SPIString
 
@@ -291,7 +291,7 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     font_variant_numeric(   ),
     font_variant_alternates(SP_CSS_FONT_VARIANT_ALTERNATES_NORMAL),
     font_variant_east_asian(),
-    font_feature_settings(  "normal"),
+    font_feature_settings(  ),
 
     // Variable Fonts
     font_variation_settings(),  // SPIFontVariationSettings
@@ -594,7 +594,6 @@ SPStyle::read( SPObject *object, Inkscape::XML::Node *repr ) {
         // Shorthands are not allowed as presentation properites. Note: text-decoration and
         // font-variant are converted to shorthands in CSS 3 but can still be read as a
         // non-shorthand for compatibility with older renders, so they should not be in this list.
-        // We could add a flag to SPIBase to avoid string comparison.
         if (p->id() != SP_PROP_FONT && p->id() != SP_PROP_MARKER) {
             p->readAttribute( repr );
         }
@@ -1041,9 +1040,10 @@ SPStyle::getFontFeatureString() {
     if( font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_RUBY )
         feature_string += "ruby, ";
 
-    if ( font_feature_settings.value && strcmp( font_feature_settings.value, "normal") ) {
+    char const *val = font_feature_settings.value();
+    if (val[0] && strcmp(val, "normal")) {
         // We do no sanity checking...
-        feature_string += font_feature_settings.value; 
+        feature_string += val;
         feature_string += ", ";
     }
 

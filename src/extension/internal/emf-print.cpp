@@ -2027,7 +2027,7 @@ unsigned int PrintEmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
             _lookup_ppt_fontfix("Convert To Wingdings", params);
             break;
         default:  //also CVTNON
-            _lookup_ppt_fontfix(style->font_family.value, params);
+            _lookup_ppt_fontfix(style->font_family.value(), params);
             break;
         }
         if (params.f2 != 0 || params.f3 != 0) {
@@ -2055,7 +2055,7 @@ unsigned int PrintEmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
         // of the special fonts.
         uint16_t *wfacename;
         if (!newfont) {
-            wfacename = U_Utf8ToUtf16le(style->font_family.value, 0, nullptr);
+            wfacename = U_Utf8ToUtf16le(style->font_family.value(), 0, nullptr);
         } else {
             wfacename = U_Utf8ToUtf16le(FontName(newfont), 0, nullptr);
         }

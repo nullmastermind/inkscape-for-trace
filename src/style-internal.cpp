@@ -94,6 +94,60 @@ const Glib::ustring SPIBase::write(guint const flags, SPStyleSrc const &style_sr
 }
 
 
+/**
+ * If str.endswith("!important") then assign stripped = str[:-10].rstrip() and return true.
+ * Otherwise, leave stripped unmodified and return false.
+ */
+static bool strip_important(gchar const *str, std::string &stripped)
+{
+    assert(str != nullptr);
+
+    constexpr size_t N = 10; // strlen("!important")
+    auto pos = strlen(str);
+
+    if (pos >= N && strncmp(str + pos - N, "!important", N) == 0) {
+        pos -= N;
+
+        // strip whitespace from the right
+        while (pos > 0 && g_ascii_isspace(str[pos - 1])) {
+            --pos;
+        }
+
+        stripped.assign(str, pos);
+        return true;
+    }
+
+    return false;
+}
+
+void SPIBase::readIfUnset(gchar const *str, SPStyleSrc source)
+{
+    if (!str)
+        return;
+
+    bool has_important = false;
+    std::string stripped;
+
+    // '!important' is invalid on attributes
+    if (source != SP_STYLE_SRC_ATTRIBUTE) {
+        has_important = strip_important(str, stripped);
+        if (has_important) {
+            str = stripped.c_str();
+        }
+    }
+
+    if (!set || (has_important && !important)) {
+        style_src = source;
+        read(str);
+        if (set) {
+            if (has_important) {
+                important = true;
+            }
+        }
+    }
+}
+
+
 // SPIFloat -------------------------------------------------------------
 
 void
@@ -1086,63 +1140,95 @@ const Glib::ustring SPIEastAsian::get_value() const
 
 void
 SPIString::read( gchar const *str ) {
+    g_assert(!set);
+    g_assert(!inherit);
+    g_assert(!_value);
+
     if( !str ) return;
+
+    if (style_src == SP_STYLE_SRC_ATTRIBUTE && id() == SP_ATTR_D) {
+        return;
+    }
 
     if (!strcmp(str, "inherit")) {
         set = true;
         inherit = true;
-        value = nullptr;
-    } else {
+    } else if (!g_strcmp0(str, get_default_value())) {
+        // no need to copy string
         set = true;
-        inherit = false;
+    } else {
+        Glib::ustring str_temp;
 
-        Glib::ustring str_temp(str);
-        if (id() == SP_ATTR_D && style_src == SP_STYLE_SRC_ATTRIBUTE) {
-            set = false;
-            return;
-        }
         if (id() == SP_PROP_FONT_FAMILY) {
             // Family names may be quoted in CSS, internally we use unquoted names.
+            str_temp = str;
             css_font_family_unquote( str_temp );
+            str = str_temp.c_str();
         } else if (id() == SP_PROP_INKSCAPE_FONT_SPEC) {
+            str_temp = str;
             css_unquote( str_temp );
+            str = str_temp.c_str();
         }
 
-        value = g_strdup(str_temp.c_str());
+        set = true;
+        _value = g_strdup(str);
     }
 }
 
 
+/**
+ * Value as it should be written to CSS representation, including quotes if needed.
+ */
 const Glib::ustring SPIString::get_value() const
 {
-    if (this->inherit) return Glib::ustring("inherit");
-    if (!this->value) return Glib::ustring("");
-    if (id() == SP_PROP_FONT_FAMILY) {
-        Glib::ustring font_family( this->value );
-        css_font_family_quote( font_family );
-        return font_family;
-    } else if (id() == SP_PROP_INKSCAPE_FONT_SPEC) {
-        Glib::ustring font_spec( this->value );
-        css_quote( font_spec );
-        return font_spec;
+    Glib::ustring val;
+
+    if (set && inherit) {
+        val = "inherit";
+    } else if (auto *v = value()) {
+        val = v;
+
+        if (id() == SP_PROP_FONT_FAMILY) {
+            css_font_family_quote(val);
+        } else if (id() == SP_PROP_INKSCAPE_FONT_SPEC) {
+            css_quote(val);
+        }
     }
-    return Glib::ustring(this->value);
+
+    return val;
 }
+
+char const *SPIString::value() const
+{
+    return _value ? _value : get_default_value();
+}
+
+char const *SPIString::get_default_value() const
+{
+    switch (id()) {
+        case SP_PROP_FONT_FAMILY:
+            return "sans-serif";
+        case SP_PROP_FONT_FEATURE_SETTINGS:
+            return "normal";
+        default:
+            return nullptr;
+    }
+}
+
 
 void
 SPIString::clear() {
     SPIBase::clear();
-    g_free( value );
-    value = nullptr;
-    if( value_default ) value = g_strdup( value_default );
+    g_free(_value);
+    _value = nullptr;
 }
 
 void
 SPIString::cascade( const SPIBase* const parent ) {
     if( const SPIString* p = dynamic_cast<const SPIString*>(parent) ) {
         if( inherits && (!set || inherit) ) {
-            g_free(value);
-            value = g_strdup(p->value);
+            g_free(_value);
+            _value = g_strdup(p->_value);
         }
     } else {
         std::cerr << "SPIString::cascade(): Incorrect parent type" << std::endl;
@@ -1156,8 +1242,8 @@ SPIString::merge( const SPIBase* const parent ) {
             if( (!set || inherit) && p->set && !(p->inherit) ) {
                 set     = p->set;
                 inherit = p->inherit;
-                g_free(value);
-                value = g_strdup(p->value);
+                g_free(_value);
+                _value = g_strdup(p->_value);
             }
         }
     }
@@ -1166,10 +1252,7 @@ SPIString::merge( const SPIBase* const parent ) {
 bool
 SPIString::operator==(const SPIBase& rhs) {
     if( const SPIString* r = dynamic_cast<const SPIString*>(&rhs) ) {
-        if( value == nullptr && r->value == nullptr ) return (SPIBase::operator==(rhs));
-        if( value == nullptr || r->value == nullptr ) return false;
-
-        return (strcmp(value, r->value) == 0 && SPIBase::operator==(rhs));
+        return g_strcmp0(_value, r->_value) == 0 && SPIBase::operator==(rhs);
     } else {
         return false;
     }
@@ -1191,9 +1274,7 @@ SPIShapes::read( gchar const *str) {
 
     if( !str ) return;
 
-    set = true;
-    inherit = false;
-    value = g_strdup(str);
+    SPIString::read(str);
 
     // The object/repr this property is connected to..
     SPObject* object = style->object;

@@ -175,13 +175,11 @@ std::vector<SPItem*> FontSubstitution::getFontReplacedItems(SPDocument* doc, Gli
         if (style) {
             gchar const *style_font = nullptr;
             if (style->font_family.set)
-                style_font = style->font_family.value;
+                style_font = style->font_family.value();
             else if (style->font_specification.set)
-                style_font = style->font_specification.value;
-            else if (style->font_family.value)
-                style_font = style->font_family.value;
-            else if (style->font_specification.value)
-                style_font = style->font_specification.value;
+                style_font = style->font_specification.value();
+            else
+                style_font = style->font_family.value();
 
             if (style_font) {
                 if (has_visible_text(item)) {

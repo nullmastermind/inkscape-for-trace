@@ -716,10 +716,11 @@ namespace Widget {
       std::string setting;
 
       // Set feature radiobutton (if it exists) or add to _feature_entry string.
-      if (query->font_feature_settings.value) {
+      char const *val = query->font_feature_settings.value();
+      if (val) {
 
           std::vector<Glib::ustring> tokens =
-              Glib::Regex::split_simple("\\s*,\\s*", query->font_feature_settings.value);
+              Glib::Regex::split_simple("\\s*,\\s*", val);
 
           for (auto token: tokens) {
               regex->match(token, matchInfo);

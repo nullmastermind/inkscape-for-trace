@@ -139,41 +139,10 @@ public:
     = default;
 
     virtual void read( gchar const *str ) = 0;
-    virtual void readIfUnset( gchar const *str, SPStyleSrc const &source = SP_STYLE_SRC_STYLE_PROP ) {
-        if (!str) return;
-
-        bool has_important = false;
-        Glib::ustring stripped = strip_important(str, has_important); // Sets 'has_important'
-        // '!important' is invalid on attributes, don't read.
-        if (source == SP_STYLE_SRC_ATTRIBUTE && has_important){
-            return;
-        }
-
-        if ( !set || (has_important && !important) ) {
-            style_src = source;
-            read( stripped.c_str() );
-            if ( set ) {
-                if (has_important) {
-                    important = true;
-                }
-            }
-        }
-    }
+    virtual void readIfUnset(gchar const *str, SPStyleSrc source = SP_STYLE_SRC_STYLE_PROP);
 
     Glib::ustring important_str() const {
         return Glib::ustring(important ? " !important" : "");
-    }
-
-    Glib::ustring strip_important( gchar const *str, bool &important ) {
-        assert (str != NULL);
-        Glib::ustring string = Glib::ustring(str);
-        auto pos = string.rfind( " !important" );
-        important = false;
-        if (pos != std::string::npos) {
-            important = true;
-            string.erase(pos);
-        }
-        return string;
     }
 
     virtual void readAttribute( Inkscape::XML::Node *repr ) {
@@ -641,15 +610,12 @@ class SPIString : public SPIBase
 {
 
 public:
-    // TODO probably want to avoid gchar* and c-style strings.
-    SPIString(gchar const *value_default_in = nullptr, bool inherits = true)
+    SPIString(bool inherits = true)
         : SPIBase(inherits)
-        , value_default(g_strdup(value_default_in))
     {}
 
     ~SPIString() override {
-        g_free(value);
-        g_free(value_default);
+        g_free(_value);
     }
 
     void read( gchar const *str ) override;
@@ -660,10 +626,8 @@ public:
 
     SPIString& operator=(const SPIString& rhs) {
         SPIBase::operator=(rhs);
-        g_free(value);
-        g_free(value_default);
-        value            = rhs.value ? g_strdup(rhs.value) : nullptr;
-        value_default    = rhs.value_default ? g_strdup(rhs.value_default) : nullptr;
+        g_free(_value);
+        _value = g_strdup(rhs._value);
         return *this;
     }
 
@@ -672,10 +636,13 @@ public:
         return !(*this == rhs);
     }
 
-  // To do: make private, convert value to Glib::ustring
-public:
-    gchar *value = nullptr;
-    gchar *value_default = nullptr;
+    //! Get value if set, or inherited value, or default value (may be NULL)
+    char const *value() const;
+
+  private:
+    char const *get_default_value() const;
+
+    gchar *_value = nullptr;
 };
 
 /// Shapes type internal to SPStyle.
@@ -685,10 +652,7 @@ class SPIShapes : public SPIString
 {
 
 public:
-    // TODO probably want to avoid gchar* and c-style strings.
-    SPIShapes(gchar const *value_default_in = nullptr)
-        : SPIString(value_default_in)
-    {}
+    SPIShapes() = default;
 
     void read( gchar const *str ) override;
 
@@ -1258,9 +1222,10 @@ class SPIVectorEffect : public SPIBase
 {
 
 public:
-    SPIVectorEffect() {
+    SPIVectorEffect()
+        : SPIBase(false)
+    {
         this->clear();
-        inherits = false;
     }
 
     ~SPIVectorEffect() override
