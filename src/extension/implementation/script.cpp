@@ -73,15 +73,18 @@ void Script::pump_events () {
 */
 Script::interpreter_t const Script::interpreterTab[] = {
 #ifdef _WIN32
-        {"perl",   "perl-interpreter",   "wperl"   },
-        {"python", "python-interpreter", "pythonw" },
+        { "perl",   "perl-interpreter",   "wperl"   },
+        { "python", "python-interpreter", "pythonw" },
+#elif defined __APPLE__
+        { "perl",   "perl-interpreter",   "perl"    },
+        { "python", "python-interpreter", "python3" },
 #else
-        {"perl",   "perl-interpreter",   "perl"   },
-        {"python", "python-interpreter", "python" },
+        { "perl",   "perl-interpreter",   "perl"    },
+        { "python", "python-interpreter", "python"  },
 #endif
-        {"ruby",   "ruby-interpreter",   "ruby"   },
-        {"shell",  "shell-interpreter",  "sh"     },
-        { nullptr,    nullptr,                  nullptr    }
+        { "ruby",   "ruby-interpreter",   "ruby"    },
+        { "shell",  "shell-interpreter",  "sh"      },
+        { nullptr,  nullptr,              nullptr   }
 };
 
 

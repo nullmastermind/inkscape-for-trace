@@ -551,6 +551,14 @@
     <string>gtk_launcher.py</string>
     <key>NSHighResolutionCapable</key>
     <true/>
+    <key>NSDesktopFolderUsageDescription</key>
+    <string>Inkscape needs your permission to access the Desktop folder.</string>
+    <key>NSDocumentsFolderUsageDescription</key>
+    <string>Inkscape needs your permission to access the Documents folder.</string>
+    <key>NSDownloadsFolderUsageDescription</key>
+    <string>Inkscape needs your permission to access the Downloads folder.</string>
+    <key>NSRemoveableVolumesUsageDescription</key>
+    <string>Inkscape needs your permission to access removable volumes.</string>
 </dict>
 </plist>
 

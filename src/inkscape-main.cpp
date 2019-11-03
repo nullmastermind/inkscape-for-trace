@@ -60,8 +60,110 @@ static void set_extensions_env()
 #endif
 }
 
+static void set_macos_app_bundle_env(gchar const *program_dir)
+{
+    std::string bundle_contents_dir;
+    bundle_contents_dir.assign(program_dir).append("/.."); // <TheApp.app>/Contents
+
+    // use bundle identifier
+    // https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/MacOSXDirectories/MacOSXDirectories.html
+    auto app_support_dir = Glib::getenv("HOME") + "/Library/Application Support/org.inkscape.Inkscape";
+
+    auto bundle_resources_dir       = bundle_contents_dir  + "/Resources";
+    auto bundle_resources_etc_dir   = bundle_resources_dir + "/etc";
+    auto bundle_resources_bin_dir   = bundle_resources_dir + "/bin";
+    auto bundle_resources_lib_dir   = bundle_resources_dir + "/lib";
+    auto bundle_resources_share_dir = bundle_resources_dir + "/share";
+
+    // failsafe: Check if the expected content is really there, using GIO modules
+    // as an indicator.
+    // This is also helpful to developers as it enables the possibility to
+    //      1. cmake -DCMAKE_INSTALL_PREFIX=Inkscape.app/Contents/Resources
+    //      2. move binary to Inkscape.app/Contents/MacOS and set rpath
+    //      3. copy Info.plist
+    // to ease up on testing and get correct application behavior (like dock icon).
+    if (!Glib::file_test(bundle_resources_lib_dir + "/gio/modules", Glib::FILE_TEST_EXISTS)) {
+        // doesn't look like a standalone bundle
+        return;
+    }
+
+    // XDG
+    // https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
+    Glib::setenv("XDG_DATA_HOME",   app_support_dir + "/share");
+    Glib::setenv("XDG_DATA_DIRS",   bundle_resources_share_dir);
+    Glib::setenv("XDG_CONFIG_HOME", app_support_dir + "/config");
+    Glib::setenv("XDG_CONFIG_DIRS", bundle_resources_etc_dir + "/xdg");
+    Glib::setenv("XDG_CACHE_HOME",  app_support_dir + "/cache");
+
+    // GTK
+    // https://developer.gnome.org/gtk3/stable/gtk-running.html
+    Glib::setenv("GTK_EXE_PREFIX",  bundle_resources_dir);
+    Glib::setenv("GTK_DATA_PREFIX", bundle_resources_dir);
+
+    // GDK
+    Glib::setenv("GDK_PIXBUF_MODULE_FILE", bundle_resources_lib_dir + "/gdk-pixbuf-2.0/2.10.0/loaders.cache");
+
+    // Inkscape
+    Glib::setenv("INKSCAPE_LOCALEDIR", bundle_resources_share_dir + "/locale");
+
+    // fontconfig
+    Glib::setenv("FONTCONFIG_PATH", bundle_resources_etc_dir + "/fonts");
+
+    // GIO
+    Glib::setenv("GIO_MODULE_DIR", bundle_resources_lib_dir + "/gio/modules");
+
+    // GNOME introspection
+    Glib::setenv("GI_TYPELIB_PATH", bundle_resources_lib_dir + "/girepository-1.0");
+
+    // PATH
+    Glib::setenv("PATH", bundle_resources_bin_dir + ":" + Glib::getenv("PATH"));
+
+    // DYLD_LIBRARY_PATH
+    // TODO: This is a workaround and marked for removal with next build pipeline
+    // update (using rpath).
+    Glib::setenv("DYLD_LIBRARY_PATH", bundle_resources_lib_dir);
+}
+
 int main(int argc, char *argv[])
 {
+#ifdef __APPLE__
+    {   // Check if we're inside an application bundle and adjust environment
+        // accordingly.
+
+        gchar *program_dir = get_program_dir();
+        if (g_str_has_suffix(program_dir, "Contents/MacOS")) {
+
+            // Step 1
+            // Remove macOS session identifier from command line arguments.
+            // Code adopted from GIMP's app/main.c
+
+            int new_argc = 0;
+            for (int i = 0; i < argc; i++) {
+                // Rewrite argv[] without "-psn_..." argument.
+                if (!g_str_has_prefix(argv[i], "-psn_")) {
+                    argv[new_argc] = argv[i];
+                    new_argc++;
+                }
+            }
+            if (argc > new_argc) {
+                argv[new_argc] = nullptr; // glib expects null-terminated array
+                argc = new_argc;
+            }
+
+            // Step 2
+            // In the past, a launch script/wrapper was used to setup necessary environment
+            // variables to facilitate relocatability for the application bundle. Starting
+            // with Catalina, this approach is no longer feasible due to new security checks
+            // that get misdirected by using a launcher. The launcher needs to go and the
+            // binary needs to setup the environment itself.
+
+            set_macos_app_bundle_env(program_dir);
+        }
+
+        g_free(program_dir);
+    }
+#endif
+
     set_extensions_env();
 
     if (gtk_init_check(NULL, NULL))
