@@ -1,7 +1,6 @@
 # German translation for Inkscape.
 # This file is distributed under the same license as the Inkscape package.
 # Copyright (C) 2000-2003, 2006, 2007 Free Software Foundation, Inc.
-#
 # Kai Lahmann <kailahmann@01019freenet.de>, 2000.
 # Benedikt Roth <Benedikt.Roth@gmx.net>, 2000.
 # Christian Meyer <chrisime@gnome.org>, 2000-2002.
@@ -24,7 +23,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2019-10-10 21:27+0200\n"
-"PO-Revision-Date: 2019-10-29 01:21+0100\n"
+"PO-Revision-Date: 2019-11-05 00:23+0100\n"
 "Last-Translator: Maren Hachmann <marenhachmann@yahoo.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -32,11 +31,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 2.0\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
-"X-Generator: Lokalize 2.0\n"
 
 #: ../share/filters/filters.svg.h:2
 msgid "Smart Jelly"
@@ -23466,6 +23465,20 @@ msgid ""
 "Note that the specification of this property is not finalized. Support and "
 "interpretation of these values varies between renderers."
 msgstr ""
+"Die Eigenschaft 'image-rendering' kann beeinflussen, wie ein Bild nach dem"
+" Ändern der Größe "
+"aussehen wird:\n"
+"\t• 'auto': keine Präferenz (Vergrößerung normalerweise geglättet und daher "
+"unscharf)\n"
+"\t• 'optimizeQuality': Darstellungsqualität ist wichtig (Vergrößerung "
+"normalerweise geglättet und daher unscharf)\n"
+"\t• 'optimizeSpeed': Darstellungsgeschwindigkeit ist wichtig (Vergrößerung "
+"wirkt normalerweise pixelig)\n"
+"\t• 'crisp-edges': Vergrößerung ohne Verwischen der Kanten (oft pixelig)\n"
+"\t• 'pixelated': Vergrößerung ist pixelig\n"
+"Hinweis: Die Spezifikation für diese Eigenschaft ist noch nicht endgültig. "
+"Die Unterstützung und Interpretation dieser Eigenschaft kann sich zwischen "
+"den einzelnen Programmen unterscheiden."
 
 #: ../src/ui/dialog/object-properties.cpp:254
 msgid "Check to make the object invisible"
@@ -23478,7 +23491,7 @@ msgstr "Aktivieren macht das Objekt unempfindlich (nicht durch Maus anwählbar)"
 
 #: ../src/ui/dialog/object-properties.cpp:271
 msgid "Check to preserve aspect ratio on images"
-msgstr ""
+msgstr "Auswählen, um das Seitenverhältnis bei Bildern beizubehalten"
 
 #: ../src/ui/dialog/object-properties.cpp:280 ../src/verbs.cpp:2829
 #: ../src/verbs.cpp:2837
@@ -23544,7 +23557,7 @@ msgstr "Ausgeblendete Objekte anzeigen"
 
 #: ../src/ui/dialog/objects.cpp:407
 msgid "no-id"
-msgstr ""
+msgstr "keine_ID"
 
 #: ../src/ui/dialog/objects.cpp:874
 msgid "Unhide objects"
@@ -23739,23 +23752,20 @@ msgid "Search"
 msgstr "Suchen"
 
 #: ../src/ui/dialog/paint-servers.cpp:75
-#, fuzzy
 msgid "All paint servers"
-msgstr "Alles inaktiv"
+msgstr "Alle Farbgebungsarten"
 
 #: ../src/ui/dialog/paint-servers.cpp:76 ../src/ui/dialog/symbols.cpp:114
 msgid "Current document"
 msgstr "Aktuelles Dokument"
 
 #: ../src/ui/dialog/paint-servers.cpp:92
-#, fuzzy
 msgid "Server"
-msgstr "_Server:"
+msgstr "Farbgebungsart"
 
 #: ../src/ui/dialog/paint-servers.cpp:104
-#, fuzzy
 msgid "Change"
-msgstr "Bereich:"
+msgstr "Ändern"
 
 #: ../src/ui/dialog/paint-servers.cpp:108
 #: ../src/ui/dialog/paint-servers.cpp:110 ../share/extensions/frame.inx:10
@@ -23790,7 +23800,6 @@ msgid "X coordinate of the radius"
 msgstr "X-Koordinate des Radius"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:41
-#, fuzzy
 msgctxt "Polar arrange tab"
 msgid "Ending angle"
 msgstr "Endwinkel"
@@ -23887,14 +23896,12 @@ msgid "Save Document as Template"
 msgstr "Dokument als Vorlage speichern"
 
 #: ../src/ui/dialog/save-template-dialog.cpp:23
-#, fuzzy
 msgid "Name: "
 msgstr "Name:"
 
 #: ../src/ui/dialog/save-template-dialog.cpp:24
-#, fuzzy
 msgid "Author: "
-msgstr "_Autoren"
+msgstr "Autor: "
 
 #: ../src/ui/dialog/save-template-dialog.cpp:25
 msgid "Description: "
@@ -23905,29 +23912,25 @@ msgid "Keywords: "
 msgstr "Schlüsselwörter:"
 
 #: ../src/ui/dialog/save-template-dialog.cpp:27
-#, fuzzy
 msgid "Set as default template"
-msgstr "Als _Standard festlegen"
+msgstr "Als Standardvorlage festlegen"
 
 #: ../src/ui/dialog/selectorsdialog.cpp:695
 #: ../src/ui/dialog/styledialog.cpp:1169
-#, fuzzy
 msgid "Edited style element."
-msgstr "Alle Teilstrecken auswerten."
+msgstr "Stilelement bearbeitet."
 
 #: ../src/ui/dialog/selectorsdialog.cpp:1160
-#, fuzzy
 msgid "CSS selector"
-msgstr "Auswahlwerkzeug"
+msgstr "CSS-Selektor"
 
 #: ../src/ui/dialog/selectorsdialog.cpp:1163
 msgid "Add"
 msgstr "_Hinzufügen"
 
 #: ../src/ui/dialog/selectorsdialog.cpp:1170
-#, fuzzy
 msgid "Invalid CSS selector."
-msgstr "Ungültiges SIOX-Ergebnis"
+msgstr "Ungültiger CSS-Selektor"
 
 #: ../src/ui/dialog/spellcheck.cpp:99
 msgid "_Accept"
@@ -24005,9 +24008,9 @@ msgid "<b>Finished</b>, nothing suspicious found"
 msgstr "<b>Beendet</b>, nichts ungewöhnliches gefunden"
 
 #: ../src/ui/dialog/spellcheck.cpp:535
-#, fuzzy, c-format
+#, c-format
 msgid "Not in dictionary: <b>%s</b>"
-msgstr "Nicht im Wörterbuch (%s): <b>%s</b>"
+msgstr "Nicht im Wörterbuch: <b>%s</b>"
 
 #: ../src/ui/dialog/spellcheck.cpp:665
 msgid "<i>Checking...</i>"
@@ -24018,36 +24021,32 @@ msgid "Fix spelling"
 msgstr "Korrigiere Rechtschreibung"
 
 #: ../src/ui/dialog/styledialog.cpp:205
-#, fuzzy
 msgid "Edit Full Stylesheet"
-msgstr "Formatvorlage"
+msgstr "Ganzes Stylesheet bearbeiten"
 
 #: ../src/ui/dialog/styledialog.cpp:523 ../src/ui/dialog/styledialog.cpp:707
 #: ../src/ui/dialog/styledialog.cpp:848
-#, fuzzy
 msgid "property"
-msgstr "Eigenschaften"
+msgstr "Eigenschaft"
 
 #: ../src/ui/dialog/styledialog.cpp:535 ../src/ui/dialog/styledialog.cpp:720
 #: ../src/ui/dialog/styledialog.cpp:860
-#, fuzzy
 msgid "value"
 msgstr "Wert"
 
 #: ../src/ui/dialog/styledialog.cpp:788
 msgid "This value is commented"
-msgstr ""
+msgstr "Dieser Wert ist auskommentiert."
 
 #: ../src/ui/dialog/styledialog.cpp:975
-#, fuzzy
 msgid "Invalid property set"
-msgstr "Ungültiger Programmname: %s"
+msgstr "Ungültiges Eigenschaft/Wert-Paar"
 
 #
 # File: ../src/ui/dialog/styledialog.cpp, line: 839
 #: ../src/ui/dialog/styledialog.cpp:977
 msgid "Used in "
-msgstr ""
+msgstr "Verwendet in: "
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:146
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:218
@@ -24059,9 +24058,8 @@ msgid "Adjust kerning value"
 msgstr "Unterschneidung anpassen"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:456
-#, fuzzy
 msgid "Font Attributes"
-msgstr "Attribute festlegen"
+msgstr "Schriftarteigenschaften"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:457
 msgid "Horiz. Advance X"
@@ -24070,31 +24068,29 @@ msgstr ""
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:457
 msgid "Average amount of horizontal space each letter takes up."
 msgstr ""
+"Durchschnittliche horizontale Breite, die für die einzelnen Zeichen zur"
+" Verfügung steht"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:458
-#, fuzzy
 msgid "Horiz. Origin X"
-msgstr "Ursprung X:"
+msgstr "Horiz. Ursprung X:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:458
-#, fuzzy
 msgid "Average horizontal origin location for each letter."
-msgstr "Drehrichtung bei jeder Reihe wechseln"
+msgstr ""
+"Durchschnittlicher Ort des horizontalen Ursprungs der einzelnen Zeichen"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:459
-#, fuzzy
 msgid "Horiz. Origin Y"
-msgstr "Ursprung Y"
+msgstr "Horiz. Ursprung Y:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:459
-#, fuzzy
 msgid "Average vertical origin location for each letter."
-msgstr "Drehrichtung bei jeder Reihe wechseln"
+msgstr "Durchschnittlicher Ort des vertikalen Ursprungs der einzelnen Zeichen"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:460
-#, fuzzy
 msgid "Font Face Attributes"
-msgstr "Bildattribute festlegen"
+msgstr "Schriftschnitteigenschaften"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:461
 msgid "Family Name:"
@@ -24105,54 +24101,54 @@ msgid ""
 "Name of the font as it appears in font selectors and css font-family "
 "properties."
 msgstr ""
+"Name der Schriftart, der in Schriftauswahlfeldern und in der CSS-Eigenschaft"
+" 'font-family' verwendet wird"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:462
-#, fuzzy
 msgid "Units per em"
-msgstr "SVG-Benutzereinheiten pro "
+msgstr "Einheiten pro em:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:462
 msgid "Number of display units each letter takes up."
-msgstr ""
+msgstr "Anzahl der Anzeigeeinheiten, die die einzelnen Zeichen breit sind"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:463
-#, fuzzy
 msgid "Ascent:"
-msgstr "Aufsteigend:"
+msgstr "Oberlänge:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:463
 msgid ""
 "Amount of space taken up by accenders like the tall line on the letter 'h'."
-msgstr ""
+msgstr "Höhe der Oberlänge, wie bei der langen Linie des Buchstaben 'h'"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:464
-#, fuzzy
 msgid "Descent:"
-msgstr "Absteigend:"
+msgstr "Unterlänge:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:464
 msgid "Amount of space taken up by decenders like the tail on the letter 'g'."
-msgstr ""
+msgstr "Höhe der Unterlänge, wie beim unteren Bogen des Buchstaben 'g'"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:465
-#, fuzzy
 msgid "Cap Height:"
-msgstr "Deckelhöhe:"
+msgstr "Versalhöhe:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:465
 msgid ""
 "The height of a capital letter above the baseline like the letter 'H' or 'I'."
 msgstr ""
+"Die Höhe von Großbuchstaben oberhalb der Grundlinie, wie bei den Buchstaben"
+" 'H' oder 'I'"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:466
-#, fuzzy
 msgid "x Height:"
-msgstr "Höhe:"
+msgstr "Mittellänge:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:466
 msgid ""
 "The height of a lower-case letter above the baseline like the letter 'x'."
 msgstr ""
+"Die Höhe der Kleinbuchstaben oberhalb der Grundlinie, wie beim Buchstaben 'x'"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:542
 msgid "glyph"
@@ -24262,7 +24258,6 @@ msgid "Second Unicode range"
 msgstr "Zweiter Unicode-Bereich"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:916
-#, fuzzy
 msgid "Kerning Value:"
 msgstr "Unterschneidungswert:"
 
@@ -24279,9 +24274,8 @@ msgid "Add font"
 msgstr "Schrift hinzufügen"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:1018
-#, fuzzy
 msgid "_Fonts"
-msgstr "Schrift"
+msgstr "Schriften"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:1026
 msgid "_Global Settings"
@@ -24434,7 +24428,7 @@ msgstr "Symbolsatz"
 
 #: ../src/ui/dialog/symbols.cpp:158
 msgid "Return to start search."
-msgstr ""
+msgstr "'Eingabe' drücken, um Suche zu beginnen"
 
 #: ../src/ui/dialog/symbols.cpp:265
 msgid "Add Symbol from the current document."
@@ -24465,44 +24459,42 @@ msgid "Make symbols bigger by zooming in."
 msgstr "Symbole durch Hineinzoomen vergrößern."
 
 #: ../src/ui/dialog/symbols.cpp:436 ../src/ui/dialog/symbols.cpp:1052
-#, fuzzy
 msgid "Searching..."
-msgstr "Suchen in"
+msgstr "Suche …"
 
 #: ../src/ui/dialog/symbols.cpp:436 ../src/ui/dialog/symbols.cpp:1059
 #: ../src/ui/dialog/symbols.cpp:1124
 msgid "Loading all symbols..."
-msgstr ""
+msgstr "Lade alle Symbole …"
 
 #: ../src/ui/dialog/symbols.cpp:457 ../src/ui/dialog/symbols.cpp:468
-#, fuzzy
 msgid "Search in all symbol sets..."
-msgstr "In allen Ebenen suchen"
+msgstr "Suche in allen Symbolsets …"
 
 #: ../src/ui/dialog/symbols.cpp:459
 msgid "First search can be slow."
-msgstr ""
+msgstr "Die erste Suche kann etwas länger dauern."
 
 #: ../src/ui/dialog/symbols.cpp:461 ../src/ui/dialog/symbols.cpp:472
 #: ../src/ui/dialog/symbols.cpp:485
-#, fuzzy
 msgid "No results found"
-msgstr "Keine Objekte gefunden"
+msgstr "Keine Symbole gefunden."
 
 #: ../src/ui/dialog/symbols.cpp:464
 msgid "Try a different search term."
-msgstr ""
+msgstr "Bitte einen anderen Suchbegriff verwenden."
 
 #: ../src/ui/dialog/symbols.cpp:475 ../src/ui/dialog/symbols.cpp:488
 msgid ""
 "Try a different search term,\n"
 "or switch to a different symbol set."
 msgstr ""
+"Bitte einen anderen Suchbegriff\n"
+"oder ein anderes Symbolset verwenden."
 
 #: ../src/ui/dialog/symbols.cpp:478
-#, fuzzy
 msgid "No symbols found"
-msgstr "Keine Objekte gefunden"
+msgstr "Keine Symbole gefunden."
 
 #: ../src/ui/dialog/symbols.cpp:482
 msgid ""
@@ -24510,6 +24502,9 @@ msgid ""
 "Choose a different symbol set\n"
 "or add a new symbol."
 msgstr ""
+"Keine Symbole im aktuellen Dokument;\n"
+"bitte ein anderes Symbolset wählen\n"
+"oder ein neues Symbol erstellen"
 
 #: ../src/ui/dialog/symbols.cpp:808 ../src/ui/dialog/symbols.cpp:829
 msgid "Unnamed Symbols"
@@ -24517,7 +24512,7 @@ msgstr "Unbenannte Symbole"
 
 #: ../src/ui/dialog/symbols.cpp:949
 msgid "notitle_"
-msgstr ""
+msgstr "keinTitel_"
 
 #: ../src/ui/dialog/symbols.cpp:1229
 msgid "Symbol without title"
@@ -24532,14 +24527,12 @@ msgid "no template selected"
 msgstr "Keine Vorlage gewählt"
 
 #: ../src/ui/dialog/template-widget.cpp:125
-#, fuzzy
 msgid "Author"
-msgstr "_Autoren"
+msgstr "Autor"
 
 #: ../src/ui/dialog/template-widget.cpp:131
-#, fuzzy
 msgid "Keywords"
-msgstr "Schlüsselwörter:"
+msgstr "Schlüsselwörter"
 
 #: ../src/ui/dialog/text-edit.cpp:66
 msgid "_Font"
