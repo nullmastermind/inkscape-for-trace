@@ -342,7 +342,7 @@ void ObjectProperties::update()
         SPObject *obj = static_cast<SPObject*>(item);
 
         /* ID */
-        _entry_id.set_text(obj->getId());
+        _entry_id.set_text(obj->getId() ? obj->getId() : "");
         _entry_id.set_sensitive(TRUE);
         _label_id.set_markup_with_mnemonic(_("_ID:") + Glib::ustring(" "));
 

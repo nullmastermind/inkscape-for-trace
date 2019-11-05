@@ -408,14 +408,8 @@ void ObjectsPanel::_addObject(SPItem* item, const Gtk::TreeModel::Row &row, bool
     SPGroup * group = SP_IS_GROUP(item) ? SP_GROUP(item) : nullptr;
 
     row[_model->_colObject] = item;
-
-    //this seems to crash on convert stroke to path then undo (probably no ID?)
-    try {
-        row[_model->_colLabel] = item->label() ? item->label() : item->getId();
-    } catch (...) {
-        row[_model->_colLabel] = Glib::ustring("getId_failure");
-        g_critical("item->getId() failed, using \"getId_failure\"");
-    }
+    gchar const * label = item->label() ? item->label() : item->getId();
+    row[_model->_colLabel] = label ? label : item->defaultLabel();
     row[_model->_colVisible] = !item->isHidden();
     row[_model->_colLocked] = !item->isSensitive();
     row[_model->_colType] = group ? (group->layerMode() == SPGroup::LAYER ? 2 : 1) : 0;
@@ -446,11 +440,9 @@ void ObjectsPanel::_updateObject( SPObject *obj, bool recurse ) {
         //We found our item in the tree; now update it!
         SPItem * item = SP_IS_ITEM(obj) ? SP_ITEM(obj) : nullptr;
         SPGroup * group = SP_IS_GROUP(obj) ? SP_GROUP(obj) : nullptr;
-        gchar const * id = obj->getId();
-        if (!id) {
-            id = _("no-id");
-        }
-        row[_model->_colLabel] = obj->label() ? obj->label() : id;
+
+        gchar const * label = obj->label() ? obj->label() : obj->getId();
+        row[_model->_colLabel] = label ? label : obj->defaultLabel();
         row[_model->_colVisible] = item ? !item->isHidden() : false;
         row[_model->_colLocked] = item ? !item->isSensitive() : false;
         row[_model->_colType] = group ? (group->layerMode() == SPGroup::LAYER ? 2 : 1) : 0;

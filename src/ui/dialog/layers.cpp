@@ -312,9 +312,9 @@ bool LayersPanel::_checkForUpdated(const Gtk::TreePath &/*path*/, const Gtk::Tre
          * with the correct value (sp-object bug?). So use the inkscape:label attribute instead which
          * has the correct value (bug #168351)
          */
-        //row[_model->_colLabel] = layer->label() ? layer->label() : layer->getId();
+        //row[_model->_colLabel] = layer->label() ? layer->label() : layer->defaultLabel();
         gchar const *label = layer->getAttribute("inkscape:label");
-        row[_model->_colLabel] = label ? label : layer->getId();
+        row[_model->_colLabel] = label ? label : layer->defaultLabel();
         row[_model->_colVisible] = SP_IS_ITEM(layer) ? !SP_ITEM(layer)->isHidden() : false;
         row[_model->_colLocked] = SP_IS_ITEM(layer) ? SP_ITEM(layer)->isLocked() : false;
 
