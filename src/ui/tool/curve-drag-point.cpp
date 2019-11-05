@@ -69,6 +69,7 @@ bool CurveDragPoint::grabbed(GdkEventMotion */*event*/)
 
 void CurveDragPoint::dragged(Geom::Point &new_pos, GdkEventMotion *event)
 {
+    if (!first || !first.next()) return;
     NodeList::iterator second = first.next();
 
     // special cancel handling - retract handles when if the segment was degenerate

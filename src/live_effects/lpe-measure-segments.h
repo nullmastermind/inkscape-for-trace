@@ -39,7 +39,7 @@ public:
     void doOnApply(SPLPEItem const* lpeitem) override;
     void doBeforeEffect (SPLPEItem const* lpeitem) override;
     void doOnRemove(SPLPEItem const* /*lpeitem*/) override;
-    Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
+    void doEffect (SPCurve * curve) override {};
     void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/) override;
     Gtk::Widget * newWidget() override;
     void createLine(Geom::Point start,Geom::Point end, Glib::ustring name, size_t counter, bool main, bool remove, bool arrows = false);
@@ -83,7 +83,6 @@ private:
     BoolParam avoid_overlapping;
     MessageParam helpdata;
     Glib::ustring display_unit;
-    bool locked_pagenumber;
     double fontsize;
     double anotation_width;
     double previous_size;
