@@ -143,6 +143,8 @@ void ControlPointSelection::clear()
     for (auto erased : out) {
         erased->updateState();
     }
+
+    _update();
     signal_selection_changed.emit(out, false);
 }
 
