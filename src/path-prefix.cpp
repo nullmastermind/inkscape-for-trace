@@ -46,6 +46,14 @@ char *append_inkscape_datadir(const char *relative_path)
             gchar *module_path = g_win32_get_package_installation_directory_of_module(NULL);
             datadir = g_build_filename(module_path, "share", NULL);
             g_free(module_path);
+#elif defined(__APPLE__)
+            gchar *program_dir = get_program_dir();
+            if (g_str_has_suffix(program_dir, "Contents/MacOS")) {
+                datadir = g_build_filename(program_dir, "../Resources/share", nullptr);
+            } else {
+                datadir = g_strdup(INKSCAPE_DATADIR);
+            }
+            g_free(program_dir);
 #else
             datadir = g_strdup(INKSCAPE_DATADIR);
 #endif
@@ -97,7 +105,7 @@ gchar *get_program_name()
         char pathbuf[PATH_MAX + 1];
         uint32_t bufsize = sizeof(pathbuf);
         if (_NSGetExecutablePath(pathbuf, &bufsize) == 0) {
-            program_name = g_strdup(pathbuf);
+            program_name = realpath(pathbuf, nullptr);
         } else {
             g_warning("get_program_name() - _NSGetExecutablePath failed");
         }
