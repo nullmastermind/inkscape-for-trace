@@ -1115,7 +1115,7 @@ void outline_join(Geom::Path &res, Geom::Path const& temp, Geom::Point in_tang, 
 
     join_data jd(res, temp, in_tang, out_tang, miter, width);
     if (!(Geom::cross(in_tang, out_tang) > 0)) {
-        join = Inkscape::JOIN_ROUND;
+        join = Inkscape::JOIN_BEVEL;
     }
     join_func *jf;
     switch (join) {
