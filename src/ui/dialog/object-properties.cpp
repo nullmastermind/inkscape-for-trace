@@ -414,7 +414,7 @@ void ObjectProperties::_labelChanged()
     /* Retrieve the label widget for the object's id */
     gchar *id = g_strdup(_entry_id.get_text().c_str());
     g_strcanon(id, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.:", '_');
-    if (strcmp(id, item->getId()) == 0) {
+    if (g_strcmp0(id, item->getId()) == 0) {
         _label_id.set_markup_with_mnemonic(_("_ID:") + Glib::ustring(" "));
     } else if (!*id || !isalnum (*id)) {
         _label_id.set_text(_("Id invalid! "));
