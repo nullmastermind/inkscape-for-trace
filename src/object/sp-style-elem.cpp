@@ -482,7 +482,7 @@ void SPStyleElem::read_content() {
             cr_cascade_set_sheet (document->getStyleCascade(), document->getStyleSheet(), ORIGIN_AUTHOR);
         } else {
             // If not the first, then chain up this style_sheet
-            cr_stylesheet_append_import (document->getStyleSheet(), style_sheet);
+            cr_stylesheet_append_stylesheet (document->getStyleSheet(), style_sheet);
         }
     } else {
         cr_stylesheet_destroy (style_sheet);
