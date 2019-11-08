@@ -159,7 +159,8 @@ cr_stylesheet_statement_get_from_list (CRStyleSheet * a_this, int itemnr)
 }
 
 /**
- *Appends a new stylesheet to the current list of #CRStylesheet.
+ *Appends a new stylesheet to the current list of #CRStylesheet, setting
+ *the "origin" of the new stylesheet to be the same as the others in list.
  *
  *@param a_this the "this pointer" of the current instance
  *of #CRStylesheet .
@@ -179,6 +180,12 @@ cr_stylesheet_append_stylesheet (CRStyleSheet * a_this, CRStyleSheet * a_new_sty
         for (cur = a_this; cur->next; cur = cur->next) ;
 
         cur->next = a_new_stylesheet;
+
+        /* The "origin" must apriori be the same for all stylesheets
+           in a list. We must set it correctly or errors will occur in
+           put_css_properties_in_props_list(). The "origin" of the initial
+           stylesheet in the list is set in cr_cascade_set_sheet(). */
+        a_new_stylesheet->origin = cur->origin;
 
         return a_this;
 }
