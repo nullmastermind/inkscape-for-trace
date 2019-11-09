@@ -20,6 +20,7 @@
 # Michael Rack <miohna@freenet.de>, 2018.
 # Julius, 2019.
 # Frank Beckmann, 2019.
+# Milo Ivir <mail@milotype.de>, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
