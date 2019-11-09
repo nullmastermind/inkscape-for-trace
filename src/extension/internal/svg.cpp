@@ -351,7 +351,7 @@ static void remove_marker_context_paint (Inkscape::XML::Node *repr,
  * Notes:
  *   Text must have been layed out. Access via old document.
  */
-static void insert_text_fallback( Inkscape::XML::Node *repr, SPDocument *doc, Inkscape::XML::Node *defs = nullptr )
+static void insert_text_fallback( Inkscape::XML::Node *repr, SPDocument *original_doc, Inkscape::XML::Node *defs = nullptr )
 {
     if (repr) {
 
@@ -360,8 +360,8 @@ static void insert_text_fallback( Inkscape::XML::Node *repr, SPDocument *doc, In
             auto id = repr->attribute("id");
             // std::cout << "insert_text_fallback: found text!  id: " << (id?id:"null") << std::endl;
 
-            // We need to get SPText object to access layout.
-            SPText* text = static_cast<SPText *>(doc->getObjectById( id ));
+            // We need to get original SPText object to access layout.
+            SPText* text = static_cast<SPText *>(original_doc->getObjectById( id ));
             if (text == nullptr) {
                 std::cerr << "insert_text_fallback: bad cast" << std::endl;
                 return;
@@ -374,6 +374,15 @@ static void insert_text_fallback( Inkscape::XML::Node *repr, SPDocument *doc, In
             }
 
             // We will keep this text node but replace all children.
+
+            // For text in a shape, We need to unset 'text-anchor' or SVG 1.1 fallback won't work.
+            // Note 'text' here refers to original document while 'repr' refers to new document copy.
+            if (text->has_shape_inside()) {
+                SPCSSAttr *css = sp_repr_css_attr(repr, "style" );
+                sp_repr_css_unset_property(css, "text-anchor");
+                sp_repr_css_set(repr, css, "style");
+                sp_repr_css_attr_unref(css);
+            }
 
             // Make a list of children to delete at end:
             std::vector<Inkscape::XML::Node *> old_children;
@@ -513,7 +522,7 @@ static void insert_text_fallback( Inkscape::XML::Node *repr, SPDocument *doc, In
         }
 
         for ( Node *child = repr->firstChild(); child; child = child->next() ) {
-            insert_text_fallback (child, doc, defs);
+            insert_text_fallback (child, original_doc, defs);
         }
     }
 }
