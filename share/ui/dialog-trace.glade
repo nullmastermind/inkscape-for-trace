@@ -182,6 +182,7 @@
                                 <property name="visible-child-name" bind-source="CBT_SS" bind-property="active-id"></property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="margin_top">5</property>
                                 <child>
                                   <object class="GtkBox">
                                     <property name="visible">True</property>
@@ -354,7 +355,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="orientation">vertical</property>
-                                    
                                     <child>
                                       <object class="GtkLabel">
                                         <property name="visible">True</property>
@@ -425,6 +425,8 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="tooltip_text" translatable="yes">Invert black and white regions</property>
+                                <property name="valign">start</property>
+                                <property name="margin_top">25</property>
                                 <property name="draw_indicator">True</property>
                               </object>
                               <packing>
@@ -707,6 +709,8 @@ Heuristics
                   <object class="GtkGrid">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="margin_left">5</property>
+                    <property name="margin_right">5</property>
                     <property name="row_spacing">4</property>
                     <property name="column_homogeneous">True</property>
                     <child>
@@ -848,6 +852,7 @@ Output
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="tooltip_text" translatable="yes">Output composed of straight lines</property>
+                    <property name="margin_left">5</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -864,6 +869,8 @@ Output
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="tooltip_text" translatable="yes">Preserve staircasing artifacts</property>
+                    <property name="margin_left">5</property>
+                    <property name="margin_bottom">5</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">RB_PA_voronoi</property>
@@ -935,6 +942,10 @@ Output
           <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="margin_left">5</property>
+            <property name="margin_right">5</property>
+            <property name="margin_top">5</property>
+            <property name="margin_bottom">5</property>
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkDrawingArea" id="previewArea">
@@ -1031,6 +1042,8 @@ Output
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">baseline</property>
+        <property name="margin_top">5</property>
+        <property name="margin_bottom">5</property>
         <property name="spacing">3</property>
         <property name="layout_style">end</property>
         <child>
