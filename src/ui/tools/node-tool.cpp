@@ -11,6 +11,9 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <iomanip>
+
+#include <glibmm/ustring.h>
 #include <glib/gi18n.h>
 #include <gdk/gdkkeysyms.h>
 
@@ -686,7 +689,13 @@ void NodeTool::update_tip(GdkEvent *event) {
     unsigned total = this->_selected_nodes->allPoints().size();
 
     if (sz != 0) {
-        char *nodestring; 
+        // TODO: Use Glib::ustring::compose and remove the useless copy after string freeze
+        char *nodestring_temp = g_strdup_printf(
+                ngettext("<b>%u of %u</b> node selected.", "<b>%u of %u</b> nodes selected.", total),
+                sz, total);
+        Glib::ustring nodestring(nodestring_temp);
+        g_free(nodestring_temp);
+
         if (sz == 2) {
             // if there are only two nodes selected, display the angle
             // of a line going through them relative to the X axis.
@@ -700,29 +709,25 @@ void NodeTool::update_tip(GdkEvent *event) {
             }
             g_assert(positions.size() == 2);
             const double angle = Geom::deg_from_rad(Geom::Line(positions[0], positions[1]).angle());
-            nodestring = g_strdup_printf("<b>%u of %u</b> nodes selected, angle: %.2f°.", sz, total, angle);
-        }
-        else {
-            nodestring = g_strdup_printf(
-                ngettext("<b>%u of %u</b> node selected.", "<b>%u of %u</b> nodes selected.", total),
-                sz, total);
+            nodestring += " ";
+            nodestring += Glib::ustring::compose(_("Angle: %1°."),
+                                                 Glib::ustring::format(std::fixed, std::setprecision(2), angle));
         }
 
         if (this->_last_over) {
             // TRANSLATORS: The %s below is where the "%u of %u nodes selected" sentence gets put
             char *dyntip = g_strdup_printf(C_("Node tool tip",
                 "%s Drag to select nodes, click to edit only this object (more: Shift)"),
-                nodestring);
+                nodestring.c_str());
             this->message_context->set(Inkscape::NORMAL_MESSAGE, dyntip);
             g_free(dyntip);
         } else {
             char *dyntip = g_strdup_printf(C_("Node tool tip",
                 "%s Drag to select nodes, click clear the selection"),
-                nodestring);
+                nodestring.c_str());
             this->message_context->set(Inkscape::NORMAL_MESSAGE, dyntip);
             g_free(dyntip);
         }
-        g_free(nodestring);
     } else if (!this->_multipath->empty()) {
         if (this->_last_over) {
             this->message_context->set(Inkscape::NORMAL_MESSAGE, C_("Node tool tip",
