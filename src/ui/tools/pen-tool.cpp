@@ -77,7 +77,6 @@ namespace Tools {
 
 static Geom::Point pen_drag_origin_w(0, 0);
 static bool pen_within_tolerance = false;
-static int pen_last_paraxial_dir = 0; // last used direction in horizontal/vertical mode; 0 = horizontal, 1 = vertical
 const double HANDLE_CUBIC_GAP = 0.001;
 
 const std::string& PenTool::getPrefsPath() {
@@ -95,6 +94,7 @@ PenTool::PenTool()
     , state(POINT)
     , polylines_only(false)
     , polylines_paraxial(false)
+    , paraxial_angle(Geom::Point(0,0))
     , num_clicks(0)
     , expecting_clicks_for_LPE(0)
     , waiting_LPE(nullptr)
@@ -254,7 +254,10 @@ bool PenTool::hasWaitingLPE() {
  * Snaps new node relative to the previous node.
  */
 void PenTool::_endpointSnap(Geom::Point &p, guint const state) const {
-    if ((state & GDK_CONTROL_MASK) && !this->polylines_paraxial) { //CTRL enables angular snapping
+    // Paraxial kicks in after first line has set the angle (before then it's a free line)
+    bool poly = this->polylines_paraxial && !this->green_curve->is_unset();
+
+    if ((state & GDK_CONTROL_MASK) && !poly) { //CTRL enables angular snapping
         if (this->npoints > 0) {
             spdc_endpoint_snap_rotation(this, p, this->p[0], state);
         } else {
@@ -265,9 +268,9 @@ void PenTool::_endpointSnap(Geom::Point &p, guint const state) const {
         // We cannot use shift here to disable snapping because the shift-key is already used
         // to toggle the paraxial direction; if the user wants to disable snapping (s)he will
         // have to use the %-key, the menu, or the snap toolbar
-        if ((this->npoints > 0) && this->polylines_paraxial) {
+        if ((this->npoints > 0) && poly) {
             // snap constrained
-            this->_setToNearestHorizVert(p, state, true);
+            this->_setToNearestHorizVert(p, state);
         } else {
             // snap freely
             boost::optional<Geom::Point> origin = this->npoints > 0 ? this->p[0] : boost::optional<Geom::Point>();
@@ -1770,7 +1773,7 @@ void PenTool::_setSubsequentPoint(Geom::Point const p, bool statusbar, guint sta
         if ((std::abs(p[Geom::X] - origin[Geom::X]) > 1e-9) && (std::abs(p[Geom::Y] - origin[Geom::Y]) > 1e-9)) {
             // ...then we should draw an L-shaped path, consisting of two paraxial segments
             Geom::Point intermed = p;
-            this->_setToNearestHorizVert(intermed, status, false);
+            this->_setToNearestHorizVert(intermed, status);
             this->red_curve->lineto(intermed);
         }
         this->red_curve->lineto(p);
@@ -1850,7 +1853,7 @@ void PenTool::_setCtrl(Geom::Point const p, guint const state) {
 
 void PenTool::_finishSegment(Geom::Point const p, guint const state) {
     if (this->polylines_paraxial) {
-        pen_last_paraxial_dir = this->nextParaxialDirection(p, this->p[0], state);
+        this->nextParaxialDirection(p, this->p[0], state);
     }
 
     ++num_clicks;
@@ -1960,8 +1963,18 @@ bool PenTool::_undoLastPoint() {
         sp_canvas_item_hide(this->cl0);
         sp_canvas_item_hide(this->cl1);
         this->state = PenTool::POINT;
+
+        if(this->polylines_paraxial) {
+            // We compare the point we're removing with the nearest horiz/vert to
+            // see if the line was added with SHIFT or not.
+            Geom::Point compare(pt);
+            this->_setToNearestHorizVert(compare, 0);
+            if ((std::abs(compare[Geom::X] - pt[Geom::X]) > 1e-9) 
+                || (std::abs(compare[Geom::Y] - pt[Geom::Y]) > 1e-9)) {
+                this->paraxial_angle = this->paraxial_angle.cw();
+            }
+        }
         this->_setSubsequentPoint(pt, true);
-        pen_last_paraxial_dir = !pen_last_paraxial_dir;
 
         //redraw
         this->_bsplineSpiroBuild();
@@ -2029,7 +2042,7 @@ void PenTool::waitForLPEMouseClicks(Inkscape::LivePathEffect::EffectType effect_
     this->polylines_paraxial = false; // TODO: think if this is correct for all cases
 }
 
-int PenTool::nextParaxialDirection(Geom::Point const &pt, Geom::Point const &origin, guint state) const {
+void PenTool::nextParaxialDirection(Geom::Point const &pt, Geom::Point const &origin, guint state) {
     //
     // after the first mouse click we determine whether the mouse pointer is closest to a
     // horizontal or vertical segment; for all subsequent mouse clicks, we use the direction
@@ -2041,45 +2054,32 @@ int PenTool::nextParaxialDirection(Geom::Point const &pt, Geom::Point const &ori
 
     if (this->green_curve->is_unset()) {
         // first mouse click
-        double dist_h = fabs(pt[Geom::X] - origin[Geom::X]);
-        double dist_v = fabs(pt[Geom::Y] - origin[Geom::Y]);
-        int ret = (dist_h < dist_v) ? 1 : 0; // 0 = horizontal, 1 = vertical
-        pen_last_paraxial_dir = (state & GDK_SHIFT_MASK) ? 1 - ret : ret;
-        return pen_last_paraxial_dir;
-    } else {
-        // subsequent mouse click
-        return (state & GDK_SHIFT_MASK) ? pen_last_paraxial_dir : 1 - pen_last_paraxial_dir;
+        double h = pt[Geom::X] - origin[Geom::X];
+        double v = pt[Geom::Y] - origin[Geom::Y];
+        this->paraxial_angle = Geom::Point(h, v).ccw();
+    }
+    if(!(state & GDK_SHIFT_MASK)) {
+        this->paraxial_angle = this->paraxial_angle.ccw();
     }
 }
 
-void PenTool::_setToNearestHorizVert(Geom::Point &pt, guint const state, bool snap) const {
+void PenTool::_setToNearestHorizVert(Geom::Point &pt, guint const state) const {
     Geom::Point const origin = this->p[0];
+    Geom::Point const target = (state & GDK_SHIFT_MASK) ? this->paraxial_angle : this->paraxial_angle.ccw();
 
-    int next_dir = this->nextParaxialDirection(pt, origin, state);
+    // Create a horizontal or vertical constraint line
+    Inkscape::Snapper::SnapConstraint cl(origin, target);
 
-    if (!snap) {
-        if (next_dir == 0) {
-            // line is forced to be horizontal
-            pt[Geom::Y] = origin[Geom::Y];
-        } else {
-            // line is forced to be vertical
-            pt[Geom::X] = origin[Geom::X];
-        }
-    } else {
-        // Create a horizontal or vertical constraint line
-        Inkscape::Snapper::SnapConstraint cl(origin, next_dir ? Geom::Point(0, 1) : Geom::Point(1, 0));
+    // Snap along the constraint line; if we didn't snap then still the constraint will be applied
+    SnapManager &m = this->desktop->namedview->snap_manager;
 
-        // Snap along the constraint line; if we didn't snap then still the constraint will be applied
-        SnapManager &m = this->desktop->namedview->snap_manager;
+    Inkscape::Selection *selection = this->desktop->getSelection();
+    // selection->singleItem() is the item that is currently being drawn. This item will not be snapped to (to avoid self-snapping)
+    // TODO: Allow snapping to the stationary parts of the item, and only ignore the last segment
 
-        Inkscape::Selection *selection = this->desktop->getSelection();
-        // selection->singleItem() is the item that is currently being drawn. This item will not be snapped to (to avoid self-snapping)
-        // TODO: Allow snapping to the stationary parts of the item, and only ignore the last segment
-
-        m.setup(this->desktop, true, selection->singleItem());
-        m.constrainedSnapReturnByRef(pt, Inkscape::SNAPSOURCE_NODE_HANDLE, cl);
-        m.unSetup();
-    }
+    m.setup(this->desktop, true, selection->singleItem());
+    m.constrainedSnapReturnByRef(pt, Inkscape::SNAPSOURCE_NODE_HANDLE, cl);
+    m.unSetup();
 }
 
 }

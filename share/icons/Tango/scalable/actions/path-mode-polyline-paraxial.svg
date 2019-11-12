@@ -9,11 +9,12 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="svg1"
-   width="15.997396"
-   height="17.002623"
+   width="18.996401"
+   height="19.771414"
    version="1.1"
    sodipodi:docname="path-mode-polyline-paraxial.svg"
-   viewBox="0 0 15.997395 17.002623">
+   viewBox="0 0 18.996399 19.771414"
+   inkscape:version="0.92.4 (unknown)">
   <metadata
      id="metadata52">
     <rdf:RDF>
@@ -35,10 +36,17 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="640"
-     inkscape:window-height="480"
+     inkscape:window-width="3066"
+     inkscape:window-height="1703"
      id="namedview50"
-     showgrid="false" />
+     showgrid="false"
+     inkscape:zoom="13.880212"
+     inkscape:cx="9.4981997"
+     inkscape:cy="9.8857088"
+     inkscape:window-x="134"
+     inkscape:window-y="41"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="paraxial_lines_mode" />
   <defs
      id="defs3">
     <linearGradient
@@ -148,21 +156,21 @@
   </defs>
   <g
      id="paraxial_lines_mode"
-     transform="translate(-1774.0011,-191.99862)">
+     transform="translate(-1772.5016,-190.61423)">
     <path
-       d="m 1776.875,195 h 10.25 v 11 h -10.25 v -0.125"
+       d="m 1778.1305,194.05468 10.026,2.1311 -2.287,10.75962 -10.026,-2.1311 0.026,-0.12226"
        id="path15500"
        inkscape:connector-curvature="0"
        style="fill:none;fill-rule:evenodd;stroke:#555753;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <path
-       d="m 1776.875,195 h 10.25 v 11 h -10.25 v -0.125"
+       d="m 1778.1305,194.05468 10.026,2.1311 -2.287,10.75962 -10.026,-2.1311 0.026,-0.12226"
        id="path15498"
        inkscape:connector-curvature="0"
        style="fill:none;fill-rule:evenodd;stroke:#babdb6;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <g
        id="use15453"
        inkscape:label="#g14630"
-       transform="translate(329,-5)">
+       transform="rotate(12,1641.2857,1768.1129)">
       <g
          id="g6643"
          transform="matrix(0.7272727,0,0,0.7310807,1453.818,-102.0049)">
@@ -181,7 +189,7 @@
     <g
        id="use15455"
        inkscape:label="#g14630"
-       transform="translate(339,-5)">
+       transform="rotate(12,1636.2857,1815.6847)">
       <g
          id="g31"
          transform="matrix(0.7272727,0,0,0.7310807,1453.818,-102.0049)">
@@ -200,7 +208,7 @@
     <g
        id="use15494"
        inkscape:label="#g14630"
-       transform="translate(339,6)">
+       transform="rotate(12,1583.9567,1810.1847)">
       <g
          id="g38"
          transform="matrix(0.7272727,0,0,0.7310807,1453.818,-102.0049)">
@@ -219,7 +227,7 @@
     <g
        id="use15496"
        inkscape:label="#g14630"
-       transform="translate(329,6)">
+       transform="rotate(12,1588.9567,1762.6129)">
       <g
          id="g45"
          transform="matrix(0.7272727,0,0,0.7310807,1453.818,-102.0049)">
