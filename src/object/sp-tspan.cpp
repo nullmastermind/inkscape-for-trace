@@ -60,7 +60,12 @@ void SPTSpan::build(SPDocument *doc, Inkscape::XML::Node *repr) {
     this->readAttr( "dx" );
     this->readAttr( "dy" );
     this->readAttr( "rotate" );
-    this->readAttr( "sodipodi:role" );
+
+    // Strip sodipodi:role from SVG 2 flowed text.
+    SPText* text = dynamic_cast<SPText*>(parent);
+    if (text && !(text->has_shape_inside() || text->has_inline_size())) {
+        this->readAttr( "sodipodi:role" );
+    }
 
     SPItem::build(doc, repr);
 }
