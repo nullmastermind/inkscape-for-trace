@@ -643,7 +643,7 @@ void Application::readStyleSheets(bool forceupd)
     for (unsigned i = 0; i < root->childCount(); ++i) {
         Inkscape::XML::Node *child = root->nthChild(i);
         if (child && strcmp(child->name(), "svg:style") == 0) {
-            styles.insert(styles.begin(), child);
+            styles.push_back(child);
         }
     }
     if (forceupd || styles.size() > 1) {
