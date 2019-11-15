@@ -180,6 +180,7 @@ cr_stylesheet_append_stylesheet (CRStyleSheet * a_this, CRStyleSheet * a_new_sty
         for (cur = a_this; cur->next; cur = cur->next) ;
 
         cur->next = a_new_stylesheet;
+        a_new_stylesheet->prev = cur;
 
         /* The "origin" must apriori be the same for all stylesheets
            in a list. We must set it correctly or errors will occur in
@@ -190,6 +191,48 @@ cr_stylesheet_append_stylesheet (CRStyleSheet * a_this, CRStyleSheet * a_new_sty
         return a_this;
 }
 
+/**
+ * cr_stylesheet_unlink:
+ *@a_this: the stylesheet to unlink.
+ *
+ *Unlinks the stylesheet from the stylesheet list.
+ *
+ *Returns a pointer to the unlinked stylesheet in
+ *case of a successfull completion, NULL otherwise.
+ */
+CRStyleSheet *
+cr_stylesheet_unlink (CRStyleSheet * a_this)
+{
+        CRStyleSheet *result = a_this;
+
+        g_return_val_if_fail (result, NULL);
+
+        /*
+         *some sanity checks first
+         */
+        if (a_this->prev) {
+                g_return_val_if_fail (a_this->prev->next == a_this, NULL);
+
+        }
+        if (a_this->next) {
+                g_return_val_if_fail (a_this->next->prev == a_this, NULL);
+        }
+
+        /*
+         *now, the real unlinking job.
+         */
+        if (a_this->prev) {
+                a_this->prev->next = a_this->next;
+        }
+        if (a_this->next) {
+                a_this->next->prev = a_this->prev;
+        }
+
+        a_this->next = NULL;
+        a_this->prev = NULL;
+
+        return a_this;
+}
 
 /**
  *Appends a new import stylesheet to the current list of imports.

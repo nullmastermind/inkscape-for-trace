@@ -91,6 +91,11 @@ struct _CRStyleSheet
          * A link to the next stylesheet.
          */
         CRStyleSheet *next;
+
+        /**
+         * A link to the previous stylesheet.
+         */
+        CRStyleSheet *prev;
 } ;
 
 CRStyleSheet * cr_stylesheet_new (CRStatement *a_stmts) ;
@@ -106,6 +111,8 @@ CRStatement * cr_stylesheet_statement_get_from_list (CRStyleSheet *a_this, int i
 CRStyleSheet * cr_stylesheet_append_import (CRStyleSheet *a_this, CRStyleSheet *a_new_import) ;
 
 CRStyleSheet * cr_stylesheet_append_stylesheet (CRStyleSheet *a_this, CRStyleSheet *a_new_stylesheet) ;
+
+CRStyleSheet * cr_stylesheet_unlink (CRStyleSheet *a_this) ;
 
 void cr_stylesheet_ref (CRStyleSheet *a_this) ;
 
