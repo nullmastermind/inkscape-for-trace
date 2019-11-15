@@ -1254,9 +1254,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
                     desktop->getSelection()->clear();
                 }
 
-                if(this->is_dilating && event->button.button == 1 && !this->space_panning) {
-                    sp_spray_dilate(this, motion_w, desktop->dt2doc(motion_dt), Geom::Point(0,0), MOD__SHIFT(event));
-                }
+                sp_spray_dilate(this, motion_w, this->last_push, Geom::Point(0,0), MOD__SHIFT(event));
 
                 this->has_dilated = true;
                 ret = TRUE;
@@ -1363,13 +1361,14 @@ bool SprayTool::root_handler(GdkEvent* event) {
                                            SP_VERB_CONTEXT_SPRAY, _("Spray with clones"));
                         break;
                     case SPRAY_MODE_SINGLE_PATH:
-                        objectSet()->pathUnion(true);
+                        object_set.pathUnion(true);
                         desktop->getSelection()->add(object_set.objects().begin(), object_set.objects().end());
                         DocumentUndo::done(this->desktop->getDocument(),
                                            SP_VERB_CONTEXT_SPRAY, _("Spray in single path"));
                         break;
                 }
             }
+            object_set.clear();
             break;
         }
 
