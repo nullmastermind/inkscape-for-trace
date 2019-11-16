@@ -257,6 +257,7 @@ bool PencilTool::_handleButtonPress(GdkEventButton const &bevent) {
                 break;
         }
 
+        set_high_motion_precision();
         this->_is_drawing = true;
     }
     return ret;
@@ -398,6 +399,8 @@ bool PencilTool::_handleMotionNotify(GdkEventMotion const &mevent) {
 
 bool PencilTool::_handleButtonRelease(GdkEventButton const &revent) {
     bool ret = false;
+
+    set_high_motion_precision(false);
 
     if ( revent.button == 1 && this->_is_drawing && !this->space_panning) {
         this->_is_drawing = false;

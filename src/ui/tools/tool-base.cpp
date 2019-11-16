@@ -1057,6 +1057,23 @@ bool ToolBase::deleteSelectedDrag(bool just_one) {
     return FALSE;
 }
 
+/** Enable (or disable) high precision for motion events
+  *
+  * This is intended to be used by drawing tools, that need to process motion events with high accuracy
+  * and high update rate (for example free hand tools)
+  *
+  * With standard accuracy some intermediate motion events might be discarded
+  *
+  * Call this function when an operation that requires high accuracy is started (e.g. mouse button is pressed
+  * to draw a line). Make sure to call it again and restore standard precision afterwards. **/
+void ToolBase::set_high_motion_precision(bool high_precision) {
+    Glib::RefPtr<Gdk::Window> window = desktop->getToplevel()->get_window();
+
+    if (window) {
+        window->set_event_compression(!high_precision);
+    }
+}
+
 /**
  * Calls virtual set() function of ToolBase.
  */

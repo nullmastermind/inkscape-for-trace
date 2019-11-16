@@ -232,6 +232,8 @@ protected:
     gchar const *const *cursor_shape;
     bool sp_event_context_knot_mouseover() const;
 
+    void set_high_motion_precision(bool high_precision = true);
+
 private:
   bool _keyboardMove(GdkEventKey const &event, Geom::Point const &dir);
   void sp_event_context_set_cursor(GdkCursorType cursor_type);

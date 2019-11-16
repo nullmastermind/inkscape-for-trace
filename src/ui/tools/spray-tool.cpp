@@ -1245,6 +1245,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
                 sp_spray_extinput(this, event);
 
                 desktop->canvas->forceFullRedrawAfterInterruptions(3);
+                set_high_motion_precision();
                 this->is_drawing = true;
                 this->is_dilating = true;
                 this->has_dilated = false;
@@ -1341,6 +1342,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
             Geom::Point const motion_dt(desktop->w2d(motion_w));
 
             desktop->canvas->endForcedFullRedraws();
+            set_high_motion_precision(false);
             this->is_drawing = false;
 
             if (this->is_dilating && event->button.button == 1 && !this->space_panning) {

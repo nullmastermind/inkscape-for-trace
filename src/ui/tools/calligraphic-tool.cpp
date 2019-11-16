@@ -471,6 +471,7 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
                 ret = TRUE;
 
                 desktop->canvas->forceFullRedrawAfterInterruptions(3);
+                set_high_motion_precision();
                 this->is_drawing = true;
                 this->just_started_drawing = true;
             }
@@ -729,6 +730,7 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
 
         sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
         desktop->canvas->endForcedFullRedraws();
+        set_high_motion_precision(false);
         this->is_drawing = false;
 
         if (this->dragging && event->button.button == 1 && !this->space_panning) {
