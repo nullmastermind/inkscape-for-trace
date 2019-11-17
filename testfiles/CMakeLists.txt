@@ -24,6 +24,7 @@ set(TEST_SOURCES
 	object-style-test
 	style-elem-test
 	style-test
+	svg-stringstream-test
 	sp-gradient-test
 	object-test)
 

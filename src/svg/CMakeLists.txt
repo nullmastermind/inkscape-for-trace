@@ -16,10 +16,8 @@ set(svg_SRC
 
 	# -------
 	# Headers
-	css-ostringstream-test.h
 	css-ostringstream.h
 	path-string.h
-	stringstream-test.h
 	stringstream.h
 	strip-trailing-zeros.h
 	svg-affine-test.h
