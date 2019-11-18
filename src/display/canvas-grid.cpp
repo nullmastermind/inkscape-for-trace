@@ -425,8 +425,8 @@ CanvasXYGrid::CanvasXYGrid (SPNamedView * nv, Inkscape::XML::Node * in_repr, SPD
     }
     origin[Geom::X] = Inkscape::Util::Quantity::convert(prefs->getDouble("/options/grids/xy/origin_x", 0.0), gridunit, "px");
     origin[Geom::Y] = Inkscape::Util::Quantity::convert(prefs->getDouble("/options/grids/xy/origin_y", 0.0), gridunit, "px");
-    color = prefs->getInt("/options/grids/xy/color", 0x0000ff20);
-    empcolor = prefs->getInt("/options/grids/xy/empcolor", 0x0000ff40);
+    color = prefs->getInt("/options/grids/xy/color", GRID_DEFAULT_COLOR);
+    empcolor = prefs->getInt("/options/grids/xy/empcolor", GRID_DEFAULT_EMPCOLOR);
     empspacing = prefs->getInt("/options/grids/xy/empspacing", 5);
     spacing[Geom::X] = Inkscape::Util::Quantity::convert(prefs->getDouble("/options/grids/xy/spacing_x", 0.0), gridunit, "px");
     spacing[Geom::Y] = Inkscape::Util::Quantity::convert(prefs->getDouble("/options/grids/xy/spacing_y", 0.0), gridunit, "px");

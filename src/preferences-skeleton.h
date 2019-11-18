@@ -129,7 +129,8 @@ R"=====(
                        show_sample_in_list="1" use_svg2="1"
                   style="fill:black;fill-opacity:1;line-height:1.25;stroke:none;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;" selcue="1"/>
 
-    <eventcontext id="nodes" selcue="1" gradientdrag="1" highlight_color="0xff0000ff" pathflash_enabled="1" pathflash_unselected="0" pathflash_timeout="500" show_handles="1" show_outline="0"
+    <eventcontext id="nodes" selcue="1" gradientdrag="1"
+      pathflash_enabled="1" pathflash_unselected="0" pathflash_timeout="500" show_handles="1" show_outline="0"
       sculpting_profile="1" single_node_transform_handles="0" show_transform_handles="0" live_outline="1" live_objects="1" show_helperpath="0" x="0" y="0" edit_clipping_paths="0" edit_masks="0" />
     <eventcontext id="tweak" selcue="0" gradientdrag="0" show_handles="0" width="0.2" force="0.2" fidelity="0.5" usepressure="1" style="fill:red;stroke:none;" usecurrent="0"/>
     <eventcontext id="spray" selcue="1" gradientdrag="0" usepressure="1" width="15" population="70" mode="1" rotation_variation="0" scale_variation="0" standard_deviation="70" mean="0"/>
@@ -321,11 +322,11 @@ R"=====(
     <group id="outlinemode" value="0"/>
 
     <group id="wireframecolors"
-           onlight="0x000000ff"
-           ondark="0xffffffff"
-           images="0xff0000ff"
-           clips="0x00ff00ff"
-           masks="0x0000ffff"/>
+           onlight="255"
+           ondark="4294967295"
+           images="4278190335"
+           clips="16711935"
+           masks="65535"/>
     <group id="svgoutput"
            disable_optimizations="0"
            usenamedcolors="0"
@@ -360,8 +361,6 @@ R"=====(
              origin_y="0.0"
              spacing_x="1.0"
              spacing_y="1.0"
-             color="0x3F3FFF20"
-             empcolor="0x3F3FFF40"
              empspacing="5"
              dotted="0"/>
       <group id="axonom"
@@ -371,8 +370,6 @@ R"=====(
              spacing_y="1.0"
              angle_x="30.0"
              angle_z="30.0"
-             color="0x3F3FFF20"
-             empcolor="0x3F3FFF40"
              empspacing="5"/>
     </group>
     <group id="workarounds"

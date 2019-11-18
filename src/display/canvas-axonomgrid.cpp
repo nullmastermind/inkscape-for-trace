@@ -83,8 +83,8 @@ CanvasAxonomGrid::CanvasAxonomGrid (SPNamedView * nv, Inkscape::XML::Node * in_r
     }
     origin[Geom::X] = Inkscape::Util::Quantity::convert(prefs->getDouble("/options/grids/axonom/origin_x", 0.0), gridunit, "px");
     origin[Geom::Y] = Inkscape::Util::Quantity::convert(prefs->getDouble("/options/grids/axonom/origin_y", 0.0), gridunit, "px");
-    color = prefs->getInt("/options/grids/axonom/color", 0x0000ff20);
-    empcolor = prefs->getInt("/options/grids/axonom/empcolor", 0x0000ff40);
+    color = prefs->getInt("/options/grids/axonom/color", GRID_DEFAULT_COLOR);
+    empcolor = prefs->getInt("/options/grids/axonom/empcolor", GRID_DEFAULT_EMPCOLOR);
     empspacing = prefs->getInt("/options/grids/axonom/empspacing", 5);
     lengthy = Inkscape::Util::Quantity::convert(prefs->getDouble("/options/grids/axonom/spacing_y", 1.0), gridunit, "px");
     angle_deg[X] = prefs->getDouble("/options/grids/axonom/angle_x", 30.0);

@@ -51,6 +51,9 @@ enum GridType {
 #define INKSCAPE_IS_GRID_CANVASITEM(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), INKSCAPE_TYPE_GRID_CANVASITEM))
 #define INKSCAPE_IS_GRID_CANVASITEM_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), INKSCAPE_TYPE_GRID_CANVASITEM))
 
+#define GRID_DEFAULT_COLOR 0x3F3FFF20
+#define GRID_DEFAULT_EMPCOLOR 0x3F3FFF40
+
 class CanvasGrid;
 
 /** All the variables that are tracked for a grid specific canvas item. */
