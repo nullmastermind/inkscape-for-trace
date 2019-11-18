@@ -1173,7 +1173,10 @@ SPDesktop::zoom_grab_focus()
 
 
 /**
- * Rotate keeping the point 'c' fixed in the desktop window.
+ * Set new rotation, keeping the point 'c' fixed in the desktop window.
+ *
+ * @param c Point in desktop coordinates
+ * @param rotate Angle in clockwise direction
  */
 void
 SPDesktop::rotate_absolute_keep_point (Geom::Point const &c, double rotate)
@@ -1184,6 +1187,12 @@ SPDesktop::rotate_absolute_keep_point (Geom::Point const &c, double rotate)
 }
 
 
+/**
+ * Rotate keeping the point 'c' fixed in the desktop window.
+ *
+ * @param c Point in desktop coordinates
+ * @param rotate Angle in clockwise direction
+ */
 void
 SPDesktop::rotate_relative_keep_point (Geom::Point const &c, double rotate)
 {
@@ -1194,65 +1203,92 @@ SPDesktop::rotate_relative_keep_point (Geom::Point const &c, double rotate)
 
 
 /**
- * Rotate aligning the point 'c' to the center of desktop window.
+ * Set new rotation, aligning the point 'c' to the center of desktop window.
+ *
+ * @param c Point in desktop coordinates
+ * @param rotate Angle in clockwise direction
  */
 void
 SPDesktop::rotate_absolute_center_point (Geom::Point const &c, double rotate)
 {
     _current_affine.setRotate( rotate );
     Geom::Rect viewbox = canvas->getViewbox();
-    set_display_area( c, viewbox.midpoint() );
+    set_display_area(c, viewbox.midpoint());
 }
 
 
+/**
+ * Rotate aligning the point 'c' to the center of desktop window.
+ *
+ * @param c Point in desktop coordinates
+ * @param rotate Angle in clockwise direction
+ */
 void
 SPDesktop::rotate_relative_center_point (Geom::Point const &c, double rotate)
 {
     _current_affine.addRotate( rotate );
     Geom::Rect viewbox = canvas->getViewbox();
-    set_display_area( c, viewbox.midpoint() );
+    set_display_area(c, viewbox.midpoint());
 }
 
 
 /**
- * Flip keeping the point 'c' fixed in the desktop window.
+ * Set new flip direction, keeping the point 'c' fixed in the desktop window.
+ *
+ * @param c Point in desktop coordinates
+ * @param flip Direction the canvas will be set as.
  */
 void
 SPDesktop::flip_absolute_keep_point (Geom::Point const &c, CanvasFlip flip)
 {
-    Geom::Point w = d2w( c ); // Must be before flip.
-    _current_affine.setFlip( flip );
-    set_display_area( c, w );
-}
-
-
-void
-SPDesktop::flip_relative_keep_point (Geom::Point const &c, CanvasFlip flip)
-{
-    Geom::Point w = d2w( c ); // Must be before flip.
-    _current_affine.addFlip( flip );
-    set_display_area( c, w );
+    Geom::Point w = d2w(c); // Must be before flip.
+    _current_affine.setFlip(flip);
+    set_display_area(c, w);
 }
 
 
 /**
- * Flip aligning the point 'c' to the center of desktop window.
+ * Flip direction, keeping the point 'c' fixed in the desktop window.
+ *
+ * @param c Point in desktop coordinates
+ * @param flip Direction to flip canvas
+ */
+void
+SPDesktop::flip_relative_keep_point (Geom::Point const &c, CanvasFlip flip)
+{
+    Geom::Point w = d2w(c); // Must be before flip.
+    _current_affine.addFlip(flip);
+    set_display_area(c, w);
+}
+
+
+/**
+ * Set new flip direction, aligning the point 'c' to the center of desktop window.
+ *
+ * @param c Point in desktop coordinates
+ * @param flip Direction the canvas will be set as.
  */
 void
 SPDesktop::flip_absolute_center_point (Geom::Point const &c, CanvasFlip flip)
 {
-    _current_affine.setFlip( flip );
+    _current_affine.setFlip(flip);
     Geom::Rect viewbox = canvas->getViewbox();
-    set_display_area( c, viewbox.midpoint() );
+    set_display_area(c, viewbox.midpoint());
 }
 
 
+/**
+ * Flip direction, aligning the point 'c' to the center of desktop window.
+ *
+ * @param c Point in desktop coordinates
+ * @param flip Direction to flip canvas
+ */
 void
 SPDesktop::flip_relative_center_point (Geom::Point const &c, CanvasFlip flip)
 {
-    _current_affine.addFlip( flip );
+    _current_affine.addFlip(flip);
     Geom::Rect viewbox = canvas->getViewbox();
-    set_display_area( c, viewbox.midpoint() );
+    set_display_area(c, viewbox.midpoint());
 }
 
 bool
