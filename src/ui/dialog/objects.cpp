@@ -215,6 +215,7 @@ public:
         add(_colType);
         add(_colHighlight);
         add(_colClipMask);
+        add(_colPrevSelectionState);
         //add(_colInsertOrder);
     }
     ~ModelColumns() override = default;
@@ -226,6 +227,7 @@ public:
     Gtk::TreeModelColumn<int> _colType;
     Gtk::TreeModelColumn<guint32> _colHighlight;
     Gtk::TreeModelColumn<int> _colClipMask;
+    Gtk::TreeModelColumn<bool> _colPrevSelectionState;
     //Gtk::TreeModelColumn<int> _colInsertOrder;
 };
 
@@ -319,7 +321,10 @@ void ObjectsPanel::_objectsChanged(SPObject */*obj*/)
             _tree_cache.clear(); // invalid. So we will also clear our own cache, as well
             _tree_update_queue.clear(); // as any remaining update queue
 
-            _tree.unset_model(); // temporarily detach the TreeStore from the TreeView for prevent flickering, and to speed up
+            // Temporarily detach the TreeStore from the TreeView to slightly reduce flickering, and to speed up
+            // Note: if we truly want to eliminate the flickering, we should implement double buffering on the _store,
+            // but maybe this is a bit too much effort/bloat for too little gain?
+            _tree.unset_model();
 
             //Add all items recursively; we will do this asynchronously, by first filling a queue, which is rather fast
             _queueObject( root, nullptr );
@@ -328,6 +333,8 @@ void ObjectsPanel::_objectsChanged(SPObject */*obj*/)
             //of the chunks, Inkscape will check if there are other tasks with a high priority, for example when user is
             //spraying. If so, the sprayed objects will be added first, and the whole updating will be restarted before
             //it even finished.
+            _paths_to_be_expanded.clear();
+            _processQueue_sig.disconnect(); // Might be needed in case objectsChanged is called directly, and not through objectsChangedWrapper()
             _processQueue_sig = Glib::signal_timeout().connect( sigc::mem_fun(*this, &ObjectsPanel::_processQueue), 0, Glib::PRIORITY_DEFAULT_IDLE+100);
         }
     }
@@ -340,6 +347,8 @@ void ObjectsPanel::_objectsChanged(SPObject */*obj*/)
  */
 void ObjectsPanel::_queueObject(SPObject* obj, Gtk::TreeModel::Row* parentRow)
 {
+    bool already_expanded = false;
+
     for(auto& child: obj->children) {
         if (SP_IS_ITEM(&child)) {
             //Add the item to the tree, basically only creating an empty row in the tree view
@@ -347,8 +356,10 @@ void ObjectsPanel::_queueObject(SPObject* obj, Gtk::TreeModel::Row* parentRow)
 
             //Add the item to a queue, so we can fill in the data in each row asynchronously
             //at a later stage. See the comments in _objectsChanged() for more details
-            bool expanded = SP_IS_GROUP(obj) && SP_GROUP(obj)->expanded();
-            _tree_update_queue.emplace_back(SP_ITEM(&child), iter, expanded);
+            bool expand = SP_IS_GROUP(obj) && SP_GROUP(obj)->expanded() && (not already_expanded);
+            _tree_update_queue.emplace_back(SP_ITEM(&child), iter, expand);
+
+            already_expanded = expand || already_expanded; // We need to expand only a single child in each group
 
             //If the item is a group, recursively add its children
             if (SP_IS_GROUP(&child)) {
@@ -385,12 +396,20 @@ bool ObjectsPanel::_processQueue() {
         queue_iter = _tree_update_queue.erase(queue_iter);
         count++;
         if (count == 100) {
-            return true; // we have not yet reached the end, so return true to keep the timeout signal alive
+            return true; // we have not yet reached the end of the queue, so return true to keep the timeout signal alive
         }
     }
 
     //We have reached the end of the queue, so we can now bring the tree view back to life safely
+
     _tree.set_model(_store); // Attach the store again to the tree view
+    // Expand the tree; this is kept outside of the _addObject and _processQueue() to allow
+    // temporarily detaching the store from the tree, which slightly reduces flickering
+    for (auto path: _paths_to_be_expanded) {
+        _tree.expand_to_path(path);
+        _tree.collapse_row(path);
+    }
+
     _blockAllSignals(false);
     _objectsSelected(_desktop->selection); //Set the tree selection
     _checkTreeSelection(); //Handle button sensitivity
@@ -418,12 +437,12 @@ void ObjectsPanel::_addObject(SPItem* item, const Gtk::TreeModel::Row &row, bool
         (item->clip_ref && item->clip_ref->getObject() ? 1 : 0) |
         (item->mask_ref && item->mask_ref->getObject() ? 2 : 0)
     ) : 0;
+    row[_model->_colPrevSelectionState] = false;
     //row[_model->_colInsertOrder] = group ? (group->insertBottom() ? 2 : 1) : 0;
 
     //If our parent object is a group and it's expanded, expand the tree
     if (expanded) {
-        _tree.expand_to_path( _store->get_path(row) );
-        _tree.collapse_row( _store->get_path(row) );
+        _paths_to_be_expanded.emplace_back(_store->get_path(row));
     }
 }
 
@@ -453,8 +472,7 @@ void ObjectsPanel::_updateObject( SPObject *obj, bool recurse ) {
         ) : 0;
         //row[_model->_colInsertOrder] = group ? (group->insertBottom() ? 2 : 1) : 0;
 
-        if (recurse)
-        {
+        if (recurse){
             for (auto& iter: obj->children) {
                 _updateObject(&iter, recurse);
             }
@@ -503,7 +521,10 @@ void ObjectsPanel::_objectsSelected( Selection *sel ) {
 
     bool setOpacity = true;
     _selectedConnection.block();
+
     _tree.get_selection()->unselect_all();
+    _store->foreach_iter(sigc::mem_fun(*this, &ObjectsPanel::_clearPrevSelectionState));
+
     SPItem *item = nullptr;
     auto items = sel->items();
     for(auto i=items.begin(); i!=items.end(); ++i){
@@ -641,6 +662,7 @@ void ObjectsPanel::_updateObjectSelected(SPItem* item, bool scrollto, bool expan
         Glib::RefPtr<Gtk::TreeSelection> select = _tree.get_selection();
 
         select->select(tree_iter);
+        row[_model->_colPrevSelectionState] = true;
         if (scrollto) {
             //Scroll to the item in the tree
             _tree.scroll_to_row(path, 0.5);
@@ -657,15 +679,21 @@ void ObjectsPanel::_pushTreeSelectionToCurrent()
         //block connections for selection and compositing values to prevent interference
         _selectionChangedConnection.block();
         _documentChangedCurrentLayer.block();
-    
         //Clear the selection and then iterate over the tree selection, pushing each item to the desktop
         _desktop->selection->clear();
+        if (_tree.get_selection()->count_selected_rows() == 0) {
+            _store->foreach_iter(sigc::mem_fun(*this, &ObjectsPanel::_clearPrevSelectionState));
+        }
         bool setOpacity = true;
-        _tree.get_selection()->selected_foreach_iter( sigc::bind<bool *>(sigc::mem_fun(*this, &ObjectsPanel::_selected_row_callback), &setOpacity));
-        //unblock connections
+        bool first_pass = true;
+        _store->foreach_iter(sigc::bind<bool *>(sigc::mem_fun(*this, &ObjectsPanel::_selectItemCallback), &setOpacity, &first_pass));
+        first_pass = false;
+        _store->foreach_iter(sigc::bind<bool *>(sigc::mem_fun(*this, &ObjectsPanel::_selectItemCallback), &setOpacity, &first_pass));
+
+        //unblock connections, unless we were already blocking them beforehand
         _selectionChangedConnection.unblock();
         _documentChangedCurrentLayer.unblock();
-        
+
         _checkTreeSelection();
     }
 }
@@ -674,31 +702,57 @@ void ObjectsPanel::_pushTreeSelectionToCurrent()
  * Helper function for pushing the current tree selection to the current desktop
  * @param iter Current tree item
  * @param setCompositingValues Whether to set the compositing values
- * @param blur
  */
-void ObjectsPanel::_selected_row_callback( const Gtk::TreeModel::iterator& iter, bool *setCompositingValues )
+bool ObjectsPanel::_selectItemCallback(const Gtk::TreeModel::iterator& iter, bool *setCompositingValues, bool *first_pass)
 {
-    if (iter) {
-        Gtk::TreeModel::Row row = *iter;
-        SPItem *item = row[_model->_colObject];
-        if (!SP_IS_GROUP(item) || SP_GROUP(item)->layerMode() != SPGroup::LAYER)
-        {
-            //If the item is not a layer, then select it and set the current layer to its parent (if it's the first item)
-            if (_desktop->selection->isEmpty()) _desktop->setCurrentLayer(item->parent);
-            _desktop->selection->add(item);
-        }
-        else
-        {
-            //If the item is a layer, set the current layer
-            if (_desktop->selection->isEmpty()) _desktop->setCurrentLayer(item);
-        }
-        if (*setCompositingValues)
-        {
-            //Only set the compositing values for the first item
-            _setCompositingValues(item);
-            *setCompositingValues = false;
+    Gtk::TreeModel::Row row = *iter;
+    bool selected = _tree.get_selection()->is_selected(iter);
+    if (selected) { // All items selected in the treeview will be added to the current selection
+        /* Adding/removing only the items that were selected or deselected since the previous call to _pushTreeSelectionToCurrent()
+         * is very slow on large documents, because _desktop->selection->remove(item) needs to traverse the whole ObjectSet to find
+         * the item to be removed. When all N objects are selected in a document, clearing the whole selection would require O(N^2)
+         * That's why we simply clear the complete selection using _desktop->selection->clear(), and re-add all items one by one.
+         * This is much faster.
+         */
+
+        /* On the first pass, we will add only the items that were selected before too. Then, on the second pass, we will add the
+         * newly selected items such that the last selected items will be actually last. This is needed for example when the user
+         * wants to align relative to the last selected item.
+         */
+        if (*first_pass == row[_model->_colPrevSelectionState]) {
+            SPItem *item = row[_model->_colObject];
+            if (!SP_IS_GROUP(item) || SP_GROUP(item)->layerMode() != SPGroup::LAYER) {
+                //If the item is not a layer, then select it and set the current layer to its parent (if it's the first item)
+                if (_desktop->selection->isEmpty()) {
+                    _desktop->setCurrentLayer(item->parent);
+                }
+                _desktop->selection->add(item);
+            } else {
+                //If the item is a layer, set the current layer
+                if (_desktop->selection->isEmpty()) {
+                    _desktop->setCurrentLayer(item);
+                }
+            }
+            if (*setCompositingValues) {
+                //Only set the compositing values for the first item <-- TODO: We have this comment here, but this has not actually been implemented?
+                _setCompositingValues(item);
+                *setCompositingValues = false;
+            }
         }
     }
+
+    if (not *first_pass) {
+        row[_model->_colPrevSelectionState] = selected;
+    }
+
+    return false;
+}
+
+bool ObjectsPanel::_clearPrevSelectionState( const Gtk::TreeModel::iterator& iter) {
+    Gtk::TreeModel::Row row = *iter;
+    row[_model->_colPrevSelectionState] = false;
+    SPItem *item = row[_model->_colObject];
+    return false;
 }
 
 /**
@@ -1194,12 +1248,10 @@ void ObjectsPanel::_blockAllSignals(bool should_block = true) {
     }
 
     _selectionChangedConnection.block(should_block);
-
     // outgoing signal
     _selectedConnection.block(should_block);
 
-    // These are not blocked; this is ok because they will invoke _objectsChanged immediately (synchronously), and update the tree
-    // desktopChangeConn, _documentChangedConnection;
+    // These are not blocked: desktopChangeConn, _documentChangedConnection
 }
 
 /**
@@ -1235,7 +1287,7 @@ void ObjectsPanel::_takeAction( int val )
         _executeUpdate_sig.disconnect();
         _blockAllSignals(true);
         _removeWatchers();
-        _store->clear();
+        //_store->clear();
         _tree_cache.clear();
         _executeUpdate_sig = Glib::signal_timeout().connect( sigc::mem_fun(*this, &ObjectsPanel::_executeUpdate), 500, Glib::PRIORITY_DEFAULT_IDLE+50);
         // In the spray tool, updating the tree competes in priority with the redrawing of the canvas,
@@ -2059,14 +2111,26 @@ ObjectsPanel::ObjectsPanel() :
     _deskTrack.connect(GTK_WIDGET(gobj()));
 }
 
+void ObjectsPanel::_desktopDestroyed(SPDesktop* /*desktop*/) {
+    // We need to make sure that we're not trying to update the tree after the desktop has vanished, e.g.
+    // when closing Inkscape. Preferable, we would do this in the deconstructor of the ObjectsPanel. But
+    // as this deconstructor is never ever called, we will do this by attach to the desktop_destroyed signal
+    // instead
+    _processQueue_sig.disconnect();
+    _executeUpdate_sig.disconnect();
+    _desktop = nullptr;
+}
+
 /**
  * Destructor
  */
 ObjectsPanel::~ObjectsPanel()
 {
+    // Never being called, not even when closing Inkscape?
+
     //Close the highlight selection dialog
     _colorSelectorDialog.hide();
-    
+
     //Set the desktop to null, which will disconnect all object watchers
     setDesktop(nullptr);
 
@@ -2138,9 +2202,11 @@ void ObjectsPanel::setDesktop( SPDesktop* desktop )
             //Connect desktop signals
             _documentChangedConnection = _desktop->connectDocumentReplaced( sigc::mem_fun(*this, &ObjectsPanel::setDocument));
 
-            _documentChangedCurrentLayer = _desktop->connectCurrentLayerChanged( sigc::mem_fun(*this, &ObjectsPanel::_objectsChanged));
+            _documentChangedCurrentLayer = _desktop->connectCurrentLayerChanged( sigc::mem_fun(*this, &ObjectsPanel::_objectsChangedWrapper));
 
             _selectionChangedConnection = _desktop->selection->connectChanged( sigc::mem_fun(*this, &ObjectsPanel::_objectsSelected));
+
+            _desktopDestroyedConnection = _desktop->connectDestroy( sigc::mem_fun(*this, &ObjectsPanel::_desktopDestroyed));
 
             setDocument(_desktop, _desktop->doc());
         } else {

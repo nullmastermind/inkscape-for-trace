@@ -424,8 +424,10 @@ gchar const *SPObject::defaultLabel() const {
         if (!_default_label) {
             if (getId()) {
                 _default_label = g_strdup_printf("#%s", getId());
-            } else {
+            } else if (getRepr()) {
                 _default_label = g_strdup_printf("<%s>", getRepr()->name());
+            } else {
+                _default_label = g_strdup("Default label");
             }
         }
         return _default_label;

@@ -72,6 +72,9 @@ private:
     //Connection for when the desktop changes
     sigc::connection desktopChangeConn;
 
+    //Connection for when the desktop is destroyed (I.e. its deconstructor is called)
+    sigc::connection _desktopDestroyedConnection;
+
     //Connection for when the document changes
     sigc::connection _documentChangedConnection;
     
@@ -143,6 +146,8 @@ private:
     //would have been cleaner to create our own custom tree model, as described here
     //https://en.wikibooks.org/wiki/GTK%2B_By_Example/Tree_View/Tree_Models
     std::map<SPItem*, Gtk::TreeModel::iterator> _tree_cache;
+    std::list<SPItem *> _selected_objects_order; // ordered by time of selection
+    std::list<Gtk::TreePath> _paths_to_be_expanded;
 
     std::vector<Gtk::Widget*> _watching;
     std::vector<Gtk::Widget*> _watchingNonTop;
@@ -198,7 +203,9 @@ private:
     void _renameObject(Gtk::TreeModel::Row row, const Glib::ustring& name);
 
     void _pushTreeSelectionToCurrent();
-    void _selected_row_callback( const Gtk::TreeModel::iterator& iter, bool *setOpacity );
+    bool _selectItemCallback(const Gtk::TreeModel::iterator& iter, bool *setOpacity, bool *first_pass);
+    bool _clearPrevSelectionState(const Gtk::TreeModel::iterator& iter);
+    void _desktopDestroyed(SPDesktop* desktop);
     
     void _checkTreeSelection();
 
@@ -242,11 +249,7 @@ private:
     void _blurChangedIter(const Gtk::TreeIter& iter, double blur);
     void _blurValueChanged();
 
-    
-    void setupDialog(const Glib::ustring &title);
-    
     void _highlightPickerColorMod();
-
 };
 
 
