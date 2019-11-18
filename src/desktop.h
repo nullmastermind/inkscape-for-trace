@@ -553,7 +553,7 @@ private:
 
       private:
         void _update() {
-            _d2w = _rotate * _scale * _flip;
+            _d2w = _scale * _rotate * _flip;
             _w2d = _d2w.inverse();
         }            
         Geom::Affine  _w2d;      // Window to desktop

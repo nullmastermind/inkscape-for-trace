@@ -1948,12 +1948,12 @@ void ZoomVerb::perform(SPAction *action, void *data)
                 SPCurve *rc = SP_DRAW_CONTEXT(ec)->red_curve;
                 if (!rc->is_empty()) {
                     Geom::Point const rotate_to (*rc->last_point());
-                    dt->rotate_relative_keep_point(rotate_to, -mul*rotate_inc);
+                    dt->rotate_relative_keep_point(rotate_to, mul * rotate_inc);
                     break;
                 }
             }
 
-            dt->rotate_relative_center_point( midpoint, -mul*rotate_inc);
+            dt->rotate_relative_center_point(midpoint, mul * rotate_inc);
             break;
         }
         case SP_VERB_ROTATE_CCW:
@@ -1964,16 +1964,16 @@ void ZoomVerb::perform(SPAction *action, void *data)
                 SPCurve *rc = SP_DRAW_CONTEXT(ec)->red_curve;
                 if (!rc->is_empty()) {
                     Geom::Point const rotate_to (*rc->last_point());
-                    dt->rotate_relative_keep_point(rotate_to, mul*rotate_inc);
+                    dt->rotate_relative_keep_point(rotate_to, -mul * rotate_inc);
                     break;
                 }
             }
 
-            dt->rotate_relative_center_point( midpoint, mul*rotate_inc);
+            dt->rotate_relative_center_point(midpoint, -mul * rotate_inc);
             break;
         }
         case SP_VERB_ROTATE_ZERO:
-            dt->rotate_absolute_center_point( midpoint, 0.0 );
+            dt->rotate_absolute_center_point(midpoint, 0.0);
             break;
         case SP_VERB_FLIP_HORIZONTAL:
         {
