@@ -164,7 +164,7 @@ protected:
     void _markForRendering();
     void _invalidateFilterBackground(Geom::IntRect const &area);
     double _cacheScore();
-    Geom::OptIntRect _cacheRect();
+    Geom::OptIntRect _cacheRect(bool cropped = false);
     virtual unsigned _updateItem(Geom::IntRect const &/*area*/, UpdateContext const &/*ctx*/,
                                  unsigned /*flags*/, unsigned /*reset*/) { return 0; }
     virtual unsigned _renderItem(DrawingContext &/*dc*/, Geom::IntRect const &/*area*/, unsigned /*flags*/,
@@ -209,7 +209,7 @@ protected:
     Inkscape::Filters::Filter *_filter;
     SPItem *_item; ///< Used to associate DrawingItems with SPItems that created them
     DrawingCache *_cache;
-    bool prev_nir;
+    bool _prev_nir;
 
     CacheList::iterator _cache_iterator;
 

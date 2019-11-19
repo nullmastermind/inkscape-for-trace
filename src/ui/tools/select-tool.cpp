@@ -799,8 +799,13 @@ bool SelectTool::root_handler(GdkEvent* event) {
                     sp_canvas_item_ungrab(this->grabbed);
                     this->grabbed = nullptr;
                 }
-
-                desktop->updateNow();
+                desktop->canvas->endForcedFullRedraws(); // we want this forced redraw always with this tool
+                if (event->button.button == 1) {
+                    // we want redraw of all dirty regions on relase
+                    desktop->canvas->_forcefull = true;
+                }
+                // Think is not necesary now
+                // desktop->updateNow();
             }
 
             if (event->button.button == 1) {

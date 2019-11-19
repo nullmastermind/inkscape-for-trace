@@ -470,6 +470,9 @@ void NodeTool::selection_changed(Inkscape::Selection *sel) {
     _previous_selection = _current_selection;
     _current_selection = vec;
 
+    // Be sure unclean areas are redraw on selection change
+    desktop->getCanvas()->_forcefull = true;
+
     this->_multipath->setItems(shapes);
     this->update_tip(nullptr);
     // This not need to be called canvas is updated on selection change on setItems
@@ -532,6 +535,11 @@ bool NodeTool::root_handler(GdkEvent* event) {
         }
         // create pathflash outline
         if (prefs->getBool("/tools/nodes/pathflash_enabled")) {
+            // We want to reset flashed item to can highligh again previous one
+            if (!over_item && this->flashed_item) {
+                this->flashed_item = nullptr;
+                break;
+            }
             if (!over_item || over_item == this->flashed_item) {
                 break;
             }
@@ -620,9 +628,6 @@ bool NodeTool::root_handler(GdkEvent* event) {
         break;
 
     case GDK_BUTTON_RELEASE:
-        if (event->button.button == 1) {
-            this->desktop->canvas->_forcefull = true;
-        }
         if (this->_selector->doubleClicked()) {
             // If the selector received the doubleclick event, then we're at some distance from
             // the path; otherwise, the doubleclick event would have been received by
@@ -651,7 +656,10 @@ bool NodeTool::root_handler(GdkEvent* event) {
                 }
             }
         }
-
+        if (event->button.button == 1) {
+            // we want redraw of all dirty regions on relase
+            this->desktop->canvas->_forcefull = true;
+        }
         break;
 
     default:

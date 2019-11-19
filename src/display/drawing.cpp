@@ -170,8 +170,10 @@ Drawing::update(Geom::IntRect const &area, UpdateContext const &ctx, unsigned fl
     if (_root) {
         _root->update(area, ctx, flags, reset);
     }
-    // process the updated cache scores
-    _pickItemsForCaching();
+    if ((flags & DrawingItem::STATE_CACHE) || (flags & DrawingItem::STATE_ALL)) {
+        // process the updated cache scores
+        _pickItemsForCaching();
+    }
 }
 
 void

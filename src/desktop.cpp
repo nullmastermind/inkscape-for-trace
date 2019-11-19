@@ -963,8 +963,8 @@ SPDesktop::set_display_area( Geom::Rect const &r, double border, bool log)
     } else {
         zoom = w.height() / r.height();
     }
+    zoom = CLAMP(zoom, SP_DESKTOP_ZOOM_MIN, SP_DESKTOP_ZOOM_MAX);
     _current_affine.setScale( Geom::Scale(zoom, yaxisdir() * zoom) );
-
     // Zero offset, actual offset calculated later.
     _current_affine.setOffset( Geom::Point( 0, 0 ) );
 

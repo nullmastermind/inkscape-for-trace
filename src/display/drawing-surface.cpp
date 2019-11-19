@@ -297,8 +297,7 @@ DrawingCache::prepare()
  * Paints the clean area from cache and modifies the @a area
  * parameter to the bounds of the region that must be repainted.
  */
-void
-DrawingCache::paintFromCache(DrawingContext &dc, Geom::OptIntRect &area)
+void DrawingCache::paintFromCache(DrawingContext &dc, Geom::OptIntRect &area, bool is_filter)
 {
     if (!area) return;
 
@@ -312,12 +311,16 @@ DrawingCache::paintFromCache(DrawingContext &dc, Geom::OptIntRect &area)
     cairo_region_t *cache_region = cairo_region_copy(dirty_region);
     cairo_region_subtract(dirty_region, _clean_region);
 
+    if (is_filter && !cairo_region_is_empty(dirty_region)) { // To allow fast panning on high zoom on filters
+        return;
+    }
     if (cairo_region_is_empty(dirty_region)) {
         area = Geom::OptIntRect();
     } else {
         cairo_rectangle_int_t to_repaint;
         cairo_region_get_extents(dirty_region, &to_repaint);
         area = _convertRect(to_repaint);
+        markDirty(*area);
         cairo_region_subtract_rectangle(cache_region, &to_repaint);
     }
     cairo_region_destroy(dirty_region);
