@@ -179,8 +179,8 @@ private:
     
     //Methods:
     
-    ObjectsPanel(ObjectsPanel const &); // no copy
-    ObjectsPanel &operator=(ObjectsPanel const &); // no assign
+    ObjectsPanel(ObjectsPanel const &) = delete; // no copy
+    ObjectsPanel &operator=(ObjectsPanel const &) = delete; // no assign
 
     void _styleButton( Gtk::Button& btn, char const* iconName, char const* tooltip );
     void _fireAction( unsigned int code );
