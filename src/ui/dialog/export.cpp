@@ -452,11 +452,11 @@ void Export::set_default_filename () {
     {
         SPDocument * doc = SP_ACTIVE_DOCUMENT;
         const gchar *uri = doc->getDocumentURI();
-        const gchar *text_extension = get_file_save_extension (Inkscape::Extension::FILE_SAVE_METHOD_SAVE_AS).c_str();
+        auto &&text_extension = get_file_save_extension(Inkscape::Extension::FILE_SAVE_METHOD_SAVE_AS);
         Inkscape::Extension::Output * oextension = nullptr;
 
-        if (text_extension != nullptr) {
-            oextension = dynamic_cast<Inkscape::Extension::Output *>(Inkscape::Extension::db.get(text_extension));
+        if (!text_extension.empty()) {
+            oextension = dynamic_cast<Inkscape::Extension::Output *>(Inkscape::Extension::db.get(text_extension.c_str()));
         }
 
         if (oextension != nullptr) {
