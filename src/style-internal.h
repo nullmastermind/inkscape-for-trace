@@ -614,6 +614,8 @@ public:
         : SPIBase(inherits)
     {}
 
+    SPIString(const SPIString &rhs) { *this = rhs; }
+
     ~SPIString() override {
         g_free(_value);
     }
@@ -625,6 +627,9 @@ public:
     void merge(   const SPIBase* const parent ) override;
 
     SPIString& operator=(const SPIString& rhs) {
+        if (this == &rhs) {
+            return *this;
+        }
         SPIBase::operator=(rhs);
         g_free(_value);
         _value = g_strdup(rhs._value);
@@ -838,6 +843,8 @@ public:
         this->clear();
     }
 
+    SPIPaintOrder(const SPIPaintOrder &rhs) { *this = rhs; }
+
     ~SPIPaintOrder() override {
         g_free( value );
     }
@@ -857,6 +864,9 @@ public:
     void merge(   const SPIBase* const parent ) override;
 
     SPIPaintOrder& operator=(const SPIPaintOrder& rhs) {
+        if (this == &rhs) {
+            return *this;
+        }
         SPIBase::operator=(rhs);
         for( unsigned i = 0; i < PAINT_ORDER_LAYERS; ++i ) {
             layer[i]     = rhs.layer[i];
