@@ -1051,7 +1051,12 @@ std::vector<Glib::ustring> SPText::get_shapes() const
     if (style->shape_inside.set && (val = style->shape_inside.value())) {
         static Glib::RefPtr<Glib::Regex> regex = Glib::Regex::create("url\\(#([A-z0-9#]*)\\)");
         Glib::MatchInfo matchInfo;
-        regex->match(val, matchInfo);
+
+        // Glib::Regex::match stack-use-after-scope workaround
+        // https://gitlab.gnome.org/GNOME/glibmm/issues/66
+        Glib::ustring val_stack = val;
+
+        regex->match(val_stack, matchInfo);
 
         while (matchInfo.matches()) {
             shapes.push_back(matchInfo.fetch(1));
