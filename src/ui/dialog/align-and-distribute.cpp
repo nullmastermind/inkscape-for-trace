@@ -165,11 +165,9 @@ void ActionAlign::do_action(SPDesktop *desktop, int index)
 
     g_return_if_fail(b);
 
-    if (horiz == Selection::HORIZONTAL && desktop->is_yaxisdown()) {
-        a.my0 = 1. - a.my0;
-        a.my1 = 1. - a.my1;
-        a.sy0 = 1. - a.sy0;
-        a.sy1 = 1. - a.sy1;
+    if (desktop->is_yaxisdown()) {
+        std::swap(a.my0, a.my1);
+        std::swap(a.sy0, a.sy1);
     }
 
     // Generate the move point from the selected bounding box
