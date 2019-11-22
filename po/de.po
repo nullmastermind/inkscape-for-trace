@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2019-10-10 21:27+0200\n"
-"PO-Revision-Date: 2019-11-22 03:52+0100\n"
+"PO-Revision-Date: 2019-11-22 15:04+0100\n"
 "Last-Translator: Maren Hachmann <marenhachmann@yahoo.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -24600,7 +24600,7 @@ msgstr "Autotrace"
 
 #: ../src/ui/dialog/tracedialog.cpp:137 ../share/ui/dialog-trace.glade:161
 msgid "Centerline tracing (autotrace)"
-msgstr ""
+msgstr "Strichzeichnung vektorisieren (autotrace)"
 
 #: ../src/ui/dialog/tracedialog.cpp:145 ../share/ui/dialog-trace.glade:455
 msgid "Brightness steps"
@@ -25056,11 +25056,11 @@ msgstr "<b>Versatz-Abstand</b> anpassen"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1893
 msgid "Adjust the <b>rectangular</b> region of the text."
-msgstr ""
+msgstr "<b>Rechteckigen</b> Textbereich anpassen."
 
 #: ../src/ui/shape-editor-knotholders.cpp:1903
 msgid "Adjust the <b>inline size</b> (line length) of the text."
-msgstr ""
+msgstr "<b>Zeilenlänge</b> (inline-size) des Textes anpassen."
 
 #: ../src/ui/shape-editor-knotholders.cpp:1942
 msgid "Drag to resize the <b>flowed text frame</b>"
@@ -25397,7 +25397,7 @@ msgstr "<b>%s</b>: "
 #, c-format
 msgctxt "Path node tip"
 msgid "<b>BSpline node</b> (%.3g power): "
-msgstr ""
+msgstr "<b>BSpline-Knoten</b> (Gewichtung %.3g):"
 
 #: ../src/ui/tool/node.cpp:1623
 #, c-format
@@ -25574,7 +25574,7 @@ msgstr "Rx:"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:97
 msgid "Horizontal radius of the circle, ellipse, or arc"
-msgstr ""
+msgstr "Horizontaler Radius des Kreises, der Ellipse oder des Bogens"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:112 ../src/ui/toolbar/rect-toolbar.cpp:156
 msgid "Ry:"
@@ -25582,7 +25582,7 @@ msgstr "Ry:"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:113
 msgid "Vertical radius of the circle, ellipse, or arc"
-msgstr ""
+msgstr "Vertikaler Radius des Kreises, der Ellipse oder des Bogens"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:125 ../src/ui/toolbar/lpe-toolbar.cpp:153
 #: ../src/ui/toolbar/node-toolbar.cpp:289
@@ -26419,7 +26419,7 @@ msgstr "Bemaßung erstellen"
 
 #: ../src/ui/toolbar/measure-toolbar.cpp:224
 msgid "Mark dimension offset"
-msgstr ""
+msgstr "Abstand der Bemaßung"
 
 #: ../src/ui/toolbar/measure-toolbar.cpp:315
 msgid "Measures only selected."
@@ -26552,11 +26552,12 @@ msgstr ""
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:302
 msgid "Scale mesh to bounding box:"
-msgstr ""
+msgstr "Gitter auf Größe des Objektrahmens:"
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:303
 msgid "Scale mesh to fit inside bounding box."
 msgstr ""
+"Passt die Größe des Verlaufsgitters so an, dass es in den Objektrahmen passt."
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:313
 #: ../src/ui/toolbar/mesh-toolbar.cpp:314
@@ -26591,6 +26592,13 @@ msgid ""
 "For web: convert to bitmap (Edit->Make bitmap copy).\n"
 "For print: export to PDF."
 msgstr ""
+"Verlaufsgitter sind Teil der SVG-2-Spezifikation:\n"
+"* die Syntax kann sich noch ändern\n"
+"* das Zusammenspiel mit Webbrowsern ist nicht sichergestellt\n"
+"\n"
+"Für die Darstellung im Web: in Rastergrafik umwandeln (Bearbeiten >"
+" Bitmap-Kopie erstellen)\n"
+"Zum Drucken: als PDF exportieren"
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:561
 msgid "Set mesh type"
@@ -26800,7 +26808,7 @@ msgstr ""
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:109
 msgid "Use pressure input"
-msgstr ""
+msgstr "Druckempfindliches Eingabegerät verwenden"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:120
 msgid "Min:"
@@ -26808,7 +26816,7 @@ msgstr "Min:"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:121
 msgid "Min percent of pressure"
-msgstr ""
+msgstr "Minimaler Prozentsatz des Anpressdrucks"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:132
 msgid "Max:"
@@ -26816,7 +26824,7 @@ msgstr "Max:"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:133
 msgid "Max percent of pressure"
-msgstr ""
+msgstr "Maximaler Prozentsatz des Anpressdrucks"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:145
 msgid "(many nodes, rough)"
@@ -26922,6 +26930,7 @@ msgstr "Stoß"
 #: ../src/ui/toolbar/pencil-toolbar.cpp:438
 msgid "Cap for powerstroke pressure"
 msgstr ""
+"Linienenden beim Zeichnen mit der druckempfindlichen PowerPencil-Funktion"
 
 #: ../src/ui/toolbar/rect-toolbar.cpp:94
 msgid "W:"
@@ -28768,7 +28777,7 @@ msgstr "Neue Reihe oder Spalte hinzugefügt."
 
 #: ../src/ui/tools/mesh-tool.cpp:482
 msgid "Fit mesh inside bounding box."
-msgstr ""
+msgstr "Gitter in Objektrahmen einpassen"
 
 #: ../src/ui/tools/mesh-tool.cpp:1117
 msgid "Create mesh"
@@ -30090,7 +30099,7 @@ msgstr "Ränder sperren"
 # File: ../src/ui/widget/page-sizer.cpp, line: 49
 #: ../src/ui/widget/page-sizer.cpp:49
 msgid "T_op:"
-msgstr ""
+msgstr "_Oben:"
 
 #: ../src/ui/widget/page-sizer.cpp:49
 msgid "Top margin"
@@ -30294,12 +30303,12 @@ msgstr "<i>Keine</i>"
 #: ../src/ui/widget/selected-style.cpp:186
 msgctxt "Fill and stroke"
 msgid "No fill, middle-click for black fill"
-msgstr ""
+msgstr "Keine Füllung; mittelklicken für schwarze Füllung"
 
 #: ../src/ui/widget/selected-style.cpp:186
 msgctxt "Fill and stroke"
 msgid "No stroke, middle-click for black stroke"
-msgstr ""
+msgstr "Keine Kontur; mittelklicken für schwarze Kontur"
 
 #: ../src/ui/widget/selected-style.cpp:188
 #: ../src/ui/widget/style-swatch.cpp:288 ../src/widgets/paint-selector.cpp:224
@@ -30543,7 +30552,7 @@ msgstr "Breite der Kontur ändern"
 
 #: ../src/ui/widget/selected-style.cpp:1020
 msgid ", drag to adjust, middle-click to remove"
-msgstr ""
+msgstr ", ziehen zum Anpassen, mittelklicken zum entfernen"
 
 #: ../src/ui/widget/selected-style.cpp:1104
 #, c-format
@@ -31983,7 +31992,7 @@ msgstr "Maske auf Auswahl anwenden (oberstes Objekt als Maske verwenden)"
 
 #: ../src/verbs.cpp:2831 ../src/verbs.cpp:2839
 msgid "_Set Inverse (LPE)"
-msgstr ""
+msgstr "_Umgekehrt setzen (LPE)"
 
 #: ../src/verbs.cpp:2832
 msgid "Apply inverse mask to selection (using the topmost object as mask)"
@@ -32538,7 +32547,7 @@ msgstr "Spiegeln zurücksetzen"
 
 #: ../src/verbs.cpp:2970
 msgid "Undo any flip"
-msgstr ""
+msgstr "Jegliche Spiegelung aufheben"
 
 #: ../src/verbs.cpp:2976
 msgid "_Rulers"
@@ -32713,9 +32722,8 @@ msgid "Toggle between normal and grayscale color display modes"
 msgstr "Zwischen normaler und Graustufen-Farb-Ansicht umschalten"
 
 #: ../src/verbs.cpp:3026
-#, fuzzy
 msgid "_Split View Mode"
-msgstr "Schaltet _Fokusmodus um"
+msgstr "Ge_teilte Ansicht"
 
 #: ../src/verbs.cpp:3027
 msgid "Split canvas in 2 to show outline"
@@ -32751,11 +32759,11 @@ msgstr ""
 
 #: ../src/verbs.cpp:3039
 msgid "Prototype..."
-msgstr ""
+msgstr "Prototyp …"
 
 #: ../src/verbs.cpp:3039
 msgid "Prototype Dialog"
-msgstr ""
+msgstr "Prototyp-Dialog"
 
 #: ../src/verbs.cpp:3041
 msgid "P_references..."
@@ -32814,14 +32822,12 @@ msgid "Select symbol from a symbols palette"
 msgstr "Symbol aus einer Symbol-Palette auswählen"
 
 #: ../src/verbs.cpp:3062
-#, fuzzy
 msgid "_Paint Servers..."
-msgstr "_Eingabegeräte..."
+msgstr "_Farbgebungsarten …"
 
 #: ../src/verbs.cpp:3064
-#, fuzzy
 msgid "Select paint server from a collection"
-msgstr "Gesprühte Objekte aus der Auswahl löschen"
+msgstr "Farbgebungsart aus der Sammlung wählen"
 
 #: ../src/verbs.cpp:3065
 msgid "Transfor_m..."
@@ -32869,9 +32875,8 @@ msgid "View and edit the XML tree of the document"
 msgstr "Zeige und ändere den XML-Baum des Dokuments"
 
 #: ../src/verbs.cpp:3078
-#, fuzzy
 msgid "_Selectors and CSS..."
-msgstr "Aus_wahlgruppen..."
+msgstr "_Selektoren und CSS ..."
 
 #: ../src/verbs.cpp:3079
 msgid "View and edit CSS selectors and styles"
@@ -36403,7 +36408,6 @@ msgstr "Sortiere Pfade, um schnelle Entfernung zu reduzieren"
 #: ../share/extensions/gcodetools_area.inx:61
 #: ../share/extensions/gcodetools_lathe.inx:41
 #: ../share/extensions/gcodetools_path_to_gcode.inx:21
-#, fuzzy
 msgid ""
 "\n"
 "Biarc interpolation tolerance is the maximum distance between path and its "
@@ -36414,13 +36418,16 @@ msgid ""
 "the depth defined by orientation points, s - surface defined by orientation "
 "points.\n"
 msgstr ""
+"\n"
 "Biarc-Interpolationstoleranz ist der maximale Abstand zwischen dem Pfad und "
-"seiner Annäherung. Ein Segment wird in zwei Segmente aufgeteilt, wenn der "
+"seiner Annäherung.\n"
+"Ein Segment wird in zwei Segmente aufgeteilt, wenn der "
 "Abstand zwischen Pfad-Segment und dessen Angleichung die Biarc-"
-"Interpolationstoleranz überschreitet. In der Tiefenfunktion ist "
-"c=Farbintensität von 0.0 (weiß) bis 1.0 (schwarz), d ist die Tiefe, "
+"Interpolationstoleranz überschreitet.\n"
+"In der Tiefenfunktion ist c=Farbintensität von 0.0 (weiß) bis 1.0 (schwarz),"
+" d ist die Tiefe, "
 "definiert durch Orientierungspunkte, s ist die Oberfläche definiert durch "
-"Orientierungspunkte."
+"Orientierungspunkte.\n"
 
 #: ../share/extensions/gcodetools_area.inx:69
 #: ../share/extensions/gcodetools_engraving.inx:27
@@ -36847,7 +36854,6 @@ msgid "Lathe modify path"
 msgstr "Drehpfad modifizieren"
 
 #: ../share/extensions/gcodetools_lathe.inx:22
-#, fuzzy
 msgid ""
 "\n"
 "            This function modifies path so it will be possible to be cut it "
@@ -36856,8 +36862,7 @@ msgid ""
 msgstr ""
 "\n"
 "            Diese Funktion verändert den Pfad, damit er mit dem"
-" Rechteck-Schneider "
-"geschnitten werden kann.\n"
+" Rechteck-Schneider geschnitten werden kann.\n"
 "        "
 
 #: ../share/extensions/gcodetools_orientation_points.inx:4
@@ -36865,7 +36870,6 @@ msgid "Orientation points"
 msgstr "Orientierungspunkte"
 
 #: ../share/extensions/gcodetools_orientation_points.inx:25
-#, fuzzy
 msgid ""
 "\n"
 "Orientation points are used to calculate transformation (offset,scale,mirror,"
@@ -36881,19 +36885,23 @@ msgid ""
 "Now press apply to create control points (independent set for each layer).\n"
 "      "
 msgstr ""
+"\n"
 "Orientierungspunkte werden zum Berechnen von Transformationen (Versatz, "
-"Skalierung, Spiegel, eine Drehung in XY-Ebene) des Pfades benutzt. Nur 3-"
-"Punkt-Modus: Nicht alle drei auf einer Linie anlegen (stattdessen 2-Punkt-"
-"Modus verwenden). Sie können die Z-Oberflächen und Z-Tiefen-Werte später mit "
-"dem Text-Werkzeug verändern (3. Koordinaten). Wenn es keine "
-"Orientierungspunkte in der aktuellen Ebene gibt, werden die von der Ebene "
-"darüber verwendet. Die Gruppierung von Orientierungspunkten nicht aufheben! "
+"Skalierung, Spiegel, eine Drehung in XY-Ebene) des Pfades benutzt.\n"
+"Nur 3-Punkt-Modus: Nicht alle drei auf einer Linie anlegen (stattdessen"
+" 2-Punkt-"
+"Modus verwenden).\n"
+"Sie können die Z-Oberflächen und Z-Tiefen-Werte später mit dem Text-Werkzeug"
+" verändern (3. Koordinaten).\n Wenn es keine Orientierungspunkte in der"
+" aktuellen Ebene gibt, werden die von der Ebene "
+"darüber verwendet.\n"
+"Die Gruppierung von Orientierungspunkten nicht aufheben!\n"
 "Sie können die Gruppe mit Doppelklick oder Strg+Eingabetaste betreten. "
 "Klicken Sie auf Anwenden, um die Kontrollpunkte (unabhängiger Satz für jede "
-"Ebene) zu erstellen."
+"Ebene) zu erstellen.\n"
+"      "
 
 #: ../share/extensions/gcodetools_orientation_points.inx:36
-#, fuzzy
 msgid ""
 "\n"
 "Gcodetools plug-in:\n"
@@ -36911,14 +36919,26 @@ msgid ""
 "Gcodetools ver. 1.7\n"
 "      "
 msgstr ""
-"Gcode-Werkzeug Plug-in: Wandelt Pfade zu Gcode (mit Kreisinterpolation), "
-"erstellt versetzte Pfade und graviert scharfe Ecken mittels Kegelschneider. "
-"Dieses Plug-In berechnet Gcode für Pfade mittels Kreisinterpolation oder "
-"lineare Bewegung, wenn nötig. Einführungen, Handbücher und Unterstützung "
-"finden Sie im Englischen Support-Forum http://www.cnc-club.ru/gcodetools und "
-"im russischen Support-Forum: http://www.cnc-club.ru/gcodetoolsru Danksagung: "
-"Nick Drobchenko, Vladimir Kalyaev, John Brooker, Henry Nicolas, Chris Lusby "
-"Taylor. Gcode-Werkzeug Ver. 1.7"
+"\n"
+"Gcode-Werkzeuge-Erweiterung:\n"
+"Wandelt Pfade zu Gcode (mit Kreisinterpolation), "
+"erstellt versetzte Pfade und graviert scharfe Ecken mittels Kegelschneider.\n"
+"\n"
+"Diese Erweiterung berechnet Gcode für Pfade mittels Kreisinterpolation oder "
+"linearer Bewegung, wenn nötig.\n"
+"\n"
+"Einführungen, Handbücher und Unterstützung "
+"finden Sie\n"
+"im englischsprachigen Support-Forum:\n"
+"    http://www.cnc-club.ru/gcodetools\n"
+"und im russischsprachigen Support-Forum:\n"
+"    http://www.cnc-club.ru/gcodetoolsru\n"
+"\n"
+"Danksagung: Nick Drobchenko, Vladimir Kalyaev, John Brooker, Henry Nicolas,"
+" Chris Lusby "
+"Taylor.\n"
+"\n"
+"Gcode-Werkzeug Ver. 1.7\n"
 
 #: ../share/extensions/gcodetools_prepare_path_for_plasma.inx:4
 msgid "Prepare path for plasma"
@@ -37023,7 +37043,6 @@ msgid "Just check tools"
 msgstr "Nur Werkzeuge überprüfen"
 
 #: ../share/extensions/gcodetools_tools_library.inx:25
-#, fuzzy
 msgid ""
 "\n"
 "Selected tool type fills appropriate default values. You can change these "
@@ -37035,14 +37054,18 @@ msgid ""
 "Press Apply to create new tool.\n"
 "            "
 msgstr ""
+"\n"
 "Der ausgewählte Werkzeugtyp gibt passende Standardwerte vor. Sie können "
-"diese Werte später mit dem Textwerkzeug ändern. Es wird das oberste Werkzeug "
-"(Z-Ordnung) in der aktiven Ebene verwendet. Wenn kein Werkzeug innerhalb der "
-"aktuellen Ebene vorhanden ist, wird eines von der Ebene darüber verwendet. "
-"Anwenden erstellt ein neues Werkzeug."
+"diese Werte später mit dem Textwerkzeug ändern.\n"
+"\n"
+"Es wird das oberste Werkzeug (Z-Ordnung) in der aktiven Ebene verwendet. Wenn"
+" kein Werkzeug innerhalb der "
+"aktuellen Ebene vorhanden ist, wird eines von der Ebene darüber verwendet.\n"
+"\n"
+"Anwenden erstellt ein neues Werkzeug.\n"
+"            "
 
 #: ../share/extensions/gcodetools_tools_library.inx:35
-#, fuzzy
 msgid ""
 "\n"
 "Gcodetools plug-in: converts paths to Gcode (using circular interpolation), "
@@ -37062,14 +37085,26 @@ msgid ""
 "\n"
 "Gcodetools ver. 1.7\n"
 msgstr ""
-"Gcode-Werkzeug Plug-in: Wandelt Pfade zu Gcode (mit Kreisinterpolation), "
-"erstellt versetzte Pfade und graviert scharfe Ecken mittels Kegelschneider. "
-"Dieses Plug-In berechnet Gcode für Pfade mittels Kreisinterpolation oder "
-"lineare Bewegung, wenn nötig. Einführungen, Handbücher und Unterstützung "
-"finden Sie im Englischen Support-Forum http://www.cnc-club.ru/gcodetools und "
-"im russischen Support-Forum: http://www.cnc-club.ru/gcodetoolsru Danksagung: "
-"Nick Drobchenko, Vladimir Kalyaev, John Brooker, Henry Nicolas, Chris Lusby "
-"Taylor. Gcode-Werkzeug Ver. 1.7"
+"\n"
+"Gcode-Werkzeuge-Erweiterung:\n"
+"Wandelt Pfade zu Gcode (mit Kreisinterpolation), "
+"erstellt versetzte Pfade und graviert scharfe Ecken mittels Kegelschneider.\n"
+"\n"
+"Diese Erweiterung berechnet Gcode für Pfade mittels Kreisinterpolation oder "
+"linearer Bewegung, wenn nötig.\n"
+"\n"
+"Einführungen, Handbücher und Unterstützung "
+"finden Sie\n"
+"im englischsprachigen Support-Forum:\n"
+"    http://www.cnc-club.ru/gcodetools\n"
+"und im russischsprachigen Support-Forum:\n"
+"    http://www.cnc-club.ru/gcodetoolsru\n"
+"\n"
+"Danksagung: Nick Drobchenko, Vladimir Kalyaev, John Brooker, Henry Nicolas,"
+" Chris Lusby "
+"Taylor.\n"
+"\n"
+"Gcode-Werkzeug Ver. 1.7\n"
 
 #: ../share/extensions/generate_voronoi.inx:3
 msgid "Voronoi Pattern"
@@ -37212,14 +37247,12 @@ msgid "Minor X Division Thickness:"
 msgstr "Konturbreite der X-Nebenteilung:"
 
 #: ../share/extensions/grid_cartesian.inx:30
-#, fuzzy
 msgid "Subminor X Division Thickness:"
-msgstr "Konturbreite untergeordnete X-Teilung (px):"
+msgstr "Konturbreite untergeordnete X-Teilung:"
 
 #: ../share/extensions/grid_cartesian.inx:31
-#, fuzzy
 msgid "X Division Thickness Unit:"
-msgstr "Konturbreite der Haupt-X-Teilung (px):"
+msgstr "Einheit der Konturbreite der X-Teilung:"
 
 #: ../share/extensions/grid_cartesian.inx:38
 msgid "Y Axis"
@@ -37269,9 +37302,8 @@ msgid "Subminor Y Division Thickness:"
 msgstr "Konturbreite untergeordnete Y-Teilung (px):"
 
 #: ../share/extensions/grid_cartesian.inx:54
-#, fuzzy
 msgid "Y Division Thickness Unit:"
-msgstr "Konturbreite der Haupt-Y-Teilung (px):"
+msgstr "Einheit der Konturbreite der Y-Teilung:"
 
 #: ../share/extensions/grid_isometric.inx:3
 msgid "Isometric Grid"
