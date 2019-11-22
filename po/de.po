@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2019-10-10 21:27+0200\n"
-"PO-Revision-Date: 2019-11-22 15:04+0100\n"
+"PO-Revision-Date: 2019-11-22 23:44+0100\n"
 "Last-Translator: Maren Hachmann <marenhachmann@yahoo.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -4553,7 +4553,7 @@ msgstr "Dialog bei Programmstart anzeigen"
 #: ../src/extension/execution-env.cpp:120
 #, c-format
 msgid "'%s' working, please wait..."
-msgstr "„%s“ arbeitet, bitte warten..."
+msgstr "„%s“ arbeitet, bitte warten …"
 
 #: ../src/extension/extension.cpp:278
 msgid ""
@@ -4582,7 +4582,7 @@ msgstr "eine Abhängigkeit nicht aufgelöst werden konnte."
 
 #: ../src/extension/extension.cpp:326
 msgid "Extension \"%1\" failed to load because %2"
-msgstr "Erweiterung \"%1\" konnte aus folgendem Grund nicht geladen werden: %2"
+msgstr "Erweiterung „%1“ konnte aus folgendem Grund nicht geladen werden: %2"
 
 #: ../src/extension/extension.cpp:695
 #, c-format
@@ -8086,7 +8086,7 @@ msgstr "Sicherungsdatei im selben Verzeichnis erstellen"
 
 #: ../src/file-update.cpp:406
 msgid "More details..."
-msgstr "Mehr Details..."
+msgstr "Mehr Details …"
 
 #. TRANSLATORS: Please don't translate link unless the page exists in your language. Add your language
 #. code to the link this way: https://inkscape.org/[lang]/learn/faq#dpi_change
@@ -8260,7 +8260,7 @@ msgstr "Es müssen keine Änderungen gespeichert werden."
 
 #: ../src/file.cpp:779
 msgid "Saving document..."
-msgstr "Dokument wird gespeichert..."
+msgstr "Dokument wird gespeichert …"
 
 # !!!
 #. TRANSLATORS: 'en' is an ISO 639-1 language code.
@@ -9011,7 +9011,7 @@ msgstr "Autospeicherung fehlgeschlagen! Kann Verzeichnis %1 nicht öffnen."
 
 #: ../src/inkscape.cpp:253
 msgid "Autosaving documents..."
-msgstr "Dokument wird automatisch gespeichert..."
+msgstr "Dokument wird automatisch gespeichert …"
 
 #: ../src/inkscape.cpp:320
 msgid "Autosave failed! Could not find inkscape extension to save document."
@@ -9441,7 +9441,7 @@ msgid ""
 "extrapolated arc, ...)"
 msgstr ""
 "Bietet eine Auswahl verschiedener Verbindungstypen für die spitzen Knoten"
-" eines Objektes (Gehrung, abgerundet, extrapolierter Bogen, ...)"
+" eines Objektes (Gehrung, abgerundet, extrapolierter Bogen, …)"
 
 #: ../src/live_effects/effect.cpp:441
 msgid "Taper stroke"
@@ -9777,7 +9777,7 @@ msgstr "Kein Effekt"
 #, c-format
 msgid "Please specify a parameter path for the LPE '%s' with %d mouse clicks"
 msgstr ""
-"Bitte erstellen Sie einen Parameterpfad für den Pfadeffekt \"%s\" mit %d "
+"Bitte erstellen Sie einen Parameterpfad für den Pfadeffekt „%s“ mit %d "
 "Mausklicks."
 
 #: ../src/live_effects/effect.cpp:1554 ../src/live_effects/effect.cpp:1633
@@ -9853,12 +9853,12 @@ msgstr "Legt das rechte Ende der Halbierenden fest"
 #: ../src/live_effects/lpe-angle_bisector.cpp:85
 #: ../src/live_effects/lpe-perp_bisector.cpp:159
 msgid "Adjust the \"left\" end of the bisector"
-msgstr "Einstellen des \"linken\" Endes der Halbierenden"
+msgstr "Einstellen des „linken“ Endes der Halbierenden"
 
 #: ../src/live_effects/lpe-angle_bisector.cpp:91
 #: ../src/live_effects/lpe-perp_bisector.cpp:165
 msgid "Adjust the \"right\" end of the bisector"
-msgstr "Einstellen des \"rechten\" Endes der Halbierenden"
+msgstr "Einstellen des „rechten“ Endes der Halbierenden"
 
 #: ../src/live_effects/lpe-attach-path.cpp:20
 msgid "Start path:"
@@ -11963,11 +11963,11 @@ msgstr "Legt das linke Ende der Parallele fest"
 
 #: ../src/live_effects/lpe-parallel.cpp:107
 msgid "Adjust the \"left\" end of the parallel"
-msgstr "Einstellen des \"linken\" Endes der Parallele"
+msgstr "Einstellen des „linken“ Endes der Parallele"
 
 #: ../src/live_effects/lpe-parallel.cpp:113
 msgid "Adjust the \"right\" end of the parallel"
-msgstr "Einstellen des \"rechten\" Endes der Parallele"
+msgstr "Einstellen des „rechten“ Endes der Parallele"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:65
 #: ../share/extensions/pathalongpath.inx:10
@@ -12333,7 +12333,7 @@ msgid ""
 "(only in method \"Perspective circle\")"
 msgstr ""
 "Zeichnet ein Quadrat in perspektivischer Ansicht um den Kreis (nur für"
-" \"Perspektivischer Kreis\")"
+" „Perspektivischer Kreis“)"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:65
 msgid "_Arc"
@@ -12347,7 +12347,7 @@ msgid ""
 "(only for methods \"Auto ellipse\" and \"Force circle\")"
 msgstr ""
 "Erzeugt einen offenen Bogen (offene Ellipse) anhand des ersten und letzten"
-" Knotens (nur für \"Auto-Ellipse\" und \"Kreis erzwingen\")"
+" Knotens (nur für „Auto-Ellipse“ und „Kreis erzwingen“)"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:69
 msgid "_Other arc side"
@@ -12385,8 +12385,8 @@ msgid ""
 "Draw the axes in perspective view\n"
 "(only in method \"Perspective circle\")"
 msgstr ""
-"Achsen in perspektivischer Ansicht einzeichnen (nur für \"Perspektivischer"
-" Kreis\")"
+"Achsen in perspektivischer Ansicht einzeichnen (nur für „Perspektivischer"
+" Kreis“)"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:75
 msgid "Axes rotation"
@@ -12429,7 +12429,7 @@ msgid ""
 "Set smoothness/sharpness of path when reaching a 'bottom' half-turn. "
 "0=sharp, 1=default"
 msgstr ""
-"Wählt Glättung des Pfades bei Einlaufen in \"unteren\" Wendepunkt. 0=spitz, "
+"Wählt Glättung des Pfades bei Einlaufen in „unteren“ Wendepunkt. 0=spitz, "
 "1=Standard"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:223
@@ -12441,7 +12441,7 @@ msgid ""
 "Set smoothness/sharpness of path when leaving a 'bottom' half-turn. 0=sharp, "
 "1=default"
 msgstr ""
-"Wählt Glättung des Pfades bei Auslaufen aus \"unterem\" Wendepunkt. 0=spitz, "
+"Wählt Glättung des Pfades bei Auslaufen aus „unterem“ Wendepunkt. 0=spitz, "
 "1=Standard"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:224
@@ -12453,7 +12453,7 @@ msgid ""
 "Set smoothness/sharpness of path when reaching a 'top' half-turn. 0=sharp, "
 "1=default"
 msgstr ""
-"Wählt Glättung des Pfades bei Einlaufen in \"oberen\" Wendepunkt. 0=spitz, "
+"Wählt Glättung des Pfades bei Einlaufen in „oberen“ Wendepunkt. 0=spitz, "
 "1=Standard"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:225
@@ -12465,7 +12465,7 @@ msgid ""
 "Set smoothness/sharpness of path when leaving a 'top' half-turn. 0=sharp, "
 "1=default"
 msgstr ""
-"Wählt Glättung des Pfades bei Auslaufen aus \"oberen\" Wendepunkt. 0=spitz, "
+"Wählt Glättung des Pfades bei Auslaufen aus dem „oberen“ Wendepunkt. 0=spitz, "
 "1=Standard"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:226
@@ -12475,7 +12475,7 @@ msgstr "Ausmaß Schwankung: 1. Seite:"
 #: ../src/live_effects/lpe-rough-hatches.cpp:226
 msgid "Randomly moves 'bottom' half-turns to produce magnitude variations."
 msgstr ""
-"Verschiebt zufällig \"untere\" Wendepunkte, um Änderung der Amplitude zu "
+"Verschiebt zufällig „untere“ Wendepunkte, um Änderung der Amplitude zu "
 "erreichen."
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:227
@@ -12487,7 +12487,7 @@ msgstr "2. Seite:"
 #: ../src/live_effects/lpe-rough-hatches.cpp:227
 msgid "Randomly moves 'top' half-turns to produce magnitude variations."
 msgstr ""
-"Verschiebt zufällig \"obere\" Wendepunkte, um Änderung der Amplitude zu "
+"Verschiebt zufällig „obere“ Wendepunkte, um Änderung der Amplitude zu "
 "erreichen."
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:228
@@ -12499,7 +12499,7 @@ msgid ""
 "Add direction randomness by moving 'bottom' half-turns tangentially to the "
 "boundary."
 msgstr ""
-"Ändert Richtung zufällig, indem \"untere\" Wendepunkte tangential zur "
+"Ändert Richtung zufällig, indem „untere“ Wendepunkte tangential zur "
 "Begrenzung bewegt werden."
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:229
@@ -12507,7 +12507,7 @@ msgid ""
 "Add direction randomness by randomly moving 'top' half-turns tangentially to "
 "the boundary."
 msgstr ""
-"Ändert Richtung zufällig, in dem \"obere\" Wendepunkte tangential zur "
+"Ändert Richtung zufällig, in dem „obere“ Wendepunkte tangential zur "
 "Begrenzung bewegt werden."
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:230
@@ -12516,11 +12516,11 @@ msgstr "Varianz: 1. Seite:"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:230
 msgid "Randomness of 'bottom' half-turns smoothness"
-msgstr "Zufall in der Glättung \"unterer\" Wendepunkte"
+msgstr "Zufall in der Glättung „unterer“ Wendepunkte"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:231
 msgid "Randomness of 'top' half-turns smoothness"
-msgstr "Zufall in der Glättung \"oberer\" Wendepunkte"
+msgstr "Zufall in der Glättung „oberer“ Wendepunkte"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:233
 msgid "Generate thick/thin path"
@@ -12544,7 +12544,7 @@ msgstr "Dicke: auf der 1. Seite:"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:235
 msgid "Width at 'bottom' half-turns"
-msgstr "Breite an den \"unteren\" Wendepunkten"
+msgstr "Breite an den „unteren“ Wendepunkten"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:236
 msgid "At 2nd side:"
@@ -12552,7 +12552,7 @@ msgstr "Auf der 2. Seite:"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:236
 msgid "Width at 'top' half-turns"
-msgstr "Breite an den \"oberen\" Wendepunkten"
+msgstr "Breite an den „oberen“ Wendepunkten"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:238
 msgid "From 2nd to 1st side:"
@@ -12560,7 +12560,7 @@ msgstr "Von der 2. zur 1. Seite:"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:238
 msgid "Width from 'top' to 'bottom'"
-msgstr "Breite der Striche von \"oben\" nach \"unten\""
+msgstr "Breite der Striche von „oben“ nach „unten“"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:239
 msgid "From 1st to 2nd side:"
@@ -12568,7 +12568,7 @@ msgstr "Von der 1. zur 2. Seite:"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:239
 msgid "Width from 'bottom' to 'top'"
-msgstr "Breite von der \"unteren\" zur \"oberen\""
+msgstr "Breite von der „unteren“ zur „oberen“"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:241
 msgid "Hatches width and dir"
@@ -12753,7 +12753,7 @@ msgstr "Hauptschritte_:"
 
 #: ../src/live_effects/lpe-ruler.cpp:43
 msgid "Draw a major mark every ... steps"
-msgstr "Eine große Marke alle ... Schritte zeichnen"
+msgstr "Eine große Marke alle … Schritte zeichnen"
 
 #: ../src/live_effects/lpe-ruler.cpp:44
 msgid "Shift marks _by:"
@@ -13814,7 +13814,7 @@ msgstr "Unbenanntes Symbol"
 #. * "Clone of: Clone of: ... in Layer 1".
 #: ../src/object/sp-use.cpp:257
 msgid "..."
-msgstr "..."
+msgstr "…"
 
 #: ../src/object/sp-use.cpp:266
 #, c-format
@@ -13827,7 +13827,7 @@ msgstr "<b>Objekte</b> zum Kombinieren auswählen."
 
 #: ../src/path-chemistry.cpp:73
 msgid "Combining paths..."
-msgstr "Kombiniere Pfade..."
+msgstr "Kombiniere Pfade …"
 
 #: ../src/path-chemistry.cpp:180
 msgid "Combine"
@@ -13843,7 +13843,7 @@ msgstr "<b>Pfad</b>muss zum Zerlegen ausgewählt sein."
 
 #: ../src/path-chemistry.cpp:204
 msgid "Breaking apart paths..."
-msgstr "Zerlege Pfade..."
+msgstr "Zerlege Pfade …"
 
 #: ../src/path-chemistry.cpp:291
 msgid "Break apart"
@@ -13859,7 +13859,7 @@ msgstr "<b>Objekte</b> auswählen, die in einen Pfad umgewandelt werden sollen."
 
 #: ../src/path-chemistry.cpp:309
 msgid "Converting objects to paths..."
-msgstr "Wandle Objekte in Pfade um..."
+msgstr "Wandle Objekte in Pfade um …"
 
 #: ../src/path-chemistry.cpp:332
 msgid "Object to path"
@@ -13877,7 +13877,7 @@ msgstr "Mindestens <b>einen Pfad</b> zum Umkehren auswählen."
 
 #: ../src/path-chemistry.cpp:602
 msgid "Reversing paths..."
-msgstr "Kehre Pfadrichtungen um..."
+msgstr "Kehre Pfadrichtungen um …"
 
 #: ../src/path-chemistry.cpp:640
 msgid "Reverse path"
@@ -14562,7 +14562,7 @@ msgstr "<b>Objekt(e) auswählen</b>, um eine Bitmap-Kopie zu erstellen."
 
 #: ../src/selection-chemistry.cpp:3607
 msgid "Rendering bitmap..."
-msgstr "Bitmap wird gerendert..."
+msgstr "Bitmap wird gerendert …"
 
 #: ../src/selection-chemistry.cpp:3794
 msgid "Create bitmap"
@@ -14945,7 +14945,7 @@ msgstr "Vereinfache Pfade:"
 #: ../src/splivarot.cpp:2215
 #, c-format
 msgid "%s <b>%d</b> of <b>%d</b> paths simplified..."
-msgstr "%s <b>%d</b> von <b>%d</b> Pfaden vereinfacht..."
+msgstr "%s <b>%d</b> von <b>%d</b> Pfaden vereinfacht …"
 
 #: ../src/splivarot.cpp:2228
 #, c-format
@@ -15098,7 +15098,7 @@ msgstr "Nachzeichnen: Bild enthält keine Bitmap-Daten"
 
 #: ../src/trace/trace.cpp:448
 msgid "Trace: Starting trace..."
-msgstr "Nachzeichnen: Nachzeichnen wird gestartet..."
+msgstr "Nachzeichnen: Nachzeichnen wird gestartet …"
 
 #: ../src/trace/trace.cpp:550 ../share/ui/dialog-trace.glade:673
 msgid "Trace bitmap"
@@ -15181,7 +15181,7 @@ msgstr "Auswahl aus Gruppe herauslösen"
 
 #: ../src/ui/contextmenu.cpp:354 ../src/verbs.cpp:3095
 msgid "_Object Properties..."
-msgstr "_Objekteigenschaften..."
+msgstr "_Objekteigenschaften …"
 
 #: ../src/ui/contextmenu.cpp:363
 msgid "_Select This"
@@ -15213,7 +15213,7 @@ msgstr "Objekttyp"
 
 #: ../src/ui/contextmenu.cpp:419
 msgid "_Move to Layer..."
-msgstr "_Verschiebe zu Ebene..."
+msgstr "_Verschiebe zu Ebene …"
 
 #: ../src/ui/contextmenu.cpp:429
 msgid "Create _Link"
@@ -15253,7 +15253,7 @@ msgstr "Grupp_ierung aufheben"
 
 #: ../src/ui/contextmenu.cpp:639
 msgid "Link _Properties..."
-msgstr "Verknüpfungs_eigenschaften..."
+msgstr "Verknüpfungs_eigenschaften …"
 
 #: ../src/ui/contextmenu.cpp:645
 msgid "_Follow Link"
@@ -15269,16 +15269,16 @@ msgstr "Verknüpfung entfernen"
 
 #: ../src/ui/contextmenu.cpp:692
 msgid "Image _Properties..."
-msgstr "Bild_eigenschaften..."
+msgstr "Bild_eigenschaften …"
 
 #: ../src/ui/contextmenu.cpp:698
 msgid "Edit Externally..."
-msgstr "Extern bearbeiten..."
+msgstr "Extern bearbeiten …"
 
 #. TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
 #: ../src/ui/contextmenu.cpp:707 ../src/verbs.cpp:2750
 msgid "_Trace Bitmap..."
-msgstr "Bitmap _nachzeichnen..."
+msgstr "Bitmap _nachzeichnen …"
 
 #: ../src/ui/contextmenu.cpp:717
 msgctxt "Context menu"
@@ -15288,20 +15288,20 @@ msgstr "Bild einbetten"
 #: ../src/ui/contextmenu.cpp:728
 msgctxt "Context menu"
 msgid "Extract Image..."
-msgstr "Bild extrahieren..."
+msgstr "Bild extrahieren …"
 
 #: ../src/ui/contextmenu.cpp:883 ../src/ui/contextmenu.cpp:903
 #: ../src/verbs.cpp:3048
 msgid "_Fill and Stroke..."
-msgstr "_Füllung und Kontur..."
+msgstr "_Füllung und Kontur …"
 
 #: ../src/ui/contextmenu.cpp:909 ../src/verbs.cpp:3073
 msgid "_Text and Font..."
-msgstr "_Text und Schriftart..."
+msgstr "_Text und Schriftart …"
 
 #: ../src/ui/contextmenu.cpp:916 ../src/verbs.cpp:3083
 msgid "Check Spellin_g..."
-msgstr "Rechtschreibprüfun_g..."
+msgstr "Rechtschreibprüfun_g …"
 
 #: ../src/ui/desktop/menubar.cpp:319
 msgctxt "Interface setup"
@@ -16447,7 +16447,7 @@ msgstr ""
 
 #: ../src/ui/dialog/clonetiler.cpp:2100
 msgid "<small>Creating tiled clones...</small>"
-msgstr "<small>Gekachelte Klone erstellen...</small>"
+msgstr "<small>Gekachelte Klone erstellen …</small>"
 
 #: ../src/ui/dialog/clonetiler.cpp:2516
 msgid "Create tiled clones"
@@ -16946,7 +16946,7 @@ msgstr "Die zuvor gespeicherten Standardmetadaten verwenden"
 
 #: ../src/ui/dialog/document-properties.cpp:1041
 msgid "Add external script..."
-msgstr "Füge externes Skript hinzu..."
+msgstr "Füge externes Skript hinzu …"
 
 #: ../src/ui/dialog/document-properties.cpp:1080
 msgid "Select a script to load"
@@ -16954,7 +16954,7 @@ msgstr "Skript zum Laden auswählen"
 
 #: ../src/ui/dialog/document-properties.cpp:1108
 msgid "Add embedded script..."
-msgstr "Füge eingebettetes Skript hinzu..."
+msgstr "Füge eingebettetes Skript hinzu …"
 
 #: ../src/ui/dialog/document-properties.cpp:1139
 msgid "Remove external script"
@@ -17008,7 +17008,7 @@ msgstr "Einheiten:"
 
 #: ../src/ui/dialog/export.cpp:137
 msgid "_Export As..."
-msgstr "_Exportieren als..."
+msgstr "_Exportieren als …"
 
 #: ../src/ui/dialog/export.cpp:140
 msgid "B_atch export all selected objects"
@@ -17169,7 +17169,7 @@ msgstr "Exportiere %1 Dateien"
 #: ../src/ui/dialog/export.cpp:1048 ../src/ui/dialog/export.cpp:1050
 #, c-format
 msgid "Exporting file <b>%s</b>..."
-msgstr "Exportiere Datei <b>%s</b>..."
+msgstr "Exportiere Datei <b>%s</b> …"
 
 #: ../src/ui/dialog/export.cpp:1061 ../src/ui/dialog/export.cpp:1158
 #, c-format
@@ -17544,7 +17544,7 @@ msgid ""
 "convenience shortcuts to allow commonly used color operations to be "
 "performed without specifying a complete matrix."
 msgstr ""
-"Gibt den Typ der Matrix vor. Das Schlüsselwort \"matrix\" erzwingt eine "
+"Gibt den Typ der Matrix vor. Das Schlüsselwort „matrix“ erzwingt eine "
 "volle 5x4-Wertematrix, während andere Schlüsselwörter bequeme Abkürzungen "
 "für oft verwendete Farboperationen bereitstellen, ohne dass eine komplette "
 "Matrix angegeben werden muss."
@@ -17793,8 +17793,8 @@ msgid ""
 "Erode: performs \"thinning\" of input image.\n"
 "Dilate: performs \"fattenning\" of input image."
 msgstr ""
-"Erodieren: \"Verdünnt\" das Eingangsbild.\n"
-"Weiten:\"Verdickt\" das Eingangsbild."
+"Erodieren: „Verdünnt“ das Eingangsbild.\n"
+"Weiten: „Verdickt“ das Eingangsbild."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2808
 msgid "Source of Image:"
@@ -17827,7 +17827,7 @@ msgstr "Exponent:"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2824
 msgid "Exponent for specular term, larger is more \"shiny\"."
-msgstr "Exponent bestimmt Glanzlicht, größer ist \"glänzender\""
+msgstr "Exponent bestimmt Glanzlicht; größer ist „glänzender“"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2833
 msgid ""
@@ -20486,7 +20486,7 @@ msgstr "Liste löschen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1015
 msgid "Maximum documents in Open _Recent:"
-msgstr "Länge der \"letzte Dokumente\"-Liste:"
+msgstr "Länge der „letzte Dokumente“-Liste:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1016
 msgid ""
@@ -21043,7 +21043,7 @@ msgstr "Eingabe/Ausgabe"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1430
 msgid "Use current directory for \"Save As ...\""
-msgstr "Verwende aktuelles Verzeichnis für \"Speichern unter...\""
+msgstr "Verwende aktuelles Verzeichnis für „Speichern unter …“"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1432
 msgid ""
@@ -21052,8 +21052,8 @@ msgid ""
 "it's off, each will open in the directory where you last saved a file using "
 "it"
 msgstr ""
-"Wenn diese Option aktiviert ist, wird der \"Speichern unter\"- und \"Kopie "
-"speichern unter\"-Dialog immer das Verzeichnis des derzeit geöffneten "
+"Wenn diese Option aktiviert ist, wird der „Speichern unter“- und „Kopie "
+"speichern unter“-Dialog immer das Verzeichnis des derzeit geöffneten "
 "Dokuments öffnen. Ist sie deaktiviert, wird das Verzeichnis geöffnet in "
 "welchem die letzte Datei gespeichert wurde."
 
@@ -21623,7 +21623,7 @@ msgid ""
 "The server name of the Open Clip Art Library webdav server; it's used by the "
 "Import and Export to OCAL function"
 msgstr ""
-"Der Servername des \"Open Clip Art Library\" Webdav Servers. Dieser wird "
+"Der Servername des „Open Clip Art Library“ Webdav-Servers. Dieser wird "
 "beim Im- und Export zur OCAL verwendet."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1729
@@ -22528,7 +22528,7 @@ msgstr "Auflösung für Bitmap-_Kopie erstellen:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2091
 msgid "Resolution used by the Create Bitmap Copy command"
-msgstr "Auflösung von Bildern die mit \"Kopiere als Bitmap\" erstellt werden."
+msgstr "Auflösung von Bildern die mit „Bitmap-Kopie erstellen“ erzeugt werden."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2094
 msgid "Ask about linking and scaling when importing bitmap images"
@@ -22641,7 +22641,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2215
 msgid "Import ..."
-msgstr "_Importieren ..."
+msgstr "_Importieren …"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2217
 msgid "Import custom keyboard shortcuts from a file"
@@ -22649,7 +22649,7 @@ msgstr "Importieren einer benutzerdefinierten Tastenkürzel-Datei"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2220
 msgid "Export ..."
-msgstr "Exportieren ..."
+msgstr "Exportieren …"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2222
 msgid "Export custom keyboard shortcuts to a file"
@@ -22666,8 +22666,8 @@ msgid ""
 "Keyboard shortcut \"%1\"\n"
 "is already assigned to \"%2\""
 msgstr ""
-"Das Tastaturkürzel \"%1\"\n"
-"wird bereits für \"%2\" verwendet."
+"Das Tastaturkürzel „%1“\n"
+"wird bereits für „%2“ verwendet."
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 2152
@@ -22725,7 +22725,7 @@ msgstr "Wörter mit Zahlen ignorieren"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2517
 msgid "Ignore words containing digits, such as \"R2D2\""
-msgstr "Wörter mit Zahlen ignorieren, wie \"R2D2\""
+msgstr "Wörter mit Zahlen ignorieren, wie „R2D2“"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2519
 msgid "Ignore words in ALL CAPITALS"
@@ -22733,7 +22733,7 @@ msgstr "Wörter in GROSSGESCHRIEBEN ignorieren"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2521
 msgid "Ignore words in all capitals, such as \"IUPAC\""
-msgstr "Wörter ignorieren, die GROSSGESCHRIEBEN sind, wie \"IUPAC\""
+msgstr "Wörter ignorieren, die GROSSGESCHRIEBEN sind, wie „IUPAC“"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2523
 msgid "Spellcheck"
@@ -23551,7 +23551,7 @@ msgstr "Objektsperrung aufheben"
 
 #: ../src/ui/dialog/object-properties.cpp:536
 msgid "Set preserve ratio"
-msgstr "\"Seitenverhältnis beibehalten\" geändert"
+msgstr "„Seitenverhältnis beibehalten“ geändert"
 
 #: ../src/ui/dialog/object-properties.cpp:553
 msgid "Hide object"
@@ -23683,7 +23683,7 @@ msgstr ""
 
 #: ../src/ui/dialog/objects.cpp:1795
 msgid "Add layer..."
-msgstr "Ebe_ne hinzufügen..."
+msgstr "Ebe_ne hinzufügen …"
 
 #: ../src/ui/dialog/objects.cpp:1802
 msgid "Remove object"
@@ -23711,7 +23711,7 @@ msgstr "Clipart gefunden"
 
 #: ../src/ui/dialog/ocaldialogs.cpp:629
 msgid "Downloading image..."
-msgstr "Bild wird heruntergeladen..."
+msgstr "Bild wird heruntergeladen …"
 
 #: ../src/ui/dialog/ocaldialogs.cpp:777
 msgid "Could not download image"
@@ -23731,7 +23731,7 @@ msgstr "Keine Beschreibung"
 
 #: ../src/ui/dialog/ocaldialogs.cpp:944
 msgid "Searching clipart..."
-msgstr "Suche Clipart..."
+msgstr "Suche Clipart …"
 
 #: ../src/ui/dialog/ocaldialogs.cpp:986
 msgid "Could not connect to the Open Clip Art Library"
@@ -24020,7 +24020,7 @@ msgstr "Nicht im Wörterbuch: <b>%s</b>"
 
 #: ../src/ui/dialog/spellcheck.cpp:665
 msgid "<i>Checking...</i>"
-msgstr "<i>Überprüfung...</i>"
+msgstr "<i>Überprüfung …</i>"
 
 #: ../src/ui/dialog/spellcheck.cpp:734
 msgid "Fix spelling"
@@ -24236,7 +24236,7 @@ msgstr "Glyphe hinzufügen"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:826
 msgid "Get curves from selection..."
-msgstr "Kurven von der Auswahl erhalten..."
+msgstr "Kurven von der Auswahl erhalten …"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:878
 msgid "Add kerning pair"
@@ -24324,7 +24324,7 @@ msgstr "Kontur festlegen"
 
 #: ../src/ui/dialog/swatches.cpp:292
 msgid "Edit..."
-msgstr "Bearbeiten..."
+msgstr "Bearbeiten …"
 
 # !!! not the best translation
 #: ../src/ui/dialog/swatches.cpp:304
@@ -24453,7 +24453,7 @@ msgstr "Weniger Symbole in einer Reihe anzeigen."
 
 #: ../src/ui/dialog/symbols.cpp:312
 msgid "Toggle 'fit' symbols in icon space."
-msgstr "\"Einpassen\" der Symbole im Symbolbereich."
+msgstr "„Einpassen“ der Symbole im Symbolbereich."
 
 #: ../src/ui/dialog/symbols.cpp:325
 msgid "Make symbols smaller by zooming out."
@@ -25839,7 +25839,7 @@ msgstr ""
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:178
 msgid "(perpendicular to stroke, \"brush\")"
-msgstr "(senkrecht zum Strich, \"Pinsel\")"
+msgstr "(senkrecht zum Strich, „Pinsel“)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:178
 msgid "(almost fixed, default)"
@@ -25847,7 +25847,7 @@ msgstr "(fast fixiert, Vorgabe)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:178
 msgid "(fixed by Angle, \"pen\")"
-msgstr "(fixiert mit Winkel, \"Stift\")"
+msgstr "(fixiert mit Winkel, „Stift“)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:182
 msgid "Fixation:"
@@ -30174,7 +30174,7 @@ msgstr "Benutzerdefiniert"
 
 #: ../src/ui/widget/page-sizer.cpp:196
 msgid "Resi_ze page to content..."
-msgstr "Ändern der Seitengröße auf Inhalt..."
+msgstr "Ändern der Seitengröße auf Inhalt …"
 
 #: ../src/ui/widget/page-sizer.cpp:204
 #: ../share/extensions/guides_creator.inx:23
@@ -30195,7 +30195,7 @@ msgstr ""
 
 #: ../src/ui/widget/page-sizer.cpp:256
 msgid "_Viewbox..."
-msgstr "_Viewbox..."
+msgstr "_Viewbox …"
 
 #: ../src/ui/widget/page-sizer.cpp:351
 msgid "Set page size"
@@ -30215,7 +30215,7 @@ msgstr "'viewBox' festlegen"
 
 #: ../src/ui/widget/preferences-widget.cpp:756
 msgid "_Browse..."
-msgstr "_Durchsuchen..."
+msgstr "_Durchsuchen …"
 
 #: ../src/ui/widget/preferences-widget.cpp:842
 msgid "Select a bitmap editor"
@@ -30452,11 +30452,11 @@ msgstr "Mehrere ausgewählte Objekte haben die selbe Kontur"
 
 #: ../src/ui/widget/selected-style.cpp:255
 msgid "Edit fill..."
-msgstr "Füllung bearbeiten..."
+msgstr "Füllung bearbeiten …"
 
 #: ../src/ui/widget/selected-style.cpp:255
 msgid "Edit stroke..."
-msgstr "Kontur bearbeiten..."
+msgstr "Kontur bearbeiten …"
 
 #: ../src/ui/widget/selected-style.cpp:259
 msgid "Last set color"
@@ -30899,7 +30899,7 @@ msgstr "Ein neues Dokument mit der Standardvorlage anlegen"
 
 #: ../src/verbs.cpp:2513
 msgid "_Open..."
-msgstr "_Öffnen..."
+msgstr "_Öffnen …"
 
 #: ../src/verbs.cpp:2513
 msgid "Open an existing document"
@@ -30921,7 +30921,7 @@ msgstr "Das Dokument speichern"
 
 #: ../src/verbs.cpp:2519
 msgid "Save _As..."
-msgstr "Speichern _unter..."
+msgstr "Speichern _unter …"
 
 #: ../src/verbs.cpp:2519
 msgid "Save document under a new name"
@@ -30929,7 +30929,7 @@ msgstr "Dokument unter einem anderen Namen speichern"
 
 #: ../src/verbs.cpp:2521
 msgid "Save a Cop_y..."
-msgstr "_Kopie speichern..."
+msgstr "_Kopie speichern …"
 
 #: ../src/verbs.cpp:2522
 msgid "Save a copy of the document under a new name"
@@ -30937,7 +30937,7 @@ msgstr "Eine Kopie des Dokuments unter einem anderen Namen speichern"
 
 #: ../src/verbs.cpp:2523
 msgid "Save Template..."
-msgstr "Als Vorlage speichern..."
+msgstr "Als Vorlage speichern …"
 
 #: ../src/verbs.cpp:2524
 msgid "Save a copy of the document as template"
@@ -30945,7 +30945,7 @@ msgstr "Eine Kopie des Dokuments als Vorlage speichern"
 
 #: ../src/verbs.cpp:2525
 msgid "_Print..."
-msgstr "_Drucken..."
+msgstr "_Drucken …"
 
 #: ../src/verbs.cpp:2525
 msgid "Print document"
@@ -30965,7 +30965,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:2532
 msgid "_Import..."
-msgstr "_Importieren..."
+msgstr "_Importieren …"
 
 #: ../src/verbs.cpp:2533
 msgid "Import a bitmap or SVG image into this document"
@@ -30973,7 +30973,7 @@ msgstr "Ein Bitmap- oder SVG-Bild in dieses Dokument importieren"
 
 #: ../src/verbs.cpp:2536
 msgid "Import Clip Art..."
-msgstr "Clip Art importieren..."
+msgstr "Clip Art importieren …"
 
 #: ../src/verbs.cpp:2537
 msgid "Import clipart from Open Clip Art Library"
@@ -31739,7 +31739,7 @@ msgstr "Die markierten Pfade in Unterpfade zerlegen"
 
 #: ../src/verbs.cpp:2761
 msgid "_Arrange..."
-msgstr "_Anordnen..."
+msgstr "_Anordnen …"
 
 #: ../src/verbs.cpp:2762
 msgid "Arrange selected objects in a table or circle"
@@ -31747,7 +31747,7 @@ msgstr "Ausgewählte Objekte in einer Tabelle oder im Kreis anordnen"
 
 #: ../src/verbs.cpp:2764
 msgid "_Add Layer..."
-msgstr "Ebene _hinzufügen..."
+msgstr "Ebene _hinzufügen …"
 
 #: ../src/verbs.cpp:2764
 msgid "Create a new layer"
@@ -31755,7 +31755,7 @@ msgstr "Eine neue Ebene anlegen"
 
 #: ../src/verbs.cpp:2766
 msgid "Re_name Layer..."
-msgstr "Ebene umbe_nennen..."
+msgstr "Ebene umbe_nennen …"
 
 #: ../src/verbs.cpp:2766
 msgid "Rename the current layer"
@@ -32749,7 +32749,7 @@ msgstr "Ansicht mit Farbverwaltung ein-/ausschalten"
 
 #: ../src/verbs.cpp:3034
 msgid "Ico_n Preview..."
-msgstr "Sy_mbolvorschau..."
+msgstr "Sy_mbolvorschau …"
 
 #: ../src/verbs.cpp:3035
 msgid "Open a window to preview objects at different icon resolutions"
@@ -32775,7 +32775,7 @@ msgstr "Globale Einstellungen für Inkscape bearbeiten"
 
 #: ../src/verbs.cpp:3043
 msgid "_Document Properties..."
-msgstr "_Dokumenteinstellungen..."
+msgstr "_Dokumenteinstellungen …"
 
 #: ../src/verbs.cpp:3044
 msgid "Edit properties of this document (to be saved with the document)"
@@ -32783,7 +32783,7 @@ msgstr "Einstellungen bearbeiten, die mit dem Dokument gespeichert werden"
 
 #: ../src/verbs.cpp:3046
 msgid "Document _Metadata..."
-msgstr "Dokument_metadaten..."
+msgstr "Dokument_metadaten …"
 
 #: ../src/verbs.cpp:3047
 msgid "Edit document metadata (to be saved with the document)"
@@ -32807,7 +32807,7 @@ msgstr "Wählen Sie Unicode-Zeichen aus einer Glyphenpalette aus"
 #. TRANSLATORS: "Swatches" means: color samples
 #: ../src/verbs.cpp:3058
 msgid "S_watches..."
-msgstr "_Farbfelder-Palette..."
+msgstr "_Farbfelder-Palette …"
 
 #: ../src/verbs.cpp:3059
 msgid "Select colors from a swatches palette"
@@ -32815,7 +32815,7 @@ msgstr "Farben aus einer Farbfelder-Palette auswählen"
 
 #: ../src/verbs.cpp:3060
 msgid "S_ymbols..."
-msgstr "S_ymbole..."
+msgstr "S_ymbole …"
 
 #: ../src/verbs.cpp:3061
 msgid "Select symbol from a symbols palette"
@@ -32831,7 +32831,7 @@ msgstr "Farbgebungsart aus der Sammlung wählen"
 
 #: ../src/verbs.cpp:3065
 msgid "Transfor_m..."
-msgstr "_Transformation..."
+msgstr "_Transformation …"
 
 #: ../src/verbs.cpp:3066
 msgid "Precisely control objects' transformations"
@@ -32839,7 +32839,7 @@ msgstr "Transformationen eines Objektes präzise einstellen"
 
 #: ../src/verbs.cpp:3067
 msgid "_Align and Distribute..."
-msgstr "_Ausrichten und verteilen..."
+msgstr "_Ausrichten und verteilen …"
 
 #: ../src/verbs.cpp:3068
 msgid "Align and distribute objects"
@@ -32855,7 +32855,7 @@ msgstr "Einige Optionen des Sprühwerkzeuges"
 
 #: ../src/verbs.cpp:3071
 msgid "Undo _History..."
-msgstr "Bearbeitungs_historie..."
+msgstr "Bearbeitungs_historie …"
 
 #: ../src/verbs.cpp:3071
 msgid "Undo History"
@@ -32868,7 +32868,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:3076
 msgid "_XML Editor..."
-msgstr "_XML-Editor..."
+msgstr "_XML-Editor …"
 
 #: ../src/verbs.cpp:3077
 msgid "View and edit the XML tree of the document"
@@ -32876,15 +32876,15 @@ msgstr "Zeige und ändere den XML-Baum des Dokuments"
 
 #: ../src/verbs.cpp:3078
 msgid "_Selectors and CSS..."
-msgstr "_Selektoren und CSS ..."
+msgstr "_Selektoren und CSS …"
 
 #: ../src/verbs.cpp:3079
 msgid "View and edit CSS selectors and styles"
-msgstr ""
+msgstr "CSS-Selektoren und Stile ansehen und bearbeiten"
 
 #: ../src/verbs.cpp:3080
 msgid "_Find/Replace..."
-msgstr "_Suchen/Ersetzen..."
+msgstr "_Suchen/Ersetzen …"
 
 #: ../src/verbs.cpp:3080
 msgid "Find objects in document"
@@ -32896,7 +32896,7 @@ msgstr "Rechtschreibprüfung für Text im Dokument"
 
 #: ../src/verbs.cpp:3086
 msgid "_Messages..."
-msgstr "_Nachrichten..."
+msgstr "_Nachrichten …"
 
 #: ../src/verbs.cpp:3086
 msgid "View debug messages"
@@ -32912,7 +32912,7 @@ msgstr "Alle offenen Dialoge zeigen oder ausblenden"
 
 #: ../src/verbs.cpp:3090
 msgid "Create Tiled Clones..."
-msgstr "Gekachelte Klone erzeugen..."
+msgstr "Gekachelte Klone erzeugen …"
 
 #: ../src/verbs.cpp:3091
 msgid ""
@@ -32924,11 +32924,11 @@ msgstr ""
 
 #: ../src/verbs.cpp:3093
 msgid "_Object attributes..."
-msgstr "_Objekteigenschaften..."
+msgstr "_Objekteigenschaften …"
 
 #: ../src/verbs.cpp:3094
 msgid "Edit the object attributes..."
-msgstr "Objektattribute bearbeiten..."
+msgstr "Objektattribute bearbeiten …"
 
 #: ../src/verbs.cpp:3096
 msgid "Edit the ID, locked and visible status, and other object properties"
@@ -32937,7 +32937,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:3098
 msgid "_Input Devices..."
-msgstr "_Eingabegeräte..."
+msgstr "_Eingabegeräte …"
 
 #: ../src/verbs.cpp:3099
 msgid "Configure extended input devices, such as a graphics tablet"
@@ -32945,7 +32945,7 @@ msgstr "Erweiterte Eingabegeräte konfigurieren, wie z.B. Grafiktabletts"
 
 #: ../src/verbs.cpp:3101
 msgid "_Extensions..."
-msgstr "_Erweiterungen..."
+msgstr "_Erweiterungen …"
 
 #: ../src/verbs.cpp:3102
 msgid "Query information about extensions"
@@ -32953,7 +32953,7 @@ msgstr "Informationen über Erweiterungen abfragen"
 
 #: ../src/verbs.cpp:3103
 msgid "Layer_s..."
-msgstr "_Ebenen..."
+msgstr "_Ebenen …"
 
 #: ../src/verbs.cpp:3103
 msgid "View Layers"
@@ -32961,7 +32961,7 @@ msgstr "Ebenen anzeigen"
 
 #: ../src/verbs.cpp:3105
 msgid "Object_s..."
-msgstr "_Objekte..."
+msgstr "_Objekte …"
 
 #: ../src/verbs.cpp:3105
 msgid "View Objects"
@@ -32977,7 +32977,7 @@ msgstr "Stildialog anzeigen"
 
 #: ../src/verbs.cpp:3108
 msgid "Path E_ffects..."
-msgstr "Pfade_ffekte ..."
+msgstr "Pfade_ffekte …"
 
 #: ../src/verbs.cpp:3109
 msgid "Manage, edit, and apply path effects"
@@ -32985,7 +32985,7 @@ msgstr "Pfadeffekte verwalten, bearbeiten und anwenden"
 
 #: ../src/verbs.cpp:3110
 msgid "Filter _Editor..."
-msgstr "Filter_editor..."
+msgstr "Filter_editor …"
 
 #: ../src/verbs.cpp:3111
 msgid "Manage, edit, and apply SVG filters"
@@ -32993,7 +32993,7 @@ msgstr "SVG-Filter verwalten, bearbeiten und anwenden"
 
 #: ../src/verbs.cpp:3112
 msgid "SVG Font Editor..."
-msgstr "SVG-Schriftarteneditor..."
+msgstr "SVG-Schriftarteneditor …"
 
 #: ../src/verbs.cpp:3112
 msgid "Edit SVG fonts"
@@ -33001,7 +33001,7 @@ msgstr "SVG-Schriften bearbeiten"
 
 #: ../src/verbs.cpp:3113
 msgid "Print Colors..."
-msgstr "Druckfarben..."
+msgstr "Druckfarben …"
 
 #: ../src/verbs.cpp:3114
 msgid ""
@@ -33012,7 +33012,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:3115
 msgid "_Export PNG Image..."
-msgstr "PNG-Bild _exportieren..."
+msgstr "PNG-Bild _exportieren …"
 
 #: ../src/verbs.cpp:3116
 msgid "Export this document or a selection as a PNG image"
@@ -33125,7 +33125,7 @@ msgstr "Letzten Effekt mit den gleichen Einstellungen anwenden"
 
 #: ../src/verbs.cpp:3151
 msgid "_Previous Extension Settings..."
-msgstr "_Vorherige Erweiterungseinstellungen..."
+msgstr "_Vorherige Erweiterungseinstellungen …"
 
 #: ../src/verbs.cpp:3152
 msgid "Repeat the last extension with new settings"
@@ -33260,7 +33260,7 @@ msgstr ""
 
 #: ../src/widgets/desktop-widget.cpp:612
 msgid "Rotation. (Also Ctrl+Shift+Scroll)"
-msgstr ""
+msgstr "Rotation (auch mit Strg+Umschalt+Mausrad)"
 
 #: ../src/widgets/desktop-widget.cpp:643
 msgid "Cursor coordinates"
@@ -33334,7 +33334,7 @@ msgid ""
 "\n"
 "Do you want to save this file as Inkscape SVG?"
 msgstr ""
-"<span weight=\"bold\" size=\"larger\">Die Datei \"%s\" wurde in einem "
+"<span weight=\"bold\" size=\"larger\">Die Datei „%s“ wurde in einem "
 "möglicherweise verlustbehafteten Format gespeichert!</span>\n"
 "\n"
 "Möchten Sie das Dokument als Inkscape-SVG speichern?"
@@ -33731,7 +33731,7 @@ msgstr "Stil von neuen kalligrafischen Strichen"
 
 #: ../src/widgets/toolbox.cpp:211 ../src/widgets/toolbox.cpp:213
 msgid "TBD"
-msgstr "\"Beschreibung fehlt noch!\""
+msgstr "Beschreibung fehlt noch!"
 
 #: ../src/widgets/toolbox.cpp:226
 msgid "Style of Paint Bucket fill objects"
@@ -33791,30 +33791,31 @@ msgstr ""
 "  Mit diesem Dialog können Rastergrafiken automatisch vektorisiert werden."
 " Für die verschiedenen Anwendungsfälle stehen unterschiedliche Methoden zur"
 " Verfügung:\n"
-" * \"Helligkeitsschwellwert\" sucht nach Regionen, die dunkler als der"
+" * „Helligkeitsschwellwert“ sucht nach Regionen, die dunkler als der"
 " gewählte Grenzwert sind und erstellt einen Pfad, der diese Regionen"
 " beinhaltet (verwendet die Potrace-Bibliothek).\n"
-" * \"Kantenerkennung\" sucht nach Helligkeitsänderungen. Wenn der Unterschied"
+" * „Kantenerkennung“ sucht nach Helligkeitsänderungen. Wenn der Unterschied"
 " in der Helligkeit zwischen Farbflächen größer ist als der gewählte"
 " Grenzwert, wird dort ein Pfad erstellt, der die beiden Regionen voneinander"
 " abgrenzt (verwendet die Potrace-Bibliothek).\n"
-" * \"Farbquantisierung\" teilt das Bild in die angegebene Anzahl an Farben"
+" * „Farbquantisierung“ teilt das Bild in die angegebene Anzahl an Farben"
 " auf und trennt die Farbbereiche mit einem Pfad (verwendet die "
 " Potrace-Bibliothek).\n"
-" * \"Autotrace\" verwendet den Autotrace-Algorithmus mit der gewählten"
+" * „Autotrace“ verwendet den Autotrace-Algorithmus mit der gewählten"
 " Option.\n"
-" * \"Linien nachzeichnen\" versucht, eine Strichzeichnung zu vektorisieren"
+" * „Strichzeichnung vektorisieren“ versucht, die Linien in einer"
+" Strichzeichnung nachzuzeichnen"
 " (verwendet die Autotrace-Bibliothek).\n"
-" * \"Mehrere Zwischenfarben\" teilt das Bild abhängig von der Helligkeit, den"
+" * „Mehrere Zwischenfarben“ teilt das Bild abhängig von der Helligkeit, den"
 " Farben oder Graustufen in Bereiche auf und erstellt für jeden Bereich einen"
 " eigenen Pfad. Kann sowohl mit Potrace als auch mit Autotrace ausgeführt"
 " werden.\n"
-" * Im Reiter \"Pixelkunst\" können mit einem Pixelerkennungs-Algorithmus"
+" * Im Reiter „Pixelkunst“ können mit einem Pixelerkennungs-Algorithmus"
 " Pixelkunst-Bilder vektorisiert werden..\n"
 "\n"
 " * Hinweise:\n"
 "  1) Vor dem Vektorisieren sollte gespeichert werden.\n"
-"  2) \"Pixelkunst nachzeichnen\" erzeugt pro Farbquadrat im Kunstwerk einen"
+"  2) „Pixelkunst nachzeichnen“ erzeugt pro Farbquadrat im Kunstwerk einen"
 " Pfad, und sollte daher nicht für Bilder verwendet werden, die zu groß oder"
 " keine Pixelkunst sind.\n"
 "  3) Autotrace ist langsamer als Potrace. Daher sollte es nicht für große"
@@ -34055,7 +34056,7 @@ msgstr ""
 #: ../share/extensions/embedimage.py:78
 msgid "File not found \"{}\". Unable to embed image."
 msgstr ""
-"Die Datei \"{}\" konnte nicht gefunden werden. Bild kann nicht eingebettet"
+"Die Datei „{}“ konnte nicht gefunden werden. Bild kann nicht eingebettet"
 " werden."
 
 #: ../share/extensions/embedimage.py:92
@@ -34327,8 +34328,9 @@ msgid ""
 "\n"
 msgstr ""
 "Das JessyInk-Skript ist in dieser SVG-Datei nicht installiert oder hat eine "
-"andere Version als die JessyInk-Erweiterung. Bitte wählen Sie \"install/"
-"update...\" aus dem \"JessyInk\" Untermenü des \"Erweiterungen\" Menü, um "
+"andere Version als die JessyInk-Erweiterung. Bitte wählen Sie"
+" „Installation/Aktualisierung …“ aus dem „JessyInk“ Untermenü des"
+" „Erweiterungen“-Menüs, um "
 "das JessyInk-Skript zu installieren oder zu aktualisieren.\n"
 "\n"
 
@@ -34430,7 +34432,7 @@ msgstr ""
 #: ../share/extensions/jessyInk_summary.py:112
 #, python-brace-format
 msgid "{0}\t\"{1}\" (object id \"{2}\") will be replaced by \"{3}\"."
-msgstr "{0}\t\"{1}\" (Objekt id \"{2}\") wird durch \"{3}\" ersetzt."
+msgstr "{0}\t„{1}“ (Objekt-ID „{2}“) wird durch „{3}“ ersetzt."
 
 #: ../share/extensions/jessyInk_summary.py:157
 #, python-brace-format
@@ -34452,12 +34454,12 @@ msgstr ""
 #: ../share/extensions/jessyInk_summary.py:163
 #, python-brace-format
 msgid "{0}\tView will be set according to object \"{1}\""
-msgstr "{0}\tView wird gemäß Objekt \"{1}\" gesetzt werden."
+msgstr "{0}\tView wird gemäß Objekt „{1}“ gesetzt werden."
 
 #: ../share/extensions/jessyInk_summary.py:165
 #, python-brace-format
 msgid "{0}\tObject \"{1}\""
-msgstr "{0}\tObjekt \"{1}\""
+msgstr "{0}\tObjekt „{1}“"
 
 #: ../share/extensions/jessyInk_summary.py:168
 msgid " will appear"
@@ -34470,7 +34472,7 @@ msgstr "wird verschwinden"
 #: ../share/extensions/jessyInk_summary.py:173
 #, python-brace-format
 msgid " using effect \"{0}\""
-msgstr "benutzter Effekt \"{0}\""
+msgstr " benutzter Effekt „{0}“"
 
 #: ../share/extensions/jessyInk_summary.py:176
 msgid " in {0!s} s"
@@ -34602,7 +34604,7 @@ msgstr "Keine Flächendaten in ausgewählter Datei gefunden"
 
 #: ../share/extensions/polyhedron_3d.py:373
 msgid "Try selecting \"Edge Specified\" in the Model File tab.\n"
-msgstr "Versuchen Sie es mit \"Kantendefiniert\" im Modeldatei-Reiter.\n"
+msgstr "Versuchen Sie es mit „Kantendefiniert“ im Modeldatei-Reiter.\n"
 
 #: ../share/extensions/polyhedron_3d.py:379
 msgid "No edge data found in specified file."
@@ -34610,7 +34612,7 @@ msgstr "In der angegebenen Datei wurden keine Kantenbeschreibungen gefunden."
 
 #: ../share/extensions/polyhedron_3d.py:380
 msgid "Try selecting \"Face Specified\" in the Model File tab.\n"
-msgstr "Versuchen Sie es mit \"Flächendefiniert\" im Modeldatei-Reiter.\n"
+msgstr "Versuchen Sie es mit „Flächendefiniert“ im Modeldatei-Reiter.\n"
 
 #: ../share/extensions/polyhedron_3d.py:490
 msgid ""
@@ -34628,7 +34630,7 @@ msgid ""
 "imported as \"Face-Specified\" under the \"Model File\" tab.\n"
 msgstr ""
 "Keine Flächenbeschreibungen gefunden! Stellen Sie sicher, dass die Datei "
-"Flächendaten enthält und als \"Flächendefiniert\" im Reiter \"Modeldatei\" "
+"Flächendaten enthält und als „Flächendefiniert“ im Reiter „Modeldatei“ "
 "importiert wird.\n"
 
 #: ../share/extensions/polyhedron_3d.py:561
@@ -34676,13 +34678,12 @@ msgstr "Bitte geben Sie eine Suchphrase in das Suchfeld ein."
 
 #: ../share/extensions/replace_font.py:226
 msgid "Please enter a replacement font in the replace with box."
-msgstr ""
-"Bitte geben Sie eine Ersetzungsschriftart im \"Ersetzen mit\"-Feld ein."
+msgstr "Bitte geben Sie eine Ersetzungsschriftart im „Ersetzen mit“-Feld ein."
 
 #: ../share/extensions/replace_font.py:231
 msgid "Please enter a replacement font in the replace all box."
 msgstr ""
-"Bitte geben Sie eine Ersetzungsschriftart im \"Alles ersetzen\"-Feld ein."
+"Bitte geben Sie eine Ersetzungsschriftart im „Alles ersetzen“-Feld ein."
 
 #: ../share/extensions/restack.py:65
 msgid "There is no selection to restack."
@@ -34745,7 +34746,7 @@ msgstr ""
 #: ../share/extensions/webslicer_create_group.py:73
 #, python-format
 msgid "Oops... The element \"%s\" is not in the Web Slicer layer"
-msgstr "Huch... Das Element \"%s\" ist nicht in der „Web Slicer“-Ebene"
+msgstr "Huch … Das Element „%s“ ist nicht in der „Web Slicer“-Ebene"
 
 #: ../share/extensions/webslicer_export.py:54
 msgid "You must give a directory to export the slices."
@@ -34835,7 +34836,6 @@ msgid "Random lightness"
 msgstr "Zufallshelligkeit"
 
 #: ../share/extensions/color_HSL_adjust.inx:17
-#, fuzzy
 msgid ""
 "\n"
 "Adjusts hue, saturation and lightness in the HSL representation of the "
@@ -34847,14 +34847,16 @@ msgid ""
 "    * Random Hue/Saturation/Lightness: randomize the parameter's value.\n"
 "      "
 msgstr ""
+"\n"
 "Verändert Farbton, Sättigung und Helligkeit der in der HSL Darstellung "
 "ausgewählten Objektfarbe.\n"
 "Optionen:\n"
-"     * Farbton: drehen in Grad (umschlingt).\n"
-"     * Sättigung: Addieren/subtrahieren % (min=-100, max=100).\n"
-"     * Helligkeit: Addieren/subtrahieren % (min=-100, max=100).\n"
-"     * Zufällig Farbton/Sättigung/Helligkeit: Zufällig den Wert des "
-"Parameters ändern."
+"    * Farbton: Änderung in Grad (zirkulär).\n"
+"    * Sättigung: Addieren/Subtrahieren % (min=-100, max=100).\n"
+"    * Helligkeit: Addieren/Subtrahieren % (min=-100, max=100).\n"
+"    * Zufälliger Farbton/Sättigung/Helligkeit: Zufällig den Wert des "
+"Parameters ändern.\n"
+"      "
 
 #: ../share/extensions/color_blackandwhite.inx:3
 msgid "Black and White"
@@ -34886,14 +34888,13 @@ msgstr "Eingabe (r,g,b) Farbbereich:"
 
 #: ../share/extensions/color_custom.inx:13
 msgid "0 - 1"
-msgstr ""
+msgstr "0–1"
 
 #: ../share/extensions/color_custom.inx:14
 msgid "0 - 255"
-msgstr ""
+msgstr "0–255"
 
 #: ../share/extensions/color_custom.inx:18
-#, fuzzy
 msgid ""
 "\n"
 "Allows you to evaluate different functions for each channel.\n"
@@ -34906,14 +34907,17 @@ msgid ""
 "  Blue Function: g\n"
 "            "
 msgstr ""
-"Erlaubt verschiedene Funktionen für jeden Kanal zu bewerten.\n"
+"\n"
+"Ermöglicht es, auf jeden Farbkanal eine eigene mathematische Funktion"
+" anzuwenden.\n"
 "r, g und b sind die normalisierten Werte der roten, grünen und blauen "
-"Kanäle. Die resultierenden RGB-Werte werden automatisch befestigt.\n"
-" \n"
-"Beispiel (die Hälfte der roten, wechselt grün und blau):\n"
-"   Rot-Funktion: r*0,5\n"
-"   Grün-Funktion: b\n"
-"   Blau-Funktion: g"
+"Kanäle. Die resultierenden RGB-Werte werden automatisch begrenzt.\n"
+"\n"
+"Beispiel (rot halbieren, grün und blau vertauschen):\n"
+"  Rot-Funktion: r*0,5\n"
+"  Grün-Funktion: b\n"
+"  Blau-Funktion: g\n"
+"            "
 
 #: ../share/extensions/color_darker.inx:3
 msgid "Darker"
@@ -35124,8 +35128,8 @@ msgid ""
 msgstr ""
 "Diese Erweiterung ersetzt die ausgwählten Knoten mit nummerierten Punkten "
 "entsprechend der folgenden Einstellungen:\n"
-"     * Schriftgröße: Größe der Nummerierung (20px, 12pt...).\n"
-"     * Punktgröße: Durchmesser der Punkte (10px, 2mm...).\n"
+"     * Schriftgröße: Größe der Nummerierung (20px, 12pt, …).\n"
+"     * Punktgröße: Durchmesser der Punkte (10px, 2mm, …).\n"
 "     * Startnummer: Erste Zahl in der Reihe, die dem ersten Knoten des "
 "Pfades zugeordnet wird.\n"
 "     * Schrittweite: Abstand der Nummerierung zwischen zwei Knoten."
@@ -35139,11 +35143,11 @@ msgstr "90 zu 96 DPI"
 # File: ../share/extensions/dpi96to90.inx, line: 7
 #: ../share/extensions/dpi90to96.inx:7 ../share/extensions/dpi96to90.inx:7
 msgid "Switch DPI"
-msgstr ""
+msgstr "DPI-Wert wechseln"
 
 #: ../share/extensions/dpi90to96.inx:9
 msgid "DPI Switch from 90 to 96"
-msgstr ""
+msgstr "DPI-Wert von 90 auf 96 umstellen"
 
 #: ../share/extensions/dpi96to90.inx:3
 msgid "DPI 96 to 90"
@@ -35151,7 +35155,7 @@ msgstr "96 zu 90 DPI"
 
 #: ../share/extensions/dpi96to90.inx:9
 msgid "DPI Switch from 96 to 90"
-msgstr ""
+msgstr "DPI-Wert von 96 auf 90 umstellen"
 
 #: ../share/extensions/draw_from_triangle.inx:3
 msgid "Draw From Triangle"
@@ -35642,27 +35646,27 @@ msgstr "Größe der Visitenkarte:"
 
 #: ../share/extensions/empty_business_card.inx:8
 msgid "74mm x 52mm (A8)"
-msgstr ""
+msgstr "74mm x 52mm (A8)"
 
 #: ../share/extensions/empty_business_card.inx:9
 msgid "85mm x 55mm (Europe)"
-msgstr ""
+msgstr "85mm x 55mm (Europa)"
 
 #: ../share/extensions/empty_business_card.inx:10
 msgid "90mm x 55mm (Australia, India, ...)"
-msgstr ""
+msgstr "90mm x 55mm (Australien, Indien, …)"
 
 #: ../share/extensions/empty_business_card.inx:11
 msgid "91mm x 55mm (Japan)"
-msgstr ""
+msgstr "91mm x 55mm (Japan)"
 
 #: ../share/extensions/empty_business_card.inx:12
 msgid "90mm x 54mm (China, ...)"
-msgstr ""
+msgstr "90mm x 54mm (China, …)"
 
 #: ../share/extensions/empty_business_card.inx:13
 msgid "90mm x 50mm (India, Russia, ...)"
-msgstr ""
+msgstr "90mm x 50mm (Indien, Russland, …)"
 
 #: ../share/extensions/empty_business_card.inx:14
 msgid "3.5in x 2in (United States, Canada)"
@@ -36272,16 +36276,15 @@ msgid ""
 "\".\n"
 "            "
 msgstr ""
-"\n\"Erstelle Flächenversatz\": Erstellt verschiedene Inkscape-Versatzobjekte, "
-"um die originale Pfadfläche bis zur maximalen \"Breite der Fläche\" zu "
+"\n„Erstelle Flächenversatz“: Erstellt verschiedene Inkscape-Versatzobjekte, "
+"um die originale Pfadfläche bis zur maximalen „Breite der Fläche“ zu "
 "füllen.\n"
 "\n"
-"Die dabei erstellten Umrisse reichen von \"1/2 D\" bis zur gesamten "
-"\"Breite der Fläche\" in \"D\" breiten Schritten, wobei D von der nächsten "
-"Werkzeugdefinition genommen wird (Wert für \"Werkzeugdurchmesser\").\n"
-"Es wird nur ein einziger Versatz erstellt, wenn die \"Bereichsbreite\" gleich"
-" \"1/2 D"
-"\" ist.\n"
+"Die dabei erstellten Umrisse reichen von „1/2 D“ bis zur gesamten "
+"„Breite der Fläche“ in „D“ breiten Schritten, wobei D von der nächsten "
+"Werkzeugdefinition genommen wird (Wert für „Werkzeugdurchmesser“).\n"
+"Es wird nur ein einziger Versatz erstellt, wenn die „Bereichsbreite“ gleich"
+" „1/2 D“ ist.\n"
 "            "
 
 #: ../share/extensions/gcodetools_area.inx:22
@@ -37297,9 +37300,8 @@ msgid "Minor Y Division Thickness:"
 msgstr "Konturbreite der Y-Nebenteilung:"
 
 #: ../share/extensions/grid_cartesian.inx:53
-#, fuzzy
 msgid "Subminor Y Division Thickness:"
-msgstr "Konturbreite untergeordnete Y-Teilung (px):"
+msgstr "Konturbreite untergeordnete Y-Teilung:"
 
 #: ../share/extensions/grid_cartesian.inx:54
 msgid "Y Division Thickness Unit:"
@@ -37440,7 +37442,7 @@ msgstr "Hilfslinienvoreinstellung:"
 #: ../share/extensions/guides_creator.inx:9
 #: ../share/extensions/guides_creator.inx:25
 msgid "Custom..."
-msgstr "Benutzerdefiniert..."
+msgstr "Benutzerdefiniert …"
 
 #: ../share/extensions/guides_creator.inx:10
 msgid "Golden ratio"
@@ -37541,11 +37543,12 @@ msgid "Hershey Text"
 msgstr "Hershey-Text"
 
 #: ../share/extensions/hershey.inx:12
-#, fuzzy
 msgid ""
 "\n"
 "Hershey Text\n"
-msgstr "Hershey-Text"
+msgstr ""
+"\n"
+"Hershey-Text\n"
 
 #: ../share/extensions/hershey.inx:16
 msgid ""
@@ -37555,6 +37558,11 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
+"Eine Funktion zum Ersetzen von Text durch Strich-basierte Schriftarten\n"
+"\n"
+"Version 3.0.2, 7.9.2019\n"
+"\n"
+"\n"
 
 #: ../share/extensions/hershey.inx:23
 msgid "Font face:"
@@ -37568,7 +37576,7 @@ msgstr "Hershey Sans (1 Linie)"
 # File: ../share/extensions/hershey.inx, line: 25
 #: ../share/extensions/hershey.inx:25
 msgid "Hershey Sans medium"
-msgstr ""
+msgstr "Hershey Sans medium"
 
 #: ../share/extensions/hershey.inx:27
 msgid "Hershey Serif medium"
@@ -37603,62 +37611,62 @@ msgstr "Hershey Gothic English"
 #. Block below this are derived from fonts licensed under SIL Open Font License
 #: ../share/extensions/hershey.inx:39
 msgid "EMS Allure"
-msgstr ""
+msgstr "EMS Allure"
 
 #
 # File: ../share/extensions/hershey.inx, line: 41
 #: ../share/extensions/hershey.inx:41
 msgid "EMS Elfin"
-msgstr ""
+msgstr "EMS Elfin"
 
 #
 # File: ../share/extensions/hershey.inx, line: 42
 #: ../share/extensions/hershey.inx:42
 msgid "EMS Felix"
-msgstr ""
+msgstr "EMS Felix"
 
 #
 # File: ../share/extensions/hershey.inx, line: 44
 #: ../share/extensions/hershey.inx:44
 msgid "EMS Nixish"
-msgstr ""
+msgstr "EMS Nixish"
 
 #
 # File: ../share/extensions/hershey.inx, line: 45
 #: ../share/extensions/hershey.inx:45
 msgid "EMS Nixish Italic"
-msgstr ""
+msgstr "EMS Nixish kursiv"
 
 #
 # File: ../share/extensions/hershey.inx, line: 47
 #: ../share/extensions/hershey.inx:47
 msgid "EMS Osmotron"
-msgstr ""
+msgstr "EMS Osmotron"
 
 #
 # File: ../share/extensions/hershey.inx, line: 48
 #: ../share/extensions/hershey.inx:48
 msgid "EMS Readability"
-msgstr ""
+msgstr "EMS Readability"
 
 #
 # File: ../share/extensions/hershey.inx, line: 49
 #: ../share/extensions/hershey.inx:49
 msgid "EMS Readability Italic"
-msgstr ""
+msgstr "EMS Readability kursiv"
 
 #
 # File: ../share/extensions/hershey.inx, line: 50
 #: ../share/extensions/hershey.inx:50
 msgid "EMS Tech"
-msgstr ""
+msgstr "EMS Tech"
 
 #
 # File: ../share/extensions/hershey.inx, line: 53
 #. Block above this are derived from fonts licensed under SIL Open Font License
 #: ../share/extensions/hershey.inx:53
 msgid "Other (given below)"
-msgstr ""
+msgstr "Andere (unten angeben)"
 
 #
 # File: ../share/extensions/hershey.inx, line: 56
@@ -37667,6 +37675,9 @@ msgid ""
 "\n"
 "Other SVG font name or path (if \"Other\" selected above):\n"
 msgstr ""
+"\n"
+"Name oder Pfad einer anderen SVG-Schriftart (wenn oben 'Andere' gewählt"
+" wurde):\n"
 
 #: ../share/extensions/hershey.inx:59
 msgid "Name/Path:"
@@ -37680,7 +37691,7 @@ msgstr "Originaltext erhalten"
 # File: ../share/extensions/hershey.inx, line: 65
 #: ../share/extensions/hershey.inx:65
 msgid "Utilities"
-msgstr ""
+msgstr "Hilfsfunktionen"
 
 #
 # File: ../share/extensions/hershey.inx, line: 66
@@ -37690,6 +37701,9 @@ msgid ""
 "Hershey Text Utility Functions\n"
 "  "
 msgstr ""
+"\n"
+"Hilfsfunktionen für Hershey Text\n"
+"  "
 
 #: ../share/extensions/hershey.inx:71
 msgid "Generate font table"
@@ -37699,7 +37713,7 @@ msgstr "Schriftartenübersicht erzeugen"
 # File: ../share/extensions/hershey.inx, line: 72
 #: ../share/extensions/hershey.inx:72
 msgid "Generate glyph table in selected font"
-msgstr ""
+msgstr "Glyphentabelle für die ausgewählte Schriftart erzeugen"
 
 #
 # File: ../share/extensions/hershey.inx, line: 75
@@ -37709,6 +37723,9 @@ msgid ""
 "\n"
 "Sample text to use when generating font table:"
 msgstr ""
+"\n"
+"\n"
+"Beispieltext für die Schriftartenübersicht:"
 
 #: ../share/extensions/hershey.inx:78
 #: ../share/extensions/render_alphabetsoup.inx:7
@@ -37740,6 +37757,28 @@ msgid ""
 "\n"
 "  "
 msgstr ""
+"\n"
+"Diese Erweiterung wandelt alle Texte (oder alle ausgewählten Texte)\n"
+"im Dokument in Pfade um, die auf „Strich“- bzw. „Gravur“-Schriftarten\n"
+"basieren, die speziell für Plotter entworfen worden sind.\n"
+"\n"
+"Während die normalen „Konturschriftarten“ (z.B. TrueType) einen Bereich\n"
+"innerhalb einer unsichtbaren Konturlinie füllen,\n"
+"bestehen Gravurschriften nur aus einzelnen Strichen bzw.\n"
+"einer einfachen Kontur, ähnlich wie handgeschriebene Texte.\n"
+"\n"
+"Gravurschriften werden verwendet, um Pfade zu erzeugen, denen\n"
+"computergesteuerte Zeichen- und Schneidemaschinen (vom Stiftplotter\n"
+"bis zum CNC-Router) leicht folgen können.\n"
+"\n"
+"Eine vollständige Anleitung steht unter folgender Adresse\n"
+"zum Herunterladen bereit:\n"
+"  http://wiki.evilmadscientist.com/hershey\n"
+"\n"
+"Zum Ausgeben eines längeren Hilfetextes in diesem Reiter auf"
+" „Anwenden“ klicken.\n"
+"\n"
+"  "
 
 #: ../share/extensions/hershey.inx:108
 msgid "Credits"
@@ -37761,6 +37800,18 @@ msgid ""
 "credits embedded within the SVG fonts included with this\n"
 "distribution.\n"
 msgstr ""
+"\n"
+"Die klassischen Hershey-Schriftarten, die in dieser Erweiterung\n"
+"bereits enthalten sind, wurden von Arbeiten von Dr. A. V. Hershey"
+" abgeleitet.\n"
+"\n"
+"Weitere moderne „EMS“-Schriftarten in diesem Paket sind\n"
+"Derivate von Schriftarten, die unter der SIL Open Font License lizenziert"
+" sind.\n"
+"\n"
+"Vollständige Urheber- und Lizenzinformationen sind in den"
+" SVG-Schriftartendateien\n"
+"in diesem Paket enthalten.\n"
 
 #: ../share/extensions/hpgl_input.inx:3
 msgid "HPGL Input"
@@ -37921,9 +37972,8 @@ msgstr ""
 "Dies hat Vorrang vor der obigen Stiftnummer-Einstellung."
 
 #: ../share/extensions/hpgl_output.inx:28 ../share/extensions/plotter.inx:86
-#, fuzzy
 msgid "Plot Features"
-msgstr "Plot-Funktionen "
+msgstr "Plot-Funktionen"
 
 #: ../share/extensions/hpgl_output.inx:29 ../share/extensions/plotter.inx:87
 msgid "Overcut (mm):"
@@ -38001,6 +38051,8 @@ msgid ""
 "Check this to automatically (nondestructively) convert all objects to paths "
 "before plotting (Default: Checked)"
 msgstr ""
+"Aktivieren, um automatisch (und nicht-destruktiv) vor dem Plotten alle"
+" Objekte in Pfade umzuwandeln (standardmäßig aktiv)"
 
 #: ../share/extensions/hpgl_output.inx:37 ../share/extensions/plotter.inx:96
 msgid ""
@@ -38117,9 +38169,8 @@ msgstr "Kommandozeilen-Optionen"
 
 #. i18n. Please don't translate link unless the page exists in your language. Add your language code to the link this way: https://inkscape.org/doc/inkscape-man.[lang].html
 #: ../share/extensions/inkscape_help_commandline.inx:7
-#, fuzzy
 msgid "https://inkscape.org/doc/inkscape-man.html"
-msgstr "http://inkscape.org/doc/inkscape-man.de.html"
+msgstr "https://inkscape.org/doc/inkscape-man.de.html"
 
 #: ../share/extensions/inkscape_help_faq.inx:3
 msgid "FAQ"
@@ -38132,9 +38183,8 @@ msgstr "Referenz der Tasten- und Maus-Befehle"
 
 #. i18n. Please don't translate link unless the page exists in your language. Add your language code to the link this way: https://inkscape.org/doc/keys.[lang].html
 #: ../share/extensions/inkscape_help_keys.inx:7
-#, fuzzy
 msgid "https://inkscape.org/doc/keys.html"
-msgstr "http://inkscape.org/doc/keys092.de.html"
+msgstr "https://inkscape.org/doc/keys.de.html"
 
 #: ../share/extensions/inkscape_help_manual.inx:3
 msgid "Inkscape Manual"
@@ -38638,14 +38688,13 @@ msgid "Set number of columns to default:"
 msgstr "Anzahl der Spalten auf Standard setzen:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx:56
-#, fuzzy
 msgid ""
 "This extension allows you customize the key bindings JessyInk uses. Please "
 "see code.google.com/p/jessyink for more details."
 msgstr ""
 "Diese Erweiterung erlaubt Ihnen, die Tastenkombinationen zu verändern, die "
-"JessyInk benutzt. Bitte schauen Sie auf code.google.com/p/jessyink für "
-"weitere Details."
+"JessyInk benutzt. Für weitere Details besuchen Sie bitte"
+" code.google.com/p/jessyink."
 
 #: ../share/extensions/jessyInk_masterSlide.inx:3
 msgid "Master slide"
@@ -38688,13 +38737,12 @@ msgid "Dragging/zoom"
 msgstr "Ziehen/Zoom"
 
 #: ../share/extensions/jessyInk_mouseHandler.inx:15
-#, fuzzy
 msgid ""
 "This extension allows you customize the mouse handler JessyInk uses. Please "
 "see code.google.com/p/jessyink for more details."
 msgstr ""
-"Diese Erweiterung erlaubt Ihnen, die Mausbedienung in JessyInk zu verändern. "
-"Bitte schauen Sie auf code.google.com/p/jessyink für weitere Details."
+"Diese Erweiterung erlaubt Ihnen, die Mausbedienung in JessyInk zu verändern."
+" Für weitere Details besuchen Sie bitte code.google.com/p/jessyink."
 
 #: ../share/extensions/jessyInk_summary.inx:3
 msgid "Summary"
@@ -38859,7 +38907,7 @@ msgstr ""
 
 #: ../share/extensions/layer2png.inx:3
 msgid "Export Layer Slices"
-msgstr ""
+msgstr "Ausschnitte exportieren"
 
 #: ../share/extensions/layer2png.inx:6
 msgid "Icon mode"
@@ -39117,7 +39165,6 @@ msgid "Paragraph length fluctuation (sentences):"
 msgstr "Unterschiede in der Absatzlänge (Sätze):"
 
 #: ../share/extensions/lorem_ipsum.inx:13
-#, fuzzy
 msgid ""
 "This effect creates the standard \"Lorem Ipsum\" pseudolatin placeholder "
 "text. If a flowed text is selected, Lorem Ipsum is added to it; otherwise a "
@@ -39125,10 +39172,12 @@ msgid ""
 "a shape (such as a path) is selected, the flowed text will flow into that "
 "shape instead of the page."
 msgstr ""
-"Dieser Effekt erstellt den standard \"Lorem Ipsum\" Platzhaltetext. Wenn ein "
+"Diese Erweiterung erzeugt den Standard-„Lorem Ipsum“-Platzhaltertext. Wenn"
+" ein "
 "Fließtext ausgewählt ist, wird Lorem Ipsum angehängt; ansonsten wird ein "
 "neues Fließtextobjekt in einer neuen Ebene erzeugt, das so groß ist wie die "
-"Seite."
+"Seite. Wenn eine Form (wie z.B. ein Pfad) ausgewählt ist, wird der Text diese "
+"Form anstelle der Seite verwenden."
 
 #: ../share/extensions/markers_strokepaint.inx:3
 msgid "Color Markers"
@@ -39234,9 +39283,8 @@ msgid "Center (Middle)"
 msgstr "Zentrum (Mitte)"
 
 #: ../share/extensions/measure.inx:29
-#, fuzzy
 msgid "Right (End)"
-msgstr "Rechts (px):"
+msgstr "Rechts (Ende)"
 
 #: ../share/extensions/measure.inx:32
 msgid "Fixed Text"
@@ -39277,15 +39325,15 @@ msgid ""
 "0.03%."
 msgstr ""
 "Diese Erweiterung misst die Länge, die Fläche oder zeichnet den"
-" Flächenmittelpunkt des gewählten "
-"Pfades. Länge und Fläche werden als Textobjekt mit den gewählten Einheiten "
-"eingefügt. Der Masseschwerpunkt wird als Kreuz dargestellt.\n"
+" Flächenmittelpunkt des gewählten Pfades. Länge und Fläche werden als"
+" Textobjekt mit den gewählten Einheiten eingefügt. Der Masseschwerpunkt wird"
+" als Kreuz dargestellt.\n"
 "\n"
 "  * Der Text kann entweder entlang des Pfades oder als eigenständiger Text "
 "in einem festgelegten Winkel ausgerichtet werden. \n"
-"  * Die Anzahl der Nachkommastellen wird durch \"Präzision\" gewählt.\n"
-"  * Das Feld \"Versatz\" kontrolliert die Entfernung Text-Pfad. \n"
-"  * Der \"Maßstab\" kann zur Messung skalierter Pfade verwendet werden. Wenn "
+"  * Die Anzahl der Nachkommastellen wird durch „Präzision“ gewählt.\n"
+"  * Das Feld „Versatz“ kontrolliert die Entfernung Text-Pfad. \n"
+"  * Der „Maßstab“ kann zur Messung skalierter Pfade verwendet werden. Wenn "
 "zum Beispiel 1 cm in der Zeichnung 2,50 m in der Realität entspricht, muss "
 "der Maßstab auf 250 gesetzt werden.\n"
 "  * Wenn die Fläche berechnet wird, sollte das Ergebnis für Polygone und "
@@ -39540,7 +39588,7 @@ msgstr ""
 "Legt die Anzahl der signifikanten Stellen für die ausgegebenen Koordinaten "
 "fest. Signifikante  Stellen entsprechen *nicht* der Anzahl an "
 "Nachkommastellen, sondern der Gesamtzahl der Stellen in der Ausgabe. Wird "
-"zum Beispiel ein Wert von \"3\" festgelegt, wird die Koordinate 3.14159 als "
+"zum Beispiel ein Wert von „3“ festgelegt, wird die Koordinate 3.14159 als "
 "3.14 ausgegeben während die Koordinate 123.675 als 124 ausgegeben wird."
 
 #: ../share/extensions/output_scour.inx:14
@@ -39576,7 +39624,7 @@ msgid ""
 "\"Remove unused IDs\" to be set."
 msgstr ""
 "Enfernt unnötige Gruppen und hebt ihren Inhalt um eine Gliederungsebene an. "
-"Benötigt \"Unbenutzte IDs entfernen\"."
+"Benötigt „Unbenutzte IDs entfernen“."
 
 #: ../share/extensions/output_scour.inx:24
 msgid "Create groups for similar attributes"
@@ -39588,7 +39636,7 @@ msgid ""
 "(e.g. fill-color, stroke-opacity, ...)."
 msgstr ""
 "Erstellt Gruppen für aufeinanderfolgende Elemente, die mindestes ein "
-"Attribut gemeinsam haben (z.B. fill-color, stroke-opacity, ...)."
+"Attribut gemeinsam haben (z.B. fill-color, stroke-opacity, …)."
 
 #: ../share/extensions/output_scour.inx:28
 msgid "Keep editor data"
@@ -39716,9 +39764,9 @@ msgid ""
 "\"Format output with line-breaks and indentation\" is disabled."
 msgstr ""
 "Gibt die Art der Einrückung an, die für jede Gliederungsebene in der Ausgabe "
-"hinzugefügt wird. \"Keine\" deaktiviert die Einrückung. Diese Einstellung "
-"hat keine Wirkung, wenn \"Ausgabe mit Zeilenumbrüchen und Einrückungen "
-"formatieren\" deaktiviert ist."
+"hinzugefügt wird. „Keine“ deaktiviert die Einrückung. Diese Einstellung "
+"hat keine Wirkung, wenn „Ausgabe mit Zeilenumbrüchen und Einrückungen "
+"formatieren“ deaktiviert ist."
 
 #: ../share/extensions/output_scour.inx:62
 msgid "Space"
@@ -39742,7 +39790,7 @@ msgid ""
 "The depth of the chosen type of indentation. E.g. if you choose \"2\" every "
 "nesting level in the output will be indented by two additional spaces/tabs."
 msgstr ""
-"Tiefe der gewählten Einrückung. Wenn z.B. \"2\" gewählt wird, wird jede "
+"Tiefe der gewählten Einrückung. Wenn z.B. „2“ gewählt wird, wird jede "
 "zusätzliche Gliederungsebene in der Ausgabe um zwei zusätzliche Leerzeichen/"
 "Tabs eingerückt."
 
@@ -39973,6 +40021,7 @@ msgstr "Pfad zu Gitter"
 #: ../share/extensions/path_mesh_p2m.inx:16
 msgid "Convert geometry of selected path (4 corners) to a meshgradient"
 msgstr ""
+"Wandelt die Geometrie des gewählten Pfades (4 Knoten) in ein Verlaufsgitter um"
 
 #: ../share/extensions/pathalongpath.inx:3
 msgid "Pattern along Path"
@@ -40026,7 +40075,7 @@ msgid ""
 "or clones are allowed."
 msgstr ""
 "Dieser Effekt verstreut oder verbiegt ein Muster entlang eines beliebigen "
-"\"Gerüst-\"Pfades. Das Muster ist das oberste Objekt in der Auswahl. "
+"„Gerüst“-Pfades. Das Muster ist das oberste Objekt in der Auswahl. "
 "Gruppierungen von Pfaden, Formen oder Klonen sind erlaubt."
 
 #: ../share/extensions/pathscatter.inx:9
@@ -40075,15 +40124,15 @@ msgid ""
 "pattern must be the topmost object in the selection. Groups of paths, "
 "shapes, clones are allowed."
 msgstr ""
-"Dieser Effekt verstreut ein Muster entlang eines beliebigen \"Gerüst-"
-"\"Pfades. Das Muster ist das oberste Objekt in einer Auswahl (Gruppierungen "
-"von Pfaden/Formen/Klonen... sind erlaubt)."
+"Dieser Effekt verstreut ein Muster entlang eines beliebigen „Gerüst"
+"“-Pfades. Das Muster ist das oberste Objekt in einer Auswahl (Gruppierungen "
+"von Pfaden/Formen/Klonen … sind erlaubt)."
 
 #
 # File: ../share/extensions/pdflatex.inx, line: 3
 #: ../share/extensions/pdflatex.inx:3
 msgid "LaTeX (pdflatex)"
-msgstr ""
+msgstr "LaTeX (pdflatex)"
 
 #: ../share/extensions/pdflatex.inx:6
 msgid "LaTeX input:"
@@ -40188,6 +40237,9 @@ msgid ""
 "Snap selected paths, images, and rectangles to pixel boundaries. Strokes "
 "with a non-zero odd width are snapped to midpoints, so they align correctly"
 msgstr ""
+"Rastet die gewählten Pfade, Bilder und Rechtecke an ganzzahligen Pixeln ein."
+" Konturen mit einer ungeraden Breite rasten in der Mitte ein, so dass sie"
+" korrekt ausgerichtet sind."
 
 #
 # File: ../share/extensions/pixelsnap.inx, line: 8
@@ -40196,6 +40248,8 @@ msgid ""
 "Snap unselected ancestors' translations (groups, layers, document height) "
 "first"
 msgstr ""
+"Die nicht ausgewählten übergeordneten Elternelemente (Gruppen, Ebenen,"
+" Dokumentenhöhe) zuerst einrasten lassen"
 
 #
 # File: ../share/extensions/pixelsnap.inx, line: 9
@@ -40204,12 +40258,14 @@ msgid ""
 "Calculate offset relative to unselected ancestors' transforms (includes "
 "document height offset)"
 msgstr ""
+"Den Abstand relativ zu den Transformationen nicht ausgewählter Elternelemente"
+" berechnen (einschließlich Dokumentenhöhe)"
 
 #
 # File: ../share/extensions/pixelsnap.inx, line: 16
 #: ../share/extensions/pixelsnap.inx:11
 msgid "Maximum slope to consider straight (%)"
-msgstr ""
+msgstr "Maximale Neigung, die noch als gerade betrachtet wird (%)"
 
 #: ../share/extensions/plotter.inx:3
 msgid "Plot"
@@ -40606,7 +40662,7 @@ msgstr "Mittel"
 
 #: ../share/extensions/prepare_file_save_as.inx:3
 msgid "Pre-Process File Save As..."
-msgstr ""
+msgstr "Vorbereitung für 'Datei speichern als' …"
 
 #: ../share/extensions/previous_glyph_layer.inx:3
 msgid "View Previous Glyph"
@@ -40717,7 +40773,7 @@ msgid ""
 "With \"Auto\", the size of the barcode depends on the length of the text and "
 "the error correction level"
 msgstr ""
-"Mit \"Auto\" ist die Größe des Barcodes von der Textlänge und des "
+"Mit „Auto“ ist die Größe des Barcodes von der Textlänge und des "
 "Fehlerkorrekturlevels abhängig"
 
 #: ../share/extensions/render_barcode_qrcode.inx:22
@@ -40753,19 +40809,16 @@ msgid "Drawing type:"
 msgstr "Typ:"
 
 #: ../share/extensions/render_barcode_qrcode.inx:37
-#, fuzzy
 msgid "Smooth: neutral"
-msgstr "Glatter Knoten"
+msgstr "Geglättet: neutral"
 
 #: ../share/extensions/render_barcode_qrcode.inx:38
-#, fuzzy
 msgid "Smooth: greedy"
-msgstr "Geglättet"
+msgstr "Geglättet: gierig"
 
 #: ../share/extensions/render_barcode_qrcode.inx:39
-#, fuzzy
 msgid "Smooth: proud"
-msgstr "Glatter Knoten"
+msgstr "Geglättet: stolz"
 
 #: ../share/extensions/render_barcode_qrcode.inx:40
 msgid "Path: simple"
@@ -40783,13 +40836,13 @@ msgstr "Pfad: benutzerdefiniert"
 # File: ../share/extensions/render_barcode_qrcode.inx, line: 44
 #: ../share/extensions/render_barcode_qrcode.inx:44
 msgid "Square sharp: obsolete"
-msgstr ""
+msgstr "Kantiges Quadrat: obsolet"
 
 #
 # File: ../share/extensions/render_barcode_qrcode.inx, line: 46
 #: ../share/extensions/render_barcode_qrcode.inx:46
 msgid "Smooth square value (0-1):"
-msgstr ""
+msgstr "Quadratglättung (0–1):"
 
 #
 # File: ../share/extensions/render_barcode_qrcode.inx, line: 47
@@ -40798,12 +40851,14 @@ msgid ""
 "For Path: custom set the path in relative coordinates (0,0)=(left,up) square "
 "size 1.0 "
 msgstr ""
+"Für 'Pfad: benutzerdefiniert' den Pfad in relativen Koordinaten angeben;"
+" (0,0) = links oben, Größe des Quadrats: 1,0"
 
 #
 # File: ../share/extensions/render_barcode_qrcode.inx, line: 48
 #: ../share/extensions/render_barcode_qrcode.inx:48
 msgid "Path string (Path: custom) or symbol #url:"
-msgstr ""
+msgstr "Pfaddaten (Pfad: benutzerdefiniert) oder #url des Symbols:"
 
 #: ../share/extensions/render_gear_rack.inx:3
 msgid "Rack Gear"
@@ -41057,9 +41112,8 @@ msgid "Create seamless patterns."
 msgstr "Nahtlose Muster erzeugen"
 
 #: ../share/extensions/seamless_pattern_procedural.inx:19
-#, fuzzy
 msgid "live seamless patterns"
-msgstr "Nahtloses Muster"
+msgstr "direkt nahtlos muster"
 
 #: ../share/extensions/setup_typography_canvas.inx:3
 msgid "1 - Setup Typography Canvas"
@@ -41323,11 +41377,11 @@ msgstr "Zeichenkodierung:"
 
 #: ../share/extensions/svgcalendar.inx:106
 msgid "Latin - iso-8859-15 - Western Europe"
-msgstr ""
+msgstr "Latin - iso-8859-15 - Westeuropa"
 
 #: ../share/extensions/svgcalendar.inx:120
 msgid "Windows - Central and Eastern Europe"
-msgstr ""
+msgstr "Windows - Zentral- und Osteuropa"
 
 #: ../share/extensions/svgcalendar.inx:121
 msgid "Windows - Russian and more"
@@ -41363,7 +41417,7 @@ msgstr "Windows - Vietnamesisch"
 
 #: ../share/extensions/svgcalendar.inx:129
 msgid "UTF-32 - All languages"
-msgstr ""
+msgstr "UTF-32 - Alle Sprachen"
 
 #: ../share/extensions/svgcalendar.inx:130
 msgid "UTF-16 - All languages"
@@ -41371,7 +41425,7 @@ msgstr "UTF-16 - Alle Sprachen"
 
 #: ../share/extensions/svgcalendar.inx:131
 msgid "UTF-8 - All languages"
-msgstr ""
+msgstr "UTF-8 - Alle Sprachen"
 
 #: ../share/extensions/svgcalendar.inx:133
 msgid ""
@@ -41725,6 +41779,8 @@ msgstr "wenn Element geladen"
 #: ../share/extensions/web_interactive_mockup.inx:22
 msgid "This effect adds interaction in a viewer like a web browser."
 msgstr ""
+"Diese Erweiterung ermöglicht es, dass die Zeichnung in einem Webbrowser auf"
+" Benutzereingaben reagiert."
 
 #
 # File: ../share/extensions/web_interactive_mockup.inx, line: 23
@@ -41732,13 +41788,12 @@ msgstr ""
 msgid ""
 "It creates a link effect by changing to viewbox from one position to another."
 msgstr ""
+"Sie simuliert Links, indem sie die Ansicht auf das Bild in einen anderen"
+" Bereich verschiebt."
 
 #: ../share/extensions/web_interactive_mockup.inx:24
-#, fuzzy
 msgid "When selecting object the last one is the one we jump to."
-msgstr ""
-"Wenn Objekte skaliert werden, dann wird die Breite der Kontur ebenso "
-"skaliert."
+msgstr "Das zuletzt gewählte Objekt ist das, zu dem gesprungen werden soll."
 
 #: ../share/extensions/web_interactive_mockup.inx:30
 #: ../share/extensions/web_set_att.inx:43
@@ -41971,7 +42026,7 @@ msgstr ""
 # File: ../share/extensions/webslicer_create_rect.inx, line: 11
 #: ../share/extensions/webslicer_create_rect.inx:25
 msgid "GIF"
-msgstr ""
+msgstr "GIF"
 
 #: ../share/extensions/webslicer_create_rect.inx:26
 msgid "GIF specific options"
@@ -41989,7 +42044,7 @@ msgstr "Palettengröße:"
 # File: ../share/extensions/webslicer_create_rect.inx, line: 33
 #: ../share/extensions/webslicer_create_rect.inx:33
 msgid "HTML"
-msgstr ""
+msgstr "HTML"
 
 #: ../share/extensions/webslicer_create_rect.inx:36
 msgid "Options for HTML export"
@@ -42186,7 +42241,7 @@ msgstr "image;editor;vector;drawing;"
 # File: ../org.inkscape.Inkscape.desktop.template, line: 17
 #: ../org.inkscape.Inkscape.desktop.template:17
 msgid "${INKSCAPE_ICONPATH}"
-msgstr ""
+msgstr "${INKSCAPE_ICONPATH}"
 
 #: ../org.inkscape.Inkscape.desktop.template:21
 msgid "New Drawing"
@@ -42273,34 +42328,30 @@ msgstr "Pixel"
 # File: ../share/ui/units.xml, line: 15
 #: ../share/ui/units.xml:15
 msgid "CSS Pixels (96/inch)"
-msgstr ""
+msgstr "CSS-Pixel (96 pro Zoll)"
 
 #: ../share/ui/units.xml:18
-#, fuzzy
 msgid "point"
 msgstr "Punkt"
 
 #: ../share/ui/units.xml:19
-#, fuzzy
 msgid "points"
-msgstr "Punkte"
+msgstr "Punkt"
 
 #: ../share/ui/units.xml:22
-#, fuzzy
 msgid "PostScript points (72/inch)"
-msgstr "PostScript (*.ps)"
+msgstr "PostScript Punkt (72 pro Zoll)"
 
 #
 # File: ../share/ui/units.xml, line: 25
 #: ../share/ui/units.xml:25
 msgid "pica"
-msgstr ""
+msgstr "Pica"
 
 # lt. http://www.typografie.info/3/page/wiki.html/_/fachbegriffe/unicase-r25
 #: ../share/ui/units.xml:26
-#, fuzzy
 msgid "picas"
-msgstr "Unikameral"
+msgstr "Pica"
 
 #: ../share/ui/units.xml:29
 msgid "12 points"
@@ -42310,7 +42361,7 @@ msgstr "12 Punkte"
 # File: ../share/ui/units.xml, line: 32
 #: ../share/ui/units.xml:32
 msgid "inch"
-msgstr ""
+msgstr "Zoll"
 
 #: ../share/ui/units.xml:33
 msgid "inches"
@@ -42320,7 +42371,7 @@ msgstr "Zoll"
 # File: ../share/ui/units.xml, line: 36
 #: ../share/ui/units.xml:36
 msgid "Inches (96 px/in)"
-msgstr ""
+msgstr "Zoll (96 px pro Zoll)"
 
 #: ../share/ui/units.xml:39
 msgid "millimeter"
@@ -42351,76 +42402,68 @@ msgid "degree"
 msgstr "Grad"
 
 #: ../share/ui/units.xml:60
-#, fuzzy
 msgid "radian"
-msgstr "radial"
+msgstr "Radiant"
 
 #: ../share/ui/units.xml:61
-#, fuzzy
 msgid "radians"
-msgstr "radial"
+msgstr "Radianten"
 
 #
 # File: ../share/ui/units.xml, line: 64
 #: ../share/ui/units.xml:64
 msgid "Radians (180/pi deg/rad)"
-msgstr ""
+msgstr "Bogenmaß (180/pi deg/rad)"
 
 #: ../share/ui/units.xml:67
-#, fuzzy
 msgid "gradian"
-msgstr "radial"
+msgstr "Gon"
 
 #: ../share/ui/units.xml:68
-#, fuzzy
 msgid "gradians"
-msgstr "radial"
+msgstr "Gon"
 
 #
 # File: ../share/ui/units.xml, line: 71
 #: ../share/ui/units.xml:71
 msgid "Gradians (360/400 deg/grad)"
-msgstr ""
+msgstr "Gon, Neugrad (360/400 deg/gon)"
 
 #
 # File: ../share/ui/units.xml, line: 74
 #: ../share/ui/units.xml:74
 msgid "turn"
-msgstr ""
+msgstr "Turn"
 
 #: ../share/ui/units.xml:75
 msgid "turns"
-msgstr "Umdrehungen"
+msgstr "Turns"
 
 #
 # File: ../share/ui/units.xml, line: 78
 #: ../share/ui/units.xml:78
 msgid "Turns (360 deg/turn)"
-msgstr ""
+msgstr "Drehungen (360 deg/turn)"
 
 #: ../share/ui/units.xml:81
-#, fuzzy
 msgid "font-height"
-msgstr "Punktförmige Lichtquelle"
+msgstr "em"
 
 #: ../share/ui/units.xml:82
-#, fuzzy
 msgid "font-heights"
-msgstr "Punktförmige Lichtquelle"
+msgstr "em"
 
 #: ../share/ui/units.xml:85
 msgid "Font height"
-msgstr "Schriftgröße"
+msgstr "em (Geviert)"
 
 #: ../share/ui/units.xml:88
-#, fuzzy
 msgid "x-height"
-msgstr "Höhe"
+msgstr "x-Höhe"
 
 #: ../share/ui/units.xml:89
-#, fuzzy
 msgid "x-heights"
-msgstr "Höhe"
+msgstr "x-Höhen"
 
 #: ../share/ui/units.xml:92
 msgid "Height of letter 'x'"
@@ -42430,19 +42473,19 @@ msgstr "Höhe des Buchstaben 'x'"
 # File: ../share/ui/units.xml, line: 95
 #: ../share/ui/units.xml:95
 msgid "half-em"
-msgstr ""
+msgstr "en"
 
 #
 # File: ../share/ui/units.xml, line: 96
 #: ../share/ui/units.xml:96
 msgid "half-ems"
-msgstr ""
+msgstr "en"
 
 #
 # File: ../share/ui/units.xml, line: 99
 #: ../share/ui/units.xml:99
 msgid "Half of font height"
-msgstr ""
+msgstr "en (Halbgeviert)"
 
 #, fuzzy
 #~ msgid "Bamum. "
