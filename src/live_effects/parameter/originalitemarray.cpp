@@ -114,9 +114,8 @@ void OriginalItemArrayParam::on_active_toggled(const Glib::ustring& item)
     row[_model->_colActive] = !row[_model->_colActive];
     w->actived = row[_model->_colActive];
     
-    gchar * full = param_getSVGValue();
-    param_write_to_repr(full);
-    g_free(full);
+    auto full = param_getSVGValue();
+    param_write_to_repr(full.c_str());
     DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                        _("Link item parameter to item"));
 }
@@ -214,9 +213,8 @@ void OriginalItemArrayParam::on_up_button_click()
             }
         }
         
-        gchar * full = param_getSVGValue();
-        param_write_to_repr(full);
-        g_free(full);
+        auto full = param_getSVGValue();
+        param_write_to_repr(full.c_str());
         
         DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                        _("Move item up"));
@@ -244,9 +242,8 @@ void OriginalItemArrayParam::on_down_button_click()
             }
         }
         
-        gchar * full = param_getSVGValue();
-        param_write_to_repr(full);
-        g_free(full);
+        auto full = param_getSVGValue();
+        param_write_to_repr(full.c_str());
         
         DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                        _("Move item down"));
@@ -262,9 +259,8 @@ void OriginalItemArrayParam::on_remove_button_click()
         Gtk::TreeModel::Row row = *iter;
         remove_link(row[_model->_colObject]);
         
-        gchar * full = param_getSVGValue();
-        param_write_to_repr(full);
-        g_free(full);
+        auto full = param_getSVGValue();
+        param_write_to_repr(full.c_str());
         
         DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                        _("Remove item"));
@@ -336,9 +332,8 @@ void OriginalItemArrayParam::remove_link(ItemAndActive* to)
 void OriginalItemArrayParam::linked_delete(SPObject */*deleted*/, ItemAndActive* to)
 {
     remove_link(to);
-    gchar * full = param_getSVGValue();
-    param_write_to_repr(full);
-    g_free(full);
+    auto full = param_getSVGValue();
+    param_write_to_repr(full.c_str());
 }
 
 bool OriginalItemArrayParam::_updateLink(const Gtk::TreeIter& iter, ItemAndActive* pd)
@@ -418,7 +413,8 @@ bool OriginalItemArrayParam::param_readSVGValue(const gchar* strvalue)
     return false;
 }
 
-gchar * OriginalItemArrayParam::param_getSVGValue() const
+Glib::ustring
+OriginalItemArrayParam::param_getSVGValue() const
 {
     Inkscape::SVGOStringStream os;
     bool foundOne = false;
@@ -430,12 +426,13 @@ gchar * OriginalItemArrayParam::param_getSVGValue() const
         }
         os << iter->href << "," << (iter->actived ? "1" : "0");
     }
-    return g_strdup(os.str().c_str());
+    return os.str();
 }
 
-gchar * OriginalItemArrayParam::param_getDefaultSVGValue() const
+Glib::ustring
+OriginalItemArrayParam::param_getDefaultSVGValue() const
 {
-    return g_strdup("");
+    return "";
 }
 
 void OriginalItemArrayParam::update()

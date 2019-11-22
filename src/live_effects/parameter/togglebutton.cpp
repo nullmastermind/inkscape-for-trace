@@ -60,16 +60,16 @@ ToggleButtonParam::param_readSVGValue(const gchar * strvalue)
     return true; // not correct: if value is unacceptable, should return false!
 }
 
-gchar *
+Glib::ustring
 ToggleButtonParam::param_getSVGValue() const
 {
-    return g_strdup(value ? "true" : "false");
+    return value ? "true" : "false";
 }
 
-gchar *
+Glib::ustring
 ToggleButtonParam::param_getDefaultSVGValue() const
 {
-    return g_strdup(defvalue ? "true" : "false");
+    return defvalue ? "true" : "false";
 }
 
 void 

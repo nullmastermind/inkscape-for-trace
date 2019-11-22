@@ -31,8 +31,8 @@ public:
     ~RandomParam() override;
 
     bool param_readSVGValue(const gchar * strvalue) override;
-    gchar * param_getSVGValue() const override;
-    gchar * param_getDefaultSVGValue() const override;
+    Glib::ustring param_getSVGValue() const override;
+    Glib::ustring param_getDefaultSVGValue() const override;
     void param_set_default() override;
 
     Gtk::Widget * param_newWidget() override;

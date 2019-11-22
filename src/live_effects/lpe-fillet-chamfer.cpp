@@ -103,9 +103,8 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
         SatelliteType satellite_type = FILLET;
         std::map<std::string, SatelliteType> gchar_map_to_satellite_type =
         boost::assign::map_list_of("F", FILLET)("IF", INVERSE_FILLET)("C", CHAMFER)("IC", INVERSE_CHAMFER)("KO", INVALID_SATELLITE);
-        gchar * mode_str = mode.param_getSVGValue();
-        std::map<std::string, SatelliteType>::iterator it = gchar_map_to_satellite_type.find(std::string(mode_str));
-        g_free(mode_str);
+        auto mode_str = mode.param_getSVGValue();
+        std::map<std::string, SatelliteType>::iterator it = gchar_map_to_satellite_type.find(mode_str.raw());
         if (it != gchar_map_to_satellite_type.end()) {
             satellite_type = it->second;
         }
@@ -322,9 +321,8 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
                 SatelliteType satellite_type = FILLET;
                 std::map<std::string, SatelliteType> gchar_map_to_satellite_type =
                 boost::assign::map_list_of("F", FILLET)("IF", INVERSE_FILLET)("C", CHAMFER)("IC", INVERSE_CHAMFER)("KO", INVALID_SATELLITE);
-                gchar * mode_str = mode.param_getSVGValue();
-                std::map<std::string, SatelliteType>::iterator it = gchar_map_to_satellite_type.find(std::string(mode_str));
-                g_free(mode_str);
+                auto mode_str = mode.param_getSVGValue();
+                std::map<std::string, SatelliteType>::iterator it = gchar_map_to_satellite_type.find(mode_str.raw());
                 if (it != gchar_map_to_satellite_type.end()) {
                     satellite_type = it->second;
                 }

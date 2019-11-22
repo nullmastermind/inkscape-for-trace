@@ -37,8 +37,8 @@ public:
     inline const gchar *handleTip() const { return param_tooltip.c_str(); }
 
     bool param_readSVGValue(const gchar * strvalue) override;
-    gchar * param_getSVGValue() const override;
-    gchar * param_getDefaultSVGValue() const override;
+    Glib::ustring param_getSVGValue() const override;
+    Glib::ustring param_getDefaultSVGValue() const override;
 
     Geom::Point getVector() const { return vector; };
     Geom::Point getOrigin() const { return origin; };

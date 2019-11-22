@@ -82,20 +82,20 @@ ColorPickerParam::param_readSVGValue(const gchar * strvalue)
     return true;
 }
 
-gchar *
+Glib::ustring
 ColorPickerParam::param_getSVGValue() const
 {
     gchar c[32];
     sprintf(c, "#%08x", value);
-    return strdup(c);
+    return c;
 }
 
-gchar *
+Glib::ustring
 ColorPickerParam::param_getDefaultSVGValue() const
 {
     gchar c[32];
     sprintf(c, "#%08x", defvalue);
-    return strdup(c);
+    return c;
 }
 
 Gtk::Widget *

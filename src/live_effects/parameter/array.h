@@ -60,14 +60,14 @@ public:
         return true;
     }
     void param_update_default(const gchar * default_value) override{};
-    gchar * param_getSVGValue() const override {
+    Glib::ustring param_getSVGValue() const override {
         Inkscape::SVGOStringStream os;
         writesvg(os, _vector);
-        return g_strdup(os.str().c_str());
+        return os.str();
     }
     
-    gchar * param_getDefaultSVGValue() const override {
-        return g_strdup("");
+    Glib::ustring param_getDefaultSVGValue() const override {
+        return "";
     }
 
     void param_setValue(std::vector<StorageType> const &new_vector) {

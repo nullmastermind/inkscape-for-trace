@@ -65,12 +65,12 @@ public:
 
         return true;
     };
-    gchar * param_getSVGValue() const override {
-        return g_strdup( enumdataconv->get_key(value).c_str() );
+    Glib::ustring param_getSVGValue() const override {
+        return enumdataconv->get_key(value);
     };
     
-    gchar * param_getDefaultSVGValue() const override {
-        return g_strdup( enumdataconv->get_key(defvalue).c_str() );
+    Glib::ustring param_getDefaultSVGValue() const override {
+        return enumdataconv->get_key(defvalue).c_str();
     };
     
     E get_value() const {

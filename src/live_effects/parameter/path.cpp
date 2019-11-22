@@ -9,6 +9,7 @@
 #include "live_effects/parameter/path.h"
 
 #include <glibmm/i18n.h>
+#include <glibmm/utility.h>
 
 #include <gtkmm/button.h>
 #include <gtkmm/label.h>
@@ -173,21 +174,21 @@ PathParam::param_readSVGValue(const gchar * strvalue)
     return false;
 }
 
-gchar *
+Glib::ustring
 PathParam::param_getSVGValue() const
 {
     if (href) {
-        return g_strdup(href);
+        return href;
     } else {
         gchar * svgd = sp_svg_write_path( _pathvector );
-        return svgd;
+        return Glib::convert_return_gchar_ptr_to_ustring(svgd);
     }
 }
 
-gchar *
+Glib::ustring
 PathParam::param_getDefaultSVGValue() const
 {
-    return g_strdup(defvalue);
+    return defvalue;
 }
 
 void
@@ -510,13 +511,16 @@ PathParam::paste_param_path(const char *svgd)
         // remove possible link to path
         remove_link();
         SPItem * item = SP_ACTIVE_DESKTOP->getSelection()->singleItem();
+        char *svgd_new = nullptr;
         if (item != nullptr) {
             Geom::PathVector path_clipboard =  sp_svg_read_pathv(svgd);
             path_clipboard *= item->i2doc_affine().inverse();
-            svgd = sp_svg_write_path( path_clipboard );
+            svgd_new = sp_svg_write_path(path_clipboard);
+            svgd = svgd_new;
         }
 
         param_write_to_repr(svgd);
+        g_free(svgd_new);
         signal_path_pasted.emit();
     }
 }

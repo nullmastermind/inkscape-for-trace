@@ -28,8 +28,8 @@ public:
     Gtk::Widget * param_newWidget() override;
     bool param_readSVGValue(const gchar * strvalue) override;
     void param_update_default(const gchar * default_value) override;
-    gchar * param_getSVGValue() const override;
-    gchar * param_getDefaultSVGValue() const override;
+    Glib::ustring param_getSVGValue() const override;
+    Glib::ustring param_getDefaultSVGValue() const override;
 
     void param_setValue(Glib::ustring newvalue);
     

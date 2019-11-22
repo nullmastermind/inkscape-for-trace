@@ -140,9 +140,7 @@ void OriginalPathArrayParam::on_reverse_toggled(const Glib::ustring& path)
     row[_model->_colReverse] = !row[_model->_colReverse];
     w->reversed = row[_model->_colReverse];
     
-    gchar * full = param_getSVGValue();
-    param_write_to_repr(full);
-    g_free(full);
+    param_write_to_repr(param_getSVGValue().c_str());
     DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                        _("Link path parameter to path"));
 }
@@ -155,9 +153,7 @@ void OriginalPathArrayParam::on_visible_toggled(const Glib::ustring& path)
     row[_model->_colVisible] = !row[_model->_colVisible];
     w->visibled = row[_model->_colVisible];
     
-    gchar * full = param_getSVGValue();
-    param_write_to_repr(full);
-    g_free(full);
+    param_write_to_repr(param_getSVGValue().c_str());
     DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                        _("Toggle path parameter visibility"));
 }
@@ -255,10 +251,8 @@ void OriginalPathArrayParam::on_up_button_click()
             }
         }
         
-        gchar * full = param_getSVGValue();
-        param_write_to_repr(full);
-        g_free(full);
-        
+        param_write_to_repr(param_getSVGValue().c_str());
+
         DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                        _("Move path up"));
         
@@ -285,9 +279,7 @@ void OriginalPathArrayParam::on_down_button_click()
             }
         }
         
-        gchar * full = param_getSVGValue();
-        param_write_to_repr(full);
-        g_free(full);
+        param_write_to_repr(param_getSVGValue().c_str());
         
         DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                        _("Move path down"));
@@ -303,9 +295,7 @@ void OriginalPathArrayParam::on_remove_button_click()
         Gtk::TreeModel::Row row = *iter;
         remove_link(row[_model->_colObject]);
         
-        gchar * full = param_getSVGValue();
-        param_write_to_repr(full);
-        g_free(full);
+        param_write_to_repr(param_getSVGValue().c_str());
         
         DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                        _("Remove path"));
@@ -378,9 +368,7 @@ void OriginalPathArrayParam::linked_delete(SPObject */*deleted*/, PathAndDirecti
 {
     //remove_link(to);
     
-    gchar * full = param_getSVGValue();
-    param_write_to_repr(full);
-    g_free(full);
+    param_write_to_repr(param_getSVGValue().c_str());
 }
 
 bool OriginalPathArrayParam::_updateLink(const Gtk::TreeIter& iter, PathAndDirectionAndVisible* pd)
@@ -507,7 +495,8 @@ bool OriginalPathArrayParam::param_readSVGValue(const gchar* strvalue)
     return false;
 }
 
-gchar * OriginalPathArrayParam::param_getSVGValue() const
+Glib::ustring
+OriginalPathArrayParam::param_getSVGValue() const
 {
     Inkscape::SVGOStringStream os;
     bool foundOne = false;
@@ -519,12 +508,13 @@ gchar * OriginalPathArrayParam::param_getSVGValue() const
         }
         os << iter->href << "," << (iter->reversed ? "1" : "0") << "," << (iter->visibled ? "1" : "0");
     }
-    return g_strdup(os.str().c_str());
+    return os.str();
 }
 
-gchar * OriginalPathArrayParam::param_getDefaultSVGValue() const
+Glib::ustring
+OriginalPathArrayParam::param_getDefaultSVGValue() const
 {
-    return g_strdup("");
+    return "";
 }
 
 void OriginalPathArrayParam::update()

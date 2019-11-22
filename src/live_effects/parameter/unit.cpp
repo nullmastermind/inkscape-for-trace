@@ -42,16 +42,16 @@ UnitParam::param_readSVGValue(const gchar * strvalue)
     return false;
 }
 
-gchar *
+Glib::ustring
 UnitParam::param_getSVGValue() const
 {
-    return g_strdup(unit->abbr.c_str());
+    return unit->abbr;
 }
 
-gchar *
+Glib::ustring
 UnitParam::param_getDefaultSVGValue() const
 {
-    return g_strdup(defunit->abbr.c_str());
+    return defunit->abbr;
 }
 
 void

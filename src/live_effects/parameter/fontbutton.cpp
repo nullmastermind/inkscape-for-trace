@@ -50,16 +50,16 @@ FontButtonParam::param_readSVGValue(const gchar * strvalue)
     return true;
 }
 
-gchar *
+Glib::ustring
 FontButtonParam::param_getSVGValue() const
 {
-    return g_strdup(value.c_str());
+    return value.c_str();
 }
 
-gchar *
+Glib::ustring
 FontButtonParam::param_getDefaultSVGValue() const
 {
-    return g_strdup(defvalue.c_str());
+    return defvalue;
 }
 
 

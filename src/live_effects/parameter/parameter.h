@@ -59,8 +59,8 @@ class Parameter {
     Parameter &operator=(const Parameter &) = delete;
 
     virtual bool param_readSVGValue(const gchar *strvalue) = 0; // returns true if new value is valid / accepted.
-    virtual gchar *param_getSVGValue() const = 0;
-    virtual gchar *param_getDefaultSVGValue() const = 0;
+    virtual Glib::ustring param_getSVGValue() const = 0;
+    virtual Glib::ustring param_getDefaultSVGValue() const = 0;
     virtual void param_widget_is_visible(bool is_visible) { widget_is_visible = is_visible; }
     virtual void param_widget_is_enabled(bool is_enabled) { widget_is_enabled = is_enabled; }
     void write_to_SVG();
@@ -107,8 +107,8 @@ class ScalarParam : public Parameter {
     ScalarParam &operator=(const ScalarParam &) = delete;
 
     bool param_readSVGValue(const gchar *strvalue) override;
-    gchar *param_getSVGValue() const override;
-    gchar *param_getDefaultSVGValue() const override;
+    Glib::ustring param_getSVGValue() const override;
+    Glib::ustring param_getDefaultSVGValue() const override;
 
     void param_set_default() override;
     void param_update_default(gdouble default_value);

@@ -62,20 +62,20 @@ RandomParam::param_readSVGValue(const gchar * strvalue)
     return false;
 }
 
-gchar *
+Glib::ustring
 RandomParam::param_getSVGValue() const
 {
     Inkscape::SVGOStringStream os;
     os << value << ';' << startseed;
-    return g_strdup(os.str().c_str());
+    return os.str();
 }
 
-gchar *
+Glib::ustring
 RandomParam::param_getDefaultSVGValue() const
 {
     Inkscape::SVGOStringStream os;
     os << defvalue << ';' << defseed;
-    return g_strdup(os.str().c_str());
+    return os.str();
 }
 
 void

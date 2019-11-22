@@ -456,9 +456,8 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
     }
     SPCSSAttr *css = sp_repr_css_attr_new();
     Inkscape::FontLister *fontlister = Inkscape::FontLister::get_instance();
-    gchar * fontbutton_str = fontbutton.param_getSVGValue();
-    fontlister->fill_css(css, Glib::ustring(fontbutton_str));
-    g_free(fontbutton_str);
+    auto fontbutton_str = fontbutton.param_getSVGValue();
+    fontlister->fill_css(css, fontbutton_str);
     std::stringstream font_size;
     setlocale (LC_NUMERIC, "C");
     font_size <<  fontsize << "px";
@@ -497,9 +496,7 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
         g_snprintf(length_str, 64, "%.*f", (int)precision, length);
     }
     setlocale (LC_NUMERIC, locale_base);
-    gchar * format_str = format.param_getSVGValue();
-    Glib::ustring label_value(format_str);
-    g_free(format_str);
+    auto label_value = format.param_getSVGValue();
     size_t s = label_value.find(Glib::ustring("{measure}"),0);
     if(s < label_value.length()) {
         label_value.replace(s, 9, length_str);
@@ -931,11 +928,9 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
             colorchanged = true;
         }
         rgb32 = color32;
-        gchar * fontbutton_str = fontbutton.param_getSVGValue();
-        Glib::ustring fontdesc_ustring = Glib::ustring(fontbutton_str);
+        auto fontdesc_ustring = fontbutton.param_getSVGValue();
         Pango::FontDescription fontdesc(fontdesc_ustring);
         double newfontsize = fontdesc.get_size() / (double)Pango::SCALE;
-        g_free(fontbutton_str);
         bool fontsizechanged = false;
         if (newfontsize != fontsize) {
             fontsize = Inkscape::Util::Quantity::convert(newfontsize, "pt", display_unit.c_str());
@@ -951,11 +946,10 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
             pathvector *= affinetransform;
         }
         c->unref();
-        gchar * format_str = format.param_getSVGValue();
-        if (Glib::ustring(format_str).empty()) {
+        auto format_str = format.param_getSVGValue();
+        if (format_str.empty()) {
             format.param_setValue(Glib::ustring("{measure}{unit}"));
         }
-        g_free(format_str);
         size_t ncurves = pathvector.curveCount();
         items.clear();
         double start_angle_cross = 0;
@@ -988,10 +982,9 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                 } else if (pathvector[i].size() > j + 1) {
                     next = pathvector[i].pointAt(j+2);
                 }
-                gchar * blacklist_str = blacklist.param_getSVGValue();
-                std::string listsegments(std::string(blacklist_str) + std::string(","));
+                auto blacklist_str = blacklist.param_getSVGValue();
+                std::string listsegments(blacklist_str.raw() + ",");
                 listsegments.erase(std::remove(listsegments.begin(), listsegments.end(), ' '), listsegments.end());
-                g_free(blacklist_str);
                 if (isWhitelist(counter, listsegments, (bool)whitelist) && !Geom::are_near(start, end)) {
                     Glib::ustring idprev = Glib::ustring("infoline-on-start-");
                     idprev += Glib::ustring::format(counter-1);

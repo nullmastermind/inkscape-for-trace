@@ -57,16 +57,16 @@ MessageParam::param_readSVGValue(const gchar * strvalue)
     return true;
 }
 
-gchar *
+Glib::ustring
 MessageParam::param_getSVGValue() const
 {
-    return g_strdup(message);
+    return message;
 }
 
-gchar *
+Glib::ustring
 MessageParam::param_getDefaultSVGValue() const
 {
-    return g_strdup(defmessage);
+    return defmessage;
 }
 
 void

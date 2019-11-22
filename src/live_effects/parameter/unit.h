@@ -31,8 +31,8 @@ public:
     ~UnitParam() override;
 
     bool param_readSVGValue(const gchar * strvalue) override;
-    gchar * param_getSVGValue() const override;
-    gchar * param_getDefaultSVGValue() const override;
+    Glib::ustring param_getSVGValue() const override;
+    Glib::ustring param_getDefaultSVGValue() const override;
     void param_set_default() override;
     void param_set_value(Inkscape::Util::Unit const &val);
     void param_update_default(const gchar * default_unit) override;

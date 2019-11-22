@@ -51,20 +51,16 @@ HiddenParam::param_readSVGValue(const gchar * strvalue)
     return true;
 }
 
-gchar *
+Glib::ustring
 HiddenParam::param_getSVGValue() const
 {
-    Inkscape::SVGOStringStream os;
-    os << value;
-    return g_strdup(os.str().c_str());
+    return value;
 }
 
-gchar *
+Glib::ustring
 HiddenParam::param_getDefaultSVGValue() const
 {
-    Inkscape::SVGOStringStream os;
-    os << defvalue;
-    return g_strdup(os.str().c_str());
+    return defvalue;
 }
 
 Gtk::Widget *

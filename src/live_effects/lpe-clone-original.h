@@ -39,9 +39,9 @@ private:
     OriginalItemParam linkeditem;
     EnumParam<Clonelpemethod> method;
     TextParam attributes;
-    gchar * old_attributes;
+    Glib::ustring old_attributes;
     TextParam css_properties;
-    gchar * old_css_properties;
+    Glib::ustring old_css_properties;
     BoolParam allow_transforms;
     const gchar * linked;
     bool listening;

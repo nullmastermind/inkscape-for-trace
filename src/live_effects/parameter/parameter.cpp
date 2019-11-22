@@ -46,9 +46,7 @@ void Parameter::param_write_to_repr(const char *svgd)
 
 void Parameter::write_to_SVG()
 {
-    gchar *str = param_getSVGValue();
-    param_write_to_repr(str);
-    g_free(str);
+    param_write_to_repr(param_getSVGValue().c_str());
 }
 
 /*###########################################
@@ -83,18 +81,18 @@ bool ScalarParam::param_readSVGValue(const gchar *strvalue)
     return false;
 }
 
-gchar *ScalarParam::param_getSVGValue() const
+Glib::ustring ScalarParam::param_getSVGValue() const
 {
     Inkscape::SVGOStringStream os;
     os << value;
-    return g_strdup(os.str().c_str());
+    return os.str();
 }
 
-gchar *ScalarParam::param_getDefaultSVGValue() const
+Glib::ustring ScalarParam::param_getDefaultSVGValue() const
 {
     Inkscape::SVGOStringStream os;
     os << defvalue;
-    return g_strdup(os.str().c_str());
+    return os.str();
 }
 
 void ScalarParam::param_set_default() { param_set_value(defvalue); }

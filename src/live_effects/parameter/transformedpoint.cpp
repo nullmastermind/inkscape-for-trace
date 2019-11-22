@@ -72,20 +72,20 @@ TransformedPointParam::param_readSVGValue(const gchar * strvalue)
     return false;
 }
 
-gchar *
+Glib::ustring
 TransformedPointParam::param_getSVGValue() const
 {
     Inkscape::SVGOStringStream os;
     os << origin << " , " << vector;
-    return g_strdup(os.str().c_str());
+    return os.str();
 }
 
-gchar *
+Glib::ustring
 TransformedPointParam::param_getDefaultSVGValue() const
 {
     Inkscape::SVGOStringStream os;
     os << defvalue;
-    return g_strdup(os.str().c_str());
+    return os.str();
 }
 
 void
@@ -133,9 +133,7 @@ void
 TransformedPointParam::set_and_write_new_values(Geom::Point const &new_origin, Geom::Point const &new_vector)
 {
     setValues(new_origin, new_vector);
-    gchar * str = param_getSVGValue();
-    param_write_to_repr(str);
-    g_free(str);
+    param_write_to_repr(param_getSVGValue().c_str());
 }
 
 void

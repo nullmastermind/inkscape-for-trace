@@ -124,20 +124,20 @@ PointParam::param_readSVGValue(const gchar * strvalue)
     return false;
 }
 
-gchar *
+Glib::ustring
 PointParam::param_getSVGValue() const
 {
     Inkscape::SVGOStringStream os;
     os << *dynamic_cast<Geom::Point const *>( this );
-    return g_strdup(os.str().c_str());
+    return os.str();
 }
 
-gchar *
+Glib::ustring
 PointParam::param_getDefaultSVGValue() const
 {
     Inkscape::SVGOStringStream os;
     os << defvalue;
-    return g_strdup(os.str().c_str());
+    return os.str();
 }
 
 void

@@ -100,19 +100,19 @@ ItemParam::param_readSVGValue(const gchar * strvalue)
     return false;
 }
 
-gchar *
+Glib::ustring
 ItemParam::param_getSVGValue() const
 {
     if (href) {
-        return g_strdup(href);
+        return href;
     }
-    return g_strdup("");
+    return "";
 }
 
-gchar *
+Glib::ustring
 ItemParam::param_getDefaultSVGValue() const
 {
-    return g_strdup(defvalue);
+    return defvalue;
 }
 
 Gtk::Widget *
