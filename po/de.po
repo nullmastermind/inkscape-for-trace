@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2019-10-10 21:27+0200\n"
-"PO-Revision-Date: 2019-11-20 01:26+0100\n"
+"PO-Revision-Date: 2019-11-22 03:52+0100\n"
 "Last-Translator: Maren Hachmann <marenhachmann@yahoo.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -25230,14 +25230,15 @@ msgid "node control handle"
 msgstr "Knotenanfasser"
 
 #: ../src/ui/tool/node.cpp:547
-#, fuzzy, c-format
+#, c-format
 msgctxt "Path handle tip"
 msgid ""
 "<b>Shift+Ctrl+Alt</b>: preserve length and snap rotation angle to %g° "
 "increments, and rotate both handles"
 msgstr ""
-"<b>Umschalt+Strg+Alt</b>: Länge behalten und Drehwinkel einrasten auf %g° "
-"Stufen, während dem Drehen beider Anfasser"
+"<b>Umschalt+Strg+Alt</b>: Länge beibehalten, Drehwinkel in Schritten von %g°"
+" einrasten "
+"und beide Anfasser drehen"
 
 #: ../src/ui/tool/node.cpp:554
 #, c-format
@@ -25258,13 +25259,14 @@ msgid "<b>Alt</b>: preserve handle length while dragging"
 msgstr "<b>Alt</b>: Anfasserlänge beim Ziehen behalten"
 
 #: ../src/ui/tool/node.cpp:574
-#, fuzzy, c-format
+#, c-format
 msgctxt "Path handle tip"
 msgid ""
 "<b>Shift+Ctrl</b>: snap rotation angle to %g° increments, and rotate both "
 "handles"
 msgstr ""
-"<b>Umschalt</b>: Einrasten des Drehwinkels auf %g° Stufen und beide Anfasser "
+"<b>Umschalt+Strg</b>: Einrasten des Drehwinkels in Schritten von %g° und"
+" beide Anfasser "
 "drehen"
 
 #: ../src/ui/tool/node.cpp:580
@@ -25293,10 +25295,9 @@ msgid "<b>Shift</b>: move handle"
 msgstr "<b>Umschalt</b>: Anfasser verschieben"
 
 #: ../src/ui/tool/node.cpp:604
-#, fuzzy
 msgctxt "Path handle tip"
 msgid "Shift, Ctrl, Alt"
-msgstr "mehr: Umschalt, Strg, Alt"
+msgstr "Umschalt, Strg, Alt"
 
 #
 # File: ../src/ui/tool/node.cpp, line: 611
@@ -31985,9 +31986,9 @@ msgid "_Set Inverse (LPE)"
 msgstr ""
 
 #: ../src/verbs.cpp:2832
-#, fuzzy
 msgid "Apply inverse mask to selection (using the topmost object as mask)"
-msgstr "Maske auf Auswahl anwenden (oberstes Objekt als Maske verwenden)"
+msgstr ""
+"Invertierte Maske auf Auswahl anwenden (oberstes Objekt als Maske verwenden)"
 
 #: ../src/verbs.cpp:2833 ../src/verbs.cpp:2843 ../share/ui/menus.xml:32
 msgid "_Edit"
@@ -32013,12 +32014,12 @@ msgstr ""
 "verwenden)"
 
 #: ../src/verbs.cpp:2840
-#, fuzzy
 msgid ""
 "Apply inverse clipping path to selection (using the topmost object as "
 "clipping path)"
 msgstr ""
-"Ausschneidepfad auf Auswahl anwenden (oberstes Objekt als Ausschneidepfad "
+"Invertierten Ausschneidepfad auf Auswahl anwenden (oberstes Objekt als"
+" Ausschneidepfad "
 "verwenden)"
 
 #: ../src/verbs.cpp:2841
@@ -32484,14 +32485,12 @@ msgid "Zoom to fit selection in window"
 msgstr "Die Auswahl in das Fenster einpassen"
 
 #: ../src/verbs.cpp:2958
-#, fuzzy
 msgid "_Center Page"
-msgstr "Innenseiten"
+msgstr "Seite _zentrieren"
 
 #: ../src/verbs.cpp:2958
-#, fuzzy
 msgid "Center page in window"
-msgstr "Die Seite in das Fenster einpassen"
+msgstr "Die Seite im Fenster zentrieren"
 
 #: ../src/verbs.cpp:2961
 msgid "Rotate Clockwise"
@@ -32723,14 +32722,12 @@ msgid "Split canvas in 2 to show outline"
 msgstr "Zeichenfläche zweiteilen, um Umrisse anzuzeigen"
 
 #: ../src/verbs.cpp:3029
-#, fuzzy
 msgid "_XRay Mode"
-msgstr "Schaltet _Fokusmodus um"
+msgstr "_Röntgenmodus"
 
 #: ../src/verbs.cpp:3029
-#, fuzzy
 msgid "XRay around cursor"
-msgstr " unter Mauszeiger"
+msgstr "Kreisförmiger Bereich mit Umrissen um Mauszeiger"
 
 # ???
 #: ../src/verbs.cpp:3031
@@ -33222,27 +33219,23 @@ msgstr "Ein eingebettetes Script entfernen"
 
 #: ../src/verbs.cpp:3217 ../src/verbs.cpp:3218 ../src/verbs.cpp:3233
 #: ../src/verbs.cpp:3234
-#, fuzzy
 msgid "Align edges of objects to the top-left corner of the anchor"
-msgstr "Rechte Objektkanten an linker Seite der Verankerung ausrichten"
+msgstr "Objekte an oberer linker Ecke der Verankerung ausrichten"
 
 #: ../src/verbs.cpp:3221 ../src/verbs.cpp:3222 ../src/verbs.cpp:3237
 #: ../src/verbs.cpp:3238
-#, fuzzy
 msgid "Align edges of objects to the top-right corner of the anchor"
-msgstr "Linke Objektkanten an rechter Seite der Verankerung ausrichten"
+msgstr "Objekte an oberer rechter Ecke der Verankerung ausrichten"
 
 #: ../src/verbs.cpp:3225 ../src/verbs.cpp:3226 ../src/verbs.cpp:3241
 #: ../src/verbs.cpp:3242
-#, fuzzy
 msgid "Align edges of objects to the bottom-right corner of the anchor"
-msgstr "Objektoberkanten an Unterkante der Verankerung ausrichten"
+msgstr "Objekte an der unteren rechten Ecke der Verankerung ausrichten"
 
 #: ../src/verbs.cpp:3229 ../src/verbs.cpp:3230 ../src/verbs.cpp:3245
 #: ../src/verbs.cpp:3246
-#, fuzzy
 msgid "Align edges of objects to the bottom-left corner of the anchor"
-msgstr "Objektoberkanten an Unterkante der Verankerung ausrichten"
+msgstr "Objekte an der unteren linken Ecke der Verankerung ausrichten"
 
 #: ../src/verbs.cpp:3249
 msgid "Center on horizontal and vertical axis"
@@ -35379,19 +35372,16 @@ msgid "Method of Scaling:"
 msgstr "Skalierungsmethode:"
 
 #: ../share/extensions/dxf_input.inx:9
-#, fuzzy
 msgid "Manual scale"
-msgstr "Manueller Skalierungsfaktor:"
+msgstr "Manuelles Skalieren"
 
 #: ../share/extensions/dxf_input.inx:10
-#, fuzzy
 msgid "Automatic scaling to size A4"
-msgstr "Automatische Skalierung für die Größe A4 nutzen"
+msgstr "Automatische Skalierung auf A4-Größe"
 
 #: ../share/extensions/dxf_input.inx:11
-#, fuzzy
 msgid "Read from file"
-msgstr "Lade von Datei"
+msgstr "Aus Datei laden"
 
 #: ../share/extensions/dxf_input.inx:13
 msgid "Manual scale factor:"
@@ -35671,17 +35661,15 @@ msgstr ""
 
 #: ../share/extensions/empty_business_card.inx:14
 msgid "3.5in x 2in (United States, Canada)"
-msgstr ""
+msgstr "3,5 x 2 Zoll (USA, Kanada)"
 
 #: ../share/extensions/empty_business_card.inx:22
-#, fuzzy
 msgid "Business Card..."
-msgstr "Visitenkarte"
+msgstr "Visitenkarte …"
 
 #: ../share/extensions/empty_business_card.inx:24
-#, fuzzy
 msgid "Business card of chosen size."
-msgstr "Größe der Visitenkarte:"
+msgstr "Visitenkarte in gewählter Größe"
 
 #: ../share/extensions/empty_business_card.inx:26
 msgid "business card"
@@ -35712,14 +35700,12 @@ msgid "Desktop..."
 msgstr "Desktop …"
 
 #: ../share/extensions/empty_desktop.inx:34
-#, fuzzy
 msgid "Empty desktop of chosen size."
-msgstr "Leeres Blatt in Bildschirmgröße"
+msgstr "Leerer Bildschirm in gewählter Größe"
 
 #: ../share/extensions/empty_desktop.inx:36
-#, fuzzy
 msgid "empty desktop"
-msgstr "Leeres Blatt in Bildschirmgröße"
+msgstr "Leerer Bildschirm"
 
 # denkbar: DVD-Umschlag (aber lässt auch an eine Hülle aus Papier denken)
 #: ../share/extensions/empty_dvd_cover.inx:3
@@ -35736,15 +35722,15 @@ msgstr "Normal (14mm)"
 
 #: ../share/extensions/empty_dvd_cover.inx:9
 msgid "Slim (9mm)"
-msgstr ""
+msgstr "Slim (9mm)"
 
 #: ../share/extensions/empty_dvd_cover.inx:10
 msgid "Super Slim (7mm)"
-msgstr ""
+msgstr "Super Slim (7mm)"
 
 #: ../share/extensions/empty_dvd_cover.inx:11
 msgid "Ultra Slim (5mm)"
-msgstr ""
+msgstr "Ultra Slim (5mm)"
 
 #: ../share/extensions/empty_dvd_cover.inx:14
 msgid "DVD cover bleed (mm):"
@@ -35759,13 +35745,13 @@ msgstr "DVD-Cover …"
 # File: ../share/extensions/empty_dvd_cover.inx, line: 23
 #: ../share/extensions/empty_dvd_cover.inx:23
 msgid "DVD cover of chosen size."
-msgstr ""
+msgstr "DVD-Cover mit wählbarer Größe"
 
 #
 # File: ../share/extensions/empty_dvd_cover.inx, line: 25
 #: ../share/extensions/empty_dvd_cover.inx:25
 msgid "dvd cover"
-msgstr ""
+msgstr "DVD-Cover"
 
 #: ../share/extensions/empty_envelope.inx:3
 #: ../share/extensions/summersnight.inx:3
@@ -35773,22 +35759,20 @@ msgid "Envelope"
 msgstr "Umhüllung"
 
 #: ../share/extensions/empty_envelope.inx:7
-#, fuzzy
 msgid "Envelope size:"
-msgstr "Größe des Helfers:"
+msgstr "Größe des Umschlags:"
 
 #: ../share/extensions/empty_envelope.inx:17
 msgid "Envelope..."
 msgstr "Umschlag …"
 
 #: ../share/extensions/empty_envelope.inx:19
-#, fuzzy
 msgid "Blank envelope of chosen size."
-msgstr "Leeres Blatt in Bildschirmgröße"
+msgstr "Leerer Umschlag in gewählter Größe"
 
 #: ../share/extensions/empty_envelope.inx:21
 msgid "empty envelope dl no10"
-msgstr ""
+msgstr "leer umschlag dl 10"
 
 #: ../share/extensions/empty_generic.inx:3
 msgid "Generic Canvas"
@@ -35809,9 +35793,8 @@ msgstr "Deckend Schwarz"
 
 #: ../share/extensions/empty_generic.inx:22
 #: ../share/extensions/empty_page.inx:24
-#, fuzzy
 msgid "Gray Opaque"
-msgstr "Deckend Schwarz"
+msgstr "Deckend Grau"
 
 #: ../share/extensions/empty_generic.inx:23
 #: ../share/extensions/empty_page.inx:25
@@ -35824,19 +35807,16 @@ msgid "Hide border"
 msgstr "Rand verbergen"
 
 #: ../share/extensions/empty_generic.inx:37
-#, fuzzy
 msgid "Generic canvas..."
-msgstr "Benutzerdefinierte Seite"
+msgstr "Beliebige Größe …"
 
 #: ../share/extensions/empty_generic.inx:39
-#, fuzzy
 msgid "Generic canvas of chosen size."
-msgstr "Rendering-Cachegröße:"
+msgstr "Zeichenfläche in gewählter Größe"
 
 #: ../share/extensions/empty_generic.inx:41
-#, fuzzy
 msgid "empty generic canvas"
-msgstr "Benutzerdefinierte Seite"
+msgstr "Leere benutzerdefinierte Seite"
 
 #: ../share/extensions/empty_icon.inx:3
 msgid "Icon"
@@ -35847,20 +35827,18 @@ msgid "Icon size:"
 msgstr "Symbolgröße:"
 
 #: ../share/extensions/empty_icon.inx:14
-#, fuzzy
 msgid "Icon..."
-msgstr "Symbol"
+msgstr "Icon …"
 
 #
 # File: ../share/extensions/empty_icon.inx, line: 16
 #: ../share/extensions/empty_icon.inx:16
 msgid "Empty icon of chosen size."
-msgstr ""
+msgstr "Leeres Icon mit wählbarer Größe"
 
 #: ../share/extensions/empty_icon.inx:18
-#, fuzzy
 msgid "empty icon"
-msgstr "Anzeige_einheiten:"
+msgstr "leer Icon"
 
 #: ../share/extensions/empty_page.inx:3
 msgid "Blank Page"
@@ -35886,13 +35864,15 @@ msgstr "Leere Seite …"
 # File: ../share/extensions/empty_page.inx, line: 35
 #: ../share/extensions/empty_page.inx:37
 msgid "Empty page of chosen size."
-msgstr ""
+msgstr "Leere Seite mit wählbarer Größe"
 
 #: ../share/extensions/empty_page.inx:39
 msgid ""
 "empty page sheet tabloid ledger letter legal print paper a4 a3 a5 letter "
 "black white opaque"
 msgstr ""
+"leere seite blatt tabloid ledger letter legal drucken papier a3 a4 a5 brief"
+" schwarz weiß deckend"
 
 #: ../share/extensions/empty_video.inx:3
 msgid "Video Screen"
@@ -35910,13 +35890,13 @@ msgstr "Video …"
 # File: ../share/extensions/empty_video.inx, line: 27
 #: ../share/extensions/empty_video.inx:27
 msgid "Video screen of chosen size."
-msgstr ""
+msgstr "Video-Leinwand mit wählbarer Größe"
 
 #
 # File: ../share/extensions/empty_video.inx, line: 29
 #: ../share/extensions/empty_video.inx:29
 msgid "empty video"
-msgstr ""
+msgstr "leer video"
 
 #: ../share/extensions/eps_input.inx:3
 msgid "EPS Input"
@@ -36005,7 +35985,7 @@ msgstr "Unterteilungen"
 
 #: ../share/extensions/frame.inx:3
 msgid "Frame"
-msgstr ""
+msgstr "Rahmen"
 
 #: ../share/extensions/frame.inx:8
 msgid "Stroke Color:"
@@ -36020,9 +36000,8 @@ msgid "Width(px)"
 msgstr "Breite (px)"
 
 #: ../share/extensions/frame.inx:21
-#, fuzzy
 msgid "Corner Radius"
-msgstr "Innerer Radius"
+msgstr "Eckenradius"
 
 #: ../share/extensions/funcplot.inx:3
 msgid "Function Plotter"
@@ -36163,7 +36142,6 @@ msgid "About"
 msgstr "Über"
 
 #: ../share/extensions/gcodetools_about.inx:10
-#, fuzzy
 msgid ""
 "Gcodetools was developed to make simple Gcode from Inkscape's paths. Gcode "
 "is a special format which is used in most of CNC machines. So Gcodetools "
@@ -36179,12 +36157,22 @@ msgid ""
 "\n"
 "To get more info visit developers page at http://www.cnc-club.ru/gcodetools"
 msgstr ""
-"Das Gcode-Werkzeug wurde entwickelt, um einfachen Gcode von Inkscape-Pfaden "
+"Die Gcode-Werkzeuge wurde entwickelt, um einfachen Gcode aus Inkscape-Pfaden "
 "zu erzeugen. Gcode ist ein spezielles Format, das in den meisten CNC-"
-"Maschinen verwendet wird. So erlauben die Gcodewerkzeuge Inkscape als CAM-"
-"Programm zu verwenden. Es kann mit einer Menge von Maschinentypen verwendet "
-"werden: Mills Drehmaschinen Laser-und Plasma-Schneider und Gravur Mühle "
-"Gravur Plotter usw. Für weitere Informationen besuchen Sie die Entwickler-"
+"Maschinen verwendet wird. So erlauben es die Gcode-Werkzeuge, Inkscape als"
+" CAM-"
+"Programm zu verwenden.\n"
+"\n"
+"Es kann mit einer Menge von Maschinentypen verwendet "
+"werden:\n"
+"    Fräsen\n"
+"    Drehmaschinen\n"
+"    Laser- und Plasma-Schneider und -gravierer\n"
+"    Graviermaschinen\n"
+"    Plotter\n"
+"    usw.\n"
+"\n"
+"Für weitere Informationen besuchen Sie die Entwickler-"
 "Seite unter http://www.cnc-club.ru/gcodetools"
 
 #: ../share/extensions/gcodetools_about.inx:24
@@ -36195,7 +36183,6 @@ msgstr ""
 #: ../share/extensions/gcodetools_lathe.inx:85
 #: ../share/extensions/gcodetools_path_to_gcode.inx:65
 #: ../share/extensions/gcodetools_prepare_path_for_plasma.inx:31
-#, fuzzy
 msgid ""
 "\n"
 "Gcodetools plug-in:\n"
@@ -36216,14 +36203,26 @@ msgid ""
 "\n"
 "Gcodetools ver. 1.7\n"
 msgstr ""
-"Gcode-Werkzeug Plug-in: Wandelt Pfade zu Gcode (mit Kreisinterpolation), "
-"erstellt versetzte Pfade und graviert scharfe Ecken mittels Kegelschneider. "
-"Dieses Plug-In berechnet Gcode für Pfade mittels Kreisinterpolation oder "
-"lineare Bewegung, wenn nötig. Einführungen, Handbücher und Unterstützung "
-"finden Sie im Englischen Support-Forum http://www.cnc-club.ru/gcodetools und "
-"im russischen Support-Forum: http://www.cnc-club.ru/gcodetoolsru Danksagung: "
-"Nick Drobchenko, Vladimir Kalyaev, John Brooker, Henry Nicolas, Chris Lusby "
-"Taylor. Gcode-Werkzeug Ver. 1.7"
+"\n"
+"Gcode-Werkzeuge-Erweiterung:\n"
+"Wandelt Pfade zu Gcode (mit Kreisinterpolation), "
+"erstellt versetzte Pfade und graviert scharfe Ecken mittels Kegelschneider.\n"
+"\n"
+"Diese Erweiterung berechnet Gcode für Pfade mittels Kreisinterpolation oder "
+"linearer Bewegung, wenn nötig.\n"
+"\n"
+"Einführungen, Handbücher und Unterstützung "
+"finden Sie\n"
+"im englischsprachigen Support-Forum:\n"
+"    http://www.cnc-club.ru/gcodetools\n"
+"und im russischsprachigen Support-Forum:\n"
+"    http://www.cnc-club.ru/gcodetoolsru\n"
+"\n"
+"Danksagung: Nick Drobchenko, Vladimir Kalyaev, John Brooker, Henry Nicolas,"
+" Chris Lusby "
+"Taylor.\n"
+"\n"
+"Gcode-Werkzeug Ver. 1.7\n"
 
 #: ../share/extensions/gcodetools_about.inx:47
 #: ../share/extensions/gcodetools_area.inx:128
@@ -36256,7 +36255,6 @@ msgid "Area tool overlap (0..0.9):"
 msgstr "Flächen-Werkzeugüberlappung (0 bis 0,9):"
 
 #: ../share/extensions/gcodetools_area.inx:14
-#, fuzzy
 msgid ""
 "\n"
 "\"Create area offset\": creates several Inkscape path offsets to fill "
@@ -36269,13 +36267,17 @@ msgid ""
 "\".\n"
 "            "
 msgstr ""
-"\"Erstelle Flächenversatz\": Erstellt verschiedene Inkscape-Versatzobjekte, "
+"\n\"Erstelle Flächenversatz\": Erstellt verschiedene Inkscape-Versatzobjekte, "
 "um die originale Pfadfläche bis zur maximalen \"Breite der Fläche\" zu "
-"füllen. Die dabei erstellten Umrisse reichen von \"1/2 D\" bis zur gesamten "
-"\"Breite der Fläche\" in \"D\" breitenSchritten, wobei D von der nächsten "
-"Werkzeugdefinition genommen wird (Wert für \"Werkzeugdurchmesser\"). Es wird "
-"nur ein einziger Versatz erstellt, wenn die \"Bereichsbreite\" gleich \"1/2 D"
-"\" ist."
+"füllen.\n"
+"\n"
+"Die dabei erstellten Umrisse reichen von \"1/2 D\" bis zur gesamten "
+"\"Breite der Fläche\" in \"D\" breiten Schritten, wobei D von der nächsten "
+"Werkzeugdefinition genommen wird (Wert für \"Werkzeugdurchmesser\").\n"
+"Es wird nur ein einziger Versatz erstellt, wenn die \"Bereichsbreite\" gleich"
+" \"1/2 D"
+"\" ist.\n"
+"            "
 
 #: ../share/extensions/gcodetools_area.inx:22
 msgid "Fill area"
@@ -36324,7 +36326,6 @@ msgid "delete"
 msgstr "Löschen"
 
 #: ../share/extensions/gcodetools_area.inx:39
-#, fuzzy
 msgid ""
 "\n"
 "Usage:\n"
@@ -36335,10 +36336,14 @@ msgid ""
 "Suspected small objects will be marked out by colored arrows.\n"
 "            "
 msgstr ""
-"Nutzung: 1. Wählen Sie alle Versatzobjekte aus (graue Umrandung) 2. Objekt/"
-"Gruppierung aufheben (Umschalt+Strg+G) 3. Klicken Sie auf Anwenden. "
+"\nNutzungshinweise:\n"
+"1. Wählen Sie alle Versatzobjekte aus (graue Umrandung)\n"
+"2. Objekt > Gruppierung aufheben (Umschalt+Strg+G)\n"
+"3. Klicken Sie auf Anwenden.\n"
+"\n"
 "(Vermutlich) zu kleine Objekte werden dann z.B. mit farbigen Pfeilen "
-"markiert."
+"markiert.\n"
+"            "
 
 #: ../share/extensions/gcodetools_area.inx:49
 #: ../share/extensions/gcodetools_lathe.inx:29
@@ -37157,14 +37162,12 @@ msgid "Cartesian Grid"
 msgstr "Kartesisches Gitter"
 
 #: ../share/extensions/grid_cartesian.inx:7
-#, fuzzy
 msgid "Border Thickness:"
-msgstr "Randkonturbreite (px):"
+msgstr "Randkonturbreite:"
 
 #: ../share/extensions/grid_cartesian.inx:8
-#, fuzzy
 msgid "Border Thickness Unit:"
-msgstr "Randkonturbreite (px):"
+msgstr "Einheit der Randkonturbreite:"
 
 #: ../share/extensions/grid_cartesian.inx:15
 msgid "X Axis"
@@ -37175,14 +37178,12 @@ msgid "Major X Divisions:"
 msgstr "Haupt-X-Teilungen:"
 
 #: ../share/extensions/grid_cartesian.inx:17
-#, fuzzy
 msgid "Major X Division Spacing:"
-msgstr "Horizontale Abstände"
+msgstr "Abstand der Haupt-X-Teilungen:"
 
 #: ../share/extensions/grid_cartesian.inx:18
-#, fuzzy
 msgid "Major X Division Spacing Unit:"
-msgstr "Abstand Haupt-X-Teilungen (px):"
+msgstr "Einheit des Abstandes der Haupt-X-Teilungen:"
 
 #: ../share/extensions/grid_cartesian.inx:24
 msgid "Subdivisions per Major X Division:"
@@ -37203,14 +37204,12 @@ msgstr ""
 "Logarithmus):"
 
 #: ../share/extensions/grid_cartesian.inx:28
-#, fuzzy
 msgid "Major X Division Thickness:"
-msgstr "Konturbreite der Haupt-X-Teilung (px):"
+msgstr "Konturbreite der Haupt-X-Teilung:"
 
 #: ../share/extensions/grid_cartesian.inx:29
-#, fuzzy
 msgid "Minor X Division Thickness:"
-msgstr "Konturbreite der X-Nebenteilung (px):"
+msgstr "Konturbreite der X-Nebenteilung:"
 
 #: ../share/extensions/grid_cartesian.inx:30
 #, fuzzy
@@ -37231,14 +37230,12 @@ msgid "Major Y Divisions:"
 msgstr "Haupt-Y-Teilungen:"
 
 #: ../share/extensions/grid_cartesian.inx:40
-#, fuzzy
 msgid "Major Y Division Spacing:"
-msgstr "Horizontale Abstände"
+msgstr "Abstand der Haupt-Y-Teilungen:"
 
 #: ../share/extensions/grid_cartesian.inx:41
-#, fuzzy
 msgid "Major Y Division Spacing Unit:"
-msgstr "Horizontale Abstände"
+msgstr "Einheit des Abstandes der Haupt-Y-Teilungen:"
 
 #: ../share/extensions/grid_cartesian.inx:47
 msgid "Subdivisions per Major Y Division:"
@@ -37259,14 +37256,12 @@ msgstr ""
 "Logarithmus):"
 
 #: ../share/extensions/grid_cartesian.inx:51
-#, fuzzy
 msgid "Major Y Division Thickness:"
-msgstr "Konturbreite der Haupt-Y-Teilung (px):"
+msgstr "Konturbreite der Haupt-Y-Teilung:"
 
 #: ../share/extensions/grid_cartesian.inx:52
-#, fuzzy
 msgid "Minor Y Division Thickness:"
-msgstr "Konturbreite der Nebenteilung Y (px):"
+msgstr "Konturbreite der Y-Nebenteilung:"
 
 #: ../share/extensions/grid_cartesian.inx:53
 #, fuzzy
@@ -37530,14 +37525,12 @@ msgid ""
 msgstr ""
 
 #: ../share/extensions/hershey.inx:23
-#, fuzzy
 msgid "Font face:"
 msgstr "Schriftart:"
 
 #: ../share/extensions/hershey.inx:24
-#, fuzzy
 msgid "Hershey Sans 1-stroke"
-msgstr "Serifenlose Schrift 1 Strich"
+msgstr "Hershey Sans (1 Linie)"
 
 #
 # File: ../share/extensions/hershey.inx, line: 25
@@ -37546,39 +37539,32 @@ msgid "Hershey Sans medium"
 msgstr ""
 
 #: ../share/extensions/hershey.inx:27
-#, fuzzy
 msgid "Hershey Serif medium"
-msgstr "Serifenschrift mittel"
+msgstr "Hershey Serif medium"
 
 #: ../share/extensions/hershey.inx:28
-#, fuzzy
 msgid "Hershey Serif medium italic"
-msgstr "Serifenschrift mittel kursiv"
+msgstr "Hershey Serif medium kursiv"
 
 #: ../share/extensions/hershey.inx:30
-#, fuzzy
 msgid "Hershey Serif bold"
-msgstr "Serifenschrift fett"
+msgstr "Hershey Serif fett"
 
 #: ../share/extensions/hershey.inx:31
-#, fuzzy
 msgid "Hershey Serif bold italic"
-msgstr "Serifenschrift fett kursiv"
+msgstr "Hershey Serif fett kursiv"
 
 #: ../share/extensions/hershey.inx:33
-#, fuzzy
 msgid "Hershey Script 1-stroke"
-msgstr "Kurrent 1 Strich"
+msgstr "Hershey Script (1 Linie)"
 
 #: ../share/extensions/hershey.inx:34
-#, fuzzy
 msgid "Hershey Script medium"
-msgstr "Kurrent mittel"
+msgstr "Hershey Script medium"
 
 #: ../share/extensions/hershey.inx:36
-#, fuzzy
 msgid "Hershey Gothic English"
-msgstr "Gotische Schrift Englisch"
+msgstr "Hershey Gothic English"
 
 #
 # File: ../share/extensions/hershey.inx, line: 39
@@ -37674,9 +37660,8 @@ msgid ""
 msgstr ""
 
 #: ../share/extensions/hershey.inx:71
-#, fuzzy
 msgid "Generate font table"
-msgstr "Protokolldatei erzeugen"
+msgstr "Schriftartenübersicht erzeugen"
 
 #
 # File: ../share/extensions/hershey.inx, line: 72
@@ -37821,9 +37806,8 @@ msgstr ""
 "(Erweiterungsmenü), um direkt über eine serielle Verbindung zu plotten."
 
 #: ../share/extensions/hpgl_output.inx:10 ../share/extensions/plotter.inx:68
-#, fuzzy
 msgid "Plotter Settings"
-msgstr "Plottereinstellungen "
+msgstr "Plottereinstellungen"
 
 #: ../share/extensions/hpgl_output.inx:13 ../share/extensions/plotter.inx:71
 msgid "Pen number:"
@@ -38846,23 +38830,20 @@ msgid "Export Layer Slices"
 msgstr ""
 
 #: ../share/extensions/layer2png.inx:6
-#, fuzzy
 msgid "Icon mode"
-msgstr "Indexmodus"
+msgstr "Iconmodus"
 
 #: ../share/extensions/layer2png.inx:7
 msgid "Sizes"
 msgstr "Größen"
 
 #: ../share/extensions/layer2png.inx:8
-#, fuzzy
 msgid "Layer with Slices:"
-msgstr "Sprühen mit Kopien"
+msgstr "Ebene mit Ausschnitten:"
 
 #: ../share/extensions/layer2png.inx:9
-#, fuzzy
 msgid "Overwrite existing exports"
-msgstr "Vorhandene Pfade löschen"
+msgstr "Vorhandene Exportdateien überschreiben"
 
 #: ../share/extensions/layer2png.inx:10
 msgid "Directory"
@@ -39158,9 +39139,8 @@ msgid "Measure Path"
 msgstr "Pfad ausmessen"
 
 #: ../share/extensions/measure.inx:6
-#, fuzzy
 msgid "Measurement Type:"
-msgstr "Mess-Typ:"
+msgstr "Art der Messung:"
 
 #: ../share/extensions/measure.inx:8
 msgctxt "measure extension"
@@ -39214,14 +39194,12 @@ msgid "Text anchor:"
 msgstr "Textanker:"
 
 #: ../share/extensions/measure.inx:27
-#, fuzzy
 msgid "Left (Start)"
-msgstr "Links nach Rechts"
+msgstr "Links (Start)"
 
 #: ../share/extensions/measure.inx:28
-#, fuzzy
 msgid "Center (Middle)"
-msgstr "Zentrum"
+msgstr "Zentrum (Mitte)"
 
 #: ../share/extensions/measure.inx:29
 #, fuzzy
@@ -39936,14 +39914,12 @@ msgid "Faces"
 msgstr "Flächen"
 
 #: ../share/extensions/path_mesh_m2p.inx:20
-#, fuzzy
 msgid "Mesh to path"
-msgstr "Objekt in Pfad umwandeln"
+msgstr "Gitter zu Pfad"
 
 #: ../share/extensions/path_mesh_m2p.inx:21
-#, fuzzy
 msgid "Convert geometry of selected meshgradient to path data"
-msgstr "Gewähltes Objekt in Pfad umwandeln"
+msgstr "Geometrie des gewählten Verlaufsgitters in Pfad umwandeln"
 
 #: ../share/extensions/path_mesh_m2p.inx:30
 #: ../share/extensions/path_mesh_p2m.inx:25
@@ -39951,19 +39927,16 @@ msgid "Mesh"
 msgstr "Gitterverlauf"
 
 #: ../share/extensions/path_mesh_p2m.inx:3
-#, fuzzy
 msgid "Path to Mesh-Gradient"
-msgstr "Verlaufsgitter"
+msgstr "Pfad zu Verlaufsgitter"
 
 #: ../share/extensions/path_mesh_p2m.inx:11
-#, fuzzy
 msgid "Convert each selected path to 1x1 mesh"
-msgstr "Gewähltes Objekt in Pfad umwandeln"
+msgstr "Jeden gewählten Pfad in ein 1x1-Verlaufsgitter umwandeln"
 
 #: ../share/extensions/path_mesh_p2m.inx:15
-#, fuzzy
 msgid "Path to mesh"
-msgstr "Pfad zu GCode"
+msgstr "Pfad zu Gitter"
 
 #: ../share/extensions/path_mesh_p2m.inx:16
 msgid "Convert geometry of selected path (4 corners) to a meshgradient"
@@ -40085,7 +40058,6 @@ msgid "LaTeX input:"
 msgstr "LaTeX-Eingabe:"
 
 #: ../share/extensions/pdflatex.inx:7
-#, fuzzy
 msgid "Additional packages (comma-separated):"
 msgstr "Zusätzliche Pakete (Komma getrennt):"
 
@@ -40737,18 +40709,16 @@ msgid "H (Approx. 30%)"
 msgstr "H (Durchschn. 30%)"
 
 #: ../share/extensions/render_barcode_qrcode.inx:34
-#, fuzzy
 msgid "Invert QR code:"
-msgstr "Knoten einfügen"
+msgstr "QR-Code invertieren:"
 
 #: ../share/extensions/render_barcode_qrcode.inx:35
 msgid "Square size (px):"
 msgstr "Quadratgröße (px):"
 
 #: ../share/extensions/render_barcode_qrcode.inx:36
-#, fuzzy
 msgid "Drawing type:"
-msgstr "Zeichnung mischen:"
+msgstr "Typ:"
 
 #: ../share/extensions/render_barcode_qrcode.inx:37
 #, fuzzy
@@ -40766,19 +40736,16 @@ msgid "Smooth: proud"
 msgstr "Glatter Knoten"
 
 #: ../share/extensions/render_barcode_qrcode.inx:40
-#, fuzzy
 msgid "Path: simple"
-msgstr "Verzeichnis:"
+msgstr "Pfad: einfach"
 
 #: ../share/extensions/render_barcode_qrcode.inx:41
-#, fuzzy
 msgid "Path: circle"
-msgstr "Kugelpackung"
+msgstr "Pfad: Kreis"
 
 #: ../share/extensions/render_barcode_qrcode.inx:42
-#, fuzzy
 msgid "Path: custom"
-msgstr "Verzeichnis:"
+msgstr "Pfad: benutzerdefiniert"
 
 #
 # File: ../share/extensions/render_barcode_qrcode.inx, line: 44
@@ -40859,17 +40826,14 @@ msgid "Find and Replace font"
 msgstr "Schrift Suchen und Ersetzen"
 
 #: ../share/extensions/replace_font.inx:11
-#, fuzzy
 msgid "Find font:"
-msgstr "Finde Schrift:"
+msgstr "Suche nach Schriftart:"
 
 #: ../share/extensions/replace_font.inx:12
-#, fuzzy
 msgid "Replace with:"
-msgstr "Und ersetze mit:"
+msgstr "Ersetze mit:"
 
 #: ../share/extensions/replace_font.inx:15
-#, fuzzy
 msgid "Replace all fonts with:"
 msgstr "Ersetze alle Schriftarten mit:"
 
@@ -41057,9 +41021,8 @@ msgid "Seamless Pattern..."
 msgstr "Nahtloses Muster …"
 
 #: ../share/extensions/seamless_pattern_procedural.inx:17
-#, fuzzy
 msgid "Create seamless patterns."
-msgstr "Nahtloses Muster"
+msgstr "Nahtlose Muster erzeugen"
 
 #: ../share/extensions/seamless_pattern_procedural.inx:19
 #, fuzzy
@@ -42414,9 +42377,8 @@ msgid "font-heights"
 msgstr "Punktförmige Lichtquelle"
 
 #: ../share/ui/units.xml:85
-#, fuzzy
 msgid "Font height"
-msgstr "Einpassen zur Höhe"
+msgstr "Schriftgröße"
 
 #: ../share/ui/units.xml:88
 #, fuzzy
@@ -42429,9 +42391,8 @@ msgid "x-heights"
 msgstr "Höhe"
 
 #: ../share/ui/units.xml:92
-#, fuzzy
 msgid "Height of letter 'x'"
-msgstr "Höhe des Papiers"
+msgstr "Höhe des Buchstaben 'x'"
 
 #
 # File: ../share/ui/units.xml, line: 95
