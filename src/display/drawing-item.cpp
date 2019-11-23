@@ -674,20 +674,34 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
 
     // carea is the area to paint
     Geom::OptIntRect carea = Geom::intersect(area, _drawbox);
+
+    if (!carea) {
+        return RENDER_OK;
+    }
     // iarea is the bounding box for intermediate rendering
     // Note 1: Pixels inside iarea but outside carea are invalid
     //         (incomplete filter dependence region).
     // Note 2: We only need to render carea of clip and mask, but
     //         iarea of the object.
+    
     Geom::OptIntRect iarea = carea;
     // expand carea to contain the dependent area of filters.
     if (_filter && render_filters) {
         iarea = _cacheRect();
-        setCached(_cached, true);
+        if (!iarea) {
+            iarea = carea;
+            _filter->area_enlarge(*iarea, this);
+            iarea.intersectWith(_drawbox);
+            setCached(false, true);
+        } else {
+            setCached(_cached, true);
+        }
     }
+
     if (!iarea) {
         return RENDER_OK;
     }
+    
     // Device scale for HiDPI screens (typically 1 or 2)
     int device_scale = dc.surface()->device_scale();
 
@@ -723,7 +737,9 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
             // There is no cache. This could be because caching of this item
             // was just turned on after the last update phase, or because
             // we were previously outside of the canvas.
-            _cache = new DrawingCache(*iarea, device_scale);
+            if (iarea) {
+                _cache = new DrawingCache(*iarea, device_scale);
+            }
         }
     } else {
         // if our caching was turned off after the last update, it was already
@@ -857,8 +873,9 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
         cachect.setOperator(CAIRO_OPERATOR_SOURCE);
         cachect.setSource(&intermediate);
         cachect.fill();
-        if (_filter && render_filters) {
-            _cache->markClean(*_cacheRect(true));
+        Geom::OptIntRect cl = _cacheRect(true);
+        if (_filter && render_filters && cl) {
+            _cache->markClean(*cl);
         } else {
             _cache->markClean(*iarea);
         }
@@ -1168,7 +1185,7 @@ inline void expandByScale(Geom::IntRect &rect, double scale)
 Geom::OptIntRect DrawingItem::_cacheRect(bool cropped)
 {
     Geom::OptIntRect r = _drawbox & _drawing.cacheLimit();
-    if (_filter && _drawing.renderFilters()) {
+    if (_filter && _drawing.renderFilters() && r && r != _drawbox) {
         // we check unfiltered item is emought inside the cache area to  render properly
         Geom::OptIntRect canvas = r;
         expandByScale(*canvas, 0.5);
