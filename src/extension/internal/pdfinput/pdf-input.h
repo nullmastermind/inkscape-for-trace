@@ -107,9 +107,11 @@ private:
     Glib::RefPtr<Gtk::Adjustment> _fallbackPrecisionSlider_adj;
     class Gtk::Label * _labelPrecisionComment;
     class Gtk::HBox * hbox6;
+#if 0
     class Gtk::Label * _labelText;
     class Gtk::ComboBoxText * _textHandlingCombo;
     class Gtk::HBox * hbox5;
+#endif
     class Gtk::CheckButton * _localFontsCheck;
     class Gtk::CheckButton * _embedImagesCheck;
     class Gtk::VBox * vbox3;

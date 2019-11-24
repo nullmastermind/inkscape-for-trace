@@ -283,8 +283,6 @@ std::vector<SPHatchPath const*> SPHatch::hatchPaths() const
 
 void SPHatch::update(SPCtx* ctx, unsigned int flags)
 {
-    typedef std::list<SPHatch::View>::iterator ViewIterator;
-
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
     }
@@ -337,8 +335,6 @@ void SPHatch::modified(unsigned int flags)
 
 void SPHatch::_onRefChanged(SPObject *old_ref, SPObject *ref)
 {
-    typedef std::list<SPHatch::View>::iterator ViewIterator;
-
     if (old_ref) {
         _modified_connection.disconnect();
     }

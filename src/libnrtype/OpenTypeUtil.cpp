@@ -359,8 +359,10 @@ void readOpenTypeSVGTable(const FT_Face ft_face,
     }
 
     // OpenType fonts use Big Endian
+#if 0
     uint16_t version = ((data[0] & 0xff) <<  8) +  (data[1] & 0xff);
     // std::cout << "Version: " << version << std::endl;
+#endif
     uint32_t offset  = ((data[2] & 0xff) << 24) + ((data[3] & 0xff) << 16) + ((data[4] & 0xff) << 8) + (data[5] & 0xff);
 
     // std::cout << "Offset: "  << offset << std::endl;

@@ -33,25 +33,26 @@ struct font_glyph;
 class font_instance {
 public:
     // the real source of the font
-    PangoFont*            pFont;
+    PangoFont*            pFont = nullptr;
     // depending on the rendering backend, different temporary data
 
     // that's the font's fingerprint; this particular PangoFontDescription gives the entry at which this font_instance
     // resides in the font_factory loadedFaces unordered_map
-    PangoFontDescription* descr;
+    PangoFontDescription* descr = nullptr;
     // refcount
-    int                   refCount;
+    int                   refCount = 0;
     // font_factory owning this font_instance
-    font_factory*         parent;
+    font_factory*         parent = nullptr;
 
     // common glyph definitions for all the rasterfonts
     std::map<int, int>    id_to_no;
-    int                   nbGlyph, maxGlyph;
+    int                   nbGlyph = 0;
+    int                   maxGlyph = 0;
 
-    font_glyph*           glyphs;
+    font_glyph*           glyphs = nullptr;
 
     // font is loaded with GSUB in 2 pass
-    bool    fulloaded;    
+    bool    fulloaded = false;
 
     // Map of OpenType tables found in font.
     std::map<Glib::ustring, OTSubstitution> openTypeTables;
@@ -63,7 +64,7 @@ public:
     std::map<int, SVGTableEntry> openTypeSVGGlyphs;
 
     // Does OpenType font contain SVG glyphs?
-    bool   fontHasSVG;
+    bool   fontHasSVG = false;
 
     font_instance();
     virtual ~font_instance();
@@ -120,9 +121,9 @@ private:
     // Temp: make public
 public:
 #ifdef USE_PANGO_WIN32
-    HFONT                 theFace;
+    HFONT                 theFace = nullptr;
 #else
-    FT_Face               theFace;
+    FT_Face               theFace = nullptr;
                 // it's a pointer in fact; no worries to ref/unref it, pango does its magic
                 // as long as pFont is valid, theFace is too
 #endif

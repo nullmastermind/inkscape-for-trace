@@ -773,8 +773,6 @@ void InkscapePreferences::themeChange()
         GtkSettings *settings = gtk_settings_get_default();
         g_object_set(settings, "gtk-theme-name", themename.c_str(), NULL);
         g_object_set(settings, "gtk-application-prefer-dark-theme", darktheme, NULL);
-        gchar *gtkThemeName;
-        gboolean gtkApplicationPreferDarkTheme;
         bool dark = darktheme || themename.find(":dark") != -1;
         if (!dark) {
             Glib::RefPtr<Gtk::StyleContext> stylecontext = window->get_style_context();

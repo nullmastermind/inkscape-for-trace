@@ -58,7 +58,6 @@ void
 sp_ui_new_view()
 {
     SPDocument *document;
-    SPViewWidget *dtw;
 
     document = SP_ACTIVE_DOCUMENT;
     if (!document) return;

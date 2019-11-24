@@ -534,10 +534,12 @@ void SelectorsDialog::_readStyleElement()
     content.erase(std::remove(content.begin(), content.end(), '\n'), content.end());
 
     // Remove comments (/* xxx */)
-    /*     while(content.find("/*") != std::string::npos) {
+#if 0
+        while(content.find("/*") != std::string::npos) {
             size_t start = content.find("/*");
             content.erase(start, (content.find("*\/", start) - start) +2);
-        } */
+        }
+#endif
 
     // First split into selector/value chunks.
     // An attempt to use Glib::Regex failed. A C++11 version worked but
@@ -664,17 +666,17 @@ void SelectorsDialog::_writeStyleElement()
 
     _scroollock = true;
     _updating = true;
-    SPDocument *document = SP_ACTIVE_DOCUMENT;
     Glib::ustring styleContent = "";
     for (auto& row: _store->children()) {
         Glib::ustring selector = row[_mColumns._colSelector];
-        /*
+#if 0
                 REMOVE_SPACES(selector);
-        /*         size_t len = selector.size();
+                size_t len = selector.size();
                 if(selector[len-1] == ','){
                     selector.erase(len-1);
                 }
-                row[_mColumns._colSelector] =  selector; */
+                row[_mColumns._colSelector] =  selector;
+#endif
         styleContent = styleContent + selector + " { " + row[_mColumns._colProperties] + " }\n";
     }
     // We could test if styleContent is empty and then delete the style node here but there is no
@@ -910,7 +912,6 @@ void SelectorsDialog::_removeFromSelector(Gtk::TreeModel::Row row)
         SPObject *obj = nullptr;
         Glib::ustring objectLabel = row[_mColumns._colSelector];
         Gtk::TreeModel::iterator iter = row->parent();
-        Inkscape::Selection *selection = getDesktop()->getSelection();
         if (iter) {
             Gtk::TreeModel::Row parent = *iter;
             Glib::ustring multiselector = parent[_mColumns._colSelector];

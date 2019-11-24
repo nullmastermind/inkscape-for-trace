@@ -791,8 +791,6 @@ box3d_set_new_z_orders_case1 (SPBox3D *box, int z_orders[6], Box3D::Axis central
 /* Precisely 2 finite VPs */
 static void
 box3d_set_new_z_orders_case2 (SPBox3D *box, int z_orders[6], Box3D::Axis central_axis, Box3D::Axis /*infinite_axis*/) {
-    Geom::Point c3(box3d_get_corner_screen(box, 3, false));
-
     bool swapped = box3d_XY_axes_are_swapped(box);
 
     int insidexy = box3d_VP_lies_in_PL_sector (box, Proj::X, 3, 3 ^ Box3D::Z, Box3D::Y);

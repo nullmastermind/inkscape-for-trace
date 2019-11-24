@@ -494,8 +494,6 @@ persp3d_absorb(Persp3D *persp1, Persp3D *persp2) {
     /* double check if we are called in sane situations */
     g_return_if_fail (persp3d_perspectives_coincide(persp1, persp2) && persp1 != persp2);
 
-    std::vector<SPBox3D *>::iterator boxes;
-
     // Note: We first need to copy the boxes of persp2 into a separate list;
     //       otherwise the loop below gets confused when perspectives are reattached.
     std::list<SPBox3D *> boxes_of_persp2 = persp3d_list_of_boxes(persp2);

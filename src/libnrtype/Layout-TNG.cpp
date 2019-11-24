@@ -17,16 +17,7 @@ namespace Text {
 const gunichar Layout::UNICODE_SOFT_HYPHEN = 0x00AD;
 const double Layout::LINE_HEIGHT_NORMAL = 1.25;
 
-Layout::Layout()
-  : _input_truncated(false)
-  , _path_fitted(nullptr)
-  , wrap_mode(WRAP_NONE)
-{
-      textLength._set = false;
-      textLengthMultiplier = 1;
-      textLengthIncrement = 0;
-      lengthAdjust = LENGTHADJUST_SPACING;
-}
+Layout::Layout() = default;
 
 Layout::~Layout()
 {

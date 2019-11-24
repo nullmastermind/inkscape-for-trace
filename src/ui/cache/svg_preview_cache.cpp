@@ -33,7 +33,6 @@
 
 GdkPixbuf* render_pixbuf(Inkscape::Drawing &drawing, double scale_factor, Geom::Rect const &dbox, unsigned psize)
 {
-    Geom::Affine t(Geom::Scale(scale_factor, scale_factor));
     drawing.root()->setTransform(Geom::Scale(scale_factor));
 
     Geom::IntRect ibox = (dbox * Geom::Scale(scale_factor)).roundOutwards();

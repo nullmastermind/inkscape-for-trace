@@ -81,7 +81,7 @@ SimpleFilterModifier::SimpleFilterModifier(int flags)
         * Is strange because only happends when object not has clip, mask, 
         * filter, blending or opacity .
         * Anyway the feature is a no-gui feature and render as spected.
-        /*
+        */
         /* if (flags & ISOLATION) {
             _isolation.property_active() = false;
             _hb_blend.pack_start(_isolation, false, false, 5);
@@ -89,8 +89,6 @@ SimpleFilterModifier::SimpleFilterModifier(int flags)
             _isolation.set_tooltip_text("Don't blend childrens with objects behind");
             _lb_isolation.set_tooltip_text("Don't blend childrens with objects behind");
         } */
-        _hb_blend.pack_start(_lb_blend, false, false, 5);
-        _hb_blend.pack_start(_blend, false, false, 5);
         Gtk::Separator *separator = Gtk::manage(new Gtk::Separator());  
         separator->set_margin_top(8);
         separator->set_margin_bottom(8);

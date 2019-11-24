@@ -78,7 +78,6 @@ SPLinearGradient::update(SPCtx *ctx, guint flags)
         if (getUnits() == SP_GRADIENT_UNITS_USERSPACEONUSE) {
             double w = ictx->viewport.width();
             double h = ictx->viewport.height();
-            double d = sqrt ((w*w + h*h)/2.0);
             double const em = style->font_size.computed;
             double const ex = 0.5 * em;  // fixme: get x height from pango or libnrtype.
 

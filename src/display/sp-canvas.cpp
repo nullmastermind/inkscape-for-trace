@@ -1023,7 +1023,7 @@ static void sp_canvas_init(SPCanvas *canvas)
     canvas->_totalelapsed = 0;
     canvas->_scrooling = false;
     canvas->_idle_time = g_get_monotonic_time();
-    bool _is_dragging;
+    canvas->_is_dragging = false;
 
 #if defined(HAVE_LIBLCMS2)
     canvas->_enable_cms_display_adj = false;

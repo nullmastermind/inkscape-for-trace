@@ -234,8 +234,6 @@ void SPPattern::_getChildren(std::list<SPObject *> &l)
 
 void SPPattern::update(SPCtx *ctx, unsigned int flags)
 {
-    typedef std::list<SPObject *>::iterator SPObjectIterator;
-
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
     }
@@ -258,8 +256,6 @@ void SPPattern::update(SPCtx *ctx, unsigned int flags)
 
 void SPPattern::modified(unsigned int flags)
 {
-    typedef std::list<SPObject *>::iterator SPObjectIterator;
-
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
     }
@@ -379,8 +375,6 @@ void SPPattern::transform_multiply(Geom::Affine postmul, bool set)
 const gchar *SPPattern::produce(const std::vector<Inkscape::XML::Node *> &reprs, Geom::Rect bounds,
                                 SPDocument *document, Geom::Affine transform, Geom::Affine move)
 {
-    typedef std::vector<Inkscape::XML::Node *>::const_iterator NodePtrIterator;
-
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     Inkscape::XML::Node *defsrepr = document->getDefs()->getRepr();
 

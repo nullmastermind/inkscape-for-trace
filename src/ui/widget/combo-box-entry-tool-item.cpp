@@ -36,10 +36,6 @@
 
 #include "ui/icon-names.h"
 
-static GQuark gDataName = 0;
-
-  //gDataName = g_quark_from_string("ink_comboboxentry-action");
-
 namespace Inkscape {
 namespace UI {
 namespace Widget {

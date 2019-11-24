@@ -201,7 +201,6 @@ StyleDialog::StyleDialog()
     _styleBox.set_orientation(Gtk::ORIENTATION_VERTICAL);
     _styleBox.set_valign(Gtk::ALIGN_START);
     _scrolledWindow.add(_styleBox);
-    Gtk::Box *alltoggler = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
     Gtk::Label *infotoggler = Gtk::manage(new Gtk::Label(_("Edit Full Stylesheet")));
     infotoggler->get_style_context()->add_class("inksmall");
     _vadj = _scrolledWindow.get_vadjustment();
@@ -942,7 +941,6 @@ bool StyleDialog::_selectorStartEdit(GdkEventButton *event, Gtk::Label *selector
 void StyleDialog::_selectorActivate(Glib::RefPtr<Gtk::TreeStore> store, Gtk::Label *selector, Gtk::Entry *selector_edit)
 {
     g_debug("StyleDialog::_selectorEditKeyPress");
-    bool ret = false;
     Glib::ustring newselector = fixCSSSelectors(selector_edit->get_text());
     if (newselector.empty()) {
         selector_edit->get_style_context()->add_class("system_error_color");
@@ -1231,7 +1229,6 @@ void StyleDialog::_setAutocompletion(Gtk::Entry *entry, Glib::ustring name)
     entry_completion->set_text_column(_mCSSData._colCSSData);
     entry_completion->set_minimum_key_length(0);
     entry_completion->set_popup_completion(true);
-    gint counter = 0;
     if (name == "paint-order") {
         Gtk::TreeModel::Row row = *(completionModel->append());
         row[_mCSSData._colCSSData] = Glib::ustring("fill markers stroke");

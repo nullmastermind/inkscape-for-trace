@@ -78,7 +78,6 @@ void _get_file_callback(SoupSession *session, SoupMessage *msg, gpointer user_da
 Glib::ustring get_file(Glib::ustring uri, unsigned int timeout, callback func) {
 
     SoupURI *s_uri = soup_uri_new(uri.c_str());
-    const char *host = soup_uri_get_host(s_uri);
     std::string path = std::string(soup_uri_decode(soup_uri_get_path(s_uri)));
     std::string filepart;
 

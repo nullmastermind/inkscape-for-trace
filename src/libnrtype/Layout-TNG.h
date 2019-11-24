@@ -171,7 +171,7 @@ public:
         WRAP_WHITE_SPACE,  // Wrapping via 'white-space' property.
         WRAP_INLINE_SIZE,  // Wrapping via 'inline-size' property.
         WRAP_SHAPE_INSIDE  // Wrapping via 'shape-inside' propertry.
-    } wrap_mode;
+    } wrap_mode = WRAP_NONE;
 
     /** The optional attributes which can be applied to a SVG text or
     related tag. See appendText(). See SVG1.1 section 10.4 for the
@@ -225,7 +225,7 @@ public:
     bool inputExists() const
         {return !_input_stream.empty();}
 
-    bool _input_truncated;
+    bool _input_truncated = false;
     bool inputTruncated() const
         {return _input_truncated;}
 
@@ -319,15 +319,15 @@ public:
     SVGLength textLength;
 
     /** How do we meet textLength if specified: by letterspacing or by scaling horizontally */
-    LengthAdjust lengthAdjust;
+    LengthAdjust lengthAdjust = LENGTHADJUST_SPACING;
 
     /** By how much each character needs to be wider or narrower, using the specified lengthAdjust
         strategy, for the layout to meet its textLength target. Is set to non-zero after the layout
         is calculated for the first time, then it is recalculated with each glyph getting its adjustment. */
     /** This one is used by scaling strategies: each glyph width is multiplied by this */
-    double textLengthMultiplier;
+    double textLengthMultiplier = 1;
     /** This one is used by letterspacing strategy: to each glyph width, this is added */
-    double textLengthIncrement;
+    double textLengthIncrement = 0;
 
     /** Get the actual spacing increment if it's due with the current values of above stuff, otherwise 0 */
     double getTextLengthIncrementDue() const;
@@ -802,7 +802,7 @@ private:
     // ******************* output
 
     /** as passed to fitToPathAlign() */
-    Path const *_path_fitted;
+    Path const *_path_fitted = nullptr;
 
     struct Glyph;
     struct Character;
@@ -900,7 +900,7 @@ private:
     public:                                                                 \
         inline name(Layout const *flow) : _flow(flow) {}                    \
         inline bool operator()(object_type const &object, unsigned index)   \
-            {return index_generator < index;}                               \
+            {g_assert(_flow); return index_generator < index;}              \
     }
 // end of macro
     EMIT_PREDICATE(PredicateLineToSpan,        Span,      _flow->_chunks[object.in_chunk].in_line);

@@ -253,7 +253,6 @@ void XmlTree::_resized()
     }
     _updating = true;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool dir = !prefs->getBool("/dialogs/xml/vertical", true);
     int max = int(_paned.property_max_position() * 0.95);
     int min = int(_paned.property_max_position() * 0.05);
     bool attrtoggler = prefs->getBool("/dialogs/xml/attrtoggler", true);

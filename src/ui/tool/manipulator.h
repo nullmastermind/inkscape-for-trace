@@ -111,7 +111,6 @@ public:
                 if (!to_remove.erase(i)) addItem(i);
             }
         }
-        typedef typename std::set<void*>::iterator RmIter;
         for (auto ri : to_remove) {
             removeItem(ri);
         }

@@ -104,17 +104,7 @@ static int ft2_cubic_to(FT_Vector const *control1, FT_Vector const *control2, FT
  *
  */
 
-font_instance::font_instance() :
-    pFont(nullptr),
-    descr(nullptr),
-    refCount(0),
-    parent(nullptr),
-    nbGlyph(0),
-    maxGlyph(0),
-    glyphs(nullptr),
-    theFace(nullptr),
-    fontHasSVG(false),
-    fulloaded(false)
+font_instance::font_instance()
 {
     //printf("font instance born\n");
     _ascent  = _ascent_max  = 0.8;

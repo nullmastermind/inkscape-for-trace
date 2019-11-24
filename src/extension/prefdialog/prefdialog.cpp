@@ -19,7 +19,6 @@
 
 // Used to get SP_ACTIVE_DESKTOP
 #include "inkscape.h"
-#include "desktop.h"
 #include "document.h"
 #include "document-undo.h"
 
@@ -141,7 +140,6 @@ PrefDialog::~PrefDialog ( )
 
 void
 PrefDialog::preview_toggle () {
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     SPDocument *document = SP_ACTIVE_DOCUMENT;
     bool modified = document->isModifiedSinceSave();
     if(_param_preview->get_bool()) {

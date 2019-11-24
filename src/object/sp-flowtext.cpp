@@ -691,7 +691,6 @@ SPItem *create_flowtext_with_internal_frame (SPDesktop *desktop, Geom::Point p0,
 void SPFlowtext::fix_overflow_flowregion(bool inverse)
 {
     SPObject *object = dynamic_cast<SPObject *>(this);
-    SPFlowregion *flowregion = nullptr;
     for (auto child : object->childList(false)) {
         SPFlowregion *flowregion = dynamic_cast<SPFlowregion *>(child);
         if (flowregion) {
