@@ -915,7 +915,7 @@ Geom::OptRect SPItem::desktopGeometricBounds() const
 Geom::OptRect SPItem::desktopVisualBounds() const
 {
     Geom::OptRect ret = documentVisualBounds();
-    if (ret && document) {
+    if (ret) {
         *ret *= document->doc2dt();
     }
     return ret;
@@ -1622,9 +1622,7 @@ Geom::Affine SPItem::i2doc_affine() const
 Geom::Affine SPItem::i2dt_affine() const
 {
     Geom::Affine ret(i2doc_affine());
-    if (document) {
-        ret *= document->doc2dt();
-    }
+    ret *= document->doc2dt();
     return ret;
 }
 
@@ -1634,7 +1632,7 @@ void SPItem::set_i2d_affine(Geom::Affine const &i2dt)
     Geom::Affine dt2p; /* desktop to item parent transform */
     if (parent) {
         dt2p = static_cast<SPItem *>(parent)->i2dt_affine().inverse();
-    } else if (document) {
+    } else {
         dt2p = document->dt2doc();
     }
 
