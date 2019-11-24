@@ -739,14 +739,10 @@ SPDesktop::change_document (SPDocument *theDocument)
  */
 void SPDesktop::setEventContext(const std::string& toolName)
 {
+    // Tool should be able to be replaced with itself. See commit 29df5ca05d
     if (event_context) {
-        if (toolName.compare(event_context->pref_observer->observed_path) != 0) {
-            event_context->finish();
-            delete event_context;
-        } else {
-            _event_context_changed_signal.emit(this, event_context);
-            return;
-        }
+        event_context->finish();
+        delete event_context;
     }
 
     if (toolName.empty()) {
