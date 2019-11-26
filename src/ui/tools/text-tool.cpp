@@ -667,11 +667,10 @@ bool TextTool::root_handler(GdkEvent* event) {
                             if ( (ex != 0.0) && (ex != 1.0) ) {
                                 sp_css_attr_scale(css, 1/ex);
                             }
+                            sp_repr_css_set_property (css, "shape-inside", shape_inside.value()); // Restore (over-written by desktop style).
+                            sp_repr_css_set_property (css, "white-space", "pre");                 // Respect new lines.
                             text->setCSS(css,"style");
                             sp_repr_css_attr_unref(css);
-                            /* Restore "shape-inside" */
-                            text->style->shape_inside = shape_inside;
-                            text->updateRepr();
 
                             desktop->getSelection()->set(text);
 

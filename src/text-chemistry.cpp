@@ -324,6 +324,7 @@ text_flow_into_shape()
             // Set 'shape-inside' property.
             SPCSSAttr* css = sp_repr_css_attr (text->getRepr(), "style");
             sp_repr_css_set_property (css, "shape-inside", shape_inside.c_str());
+            sp_repr_css_set_property (css, "white-space", "pre"); // Respect new lines.
             sp_repr_css_set (text->getRepr(), css, "style");
         }
 
