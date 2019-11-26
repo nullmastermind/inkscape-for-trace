@@ -74,8 +74,8 @@ using Inkscape::UI::Widget::UnitTracker;
 //########################
 
 // Functions for debugging:
-#ifdef DEBUG_TEXTchange
-static void sp_print_font(SPStyle change*query)
+#ifdef DEBUG_TEXT
+static void sp_print_font(SPStyle *query)
 {
 
 
@@ -98,7 +98,6 @@ static void       sp_print_fontweight( SPStyle *query ) {
         index = 13;
     std::cout << "    Weight: " << names[ index ]
               << " (" << query->font_weight.computed << ")" << std::endl;
-change
 }
 
 static void       sp_print_fontstyle( SPStyle *query ) {
@@ -1806,19 +1805,11 @@ void TextToolbar::selection_changed(Inkscape::Selection *selection) // don't bot
     std::cout << std::endl;
     std::cout << "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&" << std::endl;
     std::cout << "sp_text_toolbox_selection_changed: start " << count << std::endl;
-
-    Inkscape::Selection *selection = (SP_ACTIVE_DESKTOP)->getSelection();
-    auto itemlist0= selection->items();
-    for(auto i=itemlist0.begin();i!=itemlist0.end(); ++i) {
-        const gchar* id = (*i)->getId();
-        std::cout << "    " << id << std::endl;
-    }
-    Glib::ustring selected_text = sp_text_get_selected_text((SP_ACTIVE_DESKTOP)->event_context);
-    std::cout << "  Selected text: |" << selected_text << "|" << std::endl;
 #endif
 
     // quit if run by the _changed callbacks
     if (_freeze) {
+
 #ifdef DEBUG_TEXT
         std::cout << "    Frozen, returning" << std::endl;
         std::cout << "sp_text_toolbox_selection_changed: exit " << count << std::endl;
@@ -1828,13 +1819,26 @@ void TextToolbar::selection_changed(Inkscape::Selection *selection) // don't bot
         return;
     }
     _freeze = true;
+
+    // selection defined as argument but not used, argh!!!
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    SPDocument *document = SP_ACTIVE_DOCUMENT;
+    selection = desktop->getSelection();
+    auto itemlist = selection->items();
+
+#ifdef DEBUG_TEXT
+    for(auto i : itemlist) {
+        const gchar* id = i->getId();
+        std::cout << "    " << id << std::endl;
+    }
+    Glib::ustring selected_text = sp_text_get_selected_text((SP_ACTIVE_DESKTOP)->event_context);
+    std::cout << "  Selected text: |" << selected_text << "|" << std::endl;
+#endif
+
     // Only flowed text can be justified, only normal text can be kerned...
     // Find out if we have flowed text now so we can use it several places
     gboolean isFlow = false;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    SPDocument *document = SP_ACTIVE_DOCUMENT;
-    auto itemlist = desktop->getSelection()->items();
     std::vector<SPItem *> to_work;
     for (auto i : itemlist) {
         SPItem *item = dynamic_cast<SPItem *>(i);
@@ -2118,9 +2122,7 @@ void TextToolbar::selection_changed(Inkscape::Selection *selection) // don't bot
     }
 
 #ifdef DEBUG_TEXT
-    std::cout << "    GUI: fontfamily.value: "
-              << (query.font_family.value ? query.font_family.value : "No value")
-              << std::endl;
+    std::cout << "    GUI: fontfamily.value: "     << query.font_family.value()  << std::endl;
     std::cout << "    GUI: font_size.computed: "   << query.font_size.computed   << std::endl;
     std::cout << "    GUI: font_weight.computed: " << query.font_weight.computed << std::endl;
     std::cout << "    GUI: font_style.computed: "  << query.font_style.computed  << std::endl;
