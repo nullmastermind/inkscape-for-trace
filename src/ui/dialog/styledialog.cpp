@@ -604,6 +604,7 @@ void StyleDialog::readStyleElement()
         REMOVE_SPACES(selector); // Remove leading/trailing spaces
         // Get list of objects selector matches
         std::vector<Glib::ustring> selectordata = Glib::Regex::split_simple(";", selector);
+        Glib::ustring selector_orig = selector;
         if (!selectordata.empty()) {
             selector = selectordata.back();
         }
