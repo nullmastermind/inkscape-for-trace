@@ -1528,7 +1528,7 @@ msgstr "Matowe modelowanie wklej efekt płaskorzeźby"
 
 #: ../share/filters/filters.svg.h:614
 msgid "Rough Canvas Painting"
-msgstr "Malowanie na szorstkim płutnie"
+msgstr "Malowanie na szorstkim płótnie"
 
 #: ../share/filters/filters.svg.h:618
 msgid "Paper Bump"
@@ -22004,7 +22004,7 @@ msgstr "Przesuwanie myszą po naciśnięciu spacji"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1828
 msgid "When on, pressing and holding Space and dragging pans canvas"
-msgstr "Gdy włączone, naciśnięcie i przytrzymanie spacji i przesuń płutno"
+msgstr "Gdy włączone, naciśnięcie i przytrzymanie spacji i przesuń płótno"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1829
 msgid "Mouse wheel zooms by default"
@@ -32509,7 +32509,7 @@ msgstr "Zresetuj obrót"
 
 #: ../src/verbs.cpp:2964
 msgid "Reset canvas rotation to zero"
-msgstr "Wyzeruj obrót płutna do zera"
+msgstr "Wyzeruj obrót płótna do zera"
 
 #: ../src/verbs.cpp:2966
 msgid "Flip Horizontally"
@@ -35920,11 +35920,11 @@ msgstr "Ukryj obramowanie"
 
 #: ../share/extensions/empty_generic.inx:37
 msgid "Generic canvas..."
-msgstr "Czyste płutno"
+msgstr "Czyste płótno"
 
 #: ../share/extensions/empty_generic.inx:39
 msgid "Generic canvas of chosen size."
-msgstr "Czyste płutno w wybranym rozmiarze"
+msgstr "Czyste płótno w wybranym rozmiarze"
 
 #: ../share/extensions/empty_generic.inx:41
 msgid "empty generic canvas"
@@ -41432,7 +41432,7 @@ msgstr "wzory na żywo bez szwu"
 
 #: ../share/extensions/setup_typography_canvas.inx:3
 msgid "1 - Setup Typography Canvas"
-msgstr "1-ustawienia płutna typografii"
+msgstr "1-ustawienia płótna typografii"
 
 #: ../share/extensions/setup_typography_canvas.inx:6
 msgid "Em-size:"
@@ -42578,7 +42578,7 @@ msgstr "Tryb wyświetlania kolorów"
 
 #: ../share/ui/menus.xml:127
 msgid "_Canvas Orientation"
-msgstr "Orientacja płutna"
+msgstr "Orientacja płótna"
 
 #: ../share/ui/menus.xml:141
 msgid "Sh_ow/Hide"
