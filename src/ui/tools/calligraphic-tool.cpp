@@ -274,25 +274,18 @@ bool CalligraphicTool::apply(Geom::Point p) {
 
     /* Calculate angle of drawing tool */
 
-    double a1;
+    Geom::Point ang1;
     if (this->usetilt) {
         // 1a. calculate nib angle from input device tilt:
-        gdouble length = std::sqrt(this->xtilt*this->xtilt + this->ytilt*this->ytilt);;
-
-        if (length > 0) {
-            Geom::Point ang1 = Geom::Point(this->ytilt/length, this->xtilt/length);
-            a1 = atan2(ang1);
-        }
-        else
-            a1 = 0.0;
+        ang1 = Geom::Point(-this->xtilt, this->ytilt);
     }
     else {
         // 1b. fixed dc->angle (absolutely flat nib):
         double const radians = ( (this->angle - 90) / 180.0 ) * M_PI;
-        Geom::Point ang1 = Geom::Point(-sin(radians),  cos(radians));
-        ang1.y() *= -this->desktop->yaxisdir();
-        a1 = atan2(ang1);
+        ang1 = Geom::Point(-sin(radians),  cos(radians));
     }
+    ang1.y() *= -this->desktop->yaxisdir();
+    double a1 = atan2(ang1);
 
     // 2. perpendicular to dc->vel (absolutely non-flat nib):
     gdouble const mag_vel = Geom::L2(this->vel);
