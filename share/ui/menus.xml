@@ -81,7 +81,6 @@
        <verb verb-id="EditRemoveAllGuides" />
        <separator/>
        <verb verb-id="DialogXMLEditor" />
-       <verb verb-id="DialogSelectors" />
        <separator/>
        <verb verb-id="DialogInput" />
        <verb verb-id="DialogPreferences" show-icons="true" />
@@ -193,6 +192,7 @@
        <verb verb-id="DialogObjectProperties" />
        <verb verb-id="DialogSymbols" />
        <verb verb-id="DialogPaintServers" />
+       <verb verb-id="DialogSelectors" />
        <separator/>
        <verb verb-id="SelectionGroup" />
        <verb verb-id="SelectionUnGroup" />

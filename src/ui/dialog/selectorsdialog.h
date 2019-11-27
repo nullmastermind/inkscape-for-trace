@@ -69,7 +69,7 @@ class SelectorsDialog : public Widget::Panel {
     void _nodeRemoved( Inkscape::XML::Node &repr );
     void _nodeChanged( Inkscape::XML::Node &repr );
     // Data structure
-    enum coltype { OBJECT, SELECTOR };
+    enum coltype { OBJECT, SELECTOR, OTHER };
     class ModelColumns : public Gtk::TreeModel::ColumnRecord {
     public:
         ModelColumns() {

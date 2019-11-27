@@ -169,7 +169,7 @@ void StyleDialog::_nodeRemoved(Inkscape::XML::Node &repr)
 
 void StyleDialog::_nodeChanged(Inkscape::XML::Node &object)
 {
-    g_debug("StyleDialog::_nodeChanged");
+    g_debug("StyleDialog::_nodeChanged"); 
     readStyleElement();
 }
 
@@ -603,6 +603,13 @@ void StyleDialog::readStyleElement()
         Glib::ustring selector = tokens[i];
         REMOVE_SPACES(selector); // Remove leading/trailing spaces
         // Get list of objects selector matches
+        std::vector<Glib::ustring> selectordata = Glib::Regex::split_simple(";", selector);
+        Glib::ustring selector_orig = selector;
+        for (auto selectoritem : selectordata) {
+            if (selectordata[selectordata.size() - 1] == selectoritem) {
+                selector = selectoritem;
+            }
+        }
         std::vector<SPObject *> objVec = _getObjVec(selector);
         if (obj) {
             bool stop = true;
@@ -749,14 +756,14 @@ void StyleDialog::readStyleElement()
         empty = true;
         css_selector_event_add->signal_button_release_event().connect(
             sigc::bind<Glib::RefPtr<Gtk::TreeStore>, Gtk::TreeView *, Glib::ustring, gint>(
-                sigc::mem_fun(*this, &StyleDialog::_addRow), store, css_tree, selector, selectorpos));
+                sigc::mem_fun(*this, &StyleDialog::_addRow), store, css_tree, selector_orig, selectorpos));
         if (obj) {
             for (auto iter : result_props) {
                 empty = false;
                 Gtk::TreeIter iterstore = store->append();
                 Gtk::TreeModel::Path path = (Gtk::TreeModel::Path)iterstore;
                 Gtk::TreeModel::Row row = *(iterstore);
-                row[_mColumns._colSelector] = selector;
+                row[_mColumns._colSelector] = selector_orig;
                 row[_mColumns._colSelectorPos] = selectorpos;
                 row[_mColumns._colActive] = iter.second.second;
                 row[_mColumns._colName] = iter.first;
@@ -792,7 +799,7 @@ void StyleDialog::readStyleElement()
             for (auto iter : result_props) {
                 empty = false;
                 Gtk::TreeModel::Row row = *(store->prepend());
-                row[_mColumns._colSelector] = selector;
+                row[_mColumns._colSelector] = selector_orig;
                 row[_mColumns._colSelectorPos] = selectorpos;
                 row[_mColumns._colActive] = iter.second.second;
                 row[_mColumns._colName] = iter.first;
@@ -938,7 +945,8 @@ bool StyleDialog::_selectorStartEdit(GdkEventButton *event, Gtk::Label *selector
     return false;
 }
 
-void StyleDialog::_selectorActivate(Glib::RefPtr<Gtk::TreeStore> store, Gtk::Label *selector, Gtk::Entry *selector_edit)
+/* void StyleDialog::_selectorActivate(Glib::RefPtr<Gtk::TreeStore> store, Gtk::Label *selector, Gtk::Entry
+*selector_edit)
 {
     g_debug("StyleDialog::_selectorEditKeyPress");
     Glib::ustring newselector = fixCSSSelectors(selector_edit->get_text());
@@ -947,7 +955,7 @@ void StyleDialog::_selectorActivate(Glib::RefPtr<Gtk::TreeStore> store, Gtk::Lab
         return;
     }
     _writeStyleElement(store, selector->get_text(), selector_edit->get_text());
-}
+} */
 
 bool StyleDialog::_selectorEditKeyPress(GdkEventKey *event, Glib::RefPtr<Gtk::TreeStore> store, Gtk::Label *selector,
                                         Gtk::Entry *selector_edit)
@@ -1086,7 +1094,15 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
         if (!new_selector.empty()) {
             selector = new_selector;
         }
-        styleContent = "\n" + selector + " { \n";
+        std::vector<Glib::ustring> selectordata = Glib::Regex::split_simple(";", selector);
+        for (auto selectoritem : selectordata) {
+            if (selectordata[selectordata.size() - 1] == selectoritem) {
+                selector = selectoritem;
+            } else {
+                styleContent = styleContent + selectoritem + ";\n";
+            }
+        }
+        styleContent = styleContent + "\n" + selector + " { \n";
     }
     selectorpos = _deleted_pos;
     for (auto &row : store->children()) {
@@ -1600,6 +1616,13 @@ void StyleDialog::_updateWatchers()
 std::vector<SPObject *> StyleDialog::_getObjVec(Glib::ustring selector)
 {
     g_debug("StyleDialog::_getObjVec");
+
+    std::vector<Glib::ustring> selectordata = Glib::Regex::split_simple(";", selector);
+    for (auto selectoritem : selectordata) {
+        if (selectordata[selectordata.size() - 1] == selectoritem) {
+            selector = selectoritem;
+        }
+    }
 
     std::vector<SPObject *> objVec = SP_ACTIVE_DOCUMENT->getObjectsBySelector(selector);
 

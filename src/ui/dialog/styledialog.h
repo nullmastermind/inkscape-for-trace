@@ -130,7 +130,7 @@ class StyleDialog : public Widget::Panel {
     Glib::RefPtr<Gtk::TreeModel> _selectTree(Glib::ustring selector);
     void _writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::ustring selector,
                             Glib::ustring new_selector = "");
-    void _selectorActivate(Glib::RefPtr<Gtk::TreeStore> store, Gtk::Label *selector, Gtk::Entry *selector_edit);
+    // void _selectorActivate(Glib::RefPtr<Gtk::TreeStore> store, Gtk::Label *selector, Gtk::Entry *selector_edit);
     bool _selectorEditKeyPress(GdkEventKey *event, Glib::RefPtr<Gtk::TreeStore> store, Gtk::Label *selector,
                                Gtk::Entry *selector_edit);
     bool _selectorStartEdit(GdkEventButton *event, Gtk::Label *selector, Gtk::Entry *selector_edit);
