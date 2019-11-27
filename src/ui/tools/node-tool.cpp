@@ -294,7 +294,6 @@ void NodeTool::setup() {
 void NodeTool::finish() 
 {
     this->_selected_nodes->clear();
-    this->desktop->canvas->endForcedFullRedraws();
     ToolBase::finish();
 }
 
@@ -469,10 +468,6 @@ void NodeTool::selection_changed(Inkscape::Selection *sel) {
     std::vector<SPItem *> vec(sel->items().begin(), sel->items().end());
     _previous_selection = _current_selection;
     _current_selection = vec;
-
-    // Be sure unclean areas are redraw on selection change
-    desktop->getCanvas()->_forcefull = true;
-
     this->_multipath->setItems(shapes);
     this->update_tip(nullptr);
     // This not need to be called canvas is updated on selection change on setItems
@@ -486,6 +481,8 @@ bool NodeTool::root_handler(GdkEvent* event) {
      * 3. some keybindings
      */
     using namespace Inkscape::UI; // pull in event helpers
+
+    desktop->getCanvas()->forceFullRedrawAfterInterruptions(5, false);
 
     Inkscape::Selection *selection = desktop->selection;
     static Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -572,7 +569,6 @@ bool NodeTool::root_handler(GdkEvent* event) {
                 //prefs->getInt("/tools/nodes/highlight_color", 0xff0000ff), 1.0,
                 over_item->highlight_color(), 1.0,
                 SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
-            this->desktop->canvas->_forcefull = true;
             sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(flash), 0, SP_WIND_RULE_NONZERO);
             this->flash_tempitem = desktop->add_temporary_canvasitem(flash,
                 prefs->getInt("/tools/nodes/pathflash_timeout", 500));
@@ -655,10 +651,6 @@ bool NodeTool::root_handler(GdkEvent* event) {
                     this->_multipath->insertNode(this->desktop->d2w(sp.getPoint()));
                 }
             }
-        }
-        if (event->button.button == 1) {
-            // we want redraw of all dirty regions on relase
-            this->desktop->canvas->_forcefull = true;
         }
         break;
 

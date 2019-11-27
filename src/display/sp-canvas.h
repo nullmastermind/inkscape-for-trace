@@ -84,7 +84,7 @@ struct SPCanvas {
     void requestFullRedraw();
     void requestUpdate();
 
-    void forceFullRedrawAfterInterruptions(unsigned int count);
+    void forceFullRedrawAfterInterruptions(unsigned int count, bool reset = true);
     void endForcedFullRedraws();
 
     Geom::Rect getViewbox() const;
@@ -207,7 +207,6 @@ public:
     double _dy0;
     int _x0; ///< World coordinate of the leftmost pixels of window
     int _y0; ///< World coordinate of the topmost pixels of window
-    bool _forcefull;
     bool _scrooling;
     int _device_scale; ///< Scale for high DPI montiors
     gint64 _idle_time;

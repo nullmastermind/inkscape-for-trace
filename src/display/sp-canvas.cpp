@@ -1019,7 +1019,6 @@ static void sp_canvas_init(SPCanvas *canvas)
     canvas->_changecursor = 0;
     canvas->_inside = false; // this could be wrong on start but we update it as far we bo to the other side.
     canvas->_splits = 0;
-    canvas->_forcefull = false;
     canvas->_totalelapsed = 0;
     canvas->_scrooling = false;
     canvas->_idle_time = g_get_monotonic_time();
@@ -2091,12 +2090,7 @@ int SPCanvas::paintRectInternal(PaintRectSetup const *setup, Geom::IntRect const
     // as soon as the total redraw time exceeds 1ms, cancel;
     // this returns control to the idle loop and allows Inkscape to process user input
     // (potentially interrupting the redraw); as soon as Inkscape has some more idle time,
-    // it will get back and finish painting what remains to paint.
-
-    // if force full is set we allways redraw all is used in node tool
-    // to render in one pass highlighed path or selected nodes, that can get long time
-    // to render and if the render area go across diferent rendering tiles it render splited
-    if (elapsed > 1000 && !_forcefull) {
+    if (elapsed > 1000) {
 
         // Interrupting redraw isn't always good.
         // For example, when you drag one node of a big path, only the buffer containing
@@ -2114,6 +2108,7 @@ int SPCanvas::paintRectInternal(PaintRectSetup const *setup, Geom::IntRect const
             }
             return false;
         }
+        _forced_redraw_count = 0;
     }
 
     // Find the optimal buffer dimensions
@@ -2249,10 +2244,12 @@ bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
     return paintRectInternal(&setup, paint_rect);
 }
 
-void SPCanvas::forceFullRedrawAfterInterruptions(unsigned int count)
+void SPCanvas::forceFullRedrawAfterInterruptions(unsigned int count, bool reset)
 {
     _forced_redraw_limit = count;
-    _forced_redraw_count = 0;
+    if (reset) {
+        _forced_redraw_count = 0;
+    }
 }
 
 void SPCanvas::endForcedFullRedraws()
@@ -2577,7 +2574,6 @@ gint SPCanvas::idle_handler(gpointer data)
     if (ret) {
         // Reset idle id
         canvas->_scrooling = false;
-        canvas->_forcefull = false;
         now = g_get_monotonic_time();
         elapsed = now - canvas->_idle_time;
         canvas->_totalelapsed += elapsed;
@@ -2600,14 +2596,14 @@ gint SPCanvas::idle_handler(gpointer data)
         canvas->_idle_id = 0;
         totaloops = 1;
         canvas->_splits = 0;
+    }
 #else
     if (ret) {
         // Reset idle id
         canvas->_idle_id = 0;
         canvas->_scrooling = false;
-        canvas->_forcefull = false;
-#endif
     }
+#endif
     return !ret;
 }
 

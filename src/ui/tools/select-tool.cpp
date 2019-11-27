@@ -146,6 +146,7 @@ SelectTool::~SelectTool() {
         g_object_unref(CursorSelectMouseover);
         CursorSelectMouseover = nullptr;
     }
+    this->desktop->canvas->endForcedFullRedraws();
 }
 
 void SelectTool::setup() {
@@ -303,7 +304,6 @@ bool SelectTool::item_handler(SPItem* item, GdkEvent* event) {
 
                     gdk_window_set_cursor(window, CursorSelectDragging);
 
-                    desktop->canvas->forceFullRedrawAfterInterruptions(5);
 
                     // remember the clicked item in this->item:
                     if (this->item) {
@@ -328,7 +328,6 @@ bool SelectTool::item_handler(SPItem* item, GdkEvent* event) {
                                         nullptr, event->button.time);
 
                     this->grabbed = SP_CANVAS_ITEM(desktop->drawing);
-                    desktop->canvas->endForcedFullRedraws();
 
                     ret = TRUE;
                 }
@@ -477,6 +476,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
     if (this->item && this->item->document == nullptr) {
         this->sp_select_context_abort();
     }
+    desktop->canvas->forceFullRedrawAfterInterruptions(5, false);
 
     switch (event->type) {
         case GDK_2BUTTON_PRESS:
@@ -572,8 +572,6 @@ bool SelectTool::root_handler(GdkEvent* event) {
                     GdkWindow* window = gtk_widget_get_window (GTK_WIDGET (desktop->getCanvas()));
 
                     gdk_window_set_cursor(window, CursorSelectDragging);
-
-                    desktop->canvas->forceFullRedrawAfterInterruptions(5);
                 }
 
                 if (this->dragging) {
@@ -656,9 +654,6 @@ bool SelectTool::root_handler(GdkEvent* event) {
 
                         gobble_motion_events(GDK_BUTTON1_MASK);
                     }
-                }
-                if (this->button_press_ctrl || (this->button_press_alt && !this->button_press_shift && !selection->isEmpty())) {
-                    desktop->canvas->endForcedFullRedraws();
                 }
             }
             break;
@@ -793,16 +788,9 @@ bool SelectTool::root_handler(GdkEvent* event) {
 
                     ret = TRUE;
                 }
-                desktop->canvas->endForcedFullRedraws();
-
                 if (this->grabbed) {
                     sp_canvas_item_ungrab(this->grabbed);
                     this->grabbed = nullptr;
-                }
-                desktop->canvas->endForcedFullRedraws(); // we want this forced redraw always with this tool
-                if (event->button.button == 1) {
-                    // we want redraw of all dirty regions on relase
-                    desktop->canvas->_forcefull = true;
                 }
                 // Think is not necesary now
                 // desktop->updateNow();
