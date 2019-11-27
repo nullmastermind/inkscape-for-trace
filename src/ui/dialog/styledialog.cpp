@@ -604,11 +604,8 @@ void StyleDialog::readStyleElement()
         REMOVE_SPACES(selector); // Remove leading/trailing spaces
         // Get list of objects selector matches
         std::vector<Glib::ustring> selectordata = Glib::Regex::split_simple(";", selector);
-        Glib::ustring selector_orig = selector;
-        for (auto selectoritem : selectordata) {
-            if (selectordata[selectordata.size() - 1] == selectoritem) {
-                selector = selectoritem;
-            }
+        if (!selectordata.empty()) {
+            selector = selectordata.back();
         }
         std::vector<SPObject *> objVec = _getObjVec(selector);
         if (obj) {
@@ -1618,12 +1615,9 @@ std::vector<SPObject *> StyleDialog::_getObjVec(Glib::ustring selector)
     g_debug("StyleDialog::_getObjVec");
 
     std::vector<Glib::ustring> selectordata = Glib::Regex::split_simple(";", selector);
-    for (auto selectoritem : selectordata) {
-        if (selectordata[selectordata.size() - 1] == selectoritem) {
-            selector = selectoritem;
-        }
+    if (!selectordata.empty()) {
+        selector = selectordata.back();
     }
-
     std::vector<SPObject *> objVec = SP_ACTIVE_DOCUMENT->getObjectsBySelector(selector);
 
     g_debug("StyleDialog::_getObjVec: | %s |", selector.c_str());

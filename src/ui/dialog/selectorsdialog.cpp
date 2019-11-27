@@ -567,10 +567,8 @@ void SelectorsDialog::_readStyleElement()
         Glib::ustring selector = tokens[i];
         REMOVE_SPACES(selector); // Remove leading/trailing spaces
         std::vector<Glib::ustring> selectordata = Glib::Regex::split_simple(";", selector);
-        for (auto selectoritem : selectordata) {
-            if (selectordata[selectordata.size() - 1] == selectoritem) {
-                selector = selectoritem;
-            }
+        if (!selectordata.empty()) {
+            selector = selectordata.back();
         }
         selector = _style_dialog->fixCSSSelectors(selector);
         for (auto &row : _store->children()) {
@@ -589,7 +587,6 @@ void SelectorsDialog::_readStyleElement()
         Glib::ustring selector = tokens[i];
         REMOVE_SPACES(selector); // Remove leading/trailing spaces
         std::vector<Glib::ustring> selectordata = Glib::Regex::split_simple(";", selector);
-
         for (auto selectoritem : selectordata) {
             if (selectordata[selectordata.size() - 1] == selectoritem) {
                 selector = selectoritem;
@@ -1019,10 +1016,8 @@ std::vector<SPObject *> SelectorsDialog::_getObjVec(Glib::ustring selector)
 
     g_debug("SelectorsDialog::_getObjVec: | %s |", selector.c_str());
     std::vector<Glib::ustring> selectordata = Glib::Regex::split_simple(";", selector);
-    for (auto selectoritem : selectordata) {
-        if (selectordata[selectordata.size() - 1] == selectoritem) {
-            selector = selectoritem;
-        }
+    if (!selectordata.empty()) {
+        selector = selectordata.back();
     }
     std::vector<SPObject *> objVec;
     std::vector<Glib::ustring> tokensplus = Glib::Regex::split_simple("[,]+", selector);
