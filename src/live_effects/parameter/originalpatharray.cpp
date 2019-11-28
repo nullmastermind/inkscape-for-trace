@@ -420,7 +420,8 @@ void OriginalPathArrayParam::setPathVector(SPObject *linked_obj, guint /*flags*/
                 if (lpeobj) {
                     Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
                     if (dynamic_cast<Inkscape::LivePathEffect::LPEBSpline *>(lpe)) {
-                        LivePathEffect::sp_bspline_do_effect(curve, 0);
+                        Geom::PathVector hp;
+                        LivePathEffect::sp_bspline_do_effect(curve, 0, hp);
                     } else if (dynamic_cast<Inkscape::LivePathEffect::LPESpiro *>(lpe)) {
                         LivePathEffect::sp_spiro_do_effect(curve);
                     }

@@ -50,8 +50,8 @@ public:
 
     Inkscape::UI::ControlPointSelection* _selected_nodes;
     Inkscape::UI::MultiPathManipulator* _multipath;
-    Inkscape::Display::TemporaryItem *helperpath_tmpitem;
-    
+    std::vector<Inkscape::Display::TemporaryItem *> _helperpath_tmpitem;
+
     bool edit_clipping_paths;
     bool edit_masks;
 

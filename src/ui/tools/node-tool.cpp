@@ -171,8 +171,8 @@ NodeTool::~NodeTool() {
     if (this->flash_tempitem) {
         this->desktop->remove_temporary_canvasitem(this->flash_tempitem);
     }
-    if (this->helperpath_tmpitem) {
-        this->desktop->remove_temporary_canvasitem(this->helperpath_tmpitem);
+    for (auto hp : this->_helperpath_tmpitem) {
+        this->desktop->remove_temporary_canvasitem(hp);
     }
     this->_selection_changed_connection.disconnect();
     //this->_selection_modified_connection.disconnect();
@@ -226,7 +226,6 @@ void NodeTool::setup() {
     this->_sizeUpdatedConn = ControlManager::getManager().connectCtrlSizeChanged(
             sigc::mem_fun(this, &NodeTool::handleControlUiStyleChange)
     );
-    this->helperpath_tmpitem = nullptr;
     if (this->_transform_handle_group) {
         this->_selected_nodes = new Inkscape::UI::ControlPointSelection(this->desktop, this->_transform_handle_group);
     }
@@ -305,40 +304,44 @@ void sp_update_helperpath() {
     }
     Inkscape::UI::Tools::NodeTool *nt = static_cast<Inkscape::UI::Tools::NodeTool*>(desktop->event_context);
     Inkscape::Selection *selection = desktop->getSelection();
-    if (nt->helperpath_tmpitem) {
-        desktop->remove_temporary_canvasitem(nt->helperpath_tmpitem);
-        nt->helperpath_tmpitem = nullptr;
+    for (auto hp : nt->_helperpath_tmpitem) {
+        desktop->remove_temporary_canvasitem(hp);
     }
-
-    if (SP_IS_LPE_ITEM(selection->singleItem())) {
-        Inkscape::LivePathEffect::Effect *lpe = SP_LPE_ITEM(selection->singleItem())->getCurrentLPE();
-        if (lpe && lpe->isVisible()/* && lpe->showOrigPath()*/) {
-            
-            Inkscape::UI::ControlPointSelection *selectionNodes = nt->_selected_nodes;
-            std::vector<Geom::Point> selectedNodesPositions;
-            for (auto selectionNode : *selectionNodes) {
-                Inkscape::UI::Node *n = dynamic_cast<Inkscape::UI::Node *>(selectionNode);
-                selectedNodesPositions.push_back(n->position());
+    nt->_helperpath_tmpitem.clear();
+    std::vector<SPItem *> vec(selection->items().begin(), selection->items().end());
+    std::vector<std::pair<Geom::PathVector, Geom::Affine>> cs;
+    for (auto item : vec) {
+        SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
+        if (lpeitem && lpeitem->hasPathEffectRecursive()) {
+            Inkscape::LivePathEffect::Effect *lpe = SP_LPE_ITEM(lpeitem)->getCurrentLPE();
+            if (lpe && lpe->isVisible() /* && lpe->showOrigPath()*/) {
+                Inkscape::UI::ControlPointSelection *selectionNodes = nt->_selected_nodes;
+                std::vector<Geom::Point> selectedNodesPositions;
+                for (auto selectionNode : *selectionNodes) {
+                    Inkscape::UI::Node *n = dynamic_cast<Inkscape::UI::Node *>(selectionNode);
+                    selectedNodesPositions.push_back(n->position());
+                }
+                lpe->setSelectedNodePoints(selectedNodesPositions);
+                lpe->setCurrentZoom(desktop->current_zoom());
+                SPCurve *c = new SPCurve();
+                SPCurve *cc = new SPCurve();
+                std::vector<Geom::PathVector> cs = lpe->getCanvasIndicators(lpeitem);
+                for (auto &p : cs) {
+                    cc->set_pathvector(p);
+                    c->append(cc, false);
+                    cc->reset();
+                }
+                if (!c->is_empty()) {
+                    SPCanvasItem *helperpath = sp_canvas_bpath_new(desktop->getTempGroup(), c, true);
+                    sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(helperpath), 0x0000ff9A, 1.0, SP_STROKE_LINEJOIN_MITER,
+                                               SP_STROKE_LINECAP_BUTT);
+                    sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(helperpath), 0, SP_WIND_RULE_NONZERO);
+                    sp_canvas_item_affine_absolute(helperpath, lpeitem->i2dt_affine());
+                    nt->_helperpath_tmpitem.emplace_back(desktop->add_temporary_canvasitem(helperpath, 0));
+                }
+                c->unref();
+                cc->unref();
             }
-            lpe->setSelectedNodePoints(selectedNodesPositions);
-            lpe->setCurrentZoom(desktop->current_zoom());
-            SPCurve *c = new SPCurve();
-            SPCurve *cc = new SPCurve();
-            std::vector<Geom::PathVector> cs = lpe->getCanvasIndicators(SP_LPE_ITEM(selection->singleItem()));
-            for (auto & p : cs) {
-                cc->set_pathvector(p);
-                c->append(cc, false);
-                cc->reset();
-            }
-            if (!c->is_empty()) {
-                SPCanvasItem *helperpath = sp_canvas_bpath_new(desktop->getTempGroup(), c, true);
-                sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(helperpath), 0x0000ff9A, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
-                sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(helperpath), 0, SP_WIND_RULE_NONZERO);
-                sp_canvas_item_affine_absolute(helperpath, selection->singleItem()->i2dt_affine());
-                nt->helperpath_tmpitem = desktop->add_temporary_canvasitem(helperpath, 0);
-            }
-            c->unref();
-            cc->unref();
         }
     }
 }
@@ -470,6 +473,7 @@ void NodeTool::selection_changed(Inkscape::Selection *sel) {
     _current_selection = vec;
     this->_multipath->setItems(shapes);
     this->update_tip(nullptr);
+    sp_update_helperpath();
     // This not need to be called canvas is updated on selection change on setItems
     // this->desktop->updateNow();
 }

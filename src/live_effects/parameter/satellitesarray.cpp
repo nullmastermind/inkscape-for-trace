@@ -209,7 +209,8 @@ void SatellitesArrayParam::addKnotHolderEntities(KnotHolder *knotholder,
                             "<b>Ctrl+Alt+Click</b> reset");
                 }
                 FilletChamferKnotHolderEntity *e = new FilletChamferKnotHolderEntity(this, index);
-                e->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _(tip),_knot_shape, _knot_mode, _knot_color);
+                e->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_LPE, _(tip), _knot_shape, _knot_mode,
+                          _knot_color);
                 knotholder->add(e);
             }
             index++;
@@ -234,6 +235,7 @@ FilletChamferKnotHolderEntity::FilletChamferKnotHolderEntity(
 void FilletChamferKnotHolderEntity::knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state)
 {
     _pparam->param_effect->refresh_widgets = true;
+    _pparam->write_to_SVG();
 }
 
 void FilletChamferKnotHolderEntity::knot_set(Geom::Point const &p,

@@ -51,7 +51,6 @@ namespace OfS {
     public:
         KnotHolderEntityOffsetPoint(LPEOffset * effect) : LPEKnotHolderEntity(effect) {}
         void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
-        void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override;
         Geom::Point knot_get() const override;
     private:
     };
@@ -447,18 +446,11 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
 void LPEOffset::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
 {
     _knot_entity = new OfS::KnotHolderEntityOffsetPoint(this);
-    _knot_entity->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _("Offset point"), SP_KNOT_SHAPE_CIRCLE);
+    _knot_entity->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_LPE, _("Offset point"), SP_KNOT_SHAPE_CIRCLE);
     knotholder->add(_knot_entity);
 }
 
-
 namespace OfS {
-void KnotHolderEntityOffsetPoint::knot_ungrabbed(Geom::Point const &p, Geom::Point const& /*origin*/, guint state)
-{
-    LPEOffset* lpe = dynamic_cast<LPEOffset *>(_effect);
-    lpe->refresh_widgets = true;
-}
-
 void KnotHolderEntityOffsetPoint::knot_set(Geom::Point const &p, Geom::Point const& /*origin*/, guint state)
 {
     using namespace Geom;

@@ -37,7 +37,6 @@ class KnotHolderEntityLeftEnd : public KnotHolderEntityEnd {
 public:
     KnotHolderEntityLeftEnd(LPEPerpBisector *effect) : KnotHolderEntityEnd(effect) {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
-    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     Geom::Point knot_get() const override;
 };
 
@@ -45,7 +44,6 @@ class KnotHolderEntityRightEnd : public KnotHolderEntityEnd {
 public:
     KnotHolderEntityRightEnd(LPEPerpBisector *effect) : KnotHolderEntityEnd(effect) {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
-    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     Geom::Point knot_get() const override;
 };
 
@@ -155,14 +153,12 @@ void
 LPEPerpBisector::addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item) {
     {
         KnotHolderEntity *e = new PB::KnotHolderEntityLeftEnd(this);
-        e->create( desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
-                   _("Adjust the \"left\" end of the bisector") );
-        knotholder->add(e);
+e->create(desktop, item, knotholder, Inkscape::CTRL_TYPE_LPE, _("Adjust the \"left\" end of the bisector"));
+knotholder->add(e);
     }
     {
         KnotHolderEntity *e = new PB::KnotHolderEntityRightEnd(this);
-        e->create( desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
-                   _("Adjust the \"right\" end of the bisector") );
+        e->create(desktop, item, knotholder, Inkscape::CTRL_TYPE_LPE, _("Adjust the \"right\" end of the bisector"));
         knotholder->add(e);
     }
 };

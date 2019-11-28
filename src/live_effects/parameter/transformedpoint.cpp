@@ -174,6 +174,7 @@ public:
     void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override
     {
         param->param_effect->refresh_widgets = true;
+        param->write_to_SVG();
     };
     Geom::Point knot_get() const override{
         return param->origin + param->vector;
@@ -190,7 +191,8 @@ void
 TransformedPointParam::addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item)
 {
     TransformedPointParamKnotHolderEntity_Vector *vector_e = new TransformedPointParamKnotHolderEntity_Vector(this);
-    vector_e->create(desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, handleTip(), vec_knot_shape, vec_knot_mode, vec_knot_color);
+    vector_e->create(desktop, item, knotholder, Inkscape::CTRL_TYPE_LPE, handleTip(), vec_knot_shape, vec_knot_mode,
+                     vec_knot_color);
     knotholder->add(vector_e);
 }
 

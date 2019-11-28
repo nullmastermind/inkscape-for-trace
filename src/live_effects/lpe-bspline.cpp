@@ -23,8 +23,7 @@ const double HANDLE_CUBIC_GAP = 0.001;
 const double NO_POWER = 0.0;
 const double DEFAULT_START_POWER = 1.0/3.0;
 const double DEFAULT_END_POWER = 2.0/3.0;
-Geom::PathVector hp;
-void sp_bspline_drawHandle(Geom::Point p, double helper_size);
+Geom::Path sp_bspline_drawHandle(Geom::Point p, double helper_size);
 
 LPEBSpline::LPEBSpline(LivePathEffectObject *lpeobject)
     : Effect(lpeobject),
@@ -178,10 +177,10 @@ void LPEBSpline::changeWeight(double weight_ammount)
 
 void LPEBSpline::doEffect(SPCurve *curve)
 {
-    sp_bspline_do_effect(curve, helper_size);
+    sp_bspline_do_effect(curve, helper_size, hp);
 }
 
-void sp_bspline_do_effect(SPCurve *curve, double helper_size)
+void sp_bspline_do_effect(SPCurve *curve, double helper_size, Geom::PathVector &hp)
 {
     if (curve->get_segment_count() < 1) {
         return;
@@ -317,7 +316,7 @@ void sp_bspline_do_effect(SPCurve *curve, double helper_size)
                 curve_n->curveto(point_at1, point_at2, node);
             }
             if(!are_near(node,curve_it1->finalPoint()) && helper_size > 0.0) {
-                sp_bspline_drawHandle(node, helper_size);
+                hp.push_back(sp_bspline_drawHandle(node, helper_size));
             }
             ++curve_it1;
             ++curve_it2;
@@ -335,8 +334,7 @@ void sp_bspline_do_effect(SPCurve *curve, double helper_size)
     }
 }
 
-
-void sp_bspline_drawHandle(Geom::Point p, double helper_size)
+Geom::Path sp_bspline_drawHandle(Geom::Point p, double helper_size)
 {
     char const * svgd = "M 1,0.5 A 0.5,0.5 0 0 1 0.5,1 0.5,0.5 0 0 1 0,0.5 0.5,0.5 0 0 1 0.5,0 0.5,0.5 0 0 1 1,0.5 Z";
     Geom::PathVector pathv = sp_svg_read_pathv(svgd);
@@ -344,7 +342,7 @@ void sp_bspline_drawHandle(Geom::Point p, double helper_size)
     aff *= Geom::Scale(helper_size);
     pathv *= aff;
     pathv *= Geom::Translate(p - Geom::Point(0.5*helper_size, 0.5*helper_size));
-    hp.push_back(pathv[0]);
+    return pathv[0];
 }
 
 void LPEBSpline::doBSplineFromWidget(SPCurve *curve, double weight_ammount)

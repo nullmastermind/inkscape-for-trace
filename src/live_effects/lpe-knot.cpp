@@ -45,7 +45,6 @@ public:
     KnotHolderEntityCrossingSwitcher(LPEKnot *effect) : LPEKnotHolderEntity(effect) {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
     Geom::Point knot_get() const override;
-    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_click(guint state) override;
 };
 
@@ -658,7 +657,7 @@ LPEKnot::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::Pat
 void LPEKnot::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
 {
     KnotHolderEntity *e = new KnotHolderEntityCrossingSwitcher(this);
-    e->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
+    e->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_LPE,
               _("Drag to select a crossing, click to flip it, Shift + click to change all crossings, Ctrl + click to "
                 "reset and change all crossings"));
     knotholder->add(e);

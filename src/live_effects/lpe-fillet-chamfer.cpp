@@ -408,7 +408,7 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
     size_t path = 0;
     const double K = (4.0 / 3.0) * (sqrt(2.0) - 1.0);
     _degenerate_hide = false;
-    Geom::PathVector const pathv = pathv_to_linear_and_cubic_beziers(path_in);
+    Geom::PathVector const pathv = _pathvector_satellites->getPathVector();
     Satellites satellites = _pathvector_satellites->getSatellites();
     for (Geom::PathVector::const_iterator path_it = pathv.begin(); path_it != pathv.end(); ++path_it) {
         if (path_it->empty()) {
@@ -428,6 +428,9 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
             size_t next_index = curve + 1;
             if (curve == pathv[path].size() - 1 && pathv[path].closed()) {
                 next_index = 0;
+            }
+            if (pathv[path].size() != satellites[path].size()) {
+                continue;
             }
             //append last extreme of paths on open paths
             if (curve == pathv[path].size() -1 && !pathv[path].closed()) { //the path is open and we are at end of path

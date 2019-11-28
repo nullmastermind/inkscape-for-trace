@@ -1354,7 +1354,7 @@ Effect::doEffect_path (Geom::PathVector const & path_in)
             }
         }
     } else {
-      // concatenate the path into possibly discontinuous pwd2
+        // concatenate the path into possibly discontinuous pwd2
         Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_in;
         for (const auto & i : path_in) {
             pwd2_in.concat( i.toPwSb() );

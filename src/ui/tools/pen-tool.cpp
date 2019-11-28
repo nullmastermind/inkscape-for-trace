@@ -1728,7 +1728,8 @@ void PenTool::_bsplineSpiroBuild()
         //Effect *spr = static_cast<Effect*> ( new LPEbspline(lpeobj) );
         //spr->doEffect(curve);
         if (this->bspline) {
-            LivePathEffect::sp_bspline_do_effect(curve, 0);
+            Geom::PathVector hp;
+            LivePathEffect::sp_bspline_do_effect(curve, 0, hp);
         } else {
             LivePathEffect::sp_spiro_do_effect(curve);
         }

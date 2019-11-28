@@ -288,6 +288,7 @@ static int sp_knot_handler(SPCanvasItem */*item*/, GdkEvent *event, SPKnot *knot
                 grabbed = FALSE;
                 moved = FALSE;
                 consumed = TRUE;
+                Inkscape::UI::Tools::sp_update_helperpath();
             }
         } else if (grabbed && knot->desktop && knot->desktop->event_context &&
                    !knot->desktop->event_context->space_panning) {
@@ -319,7 +320,6 @@ static int sp_knot_handler(SPCanvasItem */*item*/, GdkEvent *event, SPKnot *knot
             sp_knot_handler_request_position(event, knot);
             moved = TRUE;
         }
-        Inkscape::UI::Tools::sp_update_helperpath();
         break;
     case GDK_ENTER_NOTIFY:
         knot->setFlag(SP_KNOT_MOUSEOVER, TRUE);

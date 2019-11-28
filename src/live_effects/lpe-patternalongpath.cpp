@@ -56,7 +56,6 @@ namespace WPAP {
             lpe->_knot_entity = nullptr;
         }
         void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
-        void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
         Geom::Point knot_get() const override;
     };
 } // WPAP
@@ -277,7 +276,8 @@ void
 LPEPatternAlongPath::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
 {
     _knot_entity = new WPAP::KnotHolderEntityWidthPatternAlongPath(this);
-    _knot_entity->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _("Change the width"), SP_KNOT_SHAPE_CIRCLE);
+    _knot_entity->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_LPE, _("Change the width"),
+                         SP_KNOT_SHAPE_CIRCLE);
     knotholder->add(_knot_entity);
     if (hide_knot) {
         _knot_entity->knot->hide();

@@ -216,10 +216,11 @@ PowerStrokePointArrayParamKnotHolderEntity::knot_get() const
     return canvas_point;
 }
 
-void PowerStrokePointArrayParamKnotHolderEntity::knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin,
-                                                                guint state)
+void
+PowerStrokePointArrayParamKnotHolderEntity::knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state)
 {
     _pparam->param_effect->refresh_widgets = true;
+    _pparam->write_to_SVG();
 }
 
 void PowerStrokePointArrayParamKnotHolderEntity::knot_set_offset(Geom::Point offset)
@@ -268,9 +269,10 @@ PowerStrokePointArrayParamKnotHolderEntity::knot_click(guint state)
             };
             // add knot to knotholder
             PowerStrokePointArrayParamKnotHolderEntity *e = new PowerStrokePointArrayParamKnotHolderEntity(_pparam, _index+1);
-            e->create( this->desktop, this->item, parent_holder, Inkscape::CTRL_TYPE_UNKNOWN,
-                       _("<b>Stroke width control point</b>: drag to alter the stroke width. <b>Ctrl+click</b> adds a control point, <b>Ctrl+Alt+click</b> deletes it, <b>Shift+click</b> launches width dialog."),
-                        _pparam->knot_shape, _pparam->knot_mode, _pparam->knot_color);
+            e->create(this->desktop, this->item, parent_holder, Inkscape::CTRL_TYPE_LPE,
+                      _("<b>Stroke width control point</b>: drag to alter the stroke width. <b>Ctrl+click</b> adds a "
+                        "control point, <b>Ctrl+Alt+click</b> deletes it, <b>Shift+click</b> launches width dialog."),
+                      _pparam->knot_shape, _pparam->knot_mode, _pparam->knot_color);
             parent_holder->add(e);
         }
     }
@@ -285,9 +287,10 @@ void PowerStrokePointArrayParam::addKnotHolderEntities(KnotHolder *knotholder, S
 {
     for (unsigned int i = 0; i < _vector.size(); ++i) {
         PowerStrokePointArrayParamKnotHolderEntity *e = new PowerStrokePointArrayParamKnotHolderEntity(this, i);
-        e->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
-                   _("<b>Stroke width control point</b>: drag to alter the stroke width. <b>Ctrl+click</b> adds a control point, <b>Ctrl+Alt+click</b> deletes it, <b>Shift+click</b> launches width dialog."),
-                   knot_shape, knot_mode, knot_color);
+        e->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_LPE,
+                  _("<b>Stroke width control point</b>: drag to alter the stroke width. <b>Ctrl+click</b> adds a "
+                    "control point, <b>Ctrl+Alt+click</b> deletes it, <b>Shift+click</b> launches width dialog."),
+                  knot_shape, knot_mode, knot_color);
         knotholder->add(e);
     }
 }

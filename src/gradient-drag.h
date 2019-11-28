@@ -110,7 +110,7 @@ struct GrDragger {
 
     /* Following are for highlighting mesh handles when corner node is selected. */
     GrDragger *getMgCorner();
-    void highlightNode(SPMeshNode* node, bool highlight, Geom::Point corner_pos);
+    void highlightNode(SPMeshNode *node, bool highlight, Geom::Point corner_pos, int index);
     void highlightCorner(bool highlight);
 
     bool mayMerge(GrDragger *other);

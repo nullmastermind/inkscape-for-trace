@@ -558,6 +558,9 @@ pathv_to_cubicbezier( Geom::PathVector const &pathv)
     Geom::PathVector output;
     double cubicGap = 0.01;
     for (const auto & pit : pathv) {
+        if (pit.empty()) {
+            continue;
+        }
         output.push_back( Geom::Path() );
         output.back().start( pit.initialPoint() );
         output.back().close( pit.closed() );

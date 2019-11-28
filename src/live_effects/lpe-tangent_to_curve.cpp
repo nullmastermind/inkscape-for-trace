@@ -33,7 +33,6 @@ class KnotHolderEntityAttachPt : public LPEKnotHolderEntity {
 public:
     KnotHolderEntityAttachPt(LPETangentToCurve *effect) : LPEKnotHolderEntity(effect) {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
-    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     Geom::Point knot_get() const override;
 };
 
@@ -41,7 +40,6 @@ class KnotHolderEntityLeftEnd : public LPEKnotHolderEntity {
 public:
     KnotHolderEntityLeftEnd(LPETangentToCurve *effect) : LPEKnotHolderEntity(effect) {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
-    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     Geom::Point knot_get() const override;
 };
 
@@ -50,7 +48,6 @@ class KnotHolderEntityRightEnd : public LPEKnotHolderEntity
 public:
     KnotHolderEntityRightEnd(LPETangentToCurve *effect) : LPEKnotHolderEntity(effect) {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
-    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     Geom::Point knot_get() const override;
 };
 
@@ -100,20 +97,17 @@ void
 LPETangentToCurve::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item) {
     {
         KnotHolderEntity *e = new TtC::KnotHolderEntityAttachPt(this);
-        e->create( nullptr, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
-                   _("Adjust the point of attachment of the tangent") );
-        knotholder->add(e);
+e->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_LPE, _("Adjust the point of attachment of the tangent"));
+knotholder->add(e);
     }
     {
         KnotHolderEntity *e = new TtC::KnotHolderEntityLeftEnd(this);
-        e->create( nullptr, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
-                    _("Adjust the <b>left</b> end of the tangent") );
+        e->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_LPE, _("Adjust the <b>left</b> end of the tangent"));
         knotholder->add(e);
     }
     {
         KnotHolderEntity *e = new TtC::KnotHolderEntityRightEnd(this);
-        e->create( nullptr, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
-                   _("Adjust the <b>right</b> end of the tangent") );
+        e->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_LPE, _("Adjust the <b>right</b> end of the tangent"));
         knotholder->add(e);
     }
 };

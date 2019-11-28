@@ -222,6 +222,7 @@ void Handle::move(Geom::Point const &new_pos)
         bspline_weight = _pm()._bsplineHandlePosition(this, false);
         this->other()->setPosition(_pm()._bsplineHandleReposition(this->other(), bspline_weight));
     }
+    Inkscape::UI::Tools::sp_update_helperpath();
 }
 
 void Handle::setPosition(Geom::Point const &p)
@@ -375,7 +376,6 @@ bool Handle::grabbed(GdkEventMotion *)
 
 void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
 {
-    Inkscape::UI::Tools::sp_update_helperpath();
     Geom::Point parent_pos = _parent->position();
     Geom::Point origin = _last_drag_origin();
     SnapManager &sm = _desktop->namedview->snap_manager;
@@ -764,6 +764,7 @@ void Node::move(Geom::Point const &new_pos)
             nextNode->back()->setPosition(_pm()._bsplineHandleReposition(nextNode->back(), nextNodeWeight));
         }
     }
+    Inkscape::UI::Tools::sp_update_helperpath();
 }
 
 void Node::transform(Geom::Affine const &m)
@@ -1307,7 +1308,6 @@ bool Node::grabbed(GdkEventMotion *event)
 
 void Node::dragged(Geom::Point &new_pos, GdkEventMotion *event)
 {
-    Inkscape::UI::Tools::sp_update_helperpath();
     // For a note on how snapping is implemented in Inkscape, see snap.h.
     SnapManager &sm = _desktop->namedview->snap_manager;
     // even if we won't really snap, we might still call the one of the

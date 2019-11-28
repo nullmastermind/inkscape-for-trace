@@ -516,12 +516,17 @@ void LivePathEffectEditor::onUp()
         SPItem *item = sel->singleItem();
         SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
         if ( lpeitem ) {
+            Inkscape::LivePathEffect::Effect *lpe = lpeitem->getCurrentLPE();
             lpeitem->upCurrentPathEffect();
-
             DocumentUndo::done( current_desktop->getDocument(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                                 _("Move path effect up") );
             
             effect_list_reload(lpeitem);
+            if (lpe) {
+                showParams(*lpe);
+                lpe_list_locked = true;
+                selectInList(lpe);
+            }
         }
     }
 }
@@ -533,11 +538,17 @@ void LivePathEffectEditor::onDown()
         SPItem *item = sel->singleItem();
         SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
         if ( lpeitem ) {
+            Inkscape::LivePathEffect::Effect *lpe = lpeitem->getCurrentLPE();
             lpeitem->downCurrentPathEffect();
 
             DocumentUndo::done( current_desktop->getDocument(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                                 _("Move path effect down") );
             effect_list_reload(lpeitem);
+            if (lpe) {
+                showParams(*lpe);
+                lpe_list_locked = true;
+                selectInList(lpe);
+            }
         }
     }
 }

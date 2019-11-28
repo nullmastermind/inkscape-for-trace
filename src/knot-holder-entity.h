@@ -102,6 +102,7 @@ private:
 class LPEKnotHolderEntity : public KnotHolderEntity {
 public:
     LPEKnotHolderEntity(Inkscape::LivePathEffect::Effect *effect) : _effect(effect) {};
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override;
 protected:
     Inkscape::LivePathEffect::Effect *_effect;
 };

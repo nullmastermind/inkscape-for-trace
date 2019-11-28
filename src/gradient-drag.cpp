@@ -1807,7 +1807,7 @@ GrDragger* GrDragger::getMgCorner(){
 /**
  * Highlight mesh node
  */
-void GrDragger::highlightNode(SPMeshNode* node, bool highlight, Geom::Point corner_pos)
+void GrDragger::highlightNode(SPMeshNode *node, bool highlight, Geom::Point corner_pos, int index)
 {
     GrPointType type = POINT_MG_TENSOR;
     if (node->node_type == MG_NODE_TYPE_HANDLE) {
@@ -1818,7 +1818,13 @@ void GrDragger::highlightNode(SPMeshNode* node, bool highlight, Geom::Point corn
     GrDragger *d = this->parent->getDraggerFor(draggable->item, type, node->draggable, draggable->fill_or_stroke);
     if (d && node->draggable < G_MAXUINT) {
         Geom::Point end = d->knot->pos;
-        double angl = Geom::Ray(corner_pos, end).angle();
+        Geom::Ray ray = Geom::Ray(corner_pos, end);
+        if (d->knot->desktop->is_yaxisdown()) {
+            end *= Geom::Scale(1, -1);
+            corner_pos *= Geom::Scale(1, -1);
+            ray.setPoints(corner_pos, end);
+        }
+        double angl = ray.angle();
 
         if (highlight && knot->fill[SP_KNOT_VISIBLE] == GR_KNOT_COLOR_HIGHLIGHT && abs(angl - knot->angle) > Geom::rad_from_deg(10.0)){
             return;
@@ -1883,16 +1889,16 @@ void  GrDragger::highlightCorner(bool highlight)
             if (ccol < mcol && crow < mrow ) patch[2] = true;
             if (ccol > 0    && crow < mrow ) patch[3] = true;
             if (patch[0] || patch[1]) {
-                highlightNode(nodes[nrow-1][ncol  ], highlight, corner_point);
+                highlightNode(nodes[nrow - 1][ncol], highlight, corner_point, 0);
             }
             if (patch[1] || patch[2])  {
-                highlightNode(nodes[nrow  ][ncol+1], highlight, corner_point);
+                highlightNode(nodes[nrow][ncol + 1], highlight, corner_point, 1);
             }
             if (patch[2] || patch[3]) {
-                highlightNode(nodes[nrow+1][ncol  ], highlight, corner_point);
+                highlightNode(nodes[nrow + 1][ncol], highlight, corner_point, 2);
             }
             if (patch[3] || patch[0]) {
-                highlightNode(nodes[nrow  ][ncol-1], highlight, corner_point);
+                highlightNode(nodes[nrow][ncol - 1], highlight, corner_point, 3);
             }
             // Highlight tensors
             /*

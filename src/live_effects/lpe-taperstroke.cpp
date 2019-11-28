@@ -48,7 +48,6 @@ namespace TpS {
     public:
         KnotHolderEntityAttachBegin(LPETaperStroke * effect) : LPEKnotHolderEntity(effect) {}
         void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
-        void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
         Geom::Point knot_get() const override;
     };
     
@@ -56,7 +55,6 @@ namespace TpS {
     public:
         KnotHolderEntityAttachEnd(LPETaperStroke * effect) : LPEKnotHolderEntity(effect) {}
         void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
-        void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
         Geom::Point knot_get() const override;
     };
 } // TpS
@@ -452,11 +450,11 @@ Piecewise<D2<SBasis> > stretch_along(Piecewise<D2<SBasis> > pwd2_in, Geom::Path 
 void LPETaperStroke::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
 {
     KnotHolderEntity *e = new TpS::KnotHolderEntityAttachBegin(this);
-    e->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _("Start point of the taper"), SP_KNOT_SHAPE_CIRCLE);
+    e->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_LPE, _("Start point of the taper"), SP_KNOT_SHAPE_CIRCLE);
     knotholder->add(e);
 
     KnotHolderEntity *f = new TpS::KnotHolderEntityAttachEnd(this);
-    f->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _("End point of the taper"), SP_KNOT_SHAPE_CIRCLE);
+    f->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_LPE, _("End point of the taper"), SP_KNOT_SHAPE_CIRCLE);
     knotholder->add(f);
 }
 

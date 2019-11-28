@@ -124,6 +124,7 @@ ControlManagerImpl::ControlManagerImpl(ControlManager &manager) :
     _sizeTable()
 {
     _typeTable[CTRL_TYPE_UNKNOWN] = SP_TYPE_CTRL;
+    _typeTable[CTRL_TYPE_LPE] = SP_TYPE_CTRL;
     _typeTable[CTRL_TYPE_ADJ_HANDLE] = SP_TYPE_CTRL;
     _typeTable[CTRL_TYPE_ANCHOR] = SP_TYPE_CTRL;
     _typeTable[CTRL_TYPE_INVISIPOINT] = SP_TYPE_CTRL;
@@ -136,12 +137,13 @@ ControlManagerImpl::ControlManagerImpl(ControlManager &manager) :
 
     // -------
     _ctrlToShape[CTRL_TYPE_UNKNOWN] = SP_CTRL_SHAPE_DIAMOND;
+    _ctrlToShape[CTRL_TYPE_LPE] = SP_CTRL_SHAPE_DIAMOND;
     _ctrlToShape[CTRL_TYPE_NODE_CUSP] = SP_CTRL_SHAPE_DIAMOND;
     _ctrlToShape[CTRL_TYPE_NODE_SMOOTH] = SP_CTRL_SHAPE_SQUARE;
     _ctrlToShape[CTRL_TYPE_NODE_AUTO] = SP_CTRL_SHAPE_CIRCLE;
     _ctrlToShape[CTRL_TYPE_NODE_SYMETRICAL] = SP_CTRL_SHAPE_SQUARE;
 
-    _ctrlToShape[CTRL_TYPE_ADJ_HANDLE] =SP_CTRL_SHAPE_CIRCLE;
+    _ctrlToShape[CTRL_TYPE_ADJ_HANDLE] = SP_CTRL_SHAPE_CIRCLE;
     _ctrlToShape[CTRL_TYPE_INVISIPOINT] = SP_CTRL_SHAPE_SQUARE;
 
     // -------
@@ -171,11 +173,11 @@ ControlManagerImpl::ControlManagerImpl(ControlManager &manager) :
     }
     {
         unsigned int sizes[] = {3, 5, 7, 9, 11, 13, 15};
-        _sizeTable[CTRL_TYPE_ANCHOR] = std::vector<unsigned int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
+        _sizeTable[CTRL_TYPE_ADJ_HANDLE] = std::vector<unsigned int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
     }
     {
         unsigned int sizes[] = {3, 5, 7, 9, 11, 13, 15};
-        _sizeTable[CTRL_TYPE_ADJ_HANDLE] = std::vector<unsigned int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
+        _sizeTable[CTRL_TYPE_ANCHOR] = std::vector<unsigned int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
     }
     {
         unsigned int sizes[] = {5, 7, 9, 11, 13, 15, 17};
@@ -197,6 +199,10 @@ ControlManagerImpl::ControlManagerImpl(ControlManager &manager) :
     {
         unsigned int sizes[] = {1, 1, 1, 1, 1, 1, 1};
         _sizeTable[CTRL_TYPE_INVISIPOINT] = std::vector<unsigned int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
+    }
+    {
+        unsigned int sizes[] = { 5, 7, 9, 11, 13, 15, 17 };
+        _sizeTable[CTRL_TYPE_LPE] = std::vector<unsigned int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
     }
 }
 
@@ -263,6 +269,7 @@ SPCanvasItem *ControlManagerImpl::createControl(SPCanvasGroup *parent, ControlTy
                                       NULL);
             break;
         case CTRL_TYPE_UNKNOWN:
+        case CTRL_TYPE_LPE:
         default:
             item = sp_canvas_item_new(parent, SP_TYPE_CTRL, nullptr);
     }

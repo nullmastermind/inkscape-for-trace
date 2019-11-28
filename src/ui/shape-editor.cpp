@@ -15,6 +15,8 @@
 #include "desktop.h"
 #include "document.h"
 #include "knotholder.h"
+#include "live_effects/effect.h"
+#include "object/sp-lpe-item.h"
 
 #include "ui/shape-editor.h"
 #include "xml/node-event-vector.h"
@@ -134,6 +136,15 @@ void ShapeEditor::set_item(SPItem *item) {
         if (!this->knotholder) {
             // only recreate knotholder if none is present
             this->knotholder = createKnotHolder(item, desktop);
+        }
+        SPLPEItem *lpe = dynamic_cast<SPLPEItem *>(item);
+        if (!(lpe &&
+            lpe->getCurrentLPE() &&
+            lpe->getCurrentLPE()->isVisible() &&
+            lpe->getCurrentLPE()->providesKnotholder()))
+        {
+            delete this->lpeknotholder;
+            this->lpeknotholder = nullptr;
         }
         if (!this->lpeknotholder) {
             // only recreate knotholder if none is present

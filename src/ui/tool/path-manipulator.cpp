@@ -37,6 +37,7 @@
 #include "ui/tool/event-utils.h"
 #include "ui/tool/multi-path-manipulator.h"
 #include "ui/tool/path-manipulator.h"
+#include "ui/tools/node-tool.h"
 
 #include "xml/node-observer.h"
 

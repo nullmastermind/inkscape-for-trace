@@ -218,6 +218,13 @@ PointParamKnotHolderEntity::knot_set(Geom::Point const &p, Geom::Point const &or
     }
 }
 
+void
+PointParamKnotHolderEntity::knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state)
+{
+    pparam->param_effect->refresh_widgets = true;
+    pparam->write_to_SVG();
+}
+
 Geom::Point
 PointParamKnotHolderEntity::knot_get() const
 {
@@ -235,17 +242,13 @@ PointParamKnotHolderEntity::knot_click(guint state)
     }
 }
 
-void PointParamKnotHolderEntity::knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state)
-{
-    pparam->param_effect->refresh_widgets = true;
-}
-
 void
 PointParam::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
 {
     _knot_entity = new PointParamKnotHolderEntity(this);
     // TODO: can we ditch handleTip() etc. because we have access to handle_tip etc. itself???
-    _knot_entity->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, handleTip(), knot_shape, knot_mode, knot_color);
+    _knot_entity->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_LPE, handleTip(), knot_shape, knot_mode,
+                         knot_color);
     knotholder->add(_knot_entity);
 }
 

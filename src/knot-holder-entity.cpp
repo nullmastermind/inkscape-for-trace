@@ -25,6 +25,7 @@
 #include "snap.h"
 #include "style.h"
 
+#include "live_effects/effect.h"
 #include "object/sp-hatch.h"
 #include "object/sp-item.h"
 #include "object/sp-namedview.h"
@@ -141,6 +142,15 @@ KnotHolderEntity::snap_knot_position_constrained(Geom::Point const &p, Inkscape:
     return s * i2d.inverse();
 }
 
+void
+LPEKnotHolderEntity::knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state)
+{
+    Inkscape::LivePathEffect::Effect *effect = _effect;
+    if (effect) {
+        effect->refresh_widgets = true;
+        effect->writeParamsToSVG();
+    }
+}
 
 /* Pattern manipulation */
 
