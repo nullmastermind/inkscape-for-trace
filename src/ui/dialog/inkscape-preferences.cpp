@@ -1141,6 +1141,9 @@ void InkscapePreferences::initPageUI()
         _icon_theme.init("/theme/iconTheme", labels, values, "hicolor");
         _page_theme.add_line(false, _("Change icon theme:"), _icon_theme, "", "", false);
         _icon_theme.signal_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicThemeCheck));
+        _sys_user_icons_dir_copy.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::ICONS, ""),
+                             _("Open icons folder"));
+        _page_theme.add_line(true, _("User icons: "), _sys_user_icons_dir_copy, "", _("Location of the user’s icons"), true, Gtk::manage(new Gtk::Box()));
     }
     Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
     _symbolic_icons.init(_("Use symbolic icons"), "/theme/symbolicIcons", false);
