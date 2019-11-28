@@ -277,7 +277,13 @@ bool CalligraphicTool::apply(Geom::Point p) {
     Geom::Point ang1;
     if (this->usetilt) {
         // 1a. calculate nib angle from input device tilt:
-        ang1 = Geom::Point(-this->xtilt, this->ytilt);
+        if (this->xtilt == 0 && this->ytilt == 0) {
+            // to be sure that atan2 in the computation below
+            // would not crash or return NaN.
+            ang1 = Geom::Point(1, 0);
+        } else {
+            ang1 = Geom::Point(-this->xtilt, this->ytilt);
+        }
     }
     else {
         // 1b. fixed dc->angle (absolutely flat nib):
