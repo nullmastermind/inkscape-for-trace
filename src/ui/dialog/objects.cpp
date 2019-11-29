@@ -142,7 +142,7 @@ public:
         _repr->addObserver(*this);
     }
 
-    ~ObjectWatcher() {
+    ~ObjectWatcher() override {
         _repr->removeObserver(*this);
     }
 
