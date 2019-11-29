@@ -694,7 +694,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
             iarea.intersectWith(_drawbox);
             setCached(false, true);
         } else {
-            setCached(_cached, true);
+            setCached(true, true);
         }
     }
 
