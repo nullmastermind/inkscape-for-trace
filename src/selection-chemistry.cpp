@@ -4179,7 +4179,10 @@ void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
             // insert into parent, restore pos
             parent->addChild(repr, ref_repr);
 
-            SPItem *mask_item = static_cast<SPItem *>(document()->getObjectByRepr(repr));
+            SPItem *mask_item = dynamic_cast<SPItem *>(document()->getObjectByRepr(repr));
+            if (!mask_item) {
+                continue;
+            }
             items_to_select.push_back(mask_item);
 
             // transform mask, so it is moved the same spot where mask was applied
