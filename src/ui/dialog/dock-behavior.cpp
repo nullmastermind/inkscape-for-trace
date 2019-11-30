@@ -260,7 +260,7 @@ DockBehavior::onDesktopActivated(SPDesktop *desktop)
         }
 
         // we're done, allow next retransientizing not sooner than after 120 msec
-        g_timeout_add (120, (GSourceFunc) sp_retransientize_again, (gpointer) floating_win);
+        g_timeout_add (120, (GSourceFunc) sp_retransientize_again, (gpointer) &_dialog);
     }
 }
 
