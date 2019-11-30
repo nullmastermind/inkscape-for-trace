@@ -526,7 +526,7 @@
 	</dict>
     </array>
     <key>CFBundleExecutable</key>
-    <string>Inkscape</string>
+    <string>inkscape</string>
     <key>CFBundleIconFile</key>
     <string>inkscape.icns</string>
     <key>CFBundleIdentifier</key>

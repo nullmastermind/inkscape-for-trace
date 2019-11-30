@@ -46,6 +46,12 @@ EOF
 chmod 755 $SRC_DIR/run_gtk-mac-bundler.sh
 run_in_terminal $SRC_DIR/run_gtk-mac-bundler.sh
 
+# Rename to get from lowercase to capitalized "i". This works only on
+# case-insensitive filesystems (default on macOS).
+
+mv $APP_DIR $APP_DIR.tmp
+mv $APP_DIR.tmp $APP_DIR
+
 # Patch library link paths.
 
 relocate_dependency @executable_path/../Resources/lib/inkscape/libinkscape_base.dylib $APP_EXE_DIR/Inkscape-bin
@@ -61,6 +67,9 @@ relocate_neighbouring_libs $APP_LIB_DIR
 
 # update minimum OS version
 /usr/libexec/PlistBuddy -c "Set LSMinimumSystemVersion '$MACOSX_DEPLOYMENT_TARGET'" $APP_PLIST
+
+# add bundle name 
+/usr/libexec/PlistBuddy -c "Add CFBundleName string 'Inkscape'" $APP_PLIST
 
 ### generate application icon ##################################################
 
@@ -196,5 +205,8 @@ done
 
 ### remove launch script #######################################################
 
-mv $APP_EXE_DIR/Inkscape-bin $APP_EXE_DIR/Inkscape
+rm $APP_EXE_DIR/Inkscape
 
+### rename binary ##############################################################
+
+mv $APP_EXE_DIR/Inkscape-bin $APP_EXE_DIR/inkscape
