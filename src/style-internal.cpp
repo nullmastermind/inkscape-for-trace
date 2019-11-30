@@ -1140,11 +1140,10 @@ const Glib::ustring SPIEastAsian::get_value() const
 
 void
 SPIString::read( gchar const *str ) {
-    g_assert(!set);
-    g_assert(!inherit);
-    g_assert(!_value);
 
     if( !str ) return;
+
+    clear();
 
     if (style_src == SP_STYLE_SRC_ATTRIBUTE && id() == SP_ATTR_D) {
         return;
