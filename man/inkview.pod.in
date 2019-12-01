@@ -2,72 +2,127 @@
 
 =head1 NAME
 
-Inkview - an SVG slideshow program.
+Inkview - an SVG viewer and slideshow program.
 
 =head1 SYNOPSIS
 
 C<inkview [options] [filename ...]>
 
+options:
+
+    -h, --help
+    -V, --version
+
+    -f, --fullscreen
+    -r, --recursive
+    -t, --timer=NUMBER
+    -s, --scale=NUMBER
+    -p, --preload
+
 =head1 DESCRIPTION
 
-B<Inkview> is a slideshow program which uses SVG files. One or more B<FILES>
-may be specified on the command-line and the slideshow will consist of the
-files supplied on the command line in the given order.
+B<Inkview> is an B<Scalable Vector Graphics (SVG)> viewer that can also be
+used for slideshows or presentations. One or more B<FILES> or B<FOLDERS> can
+be specified on the command-line for opening. Inkview will display all SVG
+files in the given order. Folders will be expanded to a list of contained SVG
+files.
 
-=head1 KEYBINDINGS
-
-Left or Page Up: show previous slide
-Right, Page Down or space bar: show next slide
-Up or Home: go to first slide
-Down or End: go to last slide
-Escape or Q: quit
-F11: go to fullscreen mode/revert back to window mode
-Return: pop up window with slide buttons (first, prev, next, last)
-
-=head1 EXAMPLES
-
-
-You can use the command
-
-    inkview B<${CMAKE_INSTALL_PREFIX}/${SHARE_INSTALL}>/inkscape/examples/*.svg*
-
-to browse through the examples included in the inkscape package.
+You can also launch Inkview without any command-line arguments, which will
+bring up a file chooser that allows to select files and folders via a
+graphical user interface.
 
 =head1 OPTIONS
 
--s, --scale=NUM     Scale image by factor NUM
+=over 8
 
-=head1 TODO
+=item B<-?>, B<--help>
 
-Add a default SVG for when a document does not load.
-Add a usage/help command line switch.
+Show help options
+
+=item B<-V>, B<--version>
+
+Print Inkview version and build date (this is usually matches the Inkscape version).
+
+=item B<-f>, B<--fullscreen>
+
+Launch Inkview in fullscreen mode.
+
+=item B<-r>, B<--recursive>
+
+Search folders specified on the command line recursively for SVG files.
+This means all SVG files in all subfolders of the specified folder will be opened.
+
+=item B<-t>, B<--timer=NUMBER>
+
+Change to the next image every NUMBER seconds
+
+=item B<-s>, B<--scale=NUMBER>
+
+Show image scaled by a factor of NUMBER instead of using the file's native size.
+
+=item B<-p>, B<--preload>
+
+Preloads all SVG files. Inkview still needs to render images upon showing,
+however this option ensures all SVG files are already parsed and loaded into
+memory. This option can also be used to verify if all files can be opened
+properly, without having to cycle through all files manually.
+
+=back
+
+=head1 KEYBINDINGS
+
+=over 8
+
+=item * Left, Page Up, or Backspace: show previous image
+
+=item * Right, Page Down, or Space: show next image
+
+=item * Up, or Home: go to first image
+
+=item * Down, or End: go to last image
+
+=back
+
+=over 8
+
+=item * Return: show control window
+
+=item * F11: toggle fullscreen mode
+
+=item * Escape or Q: quit
+
+=back
+
+=head1 EXAMPLES
+
+Open two SVG files for viewing:
+
+    inkview file1.svg file2.svg
+
+Open all SVG files in the examples folder shipped with Inkscape:
+
+    inkview B<${CMAKE_INSTALL_PREFIX}/${SHARE_INSTALL}>/inkscape/examples
+
+Launch a fullscreen slideshow that automatically changes to the next image every 5 seconds:
+
+    inkview --fullscreen --timer=5 [files/folders ...]
 
 =head1 SEE ALSO
 
-L<inkscape> and the inkview related part of the Inkscape wiki:
-
-L<http://wiki.inkscape.org/wiki/index.php/Inkview>
+L<inkscape>
 
 L<http://www.inkscape.org/>
 
 =head1 AUTHORS
 
-Johan Ceuppens
-
-This codebase owes its existence to a large number of contributors
-throughout its various incarnations. See inkscape(1) for more
-information.
-
-This man-page was written by Wolfram Quester
-E<lt>wolfi@mittelerde.physik.uni\-konstanz.deE<gt>, and converted to POD
-format by Bryce Harrington E<lt>bryce@bryceharrington.orgE<gt>.
+See L<inkscape(1)>
 
 =head1 COPYRIGHT AND LICENSE
 
-B<Copyright (C)> 1999-2016 by Authors.
+B<Copyright (C)> 1999-2019 by Authors.
 
 B<Inkscape> is free software; you can redistribute it and/or modify it
-under the terms of the GPL version 2 or later.
+under the terms of the GPL version 3 or later.
 
 
 =for comment
