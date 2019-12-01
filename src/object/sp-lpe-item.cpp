@@ -270,6 +270,7 @@ bool SPLPEItem::performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape:
 
             if (!SP_IS_GROUP(this)) {
                 // To have processed the shape to doAfterEffect
+                current->setCurveInsync(curve);
                 if (curve) {
                     lpe->pathvector_after_effect = curve->get_pathvector();
                 }
