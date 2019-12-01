@@ -92,7 +92,7 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
     SPLPEItem *splpeitem = const_cast<SPLPEItem *>(lpeItem);
     SPShape *shape = dynamic_cast<SPShape *>(splpeitem);
     if (shape) {
-        Geom::PathVector const pathv = pathv_to_linear_and_cubic_beziers(shape->getCurve()->get_pathvector());
+        Geom::PathVector const pathv = pathv_to_linear_and_cubic_beziers(shape->getCurve(true)->get_pathvector());
         Satellites satellites;
         double power = radius;
         if (!flexible) {
@@ -108,16 +108,33 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
         if (it != gchar_map_to_satellite_type.end()) {
             satellite_type = it->second;
         }
+        Geom::PathVector pathvres;
         for (const auto & path_it : pathv) {
-            if (path_it.empty()) {
+            if (path_it.empty() || path_it.size_closed() < 2) {
                 continue;
             }
             std::vector<Satellite> subpath_satellites;
-            for (Geom::Path::const_iterator curve_it = path_it.begin(); curve_it !=  path_it.end(); ++curve_it) {
-                //Maybe we want this satellites...
-                //if (curve_it->isDegenerate()) {
-                //  continue 
-                //}
+            Geom::Path::const_iterator curve_it = path_it.begin();
+            Geom::Path::const_iterator curve_endit = path_it.end_default();
+            if (path_it.closed()) {
+                const Geom::Curve &closingline = path_it.back_closed();
+                // the closing line segment is always of type
+                // Geom::LineSegment.
+                if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
+                    // closingline.isDegenerate() did not work, because it only checks for
+                    // *exact* zero length, which goes wrong for relative coordinates and
+                    // rounding errors...
+                    // the closing line segment has zero-length. So stop before that one!
+                    curve_endit = path_it.end_open();
+                }
+            }
+            Geom::Path pathresult(curve_it->initialPoint());
+            while (curve_it != curve_endit) {
+                if (pathresult.size()) {
+                    pathresult.setFinal(curve_it->initialPoint());
+                }
+                pathresult.append(*curve_it);
+                ++curve_it;
                 Satellite satellite(satellite_type);
                 satellite.setSteps(chamfer_steps);
                 satellite.setAmount(power);
@@ -126,6 +143,7 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
                 satellite.setHidden(hide_knots);
                 subpath_satellites.push_back(satellite);
             }
+
             //we add the last satellite on open path because _pathvector_satellites is related to nodes, not curves
             //so maybe in the future we can need this last satellite in other effects
             //don't remove for this effect because _pathvector_satellites class has methods when the path is modified
@@ -139,10 +157,13 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
                 satellite.setHidden(hide_knots);
                 subpath_satellites.push_back(satellite);
             }
+            pathresult.close(path_it.closed());
+            pathvres.push_back(pathresult);
+            pathresult.clear();
             satellites.push_back(subpath_satellites);
         }
         _pathvector_satellites = new PathVectorSatellites();
-        _pathvector_satellites->setPathVector(pathv);
+        _pathvector_satellites->setPathVector(pathvres);
         _pathvector_satellites->setSatellites(satellites);
         satellites_param.setPathVectorSatellites(_pathvector_satellites);
     } else {
@@ -300,16 +321,46 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         //mandatory call
         satellites_param.setEffectType(effectType());
         Geom::PathVector const pathv = pathv_to_linear_and_cubic_beziers(pathvector_before_effect);
+        Geom::PathVector pathvres;
+        for (const auto &path_it : pathv) {
+            if (path_it.empty() || path_it.size_closed() < 2) {
+                continue;
+            }
+            Geom::Path::const_iterator curve_it = path_it.begin();
+            Geom::Path::const_iterator curve_endit = path_it.end_default();
+            if (path_it.closed()) {
+                const Geom::Curve &closingline = path_it.back_closed();
+                // the closing line segment is always of type
+                // Geom::LineSegment.
+                if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
+                    // closingline.isDegenerate() did not work, because it only checks for
+                    // *exact* zero length, which goes wrong for relative coordinates and
+                    // rounding errors...
+                    // the closing line segment has zero-length. So stop before that one!
+                    curve_endit = path_it.end_open();
+                }
+            }
+            Geom::Path pathresult(curve_it->initialPoint());
+            while (curve_it != curve_endit) {
+                if (pathresult.size()) {
+                    pathresult.setFinal(curve_it->initialPoint());
+                }
+                pathresult.append(*curve_it);
+                ++curve_it;
+            }
+            pathresult.close(path_it.closed());
+            pathvres.push_back(pathresult);
+            pathresult.clear();
+        }
         //if are different sizes call to recalculate
-        //TODO: Update the satellite data in paths modified,
         Satellites satellites = satellites_param.data();
         if (satellites.empty()) {
-            doOnApply(lpeItem);
+            doOnApply(lpeItem); // dont want _impl to not update versioning
             satellites = satellites_param.data();
         }
         bool write = false;
         if (_pathvector_satellites) {
-            size_t number_nodes = pathv.nodes().size();
+            size_t number_nodes = count_pathvector_nodes(pathvres);
             size_t previous_number_nodes = _pathvector_satellites->getTotalSatellites();
             if (number_nodes != previous_number_nodes) {
                 double power = radius;
@@ -332,7 +383,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
                 satellite.setIsTime(flexible);
                 satellite.setHasMirror(true);
                 satellite.setHidden(hide_knots);
-                _pathvector_satellites->recalculateForNewPathVector(pathv, satellite);
+                _pathvector_satellites->recalculateForNewPathVector(pathvres, satellite);
                 satellites = _pathvector_satellites->getSatellites();
                 write = true;
             }
@@ -344,10 +395,13 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         }
         for (size_t i = 0; i < satellites.size(); ++i) {
             for (size_t j = 0; j < satellites[i].size(); ++j) {
-                if (j >= pathv[i].size()) {
+                if (j >= pathvres[i].size_closed()) {
+                    // we are on the end of a open path
+                    // for the moment we dont want to use
+                    // this satellite so simplest do nothing with it
                     continue;
                 }
-                Geom::Curve const &curve_in = pathv[i][j];
+                Geom::Curve const &curve_in = pathvres[i][j];
                 if (satellites[i][j].is_time != flexible) {
                     satellites[i][j].is_time = flexible;
                     double amount = satellites[i][j].amount;
@@ -368,13 +422,18 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         if (!_pathvector_satellites) {
             _pathvector_satellites = new PathVectorSatellites();
         }
-        _pathvector_satellites->setPathVector(pathv);
+        _pathvector_satellites->setPathVector(pathvres);
         _pathvector_satellites->setSatellites(satellites);
         satellites_param.setPathVectorSatellites(_pathvector_satellites, write);
-        refreshKnots();
+
         Glib::ustring current_unit = Glib::ustring(unit.get_abbreviation());
         if (previous_unit != current_unit && previous_unit != "") {
             updateAmount();
+        }
+        if (write) {
+            satellites_param.reloadKnots();
+        } else {
+            refreshKnots();
         }
         previous_unit = current_unit;
     } else {
@@ -410,35 +469,39 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
     _degenerate_hide = false;
     Geom::PathVector const pathv = _pathvector_satellites->getPathVector();
     Satellites satellites = _pathvector_satellites->getSatellites();
-    for (Geom::PathVector::const_iterator path_it = pathv.begin(); path_it != pathv.end(); ++path_it) {
-        if (path_it->empty()) {
-            continue;
-        }
+    for (const auto &path_it : pathv) {
         Geom::Path tmp_path;
-        if (path_it->size() == 1) {
-            path++;
-            tmp_path.start(path_it[0].pointAt(0));
-            tmp_path.append(path_it[0]);
-            path_out.push_back(tmp_path);
-            continue;
-        }
+
         double time0 = 0;
         size_t curve = 0;
-        for (Geom::Path::const_iterator curve_it1 = path_it->begin(); curve_it1 !=  path_it->end(); ++curve_it1) {
+        Geom::Path::const_iterator curve_it1 = path_it.begin();
+        Geom::Path::const_iterator curve_endit = path_it.end_default();
+        if (path_it.closed()) {
+            const Geom::Curve &closingline = path_it.back_closed();
+            // the closing line segment is always of type
+            // Geom::LineSegment.
+            if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
+                // closingline.isDegenerate() did not work, because it only checks for
+                // *exact* zero length, which goes wrong for relative coordinates and
+                // rounding errors...
+                // the closing line segment has zero-length. So stop before that one!
+                curve_endit = path_it.end_open();
+            }
+        }
+        while (curve_it1 != curve_endit) {
             size_t next_index = curve + 1;
-            if (curve == pathv[path].size() - 1 && pathv[path].closed()) {
+            if (curve == pathv[path].size_closed() - 1 && pathv[path].closed()) {
                 next_index = 0;
             }
-            if (pathv[path].size() != satellites[path].size()) {
-                continue;
-            }
             //append last extreme of paths on open paths
-            if (curve == pathv[path].size() -1 && !pathv[path].closed()) { //the path is open and we are at end of path
+            if (curve == pathv[path].size_closed() - 1 && !pathv[path].closed()) { // the path is open and we are at
+                                                                                    // end of path
                 if (time0 != 1) { //Previous satellite not at 100% amount
                     Geom::Curve *last_curve = curve_it1->portion(time0, 1);
                     last_curve->setInitial(tmp_path.finalPoint());
                     tmp_path.append(*last_curve);
                 }
+                ++curve_it1;
                 continue;
             }
             Geom::Curve const &curve_it2 = pathv[path][next_index];
@@ -448,8 +511,8 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
                 g_warning("Knots hidden if consecutive nodes has the same position.");
                 return path_in;
             }
-            if (!curve) { //curve == 0 
-                if (!path_it->closed()) {
+            if (!curve) { //curve == 0
+                if (!path_it.closed()) {
                     time0 = 0;
                 } else {
                     time0 = satellites[path][0].time(*curve_it1);
@@ -588,9 +651,10 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
                 }
             }
             curve++;
+            ++curve_it1;
             time0 = time2;
         }
-        if (path_it->closed()) {
+        if (path_it.closed()) {
             tmp_path.close();
         }
         path++;

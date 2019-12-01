@@ -10,6 +10,7 @@
 
 #include "effect-enum.h"
 #include "parameter/bool.h"
+#include "parameter/hidden.h"
 #include "ui/widget/registry.h"
 #include <2geom/forward.h>
 #include <glibmm/ustring.h>
@@ -67,6 +68,7 @@ public:
 
     //basically, to get this method called before the derived classes, a bit
     //of indirection is needed. We first call these methods, then the below.
+    void doAfterEffect_impl(SPLPEItem const *lpeitem);
     void doOnApply_impl(SPLPEItem const* lpeitem);
     void doBeforeEffect_impl(SPLPEItem const* lpeitem);
     void setCurrentZoom(double cZ);
@@ -140,6 +142,7 @@ public:
     bool is_load;
     bool refresh_widgets;
     BoolParam is_visible;
+    HiddenParam lpeversion;
     Geom::PathVector pathvector_before_effect;
     Geom::PathVector pathvector_after_effect;
     SPLPEItem *sp_lpe_item; // these get stored in doBeforeEffect_impl, and derived classes may do as they please with
@@ -169,7 +172,7 @@ public:
     bool _provides_knotholder_entities;
 
     int oncanvasedit_it;
-
+    bool is_applied;
     bool show_orig_path; // set this to true in derived effects to automatically have the original
                          // path displayed as helperpath
 

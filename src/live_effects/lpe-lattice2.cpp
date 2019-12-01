@@ -335,6 +335,9 @@ LPELattice2::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     original_bbox(lpeitem, false, true);
     setDefaults();
+    if (is_applied) {
+        resetGrid();
+    }
     Geom::Line vert(grid_point_8x9.param_get_default(),grid_point_10x11.param_get_default());
     Geom::Line horiz(grid_point_24x26.param_get_default(),grid_point_25x27.param_get_default());
     if(vertical_mirror) {

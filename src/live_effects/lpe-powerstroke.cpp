@@ -768,7 +768,6 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
 
 void LPEPowerStroke::doAfterEffect(SPLPEItem const *lpeitem)
 {
-    is_load = false;
     if (pathvector_before_effect[0].size() == pathvector_after_effect[0].size()) {
         if (recusion_limit < 6) {
             Inkscape::LivePathEffect::Effect *effect =

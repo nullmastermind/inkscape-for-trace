@@ -55,6 +55,7 @@ public:
     void setCurrentZoom(double current_zoom);
     void setGlobalKnotHide(bool global_knot_hide);
     void setEffectType(EffectType et);
+    void reloadKnots();
     void setPathVectorSatellites(PathVectorSatellites *pathVectorSatellites, bool write = true);
     void set_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color);
 
@@ -87,7 +88,6 @@ public:
     {
         _pparam->_knoth = nullptr;
     }
-
     void knot_set(Geom::Point const &p, Geom::Point const &origin,
                           guint state) override;
     Geom::Point knot_get() const override;
@@ -96,7 +96,7 @@ public:
     void knot_set_offset(Satellite);
     /** Checks whether the index falls within the size of the parameter's vector
      */
-    bool valid_index(size_t index,size_t subindex) const
+    bool valid_index(size_t index, size_t subindex) const
     {
         return (_pparam->_vector.size() > index && _pparam->_vector[index].size() > subindex);
     };

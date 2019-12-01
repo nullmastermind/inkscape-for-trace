@@ -84,7 +84,6 @@ LPEMirrorSymmetry::~LPEMirrorSymmetry()
 void
 LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem)
 {
-    is_load = false;
     SPDocument *document = getSPDoc();
     if (!document) {
         return;
@@ -396,7 +395,7 @@ LPEMirrorSymmetry::toMirror(Geom::Affine transform, bool reset)
 void
 LPEMirrorSymmetry::resetStyles(){
     reset = true;
-    doAfterEffect(sp_lpe_item);
+    doAfterEffect_impl(sp_lpe_item);
 }
 
 

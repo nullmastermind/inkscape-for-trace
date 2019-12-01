@@ -75,7 +75,7 @@ Geom::PathVector sp_get_recursive_pathvector(SPLPEItem *item, Geom::PathVector r
     }
     SPShape *shape = dynamic_cast<SPShape *>(item);
     if (shape && shape->getCurve()) {
-        for (auto path : shape->getCurve()->get_pathvector()) {
+        for (auto path : shape->getCurve(true)->get_pathvector()) {
             if (!path.empty()) {
                 bool pathdir = Geom::path_direction(path);
                 if (pathdir == dir && inverse) {

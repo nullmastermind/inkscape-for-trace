@@ -17,6 +17,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <helper/geom.h>
 #include <helper/geom-pathvectorsatellites.h>
 #include "util/units.h"
 
@@ -44,9 +45,7 @@ size_t PathVectorSatellites::getTotalSatellites()
 {
     size_t counter = 0;
     for (auto & _satellite : _satellites) {
-        for (size_t j = 0; j < _satellite.size(); ++j) { 
-            counter++;
-        }
+        counter += _satellite.size();
     }
     return counter;
 }
@@ -113,7 +112,7 @@ void PathVectorSatellites::updateAmount(double radius, bool apply_no_radius, boo
         for (size_t j = 0; j < _satellites[i].size(); ++j) {
             boost::optional<size_t> previous_index = boost::none;
             if (j == 0 && _pathvector[i].closed()) {
-                previous_index = _pathvector[i].size() - 1;
+                previous_index = _pathvector[i].size_closed() - 1;
             } else if (!_pathvector[i].closed() || j != 0) {
                 previous_index = j - 1;
             }
@@ -121,7 +120,7 @@ void PathVectorSatellites::updateAmount(double radius, bool apply_no_radius, boo
                 _satellites[i][j].amount = 0;
                 continue;
             }
-            if (_pathvector[i].size() == j) {
+            if (_pathvector[i].size_closed() == j) {
                 continue;
             }
             if ((!apply_no_radius && _satellites[i][j].amount == 0) ||
@@ -157,7 +156,7 @@ void PathVectorSatellites::convertUnit(Glib::ustring in, Glib::ustring to, bool 
                 _satellites[i][j].amount = 0;
                 continue;
             }
-            if (_pathvector[i].size() == j) {
+            if (_pathvector[i].size_closed() == j) {
                 continue;
             }
             if ((!apply_no_radius && _satellites[i][j].amount == 0) ||
@@ -180,7 +179,7 @@ void PathVectorSatellites::updateSatelliteType(SatelliteType satellitetype, bool
             {
                 continue;
             }
-            if (_pathvector[i].size() == j) {
+            if (_pathvector[i].size_closed() == j) {
                 if (!only_selected) {
                     _satellites[i][j].satellite_type = satellitetype;
                 }
@@ -200,33 +199,24 @@ void PathVectorSatellites::updateSatelliteType(SatelliteType satellitetype, bool
 
 void PathVectorSatellites::recalculateForNewPathVector(Geom::PathVector const pathv, Satellite const S)
 {
+    // pathv && _pathvector came here:
+    // * with diferent number of nodes
+    // * without empty subpats
+    // * _pathvector and satellites (old data) are paired
     Satellites satellites;
     bool found = false;
     //TODO evaluate fix on nodes at same position
-    size_t number_nodes = pathv.nodes().size();
-    size_t previous_number_nodes = _pathvector.nodes().size();
+    size_t number_nodes = count_pathvector_nodes(pathv);
+    size_t previous_number_nodes = count_pathvector_nodes(_pathvector);
     for (const auto & i : pathv) {
         std::vector<Satellite> path_satellites;
-        size_t count = i.size_default();
-        if ( i.closed()) {
-          const Geom::Curve &closingline = i.back_closed(); 
-          if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
-            count = i.size_open();
-          }
-        }
+        size_t count = i.size_closed();
         for (size_t j = 0; j < count; j++) {
             found = false;
             for (size_t k = 0; k < _pathvector.size(); k++) {
-                size_t count2 = _pathvector[k].size_default();
-                if ( _pathvector[k].closed()) {
-                  const Geom::Curve &closingline = _pathvector[k].back_closed(); 
-                  if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
-                    count2 = _pathvector[k].size_open();
-                  }
-                }
+                size_t count2 = _pathvector[k].size_closed();
                 for (size_t l = 0; l < count2; l++) {
-                    if (Geom::are_near(_pathvector[k][l].initialPoint(),  i[j].initialPoint()))
-                    {
+                    if (Geom::are_near(_pathvector[k][l].initialPoint(),  i[j].initialPoint())) {
                         path_satellites.push_back(_satellites[k][l]);
                         found = true;
                         break;
@@ -236,7 +226,6 @@ void PathVectorSatellites::recalculateForNewPathVector(Geom::PathVector const pa
                     break;
                 }
             }
-            
             if (!found && previous_number_nodes < number_nodes) {
                 path_satellites.push_back(S);
             }

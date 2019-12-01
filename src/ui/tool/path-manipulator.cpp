@@ -1506,14 +1506,13 @@ void PathManipulator::_setGeometry()
         // return true to leave the decision on empty to the caller.
         // Maybe the path become empty and we want to update to empty
         if (empty()) return;
-        if (SPCurve * original = _path->getCurveBeforeLPE()){
-            if(!_spcurve->is_equal(original)) {
-                _path->setCurveBeforeLPE(_spcurve, false);
+        if (_path->getCurveBeforeLPE(true)) {
+            if (!_spcurve->is_equal(_path->getCurveBeforeLPE(true))) {
+                _path->setCurveBeforeLPE(_spcurve);
                 sp_lpe_item_update_patheffect(_path, true, false);
-                original->unref();
             }
         } else if(!_spcurve->is_equal(_path->getCurve(true))) {
-            _path->setCurve(_spcurve, false);
+            _path->setCurve(_spcurve);
         }
     }
 }
@@ -1660,14 +1659,16 @@ void PathManipulator::_removeNodesFromSelection()
 void PathManipulator::_commit(Glib::ustring const &annotation)
 {
     writeXML();
-    DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_NODE, annotation.data());
+    if (_desktop) {
+        DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_NODE, annotation.data());
+    }
 }
 
 void PathManipulator::_commit(Glib::ustring const &annotation, gchar const *key)
 {
     writeXML();
     DocumentUndo::maybeDone(_desktop->getDocument(), key, SP_VERB_CONTEXT_NODE,
-                            annotation.data());
+                                annotation.data());
 }
 
 /** Update the position of the curve drag point such that it is over the nearest

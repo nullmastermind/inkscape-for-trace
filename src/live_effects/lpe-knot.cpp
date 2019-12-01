@@ -574,7 +574,7 @@ LPEKnot::doBeforeEffect (SPLPEItem const* lpeitem)
     original_bbox(lpeitem);
     
     if (SP_IS_PATH(lpeitem)) {
-        supplied_path = SP_PATH(lpeitem)->getCurve()->get_pathvector();
+        supplied_path = SP_PATH(lpeitem)->getCurve(true)->get_pathvector();
     }
 
     gpaths.clear();

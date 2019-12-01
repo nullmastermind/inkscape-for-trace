@@ -589,11 +589,11 @@ PencilToolbar::tolerance_value_changed()
                             sp_lpe_item_update_patheffect(lpeitem, false, false);
                             SPShape *sp_shape = dynamic_cast<SPShape *>(lpeitem);
                             if (sp_shape) {
-                                guint previous_curve_length = sp_shape->getCurve()->get_segment_count();
+                                guint previous_curve_length = sp_shape->getCurve(true)->get_segment_count();
                                 lpe_simplify->getRepr()->setAttribute("threshold", ss.str());
                                 sp_lpe_item_update_patheffect(lpeitem, false, false);
                                 simplified = true;
-                                guint curve_length = sp_shape->getCurve()->get_segment_count();
+                                guint curve_length = sp_shape->getCurve(true)->get_segment_count();
                                 std::vector<Geom::Point> ts = lpe_powerstroke->offset_points.data();
                                 double factor = (double)curve_length/ (double)previous_curve_length;
                                 for (auto & t : ts) {

@@ -24,7 +24,7 @@
 
 #include "desktop.h"
 #include "message-stack.h"
-
+#include "helper/geom.h"
 #include "object/sp-path.h"
 
 #include <svg/path-string.h>
@@ -109,7 +109,7 @@ std::vector<TracingEngineResult> DepixelizeTracingEngine::trace(Glib::RefPtr<Gdk
         osalpha << float(it->rgba[3]) / 255.;
         gchar* style = g_strdup_printf("fill:%s;fill-opacity:%s;", b, osalpha.str().c_str());
         printf("%s\n", style);
-        TracingEngineResult r(style, sp_svg_write_path(it->pathVector), it->pathVector.nodes().size());
+        TracingEngineResult r(style, sp_svg_write_path(it->pathVector), count_pathvector_nodes(it->pathVector));
         res.push_back(r);
         g_free(style);
     }

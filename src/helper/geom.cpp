@@ -598,6 +598,16 @@ pathv_to_cubicbezier( Geom::PathVector const &pathv)
     return output;
 }
 
+//Study move to 2Geom
+size_t 
+count_pathvector_nodes(Geom::PathVector const &pathv) {
+    size_t tot = 0;
+    for (auto subpath : pathv) {
+        tot += subpath.size_closed();
+    }
+    return tot;
+}
+
 // The next routine is modified from curv4_div::recursive_bezier from file agg_curves.cpp
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry (AGG) - Version 2.5

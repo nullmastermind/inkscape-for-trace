@@ -84,6 +84,7 @@
 #include "ui/tools/pen-tool.h"
 
 #include "object/sp-defs.h"
+#include "object/sp-root.h"
 #include "object/sp-shape.h"
 
 #include <cstdio>
@@ -1103,6 +1104,7 @@ Effect::Effect(LivePathEffectObject *lpeobject)
       _provides_knotholder_entities(false),
       oncanvasedit_it(0),
       is_visible(_("Is visible?"), _("If unchecked, the effect remains applied to the object but is temporarily disabled on canvas"), "is_visible", &wr, this, true),
+      lpeversion("Version", "version of LPE 0 inksape lower 1, 1 and up versioning", "lpeversion", &wr, this, "0", true),
       show_orig_path(false),
       keep_paths(false),
       is_load(true),
@@ -1114,9 +1116,11 @@ Effect::Effect(LivePathEffectObject *lpeobject)
       current_shape(nullptr),
       provides_own_flash_paths(true), // is automatically set to false if providesOwnFlashPaths() is not overridden
       defaultsopen(false),
-      is_ready(false)
+      is_ready(false),
+      is_applied(false)
 {
     registerParameter( dynamic_cast<Parameter *>(&is_visible) );
+    registerParameter( dynamic_cast<Parameter *>(&lpeversion) );
     is_visible.widget_is_visible = false;
     current_zoom = 0.0;
 }
@@ -1265,12 +1269,21 @@ void Effect::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
 {
 }
 //secret impl methods (shhhh!)
+void Effect::doAfterEffect_impl(SPLPEItem const *lpeitem)
+{
+    doAfterEffect(lpeitem);
+    is_load = false;
+    is_applied = false;
+}
 void Effect::doOnApply_impl(SPLPEItem const* lpeitem)
 {
     sp_lpe_item = const_cast<SPLPEItem *>(lpeitem);
+    is_applied = true;
     doOnApply(lpeitem);
     setReady();
     has_exception = false;
+    lpeversion.param_setValue("1", true); // we can override this value in each LPE to major versions I dont want to
+                                          // repeat inkscape versioning
 }
 
 void Effect::doBeforeEffect_impl(SPLPEItem const* lpeitem)

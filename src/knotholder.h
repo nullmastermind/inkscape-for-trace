@@ -71,6 +71,7 @@ public:
     bool knot_mouseover() const;
 
     friend class Inkscape::UI::ShapeEditor; // FIXME why?
+    friend class Inkscape::LivePathEffect::SatellitesArrayParam;                       // why?
     friend class Inkscape::LivePathEffect::PowerStrokePointArrayParamKnotHolderEntity; // why?
     friend class Inkscape::LivePathEffect::FilletChamferKnotHolderEntity; // why?
 

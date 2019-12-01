@@ -477,7 +477,7 @@ Geom::Point KnotHolderEntityOffsetPoint::knot_get() const
         if (group) {
             nearest = Geom::Point(lpe->boundingbox_X.min(), lpe->boundingbox_Y.min());
         } else {
-            Geom::PathVector out = SP_SHAPE(item)->getCurve()->get_pathvector();
+            Geom::PathVector out = SP_SHAPE(item)->getCurve(true)->get_pathvector();
             nearest = lpe->get_default_point(out);
         }
     }

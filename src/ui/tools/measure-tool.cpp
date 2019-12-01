@@ -1182,7 +1182,7 @@ void MeasureTool::showInfoBox(Geom::Point cursor, bool into_groups)
                 y_point *= desktop->doc2dt();
                 item_y = Inkscape::Util::Quantity::convert(y_point[Geom::Y] * scale, "px", unit_name);
                 if (SP_IS_SHAPE(over)) {
-                    Geom::PathVector shape = SP_SHAPE(over)->getCurve()->get_pathvector();
+                    Geom::PathVector shape = SP_SHAPE(over)->getCurve(true)->get_pathvector();
                     item_length = Geom::length(paths_to_pw(shape));
                     item_length = Inkscape::Util::Quantity::convert(item_length * scale, unit->abbr, unit_name);
                 }

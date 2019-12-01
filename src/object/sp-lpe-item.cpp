@@ -243,6 +243,10 @@ bool SPLPEItem::performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape:
             }
             // To Calculate BBox on shapes and nested LPE
             current->setCurveInsync(curve);
+            if (lpe->lpeversion.param_getSVGValue() != "0") { // we are on 1 or up
+                current->bbox_vis_cache_is_valid = false;
+                current->bbox_geom_cache_is_valid = false;
+            }
             // Groups have their doBeforeEffect called elsewhere
             if (!SP_IS_GROUP(this) && !is_clip_or_mask) {
                 lpe->doBeforeEffect_impl(this);
@@ -269,7 +273,7 @@ bool SPLPEItem::performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape:
                 if (curve) {
                     lpe->pathvector_after_effect = curve->get_pathvector();
                 }
-                lpe->doAfterEffect(this);
+                lpe->doAfterEffect_impl(this);
             }
         }
     }
@@ -369,9 +373,7 @@ sp_lpe_item_create_original_path_recursive(SPLPEItem *lpeitem)
             }
         }
     } else if (SPShape * shape = dynamic_cast<SPShape *>(lpeitem)) {
-        if (SPCurve * c_lpe = shape->getCurveBeforeLPE()) {
-            c_lpe->unref();
-        } else {
+        if (!shape->getCurveBeforeLPE(true)) {
             shape->setCurveBeforeLPE(shape->getCurve());
         }
     }
@@ -430,7 +432,7 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem, bool keep_paths,
             }
             repr->setAttribute("inkscape:original-d", nullptr);
             path->setCurveBeforeLPE(nullptr);
-            if (!(shape->getCurve()->get_segment_count())) {
+            if (!(shape->getCurve(true)->get_segment_count())) {
                 repr->parent()->removeChild(repr);
             }
         } else {
