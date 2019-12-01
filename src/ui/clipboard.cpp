@@ -1338,9 +1338,6 @@ void ClipboardManagerImpl::_onGet(Gtk::SelectionData &sel, guint /*info*/)
                 (*out)->set_state(Inkscape::Extension::Extension::STATE_LOADED);
             }
 
-            if (SP_ACTIVE_DOCUMENT) {
-                _clipboardSPDoc->setDocumentBase(SP_ACTIVE_DOCUMENT->getDocumentBase());
-            }
 
             (*out)->save(_clipboardSPDoc, filename, true);
         }
@@ -1380,6 +1377,10 @@ void ClipboardManagerImpl::_createInternalClipboard()
         _defs = _clipboardSPDoc->getDefs()->getRepr();
         _doc = _clipboardSPDoc->getReprDoc();
         _root = _clipboardSPDoc->getReprRoot();
+
+        if (SP_ACTIVE_DOCUMENT) {
+            _clipboardSPDoc->setDocumentBase(SP_ACTIVE_DOCUMENT->getDocumentBase());
+        }
 
         _clipnode = _doc->createElement("inkscape:clipboard");
         _root->appendChild(_clipnode);

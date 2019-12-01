@@ -113,7 +113,7 @@ Inkscape::XML::rebase_href_attrs(gchar const *const old_abs_base,
     }
 
     std::string baseuri;
-    if (new_abs_base) {
+    if (new_abs_base && new_abs_base[0]) {
         baseuri = URI::from_dirname(new_abs_base).str();
     }
 
