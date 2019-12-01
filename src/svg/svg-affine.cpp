@@ -150,7 +150,8 @@ sp_svg_transform_write(Geom::Affine const &transform)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
-    double e = 0.000001 * transform.descrim();
+    // this must be a bit grater than EPSILON
+    double e = 1e-5 * transform.descrim();
     int prec = prefs->getInt("/options/svgoutput/numericprecision", 8);
     int min_exp = prefs->getInt("/options/svgoutput/minimumexponent", -8);
 

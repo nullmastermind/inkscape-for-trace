@@ -1525,21 +1525,23 @@ void SPItem::doWriteTransform(Geom::Affine const &transform, Geom::Affine const 
         )
     {
         transform_attr = this->set_transform(transform);
-        if (freeze_stroke_width) {
-            freeze_stroke_width_recursive(false);
-        }
-    } else {
-        if (freeze_stroke_width) {
-            freeze_stroke_width_recursive(false);
-            if (compensate) {
-                if (!prefs->getBool("/options/transform/stroke", true)) {
-                    // Recursively compensate for stroke scaling, depending on user preference
-                    // (As to why we need to do this, see the comment a few lines above near the freeze_stroke_width_recursive(true) call)
-                    double const expansion = 1. / advertized_transform.descrim();
-                    adjust_stroke_width_recursive(expansion);
-                }
+    }
+    if (freeze_stroke_width) {
+        freeze_stroke_width_recursive(false);
+        if (compensate) {
+            if (!prefs->getBool("/options/transform/stroke", true)) {
+                // Recursively compensate for stroke scaling, depending on user preference
+                // (As to why we need to do this, see the comment a few lines above near the freeze_stroke_width_recursive(true) call)
+                double const expansion = 1. / advertized_transform.descrim();
+                adjust_stroke_width_recursive(expansion);
             }
         }
+    }
+    // this avoid temporary scaling issues on display when near identity
+    // this must be a bit grater than EPSILON * transform.descrim()
+    double e = 1e-5 * transform.descrim();
+    if (transform_attr.isIdentity(e)) {
+        transform_attr = Geom::Affine();
     }
     set_item_transform(transform_attr);
 
