@@ -2039,6 +2039,11 @@ void OdfOutput::reset()
  */
 void OdfOutput::save(Inkscape::Extension::Output */*mod*/, SPDocument *doc, gchar const *filename)
 {
+    if (doc != SP_ACTIVE_DOCUMENT) {
+        g_warning("OdfOutput can only save the active document");
+        return;
+    }
+
     reset();
 
     docBaseUri = Inkscape::URI::from_dirname(doc->getDocumentBase()).str();
