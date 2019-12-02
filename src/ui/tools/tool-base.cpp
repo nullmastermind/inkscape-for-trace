@@ -478,9 +478,11 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
                 ret = TRUE;
             } else {
+                // To fix https://bugs.launchpad.net/inkscape/+bug/1458200
+                // we increase the tolerance because no sensible data for panning
                 if (within_tolerance && (abs((gint) event->motion.x - xp)
-                        < tolerance) && (abs((gint) event->motion.y - yp)
-                        < tolerance)) {
+                        < tolerance * 3) && (abs((gint) event->motion.y - yp)
+                        < tolerance * 3)) {
                     // do not drag if we're within tolerance from origin
                     break;
                 }
@@ -1146,7 +1148,12 @@ gint sp_event_context_virtual_root_handler(ToolBase * event_context, GdkEvent * 
         // This will toggle the current tool and delete the current one.
         // Thus, save a pointer to the desktop before calling it.
         SPDesktop* desktop = event_context->desktop;
-
+        if (event->type == GDK_KEY_PRESS && 
+            get_latin_keyval(&event->key) == GDK_KEY_space &&
+            desktop->event_context->space_panning) 
+        {
+            return FALSE;
+        }
         ret = event_context->root_handler(event);
 
         set_event_location(desktop, event);
