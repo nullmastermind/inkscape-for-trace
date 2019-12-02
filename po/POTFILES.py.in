@@ -25,8 +25,8 @@
 ../share/extensions/jessyInk_transitions.py
 ../share/extensions/jessyInk_video.py
 ../share/extensions/jessyInk_view.py
-../share/extensions/launch_webbrowser.py
 ../share/extensions/markers_strokepaint.py
+../share/extensions/path_envelope.py
 ../share/extensions/pathalongpath.py
 ../share/extensions/pathscatter.py
 ../share/extensions/perspective.py
@@ -35,7 +35,6 @@
 ../share/extensions/print_win32_vector.py
 ../share/extensions/replace_font.py
 ../share/extensions/restack.py
-../share/extensions/summersnight.py
 ../share/extensions/voronoi2svg.py
 ../share/extensions/web_set_att.py
 ../share/extensions/web_transmit_att.py
