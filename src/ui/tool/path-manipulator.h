@@ -53,7 +53,7 @@ class PathManipulator : public PointManipulator {
 public:
     typedef SPPath *ItemType;
 
-    PathManipulator(MultiPathManipulator &mpm, SPPath *path, Geom::Affine const &edit_trans,
+    PathManipulator(MultiPathManipulator &mpm, SPObject *path, Geom::Affine const &edit_trans,
         guint32 outline_color, Glib::ustring lpe_key);
     ~PathManipulator() override;
     bool event(Inkscape::UI::Tools::ToolBase *, GdkEvent *) override;
@@ -62,7 +62,7 @@ public:
     void writeXML();
     void update(bool alert_LPE = false); // update display, but don't commit
     void clear(); // remove all nodes from manipulator
-    SPPath *item() { return _path; }
+    SPObject *item() { return _path; }
 
     void selectSubpaths();
     void invertSelectionInSubpaths();
@@ -141,7 +141,7 @@ private:
 
     SubpathList _subpaths;
     MultiPathManipulator &_multi_path_manipulator;
-    SPPath *_path; ///< can be an SPPath or an Inkscape::LivePathEffect::Effect  !!!
+    SPObject *_path; ///< can be an SPPath or an Inkscape::LivePathEffect::Effect  !!!
     SPCurve *_spcurve; // in item coordinates
     SPCanvasItem *_outline;
     CurveDragPoint *_dragpoint; // an invisible control point hovering over curve

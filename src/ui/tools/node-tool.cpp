@@ -395,22 +395,15 @@ void gather_items(NodeTool *nt, SPItem *base, SPObject *obj, Inkscape::UI::Shape
     }
 
     //XML Tree being used directly here while it shouldn't be.
-    if (SP_IS_PATH(obj) && obj->getRepr()->attribute("inkscape:original-d") != nullptr &&
-        !SP_LPE_ITEM(obj)->hasPathEffectOfType(Inkscape::LivePathEffect::POWERCLIP) &&
-        !SP_LPE_ITEM(obj)->hasPathEffectOfType(Inkscape::LivePathEffect::POWERMASK)) {
-        ShapeRecord r;
-        r.item = static_cast<SPItem*>(obj);
-        r.edit_transform = Geom::identity(); // TODO wrong?
-        r.role = role;
-        s.insert(r);
-    } else if (role != SHAPE_ROLE_NORMAL && (SP_IS_GROUP(obj) || SP_IS_OBJECTGROUP(obj))) {
+    if (role != SHAPE_ROLE_NORMAL && (SP_IS_GROUP(obj) || SP_IS_OBJECTGROUP(obj))) {
         for (auto& c: obj->children) {
             gather_items(nt, base, &c, role, s);
         }
     } else if (SP_IS_ITEM(obj)) {
-        SPItem *item = static_cast<SPItem*>(obj);
+        SPObject *object = obj;
+        SPItem *item = dynamic_cast<SPItem *>(obj);
         ShapeRecord r;
-        r.item = item;
+        r.object = object;
         // TODO add support for objectBoundingBox
         r.edit_transform = base ? base->i2doc_affine() : Geom::identity();
         r.role = role;
@@ -448,7 +441,7 @@ void NodeTool::selection_changed(Inkscape::Selection *sel) {
          i != this->_shape_editors.end(); )
     {
         ShapeRecord s;
-        s.item = i->first;
+        s.object = dynamic_cast<SPObject *>(i->first);
 
         if (shapes.find(s) == shapes.end()) {
             this->_shape_editors.erase(i++);
@@ -458,12 +451,12 @@ void NodeTool::selection_changed(Inkscape::Selection *sel) {
     }
 
     for (const auto & r : shapes) {
-        if ((SP_IS_SHAPE(r.item) || SP_IS_TEXT(r.item) || SP_IS_GROUP(r.item) || SP_IS_OBJECTGROUP(r.item)) &&
-            this->_shape_editors.find(r.item) == this->_shape_editors.end())
-        {
+        if ((SP_IS_SHAPE(r.object) || SP_IS_TEXT(r.object) || SP_IS_GROUP(r.object) || SP_IS_OBJECTGROUP(r.object)) &&
+            this->_shape_editors.find(SP_ITEM(r.object)) == this->_shape_editors.end()) {
             ShapeEditor *si = new ShapeEditor(this->desktop, r.edit_transform);
-            si->set_item(r.item);
-            this->_shape_editors.insert(const_cast<SPItem*&>(r.item), si);
+            SPItem *item = SP_ITEM(r.object);
+            si->set_item(item);
+            this->_shape_editors.insert(item, si);
         }
     }
 

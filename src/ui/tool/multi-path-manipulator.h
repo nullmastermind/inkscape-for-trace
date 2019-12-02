@@ -120,7 +120,7 @@ private:
     void _commit(CommitEvent cps);
     void _done(gchar const *reason, bool alert_LPE = true);
     void _doneWithCleanup(gchar const *reason, bool alert_LPE = false);
-    guint32 _getOutlineColor(ShapeRole role, SPItem *item);
+    guint32 _getOutlineColor(ShapeRole role, SPObject *object);
 
     MapType _mmap;
 public:

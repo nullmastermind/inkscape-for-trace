@@ -7,6 +7,7 @@
  */
 
 #include "live_effects/parameter/path.h"
+#include "live_effects/lpeobject.h"
 
 #include <glibmm/i18n.h>
 #include <glibmm/utility.h>
@@ -282,7 +283,7 @@ PathParam::param_editOncanvas(SPItem *item, SPDesktop * dt)
     r.role = SHAPE_ROLE_LPE_PARAM;
     r.edit_transform = item->i2dt_affine(); // TODO is it right?
     if (!href) {
-        r.item = reinterpret_cast<SPItem*>(param_effect->getLPEObj());
+        r.object = dynamic_cast<SPObject *>(param_effect->getLPEObj());
         r.lpe_key = param_key;
         Geom::PathVector stored_pv =  _pathvector;
         if (_pathvector.empty()) {
@@ -293,7 +294,7 @@ PathParam::param_editOncanvas(SPItem *item, SPDesktop * dt)
             g_free(svgd);
         }
     } else {
-        r.item = ref.getObject();
+        r.object = ref.getObject();
     }
     shapes.insert(r);
     nt->_multipath->setItems(shapes);

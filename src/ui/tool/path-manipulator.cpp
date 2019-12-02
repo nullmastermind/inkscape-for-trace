@@ -104,7 +104,7 @@ private:
 };
 
 void build_segment(Geom::PathBuilder &, Node *, Node *);
-PathManipulator::PathManipulator(MultiPathManipulator &mpm, SPPath *path,
+PathManipulator::PathManipulator(MultiPathManipulator &mpm, SPObject *path,
         Geom::Affine const &et, guint32 outline_color, Glib::ustring lpe_key)
     : PointManipulator(mpm._path_data.node_data.desktop, *mpm._path_data.node_data.selection)
     , _subpaths(*this)
@@ -123,8 +123,10 @@ PathManipulator::PathManipulator(MultiPathManipulator &mpm, SPPath *path,
     , _is_bspline(false)
     , _lpe_key(std::move(lpe_key))
 {
-    if (_lpe_key.empty()) {
-        _i2d_transform = path->i2dt_affine();
+    LivePathEffectObject *lpeobj = dynamic_cast<LivePathEffectObject *>(_path);
+    SPPath *pathshadow = dynamic_cast<SPPath *>(_path);
+    if (!lpeobj) {
+        _i2d_transform = pathshadow->i2dt_affine();
     } else {
         _i2d_transform = Geom::identity();
     }
@@ -1121,16 +1123,19 @@ void PathManipulator::_externalChange(unsigned type)
         _updateOutline();
         } break;
     case PATH_CHANGE_TRANSFORM: {
-        Geom::Affine i2d_change = _d2i_transform;
-        _i2d_transform = _path->i2dt_affine();
-        _d2i_transform = _i2d_transform.inverse();
-        i2d_change *= _i2d_transform;
-        for (auto & _subpath : _subpaths) {
-            for (auto & j : *_subpath) {
-                j.transform(i2d_change);
+        SPPath *path = dynamic_cast<SPPath *>(_path);
+        if (path) {
+            Geom::Affine i2d_change = _d2i_transform;
+            _i2d_transform = path->i2dt_affine();
+            _d2i_transform = _i2d_transform.inverse();
+            i2d_change *= _i2d_transform;
+            for (auto & _subpath : _subpaths) {
+                for (auto & j : *_subpath) {
+                    j.transform(i2d_change);
+                }
             }
+            _updateOutline();
         }
-        _updateOutline();
         } break;
     default: break;
     }
@@ -1253,8 +1258,9 @@ int PathManipulator::_bsplineGetSteps() const {
 
 // determines if the trace has bspline effect
 void PathManipulator::_recalculateIsBSpline(){
-    if (SP_IS_LPE_ITEM(_path) && _path->hasPathEffect()) {
-        Inkscape::LivePathEffect::Effect const *this_effect = _path->getPathEffectOfType(Inkscape::LivePathEffect::BSPLINE);
+    SPPath *path = dynamic_cast<SPPath *>(_path);
+    if (path && path->hasPathEffect()) {
+        Inkscape::LivePathEffect::Effect const *this_effect = path->getPathEffectOfType(Inkscape::LivePathEffect::BSPLINE);
         if(this_effect){
             _is_bspline = true;
             return;
@@ -1375,8 +1381,9 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
     _spcurve->set_pathvector(pathv);
     if (alert_LPE) {
         /// \todo note that _path can be an Inkscape::LivePathEffect::Effect* too, kind of confusing, rework member naming?
-        if (SP_IS_LPE_ITEM(_path) && _path->hasPathEffect()) {
-            Inkscape::LivePathEffect::Effect* this_effect = _path->getPathEffectOfType(Inkscape::LivePathEffect::POWERSTROKE);
+        SPPath *path = dynamic_cast<SPPath *>(_path);
+        if (path && path->hasPathEffect()) {
+            Inkscape::LivePathEffect::Effect* this_effect = path->getPathEffectOfType(Inkscape::LivePathEffect::POWERSTROKE);
             if(this_effect){
                 LivePathEffect::LPEPowerStroke *lpe_pwr = dynamic_cast<LivePathEffect::LPEPowerStroke*>(this_effect->getLPEObj()->get_lpe());
                 if (lpe_pwr) {
@@ -1468,16 +1475,18 @@ void PathManipulator::_updateOutline()
 void PathManipulator::_getGeometry()
 {
     using namespace Inkscape::LivePathEffect;
-    if (!_lpe_key.empty()) {
-        Effect *lpe = LIVEPATHEFFECT(_path)->get_lpe();
+    LivePathEffectObject *lpeobj = dynamic_cast<LivePathEffectObject *>(_path);
+    SPPath *path = dynamic_cast<SPPath *>(_path);
+    if (lpeobj) {
+        Effect *lpe = lpeobj->get_lpe();
         if (lpe) {
             PathParam *pathparam = dynamic_cast<PathParam *>(lpe->getParameter(_lpe_key.data()));
             _spcurve->unref();
             _spcurve = new SPCurve(pathparam->get_pathvector());
         }
-    } else {
+    } else if (path) {
         _spcurve->unref();
-        _spcurve = _path->getCurveForEdit();
+        _spcurve = path->getCurveForEdit();
         // never allow NULL to sneak in here!
         if (_spcurve == nullptr) {
             _spcurve = new SPCurve();
@@ -1489,11 +1498,13 @@ void PathManipulator::_getGeometry()
 void PathManipulator::_setGeometry()
 {
     using namespace Inkscape::LivePathEffect;
-    if (!_lpe_key.empty()) {
+    LivePathEffectObject *lpeobj = dynamic_cast<LivePathEffectObject *>(_path);
+    SPPath *path = dynamic_cast<SPPath *>(_path);
+    if (lpeobj) {
         // copied from nodepath.cpp
         // NOTE: if we are editing an LPE param, _path is not actually an SPPath, it is
         // a LivePathEffectObject. (mad laughter)
-        Effect *lpe = LIVEPATHEFFECT(_path)->get_lpe();
+        Effect *lpe = lpeobj->get_lpe();
         if (lpe) {
             PathParam *pathparam = dynamic_cast<PathParam *>(lpe->getParameter(_lpe_key.data()));
             if (pathparam->get_pathvector() == _spcurve->get_pathvector()) {
@@ -1502,17 +1513,17 @@ void PathManipulator::_setGeometry()
             pathparam->set_new_value(_spcurve->get_pathvector(), false);
             LIVEPATHEFFECT(_path)->requestModified(SP_OBJECT_MODIFIED_FLAG);
         }
-    } else {
+    } else if (path) {
         // return true to leave the decision on empty to the caller.
         // Maybe the path become empty and we want to update to empty
         if (empty()) return;
-        if (_path->getCurveBeforeLPE(true)) {
-            if (!_spcurve->is_equal(_path->getCurveBeforeLPE(true))) {
-                _path->setCurveBeforeLPE(_spcurve);
-                sp_lpe_item_update_patheffect(_path, true, false);
+        if (path->getCurveBeforeLPE(true)) {
+            if (!_spcurve->is_equal(path->getCurveBeforeLPE(true))) {
+                path->setCurveBeforeLPE(_spcurve);
+                sp_lpe_item_update_patheffect(path, true, false);
             }
-        } else if(!_spcurve->is_equal(_path->getCurve(true))) {
-            _path->setCurve(_spcurve);
+        } else if(!_spcurve->is_equal(path->getCurve(true))) {
+            path->setCurve(_spcurve);
         }
     }
 }
@@ -1520,7 +1531,8 @@ void PathManipulator::_setGeometry()
 /** Figure out in what attribute to store the nodetype string. */
 Glib::ustring PathManipulator::_nodetypesKey()
 {
-    if (_lpe_key.empty()) {
+    LivePathEffectObject *lpeobj = dynamic_cast<LivePathEffectObject *>(_path);
+    if (!lpeobj) {
         return "sodipodi:nodetypes";
     } else {
         return _lpe_key + "-nodetypes";
@@ -1532,9 +1544,11 @@ Glib::ustring PathManipulator::_nodetypesKey()
 Inkscape::XML::Node *PathManipulator::_getXMLNode()
 {
     //XML Tree being used here directly while it shouldn't be.
-    if (_lpe_key.empty()) return _path->getRepr();
+    LivePathEffectObject *lpeobj = dynamic_cast<LivePathEffectObject *>(_path);
+    if (!lpeobj)
+        return _path->getRepr();
     //XML Tree being used here directly while it shouldn't be.
-    return LIVEPATHEFFECT(_path)->getRepr();
+    return lpeobj->getRepr();
 }
 
 bool PathManipulator::_nodeClicked(Node *n, GdkEventButton *event)
