@@ -506,6 +506,23 @@ bool MeshTool::root_handler(GdkEvent* event) {
 
     gint ret = FALSE;
 
+    auto move_handle = [&](int x_dir, int y_dir) {
+        gint mul = 1 + gobble_key_events(get_latin_keyval(&event->key), 0); // with any mask
+
+        if (MOD__SHIFT(event)) {
+            mul *= 10;
+        }
+
+        y_dir *= -desktop->yaxisdir();
+
+        if (MOD__ALT(event)) {
+            drag->selected_move_screen(mul * x_dir, mul * y_dir);
+        } else {
+            mul *= nudge;
+            drag->selected_move(mul * x_dir, mul * y_dir);
+        }
+    };
+
     switch (event->type) {
     case GDK_2BUTTON_PRESS:
 
@@ -855,22 +872,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
         case GDK_KEY_KP_Left:
         case GDK_KEY_KP_4:
             if (!MOD__CTRL(event)) { // not ctrl
-                gint mul = 1 + gobble_key_events(get_latin_keyval(&event->key), 0); // with any mask
-
-                if (MOD__ALT(event)) { // alt
-                    if (MOD__SHIFT(event)) {
-                    	drag->selected_move_screen(mul*-10, 0); // shift
-                    } else {
-                    	drag->selected_move_screen(mul*-1, 0); // no shift
-                    }
-                } else { // no alt
-                    if (MOD__SHIFT(event)) {
-                    	drag->selected_move(mul*-10*nudge, 0); // shift
-                    } else {
-                    	drag->selected_move(mul*-nudge, 0); // no shift
-                    }
-                }
-
+                move_handle(-1, 0);
                 ret = TRUE;
             }
             break;
@@ -879,22 +881,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
         case GDK_KEY_KP_Up:
         case GDK_KEY_KP_8:
             if (!MOD__CTRL(event)) { // not ctrl
-                gint mul = 1 + gobble_key_events(get_latin_keyval(&event->key), 0); // with any mask
-
-                if (MOD__ALT(event)) { // alt
-                    if (MOD__SHIFT(event)) {
-                    	drag->selected_move_screen(0, mul*10); // shift
-                    } else {
-                    	drag->selected_move_screen(0, mul*1); // no shift
-                    }
-                } else { // no alt
-                    if (MOD__SHIFT(event)) {
-                    	drag->selected_move(0, mul*10*nudge); // shift
-                    } else {
-                    	drag->selected_move(0, mul*nudge); // no shift
-                    }
-                }
-
+                move_handle(0, 1);
                 ret = TRUE;
             }
             break;
@@ -903,22 +890,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
         case GDK_KEY_KP_Right:
         case GDK_KEY_KP_6:
             if (!MOD__CTRL(event)) { // not ctrl
-                gint mul = 1 + gobble_key_events(get_latin_keyval(&event->key), 0); // with any mask
-
-                if (MOD__ALT(event)) { // alt
-                    if (MOD__SHIFT(event)) {
-                    	drag->selected_move_screen(mul*10, 0); // shift
-                    } else {
-                    	drag->selected_move_screen(mul*1, 0); // no shift
-                    }
-                } else { // no alt
-                    if (MOD__SHIFT(event)) {
-                    	drag->selected_move(mul*10*nudge, 0); // shift
-                    } else {
-                    	drag->selected_move(mul*nudge, 0); // no shift
-                    }
-                }
-
+                move_handle(1, 0);
                 ret = TRUE;
             }
             break;
@@ -927,22 +899,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
         case GDK_KEY_KP_Down:
         case GDK_KEY_KP_2:
             if (!MOD__CTRL(event)) { // not ctrl
-                gint mul = 1 + gobble_key_events(get_latin_keyval(&event->key), 0); // with any mask
-
-                if (MOD__ALT(event)) { // alt
-                    if (MOD__SHIFT(event)) {
-                    	drag->selected_move_screen(0, mul*-10); // shift
-                    } else {
-                    	drag->selected_move_screen(0, mul*-1); // no shift
-                    }
-                } else { // no alt
-                    if (MOD__SHIFT(event)) {
-                    	drag->selected_move(0, mul*-10*nudge); // shift
-                    } else {
-                    	drag->selected_move(0, mul*-nudge); // no shift
-                    }
-                }
-
+                move_handle(0, -1);
                 ret = TRUE;
             }
             break;
