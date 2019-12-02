@@ -689,12 +689,12 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
         //
         gchar const *poppler_datadir = g_getenv("POPPLER_DATADIR");
         if (poppler_datadir != NULL) {
-            globalParams = new GlobalParams(poppler_datadir);
+            globalParams = _POPPLER_NEW_GLOBAL_PARAMS(poppler_datadir);
         } else {
-            globalParams = new GlobalParams();
+            globalParams = _POPPLER_NEW_GLOBAL_PARAMS();
         }
 #else
-        globalParams = new GlobalParams();
+        globalParams = _POPPLER_NEW_GLOBAL_PARAMS();
 #endif // ENABLE_OSX_APP_LOCATIONS
     }
 
