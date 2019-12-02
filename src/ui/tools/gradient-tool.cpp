@@ -457,29 +457,11 @@ bool GradientTool::root_handler(GdkEvent* event) {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     this->tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
-    double const nudge = prefs->getDoubleLimited("/options/nudgedistance/value", 2, 0, 1000, "px"); // in px
 
     GrDrag *drag = this->_grdrag;
     g_assert (drag);
 
     gint ret = FALSE;
-
-    auto move_handle = [&](int x_dir, int y_dir) {
-        gint mul = 1 + gobble_key_events(get_latin_keyval(&event->key), 0); // with any mask
-
-        if (MOD__SHIFT(event)) {
-            mul *= 10;
-        }
-
-        y_dir *= -desktop->yaxisdir();
-
-        if (MOD__ALT(event)) {
-            drag->selected_move_screen(mul * x_dir, mul * y_dir);
-        } else {
-            mul *= nudge;
-            drag->selected_move(mul * x_dir, mul * y_dir);
-        }
-    };
 
     switch (event->type) {
     case GDK_2BUTTON_PRESS:
@@ -731,42 +713,6 @@ bool GradientTool::root_handler(GdkEvent* event) {
             //TODO: make dragging escapable by Esc
             break;
 
-        case GDK_KEY_Left: // move handle left
-        case GDK_KEY_KP_Left:
-        case GDK_KEY_KP_4:
-            if (!MOD__CTRL(event)) { // not ctrl
-                move_handle(-1, 0);
-                ret = TRUE;
-            }
-            break;
-
-        case GDK_KEY_Up: // move handle up
-        case GDK_KEY_KP_Up:
-        case GDK_KEY_KP_8:
-            if (!MOD__CTRL(event)) { // not ctrl
-                move_handle(0, 1);
-                ret = TRUE;
-            }
-            break;
-
-        case GDK_KEY_Right: // move handle right
-        case GDK_KEY_KP_Right:
-        case GDK_KEY_KP_6:
-            if (!MOD__CTRL(event)) { // not ctrl
-                move_handle(1, 0);
-                ret = TRUE;
-            }
-            break;
-
-        case GDK_KEY_Down: // move handle down
-        case GDK_KEY_KP_Down:
-        case GDK_KEY_KP_2:
-            if (!MOD__CTRL(event)) { // not ctrl
-                move_handle(0, -1);
-                ret = TRUE;
-            }
-            break;
-
         case GDK_KEY_r:
         case GDK_KEY_R:
             if (MOD__SHIFT_ONLY(event)) {
@@ -799,6 +745,7 @@ bool GradientTool::root_handler(GdkEvent* event) {
             break;
 
         default:
+            ret = drag->key_press_handler(event);
             break;
         }
         break;

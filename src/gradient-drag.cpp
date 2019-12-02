@@ -26,6 +26,7 @@
 #include "document.h"
 #include "gradient-chemistry.h"
 #include "gradient-drag.h"
+#include "include/macros.h"
 #include "inkscape.h"
 #include "knot.h"
 #include "selection-chemistry.h"
@@ -2816,6 +2817,71 @@ void GrDrag::selected_move_screen(double x, double y)
     gdouble zy = y / zoom;
 
     selected_move (zx, zy);
+}
+
+/**
+ * Handle arrow key events
+ * @param event Event with type GDK_KEY_PRESS
+ * @return True if the event was handled, false otherwise
+ */
+bool GrDrag::key_press_handler(GdkEvent *event)
+{
+    if (MOD__CTRL(event)) {
+        return false;
+    }
+
+    auto keyval = Inkscape::UI::Tools::get_latin_keyval(&event->key);
+    double x_dir = 0;
+    double y_dir = 0;
+
+    switch (keyval) {
+        case GDK_KEY_Left: // move handle left
+        case GDK_KEY_KP_Left:
+        case GDK_KEY_KP_4:
+            x_dir = -1;
+            break;
+
+        case GDK_KEY_Up: // move handle up
+        case GDK_KEY_KP_Up:
+        case GDK_KEY_KP_8:
+            y_dir = 1;
+            break;
+
+        case GDK_KEY_Right: // move handle right
+        case GDK_KEY_KP_Right:
+        case GDK_KEY_KP_6:
+            x_dir = 1;
+            break;
+
+        case GDK_KEY_Down: // move handle down
+        case GDK_KEY_KP_Down:
+        case GDK_KEY_KP_2:
+            y_dir = -1;
+            break;
+
+        default:
+            return false;
+    }
+
+    y_dir *= -desktop->yaxisdir();
+
+    gint mul = 1 + Inkscape::UI::Tools::gobble_key_events(keyval, 0); // with any mask
+
+    if (MOD__SHIFT(event)) {
+        mul *= 10;
+    }
+
+    if (MOD__ALT(event)) {
+        selected_move_screen(mul * x_dir, mul * y_dir);
+    } else {
+        auto *prefs = Inkscape::Preferences::get();
+        auto nudge = prefs->getDoubleLimited("/options/nudgedistance/value", 2, 0, 1000, "px"); // in px
+
+        mul *= nudge;
+        selected_move(mul * x_dir, mul * y_dir);
+    }
+
+    return true;
 }
 
 /**
