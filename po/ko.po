@@ -43650,13 +43650,13 @@ msgstr "글꼴 높이의 절반"
 #~ msgstr "파일/폴더…"
 
 #~ msgid "File or folder does not exist"
-#~ msgstr "파일 또는 폴더가 없음"
+#~ msgstr "파일 또는 폴더가 존재하지 않습니다."
 
 #~ msgid "Could not open file"
-#~ msgstr "파일을 열수 없었습니다"
+#~ msgstr "파일을 열 수 없습니다."
 
 #~ msgid "- display SVG files"
-#~ msgstr "- SVG 파일 표시"
+#~ msgstr "- SVG 파일들을 표시합니다."
 
 #~ msgid ""
 #~ "Quickly browse through a collection of .svg(z) files\n"
@@ -43737,7 +43737,7 @@ msgstr "글꼴 높이의 절반"
 
 #~ msgctxt "Font variant"
 #~ msgid "Normal"
-#~ msgstr "정상"
+#~ msgstr "보통"
 
 #~ msgctxt "Font variant"
 #~ msgid "Small"
@@ -43760,10 +43760,10 @@ msgstr "글꼴 높이의 절반"
 #~ msgstr "흐림 변경"
 
 #~ msgid "Pick opacity"
-#~ msgstr "불투명도 추출"
+#~ msgstr "불투명도 추출합니다."
 
 #~ msgid "Assign opacity"
-#~ msgstr "불투명도 부여"
+#~ msgstr "불투명도 설정하기"
 
 #~ msgid "Type text in a text node"
 #~ msgstr "문자열 노드에 문자열 입력"
@@ -43772,8 +43772,8 @@ msgstr "글꼴 높이의 절반"
 #~ "The export_gpl.py module requires PyXML.  Please download the latest "
 #~ "version from http://pyxml.sourceforge.net/."
 #~ msgstr ""
-#~ "export_gpl.py 모듈은 PyXML을 필요로 함.  http://pyxml.sourceforge.net/에"
-#~ "서 최신 버전을 내려 받으세요."
+#~ "export_gpl.py 모듈은 PyXML이 필요합니다.  http://pyxml.sourceforge.net/에"
+#~ "서 최신 버전을 다운 받으세요."
 
 #~ msgid ""
 #~ "Failed to import the subprocess module. Please report this as a bug at: "
@@ -44020,7 +44020,7 @@ msgstr "글꼴 높이의 절반"
 #~ "니다 (기본값은 0)"
 
 #~ msgid "About Inkscape"
-#~ msgstr "잉크스케이프에 대하여"
+#~ msgstr "잉크스케이프 소개"
 
 #~ msgid "_Splash"
 #~ msgstr "스플래시(_S)"
