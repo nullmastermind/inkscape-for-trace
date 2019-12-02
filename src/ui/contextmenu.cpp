@@ -359,7 +359,7 @@ void ContextMenu::MakeItemMenu ()
     AddSeparator();
 
     /* Select item */
-    if (Inkscape::Verb::getbyid( "org.inkscape.followlink" )) {
+    if (Inkscape::Verb::getbyid( "org.inkscape.follow_link" )) {
         mi = Gtk::manage(new Gtk::MenuItem(_("_Select This"), true));
         if (_desktop->selection->includes(_item)) {
             mi->set_sensitive(FALSE);
@@ -666,7 +666,7 @@ void ContextMenu::AnchorLinkFollow()
         _desktop->selection->set(_item);
     }
     // Opening the selected links with a python extension
-    Inkscape::Verb *verb = Inkscape::Verb::getbyid( "org.inkscape.followlink" );
+    Inkscape::Verb *verb = Inkscape::Verb::getbyid( "org.inkscape.follow_link" );
     if (verb) {
         SPAction *action = verb->get_action(Inkscape::ActionContext(_desktop));
         if (action) {
@@ -713,7 +713,7 @@ void ContextMenu::MakeImageMenu ()
     }
 
     /* Embed image */
-    if (Inkscape::Verb::getbyid( "org.ekips.filter.embedselectedimages" )) {
+    if (Inkscape::Verb::getbyid( "org.inkscape.filter.selected.embed_image" )) {
         mi = Gtk::manage(new Gtk::MenuItem(C_("Context menu", "Embed Image")));
         mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ImageEmbed));
         mi->show();
@@ -724,7 +724,7 @@ void ContextMenu::MakeImageMenu ()
     }
 
     /* Extract image */
-    if (Inkscape::Verb::getbyid( "org.ekips.filter.extractimage" )) {
+    if (Inkscape::Verb::getbyid( "org.inkscape.filter.embed_image" )) {
         mi = Gtk::manage(new Gtk::MenuItem(C_("Context menu", "Extract Image...")));
         mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ImageExtract));
         mi->show();
@@ -851,7 +851,7 @@ void ContextMenu::ImageEmbed()
         _desktop->selection->set(_item);
     }
 
-    Inkscape::Verb *verb = Inkscape::Verb::getbyid( "org.ekips.filter.embedselectedimages" );
+    Inkscape::Verb *verb = Inkscape::Verb::getbyid( "org.inkscape.filter.selected.embed_image" );
     if (verb) {
         SPAction *action = verb->get_action(Inkscape::ActionContext(_desktop));
         if (action) {
@@ -866,7 +866,7 @@ void ContextMenu::ImageExtract()
         _desktop->selection->set(_item);
     }
 
-    Inkscape::Verb *verb = Inkscape::Verb::getbyid( "org.ekips.filter.extractimage" );
+    Inkscape::Verb *verb = Inkscape::Verb::getbyid( "org.inkscape.filter.embed_image" );
     if (verb) {
         SPAction *action = verb->get_action(Inkscape::ActionContext(_desktop));
         if (action) {
