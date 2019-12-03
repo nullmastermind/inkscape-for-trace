@@ -6,6 +6,7 @@
 # Luca Ferretti <elle.uca@infinito.it>, 2005.
 # Luca Bruno <lucab@debian.org>, 2005-2009.
 # Firas Hanife <FirasHanife@gmail.com>, 2014-2019.
+# Germano Gasparini <grigio60@gmail.com>, 2019.
 #
 msgid ""
 msgstr ""
@@ -3180,7 +3181,7 @@ msgstr "Cassiere"
 #: ../share/symbols/symbols.h:213 ../share/symbols/symbols.h:214
 msgctxt "Symbol"
 msgid "First Aid"
-msgstr "Primo soccorso"
+msgstr "Pronto soccorso"
 
 #: ../share/symbols/symbols.h:15 ../share/symbols/symbols.h:16
 msgctxt "Symbol"
@@ -4513,7 +4514,7 @@ msgstr "tipo"
 #: ../src/extension/dependency.cpp:325
 #, fuzzy
 msgid "location"
-msgstr "locazione"
+msgstr "posizione"
 
 #: ../src/extension/dependency.cpp:326
 #, fuzzy
@@ -6043,17 +6044,17 @@ msgstr "Opzioni illuminazione puntiforme"
 #: ../src/extension/internal/filter/bumps.h:114
 #: ../src/extension/internal/filter/bumps.h:118
 msgid "X location"
-msgstr "Locazione X"
+msgstr "Posizione X"
 
 #: ../src/extension/internal/filter/bumps.h:115
 #: ../src/extension/internal/filter/bumps.h:119
 msgid "Y location"
-msgstr "Locazione Y"
+msgstr "Posizione Y"
 
 #: ../src/extension/internal/filter/bumps.h:116
 #: ../src/extension/internal/filter/bumps.h:120
 msgid "Z location"
-msgstr "Locazione Z"
+msgstr "Posizione Z"
 
 #: ../src/extension/internal/filter/bumps.h:117
 msgid "Spot light options"
@@ -8626,7 +8627,7 @@ msgstr "Mostra la versione di Inkscape"
 
 #: ../src/inkscape-application.cpp:537
 msgid "Print system extension directory"
-msgstr "Mostra la locazione delle estensioni nel sistema"
+msgstr "Mostra la posizione delle estensioni nel sistema"
 
 #: ../src/inkscape-application.cpp:540
 msgid "File import"
@@ -15256,7 +15257,8 @@ msgstr ""
 "Firas Hanife (FirasHanife@gmail.com)\n"
 "Luca Bruno (lucab@debian.org)\n"
 "Luca Ferretti (elle.uca@infinito.it)\n"
-"Francesco Ricci (tardo2002@libero.it)"
+"Francesco Ricci (tardo2002@libero.it)\n"
+"Germano Gasparini (grigio60@gmail.com)"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:212
 #: ../src/ui/dialog/align-and-distribute.cpp:930
@@ -19166,11 +19168,11 @@ msgstr "Movimento"
 
 #: ../src/ui/dialog/glyphs.cpp:383
 msgid "Ornamental Dingbats"
-msgstr ""
+msgstr "Dingbat ornamentali"
 
 #: ../src/ui/dialog/glyphs.cpp:384
 msgid "Transport and Map Symbols"
-msgstr ""
+msgstr "Simboli mappe e trasporti"
 
 #: ../src/ui/dialog/glyphs.cpp:385
 #, fuzzy
@@ -19189,7 +19191,7 @@ msgstr "Supplemento Frecce A"
 
 #: ../src/ui/dialog/glyphs.cpp:388
 msgid "Supplemental Symbols and Pictographs"
-msgstr ""
+msgstr "Simboli e pittogrammi supplementari"
 
 #: ../src/ui/dialog/glyphs.cpp:389
 #, fuzzy
@@ -20473,7 +20475,7 @@ msgstr "Cambia tema Gtk:"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1112
 #: ../src/ui/dialog/inkscape-preferences.cpp:2551
 msgid "Open themes folder"
-msgstr "Apre la locazione dei temi"
+msgstr "Apre la cartella dei temi"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1113
 #: ../src/ui/dialog/inkscape-preferences.cpp:2552
@@ -20483,7 +20485,7 @@ msgstr "Temi: "
 #: ../src/ui/dialog/inkscape-preferences.cpp:1113
 #: ../src/ui/dialog/inkscape-preferences.cpp:2552
 msgid "Location of the user’s themes"
-msgstr "Locazione dei temi"
+msgstr "Posizione dei temi"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1114
 #: ../src/ui/dialog/inkscape-preferences.cpp:1115
@@ -22588,11 +22590,11 @@ msgstr "Preferenze: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2541
 msgid "Location of the user’s preferences file"
-msgstr "Locazione del file delle preferenze"
+msgstr "Posizione del file delle preferenze"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2543
 msgid "Open preferences folder"
-msgstr "Apre la locazione delle preferenze"
+msgstr "Apre la cartella delle preferenze"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2544
 msgid "User config: "
@@ -22600,11 +22602,11 @@ msgstr "Configurazione: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2544
 msgid "Location of users configuration"
-msgstr "Locazione della configurazione"
+msgstr "Posizione della configurazione"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2547
 msgid "Open extensions folder"
-msgstr "Apre la locazione delle estensioni"
+msgstr "Apre cartella delle estensioni"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2548
 msgid "User extensions: "
@@ -22612,11 +22614,11 @@ msgstr "Estensioni: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2549
 msgid "Location of the user’s extensions"
-msgstr "Locazione delle estensioni"
+msgstr "Posizione delle estensioni"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2555
 msgid "Open icons folder"
-msgstr "Apre la locazione delle icone"
+msgstr "Apre la cartella delle icone"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2556
 msgid "User icons: "
@@ -22624,11 +22626,11 @@ msgstr "Icone: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2556
 msgid "Location of the user’s icons"
-msgstr "Locazione delle icone"
+msgstr "Posizione delle icone"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2559
 msgid "Open templates folder"
-msgstr "Apre la locazione dei modelli"
+msgstr "Apre la cartella dei modelli"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2560
 msgid "User templates: "
@@ -22636,11 +22638,11 @@ msgstr "Modelli: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2561
 msgid "Location of the user’s templates"
-msgstr "Locazione dei modelli"
+msgstr "Posizione dei modelli"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2564
 msgid "Open symbols folder"
-msgstr "Apre la locazione dei simboli"
+msgstr "Apre la cartella dei simboli"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2566
 msgid "User symbols: "
@@ -22648,7 +22650,7 @@ msgstr "Simboli: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2566
 msgid "Location of the user’s symbols"
-msgstr "Locazione dei simboli"
+msgstr "Posizione dei simboli"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2570
 #, fuzzy
@@ -22663,11 +22665,11 @@ msgstr "Estensioni utente: "
 #: ../src/ui/dialog/inkscape-preferences.cpp:2573
 #, fuzzy
 msgid "Location of the user’s paint servers"
-msgstr "Locazione delle estensioni dell'utente"
+msgstr "Posizione delle estensioni dell'utente"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2576
 msgid "Open palettes folder"
-msgstr "Apre la locazione delle palette"
+msgstr "Apre la cartella delle palette"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2577
 msgid "User palettes: "
@@ -22675,11 +22677,11 @@ msgstr "Palette: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2577
 msgid "Location of the user’s palettes"
-msgstr "Locazione delle palette dell'utente"
+msgstr "Posizione delle palette dell'utente"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2581
 msgid "Open keyboard shortcuts folder"
-msgstr "Apre la locazione delle scorciatoie da tastiera"
+msgstr "Apre la cartella delle scorciatoie da tastiera"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2582
 msgid "User keys: "
@@ -22687,11 +22689,11 @@ msgstr "Scorciatoie: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2583
 msgid "Location of the user’s keyboard mapping files"
-msgstr "Locazione dei file di mappatura delle scorciatoie da tastiera"
+msgstr "Posizione dei file di mappatura delle scorciatoie da tastiera"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2586
 msgid "Open user interface folder"
-msgstr "Apre la locazione della interfaccia utente"
+msgstr "Apre la cartella della interfaccia utente"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2587
 msgid "User UI: "
@@ -22700,7 +22702,7 @@ msgstr "UI: "
 #: ../src/ui/dialog/inkscape-preferences.cpp:2588
 #, fuzzy
 msgid "Location of the user’s user interface description files"
-msgstr "Locazione del file di preferenze dell'utente"
+msgstr "Posizione del file di preferenze dell'utente"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2592
 msgid "User cache: "
@@ -22708,7 +22710,7 @@ msgstr "Cache: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2592
 msgid "Location of user’s cache"
-msgstr "Locazione della cache"
+msgstr "Posizione della cache"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2600
 msgid "Temporary files: "
@@ -22716,7 +22718,7 @@ msgstr "File temporanei: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2600
 msgid "Location of the temporary files used for autosave"
-msgstr "Locazione dei file temporanei usati per l'autosalvataggio"
+msgstr "Posizione dei file temporanei usati per l'autosalvataggio"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2604
 msgid "Inkscape data: "
@@ -22724,7 +22726,7 @@ msgstr "Dati Inkscape: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2604
 msgid "Location of Inkscape data"
-msgstr "Locazione dei dati di Inkscape"
+msgstr "Posizione dei dati di Inkscape"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2608
 msgid "Inkscape extensions: "
@@ -22732,7 +22734,7 @@ msgstr "Estensioni di Inkscape: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2608
 msgid "Location of the Inkscape extensions"
-msgstr "Locazione delle estensioni di Inkscape"
+msgstr "Posizione delle estensioni di Inkscape"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2618
 msgid "System data: "
@@ -22740,7 +22742,7 @@ msgstr "Dati sistema: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2618
 msgid "Locations of system data"
-msgstr "Locazione dei dati di sistema"
+msgstr "Posizione dei dati di sistema"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2632
 msgid "Icon theme: "
@@ -22748,7 +22750,7 @@ msgstr "Tema icone: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2632
 msgid "Locations of icon themes"
-msgstr "Locazione dei temi delle icone"
+msgstr "Posizione dei temi delle icone"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2634
 msgid "System"
@@ -23813,11 +23815,11 @@ msgstr "Imposta attributi"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:457
 msgid "Horiz. Advance X"
-msgstr ""
+msgstr "Avanzamento orizzontale"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:457
 msgid "Average amount of horizontal space each letter takes up."
-msgstr ""
+msgstr "Quantità media di spazio occupata da ogni lettera."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:458
 #, fuzzy
@@ -23827,7 +23829,7 @@ msgstr "Origine X:"
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:458
 #, fuzzy
 msgid "Average horizontal origin location for each letter."
-msgstr "Alterna la direzione della rotazione per ogni riga"
+msgstr "Posizione orizzontale di inizio di ogni lettera."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:459
 #, fuzzy
@@ -23837,7 +23839,7 @@ msgstr "Origine Y"
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:459
 #, fuzzy
 msgid "Average vertical origin location for each letter."
-msgstr "Alterna la direzione della rotazione per ogni riga"
+msgstr "Posizione verticale di inizio di ogni lettera."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:460
 #, fuzzy
@@ -23853,6 +23855,8 @@ msgid ""
 "Name of the font as it appears in font selectors and css font-family "
 "properties."
 msgstr ""
+"Nome del font come compare nei selettori e nella proprietà css "
+"font-family."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:462
 #, fuzzy
@@ -23861,7 +23865,7 @@ msgstr "Unità utente per "
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:462
 msgid "Number of display units each letter takes up."
-msgstr ""
+msgstr "Numero di unità di display occupate da ogni lettera."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:463
 #, fuzzy
@@ -23872,6 +23876,7 @@ msgstr "Ascendente:"
 msgid ""
 "Amount of space taken up by accenders like the tall line on the letter 'h'."
 msgstr ""
+"Spazio occupato dalle linee ascendenti come la linea lunga della lettera 'h'."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:464
 #, fuzzy
@@ -23881,6 +23886,7 @@ msgstr "Discendente:"
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:464
 msgid "Amount of space taken up by decenders like the tail on the letter 'g'."
 msgstr ""
+"Spazio occupato dalle linee discendenti come il ricciolo della lettera 'g'."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:465
 #, fuzzy
@@ -23891,16 +23897,18 @@ msgstr "Altezza della maiuscola:"
 msgid ""
 "The height of a capital letter above the baseline like the letter 'H' or 'I'."
 msgstr ""
+"Altezza delle lettere maiuscole sulla linea base come le lettere 'H' o 'I'."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:466
 #, fuzzy
 msgid "x Height:"
-msgstr "Altezza:"
+msgstr "Altezza della minuscola:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:466
 msgid ""
 "The height of a lower-case letter above the baseline like the letter 'x'."
 msgstr ""
+"Altezza delle lettere minuscole sulla linea base come la lettera 'x'."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:542
 msgid "glyph"
@@ -33890,18 +33898,21 @@ msgid ""
 "The HPGL data contained unknown (unsupported) commands, there is a "
 "possibility that the drawing is missing some content."
 msgstr ""
+"I dati HPGL contengono comandi sconosciuti (non supportati), è  "
+"possibile che nel disegno manchino alcuni contenuti."
 
 #: ../share/extensions/hpgl_output.py:54
 msgid "No paths were found. Please convert objects you want into paths."
-msgstr ""
+msgstr "Nessun tracciato trovato. Convertire gli oggetti desiderati in "
+"tracciati."
 
 #: ../share/extensions/inkex/bezier.py:406
 msgid "Area is zero, cannot calculate Center of Mass"
-msgstr ""
+msgstr "L'area è nulla, impossibile calcolare il centro di massa"
 
 #: ../share/extensions/inkex/deprecated.py:84
 msgid "{} is deprecated and should be removed"
-msgstr ""
+msgstr "{} è deprecato e va rimosso"
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 93
@@ -33911,6 +33922,9 @@ msgid ""
 "change `self.OptionParser.add_option` to `self.arg_parser.add_argument`; the "
 "arguments are similar."
 msgstr ""
+"{} o `optparse` sono deprecati e sostituiti da `argparser`. Sostituire "
+"`self.OptionParser.add_option` con `self.arg_parser.add_argument`; gli "
+"argomenti sono simili."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 108
@@ -33919,6 +33933,8 @@ msgid ""
 "{} method is now a required method. It should be created on {cls}, even if "
 "it does nothing."
 msgstr ""
+"Il metodo {} ora è obbligatorio. Va creato in {cls}, anche se non deve "
+"eseguire nulla."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 114
@@ -33926,6 +33942,7 @@ msgstr ""
 msgid ""
 "{} is now a method in the svg. Use `self.svg.get_current_layer()` instead."
 msgstr ""
+"{} ora è un metodo svg. Usare `self.svg.get_current_layer()` al suo posto."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 120
@@ -33933,6 +33950,7 @@ msgstr ""
 msgid ""
 "{} is now a method in the svg. Use `self.svg.get_center_position()` instead."
 msgstr ""
+"{} ora è un metodo svg. Usare `self.svg.get_center_position()` al suo posto."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 125
@@ -33944,18 +33962,19 @@ msgstr ""
 msgid ""
 "{} is now a method in the svg document. Use `self.svg.get_ids()` instead."
 msgstr ""
+"{} ora è un metodo del documento svg. Usare `self.svg.get_ids()` al suo posto."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 143
 #: ../share/extensions/inkex/deprecated.py:144
 msgid "Use `self.svg.get_ids()` instead of {} and `doc_ids`."
-msgstr ""
+msgstr "Usare `self.svg.get_ids()` invece di {} e `doc_ids`."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 148
 #: ../share/extensions/inkex/deprecated.py:149
 msgid "{} has been removed"
-msgstr ""
+msgstr "{} è stato rimosso"
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 136
@@ -33963,18 +33982,21 @@ msgstr ""
 msgid ""
 "{} is now a method in the svg. Use `self.svg.getElementById(eid)` instead."
 msgstr ""
+"{} ora è un metodo svg. Usare `self.svg.getElementById(eid)` al suo posto."
 
 #: ../share/extensions/inkex/deprecated.py:157
 msgid ""
 "{} is now a new method in the svg document. Use `self.svg.getElement(path)` "
 "instead.`"
 msgstr ""
+"{} ora è un nuovo metodo del documento svg. Usare `self.svg.getElement(path)` "
+"al suo posto."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 162
 #: ../share/extensions/inkex/deprecated.py:163
 msgid "{} is no longer in use. Use the lxml .getparent() method instead."
-msgstr ""
+msgstr "{} non è più usato. Usare il metodo lxml .getparent() al suo posto."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 152
@@ -33983,72 +34005,88 @@ msgid ""
 "{} is now a property of the svg. Use `self.svg.namedview` to access this "
 "element"
 msgstr ""
+"{} ora è una proprietà svg. Usare `self.svg.namedview` per accedere a  "
+"questo elemento"
 
 #: ../share/extensions/inkex/deprecated.py:173
 msgid ""
 "{} is now a method of the namedview element object. Use `self.svg.namedview."
 "add(Guide().move_to(x, y, a))` instead"
 msgstr ""
+"{} ora è un metodo dell'oggetto namedview element. Usare `self.svg.namedview."
+"add(Guide().move_to(x, y, a))` al suo posto"
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 178
 #: ../share/extensions/inkex/deprecated.py:179
 msgid "{} is now `Effect.run()`. The `output` argument has changed."
-msgstr ""
+msgstr "{} ora è `Effect.run()`. L'argomento `output` è cambiato."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 184
 #: ../share/extensions/inkex/deprecated.py:185
 msgid "self.args[-1] is now self.options.input_file"
-msgstr ""
+msgstr "self.args[-1] ora è self.options.input_file"
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 189
 #: ../share/extensions/inkex/deprecated.py:190
 msgid "self.svg_file is now self.options.input_file"
-msgstr ""
+msgstr "self.svg_file ora è self.options.input_file"
 
 #: ../share/extensions/inkex/deprecated.py:202
 msgid ""
 "{} is now a method in the svg document.  Use `self.svg."
 "get_unique_id(old_id)` instead."
 msgstr ""
+"{} ora è un metodo del documento svg.  Usare `self.svg."
+"get_unique_id(old_id)` al suo posto."
 
 #: ../share/extensions/inkex/deprecated.py:207
 msgid "{} is now a property of the svg document. Use `self.svg.width` instead."
-msgstr ""
+msgstr "{} ora è una proprietà del documento svg. Usare `self.svg.width` "
+"al suo posto."
 
 #: ../share/extensions/inkex/deprecated.py:212
 msgid ""
 "{} is now a property of the svg document. Use `self.svg.height` instead."
 msgstr ""
+"{} ora è una proprietà del documento svg. Usare `self.svg.height` "
+"al suo posto."
 
 #: ../share/extensions/inkex/deprecated.py:217
 msgid "{} is now a property of the svg document. Use `self.svg.unit` instead."
 msgstr ""
+"{} ora è una proprietà del documento svg. Usare `self.svg.unit` al suo posto."
 
 #: ../share/extensions/inkex/deprecated.py:222
 msgid ""
 "{} is now a method in the svg document. Use `self.svg.unittouu(str)` instead."
 msgstr ""
+"{} ora è un metodo del documento svg.  Usare `self.svg.unittouu(str)` al "
+"suo posto."
 
 #: ../share/extensions/inkex/deprecated.py:227
 msgid ""
 "{} is now a method in the svg document. Use `self.svg.uutounit(value, unit)` "
 "instead."
 msgstr ""
+"{} ora è un metodo del documento svg.  Usare `self.svg.uutounit(value, unit)` "
+"al suo posto."
 
 #: ../share/extensions/inkex/deprecated.py:232
 msgid ""
 "{} is now a method in the svg document. Use `self.svg.add_unit(value)` "
 "instead."
 msgstr ""
+"{} ora è un metodo del documento svg.  Usare `self.svg.add_unit(value)` "
+"al suo posto."
 
 #
 # File: ../share/extensions/interp_att_g.py, line: 92
 #: ../share/extensions/interp_att_g.py:87
 msgid "Bad values for a number field: {}, {}."
-msgstr ""
+msgstr "Valore non valido per un campo numerico: {}, {}."
 
 #: ../share/extensions/interp_att_g.py:113
 #, fuzzy
@@ -37529,7 +37567,7 @@ msgstr "File HP Graphics Language (*.hpgl)"
 #: ../share/extensions/hpgl_input.inx:15
 #, fuzzy
 msgid "Import an HP Graphics Language file"
-msgstr "Esporta un file HP Graphics Language"
+msgstr "Importa un file HP Graphics Language"
 
 #: ../share/extensions/hpgl_output.inx:3
 msgid "HPGL Output"
@@ -37541,30 +37579,33 @@ msgid ""
 "Please use the plotter extension (Extensions menu) to plot directly over a "
 "serial connection."
 msgstr ""
+"Assicurasri che tutti gli oggetti da salvare siano convertiti in tracciati. "
+"Usare l'estensione plotter (menu Estensioni) per eseguire il plot su un "
+"collegamento seriale."
 
 #: ../share/extensions/hpgl_output.inx:9 ../share/extensions/plotter.inx:67
 #, fuzzy
 msgid "Plotter Settings"
-msgstr "Impostazioni importazione PDF"
+msgstr "Impostazioni Plotter"
 
 #: ../share/extensions/hpgl_output.inx:12 ../share/extensions/plotter.inx:70
 #, fuzzy
 msgid "Pen number:"
-msgstr "Angolo de"
+msgstr "Numero di penne:"
 
 #
 # File: ../share/extensions/hpgl_output.inx, line: 13
 # File: ../share/extensions/plotter.inx, line: 71
 #: ../share/extensions/hpgl_output.inx:12 ../share/extensions/plotter.inx:70
 msgid "The number of the pen (tool) to use (Standard: '1')"
-msgstr ""
+msgstr "Numero di penne da utilizzare (standard: '1')"
 
 #
 # File: ../share/extensions/hpgl_output.inx, line: 14
 # File: ../share/extensions/plotter.inx, line: 72
 #: ../share/extensions/hpgl_output.inx:13 ../share/extensions/plotter.inx:71
 msgid "Pen force (g):"
-msgstr ""
+msgstr "Forza della penna (g)"
 
 #
 # File: ../share/extensions/hpgl_output.inx, line: 14
@@ -37574,13 +37615,15 @@ msgid ""
 "The amount of force pushing down the pen in grams, set to 0 to omit command; "
 "most plotters ignore this command (Default: 0)"
 msgstr ""
+"Forza di pressione della penna in grammi, impostare 0 per saltare questo comando; "
+"la maggior parte dei plotter lo ignorano (valore predefinito: 0)"
 
 #
 # File: ../share/extensions/hpgl_output.inx, line: 15
 # File: ../share/extensions/plotter.inx, line: 73
 #: ../share/extensions/hpgl_output.inx:14 ../share/extensions/plotter.inx:72
 msgid "Pen speed (cm/s or mm/s):"
-msgstr ""
+msgstr "Velocità della penna (cm/s o mm/s):"
 
 #
 # File: ../share/extensions/hpgl_output.inx, line: 15
@@ -37590,6 +37633,9 @@ msgid ""
 "(depending on your plotter model), set to 0 to omit command; most plotters "
 "ignore this command (Default: 0)"
 msgstr ""
+"Velocità di movimento della penna in centimetri o millimetri al secondo "
+"(dipende dal modello del plotter), impostare a 0 per saltare questo comando; "
+"la maggior parte dei plotter lo ignorano (valore predefinito: 0)"
 
 #: ../share/extensions/hpgl_output.inx:15
 msgid "Rotation (°, Clockwise):"
@@ -37600,36 +37646,36 @@ msgstr "Rotazione (°, oraria):"
 # File: ../share/extensions/plotter.inx, line: 74
 #: ../share/extensions/hpgl_output.inx:15 ../share/extensions/plotter.inx:73
 msgid "Rotation of the drawing (Default: 0°)"
-msgstr ""
+msgstr "Rotazione del disegno (predefinito: 0°)"
 
 #: ../share/extensions/hpgl_output.inx:21 ../share/extensions/plotter.inx:79
 #, fuzzy
 msgid "Mirror X axis"
-msgstr "Asse Y riflessione"
+msgstr "Rifletti asse X"
 
 #
 # File: ../share/extensions/hpgl_output.inx, line: 22
 # File: ../share/extensions/plotter.inx, line: 80
 #: ../share/extensions/hpgl_output.inx:21 ../share/extensions/plotter.inx:79
 msgid "Check this to mirror the X axis (Default: Unchecked)"
-msgstr ""
+msgstr "Seleziona per riflettere sull'asse X (predefinito: non selezionato)"
 
 #: ../share/extensions/hpgl_output.inx:22 ../share/extensions/plotter.inx:80
 #, fuzzy
 msgid "Mirror Y axis"
-msgstr "Asse Y riflessione"
+msgstr "Rifletti asse Y"
 
 #
 # File: ../share/extensions/hpgl_output.inx, line: 23
 # File: ../share/extensions/plotter.inx, line: 81
 #: ../share/extensions/hpgl_output.inx:22 ../share/extensions/plotter.inx:80
 msgid "Check this to mirror the Y axis (Default: Unchecked)"
-msgstr ""
+msgstr "Seleziona per riflettere sull'asse Y (predefinito: non selezionato)"
 
 #: ../share/extensions/hpgl_output.inx:23 ../share/extensions/plotter.inx:81
 #, fuzzy
 msgid "Center zero point"
-msgstr "Centra linee"
+msgstr "Punto zero centrato"
 
 #
 # File: ../share/extensions/hpgl_output.inx, line: 24
@@ -37638,6 +37684,8 @@ msgstr "Centra linee"
 msgid ""
 "Check this if your plotter uses a centered zero point (Default: Unchecked)"
 msgstr ""
+"Selezionare se il plotter usa un punto zero centrato (predefinito: "
+"non selezionato)"
 
 #: ../share/extensions/hpgl_output.inx:25 ../share/extensions/plotter.inx:83
 msgid ""
@@ -37645,11 +37693,14 @@ msgid ""
 "each pen, name the layers \"Pen 1\", \"Pen 2\", etc., and put your drawings "
 "in the corresponding layers. This overrules the pen number option above."
 msgstr ""
+"Per usare più penne differenti del plotter, creare un livello per ogni penna "
+"chiamarli \"Pen 1\", \"Pen 2\", eccetera e mettere i disegni nel livello "
+"corrispondente. Questo ha la precedenza sull'opzione del numero di penna."
 
 #: ../share/extensions/hpgl_output.inx:27 ../share/extensions/plotter.inx:85
 #, fuzzy
 msgid "Plot Features"
-msgstr "Cuoio"
+msgstr "Caratteristiche Plot"
 
 #
 # File: ../share/extensions/hpgl_output.inx, line: 29
@@ -37670,7 +37721,7 @@ msgstr ""
 #: ../share/extensions/hpgl_output.inx:29 ../share/extensions/plotter.inx:87
 #, fuzzy
 msgid "Tool (Knife) offset correction (mm):"
-msgstr "Proiezione orizzontale, px"
+msgstr "Strumento (Coltello), correzione spostamento (mm):"
 
 #
 # File: ../share/extensions/hpgl_output.inx, line: 30
@@ -37684,7 +37735,7 @@ msgstr ""
 #: ../share/extensions/hpgl_output.inx:30 ../share/extensions/plotter.inx:88
 #, fuzzy
 msgid "Precut"
-msgstr "Impostazioni predefinita del sistema"
+msgstr "Pre-taglio"
 
 #
 # File: ../share/extensions/hpgl_output.inx, line: 31
@@ -37737,12 +37788,16 @@ msgid ""
 "Check this to automatically (nondestructively) convert all objects to paths "
 "before plotting (Default: Checked)"
 msgstr ""
+"Selezionare per convertire automaticamente (in modo non distruttivo) tutti "
+"gli oggetti in tracciati prima del plot (Predefinito: Selezionato)"
 
 #: ../share/extensions/hpgl_output.inx:36 ../share/extensions/plotter.inx:95
 msgid ""
 "All these settings depend on the plotter you use, for more information "
 "please consult the manual or homepage for your plotter."
 msgstr ""
+"Tutte queste impostazioni dipendono dal plotter utilizzato, per ulteriori "
+"informazioni consultare il manuale o il sito web del plotter."
 
 #: ../share/extensions/hpgl_output.inx:41
 #, fuzzy
@@ -37832,7 +37887,7 @@ msgstr "Attributo da impostare:"
 
 #: ../share/extensions/ink2canvas.inx:3
 msgid "Convert to html5 canvas"
-msgstr "Converti in html5 canvas"
+msgstr "Converti in canvas html5"
 
 #: ../share/extensions/ink2canvas.inx:8
 msgid "HTML 5 canvas (*.html)"
@@ -37845,7 +37900,7 @@ msgstr "Codice HTML 5 canvas"
 #: ../share/extensions/inkscape_follow_link.inx:3
 #, fuzzy
 msgid "Follow Link"
-msgstr "Segui Collegamento"
+msgstr "Segui collegamento"
 
 #: ../share/extensions/inkscape_help_askaquestion.inx:3
 msgid "Ask Us a Question"
@@ -39117,7 +39172,7 @@ msgstr ""
 # File: ../share/extensions/nicechart.inx, line: 31
 #: ../share/extensions/nicechart.inx:32
 msgid "Data"
-msgstr ""
+msgstr "Dati"
 
 #: ../share/extensions/nicechart.inx:34
 #, fuzzy
@@ -39127,67 +39182,67 @@ msgstr "Carica da file"
 #: ../share/extensions/nicechart.inx:35
 #, fuzzy
 msgid "Enter the full path to a CSV file:"
-msgstr "Percorso completo al file di log:"
+msgstr "Percorso completo del file CSV:"
 
 #: ../share/extensions/nicechart.inx:37
 #, fuzzy
 msgid "Delimiter:"
-msgstr "Spigolosità:"
+msgstr "Separatore:"
 
 #: ../share/extensions/nicechart.inx:38
 #, fuzzy
 msgid "Column that contains the keys:"
-msgstr "Angolo di rotazione"
+msgstr "Colonna contenente le chiavi:"
 
 #: ../share/extensions/nicechart.inx:39
 #, fuzzy
 msgid "Column that contains the values:"
-msgstr "Angolo di rotazione"
+msgstr "Colonna contenente i valori:"
 
 #
 # File: ../share/extensions/nicechart.inx, line: 39
 #: ../share/extensions/nicechart.inx:40
 msgid "File encoding (e.g. utf-8):"
-msgstr ""
+msgstr "Codifica del file (es. utf-8):"
 
 #
 # File: ../share/extensions/nicechart.inx, line: 40
 #: ../share/extensions/nicechart.inx:41
 msgid "First line contains headings"
-msgstr ""
+msgstr "Prima riga con intestazioni"
 
 #: ../share/extensions/nicechart.inx:43
 #, fuzzy
 msgid "Direct input"
-msgstr "Direzione"
+msgstr "Input diretto"
 
 #
 # File: ../share/extensions/nicechart.inx, line: 45
 #: ../share/extensions/nicechart.inx:44
 msgid "Type in comma separated values:"
-msgstr ""
+msgstr "Inserire i valori separati da virgole:"
 
 #
 # File: ../share/extensions/nicechart.inx, line: 46
 #: ../share/extensions/nicechart.inx:45
 msgid "(format like this: apples:3,bananas:5)"
-msgstr ""
+msgstr "(formato del tipo: mele:3,banane:5)"
 
 #
 # File: ../share/extensions/nicechart.inx, line: 45
 #: ../share/extensions/nicechart.inx:46
 msgid "Data:"
-msgstr ""
+msgstr "Dati:"
 
 #: ../share/extensions/nicechart.inx:50
 #, fuzzy
 msgid "Labels"
-msgstr "Etichetta"
+msgstr "Etichette"
 
 #: ../share/extensions/nicechart.inx:51
 #, fuzzy
 msgid "Font:"
-msgstr "Carattere"
+msgstr "Carattere:"
 
 #: ../share/extensions/nicechart.inx:53
 #, fuzzy
@@ -39198,71 +39253,71 @@ msgstr "Colore carattere:"
 # File: ../share/extensions/nicechart.inx, line: 54
 #: ../share/extensions/nicechart.inx:55
 msgid "Charts"
-msgstr ""
+msgstr "Grafici"
 
 #: ../share/extensions/nicechart.inx:56
 #, fuzzy
 msgid "Draw horizontally"
-msgstr "Muovi orizzontalmente"
+msgstr "Disegna in orizzontale"
 
 #: ../share/extensions/nicechart.inx:57
 #, fuzzy
 msgid "Bar length:"
-msgstr "Lunghezza p_rincipali:"
+msgstr "Lunghezza barre:"
 
 #: ../share/extensions/nicechart.inx:58
 #, fuzzy
 msgid "Bar width:"
-msgstr "Larghezza sfocatura:"
+msgstr "Larghezza barre:"
 
 #: ../share/extensions/nicechart.inx:59
 #, fuzzy
 msgid "Pie radius:"
-msgstr "Raggio interno:"
+msgstr "Raggio diagramma a torta:"
 
 #: ../share/extensions/nicechart.inx:60
 #, fuzzy
 msgid "Bar offset:"
-msgstr "Spostamento blu"
+msgstr "Spaziatura barre:"
 
 #
 # File: ../share/extensions/nicechart.inx, line: 61
 #: ../share/extensions/nicechart.inx:62
 msgid "Offset between chart and labels:"
-msgstr ""
+msgstr "Spaziatura tra grafico ed etichette:"
 
 #
 # File: ../share/extensions/nicechart.inx, line: 62
 #: ../share/extensions/nicechart.inx:63
 msgid "Offset between chart and chart title:"
-msgstr ""
+msgstr "Spaziatura tra grafico e titolo:"
 
 #
 # File: ../share/extensions/nicechart.inx, line: 63
 #: ../share/extensions/nicechart.inx:64
 msgid "Work around aliasing effects (creates overlapping segments)"
-msgstr ""
+msgstr "Correggi gli effetti di arrotondamento (crea segmenti sovrapposti)"
 
 #: ../share/extensions/nicechart.inx:66
 #, fuzzy
 msgid "Color scheme:"
-msgstr "Colori:"
+msgstr "Schema di colori:"
 
 #
 # File: ../share/extensions/nicechart.inx, line: 72
 #: ../share/extensions/nicechart.inx:71
 msgid "SAP"
-msgstr ""
+msgstr "SAP"
 
 #: ../share/extensions/nicechart.inx:74
 #, fuzzy
 msgid "Custom colors:"
-msgstr "Colore rugosità"
+msgstr "Colori personalizzati:"
 
 #: ../share/extensions/nicechart.inx:76
 #, fuzzy
 msgid "Reverse color scheme"
-msgstr "Rimuovi colore contorno"
+msgstr "Inverti schema di colori"
 
 #: ../share/extensions/nicechart.inx:77
 #, fuzzy
@@ -39272,32 +39327,32 @@ msgstr "Proietta ombra"
 #: ../share/extensions/nicechart.inx:80
 #, fuzzy
 msgid "Show values"
-msgstr "Mostra maniglie"
+msgstr "Mostra i valori"
 
 #: ../share/extensions/nicechart.inx:87
 #, fuzzy
 msgid "Chart type:"
-msgstr "Tipo ombra:"
+msgstr "Tipo di grafico:"
 
 #: ../share/extensions/nicechart.inx:88
 #, fuzzy
 msgid "Bar chart"
-msgstr "Altezza barre:"
+msgstr "Grafico a barre"
 
 #: ../share/extensions/nicechart.inx:89
 #, fuzzy
 msgid "Pie chart"
-msgstr "Altezza barre:"
+msgstr "Grafico a torta"
 
 #: ../share/extensions/nicechart.inx:90
 #, fuzzy
 msgid "Pie chart (percentage)"
-msgstr "Percentuale:"
+msgstr "Grafico a torta (percentuale)"
 
 #: ../share/extensions/nicechart.inx:91
 #, fuzzy
 msgid "Stacked bar chart"
-msgstr "Altezza barre:"
+msgstr "Grafico a barre sovrapposte"
 
 #: ../share/extensions/output_scour.inx:3
 msgid "Optimized SVG Output"
@@ -39307,7 +39362,7 @@ msgstr "Output SVG ottimizzato"
 # File: ../share/extensions/output_scour.inx, line: 10
 #: ../share/extensions/output_scour.inx:10
 msgid "Number of significant digits for coordinates:"
-msgstr ""
+msgstr "Numero di cifre significative per le coordinate:"
 
 #: ../share/extensions/output_scour.inx:10
 msgid ""
@@ -39317,11 +39372,16 @@ msgid ""
 "\"3\" is specified, the coordinate 3.14159 is output as 3.14 while the "
 "coordinate 123.675 is output as 124."
 msgstr ""
+"Specifica il numero di cifre significative da usare per le coordinate. "
+"Questo *non* rappresenta il numero di cifre decimali ma è il numero totale "
+"di cifre da mostrare in uscita. Per esempio, impostando il valore \"3\", "
+"la coordinata 3.14159 verrà rappresentata come 3.14 mentre la coordinata "
+"123.675 verrà rappresentata come 124."
 
 #: ../share/extensions/output_scour.inx:14
 #, fuzzy
 msgid "Shorten color values"
-msgstr "Colori tenui"
+msgstr "Abbrevia i valori dei colori"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 14
@@ -39330,33 +39390,38 @@ msgid ""
 "Convert all color specifications to #RRGGBB (or #RGB where applicable) "
 "format."
 msgstr ""
+"Converte tutte le specifiche dei colori nel formato #RRGGBB (o #RGB "
+"dove possibile)."
 
 #: ../share/extensions/output_scour.inx:17
 #, fuzzy
 msgid "Convert CSS attributes to XML attributes"
-msgstr "Cancella attributo"
+msgstr "Converte gli attributi CSS in attributi XML"
 
 #: ../share/extensions/output_scour.inx:17
 msgid ""
 "Convert styles from style tags and inline style=\"\" declarations into XML "
 "attributes."
 msgstr ""
+"Converte i tag style e le dichiarazioni style=\"\" in attributi XML."
 
 #: ../share/extensions/output_scour.inx:21
 #, fuzzy
 msgid "Collapse groups"
-msgstr "Area cuscinetto"
+msgstr "Unisci i gruppi"
 
 #: ../share/extensions/output_scour.inx:21
 msgid ""
 "Remove useless groups, promoting their contents up one level. Requires "
 "\"Remove unused IDs\" to be set."
 msgstr ""
+"Rimuove i gruppi inutili, promuovendo di un livello il loro contenuto. "
+"Richiede l'opzione \"Rimouvi ID non utilizzati\"."
 
 #: ../share/extensions/output_scour.inx:24
 #, fuzzy
 msgid "Create groups for similar attributes"
-msgstr "Elimina proprietà stile inappropriate"
+msgstr "Crea gruppi per attributi simili"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 24
@@ -39365,12 +39430,14 @@ msgid ""
 "Create groups for runs of elements having at least one attribute in common "
 "(e.g. fill-color, stroke-opacity, ...)."
 msgstr ""
+"Crea gruppi per quegli elementi che hanno almento un attributo in comune "
+"(es. fill-color, stroke-opacity, ...)."
 
 #
 # File: ../share/extensions/output_scour.inx, line: 28
 #: ../share/extensions/output_scour.inx:28
 msgid "Keep editor data"
-msgstr ""
+msgstr "Mantieni i dati dell'editor"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 28
@@ -39379,24 +39446,26 @@ msgid ""
 "Don't remove editor-specific elements and attributes. Currently supported: "
 "Inkscape, Sodipodi and Adobe Illustrator."
 msgstr ""
+"Non rimuove gli elementi e gli attributi specifici dell'editor. Supporta: "
+"Inkscape, Sodipodi e Adobe Illustrator."
 
 #
 # File: ../share/extensions/output_scour.inx, line: 31
 #: ../share/extensions/output_scour.inx:31
 msgid "Keep unreferenced definitions"
-msgstr ""
+msgstr "Mantieni le definizioni senza riferimenti"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 31
 #: ../share/extensions/output_scour.inx:31
 msgid "Keep element definitions that are not currently used in the SVG"
-msgstr ""
+msgstr "Mantiene le definizioni di elementi non usate al momento in SVG"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 35
 #: ../share/extensions/output_scour.inx:35
 msgid "Work around renderer bugs"
-msgstr ""
+msgstr "Correggi gli errori di rendering"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 35
@@ -39405,16 +39474,18 @@ msgid ""
 "Works around some common renderer bugs (mainly libRSVG) at the cost of a "
 "slightly larger SVG file."
 msgstr ""
+"Corregge alcuni errori comuni di rendering (principalmente libRSVG) "
+"producendo un file SVG un po' più grande."
 
 #: ../share/extensions/output_scour.inx:38
 #, fuzzy
 msgid "Document options"
-msgstr "Proprietà del _documento..."
+msgstr "Opzioni documento"
 
 #: ../share/extensions/output_scour.inx:41
 #, fuzzy
 msgid "Remove the XML declaration"
-msgstr "Rimuovi _trasformazioni"
+msgstr "Rimuovi dichiarazione XML"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 41
@@ -39424,6 +39495,8 @@ msgid ""
 "especially if special characters are used in the document) from the file "
 "header."
 msgstr ""
+"Elimina dall'header del file la dichiarazione XML (opzionale ma andrebbe "
+"messa, in particolare se il documento contiene caratteri speciali)."
 
 #: ../share/extensions/output_scour.inx:44
 #, fuzzy
@@ -39438,22 +39511,25 @@ msgid ""
 "include license and author information, alternate versions for non-SVG-"
 "enabled browsers, etc."
 msgstr ""
+"Rimuove i metadati e le informazioni associate, come le informazioni sulla "
+"licenza e gli autori, le versioni alternative per i browser che non gestiscono "
+"SVG eccetera."
 
 #: ../share/extensions/output_scour.inx:47
 #, fuzzy
 msgid "Remove comments"
-msgstr "Rimuovi font"
+msgstr "Rimuovi commenti"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 47
 #: ../share/extensions/output_scour.inx:47
 msgid "Remove all XML comments from output."
-msgstr ""
+msgstr "Rimuove tutti i commenti XML."
 
 #: ../share/extensions/output_scour.inx:50
 #, fuzzy
 msgid "Embed raster images"
-msgstr "Incorpora immagini"
+msgstr "Incorpora immagini grezze"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 50
@@ -39462,6 +39538,8 @@ msgid ""
 "Resolve external references to raster images and embed them as Base64-"
 "encoded data URLs."
 msgstr ""
+"Risolve i riferimenti esterni per rasterizzare immagini e incorporarle "
+"come URL codificate in Base64."
 
 #: ../share/extensions/output_scour.inx:53
 #, fuzzy
@@ -39475,17 +39553,20 @@ msgid ""
 "Set page size to 100%/100% (full width and height of the display area) and "
 "introduce a viewBox specifying the drawings dimensions."
 msgstr ""
+"Imposta la dimensione della pagina a 100%/100% (larghezza e altezza piena "
+"dell'area di visualizzazione) e mostra una viewBox per specificare le "
+"dimensioni del disegno."
 
 #: ../share/extensions/output_scour.inx:55
 #, fuzzy
 msgid "Pretty-printing"
-msgstr "Pittura"
+msgstr "Formattazione"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 58
 #: ../share/extensions/output_scour.inx:58
 msgid "Format output with line-breaks and indentation"
-msgstr ""
+msgstr "Output con a capo e indentazioni"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 58
@@ -39495,11 +39576,14 @@ msgid ""
 "to hand-edit the SVG file you can disable this option to bring down the file "
 "size even more at the cost of clarity."
 msgstr ""
+"Produce un output ben formattato compresi gli a capo. Se non si deve modificare "
+"a mano il file SVG, si può fare a meno di questa opzione per ridurre la "
+"dimensione del file a scapito della leggibilità."
 
 #: ../share/extensions/output_scour.inx:61
 #, fuzzy
 msgid "Indentation characters:"
-msgstr "Carattere unicode:"
+msgstr "Caratteri di indentazione:"
 
 #: ../share/extensions/output_scour.inx:61
 msgid ""
@@ -39507,16 +39591,19 @@ msgid ""
 "Specify \"None\" to disable indentation. This option has no effect if "
 "\"Format output with line-breaks and indentation\" is disabled."
 msgstr ""
+"Tipo di indentazione da usare per ogni livello di annidamento. "
+"Specificare \"Nessuno\" per disabilitare l'indentazione. Questa opzione "
+"non ha effetto se \"Output con a capo e indentazioni\" è disabilitato."
 
 #: ../share/extensions/output_scour.inx:62
 #, fuzzy
 msgid "Space"
-msgstr "Macchia"
+msgstr "Spazio"
 
 #: ../share/extensions/output_scour.inx:63
 #, fuzzy
 msgid "Tab"
-msgstr "Tabella"
+msgstr "Tabulazione"
 
 #: ../share/extensions/output_scour.inx:64
 #, fuzzy
@@ -39527,17 +39614,19 @@ msgstr "Nessuno"
 #: ../share/extensions/output_scour.inx:68
 #, fuzzy
 msgid "Depth of indentation:"
-msgstr "Funzione rosso"
+msgstr "Ampiezza indentazione:"
 
 #: ../share/extensions/output_scour.inx:68
 msgid ""
 "The depth of the chosen type of indentation. E.g. if you choose \"2\" every "
 "nesting level in the output will be indented by two additional spaces/tabs."
 msgstr ""
+"Ampiezza dell'indentazione prescelta. Per esempio, impostando \"2\" ogni "
+"livello verrà indentato di due spazi/tabulazioni in più."
 
 #: ../share/extensions/output_scour.inx:71
 msgid "Strip the \"xml:space\" attribute from the root SVG element"
-msgstr ""
+msgstr "Elimina l'attributo \"xml:space\" dall'elemento SVG root"
 
 #: ../share/extensions/output_scour.inx:71
 msgid ""
@@ -39554,7 +39643,7 @@ msgstr "ID"
 #: ../share/extensions/output_scour.inx:76
 #, fuzzy
 msgid "Remove unused IDs"
-msgstr "Rimuovi rosso"
+msgstr "Rimuovi ID non utilizzati"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 76
@@ -39563,12 +39652,14 @@ msgid ""
 "Remove all unreferenced IDs from elements. Those are not needed for "
 "rendering."
 msgstr ""
+"Rimuove dagli elementi tutti gli ID non referenziati che non servono "
+"per il rendering."
 
 #
 # File: ../share/extensions/output_scour.inx, line: 80
 #: ../share/extensions/output_scour.inx:80
 msgid "Shorten IDs"
-msgstr ""
+msgstr "Abbrevia ID"
 
 #: ../share/extensions/output_scour.inx:80
 msgid ""
@@ -39576,24 +39667,27 @@ msgid ""
 "shortest values to the most-referenced elements. For instance, "
 "\"linearGradient5621\" will become \"a\" if it is the most used element."
 msgstr ""
+"Minimizza la lunghezza degli ID usando solo lettere minuscole e assegnando "
+"i nomi più brevi agli elementi più referenziati. Per esempio,  "
+"\"linearGradient5621\" diventerà \"a\" se è l'elemento più utilizzato."
 
 #
 # File: ../share/extensions/output_scour.inx, line: 83
 #: ../share/extensions/output_scour.inx:83
 msgid "Prefix shortened IDs with:"
-msgstr ""
+msgstr "Prefissa gli ID abbreviati:"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 83
 #: ../share/extensions/output_scour.inx:83
 msgid "Prepend shortened IDs with the specified prefix."
-msgstr ""
+msgstr "Aggiunge in testa agli ID abbreviati il prefisso indicato."
 
 #
 # File: ../share/extensions/output_scour.inx, line: 87
 #: ../share/extensions/output_scour.inx:87
 msgid "Preserve manually created IDs not ending with digits"
-msgstr ""
+msgstr "Mantieni ID manuali che non finiscono per cifra"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 87
@@ -39604,63 +39698,68 @@ msgid ""
 "preserved while numbered IDs (as they are generated by most SVG editors "
 "including Inkscape) will be removed/shortened."
 msgstr ""
+"Gli ID descrittivi creati manualmente per referenziare o etichettare gruppi "
+"o elementi specifici (es. #arrowStart, #arrowEnd o #textLabels) verranno "
+"conservati mentre gli ID numerati (generati tipicamente dalla maggior parte "
+"degli editor SVG, compreso Inkscape) verranno rimossi o abbreviati."
 
 #: ../share/extensions/output_scour.inx:90
 #, fuzzy
 msgid "Preserve the following IDs:"
 msgstr ""
-"Trovati i seguenti caratteri:\n"
-"%s"
+"Mantieni gli ID seguenti:"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 90
 #: ../share/extensions/output_scour.inx:90
 msgid "A comma-separated list of IDs that are to be preserved."
-msgstr ""
+msgstr "Elenco separato da virgoli degli ID da mantenere."
 
 #
 # File: ../share/extensions/output_scour.inx, line: 93
 #: ../share/extensions/output_scour.inx:93
 msgid "Preserve IDs starting with:"
-msgstr ""
+msgstr "Mantieni gli ID che iniziano con:"
 
 #: ../share/extensions/output_scour.inx:93
 msgid ""
 "Preserve all IDs that start with the specified prefix (e.g. specify \"flag\" "
 "to preserve \"flag-mx\", \"flag-pt\", etc.)."
 msgstr ""
+"Mantiene tutti gli ID che iniziano col prefisso specificato (es. \"flag\" "
+"farà mantenere \"flag-mx\", \"flag-pt\", eccetera)."
 
 #: ../share/extensions/output_scour.inx:101
 #, fuzzy
 msgid "Optimized SVG Output is provided by"
-msgstr "Output SVG ottimizzato"
+msgstr "Output SVG ottimizzato fornito da"
 
 #: ../share/extensions/output_scour.inx:102
 msgid "Scour - An SVG Scrubber"
-msgstr ""
+msgstr "Scour - An SVG Scrubber"
 
 #: ../share/extensions/output_scour.inx:104
 msgid "For details please refer to"
-msgstr ""
+msgstr "Per ulteriori dettagli fare riferimento a"
 
 #: ../share/extensions/output_scour.inx:105
 msgid "https://github.com/scour-project/scour"
-msgstr ""
+msgstr "https://github.com/scour-project/scour"
 
 #: ../share/extensions/output_scour.inx:110
 #, fuzzy
 msgid "This version of the extension is designed for"
-msgstr "l'estensione è stata programmata solo per Windows."
+msgstr "Questa versione dell'estensione è progettata per"
 
 #: ../share/extensions/output_scour.inx:111
 msgid "Scour 0.31+"
-msgstr ""
+msgstr "Scour 0.31+"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 109
 #: ../share/extensions/output_scour.inx:115
 msgid "Show warnings for older versions of Scour"
-msgstr ""
+msgstr "Mostra avviso su versioni precedenti di Scour"
 
 #: ../share/extensions/output_scour.inx:122
 msgid "Optimized SVG (*.svg)"
@@ -40012,12 +40111,13 @@ msgstr ""
 
 #: ../share/extensions/plotter.inx:3
 msgid "Plot"
-msgstr ""
+msgstr "Plot"
 
 #: ../share/extensions/plotter.inx:7
 msgid ""
 "Please make sure that all objects you want to plot are converted to paths."
 msgstr ""
+"Assicurarsi che tutti gli oggetti da disegnare sono convertiti in tracciati."
 
 #: ../share/extensions/plotter.inx:9
 #, fuzzy
@@ -40027,17 +40127,17 @@ msgstr "Connessione"
 #: ../share/extensions/plotter.inx:10
 #, fuzzy
 msgid "Port type:"
-msgstr "Tipo ombra:"
+msgstr "Tipo di porta:"
 
 #: ../share/extensions/plotter.inx:11
 #, fuzzy
 msgid "Serial"
-msgstr "Punto verticale:"
+msgstr "Seriale"
 
 #: ../share/extensions/plotter.inx:14
 #, fuzzy
 msgid "Parallel port:"
-msgstr "Parallelo"
+msgstr "Parallela:"
 
 #
 # File: ../share/extensions/plotter.inx, line: 15
@@ -40046,11 +40146,13 @@ msgid ""
 "The port of your parallel connection, on Windows not currently supported, on "
 "Linux something like: '/dev/usb/lp2' (Default: /dev/usb/lp2)"
 msgstr ""
+"Porta parallela usata per il collegamento, non supportata su Windows, su "
+"Linux è del tipo: '/dev/usb/lp2' (predefinito: /dev/usb/lp2)"
 
 #: ../share/extensions/plotter.inx:15
 #, fuzzy
 msgid "Serial port:"
-msgstr "Punto verticale:"
+msgstr "Porta seriale:"
 
 #
 # File: ../share/extensions/plotter.inx, line: 16
@@ -40059,22 +40161,24 @@ msgid ""
 "The port of your serial connection, on Windows something like 'COM1', on "
 "Linux something like: '/dev/ttyUSB0' (Default: COM1)"
 msgstr ""
+"Porta seriale usata per il collegamento, su Windows è del tipo 'COM1', su "
+"Linux è del tipo: '/dev/ttyUSB0' (predefinito: COM1)"
 
 #: ../share/extensions/plotter.inx:16
 #, fuzzy
 msgid "Serial baud rate:"
-msgstr "_Verticale"
+msgstr "Baud rate:"
 
 #
 # File: ../share/extensions/plotter.inx, line: 17
 #: ../share/extensions/plotter.inx:16
 msgid "The Baud rate of your serial connection (Default: 9600)"
-msgstr ""
+msgstr "Baud rate della linea seriale (predefinito: 9600)"
 
 #: ../share/extensions/plotter.inx:33
 #, fuzzy
 msgid "Serial byte size:"
-msgstr "Incolla dimensione"
+msgstr "Dimensione byte"
 
 #
 # File: ../share/extensions/plotter.inx, line: 34
@@ -40083,11 +40187,13 @@ msgid ""
 "The Byte size of your serial connection, 99% of all plotters use the default "
 "setting (Default: 8 Bits)"
 msgstr ""
+"Dimensione del byte usato dal collegamento seriale, il 99% dei plotter usano "
+"il valore predefinito (8 bit)"
 
 #: ../share/extensions/plotter.inx:39
 #, fuzzy
 msgid "Serial stop bits:"
-msgstr "Punto verticale:"
+msgstr "Numero di bit di stop:"
 
 #
 # File: ../share/extensions/plotter.inx, line: 40
@@ -40096,11 +40202,13 @@ msgid ""
 "The Stop bits of your serial connection, 99% of all plotters use the default "
 "setting (Default: 1 Bit)"
 msgstr ""
+"Numero di bit di stop usati dal collegamento seriale, il 99% dei plotter "
+"usano il valore predefinito (1 bit)"
 
 #: ../share/extensions/plotter.inx:44
 #, fuzzy
 msgid "Serial parity:"
-msgstr "Punto verticale:"
+msgstr "Parità:"
 
 #
 # File: ../share/extensions/plotter.inx, line: 45
@@ -40109,11 +40217,13 @@ msgid ""
 "The Parity of your serial connection, 99% of all plotters use the default "
 "setting (Default: None)"
 msgstr ""
+"Tipo di parità usata dal collegamento seriale, il 99% dei plotter "
+"usano il valore predefinito (nessuna)"
 
 #: ../share/extensions/plotter.inx:51
 #, fuzzy
 msgid "Serial flow control:"
-msgstr "Navigazione"
+msgstr "Controllo di flusso:"
 
 #
 # File: ../share/extensions/plotter.inx, line: 52
@@ -40122,6 +40232,8 @@ msgid ""
 "The Software / Hardware flow control of your serial connection (Default: "
 "Software)"
 msgstr ""
+"Tipo di controllo di flusso software / hardware usato dal collegamento "
+"seriale (predefinito: Software)"
 
 #: ../share/extensions/plotter.inx:52
 msgid "Software (XON/XOFF)"
@@ -40138,13 +40250,13 @@ msgstr "Hardware (DSR/DTR + RTS/CTS)"
 #: ../share/extensions/plotter.inx:57
 #, fuzzy
 msgid "Command language:"
-msgstr "Seconda lingua:"
+msgstr "Linguaggio di comando:"
 
 #
 # File: ../share/extensions/plotter.inx, line: 58
 #: ../share/extensions/plotter.inx:57
 msgid "The command language to use (Default: HPGL)"
-msgstr ""
+msgstr "Linguaggio di comando utilizzato (predefinito: HPGL)"
 
 #: ../share/extensions/plotter.inx:58
 msgid "HPGL"
@@ -40164,16 +40276,20 @@ msgid ""
 "Using wrong settings can under certain circumstances cause Inkscape to "
 "freeze. Always save your work before plotting!"
 msgstr ""
+"Usare un'impostazione sbagliata in certi casi può comportare il blocco "
+"di Inkscape. Salvare sempre il lavoro prima di inviare al plotter!"
 
 #: ../share/extensions/plotter.inx:64
 msgid ""
 "This can be a physical serial connection or a USB-to-Serial bridge. Ask your "
 "plotter manufacturer for drivers if needed."
 msgstr ""
+"Questo collegamento può essere una linea seriale fisica o un adattatore "
+"da USB a seriale. Se necessario, procurarsi i driver presso il fornitore."
 
 #: ../share/extensions/plotter.inx:65
 msgid "Parallel (LPT) connections are not supported."
-msgstr ""
+msgstr "I collegamenti paralleli (LPT) non sono supportati."
 
 #
 # File: ../share/extensions/plotter.inx, line: 73
@@ -40183,6 +40299,9 @@ msgid ""
 "(depending on your plotter model), set to 0 to omit command. Most plotters "
 "ignore this command. (Default: 0)"
 msgstr ""
+"Velocità di movimento della penna in centimetri o millimetri al secondo "
+"(dipende dal modello del plotter), impostare a 0 per saltare questo comando. "
+"La maggior parte dei plotter lo ignorano. (valore predefinito: 0)"
 
 #: ../share/extensions/plotter.inx:73
 msgid "Rotation (°, clockwise):"
