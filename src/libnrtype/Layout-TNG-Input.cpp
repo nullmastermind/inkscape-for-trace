@@ -41,7 +41,7 @@ void Layout::_clearInputObjects()
 // this function does nothing more than store all its parameters for future reference
 void Layout::appendText(Glib::ustring const &text,
                         SPStyle *style,
-                        void *source_cookie,
+                        SPObject *source,
                         OptionalTextTagAttrs const *optional_attributes,
                         unsigned optional_attributes_offset,
                         Glib::ustring::const_iterator text_begin,
@@ -51,7 +51,7 @@ void Layout::appendText(Glib::ustring const &text,
 
     InputStreamTextSource *new_source = new InputStreamTextSource;
 
-    new_source->source_cookie = source_cookie;
+    new_source->source = source;
     new_source->text = &text;
     new_source->text_begin = text_begin;
     new_source->text_end = text_end;
@@ -102,11 +102,11 @@ void Layout::_copyInputVector(std::vector<SVGLength> const &input_vector, unsign
 }
 
 // just save what we've been given, really
-void Layout::appendControlCode(TextControlCode code, void *source_cookie, double width, double ascent, double descent)
+void Layout::appendControlCode(TextControlCode code, SPObject *source, double width, double ascent, double descent)
 {
     InputStreamControlCode *new_code = new InputStreamControlCode;
 
-    new_code->source_cookie = source_cookie;
+    new_code->source = source;
     new_code->code = code;
     new_code->width = width;
     new_code->ascent = ascent;

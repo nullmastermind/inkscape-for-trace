@@ -2307,8 +2307,8 @@ void TextToolbar::prepare_inner()
             if (flowtext) {
                 flowtext->fix_overflow_flowregion(false);
             }
-            void *rawptr_start = nullptr;
-            void *rawptr_end = nullptr;
+            SPObject *rawptr_start = nullptr;
+            SPObject *rawptr_end = nullptr;
             layout->getSourceOfCharacter(wrap_start, &rawptr_start);
             layout->getSourceOfCharacter(wrap_end, &rawptr_end);
             if (text) {

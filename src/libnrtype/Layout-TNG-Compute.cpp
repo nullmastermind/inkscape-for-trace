@@ -133,7 +133,7 @@ class Layout::Calculator
       * Layout::Span (constant font, direction, etc), except that they are from
       * before we have located the line breaks, so bear no relation to chunks.
       * They are guaranteed to be in at most one PangoItem (spans with no text in
-      * them will not have an associated PangoItem), exactly one input source and
+      * them will not have an associated PangoItem), exactly one input object and
       * will only have one change of x, y, dx, dy or rotate attribute, which will
       * be at the beginning. An UnbrokenSpan can cross a chunk boundary, c.f.
       * BrokenSpan.
@@ -665,6 +665,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
         }
 
         for (std::vector<BrokenSpan>::const_iterator it_span = it_chunk->broken_spans.begin() ; it_span != it_chunk->broken_spans.end() ; it_span++) {
+
             // begin adding spans to the list
             UnbrokenSpan const &unbroken_span = *it_span->start.iter_span;
             double x_in_span_last = 0.0;  // set at the END when a new cluster starts
@@ -1067,10 +1068,10 @@ void Layout::Calculator::BrokenSpan::setZero()
 //                        input_item.in_sub_flow = true;
 //                        if (_flow._input_stream[sub_input_index]->Type() == CONTROL_CODE) {
 //                            Layout::InputStreamControlCode const *control_code = static_cast<Layout::InputStreamControlCode const *>(_flow._input_stream[sub_input_index]);
-//                            input_item.sub_flow->appendControlCode(control_code->code, control_code->source_cookie, control_code->width, control_code->ascent, control_code->descent);
+//                            input_item.sub_flow->appendControlCode(control_code->code, control_code->source, control_code->width, control_code->ascent, control_code->descent);
 //                        } else if (_flow._input_stream[sub_input_index]->Type() == TEXT_SOURCE) {
 //                            Layout::InputStreamTextSource *text_source = static_cast<Layout::InputStreamTextSource *>(_flow._input_stream[sub_input_index]);
-//                            input_item.sub_flow->appendText(*text_source->text, text_source->style, text_source->source_cookie, NULL, 0, text_source->text_begin, text_source->text_end);
+//                            input_item.sub_flow->appendText(*text_source->text, text_source->style, text_source->source, NULL, 0, text_source->text_begin, text_source->text_end);
 //                            Layout::InputStreamTextSource *sub_flow_text_source = static_cast<Layout::InputStreamTextSource *>(input_item.sub_flow->_input_stream.back());
 //                            sub_flow_text_source->x = text_source->x;    // this is easier than going via optionalattrs for the appendText() call
 //                            sub_flow_text_source->y = text_source->y;    // should these actually be allowed anyway? You'll almost never get the results you expect
@@ -1149,7 +1150,7 @@ void  Layout::Calculator::_buildPangoItemizationForPara(ParagraphInfo *para) con
 #endif
 
             // Set language
-            SPObject * object = static_cast<SPObject *>(text_source->source_cookie);
+            SPObject * object = text_source->source;
             if (!object->lang.empty()) {
                 PangoLanguage* language = pango_language_from_string(object->lang.c_str());
                 PangoAttribute *attribute_language = pango_attr_language_new( language );
@@ -1262,7 +1263,7 @@ unsigned Layout::Calculator::_buildSpansForPara(ParagraphInfo *para) const
                 new_span.input_index         = input_index;
 
                 // No pango object, so find font and line height ourselves.
-                SPObject * object = static_cast<SPObject *>(control_code->source_cookie);
+                SPObject * object = control_code->source;
                 if (object) {
                     SPStyle * style = object->style;
                     if (style) {
@@ -1292,7 +1293,6 @@ unsigned Layout::Calculator::_buildSpansForPara(ParagraphInfo *para) const
             }
         } else if (_flow._input_stream[input_index]->Type() == TEXT_SOURCE && pango_item_index < para->pango_items.size()) {
             Layout::InputStreamTextSource const *text_source = static_cast<Layout::InputStreamTextSource const *>(_flow._input_stream[input_index]);
-
             unsigned char_index_in_source = 0;
 
             unsigned span_start_byte_in_source = 0;

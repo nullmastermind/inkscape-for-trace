@@ -467,17 +467,15 @@ SpellCheck::nextWord()
     }
 
     // try to link this word with the next if separated by '
-    void *rawptr;
+    SPObject *char_item = nullptr;
     Glib::ustring::iterator text_iter;
-    _layout->getSourceOfCharacter(_end_w, &rawptr, &text_iter);
-    SPObject *char_item = reinterpret_cast<SPObject *>(rawptr);
+    _layout->getSourceOfCharacter(_end_w, &char_item, &text_iter);
     if (SP_IS_STRING(char_item)) {
         int this_char = *text_iter;
         if (this_char == '\'' || this_char == 0x2019) {
             Inkscape::Text::Layout::iterator end_t = _end_w;
             end_t.nextCharacter();
-            _layout->getSourceOfCharacter(end_t, &rawptr, &text_iter);
-            SPObject *char_item = reinterpret_cast<SPObject *>(rawptr);
+            _layout->getSourceOfCharacter(end_t, &char_item, &text_iter);
             if (SP_IS_STRING(char_item)) {
                 int this_char = *text_iter;
                 if (g_ascii_isalpha(this_char)) { // 's

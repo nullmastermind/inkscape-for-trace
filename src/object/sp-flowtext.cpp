@@ -535,10 +535,9 @@ Inkscape::XML::Node *SPFlowtext::getAsText()
                 sp_repr_set_svg_double(line_tspan, "y", anchor_point[Geom::Y]);
             }
 
-            void *rawptr = nullptr;
+            SPObject *source_obj = nullptr;
             Glib::ustring::iterator span_text_start_iter;
-            this->layout.getSourceOfCharacter(it, &rawptr, &span_text_start_iter);
-            SPObject *source_obj = reinterpret_cast<SPObject *>(rawptr);
+            this->layout.getSourceOfCharacter(it, &source_obj, &span_text_start_iter);
 
             Glib::ustring style_text = (dynamic_cast<SPString *>(source_obj) ? source_obj->parent : source_obj)->style->write( SP_STYLE_FLAG_IFDIFF, SP_STYLE_SRC_UNSET, this->style);
             if (!style_text.empty()) {
@@ -548,10 +547,9 @@ Inkscape::XML::Node *SPFlowtext::getAsText()
             SPString *str = dynamic_cast<SPString *>(source_obj);
             if (str) {
                 Glib::ustring *string = &(str->string); // TODO fixme: dangerous, unsafe premature-optimization
-                void *rawptr = nullptr;
+                SPObject *span_end_obj = nullptr;
                 Glib::ustring::iterator span_text_end_iter;
-                this->layout.getSourceOfCharacter(it_span_end, &rawptr, &span_text_end_iter);
-                SPObject *span_end_obj = reinterpret_cast<SPObject *>(rawptr);
+                this->layout.getSourceOfCharacter(it_span_end, &span_end_obj, &span_text_end_iter);
                 if (span_end_obj != source_obj) {
                     if (it_span_end == this->layout.end()) {
                         span_text_end_iter = span_text_start_iter;

@@ -476,10 +476,9 @@ static void insert_text_fallback( Inkscape::XML::Node *repr, SPDocument *origina
                         std::swap(attrs.dx, attrs.dy);
                     }
                     TextTagAttributes(attrs).writeTo(span_tspan);
-                    void *rawptr = nullptr;
+                    SPObject *source_obj = nullptr;
                     Glib::ustring::iterator span_text_start_iter;
-                    text->layout.getSourceOfCharacter(it, &rawptr, &span_text_start_iter);
-                    SPObject *source_obj = reinterpret_cast<SPObject *>(rawptr);
+                    text->layout.getSourceOfCharacter(it, &source_obj, &span_text_start_iter);
 
                     // Set tspan style
                     Glib::ustring style_text = (dynamic_cast<SPString *>(source_obj) ? source_obj->parent : source_obj)->style->write( SP_STYLE_FLAG_IFDIFF, SP_STYLE_SRC_UNSET, text->style);
@@ -491,10 +490,9 @@ static void insert_text_fallback( Inkscape::XML::Node *repr, SPDocument *origina
                     SPString *str = dynamic_cast<SPString *>(source_obj);
                     if (str) {
                         Glib::ustring *string = &(str->string); // TODO fixme: dangerous, unsafe premature-optimization
-                        void *rawptr = nullptr;
+                        SPObject *span_end_obj = nullptr;
                         Glib::ustring::iterator span_text_end_iter;
-                        text->layout.getSourceOfCharacter(it_span_end, &rawptr, &span_text_end_iter);
-                        SPObject *span_end_obj = reinterpret_cast<SPObject *>(rawptr);
+                        text->layout.getSourceOfCharacter(it_span_end, &span_end_obj, &span_text_end_iter);
                         if (span_end_obj != source_obj) {
                             if (it_span_end == text->layout.end()) {
                                 span_text_end_iter = span_text_start_iter;

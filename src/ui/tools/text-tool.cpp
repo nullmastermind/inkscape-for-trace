@@ -1610,12 +1610,10 @@ int TextTool::_styleQueried(SPStyle *style, int property)
     }
     for (Inkscape::Text::Layout::iterator it = begin_it ; it < end_it ; it.nextStartOfSpan()) {
         SPObject *pos_obj = nullptr;
-        void *rawptr = nullptr;
-        layout->getSourceOfCharacter(it, &rawptr);
-        if (!rawptr || !SP_IS_OBJECT(rawptr)) {
+        layout->getSourceOfCharacter(it, &pos_obj);
+        if (!pos_obj) {
             continue;
         }
-        pos_obj = reinterpret_cast<SPObject *>(rawptr);
         while (SP_IS_STRING(pos_obj) && pos_obj->parent) {
            pos_obj = pos_obj->parent;   // SPStrings don't have style
         }

@@ -219,12 +219,12 @@ Layout::iterator Layout::getLetterAt(double x, double y) const
     return end();
 }
 
-Layout::iterator Layout::sourceToIterator(void *source_cookie /*, Glib::ustring::const_iterator text_iterator*/) const
+Layout::iterator Layout::sourceToIterator(SPObject *source /*, Glib::ustring::const_iterator text_iterator*/) const
 {
     unsigned source_index;
     if (_characters.empty()) return end();
     for (source_index = 0 ; source_index < _input_stream.size() ; source_index++)
-        if (_input_stream[source_index]->source_cookie == source_cookie) break;
+        if (_input_stream[source_index]->source == source) break;
     if (source_index == _input_stream.size()) return end();
 
     unsigned char_index = _sourceToCharacter(source_index);
@@ -588,14 +588,14 @@ void Layout::queryCursorShape(iterator const &it, Geom::Point &position, double 
     }
 }
 
-void Layout::getSourceOfCharacter(iterator const &it, void **source_cookie, Glib::ustring::iterator *text_iterator) const
+void Layout::getSourceOfCharacter(iterator const &it, SPObject **source, Glib::ustring::iterator *text_iterator) const
 {
     if (it._char_index >= _characters.size()) {
-        *source_cookie = nullptr;
+        *source = nullptr;
         return;
     }
     InputStreamItem *stream_item = _input_stream[_spans[_characters[it._char_index].in_span].in_input_stream_item];
-    *source_cookie = stream_item->source_cookie;
+    *source = stream_item->source;
     if (text_iterator && stream_item->Type() == TEXT_SOURCE) {
         InputStreamTextSource *text_source = dynamic_cast<InputStreamTextSource *>(stream_item);
 

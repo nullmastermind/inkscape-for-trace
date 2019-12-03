@@ -598,7 +598,7 @@ Glib::ustring Layout::dumpAsText() const
                  direction_to_text(_paragraphs[_lines[_chunks[_spans[span_index].in_chunk].in_line].in_paragraph].base_direction))
                +  Glib::ustring::compose("  in source %1 (type=%2, cookie=%3)\n", _spans[span_index].in_input_stream_item,
                  _input_stream[_spans[span_index].in_input_stream_item]->Type(),
-                 _input_stream[_spans[span_index].in_input_stream_item]->source_cookie)
+                 _input_stream[_spans[span_index].in_input_stream_item]->source)
                +  Glib::ustring::compose("  in line %1 (baseline=%2, shape=%3)\n", _chunks[_spans[span_index].in_chunk].in_line,
                  _lines[_chunks[_spans[span_index].in_chunk].in_line].baseline_y,
                  _lines[_chunks[_spans[span_index].in_chunk].in_line].in_shape)

@@ -35,6 +35,7 @@ namespace Inkscape {
 using Inkscape::Extension::Internal::CairoRenderContext;
 
 class SPStyle;
+class SPObject;
 class Shape;
 struct SPPrintContext;
 class Path;
@@ -238,12 +239,7 @@ public:
      \param style The font style. Layout will hold a reference to this
                   object for the duration of its ownership, ie until you
                   call clear() or the class is destroyed. Must not be NULL.
-     \param source_cookie  This pointer is treated as opaque by Layout
-                  but will be passed through the flowing process intact so
-                  that callers can use it to refer to the original object
-                  that generated a particular glyph. See Layout::iterator.
-                  Implementation detail: currently all callers put an
-                  SPString in here.
+     \param source  Pointer to object that is source of text.
      \param optional_attributes  A structure containing additional options
                   for this text. See OptionalTextTagAttrs. The values are
                   copied to internal storage before this method returns.
@@ -258,9 +254,9 @@ public:
      \param text_end    Used for selecting only a substring of \a text
                   to process.
     */
-    void appendText(Glib::ustring const &text, SPStyle *style, void *source_cookie, OptionalTextTagAttrs const *optional_attributes, unsigned optional_attributes_offset, Glib::ustring::const_iterator text_begin, Glib::ustring::const_iterator text_end);
-    inline void appendText(Glib::ustring const &text, SPStyle *style, void *source_cookie, OptionalTextTagAttrs const *optional_attributes = nullptr, unsigned optional_attributes_offset = 0)
-        {appendText(text, style, source_cookie, optional_attributes, optional_attributes_offset, text.begin(), text.end());}
+    void appendText(Glib::ustring const &text, SPStyle *style, SPObject *source, OptionalTextTagAttrs const *optional_attributes, unsigned optional_attributes_offset, Glib::ustring::const_iterator text_begin, Glib::ustring::const_iterator text_end);
+    inline void appendText(Glib::ustring const &text, SPStyle *style, SPObject *source, OptionalTextTagAttrs const *optional_attributes = nullptr, unsigned optional_attributes_offset = 0)
+        {appendText(text, style, source, optional_attributes, optional_attributes_offset, text.begin(), text.end());}
 
     /** Control codes are metadata in the text stream to signify items
     that occupy real space (unlike style changes) but don't belong in the
@@ -274,18 +270,13 @@ public:
                     control code occupies.
      \param descent The number of pixels below the text baseline that this
                     control code occupies.
-     \param source_cookie This pointer is treated as opaque by Layout
-                  but will be passed through the flowing process intact so
-                  that callers can use it to refer to the original object
-                  that generated a particular area. See Layout::iterator.
-                  Implementation detail: currently all callers put an
-                  SPObject in here.
+     \param source  Pointer to object that is source of control code.
     Note that for some control codes (eg tab) the values of the \a width,
     \a ascender and \a descender are implied by the surrounding text (and
     in the case of tabs, the values set in tab_stops) so the values you pass
     here are ignored.
     */
-    void appendControlCode(TextControlCode code, void *source_cookie, double width = 0.0, double ascent = 0.0, double descent = 0.0);
+    void appendControlCode(TextControlCode code, SPObject *source, double width = 0.0, double ascent = 0.0, double descent = 0.0);
 
     /** Stores another shape inside which to flow the text. If this method
     is never called then no automatic wrapping is done and lines will
@@ -485,19 +476,19 @@ public:
     /* Returns an iterator pointing to the character in the output which
     was created from the given input. If the character at the given byte
     offset was removed (soft hyphens, for example) the next character after
-    it is returned. If no input was added with the given cookie, end() is
-    returned. If more than one input has the same cookie, the first will
+    it is returned. If no input was added with the given object, end() is
+    returned. If more than one input has the same object, the first will
     be used regardless of the value of \a text_iterator. If
     \a text_iterator is out of bounds, the first or last character belonging
     to the given input will be returned accordingly.
-    iterator sourceToIterator(void *source_cookie, Glib::ustring::const_iterator text_iterator) const;
+    iterator sourceToIterator(SPObject *source, Glib::ustring::const_iterator text_iterator) const;
  */
  
     /** Returns an iterator pointing to the first character in the output
-    which was created from the given source. If \a source_cookie is invalid,
-    end() is returned. If more than one input has the same cookie, the
+    which was created from the given source. If \a source object is invalid,
+    end() is returned. If more than one input has the same object, the
     first one will be used. */
-    iterator sourceToIterator(void *source_cookie) const;
+    iterator sourceToIterator(SPObject *source) const;
 
     // many functions acting on iterators, most of which are obvious
     // also most of them don't check that \a it != end(). Be careful.
@@ -525,14 +516,13 @@ public:
     inline int characterAt(iterator const &it) const;
 
     /** Discovers where the character pointed to by \a it came from, by
-    retrieving the cookie that was passed to the call to appendText() or
+    retrieving the object that was passed to the call to appendText() or
     appendControlCode() which generated that output. If \a it == end()
-    then NULL is returned as the cookie. If the character was generated
+    then NULL is returned as the object. If the character was generated
     from a call to appendText() then the optional \a text_iterator
     parameter is set to point to the actual character, otherwise
     \a text_iterator is unaltered. */
-    // TODO FIXME a void* cookie is a very unsafe design, and C++ makes it unnecessary.  
-    void getSourceOfCharacter(iterator const &it, void **source_cookie, Glib::ustring::iterator *text_iterator = nullptr) const;
+    void getSourceOfCharacter(iterator const &it, SPObject **source, Glib::ustring::iterator *text_iterator = nullptr) const;
 
     /** For latin text, the left side of the character, on the baseline */
     Geom::Point characterAnchorPoint(iterator const &it) const;
@@ -696,7 +686,7 @@ private:
     public:
         virtual ~InputStreamItem() = default;
         virtual InputStreamItemType Type() =0;
-        void *source_cookie;
+        SPObject *source;
     };
 
     /** Represents a text item in the input stream. See #_input_stream.
@@ -1128,7 +1118,7 @@ inline bool Layout::isWhitespace(iterator const &it) const
 
 inline int Layout::characterAt(iterator const &it) const
 {
-    void *unused;
+    SPObject *unused;
     Glib::ustring::iterator text_iter;
     getSourceOfCharacter(it, &unused, &text_iter);
     return *text_iter;
