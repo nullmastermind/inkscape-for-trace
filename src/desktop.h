@@ -514,10 +514,10 @@ private:
         }
 
         bool isFlipped( CanvasFlip flip ) {
-            if ((flip & FLIP_HORIZONTAL) && _flip[0] != 1) {
+            if ((flip & FLIP_HORIZONTAL) && Geom::are_near(_flip[0], -1)) {
                 return true;
             }
-            if ((flip & FLIP_VERTICAL) && _flip[1] != 1) {
+            if ((flip & FLIP_VERTICAL) && Geom::are_near(_flip[1], -1)) {
                 return true;
             }
             return false;
