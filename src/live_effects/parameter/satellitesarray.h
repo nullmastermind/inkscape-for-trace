@@ -56,6 +56,7 @@ public:
     void setGlobalKnotHide(bool global_knot_hide);
     void setEffectType(EffectType et);
     void reloadKnots();
+    void updateAmmount(double amount); 
     void setPathVectorSatellites(PathVectorSatellites *pathVectorSatellites, bool write = true);
     void set_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color);
 

@@ -55,7 +55,7 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject)
                     false),
       use_knot_distance(_("Use knots distance instead radius"),
                         _("Use knots distance instead radius"),
-                        "use_knot_distance", &wr, this, false),
+                        "use_knot_distance", &wr, this, true),
       hide_knots(_("Hide knots"), _("Hide knots"), "hide_knots", &wr, this,
                  false),
       apply_no_radius(_("Apply changes if radius = 0"), _("Apply changes if radius = 0"), "apply_no_radius", &wr, this, true),
@@ -84,6 +84,7 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject)
     chamfer_steps.param_set_increments(1, 1);
     chamfer_steps.param_set_digits(0);
     _provides_knotholder_entities = true;
+    helperpath = false;
     previous_unit = Glib::ustring("");
 }
 
@@ -345,6 +346,9 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
                 if (pathresult.size()) {
                     pathresult.setFinal(curve_it->initialPoint());
                 }
+                if (Geom::are_near((*curve_it).initialPoint(), (*curve_it).finalPoint())) {
+                    return;
+                }
                 pathresult.append(*curve_it);
                 ++curve_it;
             }
@@ -417,6 +421,10 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
                 if (only_selected && isNodePointSelected(curve_in.initialPoint()) ){
                     satellites[i][j].setSelected(true);
                 }
+            }
+            if (!pathvres[i].closed()) {
+                satellites[i][0].amount = 0;
+                satellites[i][pathvres[i].size_closed() -1].amount = 0;
             }
         }
         if (!_pathvector_satellites) {
@@ -660,6 +668,11 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
         path++;
         path_out.push_back(tmp_path);
     }
+    if (helperpath) {
+        _hp = path_out;
+        return pathvector_after_effect;
+    }
+    _hp.clear();
     return path_out;
 }
 

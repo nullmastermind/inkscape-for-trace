@@ -8,6 +8,7 @@
  */
 
 #include "live_effects/parameter/satellitesarray.h"
+#include "live_effects/lpe-fillet-chamfer.h"
 #include "knotholder.h"
 #include "live_effects/effect.h"
 #include "ui/dialog/lpe-fillet-chamfer-properties.h"
@@ -241,6 +242,23 @@ void SatellitesArrayParam::addKnotHolderEntities(KnotHolder *knotholder,
     }
 }
 
+void SatellitesArrayParam::updateAmmount(double amount)
+{ 
+    Geom::PathVector const pathv = _last_pathvector_satellites->getPathVector();
+    Satellites satellites = _last_pathvector_satellites->getSatellites();
+    for (size_t i = 0; i < satellites.size(); ++i) {
+        for (size_t j = 0; j < satellites[i].size(); ++j) {
+            Geom::Curve const &curve_in = pathv[i][j];
+            if (param_effect->isNodePointSelected(curve_in.initialPoint()) ){
+                _vector[i][j].amount = amount;
+                _vector[i][j].setSelected(true);
+            } else {
+                _vector[i][j].setSelected(false);
+            }
+        }
+    }
+}
+
 void SatellitesArrayParam::addKnotHolderEntities(KnotHolder *knotholder,
         SPItem *item)
 {
@@ -252,11 +270,6 @@ FilletChamferKnotHolderEntity::FilletChamferKnotHolderEntity(
     SatellitesArrayParam *p, size_t index)
     : _pparam(p), _index(index) {}
 
-void FilletChamferKnotHolderEntity::knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state)
-{
-    _pparam->param_effect->refresh_widgets = true;
-    _pparam->write_to_SVG();
-}
 
 void FilletChamferKnotHolderEntity::knot_set(Geom::Point const &p,
         Geom::Point const &/*origin*/,
@@ -321,8 +334,23 @@ void FilletChamferKnotHolderEntity::knot_set(Geom::Point const &p,
     } else {
         satellite.setPosition(s, pathv[satelite_index][subsatelite_index]);
     }
+    Inkscape::LivePathEffect::LPEFilletChamfer *filletchamfer = dynamic_cast<Inkscape::LivePathEffect::LPEFilletChamfer *>(_pparam->param_effect);
+    filletchamfer->helperpath = true;
+    _pparam->updateAmmount(satellite.amount);
     _pparam->_vector[satelite_index][subsatelite_index] = satellite;
     sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);
+}
+
+void
+FilletChamferKnotHolderEntity::knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state)
+{
+    Inkscape::LivePathEffect::LPEFilletChamfer *filletchamfer = dynamic_cast<Inkscape::LivePathEffect::LPEFilletChamfer *>(_pparam->param_effect);
+    if (filletchamfer) {
+        filletchamfer->refresh_widgets = true;
+        filletchamfer->helperpath = false;
+        filletchamfer->writeParamsToSVG();
+        sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);
+    }
 }
 
 Geom::Point FilletChamferKnotHolderEntity::knot_get() const

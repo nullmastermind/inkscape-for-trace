@@ -129,7 +129,6 @@ void PathVectorSatellites::updateAmount(double radius, bool apply_no_radius, boo
                 continue;
             }
             
-            Geom::Point satellite_point = _pathvector[i].pointAt(j);
             if (_satellites[i][j].selected || !only_selected) {
                 if (!use_knot_distance && !flexible) {
                     if (previous_index) {
@@ -207,7 +206,7 @@ void PathVectorSatellites::recalculateForNewPathVector(Geom::PathVector const pa
     bool found = false;
     //TODO evaluate fix on nodes at same position
     size_t number_nodes = count_pathvector_nodes(pathv);
-    size_t previous_number_nodes = count_pathvector_nodes(_pathvector);
+    size_t previous_number_nodes = getTotalSatellites();
     for (const auto & i : pathv) {
         std::vector<Satellite> path_satellites;
         size_t count = i.size_closed();
@@ -226,7 +225,7 @@ void PathVectorSatellites::recalculateForNewPathVector(Geom::PathVector const pa
                     break;
                 }
             }
-            if (!found && previous_number_nodes < number_nodes) {
+            if (!found) {
                 path_satellites.push_back(S);
             }
         }

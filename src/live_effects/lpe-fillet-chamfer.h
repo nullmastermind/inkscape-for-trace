@@ -47,7 +47,7 @@ public:
     void updateChamferSteps();
     void updateAmount();
     void refreshKnots();
-
+    bool helperpath;
     SatellitesArrayParam satellites_param;
 
 private:
