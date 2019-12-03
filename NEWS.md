@@ -1,3 +1,19 @@
+Inkscape 1.0beta2
+
+Release hilights
+
+Released on 2019-12-01
+
+  • Better support for macOS
+  • Rendering performance improvements
+  • Various bugfixes
+
+Known issues
+
+  • Fontconfig errors on some configurations
+  • Pango 1.44 has issues with vertical text
+
+
 Inkscape 1.0beta
 
 Release highlights
