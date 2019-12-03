@@ -15,11 +15,11 @@
    sodipodi:docname="color-fill-symbolic.svg"
    inkscape:version="1.0beta0 (1d85f8e, 2019-09-11)">
   <style id="s0">
-     .base {  }
-     .success {  }
-     .warning {  }
-     .error {  }
-     .dark {  }
+   .base    { fill: #000000; }
+   .success { fill: #009909; }
+   .warning { fill: #FF1990; }
+   .error   { fill: #00AAFF; }
+   .dark    {  }
   </style>
   <style id="s2"> 
      @import '../../highlights.css'; 
