@@ -166,9 +166,10 @@ int main(int argc, char *argv[])
 
     set_extensions_env();
 
-    if (gtk_init_check(NULL, NULL))
+    if (gtk_init_check(NULL, NULL)) {
+        g_set_prgname("org.inkscape.Inkscape");
         return (ConcreteInkscapeApplication<Gtk::Application>::get_instance()).run(argc, argv);
-    else
+    } else
         return (ConcreteInkscapeApplication<Gio::Application>::get_instance()).run(argc, argv);
 }
 
