@@ -9035,10 +9035,6 @@ msgstr "Inkview - Ein Betrachter für SVG-Dateien"
 msgid "path1 [path2 pathN]]"
 msgstr "Pfad1 [Pfad2 [PfadN]]"
 
-#: ../src/inkview-application.cpp:67
-msgid "path1 [path2 pathN]]"
-msgstr ""
-
 #: ../src/inkview-application.cpp:68
 msgid ""
 "Open one or more SVG files (or folders containing SVG files) for viewing."
