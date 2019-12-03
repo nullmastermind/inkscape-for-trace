@@ -40,29 +40,8 @@ enum SPSelTransType {
 };
 
 // Which handle does what in the alignment (clicking)
-const int AlignVerb[36] = {
+const int AlignVerb[18] = {
     // Left Click
-    SP_VERB_ALIGN_VERTICAL_TOP,
-    SP_VERB_ALIGN_HORIZONTAL_RIGHT,
-    SP_VERB_ALIGN_VERTICAL_BOTTOM,
-    SP_VERB_ALIGN_HORIZONTAL_LEFT,
-    SP_VERB_ALIGN_VERTICAL_CENTER,
-    SP_VERB_ALIGN_BOTH_BOTTOM_LEFT,
-    SP_VERB_ALIGN_BOTH_BOTTOM_RIGHT,
-    SP_VERB_ALIGN_BOTH_TOP_RIGHT,
-    SP_VERB_ALIGN_BOTH_TOP_LEFT,
-    // Shift Click
-    SP_VERB_ALIGN_VERTICAL_BOTTOM_TO_ANCHOR,
-    SP_VERB_ALIGN_HORIZONTAL_LEFT_TO_ANCHOR,
-    SP_VERB_ALIGN_VERTICAL_TOP_TO_ANCHOR,
-    SP_VERB_ALIGN_HORIZONTAL_RIGHT_TO_ANCHOR,
-    SP_VERB_ALIGN_HORIZONTAL_CENTER,
-    SP_VERB_ALIGN_BOTH_TOP_RIGHT_TO_ANCHOR,
-    SP_VERB_ALIGN_BOTH_TOP_LEFT_TO_ANCHOR,
-    SP_VERB_ALIGN_BOTH_BOTTOM_LEFT_TO_ANCHOR,
-    SP_VERB_ALIGN_BOTH_BOTTOM_RIGHT_TO_ANCHOR,
-
-    // Opposite Canvas direction
     SP_VERB_ALIGN_VERTICAL_TOP,
     SP_VERB_ALIGN_HORIZONTAL_RIGHT,
     SP_VERB_ALIGN_VERTICAL_BOTTOM,
@@ -87,7 +66,6 @@ const int AlignVerb[36] = {
 const int AlignHandleToVerb = -13;
 // Offset for moving from Left click to Shift Click
 const int AlignShiftVerb = 9;
-const int AlignOrientVerb = 18;
 
 struct SPSelTransTypeInfo {
         guint32 const *color;

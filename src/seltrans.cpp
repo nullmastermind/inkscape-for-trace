@@ -1352,16 +1352,12 @@ void Inkscape::SelTrans::align(guint state, SPSelTransHandle const &handle)
     bool sel_as_group = prefs->getBool("/dialogs/align/sel-as-groups");
     int align_to = prefs->getInt("/dialogs/align/align-to", 6);
 
-    int verb_offset = 0;
+    int verb_id = -1;
     if (state & GDK_SHIFT_MASK) {
-        verb_offset += AlignShiftVerb;
+        verb_id = AlignVerb[handle.control + AlignHandleToVerb + AlignShiftVerb];
+    } else {
+        verb_id = AlignVerb[handle.control + AlignHandleToVerb];
     }
-    if (!this->_desktop->is_yaxisdown()) {
-        verb_offset += AlignOrientVerb;
-    }
-
-    int verb_id = AlignVerb[handle.control + AlignHandleToVerb + verb_offset];
-
     if(verb_id >= 0) {
         prefs->setBool("/dialogs/align/sel-as-groups", (state & GDK_CONTROL_MASK) != 0);
         prefs->setInt("/dialogs/align/align-to", 6);
