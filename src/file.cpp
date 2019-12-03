@@ -874,7 +874,9 @@ sp_file_save_template(Gtk::Window &parentWindow, Glib::ustring name,
 
     root->appendChild(templateinfo_node);
 
-    auto encodedName = Glib::uri_escape_string(name);
+    // Escape filenames for windows users, but filenames are not URIs so
+    // Allow UTF-8 and don't escape spaces witch are popular chars.
+    auto encodedName = Glib::uri_escape_string(name, " ", true);
     encodedName.append(".svg");
 
     auto filename = Inkscape::IO::Resource::get_path_ustring(USER, TEMPLATES, encodedName.c_str());

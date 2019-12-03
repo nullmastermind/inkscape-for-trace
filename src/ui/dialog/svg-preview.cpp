@@ -221,12 +221,14 @@ void SVGPreview::showImage(Glib::ustring &theFileName)
 
     // if (!Glib::get_charset()) //If we are not utf8
     fileName = Glib::filename_to_utf8(fileName);
+    // Filenames in xlinks are decoded, so any % will break without this.
+    auto encodedName = Glib::uri_escape_string(fileName);
 
     // Fill in the template
     /* FIXME: Do proper XML quoting for fileName. */
     gchar *xmlBuffer =
         g_strdup_printf(xformat, previewWidth, previewHeight, imgX, imgY, scaledImgWidth, scaledImgHeight,
-                        fileName.c_str(), rectX, rectY, rectWidth, rectHeight, width.c_str(), height.c_str() );
+                        encodedName.c_str(), rectX, rectY, rectWidth, rectHeight, width.c_str(), height.c_str() );
 
     // g_message("%s\n", xmlBuffer);
 
