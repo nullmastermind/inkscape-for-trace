@@ -121,7 +121,7 @@ GtkIconSize ToolboxFactory::prefToSize( Glib::ustring const &path, int base ) {
     static GtkIconSize sizeChoices[] = {
         GTK_ICON_SIZE_LARGE_TOOLBAR,
         GTK_ICON_SIZE_SMALL_TOOLBAR,
-        GTK_ICON_SIZE_MENU,
+        GTK_ICON_SIZE_DND,
         GTK_ICON_SIZE_DIALOG
     };
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -132,7 +132,7 @@ GtkIconSize ToolboxFactory::prefToSize( Glib::ustring const &path, int base ) {
 Gtk::IconSize ToolboxFactory::prefToSize_mm(Glib::ustring const &path, int base)
 {
     static Gtk::IconSize sizeChoices[] = { Gtk::ICON_SIZE_LARGE_TOOLBAR, Gtk::ICON_SIZE_SMALL_TOOLBAR,
-                                           Gtk::ICON_SIZE_MENU, Gtk::ICON_SIZE_DIALOG };
+                                           Gtk::ICON_SIZE_DND, Gtk::ICON_SIZE_DIALOG };
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int index = prefs->getIntLimited(path, base, 0, G_N_ELEMENTS(sizeChoices));
     return sizeChoices[index];

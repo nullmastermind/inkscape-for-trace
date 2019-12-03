@@ -1194,7 +1194,7 @@ void InkscapePreferences::initPageUI()
     {
         Glib::ustring sizeLabels[] = { C_("Icon size", "Larger"), C_("Icon size", "Large"), C_("Icon size", "Small"),
                                        C_("Icon size", "Smaller") };
-        int sizeValues[] = { 3, 0, 1, 2 };
+        int sizeValues[] = { 3, 2, 0, 1 };
         // "Larger" is 3 to not break existing preference files. Should fix in GTK3
 
         _misc_small_tools.init("/toolbox/tools/small", sizeLabels, sizeValues, G_N_ELEMENTS(sizeLabels), 0);
