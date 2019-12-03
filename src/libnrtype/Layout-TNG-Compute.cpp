@@ -1455,7 +1455,7 @@ unsigned Layout::Calculator::_buildSpansForPara(ParagraphInfo *para) const
 
                     } // End right to left text.
 
-                    //  The following sorting doesn't seem to be necessary, and causes https://gitlab.com/inkscape/inkscape/issues/394 ... must test further.
+                    //  The following sorting doesn't seem to be necessary, and causes GitHub bug #394... must test further.
 
                     /*
                         CAREFUL, within a log_cluster the order of glyphs may not map 1:1, or
