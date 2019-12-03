@@ -532,7 +532,7 @@ msgstr "Cera iridiscente"
 
 #: ../share/filters/filters.svg.h:176
 msgid "Waxy texture which keeps its iridescence through color fill change"
-msgstr ""Textura de cera que mantem sua iridescência através da mudança da cor de preenchimento"
+msgstr "Textura de cera que mantem sua iridescência através da mudança da cor de preenchimento"
 
 
 #: ../share/filters/filters.svg.h:178
@@ -760,7 +760,7 @@ msgid "Electronic Microscopy"
 msgstr "Microscópio Eletrônico"
 
 #: ../share/filters/filters.svg.h:284
-msgid ""Bevel, crude light, discoloration and glow like in electronic microscopy"
+msgid "Bevel, crude light, discoloration and glow like in electronic microscopy"
 msgstr "Relevo, luz simples, descoloração e incandescência microscópica"
 
 #: ../share/filters/filters.svg.h:286
