@@ -37579,7 +37579,7 @@ msgid ""
 "Please use the plotter extension (Extensions menu) to plot directly over a "
 "serial connection."
 msgstr ""
-"Assicurasri che tutti gli oggetti da salvare siano convertiti in tracciati. "
+"Assicurarsi che tutti gli oggetti da salvare siano convertiti in tracciati. "
 "Usare l'estensione plotter (menu Estensioni) per eseguire il plot su un "
 "collegamento seriale."
 
