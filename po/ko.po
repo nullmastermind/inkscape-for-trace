@@ -7365,11 +7365,11 @@ msgstr "보이는 것은 어떤 것이라도 단색으로 다시 칠하기"
 #: ../src/extension/internal/gdkpixbuf-input.cpp:191
 #, c-format
 msgid "%s bitmap image import"
-msgstr "%s 비트맵 이미지 들여오기"
+msgstr "%s 비트맵 이미지 가져오기"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:198
 msgid "Image Import Type:"
-msgstr "이미지 들여오기 유형:"
+msgstr "이미지 가져오기 유형:"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:198
 msgid ""
@@ -7401,7 +7401,7 @@ msgid ""
 "Take information from file or use default bitmap import resolution as "
 "defined in the preferences."
 msgstr ""
-"파일에서 정보를 얻거나, 기본설정에서 정한 기본 비트맵 들여오기 해상도를 사용"
+"파일에서 정보를 얻거나, 기본설정에서 정한 기본 비트맵 가져오기 해상도를 사용"
 "합니다."
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:204
@@ -7410,7 +7410,7 @@ msgstr "파일로부터"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:205
 msgid "Default import resolution"
-msgstr "기본 들여오기 해상도"
+msgstr "기본 가져오기 해상도"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:208
 #: ../src/extension/internal/svg.cpp:683
@@ -7603,7 +7603,7 @@ msgstr "<b>주의</b>: 높은 정확도는 큰 SVG 파일이 생성되며 실행
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:144
 msgid "Poppler/Cairo import"
-msgstr "Poppler/Cairo 들여오기"
+msgstr "Poppler/Cairo 가져오기"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:145
 msgid ""
@@ -7611,13 +7611,13 @@ msgid ""
 "glyphs where each glyph is a path. Images are stored internally. Meshes "
 "cause entire document to be rendered as a raster image."
 msgstr ""
-"외부 라이브러리를 통한 들여오기. 문자열은 복제된 그림글자를 담은 그룹으로 구"
+"외부 라이브러리를 통한 가져오기. 문자열은 복제된 그림글자를 담은 그룹으로 구"
 "성됩니다. 여기서 각 그림글자는 경로입니다. 이미지는 내부적으로 저장됩니다. 메"
 "시가 있으면 전체 문서가 래스터 이미지로 렌더링됩니다."
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:147
 msgid "Internal import"
-msgstr "내부의 들여오기"
+msgstr "내부의 가져오기"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:148
 msgid ""
@@ -7643,11 +7643,11 @@ msgstr "이미지를 내장"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:170
 msgid "Import settings"
-msgstr "설정 들여오기"
+msgstr "설정 가져오기"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:306
 msgid "PDF Import Settings"
-msgstr "PDF 들여오기 설정"
+msgstr "PDF 가져오기 설정"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:448
 msgctxt "PDF input precision"
@@ -7711,7 +7711,7 @@ msgstr "SVG 입력"
 
 #: ../src/extension/internal/svg.cpp:677
 msgid "SVG Image Import Type:"
-msgstr "SVG 이미지 들여오기 유형:"
+msgstr "SVG 이미지 가져오기 유형:"
 
 #: ../src/extension/internal/svg.cpp:678
 msgid "Include SVG image as editable object(s) in the current file"
@@ -8148,7 +8148,7 @@ msgstr "ko"
 #: ../src/file.cpp:1163 ../src/ui/dialog/inkscape-preferences.cpp:2091
 #: ../src/ui/dialog/ocaldialogs.cpp:1087
 msgid "Import"
-msgstr "들여오기"
+msgstr "가져오기"
 
 #: ../src/file.cpp:1166
 #, c-format
@@ -8161,7 +8161,7 @@ msgstr "들여올 파일 선택"
 
 #: ../src/file.cpp:1469
 msgid "Import Clip Art"
-msgstr "Clip Art 들여오기"
+msgstr "Clip Art 가져오기"
 
 #: ../src/filter-enums.cpp:23
 msgid "Color Matrix"
@@ -8525,7 +8525,7 @@ msgstr "시스템 확장 디렉터리 출력"
 
 #: ../src/inkscape-application.cpp:540
 msgid "File import"
-msgstr "파일 들여오기"
+msgstr "파일 가져오기"
 
 #
 # File: ../src/inkscape-application.cpp, line: 541
@@ -21872,7 +21872,7 @@ msgstr "SVG 이미지를 들여올 때 연계하기 및 배율 변경 대화창�
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2103
 msgid "Bitmap import/open mode:"
-msgstr "비트맵 들여오기/열기 모드:"
+msgstr "비트맵 가져오기/열기 모드:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2107
 msgid "Include"
@@ -21880,7 +21880,7 @@ msgstr "포함"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2110
 msgid "SVG import mode:"
-msgstr "SVG 들여오기 모드:"
+msgstr "SVG 가져오기 모드:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2117
 msgid "Image scale (image-rendering):"
@@ -21888,11 +21888,11 @@ msgstr "이미지 배율 (이미지 렌더링):"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2122
 msgid "Default _import resolution:"
-msgstr "기본 들여오기 해상도(_I):"
+msgstr "기본 가져오기 해상도(_I):"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2123
 msgid "Default import resolution (in dots per inch) for bitmap and SVG import"
-msgstr "비트맵 및 SVG 들여오기용 기본 들여오기 해상도 (인치당 도트 수)"
+msgstr "비트맵 및 SVG 가져오기용 기본 가져오기 해상도 (인치당 도트 수)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2124
 msgid "Override file resolution"
@@ -21916,7 +21916,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2133
 msgid "Imported Images"
-msgstr "들여온 이미지"
+msgstr "가져온 이미지"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2145
 msgid ""
@@ -21960,7 +21960,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2213
 msgid "Import ..."
-msgstr "들여오기 ..."
+msgstr "가져오기 ..."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2215
 msgid "Import custom keyboard shortcuts from a file"
@@ -29996,7 +29996,7 @@ msgstr "새 이름으로 문서 저장"
 
 #: ../src/verbs.cpp:2521
 msgid "Save a Cop_y..."
-msgstr "복사본 저장(_Y)..."
+msgstr "사본 저장(_Y)..."
 
 #: ../src/verbs.cpp:2522
 msgid "Save a copy of the document under a new name"
@@ -30032,19 +30032,19 @@ msgstr ""
 
 #: ../src/verbs.cpp:2532
 msgid "_Import..."
-msgstr "들여오기(_I)..."
+msgstr "가져오기(_I)..."
 
 #: ../src/verbs.cpp:2533
 msgid "Import a bitmap or SVG image into this document"
-msgstr "비트맵 또는 SVG 이미지를 이 문서로 들여오기"
+msgstr "비트맵 또는 SVG 이미지를 이 문서로 가져오기"
 
 #: ../src/verbs.cpp:2536
 msgid "Import Clip Art..."
-msgstr "클립 아트 들여오기..."
+msgstr "클립 아트 가져오기..."
 
 #: ../src/verbs.cpp:2537
 msgid "Import clipart from Open Clip Art Library"
-msgstr "오픈 클립 아트에서 클립아트 들여오기"
+msgstr "오픈 클립 아트에서 클립아트 가져오기"
 
 #: ../src/verbs.cpp:2540
 msgid "N_ext Window"
@@ -34356,7 +34356,7 @@ msgstr "수동 Y-축 원점 (mm):"
 
 #: ../share/extensions/dxf_input.inx:16
 msgid "Gcodetools compatible point import"
-msgstr "Gcodetools 호환 포인트 들여오기"
+msgstr "Gcodetools 호환 포인트 가져오기"
 
 #: ../share/extensions/dxf_input.inx:18
 #: ../share/extensions/render_barcode_qrcode.inx:28
@@ -34384,7 +34384,7 @@ msgstr ""
 "- 축척 계수 및 원점은 수동 축척에만 적용됩니다.\n"
 "- '자동 크기 조정'은 A4 페이지의 너비에 맞춥니다.\n"
 "- '파일로부터 읽기'는 변수 $MEASUREMENT를 사용합니다.\n"
-"- 레이어는 ‘파일 → 열기’에서만 유지됩니다. 들여오기에서는 안 됩니다.\n"
+"- 레이어는 ‘파일 → 열기’에서만 유지됩니다. 가져오기에서는 안 됩니다.\n"
 "- BLOCKS 지원이 제한적이므로, 필요하면 AutoCAD ‘블록 분해’를 사용하십시오."
 
 #: ../share/extensions/dxf_input.inx:40
@@ -34393,7 +34393,7 @@ msgstr "오토캐드 DXF R13 (*.dxf)"
 
 #: ../share/extensions/dxf_input.inx:41
 msgid "Import AutoCAD's Document Exchange Format"
-msgstr "AutoCAD의 DXF(문서 교환 형식) 들여오기"
+msgstr "AutoCAD의 DXF(문서 교환 형식) 가져오기"
 
 #: ../share/extensions/dxf_outlines.inx:3
 msgid "Desktop Cutting Plotter R14"
@@ -36757,7 +36757,7 @@ msgstr "HP 그래픽 언어 파일 (*.hpgl)"
 
 #: ../share/extensions/hpgl_input.inx:16
 msgid "Import an HP Graphics Language file"
-msgstr "HP 그래픽 언어 파일을 들여오기"
+msgstr "HP 그래픽 언어 파일을 가져오기"
 
 #: ../share/extensions/hpgl_output.inx:3
 msgid "HPGL Output"
@@ -43071,7 +43071,7 @@ msgstr "글꼴 높이의 절반"
 #~ "해법 1: ‘경로 → 개체를 경로로’ 또는 Shift+Ctrl+C.\n"
 #~ "해법 2: ‘경로 → 동적 오프셋’ 또는 Ctrl+J.\n"
 #~ "해법 3: 모든 등고선을 PostScript 레벨 2로 내보내고(파일→다른 이름 저장→ ."
-#~ "ps) 이 파일을 ‘파일 → 들여오기’ 하세요."
+#~ "ps) 이 파일을 ‘파일 → 가져오기’ 하세요."
 
 #~ msgid ""
 #~ "Document has no layers! Add at least one layer using layers panel (Ctrl"
