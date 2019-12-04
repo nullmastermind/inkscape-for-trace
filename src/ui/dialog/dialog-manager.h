@@ -39,7 +39,7 @@ public:
 
     /* generic dialog management start */
     typedef std::map<GQuark, DialogFactory> FactoryMap;
-    typedef std::map<GQuark, Dialog*> DialogMap;
+    typedef std::map<GQuark, std::unique_ptr<Dialog>> DialogMap;
 
     void registerFactory(gchar const *name, DialogFactory factory);
     void registerFactory(GQuark name, DialogFactory factory);
@@ -54,6 +54,8 @@ protected:
 
     FactoryMap _factory_map; //< factories to create dialogs
     DialogMap _dialog_map; //< map of already created dialogs
+    static DialogMap _app_dialog_map; //< map of application-level dialogs
+    static unsigned _app_dialog_map_refcount;
 };
 
 } // namespace Dialog

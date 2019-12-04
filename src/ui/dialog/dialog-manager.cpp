@@ -71,6 +71,10 @@ inline Dialog *create() { return PanelDialog<B>::template create<T>(); }
 
 }
 
+// static member variables
+DialogManager::DialogMap DialogManager::_app_dialog_map;
+unsigned DialogManager::_app_dialog_map_refcount = 0;
+
 /**
  *  This class is provided as a container for Inkscape's various
  *  dialogs.  This allows InkscapeApplication to treat the various
@@ -94,6 +98,9 @@ inline Dialog *create() { return PanelDialog<B>::template create<T>(); }
 DialogManager::DialogManager() {
 
     using namespace Behavior;
+
+    // increment reference count
+    ++_app_dialog_map_refcount;
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int dialogs_type = prefs->getIntLimited("/options/dialogtype/value", DOCK, 0, 1);
@@ -186,8 +193,9 @@ DialogManager::DialogManager() {
 }
 
 DialogManager::~DialogManager() {
-    for (auto &item : _dialog_map) {
-        delete item.second;
+    // destroy application level dialogs when the last dialog manager goes out of scope
+    if (!--_app_dialog_map_refcount) {
+        _app_dialog_map.clear();
     }
 }
 
@@ -248,14 +256,21 @@ Dialog *DialogManager::getDialog(GQuark name) {
 
     Dialog *dialog=nullptr;
     if ( dialog_found != _dialog_map.end() ) {
-        dialog = dialog_found->second;
+        return dialog_found->second.get();
+    } else if ((dialog_found = _app_dialog_map.find(name)) != _app_dialog_map.end()) {
+        return dialog_found->second.get();
     } else {
         FactoryMap::iterator factory_found;
         factory_found = _factory_map.find(name);
 
         if ( factory_found != _factory_map.end() ) {
             dialog = factory_found->second();
-            _dialog_map[name] = dialog;
+            static GQuark InkscapePreferences_quark = g_quark_from_static_string("InkscapePreferences");
+            if (name == InkscapePreferences_quark) {
+                _app_dialog_map[name].reset(dialog);
+            } else {
+                _dialog_map[name].reset(dialog);
+            }
         }
     }
 
