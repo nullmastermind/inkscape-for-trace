@@ -115,6 +115,7 @@ private:
     
     //
     InternalUIBounce* _pending;
+    bool _pending_update;
     
     //Whether the drag & drop was dragged into an item
     gboolean _dnd_into;

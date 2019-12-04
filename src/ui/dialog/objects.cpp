@@ -165,8 +165,15 @@ public:
         }
     }
     void notifyContentChanged( Node &/*node*/, Util::ptr_shared /*old_content*/, Util::ptr_shared /*new_content*/ ) override {}
-    void notifyAttributeChanged( Node &/*node*/, GQuark name, Util::ptr_shared /*old_value*/, Util::ptr_shared /*new_value*/ ) override {
-        if ( _pnl && _obj ) {
+    void notifyAttributeChanged( Node &node, GQuark name, Util::ptr_shared /*old_value*/, Util::ptr_shared /*new_value*/ ) override {
+        /* Weird things happen on undo! we get notified about the child being removed, but after that we still get
+         * notified for attributes being changed on this XML node! In that case the corresponding SPObject might already
+         * have been deleted and the pointer to might be invalid, leading to a segfault if we're not carefull.
+         * So after we initiated the update of the treeview using _objectsChangedWrapper() in notifyChildRemoved(), the
+         * _pending_update flag is set, and we will no longer process any notifyAttributeChanged()
+         * Reproducing the crash: new document -> open objects panel -> draw freehand line -> undo -> segfault (but only
+         * if we don't check for _pending_update) */
+        if ( _pnl && (!_pnl->_pending_update) && _obj ) {
             if ( name == _lockedAttr || name == _labelAttr || name == _highlightAttr || name == _groupAttr || name == _styleAttr || name == _clipAttr || name == _maskAttr ) {
                 _pnl->_updateObject(_obj, name == _highlightAttr);
                 if ( name == _styleAttr ) {
@@ -287,17 +294,16 @@ Gtk::MenuItem& ObjectsPanel::_addPopupItem( SPDesktop *desktop, unsigned int cod
 }
 
 /**
- * Add a watchers to an item, which will signal us in case of changes to that item
- * @param item The item to be watched
+ * Attach a watcher to the XML node of an item, which will signal us in case of changes to that item or node
+ * @param item The item of which the XML node is to be watched
  */
 void ObjectsPanel::_addWatcher(SPItem *item) {
-    // Add a watcher on item, if it doesn't exist yet
     bool used = true; // Any newly created watcher is obviously being used
     auto iter = _objectWatchers.find(item);
-    if (iter == _objectWatchers.end()) { // If not found
+    if (iter == _objectWatchers.end()) { // If not found then watcher doesn't exist yet
         ObjectsPanel::ObjectWatcher *w = new ObjectsPanel::ObjectWatcher(this, item);
         _objectWatchers.emplace(item, std::make_pair(w, used));
-    } else { // Found; flag as "in use"
+    } else { // Found; no need to create a new watcher; just flag it as "in use"
         (*iter).second.second = used;
     }
 }
@@ -450,6 +456,7 @@ bool ObjectsPanel::_processQueue() {
     _blockAllSignals(false);
     _objectsSelected(_desktop->selection); //Set the tree selection
     _checkTreeSelection(); //Handle button sensitivity
+    _pending_update = false;
     return false; // Return false to kill the timeout signal that kept calling _processQueue
 }
 
@@ -1318,6 +1325,7 @@ bool ObjectsPanel::_executeUpdate() {
 void ObjectsPanel::_takeAction( int val )
 {
     if (val == UPDATE_TREE) {
+        _pending_update = true;
         // We might already have been updating the tree, but new data is available now
         // so we will then first cancel the old update before scheduling a new one
         _processQueue_sig.disconnect();
@@ -1829,6 +1837,7 @@ ObjectsPanel::ObjectsPanel() :
     _document(nullptr),
     _model(nullptr),
     _pending(nullptr),
+    _pending_update(false),
     _toggleEvent(nullptr),
     _defer_target(),
     _visibleHeader(C_("Visibility", "V")),
