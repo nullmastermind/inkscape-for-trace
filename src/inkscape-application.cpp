@@ -701,7 +701,7 @@ ConcreteInkscapeApplication<T>::create_window(const Glib::RefPtr<Gio::File>& fil
                                               bool add_to_recent,
                                               bool replace_empty)
 {
-    std::cerr << "ConcreteInkscapeApplication<T>::create_window: Should not be called!";
+    std::cerr << "ConcreteInkscapeApplication<T>::create_window: Should not be called!" << std::endl;
     return nullptr;
 }
 
