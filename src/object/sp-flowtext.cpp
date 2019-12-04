@@ -698,7 +698,7 @@ void SPFlowtext::fix_overflow_flowregion(bool inverse)
                 if (inverse) {
                     scale = scale.inverse();
                 }
-                SP_SHAPE(childshapes)->doWriteTransform(scale, nullptr, true);
+                SP_ITEM(childshapes)->doWriteTransform(scale, nullptr, true);
             }
             break;
         }
