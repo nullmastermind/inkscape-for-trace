@@ -188,6 +188,8 @@ clangtidyfull:linux:
   only:
     - branches@inkscape/inkscape
   script:
+    # skip files which clangtidy-helper.sh will revert anyway
+    - find src/3rdparty src/2geom -name CMakeLists.txt | xargs tee
     - bash buildtools/clangtidy-helper.sh
 
     ### scan-build is a static analysis tool. This job is *slow*.
