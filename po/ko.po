@@ -16423,7 +16423,7 @@ msgstr "<b>내장된 스트립트 파일:</b>"
 
 #: ../src/ui/dialog/document-properties.cpp:842
 msgid "New"
-msgstr "새로"
+msgstr "새로 만들기"
 
 #: ../src/ui/dialog/document-properties.cpp:884
 msgid "Script id"
@@ -16940,7 +16940,7 @@ msgstr "부본(_D)"
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:1001 ../src/verbs.cpp:2511
 #: ../share/ui/inkscape-application.glade:10
 msgid "_New"
-msgstr "새로(_N)"
+msgstr "새로 만들기(_N)"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1343
 msgid "_Filter"
@@ -25394,7 +25394,7 @@ msgstr "다수 그레이디언트"
 #: ../src/ui/toolbar/gradient-toolbar.cpp:344
 #: ../src/ui/toolbar/mesh-toolbar.cpp:164
 msgid "New:"
-msgstr "새로:"
+msgstr "새로 만들기:"
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:348
 msgid "linear"
