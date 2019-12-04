@@ -234,7 +234,7 @@ SPAction::create_toolbutton_for_verb(unsigned int             verb_code,
     // Get display properties for the verb
     auto verb = Inkscape::Verb::get(verb_code);
     auto target_action = verb->get_action(context);
-    auto icon_name = verb->get_image();
+    auto icon_name = verb->get_image() ? verb->get_image() : Glib::ustring();
 
     // Create a button with the required display properties
     auto button = Gtk::manage(new Gtk::ToolButton(verb->get_tip()));
