@@ -1598,7 +1598,7 @@ msgstr "두 배로 흐림"
 msgid ""
 "Overlays two copies with different blur amounts and modifiable blend and "
 "composite"
-msgstr "서로 다른 흐림 양·수정 가능한 혼합·합성이 있는 두 복사본을 덧씌웁니다"
+msgstr "서로 다른 흐림 양·수정 가능한 혼합·합성이 있는 두 사본을 덧씌웁니다"
 
 #: ../share/filters/filters.svg.h:658
 msgid "Image Drawing Basic"
@@ -5188,7 +5188,7 @@ msgstr "단계 수:"
 
 #: ../src/extension/internal/bluredge.cpp:133
 msgid "Number of inset/outset copies of the object to make"
-msgstr "만들 개체의 좁히기/넓히기 복사본의 개수"
+msgstr "만들 개체의 좁히기/넓히기 사본의 개수"
 
 #: ../src/extension/internal/bluredge.cpp:137
 #: ../share/extensions/extrude.inx:13
@@ -7959,7 +7959,7 @@ msgid ""
 "The appearance of elements such as clips, masks, filters, and clones\n"
 "is most important. <b>(Choose if unsure.)</b>"
 msgstr ""
-"자르기, 마스크, 필터 및 복제본 같은 요소의 모습이\n"
+"자르기, 마스크, 필터 및 사본 같은 요소의 모습이\n"
 "극히 중요합니다. <b>(확실하지 않으면 선택)</b>"
 
 #: ../src/file-update.cpp:403
@@ -8125,7 +8125,7 @@ msgstr "그리기-%1"
 
 #: ../src/file.cpp:646
 msgid "Select file to save a copy to"
-msgstr "복사본을 저장할 파일 선택"
+msgstr "사본을 저장할 파일 선택"
 
 #: ../src/file.cpp:648
 msgid "Select file to save to"
@@ -9041,7 +9041,7 @@ msgstr "경로 따르는 패턴"
 
 #: ../src/live_effects/effect.cpp:134
 msgid "Place one or more copies of another path along the path"
-msgstr "경로를 따라 다른 경로의 복사본을 하나 또는 여러 개 배치"
+msgstr "경로를 따라 다른 경로의 사본을 하나 또는 여러 개 배치"
 
 #: ../src/live_effects/effect.cpp:144
 msgid "Stitch Sub-Paths"
@@ -9269,7 +9269,7 @@ msgid ""
 "mirrored copy can be styled independently."
 msgstr ""
 "이동가능한 축을 따라 또는 페이지 중심을 기준으로 개체를 미러링합니다. 미러링"
-"된 복사본은 따로 스타일을 지정할 수 있습니다."
+"된 사본은 따로 스타일을 지정할 수 있습니다."
 
 #: ../src/live_effects/effect.cpp:469
 msgid "Rotate copies"
@@ -9280,7 +9280,7 @@ msgid ""
 "Create multiple rotated copies of an object, as in a kaleidoscope. The "
 "copies can be styled independently."
 msgstr ""
-"만화경에서와 같이 개체의 회전된 복사본을 여러 개 만듭니다. 복사본은 따로 스타"
+"만화경에서와 같이 개체의 회전된 사본을 여러 개 만듭니다. 사본은 따로 스타"
 "일을 지정할 수 있습니다."
 
 #: ../src/live_effects/effect.cpp:484
@@ -10041,7 +10041,7 @@ msgstr "시작 각도"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:67
 msgid "Angle of the first copy"
-msgstr "첫 번째 복사본의 각도"
+msgstr "첫 번째 사본의 각도"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:68
 msgid "Rotation angle"
@@ -10049,15 +10049,15 @@ msgstr "회전 각도"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:68
 msgid "Angle between two successive copies"
-msgstr "두 연속된 복사본 사이의 각도"
+msgstr "두 연속된 사본 사이의 각도"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:69
 msgid "Number of copies"
-msgstr "복사본 개수"
+msgstr "사본 개수"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:69
 msgid "Number of copies of the original path"
-msgstr "원본 경로의 복사본 개수"
+msgstr "원본 경로의 사본 개수"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:70
 msgid "Gap"
@@ -10067,11 +10067,11 @@ msgstr "빈틈"
 # File: ../src/live_effects/lpe-copy_rotate.cpp, line: 70
 #: ../src/live_effects/lpe-copy_rotate.cpp:70
 msgid "Gap space between copies, use small negative gaps to fix some joins"
-msgstr "복사본 사이의 틈 간격. 작은 음수 틈을 사용하여 일부 이음을 수정함"
+msgstr "사본 사이의 틈 간격. 작은 음수 틈을 사용하여 일부 이음을 수정함"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:71
 msgid "360° Copies"
-msgstr "360° 복사본"
+msgstr "360° 사본"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:71
 msgid "No rotation angle, fixed to 360°"
@@ -10079,11 +10079,11 @@ msgstr "회전 각도 없음. 360°로 고정됨"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:72
 msgid "Mirror copies"
-msgstr "복사본을 거울 대칭"
+msgstr "사본을 거울 대칭"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:72
 msgid "Mirror between copies"
-msgstr "복사본 사이 거울 대칭"
+msgstr "사본 사이 거울 대칭"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:73
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:59
@@ -11700,11 +11700,11 @@ msgstr "패턴의 너비"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:77
 msgid "Pattern copies:"
-msgstr "패턴 복사본:"
+msgstr "패턴 사본:"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:77
 msgid "How many pattern copies to place along the skeleton path"
-msgstr "얼마나많은 패턴 복사본을 뼈대 경로를 따라 놓을 것인지"
+msgstr "얼마나많은 패턴 사본을 뼈대 경로를 따라 놓을 것인지"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:79
 msgid "Wid_th in units of length"
@@ -11724,7 +11724,7 @@ msgid ""
 "Space between copies of the pattern. Negative values allowed, but are "
 "limited to -90% of pattern width."
 msgstr ""
-"패턴 복사본들 사이 공간. 음수를 허용하지만 패턴 너비의 -90%로 제한됩니다."
+"패턴 사본들 사이 공간. 음수를 허용하지만 패턴 너비의 -90%로 제한됩니다."
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:86
 msgid "No_rmal offset:"
@@ -14035,7 +14035,7 @@ msgstr "선택된 개체 안에 적용된 경로 효과가 없음."
 
 #: ../src/selection-chemistry.cpp:2606 ../src/ui/dialog/clonetiler.cpp:2086
 msgid "Select an <b>object</b> to clone."
-msgstr "복제본을 만들 <b>개체</b>를 선택하세요."
+msgstr "사본을 만들 <b>개체</b>를 선택하세요."
 
 #: ../src/selection-chemistry.cpp:2641
 msgctxt "Action"
@@ -14044,35 +14044,35 @@ msgstr "복제"
 
 #: ../src/selection-chemistry.cpp:2650
 msgid "Select <b>clones</b> to relink."
-msgstr "다시 링크할 <b>복제본</b>을 선택하세요."
+msgstr "다시 링크할 <b>사본</b>을 선택하세요."
 
 #: ../src/selection-chemistry.cpp:2658
 msgid "Copy an <b>object</b> to clipboard to relink clones to."
-msgstr "복제본을 다시 링크할 <b>개체</b>를 클립보드에 복사."
+msgstr "사본을 다시 링크할 <b>개체</b>를 클립보드에 복사."
 
 #: ../src/selection-chemistry.cpp:2680
 msgid "<b>No clones to relink</b> in the selection."
-msgstr "선택 영역 안에 <b>다시 링크할 복제본이 없음</b>."
+msgstr "선택 영역 안에 <b>다시 링크할 사본이 없음</b>."
 
 #: ../src/selection-chemistry.cpp:2683
 msgid "Relink clone"
-msgstr "복제본 다시 링크"
+msgstr "사본 다시 링크"
 
 #: ../src/selection-chemistry.cpp:2692 ../src/selection-chemistry.cpp:2784
 msgid "Select <b>clones</b> to unlink."
-msgstr "다시 링크할 <b>복제본</b>을 선택하세요."
+msgstr "다시 링크할 <b>사본</b>을 선택하세요."
 
 #: ../src/selection-chemistry.cpp:2771 ../src/selection-chemistry.cpp:2802
 msgid "<b>No clones to unlink</b> in the selection."
-msgstr "선택 영역 안에 <b>링크 해제할 복제본이 없음</b>."
+msgstr "선택 영역 안에 <b>링크 해제할 사본이 없음</b>."
 
 #: ../src/selection-chemistry.cpp:2776
 msgid "Unlink clone"
-msgstr "복제본 링크 해제"
+msgstr "사본 링크 해제"
 
 #: ../src/selection-chemistry.cpp:2806
 msgid "Unlink clone recursively"
-msgstr "반복해 들어가면서 복제본 링크 해제"
+msgstr "반복해 들어가면서 사본 링크 해제"
 
 #: ../src/selection-chemistry.cpp:2816
 msgid ""
@@ -14080,7 +14080,7 @@ msgid ""
 "to go to its source. Select a <b>text on path</b> to go to the path. Select "
 "a <b>flowed text</b> to go to its frame."
 msgstr ""
-"원본을 찾을 <b>복제본</b>을 선택하세요. 원본을 찾을 <b>링크된 오프셋</b>을 선"
+"원본을 찾을 <b>사본</b>을 선택하세요. 원본을 찾을 <b>링크된 오프셋</b>을 선"
 "택하세요. 경로를 찾을 <b>경로 위의 문자열</b>을 선택하세요. 프레임을 찾을 <b>"
 "유동 문자열</b>을 선택하세요."
 
@@ -14089,7 +14089,7 @@ msgid ""
 "<b>Cannot find</b> the object to select (orphaned clone, offset, textpath, "
 "flowed text?)"
 msgstr ""
-"선택할 개체를 <b>찾을 수 없음</b> (고립된 복제본, 오프섹, 문자열경로, 유동 문"
+"선택할 개체를 <b>찾을 수 없음</b> (고립된 사본, 오프섹, 문자열경로, 유동 문"
 "자열?)"
 
 #: ../src/selection-chemistry.cpp:2864
@@ -14160,7 +14160,7 @@ msgstr "페턴을 개체로 변환"
 
 #: ../src/selection-chemistry.cpp:3603
 msgid "Select <b>object(s)</b> to make a bitmap copy."
-msgstr "비트맵 복사본을 작성할 <b>개체</b>를 선택하세요."
+msgstr "비트맵 사본을 작성할 <b>개체</b>를 선택하세요."
 
 #: ../src/selection-chemistry.cpp:3607
 msgid "Rendering bitmap..."
@@ -15636,14 +15636,14 @@ msgstr "초기 색상: "
 
 #: ../src/ui/dialog/clonetiler.cpp:660
 msgid "Initial color of tiled clones"
-msgstr "타일 복제본의 초기 색상"
+msgstr "타일 사본의 초기 색상"
 
 #: ../src/ui/dialog/clonetiler.cpp:660
 msgid ""
 "Initial color for clones (works only if the original has unset fill or "
 "stroke or on spray tool in copy mode)"
 msgstr ""
-"복제본의 초기 색상(원본이 채움 또는 윤곽선이 미설정이거나, 뿌리기 도구 상에"
+"사본의 초기 색상(원본이 채움 또는 윤곽선이 미설정이거나, 뿌리기 도구 상에"
 "서 복사 모드에서만 작동)"
 
 #: ../src/ui/dialog/clonetiler.cpp:675
@@ -15708,14 +15708,14 @@ msgstr "따라 그리기(_T)"
 
 #: ../src/ui/dialog/clonetiler.cpp:784
 msgid "Trace the drawing under the clones/sprayed items"
-msgstr "복제본/뿌려진 항목 밑의 그림 따라 그리기"
+msgstr "사본/뿌려진 항목 밑의 그림 따라 그리기"
 
 #: ../src/ui/dialog/clonetiler.cpp:788
 msgid ""
 "For each clone/sprayed item, pick a value from the drawing in its location "
 "and apply it"
 msgstr ""
-"복제본/뿌려진 항목마다, 그 위치에 있는 그림에서 값을 추출하여 적용합니다"
+"사본/뿌려진 항목마다, 그 위치에 있는 그림에서 값을 추출하여 적용합니다"
 
 #: ../src/ui/dialog/clonetiler.cpp:800
 msgid "1. Pick from the drawing:"
@@ -15810,7 +15810,7 @@ msgstr "추출한 값을 반전합니다"
 
 #: ../src/ui/dialog/clonetiler.cpp:913
 msgid "3. Apply the value to the clones':"
-msgstr "3. 복제본의 다음에 그 값을 적용:"
+msgstr "3. 사본의 다음에 그 값을 적용:"
 
 #: ../src/ui/dialog/clonetiler.cpp:923
 msgid "Presence"
@@ -15820,7 +15820,7 @@ msgstr "존재함"
 msgid ""
 "Each clone is created with the probability determined by the picked value in "
 "that point"
-msgstr "복제본마다 그 지점에서 추출된 값으로 결정되는 확률만큼 만들어집니다"
+msgstr "사본마다 그 지점에서 추출된 값으로 결정되는 확률만큼 만들어집니다"
 
 #: ../src/ui/dialog/clonetiler.cpp:932
 msgid "Size"
@@ -15828,23 +15828,23 @@ msgstr "크기"
 
 #: ../src/ui/dialog/clonetiler.cpp:935
 msgid "Each clone's size is determined by the picked value in that point"
-msgstr "매 복제본의 크기는 그 지점에서 추출된 값으로 결정됩니다"
+msgstr "매 사본의 크기는 그 지점에서 추출된 값으로 결정됩니다"
 
 #: ../src/ui/dialog/clonetiler.cpp:944
 msgid ""
 "Each clone is painted by the picked color (the original must have unset fill "
 "or stroke)"
 msgstr ""
-"매 복제본이 추출된 색상으로 칠해집니다 (원본은 채움 또는 윤곽선이 미설정이어"
+"매 사본이 추출된 색상으로 칠해집니다 (원본은 채움 또는 윤곽선이 미설정이어"
 "야 합니다)"
 
 #: ../src/ui/dialog/clonetiler.cpp:953
 msgid "Each clone's opacity is determined by the picked value in that point"
-msgstr "매 복제본의 불투명도가 그 지점에서 추출된 값으로 결정됩니다"
+msgstr "매 사본의 불투명도가 그 지점에서 추출된 값으로 결정됩니다"
 
 #: ../src/ui/dialog/clonetiler.cpp:967
 msgid "Apply to tiled clones:"
-msgstr "타일 복제본에 적용:"
+msgstr "타일 사본에 적용:"
 
 #: ../src/ui/dialog/clonetiler.cpp:988
 msgid "How many rows in the tiling"
@@ -15896,7 +15896,7 @@ msgstr " <b>만들기(_C)</b> "
 
 #: ../src/ui/dialog/clonetiler.cpp:1131
 msgid "Create and tile the clones of the selection"
-msgstr "선택한 개체의 복제본을 만들고 및 타일링 합니다"
+msgstr "선택한 개체의 사본을 만들고 및 타일링 합니다"
 
 #. TRANSLATORS: if a group of objects are "clumped" together, then they
 #. are unevenly spread in the given amount of space - as shown in the
@@ -15909,7 +15909,7 @@ msgstr " 응집 제거(_U) "
 
 #: ../src/ui/dialog/clonetiler.cpp:1148
 msgid "Spread out clones to reduce clumping; can be applied repeatedly"
-msgstr "응집을 제거하려고 복제본을 펼쳐 놓습니다; 반복적으로 적용 가능합니다"
+msgstr "응집을 제거하려고 사본을 펼쳐 놓습니다; 반복적으로 적용 가능합니다"
 
 #: ../src/ui/dialog/clonetiler.cpp:1154
 msgid " Re_move "
@@ -15917,7 +15917,7 @@ msgstr " 제거(_M) "
 
 #: ../src/ui/dialog/clonetiler.cpp:1155
 msgid "Remove existing tiled clones of the selected object (siblings only)"
-msgstr "선택한 개체의 기존 타일 복제본을 제거 (같은 단계의 것만)"
+msgstr "선택한 개체의 기존 타일 사본을 제거 (같은 단계의 것만)"
 
 #: ../src/ui/dialog/clonetiler.cpp:1170
 msgid " R_eset "
@@ -15942,43 +15942,43 @@ msgstr "<small>두 개 이상의 개체가 선택됨.</small>"
 #: ../src/ui/dialog/clonetiler.cpp:1245
 #, c-format
 msgid "<small>Object has <b>%d</b> tiled clones.</small>"
-msgstr "<small>개체에 <b>%d</b>개의 타일 복제본이 있음</small>"
+msgstr "<small>개체에 <b>%d</b>개의 타일 사본이 있음</small>"
 
 #: ../src/ui/dialog/clonetiler.cpp:1250
 msgid "<small>Object has no tiled clones.</small>"
-msgstr "<small>개체에 타일 복제본이 없음.</small>"
+msgstr "<small>개체에 타일 사본이 없음.</small>"
 
 #: ../src/ui/dialog/clonetiler.cpp:1967
 msgid "Select <b>one object</b> whose tiled clones to unclump."
-msgstr "응집을 제거할 타일 복제본이 있는 <b>개체 하나</b>를 선택하세요."
+msgstr "응집을 제거할 타일 사본이 있는 <b>개체 하나</b>를 선택하세요."
 
 #: ../src/ui/dialog/clonetiler.cpp:1987
 msgid "Unclump tiled clones"
-msgstr "타일 복제본의 응집을 제거"
+msgstr "타일 사본의 응집을 제거"
 
 #: ../src/ui/dialog/clonetiler.cpp:2016
 msgid "Select <b>one object</b> whose tiled clones to remove."
-msgstr "제거할 타일 복제본이 있는 <b>개체 하나</b>를 선택하세요."
+msgstr "제거할 타일 사본이 있는 <b>개체 하나</b>를 선택하세요."
 
 #: ../src/ui/dialog/clonetiler.cpp:2039
 msgid "Delete tiled clones"
-msgstr "타일 복제본 삭제"
+msgstr "타일 사본 삭제"
 
 #: ../src/ui/dialog/clonetiler.cpp:2092
 msgid ""
 "If you want to clone several objects, <b>group</b> them and <b>clone the "
 "group</b>."
 msgstr ""
-"만약에 여러 개체의 복제본을 만들고 싶다면, 그 개체들을 <b>그룹</b> 으로 묶고 "
-"<b>그룹의 복제본</b>을 만드세요."
+"만약에 여러 개체의 사본을 만들고 싶다면, 그 개체들을 <b>그룹</b> 으로 묶고 "
+"<b>그룹의 사본</b>을 만드세요."
 
 #: ../src/ui/dialog/clonetiler.cpp:2100
 msgid "<small>Creating tiled clones...</small>"
-msgstr "<small>타일 복제본 만드는 중...</small>"
+msgstr "<small>타일 사본 만드는 중...</small>"
 
 #: ../src/ui/dialog/clonetiler.cpp:2516
 msgid "Create tiled clones"
-msgstr "타일 복제본 만들기"
+msgstr "타일 사본 만들기"
 
 #: ../src/ui/dialog/clonetiler.cpp:2706
 msgid "<small>Per row:</small>"
@@ -17633,7 +17633,7 @@ msgstr "그룹"
 #: ../src/ui/dialog/find.cpp:96
 msgctxt "Find dialog"
 msgid "Clones"
-msgstr "복제본"
+msgstr "사본"
 
 #: ../src/ui/dialog/find.cpp:98 ../share/extensions/embedimage.inx:10
 #: ../share/extensions/extractimage.inx:11
@@ -17755,7 +17755,7 @@ msgstr "그룹 찾기"
 
 #: ../src/ui/dialog/find.cpp:179
 msgid "Search clones"
-msgstr "복제본 찾기"
+msgstr "사본 찾기"
 
 #: ../src/ui/dialog/find.cpp:182
 msgid "Search images"
@@ -20457,7 +20457,7 @@ msgid ""
 "it's off, each will open in the directory where you last saved a file using "
 "it"
 msgstr ""
-"이 옵션을 켜면, “다른 이름으로 저장...” 및 “복사본 저장...” 대화창은 항상 현"
+"이 옵션을 켜면, “다른 이름으로 저장...” 및 “사본 저장...” 대화창은 항상 현"
 "재 열린 문서가 있는 폴더에서 열립니다. 끄면, 각각 그 대화창을 사용해서 마지막"
 "에 파일을 저장한 폴더에서 열립니다"
 
@@ -21521,43 +21521,43 @@ msgstr "삭제됨"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1920
 msgid "Moving original: clones and linked offsets"
-msgstr "원본: 복제본 및 연결된 오프셋 이동하기"
+msgstr "원본: 사본 및 연결된 오프셋 이동하기"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1922
 msgid "Clones are translated by the same vector as their original"
-msgstr "복제본을 원본과 같은 벡터를 사용하여 옮깁니다"
+msgstr "사본을 원본과 같은 벡터를 사용하여 옮깁니다"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1924
 msgid "Clones preserve their positions when their original is moved"
-msgstr "원본을 이동할 때 복제본의 위치를 바꾸지 않습니다"
+msgstr "원본을 이동할 때 사본의 위치를 바꾸지 않습니다"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1926
 msgid ""
 "Each clone moves according to the value of its transform= attribute; for "
 "example, a rotated clone will move in a different direction than its original"
 msgstr ""
-"복제본마다 자신의 ‘transform=’ 특성의 값에 따라서 이동합니다; 예를 들어, 회전"
-"된 복제본은 그 원본과 다른 방향으로 이동할 것입니다"
+"사본마다 자신의 ‘transform=’ 특성의 값에 따라서 이동합니다; 예를 들어, 회전"
+"된 사본은 그 원본과 다른 방향으로 이동할 것입니다"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1927
 msgid "Deleting original: clones"
-msgstr "원본: 복제본 삭제하기"
+msgstr "원본: 사본 삭제하기"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1929
 msgid "Orphaned clones are converted to regular objects"
-msgstr "고립된 복제본을 정규 개체로 변환합니다"
+msgstr "고립된 사본을 정규 개체로 변환합니다"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1931
 msgid "Orphaned clones are deleted along with their original"
-msgstr "고립된 복제본을 원본과 함께 삭제합니다"
+msgstr "고립된 사본을 원본과 함께 삭제합니다"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1933
 msgid "Duplicating original+clones/linked offset"
-msgstr "원본+복제본/연결된 오프셋의 부본을 작성합니다"
+msgstr "원본+사본/연결된 오프셋의 부본을 작성합니다"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1935
 msgid "Relink duplicated clones"
-msgstr "부본인 복제본을 다시 연결"
+msgstr "부본인 사본을 다시 연결"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1937
 msgid ""
@@ -21565,12 +21565,12 @@ msgid ""
 "(possibly in groups), relink the duplicated clone to the duplicated original "
 "instead of the old original"
 msgstr ""
-"복제본과 그 원본이 (아마도 그룹 안에) 들어 있는 선택 영역을 등사할 때, 부본 "
-"작성으로 만든 복제본을 예전 원본이 아니라 복사된 원본에 다시 연결합니다"
+"사본과 그 원본이 (아마도 그룹 안에) 들어 있는 선택 영역을 등사할 때, 부본 "
+"작성으로 만든 사본을 예전 원본이 아니라 복사된 원본에 다시 연결합니다"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1939
 msgid "Unlinking clones"
-msgstr "복제본 링크 해제 중"
+msgstr "사본 링크 해제 중"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1940
 msgid "Path operations unlink clones"
@@ -21587,7 +21587,7 @@ msgstr ""
 #. TRANSLATORS: Heading for the Inkscape Preferences "Clones" Page
 #: ../src/ui/dialog/inkscape-preferences.cpp:1945
 msgid "Clones"
-msgstr "복제본"
+msgstr "사본"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1948
 msgid "When applying, use the topmost selected object as clippath/mask"
@@ -21848,7 +21848,7 @@ msgstr "만들기"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2088
 msgid "Resolution for Create Bitmap _Copy:"
-msgstr "비트맵 복사본(_C) 작성용 해상도:"
+msgstr "비트맵 사본(_C) 작성용 해상도:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2089
 msgid "Resolution used by the Create Bitmap Copy command"
@@ -22560,7 +22560,7 @@ msgstr "효과를 더하려면 버튼을 클릭"
 
 #: ../src/ui/dialog/livepatheffect-editor.cpp:326
 msgid "Click add button to convert clone"
-msgstr "복제본을 변환하려면 더하기 버튼을 클릭"
+msgstr "사본을 변환하려면 더하기 버튼을 클릭"
 
 #: ../src/ui/dialog/livepatheffect-editor.cpp:331
 #: ../src/ui/dialog/livepatheffect-editor.cpp:335
@@ -22693,11 +22693,11 @@ msgstr "로그 캡처 중지됨."
 
 #: ../src/ui/dialog/new-from-template.cpp:22
 msgid "Create from template"
-msgstr "서식으로부터 만들기"
+msgstr "템플릿으로 만들기"
 
 #: ../src/ui/dialog/new-from-template.cpp:24
 msgid "New From Template"
-msgstr "서식으로부터 새로 만들기"
+msgstr "템플릿으로 새로 만들기"
 
 #: ../src/ui/dialog/object-attributes.cpp:38
 msgid "Href:"
@@ -23198,7 +23198,7 @@ msgstr "CairoRenderContext를 설정하지 못했습니다"
 
 #: ../src/ui/dialog/save-template-dialog.cpp:22
 msgid "Save Document as Template"
-msgstr "서식으로 문서 저장"
+msgstr "템플릿으로 문서 저장"
 
 #: ../src/ui/dialog/save-template-dialog.cpp:23
 msgid "Name: "
@@ -25824,7 +25824,7 @@ msgstr ""
 "* 구문 형식이 바뀔 수 있습니다\n"
 "* 웹 브라우저의 지원이 보장되지 않습니다.\n"
 "\n"
-"웹용: 비트맵으로 변환 (편집 → 비트맵 복사본 만들기).\n"
+"웹용: 비트맵으로 변환 (편집 → 비트맵 사본 만들기).\n"
 "인쇄용: PDF로 내보내기."
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:561
@@ -26525,19 +26525,19 @@ msgstr "나선 변경"
 
 #: ../src/ui/toolbar/spray-toolbar.cpp:81 ../src/ui/tools/spray-tool.cpp:1359
 msgid "Spray with copies"
-msgstr "복사본으로 뿌리기"
+msgstr "사본으로 뿌리기"
 
 #: ../src/ui/toolbar/spray-toolbar.cpp:82
 msgid "Spray copies of the initial selection"
-msgstr "처음 선택 항목의 복사본 뿌리기"
+msgstr "처음 선택 항목의 사본 뿌리기"
 
 #: ../src/ui/toolbar/spray-toolbar.cpp:86 ../src/ui/tools/spray-tool.cpp:1363
 msgid "Spray with clones"
-msgstr "복제본으로 뿌리기"
+msgstr "사본으로 뿌리기"
 
 #: ../src/ui/toolbar/spray-toolbar.cpp:87
 msgid "Spray clones of the initial selection"
-msgstr "처음 선택 항목의 복제본 뿌리기"
+msgstr "처음 선택 항목의 사본 뿌리기"
 
 #: ../src/ui/toolbar/spray-toolbar.cpp:92
 msgid "Spray single path"
@@ -28266,7 +28266,7 @@ msgid ""
 "%s. Drag, click or click and scroll to spray <b>copies</b> of the initial "
 "selection."
 msgstr ""
-"%s. 초기 선택 항목의 <b>복사본</b>을 뿌리려면, 끌기 · 클릭 · 또는 클릭하고 휠"
+"%s. 초기 선택 항목의 <b>사본</b>을 뿌리려면, 끌기 · 클릭 · 또는 클릭하고 휠"
 "돌리기."
 
 #: ../src/ui/tools/spray-tool.cpp:209
@@ -28275,7 +28275,7 @@ msgid ""
 "%s. Drag, click or click and scroll to spray <b>clones</b> of the initial "
 "selection."
 msgstr ""
-"%s. 초기 선택 항목의 <b>복제본</b>을 뿌리려면 끌기, 끌기 · 클릭 · 또는 클릭하"
+"%s. 초기 선택 항목의 <b>사본</b>을 뿌리려면 끌기, 끌기 · 클릭 · 또는 클릭하"
 "고 휠돌리기."
 
 #: ../src/ui/tools/spray-tool.cpp:212
@@ -29964,7 +29964,7 @@ msgstr "아무 작업도 하지 않음"
 
 #: ../src/verbs.cpp:2511
 msgid "Create new document from the default template"
-msgstr "기본 서식으로 새 문서 만들기"
+msgstr "기본 템플릿으로 새 문서 만들기"
 
 #: ../src/verbs.cpp:2513
 msgid "_Open..."
@@ -30008,7 +30008,7 @@ msgstr "서식 저장 …"
 
 #: ../src/verbs.cpp:2524
 msgid "Save a copy of the document as template"
-msgstr "서식으로 문서의 복사본 저장"
+msgstr "문서의 사본을 템플릿으로 저장"
 
 #: ../src/verbs.cpp:2525
 msgid "_Print..."
@@ -30076,11 +30076,11 @@ msgstr "잉크스케이프 종료"
 
 #: ../src/verbs.cpp:2547
 msgid "New from _Template..."
-msgstr "서식으로부터(_T) 새로..."
+msgstr "템플릿으로(_T) 새로..."
 
 #: ../src/verbs.cpp:2548
 msgid "Create new project from template"
-msgstr "서식으로 새 프로젝트 만들기"
+msgstr "템플릿으로 새 프로젝트 만들기"
 
 #: ../src/verbs.cpp:2551
 msgid "Undo last action"
@@ -30225,26 +30225,26 @@ msgstr "선택한 개체의 부본을 작성합니다"
 
 #: ../src/verbs.cpp:2585
 msgid "Create Clo_ne"
-msgstr "복제본 만들기(_N)"
+msgstr "사본 만들기(_N)"
 
 #: ../src/verbs.cpp:2586
 msgid "Create a clone (a copy linked to the original) of selected object"
-msgstr "선택된 개체의 복제본(원본에 링크된 복사본)을 만듭니다"
+msgstr "선택된 개체의 사본(원본에 링크된 사본)을 만듭니다"
 
 #: ../src/verbs.cpp:2587
 msgid "Unlin_k Clone"
-msgstr "복제본 링크해제(_K)"
+msgstr "사본 링크해제(_K)"
 
 #: ../src/verbs.cpp:2588
 msgid ""
 "Cut the selected clones' links to the originals, turning them into "
 "standalone objects"
 msgstr ""
-"선택한 복제본에서 원본으로의 링크를 끊습니다. 복제본은 독립된 개체가 됩니다"
+"선택한 사본에서 원본으로의 링크를 끊습니다. 사본은 독립된 개체가 됩니다"
 
 #: ../src/verbs.cpp:2590
 msgid "Unlink Clones _recursively"
-msgstr "반복해 들어가며 복제본 링크(_R) 해제"
+msgstr "반복해 들어가며 사본 링크(_R) 해제"
 
 #: ../src/verbs.cpp:2591
 msgid "Unlink all clones in the selection, even if they are in groups."
@@ -30254,11 +30254,11 @@ msgstr ""
 
 #: ../src/verbs.cpp:2593
 msgid "Relink to Copied"
-msgstr "복사본으로 다시 링크"
+msgstr "사본으로 다시 링크"
 
 #: ../src/verbs.cpp:2594
 msgid "Relink the selected clones to the object currently on the clipboard"
-msgstr "현재 클립보드에 있는 개체로 선택한 복제본을 다시 링크합니다"
+msgstr "현재 클립보드에 있는 개체로 선택한 사본을 다시 링크합니다"
 
 #: ../src/verbs.cpp:2595
 msgid "Select _Original"
@@ -30266,7 +30266,7 @@ msgstr "원본 선택(_O)"
 
 #: ../src/verbs.cpp:2596
 msgid "Select the object to which the selected clone is linked"
-msgstr "선택한 복제본이 링크된 개체를 선택합니다"
+msgstr "선택한 사본이 링크된 개체를 선택합니다"
 
 #: ../src/verbs.cpp:2597
 msgid "Clone original path (LPE)"
@@ -30757,7 +30757,7 @@ msgstr "비트맵 이미지를 따라 그려서 하나 이상의 경로를 만�
 
 #: ../src/verbs.cpp:2752
 msgid "Make a _Bitmap Copy"
-msgstr "비트맵 복사본 만들기(_B)"
+msgstr "비트맵 사본 만들기(_B)"
 
 #: ../src/verbs.cpp:2753
 msgid "Export selection to a bitmap and insert it into document"
@@ -31941,14 +31941,14 @@ msgstr "열린 대화창을 모두 보이거나 숨깁니다"
 
 #: ../src/verbs.cpp:3090
 msgid "Create Tiled Clones..."
-msgstr "타일 복제본 만들기..."
+msgstr "타일 사본 만들기..."
 
 #: ../src/verbs.cpp:3091
 msgid ""
 "Create multiple clones of selected object, arranging them into a pattern or "
 "scattering"
 msgstr ""
-"선택한 개체의 복제본을 여러 개 만들기. 복제본을 패턴으로 배열하거나 흩어놓습"
+"선택한 개체의 사본을 여러 개 만들기. 사본을 패턴으로 배열하거나 흩어놓습"
 "니다"
 
 #: ../src/verbs.cpp:3093
@@ -33504,7 +33504,7 @@ msgid ""
 "Please choose a larger object or set 'Space between copies' > 0"
 msgstr ""
 "패턴의 전체 길이가 너무 작음:\n"
-"더 큰 개체를 선택하거나 '복사본 사이의 공간'을 0보가 크게 설정하십시오"
+"더 큰 개체를 선택하거나 '사본 사이의 공간'을 0보가 크게 설정하십시오"
 
 #: ../share/extensions/pathalongpath.py:261
 msgid ""
@@ -34524,7 +34524,7 @@ msgstr ""
 "- 지원되는 요소 유형\n"
 "     - 경로 (선 및 스플라인)\n"
 "     - 직사각형\n"
-"     - 복제본 (원본과의 상호 참조가 손실됨)\n"
+"     - 사본 (원본과의 상호 참조가 손실됨)\n"
 "- ROBO-Master 스플라인 출력은 Inkscape가 아닌 ROBO-Master 및 AutoDesk 뷰어로"
 "만 읽을 수 있는 특별한 스플라인입니다.\n"
 "- LWPOLYLINE 출력은 다중으로-연결된 다각선이므로, LINE 출력의 구식 버전을 사"
@@ -38849,7 +38849,7 @@ msgstr "리본"
 #: ../share/extensions/pathalongpath.inx:19
 #: ../share/extensions/pathscatter.inx:11
 msgid "Space between copies:"
-msgstr "복사본 사이 공백:"
+msgstr "사본 사이 공백:"
 
 #: ../share/extensions/pathalongpath.inx:20
 #: ../share/extensions/pathscatter.inx:12
@@ -38878,7 +38878,7 @@ msgid ""
 "or clones are allowed."
 msgstr ""
 "이 효과는 임의의 “뼈대” 경로를 따라 패턴을 흩트리거나 구부립니다. 패턴은 선"
-"택 영역에서 맨 위에 있는 개체입니다. 경로, 모양 또는 복제본을 사용할 수 있습"
+"택 영역에서 맨 위에 있는 개체입니다. 경로, 모양 또는 사본을 사용할 수 있습"
 "니다."
 
 #: ../share/extensions/pathscatter.inx:9
@@ -38928,7 +38928,7 @@ msgid ""
 "shapes, clones are allowed."
 msgstr ""
 "이 효과는 임의의 “뼈대” 경로를 따라 패턴을 흩트립니다. 패턴은 선택 영역에서 "
-"맨 위에 있는 개체이어야 합니다. 경로, 모양 또는 복제본의 그룹을 사용할 수 있"
+"맨 위에 있는 개체이어야 합니다. 경로, 모양 또는 사본의 그룹을 사용할 수 있"
 "습니다."
 
 #
@@ -41013,7 +41013,7 @@ msgstr "새 그림"
 
 #: ../share/ui/menus.xml:54
 msgid "Clo_ne"
-msgstr "복제본(_N)"
+msgstr "사본(_N)"
 
 #: ../share/ui/menus.xml:69
 msgid "Select Sa_me"
