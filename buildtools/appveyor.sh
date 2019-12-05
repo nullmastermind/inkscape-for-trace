@@ -40,9 +40,9 @@ wget -nv https://github.com/dejavu-fonts/dejavu-fonts/releases/download/version_
 message "--- Installing dependencies"
 source ../buildtools/msys2installdeps.sh
 pacman -S $MINGW_PACKAGE_PREFIX-{ccache,gtest,ntldd-git} $PACMAN_OPTIONS
-
-export CCACHE_DIR=$(cygpath -a ccache/master)
-ccache --max-size=200M
+ 
+export CCACHE_DIR=$(cygpath -a ccache)
+ccache --max-size=500M
 ccache --set-config=sloppiness=include_file_ctime,include_file_mtime
 
 
