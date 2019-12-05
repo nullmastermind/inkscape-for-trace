@@ -669,7 +669,6 @@ void update_tool_toolbox( SPDesktop *desktop, ToolBase *eventcontext, GtkWidget 
 void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    GtkSizeGroup* grouper = gtk_size_group_new( GTK_SIZE_GROUP_BOTH );
 
     // Loop through all the toolboxes and create them using either
     // their "create" methods.
@@ -709,7 +708,6 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
             // and also store a pointer to it inside the toolbox.  This allows the
             // active toolbar to be changed.
             gtk_container_add(GTK_CONTAINER(toolbox), holder);
-            gtk_size_group_add_widget(grouper, holder);
             sp_set_font_size_smaller( holder );
             gtk_widget_set_name( holder, aux_toolboxes[i].ui_name );
 
@@ -723,8 +721,6 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
             g_warning("Could not create toolbox %s", aux_toolboxes[i].ui_name);
         }
     }
-
-    g_object_unref( G_OBJECT(grouper) );
 }
 
 void update_aux_toolbox(SPDesktop * /*desktop*/, ToolBase *eventcontext, GtkWidget *toolbox)
