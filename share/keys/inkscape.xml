@@ -640,6 +640,8 @@ override) the bindings in the main default.xml.
 
   <bind key="p" modifiers="Primary,Shift" action="DialogPreferences" display="true" />
   <bind key="P" modifiers="Primary,Shift" action="DialogPreferences" />
+  <!-- MacOs standard Prefs key -->
+  <bind key="comma" modifiers="Meta" action="DialogPreferences" />
 
   <bind key="f" modifiers="Primary,Shift" action="DialogFillStroke" display="true" />
   <bind key="F" modifiers="Primary,Shift" action="DialogFillStroke" />
