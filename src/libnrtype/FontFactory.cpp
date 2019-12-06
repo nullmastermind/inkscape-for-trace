@@ -262,11 +262,6 @@ font_factory::font_factory() :
                                               nullptr);
 #endif
 
-// TEMP
-#if PANGO_VERSION_CHECK(1,41,1)
-    std::cerr << "Pango version: " << pango_version_string() << std::endl;
-#endif
-
 }
 
 font_factory::~font_factory()

@@ -30,6 +30,7 @@ void
 print_inkscape_version()
 {
     std::cout << "Inkscape " << Inkscape::version_string << std::endl;
+    std::cerr << "    Pango version: " << pango_version_string() << std::endl;
 }
 
 void
