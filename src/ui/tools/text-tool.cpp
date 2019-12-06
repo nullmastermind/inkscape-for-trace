@@ -1614,7 +1614,10 @@ int TextTool::_styleQueried(SPStyle *style, int property)
         if (!pos_obj) {
             continue;
         }
-        while (SP_IS_STRING(pos_obj) && pos_obj->parent) {
+        if (! pos_obj->parent) // the string is not in the document anymore (deleted)
+            return 0;
+
+        if ( SP_IS_STRING(pos_obj) ) {
            pos_obj = pos_obj->parent;   // SPStrings don't have style
         }
         styles_list.insert(styles_list.begin(),(SPItem*)pos_obj);
