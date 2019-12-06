@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: Inkscape 1.0\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2019-11-12 19:21+0100\n"
-"PO-Revision-Date: 2019-11-28 17:00+0100\n"
-"Last-Translator: Firas Hanife <FirasHanife@gmail.com>\n"
+"PO-Revision-Date: 2019-12-06 17:00+0100\n"
+"Last-Translator: Firas Hanife <firashanife@gmail.com>\n"
 "Language-Team: \n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -7740,7 +7740,7 @@ msgstr "grezzo"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:166
 msgid "Replace PDF fonts by closest-named installed fonts"
-msgstr "Rimpiazza font PDF con il font installato dal nome più simile"
+msgstr "Rimpiazza caratteri PDF con i caratteri installati dal nome più simile"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:168
 msgid "Embed images"
@@ -9124,41 +9124,36 @@ msgstr ""
 
 #. TRANSLATORS: This refers to the hatch that's inside the object
 #: ../src/knotholder.cpp:403
-#, fuzzy
 msgid "<b>Move</b> the hatch fill inside the object"
-msgstr "<b>Muovi</b> il motivo di riempimento all'interno dell'oggetto"
+msgstr "<b>Muovi</b> il riempimento a tratteggi all'interno dell'oggetto"
 
 #: ../src/knotholder.cpp:406
-#, fuzzy
 msgid "<b>Scale</b> the hatch fill; uniformly if with <b>Ctrl</b>"
 msgstr ""
-"<b>Ridimensiona</b> il motivo di riempimento; in maniera uniforme con "
+"<b>Ridimensiona</b> lo riempimento a tratteggi; in maniera uniforme con "
 "<b>Ctrl</b>"
 
 #: ../src/knotholder.cpp:410
-#, fuzzy
 msgid "<b>Rotate</b> the hatch fill; with <b>Ctrl</b> to snap angle"
 msgstr ""
-"<b>Ruota</b> il motivo di riempimento; <b>Ctrl</b> per far scattare l'angolo"
+"<b>Ruota</b> lo riempimento a tratteggi; <b>Ctrl</b> per far scattare "
+"l'angolo"
 
 #. TRANSLATORS: This refers to the pattern that's inside the object
 #: ../src/knotholder.cpp:424
-#, fuzzy
 msgid "<b>Move</b> the hatch stroke inside the object"
-msgstr "<b>Muovi</b> il motivo di riempimento all'interno dell'oggetto"
+msgstr "<b>Muovi</b> il contorno a tratteggi all'interno dell'oggetto"
 
 #: ../src/knotholder.cpp:427
-#, fuzzy
 msgid "<b>Scale</b> the hatch stroke; uniformly if with <b>Ctrl</b>"
 msgstr ""
-"<b>Ridimensiona</b> il motivo di riempimento; in maniera uniforme con "
+"<b>Ridimensiona</b> il contorno a tratteggi; in maniera uniforme con "
 "<b>Ctrl</b>"
 
 #: ../src/knotholder.cpp:431
-#, fuzzy
 msgid "<b>Rotate</b> the hatch stroke; with <b>Ctrl</b> to snap angle"
 msgstr ""
-"<b>Ruota</b> il motivo di riempimento; <b>Ctrl</b> per far scattare l'angolo"
+"<b>Ruota</b> il contorno a tratteggi; <b>Ctrl</b> per far scattare l'angolo"
 
 #: ../src/knotholder.cpp:445 ../src/knotholder.cpp:447
 msgid "<b>Resize</b> the filter effect region"
@@ -9166,7 +9161,7 @@ msgstr "<b>Ridimensiona</b> la regione del filtro"
 
 #: ../src/libnrtype/FontFactory.cpp:665
 msgid "Ignoring font without family that will crash Pango"
-msgstr "I font senza famiglia che fanno andare in crash Pango vengono ignorati"
+msgstr "I caratteri senza famiglia che fanno andare in crash Pango vengono ignorati"
 
 #: ../src/live_effects/effect.cpp:103
 msgid "Bend"
@@ -14353,9 +14348,8 @@ msgid "Unlink clone"
 msgstr "Scollega clone"
 
 #: ../src/selection-chemistry.cpp:2802
-#, fuzzy
 msgid "Unlink clone recursively"
-msgstr "Scollega clone"
+msgstr "Scollega clone ricorsivamente"
 
 #: ../src/selection-chemistry.cpp:2812
 msgid ""
@@ -19162,9 +19156,8 @@ msgid "Miscellaneous Symbols and Pictographs"
 msgstr "Vari Simboli e Frecce"
 
 #: ../src/ui/dialog/glyphs.cpp:382
-#, fuzzy
 msgid "Emoticons"
-msgstr "Movimento"
+msgstr "Emoticons"
 
 #: ../src/ui/dialog/glyphs.cpp:383
 msgid "Ornamental Dingbats"
@@ -19187,7 +19180,7 @@ msgstr "Forme geometriche"
 #: ../src/ui/dialog/glyphs.cpp:387
 #, fuzzy
 msgid "Supplemental Arrows-C"
-msgstr "Supplemento Frecce A"
+msgstr "Supplemento Frecce C"
 
 #: ../src/ui/dialog/glyphs.cpp:388
 msgid "Supplemental Symbols and Pictographs"
@@ -19845,37 +19838,36 @@ msgstr "Cartelle caratteri"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:490
 msgid "Use Inkscape's fonts directory"
-msgstr "Usa la cartella dei caratteri di Inkscape"
+msgstr "Usa la cartella dei font di Inkscape"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:491
 msgid ""
 "Load additional fonts from \"fonts\" directory located in Inkscape's global "
 "\"share\" directory"
 msgstr ""
-"Carica caratteri aggiuntivi dalla cartella \"fonts\" locata nella cartella "
+"Carica font aggiuntivi dalla cartella \"fonts\" locata nella cartella "
 "\"share\" globale di Inkscape"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:492
 msgid "Use user's fonts directory"
-msgstr "Usa la cartella dei caratteri utente"
+msgstr "Usa la cartella dei font utente"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:493
 msgid ""
 "Load additional fonts from \"fonts\" directory located in Inkscape's user "
 "configuration directory"
 msgstr ""
-"Carica caratteri aggiuntivi dalla cartella \"fonts\" locata nella cartella "
+"Carica font aggiuntivi dalla cartella \"fonts\" locata nella cartella "
 "della configurazione utente di Inkscape"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:495
 msgid "Additional font directories"
-msgstr "Cartelle caratteri aggiuntive"
+msgstr "Cartelle font aggiuntivi"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:495
 msgid "Load additional fonts from custom locations (one path per line)"
 msgstr ""
-"Carica caratteri aggiuntivi da locazioni personalizzate (un percorso per "
-"riga)"
+"Carica font aggiuntivi da locazioni personalizzate (un percorso per riga)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:501
 msgid "Spray"
@@ -21784,6 +21776,8 @@ msgid ""
 "Initial state of snapping in new documents and non-Inkscape SVGs. Snap "
 "status is subsequently saved per-document."
 msgstr ""
+"Stato iniziale dell'aggancio per i documenti nuovi e gli SVG non di "
+"Inkscape. Lo stato è poi salvato nel documento."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1831
 msgid "Snap indicator"
@@ -22051,19 +22045,20 @@ msgstr ""
 "duplicato invece che al vecchio originale"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1929
-#, fuzzy
 msgid "Unlinking clones"
-msgstr "Scollega clone"
+msgstr "Scollega cloni"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1930
 msgid "Path operations unlink clones"
-msgstr ""
+msgstr "Operazioni su tracciato scollegano cloni"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1932
 msgid ""
 "The following path operations will unlink clones: Stroke to path, Object to "
 "path, Boolean operations, Combine, Break apart"
 msgstr ""
+"Le seguenti operazioni su tracciato scollegheranno i cloni: Da contorno a "
+"tracciato, Da oggetto a tracciato, operazioni booleane, Combina, Separa"
 
 #. TRANSLATORS: Heading for the Inkscape Preferences "Clones" Page
 #: ../src/ui/dialog/inkscape-preferences.cpp:1935
@@ -22653,19 +22648,16 @@ msgid "Location of the user’s symbols"
 msgstr "Posizione dei simboli"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2570
-#, fuzzy
 msgid "Open paint servers folder"
-msgstr "Apri file HPGL per plotter"
+msgstr "Apre la cartella delle trame"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2572
-#, fuzzy
 msgid "User paint servers: "
-msgstr "Estensioni utente: "
+msgstr "Trame: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2573
-#, fuzzy
 msgid "Location of the user’s paint servers"
-msgstr "Posizione delle estensioni dell'utente"
+msgstr "Posizione delle trame dell'utente"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2576
 msgid "Open palettes folder"
@@ -22700,9 +22692,8 @@ msgid "User UI: "
 msgstr "UI: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2588
-#, fuzzy
 msgid "Location of the user’s user interface description files"
-msgstr "Posizione del file di preferenze dell'utente"
+msgstr "Posizione del file di descrizione dell'interfaccia dell'utente"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2592
 msgid "User cache: "
@@ -23501,9 +23492,8 @@ msgid "Select Highlight Color"
 msgstr "Seleziona colore di evidenziazione"
 
 #: ../src/ui/dialog/paint-servers.cpp:75
-#, fuzzy
 msgid "All paint servers"
-msgstr "Tutti inattivi"
+msgstr "Tutte le trame"
 
 #: ../src/ui/dialog/paint-servers.cpp:76 ../src/ui/dialog/symbols.cpp:114
 msgid "Current document"
@@ -23511,7 +23501,7 @@ msgstr "Documento attuale"
 
 #: ../src/ui/dialog/paint-servers.cpp:92
 msgid "Server"
-msgstr ""
+msgstr "Trama"
 
 #: ../src/ui/dialog/paint-servers.cpp:104
 msgid "Change"
@@ -24301,9 +24291,8 @@ msgid "_Font"
 msgstr "_Carattere"
 
 #: ../src/ui/dialog/text-edit.cpp:68
-#, fuzzy
 msgid "_Features"
-msgstr "Texture"
+msgstr "_Funzionalità"
 
 #: ../src/ui/dialog/text-edit.cpp:69
 msgid "Set as _default"
@@ -29461,7 +29450,6 @@ msgid "Opacity (%)"
 msgstr "Opacità (%)"
 
 #: ../src/ui/widget/font-selector-toolbar.cpp:143
-#, fuzzy
 msgid "Select all text with this text family"
 msgstr "Seleziona tutti i testi con questa famiglia carattere"
 
@@ -29527,55 +29515,47 @@ msgstr "Apice"
 #: ../src/ui/widget/font-variants.cpp:165
 msgctxt "Font feature"
 msgid "Capitals"
-msgstr "Maiuscole"
+msgstr "Maiuscoli"
 
 #: ../src/ui/widget/font-variants.cpp:167
-#, fuzzy
 msgctxt "Font feature"
 msgid "Small"
-msgstr "Piccola"
+msgstr "Maiuscoletto"
 
 #: ../src/ui/widget/font-variants.cpp:168
-#, fuzzy
 msgctxt "Font feature"
 msgid "All small"
-msgstr "All small"
+msgstr "Tutto maiuscoletto"
 
 #: ../src/ui/widget/font-variants.cpp:169
-#, fuzzy
 msgctxt "Font feature"
 msgid "Petite"
 msgstr "Petite"
 
 #: ../src/ui/widget/font-variants.cpp:170
-#, fuzzy
 msgctxt "Font feature"
 msgid "All petite"
-msgstr "All petite"
+msgstr "Tutto petite"
 
 #: ../src/ui/widget/font-variants.cpp:171
-#, fuzzy
 msgctxt "Font feature"
 msgid "Unicase"
 msgstr "Unicase"
 
 #: ../src/ui/widget/font-variants.cpp:172
-#, fuzzy
 msgctxt "Font feature"
 msgid "Titling"
 msgstr "Titling"
 
 #: ../src/ui/widget/font-variants.cpp:174
-#, fuzzy
 msgctxt "Font feature"
 msgid "Numeric"
 msgstr "Numeri"
 
 #: ../src/ui/widget/font-variants.cpp:175
-#, fuzzy
 msgctxt "Font feature"
 msgid "Lining"
-msgstr "Maiuscoli"
+msgstr "Lining"
 
 #: ../src/ui/widget/font-variants.cpp:176
 msgctxt "Font feature"
@@ -29589,7 +29569,6 @@ msgstr "Stile predefinito"
 
 #: ../src/ui/widget/font-variants.cpp:178
 #: ../src/ui/widget/font-variants.cpp:197
-#, fuzzy
 msgctxt "Font feature"
 msgid "Proportional"
 msgstr "Proporzionale"
@@ -29600,7 +29579,6 @@ msgid "Tabular"
 msgstr "Tabulare"
 
 #: ../src/ui/widget/font-variants.cpp:180
-#, fuzzy
 msgctxt "Font feature"
 msgid "Default Width"
 msgstr "Larghezza predefinita"
@@ -29611,13 +29589,11 @@ msgid "Diagonal"
 msgstr "Diagonali"
 
 #: ../src/ui/widget/font-variants.cpp:182
-#, fuzzy
 msgctxt "Font feature"
 msgid "Stacked"
 msgstr "Impilate"
 
 #: ../src/ui/widget/font-variants.cpp:183
-#, fuzzy
 msgctxt "Font feature"
 msgid "Default Fractions"
 msgstr "Frazioni predefinite"
@@ -29633,10 +29609,9 @@ msgid "Slashed Zero"
 msgstr "Zero barrato"
 
 #: ../src/ui/widget/font-variants.cpp:187
-#, fuzzy
 msgctxt "Font feature"
 msgid "East Asian"
-msgstr "Gaussiano"
+msgstr "Asia orientale"
 
 #: ../src/ui/widget/font-variants.cpp:188
 #: ../src/ui/widget/font-variants.cpp:195
@@ -29665,39 +29640,34 @@ msgid "JIS04"
 msgstr "JIS04"
 
 #: ../src/ui/widget/font-variants.cpp:193
-#, fuzzy
 msgctxt "Font feature"
 msgid "Simplified"
-msgstr "Semplifica"
+msgstr "Semplificato"
 
 #: ../src/ui/widget/font-variants.cpp:194
-#, fuzzy
 msgctxt "Font feature"
 msgid "Traditional"
-msgstr "Transizioni"
+msgstr "Tradizionale"
 
 #: ../src/ui/widget/font-variants.cpp:196
-#, fuzzy
 msgctxt "Font feature"
 msgid "Full Width"
-msgstr "Larghezza predefinita"
+msgstr "Larghezza completa"
 
 #: ../src/ui/widget/font-variants.cpp:198
 msgctxt "Font feature"
 msgid "Ruby"
-msgstr ""
+msgstr "Ruby"
 
 #: ../src/ui/widget/font-variants.cpp:200
-#, fuzzy
 msgctxt "Font feature"
 msgid "Feature Settings"
-msgstr "Font Feature Settings"
+msgstr "Impostazioni funzionalità"
 
 #: ../src/ui/widget/font-variants.cpp:201
-#, fuzzy
 msgctxt "Font feature"
 msgid "Selection has different Feature Settings!"
-msgstr "La selezione ha Feature Settings differenti!"
+msgstr "La selezione ha delle impostazioni differenti!"
 
 #: ../src/ui/widget/font-variants.cpp:217
 msgid "Common ligatures. On by default. OpenType tables: 'liga', 'clig'"
@@ -29717,7 +29687,7 @@ msgstr "Legature contestuali. Attive di default. OpenType table: 'calt'"
 
 #: ../src/ui/widget/font-variants.cpp:274
 msgid "Normal position."
-msgstr "Posizione normale."
+msgstr "Posizione normale"
 
 #: ../src/ui/widget/font-variants.cpp:275
 msgid "Subscript. OpenType table: 'subs'"
@@ -29729,7 +29699,7 @@ msgstr "Apice. OpenType table: 'sups'"
 
 #: ../src/ui/widget/font-variants.cpp:304
 msgid "Normal capitalization."
-msgstr "Maiuscole normali."
+msgstr "Maiuscole normali"
 
 #: ../src/ui/widget/font-variants.cpp:305
 msgid "Small-caps (lowercase). OpenType table: 'smcp'"
@@ -29761,18 +29731,18 @@ msgstr ""
 msgid ""
 "Unicase (small caps for uppercase, normal for lowercase). OpenType table: "
 "'unic'"
-msgstr "Le lettere sono in formato unicase. OpenType Table: 'unic'"
+msgstr "Le lettere sono in formato Unicase. OpenType Table: 'unic'"
 
 #: ../src/ui/widget/font-variants.cpp:310
 msgid ""
 "Titling caps (lighter-weight uppercase for use in titles). OpenType table: "
 "'titl'"
 msgstr ""
-"Le lettere sono in un formato apposito per i titoli. OpenType table: 'titl' "
+"Le lettere sono in un formato apposito per i titoli. OpenType table: 'titl'"
 
 #: ../src/ui/widget/font-variants.cpp:350
 msgid "Normal style."
-msgstr "Stile normale."
+msgstr "Stile normale"
 
 #: ../src/ui/widget/font-variants.cpp:351
 msgid "Lining numerals. OpenType table: 'lnum'"
@@ -29784,7 +29754,7 @@ msgstr "Numeri elzeviriani. OpenType table: 'onum'"
 
 #: ../src/ui/widget/font-variants.cpp:353
 msgid "Normal widths."
-msgstr "Larghezze normali."
+msgstr "Larghezze normali"
 
 #: ../src/ui/widget/font-variants.cpp:354
 msgid "Proportional width numerals. OpenType table: 'pnum'"
@@ -29796,7 +29766,7 @@ msgstr "Larghezza numeri fissa. OpenType table: 'tnum'"
 
 #: ../src/ui/widget/font-variants.cpp:356
 msgid "Normal fractions."
-msgstr "Frazioni normali."
+msgstr "Frazioni normali"
 
 #: ../src/ui/widget/font-variants.cpp:357
 msgid "Diagonal fractions. OpenType table: 'frac'"
@@ -29816,62 +29786,52 @@ msgstr "Zeri barrati. OpenType table: 'zero'"
 
 #: ../src/ui/widget/font-variants.cpp:422
 msgid "Default variant."
-msgstr "Variante predefinita."
+msgstr "Variante predefinita"
 
 #: ../src/ui/widget/font-variants.cpp:423
-#, fuzzy
 msgid "JIS78 forms. OpenType table: 'jp78'."
-msgstr "Pedice. OpenType table: 'sups'"
+msgstr "Forme JIS78. OpenType table: 'jp78'"
 
 #: ../src/ui/widget/font-variants.cpp:424
-#, fuzzy
 msgid "JIS83 forms. OpenType table: 'jp83'."
-msgstr "Pedice. OpenType table: 'sups'"
+msgstr "Forme JIS83. OpenType table: 'jp83'"
 
 #: ../src/ui/widget/font-variants.cpp:425
-#, fuzzy
 msgid "JIS90 forms. OpenType table: 'jp90'."
-msgstr "Pedice. OpenType table: 'sups'"
+msgstr "Forme JIS90. OpenType table: 'jp90'"
 
 #: ../src/ui/widget/font-variants.cpp:426
-#, fuzzy
 msgid "JIS2004 forms. OpenType table: 'jp04'."
-msgstr "Pedice. OpenType table: 'sups'"
+msgstr "Forme JIS2004. OpenType table: 'jp04'"
 
 #: ../src/ui/widget/font-variants.cpp:427
-#, fuzzy
 msgid "Simplified forms. OpenType table: 'smpl'."
-msgstr "Pedice. OpenType table: 'sups'"
+msgstr "Forme semplificate. OpenType table: 'smpl'"
 
 #: ../src/ui/widget/font-variants.cpp:428
-#, fuzzy
 msgid "Traditional forms. OpenType table: 'trad'."
-msgstr "Frazioni diagonali. OpenType table: 'frac'"
+msgstr "Forme tradizionali. OpenType table: 'trad'"
 
 #: ../src/ui/widget/font-variants.cpp:429
 msgid "Default width."
-msgstr "Larghezza predefinita."
+msgstr "Larghezza predefinita"
 
 #: ../src/ui/widget/font-variants.cpp:430
-#, fuzzy
 msgid "Full width variants. OpenType table: 'fwid'."
-msgstr "Larghezza numeri fissa. OpenType table: 'tnum'"
+msgstr "Varianti a larghezza completa. OpenType table: 'fwid'"
 
 #: ../src/ui/widget/font-variants.cpp:431
-#, fuzzy
 msgid "Proportional width variants. OpenType table: 'pwid'."
-msgstr "Larghezza numeri proporzionale. OpenType table: 'pnum'"
+msgstr "Varianti a larghezza proporzionale. OpenType table: 'pwid'"
 
 #: ../src/ui/widget/font-variants.cpp:432
-#, fuzzy
 msgid "Ruby variants. OpenType table: 'ruby'."
-msgstr "Apice. OpenType table: 'subs'"
+msgstr "Varianti Ruby. OpenType table: 'ruby'"
 
 #: ../src/ui/widget/font-variants.cpp:482
-#, fuzzy
 msgid "Feature settings in CSS form (e.g. \"wxyz\" or \"wxyz\" 3)."
 msgstr ""
-"Font Feature Settings in formato CSS. Non viene effettuato alcun controllo."
+"Impostazioni caratteristiche in formato CSS (e.g. \"wxyz\" o \"wxyz\" 3)"
 
 #: ../src/ui/widget/layer-selector.cpp:115
 msgid "Toggle current layer visibility"
@@ -29894,7 +29854,6 @@ msgid "Proprietary"
 msgstr "Proprietario"
 
 #: ../src/ui/widget/licensor.cpp:39
-#, fuzzy
 msgctxt "MetadataLicence"
 msgid "Other"
 msgstr "Altro"
@@ -29975,7 +29934,7 @@ msgstr "Margine inferiore"
 
 #: ../src/ui/widget/page-sizer.cpp:54
 msgid "Scale _x:"
-msgstr "Scala _x:"
+msgstr "Scala _X:"
 
 #: ../src/ui/widget/page-sizer.cpp:54
 msgid "Scale X"
@@ -29983,7 +29942,7 @@ msgstr "Scala X"
 
 #: ../src/ui/widget/page-sizer.cpp:55
 msgid "Scale _y:"
-msgstr "Scala _y:"
+msgstr "Scala _Y:"
 
 #: ../src/ui/widget/page-sizer.cpp:55
 msgid ""
@@ -32657,14 +32616,12 @@ msgid "Select symbol from a symbols palette"
 msgstr "Seleziona simbolo da una paletta di simboli"
 
 #: ../src/verbs.cpp:3057
-#, fuzzy
 msgid "_Paint Servers..."
-msgstr "Dispositivi di _input..."
+msgstr "_Trame..."
 
 #: ../src/verbs.cpp:3059
-#, fuzzy
 msgid "Select paint server from a collection"
-msgstr "Cancella oggetti spruzzati dalla selezione"
+msgstr "Seleziona una trama da una collezione"
 
 #: ../src/verbs.cpp:3060
 msgid "Transfor_m..."
@@ -32701,7 +32658,8 @@ msgstr "Cronologia modifiche"
 #: ../src/verbs.cpp:3069
 msgid "View and select font family, font size and other text properties"
 msgstr ""
-"Mostra e modifica il tipo di font, la dimensione ed altre proprietà del testo"
+"Mostra e modifica il tipo di carattere, la dimensione ed altre proprietà del "
+"testo"
 
 #: ../src/verbs.cpp:3071
 msgid "_XML Editor..."
@@ -36077,7 +36035,6 @@ msgstr ""
 
 #: ../share/extensions/gcodetools_area.inx:33
 #: ../share/extensions/hershey.inx:67
-#, fuzzy
 msgid "Action:"
 msgstr "Azione:"
 
@@ -37274,13 +37231,15 @@ msgid "Hershey Text"
 msgstr "Testo Hershey"
 
 #: ../share/extensions/hershey.inx:9
-#, fuzzy
 msgid ""
 "\n"
 "Hershey Text\n"
-msgstr "Testo Hershey"
+msgstr ""
+"\n"
+"Testo Hershey\n"
 
 #: ../share/extensions/hershey.inx:13
+#, fuzzy
 msgid ""
 "A tool to replace text with stroke fonts\n"
 "\n"
@@ -37288,119 +37247,115 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
+"Strumento per sostituire il testo con tratti\n"
+"\n"
+"Versione 3.0.2, 2019-09-07\n"
+"\n"
+"\n"
 
 #: ../share/extensions/hershey.inx:20
-#, fuzzy
 msgid "Font face:"
-msgstr "Carattere: "
+msgstr "Carattere:"
 
 #: ../share/extensions/hershey.inx:21
-#, fuzzy
 msgid "Hershey Sans 1-stroke"
-msgstr "Sans 1-tratto"
+msgstr "Hershey Sans 1-tratto"
 
 #
 # File: ../share/extensions/hershey.inx, line: 25
 #: ../share/extensions/hershey.inx:22
 msgid "Hershey Sans medium"
-msgstr ""
+msgstr "Hershey Sans medio"
 
 #: ../share/extensions/hershey.inx:24
-#, fuzzy
 msgid "Hershey Serif medium"
-msgstr "Serif medio"
+msgstr "Hershey Serif medio"
 
 #: ../share/extensions/hershey.inx:25
-#, fuzzy
 msgid "Hershey Serif medium italic"
-msgstr "Serif medio corsivo"
+msgstr "Hershey Serif medio corsivo"
 
 #: ../share/extensions/hershey.inx:27
-#, fuzzy
 msgid "Hershey Serif bold"
-msgstr "Serif grassetto"
+msgstr "Hershey Serif grassetto"
 
 #: ../share/extensions/hershey.inx:28
-#, fuzzy
 msgid "Hershey Serif bold italic"
-msgstr "Serif grassetto corsivo"
+msgstr "Hershey Serif grassetto corsivo"
 
 #: ../share/extensions/hershey.inx:30
-#, fuzzy
 msgid "Hershey Script 1-stroke"
-msgstr "Script 1-tratto"
+msgstr "Hershey Script 1-tratto"
 
 #: ../share/extensions/hershey.inx:31
-#, fuzzy
 msgid "Hershey Script medium"
-msgstr "Script medio"
+msgstr "Hershey Script medio"
 
 #: ../share/extensions/hershey.inx:33
-#, fuzzy
 msgid "Hershey Gothic English"
-msgstr "Inglese gotico"
+msgstr "Hershey Inglese gotico"
 
 #
 # File: ../share/extensions/hershey.inx, line: 39
 #. Block below this are derived from fonts licensed under SIL Open Font License
 #: ../share/extensions/hershey.inx:36
 msgid "EMS Allure"
-msgstr ""
+msgstr "EMS Allure"
 
 #
 # File: ../share/extensions/hershey.inx, line: 41
 #: ../share/extensions/hershey.inx:38
 msgid "EMS Elfin"
-msgstr ""
+msgstr "EMS Elfin"
 
 #
 # File: ../share/extensions/hershey.inx, line: 42
 #: ../share/extensions/hershey.inx:39
 msgid "EMS Felix"
-msgstr ""
+msgstr "EMS Felix"
 
 #
 # File: ../share/extensions/hershey.inx, line: 44
 #: ../share/extensions/hershey.inx:41
 msgid "EMS Nixish"
-msgstr ""
+msgstr "EMS Nixish"
 
 #
 # File: ../share/extensions/hershey.inx, line: 45
 #: ../share/extensions/hershey.inx:42
 msgid "EMS Nixish Italic"
-msgstr ""
+msgstr "EMS Nixish Corsivo"
 
 #
 # File: ../share/extensions/hershey.inx, line: 47
 #: ../share/extensions/hershey.inx:44
 msgid "EMS Osmotron"
-msgstr ""
+msgstr "EMS Osmotron"
 
 #
 # File: ../share/extensions/hershey.inx, line: 48
 #: ../share/extensions/hershey.inx:45
 msgid "EMS Readability"
-msgstr ""
+msgstr "EMS Readability"
 
 #
 # File: ../share/extensions/hershey.inx, line: 49
 #: ../share/extensions/hershey.inx:46
 msgid "EMS Readability Italic"
-msgstr ""
+msgstr "EMS Readability Corsivo"
 
 #
 # File: ../share/extensions/hershey.inx, line: 50
 #: ../share/extensions/hershey.inx:47
 msgid "EMS Tech"
-msgstr ""
+msgstr "EMS Tech"
 
 #
 # File: ../share/extensions/hershey.inx, line: 53
 #. Block above this are derived from fonts licensed under SIL Open Font License
 #: ../share/extensions/hershey.inx:50
 msgid "Other (given below)"
-msgstr ""
+msgstr "Altro (vedi sotto)"
 
 #
 # File: ../share/extensions/hershey.inx, line: 56
@@ -37409,11 +37364,12 @@ msgid ""
 "\n"
 "Other SVG font name or path (if \"Other\" selected above):\n"
 msgstr ""
+"\n"
+"Nome o percorso di un altro font SVG (se \"Altro\" è selezionato):\n"
 
 #: ../share/extensions/hershey.inx:56
-#, fuzzy
 msgid "Name/Path:"
-msgstr "Nome:"
+msgstr "Nome/Percorso:"
 
 #: ../share/extensions/hershey.inx:58 ../share/extensions/text_split.inx:12
 msgid "Preserve original text"
@@ -37423,7 +37379,7 @@ msgstr "Mantieni il testo originale"
 # File: ../share/extensions/hershey.inx, line: 65
 #: ../share/extensions/hershey.inx:62
 msgid "Utilities"
-msgstr ""
+msgstr "Strumenti"
 
 #
 # File: ../share/extensions/hershey.inx, line: 66
@@ -37433,17 +37389,19 @@ msgid ""
 "Hershey Text Utility Functions\n"
 "  "
 msgstr ""
+"\n"
+"Strumenti testo Hershey\n"
+" "
 
 #: ../share/extensions/hershey.inx:68
-#, fuzzy
 msgid "Generate font table"
-msgstr "Genera file di log"
+msgstr "Genera tabella font"
 
 #
 # File: ../share/extensions/hershey.inx, line: 72
 #: ../share/extensions/hershey.inx:69
 msgid "Generate glyph table in selected font"
-msgstr ""
+msgstr "Genera tabella glifi del carattere selezionato"
 
 #
 # File: ../share/extensions/hershey.inx, line: 75
@@ -37453,6 +37411,9 @@ msgid ""
 "\n"
 "Sample text to use when generating font table:"
 msgstr ""
+"\n"
+"\n"
+"Testo d'esempio per generare la tabella caratteri:"
 
 #: ../share/extensions/hershey.inx:75
 #: ../share/extensions/render_alphabetsoup.inx:6
@@ -39106,7 +39067,7 @@ msgstr "Cartella di lavoro non valida: %s"
 
 #: ../share/extensions/media_zip.inx:7
 msgid "Add font list"
-msgstr "Aggiungi lista caratteri"
+msgstr "Aggiungi lista font"
 
 #: ../share/extensions/media_zip.inx:11
 msgid "Compressed Inkscape SVG with media (*.zip)"
@@ -40977,14 +40938,12 @@ msgid "Seamless Pattern Procedural"
 msgstr ""
 
 #: ../share/extensions/seamless_pattern_procedural.inx:14
-#, fuzzy
 msgid "Seamless Pattern..."
-msgstr "Motivo continuo"
+msgstr "Motivo continuo..."
 
 #: ../share/extensions/seamless_pattern_procedural.inx:16
-#, fuzzy
 msgid "Create seamless patterns."
-msgstr "Motivo continuo"
+msgstr "Crea un motivo continuo."
 
 #: ../share/extensions/seamless_pattern_procedural.inx:18
 #, fuzzy
