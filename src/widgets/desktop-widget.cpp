@@ -2400,6 +2400,9 @@ SPDesktopWidget::on_ruler_box_button_release_event(GdkEventButton *event, Gtk::E
 bool
 SPDesktopWidget::on_ruler_box_button_press_event(GdkEventButton *event, Gtk::EventBox *widget, bool horiz)
 {
+    if (_ruler_clicked) // event triggerred on a double click: do no process the click
+        return false;
+
     int wx, wy;
 
     GdkWindow *window = gtk_widget_get_window(GTK_WIDGET(_canvas));
