@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+  width="100%"
+  height="100%"
+  viewBox="0 0 600 600">
+
+  <style type="text/css">
+
+    @font-face {
+      font-family: "Estedad";
+      src: url("fonts/Estedad-Medium.ttf");
+    }
+
+    @font-face {
+      font-family: "Noto Sans Hebrew";
+      src: url("fonts/NotoSansHebrew-Regular.ttf");
+    }
+
+    @font-face {
+      font-family: "Noto Sans";
+      src: url("fonts/NotoSans-Regular.ttf");
+    }
+
+    @font-face {
+      font-family: "Noto Sans CJK JP";
+      src: url("fonts/NotoSansCJKjp-Regular.otf");
+    }
+
+    @font-face {
+      font-family: "Lohit Telugu";
+      src: url("fonts/Lohit-Telugu.ttf");
+    }
+
+  </style>
+
+  <g style="fill:none;stroke:black;stroke-width:0.5px;font-size:42px;font-family:serif;text-anchor:middle">
+
+    <!-- bug https://gitlab.com/inkscape/inkscape/issues/469 -->
+    <text xml:space="preserve"
+          x="300"
+          y="50"
+          style="font-family:Estedad;direction:rtl">نیرو</text>
+
+    <text xml:space="preserve"
+          x="300"
+          y="100"
+          style="font-family:Estedad;direction:rtl">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</text>
+
+    <text xml:space="preserve"
+          x="300"
+          y="150"
+          style="font-family:'Noto Sans Hebrew';direction:rtl">שָׁלוֹם</text>
+
+    <text xml:space="preserve"
+          x="300"
+          y="200"
+          style="font-family:'Noto Sans Hebrew';direction:rtl">חִירִיק</text>
+
+    <text xml:space="preserve"
+          x="300"
+          y="250"
+          style="font-family:'Noto Sans'">â â̂ â â̂</text>
+
+    <text xml:space="preserve"
+          x="300"
+          y="300"
+          style="font-family:'Noto Sans'">a ḁ ą ą</text>
+
+    <text xml:space="preserve"
+          x="300"
+          y="350"
+          style="font-family:'Noto Sans CJK JP'">ヘ ペ ペ</text>
+
+    <text xml:space="preserve"
+          x="300"
+          y="400"
+          style="font-family:'Lohit Telugu'">తెలుగులో</text>
+
+    <!-- Teluga bug https://gitlab.com/inkscape/inkscape/issues/394 -->
+    <text xml:space="preserve"
+          x="300"
+          y="450"
+          style="font-family:'Lohit Telugu'">గ్రంథాలయం</text>
+
+    <!-- Teluga bug https://launchpadlibrarian.net/167162208/inkscape-telugu-text.svg -->
+    <text xml:space="preserve"
+          x="300"
+          y="500"
+          style="font-family:'Lohit Telugu'">ఇంక్‌స్కేప్</text>
+  </g>
+</svg>

@@ -14,6 +14,9 @@ set(RENDERING_TESTS
     selector-important-002
     selector-important-003
     test-dont-crash
+    # text-shaping
+    ## Expected rendering generated with Pango 1.44. Currently fails with
+    ## CI as CI uses Pango 1.40. Enable after updating CI to Ubuntu 20.04.
 )
 
 
