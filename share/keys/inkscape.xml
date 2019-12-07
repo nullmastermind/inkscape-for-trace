@@ -253,8 +253,9 @@ override) the bindings in the main default.xml.
   <bind key="F11" action="FocusToggle" modifiers="Shift" display="true" />
   <bind key="F11" action="FullScreenFocus" modifiers="Primary" display="true" />
 
-  <bind key="Tab" modifiers="Primary" action="NextWindow" display="true" />
-  <bind key="ISO_Left_Tab" modifiers="Primary" action="PrevWindow" display="true" />
+  <bind key="Tab" modifiers="Ctrl" action="NextWindow" display="true" />
+  <bind key="ISO_Left_Tab" modifiers="Ctrl" action="PrevWindow" display="true" />
+  <bind key="grave" modifiers="Meta" action="NextWindow" /> <!-- macOS standard -->
 
   <bind key="numbersign" modifiers="Shift" action="ToggleGrid" /> <!-- # -->
   <bind key="numbersign" action="ToggleGrid" display="true" />
