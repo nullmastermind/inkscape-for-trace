@@ -65,6 +65,7 @@
 #include "ui/dialog/dialog-manager.h"
 #include "ui/interface.h" // Only for getLayoutPrefPath
 #include "ui/tool-factory.h"
+#include "ui/tools/tool-base.h"
 #include "ui/tools/box3d-tool.h"
 #include "ui/tools/select-tool.h"
 
@@ -1934,6 +1935,12 @@ _onSelectionChanged
 static gint
 _arena_handler (SPCanvasArena */*arena*/, Inkscape::DrawingItem *ai, GdkEvent *event, SPDesktop *desktop)
 {
+    if (event->type == GDK_KEY_PRESS && 
+        Inkscape::UI::Tools::get_latin_keyval(&event->key) == GDK_KEY_space &&
+        desktop->event_context->space_panning) 
+    {
+        return true;
+    }
     if (ai) {
         SPItem *spi = ai->getItem();
         return sp_event_context_item_handler (desktop->event_context, spi, event);
