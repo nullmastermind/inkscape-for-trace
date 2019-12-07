@@ -39,11 +39,14 @@
 #include "ui/view/view.h"
 #include "ui/uxmanager.h"   // To Do: Convert to actions
 
+#ifdef GDK_WINDOWING_QUARTZ
+#include <gtkosxapplication.h>
+#endif
+
 // ================= Common ====================
 
 std::vector<std::pair<std::pair<unsigned int, Gtk::MenuItem *>, Inkscape::UI::View::View *>> menuitems;
 unsigned int lastverb = -1;
-bool updatingtask = false;
 
 
 /**
@@ -58,6 +61,22 @@ Gtk::MenuItem *get_menu_item_for_verb(unsigned int verb, Inkscape::UI::View::Vie
     }
     return nullptr;
 }
+
+#ifdef GDK_WINDOWING_QUARTZ
+/**
+ * Update menubar for macOS
+ *
+ * Can be used as a glib timeout callback.
+ */
+static gboolean sync_menubar(gpointer = nullptr)
+{
+    auto osxapp = gtkosx_application_get();
+    if (osxapp) {
+        gtkosx_application_sync_menubar(osxapp);
+    }
+    return false;
+}
+#endif
 
 // Sets tip
 static void
@@ -80,123 +99,17 @@ static void item_activate(Gtk::MenuItem *menuitem, SPAction *action)
         lastverb = -1;
         return;
     }
-#ifdef GDK_WINDOWING_QUARTZ
-    bool nocheck = true;
-    for (auto menu : menuitems) {
-        if (menu.second == SP_ACTIVE_DESKTOP) {
-            Gtk::CheckMenuItem *check = dynamic_cast<Gtk::CheckMenuItem *>(menu.first.second);
-            if (check) {
-                if ((menu.first.first == SP_VERB_VIEW_COLOR_MODE_NORMAL ||
-                     menu.first.first == SP_VERB_VIEW_COLOR_MODE_GRAYSCALE) &&
-                     (action->verb->get_code() == SP_VERB_VIEW_COLOR_MODE_NORMAL ||
-                      action->verb->get_code() == SP_VERB_VIEW_COLOR_MODE_GRAYSCALE)) 
-                {
-                    if (action->verb->get_code() == menu.first.first) {
-                        lastverb = action->verb->get_code();
-                        sp_action_perform(action, nullptr);
-                        check->property_active() = true;
-                        lastverb = -1;
-                        nocheck = false;
-                    } else {
-                        lastverb = menu.first.first;
-                        check->property_active() = false;
-                        lastverb = -1;
-                    }
-                } else if ((menu.first.first == SP_VERB_VIEW_MODE_NORMAL ||
-                            menu.first.first == SP_VERB_VIEW_MODE_NO_FILTERS ||
-                            menu.first.first == SP_VERB_VIEW_MODE_OUTLINE ||
-                            menu.first.first == SP_VERB_VIEW_MODE_VISIBLE_HAIRLINES) &&
-                           (action->verb->get_code() == SP_VERB_VIEW_MODE_NORMAL ||
-                            action->verb->get_code() == SP_VERB_VIEW_MODE_NO_FILTERS ||
-                            action->verb->get_code() == SP_VERB_VIEW_MODE_OUTLINE ||
-                            action->verb->get_code() == SP_VERB_VIEW_MODE_VISIBLE_HAIRLINES))
-                {
-                    if (action->verb->get_code() == menu.first.first) {
-                        lastverb = action->verb->get_code();
-                        sp_action_perform(action, nullptr);
-                        check->property_active() = true;
-                        lastverb = -1;
-                        nocheck = false;
-                    } else {
-                        lastverb = menu.first.first;
-                        check->property_active() = false;
-                        lastverb = -1;
-                    }
-                } else if (action->verb->get_code() == menu.first.first) {
-                    lastverb = action->verb->get_code();
-                    sp_action_perform(action, nullptr);
-                    lastverb = -1;
-                    nocheck = false;
-                }
-            }
-        }
-    }
-    if (nocheck) {
-        lastverb = action->verb->get_code();
-        sp_action_perform(action, nullptr);
-    }
-#else
     lastverb = action->verb->get_code();
     sp_action_perform(action, nullptr);
-#endif
     lastverb = -1;
+
+#ifdef GDK_WINDOWING_QUARTZ
+    sync_menubar();
+#endif
 }
 
 static void set_menuitems(unsigned int emitting_verb, bool value)
 {
-#ifdef GDK_WINDOWING_QUARTZ
-    unsigned int current_verb = lastverb;
-    for (auto menu : menuitems) {
-        if (menu.second == SP_ACTIVE_DESKTOP) {
-            if (emitting_verb == menu.first.first) {
-                if (emitting_verb == current_verb) {
-                    lastverb = -1;
-                    return;
-                }
-            }
-            Gtk::CheckMenuItem *check = dynamic_cast<Gtk::CheckMenuItem *>(menu.first.second);
-            if (check) {
-                if ((menu.first.first == SP_VERB_VIEW_COLOR_MODE_NORMAL ||
-                     menu.first.first == SP_VERB_VIEW_COLOR_MODE_GRAYSCALE) &&
-                    (emitting_verb == SP_VERB_VIEW_COLOR_MODE_NORMAL ||
-                     emitting_verb == SP_VERB_VIEW_COLOR_MODE_GRAYSCALE))
-                {
-                    if (emitting_verb == menu.first.first) {
-                        lastverb = menu.first.first;
-                        check->property_active() = true;
-                        lastverb = -1;
-                    } else {
-                        lastverb = menu.first.first;
-                        check->property_active() = false;
-                        lastverb = -1;
-                    }
-                } else if ((menu.first.first == SP_VERB_VIEW_MODE_NORMAL ||
-                            menu.first.first == SP_VERB_VIEW_MODE_NO_FILTERS ||
-                            menu.first.first == SP_VERB_VIEW_MODE_OUTLINE ||
-                            menu.first.first == SP_VERB_VIEW_MODE_VISIBLE_HAIRLINES) &&
-                           (emitting_verb == SP_VERB_VIEW_MODE_NORMAL || 
-                            emitting_verb == SP_VERB_VIEW_MODE_NO_FILTERS ||
-                            emitting_verb == SP_VERB_VIEW_MODE_OUTLINE ||
-                            emitting_verb == SP_VERB_VIEW_MODE_VISIBLE_HAIRLINES))
-                {
-                    if (emitting_verb == menu.first.first) {
-                        lastverb = menu.first.first;
-                        check->property_active() = true;
-                        lastverb = -1;
-                    } else {
-                        lastverb = menu.first.first;
-                        check->property_active() = false;
-                        lastverb = -1;
-                    }
-                } else if (emitting_verb == menu.first.first) {
-                    lastverb = menu.first.first;
-                    check->property_active() = value;
-                    lastverb = -1;
-                }
-            }
-        }
-    }
-#else
     for (auto menu : menuitems) {
         if (menu.second == SP_ACTIVE_DESKTOP) {
             if (emitting_verb == menu.first.first) {
@@ -215,7 +128,6 @@ static void set_menuitems(unsigned int emitting_verb, bool value)
             }
         }
     }
-#endif
 }
 
 // Change label name (used in the Undo/Redo menu items).
@@ -356,26 +268,6 @@ checkitem_update(Gtk::CheckMenuItem* menuitem, SPAction* action)
         } else if (id == "ViewCmsToggle") {
             active = dt->colorProfAdjustEnabled();
         }
-#ifdef GDK_WINDOWING_QUARTZ
-        else if (id == "ViewModeNormal") {
-            active = true;
-
-        } else if (id == "ViewModeNoFilters") {
-            active = false;
-
-        } else if (id == "ViewModeOutline") {
-            active = false;
-
-        } else if (id == "ViewModeVisibleHairlines") {
-            active = false;
-
-        } else if (id == "ViewColorModeNormal") {
-            active = true;
-
-        } else if (id == "ViewColorModeGrayscale") {
-            active = false;
-        }            
-#endif
         else if (id == "ViewSplitModeToggle") {
             active = dt->splitMode();
 
@@ -444,34 +336,17 @@ build_menu_check_item_from_verb(SPAction* action)
     return menuitem;
 }
 
-#ifdef GDK_WINDOWING_QUARTZ
-// ================= Tasks Submenu Mac==============
-static void
-task_activated_mac(SPDesktop* dt, int number, std::vector<Gtk::CheckMenuItem *> taskitems)
-{
-    if (updatingtask) {
-        return;
-    }
-    updatingtask = true;
-    Inkscape::UI::UXManager::getInstance()->setTask(dt, number);
-    int counter = 0;
-    for (auto menuitem : taskitems) {
-        if (counter == number) {
-            menuitem->set_active(true);
-        } else {
-            menuitem->set_active(false);
-        }
-        counter++;
-    }
-    updatingtask = false;
-}
-#endif
 
 // ================= Tasks Submenu ==============
 static void
 task_activated(SPDesktop* dt, int number)
 {
     Inkscape::UI::UXManager::getInstance()->setTask(dt, number);
+
+#ifdef GDK_WINDOWING_QUARTZ
+    // call later, crashes during startup if called directly
+    g_idle_add(sync_menubar, nullptr);
+#endif
 }
 
 // Sets tip
@@ -498,27 +373,7 @@ add_tasks(Gtk::MenuShell* menu, SPDesktop* dt)
     };
 
     int active = Inkscape::UI::UXManager::getInstance()->getDefaultTask(dt);
-#ifdef GDK_WINDOWING_QUARTZ
-    std::vector<Gtk::CheckMenuItem *> taskitems;
-    for (unsigned int i = 0; i < 3; ++i) {
-        Gtk::CheckMenuItem *menuitem = Gtk::manage(new Gtk::CheckMenuItem(data[i][0]));
-        if (menuitem) {
-            taskitems.push_back(menuitem);
-        }
-    }
-    for (unsigned int i = 0; i < 3; ++i) {
-        if (active == i) {
-            taskitems[i]->set_active(true);
-        } else {
-            taskitems[i]->set_active(false);
-        }
 
-        taskitems[i]->signal_toggled().connect(
-            sigc::bind(sigc::ptr_fun(&task_activated_mac), dt, i, taskitems));
-
-        menu->append(*taskitems[i]);
-    }
-#else
     Gtk::RadioMenuItem::Group group;
 
     for (unsigned int i = 0; i < 3; ++i) {
@@ -539,7 +394,6 @@ add_tasks(Gtk::MenuShell* menu, SPDesktop* dt)
             menu->append(*menuitem);
         }
     }
-#endif
 }
 
 
@@ -650,36 +504,6 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
                     if (verb != nullptr && verb->get_code() != SP_VERB_NONE) {
 
                         SPAction* action = verb->get_action(Inkscape::ActionContext(view));
-#ifdef GDK_WINDOWING_QUARTZ
-                        if (menu_ptr->attribute("check") != nullptr || menu_ptr->attribute("radio") != nullptr) {
-                            Gtk::MenuItem *menuitem = build_menu_check_item_from_verb(action);
-                            if (menuitem) {
-                                if (menu_ptr->attribute("default") != nullptr) {
-                                    auto checkmenuitem = dynamic_cast<Gtk::CheckMenuItem *>(menuitem);
-                                    if (checkmenuitem) {
-                                        checkmenuitem->set_active(true);
-                                    }
-                                }
-                                std::pair<std::pair<unsigned int, Gtk::MenuItem *>, Inkscape::UI::View::View *>
-                                    verbmenuitem = std::make_pair(std::make_pair(verb->get_code(), menuitem), view);
-                                menuitems.push_back(verbmenuitem);
-                                menu->append(*menuitem);
-                            }
-                        } else {
-                            Gtk::MenuItem *menuitem = build_menu_item_from_verb(action, show_icons_curr);
-                            if (menuitem) {
-                                menu->append(*menuitem);
-                            }
-
-                            // for moving menu items to "Inkscape" menu
-                            switch (verb->get_code()) {
-                                case SP_VERB_DIALOG_DISPLAY:
-                                case SP_VERB_DIALOG_INPUT:
-                                case SP_VERB_HELP_ABOUT:
-                                    menuitems.emplace_back(std::make_pair(verb->get_code(), menuitem), view);
-                            }
-                        }
-#else
                         if (menu_ptr->attribute("check") != nullptr) {
                             Gtk::MenuItem *menuitem = build_menu_check_item_from_verb(action);
                             if (menuitem) {
@@ -707,8 +531,17 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
                             if (menuitem) {
                                 menu->append(*menuitem);
                             }
-                        }
+
+#ifdef GDK_WINDOWING_QUARTZ
+                            // for moving menu items to "Inkscape" menu
+                            switch (verb->get_code()) {
+                                case SP_VERB_DIALOG_DISPLAY:
+                                case SP_VERB_DIALOG_INPUT:
+                                case SP_VERB_HELP_ABOUT:
+                                    menuitems.emplace_back(std::make_pair(verb->get_code(), menuitem), view);
+                            }
 #endif
+                        }
                     } else if (true
 #if !HAVE_ASPELL
                         && !strcmp(verb_name.c_str(), "DialogSpellcheck")
