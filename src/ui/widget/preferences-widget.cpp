@@ -899,7 +899,8 @@ void PrefOpenFolder::onRelatedButtonClickedCallback()
 #ifdef _WIN32
     ShellExecute(NULL, "open", relatedEntry->get_text().c_str(), NULL, NULL, SW_SHOWDEFAULT);
 #elif defined(__APPLE__)
-    system(("open " + relatedEntry->get_text()).c_str());
+    std::vector<std::string> argv = { "open", relatedEntry->get_text().raw() };
+    Glib::spawn_async("", argv, Glib::SpawnFlags::SPAWN_SEARCH_PATH);
 #else
     gchar *path = g_filename_to_uri(relatedEntry->get_text().c_str(), NULL, NULL);
     Glib::ustring xgd = "xdg-open ";
