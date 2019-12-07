@@ -822,13 +822,10 @@ void MeasureTool::toMarkDimension()
     totallengthval = Inkscape::Util::Quantity::convert(totallengthval, "px", unit_name);
     double scale = prefs->getDouble("/tools/measure/scale", 100.0) / 100.0;
     gchar *totallength_str = g_strdup_printf(precision_str.str().c_str(), totallengthval * scale, unit_name.c_str());
+    double textangle = Geom::rad_from_deg(180) - ray.angle();
     if (desktop->is_yaxisdown()) {
-        end_p *= Geom::Scale(1, -1);
-        start_p *= Geom::Scale(1, -1);
-        ray.setPoints(start_p, end_p);
+        textangle = ray.angle() - Geom::rad_from_deg(180);
     }
-    double textangle = ray.angle();
-
     setLabelText(totallength_str, middle, fontsize, textangle, color);
     g_free(totallength_str);
     doc->ensureUpToDate();
@@ -853,6 +850,7 @@ void MeasureTool::setGuide(Geom::Point origin, double angle, const char *label)
     // <sodipodi:guide> stores inverted y-axis coordinates
     if (desktop->is_yaxisdown()) {
         origin[Geom::Y] = doc->getHeight().value("px") - origin[Geom::Y];
+        angle *= -1.0;
     }
 
     origin *= affine;
@@ -1267,10 +1265,7 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, bool to_phantom,
     p.start(start_p_doc);
     p.appendNew<Geom::LineSegment>(end_p_doc);
     lineseg.push_back(p);
-    if (desktop->is_yaxisdown()) {
-        end_p *= Geom::Scale(1, -1);
-        start_p *= Geom::Scale(1, -1);
-    }
+
     double angle = atan2(end_p - start_p);
     double baseAngle = 0;
 
