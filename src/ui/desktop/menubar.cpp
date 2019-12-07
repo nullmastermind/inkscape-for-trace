@@ -46,6 +46,19 @@ unsigned int lastverb = -1;
 bool updatingtask = false;
 
 
+/**
+ * Get menu item (if it was registered in `menuitems`)
+ */
+Gtk::MenuItem *get_menu_item_for_verb(unsigned int verb, Inkscape::UI::View::View *view)
+{
+    for (auto &item : menuitems) {
+        if (item.first.first == verb && item.second == view) {
+            return item.first.second;
+        }
+    }
+    return nullptr;
+}
+
 // Sets tip
 static void
 select_action(SPAction *action)
@@ -656,6 +669,14 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
                             Gtk::MenuItem *menuitem = build_menu_item_from_verb(action, show_icons_curr);
                             if (menuitem) {
                                 menu->append(*menuitem);
+                            }
+
+                            // for moving menu items to "Inkscape" menu
+                            switch (verb->get_code()) {
+                                case SP_VERB_DIALOG_DISPLAY:
+                                case SP_VERB_DIALOG_INPUT:
+                                case SP_VERB_HELP_ABOUT:
+                                    menuitems.emplace_back(std::make_pair(verb->get_code(), menuitem), view);
                             }
                         }
 #else

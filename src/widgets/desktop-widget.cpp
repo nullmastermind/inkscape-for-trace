@@ -957,6 +957,28 @@ sp_desktop_widget_realize (GtkWidget *widget)
         gtkosx_application_set_use_quartz_accelerators(osxapp, false);
         gtkosx_application_set_help_menu(osxapp, _get_help_menu(menushell->gobj()));
         gtkosx_application_set_window_menu(osxapp, nullptr);
+
+        // move some items to "Inkscape" menu
+        unsigned app_menu_verbs[] = {
+            SP_VERB_NONE,
+            SP_VERB_DIALOG_INPUT,
+            SP_VERB_DIALOG_DISPLAY,
+            SP_VERB_NONE,
+            SP_VERB_HELP_ABOUT,
+        };
+        for (auto verb : app_menu_verbs) {
+            GtkWidget *menuitem = nullptr;
+            if (verb == SP_VERB_NONE) {
+                menuitem = gtk_separator_menu_item_new();
+            } else if (auto item = get_menu_item_for_verb(verb, dtw->desktop)) {
+                menuitem = static_cast<Gtk::Widget *>(item)->gobj();
+            } else {
+                continue;
+            }
+            // Don't use index 0 because it appends the app name. Index 1
+            // seems to work perfectly with inserting items in reverse order.
+            gtkosx_application_insert_app_menu_item(osxapp, menuitem, 1);
+        }
     }
 #endif
 }

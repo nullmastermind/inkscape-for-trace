@@ -19,6 +19,7 @@
 
 namespace Gtk {
   class MenuBar;
+  class MenuItem;
 }
 
 namespace Inkscape {
@@ -31,6 +32,7 @@ namespace View {
 
 bool getStateFromPref(SPDesktop *dt, Glib::ustring item);
 Gtk::MenuBar* build_menubar(Inkscape::UI::View::View* view);
+Gtk::MenuItem *get_menu_item_for_verb(unsigned int verb, Inkscape::UI::View::View *);
 
 #endif // SEEN_DESKTOP_MENUBAR_H
 
