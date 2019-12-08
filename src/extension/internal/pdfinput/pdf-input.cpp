@@ -367,11 +367,7 @@ PdfImportDialog::~PdfImportDialog() {
     }
 #endif
     if (_thumb_data) {
-        if (_render_thumb) {
-            delete _thumb_data;
-        } else {
             gfree(_thumb_data);
-        }
     }
 }
 
@@ -616,9 +612,9 @@ void PdfImportDialog::_setPreviewPage(int page) {
     _thumb_height = (int)ceil( height * scale_factor );
     _thumb_rowstride = _thumb_width * 4;
     if (_thumb_data) {
-        delete _thumb_data;
+        gfree(_thumb_data);
     }
-    _thumb_data = new unsigned char[ _thumb_rowstride * _thumb_height ];
+    _thumb_data = reinterpret_cast<unsigned char *>(gmalloc(_thumb_rowstride * _thumb_height));
     if (_cairo_surface) {
         cairo_surface_destroy(_cairo_surface);
     }
