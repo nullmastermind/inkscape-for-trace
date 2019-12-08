@@ -365,6 +365,13 @@ void LPEBool::doEffect(SPCurve *curve)
 {
     Geom::PathVector path_in = curve->get_pathvector();
     SPItem *operand = dynamic_cast<SPItem *>(operand_path.getObject());
+
+    if (operand == SP_ITEM(current_shape)) {
+        g_warning("operand and current shape are the same");
+        operand_path.param_set_default();
+        return;
+    }
+
     if (operand_path.linksToPath() && operand) {
         if (!operand->isHidden() && hide_linked) {
             operand->setHidden(true);
