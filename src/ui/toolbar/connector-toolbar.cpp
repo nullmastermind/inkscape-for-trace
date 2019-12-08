@@ -233,7 +233,7 @@ ConnectorToolbar::orthogonal_toggled()
         if (Inkscape::UI::Tools::cc_item_is_connector(item)) {
             item->setAttribute( "inkscape:connector-type",
                     value, nullptr);
-            item->avoidRef->handleSettingChange();
+            item->getAvoidRef().handleSettingChange();
             modmade = true;
         }
     }
@@ -280,7 +280,7 @@ ConnectorToolbar::curvature_changed()
         if (Inkscape::UI::Tools::cc_item_is_connector(item)) {
             item->setAttribute( "inkscape:connector-curvature",
                     value, nullptr);
-            item->avoidRef->handleSettingChange();
+            item->getAvoidRef().handleSettingChange();
             modmade = true;
         }
     }

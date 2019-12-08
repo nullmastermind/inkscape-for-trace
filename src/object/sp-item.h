@@ -33,7 +33,9 @@
 //class SPGuideConstraint;
 #include "sp-guide-constraint.h"
 
+class SPClipPath;
 class SPClipPathReference;
+class SPMask;
 class SPMaskReference;
 class SPAvoidRef;
 class SPPattern;
@@ -153,12 +155,22 @@ public:
     mutable Geom::OptRect doc_bbox;
     Geom::Rect viewport;  // Cache viewport information
 
+    SPClipPath *getClipObject() const;
+    SPMask *getMaskObject() const;
+
+    SPClipPathReference &getClipRef();
+    SPMaskReference &getMaskRef();
+
+    SPAvoidRef &getAvoidRef();
+
+  private:
     SPClipPathReference *clip_ref;
     SPMaskReference *mask_ref;
 
     // Used for object-avoiding connectors
     SPAvoidRef *avoidRef;
 
+  public:
     SPItemView *display;
 
     std::vector<SPGuideConstraint> constraints;

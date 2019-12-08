@@ -478,8 +478,8 @@ void ObjectsPanel::_addObjectToTree(SPItem* item, const Gtk::TreeModel::Row &row
     row[_model->_colType] = group ? (group->layerMode() == SPGroup::LAYER ? 2 : 1) : 0;
     row[_model->_colHighlight] = item->isHighlightSet() ? item->highlight_color() : item->highlight_color() & 0xffffff00;
     row[_model->_colClipMask] = item ? (
-        (item->clip_ref && item->clip_ref->getObject() ? 1 : 0) |
-        (item->mask_ref && item->mask_ref->getObject() ? 2 : 0)
+        (item->getClipObject() ? 1 : 0) |
+        (item->getMaskObject() ? 2 : 0)
     ) : 0;
     row[_model->_colPrevSelectionState] = false;
     //row[_model->_colInsertOrder] = group ? (group->insertBottom() ? 2 : 1) : 0;
@@ -511,8 +511,8 @@ void ObjectsPanel::_updateObject( SPObject *obj, bool recurse ) {
         row[_model->_colType] = group ? (group->layerMode() == SPGroup::LAYER ? 2 : 1) : 0;
         row[_model->_colHighlight] = item ? (item->isHighlightSet() ? item->highlight_color() : item->highlight_color() & 0xffffff00) : 0;
         row[_model->_colClipMask] = item ? (
-            (item->clip_ref && item->clip_ref->getObject() ? 1 : 0) |
-            (item->mask_ref && item->mask_ref->getObject() ? 2 : 0)
+            (item->getClipObject() ? 1 : 0) |
+            (item->getMaskObject() ? 2 : 0)
         ) : 0;
         //row[_model->_colInsertOrder] = group ? (group->insertBottom() ? 2 : 1) : 0;
 

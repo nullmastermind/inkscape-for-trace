@@ -192,6 +192,20 @@ void URIReference::attach(const URI &uri)
     g_free(id);
 }
 
+bool URIReference::try_attach(char const *uri)
+{
+    if (uri && uri[0]) {
+        try {
+            attach(Inkscape::URI(uri));
+            return true;
+        } catch (Inkscape::BadURIException &e) {
+            g_warning("%s", e.what());
+        }
+    }
+    detach();
+    return false;
+}
+
 void URIReference::detach()
 {
     _connection.disconnect();

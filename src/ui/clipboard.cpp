@@ -877,15 +877,11 @@ void ClipboardManagerImpl::_copyUsedDefs(SPItem *item)
     }
 
     // Copy clipping objects
-    if (item->clip_ref){
-        if (item->clip_ref->getObject()) {
-            _copyNode(item->clip_ref->getObject()->getRepr(), _doc, _defs);
-        }
+    if (SPObject *clip = item->getClipObject()) {
+        _copyNode(clip->getRepr(), _doc, _defs);
     }
     // Copy mask objects
-    if (item->mask_ref){
-        if (item->mask_ref->getObject()) {
-            SPObject *mask = item->mask_ref->getObject();
+    if (SPObject *mask = item->getMaskObject()) {
             _copyNode(mask->getRepr(), _doc, _defs);
             // recurse into the mask for its gradients etc.
             for(auto& o: mask->children) {
@@ -894,7 +890,6 @@ void ClipboardManagerImpl::_copyUsedDefs(SPItem *item)
                     _copyUsedDefs(childItem);
                 }
             }
-        }
     }
 
     // Copy filters

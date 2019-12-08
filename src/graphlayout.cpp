@@ -150,7 +150,7 @@ void graphlayout(std::vector<SPItem*> const & items) {
         std::map<std::string, unsigned>::iterator i_iter=nodelookup.find(item->getId());
         if (i_iter == nodelookup.end()) continue;
         unsigned u = i_iter->second;
-        std::vector<SPItem*> nlist = item->avoidRef->getAttachedConnectors(Avoid::runningFrom);
+        std::vector<SPItem*> nlist = item->getAvoidRef().getAttachedConnectors(Avoid::runningFrom);
         std::list<SPItem*> connectors;
 
         connectors.insert(connectors.end(), nlist.begin(), nlist.end());

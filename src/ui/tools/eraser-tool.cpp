@@ -766,7 +766,7 @@ void EraserTool::set_to_accumulated() {
                             selection->set(dup);
                             selection->pathUnion(true);
                             if (bbox && bbox->intersects(*eraserBbox)) {
-                                SPClipPath *clip_path = item->clip_ref->getObject();
+                                SPClipPath *clip_path = item->getClipObject();
                                 if (clip_path) {
                                     std::vector<SPItem*> selected;
                                     selected.push_back(SP_ITEM(clip_path->firstChild()));

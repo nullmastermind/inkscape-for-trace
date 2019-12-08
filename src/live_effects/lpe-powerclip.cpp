@@ -96,7 +96,7 @@ Geom::PathVector LPEPowerClip::getClipPathvector()
         return res;
     }
 
-    SPObject *clip_path = sp_lpe_item->clip_ref->getObject();
+    SPObject *clip_path = sp_lpe_item->getClipObject();
     if (clip_path) {
         std::vector<SPObject*> clip_path_list = clip_path->childList(true);
         clip_path_list.pop_back();
@@ -141,7 +141,7 @@ void LPEPowerClip::add()
     if (!document || !sp_lpe_item) {
         return;
     }
-    SPObject *clip_path = sp_lpe_item->clip_ref->getObject();
+    SPObject *clip_path = sp_lpe_item->getClipObject();
     SPObject *elemref = NULL;
     if (clip_path) {
         Inkscape::XML::Document *xml_doc = document->getReprDoc();
@@ -224,7 +224,7 @@ LPEPowerClip::doOnRemove (SPLPEItem const* /*lpeitem*/)
     if (elemref) {
         elemref->deleteObject();
     }
-    SPObject *clip_path = sp_lpe_item->clip_ref->getObject();
+    SPObject *clip_path = sp_lpe_item->getClipObject();
     if (clip_path) {
         std::vector<SPObject *> clip_path_list = clip_path->childList(true);
         for (auto clip : clip_path_list) {
@@ -294,7 +294,7 @@ void sp_inverse_powerclip(Inkscape::Selection *sel) {
         for(auto i = boost::rbegin(selList); i != boost::rend(selList); ++i) {
             SPLPEItem* lpeitem = dynamic_cast<SPLPEItem*>(*i);
             if (lpeitem) {
-                SPClipPath *clip_path = SP_ITEM(lpeitem)->clip_ref->getObject();
+                SPClipPath *clip_path = SP_ITEM(lpeitem)->getClipObject();
                 if(clip_path) {
                     std::vector<SPObject*> clip_path_list = clip_path->childList(true);
                     for (std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {

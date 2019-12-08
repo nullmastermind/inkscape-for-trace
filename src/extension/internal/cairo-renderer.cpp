@@ -611,8 +611,8 @@ CairoRenderer::setStateForItem(CairoRenderContext *ctx, SPItem const *item)
     ctx->setStateForStyle(item->style);
 
     CairoRenderState *state = ctx->getCurrentState();
-    state->clip_path = item->clip_ref->getObject();
-    state->mask = item->mask_ref->getObject();
+    state->clip_path = item->getClipObject();
+    state->mask = item->getMaskObject();
     state->item_transform = Geom::Affine (item->transform);
 
     // If parent_has_userspace is true the parent state's transform

@@ -1005,7 +1005,7 @@ void  PrintEmf::do_clip_if_present(SPStyle const *style){
         SPClipPath *scp = nullptr;
         SPItem *item = SP_ITEM(style->object);
         while(true) {
-            scp = (item->clip_ref ? item->clip_ref->getObject() : nullptr);
+            scp = item->getClipObject();
             if(scp)break;
             item = SP_ITEM(item->parent);
             if(!item || SP_IS_ROOT(item))break; // this will never be a clipping path

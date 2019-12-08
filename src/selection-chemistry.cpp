@@ -2699,27 +2699,25 @@ bool ObjectSet::unlink(const bool skip_undo)
 
         ObjectSet tmp_set(document());
         tmp_set.set(item);
-        Inkscape::URIReference *clip = item->clip_ref;
-        Inkscape::URIReference *mask = item->mask_ref;
-        if ((nullptr != clip) && (nullptr != clip->getObject())) {
-            SPUse * clipuse = dynamic_cast<SPUse *>(clip->getObject());
+        auto *clip_obj = item->getClipObject();
+        auto *mask_obj = item->getMaskObject();
+        if (clip_obj) {
+            SPUse *clipuse = dynamic_cast<SPUse *>(clip_obj);
             if (clipuse) {
                 tmp_set.unsetMask(true,true);
                 unlinked = tmp_set.unlink(true) || unlinked;
                 tmp_set.setMask(true,false,true);
             }
             new_select.push_back(tmp_set.singleItem());
-        }
-        else if ((nullptr != mask) && (nullptr != mask->getObject())) {
-            SPUse * maskuse = dynamic_cast<SPUse *>(mask->getObject());
+        } else if (mask_obj) {
+            SPUse *maskuse = dynamic_cast<SPUse *>(mask_obj);
             if (maskuse) {
                 tmp_set.unsetMask(false,true);
                 unlinked = tmp_set.unlink(true) || unlinked;
                 tmp_set.setMask(false,false,true);
             }
             new_select.push_back(tmp_set.singleItem());
-        }
-        else {
+        } else {
             if (dynamic_cast<SPText *>(item)) {
                 SPObject *tspan = sp_tref_convert_to_tspan(item);
 
@@ -4115,17 +4113,17 @@ void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
         if (remove_original) {
             // remember referenced mask/clippath, so orphaned masks can be moved back to document
             SPItem *item = *i;
-            Inkscape::URIReference *uri_ref = nullptr;
+            SPObject *obj_ref = nullptr;
 
             if (apply_clip_path) {
-                uri_ref = item->clip_ref;
+                obj_ref = item->getClipObject();
             } else {
-                uri_ref = item->mask_ref;
+                obj_ref = item->getMaskObject();
             }
 
             // collect distinct mask object (and associate with item to apply transform)
-            if ((nullptr != uri_ref) && (nullptr != uri_ref->getObject())) {
-                referenced_objects[uri_ref->getObject()] = item;
+            if (obj_ref) {
+                referenced_objects[obj_ref] = item;
             }
         }
 

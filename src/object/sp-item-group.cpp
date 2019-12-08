@@ -778,15 +778,15 @@ void SPGroup::scaleChildItemsRec(Geom::Scale const &sc, Geom::Point const &p, bo
                     } else {
                         // used for other import
                         SPItem *sub_item = nullptr;
-                        if (item->clip_ref->getObject()) {
-                            sub_item = dynamic_cast<SPItem *>(item->clip_ref->getObject()->firstChild());
+                        if (item->getClipObject()) {
+                            sub_item = dynamic_cast<SPItem *>(item->getClipObject()->firstChild());
                         }
                         if (sub_item != nullptr) {
                             sub_item->doWriteTransform(sub_item->transform*sc, nullptr, true);
                         }
                         sub_item = nullptr;
-                        if (item->mask_ref->getObject()) {
-                            sub_item = dynamic_cast<SPItem *>(item->mask_ref->getObject()->firstChild());
+                        if (item->getMaskObject()) {
+                            sub_item = dynamic_cast<SPItem *>(item->getMaskObject()->firstChild());
                         }
                         if (sub_item != nullptr) {
                             sub_item->doWriteTransform(sub_item->transform*sc, nullptr, true);

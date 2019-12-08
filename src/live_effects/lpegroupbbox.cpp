@@ -34,11 +34,11 @@ GroupBBoxEffect::clip_mask_bbox(SPLPEItem *item, Geom::Affine transform)
 {
     Geom::OptRect bbox;
     Geom::Affine affine = transform * item->transform;
-    SPClipPath * clip_path = item->clip_ref->getObject();
+    SPClipPath *clip_path = item->getClipObject();
     if(clip_path) {
         bbox.unionWith(clip_path->geometricBounds(affine));
     }
-    SPMask * mask_path = item->mask_ref->getObject();
+    SPMask * mask_path = item->getMaskObject();
     if(mask_path) {
         bbox.unionWith(mask_path->visualBounds(affine));
     }

@@ -416,12 +416,12 @@ void gather_items(NodeTool *nt, SPItem *base, SPObject *obj, Inkscape::UI::Shape
 
         if (s.insert(r).second) {
             // this item was encountered the first time
-            if (nt->edit_clipping_paths && item->clip_ref) {
-                gather_items(nt, item, item->clip_ref->getObject(), SHAPE_ROLE_CLIPPING_PATH, s);
+            if (nt->edit_clipping_paths) {
+                gather_items(nt, item, item->getClipObject(), SHAPE_ROLE_CLIPPING_PATH, s);
             }
 
-            if (nt->edit_masks && item->mask_ref) {
-                gather_items(nt, item, item->mask_ref->getObject(), SHAPE_ROLE_MASK, s);
+            if (nt->edit_masks) {
+                gather_items(nt, item, item->getMaskObject(), SHAPE_ROLE_MASK, s);
             }
         }
     }

@@ -434,19 +434,11 @@ void ContextMenu::MakeItemMenu ()
 
     bool ClipRefOK=false;
     bool MaskRefOK=false;
-    if (_item){
-        if (_item->clip_ref){
-            if (_item->clip_ref->getObject()){
-                ClipRefOK=true;
-            }
-        }
+    if (_item && _item->getClipObject()) {
+        ClipRefOK = true;
     }
-    if (_item){
-        if (_item->mask_ref){
-            if (_item->mask_ref->getObject()){
-                MaskRefOK=true;
-            }
-        }
+    if (_item && _item->getMaskObject()) {
+        MaskRefOK = true;
     }
     /* Set mask */
     mi = Gtk::manage(new Gtk::MenuItem(_("Set Mask"), true));

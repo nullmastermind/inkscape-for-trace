@@ -151,8 +151,8 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
     SPPath  * path_origin  = SP_PATH(origin);
     SPShape * shape_dest   = SP_SHAPE(dest);
     SPPath  * path_dest    = SP_PATH(dest);
-    SPMask  * mask_origin  = SP_ITEM(origin)->mask_ref->getObject();
-    SPMask  * mask_dest    = SP_ITEM(dest)->mask_ref->getObject();
+    SPMask  * mask_origin  = SP_ITEM(origin)->getMaskObject();
+    SPMask  * mask_dest    = SP_ITEM(dest)->getMaskObject();
     if(mask_origin && mask_dest) {
         std::vector<SPObject*> mask_list = mask_origin->childList(true);
         std::vector<SPObject*> mask_list_dest = mask_dest->childList(true);
@@ -167,8 +167,8 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
         }
     }
     
-    SPClipPath *clippath_origin = SP_ITEM(origin)->clip_ref->getObject();
-    SPClipPath *clippath_dest = SP_ITEM(dest)->clip_ref->getObject();
+    SPClipPath *clippath_origin = SP_ITEM(origin)->getClipObject();
+    SPClipPath *clippath_dest = SP_ITEM(dest)->getClipObject();
     if(clippath_origin && clippath_dest) {
         std::vector<SPObject*> clippath_list = clippath_origin->childList(true);
         std::vector<SPObject*> clippath_list_dest = clippath_dest->childList(true);

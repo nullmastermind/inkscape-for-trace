@@ -63,10 +63,15 @@ public:
      * Throws a BadURIException if the URI is unsupported,
      * or the fragment identifier is xpointer and malformed.
      *
-     * @param rel_document document for relative URIs
      * @param uri the URI to watch
      */
     void attach(URI const& uri);
+
+    /**
+     * Try to attach to a URI. Return false if URL is malformed and detach any
+     * previous attachment.
+     */
+    bool try_attach(char const *uri);
 
     /**
      * Detaches from the currently attached URI target, if any;

@@ -336,7 +336,7 @@ sp_lpe_item_create_original_path_recursive(SPLPEItem *lpeitem)
 {
     g_return_if_fail(lpeitem != nullptr);
 
-    SPClipPath *clip_path = SP_ITEM(lpeitem)->clip_ref->getObject();
+    SPClipPath *clip_path = SP_ITEM(lpeitem)->getClipObject();
     if(clip_path) {
         std::vector<SPObject*> clip_path_list = clip_path->childList(true);
         for ( std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
@@ -345,7 +345,7 @@ sp_lpe_item_create_original_path_recursive(SPLPEItem *lpeitem)
         }
     }
 
-    SPMask *mask_path = SP_ITEM(lpeitem)->mask_ref->getObject();
+    SPMask *mask_path = SP_ITEM(lpeitem)->getMaskObject();
     if(mask_path) {
         std::vector<SPObject*> mask_path_list = mask_path->childList(true);
         for ( std::vector<SPObject*>::const_iterator iter = mask_path_list.begin(); iter != mask_path_list.end();++iter) {
@@ -391,7 +391,7 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem, bool keep_paths,
     SPGroup *group = dynamic_cast<SPGroup*>(lpeitem);
     SPShape *shape = dynamic_cast<SPShape*>(lpeitem);
     SPPath  *path  = dynamic_cast<SPPath *>(lpeitem);
-    SPClipPath *clip_path = item->clip_ref->getObject();
+    SPClipPath *clip_path = item->getClipObject();
     if(clip_path) {
         std::vector<SPObject*> clip_path_list = clip_path->childList(true);
         for ( std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
@@ -402,7 +402,7 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem, bool keep_paths,
         }
     }
 
-    SPMask *mask_path = item->mask_ref->getObject();
+    SPMask *mask_path = item->getMaskObject();
     if(mask_path) {
         std::vector<SPObject*> mask_path_list = mask_path->childList(true);
         for ( std::vector<SPObject*>::const_iterator iter = mask_path_list.begin(); iter != mask_path_list.end();++iter) {
@@ -832,7 +832,7 @@ SPLPEItem::resetClipPathAndMaskLPE(bool fromrecurse)
         }
         return;
     }
-    SPClipPath *clip_path = this->clip_ref->getObject();
+    SPClipPath *clip_path = this->getClipObject();
     if(clip_path) {
         std::vector<SPObject*> clip_path_list = clip_path->childList(true);
         for ( std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
@@ -858,7 +858,7 @@ SPLPEItem::resetClipPathAndMaskLPE(bool fromrecurse)
             }
         }
     }
-    SPMask *mask = this->mask_ref->getObject();
+    SPMask *mask = this->getMaskObject();
     if(mask) {
         std::vector<SPObject*> mask_list = mask->childList(true);
         for ( std::vector<SPObject*>::const_iterator iter=mask_list.begin();iter!=mask_list.end();++iter) {
@@ -892,7 +892,7 @@ SPLPEItem::applyToClipPath(SPItem* to, Inkscape::LivePathEffect::Effect *lpe)
     if (lpe && !lpe->apply_to_clippath_and_mask) {
         return;
     }
-    SPClipPath *clip_path = to->clip_ref->getObject();
+    SPClipPath *clip_path = to->getClipObject();
     if(clip_path) {
         std::vector<SPObject*> clip_path_list = clip_path->childList(true);
         for ( std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
@@ -908,7 +908,7 @@ SPLPEItem::applyToMask(SPItem* to, Inkscape::LivePathEffect::Effect *lpe)
     if (lpe && !lpe->apply_to_clippath_and_mask) {
         return;
     }
-    SPMask *mask = to->mask_ref->getObject();
+    SPMask *mask = to->getMaskObject();
     if(mask) {
         std::vector<SPObject*> mask_list = mask->childList(true);
         for ( std::vector<SPObject*>::const_iterator iter=mask_list.begin();iter!=mask_list.end();++iter) {

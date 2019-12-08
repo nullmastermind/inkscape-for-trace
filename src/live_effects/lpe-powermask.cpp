@@ -56,7 +56,7 @@ void
 LPEPowerMask::doOnApply (SPLPEItem const * lpeitem)
 {
     SPLPEItem *item = const_cast<SPLPEItem*>(lpeitem);
-    SPObject * mask = item->mask_ref->getObject();
+    SPObject * mask = item->getMaskObject();
     bool hasit = false;
     if (lpeitem->hasPathEffect() && lpeitem->pathEffectsEnabled()) {
         for (auto & it : *lpeitem->path_effect_list)
@@ -92,7 +92,7 @@ void LPEPowerMask::tryForkMask()
     if (!document || !sp_lpe_item) {
         return;
     }
-    SPObject *mask = sp_lpe_item->mask_ref->getObject();
+    SPObject *mask = sp_lpe_item->getMaskObject();
     SPObject *elemref = document->getObjectById(getId().c_str());
     if (!elemref && sp_lpe_item && mask) {
         Glib::ustring newmask = getId();
@@ -110,41 +110,27 @@ void
 LPEPowerMask::doBeforeEffect (SPLPEItem const* lpeitem){
     //To avoid close of color dialog and better performance on change color
     tryForkMask();
-    SPObject * mask = SP_ITEM(sp_lpe_item)->mask_ref->getObject();
+    SPObject * mask = SP_ITEM(sp_lpe_item)->getMaskObject();
     auto uri_str = uri.param_getSVGValue();
     if (hide_mask && mask) {
-        SP_ITEM(sp_lpe_item)->mask_ref->detach();
+        SP_ITEM(sp_lpe_item)->getMaskRef().detach();
     } else if (!hide_mask && !mask && !uri_str.empty()) {
-        try {
-            SP_ITEM(sp_lpe_item)->mask_ref->attach(Inkscape::URI(uri_str.c_str()));
-        } catch (Inkscape::BadURIException &e) {
-            g_warning("%s", e.what());
-            SP_ITEM(sp_lpe_item)->mask_ref->detach();
-        }
+        SP_ITEM(sp_lpe_item)->getMaskRef().try_attach(uri_str.c_str());
     }
-    mask = SP_ITEM(sp_lpe_item)->mask_ref->getObject();
+    mask = SP_ITEM(sp_lpe_item)->getMaskObject();
     if (mask) {
         if (previous_color != background_color.get_value()) {
             previous_color = background_color.get_value();
             setMask();
         } else {
             uri.param_setValue(Glib::ustring(extract_uri(sp_lpe_item->getRepr()->attribute("mask"))), true);
-            SP_ITEM(sp_lpe_item)->mask_ref->detach();
+            SP_ITEM(sp_lpe_item)->getMaskRef().detach();
             Geom::OptRect bbox = lpeitem->visualBounds();
             if(!bbox) {
                 return;
             }
             uri_str = uri.param_getSVGValue();
-            if (!uri_str.empty()) {
-                try {
-                    SP_ITEM(sp_lpe_item)->mask_ref->attach(Inkscape::URI(uri_str.c_str()));
-                } catch (Inkscape::BadURIException &e) {
-                    g_warning("%s", e.what());
-                    SP_ITEM(sp_lpe_item)->mask_ref->detach();
-                }
-            } else {
-                SP_ITEM(sp_lpe_item)->mask_ref->detach();
-            }
+            SP_ITEM(sp_lpe_item)->getMaskRef().try_attach(uri_str.c_str());
 
             Geom::Rect bboxrect = (*bbox);
             bboxrect.expandBy(1);
@@ -160,7 +146,7 @@ LPEPowerMask::doBeforeEffect (SPLPEItem const* lpeitem){
 
 void
 LPEPowerMask::setMask(){
-    SPMask *mask = SP_ITEM(sp_lpe_item)->mask_ref->getObject();
+    SPMask *mask = SP_ITEM(sp_lpe_item)->getMaskObject();
     SPObject *elemref = nullptr;
     SPDocument *document = getSPDoc();
     if (!document || !mask) {
@@ -301,7 +287,7 @@ LPEPowerMask::doEffect (SPCurve * curve)
 void 
 LPEPowerMask::doOnRemove (SPLPEItem const* lpeitem)
 {
-    SPMask *mask = lpeitem->mask_ref->getObject();
+    SPMask *mask = lpeitem->getMaskObject();
     if (mask) {
         invert.param_setValue(false);
         //wrap.param_setValue(false);
@@ -327,7 +313,7 @@ void sp_inverse_powermask(Inkscape::Selection *sel) {
         for(auto i = boost::rbegin(selList); i != boost::rend(selList); ++i) {
             SPLPEItem* lpeitem = dynamic_cast<SPLPEItem*>(*i);
             if (lpeitem) {
-                SPMask *mask = lpeitem->mask_ref->getObject();
+                SPMask *mask = lpeitem->getMaskObject();
                 if (mask) {
                     Inkscape::XML::Document *xml_doc = document->getReprDoc();
                     Inkscape::XML::Node *parent = mask->getRepr();

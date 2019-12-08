@@ -87,19 +87,48 @@ SPItem::SPItem() : SPObject() {
 
     display = nullptr;
 
-    clip_ref = new SPClipPathReference(this);
-    clip_ref->changedSignal().connect(sigc::bind(sigc::ptr_fun(clip_ref_changed), this));
-
-    mask_ref = new SPMaskReference(this);
-    mask_ref->changedSignal().connect(sigc::bind(sigc::ptr_fun(mask_ref_changed), this));
+    clip_ref = nullptr;
+    mask_ref = nullptr;
 
     style->signal_fill_ps_changed.connect(sigc::bind(sigc::ptr_fun(fill_ps_ref_changed), this));
     style->signal_stroke_ps_changed.connect(sigc::bind(sigc::ptr_fun(stroke_ps_ref_changed), this));
 
-    avoidRef = new SPAvoidRef(this);
+    avoidRef = nullptr;
 }
 
 SPItem::~SPItem() = default;
+
+SPClipPath *SPItem::getClipObject() const { return clip_ref ? clip_ref->getObject() : nullptr; }
+
+SPMask *SPItem::getMaskObject() const { return mask_ref ? mask_ref->getObject() : nullptr; }
+
+SPMaskReference &SPItem::getMaskRef()
+{
+    if (!mask_ref) {
+        mask_ref = new SPMaskReference(this);
+        mask_ref->changedSignal().connect(sigc::bind(sigc::ptr_fun(mask_ref_changed), this));
+    }
+
+    return *mask_ref;
+}
+
+SPClipPathReference &SPItem::getClipRef()
+{
+    if (!clip_ref) {
+        clip_ref = new SPClipPathReference(this);
+        clip_ref->changedSignal().connect(sigc::bind(sigc::ptr_fun(clip_ref_changed), this));
+    }
+
+    return *clip_ref;
+}
+
+SPAvoidRef &SPItem::getAvoidRef()
+{
+    if (!avoidRef) {
+        avoidRef = new SPAvoidRef(this);
+    }
+    return *avoidRef;
+}
 
 bool SPItem::isVisibleAndUnlocked() const {
     return (!isHidden() && !isLocked());
@@ -443,32 +472,16 @@ void SPItem::set(SPAttributeEnum key, gchar const* value) {
         }
         case SP_PROP_CLIP_PATH: {
             auto uri = extract_uri(value);
-            if (!uri.empty()) {
-                try {
-                    item->clip_ref->attach(Inkscape::URI(uri.c_str()));
-                } catch (Inkscape::BadURIException &e) {
-                    g_warning("%s", e.what());
-                    item->clip_ref->detach();
-                }
-            } else {
-                item->clip_ref->detach();
+            if (!uri.empty() || item->clip_ref) {
+                item->getClipRef().try_attach(uri.c_str());
             }
-
             break;
         }
         case SP_PROP_MASK: {
             auto uri = extract_uri(value);
-            if (!uri.empty()) {
-                try {
-                    item->mask_ref->attach(Inkscape::URI(uri.c_str()));
-                } catch (Inkscape::BadURIException &e) {
-                    g_warning("%s", e.what());
-                    item->mask_ref->detach();
-                }
-            } else {
-                item->mask_ref->detach();
+            if (!uri.empty() || item->mask_ref) {
+                item->getMaskRef().try_attach(uri.c_str());
             }
-
             break;
         }
         case SP_ATTR_SODIPODI_INSENSITIVE:
@@ -490,7 +503,9 @@ void SPItem::set(SPAttributeEnum key, gchar const* value) {
             break;
         }
         case SP_ATTR_CONNECTOR_AVOID:
-            item->avoidRef->setAvoid(value);
+            if (value || item->avoidRef) {
+                item->getAvoidRef().setAvoid(value);
+            }
             break;
         case SP_ATTR_TRANSFORM_CENTER_X:
             if (value) {
@@ -851,13 +866,13 @@ Geom::OptRect SPItem::visualBounds(Geom::Affine const &transform, bool wfilter, 
     	//bbox = this->bbox(transform, SPItem::VISUAL_BBOX);
     	bbox = const_cast<SPItem*>(this)->bbox(transform, SPItem::VISUAL_BBOX);
     }
-    if (clip_ref->getObject() && wclip) {
+    if (clip_ref && clip_ref->getObject() && wclip) {
         SPItem *ownerItem = dynamic_cast<SPItem *>(clip_ref->getOwner());
         g_assert(ownerItem != nullptr);
         ownerItem->bbox_valid = FALSE;  // LP Bug 1349018
         bbox.intersectWith(clip_ref->getObject()->geometricBounds(transform));
     }
-    if (mask_ref->getObject() && wmask) {
+    if (mask_ref && mask_ref->getObject() && wmask) {
         bbox_valid = false;  // LP Bug 1349018
         bbox.intersectWith(mask_ref->getObject()->visualBounds(transform));
     }
@@ -984,8 +999,8 @@ void SPItem::getSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscap
     // Get the snappoints of clipping paths and mask, if any
     std::list<SPObject const *> clips_and_masks;
 
-    clips_and_masks.push_back(clip_ref->getObject());
-    clips_and_masks.push_back(mask_ref->getObject());
+    if (clip_ref) clips_and_masks.push_back(clip_ref->getObject());
+    if (mask_ref) clips_and_masks.push_back(mask_ref->getObject());
 
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     for (std::list<SPObject const *>::const_iterator o = clips_and_masks.begin(); o != clips_and_masks.end(); ++o) {
@@ -1040,13 +1055,13 @@ gchar *SPItem::detailedDescription() const {
         gchar* s = g_strdup_printf("<b>%s</b> %s",
                     this->displayName(), this->description());
 
-	if (s && clip_ref->getObject()) {
+	if (s && clip_ref && clip_ref->getObject()) {
 		gchar *snew = g_strdup_printf (_("%s; <i>clipped</i>"), s);
 		g_free (s);
 		s = snew;
 	}
 
-	if (s && mask_ref->getObject()) {
+	if (s && mask_ref && mask_ref->getObject()) {
 		gchar *snew = g_strdup_printf (_("%s; <i>masked</i>"), s);
 		g_free (s);
 		s = snew;
@@ -1122,7 +1137,7 @@ Inkscape::DrawingItem *SPItem::invoke_show(Inkscape::Drawing &drawing, unsigned 
         //ai->setCompositeOperator( style->composite_op.value );
         ai->setVisible(!isHidden());
         ai->setSensitive(sensitive);
-        if (clip_ref->getObject()) {
+        if (clip_ref && clip_ref->getObject()) {
             SPClipPath *cp = clip_ref->getObject();
 
             if (!display->arenaitem->key()) {
@@ -1138,7 +1153,7 @@ Inkscape::DrawingItem *SPItem::invoke_show(Inkscape::Drawing &drawing, unsigned 
             cp->setBBox(clip_key, item_bbox);
             cp->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         }
-        if (mask_ref->getObject()) {
+        if (mask_ref && mask_ref->getObject()) {
             SPMask *mask = mask_ref->getObject();
 
             if (!display->arenaitem->key()) {
@@ -1202,11 +1217,11 @@ void SPItem::invoke_hide(unsigned key)
     while (v != nullptr) {
         SPItemView *next = v->next;
         if (v->key == key) {
-            if (clip_ref->getObject()) {
+            if (clip_ref && clip_ref->getObject()) {
                 (clip_ref->getObject())->hide(v->arenaitem->key());
                 v->arenaitem->setClip(nullptr);
             }
-            if (mask_ref->getObject()) {
+            if (mask_ref && mask_ref->getObject()) {
                 mask_ref->getObject()->sp_mask_hide(v->arenaitem->key());
                 v->arenaitem->setMask(nullptr);
             }

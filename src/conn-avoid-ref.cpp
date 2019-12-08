@@ -345,7 +345,7 @@ std::vector<SPItem *> get_avoided_items(std::vector<SPItem *> &list, SPObject *f
             !desktop->isLayer(SP_ITEM(&child)) &&
             !SP_ITEM(&child)->isLocked() &&
             !desktop->itemIsHidden(SP_ITEM(&child)) &&
-            (!initialised || SP_ITEM(&child)->avoidRef->shapeRef)
+            (!initialised || SP_ITEM(&child)->getAvoidRef().shapeRef)
             )
         {
             list.push_back(SP_ITEM(&child));
@@ -362,7 +362,7 @@ std::vector<SPItem *> get_avoided_items(std::vector<SPItem *> &list, SPObject *f
 
 void avoid_item_move(Geom::Affine const */*mp*/, SPItem *moved_item)
 {
-    Avoid::ShapeRef *shapeRef = moved_item->avoidRef->shapeRef;
+    Avoid::ShapeRef *shapeRef = moved_item->getAvoidRef().shapeRef;
     g_assert(shapeRef);
 
     Router *router = moved_item->document->getRouter();
@@ -387,7 +387,7 @@ void init_avoided_shape_geometry(SPDesktop *desktop)
 
     for (std::vector<SPItem *>::const_iterator iter = items.begin(); iter != items.end(); ++iter) {
         SPItem *item = *iter;
-        item->avoidRef->handleSettingChange();
+        item->getAvoidRef().handleSettingChange();
     }
 }
 

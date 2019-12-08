@@ -1081,7 +1081,7 @@ void ConnectorTool::_activeShapeAddKnot(SPItem* item)
     g_signal_connect(G_OBJECT(knot->item), "event",
             G_CALLBACK(cc_generic_knot_handler), knot);
 
-    knot->setPosition(item->avoidRef->getConnectionPointPos() * desktop->doc2dt(), 0);
+    knot->setPosition(item->getAvoidRef().getConnectionPointPos() * desktop->doc2dt(), 0);
     knot->show();
     this->knots[knot] = 1;
 }
@@ -1306,7 +1306,7 @@ void cc_selection_set_avoid(bool const set_avoid)
 
         if (cc_item_is_shape(item)) {
             item->setAttribute("inkscape:connector-avoid", value, nullptr);
-            item->avoidRef->handleSettingChange();
+            item->getAvoidRef().handleSettingChange();
             changes++;
         }
     }

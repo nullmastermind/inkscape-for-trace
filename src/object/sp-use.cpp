@@ -432,9 +432,9 @@ void SPUse::move_compensate(Geom::Affine const *mp) {
     if (!(m.isTranslation())){
     	//BUT move clippaths accordingly.
         //if clone has a clippath, move it accordingly
-        if(clip_ref->getObject()){
-            for(auto& clip: clip_ref->getObject()->children){
-            	SPItem *item = (SPItem*) &clip;
+        if (getClipObject()) {
+            for (auto &clip : getClipObject()->children) {
+                SPItem *item = (SPItem*) &clip;
             	if(item){
                     item->transform *= m;
                     Geom::Affine identity;
@@ -442,9 +442,9 @@ void SPUse::move_compensate(Geom::Affine const *mp) {
             	}
             }
         }
-        if(mask_ref->getObject()){
-            for(auto& mask: mask_ref->getObject()->children){
-            	SPItem *item = (SPItem*) &mask;
+        if (getMaskObject()) {
+            for (auto &mask : getMaskObject()->children) {
+                SPItem *item = (SPItem*) &mask;
             	if(item){
                     item->transform *= m;
                     Geom::Affine identity;
@@ -472,8 +472,8 @@ void SPUse::move_compensate(Geom::Affine const *mp) {
     }
 
     //if clone has a clippath, move it accordingly
-    if(clip_ref->getObject()){
-        for(auto& clip: clip_ref->getObject()->children){
+    if (getClipObject()) {
+        for (auto &clip : getClipObject()->children) {
         	SPItem *item = (SPItem*) &clip;
         	if(item){
                 item->transform *= clone_move.inverse();
@@ -482,9 +482,9 @@ void SPUse::move_compensate(Geom::Affine const *mp) {
         	}
         }
     }
-    if(mask_ref->getObject()){
-        for(auto& mask: mask_ref->getObject()->children){
-        	SPItem *item = (SPItem*) &mask;
+    if (getMaskObject()) {
+        for (auto &mask : getMaskObject()->children) {
+            SPItem *item = (SPItem*) &mask;
         	if(item){
                 item->transform *= clone_move.inverse();
                 Geom::Affine identity;

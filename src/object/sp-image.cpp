@@ -673,7 +673,7 @@ void SPImage::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape:
     the image is rotated, then the snappoints will rotate with it. Again, just like a rect.
     */
 
-    if (this->clip_ref->getObject()) {
+    if (this->getClipObject()) {
         //We are looking at a clipped image: do not return any snappoints, as these might be
         //far far away from the visible part from the clipped image
         //TODO Do return snappoints, but only when within visual bounding box
@@ -740,7 +740,7 @@ Geom::Affine SPImage::set_transform(Geom::Affine const &xform) {
 static void sp_image_set_curve( SPImage *image )
 {
     //create a curve at the image's boundary for snapping
-    if ((image->height.computed < MAGIC_EPSILON_TOO) || (image->width.computed < MAGIC_EPSILON_TOO) || (image->clip_ref->getObject())) {
+    if ((image->height.computed < MAGIC_EPSILON_TOO) || (image->width.computed < MAGIC_EPSILON_TOO) || (image->getClipObject())) {
         if (image->curve) {
             image->curve = image->curve->unref();
         }
