@@ -5469,7 +5469,7 @@ msgstr "Mapatu eredu betegarri guztiak EMF itzaleztadura arruntetara"
 
 #: ../src/extension/internal/emf-inout.cpp:3660
 msgid "Ignore image rotations"
-msgstr "Ez ikusi egin irudiaren biraketei"
+msgstr "Ezikusi irudiaren biraketa"
 
 #: ../src/extension/internal/emf-inout.cpp:3664
 msgid "Enhanced Metafile (*.emf)"
@@ -18583,7 +18583,7 @@ msgstr "Hautatutako objektuek hautapen-heldulekua erakutsiko duten edo ez (hauta
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:202
 msgid "Enable gradient editing"
-msgstr "Gaitu gradientea editatzea"
+msgstr "Gaitu gradientearen edizioa"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:203
 msgid "Whether selected objects display gradient editing controls"
@@ -18601,7 +18601,7 @@ msgstr "Objektu bat gidetara bihurtzean hauek objektuaren benetako ertzetan zeha
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:216
 msgid "Ctrl+click _dot size:"
-msgstr "Ctrl+egin klik-en puntu-tamaina:"
+msgstr "Ctrl+klik ekintzaren puntu-tamaina:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:216
 msgid "times current stroke width"
@@ -18673,7 +18673,7 @@ msgstr "Tresnak"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:326
 msgid "Bounding box to use"
-msgstr "Muga-koadroa erabiltzeko"
+msgstr "Erabiliko den muga-koadroa"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:327
 msgid "Visual bounding box"
@@ -18697,7 +18697,7 @@ msgstr "Gidetara bihurtzea"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:335
 msgid "Keep objects after conversion to guides"
-msgstr "Mantendu objketuak gidetara bihurtu ostean"
+msgstr "Mantendu objektuak gidetara bihurtu ostean"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:337
 msgid ""
@@ -18872,7 +18872,7 @@ msgstr "Edizioaren hobespenak"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:393
 msgid "Show transform handles for single nodes"
-msgstr "Erakutsi nodo bakunen eraldatzeko heldulekuak"
+msgstr "Erakutsi nodo bakunak eraldatzeko heldulekuak"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:394
 msgid "Show transform handles even when only a single node is selected"
@@ -18908,7 +18908,7 @@ msgstr "Neurtu"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:412
 msgid "Ignore first and last points"
-msgstr "Ez ikusi egin aurreneko eta azkeneko puntuei"
+msgstr "Ezikusi lehen eta azken puntuak"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:413
 msgid ""
@@ -19683,7 +19683,7 @@ msgstr "Ez"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1210
 msgid "Theme decides"
-msgstr "Gaiak erabilitzen du"
+msgstr "Gaiak erabakitzen du"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1213
 msgid "Show icons in menus:"
@@ -19790,7 +19790,7 @@ msgstr "Ezarri leihoaren tamaina lehenetsia"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1256
 msgid "Saving window geometry (size and position)"
-msgstr "Leihoaren geometria gordetzen (tamaina eta posizioa)"
+msgstr "Leihoaren geometria gordetzea (tamaina eta posizioa)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1258
 msgid "Let the window manager determine placement of all windows"
@@ -19810,7 +19810,7 @@ msgstr "Gorde eta leheneratu leihoaren geometria dokumentu bakoitzeko (geometria
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1264
 msgid "Saving dialogs status"
-msgstr "Elkarrizketa-koadroen egoera gordetzen"
+msgstr "Elkarrizketa-koadroen egoera gordetzea"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1268
 msgid ""
@@ -19986,7 +19986,7 @@ msgstr "Aukera hau aktibatuta dagoenean, unean irekitako dokumentua kokatuta dag
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1432
 msgid "Add label comments to printing output"
-msgstr "Gehitu etiketen iruzkina inprimatzeko"
+msgstr "Gehitu etiketen iruzkina inprimatutako irteerari"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1434
 msgid ""
@@ -20044,7 +20044,7 @@ msgstr "Ezarri nodoaren heldulekuen tamaina erlatiboa"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1452
 msgid "Use pressure-sensitive tablet (requires restart)"
-msgstr "Erabili presioari sentikorra den tableta grafikoa (berrabiaraztea eskatzen du)"
+msgstr "Erabili presioari sentikorra den tableta grafikoa (berrabiarazi behar da)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1454
 msgid ""
@@ -20259,15 +20259,15 @@ msgstr "SVG 2"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1534
 msgid "Insert SVG 1.1 fallback in text."
-msgstr "SVG 1.1 bertsioko testuaren ordezkoa txertatzen du."
+msgstr "Txertatu SVG 1.1 bertsioko testuaren ordezkoa"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1535
 msgid "Insert Mesh Gradient JavaScript polyfill."
-msgstr "Txertatu sare-gradientearen Javascript betegarri anitza."
+msgstr "Txertatu sare-gradientearen Javascript betegarri anitza"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1536
 msgid "Insert Hatch Paint Server JavaScript polyfill."
-msgstr "Txertatu itzaleztaduren margotze-zerbitzariaren Javascript betegarri anitza."
+msgstr "Txertatu itzaleztaduren margotze-zerbitzariaren Javascript betegarri anitza"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1538
 msgid "Adds fallback options for non-SVG 2 renderers."
@@ -20287,11 +20287,11 @@ msgstr "SVG 2 bertsiotik SVG 1.1 bertsiora"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1545
 msgid "Replace markers with 'auto_start_reverse'."
-msgstr "Ordeztu markatzaileak 'auto_start_reverse' aukerarekin."
+msgstr "Ordeztu markatzaileak 'auto_start_reverse' aukerarekin"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1546
 msgid "Replace markers using 'context_paint' or 'context_fill'."
-msgstr "Ordeztu markatzaileak 'context_paint' edo 'context_fill' erabilita."
+msgstr "Ordeztu markatzaileak 'context_paint' edo 'context_fill' erabilita"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1548
 msgid "SVG 2 allows markers to automatically be reversed at start of path."
@@ -20340,15 +20340,15 @@ msgstr "Pantailaren profila:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1581
 msgid "Retrieve profile from display"
-msgstr "Lortu profila pantailatik"
+msgstr "Eskuratu profila pantailatik"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1584
 msgid "Retrieve profiles from those attached to displays via XICC"
-msgstr "Lortu profilak pantailetara XICC bidez konektatutakoetatik"
+msgstr "Eskuratu profilak pantailetara XICC bidez konektatutakoetatik"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1586
 msgid "Retrieve profiles from those attached to displays"
-msgstr "Lortu profilak pantailetara konektatutakoetatik"
+msgstr "Eskuratu profilak pantailetara konektatutakoetatik"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1591
 msgid "Display rendering intent:"
@@ -20866,7 +20866,7 @@ msgstr "> edo < teklak sakatzeak hautapena eskalatzen du"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1885
 msgid "_Inset/Outset by:"
-msgstr "_Laburtu/Luzatu:"
+msgstr "_Laburtu/luzatu:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1886
 msgid "Inset and Outset commands displace the path by this distance"
@@ -20905,7 +20905,7 @@ msgstr "Ctrl tekla sakatuz biratzean hainbat graduekin atxikiko du; [ edo ] saka
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1897
 msgid "Relative snapping of guideline angles"
-msgstr "Gidalerroen angeluen atxikitze erlatiboa"
+msgstr "Gidalerroen angeluen atxikitze-erlatiboa"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1899
 msgid ""
@@ -20942,7 +20942,7 @@ msgstr "Urratsak"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1909
 msgid "Move in parallel"
-msgstr "Lekuz paraleloki aldatu"
+msgstr "Lekuz aldatu paraleloan"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1911
 msgid "Stay unmoved"
@@ -20992,7 +20992,7 @@ msgstr "Klon zurtzak jatorrizkoekin batera ezabatuko dira."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1933
 msgid "Duplicating original+clones/linked offset"
-msgstr "Jatorrizkoa +klonak/estekatuen desplazamendua bikoiztea"
+msgstr "Jatorrizkoa+klonak/estekatuen desplazamendua bikoiztea"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1935
 msgid "Relink duplicated clones"
@@ -21007,7 +21007,7 @@ msgstr "Hautapen bat bikoiztean, bai klona bai bere jatorrizkoa (litekeena talde
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1939
 msgid "Unlinking clones"
-msgstr "Klonak askatzen"
+msgstr "Klonak askatzea"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1940
 msgid "Path operations unlink clones"
@@ -21298,7 +21298,7 @@ msgstr "Bit-mapak inportatzeko/irekitzeko modua:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2107
 msgid "Include"
-msgstr "Sartu"
+msgstr "Txertatu"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2110
 msgid "SVG import mode:"
@@ -32173,7 +32173,7 @@ msgstr "Hautatu objektua."
 msgid ""
 "%d ENTITIES of type POLYLINE encountered and ignored. Please try to convert "
 "to Release 13 format using QCad."
-msgstr "POLYMARRA motako %d ENTITATE aurkituta eta ez ikusi eginda. Saia zaitez 'Release 13' formatura bihurtzen QCad erabiliz."
+msgstr "POLYMARRA motako %d ENTITATE aurkituta eta ezikusi eginda. Saia zaitez 'Release 13' formatura bihurtzen QCad erabiliz."
 
 #: ../share/extensions/embedimage.py:78
 msgid "File not found \"{}\". Unable to embed image."
@@ -32396,7 +32396,7 @@ msgstr "Hautatu objektua efektu bat esleitzeko.\n"
 msgid ""
 "Node with id '{0}' is not a suitable text node and was therefore ignored.\n"
 "\n"
-msgstr "'{0}' nodoa ez da testuaren nodo egokia eta ondorioz ez ikusi egingo zaio.\n"
+msgstr "'{0}' nodoa ez da testuaren nodo egokia eta ondorioz ezikusi egingo zaio.\n"
 "\n"
 
 #: ../share/extensions/jessyInk_effects.py:42
@@ -35399,7 +35399,7 @@ msgstr "Irudiaren izena (luzapenik gabe):"
 
 #: ../share/extensions/guillotine.inx:12
 msgid "Ignore these settings and use export hints"
-msgstr "Ez ikusi egin ezarpen hauei eta erabili esportazioaren argibideak"
+msgstr "Ezikusi ezarpen hauek eta erabili esportazioaren argibideak"
 
 #: ../share/extensions/handles.inx:3
 msgid "Draw Handles"
