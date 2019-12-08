@@ -664,11 +664,11 @@ override) the bindings in the main default.xml.
   <bind key="y" modifiers="Primary,Shift" action="DialogSymbols" display="true" />
   <bind key="Y" modifiers="Primary,Shift" action="DialogSymbols" />
 
-  <bind key="ampersand" modifiers="Primary,Shift" action="DialogLivePathEffect" />
-  <bind key="7" modifiers="Primary,Shift" action="DialogLivePathEffect" display="true" />
+  <bind key="ampersand" modifiers="Primary" action="DialogLivePathEffect" display="true" />
+  <bind key="7" modifiers="Primary,Shift" action="DialogLivePathEffect" />
 
-  <bind key="ampersand" modifiers="Primary" action="PasteLivePathEffect" />
-  <bind key="7" modifiers="Primary" action="PasteLivePathEffect" display="true" />
+  <bind key="ampersand" action="PasteLivePathEffect" display="true" />
+  <bind key="7" modifiers="Primary" action="PasteLivePathEffect" />
 
   <bind action="RemoveLivePathEffect" />
 
