@@ -72,7 +72,7 @@ public:
     /**
      * Update GUI.
      */
-    void update( Glib::ustring& font_spec );
+    void update(const Glib::ustring& font_spec);
 
     /**
      * Fill SPCSSAttr based on settings of buttons.
@@ -95,6 +95,9 @@ public:
     sigc::connection connectChanged(sigc::slot<void> slot) {
         return signal_changed.connect(slot);
     }
+
+    // return true if there are some variations present
+    bool variations_present() const;
 
 private:
 

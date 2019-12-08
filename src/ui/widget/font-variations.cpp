@@ -67,7 +67,7 @@ FontVariations::FontVariations () :
 
 // Update GUI based on query.
 void
-FontVariations::update (Glib::ustring& font_spec) {
+FontVariations::update (const Glib::ustring& font_spec) {
 
     font_instance* res = font_factory::Default()->FaceFromFontSpecification (font_spec.c_str());
 
@@ -157,6 +157,10 @@ void
 FontVariations::on_variations_change() {
     // std::cout << "FontVariations::on_variations_change: " << get_css_string() << std::endl;;
     signal_changed.emit ();
+}
+
+bool FontVariations::variations_present() const {
+    return !axes.empty();
 }
 
 } // namespace Widget

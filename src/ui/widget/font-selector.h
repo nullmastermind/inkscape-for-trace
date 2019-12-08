@@ -114,6 +114,9 @@ private:
     // Variables
     double font_size;
 
+    // control font variations update and UI element size
+    void update_variations(const Glib::ustring& fontspec);
+
 public:
 
     /**

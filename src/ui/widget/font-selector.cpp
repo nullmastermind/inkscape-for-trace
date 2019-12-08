@@ -91,14 +91,17 @@ FontSelector::FontSelector (bool with_size, bool with_variations)
     set_name ("FontSelectorGrid");
     set_row_spacing(4);
     set_column_spacing(4);
-    attach (family_frame,  0, 0, 1, 2);
-    attach (style_frame,   1, 0, 2, 1);
+    // Add extra columns to the "family frame" to change space distribution
+    // by prioritizing font family over styles
+    const int extra = 4;
+    attach (family_frame,  0, 0, 1 + extra, 2);
+    attach (style_frame,   1 + extra, 0, 2, 1);
     if (with_size) { // Glyph panel does not use size.
-        attach (size_label,    1, 1, 1, 1);
-        attach (size_combobox, 2, 1, 1, 1);
+        attach (size_label,    1 + extra, 1, 1, 1);
+        attach (size_combobox, 2 + extra, 1, 1, 1);
     }
     if (with_variations) { // Glyphs panel does not use variations.
-        attach (font_variations_scroll, 0, 2, 3, 1);
+        attach (font_variations_scroll, 0, 2, 3 + extra, 1);
     }
 
     // Add signals
@@ -203,7 +206,7 @@ FontSelector::update_font ()
     }
 
     Glib::ustring fontspec = font_lister->get_fontspec();
-    font_variations.update( fontspec );
+    update_variations(fontspec);
 
     signal_block = false;
 }
@@ -368,7 +371,7 @@ FontSelector::on_style_changed() {
     // Update variations widget if new style selected from style widget.
     signal_block = true;
     Glib::ustring fontspec = get_fontspec( false );
-    font_variations.update( fontspec );
+    update_variations(fontspec);
     signal_block = false;
 
     // Let world know
@@ -421,6 +424,14 @@ FontSelector::changed_emit() {
     signal_block = true;
     signal_changed.emit (get_fontspec());
     signal_block = false;
+}
+
+void FontSelector::update_variations(const Glib::ustring& fontspec) {
+    font_variations.update(fontspec);
+
+    // Check if there are any variations available; if not, don't expand font_variations_scroll
+    bool hasContent = font_variations.variations_present();
+    font_variations_scroll.set_vexpand(hasContent);
 }
 
 } // namespace Widget

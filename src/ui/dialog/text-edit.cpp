@@ -284,8 +284,26 @@ void TextEdit::setPreviewText (Glib::ustring font_spec, Glib::ustring font_featu
         return;
     }
 
+    // Limit number of lines in preview to arbitrary amount to prevent Text and Font dialog
+    // from growing taller than a desktop
+    const int max_lines = 4;
+    // Ignore starting empty lines; they would show up as nothing
+    auto start_pos = phrase.find_first_not_of(" \n\r\t");
+    if (start_pos == Glib::ustring::npos) {
+        start_pos = 0;
+    }
+    // Now take up to max_lines
+    auto end_pos = Glib::ustring::npos;
+    auto from = start_pos;
+    for (int i = 0; i < max_lines; ++i) {
+        end_pos = phrase.find("\n", from);
+        if (end_pos == Glib::ustring::npos) { break; }
+        from = end_pos + 1;
+    }
+    Glib::ustring phrase_trimmed = phrase.substr(start_pos, end_pos != Glib::ustring::npos ? end_pos - start_pos : end_pos);
+
     Glib::ustring font_spec_escaped = Glib::Markup::escape_text( font_spec );
-    Glib::ustring phrase_escaped = Glib::Markup::escape_text( phrase );
+    Glib::ustring phrase_escaped = Glib::Markup::escape_text(phrase_trimmed);
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int unit = prefs->getInt("/options/font/unitType", SP_CSS_UNIT_PT);
