@@ -138,9 +138,7 @@ DrawingShape::_updateItem(Geom::IntRect const &area, UpdateContext const &ctx, u
 
     if (!_curve || 
         !_style ||
-        _curve->is_empty() ||
-        (( _nrstyle.fill.type != NRStyle::PAINT_NONE ) &&
-         ( _nrstyle.stroke.type != NRStyle::PAINT_NONE && !outline) ))
+        _curve->is_empty())
     {
         return STATE_ALL;
     }
