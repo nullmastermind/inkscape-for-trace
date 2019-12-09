@@ -390,7 +390,7 @@ PencilToolbar::add_advanced_shape_options(bool tool_is_pencil)
         row[columns.col_sensitive] = true;
     }
 
-    _shape_item = Gtk::manage(UI::Widget::ComboToolItem::create(_("Shape:"), _("Shape of new paths drawn by this tool"), "Not Used", store));
+    _shape_item = Gtk::manage(UI::Widget::ComboToolItem::create(_("Shape"), _("Shape of new paths drawn by this tool"), "Not Used", store));
     _shape_item->use_group_label(true);
 
     auto prefs = Inkscape::Preferences::get();
@@ -424,7 +424,7 @@ void PencilToolbar::add_powerstroke_cap(bool tool_is_pencil)
         row[columns.col_sensitive] = true;
     }
 
-    _cap_item = Gtk::manage(UI::Widget::ComboToolItem::create(_("Caps:"), _("Line endings when drawing with pressure-sensitive PowerPencil"), "Not Used", store));
+    _cap_item = Gtk::manage(UI::Widget::ComboToolItem::create(_("Caps"), _("Line endings when drawing with pressure-sensitive PowerPencil"), "Not Used", store));
 
     auto prefs = Inkscape::Preferences::get();
 

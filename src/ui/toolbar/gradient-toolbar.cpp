@@ -462,7 +462,7 @@ GradientToolbar::GradientToolbar(SPDesktop *desktop)
             row[columns.col_sensitive] = true;
         }
 
-        _spread_cb = Gtk::manage(UI::Widget::ComboToolItem::create(_("Repeat: "),
+        _spread_cb = Gtk::manage(UI::Widget::ComboToolItem::create(_("Repeat"),
                                         // TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/pservers.html#LinearGradientSpreadMethodAttribute
                                         _("Whether to fill with flat color beyond the ends of the gradient vector "
                                           "(spreadMethod=\"pad\"), or repeat the gradient in the same direction "

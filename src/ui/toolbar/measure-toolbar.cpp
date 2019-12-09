@@ -117,7 +117,7 @@ MeasureToolbar::MeasureToolbar(SPDesktop *desktop)
 
     /* units menu */
     {
-        auto ti = _tracker->create_tool_item(_("Units:"), _("The units to be used for the measurements") );
+        auto ti = _tracker->create_tool_item(_("Units"), _("The units to be used for the measurements") );
         ti->signal_changed().connect(sigc::mem_fun(*this, &MeasureToolbar::unit_changed));
         add(*ti);
     }

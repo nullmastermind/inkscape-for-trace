@@ -333,7 +333,7 @@ MeshToolbar::MeshToolbar(SPDesktop *desktop)
         row[columns.col_label    ] = _("Bicubic");
         row[columns.col_sensitive] = true;
 
-        _select_type_item = Gtk::manage(UI::Widget::ComboToolItem::create(_("Smoothing:"),
+        _select_type_item = Gtk::manage(UI::Widget::ComboToolItem::create(_("Smoothing"),
             // TRANSLATORS: Type of Smoothing. See https://en.wikipedia.org/wiki/Coons_patch
             _("Coons: no smoothing. Bicubic: smoothing across patch boundaries."),
             "Not Used", store));

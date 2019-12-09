@@ -66,7 +66,7 @@ PaintbucketToolbar::PaintbucketToolbar(SPDesktop *desktop)
             row[columns.col_sensitive] = true;
         }
 
-        _channels_item = Gtk::manage(UI::Widget::ComboToolItem::create(_("Fill by:"), Glib::ustring(), "Not Used", store));
+        _channels_item = Gtk::manage(UI::Widget::ComboToolItem::create(_("Fill by"), Glib::ustring(), "Not Used", store));
         _channels_item->use_group_label(true);
 
         int channels = prefs->getInt("/tools/paintbucket/channels", 0);
@@ -128,7 +128,7 @@ PaintbucketToolbar::PaintbucketToolbar(SPDesktop *desktop)
             row[columns.col_sensitive] = true;
         }
 
-        _autogap_item = Gtk::manage(UI::Widget::ComboToolItem::create(_("Close gaps:"), Glib::ustring(), "Not Used", store));
+        _autogap_item = Gtk::manage(UI::Widget::ComboToolItem::create(_("Close gaps"), Glib::ustring(), "Not Used", store));
         _autogap_item->use_group_label(true);
 
         int autogap = prefs->getInt("/tools/paintbucket/autogap", 0);
