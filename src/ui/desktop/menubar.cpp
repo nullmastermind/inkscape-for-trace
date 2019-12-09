@@ -117,6 +117,7 @@ static void set_menuitems(unsigned int emitting_verb, bool value)
                     lastverb = -1;
                     return;
                 }
+                lastverb = emitting_verb;
                 Gtk::CheckMenuItem *check = dynamic_cast<Gtk::CheckMenuItem *>(menu.first.second);
                 Gtk::RadioMenuItem *radio = dynamic_cast<Gtk::RadioMenuItem *>(menu.first.second);
                 if (radio) {
