@@ -60,6 +60,7 @@ using namespace Inkscape::IO::Resource;
 
 static bool try_shortcuts_file(char const *filename, bool const is_user_set=false);
 static void read_shortcuts_file(char const *filename, bool const is_user_set=false);
+static void _read_shortcuts_file(XML::Node const *root, bool const is_user_set);
 
 unsigned int sp_shortcut_get_key(unsigned int const shortcut);
 GdkModifierType sp_shortcut_get_modifiers(unsigned int const shortcut);
@@ -645,6 +646,13 @@ static void read_shortcuts_file(char const *filename, bool const is_user_set) {
     }
 
     XML::Node const *root=doc->root();
+    _read_shortcuts_file(root, is_user_set);
+
+    GC::release(doc);
+}
+
+static void _read_shortcuts_file(XML::Node const *root, bool const is_user_set)
+{
     g_return_if_fail(!strcmp(root->name(), "keys"));
     XML::NodeConstSiblingIterator iter=root->firstChild();
     for ( ; iter ; ++iter ) {
@@ -652,6 +660,10 @@ static void read_shortcuts_file(char const *filename, bool const is_user_set) {
 
         if (!strcmp(iter->name(), "bind")) {
             is_primary = iter->attribute("display") && strcmp(iter->attribute("display"), "false") && strcmp(iter->attribute("display"), "0");
+        } else if (!strcmp(iter->name(), "keys")) {
+            // include another keys file
+            _read_shortcuts_file(iter, is_user_set);
+            continue;
         } else {
             // some unknown element, do not complain
             continue;
@@ -729,8 +741,6 @@ static void read_shortcuts_file(char const *filename, bool const is_user_set) {
 
         sp_shortcut_set(keyval | modifiers, verb, is_primary, is_user_set);
     }
-
-    GC::release(doc);
 }
 
 /**

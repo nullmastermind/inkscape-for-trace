@@ -16,6 +16,7 @@
 #include <stdexcept>
 
 #include <libxml/parser.h>
+#include <libxml/xinclude.h>
 
 #include "xml/repr.h"
 #include "xml/attribute-record.h"
@@ -220,8 +221,14 @@ xmlDocPtr XmlSource::readXml()
     // Allow NOENT only if we're filtering out SYSTEM and PUBLIC entities
     if (LoadEntities)     parse_options |= XML_PARSE_NOENT;
 
-    return xmlReadIO( readCb, closeCb, this,
+    auto doc = xmlReadIO( readCb, closeCb, this,
                       filename, getEncoding(), parse_options);
+
+    if (xmlXIncludeProcessFlags(doc, XML_PARSE_NOXINCNODE) < 0) {
+        g_warning("XInclude processing failed for %s", filename);
+    }
+
+    return doc;
 }
 
 int XmlSource::readCb( void * context, char * buffer, int len )
