@@ -665,7 +665,7 @@ static void read_shortcuts_file(char const *filename, bool const is_user_set) {
 
         Inkscape::Verb *verb=Inkscape::Verb::getbyid(verb_name);
         if (!verb
-#if !HAVE_ASPELL
+#ifndef HAVE_ASPELL
                 && strcmp(verb_name, "DialogSpellcheck") != 0
 #endif
            ) {

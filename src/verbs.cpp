@@ -798,7 +798,7 @@ Verb *Verb::getbyid(gchar const *id, bool verbose)
     }
 
     if (verb == nullptr
-#if !HAVE_ASPELL
+#ifndef HAVE_ASPELL
                 && strcmp(id, "DialogSpellcheck") != 0
 #endif
             ) {

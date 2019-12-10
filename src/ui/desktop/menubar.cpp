@@ -544,8 +544,8 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
 #endif
                         }
                     } else if (true
-#if !HAVE_ASPELL
-                        && !strcmp(verb_name.c_str(), "DialogSpellcheck")
+#ifndef HAVE_ASPELL
+                        && strcmp(verb_name.c_str(), "DialogSpellcheck") != 0
 #endif
                         ) {
                         std::cerr << "build_menu: no verb with id: " << verb_name << std::endl;
