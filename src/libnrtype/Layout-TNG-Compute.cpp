@@ -408,14 +408,15 @@ bool Layout::Calculator::_measureUnbrokenSpan(ParagraphInfo const &para,
         while (span->end_glyph_index < (unsigned)span->end.iter_span->glyph_string->num_glyphs
                && span->end.iter_span->glyph_string->log_clusters[span->end_glyph_index] <= (int)span->end.char_byte) {
 
-            // Advance does not include kerning.
-            // font_instance *font = para.pango_items[span->end.iter_span->pango_item_index].font;
-            // double font_size = span->start.iter_span->font_size;
-            // double glyph_h_advance = font_size * font->Advance(info->glyph, false);
-            // double glyph_v_advance = font_size * font->Advance(info->glyph, true );
-
             PangoGlyphInfo *info = &(span->end.iter_span->glyph_string->glyphs[span->end_glyph_index]);
             double glyph_width    = font_size_multiplier * info->geometry.width;
+
+            // Advance does not include kerning but Pango gives wrong advances for vertical text
+            // with upright orientation.
+            font_instance *font = para.pango_items[span->end.iter_span->pango_item_index].font;
+            double font_size = span->start.iter_span->font_size;
+            double glyph_h_advance = font_size * font->Advance(info->glyph, false);
+            double glyph_v_advance = font_size * font->Advance(info->glyph, true );
 
             if (_block_progression == LEFT_TO_RIGHT || _block_progression == RIGHT_TO_LEFT) {
                 // Vertical text
@@ -430,7 +431,11 @@ bool Layout::Calculator::_measureUnbrokenSpan(ParagraphInfo const &para,
                     guint32 c = *Glib::ustring::const_iterator(span->end.iter_span->input_stream_first_character.base() + span->end.char_byte);
                     if (g_unichar_type (c) != G_UNICODE_NON_SPACING_MARK) {
                         // Non-spacing marks should not contribute to width. Fonts may not report the correct advance, especially if the 'vmtx' table is missing.
-                        char_width += glyph_width;
+                        if (pango_version_check(1,44,0) != nullptr) {
+                            char_width += glyph_width;
+                        } else {
+                            char_width += glyph_v_advance;
+                        }
                     }
                 }
             } else {
@@ -795,10 +800,11 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                     new_glyph.rotation = glyph_rotate;
                     new_glyph.orientation = ORIENTATION_UPRIGHT; // Only effects vertical text
 
-#ifdef DEBUG_GLYPH
-                    // Advance does not include kerning
+                    // Advance does not include kerning but Pango <= 1.43 gives wrong advances for verical upright text.
                     double glyph_h_advance = new_span.font_size * font->Advance(new_glyph.glyph, false);
                     double glyph_v_advance = new_span.font_size * font->Advance(new_glyph.glyph, true );
+
+#ifdef DEBUG_GLYPH
 
                     bool is_cluster_start = unbroken_span_glyph_info->attr.is_cluster_start;
                     std::cout << "  " << std::hex << std::setw(6) << *iter_source_text << std::dec
@@ -888,7 +894,13 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                                       << std::endl;
 #endif
 
-                            // new_glyph.x -= delta_x; // Ignore
+                            if (pango_version_check(1,44,0) != nullptr) {
+                                new_glyph.advance = glyph_v_advance;
+                                new_glyph.x += delta_x;
+                                // Glyph reference point is center (shift left edge to center glyph).
+                                new_glyph.y -= glyph_h_advance/2.0;
+                            }
+
                             new_glyph.y -= delta_y;
 
                             // Adjust for alignment point (top of em box, horizontal center).
@@ -897,9 +909,12 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                                                                  para.pango_items[unbroken_span.pango_item_index].font->GetBaselines()[ SP_CSS_BASELINE_CENTRAL ] );
 
                             if (g_unichar_type (*iter_source_text) == G_UNICODE_NON_SPACING_MARK) {
-                                new_glyph.x -= new_span.line_height.emSize();
-                                new_glyph.x -= delta_x;
-                                new_glyph.x += old_delta_x;
+
+                                if (pango_version_check(1,44,0) == nullptr) {
+                                    new_glyph.x -= new_span.line_height.emSize();
+                                    new_glyph.x += delta_x;
+                                    new_glyph.x += old_delta_x;
+                                }
                                 new_glyph.advance = 0; // Many fonts report a non-zero advance for marks, especially if the 'vmtx' table is missing.
                             } else {
                                 old_delta_x = delta_x;
