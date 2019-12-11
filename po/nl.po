@@ -60,7 +60,7 @@ msgstr ""
 "Project-Id-Version: inkscape 0.92\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2019-10-20 20:22+0200\n"
-"PO-Revision-Date: 2019-11-01 11:02+0100\n"
+"PO-Revision-Date: 2019-11-10 10:44+0100\n"
 "Last-Translator: Kris De Gussem <Kris.DeGussem@gmail.com>\n"
 "Language-Team: Dutch\n"
 "Language: nl\n"
@@ -1813,7 +1813,7 @@ msgstr "Aluminium"
 
 #: ../share/filters/filters.svg.h:728
 msgid "Aluminium effect with sharp brushed reflections"
-msgstr "Aluminiumeffect met scherpe spiegelende reflecties"
+msgstr "Aluminiumeffect met scherpe reflecties"
 
 #: ../share/filters/filters.svg.h:730
 msgid "Comics"
@@ -4674,7 +4674,7 @@ msgstr ""
 
 #: ../src/extension/internal/bitmap/adaptiveThreshold.cpp:40
 msgid "Adaptive Threshold"
-msgstr "Aanpassende drempelwaarde"
+msgstr "Adaptieve drempelwaarde"
 
 #: ../src/extension/internal/bitmap/adaptiveThreshold.cpp:42
 #: ../src/extension/internal/bitmap/raise.cpp:43
@@ -4705,7 +4705,7 @@ msgstr "Hoogte:"
 #: ../src/ui/toolbar/measure-toolbar.cpp:223
 #: ../share/extensions/printing_marks.inx:27
 msgid "Offset:"
-msgstr "Beginpunt:"
+msgstr "Offset:"
 
 #: ../src/extension/internal/bitmap/adaptiveThreshold.cpp:48
 #: ../src/extension/internal/bitmap/addNoise.cpp:59
@@ -6550,7 +6550,7 @@ msgstr "Schaduwen"
 #: ../src/live_effects/lpe-transform_2pts.cpp:41
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1030
 msgid "Offset"
-msgstr "Verplaatsen"
+msgstr "Offset"
 
 #: ../src/extension/internal/filter/color.h:1129
 msgid "Modify lights and shadows separately"
@@ -9566,7 +9566,7 @@ msgstr ""
 
 #: ../src/live_effects/effect.cpp:513 ../src/selection-chemistry.cpp:2952
 msgid "Fill between many"
-msgstr "Vullen tussen verschillende"
+msgstr "Vullen tussen diverse"
 
 #: ../src/live_effects/effect.cpp:517
 msgid ""
@@ -9614,7 +9614,7 @@ msgstr "Hoeken (omlijsting/afschuining)"
 msgid ""
 "Adjust the shape of a path's corners, rounding them to a specified radius, "
 "or cutting them off"
-msgstr ""
+msgstr "Hoeken van paden afsnijden of afronden tot een bepaalde straal"
 
 #: ../src/live_effects/effect.cpp:584
 msgid "Boolean operation"
@@ -9624,19 +9624,19 @@ msgstr "Booleaanse operatie"
 msgid ""
 "Cut, union, subtract, intersect and divide a path non-destructively with "
 "another path"
-msgstr ""
+msgstr "Pad niet-destructief snijden, verenigen, aftrekken, doorsneden en delen met een ander pad"
 
 #: ../src/live_effects/effect.cpp:598 ../src/live_effects/effect.cpp:602
 msgid "Embroidery stitch"
-msgstr ""
+msgstr "Borduren"
 
 #: ../src/live_effects/effect.cpp:612
 msgid "Power clip"
-msgstr ""
+msgstr "Power clip"
 
 #: ../src/live_effects/effect.cpp:616
 msgid "Invert, hide or flatten a clip (apply like a Boolean operation)"
-msgstr ""
+msgstr "Înverteren, verbergen of uitvlakken van een clip (zoals een Booleaanse operatie)"
 
 #: ../src/live_effects/effect.cpp:626
 msgid "Power mask"
@@ -9644,7 +9644,7 @@ msgstr "Power masker"
 
 #: ../src/live_effects/effect.cpp:630
 msgid "Invert or hide a mask, or use its negative"
-msgstr ""
+msgstr "Inverteren, verbergen of het negatief van een masker gebruiken"
 
 #: ../src/live_effects/effect.cpp:640
 msgid "Ellipse from points"
@@ -9657,7 +9657,7 @@ msgstr ""
 
 #: ../src/live_effects/effect.cpp:658
 msgid "Offset the path, optionally keeping cusp corners cusp"
-msgstr ""
+msgstr "Pad verplaatsen, optioneel vlijven hoekige knooppunten hoekig"
 
 #: ../src/live_effects/effect.cpp:668
 msgid "Dashed Stroke"
@@ -9667,16 +9667,16 @@ msgstr "Streepjeslijn"
 msgid ""
 "Add a dashed stroke whose dashes end exactly on a node, optionally with the "
 "same number of dashes per path segment"
-msgstr ""
+msgstr "Streepjeslijn toevoegen waarvan de strepen exact op een knooppunt eindigen, optioneel met hetzelfde aantal streepjes per segment"
 
 #: ../src/live_effects/effect.cpp:682
 msgid "Angle bisector"
-msgstr "Deellijn hoek"
+msgstr "Deellijn"
 
 #: ../src/live_effects/effect.cpp:686
 msgid ""
 "Draw a line that halves the angle between the first three nodes of the path"
-msgstr ""
+msgstr "Een lijn tekenen die de hoek tussen de eerste drie knooppunten van een pad in twee deelt"
 
 #: ../src/live_effects/effect.cpp:696
 msgid "Circle (by center and radius)"
@@ -9686,7 +9686,7 @@ msgstr "Cirkel (middelpunt en straal)"
 msgid ""
 "Draw a circle, where the first node of the path is the center, and the last "
 "determines its radius"
-msgstr ""
+msgstr "Een cirkel tekenen, het eerste knoppunt van een pad is het centrum en het laatste bepaalt de straal"
 
 #: ../src/live_effects/effect.cpp:710
 msgid "Circle by 3 points"
@@ -9696,7 +9696,7 @@ msgstr "Cirkel door 3 punten"
 msgid ""
 "Draw a circle whose circumference passes through the first three nodes of "
 "the path"
-msgstr ""
+msgstr "Een cirkel tekenen waarvan de omtrek door de eerste drie knooppunten van een pad gaat"
 
 #: ../src/live_effects/effect.cpp:724 ../share/extensions/extrude.inx:3
 msgid "Extrude"
@@ -9704,7 +9704,7 @@ msgstr "Uitrekken"
 
 #: ../src/live_effects/effect.cpp:728
 msgid "Extrude the path, creating a face for each path segment"
-msgstr ""
+msgstr "Een pad uitrekken door een vlak voor elk segment te maken"
 
 #: ../src/live_effects/effect.cpp:738
 msgid "Line Segment"
@@ -9712,7 +9712,7 @@ msgstr "Lijnsegment"
 
 #: ../src/live_effects/effect.cpp:742
 msgid "Draw a straight line that connects the first and last node of a path"
-msgstr ""
+msgstr "Een rechte lijn tekenen die het eerste en laatste knooppunt van een pad verbindt"
 
 #: ../src/live_effects/effect.cpp:752
 #: ../src/live_effects/lpe-measure-segments.cpp:61
@@ -9722,7 +9722,7 @@ msgstr "Parallelle"
 
 #: ../src/live_effects/effect.cpp:756
 msgid "Create a draggable line that will always be parallel to a two-node path"
-msgstr ""
+msgstr "Een versleepbare lijn maken die steeds parallel is aan een twee-knooppuntenpad"
 
 #: ../src/live_effects/effect.cpp:766
 msgid "Perpendicular bisector"
@@ -9732,7 +9732,7 @@ msgstr "Loodrechte deellijn"
 msgid ""
 "Draw a perpendicular line in the middle of the (imaginary) line that "
 "connects the start and end nodes"
-msgstr ""
+msgstr "Een loodrechte tekenen in het midden van een (denkbeeldige) lijn tussen start- en eindknooppunt"
 
 #: ../src/live_effects/effect.cpp:780
 msgid "Tangent to curve"
@@ -9742,7 +9742,7 @@ msgstr "Raaklijn aan curve"
 msgid ""
 "Draw a tangent with variable length and additional angle that can be moved "
 "along the path"
-msgstr ""
+msgstr "Een raaklijn met variabele lengte en additionele hoek die verplaatst kan worden langs het pad"
 
 #: ../src/live_effects/effect.cpp:795
 msgid "doEffect stack test"
@@ -9750,7 +9750,7 @@ msgstr "doEffect-stapeltest"
 
 #: ../src/live_effects/effect.cpp:799
 msgid "Test LPE"
-msgstr ""
+msgstr "Test LPE"
 
 #: ../src/live_effects/effect.cpp:809
 msgid "Dynamic stroke"
@@ -9760,7 +9760,7 @@ msgstr "Dynamische lijn"
 msgid ""
 "Create calligraphic strokes with variably shaped ends, making use of a "
 "parameter for the brush angle"
-msgstr ""
+msgstr "Kalligrafische lijnen met variabel vormgegeven uiteinden maken, met behulp van een parameter voor de penseelhoek"
 
 #: ../src/live_effects/effect.cpp:823
 msgid "Lattice Deformation"
@@ -9768,7 +9768,7 @@ msgstr "Roostervervorming"
 
 #: ../src/live_effects/effect.cpp:827
 msgid "Deform an object using a 4x4 grid"
-msgstr ""
+msgstr "Een object met een 4x4 grid vervormen"
 
 #: ../src/live_effects/effect.cpp:837
 msgid "Path length"
@@ -9776,16 +9776,15 @@ msgstr "Padlengte"
 
 #: ../src/live_effects/effect.cpp:841
 msgid "Display the total length of a (curved) path"
-msgstr ""
+msgstr "De totale lengte van een (gekromd) pad tonen"
 
 #: ../src/live_effects/effect.cpp:851
 msgid "Recursive skeleton"
 msgstr "Recursief skelet"
 
 #: ../src/live_effects/effect.cpp:855
-#, fuzzy
 msgid "Draw a path recursively"
-msgstr "Een pad tekenen dat een raster is"
+msgstr "Een pad recursief"
 
 #: ../src/live_effects/effect.cpp:865
 msgid "Text label"
@@ -9819,9 +9818,8 @@ msgstr ""
 "Geef aub een parameterpad op voor het padeffect '%s' met %d muisklikken"
 
 #: ../src/live_effects/effect.cpp:1561 ../src/live_effects/effect.cpp:1649
-#, fuzzy
 msgid "<b>Default value:</b> "
-msgstr " <b>_Aanmaken</b> "
+msgstr "<b>Standaardwaarde:</b> "
 
 #: ../src/live_effects/effect.cpp:1562 ../src/live_effects/effect.cpp:1635
 msgid "<b>Default value overridden:</b> "
@@ -9869,29 +9867,25 @@ msgstr ""
 #: ../src/live_effects/lpe-parallel.cpp:51
 #: ../src/live_effects/lpe-perp_bisector.cpp:98
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:63
-#, fuzzy
 msgid "Length left:"
-msgstr "Lengte-eenheid:"
+msgstr "Lengte links:"
 
 #: ../src/live_effects/lpe-angle_bisector.cpp:45
 #: ../src/live_effects/lpe-perp_bisector.cpp:98
-#, fuzzy
 msgid "Specifies the left end of the bisector"
-msgstr "Definieert de kleur van de lichtbron"
+msgstr "Definieert het linkereinde van de deellijn"
 
 #: ../src/live_effects/lpe-angle_bisector.cpp:46
 #: ../src/live_effects/lpe-parallel.cpp:52
 #: ../src/live_effects/lpe-perp_bisector.cpp:99
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:64
-#, fuzzy
 msgid "Length right:"
-msgstr "Lengte-eenheid:"
+msgstr "Lengte rechts:"
 
 #: ../src/live_effects/lpe-angle_bisector.cpp:46
 #: ../src/live_effects/lpe-perp_bisector.cpp:99
-#, fuzzy
 msgid "Specifies the right end of the bisector"
-msgstr "De lichtheid van de kleur kiezen"
+msgstr "Definieert het rechtereinde van de deellijn"
 
 #
 # File: ../src/live_effects/lpe-angle_bisector.cpp, line: 85
@@ -9899,13 +9893,12 @@ msgstr "De lichtheid van de kleur kiezen"
 #: ../src/live_effects/lpe-angle_bisector.cpp:85
 #: ../src/live_effects/lpe-perp_bisector.cpp:159
 msgid "Adjust the \"left\" end of the bisector"
-msgstr ""
+msgstr "Het \"linker\"einde van de deellijn aanpassen"
 
 #: ../src/live_effects/lpe-angle_bisector.cpp:91
 #: ../src/live_effects/lpe-perp_bisector.cpp:165
-#, fuzzy
 msgid "Adjust the \"right\" end of the bisector"
-msgstr "Verzadiging aanpassen"
+msgstr "Het \"rechter\"einde van de deellijn aanpassen"
 
 #: ../src/live_effects/lpe-attach-path.cpp:20
 msgid "Start path:"
@@ -9988,11 +9981,11 @@ msgstr "Breedte van het pad"
 
 #: ../src/live_effects/lpe-bendpath.cpp:61
 msgid "W_idth in units of length"
-msgstr "B_reedte in eenheden van lengte"
+msgstr "B_reedte als x maal lengte"
 
 #: ../src/live_effects/lpe-bendpath.cpp:61
 msgid "Scale the width of the path in units of its length"
-msgstr "De breedte van het pad schalen in eenheden van zijn lengte"
+msgstr "De breedte van het pad schalen als x maal zijn lengte"
 
 #: ../src/live_effects/lpe-bendpath.cpp:62
 msgid "_Original path is vertical"
@@ -10005,9 +9998,8 @@ msgstr ""
 
 #: ../src/live_effects/lpe-bendpath.cpp:63
 #: ../src/live_effects/lpe-patternalongpath.cpp:93
-#, fuzzy
 msgid "Hide width knot"
-msgstr "Knooppunten verbergen"
+msgstr "Breedte knooppunt verbergen"
 
 #: ../src/live_effects/lpe-bendpath.cpp:177
 #: ../src/live_effects/lpe-patternalongpath.cpp:280
@@ -10032,59 +10024,51 @@ msgstr "symmetrisch verschil"
 
 #: ../src/live_effects/lpe-bool.cpp:43
 msgid "division"
-msgstr "deling"
+msgstr "verdelen"
 
 #: ../src/live_effects/lpe-bool.cpp:47
 msgid "cut"
 msgstr "snijden"
 
 #: ../src/live_effects/lpe-bool.cpp:48
-#, fuzzy
 msgid "cut inside"
-msgstr "Buiten"
+msgstr "langs binnen snijden"
 
 #: ../src/live_effects/lpe-bool.cpp:49
-#, fuzzy
 msgid "cut outside"
-msgstr "Buiten"
+msgstr "langs buiten snijden"
 
 #: ../src/live_effects/lpe-bool.cpp:55 ../src/live_effects/lpe-bool.cpp:64
-#, fuzzy
 msgid "even-odd"
-msgstr "gelijkmatig"
+msgstr "even-oneven"
 
 #: ../src/live_effects/lpe-bool.cpp:56 ../src/live_effects/lpe-bool.cpp:65
 msgid "non-zero"
-msgstr ""
+msgstr "niet nul"
 
 #: ../src/live_effects/lpe-bool.cpp:57 ../src/live_effects/lpe-bool.cpp:66
-#, fuzzy
 msgid "positive"
-msgstr "Composiet"
+msgstr "positief"
 
 #: ../src/live_effects/lpe-bool.cpp:58
-#, fuzzy
 msgid "take from object"
-msgstr "Van object"
+msgstr "van object overnemen"
 
 #: ../src/live_effects/lpe-bool.cpp:73
-#, fuzzy
 msgid "Operand path:"
-msgstr "Buigingspad:"
+msgstr "Bewerkingspad:"
 
 #: ../src/live_effects/lpe-bool.cpp:73
-#, fuzzy
 msgid "Operand for the boolean operation"
-msgstr "De standaarddeviatie voor de vervagingsbewerking."
+msgstr "Bewerkingspad voor de booleaanse bewerking"
 
 #: ../src/live_effects/lpe-bool.cpp:74
-#, fuzzy
 msgid "Operation:"
-msgstr "Operator:"
+msgstr "Bewerking:"
 
 #: ../src/live_effects/lpe-bool.cpp:74
 msgid "Boolean Operation"
-msgstr "Booleaanse handeling"
+msgstr "Booleaanse bewerking"
 
 #: ../src/live_effects/lpe-bool.cpp:75
 msgid "Swap operands"
@@ -10092,45 +10076,43 @@ msgstr ""
 
 #: ../src/live_effects/lpe-bool.cpp:75
 msgid "Swap operands (useful e.g. for difference)"
-msgstr ""
+msgstr "Paden wisselen (bruikbaar bij vb. verschil)"
 
 #: ../src/live_effects/lpe-bool.cpp:76
-#, fuzzy
 msgid "Hide Linked"
-msgstr "Recht knooppunt"
+msgstr "Link verbergen"
 
 #: ../src/live_effects/lpe-bool.cpp:76
-#, fuzzy
 msgid "Hide linked path"
-msgstr "Gelinkt pad:"
+msgstr "Gelinkt pad verbergen"
 
 #: ../src/live_effects/lpe-bool.cpp:78
-#, fuzzy
 msgid "Remove inner"
-msgstr "Verwijder filter"
+msgstr "Niet-contour verwijderen"
 
 #: ../src/live_effects/lpe-bool.cpp:79
 msgid ""
 "For cut operations: remove inner (non-contour) lines of cutting path to "
 "avoid invisible extra points"
 msgstr ""
+"Voor snijbewerkingen: niet-contourlijnen van snijpad verwijderen om extra "
+"onzichtbare knooppunten te vermijden"
 
 #: ../src/live_effects/lpe-bool.cpp:81
-#, fuzzy
 msgid "Fill type this:"
-msgstr "Alle soorten"
+msgstr "Vulling huidig pad:"
 
 #: ../src/live_effects/lpe-bool.cpp:81
 msgid "Fill type (winding mode) for this path"
-msgstr ""
+msgstr "Vulling van dit pad"
 
 #: ../src/live_effects/lpe-bool.cpp:83
 msgid "Fill type operand:"
-msgstr ""
+msgstr "Vulling bewerkingspad:"
 
 #: ../src/live_effects/lpe-bool.cpp:83
 msgid "Fill type (winding mode) for operand path"
-msgstr ""
+msgstr "Vulling van bewerkingspad"
 
 #: ../src/live_effects/lpe-bounding-box.cpp:20
 #: ../src/live_effects/lpe-fill-between-many.cpp:35
@@ -10293,19 +10275,16 @@ msgid "Method:"
 msgstr "Methode:"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:64
-#, fuzzy
 msgid "Rotate methods"
-msgstr "Modus roteren"
+msgstr "Draaimethoden"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:65
-#, fuzzy
 msgid "Origin"
-msgstr "X-oorsprong:"
+msgstr "Oorsprong"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:65
-#, fuzzy
 msgid "Adjust origin of the rotation"
-msgstr "Verzadiging aanpassen"
+msgstr "Oorsprong van de draaiing aanpassen"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:66
 #: ../src/live_effects/lpe-transform_2pts.cpp:38
@@ -10313,92 +10292,80 @@ msgid "Start point"
 msgstr "Beginpunt"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:66
-#, fuzzy
 msgid "Starting point to define start angle"
-msgstr "Beginpunt tap"
+msgstr "Beginpunt om de beginhoek te bepalen"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:66
 msgid "Adjust starting point to define start angle"
-msgstr ""
+msgstr "Beginpunt aanpassen om de beginghoek te bepalen"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:67
-#, fuzzy
 msgid "Starting angle"
 msgstr "Beginhoek"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:67
-#, fuzzy
 msgid "Angle of the first copy"
-msgstr "Taal van het document"
+msgstr "Hoek van de eerste kopie"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:68
-#, fuzzy
 msgid "Rotation angle"
-msgstr "Beginhoek"
+msgstr "Draaihoek"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:68
-#, fuzzy
 msgid "Angle between two successive copies"
-msgstr "Afstand tussen opeenvolgende markeringen"
+msgstr "Hoek tussen twee kopies"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:69
-#, fuzzy
 msgid "Number of copies"
-msgstr "Aantal dia's"
+msgstr "Aantal kopies"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:69
-#, fuzzy
 msgid "Number of copies of the original path"
-msgstr "Aantal hoeken van een veelhoek of ster"
+msgstr "Aantal kopies van het originele pad"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:70
-#, fuzzy
 msgid "Gap"
-msgstr "Diagram"
+msgstr "Ruimte"
 
 #
 # File: ../src/live_effects/lpe-copy_rotate.cpp, line: 70
 #: ../src/live_effects/lpe-copy_rotate.cpp:70
 msgid "Gap space between copies, use small negative gaps to fix some joins"
-msgstr ""
+msgstr "Ruimte tussen kopies, gebruik kleine negatieve waarden om sommige verbindingen te fixen"
 
 #
 # File: ../src/live_effects/lpe-copy_rotate.cpp, line: 71
 #: ../src/live_effects/lpe-copy_rotate.cpp:71
 msgid "360° Copies"
-msgstr ""
+msgstr "360° kopies"
 
 #
 # File: ../src/live_effects/lpe-copy_rotate.cpp, line: 71
 #: ../src/live_effects/lpe-copy_rotate.cpp:71
 msgid "No rotation angle, fixed to 360°"
-msgstr ""
+msgstr "Geen draaihoek, gefixeert op 360°"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:72
-#, fuzzy
 msgid "Mirror copies"
-msgstr "X-as spiegelen"
+msgstr "Kopies spiegelen"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:72
-#, fuzzy
 msgid "Mirror between copies"
-msgstr "Ruimte tussen kopieën:"
+msgstr "Spiegelen tussen kopies"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:73
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:59
-#, fuzzy
 msgid "Split elements"
-msgstr "Modus schalen"
+msgstr "Splitsen"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:73
 msgid "Split elements, so each can have its own style"
-msgstr ""
+msgstr "Kopies splitsen zodat elk zijn eigen stijl kan hebben"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:367
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:144
-#, fuzzy
 msgid "Reset styles"
-msgstr "Tekststijl behouden"
+msgstr "Stijlen resetten"
 
 #: ../src/live_effects/lpe-curvestitch.cpp:37
 msgid "Stitch path:"
@@ -10481,52 +10448,46 @@ msgid "Scale the width of the stitch path relative to its length"
 msgstr "Schaal de breedte van het naaipad relatief tov zijn lengte"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:18
-#, fuzzy
 msgid "Number of dashes"
-msgstr "Aantal stappen:"
+msgstr "Aantal streepjes"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:19
-#, fuzzy
 msgid "Hole factor"
-msgstr "Schalingsfactor:"
+msgstr "Open ruimte"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:20
-#, fuzzy
 msgid "Use segments"
-msgstr "Segment verwijderen"
+msgstr "Segmenten gebruiken"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:21
-#, fuzzy
 msgid "Half start/end"
-msgstr "Boog: Begin/einde veranderen"
+msgstr "Halve lengte begin/einde"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:21
-#, fuzzy
 msgid "Start and end of each segment has half size"
-msgstr "Begin en einde meting actief."
+msgstr "Halve lengte aan begin en einde van elk segment"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:22
 msgid "Unify dashes"
-msgstr ""
+msgstr "Streepjes samenvoegen"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:22
 msgid "Approximately unify the dashes length using the minimal length segment"
-msgstr ""
+msgstr "Streepjes bij benadering samenvoegen aan de hand van de minimale segmentlengte"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:24
 #: ../src/live_effects/lpe-powerclip.cpp:37
 msgid "Info Box"
-msgstr ""
+msgstr "Info"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:24
 #: ../src/live_effects/lpe-powerclip.cpp:37
-#, fuzzy
 msgid "Important messages"
-msgstr "Importinstellingen"
+msgstr "Belangrijke info"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:25
 msgid "Add <b>\"Fill Between Many LPE\"</b> to add fill."
-msgstr ""
+msgstr "Pas <b>\"padeffect Vullen tussen diverse\"</b> toe om vulling toe te voegen."
 
 #: ../src/live_effects/lpe-ellipse_5pts.cpp:75
 msgid "Five points required for constructing an ellipse"
@@ -10537,133 +10498,121 @@ msgid "No ellipse found for specified points"
 msgstr "Geen ellips gevonden voor opgegeven punten"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:30
-#, fuzzy
 msgid "no reordering"
-msgstr "Renderen"
+msgstr "geen rendering"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:31
 msgid "zig-zag"
-msgstr ""
+msgstr "zig-zag"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:32
 msgid "zig-zag, reverse first"
-msgstr ""
+msgstr "zig-zag, eerste omgekeerd"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:33
-#, fuzzy
 msgid "closest"
-msgstr "Sluiten"
+msgstr "dichtstbijzijnde"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:34
 msgid "closest, reverse first"
-msgstr ""
+msgstr "dichtstbijzijnde, eerste omgekeerd"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:35
 msgid "traveling salesman 2-opt (fast, bad)"
-msgstr ""
+msgstr "handelsreizigersprobleem 2-opt (snel, slecht)"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:36
 msgid "traveling salesman 3-opt (fast, ok)"
-msgstr ""
+msgstr "handelsreizigersprobleem 3-opt (snel, ok)"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:37
 msgid "traveling salesman 4-opt (seconds)"
-msgstr ""
+msgstr "handelsreizigersprobleem 4-opt (seconden)"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:38
 msgid "traveling salesman 5-opt (minutes)"
-msgstr ""
+msgstr "handelsreizigersprobleem 5-opt (minuten)"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:45
-#, fuzzy
 msgid "straight line"
-msgstr "rasterlijn"
+msgstr "rechte lijn"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:46
-#, fuzzy
 msgid "move to begin"
-msgstr "Naar laag verplaatsen"
+msgstr "naar begin verplaatsen"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:47
-#, fuzzy
 msgid "move to middle"
-msgstr "Naar lijst omzetten"
+msgstr "naar midden verplaatsen"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:48
-#, fuzzy
 msgid "move to end"
-msgstr "Naar laag verplaatsen"
+msgstr "naar einde verplaatsen"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:56
-#, fuzzy
 msgid "Ordering method"
-msgstr "Oriëntatie"
+msgstr "Rangschikking"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:56
 msgid "Method used to order sub paths"
-msgstr ""
+msgstr "Methode voor het rangschikken van subpaden"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:57
-#, fuzzy
 msgid "Connection method"
-msgstr "Verbindingslengte"
+msgstr "Verbindingsmethode"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:57
 msgid "Method to connect end points of sub paths"
-msgstr ""
+msgstr "Methode om eindpunten van subpaden te verbinen"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:58
-#, fuzzy
 msgid "Stitch length"
-msgstr "Padlengte"
+msgstr "Steeklengte"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:58
 msgid "If not 0, linearize path with given step length"
-msgstr ""
+msgstr "Indien niet 0, pad lineariseren met deze steeklengte"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:59
-#, fuzzy
 msgid "Minimum stitch length [%]"
-msgstr "Maximum segmentlengte:"
+msgstr "Minimum steeklengte [%]"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:59
 msgid "Combine steps shorter than this [%]"
-msgstr ""
+msgstr "Stappen korter dan deze combineren [%]"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:60
-#, fuzzy
 msgid "Stitch pattern"
-msgstr "Naaipad:"
+msgstr "Steekpatroon"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:60
 msgid "Select between different stitch patterns"
-msgstr ""
+msgstr "Selecteer tussen verschillende steekpatronen"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:61
-#, fuzzy
 msgid "Show stitches"
-msgstr "Punten tonen"
+msgstr "Steken tonen"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:61
 msgid ""
 "Show stitches as small gaps (just for inspection - don't use for output)"
-msgstr ""
+msgstr "Steken as kleine open ruimte tonen (voor inspectie - niet voor resultaat)"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:62
 msgid "Show stitch gap"
-msgstr ""
+msgstr "Steekafstand tonen"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:62
 msgid "Gap between stitches when showing stitches"
-msgstr ""
+msgstr "Afstand tussen steken bij het tonen van steken"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:63
 msgid "Jump if longer"
-msgstr ""
+msgstr "Verspring indien langer"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:63
 msgid "Jump connection if longer than"
-msgstr ""
+msgstr "Verspring indien langer dan"
 
 #: ../src/live_effects/lpe-envelope.cpp:18
 msgid "Top bend path:"
@@ -10759,9 +10708,8 @@ msgstr "Sluiten"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:39
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:25
-#, fuzzy
 msgid "Close path"
-msgstr "Het pad wordt gesloten."
+msgstr "Pad sluiten"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:40
 #, fuzzy
@@ -10826,9 +10774,8 @@ msgid "Chamfer steps"
 msgstr "Afschuiningsstappen"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:51
-#, fuzzy
 msgid "Radius in %"
-msgstr "straal, in eenheid of in %"
+msgstr "Straal in %"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:51
 msgid "Flexible radius size (%)"
@@ -11476,9 +11423,8 @@ msgstr "Verticaal"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:67
 #: ../src/live_effects/lpe-offset.cpp:77
-#, fuzzy
 msgid "Unit of measurement"
-msgstr "Uitdrukking van papierdikte:"
+msgstr "Meeteenheid"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:68
 #: ../share/extensions/gcodetools_graffiti.inx:18
@@ -11502,9 +11448,8 @@ msgid "Set color and opacity of the dimensions"
 msgstr "Lettertypegrootte voor de meetlabels"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:70
-#, fuzzy
 msgid "Font"
-msgstr "_Lettertype"
+msgstr "Lettertype"
 
 # De volgende zes strings beschrijven wat enkele toetsen doen.
 # Een kleine letter maakt duidelijker dat ze een voortzetting zijn.
@@ -11543,9 +11488,8 @@ msgid "Distance of dimension line from the path"
 msgstr ""
 
 #: ../src/live_effects/lpe-measure-segments.cpp:74
-#, fuzzy
 msgid "Label position"
-msgstr "X-Positie"
+msgstr "Labelpositie"
 
 #
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 74
@@ -11589,9 +11533,8 @@ msgid "Scale"
 msgstr "Schalen"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:78
-#, fuzzy
 msgid "Scaling factor"
-msgstr "Schalingsfactor:"
+msgstr "Schalingsfactor"
 
 #. TRANSLATORS: Don't translate "{measure}" and "{unit}" variables.
 #: ../src/live_effects/lpe-measure-segments.cpp:81
@@ -11743,9 +11686,8 @@ msgid ""
 msgstr ""
 
 #: ../src/live_effects/lpe-measure-segments.cpp:94
-#, fuzzy
 msgid "Distance"
-msgstr "Veraf"
+msgstr "Afstand"
 
 #
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 94
@@ -12129,11 +12071,11 @@ msgstr "Het aantal patroonkopieën langs het skeletpad"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:79
 msgid "Wid_th in units of length"
-msgstr "Br_eedte in eenheden van lengte"
+msgstr "Br_eedte als x maal lengte"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:80
 msgid "Scale the width of the pattern in units of its length"
-msgstr "De breedte van het patroon in eenheden van zijn lengte"
+msgstr "De breedte van het patroon als x maal zijn lengte"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:82
 msgid "Spa_cing:"
@@ -34074,9 +34016,8 @@ msgid "Error threshold"
 msgstr "Ruwe grenswaarde:"
 
 #: ../share/ui/dialog-trace.glade:418
-#, fuzzy
 msgid "Invert image"
-msgstr "Kleuren _inverteren"
+msgstr "Afbeelding inverteren"
 
 #: ../share/ui/dialog-trace.glade:422
 msgid "Invert black and white regions"
@@ -34107,9 +34048,8 @@ msgstr ""
 "(gewoonlijk met gaten)"
 
 #: ../share/ui/dialog-trace.glade:497
-#, fuzzy
 msgid "Remove background"
-msgstr "_Achtergrond verwijderen"
+msgstr "Achtergrond verwijderen"
 
 #: ../share/ui/dialog-trace.glade:501
 msgid "Remove bottom (background) layer when done"
@@ -34124,9 +34064,8 @@ msgid "The desired number of scans"
 msgstr "Het gewenste aantal niveaus"
 
 #: ../share/ui/dialog-trace.glade:545
-#, fuzzy
 msgid "Multiple scans"
-msgstr "Meerdere overgangen"
+msgstr "Meerdere scans"
 
 #: ../share/ui/dialog-trace.glade:578
 #, fuzzy
@@ -34230,16 +34169,16 @@ msgid "The radius of the window analyzed"
 msgstr "De straal van het geanalyseerde venster"
 
 #: ../share/ui/dialog-trace.glade:826
-#, fuzzy
 msgid ""
 "\n"
 "Output\n"
-msgstr "Uitvoer"
+msgstr ""
+"\n"
+"Uitvoer\n"
 
 #: ../share/ui/dialog-trace.glade:841
-#, fuzzy
 msgid "Voronoi"
-msgstr "Voronoipatroon"
+msgstr "Voronoi"
 
 #: ../share/ui/dialog-trace.glade:845
 msgid "Output composed of straight lines"
@@ -34273,9 +34212,8 @@ msgid "_Help"
 msgstr "_Help"
 
 #: ../share/ui/inkscape-application.glade:25
-#, fuzzy
 msgid "_About"
-msgstr "Over"
+msgstr "_Over"
 
 #: ../share/extensions/convert2dashes.py:40
 msgid "Total number of objects not converted: {}\n"
@@ -35850,9 +35788,8 @@ msgid "Business Card"
 msgstr "Visitekaart"
 
 #: ../share/extensions/empty_business_card.inx:6
-#, fuzzy
 msgid "Business card size:"
-msgstr "Visitekaart 85x54mm"
+msgstr "Grootte visitekaart:"
 
 #: ../share/extensions/empty_business_card.inx:7
 msgid "74mm x 52mm (A8)"
@@ -35883,19 +35820,16 @@ msgid "3.5in x 2in (United States, Canada)"
 msgstr "3.5in x 2in (Verenigde staten, Canada)"
 
 #: ../share/extensions/empty_business_card.inx:21
-#, fuzzy
 msgid "Business Card..."
-msgstr "Visitekaart"
+msgstr "Visitekaart..."
 
 #: ../share/extensions/empty_business_card.inx:23
-#, fuzzy
 msgid "Business card of chosen size."
-msgstr "Visitekaart 85x54mm"
+msgstr "Visitekaart met gekozen grootte"
 
 #: ../share/extensions/empty_business_card.inx:25
-#, fuzzy
 msgid "business card"
-msgstr "Visitekaart"
+msgstr "visitekaart"
 
 #: ../share/extensions/empty_desktop.inx:3
 msgid "Desktop"
@@ -35918,19 +35852,16 @@ msgid "Custom Height:"
 msgstr "Aangepaste hoogte:"
 
 #: ../share/extensions/empty_desktop.inx:31
-#, fuzzy
 msgid "Desktop..."
-msgstr "Bureaublad"
+msgstr "Bureaublad..."
 
 #: ../share/extensions/empty_desktop.inx:33
-#, fuzzy
 msgid "Empty desktop of chosen size."
-msgstr "Lege bureaubladpagina"
+msgstr "Leeg bureaublad van gekozen grootte"
 
 #: ../share/extensions/empty_desktop.inx:35
-#, fuzzy
 msgid "empty desktop"
-msgstr "Lege bureaubladpagina"
+msgstr "leeg bureaublad "
 
 #: ../share/extensions/empty_dvd_cover.inx:3
 msgid "DVD Cover"
@@ -35941,9 +35872,8 @@ msgid "DVD spine width:"
 msgstr "Rugbreedte:"
 
 #: ../share/extensions/empty_dvd_cover.inx:7
-#, fuzzy
 msgid "Normal (14mm)"
-msgstr "Normaal"
+msgstr "Normaal (14 mm)"
 
 #: ../share/extensions/empty_dvd_cover.inx:8
 msgid "Slim (9mm)"
@@ -35962,9 +35892,8 @@ msgid "DVD cover bleed (mm):"
 msgstr "Deksel (mm):"
 
 #: ../share/extensions/empty_dvd_cover.inx:20
-#, fuzzy
 msgid "DVD Cover..."
-msgstr "DVD voorblad"
+msgstr "DVD voorblad..."
 
 #
 # File: ../share/extensions/empty_dvd_cover.inx, line: 23
@@ -35984,19 +35913,16 @@ msgid "Envelope"
 msgstr "Envelop"
 
 #: ../share/extensions/empty_envelope.inx:6
-#, fuzzy
 msgid "Envelope size:"
-msgstr "Handvatgrootte:"
+msgstr "Envelopgrootte:"
 
 #: ../share/extensions/empty_envelope.inx:16
-#, fuzzy
 msgid "Envelope..."
 msgstr "Envelop"
 
 #: ../share/extensions/empty_envelope.inx:18
-#, fuzzy
 msgid "Blank envelope of chosen size."
-msgstr "Lege bureaubladpagina"
+msgstr "Lege envelop van gekozen grootte"
 
 #: ../share/extensions/empty_envelope.inx:20
 msgid "empty envelope dl no10"
@@ -36021,9 +35947,8 @@ msgstr "Zwart opaak"
 
 #: ../share/extensions/empty_generic.inx:21
 #: ../share/extensions/empty_page.inx:23
-#, fuzzy
 msgid "Gray Opaque"
-msgstr "Zwart opaak"
+msgstr "Grijs opaak"
 
 #: ../share/extensions/empty_generic.inx:22
 #: ../share/extensions/empty_page.inx:24
@@ -36036,19 +35961,16 @@ msgid "Hide border"
 msgstr "Rand verbergen"
 
 #: ../share/extensions/empty_generic.inx:36
-#, fuzzy
 msgid "Generic canvas..."
-msgstr "Standaardcanvas"
+msgstr "Generiek canvas..."
 
 #: ../share/extensions/empty_generic.inx:38
-#, fuzzy
 msgid "Generic canvas of chosen size."
-msgstr "_Cachegrootte voor renderen:"
+msgstr "Generiek canvas van gekozen grootte."
 
 #: ../share/extensions/empty_generic.inx:40
-#, fuzzy
 msgid "empty generic canvas"
-msgstr "Standaardcanvas"
+msgstr "leeg generiek canvas"
 
 #: ../share/extensions/empty_icon.inx:3
 msgid "Icon"
@@ -36059,9 +35981,8 @@ msgid "Icon size:"
 msgstr "Grootte icoon:"
 
 #: ../share/extensions/empty_icon.inx:13
-#, fuzzy
 msgid "Icon..."
-msgstr "Icoon"
+msgstr "Icoon..."
 
 #
 # File: ../share/extensions/empty_icon.inx, line: 16
@@ -36070,14 +35991,12 @@ msgid "Empty icon of chosen size."
 msgstr ""
 
 #: ../share/extensions/empty_icon.inx:17
-#, fuzzy
 msgid "empty icon"
-msgstr "Documenteenheid:"
+msgstr "leeg icoon"
 
 #: ../share/extensions/empty_page.inx:3
-#, fuzzy
 msgid "Blank Page"
-msgstr "Blanco"
+msgstr "Lege pagina"
 
 #: ../share/extensions/empty_page.inx:6
 msgid "Page size:"
@@ -36092,9 +36011,8 @@ msgid "Page background:"
 msgstr "Pagina-achtergrond:"
 
 #: ../share/extensions/empty_page.inx:34
-#, fuzzy
 msgid "Blank Page..."
-msgstr "Pagina"
+msgstr "Lege pagina..."
 
 #
 # File: ../share/extensions/empty_page.inx, line: 35
@@ -36117,9 +36035,8 @@ msgid "Video size:"
 msgstr "Grootte video:"
 
 #: ../share/extensions/empty_video.inx:24
-#, fuzzy
 msgid "Video..."
-msgstr "Video"
+msgstr "Video..."
 
 #
 # File: ../share/extensions/empty_video.inx, line: 27
@@ -36154,9 +36071,8 @@ msgid "Extract Image"
 msgstr "Eén afbeelding extraheren"
 
 #: ../share/extensions/extractimage.inx:5
-#, fuzzy
 msgid "Extract only selected images"
-msgstr "Alleen geselecteerde afbeeldingen invoegen"
+msgstr "Alleen geselecteerde afbeeldingen extraheren"
 
 #: ../share/extensions/extractimage.inx:6
 msgid "Path to save image:"
@@ -36223,24 +36139,20 @@ msgid "Frame"
 msgstr "Frame"
 
 #: ../share/extensions/frame.inx:7
-#, fuzzy
 msgid "Stroke Color:"
-msgstr "Lijnkleur"
+msgstr "Lijnkleur:"
 
 #: ../share/extensions/frame.inx:10
-#, fuzzy
 msgid "Fill Color:"
-msgstr "Vulkleur"
+msgstr "Vulkleur:"
 
 #: ../share/extensions/frame.inx:19
-#, fuzzy
 msgid "Width(px)"
-msgstr "Breedte"
+msgstr "Breedte (px)"
 
 #: ../share/extensions/frame.inx:20
-#, fuzzy
 msgid "Corner Radius"
-msgstr "Binnenstraal"
+msgstr "Straal hoek"
 
 #: ../share/extensions/funcplot.inx:3
 msgid "Function Plotter"
@@ -42750,146 +42662,6 @@ msgstr ""
 #~ msgstr "Geperst metaal met een gewalste rand"
 
 #, fuzzy
-#~ msgid "Capping:"
-#~ msgstr "Klotsen"
-
-#, fuzzy
-#~ msgid "left capping"
-#~ msgstr "Kleven activeren"
-
-#, fuzzy
-#~ msgid "Control handle 0:"
-#~ msgstr "Handvat 0:"
-
-#, fuzzy
-#~ msgid "Control handle 0"
-#~ msgstr "Handvat 0:"
-
-#, fuzzy
-#~ msgid "Control handle 1:"
-#~ msgstr "Handvat 1:"
-
-#, fuzzy
-#~ msgid "Control handle 1"
-#~ msgstr "Handvat 1:"
-
-#, fuzzy
-#~ msgid "Control handle 2:"
-#~ msgstr "Handvat 2:"
-
-#, fuzzy
-#~ msgid "Control handle 2"
-#~ msgstr "Handvat 2:"
-
-#, fuzzy
-#~ msgid "Control handle 3:"
-#~ msgstr "Handvat 3:"
-
-#, fuzzy
-#~ msgid "Control handle 3"
-#~ msgstr "Handvat 3:"
-
-#, fuzzy
-#~ msgid "Control handle 4:"
-#~ msgstr "Handvat 4:"
-
-#, fuzzy
-#~ msgid "Control handle 4"
-#~ msgstr "Handvat 4:"
-
-#, fuzzy
-#~ msgid "Control handle 5:"
-#~ msgstr "Handvat 5:"
-
-#, fuzzy
-#~ msgid "Control handle 5"
-#~ msgstr "Handvat 5:"
-
-#, fuzzy
-#~ msgid "Control handle 6:"
-#~ msgstr "Handvat 6:"
-
-#, fuzzy
-#~ msgid "Control handle 6"
-#~ msgstr "Handvat 6:"
-
-#, fuzzy
-#~ msgid "Control handle 7:"
-#~ msgstr "Handvat 7:"
-
-#, fuzzy
-#~ msgid "Control handle 7"
-#~ msgstr "Handvat 7:"
-
-#, fuzzy
-#~ msgid "Control handle 8:"
-#~ msgstr "Handvat 18:"
-
-#, fuzzy
-#~ msgid "Control handle 8"
-#~ msgstr "Handvat 18:"
-
-#, fuzzy
-#~ msgid "Control handle 9:"
-#~ msgstr "Handvat 19:"
-
-#, fuzzy
-#~ msgid "Control handle 9"
-#~ msgstr "Handvat 19:"
-
-#, fuzzy
-#~ msgid "Control handle 10:"
-#~ msgstr "Handvat 0:"
-
-#, fuzzy
-#~ msgid "Control handle 10"
-#~ msgstr "Handvat 0:"
-
-#, fuzzy
-#~ msgid "Control handle 11:"
-#~ msgstr "Handvat 1:"
-
-#, fuzzy
-#~ msgid "Control handle 11"
-#~ msgstr "Handvat 1:"
-
-#, fuzzy
-#~ msgid "Control handle 12:"
-#~ msgstr "Handvat 12:"
-
-#, fuzzy
-#~ msgid "Control handle 12"
-#~ msgstr "Handvat 12:"
-
-#, fuzzy
-#~ msgid "Control handle 13:"
-#~ msgstr "Handvat 13:"
-
-#, fuzzy
-#~ msgid "Control handle 13"
-#~ msgstr "Handvat 13:"
-
-#, fuzzy
-#~ msgid "Control handle 14:"
-#~ msgstr "Handvat 14:"
-
-#, fuzzy
-#~ msgid "Control handle 14"
-#~ msgstr "Handvat 14:"
-
-#, fuzzy
-#~ msgid "Control handle 15:"
-#~ msgstr "Handvat 15:"
-
-#, fuzzy
-#~ msgid "Control handle 15"
-#~ msgstr "Handvat 15:"
-
-#, fuzzy
-#~ msgid "Display unit"
-#~ msgstr "Documenteenheid:"
-
-#, fuzzy
 #~ msgid "Print unit after path length"
 #~ msgstr "In-uit padlengte"
 
@@ -43239,39 +43011,6 @@ msgstr ""
 #~ "Hetzelfde als 'Kleuren', maar het resultaat wordt omgezet naar een "
 #~ "grijsschaal"
 
-#~ msgid "S_mooth"
-#~ msgstr "_Vervagen"
-
-#~ msgid "Stac_k scans"
-#~ msgstr "_Scans stapelen"
-
-#~ msgid "_Mode"
-#~ msgstr "_Modus"
-
-#~ msgid "Suppress _speckles"
-#~ msgstr "_Spikkels onderdrukken"
-
-#~ msgid "S_ize:"
-#~ msgstr "G_rootte:"
-
-#~ msgid "Optimize p_aths"
-#~ msgstr "P_aden optimaliseren"
-
-#~ msgid "To_lerance:"
-#~ msgstr "_Tolerantie:"
-
-#~ msgid "O_ptions"
-#~ msgstr "O_pties"
-
-#~ msgid "SIOX _foreground selection"
-#~ msgstr "SIO_X-voorgrondselectie"
-
-#~ msgid "Live Preview"
-#~ msgstr "Live voorvertonen"
-
-#~ msgid "_Update"
-#~ msgstr "_Bijwerken"
-
 #~ msgid ""
 #~ "Preview the intermediate bitmap with the current settings, without actual "
 #~ "tracing"
@@ -43289,207 +43028,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Paden maken met het Kopf-Lischinski algorithme om pixel art te "
 #~ "vectoriseren"
-
-#, fuzzy
-#~ msgid "#000000"
-#~ msgstr "zwart (#000000)"
-
-#, fuzzy
-#~ msgid "#808080"
-#~ msgstr "grijs (#808080)"
-
-#, fuzzy
-#~ msgid "-------------------------------------------------------------------------"
-#~ msgstr "-------------------------------------------------"
-
-#, fuzzy
-#~ msgid ".ai.svg"
-#~ msgstr "about.nl.svg"
-
-#, fuzzy
-#~ msgid ".svg"
-#~ msgstr "about.nl.svg"
-
-#, fuzzy
-#~ msgid "16x16"
-#~ msgstr "Icoon 16x16"
-
-#, fuzzy
-#~ msgid "1cm"
-#~ msgstr "cm"
-
-#, fuzzy
-#~ msgid "250"
-#~ msgstr "CP 1250"
-
-#, fuzzy
-#~ msgid "32x32"
-#~ msgstr "Icoon 32x32"
-
-#, fuzzy
-#~ msgid "48x48"
-#~ msgstr "Icoon 48x48"
-
-#, fuzzy
-#~ msgid "64x64"
-#~ msgstr "Icoon 64x64"
-
-#, fuzzy
-#~ msgid "6cm"
-#~ msgstr "cm"
-
-#, fuzzy
-#~ msgid "<b>Click</b> CSS property to edit."
-#~ msgstr "<b>Klik</b> op een attribuut om het te wijzigen."
-
-#~ msgid "About..."
-#~ msgstr "Over..."
-
-#, fuzzy
-#~ msgid "Add a new style property"
-#~ msgstr "Een nieuwe selectieset toevoegen"
-
-#, fuzzy
-#~ msgid "Apply color"
-#~ msgstr "Kleur kopiëren"
-
-#, fuzzy
-#~ msgid "Arial"
-#~ msgstr "Seriële poort:"
-
-#~ msgid "Astrology"
-#~ msgstr "Astrologie"
-
-#, fuzzy
-#~ msgid "Code39"
-#~ msgstr "QR-code"
-
-#, fuzzy
-#~ msgid "Code39 Extended"
-#~ msgstr "Grieks, uitgebreid"
-
-#, fuzzy
-#~ msgid "Code93"
-#~ msgstr "QR-code"
-
-#, fuzzy
-#~ msgid "Css Dialog..."
-#~ msgstr "Dialoog"
-
-#, fuzzy
-#~ msgid "D"
-#~ msgstr "ID"
-
-#, fuzzy
-#~ msgid "EAN13 +Extensions"
-#~ msgstr "IPA-extensies"
-
-#, fuzzy
-#~ msgid "EAN2 Extension"
-#~ msgstr "IPA-extensies"
-
-#, fuzzy
-#~ msgid "EAN5 Extension"
-#~ msgstr "IPA-extensies"
-
-#, fuzzy
-#~ msgid "GUI: Console only."
-#~ msgstr "Alleen iconen"
-
-#~ msgid "Gothic German"
-#~ msgstr "Gotisch Duits"
-
-#~ msgid "Gothic Italian"
-#~ msgstr "Gotisch Italiaans"
-
-#~ msgid "Greek 1-stroke"
-#~ msgstr "Grieks 1-lijn"
-
-#~ msgid "Greek medium"
-#~ msgstr "Grieks medium"
-
-#, fuzzy
-#~ msgid "Hershey Text for Inkscape"
-#~ msgstr "Hersheytekst"
-
-#~ msgid "Japanese"
-#~ msgstr "Japans"
-
-#~ msgid "Kerning"
-#~ msgstr "Overhang"
-
-#~ msgid "Letter rotation"
-#~ msgstr "Letterrotatie"
-
-#~ msgid "Letter spacing"
-#~ msgstr "Letterafstand"
-
-#~ msgid "Line Height"
-#~ msgstr "Lijnhoogte"
-
-#~ msgid "Lower"
-#~ msgstr "Laag"
-
-#~ msgid "Lower limit of ruler"
-#~ msgstr "Ondergrens liniaal"
-
-#~ msgid "Math (lower)"
-#~ msgstr "Wiskunde (onderkast)"
-
-#~ msgid "Math (upper)"
-#~ msgstr "Wiskunde (kapitaal)"
-
-#~ msgid "Max Size"
-#~ msgstr "Maximum grootte"
-
-#~ msgid "Maximum size of the ruler"
-#~ msgstr "Maximumgrootte liniaal"
-
-#~ msgid "Meteorology"
-#~ msgstr "Meteorologie"
-
-#~ msgid "Music"
-#~ msgstr "Muziek"
-
-#, fuzzy
-#~ msgid "Odd"
-#~ msgstr "_Toevoegen"
-
-#, fuzzy
-#~ msgid "PDF-Level"
-#~ msgstr "Egaliseren"
-
-#~ msgid "Position of mark on the ruler"
-#~ msgstr "Positie markering op liniaal"
-
-#, fuzzy
-#~ msgid "Process: Verb(s) to call when Inkscape opens."
-#~ msgstr "Verb om aan te roepen als Inkscape start."
-
-#, fuzzy
-#~ msgid ""
-#~ "Property <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to "
-#~ "commit changes."
-#~ msgstr ""
-#~ "Attribuut <b>%s</b> is geselecteerd. Druk op <b>Ctrl+Enter</b> om "
-#~ "wijzigingen door te voeren."
-
-#, fuzzy
-#~ msgid "RIGHT"
-#~ msgstr "HOOGTE"
-
-#~ msgid "Render Text"
-#~ msgstr "Tekst renderen"
-
-#, fuzzy
-#~ msgid "S_electors"
-#~ msgstr "Selecteren"
-
-#~ msgid "Sans bold"
-#~ msgstr "Sans vet"
-
-#~ msgid "Script 1-stroke (alt)"
-#~ msgstr "Script 1-lijn (alt)"
 
 #~ msgid ""
 #~ "Snap all paths in selection to pixels. Snaps borders to half-points and "
@@ -43530,616 +43068,6 @@ msgstr ""
 #~ "\n"
 #~ "Voor meer informatie zie:\n"
 #~ "  www.evilmadscientist.com/go/hershey"
-
-#~ msgid "Toggle Subscript"
-#~ msgstr "Subscript"
-
-#~ msgid "Toggle Superscript"
-#~ msgstr "Superscript"
-
-#~ msgid "Typeset that text"
-#~ msgstr "Tekst zetten"
-
-#~ msgid "Unit of the ruler"
-#~ msgstr "Eenheid van liniaal"
-
-#~ msgid "Upper"
-#~ msgstr "Hoog"
-
-#~ msgid "Upper limit of ruler"
-#~ msgstr "Bovengrens van liniaal"
-
-#~ msgid "Vertical Shift"
-#~ msgstr "Verticale verplaatsing"
-
-#~ msgid "Vertical shift (px)"
-#~ msgstr "Verticale verplaatsing (px)"
-
-#~ msgid "Word spacing"
-#~ msgstr "Woordafstand"
-
-#~ msgid "Write glyph table"
-#~ msgstr "Karaktertabel schrijven"
-
-#, fuzzy
-#~ msgid "XVERBS-FILENAME"
-#~ msgstr "BESTANDSNAAM"
-
-#, fuzzy
-#~ msgid "Z"
-#~ msgstr "Z:"
-
-#, fuzzy
-#~ msgid "_Attributes"
-#~ msgstr "Attributen instellen"
-
-#, fuzzy
-#~ msgid "_Nodes"
-#~ msgstr "Knooppunten"
-
-#, fuzzy
-#~ msgid "_Styles"
-#~ msgstr "_Stijl"
-
-#, fuzzy
-#~ msgid "addnodes.py"
-#~ msgstr "Knooppunten toevoegen"
-
-#, fuzzy
-#~ msgid "application/x-zip"
-#~ msgstr "Hoofdvenster"
-
-#, fuzzy
-#~ msgid "arabic"
-#~ msgstr "Arabisch"
-
-#, fuzzy
-#~ msgid "arial"
-#~ msgstr "Cariës"
-
-#, fuzzy
-#~ msgid "c"
-#~ msgstr "pc"
-
-#, fuzzy
-#~ msgid "chinese"
-#~ msgstr "Buginees"
-
-#, fuzzy
-#~ msgid "class1"
-#~ msgstr "Klassiek"
-
-#, fuzzy
-#~ msgid "color_blackandwhite.py"
-#~ msgstr "Alleen zwart en wit:"
-
-#, fuzzy
-#~ msgid "color_darker.py"
-#~ msgstr "Kleurmarkeringen"
-
-#, fuzzy
-#~ msgid "color_desaturate.py"
-#~ msgstr "Onverzadigd maken"
-
-#, fuzzy
-#~ msgid "color_grayscale.py"
-#~ msgstr "grijstinten"
-
-#, fuzzy
-#~ msgid "color_lesssaturation.py"
-#~ msgstr "Pre-verzadiging"
-
-#, fuzzy
-#~ msgid "color_moresaturation.py"
-#~ msgstr "Pre-verzadiging"
-
-#, fuzzy
-#~ msgid "color_randomize.py"
-#~ msgstr "Globaal randomiseren"
-
-#, fuzzy
-#~ msgid "color_replace.py"
-#~ msgstr "Te vervangen kleur"
-
-#, fuzzy
-#~ msgid "coloreffect.py"
-#~ msgstr "Geen effect"
-
-#, fuzzy
-#~ msgid "convert2dashes.py"
-#~ msgstr "Omzetten naar streepjes"
-
-#, fuzzy
-#~ msgid "custom"
-#~ msgstr "Aangepast"
-
-#, fuzzy
-#~ msgid "cyrillic"
-#~ msgstr "Cyrillisch"
-
-#, fuzzy
-#~ msgid "cyrillic-asian"
-#~ msgstr "Cyrillisch"
-
-#, fuzzy
-#~ msgid "dimension.py"
-#~ msgstr "Dimensies"
-
-#, fuzzy
-#~ msgid "draw_from_triangle.py"
-#~ msgstr "Op basis van driehoek tekenen"
-
-#, fuzzy
-#~ msgid "dxf_outlines.py"
-#~ msgstr "contour"
-
-#, fuzzy
-#~ msgid "e"
-#~ msgstr "nl"
-
-#, fuzzy
-#~ msgid "embedimage.py"
-#~ msgstr "Afbeeldingen invoegen"
-
-#, fuzzy
-#~ msgid "empty_business_card.py"
-#~ msgstr "Leeg visitekaartsjabloon"
-
-#, fuzzy
-#~ msgid "extractimage.py"
-#~ msgstr "Eén afbeelding extraheren"
-
-#, fuzzy
-#~ msgid "extrude.py"
-#~ msgstr "Uitrekken"
-
-#, fuzzy
-#~ msgid "fill stroke stroke-width"
-#~ msgstr "Lijndikte mee schalen"
-
-#, fuzzy
-#~ msgid "flatten.py"
-#~ msgstr "Bezierkrommes afvlakken"
-
-#, fuzzy
-#~ msgid "foldablebox.py"
-#~ msgstr "Opvouwbare doos"
-
-#, fuzzy
-#~ msgid "fractalize.py"
-#~ msgstr "Fractaliseren"
-
-#, fuzzy
-#~ msgid "greek"
-#~ msgstr "Grieks"
-
-#, fuzzy
-#~ msgid "guides_creator.py"
-#~ msgstr "Hulplijngenerator"
-
-#, fuzzy
-#~ msgid "guillotine.py"
-#~ msgstr "Guillotine"
-
-#, fuzzy
-#~ msgid "guillotined"
-#~ msgstr "Guillotine"
-
-#, fuzzy
-#~ msgid "handles.py"
-#~ msgstr "Handvatten"
-
-#, fuzzy
-#~ msgid "hebrew"
-#~ msgstr "Hebreeuws"
-
-#, fuzzy
-#~ msgid "http://inkscape.org/contribute/report-bugs/"
-#~ msgstr "http://inkscape.org/doc/keys092.html"
-
-#, fuzzy
-#~ msgid "https://inkscape.org/learn/faq/"
-#~ msgstr "http://inkscape.org/doc/keys092.html"
-
-#, fuzzy
-#~ msgid "i"
-#~ msgstr "Yi"
-
-#, fuzzy
-#~ msgid "il.datamatrix"
-#~ msgstr "Datamatrix"
-
-#, fuzzy
-#~ msgid "il.fromtriangle"
-#~ msgstr "Driehoek"
-
-#, fuzzy
-#~ msgid "il.wireframesphere"
-#~ msgstr "Draadmodel sfeer"
-
-#, fuzzy
-#~ msgid "image/sif"
-#~ msgstr "Afbeeldingen"
-
-#, fuzzy
-#~ msgid "image/x-encapsulated-postscript"
-#~ msgstr "Encapsulated Postscript"
-
-#, fuzzy
-#~ msgid "image_attributes.py"
-#~ msgstr "Inline attributen"
-
-#, fuzzy
-#~ msgid "images"
-#~ msgstr "Afbeeldingen"
-
-#, fuzzy
-#~ msgid "inherit"
-#~ msgstr "overgeërfd"
-
-#, fuzzy
-#~ msgid "jessyInk_install.py"
-#~ msgstr "JessInk script geïnstalleerd."
-
-#, fuzzy
-#~ msgid "jessyInk_uninstall.py"
-#~ msgstr "JessInk script geïnstalleerd."
-
-#, fuzzy
-#~ msgid "jessyink.install"
-#~ msgstr "JessInk script geïnstalleerd."
-
-#, fuzzy
-#~ msgid "jessyink.transitions"
-#~ msgstr "Transities"
-
-#, fuzzy
-#~ msgid "jitternodes.py"
-#~ msgstr "Knooppunten schudden"
-
-#, fuzzy
-#~ msgid "k"
-#~ msgstr "Wk"
-
-#, fuzzy
-#~ msgid "km"
-#~ msgstr "m"
-
-#, fuzzy
-#~ msgid "latin1"
-#~ msgstr "Latijn 1"
-
-#, fuzzy
-#~ msgid "latin2"
-#~ msgstr "Latijn"
-
-#, fuzzy
-#~ msgid "latin3"
-#~ msgstr "Latijn"
-
-#, fuzzy
-#~ msgid "latin4"
-#~ msgstr "Latijn"
-
-#, fuzzy
-#~ msgid "latin5"
-#~ msgstr "Latijn"
-
-#, fuzzy
-#~ msgid "latin6"
-#~ msgstr "Latijn"
-
-#, fuzzy
-#~ msgid "latin8"
-#~ msgstr "Latijn"
-
-#, fuzzy
-#~ msgid "lorem_ipsum.py"
-#~ msgstr "Lorem ipsum"
-
-#, fuzzy
-#~ msgid "macgreek"
-#~ msgstr "Grieks"
-
-#, fuzzy
-#~ msgid "math.triangle"
-#~ msgstr "Driehoek"
-
-#, fuzzy
-#~ msgid "measure.py"
-#~ msgstr "Meetlat"
-
-#, fuzzy
-#~ msgid "n"
-#~ msgstr "In"
-
-#, fuzzy
-#~ msgid "nicechart.py"
-#~ msgstr "Taartdiagram"
-
-#, fuzzy
-#~ msgid "o"
-#~ msgstr "NKo"
-
-#, fuzzy
-#~ msgid "optimizeQuality"
-#~ msgstr "Glad (optimizeQuality)"
-
-#, fuzzy
-#~ msgid "optimizeSpeed"
-#~ msgstr "Geblokt (optimizeSpeed)"
-
-#, fuzzy
-#~ msgid "org.inkscape.help.manual"
-#~ msgstr "Inkscapehandleiding"
-
-#, fuzzy
-#~ msgid "org.inkscape.output.xaml"
-#~ msgstr "Inkscape SVG (*.svg)"
-
-#, fuzzy
-#~ msgid "org.inkscape.web.set-att"
-#~ msgstr "Inkscape: _Basis"
-
-#, fuzzy
-#~ msgid "output.ngc"
-#~ msgstr "Uitvoer"
-
-#, fuzzy
-#~ msgid "p"
-#~ msgstr "Omhoog"
-
-#, fuzzy
-#~ msgid "param_curves.py"
-#~ msgstr "Parametrische curves"
-
-#, fuzzy
-#~ msgid "pathalongpath.py"
-#~ msgstr "Het pad wordt gesloten."
-
-#, fuzzy
-#~ msgid "pathscatter.py"
-#~ msgstr "Frees"
-
-#, fuzzy
-#~ msgid "perfectboundcover.py"
-#~ msgstr "Omslag ingebonden boek"
-
-#, fuzzy
-#~ msgid "perspective.py"
-#~ msgstr "Perspectief"
-
-#, fuzzy
-#~ msgid "pixelsnap.py"
-#~ msgstr "beeldpunten met"
-
-#, fuzzy
-#~ msgid "polyhedron_3d.py"
-#~ msgstr "3D veelhoek"
-
-#, fuzzy
-#~ msgid "printing_marks.py"
-#~ msgstr "Afdrukmarkeringen"
-
-#, fuzzy
-#~ msgid "rect"
-#~ msgstr "Direct"
-
-#, fuzzy
-#~ msgid "replace_font.py"
-#~ msgstr "Lettertype vervangen"
-
-#, fuzzy
-#~ msgid "restack.py"
-#~ msgstr "Herstapelen"
-
-#, fuzzy
-#~ msgid "rubberstretch.py"
-#~ msgstr "Elastische vervorming"
-
-#, fuzzy
-#~ msgid "seamless_pattern.py"
-#~ msgstr "Naadloos patroon"
-
-#, fuzzy
-#~ msgid "setup_typography_canvas.py"
-#~ msgstr "1 - Typografiecanvas instellen"
-
-#, fuzzy
-#~ msgid "slice"
-#~ msgstr "Schaar"
-
-#, fuzzy
-#~ msgid "spirograph.py"
-#~ msgstr "Spirograaf"
-
-#, fuzzy
-#~ msgid "straightseg.py"
-#~ msgstr "rasterlijn"
-
-#, fuzzy
-#~ msgid "svgcalendar.py"
-#~ msgstr "Kalender"
-
-#, fuzzy
-#~ msgid "synfig_output.py"
-#~ msgstr "Synfig-uitvoer"
-
-#, fuzzy
-#~ msgid "t"
-#~ msgstr "pt"
-
-#, fuzzy
-#~ msgid "text"
-#~ msgstr "Context"
-
-#, fuzzy
-#~ msgid "text/plain"
-#~ msgstr "grondlijn tekst"
-
-#, fuzzy
-#~ msgid "text_lowercase.py"
-#~ msgstr "kleine letters"
-
-#, fuzzy
-#~ msgid "text_sentencecase.py"
-#~ msgstr "Eerste woord in zin met hoofdletter"
-
-#, fuzzy
-#~ msgid "triangle.py"
-#~ msgstr "Driehoek"
-
-#, fuzzy
-#~ msgid "whirl.py"
-#~ msgstr "Draaiing"
-
-#, fuzzy
-#~ msgid "wireframe_sphere.py"
-#~ msgstr "Draadmodel sfeer"
-
-#, fuzzy
-#~ msgid "x"
-#~ msgstr "px"
-
-#~ msgid "Inkscape Vector Graphics Editor"
-#~ msgstr "Inkscape vector tekenpakket"
-
-#~ msgid ""
-#~ "Determines whether to snap to this grid or not. Can be 'on' for invisible "
-#~ "grids."
-#~ msgstr ""
-#~ "Bepaalt of er aan dit raster gekleefd moet worden of niet. Kan "
-#~ "ingeschakeld zijn voor onzichtbare rasters."
-
-#~ msgid "JavaFX Output"
-#~ msgstr "JavaFX-uitvoer"
-
-#~ msgid "JavaFX (*.fx)"
-#~ msgstr "JavaFX (*.fx)"
-
-#~ msgid "JavaFX Raytracer File"
-#~ msgstr "JavaFX Raytracer Bestand"
-
-#, fuzzy
-#~ msgid "Inkscape - A Vector Drawing Program"
-#~ msgstr "Inkscape vector tekenpakket"
-
-#, fuzzy
-#~ msgid "Orientation method"
-#~ msgstr "Oriëntatie"
-
-#, fuzzy
-#~ msgid "Font Selector"
-#~ msgstr "Selecteren"
-
-#, fuzzy
-#~ msgid "Text top/bottom"
-#~ msgstr "Boven naar onder"
-
-#, fuzzy
-#~ msgid "Format"
-#~ msgstr "Formaat:"
-
-#, fuzzy
-#~ msgid "Blacklist"
-#~ msgstr "Zwart"
-
-#, fuzzy
-#~ msgid "Show measure number"
-#~ msgstr "Weeknummer tonen"
-
-#, fuzzy
-#~ msgid "Rotate Annotation"
-#~ msgstr "Letterrotatie"
-
-#, fuzzy
-#~ msgid "Linked items:"
-#~ msgstr "Gelinkt pad:"
-
-#, fuzzy
-#~ msgid "Turn doesn't fit measurements"
-#~ msgstr "Lettertypegrootte voor de meetlabels"
-
-#, fuzzy
-#~ msgid "Free from reflection line"
-#~ msgstr "Van selectieset verwijderen"
-
-#, fuzzy
-#~ msgid "Symmetry move mode"
-#~ msgstr "Symmetrisch knooppunt"
-
-#~ msgctxt "Profile name"
-#~ msgid "None"
-#~ msgstr "Geen"
-
-#~ msgid "Left edge of source"
-#~ msgstr "Linkerrand van bron"
-
-#~ msgid "Top edge of source"
-#~ msgstr "Bovenrand van bron"
-
-#~ msgid "Right edge of source"
-#~ msgstr "Rechterrand van bron"
-
-#~ msgid "Bottom edge of source"
-#~ msgstr "Onderrand van bron"
-
-#~ msgid "Source width"
-#~ msgstr "Bronbreedte"
-
-#~ msgid "Source height"
-#~ msgstr "Bronhoogte"
-
-#~ msgid "Destination width"
-#~ msgstr "Doelbreedte"
-
-#~ msgid "Destination height"
-#~ msgstr "Doelhoogte"
-
-#~ msgid "Resolution (dots per inch)"
-#~ msgstr "Resolutie (in punten per duim)"
-
-#~ msgctxt "Export dialog"
-#~ msgid "Custom"
-#~ msgstr "Aangepast"
-
-#~ msgid "Source"
-#~ msgstr "Bron"
-
-#~ msgid "Cairo"
-#~ msgstr "Cairo"
-
-#~ msgid "Antialias"
-#~ msgstr "Antialias"
-
-#~ msgid "Amharic (am)"
-#~ msgstr "Amhaars (am)"
-
-#, fuzzy
-#~ msgid "Deleted property from style attribute."
-#~ msgstr "Groepen maken voor gelijkende attributen"
-
-#~ msgid "Kerning Setup"
-#~ msgstr "Instelling overhang"
-
-#~ msgid "Remove from selection set"
-#~ msgstr "Van selectieset verwijderen"
-
-#~ msgid "Items"
-#~ msgstr "Items"
-
-#~ msgid "Add selection to set"
-#~ msgstr "Selectie aan set toevoegen"
-
-#~ msgid "Moved sets"
-#~ msgstr "Sets verplaatst"
-
-#~ msgid "Remove Item/Set"
-#~ msgstr "Item/set verwijderen"
-
-#~ msgctxt "Path handle tip"
-#~ msgid "more: Ctrl"
-#~ msgstr "meer: Ctrl"
 
 #~ msgctxt "Path handle tip"
 #~ msgid "<b>Auto node handle</b>: drag to convert to smooth node (%s)"
@@ -44482,36 +43410,6 @@ msgstr ""
 #~ "gebaseerd systeem kan dit gedaan worden met het commando, sudo apt-get "
 #~ "install python-numpy."
 
-#~ msgid "Could not locate file: %s"
-#~ msgstr "Kon bestand niet vinden: %s"
-
-#~ msgid "Unrecognised DataMatrix size"
-#~ msgstr "Niet herkende DataMatrix-grootte"
-
-#~ msgid "Invalid bit value, this is a bug!"
-#~ msgstr "Foute bitwaarde. Dit is een programmeerfout!"
-
-#~ msgid "Please enter an input string"
-#~ msgstr "Voeg aub. een invoerstring in"
-
-#~ msgid "Please enter an input text"
-#~ msgstr "Geef aub. een invoertekst op"
-
-#~ msgid "You must select a correct system encoding."
-#~ msgstr "Je moet een correcte systeemencodering selecteren."
-
-#~ msgid "Can't create \"%s\"."
-#~ msgstr "Kan \"%s\" niet maken."
-
-#~ msgid "The directory \"%s\" does not exists."
-#~ msgstr "De map \"%s\" bestaat niet."
-
-#~ msgid "You have more than one element with \"%s\" html-id."
-#~ msgstr "Je hebt meer dan één element met html-id \"%s\"."
-
-#~ msgid "Please enter an even number of lines of longitude."
-#~ msgstr "Geef aub. een even aantal lijnen in."
-
 #~ msgctxt "Custom color extension"
 #~ msgid "Custom"
 #~ msgstr "Aangepast"
@@ -44541,9 +43439,6 @@ msgstr ""
 #~ msgid "A diagram created with the program Dia"
 #~ msgstr "Een diagram gemaakt met het programma Dia"
 
-#~ msgid "LaTeX"
-#~ msgstr "LaTeX"
-
 #~ msgid "Check for updates"
 #~ msgstr "Controleren op updates"
 
@@ -44552,20 +43447,6 @@ msgstr ""
 #~ msgstr ""
 #~ "De laatste stabiele Gcodetools versie controleren en trachten de updates "
 #~ "op te halen."
-
-#~ msgid "Action: "
-#~ msgstr "Actie:"
-
-#~ msgid ""
-#~ " \n"
-#~ "\n"
-#~ "\n"
-#~ "\n"
-#~ msgstr ""
-#~ " \n"
-#~ "\n"
-#~ "\n"
-#~ "\n"
 
 #~ msgid "Sketch Input"
 #~ msgstr "Sketch-invoer"
@@ -44654,117 +43535,6 @@ msgstr ""
 
 #~ msgid "Offset %"
 #~ msgstr "Verplaatsing %"
-
-#~ msgid "tutorial-basic.svg"
-#~ msgstr "tutorial-basic.nl.svg"
-
-#~ msgid "tutorial-shapes.svg"
-#~ msgstr "tutorial-shapes.nl.svg"
-
-#~ msgid "tutorial-advanced.svg"
-#~ msgstr "tutorial-advanced.nl.svg"
-
-#~ msgid "tutorial-tracing.svg"
-#~ msgstr "tutorial-tracing.nl.svg"
-
-#~ msgid "tutorial-tracing-pixelart.svg"
-#~ msgstr "tutorial-tracing-pixelart.nl.svg"
-
-#~ msgid "tutorial-calligraphy.svg"
-#~ msgstr "tutorial-calligraphy.nl.svg"
-
-#~ msgid "tutorial-interpolate.svg"
-#~ msgstr "tutorial-interpolate.nl.svg"
-
-#~ msgid "tutorial-elements.svg"
-#~ msgstr "tutorial-elements.nl.svg"
-
-#~ msgid "tutorial-tips.svg"
-#~ msgstr "tutorial-tips.nl.svg"
-
-#, fuzzy
-#~ msgid "Color for symbolic icons"
-#~ msgstr "Symbolen laten 'passen' in hun ruimte."
-
-#~ msgid "Verb \"%s\" Unknown"
-#~ msgstr "Werkwoord \"%s\" is onbekend"
-
-#~ msgid "Horizontal radius"
-#~ msgstr "Horizontale straal"
-
-#~ msgid "Vertical radius"
-#~ msgstr "Verticale straal"
-
-#~ msgid "Angle in X direction"
-#~ msgstr "Hoek in X-richting"
-
-#~ msgid "Angle in Y direction"
-#~ msgstr "Hoek in Y-richting"
-
-#~ msgid "Angle in Z direction"
-#~ msgstr "Hoek in Z-richting"
-
-#, fuzzy
-#~ msgid "Eraser Stroke Thinning"
-#~ msgstr "Lijnversmalling"
-
-#, fuzzy
-#~ msgid "Eraser Cap rounding"
-#~ msgstr "Ronding van uiteinde"
-
-#, fuzzy
-#~ msgid "EraserStroke Tremor"
-#~ msgstr "Lijnbeving"
-
-#~ msgid "Eraser Mass"
-#~ msgstr "Gomgewicht"
-
-#~ msgid "Scale %"
-#~ msgstr "Schaal %"
-
-#~ msgid "Insert"
-#~ msgstr "Invoegen"
-
-#~ msgid "Insert min X"
-#~ msgstr "Bij min X toevoegen"
-
-#~ msgid "Insert max X"
-#~ msgstr "Bij max X toevoegen"
-
-#~ msgid "Insert min Y"
-#~ msgstr "Bij min Y toevoegen"
-
-#~ msgid "Insert max Y"
-#~ msgstr "Bij max Y toevoegen"
-
-#~ msgid "Join"
-#~ msgstr "Verbinden"
-
-#~ msgid "X coordinate:"
-#~ msgstr "X-coördinaat:"
-
-#~ msgid "Y coordinate:"
-#~ msgstr "Y-coördinaat:"
-
-#~ msgid "Fill by"
-#~ msgstr "Vullen met"
-
-#~ msgid "Fill Threshold"
-#~ msgstr "Vullingsdrempel"
-
-#~ msgid "Grow/shrink by"
-#~ msgstr "Verdikken/verdunnen met"
-
-#~ msgid "Close gaps"
-#~ msgstr "Gaten opvullen"
-
-#, fuzzy
-#~ msgid "Min pressure"
-#~ msgstr "Druk"
-
-#, fuzzy
-#~ msgid "Max pressure"
-#~ msgstr "Druk"
 
 #~ msgid "Smoothing: "
 #~ msgstr "Afvlakking: "
@@ -44939,44 +43709,6 @@ msgstr ""
 #~ "\n"
 #~ "Beschikbare opties:"
 
-#, fuzzy
-#~ msgid "Inkscape Options"
-#~ msgstr "Inkscape-uitbreidingen: "
-
-#, fuzzy
-#~ msgid "Default program options"
-#~ msgstr "Standaard breuken"
-
-#, fuzzy
-#~ msgid "File or folder does not exist"
-#~ msgstr "De map \"%s\" bestaat niet."
-
-#, fuzzy
-#~ msgid "Could not open file"
-#~ msgstr "Kon bestand niet vinden: %s"
-
-#, fuzzy
-#~ msgid "- display SVG files"
-#~ msgstr "HPLG plotter bestanden openen"
-
-#~ msgid "Radius (unit or %):"
-#~ msgstr "Straal (eenheid of %):"
-
-#, fuzzy
-#~ msgid "Mirror Knots"
-#~ msgstr "X-as spiegelen"
-
-#, fuzzy
-#~ msgid "Helper path size with direction to node:"
-#~ msgstr "Handvatgrootte met richting:"
-
-#, fuzzy
-#~ msgid "Helper path size with direction to node"
-#~ msgstr "Handvatgrootte met richting"
-
-#~ msgid "Fi_xed width:"
-#~ msgstr "_Vaste breedte:"
-
 #~ msgid "Consider 'Interruption width' as a ratio of stroke width"
 #~ msgstr "'Breedte onderbreking' beschouwen als verhouding van lijnbreedte"
 
@@ -44995,101 +43727,6 @@ msgstr ""
 #~ msgid "Drag to select a crossing, click to flip it"
 #~ msgstr "Sleep om een kruising te selecteren, klik om te spiegelen"
 
-#, fuzzy
-#~ msgid "Convert clips to paths, undoable"
-#~ msgstr "Tekst naar paden omzetten"
-
-#~ msgid "Pig Latin (en_US@piglatin)"
-#~ msgstr "Pig Latin (en_US@piglatin)"
-
-#~ msgid "Bitmap link:"
-#~ msgstr "Bitmaplink:"
-
-#~ msgid "Bitmaps"
-#~ msgstr "Bitmaps"
-
-#~ msgid "Image Rendering:"
-#~ msgstr "Renderen van afbeelding:"
-
-#~ msgid "_Variants"
-#~ msgstr "_Varianten"
-
-#~ msgctxt "Font variant"
-#~ msgid "Position"
-#~ msgstr "Positie"
-
-#~ msgctxt "Font variant"
-#~ msgid "Normal"
-#~ msgstr "Normaal"
-
-#~ msgctxt "Font variant"
-#~ msgid "Small"
-#~ msgstr "Klein"
-
-#~ msgid ", drag to adjust"
-#~ msgstr ", sleep om aan te passen"
-
-#~ msgid "_New View Preview"
-#~ msgstr "_Nieuw voorbeeld weergeven"
-
-#~ msgid "New View Preview"
-#~ msgstr "Nieuw voorbeeld weergeven"
-
-#~ msgid "Gl_yphs..."
-#~ msgstr "T_ekens..."
-
-#, fuzzy
-#~ msgid "Change arc"
-#~ msgstr "Vervaging wijzigen"
-
-#~ msgid "Pick opacity"
-#~ msgstr "Kies ondoorzichtigheid"
-
-#~ msgid "Assign opacity"
-#~ msgstr "Ondoorzichtigheid wijzigen"
-
-#~ msgid "Type text in a text node"
-#~ msgstr "Tekst tikken in een tekstobject"
-
-#~ msgid ""
-#~ "The export_gpl.py module requires PyXML.  Please download the latest "
-#~ "version from http://pyxml.sourceforge.net/."
-#~ msgstr ""
-#~ "De export_gpl.py module vereist PyXML. Download alstublief de laatste "
-#~ "versie van http://pyxml.sourceforge.net/."
-
-#~ msgid ""
-#~ "Failed to import the subprocess module. Please report this as a bug at: "
-#~ "https://bugs.launchpad.net/inkscape."
-#~ msgstr ""
-#~ "Importeren van subprocesmodule gefaald. Rapporteer aub. deze bug op: "
-#~ "https://bugs.launchpad.net/inkscape."
-
-#~ msgid "Python version is: "
-#~ msgstr "Pythonversie: "
-
-#, fuzzy
-#~ msgid "Failed to convert objects to paths. Continued without converting."
-#~ msgstr "Converteer alstublief eerst de objecten naar paden! (Kreeg [%s].)"
-
-#~ msgid ""
-#~ "The fantastic lxml wrapper for libxml2 is required by inkex.py and "
-#~ "therefore this extension.Please download and install the latest version "
-#~ "from http://cheeseshop.python.org/pypi/lxml/, or install it through your "
-#~ "package manager by a command like: sudo apt-get install python-lxml\n"
-#~ "\n"
-#~ "Technical details:\n"
-#~ "%s"
-#~ msgstr ""
-#~ "De lxml wrapper voor libxml2 is nodig voor inkex.py en dus ook voor deze "
-#~ "uitbreiding. Download en installeer alstublief de laatste versie van "
-#~ "http://cheeseshop.python.org/pypi/lxml/ of installeer het met uw package "
-#~ "manager via de commandolijn (bijvoorbeeld): sudo apt-get install python-"
-#~ "lxml\n"
-#~ "\n"
-#~ "Technische details:\n"
-#~ "%s"
-
 #~ msgid "Unable to open specified file: %s"
 #~ msgstr "Kan opgegeven bestand niet openen: %s"
 
@@ -45101,24 +43738,6 @@ msgstr ""
 
 #~ msgid "sorry, this will run only on Windows, exiting..."
 #~ msgstr "sorry, dit draait alleen op Windows, bezig met afsluiten..."
-
-#, fuzzy
-#~ msgid ""
-#~ "You need to install the UniConvertor software.\n"
-#~ "For GNU/Linux: install the package python-uniconvertor.\n"
-#~ "For Windows: download it from\n"
-#~ "https://sk1project.net/modules.php?"
-#~ "name=Products&product=uniconvertor&op=download\n"
-#~ "and install into your Inkscape's Python location\n"
-#~ msgstr ""
-#~ "Je moet UniConvertor installeren.\n"
-#~ "GNU/Linux: installeer het pakket python-uniconvertor.\n"
-#~ "Windows: download van\n"
-#~ "http://sk1project.org/modules.php?name=Products&product=uniconvertor\n"
-#~ "en installeer het in Inkscape's Pythonlocatie.\n"
-
-#~ msgid "AI 8.0 Input"
-#~ msgstr "AI 8.0 invoer"
 
 #, fuzzy
 #~ msgid "Adobe Illustrator 8.0 and below (UC) (*.ai)"
@@ -45236,185 +43855,6 @@ msgstr ""
 #~ "Map voor uitbreidingen niet beschikbaar. Filters kunnen niet geladen "
 #~ "worden."
 
-#~ msgid "Adobe PDF (*.pdf)"
-#~ msgstr "Adobe PDF (*.pdf)"
-
-#~ msgid "Autosave failed! Cannot create directory %1."
-#~ msgstr "Auto-opslaan mislukt! Kan directory %1 niet maken."
-
-#, fuzzy
-#~ msgid "Measure Line"
-#~ msgstr "Einde meetlat"
-
-#~ msgid "Fillet point"
-#~ msgstr "Afschuiningspunt"
-
-#~ msgid "Ignore 0 radius knots"
-#~ msgstr "0 straalknopen negeren"
-
-#~ msgid "Fillets methods"
-#~ msgstr "Afschuiningsmethode"
-
-#~ msgid "IMPORTANT! New version soon..."
-#~ msgstr "BELANGRIJK! Binnenkort nieuwe versie..."
-
-#~ msgid "Not compatible. Convert to path after."
-#~ msgstr "Niet compatibel. Nadien naar pad omzetten."
-
-#~ msgid "Convert to chamfer"
-#~ msgstr "Naar afschuining omzetten"
-
-#~ msgid "Knots and helper paths refreshed"
-#~ msgstr "Knooppunten en hulppaden verversen"
-
-#, fuzzy
-#~ msgid "Unit*"
-#~ msgstr "Eenheid"
-
-#, fuzzy
-#~ msgid "Curve on origin"
-#~ msgstr "oorsprong hulplijn"
-
-#, fuzzy
-#~ msgid "Precision*"
-#~ msgstr "Precisie"
-
-#, fuzzy
-#~ msgid "Positon*"
-#~ msgstr "Positie"
-
-#, fuzzy
-#~ msgid "Positon"
-#~ msgstr "Positie"
-
-#, fuzzy
-#~ msgid "Text top/bottom*"
-#~ msgstr "Boven naar onder"
-
-#, fuzzy
-#~ msgid "Text right/left*"
-#~ msgstr "Tekstuitlijning"
-
-#, fuzzy
-#~ msgid "Text right/left"
-#~ msgstr "Tekstuitlijning"
-
-#, fuzzy
-#~ msgid "Helpline distance*"
-#~ msgstr "Knooppuntafstand"
-
-#, fuzzy
-#~ msgid "Helpline overlap*"
-#~ msgstr "Overlappingen verwijderen"
-
-#, fuzzy
-#~ msgid "Scale*"
-#~ msgstr "Schalen"
-
-#, fuzzy
-#~ msgid "Rotate Anotation*"
-#~ msgstr "Letterrotatie"
-
-#, fuzzy
-#~ msgid "CSS anotation*"
-#~ msgstr "Verzadiging"
-
-#, fuzzy
-#~ msgid "CSS arrows*"
-#~ msgstr "Ctrl+pijltjestoetsen"
-
-#, fuzzy
-#~ msgid "Save '*' as default"
-#~ msgstr "_Instellen als standaard"
-
-#~ msgid ""
-#~ "Only for PS/EPS/PDF, sets margin in mm around exported area (default 0)"
-#~ msgstr ""
-#~ "Alleen voor PS/EPS/PDF, bepaalt de marge in mm rond het geëxporteerde "
-#~ "gebied (standaard 0)"
-
-#~ msgid "Keyboard directory (%s) is unavailable."
-#~ msgstr "Toetsenbordmap (%s) is niet beschikbaar."
-
-#~ msgid "Segment"
-#~ msgstr "Segment"
-
-#~ msgid "About Inkscape"
-#~ msgstr "Over Inkscape"
-
-#~ msgid "_Splash"
-#~ msgstr "_Splash"
-
-#~ msgid "_Translators"
-#~ msgstr "Ver_talers"
-
-#~ msgid "_License"
-#~ msgstr "_Licentie"
-
-#~ msgid "Save"
-#~ msgstr "Opslaan"
-
-#~ msgid "Show close button on dialogs"
-#~ msgstr "Sluitknop weergeven in dialogen"
-
-#~ msgid "Whether dialog windows have a close button (requires restart)"
-#~ msgstr ""
-#~ "Of dialoog vensters een knop hebben om te sluiten (vereist herstart)"
-
-#~ msgid "Palettes directory (%s) is unavailable."
-#~ msgstr "De palettenmap (%s) is niet beschikbaar."
-
-#~ msgid "Vertical text"
-#~ msgstr "Verticale tekst"
-
-#~ msgid "Text path offset"
-#~ msgstr "Verplaatsing tekstpad"
-
-#~ msgid "_Blur:"
-#~ msgstr "_Vervagen:"
-
-#~ msgid "Scale Y"
-#~ msgstr "Y schalen"
-
-#~ msgid "Arc: Change open/closed"
-#~ msgstr "Boog: Open/gesloten veranderen"
-
-#~ msgid "Closed arc"
-#~ msgstr "Gesloten boog"
-
-#~ msgid "Open Arc"
-#~ msgstr "Open boog"
-
-#~ msgid ", grayscale"
-#~ msgstr ", grijstinten"
-
-#~ msgid ", print colors preview"
-#~ msgstr ", afdrukvoorbeeld"
-
-#~ msgid "%s%s: %d (%s%s) - Inkscape"
-#~ msgstr "%s%s: %d (%s%s) - Inkscape"
-
-#~ msgid "%s%s: %d (%s) - Inkscape"
-#~ msgstr "%s%s: %d (%s) - Inkscape"
-
-#~ msgid "%s%s: %d - Inkscape"
-#~ msgstr "%s%s: %d - Inkscape"
-
-#~ msgid "%s%s (%s%s) - Inkscape"
-#~ msgstr "%s%s (%s%s) - Inkscape"
-
-#~ msgid "%s%s (%s) - Inkscape"
-#~ msgstr "%s%s (%s) - Inkscape"
-
-#~ msgid "%s%s - Inkscape"
-#~ msgstr "%s%s - Inkscape"
-
-#~ msgid "Face"
-#~ msgstr "Zijde"
-
-#~ msgid "on:"
-#~ msgstr "Op:"
-
 #~ msgid "Choose a gradient"
 #~ msgstr "Kleurverloop kiezen"
 
@@ -45450,10 +43890,6 @@ msgstr ""
 
 #~ msgid "Coons"
 #~ msgstr "Coons"
-
-#, fuzzy
-#~ msgid "Area ("
-#~ msgstr "Oppervlakte"
 
 #~ msgid ""
 #~ "pstoedit must be installed to run; see http://www.pstoedit.net/pstoedit"
@@ -46431,138 +44867,3 @@ msgstr ""
 #~ msgctxt "Symbol"
 #~ msgid "Bike Parking"
 #~ msgstr "Fietsparking"
-
-#~ msgid "A4 Landscape Page"
-#~ msgstr "A4-pagina liggend"
-
-#~ msgid "Empty A4 landscape sheet"
-#~ msgstr "Lege A4-pagina liggend"
-
-#~ msgid "A4 paper sheet empty landscape"
-#~ msgstr "Lege A4-pagina liggend"
-
-#~ msgid "A4 Page"
-#~ msgstr "A4-pagina"
-
-#~ msgid "Empty A4 sheet"
-#~ msgstr "Lege A4-pagina"
-
-#~ msgid "A4 paper sheet empty"
-#~ msgstr "Lege A4-pagina"
-
-#~ msgid "Empty black page"
-#~ msgstr "Lege zwarte pagina"
-
-#~ msgid "black opaque empty"
-#~ msgstr "zwart opaak leeg"
-
-#~ msgid "Empty white page"
-#~ msgstr "Lege witte pagina"
-
-#~ msgid "white opaque empty"
-#~ msgstr "wit opaak leeg"
-
-#~ msgid "business card empty 85x54"
-#~ msgstr "Visitekaart leeg 85x54"
-
-#~ msgid "Business Card 90x50mm"
-#~ msgstr "Visitekaart 90x50mm"
-
-#~ msgid "business card empty 90x50"
-#~ msgstr "Lege visitekaart 90x50"
-
-#~ msgid "CD Cover 300dpi"
-#~ msgstr "CD Cover 300ppi"
-
-#~ msgid "Empty CD box cover."
-#~ msgstr "Lege CD box cover."
-
-#~ msgid "CD cover disc disk 300dpi box"
-#~ msgstr "CD cover 300dpi"
-
-#~ msgid "DVD Cover Regular 300dpi "
-#~ msgstr "DVD cover normaal 300ppi "
-
-#~ msgid "Template for both-sides DVD covers."
-#~ msgstr "Sjabloon voor tweezijdige DVD covers."
-
-#~ msgid "DVD cover regular 300dpi"
-#~ msgstr "DVD cover normaal 300ppi"
-
-#~ msgid "DVD Cover Slim 300dpi "
-#~ msgstr "DVD cover dun 300ppi"
-
-#~ msgid "Template for both-sides DVD slim covers."
-#~ msgstr "Sjabloon voor dunne tweezijdige DVD covers."
-
-#~ msgid "DVD cover slim 300dpi"
-#~ msgstr "DVD cover dun 300ppi"
-
-#~ msgid "DVD Cover Superslim 300dpi "
-#~ msgstr "DVD cover superdun 300ppi "
-
-#~ msgid "Template for both-sides DVD superslim covers."
-#~ msgstr "Sjabloon voor superdunne tweezijdige DVD covers."
-
-#~ msgid "DVD cover superslim 300dpi"
-#~ msgstr "DVD cover superdun 300ppi"
-
-#~ msgid "DVD Cover Ultraslim 300dpi "
-#~ msgstr "DVD cover ultradun 300ppi "
-
-#~ msgid "Template for both-sides DVD ultraslim covers."
-#~ msgstr "Sjabloon voor ultradunne tweezijdige DVD covers."
-
-#~ msgid "DVD cover ultraslim 300dpi"
-#~ msgstr "DVD cover ultradun 300ppi"
-
-#~ msgid "Desktop 1024x768"
-#~ msgstr "Bureaublad 1024x768"
-
-#~ msgid "desktop 1024x768 wallpaper"
-#~ msgstr "Bureaublad 1024x768"
-
-#~ msgid "Desktop 1600x1200"
-#~ msgstr "Bureaublad 1600x1200"
-
-#~ msgid "desktop 1600x1200 wallpaper"
-#~ msgstr "Bureaublad 1600x1200"
-
-#~ msgid "desktop 640x480 wallpaper"
-#~ msgstr "Bureaublad 640x480"
-
-#~ msgid "Desktop 800x600"
-#~ msgstr "Bureaublad 800x600"
-
-#~ msgid "desktop 800x600 wallpaper"
-#~ msgstr "bureaublad 800x600"
-
-#~ msgid "Fontforge Glyph"
-#~ msgstr "Fontforgeteken"
-
-#~ msgid "font fontforge glyph 1000x1000"
-#~ msgstr "teken lettertype Fontforge 1000x1000"
-
-#~ msgid "Small 16x16 icon template."
-#~ msgstr "Sjabloon voor klein 16x16 icoon."
-
-#~ msgid "icon 16x16 empty"
-#~ msgstr "16x16 icoon leeg"
-
-#~ msgid "32x32 icon template."
-#~ msgstr "Sjabloon voor 32x32 icoon."
-
-#~ msgid "icon 32x32 empty"
-#~ msgstr "32x32 icoon leeg"
-
-#~ msgid "48x48 icon template."
-#~ msgstr "Sjabloon voor 48x48 icoon."
-
-#~ msgid "icon 48x48 empty"
-#~ msgstr "48x48 icoon leeg"
-
-#~ msgid "64x64 icon template."
-#~ msgstr "Sjabloon voor 64x64 icoon."
-
-#~ msgid "icon 64x64 empty"
-#~ msgstr "64x64 icoon leeg"
