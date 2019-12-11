@@ -198,7 +198,7 @@ void Layout::show(DrawingGroup *in_arena, Geom::OptRect const &paintbox) const
                 // Use maximum ascent and descent to ensure glyphs that extend outside the embox
                 // are fully drawn.
                 (void) nr_text->addComponent(_spans[span_index].font, _glyphs[glyph_index].glyph, glyph_matrix,
-                    _glyphs[glyph_index].width,
+                    _glyphs[glyph_index].advance,
                     _spans[span_index].line_height.getMaxAscent(),
                     _spans[span_index].line_height.getMaxDescent(),
                     glyph_matrix.translation()[Geom::X] - phase0
@@ -330,7 +330,7 @@ Geom::Affine glyph_matrix;
                 // figure out char widths, used by EMF, not currently used elsewhere
                 double cwidth;
                 if(lc_index == _glyphs[glyph_index].in_character){  // Glyph width is used only for the first character, these may be 0
-                    cwidth = rtl * _glyphs[glyph_index].width; // width might be zero
+                    cwidth = rtl * _glyphs[glyph_index].advance; // advance might be zero
                 }
                 else {
                     cwidth = 0;
@@ -718,7 +718,7 @@ void Layout::fitToPathAlign(SVGLength const &startOffset, Path const &path)
         size_t const current_cluster_glyph_index = _characters[char_index].in_glyph;
         for (size_t glyph_index = current_cluster_glyph_index ; glyph_index < next_cluster_glyph_index ; glyph_index++)
         {
-            cluster_width += _glyphs[glyph_index].width;
+            cluster_width += _glyphs[glyph_index].advance;
         }
         // TODO block progression?
         if (span.direction == RIGHT_TO_LEFT)

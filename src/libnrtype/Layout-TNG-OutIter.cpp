@@ -358,7 +358,7 @@ Geom::Rect Layout::characterBoundingBox(iterator const &it, double *rotation) co
         double cluster_half_width = 0.0;
         for (int glyph_index = _characters[char_index].in_glyph ; _glyphs.size() != glyph_index ; glyph_index++) {
             if (_glyphs[glyph_index].in_character != char_index) break;
-            cluster_half_width += _glyphs[glyph_index].width;
+            cluster_half_width += _glyphs[glyph_index].advance;
         }
         cluster_half_width *= 0.5;
 
@@ -652,7 +652,7 @@ void Layout::simulateLayoutUsingKerning(iterator const &from, iterator const &to
             double glyphs_width = 0.0;
             if (_characters[prev_cluster_char_index].in_glyph != -1)
                 for (int glyph_index = _characters[prev_cluster_char_index].in_glyph ; glyph_index < _characters[char_index].in_glyph ; glyph_index++)
-                    glyphs_width += _glyphs[glyph_index].width;
+                    glyphs_width += _glyphs[glyph_index].advance;
             if (_characters[char_index].span(this).direction == RIGHT_TO_LEFT)
                 glyphs_width = -glyphs_width;
 

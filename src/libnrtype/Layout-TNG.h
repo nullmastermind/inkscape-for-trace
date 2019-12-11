@@ -809,7 +809,7 @@ private:
         float y;         /// relative to the current line's baseline
         float rotation;  /// absolute, modulo any object transforms, which we don't know about
         Orientation orientation; /// Orientation of glyph in vertical text
-        float width;
+        float advance;   /// for positioning next glyph
         float vertical_scale; /// to implement lengthAdjust="spacingAndGlyphs" that must scale glyphs only horizontally; instead we change font size and then undo that change vertically only
         inline Span  const & span (Layout const *l) const {return                      l->_spans[l->_characters[in_character].in_span];}
         inline Chunk const & chunk(Layout const *l) const {return           l->_chunks[l->_spans[l->_characters[in_character].in_span].in_chunk];}

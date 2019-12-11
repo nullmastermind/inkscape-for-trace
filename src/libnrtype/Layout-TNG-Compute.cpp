@@ -9,6 +9,9 @@
  *
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
+
+#include <iomanip>
+
 #include "Layout-TNG.h"
 #include "style.h"
 #include "font-instance.h"
@@ -21,6 +24,7 @@ namespace Inkscape {
 namespace Text {
 
 //#define DEBUG_LAYOUT_TNG_COMPUTE
+//#define DEBUG_GLYPH
 
 //#define IFTRACE(_code) _code
 #define IFTRACE(_code)
@@ -301,6 +305,8 @@ public:
  *  Similarly, \a last_emergency_break_span will contain the vital
  *  statistics for the span up to the last inter-character boundary,
  *  or will be unaltered if there is none.
+ *
+ *  An unbroken span corresponds to at most one PangoItem
  */
 bool Layout::Calculator::_measureUnbrokenSpan(ParagraphInfo const &para,
                                               BrokenSpan *span,
@@ -327,12 +333,15 @@ bool Layout::Calculator::_measureUnbrokenSpan(ParagraphInfo const &para,
     }
 
     if (_flow._input_stream[span->start.iter_span->input_index]->Type() == CONTROL_CODE) {
+
         InputStreamControlCode const *control_code = static_cast<InputStreamControlCode const *>(_flow._input_stream[span->start.iter_span->input_index]);
+
         if (control_code->code == SHAPE_BREAK || control_code->code == PARAGRAPH_BREAK) {
             *last_emergency_break_span = *last_break_span = *span;
             return false;
         }
-        if (control_code->code == ARBITRARY_GAP) {
+
+        if (control_code->code == ARBITRARY_GAP) { // Not used!
             if (span->width + control_code->width > maximum_width)
                 return false;
             TRACE(("        fitted control code, width = %f\n", control_code->width));
@@ -340,7 +349,6 @@ bool Layout::Calculator::_measureUnbrokenSpan(ParagraphInfo const &para,
             span->end.increment();
         }
         return true;
-
     }
 
     if (_flow._input_stream[span->start.iter_span->input_index]->Type() != TEXT_SOURCE)
@@ -400,21 +408,14 @@ bool Layout::Calculator::_measureUnbrokenSpan(ParagraphInfo const &para,
         while (span->end_glyph_index < (unsigned)span->end.iter_span->glyph_string->num_glyphs
                && span->end.iter_span->glyph_string->log_clusters[span->end_glyph_index] <= (int)span->end.char_byte) {
 
-            PangoGlyphInfo *info = &(span->end.iter_span->glyph_string->glyphs[span->end_glyph_index]);
-            // double glyph_width    = font_size_multiplier * info->geometry.width;
-            // double glyph_x_offset = font_size_multiplier * info->geometry.x_offset;
-            // double glyph_y_offset = font_size_multiplier * info->geometry.y_offset;
-            // std::cout << "  glyph: " << info->glyph << "  width: " << glyph_width << "  x_offset: " << glyph_x_offset << "  y_offset: " << glyph_y_offset << std::endl;
+            // Advance does not include kerning.
+            // font_instance *font = para.pango_items[span->end.iter_span->pango_item_index].font;
+            // double font_size = span->start.iter_span->font_size;
+            // double glyph_h_advance = font_size * font->Advance(info->glyph, false);
+            // double glyph_v_advance = font_size * font->Advance(info->glyph, true );
 
-            font_instance *font = para.pango_items[span->end.iter_span->pango_item_index].font;
-            double font_size = span->start.iter_span->font_size;
-            double glyph_h_advance = font_size * font->Advance(info->glyph, false);
-            double glyph_v_advance = font_size * font->Advance(info->glyph, true );
-            // std::cout << "    h_advance: " << glyph_h_advance << "  v_advance: " << glyph_v_advance << std::endl;
-            // Geom::OptRect  bbox = font->BBox(info->glyph);
-            // *bbox *= Geom::Scale(font_size);
-            // std::cout << "    bbox: " << *bbox <<  std::endl;
-            // std::cout << "    h_extent: " << bbox->width() << "  v_extent: " << bbox->height() << std::endl;
+            PangoGlyphInfo *info = &(span->end.iter_span->glyph_string->glyphs[span->end_glyph_index]);
+            double glyph_width    = font_size_multiplier * info->geometry.width;
 
             if (_block_progression == LEFT_TO_RIGHT || _block_progression == RIGHT_TO_LEFT) {
                 // Vertical text
@@ -423,18 +424,18 @@ bool Layout::Calculator::_measureUnbrokenSpan(ParagraphInfo const &para,
                     (text_source->style->text_orientation.computed == SP_CSS_TEXT_ORIENTATION_MIXED &&
                      para.pango_items[span->end.iter_span->pango_item_index].item->analysis.gravity == PANGO_GRAVITY_SOUTH) ) {
                     // Sideways orientation
-                    char_width += glyph_h_advance;
+                    char_width += glyph_width;
                 } else {
                     // Upright orientation
                     guint32 c = *Glib::ustring::const_iterator(span->end.iter_span->input_stream_first_character.base() + span->end.char_byte);
                     if (g_unichar_type (c) != G_UNICODE_NON_SPACING_MARK) {
                         // Non-spacing marks should not contribute to width. Fonts may not report the correct advance, especially if the 'vmtx' table is missing.
-                        char_width += glyph_v_advance;
+                        char_width += glyph_width;
                     }
                 }
             } else {
                 // Horizontal text
-                char_width += font_size_multiplier * info->geometry.width;
+                char_width += glyph_width;
             }
             span->end_glyph_index++;
         }
@@ -664,6 +665,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
             }
         }
 
+        // Loop over broken spans; a broken span is part of no more than one PangoItem.
         for (std::vector<BrokenSpan>::const_iterator it_span = it_chunk->broken_spans.begin() ; it_span != it_chunk->broken_spans.end() ; it_span++) {
 
             // begin adding spans to the list
@@ -741,7 +743,20 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                 int      log_cluster_size_chars      = 0;   // Number of characters in this log_cluster 
                 unsigned end_byte                    = 0;
 
+                // Get some pointers (constant for an unbroken span).
+                font_instance *font   = para.pango_items[unbroken_span.pango_item_index].font;
+                PangoItem *pango_item = para.pango_items[unbroken_span.pango_item_index].item;
+
                 // Loop over glyphs in span
+                double old_delta_x = 0.0;
+
+#ifdef DEBUG_GLYPH
+                std::cout << "\nGlyph in span" << std::endl;
+                std::cout << "  Unicode  Glyph  h_advance  v_advance  width  cluster    orientation   new_glyph         delta"     << std::endl;
+                std::cout << "   (hex)     No.                                start                   x       y       x       y"   << std::endl;
+                std::cout << "  -------------------------------------------------------------------------------------------------" << std::endl;
+#endif
+
                 for (unsigned glyph_index = it_span->start_glyph_index ; glyph_index < it_span->end_glyph_index ; glyph_index++) {
 
                     unsigned char_byte              = iter_source_text.base() - unbroken_span.input_stream_first_character.base();
@@ -772,11 +787,28 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
 
                     // create the Layout::Glyph
                     PangoGlyphInfo *unbroken_span_glyph_info = &unbroken_span.glyph_string->glyphs[glyph_index];
+                    double glyph_width = font_size_multiplier * unbroken_span_glyph_info->geometry.width;
+
                     Layout::Glyph new_glyph;
                     new_glyph.glyph = unbroken_span_glyph_info->glyph;
                     new_glyph.in_character = _flow._characters.size();
                     new_glyph.rotation = glyph_rotate;
                     new_glyph.orientation = ORIENTATION_UPRIGHT; // Only effects vertical text
+
+#ifdef DEBUG_GLYPH
+                    // Advance does not include kerning
+                    double glyph_h_advance = new_span.font_size * font->Advance(new_glyph.glyph, false);
+                    double glyph_v_advance = new_span.font_size * font->Advance(new_glyph.glyph, true );
+
+                    bool is_cluster_start = unbroken_span_glyph_info->attr.is_cluster_start;
+                    std::cout << "  " << std::hex << std::setw(6) << *iter_source_text << std::dec
+                              << "  " << std::setw(6) << new_glyph.glyph
+                              << std::fixed << std::showpoint << std::setprecision(2)
+                              << "   " << std::setw(6) << glyph_h_advance
+                              << "   " << std::setw(6) << glyph_v_advance
+                              << "   " << std::setw(6) << glyph_width
+                              << "   " << std::setw(6) << std::boolalpha << is_cluster_start; // << std::endl;
+#endif
 
                     // We may have scaled font size to fit textLength; now, if
                     // @lengthAdjust=spacingAndGlyphs, this scaling must be only horizontal,
@@ -789,6 +821,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                     // Position glyph --------------------
                     new_glyph.x = current_x;
                     new_glyph.y =_y_offset;
+                    new_glyph.advance = glyph_width;
 
                     // y-coordinate is flipped between vertical and horizontal text...
                     // delta_y is common offset but applied with opposite sign
@@ -812,53 +845,84 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                              para.pango_items[unbroken_span.pango_item_index].item->analysis.gravity == PANGO_GRAVITY_SOUTH) ) {
 
                             // Sideways orientation (Latin characters, CJK punctuation), 90deg rotation done at output stage.
+
+#ifdef DEBUG_GLYPH
+                            std::cout << "       Sideways"
+                                      << "  " << std::setw(6) << new_glyph.x
+                                      << "  " << std::setw(6) << new_glyph.y
+                                      << "  " << std::setw(6) << delta_x
+                                      << "  " << std::setw(6) << delta_y
+                                      << std::endl;
+#endif
+
                             new_glyph.orientation = ORIENTATION_SIDEWAYS;
 
                             new_glyph.x += delta_x;
                             new_glyph.y -= delta_y;
 
-                            new_glyph.y    -= new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->GetBaselines()[ dominant_baseline ];
-                            new_glyph.width = new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->Advance(unbroken_span_glyph_info->glyph, false);
+                            new_glyph.y -= new_span.font_size * font->GetBaselines()[ dominant_baseline ];
 
                         } else {
                             // Upright orientation
 
-                            new_glyph.x += delta_x;
+                            // This is complicated as Pango (1.44) doesn't do what is expected in
+                            // the 'x' direction (which points downward for vertical text).  If one
+                            // subtracts delta_x, Latin glyphs are aligned so their ink rectangle
+                            // is at the top of the grid, rather than their em box. The initial
+                            // character is positioned so its base is at the alignment
+                            // point. Non-spacing-marks are positioned an em-box too low.
+
+                            // What we do:
+                            // *  Ignore delta_x on first glyph, the baseline will be on grid.
+                            // *  Shift non-spacing-marks up by an embox.
+                            // *  Further shift non-spacing-marks up by the difference in delta_x's of the mark and previous character
+                            //    (the relative difference is correct).
+                            // *  Set the advance for non-spacing-marks to 0 (as many fonts don't include vertical metrics).
+
+#ifdef DEBUG_GLYPH
+                            std::cout << "        Upright"
+                                      << "  " << std::setw(6) << new_glyph.x
+                                      << "  " << std::setw(6) << new_glyph.y
+                                      << "  " << std::setw(6) << delta_x
+                                      << "  " << std::setw(6) << delta_y
+                                      << std::endl;
+#endif
+
+                            // new_glyph.x -= delta_x; // Ignore
                             new_glyph.y -= delta_y;
 
                             // Adjust for alignment point (top of em box, horizontal center).
-                            new_glyph.x += new_span.line_height.ascent;
+                            new_glyph.x += new_span.line_height.ascent; // Moves baseline so em-box on grid.
                             new_glyph.y -= new_span.font_size * (para.pango_items[unbroken_span.pango_item_index].font->GetBaselines()[ dominant_baseline ] -
                                                                  para.pango_items[unbroken_span.pango_item_index].font->GetBaselines()[ SP_CSS_BASELINE_CENTRAL ] );
 
-                            static double shift_y = 0; // Save to use with non_spacing marks (should be shifted the same amount as previous glyph).
-                            static double shift_x = 0; // Subtract incorrect Pango inclusion of horizontal advance (https://bugzilla.gnome.org 787526)
                             if (g_unichar_type (*iter_source_text) == G_UNICODE_NON_SPACING_MARK) {
-                                new_glyph.width = 0;
-                                new_glyph.x += shift_x; // Hack
-                                shift_x = 0;
+                                new_glyph.x -= new_span.line_height.emSize();
+                                new_glyph.x -= delta_x;
+                                new_glyph.x += old_delta_x;
+                                new_glyph.advance = 0; // Many fonts report a non-zero advance for marks, especially if the 'vmtx' table is missing.
                             } else {
-                                // Glyph reference point is center  (shift: left edge to center glyph)
-                                shift_y = unbroken_span_glyph_info->geometry.width * 0.5 * font_size_multiplier;
-                                new_glyph.width = new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->Advance(unbroken_span_glyph_info->glyph, true);
-                                shift_x =         new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->Advance(unbroken_span_glyph_info->glyph, false);
+                                old_delta_x = delta_x;
                             }
-                            new_glyph.y -= shift_y;
                         }
                     } else {
                         // Horizontal text
+
+#ifdef DEBUG_GLYPH
+                        std::cout << "     Horizontal"
+                                  << "  " << std::setw(6) << new_glyph.x
+                                  << "  " << std::setw(6) << new_glyph.y
+                                  << "  " << std::setw(6) << delta_x
+                                  << "  " << std::setw(6) << delta_y
+                                  << std::endl;
+#endif
 
                         if( dominant_baseline == SP_CSS_BASELINE_AUTO ) dominant_baseline = SP_CSS_BASELINE_ALPHABETIC;
 
                         new_glyph.x += delta_x;
                         new_glyph.y += delta_y;
 
-                        new_glyph.y += new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->GetBaselines()[ dominant_baseline ];
-                        
-                        new_glyph.width = unbroken_span_glyph_info->geometry.width * font_size_multiplier;
-                        if ((new_glyph.width == 0) && (para.pango_items[unbroken_span.pango_item_index].font))
-                            new_glyph.width = new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->Advance(unbroken_span_glyph_info->glyph, false);
-                            // Pango returns zero width for invalid glyph characters (those empty boxes), so go to freetype for the info.
+                        new_glyph.y += new_span.font_size * font->GetBaselines()[ dominant_baseline ];
                     }
 
                     // Correct for right to left text
@@ -919,7 +983,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                         }
                     }
 
-                    double advance_width = new_glyph.width;
+                    double advance_width = new_glyph.advance;
                     while (char_byte < end_byte) {
 
                         /* Hack to survive ligatures:  in log_cluster keep the number of available chars >= number of glyphs remaining.
@@ -962,7 +1026,6 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                         current_x += advance_width;
                         x_in_span_last += advance_width;
                     }
-
                 } // Loop over glyphs in span
 
             } else if (_flow._input_stream[unbroken_span.input_index]->Type() == CONTROL_CODE) {
@@ -1308,7 +1371,9 @@ unsigned Layout::Calculator::_buildSpansForPara(ParagraphInfo *para) const
                 para->unbroken_spans.push_back(new_span);
                 TRACE(("add empty span for break %lu\n", para->unbroken_spans.size() - 1));
                 break;                                    // stop at the end of the paragraph
-            } else if (control_code->code == ARBITRARY_GAP) {
+
+            } else if (control_code->code == ARBITRARY_GAP) { // Not used!
+
                 UnbrokenSpan new_span;
                 new_span.pango_item_index    = -1;
                 new_span.input_index         = input_index;
