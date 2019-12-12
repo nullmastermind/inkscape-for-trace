@@ -106,11 +106,7 @@ echo "./../../../../../../../Resources/lib/python3.7/site-packages" > $APP_FRA_D
 
 ### install Python package: lxml ###############################################
 
-(
-  export CFLAGS=-I$OPT_DIR/include/libxml2   # This became necessary when switching
-  export LDFLAGS=-L/$LIB_DIR                 # from builing on 10.13 to 10.11.
-  pip3 install --install-option="--prefix=$APP_RES_DIR" --ignore-installed $PYTHON_LXML
-)
+pip3 install --install-option="--prefix=$APP_RES_DIR" --ignore-installed $PYTHON_LXML
 
 # patch 'etree'
 relocate_dependency @loader_path/../../../libxml2.2.dylib $APP_LIB_DIR/python3.7/site-packages/lxml/etree.cpython-37m-darwin.so

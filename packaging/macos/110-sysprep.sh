@@ -13,14 +13,9 @@ for script in $SELF_DIR/0??-*.sh; do source $script; done
 
 run_annotated
 
-### create our work directory ##################################################
+### create work directory ######################################################
 
 [ ! -d $WRK_DIR ] && mkdir -p $WRK_DIR
-
-# Use a ramdisk to speed up things.
-if $RAMDISK_ENABLE; then
-  create_ramdisk $WRK_DIR $RAMDISK_SIZE
-fi
 
 ### redirect to locations below WRK_DIR ########################################
 
@@ -31,4 +26,3 @@ ln -sf $TMP_DIR $HOME/.cache
 
 rm -rf $HOME/.local   # used by gtk-mac-bundler
 ln -sf $OPT_DIR $HOME/.local
-

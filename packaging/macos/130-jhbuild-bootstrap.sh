@@ -6,10 +6,15 @@
 # ### 130-jhbuild-bootstrap.sh ###
 # Bootstrap the JHBuild environment.
 
-### load settings and functions ################################################
+### load global settings and functions #########################################
 
 SELF_DIR=$(F=$0; while [ ! -z $(readlink $F) ] && F=$(readlink $F); cd $(dirname $F); F=$(basename $F); [ -L $F ]; do :; done; echo $(pwd -P))
 for script in $SELF_DIR/0??-*.sh; do source $script; done
+
+### local settings #############################################################
+
+export PYTHONUSERBASE=$DEVPREFIX
+export PIP_CONFIG_DIR=$DEVCONFIG/pip
 
 #run_annotated   disabled for now, breaks jhbuild interactive mode
 

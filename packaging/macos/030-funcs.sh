@@ -31,10 +31,10 @@ function get_inkscape_version
   local ver_minor=$(grep INKSCAPE_VERSION_MINOR $file | head -n 1 | awk '{ print $2+0 }')
   local ver_patch=$(grep INKSCAPE_VERSION_PATCH $file | head -n 1 | awk '{ print $2+0 }')
   local ver_suffix=$(grep INKSCAPE_VERSION_SUFFIX $file | head -n 1 | awk '{ print $2 }')
-  
+
   ver_suffix=${ver_suffix%\"*}   # remove "double quote and everything after" from end
   ver_suffix=${ver_suffix#\"}   # remove "double quote" from beginning
- 
+
   echo $ver_major.$ver_minor.$ver_patch$ver_suffix
 }
 
@@ -70,7 +70,7 @@ function get_source
   cd $target_dir
 
   # This downloads a file and pipes it directly into tar (file is not saved
-  # to disk) to extract it. Output from stderr is saved temporarily to 
+  # to disk) to extract it. Output from stderr is saved temporarily to
   # determine the directory the files have been extracted to.
   curl -L $url | tar xv$(get_comp_flag $url) $options 2>$log
   cd $(head -1 $log | awk '{ print $2 }')
@@ -86,7 +86,7 @@ function save_file
 
   [ -z $target_dir ] && target_dir=$SRC_DIR
 
-  local file=$SRC_DIR/$(basename $url)
+  local file=$target_dir/$(basename $url)
   if [ -f $file ]; then
     echo "$FUNCNAME: file $file exists"
   else
@@ -148,7 +148,7 @@ function create_ramdisk
 # usage:
 # insert_before <filename> <insert before this pattern> <line to insert>
 
-function insert_before 
+function insert_before
 {
   local file=$1
   local pattern=$2
@@ -234,7 +234,7 @@ function readlinkf
     :
   done
 
-  # Compute the canonicalized name by finding the physical path 
+  # Compute the canonicalized name by finding the physical path
   # for the directory we're in and appending the target file.
   echo $(pwd -P)/$file
 }
@@ -274,7 +274,7 @@ function create_dmg
 
   # set application
   sed -i '' "s/PLACEHOLDERAPPLICATION/$(escape_sed $app)/" $cfg
-  
+
   # set disk image icon (if it exists)
   local icon=$SRC_DIR/$(basename -s .py $cfg).icns
   if [ -f $icon ]; then
@@ -318,3 +318,58 @@ end tell
 EOF
 }
 
+### replacements for plain echo: ok, error, info, warning ######################
+
+function echo_ok
+{
+  echo -e "✅ $*"
+}
+
+function echo_err
+{
+  echo -e "❌ $*"
+}
+
+function echo_warn
+{
+  echo -e "⚠️ $*"
+}
+
+function echo_info
+{
+  echo -e "ℹ️  $*"
+}
+
+function echo_act   # action
+{
+  echo -e "➡️  $*"
+}
+
+### create a ramdisk and return the device #####################################
+
+function create_ram_device
+{
+  local size_gib=$1   # unit is GiB
+  local name=$2       # volume name
+
+  [ -z $name ] && name=$(uuidgen | md5 | head -c 8)   # generate random name
+
+  local size_sectors=$(expr $size_gib \* 1024 \* 2048)
+  local device=$(hdiutil attach -nomount ram://$size_sectors)
+  newfs_hfs -v "$name" $device >/dev/null
+
+  echo $device
+}
+
+### attach a disk image and return the device ##################################
+
+function create_dmg_device
+{
+  local dmg=$1
+  local options=$2   # optional arguments for hdiutil
+
+  local device=$(hdiutil attach -nomount $dmg $options | grep "^/dev/disk" | \
+      grep "Apple_HFS" | awk '{ print $1 }')
+
+  echo $device
+}

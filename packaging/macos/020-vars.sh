@@ -30,35 +30,29 @@ export SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX${MACOSX_DEPLOYMEN
 
 ### ramdisk ####################################################################
 
-# 9 GiB to build toolset, 5 GiB when using pre-built toolset
+# A ramdisk is used as writable overlay to a read-only disk image containing
+# the build system.
 
-RAMDISK_ENABLE=true   # mount ramdisk to WRK_DIR
-RAMDISK_SIZE=9        # unit is GiB
+RAMDISK_SIZE=4   # unit is GiB
 
-### try to use pre-built toolset ###############################################
+### the main writable directory where all the action takes place ###############
 
-# In order to just download and extract a pre-built toolset
-#   - it has to be enabled ('TOOLSET_CACHE_ENABLE=true')
-#   - you have to use DEFAULT_SYSTEM_WRK_DIR as your WRK_DIR
-#     (see commentary in the section below for explanation)
-#
-# It does not hurt to have it enabled by default, because if it cannot be
-# used, it won't be used and doesn't cause errors.
+[ -z $WRITABLE_DIR ] && WRITABLE_DIR=/Users/Shared/work
 
-TOOLSET_CACHE_ENABLE=true
-
-### work directory and subdirectories ##########################################
-
-[ -z $WRK_DIR ] && WRK_DIR=/Users/Shared/work
-
-if [ $(mkdir -p $WRK_DIR 2>/dev/null; echo $?) -eq 0 ] &&
-   [ -w $WRK_DIR ] &&
-   [ "$(stat -f '%Su' $WRK_DIR)" = "$(whoami)" ] ; then
-  echo "using build directory: $WRK_DIR"
+if  [ $(mkdir -p $WRITABLE_DIR 2>/dev/null; echo $?) -eq 0 ] &&
+    [ -w $WRITABLE_DIR ] &&
+    [ "$(stat -f '%Su' $WRITABLE_DIR)" = "$(whoami)" ] ; then
+  echo "using build directory: $WRITABLE_DIR"
 else
-  echo "directory not usable: $WRK_DIR"
+  echo "directory not usable: $WRITABLE_DIR"
   exit 1
 fi
+
+### build system paths  ########################################################
+
+REPOSITORY_DIR=$WRITABLE_DIR/repo  # downloaded build systems (.dmg files)
+
+WRK_DIR=$WRITABLE_DIR/1            # directory to mount build system to
 
 OPT_DIR=$WRK_DIR/opt
 BIN_DIR=$OPT_DIR/bin
@@ -66,7 +60,12 @@ LIB_DIR=$OPT_DIR/lib
 SRC_DIR=$OPT_DIR/src
 TMP_DIR=$OPT_DIR/tmp
 
-### set system temporary locations to our TMP_DIR ##############################
+### build system version #######################################################
+
+VERSION_WANT=0.24
+VERSION_HAVE=$([ -f $WRK_DIR/version.txt ] && cat $WRK_DIR/version.txt)
+
+### use our TMP_DIR for everything temporary ###################################
 
 export TMP=$TMP_DIR
 export TEMP=$TMP_DIR
@@ -76,10 +75,8 @@ export TMPDIR=$TMP_DIR
 
 export DEVROOT=$WRK_DIR/gtk-osx
 export DEVPREFIX=$DEVROOT/local
-export PYTHONUSERBASE=$DEVPREFIX
 export DEV_SRC_ROOT=$DEVROOT/source
 DEVCONFIG=$DEVROOT/config   # no export because this is an intermediate variable
-export PIP_CONFIG_DIR=$DEVCONFIG/pip
 
 ### Inkscape Git repository directory ##########################################
 
@@ -145,8 +142,7 @@ URL_PYTHON3_BIN=https://github.com/dehesselle/py3framework/releases/download/py3
 # This is for JHBuild only.
 URL_PYTHON36_SRC=https://github.com/dehesselle/py3framework/archive/py369.3.tar.gz
 URL_PYTHON36_BIN=https://github.com/dehesselle/py3framework/releases/download/py369.3/py369_framework_3.tar.xz
-# A pre-built version of the complete toolset.
-URL_TOOLSET_CACHE=https://github.com/dehesselle/mibap/releases/download/v0.22/mibap_v0.22.tar.xz
+URL_BUILDSYS=https://github.com/dehesselle/mibap/releases/download/v$VERSION_WANT/mibap_v$VERSION_WANT.dmg
 
 ### Python packages ############################################################
 

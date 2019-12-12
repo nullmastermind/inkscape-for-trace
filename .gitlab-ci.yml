@@ -78,7 +78,7 @@ inkscape:mac:
   except:
     - schedules
   before_script:
-    - packaging/macos/build_toolset.sh
+    - packaging/macos/install_toolset.sh
   script:
     - packaging/macos/build_inkscape.sh
   artifacts:
