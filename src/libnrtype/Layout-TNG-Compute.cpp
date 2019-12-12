@@ -412,7 +412,7 @@ bool Layout::Calculator::_measureUnbrokenSpan(ParagraphInfo const &para,
             double glyph_width    = font_size_multiplier * info->geometry.width;
 
             // Advance does not include kerning but Pango gives wrong advances for vertical text
-            // with upright orientation.
+            // with upright orientation (pre 1.44.0).
             font_instance *font = para.pango_items[span->end.iter_span->pango_item_index].font;
             double font_size = span->start.iter_span->font_size;
             double glyph_h_advance = font_size * font->Advance(info->glyph, false);
@@ -432,8 +432,10 @@ bool Layout::Calculator::_measureUnbrokenSpan(ParagraphInfo const &para,
                     if (g_unichar_type (c) != G_UNICODE_NON_SPACING_MARK) {
                         // Non-spacing marks should not contribute to width. Fonts may not report the correct advance, especially if the 'vmtx' table is missing.
                         if (pango_version_check(1,44,0) != nullptr) {
+                            // Pango >= 1.44.0
                             char_width += glyph_width;
                         } else {
+                            // Pango < 1.44.0  glyph_width returned is horizontal width, not vertical.
                             char_width += glyph_v_advance;
                         }
                     }
@@ -565,6 +567,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
     } else {
         new_line.baseline_y += line_height.getTypoAscent();
     }
+
 
     TRACE(("    initial new_line.baseline_y: %f\n", new_line.baseline_y ));
 
@@ -756,7 +759,8 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                 double old_delta_x = 0.0;
 
 #ifdef DEBUG_GLYPH
-                std::cout << "\nGlyph in span" << std::endl;
+                std::cout << "\nGlyphs in span: x_start: " << new_span.x_start << " y_offset: " << new_span.y_offset
+                          << "  PangoItem flags: " << (int)pango_item->analysis.flags << " Gravity: " << (int)pango_item->analysis.gravity << std::endl;
                 std::cout << "  Unicode  Glyph  h_advance  v_advance  width  cluster    orientation   new_glyph         delta"     << std::endl;
                 std::cout << "   (hex)     No.                                start                   x       y       x       y"   << std::endl;
                 std::cout << "  -------------------------------------------------------------------------------------------------" << std::endl;
@@ -847,8 +851,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
 
                         // TODO: Should also check 'glyph_orientation_vertical' if 'text-orientation' is unset...
                         if( new_span.text_orientation == SP_CSS_TEXT_ORIENTATION_SIDEWAYS ||
-                            (new_span.text_orientation == SP_CSS_TEXT_ORIENTATION_MIXED &&
-                             para.pango_items[unbroken_span.pango_item_index].item->analysis.gravity == PANGO_GRAVITY_SOUTH) ) {
+                            (new_span.text_orientation == SP_CSS_TEXT_ORIENTATION_MIXED && pango_item->analysis.gravity == PANGO_GRAVITY_SOUTH) ) {
 
                             // Sideways orientation (Latin characters, CJK punctuation), 90deg rotation done at output stage.
 
@@ -866,7 +869,10 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                             new_glyph.x += delta_x;
                             new_glyph.y -= delta_y;
 
-                            new_glyph.y -= new_span.font_size * font->GetBaselines()[ dominant_baseline ];
+                            if (pango_version_check(1,44,0) == nullptr) {
+                                // Pango >= 1.44
+                                new_glyph.y -= new_span.font_size * font->GetBaselines()[ dominant_baseline ];
+                            }
 
                         } else {
                             // Upright orientation
@@ -895,6 +901,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
 #endif
 
                             if (pango_version_check(1,44,0) != nullptr) {
+                                // Pango < 1.44.0
                                 new_glyph.advance = glyph_v_advance;
                                 new_glyph.x += delta_x;
                                 // Glyph reference point is center (shift left edge to center glyph).
@@ -911,8 +918,9 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                             if (g_unichar_type (*iter_source_text) == G_UNICODE_NON_SPACING_MARK) {
 
                                 if (pango_version_check(1,44,0) == nullptr) {
+                                    // Pango >= 1.44
                                     new_glyph.x -= new_span.line_height.emSize();
-                                    new_glyph.x += delta_x;
+                                    new_glyph.x -= delta_x;
                                     new_glyph.x += old_delta_x;
                                 }
                                 new_glyph.advance = 0; // Many fonts report a non-zero advance for marks, especially if the 'vmtx' table is missing.
@@ -1959,21 +1967,29 @@ bool Layout::Calculator::calculate()
 
     _font_factory_size_multiplier = (font_factory::Default())->fontSize;
 
-    // Reset gravity hint in case it was changed via previous use of 'text-orientation'
-    // (scripts take their natural gravity given base gravity).
-    pango_context_set_gravity_hint(_pango_context, PANGO_GRAVITY_HINT_NATURAL);
-
     _block_progression = _flow._blockProgression();
     if( _block_progression == RIGHT_TO_LEFT || _block_progression == LEFT_TO_RIGHT ) {
         // Vertical text, CJK
-        pango_context_set_base_gravity(_pango_context, PANGO_GRAVITY_EAST);
-
-        if( _flow._blockTextOrientation() == SP_CSS_TEXT_ORIENTATION_UPRIGHT ) {
-            pango_context_set_gravity_hint(_pango_context, PANGO_GRAVITY_HINT_STRONG);
+        switch (_flow._blockTextOrientation()) {
+            case SP_CSS_TEXT_ORIENTATION_MIXED:
+                pango_context_set_base_gravity(_pango_context, PANGO_GRAVITY_EAST);
+                pango_context_set_gravity_hint(_pango_context, PANGO_GRAVITY_HINT_NATURAL);
+                break;
+            case SP_CSS_TEXT_ORIENTATION_UPRIGHT:
+                pango_context_set_base_gravity(_pango_context, PANGO_GRAVITY_EAST);
+                pango_context_set_gravity_hint(_pango_context, PANGO_GRAVITY_HINT_STRONG);
+                break;
+            case SP_CSS_TEXT_ORIENTATION_SIDEWAYS:
+                pango_context_set_base_gravity(_pango_context, PANGO_GRAVITY_SOUTH);
+                pango_context_set_gravity_hint(_pango_context, PANGO_GRAVITY_HINT_STRONG);
+                break;
+            default:
+                std::cerr << "Layout::Calculator: Unhandled text orientation!" << std::endl;
         }
     } else {
         // Horizontal text
         pango_context_set_base_gravity(_pango_context, PANGO_GRAVITY_AUTO);
+        pango_context_set_gravity_hint(_pango_context, PANGO_GRAVITY_HINT_NATURAL);
     }
 
     // Minimum line box height determined by block container.
