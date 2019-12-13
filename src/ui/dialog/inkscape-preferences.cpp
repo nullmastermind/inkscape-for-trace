@@ -1051,7 +1051,7 @@ void InkscapePreferences::initPageUI()
 
 
     // Theme
-    _page_theme.add_group_header(_("Theme changes"));
+    _page_theme.add_group_header(_("Theme"));
     {
         using namespace Inkscape::IO::Resource;
         GHashTable *t;
@@ -1104,16 +1104,16 @@ void InkscapePreferences::initPageUI()
         g_hash_table_destroy(t);
 
         _gtk_theme.init("/theme/gtkTheme", labels, values, "Adwaita");
-        _page_theme.add_line(false, _("Change Gtk theme:"), _gtk_theme, "", "", false);
+        _page_theme.add_line(false, _("Change GTK theme:"), _gtk_theme, "", "", false);
         _gtk_theme.signal_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::themeChange));
     }
     _sys_user_themes_dir_copy.init(g_build_filename(g_get_user_data_dir(), "themes", NULL), _("Open themes folder"));
-    _page_theme.add_line(true, _("User themes: "), _sys_user_themes_dir_copy, "", _("Location of the user’s themes"), true, Gtk::manage(new Gtk::Box()));
+    _page_theme.add_line(true, _("User themes:"), _sys_user_themes_dir_copy, "", _("Location of the user’s themes"), true, Gtk::manage(new Gtk::Box()));
     _dark_theme.init(_("Use dark theme"), "/theme/preferDarkTheme", false);
     _page_theme.add_line(true, "", _dark_theme, "", _("Use dark theme"), true);
     _dark_theme.signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::themeChange));
     // Icons
-    _page_theme.add_group_header(_("Display icons"));
+    _page_theme.add_group_header(_("Icons"));
     {
         using namespace Inkscape::IO::Resource;
         auto folders = get_foldernames(ICONS, { "application" });
@@ -1123,7 +1123,7 @@ void InkscapePreferences::initPageUI()
             // from https://stackoverflow.com/questions/8520560/get-a-file-name-from-a-path#8520871
             // Maybe we can link boost path utilities
             // Remove directory if present.
-            // Do this before extension removal incase directory has a period character.
+            // Do this before extension removal in case the directory has a period character.
             const size_t last_slash_idx = folder.find_last_of("\\/");
             if (std::string::npos != last_slash_idx) {
                 folder.erase(0, last_slash_idx + 1);
@@ -1176,20 +1176,20 @@ void InkscapePreferences::initPageUI()
     Gtk::Box *icon_buttons = Gtk::manage(new Gtk::Box());
     icon_buttons->pack_start(_symbolic_base_color, true, true, 4);
     _page_theme.add_line(false, "", *icon_buttons, _("Icon color"),
-                         _("Base color for icons. Some icons changes need reload"), false);
+                         _("Base color for icons"), false);
     Gtk::Box *icon_buttons_hight = Gtk::manage(new Gtk::Box());
     icon_buttons_hight->pack_start(_symbolic_success_color, true, true, 4);
     icon_buttons_hight->pack_start(_symbolic_warning_color, true, true, 4);
     icon_buttons_hight->pack_start(_symbolic_error_color, true, true, 4);
     /* icon_buttons_hight->pack_start(*_complementary_colors, true, true, 4); */
     _page_theme.add_line(false, "", *icon_buttons_hight, _("Highlights"),
-                         _("Highlights colors, some symbolic icon themes use it. Some icons changes need reload"),
+                         _("Highlight colors supported by some symbolic icon themes"),
                          false);
     Gtk::Box *icon_buttons_def = Gtk::manage(new Gtk::Box());
     resetIconsColors();
     changeIconsColor(0xffffffff);
     _page_theme.add_line(false, "", *icon_buttons_def, "",
-                         _("Reset theme colors, some symbolic icon themes use it. Some icons changes need reload"),
+                         _("Reset theme colors for some symbolic icon themes"),
                          false);
     {
         Glib::ustring sizeLabels[] = { C_("Icon size", "Larger"), C_("Icon size", "Large"), C_("Icon size", "Small"),
@@ -1203,21 +1203,21 @@ void InkscapePreferences::initPageUI()
 
         _misc_small_toolbar.init("/toolbox/small", sizeLabels, sizeValues, G_N_ELEMENTS(sizeLabels), 0);
         _page_theme.add_line(false, _("Control bar icon size:"), _misc_small_toolbar, "",
-                             _("Set the size for the icons in tools' control bars to use (requires restart)"), false);
+                             _("Set the size for the icons in tools' control bars (requires restart)"), false);
 
         _misc_small_secondary.init("/toolbox/secondary", sizeLabels, sizeValues, G_N_ELEMENTS(sizeLabels), 1);
         _page_theme.add_line(false, _("Secondary toolbar icon size:"), _misc_small_secondary, "",
-                             _("Set the size for the icons in secondary toolbars to use (requires restart)"), false);
+                             _("Set the size for the icons in secondary toolbars (requires restart)"), false);
     }
     {
         Glib::ustring menu_icons_labels[] = {_("Yes"), _("No"), _("Theme decides")};
         int menu_icons_values[] = {1, -1, 0};
         _menu_icons.init("/theme/menuIcons", menu_icons_labels, menu_icons_values, G_N_ELEMENTS(menu_icons_labels), 0);
         _page_theme.add_line(false, _("Show icons in menus:"), _menu_icons, "",
-                             _("You can either enable or disable all icons in menus. By default the theme determines which icons to display by using the 'show-icons' attribute in its 'menus.xml' file. (requires restart)"), false);
+                             _("You can either enable or disable all icons in menus. By default, the setting for the 'show-icons' attribute in the 'menus.xml' file determines whether to display icons in menus. (requires restart)"), false);
     }
 
-    this->AddPage(_page_theme, _("Theme"), iter_ui, PREFS_PAGE_UI_THEME);
+    this->AddPage(_page_theme, _("Themeing"), iter_ui, PREFS_PAGE_UI_THEME);
     symbolicThemeCheck();
     // Windows
     _win_save_geom.init ( _("Save and restore window geometry for each document"), "/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_FILE, true, nullptr);
@@ -1264,11 +1264,11 @@ void InkscapePreferences::initPageUI()
     _page_windows.add_line( true, "", _win_save_geom, "",
                             _("Save and restore window geometry for each document (saves geometry in the document)"));
 
-    _page_windows.add_group_header( _("Saving dialogs status"));
+    _page_windows.add_group_header( _("Saving dialogs' status"));
     _page_windows.add_line( true, "", _win_save_dialog_pos_off, "",
-                            _("Don't save dialogs status"));
+                            _("Don't save dialogs' status"));
     _page_windows.add_line( true, "", _win_save_dialog_pos_on, "",
-                            _("Save and restore dialogs status (the last open windows dialogs are saved when it closes)"));
+                            _("Save and restore dialogs' status (the last open windows dialogs are saved when it closes)"));
 
 
 
@@ -1535,21 +1535,21 @@ void InkscapePreferences::initPageIO()
     // SVG 2 Fallbacks
     _page_svgexport.add_group_header( _("SVG 2"));
     _svgexport_insert_text_fallback.init( _("Insert SVG 1.1 fallback in text."),                                     "/options/svgexport/text_insertfallback",    true );
-    _svgexport_insert_mesh_polyfill.init( _("Insert Mesh Gradient JavaScript polyfill."),                            "/options/svgexport/mesh_insertpolyfill",    true );
-    _svgexport_insert_hatch_polyfill.init( _("Insert Hatch Paint Server JavaScript polyfill."),                       "/options/svgexport/hatch_insertpolyfill",   true );
+    _svgexport_insert_mesh_polyfill.init( _("Insert JavaScript code for mesh gradients."),                            "/options/svgexport/mesh_insertpolyfill",    true );
+    _svgexport_insert_hatch_polyfill.init( _("Insert JavaScript code for SVG2 hatches."),                       "/options/svgexport/hatch_insertpolyfill",   true );
 
-    _page_svgexport.add_line( false, "", _svgexport_insert_text_fallback,  "", _("Adds fallback options for non-SVG 2 renderers."),                          false);
-    _page_svgexport.add_line( false, "", _svgexport_insert_mesh_polyfill,  "", _("Adds JavaScript polyfill to render meshes."),                              false);
-    _page_svgexport.add_line( false, "", _svgexport_insert_hatch_polyfill,  "", _("Adds JavaScript polyfill to render hatches (linear and absolute paths)."), false);
+    _page_svgexport.add_line( false, "", _svgexport_insert_text_fallback,  "", _("Adds fallback options for non-SVG 2 renderers."), false);
+    _page_svgexport.add_line( false, "", _svgexport_insert_mesh_polyfill,  "", _("Adds a JavaScript polyfill for rendering meshes in web browsers."), false);
+    _page_svgexport.add_line( false, "", _svgexport_insert_hatch_polyfill,  "", _("Adds a JavaScript polyfill for rendering hatches in web browsers."), false);
 
     // SVG Export Options (SVG 2 -> SVG 1)
     _page_svgexport.add_group_header( _("SVG 2 to SVG 1.1"));
 
-    _svgexport_remove_marker_auto_start_reverse.init( _("Replace markers with 'auto_start_reverse'."),               "/options/svgexport/marker_autostartreverse", false);
-    _svgexport_remove_marker_context_paint.init(      _("Replace markers using 'context_paint' or 'context_fill'."), "/options/svgexport/marker_contextpaint",     false);
+    _svgexport_remove_marker_auto_start_reverse.init( _("Use correct marker direction in SVG 1.1 renderers."),               "/options/svgexport/marker_autostartreverse", false);
+    _svgexport_remove_marker_context_paint.init(      _("Use correct marker colors in SVG 1.1 renderers."), "/options/svgexport/marker_contextpaint",     false);
 
-    _page_svgexport.add_line( false, "", _svgexport_remove_marker_auto_start_reverse, "", _("SVG 2 allows markers to automatically be reversed at start of path."), false);
-    _page_svgexport.add_line( false, "", _svgexport_remove_marker_context_paint,      "", _("SVG 2 allows markers to automatically match stroke color."),           false);
+    _page_svgexport.add_line( false, "", _svgexport_remove_marker_auto_start_reverse, "", _("SVG 2 allows markers to automatically be reversed at the start of a path with 'auto_start_reverse'. This adds a rotated duplicate of the marker's definition."), false);
+    _page_svgexport.add_line( false, "", _svgexport_remove_marker_context_paint,      "", _("SVG 2 allows markers to automatically match the stroke color by using 'context_paint' or 'context_fill'. This adjusts the markers own colors."),           false);
 
     this->AddPage(_page_svgexport, _("SVG export"), iter_io, PREFS_PAGE_IO_SVGEXPORT);
 
@@ -1827,7 +1827,7 @@ void InkscapePreferences::initPageBehavior()
 
     _snap_default.init( _("Enable snapping in new documents"), "/options/snapdefault/value", true);
     _page_snapping.add_line( true, "", _snap_default, "",
-                             _("Initial state of snapping in new documents and non-Inkscape SVGs. Snap status is subsequently saved per-document."));
+                             _("Initial state of snapping in new documents and SVG files that are opened with Inkscape for the first time. Snap status is subsequently saved per-document."));
 
     _page_snapping.add_group_header( _("Snap indicator"));
 
@@ -2004,8 +2004,8 @@ void InkscapePreferences::initPageRendering()
 
     // rendering xray radius
     _rendering_xray_radius.init("/options/rendering/xray-radius", 1.0, 1500.0, 1.0, 100.0, 100.0, true, false);
-    _page_rendering.add_line(false, _("Rendering XRay radius:"), _rendering_xray_radius, "",
-                             _("XRay mode radius preview"), false);
+    _page_rendering.add_line(false, _("X-ray radius:"), _rendering_xray_radius, "",
+                             _("Radius of the circular area around the mouse cursor in X-ray mode"), false);
 
     /* blur quality */
     _blur_quality_best.init ( _("Best quality (slowest)"), "/options/blurquality/value",

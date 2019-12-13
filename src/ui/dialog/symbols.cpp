@@ -155,7 +155,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   
 
   search = Gtk::manage(new Gtk::SearchEntry());  // Search
-  search->set_tooltip_text(_("Return to start search."));
+  search->set_tooltip_text(_("Press 'Return' to start search."));
   search->signal_key_press_event().connect_notify(  sigc::mem_fun(*this, &SymbolsDialog::beforeSearch));
   search->signal_key_release_event().connect_notify(sigc::mem_fun(*this, &SymbolsDialog::unsensitive));
 
@@ -456,9 +456,9 @@ void SymbolsDialog::showOverlay() {
         overlay_title->set_markup(Glib::ustring("<span size=\"large\">") +
                                   Glib::ustring(_("Search in all symbol sets...")) + Glib::ustring("</span>"));
         overlay_desc->set_markup(Glib::ustring("<span size=\"small\">") +
-                                 Glib::ustring(_("First search can be slow.")) + Glib::ustring("</span>"));
+                                 Glib::ustring(_("The first search can be slow.")) + Glib::ustring("</span>"));
     } else if (!icons_found && !search_str.empty()) {
-        overlay_title->set_markup(Glib::ustring("<span size=\"large\">") + Glib::ustring(_("No results found")) +
+        overlay_title->set_markup(Glib::ustring("<span size=\"large\">") + Glib::ustring(_("No symbols found.")) +
                                   Glib::ustring("</span>"));
         overlay_desc->set_markup(Glib::ustring("<span size=\"small\">") +
                                  Glib::ustring(_("Try a different search term.")) + Glib::ustring("</span>"));
@@ -469,20 +469,20 @@ void SymbolsDialog::showOverlay() {
         overlay_desc->set_markup(Glib::ustring("<span size=\"small\">") + Glib::ustring("</span>"));
     }
   } else if (!number_symbols && (current != CURRENTDOC || !search_str.empty())) {
-      overlay_title->set_markup(Glib::ustring("<span size=\"large\">") + Glib::ustring(_("No results found")) +
+      overlay_title->set_markup(Glib::ustring("<span size=\"large\">") + Glib::ustring(_("No symbols found.")) +
                                 Glib::ustring("</span>"));
       overlay_desc->set_markup(Glib::ustring("<span size=\"small\">") +
                                Glib::ustring(_("Try a different search term,\nor switch to a different symbol set.")) +
                                Glib::ustring("</span>"));
   } else if (!number_symbols && current == CURRENTDOC) {
-      overlay_title->set_markup(Glib::ustring("<span size=\"large\">") + Glib::ustring(_("No symbols found")) +
+      overlay_title->set_markup(Glib::ustring("<span size=\"large\">") + Glib::ustring(_("No symbols found.")) +
                                 Glib::ustring("</span>"));
       overlay_desc->set_markup(
           Glib::ustring("<span size=\"small\">") +
           Glib::ustring(_("No symbols in current document.\nChoose a different symbol set\nor add a new symbol.")) +
           Glib::ustring("</span>"));
   } else if (!icons_found && !search_str.empty()) {
-      overlay_title->set_markup(Glib::ustring("<span size=\"large\">") + Glib::ustring(_("No results found")) +
+      overlay_title->set_markup(Glib::ustring("<span size=\"large\">") + Glib::ustring(_("No symbols found.")) +
                                 Glib::ustring("</span>"));
       overlay_desc->set_markup(Glib::ustring("<span size=\"small\">") +
                                Glib::ustring(_("Try a different search term,\nor switch to a different symbol set.")) +

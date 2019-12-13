@@ -64,7 +64,7 @@ InkviewApplication::InkviewApplication()
 
     // Additional informational strings for --help output
     // TODO: Claims to be translated automatically, but seems broken, so pass already translated strings
-    set_option_context_parameter_string(_("path1 [path2 pathN]]"));
+    set_option_context_parameter_string(_("path1 [path2 [pathN]]"));
     set_option_context_summary(_("Open one or more SVG files (or folders containing SVG files) for viewing."));
 
     // Will automatically handle character conversions.

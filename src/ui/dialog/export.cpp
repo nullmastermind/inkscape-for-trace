@@ -166,7 +166,7 @@ Export::Export () :
     hide_export.set_use_underline();
     hide_export.set_tooltip_text(_("In the exported image, hide all objects except those that are selected"));
     interlacing.set_use_underline();
-    interlacing.set_tooltip_text(_("Enables ADAM7 interlacing for PNG output. This results in slightly heavier images, but big images will look better sooner when loading the file"));
+    interlacing.set_tooltip_text(_("Enables ADAM7 interlacing for PNG output. This results in slightly larger image files, but big images can already be displayed (slightly blurry) while still loading."));
     closeWhenDone.set_use_underline();
     closeWhenDone.set_tooltip_text(_("Once the export completes, close this dialog"));
     prefs = Inkscape::Preferences::get();

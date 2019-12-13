@@ -559,16 +559,16 @@ void LivePathEffectAdd::reload_effect_list()
     _LPESelectorFlowBox->invalidate_filter();
     if (_showfavs) {
         if (_visiblelpe == 0) {
-            _LPEInfo->set_text(_("You don't have any favorites yet, please disable the favorites star"));
+            _LPEInfo->set_text(_("You don't have any favorites yet. Click on the favorites star again to see all LPEs."));
             _LPEInfo->set_visible(true);
             _LPEInfo->get_style_context()->add_class("lpeinfowarn");
         } else {
-            _LPEInfo->set_text(_("This is your favorite effects"));
+            _LPEInfo->set_text(_("These are your favorite effects"));
             _LPEInfo->set_visible(true);
             _LPEInfo->get_style_context()->add_class("lpeinfowarn");
         }
     } else {
-        _LPEInfo->set_text(_("Your search do a empty result, please try again"));
+        _LPEInfo->set_text(_("Nothing found! Please try again with different search terms."));
         _LPEInfo->set_visible(false);
         _LPEInfo->get_style_context()->remove_class("lpeinfowarn");
     }
@@ -580,7 +580,7 @@ void LivePathEffectAdd::on_search()
     _LPESelectorFlowBox->invalidate_filter();
     if (_showfavs) {
         if (_visiblelpe == 0) {
-            _LPEInfo->set_text(_("Your search do a empty result, please try again"));
+            _LPEInfo->set_text(_("Nothing found! Please try again with different search terms."));
             _LPEInfo->set_visible(true);
             _LPEInfo->get_style_context()->add_class("lpeinfowarn");
         } else {
@@ -589,7 +589,7 @@ void LivePathEffectAdd::on_search()
         }
     } else {
         if (_visiblelpe == 0) {
-            _LPEInfo->set_text(_("Your search do a empty result, please try again"));
+            _LPEInfo->set_text(_("Nothing found! Please try again with different search terms."));
             _LPEInfo->set_visible(true);
             _LPEInfo->get_style_context()->add_class("lpeinfowarn");
         } else {

@@ -24,16 +24,16 @@ namespace Inkscape {
 namespace LivePathEffect {
 
 static const Util::EnumData<Filllpemethod> FilllpemethodData[] = {
-    { FLM_ORIGINALD, N_("Without LPE's"), "originald" }, 
+    { FLM_ORIGINALD, N_("Without LPEs"), "originald" }, 
     { FLM_BSPLINESPIRO, N_("With Spiro or BSpline"), "bsplinespiro" },
-    { FLM_D, N_("With LPE's"), "d" }
+    { FLM_D, N_("With all LPEs"), "d" }
 };
 static const Util::EnumDataConverter<Filllpemethod> FLMConverter(FilllpemethodData, FLM_END);
 
 LPEFillBetweenMany::LPEFillBetweenMany(LivePathEffectObject *lpeobject)
     : Effect(lpeobject)
     , linked_paths(_("Linked path:"), _("Paths from which to take the original path data"), "linkedpaths", &wr, this)
-    , method(_("LPE's on linked:"), _("LPE's on linked"), "method", FLMConverter, &wr, this, FLM_BSPLINESPIRO)
+    , method(_("LPEs:"), _("Which LPEs of the linked paths should be considered"), "method", FLMConverter, &wr, this, FLM_BSPLINESPIRO)
     , fuse(_("Fuse coincident points"), _("Fuse coincident points"), "fuse", &wr, this, false)
     , join(_("Join subpaths"), _("Join subpaths"), "join", &wr, this, true)
     , close(_("Close"), _("Close path"), "close", &wr, this, true)

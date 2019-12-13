@@ -698,7 +698,7 @@ std::vector<Glib::ustring> ClipboardManagerImpl::getElementsOfType(SPDesktop *de
         result.emplace_back(node->attribute("id"));
     }
     if ( result.empty() ) {
-        _userWarn(desktop, ((Glib::ustring)_("Clipboard does not contain any.") + (Glib::ustring)type).c_str());
+        _userWarn(desktop, (Glib::ustring::compose(_("Clipboard does not contain any objects of type \"%1\"."), type)).c_str());
         tempdoc->doUnref();
         return result;
     }

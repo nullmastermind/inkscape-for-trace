@@ -356,7 +356,7 @@ LPEKnot::LPEKnot(LivePathEffectObject *lpeobject)
           _("_In units of stroke width"),
           _("Gap width is given in multiples of stroke width. When unchecked, document units are used."),
           "prop_to_stroke_width", &wr, this, true)
-    , both(_("_Both gaps"), _("Use gap in both intersection elements"), "both", &wr, this, false)
+    , both(_("_Gaps in both"), _("At path intersections, both parts will have a gap"), "both", &wr, this, false)
     , inverse_width(_("_Groups: Inverse"), _("Use other stroke width, useful in groups with different stroke widths"),
                     "inverse_width", &wr, this, false)
     , add_stroke_width("St_roke width", "Add the stroke width to the gap size", "add_stroke_width", &wr, this,
@@ -364,7 +364,7 @@ LPEKnot::LPEKnot(LivePathEffectObject *lpeobject)
     , add_other_stroke_width("_Crossing path stroke width", "Add crossed stroke width to the gap size",
                              "add_other_stroke_width", &wr, this, "inkscape_1.0_and_up", true)
     , switcher_size(_("S_witcher size:"), _("Orientation indicator/switcher size"), "switcher_size", &wr, this, 15)
-    , crossing_points_vector(_("Crossing Signs"), _("Crossings signs"), "crossing_points_vector", &wr, this)
+    , crossing_points_vector(_("Crossing Signs"), _("Crossing signs"), "crossing_points_vector", &wr, this)
     , crossing_points()
     , gpaths()
     , gstroke_widths()

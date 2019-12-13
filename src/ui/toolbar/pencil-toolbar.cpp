@@ -294,8 +294,8 @@ PencilToolbar::add_freehand_mode_toggle(bool tool_is_pencil)
     add(* Gtk::manage(new Gtk::SeparatorToolItem()));
 
     /* LPE bspline spiro flatten */
-    _flatten_spiro_bspline = Gtk::manage(new Gtk::ToolButton(_("LPE spiro or bspline flatten")));
-    _flatten_spiro_bspline->set_tooltip_text(_("LPE spiro or bspline flatten"));
+    _flatten_spiro_bspline = Gtk::manage(new Gtk::ToolButton(_("Flatten Spiro or BSpline LPE")));
+    _flatten_spiro_bspline->set_tooltip_text(_("Flatten Spiro or BSpline LPE"));
     _flatten_spiro_bspline->set_icon_name(INKSCAPE_ICON("flatten"));
     _flatten_spiro_bspline->signal_clicked().connect(sigc::mem_fun(*this, &PencilToolbar::flatten_spiro_bspline));
     add(*_flatten_spiro_bspline);
@@ -435,7 +435,7 @@ void PencilToolbar::add_powerstroke_cap(bool tool_is_pencil)
         _cap_combo->append(item);
     }
 
-    _cap_combo->set_tooltip_text(_("Cap for powerstroke pressure"));
+    _cap_combo->set_tooltip_text(_("Line endings when drawing with pressure-sensitive PowerPencil"));
     int cap = prefs->getInt("/live_effects/powerstroke/powerpencilcap", 4);
     _cap_combo->set_active(cap);
 

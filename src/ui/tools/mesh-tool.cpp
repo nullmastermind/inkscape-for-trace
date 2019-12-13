@@ -479,7 +479,7 @@ sp_mesh_context_fit_mesh_in_bbox (MeshTool *rc)
     }
     if (changed) {
         DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_MESH,
-                           _("Fit mesh inside bounding box."));
+                           _("Fit mesh inside bounding box"));
     }
 }
 

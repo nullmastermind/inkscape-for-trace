@@ -126,7 +126,7 @@ void FileDialogBaseGtk::internalSetup()
 
         previewCheckbox.signal_toggled().connect(sigc::mem_fun(*this, &FileDialogBaseGtk::_previewEnabledCB));
 
-        svgexportCheckbox.set_label(Glib::ustring(_("Export as SVG 1.1 per settings in Preference Dialog.")));
+        svgexportCheckbox.set_label(Glib::ustring(_("Export as SVG 1.1 per settings in Preferences dialog")));
         svgexportCheckbox.set_active(enableSVGExport);
 
         svgexportCheckbox.signal_toggled().connect(sigc::mem_fun(*this, &FileDialogBaseGtk::_svgexportEnabledCB));

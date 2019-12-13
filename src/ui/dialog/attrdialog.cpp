@@ -152,7 +152,7 @@ AttrDialog::AttrDialog()
     _scrolled_text_view.set_max_content_height(450);
     _scrolled_text_view.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     _scrolled_text_view.set_propagate_natural_width(true);
-    Gtk::Label *helpreturn = Gtk::manage(new Gtk::Label(_("Shift+Return new line")));
+    Gtk::Label *helpreturn = Gtk::manage(new Gtk::Label(_("Shift+Return for a new line")));
     helpreturn->get_style_context()->add_class("inksmall");
     Gtk::Button *apply = Gtk::manage(new Gtk::Button());
     Gtk::Image *icon = Gtk::manage(sp_get_icon_image("on-outline", 26));

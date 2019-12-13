@@ -201,8 +201,6 @@ StyleDialog::StyleDialog()
     _styleBox.set_orientation(Gtk::ORIENTATION_VERTICAL);
     _styleBox.set_valign(Gtk::ALIGN_START);
     _scrolledWindow.add(_styleBox);
-    Gtk::Label *infotoggler = Gtk::manage(new Gtk::Label(_("Edit Full Stylesheet")));
-    infotoggler->get_style_context()->add_class("inksmall");
     _vadj = _scrolledWindow.get_vadjustment();
     _vadj->signal_value_changed().connect(sigc::mem_fun(*this, &StyleDialog::_vscrool));
     _mainBox.set_orientation(Gtk::ORIENTATION_VERTICAL);
@@ -789,7 +787,7 @@ void StyleDialog::readStyleElement()
                     }
                 } else {
                     row[_mColumns._colStrike] = true;
-                    Glib::ustring tooltiptext = _("This value is commented");
+                    Glib::ustring tooltiptext = _("This value is commented out.");
                     row[_mColumns._colOwner] = tooltiptext;
                 }
             }
@@ -815,7 +813,7 @@ void StyleDialog::readStyleElement()
     try {
         _builder = Gtk::Builder::create_from_file(gladefile);
     } catch (const Glib::Error &ex) {
-        g_warning("Glade file loading failed for filter effect dialog");
+        g_warning("Glade file loading failed for filter effect dialog.");
         return;
     }
     _builder->get_widget("CSSSelector", css_selector);
@@ -979,7 +977,7 @@ bool StyleDialog::_on_foreach_iter(const Gtk::TreeModel::iterator &iter)
         Glib::ustring value = _owner_style[row[_mColumns._colName]];
         Glib::ustring tooltiptext = Glib::ustring(_("Invalid property set"));
         if (!value.empty()) {
-            tooltiptext = Glib::ustring(_("Used in ") + _owner_style[row[_mColumns._colName]]);
+            tooltiptext = Glib::ustring::compose(_("Used in %1"), _owner_style[row[_mColumns._colName]]);
         }
         row[_mColumns._colOwner] = tooltiptext;
     }

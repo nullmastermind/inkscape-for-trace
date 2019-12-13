@@ -19,9 +19,9 @@ LPEDashedStroke::LPEDashedStroke(LivePathEffectObject *lpeobject)
     , holefactor(_("Hole factor"), _("Hole factor"), "holefactor", &wr, this, 0.0)
     , splitsegments(_("Use segments"), _("Use segments"), "splitsegments", &wr, this, true)
     , halfextreme(_("Half start/end"), _("Start and end of each segment has half size"), "halfextreme", &wr, this, true)
-    , unifysegment(_("Unify dashes"), _("Approximately unify the dashes length using the minimal length segment"),
+    , unifysegment(_("Equalize dashes"), _("Global dash length is approximately the length of the dashes in the shortest path segment"),
                    "unifysegment", &wr, this, true)
-    , message(_("Info Box"), _("Important messages"), "message", &wr, this,
+    , message(_("Note"), _("Important messages"), "message", &wr, this,
               _("Add <b>\"Fill Between Many LPE\"</b> to add fill."))
 {
     registerParameter(&numberdashes);

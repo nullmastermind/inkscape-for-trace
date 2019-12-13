@@ -375,14 +375,14 @@ void KnotHolder::add_pattern_knotholder()
         PatternKnotHolderEntityScale *entity_scale = new PatternKnotHolderEntityScale(false);
         entity_xy->create(desktop, item, this, Inkscape::CTRL_TYPE_POINT,
                           // TRANSLATORS: This refers to the pattern that's inside the object
-                          _("<b>Move</b> the pattern stroke inside the object"), SP_KNOT_SHAPE_CROSS);
+                          _("<b>Move</b> the stroke's pattern inside the object"), SP_KNOT_SHAPE_CROSS);
 
         entity_scale->create(desktop, item, this, Inkscape::CTRL_TYPE_SIZER,
-                             _("<b>Scale</b> the pattern stroke; uniformly if with <b>Ctrl</b>"), SP_KNOT_SHAPE_SQUARE,
+                             _("<b>Scale</b> the stroke's pattern; uniformly if with <b>Ctrl</b>"), SP_KNOT_SHAPE_SQUARE,
                              SP_KNOT_MODE_XOR);
 
         entity_angle->create(desktop, item, this, Inkscape::CTRL_TYPE_ROTATE,
-                             _("<b>Rotate</b> the pattern stroke; with <b>Ctrl</b> to snap angle"),
+                             _("<b>Rotate</b> the stroke's pattern; with <b>Ctrl</b> to snap angle"),
                              SP_KNOT_SHAPE_CIRCLE, SP_KNOT_MODE_XOR);
 
         entity.push_back(entity_xy);

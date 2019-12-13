@@ -220,11 +220,11 @@ void ObjectProperties::_init()
         _combo_image_rendering.append(enum_image_rendering[i].key);
     }
     _combo_image_rendering.set_tooltip_text(_("The 'image-rendering' property can influence how a bitmap is re-scaled:\n"
-                                              "\t• 'auto' no preference (usually smooth but blurred)\n"
-                                              "\t• 'optimizeQuality' prefer rendering quality (usually smooth but blurred)\n"
-                                              "\t• 'optimizeSpeed' prefer rendering speed (usually blocky)\n"
-                                              "\t• 'crisp-edges' rescale without blurring edges (often blocky)\n"
-                                              "\t• 'pixelated' render blocky\n"
+                                              "\t• 'auto': no preference (scaled image is usually smooth but blurred)\n"
+                                              "\t• 'optimizeQuality': prefer rendering quality (usually smooth but blurred)\n"
+                                              "\t• 'optimizeSpeed': prefer rendering speed (usually blocky)\n"
+                                              "\t• 'crisp-edges': rescale without blurring edges (often blocky)\n"
+                                              "\t• 'pixelated': render blocky\n"
                                               "Note that the specification of this property is not finalized. "
                                               "Support and interpretation of these values varies between renderers."));
 

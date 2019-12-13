@@ -188,17 +188,17 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
         _pattern[i].set_markup (_("Pattern"));
         sp_set_font_size_smaller (GTK_WIDGET(_pattern[i].gobj()));
         _pattern[i].show_all();
-        __pattern[i] = (i == SS_FILL)? (_("Pattern fill")) : (_("Pattern stroke"));
+        __pattern[i] = (i == SS_FILL)? (_("Pattern (fill)")) : (_("Pattern (stroke)"));
 
         _hatch[i].set_markup(_("Hatch"));
         sp_set_font_size_smaller(GTK_WIDGET(_hatch[i].gobj()));
         _hatch[i].show_all();
-        __hatch[i] = (i == SS_FILL) ? (_("Hatch fill")) : (_("Hatch stroke"));
+        __hatch[i] = (i == SS_FILL) ? (_("Hatch (fill)")) : (_("Hatch (stroke)"));
 
         _lgradient[i].set_markup (_("<b>L</b>"));
         sp_set_font_size_smaller (GTK_WIDGET(_lgradient[i].gobj()));
         _lgradient[i].show_all();
-        __lgradient[i] = (i == SS_FILL)? (_("Linear gradient fill")) : (_("Linear gradient stroke"));
+        __lgradient[i] = (i == SS_FILL)? (_("Linear gradient (fill)")) : (_("Linear gradient (stroke)"));
 
         _gradient_preview_l[i] =  GTK_WIDGET(sp_gradient_image_new (nullptr));
         _gradient_box_l[i].pack_start(_lgradient[i]);
@@ -208,7 +208,7 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
         _rgradient[i].set_markup (_("<b>R</b>"));
         sp_set_font_size_smaller (GTK_WIDGET(_rgradient[i].gobj()));
         _rgradient[i].show_all();
-        __rgradient[i] = (i == SS_FILL)? (_("Radial gradient fill")) : (_("Radial gradient stroke"));
+        __rgradient[i] = (i == SS_FILL)? (_("Radial gradient (fill)")) : (_("Radial gradient (stroke)"));
 
         _gradient_preview_r[i] = GTK_WIDGET(sp_gradient_image_new (nullptr));
         _gradient_box_r[i].pack_start(_rgradient[i]);
@@ -219,7 +219,7 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
         _mgradient[i].set_markup (_("<b>M</b>"));
         sp_set_font_size_smaller (GTK_WIDGET(_mgradient[i].gobj()));
         _mgradient[i].show_all();
-        __mgradient[i] = (i == SS_FILL)? (_("Mesh gradient fill")) : (_("Mesh gradient stroke"));
+        __mgradient[i] = (i == SS_FILL)? (_("Mesh gradient (fill)")) : (_("Mesh gradient (stroke)"));
 
         _gradient_preview_m[i] = GTK_WIDGET(sp_gradient_image_new (nullptr));
         _gradient_box_m[i].pack_start(_mgradient[i]);
@@ -238,7 +238,7 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
         __unset[i] = (i == SS_FILL)? (_("Unset fill")) : (_("Unset stroke"));
 
         _color_preview[i] = new Inkscape::UI::Widget::ColorPreview (0);
-        __color[i] = (i == SS_FILL)? (_("Flat color fill")) : (_("Flat color stroke"));
+        __color[i] = (i == SS_FILL)? (_("Flat color (fill)")) : (_("Flat color (stroke)"));
 
         // TRANSLATORS: A means "Averaged"
         _averaged[i].set_markup (_("<b>a</b>"));
