@@ -24,7 +24,6 @@
 ../share/extensions/dhw_input.inx
 ../share/extensions/dimension.inx
 ../share/extensions/docinfo.inx
-../share/extensions/dots.inx
 ../share/extensions/dpi90to96.inx
 ../share/extensions/dpi96to90.inx
 ../share/extensions/draw_from_triangle.inx
@@ -109,6 +108,7 @@
 ../share/extensions/path_envelope.inx
 ../share/extensions/path_mesh_m2p.inx
 ../share/extensions/path_mesh_p2m.inx
+../share/extensions/path_number_nodes.inx
 ../share/extensions/pathalongpath.inx
 ../share/extensions/pathscatter.inx
 ../share/extensions/pdflatex.inx
