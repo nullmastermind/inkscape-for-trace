@@ -2205,7 +2205,7 @@ msgstr "marrone (#A52A2A)"
 #: ../share/palettes/palettes.h:40
 msgctxt "Palette"
 msgid "firebrick (#B22222)"
-msgstr "firebrick (#B22222)"
+msgstr "mattone (#B22222)"
 
 #: ../share/palettes/palettes.h:41
 msgctxt "Palette"
@@ -2365,7 +2365,7 @@ msgstr "grano (#F5DEB3)"
 #: ../share/palettes/palettes.h:72
 msgctxt "Palette"
 msgid "oldlace (#FDF5E6)"
-msgstr "vecchio laccio (#FDF5E6)"
+msgstr "vecchio merletto (#FDF5E6)"
 
 #: ../share/palettes/palettes.h:73
 msgctxt "Palette"
@@ -5490,7 +5490,7 @@ msgstr "File input Corel DRAW Compressed Exchange"
 
 #: ../src/extension/internal/cdr-input.cpp:357
 msgid "Corel DRAW Compressed Exchange files (*.ccx)"
-msgstr "File Corel DRAW Compressed Exchang (*.ccx)"
+msgstr "File Corel DRAW Compressed Exchange (*.ccx)"
 
 #: ../src/extension/internal/cdr-input.cpp:358
 msgid "Open compressed exchange files saved in Corel DRAW"
@@ -15237,6 +15237,7 @@ msgstr ""
 "Luca Ferretti (elle.uca@infinito.it)\n"
 "Francesco Ricci (tardo2002@libero.it)\n"
 "Germano Gasparini (grigio60@gmail.com)"
+"Marco Riva (oelimar@mail.com)"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:210
 #: ../src/ui/dialog/align-and-distribute.cpp:928
@@ -15301,7 +15302,7 @@ msgstr "Allinea linee del testo"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:930
 msgid "Rearrange"
-msgstr "Ordinamento"
+msgstr "Riordina"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:932
 #: ../src/ui/toolbar/snap-toolbar.cpp:89
@@ -15316,7 +15317,7 @@ msgstr "Relativo a: "
 #: ../src/ui/dialog/align-and-distribute.cpp:945 ../src/verbs.cpp:3184
 #: ../src/verbs.cpp:3185
 msgid "Align right edges of objects to the left edge of the anchor"
-msgstr "Allinea margine destro dell'oggetto al margine sinistro del fisso"
+msgstr "Allinea margine destro dell'oggetto al margine sinistro del riferimento"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:948 ../src/verbs.cpp:3187
 #: ../src/verbs.cpp:3188
@@ -15336,12 +15337,13 @@ msgstr "Allinea i lati destri"
 #: ../src/ui/dialog/align-and-distribute.cpp:957 ../src/verbs.cpp:3194
 #: ../src/verbs.cpp:3195
 msgid "Align left edges of objects to the right edge of the anchor"
-msgstr "Allinea lato sinistro dell'oggetto al lato destro del fisso"
+msgstr "Allinea lato sinistro dell'oggetto al lato destro del riferimento"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:960 ../src/verbs.cpp:3198
 #: ../src/verbs.cpp:3199
 msgid "Align bottom edges of objects to the top edge of the anchor"
-msgstr "Allinea margine inferiore dell'oggetto al margine superiore del fisso"
+msgstr "Allinea margine inferiore dell'oggetto al margine superiore del "
+"riferimento"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:963 ../src/verbs.cpp:3201
 msgid "Align top edges"
@@ -15361,7 +15363,7 @@ msgstr "Allinea i margini inferiori"
 #: ../src/verbs.cpp:3209
 msgid "Align top edges of objects to the bottom edge of the anchor"
 msgstr ""
-"Allinea il margine superiore dell'oggetto al margine inferiore del fisso"
+"Allinea il margine superiore dell'oggetto al margine inferiore del riferimento"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:977
 msgid "Align baseline anchors of texts horizontally"
@@ -15718,14 +15720,14 @@ msgstr "<b>Esponente:</b>"
 #: ../src/ui/dialog/clonetiler.cpp:241
 msgid "Whether rows are spaced evenly (1), converge (<1) or diverge (>1)"
 msgstr ""
-"Specifica se le righe sono a spaziatura costante (1), convergenti (<1) o "
-"divergenti (>1)"
+"Specifica se le righe sono a spaziatura costante (1), convergente (<1) o "
+"divergente (>1)"
 
 #: ../src/ui/dialog/clonetiler.cpp:248
 msgid "Whether columns are spaced evenly (1), converge (<1) or diverge (>1)"
 msgstr ""
-"Specifica se le colonne sono a spaziatura costante (1), convergenti (<1) o "
-"divergenti (>1)"
+"Specifica se le colonne sono a spaziatura costante (1), convergente (<1) o "
+"divergente (>1)"
 
 #. TRANSLATORS: "Alternate" is a verb here
 #: ../src/ui/dialog/clonetiler.cpp:256 ../src/ui/dialog/clonetiler.cpp:427
@@ -15750,11 +15752,11 @@ msgstr "<small>Accumula:</small>"
 
 #: ../src/ui/dialog/clonetiler.cpp:282
 msgid "Cumulate the shifts for each row"
-msgstr "Accumula lo spostamento per ogni riga"
+msgstr "Somma lo spostamento per ogni riga"
 
 #: ../src/ui/dialog/clonetiler.cpp:287
 msgid "Cumulate the shifts for each column"
-msgstr "Accumula lo spostamento per ogni colonna"
+msgstr "Somma lo spostamento per ogni colonna"
 
 #. TRANSLATORS: "Cumulate" is a verb here
 #: ../src/ui/dialog/clonetiler.cpp:294
@@ -15781,19 +15783,19 @@ msgstr "<b>Scala X:</b>"
 #, no-c-format
 msgid "Horizontal scale per row (in % of tile width)"
 msgstr ""
-"Il ridimensionamento orizzontale per ogni riga (in % sulla larghezza del "
+"Ridimensionamento orizzontale per ogni riga (in % sulla larghezza del "
 "clone)"
 
 #: ../src/ui/dialog/clonetiler.cpp:340
 #, no-c-format
 msgid "Horizontal scale per column (in % of tile width)"
 msgstr ""
-"Il ridimensionamento orizzontale per ogni colonna (in % sulla larghezza del "
+"Ridimensionamento orizzontale per ogni colonna (in % sulla larghezza del "
 "clone)"
 
 #: ../src/ui/dialog/clonetiler.cpp:346
 msgid "Randomize the horizontal scale by this percentage"
-msgstr "Rende casuale di questa percentuale il ridimensionamento orizzontale"
+msgstr "Rende casuale il ridimensionamento orizzontale in questa percentuale"
 
 #: ../src/ui/dialog/clonetiler.cpp:354
 msgid "<b>Scale Y:</b>"
@@ -15803,30 +15805,30 @@ msgstr "<b>Scala Y:</b>"
 #, no-c-format
 msgid "Vertical scale per row (in % of tile height)"
 msgstr ""
-"Il ridimensionamento verticale per ogni riga (in % sulla larghezza del clone)"
+"Ridimensionamento verticale per ogni riga (in % sulla larghezza del clone)"
 
 #: ../src/ui/dialog/clonetiler.cpp:371
 #, no-c-format
 msgid "Vertical scale per column (in % of tile height)"
 msgstr ""
-"Il ridimensionamento verticale per ogni colonna (in % sulla larghezza del "
+"Ridimensionamento verticale per ogni colonna (in % sulla larghezza del "
 "clone)"
 
 #: ../src/ui/dialog/clonetiler.cpp:377
 msgid "Randomize the vertical scale by this percentage"
-msgstr "Rende casuale di questa percentuale il ridimensionamento verticale"
+msgstr "Rende casuale il ridimensionamento verticale in questa percentuale"
 
 #: ../src/ui/dialog/clonetiler.cpp:392
 msgid "Whether row scaling is uniform (1), converge (<1) or diverge (>1)"
 msgstr ""
-"Specifica se le dimensioni delle righe costanti (1), convergenti (<1) o "
-"divergenti (>1)"
+"Specifica se la scalatura delle righe è costante (1), convergente (<1) o "
+"divergente (>1)"
 
 #: ../src/ui/dialog/clonetiler.cpp:398
 msgid "Whether column scaling is uniform (1), converge (<1) or diverge (>1)"
 msgstr ""
-"Specifica se le dimensioni delle righe costanti (1), convergenti (<1) o "
-"divergenti (>1)"
+"Specifica se la scalatura delle colonne è costante (1), convergente (<1) o "
+"divergente (>1)"
 
 #: ../src/ui/dialog/clonetiler.cpp:406
 msgid "<b>Base:</b>"
@@ -15849,11 +15851,11 @@ msgstr "Alterna il segno del ridimensionamento per ogni colonna"
 
 #: ../src/ui/dialog/clonetiler.cpp:453
 msgid "Cumulate the scales for each row"
-msgstr "Accumula il ridimensionamento per ogni riga"
+msgstr "Somma il ridimensionamento per ogni riga"
 
 #: ../src/ui/dialog/clonetiler.cpp:458
 msgid "Cumulate the scales for each column"
-msgstr "Accumula il ridimensionamento per ogni colonna"
+msgstr "Somma il ridimensionamento per ogni colonna"
 
 #: ../src/ui/dialog/clonetiler.cpp:467
 msgid "_Rotation"
@@ -15875,7 +15877,7 @@ msgstr "Ruota i cloni di questo angolo per ogni colonna"
 
 #: ../src/ui/dialog/clonetiler.cpp:498
 msgid "Randomize the rotation angle by this percentage"
-msgstr "Rende casuale di questa percentuale l'angolo di rotazione"
+msgstr "Rende casuale in questa percentuale l'angolo di rotazione"
 
 #: ../src/ui/dialog/clonetiler.cpp:513
 msgid "Alternate the rotation direction for each row"
@@ -15887,11 +15889,11 @@ msgstr "Alterna la direzione della rotazione per ogni colonna"
 
 #: ../src/ui/dialog/clonetiler.cpp:532
 msgid "Cumulate the rotation for each row"
-msgstr "Accumula la rotazione per ogni riga"
+msgstr "Somma la rotazione per ogni riga"
 
 #: ../src/ui/dialog/clonetiler.cpp:537
 msgid "Cumulate the rotation for each column"
-msgstr "Accumula la rotazione per ogni colonna"
+msgstr "Somma la rotazione per ogni colonna"
 
 #: ../src/ui/dialog/clonetiler.cpp:546
 msgid "_Blur & opacity"
@@ -15911,7 +15913,7 @@ msgstr "Sfoca i cloni di questa percentuale per ogni colonna"
 
 #: ../src/ui/dialog/clonetiler.cpp:574
 msgid "Randomize the tile blur by this percentage"
-msgstr "Rende casuale di questa percentuale la sfocatura del clone"
+msgstr "Rende casuale la sfocatura del clone in questa percentuale"
 
 #: ../src/ui/dialog/clonetiler.cpp:589
 msgid "Alternate the sign of blur change for each row"
@@ -15928,15 +15930,15 @@ msgstr "<b>Opacità:</b>"
 
 #: ../src/ui/dialog/clonetiler.cpp:610
 msgid "Decrease tile opacity by this percentage for each row"
-msgstr "Riduce di questa percentuale per ogni riga l'opacità dei cloni"
+msgstr "Riduce l'opacità dei cloni in questa percentuale per ogni riga"
 
 #: ../src/ui/dialog/clonetiler.cpp:616
 msgid "Decrease tile opacity by this percentage for each column"
-msgstr "Riduce di questa percentuale per ogni colonna l'opacità dei cloni"
+msgstr "Riduce l'opacità dei cloni in questa percentuale per ogni colonna"
 
 #: ../src/ui/dialog/clonetiler.cpp:622
 msgid "Randomize the tile opacity by this percentage"
-msgstr "Rende casuale di questa percentuale l'opacità dei cloni"
+msgstr "Rende casuale l'opacità dei cloni in questa percentuale"
 
 #: ../src/ui/dialog/clonetiler.cpp:637
 msgid "Alternate the sign of opacity change for each row"
@@ -15980,7 +15982,7 @@ msgstr "Cambia di questa percentuale per ogni colonna l'opacità dei cloni"
 
 #: ../src/ui/dialog/clonetiler.cpp:694
 msgid "Randomize the tile hue by this percentage"
-msgstr "Rende casuale di questa percentuale l'opacità del clone"
+msgstr "Rende casuale l'opacità del clone in questa percentuale"
 
 #: ../src/ui/dialog/clonetiler.cpp:703
 msgid "<b>S:</b>"
@@ -15988,16 +15990,16 @@ msgstr "<b>S:</b>"
 
 #: ../src/ui/dialog/clonetiler.cpp:710
 msgid "Change the color saturation by this percentage for each row"
-msgstr "Cambia di questa percentuale per ogni riga la saturazione del colore"
+msgstr "Cambia la saturazione del colore di questa percentuale per ogni riga"
 
 #: ../src/ui/dialog/clonetiler.cpp:716
 msgid "Change the color saturation by this percentage for each column"
 msgstr ""
-"Cambia di questa percentuale per ogni colonna la saturazione del colore"
+"Cambia la saturazione del colore di questa percentuale per ogni colonna"
 
 #: ../src/ui/dialog/clonetiler.cpp:722
 msgid "Randomize the color saturation by this percentage"
-msgstr "Rende casuale di questa percentuale la saturazione del clone"
+msgstr "Rende casuale la saturazione del clone fino a questa percentuale"
 
 #: ../src/ui/dialog/clonetiler.cpp:730
 msgid "<b>L:</b>"
@@ -16005,15 +16007,15 @@ msgstr "<b>L:</b>"
 
 #: ../src/ui/dialog/clonetiler.cpp:737
 msgid "Change the color lightness by this percentage for each row"
-msgstr "Riduce di questa percentuale per ogni riga la luminosità dei cloni"
+msgstr "Riduce la luminosità dei cloni di questa percentuale per ogni riga"
 
 #: ../src/ui/dialog/clonetiler.cpp:743
 msgid "Change the color lightness by this percentage for each column"
-msgstr "Riduce di questa percentuale per ogni colonna la luminosità dei cloni"
+msgstr "Riduce la luminosità dei cloni di questa percentuale per ogni colonna"
 
 #: ../src/ui/dialog/clonetiler.cpp:749
 msgid "Randomize the color lightness by this percentage"
-msgstr "Rende casuale di questa percentuale la luminosità del clone"
+msgstr "Rende casuale la luminosità del clone in questa percentuale"
 
 #: ../src/ui/dialog/clonetiler.cpp:764
 msgid "Alternate the sign of color changes for each row"
@@ -16122,7 +16124,7 @@ msgstr "Casualità:"
 
 #: ../src/ui/dialog/clonetiler.cpp:896
 msgid "Randomize the picked value by this percentage"
-msgstr "Rende casuale di questa percentuale il valore prelevato"
+msgstr "Rende casuale il valore prelevato di questa percentuale"
 
 #: ../src/ui/dialog/clonetiler.cpp:903
 msgid "Invert:"
@@ -16245,7 +16247,7 @@ msgstr " Ri_muovi "
 
 #: ../src/ui/dialog/clonetiler.cpp:1155
 msgid "Remove existing tiled clones of the selected object (siblings only)"
-msgstr "Rimuove i cloni in serie dell'oggetto selezionati (solo imparentati)"
+msgstr "Rimuove i cloni in serie dell'oggetto selezionato (solo imparentati)"
 
 #: ../src/ui/dialog/clonetiler.cpp:1170
 msgid " R_eset "
@@ -16257,8 +16259,8 @@ msgid ""
 "Reset all shifts, scales, rotates, opacity and color changes in the dialog "
 "to zero"
 msgstr ""
-"Reimposta tutti gli spostamenti, scale, rotazioni, opacità e cambiamenti di "
-"colore nella sottofinestra a zero"
+"Resetta tutti gli spostamenti, scalature, rotazioni, opacità e cambiamenti "
+"di colore nella sottofinestra"
 
 #: ../src/ui/dialog/clonetiler.cpp:1232
 msgid "<small>Nothing selected.</small>"
@@ -16593,7 +16595,7 @@ msgstr "Aggancia tracciati fissaggi"
 #: ../src/ui/dialog/document-properties.cpp:136
 msgid "When snapping to paths, then also try snapping to clip paths"
 msgstr ""
-"Quando aggancia a tracciati, prova ad agganciare ai tracciati dei fissaggi"
+"Agganciando i tracciati, prova anche ad agganciare ai tracciati dei fissaggi"
 
 #: ../src/ui/dialog/document-properties.cpp:137
 msgid "Snap to mask paths"
@@ -16602,7 +16604,7 @@ msgstr "Aggancia tracciati maschere"
 #: ../src/ui/dialog/document-properties.cpp:137
 msgid "When snapping to paths, then also try snapping to mask paths"
 msgstr ""
-"Quando aggancia a tracciati, prova ad agganciare ai tracciati delle maschere"
+"Agganciando i tracciati, prova anche ad agganciare ai tracciati delle maschere"
 
 #: ../src/ui/dialog/document-properties.cpp:138
 msgid "Snap perpendicularly"
@@ -16612,7 +16614,7 @@ msgstr "Aggancia perpendicolarmente"
 msgid ""
 "When snapping to paths or guides, then also try snapping perpendicularly"
 msgstr ""
-"Quando aggancia a tracciati o guide, prova ad agganciare perpendicolarmente"
+"Quando aggancia tracciati o guide, prova ad agganciare perpendicolarmente"
 
 #: ../src/ui/dialog/document-properties.cpp:139
 msgid "Snap tangentially"
@@ -16621,7 +16623,7 @@ msgstr "Aggancia tangenzialmente"
 #: ../src/ui/dialog/document-properties.cpp:139
 msgid "When snapping to paths or guides, then also try snapping tangentially"
 msgstr ""
-"Quando aggancia a tracciati o guide, prova ad agganciare tangenzialmente"
+"Quando aggancia tracciati o guide, prova ad agganciare tangenzialmente"
 
 #: ../src/ui/dialog/document-properties.cpp:142
 msgctxt "Grid"
