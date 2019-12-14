@@ -1180,7 +1180,7 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
         // Stroke
         SPCSSAttr *ncss = nullptr;
         {
-            ncss = sp_css_attr_from_style(i_style, SP_STYLE_FLAG_ALWAYS | SP_STYLE_FLAG_IFSRC);
+            ncss = sp_css_attr_from_style(i_style, SP_STYLE_FLAG_ALWAYS);
             gchar const *s_val = sp_repr_css_property(ncss, "stroke", nullptr);
             gchar const *s_opac = sp_repr_css_property(ncss, "stroke-opacity", nullptr);
             opacity = sp_repr_css_property(ncss, "opacity", nullptr);
@@ -1203,7 +1203,7 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
         // Fill
         SPCSSAttr *ncsf = nullptr;
         {
-            ncsf = sp_css_attr_from_style(i_style, SP_STYLE_FLAG_ALWAYS | SP_STYLE_FLAG_IFSRC);
+            ncsf = sp_css_attr_from_style(i_style, SP_STYLE_FLAG_ALWAYS);
             sp_repr_css_set_property(ncsf, "stroke", "none");
             sp_repr_css_set_property(ncsf, "stroke-opacity", "1.0");
             sp_repr_css_set_property(ncsf, "filter", nullptr);
