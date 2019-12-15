@@ -175,8 +175,6 @@ class SPStylePropHelper {
         REGISTER_PROPERTY(SP_PROP_PAINT_ORDER, paint_order, "paint-order");
 
         REGISTER_PROPERTY(SP_PROP_FILTER, filter, "filter");
-        REGISTER_PROPERTY(SP_ATTR_INVALID, filter_blend_mode, "filter-blend-mode");
-        REGISTER_PROPERTY(SP_ATTR_INVALID, filter_gaussianBlur_deviation, "filter-gaussianBlur-deviation");
 
         REGISTER_PROPERTY(SP_PROP_COLOR_RENDERING, color_rendering, "color-rendering");
         REGISTER_PROPERTY(SP_PROP_IMAGE_RENDERING, image_rendering, "image-rendering");
@@ -373,8 +371,6 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
 
     // Filter properties
     filter(),
-    filter_blend_mode(      SP_CSS_BLEND_NORMAL),
-    filter_gaussianBlur_deviation(), // SPILength
     enable_background(      SP_CSS_BACKGROUND_ACCUMULATE, false),
 
     // Rendering hint properties
@@ -1500,8 +1496,6 @@ sp_css_attr_unset_blacklist(SPCSSAttr *css)
     sp_repr_css_set_property(css, "solid-color",         nullptr);
     sp_repr_css_set_property(css, "solid-opacity",       nullptr);
     sp_repr_css_set_property(css, "fill-rule",           nullptr);
-    sp_repr_css_set_property(css, "filter-blend-mode",   nullptr);
-    sp_repr_css_set_property(css, "filter-gaussianBlur-deviation", nullptr);
     sp_repr_css_set_property(css, "color-rendering",     nullptr);
     sp_repr_css_set_property(css, "image-rendering",     nullptr);
     sp_repr_css_set_property(css, "shape-rendering",     nullptr);

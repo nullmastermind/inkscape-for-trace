@@ -272,10 +272,9 @@ public:
 
     /** Filter effect */
     T<SP_PROP_FILTER, SPIFilter> filter;
-    /** Filter blend mode */
-    T<SP_ATTR_INVALID, SPIEnum<SPBlendMode>> filter_blend_mode;
     /** normally not used, but duplicates the Gaussian blur deviation (if any) from the attached
         filter when the style is used for querying */
+    // TODO remove, find other logic for querying
     T<SP_ATTR_INVALID, SPILength> filter_gaussianBlur_deviation;
     /** enable-background, used for defining where filter effects get their background image */
     T<SP_PROP_ENABLE_BACKGROUND, SPIEnum<SPEnableBackground>> enable_background;
