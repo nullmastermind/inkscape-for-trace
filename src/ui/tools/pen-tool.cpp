@@ -1289,6 +1289,11 @@ void PenTool::_setAngleDistanceStatusMessage(Geom::Point const p, int pc_point_t
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (prefs->getBool("/options/compassangledisplay/value", false) != 0) {
         angle = 90 - angle;
+
+        if (desktop->is_yaxisdown()) {
+            angle = 180 - angle;
+        }
+
         if (angle < 0) {
             angle += 360;
         }
