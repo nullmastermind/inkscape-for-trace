@@ -4476,7 +4476,7 @@ msgstr "Memóriadokumentum %d"
 
 #: ../src/document.cpp:585
 msgid "Memory document %1"
-msgstr "Memóriadokumentum %d"
+msgstr "Memóriadokumentum %1"
 
 #: ../src/document.cpp:914
 #, c-format
