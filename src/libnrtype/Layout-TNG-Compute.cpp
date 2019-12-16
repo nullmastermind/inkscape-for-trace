@@ -869,10 +869,10 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                             new_glyph.x += delta_x;
                             new_glyph.y -= delta_y;
 
-                            if (pango_version_check(1,44,0) == nullptr) {
-                                // Pango >= 1.44
-                                new_glyph.y -= new_span.font_size * font->GetBaselines()[ dominant_baseline ];
-                            }
+                            // Multiplying by font-size could cause slight differences in
+                            // positioning for different baselines if the font size varies within a
+                            // line of text (e.g. sub-scripts and super-scripts).
+                            new_glyph.y -= new_span.font_size * font->GetBaselines()[ dominant_baseline ];
 
                         } else {
                             // Upright orientation
@@ -912,8 +912,8 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
 
                             // Adjust for alignment point (top of em box, horizontal center).
                             new_glyph.x += new_span.line_height.ascent; // Moves baseline so em-box on grid.
-                            new_glyph.y -= new_span.font_size * (para.pango_items[unbroken_span.pango_item_index].font->GetBaselines()[ dominant_baseline ] -
-                                                                 para.pango_items[unbroken_span.pango_item_index].font->GetBaselines()[ SP_CSS_BASELINE_CENTRAL ] );
+                            new_glyph.y -= new_span.font_size * (font->GetBaselines()[ dominant_baseline ] -
+                                                                 font->GetBaselines()[ SP_CSS_BASELINE_CENTRAL ] );
 
                             if (g_unichar_type (*iter_source_text) == G_UNICODE_NON_SPACING_MARK) {
 
