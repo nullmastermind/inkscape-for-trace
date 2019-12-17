@@ -566,6 +566,11 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
                 // Filter recent files to those already opened in Inkscape.
                 Glib::RefPtr<Gtk::RecentFilter> recentfilter = Gtk::RecentFilter::create();
                 recentfilter->add_application(g_get_prgname());
+                recentfilter->add_application("org.inkscape.Inkscape");
+                recentfilter->add_application("inkscape");
+#ifdef _WIN32
+                recentfilter->add_application("inkscape.exe");
+#endif
 
                 Gtk::RecentChooserMenu* recentchoosermenu = Gtk::manage(new Gtk::RecentChooserMenu());
                 int max = Inkscape::Preferences::get()->getInt("/options/maxrecentdocuments/value");
