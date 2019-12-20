@@ -2580,7 +2580,6 @@ gint SPCanvas::idle_handler(gpointer data)
         SPDesktop *desktop = SP_ACTIVE_DESKTOP;
         if (desktop) {
             SPCanvasArena *arena = SP_CANVAS_ARENA(desktop->drawing);
-            arena->drawing.lookCacheLimit = true;
             Inkscape::RenderMode rm = arena->drawing.renderMode();
             if (rm == Inkscape::RENDERMODE_OUTLINE) {
                 canvas->_totalelapsed = 0;
@@ -2603,11 +2602,6 @@ gint SPCanvas::idle_handler(gpointer data)
         // Reset idle id
         canvas->_idle_id = 0;
         canvas->_scrooling = false;
-        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-        if (desktop) {
-            SPCanvasArena *arena = SP_CANVAS_ARENA(desktop->drawing);
-            arena->drawing.lookCacheLimit = true;
-        }
     }
 #endif
     return !ret;
@@ -2675,10 +2669,6 @@ void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrol
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (desktop && desktop->splitMode()) {
         split = true;
-    }
-    if (desktop) {
-        SPCanvasArena *arena = SP_CANVAS_ARENA(desktop->drawing);
-        arena->drawing.lookCacheLimit = false;
     }
     if (clear || split || _xray || outsidescrool) {
         _dx0 = cx; // here the 'd' stands for double, not delta!

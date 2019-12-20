@@ -92,7 +92,6 @@ public:
     // TODO: remove these temporarily public members
     guint32 outlinecolor;
     double delta;
-    bool lookCacheLimit;
 private:
     bool _exact;  // if true then rendering must be exact
     RenderMode _rendermode;
