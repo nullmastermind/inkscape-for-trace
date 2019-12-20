@@ -233,12 +233,6 @@ add_custom_target(clean-all
 # Install Target
 # -----------------------------------------------------------------------------
 add_subdirectory(share)
-
-install(FILES
-	AUTHORS
-	TRANSLATORS
-	DESTINATION ${INKSCAPE_SHARE_INSTALL}/doc)
-
 include(CMakeScripts/Install.cmake)
 
 # -----------------------------------------------------------------------------
