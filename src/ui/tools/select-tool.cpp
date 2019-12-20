@@ -304,6 +304,7 @@ bool SelectTool::item_handler(SPItem* item, GdkEvent* event) {
 
                     gdk_window_set_cursor(window, CursorSelectDragging);
 
+                    desktop->canvas->forceFullRedrawAfterInterruptions(5);
 
                     // remember the clicked item in this->item:
                     if (this->item) {
@@ -328,7 +329,7 @@ bool SelectTool::item_handler(SPItem* item, GdkEvent* event) {
                                         nullptr, event->button.time);
 
                     this->grabbed = SP_CANVAS_ITEM(desktop->drawing);
-
+                    desktop->canvas->endForcedFullRedraws();
                     ret = TRUE;
                 }
             } else if (event->button.button == 3 && !this->dragging) {
@@ -476,7 +477,6 @@ bool SelectTool::root_handler(GdkEvent* event) {
     if (this->item && this->item->document == nullptr) {
         this->sp_select_context_abort();
     }
-    desktop->canvas->forceFullRedrawAfterInterruptions(5, false);
 
     switch (event->type) {
         case GDK_2BUTTON_PRESS:
@@ -550,7 +550,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
         case GDK_MOTION_NOTIFY:
         {
             tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
-
+            
             if ((event->motion.state & GDK_BUTTON1_MASK) && !this->space_panning) {
                 Geom::Point const motion_pt(event->motion.x, event->motion.y);
                 Geom::Point const p(desktop->w2d(motion_pt));
@@ -572,7 +572,11 @@ bool SelectTool::root_handler(GdkEvent* event) {
                     GdkWindow* window = gtk_widget_get_window (GTK_WIDGET (desktop->getCanvas()));
 
                     gdk_window_set_cursor(window, CursorSelectDragging);
+                    
+                    desktop->canvas->forceFullRedrawAfterInterruptions(5);
+
                 }
+         
 
                 if (this->dragging) {
                     /* User has dragged fast, so we get events on root (lauris)*/
@@ -654,7 +658,12 @@ bool SelectTool::root_handler(GdkEvent* event) {
 
                         gobble_motion_events(GDK_BUTTON1_MASK);
                     }
+
                 }
+                if (this->button_press_ctrl || (this->button_press_alt && !this->button_press_shift && !selection->isEmpty())) {
+                    desktop->canvas->endForcedFullRedraws();
+                }
+
             }
             break;
         }
@@ -788,6 +797,8 @@ bool SelectTool::root_handler(GdkEvent* event) {
 
                     ret = TRUE;
                 }
+                desktop->canvas->endForcedFullRedraws();
+
                 if (this->grabbed) {
                     sp_canvas_item_ungrab(this->grabbed);
                     this->grabbed = nullptr;

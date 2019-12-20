@@ -162,7 +162,7 @@ protected:
     void _renderOutline(DrawingContext &dc, Geom::IntRect const &area, unsigned flags);
     void _markForUpdate(unsigned state, bool propagate);
     void _markForRendering();
-    void _invalidateFilterBackground(Geom::IntRect const &area);
+    void _invalidateFilterBackground(Geom::IntRect const &area, DrawingItem *di);
     double _cacheScore();
     Geom::OptIntRect _cacheRect(bool cropped = false);
     virtual unsigned _updateItem(Geom::IntRect const &/*area*/, UpdateContext const &/*ctx*/,

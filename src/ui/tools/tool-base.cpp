@@ -562,7 +562,8 @@ bool ToolBase::root_handler(GdkEvent* event) {
             desktop->zoom_relative_keep_point(event_dt, (event->button.state
                     & GDK_SHIFT_MASK) ? 1 / zoom_inc : zoom_inc);
 
-            desktop->updateNow();
+            // commented zoom_relative_keep_point do the update
+            //desktop->updateNow();
             ret = TRUE;
         } else if (panning == event->button.button) {
             panning = 0;
@@ -576,7 +577,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
             Geom::Point const moved_w(motion_w - button_w);
 
             this->desktop->scroll_relative(moved_w);
-            desktop->updateNow();
+            //desktop->updateNow();
             ret = TRUE;
         } else if (zoom_rb == event->button.button) {
             zoom_rb = 0;
@@ -742,7 +743,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
             sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
 
-            desktop->updateNow();
+            //desktop->updateNow();
         }
 
         if (panning_cursor == 1) {

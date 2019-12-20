@@ -484,8 +484,6 @@ bool NodeTool::root_handler(GdkEvent* event) {
      */
     using namespace Inkscape::UI; // pull in event helpers
 
-    desktop->getCanvas()->forceFullRedrawAfterInterruptions(5, false);
-
     Inkscape::Selection *selection = desktop->selection;
     static Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
@@ -563,7 +561,7 @@ bool NodeTool::root_handler(GdkEvent* event) {
             if (!c) {
                 break; // break out when curve doesn't exist
             }
-
+            desktop->getCanvas()->forceFullRedrawAfterInterruptions(3);
             c->transform(over_item->i2dt_affine());
             SPCanvasItem *flash = sp_canvas_bpath_new(desktop->getTempGroup(), c, true);
 
@@ -574,7 +572,7 @@ bool NodeTool::root_handler(GdkEvent* event) {
             sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(flash), 0, SP_WIND_RULE_NONZERO);
             this->flash_tempitem = desktop->add_temporary_canvasitem(flash,
                 prefs->getInt("/tools/nodes/pathflash_timeout", 500));
-
+            this->desktop->canvas->endForcedFullRedraws();
             c->unref();
         }
         } break; // do not return true, because we need to pass this event to the parent context

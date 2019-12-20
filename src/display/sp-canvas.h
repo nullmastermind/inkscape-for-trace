@@ -84,7 +84,7 @@ struct SPCanvas {
     void requestFullRedraw();
     void requestUpdate();
 
-    void forceFullRedrawAfterInterruptions(unsigned int count, bool reset = true);
+    void forceFullRedrawAfterInterruptions(unsigned int count);
     void endForcedFullRedraws();
 
     Geom::Rect getViewbox() const;
