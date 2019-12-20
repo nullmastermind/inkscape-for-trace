@@ -331,11 +331,15 @@ DrawingItem::setStyle(SPStyle *style, SPStyle *context_style)
     }
 
     if (style && style->enable_background.set) {
-        if (style->enable_background.value == SP_CSS_BACKGROUND_NEW && !_background_new) {
+        bool update = false;
+        if (style->enable_background.value == SP_CSS_BACKGROUND_NEW) {
+            update = _background_new == false;
             _background_new = true;
-            _markForUpdate(STATE_BACKGROUND, true);
-        } else if (style->enable_background.value == SP_CSS_BACKGROUND_ACCUMULATE && _background_new) {
+        } else if (style->enable_background.value == SP_CSS_BACKGROUND_ACCUMULATE) {
+            update = _background_new == true;
             _background_new = false;
+        }
+        if (update) {
             _markForUpdate(STATE_BACKGROUND, true);
         }
     }
@@ -731,7 +735,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
             _cache->paintFromCache(dc, carea, _filter && render_filters);
             if (!carea) {
                 dc.setSource(0, 0, 0, 0);
-                return RENDER_OK;
+                return RENDER_OK;       
             }
         } else {
             // There is no cache. This could be because caching of this item
@@ -1185,7 +1189,7 @@ inline void expandByScale(Geom::IntRect &rect, double scale)
 Geom::OptIntRect DrawingItem::_cacheRect(bool cropped)
 {
     Geom::OptIntRect r = _drawbox & _drawing.cacheLimit();
-    if (_filter && _drawing.renderFilters() && r && r != _drawbox) {
+    if (!_drawing.lookCacheLimit && _filter && _drawing.renderFilters() && r && r != _drawbox) {
         // we check unfiltered item is emought inside the cache area to  render properly
         Geom::OptIntRect canvas = r;
         expandByScale(*canvas, 0.5);
