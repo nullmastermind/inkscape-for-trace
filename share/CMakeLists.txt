@@ -17,6 +17,7 @@ add_subdirectory(tutorials)
 add_subdirectory(ui)
 
 install(DIRECTORY extensions DESTINATION ${INKSCAPE_SHARE_INSTALL}
+    COMPONENT extensions
 	PATTERN ".git*" EXCLUDE
 	PATTERN "tests" EXCLUDE
 	PATTERN "*.pyc" EXCLUDE

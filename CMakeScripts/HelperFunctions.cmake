@@ -132,13 +132,14 @@ endfunction(list_files_pip)
 #   FILES       - the list of files (absolute or relative paths)
 #   ROOT        - the root to search the files in (if file paths are relative)
 #   DESTINATION - the destination where to install files to
+#   COMPONENT   - cpack component
 #   INCLUDE     - a (list of) regular expression(s) specifying which files to include
 #                 (omit or leave empty to include all files)
 #   EXCLUDE     - a (list of) regular expression(s) specifying which files to exclude
 #                 (takes precedence over include rules)
 function(install_list)
     # parse arguments
-    set(oneValueArgs ROOT DESTINATION)
+    set(oneValueArgs ROOT DESTINATION COMPONENT)
     set(multiValueArgs FILES INCLUDE EXCLUDE)
     cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
@@ -172,7 +173,11 @@ function(install_list)
         # install if file should be included
         if(${include_file})
             get_filename_component(directory ${file} DIRECTORY)
-            install(FILES "${ARG_ROOT}/${file}" DESTINATION "${ARG_DESTINATION}${directory}")
+            install(
+                FILES "${ARG_ROOT}/${file}"
+                DESTINATION "${ARG_DESTINATION}${directory}"
+                COMPONENT "${ARG_COMPONENT}"
+            )
         endif()
     endforeach()
 endfunction(install_list)

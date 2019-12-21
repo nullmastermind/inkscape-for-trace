@@ -92,3 +92,54 @@ set(CPACK_DEBIAN_PACKAGE_SUGGESTS "dia, libsvg-perl, libxml-xql-perl, pstoedit, 
 
 ## load cpack module (do this *after* all the CPACK_* variables have been set)
 include(CPack)
+
+
+
+
+## Component definition
+#  - variable names are UPPER CASE, even if component names are lower case
+#  - components/groups are ordered alphabetically by component/group name; groups always come first
+#  - empty (e.g. OS-specific) components are discarded automatically
+
+cpack_add_component_group(
+                    group_1_program_files
+                    DISPLAY_NAME "Program Files"
+                    EXPANDED)
+cpack_add_component(inkscape
+                    DISPLAY_NAME "Inkscape SVG Editor"
+                    DESCRIPTION "Inkscape core files and dependencies"
+                    GROUP "group_1_program_files"
+                    REQUIRED)
+cpack_add_component(python
+                    DISPLAY_NAME "Python"
+                    DESCRIPTION "Python interpreter (required to run Inkscape extensions)"
+                    GROUP "group_1_program_files")
+
+cpack_add_component_group(
+                    group_2_inkscape_data
+                    DISPLAY_NAME "Inkscape Data"
+                    EXPANDED)
+cpack_add_component(extensions
+                    DISPLAY_NAME "Extensions"
+                    DESCRIPTION "Inkscape extensions (including many import and export plugins)"
+                    GROUP "group_2_inkscape_data")
+cpack_add_component(examples
+                    DISPLAY_NAME "Examples"
+                    DESCRIPTION "Example files created in Inkscape"
+                    GROUP "group_2_inkscape_data")
+cpack_add_component(tutorials
+                    DISPLAY_NAME "Tutorials"
+                    DESCRIPTION "Tutorials teaching Inkscape usage"
+                    GROUP "group_2_inkscape_data")
+
+cpack_add_component(dictionaries
+                    DISPLAY_NAME "Dictionaries"
+                    DESCRIPTION "Dictionaries for some common languages for spell checking in Inkscape")
+
+cpack_add_component(translations
+                    DISPLAY_NAME "Translations"
+                    DESCRIPTION "Translations and localized content for Inkscape")
+
+# TODO: Add localized content to translation component
+# TODO: Split translations into individual components
+# TODO: Separate themes and make optional depending on size

@@ -33,6 +33,7 @@ include(CMakeScripts/ConfigEnv.cmake)
 include(GNUInstallDirs) # for the CMAKE_INSTALL_LIBDIR variable
 
 project(inkscape)
+set(CMAKE_INSTALL_DEFAULT_COMPONENT_NAME inkscape) # needs to be before any install() commands
 
 include(CMakeScripts/ConfigPaths.cmake)
 
