@@ -14,36 +14,34 @@ for script in $SELF_DIR/0??-*.sh; do source $script; done
 ### local settings #############################################################
 
 export PYTHONUSERBASE=$DEVPREFIX
-export PIP_CONFIG_DIR=$DEVCONFIG/pip
+export PIP_CONFIG_DIR=$DEVROOT/pip
 
 #run_annotated   disabled for now, breaks jhbuild interactive mode
 
 ### install and configure jhbuild ##############################################
 
-# remove configuration files from a previous installation
-rm $HOME/.config/jhbuild* 2>/dev/null
-
 bash <(curl -s $URL_GTK_OSX_SETUP)   # run jhbuild setup script
 
-mv $HOME/.config/jhbuild* $DEVCONFIG
-ln -sf $DEVCONFIG/jhbuild* $HOME/.config
+# JHBuild: paths
+echo "checkoutroot = '$SRC_DIR/checkout'" >> $JHBUILDRC_CUSTOM
+echo "prefix = '$OPT_DIR'"                >> $JHBUILDRC_CUSTOM
+echo "tarballdir = '$SRC_DIR/download'"   >> $JHBUILDRC_CUSTOM
 
-( # configure jhbuild
-  JHBUILDRC=$DEVCONFIG/jhbuildrc-custom
-  echo "checkoutroot = '$SRC_DIR/checkout'"   >> $JHBUILDRC
-  echo "prefix = '$OPT_DIR'"                  >> $JHBUILDRC
-  echo "tarballdir = '$SRC_DIR/download'"     >> $JHBUILDRC
-  echo "quiet_mode = True"                    >> $JHBUILDRC  # suppress output
-  echo "progress_bar = True"                  >> $JHBUILDRC
-  echo "moduleset = '$URL_GTK_OSX_MODULESET'" >> $JHBUILDRC  # custom moduleset
+# JHBuild: console output
+echo "quiet_mode = True"   >> $JHBUILDRC_CUSTOM
+echo "progress_bar = True" >> $JHBUILDRC_CUSTOM
 
-  # configure SDK
-  sed -i "" "s/^setup_sdk/#setup_sdk/" $JHBUILDRC   # disable existing setting
-  echo "setup_sdk(target=\"$MACOSX_DEPLOYMENT_TARGET\")" >> $JHBUILDRC
-  echo "os.environ[\"SDKROOT\"]=\"$SDKROOT\"" >> $JHBUILDRC
-  echo "if \"openssl\" in skip:" >> $JHBUILDRC
-  echo "  skip.remove(\"openssl\")" >> $JHBUILDRC
-)
+# JHBuild: moduleset
+echo "moduleset = '$URL_GTK_OSX_MODULESET'" >> $JHBUILDRC_CUSTOM
+
+# JHBuild: macOS SDK
+sed -i "" "s/^setup_sdk/#setup_sdk/"                      $JHBUILDRC_CUSTOM 
+echo "setup_sdk(target=\"$MACOSX_DEPLOYMENT_TARGET\")" >> $JHBUILDRC_CUSTOM
+echo "os.environ[\"SDKROOT\"]=\"$SDKROOT\""            >> $JHBUILDRC_CUSTOM
+
+# JHBuild: TODO: I have forgotten why this is here
+echo "if \"openssl\" in skip:"    >> $JHBUILDRC_CUSTOM
+echo "  skip.remove(\"openssl\")" >> $JHBUILDRC_CUSTOM
 
 ### bootstrap JHBuild ##########################################################
 

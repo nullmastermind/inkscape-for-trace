@@ -66,6 +66,10 @@ relocate_neighbouring_libs $APP_LIB_DIR
 /usr/libexec/PlistBuddy -c "Set CFBundleVersion '$(get_inkscape_version) ($(get_repo_version $INK_DIR))'" $APP_PLIST
 
 # update minimum OS version
+if [ "$MACOSX_DEPLOYMENT_TARGET" = "10.9" ]; then
+  MACOSX_DEPLOYMENT_TARGET=10.10   # workaround until we can use 10.10 SDK
+fi
+
 /usr/libexec/PlistBuddy -c "Set LSMinimumSystemVersion '$MACOSX_DEPLOYMENT_TARGET'" $APP_PLIST
 
 # add bundle name 

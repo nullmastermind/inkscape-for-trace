@@ -66,7 +66,7 @@ appimage:linux:
     paths:
       - Inkscape*.AppImage*
 
-    ### On mac... (this needs a custom mac runner)
+    ### On macOS... (this needs a custom mac runner)
 
 inkscape:mac:
   stage: build
@@ -81,6 +81,8 @@ inkscape:mac:
     - packaging/macos/install_toolset.sh
   script:
     - packaging/macos/build_inkscape.sh
+  after_script:
+    - packaging/macos/uninstall_toolset.sh
   artifacts:
     expire_in: 1 year
     paths:

@@ -13,16 +13,18 @@ for script in $SELF_DIR/0??-*.sh; do source $script; done
 
 run_annotated
 
+### initial information ########################################################
+
+echo_info "using TOOLSET_ROOT_DIR = $TOOLSET_ROOT_DIR" 
+
 ### create work directory ######################################################
 
-[ ! -d $WRK_DIR ] && mkdir -p $WRK_DIR
+[ ! -d $WRK_DIR ] && mkdir -p $WRK_DIR || true
 
-### redirect to locations below WRK_DIR ########################################
+### create temporary directory #################################################
 
-mkdir -p $TMP_DIR
+[ ! -d $TMP_DIR ] && mkdir -p $TMP_DIR || true
 
-rm -rf $HOME/.cache   # used by jhbuild
-ln -sf $TMP_DIR $HOME/.cache
+### create toolset repository directory ########################################
 
-rm -rf $HOME/.local   # used by gtk-mac-bundler
-ln -sf $OPT_DIR $HOME/.local
+[ ! -d $TOOLSET_REPO_DIR ] && mkdir -p $TOOLSET_REPO_DIR || true

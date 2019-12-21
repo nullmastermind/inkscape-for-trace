@@ -28,8 +28,12 @@ save_file $URL_INKSCAPE_DMG_ICNS
 
 ### install gtk-mac-bundler ####################################################
 
-get_source $URL_GTK_MAC_BUNDLER
-jhbuild run make install
+(
+  export GMB_BINDIR=$BIN_DIR
+
+  get_source $URL_GTK_MAC_BUNDLER
+  jhbuild run make install
+)
 
 ### install svg to png convertor ###############################################
 
@@ -54,3 +58,4 @@ save_file $URL_PYTHON3_BIN
 
 cp $TMP_DIR/jhbuild/build/pkg-config-0.29.2/glib/glib/libcharset/charset.alias $LIB_DIR
 
+# vim: expandtab:shiftwidth=2:tabstop=2:softtabstop=2 :

@@ -22,37 +22,53 @@ export MAKEFLAGS="-j $CORES"
 
 ### target OS version ##########################################################
 
-# You can build an macOS Mojave 10.14 using Xcode 10.3 using the SDK
+# You can build an macOS Mojave 10.14 using Xcode 10.3 with the SDK
 # from OS X Mavericks 10.9 (part of Xcode 6.3).
-
+# Switching to 10.10 SDK is on hold due to GTK 3.24.13 not compiling
+# successfully.
 export MACOSX_DEPLOYMENT_TARGET=10.9   # OS X Mavericks
 export SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX${MACOSX_DEPLOYMENT_TARGET}.sdk
 
+### build system/toolset version ###############################################
+
+TOOLSET_VERSION=0.28
+
 ### ramdisk ####################################################################
 
-# A ramdisk is used as writable overlay to a read-only disk image containing
-# the build system.
+# There are two types of ramdisks:
+#   - When using the pre-compiled toolset dmg, only a small writable
+#     overlay is required.
+#   - When building the toolset yourself, a large ramdisk can be (optionally!)
+#     used to speed up the process and avoid wearing out the SSD.
 
-RAMDISK_SIZE=4   # unit is GiB
+OVERLAY_RAMDISK_SIZE=2   # unit is GiB
 
-### the main writable directory where all the action takes place ###############
+BUILD_RAMDISK_SIZE=9     # unit is GiB
 
-[ -z $WRITABLE_DIR ] && WRITABLE_DIR=/Users/Shared/work
+### toolset root directory #####################################################
 
-if  [ $(mkdir -p $WRITABLE_DIR 2>/dev/null; echo $?) -eq 0 ] &&
-    [ -w $WRITABLE_DIR ] &&
-    [ "$(stat -f '%Su' $WRITABLE_DIR)" = "$(whoami)" ] ; then
-  echo "using build directory: $WRITABLE_DIR"
+# This is where all the action takes place below.
+
+[ -z $TOOLSET_ROOT_DIR ] && TOOLSET_ROOT_DIR=/Users/Shared/work
+
+if  [ $(mkdir -p $TOOLSET_ROOT_DIR 2>/dev/null; echo $?) -eq 0 ] &&
+    [ -w $TOOLSET_ROOT_DIR ] &&
+    [ "$(stat -f '%Su' $TOOLSET_ROOT_DIR)" = "$(whoami)" ] ; then
+  :   # nothing to do, everything ok
 else
-  echo "directory not usable: $WRITABLE_DIR"
+  echo "❌ directory not usable (TOOLSET_ROOT_DIR): $TOOLSET_ROOT_DIR"
   exit 1
 fi
 
-### build system paths  ########################################################
+### toolset subdirectories #####################################################
 
-REPOSITORY_DIR=$WRITABLE_DIR/repo  # downloaded build systems (.dmg files)
+TOOLSET_REPO_DIR=$TOOLSET_ROOT_DIR/repo  # downloaded build systems (.dmg files)
 
-WRK_DIR=$WRITABLE_DIR/1            # directory to mount build system to
+if [ -z $WRK_DIR_NAME ]; then   # allow to override this
+  WRK_DIR_NAME=$TOOLSET_VERSION
+fi
+
+WRK_DIR=$TOOLSET_ROOT_DIR/$WRK_DIR_NAME  # directory to mount build system to
 
 OPT_DIR=$WRK_DIR/opt
 BIN_DIR=$OPT_DIR/bin
@@ -60,23 +76,22 @@ LIB_DIR=$OPT_DIR/lib
 SRC_DIR=$OPT_DIR/src
 TMP_DIR=$OPT_DIR/tmp
 
-### build system version #######################################################
-
-VERSION_WANT=0.24
-VERSION_HAVE=$([ -f $WRK_DIR/version.txt ] && cat $WRK_DIR/version.txt)
-
 ### use our TMP_DIR for everything temporary ###################################
 
 export TMP=$TMP_DIR
 export TEMP=$TMP_DIR
 export TMPDIR=$TMP_DIR
+export XDG_CACHE_HOME=$TMP_DIR    # avoids creation of ~/.cache
+export XDG_CONFIG_HOME=$TMP_DIR   # avoids creation of ~/.config
 
-### set jhbuild directories ####################################################
+### JHBuild subdirectories and configuration ###################################
 
 export DEVROOT=$WRK_DIR/gtk-osx
 export DEVPREFIX=$DEVROOT/local
 export DEV_SRC_ROOT=$DEVROOT/source
-DEVCONFIG=$DEVROOT/config   # no export because this is an intermediate variable
+
+export JHBUILDRC=$DEVROOT/jhbuildrc
+export JHBUILDRC_CUSTOM=$JHBUILDRC-custom
 
 ### Inkscape Git repository directory ##########################################
 
@@ -120,8 +135,8 @@ URL_GC=https://github.com/ivmai/bdwgc/releases/download/v8.0.4/gc-8.0.4.tar.gz
 URL_GDL=https://github.com/GNOME/gdl/archive/GDL_3_28_0.tar.gz
 URL_GHOSTSCRIPT=https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs927/ghostscript-9.27.tar.gz
 URL_GSL=http://ftp.fau.de/gnu/gsl/gsl-2.5.tar.gz
-URL_GTK_MAC_BUNDLER=https://gitlab.gnome.org/GNOME/gtk-mac-bundler/-/archive/93edee7e2d0ec8230aaf5acb21452202b10cd678.tar.gz
-URL_GTK_OSX=https://raw.githubusercontent.com/dehesselle/gtk-osx/inkscape
+URL_GTK_MAC_BUNDLER=https://github.com/dehesselle/gtk-mac-bundler/archive/24651a002b029b4703c378dfb368305af4d88752.tar.gz
+URL_GTK_OSX=https://raw.githubusercontent.com/dehesselle/gtk-osx/inkscape-1.0.x
 URL_GTK_OSX_SETUP=$URL_GTK_OSX/gtk-osx-setup.sh
 URL_GTK_OSX_MODULESET=$URL_GTK_OSX/modulesets-stable/gtk-osx.modules
 URL_IMAGEMAGICK=https://github.com/ImageMagick/ImageMagick6/archive/6.9.7-10.tar.gz
@@ -142,7 +157,7 @@ URL_PYTHON3_BIN=https://github.com/dehesselle/py3framework/releases/download/py3
 # This is for JHBuild only.
 URL_PYTHON36_SRC=https://github.com/dehesselle/py3framework/archive/py369.3.tar.gz
 URL_PYTHON36_BIN=https://github.com/dehesselle/py3framework/releases/download/py369.3/py369_framework_3.tar.xz
-URL_BUILDSYS=https://github.com/dehesselle/mibap/releases/download/v$VERSION_WANT/mibap_v$VERSION_WANT.dmg
+URL_TOOLSET=https://github.com/dehesselle/mibap/releases/download/v$TOOLSET_VERSION/mibap_v$TOOLSET_VERSION.dmg
 
 ### Python packages ############################################################
 
@@ -161,5 +176,5 @@ PYTHON_PYSERIAL=pyserial==3.4
 # Settings that would otherwise go into '.profile'.
 
 export PATH=$DEVPREFIX/bin:$BIN_DIR:/usr/bin:/bin:/usr/sbin:/sbin
-export LANG=de_DE.UTF-8   # jhbuild complains otherwise   FIXME hard-coded value
+export LANG=de_DE.UTF-8   # jhbuild complains otherwise   FIXME: hard-coded value
 

@@ -14,7 +14,7 @@ for script in $SELF_DIR/0??-*.sh; do source $script; done
 
 set -e
 
-### create build system ########################################################
+### build toolset ##############################################################
 
 function build
 {

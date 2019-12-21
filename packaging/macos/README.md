@@ -2,74 +2,92 @@
 
 This folder contains the scripts that make up the build pipeline for Inkscape on macOS.
 
-## Requirements
-
-_These requirements have changed a few times over the course of development. So it would be more fair to call them "recommendations" instead, but I want to emphasize the importance of sticking to a known-good setup because of the huge number of moving parts involved._
-
-- __A clean environment is key__. Ideally, you'd have a __dedicated, clean macOS installation__ (as in "freshly installed + Xcode") available as build machine.
-  - Make sure there are no remnants from other build environments (e.g. MacPorts, Fink, Homebrew) on your system.  
-    Rule of thumb: clear out `/usr/local`.
-  - macOS 10.14.6 with Xcode 10.3.
-  - OS X Mavericks 10.9 SDK from Xcode 6.4  
-    `/Library/Developer/CommandLineTools/SDKs/MacOSX10.9.sdk`
-
-- __Use a dedicated user account__ unless you're prepared that these scripts will delete and overwrite your data in the following locations:  
-_(based on default configuration)_
-
-    ```bash
-    $HOME/.cache               # will be removed, then linked to $TMP_DIR
-    $HOME/.config/jhbuildrc*   # will be removed, then linked to $DEVCONFIG
-    $HOME/.local               # will be removed, then linked to $OPT_DIR
-    ```
-
-- __16 GiB RAM__, since we're using a 9 GiB ramdisk to build everything.
-  - Using a ramdisk speeds up the process significantly and avoids wearing out your SSD.
-  - You can choose to not use a ramdisk by overriding the configuration.
-
-    ```bash
-    echo "RAMDISK_ENABLE=false" > 021-vars-custom.sh
-    ```
-
-  - The build environment takes up ~6.1 GiB of disk space, the rest is buffer to be used during compilation and packaging. Subject to change and YMMV.
-
-  - If you only want to build Inkscape and not the build environment itself, a 5 GiB ramdisk is sufficient. (Not all of the tarball's content is extracted.)
-
-- somewhat decent __internet connection__ for all the downloads
-
 ## Usage
 
-### standalone
+### Recommendations
 
-You can either run all the executable scripts that have a numerical prefix (>100) yourself and in the given order, or, if you're feeling bold, use
+ℹ️ _These tend to change as development progresses (as they already have a few times) and I won't deny that there's usually more than one way to do something, but I can only support what I use myself. So feel free to experiment and deviate, but know that __it is dangerous to go alone! Take this 🗡️.___
 
-```bash
-./build_all.sh
-```
+- __A clean environment is key.__
+  - Make sure there are no remnants from other build environments (e.g. MacPorts, Fink, Homebrew) on your system.
+    - Rule of thumb: clear out `/usr/local`.
+  - Use macOS Mojave 10.14.6 with Xcode 10.3.
+  - Copy OS X Mavericks 10.9 SDK from Xcode 6.3 to `/Library/Developer/CommandLineTools/SDKs/MacOSX10.9.sdk`.
 
-to have everything run for you. If you are doing this the first time, my advice is to do it manually and step-by-step first to see if you're getting through all of it without errors.
+- __Use a dedicated user account__ to avoid any interference with the environment (e.g. no custom settings in `.profile`, `.bashrc`, etc.).
 
-### GitLab CI
+- A somewhat decent __internet connection__ for all the downloads.
 
-> TODO: this section needs to be updated!
+### Building the toolset
 
-#### configuration example `.gitlab-runner/config.toml`
+ℹ️ _If you only want to build Inkscape and not the complete toolset, skip ahead to the next section!_
 
-```toml
-[[runners]]
-  name = "<YOUR RUNNER'S NAME>"
-  url = "https://gitlab.com/"
-  token = "<YOUR TOKEN>"
-  executor = "shell"
-  builds_dir = "/Users/<YOUR DEDICATED USER>/work/builds"
-  cache_dir = "/Users/<YOUR DEDICATED USER>/work/cache"
-```
+1. Clone this repository and `cd` into it.
 
-#### configuration example `.gitlab-ci.yml`
+   ```bash
+   git clone https://github.com/dehesselle/mibap
+   cd mibap
+   ```
+
+2. Specify a folder where all the action is going to take place. (Please avoid spaces in paths!)
+
+   ```bash
+   echo "TOOLSET_ROOT_DIR=$HOME/my_build_dir" > 015-customdir.sh
+   ```
+
+3. Build the toolset.
+
+   ```bash
+   ./build_toolset.sh
+   ```
+
+4. ☕ (Time to get a beverage - this will take a while!)
+
+### Installing a pre-compiled toolset
+
+ℹ️ _If you built the toolset yourself, skip ahead to the next section!_
+
+ℹ️ _Using `/Users/Shared/work` as `TOOLSET_ROOT_DIR` is mandatory! (This is the default.)_
+
+1. Clone this repository and `cd` into it.
+
+   ```bash
+   git clone https://github.com/dehesselle/mibap
+   cd mibap
+   ```
+
+2. Install the toolset.
+
+   ```bash
+   ./install_toolset.sh
+   ```
+
+   You should know what that actually does:
+
+   - download a disk image (about 1.6 GiB) to `/Users/Shared/work/repo`
+   - mount the disk image to `/Users/Shared/work/1`
+   - union-mount a ramdisk (2 GiB) to `/Users/Shared/work/1`
+
+   The mounted volumes won't show up in the finder but you can see (and eject) them using `diskutil`.
+
+### Building Inkscape
+
+1. Build Inkscape.
+
+   ```bash
+   ./build_inkscape.sh
+   ```
+
+   Ultimately this will produce `/Users/Shared/work/1/artifacts/Inkscape.dmg`.
+
+## GitLab CI
+
+The intended usage in `.gitlab-ci.yml` is as follows:
 
 ```yaml
 buildmacos:
   before_script:
-    - packaging/macos/build_toolset.sh
+    - packaging/macos/install_toolset.sh
   script:
     - packaging/macos/build_inkscape.sh
 ```
