@@ -112,7 +112,7 @@ void PathVectorSatellites::updateAmount(double radius, bool apply_no_radius, boo
         for (size_t j = 0; j < _satellites[i].size(); ++j) {
             boost::optional<size_t> previous_index = boost::none;
             if (j == 0 && _pathvector[i].closed()) {
-                previous_index = _pathvector[i].size_closed() - 1;
+                previous_index = count_path_nodes(_pathvector[i]) - 1;
             } else if (!_pathvector[i].closed() || j != 0) {
                 previous_index = j - 1;
             }
@@ -120,7 +120,7 @@ void PathVectorSatellites::updateAmount(double radius, bool apply_no_radius, boo
                 _satellites[i][j].amount = 0;
                 continue;
             }
-            if (_pathvector[i].size_closed() == j) {
+            if (count_path_nodes(_pathvector[i]) == j) {
                 continue;
             }
             if ((!apply_no_radius && _satellites[i][j].amount == 0) ||
@@ -155,7 +155,7 @@ void PathVectorSatellites::convertUnit(Glib::ustring in, Glib::ustring to, bool 
                 _satellites[i][j].amount = 0;
                 continue;
             }
-            if (_pathvector[i].size_closed() == j) {
+            if (count_path_nodes(_pathvector[i]) == j) {
                 continue;
             }
             if ((!apply_no_radius && _satellites[i][j].amount == 0) ||
@@ -178,7 +178,7 @@ void PathVectorSatellites::updateSatelliteType(SatelliteType satellitetype, bool
             {
                 continue;
             }
-            if (_pathvector[i].size_closed() == j) {
+            if (count_path_nodes(_pathvector[i]) == j) {
                 if (!only_selected) {
                     _satellites[i][j].satellite_type = satellitetype;
                 }
@@ -209,11 +209,11 @@ void PathVectorSatellites::recalculateForNewPathVector(Geom::PathVector const pa
     size_t previous_number_nodes = getTotalSatellites();
     for (const auto & i : pathv) {
         std::vector<Satellite> path_satellites;
-        size_t count = i.size_closed();
+        size_t count = count_path_nodes(i);
         for (size_t j = 0; j < count; j++) {
             found = false;
             for (size_t k = 0; k < _pathvector.size(); k++) {
-                size_t count2 = _pathvector[k].size_closed();
+                size_t count2 = count_path_nodes(_pathvector[k]);
                 for (size_t l = 0; l < count2; l++) {
                     if (Geom::are_near(_pathvector[k][l].initialPoint(),  i[j].initialPoint())) {
                         path_satellites.push_back(_satellites[k][l]);

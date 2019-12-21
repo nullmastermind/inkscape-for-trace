@@ -15,9 +15,10 @@
 #include "helper/geom-curves.h"
 #include "helper/geom-satellite.h"
 
-#include <2geom/elliptical-arc.h>
-#include "knotholder.h"
 #include "display/curve.h"
+#include "knotholder.h"
+#include "ui/tools/tool-base.h"
+#include <2geom/elliptical-arc.h>
 #include <boost/optional.hpp>
 
 #include "object/sp-shape.h"
@@ -111,7 +112,7 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
         }
         Geom::PathVector pathvres;
         for (const auto & path_it : pathv) {
-            if (path_it.empty() || path_it.size_closed() < 2) {
+            if (path_it.empty() || count_path_nodes(path_it) < 2) {
                 continue;
             }
             std::vector<Satellite> subpath_satellites;
@@ -324,7 +325,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         Geom::PathVector const pathv = pathv_to_linear_and_cubic_beziers(pathvector_before_effect);
         Geom::PathVector pathvres;
         for (const auto &path_it : pathv) {
-            if (path_it.empty() || path_it.size_closed() < 2) {
+            if (path_it.empty() || count_path_nodes(path_it) < 2) {
                 continue;
             }
             Geom::Path::const_iterator curve_it = path_it.begin();
@@ -355,8 +356,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
             pathresult.close(path_it.closed());
             pathvres.push_back(pathresult);
             pathresult.clear();
-        }
-        //if are different sizes call to recalculate
+        } // if are different sizes call to recalculate
         Satellites satellites = satellites_param.data();
         if (satellites.empty()) {
             doOnApply(lpeItem); // dont want _impl to not update versioning
@@ -390,6 +390,10 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
                 _pathvector_satellites->recalculateForNewPathVector(pathvres, satellite);
                 satellites = _pathvector_satellites->getSatellites();
                 write = true;
+                SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+                if (desktop) {
+                    SP_ACTIVE_DESKTOP->event_context->_delayed_snap_event = nullptr;
+                }
             }
         }
         if (_degenerate_hide) {
@@ -399,7 +403,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         }
         for (size_t i = 0; i < satellites.size(); ++i) {
             for (size_t j = 0; j < satellites[i].size(); ++j) {
-                if (j >= pathvres[i].size_closed()) {
+                if (j >= count_path_nodes(pathvres[i])) {
                     // we are on the end of a open path
                     // for the moment we dont want to use
                     // this satellite so simplest do nothing with it
@@ -424,7 +428,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
             }
             if (!pathvres[i].closed()) {
                 satellites[i][0].amount = 0;
-                satellites[i][pathvres[i].size_closed() -1].amount = 0;
+                satellites[i][count_path_nodes(pathvres[i]) - 1].amount = 0;
             }
         }
         if (!_pathvector_satellites) {
@@ -498,12 +502,12 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
         }
         while (curve_it1 != curve_endit) {
             size_t next_index = curve + 1;
-            if (curve == pathv[path].size_closed() - 1 && pathv[path].closed()) {
+            if (curve == count_path_nodes(pathv[path]) - 1 && pathv[path].closed()) {
                 next_index = 0;
             }
             //append last extreme of paths on open paths
-            if (curve == pathv[path].size_closed() - 1 && !pathv[path].closed()) { // the path is open and we are at
-                                                                                    // end of path
+            if (curve == count_path_nodes(pathv[path]) - 1 && !pathv[path].closed()) { // the path is open and we are at
+                                                                                       // end of path
                 if (time0 != 1) { //Previous satellite not at 100% amount
                     Geom::Curve *last_curve = curve_it1->portion(time0, 1);
                     last_curve->setInitial(tmp_path.finalPoint());

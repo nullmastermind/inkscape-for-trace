@@ -663,6 +663,18 @@ SPCurve::nodes_in_path() const
         // and therefore any path has at least one valid node
         size_t psize = std::max<size_t>(1, it.size_closed());
         nr += psize;
+        if (it.closed()) {
+            const Geom::Curve &closingline = it.back_closed();
+            // the closing line segment is always of type
+            // Geom::LineSegment.
+            if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
+                // closingline.isDegenerate() did not work, because it only checks for
+                // *exact* zero length, which goes wrong for relative coordinates and
+                // rounding errors...
+                // the closing line segment has zero-length. So stop before that one!
+                nr -= 1;
+            }
+        }
     }
 
     return nr;

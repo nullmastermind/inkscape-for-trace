@@ -603,7 +603,24 @@ size_t
 count_pathvector_nodes(Geom::PathVector const &pathv) {
     size_t tot = 0;
     for (auto subpath : pathv) {
-        tot += subpath.size_closed();
+        tot += count_path_nodes(subpath);
+    }
+    return tot;
+}
+size_t count_path_nodes(Geom::Path const &path)
+{
+    size_t tot = path.size_closed();
+    if (path.closed()) {
+        const Geom::Curve &closingline = path.back_closed();
+        // the closing line segment is always of type
+        // Geom::LineSegment.
+        if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
+            // closingline.isDegenerate() did not work, because it only checks for
+            // *exact* zero length, which goes wrong for relative coordinates and
+            // rounding errors...
+            // the closing line segment has zero-length. So stop before that one!
+            tot -= 1;
+        }
     }
     return tot;
 }

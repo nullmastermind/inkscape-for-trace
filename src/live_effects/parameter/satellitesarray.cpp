@@ -8,9 +8,10 @@
  */
 
 #include "live_effects/parameter/satellitesarray.h"
-#include "live_effects/lpe-fillet-chamfer.h"
+#include "helper/geom.h"
 #include "knotholder.h"
 #include "live_effects/effect.h"
+#include "live_effects/lpe-fillet-chamfer.h"
 #include "ui/dialog/lpe-fillet-chamfer-properties.h"
 #include "ui/shape-editor.h"
 #include "ui/tools-switch.h"
@@ -123,9 +124,9 @@ void SatellitesArrayParam::updateCanvasIndicators(bool mirror)
                 if (_vector[i][j].hidden || //Ignore if hidden
                     (!_vector[i][j].has_mirror && mirror == true) || //Ignore if not have mirror and we are in mirror loop
                     _vector[i][j].amount == 0 || //no helper in 0 value
-                    j >= pathv[i].size_closed() || //ignore last satellite in open paths with fillet chamfer effect
+                    j >= count_path_nodes(pathv[i]) || //ignore last satellite in open paths with fillet chamfer effect
                     (!pathv[i].closed() && j == 0) ||  //ignore first satellites on open paths
-                    pathv[i].size_closed() == 2)
+                    count_path_nodes(pathv[i]) == 2)
                 {
                     continue;
                 }
@@ -136,7 +137,7 @@ void SatellitesArrayParam::updateCanvasIndicators(bool mirror)
                 double length_out = curve_in->length();
                 gint previous_index = j - 1; //Always are previous index because we skip first satellite on open paths
                 if (j == 0 && pathv[i].closed()) {
-                    previous_index = pathv[i].size_closed() - 1;
+                    previous_index = count_path_nodes(pathv[i]) - 1;
                 }
                 if ( previous_index < 0 ) {
                     return;
@@ -298,13 +299,13 @@ void FilletChamferKnotHolderEntity::knot_set(Geom::Point const &p,
     if (satellite.hidden ||
        (!pathv[satelite_index].closed() && 
         (subsatelite_index == 0||//ignore first satellites on open paths
-         pathv[satelite_index].size_closed() - 1 == subsatelite_index))) //ignore last satellite in open paths with fillet chamfer effect
+         count_path_nodes(pathv[satelite_index]) - 1 == subsatelite_index))) //ignore last satellite in open paths with fillet chamfer effect
     {
         return;
     }
     gint previous_index = subsatelite_index - 1;
     if (subsatelite_index == 0 && pathv[satelite_index].closed()) {
-        previous_index = pathv[satelite_index].size_closed() - 1;
+        previous_index = count_path_nodes(pathv[satelite_index]) - 1;
     }
     if ( previous_index < 0 ) {
         return;
@@ -376,7 +377,7 @@ Geom::Point FilletChamferKnotHolderEntity::knot_get() const
     Geom::PathVector pathv = _pparam->_last_pathvector_satellites->getPathVector();
     if (satellite.hidden ||
         (!pathv[satelite_index].closed() && (subsatelite_index == 0 ||
-        subsatelite_index == pathv[satelite_index].size_closed() - 1)))  //ignore first and last satellites on open paths
+        subsatelite_index == count_path_nodes(pathv[satelite_index]) - 1)))  //ignore first and last satellites on open paths
     {
         return Geom::Point(Geom::infinity(), Geom::infinity());
     }
@@ -384,7 +385,7 @@ Geom::Point FilletChamferKnotHolderEntity::knot_get() const
     if (is_mirror) {
         gint previous_index = subsatelite_index - 1;
         if (subsatelite_index == 0 && pathv[satelite_index].closed()) {
-            previous_index = pathv[satelite_index].size_closed() - 1;
+            previous_index = count_path_nodes(pathv[satelite_index]) - 1;
         }
         if ( previous_index < 0 ) {
             return Geom::Point(Geom::infinity(), Geom::infinity());
@@ -432,7 +433,7 @@ void FilletChamferKnotHolderEntity::knot_click(guint state)
     Geom::PathVector pathv = _pparam->_last_pathvector_satellites->getPathVector();
     if (!pathv[satelite_index].closed() && 
        (subsatelite_index == 0 ||
-        pathv[satelite_index].size_closed() - 1 == subsatelite_index)) //ignore last satellite in open paths with fillet chamfer effect
+        count_path_nodes(pathv[satelite_index]) - 1 == subsatelite_index)) //ignore last satellite in open paths with fillet chamfer effect
     {
         return;
     }
@@ -484,7 +485,7 @@ void FilletChamferKnotHolderEntity::knot_click(guint state)
         double amount = _pparam->_vector[satelite_index][subsatelite_index].amount;
         gint previous_index = subsatelite_index - 1;
         if (subsatelite_index == 0 && pathv[satelite_index].closed()) {
-            previous_index = pathv[satelite_index].size_closed() - 1;
+            previous_index = count_path_nodes(pathv[satelite_index]) - 1;
         }
         if ( previous_index < 0 ) {
             return;
@@ -529,7 +530,7 @@ void FilletChamferKnotHolderEntity::knot_set_offset(Satellite satellite)
     Geom::PathVector pathv = _pparam->_last_pathvector_satellites->getPathVector();
     if (satellite.hidden ||
         (!pathv[satelite_index].closed() && 
-        (subsatelite_index == 0 || pathv[satelite_index].size_closed() - 1 == subsatelite_index))) //ignore last satellite in open paths with fillet chamfer effect
+        (subsatelite_index == 0 || count_path_nodes(pathv[satelite_index]) - 1 == subsatelite_index))) //ignore last satellite in open paths with fillet chamfer effect
     {
         return;
     }
@@ -538,7 +539,7 @@ void FilletChamferKnotHolderEntity::knot_set_offset(Satellite satellite)
     if (!_pparam->_use_distance && !satellite.is_time) {
         gint previous_index = subsatelite_index - 1;
         if (subsatelite_index == 0 && pathv[satelite_index].closed()) {
-            previous_index = pathv[satelite_index].size_closed() - 1;
+            previous_index = count_path_nodes(pathv[satelite_index]) - 1;
         }
         if ( previous_index < 0 ) {
             return;
