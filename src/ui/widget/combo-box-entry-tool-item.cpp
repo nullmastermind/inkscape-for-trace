@@ -641,7 +641,7 @@ ComboBoxEntryToolItem::defocus()
 }
 
 gboolean
-ComboBoxEntryToolItem::keypress_cb( GtkWidget * /*widget*/, GdkEventKey *event, gpointer data )
+ComboBoxEntryToolItem::keypress_cb( GtkWidget *entry, GdkEventKey *event, gpointer data )
 {
     gboolean wasConsumed = FALSE; /* default to report event not consumed */
     guint key = 0;
@@ -652,10 +652,19 @@ ComboBoxEntryToolItem::keypress_cb( GtkWidget * /*widget*/, GdkEventKey *event, 
 
     switch ( key ) {
 
-        // TODO Add bindings for Tab/LeftTab
         case GDK_KEY_Escape:
         {
             //gtk_spin_button_set_value( GTK_SPIN_BUTTON(widget), action->private_data->lastVal );
+            action->defocus();
+            wasConsumed = TRUE;
+        }
+        break;
+
+        case GDK_KEY_Tab:
+        {
+            // Fire activation similar to how Return does, but also return focus to text object
+            // itself
+            entry_activate_cb( GTK_ENTRY (entry), data );
             action->defocus();
             wasConsumed = TRUE;
         }
