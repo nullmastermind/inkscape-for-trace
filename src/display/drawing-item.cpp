@@ -604,8 +604,7 @@ DrawingItem::update(Geom::IntRect const &area, UpdateContext const &ctx, unsigne
                 // Destroy cache for this item - outside of canvas or invisible.
                 // The opposite transition (invisible -> visible or object
                 // entering the canvas) is handled during the render phase
-                delete _cache;
-                _cache = nullptr;
+                setCached(false, true);
             }
         }
     }
@@ -1082,28 +1081,22 @@ DrawingItem::_markForRendering()
     }
 
     if (bkg_root) {
-        bkg_root->_invalidateFilterBackground(*dirty, this);
+        bkg_root->_invalidateFilterBackground(*dirty);
     }
     _drawing.signal_request_render.emit(*dirty);
 }
 
 void
-DrawingItem::_invalidateFilterBackground(Geom::IntRect const &area, DrawingItem *di)
+DrawingItem::_invalidateFilterBackground(Geom::IntRect const &area)
 {
     if (!_drawbox.intersects(area)) return;
-    static bool on = false;
-    if (this == di) {
-        on = true;
-    }
-    if (!this->parent()) {
-        on = false;
-    }
-    if (on && _cache && _filter && _filter->uses_background()) {
+
+    if (_cache && _filter && _filter->uses_background()) {
         _cache->markDirty(area);
     }
 
     for (auto & i : _children) {
-        i._invalidateFilterBackground(area, di);
+        i._invalidateFilterBackground(area);
     }
 }
 
@@ -1196,9 +1189,9 @@ Geom::OptIntRect DrawingItem::_cacheRect(bool cropped)
         // we check unfiltered item is emought inside the cache area to  render properly
         Geom::OptIntRect canvas = r;
         expandByScale(*canvas, 0.5);
+        expandByScale(*r, 2);
         Geom::OptIntRect valid = Geom::intersect(canvas, _bbox);
         if (!valid) {
-            expandByScale(*r, 2);
             valid = _bbox;
             // contract the item _bbox to get reduced size to render. $ seems good enought
             expandByScale(*valid, 0.5);
@@ -1212,7 +1205,7 @@ Geom::OptIntRect DrawingItem::_cacheRect(bool cropped)
         if (cropped && r && _drawbox != valid) {
             expandByScale(*r, 5. / 6.);
         }
-        r = _drawbox & r;
+        return _drawbox & r;
     }
     return r;
 }

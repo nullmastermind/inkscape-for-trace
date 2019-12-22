@@ -2108,6 +2108,7 @@ int SPCanvas::paintRectInternal(PaintRectSetup const *setup, Geom::IntRect const
             }
             return false;
         }
+        _forced_redraw_count = 0;
     }
 
     // Find the optimal buffer dimensions
@@ -2243,9 +2244,12 @@ bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
     return paintRectInternal(&setup, paint_rect);
 }
 
-void SPCanvas::forceFullRedrawAfterInterruptions(unsigned int count)
+void SPCanvas::forceFullRedrawAfterInterruptions(unsigned int count, bool reset)
 {
     _forced_redraw_limit = count;
+    if (reset) {
+        _forced_redraw_count = 0;
+    }
 }
 
 void SPCanvas::endForcedFullRedraws()
