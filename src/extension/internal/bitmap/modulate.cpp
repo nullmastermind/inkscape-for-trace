@@ -21,7 +21,7 @@ namespace Bitmap {
 void
 Modulate::applyEffect(Magick::Image* image) {
 	float hue = (_hue * 200 / 360.0) + 100;
-	image->modulate(_brightness + 100, _saturation + 100, hue);
+	image->modulate(_brightness, _saturation, hue);
 }
 
 void
@@ -41,8 +41,8 @@ Modulate::init()
 			"<name>" N_("HSB Adjust") "</name>\n"
 			"<id>org.inkscape.effect.bitmap.modulate</id>\n"			
 			"<param name=\"hue\" gui-text=\"" N_("Hue:") "\" type=\"float\" min=\"-360\" max=\"360\">0</param>\n"
-			"<param name=\"saturation\" gui-text=\"" N_("Saturation:") "\" type=\"float\" min=\"-200\" max=\"200\">0</param>\n"
-			"<param name=\"brightness\" gui-text=\"" N_("Brightness:") "\" type=\"float\" min=\"-200\" max=\"200\">0</param>\n"
+			"<param name=\"saturation\" gui-text=\"" N_("Saturation:") "\" type=\"float\" min=\"0\" max=\"200\">100</param>\n"
+			"<param name=\"brightness\" gui-text=\"" N_("Brightness:") "\" type=\"float\" min=\"0\" max=\"200\">100</param>\n"
 			"<effect>\n"
 				"<object-type>all</object-type>\n"
 				"<effects-menu>\n"
