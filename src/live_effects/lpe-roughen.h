@@ -44,6 +44,7 @@ public:
     LPERoughen(LivePathEffectObject *lpeobject);
     ~LPERoughen() override;
 
+    void doOnApply(SPLPEItem const *lpeitem) override;
     void doEffect(SPCurve *curve) override;
     virtual double sign(double randNumber);
     virtual Geom::Point randomize(double max_length, bool is_node = false);

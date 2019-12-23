@@ -81,7 +81,7 @@ LPERoughen::LPERoughen(LivePathEffectObject *lpeobject)
     global_randomize.param_set_range(0., Geom::infinity());
     max_segment_size.param_set_range(0., Geom::infinity());
     max_segment_size.param_set_increments(1, 1);
-    max_segment_size.param_set_digits(1);
+    max_segment_size.param_set_digits(3);
     segments.param_set_range(1, Geom::infinity());
     segments.param_set_increments(1, 1);
     segments.param_set_digits(0);
@@ -90,6 +90,70 @@ LPERoughen::LPERoughen(LivePathEffectObject *lpeobject)
 }
 
 LPERoughen::~LPERoughen() = default;
+
+/* double sp_get_perimeter(SPLPEItem const *lpeitem) {
+    double lenght = 0;
+    if (dynamic_cast<SPGroup *>(lpeitem) ) {
+    std::vector<SPItem*> const item_list = sp_item_group_item_list(lpeitem);
+    for (auto sub_item : item_list) {
+        if (sub_item) {
+            SPLPEItem *lpe_item = dynamic_cast<SPLPEItem *>(sub_item);
+            if (lpe_item) {
+                lenght += sp_get_perimeter(lpe_item);
+            }
+        }
+    }
+    if (SP_IS_SHAPE(lpeitem)) {
+        Geom::PathVector shape = SP_SHAPE(lpeitem)->getCurve(true)->get_pathvector();
+        lenght += Geom::length(paths_to_pw(shape));
+    }
+    return lenght;
+} */
+
+void LPERoughen::doOnApply(SPLPEItem const *lpeitem)
+{
+    Geom::OptRect bbox = lpeitem->bounds(SPItem::GEOMETRIC_BBOX);
+    if (bbox) {
+        std::vector<Parameter *>::iterator it = param_vector.begin();
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        while (it != param_vector.end()) {
+            Parameter *param = *it;
+            const gchar *key = param->param_key.c_str();
+            Glib::ustring pref_path = (Glib::ustring) "/live_effects/" +
+                                      (Glib::ustring)LPETypeConverter.get_key(effectType()).c_str() +
+                                      (Glib::ustring) "/" + (Glib::ustring)key;
+
+
+            bool valid = prefs->getEntry(pref_path).isValid();
+            // double lenght = sp_get_perimeter(lpeitem);
+            Glib::ustring displace_x_str = Glib::ustring::format((*bbox).width() / 100.0);
+            Glib::ustring displace_y_str = Glib::ustring::format((*bbox).height() / 100.0);
+            Glib::ustring max_segment_size_str =
+                Glib::ustring::format(std::min((*bbox).height(), (*bbox).width()) / 100.0);
+            double height = (*bbox).height();
+            if (!valid) {
+                if (strcmp(key, "method") == 0) {
+                    param->param_readSVGValue("size");
+                } else if (strcmp(key, "max_segment_size") == 0) {
+                    param->param_readSVGValue(max_segment_size_str.c_str());
+                } else if (strcmp(key, "displace_x") == 0) {
+                    param->param_readSVGValue(displace_x_str.c_str());
+                } else if (strcmp(key, "displace_y") == 0) {
+                    param->param_readSVGValue(displace_y_str.c_str());
+                } else if (strcmp(key, "handles") == 0) {
+                    param->param_readSVGValue("along");
+                } else if (strcmp(key, "shift_nodes") == 0) {
+                    param->param_readSVGValue("true");
+                } else if (strcmp(key, "fixed_displacement") == 0) {
+                    param->param_readSVGValue("true");
+                } else if (strcmp(key, "spray_tool_friendly") == 0) {
+                    param->param_readSVGValue("true");
+                }
+            }
+            ++it;
+        }
+    }
+}
 
 void LPERoughen::doBeforeEffect(SPLPEItem const *lpeitem)
 {
