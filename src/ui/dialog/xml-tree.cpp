@@ -422,9 +422,9 @@ void XmlTree::set_tree_select(Inkscape::XML::Node *repr)
             GtkTreePath* path = gtk_tree_model_get_path(GTK_TREE_MODEL(tree->store), &node);
             gtk_tree_view_expand_to_path (GTK_TREE_VIEW(tree), path);
             gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(tree), path, nullptr, TRUE, 0.66, 0.0);
-            gtk_tree_path_free(path);
-
             gtk_tree_selection_select_iter(selection, &node);
+            gtk_tree_view_set_cursor(GTK_TREE_VIEW(tree), path, NULL, false);
+            gtk_tree_path_free(path);
 
         } else {
             g_message("XmlTree::set_tree_select : Couldn't find repr node");
