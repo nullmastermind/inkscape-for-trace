@@ -491,13 +491,15 @@ void SPStar::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::
 Geom::Affine SPStar::set_transform(Geom::Affine const &xform)
 {
     bool opt_trans = (randomized == 0);
-    if (hasPathEffectRecursive() && pathEffectsEnabled()) {
+    if (pathEffectsEnabled() && !optimizeTransforms()) {
         return xform;
     }
     // Only set transform with proportional scaling
     if (!xform.withoutTranslation().isUniformScale()) {
         return xform;
     }
+    notifyTransform(xform);
+
 
     /* Calculate star start in parent coords. */
     Geom::Point pos( this->center * xform );

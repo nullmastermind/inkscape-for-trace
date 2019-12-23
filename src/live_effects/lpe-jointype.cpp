@@ -128,6 +128,15 @@ void LPEJoinType::doOnApply(SPLPEItem const* lpeitem)
     }
 }
 
+void LPEJoinType::transform_multiply(Geom::Affine const &postmul, bool /*set*/)
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool transform_stroke = prefs ? prefs->getBool("/options/transform/stroke", true) : true;
+    if (transform_stroke) {
+        line_width.param_transform_multiply(postmul, false);
+    }
+}
+
 //from LPEPowerStroke -- sets stroke color from existing fill color
 
 void LPEJoinType::doOnRemove(SPLPEItem const* lpeitem)

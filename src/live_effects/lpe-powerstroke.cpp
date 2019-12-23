@@ -766,6 +766,11 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
     return path_out;
 }
 
+void LPEPowerStroke::transform_multiply(Geom::Affine const &postmul, bool /*set*/)
+{
+    offset_points.param_transform_multiply(postmul, false);
+}
+
 void LPEPowerStroke::doAfterEffect(SPLPEItem const *lpeitem)
 {
     if (pathvector_before_effect[0].size() == pathvector_after_effect[0].size()) {

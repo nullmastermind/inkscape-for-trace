@@ -20,29 +20,29 @@
 
 #include "bad-uri-exception.h"
 
-#include "live_effects/effect.h"
-#include "live_effects/lpe-path_length.h"
-#include "live_effects/lpeobject.h"
-#include "live_effects/lpeobject-reference.h"
-#include "live_effects/lpe-mirror_symmetry.h"
-#include "live_effects/lpe-copy_rotate.h"
-
-#include "sp-path.h"
-#include "sp-root.h"
-#include "sp-item-group.h"
 #include "attributes.h"
-#include "uri.h"
-#include "message-stack.h"
-#include "inkscape.h"
 #include "desktop.h"
-#include "ui/shape-editor.h"
-#include "path-chemistry.h"
-#include "sp-ellipse.h"
 #include "display/curve.h"
-#include "svg/svg.h"
+#include "inkscape.h"
+#include "live_effects/effect.h"
+#include "live_effects/lpe-bool.h"
+#include "live_effects/lpe-clone-original.h"
+#include "live_effects/lpe-copy_rotate.h"
+#include "live_effects/lpe-lattice2.h"
+#include "live_effects/lpe-measure-segments.h"
+#include "live_effects/lpe-mirror_symmetry.h"
+#include "message-stack.h"
+#include "path-chemistry.h"
 #include "sp-clippath.h"
+#include "sp-ellipse.h"
+#include "sp-item-group.h"
 #include "sp-mask.h"
+#include "sp-path.h"
 #include "sp-rect.h"
+#include "sp-root.h"
+#include "svg/svg.h"
+#include "ui/shape-editor.h"
+#include "uri.h"
 
 /* LPEItem base class */
 
@@ -279,6 +279,63 @@ bool SPLPEItem::performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape:
         }
     }
     return true;
+}
+
+/**
+ * returns true when LPE write unoptimiced
+ */
+bool SPLPEItem::optimizeTransforms()
+{
+    bool ret = true;
+    if (dynamic_cast<SPGroup *>(this)) {
+        return false;
+    }
+    std::list<Inkscape::LivePathEffect::LPEObjectReference *>::iterator i;
+    for (i = this->path_effect_list->begin(); i != this->path_effect_list->end(); ++i) {
+        Inkscape::LivePathEffect::LPEObjectReference *lperef = (*i);
+        if (!lperef) {
+            continue;
+        }
+        if (!ret) {
+            break;
+        }
+        LivePathEffectObject *lpeobj = lperef->lpeobject;
+        if (lpeobj) {
+            Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
+            if (lpe) {
+                if (dynamic_cast<Inkscape::LivePathEffect::LPEMeasureSegments *>(lpe) ||
+                    dynamic_cast<Inkscape::LivePathEffect::LPECloneOriginal *>(lpe) ||
+                    dynamic_cast<Inkscape::LivePathEffect::LPEMirrorSymmetry *>(lpe) ||
+                    dynamic_cast<Inkscape::LivePathEffect::LPELattice2 *>(lpe) ||
+                    dynamic_cast<Inkscape::LivePathEffect::LPEBool *>(lpe) ||
+                    dynamic_cast<Inkscape::LivePathEffect::LPECopyRotate *>(lpe)) {
+                    ret = false;
+                }
+            }
+        }
+    }
+    return ret;
+}
+
+/**
+ * notify tranbsform applied to a LPE
+ */
+void SPLPEItem::notifyTransform(Geom::Affine const &postmul)
+{
+    std::list<Inkscape::LivePathEffect::LPEObjectReference *>::iterator i;
+    for (i = this->path_effect_list->begin(); i != this->path_effect_list->end(); ++i) {
+        Inkscape::LivePathEffect::LPEObjectReference *lperef = (*i);
+        if (!lperef) {
+            continue;
+        }
+        LivePathEffectObject *lpeobj = lperef->lpeobject;
+        if (lpeobj) {
+            Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
+            if (lpe) {
+                lpe->transform_multiply(postmul, false);
+            }
+        }
+    }
 }
 
 // CPPIFY: make pure virtual

@@ -76,7 +76,7 @@ public:
     bool isNodePointSelected(Geom::Point const &nodePoint) const;
     virtual void doOnApply (SPLPEItem const* lpeitem);
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
-    
+    virtual void transform_multiply(Geom::Affine const &postmul, bool set);
     virtual void doAfterEffect (SPLPEItem const* lpeitem);
     virtual void doOnException(SPLPEItem const *lpeitem);
     virtual void doOnRemove (SPLPEItem const* lpeitem);

@@ -36,6 +36,7 @@ public:
 
     Geom::PathVector doEffect_path (Geom::PathVector const& path_in) override;
     Geom::PathVector doEffect_simplePath(Geom::PathVector const& path_in);
+    void transform_multiply(Geom::Affine const &postmul, bool set) override;
 
     void addKnotHolderEntities(KnotHolder * knotholder, SPItem * item) override;
 

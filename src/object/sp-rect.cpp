@@ -378,9 +378,10 @@ void SPRect::update_patheffect(bool write) {
 }
 
 Geom::Affine SPRect::set_transform(Geom::Affine const& xform) {
-    if (hasPathEffectRecursive() && pathEffectsEnabled()) {
+    if (pathEffectsEnabled() && !optimizeTransforms()) {
         return xform;
     }
+    notifyTransform(xform);
     /* Calculate rect start in parent coords. */
     Geom::Point pos(Geom::Point(this->x.computed, this->y.computed) * xform);
 

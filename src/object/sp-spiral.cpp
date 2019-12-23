@@ -409,14 +409,14 @@ void SPSpiral::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape
  */
 Geom::Affine SPSpiral::set_transform(Geom::Affine const &xform)
 {
-    if (hasPathEffectRecursive() && pathEffectsEnabled()) {
+    if (pathEffectsEnabled() && !optimizeTransforms()) {
         return xform;
     }
     // Only set transform with proportional scaling
     if (!xform.withoutTranslation().isUniformScale()) {
         return xform;
     }
-
+    notifyTransform(xform);
     /* Calculate spiral start in parent coords. */
     Geom::Point pos( Geom::Point(this->cx, this->cy) * xform );
 

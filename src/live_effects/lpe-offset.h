@@ -36,6 +36,7 @@ public:
     ~LPEOffset() override;
     void doBeforeEffect (SPLPEItem const* lpeitem) override;
     Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
+    void transform_multiply(Geom::Affine const &postmul, bool set) override;
     void addKnotHolderEntities(KnotHolder * knotholder, SPItem * item) override;
     void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec) override;
     void calculateOffset (Geom::PathVector const & path_in);

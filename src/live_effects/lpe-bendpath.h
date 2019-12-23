@@ -44,6 +44,8 @@ public:
 
     void resetDefaults(SPItem const* item) override;
 
+    void transform_multiply(Geom::Affine const &postmul, bool set) override;
+
     void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec) override;
       
     void addKnotHolderEntities(KnotHolder * knotholder, SPItem * item) override;

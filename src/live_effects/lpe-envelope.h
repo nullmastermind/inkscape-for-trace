@@ -33,6 +33,7 @@ public:
     ~LPEEnvelope() override;
 
     void doBeforeEffect (SPLPEItem const* lpeitem) override;
+    void transform_multiply(Geom::Affine const &postmul, bool set) override;
 
     Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in) override;
 

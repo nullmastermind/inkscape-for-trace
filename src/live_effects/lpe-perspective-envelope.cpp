@@ -67,6 +67,14 @@ LPEPerspectiveEnvelope::LPEPerspectiveEnvelope(LivePathEffectObject *lpeobject) 
 LPEPerspectiveEnvelope::~LPEPerspectiveEnvelope()
 = default;
 
+void LPEPerspectiveEnvelope::transform_multiply(Geom::Affine const &postmul, bool /*set*/)
+{
+    up_left_point.param_transform_multiply(postmul, false);
+    up_right_point.param_transform_multiply(postmul, false);
+    down_left_point.param_transform_multiply(postmul, false);
+    down_right_point.param_transform_multiply(postmul, false);
+}
+
 bool pointInTriangle(Geom::Point const &p, std::vector<Geom::Point> points)
 {
     if (points.size() != 3) {

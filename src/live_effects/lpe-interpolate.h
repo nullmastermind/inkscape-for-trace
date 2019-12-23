@@ -29,6 +29,7 @@ class LPEInterpolate : public Effect {
     ~LPEInterpolate() override;
 
     Geom::PathVector doEffect_path(Geom::PathVector const &path_in) override;
+    void transform_multiply(Geom::Affine const &postmul, bool set) override;
 
     void resetDefaults(SPItem const *item) override;
 

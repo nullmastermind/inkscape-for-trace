@@ -135,6 +135,12 @@ LPEOffset::get_nearest_point(Geom::PathVector pathv, Geom::Point point)  const
     return res;
 }
 
+void LPEOffset::transform_multiply(Geom::Affine const &postmul, bool /*set*/)
+{
+    offset.param_transform_multiply(postmul, true);
+    offset_pt = Geom::Point(Geom::infinity(), Geom::infinity());
+}
+
 Geom::Point 
 LPEOffset::get_default_point(Geom::PathVector pathv)  const
 {

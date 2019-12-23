@@ -54,7 +54,7 @@ void PowerStrokePointArrayParam::param_transform_multiply(Geom::Affine const &po
              point_it != e; ++point_it)
         {
             // scale each width knot with the average scaling in X and Y
-            Geom::Coord const A = (*point_it)[Geom::Y] * ((postmul.expansionX() + postmul.expansionY()) / 2);
+            Geom::Coord const A = (*point_it)[Geom::Y] * postmul.descrim();
             result.emplace_back((*point_it)[Geom::X], A);
         }
         param_set_and_write_new_value(result);

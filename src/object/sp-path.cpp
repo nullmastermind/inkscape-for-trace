@@ -343,12 +343,16 @@ Geom::Affine SPPath::set_transform(Geom::Affine const &transform) {
     if (!_curve) { // 0 nodes, nothing to transform
         return Geom::identity();
     }
-    if (hasPathEffectRecursive() && pathEffectsEnabled()) {
+
+    if (pathEffectsEnabled() && !optimizeTransforms()) {
         return transform;
     }
-
-    _curve->transform(transform);
-
+    if (hasPathEffectRecursive() && pathEffectsEnabled()) {
+        _curve_before_lpe->transform(transform);
+    } else {
+        _curve->transform(transform);
+    }
+    notifyTransform(transform);
     // Adjust stroke
     this->adjust_stroke(transform.descrim());
 

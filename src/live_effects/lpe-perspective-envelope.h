@@ -37,6 +37,8 @@ public:
 
     virtual Geom::Point projectPoint(Geom::Point p);
 
+    void transform_multiply(Geom::Affine const &postmul, bool set) override;
+
     virtual Geom::Point projectPoint(Geom::Point p,  double m[][3]);
 
     virtual Geom::Point pointAtRatio(Geom::Coord ratio,Geom::Point A, Geom::Point B);

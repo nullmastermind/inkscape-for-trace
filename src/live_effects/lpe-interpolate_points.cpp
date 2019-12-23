@@ -30,7 +30,6 @@ static const Util::EnumData<unsigned> InterpolatorTypeData[] = {
 };
 static const Util::EnumDataConverter<unsigned> InterpolatorTypeConverter(InterpolatorTypeData, sizeof(InterpolatorTypeData)/sizeof(*InterpolatorTypeData));
 
-
 LPEInterpolatePoints::LPEInterpolatePoints(LivePathEffectObject *lpeobject)
     : Effect(lpeobject)
     , interpolator_type(
@@ -45,7 +44,6 @@ LPEInterpolatePoints::LPEInterpolatePoints(LivePathEffectObject *lpeobject)
 
 LPEInterpolatePoints::~LPEInterpolatePoints()
 = default;
-
 
 Geom::PathVector
 LPEInterpolatePoints::doEffect_path (Geom::PathVector const & path_in)

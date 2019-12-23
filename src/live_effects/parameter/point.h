@@ -49,7 +49,7 @@ public:
     void param_update_default(Geom::Point default_point);
 
     void param_update_default(const gchar * default_point) override;
-    void param_transform_multiply(Geom::Affine const& /*postmul*/, bool /*set*/) override;
+    void param_transform_multiply(Geom::Affine const & /*postmul*/, bool set) override;
 
     void set_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color);
 

@@ -51,7 +51,7 @@ public:
     void param_setup_nodepath(Inkscape::NodePath::Path *np) override;
     void addCanvasIndicators(SPLPEItem const* lpeitem, std::vector<Geom::PathVector> &hp_vec) override;
 
-    void param_transform_multiply(Geom::Affine const& /*postmul*/, bool /*set*/) override;
+    void param_transform_multiply(Geom::Affine const &postmul, bool set) override;
     void setFromOriginalD(bool from_original_d){ _from_original_d = from_original_d; };
 
     sigc::signal <void> signal_path_pasted;

@@ -47,6 +47,11 @@ LPEInterpolate::LPEInterpolate(LivePathEffectObject *lpeobject)
 
 LPEInterpolate::~LPEInterpolate() = default;
 
+void LPEInterpolate::transform_multiply(Geom::Affine const &postmul, bool /*set*/)
+{
+    trajectory_path.param_transform_multiply(postmul, false);
+}
+
 /*
  * interpolate path_in[0] to path_in[1]
  */
