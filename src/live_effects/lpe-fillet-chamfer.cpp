@@ -349,7 +349,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
                 }
                 if (Geom::are_near((*curve_it).initialPoint(), (*curve_it).finalPoint())) {
                     return;
-                }
+                }            
                 pathresult.append(*curve_it);
                 ++curve_it;
             }
@@ -391,11 +391,9 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
                 satellites = _pathvector_satellites->getSatellites();
                 write = true;
                 SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-                if (desktop) {
-                    SP_ACTIVE_DESKTOP->event_context->_delayed_snap_event = nullptr;
-                }
             }
         }
+        
         if (_degenerate_hide) {
             satellites_param.setGlobalKnotHide(true);
         } else {
@@ -437,7 +435,13 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         _pathvector_satellites->setPathVector(pathvres);
         _pathvector_satellites->setSatellites(satellites);
         satellites_param.setPathVectorSatellites(_pathvector_satellites, write);
-
+        size_t number_nodes = count_pathvector_nodes(pathvres);
+        size_t previous_number_nodes = _pathvector_satellites->getTotalSatellites();
+        if (number_nodes != previous_number_nodes) {
+            doOnApply(lpeItem); // dont want _impl to not update versioning
+            satellites = satellites_param.data();
+            satellites_param.setPathVectorSatellites(_pathvector_satellites, write);
+        }
         Glib::ustring current_unit = Glib::ustring(unit.get_abbreviation());
         if (previous_unit != current_unit && previous_unit != "") {
             updateAmount();

@@ -75,7 +75,7 @@ void SatellitesArrayParam::reloadKnots()
                 Inkscape::UI::ShapeEditor *shape_editor = i->second;
                 if (shape_editor && shape_editor->lpeknotholder) {
                     SPItem *item = shape_editor->knotholder->item;
-                    shape_editor->unset_item(false);
+                    shape_editor->unset_item(true);
                     shape_editor->set_item(item);
                 }
             }
