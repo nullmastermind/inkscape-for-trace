@@ -331,11 +331,14 @@ DrawingItem::setStyle(SPStyle *style, SPStyle *context_style)
     }
 
     if (style && style->enable_background.set) {
-        if (style->enable_background.value == SP_CSS_BACKGROUND_NEW && !_background_new) {
+        bool _background_new_check = _background_new;
+        if (style->enable_background.value == SP_CSS_BACKGROUND_NEW) {
             _background_new = true;
-            _markForUpdate(STATE_BACKGROUND, true);
-        } else if (style->enable_background.value == SP_CSS_BACKGROUND_ACCUMULATE && _background_new) {
+        }
+        if (style->enable_background.value == SP_CSS_BACKGROUND_ACCUMULATE) {
             _background_new = false;
+        }
+        if (_background_new_check != _background_new) {
             _markForUpdate(STATE_BACKGROUND, true);
         }
     }
@@ -1080,7 +1083,7 @@ DrawingItem::_markForRendering()
         }
     }
 
-    if (bkg_root) {
+    if (bkg_root && bkg_root->_parent && bkg_root->_parent->_parent) {
         bkg_root->_invalidateFilterBackground(*dirty);
     }
     _drawing.signal_request_render.emit(*dirty);
@@ -1189,9 +1192,9 @@ Geom::OptIntRect DrawingItem::_cacheRect(bool cropped)
         // we check unfiltered item is emought inside the cache area to  render properly
         Geom::OptIntRect canvas = r;
         expandByScale(*canvas, 0.5);
-        expandByScale(*r, 2);
         Geom::OptIntRect valid = Geom::intersect(canvas, _bbox);
         if (!valid) {
+            expandByScale(*r, 2);
             valid = _bbox;
             // contract the item _bbox to get reduced size to render. $ seems good enought
             expandByScale(*valid, 0.5);
