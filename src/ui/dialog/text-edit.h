@@ -32,7 +32,6 @@
 #include "ui/widget/font-variants.h"
 
 class SPItem;
-struct SPFontSelector;
 class font_instance;
 class SPCSSAttr;
 
