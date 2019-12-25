@@ -78,10 +78,8 @@ PowerStrokePointArrayParam::recalculate_controlpoints_for_new_pwd2(Geom::Piecewi
             for (auto & i : _vector) {
                 Geom::Point pt = i;
                 Geom::Point position = last_pwd2.valueAt(pt[Geom::X]) + pt[Geom::Y] * last_pwd2_normal.valueAt(pt[Geom::X]);
-                
                 double t = nearest_time(position, pwd2_in);
-                double offset = dot(position - pwd2_in.valueAt(t), normal.valueAt(t));
-                i = Geom::Point(t, offset);
+                i[Geom::X] = t;
             }
         }
 
