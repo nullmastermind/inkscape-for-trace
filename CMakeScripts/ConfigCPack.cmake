@@ -101,6 +101,10 @@ include(CPack)
 #  - components/groups are ordered alphabetically by component/group name; groups always come first
 #  - empty (e.g. OS-specific) components are discarded automatically
 
+cpack_add_install_type(full    DISPLAY_NAME Full)
+cpack_add_install_type(compact DISPLAY_NAME Compact) # no translations, dictionaries, examples, etc.
+cpack_add_install_type(minimal DISPLAY_NAME Minimal) # minimal "working" set-up, excluding everything non-essential
+
 cpack_add_component_group(
                     group_1_program_files
                     DISPLAY_NAME "Program Files"
@@ -113,7 +117,8 @@ cpack_add_component(inkscape
 cpack_add_component(python
                     DISPLAY_NAME "Python"
                     DESCRIPTION "Python interpreter (required to run Inkscape extensions)"
-                    GROUP "group_1_program_files")
+                    GROUP "group_1_program_files"
+                    INSTALL_TYPES full compact)
 
 cpack_add_component_group(
                     group_2_inkscape_data
@@ -122,23 +127,28 @@ cpack_add_component_group(
 cpack_add_component(extensions
                     DISPLAY_NAME "Extensions"
                     DESCRIPTION "Inkscape extensions (including many import and export plugins)"
-                    GROUP "group_2_inkscape_data")
+                    GROUP "group_2_inkscape_data"
+                    INSTALL_TYPES full compact)
 cpack_add_component(examples
                     DISPLAY_NAME "Examples"
                     DESCRIPTION "Example files created in Inkscape"
-                    GROUP "group_2_inkscape_data")
+                    GROUP "group_2_inkscape_data"
+                    INSTALL_TYPES full)
 cpack_add_component(tutorials
                     DISPLAY_NAME "Tutorials"
                     DESCRIPTION "Tutorials teaching Inkscape usage"
-                    GROUP "group_2_inkscape_data")
+                    GROUP "group_2_inkscape_data"
+                    INSTALL_TYPES full)
 
 cpack_add_component(dictionaries
                     DISPLAY_NAME "Dictionaries"
-                    DESCRIPTION "Dictionaries for some common languages for spell checking in Inkscape")
+                    DESCRIPTION "Dictionaries for some common languages for spell checking in Inkscape"
+                    INSTALL_TYPES full)
 
 cpack_add_component(translations
                     DISPLAY_NAME "Translations"
-                    DESCRIPTION "Translations and localized content for Inkscape")
+                    DESCRIPTION "Translations and localized content for Inkscape"
+                    INSTALL_TYPES full)
 
 # TODO: Add localized content to translation component
 # TODO: Split translations into individual components
