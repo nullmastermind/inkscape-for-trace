@@ -55,7 +55,6 @@ configure_file("${CMAKE_SOURCE_DIR}/CMakeScripts/CPack.cmake" "${CMAKE_BINARY_DI
 ## Generator-specific configuration ##
 
 # NSIS (Windows .exe installer)
-# TODO: associate file extension(s)
 set(CPACK_NSIS_MUI_ICON "${CMAKE_SOURCE_DIR}/share/branding/inkscape.ico")
 set(CPACK_NSIS_MUI_WELCOMEFINISHPAGE_BITMAP "${CMAKE_SOURCE_DIR}/packaging/nsis/welcomefinish.bmp")
 set(CPACK_NSIS_INSTALLED_ICON_NAME "bin/inkscape.exe")
@@ -68,7 +67,19 @@ set(CPACK_NSIS_MODIFY_PATH "ON") # while the name does not suggest it, this also
 set(CPACK_NSIS_MUI_FINISHPAGE_RUN "inkscape") # TODO: this results in instance with administrative privileges!
 
 set(CPACK_NSIS_COMPRESSOR "${CPACK_NSIS_COMPRESSOR}\n  SetCompressorDictSize 64") # hack
-set(CPACK_NSIS_COMPRESSOR "${CPACK_NSIS_COMPRESSOR}\n  BrandingText \\\"${CPACK_PACKAGE_DESCRIPTION_SUMMARY}\\\"") # hack
+set(CPACK_NSIS_COMPRESSOR "${CPACK_NSIS_COMPRESSOR}\n  BrandingText '${CPACK_PACKAGE_DESCRIPTION_SUMMARY}'") # hack
+
+file(TO_NATIVE_PATH "${CMAKE_SOURCE_DIR}/packaging/nsis/fileassoc.nsh" native_path)
+string(REPLACE "\\" "\\\\" native_path "${native_path}")
+set(CPACK_NSIS_EXTRA_PREINSTALL_COMMANDS "!include ${native_path}")
+set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "\
+  !insertmacro APP_ASSOCIATE 'svg' 'Inkscape.SVG' 'Scalable Vector Graphics' '$INSTDIR\\\\bin\\\\inkscape.exe,0' 'Open with Inkscape' '$INSTDIR\\\\bin\\\\inkscape.exe \\\"%1\\\"'\n\
+  !insertmacro APP_ASSOCIATE 'svgz' 'Inkscape.SVGZ' 'Compressed Scalable Vector Graphics' '$INSTDIR\\\\bin\\\\inkscape.exe,0' 'Open with Inkscape' '$INSTDIR\\\\bin\\\\inkscape.exe \\\"%1\\\"'\n\
+  !insertmacro UPDATEFILEASSOC")
+set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "\
+  !insertmacro APP_UNASSOCIATE 'svg' 'Inkscape.SVG'\n\
+  !insertmacro APP_UNASSOCIATE 'svgz' 'Inkscape.SVGZ'\n\
+  !insertmacro UPDATEFILEASSOC")
 
 # WIX (Windows .msi installer)
 # TODO: associate file extension(s)
