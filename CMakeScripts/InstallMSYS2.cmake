@@ -18,6 +18,7 @@ if(WIN32)
   file(GLOB MINGW_LIBS
     ${MINGW_BIN}/LIBEAY32.dll
     ${MINGW_BIN}/SSLEAY32.dll
+    ${MINGW_BIN}/imagequant.dll
     ${MINGW_BIN}/libMagick*.dll
     ${MINGW_BIN}/libaspell-[0-9]*.dll
     ${MINGW_BIN}/libatk-1.0-[0-9]*.dll
@@ -273,7 +274,7 @@ if(WIN32)
 
   set(site_packages "lib/python${python_version}/site-packages")
   # Python packages installed via pacman
-  set(packages "python3-lxml" "python3-numpy" "python3-pillow" "python3-six" "python3-cairo" "python3-gobject")
+  set(packages "python-lxml" "python-numpy" "python-pillow" "python-six" "python-cairo" "python-gobject")
   foreach(package ${packages})
     list_files_pacman(${package} paths)
     install_list(FILES ${paths}

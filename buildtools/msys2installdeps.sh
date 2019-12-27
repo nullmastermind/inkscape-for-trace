@@ -80,13 +80,13 @@ done
 
 # install Python and modules used by Inkscape
 eval pacman -S $PACMAN_OPTIONS \
-$ARCH-python3 \
-$ARCH-python3-pip \
-$ARCH-python3-lxml \
-$ARCH-python3-numpy \
-$ARCH-python3-pillow \
-$ARCH-python3-six \
-$ARCH-python3-gobject
+$ARCH-python \
+$ARCH-python-pip \
+$ARCH-python-lxml \
+$ARCH-python-numpy \
+$ARCH-python-pillow \
+$ARCH-python-six \
+$ARCH-python-gobject
 
 PACKAGES="coverage pyserial scour"
 for arch in $(eval echo $ARCH); do
