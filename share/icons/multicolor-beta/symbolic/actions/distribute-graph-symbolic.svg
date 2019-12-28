@@ -16,7 +16,7 @@
    viewBox="0 0 16 16"
    sodipodi:docname="distribute-graph-symbolic.svg"
    inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
-     <style id="s0">
+<style id="s0">
    .base    { fill: #000000; }
    .success { fill: #009909; }
    .warning { fill: #FF1990; }
@@ -26,6 +26,7 @@
   <style id="s2"> 
      @import '../../highlights.css'; 
   </style>
+     
 <metadata
      id="metadata18">
     <rdf:RDF>

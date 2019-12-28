@@ -14,10 +14,7 @@
    viewBox="0 0 16 16"
    sodipodi:docname="tool-tweak-symbolic.svg"
    inkscape:version="1.0alpha2 (119fb3b5e8, 2019-06-21, custom)">
-
-  <title
-     id="title3468">symbolic icons</title>
-     <style id="s0">
+<style id="s0">
    .base    { fill: #000000; }
    .success { fill: #009909; }
    .warning { fill: #FF1990; }
@@ -27,6 +24,10 @@
   <style id="s2"> 
      @import '../../highlights.css'; 
   </style>
+
+  <title
+     id="title3468">symbolic icons</title>
+     
 <metadata
      id="metadata943">
     <rdf:RDF>

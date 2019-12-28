@@ -13,7 +13,7 @@
    version="1.1"
    sodipodi:docname="align-sel-as-group-symbolic.svg"
    inkscape:version="1.0beta0 (1b5d333, 2019-09-08)">
-     <style id="s0">
+<style id="s0">
    .base    { fill: #000000; }
    .success { fill: #009909; }
    .warning { fill: #FF1990; }
@@ -23,6 +23,7 @@
   <style id="s2"> 
      @import '../../highlights.css'; 
   </style>
+     
 <metadata
      id="metadata41">
     <rdf:RDF>
