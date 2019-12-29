@@ -13226,7 +13226,7 @@ msgstr "<b>Ez dago</b> konbinatu beharreko <b>biderik</b> hautapenean."
 
 #: ../src/path-chemistry.cpp:200
 msgid "Select <b>path(s)</b> to break apart."
-msgstr "Hautatu <b>bideak</b> banantzeko."
+msgstr "Hautatu <b>bideak</b> deskonbinatzeko."
 
 #: ../src/path-chemistry.cpp:204
 msgid "Breaking apart paths..."
@@ -13234,19 +13234,19 @@ msgstr "Bideak banatzea..."
 
 #: ../src/path-chemistry.cpp:291
 msgid "Break apart"
-msgstr "_Banandu"
+msgstr "_Deskonbinatu"
 
 #: ../src/path-chemistry.cpp:295
 msgid "<b>No path(s)</b> to break apart in the selection."
-msgstr "Ez dago banantzeko <b>biderik</b> hautapenean."
+msgstr "Ez dago deskonbinatzeko <b>biderik</b> hautapenean."
 
 #: ../src/path-chemistry.cpp:303
 msgid "Select <b>object(s)</b> to convert to path."
-msgstr "Hautatu <b>objektuak</b> bidean bihurtzeko."
+msgstr "Hautatu <b>objektuak</b> bide bihurtzeko."
 
 #: ../src/path-chemistry.cpp:309
 msgid "Converting objects to paths..."
-msgstr "Bihurtu objektuak bideetan..."
+msgstr "Bihurtu objektuak bide..."
 
 #: ../src/path-chemistry.cpp:332
 msgid "Object to path"
@@ -21017,7 +21017,7 @@ msgstr "Bide-eragiketek klonak askatzen dituzte"
 msgid ""
 "The following path operations will unlink clones: Stroke to path, Object to "
 "path, Boolean operations, Combine, Break apart"
-msgstr "Honako bide-eragiketek klonak askatuko ditu: 'Trazua bide', 'Objektua bide', 'Eragiketa boolearrak', 'Konbinatu', 'Banandu'"
+msgstr "Honako bide-eragiketek klonak askatuko ditu: 'Trazua bide', 'Objektua bide', 'Eragiketa boolearrak', 'Konbinatu', 'Deskonbinatu'"
 
 #. TRANSLATORS: Heading for the Inkscape Preferences "Clones" Page
 #: ../src/ui/dialog/inkscape-preferences.cpp:1945
@@ -24713,7 +24713,7 @@ msgstr "Handitu parametro hau borragoma arrastatzeko, inertziaz arrastatuko bali
 #: ../src/ui/toolbar/eraser-toolbar.cpp:205
 #: ../src/ui/toolbar/eraser-toolbar.cpp:206
 msgid "Break apart cut items"
-msgstr "Banandu moztutako elementuak"
+msgstr "Deskonbinatu moztutako elementuak"
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:133
 #: ../src/ui/toolbar/gradient-toolbar.cpp:153
@@ -28442,7 +28442,7 @@ msgstr "Beheko marjina"
 
 #: ../src/ui/widget/page-sizer.cpp:54
 msgid "Scale _x:"
-msgstr "_x eskala:"
+msgstr "_X eskala:"
 
 #: ../src/ui/widget/page-sizer.cpp:54
 msgid "Scale X"
@@ -28450,14 +28450,14 @@ msgstr "X eskala"
 
 #: ../src/ui/widget/page-sizer.cpp:55
 msgid "Scale _y:"
-msgstr "_y eskala:"
+msgstr "_Y eskala:"
 
 #: ../src/ui/widget/page-sizer.cpp:55
 msgid ""
 "While SVG allows non-uniform scaling it is recommended to use only uniform "
 "scaling in Inkscape. To set a non-uniform scaling, set the 'viewBox' "
 "directly."
-msgstr "SVG formatuak uniformea ez den eskalatzea onartzen du, baina hobe da eskalatze uniformea soilik erabiltzea Inkscapen. Eskalatze ez uniformea ezartzeko, ezarri zuzenean 'viewBox' atributua."
+msgstr "SVG formatuak uniformea ez den eskalatzea onartzen du, baina hobe da eskalatze uniformea soilik erabiltzea Inkscapen. Eskalatze ez uniformea ezartzeko, ezarri bista-koadroa."
 
 #: ../src/ui/widget/page-sizer.cpp:112
 msgid "Failed to create the page file."
@@ -28500,7 +28500,7 @@ msgstr "Aldatu orriaren tamaina uneko hautapenari doitzeko (edo marrazki ososari
 
 #: ../src/ui/widget/page-sizer.cpp:256
 msgid "_Viewbox..."
-msgstr "_Viewbox..."
+msgstr "_Bista-koadroa..."
 
 #: ../src/ui/widget/page-sizer.cpp:351
 msgid "Set page size"
@@ -28516,7 +28516,7 @@ msgstr "Ezarri orriaren eskala"
 
 #: ../src/ui/widget/page-sizer.cpp:717
 msgid "Set 'viewBox'"
-msgstr "Ezarri 'viewBox'"
+msgstr "Ezarri bista-koadroa"
 
 #: ../src/ui/widget/preferences-widget.cpp:756
 msgid "_Browse..."
@@ -37384,13 +37384,13 @@ msgstr "Ebatzi raster irudiekiko kanpo-erreferentziak eta kapsulatu haiek Base64
 
 #: ../share/extensions/output_scour.inx:53
 msgid "Enable viewboxing"
-msgstr "Gaitu ikuspegi-kutxa"
+msgstr "Gaitu bista-koadroa"
 
 #: ../share/extensions/output_scour.inx:53
 msgid ""
 "Set page size to 100%/100% (full width and height of the display area) and "
 "introduce a viewBox specifying the drawings dimensions."
-msgstr "Ezarri orri-tamaina gisa %100/%100 (bistaratze-arearen zabalera eta altuera osoa) eta sartu viewBox bat marrazkiaren dimentsioak zehazteko."
+msgstr "Ezarri orri-tamaina gisa %100/%100 (bistaratze-arearen zabalera eta altuera osoa) eta sartu bista-koadro bat marrazkiaren dimentsioak zehazteko."
 
 #: ../share/extensions/output_scour.inx:55
 msgid "Pretty-printing"
@@ -39338,7 +39338,7 @@ msgstr "Efektu honek elkarrekintza bat gehitzen dio ikustaile batean, adibidez w
 #: ../share/extensions/web_interactive_mockup.inx:23
 msgid ""
 "It creates a link effect by changing to viewbox from one position to another."
-msgstr "Esteka efektu bat sortzen du ikuspegi-kutxa kokaleku batetik beste batera aldatuta."
+msgstr "Esteka efektu bat sortzen du bista-koadroa kokaleku batetik beste batera aldatuta."
 
 #: ../share/extensions/web_interactive_mockup.inx:24
 msgid "When selecting object the last one is the one we jump to."
