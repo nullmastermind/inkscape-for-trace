@@ -304,8 +304,8 @@ if(WIN32)
     )
   endforeach()
   install(CODE
-    "MESSAGE(\"Pre-compiling Python byte-code (.pyc files)\")
-     execute_process(COMMAND \${CMAKE_INSTALL_PREFIX}/bin/python -m compileall -qq \${CMAKE_INSTALL_PREFIX})"
+    "MESSAGE(\"Pre-compiling Python distribution to byte-code (.pyc files)\")
+     execute_process(COMMAND \${CMAKE_INSTALL_PREFIX}/bin/python -m compileall -qq \${CMAKE_INSTALL_PREFIX}/lib/python${python_version})"
     COMPONENT python)
 
   # gdb

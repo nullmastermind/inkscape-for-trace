@@ -22,3 +22,10 @@ install(DIRECTORY extensions DESTINATION ${INKSCAPE_SHARE_INSTALL}
 	PATTERN "tests" EXCLUDE
 	PATTERN "*.pyc" EXCLUDE
 	)
+
+if(WIN32)
+  install(CODE
+    "MESSAGE(\"Pre-compiling Python extensions to byte-code (.pyc files)\")
+     execute_process(COMMAND \${CMAKE_INSTALL_PREFIX}/bin/python -m compileall -qq \${CMAKE_INSTALL_PREFIX}/${INKSCAPE_SHARE_INSTALL})"
+    COMPONENT extensions)
+endif()
