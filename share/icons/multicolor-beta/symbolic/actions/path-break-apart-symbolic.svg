@@ -8,14 +8,14 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    inkscape:version="1.1-dev (6039630, 2019-12-20)"
-   sodipodi:docname="edit-undo-symbolic.svg"
+   sodipodi:docname="path-break-apart-symbolic.svg"
    viewBox="0 0 16 16"
    height="16"
    width="16"
    id="svg1"
    version="1.1">
   <metadata
-     id="metadata1784">
+     id="metadata2738">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -26,13 +26,14 @@
     </rdf:RDF>
   </metadata>
   <defs
-     id="defs1782" />
+     id="defs2736" />
   <style
-     id="s0">.base { fill:#000000; }
+     id="s0">
+.base { fill:#000000; }
 .success { fill:#009909; }
 .warning { fill:#FF1990; }
 .error { fill:#00AAFF; }
-.dark {  }
+.dark { }
 </style>
   <style
      id="s2">
@@ -48,7 +49,7 @@
      inkscape:window-width="1296"
      inkscape:cy="8"
      inkscape:cx="8"
-     inkscape:zoom="41.125"
+     inkscape:zoom="43.25"
      showgrid="true"
      id="namedview"
      guidetolerance="10"
@@ -59,25 +60,28 @@
        type="xygrid" />
   </sodipodi:namedview>
   <g
-     inkscape:label="00367"
-     id="edit-undo"
-     transform="translate(-285,-1107.3621)">
+     id="path-break-apart"
+     inkscape:label="00083"
+     transform="matrix(1,0,0,0.999983,-165,-727.34939)">
     <path
        style="opacity:0;fill:none"
-       d="m 285,1107.3621 h 16 v 16 h -16 z"
-       id="rect10176"
+       d="m 165,727.36212 h 16 v 16 h -16 z"
+       id="rect19489"
        inkscape:connector-curvature="0" />
     <path
-       class="warning"
        style="opacity:1"
-       d="m 286,1113.362 4,4 v -8 z"
-       id="path15820"
+       d="m 176.9688,732.3621 h 0.031 l -0.031,1 h 3 v 9 h -9 v -3 c -0.4825,0.1142 0.048,0 -0.4688,0 -0.1711,0 -0.3323,-0.018 -0.5,-0.031 v 4.0313 h 2 9 v -2 -7 -2 h -2 -2.0312 z"
+       id="path19491"
        inkscape:connector-curvature="0" />
     <path
-       class="warning"
        inkscape:connector-curvature="0"
-       id="path7283"
-       d="m 290,1112.362 v 2 h 5.5 c 0.8403,0 1.5,0.66 1.5,1.5 v 0.5 0.5 c 0,0.841 -0.6597,1.5 -1.5,1.5 H 295 v 2 h 0.5 c 1.9212,0 3.5,-1.579 3.5,-3.5 v -0.5 -0.5 c 0,-1.921 -1.5788,-3.5 -3.5,-3.5 z"
+       id="path19493"
+       d="m 169.9688,732.3621 v 2 1 h 1 v -2 h 2 v -1 h -1 z"
        style="opacity:1" />
+    <path
+       style="opacity:1"
+       d="m 170.5,727.3622 c -3.0376,0 -5.5,2.4624 -5.5,5.5 0,3.0376 2.4624,5.5 5.5,5.5 3.0376,0 5.5,-2.4624 5.5,-5.5 0,-3.0376 -2.4624,-5.5 -5.5,-5.5 z m 0,1 c 2.4853,0 4.5,2.0147 4.5,4.5 0,2.4853 -2.0147,4.5 -4.5,4.5 -2.4853,0 -4.5,-2.0147 -4.5,-4.5 0,-2.4853 2.0147,-4.5 4.5,-4.5 z"
+       id="path19495"
+       inkscape:connector-curvature="0" />
   </g>
 </svg>

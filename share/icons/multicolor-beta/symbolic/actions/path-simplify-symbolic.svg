@@ -8,14 +8,14 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    inkscape:version="1.1-dev (6039630, 2019-12-20)"
-   sodipodi:docname="edit-undo-symbolic.svg"
+   sodipodi:docname="path-simplify-symbolic.svg"
    viewBox="0 0 16 16"
    height="16"
    width="16"
    id="svg1"
    version="1.1">
   <metadata
-     id="metadata1784">
+     id="metadata3605">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -26,7 +26,7 @@
     </rdf:RDF>
   </metadata>
   <defs
-     id="defs1782" />
+     id="defs3603" />
   <style
      id="s0">.base { fill:#000000; }
 .success { fill:#009909; }
@@ -59,25 +59,30 @@
        type="xygrid" />
   </sodipodi:namedview>
   <g
-     inkscape:label="00367"
-     id="edit-undo"
-     transform="translate(-285,-1107.3621)">
+     id="path-simplify"
+     inkscape:label="00088"
+     transform="translate(-165,-827.3622)">
     <path
-       style="opacity:0;fill:none"
-       d="m 285,1107.3621 h 16 v 16 h -16 z"
-       id="rect10176"
+       transform="translate(0,512.3622)"
+       style="opacity:0;fill:none;stroke-linecap:round"
+       d="m 165,315 h 16 v 16 h -16 z"
+       id="rect19858"
        inkscape:connector-curvature="0" />
     <path
-       class="warning"
-       style="opacity:1"
-       d="m 286,1113.362 4,4 v -8 z"
-       id="path15820"
-       inkscape:connector-curvature="0" />
-    <path
-       class="warning"
        inkscape:connector-curvature="0"
-       id="path7283"
-       d="m 290,1112.362 v 2 h 5.5 c 0.8403,0 1.5,0.66 1.5,1.5 v 0.5 0.5 c 0,0.841 -0.6597,1.5 -1.5,1.5 H 295 v 2 h 0.5 c 1.9212,0 3.5,-1.579 3.5,-3.5 v -0.5 -0.5 c 0,-1.921 -1.5788,-3.5 -3.5,-3.5 z"
+       id="path15542"
+       d="m 170.4005,827.5184 c -1.2455,-0.2089 -2.629,0.3508 -4.0726,1.9688 a 0.8197254,1.0001 0 1 0 1.1014,1.4687 c 1.2202,-1.3676 2.0396,-1.5906 2.7663,-1.4687 0.7267,0.1219 1.498,0.7316 2.3565,1.5 0.8584,0.7683 1.7771,1.6707 2.9712,2.0937 1.194,0.423 2.6417,0.2206 4.1238,-1.0312 a 0.82782028,1.0099763 0 0 0 -0.9477,-1.6563 c -1.1818,0.9982 -1.9369,1.0569 -2.7151,0.7813 -0.7782,-0.2757 -1.6013,-1.022 -2.4845,-1.8125 -0.8833,-0.7906 -1.8538,-1.6349 -3.0993,-1.8438 z"
+       style="opacity:0.5" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path10936-5"
+       d="m 166.7846,840.3622 a 0.8213286,1.001098 0 1 0 0.0768,2 h 12.3064 a 0.8205098,1.0001 0 1 0 0,-2 h -12.3064 a 0.8205098,1.0001 0 0 0 -0.0768,0 z"
+       style="opacity:1" />
+    <path
+       class="success"
+       inkscape:connector-curvature="0"
+       id="path15546"
+       d="m 170,835.3622 h 5 1 l -3,3 z"
        style="opacity:1" />
   </g>
 </svg>

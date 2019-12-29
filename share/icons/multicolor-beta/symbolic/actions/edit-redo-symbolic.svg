@@ -7,13 +7,26 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   version="1.1"
-   id="svg1"
-   width="16"
-   height="16"
-   viewBox="0 0 16 16"
+   inkscape:version="1.1-dev (6039630, 2019-12-20)"
    sodipodi:docname="edit-redo-symbolic.svg"
-   inkscape:version="1.1-dev (f9311a1ba8, 2019-12-25)">
+   viewBox="0 0 16 16"
+   height="16"
+   width="16"
+   id="svg1"
+   version="1.1">
+  <metadata
+     id="metadata2991">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs2989" />
   <style
      id="s0">.base { fill:#000000; }
 .success { fill:#009909; }
@@ -25,60 +38,46 @@
      id="s2">
 @import '../../highlights.css';
 </style>
-  <metadata
-     id="metadata2991">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <defs
-     id="defs2989" />
   <sodipodi:namedview
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     id="namedview"
-     showgrid="true"
-     inkscape:zoom="32.000001"
-     inkscape:cx="8.2570721"
-     inkscape:cy="8.631246"
-     inkscape:window-width="2192"
-     inkscape:window-height="1169"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:window-maximized="1"
+     inkscape:document-rotation="0"
      inkscape:current-layer="edit-redo"
-     inkscape:document-rotation="0">
+     inkscape:window-maximized="1"
+     inkscape:window-y="-6"
+     inkscape:window-x="65"
+     inkscape:window-height="890"
+     inkscape:window-width="1296"
+     inkscape:cy="8"
+     inkscape:cx="8"
+     inkscape:zoom="41.125"
+     showgrid="true"
+     id="namedview"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10">
     <inkscape:grid
-       type="xygrid"
-       id="grid" />
+       id="grid"
+       type="xygrid" />
   </sodipodi:namedview>
   <g
-     transform="translate(-317,-1107.3621)"
+     inkscape:label="00368"
      id="edit-redo"
-     inkscape:label="00368">
+     transform="translate(-317,-1107.3621)">
     <path
-       class="error "
-       inkscape:connector-curvature="0"
-       id="path140"
-       d="M 332.80232,1113.3621 328,1118.1645 v -9.6049 z"
-       style="opacity:1;stroke-width:1.20059" />
-    <path
-       inkscape:connector-curvature="0"
-       id="rect37650"
+       style="opacity:0;fill:none"
        d="m 317,1107.3621 h 16 v 16 h -16 z"
-       style="opacity:0;fill:none" />
+       id="rect37650"
+       inkscape:connector-curvature="0" />
     <path
        class="error"
        inkscape:connector-curvature="0"
-       id="path37654"
-       d="m 328,1112.362 v 2 h -5.5 c -0.8403,0 -1.5,0.66 -1.5,1.5 v 0.5 0.5 c 0,0.841 0.6597,1.5 1.5,1.5 h 0.5 v 2 h -0.5 c -1.9212,0 -3.5,-1.579 -3.5,-3.5 v -0.5 -0.5 c 0,-1.921 1.5788,-3.5 3.5,-3.5 z"
+       id="path37652"
+       d="m 332,1113.362 -4,4 v -8 z"
        style="opacity:1" />
+    <path
+       class="error"
+       style="opacity:1"
+       d="m 328,1112.362 v 2 h -5.5 c -0.8403,0 -1.5,0.66 -1.5,1.5 v 0.5 0.5 c 0,0.841 0.6597,1.5 1.5,1.5 h 0.5 v 2 h -0.5 c -1.9212,0 -3.5,-1.579 -3.5,-3.5 v -0.5 -0.5 c 0,-1.921 1.5788,-3.5 3.5,-3.5 z"
+       id="path37654"
+       inkscape:connector-curvature="0" />
   </g>
 </svg>

@@ -8,14 +8,14 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    inkscape:version="1.1-dev (6039630, 2019-12-20)"
-   sodipodi:docname="edit-undo-symbolic.svg"
+   sodipodi:docname="transform-affect-stroke-symbolic.svg"
    viewBox="0 0 16 16"
    height="16"
    width="16"
    id="svg1"
    version="1.1">
   <metadata
-     id="metadata1784">
+     id="metadata1766">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -26,13 +26,14 @@
     </rdf:RDF>
   </metadata>
   <defs
-     id="defs1782" />
+     id="defs1764" />
   <style
-     id="s0">.base { fill:#000000; }
+     id="s0">
+.base { fill:#000000; }
 .success { fill:#009909; }
 .warning { fill:#FF1990; }
 .error { fill:#00AAFF; }
-.dark {  }
+.dark { }
 </style>
   <style
      id="s2">
@@ -59,25 +60,38 @@
        type="xygrid" />
   </sodipodi:namedview>
   <g
-     inkscape:label="00367"
-     id="edit-undo"
-     transform="translate(-285,-1107.3621)">
+     id="transform-affect-stroke"
+     inkscape:label="00157"
+     transform="matrix(1,0,0,0.999999,-348,-527.36152)">
     <path
        style="opacity:0;fill:none"
-       d="m 285,1107.3621 h 16 v 16 h -16 z"
-       id="rect10176"
+       d="m 348,527.36218 h 16 v 16 h -16 z"
+       id="rect30527"
        inkscape:connector-curvature="0" />
     <path
-       class="warning"
        style="opacity:1"
-       d="m 286,1113.362 4,4 v -8 z"
-       id="path15820"
+       d="m 350,528.3622 v 2 h 1.323 8.677 v 4 1 h 2 v -2 -4 -1 h -1.4622 -9.6178 z"
+       id="path5760"
        inkscape:connector-curvature="0" />
     <path
-       class="warning"
        inkscape:connector-curvature="0"
-       id="path7283"
-       d="m 290,1112.362 v 2 h 5.5 c 0.8403,0 1.5,0.66 1.5,1.5 v 0.5 0.5 c 0,0.841 -0.6597,1.5 -1.5,1.5 H 295 v 2 h 0.5 c 1.9212,0 3.5,-1.579 3.5,-3.5 v -0.5 -0.5 c 0,-1.921 -1.5788,-3.5 -3.5,-3.5 z"
+       id="path5762"
+       d="m 350,532.3622 v 1 h 0.5 6.5 v 1.5 0.5 h 1 v -0.5 -2 -0.5 h -0.5 -7 z"
+       style="opacity:1" />
+    <path
+       style="opacity:1"
+       d="m 353,539.342 v 2.0202 h 2 v -2.0202 z"
+       id="path5770"
+       inkscape:connector-curvature="0" />
+    <path
+       style="opacity:1"
+       d="m 356,541.3622 v -2 h 3 v -2 l 2.9883,3 -2.9883,3 v -2 z"
+       id="path30562"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path30570"
+       d="m 350,539.3622 v 2.0201 h 2 v -2.0201 z"
        style="opacity:1" />
   </g>
 </svg>

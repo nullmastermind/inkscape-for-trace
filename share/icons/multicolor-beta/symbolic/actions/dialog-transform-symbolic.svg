@@ -7,15 +7,20 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   inkscape:version="1.1-dev (6039630, 2019-12-20)"
-   sodipodi:docname="dialog-transform-symbolic.svg"
-   viewBox="0 0 16 16"
-   height="16"
-   width="16"
+   version="1.1"
    id="svg1"
-   version="1.1">
+   width="16"
+   height="16"
+   viewBox="0 0 16 16"
+   sodipodi:docname="dialog-transform-symbolic.svg"
+   inkscape:version="1.1-dev (6039630, 2019-12-20)">
   <style
-     id="style6275"></style>
+     id="style6275">.base { fill:#000000; }
+.success { fill:#009909; }
+.warning { fill:#FF1990; }
+.error { fill:#00AAFF; }
+.dark {  }
+</style>
   <metadata
      id="metadata5712">
     <rdf:RDF>
@@ -33,76 +38,81 @@
        attempt_force_join="true"
        miter_limit="100"
        linejoin_type="extrp_arc"
-       line_width="1.93639"
+       line_width="2"
        linecap_type="butt"
        lpeversion="1"
        is_visible="true"
-       id="path-effect6279"
+       id="path-effect5292"
        effect="join_type" />
+    <inkscape:path-effect
+       effect="join_type"
+       id="path-effect6279"
+       is_visible="true"
+       lpeversion="1"
+       linecap_type="butt"
+       line_width="1.93639"
+       linejoin_type="extrp_arc"
+       miter_limit="100"
+       attempt_force_join="true" />
   </defs>
   <sodipodi:namedview
-     inkscape:snap-global="false"
-     inkscape:document-rotation="0"
-     inkscape:current-layer="svg1"
-     inkscape:window-maximized="1"
-     inkscape:window-y="-6"
-     inkscape:window-x="65"
-     inkscape:window-height="890"
-     inkscape:window-width="1296"
-     inkscape:cy="10.16331"
-     inkscape:cx="9.1696963"
-     inkscape:zoom="29.079766"
-     showgrid="true"
-     id="namedview"
-     guidetolerance="10"
+     objecttolerance="10"
      gridtolerance="10"
-     objecttolerance="10">
+     guidetolerance="10"
+     id="namedview"
+     showgrid="true"
+     inkscape:zoom="29.079766"
+     inkscape:cx="4.9049724"
+     inkscape:cy="8.5478263"
+     inkscape:window-width="1296"
+     inkscape:window-height="890"
+     inkscape:window-x="65"
+     inkscape:window-y="-6"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1"
+     inkscape:document-rotation="0"
+     inkscape:snap-global="false">
     <inkscape:grid
-       id="grid"
-       type="xygrid" />
+       type="xygrid"
+       id="grid" />
   </sodipodi:namedview>
   <g
-     id="dialog-transform"
+     transform="translate(-135,-787.3622)"
      inkscape:label="00068"
-     transform="translate(-135,-787.3622)">
+     id="dialog-transform">
     <path
-       transform="translate(0,512.3622)"
-       style="opacity:0;fill:none"
-       d="m 135,275 h 16 v 16 h -16 z"
+       inkscape:connector-curvature="0"
        id="rect18662"
-       inkscape:connector-curvature="0" />
+       d="m 135,275 h 16 v 16 h -16 z"
+       style="opacity:0;fill:none"
+       transform="translate(0,512.3622)" />
     <path
-       sodipodi:nodetypes="cccccccc"
-       style="opacity:1"
-       d="m 137.0312,281.5 c 0,0.1711 -0.013,0.3323 0,0.5 H 135 l 3,3 3,-3 h -1.9375 c -0.0187,-0.1668 0,-0.3282 0,-0.5 z"
-       transform="translate(0,512.3622)"
+       inkscape:connector-curvature="0"
        id="path18678"
-       inkscape:connector-curvature="0" />
-    <path
-       transform="matrix(1.333333,0,0,1.333333,-48.66667,417.6955)"
-       style="opacity:1"
-       d="m 146,282.5 a 1.5,1.5 0 0 1 -1.5,1.5 1.5,1.5 0 0 1 -1.5,-1.5 1.5,1.5 0 0 1 1.5,-1.5 1.5,1.5 0 0 1 1.5,1.5 z"
-       id="path18701"
-       inkscape:connector-curvature="0" />
-    <path
        transform="translate(0,512.3622)"
+       d="M 137.0312,282 H 135 l 3,3 3,-3 h -1.9375 z"
        style="opacity:1"
-       d="m 135,286 h 6 v 5 h -6 z"
+       sodipodi:nodetypes="cccccc" />
+    <path
+       class="success"
+       inkscape:connector-curvature="0"
+       id="path18701"
+       d="m 146,282.5 a 1.5,1.5 0 0 1 -1.5,1.5 1.5,1.5 0 0 1 -1.5,-1.5 1.5,1.5 0 0 1 1.5,-1.5 1.5,1.5 0 0 1 1.5,1.5 z"
+       style="opacity:1"
+       transform="matrix(1.333333,0,0,1.333333,-48.66667,417.6955)" />
+    <path
+       inkscape:connector-curvature="0"
        id="rect18705"
-       inkscape:connector-curvature="0" />
+       d="m 135,286 h 6 v 5 h -6 z"
+       style="opacity:1"
+       transform="translate(0,512.3622)" />
   </g>
   <path
-     inkscape:path-effect="#path-effect6279"
-     d="m 4.0140076,6.9422462 c 10e-8,-2.7582997 2.2448866,-5.003186 5.0031863,-5.003186 2.7583001,1e-7 5.0031861,2.2448865 5.0031861,5.0031862 0,2.7582997 -2.244886,5.0031866 -5.0031861,5.0031866 l 10e-8,1.93639 c 3.837506,0 6.939576,-3.102071 6.939576,-6.9395766 0,-3.8375057 -3.10207,-6.93957607 -6.9395761,-6.93957615 -3.8375057,-8e-8 -6.9395761,3.10207015 -6.9395763,6.93957585 z"
-     sodipodi:arc-type="arc"
-     sodipodi:open="true"
-     sodipodi:end="1.5707963"
-     sodipodi:start="3.1415927"
-     sodipodi:ry="5.9713812"
-     sodipodi:rx="5.9713812"
-     sodipodi:cy="6.9422464"
-     sodipodi:cx="9.0171938"
-     sodipodi:type="arc"
-     id="path6277"
-     style="opacity:1;fill:#000000;stroke:none;stroke-width:1.93639;fill-rule:nonzero" />
+     inkscape:original-d="m 9.017194,12.913628 c 3.297903,0 5.971381,-2.673479 5.971381,-5.9713816 0,-3.2979027 -2.673478,-5.9026048 -5.9713811,-5.9026048 -3.2979027,-10e-8 -5.9713813,2.3007505 -5.9713813,5.5986532 V 7.537994"
+     inkscape:path-effect="#path-effect5292"
+     sodipodi:nodetypes="csssc"
+     inkscape:connector-curvature="0"
+     d="m 9.017194,13.913628 c 3.855232,0 6.971381,-3.11615 6.971381,-6.9713816 0,-3.8721202 -3.114032,-6.9026048 -6.9713811,-6.9026048 -3.8211331,-1.2e-7 -6.9713813,2.6927553 -6.9713813,6.5986532 V 7.537994 h 2 V 6.6382948 c 0,-2.6899075 2.196709,-4.5986533 4.9713813,-4.5986532 2.7384571,0 4.9713811,2.1789196 4.9713811,4.9026048 0,2.7405738 -2.230807,4.9713816 -4.971381,4.9713816 z"
+     style="opacity:1;fill:#000000;fill-rule:nonzero;stroke:none;stroke-width:2"
+     id="path6277" />
 </svg>
