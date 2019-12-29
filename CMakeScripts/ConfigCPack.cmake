@@ -5,8 +5,6 @@
 
 ## General ##
 
-set(INKSCAPE_CPACK_PREFIX ${PROJECT_NAME}-${INKSCAPE_VERSION}_${INKSCAPE_REVISION_DATE}_${INKSCAPE_REVISION_HASH})
-
 set(CPACK_PACKAGE_NAME "Inkscape")
 set(CPACK_PACKAGE_VENDOR "Inkscape")
 set(CPACK_PACKAGE_VERSION_MAJOR ${INKSCAPE_VERSION_MAJOR}) # TODO: Can be set via project(), see CMAKE_PROJECT_VERSION_PATCH
@@ -19,7 +17,7 @@ set(CPACK_PACKAGE_HOMEPAGE_URL "https://inkscape.org")
 set(CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}/share/branding/inkscape.svg") # TODO: Can any generator make use of this?
 set(CPACK_PACKAGE_CONTACT "Inkscape developers <inkscape-devel@lists.inkscape.org>")
 
-set(CPACK_PACKAGE_FILE_NAME ${INKSCAPE_CPACK_PREFIX})
+set(CPACK_PACKAGE_FILE_NAME ${INKSCAPE_DIST_PREFIX})
 set(CPACK_PACKAGE_CHECKSUM "SHA256")
 
 set(CPACK_PACKAGE_EXECUTABLES "inkscape;Inkscape;inkview;Inkview")
@@ -39,7 +37,7 @@ set(CPACK_WARN_ON_ABSOLUTE_INSTALL_DESTINATION TRUE)
 
 # specific config for source packaging (note this is used by the 'dist' target)
 set(CPACK_SOURCE_GENERATOR "TXZ")
-set(CPACK_SOURCE_PACKAGE_FILE_NAME ${INKSCAPE_CPACK_PREFIX})
+set(CPACK_SOURCE_PACKAGE_FILE_NAME ${INKSCAPE_DIST_PREFIX})
 set(CPACK_SOURCE_IGNORE_FILES "~$;[.]swp$;/[.]svn/;/[.]git/;.gitignore;/build/;/obj*/;cscope.*;.gitlab*;.coveragerc;*.md;")
 
 

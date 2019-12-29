@@ -273,7 +273,6 @@ message("-----------------------------------------------------------------------
 message("PROJECT_NAME:            ${PROJECT_NAME}")
 message("INKSCAPE_VERSION:        ${INKSCAPE_VERSION}")
 message("INKSCAPE_DIST_PREFIX:    ${INKSCAPE_DIST_PREFIX}")
-message("INKSCAPE_CPACK_PREFIX:   ${INKSCAPE_CPACK_PREFIX}")
 message("")
 
 # cmake info
