@@ -21,6 +21,15 @@ void text_remove_all_kerns();
 void text_flow_into_shape();
 void text_unflow();
 void flowtext_to_text();
+enum text_ref_t { TEXT_REF_DEF = 0x1, TEXT_REF_EXTERNAL = 0x2, TEXT_REF_INTERNAL = 0x4, };
+using text_refs_t = std::vector<std::pair<Glib::ustring, text_ref_t>>;
+template<typename InIter>
+text_refs_t text_categorize_refs(SPDocument *doc, InIter begin, InIter end, text_ref_t which);
+template<typename InIterOrig, typename InIterCopy>
+void text_relink_refs(text_refs_t const &refs,
+        InIterOrig origBegin, InIterOrig origEnd, InIterCopy copyBegin);
+
+#include "text-chemistry-impl.h"
 
 #endif // SEEN_TEXT_CHEMISTRY_H
 

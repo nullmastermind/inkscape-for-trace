@@ -50,6 +50,7 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 #include "path-chemistry.h"
 #include "selection.h"
 #include "text-editing.h"
+#include "text-chemistry.h"
 #include "verbs.h"
 
 #include "display/cairo-utils.h"
@@ -463,23 +464,37 @@ void ObjectSet::duplicate(bool suppressDone, bool duplicateLayer)
     // them, just what we need
     sort(reprs.begin(),reprs.end(),sp_repr_compare_position_bool);
 
-    std::vector<Inkscape::XML::Node*> newsel;
-
     std::vector<const gchar *> old_ids;
     std::vector<const gchar *> new_ids;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool relink_clones = prefs->getBool("/options/relinkclonesonduplicate/value");
     const bool fork_livepatheffects = prefs->getBool("/options/forklpeonduplicate/value", true);
 
-    for(std::vector<Inkscape::XML::Node*>::const_iterator i=reprs.begin();i!=reprs.end();++i){
-        Inkscape::XML::Node *old_repr = *i;
+    // check ref-d shapes, split in defs|internal|external
+    // add external & defs to reprs
+    auto text_refs = text_categorize_refs(doc, reprs.begin(), reprs.end(),
+            static_cast<text_ref_t>(TEXT_REF_DEF | TEXT_REF_EXTERNAL | TEXT_REF_INTERNAL));
+    for (auto const &ref : text_refs) {
+        if (ref.second == TEXT_REF_DEF || ref.second == TEXT_REF_EXTERNAL) {
+            reprs.push_back(doc->getObjectById(ref.first)->getRepr());
+        }
+    }
+
+    std::vector<Inkscape::XML::Node*> copies;
+    for(auto old_repr : reprs) {
         Inkscape::XML::Node *parent = old_repr->parent();
         Inkscape::XML::Node *copy = old_repr->duplicate(xml_doc);
 
-        if(! duplicateLayer)
+        if (!duplicateLayer || sp_repr_is_def(old_repr)) {
             parent->appendChild(copy);
-        else
+        } else if (sp_repr_is_layer(old_repr)) {
             parent->addChild(copy, old_repr);
+        } else {
+            // duplicateLayer, non-layer, non-def
+            // external nodes -- append to new layer
+            // text_relink will ignore extra nodes in layer children
+            copies[0]->appendChild(copy);
+        }
 
         if (relink_clones) {
             SPObject *old_obj = doc->getObjectByRepr(old_repr);
@@ -496,8 +511,22 @@ void ObjectSet::duplicate(bool suppressDone, bool duplicateLayer)
             }
         }
 
-        newsel.push_back(copy);
+        copies.push_back(copy);
         Inkscape::GC::release(copy);
+    }
+
+    // Relink copied text nodes to copied reference shapes
+    text_relink_refs(text_refs, reprs.begin(), reprs.end(), copies.begin());
+
+    // copies contains def nodes, we don't want that in our selection
+    std::vector<Inkscape::XML::Node*> newsel;
+    if (!duplicateLayer) {
+        // compute newsel, by removing def nodes from copies
+        for (auto node : copies) {
+            if (!sp_repr_is_def(node)) {
+                newsel.push_back(node);
+            }
+        }
     }
 
     if (relink_clones) {
@@ -566,7 +595,7 @@ void ObjectSet::duplicate(bool suppressDone, bool duplicateLayer)
     if(!duplicateLayer)
         setReprList(newsel);
     else{
-        SPObject* new_layer = doc->getObjectByRepr(newsel[0]);
+        SPObject* new_layer = doc->getObjectByRepr(copies[0]);
         gchar* name = g_strdup_printf(_("%s copy"), new_layer->label());
         desktop()->layer_manager->renameLayer( new_layer, name, TRUE );
         g_free(name);

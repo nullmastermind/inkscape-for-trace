@@ -43,7 +43,7 @@ class Node;
 class SPStyle {
 
 public:
-    
+
     SPStyle(SPDocument *document = nullptr, SPObject *object = nullptr);// document is ignored if valid object given
     ~SPStyle();
     const std::vector<SPIBase *> properties();
@@ -186,7 +186,7 @@ public:
     /* Text Decoration ----------------------- */
 
     /** text decoration (css2 16.3.1) */
-    T<SP_PROP_TEXT_DECORATION, SPITextDecoration> text_decoration; 
+    T<SP_PROP_TEXT_DECORATION, SPITextDecoration> text_decoration;
     /** CSS 3 2.1, 2.2, 2.3 */
     /** Not done yet, test_decoration3        = css3 2.4*/
     T<SP_PROP_TEXT_DECORATION_LINE, SPITextDecorationLine> text_decoration_line;
@@ -266,7 +266,7 @@ public:
     T<SP_PROP_MARKER_START, SPIString> marker_start;
     T<SP_PROP_MARKER_MID, SPIString> marker_mid;
     T<SP_PROP_MARKER_END, SPIString> marker_end;
-    SPIString* marker_ptrs[SP_MARKER_LOC_QTY]; 
+    SPIString* marker_ptrs[SP_MARKER_LOC_QTY];
 
     /* Filter effects ------------------------ */
 
@@ -387,4 +387,4 @@ Glib::ustring css2_escape_quote(char const *val);
   End:
 */
 // vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
- 
+

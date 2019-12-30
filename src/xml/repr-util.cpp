@@ -247,7 +247,7 @@ gchar const *sp_xml_ns_prefix_uri(gchar const *prefix)
     return uri;
 }
 
-/** 
+/**
  *  Works for different-parent objects, so long as they have a common ancestor. Return value:
  *    0    positions are equivalent
  *    1    first object's position is greater than the second
@@ -292,7 +292,7 @@ int sp_repr_compare_position(Inkscape::XML::Node const *first, Inkscape::XML::No
        its list of children), it should be equivalent to walk along the
        children and see which we encounter first (returning 0 iff first
        == second).
-       
+
        Given that this function is used solely for sorting, we can use a
        similar approach to do the sort: gather the things to be sorted,
        into an STL vector (to allow random access and faster

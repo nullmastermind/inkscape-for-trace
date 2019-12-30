@@ -28,7 +28,7 @@
 #include "object/sp-root.h"
 #include "style.h"
 
-enum ID_REF_TYPE { REF_HREF, REF_STYLE, REF_URL, REF_CLIPBOARD };
+enum ID_REF_TYPE { REF_HREF, REF_STYLE, REF_SHAPES, REF_URL, REF_CLIPBOARD };
 
 struct IdReference {
     ID_REF_TYPE type;
@@ -64,6 +64,16 @@ const char* SPIPaint_properties[] = {
 };
 #define NUM_SPIPAINT_PROPERTIES (sizeof(SPIPaint_properties) / sizeof(*SPIPaint_properties))
 
+const SPIShapes SPStyle::* SPIShapes_members[] = {
+    reinterpret_cast<SPIShapes SPStyle::*>(&SPStyle::shape_inside),
+    reinterpret_cast<SPIShapes SPStyle::*>(&SPStyle::shape_subtract),
+};
+const char *SPIShapes_properties[] = {
+    "shape-inside",
+    "shape-subtract",
+};
+#define NUM_SPISHAPES_PROPERTIES (sizeof(SPIShapes_properties) / sizeof(*SPIShapes_properties))
+
 const char* other_url_properties[] = {
     "clip-path",
     "color-profile",
@@ -85,6 +95,56 @@ const char* clipboard_properties[] = {
     "marker-start"
 };
 #define NUM_CLIPBOARD_PROPERTIES (sizeof(clipboard_properties) / sizeof(*clipboard_properties))
+
+/**
+ * Given an reference (idref), make it point to to_obj instead
+ */
+static void
+fix_ref(IdReference const &idref, SPObject *to_obj, const char *old_id) {
+    switch (idref.type) {
+        case REF_HREF: {
+            gchar *new_uri = g_strdup_printf("#%s", to_obj->getId());
+            idref.elem->setAttribute(idref.attr, new_uri);
+            g_free(new_uri);
+            break;
+        }
+        case REF_STYLE: {
+            sp_style_set_property_url(idref.elem, idref.attr, to_obj, false);
+            break;
+        }
+        case REF_SHAPES: {
+            SPCSSAttr* css = sp_repr_css_attr (idref.elem->getRepr(), "style");
+            std::string prop = sp_repr_css_property (css, idref.attr, nullptr);
+            std::string oid; oid.append("url(#").append(old_id).append(")");
+            auto pos = prop.find(oid);
+            if (pos != std::string::npos) {
+                std::string nid; nid.append("url(#").append(to_obj->getId()).append(")");
+                prop.replace(pos, oid.size(), nid);
+                sp_repr_css_set_property (css, idref.attr, prop.c_str());
+                sp_repr_css_set (idref.elem->getRepr(), css, "style");
+            } else {
+                std::cerr << "Failed to switch id -- shouldn't happen" << std::endl;
+            }
+            break;
+        }
+        case REF_URL: {
+            gchar *url = g_strdup_printf("url(#%s)", to_obj->getId());
+            idref.elem->setAttribute(idref.attr, url);
+            g_free(url);
+            break;
+        }
+        case REF_CLIPBOARD: {
+            SPCSSAttr *style = sp_repr_css_attr(idref.elem->getRepr(), "style");
+            gchar *url = g_strdup_printf("url(#%s)", to_obj->getId());
+            sp_repr_css_set_property(style, idref.attr, url);
+            g_free(url);
+            Glib::ustring style_string;
+            sp_repr_css_write_string(style, style_string);
+            idref.elem->setAttributeOrRemoveIfEmpty("style", style_string);
+            break;
+        }
+    }
+}
 
 /**
  *  Build a table of places where IDs are referenced, for a given element.
@@ -144,6 +204,16 @@ find_references(SPObject *elem, refmap_type &refmap)
         }
     }
 
+    /* check for shape-inside/shape-subtract that contain multiple url(#..) each */
+    for (unsigned i = 0; i < NUM_SPISHAPES_PROPERTIES; ++i) {
+        const SPIShapes SPStyle::*prop = SPIShapes_members[i];
+        const SPIShapes *shapes = &(style->*prop);
+        for (const auto &shape_id : shapes->shape_ids) {
+            IdReference idref = { REF_SHAPES, elem, SPIShapes_properties[i] };
+            refmap[shape_id].push_back(idref);
+        }
+    }
+
     /* check for url(#...) references in 'filter' */
     const SPIFilter *filter = &(style->filter);
     if (filter->href) {
@@ -179,7 +249,7 @@ find_references(SPObject *elem, refmap_type &refmap)
             }
         }
     }
-    
+
     // recurse
     for (auto& child: elem->children)
     {
@@ -204,7 +274,7 @@ change_clashing_ids(SPDocument *imported_doc, SPDocument *current_doc,
         // To try to preserve any meaningfulness that the original ID
         // may have had, the new ID is the old ID followed by a hyphen
         // and one or more digits.
-        
+
         if (SP_IS_GRADIENT(elem)) {
             SPObject *cd_obj =  current_doc->getObjectById(id);
 
@@ -215,7 +285,7 @@ change_clashing_ids(SPDocument *imported_doc, SPDocument *current_doc,
                  }
              }
         }
-        
+
         if (fix_clashing_ids) {
             std::string old_id(id);
             std::string new_id(old_id + '-');
@@ -230,7 +300,7 @@ change_clashing_ids(SPDocument *imported_doc, SPDocument *current_doc,
             elem->setAttribute("id", new_id);
                 // Make a note of this change, if we need to fix up refs to it
             if (refmap.find(old_id) != refmap.end())
-            id_changes->push_back(id_changeitem_type(elem, old_id));
+                id_changes->push_back(id_changeitem_type(elem, old_id));
         }
     }
 
@@ -256,34 +326,7 @@ fix_up_refs(refmap_type const &refmap, const id_changelist_type &id_changes)
         std::list<IdReference>::const_iterator it;
         const std::list<IdReference>::const_iterator it_end = pos->second.end();
         for (it = pos->second.begin(); it != it_end; ++it) {
-            switch (it->type) {
-                case REF_HREF: {
-                    gchar *new_uri = g_strdup_printf("#%s", obj->getId());
-                    it->elem->setAttribute(it->attr, new_uri);
-                    g_free(new_uri);
-                    break;
-                }
-                case REF_STYLE: {
-                    sp_style_set_property_url(it->elem, it->attr, obj, false);
-                    break;
-                }
-                case REF_URL: {
-                    gchar *url = g_strdup_printf("url(#%s)", obj->getId());
-                    it->elem->setAttribute(it->attr, url);
-                    g_free(url);
-                    break;
-                }
-                case REF_CLIPBOARD: {
-                    SPCSSAttr *style = sp_repr_css_attr(it->elem->getRepr(), "style");
-                    gchar *url = g_strdup_printf("url(#%s)", obj->getId());
-                    sp_repr_css_set_property(style, it->attr, url);
-                    g_free(url);
-                    Glib::ustring style_string;
-                    sp_repr_css_write_string(style, style_string);
-                    it->elem->setAttributeOrRemoveIfEmpty("style", style_string);
-                    break;
-                }
-            }
+            fix_ref(*it, obj, pp->second.c_str());
         }
     }
 }
@@ -300,7 +343,7 @@ prevent_id_clashes(SPDocument *imported_doc, SPDocument *current_doc)
     refmap_type refmap;
     id_changelist_type id_changes;
     SPObject *imported_root = imported_doc->getRoot();
-        
+
     find_references(imported_root, refmap);
     change_clashing_ids(imported_doc, current_doc, imported_root, refmap,
                         &id_changes);
@@ -324,34 +367,7 @@ change_def_references(SPObject *from_obj, SPObject *to_obj)
         std::list<IdReference>::const_iterator it;
         const std::list<IdReference>::const_iterator it_end = pos->second.end();
         for (it = pos->second.begin(); it != it_end; ++it) {
-            switch (it->type) {
-                case REF_HREF: {
-                    gchar *new_uri = g_strdup_printf("#%s", to_obj->getId());
-                    it->elem->setAttribute(it->attr, new_uri);
-                    g_free(new_uri);
-                    break;
-                }
-                case REF_STYLE: {
-                    sp_style_set_property_url(it->elem, it->attr, to_obj, false);
-                    break;
-                }
-                case REF_URL: {
-                    gchar *url = g_strdup_printf("url(#%s)", to_obj->getId());
-                    it->elem->setAttribute(it->attr, url);
-                    g_free(url);
-                    break;
-                }
-                case REF_CLIPBOARD: {
-                    SPCSSAttr *style = sp_repr_css_attr(it->elem->getRepr(), "style");
-                    gchar *url = g_strdup_printf("url(#%s)", to_obj->getId());
-                    sp_repr_css_set_property(style, it->attr, url);
-                    g_free(url);
-                    Glib::ustring style_string;
-                    sp_repr_css_write_string(style, style_string);
-                    it->elem->setAttributeOrRemoveIfEmpty("style", style_string);
-                    break;
-                }
-            } 
+            fix_ref(*it, to_obj, from_obj->getId());
         }
     }
 }

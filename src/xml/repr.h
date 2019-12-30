@@ -148,7 +148,7 @@ Inkscape::XML::Node *sp_repr_lookup_name(Inkscape::XML::Node *repr,
 Inkscape::XML::Node const *sp_repr_lookup_name(Inkscape::XML::Node const *repr,
                                                char const *name,
                                                int maxdepth = -1);
-                                               
+
 std::vector<Inkscape::XML::Node const *> sp_repr_lookup_name_many(Inkscape::XML::Node const *repr,
                                                                   char const *name,
                                                                   int maxdepth = -1);
@@ -175,6 +175,63 @@ std::vector<Inkscape::XML::Node *> sp_repr_lookup_property_many(Inkscape::XML::N
 
 inline Inkscape::XML::Node *sp_repr_document_first_child(Inkscape::XML::Document const *doc) {
     return const_cast<Inkscape::XML::Node *>(doc->firstChild());
+}
+
+inline bool sp_repr_is_def(Inkscape::XML::Node const *node) {
+    return node->parent() != nullptr &&
+        node->parent()->name() != nullptr &&
+        strcmp("svg:defs", node->parent()->name()) == 0;
+}
+
+inline bool sp_repr_is_layer(Inkscape::XML::Node const *node) {
+    return node->attribute("inkscape:groupmode") != nullptr &&
+        strcmp("layer", node->attribute("inkscape:groupmode")) == 0;
+}
+
+/**
+ * @brief Visit all descendants recursively.
+ *
+ * Traverse all descendants of node and call visitor on it.
+ * Stop descending when visitor returns false
+ *
+ * @param node The root node to start visiting
+ * @param visitor The visitor lambda (Node *) -> bool
+ *                If visitor returns false child nodes of current node are not visited.
+ * @relatesalso Inkscape::XML::Node
+ */
+template <typename Visitor>
+void sp_repr_visit_descendants(Inkscape::XML::Node *node, Visitor visitor) {
+    if (!visitor(node)) {
+        return;
+    }
+    for (Inkscape::XML::Node *child = node->firstChild();
+            child != nullptr;
+            child = child->next()) {
+        sp_repr_visit_descendants(child, visitor);
+    }
+}
+
+/**
+ * @brief Visit descendants of 2 nodes in parallel.
+ * The assumption is that one a and b trees are the same in terms of structure (like one is
+ * a duplicate of the other).
+ *
+ * @param a first node tree root
+ * @param b second node tree root
+ * @param visitor The visitor lambda (Node *, Node *) -> bool
+ *                If visitor returns false child nodes are not visited.
+ * @relatesalso Inkscape::XML::Node
+ */
+template <typename Visitor>
+void sp_repr_visit_descendants(Inkscape::XML::Node *a, Inkscape::XML::Node *b, Visitor visitor) {
+    if (!visitor(a, b)) {
+        return;
+    }
+    for (Inkscape::XML::Node *ac = a->firstChild(), *bc = b->firstChild();
+            ac != nullptr && bc != nullptr;
+            ac = ac->next(), bc = bc->next()) {
+        sp_repr_visit_descendants(ac, bc, visitor);
+    }
 }
 
 #endif // SEEN_SP_REPR_H

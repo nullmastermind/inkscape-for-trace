@@ -422,7 +422,7 @@ Geom::Affine SPText::set_transform(Geom::Affine const &xform) {
         }
     }
     // we cannot optimize textpath because changing its fontsize will break its match to the path
-    
+
     if (SP_IS_TEXT_TEXTPATH (this)) {
         if (!this->_optimizeTextpathText) {
             return xform;
@@ -1057,25 +1057,7 @@ Inkscape::XML::Node* SPText::get_first_rectangle()
 // Get a list of shape in 'shape-inside' as a vector of strings.
 std::vector<Glib::ustring> SPText::get_shapes() const
 {
-    std::vector<Glib::ustring> shapes;
-    char const *val;
-    if (style->shape_inside.set && (val = style->shape_inside.value())) {
-        static Glib::RefPtr<Glib::Regex> regex = Glib::Regex::create("url\\(#([A-z0-9#]*)\\)");
-        Glib::MatchInfo matchInfo;
-
-        // Glib::Regex::match stack-use-after-scope workaround
-        // https://gitlab.gnome.org/GNOME/glibmm/issues/66
-        Glib::ustring val_stack = val;
-
-        regex->match(val_stack, matchInfo);
-
-        while (matchInfo.matches()) {
-            shapes.push_back(matchInfo.fetch(1));
-            matchInfo.next();
-        }
-    }
-
-    return shapes;
+    return style->shape_inside.shape_ids;
 }
 
 

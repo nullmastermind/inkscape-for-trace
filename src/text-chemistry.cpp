@@ -15,6 +15,7 @@
 #include <cstring>
 #include <string>
 #include <glibmm/i18n.h>
+#include <glibmm/regex.h>
 
 
 #include "desktop.h"
@@ -106,7 +107,7 @@ text_put_on_path()
 
         if (!SP_FLOWTEXT(text)->layout.outputExists()) {
             desktop->getMessageStack()->
-                flash(Inkscape::WARNING_MESSAGE, 
+                flash(Inkscape::WARNING_MESSAGE,
                       _("The flowed text(s) must be <b>visible</b> in order to be put on a path."));
         }
 
@@ -176,7 +177,7 @@ text_put_on_path()
     text->removeAttribute("x");
     text->removeAttribute("y");
 
-    DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_TEXT, 
+    DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
                        _("Put text on path"));
 }
 
@@ -209,7 +210,7 @@ text_remove_from_path()
     if (!did) {
         desktop->getMessageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No texts-on-paths</b> in the selection."));
     } else {
-        DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_TEXT, 
+        DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
                            _("Remove text from path"));
         std::vector<SPItem *> vec(selection->items().begin(), selection->items().end());
         selection->setList(vec); // reselect to update statusbar description
@@ -274,7 +275,7 @@ text_remove_all_kerns()
     if (!did) {
         desktop->getMessageStack()->flash(Inkscape::ERROR_MESSAGE, _("Select <b>text(s)</b> to remove kerns from."));
     } else {
-        DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_TEXT, 
+        DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
                            _("Remove manual kerns"));
     }
 }
@@ -536,7 +537,7 @@ text_unflow ()
         }
     }
 
-    DocumentUndo::done(doc, SP_VERB_CONTEXT_TEXT, 
+    DocumentUndo::done(doc, SP_VERB_CONTEXT_TEXT,
                        _("Unflow flowed text"));
 }
 
@@ -548,7 +549,7 @@ flowtext_to_text()
     Inkscape::Selection *selection = desktop->getSelection();
 
     if (selection->isEmpty()) {
-        desktop->getMessageStack()->flash(Inkscape::WARNING_MESSAGE, 
+        desktop->getMessageStack()->flash(Inkscape::WARNING_MESSAGE,
                                                  _("Select <b>flowed text(s)</b> to convert."));
         return;
     }
@@ -559,7 +560,7 @@ flowtext_to_text()
     std::vector<Inkscape::XML::Node*> reprs;
     std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
     for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();++i){
-        
+
         SPItem *item = *i;
 
         if (!SP_IS_FLOWTEXT(item))
@@ -582,7 +583,7 @@ flowtext_to_text()
         SPItem *new_item = reinterpret_cast<SPItem *>(desktop->getDocument()->getObjectByRepr(repr));
         new_item->doWriteTransform(item->transform);
         new_item->updateRepr();
-    
+
         Inkscape::GC::release(repr);
         item->deleteObject();
 
@@ -590,10 +591,10 @@ flowtext_to_text()
     }
 
     if (did) {
-        DocumentUndo::done(desktop->getDocument(), 
+        DocumentUndo::done(desktop->getDocument(),
                            SP_VERB_OBJECT_FLOWTEXT_TO_TEXT,
                            _("Convert flowed text to text"));
-        selection->setReprList(reprs);        
+        selection->setReprList(reprs);
     } else if (ignored) {
         // no message for (did && ignored) because it is immediately overwritten
         desktop->getMessageStack()->
@@ -608,6 +609,27 @@ flowtext_to_text()
 
 }
 
+
+Glib::ustring text_relink_shapes_str(gchar const *prop, std::map<Glib::ustring, Glib::ustring> const &old_to_new) {
+    std::vector<Glib::ustring> shapes_url = Glib::Regex::split_simple(" ", prop);
+    Glib::ustring res;
+    for (auto shape_url : shapes_url) {
+        if (shape_url.compare(0, 5, "url(#") != 0 || shape_url.compare(shape_url.size() - 1, 1, ")") != 0) {
+            std::cerr << "text_relink_shapes_str: Invalid shape value: " << shape_url << std::endl;
+        } else {
+            auto old_id = shape_url.substr(5, shape_url.size() - 6);
+            auto find_it = old_to_new.find(old_id);
+            if (find_it != old_to_new.end()) {
+                res.append("url(#").append(find_it->second).append(") ");
+            } else {
+                std::cerr << "Failed to replace reference " << old_id << std::endl;
+            }
+        }
+    }
+    // remove trailing space
+    res.resize(res.size() - 1);
+    return res;
+}
 
 /*
   Local Variables:

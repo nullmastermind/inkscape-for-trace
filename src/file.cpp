@@ -956,7 +956,7 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
             continue;
         }
         if (!strcmp(obj->name(), "inkscape:clipboard")) {
-    	clipboard = obj;
+            clipboard = obj;
             continue;
         }
         Inkscape::XML::Node *obj_copy = obj->duplicate(target_document->getReprDoc());
@@ -1042,7 +1042,7 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     bool cancelled = false;
-    
+
     // store mouse pointer location before opening any dialogs, so we can drop the item where initially intended
     auto pointer_location = desktop->point();
 

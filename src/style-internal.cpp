@@ -211,7 +211,7 @@ SPIFloat::operator==(const SPIBase& rhs) {
 
 // SPIScale24 -----------------------------------------------------------
 
-void 
+void
 SPIScale24::read( gchar const *str ) {
 
     if( !str ) return;
@@ -1319,7 +1319,7 @@ SPIShapes::read( gchar const *str) {
 
 // Used for 'color', 'text-decoration-color', 'flood-color', 'lighting-color', and 'stop-color'.
 // (The last three have yet to be implemented.)
-// CSS3: 'currentcolor' is allowed value and is equal to inherit for the 'color' property. 
+// CSS3: 'currentcolor' is allowed value and is equal to inherit for the 'color' property.
 // FIXME: We should preserve named colors, hsl colors, etc.
 void SPIColor::read( gchar const *str ) {
 
@@ -1935,7 +1935,7 @@ void
 SPIFilter::cascade( const SPIBase* const parent ) {
     if( const SPIFilter* p = dynamic_cast<const SPIFilter*>(parent) ) {
         if( inherit ) {  // Only inherits if 'inherit' true/
-            // FIXME: This is rather unlikely so ignore for now. 
+            // FIXME: This is rather unlikely so ignore for now.
             (void)p;
             std::cerr << "SPIFilter::cascade: value 'inherit' not supported." << std::endl;
         } else {
@@ -2130,7 +2130,7 @@ SPIFontSize::read( gchar const *str ) {
                 type = SP_FONT_SIZE_LENGTH;
             }
         }
-        return; 
+        return;
     }
 }
 
@@ -2260,7 +2260,7 @@ SPIFontSize::merge( const SPIBase* const parent ) {
                 literal  = p->literal;
                 value    = p->value;
                 computed = p->computed; // Just to be sure
-            } else if ( type == SP_FONT_SIZE_LENGTH  && 
+            } else if ( type == SP_FONT_SIZE_LENGTH  &&
                         unit != SP_CSS_UNIT_EM &&
                         unit != SP_CSS_UNIT_EX ) {
                 // Absolute size, computed value already set
@@ -2546,11 +2546,11 @@ SPIBaselineShift::cascade( const SPIBase* const parent ) {
             } else if (literal == SP_CSS_BASELINE_SHIFT_SUB ) {
                 // Should use subscript position from font relative to alphabetic baseline
                 // OpenOffice, Adobe: -0.33, Word -0.14, LaTex about -0.2.
-                computed = -0.2 * pfont_size->computed; 
+                computed = -0.2 * pfont_size->computed;
             } else if (literal == SP_CSS_BASELINE_SHIFT_SUPER ) {
                 // Should use superscript position from font relative to alphabetic baseline
                 // OpenOffice, Adobe: 0.33, Word 0.35, LaTex about 0.45.
-                computed =  0.4 * pfont_size->computed; 
+                computed =  0.4 * pfont_size->computed;
             } else {
                 /* Illegal value */
             }
@@ -2561,10 +2561,10 @@ SPIBaselineShift::cascade( const SPIBase* const parent ) {
         } else if (type == SP_BASELINE_SHIFT_LENGTH) {
             switch (unit) {
                 case SP_CSS_UNIT_EM:
-                    computed = value * pfont_size->computed; 
+                    computed = value * pfont_size->computed;
                     break;
                 case SP_CSS_UNIT_EX:
-                    computed = value * 0.5 * pfont_size->computed; 
+                    computed = value * 0.5 * pfont_size->computed;
                     break;
                 default:
                     /* No change */
@@ -2665,7 +2665,7 @@ SPITextDecorationLine::read( gchar const *str ) {
                     if ((slen == 12) && strneq(hstr, "line-through", slen)){  found_line_through = true; break; }
                     if ((slen ==  5) && strneq(hstr, "blink",        slen)){  found_blink        = true; break; }
                     if ((slen ==  4) && strneq(hstr, "none",         slen)){                             break; }
-                    
+
                     hit_one = false; // whatever this thing is, we do not recognize it
                     break;
                 }
@@ -2776,7 +2776,7 @@ SPITextDecorationStyle::read( gchar const *str ) {
         bool found_dashed       = false;
         bool found_wavy         = false;
         bool found_one          = false;
-        
+
         // this method ignores inlineid keys and extra delimiters, so " ,,, style hello" will set style and ignore hello
         // if more than one style is present, the first is used
         const gchar *hstr = str;
@@ -2991,7 +2991,7 @@ SPITextDecoration::merge( const SPIBase* const parent ) {
 bool
 SPITextDecoration::operator==(const SPIBase& rhs) {
     if( const SPITextDecoration* r = dynamic_cast<const SPITextDecoration*>(&rhs) ) {
-        return (style->text_decoration_line == r->style->text_decoration_line && 
+        return (style->text_decoration_line == r->style->text_decoration_line &&
                 SPIBase::operator==(rhs));
     } else {
         return false;
@@ -3136,7 +3136,7 @@ template class SPIEnum<uint_least8_t>;
 
 
 
-/* ----------------------------  NOTES  ----------------------------- */                        
+/* ----------------------------  NOTES  ----------------------------- */
 
 /*
  * opacity's effect is cumulative; we set the new value to the combined effect.  The default value

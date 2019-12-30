@@ -44,6 +44,7 @@
 #include "live_effects/parameter/path.h"
 #include "ui/tools/text-tool.h"
 #include "text-editing.h"
+#include "text-chemistry.h"
 #include "ui/tools-switch.h"
 #include "path-chemistry.h"
 #include "util/units.h"
@@ -115,6 +116,7 @@ private:
     void _copyHatch(SPHatch *);
     void _copyTextPath(SPTextPath *);
     Inkscape::XML::Node *_copyNode(Inkscape::XML::Node *, Inkscape::XML::Document *, Inkscape::XML::Node *);
+    Inkscape::XML::Node *_copyIgnoreDup(Inkscape::XML::Node *, Inkscape::XML::Document *, Inkscape::XML::Node *);
 
     bool _pasteImage(SPDocument *doc);
     bool _pasteText(SPDesktop *desktop);
@@ -723,10 +725,17 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
     }
 
     // copy the representation of the items
-    std::vector<SPObject*> sorted_items;
-    for(auto i=itemlist.begin();i!=itemlist.end();++i)
-        sorted_items.push_back(*i);
-    sort(sorted_items.begin(),sorted_items.end(),sp_object_compare_position_bool);
+    std::vector<SPObject*> sorted_items(itemlist.begin(), itemlist.end());
+    {
+        // Get external text references and add them to sorted_items
+        auto ext_refs = text_categorize_refs(selection->document(),
+                sorted_items.begin(), sorted_items.end(),
+                TEXT_REF_EXTERNAL);
+        for (auto const &ext_ref : ext_refs) {
+            sorted_items.push_back(selection->document()->getObjectById(ext_ref.first));
+        }
+    }
+    sort(sorted_items.begin(), sorted_items.end(), sp_object_compare_position_bool);
 
     //remove already copied elements from cloned_elements
     std::vector<SPItem*>tr;
@@ -739,7 +748,6 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
     }
 
     sorted_items.insert(sorted_items.end(),cloned_elements.begin(),cloned_elements.end());
-
     for(std::vector<SPObject*>::const_iterator i=sorted_items.begin();i!=sorted_items.end();++i){
         SPItem *item = dynamic_cast<SPItem*>(*i);
         if (item) {
@@ -874,6 +882,18 @@ void ClipboardManagerImpl::_copyUsedDefs(SPItem *item)
         if (textpath) {
             _copyTextPath(textpath);
         }
+        if (text) {
+            for (auto &&shape_prop_ptr : {
+                    reinterpret_cast<SPIShapes SPStyle::*>(&SPStyle::shape_inside),
+                    reinterpret_cast<SPIShapes SPStyle::*>(&SPStyle::shape_subtract) }) {
+                for (auto const &shape_id : (text->style->*shape_prop_ptr).shape_ids) {
+                    auto shape_repr = text->document->getObjectById(shape_id)->getRepr();
+                    if (sp_repr_is_def(shape_repr)) {
+                        _copyIgnoreDup(shape_repr, _doc, _defs);
+                    }
+                }
+            }
+        }
     }
 
     // Copy clipping objects
@@ -998,13 +1018,7 @@ void ClipboardManagerImpl::_copyTextPath(SPTextPath *tp)
     if (!path) {
         return;
     }
-    Inkscape::XML::Node *path_node = path->getRepr();
-
-    // Do not copy the text path to defs if it's already copied
-    if (sp_repr_lookup_child(_root, "id", path_node->attribute("id"))) {
-        return;
-    }
-    _copyNode(path_node, _doc, _defs);
+    _copyIgnoreDup(path->getRepr(), _doc, _defs);
 }
 
 
@@ -1017,6 +1031,18 @@ void ClipboardManagerImpl::_copyTextPath(SPTextPath *tp)
  */
 Inkscape::XML::Node *ClipboardManagerImpl::_copyNode(Inkscape::XML::Node *node, Inkscape::XML::Document *target_doc, Inkscape::XML::Node *parent)
 {
+    Inkscape::XML::Node *dup = node->duplicate(target_doc);
+    parent->appendChild(dup);
+    Inkscape::GC::release(dup);
+    return dup;
+}
+
+Inkscape::XML::Node *ClipboardManagerImpl::_copyIgnoreDup(Inkscape::XML::Node *node, Inkscape::XML::Document *target_doc, Inkscape::XML::Node *parent)
+{
+    if (sp_repr_lookup_child(_root, "id", node->attribute("id"))) {
+        // node already copied
+        return nullptr;
+    }
     Inkscape::XML::Node *dup = node->duplicate(target_doc);
     parent->appendChild(dup);
     Inkscape::GC::release(dup);
@@ -1258,6 +1284,7 @@ SPDocument *ClipboardManagerImpl::_retrieveClipboard(Glib::ustring required_targ
     SPDocument *tempdoc = nullptr;
     try {
         tempdoc = (*in)->open(filename);
+        tempdoc->doRef();
     } catch (...) {
     }
     g_unlink(filename);
