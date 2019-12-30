@@ -876,7 +876,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
         cachect.setOperator(CAIRO_OPERATOR_SOURCE);
         cachect.setSource(&intermediate);
         cachect.fill();
-        Geom::OptIntRect cl = _cacheRect(true);
+        Geom::OptIntRect cl = _cacheRect();
         if (_filter && render_filters && cl) {
             _cache->markClean(*cl);
         } else {
@@ -1185,28 +1185,22 @@ inline void expandByScale(Geom::IntRect &rect, double scale)
 }
 
 
-Geom::OptIntRect DrawingItem::_cacheRect(bool cropped)
+Geom::OptIntRect DrawingItem::_cacheRect()
 {
     Geom::OptIntRect r = _drawbox & _drawing.cacheLimit();
-    if (_filter && _drawing.renderFilters() && r && r != _drawbox) {
+    if (_filter && _drawing.cacheLimit() && _drawing.renderFilters() && r && r != _drawbox) {
         // we check unfiltered item is emought inside the cache area to  render properly
         Geom::OptIntRect canvas = r;
         expandByScale(*canvas, 0.5);
         Geom::OptIntRect valid = Geom::intersect(canvas, _bbox);
         if (!valid) {
-            expandByScale(*r, 2);
             valid = _bbox;
             // contract the item _bbox to get reduced size to render. $ seems good enought
             expandByScale(*valid, 0.5);
             // now we get the nearest point to cache area
-            Geom::IntPoint center = (*r).midpoint();
+            Geom::IntPoint center = (*_drawing.cacheLimit()).midpoint();
             Geom::IntPoint nearest = (*valid).nearestEdgePoint(center);
             r.expandTo(nearest);
-        }
-        valid = _drawbox & r;
-        // to reduce banding if item filtered overflow iarea area
-        if (cropped && r && _drawbox != valid) {
-            expandByScale(*r, 5. / 6.);
         }
         return _drawbox & r;
     }
