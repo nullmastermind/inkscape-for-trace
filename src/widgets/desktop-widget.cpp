@@ -48,6 +48,7 @@
 
 #include "helper/action.h"
 
+#include "object/sp-guide.h"
 #include "object/sp-image.h"
 #include "object/sp-namedview.h"
 #include "object/sp-root.h"
@@ -1043,6 +1044,23 @@ SPDesktopWidget::eventoutside(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
 {
     if ((event->type == GDK_MOTION_NOTIFY || event->type == GDK_BUTTON_RELEASE) && !dtw->_canvas->_inside &&
         dtw->desktop->event_context->_button1on) {
+        if (dtw->desktop->active_guide) {
+            if (event->type == GDK_MOTION_NOTIFY) {
+                Geom::Point const motion_w(event->motion.x, event->motion.y);
+                Geom::Point motion_dt(dtw->desktop->w2d(motion_w));
+                dtw->desktop->active_guide->moveto(motion_dt, false);
+                dtw->desktop->set_coordinate_status(motion_dt);
+            } else {
+                dtw->desktop->active_guide->moveto(dtw->desktop->active_guide->getPoint(), false);
+                dtw->desktop->active_guide->set_normal(dtw->desktop->active_guide->getNormal(), false);
+                sp_guide_remove(dtw->desktop->active_guide);
+                dtw->desktop->active_guide = nullptr;
+                Glib::wrap(GTK_WIDGET(dtw->desktop->getCanvas()))
+                    ->get_window()
+                    ->set_cursor(dtw->desktop->event_context->cursor);
+                DocumentUndo::done(dtw->desktop->getDocument(), SP_VERB_NONE, _("Delete guide"));
+            }
+        }
         sp_desktop_root_handler(nullptr, event, dtw->desktop);
     }
 

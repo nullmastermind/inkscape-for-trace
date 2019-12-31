@@ -186,7 +186,7 @@ public:
     SPCanvasItem  *canvas_debug;  ///< shows tiling
     SPCSSAttr     *current;     ///< current style
     bool           _focusMode;  ///< Whether we're focused working or general working
-
+    SPGuide *active_guide;
     unsigned int dkey;
     unsigned int number;
     guint window_state;
