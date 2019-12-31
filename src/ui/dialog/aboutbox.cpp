@@ -81,9 +81,9 @@ AboutBox::AboutBox()
     // Set Application metadata, which will be automatically
     // inserted into text widgets by the Gtk::AboutDialog parent class
     // clang-format off
-    set_program_name  (  "Inkscape");
+    set_program_name  (  "Inkscape" );
     set_version       (  Inkscape::version_string);
-    set_logo_icon_name(  INKSCAPE_ICON("org.inkscape.Inkscape"));
+    set_logo_icon_name( "" ); // Disable icon
     set_website       (  "https://www.inkscape.org");
     set_website_label (_("Inkscape website"));
     set_license_type    (Gtk::LICENSE_GPL_3_0);
@@ -131,9 +131,9 @@ void AboutBox::build_splash_widget() {
 
         auto viewer = Gtk::manage(new Inkscape::UI::View::SVGViewWidget(doc));
 
-        // temporary hack: halve the dimensions so the dialog will fit
-        double width=doc->getWidth().value("px") / 2.0;
-        double height=doc->getHeight().value("px") / 2.0;
+        // temporary hack: halve the dimensions so the dialog will fit, 80% scale
+        double width=doc->getWidth().value("px") * 0.8;
+        double height=doc->getHeight().value("px") * 0.8;
         viewer->setResize(width, height);
 
         _splash_widget = new Gtk::AspectFrame();
