@@ -151,7 +151,6 @@ SPDesktop::SPDesktop()
     , _active(false)
     , _image_render_observer(this, "/options/rendering/imageinoutlinemode")
     , grids_visible(false)
-    , active_guide(nullptr)
 {
     layers = new Inkscape::LayerModel();
     layers->_layer_activated_signal.connect(sigc::bind(sigc::ptr_fun(_layer_activated), this));

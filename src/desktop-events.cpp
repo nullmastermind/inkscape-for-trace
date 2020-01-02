@@ -151,7 +151,6 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
             break;
         case GDK_MOTION_NOTIFY:
             if (drag_type != SP_DRAG_NONE) {
-                desktop->active_guide = guide;
                 Geom::Point const motion_w(event->motion.x,
                                            event->motion.y);
                 Geom::Point motion_dt(desktop->w2d(motion_w));
@@ -324,7 +323,6 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                     moved = false;
                     desktop->set_coordinate_status(event_dt);
                 }
-                desktop->active_guide = nullptr;
                 drag_type = SP_DRAG_NONE;
                 sp_canvas_item_ungrab(item);
                 ret=TRUE;
