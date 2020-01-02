@@ -215,10 +215,8 @@ public:
 
     /// Image surface storing the contents of the widget
     cairo_surface_t *_backing_store;
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
     /// This should be e.g. a cairo-xlib surface that is used to allocate _backing_store; might be NULL.
     cairo_surface_t *_surface_for_similar;
-#endif
     /// Area of the widget that has up-to-date content
     cairo_region_t *_clean_region;
     /// Widget background, defaults to white

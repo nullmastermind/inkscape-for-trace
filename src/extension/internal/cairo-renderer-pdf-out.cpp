@@ -243,9 +243,7 @@ CairoRendererPdfOutput::init ()
             "<name>Portable Document Format</name>\n"
             "<id>org.inkscape.output.pdf.cairorenderer</id>\n"
             "<param name=\"PDFversion\" gui-text=\"" N_("Restrict to PDF version:") "\" type=\"optiongroup\" appearance=\"combo\" >\n"
-#if (CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0))
                 "<option value='PDF-1.5'>" N_("PDF 1.5") "</option>\n"
-#endif
                 "<option value='PDF-1.4'>" N_("PDF 1.4") "</option>\n"
             "</param>\n"
             "<param name=\"textToPath\" gui-text=\"" N_("Text output options:") "\" type=\"optiongroup\" appearance=\"radio\">\n"

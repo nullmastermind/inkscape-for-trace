@@ -801,13 +801,6 @@ CairoRenderContext::setupSurface(double width, double height)
     _width = width;
     _height = height;
 
-    Inkscape::SVGOStringStream os_bbox;
-    Inkscape::SVGOStringStream os_pagebbox;
-    os_bbox.setf(std::ios::fixed); // don't use scientific notation
-    os_pagebbox.setf(std::ios::fixed); // don't use scientific notation
-    os_bbox << "%%BoundingBox: 0 0 " << (int)ceil(width) << (int)ceil(height);  // apparently, the numbers should be integers. (see bug 380501)
-    os_pagebbox << "%%PageBoundingBox: 0 0 " << (int)ceil(width) << (int)ceil(height);
-
     cairo_surface_t *surface = nullptr;
     cairo_matrix_t ctm;
     cairo_matrix_init_identity (&ctm);
@@ -829,12 +822,6 @@ CairoRenderContext::setupSurface(double width, double height)
             }
             cairo_ps_surface_restrict_to_level(surface, (cairo_ps_level_t)_ps_level);
             cairo_ps_surface_set_eps(surface, (cairo_bool_t) _eps);
-            // Cairo calculates the bounding box itself, however we want to override this. See Launchpad bug #380501
-#if (CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 11, 2))
-//            cairo_ps_dsc_comment(surface, os_bbox.str().c_str());
-//            cairo_ps_dsc_begin_page(surface);
-//            cairo_ps_dsc_comment(surface, os_pagebbox.str().c_str());
-#endif
             break;
 #endif
         default:

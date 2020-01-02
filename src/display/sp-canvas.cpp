@@ -983,9 +983,7 @@ static void sp_canvas_init(SPCanvas *canvas)
     canvas->_drawing_disabled = false;
 
     canvas->_backing_store = nullptr;
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
     canvas->_surface_for_similar = nullptr;
-#endif
     canvas->_clean_region = cairo_region_create();
     canvas->_background = cairo_pattern_create_rgb(1, 1, 1);
     canvas->_background_is_checkerboard = false;
@@ -1054,12 +1052,10 @@ void SPCanvas::dispose(GObject *object)
         cairo_surface_destroy(canvas->_backing_store);
         canvas->_backing_store = nullptr;
     }
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
     if (canvas->_surface_for_similar) {
         cairo_surface_destroy(canvas->_surface_for_similar);
         canvas->_surface_for_similar = nullptr;
     }
-#endif
     if (canvas->_clean_region) {
         cairo_region_destroy(canvas->_clean_region);
         canvas->_clean_region = nullptr;
@@ -1184,7 +1180,6 @@ void SPCanvas::handle_size_allocate(GtkWidget *widget, GtkAllocation *allocation
 
     // Resize backing store.
     cairo_surface_t *new_backing_store = nullptr;
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
     if (canvas->_surface_for_similar != nullptr) {
 
         // Size in device pixels. Does not set device scale.
@@ -1194,7 +1189,6 @@ void SPCanvas::handle_size_allocate(GtkWidget *widget, GtkAllocation *allocation
                                                allocation->width  * canvas->_device_scale,
                                                allocation->height * canvas->_device_scale);
     }
-#endif
     if (new_backing_store == nullptr) {
 
         // Size in device pixels. Does not set device scale.
@@ -2261,7 +2255,6 @@ gboolean SPCanvas::handle_draw(GtkWidget *widget, cairo_t *cr) {
 
     SPCanvas *canvas = SP_CANVAS(widget);
 
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
     if (canvas->_surface_for_similar == nullptr && canvas->_backing_store != nullptr) {
 
         // Device scale is copied but since this is only created one time, we'll
@@ -2295,7 +2288,6 @@ gboolean SPCanvas::handle_draw(GtkWidget *widget, cairo_t *cr) {
         cairo_surface_destroy(canvas->_backing_store);
         canvas->_backing_store = new_backing_store;
     }
-#endif
 
     // Blit from the backing store, without regard for the clean region.
     // This is necessary because GTK clears the widget for us, which causes
@@ -2681,7 +2673,6 @@ void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrol
         assert(_backing_store);
         // this cairo operation is slow, improvements welcome
         cairo_surface_t *new_backing_store = nullptr;
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
         if (_surface_for_similar != nullptr)
 
             // Size in device pixels. Does not set device scale.
@@ -2690,7 +2681,6 @@ void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrol
                                                 CAIRO_FORMAT_ARGB32,
                                                 allocation.width  * _device_scale,
                                                 allocation.height * _device_scale);
-#endif
         if (new_backing_store == nullptr)
             // Size in device pixels. Does not set device scale.
             new_backing_store =

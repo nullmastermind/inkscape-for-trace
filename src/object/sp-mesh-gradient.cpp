@@ -154,14 +154,8 @@ Inkscape::XML::Node* SPMeshGradient::write(Inkscape::XML::Document *xml_doc, Ink
 }
 
 cairo_pattern_t* SPMeshGradient::pattern_new(cairo_t * /*ct*/,
-#if defined(MESH_DEBUG) || (CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 11, 4))
-				     Geom::OptRect const &bbox,
-				     double opacity
-#else
-				     Geom::OptRect const & /*bbox*/,
-				     double /*opacity*/
-#endif
-				     )
+  Geom::OptRect const &bbox,
+	double opacity)
 {
   using Geom::X;
   using Geom::Y;
@@ -174,7 +168,6 @@ cairo_pattern_t* SPMeshGradient::pattern_new(cairo_t * /*ct*/,
 
   cairo_pattern_t *cp = nullptr;
 
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 11, 4)
   SPMeshNodeArray* my_array = &array;
 
   if( type_set ) {
@@ -265,15 +258,6 @@ cairo_pattern_t* SPMeshGradient::pattern_new(cairo_t * /*ct*/,
     gs2user *= bbox2user;
   }
   ink_cairo_pattern_set_matrix(cp, gs2user.inverse());
-
-#else
-  static bool shown = false;
-  if( !shown ) {
-    std::cout << "sp_mesh_create_pattern: needs cairo >= 1.11.4, using "
-	      << cairo_version_string() << std::endl;
-    shown = true;
-  }
-#endif
 
   /*
     cairo_pattern_t *cp = cairo_pattern_create_radial(
