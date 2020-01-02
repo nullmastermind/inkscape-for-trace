@@ -200,8 +200,12 @@ SpellCheck::SpellCheck () :
 
     show_all_children ();
 
-    // run it at once
-    onStart ();
+    tree_view.set_sensitive(false);
+    accept_button.set_sensitive(false);
+    ignore_button.set_sensitive(false);
+    ignoreonce_button.set_sensitive(false);
+    add_button.set_sensitive(false);
+    stop_button.set_sensitive(false);
 }
 
 SpellCheck::~SpellCheck()
@@ -372,12 +376,6 @@ SpellCheck::init(SPDesktop *d)
 {
     desktop = d;
 
-    tree_view.set_sensitive(false);
-    accept_button.set_sensitive(false);
-    ignore_button.set_sensitive(false);
-    ignoreonce_button.set_sensitive(false);
-    add_button.set_sensitive(false);
-    stop_button.set_sensitive(false);
     start_button.set_sensitive(false);
 
     _stops = 0;
