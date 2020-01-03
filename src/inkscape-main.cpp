@@ -119,8 +119,8 @@ static void set_macos_app_bundle_env(gchar const *program_dir)
     Glib::setenv("PATH", bundle_resources_bin_dir + ":" + Glib::getenv("PATH"));
 
     // DYLD_LIBRARY_PATH
-    // TODO: This is a workaround and marked for removal with next build pipeline
-    // update (using rpath).
+    // This is required to make Python GTK bindings work as they use dlopen()
+    // to load libraries.
     Glib::setenv("DYLD_LIBRARY_PATH", bundle_resources_lib_dir);
 }
 
