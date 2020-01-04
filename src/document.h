@@ -88,7 +88,6 @@ namespace Inkscape {
 }
 
 class SPDefs;
-class SP3DBox;
 class Persp3D;
 class Persp3DImpl;
 class SPItemCtx;
