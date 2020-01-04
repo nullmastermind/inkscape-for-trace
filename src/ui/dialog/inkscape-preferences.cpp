@@ -1528,6 +1528,11 @@ void InkscapePreferences::initPageIO()
     _svgoutput_check_writing.init( _("Writing"), "/options/svgoutput/check_on_writing", true);
     _page_svgoutput.add_line( true, "", _svgoutput_check_writing, "", _("Check attributes and style properties on writing out SVG files"), false);
 
+    _page_svgoutput.add_group_header(_("Legacy Options"));
+
+    _svgoutput_usesodipodiabsref.init(_("Linked images use absolute paths"), "/options/svgoutput/usesodipodiabsref", false);
+    _page_svgoutput.add_line(true, "", _svgoutput_usesodipodiabsref, "", _("If set, add sodipodi:absref attribute to linked images"), false);
+
     this->AddPage(_page_svgoutput, _("SVG output"), iter_io, PREFS_PAGE_IO_SVGOUTPUT);
 
     // SVG Export Options ==========================================

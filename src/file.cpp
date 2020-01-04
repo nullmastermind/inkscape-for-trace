@@ -1060,7 +1060,7 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
     }
 
     if (doc != nullptr) {
-        Inkscape::XML::rebase_hrefs(doc, in_doc->getDocumentBase(), true);
+        Inkscape::XML::rebase_hrefs(doc, in_doc->getDocumentBase(), false);
         Inkscape::XML::Document *xml_in_doc = in_doc->getReprDoc();
 
         prevent_id_clashes(doc, in_doc);

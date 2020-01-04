@@ -460,6 +460,7 @@ protected:
 
     // SVG Output page:
     UI::Widget::PrefCheckButton   _svgoutput_usenamedcolors;
+    UI::Widget::PrefCheckButton   _svgoutput_usesodipodiabsref;
     UI::Widget::PrefSpinButton    _svgoutput_numericprecision;
     UI::Widget::PrefSpinButton    _svgoutput_minimumexponent;
     UI::Widget::PrefCheckButton   _svgoutput_inlineattrs;

@@ -200,6 +200,10 @@ void Inkscape::XML::rebase_hrefs(SPDocument *const doc, gchar const *const new_b
             ir->setAttribute("sodipodi:absref", url.toNativeFilename());
         }
 
+        if (!spns) {
+            ir->setAttribute("sodipodi:absref", nullptr);
+        }
+
         auto href_str = url.str(new_base_url_str.c_str());
         href_str = Inkscape::uri_to_iri(href_str.c_str());
 

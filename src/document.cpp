@@ -924,7 +924,9 @@ void SPDocument::do_change_uri(gchar const *const filename, bool const rebase)
     DocumentUndo::setUndoSensitive(this, false);
 
     if (rebase) {
-        Inkscape::XML::rebase_hrefs(this, new_document_base, true);
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        bool use_sodipodi_absref = prefs->getBool("/options/svgoutput/usesodipodiabsref", false);
+        Inkscape::XML::rebase_hrefs(this, new_document_base, use_sodipodi_absref);
     }
 
     if (strncmp(new_document_name, "ink_ext_XXXXXX", 14))	// do not use temporary filenames
