@@ -58,9 +58,9 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     add(*_mainbox);
 
     // Desktop widget (=> MultiPaned)
-    _desktop_widget = sp_desktop_widget_new(_document);
+    _desktop_widget = new SPDesktopWidget(_document);
     _desktop_widget->window = this;
-    gtk_widget_show(GTK_WIDGET(_desktop_widget));
+    _desktop_widget->show();
     _desktop = _desktop_widget->desktop;
 
     // Menu bar (must come after desktop widget creation as we need _desktop)
@@ -73,7 +73,7 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     // Status bar
 
     // _mainbox->pack_start(*_menubar, false, false);
-    gtk_box_pack_start(GTK_BOX(_mainbox->gobj()), GTK_WIDGET(_desktop_widget), true, true, 0); // Can't use Glib::wrap()
+    _mainbox->pack_start(*Gtk::manage(_desktop_widget), true, true);
 
     // ================== Callbacks ==================
     signal_delete_event().connect(      sigc::mem_fun(*_desktop, &SPDesktop::onDeleteUI));

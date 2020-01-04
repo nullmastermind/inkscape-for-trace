@@ -53,16 +53,8 @@ class Ruler;
 } // namespace UI
 } // namespace Inkscape
 
-#define SP_TYPE_DESKTOP_WIDGET SPDesktopWidget::getType()
-#define SP_DESKTOP_WIDGET(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_DESKTOP_WIDGET, SPDesktopWidget))
-#define SP_DESKTOP_WIDGET_CLASS(k) (G_TYPE_CHECK_CLASS_CAST ((k), SP_TYPE_DESKTOP_WIDGET, SPDesktopWidgetClass))
-#define SP_IS_DESKTOP_WIDGET(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_DESKTOP_WIDGET))
-#define SP_IS_DESKTOP_WIDGET_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE ((k), SP_TYPE_DESKTOP_WIDGET))
-
-/**
- * Create a new SPDesktopWidget
- */
-SPDesktopWidget *sp_desktop_widget_new(SPDocument* document);
+#define SP_DESKTOP_WIDGET(o) dynamic_cast<SPDesktopWidget*>(o)
+#define SP_IS_DESKTOP_WIDGET(o) bool(dynamic_cast<SPDesktopWidget const *>(o))
 
 void sp_desktop_widget_show_decorations(SPDesktopWidget *dtw, gboolean show);
 void sp_desktop_widget_update_hruler (SPDesktopWidget *dtw);
@@ -75,11 +67,18 @@ void sp_dtw_desktop_activate (SPDesktopWidget *dtw);
 void sp_dtw_desktop_deactivate (SPDesktopWidget *dtw);
 
 /// A GtkEventBox on an SPDesktop.
-struct SPDesktopWidget {
-    SPViewWidget viewwidget;
+class SPDesktopWidget : public SPViewWidget {
+    using parent_type = SPViewWidget;
 
     SPDesktopWidget();
-    ~SPDesktopWidget();
+
+  public:
+    SPDesktopWidget(SPDocument *document);
+    ~SPDesktopWidget() override;
+
+    void on_size_allocate(Gtk::Allocation &) override;
+    void on_realize() override;
+    void on_unrealize() override;
 
     unsigned int update : 1;
 
@@ -88,8 +87,6 @@ struct SPDesktopWidget {
     SPDesktop *desktop;
 
     Gtk::Window *window;
-
-    static void dispose(GObject *object);
 
 private:
     // Flags for ruler event handling
@@ -204,9 +201,9 @@ public:
         { return _dtw->shutdown(); }
         void destroy() override
         {
-            if(_dtw->window != nullptr)
-                delete _dtw->window;
+            auto *window = _dtw->window;
             _dtw->window = nullptr;
+            delete window; // may also delete _dtw and this
         }
 
         void storeDesktopPosition() override { _dtw->storeDesktopPosition(); }
@@ -279,9 +276,6 @@ public:
 
     Inkscape::UI::Widget::Dock* getDock();
 
-    static GType getType();
-    static SPDesktopWidget* createInstance(SPDocument *document);
-
     void updateNamedview();
     void update_guides_lock();
 
@@ -309,7 +303,6 @@ public:
     GtkWidget *commands_toolbox;
     GtkWidget *snap_toolbox;
 
-    static void init(SPDesktopWidget *widget);
     void layoutWidgets();
 
     void namedviewModified(SPObject *obj, guint flags);
@@ -338,11 +331,6 @@ public:
     bool on_ruler_box_button_press_event(GdkEventButton *event, Gtk::EventBox *widget, bool horiz);
     bool on_ruler_box_button_release_event(GdkEventButton *event, Gtk::EventBox *widget, bool horiz);
     bool on_ruler_box_motion_notify_event(GdkEventMotion *event, Gtk::EventBox *widget, bool horiz);
-};
-
-/// The SPDesktopWidget vtable
-struct SPDesktopWidgetClass {
-    SPViewWidgetClass parent_class;
 };
 
 #endif /* !SEEN_SP_DESKTOP_WIDGET_H */

@@ -93,17 +93,6 @@ using Inkscape::Util::unit_table;
 //---------------------------------------------------------------------
 /* SPDesktopWidget */
 
-static void sp_desktop_widget_class_init (SPDesktopWidgetClass *klass);
-
-static void sp_desktop_widget_finalize(GObject *);
-static void sp_desktop_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation);
-static void sp_desktop_widget_realize (GtkWidget *widget);
-
-static gdouble sp_dtw_zoom_value_to_display (gdouble value);
-static gdouble sp_dtw_zoom_display_to_value (gdouble value);
-
-SPViewWidgetClass *dtw_parent_class;
-
 class CMSPrefWatcher {
 public:
     CMSPrefWatcher() :
@@ -234,52 +223,6 @@ SPDesktopWidget::window_get_pointer()
     return Geom::Point(x, y);
 }
 
-static GTimer *overallTimer = nullptr;
-
-/**
- * Registers SPDesktopWidget class and returns its type number.
- */
-GType SPDesktopWidget::getType()
-{
-    static GType type = 0;
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPDesktopWidgetClass),
-            nullptr, // base_init
-            nullptr, // base_finalize
-            (GClassInitFunc)sp_desktop_widget_class_init,
-            nullptr, // class_finalize
-            nullptr, // class_data
-            sizeof(SPDesktopWidget),
-            0, // n_preallocs
-            (GInstanceInitFunc)SPDesktopWidget::init,
-            nullptr // value_table
-        };
-        type = g_type_register_static(SP_TYPE_VIEW_WIDGET, "SPDesktopWidget", &info, static_cast<GTypeFlags>(0));
-        // Begin a timer to watch for the first desktop to appear on-screen
-        overallTimer = g_timer_new();
-    }
-    return type;
-}
-
-/**
- * SPDesktopWidget vtable initialization
- */
-static void
-sp_desktop_widget_class_init (SPDesktopWidgetClass *klass)
-{
-    dtw_parent_class = SP_VIEW_WIDGET_CLASS(g_type_class_peek_parent(klass));
-
-    GObjectClass *object_class = G_OBJECT_CLASS(klass);
-    GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
-
-    object_class->dispose = SPDesktopWidget::dispose;
-    object_class->finalize = sp_desktop_widget_finalize;
-
-    widget_class->size_allocate = sp_desktop_widget_size_allocate;
-    widget_class->realize = sp_desktop_widget_realize;
-}
-
 /**
  * Callback for changes in size of the canvas table (i.e. the container for
  * the canvas, the rulers etc).
@@ -303,27 +246,6 @@ SPDesktopWidget::canvas_tbl_size_allocate(Gtk::Allocation& allocation)
     update_rulers();
 }
 
-/**
- * Callback for SPDesktopWidget object initialization.
- */
-void SPDesktopWidget::init( SPDesktopWidget *dtw )
-{
-    // TODO Don't let Glib allocate a non-trivial C++ class. For example
-    // convert SPDesktopWidget and SPViewWidget to Glibmm derived classes,
-    // or separate out the C++ member variables to make SPDesktopWidget
-    // a trivial type.
-
-    // The 'viewwidget' member is already initialized at this point
-    static_assert(std::is_trivial<decltype(dtw->viewwidget)>::value, "");
-    auto viewwidget_save = std::move(dtw->viewwidget);
-
-    // The instance was allocated from C (glib) but has C++ members.
-    new (dtw) SPDesktopWidget();
-
-    // restore
-    dtw->viewwidget = std::move(viewwidget_save);
-}
-
 SPDesktopWidget::SPDesktopWidget()
 {
     auto *const dtw = this;
@@ -342,7 +264,7 @@ SPDesktopWidget::SPDesktopWidget()
     /* Main table */
     dtw->_vbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
     dtw->_vbox->set_name("DesktopMainTable");
-    gtk_container_add( GTK_CONTAINER(dtw), GTK_WIDGET(dtw->_vbox->gobj()) );
+    dtw->add(*dtw->_vbox);
 
     /* Status bar */
     dtw->_statusbar = Gtk::manage(new Gtk::Box());
@@ -475,7 +397,7 @@ SPDesktopWidget::SPDesktopWidget()
     gchar const* tip = "";
     Inkscape::Verb* verb = Inkscape::Verb::get( SP_VERB_VIEW_CMS_TOGGLE );
     if ( verb ) {
-        SPAction *act = verb->get_action( Inkscape::ActionContext( dtw->viewwidget.view ) );
+        SPAction *act = verb->get_action(Inkscape::ActionContext(dtw->getView()));
         if ( act && act->tip ) {
             tip = act->tip;
         }
@@ -722,17 +644,6 @@ SPDesktopWidget::SPDesktopWidget()
 
     gtk_widget_grab_focus (GTK_WIDGET(dtw->_canvas));
 
-    // If this is the first desktop created, report the time it takes to show up
-    if ( overallTimer ) {
-        if ( prefs->getBool("/dialogs/debug/trackAppear", false) ) {
-            // Time tracker takes ownership of the timer.
-            AppearTimeTracker *tracker = new AppearTimeTracker(overallTimer, GTK_WIDGET(dtw), "first SPDesktopWidget");
-            tracker->setAutodelete(true);
-        } else {
-            g_timer_destroy(overallTimer);
-        }
-        overallTimer = nullptr;
-    }
     // Ensure that ruler ranges are updated correctly whenever the canvas table
     // is resized
     dtw->_canvas_tbl_size_allocate_connection = dtw->_canvas_tbl->signal_size_allocate().connect(sigc::mem_fun(dtw, &SPDesktopWidget::canvas_tbl_size_allocate));
@@ -743,13 +654,9 @@ SPDesktopWidget::SPDesktopWidget()
  * (Might be called more than once)
  */
 void
-SPDesktopWidget::dispose(GObject *object)
+SPDesktopWidget::on_unrealize()
 {
-    SPDesktopWidget *dtw = SP_DESKTOP_WIDGET (object);
-
-    if (dtw == nullptr) {
-        return;
-    }
+    auto dtw = this;
 
     UXManager::getInstance()->delTrack(dtw);
 
@@ -778,14 +685,10 @@ SPDesktopWidget::dispose(GObject *object)
 
         // Canvas
         g_signal_handlers_disconnect_by_data(G_OBJECT(dtw->_canvas), dtw);
-        g_signal_handlers_disconnect_by_data(G_OBJECT(dtw->_menubar->gobj()), dtw);
 
         // CMS
         g_signal_handlers_disconnect_by_data(G_OBJECT(dtw->_cms_adjust->gobj()), dtw);
         g_object_unref(dtw->_tracker);
-
-        // Desktop Widget
-        g_signal_handlers_disconnect_by_data(G_OBJECT(dtw), dtw);
 
         dtw->_canvas_tbl_size_allocate_connection.disconnect();
 
@@ -803,23 +706,12 @@ SPDesktopWidget::dispose(GObject *object)
         dtw->desktop = nullptr;
     }
 
-    if (G_OBJECT_CLASS (dtw_parent_class)->dispose) {
-        (* G_OBJECT_CLASS (dtw_parent_class)->dispose) (object);
-    }
-}
-
-/**
- * Call destructor for C++ type (only called once)
- */
-static void sp_desktop_widget_finalize(GObject *object)
-{
-    SP_DESKTOP_WIDGET(object)->~SPDesktopWidget();
-
-    G_OBJECT_CLASS(dtw_parent_class)->finalize(object);
+    parent_type::on_unrealize();
 }
 
 SPDesktopWidget::~SPDesktopWidget()
 {
+    delete stub;
     delete _dock;
 }
 
@@ -893,32 +785,24 @@ SPDesktopWidget::getDock()
 /**
  * Callback to allocate space for desktop widget.
  */
-static void
-sp_desktop_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
+void SPDesktopWidget::on_size_allocate(Gtk::Allocation &allocation)
 {
-    SPDesktopWidget *dtw = SP_DESKTOP_WIDGET (widget);
-    GtkAllocation widg_allocation;
-    gtk_widget_get_allocation(widget, &widg_allocation);
+    Gtk::Allocation widg_allocation = this->get_allocation();
 
-    if ((allocation->x == widg_allocation.x) &&
-        (allocation->y == widg_allocation.y) &&
-        (allocation->width == widg_allocation.width) &&
-        (allocation->height == widg_allocation.height)) {
-        if (GTK_WIDGET_CLASS (dtw_parent_class)->size_allocate)
-            GTK_WIDGET_CLASS (dtw_parent_class)->size_allocate (widget, allocation);
+    if (allocation == widg_allocation) {
+        parent_type::on_size_allocate(allocation);
         return;
     }
 
-    if (gtk_widget_get_realized (widget)) {
+    if (this->get_realized()) {
+        SPDesktopWidget *dtw = this;
         Geom::Rect const area = dtw->desktop->get_display_area();
         Geom::Rect const d_canvas = dtw->desktop->getCanvas()->getViewbox();
         Geom::Point midpoint = dtw->desktop->w2d(d_canvas.midpoint());
 
         double zoom = dtw->desktop->current_zoom();
 
-        if (GTK_WIDGET_CLASS(dtw_parent_class)->size_allocate) {
-            GTK_WIDGET_CLASS(dtw_parent_class)->size_allocate (widget, allocation);
-        }
+        parent_type::on_size_allocate(allocation);
 
         if (dtw->get_sticky_zoom_active()) {
             /* Find new visible area */
@@ -935,10 +819,7 @@ sp_desktop_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
         dtw->desktop->show_dialogs();
 
     } else {
-        if (GTK_WIDGET_CLASS (dtw_parent_class)->size_allocate) {
-            GTK_WIDGET_CLASS (dtw_parent_class)->size_allocate (widget, allocation);
-        }
-//            this->size_allocate (widget, allocation);
+        parent_type::on_size_allocate(allocation);
     }
 }
 
@@ -958,15 +839,12 @@ static GtkMenuItem *_get_help_menu(GtkMenuShell *menu)
 /**
  * Callback to realize desktop widget.
  */
-static void
-sp_desktop_widget_realize (GtkWidget *widget)
+void SPDesktopWidget::on_realize()
 {
-
-    SPDesktopWidget *dtw = SP_DESKTOP_WIDGET (widget);
+    SPDesktopWidget *dtw = this;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
-    if (GTK_WIDGET_CLASS (dtw_parent_class)->realize)
-        (* GTK_WIDGET_CLASS (dtw_parent_class)->realize) (widget);
+    parent_type::on_realize();
 
     Geom::Rect d = Geom::Rect::from_xywh(Geom::Point(0,0), (dtw->desktop->doc())->getDimensions());
 
@@ -1080,9 +958,7 @@ SPDesktopWidget::event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw)
         }
     }
 
-    if (GTK_WIDGET_CLASS (dtw_parent_class)->event) {
-        return (* GTK_WIDGET_CLASS (dtw_parent_class)->event) (widget, event);
-    } else {
+    {
         // The key press/release events need to be passed to desktop handler explicitly,
         // because otherwise the event contexts only receive key events when the mouse cursor
         // is over the canvas. This redirection is only done for key events and only if there's no
@@ -1103,7 +979,7 @@ void
 SPDesktopWidget::color_profile_event(EgeColorProfTracker */*tracker*/, SPDesktopWidget *dtw)
 {
     // Handle profile changes
-    GdkWindow *window = gtk_widget_get_window(gtk_widget_get_toplevel(GTK_WIDGET(dtw)));
+    GdkWindow *window = dtw->get_window()->gobj();
 
     // Figure out the ID for the monitor
     auto display = gdk_display_get_default();
@@ -1155,7 +1031,7 @@ SPDesktopWidget::update_guides_lock()
 void
 SPDesktopWidget::cms_adjust_toggled( GtkWidget */*button*/, gpointer data )
 {
-    SPDesktopWidget *dtw = SP_DESKTOP_WIDGET(data);
+    auto dtw = static_cast<SPDesktopWidget *>(data);
 
     bool down = dtw->_cms_adjust->get_active();
     if ( down != dtw->_canvas->_enable_cms_display_adj ) {
@@ -1177,7 +1053,7 @@ SPDesktopWidget::cms_adjust_set_sensitive(bool enabled)
 {
     Inkscape::Verb* verb = Inkscape::Verb::get( SP_VERB_VIEW_CMS_TOGGLE );
     if ( verb ) {
-        SPAction *act = verb->get_action( Inkscape::ActionContext(viewwidget.view) );
+        SPAction *act = verb->get_action(Inkscape::ActionContext(getView()));
         if ( act ) {
             sp_action_set_sensitive( act, enabled );
         }
@@ -1211,7 +1087,7 @@ SPDesktopWidget::shutdown()
     if (INKSCAPE.sole_desktop_for_document(*desktop)) {
         SPDocument *doc = desktop->doc();
         if (doc->isModifiedSinceSave()) {
-            Gtk::Window *toplevel_window = Glib::wrap(GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(this))));
+            auto toplevel_window = window;
             Glib::ustring message = g_markup_printf_escaped(
                 _("<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before closing?</span>\n\n"
                   "If you close without saving, your changes will be discarded."),
@@ -1258,7 +1134,7 @@ SPDesktopWidget::shutdown()
         /* Code to check data loss */
         bool allow_data_loss = FALSE;
         while (doc->getReprRoot()->attribute("inkscape:dataloss") != nullptr && allow_data_loss == FALSE) {
-            Gtk::Window *toplevel_window = Glib::wrap(GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(this))));
+            auto toplevel_window = window;
             Glib::ustring message = g_markup_printf_escaped(
                 _("<span weight=\"bold\" size=\"larger\">The file \"%s\" was saved with a format that may cause data loss!</span>\n\n"
                   "Do you want to save this file as Inkscape SVG?"),
@@ -1369,7 +1245,7 @@ SPDesktopWidget::enableInteraction()
   _interaction_disabled_counter--;
 
   if (_interaction_disabled_counter == 0) {
-    gtk_widget_set_sensitive(GTK_WIDGET(this), TRUE);
+    this->set_sensitive();
   }
 }
 
@@ -1377,7 +1253,7 @@ void
 SPDesktopWidget::disableInteraction()
 {
   if (_interaction_disabled_counter == 0) {
-    gtk_widget_set_sensitive(GTK_WIDGET(this), FALSE);
+    this->set_sensitive(false);
   }
 
   _interaction_disabled_counter++;
@@ -1461,15 +1337,13 @@ SPDesktopWidget::setWindowTransient (void *p, int transient_policy)
 void
 SPDesktopWidget::presentWindow()
 {
-    GtkWindow *w =GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(this)));
-    if (w)
-        gtk_window_present (w);
+    if (window)
+        window->present();
 }
 
 bool SPDesktopWidget::showInfoDialog( Glib::ustring const &message )
 {
     bool result = false;
-    Gtk::Window *window = Glib::wrap(GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(this))));
     if (window)
     {
         Gtk::MessageDialog dialog(*window, message, false, Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK);
@@ -1766,15 +1640,10 @@ void SPDesktopWidget::setToolboxPosition(Glib::ustring const& id, GtkPositionTyp
 }
 
 
-SPDesktopWidget *sp_desktop_widget_new(SPDocument *document)
+SPDesktopWidget::SPDesktopWidget(SPDocument *document)
+    : SPDesktopWidget()
 {
-    SPDesktopWidget* dtw = SPDesktopWidget::createInstance(document);
-    return dtw;
-}
-
-SPDesktopWidget* SPDesktopWidget::createInstance(SPDocument *document)
-{
-    SPDesktopWidget *dtw = static_cast<SPDesktopWidget*>(g_object_new(SP_TYPE_DESKTOP_WIDGET, nullptr));
+    SPDesktopWidget *dtw = this;
 
     SPNamedView *namedview = sp_document_namedview(document, nullptr);
 
@@ -1796,7 +1665,7 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPDocument *document)
     /* Once desktop is set, we can update rulers */
     dtw->update_rulers();
 
-    sp_view_widget_set_view (SP_VIEW_WIDGET (dtw), dtw->desktop);
+    dtw->setView(dtw->desktop);
 
     /* Listen on namedview modification */
     dtw->modified_connection = namedview->connectModified(sigc::mem_fun(*dtw, &SPDesktopWidget::namedviewModified));
@@ -1826,8 +1695,6 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPDocument *document)
 
     UXManager::getInstance()->addTrack(dtw);
     UXManager::getInstance()->connectToDesktop( toolboxes, dtw->desktop );
-
-    return dtw;
 }
 
 

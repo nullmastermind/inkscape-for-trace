@@ -327,7 +327,7 @@ bool colorItemHandleButtonPress(GdkEventButton* event, UI::Widget::Preview *prev
             if ( popupMenu ) {
                 gtk_container_foreach(GTK_CONTAINER(popupSub), removeit, popupSub);
                 bool processed = false;
-                GtkWidget *wdgt = gtk_widget_get_ancestor(GTK_WIDGET(preview->gobj()), SP_TYPE_DESKTOP_WIDGET);
+                auto *wdgt = preview->get_ancestor(SPDesktopWidget::get_type());
                 if ( wdgt ) {
                     SPDesktopWidget *dtw = SP_DESKTOP_WIDGET(wdgt);
                     if ( dtw && dtw->desktop ) {

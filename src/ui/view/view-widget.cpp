@@ -13,39 +13,14 @@
 #include "view.h"
 #include "view-widget.h"
 
-//using namespace Inkscape::UI::View;
-
-// SPViewWidget
-static void sp_view_widget_dispose(GObject *object);
-
-G_DEFINE_TYPE(SPViewWidget, sp_view_widget, GTK_TYPE_EVENT_BOX);
-
-/**
- * Callback to initialize the SPViewWidget vtable.
- */
-static void sp_view_widget_class_init(SPViewWidgetClass *vwc)
-{
-    GObjectClass *object_class = G_OBJECT_CLASS(vwc);
-    
-    object_class->dispose = sp_view_widget_dispose;
-}
-
-/**
- * Callback to initialize the SPViewWidget.
- */
-static void sp_view_widget_init(SPViewWidget *vw)
-{
-    vw->view = nullptr;
-}
-
 /**
  * Callback to disconnect from view and destroy SPViewWidget.
  *
  * Apparently, this gets only called when a desktop is closed, but then twice!
  */
-static void sp_view_widget_dispose(GObject *object)
+void SPViewWidget::on_unrealize()
 {
-    SPViewWidget *vw = SP_VIEW_WIDGET(object);
+    SPViewWidget *vw = this;
 
     if (vw->view) {
         vw->view->close();
@@ -53,39 +28,20 @@ static void sp_view_widget_dispose(GObject *object)
         vw->view = nullptr;
     }
 
-    if (G_OBJECT_CLASS(sp_view_widget_parent_class)->dispose) {
-        G_OBJECT_CLASS(sp_view_widget_parent_class)->dispose(object);
-    }
+    parent_type::on_unrealize();
 
     Inkscape::GC::request_early_collection();
 }
 
-void sp_view_widget_set_view(SPViewWidget *vw, Inkscape::UI::View::View *view)
+void SPViewWidget::setView(view_type *view)
 {
-    g_return_if_fail(vw != nullptr);
-    g_return_if_fail(SP_IS_VIEW_WIDGET(vw));
+    auto vw = this;
     g_return_if_fail(view != nullptr);
     
     g_return_if_fail(vw->view == nullptr);
     
     vw->view = view;
     Inkscape::GC::anchor(view);
-
-    if (((SPViewWidgetClass *) G_OBJECT_GET_CLASS(vw))->set_view) {
-        ((SPViewWidgetClass *) G_OBJECT_GET_CLASS(vw))->set_view(vw, view);
-    }
-}
-
-bool sp_view_widget_shutdown(SPViewWidget *vw)
-{
-    g_return_val_if_fail(vw != nullptr, TRUE);
-    g_return_val_if_fail(SP_IS_VIEW_WIDGET(vw), TRUE);
-
-    if (((SPViewWidgetClass *) G_OBJECT_GET_CLASS(vw))->shutdown) {
-        return ((SPViewWidgetClass *) G_OBJECT_GET_CLASS(vw))->shutdown(vw);
-    }
-
-    return FALSE;
 }
 
 

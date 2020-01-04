@@ -1581,7 +1581,7 @@ gboolean sp_event_context_snap_watchdog_callback(gpointer data) {
     case DelayedSnapEvent::GUIDE_HRULER:
     case DelayedSnapEvent::GUIDE_VRULER: {
         gpointer item = dse->getItem();
-        gpointer item2 = dse->getItem2();
+        auto item2 = static_cast<Gtk::Widget *>(dse->getItem2());
         if (item && item2) {
             g_assert(GTK_IS_WIDGET(item));
             g_assert(SP_IS_DESKTOP_WIDGET(item2));
