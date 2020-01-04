@@ -23,7 +23,7 @@
    .dark    {  }
   </style>
   <style
-     id="s2"> 
+     id="s2">
      @import '../../highlights.css'; 
   </style>
   <metadata
@@ -54,7 +54,6 @@
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:current-layer="snap-nodes-rotation-center"
-     inkscape:document-rotation="0"
      inkscape:snap-nodes="true"
      inkscape:snap-grids="true"
      inkscape:snap-to-guides="false"

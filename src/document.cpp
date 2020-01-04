@@ -376,7 +376,6 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
         if (!bordercolor.empty()) {
             rnew->setAttribute("bordercolor", bordercolor.data());
         }
-        sp_repr_set_svg_double(rnew, "inkscape:document-rotation", 0.);
         sp_repr_set_svg_double(rnew, "borderopacity",
             prefs->getDouble("/template/base/borderopacity", 1.0));
         sp_repr_set_svg_double(rnew, "objecttolerance",
@@ -400,9 +399,6 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
         Inkscape::GC::release(rnew);
     } else {
         Inkscape::XML::Node *nv_repr = sp_item_group_get_child_by_name(document->root, nullptr, "sodipodi:namedview")->getRepr();
-        if (!nv_repr->attribute("inkscape:document-rotation")) {
-            sp_repr_set_svg_double(nv_repr, "inkscape:document-rotation", 0.);
-        }
     }
 
     // Defs

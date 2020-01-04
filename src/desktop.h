@@ -359,6 +359,7 @@ public:
     void zoom_center_page();
 
     double current_zoom() const { return _current_affine.getZoom(); }
+    Geom::Point current_center() const;
 
     void zoom_quick(bool enable = true);
     /** \brief  Returns whether the desktop is in quick zoom mode or not */

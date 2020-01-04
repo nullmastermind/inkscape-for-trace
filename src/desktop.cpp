@@ -1104,6 +1104,9 @@ void SPDesktop::zoom_center_page()
     zoom_absolute_center_point(Geom::Point(doc()->getWidth().value("px")/2, doc()->getHeight().value("px")/2), this->current_zoom());
 }
 
+Geom::Point SPDesktop::current_center() const {
+    return canvas->getViewbox().midpoint() * _current_affine.w2d();
+}
 
 /**
  * Performs a quick zoom into what the user is working on.

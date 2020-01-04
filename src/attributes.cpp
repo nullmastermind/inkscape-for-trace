@@ -89,6 +89,7 @@ static SPStyleProp const props[] = {
     {SP_ATTR_INKSCAPE_PAGEOPACITY, "inkscape:pageopacity"},
     {SP_ATTR_INKSCAPE_PAGESHADOW, "inkscape:pageshadow"},
     {SP_ATTR_INKSCAPE_ZOOM, "inkscape:zoom"},
+    {SP_ATTR_INKSCAPE_ROTATION, "inkscape:rotation"},
     {SP_ATTR_INKSCAPE_CX, "inkscape:cx"},
     {SP_ATTR_INKSCAPE_CY, "inkscape:cy"},
     {SP_ATTR_INKSCAPE_WINDOW_WIDTH, "inkscape:window-width"},

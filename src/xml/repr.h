@@ -119,6 +119,7 @@ unsigned sp_repr_set_boolean(Inkscape::XML::Node *repr, char const *key, unsigne
 unsigned sp_repr_set_int(Inkscape::XML::Node *repr, char const *key, int val);
 unsigned sp_repr_set_css_double(Inkscape::XML::Node *repr, char const *key, double val);
 unsigned sp_repr_set_svg_double(Inkscape::XML::Node *repr, char const *key, double val);
+unsigned sp_repr_set_svg_non_default_double(Inkscape::XML::Node *repr, char const *key, double val, double default_value);
 unsigned sp_repr_set_svg_length(Inkscape::XML::Node *repr, char const *key, SVGLength &val);
 unsigned sp_repr_set_point(Inkscape::XML::Node *repr, char const *key, Geom::Point const & val);
 unsigned sp_repr_get_point(Inkscape::XML::Node *repr, char const *key, Geom::Point *val);

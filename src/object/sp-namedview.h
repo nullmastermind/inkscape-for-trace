@@ -53,6 +53,7 @@ public:
     unsigned int borderlayer : 2;
 
     double zoom;
+    double rotation; // Document rotation in degrees (positive is clockwise)
     double cx;
     double cy;
     int window_width;

@@ -74,6 +74,7 @@ SPNamedView::SPNamedView() : SPObjectGroup(), snap_manager(this) {
     this->page_size_units = nullptr;
     this->pagecolor = 0;
     this->cx = 0;
+    this->rotation = 0;
     this->pageshadow = 0;
     this->window_width = 0;
     this->window_height = 0;
@@ -212,6 +213,7 @@ void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
     this->readAttr( "inkscape:pageopacity" );
     this->readAttr( "inkscape:pageshadow" );
     this->readAttr( "inkscape:zoom" );
+    this->readAttr( "inkscape:rotation" );
     this->readAttr( "inkscape:cx" );
     this->readAttr( "inkscape:cy" );
     this->readAttr( "inkscape:window-width" );
@@ -403,6 +405,10 @@ void SPNamedView::set(SPAttributeEnum key, const gchar* value) {
             break;
     case SP_ATTR_INKSCAPE_ZOOM:
             this->zoom = value ? g_ascii_strtod(value, nullptr) : 0; // zero means not set
+            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            break;
+    case SP_ATTR_INKSCAPE_ROTATION:
+            this->rotation = value ? g_ascii_strtod(value, nullptr) : 0; // zero means not set
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SP_ATTR_INKSCAPE_CX:
@@ -845,6 +851,15 @@ void sp_namedview_zoom_and_view_from_document(SPDesktop *desktop)
     } else if (desktop->getDocument()) { // document without saved zoom, zoom to its page
         desktop->zoom_page();
     }
+    if (nv->rotation != 0 && nv->rotation != HUGE_VAL && !std::isnan(nv->rotation)) {
+        Geom::Point p;
+        if (nv->cx != HUGE_VAL && !std::isnan(nv->cx) && nv->cy != HUGE_VAL && !std::isnan(nv->cy)) {
+            p = Geom::Point(nv->cx, nv->cy);
+        }else{
+            p = desktop->current_center();
+        }
+        desktop->rotate_absolute_keep_point(p, nv->rotation * M_PI / 180.0);
+    }
 }
 
 void SPNamedView::writeNewGrid(SPDocument *document,int gridtype)
@@ -899,7 +914,6 @@ void sp_namedview_document_from_window(SPDesktop *desktop)
     bool save_geometry_in_file = window_geometry == PREFS_WINDOW_GEOMETRY_FILE;
     bool save_viewport_in_file = prefs->getBool("/options/savedocviewport/value", true);
     Inkscape::XML::Node *view = desktop->namedview->getRepr();
-    Geom::Rect const r = desktop->get_display_area();
 
     // saving window geometry is not undoable
     bool saved = DocumentUndo::getUndoSensitive(desktop->getDocument());
@@ -907,8 +921,11 @@ void sp_namedview_document_from_window(SPDesktop *desktop)
 
     if (save_viewport_in_file) {
         sp_repr_set_svg_double(view, "inkscape:zoom", desktop->current_zoom());
-        sp_repr_set_svg_double(view, "inkscape:cx", r.midpoint()[Geom::X]);
-        sp_repr_set_svg_double(view, "inkscape:cy", r.midpoint()[Geom::Y]);
+        double rotation = ::round(desktop->current_rotation() * 180.0 / M_PI);
+        sp_repr_set_svg_non_default_double(view, "inkscape:rotation", rotation, 0.0);
+        Geom::Point center = desktop->current_center();
+        sp_repr_set_svg_double(view, "inkscape:cx", center.x());
+        sp_repr_set_svg_double(view, "inkscape:cy", center.y());
     }
 
     if (save_geometry_in_file) {
