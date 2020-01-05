@@ -395,14 +395,14 @@ draw_vertical_padding(color_point p0, color_point p1, int padding, bool pad_upwa
     double max_x = std::max(p0.x, p1.x);
 
     for (int y = min_y; y <= max_y; ++y) {
-        int start_x = lerp(p0, p1, p0.y, p1.y, y).x;
-        int end_x = lerp(p0, p1, p0.y, p1.y, clamp(y + 1, min_y, max_y)).x;
+        double start_x = lerp(p0, p1, p0.y, p1.y, clamp(y, min_y, max_y)).x;
+        double end_x = lerp(p0, p1, p0.y, p1.y, clamp(y + 1, min_y, max_y)).x;
         if (start_x > end_x) {
             std::swap(start_x, end_x);
         }
 
         guint32 *p = buffer + y * stride;
-        p += start_x;
+        p += static_cast<int>(start_x);
         for (int x = start_x; x <= end_x; ++x) {
             color_point point = lerp(p0, p1, p0.x, p1.x, clamp(x, min_x, max_x));
             for (int offset = 0; offset <= padding; ++offset) {
