@@ -577,23 +577,33 @@ void AttrDialog::nameEdited (const Glib::ustring& path, const Glib::ustring& nam
         if (old_name == "content") {
             return;
         }
-        Glib::ustring value = row[_attrColumns._attributeValue];
-        // Move to editing value, we set the name as a temporary store value
+        // Do not allow empty name (this would delete the attribute)
+        if (name.empty()) {
+            return;
+        }
+        // Do not allow duplicate names
+        const auto children = _store->children();
+        for (const auto &child : children) {
+            if (name == child[_attrColumns._attributeName]) {
+                return;
+            }
+        }
+        // Copy old value and remove old name
+        Glib::ustring value;
         if (!old_name.empty()) {
-            // Remove old named value
+            value = row[_attrColumns._attributeValue];
             _updating = true;
             _repr->setAttribute(old_name.c_str(), nullptr, false);
             _updating = false;
         }
-        if (!name.empty()) {
-            row[_attrColumns._attributeName] = name;
-            grab_focus();
-            _updating = true;
-            // this allow store empty values
-            _repr->setAttribute(name.c_str(), "", false);
-            _updating = false;
-            g_timeout_add(50, &sp_attrdialog_store_move_to_next, this);
-        }
+
+        // Do the actual renaming and set new value
+        row[_attrColumns._attributeName] = name;
+        grab_focus();
+        _updating = true;
+        _repr->setAttribute(name.c_str(), value.c_str(), false); // use char * overload (allows empty attribute values)
+        _updating = false;
+        g_timeout_add(50, &sp_attrdialog_store_move_to_next, this);
         this->setUndo(_("Rename attribute"));
     }
 }
