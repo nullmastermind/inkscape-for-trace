@@ -163,7 +163,18 @@ ColorWheel::get_rgb()
     return hsv_to_rgb(_hue, _saturation, _value);
 }
 
-/* Pad triangle vertically if necessary */
+/**
+  * Paints padding for an edge of the triangle,
+  * using the (vertically) closest point.
+  *
+  * @param p0 A corner of the triangle. Not the same corner as p1
+  * @param p1 A corner of the triangle. Not the same corner as p0
+  * @param padding The height of the padding
+  * @param pad_upwards True if padding is above the line
+  * @param buffer Array that the triangle is painted to
+  * @param height Height of buffer
+  * @param stride Stride of buffer
+*/
 void
 draw_vertical_padding(color_point p0, color_point p1, int padding, bool pad_upwards,
                       guint32 *buffer, int height, int stride);
@@ -382,7 +393,7 @@ void
 draw_vertical_padding(color_point p0, color_point p1, int padding, bool pad_upwards,
                       guint32 *buffer, int height, int stride)
 {
-    // skip if horizontal padding is more accurate
+    // skip if horizontal padding is more accurate, e.g. if the edge is vertical
     double gradient = (p1.y - p0.y) / (p1.x - p0.x);
     if (std::abs(gradient) > 1.0) {
         return;
@@ -394,6 +405,7 @@ draw_vertical_padding(color_point p0, color_point p1, int padding, bool pad_upwa
     double min_x = std::min(p0.x, p1.x);
     double max_x = std::max(p0.x, p1.x);
 
+    // go through every point on the line
     for (int y = min_y; y <= max_y; ++y) {
         double start_x = lerp(p0, p1, p0.y, p1.y, clamp(y, min_y, max_y)).x;
         double end_x = lerp(p0, p1, p0.y, p1.y, clamp(y + 1, min_y, max_y)).x;
@@ -404,7 +416,9 @@ draw_vertical_padding(color_point p0, color_point p1, int padding, bool pad_upwa
         guint32 *p = buffer + y * stride;
         p += static_cast<int>(start_x);
         for (int x = start_x; x <= end_x; ++x) {
+            // get the color at this point on the line
             color_point point = lerp(p0, p1, p0.x, p1.x, clamp(x, min_x, max_x));
+            // paint the padding vertically above or below this point
             for (int offset = 0; offset <= padding; ++offset) {
                 if (pad_upwards && (point.y - offset) >= 0) {
                     *(p - (offset * stride)) = point.get_color();
