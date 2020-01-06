@@ -19,6 +19,7 @@
 #include "widget-spacer.h"
 
 #include <algorithm>
+#include <cstring>
 
 #include <sigc++/sigc++.h>
 
