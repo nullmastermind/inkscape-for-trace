@@ -52,17 +52,25 @@ DockItem::DockItem(Dock& dock, const Glib::ustring& name, const Glib::ustring& l
     }
 
     _frame.set_shadow_type(Gtk::SHADOW_IN);
-    gtk_container_add (GTK_CONTAINER (_gdl_dock_item), GTK_WIDGET (_frame.gobj()));
+    _gdl_dock_item_wrapped = Glib::wrap(GTK_CONTAINER(_gdl_dock_item));
+    _gdl_dock_item_wrapped->add(_frame);
     _frame.add(_dock_item_box);
     _dock_item_box.set_border_width(3);
 
-    signal_drag_begin().connect(sigc::mem_fun(*this, &Inkscape::UI::Widget::DockItem::_onDragBegin));
-    signal_drag_end().connect(sigc::mem_fun(*this, &Inkscape::UI::Widget::DockItem::_onDragEnd));
-    signal_hide().connect(sigc::mem_fun(*this, &Inkscape::UI::Widget::DockItem::_onHide), false);
-    signal_show().connect(sigc::mem_fun(*this, &Inkscape::UI::Widget::DockItem::_onShow), false);
-    signal_state_changed().connect(sigc::mem_fun(*this, &Inkscape::UI::Widget::DockItem::_onStateChanged));
-    signal_delete_event().connect(sigc::mem_fun(*this, &Inkscape::UI::Widget::DockItem::_onDeleteEvent));
-    signal_realize().connect(sigc::mem_fun(*this, &Inkscape::UI::Widget::DockItem::_onRealize));
+    _connections.emplace_back(
+        signal_drag_begin().connect(sigc::mem_fun(*this, &Inkscape::UI::Widget::DockItem::_onDragBegin)));
+    _connections.emplace_back(
+        signal_drag_end().connect(sigc::mem_fun(*this, &Inkscape::UI::Widget::DockItem::_onDragEnd)));
+    _connections.emplace_back(
+        signal_hide().connect(sigc::mem_fun(*this, &Inkscape::UI::Widget::DockItem::_onHide), false));
+    _connections.emplace_back(
+        signal_show().connect(sigc::mem_fun(*this, &Inkscape::UI::Widget::DockItem::_onShow), false));
+    _connections.emplace_back(
+        signal_state_changed().connect(sigc::mem_fun(*this, &Inkscape::UI::Widget::DockItem::_onStateChanged)));
+    _connections.emplace_back(
+        signal_delete_event().connect(sigc::mem_fun(*this, &Inkscape::UI::Widget::DockItem::_onDeleteEvent)));
+    _connections.emplace_back(
+        signal_realize().connect(sigc::mem_fun(*this, &Inkscape::UI::Widget::DockItem::_onRealize)));
 
     _dock.addItem(*this, ( _prev_state == FLOATING_STATE || _prev_state == ICONIFIED_FLOATING_STATE ) ? GDL_DOCK_FLOATING : placement);
 
@@ -76,13 +84,23 @@ DockItem::DockItem(Dock& dock, const Glib::ustring& name, const Glib::ustring& l
 
 DockItem::~DockItem()
 {
-    g_free(_gdl_dock_item);
+    for (auto &conn : _connections) {
+        conn.disconnect();
+    }
+
+    _signal_hide_connection.disconnect();
+    _signal_key_press_event_connection.disconnect();
+
+    // https://gitlab.gnome.org/GNOME/gdl/issues/2
+#ifdef GDL_VERSION_AT_LEAST_3_35
+    gdl_dock_item_unbind(GDL_DOCK_ITEM(_gdl_dock_item));
+#endif
 }
 
 Gtk::Widget&
 DockItem::getWidget()
 {
-    return *Glib::wrap(GTK_WIDGET(_gdl_dock_item));
+    return *_gdl_dock_item_wrapped;
 }
 
 GtkWidget *
@@ -281,42 +299,42 @@ DockItem::grab_focus()
 Glib::SignalProxy0<void>
 DockItem::signal_show()
 {
-    return Glib::SignalProxy0<void>(Glib::wrap(GTK_WIDGET(_gdl_dock_item)),
+    return Glib::SignalProxy0<void>(_gdl_dock_item_wrapped,
                                     &_signal_show_proxy);
 }
 
 Glib::SignalProxy0<void>
 DockItem::signal_hide()
 {
-    return Glib::SignalProxy0<void>(Glib::wrap(GTK_WIDGET(_gdl_dock_item)),
+    return Glib::SignalProxy0<void>(_gdl_dock_item_wrapped,
                                     &_signal_hide_proxy);
 }
 
 Glib::SignalProxy1<bool, GdkEventAny *>
 DockItem::signal_delete_event()
 {
-    return Glib::SignalProxy1<bool, GdkEventAny *>(Glib::wrap(GTK_WIDGET(_gdl_dock_item)),
+    return Glib::SignalProxy1<bool, GdkEventAny *>(_gdl_dock_item_wrapped,
                                                   &_signal_delete_event_proxy);
 }
 
 Glib::SignalProxy0<void>
 DockItem::signal_drag_begin()
 {
-    return Glib::SignalProxy0<void>(Glib::wrap(GTK_WIDGET(_gdl_dock_item)),
+    return Glib::SignalProxy0<void>(_gdl_dock_item_wrapped,
                                     &_signal_drag_begin_proxy);
 }
 
 Glib::SignalProxy1<void, bool>
 DockItem::signal_drag_end()
 {
-    return Glib::SignalProxy1<void, bool>(Glib::wrap(GTK_WIDGET(_gdl_dock_item)),
+    return Glib::SignalProxy1<void, bool>(_gdl_dock_item_wrapped,
                                           &_signal_drag_end_proxy);
 }
 
 Glib::SignalProxy0<void>
 DockItem::signal_realize()
 {
-    return Glib::SignalProxy0<void>(Glib::wrap(GTK_WIDGET(_gdl_dock_item)),
+    return Glib::SignalProxy0<void>(_gdl_dock_item_wrapped,
                                     &_signal_realize_proxy);
 }
 
@@ -394,12 +412,17 @@ DockItem::_onKeyPress(GdkEventKey *event)
 void
 DockItem::_onStateChanged(State /*prev_state*/, State new_state)
 {
+    _signal_hide_connection.disconnect();
+    _signal_key_press_event_connection.disconnect();
+
     _window = getWindow();
     if(_window)
         _window->set_type_hint(Gdk::WINDOW_TYPE_HINT_NORMAL);
 
     if (new_state == FLOATING_STATE && _window) {
-        _window->signal_hide().connect(sigc::mem_fun(*this, &Inkscape::UI::Widget::DockItem::_onHideWindow));
+        _signal_hide_connection =
+            _window->signal_hide().connect(sigc::mem_fun(*this, &Inkscape::UI::Widget::DockItem::_onHideWindow));
+
         _signal_key_press_event_connection =
             _window->signal_key_press_event().connect(sigc::mem_fun(*this, &Inkscape::UI::Widget::DockItem::_onKeyPress));
     }

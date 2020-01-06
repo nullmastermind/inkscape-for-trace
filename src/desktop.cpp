@@ -196,7 +196,11 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, Inkscape::UI::View::EditWid
     Inkscape::DocumentUndo::setUndoSensitive(document, true);
 
     /* Setup Dialog Manager */
-    _dlg_mgr = &Inkscape::UI::Dialog::DialogManager::getInstance();
+    _dlg_mgr = Inkscape::UI::Dialog::DialogManager::getInstance();
+    if (!_dlg_mgr) {
+        _dlg_mgr_owned = new Inkscape::UI::Dialog::DialogManager();
+        _dlg_mgr = _dlg_mgr_owned;
+    }
 
     dkey = SPItem::display_key_new(1);
 
@@ -405,6 +409,9 @@ void SPDesktop::destroy()
     }
 
     _guides_message_context = nullptr;
+
+    delete _dlg_mgr_owned;
+    _dlg_mgr_owned = nullptr;
 }
 
 SPDesktop::~SPDesktop()

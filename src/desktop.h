@@ -143,6 +143,7 @@ class SPDesktop : public Inkscape::UI::View::View
 {
 public:
     Inkscape::UI::Dialog::DialogManager *_dlg_mgr;
+    Inkscape::UI::Dialog::DialogManager *_dlg_mgr_owned = nullptr;
     SPNamedView               *namedview;
     SPCanvas                  *canvas;
     Inkscape::LayerModel      *layers;

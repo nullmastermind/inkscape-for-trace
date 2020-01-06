@@ -31,7 +31,6 @@ namespace Dialog {
 
 enum BehaviorType { FLOATING, DOCK };
 
-gboolean sp_retransientize_again(gpointer dlgPtr);
 void sp_dialog_shutdown(GObject *object, gpointer dlgPtr);
 
 /**
@@ -110,7 +109,15 @@ public:
     void           save_geometry();
     void           save_status(int visible, int state, int placement);
 
-    bool retransientize_suppress; // when true, do not retransientize (prevents races when switching new windows too fast)
+  private:
+    // when true, do not retransientize (prevents races when switching new windows too fast)
+    bool _retransientize_suppress = false;
+    guint _retransientize_again_timeout = 0;
+    static gboolean retransientize_again(gpointer);
+
+  public:
+    bool retransientize_suppress();
+    void retransientize_again_timeout_add();
 
 protected:
     Glib::ustring const _prefs_path;
@@ -140,11 +147,16 @@ protected:
 
     Inkscape::Selection*   _getSelection();
 
+#if 0
     sigc::connection _desktop_activated_connection;
     sigc::connection _dialogs_hidden_connection;
     sigc::connection _dialogs_unhidden_connection;
     sigc::connection _shutdown_connection;
     sigc::connection _change_theme_connection;
+#endif
+
+  protected:
+    std::vector<sigc::connection> _connections;
 
   private:
     Behavior::Behavior* _behavior;

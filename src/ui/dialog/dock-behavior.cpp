@@ -41,8 +41,13 @@ DockBehavior::DockBehavior(Dialog &dialog) :
 {
     // Connect signals
     _signal_hide_connection = signal_hide().connect(sigc::mem_fun(*this, &Inkscape::UI::Dialog::Behavior::DockBehavior::_onHide));
-    signal_show().connect(sigc::mem_fun(*this, &Inkscape::UI::Dialog::Behavior::DockBehavior::_onShow));
-    _dock_item.signal_state_changed().connect(sigc::mem_fun(*this, &Inkscape::UI::Dialog::Behavior::DockBehavior::_onStateChanged));
+
+    _connections.emplace_back(_signal_hide_connection);
+    _connections.emplace_back(
+        signal_show().connect(sigc::mem_fun(*this, &Inkscape::UI::Dialog::Behavior::DockBehavior::_onShow)));
+    _connections.emplace_back(_dock_item.signal_state_changed().connect(
+        sigc::mem_fun(*this, &Inkscape::UI::Dialog::Behavior::DockBehavior::_onStateChanged)));
+
     if (_dock_item.getState() == Widget::DockItem::FLOATING_STATE) {
         if (Gtk::Window *floating_win = _dock_item.getWindow()) {
             sp_transientize(GTK_WIDGET(floating_win->gobj()));
@@ -53,8 +58,11 @@ DockBehavior::DockBehavior(Dialog &dialog) :
     }
 }
 
-DockBehavior::~DockBehavior()
-= default;
+DockBehavior::~DockBehavior() {
+    for (auto &conn : _connections) {
+        conn.disconnect();
+    }
+}
 
 
 Behavior *
@@ -228,21 +236,8 @@ DockBehavior::onDesktopActivated(SPDesktop *desktop)
 
     Gtk::Window *floating_win = _dock_item.getWindow();
 
-    if (floating_win) {
-
-        if (_dialog.retransientize_suppress) {
-            /* if retransientizing of this dialog is still forbidden after
-             * previous call warning turned off because it was confusingly fired
-             * when loading many files from command line
-             */
-
-            // g_warning("Retranzientize aborted! You're switching windows too fast!");
-            return;
-        }
-
+    if (floating_win && _dialog.retransientize_suppress()) {
         if (GtkWindow *dialog_win = floating_win->gobj()) {
-
-            _dialog.retransientize_suppress = true; // disallow other attempts to retranzientize this dialog
 
             desktop->setWindowTransient (dialog_win);
 
@@ -257,10 +252,11 @@ DockBehavior::onDesktopActivated(SPDesktop *desktop)
                 // without this, a transient window not always emerges on top
                 gtk_window_present (dialog_win);
             }
+
         }
 
         // we're done, allow next retransientizing not sooner than after 120 msec
-        g_timeout_add (120, (GSourceFunc) sp_retransientize_again, (gpointer) &_dialog);
+        _dialog.retransientize_again_timeout_add();
     }
 }
 

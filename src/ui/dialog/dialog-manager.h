@@ -29,7 +29,7 @@ public:
     DialogManager();
     virtual ~DialogManager();
 
-    static DialogManager &getInstance();
+    static DialogManager *getInstance();
 
     // sigc::signal<void> show_dialogs;
     // sigc::signal<void> show_f12;

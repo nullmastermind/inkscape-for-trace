@@ -39,7 +39,10 @@ public:
       _panel (panel) { }
 
     virtual void present() = 0;
-    virtual ~PanelDialogBase() = default;
+    virtual ~PanelDialogBase()
+    { //
+        _document_replaced_connection.disconnect();
+    }
 
     virtual UI::Widget::Panel &getPanel() { return _panel; }
 
@@ -100,6 +103,7 @@ void PanelDialogBase::_propagateDocumentReplaced(SPDesktop *desktop, SPDocument 
 
 void PanelDialogBase::_propagateDesktopActivated(SPDesktop *desktop)
 {
+    _document_replaced_connection.disconnect();
     _document_replaced_connection =
         desktop->connectDocumentReplaced(sigc::mem_fun(*this, &PanelDialogBase::_propagateDocumentReplaced));
     _panel.signalActivateDesktop().emit(desktop);
@@ -118,17 +122,14 @@ PanelDialog<B>::PanelDialog(Widget::Panel &panel, char const *prefs_path, int co
     Dialog(&B::create, prefs_path, verb_num)
 {
     Gtk::Box *vbox = get_vbox();
-    _panel.signalResponse().connect(sigc::mem_fun(*this, &PanelDialog::_handleResponse));
-    _panel.signalPresent().connect(sigc::mem_fun(*this, &PanelDialog::_presentDialog));
+    _connections.emplace_back(_panel.signalResponse().connect(sigc::mem_fun(*this, &PanelDialog::_handleResponse)));
+    _connections.emplace_back(_panel.signalPresent().connect(sigc::mem_fun(*this, &PanelDialog::_presentDialog)));
 
     vbox->pack_start(_panel, true, true, 0);
 
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
     _propagateDesktopActivated(desktop);
-
-    _document_replaced_connection =
-        desktop->connectDocumentReplaced(sigc::mem_fun(*this, &PanelDialog::_propagateDocumentReplaced));
 
     show_all_children();
 }
@@ -179,13 +180,10 @@ template <typename P>
 PanelDialog<Behavior::FloatingBehavior> *PanelDialog<Behavior::FloatingBehavior>::create()
 {
     auto instance = _create<P>();
-
-    INKSCAPE.signal_activate_desktop.connect(
-            sigc::mem_fun(*instance, &PanelDialog<Behavior::FloatingBehavior>::_propagateDesktopActivated)
-    );
-    INKSCAPE.signal_deactivate_desktop.connect(        
-            sigc::mem_fun(*instance, &PanelDialog<Behavior::FloatingBehavior>::_propagateDesktopDeactivated)
-    );
+    instance->_connections.emplace_back(INKSCAPE.signal_activate_desktop.connect(
+        sigc::mem_fun(*instance, &PanelDialog<Behavior::FloatingBehavior>::_propagateDesktopActivated)));
+    instance->_connections.emplace_back(INKSCAPE.signal_deactivate_desktop.connect(
+        sigc::mem_fun(*instance, &PanelDialog<Behavior::FloatingBehavior>::_propagateDesktopDeactivated)));
 
     return instance;
 }

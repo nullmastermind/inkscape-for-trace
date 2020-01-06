@@ -65,6 +65,8 @@ public:
     void onShutdown() override;
 
 private:
+    std::vector<sigc::connection> _connections;
+
     Widget::DockItem _dock_item;
 
     DockBehavior(Dialog& dialog);

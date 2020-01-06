@@ -78,6 +78,9 @@ void sp_dtw_desktop_deactivate (SPDesktopWidget *dtw);
 struct SPDesktopWidget {
     SPViewWidget viewwidget;
 
+    SPDesktopWidget();
+    ~SPDesktopWidget();
+
     unsigned int update : 1;
 
     sigc::connection modified_connection;
@@ -158,6 +161,8 @@ private:
     double _dt2r;
 
     SPCanvas *_canvas;
+
+    std::vector<sigc::connection> _connections;
 
 public:
     Inkscape::UI::Widget::LayerSelector *layer_selector;

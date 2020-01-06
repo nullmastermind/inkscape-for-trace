@@ -38,11 +38,30 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
-gboolean sp_retransientize_again(gpointer dlgPtr)
+gboolean Dialog::retransientize_again(gpointer dlgPtr)
 {
     Dialog *dlg = static_cast<Dialog *>(dlgPtr);
-    dlg->retransientize_suppress = false;
+    g_assert(dlg->_retransientize_again_timeout != 0);
+    g_assert(dlg->_retransientize_suppress);
+    dlg->_retransientize_again_timeout = 0;
+    dlg->_retransientize_suppress = false;
     return FALSE; // so that it is only called once
+}
+
+void Dialog::retransientize_again_timeout_add()
+{
+    g_assert(_retransientize_again_timeout == 0);
+    g_assert(_retransientize_suppress);
+    _retransientize_again_timeout = g_timeout_add(120, (GSourceFunc)Dialog::retransientize_again, (gpointer)this);
+}
+
+bool Dialog::retransientize_suppress()
+{
+    if (_retransientize_suppress) {
+        return false;
+    }
+    _retransientize_suppress = true;
+    return true;
 }
 
 //=====================================================================
@@ -51,7 +70,6 @@ Dialog::Dialog(Behavior::BehaviorFactory behavior_factory, const char *prefs_pat
                Glib::ustring apply_label)
     : _user_hidden(false), 
       _hiddenF12(false),
-      retransientize_suppress(false),
       _prefs_path(prefs_path),
       _verb_num(verb_num),
       _title(),
@@ -70,15 +88,17 @@ Dialog::Dialog(Behavior::BehaviorFactory behavior_factory, const char *prefs_pat
     _behavior = behavior_factory(*this);
     _desktop = SP_ACTIVE_DESKTOP;
 
-    Gtk::Widget *widg = dynamic_cast<Gtk::Widget *>(Glib::wrap(_behavior->gobj()));
-    INKSCAPE.signal_activate_desktop.connect(sigc::mem_fun(*this, &Dialog::onDesktopActivated));
-    INKSCAPE.signal_dialogs_hide.connect(sigc::mem_fun(*this, &Dialog::onHideF12));
-    INKSCAPE.signal_dialogs_unhide.connect(sigc::mem_fun(*this, &Dialog::onShowF12));
-    INKSCAPE.signal_shut_down.connect(sigc::mem_fun(*this, &Dialog::onShutdown));
-    INKSCAPE.signal_change_theme.connect(sigc::bind(sigc::ptr_fun(&sp_add_top_window_classes), widg));
+    Gtk::Widget *widg = &static_cast<Gtk::Widget &>(*_behavior);
+    _connections.emplace_back(
+        INKSCAPE.signal_activate_desktop.connect(sigc::mem_fun(*this, &Dialog::onDesktopActivated)));
+    _connections.emplace_back(INKSCAPE.signal_dialogs_hide.connect(sigc::mem_fun(*this, &Dialog::onHideF12)));
+    _connections.emplace_back(INKSCAPE.signal_dialogs_unhide.connect(sigc::mem_fun(*this, &Dialog::onShowF12)));
+    _connections.emplace_back(INKSCAPE.signal_shut_down.connect(sigc::mem_fun(*this, &Dialog::onShutdown)));
+    _connections.emplace_back(
+        INKSCAPE.signal_change_theme.connect(sigc::bind(sigc::ptr_fun(&sp_add_top_window_classes), widg)));
 
-    Glib::wrap(gobj())->signal_event().connect(sigc::mem_fun(*this, &Dialog::_onEvent));
-    Glib::wrap(gobj())->signal_key_press_event().connect(sigc::mem_fun(*this, &Dialog::_onKeyPress));
+    _connections.emplace_back(widg->signal_event().connect(sigc::mem_fun(*this, &Dialog::_onEvent)));
+    _connections.emplace_back(widg->signal_key_press_event().connect(sigc::mem_fun(*this, &Dialog::_onKeyPress)));
 
     read_geometry();
     sp_add_top_window_classes(widg);
@@ -86,6 +106,14 @@ Dialog::Dialog(Behavior::BehaviorFactory behavior_factory, const char *prefs_pat
 
 Dialog::~Dialog()
 {
+    if (_retransientize_again_timeout) {
+        g_source_remove(_retransientize_again_timeout);
+    }
+
+    for (auto &conn : _connections) {
+        conn.disconnect();
+    }
+
     save_geometry();
     delete _behavior;
     _behavior = nullptr;

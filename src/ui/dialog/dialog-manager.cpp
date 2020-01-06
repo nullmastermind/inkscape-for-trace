@@ -186,13 +186,16 @@ DialogManager::DialogManager() {
 }
 
 DialogManager::~DialogManager() {
-    // TODO:  Disconnect the signals
-    // TODO:  Do we need to explicitly delete the dialogs?
-    //        Appears to cause a segfault if we do
+    for (auto &item : _dialog_map) {
+        delete item.second;
+    }
 }
 
 
-DialogManager &DialogManager::getInstance()
+/**
+ * Get a static singleton if we use floating dialogs, or NULL if we use dockable dialogs.
+ */
+DialogManager *DialogManager::getInstance()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int dialogs_type = prefs->getIntLimited("/options/dialogtype/value", DOCK, 0, 1);
@@ -203,10 +206,10 @@ DialogManager &DialogManager::getInstance()
 
         if (!instance)
             instance = new DialogManager();
-        return *instance;
+        return instance;
     }
 
-    return *new DialogManager();
+    return nullptr;
 }
 
 /**

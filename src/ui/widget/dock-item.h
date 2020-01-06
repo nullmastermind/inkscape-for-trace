@@ -90,6 +90,8 @@ public:
     sigc::signal<void, State, State> signal_state_changed();
 
 private:
+    std::vector<sigc::connection> _connections;
+
     Dock &_dock;              //< parent dock
 
     State _prev_state;        //< last known state
@@ -102,6 +104,7 @@ private:
     bool _grab_focus_on_realize;   //< if the dock item should grab focus on the next realize
 
     GtkWidget *_gdl_dock_item;
+    Gtk::Container *_gdl_dock_item_wrapped;
     Glib::RefPtr<Gdk::Pixbuf> _icon_pixbuf;
 
     /** Interface widgets, will be packed like 
@@ -123,6 +126,7 @@ private:
     bool _onDeleteEvent(GdkEventAny *event);
 
     sigc::connection _signal_key_press_event_connection;
+    sigc::connection _signal_hide_connection;
 
     /** GdlDockItem signal proxy structures */
     static const Glib::SignalProxyInfo _signal_show_proxy;

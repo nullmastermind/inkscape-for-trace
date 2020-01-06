@@ -65,6 +65,7 @@ enum {
 
 static void ege_color_prof_tracker_get_property( GObject* obj, guint propId, GValue* value, GParamSpec * pspec );
 static void ege_color_prof_tracker_set_property( GObject* obj, guint propId, const GValue *value, GParamSpec* pspec );
+static void ege_color_prof_tracker_dispose(GObject *);
 
 class ScreenTrack {
     public:
@@ -103,8 +104,6 @@ typedef struct
 #define EGE_COLOR_PROF_TRACKER_GET_PRIVATE( o ) \
     reinterpret_cast<EgeColorProfTrackerPrivate *>( ege_color_prof_tracker_get_instance_private (o))
 
-static void target_finalized( gpointer data, GObject* where_the_object_was );
-static void window_finalized( gpointer data, GObject* where_the_object_was );
 static void event_after_cb( GtkWidget* widget, GdkEvent* event, gpointer user_data );
 static void target_hierarchy_changed_cb(GtkWidget* widget, GtkWidget* prev_top, gpointer user_data);
 static void target_screen_changed_cb(GtkWidget* widget, GdkScreen* prev_screen, gpointer user_data);
@@ -121,6 +120,8 @@ void ege_color_prof_tracker_class_init( EgeColorProfTrackerClass* klass )
         objClass->get_property = ege_color_prof_tracker_get_property;
         objClass->set_property = ege_color_prof_tracker_set_property;
         klass->changed = nullptr;
+
+        objClass->dispose = ege_color_prof_tracker_dispose;
 
         signals[CHANGED] = g_signal_new( "changed",
                                          G_TYPE_FROM_CLASS(klass),
@@ -179,7 +180,6 @@ EgeColorProfTracker* ege_color_prof_tracker_new( GtkWidget* target )
     priv->_target = target;
 
     if ( target ) {
-        g_object_weak_ref( G_OBJECT(target), target_finalized, obj );
         g_signal_connect( G_OBJECT(target), "hierarchy-changed", G_CALLBACK( target_hierarchy_changed_cb ), obj );
         g_signal_connect( G_OBJECT(target), "screen-changed",    G_CALLBACK( target_screen_changed_cb ),    obj );
 
@@ -198,6 +198,33 @@ EgeColorProfTracker* ege_color_prof_tracker_new( GtkWidget* target )
     }
 
     return tracker;
+}
+
+void ege_color_prof_tracker_dispose(GObject *obj)
+{
+    auto *tracker = EGE_COLOR_PROF_TRACKER(obj);
+    auto *priv = EGE_COLOR_PROF_TRACKER_GET_PRIVATE(tracker);
+
+    if (priv->_target) {
+        // remove from trackers
+        auto *trackers = tracked_screen->trackers;
+        auto it = std::find(trackers->begin(), trackers->end(), tracker);
+        if (it != trackers->end()) {
+            trackers->erase(it);
+        }
+
+        // disconnect signals
+        g_signal_handlers_disconnect_by_data(G_OBJECT(priv->_target), obj);
+        g_signal_handlers_disconnect_by_data(G_OBJECT(gtk_widget_get_toplevel(priv->_target)), obj);
+
+        priv->_target = nullptr;
+    }
+
+    // chain up to parent
+    auto *parent_class = G_OBJECT_CLASS(ege_color_prof_tracker_parent_class);
+    if (parent_class->dispose) {
+        (*parent_class->dispose)(obj);
+    }
 }
 
 void ege_color_prof_tracker_get_profile( EgeColorProfTracker const * tracker, gpointer* ptr, guint* len )
@@ -321,29 +348,6 @@ void track_screen( GdkScreen* screen, EgeColorProfTracker* tracker )
 }
 
 
-void target_finalized( gpointer data, GObject* where_the_object_was )
-{
-    (void)data;
-    if ( tracked_screen ) {
-        for (auto i = tracked_screen->trackers->begin(); i != tracked_screen->trackers->end(); ++i) {
-            auto priv = EGE_COLOR_PROF_TRACKER_GET_PRIVATE (*i);
-            if ( (void*)(priv->_target) == (void*)where_the_object_was ) {
-                /* The tracked widget is now gone, remove it */
-                priv->_target = nullptr;
-                tracked_screen->trackers->erase(i);
-                break;
-            }
-        }
-    }
-}
-
-void window_finalized( gpointer data, GObject* where_the_object_was )
-{
-    (void)data;
-    (void)where_the_object_was;
-/*     g_message("Window at %p is now going away", where_the_object_was); */
-}
-
 void event_after_cb( GtkWidget* widget, GdkEvent* event, gpointer user_data )
 {
     if ( event->type == GDK_CONFIGURE ) {
@@ -379,7 +383,6 @@ void target_hierarchy_changed_cb(GtkWidget* widget, GtkWidget* prev_top, gpointe
         if ( gtk_widget_is_toplevel(top) ) {
             GtkWindow* win = GTK_WINDOW(top);
             g_signal_connect( G_OBJECT(win), "event-after", G_CALLBACK( event_after_cb ), user_data );
-            g_object_weak_ref( G_OBJECT(win), window_finalized, user_data );
         }
     }
 }

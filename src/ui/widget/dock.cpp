@@ -55,7 +55,8 @@ Dock::Dock(Gtk::Orientation orientation)
 
     _paned = Gtk::manage(new Gtk::Paned(orientation));
     _paned->set_name("DockBoxPane");
-    _paned->pack1(*Glib::wrap(GTK_WIDGET(_gdl_dock)), false,  false);
+    // transfer ownership of `_gdl_dock` to `_paned` with `manage()`
+    _paned->pack1(*Gtk::manage(Glib::wrap(GTK_WIDGET(_gdl_dock))), false,  false);
     _paned->pack2(_filler,                            true,   false);
     //                                                resize, shrink
 
@@ -91,20 +92,31 @@ Dock::Dock(Gtk::Orientation orientation)
 
     gdl_dock_bar_set_style(_gdl_dock_bar, gdl_dock_bar_style);
 
-
-    INKSCAPE.signal_dialogs_hide.connect(sigc::mem_fun(*this, &Dock::hide));
-    INKSCAPE.signal_dialogs_unhide.connect(sigc::mem_fun(*this, &Dock::show));
+    _connections.emplace_back(INKSCAPE.signal_dialogs_hide.connect(sigc::mem_fun(*this, &Dock::hide)));
+    _connections.emplace_back(INKSCAPE.signal_dialogs_unhide.connect(sigc::mem_fun(*this, &Dock::show)));
 
     g_signal_connect(_paned->gobj(), "button-press-event", G_CALLBACK(_on_paned_button_event), (void *)this);
     g_signal_connect(_paned->gobj(), "button-release-event", G_CALLBACK(_on_paned_button_event), (void *)this);
 
-    signal_layout_changed().connect(sigc::mem_fun(*this, &Inkscape::UI::Widget::Dock::_onLayoutChanged));
+    _connections.emplace_back(
+        signal_layout_changed().connect(sigc::mem_fun(*this, &Inkscape::UI::Widget::Dock::_onLayoutChanged)));
 }
 
 Dock::~Dock()
 {
-    g_free(_gdl_dock);
-    g_free(_gdl_dock_bar);
+    // assume that releaseAllReferences has been called
+    g_assert(_dock_items.empty());
+}
+
+void Dock::releaseAllReferences()
+{
+    for (auto &conn : _connections) {
+        conn.disconnect();
+    }
+
+    g_signal_handlers_disconnect_by_data(_paned->gobj(), this);
+
+    _dock_items.clear();
 }
 
 void Dock::addItem(DockItem& item, GdlDockPlacement placement)

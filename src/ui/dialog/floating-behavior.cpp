@@ -40,8 +40,6 @@ FloatingBehavior::FloatingBehavior(Dialog &dialog) :
     signal_delete_event().connect(sigc::mem_fun(_dialog, &Inkscape::UI::Dialog::Dialog::_onDeleteEvent));
 
     sp_transientize(GTK_WIDGET(_d->gobj()));
-    _dialog.retransientize_suppress = false;
-
 
     // install CSS to control focused/unfocused opacity and transition time
     // TODO: currently needs a restart (but seems reasonable, considering anybody will hardly ever change these)
@@ -140,20 +138,8 @@ FloatingBehavior::onDesktopActivated (SPDesktop *desktop)
 
     GtkWindow *dialog_win = GTK_WINDOW(_d->gobj());
 
-    if (_dialog.retransientize_suppress) {
-         /* if retransientizing of this dialog is still forbidden after
-          * previous call warning turned off because it was confusingly fired
-          * when loading many files from command line
-          */
-
-         // g_warning("Retranzientize aborted! You're switching windows too fast!");
-        return;
-    }
-
-    if (dialog_win)
+    if (dialog_win && _dialog.retransientize_suppress())
     {
-        _dialog.retransientize_suppress = true; // disallow other attempts to retranzientize this dialog
-
         desktop->setWindowTransient (dialog_win);
 
         /*
@@ -167,10 +153,11 @@ FloatingBehavior::onDesktopActivated (SPDesktop *desktop)
             // without this, a transient window not always emerges on top
             gtk_window_present (dialog_win);
         }
+
+        // we're done, allow next retransientizing not sooner than after 120 msec
+        _dialog.retransientize_again_timeout_add();
     }
 
-    // we're done, allow next retransientizing not sooner than after 120 msec
-    g_timeout_add (120, (GSourceFunc) sp_retransientize_again, (gpointer) &_dialog);
 }
 
 

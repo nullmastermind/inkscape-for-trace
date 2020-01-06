@@ -95,6 +95,7 @@ using Inkscape::Util::unit_table;
 
 static void sp_desktop_widget_class_init (SPDesktopWidgetClass *klass);
 
+static void sp_desktop_widget_finalize(GObject *);
 static void sp_desktop_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation);
 static void sp_desktop_widget_realize (GtkWidget *widget);
 
@@ -273,6 +274,7 @@ sp_desktop_widget_class_init (SPDesktopWidgetClass *klass)
     GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
 
     object_class->dispose = SPDesktopWidget::dispose;
+    object_class->finalize = sp_desktop_widget_finalize;
 
     widget_class->size_allocate = sp_desktop_widget_size_allocate;
     widget_class->realize = sp_desktop_widget_realize;
@@ -306,9 +308,27 @@ SPDesktopWidget::canvas_tbl_size_allocate(Gtk::Allocation& allocation)
  */
 void SPDesktopWidget::init( SPDesktopWidget *dtw )
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    // TODO Don't let Glib allocate a non-trivial C++ class. For example
+    // convert SPDesktopWidget and SPViewWidget to Glibmm derived classes,
+    // or separate out the C++ member variables to make SPDesktopWidget
+    // a trivial type.
 
-    new (&dtw->modified_connection) sigc::connection();
+    // The 'viewwidget' member is already initialized at this point
+    static_assert(std::is_trivial<decltype(dtw->viewwidget)>::value, "");
+    auto viewwidget_save = std::move(dtw->viewwidget);
+
+    // The instance was allocated from C (glib) but has C++ members.
+    new (dtw) SPDesktopWidget();
+
+    // restore
+    dtw->viewwidget = std::move(viewwidget_save);
+}
+
+SPDesktopWidget::SPDesktopWidget()
+{
+    auto *const dtw = this;
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     dtw->_ruler_clicked = false;
     dtw->_ruler_dragged = false;
@@ -331,7 +351,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 
     /* Swatches panel */
     {
-        dtw->_panels = new Inkscape::UI::Dialog::SwatchesPanel("/embedded/swatches");
+        dtw->_panels = Gtk::manage(new Inkscape::UI::Dialog::SwatchesPanel("/embedded/swatches"));
         dtw->_panels->set_vexpand(false);
         dtw->_vbox->pack_end(*dtw->_panels, false, true);
     }
@@ -380,7 +400,8 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     dtw->_guides_lock->set_name("LockGuides");
     auto context = dtw->_guides_lock->get_style_context();
     context->add_provider(guides_lock_style_provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    dtw->_guides_lock->signal_toggled().connect(sigc::mem_fun(dtw, &SPDesktopWidget::update_guides_lock));
+    _connections.emplace_back(
+        dtw->_guides_lock->signal_toggled().connect(sigc::mem_fun(dtw, &SPDesktopWidget::update_guides_lock)));
     dtw->_canvas_tbl->attach(*dtw->_guides_lock, 0, 0, 1, 1);
 
     /* Rulers */
@@ -394,9 +415,12 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     dtw->_hruler_box = Gtk::manage(new Gtk::EventBox());
     dtw->_hruler_box->set_tooltip_text(gettext(pt->name_plural.c_str()));
     dtw->_hruler_box->add(*dtw->_hruler);
-    dtw->_hruler_box->signal_button_press_event().connect(sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_button_press_event), dtw->_hruler_box, true));
-    dtw->_hruler_box->signal_button_release_event().connect(sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_button_release_event), dtw->_hruler_box, true));
-    dtw->_hruler_box->signal_motion_notify_event().connect(sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_motion_notify_event), dtw->_hruler_box, true));
+    _connections.emplace_back(dtw->_hruler_box->signal_button_press_event().connect(
+        sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_button_press_event), dtw->_hruler_box, true)));
+    _connections.emplace_back(dtw->_hruler_box->signal_button_release_event().connect(
+        sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_button_release_event), dtw->_hruler_box, true)));
+    _connections.emplace_back(dtw->_hruler_box->signal_motion_notify_event().connect(
+        sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_motion_notify_event), dtw->_hruler_box, true)));
 
     dtw->_canvas_tbl->attach(*dtw->_hruler_box, 1, 0, 1, 1);
 
@@ -407,9 +431,12 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     dtw->_vruler_box = Gtk::manage(new Gtk::EventBox());
     dtw->_vruler_box->set_tooltip_text(gettext(pt->name_plural.c_str()));
     dtw->_vruler_box->add(*dtw->_vruler);
-    dtw->_vruler_box->signal_button_press_event().connect(sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_button_press_event), dtw->_vruler_box, false));
-    dtw->_vruler_box->signal_button_release_event().connect(sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_button_release_event), dtw->_vruler_box, false));
-    dtw->_vruler_box->signal_motion_notify_event().connect(sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_motion_notify_event), dtw->_vruler_box, false));
+    _connections.emplace_back(dtw->_vruler_box->signal_button_press_event().connect(
+        sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_button_press_event), dtw->_vruler_box, false)));
+    _connections.emplace_back(dtw->_vruler_box->signal_button_release_event().connect(
+        sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_button_release_event), dtw->_vruler_box, false)));
+    _connections.emplace_back(dtw->_vruler_box->signal_motion_notify_event().connect(
+        sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_motion_notify_event), dtw->_vruler_box, false)));
 
     dtw->_canvas_tbl->attach(*dtw->_vruler_box, 0, 1, 1, 1);
 
@@ -435,7 +462,8 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
                                                                      _("Zoom drawing if window size changes")));
     dtw->_sticky_zoom->set_name("StickyZoom");
     dtw->_sticky_zoom->set_active(prefs->getBool("/options/stickyzoom/value"));
-    dtw->_sticky_zoom->signal_toggled().connect(sigc::mem_fun(dtw, &SPDesktopWidget::sticky_zoom_toggled));
+    _connections.emplace_back(
+        dtw->_sticky_zoom->signal_toggled().connect(sigc::mem_fun(dtw, &SPDesktopWidget::sticky_zoom_toggled)));
     dtw->_vscrollbar_box->pack_start(*dtw->_sticky_zoom, false, false);
 
     // Vertical scrollbar
@@ -518,7 +546,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 
     if (create_dock) {
         dtw->_dock = new Inkscape::UI::Widget::Dock();
-        auto paned = new Gtk::Paned();
+        auto paned = Gtk::manage(new Gtk::Paned());
         paned->set_name("Canvas_and_Dock");
 
         paned->pack1(*dtw->_canvas_tbl);
@@ -534,19 +562,22 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
         paned->set_vexpand(true);
         tbl_wrapper->attach(*paned, 1, 1, 1, 1);
     } else {
+        dtw->_dock = nullptr;
         dtw->_canvas_tbl->set_hexpand(true);
         dtw->_canvas_tbl->set_vexpand(true);
         tbl_wrapper->attach(*(dtw->_canvas_tbl), 1, 1, 1, 1);
     }
 
     // connect scrollbar signals
-    dtw->_hadj->signal_value_changed().connect(sigc::mem_fun(dtw, &SPDesktopWidget::on_adjustment_value_changed));
-    dtw->_vadj->signal_value_changed().connect(sigc::mem_fun(dtw, &SPDesktopWidget::on_adjustment_value_changed));
+    _connections.emplace_back(
+        dtw->_hadj->signal_value_changed().connect(sigc::mem_fun(dtw, &SPDesktopWidget::on_adjustment_value_changed)));
+    _connections.emplace_back(
+        dtw->_vadj->signal_value_changed().connect(sigc::mem_fun(dtw, &SPDesktopWidget::on_adjustment_value_changed)));
 
     // --------------- Status Tool Bar ------------------//
 
     // Selected Style (Fill/Stroke/Opacity)
-    dtw->_selected_style = new Inkscape::UI::Widget::SelectedStyle(true);
+    dtw->_selected_style = Gtk::manage(new Inkscape::UI::Widget::SelectedStyle(true));
     dtw->_statusbar->pack_start(*dtw->_selected_style, false, false);
 
     // Separator
@@ -709,6 +740,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 
 /**
  * Called before SPDesktopWidget destruction.
+ * (Might be called more than once)
  */
 void
 SPDesktopWidget::dispose(GObject *object)
@@ -726,23 +758,41 @@ SPDesktopWidget::dispose(GObject *object)
             watcher->remove(dtw);
         }
 
+        for (auto &conn : dtw->_connections) {
+            conn.disconnect();
+        }
+
         // Zoom
         dtw->_zoom_status_input_connection.disconnect();
         dtw->_zoom_status_output_connection.disconnect();
-        g_signal_handlers_disconnect_matched (G_OBJECT (dtw->_zoom_status->gobj()), G_SIGNAL_MATCH_DATA, 0, 0, nullptr, nullptr, dtw->_zoom_status);
+        g_signal_handlers_disconnect_by_data(G_OBJECT(dtw->_zoom_status->gobj()), dtw->_zoom_status->gobj());
         dtw->_zoom_status_value_changed_connection.disconnect();
         dtw->_zoom_status_populate_popup_connection.disconnect();
 
         // Rotation
         dtw->_rotation_status_input_connection.disconnect();
         dtw->_rotation_status_output_connection.disconnect();
-        g_signal_handlers_disconnect_matched (G_OBJECT (dtw->_rotation_status->gobj()), G_SIGNAL_MATCH_DATA, 0, 0, nullptr, nullptr, dtw->_rotation_status);
+        g_signal_handlers_disconnect_by_data(G_OBJECT(dtw->_rotation_status->gobj()), dtw->_rotation_status->gobj());
         dtw->_rotation_status_value_changed_connection.disconnect();
         dtw->_rotation_status_populate_popup_connection.disconnect();
 
         // Canvas
-        g_signal_handlers_disconnect_by_func (G_OBJECT (dtw->_canvas), (gpointer) G_CALLBACK (SPDesktopWidget::event), dtw);
+        g_signal_handlers_disconnect_by_data(G_OBJECT(dtw->_canvas), dtw);
+        g_signal_handlers_disconnect_by_data(G_OBJECT(dtw->_menubar->gobj()), dtw);
+
+        // CMS
+        g_signal_handlers_disconnect_by_data(G_OBJECT(dtw->_cms_adjust->gobj()), dtw);
+        g_object_unref(dtw->_tracker);
+
+        // Desktop Widget
+        g_signal_handlers_disconnect_by_data(G_OBJECT(dtw), dtw);
+
         dtw->_canvas_tbl_size_allocate_connection.disconnect();
+
+        if (dtw->_dock) {
+            // dock and desktop both have references to dock items
+            dtw->_dock->releaseAllReferences();
+        }
 
         dtw->layer_selector->setDesktop(nullptr);
         dtw->layer_selector->unreference();
@@ -753,11 +803,24 @@ SPDesktopWidget::dispose(GObject *object)
         dtw->desktop = nullptr;
     }
 
-    dtw->modified_connection.~connection();
-
     if (G_OBJECT_CLASS (dtw_parent_class)->dispose) {
         (* G_OBJECT_CLASS (dtw_parent_class)->dispose) (object);
     }
+}
+
+/**
+ * Call destructor for C++ type (only called once)
+ */
+static void sp_desktop_widget_finalize(GObject *object)
+{
+    SP_DESKTOP_WIDGET(object)->~SPDesktopWidget();
+
+    G_OBJECT_CLASS(dtw_parent_class)->finalize(object);
+}
+
+SPDesktopWidget::~SPDesktopWidget()
+{
+    delete _dock;
 }
 
 /**

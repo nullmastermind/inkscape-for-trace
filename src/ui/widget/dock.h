@@ -60,7 +60,12 @@ public:
     /** Scrolls the scrolled window container to make the provided dock item visible, if needed */
     void scrollToItem(DockItem& item);
 
+    //! Disconnect all signals and clear all unowned pointers
+    void releaseAllReferences();
+
 protected:
+
+    std::vector<sigc::connection> _connections;
 
     std::list<const DockItem *> _dock_items;   //< added dock items
 
