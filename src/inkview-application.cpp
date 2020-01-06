@@ -28,6 +28,7 @@
 
 #include "inkscape.h"             // Inkscape::Application
 #include "inkscape-version.h"     // Inkscape version
+#include "include/glibmm_version.h"
 #include "inkgc/gc-core.h"        // Garbage Collecting init
 #include "inkview-window.h"
 
@@ -62,10 +63,12 @@ InkviewApplication::InkviewApplication()
 
     Glib::set_application_name(N_("Inkview - An SVG File Viewer"));  // After gettext() init.
 
+#if GLIBMM_CHECK_VERSION(2,56,0)
     // Additional informational strings for --help output
     // TODO: Claims to be translated automatically, but seems broken, so pass already translated strings
     set_option_context_parameter_string(_("path1 [path2 [pathN]]"));
     set_option_context_summary(_("Open one or more SVG files (or folders containing SVG files) for viewing."));
+#endif
 
     // Will automatically handle character conversions.
     // Note: OPTION_TYPE_FILENAME => std::string, OPTION_TYPE_STRING => Glib::ustring.

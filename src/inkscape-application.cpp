@@ -23,6 +23,8 @@
 #include "desktop.h"              // Access to window
 #include "file.h"                 // sp_file_convert_dpi
 
+#include "include/glibmm_version.h"
+
 #include "inkgc/gc-core.h"        // Garbage Collecting init
 
 #include "io/file.h"              // File open (command line).
@@ -521,6 +523,7 @@ ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
     // Will automatically handle character conversions.
     // Note: OPTION_TYPE_FILENAME => std::string, OPTION_TYPE_STRING => Glib::ustring.
 
+#if GLIBMM_CHECK_VERSION(2,56,0)
     // Additional informational strings for --help output
     // TODO: Claims to be translated automatically, but seems broken, so pass already translated strings
     this->set_option_context_parameter_string(_("file1 [file2 [fileN]]"));
@@ -531,6 +534,7 @@ ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
             + "  " + Glib::ustring::compose(_("Export input files (%1) to PNG format keeping original name (%2):"), "in1.svg, in2.svg", "in1.png, in2.png") + '\n'
             + '\t' + "inkscape --export-type=png in1.svg in2.svg\n"
             + "  " + Glib::ustring::compose(_("See %1 and %2 for more details."), "'man inkscape'", "http://wiki.inkscape.org/wiki/index.php/Using_the_Command_Line"));
+#endif
 
     // General
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "version",                 'V', N_("Print Inkscape version"),                                                  "");
