@@ -54,6 +54,10 @@ Selection::~Selection() {
         g_source_remove(_idle);
         _idle = 0;
     }
+
+    for (auto &c : _modified_connections) {
+        c.second.disconnect();
+    }
 }
 
 /* Handler for selected objects "modified" signal */

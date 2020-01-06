@@ -34,13 +34,27 @@ using Inkscape::XML::Node;
 
 class LayerManager::LayerWatcher : public Inkscape::XML::NodeObserver {
 public:
-    LayerWatcher(LayerManager* mgr, SPObject* obj, sigc::connection c) :
+    LayerWatcher(LayerManager* mgr, SPObject* obj) :
         _mgr(mgr),
         _obj(obj),
-        _connection(c),
         _lockedAttr(g_quark_from_string("sodipodi:insensitive")),
         _labelAttr(g_quark_from_string("inkscape:label"))
-    {}
+    {
+        _connection = _obj->connectModified(sigc::mem_fun(*mgr, &LayerManager::_objectModified));
+        _obj->getRepr()->addObserver(*this);
+    }
+
+    ~LayerWatcher() override
+    {
+        _connection.disconnect();
+
+        if (_obj) {
+            Node *node = _obj->getRepr();
+            if (node) {
+                node->removeObserver(*this);
+            }
+        }
+    }
 
     void notifyChildAdded( Node &/*node*/, Node &/*child*/, Node */*prev*/ ) override {}
     void notifyChildRemoved( Node &/*node*/, Node &/*child*/, Node */*prev*/ ) override {}
@@ -242,17 +256,7 @@ void LayerManager::_objectModified( SPObject* obj, guint /*flags*/ )
 void LayerManager::_rebuild() {
 //     Debug::EventTracker<DebugLayerRebuild> tracker1();
 
-    while ( !_watchers.empty() ) {
-        LayerWatcher* one = _watchers.back();
-        _watchers.pop_back();
-        if ( one->_obj ) {
-            Node* node = one->_obj->getRepr();
-            if ( node ) {
-                node->removeObserver(*one);
-            }
-            one->_connection.disconnect();
-        }
-    }
+    _watchers.clear();
 
     _clear();
 
@@ -323,11 +327,7 @@ void LayerManager::_rebuild() {
             if ( node && node->parent() ) {
 //                 Debug::EventTracker<DebugAddLayer> tracker(*layer);
 
-                sigc::connection connection = layer->connectModified(sigc::mem_fun(*this, &LayerManager::_objectModified));
-
-                LayerWatcher *eye = new LayerWatcher(this, layer, connection);
-                _watchers.push_back( eye );
-                layer->getRepr()->addObserver(*eye);
+                _watchers.emplace_back(new LayerWatcher(this, layer));
 
                 _addOne(layer);
             }
