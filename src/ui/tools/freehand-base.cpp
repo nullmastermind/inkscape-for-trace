@@ -821,7 +821,7 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
         SPCurve *s = dc->sa_overwrited;
         s->append_continuous(c, 0.0625);
         c->unref();
-        c = s;
+        c = s->ref();
     } else /* Step D - test end */ if (dc->ea) {
         SPCurve *e = dc->ea->curve;
         if (!dc->white_curves.empty()) {
