@@ -1864,7 +1864,6 @@ void ObjectsPanel::_blurChangedIter(const Gtk::TreeIter& iter, double blur)
 ObjectsPanel::ObjectsPanel() :
     UI::Widget::Panel("/dialogs/objects", SP_VERB_DIALOG_OBJECTS),
     _rootWatcher(nullptr),
-    _deskTrack(),
     _desktop(nullptr),
     _document(nullptr),
     _model(nullptr),
@@ -2182,10 +2181,6 @@ ObjectsPanel::ObjectsPanel() :
     setDesktop( targetDesktop );
 
     show_all_children();
-
-    //Connect the desktop changed connection
-    desktopChangeConn = _deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &ObjectsPanel::setDesktop) );
-    _deskTrack.connect(GTK_WIDGET(gobj()));
 }
 
 /**
@@ -2230,9 +2225,6 @@ ObjectsPanel::~ObjectsPanel()
         gdk_event_free( _toggleEvent );
         _toggleEvent = nullptr;
     }
-
-    desktopChangeConn.disconnect();
-    _deskTrack.disconnect();
 }
 
 /**
@@ -2293,7 +2285,6 @@ void ObjectsPanel::setDesktop( SPDesktop* desktop )
             setDocument(nullptr, nullptr);
         }
     }
-    _deskTrack.setBase(desktop);
 }
 } //namespace Dialogs
 } //namespace UI

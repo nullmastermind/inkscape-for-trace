@@ -24,7 +24,6 @@
 
 #include "attributes.h"
 #include "display/nr-filter-types.h"
-#include "ui/dialog/desktop-tracker.h"
 #include "ui/widget/combo-enums.h"
 #include "ui/widget/panel.h"
 #include "ui/widget/spin-scale.h"
@@ -46,6 +45,8 @@ public:
 
     FilterEffectsDialog();
     ~FilterEffectsDialog() override;
+
+    void setDesktop(SPDesktop *) override;
 
     static FilterEffectsDialog &getInstance()
     { return *new FilterEffectsDialog(); }
@@ -86,8 +87,10 @@ private:
             Gtk::TreeModelColumn<int> count;
         };
 
+      public:
         void setTargetDesktop(SPDesktop *desktop);
        
+      private:
         void on_document_replaced(SPDesktop *desktop, SPDocument *document);
         void on_change_selection();
         void on_modified_selection( guint flags );
@@ -113,14 +116,8 @@ private:
         SPDesktop *_desktop;
 
         /**
-         * Auxiliary widget to keep track of desktop changes for the floating dialog.
-         */
-        DesktopTracker _deskTrack;
-
-        /**
          * Link to callback function for a change in desktop (window).
          */
-        sigc::connection desktopChangeConn;
         sigc::connection _selectChangedConn;
         sigc::connection _selectModifiedConn;
         sigc::connection _doc_replaced;

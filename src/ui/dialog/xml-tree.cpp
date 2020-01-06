@@ -218,8 +218,6 @@ XmlTree::XmlTree()
     raise_node_button.signal_clicked().connect(sigc::mem_fun(*this, &XmlTree::cmd_raise_node));
     lower_node_button.signal_clicked().connect(sigc::mem_fun(*this, &XmlTree::cmd_lower_node));
 
-    desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &XmlTree::set_tree_desktop) );
-    deskTrack.connect(GTK_WIDGET(gobj()));
     _paned.property_position().signal_changed().connect(sigc::mem_fun(*this, &XmlTree::_childresized));
     _paned.signal_size_allocate().connect(sigc::mem_fun(*this, &XmlTree::_panedresized));
     set_name("XMLAndAttributesDialog");
@@ -237,8 +235,6 @@ XmlTree::XmlTree()
     dialog_scroller->set_shadow_type(Gtk::SHADOW_IN);
     dialog_scroller->add(*Gtk::manage(contents));
     root->pack_start(*dialog_scroller, true, true, 0);
-    g_assert(desktop != nullptr);
-    set_tree_desktop(desktop);
 
 }
 
@@ -322,7 +318,8 @@ XmlTree::~XmlTree ()
 void XmlTree::setDesktop(SPDesktop *desktop)
 {
     Panel::setDesktop(desktop);
-    deskTrack.setBase(desktop);
+
+    set_tree_desktop(desktop);
 }
 
 /**

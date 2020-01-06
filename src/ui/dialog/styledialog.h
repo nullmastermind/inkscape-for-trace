@@ -37,7 +37,6 @@
 #include <gtkmm/viewport.h>
 #include <ui/widget/panel.h>
 
-#include "ui/dialog/desktop-tracker.h"
 
 #include "xml/helper-observer.h"
 
@@ -64,6 +63,8 @@ class StyleDialog : public Widget::Panel {
     StyleDialog();
     StyleDialog(StyleDialog const &d) = delete;
     StyleDialog operator=(StyleDialog const &d) = delete;
+
+    void setDesktop(SPDesktop *desktop) override;
 
     static StyleDialog &getInstance() { return *new StyleDialog(); }
     void setCurrentSelector(Glib::ustring current_selector);
@@ -173,14 +174,11 @@ class StyleDialog : public Widget::Panel {
 
     // Signals and handlers - External
     sigc::connection _document_replaced_connection;
-    sigc::connection _desktop_changed_connection;
     sigc::connection _selection_changed_connection;
 
     void _handleDocumentReplaced(SPDesktop *desktop, SPDocument *document);
-    void _handleDesktopChanged(SPDesktop *desktop);
     void _handleSelectionChanged();
     void _closeDialog(Gtk::Dialog *textDialogPtr);
-    DesktopTracker _desktopTracker;
 };
 
 } // namespace Dialog

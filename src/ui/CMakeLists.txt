@@ -94,7 +94,6 @@ set(ui_SRC
 	dialog/color-item.cpp
     dialog/attrdialog.cpp
 	dialog/debug.cpp
-	dialog/desktop-tracker.cpp
 	dialog/dialog-manager.cpp
 	dialog/dialog.cpp
 	dialog/dock-behavior.cpp
@@ -258,7 +257,6 @@ set(ui_SRC
 	dialog/color-item.h
     dialog/attrdialog.h
 	dialog/debug.h
-	dialog/desktop-tracker.h
 	dialog/dialog-manager.h
 	dialog/dialog.h
 	dialog/dock-behavior.h

@@ -250,7 +250,6 @@ SelectorsDialog::SelectorsDialog()
     , _textNode(nullptr)
     , _scroolpos(0)
     , _scroollock(false)
-    , _desktopTracker()
 {
     g_debug("SelectorsDialog::SelectorsDialog");
     // Tree
@@ -293,11 +292,6 @@ SelectorsDialog::SelectorsDialog()
     _treeView.signal_row_collapsed().connect(sigc::mem_fun(*this, &SelectorsDialog::_rowCollapse));
 
     _showWidgets();
-
-    // Document & Desktop
-    _desktop_changed_connection =
-        _desktopTracker.connectDesktopChanged(sigc::mem_fun(*this, &SelectorsDialog::_handleDesktopChanged));
-    _desktopTracker.connect(GTK_WIDGET(gobj()));
 
     _document_replaced_connection =
         getDesktop()->connectDocumentReplaced(sigc::mem_fun(this, &SelectorsDialog::_handleDocumentReplaced));
@@ -453,7 +447,6 @@ void SelectorsDialog::_toggleDirection(Gtk::RadioButton *vertical)
 SelectorsDialog::~SelectorsDialog()
 {
     g_debug("SelectorsDialog::~SelectorsDialog");
-    _desktop_changed_connection.disconnect();
     _document_replaced_connection.disconnect();
     _selection_changed_connection.disconnect();
 }
@@ -1427,10 +1420,8 @@ void SelectorsDialog::_handleDocumentReplaced(SPDesktop *desktop, SPDocument * /
 /*
  * When a dialog is floating, it is connected to the active desktop.
  */
-void SelectorsDialog::_handleDesktopChanged(SPDesktop *desktop)
+void SelectorsDialog::setDesktop(SPDesktop *desktop)
 {
-    g_debug("SelectorsDialog::handleDesktopReplaced()");
-
     if (getDesktop() == desktop) {
         // This will happen after construction of dialog. We've already
         // set up signals so just return.
@@ -1440,7 +1431,7 @@ void SelectorsDialog::_handleDesktopChanged(SPDesktop *desktop)
     _selection_changed_connection.disconnect();
     _document_replaced_connection.disconnect();
 
-    setDesktop( desktop );
+    Panel::setDesktop( desktop );
 
     _selection_changed_connection = desktop->getSelection()->connectChanged(
         sigc::hide(sigc::mem_fun(this, &SelectorsDialog::_handleSelectionChanged)));
@@ -1450,6 +1441,8 @@ void SelectorsDialog::_handleDesktopChanged(SPDesktop *desktop)
     _updateWatchers();
     _readStyleElement();
     _selectRow();
+
+    _style_dialog->setDesktop(desktop);
 }
 
 

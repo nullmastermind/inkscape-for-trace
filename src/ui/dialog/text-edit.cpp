@@ -69,8 +69,6 @@ TextEdit::TextEdit()
       setasdefault_button(_("Set as _default")),
       close_button(_("_Close"), true),
       apply_button(_("_Apply"), true),
-      desktop(nullptr),
-      deskTrack(),
       selectChangedConn(),
       subselChangedConn(),
       selectModifiedConn(),
@@ -162,8 +160,6 @@ TextEdit::TextEdit()
     fontChangedConn = font_selector.connectChanged (sigc::mem_fun(*this, &TextEdit::onFontChange));
     fontFeaturesChangedConn = font_features.connectChanged(sigc::mem_fun(*this, &TextEdit::onChange));
     notebook.signal_switch_page().connect(sigc::mem_fun(*this, &TextEdit::onFontFeatures));
-    desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &TextEdit::setTargetDesktop) );
-    deskTrack.connect(GTK_WIDGET(gobj()));
 
     font_selector.set_name ("TextEdit");
 
@@ -175,8 +171,6 @@ TextEdit::~TextEdit()
     selectModifiedConn.disconnect();
     subselChangedConn.disconnect();
     selectChangedConn.disconnect();
-    desktopChangeConn.disconnect();
-    deskTrack.disconnect();
     fontChangedConn.disconnect();
     fontFeaturesChangedConn.disconnect();
 }
@@ -198,11 +192,6 @@ void TextEdit::onReadSelection ( gboolean dostyle, gboolean /*docontent*/ )
 {
     if (blocked)
         return;
-
-    if (!desktop || SP_ACTIVE_DESKTOP != desktop)
-    {
-        return;
-    }
 
     blocked = true;
 
@@ -419,7 +408,7 @@ void TextEdit::onApply()
 {
     blocked = true;
 
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    SPDesktop *desktop = getDesktop();
 
     unsigned items = 0;
     auto item_list = desktop->getSelection()->items();
@@ -529,18 +518,13 @@ void TextEdit::onFontChange(Glib::ustring fontspec)
 void TextEdit::setDesktop(SPDesktop *desktop)
 {
     Panel::setDesktop(desktop);
-    deskTrack.setBase(desktop);
-}
 
-void TextEdit::setTargetDesktop(SPDesktop *desktop)
-{
-    if (this->desktop != desktop) {
-        if (this->desktop) {
+    {
+        {
             selectModifiedConn.disconnect();
             subselChangedConn.disconnect();
             selectChangedConn.disconnect();
         }
-        this->desktop = desktop;
         if (desktop && desktop->selection) {
             selectChangedConn = desktop->selection->connectChanged(sigc::hide(sigc::mem_fun(*this, &TextEdit::onSelectionChange)));
             subselChangedConn = desktop->connectToolSubselectionChanged(sigc::hide(sigc::mem_fun(*this, &TextEdit::onSelectionChange)));

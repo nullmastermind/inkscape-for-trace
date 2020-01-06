@@ -163,9 +163,6 @@ Transformation::Transformation()
     _selChangeConn = INKSCAPE.signal_selection_changed.connect(sigc::bind(sigc::ptr_fun(&on_selection_changed), this));
     _selModifyConn = INKSCAPE.signal_selection_modified.connect(sigc::hide<1>(sigc::bind(sigc::ptr_fun(&on_selection_modified), this)));
 
-    _desktopChangeConn = _deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &Transformation::setDesktop) );
-    _deskTrack.connect(GTK_WIDGET(gobj()));
-
     show_all_children();
 }
 
@@ -173,15 +170,6 @@ Transformation::~Transformation()
 {
     _selModifyConn.disconnect();
     _selChangeConn.disconnect();   
-    _desktopChangeConn.disconnect();
-    _deskTrack.disconnect();
-}
-
-void Transformation::setTargetDesktop(SPDesktop *desktop)
-{
-    if (_desktop != desktop) {
-        _desktop = desktop;
-    }
 }
 
 /*########################################################################

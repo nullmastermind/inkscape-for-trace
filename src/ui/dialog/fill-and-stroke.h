@@ -18,7 +18,6 @@
 
 #include "ui/widget/panel.h"
 #include "ui/widget/object-composite-settings.h"
-#include "ui/dialog/desktop-tracker.h"
 
 #include <gtkmm/notebook.h>
 #include "ui/widget/style-subject.h"
@@ -71,14 +70,10 @@ private:
     FillAndStroke(FillAndStroke const &d) = delete;
     FillAndStroke& operator=(FillAndStroke const &d) = delete;
 
-    void setTargetDesktop(SPDesktop *desktop);
-
-    DesktopTracker deskTrack;
     SPDesktop *targetDesktop;
     Gtk::Widget *fillWdgt;
     Gtk::Widget *strokeWdgt;
     Gtk::Widget *strokeStyleWdgt;
-    sigc::connection desktopChangeConn;
 };
 
 } // namespace Dialog

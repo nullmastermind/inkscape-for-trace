@@ -15,7 +15,6 @@
 
 #include <iostream>
 #include "ui/widget/panel.h"
-#include "ui/dialog/desktop-tracker.h"
 
 // Only to display status.
 #include <gtkmm/label.h>
@@ -45,14 +44,11 @@ private:
 
     // Signals and handlers
     sigc::connection connectionDocumentReplaced;
-    sigc::connection connectionDesktopChanged;
     sigc::connection connectionSelectionChanged;
 
     void handleDocumentReplaced(SPDesktop* desktop, SPDocument *document);
-    void handleDesktopChanged(SPDesktop* desktop);
+    void setDesktop(SPDesktop *) override;
     void handleSelectionChanged();
-
-    DesktopTracker desktopTracker;
 
     // Just for example
     Gtk::Label label;

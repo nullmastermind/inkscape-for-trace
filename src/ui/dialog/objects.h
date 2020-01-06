@@ -23,7 +23,6 @@
 #include <gtkmm/dialog.h>
 #include "ui/widget/spinbutton.h"
 #include "ui/widget/panel.h"
-#include "desktop-tracker.h"
 #include "ui/widget/style-subject.h"
 #include "selection.h"
 #include "ui/widget/filter-effect-chooser.h"
@@ -69,9 +68,6 @@ private:
     //All object watchers
     std::map<SPItem*, std::pair<ObjectsPanel::ObjectWatcher*, bool> > _objectWatchers;
     
-    //Connection for when the desktop changes
-    sigc::connection desktopChangeConn;
-
     //Connection for when the desktop is destroyed (I.e. its deconstructor is called)
     sigc::connection _desktopDestroyedConnection;
 
@@ -96,9 +92,6 @@ private:
     sigc::connection _processQueue_sig;
     sigc::connection _executeUpdate_sig;
 
-    //Desktop tracker for grabbing the desktop changed connection
-    DesktopTracker _deskTrack;
-    
     //Members:
     
     //The current desktop

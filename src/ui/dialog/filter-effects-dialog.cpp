@@ -1323,7 +1323,6 @@ static Gtk::Menu * create_popup_menu(Gtk::Widget& parent,
 /*** FilterModifier ***/
 FilterEffectsDialog::FilterModifier::FilterModifier(FilterEffectsDialog& d)
     :    _desktop(nullptr),
-         _deskTrack(),
          _dialog(d),
          _add(_("_New"), true),
          _observer(new Inkscape::XML::SignalObserver)
@@ -1378,9 +1377,6 @@ FilterEffectsDialog::FilterModifier::FilterModifier(FilterEffectsDialog& d)
 
     _list.get_selection()->signal_changed().connect(sigc::mem_fun(*this, &FilterModifier::on_filter_selection_changed));
     _observer->signal_changed().connect(signal_filter_changed().make_slot());
-
-    desktopChangeConn = _deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &FilterModifier::setTargetDesktop) );
-    _deskTrack.connect(GTK_WIDGET(gobj()));
 
     update_filters();
 }
@@ -2714,6 +2710,11 @@ FilterEffectsDialog::~FilterEffectsDialog()
 {
     delete _settings;
     delete _filter_general_settings;
+}
+
+void FilterEffectsDialog::setDesktop(SPDesktop *desktop)
+{ //
+    _filter_modifier.setTargetDesktop(desktop);
 }
 
 void FilterEffectsDialog::set_attrs_locked(const bool l)

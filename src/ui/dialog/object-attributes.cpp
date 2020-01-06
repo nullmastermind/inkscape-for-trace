@@ -74,17 +74,11 @@ ObjectAttributes::ObjectAttributes () :
     blocked (false),
     CurrentItem(nullptr),
     attrTable(Gtk::manage(new SPAttributeTable())),
-    desktop(nullptr),
-    deskTrack(),
     selectChangedConn(),
     subselChangedConn(),
     selectModifiedConn()
 {
     attrTable->show();
-    widget_setup();
-    
-    desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &ObjectAttributes::setTargetDesktop) );
-    deskTrack.connect(GTK_WIDGET(gobj()));
 }
 
 ObjectAttributes::~ObjectAttributes ()
@@ -92,8 +86,6 @@ ObjectAttributes::~ObjectAttributes ()
     selectModifiedConn.disconnect();
     subselChangedConn.disconnect();
     selectChangedConn.disconnect();
-    desktopChangeConn.disconnect();
-    deskTrack.disconnect();
 }
 
 void ObjectAttributes::widget_setup ()
@@ -172,15 +164,17 @@ void ObjectAttributes::widget_setup ()
     blocked = false;
 }
 
-void ObjectAttributes::setTargetDesktop(SPDesktop *desktop)
+void ObjectAttributes::setDesktop(SPDesktop *desktop)
 {
-    if (this->desktop != desktop) {
-        if (this->desktop) {
+    {
+        {
             selectModifiedConn.disconnect();
             subselChangedConn.disconnect();
             selectChangedConn.disconnect();
         }
-        this->desktop = desktop;
+
+        Panel::setDesktop(desktop);
+
         if (desktop && desktop->selection) {
             selectChangedConn = desktop->selection->connectChanged(sigc::hide(sigc::mem_fun(*this, &ObjectAttributes::widget_setup)));
             subselChangedConn = desktop->connectToolSubselectionChanged(sigc::hide(sigc::mem_fun(*this, &ObjectAttributes::widget_setup)));

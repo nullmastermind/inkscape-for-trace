@@ -23,7 +23,6 @@
 
 #include <glibmm/i18n.h>
 
-#include "desktop-tracker.h"
 #include "desktop.h"
 #include "selection.h"
 
@@ -57,11 +56,7 @@ class TraceDialogImpl2 : public TraceDialog {
     void onSetDefaults();
 
     void setDesktop(SPDesktop *desktop) override;
-    void setTargetDesktop(SPDesktop *desktop);
 
-    SPDesktop *desktop;
-    DesktopTracker deskTrack;
-    sigc::connection desktopChangeConn;
     sigc::connection selectChangedConn;
     sigc::connection selectModifiedConn;
 
@@ -84,17 +79,12 @@ class TraceDialogImpl2 : public TraceDialog {
 void TraceDialogImpl2::setDesktop(SPDesktop *desktop)
 {
     Panel::setDesktop(desktop);
-    deskTrack.setBase(desktop);
-}
 
-void TraceDialogImpl2::setTargetDesktop(SPDesktop *desktop)
-{
-    if (this->desktop != desktop) {
-        if (this->desktop) {
+    {
+        {
             selectChangedConn.disconnect();
             selectModifiedConn.disconnect();
         }
-        this->desktop = desktop;
         if (desktop && desktop->selection) {
             selectModifiedConn = desktop->selection->connectModified(
                 sigc::hide<0>(sigc::mem_fun(*this, &TraceDialogImpl2::onSelectionModified)));
@@ -347,8 +337,6 @@ TraceDialogImpl2::TraceDialogImpl2()
 #undef GET_O
     _getContents()->add(*mainBox);
     // show_all_children();
-    desktopChangeConn = deskTrack.connectDesktopChanged(sigc::mem_fun(*this, &TraceDialogImpl2::setTargetDesktop));
-    deskTrack.connect(GTK_WIDGET(gobj()));
 
     B_Update->signal_clicked().connect(sigc::mem_fun(*this, &TraceDialogImpl2::previewCallback));
     B_OK->signal_clicked().connect(sigc::mem_fun(*this, &TraceDialogImpl2::traceCallback));
@@ -362,7 +350,6 @@ TraceDialogImpl2::~TraceDialogImpl2()
 {
     selectChangedConn.disconnect();
     selectModifiedConn.disconnect();
-    desktopChangeConn.disconnect();
 }
 
 

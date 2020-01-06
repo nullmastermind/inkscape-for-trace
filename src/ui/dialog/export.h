@@ -18,7 +18,6 @@
 #include <gtkmm/grid.h>
 #include <gtkmm/comboboxtext.h>
 
-#include "ui/dialog/desktop-tracker.h"
 #include "ui/widget/panel.h"
 
 namespace Gtk {
@@ -209,11 +208,6 @@ private:
     void setDesktop(SPDesktop *desktop) override;
 
     /**
-     * Is invoked by the desktop tracker when the desktop changes.
-     */
-    void setTargetDesktop(SPDesktop *desktop);
-
-    /**
      * Creates progress dialog for batch exporting.
      *
      * @param progress_text Text to be shown in the progress bar
@@ -340,9 +334,6 @@ private:
     bool interrupted; // indicates whether export needs to be interrupted (read: user pressed cancel in the progress dialog)
 
     Inkscape::Preferences *prefs;
-    SPDesktop *desktop;
-    DesktopTracker deskTrack;
-    sigc::connection desktopChangeConn;
     sigc::connection selectChangedConn;
     sigc::connection subselChangedConn;
     sigc::connection selectModifiedConn;

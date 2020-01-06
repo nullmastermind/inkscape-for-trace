@@ -10,7 +10,6 @@
 
 #include "ui/widget/panel.h"
 #include <gtkmm/treemodel.h>
-#include "ui/dialog/desktop-tracker.h"
 
 
 namespace Gtk {
@@ -57,7 +56,6 @@ private:
 
     void glyphActivated(Gtk::TreeModel::Path const & path);
     void glyphSelectionChanged();
-    void setTargetDesktop(SPDesktop *desktop);
     void selectionModifiedCB(guint flags);
     void readSelection( bool updateStyle, bool updateContent );
     void calcCanInsert();
@@ -72,8 +70,6 @@ private:
     Gtk::ComboBoxText *scriptCombo;
     Gtk::ComboBoxText *rangeCombo;
     Inkscape::UI::Widget::FontSelector *fontSelector;
-    SPDesktop *targetDesktop;
-    DesktopTracker deskTrack;
 
     std::vector<sigc::connection> instanceConns;
     std::vector<sigc::connection> desktopConns;

@@ -26,7 +26,6 @@
 #include <gtkmm/scrolledwindow.h>
 #include "ui/widget/panel.h"
 #include "ui/widget/frame.h"
-#include "ui/dialog/desktop-tracker.h"
 
 #include "ui/widget/font-selector.h"
 #include "ui/widget/font-variants.h"
@@ -133,15 +132,6 @@ protected:
      */
     void setDesktop(SPDesktop *desktop) override;
 
-    /**
-     * Is invoked by the desktop tracker when the desktop changes.
-     *
-     * @see DesktopTracker
-     */
-    void setTargetDesktop(SPDesktop *desktop);
-
-
-
 private:
 
     /*
@@ -178,9 +168,6 @@ private:
     Gtk::Button apply_button;
 
     // Signals
-    SPDesktop *desktop;
-    DesktopTracker deskTrack;
-    sigc::connection desktopChangeConn;
     sigc::connection selectChangedConn;
     sigc::connection subselChangedConn;
     sigc::connection selectModifiedConn;

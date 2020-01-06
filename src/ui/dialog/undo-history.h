@@ -25,7 +25,6 @@
 
 #include "event-log.h"
 
-#include "ui/dialog/desktop-tracker.h"
 
 class SPDesktop;
 
@@ -129,9 +128,6 @@ protected:
     Glib::RefPtr<Gtk::TreeModel> _event_list_store;
     Gtk::TreeView _event_list_view;
     Glib::RefPtr<Gtk::TreeSelection> _event_list_selection;
-
-    DesktopTracker _deskTrack;
-    sigc::connection _desktopChangeConn;
 
     EventLog::CallbackMap _callback_connections;
 

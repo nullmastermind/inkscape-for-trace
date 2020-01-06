@@ -99,8 +99,6 @@ UndoHistory::UndoHistory()
       _scrolled_window(),
       _event_list_store(),
       _event_list_selection(_event_list_view.get_selection()),
-      _deskTrack(),
-      _desktopChangeConn(),
       _callback_connections()
 {
     if ( !_document || !_event_log || !_columns ) return;
@@ -158,9 +156,6 @@ UndoHistory::UndoHistory()
     _callback_connections[EventLog::CALLB_COLLAPSE] =
         _event_list_view.signal_row_collapsed().connect(sigc::mem_fun(*this, &Inkscape::UI::Dialog::UndoHistory::_onCollapseEvent));
 
-    _desktopChangeConn = _deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &UndoHistory::setDesktop) );
-    _deskTrack.connect(GTK_WIDGET(gobj()));
-
     // connect to be informed of document changes
     signalDocumentReplaced().connect(sigc::mem_fun(*this, &UndoHistory::_handleDocumentReplaced));
 
@@ -172,7 +167,6 @@ UndoHistory::UndoHistory()
 
 UndoHistory::~UndoHistory()
 {
-    _desktopChangeConn.disconnect();
 }
 
 

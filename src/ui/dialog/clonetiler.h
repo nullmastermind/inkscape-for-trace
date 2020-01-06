@@ -13,7 +13,6 @@
 
 #include "ui/widget/panel.h"
 
-#include "ui/dialog/desktop-tracker.h"
 #include "ui/widget/color-picker.h"
 
 namespace Gtk {
@@ -150,8 +149,6 @@ private:
     Gtk::CheckButton *_b;
     Gtk::CheckButton *_cb_keep_bbox;
     GtkWidget *nb;
-    SPDesktop *desktop;
-    DesktopTracker deskTrack;
     Inkscape::UI::Widget::ColorPicker *color_picker;
     GtkSizeGroup* table_row_labels;
     Inkscape::UI::Widget::UnitMenu *unit_menu;
@@ -159,7 +156,6 @@ private:
     Glib::RefPtr<Gtk::Adjustment> fill_width;
     Glib::RefPtr<Gtk::Adjustment> fill_height;
 
-    sigc::connection desktopChangeConn;
     sigc::connection selectChangedConn;
     sigc::connection externChangedConn;
     sigc::connection subselChangedConn;
@@ -171,11 +167,6 @@ private:
      * Can be invoked for setting the desktop. Currently not used.
      */
     void setDesktop(SPDesktop *desktop) override;
-
-    /**
-     * Is invoked by the desktop tracker when the desktop changes.
-     */
-    void setTargetDesktop(SPDesktop *desktop);
 
     // Variables that used to be set using GObject
     GtkWidget *_buttons_on_tiles;

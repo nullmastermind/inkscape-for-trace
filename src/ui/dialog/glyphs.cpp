@@ -422,7 +422,6 @@ GlyphColumns *GlyphsPanel::getColumns()
 GlyphsPanel::GlyphsPanel() :
     Inkscape::UI::Widget::Panel("/dialogs/glyphs", SP_VERB_DIALOG_GLYPHS),
     store(Gtk::ListStore::create(*getColumns())),
-    deskTrack(),
     instanceConns(),
     desktopConns()
 {
@@ -558,11 +557,6 @@ GlyphsPanel::GlyphsPanel() :
 
 
     show_all_children();
-
-    // Connect this up last
-    conn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &GlyphsPanel::setTargetDesktop) );
-    instanceConns.push_back(conn);
-    deskTrack.connect(GTK_WIDGET(gobj()));
 }
 
 GlyphsPanel::~GlyphsPanel()
@@ -581,22 +575,16 @@ GlyphsPanel::~GlyphsPanel()
 void GlyphsPanel::setDesktop(SPDesktop *desktop)
 {
     Panel::setDesktop(desktop);
-    deskTrack.setBase(desktop);
-}
 
-void GlyphsPanel::setTargetDesktop(SPDesktop *desktop)
-{
-    if (targetDesktop != desktop) {
-        if (targetDesktop) {
+    {
+        {
             for (auto & desktopConn : desktopConns) {
                 desktopConn.disconnect();
             }
             desktopConns.clear();
         }
 
-        targetDesktop = desktop;
-
-        if (targetDesktop && targetDesktop->selection) {
+        if (desktop && desktop->selection) {
             sigc::connection conn = desktop->selection->connectChanged(sigc::hide(sigc::bind(sigc::mem_fun(*this, &GlyphsPanel::readSelection), true, true)));
             desktopConns.push_back(conn);
 
@@ -616,6 +604,7 @@ void GlyphsPanel::setTargetDesktop(SPDesktop *desktop)
 // Append selected glyphs to selected text
 void GlyphsPanel::insertText()
 {
+    auto targetDesktop = getDesktop();
     SPItem *textItem = nullptr;
     auto itemlist= targetDesktop->selection->items();
         for(auto i=itemlist.begin(); itemlist.end() != i; ++i) {
@@ -711,7 +700,7 @@ void GlyphsPanel::selectionModifiedCB(guint flags)
 void GlyphsPanel::calcCanInsert()
 {
     int items = 0;
-    auto itemlist= targetDesktop->selection->items();
+    auto itemlist = getDesktop()->selection->items();
     for(auto i=itemlist.begin(); itemlist.end() != i; ++i) {
         if (SP_IS_TEXT(*i) || SP_IS_FLOWTEXT(*i)) {
             ++items;

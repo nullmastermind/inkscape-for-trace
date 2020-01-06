@@ -86,11 +86,6 @@ ObjectProperties::ObjectProperties()
     _int_labels.emplace_back("onfocusout:");
     _int_labels.emplace_back("onload:");
 
-    _desktop_changed_connection = _desktop_tracker.connectDesktopChanged(
-        sigc::mem_fun(*this, &ObjectProperties::_setTargetDesktop)
-    );
-    _desktop_tracker.connect(GTK_WIDGET(gobj()));
-
     _init();
 }
 
@@ -98,8 +93,6 @@ ObjectProperties::~ObjectProperties()
 {
     _subselection_changed_connection.disconnect();
     _selection_changed_connection.disconnect();
-    _desktop_changed_connection.disconnect();
-    _desktop_tracker.disconnect();
 }
 
 void ObjectProperties::_init()
@@ -554,14 +547,10 @@ void ObjectProperties::_hiddenToggled()
     _blocked = false;
 }
 
-void ObjectProperties::_setDesktop(SPDesktop *desktop)
+void ObjectProperties::setDesktop(SPDesktop *desktop)
 {
     Panel::setDesktop(desktop);
-    _desktop_tracker.setBase(desktop);
-}
 
-void ObjectProperties::_setTargetDesktop(SPDesktop *desktop)
-{
     if (this->_desktop != desktop) {
         if (this->_desktop) {
             _subselection_changed_connection.disconnect();

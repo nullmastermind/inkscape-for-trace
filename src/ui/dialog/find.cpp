@@ -105,9 +105,7 @@ Find::Find()
       button_find(_("_Find")),
       button_replace(_("_Replace All")),
       _action_replace(false),
-      blocked(false),
-      desktop(nullptr),
-      deskTrack()
+      blocked(false)
 
 {
     _left_size_group = Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL);
@@ -340,9 +338,6 @@ Find::Find()
     onSearchinText();
     onToggleAlltypes();
 
-    desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &Find::setTargetDesktop) );
-    deskTrack.connect(GTK_WIDGET(gobj()));
-
     show_all_children();
 
     Inkscape::Selection *selection = SP_ACTIVE_DESKTOP->getSelection();
@@ -362,24 +357,17 @@ Find::Find()
 
 Find::~Find()
 {
-    desktopChangeConn.disconnect();
     selectChangedConn.disconnect();
-    deskTrack.disconnect();
 }
 
 void Find::setDesktop(SPDesktop *desktop)
 {
     Panel::setDesktop(desktop);
-    deskTrack.setBase(desktop);
-}
 
-void Find::setTargetDesktop(SPDesktop *desktop)
-{
-    if (this->desktop != desktop) {
-        if (this->desktop) {
+    {
+        {
             selectChangedConn.disconnect();
         }
-        this->desktop = desktop;
         if (desktop && desktop->selection) {
             selectChangedConn = desktop->selection->connectChanged(sigc::hide(sigc::mem_fun(*this, &Find::onSelectionChange)));
         }
@@ -861,7 +849,7 @@ bool Find::item_type_match (SPItem *item)
 			   dynamic_cast<SPFlowtspan *>(item) || dynamic_cast<SPFlowpara *>(item)) {
         return (all || check_texts.get_active());
 
-    } else if (dynamic_cast<SPGroup *>(item) && !desktop->isLayer(item) ) { // never select layers!
+    } else if (dynamic_cast<SPGroup *>(item) && !getDesktop()->isLayer(item) ) { // never select layers!
         return (all || check_groups.get_active());
 
     } else if (dynamic_cast<SPUse *>(item)) {
@@ -909,6 +897,8 @@ std::vector<SPItem*> &Find::all_items (SPObject *r, std::vector<SPItem*> &l, boo
         return l; // we're not interested in metadata
     }
 
+    auto desktop = getDesktop();
+
     for (auto& child: r->children) {
         SPItem *item = dynamic_cast<SPItem *>(&child);
         if (item && !child.cloned && !desktop->isLayer(item)) {
@@ -923,6 +913,8 @@ std::vector<SPItem*> &Find::all_items (SPObject *r, std::vector<SPItem*> &l, boo
 
 std::vector<SPItem*> &Find::all_selection_items (Inkscape::Selection *s, std::vector<SPItem*> &l, SPObject *ancestor, bool hidden, bool locked)
 {
+    auto desktop = getDesktop();
+
 	auto itemlist= s->items();
     for (auto i=boost::rbegin(itemlist); boost::rend(itemlist) != i; ++i) {
         SPObject *obj = *i;
@@ -972,6 +964,7 @@ void Find::onReplace()
 
 void Find::onAction()
 {
+    auto desktop = getDesktop();
 
     bool hidden = check_include_hidden.get_active();
     bool locked = check_include_locked.get_active();

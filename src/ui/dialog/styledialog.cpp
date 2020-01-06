@@ -190,7 +190,6 @@ StyleDialog::StyleDialog()
     , _updating(false)
     , _textNode(nullptr)
     , _scroolpos(0)
-    , _desktopTracker()
     , _deleted_pos(0)
     , _deletion(false)
 {
@@ -207,9 +206,6 @@ StyleDialog::StyleDialog()
 
     _getContents()->pack_start(_mainBox, Gtk::PACK_EXPAND_WIDGET);
     // Document & Desktop
-    _desktop_changed_connection =
-        _desktopTracker.connectDesktopChanged(sigc::mem_fun(*this, &StyleDialog::_handleDesktopChanged));
-    _desktopTracker.connect(GTK_WIDGET(gobj()));
 
     _document_replaced_connection =
         getDesktop()->connectDocumentReplaced(sigc::mem_fun(this, &StyleDialog::_handleDocumentReplaced));
@@ -282,7 +278,6 @@ Glib::ustring StyleDialog::fixCSSSelectors(Glib::ustring selector)
 StyleDialog::~StyleDialog()
 {
     g_debug("StyleDialog::~StyleDialog");
-    _desktop_changed_connection.disconnect();
     _document_replaced_connection.disconnect();
     _selection_changed_connection.disconnect();
 }
@@ -1654,7 +1649,7 @@ void StyleDialog::_handleDocumentReplaced(SPDesktop *desktop, SPDocument * /* do
 /*
  * When a dialog is floating, it is connected to the active desktop.
  */
-void StyleDialog::_handleDesktopChanged(SPDesktop *desktop)
+void StyleDialog::setDesktop(SPDesktop *desktop)
 {
     g_debug("StyleDialog::handleDesktopReplaced()");
 
@@ -1666,7 +1661,7 @@ void StyleDialog::_handleDesktopChanged(SPDesktop *desktop)
 
     _selection_changed_connection.disconnect();
     _document_replaced_connection.disconnect();
-    setDesktop(desktop);
+    Panel::setDesktop(desktop);
 
     _selection_changed_connection =
         desktop->getSelection()->connectChanged(sigc::hide(sigc::mem_fun(this, &StyleDialog::_handleSelectionChanged)));

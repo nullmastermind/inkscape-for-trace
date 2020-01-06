@@ -27,7 +27,6 @@
 #include <gtkmm/grid.h>
 
 #include "2geom/rect.h"
-#include "ui/dialog/desktop-tracker.h"
 
 class SPItem;
 
@@ -92,7 +91,6 @@ protected:
                         guint row, guint col);
     void addBaselineButton(const Glib::ustring &id, const Glib::ustring tiptext,
                            guint row, guint col, Gtk::Grid &table, Geom::Dim2 orientation, bool distribute);
-    void setTargetDesktop(SPDesktop *desktop);
 
     std::list<Action *> _actionList;
     UI::Widget::Frame _alignFrame, _distributeFrame, _rearrangeFrame, _removeOverlapFrame, _nodesFrame;
@@ -115,8 +113,6 @@ protected:
     Gtk::ComboBoxText _comboNode;
 
     SPDesktop *_desktop;
-    DesktopTracker _deskTrack;
-    sigc::connection _desktopChangeConn;
     sigc::connection _toolChangeConn;
     sigc::connection _selChangeConn;
 private:

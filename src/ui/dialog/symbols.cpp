@@ -107,7 +107,6 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   all_docs_processed(false),
   icon_view(nullptr),
   current_desktop(nullptr),
-  desk_track(),
   current_document(nullptr),
   preview_document(nullptr),
   instanceConns(),
@@ -367,10 +366,6 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   icons_found = false;
   
   addSymbolsInDoc(current_document); /* Defaults to current document */
-  sigc::connection desktopChangeConn =
-    desk_track.connectDesktopChanged( sigc::mem_fun(*this, &SymbolsDialog::setTargetDesktop) );
-  instanceConns.push_back( desktopChangeConn );
-  desk_track.connect(GTK_WIDGET(gobj()));
 }
 
 SymbolsDialog::~SymbolsDialog()
@@ -380,7 +375,6 @@ SymbolsDialog::~SymbolsDialog()
   }
   idleconn.disconnect();
   instanceConns.clear();
-  desk_track.disconnect();
 }
 
 SymbolsDialog& SymbolsDialog::getInstance()
@@ -573,6 +567,12 @@ void SymbolsDialog::documentReplaced(SPDesktop *desktop, SPDocument *document)
 {
   current_desktop  = desktop;
   current_document = document;
+
+  if (symbol_sets[symbol_set->get_active_text()]) {
+      // Symbol set is not from Current document, no need to rebuild
+      return;
+  }
+
   rebuild();
 }
 
@@ -1375,15 +1375,11 @@ SymbolsDialog::getOverlay(gint width, gint height)
   return Glib::wrap(pixbuf);
 }
 
-void SymbolsDialog::setTargetDesktop(SPDesktop *desktop)
+void SymbolsDialog::setDesktop(SPDesktop *desktop)
 {
-  if (this->current_desktop != desktop) {
-    this->current_desktop = desktop;
-    if( !symbol_sets[symbol_set->get_active_text()] ) {
-      // Symbol set is from Current document, update
-      rebuild();
-    }
-  }
+    Panel::setDesktop(desktop);
+
+    documentReplaced(desktop, desktop->getDocument());
 }
 
 } //namespace Dialogs

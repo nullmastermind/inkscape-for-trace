@@ -88,7 +88,6 @@ void IconPreviewPanel::on_button_clicked(int which)
  */
 IconPreviewPanel::IconPreviewPanel() :
     UI::Widget::Panel("/dialogs/iconpreview", SP_VERB_VIEW_ICON_PREVIEW),
-    deskTrack(),
     desktop(nullptr),
     document(nullptr),
     timer(nullptr),
@@ -98,7 +97,6 @@ IconPreviewPanel::IconPreviewPanel() :
     targetId(),
     hot(1),
     selectionButton(nullptr),
-    desktopChangeConn(),
     docReplacedConn(),
     docModConn(),
     selChangedConn()
@@ -246,9 +244,6 @@ IconPreviewPanel::IconPreviewPanel() :
 
     show_all_children();
 
-    // Connect this up last
-    desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &IconPreviewPanel::setDesktop) );
-    deskTrack.connect(GTK_WIDGET(gobj()));
 }
 
 IconPreviewPanel::~IconPreviewPanel()
@@ -268,8 +263,6 @@ IconPreviewPanel::~IconPreviewPanel()
     selChangedConn.disconnect();
     docModConn.disconnect();
     docReplacedConn.disconnect();
-    desktopChangeConn.disconnect();
-    deskTrack.disconnect();
 }
 
 //#########################################################################
@@ -311,7 +304,6 @@ void IconPreviewPanel::setDesktop( SPDesktop* desktop )
         }
     }
     setDocument(newDoc);
-    deskTrack.setBase(desktop);
 }
 
 void IconPreviewPanel::setDocument( SPDocument *document )

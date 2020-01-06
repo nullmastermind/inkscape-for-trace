@@ -50,11 +50,9 @@ FillAndStroke::FillAndStroke()
                           UI::Widget::SimpleFilterModifier::BLEND |
                           UI::Widget::SimpleFilterModifier::BLUR |
                           UI::Widget::SimpleFilterModifier::OPACITY)
-    , deskTrack()
     , targetDesktop(nullptr)
     , fillWdgt(nullptr)
     , strokeWdgt(nullptr)
-    , desktopChangeConn()
 {
     Gtk::Box *contents = _getContents();
     contents->set_spacing(2);
@@ -76,28 +74,17 @@ FillAndStroke::FillAndStroke()
     show_all_children();
 
     _composite_settings.setSubject(&_subject);
-
-    // Connect this up last
-    desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &FillAndStroke::setTargetDesktop) );
-    deskTrack.connect(GTK_WIDGET(gobj()));
 }
 
 FillAndStroke::~FillAndStroke()
 {
     _composite_settings.setSubject(nullptr);
-
-    desktopChangeConn.disconnect();
-    deskTrack.disconnect();
 }
 
 void FillAndStroke::setDesktop(SPDesktop *desktop)
 {
     Panel::setDesktop(desktop);
-    deskTrack.setBase(desktop);
-}
 
-void FillAndStroke::setTargetDesktop(SPDesktop *desktop)
-{
     if (targetDesktop != desktop) {
         targetDesktop = desktop;
         if (fillWdgt) {

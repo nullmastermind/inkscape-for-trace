@@ -155,8 +155,6 @@ Export::Export () :
     prog_dlg(nullptr),
     interrupted(false),
     prefs(nullptr),
-    desktop(nullptr),
-    deskTrack(),
     selectChangedConn(),
     subselChangedConn(),
     selectModifiedConn()
@@ -387,9 +385,6 @@ Export::Export () :
     export_button.signal_clicked().connect(sigc::mem_fun(*this, &Export::onExport));
     hide_export.signal_clicked().connect(sigc::mem_fun(*this, &Export::onHideExceptSelected));
 
-    desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &Export::setTargetDesktop) );
-    deskTrack.connect(GTK_WIDGET(gobj()));
-
     show_all_children();
     setExporting(false);
 
@@ -404,25 +399,18 @@ Export::~Export ()
     selectModifiedConn.disconnect();
     subselChangedConn.disconnect();
     selectChangedConn.disconnect();
-    desktopChangeConn.disconnect();
-    deskTrack.disconnect();
 }
 
 void Export::setDesktop(SPDesktop *desktop)
 {
     Panel::setDesktop(desktop);
-    deskTrack.setBase(desktop);
-}
 
-void Export::setTargetDesktop(SPDesktop *desktop)
-{
-    if (this->desktop != desktop) {
-        if (this->desktop) {
+    {
+        {
             selectModifiedConn.disconnect();
             subselChangedConn.disconnect();
             selectChangedConn.disconnect();
         }
-        this->desktop = desktop;
         if (desktop && desktop->selection) {
 
             selectChangedConn = desktop->selection->connectChanged(sigc::hide(sigc::mem_fun(*this, &Export::onSelectionChanged)));
@@ -1285,6 +1273,7 @@ void Export::onBrowse ()
 {
     GtkWidget *fs;
     Glib::ustring filename;
+    SPDesktop *desktop = getDesktop();
 
     fs = gtk_file_chooser_dialog_new (_("Select a filename for exporting"),
                                       (GtkWindow*)desktop->getToplevel(),
@@ -1333,7 +1322,6 @@ void Export::onBrowse ()
     wcsncpy(_filename, reinterpret_cast<wchar_t*>(utf16_path_string), _MAX_PATH);
     g_free(utf16_path_string);
 
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     Glib::RefPtr<const Gdk::Window> parentWindow = desktop->getToplevel()->get_window();
     g_assert(parentWindow->gobj() != NULL);
 

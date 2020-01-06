@@ -21,7 +21,6 @@
 
 #include "display/drawing.h"
 #include "include/gtkmm_version.h"
-#include "ui/dialog/desktop-tracker.h"
 #include "ui/widget/panel.h"
 
 class SPObject;
@@ -61,6 +60,8 @@ class SymbolsDialog : public UI::Widget::Panel {
 public:
     SymbolsDialog( gchar const* prefsPath = "/dialogs/symbols" );
     ~SymbolsDialog() override;
+
+    void setDesktop(SPDesktop *) override;
 
     static SymbolsDialog& getInstance();
 
@@ -149,9 +150,7 @@ private:
     Gtk::ScrolledWindow *scroller;
     Gtk::ToggleButton* fit_symbol;
     Gtk::IconSize iconsize;
-    void setTargetDesktop(SPDesktop *desktop);
     SPDesktop*  current_desktop;
-    DesktopTracker desk_track;
     SPDocument* current_document;
     SPDocument* preview_document; /* Document to render single symbol */
     

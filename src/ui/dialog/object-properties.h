@@ -41,7 +41,6 @@
 #include <gtkmm/textview.h>
 #include <gtkmm/comboboxtext.h>
 
-#include "ui/dialog/desktop-tracker.h"
 
 class SPAttributeTable;
 class SPDesktop;
@@ -100,8 +99,6 @@ private:
     SPAttributeTable *_attr_table; //the widget for showing the on... names at the bottom
     
     SPDesktop *_desktop;
-    DesktopTracker _desktop_tracker;
-    sigc::connection _desktop_changed_connection;
     sigc::connection _selection_changed_connection;
     sigc::connection _subselection_changed_connection;
     
@@ -123,11 +120,8 @@ private:
     /// Callback for checkbox Preserve Aspect Ratio.
     void _aspectRatioToggled();
 
-    /// Can be invoked for setting the desktop. Currently not used.
-    void _setDesktop(SPDesktop *desktop);
-    
-    /// Is invoked by the desktop tracker when the desktop changes.
-    void _setTargetDesktop(SPDesktop *desktop);
+  public:
+    void setDesktop(SPDesktop *desktop) override;
 };
 
 }

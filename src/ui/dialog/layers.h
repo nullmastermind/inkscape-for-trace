@@ -20,7 +20,6 @@
 #include "ui/widget/spinbutton.h"
 #include "ui/widget/panel.h"
 #include "ui/widget/object-composite-settings.h"
-#include "desktop-tracker.h"
 #include "ui/widget/style-subject.h"
 
 class SPObject;
@@ -98,7 +97,6 @@ private:
     // Internal
     sigc::connection _selectedConnection;
 
-    DesktopTracker deskTrack;
     int _maxNestDepth;
     SPDesktop* _desktop;
     ModelColumns* _model;
@@ -127,7 +125,6 @@ private:
 
     UI::Widget::StyleSubject::CurrentLayer _subject;
     UI::Widget::ObjectCompositeSettings _compositeSettings;
-    sigc::connection desktopChangeConn;
 };
 
 

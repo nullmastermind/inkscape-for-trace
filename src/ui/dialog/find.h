@@ -24,7 +24,6 @@
 #include <gtkmm/radiobutton.h>
 #include <gtkmm/sizegroup.h>
 
-#include "ui/dialog/desktop-tracker.h"
 
 class SPItem;
 class SPObject;
@@ -199,10 +198,6 @@ protected:
      * Can be invoked for setting the desktop. Currently not used.
      */
     void        setDesktop(SPDesktop *desktop) override;
-    /**
-     * Is invoked by the desktop tracker when the desktop changes.
-     */
-    void        setTargetDesktop(SPDesktop *desktop);
 
     /**
      * Called when desktop selection changes
@@ -311,9 +306,6 @@ private:
     bool _action_replace;
     bool blocked;
 
-    SPDesktop *desktop;
-    DesktopTracker deskTrack;
-    sigc::connection desktopChangeConn;
     sigc::connection selectChangedConn;
 };
 

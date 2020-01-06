@@ -29,7 +29,6 @@
 #include "message.h"
 
 #include "ui/dialog/attrdialog.h"
-#include "ui/dialog/desktop-tracker.h"
 
 
 class SPDesktop;
@@ -235,9 +234,6 @@ private:
     Gtk::ToolButton lower_node_button;
 
     GtkWidget *new_window;
-
-    DesktopTracker deskTrack;
-    sigc::connection desktopChangeConn;
 };
 
 }

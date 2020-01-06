@@ -13,7 +13,6 @@
 #ifndef SEEN_DIALOGS_OBJECT_ATTRIBUTES_H
 #define SEEN_DIALOGS_OBJECT_ATTRIBUTES_H
 
-#include "ui/dialog/desktop-tracker.h"
 #include "ui/widget/panel.h"
 
 class SPAttributeTable;
@@ -63,21 +62,6 @@ private:
     SPAttributeTable *attrTable;
     
     /**
-     * Stores the current desktop.
-     */
-    SPDesktop *desktop;
-    
-    /**
-     * Auxiliary widget to keep track of desktop changes for the floating dialog.
-     */
-    DesktopTracker deskTrack;
-    
-    /**
-     * Link to callback function for a change in desktop (window).
-     */
-    sigc::connection desktopChangeConn;
-    
-    /**
      * Link to callback function for a selection change.
      */
     sigc::connection selectChangedConn;
@@ -93,16 +77,8 @@ private:
      */
     void selectionModifiedCB( guint flags );
     
-    /*
-     * Can be invoked for setting the desktop. Currently not used.
-     */
-    // void setDesktop(SPDesktop *desktop);
-    
-    /**
-     * Is invoked by the desktop tracker when the desktop changes.
-     */
-    void setTargetDesktop(SPDesktop *desktop);
-
+  public:
+    void setDesktop(SPDesktop *desktop) override;
 };
 
 }

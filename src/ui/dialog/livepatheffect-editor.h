@@ -26,7 +26,6 @@
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/toolbar.h>
 #include <gtkmm/buttonbox.h>
-#include "ui/dialog/desktop-tracker.h"
 
 class SPDesktop;
 class SPLPEItem;
@@ -55,15 +54,6 @@ public:
 
 private:
 
-    /**
-     * Auxiliary widget to keep track of desktop changes for the floating dialog.
-     */
-    DesktopTracker deskTrack;
-
-    /**
-     * Link to callback function for a change in desktop (window).
-     */
-    sigc::connection desktopChangeConn;
     sigc::connection selection_changed_connection;
     sigc::connection selection_modified_connection;
 

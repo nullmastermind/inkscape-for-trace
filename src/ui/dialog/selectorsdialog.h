@@ -15,7 +15,6 @@
 #ifndef SELECTORSDIALOG_H
 #define SELECTORSDIALOG_H
 
-#include "ui/dialog/desktop-tracker.h"
 #include "ui/dialog/dialog-manager.h"
 #include "ui/dialog/styledialog.h"
 #include "ui/widget/panel.h"
@@ -160,18 +159,15 @@ class SelectorsDialog : public Widget::Panel {
 
     // Signals and handlers - External
     sigc::connection _document_replaced_connection;
-    sigc::connection _desktop_changed_connection;
     sigc::connection _selection_changed_connection;
 
     void _handleDocumentReplaced(SPDesktop* desktop, SPDocument *document);
-    void _handleDesktopChanged(SPDesktop* desktop);
+    void setDesktop(SPDesktop *desktop) override;
     void _handleSelectionChanged();
     void _panedrealized();
     void _rowExpand(const Gtk::TreeModel::iterator &iter, const Gtk::TreeModel::Path &path);
     void _rowCollapse(const Gtk::TreeModel::iterator &iter, const Gtk::TreeModel::Path &path);
     void _closeDialog(Gtk::Dialog *textDialogPtr);
-
-    DesktopTracker _desktopTracker;
 
     Inkscape::XML::SignalObserver _objObserver; // Track object in selected row (for style change).
 

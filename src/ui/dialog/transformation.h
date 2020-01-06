@@ -19,7 +19,6 @@
 #include "ui/widget/panel.h"
 #include "ui/widget/notebook-page.h"
 #include "ui/widget/scalar-unit.h"
-#include "ui/dialog/desktop-tracker.h"
 
 
 namespace Inkscape {
@@ -153,10 +152,6 @@ protected:
     Gtk::CheckButton  _check_apply_separately;
     Gtk::CheckButton  _check_replace_matrix;
 
-    SPDesktop *_desktop;
-    DesktopTracker _deskTrack;
-    sigc::connection _desktopChangeConn;
-
     /**
      * Layout the GUI components, and prepare for use
      */
@@ -210,8 +205,6 @@ protected:
     void applyPageRotate(Inkscape::Selection *);
     void applyPageSkew(Inkscape::Selection *);
     void applyPageTransform(Inkscape::Selection *);
-
-    void setTargetDesktop(SPDesktop* desktop);
 
 private:
 

@@ -1146,9 +1146,6 @@ AlignAndDistribute::AlignAndDistribute()
     _selChangeConn = INKSCAPE.signal_selection_changed.connect(sigc::hide<0>(sigc::bind(sigc::ptr_fun(&on_selection_changed), this)));
     randomize_bbox = Geom::OptRect();
 
-    _desktopChangeConn = _deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &AlignAndDistribute::setDesktop) );
-    _deskTrack.connect(GTK_WIDGET(gobj()));
-
     show_all_children();
 
     on_tool_changed (this); // set current mode
@@ -1162,16 +1159,6 @@ AlignAndDistribute::~AlignAndDistribute()
 
     _toolChangeConn.disconnect();
     _selChangeConn.disconnect();
-    _desktopChangeConn.disconnect();
-    _deskTrack.disconnect();
-}
-
-void AlignAndDistribute::setTargetDesktop(SPDesktop *desktop)
-{
-    if (_desktop != desktop) {
-        _desktop = desktop;
-        on_tool_changed (this);
-    }
 }
 
 

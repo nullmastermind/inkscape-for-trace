@@ -252,7 +252,6 @@ DockBehavior::onDesktopActivated(SPDesktop *desktop)
                 // without this, a transient window not always emerges on top
                 gtk_window_present (dialog_win);
             }
-
         }
 
         // we're done, allow next retransientizing not sooner than after 120 msec

@@ -29,7 +29,6 @@
 #include <gtkmm/liststore.h>
 #include <gtkmm/treeview.h>
 
-#include "ui/dialog/desktop-tracker.h"
 #include "ui/widget/panel.h"
 
 #include "text-editing.h"
@@ -172,11 +171,6 @@ private:
      */
     void setDesktop(SPDesktop *desktop) override;
 
-    /**
-     * Is invoked by the desktop tracker when the desktop changes.
-     */
-    void setTargetDesktop(SPDesktop *desktop);
-
     SPObject *_root;
 
 #if HAVE_ASPELL
@@ -266,8 +260,6 @@ private:
     Gtk::ButtonBox  actionbutton_hbox;
 
     SPDesktop *     desktop;
-    DesktopTracker  deskTrack;
-    sigc::connection desktopChangeConn;
 
     class TreeColumns : public Gtk::TreeModel::ColumnRecord
     {

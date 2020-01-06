@@ -26,11 +26,9 @@ namespace Dialog {
 
 // Note that in order for a dialog to be restored, it must be listed in SPDesktop::show_dialogs().
 
-Prototype::Prototype() :
-    UI::Widget::Panel("/dialogs/prototype", SP_VERB_DIALOG_PROTOTYPE),
+Prototype::Prototype()
+    : UI::Widget::Panel("/dialogs/prototype", SP_VERB_DIALOG_PROTOTYPE)
 
-    desktopTracker() //,
-    // desktopChangedConnection()
 {
     std::cout << "Prototype::Prototype()" << std::endl;
 
@@ -43,10 +41,6 @@ Prototype::Prototype() :
     if (getDesktop() == nullptr) {
         std::cerr << "Prototype::Prototype: desktop is NULL!" << std::endl;
     }
-
-    connectionDesktopChanged = desktopTracker.connectDesktopChanged(
-        sigc::mem_fun(*this, &Prototype::handleDesktopChanged) );
-    desktopTracker.connect(GTK_WIDGET(gobj()));
 
     // This results in calling handleDocumentReplaced twice. Fix me!
     connectionDocumentReplaced = getDesktop()->connectDocumentReplaced(
@@ -66,7 +60,6 @@ Prototype::~Prototype()
 {
     // Never actually called.
     std::cout << "Prototype::~Prototype()" << std::endl;
-    connectionDesktopChanged.disconnect();
     connectionDocumentReplaced.disconnect();
     connectionSelectionChanged.disconnect();
 }
@@ -109,7 +102,7 @@ Prototype::handleDocumentReplaced(SPDesktop *desktop, SPDocument * /* document *
  * When a dialog is floating, it is connected to the active desktop.
  */
 void
-Prototype::handleDesktopChanged(SPDesktop* desktop) {
+Prototype::setDesktop(SPDesktop* desktop) {
     std::cout << "Prototype::handleDesktopChanged(): " << desktop << std::endl;
 
     if (getDesktop() == desktop) {
@@ -123,7 +116,7 @@ Prototype::handleDesktopChanged(SPDesktop* desktop) {
     connectionSelectionChanged.disconnect();
     connectionDocumentReplaced.disconnect();
 
-    setDesktop( desktop );
+    Panel::setDesktop(desktop);
 
     connectionSelectionChanged = desktop->getSelection()->connectChanged(
         sigc::hide(sigc::mem_fun(this, &Prototype::handleSelectionChanged)));

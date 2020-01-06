@@ -104,8 +104,7 @@ SpellCheck::SpellCheck () :
     dictionary_hbox(false, 0),
     stop_button(_("_Stop"), true),
     start_button(_("_Start"), true),
-    desktop(nullptr),
-    deskTrack()
+    desktop(nullptr)
 {
     _prefs = Inkscape::Preferences::get();
 
@@ -195,8 +194,6 @@ SpellCheck::SpellCheck () :
     tree_view.get_selection()->signal_changed().connect(sigc::mem_fun(*this, &SpellCheck::onTreeSelectionChange));
     dictionary_combo.signal_changed().connect(sigc::mem_fun(*this, &SpellCheck::onLanguageChanged));
     pref_button.signal_clicked().connect(sigc::ptr_fun(show_spellcheck_preferences_dialog));
-    desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &SpellCheck::setTargetDesktop) );
-    deskTrack.connect(GTK_WIDGET(gobj()));
 
     show_all_children ();
 
@@ -212,21 +209,13 @@ SpellCheck::~SpellCheck()
 {
     clearRects();
     disconnect();
-
-    desktopChangeConn.disconnect();
-    deskTrack.disconnect();
 }
 
 void SpellCheck::setDesktop(SPDesktop *desktop)
 {
     Panel::setDesktop(desktop);
-    deskTrack.setBase(desktop);
-}
 
-void SpellCheck::setTargetDesktop(SPDesktop *desktop)
-{
-    if (this->desktop != desktop) {
-        this->desktop = desktop;
+    {
         if (_working) {
             // Stop and start on the new desktop
             finished();

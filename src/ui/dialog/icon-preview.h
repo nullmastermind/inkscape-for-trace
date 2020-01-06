@@ -25,7 +25,6 @@
 #include <gtkmm/toggletoolbutton.h>
 
 #include "ui/widget/panel.h"
-#include "desktop-tracker.h"
 
 class SPObject;
 namespace Glib {
@@ -58,7 +57,6 @@ private:
     IconPreviewPanel &operator=(IconPreviewPanel const &) = delete; // no assign
 
 
-    DesktopTracker deskTrack;
     SPDesktop *desktop;
     SPDocument *document;
     Glib::Timer *timer;
@@ -82,7 +80,6 @@ private:
     Gtk::Image** images;
     Glib::ustring** labels;
     Gtk::ToggleToolButton** buttons;
-    sigc::connection desktopChangeConn;
     sigc::connection docReplacedConn;
     sigc::connection docModConn;
     sigc::connection selChangedConn;

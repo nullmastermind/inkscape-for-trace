@@ -733,7 +733,6 @@ bool LayersPanel::_rowSelectFunction( Glib::RefPtr<Gtk::TreeModel> const & /*mod
  */
 LayersPanel::LayersPanel() :
     UI::Widget::Panel("/dialogs/layers", SP_VERB_DIALOG_LAYERS),
-    deskTrack(),
     _maxNestDepth(20),
     _desktop(nullptr),
     _model(nullptr),
@@ -743,8 +742,7 @@ LayersPanel::LayersPanel() :
                        UI::Widget::SimpleFilterModifier::ISOLATION |
                        UI::Widget::SimpleFilterModifier::BLEND |
                        UI::Widget::SimpleFilterModifier::OPACITY |
-                       UI::Widget::SimpleFilterModifier::BLUR),
-    desktopChangeConn()
+                       UI::Widget::SimpleFilterModifier::BLUR)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     _maxNestDepth = prefs->getIntLimited("/dialogs/layers/maxDepth", 20, 1, 1000);
@@ -922,10 +920,6 @@ LayersPanel::LayersPanel() :
     show_all_children();
 
     // restorePanelPrefs();
-
-    // Connect this up last
-    desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &LayersPanel::setDesktop) );
-    deskTrack.connect(GTK_WIDGET(gobj()));
 }
 
 LayersPanel::~LayersPanel()
@@ -950,9 +944,6 @@ LayersPanel::~LayersPanel()
         gdk_event_free( _toggleEvent );
         _toggleEvent = nullptr;
     }
-
-    desktopChangeConn.disconnect();
-    deskTrack.disconnect();
 }
 
 
@@ -982,7 +973,6 @@ void LayersPanel::setDesktop( SPDesktop* desktop )
             _layersChanged();
         }
     }
-    deskTrack.setBase(desktop);
 }
 
 

@@ -73,8 +73,6 @@ static SPDocument *trace_doc = nullptr;
 
 CloneTiler::CloneTiler () :
     UI::Widget::Panel("/dialogs/clonetiler/", SP_VERB_DIALOG_CLONETILER),
-    desktop(nullptr),
-    deskTrack(),
     table_row_labels(nullptr)
 {
     Gtk::Box *contents = _getContents();
@@ -1180,9 +1178,6 @@ CloneTiler::CloneTiler () :
 
     show_all();
 
-    desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &CloneTiler::setTargetDesktop) );
-    deskTrack.connect(GTK_WIDGET(gobj()));
-
 }
 
 CloneTiler::~CloneTiler ()
@@ -1191,22 +1186,12 @@ CloneTiler::~CloneTiler ()
     //selectModifiedConn.disconnect();
     selectChangedConn.disconnect();
     externChangedConn.disconnect();
-    desktopChangeConn.disconnect();
-    deskTrack.disconnect();
     color_changed_connection.disconnect();
 }
 
 void CloneTiler::setDesktop(SPDesktop *desktop)
 {
     Panel::setDesktop(desktop);
-    deskTrack.setBase(desktop);
-}
-
-void CloneTiler::setTargetDesktop(SPDesktop *desktop)
-{
-    if (this->desktop != desktop) {
-        this->desktop = desktop;
-    }
 }
 
 void CloneTiler::on_picker_color_changed(guint rgba)
