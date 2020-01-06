@@ -183,6 +183,14 @@ guint sp_shortcut_translate_event(GdkEventKey const *event, guint *effective_mod
 
     keyval = Inkscape::UI::Tools::get_latin_keyval(event, &consumed_modifiers);
 
+    // Observe case convertible key values always as lower case and don't consume the "Shift"
+    // modifier for them
+    bool is_case_convertible = !(gdk_keyval_is_upper(keyval) && gdk_keyval_is_lower(keyval));
+    if (is_case_convertible) {
+        keyval = gdk_keyval_to_lower(keyval);
+        consumed_modifiers &= ~GDK_SHIFT_MASK;
+    }
+
     remaining_modifiers = initial_modifiers & ~consumed_modifiers;
     resulting_modifiers = ( remaining_modifiers & GDK_SHIFT_MASK ? SP_SHORTCUT_SHIFT_MASK : 0 ) |
 	                      ( remaining_modifiers & GDK_CONTROL_MASK ? SP_SHORTCUT_CONTROL_MASK : 0 ) |
@@ -190,12 +198,6 @@ guint sp_shortcut_translate_event(GdkEventKey const *event, guint *effective_mod
 	                      ( remaining_modifiers & GDK_HYPER_MASK ? SP_SHORTCUT_HYPER_MASK : 0 ) |
 	                      ( remaining_modifiers & GDK_META_MASK ? SP_SHORTCUT_META_MASK : 0 ) |
 	                      ( remaining_modifiers & GDK_MOD1_MASK ? SP_SHORTCUT_ALT_MASK : 0 );              
-
-    // enforce the Shift modifier for uppercase letters (otherwise plain A and Shift+A are equivalent)
-    // for characters that are not letters both (is_upper and is_lower) return TRUE, so the condition is false
-    if (gdk_keyval_is_upper(keyval) && !gdk_keyval_is_lower(keyval)) {
-        resulting_modifiers |= SP_SHORTCUT_SHIFT_MASK;
-    }
 
     *effective_modifiers = resulting_modifiers;
     return keyval;
