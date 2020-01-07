@@ -13,9 +13,10 @@
 #ifndef SEEN_INKSCAPE_XML_COMPOSITE_NODE_OBSERVER_H
 #define SEEN_INKSCAPE_XML_COMPOSITE_NODE_OBSERVER_H
 
+#include "inkgc/gc-alloc.h"
 #include "inkgc/gc-managed.h"
 #include "xml/node-observer.h"
-#include "util/list-container.h"
+#include <list>
 
 namespace Inkscape {
 
@@ -39,7 +40,7 @@ public:
         NodeObserver &observer;
         bool marked; //< if marked for removal
     };
-    typedef Util::ListContainer<ObserverRecord> ObserverRecordList;
+    typedef std::list<ObserverRecord, Inkscape::GC::Alloc<ObserverRecord, Inkscape::GC::MANUAL>> ObserverRecordList;
 
     CompositeNodeObserver()
     : _iterating(0), _active_marked(0), _pending_marked(0) {}

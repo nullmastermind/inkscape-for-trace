@@ -114,9 +114,9 @@ void CompositeNodeObserver::notifyElementNameChanged(Node& node, GQuark old_name
 
 void CompositeNodeObserver::add(NodeObserver &observer) {
     if (_iterating) {
-        _pending.push_back(ObserverRecord(observer));
+        _pending.emplace_back(observer);
     } else {
-        _active.push_back(ObserverRecord(observer));
+        _active.emplace_back(observer);
     }
 }
 
@@ -191,7 +191,7 @@ struct unmarked_record_satisfying {
 };
 
 template <typename Predicate>
-bool mark_one(ObserverRecordList &observers, unsigned &/*marked_count*/,
+bool mark_one(ObserverRecordList &observers, unsigned &marked_count,
               Predicate p)
 {
     ObserverRecordList::iterator found=std::find_if(
@@ -200,6 +200,7 @@ bool mark_one(ObserverRecordList &observers, unsigned &/*marked_count*/,
     );
 
     if ( found != observers.end() ) {
+        ++marked_count;
         found->marked = true;
         return true;
     } else {
@@ -211,22 +212,13 @@ template <typename Predicate>
 bool remove_one(ObserverRecordList &observers, unsigned &/*marked_count*/,
                 Predicate p)
 {
-    if (observers.empty()) {
-        return false;
-    }
-
-    if (unmarked_record_satisfying<Predicate>(p)(observers.front())) {
-        observers.pop_front();
-        return true;
-    }
-
-    ObserverRecordList::iterator found=Algorithms::find_if_before(
+    ObserverRecordList::iterator found = std::find_if(
         observers.begin(), observers.end(),
         unmarked_record_satisfying<Predicate>(p)
     );
 
     if ( found != observers.end() ) {
-        observers.erase_after(found);
+        observers.erase(found);
         return true;
     } else {
         return false;
@@ -237,20 +229,11 @@ bool is_marked(ObserverRecord const &record) { return record.marked; }
 
 void remove_all_marked(ObserverRecordList &observers, unsigned &marked_count)
 {
-    ObserverRecordList::iterator iter;
+    if (marked_count) {
+        g_assert(!observers.empty());
 
-    g_assert( !observers.empty() || !marked_count );
-
-    while ( marked_count && observers.front().marked ) {
-        observers.pop_front();
-        --marked_count;
-    }
-
-    iter = observers.begin();
-    while (marked_count) {
-        iter = Algorithms::find_if_before(iter, observers.end(), is_marked);
-        observers.erase_after(iter);
-        --marked_count;
+        observers.remove_if(is_marked);
+        marked_count = 0;
     }
 }
 
@@ -260,8 +243,8 @@ void CompositeNodeObserver::_finishIteration() {
     if (!--_iterating) {
         remove_all_marked(_active, _active_marked);
         remove_all_marked(_pending, _pending_marked);
-        _active.insert(_active.end(), _pending.begin(), _pending.end());
-        _pending.clear();
+        _active.splice(_active.end(), std::move(_pending));
+        g_assert(_pending.empty());
     }
 }
 
