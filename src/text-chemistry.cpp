@@ -423,8 +423,7 @@ text_unflow ()
 
     Inkscape::Selection *selection = desktop->getSelection();
 
-
-    if (!flowtext_in_selection(selection) || boost::distance(selection->items()) < 1) {
+    if (!text_or_flowtext_in_selection(selection) || boost::distance(selection->items()) < 1) {
         desktop->getMessageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>a flowed text</b> to unflow it."));
         return;
     }
@@ -433,66 +432,108 @@ text_unflow ()
     std::vector<SPItem *> old_objs;
 
     auto items = selection->items();
-    for(auto i=items.begin();i!=items.end();++i){
+    for (auto i : items) {
 
-        if (!SP_IS_FLOWTEXT(*i)) {
-            continue;
+        SPFlowtext *flowtext = dynamic_cast<SPFlowtext *>(i);
+        SPText *text = dynamic_cast<SPText *>(i);
+
+        if (flowtext) {
+
+            // we discard transform when unflowing, but we must preserve expansion which is visible as
+            // font size multiplier
+            double ex = (flowtext->transform).descrim();
+
+            if (sp_te_get_string_multiline(flowtext) == nullptr) { // flowtext is empty
+                continue;
+            }
+
+            /* Create <text> */
+            Inkscape::XML::Node *rtext = xml_doc->createElement("svg:text");
+            rtext->setAttribute("xml:space", "preserve"); // we preserve spaces in the text objects we create
+
+            /* Set style */
+            rtext->setAttribute("style", flowtext->getRepr()->attribute("style")); // fixme: transfer style attrs too;
+                                                                                   // and from descendants
+
+            Geom::OptRect bbox = flowtext->geometricBounds(flowtext->i2doc_affine());
+            if (bbox) {
+                Geom::Point xy = bbox->min();
+                sp_repr_set_svg_double(rtext, "x", xy[Geom::X]);
+                sp_repr_set_svg_double(rtext, "y", xy[Geom::Y]);
+            }
+
+            /* Create <tspan> */
+            Inkscape::XML::Node *rtspan = xml_doc->createElement("svg:tspan");
+            rtspan->setAttribute("sodipodi:role", "line"); // otherwise, why bother creating the tspan?
+            rtext->addChild(rtspan, nullptr);
+
+            gchar *text_string = sp_te_get_string_multiline(flowtext);
+            Inkscape::XML::Node *text_repr = xml_doc->createTextNode(text_string); // FIXME: transfer all formatting!!!
+            free(text_string);
+            rtspan->appendChild(text_repr);
+
+            flowtext->parent->getRepr()->appendChild(rtext);
+            SPObject *text_object = doc->getObjectByRepr(rtext);
+
+            // restore the font size multiplier from the flowtext's transform
+            SPText *text = SP_TEXT(text_object);
+            text->_adjustFontsizeRecursive(text, ex);
+
+            new_objs.push_back((SPItem *)text_object);
+            old_objs.push_back(flowtext);
+
+            Inkscape::GC::release(rtext);
+            Inkscape::GC::release(rtspan);
+            Inkscape::GC::release(text_repr);
+
+        } else if (text){
+
+            if (text->has_shape_inside()) {
+
+                Inkscape::XML::Node *rtext = text->getRepr();
+
+                // Position unflowed text near shape.
+                Geom::OptRect bbox = text->geometricBounds(text->i2doc_affine());
+                if (bbox) {
+                    Geom::Point xy = bbox->min();
+                    sp_repr_set_svg_double(rtext, "x", xy[Geom::X]);
+                    sp_repr_set_svg_double(rtext, "y", xy[Geom::Y]);
+                }
+
+                // Remove 'shape-inside' property.
+                SPCSSAttr *css = sp_repr_css_attr(rtext, "style");
+                sp_repr_css_unset_property(css, "shape-inside");
+                sp_repr_css_change(rtext, css, "style");
+                sp_repr_css_attr_unref(css);
+
+                // We'll leave tspans alone other than stripping 'x' and 'y' (this will preserve
+                // styling).
+                // We'll also remove temporarily 'sodipodi:role' (which shouldn't be
+                // necessary later).
+                for (auto j : text->childList(false)) {
+                    SPTSpan* tspan = dynamic_cast<SPTSpan *>(j);
+                    if (tspan) {
+                        tspan->getRepr()->setAttribute("x", nullptr);
+                        tspan->getRepr()->setAttribute("y", nullptr);
+                        tspan->getRepr()->setAttribute("sodipodi:role", nullptr);
+                    }
+                }
+            }
         }
-
-        SPItem *flowtext = *i;
-
-        // we discard transform when unflowing, but we must preserve expansion which is visible as
-        // font size multiplier
-        double ex = (flowtext->transform).descrim();
-
-        if (sp_te_get_string_multiline(flowtext) == nullptr) { // flowtext is empty
-            continue;
-        }
-
-        /* Create <text> */
-        Inkscape::XML::Node *rtext = xml_doc->createElement("svg:text");
-        rtext->setAttribute("xml:space", "preserve"); // we preserve spaces in the text objects we create
-
-        /* Set style */
-        rtext->setAttribute("style", flowtext->getRepr()->attribute("style")); // fixme: transfer style attrs too; and from descendants
-
-        Geom::OptRect bbox = flowtext->geometricBounds(flowtext->i2doc_affine());
-        if (bbox) {
-            Geom::Point xy = bbox->min();
-            sp_repr_set_svg_double(rtext, "x", xy[Geom::X]);
-            sp_repr_set_svg_double(rtext, "y", xy[Geom::Y]);
-        }
-
-        /* Create <tspan> */
-        Inkscape::XML::Node *rtspan = xml_doc->createElement("svg:tspan");
-        rtspan->setAttribute("sodipodi:role", "line"); // otherwise, why bother creating the tspan?
-        rtext->addChild(rtspan, nullptr);
-
-        gchar *text_string = sp_te_get_string_multiline(flowtext);
-        Inkscape::XML::Node *text_repr = xml_doc->createTextNode(text_string); // FIXME: transfer all formatting!!!
-        free(text_string);
-        rtspan->appendChild(text_repr);
-
-        flowtext->parent->getRepr()->appendChild(rtext);
-        SPObject *text_object = doc->getObjectByRepr(rtext);
-
-        // restore the font size multiplier from the flowtext's transform
-        SPText *text = SP_TEXT(text_object);
-        text->_adjustFontsizeRecursive(text, ex);
-
-        new_objs.push_back((SPItem*)text_object);
-        old_objs.push_back(flowtext);
-
-        Inkscape::GC::release(rtext);
-        Inkscape::GC::release(rtspan);
-        Inkscape::GC::release(text_repr);
     }
 
-    selection->clear();
-    reverse(new_objs.begin(),new_objs.end());
-    selection->setList(new_objs);
-    for (auto i:old_objs) {
-        i->deleteObject (true);
+    // For flowtext objects.
+    if (new_objs.size() != 0) {
+
+        // Update selection
+        selection->clear();
+        reverse(new_objs.begin(), new_objs.end());
+        selection->setList(new_objs);
+
+        // Delete old objects
+        for (auto i : old_objs) {
+            i->deleteObject(true);
+        }
     }
 
     DocumentUndo::done(doc, SP_VERB_CONTEXT_TEXT, 
