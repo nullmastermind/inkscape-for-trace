@@ -12,7 +12,9 @@
 #ifndef SEEN_GLIBMM_VERSION
 #define SEEN_GLIBMM_VERSION
 
-#include <glibmmconfig.h>
+#include <glibmm.h>
+
+#ifndef GLIBMM_CHECK_VERSION
 
 #if !defined(GLIBMM_MAJOR_VERSION) || !defined(GLIBMM_MINOR_VERSION) || !defined(GLIBMM_MICRO_VERSION)
     #error "Missing defines for glibmm version (GLIBMM_MAJOR_VERSION / GLIBMM_MINOR_VERSION / GLIBMM_MICRO_VERSION)"
@@ -37,5 +39,7 @@
     (GLIBMM_MAJOR_VERSION == (major) && GLIBMM_MINOR_VERSION > (minor)) ||  \
     (GLIBMM_MAJOR_VERSION == (major) && GLIBMM_MINOR_VERSION == (minor) &&  \
      GLIBMM_MICRO_VERSION >= (micro)))
+
+#endif // #ifndef GLIBMM_CHECK_VERSION
 
 #endif // SEEN_GLIBMM_VERSION

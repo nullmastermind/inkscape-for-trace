@@ -12,7 +12,9 @@
 #ifndef SEEN_GTKMM_VERSION
 #define SEEN_GTKMM_VERSION
 
-#include <gtkmmconfig.h>
+#include <gtkmm.h>
+
+#ifndef GTKMM_CHECK_VERSION
 
 #if !defined(GTKMM_MAJOR_VERSION) || !defined(GTKMM_MINOR_VERSION) || !defined(GTKMM_MICRO_VERSION)
     #error "Missing defines for gtkmm version (GTKMM_MAJOR_VERSION / GTKMM_MINOR_VERSION / GTKMM_MICRO_VERSION)"
@@ -37,5 +39,7 @@
     (GTKMM_MAJOR_VERSION == (major) && GTKMM_MINOR_VERSION > (minor)) ||  \
     (GTKMM_MAJOR_VERSION == (major) && GTKMM_MINOR_VERSION == (minor) &&  \
      GTKMM_MICRO_VERSION >= (micro)))
+
+#endif // #ifndef GTKMM_CHECK_VERSION
 
 #endif // SEEN_GTKMM_VERSION
