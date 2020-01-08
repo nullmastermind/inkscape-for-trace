@@ -716,7 +716,7 @@ void ContextMenu::MakeImageMenu ()
     }
 
     /* Extract image */
-    if (Inkscape::Verb::getbyid( "org.inkscape.filter.embed_image" )) {
+    if (Inkscape::Verb::getbyid( "org.inkscape.filter.extract_image" )) {
         mi = Gtk::manage(new Gtk::MenuItem(C_("Context menu", "Extract Image...")));
         mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ImageExtract));
         mi->show();
@@ -858,7 +858,7 @@ void ContextMenu::ImageExtract()
         _desktop->selection->set(_item);
     }
 
-    Inkscape::Verb *verb = Inkscape::Verb::getbyid( "org.inkscape.filter.embed_image" );
+    Inkscape::Verb *verb = Inkscape::Verb::getbyid( "org.inkscape.filter.extract_image" );
     if (verb) {
         SPAction *action = verb->get_action(Inkscape::ActionContext(_desktop));
         if (action) {
