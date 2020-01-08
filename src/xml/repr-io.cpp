@@ -224,7 +224,7 @@ xmlDocPtr XmlSource::readXml()
     auto doc = xmlReadIO( readCb, closeCb, this,
                       filename, getEncoding(), parse_options);
 
-    if (xmlXIncludeProcessFlags(doc, XML_PARSE_NOXINCNODE) < 0) {
+    if (doc && xmlXIncludeProcessFlags(doc, XML_PARSE_NOXINCNODE) < 0) {
         g_warning("XInclude processing failed for %s", filename);
     }
 
