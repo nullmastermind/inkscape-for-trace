@@ -1093,6 +1093,7 @@ ConcreteInkscapeApplication<T>::shell()
     std::cout << " filename action1:arg1; action2:arg2; verb1; verb2; ..." << std::endl;
 
     std::string input;
+    InkscapeWindow *window = nullptr;
     while (true) {
         std::cout << "> ";
         std::getline(std::cin, input);
@@ -1114,24 +1115,36 @@ ConcreteInkscapeApplication<T>::shell()
                       << input << "|" << std::endl;
         }
 
-        // Create desktop.
-        SPDesktop* desktop = nullptr;
         if (!filename.empty()) {
             Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(filename);
-            desktop = create_window(file);
+            SPDocument *document = document_open(file);
+            if (!document) {
+                std::cerr << "ConcreteInkscapeApplication::shell(): Failed to created document: " << filename << std::endl;
+                continue;
+            }
+
+            if (!window) {
+                // Create window.
+                window = window_open(document);
+            } else {
+                // Reuse window
+                document->ensureUpToDate();
+                document_swap(window, document);
+            }
         }
 
         // Find and execute actions (verbs).
         action_vector_t action_vector;
         parse_actions(input_u, action_vector);
         for (auto action: action_vector) {
-		Gio::Application::activate_action( action.first, action.second );
-        }
-
-        if (desktop) {
-            desktop->destroy();
+            Gio::Application::activate_action( action.first, action.second );
         }
     }
+
+    if (window) {
+        window_close(window);
+    }
+
 
     T::quit(); // Must quit or segfault. (Might be fixed by using desktop->getToplevel()->hide() above.);
 }
