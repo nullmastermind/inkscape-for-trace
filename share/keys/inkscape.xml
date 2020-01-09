@@ -71,38 +71,38 @@ override) the bindings in the main default.xml.
 
 <!-- Tools -->
 
-  <bind key="F1" action="ToolSelector" display="true" />
-  <bind key="s" action="ToolSelector" />
+  <bind key="F1" action="ToolSelector" />
+  <bind key="s" action="ToolSelector" display="true" />
 
   <bind action="SelectPrefs" />
 
-  <bind key="F2" action="ToolNode" display="true" />
-  <bind key="n" action="ToolNode" />
+  <bind key="F2" action="ToolNode" />
+  <bind key="n" action="ToolNode" display="true" />
 
   <bind action="NodePrefs" />
 
-  <bind key="F2" modifiers="Shift" action="ToolTweak" display="true" />
-  <bind key="w" action="ToolTweak" />
+  <bind key="F2" modifiers="Shift" action="ToolTweak" />
+  <bind key="w" action="ToolTweak" display="true" />
 
   <bind action="TweakPrefs" />
 
-  <bind key="F3" action="ToolZoom" display="true" />
-  <bind key="z" action="ToolZoom" />
+  <bind key="F3" action="ToolZoom" />
+  <bind key="z" action="ToolZoom" display="true" />
 
   <bind action="ZoomPrefs" />
 
-  <bind key="F4" action="ToolRect" display="true" />
-  <bind key="r" action="ToolRect" />
+  <bind key="F4" action="ToolRect" />
+  <bind key="r" action="ToolRect" display="true" />
 
   <bind action="RectPrefs" />
 
-  <bind key="F4" modifiers="Shift" action="Tool3DBox" display="true" />
-  <bind key="x" action="Tool3DBox" />
+  <bind key="F4" modifiers="Shift" action="Tool3DBox" />
+  <bind key="x" action="Tool3DBox" display="true" />
 
   <bind action="3DBoxPrefs" />
 
-  <bind key="F5" action="ToolArc" display="true" />
-  <bind key="e" action="ToolArc" />
+  <bind key="F5" action="ToolArc" />
+  <bind key="e" action="ToolArc" display="true" />
 
   <bind action="ArcPrefs" />
 
@@ -117,23 +117,23 @@ override) the bindings in the main default.xml.
 
   <bind action="StarPrefs" />
 
-  <bind key="F9" action="ToolSpiral" display="true" />
-  <bind key="i" action="ToolSpiral" />
+  <bind key="F9" action="ToolSpiral" />
+  <bind key="i" action="ToolSpiral" display="true" />
 
   <bind action="SpiralPrefs" />
 
-  <bind key="F6" action="ToolPencil" display="true" />
-  <bind key="p" action="ToolPencil" />
+  <bind key="F6" action="ToolPencil" />
+  <bind key="p" action="ToolPencil" display="true" />
 
   <bind action="PencilPrefs" />
 
-  <bind key="F6" modifiers="Shift" action="ToolPen" display="true" />
-  <bind key="b" action="ToolPen" />
+  <bind key="F6" modifiers="Shift" action="ToolPen" />
+  <bind key="b" action="ToolPen" display="true" />
 
   <bind action="PenPrefs" />
 
-  <bind key="F6" modifiers="Primary" action="ToolCalligraphic" display="true" />
-  <bind key="c" action="ToolCalligraphic" />
+  <bind key="F6" modifiers="Primary" action="ToolCalligraphic" />
+  <bind key="c" action="ToolCalligraphic" display="true" />
 
   <bind action="CalligraphicPrefs" />
 
@@ -141,33 +141,33 @@ override) the bindings in the main default.xml.
 
   <bind action="EraserPrefs" />
 
-  <bind key="F7" modifiers="Shift" action="ToolPaintBucket" display="true" />
-  <bind key="u" action="ToolPaintBucket" />
+  <bind key="F7" modifiers="Shift" action="ToolPaintBucket" />
+  <bind key="u" action="ToolPaintBucket" display="true" />
 
   <bind action="PaintBucketPrefs" />
 
-  <bind key="F8" action="ToolText" display="true" />
-  <bind key="t" action="ToolText" />
+  <bind key="F8" action="ToolText" />
+  <bind key="t" action="ToolText" display="true" />
 
   <bind action="TextPrefs" />
 
-  <bind key="F1" modifiers="Primary" action="ToolGradient" display="true" />
-  <bind key="g" action="ToolGradient" />
+  <bind key="F1" modifiers="Primary" action="ToolGradient" />
+  <bind key="g" action="ToolGradient" display="true" />
 
   <bind action="GradientPrefs" />
 
-  <bind key="F2" modifiers="Primary" action="ToolConnector" display="true" />
-  <bind key="o" action="ToolConnector" />
+  <bind key="F2" modifiers="Primary" action="ToolConnector" />
+  <bind key="o" action="ToolConnector" display="true" />
 
   <bind action="ConnectorPrefs" />
 
-  <bind key="F7" action="ToolDropper" display="true" />
-  <bind key="d" action="ToolDropper" />
+  <bind key="F7" action="ToolDropper" />
+  <bind key="d" action="ToolDropper" display="true" />
 
   <bind action="DropperPrefs" />
 
-  <bind key="F3" modifiers="Shift" action="ToolSpray" display="true" />
-  <bind key="a" action="ToolSpray" />
+  <bind key="F3" modifiers="Shift" action="ToolSpray" />
+  <bind key="a" action="ToolSpray" display="true" />
 
   <bind action="SprayPrefs" />
 
