@@ -364,29 +364,6 @@ void AttrDialog::attr_reset_context(gint attr)
     }
 }
 
-// TODO: improve and find a good location
-// duplicated in sp-xmlview.cpp:315
-Glib::ustring sp_remove_newlines_and_tabs(Glib::ustring val)
-{
-    int pos = 0;
-    Glib::ustring newlinesign = "␤";
-    Glib::ustring tabsign = "⇥";
-    while ((pos = val.find("\r\n")) != std::string::npos) {
-        val.erase(pos, 2);
-        val.insert(pos, newlinesign);
-    }
-    pos = 0;
-    while ((pos = val.find('\n')) != std::string::npos) {
-        val.erase(pos, 1);
-        val.insert(pos, newlinesign);
-    }
-    pos = 0;
-    while ((pos = val.find('\t')) != std::string::npos) {
-        val.erase(pos, 1);
-        val.insert(pos, tabsign);
-    }
-    return val;
-}
 /**
  * @brief AttrDialog::onAttrChanged
  * This is called when the XML has an updated attribute
@@ -398,7 +375,13 @@ void AttrDialog::onAttrChanged(Inkscape::XML::Node *repr, const gchar * name, co
     }
     Glib::ustring renderval = "";
     if (new_value) {
-        renderval = sp_remove_newlines_and_tabs(Glib::ustring(new_value));
+        // We do not ever want to show a long value in-line (gtk hates big columns with multi-lines)
+        glong length = g_utf8_strlen(new_value, -1);
+        if(length > 100) {
+            renderval = Glib::ustring("[...]");
+        } else {
+            renderval = Glib::ustring(new_value);
+        }
     }
     for(auto iter: this->_store->children())
     {
@@ -649,7 +632,10 @@ void AttrDialog::valueEdited (const Glib::ustring& path, const Glib::ustring& va
         }
         if(!value.empty()) {
             row[_attrColumns._attributeValue] = value;
-            Glib::ustring renderval = sp_remove_newlines_and_tabs(value);
+            Glib::ustring renderval = Glib::ustring("[...]");
+            if(value.length() <= 100) {
+                renderval = value;
+            }
             row[_attrColumns._attributeValueRender] = renderval;
         }
         Inkscape::Selection *selection = _desktop->getSelection();
