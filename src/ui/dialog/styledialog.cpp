@@ -1121,7 +1121,7 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
     }
     if (selector == "style_properties") {
         _updating = true;
-        obj->getRepr()->setAttribute("style", styleContent, false);
+        obj->getRepr()->setAttribute("style", styleContent);
         _updating = false;
     } else if (selector == "attributes") {
         for (auto iter : obj->style->properties()) {
@@ -1411,9 +1411,9 @@ void StyleDialog::_nameEdited(const Glib::ustring &path, const Glib::ustring &na
                 Glib::ustring css_str = "";
                 SPCSSAttr *css = sp_repr_css_attr_new();
                 sp_repr_css_attr_add_from_string(css, obj->getRepr()->attribute("style"));
-                css->setAttribute(name, nullptr);
+                css->removeAttribute(name);
                 sp_repr_css_write_string(css, css_str);
-                obj->getRepr()->setAttribute("style", css_str);
+                obj->getRepr()->setAttributeOrRemoveIfEmpty("style", css_str);
                 obj->style->readFromObject(obj);
                 obj->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             }

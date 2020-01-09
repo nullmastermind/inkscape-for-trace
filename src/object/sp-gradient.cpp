@@ -90,7 +90,7 @@ void SPGradient::setSwatch( bool swatch )
     if ( swatch != isSwatch() ) {
         this->swatch = swatch; // to make isSolid() work, this happens first
         gchar const* paintVal = swatch ? (isSolid() ? "solid" : "gradient") : nullptr;
-        setAttribute( "osb:paint", paintVal, nullptr );
+        setAttribute( "osb:paint", paintVal);
 
         requestModified( SP_OBJECT_MODIFIED_FLAG );
     }
@@ -415,7 +415,7 @@ void SPGradient::set(SPAttributeEnum key, gchar const *value)
                 Glib::ustring paintVal = ( this->hasStops() && (this->getStopCount() == 0) ) ? "solid" : "gradient";
 
                 if ( paintVal != value ) {
-                    this->setAttribute( "osb:paint", paintVal, nullptr );
+                    this->setAttribute( "osb:paint", paintVal);
                     modified = true;
                 }
             }
@@ -479,7 +479,7 @@ void SPGradient::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *re
         if ( this->getStopCount() > 0 ) {
             gchar const * attr = this->getAttribute("osb:paint");
             if ( attr && strcmp(attr, "gradient") ) {
-            	this->setAttribute( "osb:paint", "gradient", nullptr );
+            	this->setAttribute( "osb:paint", "gradient" );
             }
         }
     }
@@ -524,7 +524,7 @@ void SPGradient::remove_child(Inkscape::XML::Node *child)
         gchar const * attr = this->getAttribute("osb:paint");
 
         if ( attr && strcmp(attr, "solid") ) {
-            this->setAttribute( "osb:paint", "solid", nullptr );
+            this->setAttribute( "osb:paint", "solid" );
         }
     }
 

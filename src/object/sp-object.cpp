@@ -1396,7 +1396,7 @@ void SPObject::removeAttribute(gchar const *key, SPException *ex)
 
     /// \todo fixme: Exception if object is NULL? */
     //XML Tree being used here.
-    getRepr()->setAttribute(key, nullptr, false);
+    getRepr()->removeAttribute(key);
 }
 
 bool SPObject::storeAsDouble( gchar const *key, double *val ) const

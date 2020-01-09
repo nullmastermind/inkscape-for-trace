@@ -202,9 +202,8 @@ public:
      */
 
     void setAttribute(Inkscape::Util::const_char_ptr key,
-                      Inkscape::Util::const_char_ptr value,
-                      bool is_interactive=false) {
-        this->setAttributeImpl(key.data(), value.data(), is_interactive);
+                      Inkscape::Util::const_char_ptr value) {
+        this->setAttributeImpl(key.data(), value.data());
     }
 
     /**
@@ -217,7 +216,7 @@ public:
     void setAttributeOrRemoveIfEmpty(Inkscape::Util::const_char_ptr key,
                                      Inkscape::Util::const_char_ptr value) {
         this->setAttributeImpl(key.data(),
-                (value.data() == nullptr || value.data()[0]=='\0') ? nullptr : value.data(), false);
+                (value.data() == nullptr || value.data()[0]=='\0') ? nullptr : value.data());
     }
 
 
@@ -228,7 +227,7 @@ public:
      *
      */
     void removeAttribute(Inkscape::Util::const_char_ptr key) {
-        this->setAttributeImpl(key.data(), nullptr, false);
+        this->setAttributeImpl(key.data(), nullptr);
     }
 
     //@}
@@ -524,7 +523,7 @@ public:
 protected:
     Node(Node const &) : Anchored() {}
 
-    virtual void setAttributeImpl(char const *key, char const *value, bool is_interactive)=0;
+    virtual void setAttributeImpl(char const *key, char const *value)=0;
 };
 
 }

@@ -178,7 +178,7 @@ ImageMagick::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::Vi
             // e.g. resize the image element, after the effecti is applied
             postEffect(&effectedImage, dc->_imageItems[i]);
 
-//    dc->_nodes[i]->setAttribute("xlink:href", dc->_caches[i], true);
+//    dc->_nodes[i]->setAttribute("xlink:href", dc->_caches[i]);
 
             Magick::Blob *blob = new Magick::Blob();
             effectedImage.write(blob);
@@ -215,7 +215,7 @@ ImageMagick::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::Vi
             }
             *formatted_i = '\0';
 
-            dc->_nodes[i]->setAttribute("xlink:href", dc->_caches[i], true);            
+            dc->_nodes[i]->setAttribute("xlink:href", dc->_caches[i]);
             dc->_nodes[i]->removeAttribute("sodipodi:absref");
             delete blob;
         }

@@ -513,9 +513,9 @@ text_unflow ()
                 for (auto j : text->childList(false)) {
                     SPTSpan* tspan = dynamic_cast<SPTSpan *>(j);
                     if (tspan) {
-                        tspan->getRepr()->setAttribute("x", nullptr);
-                        tspan->getRepr()->setAttribute("y", nullptr);
-                        tspan->getRepr()->setAttribute("sodipodi:role", nullptr);
+                        tspan->getRepr()->removeAttribute("x");
+                        tspan->getRepr()->removeAttribute("y");
+                        tspan->getRepr()->removeAttribute("sodipodi:role");
                     }
                 }
             }

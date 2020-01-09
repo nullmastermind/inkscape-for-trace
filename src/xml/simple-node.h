@@ -126,7 +126,7 @@ protected:
     SimpleNode(SimpleNode const &repr, Document *document);
 
     virtual SimpleNode *_duplicate(Document *doc) const=0;
-    void setAttributeImpl(char const *key, char const *value, bool is_interactive) override;
+    void setAttributeImpl(char const *key, char const *value) override;
 
 private:
     void operator=(Node const &); // no assign

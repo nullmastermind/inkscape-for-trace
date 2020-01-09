@@ -916,7 +916,7 @@ void SelectorsDialog::_addToSelector(Gtk::TreeModel::Row row)
             sp_repr_css_attr_add_from_string(css_selector, selprops.c_str());
             for (List<AttributeRecord const> iter = css_selector->attributeList(); iter; ++iter) {
                 gchar const *key = g_quark_to_string(iter->key);
-                css->setAttribute(key, nullptr);
+                css->removeAttribute(key);
             }
             sp_repr_css_write_string(css, css_str);
             sp_repr_css_attr_unref(css);

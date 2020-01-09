@@ -229,10 +229,10 @@ gchar *finish_create_shape (DocumentInterface *doc_interface, GError ** /*error*
     if (style) {
         Glib::ustring str;
         sp_repr_css_write_string(style, str);
-        newNode->setAttributeOrRemoveIfEmpty("style", str, true);
+        newNode->setAttributeOrRemoveIfEmpty("style", str);
     }
     else {
-        newNode->setAttribute("style", "fill:#0000ff;fill-opacity:1;stroke:#c900b9;stroke-width:0;stroke-miterlimit:0;stroke-opacity:1;stroke-dasharray:none", true);
+        newNode->setAttribute("style", "fill:#0000ff;fill-opacity:1;stroke:#c900b9;stroke-width:0;stroke-miterlimit:0;stroke-opacity:1;stroke-dasharray:none");
     }
 
     doc_interface->target.getSelection()->layers()->currentLayer()->appendChildRepr(newNode);
@@ -650,7 +650,7 @@ document_interface_set_attribute (DocumentInterface *doc_interface, char *shape,
     if (!newNode)
         return FALSE;
         
-    newNode->setAttribute(attribute, newval, true);
+    newNode->setAttribute(attribute, newval);
     return TRUE;
 }
 
@@ -787,7 +787,7 @@ document_interface_modify_css (DocumentInterface *doc_interface, gchar *shape,
     sp_repr_css_set_property(oldstyle, cssattrb, newval);
     Glib::ustring str;
     sp_repr_css_write_string (oldstyle, str);
-    node->setAttributeOrRemoveIfEmpty (style, str, true);
+    node->setAttributeOrRemoveIfEmpty (style, str);
     return TRUE;
 }
 
@@ -812,7 +812,7 @@ document_interface_merge_css (DocumentInterface *doc_interface, gchar *shape,
     sp_repr_css_merge(oldstyle, newstyle);
     Glib::ustring str;
     sp_repr_css_write_string (oldstyle, str);
-    node->setAttributeOrRemoveIfEmpty (style, str, true);
+    node->setAttributeOrRemoveIfEmpty (style, str);
     
     return TRUE;
 }

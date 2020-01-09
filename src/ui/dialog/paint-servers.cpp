@@ -478,7 +478,7 @@ void PaintServersDialog::on_item_activated(const Gtk::TreeModel::Path& path)
 
         // Set attribute for each selected item
         style.replace(search_start, search_end, new_value);
-        item->setAttribute("style", style, nullptr);
+        item->setAttribute("style", style);
 
         // Remove previous paint server, if it exists
         if (regex_url->match(previous_value)) {
