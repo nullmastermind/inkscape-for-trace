@@ -275,28 +275,28 @@ Inkscape::XML::Node* Persp3D::write(Inkscape::XML::Document *xml_doc, Inkscape::
             Inkscape::SVGOStringStream os;
             pt = legacy_transform_backward(pt, document);
             os << pt[0] << " : " << pt[1] << " : " << pt[2];
-            repr->setAttribute("inkscape:vp_x", os.str().c_str());
+            repr->setAttribute("inkscape:vp_x", os.str());
         }
         {
             Proj::Pt2 pt = perspective_impl->tmat.column( Proj::Y );
             Inkscape::SVGOStringStream os;
             pt = legacy_transform_backward(pt, document);
             os << pt[0] << " : " << pt[1] << " : " << pt[2];
-            repr->setAttribute("inkscape:vp_y", os.str().c_str());
+            repr->setAttribute("inkscape:vp_y", os.str());
         }
         {
             Proj::Pt2 pt = perspective_impl->tmat.column( Proj::Z );
             Inkscape::SVGOStringStream os;
             pt = legacy_transform_backward(pt, document);
             os << pt[0] << " : " << pt[1] << " : " << pt[2];
-            repr->setAttribute("inkscape:vp_z", os.str().c_str());
+            repr->setAttribute("inkscape:vp_z", os.str());
         }
         {
             Proj::Pt2 pt = perspective_impl->tmat.column( Proj::W );
             Inkscape::SVGOStringStream os;
             pt = legacy_transform_backward(pt, document);
             os << pt[0] << " : " << pt[1] << " : " << pt[2];
-            repr->setAttribute("inkscape:persp3d-origin", os.str().c_str());
+            repr->setAttribute("inkscape:persp3d-origin", os.str());
         }
     }
 

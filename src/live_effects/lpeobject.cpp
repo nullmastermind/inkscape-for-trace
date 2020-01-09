@@ -132,7 +132,7 @@ Inkscape::XML::Node* LivePathEffectObject::write(Inkscape::XML::Document *xml_do
     }
 
     if ((flags & SP_OBJECT_WRITE_ALL) || this->lpe) {
-        repr->setAttribute("effect", Inkscape::LivePathEffect::LPETypeConverter.get_key(this->effecttype).c_str());
+        repr->setAttributeOrRemoveIfEmpty("effect", Inkscape::LivePathEffect::LPETypeConverter.get_key(this->effecttype));
 
         this->lpe->writeParamsToSVG();
     }

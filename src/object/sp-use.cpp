@@ -169,12 +169,12 @@ Inkscape::XML::Node* SPUse::write(Inkscape::XML::Document *xml_doc, Inkscape::XM
 
     sp_repr_set_svg_double(repr, "x", this->x.computed);
     sp_repr_set_svg_double(repr, "y", this->y.computed);
-    repr->setAttribute("width", sp_svg_length_write_with_units(this->width).c_str());
-    repr->setAttribute("height", sp_svg_length_write_with_units(this->height).c_str());
+    repr->setAttribute("width", sp_svg_length_write_with_units(this->width));
+    repr->setAttribute("height", sp_svg_length_write_with_units(this->height));
 
     if (this->ref->getURI()) {
         auto uri_string = this->ref->getURI()->str();
-        repr->setAttribute("xlink:href", uri_string.c_str());
+        repr->setAttributeOrRemoveIfEmpty("xlink:href", uri_string);
     }
 
     SPShape *shape = dynamic_cast<SPShape *>(child);
@@ -711,11 +711,11 @@ SPItem *SPUse::unlink() {
     Inkscape::GC::release(repr);
 
     // Remove tiled clone attrs.
-    copy->setAttribute("inkscape:tiled-clone-of", nullptr);
-    copy->setAttribute("inkscape:tile-w", nullptr);
-    copy->setAttribute("inkscape:tile-h", nullptr);
-    copy->setAttribute("inkscape:tile-cx", nullptr);
-    copy->setAttribute("inkscape:tile-cy", nullptr);
+    copy->removeAttribute("inkscape:tiled-clone-of");
+    copy->removeAttribute("inkscape:tile-w");
+    copy->removeAttribute("inkscape:tile-h");
+    copy->removeAttribute("inkscape:tile-cx");
+    copy->removeAttribute("inkscape:tile-cy");
 
     // Establish the succession and let go of our object.
     this->setSuccessor(unlinked);

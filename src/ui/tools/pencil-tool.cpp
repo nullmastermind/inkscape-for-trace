@@ -780,7 +780,7 @@ void PencilTool::addPowerStrokePencil()
                     if (!valid) {
                         lpe->getRepr()->setAttribute("step", "1");
                     }
-                    lpe->getRepr()->setAttribute("threshold", threshold.str().c_str());
+                    lpe->getRepr()->setAttribute("threshold", threshold.str());
                     lpe->getRepr()->setAttribute("simplify_individual_paths", "false");
                     lpe->getRepr()->setAttribute("simplify_just_coalesce", "false");
                     sp_lpe_item_enable_path_effects(lpeitem, true);

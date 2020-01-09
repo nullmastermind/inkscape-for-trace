@@ -540,7 +540,7 @@ SPGlyph *new_glyph(SPDocument* document, SPFont *font, const int count)
 
     std::ostringstream os;
     os << _("glyph") << " " << count;
-    repr->setAttribute("glyph-name", os.str().c_str());
+    repr->setAttribute("glyph-name", os.str());
 
     // Append the new glyph node to the current font
     font->getRepr()->appendChild(repr);
@@ -864,8 +864,8 @@ void SvgFontsDialog::add_kerning_pair(){
     // create a new hkern node
     Inkscape::XML::Node *repr = xml_doc->createElement("svg:hkern");
 
-    repr->setAttribute("u1", first_glyph.get_active_text().c_str());
-    repr->setAttribute("u2", second_glyph.get_active_text().c_str());
+    repr->setAttribute("u1", first_glyph.get_active_text());
+    repr->setAttribute("u2", second_glyph.get_active_text());
     repr->setAttribute("k", "0");
 
     // Append the new hkern node to the current font

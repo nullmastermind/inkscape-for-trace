@@ -436,7 +436,7 @@ gchar const *SPObject::defaultLabel() const {
 
 void SPObject::setLabel(gchar const *label)
 {
-    getRepr()->setAttribute("inkscape:label", label, false);
+    getRepr()->setAttribute("inkscape:label", label);
 }
 
 
@@ -1070,7 +1070,7 @@ Inkscape::XML::Node* SPObject::write(Inkscape::XML::Document *doc, Inkscape::XML
     if (!repr && (flags & SP_OBJECT_WRITE_BUILD)) {
         repr = this->getRepr()->duplicate(doc);
         if (!( flags & SP_OBJECT_WRITE_EXT )) {
-            repr->setAttribute("inkscape:collect", nullptr);
+            repr->removeAttribute("inkscape:collect");
         }
     } else if (repr) {
         repr->setAttribute("id", this->getId());
@@ -1086,7 +1086,7 @@ Inkscape::XML::Node* SPObject::write(Inkscape::XML::Document *doc, Inkscape::XML
         {
             repr->setAttribute("inkscape:collect", "always");
         } else {
-            repr->setAttribute("inkscape:collect", nullptr);
+            repr->removeAttribute("inkscape:collect");
         }
 
         if (style) {
@@ -1103,12 +1103,7 @@ Inkscape::XML::Node* SPObject::write(Inkscape::XML::Document *doc, Inkscape::XML
                 Glib::ustring s_cleaned = sp_attribute_clean_style( repr, s.c_str(), flags ); 
             }
 
-            if( s.empty() ) {
-                repr->setAttribute("style", nullptr);
-            } else {
-                repr->setAttribute("style", s.c_str());
-            }
-
+            repr->setAttributeOrRemoveIfEmpty("style", s);
         } else {
             /** \todo I'm not sure what to do in this case.  Bug #1165868
              * suggests that it can arise, but the submitter doesn't know
@@ -1381,7 +1376,8 @@ gchar const *SPObject::getAttribute(gchar const *key, SPException *ex) const
     return (gchar const *) getRepr()->attribute(key);
 }
 
-void SPObject::setAttribute(gchar const *key, gchar const *value, SPException *ex)
+void SPObject::setAttribute(Inkscape::Util::const_char_ptr key,
+                            Inkscape::Util::const_char_ptr value, SPException *ex)
 {
     g_assert(this->repr != nullptr);
     /* If exception is not clear, return */
@@ -1389,19 +1385,9 @@ void SPObject::setAttribute(gchar const *key, gchar const *value, SPException *e
 
     /// \todo fixme: Exception if object is NULL? */
     //XML Tree being used here.
-    getRepr()->setAttribute(key, value, false);
+    getRepr()->setAttribute(key, value);
 }
 
-void SPObject::setAttribute(char const *key, Glib::ustring const &value, SPException *ex)
-{
-    setAttribute(key, value.empty() ? nullptr : value.c_str(), ex);
-}
-
-void SPObject::setAttribute(Glib::ustring const &key, Glib::ustring const &value, SPException *ex)
-{
-    setAttribute( key.empty()   ? nullptr : key.c_str(),
-                  value.empty() ? nullptr : value.c_str(), ex);
-}
 
 void SPObject::removeAttribute(gchar const *key, SPException *ex)
 {

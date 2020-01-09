@@ -987,7 +987,7 @@ void SPMeshNodeArray::write( SPMeshGradient *mg ) {
                     if( k < 3 ) is << " ";
                 }
 
-                patch->setAttribute("tensor", is.str().c_str());
+                patch->setAttribute("tensor", is.str());
                 // std::cout << "  SPMeshNodeArray::write: tensor: " << is.str() << std::endl;
             }
 
@@ -1048,7 +1048,7 @@ void SPMeshNodeArray::write( SPMeshGradient *mg ) {
                     default:
                         std::cerr << "SPMeshNodeArray::write(): unhandled path type" << path_type << std::endl;
                 }
-                stop->setAttribute("path", is.str().c_str());
+                stop->setAttribute("path", is.str());
                 // std::cout << "SPMeshNodeArray::write: path:  " << is.str().c_str() << std::endl;
                 // Add stop-color
                 if( ( k == 0 && i == 0 && j == 0 ) ||
@@ -1057,12 +1057,12 @@ void SPMeshNodeArray::write( SPMeshGradient *mg ) {
                     ( k == 3 &&           j == 0 ) ) {
 
                     // Why are we setting attribute and not style?
-                    //stop->setAttribute("stop-color",   patchi.getColor(k).toString().c_str() );
+                    //stop->setAttribute("stop-color",   patchi.getColor(k).toString() );
                     //stop->setAttribute("stop-opacity", patchi.getOpacity(k) );
 
                     Inkscape::CSSOStringStream os;
                     os << "stop-color:" << patchi.getColor(k).toString() << ";stop-opacity:" << patchi.getOpacity(k);
-                    stop->setAttribute("style", os.str().c_str());
+                    stop->setAttribute("style", os.str());
                 }
                 patch->appendChild( stop );
             }

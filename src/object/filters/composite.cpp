@@ -291,10 +291,10 @@ Inkscape::XML::Node* SPFeComposite::write(Inkscape::XML::Document *doc, Inkscape
         sp_repr_set_svg_double(repr, "k3", this->k3);
         sp_repr_set_svg_double(repr, "k4", this->k4);
     } else {
-        repr->setAttribute("k1", nullptr);
-        repr->setAttribute("k2", nullptr);
-        repr->setAttribute("k3", nullptr);
-        repr->setAttribute("k4", nullptr);
+        repr->removeAttribute("k1");
+        repr->removeAttribute("k2");
+        repr->removeAttribute("k3");
+        repr->removeAttribute("k4");
     }
 
     SPFilterPrimitive::write(doc, repr, flags);

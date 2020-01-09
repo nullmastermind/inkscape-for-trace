@@ -187,7 +187,7 @@ void Metafile::setViewBoxIfMissing(SPDocument *doc) {
         Inkscape::SVGOStringStream os;
         Inkscape::Util::Unit const* doc_unit = doc->getWidth().unit;
         os << doc_unit->abbr;
-        repr->setAttribute("inkscape:document-units", os.str().c_str());
+        repr->setAttribute("inkscape:document-units", os.str());
 
         // Set viewBox
         doc->setViewBox(Geom::Rect::from_xywh(0, 0, doc->getWidth().value(doc_unit), doc->getHeight().value(doc_unit)));

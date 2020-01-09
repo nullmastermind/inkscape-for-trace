@@ -477,7 +477,7 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
                                                                   te_get_layout(item)->begin(),
                                                                   te_get_layout(item)->end() );
         if( original_text.size() > 0 ) {
-            g_repr->setAttribute("aria-label", original_text.c_str() );
+            g_repr->setAttributeOrRemoveIfEmpty("aria-label", original_text );
         }
 
         g_repr->setAttribute("transform", item->getRepr()->attribute("transform"));
@@ -487,7 +487,7 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
         /* Whole text's style */
         Glib::ustring style_str =
             item->style->write( SP_STYLE_FLAG_IFDIFF, SP_STYLE_SRC_UNSET, item->parent ? item->parent->style : nullptr); // TODO investigate possibility
-        g_repr->setAttribute("style", style_str.c_str());
+        g_repr->setAttributeOrRemoveIfEmpty("style", style_str);
 
         Inkscape::Text::Layout::iterator iter = te_get_layout(item)->begin();
         do {
@@ -525,7 +525,7 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
             g_free(def_str);
             curve->unref();
 
-            p_repr->setAttribute("style", style_str.c_str());
+            p_repr->setAttributeOrRemoveIfEmpty("style", style_str);
 
             g_repr->appendChild(p_repr);
 
@@ -567,7 +567,7 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
     /* Style */
     Glib::ustring style_str =
         item->style->write( SP_STYLE_FLAG_IFDIFF, SP_STYLE_SRC_UNSET, item->parent ? item->parent->style : nullptr); // TODO investigate possibility
-    repr->setAttribute("style", style_str.c_str());
+    repr->setAttributeOrRemoveIfEmpty("style", style_str);
 
     /* Definition */
     gchar *def_str = sp_svg_write_path(curve->get_pathvector());

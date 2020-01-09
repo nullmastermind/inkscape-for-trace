@@ -1091,7 +1091,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                     clone->setAttribute("inkscape:spray-origin", spray_origin);
                 }
                 gchar *href_str = g_strdup_printf("#%s", old_repr->attribute("id"));
-                clone->setAttribute("xlink:href", href_str, false); 
+                clone->setAttribute("xlink:href", href_str);
                 g_free(href_str);
 
                 SPObject *clone_object = doc->getObjectByRepr(clone);

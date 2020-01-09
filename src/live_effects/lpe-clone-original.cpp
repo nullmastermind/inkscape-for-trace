@@ -52,7 +52,7 @@ LPECloneOriginal::LPECloneOriginal(LivePathEffectObject *lpeobject)
     const gchar * linkedpath = this->getRepr()->attribute("linkedpath");
     if (linkedpath && strcmp(linkedpath, "") != 0){
         this->getRepr()->setAttribute("linkeditem", linkedpath);
-        this->getRepr()->setAttribute("linkedpath", nullptr);
+        this->getRepr()->removeAttribute("linkedpath");
         this->getRepr()->setAttribute("method", "bsplinespiro");
         this->getRepr()->setAttribute("allow_transforms", "false");
     };
@@ -187,7 +187,7 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
     while (*iter != nullptr) {
         const char* attribute = (*iter);
         if (strlen(attribute)) {
-            dest->getRepr()->setAttribute(attribute, nullptr);
+            dest->getRepr()->removeAttribute(attribute);
         }
         iter++;
     }
@@ -234,7 +234,7 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
                     g_free(str);
                     c->unref();
                 } else if (method != CLM_NONE) {
-                    dest->getRepr()->setAttribute(attribute, nullptr);
+                    dest->getRepr()->removeAttribute(attribute);
                 }
             } else {
                 if (!(SP_IS_GROUP(dest) && dest->getId() == sp_lpe_item->getId() && !strcmp(attribute, "transform") &&
@@ -276,7 +276,7 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
     g_strfreev (styleattarray);
     Glib::ustring css_str;
     sp_repr_css_write_string(css_dest,css_str);
-    dest->getRepr()->setAttribute("style", css_str.c_str());
+    dest->getRepr()->setAttributeOrRemoveIfEmpty("style", css_str);
 }
 void
 LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){

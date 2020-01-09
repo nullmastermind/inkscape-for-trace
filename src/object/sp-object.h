@@ -17,7 +17,7 @@
  */
 
 #include <glibmm/ustring.h>
-
+#include "util/const_char_ptr.h"
 /* SPObject flags */
 
 class SPObject;
@@ -707,9 +707,17 @@ public:
      */
     void setKeyValue(SPAttributeEnum key, char const *value);
 
-    void setAttribute(         char const *key,          char const *value, SPException *ex=nullptr);
-    void setAttribute(         char const *key, Glib::ustring const &value, SPException *ex=nullptr);
-    void setAttribute(Glib::ustring const &key, Glib::ustring const &value, SPException *ex=nullptr);
+
+    void setAttribute(Inkscape::Util::const_char_ptr key,
+                      Inkscape::Util::const_char_ptr value,
+                      SPException *ex=nullptr);
+
+    void setAttributeOrRemoveIfEmpty(Inkscape::Util::const_char_ptr key,
+                                     Inkscape::Util::const_char_ptr value,
+                                     SPException *ex=nullptr) {
+        this->setAttribute(key.data(),
+                          (value.data() == nullptr || value.data()[0]=='\0') ? nullptr : value.data(), ex);
+    }
 
     /**
      * Read value of key attribute from XML node into object.

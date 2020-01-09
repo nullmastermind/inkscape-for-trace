@@ -120,11 +120,11 @@ Grid::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::View *doc
     Inkscape::XML::Node * current_layer = static_cast<SPDesktop *>(document)->currentLayer()->getRepr();
     Inkscape::XML::Node * path = xml_doc->createElement("svg:path");
 
-    path->setAttribute("d", path_data.c_str());
+    path->setAttribute("d", path_data);
 
     std::ostringstream stringstream;
     stringstream << "fill:none;stroke:#000000;stroke-width:" << line_width << "px";
-    path->setAttribute("style", stringstream.str().c_str());
+    path->setAttribute("style", stringstream.str());
 
     current_layer->appendChild(path);
     Inkscape::GC::release(path);

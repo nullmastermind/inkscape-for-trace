@@ -331,15 +331,15 @@ Inkscape::XML::Node *SPRoot::write(Inkscape::XML::Document *xml_doc, Inkscape::X
     /* Unlike all other SPObject, here we want to preserve absolute units too (and only here,
      * according to the recommendation in http://www.w3.org/TR/SVG11/coords.html#Units).
      */
-    repr->setAttribute("width", sp_svg_length_write_with_units(this->width).c_str());
-    repr->setAttribute("height", sp_svg_length_write_with_units(this->height).c_str());
+    repr->setAttribute("width", sp_svg_length_write_with_units(this->width));
+    repr->setAttribute("height", sp_svg_length_write_with_units(this->height));
 
     if (this->viewBox_set) {
         Inkscape::SVGOStringStream os;
         os << this->viewBox.left() << " " << this->viewBox.top() << " "
            << this->viewBox.width() << " " << this->viewBox.height();
 
-        repr->setAttribute("viewBox", os.str().c_str());
+        repr->setAttribute("viewBox", os.str());
     }
 
     SPGroup::write(xml_doc, repr, flags);

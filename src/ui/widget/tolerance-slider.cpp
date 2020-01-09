@@ -190,7 +190,7 @@ void ToleranceSlider::update (double val)
     bool saved = DocumentUndo::getUndoSensitive(doc);
     DocumentUndo::setUndoSensitive(doc, false);
     Inkscape::XML::Node *repr = dt->getNamedView()->getRepr();
-    repr->setAttribute(_key.c_str(), os.str().c_str());
+    repr->setAttribute(_key, os.str());
     DocumentUndo::setUndoSensitive(doc, saved);
 
     doc->setModifiedSinceSave();

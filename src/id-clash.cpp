@@ -280,7 +280,7 @@ fix_up_refs(refmap_type const &refmap, const id_changelist_type &id_changes)
                     g_free(url);
                     Glib::ustring style_string;
                     sp_repr_css_write_string(style, style_string);
-                    it->elem->setAttribute("style", style_string);
+                    it->elem->setAttributeOrRemoveIfEmpty("style", style_string);
                     break;
                 }
             }
@@ -348,7 +348,7 @@ change_def_references(SPObject *from_obj, SPObject *to_obj)
                     g_free(url);
                     Glib::ustring style_string;
                     sp_repr_css_write_string(style, style_string);
-                    it->elem->setAttribute("style", style_string);
+                    it->elem->setAttributeOrRemoveIfEmpty("style", style_string);
                     break;
                 }
             } 

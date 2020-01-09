@@ -268,7 +268,7 @@ void sp_repr_css_set_property(SPCSSAttr *css, gchar const *name, gchar const *va
     g_assert(css != nullptr);
     g_assert(name != nullptr);
 
-    ((Node *) css)->setAttribute(name, value, false);
+    ((Node *) css)->setAttribute(name, value);
 }
 
 /**
@@ -279,7 +279,7 @@ void sp_repr_css_unset_property(SPCSSAttr *css, gchar const *name)
     g_assert(css != nullptr);
     g_assert(name != nullptr);
 
-    ((Node *) css)->setAttribute(name, "inkscape:unset", false);
+    ((Node *) css)->setAttribute(name, "inkscape:unset");
 }
 
 /**
@@ -336,7 +336,7 @@ void sp_repr_css_set(Node *repr, SPCSSAttr *css, gchar const *attr)
      * SPObject::repr_attr_changed and thus updates the object's SPStyle. This update
      * results in another call to repr->setAttribute().
      */
-    repr->setAttribute(attr, value.c_str());
+    repr->setAttributeOrRemoveIfEmpty(attr, value);
 }
 
 /**
@@ -429,7 +429,7 @@ static void sp_repr_css_merge_from_decl(SPCSSAttr *css, CRDeclaration const *con
         os << units;
         //g_message("sp_repr_css_merge_from_decl looks like em or ex units %s --> %s", str_value, os.str().c_str());
     }
-    ((Node *) css)->setAttribute(decl->property->stryng->str, os.str().c_str(), false);
+    ((Node *) css)->setAttribute(decl->property->stryng->str, os.str());
 }
 
 /**

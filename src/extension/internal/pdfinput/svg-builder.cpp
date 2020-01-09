@@ -421,11 +421,7 @@ void SvgBuilder::_setBlendMode(Inkscape::XML::Node *node, GfxState *state)
     }
     Glib::ustring value;
     sp_repr_css_write_string(css, value);
-    if (value.empty()) {
-        node->setAttribute("style", nullptr);
-    } else {
-        node->setAttribute("style", value.c_str());
-    }
+    node->setAttributeOrRemoveIfEmpty("style", value);
     sp_repr_css_attr_unref(css);
 }
 /**
@@ -520,7 +516,7 @@ void SvgBuilder::addShadedFill(GfxShading *shading, double *matrix, GfxPath *pat
             SPObject *clip_obj = _doc->getObjectById(clip_path_id);
             if (clip_obj) {
                 clip_obj->deleteObject();
-                node->setAttribute("clip-path", nullptr);
+                node->removeAttribute("clip-path");
                 TRACE(("removed clipping path: %s\n", clip_path_id));
             }
             break;
@@ -1294,12 +1290,12 @@ void SvgBuilder::_flushText() {
                 if ( same_coords[0] ) {
                     sp_repr_set_svg_double(tspan_node, "x", last_delta_pos[0]);
                 } else {
-                    tspan_node->setAttribute("x", x_coords.c_str());
+                    tspan_node->setAttributeOrRemoveIfEmpty("x", x_coords);
                 }
                 if ( same_coords[1] ) {
                     sp_repr_set_svg_double(tspan_node, "y", last_delta_pos[1]);
                 } else {
-                    tspan_node->setAttribute("y", y_coords.c_str());
+                    tspan_node->setAttributeOrRemoveIfEmpty("y", y_coords);
                 }
                 TRACE(("tspan content: %s\n", text_buffer.c_str()));
                 if ( glyphs_in_a_row > 1 ) {
@@ -1693,7 +1689,7 @@ Inkscape::XML::Node *SvgBuilder::_createImage(Stream *str, int width, int height
         auto *base64String = g_base64_encode(png_buffer.data(), png_buffer.size());
         auto png_data = std::string("data:image/png;base64,") + base64String;
         g_free(base64String);
-        image_node->setAttribute("xlink:href", png_data.c_str());
+        image_node->setAttributeOrRemoveIfEmpty("xlink:href", png_data);
     } else {
         fclose(fp);
         image_node->setAttribute("xlink:href", file_name);
@@ -1776,7 +1772,7 @@ void SvgBuilder::addImageMask(GfxState *state, Stream *str, int width, int heigh
             // Create the mask
             Inkscape::XML::Node *mask_node = _createMask(1.0, 1.0);
             // Remove unnecessary transformation from the mask image
-            mask_image_node->setAttribute("transform", nullptr);
+            mask_image_node->removeAttribute("transform");
             mask_node->appendChild(mask_image_node);
             Inkscape::GC::release(mask_image_node);
             gchar *mask_url = g_strdup_printf("url(#%s)", mask_node->attribute("id"));
@@ -1802,7 +1798,7 @@ void SvgBuilder::addMaskedImage(GfxState *state, Stream *str, int width, int hei
         // Create mask for the image
         Inkscape::XML::Node *mask_node = _createMask(1.0, 1.0);
         // Remove unnecessary transformation from the mask image
-        mask_image_node->setAttribute("transform", nullptr);
+        mask_image_node->removeAttribute("transform");
         mask_node->appendChild(mask_image_node);
         // Scale the mask to the size of the image
         Geom::Affine mask_transform((double)width, 0.0, 0.0, (double)height, 0.0, 0.0);
@@ -1836,7 +1832,7 @@ void SvgBuilder::addSoftMaskedImage(GfxState *state, Stream *str, int width, int
         // Create mask for the image
         Inkscape::XML::Node *mask_node = _createMask(1.0, 1.0);
         // Remove unnecessary transformation from the mask image
-        mask_image_node->setAttribute("transform", nullptr);
+        mask_image_node->removeAttribute("transform");
         mask_node->appendChild(mask_image_node);
         // Set mask and add image
         gchar *mask_url = g_strdup_printf("url(#%s)", mask_node->attribute("id"));

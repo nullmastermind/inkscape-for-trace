@@ -146,10 +146,10 @@ void SPConnEndPair::writeRepr(Inkscape::XML::Node *const repr) const
         const Inkscape::URI* U = this->_connEnd[handle_ix]->ref.getURI();
         if (U) {
             auto str = U->str();
-            repr->setAttribute(attr_strs[handle_ix], str.c_str());
+            repr->setAttribute(attr_strs[handle_ix], str);
         }
     }
-    repr->setAttribute("inkscape:connector-curvature", Glib::Ascii::dtostr(_connCurvature).c_str());
+    repr->setAttribute("inkscape:connector-curvature", Glib::Ascii::dtostr(_connCurvature));
     if (_connType == SP_CONNECTOR_POLYLINE || _connType == SP_CONNECTOR_ORTHOGONAL)
         repr->setAttribute("inkscape:connector-type", _connType == SP_CONNECTOR_POLYLINE ? "polyline" : "orthogonal" );
 }

@@ -123,7 +123,7 @@ SPTag::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flag
         if (_expanded) {
             repr->setAttribute("inkscape:expanded", "true");
         } else {
-            repr->setAttribute("inkscape:expanded", nullptr);
+            repr->removeAttribute("inkscape:expanded");
         }
     }
     SPObject::write(doc, repr, flags);

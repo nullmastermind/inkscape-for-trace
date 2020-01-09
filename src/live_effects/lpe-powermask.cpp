@@ -81,8 +81,8 @@ LPEPowerMask::doOnApply (SPLPEItem const * lpeitem)
     } else {
         Glib::ustring newmask = getId();
         Glib::ustring uri = Glib::ustring("url(#") + newmask + Glib::ustring(")");
-        mask->setAttribute("id", newmask.c_str());
-        item->setAttribute("mask", uri.c_str());
+        mask->setAttribute("id", newmask);
+        item->setAttribute("mask", uri);
     }
 }
 
@@ -100,9 +100,9 @@ void LPEPowerMask::tryForkMask()
         Inkscape::XML::Document *xml_doc = document->getReprDoc();
         Inkscape::XML::Node *fork = mask->getRepr()->duplicate(xml_doc);
         mask = SP_OBJECT(document->getDefs()->appendChildRepr(fork));
-        fork->setAttribute("id", newmask.c_str());
+        fork->setAttribute("id", newmask);
         Inkscape::GC::release(fork);
-        sp_lpe_item->setAttribute("mask", uri.c_str());
+        sp_lpe_item->setAttribute("mask", uri);
     }
 }
 
@@ -164,8 +164,8 @@ LPEPowerMask::setMask(){
     Glib::ustring filter_uri = (Glib::ustring)"url(#" + filter_id + (Glib::ustring)")";
     if (!(elemref = document->getObjectById(filter_id))) {
         filter = xml_doc->createElement("svg:filter");
-        filter->setAttribute("id", filter_id.c_str());
-        filter->setAttribute("inkscape:label", filter_label.c_str());
+        filter->setAttribute("id", filter_id);
+        filter->setAttribute("inkscape:label", filter_label);
         SPCSSAttr *css = sp_repr_css_attr_new();
         sp_repr_css_set_property(css, "color-interpolation-filters", "sRGB");
         sp_repr_css_change(filter, css, "style");
@@ -176,13 +176,13 @@ LPEPowerMask::setMask(){
         filter->setAttribute("y", "-50");
         Inkscape::XML::Node *primitive1 =  xml_doc->createElement("svg:feColorMatrix");
         Glib::ustring primitive1_id = (mask_id + (Glib::ustring)"_primitive1").c_str();
-        primitive1->setAttribute("id", primitive1_id.c_str());
+        primitive1->setAttribute("id", primitive1_id);
         primitive1->setAttribute("values", "1");
         primitive1->setAttribute("type", "saturate");
         primitive1->setAttribute("result", "fbSourceGraphic");
         Inkscape::XML::Node *primitive2 =  xml_doc->createElement("svg:feColorMatrix");
         Glib::ustring primitive2_id = (mask_id + (Glib::ustring)"_primitive2").c_str();
-        primitive2->setAttribute("id", primitive2_id.c_str());
+        primitive2->setAttribute("id", primitive2_id);
         primitive2->setAttribute("values", "-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 1 0 ");
         primitive2->setAttribute("in", "fbSourceGraphic");
         elemref = defs->appendChildRepr(filter);
@@ -224,7 +224,7 @@ LPEPowerMask::setMask(){
             }
             Glib::ustring css_str;
             sp_repr_css_write_string(css, css_str);
-            mask_node->setAttribute("style", css_str.c_str());
+            mask_node->setAttribute("style", css_str);
         }
     }
     if ((elemref = document->getObjectById(box_id))) {
@@ -234,7 +234,7 @@ LPEPowerMask::setMask(){
         bool exist = true;
         if (!(elemref = document->getObjectById(box_id))) {
             box = xml_doc->createElement("svg:path");
-            box->setAttribute("id", box_id.c_str());
+            box->setAttribute("id", box_id);
             exist = false;
         }
         Glib::ustring style;
@@ -258,7 +258,7 @@ LPEPowerMask::setMask(){
         }
         Glib::ustring css_str;
         sp_repr_css_write_string(css, css_str);
-        box->setAttribute("style", css_str.c_str());
+        box->setAttributeOrRemoveIfEmpty("style", css_str);
         gchar * box_str = sp_svg_write_path( mask_box );
         box->setAttribute("d" , box_str);
         g_free(box_str);

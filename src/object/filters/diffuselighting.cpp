@@ -207,13 +207,13 @@ Inkscape::XML::Node* SPFeDiffuseLighting::write(Inkscape::XML::Document *doc, In
     if (this->surfaceScale_set) {
         sp_repr_set_css_double(repr, "surfaceScale", this->surfaceScale);
     } else {
-        repr->setAttribute("surfaceScale", nullptr);
+        repr->removeAttribute("surfaceScale");
     }
 
     if (this->diffuseConstant_set) {
         sp_repr_set_css_double(repr, "diffuseConstant", this->diffuseConstant);
     } else {
-        repr->setAttribute("diffuseConstant", nullptr);
+        repr->removeAttribute("diffuseConstant");
     }
 
     /*TODO kernelUnits */
@@ -222,7 +222,7 @@ Inkscape::XML::Node* SPFeDiffuseLighting::write(Inkscape::XML::Document *doc, In
         sp_svg_write_color(c, sizeof(c), this->lighting_color);
         repr->setAttribute("lighting-color", c);
     } else {
-        repr->setAttribute("lighting-color", nullptr);
+        repr->removeAttribute("lighting-color");
     }
         
     SPFilterPrimitive::write(doc, repr, flags);

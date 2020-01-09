@@ -104,7 +104,7 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
         Inkscape::XML::Document *xml_doc;
         xml_doc = _effects_list->document();
         _menu_node = xml_doc->createElement("verb");
-        _menu_node->setAttribute("verb-id", this->get_id(), false);
+        _menu_node->setAttribute("verb-id", this->get_id());
 
         if (!hidden) {
             if (_filters_list &&
@@ -149,7 +149,7 @@ Effect::merge_menu (Inkscape::XML::Node * base,
             // it still seems desirable to be able to put the extension into the existing (translated) submenus.
             mergename = _(menuname);
         }
-        tomerge->setAttribute("name", mergename, false);
+        tomerge->setAttribute("name", mergename);
     }
 
     int position = -1;

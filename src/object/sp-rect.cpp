@@ -327,7 +327,7 @@ bool SPRect::set_rect_path_attribute(Inkscape::XML::Node *repr)
 
         g_free(d);
     } else {
-        repr->setAttribute("d", nullptr);
+        repr->removeAttribute("d");
     }
 
     return true;

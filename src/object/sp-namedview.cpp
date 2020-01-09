@@ -174,15 +174,15 @@ static void sp_namedview_generate_old_grid(SPNamedView * /*nv*/, SPDocument *doc
         Inkscape::GC::release(newnode);
 
         // remove all old settings
-        repr->setAttribute("gridoriginx", nullptr);
-        repr->setAttribute("gridoriginy", nullptr);
-        repr->setAttribute("gridspacingx", nullptr);
-        repr->setAttribute("gridspacingy", nullptr);
-        repr->setAttribute("gridcolor", nullptr);
-        repr->setAttribute("gridempcolor", nullptr);
-        repr->setAttribute("gridopacity", nullptr);
-        repr->setAttribute("gridempopacity", nullptr);
-        repr->setAttribute("gridempspacing", nullptr);
+        repr->removeAttribute("gridoriginx");
+        repr->removeAttribute("gridoriginy");
+        repr->removeAttribute("gridspacingx");
+        repr->removeAttribute("gridspacingy");
+        repr->removeAttribute("gridcolor");
+        repr->removeAttribute("gridempcolor");
+        repr->removeAttribute("gridopacity");
+        repr->removeAttribute("gridempopacity");
+        repr->removeAttribute("gridempspacing");
 
 //        SPDocumentUndo::done(doc, SP_VERB_DIALOG_NAMEDVIEW, _("Create new grid from pre0.46 grid settings"));
     }

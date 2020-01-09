@@ -353,10 +353,10 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
     document->root->invoke_build(document, rroot, false);
 
     /* Eliminate obsolete sodipodi:docbase, for privacy reasons */
-    rroot->setAttribute("sodipodi:docbase", nullptr);
+    rroot->removeAttribute("sodipodi:docbase");
 
     /* Eliminate any claim to adhere to a profile, as we don't try to */
-    rroot->setAttribute("baseProfile", nullptr);
+    rroot->removeAttribute("baseProfile");
 
     // creating namedview
     if (!sp_item_group_get_child_by_name(document->root, nullptr, "sodipodi:namedview")) {
@@ -369,13 +369,13 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
         // Add namedview data from the preferences
         // we can't use getAllEntries because this could produce non-SVG doubles
         Glib::ustring pagecolor = prefs->getString("/template/base/pagecolor");
-        if (!pagecolor.empty()) {
-            rnew->setAttribute("pagecolor", pagecolor.data());
-        }
+
+        rnew->setAttributeOrRemoveIfEmpty("pagecolor", pagecolor.data());
+
         Glib::ustring bordercolor = prefs->getString("/template/base/bordercolor");
-        if (!bordercolor.empty()) {
-            rnew->setAttribute("bordercolor", bordercolor.data());
-        }
+
+        rnew->setAttributeOrRemoveIfEmpty("bordercolor", bordercolor.data());
+
         sp_repr_set_svg_double(rnew, "borderopacity",
             prefs->getDouble("/template/base/borderopacity", 1.0));
         sp_repr_set_svg_double(rnew, "objecttolerance",

@@ -193,7 +193,7 @@ Inkscape::XML::Node* SPFeTurbulence::write(Inkscape::XML::Document *doc, Inkscap
     SPFilterPrimitive::write(doc, repr, flags);
 
     /* turbulence doesn't take input */
-    repr->setAttribute("in", nullptr);
+    repr->removeAttribute("in");
 
     return repr;
 }

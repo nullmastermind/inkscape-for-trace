@@ -921,7 +921,7 @@ void SelectorsDialog::_addToSelector(Gtk::TreeModel::Row row)
             sp_repr_css_write_string(css, css_str);
             sp_repr_css_attr_unref(css);
             sp_repr_css_attr_unref(css_selector);
-            obj->getRepr()->setAttribute("style", css_str.c_str());
+            obj->getRepr()->setAttribute("style", css_str);
             obj->style->readFromObject(obj);
             obj->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
         }
@@ -1129,7 +1129,7 @@ void SelectorsDialog::_removeClass(SPObject *obj, const Glib::ustring &className
         }
         REMOVE_SPACES(classAttr);
         if (classAttr.empty()) {
-            obj->getRepr()->setAttribute("class", nullptr);
+            obj->getRepr()->removeAttribute("class");
         } else {
             obj->getRepr()->setAttribute("class", classAttr);
         }

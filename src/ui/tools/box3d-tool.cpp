@@ -530,7 +530,7 @@ void Box3dTool::drag(guint /*state*/) {
 
             if (use_current && !cur_style.empty()) {
                 // use last used style 
-                side->setAttribute("style", cur_style.data());
+                side->setAttribute("style", cur_style);
             } else {
                 // use default style 
                 Glib::ustring tool_path = Glib::ustring::compose("/tools/shapes/3dbox/%1",

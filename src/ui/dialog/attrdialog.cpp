@@ -454,7 +454,7 @@ void AttrDialog::onAttrDelete(Glib::ustring path)
             return;
         } else {
             this->_store->erase(row);
-            this->_repr->setAttribute(name.c_str(), nullptr, false);
+            this->_repr->removeAttribute(name);
             this->setUndo(_("Delete attribute"));
         }
     }
@@ -481,7 +481,7 @@ bool AttrDialog::onKeyPressed(GdkEventKey *event)
                 Glib::ustring name = row[_attrColumns._attributeName];
                 if (name != "content") {
                     this->_store->erase(row);
-                    this->_repr->setAttribute(name.c_str(), nullptr, false);
+                    this->_repr->removeAttribute(name);
                     this->setUndo(_("Delete attribute"));
                 }
                 ret = true;
@@ -593,7 +593,7 @@ void AttrDialog::nameEdited (const Glib::ustring& path, const Glib::ustring& nam
         if (!old_name.empty()) {
             value = row[_attrColumns._attributeValue];
             _updating = true;
-            _repr->setAttribute(old_name.c_str(), nullptr, false);
+            _repr->removeAttribute(old_name);
             _updating = false;
         }
 
@@ -601,7 +601,7 @@ void AttrDialog::nameEdited (const Glib::ustring& path, const Glib::ustring& nam
         row[_attrColumns._attributeName] = name;
         grab_focus();
         _updating = true;
-        _repr->setAttribute(name.c_str(), value.c_str(), false); // use char * overload (allows empty attribute values)
+        _repr->setAttributeOrRemoveIfEmpty(name, value); // use char * overload (allows empty attribute values)
         _updating = false;
         g_timeout_add(50, &sp_attrdialog_store_move_to_next, this);
         this->setUndo(_("Rename attribute"));
@@ -645,7 +645,7 @@ void AttrDialog::valueEdited (const Glib::ustring& path, const Glib::ustring& va
         if (name == "content") {
             _repr->setContent(value.c_str());
         } else {
-            _repr->setAttribute(name.c_str(), value, false);
+            _repr->setAttributeOrRemoveIfEmpty(name, value);
         }
         if(!value.empty()) {
             row[_attrColumns._attributeValue] = value;

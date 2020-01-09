@@ -971,7 +971,7 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
             obj_copy->setAttribute("transform",obj_copy->attribute("transform-with-parent"));
         }
         if(obj_copy->attribute("transform-with-parent"))
-            obj_copy->setAttribute("transform-with-parent", nullptr);
+            obj_copy->removeAttribute("transform-with-parent");
     }
 
     std::vector<Inkscape::XML::Node*> pasted_objects_not;
@@ -1117,8 +1117,8 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
                 // convert layers to groups, and make sure they are unlocked
                 // FIXME: add "preserve layers" mode where each layer from
                 //        import is copied to the same-named layer in host
-                newitem->setAttribute("inkscape:groupmode", nullptr);
-                newitem->setAttribute("sodipodi:insensitive", nullptr);
+                newitem->removeAttribute("inkscape:groupmode");
+                newitem->removeAttribute("sodipodi:insensitive");
 
                 if (newgroup) newgroup->appendChild(newitem);
                 else new_obj = place_to_insert->appendChildRepr(newitem);

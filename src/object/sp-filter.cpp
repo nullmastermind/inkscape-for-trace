@@ -285,25 +285,25 @@ Inkscape::XML::Node* SPFilter::write(Inkscape::XML::Document *doc, Inkscape::XML
     if (this->x._set) {
         sp_repr_set_svg_double(repr, "x", this->x.computed);
     } else {
-        repr->setAttribute("x", nullptr);
+        repr->removeAttribute("x");
     }
 
     if (this->y._set) {
         sp_repr_set_svg_double(repr, "y", this->y.computed);
     } else {
-        repr->setAttribute("y", nullptr);
+        repr->removeAttribute("y");
     }
 
     if (this->width._set) {
         sp_repr_set_svg_double(repr, "width", this->width.computed);
     } else {
-        repr->setAttribute("width", nullptr);
+        repr->removeAttribute("width");
     }
 
     if (this->height._set) {
         sp_repr_set_svg_double(repr, "height", this->height.computed);
     } else {
-        repr->setAttribute("height", nullptr);
+        repr->removeAttribute("height");
     }
 
     if (this->filterRes.getNumber()>=0) {
@@ -311,12 +311,12 @@ Inkscape::XML::Node* SPFilter::write(Inkscape::XML::Document *doc, Inkscape::XML
         repr->setAttribute("filterRes", tmp);
         g_free(tmp);
     } else {
-        repr->setAttribute("filterRes", nullptr);
+        repr->removeAttribute("filterRes");
     }
 
     if (this->href->getURI()) {
         auto uri_string = this->href->getURI()->str();
-        repr->setAttribute("xlink:href", uri_string.c_str());
+        repr->setAttributeOrRemoveIfEmpty("xlink:href", uri_string);
     }
 
     SPObject::write(doc, repr, flags);

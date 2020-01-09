@@ -73,7 +73,7 @@ static void pruneExtendedNamespaces( Inkscape::XML::Node *repr )
             }
             // Can't change the set we're iterating over while we are iterating.
             for (auto & it : attrsRemoved) {
-                repr->setAttribute(it, nullptr);
+                repr->removeAttribute(it);
             }
         }
 
@@ -166,7 +166,7 @@ static void remove_marker_auto_start_reverse(Inkscape::XML::Node *repr,
                         }
 
                         // Override attributes
-                        marker_reversed->setAttribute("id", marker_name_reversed.c_str());
+                        marker_reversed->setAttribute("id", marker_name_reversed);
                         marker_reversed->setAttribute("orient", "auto");
 
                         // Find transform
@@ -483,7 +483,7 @@ static void insert_text_fallback( Inkscape::XML::Node *repr, SPDocument *origina
                     // Set tspan style
                     Glib::ustring style_text = (dynamic_cast<SPString *>(source_obj) ? source_obj->parent : source_obj)->style->write( SP_STYLE_FLAG_IFDIFF, SP_STYLE_SRC_UNSET, text->style);
                     if (!style_text.empty()) {
-                        span_tspan->setAttribute("style", style_text.c_str());
+                        span_tspan->setAttributeOrRemoveIfEmpty("style", style_text);
                     }
 
                     // Add text node

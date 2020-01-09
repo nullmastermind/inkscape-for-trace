@@ -685,7 +685,7 @@ SPStop *sp_vector_add_stop(SPGradient *vector, SPStop* prev_stop, SPStop* next_s
     sp_svg_write_color (c, sizeof(c), cnew);
     gdouble opacity = (gdouble) SP_RGBA32_A_F (cnew);
     os << "stop-color:" << c << ";stop-opacity:" << opacity <<";";
-    newstop->setAttribute("style", os.str());
+    newstop->setAttributeOrRemoveIfEmpty("style", os.str());
     Inkscape::GC::release(new_stop_repr);
 
     return newstop;
@@ -1503,9 +1503,9 @@ static void sp_gradient_repr_set_link(Inkscape::XML::Node *repr, SPGradient *lin
     if (link) {
         Glib::ustring ref("#");
         ref += link->getId();
-        repr->setAttribute("xlink:href", ref.c_str());
+        repr->setAttribute("xlink:href", ref);
     } else {
-        repr->setAttribute("xlink:href", nullptr);
+        repr->removeAttribute("xlink:href");
     }
 }
 

@@ -495,13 +495,13 @@ static void verify_grad(SPGradient *gradient)
 
         child = xml_doc->createElement("svg:stop");
         sp_repr_set_css_double(child, "offset", 0.0);
-        child->setAttribute("style", os.str().c_str());
+        child->setAttribute("style", os.str());
         gradient->getRepr()->addChild(child, nullptr);
         Inkscape::GC::release(child);
 
         child = xml_doc->createElement("svg:stop");
         sp_repr_set_css_double(child, "offset", 1.0);
-        child->setAttribute("style", os.str().c_str());
+        child->setAttribute("style", os.str());
         gradient->getRepr()->addChild(child, nullptr);
         Inkscape::GC::release(child);
         return;
@@ -1095,7 +1095,7 @@ static void sp_gradient_vector_widget_load_gradient(GtkWidget *widget, SPGradien
         if (gradient->getRepr()->attribute("inkscape:collect")) {
             SPDocument *document = gradient->document;
             DocumentUndo::ScopedInsensitive _no_undo(document);
-            gradient->setAttribute("inkscape:collect", nullptr);
+            gradient->removeAttribute("inkscape:collect");
         }
     } else { // no gradient, disable everything
         gtk_widget_set_sensitive(widget, FALSE);

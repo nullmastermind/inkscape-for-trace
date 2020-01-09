@@ -11,6 +11,7 @@ set(util_SRC
 
 	# -------
 	# Headers
+	const_char_ptr.h
 	copy.h
 	ege-appear-time-tracker.h
 	ege-tags.h

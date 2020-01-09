@@ -240,7 +240,7 @@ void setMeasureItem(Geom::PathVector pathv, bool is_curve, bool markers, guint32
     }
     Glib::ustring css_str;
     sp_repr_css_write_string(css,css_str);
-    repr->setAttribute("style", css_str.c_str());
+    repr->setAttribute("style", css_str);
     sp_repr_css_attr_unref (css);
     g_assert( str != nullptr );
     repr->setAttribute("d", str);
@@ -711,7 +711,7 @@ void MeasureTool::setMarker(bool isStart)
     sp_repr_css_set_property (css, "fill-opacity", "1");
     Glib::ustring css_str;
     sp_repr_css_write_string(css,css_str);
-    rpath->setAttribute("style", css_str.c_str());
+    rpath->setAttribute("style", css_str);
     sp_repr_css_attr_unref (css);
     rpath->setAttribute("transform", isStart ? "scale(0.3) translate(-2.3,0)" : "scale(0.3) rotate(180) translate(-2.3,0)");
     SPItem *path = SP_ITEM(marker->appendChildRepr(rpath));
@@ -860,14 +860,14 @@ void MeasureTool::setGuide(Geom::Point origin, double angle, const char *label)
     std::stringstream position;
     position.imbue(std::locale::classic());
     position <<  origin[Geom::X] << "," << origin[Geom::Y];
-    guide->setAttribute("position", position.str().c_str() );
+    guide->setAttribute("position", position.str() );
     guide->setAttribute("inkscape:color", "rgb(167,0,255)");
     guide->setAttribute("inkscape:label", label);
     Geom::Point unit_vector = Geom::rot90(origin.polar(angle));
     std::stringstream angle_str;
     angle_str.imbue(std::locale::classic());
     angle_str << unit_vector[Geom::X] << "," << unit_vector[Geom::Y];
-    guide->setAttribute("orientation", angle_str.str().c_str());
+    guide->setAttribute("orientation", angle_str.str());
     namedview->appendChild(guide);
     Inkscape::GC::release(guide);
 }
@@ -958,7 +958,7 @@ void MeasureTool::setLabelText(const char *value, Geom::Point pos, double fontsi
     sp_repr_css_set_property (css, "stroke", "none");
     Glib::ustring css_str;
     sp_repr_css_write_string(css,css_str);
-    rtspan->setAttribute("style", css_str.c_str());
+    rtspan->setAttribute("style", css_str);
     sp_repr_css_attr_unref (css);
     rtext->addChild(rtspan, nullptr);
     Inkscape::GC::release(rtspan);
@@ -988,7 +988,7 @@ void MeasureTool::setLabelText(const char *value, Geom::Point pos, double fontsi
         sp_repr_css_set_property (css, "stroke-width", "0");
         Glib::ustring css_str;
         sp_repr_css_write_string(css,css_str);
-        rrect->setAttribute("style", css_str.c_str());
+        rrect->setAttribute("style", css_str);
         sp_repr_css_attr_unref (css);
         sp_repr_set_svg_double(rgroup, "x", 0);
         sp_repr_set_svg_double(rgroup, "y", 0);

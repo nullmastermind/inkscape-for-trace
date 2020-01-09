@@ -113,7 +113,7 @@ protected:
         DocumentUndo::setUndoSensitive(local_doc, false);
         const char * svgstr_old = local_repr->attribute(_key.c_str());
         if (!write_undo) {
-            local_repr->setAttribute(_key.c_str(), svgstr);
+            local_repr->setAttribute(_key, svgstr);
         }
         DocumentUndo::setUndoSensitive(local_doc, saved);
         if (svgstr_old && svgstr && strcmp(svgstr_old,svgstr)) {
@@ -121,7 +121,7 @@ protected:
         }
 
         if (write_undo) {
-            local_repr->setAttribute(_key.c_str(), svgstr);
+            local_repr->setAttribute(_key, svgstr);
             DocumentUndo::done(local_doc, event_type, event_description);
         }
     }

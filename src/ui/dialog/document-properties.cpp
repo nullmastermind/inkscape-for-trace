@@ -515,9 +515,9 @@ void DocumentProperties::linkSelectedProfile()
         gchar* tmp = g_strdup(name.c_str());
         Glib::ustring nameStr = tmp ? tmp : "profile"; // TODO add some auto-numbering to avoid collisions
         sanitizeName(nameStr);
-        cprofRepr->setAttribute("name", nameStr.c_str());
-        cprofRepr->setAttribute("xlink:href", (gchar*) file.c_str());
-        cprofRepr->setAttribute("id", (gchar*) file.c_str());
+        cprofRepr->setAttribute("name", nameStr);
+        cprofRepr->setAttribute("xlink:href", file);
+        cprofRepr->setAttribute("id", file);
 
 
         // Checks whether there is a defs element. Creates it when needed
@@ -1032,7 +1032,7 @@ void DocumentProperties::addExternalScript(){
 
         Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
         Inkscape::XML::Node *scriptRepr = xml_doc->createElement("svg:script");
-        scriptRepr->setAttribute("xlink:href", (gchar*) _script_entry.get_text().c_str());
+        scriptRepr->setAttributeOrRemoveIfEmpty("xlink:href", _script_entry.get_text());
         _script_entry.set_text("");
 
         xml_doc->root()->addChild(scriptRepr, nullptr);
@@ -1633,7 +1633,7 @@ void DocumentProperties::onDocUnitChange()
     // Set document unit
     Inkscape::SVGOStringStream os;
     os << doc_unit->abbr;
-    repr->setAttribute("inkscape:document-units", os.str().c_str());
+    repr->setAttribute("inkscape:document-units", os.str());
 
     _page_sizer.updateScaleUI();
 

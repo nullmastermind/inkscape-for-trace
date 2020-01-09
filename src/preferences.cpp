@@ -497,7 +497,7 @@ void Preferences::remove(Glib::ustring const &pref_path)
                     continue;
                 }
                 if (!node->firstChild()) {
-                    node->setAttribute(splits[part_i], nullptr);
+                    node->removeAttribute(splits[part_i]);
                     g_strfreev(splits);
                     return;
                 }
@@ -759,7 +759,7 @@ void Preferences::_setRawValue(Glib::ustring const &path, Glib::ustring const &v
 
     // set the attribute
     Inkscape::XML::Node *node = _getNode(node_key, true);
-    node->setAttribute(attr_key.c_str(), value.c_str());
+    node->setAttributeOrRemoveIfEmpty(attr_key, value);
 
     if (_initialized) {
         cachedRawValue[path.c_str()] = RAWCACHE_CODE_VALUE + value;

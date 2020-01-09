@@ -232,7 +232,7 @@ static void spdc_paste_curve_as_freehand_shape(Geom::PathVector const &newpath, 
     }
     Inkscape::SVGOStringStream os;
     os << scale;
-    lpe->getRepr()->setAttribute("prop_scale", os.str().c_str());
+    lpe->getRepr()->setAttribute("prop_scale", os.str());
     DocumentUndo::setUndoSensitive(document, saved);
 }
 
@@ -283,7 +283,7 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
         if (dc->tablet_enabled) {
             SPObject *elemref = nullptr;
             if ((elemref = document->getObjectById("power_stroke_preview"))) {
-                elemref->getRepr()->setAttribute("style", nullptr);
+                elemref->getRepr()->removeAttribute("style");
                 SPItem *successor = dynamic_cast<SPItem *>(elemref);
                 sp_desktop_apply_style_tool(desktop, successor->getRepr(),
                                             Glib::ustring("/tools/freehand/pencil").data(), false);
@@ -343,7 +343,7 @@ static void spdc_apply_bend_shape(gchar const *svgd, FreehandBase *dc, SPItem *i
     }
     Inkscape::SVGOStringStream os;
     os << scale;
-    lpe->getRepr()->setAttribute("prop_scale", os.str().c_str());
+    lpe->getRepr()->setAttribute("prop_scale", os.str());
     lpe->getRepr()->setAttribute("scale_y_rel", "false");
     lpe->getRepr()->setAttribute("vertical", "false");
     static_cast<LPEBendPath*>(lpe)->bend_path.paste_param_path(svgd);
@@ -365,7 +365,7 @@ static void spdc_apply_simplify(std::string threshold, FreehandBase *dc, SPItem 
     Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
     // write simplify parameters:
     lpe->getRepr()->setAttribute("steps", "1");
-    lpe->getRepr()->setAttribute("threshold", threshold);
+    lpe->getRepr()->setAttributeOrRemoveIfEmpty("threshold", threshold);
     lpe->getRepr()->setAttribute("smooth_angles", "360");
     lpe->getRepr()->setAttribute("helper_size", "0");
     lpe->getRepr()->setAttribute("simplify_individual_paths", "false");

@@ -614,9 +614,7 @@ void sp_shortcut_add_to_file(char const *action, unsigned int const shortcut) {
     Inkscape::XML::Node *newnode;
     newnode = doc->createElement("bind");
     newnode->setAttribute("key", key);
-    if (!modifiers.empty()) {
-        newnode->setAttribute("modifiers", modifiers.c_str());
-    }
+    newnode->setAttributeOrRemoveIfEmpty("modifiers", modifiers);
     newnode->setAttribute("action", action);
     newnode->setAttribute("display", "true");
 
@@ -626,11 +624,8 @@ void sp_shortcut_add_to_file(char const *action, unsigned int const shortcut) {
         // Add another uppercase version if a character
         Inkscape::XML::Node *newnode;
         newnode = doc->createElement("bind");
-        newnode->setAttribute("key", Glib::ustring(key).uppercase().c_str());
-        if (!modifiers.empty()) {
-            newnode->setAttribute("modifiers", modifiers.c_str());
-        }
-
+        newnode->setAttribute("key", Glib::ustring(key).uppercase());
+        newnode->setAttributeOrRemoveIfEmpty("modifiers", modifiers);
         newnode->setAttribute("action", action);
         doc->root()->appendChild(newnode);
     }

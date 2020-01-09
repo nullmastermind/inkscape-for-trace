@@ -1331,7 +1331,7 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
                 Inkscape::XML::Node *g_repr = xml_doc->createElement("svg:g");
                 Inkscape::copy_object_properties(g_repr, item->getRepr());
                 // drop copied style, children will be re-styled (stroke becomes fill)
-                g_repr->setAttribute("style", nullptr);
+                g_repr->removeAttribute("style");
 
                 // add the group to the parent
                 // move to the saved position
@@ -1799,7 +1799,7 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
             repr->setAttribute("xlink:href", uri);
             g_free((void *) uri);
         } else {
-            repr->setAttribute("inkscape:href", nullptr);
+            repr->removeAttribute("inkscape:href");
             // delete original
             item->deleteObject(false);
         }

@@ -397,8 +397,8 @@ void CanvasGrid::setOrigin(Geom::Point const &origin_px)
     Inkscape::SVGOStringStream os_x, os_y;
     os_x << origin_px[Geom::X] * scale_x;
     os_y << origin_px[Geom::Y] * scale_y;
-    repr->setAttribute("originx", os_x.str().c_str());
-    repr->setAttribute("originy", os_y.str().c_str());
+    repr->setAttribute("originx", os_x.str());
+    repr->setAttribute("originy", os_y.str());
 }
 
 void CanvasGrid::align_clicked(int align)
@@ -807,10 +807,10 @@ CanvasXYGrid::Scale (Geom::Scale const &scale ) {
     os_y << origin[Geom::Y];
     ss_x << spacing[Geom::X];
     ss_y << spacing[Geom::Y];
-    repr->setAttribute("originx",  os_x.str().c_str());
-    repr->setAttribute("originy",  os_y.str().c_str());
-    repr->setAttribute("spacingx", ss_x.str().c_str());
-    repr->setAttribute("spacingy", ss_y.str().c_str());
+    repr->setAttribute("originx",  os_x.str());
+    repr->setAttribute("originy",  os_y.str());
+    repr->setAttribute("spacingx", ss_x.str());
+    repr->setAttribute("spacingy", ss_y.str());
 }
 
 void

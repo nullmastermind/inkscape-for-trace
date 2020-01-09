@@ -83,7 +83,7 @@ Inkscape::XML::Node* SPStar::write(Inkscape::XML::Document *xml_doc, Inkscape::X
         repr->setAttribute("d", d);
         g_free(d);
     } else {
-        repr->setAttribute("d", nullptr);
+        repr->removeAttribute("d");
     }
     // CPPIFY: see header file
     SPShape::write(xml_doc, repr, flags);

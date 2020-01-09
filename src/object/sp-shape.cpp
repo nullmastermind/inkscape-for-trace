@@ -834,7 +834,7 @@ void SPShape::update_patheffect(bool write)
                 repr->setAttribute("d", str);
                 g_free(str);
             } else {
-                repr->setAttribute("d", nullptr);
+                repr->removeAttribute("d");
             }
         }
         c_lpe->unref();

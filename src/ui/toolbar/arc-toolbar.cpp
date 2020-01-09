@@ -386,7 +386,7 @@ ArcToolbar::type_changed( int type )
         if (SP_IS_GENERICELLIPSE(item)) {
             Inkscape::XML::Node *repr = item->getRepr();
             repr->setAttribute("sodipodi:open", (open?"true":nullptr) );
-            repr->setAttribute("sodipodi:arc-type", arc_type.c_str());
+            repr->setAttribute("sodipodi:arc-type", arc_type);
             item->updateRepr();
             modmade = true;
         }

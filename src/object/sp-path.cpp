@@ -158,7 +158,7 @@ void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
                     curve->unref();
 
                     // Convert from property to attribute (convert back on write)
-                    setAttribute("d", value);
+                    setAttributeOrRemoveIfEmpty("d", value);
 
                     SPCSSAttr *css = sp_repr_css_attr( getRepr(), "style");
                     sp_repr_css_unset_property ( css, "d");
@@ -306,7 +306,7 @@ g_message("sp_path_write writes 'd' attribute");
         repr->setAttribute("d", str);
         g_free(str);
     } else {
-        repr->setAttribute("d", nullptr);
+        repr->removeAttribute("d");
     }
 
     if (flags & SP_OBJECT_WRITE_EXT) {
@@ -315,7 +315,7 @@ g_message("sp_path_write writes 'd' attribute");
             repr->setAttribute("inkscape:original-d", str);
             g_free(str);
         } else {
-            repr->setAttribute("inkscape:original-d", nullptr);
+            repr->removeAttribute("inkscape:original-d");
         }
     }
 

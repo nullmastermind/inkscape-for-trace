@@ -239,31 +239,31 @@ Inkscape::XML::Node* SPMarker::write(Inkscape::XML::Document *xml_doc, Inkscape:
 			repr->setAttribute("markerUnits", "userSpaceOnUse");
 		}
 	} else {
-		repr->setAttribute("markerUnits", nullptr);
+		repr->removeAttribute("markerUnits");
 	}
 
 	if (this->refX._set) {
 		sp_repr_set_svg_double(repr, "refX", this->refX.computed);
 	} else {
-		repr->setAttribute("refX", nullptr);
+		repr->removeAttribute("refX");
 	}
 
 	if (this->refY._set) {
 		sp_repr_set_svg_double (repr, "refY", this->refY.computed);
 	} else {
-		repr->setAttribute("refY", nullptr);
+		repr->removeAttribute("refY");
 	}
 
 	if (this->markerWidth._set) {
 		sp_repr_set_svg_double (repr, "markerWidth", this->markerWidth.computed);
 	} else {
-		repr->setAttribute("markerWidth", nullptr);
+		repr->removeAttribute("markerWidth");
 	}
 
 	if (this->markerHeight._set) {
 		sp_repr_set_svg_double (repr, "markerHeight", this->markerHeight.computed);
 	} else {
-		repr->setAttribute("markerHeight", nullptr);
+		repr->removeAttribute("markerHeight");
 	}
 
 	if (this->orient_set) {
@@ -275,7 +275,7 @@ Inkscape::XML::Node* SPMarker::write(Inkscape::XML::Document *xml_doc, Inkscape:
                 sp_repr_set_css_double(repr, "orient", this->orient.computed);
             }
 	} else {
-            repr->setAttribute("orient", nullptr);
+            repr->removeAttribute("orient");
 	}
         
 	/* fixme: */
@@ -482,7 +482,7 @@ SPObject *sp_marker_fork_if_necessary(SPObject *marker)
     SPDocument *doc = marker->document;
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
     // Turn off garbage-collectable or it might be collected before we can use it
-    marker->setAttribute("inkscape:collect", nullptr);
+    marker->removeAttribute("inkscape:collect");
     Inkscape::XML::Node *mark_repr = marker->getRepr()->duplicate(xml_doc);
     doc->getDefs()->getRepr()->addChild(mark_repr, nullptr);
     if (!mark_repr->attribute("inkscape:stockid")) {

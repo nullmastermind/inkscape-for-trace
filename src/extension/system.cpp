@@ -305,7 +305,7 @@ save(Extension *key, SPDocument *doc, gchar const *filename, bool setextension, 
             // also save the extension for next use
             store_file_extension_in_prefs (omod->get_id(), save_method);
             // set the "dataloss" attribute if the chosen extension is lossy
-            repr->setAttribute("inkscape:dataloss", nullptr);
+            repr->removeAttribute("inkscape:dataloss");
             if (omod->causes_dataloss()) {
                 repr->setAttribute("inkscape:dataloss", "true");
             }

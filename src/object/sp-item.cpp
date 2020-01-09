@@ -756,31 +756,31 @@ Inkscape::XML::Node* SPItem::write(Inkscape::XML::Document *xml_doc, Inkscape::X
         if (item->transform_center_x != 0)
             sp_repr_set_svg_double (repr, "inkscape:transform-center-x", item->transform_center_x);
         else
-            repr->setAttribute ("inkscape:transform-center-x", nullptr);
+            repr->removeAttribute("inkscape:transform-center-x");
         if (item->transform_center_y != 0) {
             auto y = item->transform_center_y;
             y *= -document->yaxisdir();
             sp_repr_set_svg_double (repr, "inkscape:transform-center-y", y);
         } else
-            repr->setAttribute ("inkscape:transform-center-y", nullptr);
+            repr->removeAttribute("inkscape:transform-center-y");
     }
 
     if (item->clip_ref){
         if (item->clip_ref->getObject()) {
             auto value = item->clip_ref->getURI()->cssStr();
-            repr->setAttribute("clip-path", value.c_str());
+            repr->setAttributeOrRemoveIfEmpty("clip-path", value);
         }
     }
     if (item->mask_ref){
         if (item->mask_ref->getObject()) {
             auto value = item->mask_ref->getURI()->cssStr();
-            repr->setAttribute("mask", value.c_str());
+            repr->setAttributeOrRemoveIfEmpty("mask", value);
         }
     }
     if (item->_highlightColor){
         repr->setAttribute("inkscape:highlight-color", item->_highlightColor);
     } else {
-        repr->setAttribute("inkscape:highlight-color", nullptr);
+        repr->removeAttribute("inkscape:highlight-color");
     }
 
     SPObject::write(xml_doc, repr, flags);

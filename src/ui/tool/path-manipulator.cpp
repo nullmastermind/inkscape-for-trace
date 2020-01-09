@@ -203,7 +203,7 @@ void PathManipulator::writeXML()
         _observer->block();
         if (!empty()) {
             _path->updateRepr();
-            _getXMLNode()->setAttribute(_nodetypesKey().data(), _createTypeString().data());
+            _getXMLNode()->setAttribute(_nodetypesKey(), _createTypeString());
         }
         else {
             // this manipulator will have to be destroyed right after this call

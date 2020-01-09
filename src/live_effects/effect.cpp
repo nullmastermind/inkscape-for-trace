@@ -1213,7 +1213,7 @@ Effect::processObjects(LPEAction lpe_action)
                     if (elemnode->attribute("inkscape:path-effect")) {
                         sp_item_list_to_curves(item_list, item_selected, item_to_select);
                     }
-                    elemnode->setAttribute("sodipodi:insensitive", nullptr);
+                    elemnode->removeAttribute("sodipodi:insensitive");
                     if (!SP_IS_DEFS(SP_ITEM(elemref)->parent)) {
                         SP_ITEM(elemref)->moveTo(SP_ITEM(sp_lpe_item), false);
                     }
@@ -1230,10 +1230,10 @@ Effect::processObjects(LPEAction lpe_action)
                 if (!this->isVisible()/* && std::strcmp(elemref->getId(),sp_lpe_item->getId()) != 0*/) {
                     css->setAttribute("display", "none");
                 } else {
-                    css->setAttribute("display", nullptr);
+                    css->removeAttribute("display");
                 }
                 sp_repr_css_write_string(css,css_str);
-                elemnode->setAttribute("style", css_str.c_str());
+                elemnode->setAttributeOrRemoveIfEmpty("style", css_str);
                 break;
 
             default:

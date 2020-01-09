@@ -16,6 +16,7 @@
 #include <glibmm/ustring.h>
 #include "gc-anchored.h"
 #include "util/list.h"
+#include "util/const_char_ptr.h"
 
 namespace Inkscape {
 namespace XML {
@@ -199,18 +200,37 @@ public:
      * @param value The new value of the attribute
      * @param is_interactive Ignored
      */
-    virtual void setAttribute(char const *key, char const *value, bool is_interactive=false)=0;
 
-    void setAttribute(char const *key, Glib::ustring const &value, bool is_interactive=false)
-    {
-        setAttribute(key, value.empty() ? nullptr : value.c_str(), is_interactive);
+    void setAttribute(Inkscape::Util::const_char_ptr key,
+                      Inkscape::Util::const_char_ptr value,
+                      bool is_interactive=false) {
+        this->setAttributeImpl(key.data(), value.data(), is_interactive);
     }
 
-    void setAttribute(Glib::ustring const &key, Glib::ustring const &value, bool is_interactive=false)
-    {
-        setAttribute( key.empty()   ? nullptr : key.c_str(),
-                      value.empty() ? nullptr : value.c_str(), is_interactive);
+    /**
+     * @brief Change an attribute of this node. Empty string deletes the attribute.
+     *
+     * @param key Name of the attribute to change
+     * @param value The new value of the attribute
+     *
+     */
+    void setAttributeOrRemoveIfEmpty(Inkscape::Util::const_char_ptr key,
+                                     Inkscape::Util::const_char_ptr value) {
+        this->setAttributeImpl(key.data(),
+                (value.data() == nullptr || value.data()[0]=='\0') ? nullptr : value.data(), false);
     }
+
+
+    /**
+     * @brief Remove an attribute of this node
+     *
+     * @param key Name of the attribute to delete
+     *
+     */
+    void removeAttribute(Inkscape::Util::const_char_ptr key) {
+        this->setAttributeImpl(key.data(), nullptr, false);
+    }
+
     //@}
     /**
      * @brief Set the integer GQuark code for the name of the node.
@@ -503,6 +523,8 @@ public:
 
 protected:
     Node(Node const &) : Anchored() {}
+
+    virtual void setAttributeImpl(char const *key, char const *value, bool is_interactive)=0;
 };
 
 }

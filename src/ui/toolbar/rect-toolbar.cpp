@@ -232,7 +232,7 @@ RectToolbar::value_changed(Glib::RefPtr<Gtk::Adjustment>&  adj,
             if (adj->get_value() != 0) {
                 (SP_RECT(*i)->*setter)(Quantity::convert(adj->get_value(), unit, "px"));
             } else {
-                (*i)->setAttribute(value_name, nullptr);
+                (*i)->removeAttribute(value_name);
             }
             modmade = true;
         }

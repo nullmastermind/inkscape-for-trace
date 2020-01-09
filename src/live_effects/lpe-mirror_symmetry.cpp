@@ -321,7 +321,7 @@ LPEMirrorSymmetry::cloneD(SPObject *orig, SPObject *dest, bool reset)
             g_free(str);
             c->unref();
         } else {
-            dest->getRepr()->setAttribute("d", nullptr);
+            dest->getRepr()->removeAttribute("d");
         }
     }
     if (reset) {
@@ -373,7 +373,7 @@ LPEMirrorSymmetry::toMirror(Geom::Affine transform, bool reset)
         phantom = elemref->getRepr();
     } else {
         phantom = createPathBase(sp_lpe_item);
-        phantom->setAttribute("id", elemref_id.c_str());
+        phantom->setAttribute("id", elemref_id);
         reset = true;
         elemref = container->appendChildRepr(phantom);
         Inkscape::GC::release(phantom);

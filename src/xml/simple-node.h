@@ -82,7 +82,6 @@ public:
     void setPosition(int pos) override;
 
     char const *attribute(char const *key) const override;
-    void setAttribute(char const *key, char const *value, bool is_interactive=false) override;
     bool matchAttributeName(char const *partial_name) const override;
 
     char const *content() const override;
@@ -127,6 +126,7 @@ protected:
     SimpleNode(SimpleNode const &repr, Document *document);
 
     virtual SimpleNode *_duplicate(Document *doc) const=0;
+    void setAttributeImpl(char const *key, char const *value, bool is_interactive) override;
 
 private:
     void operator=(Node const &); // no assign

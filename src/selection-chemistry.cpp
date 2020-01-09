@@ -1768,7 +1768,7 @@ void ObjectSet::removeTransform()
 {
     auto items = xmlNodes();
     for (auto l=items.begin();l!=items.end() ;++l) {
-        (*l)->setAttribute("transform", nullptr, false);
+        (*l)->removeAttribute("transform");
     }
 
     if(document())
@@ -2617,14 +2617,14 @@ void ObjectSet::clone()
         Inkscape::XML::Node *parent = sel_repr->parent();
 
         Inkscape::XML::Node *clone = xml_doc->createElement("svg:use");
-        clone->setAttribute("x", "0", false);
-        clone->setAttribute("y", "0", false);
+        clone->setAttribute("x", "0");
+        clone->setAttribute("y", "0");
         gchar *href_str = g_strdup_printf("#%s", sel_repr->attribute("id"));
-        clone->setAttribute("xlink:href", href_str, false);
+        clone->setAttribute("xlink:href", href_str);
         g_free(href_str);
 
-        clone->setAttribute("inkscape:transform-center-x", sel_repr->attribute("inkscape:transform-center-x"), false);
-        clone->setAttribute("inkscape:transform-center-y", sel_repr->attribute("inkscape:transform-center-y"), false);
+        clone->setAttribute("inkscape:transform-center-x", sel_repr->attribute("inkscape:transform-center-x"));
+        clone->setAttribute("inkscape:transform-center-y", sel_repr->attribute("inkscape:transform-center-y"));
 
         // add the new clone to the top of the original's parent
         parent->appendChild(clone);
@@ -2916,11 +2916,11 @@ void ObjectSet::cloneOriginalPathLPE(bool allow_transforms)
         Inkscape::XML::Node *lpe_repr = xml_doc->createElement("inkscape:path-effect");
         if (multiple) {
             lpe_repr->setAttribute("effect", "fill_between_many");
-            lpe_repr->setAttribute("linkedpaths", os.str());
+            lpe_repr->setAttributeOrRemoveIfEmpty("linkedpaths", os.str());
             lpe_repr->setAttribute("applied", "true");
         } else {
             lpe_repr->setAttribute("effect", "clone_original");
-            lpe_repr->setAttribute("linkeditem", ((Glib::ustring)"#" + (Glib::ustring)firstItem->getId()).c_str());
+            lpe_repr->setAttribute("linkeditem", ((Glib::ustring)"#" + (Glib::ustring)firstItem->getId()));
         }
         gchar const *method_str = allow_transforms ?  "d" : "bsplinespiro";
         lpe_repr->setAttribute("method", method_str);
@@ -2933,7 +2933,7 @@ void ObjectSet::cloneOriginalPathLPE(bool allow_transforms)
         // create the new path
         Inkscape::XML::Node *clone = xml_doc->createElement("svg:path");
         {
-            clone->setAttribute("d", "M 0 0", false);
+            clone->setAttribute("d", "M 0 0");
             // add the new clone to the top of the original's parent
             parent->appendChildRepr(clone);
             // select the new object:
@@ -3192,7 +3192,7 @@ void ObjectSet::toSymbol()
         symbol_repr->setAttribute("inkscape:transform-center-y",
                                   the_group->getAttribute("inkscape:transform-center-y"));
 
-        the_group->setAttribute("style", nullptr);
+        the_group->removeAttribute("style");
 
     }
 
@@ -3226,7 +3226,7 @@ void ObjectSet::toSymbol()
     // Create <use> pointing to new symbol (to replace the moved objects).
     Inkscape::XML::Node *clone = xml_doc->createElement("svg:use");
 
-    clone->setAttribute("xlink:href", Glib::ustring("#")+symbol_repr->attribute("id"), false);
+    clone->setAttribute("xlink:href", Glib::ustring("#")+symbol_repr->attribute("id"));
 
     the_parent_repr->appendChild(clone);
 
@@ -3862,20 +3862,21 @@ void ObjectSet::setClipGroup()
     topmost_parent->addChildAtPos(outer, topmost + 1);
 
     Inkscape::XML::Node *clone = xml_doc->createElement("svg:use");
-    clone->setAttribute("x", "0", false);
-    clone->setAttribute("y", "0", false);
-    clone->setAttribute("xlink:href", g_strdup_printf("#%s", inner->attribute("id")), false);
+    clone->setAttribute("x", "0");
+    clone->setAttribute("y", "0");
+    clone->setAttribute("xlink:href", g_strdup_printf("#%s", inner->attribute("id")));
 
-    clone->setAttribute("inkscape:transform-center-x", inner->attribute("inkscape:transform-center-x"), false);
-    clone->setAttribute("inkscape:transform-center-y", inner->attribute("inkscape:transform-center-y"), false);
+    clone->setAttribute("inkscape:transform-center-x", inner->attribute("inkscape:transform-center-x"));
+    clone->setAttribute("inkscape:transform-center-y", inner->attribute("inkscape:transform-center-y"));
 
     std::vector<Inkscape::XML::Node*> templist;
     templist.push_back(clone);
     // add the new clone to the top of the original's parent
     gchar const *mask_id = SPClipPath::create(templist, doc);
 
-
-    outer->setAttribute("clip-path", g_strdup_printf("url(#%s)", mask_id));
+    char* tmp = g_strdup_printf("url(#%s)", mask_id);
+    outer->setAttribute("clip-path", tmp);
+    g_free(tmp);
 
     Inkscape::GC::release(clone);
 
@@ -4153,10 +4154,10 @@ void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
                 copy->setAttribute("d", copy->attribute("inkscape:original-d"));
             } else if (copy->attribute("inkscape:original-d")) {
                 copy->setAttribute("d", copy->attribute("inkscape:original-d"));
-                copy->setAttribute("inkscape:original-d", nullptr);
+                copy->removeAttribute("inkscape:original-d");
             } else if (!copy->attribute("inkscape:path-effect") && !SP_IS_PATH(&child)) {
-                copy->setAttribute("d", nullptr);
-                copy->setAttribute("inkscape:original-d", nullptr);
+                copy->removeAttribute("d");
+                copy->removeAttribute("inkscape:original-d");
             }
             items_to_move.push_back(copy);
         }

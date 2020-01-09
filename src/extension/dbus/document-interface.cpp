@@ -229,10 +229,10 @@ gchar *finish_create_shape (DocumentInterface *doc_interface, GError ** /*error*
     if (style) {
         Glib::ustring str;
         sp_repr_css_write_string(style, str);
-        newNode->setAttribute("style", str.c_str(), TRUE);
+        newNode->setAttributeOrRemoveIfEmpty("style", str, true);
     }
     else {
-        newNode->setAttribute("style", "fill:#0000ff;fill-opacity:1;stroke:#c900b9;stroke-width:0;stroke-miterlimit:0;stroke-opacity:1;stroke-dasharray:none", TRUE);
+        newNode->setAttribute("style", "fill:#0000ff;fill-opacity:1;stroke:#c900b9;stroke-width:0;stroke-miterlimit:0;stroke-opacity:1;stroke-dasharray:none", true);
     }
 
     doc_interface->target.getSelection()->layers()->currentLayer()->appendChildRepr(newNode);
@@ -456,7 +456,7 @@ document_interface_line (DocumentInterface *doc_interface, int x, int y,
     std::stringstream out;
     // Not sure why this works.
 	out << "m " << x << "," << y << " " << x2 - x << "," << y2 - y;
-    newNode->setAttribute("d", out.str().c_str());
+    newNode->setAttribute("d", out.str());
     return finish_create_shape (doc_interface, error, newNode, (gchar *)"create line");
 }
 
@@ -650,7 +650,7 @@ document_interface_set_attribute (DocumentInterface *doc_interface, char *shape,
     if (!newNode)
         return FALSE;
         
-    newNode->setAttribute(attribute, newval, TRUE);
+    newNode->setAttribute(attribute, newval, true);
     return TRUE;
 }
 
@@ -787,7 +787,7 @@ document_interface_modify_css (DocumentInterface *doc_interface, gchar *shape,
     sp_repr_css_set_property(oldstyle, cssattrb, newval);
     Glib::ustring str;
     sp_repr_css_write_string (oldstyle, str);
-    node->setAttribute (style, str.c_str(), TRUE);
+    node->setAttributeOrRemoveIfEmpty (style, str, true);
     return TRUE;
 }
 
@@ -812,7 +812,7 @@ document_interface_merge_css (DocumentInterface *doc_interface, gchar *shape,
     sp_repr_css_merge(oldstyle, newstyle);
     Glib::ustring str;
     sp_repr_css_write_string (oldstyle, str);
-    node->setAttribute (style, str.c_str(), TRUE);
+    node->setAttributeOrRemoveIfEmpty (style, str, true);
     
     return TRUE;
 }

@@ -108,7 +108,7 @@ TEST_F(ObjectTest, Clones) {
     for (size_t i = 0; i < num_clones; ++i) {
         Node *clone = xml_doc->createElement("svg:use");
         Inkscape::GC::release(clone);
-        clone->setAttribute("xlink:href", href.c_str());
+        clone->setAttribute("xlink:href", href);
         parent->addChild(clone, node);
         clones[i] = clone;
     }

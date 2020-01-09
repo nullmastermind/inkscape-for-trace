@@ -119,7 +119,7 @@ void SPOffset::build(SPDocument *document, Inkscape::XML::Node *repr) {
         //in all the below lines in the block while it shouldn't be.
         gchar const *oldA = this->getRepr()->attribute("sodipodi:radius");
         this->setAttribute("inkscape:radius", oldA);
-        this->setAttribute("sodipodi:radius", nullptr);
+        this->removeAttribute("sodipodi:radius");
 
         this->readAttr( "inkscape:radius" );
     }
@@ -129,7 +129,7 @@ void SPOffset::build(SPDocument *document, Inkscape::XML::Node *repr) {
     } else {
         gchar const *oldA = this->getRepr()->attribute("sodipodi:original");
         this->setAttribute("inkscape:original", oldA);
-        this->setAttribute("sodipodi:original", nullptr);
+        this->removeAttribute("sodipodi:original");
 
         this->readAttr( "inkscape:original" );
     }
@@ -152,7 +152,7 @@ void SPOffset::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
             free(nA);
 
-            this->setAttribute("inkscape:href", nullptr);
+            this->removeAttribute("inkscape:href");
         }
 
         this->readAttr( "xlink:href" );

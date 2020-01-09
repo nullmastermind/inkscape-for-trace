@@ -648,7 +648,7 @@ SPStyle::readFromPrefs(Glib::ustring const &path) {
 
     std::vector<Inkscape::Preferences::Entry> attrs = prefs->getAllEntries(path);
     for (auto & attr : attrs) {
-        tempnode->setAttribute(attr.getEntryName().data(), attr.getString().data());
+        tempnode->setAttribute(attr.getEntryName(), attr.getString());
     }
 
     read( nullptr, tempnode );

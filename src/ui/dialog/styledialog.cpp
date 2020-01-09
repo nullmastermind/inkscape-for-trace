@@ -1130,7 +1130,7 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
                 const gchar *attr = obj->getRepr()->attribute(iter->name().c_str());
                 if (attr) {
                     _updating = true;
-                    obj->getRepr()->setAttribute(iter->name(), nullptr);
+                    obj->getRepr()->removeAttribute(iter->name());
                     _updating = false;
                 }
             }
@@ -1140,7 +1140,7 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
             Glib::ustring value = row[_mColumns._colValue];
             if (!(name.empty() && value.empty())) {
                 _updating = true;
-                obj->getRepr()->setAttribute(name.c_str(), value, false);
+                obj->getRepr()->setAttribute(name, value);
                 _updating = false;
             }
         }
@@ -1411,9 +1411,9 @@ void StyleDialog::_nameEdited(const Glib::ustring &path, const Glib::ustring &na
                 Glib::ustring css_str = "";
                 SPCSSAttr *css = sp_repr_css_attr_new();
                 sp_repr_css_attr_add_from_string(css, obj->getRepr()->attribute("style"));
-                css->setAttribute(name.c_str(), nullptr);
+                css->setAttribute(name, nullptr);
                 sp_repr_css_write_string(css, css_str);
-                obj->getRepr()->setAttribute("style", css_str.c_str());
+                obj->getRepr()->setAttribute("style", css_str);
                 obj->style->readFromObject(obj);
                 obj->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             }
@@ -1463,9 +1463,9 @@ void StyleDialog::_valueEdited(const Glib::ustring &path, const Glib::ustring &v
                 Glib::ustring css_str = "";
                 SPCSSAttr *css = sp_repr_css_attr_new();
                 sp_repr_css_attr_add_from_string(css, obj->getRepr()->attribute("style"));
-                css->setAttribute(name.c_str(), nullptr);
+                css->removeAttribute(name);
                 sp_repr_css_write_string(css, css_str);
-                obj->getRepr()->setAttribute("style", css_str.c_str());
+                obj->getRepr()->setAttribute("style", css_str);
                 obj->style->readFromObject(obj);
                 obj->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             }

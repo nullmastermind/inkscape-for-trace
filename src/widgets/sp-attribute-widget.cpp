@@ -271,7 +271,7 @@ static void sp_attribute_table_entry_changed ( Gtk::Entry *editable,
                 spat->blocked = true;
                 Glib::ustring text = e->get_text ();
                 if (spat->_object) {
-                    spat->_object->getRepr()->setAttribute(attributes[i].c_str(), text.c_str(), false);
+                    spat->_object->getRepr()->setAttribute(attributes[i], text);
                     DocumentUndo::done(spat->_object->document, SP_VERB_NONE,
                                        _("Set attribute"));
                 }

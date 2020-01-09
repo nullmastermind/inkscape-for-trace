@@ -197,11 +197,11 @@ void Inkscape::XML::rebase_hrefs(SPDocument *const doc, gchar const *const new_b
                 url = URI::from_native_filename(spabsref);
             }
         } else if (spns) {
-            ir->setAttribute("sodipodi:absref", url.toNativeFilename());
+            ir->setAttributeOrRemoveIfEmpty("sodipodi:absref", url.toNativeFilename());
         }
 
         if (!spns) {
-            ir->setAttribute("sodipodi:absref", nullptr);
+            ir->removeAttribute("sodipodi:absref");
         }
 
         auto href_str = url.str(new_base_url_str.c_str());

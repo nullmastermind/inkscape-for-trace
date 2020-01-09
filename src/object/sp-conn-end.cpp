@@ -229,7 +229,7 @@ static void sp_conn_end_deleted(SPObject *, SPObject *const owner, unsigned cons
 {
     char const * const attrs[] = {
         "inkscape:connection-start", "inkscape:connection-end"};
-    owner->setAttribute(attrs[handle_ix], nullptr);
+    owner->removeAttribute(attrs[handle_ix]);
     /* I believe this will trigger sp_conn_end_href_changed. */
 }
 

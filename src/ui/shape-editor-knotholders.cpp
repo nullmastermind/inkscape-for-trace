@@ -243,8 +243,8 @@ RectKnotHolderEntityRX::knot_click(unsigned int state)
 
     if (state & GDK_SHIFT_MASK) {
         /* remove rounding from rectangle */
-        rect->getRepr()->setAttribute("rx", nullptr);
-        rect->getRepr()->setAttribute("ry", nullptr);
+        rect->getRepr()->removeAttribute("rx");
+        rect->getRepr()->removeAttribute("ry");
     } else if (state & GDK_CONTROL_MASK) {
         /* Ctrl-click sets the vertical rounding to be the same as the horizontal */
         rect->getRepr()->setAttribute("ry", rect->getRepr()->attribute("rx"));
@@ -301,8 +301,8 @@ RectKnotHolderEntityRY::knot_click(unsigned int state)
 
     if (state & GDK_SHIFT_MASK) {
         /* remove rounding */
-        rect->getRepr()->setAttribute("rx", nullptr);
-        rect->getRepr()->setAttribute("ry", nullptr);
+        rect->getRepr()->removeAttribute("rx");
+        rect->getRepr()->removeAttribute("ry");
     } else if (state & GDK_CONTROL_MASK) {
         /* Ctrl-click sets the vertical rounding to be the same as the horizontal */
         rect->getRepr()->setAttribute("rx", rect->getRepr()->attribute("ry"));

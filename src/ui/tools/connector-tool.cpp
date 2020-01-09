@@ -763,9 +763,9 @@ void ConnectorTool::_reroutingFinish(Geom::Point *const p)
 
         if (found) {
             if (this->clickedhandle == this->endpt_handle[0]) {
-                this->clickeditem->setAttribute("inkscape:connection-start", shape_label, nullptr);
+                this->clickeditem->setAttribute("inkscape:connection-start", shape_label);
             } else {
-                this->clickeditem->setAttribute("inkscape:connection-end", shape_label, nullptr);
+                this->clickeditem->setAttribute("inkscape:connection-end", shape_label);
             }
             g_free(shape_label);
         }
@@ -899,12 +899,12 @@ void ConnectorTool::_flushWhite(SPCurve *gc)
         this->newconn->setAttribute( "inkscape:connector-curvature",
                                    Glib::Ascii::dtostr(this->curvature).c_str(), nullptr );
         if (this->shref) {
-            this->newconn->setAttribute( "inkscape:connection-start", this->shref, nullptr);
+            this->newconn->setAttribute( "inkscape:connection-start", this->shref);
             connection = true;
         }
 
         if (this->ehref) {
-            this->newconn->setAttribute( "inkscape:connection-end", this->ehref, nullptr);
+            this->newconn->setAttribute( "inkscape:connection-end", this->ehref);
             connection = true;
         }
         // Process pending updates.
@@ -1305,7 +1305,7 @@ void cc_selection_set_avoid(bool const set_avoid)
         char const *value = (set_avoid) ? "true" : nullptr;
 
         if (cc_item_is_shape(item)) {
-            item->setAttribute("inkscape:connector-avoid", value, nullptr);
+            item->setAttribute("inkscape:connector-avoid", value);
             item->getAvoidRef().handleSettingChange();
             changes++;
         }

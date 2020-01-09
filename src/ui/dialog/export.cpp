@@ -1196,7 +1196,7 @@ void Export::onExport ()
 
             gchar const *temp_string = repr->attribute("inkscape:export-filename");
             if (temp_string == nullptr || (filename_ext != temp_string)) {
-                repr->setAttribute("inkscape:export-filename", filename_ext.c_str());
+                repr->setAttribute("inkscape:export-filename", filename_ext);
                 modified = true;
             }
             temp_string = repr->attribute("inkscape:export-xdpi");
@@ -1240,7 +1240,7 @@ void Export::onExport ()
                             (dir == docdir)))) {
                     temp_string = repr->attribute("inkscape:export-filename");
                     if (temp_string == nullptr || (filename_ext != temp_string)) {
-                        repr->setAttribute("inkscape:export-filename", filename_ext.c_str());
+                        repr->setAttribute("inkscape:export-filename", filename_ext);
                         modified = true;
                     }
                 }

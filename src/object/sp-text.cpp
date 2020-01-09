@@ -107,7 +107,7 @@ void SPText::set(SPAttributeEnum key, const gchar* value) {
                     this->style->line_height.value = this->style->line_height.computed = sp_svg_read_percentage (value, 1.0);
                 }
                 // Remove deprecated attribute
-                this->setAttribute("sodipodi:linespacing", nullptr);
+                this->removeAttribute("sodipodi:linespacing");
 
                 this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
                 break;
@@ -1285,15 +1285,15 @@ void TextTagAttributes::update( double em, double ex, double w, double h )
 void TextTagAttributes::writeSingleAttributeLength(Inkscape::XML::Node *node, gchar const *key, const SVGLength &length)
 {
     if (length._set) {
-        node->setAttribute(key, length.write().c_str());
+        node->setAttribute(key, length.write());
     } else
-        node->setAttribute(key, nullptr);
+        node->removeAttribute(key);
 }
 
 void TextTagAttributes::writeSingleAttributeVector(Inkscape::XML::Node *node, gchar const *key, std::vector<SVGLength> const &attr_vector)
 {
     if (attr_vector.empty())
-        node->setAttribute(key, nullptr);
+        node->removeAttribute(key);
     else {
         Glib::ustring string;
 
@@ -1302,7 +1302,7 @@ void TextTagAttributes::writeSingleAttributeVector(Inkscape::XML::Node *node, gc
             if (!string.empty()) string += ' ';
             string += it.write();
         }
-        node->setAttribute(key, string.c_str());
+        node->setAttributeOrRemoveIfEmpty(key, string);
     }
 }
 
