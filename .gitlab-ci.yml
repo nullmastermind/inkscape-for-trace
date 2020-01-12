@@ -175,7 +175,7 @@ clangtidy:linux:
   stage: build
   except:
     - schedules
-    - branches@inkscape/inkscape
+    - master@inkscape/inkscape
   script:
     - git fetch https://gitlab.com/inkscape/inkscape.git
     # "borrow" a 2geom file to dump header includes
@@ -188,7 +188,7 @@ clangtidyfull:linux:
   except:
     - schedules
   only:
-    - branches@inkscape/inkscape
+    - master@inkscape/inkscape
   script:
     # skip files which clangtidy-helper.sh will revert anyway
     - find src/3rdparty src/2geom -name CMakeLists.txt | xargs tee
