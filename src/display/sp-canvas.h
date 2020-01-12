@@ -226,9 +226,6 @@ public:
     /// Last known modifier state, for deferred repick when a button is down.
     int _state;
 
-    /// Get idf we are outside canvas area
-    bool _inside;
-
     /** The item containing the mouse pointer, or NULL if none. */
     SPCanvasItem *_current_item;
 

@@ -1015,7 +1015,6 @@ static void sp_canvas_init(SPCanvas *canvas)
     canvas->_xray = false;
     canvas->_xray_orig = Geom::Point();
     canvas->_changecursor = 0;
-    canvas->_inside = false; // this could be wrong on start but we update it as far we bo to the other side.
     canvas->_splits = 0;
     canvas->_totalelapsed = 0;
     canvas->_scrooling = false;
@@ -2330,11 +2329,6 @@ gint SPCanvas::handle_crossing(GtkWidget *widget, GdkEventCrossing *event)
 
     if (event->window != getWindow(canvas)) {
         return FALSE;
-    }
-    if (event->type == GDK_LEAVE_NOTIFY) {
-        canvas->_inside = false;
-    } else {
-        canvas->_inside = true;
     }
     canvas->_state = event->state;
     return canvas->pickCurrentItem(reinterpret_cast<GdkEvent *>(event));

@@ -161,6 +161,7 @@ public:
     gint xp, yp;           ///< where drag started
     gint tolerance;
     bool _button1on;
+    bool _button2on;
     bool _button3on;
     bool within_tolerance;  ///< are we still within tolerance of origin
 

@@ -948,6 +948,9 @@ bool ToolBase::block_button(GdkEvent *event)
                 case 1:
                     this->_button1on = true;
                     break;
+                case 2:
+                    this->_button2on = true;
+                    break;
                 case 3:
                     this->_button3on = true;
                     break;
@@ -957,6 +960,9 @@ bool ToolBase::block_button(GdkEvent *event)
             switch (event->button.button) {
                 case 1:
                     this->_button1on = false;
+                    break;
+                case 2:
+                    this->_button2on = false;
                     break;
                 case 3:
                     this->_button3on = false;
@@ -968,6 +974,11 @@ bool ToolBase::block_button(GdkEvent *event)
                 this->_button1on = true;
             } else {
                 this->_button1on = false;
+            }
+            if (event->motion.state & Gdk::ModifierType::BUTTON2_MASK) {
+                this->_button2on = true;
+            } else {
+                this->_button2on = false;
             }
             if (event->motion.state & Gdk::ModifierType::BUTTON3_MASK) {
                 this->_button3on = true;
@@ -1096,13 +1107,6 @@ void sp_event_context_read(ToolBase *ec, gchar const *key) {
 gint sp_event_context_root_handler(ToolBase * event_context,
         GdkEvent * event)
 {
-    Geom::Point pos = Geom::Point(0, 0);
-    if ((event->type == GDK_BUTTON_RELEASE || event->type == GDK_MOTION_NOTIFY) &&
-        !event_context->desktop->canvas->_inside) {
-        pos = event_context->desktop->d2w(event_context->desktop->point(true));
-        event->motion.x = pos[Geom::X];
-        event->motion.y = pos[Geom::Y];
-    }
 
     if (!event_context->_uses_snap) {
         return sp_event_context_virtual_root_handler(event_context, event);
