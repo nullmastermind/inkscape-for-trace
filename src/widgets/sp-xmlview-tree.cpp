@@ -121,12 +121,6 @@ GtkWidget *sp_xmlview_tree_new(Inkscape::XML::Node * repr, void * /*factory*/, v
 {
     SPXMLViewTree *tree = SP_XMLVIEW_TREE(g_object_new (SP_TYPE_XMLVIEW_TREE, nullptr));
 
-    tree->store = gtk_tree_store_new (STORE_N_COLS, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_POINTER);
-
-    // Detach the model from the view until all the data is loaded
-    g_object_ref(tree->store);
-    gtk_tree_view_set_model(GTK_TREE_VIEW(tree), nullptr);
-
     gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(tree), FALSE);
     gtk_tree_view_set_reorderable (GTK_TREE_VIEW(tree), TRUE);
     gtk_tree_view_set_enable_search (GTK_TREE_VIEW(tree), TRUE);
@@ -140,7 +134,6 @@ GtkWidget *sp_xmlview_tree_new(Inkscape::XML::Node * repr, void * /*factory*/, v
 
     sp_xmlview_tree_set_repr (tree, repr);
 
-    g_signal_connect(G_OBJECT(tree->store), "row-changed", G_CALLBACK(on_row_changed), tree);
     g_signal_connect(GTK_TREE_VIEW(tree), "drag_data_received",  G_CALLBACK(on_drag_data_received), tree);
     g_signal_connect(GTK_TREE_VIEW(tree), "drag-motion",  G_CALLBACK(do_drag_motion), tree);
     g_signal_connect(GTK_TREE_VIEW(tree), "test-expand-row", G_CALLBACK(on_test_expand_row), nullptr);
@@ -237,6 +230,16 @@ add_node (SPXMLViewTree * tree, GtkTreeIter *parent, GtkTreeIter *before, Inksca
     }
 
 	return rowref;
+}
+
+static gboolean remove_all_listeners(GtkTreeModel *model, GtkTreePath *, GtkTreeIter *iter, gpointer)
+{
+    NodeData *data = nullptr;
+    gtk_tree_model_get(model, iter, STORE_DATA_COL, &data, -1);
+    if (data && data->repr) {
+        sp_repr_remove_listener_by_data(data->repr, data);
+    }
+    return false;
 }
 
 NodeData *node_data_new(SPXMLViewTree * tree, GtkTreeIter * /*node*/, GtkTreeRowReference  *rowref, Inkscape::XML::Node *repr)
@@ -672,29 +675,28 @@ void
 sp_xmlview_tree_set_repr (SPXMLViewTree * tree, Inkscape::XML::Node * repr)
 {
     if ( tree->repr == repr ) return;
-    if (tree->repr) {
-        /*
-         *  Would like to simple call gtk_tree_store_clear here,
-         *  but it is extremely slow on large data sets.
-         *  Instead just unref the old and create a new store.
-         */
-        //gtk_tree_store_clear(tree->store);
-        gtk_tree_view_set_model(GTK_TREE_VIEW(tree), nullptr);
-        g_object_unref(tree->store);
-        tree->store = gtk_tree_store_new (STORE_N_COLS, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_POINTER);
-        gtk_tree_view_set_model (GTK_TREE_VIEW(tree), GTK_TREE_MODEL(tree->store));
 
+    if (tree->store) {
+        gtk_tree_view_set_model(GTK_TREE_VIEW(tree), nullptr);
+        gtk_tree_model_foreach(GTK_TREE_MODEL(tree->store), remove_all_listeners, nullptr);
+        g_object_unref(tree->store);
+        tree->store = nullptr;
+    }
+
+    if (tree->repr) {
         Inkscape::GC::release(tree->repr);
     }
     tree->repr = repr;
     if (repr) {
+        tree->store = gtk_tree_store_new(STORE_N_COLS, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_POINTER);
+
         GtkTreeRowReference * rowref;
         Inkscape::GC::anchor(repr);
         rowref = add_node (tree, nullptr, nullptr, repr);
 
         // Set the tree model here, after all data is inserted
         gtk_tree_view_set_model (GTK_TREE_VIEW(tree), GTK_TREE_MODEL(tree->store));
-        g_object_unref(tree->store);
+        g_signal_connect(G_OBJECT(tree->store), "row-changed", G_CALLBACK(on_row_changed), tree);
 
         GtkTreePath *path = gtk_tree_row_reference_get_path(rowref);
         gtk_tree_view_expand_to_path (GTK_TREE_VIEW(tree), path);
