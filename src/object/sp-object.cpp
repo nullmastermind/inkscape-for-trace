@@ -1094,6 +1094,15 @@ Inkscape::XML::Node* SPObject::write(Inkscape::XML::Document *doc, Inkscape::XML
             Glib::ustring s =
                 style->write(SP_STYLE_FLAG_IFSET | SP_STYLE_FLAG_IFSRC, SP_STYLE_SRC_STYLE_PROP);
 
+            // Write style attributes (SP_STYLE_SRC_ATTRIBUTE) back to xml object
+            auto properties = style->properties();
+            for (auto * prop : properties) {
+                if(prop->shall_write(SP_STYLE_FLAG_IFSET | SP_STYLE_FLAG_IFSRC, SP_STYLE_SRC_ATTRIBUTE)) {
+                    // WARNING: We don't know for sure if the css names are the same as the attribute names
+                    repr->setAttributeOrRemoveIfEmpty(prop->name(), prop->get_value());
+                }
+            }
+
             // Check for valid attributes. This may be time consuming.
             // It is useful, though, for debugging Inkscape code.
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
