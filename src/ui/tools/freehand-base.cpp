@@ -655,9 +655,6 @@ static void spdc_selection_modified(Inkscape::Selection *sel, guint /*flags*/, F
 
 static void spdc_attach_selection(FreehandBase *dc, Inkscape::Selection */*sel*/)
 {
-    if (SP_IS_PENCIL_CONTEXT(dc) && dc->sa) {
-        return;
-    }
     // We reset white and forget white/start/end anchors
     spdc_reset_white(dc);
     dc->sa = nullptr;
