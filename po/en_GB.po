@@ -36064,7 +36064,7 @@ msgstr "Depth function:"
 #: ../share/extensions/gcodetools_path_to_gcode.inx:19
 #, fuzzy
 msgid "Sort paths to reduce rapid distance"
-msgstr "Sort paths to reduse rapid distance"
+msgstr "Sort paths to reduce rapid distance"
 
 #: ../share/extensions/gcodetools_area.inx:61
 #: ../share/extensions/gcodetools_lathe.inx:41
