@@ -110,6 +110,7 @@ protected:
 
 private:
     SPDesktop       *_desktop;
+    void on_activate_desktop(SPDesktop *);
 
     int              _verb_num;
 

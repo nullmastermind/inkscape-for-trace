@@ -164,7 +164,6 @@ class SelectorsDialog : public Widget::Panel {
     void _handleDocumentReplaced(SPDesktop* desktop, SPDocument *document);
     void setDesktop(SPDesktop *desktop) override;
     void _handleSelectionChanged();
-    void _panedrealized();
     void _rowExpand(const Gtk::TreeModel::iterator &iter, const Gtk::TreeModel::Path &path);
     void _rowCollapse(const Gtk::TreeModel::iterator &iter, const Gtk::TreeModel::Path &path);
     void _closeDialog(Gtk::Dialog *textDialogPtr);

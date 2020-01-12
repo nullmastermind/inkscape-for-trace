@@ -34,32 +34,15 @@ Prototype::Prototype()
 
     // A widget for demonstration that displays the current SVG's id.
     _getContents()->pack_start(label);  // Panel::_getContents()
-
-    // desktop is set by Panel constructor so this should never be NULL.
-    // Note, we need to use getDesktop() since _desktop is private in Panel.h.
-    // It should probably be protected instead... but need to verify in doesn't break anything.
-    if (getDesktop() == nullptr) {
-        std::cerr << "Prototype::Prototype: desktop is NULL!" << std::endl;
-    }
-
-    // This results in calling handleDocumentReplaced twice. Fix me!
-    connectionDocumentReplaced = getDesktop()->connectDocumentReplaced(
-        sigc::mem_fun(this, &Prototype::handleDocumentReplaced));
-
-    // Alternative mechanism but results in calling handleDocumentReplaced four times.
-    // signalDocumentReplaced().connect(
-    //    sigc::mem_fun(this, &Prototype::handleDocumentReplaced));
-
-    connectionSelectionChanged = getDesktop()->getSelection()->connectChanged(
-        sigc::hide(sigc::mem_fun(this, &Prototype::handleSelectionChanged)));
-
-    updateLabel();
 }
 
 Prototype::~Prototype()
 {
     // Never actually called.
     std::cout << "Prototype::~Prototype()" << std::endl;
+
+    // might not be necessary because we expect Panel::on_unmap being
+    // called first and triggering setDesktop(nullptr)
     connectionDocumentReplaced.disconnect();
     connectionSelectionChanged.disconnect();
 }
@@ -91,6 +74,9 @@ Prototype::handleDocumentReplaced(SPDesktop *desktop, SPDocument * /* document *
 
     connectionSelectionChanged.disconnect();
 
+    if (!desktop)
+        return;
+
     connectionSelectionChanged = desktop->getSelection()->connectChanged(
         sigc::hide(sigc::mem_fun(this, &Prototype::handleSelectionChanged)));
 
@@ -105,26 +91,17 @@ void
 Prototype::setDesktop(SPDesktop* desktop) {
     std::cout << "Prototype::handleDesktopChanged(): " << desktop << std::endl;
 
-    if (getDesktop() == desktop) {
-        // This will happen after construction of Prototype. We've already
-        // set up signals so just return.
-        std::cout << "  getDesktop() == desktop" << std::endl;
-        return;
-    }
-
     // Connections are disconnect safe.
-    connectionSelectionChanged.disconnect();
     connectionDocumentReplaced.disconnect();
 
     Panel::setDesktop(desktop);
 
-    connectionSelectionChanged = desktop->getSelection()->connectChanged(
-        sigc::hide(sigc::mem_fun(this, &Prototype::handleSelectionChanged)));
-    connectionDocumentReplaced = desktop->connectDocumentReplaced(
+    if (desktop) {
+        connectionDocumentReplaced = desktop->connectDocumentReplaced(
         sigc::mem_fun(this, &Prototype::handleDocumentReplaced));
+    }
 
-    // Update demonstration widget.
-    updateLabel();
+    handleDocumentReplaced(desktop, nullptr);
 }
 
 /*

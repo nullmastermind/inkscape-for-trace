@@ -113,6 +113,8 @@ public:
 
     void updateSelection(PageType page, Inkscape::Selection *selection);
 
+    void setDesktop(SPDesktop *) override;
+
 protected:
 
     Gtk::Notebook     _notebook;

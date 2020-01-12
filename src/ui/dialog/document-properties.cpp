@@ -171,8 +171,6 @@ DocumentProperties::DocumentProperties()
     _grids_button_remove.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::onRemoveGrid));
 
     signalDocumentReplaced().connect(sigc::mem_fun(*this, &DocumentProperties::_handleDocumentReplaced));
-    signalActivateDesktop().connect(sigc::mem_fun(*this, &DocumentProperties::_handleActivateDesktop));
-    signalDeactiveDesktop().connect(sigc::mem_fun(*this, &DocumentProperties::_handleDeactivateDesktop));
 
     _rum_deflt._changed_connection.block();
     _rum_deflt.getUnitMenu()->signal_changed().connect(sigc::mem_fun(*this, &DocumentProperties::onDocUnitChange));
@@ -180,24 +178,12 @@ DocumentProperties::DocumentProperties()
 
 void DocumentProperties::init()
 {
-    update();
-
-    Inkscape::XML::Node *repr = getDesktop()->getNamedView()->getRepr();
-    repr->addListener (&_repr_events, this);
-    Inkscape::XML::Node *root = getDesktop()->getDocument()->getRoot()->getRepr();
-    root->addListener (&_repr_events, this);
-
     show_all_children();
     _grids_button_remove.hide();
 }
 
 DocumentProperties::~DocumentProperties()
 {
-    Inkscape::XML::Node *repr = getDesktop()->getNamedView()->getRepr();
-    repr->removeListenerByData (this);
-    Inkscape::XML::Node *root = getDesktop()->getDocument()->getRoot()->getRepr();
-    root->removeListenerByData (this);
-
     for (auto & it : _rdflist)
         delete it;
 }
@@ -1350,10 +1336,6 @@ void DocumentProperties::build_gridspage()
     /// \todo FIXME: gray out snapping when grid is off.
     /// Dissenting view: you want snapping without grid.
 
-    SPDesktop *dt = getDesktop();
-    SPNamedView *nv = dt->getNamedView();
-    (void)nv;
-
     _grids_label_crea.set_markup(_("<b>Creation</b>"));
     _grids_label_def.set_markup(_("<b>Defined grids</b>"));
     _grids_hbox_crea.pack_start(_grids_combo_gridtype, true, true);
@@ -1374,8 +1356,6 @@ void DocumentProperties::build_gridspage()
     _grids_vbox.pack_start(_grids_label_def, false, false);
     _grids_vbox.pack_start(_grids_notebook, false, false);
     _grids_vbox.pack_start(_grids_button_remove, false, false);
-
-    update_gridspage();
 }
 
 
@@ -1520,28 +1500,28 @@ void DocumentProperties::save_default_metadata()
 
 void DocumentProperties::_handleDocumentReplaced(SPDesktop* desktop, SPDocument *document)
 {
-    Inkscape::XML::Node *repr = desktop->getNamedView()->getRepr();
-    repr->addListener(&_repr_events, this);
-    Inkscape::XML::Node *root = document->getRoot()->getRepr();
-    root->addListener(&_repr_events, this);
+    _repr_root = desktop->getNamedView()->getRepr();
+    _repr_root->addListener(&_repr_events, this);
+    _repr_namedview = document->getRoot()->getRepr();
+    _repr_namedview->addListener(&_repr_events, this);
+
     update();
 }
 
-void DocumentProperties::_handleActivateDesktop(SPDesktop *desktop)
+void DocumentProperties::setDesktop(SPDesktop *desktop)
 {
-    Inkscape::XML::Node *repr = desktop->getNamedView()->getRepr();
-    repr->addListener(&_repr_events, this);
-    Inkscape::XML::Node *root = desktop->getDocument()->getRoot()->getRepr();
-    root->addListener(&_repr_events, this);
-    update();
-}
+    if (_repr_root) {
+        _repr_root->removeListenerByData(this);
+        _repr_root = nullptr;
+        _repr_namedview->removeListenerByData(this);
+        _repr_namedview = nullptr;
+    }
 
-void DocumentProperties::_handleDeactivateDesktop(SPDesktop *desktop)
-{
-    Inkscape::XML::Node *repr = desktop->getNamedView()->getRepr();
-    repr->removeListenerByData(this);
-    Inkscape::XML::Node *root = desktop->getDocument()->getRoot()->getRepr();
-    root->removeListenerByData(this);
+    Panel::setDesktop(desktop);
+
+    if (desktop) {
+        _handleDocumentReplaced(desktop, desktop->getDocument());
+    }
 }
 
 static void on_child_added(Inkscape::XML::Node */*repr*/, Inkscape::XML::Node */*child*/, Inkscape::XML::Node */*ref*/, void *data)

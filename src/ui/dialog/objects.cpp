@@ -414,6 +414,11 @@ void ObjectsPanel::_queueObject(SPObject* obj, Gtk::TreeModel::Row* parentRow)
  * @return False if the queue has been fully emptied
  */
 bool ObjectsPanel::_processQueue() {
+    auto *desktop = getDesktop();
+    if (!desktop) {
+        return false;
+    }
+
     auto queue_iter = _tree_update_queue.begin();
     auto queue_end  = _tree_update_queue.end();
     int count = 0;
@@ -454,7 +459,7 @@ bool ObjectsPanel::_processQueue() {
     }
 
     _blockAllSignals(false);
-    _objectsSelected(_desktop->selection); //Set the tree selection; will also invoke _checkTreeSelection()
+    _objectsSelected(desktop->selection); //Set the tree selection; will also invoke _checkTreeSelection()
     _pending_update = false;
     return false; // Return false to kill the timeout signal that kept calling _processQueue
 }

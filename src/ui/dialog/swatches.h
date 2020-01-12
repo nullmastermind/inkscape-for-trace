@@ -84,8 +84,7 @@ private:
 
     Gtk::Menu       *_menu;
 
-    sigc::connection _documentConnection;
-    sigc::connection _selChanged;
+    std::vector<sigc::connection> _desktopConnections;
 
     friend class DocTrack;
 };

@@ -78,7 +78,7 @@ public:
     // Accessor functions
 
     Glib::RefPtr<Gtk::TreeModel> getEventListStore() const { return _event_list_store; }
-    const EventModelColumns& getColumns() const            { return _columns; }
+    static const EventModelColumns& getColumns();
     iterator getCurrEvent() const                          { return _curr_event; }
     iterator getCurrEventParent() const                    { return _curr_event_parent; }
 
@@ -118,8 +118,6 @@ private:
     EventLogPrivate *_priv;
 
     SPDocument *_document;       //< document that is logged
-
-    const EventModelColumns _columns;
 
     Glib::RefPtr<Gtk::TreeStore> _event_list_store; 
 

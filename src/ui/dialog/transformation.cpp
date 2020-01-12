@@ -144,8 +144,6 @@ Transformation::Transformation()
       ((Gtk::Entry *) (_scalar_skew_horizontal.getWidget()))->set_activates_default(true);
       ((Gtk::Entry *) (_scalar_skew_vertical.getWidget()))->set_activates_default(true);
 
-    updateSelection(PAGE_MOVE, _getSelection());
-
     resetButton = addResponseButton(_("_Clear"), 0);
     if (resetButton) {
         resetButton->set_tooltip_text(_("Reset the values on the current tab to defaults"));
@@ -194,13 +192,6 @@ void Transformation::presentPage(Transformation::PageType page)
 void Transformation::layoutPageMove()
 {
     _units_move.setUnitType(UNIT_TYPE_LINEAR);
-    
-    // Setting default unit to document unit
-    SPDesktop *dt = getDesktop();
-    SPNamedView *nv = dt->getNamedView();
-    if (nv->display_units) {
-        _units_move.setUnit(nv->display_units->abbr);
-    }
     
     _scalar_move_horizontal.initScalar(-1e6, 1e6);
     _scalar_move_horizontal.setDigits(3);
@@ -305,15 +296,6 @@ void Transformation::layoutPageRotate()
     _page_rotate.table().attach(_units_rotate,            2, 0, 1, 1);
     _page_rotate.table().attach(_counterclockwise_rotate, 3, 0, 1, 1);
     _page_rotate.table().attach(_clockwise_rotate,        4, 0, 1, 1);
-
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (prefs->getBool("/dialogs/transformation/rotateCounterClockwise", TRUE) != getDesktop()->is_yaxisdown()) {
-        _counterclockwise_rotate.set_active();
-        onRotateCounterclockwiseClicked();
-    } else {
-        _clockwise_rotate.set_active();
-        onRotateClockwiseClicked();
-    }
 
     _scalar_rotate.signal_value_changed()
         .connect(sigc::mem_fun(*this, &Transformation::onRotateValueChanged));
@@ -497,6 +479,10 @@ void Transformation::updateSelection(PageType page, Inkscape::Selection *selecti
 
 void Transformation::onSwitchPage(Gtk::Widget * /*page*/, guint pagenum)
 {
+    if (!getDesktop()) {
+        return;
+    }
+
     updateSelection((PageType)pagenum, getDesktop()->getSelection());
 }
 
@@ -1150,6 +1136,32 @@ void Transformation::onApplySeparatelyToggled()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setBool("/dialogs/transformation/applyseparately", _check_apply_separately.get_active());
+}
+
+void Transformation::setDesktop(SPDesktop*desktop)
+{
+    Panel::setDesktop(desktop);
+
+    if (!desktop) {
+        return;
+    }
+
+    // Setting default unit to document unit
+    SPNamedView *nv = desktop->getNamedView();
+    if (nv->display_units) {
+        _units_move.setUnit(nv->display_units->abbr);
+    }
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    if (prefs->getBool("/dialogs/transformation/rotateCounterClockwise", true) != desktop->is_yaxisdown()) {
+        _counterclockwise_rotate.set_active();
+        onRotateCounterclockwiseClicked();
+    } else {
+        _clockwise_rotate.set_active();
+        onRotateClockwiseClicked();
+    }
+
+    updateSelection(PAGE_MOVE, _getSelection());
 }
 
 

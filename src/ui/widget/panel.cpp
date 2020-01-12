@@ -40,7 +40,7 @@ void Panel::prep() {
 
 Panel::Panel(gchar const *prefs_path, int verb_num) :
     _prefs_path(prefs_path),
-    _desktop(SP_ACTIVE_DESKTOP),
+    _desktop(nullptr),
     _verb_num(verb_num),
     _action_area(nullptr)
 {
@@ -48,7 +48,10 @@ Panel::Panel(gchar const *prefs_path, int verb_num) :
     set_orientation(Gtk::ORIENTATION_VERTICAL);
 
     signalResponse().connect(sigc::mem_fun(*this, &Panel::_handleResponse));
-    signalActivateDesktop().connect(sigc::mem_fun(*this, &Panel::setDesktop));
+    signalActivateDesktop().connect(sigc::mem_fun(*this, &Panel::on_activate_desktop));
+
+    signal_map().connect([this]() { this->setDesktop(SP_ACTIVE_DESKTOP); });
+    signal_unmap().connect([this]() { this->setDesktop(nullptr); });
 
     pack_start(_contents, true, true);
 
@@ -81,6 +84,13 @@ gchar const *Panel::getPrefsPath() const
 int const &Panel::getVerb() const
 {
     return _verb_num;
+}
+
+void Panel::on_activate_desktop(SPDesktop *desktop)
+{
+    if (get_mapped() && desktop != _desktop) {
+        setDesktop(desktop);
+    }
 }
 
 void Panel::setDesktop(SPDesktop *desktop)

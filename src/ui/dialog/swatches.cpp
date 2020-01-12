@@ -666,9 +666,6 @@ SwatchesPanel::~SwatchesPanel()
 {
     _trackDocument( this, nullptr );
 
-    _documentConnection.disconnect();
-    _selChanged.disconnect();
-
     if ( _clear ) {
         delete _clear;
     }
@@ -847,28 +844,27 @@ void SwatchesPanel::setDesktop( SPDesktop* desktop )
 {
     if ( desktop != _currentDesktop ) {
         if ( _currentDesktop ) {
-            _documentConnection.disconnect();
-            _selChanged.disconnect();
+            for (auto &conn : _desktopConnections) {
+                conn.disconnect();
+            }
         }
 
         _currentDesktop = desktop;
 
         if ( desktop ) {
-            _currentDesktop->selection->connectChanged(
-                sigc::hide(sigc::mem_fun(*this, &SwatchesPanel::_updateFromSelection)));
+            _desktopConnections.emplace_back(desktop->selection->connectChanged( //
+                [this](Inkscape::Selection *) { this->_updateFromSelection(); }));
 
-            _currentDesktop->selection->connectModified(
-                sigc::hide(sigc::hide(sigc::mem_fun(*this, &SwatchesPanel::_updateFromSelection))));
+            _desktopConnections.emplace_back(desktop->selection->connectModified( //
+                [this](Inkscape::Selection *, unsigned) { this->_updateFromSelection(); }));
 
-            _currentDesktop->connectToolSubselectionChanged(
-                sigc::hide(sigc::mem_fun(*this, &SwatchesPanel::_updateFromSelection)));
+            _desktopConnections.emplace_back(desktop->connectToolSubselectionChanged( //
+                [this](gpointer) { this->_updateFromSelection(); }));
 
-            sigc::bound_mem_functor1<void, SwatchesPanel, SPDocument*> first = sigc::mem_fun(*this, &SwatchesPanel::_setDocument);
-            sigc::slot<void, SPDocument*> base2 = first;
-            sigc::slot<void,SPDesktop*, SPDocument*> slot2 = sigc::hide<0>( base2 );
-            _documentConnection = desktop->connectDocumentReplaced( slot2 );
+            _desktopConnections.emplace_back(desktop->connectDocumentReplaced( //
+                [this](SPDesktop *, SPDocument *doc) { this->_setDocument(doc); }));
 
-            _setDocument( desktop->doc() );
+            _setDocument(desktop->doc());
         } else {
             _setDocument(nullptr);
         }
@@ -1164,7 +1160,10 @@ void SwatchesPanel::_setDocument( SPDocument *document )
     if ( document != _currentDocument ) {
         _trackDocument(this, document);
         _currentDocument = document;
-        handleGradientsChange( document );
+
+        if (document) {
+            handleGradientsChange(document);
+        }
     }
 }
 

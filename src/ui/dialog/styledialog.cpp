@@ -205,19 +205,6 @@ StyleDialog::StyleDialog()
     _mainBox.set_orientation(Gtk::ORIENTATION_VERTICAL);
 
     _getContents()->pack_start(_mainBox, Gtk::PACK_EXPAND_WIDGET);
-    // Document & Desktop
-
-    _document_replaced_connection =
-        getDesktop()->connectDocumentReplaced(sigc::mem_fun(this, &StyleDialog::_handleDocumentReplaced));
-
-    _selection_changed_connection = getDesktop()->getSelection()->connectChanged(
-        sigc::hide(sigc::mem_fun(this, &StyleDialog::_handleSelectionChanged)));
-
-    // Add watchers
-    _updateWatchers();
-
-    // Load tree
-    readStyleElement();
 }
 
 void StyleDialog::_vscrool()
@@ -1592,9 +1579,11 @@ void StyleDialog::_updateWatchers()
         delete w;
     }
 
-    // Recursively add new watchers
-    Inkscape::XML::Node *root = SP_ACTIVE_DOCUMENT->getReprRoot();
-    _addWatcherRecursive(root);
+    if (getDesktop()) {
+        // Recursively add new watchers
+        Inkscape::XML::Node *root = SP_ACTIVE_DOCUMENT->getReprRoot();
+        _addWatcherRecursive(root);
+    }
 
     g_debug("StyleDialog::_updateWatchers(): %d", (int)_nodeWatchers.size());
 
@@ -1638,10 +1627,14 @@ void StyleDialog::_handleDocumentReplaced(SPDesktop *desktop, SPDocument * /* do
 
     _selection_changed_connection.disconnect();
 
+    _updateWatchers();
+
+    if (!desktop)
+        return;
+
     _selection_changed_connection =
         desktop->getSelection()->connectChanged(sigc::hide(sigc::mem_fun(this, &StyleDialog::_handleSelectionChanged)));
 
-    _updateWatchers();
     readStyleElement();
 }
 
@@ -1659,17 +1652,16 @@ void StyleDialog::setDesktop(SPDesktop *desktop)
         return;
     }
 
-    _selection_changed_connection.disconnect();
     _document_replaced_connection.disconnect();
+
     Panel::setDesktop(desktop);
 
-    _selection_changed_connection =
-        desktop->getSelection()->connectChanged(sigc::hide(sigc::mem_fun(this, &StyleDialog::_handleSelectionChanged)));
-    _document_replaced_connection =
+    if (desktop) {
+        _document_replaced_connection =
         desktop->connectDocumentReplaced(sigc::mem_fun(this, &StyleDialog::_handleDocumentReplaced));
+    }
 
-    _updateWatchers();
-    readStyleElement();
+    _handleDocumentReplaced(desktop, nullptr);
 }
 
 

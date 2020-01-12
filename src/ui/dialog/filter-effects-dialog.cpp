@@ -1377,8 +1377,6 @@ FilterEffectsDialog::FilterModifier::FilterModifier(FilterEffectsDialog& d)
 
     _list.get_selection()->signal_changed().connect(sigc::mem_fun(*this, &FilterModifier::on_filter_selection_changed));
     _observer->signal_changed().connect(signal_filter_changed().make_slot());
-
-    update_filters();
 }
 
 FilterEffectsDialog::FilterModifier::~FilterModifier()
@@ -1397,7 +1395,6 @@ void FilterEffectsDialog::FilterModifier::setTargetDesktop(SPDesktop *desktop)
             _selectModifiedConn.disconnect();
             _doc_replaced.disconnect();
             _resource_changed.disconnect();
-            _dialog.setDesktop(nullptr);
         }
         _desktop = desktop;
         if (desktop) {
@@ -1407,7 +1404,6 @@ void FilterEffectsDialog::FilterModifier::setTargetDesktop(SPDesktop *desktop)
             }
             _doc_replaced = desktop->connectDocumentReplaced( sigc::mem_fun(*this, &FilterModifier::on_document_replaced));
             _resource_changed = desktop->getDocument()->connectResourcesChanged("filter",sigc::mem_fun(*this, &FilterModifier::update_filters));
-            _dialog.setDesktop(desktop);
 
             update_filters();
         }
@@ -2714,6 +2710,7 @@ FilterEffectsDialog::~FilterEffectsDialog()
 
 void FilterEffectsDialog::setDesktop(SPDesktop *desktop)
 { //
+    Panel::setDesktop(desktop);
     _filter_modifier.setTargetDesktop(desktop);
 }
 

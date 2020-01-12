@@ -92,24 +92,20 @@ UndoHistory& UndoHistory::getInstance()
 UndoHistory::UndoHistory()
     : UI::Widget::Panel("/dialogs/undo-history", SP_VERB_DIALOG_UNDO_HISTORY),
       _document_replaced_connection(),
-      _desktop(getDesktop()),
-      _document(_desktop ? _desktop->doc() : nullptr),
-      _event_log(_desktop ? _desktop->event_log : nullptr),
-      _columns(_event_log ? &_event_log->getColumns() : nullptr),
+      _desktop(nullptr),
+      _document(nullptr),
+      _event_log(nullptr),
       _scrolled_window(),
       _event_list_store(),
       _event_list_selection(_event_list_view.get_selection()),
       _callback_connections()
 {
-    if ( !_document || !_event_log || !_columns ) return;
+    auto *_columns = &EventLog::getColumns();
 
     set_size_request(-1, 95);
 
     _getContents()->pack_start(_scrolled_window);
     _scrolled_window.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
-
-    // connect with the EventLog
-    _connectEventLog();
 
     _event_list_view.set_enable_search(false);
     _event_list_view.set_headers_visible(false);
@@ -160,9 +156,6 @@ UndoHistory::UndoHistory()
     signalDocumentReplaced().connect(sigc::mem_fun(*this, &UndoHistory::_handleDocumentReplaced));
 
     show_all_children();
-
-    // scroll to the selected row
-    _event_list_view.set_cursor(_event_list_store->get_path(_event_log->getCurrEvent()));
 }
 
 UndoHistory::~UndoHistory()

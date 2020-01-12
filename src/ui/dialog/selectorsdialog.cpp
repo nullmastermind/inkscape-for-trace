@@ -293,22 +293,6 @@ SelectorsDialog::SelectorsDialog()
 
     _showWidgets();
 
-    _document_replaced_connection =
-        getDesktop()->connectDocumentReplaced(sigc::mem_fun(this, &SelectorsDialog::_handleDocumentReplaced));
-
-    _selection_changed_connection = getDesktop()->getSelection()->connectChanged(
-        sigc::hide(sigc::mem_fun(this, &SelectorsDialog::_handleSelectionChanged)));
-
-    // Add watchers
-    _updateWatchers();
-
-    // Load tree
-    _readStyleElement();
-    _selectRow();
-
-    if (!_store->children().empty()) {
-        _del.show();
-    }
     show_all();
 }
 
@@ -384,7 +368,6 @@ void SelectorsDialog::_showWidgets()
     int panedpos = prefs->getInt("/dialogs/selectors/panedpos", widthpos / 2);
     _paned.property_position().signal_changed().connect(sigc::mem_fun(*this, &SelectorsDialog::_childresized));
     _paned.signal_size_allocate().connect(sigc::mem_fun(*this, &SelectorsDialog::_panedresized));
-    _paned.signal_realize().connect(sigc::mem_fun(*this, &SelectorsDialog::_panedrealized));
     _updating = true;
     _paned.property_position() = panedpos;
     _updating = false;
@@ -397,8 +380,6 @@ void SelectorsDialog::_panedresized(Gtk::Allocation allocation)
     g_debug("SelectorsDialog::_panedresized");
     _resized();
 }
-
-void SelectorsDialog::_panedrealized() { _style_dialog->readStyleElement(); }
 
 void SelectorsDialog::_childresized()
 {
@@ -754,8 +735,10 @@ void SelectorsDialog::_updateWatchers()
     }
 
     // Recursively add new watchers
-    Inkscape::XML::Node *root = SP_ACTIVE_DOCUMENT->getReprRoot();
-    _addWatcherRecursive(root);
+    if (getDesktop()) {
+        Inkscape::XML::Node *root = getDesktop()->doc()->getReprRoot();
+        _addWatcherRecursive(root);
+    }
 
     g_debug("SelectorsDialog::_updateWatchers(): %d", (int)_nodeWatchers.size());
 
@@ -1408,10 +1391,14 @@ void SelectorsDialog::_handleDocumentReplaced(SPDesktop *desktop, SPDocument * /
 
     _selection_changed_connection.disconnect();
 
+    if (!desktop)
+        return;
+
     _selection_changed_connection = desktop->getSelection()->connectChanged(
         sigc::hide(sigc::mem_fun(this, &SelectorsDialog::_handleSelectionChanged)));
 
     _updateWatchers();
+
     _readStyleElement();
     _selectRow();
 }
@@ -1422,27 +1409,21 @@ void SelectorsDialog::_handleDocumentReplaced(SPDesktop *desktop, SPDocument * /
  */
 void SelectorsDialog::setDesktop(SPDesktop *desktop)
 {
-    if (getDesktop() == desktop) {
-        // This will happen after construction of dialog. We've already
-        // set up signals so just return.
-        return;
-    }
+    g_assert(getDesktop() != desktop);
 
-    _selection_changed_connection.disconnect();
     _document_replaced_connection.disconnect();
 
     Panel::setDesktop( desktop );
 
-    _selection_changed_connection = desktop->getSelection()->connectChanged(
-        sigc::hide(sigc::mem_fun(this, &SelectorsDialog::_handleSelectionChanged)));
-    _document_replaced_connection =
-        desktop->connectDocumentReplaced(sigc::mem_fun(this, &SelectorsDialog::_handleDocumentReplaced));
-
-    _updateWatchers();
-    _readStyleElement();
-    _selectRow();
+    _handleDocumentReplaced(desktop, nullptr);
 
     _style_dialog->setDesktop(desktop);
+
+    if (!desktop)
+        return;
+
+    _document_replaced_connection =
+        desktop->connectDocumentReplaced(sigc::mem_fun(this, &SelectorsDialog::_handleDocumentReplaced));
 }
 
 

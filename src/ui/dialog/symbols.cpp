@@ -134,9 +134,6 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   symbol_set->set_hexpand();
   
   table->attach(*Gtk::manage(symbol_set),1,row,1,1);
-  sigc::connection connSet = symbol_set->signal_changed().connect(
-          sigc::mem_fun(*this, &SymbolsDialog::rebuild));
-  instanceConns.push_back(connSet);
 
   ++row;
   
@@ -183,11 +180,6 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   icon_view->enable_model_drag_source (targets, Gdk::BUTTON1_MASK, Gdk::ACTION_COPY);
   icon_view->signal_drag_data_get().connect(
           sigc::mem_fun(*this, &SymbolsDialog::iconDragDataGet));
-
-  sigc::connection connIconChanged;
-  connIconChanged = icon_view->signal_selection_changed().connect(
-          sigc::mem_fun(*this, &SymbolsDialog::iconChanged));
-  instanceConns.push_back(connIconChanged);
 
   scroller = new Gtk::ScrolledWindow();
   scroller->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_ALWAYS);
@@ -343,29 +335,13 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
 
   sensitive = true;
 
-  current_desktop  = SP_ACTIVE_DESKTOP;
-  current_document = current_desktop->getDocument();
   preview_document = symbolsPreviewDoc(); /* Template to render symbols in */
   preview_document->ensureUpToDate(); /* Necessary? */
   key = SPItem::display_key_new(1);
   renderDrawing.setRoot(preview_document->getRoot()->invoke_show(renderDrawing, key, SP_ITEM_SHOW_DISPLAY ));
 
-  // This might need to be a global variable so setTargetDesktop can modify it
-  SPDefs *defs = current_document->getDefs();
-  sigc::connection defsModifiedConn = defs->connectModified(sigc::mem_fun(*this, &SymbolsDialog::defsModified));
-  instanceConns.push_back(defsModifiedConn);
-
-  sigc::connection selectionChangedConn = current_desktop->selection->connectChanged(
-          sigc::mem_fun(*this, &SymbolsDialog::selectionChanged));
-  instanceConns.push_back(selectionChangedConn);
-
-  sigc::connection documentReplacedConn = current_desktop->connectDocumentReplaced(
-          sigc::mem_fun(*this, &SymbolsDialog::documentReplaced));
-  instanceConns.push_back(documentReplacedConn);
   getSymbolsTitle();
   icons_found = false;
-  
-  addSymbolsInDoc(current_document); /* Defaults to current document */
 }
 
 SymbolsDialog::~SymbolsDialog()
@@ -565,8 +541,32 @@ void SymbolsDialog::selectionChanged(Inkscape::Selection *selection) {
 
 void SymbolsDialog::documentReplaced(SPDesktop *desktop, SPDocument *document)
 {
+  if (current_desktop) {
+      for (auto &conn : instanceConns) {
+          conn.disconnect();
+      }
+  }
+
   current_desktop  = desktop;
   current_document = document;
+
+  if (!current_desktop) {
+      return;
+  }
+
+  instanceConns.emplace_back(symbol_set->signal_changed().connect(sigc::mem_fun(*this, &SymbolsDialog::rebuild)));
+
+  instanceConns.emplace_back(
+      icon_view->signal_selection_changed().connect(sigc::mem_fun(*this, &SymbolsDialog::iconChanged)));
+
+  SPDefs *defs = current_document->getDefs();
+  instanceConns.emplace_back(defs->connectModified(sigc::mem_fun(*this, &SymbolsDialog::defsModified)));
+
+  instanceConns.emplace_back(
+      current_desktop->selection->connectChanged(sigc::mem_fun(*this, &SymbolsDialog::selectionChanged)));
+
+  instanceConns.emplace_back(
+      current_desktop->connectDocumentReplaced(sigc::mem_fun(*this, &SymbolsDialog::documentReplaced)));
 
   if (symbol_sets[symbol_set->get_active_text()]) {
       // Symbol set is not from Current document, no need to rebuild
@@ -1379,7 +1379,7 @@ void SymbolsDialog::setDesktop(SPDesktop *desktop)
 {
     Panel::setDesktop(desktop);
 
-    documentReplaced(desktop, desktop->getDocument());
+    documentReplaced(desktop, desktop ? desktop->getDocument() : nullptr);
 }
 
 } //namespace Dialogs

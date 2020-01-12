@@ -165,11 +165,17 @@ public:
     std::vector<DialogConnection> _connections;
 };
 
+const EventLog::EventModelColumns &EventLog::getColumns()
+{
+    static const EventModelColumns columns;
+    return columns;
+}
+
 EventLog::EventLog(SPDocument* document) :
     UndoStackObserver(),
     _priv(new EventLogPrivate()),
     _document (document),
-    _event_list_store (Gtk::TreeStore::create(_columns)),
+    _event_list_store (Gtk::TreeStore::create(getColumns())),
     _curr_event_parent (nullptr),
     _notifications_blocked (false)
 {
@@ -177,6 +183,7 @@ EventLog::EventLog(SPDocument* document) :
     Gtk::TreeRow curr_row = *(_event_list_store->append());
     _curr_event = _last_saved = _last_event = curr_row;
     
+    auto &_columns = getColumns();
     curr_row[_columns.description] = _("[Unchanged]");
     curr_row[_columns.type] = SP_VERB_FILE_NEW;
 }
@@ -193,6 +200,7 @@ void
 EventLog::notifyUndoEvent(Event* log) 
 {
     if ( !_notifications_blocked ) {
+        auto &_columns = getColumns();
     
         // make sure the supplied event matches the next undoable event
         g_return_if_fail ( _getUndoEvent() && (*(_getUndoEvent()))[_columns.event] == log );
@@ -239,6 +247,7 @@ void
 EventLog::notifyRedoEvent(Event* log)
 {
     if ( !_notifications_blocked ) {
+        auto &_columns = getColumns();
 
         // make sure the supplied event matches the next redoable event
         g_return_if_fail ( _getRedoEvent() && (*(_getRedoEvent()))[_columns.event] == log );
@@ -291,6 +300,7 @@ EventLog::notifyUndoCommitEvent(Event* log)
     const unsigned int event_type = log->type;
 
     Gtk::TreeRow curr_row;
+    auto &_columns = getColumns();
 
     // if the new event is of the same type as the previous then create a new branch
     if ( event_type == (*_curr_event)[_columns.type] ) {
@@ -358,6 +368,7 @@ void
 EventLog::updateUndoVerbs()
 {
     if(_document) {
+        auto &_columns = getColumns();
 
         if(_getUndoEvent()) { 
             Inkscape::Verb::get(SP_VERB_EDIT_UNDO)->sensitive(_document, true);
@@ -432,6 +443,7 @@ void
 EventLog::_clearRedo()
 {
     if ( _last_event != _curr_event ) {
+        auto &_columns = getColumns();
 
         _last_event = _curr_event;
 

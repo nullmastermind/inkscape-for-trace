@@ -55,6 +55,8 @@ public:
     static DocumentProperties &getInstance();
     static void destroy();
 
+    void setDesktop(SPDesktop *desktop) override;
+
     void  update_gridspage();
 
 protected:
@@ -102,8 +104,6 @@ protected:
     void  save_default_metadata();
 
     void _handleDocumentReplaced(SPDesktop* desktop, SPDocument *document);
-    void _handleActivateDesktop(SPDesktop *desktop);
-    void _handleDeactivateDesktop(SPDesktop *desktop);
 
     Inkscape::XML::SignalObserver _emb_profiles_observer, _scripts_observer;
     Gtk::Notebook  _notebook;
@@ -242,6 +242,10 @@ private:
 
     // callback for document unit change
     void onDocUnitChange();
+
+    // nodes connected to listeners
+    Inkscape::XML::Node *_repr_namedview = nullptr;
+    Inkscape::XML::Node *_repr_root = nullptr;
 };
 
 } // namespace Dialog

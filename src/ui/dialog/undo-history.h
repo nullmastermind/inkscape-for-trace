@@ -120,9 +120,6 @@ protected:
     SPDocument *_document;
     EventLog *_event_log;
 
-
-    const EventLog::EventModelColumns *_columns;
-
     Gtk::ScrolledWindow _scrolled_window;    
 
     Glib::RefPtr<Gtk::TreeModel> _event_list_store;

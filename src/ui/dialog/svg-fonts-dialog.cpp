@@ -1018,8 +1018,6 @@ SvgFontsDialog::SvgFontsDialog()
     _FontsList.append_column_editable(_("_Fonts"), _columns.label);
     _FontsList.get_selection()->signal_changed().connect(sigc::mem_fun(*this, &SvgFontsDialog::on_font_selection_changed));
 
-    this->update_fonts();
-
     Gtk::Notebook *tabs = Gtk::manage(new Gtk::Notebook());
     tabs->set_scrollable();
 
@@ -1043,13 +1041,28 @@ SvgFontsDialog::SvgFontsDialog()
     _FontsList.signal_button_release_event().connect_notify(sigc::mem_fun(*this, &SvgFontsDialog::fonts_list_button_release));
     create_fonts_popup_menu(_FontsList, sigc::mem_fun(*this, &SvgFontsDialog::remove_selected_font));
 
-    _defs_observer.set(this->getDesktop()->getDocument()->getDefs());
-    _defs_observer.signal_changed().connect(sigc::mem_fun(*this, &SvgFontsDialog::update_fonts));
-
     _getContents()->show_all();
 }
 
 SvgFontsDialog::~SvgFontsDialog()= default;
+
+void SvgFontsDialog::setDesktop(SPDesktop *desktop)
+{
+    if (getDesktop()) {
+        _defs_observer_connection.disconnect();
+    }
+
+    Panel::setDesktop(desktop);
+
+    if (!desktop)
+        return;
+
+    _defs_observer.set(desktop->getDocument()->getDefs());
+    _defs_observer_connection =
+        _defs_observer.signal_changed().connect(sigc::mem_fun(*this, &SvgFontsDialog::update_fonts));
+
+    update_fonts();
+}
 
 } // namespace Dialog
 } // namespace UI

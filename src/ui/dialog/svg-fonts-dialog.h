@@ -68,6 +68,8 @@ public:
 
     static SvgFontsDialog &getInstance() { return *new SvgFontsDialog(); }
 
+    void setDesktop(SPDesktop *) override;
+
     void update_fonts();
     SvgFont* get_selected_svgfont();
     SPFont* get_selected_spfont();
@@ -142,6 +144,8 @@ private:
 
     Inkscape::XML::SignalObserver _defs_observer; //in order to update fonts
     Inkscape::XML::SignalObserver _glyphs_observer;
+
+    sigc::connection _defs_observer_connection;
 
     Gtk::HBox* AttrCombo(gchar* lbl, const SPAttributeEnum attr);
 //    Gtk::HBox* AttrSpin(gchar* lbl, const SPAttributeEnum attr);
