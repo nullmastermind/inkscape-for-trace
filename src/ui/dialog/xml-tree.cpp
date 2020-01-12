@@ -397,7 +397,26 @@ void XmlTree::set_tree_repr(Inkscape::XML::Node *repr)
 
 }
 
+/**
+ * Expand all parent nodes of `repr`
+ */
+static void expand_parents(SPXMLViewTree *tree, Inkscape::XML::Node *repr)
+{
+    auto parentrepr = repr->parent();
+    if (!parentrepr) {
+        return;
+    }
 
+    expand_parents(tree, parentrepr);
+
+    GtkTreeIter node;
+    if (sp_xmlview_tree_get_repr_node(tree, parentrepr, &node)) {
+        GtkTreePath *path = gtk_tree_model_get_path(GTK_TREE_MODEL(tree->store), &node);
+        if (path) {
+            gtk_tree_view_expand_row(GTK_TREE_VIEW(tree), path, false);
+        }
+    }
+}
 
 void XmlTree::set_tree_select(Inkscape::XML::Node *repr)
 {
@@ -414,13 +433,14 @@ void XmlTree::set_tree_select(Inkscape::XML::Node *repr)
 
         Inkscape::GC::anchor(selected_repr);
 
+        expand_parents(tree, repr);
+
         if (sp_xmlview_tree_get_repr_node(SP_XMLVIEW_TREE(tree), repr, &node)) {
 
             GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));
             gtk_tree_selection_unselect_all (selection);
 
             GtkTreePath* path = gtk_tree_model_get_path(GTK_TREE_MODEL(tree->store), &node);
-            gtk_tree_view_expand_to_path (GTK_TREE_VIEW(tree), path);
             gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(tree), path, nullptr, TRUE, 0.66, 0.0);
             gtk_tree_selection_select_iter(selection, &node);
             gtk_tree_view_set_cursor(GTK_TREE_VIEW(tree), path, NULL, false);
