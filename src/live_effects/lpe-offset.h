@@ -17,8 +17,9 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "live_effects/lpegroupbbox.h"
 #include "live_effects/effect.h"
+#include "live_effects/lpegroupbbox.h"
+#include "live_effects/parameter/enum.h"
 #include "live_effects/parameter/parameter.h"
 #include "live_effects/parameter/unit.h"
 
@@ -54,6 +55,7 @@ private:
     BoolParam update_on_knot_move;
     Geom::Point offset_pt;
     Glib::ustring display_unit;
+    Glib::ustring prev_unit;
     KnotHolderEntity * _knot_entity;
     Geom::PathVector filled_rule_pathv;
     Geom::PathVector helper_path;

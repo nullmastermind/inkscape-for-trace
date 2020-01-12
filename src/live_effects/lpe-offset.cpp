@@ -93,6 +93,7 @@ LPEOffset::LPEOffset(LivePathEffectObject *lpeobject) :
     _knot_entity = nullptr;
     _provides_knotholder_entities = true;
     apply_to_clippath_and_mask = true;
+    prev_unit = unit.get_abbreviation();
 }
 
 LPEOffset::~LPEOffset()
@@ -164,6 +165,57 @@ sp_get_distance_point(Geom::PathVector pathv, Geom::Point origin) {
     if (pathvectortime) {
         Geom::PathTime pathtime = pathvectortime->asPathTime();
         nearest = pathv[(*pathvectortime).path_index].pointAt(pathtime.curve_index + pathtime.t);
+        // we are not on simplet case on a parallel offset
+        if (Geom::are_near(pathtime.t, 0) || Geom::are_near(pathtime.t, 1)) {
+            bool start = Geom::are_near(nearest, pathv[(*pathvectortime).path_index].initialPoint());
+            bool end = Geom::are_near(nearest, pathv[(*pathvectortime).path_index].finalPoint());
+            bool closed = Geom::are_near(pathv[(*pathvectortime).path_index].initialPoint(),
+                                         pathv[(*pathvectortime).path_index].finalPoint());
+            double dist_corner = 0;
+            Geom::Point pa = pathv[(*pathvectortime).path_index].pointAt(pathtime.curve_index + 1);
+            Geom::Point pb = pathv[(*pathvectortime).path_index].pointAt(pathtime.curve_index);
+            if (closed && start) {
+                pa = pathv[(*pathvectortime).path_index].pointAt(pathtime.curve_index);
+                pb = pathv[(*pathvectortime).path_index].pointAt(pathtime.curve_index + 1);
+            }
+            if (!closed && (start || end)) {
+                if (start) {
+                    pa = pathv[(*pathvectortime).path_index].pointAt(pathtime.curve_index);
+                    pb = pathv[(*pathvectortime).path_index].pointAt(pathtime.curve_index + 1);
+                }
+            }
+            Geom::Line line;
+            line.setPoints(pa, pb);
+            line.setAngle(line.angle() + Geom::rad_from_deg(90));
+            Geom::Point nearestline = line.pointAt(line.nearestTime(origin));
+            boost::optional<Geom::PathVectorTime> pathvectortime_line = pathv.nearestTime(nearestline);
+            if (pathvectortime_line) {
+                Geom::PathTime pathtime_line = pathvectortime_line->asPathTime();
+                nearest = pathv[(*pathvectortime_line).path_index].pointAt(pathtime_line.curve_index + pathtime_line.t);
+                dist_corner = Geom::distance(nearestline, nearest);
+            }
+            if (closed || !(start || end)) {
+                if (closed && start) {
+                    size_t sizepath = pathv[(*pathvectortime).path_index].size();
+                    pa = pathv[(*pathvectortime).path_index].pointAt(sizepath - 1);
+                    pb = pathv[(*pathvectortime).path_index].pointAt(sizepath - 2);
+                } else {
+                    pa = pathv[(*pathvectortime).path_index].pointAt(pathtime.curve_index + 1);
+                    pb = pathv[(*pathvectortime).path_index].pointAt(pathtime.curve_index + 2);
+                }
+                line;
+                line.setPoints(pa, pb);
+                line.setAngle(line.angle() + Geom::rad_from_deg(90));
+                Geom::Point nearestline = line.pointAt(line.nearestTime(origin));
+                boost::optional<Geom::PathVectorTime> pathvectortime_line = pathv.nearestTime(nearestline);
+                if (pathvectortime_line) {
+                    Geom::PathTime pathtime_line = pathvectortime_line->asPathTime();
+                    nearest =
+                        pathv[(*pathvectortime_line).path_index].pointAt(pathtime_line.curve_index + pathtime_line.t);
+                    return std::max(dist_corner, Geom::distance(nearestline, nearest));
+                }
+            }
+        }
     }
     return Geom::distance(origin, nearest);
 }
@@ -209,6 +261,10 @@ LPEOffset::doBeforeEffect (SPLPEItem const* lpeitem)
         return;
     }
     display_unit = document->getDisplayUnit()->abbr.c_str();
+    if (prev_unit != unit.get_abbreviation()) {
+        offset.param_set_value(Inkscape::Util::Quantity::convert(offset, prev_unit, unit.get_abbreviation()));
+    }
+    prev_unit = unit.get_abbreviation();
     SPGroup const *group = dynamic_cast<SPGroup const *>(lpeitem);
     if (group) {
         helper_path.clear();
@@ -306,9 +362,13 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
         }
         int wdg = offset_winding(filled_rule_pathv, original);
         bool path_inside = wdg % 2 != 0;
-        double gap_size = -0.5;
+        double gap_size = -0.01;
         bool closed = original.closed();
-        double to_offset = Inkscape::Util::Quantity::convert(std::abs(offset), unit.get_abbreviation(), display_unit.c_str());
+        double to_offset =
+            Inkscape::Util::Quantity::convert(std::abs(offset / 2.0), unit.get_abbreviation(), display_unit.c_str());
+        if (to_offset <= 0.01) {
+            return path_in;
+        }
         Geom::Path with_dir = half_outline(original, 
                                 to_offset,
                                 (attempt_force_join ? std::numeric_limits<double>::max() : miter_limit),
@@ -319,16 +379,14 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
                                 (attempt_force_join ? std::numeric_limits<double>::max() : miter_limit),
                                 static_cast<LineJoinType>(linejoin_type.get_value()),
                                 static_cast<LineCapType>(BUTT_FLAT));
-        Geom::Path with_dir_gap = half_outline(original, 
-                                to_offset + gap_size,
-                                (attempt_force_join ? std::numeric_limits<double>::max() : miter_limit),
-                                static_cast<LineJoinType>(linejoin_type.get_value()),
-                                static_cast<LineCapType>(BUTT_FLAT));
-        Geom::Path against_dir_gap = half_outline(original.reversed(), 
-                                to_offset + gap_size,
-                                (attempt_force_join ? std::numeric_limits<double>::max() : miter_limit),
-                                static_cast<LineJoinType>(linejoin_type.get_value()),
-                                static_cast<LineCapType>(BUTT_FLAT));
+        Geom::Path with_dir_gap =
+            half_outline(original, std::abs(to_offset + gap_size),
+                         (attempt_force_join ? std::numeric_limits<double>::max() : miter_limit),
+                         static_cast<LineJoinType>(linejoin_type.get_value()), static_cast<LineCapType>(BUTT_FLAT));
+        Geom::Path against_dir_gap =
+            half_outline(original.reversed(), std::abs(to_offset + gap_size),
+                         (attempt_force_join ? std::numeric_limits<double>::max() : miter_limit),
+                         static_cast<LineJoinType>(linejoin_type.get_value()), static_cast<LineCapType>(BUTT_FLAT));
         bool reversed = false;
         Geom::OptRect against_dir_bounds = against_dir.boundsFast();
         Geom::OptRect with_dir_bounds = with_dir.boundsFast();
@@ -468,7 +526,7 @@ void KnotHolderEntityOffsetPoint::knot_set(Geom::Point const &p, Geom::Point con
     }
     double offset = lpe->sp_get_offset(s);
     lpe->offset_pt = s;
-    lpe->offset.param_set_value(offset);
+    lpe->offset.param_set_value(offset * 2);
     if (lpe->update_on_knot_move) {
         sp_lpe_item_update_patheffect (SP_LPE_ITEM(item), false, false);
     }
@@ -479,13 +537,18 @@ Geom::Point KnotHolderEntityOffsetPoint::knot_get() const
     SPGroup * group = dynamic_cast<SPGroup *>(item);
     LPEOffset * lpe = dynamic_cast<LPEOffset *> (_effect);
     Geom::Point nearest = lpe->offset_pt;
+    Geom::PathVector out = SP_SHAPE(item)->getCurve(true)->get_pathvector();
     if (lpe->offset_pt == Geom::Point(Geom::infinity(), Geom::infinity())) {
         if (group) {
             nearest = Geom::Point(lpe->boundingbox_X.min(), lpe->boundingbox_Y.min());
         } else {
-            Geom::PathVector out = SP_SHAPE(item)->getCurve(true)->get_pathvector();
             nearest = lpe->get_default_point(out);
         }
+    }
+    boost::optional<Geom::PathVectorTime> pathvectortime = out.nearestTime(nearest);
+    if (pathvectortime) {
+        Geom::PathTime pathtime = pathvectortime->asPathTime();
+        nearest = out[(*pathvectortime).path_index].pointAt(pathtime.curve_index + pathtime.t);
     }
     return nearest;
 }
