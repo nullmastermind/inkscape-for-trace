@@ -1090,7 +1090,7 @@ ConcreteInkscapeApplication<T>::shell()
 {
     std::cout << "Inkscape interactive shell mode. Type 'quit' to quit." << std::endl;
     std::cout << " Input of the form:" << std::endl;
-    std::cout << "> filename action1:arg1; action2:arg2; verb1; verb2; ..." << std::endl;
+    std::cout << " filename action1:arg1; action2:arg2; verb1; verb2; ..." << std::endl;
 
     std::string input;
     while (true) {
@@ -1143,7 +1143,7 @@ ConcreteInkscapeApplication<T>::shell2()
 {
     std::cout << "Inkscape interactive shell mode. Type 'quit' to quit." << std::endl;
     std::cout << " Input of the form:" << std::endl;
-    std::cout << "> action1:arg1; action2;arg2; verb1; verb2; ..." << std::endl;
+    std::cout << " action1:arg1; action2;arg2; verb1; verb2; ..." << std::endl;
     std::cout << "Only verbs that don't require a desktop may be used." << std::endl;
 
     std::string input;
