@@ -903,7 +903,7 @@ static GtkWidget * sp_gradient_vector_widget_new(SPGradient *gradient, SPStop *s
     Inkscape::UI::SelectedColor *selected_color = new Inkscape::UI::SelectedColor;
     g_object_set_data(G_OBJECT(vb), "cselector", selected_color);
     g_object_set_data(G_OBJECT(vb), "updating_color", reinterpret_cast<void*>(0));
-    selected_color->signal_dragged.connect(sigc::bind(sigc::ptr_fun(&sp_gradient_vector_color_dragged), selected_color, G_OBJECT(vb)));
+    selected_color->signal_changed.connect(sigc::bind(sigc::ptr_fun(&sp_gradient_vector_color_changed), selected_color, G_OBJECT(vb)));
     selected_color->signal_dragged.connect(sigc::bind(sigc::ptr_fun(&sp_gradient_vector_color_changed), selected_color, G_OBJECT(vb)));
 
     Gtk::Widget *color_selector = Gtk::manage(new ColorNotebook(*selected_color));
