@@ -84,6 +84,7 @@ void SPMarker::build(SPDocument *document, Inkscape::XML::Node *repr) {
     this->readAttr( "orient" );
     this->readAttr( "viewBox" );
     this->readAttr( "preserveAspectRatio" );
+    this->readAttr( "style" );
 
     SPGroup::build(document, repr);
 }

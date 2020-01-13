@@ -50,6 +50,7 @@ void SPMask::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 
 	this->readAttr( "maskUnits" );
 	this->readAttr( "maskContentUnits" );
+	this->readAttr( "style" );
 
 	/* Register ourselves */
 	doc->addResource("mask", this);
