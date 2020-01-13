@@ -56,6 +56,6 @@ save_file $URL_PYTHON3_BIN
 # This wasn't necessary before, but since recent gtk-osx upstream updates,
 # whatever package did install the file in LIB_DIR, isn't doing it any longer.
 
-cp $TMP_DIR/jhbuild/build/pkg-config-0.29.2/glib/glib/libcharset/charset.alias $LIB_DIR
+cp $TMP_DIR/jhbuild/build/pkg-config-*/glib/glib/libcharset/charset.alias $LIB_DIR
 
 # vim: expandtab:shiftwidth=2:tabstop=2:softtabstop=2 :

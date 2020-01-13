@@ -4,15 +4,15 @@ This folder contains the scripts that make up the build pipeline for Inkscape on
 
 ## Usage
 
-### Recommendations
+### Requirements
 
 ℹ️ _These tend to change as development progresses (as they already have a few times) and I won't deny that there's usually more than one way to do something, but I can only support what I use myself. So feel free to experiment and deviate, but know that __it is dangerous to go alone! Take this 🗡️.___
 
 - __A clean environment is key.__
   - Make sure there are no remnants from other build environments (e.g. MacPorts, Fink, Homebrew) on your system.
     - Rule of thumb: clear out `/usr/local`.
-  - Use macOS Mojave 10.14.6 with Xcode 10.3.
-  - Copy OS X Mavericks 10.9 SDK from Xcode 6.3 to `/Library/Developer/CommandLineTools/SDKs/MacOSX10.9.sdk`.
+  - Use macOS Mojave 10.14.6 with Xcode 11.3.1.
+  - Copy OS X El Capitan 10.11 SDK from Xcode 7.3.1 to `/Library/Developer/CommandLineTools/SDKs/MacOSX10.11.sdk`.
 
 - __Use a dedicated user account__ to avoid any interference with the environment (e.g. no custom settings in `.profile`, `.bashrc`, etc.).
 
@@ -82,7 +82,9 @@ This folder contains the scripts that make up the build pipeline for Inkscape on
 
 ## GitLab CI
 
-The intended usage in `.gitlab-ci.yml` is as follows:
+Make sure the runner fulfills the same requirements as listed in the usage section above.
+
+Configure a job in your `.gitlab-ci.yml` as follows:
 
 ```yaml
 buildmacos:

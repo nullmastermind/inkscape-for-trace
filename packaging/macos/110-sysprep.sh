@@ -15,7 +15,15 @@ run_annotated
 
 ### initial information ########################################################
 
-echo_info "using TOOLSET_ROOT_DIR = $TOOLSET_ROOT_DIR" 
+echo_info "TOOLSET_ROOT_DIR = $TOOLSET_ROOT_DIR"
+echo_info "WRK_DIR          = $WRK_DIR"
+
+### check for presence of SDK ##################################################
+
+if [ ! -d $SDKROOT ]; then
+  echo_err "SDK not found: $SDKROOT"
+  exit 1
+fi
 
 ### create work directory ######################################################
 

@@ -22,34 +22,37 @@ export MAKEFLAGS="-j $CORES"
 
 ### target OS version ##########################################################
 
-# You can build an macOS Mojave 10.14 using Xcode 10.3 with the SDK
-# from OS X Mavericks 10.9 (part of Xcode 6.3).
-# Switching to 10.10 SDK is on hold due to GTK 3.24.13 not compiling
-# successfully.
-export MACOSX_DEPLOYMENT_TARGET=10.9   # OS X Mavericks
+# Gtk support policy is to support operating system releases up to 5 years
+# back. See https://gitlab.gnome.org/GNOME/gtk-osx/blob/master/README.md
+#
+# gtk 3.24.13 does not builds with 10.10 SDK
+# (undeclared identifier NSWindowCollectionBehaviorFullScreenDisallowsTiling)
+
+# The current setup is
+#   - Xcode 11.3.1
+#   - OS X El Capitan 10.11 SDK (part of Xcode 7.3.1)
+#   - macOS Mojave 10.14.6
+export MACOSX_DEPLOYMENT_TARGET=10.11
 export SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX${MACOSX_DEPLOYMENT_TARGET}.sdk
 
 ### build system/toolset version ###############################################
 
-TOOLSET_VERSION=0.28
+TOOLSET_VERSION=0.29
 
 ### ramdisk ####################################################################
 
-# There are two types of ramdisks:
-#   - When using the pre-compiled toolset dmg, only a small writable
-#     overlay is required.
-#   - When building the toolset yourself, a large ramdisk can be (optionally!)
-#     used to speed up the process and avoid wearing out the SSD.
-
+# Using the toolset dmg, a small writable overlay required.
 OVERLAY_RAMDISK_SIZE=2   # unit is GiB
-
-BUILD_RAMDISK_SIZE=9     # unit is GiB
 
 ### toolset root directory #####################################################
 
-# This is where all the action takes place below.
+# This is the main directory where all the action takes place below. It is
+# one level above WRK_DIR (which in previous releases has been called the
+# main directory) so we can manage and switch between multiple different WRK_DIR
+# versions as required.
 
-[ -z $TOOLSET_ROOT_DIR ] && TOOLSET_ROOT_DIR=/Users/Shared/work
+# Allow this to be overridable or use the default.
+[ -z $TOOLSET_ROOT_DIR ] && TOOLSET_ROOT_DIR=/Users/Shared/work || true
 
 if  [ $(mkdir -p $TOOLSET_ROOT_DIR 2>/dev/null; echo $?) -eq 0 ] &&
     [ -w $TOOLSET_ROOT_DIR ] &&
@@ -60,15 +63,16 @@ else
   exit 1
 fi
 
-### toolset subdirectories #####################################################
+### toolset repository directory ###############################################
 
-TOOLSET_REPO_DIR=$TOOLSET_ROOT_DIR/repo  # downloaded build systems (.dmg files)
+# This is where .dmg files with pre-compiled toolsets are downloaded to.
 
-if [ -z $WRK_DIR_NAME ]; then   # allow to override this
-  WRK_DIR_NAME=$TOOLSET_VERSION
-fi
+TOOLSET_REPO_DIR=$TOOLSET_ROOT_DIR/repo
 
-WRK_DIR=$TOOLSET_ROOT_DIR/$WRK_DIR_NAME  # directory to mount build system to
+### work directory and subdirectories ##########################################
+
+# Allow this to be overrideable or use version number as default.
+[ -z $WRK_DIR ] && WRK_DIR=$TOOLSET_ROOT_DIR/$TOOLSET_VERSION || true
 
 OPT_DIR=$WRK_DIR/opt
 BIN_DIR=$OPT_DIR/bin
@@ -76,7 +80,7 @@ LIB_DIR=$OPT_DIR/lib
 SRC_DIR=$OPT_DIR/src
 TMP_DIR=$OPT_DIR/tmp
 
-### use our TMP_DIR for everything temporary ###################################
+### use TMP_DIR for everything temporary #######################################
 
 export TMP=$TMP_DIR
 export TEMP=$TMP_DIR
@@ -90,7 +94,7 @@ export DEVROOT=$WRK_DIR/gtk-osx
 export DEVPREFIX=$DEVROOT/local
 export DEV_SRC_ROOT=$DEVROOT/source
 
-export JHBUILDRC=$DEVROOT/jhbuildrc
+export JHBUILDRC=$DEVROOT/jhbuildrc   # requires modified gtk-osx-setup.sh
 export JHBUILDRC_CUSTOM=$JHBUILDRC-custom
 
 ### Inkscape Git repository directory ##########################################
@@ -121,6 +125,7 @@ APP_BIN_DIR=$APP_RES_DIR/bin
 APP_ETC_DIR=$APP_RES_DIR/etc
 APP_EXE_DIR=$APP_CON_DIR/MacOS
 APP_LIB_DIR=$APP_RES_DIR/lib
+
 APP_PLIST=$APP_CON_DIR/Info.plist
 
 ### download URLs ##############################################################
@@ -132,17 +137,20 @@ URL_BOOST=https://dl.bintray.com/boostorg/release/1.69.0/source/boost_1_69_0.tar
 URL_CPPUNIT=https://dev-www.libreoffice.org/src/cppunit-1.14.0.tar.gz
 URL_DOUBLE_CONVERSION=https://github.com/google/double-conversion/archive/v3.1.4.tar.gz
 URL_GC=https://github.com/ivmai/bdwgc/releases/download/v8.0.4/gc-8.0.4.tar.gz
-URL_GDL=https://github.com/GNOME/gdl/archive/GDL_3_28_0.tar.gz
+
+# This is one commit ahead of GDL_3_34_0.
+# Fixes https://gitlab.gnome.org/GNOME/gdl/issues/2
+URL_GDL=https://gitlab.gnome.org/GNOME/gdl/-/archive/9f11ad3ca8cef85b075419b30036d73648498dfe/gdl-9f11ad3ca8cef85b075419b30036d73648498dfe.tar.gz
+
 URL_GHOSTSCRIPT=https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs927/ghostscript-9.27.tar.gz
 URL_GSL=http://ftp.fau.de/gnu/gsl/gsl-2.5.tar.gz
 URL_GTK_MAC_BUNDLER=https://github.com/dehesselle/gtk-mac-bundler/archive/24651a002b029b4703c378dfb368305af4d88752.tar.gz
-URL_GTK_OSX=https://raw.githubusercontent.com/dehesselle/gtk-osx/inkscape-1.0.x
+URL_GTK_OSX=https://raw.githubusercontent.com/dehesselle/gtk-osx/inkscape
 URL_GTK_OSX_SETUP=$URL_GTK_OSX/gtk-osx-setup.sh
 URL_GTK_OSX_MODULESET=$URL_GTK_OSX/modulesets-stable/gtk-osx.modules
 URL_IMAGEMAGICK=https://github.com/ImageMagick/ImageMagick6/archive/6.9.7-10.tar.gz
 URL_INKSCAPE=https://gitlab.com/inkscape/inkscape
 URL_INKSCAPE_DMG_ICNS=https://github.com/dehesselle/mibap/raw/master/inkscape_dmg.icns
-URL_LCMS2=https://netcologne.dl.sourceforge.net/project/lcms/lcms/2.9/lcms2-2.9.tar.gz
 URL_LIBCDR=https://github.com/LibreOffice/libcdr/archive/libcdr-0.1.5.tar.gz
 URL_LIBREVENGE=https://ayera.dl.sourceforge.net/project/libwpd/librevenge/librevenge-0.0.4/librevenge-0.0.4.tar.gz
 URL_LIBVISIO=https://github.com/LibreOffice/libvisio/archive/libvisio-0.1.6.tar.gz
@@ -152,11 +160,15 @@ URL_OPENMP=https://github.com/llvm/llvm-project/releases/download/llvmorg-7.1.0/
 URL_PNG2ICNS=https://github.com/bitboss-ca/png2icns/archive/v0.1.tar.gz
 URL_POPPLER=https://gitlab.freedesktop.org/poppler/poppler/-/archive/poppler-0.74.0/poppler-poppler-0.74.0.tar.gz
 URL_POTRACE=http://potrace.sourceforge.net/download/1.15/potrace-1.15.tar.gz
+
 # This is the relocatable framework to be bundled with the app.
 URL_PYTHON3_BIN=https://github.com/dehesselle/py3framework/releases/download/py374.3/py374_framework_3.tar.xz
-# This is for JHBuild only.
+
+# These two are for JHBuild only (it fails to download and install its own Python).
 URL_PYTHON36_SRC=https://github.com/dehesselle/py3framework/archive/py369.3.tar.gz
 URL_PYTHON36_BIN=https://github.com/dehesselle/py3framework/releases/download/py369.3/py369_framework_3.tar.xz
+
+# Pre-compiled version of the whole toolset.
 URL_TOOLSET=https://github.com/dehesselle/mibap/releases/download/v$TOOLSET_VERSION/mibap_v$TOOLSET_VERSION.dmg
 
 ### Python packages ############################################################
@@ -177,4 +189,3 @@ PYTHON_PYSERIAL=pyserial==3.4
 
 export PATH=$DEVPREFIX/bin:$BIN_DIR:/usr/bin:/bin:/usr/sbin:/sbin
 export LANG=de_DE.UTF-8   # jhbuild complains otherwise   FIXME: hard-coded value
-

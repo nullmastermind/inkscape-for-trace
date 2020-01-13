@@ -35,7 +35,7 @@ echo "progress_bar = True" >> $JHBUILDRC_CUSTOM
 echo "moduleset = '$URL_GTK_OSX_MODULESET'" >> $JHBUILDRC_CUSTOM
 
 # JHBuild: macOS SDK
-sed -i "" "s/^setup_sdk/#setup_sdk/"                      $JHBUILDRC_CUSTOM 
+sed -i "" "s/^setup_sdk/#setup_sdk/"                      $JHBUILDRC_CUSTOM
 echo "setup_sdk(target=\"$MACOSX_DEPLOYMENT_TARGET\")" >> $JHBUILDRC_CUSTOM
 echo "os.environ[\"SDKROOT\"]=\"$SDKROOT\""            >> $JHBUILDRC_CUSTOM
 

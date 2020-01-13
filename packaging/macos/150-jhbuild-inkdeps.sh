@@ -19,11 +19,13 @@ run_annotated
 # adwaita-icon-theme - icons used by Inkscape/GTK
 # gtkspell3 - GtkSpell spellchecking/highlighting
 # libsoup - GNOME http client/server library
+# lcms2 - little CMS colore engine v2 
 
 jhbuild build \
   adwaita-icon-theme \
   gtkspell3 \
-  libsoup
+  libsoup \
+  lcms
 
 ### install GNU Scientific Library #############################################
 
@@ -38,6 +40,7 @@ configure_make_makeinstall
 ### install GNOME Docking Library ##############################################
 
 get_source $URL_GDL
+patch -p1 < $SELF_DIR/gdl_disable_preview_window.patch
 jhbuild run ./autogen.sh
 configure_make_makeinstall
 
@@ -46,11 +49,6 @@ configure_make_makeinstall
 get_source $URL_BOOST
 jhbuild run ./bootstrap.sh --prefix=$OPT_DIR
 jhbuild run ./b2 -j$CORES install
-
-### install little CMS colore engine v2 ########################################
-
-get_source $URL_LCMS2
-configure_make_makeinstall
 
 ### install OpenJPEG ###########################################################
 
@@ -119,4 +117,3 @@ cmake_make_makeinstall
 
 get_source $URL_GHOSTSCRIPT
 configure_make_makeinstall
-

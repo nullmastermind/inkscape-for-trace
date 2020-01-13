@@ -17,7 +17,7 @@ run_annotated
 ### install Python 3 ###########################################################
 
 get_source $URL_PYTHON36_BIN $WRK_DIR
-get_source $URL_PYTHON36_SRC
+get_source $URL_PYTHON36_SRC   # we only need 310-package-fixed.sh
 
 sed -i "" "/^WRK_DIR/s/.*/WRK_DIR=$(escape_sed $WRK_DIR)/" 020-vars.sh
 sed -i "" '/^FRA_DIR/s/.*/FRA_DIR=$WRK_DIR/' 020-vars.sh
@@ -29,4 +29,3 @@ chmod 755 311-package-fixed-nocp.sh
 ./311-package-fixed-nocp.sh
 
 ln -sf $WRK_DIR/Python.framework/Versions/Current/bin/python3 $BIN_DIR
-
