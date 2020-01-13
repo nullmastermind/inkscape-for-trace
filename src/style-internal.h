@@ -150,9 +150,9 @@ public:
     }
 
     virtual const Glib::ustring get_value() const = 0;
-    virtual bool shall_write( guint const flags = SP_STYLE_FLAG_IFSET,
-                               SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                               SPIBase const *const base = nullptr ) const;
+    bool shall_write( guint const flags = SP_STYLE_FLAG_IFSET,
+                      SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
+                      SPIBase const *const base = nullptr ) const;
     virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
                                        SPIBase const *const base = nullptr ) const;

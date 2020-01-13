@@ -78,6 +78,16 @@ inline bool should_write( guint const flags, bool set, bool dfp, bool src) {
     return should_write;
 }
 
+/**
+ * Check if this property should be written. This function won't do any writing so can
+ * be used as a quick way to check if specific kinds of style attrs have been changed.
+ *
+ * @param flags Conditions bitmask of `SP_STYLE_FLAG_*` bits
+ * @param style_src_req For `SP_STYLE_FLAG_IFSRC`
+ * @param base Parent node style for `SP_STYLE_FLAG_IFDIFF`, can be NULL
+ *
+ * @return True if property should be written, false otherwise
+ */
 bool SPIBase::shall_write(guint const flags, SPStyleSrc const &style_src_req, SPIBase const *const base) const
 {
     // Is this class different from the SPIBase given, this is used in Object-to-Path
@@ -87,6 +97,16 @@ bool SPIBase::shall_write(guint const flags, SPStyleSrc const &style_src_req, SP
     return should_write(flags, set, dfp, src);
 }
 
+/**
+ * Compile this style conditionally into a 'name: value' string suitable for css attrs.
+ * see shall_write for details on conditional flags.
+ *
+ * @param flags Conditions bitmask of `SP_STYLE_FLAG_*` bits
+ * @param style_src_req For `SP_STYLE_FLAG_IFSRC`
+ * @param base Parent node style for `SP_STYLE_FLAG_IFDIFF`, can be NULL
+ *
+ * @return completed css string or empty string if conditions not met.
+ */
 const Glib::ustring SPIBase::write(guint const flags, SPStyleSrc const &style_src_req, SPIBase const *const base) const
 {
     if (shall_write(flags, style_src_req, base)) {
