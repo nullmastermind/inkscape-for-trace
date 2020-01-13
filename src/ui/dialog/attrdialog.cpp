@@ -128,7 +128,7 @@ AttrDialog::AttrDialog()
     _valueRenderer = Gtk::manage(new Gtk::CellRendererText());
     _valueRenderer->property_editable() = true;
     _valueRenderer->property_placeholder_text().set_value(_("Attribute Value"));
-    _valueRenderer->property_ellipsize().set_value(Pango::ELLIPSIZE_MIDDLE);
+    _valueRenderer->property_ellipsize().set_value(Pango::ELLIPSIZE_END);
     _valueRenderer->signal_edited().connect(sigc::mem_fun(*this, &AttrDialog::valueEdited));
     _valueRenderer->signal_editing_started().connect(sigc::mem_fun(*this, &AttrDialog::startValueEdit));
     _treeView.append_column(_("Value"), *_valueRenderer);
@@ -223,6 +223,39 @@ static gboolean key_callback(GtkWidget *widget, GdkEventKey *event, AttrDialog *
     }
     return false;
 }
+
+/**
+ * Prepare value string suitable for display in a Gtk::CellRendererText
+ *
+ * Value is truncated at the first new line character (if any) and a visual indicator and ellipsis is added.
+ * Overall length is limited as well to prevent performance degradation for very long values.
+ *
+ * @param value Raw attribute value
+ * @return Single-line string with fixed maximum length
+ */
+static Glib::ustring prepare_rendervalue(const Glib::ustring &value)
+{
+    static const int MAX_LENGTH = 500; // maximum length of string before it's truncated for performance reasons
+                                       // ~400 characters fit horizontally on a WQHD display, so 500 should be plenty
+
+    Glib::ustring renderval;
+
+    // truncate to MAX_LENGTH
+    if (value.length() > MAX_LENGTH) {
+        renderval = Glib::ustring(value, 0, MAX_LENGTH) + "…";
+    } else {
+        renderval = Glib::ustring(value);
+    }
+
+    // truncate at first newline (if present) and add a visual indicator
+    auto ind = renderval.find('\n');
+    if (ind != Glib::ustring::npos) {
+        renderval = Glib::ustring(renderval, 0, ind) + " ⏎ …";
+    }
+
+    return renderval;
+}
+
 
 /**
  * @brief AttrDialog::~AttrDialog
@@ -373,15 +406,9 @@ void AttrDialog::onAttrChanged(Inkscape::XML::Node *repr, const gchar * name, co
     if (_updating) {
         return;
     }
-    Glib::ustring renderval = "";
+    Glib::ustring renderval;
     if (new_value) {
-        // We do not ever want to show a long value in-line (gtk hates big columns with multi-lines)
-        glong length = g_utf8_strlen(new_value, -1);
-        if(length > 100) {
-            renderval = Glib::ustring("[...]");
-        } else {
-            renderval = Glib::ustring(new_value);
-        }
+        renderval = prepare_rendervalue(new_value);
     }
     for(auto iter: this->_store->children())
     {
@@ -632,10 +659,7 @@ void AttrDialog::valueEdited (const Glib::ustring& path, const Glib::ustring& va
         }
         if(!value.empty()) {
             row[_attrColumns._attributeValue] = value;
-            Glib::ustring renderval = Glib::ustring("[...]");
-            if(value.length() <= 100) {
-                renderval = value;
-            }
+            Glib::ustring renderval = prepare_rendervalue(value);
             row[_attrColumns._attributeValueRender] = renderval;
         }
         Inkscape::Selection *selection = _desktop->getSelection();
