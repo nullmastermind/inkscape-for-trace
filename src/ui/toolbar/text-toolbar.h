@@ -108,6 +108,7 @@ private:
     sigc::connection c_selection_modified;
     sigc::connection c_selection_modified_select_tool;
     sigc::connection c_subselection_changed;
+    void text_outer_set_style(SPCSSAttr *css);
     void fontfamily_value_changed();
     void fontsize_value_changed();
     void subselection_wrap_toggle(bool start);

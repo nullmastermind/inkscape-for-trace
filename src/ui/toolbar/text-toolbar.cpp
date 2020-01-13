@@ -639,6 +639,38 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
     desktop->connectEventContextChanged(sigc::mem_fun(*this, &TextToolbar::watch_ec));
 }
 
+/*
+ * Set the style, depending on the inner or outer text being selected
+ */
+void TextToolbar::text_outer_set_style(SPCSSAttr *css)
+{
+    // Calling sp_desktop_set_style will result in a call to TextTool::_styleSet() which
+    // will set the style on selected text inside the <text> element. If we want to set
+    // the style on the outer <text> objects we need to bypass this call.
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if(_outer) {
+        // Apply css to parent text objects directly.
+        for (auto i : desktop->getSelection()->items()) {
+            SPItem *item = dynamic_cast<SPItem *>(i);
+            if (dynamic_cast<SPText *>(item) || dynamic_cast<SPFlowtext *>(item)) {
+                // Scale by inverse of accumulated parent transform
+                SPCSSAttr *css_set = sp_repr_css_attr_new();
+                sp_repr_css_merge(css_set, css);
+                Geom::Affine const local(item->i2doc_affine());
+                double const ex(local.descrim());
+                if ((ex != 0.0) && (ex != 1.0)) {
+                    sp_css_attr_scale(css_set, 1 / ex);
+                }
+                recursively_set_properties(item, css_set);
+                sp_repr_css_attr_unref(css_set);
+            }
+        }
+    } else {
+        // Apply css to selected inner objects.
+        sp_desktop_set_style (desktop, css, true, false);
+    }
+}
+
 void
 TextToolbar::fontfamily_value_changed()
 {
@@ -761,32 +793,8 @@ TextToolbar::fontsize_value_changed()
     double factor = size / selection_fontsize;
 
     // Apply font size to selected objects.
-    // Calling sp_desktop_set_style will result in a call to TextTool::_styleSet() which
-    // will set the style on selected text inside the <text> element. If we want to set
-    // the style on the outer <text> objects we need to bypass this call.
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    int textchids = 0;
-    if (_outer) {
-        Inkscape::Selection *selection = desktop->getSelection();
-        auto itemlist= selection->items();
-        for(auto i=itemlist.begin();i!=itemlist.end(); ++i){
-            if (dynamic_cast<SPText *>(*i) || dynamic_cast<SPFlowtext *>(*i)) {
-                SPItem *item = *i;
-                // Scale by inverse of accumulated parent transform
-                SPCSSAttr *css_set = sp_repr_css_attr_new();
-                sp_repr_css_merge(css_set, css);
-                Geom::Affine const local(item->i2doc_affine());
-                double const ex(local.descrim());
-                if ( (ex != 0.0) && (ex != 1.0) ) {
-                    sp_css_attr_scale(css_set, 1/ex);
-                }
-                recursively_set_properties(item, css_set);
-                sp_repr_css_attr_unref(css_set);
-            }
-        }
-    } else {
-        sp_desktop_set_style (desktop, css, true, true);
-    }
+    text_outer_set_style(css);
+
     Unit const *unit_lh = _tracker->getActiveUnit();
     g_return_if_fail(unit_lh != nullptr);
     if (!is_relative(unit_lh) && _outer) {
@@ -1272,25 +1280,14 @@ TextToolbar::lineheight_value_changed()
         // Inside SVG file, always use "px" for absolute units.
         osfs << Quantity::convert(_line_height_adj->get_value(), unit, "px") << "px";
     }
+
     sp_repr_css_set_property (css, "line-height", osfs.str().c_str());
+
     Inkscape::Selection *selection = desktop->getSelection();
     auto itemlist = selection->items();
     if (_outer) {
-        for (auto i = itemlist.begin(); i != itemlist.end(); ++i) {
-            if (dynamic_cast<SPText *>(*i) || dynamic_cast<SPFlowtext *>(*i)) {
-                SPItem *item = *i;
-                // Scale by inverse of accumulated parent transform
-                SPCSSAttr *css_set = sp_repr_css_attr_new();
-                sp_repr_css_merge(css_set, css);
-                Geom::Affine const local(item->i2doc_affine());
-                double const ex(local.descrim());
-                if ((ex != 0.0) && (ex != 1.0)) {
-                    sp_css_attr_scale(css_set, 1 / ex);
-                }
-                recursively_set_properties(item, css_set);
-                sp_repr_css_attr_unref(css_set);
-            }
-        }
+        // Special else makes this different from other uses of text_outer_set_style
+        text_outer_set_style(css);
     } else {
         SPItem *parent = dynamic_cast<SPItem *>(*itemlist.begin());
         SPStyle *parent_style = parent->style;
@@ -1319,7 +1316,7 @@ TextToolbar::lineheight_value_changed()
         sp_repr_css_attr_unref(cssfit);
     }
     // Only need to save for undo if a text item has been changed.
-    itemlist= selection->items();
+    itemlist = selection->items();
     bool modmade = false;
     for (auto i : itemlist) {
         SPText *text = dynamic_cast<SPText *>(i);
@@ -1607,10 +1604,8 @@ TextToolbar::wordspacing_value_changed()
     Inkscape::CSSOStringStream osfs;
     osfs << _word_spacing_adj->get_value() << "px"; // For now always use px
     sp_repr_css_set_property (css, "word-spacing", osfs.str().c_str());
+    text_outer_set_style(css);
 
-    // Apply word-spacing to selected objects.
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    sp_desktop_set_style (desktop, css, true, false);
     // If no selected objects, set default.
     SPStyle query(SP_ACTIVE_DOCUMENT);
     int result_numbers =
@@ -1645,10 +1640,7 @@ TextToolbar::letterspacing_value_changed()
     Inkscape::CSSOStringStream osfs;
     osfs << _letter_spacing_adj->get_value() << "px";  // For now always use px
     sp_repr_css_set_property (css, "letter-spacing", osfs.str().c_str());
-
-    // Apply letter-spacing to selected objects.
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    sp_desktop_set_style (desktop, css, true, false);
+    text_outer_set_style(css);
 
     // If no selected objects, set default.
     SPStyle query(SP_ACTIVE_DOCUMENT);
@@ -2093,7 +2085,6 @@ void TextToolbar::selection_changed(Inkscape::Selection *selection) // don't bot
         else letterSpacing = query.letter_spacing.computed; // Assume no units (change in desktop-style.cpp)
 
         _letter_spacing_adj->set_value(letterSpacing);
-
 
         // Writing mode
         int activeButton2 = 0;
