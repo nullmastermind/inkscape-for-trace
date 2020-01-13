@@ -208,7 +208,8 @@ void Layout::show(DrawingGroup *in_arena, Geom::OptRect const &paintbox) const
         }
         nr_text->setStyle(text_source->style);
         nr_text->setItemBounds(paintbox);
-        in_arena->prependChild(nr_text);
+        // Text spans must be painted in the right order (see inkscape/685)
+        in_arena->appendChild(nr_text);
         // Set item bounds without filter enlargement
         in_arena->setItemBounds(paintbox);
     }
