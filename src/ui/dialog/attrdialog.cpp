@@ -230,27 +230,27 @@ static gboolean key_callback(GtkWidget *widget, GdkEventKey *event, AttrDialog *
  * Value is truncated at the first new line character (if any) and a visual indicator and ellipsis is added.
  * Overall length is limited as well to prevent performance degradation for very long values.
  *
- * @param value Raw attribute value
+ * @param value Raw attribute value as UTF-8 encoded string
  * @return Single-line string with fixed maximum length
  */
-static Glib::ustring prepare_rendervalue(const Glib::ustring &value)
+static Glib::ustring prepare_rendervalue(const char *value)
 {
-    static const int MAX_LENGTH = 500; // maximum length of string before it's truncated for performance reasons
-                                       // ~400 characters fit horizontally on a WQHD display, so 500 should be plenty
+    constexpr int MAX_LENGTH = 500; // maximum length of string before it's truncated for performance reasons
+                                    // ~400 characters fit horizontally on a WQHD display, so 500 should be plenty
 
     Glib::ustring renderval;
 
     // truncate to MAX_LENGTH
-    if (value.length() > MAX_LENGTH) {
-        renderval = Glib::ustring(value, 0, MAX_LENGTH) + "…";
+    if (g_utf8_strlen(value, -1) > MAX_LENGTH) {
+        renderval = Glib::ustring(value, MAX_LENGTH) + "…";
     } else {
-        renderval = Glib::ustring(value);
+        renderval = value;
     }
 
     // truncate at first newline (if present) and add a visual indicator
     auto ind = renderval.find('\n');
     if (ind != Glib::ustring::npos) {
-        renderval = Glib::ustring(renderval, 0, ind) + " ⏎ …";
+        renderval.replace(ind, Glib::ustring::npos, " ⏎ …");
     }
 
     return renderval;
@@ -659,7 +659,7 @@ void AttrDialog::valueEdited (const Glib::ustring& path, const Glib::ustring& va
         }
         if(!value.empty()) {
             row[_attrColumns._attributeValue] = value;
-            Glib::ustring renderval = prepare_rendervalue(value);
+            Glib::ustring renderval = prepare_rendervalue(value.c_str());
             row[_attrColumns._attributeValueRender] = renderval;
         }
         Inkscape::Selection *selection = _desktop->getSelection();
