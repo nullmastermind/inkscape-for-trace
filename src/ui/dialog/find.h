@@ -111,6 +111,19 @@ protected:
      */
     bool        item_style_match (SPItem *item, const gchar *text, bool exact, bool casematch, bool replace=false);
     /**
+     * Returns true if the SPItem 'item' has a <title> or <desc> child that
+     * matches
+     *
+     * @param item the SPItem to check
+     * @param name the value to compare with
+     * @param exact do an exact match
+     * @param casematch match the text case exactly
+     * @param replace replace the value if found
+     *
+     */
+    bool        item_desc_match (SPItem *item, const gchar *text, bool exact, bool casematch, bool replace=false);
+    bool        item_title_match (SPItem *item, const gchar *text, bool exact, bool casematch, bool replace=false);
+    /**
      * Returns true if found the SPItem 'item' has the same attribute name
      *
      * @param item the SPItem to check
@@ -242,6 +255,8 @@ private:
     Gtk::CheckButton    check_attributevalue;
     Gtk::CheckButton    check_style;
     Gtk::CheckButton    check_font;
+    Gtk::CheckButton    check_desc;
+    Gtk::CheckButton    check_title;
     Gtk::HBox hbox_properties;
     Gtk::VBox vbox_properties1;
     Gtk::VBox vbox_properties2;

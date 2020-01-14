@@ -81,6 +81,8 @@ Find::Find()
       check_attributevalue(_("Attri_bute value")),
       check_style(_("_Style")),
       check_font(_("F_ont")),
+      check_desc(_("_Desc")),
+      check_title(_("Title")),
       frame_properties(_("Properties")),
 
       check_alltypes(_("All types")),
@@ -151,6 +153,12 @@ Find::Find()
     check_font.set_use_underline();
     check_font.set_tooltip_text(_("Search fonts"));
     check_font.set_active(false);
+    check_desc.set_use_underline();
+    check_desc.set_tooltip_text(_("Search description"));
+    check_desc.set_active(false);
+    check_title.set_use_underline();
+    check_title.set_tooltip_text(_("Search title"));
+    check_title.set_active(false);
     check_alltypes.set_use_underline();
     check_alltypes.set_tooltip_text(_("Search all object types"));
     check_alltypes.set_active(true);
@@ -225,12 +233,16 @@ Find::Find()
     vbox_properties1.pack_start(check_ids, Gtk::PACK_SHRINK);
     vbox_properties1.pack_start(check_style, Gtk::PACK_SHRINK);
     vbox_properties1.pack_start(check_font, Gtk::PACK_SHRINK);
+    vbox_properties1.pack_start(check_desc, Gtk::PACK_SHRINK);
+    vbox_properties1.pack_start(check_title, Gtk::PACK_SHRINK);
     vbox_properties2.pack_start(check_attributevalue, Gtk::PACK_SHRINK);
     vbox_properties2.pack_start(check_attributename, Gtk::PACK_SHRINK);
     vbox_properties2.set_valign(Gtk::ALIGN_START);
     _left_size_group->add_widget(check_ids);
     _left_size_group->add_widget(check_style);
     _left_size_group->add_widget(check_font);
+    _left_size_group->add_widget(check_desc);
+    _left_size_group->add_widget(check_title);
     _right_size_group->add_widget(check_attributevalue);
     _right_size_group->add_widget(check_attributename);
     hbox_properties.set_spacing(4);
@@ -293,6 +305,8 @@ Find::Find()
     checkProperties.push_back(&check_ids);
     checkProperties.push_back(&check_style);
     checkProperties.push_back(&check_font);
+    checkProperties.push_back(&check_desc);
+    checkProperties.push_back(&check_title);
     checkProperties.push_back(&check_attributevalue);
     checkProperties.push_back(&check_attributename);
 
@@ -428,6 +442,30 @@ gsize Find::find_strcmp_pos(const gchar *str, const gchar *find, bool exact, boo
 bool Find::find_strcmp(const gchar *str, const gchar *find, bool exact, bool casematch)
 {
     return (std::string::npos != find_strcmp_pos(str, find, exact, casematch));
+}
+
+bool Find::item_desc_match (SPItem *item, const gchar *text, bool exact, bool casematch, bool replace)
+{
+    gchar* desc  = item->desc();
+    bool found = find_strcmp(desc, text, exact, casematch);
+    if (found && replace) {
+        Glib::ustring r = find_replace(desc, text, entry_replace.getEntry()->get_text().c_str(), exact, casematch, replace);
+        item->setDesc(r.c_str());
+    }
+    g_free(desc);
+    return found;
+}
+
+bool Find::item_title_match (SPItem *item, const gchar *text, bool exact, bool casematch, bool replace)
+{
+    gchar* title = item->title();
+    bool found = find_strcmp(title, text, exact, casematch);
+    if (found && replace) {
+        Glib::ustring r = find_replace(title, text, entry_replace.getEntry()->get_text().c_str(), exact, casematch, replace);
+        item->setTitle(r.c_str());
+    }
+    g_free(title);
+    return found;
 }
 
 bool Find::item_text_match (SPItem *item, const gchar *find, bool exact, bool casematch, bool replace/*=false*/)
@@ -672,6 +710,8 @@ std::vector<SPItem*> Find::filter_fields (std::vector<SPItem*> &l, bool exact, b
         bool ids = check_ids.get_active();
         bool style = check_style.get_active();
         bool font = check_font.get_active();
+        bool desc = check_desc.get_active();
+        bool title = check_title.get_active();
         bool attrname  = check_attributename.get_active();
         bool attrvalue = check_attributevalue.get_active();
 
@@ -752,6 +792,36 @@ std::vector<SPItem*> Find::filter_fields (std::vector<SPItem*> &l, bool exact, b
                         out.push_back(*i);
                         if (_action_replace) {
                             item_font_match(item, text, exact, casematch, _action_replace);
+                        }
+                    }
+                }
+            }
+        }
+        if (desc) {
+            for (std::vector<SPItem*>::const_reverse_iterator i=in.rbegin(); in.rend() != i; ++i) {
+                SPObject *obj = *i;
+                SPItem *item = dynamic_cast<SPItem *>(obj);
+                g_assert(item != nullptr);
+                if (item_desc_match(item, text, exact, casematch)) {
+                    if (out.end()==find(out.begin(),out.end(),*i)) {
+                        out.push_back(*i);
+                        if (_action_replace) {
+                            item_desc_match(item, text, exact, casematch, _action_replace);
+                        }
+                    }
+                }
+            }
+        }
+        if (title) {
+            for (std::vector<SPItem*>::const_reverse_iterator i=in.rbegin(); in.rend() != i; ++i) {
+                SPObject *obj = *i;
+                SPItem *item = dynamic_cast<SPItem *>(obj);
+                g_assert(item != nullptr);
+                if (item_title_match(item, text, exact, casematch)) {
+                    if (out.end()==find(out.begin(),out.end(),*i)) {
+                        out.push_back(*i);
+                        if (_action_replace) {
+                            item_title_match(item, text, exact, casematch, _action_replace);
                         }
                     }
                 }
