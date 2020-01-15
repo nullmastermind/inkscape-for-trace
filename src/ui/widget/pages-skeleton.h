@@ -148,7 +148,7 @@ Video HD 1080p,            1920,   1080, px
 Video DCI 2k (Full Frame), 2048,   1080, px
 Video UHD 4k,              3840,   2160, px
 Video DCI 4k (Full Frame), 4096,   2160, px
-Video UHD 4k,              7680,   4320, px
+Video UHD 8k,              7680,   4320, px
 )";
 
 #endif
