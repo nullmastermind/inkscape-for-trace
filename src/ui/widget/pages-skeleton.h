@@ -139,6 +139,16 @@ Arch C,                      18,     24, in
 Arch D,                      24,     36, in
 Arch E,                      36,     48, in
 Arch E1,                     30,     42, in
+Video SD / PAL,             768,    576, px
+Video SD-Widescreen / PAL, 1024,    576, px
+Video SD / NTSC,            544,    480, px
+Video SD-Widescreen / NTSC, 872,    486, px
+Video HD 720p,             1280,    720, px
+Video HD 1080p,            1920,   1080, px
+Video DCI 2k (Full Frame), 2048,   1080, px
+Video UHD 4k,              3840,   2160, px
+Video DCI 4k (Full Frame), 4096,   2160, px
+Video UHD 4k,              7680,   4320, px
 )";
 
 #endif
