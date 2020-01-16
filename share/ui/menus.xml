@@ -22,7 +22,6 @@
        <verb verb-id="FileVacuum" />
        <separator/>
        <verb verb-id="DialogDocumentProperties" />
-       <!--verb verb-id="DialogMetadata" /-->
        <separator/>
        <verb verb-id="FileClose" />
        <verb verb-id="FileQuit" />

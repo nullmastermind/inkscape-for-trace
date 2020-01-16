@@ -6,7 +6,6 @@
   <remap id='file_export' newid='document-export'/>
   <remap id='ocal_import' newid='document-import-ocal'/>
   <remap id='ocal_export' newid='document-export-ocal'/>
-  <remap id='document_metadata' newid='document-metadata'/>
   <remap id='input_devices' newid='dialog-input-devices'/>
   
   <!-- edit menu -->

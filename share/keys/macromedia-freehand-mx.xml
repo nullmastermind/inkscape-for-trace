@@ -410,7 +410,6 @@ File, Edit, View, Modify, Text, Xtras, Window, Help.
   <!-- Swatches in Freehand is a sub-tab of the Assets Panel.  -->
   <bind key="F9" modifiers="Ctrl" action="DialogSwatches" display="true"/>
 
-  <bind action="DialogMetadata" />
   <bind action="DialogClonetiler" />
   <bind action="DialogArrange" />
   <bind action="DialogDebug" />

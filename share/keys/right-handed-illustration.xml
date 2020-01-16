@@ -531,7 +531,6 @@ Future improvements:
   <bind key="w" modifiers="Ctrl,Shift" action="DialogSwatches" display="true"/>
   <bind key="W" modifiers="Ctrl,Shift" action="DialogSwatches" />
 
-  <bind action="DialogMetadata" />
   <bind action="DialogClonetiler" />
   <bind action="DialogArrange" />
   <bind action="DialogDebug" />

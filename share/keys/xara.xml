@@ -534,7 +534,6 @@ Hom/end keys-select minimum or maximum feather values
   <bind key="w" modifiers="Ctrl,Shift" action="DialogSwatches"/>
   <bind key="W" modifiers="Ctrl,Shift" action="DialogSwatches" />
 
-  <bind action="DialogMetadata" />
   <bind action="DialogClonetiler" />
   <bind action="DialogArrange" />
   <bind action="DialogDebug" />

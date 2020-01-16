@@ -950,7 +950,6 @@ void DocumentProperties::build_scripting()
     onExternalScriptSelectRow();
 }
 
-// TODO: This duplicates code in document-metadata.cpp
 void DocumentProperties::build_metadata()
 {
     using Inkscape::UI::Widget::EntityEntry;

@@ -2129,10 +2129,6 @@ void DialogVerb::perform(SPAction *action, void *data)
             //sp_display_dialog();
             dt->_dlg_mgr->showDialog("InkscapePreferences");
             break;
-        case SP_VERB_DIALOG_METADATA:
-            // sp_desktop_dialog();
-            dt->_dlg_mgr->showDialog("DocumentMetadata");
-            break;
         case SP_VERB_DIALOG_NAMEDVIEW:
             // sp_desktop_dialog();
             dt->_dlg_mgr->showDialog("DocumentProperties");
@@ -3038,8 +3034,6 @@ Verb *Verb::_base_verbs[] = {
     new DialogVerb(SP_VERB_DIALOG_NAMEDVIEW, "DialogDocumentProperties", N_("_Document Properties..."),
                    N_("Edit properties of this document (to be saved with the document)"),
                    INKSCAPE_ICON("document-properties")),
-    new DialogVerb(SP_VERB_DIALOG_METADATA, "DialogMetadata", N_("Document _Metadata..."),
-                   N_("Edit document metadata (to be saved with the document)"), INKSCAPE_ICON("document-metadata")),
     new DialogVerb(SP_VERB_DIALOG_FILL_STROKE, "DialogFillStroke", N_("_Fill and Stroke..."),
                    N_("Edit objects' colors, gradients, arrowheads, and other fill and stroke properties..."),
                    INKSCAPE_ICON("dialog-fill-and-stroke")),

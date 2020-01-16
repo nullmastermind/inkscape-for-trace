@@ -229,7 +229,6 @@
 ../src/ui/dialog/clonetiler.cpp
 ../src/ui/dialog/color-item.cpp
 ../src/ui/dialog/debug.cpp
-../src/ui/dialog/document-metadata.cpp
 ../src/ui/dialog/document-properties.cpp
 ../src/ui/dialog/export.cpp
 ../src/ui/dialog/extension-editor.cpp
