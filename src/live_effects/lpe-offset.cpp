@@ -365,7 +365,7 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
         double gap_size = -0.01;
         bool closed = original.closed();
         double to_offset =
-            Inkscape::Util::Quantity::convert(std::abs(offset / 2.0), unit.get_abbreviation(), display_unit.c_str());
+            Inkscape::Util::Quantity::convert(std::abs(offset), unit.get_abbreviation(), display_unit.c_str());
         if (to_offset <= 0.01) {
             return path_in;
         }
@@ -526,7 +526,7 @@ void KnotHolderEntityOffsetPoint::knot_set(Geom::Point const &p, Geom::Point con
     }
     double offset = lpe->sp_get_offset(s);
     lpe->offset_pt = s;
-    lpe->offset.param_set_value(offset * 2);
+    lpe->offset.param_set_value(offset);
     if (lpe->update_on_knot_move) {
         sp_lpe_item_update_patheffect (SP_LPE_ITEM(item), false, false);
     }
