@@ -31,6 +31,7 @@
 #include <gtkmm/recentinfo.h>
 #include <gtkmm/recentmanager.h>
 
+#include "auto-save.h"
 #include "cms-system.h"
 #include "document.h"
 #include "enums.h"
@@ -1711,15 +1712,12 @@ void InkscapePreferences::initPageIO()
      * update our running configuration
      *
      * FIXME!
-     * the inkscape_autosave_init should be called AFTER the values have been changed
-     * (which cannot be guaranteed from here) - use a PrefObserver somewhere
+     * AutoSave::restart() should be called AFTER the values have been changed
+     * (which cannot be guaranteed from here) - use a PrefObserver somewhere.
      */
-    /*
-    _autosave_autosave_enable.signal_toggled().connect( sigc::ptr_fun(inkscape_autosave_init), TRUE );
-    _autosave_autosave_interval.signal_changed().connect( sigc::ptr_fun(inkscape_autosave_init), TRUE );
-    */
+    _save_autosave_enable.signal_toggled(  ).connect( sigc::ptr_fun(Inkscape::AutoSave::restart), true);
+    _save_autosave_interval.signal_changed().connect( sigc::ptr_fun(Inkscape::AutoSave::restart), true);
 
-    // -----------
     this->AddPage(_page_autosave, _("Autosave"), iter_io, PREFS_PAGE_IO_AUTOSAVE);
 }
 

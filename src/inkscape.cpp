@@ -88,11 +88,6 @@ static void (* bus_handler)  (int) = SIG_DFL;
 
 #define SP_INDENT 8
 
-#ifdef _WIN32
-typedef int uid_t;
-#define getuid() 0
-#endif
-
 /**  C++ification TODO list
  * - _S_inst should NOT need to be assigned inside the constructor, but if it isn't the Filters+Extensions menus break.
  * - Application::_deskops has to be a pointer because of a signal bug somewhere else. Basically, it will attempt to access a deleted object in sp_ui_close_all(),
@@ -146,13 +141,6 @@ void inkscape_unref(Inkscape::Application & in)
     }
 }
 
-// Callback passed to g_timeout_add_seconds()
-// gets the current instance and calls autosave()
-int inkscape_autosave(gpointer) {
-    g_assert(Inkscape::Application::exists());
-    return INKSCAPE.autosave();
-}
-
 namespace Inkscape {
 
 /**
@@ -198,174 +186,6 @@ Application::instance()
          g_error("Inkscape::Application does not yet exist.");
     }
     return *Application::_S_inst;
-}
-
-/**
- * static gint inkscape_autosave(gpointer);
- *
- * Responsible for autosaving all open documents
- */
-int Application::autosave()
-{
-    if (_document_set.empty()) { // nothing to autosave
-        return TRUE;
-    }
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-
-    // Use UID for separating autosave-documents between users if directory is multiuser
-    uid_t uid = getuid();
-
-    Glib::ustring autosave_dir;
-    {
-        Glib::ustring tmp = prefs->getString("/options/autosave/path");
-        if (!tmp.empty()) {
-            autosave_dir = tmp;
-        } else {
-            autosave_dir = Glib::build_filename(Glib::get_user_cache_dir(), "inkscape");
-        }
-    }
-
-    GDir *autosave_dir_ptr = g_dir_open(autosave_dir.c_str(), 0, nullptr);
-    if (!autosave_dir_ptr) {
-        // Try to create the autosave directory if it doesn't exist
-        g_mkdir(autosave_dir.c_str(), 0755);
-        // Try to read dir again
-        autosave_dir_ptr = g_dir_open(autosave_dir.c_str(), 0, nullptr);
-        if( !autosave_dir_ptr ){
-            Glib::ustring msg = Glib::ustring::compose(
-                    _("Autosave failed! Cannot open directory %1."), Glib::filename_to_utf8(autosave_dir));
-            g_warning("%s", msg.c_str());
-            SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::ERROR_MESSAGE, msg.c_str());
-            return TRUE;
-        }
-    }
-
-    time_t sptime = time(nullptr);
-    struct tm *sptm = localtime(&sptime);
-    gchar sptstr[256];
-    strftime(sptstr, 256, "%Y_%m_%d_%H_%M_%S", sptm);
-
-    gint autosave_max = prefs->getInt("/options/autosave/max", 10);
-
-    gint docnum = 0;
-    int pid = ::getpid();
-
-    SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Autosaving documents..."));
-    for (auto & iter : _document_set) {
-
-        SPDocument *doc = iter.first;
-
-        ++docnum;
-
-        Inkscape::XML::Node *repr = doc->getReprRoot();
-
-
-        if (doc->isModifiedSinceSave()) {
-            gchar *oldest_autosave = nullptr;
-            const gchar  *filename = nullptr;
-            GStatBuf sb;
-            time_t min_time = 0;
-            gint count = 0;
-
-            // Look for previous autosaves
-            gchar* baseName = g_strdup_printf( "inkscape-autosave-%d", uid );
-            g_dir_rewind(autosave_dir_ptr);
-            while( (filename = g_dir_read_name(autosave_dir_ptr)) != nullptr ){
-                if ( strncmp(filename, baseName, strlen(baseName)) == 0 ){
-                    gchar* full_path = g_build_filename( autosave_dir.c_str(), filename, NULL );
-                    if (g_file_test (full_path, G_FILE_TEST_EXISTS)){
-                        if ( g_stat(full_path, &sb) != -1 ) {
-                            if ( difftime(sb.st_ctime, min_time) < 0 || min_time == 0 ){
-                                min_time = sb.st_ctime;
-                                if ( oldest_autosave ) {
-                                    g_free(oldest_autosave);
-                                }
-                                oldest_autosave = g_strdup(full_path);
-                            }
-                            count ++;
-                        }
-                    }
-                    g_free(full_path);
-                }
-            }
-
-            // Have we reached the limit for number of autosaves?
-            if ( count >= autosave_max ){
-                // Remove the oldest file
-                if ( oldest_autosave ) {
-                    unlink(oldest_autosave);
-                }
-            }
-
-            if ( oldest_autosave ) {
-                g_free(oldest_autosave);
-                oldest_autosave = nullptr;
-            }
-
-
-            // Set the filename we will actually save to
-            g_free(baseName);
-            baseName = g_strdup_printf("inkscape-autosave-%d-%d-%s-%03d.svg", uid, pid, sptstr, docnum);
-            gchar* full_path = g_build_filename(autosave_dir.c_str(), baseName, NULL);
-            g_free(baseName);
-            baseName = nullptr;
-
-            // Try to save the file
-            FILE *file = Inkscape::IO::fopen_utf8name(full_path, "w");
-            gchar *errortext = nullptr;
-            if (file) {
-                try{
-                    sp_repr_save_stream(repr->document(), file, SP_SVG_NS_URI);
-                } catch (Inkscape::Extension::Output::no_extension_found &e) {
-                    errortext = g_strdup(_("Autosave failed! Could not find inkscape extension to save document."));
-                } catch (Inkscape::Extension::Output::save_failed &e) {
-                    gchar *safeUri = Inkscape::IO::sanitizeString(full_path);
-                    errortext = g_strdup_printf(_("Autosave failed! File %s could not be saved."), safeUri);
-                    g_free(safeUri);
-                }
-                fclose(file);
-            }
-            else {
-                gchar *safeUri = Inkscape::IO::sanitizeString(full_path);
-                errortext = g_strdup_printf(_("Autosave failed! File %s could not be saved."), safeUri);
-                g_free(safeUri);
-            }
-
-            if (errortext) {
-                SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::ERROR_MESSAGE, errortext);
-                g_warning("%s", errortext);
-                g_free(errortext);
-            }
-
-            g_free(full_path);
-        }
-    }
-    g_dir_close(autosave_dir_ptr);
-
-    SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Autosave complete."));
-
-    return TRUE;
-}
-
-void Application::autosave_init()
-{
-    static guint32 autosave_timeout_id = 0;
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-
-    // Turn off any previously initiated timeouts
-    if ( autosave_timeout_id ) {
-        g_source_remove(autosave_timeout_id);
-        autosave_timeout_id = 0;
-    }
-
-    // Is autosave enabled?
-    if (!prefs->getBool("/options/autosave/enable", true)){
-        autosave_timeout_id = 0;
-    } else {
-        // Turn on autosave
-        guint32 timeout = prefs->getInt("/options/autosave/interval", 10) * 60;
-        autosave_timeout_id = g_timeout_add_seconds(timeout, inkscape_autosave, nullptr);
-    }
 }
 
 /* \brief Constructor for the application.
@@ -453,8 +273,6 @@ Application::Application(bool use_gui) :
 
     /* Initialize the extensions */
     Inkscape::Extension::init();
-
-    autosave_init();
 
     /* Initialize font factory */
     font_factory *factory = font_factory::Default();

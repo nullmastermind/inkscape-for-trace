@@ -9,6 +9,7 @@ set(inkscape_SRC
   attribute-rel-util.cpp
   attribute-sort-util.cpp
   attributes.cpp
+  auto-save.cpp
   axis-manip.cpp
   color.cpp
   composite-undo-stack-observer.cpp
@@ -101,6 +102,7 @@ set(inkscape_SRC
   attribute-rel-util.h
   attribute-sort-util.h
   attributes.h
+  auto-save.h
   axis-manip.h
   bad-uri-exception.h
   cms-color-types.h

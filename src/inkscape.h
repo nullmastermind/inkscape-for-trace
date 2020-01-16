@@ -96,7 +96,6 @@ public:
     static bool isCrashing() { return _crashIsHappening; }
 
     // useful functions
-    void autosave_init();
     void application_init (gboolean use_gui);
     void load_config (const gchar *filename, Inkscape::XML::Document *config, const gchar *skeleton, 
                       unsigned int skel_size, const gchar *e_notreg, const gchar *e_notxml, 
@@ -155,8 +154,6 @@ public:
     void exit ();
     
     static void crash_handler(int signum);
-
-    int autosave();
 
     // nobody should be accessing our reference count, so it's made private.
     friend void ::inkscape_ref  (Application & in);

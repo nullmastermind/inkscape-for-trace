@@ -3,6 +3,7 @@
 ../share/paint/patterns.svg.h
 ../share/symbols/symbols.h
 ../share/templates/templates.h
+../src/auto-save.cpp
 ../src/context-fns.cpp
 ../src/desktop-events.cpp
 ../src/desktop.cpp
