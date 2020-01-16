@@ -92,11 +92,9 @@ PACKAGES="coverage pyserial scour"
 for arch in $(eval echo $ARCH); do
   case ${arch} in
     mingw-w64-i686)
-      /mingw32/bin/pip3 install --upgrade --upgrade-strategy eager ${PACKAGES} || \
       /mingw32/bin/pip3 install --upgrade ${PACKAGES}
       ;;
     mingw-w64-x86_64)
-      /mingw64/bin/pip3 install --upgrade --upgrade-strategy eager ${PACKAGES} || \
       /mingw64/bin/pip3 install --upgrade ${PACKAGES}
       ;;
   esac
