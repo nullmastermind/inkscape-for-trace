@@ -14,8 +14,6 @@
 
 #include "live_effects/lpe-bool.h"
 
-#include "document-undo.h"
-
 #include "2geom/affine.h"
 #include "2geom/bezier-curve.h"
 #include "2geom/path-sink.h"
@@ -386,12 +384,9 @@ void LPEBool::doEffect(SPCurve *curve)
 
         // operand->set_transform(i2anc_affine(sp_lpe_item, sp_lpe_item->parent));
         Geom::Affine current = sp_item_transform_repr(sp_lpe_item);
-        bool sensitive = Inkscape::DocumentUndo::getUndoSensitive(getSPDoc());
-        Inkscape::DocumentUndo::setUndoSensitive(getSPDoc(), false);
         if (!is_load) {
             operand->doWriteTransform(prev.inverse() * current);
         }
-        Inkscape::DocumentUndo::setUndoSensitive(getSPDoc(), sensitive);
         Geom::PathVector operand_pv = operand_path.get_pathvector();
         if (!is_load) {
             operand_pv *= current.inverse();
