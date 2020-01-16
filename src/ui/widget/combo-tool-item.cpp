@@ -65,7 +65,7 @@ ComboToolItem::ComboToolItem(Glib::ustring group_label,
     // ": " is added to the group label later
     if (!_group_label.empty()) {
         // we don't expect trailing spaces
-        g_assert(_group_label.raw()[_group_label.raw().size() - 1] != ' ');
+        // g_assert(_group_label.raw()[_group_label.raw().size() - 1] != ' ');
 
         // strip space (note: raw() indexing is much cheaper on Glib::ustring)
         if (_group_label.raw()[_group_label.raw().size() - 1] == ' ') {
@@ -74,7 +74,7 @@ ComboToolItem::ComboToolItem(Glib::ustring group_label,
     }
     if (!_group_label.empty()) {
         // we don't expect a trailing colon
-        g_assert(_group_label.raw()[_group_label.raw().size() - 1] != ':');
+        // g_assert(_group_label.raw()[_group_label.raw().size() - 1] != ':');
 
         // strip colon (note: raw() indexing is much cheaper on Glib::ustring)
         if (_group_label.raw()[_group_label.raw().size() - 1] == ':') {
