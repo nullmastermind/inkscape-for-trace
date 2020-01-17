@@ -54,51 +54,57 @@ Inkscape::ControlType nodeTypeToCtrlType(Inkscape::UI::NodeType type)
     return result;
 }
 
-class PrecisionWatcher : public Inkscape::Preferences::Observer{
+class PrecisionWatcher : public Inkscape::Preferences::Observer {
 public:
-    static double error_of(double value){
-        return value*instance().rel_error;
+    static double error_of(double value) {
+        return value * instance().rel_error;
     }
 
     void notify(const Inkscape::Preferences::Entry &new_val) override {
-        int digits = new_val.getIntLimited(6,1,16);
+        int digits = new_val.getIntLimited(6, 1, 16);
         set_numeric_precision(digits);
     }
 
     void set_numeric_precision(int digits) {
         double relative_error = 0.5;
-        while (digits>0){ relative_error /= 10; digits--;}
+        while (digits > 0) {
+            relative_error /= 10;
+            digits--;
+        }
         rel_error = relative_error;
     }
 
 private:
-    static PrecisionWatcher& instance(){
+    static PrecisionWatcher &instance() {
         static PrecisionWatcher _instance;
         return _instance;
     }
+
     PrecisionWatcher() : Observer("/options/svgoutput/numericprecision"), rel_error(1) {
         Inkscape::Preferences::get()->addObserver(*this);
         int digits = Inkscape::Preferences::get()->getIntLimited("/options/svgoutput/numericprecision", 6, 1, 16);
         set_numeric_precision(digits);
     }
+
     ~PrecisionWatcher() override {
         Inkscape::Preferences::get()->removeObserver(*this);
     }
+
     std::atomic<double> rel_error;
 };
 
-double uncertainty_of(const Geom::Point& point){
+double uncertainty_of(const Geom::Point &point) {
     return PrecisionWatcher::error_of(point.length());
 }
 
-bool three_points_are_in_line(const Geom::Point& A, const Geom::Point& B, const Geom::Point& C){
+bool three_points_are_in_line(const Geom::Point &A, const Geom::Point &B, const Geom::Point &C) {
     const double tolerance_factor = 10; // to account other factors which increase uncertainty
     const double tolerance_A = uncertainty_of(A) * tolerance_factor;
     const double tolerance_B = uncertainty_of(B) * tolerance_factor;
     const double tolerance_C = uncertainty_of(C) * tolerance_factor;
-    const double CB_length = (B-C).length();
-    const double AB_length = (B-A).length();
-    Geom::Point C_reflect_scaled = B + (B-C)/CB_length*AB_length;
+    const double CB_length = (B - C).length();
+    const double AB_length = (B - A).length();
+    Geom::Point C_reflect_scaled = B + (B - C) / CB_length * AB_length;
     double tolerance_C_reflect_scaled = tolerance_B
                                         + (tolerance_B + tolerance_C)
                                           * (1 + (tolerance_A + tolerance_B) / AB_length)
@@ -1076,8 +1082,7 @@ void Node::pickBestType()
                 _type = NODE_SYMMETRIC;
                 break;
             }*/
-            if (three_points_are_in_line(_front.position(), position(), _back.position()))
-            {
+            if (three_points_are_in_line(_front.position(), position(), _back.position())) {
                 _type = NODE_SMOOTH;
                 break;
             }
