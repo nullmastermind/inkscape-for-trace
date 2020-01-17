@@ -1017,13 +1017,15 @@ Application::add_document (SPDocument *document)
             }
        }
     } else {
-        // insert succeeded, this document is new. Do we need to create a
-        // selection model for it, i.e. are we running without a desktop?
-        if (!_use_gui) {
-            // Create layer model and selection model so we can run some verbs without a GUI
-            g_assert(_selection_models.find(document) == _selection_models.end());
-            _selection_models[document] = new AppSelectionModel(document);
-        }
+        // insert succeeded, this document is new.
+
+        // Create a selection model tied to the document for running without a GUI.
+        // We create the model even if there is a GUI as there might not be a window
+        // tied to the document (which would have its own selection model) as in the
+        // case where a verb requires a GUI where it's not really needed (conversion
+        // of verbs to actions will eliminate this need).
+        g_assert(_selection_models.find(document) == _selection_models.end());
+        _selection_models[document] = new AppSelectionModel(document);
     }
 }
 

@@ -71,7 +71,6 @@ select_via_element(Glib::ustring element, InkscapeApplication* app)
     if (!get_document_and_selection(app, &document, &selection)) {
         return;
     }
-
     auto objects = document->getObjectsByElement(element);
     selection->add(objects.begin(), objects.end());
 }
@@ -110,6 +109,7 @@ add_actions_selection(ConcreteInkscapeApplication<T>* app)
     app->add_action_radio_string(  "select-via-class",   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_via_class),          app), "null");
     app->add_action_radio_string(  "select-via-element", sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_via_element),        app), "null");
     app->add_action_radio_string(  "select-via-selector",sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_via_selector),       app), "null");
+    app->add_action(               "select-all",         sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_all),                app)        );
 }
 
 template void add_actions_selection(ConcreteInkscapeApplication<Gio::Application>* app);

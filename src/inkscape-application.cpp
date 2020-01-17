@@ -40,9 +40,11 @@
 #include "util/units.h"           // Redimension window
 
 #include "actions/actions-base.h"      // Actions
+#include "actions/actions-file.h"      // Actions
 #include "actions/actions-output.h"    // Actions
 #include "actions/actions-selection.h" // Actions
 #include "actions/actions-transform.h" // Actions
+#include "actions/actions-window.h"    // Actions
 
 #ifdef GDK_WINDOWING_QUARTZ
 #include <gtkosxapplication.h>
@@ -64,18 +66,6 @@ using Inkscape::IO::Resource::UIS;
 // depending on if the Gio::APPLICATION_HANDLES_OPEN and/or Gio::APPLICATION_HANDLES_COMMAND_LINE
 // flags are set. If the open flag is set and the command line not, the all the remainng arguments
 // after calling on_handle_local_options() are assumed to be filenames.
-
-InkscapeApplication::InkscapeApplication()
-    : _with_gui(true)
-    , _batch_process(false)
-    , _use_shell(false)
-    , _use_pipe(false)
-    , _active_document(nullptr)
-    , _active_selection(nullptr)
-    , _active_view(nullptr)
-    , _pdf_page(1)
-    , _pdf_poppler(false)
-{}
 
 // Add document to app.
 void
@@ -207,7 +197,7 @@ InkscapeApplication::document_swap(InkscapeWindow* window, SPDocument* document)
     _active_document  = document;
     _active_selection = context.getSelection();
     _active_view      = context.getView();
-
+    _active_window    = window;
     return true;
 }
 
@@ -371,12 +361,13 @@ InkscapeApplication::window_open(SPDocument* document)
     _active_selection = context.getSelection();
     _active_view      = context.getView();
     _active_document  = document;
+    _active_window    = window;
 
     auto it = _documents.find(document);
     if (it != _documents.end()) {
         it->second.push_back(window);
     } else {
-        std::cerr << "InkscapeApplication::open_window: Document not in map!" << std::endl;
+        std::cerr << "InkscapeApplication::window_open: Document not in map!" << std::endl;
     }
 
     document_fix(window); // May need flag to prevent this from being called more than once.
@@ -400,9 +391,10 @@ InkscapeApplication::window_close(InkscapeWindow* window)
             // To be removed (remove once per window)!
             bool last = INKSCAPE.remove_document(document);
 
+            // Leave active document alone (maybe should find new active window and reset variables).
             _active_selection = nullptr;
             _active_view      = nullptr;
-            _active_document  = nullptr;
+            _active_window    = nullptr;
 
             // Remove window from document map.
             auto it = _documents.find(document);
@@ -412,20 +404,32 @@ InkscapeApplication::window_close(InkscapeWindow* window)
                     it->second.erase(it2);
                     delete window; // Results in call to SPDesktop::destroy()
                 } else {
-                    std::cerr << "ConcreteInkscapeApplication<T>::close_window: window not found!" << std::endl;
+                    std::cerr << "InkscapeApplication::close_window: window not found!" << std::endl;
                 }
             } else {
-                std::cerr << "ConcreteInkscapeApplication<T>::close_window: document not in map!" << std::endl;
+                std::cerr << "InkscapeApplication::close_window: document not in map!" << std::endl;
             }
         } else {
-            std::cerr << "ConcreteInkscapeApplication<T>::close_window: No document!" << std::endl;
+            std::cerr << "InkscapeApplication::close_window: No document!" << std::endl;
         }
 
     } else {
-        std::cerr << "ConcreteInkscapeApplication<T>::close_window: No window!" << std::endl;
+        std::cerr << "InkscapeApplication::close_window: No window!" << std::endl;
     }
 
     // dump();
+}
+
+
+// Closes active window (useful for scripting).
+void
+InkscapeApplication::window_close_active()
+{
+    if (_active_window) {
+        window_close (_active_window);
+    } else {
+        std::cerr << "InkscapeApplication::window_close_active: no active window!" << std::endl;
+    }
 }
 
 
@@ -531,9 +535,11 @@ ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
 
     // ======================== Actions =========================
     add_actions_base(this);      // actions that are GUI independent
+    add_actions_file(this);      // actions for file handling
     add_actions_output(this);    // actions for file export
     add_actions_selection(this); // actions for object selection
     add_actions_transform(this); // actions for transforming selected objects
+    add_actions_window(this);    // actions for windows
 
     // ====================== Command Line ======================
 
@@ -622,7 +628,6 @@ ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
 
     // Interface
     _start_main_option_section(_("Interface"));
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "without-gui",            'z', N_("Console interface only (no visible GUI)"),                                  "");
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "with-gui",               'g', N_("With graphical user interface (required by some actions/verbs)"),           "");
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "batch-process",         '\0', N_("Close GUI after executing all actions/verbs"),"");
     _start_main_option_section();
@@ -715,31 +720,72 @@ ConcreteInkscapeApplication<Gtk::Application>::on_startup2()
 }
 
 /** We should not create a window if T is Gio::Applicaton.
-*/
+ */
 template<class T>
-SPDesktop*
-ConcreteInkscapeApplication<T>::create_window(const Glib::RefPtr<Gio::File>& file,
-                                              bool add_to_recent,
-                                              bool replace_empty)
+InkscapeWindow*
+ConcreteInkscapeApplication<T>::create_window(SPDocument *document, bool replace)
 {
     std::cerr << "ConcreteInkscapeApplication<T>::create_window: Should not be called!" << std::endl;
     return nullptr;
 }
 
+/** Create a window given a document. This is used internally in InkscapeApplication.
+ */
+template<>
+InkscapeWindow*
+ConcreteInkscapeApplication<Gtk::Application>::create_window(SPDocument *document, bool replace)
+{
+    SPDocument *old_document = _active_document;
+    InkscapeWindow* window = InkscapeApplication::get_active_window();
 
-/** Create a window given a Gio::File. This is what most functions should call.
+    if (replace && old_document && window) {
+        document_swap (window, document);
+
+        // Delete old document if no longer attached to any window.
+        auto it = _documents.find (old_document);
+        if (it != _documents.end()) {
+            if (it->second.size() == 0) {
+                document_close (old_document);
+            }
+        }
+
+        document->emitResizedSignal(document->getWidth().value("px"), document->getHeight().value("px"));
+
+    } else {
+        window = window_open (document);
+    }
+    window->show();
+
+    return window;
+}
+
+
+/** We should not create a window if T is Gio::Applicaton.
+*/
+template<class T>
+void
+ConcreteInkscapeApplication<T>::create_window(const Glib::RefPtr<Gio::File>& file,
+                                              bool add_to_recent,
+                                              bool replace_empty)
+{
+    std::cerr << "ConcreteInkscapeApplication<T>::create_window: Should not be called!" << std::endl;
+}
+
+
+/** Create a window given a Gio::File. This is what most external functions should call.
     The booleans are only false when opening a help file.
 */
 template<>
-SPDesktop*
+void
 ConcreteInkscapeApplication<Gtk::Application>::create_window(const Glib::RefPtr<Gio::File>& file,
                                                              bool add_to_recent,
                                                              bool replace_empty)
 {
-    SPDesktop* desktop = nullptr;
+    SPDocument* document = nullptr;
+    InkscapeWindow* window = nullptr;
 
     if (file) {
-        SPDocument* document = document_open (file);
+        document = document_open (file);
         if (document) {
 
             if (add_to_recent) {
@@ -747,38 +793,11 @@ ConcreteInkscapeApplication<Gtk::Application>::create_window(const Glib::RefPtr<
                 recentmanager->add_item (file->get_uri());
             }
 
-            // TODO Remove this code... handle document replacement elsewhere.
             SPDocument* old_document = _active_document;
-            if (replace_empty && old_document && old_document->getVirgin()) {
-                // virgin == true => an empty document (template).
+            bool replace = replace_empty && old_document && old_document->getVirgin();
+            // virgin == true => an empty document (template).
 
-                // Is there a better place for this? It requires GUI.
-
-                document->ensureUpToDate(); // TODO this will trigger broken line warnings, etc.
-
-                InkscapeWindow* window = dynamic_cast<InkscapeWindow*>(get_active_window());
-                if (window) {
-                    document_swap (window, document);
-
-                    // Delete old document if no longer attached to any window.
-                    auto it = _documents.find (old_document);
-                    if (it != _documents.end()) {
-                        if (it->second.size() == 0) {
-                            document_close (old_document);
-                        }
-                    }
-
-                    document->emitResizedSignal(document->getWidth().value("px"), document->getHeight().value("px"));
-                    desktop = window->get_desktop();
-                } else {
-                    std::cerr << "ConcreteInkscapeApplication<T>::create_window: Failed to find active window!" << std::endl;
-                }
-            } else {
-                InkscapeWindow* window = window_open (document);
-                desktop = window->get_desktop();
-            }
-            INKSCAPE.readStyleSheets();
-
+            window = create_window (document, replace);
 
         } else {
             std::cerr << "ConcreteInkscapeApplication<T>::create_window: Failed to load: "
@@ -788,24 +807,27 @@ ConcreteInkscapeApplication<Gtk::Application>::create_window(const Glib::RefPtr<
     } else {
         std::string Template =
             Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::TEMPLATES, "default.svg", true);
-        SPDocument* document = document_new (Template);
+        document = document_new (Template);
         if (document) {
-            InkscapeWindow* window = window_open (document);
-            desktop = window->get_desktop();
+            window = window_open (document);
         } else {
             std::cerr << "ConcreteInkscapeApplication<T>::create_window: Failed to open default template! " << Template << std::endl;
         }
     }
 
-    if (desktop) {
-        _active_document = desktop->getDocument();
+    _active_document = document;
+    _active_window   = window;
+
 #ifdef WITH_DBUS
-        Inkscape::Extension::Dbus::dbus_init_desktop_interface(desktop);
-#endif
-    } else {
-        std::cerr << "ConcreteInkscapeApplication<T>::create_window: Failed to create desktop!" << std::endl;
+    if (window) {
+        SPDesktop* desktop = window->get_desktop();
+        if (desktop) {
+            Inkscape::Extension::Dbus::dbus_init_desktop_interface(desktop);
+        } else {
+            std::cerr << "ConcreteInkscapeApplication<T>::create_window: Failed to create desktop!" << std::endl;
+        }
     }
-    return (desktop); // Temp: Need to track desktop for shell mode.
+#endif
 }
 
 /** No need to destroy window if T is Gio::Application.
@@ -881,27 +903,30 @@ ConcreteInkscapeApplication<Gtk::Application>::destroy_all()
     }
 }
 
-/** Process document (headless operation).
- * 'output_path' is path or "-" for pipe.
+/** Common processing for documents
  */
 template<class T>
 void
-ConcreteInkscapeApplication<T>::process(SPDocument* document, std::string output_path)
+ConcreteInkscapeApplication<T>::process_document(SPDocument* document, std::string output_path)
 {
     // Add to Inkscape::Application...
     INKSCAPE.add_document(document);
+
+    // Are we doing one file at a time? In that case, we don't recreate new windows for each file.
+    bool replace = _use_pipe || _batch_process;
+
+    // Open window if needed (reuse window if we are doing one file at a time inorder to save overhead).
+    if (_with_gui) {
+        _active_window = create_window(document, replace);
+    }
+
     // ActionContext should be removed once verbs are gone but we use it for now.
     Inkscape::ActionContext context = INKSCAPE.action_context_for_document(document);
     _active_document  = document;
     _active_selection = context.getSelection();
     _active_view      = context.getView();
 
-    if (_active_selection == nullptr) {
-        std::cerr << "ConcreteInkscapeApplication<T>::process: _active_selection in null!" << std::endl;
-        std::cerr << "  Must use --without_gui with --pipe!" << std::endl;
-        return; // Avoid segfault
-    }
-    INKSCAPE.readStyleSheets();
+    INKSCAPE.readStyleSheets(); // What is this doing here???
     document->ensureUpToDate(); // Or queries don't work!
 
     // process_file
@@ -910,95 +935,52 @@ ConcreteInkscapeApplication<T>::process(SPDocument* document, std::string output
     }
 
     if (_use_shell) {
-        shell2();
-    } else {
+        shell();
+    }
+
+    // Only if --export-file, --export-type, or --export-overwrite are used.
+    if (_auto_export) {
         // Save... can't use action yet.
         _file_export.do_export(document, output_path);
     }
-
-    _active_document = nullptr;
-    _active_selection = nullptr;
-    _active_view = nullptr;
-
-    // Close file
-    INKSCAPE.remove_document(document);
 }
 
-/** Process 'file' using GUI.
- */
-template<class T>
-void
-ConcreteInkscapeApplication<T>::process_file_with_gui(Glib::RefPtr<Gio::File> file)
-{
-    // no-op in general case (we only have a GUI if our application instance is a a Gtk::Application, see below)
-}
 
-template<>
-void
-ConcreteInkscapeApplication<Gtk::Application>::process_file_with_gui(Glib::RefPtr<Gio::File> file)
-{
-    // Create a window for each file.
-    SPDesktop* desktop = create_window(file);
-
-    if (!desktop)
-        return;
-
-    // Process each file.
-    for (auto action: _command_line_actions) {
-        Gio::Application::activate_action( action.first, action.second );
-    }
-
-    // Close window after we're done with file. This may not be the best way...
-    // but we need to rewrite most of the window handling code so do this for now.
-    if (_batch_process) {
-        remove_window(*desktop->getToplevel());
-                                     // Eventually create_window() should return a pointer to the window, not the desktop.
-    }
-}
-
-// Open document window with default document. Either this or on_open() is called.
+// Open document window with default document or pipe. Either this or on_open() is called.
 template<class T>
 void
 ConcreteInkscapeApplication<T>::on_activate()
 {
     on_startup2();
 
-    if (_use_pipe) {
+    std::string output;
 
-        if (_with_gui) {
-            std::cerr << "Must use --without-gui with --pipe!" << std::endl;
-            return;
-        }
+    // Create new document, either from pipe or from template.
+    SPDocument *document = nullptr;
+
+    if (_use_pipe) {
 
         // Create document from pipe in.
         std::istreambuf_iterator<char> begin(std::cin), end;
         std::string s(begin, end);
-        SPDocument *document = document_open (s);
-        if (!document) return;
+        document = document_open (s);
+        output = "-";
 
-        // Process
-        process (document, "-");
+    } else {
 
-        document_close (document);
+        // Create a blank document from template
+        std::string Template =
+            Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::TEMPLATES, "default.svg", true);
+        document = document_new (Template);
+    }
+
+    if (!document) {
+        std::cerr << "ConcreteInksacpeApplication::on_activate: failed to created document!" << std::endl;
         return;
     }
 
-    if (_with_gui) {
-        if (_use_shell) {
-            shell(); // Shell will create its own windows.
-        } else {
-            create_window();
-            for (auto action: _command_line_actions) {
-                Gio::Application::activate_action( action.first, action.second );
-            }
-        }
-    } else {
-        std::cerr << "InkscapeApplication::on_activate:  Without GUI" << std::endl;
-        if (_use_shell) {
-            shell2();
-        }
-        // Create blank document?
-    }
+    // Process document (command line actions, shell, create window)
+    process_document (document, output);
 }
 
 // Open document window for each file. Either this or on_activate() is called.
@@ -1023,17 +1005,21 @@ ConcreteInkscapeApplication<T>::on_open(const Gio::Application::type_vec_files& 
     }
 
     for (auto file : files) {
-        if (_with_gui) {
-            process_file_with_gui(file);
-        } else {
-            // Open file
-            SPDocument *document = document_open (file);
-            if (!document) continue;
 
-
-            process (document, file->get_path());
-            document_close (document);
+        // Open file
+        SPDocument *document = document_open (file);
+        if (!document) {
+            std::cerr << "ConcreteInkscapeApplication::on_open: failed to create document!" << std::endl;
+            continue;
         }
+
+        // Process document (command line actions, shell, create window)
+        process_document (document, file->get_path());
+    }
+
+    if (_batch_process) {
+        // If with_gui, we've reused a window for each file. We must quit to destroy it.
+        Gio::Application::quit();
     }
 }
 
@@ -1099,93 +1085,36 @@ ConcreteInkscapeApplication<T>::parse_actions(const Glib::ustring& input, action
     }
 }
 
-// Interactively trigger actions. This is a travesty! Due to most verbs requiring a desktop we must
-// create one even in shell mode!
+// Once we don't need to create a window just to process verbs!
 template<class T>
 void
 ConcreteInkscapeApplication<T>::shell()
 {
     std::cout << "Inkscape interactive shell mode. Type 'quit' to quit." << std::endl;
     std::cout << " Input of the form:" << std::endl;
-    std::cout << " filename action1:arg1; action2:arg2; verb1; verb2; ..." << std::endl;
+    std::cout << " action1:arg1; action2;arg2; verb1; verb2; ..." << std::endl;
+    if (!_with_gui) {
+        std::cout << "Only verbs that don't require a desktop may be used." << std::endl;
+    }
 
     std::string input;
-    InkscapeWindow *window = nullptr;
     while (true) {
         std::cout << "> ";
+        std::string input;
         std::getline(std::cin, input);
 
         if (input == "quit") break;
 
-        // Get filename which must be first and separated by space (and not contain ':' or ';').
-        // Regex works on Glib::ustrings and will give bad results if one tries to use std::string.
-        Glib::ustring input_u = input;
-        Glib::ustring filename;
-        Glib::RefPtr<Glib::Regex> regex = Glib::Regex::create("^\\s*([^:;\\s]+)\\s+(.*)");
-        Glib::MatchInfo match_info;
-        regex->match(input_u, match_info);
-        if (match_info.matches()) {
-            filename = match_info.fetch(1);
-            input_u = match_info.fetch(2);
-        } else {
-            std::cerr << "InkscapeApplication::shell: Failed to find file in |"
-                      << input << "|" << std::endl;
-        }
-
-        if (!filename.empty()) {
-            Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(filename);
-            SPDocument *document = document_open(file);
-            if (!document) {
-                std::cerr << "ConcreteInkscapeApplication::shell(): Failed to created document: " << filename << std::endl;
-                continue;
-            }
-
-            if (!window) {
-                // Create window.
-                window = window_open(document);
-            } else {
-                // Reuse window
-                document->ensureUpToDate();
-                document_swap(window, document);
-            }
-        }
-
-        // Find and execute actions (verbs).
-        action_vector_t action_vector;
-        parse_actions(input_u, action_vector);
-        for (auto action: action_vector) {
-            Gio::Application::activate_action( action.first, action.second );
-        }
-    }
-
-    if (window) {
-        window_close(window);
-    }
-
-
-    T::quit(); // Must quit or segfault. (Might be fixed by using desktop->getToplevel()->hide() above.);
-}
-
-// Once we don't need to create a window just to process verbs!
-template<class T>
-void
-ConcreteInkscapeApplication<T>::shell2()
-{
-    std::cout << "Inkscape interactive shell mode. Type 'quit' to quit." << std::endl;
-    std::cout << " Input of the form:" << std::endl;
-    std::cout << " action1:arg1; action2;arg2; verb1; verb2; ..." << std::endl;
-    std::cout << "Only verbs that don't require a desktop may be used." << std::endl;
-
-    std::string input;
-    while (true) {
-        std::cout << "> ";
-        std::cin >> input;
-        if (input == "quit") break;
         action_vector_t action_vector;
         parse_actions(input, action_vector);
         for (auto action: action_vector) {
             Gio::Application::activate_action( action.first, action.second );
         }
+
+        // This would allow displaying the results of actions on the fly... but it needs to be well
+        // vetted first.
+        Glib::RefPtr<Glib::MainContext> context = Glib::MainContext::get_default();
+        while (context->iteration(false)) {};
     }
 }
 
@@ -1239,28 +1168,71 @@ ConcreteInkscapeApplication<T>::on_handle_local_options(const Glib::RefPtr<Glib:
     auto base = Glib::VariantBase();
 
     // ================== GUI and Shell ================
-    if (options->contains("without-gui"))    _with_gui = false;
-    if (options->contains("with-gui"))       _with_gui = true;
+
+    // Use of most commmand line options turns off use of gui unless explicitly requested!
+    // Listed in order that they appear in constructor.
+    if (options->contains("pipe")                  ||
+
+        options->contains("export-file")           ||
+        options->contains("export-overwrite")      ||
+        options->contains("export-type")           ||
+
+        options->contains("export-area-page")      ||
+        options->contains("export-area-drawing")   ||
+        options->contains("export-area")           ||
+        options->contains("export-area-snap")      ||
+        options->contains("export-dpi")            ||
+        options->contains("export-width")          ||
+        options->contains("export-height")         ||
+        options->contains("export-margin")         ||
+        options->contains("export-height")         ||
+
+        options->contains("export-id")             ||
+        options->contains("export-id-only")        ||
+        options->contains("export-plain-svg")      ||
+        options->contains("export-ps-level")       ||
+        options->contains("export-pdf-version")    ||
+        options->contains("export-text-to_path")   ||
+        options->contains("export-latex")          ||
+        options->contains("export-ignore-filters") ||
+        options->contains("export-use-hints")      ||
+        options->contains("export-background")     ||
+        options->contains("export-background-opacity") ||
+        options->contains("export-text-to_path")   ||
+
+        options->contains("query-id")              ||
+        options->contains("query-x")               ||
+        options->contains("query-all")             ||
+        options->contains("query-y")               ||
+        options->contains("query-width")           ||
+        options->contains("query-height")          ||
+
+        options->contains("vacuum-defs")           ||
+        options->contains("select")                ||
+        options->contains("actions")               ||
+        options->contains("verb")                  ||
+        options->contains("shell")
+        ) {
+        _with_gui = false;
+    }
+
+    if (options->contains("with-gui")        ||
+        options->contains("batch-process")
+        ) {
+        _with_gui = true; // Override turning GUI off
+    }
+
     if (options->contains("batch-process"))  _batch_process = true;
     if (options->contains("shell"))          _use_shell = true;
     if (options->contains("pipe"))           _use_pipe  = true;
 
-    // Some options should preclude using gui!
-    if (options->contains("query-id")         ||
-        options->contains("query-x")          ||
-        options->contains("query-all")        ||
-        options->contains("query-y")          ||
-        options->contains("query-width")      ||
-        options->contains("query-height")     ||
-        options->contains("export-file")      ||
+
+    // Enable auto-export
+    if (options->contains("export-file")      ||
         options->contains("export-type")      ||
-        options->contains("export-overwrite") ||
-        options->contains("export-id")        ||
-        options->contains("export-plain-svg") ||
-        options->contains("export-text-to_path") ||
-        options->contains("pipe")
+        options->contains("export-overwrite")
         ) {
-        _with_gui = false;
+        _auto_export = true;
     }
 
     // ==================== ACTIONS ====================

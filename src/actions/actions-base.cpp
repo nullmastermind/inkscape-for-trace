@@ -202,6 +202,12 @@ vacuum_defs(InkscapeApplication* app)
     document->vacuumDocument();
 }
 
+void
+quit_inkscape(InkscapeApplication* app)
+{
+    app->on_quit();
+}
+
 template<class T>
 void
 add_actions_base(ConcreteInkscapeApplication<T>* app)
@@ -224,6 +230,7 @@ add_actions_base(ConcreteInkscapeApplication<T>* app)
     app->add_action(               "query-height",       sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&query_height),              app)        );
     app->add_action(               "query-all",          sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&query_all),                 app)        );
 
+    app->add_action(               "quit-inkscape",      sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&quit_inkscape),             app)        );
 }
 
 template void add_actions_base(ConcreteInkscapeApplication<Gio::Application>* app);

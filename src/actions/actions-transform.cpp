@@ -14,6 +14,7 @@
 
 #include "actions-transform.h"
 #include "actions-helper.h"
+#include "document-undo.h"
 #include "inkscape-application.h"
 
 #include "inkscape.h"             // Inkscape::Application
@@ -22,9 +23,14 @@
 void
 transform_rotate(const Glib::VariantBase& value, InkscapeApplication *app)
 {
+
     Glib::Variant<double> d = Glib::VariantBase::cast_dynamic<Glib::Variant<double> >(value);
     auto selection = app->get_active_selection();
+
     selection->rotate(d.get());
+
+    // Needed to update repr (is this the best way?).
+    Inkscape::DocumentUndo::done(app->get_active_document(), 0, "ActionTransformRotate");
 }
 
 template<class T>
