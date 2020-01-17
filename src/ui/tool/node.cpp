@@ -54,6 +54,24 @@ Inkscape::ControlType nodeTypeToCtrlType(Inkscape::UI::NodeType type)
     return result;
 }
 
+double error_bar(const Geom::Point& point){
+    return point.length()*1e-6;
+}
+
+bool three_points_are_in_line(const Geom::Point& A, const Geom::Point& B, const Geom::Point& C){
+    double error_A = error_bar(A);
+    double error_B = error_bar(B);
+    double error_C = error_bar(C);
+    double CB_length = (B-C).length();
+    double AB_length = (B-A).length();
+    Geom::Point C_reflect_scaled = B + (B-C)/CB_length*AB_length;
+    double error_C_reflect_scaled = error_B
+                                    + (error_B + error_C)
+                                      * (1 + (error_A + error_B) / AB_length)
+                                      * (1 + (error_C + error_B) / CB_length);
+    return Geom::are_near(C_reflect_scaled, A, error_C_reflect_scaled + error_A);
+}
+
 } // namespace
 
 namespace Inkscape {
@@ -1019,15 +1037,12 @@ void Node::pickBestType()
         if (both_degen) break;
         // if neither are degenerate, check their respective positions
         if (neither_degen) {
-            Geom::Point front_delta = _front.position() - position();
-            Geom::Point back_delta = _back.position() - position();
             // for now do not automatically make nodes symmetric, it can be annoying
             /*if (Geom::are_near(front_delta, -back_delta)) {
                 _type = NODE_SYMMETRIC;
                 break;
             }*/
-            if (Geom::are_near(Geom::unit_vector(front_delta),
-                Geom::unit_vector(-back_delta)))
+            if (three_points_are_in_line(_front.position(), position(), _back.position()))
             {
                 _type = NODE_SMOOTH;
                 break;
@@ -1037,16 +1052,12 @@ void Node::pickBestType()
         // we know that if front is degenerate, back isn't, because
         // both_degen was false
         if (front_degen && _next() && _next()->_back.isDegenerate()) {
-            Geom::Point segment_delta = Geom::unit_vector(_next()->position() - position());
-            Geom::Point handle_delta = Geom::unit_vector(_back.position() - position());
-            if (Geom::are_near(segment_delta, -handle_delta)) {
+            if (three_points_are_in_line(_next()->position(), position(), _back.position())) {
                 _type = NODE_SMOOTH;
                 break;
             }
         } else if (back_degen && _prev() && _prev()->_front.isDegenerate()) {
-            Geom::Point segment_delta = Geom::unit_vector(_prev()->position() - position());
-            Geom::Point handle_delta = Geom::unit_vector(_front.position() - position());
-            if (Geom::are_near(segment_delta, -handle_delta)) {
+            if (three_points_are_in_line(_prev()->position(), position(), _front.position())) {
                 _type = NODE_SMOOTH;
                 break;
             }
