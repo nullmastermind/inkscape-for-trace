@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
-Checks:          'clang-diagnostic-*,clang-analyzer-*, modernize-deprecated-headers, modernize-loop-convert, modernize-use-override, modernize-redundant-void-arg, modernize-use-emplace, modernize-use-noexcept, modernize-use-bool-literals, modernize-pass-by-value, modernize-use-equals-default, modernize-use-equals-default, modernize-use-equals-delete'
+Checks:          'clang-diagnostic-*,clang-analyzer-*, modernize-deprecated-headers, modernize-loop-convert, modernize-use-override, modernize-redundant-void-arg, modernize-use-emplace, modernize-use-noexcept, modernize-use-bool-literals, modernize-pass-by-value, modernize-use-equals-delete'
+#, modernize-use-equals-default (gave false results)
 #, readability-*, bugprone-*'
 WarningsAsErrors: ''
 HeaderFilterRegex: '.*'
