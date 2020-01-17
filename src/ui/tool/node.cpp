@@ -54,22 +54,56 @@ Inkscape::ControlType nodeTypeToCtrlType(Inkscape::UI::NodeType type)
     return result;
 }
 
-double error_bar(const Geom::Point& point){
-    return point.length()*1e-6;
+class PrecisionWatcher : public Inkscape::Preferences::Observer{
+public:
+    static double error_of(double value){
+        return value*instance().rel_error;
+    }
+
+    void notify(const Inkscape::Preferences::Entry &new_val) override {
+        int digits = new_val.getIntLimited(6,1,16);
+        set_numeric_precision(digits);
+    }
+
+    void set_numeric_precision(int digits) {
+        double relative_error = 0.5;
+        while (digits>0){ relative_error /= 10; digits--;}
+        rel_error = relative_error;
+    }
+
+private:
+    static PrecisionWatcher& instance(){
+        static PrecisionWatcher _instance;
+        return _instance;
+    }
+    PrecisionWatcher() : Observer("/options/svgoutput/numericprecision"), rel_error(1) {
+        Inkscape::Preferences::get()->addObserver(*this);
+        int digits = Inkscape::Preferences::get()->getIntLimited("/options/svgoutput/numericprecision", 6, 1, 16);
+        set_numeric_precision(digits);
+    }
+    ~PrecisionWatcher() override {
+        Inkscape::Preferences::get()->removeObserver(*this);
+    }
+    std::atomic<double> rel_error;
+};
+
+double uncertainty_of(const Geom::Point& point){
+    return PrecisionWatcher::error_of(point.length());
 }
 
 bool three_points_are_in_line(const Geom::Point& A, const Geom::Point& B, const Geom::Point& C){
-    double error_A = error_bar(A);
-    double error_B = error_bar(B);
-    double error_C = error_bar(C);
-    double CB_length = (B-C).length();
-    double AB_length = (B-A).length();
+    const double tolerance_factor = 10; // to account other factors which increase uncertainty
+    const double tolerance_A = uncertainty_of(A) * tolerance_factor;
+    const double tolerance_B = uncertainty_of(B) * tolerance_factor;
+    const double tolerance_C = uncertainty_of(C) * tolerance_factor;
+    const double CB_length = (B-C).length();
+    const double AB_length = (B-A).length();
     Geom::Point C_reflect_scaled = B + (B-C)/CB_length*AB_length;
-    double error_C_reflect_scaled = error_B
-                                    + (error_B + error_C)
-                                      * (1 + (error_A + error_B) / AB_length)
-                                      * (1 + (error_C + error_B) / CB_length);
-    return Geom::are_near(C_reflect_scaled, A, error_C_reflect_scaled + error_A);
+    double tolerance_C_reflect_scaled = tolerance_B
+                                        + (tolerance_B + tolerance_C)
+                                          * (1 + (tolerance_A + tolerance_B) / AB_length)
+                                          * (1 + (tolerance_C + tolerance_B) / CB_length);
+    return Geom::are_near(C_reflect_scaled, A, tolerance_C_reflect_scaled + tolerance_A);
 }
 
 } // namespace
