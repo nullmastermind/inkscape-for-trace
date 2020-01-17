@@ -65,20 +65,7 @@ public:
         set_numeric_precision(digits);
     }
 
-    void set_numeric_precision(int digits) {
-        double relative_error = 0.5;
-        while (digits > 0) {
-            relative_error /= 10;
-            digits--;
-        }
-        rel_error = relative_error;
-    }
-
 private:
-    static PrecisionWatcher &instance() {
-        static PrecisionWatcher _instance;
-        return _instance;
-    }
 
     PrecisionWatcher() : Observer("/options/svgoutput/numericprecision"), rel_error(1) {
         Inkscape::Preferences::get()->addObserver(*this);
@@ -88,6 +75,20 @@ private:
 
     ~PrecisionWatcher() override {
         Inkscape::Preferences::get()->removeObserver(*this);
+    }
+
+    void set_numeric_precision(int digits) {
+        double relative_error = 0.5;
+        while (digits > 0) {
+            relative_error /= 10;
+            digits--;
+        }
+        rel_error = relative_error;
+    }
+
+    static PrecisionWatcher &instance() {
+        static PrecisionWatcher _instance;
+        return _instance;
     }
 
     std::atomic<double> rel_error;
