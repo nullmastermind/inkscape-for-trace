@@ -147,6 +147,7 @@ void SPMask::child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) {
 			Inkscape::DrawingItem *ac = SP_ITEM (ochild)->invoke_show(v->arenaitem->drawing(), v->key, SP_ITEM_REFERENCE_FLAGS);
 			
 			if (ac) {
+			    // @fixme must take position into account
 			    v->arenaitem->prependChild(ac);
 			}
 		}
@@ -249,7 +250,7 @@ Inkscape::DrawingItem *SPMask::sp_mask_show(Inkscape::Drawing &drawing, unsigned
 			Inkscape::DrawingItem *ac = SP_ITEM (&child)->invoke_show (drawing, key, SP_ITEM_REFERENCE_FLAGS);
 
 			if (ac) {
-				ai->prependChild(ac);
+				ai->appendChild(ac);
 			}
 		}
 	}
