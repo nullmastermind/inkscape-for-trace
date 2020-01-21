@@ -2263,12 +2263,14 @@ void ObjectSet::scale(double grow)
     double const times = 1.0 + grow / max_len;
     setScaleRelative(center_, Geom::Scale(times, times));
 
-    DocumentUndo::maybeDone(document(),
-                            ( (grow > 0)
-                              ? "selector:scale:larger"
-                              : "selector:scale:smaller" ),
-                            SP_VERB_CONTEXT_SELECT,
-                            _("Scale"));
+    if (document()) {
+            DocumentUndo::maybeDone(document(),
+                                    ( (grow > 0)
+                                      ? "selector:scale:larger"
+                                      : "selector:scale:smaller" ),
+                                    SP_VERB_CONTEXT_SELECT,
+                                    _("Scale"));
+    }
 }
 
 void ObjectSet::scaleScreen(double grow_pixels)
@@ -2303,16 +2305,17 @@ void ObjectSet::move(double dx, double dy)
 
     moveRelative(dx, dy);
 
-    SPDocument *doc = document();
-    if (dx == 0) {
-        DocumentUndo::maybeDone(doc, "selector:move:vertical", SP_VERB_CONTEXT_SELECT,
-                                _("Move vertically"));
-    } else if (dy == 0) {
-        DocumentUndo::maybeDone(doc, "selector:move:horizontal", SP_VERB_CONTEXT_SELECT,
-                                _("Move horizontally"));
-    } else {
-        DocumentUndo::done(doc, SP_VERB_CONTEXT_SELECT,
-                           _("Move"));
+    if (document()) {
+        if (dx == 0) {
+            DocumentUndo::maybeDone(document(), "selector:move:vertical", SP_VERB_CONTEXT_SELECT,
+                                    _("Move vertically"));
+        } else if (dy == 0) {
+            DocumentUndo::maybeDone(document(), "selector:move:horizontal", SP_VERB_CONTEXT_SELECT,
+                                    _("Move horizontally"));
+        } else {
+            DocumentUndo::done(document(), SP_VERB_CONTEXT_SELECT,
+                               _("Move"));
+        }
     }
 }
 

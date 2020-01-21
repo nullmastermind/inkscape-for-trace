@@ -21,6 +21,36 @@
 #include "selection.h"            // Selection
 
 void
+transform_translate(const Glib::VariantBase& value, InkscapeApplication *app)
+{
+    Glib::Variant<Glib::ustring> s = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring> >(value);
+
+    std::vector<Glib::ustring> tokens = Glib::Regex::split_simple(",", s.get());
+    if (tokens.size() != 2) {
+        std::cerr << "action:transform_translate: requires two comma separated numbers" << std::endl;
+        return;
+    }
+    double dx = 0;
+    double dy = 0;
+
+    try {
+        dx = std::stod(tokens[0]);
+        dy = std::stod(tokens[1]);
+    } catch (...) {
+        std::cerr << "action:transform-move: invalid arguments" << std::endl;
+        return;
+    }
+
+    std::cout << "dx: " << dx << " dy: " << dy << std::endl;
+
+    auto selection = app->get_active_selection();
+    selection->move(dx, dy);
+
+    // Needed to update repr (is this the best way?).
+    Inkscape::DocumentUndo::done(app->get_active_document(), 0, "ActionTransformTranslate");
+}
+
+void
 transform_rotate(const Glib::VariantBase& value, InkscapeApplication *app)
 {
 
@@ -31,6 +61,27 @@ transform_rotate(const Glib::VariantBase& value, InkscapeApplication *app)
 
     // Needed to update repr (is this the best way?).
     Inkscape::DocumentUndo::done(app->get_active_document(), 0, "ActionTransformRotate");
+}
+
+void
+transform_scale(const Glib::VariantBase& value, InkscapeApplication *app)
+{
+    Glib::Variant<double> d = Glib::VariantBase::cast_dynamic<Glib::Variant<double> >(value);
+    auto selection = app->get_active_selection();
+    selection->scale(d.get());
+
+    // Needed to update repr (is this the best way?).
+    Inkscape::DocumentUndo::done(app->get_active_document(), 0, "ActionTransformScale");
+}
+
+void
+transform_remove(InkscapeApplication *app)
+{
+    auto selection = app->get_active_selection();
+    selection->removeTransform();
+
+    // Needed to update repr (is this the best way?).
+    Inkscape::DocumentUndo::done(app->get_active_document(), 0, "ActionTransformRemoveTransform");
 }
 
 template<class T>
@@ -45,11 +96,13 @@ add_actions_transform(ConcreteInkscapeApplication<T>* app)
     // Debian 9 has 2.50.0
 #if GLIB_CHECK_VERSION(2, 52, 0)
 
+    app->add_action_with_parameter( "transform-translate",      String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&transform_translate),       app));
     app->add_action_with_parameter( "transform-rotate",         Double, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&transform_rotate),          app));
+    app->add_action_with_parameter( "transform-scale",          Double, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&transform_scale),           app));
+    app->add_action(                "transform-remove",                 sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&transform_remove),          app));
 
 #endif
 }
-
 
 
 template void add_actions_transform(ConcreteInkscapeApplication<Gio::Application>* app);
