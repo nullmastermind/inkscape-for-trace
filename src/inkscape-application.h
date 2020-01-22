@@ -25,6 +25,7 @@
 #include "document.h"
 #include "selection.h"
 
+#include "actions/actions-extra-data.h"
 #include "helper/action.h"
 #include "io/file-export-cmd.h"   // File export (non-verb)
 
@@ -90,6 +91,10 @@ public:
     // Update all windows connected to a document.
     void                  windows_update(SPDocument* document);
 
+
+    /****** Actions *******/
+    InkActionExtraData&   get_action_extra_data() { return _action_extra_data; }
+
     /******* Debug ********/
     void                  dump();
 
@@ -123,6 +128,9 @@ protected:
 
     // Actions from the command line or file.
     action_vector_t _command_line_actions;
+
+    // Extra data associated with actions (Label, Section, Tooltip/Help).
+    InkActionExtraData _action_extra_data;
 };
 
 // T can be either:

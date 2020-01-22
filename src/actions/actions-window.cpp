@@ -12,6 +12,7 @@
 
 #include <giomm.h>  // Not <gtkmm.h>! To eventually allow a headless version!
 #include <gtkmm.h>
+#include <glibmm/i18n.h>
 
 #include "actions-window.h"
 #include "actions-helper.h"
@@ -49,6 +50,11 @@ window_close(InkscapeApplication *app)
     app->window_close_active();
 }
 
+std::vector<std::vector<Glib::ustring>> raw_data_window =
+{
+    {"window-open",               "WindowOpen",              "Window",     N_("Open a window for the active document. GUI only.")   },
+    {"window-close",              "WindowClose",             "Window",     N_("Close the active window.")                           }
+};
 
 template <class T>
 void
@@ -68,6 +74,8 @@ add_actions_window(ConcreteInkscapeApplication<T>* app)
 #else
     std::cerr << "add_actions: Some actions require Glibmm 2.52, compiled with: " << glib_major_version << "." << glib_minor_version << std::endl;
 #endif
+
+    app->get_action_extra_data().add_data(raw_data_window);
 }
 
 

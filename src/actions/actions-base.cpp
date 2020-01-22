@@ -11,6 +11,7 @@
 #include <iostream>
 
 #include <giomm.h>  // Not <gtkmm.h>! To eventually allow a headless version!
+#include <glibmm/i18n.h>
 
 #include "actions-base.h"
 #include "actions-helper.h"
@@ -208,21 +209,42 @@ quit_inkscape(InkscapeApplication* app)
     app->on_quit();
 }
 
+std::vector<std::vector<Glib::ustring>> raw_data_base =
+{
+    {"inkscape-version",          "InkscapeVersion",         "Base",       N_("Print Inkscape version and exit.")                   },
+    {"extension-directory",       "InkscapeExtensionsDir",   "Base",       N_("Print Extensions directory and exit.")               },
+    {"verb-list",                 "InkscapeVerbs",           "Base",       N_("Print a list of verbs and exit.")                    },
+    {"verb",                      "Verb",                    "Base",       N_("Execute verb(s).")                                   },
+    {"vacuum-defs",               "VacuumDefs",              "Base",       N_("Remove unused definitions (gradients, etc.).")       },
+    {"quit-inkscape",             "QuitInkscape",            "Base",       N_("Immediately quit Inkscape.")                         },
+
+    {"open-page",                 "ImportPageNumber",        "Import",     N_("Import page number.")                                },
+    {"convert-dpi-method",        "ImportDPIMethod",         "Import",     N_("Import DPI convert method.")                         },
+    {"no-convert-baseline",       "ImportBaselineConvert",   "Import",     N_("Import convert text baselines.")                     },
+
+    {"query-x",                   "QueryX",                  "Query",      N_("Query 'x' value(s) of selected objects.")            },
+    {"query-y",                   "QueryY",                  "Query",      N_("Query 'y' value(s) of selected objects.")            },
+    {"query-width",               "QueryWidth",              "Query",      N_("Query 'width' value(s) of object(s).")               },
+    {"query-height",              "QueryHeight",             "Query",      N_("Query 'height' value(s) of object(s).")              },
+    {"query-all",                 "QueryAll",                "Query",      N_("Query 'x', 'y', 'width', and 'height'.")             }
+};
+
 template<class T>
 void
 add_actions_base(ConcreteInkscapeApplication<T>* app)
 {
     // Note: "radio" actions are just an easy way to set type without using templating.
-    app->add_action("inkscape-version",                                                   sigc::ptr_fun(&print_inkscape_version   ));
-    app->add_action("extension-directory",                                                sigc::ptr_fun(&print_extension_directory));
-    app->add_action("verb-list",                                                          sigc::ptr_fun(&print_verb_list          ));
+    app->add_action(               "inkscape-version",                                    sigc::ptr_fun(&print_inkscape_version)                 );
+    app->add_action(               "extension-directory",                                 sigc::ptr_fun(&print_extension_directory)              );
+    app->add_action(               "verb-list",                                           sigc::ptr_fun(&print_verb_list)                        );
+    app->add_action_radio_string(  "verb",               sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&verbs),                     app), "null");
+    app->add_action(               "vacuum-defs",        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&vacuum_defs),               app)        );
+    app->add_action(               "quit-inkscape",      sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&quit_inkscape),             app)        );
 
     app->add_action_radio_integer( "open-page",                                           sigc::ptr_fun(&pdf_page),                             0);
     app->add_action_radio_string(  "convert-dpi-method",                                  sigc::ptr_fun(&convert_dpi_method),              "none");
     app->add_action(               "no-convert-baseline",                                 sigc::ptr_fun(&no_convert_baseline)                    );
 
-    app->add_action(               "vacuum-defs",        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&vacuum_defs),               app)        );
-    app->add_action_radio_string(  "verb",               sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&verbs),                     app), "null");
 
     app->add_action(               "query-x",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&query_x),                   app)        );
     app->add_action(               "query-y",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&query_y),                   app)        );
@@ -230,7 +252,7 @@ add_actions_base(ConcreteInkscapeApplication<T>* app)
     app->add_action(               "query-height",       sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&query_height),              app)        );
     app->add_action(               "query-all",          sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&query_all),                 app)        );
 
-    app->add_action(               "quit-inkscape",      sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&quit_inkscape),             app)        );
+    app->get_action_extra_data().add_data(raw_data_base);
 }
 
 template void add_actions_base(ConcreteInkscapeApplication<Gio::Application>* app);

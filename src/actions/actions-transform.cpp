@@ -11,6 +11,7 @@
 #include <iostream>
 
 #include <giomm.h>  // Not <gtkmm.h>! To eventually allow a headless version!
+#include <glibmm/i18n.h>
 
 #include "actions-transform.h"
 #include "actions-helper.h"
@@ -84,6 +85,15 @@ transform_remove(InkscapeApplication *app)
     Inkscape::DocumentUndo::done(app->get_active_document(), 0, "ActionTransformRemoveTransform");
 }
 
+
+std::vector<std::vector<Glib::ustring>> raw_data_transform =
+{
+   {"transform-translate",       "TransformTranslate",      "Transform",  N_("Translate selected objects (dx,dy).")                 },
+   {"transform-rotate",          "TransformRotate",         "Transform",  N_("Rotate selected objects by degrees.")                 },
+   {"transform-scale",           "TransformScale",          "Transform",  N_("Scale selected objects by scale factor.")             },
+   {"transform-remove",          "TransformRemove",         "Transform",  N_("Remove any transforms from selected objects.")        }
+};
+
 template<class T>
 void
 add_actions_transform(ConcreteInkscapeApplication<T>* app)
@@ -102,6 +112,8 @@ add_actions_transform(ConcreteInkscapeApplication<T>* app)
     app->add_action(                "transform-remove",                 sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&transform_remove),          app));
 
 #endif
+
+    app->get_action_extra_data().add_data(raw_data_transform);
 }
 
 

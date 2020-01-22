@@ -11,6 +11,7 @@
 #include <iostream>
 
 #include <giomm.h>  // Not <gtkmm.h>! To eventually allow a headless version!
+#include <glibmm/i18n.h>
 
 #include "actions-file.h"
 #include "actions-helper.h"
@@ -88,6 +89,13 @@ file_close(InkscapeApplication *app)
 // file_quit ... should just be quit
 // file_template
 
+std::vector<std::vector<Glib::ustring>> raw_data_file =
+{
+    {"file-open",                 "FileOpen",                "File",       N_("Open file.")                                         },
+    {"file-new",                  "FileNew",                 "File",       N_("Open new document using template.")                  },
+    {"file-close",                "FileClose",               "File",       N_("Close active document.")                             }
+};
+
 template <class T>
 void
 add_actions_file(ConcreteInkscapeApplication<T>* app)
@@ -107,6 +115,8 @@ add_actions_file(ConcreteInkscapeApplication<T>* app)
 #else
     std::cerr << "add_actions: Some actions require Glibmm 2.52, compiled with: " << glib_major_version << "." << glib_minor_version << std::endl;
 #endif
+
+    app->get_action_extra_data().add_data(raw_data_file);
 }
 
 

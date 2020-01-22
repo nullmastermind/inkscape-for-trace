@@ -3,6 +3,12 @@
 ../share/paint/patterns.svg.h
 ../share/symbols/symbols.h
 ../share/templates/templates.h
+../src/actions/actions-base.cpp
+../src/actions/actions-file.cpp
+../src/actions/actions-output.cpp
+../src/actions/actions-selection.cpp
+../src/actions/actions-transform.cpp
+../src/actions/actions-window.cpp
 ../src/auto-save.cpp
 ../src/context-fns.cpp
 ../src/desktop-events.cpp

@@ -11,6 +11,7 @@
 #include <iostream>
 
 #include <giomm.h>  // Not <gtkmm.h>! To eventually allow a headless version!
+#include <glibmm/i18n.h>
 
 #include "actions-output.h"
 #include "actions-helper.h"
@@ -210,6 +211,37 @@ export_do(InkscapeApplication *app)
     app->file_export()->do_export(document, filename);
 }
 
+std::vector<std::vector<Glib::ustring>> raw_data_output =
+{
+   {"export-type",               "ExportType",              "Export",     N_("Export file type.")                                  },
+   {"export-filename",           "ExportFileName",          "Export",     N_("Export file name.")                                  },
+   {"export-overwrite",          "ExportOverWrite",         "Export",     N_("Export over-write file.")                            },
+
+   {"export-area",               "ExportArea",              "Export",     N_("Export area.")                                       },
+   {"export-area-drawing",       "ExportAreaDrawing",       "Export",     N_("Export drawing area.")                               },
+   {"export-area-page",          "ExportAreaPage",          "Export",     N_("Export page area.")                                  },
+   {"export-margin",             "ExportMargin",            "Export",     N_("Export margin.")                                     },
+   {"export-area-snap",          "ExportAreaSnap",          "Export",     N_("Export snap area to integer values.")                },
+   {"export-width",              "ExportWidth",             "Export",     N_("Export width.")                                      },
+   {"export-height",             "ExportHeight",            "Export",     N_("Export height.")                                     },
+
+   {"export-id",                 "ExportID",                "Export",     N_("Export id(s).")                                      },
+   {"export-id-only",            "ExportIDOnly",            "Export",     N_("Export id(s) only.")                                 },
+
+   {"export-plain-svg",          "ExportPlanSVG",           "Export",     N_("Export as plain SVG.")                               },
+   {"export-dpi",                "ExportDPI",               "Export",     N_("Export DPI.")                                        },
+   {"export-ignore-filters",     "ExportIgnoreFilters",     "Export",     N_("Export ignore filters.")                             },
+   {"export-text-to-path",       "ExportTextToPath",        "Export",     N_("Export convert text to paths.")                      },
+   {"export-ps-level",           "ExportPSLevel",           "Export",     N_("Export PostScript level.")                           },
+   {"export-pdf-version",        "ExportPSVersion",         "Export",     N_("Export PDF version.")                                },
+   {"export-latex",              "ExportLaTeX",             "Export",     N_("Export LaTeX.")                                      },
+   {"export-use-hints",          "ExportUseHInts",          "Export",     N_("Export using saved hints.")                          },
+   {"export-background",         "ExportBackground",        "Export",     N_("Export background color.")                           },
+   {"export-background-opacity", "ExportBackgroundOpacity", "Export",     N_("Export background opacity.")                         },
+
+   {"export-do",                 "ExportDo",                "Export",     N_("Do export.")                                         }
+};
+
 template <class T>
 void
 add_actions_output(ConcreteInkscapeApplication<T>* app)
@@ -238,6 +270,7 @@ add_actions_output(ConcreteInkscapeApplication<T>* app)
 
     app->add_action_with_parameter( "export-id",                String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_id),           app));
     app->add_action_with_parameter( "export-id-only",           Bool,   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_id_only),      app));
+
     app->add_action_with_parameter( "export-plain-svg",         Bool,   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_plain_svg),    app));
     app->add_action_with_parameter( "export-dpi",               Int,    sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_dpi),          app));
     app->add_action_with_parameter( "export-ignore-filters",    Bool,   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_plain_svg),    app));
@@ -254,6 +287,8 @@ add_actions_output(ConcreteInkscapeApplication<T>* app)
 #else
     std::cerr << "add_actions: Some actions require Glibmm 2.52, compiled with: " << glib_major_version << "." << glib_minor_version << std::endl;
 #endif
+
+    app->get_action_extra_data().add_data(raw_data_output);
 }
 
 

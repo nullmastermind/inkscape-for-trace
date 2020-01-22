@@ -11,6 +11,7 @@
 #include <iostream>
 
 #include <giomm.h>  // Not <gtkmm.h>! To eventually allow a headless version!
+#include <glibmm/i18n.h>
 
 #include "actions-selection.h"
 #include "actions-helper.h"
@@ -34,7 +35,7 @@ select_clear(InkscapeApplication* app)
 }
 
 void
-select_via_id(Glib::ustring ids, InkscapeApplication* app)
+select_by_id(Glib::ustring ids, InkscapeApplication* app)
 {
     SPDocument* document = nullptr;
     Inkscape::Selection* selection = nullptr;
@@ -48,13 +49,13 @@ select_via_id(Glib::ustring ids, InkscapeApplication* app)
         if (object) {
             selection->add(object);
         } else {
-            std::cerr << "select_via_id: Did not find object with id: " << id << std::endl;
+            std::cerr << "select_by_id: Did not find object with id: " << id << std::endl;
         }
     }
 }
 
 void
-unselect_via_id(Glib::ustring ids, InkscapeApplication* app)
+unselect_by_id(Glib::ustring ids, InkscapeApplication* app)
 {
     SPDocument* document = nullptr;
     Inkscape::Selection* selection = nullptr;
@@ -68,13 +69,13 @@ unselect_via_id(Glib::ustring ids, InkscapeApplication* app)
         if (object) {
             selection->remove(object);
         } else {
-            std::cerr << "unselect_via_id: Did not find object with id: " << id << std::endl;
+            std::cerr << "unselect_by_id: Did not find object with id: " << id << std::endl;
         }
     }
 }
 
 void
-select_via_class(Glib::ustring klass, InkscapeApplication* app)
+select_by_class(Glib::ustring klass, InkscapeApplication* app)
 {
     SPDocument* document = nullptr;
     Inkscape::Selection* selection = nullptr;
@@ -87,7 +88,7 @@ select_via_class(Glib::ustring klass, InkscapeApplication* app)
 }
 
 void
-select_via_element(Glib::ustring element, InkscapeApplication* app)
+select_by_element(Glib::ustring element, InkscapeApplication* app)
 {
     SPDocument* document = nullptr;
     Inkscape::Selection* selection = nullptr;
@@ -99,7 +100,7 @@ select_via_element(Glib::ustring element, InkscapeApplication* app)
 }
 
 void
-select_via_selector(Glib::ustring selector, InkscapeApplication* app)
+select_by_selector(Glib::ustring selector, InkscapeApplication* app)
 {
     SPDocument* document = nullptr;
     Inkscape::Selection* selection = nullptr;
@@ -214,6 +215,7 @@ select_invert(Glib::ustring condition, InkscapeApplication* app)
     selection->setList(objects);
 }
 
+
 // Debug... print selected items
 void
 select_list(InkscapeApplication* app)
@@ -231,21 +233,38 @@ select_list(InkscapeApplication* app)
 }
 
 
+std::vector<std::vector<Glib::ustring>> raw_data_selection =
+{
+    {"select-clear",              "SelectClear",             "Select",     N_("Selection clear")                                    },
+    {"select",                    "Select",                  "Select",     N_("Select by ID (Deprecated)")                          },
+    {"unselect",                  "UnSelect",                "Select",     N_("Unselect by ID (Deprecated)")                        },
+    {"select-by-id",              "SelectById",              "Select",     N_("Select by ID")                                       },
+    {"unselect-by-id",            "UnselectById",            "Select",     N_("Unselect by ID")                                     },
+    {"select-by-class",           "SelectByClass",           "Select",     N_("Select by class")                                    },
+    {"select-by-element",         "SelectByElement",         "Select",     N_("Select by SVG element (e.g. 'rect').")               },
+    {"select-by-selector",        "SelectBySelector",        "Select",     N_("Select by CSS selector")                             },
+    {"select-all",                "SelectAll",               "Select",     N_("Select all. Options: 'all' (every object including groups), 'layers', 'no-layers' (top level objects in layers), 'groups' (all groups including layers), 'no-groups' (all objects other than groups and layers, default).")},
+    {"select-invert",             "SelectInvert",            "Select",     N_("Invert selection. Options: 'all', 'layers', 'no-layers', 'groups', 'no-groups' (default).")},
+    {"select-list",               "SelectList",              "Select",     N_("Print a list of objects in current selection.")      }
+};
+
 template<class T>
 void
 add_actions_selection(ConcreteInkscapeApplication<T>* app)
 {
     app->add_action(               "select-clear",       sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_clear),              app)        );
-    app->add_action_radio_string(  "select",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_via_id),             app), "null"); // Backwards compatible.
-    app->add_action_radio_string(  "unselect",           sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&unselect_via_id),           app), "null"); // Match select.
-    app->add_action_radio_string(  "select-via-id",      sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_via_id),             app), "null");
-    app->add_action_radio_string(  "unselect-via-id",    sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&unselect_via_id),           app), "null");
-    app->add_action_radio_string(  "select-via-class",   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_via_class),          app), "null");
-    app->add_action_radio_string(  "select-via-element", sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_via_element),        app), "null");
-    app->add_action_radio_string(  "select-via-selector",sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_via_selector),       app), "null");
+    app->add_action_radio_string(  "select",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_by_id),              app), "null"); // Backwards compatible.
+    app->add_action_radio_string(  "unselect",           sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&unselect_by_id),            app), "null"); // Match select.
+    app->add_action_radio_string(  "select-by-id",      sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_by_id),               app), "null");
+    app->add_action_radio_string(  "unselect-by-id",    sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&unselect_by_id),             app), "null");
+    app->add_action_radio_string(  "select-by-class",   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_by_class),            app), "null");
+    app->add_action_radio_string(  "select-by-element", sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_by_element),          app), "null");
+    app->add_action_radio_string(  "select-by-selector",sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_by_selector),         app), "null");
     app->add_action_radio_string(  "select-all",         sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_all),                app), "null");
     app->add_action_radio_string(  "select-invert",      sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_invert),             app), "null");
     app->add_action(               "select-list",        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_list),               app)        );
+
+    app->get_action_extra_data().add_data(raw_data_selection);
 }
 
 template void add_actions_selection(ConcreteInkscapeApplication<Gio::Application>* app);
