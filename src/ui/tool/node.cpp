@@ -54,8 +54,15 @@ Inkscape::ControlType nodeTypeToCtrlType(Inkscape::UI::NodeType type)
     return result;
 }
 
-class PrecisionWatcher : public Inkscape::Preferences::Observer {
+/**
+ * @brief provides means to estimate float point rounding error due to serialization to svg
+ *
+ *  Keeps cached value up to date with preferences option `/options/svgoutput/numericprecision`
+ *  to avoid costly direct reads
+ * */
+class SvgOutputPrecisionWatcher : public Inkscape::Preferences::Observer {
 public:
+    /// Returns absolute \a value`s rounding serialization error based on current preferences settings
     static double error_of(double value) {
         return value * instance().rel_error;
     }
@@ -66,19 +73,18 @@ public:
     }
 
 private:
-
-    PrecisionWatcher() : Observer("/options/svgoutput/numericprecision"), rel_error(1) {
+  SvgOutputPrecisionWatcher() : Observer("/options/svgoutput/numericprecision"), rel_error(1) {
         Inkscape::Preferences::get()->addObserver(*this);
         int digits = Inkscape::Preferences::get()->getIntLimited("/options/svgoutput/numericprecision", 6, 1, 16);
         set_numeric_precision(digits);
     }
 
-    ~PrecisionWatcher() override {
+    ~SvgOutputPrecisionWatcher() override {
         Inkscape::Preferences::get()->removeObserver(*this);
     }
-
+    /// Update cached value of relative error with number of significant digits
     void set_numeric_precision(int digits) {
-        double relative_error = 0.5;
+        double relative_error = 0.5; // the error is half of last digit
         while (digits > 0) {
             relative_error /= 10;
             digits--;
@@ -86,23 +92,33 @@ private:
         rel_error = relative_error;
     }
 
-    static PrecisionWatcher &instance() {
-        static PrecisionWatcher _instance;
+    static SvgOutputPrecisionWatcher &instance() {
+        static SvgOutputPrecisionWatcher _instance;
         return _instance;
     }
 
-    std::atomic<double> rel_error;
+    std::atomic<double> rel_error; /// Cached relative error
 };
 
-double uncertainty_of(const Geom::Point &point) {
-    return PrecisionWatcher::error_of(point.length());
+/// Returns absolute error of \a point as if serialized to svg with current preferences
+double serializing_error_of(const Geom::Point &point) {
+    return SvgOutputPrecisionWatcher::error_of(point.length());
 }
 
-bool three_points_are_in_line(const Geom::Point &A, const Geom::Point &B, const Geom::Point &C) {
+/**
+ * @brief Returns true if three points are collinear within current serializing precision
+ *
+ * The algorithm of collinearity check is explicitly used to calculate the check error.
+ *
+ * This function can be sufficiently reduced or even removed completely if `Geom::are_collinear`
+ * would declare it's check algorithm as part of the public API.
+ *
+ * */
+bool are_collinear_within_serializing_error(const Geom::Point &A, const Geom::Point &B, const Geom::Point &C) {
     const double tolerance_factor = 10; // to account other factors which increase uncertainty
-    const double tolerance_A = uncertainty_of(A) * tolerance_factor;
-    const double tolerance_B = uncertainty_of(B) * tolerance_factor;
-    const double tolerance_C = uncertainty_of(C) * tolerance_factor;
+    const double tolerance_A = serializing_error_of(A) * tolerance_factor;
+    const double tolerance_B = serializing_error_of(B) * tolerance_factor;
+    const double tolerance_C = serializing_error_of(C) * tolerance_factor;
     const double CB_length = (B - C).length();
     const double AB_length = (B - A).length();
     Geom::Point C_reflect_scaled = B + (B - C) / CB_length * AB_length;
@@ -1083,7 +1099,7 @@ void Node::pickBestType()
                 _type = NODE_SYMMETRIC;
                 break;
             }*/
-            if (three_points_are_in_line(_front.position(), position(), _back.position())) {
+            if (are_collinear_within_serializing_error(_front.position(), position(), _back.position())) {
                 _type = NODE_SMOOTH;
                 break;
             }
@@ -1092,12 +1108,12 @@ void Node::pickBestType()
         // we know that if front is degenerate, back isn't, because
         // both_degen was false
         if (front_degen && _next() && _next()->_back.isDegenerate()) {
-            if (three_points_are_in_line(_next()->position(), position(), _back.position())) {
+            if (are_collinear_within_serializing_error(_next()->position(), position(), _back.position())) {
                 _type = NODE_SMOOTH;
                 break;
             }
         } else if (back_degen && _prev() && _prev()->_front.isDegenerate()) {
-            if (three_points_are_in_line(_prev()->position(), position(), _front.position())) {
+            if (are_collinear_within_serializing_error(_prev()->position(), position(), _front.position())) {
                 _type = NODE_SMOOTH;
                 break;
             }
