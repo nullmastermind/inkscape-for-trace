@@ -228,6 +228,8 @@ set(inkscape_SRC
   actions/actions-file.cpp
   actions/actions-helper.h
   actions/actions-helper.cpp
+  actions/actions-object.h
+  actions/actions-object.cpp
   actions/actions-output.h
   actions/actions-output.cpp
   actions/actions-selection.h

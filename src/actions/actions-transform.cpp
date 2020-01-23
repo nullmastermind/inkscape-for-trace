@@ -42,8 +42,6 @@ transform_translate(const Glib::VariantBase& value, InkscapeApplication *app)
         return;
     }
 
-    std::cout << "dx: " << dx << " dy: " << dy << std::endl;
-
     auto selection = app->get_active_selection();
     selection->move(dx, dy);
 

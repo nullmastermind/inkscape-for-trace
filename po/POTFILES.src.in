@@ -5,6 +5,7 @@
 ../share/templates/templates.h
 ../src/actions/actions-base.cpp
 ../src/actions/actions-file.cpp
+../src/actions/actions-object.cpp
 ../src/actions/actions-output.cpp
 ../src/actions/actions-selection.cpp
 ../src/actions/actions-transform.cpp

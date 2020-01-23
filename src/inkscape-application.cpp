@@ -43,6 +43,7 @@
 
 #include "actions/actions-base.h"      // Actions
 #include "actions/actions-file.h"      // Actions
+#include "actions/actions-object.h"    // Actions
 #include "actions/actions-output.h"    // Actions
 #include "actions/actions-selection.h" // Actions
 #include "actions/actions-transform.h" // Actions
@@ -538,6 +539,7 @@ ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
     // ======================== Actions =========================
     add_actions_base(this);      // actions that are GUI independent
     add_actions_file(this);      // actions for file handling
+    add_actions_object(this);    // actions for object manipulation
     add_actions_output(this);    // actions for file export
     add_actions_selection(this); // actions for object selection
     add_actions_transform(this); // actions for transforming selected objects
