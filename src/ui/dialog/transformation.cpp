@@ -80,8 +80,8 @@ Transformation::Transformation()
       _scalar_transform_b     ("_B:", _("Transformation matrix element B")),
       _scalar_transform_c     ("_C:", _("Transformation matrix element C")),
       _scalar_transform_d     ("_D:", _("Transformation matrix element D")),
-      _scalar_transform_e     ("_E:", _("Transformation matrix element E")),
-      _scalar_transform_f     ("_F:", _("Transformation matrix element F")),
+      _scalar_transform_e     ("_E:", _("Transformation matrix element E"), UNIT_TYPE_LINEAR, "", "", &_units_transform),
+      _scalar_transform_f     ("_F:", _("Transformation matrix element F"), UNIT_TYPE_LINEAR, "", "", &_units_transform),
 
       _counterclockwise_rotate (),
       _clockwise_rotate (),
@@ -368,6 +368,15 @@ void Transformation::layoutPageSkew()
 
 void Transformation::layoutPageTransform()
 {
+    _units_transform.setUnitType(UNIT_TYPE_LINEAR);
+    // Setting default unit to document unit
+    SPDesktop *dt = getDesktop();
+    SPNamedView *nv = dt->getNamedView();
+    if (nv->display_units) {
+        _units_transform.setUnit(nv->display_units->abbr);
+    }
+    _units_transform.set_tooltip_text(_("E and F units"));
+
     _scalar_transform_a.setWidgetSizeRequest(65, -1);
     _scalar_transform_a.setRange(-1e10, 1e10);
     _scalar_transform_a.setDigits(3);
@@ -445,12 +454,13 @@ void Transformation::layoutPageTransform()
     _scalar_transform_f.set_hexpand();
 
     _page_transform.table().attach(_scalar_transform_f, 2, 1, 1, 1);
+    _page_transform.table().attach(_units_transform, 2, 2, 1, 1);
 
     _scalar_transform_f.signal_value_changed()
         .connect(sigc::mem_fun(*this, &Transformation::onTransformValueChanged));
 
     // Edit existing matrix
-    _page_transform.table().attach(_check_replace_matrix, 0, 2, 2, 1);
+    _page_transform.table().attach(_check_replace_matrix, 0, 3, 2, 1);
 
     _check_replace_matrix.set_active(false);
     _check_replace_matrix.signal_toggled()
@@ -583,8 +593,8 @@ void Transformation::updatePageTransform(Inkscape::Selection *selection)
             _scalar_transform_b.setValue(new_displayed[1]);
             _scalar_transform_c.setValue(new_displayed[2]);
             _scalar_transform_d.setValue(new_displayed[3]);
-            _scalar_transform_e.setValue(new_displayed[4]);
-            _scalar_transform_f.setValue(new_displayed[5]);
+            _scalar_transform_e.setValue(new_displayed[4], "px");
+            _scalar_transform_f.setValue(new_displayed[5], "px");
         } else {
             // do nothing, so you can apply the same matrix to many objects in turn
         }
@@ -914,8 +924,8 @@ void Transformation::applyPageTransform(Inkscape::Selection *selection)
     double b = _scalar_transform_b.getValue();
     double c = _scalar_transform_c.getValue();
     double d = _scalar_transform_d.getValue();
-    double e = _scalar_transform_e.getValue();
-    double f = _scalar_transform_f.getValue();
+    double e = _scalar_transform_e.getValue("px");
+    double f = _scalar_transform_f.getValue("px");
 
     Geom::Affine displayed(a, b, c, d, e, f);
     if (displayed.isSingular()) {
@@ -1073,8 +1083,8 @@ void Transformation::onReplaceMatrixToggled()
     double b = _scalar_transform_b.getValue();
     double c = _scalar_transform_c.getValue();
     double d = _scalar_transform_d.getValue();
-    double e = _scalar_transform_e.getValue();
-    double f = _scalar_transform_f.getValue();
+    double e = _scalar_transform_e.getValue("px");
+    double f = _scalar_transform_f.getValue("px");
 
     Geom::Affine displayed (a, b, c, d, e, f);
     Geom::Affine current = selection->items().front()->transform; // take from the first item in selection
@@ -1090,8 +1100,8 @@ void Transformation::onReplaceMatrixToggled()
     _scalar_transform_b.setValue(new_displayed[1]);
     _scalar_transform_c.setValue(new_displayed[2]);
     _scalar_transform_d.setValue(new_displayed[3]);
-    _scalar_transform_e.setValue(new_displayed[4]);
-    _scalar_transform_f.setValue(new_displayed[5]);
+    _scalar_transform_e.setValue(new_displayed[4], "px");
+    _scalar_transform_f.setValue(new_displayed[5], "px");
 }
 
 void Transformation::onScaleProportionalToggled()
@@ -1141,8 +1151,8 @@ void Transformation::onClear()
         _scalar_transform_b.setValue(0);
         _scalar_transform_c.setValue(0);
         _scalar_transform_d.setValue(1);
-        _scalar_transform_e.setValue(0);
-        _scalar_transform_f.setValue(0);
+        _scalar_transform_e.setValue(0, "px");
+        _scalar_transform_f.setValue(0, "px");
         break;
     }
     }
