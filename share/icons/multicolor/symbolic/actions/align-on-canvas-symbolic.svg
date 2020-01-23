@@ -15,11 +15,9 @@
    sodipodi:docname="align-on-canvas-symbolic.svg"
    inkscape:version="1.0beta0 (1b5d333, 2019-09-08)">
 <style id="s0">
-   .base    { fill: #000000; }
    .success { fill: #009909; }
    .warning { fill: #FF1990; }
    .error   { fill: #00AAFF; }
-   .dark    {  }
   </style>
   <style id="s2"> 
      @import '../../highlights.css'; 
@@ -38,6 +36,7 @@
      inkscape:window-x="54"
      inkscape:window-y="-8"
      inkscape:current-layer="layercompo"
+     inkscape:document-rotation="0"
      inkscape:window-width="1858"
      inkscape:window-height="1177"
      inkscape:window-maximized="1">

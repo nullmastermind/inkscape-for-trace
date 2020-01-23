@@ -2,14 +2,7 @@
 Name=multicolor
 Comment=next generation theme for inkscape
 Hidden=true
-Directories=symbolic/actions,symbolic/apps
-
-[symbolic/apps]
-MinSize=8
-Size=16
-MaxSize=512
-Context=Actions
-Type=Scalable
+Directories=symbolic/actions
 
 [symbolic/actions]
 MinSize=8

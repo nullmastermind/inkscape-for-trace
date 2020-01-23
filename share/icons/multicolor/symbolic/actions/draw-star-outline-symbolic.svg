@@ -16,11 +16,9 @@
    version="1.1">
   <style
      id="s0">
-.base { fill:#000000; }
 .success { fill:#009909; }
 .warning { fill:#FF1990; }
 .error { fill:#00AAFF; }
-.dark { }
 </style>
   <style
      id="s2">
@@ -40,6 +38,7 @@
   <defs
      id="defs8" />
   <sodipodi:namedview
+     inkscape:document-rotation="0"
      inkscape:snap-global="false"
      inkscape:current-layer="svg1"
      inkscape:window-maximized="1"

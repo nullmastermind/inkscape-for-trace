@@ -15,11 +15,9 @@
    id="svg1"
    version="1.1">
 <style id="s0">
-   .base    { fill: #000000; }
    .success { fill: #009909; }
    .warning { fill: #FF1990; }
    .error   { fill: #00AAFF; }
-   .dark    {  }
   </style>
   <style id="s2"> 
      @import '../../highlights.css'; 
@@ -60,6 +58,7 @@
        effect="join_type" />
   </defs>
   <sodipodi:namedview
+     inkscape:document-rotation="0"
      inkscape:current-layer="svg1"
      inkscape:window-maximized="1"
      inkscape:window-y="27"
@@ -96,7 +95,7 @@
        style="opacity:0.4;"
        id="polygon1130" />
     <path
-       class="base"
+       
        inkscape:label="poly out"
        inkscape:connector-curvature="0"
        d="m 937.55,406.41 a 1.5,1.5 0 0 0 1.47805,-1.24434 l 0.32,-1.85 a 1.5,1.5 0 0 0 -0.43139,-1.33014 l -5.02,-4.89 a 1.5,1.5 0 0 0 -0.83243,2.5591 l 6.93,-1 a 1.5,1.5 0 0 0 1.13077,-0.82056 l 2.36,-4.78 a 1.5,1.5 0 0 0 -0.46213,-1.87672 l -9.45,-6.88 a 1.5,1.5 0 0 0 -1.76449,-9.1e-4 l -10.2,7.41 a 1.5,1.5 0 0 0 -0.54517,1.67647 l 3.89,11.99 A 1.5,1.5 0 0 0 926.38,406.41 Z m -13.63321,-13.9529 a 1.5,1.5 0 0 0 -0.54517,1.67647 l 10.2,-7.41 a 1.5,1.5 0 0 0 -1.76449,-9.1e-4 l 9.45,6.88 a 1.5,1.5 0 0 0 -0.46213,-1.87672 l -2.36,4.78 a 1.5,1.5 0 0 0 1.13077,-0.82056 l -6.93,1 a 1.5,1.5 0 0 0 -0.83243,2.5591 l 5.02,4.89 a 1.5,1.5 0 0 0 -0.43139,-1.33014 l -0.32,1.85 A 1.5,1.5 0 0 0 937.55,403.41 h -11.17 a 1.5,1.5 0 0 0 1.42679,1.0371 z"
@@ -112,7 +111,7 @@
        style="opacity:0.2;"
        id="polygon1136" />
     <path
-       class="base"
+       
        inkscape:label="star out"
        inkscape:original-d="m 942.88,406.71 -6.2,3.25 1.19,-6.9 -5.02,-4.89 6.93,-1 3.1,-6.28 3.1,6.28 6.93,1 -5.01,4.89 1.18,6.9 z"
        inkscape:path-effect="#path-effect1916"

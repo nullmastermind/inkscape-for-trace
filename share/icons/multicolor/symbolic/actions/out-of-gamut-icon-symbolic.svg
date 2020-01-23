@@ -3,11 +3,9 @@
 
 <svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" version="1.1" width="249.50522" height="249.50523" id="svg2" sodipodi:docname="out-of-gamut-icon-symbolic.svg" inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
 <style id="s0">
-.base { fill:#000000; }
 .success { fill:#009909; }
 .warning { fill:#FF1990; }
 .error { fill:#00AAFF; }
-.dark { }
 </style>
 <style id="s2">
 @import '../../highlights.css';

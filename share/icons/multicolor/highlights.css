@@ -16,11 +16,11 @@
 }
 
 .error {
-    fill: #00AAFF;
+    fill: #0099E6;
 }
 
 .dark .base {
-    fill: #ffffff;
+    fill: #EBEBEB;
 }
 
 .dark .success {
@@ -32,12 +32,5 @@
 }
 
 .dark .error {
-    fill: #00AAFF;
-}
-
-
-/* do not change */
-
-.dark #background {
-    opacity: 0.8 !important;
+    fill: #0099E6;
 }

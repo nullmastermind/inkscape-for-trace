@@ -15,11 +15,9 @@
    id="svg1"
    version="1.1">
 <style id="s0">
-   .base    { fill: #000000; }
    .success { fill: #009909; }
    .warning { fill: #FF1990; }
    .error   { fill: #00AAFF; }
-   .dark    {  }
   </style>
   <style id="s2"> 
      @import '../../highlights.css'; 
@@ -51,6 +49,7 @@
        effect="join_type" />
   </defs>
   <sodipodi:namedview
+     inkscape:document-rotation="0"
      inkscape:current-layer="g0"
      inkscape:window-maximized="1"
      inkscape:window-y="-8"
@@ -82,13 +81,13 @@
               id="g2263"
        transform="matrix(0.58899477,0,0,0.58899477,-572.27697,-131.55209)">
       <path
-         class="base"
+         
          id="rect2253"
                   transform="rotate(-45)"
          d="m 522.29419,862.97675 h 13.6437 v 6.59477 h -13.6437 z"
          inkscape:connector-curvature="0" />
       <path
-         class="base"
+         
                   d="m 997.4363,232.32178 -1.98083,1.98083 -4.66624,-4.66624 1.98083,-1.98083 c 0.82788,-0.82788 2.17319,-0.82788 3.00107,0 l 1.66517,1.66517 c 0.82788,0.82788 0.82788,2.17319 0,3.00107 z"
          id="path2255"
          inkscape:connector-curvature="0"

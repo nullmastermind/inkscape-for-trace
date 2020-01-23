@@ -15,11 +15,9 @@
    id="svg1"
    version="1.1">
 <style id="s0">
-   .base    { fill: #000000; }
    .success { fill: #009909; }
    .warning { fill: #FF1990; }
    .error   { fill: #00AAFF; }
-   .dark    {  }
   </style>
   <style id="s2"> 
      @import '../../highlights.css'; 
@@ -41,6 +39,7 @@
      id="defs1010" />
   <sodipodi:namedview
      inkscape:snap-bbox="true"
+     inkscape:document-rotation="0"
      inkscape:current-layer="svg1"
      inkscape:window-maximized="1"
      inkscape:window-y="27"
@@ -68,26 +67,26 @@
        d="M 0,0 H 16 V 16 H 0 Z"
        id="background" />
     <path
-       class="base"
+       
        sodipodi:nodetypes="sccssss"
        id="path30001"
        d="M 10.671831,1.2812656 6.6562611,5.1250091 10.687458,9.4685388 14.843721,5.593742 c 0.23726,-0.2211931 0.18772,-0.6911461 -0.125,-1.0312658 L 11.739697,1.3224322 C 11.326937,0.87351261 10.965898,0.99977917 10.671831,1.2812989 Z"
        inkscape:connector-curvature="0" />
     <path
-       class="base"
+       
        sodipodi:nodetypes="csssscc"
        id="path30003"
        d="M 5.4999954,6.2185415 3.2998973,8.2739398 C 2.9658375,8.5860728 2.8343776,8.9913392 3.1395107,9.3377389 l 2.9229509,3.3187971 c 0.3416931,0.387933 0.7905927,0.391266 1.0742658,0.124933 l 2.3632647,-2.218931 z"
        style="opacity:0.5"
        inkscape:connector-curvature="0" />
     <path
-       class="base"
+       
        sodipodi:nodetypes="cscccc"
        d="m 8.9998925,13.666802 c -0.3877997,0 -0.6999994,0.297333 -0.6999994,0.666666 0,0.369333 0.3121997,0.666666 0.6999994,0.666666 h 5.9999955 l 10e-5,-1.333332 z"
        id="path30005"
        inkscape:connector-curvature="0" />
     <path
-       class="base"
+       
        inkscape:connector-curvature="0"
        id="path30005-4"
        d="m 3.4561505,15.000134 c 0.3877996,0 0.6999994,-0.297333 0.6999994,-0.666666 0,-0.369333 -0.3121998,-0.666666 -0.6999994,-0.666666 H 0.99990583 v 1.333332 z"

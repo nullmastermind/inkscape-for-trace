@@ -39,17 +39,17 @@
        effect="join_type" />
   </defs>
   <style
-     id="s0">.base { fill:#000000; }
+     id="s0">
 .success { fill:#009909; }
 .warning { fill:#FF1990; }
 .error { fill:#00AAFF; }
-.dark {  }
 </style>
   <style
      id="s2">
 @import '../../highlights.css';
 </style>
   <sodipodi:namedview
+     inkscape:document-rotation="0"
      inkscape:current-layer="g18423"
      inkscape:window-maximized="1"
      inkscape:window-y="-6"

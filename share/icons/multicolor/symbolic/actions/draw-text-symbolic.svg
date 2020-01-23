@@ -15,11 +15,9 @@
    id="svg1"
    version="1.1">
 <style id="s0">
-   .base    { fill: #000000; }
    .success { fill: #009909; }
    .warning { fill: #FF1990; }
    .error   { fill: #00AAFF; }
-   .dark    {  }
   </style>
   <style id="s2"> 
      @import '../../highlights.css'; 
@@ -56,6 +54,7 @@
        effect="fillet_chamfer" />
   </defs>
   <sodipodi:namedview
+     inkscape:document-rotation="0"
      inkscape:current-layer="g0"
      inkscape:window-maximized="1"
      inkscape:window-y="-8"
@@ -88,7 +87,7 @@
        inkscape:connector-curvature="0"
        id="path1713"
        d="M 8.3086493,12.191652 H 3.6868973 L 3,14 H 0 L 4.6967477,3 H 7.3166388 L 12,14 H 9 Z M 6.0374978,6.0826243 4.6904759,10 h 2.614595 z"
-       class="base" />
+        />
     <path
        style="stroke-width:1.12034"
        inkscape:connector-curvature="0"

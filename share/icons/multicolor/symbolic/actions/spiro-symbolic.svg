@@ -18,11 +18,9 @@
      id="defs2144" />
   <style
      id="s0">
-.base { fill:#000000; }
 .success { fill:#009909; }
 .warning { fill:#FF1990; }
 .error { fill:#00AAFF; }
-.dark { }
 </style>
   <style
      id="s2">
@@ -39,6 +37,7 @@
      inkscape:cy="8.3242846"
      inkscape:window-x="54"
      inkscape:window-y="-8"
+     inkscape:document-rotation="0"
      inkscape:snap-global="false"
      inkscape:window-width="1858"
      inkscape:window-height="1177"

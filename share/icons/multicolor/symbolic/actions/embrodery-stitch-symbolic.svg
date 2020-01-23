@@ -15,11 +15,10 @@
    sodipodi:docname="embrodery-stitch-symbolic.svg"
    inkscape:version="1.1-dev (1fceb22ce1, 2019-12-30, custom)">
   <style
-     id="s0">.base { fill:#000000; }
+     id="s0">
 .success { fill:#009909; }
 .warning { fill:#FF1990; }
 .error { fill:#00AAFF; }
-.dark {  }
 </style>
   <style
      id="s2">
@@ -70,6 +69,7 @@
      inkscape:cy="7.5959797"
      inkscape:window-x="0"
      inkscape:window-y="27"
+     inkscape:document-rotation="0"
      inkscape:window-width="2560"
      inkscape:window-height="1376"
      inkscape:window-maximized="1"

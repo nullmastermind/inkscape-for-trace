@@ -17,11 +17,10 @@
   <defs
      id="defs1765" />
   <style
-     id="s0">.base { fill:#000000; }
+     id="s0">
 .success { fill:#009909; }
 .warning { fill:#FF1990; }
-.error { fill:#00AAFF; }
-.dark {  }
+.error { fill:#0099E6; }
 </style>
   <style
      id="s2">
@@ -38,6 +37,7 @@
      inkscape:cy="8.9906751"
      inkscape:window-x="0"
      inkscape:window-y="27"
+     inkscape:document-rotation="0"
      inkscape:snap-global="false"
      inkscape:window-width="2560"
      inkscape:window-height="1376"

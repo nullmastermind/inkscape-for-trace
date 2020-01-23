@@ -15,11 +15,10 @@
    height="24"
    width="24">
   <style
-     id="s0">.base { fill:#000000; }
+     id="s0">
 .success { fill:#009909; }
 .warning { fill:#FF1990; }
 .error { fill:#00AAFF; }
-.dark {  }
 </style>
   <style
      id="s2">
@@ -54,6 +53,7 @@
      gridtolerance="10"
      objecttolerance="10"
      borderopacity="1"
+     inkscape:document-rotation="0"
      bordercolor="#666666"
      pagecolor="#ffffff" />
   <defs

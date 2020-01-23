@@ -15,11 +15,9 @@
    sodipodi:docname="align-vertical-bottom-symbolic.svg"
    inkscape:version="1.0beta0 (1b5d333, 2019-09-08)">
 <style id="s0">
-   .base    { fill: #000000; }
    .success { fill: #009909; }
    .warning { fill: #FF1990; }
    .error   { fill: #00AAFF; }
-   .dark    {  }
   </style>
   <style id="s2"> 
      @import '../../highlights.css'; 
@@ -53,6 +51,7 @@
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg1"
+     inkscape:document-rotation="0"
      inkscape:snap-global="true">
     <inkscape:grid
        type="xygrid"

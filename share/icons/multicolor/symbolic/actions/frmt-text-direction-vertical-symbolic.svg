@@ -15,11 +15,10 @@
    sodipodi:docname="frmt-text-direction-vertical-symbolic.svg"
    inkscape:version="1.1-dev (6039630, 2019-12-20)">
   <style
-     id="s0">.base { fill:#000000; }
+     id="s0">
 .success { fill:#009909; }
 .warning { fill:#FF1990; }
 .error { fill:#00AAFF; }
-.dark {  }
 </style>
   <style
      id="s2">
@@ -54,6 +53,7 @@
      inkscape:window-y="-6"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg1"
+     inkscape:document-rotation="0"
      inkscape:snap-global="true">
     <inkscape:grid
        type="xygrid"
@@ -89,7 +89,7 @@
      inkscape:connector-curvature="0"
      id="path1713"
      d="M 13.413488,5.1780236 H 11.31269 L 11.000463,6 H 9.6368273 L 11.771712,1 h 1.19086 l 2.128801,5 H 13.727736 Z M 12.381144,2.4011927 11.768862,4.1818182 h 1.188452 z"
-     class="base" />
+      />
   <path
      class="success"
      style="opacity:1;stroke-width:0.581489"

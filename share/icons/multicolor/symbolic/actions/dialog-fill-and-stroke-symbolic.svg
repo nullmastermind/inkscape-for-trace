@@ -15,11 +15,9 @@
    id="svg1"
    version="1.1">
 <style id="s0">
-   .base    { fill: #000000; }
    .success { fill: #009909; }
    .warning { fill: #FF1990; }
    .error   { fill: #00AAFF; }
-   .dark    {  }
   </style>
   <style id="s2"> 
      @import '../../highlights.css'; 
@@ -40,6 +38,7 @@
   <defs
      id="defs1158" />
   <sodipodi:namedview
+     inkscape:document-rotation="0"
      inkscape:current-layer="svg1"
      inkscape:window-maximized="1"
      inkscape:window-y="-8"
@@ -74,7 +73,7 @@
        id="path3292"
        inkscape:connector-curvature="0" />
     <path
-       class="base"
+       
        inkscape:label="mid"
        id="polygon3296"
        d="M 6.1468328,8.881729 5.2115696,10.820094 6.2961354,11.90466 8.2345047,10.96941 Z"
@@ -86,12 +85,12 @@
        id="path3290"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccccc"
-       class="base" />
+        />
     <path
        sodipodi:nodetypes="ccccccccc"
        inkscape:connector-curvature="0"
        d="M 0,0 V 0.9570773 L 0,12 h 0.95707778 l 0,-11.0429227 H 12 V 0 H 0.95707778 Z"
        id="rect44369"
-       class="base" />
+        />
   </g>
 </svg>

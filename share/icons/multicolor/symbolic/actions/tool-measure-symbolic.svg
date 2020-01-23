@@ -15,11 +15,9 @@
    sodipodi:docname="tool-measure-symbolic.svg"
    inkscape:version="1.0alpha2 (119fb3b5e8, 2019-06-21, custom)">
 <style id="s0">
-   .base    { fill: #000000; }
    .success { fill: #009909; }
    .warning { fill: #FF1990; }
    .error   { fill: #00AAFF; }
-   .dark    {  }
   </style>
   <style id="s2"> 
      @import '../../highlights.css'; 
@@ -101,7 +99,8 @@
      inkscape:window-x="0"
      inkscape:window-y="27"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg1">
+     inkscape:current-layer="svg1"
+     inkscape:document-rotation="0">
     <inkscape:grid
        type="xygrid"
        id="grid" />
@@ -120,7 +119,7 @@
        inkscape:path-effect="#path-effect2960"
        sodipodi:nodetypes="ccsscc"
        inkscape:connector-curvature="0"
-       class="st5  base"
+       class="st5"
        d="m 3.9673706,1.7486544 a 0.65,0.65 0 0 0 -0.65,0.65 H 9.679796 c 1.35277,0 1.673022,0.3547503 1.673221,1.4947634 l 0.0019,10.8843952 a 0.65,0.65 0 0 0 0.65,-0.650113 l -8.6875464,0 a 0.65,0.65 0 0 0 0.65,0.65 z M 12.004917,15.4277 a 0.65,0.65 0 0 0 0.65,-0.650113 L 12.653017,3.8931908 C 12.65268,1.9645529 11.731686,1.0986544 9.679796,1.0986544 H 3.3173706 a 0.65,0.65 0 0 0 -0.65,0.65 V 14.7777 a 0.65,0.65 0 0 0 0.65,0.65 z"
        id="path1224" />
     <path
@@ -130,7 +129,7 @@
        sodipodi:nodetypes="cc"
        inkscape:connector-curvature="0"
        d="m 3.5024044,10.130553 h 4.0523785 a 0.5,0.5 0 1 0 0,-0.9999998 H 3.5024044 a 0.5,0.5 0 1 0 0,0.9999998 z"
-       class="st23  base"
+       class="st23"
        id="line1228" />
     <path
        transform="translate(0.3388562,-0.2631772)"
@@ -139,7 +138,7 @@
        sodipodi:nodetypes="cc"
        inkscape:connector-curvature="0"
        d="m 3.5024044,7.4836273 h 2.3833321 a 0.5,0.5 0 1 0 0,-1 H 3.5024044 a 0.5,0.5 0 1 0 0,1 z"
-       class="st23  base"
+       class="st23"
        id="line1230" />
     <path
        transform="translate(0.3388562,-0.2631772)"
@@ -148,7 +147,7 @@
        sodipodi:nodetypes="cc"
        inkscape:connector-curvature="0"
        d="m 3.5916902,12.777479 h 2.3833321 a 0.5,0.5 0 1 0 0,-1 H 3.5916902 a 0.5,0.5 0 1 0 0,1 z"
-       class="st23  base"
+       class="st23"
        id="line1232" />
     <path
        transform="translate(0.3388562,-0.2631772)"
@@ -157,7 +156,7 @@
        sodipodi:nodetypes="cc"
        inkscape:connector-curvature="0"
        d="m 3.5024044,4.8367019 h 4.0523785 a 0.5,0.5 0 1 0 0,-1 H 3.5024044 a 0.5,0.5 0 1 0 0,1 z"
-       class="st23  base"
+       class="st23"
        id="line1226" />
   </g>
 </svg>

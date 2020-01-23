@@ -15,11 +15,9 @@
    sodipodi:docname="draw-ellipse-symbolic.svg"
    inkscape:version="1.0beta0 (1d85f8e, 2019-09-11)">
 <style id="s0">
-   .base    { fill: #000000; }
    .success { fill: #009909; }
    .warning { fill: #FF1990; }
    .error   { fill: #00AAFF; }
-   .dark    {  }
   </style>
   <style id="s2"> 
      @import '../../highlights.css'; 
@@ -83,6 +81,7 @@
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg1"
+     inkscape:document-rotation="0"
      inkscape:snap-global="false">
     <inkscape:grid
        type="xygrid"
@@ -107,7 +106,7 @@
        d="m 3.2763787,7.9999867 c 0,-2.6043712 2.1192473,-4.7236179 4.723617,-4.7236179 2.6043693,0 4.7236113,2.1192458 4.7236113,4.7236179 0,2.6043653 -2.119248,4.7236123 -4.7236113,4.7236123 -2.604371,0 -4.723617,-2.11924 -4.723617,-4.7236123 z m 11.1972283,0 c 0,-3.5796945 -2.893918,-6.4736179 -6.4736113,-6.4736179 -3.5796943,0 -6.473617,2.8939225 -6.473617,6.4736179 0,3.5796963 2.893924,6.4736123 6.473617,6.4736123 3.5796893,0 6.4736113,-2.893921 6.4736113,-6.4736123 z"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sssss"
-       class="base"
+       
        inkscape:path-effect="#path-effect992"
        inkscape:original-d="m 7.9999957,13.598599 c -3.092032,0 -5.598617,-2.506578 -5.598617,-5.5986123 0,-3.0920333 2.506585,-5.5986179 5.598617,-5.5986179 3.0920313,0 5.5986113,2.5065846 5.5986113,5.5986179 0,3.0920283 -2.506585,5.5986123 -5.5986113,5.5986123 z"
        transform="matrix(1.082096,0,0,1.082096,-0.65676737,-0.65676663)" />

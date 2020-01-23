@@ -46,17 +46,17 @@
        effect="fillet_chamfer" />
   </defs>
   <style
-     id="s0">.base { fill:#000000; }
+     id="s0">
 .success { fill:#009909; }
 .warning { fill:#FF1990; }
 .error { fill:#00AAFF; }
-.dark {  }
 </style>
   <style
      id="s2">
 @import '../../highlights.css';
 </style>
   <sodipodi:namedview
+     inkscape:document-rotation="0"
      inkscape:current-layer="transform-skew-vertical"
      inkscape:window-maximized="1"
      inkscape:window-y="-6"
@@ -91,7 +91,7 @@
        d="m 539,722.3622 h 2 v 6 h 2 v -6 h 2 l -3,-4 z"
        id="path19386" />
     <path
-       class="base"
+       
        style="opacity:0.3"
        d="m 529,721.3622 v 7 h 7 v -7 z"
        id="path19388"
@@ -99,7 +99,7 @@
     <path
        inkscape:original-d="m 539,712.3622 -10,9 v 7 l 10,-8.2188 z"
        inkscape:path-effect="#path-effect2965"
-       class="base"
+       
        style="opacity:1"
        d="m 538.25658,713.03127 -8.51316,7.66186 A 2.2457293,2.2457293 114.00639 0 0 529,722.36236 v 4.99968 a 0.47260315,0.47260315 25.291949 0 0 0.77268,0.36511 l 8.45464,-6.9487 A 2.1166317,2.1166317 115.29195 0 0 539,719.14324 v -5.78088 a 0.44543518,0.44543518 24.006394 0 0 -0.74342,-0.33109 z"
        id="path19390"

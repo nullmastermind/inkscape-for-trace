@@ -15,11 +15,9 @@
    id="svg1">
   <style
      id="s0">
-.base { fill:#000000; }
 .success { fill:#009909; }
 .warning { fill:#FF1990; }
 .error { fill:#00AAFF; }
-.dark { }
 </style>
   <style
      id="s2">
@@ -47,6 +45,7 @@
      inkscape:cy="14"
      inkscape:cx="14"
      inkscape:zoom="23.5"
+     inkscape:document-rotation="0"
      showgrid="true"
      id="base">
     <inkscape:grid

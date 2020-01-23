@@ -7,19 +7,18 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   version="1.1"
-   id="svg1"
-   width="16"
-   height="16"
-   viewBox="0 0 16 16"
+   inkscape:version="1.1-dev (3d47766, 2020-01-22)"
    sodipodi:docname="offset-symbolic.svg"
-   inkscape:version="1.1-dev (1fceb22ce1, 2019-12-30, custom)">
+   viewBox="0 0 16 16"
+   height="16"
+   width="16"
+   id="svg1"
+   version="1.1">
   <style
-     id="s0">.base { fill:#000000; }
+     id="s0">
 .success { fill:#009909; }
 .warning { fill:#FF1990; }
 .error { fill:#00AAFF; }
-.dark {  }
 </style>
   <style
      id="s2">
@@ -28,19 +27,29 @@
   <defs
      id="defs5868">
     <inkscape:path-effect
-       effect="interpolate"
-       id="path-effect5970"
-       is_visible="true"
+       steps="16"
+       equidistant_spacing="true"
        trajectory="M 0.5,3.7332036 -13.561598,-8.2670085"
-       equidistant_spacing="true"
-       steps="16" />
-    <inkscape:path-effect
-       effect="interpolate"
-       id="path-effect5967"
        is_visible="true"
-       trajectory="M 0,0 V 0"
+       id="path-effect5970"
+       effect="interpolate" />
+    <inkscape:path-effect
+       steps="5"
        equidistant_spacing="true"
-       steps="5" />
+       trajectory="M 0,0 V 0"
+       is_visible="true"
+       id="path-effect5967"
+       effect="interpolate" />
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect5964"
+       is_visible="true"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
     <inkscape:path-effect
        only_selected="false"
        apply_with_weight="true"
@@ -49,38 +58,29 @@
        steps="2"
        weight="33.333333"
        is_visible="true"
-       id="path-effect5964"
-       effect="bspline" />
-    <inkscape:path-effect
-       effect="bspline"
        id="path-effect5960"
-       is_visible="true"
-       weight="33.333333"
-       steps="2"
-       helper_size="0"
-       apply_no_weight="true"
-       apply_with_weight="true"
-       only_selected="false" />
+       effect="bspline" />
   </defs>
   <sodipodi:namedview
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     id="namedview"
-     showgrid="true"
-     inkscape:zoom="19.209395"
-     inkscape:cx="5.8656877"
-     inkscape:cy="12.008866"
-     inkscape:window-x="0"
-     inkscape:window-y="27"
-     showguides="true"
-     inkscape:window-width="2560"
-     inkscape:window-height="1376"
+     inkscape:current-layer="layercompo"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg1">
+     inkscape:window-height="1376"
+     inkscape:window-width="2560"
+     showguides="true"
+     inkscape:document-rotation="0"
+     inkscape:window-y="27"
+     inkscape:window-x="0"
+     inkscape:cy="5.1900686"
+     inkscape:cx="8.5949818"
+     inkscape:zoom="54.332374"
+     showgrid="true"
+     id="namedview"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10">
     <inkscape:grid
-       type="xygrid"
-       id="grid" />
+       id="grid"
+       type="xygrid" />
   </sodipodi:namedview>
   <metadata
      id="metadata1906">
@@ -92,7 +92,7 @@
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <cc:license
            rdf:resource="http://creativecommons.org/publicdomain/zero/1.0/" />
-        <dc:title></dc:title>
+        <dc:title />
         <dc:date>13 Jan 2019</dc:date>
         <dc:creator>
           <cc:Agent>
@@ -141,25 +141,29 @@ Jabier Arraiza</dc:title>
     </rdf:RDF>
   </metadata>
   <g
-     inkscape:groupmode="layer"
+     inkscape:label="offset"
      id="layercompo"
-     inkscape:label="offset">
+     inkscape:groupmode="layer">
+    <path
+       inkscape:connector-curvature="0"
+       style="opacity:0;fill:none"
+       d="M 0,0 H 16 V 16 H 0 Z"
+       id="rect22048" />
     <path
        class="error"
-       id="path5952"
-       style="stroke-width:1.14443"
-       d="M 7.96875 1.2148438 A 6.7086277 6.7086277 0 0 0 7.2382812 1.265625 L 1.78125 5.5429688 A 6.7086277 6.7086277 0 0 0 1.4257812 6.8789062 L 8.4375 1.2265625 A 6.7086277 6.7086277 0 0 0 8.0527344 1.2148438 A 6.7086277 6.7086277 0 0 0 7.96875 1.2148438 z M 9.1386719 1.3027344 L 1.3535156 7.5800781 A 6.7086277 6.7086277 0 0 0 1.34375 7.9238281 A 6.7086277 6.7086277 0 0 0 1.3847656 8.6542969 L 10.011719 1.5078125 A 6.7086277 6.7086277 0 0 0 9.1386719 1.3027344 z M 6.1386719 1.4941406 A 6.7086277 6.7086277 0 0 0 2.2695312 4.5253906 L 6.1386719 1.4941406 z M 10.560547 1.7011719 L 1.4726562 9.2324219 A 6.7086277 6.7086277 0 0 0 1.7246094 10.15625 L 11.271484 2.0390625 A 6.7086277 6.7086277 0 0 0 10.560547 1.7011719 z M 11.724609 2.3085938 L 1.921875 10.644531 A 6.7086277 6.7086277 0 0 0 2.34375 11.445312 L 12.318359 2.7480469 A 6.7086277 6.7086277 0 0 0 11.724609 2.3085938 z M 12.695312 3.0820312 L 2.6230469 11.863281 A 6.7086277 6.7086277 0 0 0 3.1933594 12.548828 L 13.193359 3.6132812 A 6.7086277 6.7086277 0 0 0 12.695312 3.0820312 z M 13.5 4.0097656 L 3.5527344 12.898438 A 6.7086277 6.7086277 0 0 0 4.2636719 13.458984 L 13.902344 4.6425781 A 6.7086277 6.7086277 0 0 0 13.5 4.0097656 z M 14.138672 5.1035156 L 4.703125 13.736328 A 6.7086277 6.7086277 0 0 0 5.5664062 14.154297 L 14.433594 5.8574219 A 6.7086277 6.7086277 0 0 0 14.138672 5.1035156 z M 14.583984 6.4003906 L 6.0976562 14.341797 A 6.7086277 6.7086277 0 0 0 7.1484375 14.570312 L 14.732422 7.3183594 A 6.7086277 6.7086277 0 0 0 14.583984 6.4003906 z M 14.759766 7.9824219 L 7.8125 14.626953 A 6.7086277 6.7086277 0 0 0 8.0527344 14.632812 A 6.7086277 6.7086277 0 0 0 9.1699219 14.537109 L 14.638672 9.1953125 A 6.7086277 6.7086277 0 0 0 14.759766 7.9824219 z M 14.380859 10.146484 L 10.126953 14.300781 A 6.7086277 6.7086277 0 0 0 14.380859 10.146484 z " />
-    <path
-       id="rect22048"
-       d="M 0,0 H 16 V 16 H 0 Z"
-       style="opacity:0;fill:none" />
-    <path
-       id="circle5956"
+       id="circle5956-0"
        style="opacity:1;stroke-width:1.14443"
-       d="M 13.075706,7.9233732 A 5.0235491,5.0235491 0 0 1 8.0521564,12.946922 5.0235491,5.0235491 0 0 1 3.0286074,7.9233732 5.0235491,5.0235491 0 0 1 8.0521564,2.8998241 5.0235491,5.0235491 0 0 1 13.075706,7.9233732" />
+       d="M 14.815948,7.9233734 A 6.7637909,6.7637909 0 0 1 8.0521566,14.687164 6.7637909,6.7637909 0 0 1 1.2883658,7.9233734 6.7637909,6.7637909 0 0 1 8.0521566,1.1595825 6.7637909,6.7637909 0 0 1 14.815948,7.9233734"
+       inkscape:connector-curvature="0" />
     <path
-       id="path6539"
+       inkscape:connector-curvature="0"
+       d="M 13.075706,7.9233732 A 5.0235491,5.0235491 0 0 1 8.0521564,12.946922 5.0235491,5.0235491 0 0 1 3.0286074,7.9233732 5.0235491,5.0235491 0 0 1 8.0521564,2.8998241 5.0235491,5.0235491 0 0 1 13.075706,7.9233732"
+       style="opacity:1;stroke-width:1.14443"
+       id="circle5956" />
+    <path
+       inkscape:connector-curvature="0"
+       d="M 4.6464958,2.5054502 A 0.6616239,0.6616239 0 0 1 3.9848719,3.1670741 0.6616239,0.6616239 0 0 1 3.323248,2.5054502 0.6616239,0.6616239 0 0 1 3.9848719,1.8438264 0.6616239,0.6616239 0 0 1 4.6464958,2.5054502 Z"
        style="fill:#000000;stroke:none;stroke-width:0.330812;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 4.6464958,2.5054502 A 0.6616239,0.6616239 0 0 1 3.9848719,3.1670741 0.6616239,0.6616239 0 0 1 3.323248,2.5054502 0.6616239,0.6616239 0 0 1 3.9848719,1.8438264 0.6616239,0.6616239 0 0 1 4.6464958,2.5054502 Z" />
+       id="path6539" />
   </g>
 </svg>
