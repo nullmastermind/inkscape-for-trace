@@ -417,7 +417,9 @@ override) the bindings in the main default.xml.
   <bind key="bracketright" modifiers="Ctrl" action="ObjectRotate90" display="true"/>
   <bind key="bracketleft" modifiers="Ctrl" action="ObjectRotate90CCW" display="true"/>
 
-  <bind action="ObjectRemoveTransform" />
+  <!--TODO: Add button to object transform dialogue for increased visibility: https://gitlab.com/inkscape/inbox/issues/1665-->
+  <bind key="t" modifiers="Shift,Alt" action="ObjectRemoveTransform" /> 
+  <bind key="T" modifiers="Shift,Alt" action="ObjectRemoveTransform" /> 
 
   <bind action="FitCanvasToSelection" />
   <bind action="FitCanvasToDrawing" />
