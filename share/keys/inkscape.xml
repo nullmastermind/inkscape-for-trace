@@ -414,9 +414,8 @@ override) the bindings in the main default.xml.
   <bind action="ObjectSetClipPath" />
   <bind action="ObjectUnSetClipPath" />
 
-  <!-- FIXME: currently these bypass the verbs, so the verbs are not bound to ctrl+[] as they should be -->
-  <bind action="ObjectRotate90" />
-  <bind action="ObjectRotate90CCW" />
+  <bind key="bracketright" modifiers="Ctrl" action="ObjectRotate90" display="true"/>
+  <bind key="bracketleft" modifiers="Ctrl" action="ObjectRotate90CCW" display="true"/>
 
   <bind action="ObjectRemoveTransform" />
 
