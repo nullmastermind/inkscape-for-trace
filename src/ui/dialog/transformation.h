@@ -128,6 +128,7 @@ protected:
     UI::Widget::UnitMenu          _units_scale;
     UI::Widget::UnitMenu          _units_rotate;
     UI::Widget::UnitMenu          _units_skew;
+    UI::Widget::UnitMenu          _units_transform;
 
     UI::Widget::ScalarUnit        _scalar_move_horizontal;
     UI::Widget::ScalarUnit        _scalar_move_vertical;
@@ -141,8 +142,8 @@ protected:
     UI::Widget::Scalar            _scalar_transform_b;
     UI::Widget::Scalar            _scalar_transform_c;
     UI::Widget::Scalar            _scalar_transform_d;
-    UI::Widget::Scalar            _scalar_transform_e;
-    UI::Widget::Scalar            _scalar_transform_f;
+    UI::Widget::ScalarUnit        _scalar_transform_e;
+    UI::Widget::ScalarUnit        _scalar_transform_f;
 
     Gtk::RadioButton         _counterclockwise_rotate;
     Gtk::RadioButton         _clockwise_rotate;
