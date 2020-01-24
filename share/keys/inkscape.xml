@@ -423,7 +423,9 @@ override) the bindings in the main default.xml.
 
   <bind action="FitCanvasToSelection" />
   <bind action="FitCanvasToDrawing" />
-  <bind action="FitCanvasToSelectionOrDrawing" />
+  <bind key="r" modifiers="Ctrl,Shift" action="FitCanvasToSelectionOrDrawing" display="true" />
+  <bind key="R" modifiers="Ctrl,Shift" action="FitCanvasToSelectionOrDrawing" />
+
 
 <!-- Path -->
 
