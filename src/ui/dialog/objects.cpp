@@ -2166,7 +2166,6 @@ ObjectsPanel::ObjectsPanel() :
 
     //Set up the color selection dialog
     GtkWidget *dlg = GTK_WIDGET(_colorSelectorDialog.gobj());
-    sp_transientize(dlg);
 
     _colorSelectorDialog.hide();
     _colorSelectorDialog.set_title (_("Select Highlight Color"));

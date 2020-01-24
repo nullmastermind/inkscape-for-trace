@@ -49,12 +49,7 @@ DockBehavior::DockBehavior(Dialog &dialog) :
         sigc::mem_fun(*this, &Inkscape::UI::Dialog::Behavior::DockBehavior::_onStateChanged)));
 
     if (_dock_item.getState() == Widget::DockItem::FLOATING_STATE) {
-        if (Gtk::Window *floating_win = _dock_item.getWindow()) {
-            sp_transientize(GTK_WIDGET(floating_win->gobj()));
-            if(!strcmp(Inkscape::Verb::get(_dialog._verb_num)->get_id() ,"DialogDocumentProperties")) {
-                floating_win->set_resizable(false);
-            }
-        }
+        _onStateChanged(Widget::DockItem::DOCKED_STATE, Widget::DockItem::FLOATING_STATE);
     }
 }
 
@@ -224,39 +219,6 @@ DockBehavior::onShutdown()
 void
 DockBehavior::onDesktopActivated(SPDesktop *desktop)
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    gint transient_policy = prefs->getIntLimited( "/options/transientpolicy/value", 1, 0, 2);
-
-#ifdef _WIN32 // Win32 special code to enable transient dialogs
-    transient_policy = 2;
-#endif
-
-    if (!transient_policy)
-        return;
-
-    Gtk::Window *floating_win = _dock_item.getWindow();
-
-    if (floating_win && _dialog.retransientize_suppress()) {
-        if (GtkWindow *dialog_win = floating_win->gobj()) {
-
-            desktop->setWindowTransient (dialog_win);
-
-            /*
-             * This enables "aggressive" transientization,
-             * i.e. dialogs always emerging on top when you switch documents. Note
-             * however that this breaks "click to raise" policy of a window
-             * manager because the switched-to document will be raised at once
-             * (so that its transients also could raise)
-             */
-            if (transient_policy == 2 && ! _dialog._hiddenF12 && !_dialog._user_hidden) {
-                // without this, a transient window not always emerges on top
-                gtk_window_present (dialog_win);
-            }
-        }
-
-        // we're done, allow next retransientizing not sooner than after 120 msec
-        _dialog.retransientize_again_timeout_add();
-    }
 }
 
 
