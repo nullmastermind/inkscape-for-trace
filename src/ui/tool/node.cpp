@@ -54,6 +54,81 @@ Inkscape::ControlType nodeTypeToCtrlType(Inkscape::UI::NodeType type)
     return result;
 }
 
+/**
+ * @brief provides means to estimate float point rounding error due to serialization to svg
+ *
+ *  Keeps cached value up to date with preferences option `/options/svgoutput/numericprecision`
+ *  to avoid costly direct reads
+ * */
+class SvgOutputPrecisionWatcher : public Inkscape::Preferences::Observer {
+public:
+    /// Returns absolute \a value`s rounding serialization error based on current preferences settings
+    static double error_of(double value) {
+        return value * instance().rel_error;
+    }
+
+    void notify(const Inkscape::Preferences::Entry &new_val) override {
+        int digits = new_val.getIntLimited(6, 1, 16);
+        set_numeric_precision(digits);
+    }
+
+private:
+  SvgOutputPrecisionWatcher() : Observer("/options/svgoutput/numericprecision"), rel_error(1) {
+        Inkscape::Preferences::get()->addObserver(*this);
+        int digits = Inkscape::Preferences::get()->getIntLimited("/options/svgoutput/numericprecision", 6, 1, 16);
+        set_numeric_precision(digits);
+    }
+
+    ~SvgOutputPrecisionWatcher() override {
+        Inkscape::Preferences::get()->removeObserver(*this);
+    }
+    /// Update cached value of relative error with number of significant digits
+    void set_numeric_precision(int digits) {
+        double relative_error = 0.5; // the error is half of last digit
+        while (digits > 0) {
+            relative_error /= 10;
+            digits--;
+        }
+        rel_error = relative_error;
+    }
+
+    static SvgOutputPrecisionWatcher &instance() {
+        static SvgOutputPrecisionWatcher _instance;
+        return _instance;
+    }
+
+    std::atomic<double> rel_error; /// Cached relative error
+};
+
+/// Returns absolute error of \a point as if serialized to svg with current preferences
+double serializing_error_of(const Geom::Point &point) {
+    return SvgOutputPrecisionWatcher::error_of(point.length());
+}
+
+/**
+ * @brief Returns true if three points are collinear within current serializing precision
+ *
+ * The algorithm of collinearity check is explicitly used to calculate the check error.
+ *
+ * This function can be sufficiently reduced or even removed completely if `Geom::are_collinear`
+ * would declare it's check algorithm as part of the public API.
+ *
+ * */
+bool are_collinear_within_serializing_error(const Geom::Point &A, const Geom::Point &B, const Geom::Point &C) {
+    const double tolerance_factor = 10; // to account other factors which increase uncertainty
+    const double tolerance_A = serializing_error_of(A) * tolerance_factor;
+    const double tolerance_B = serializing_error_of(B) * tolerance_factor;
+    const double tolerance_C = serializing_error_of(C) * tolerance_factor;
+    const double CB_length = (B - C).length();
+    const double AB_length = (B - A).length();
+    Geom::Point C_reflect_scaled = B + (B - C) / CB_length * AB_length;
+    double tolerance_C_reflect_scaled = tolerance_B
+                                        + (tolerance_B + tolerance_C)
+                                          * (1 + (tolerance_A + tolerance_B) / AB_length)
+                                          * (1 + (tolerance_C + tolerance_B) / CB_length);
+    return Geom::are_near(C_reflect_scaled, A, tolerance_C_reflect_scaled + tolerance_A);
+}
+
 } // namespace
 
 namespace Inkscape {
@@ -1019,16 +1094,12 @@ void Node::pickBestType()
         if (both_degen) break;
         // if neither are degenerate, check their respective positions
         if (neither_degen) {
-            Geom::Point front_delta = _front.position() - position();
-            Geom::Point back_delta = _back.position() - position();
             // for now do not automatically make nodes symmetric, it can be annoying
             /*if (Geom::are_near(front_delta, -back_delta)) {
                 _type = NODE_SYMMETRIC;
                 break;
             }*/
-            if (Geom::are_near(Geom::unit_vector(front_delta),
-                Geom::unit_vector(-back_delta)))
-            {
+            if (are_collinear_within_serializing_error(_front.position(), position(), _back.position())) {
                 _type = NODE_SMOOTH;
                 break;
             }
@@ -1037,16 +1108,12 @@ void Node::pickBestType()
         // we know that if front is degenerate, back isn't, because
         // both_degen was false
         if (front_degen && _next() && _next()->_back.isDegenerate()) {
-            Geom::Point segment_delta = Geom::unit_vector(_next()->position() - position());
-            Geom::Point handle_delta = Geom::unit_vector(_back.position() - position());
-            if (Geom::are_near(segment_delta, -handle_delta)) {
+            if (are_collinear_within_serializing_error(_next()->position(), position(), _back.position())) {
                 _type = NODE_SMOOTH;
                 break;
             }
         } else if (back_degen && _prev() && _prev()->_front.isDegenerate()) {
-            Geom::Point segment_delta = Geom::unit_vector(_prev()->position() - position());
-            Geom::Point handle_delta = Geom::unit_vector(_front.position() - position());
-            if (Geom::are_near(segment_delta, -handle_delta)) {
+            if (are_collinear_within_serializing_error(_prev()->position(), position(), _front.position())) {
                 _type = NODE_SMOOTH;
                 break;
             }
