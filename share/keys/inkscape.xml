@@ -348,7 +348,7 @@ override) the bindings in the main default.xml.
   <bind key="Tab" action="EditSelectNext" display="true" />
   <bind key="ISO_Left_Tab" action="EditSelectPrev" display="true" />
 
-  <bind key="Escape" action="EditDeselect" />
+  <bind key="Escape" action="EditDeselect" display="true"/>
 
   <bind key="7" action="EditNextPathEffectParameter" display="true" />
 
