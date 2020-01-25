@@ -226,16 +226,8 @@ ItemParam::linked_transformed_callback(Geom::Affine const *rel_transf, SPItem */
 
 
 void
-ItemParam::on_link_button_click()
+ItemParam::linkitem(Glib::ustring itemid)
 {
-    Inkscape::UI::ClipboardManager *cm = Inkscape::UI::ClipboardManager::get();
-    const gchar * iid = cm->getFirstObjectID();
-    if (!iid) {
-        return;
-    }
-    
-    Glib::ustring itemid(iid);
-
     if (itemid.empty()) {
         return;
     }
@@ -254,6 +246,19 @@ ItemParam::on_link_button_click()
         DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                            _("Link item parameter to path"));
     }
+}
+
+void
+ItemParam::on_link_button_click()
+{
+    Inkscape::UI::ClipboardManager *cm = Inkscape::UI::ClipboardManager::get();
+    const gchar * iid = cm->getFirstObjectID();
+    if (!iid) {
+        return;
+    }
+    
+    Glib::ustring itemid(iid);
+    linkitem(itemid);
 }
 
 } /* namespace LivePathEffect */

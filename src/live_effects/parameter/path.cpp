@@ -544,12 +544,9 @@ PathParam::on_copy_button_click()
 }
 
 void
-PathParam::on_link_button_click()
+PathParam::linkitem(Glib::ustring pathid)
 {
-    Inkscape::UI::ClipboardManager *cm = Inkscape::UI::ClipboardManager::get();
-    Glib::ustring pathid = cm->getShapeOrTextObjectId(SP_ACTIVE_DESKTOP);
-
-    if (pathid == "") {
+    if (pathid.empty()) {
         return;
     }
 
@@ -567,6 +564,15 @@ PathParam::on_link_button_click()
         DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                            _("Link path parameter to path"));
     }
+}
+
+void
+PathParam::on_link_button_click()
+{
+    Inkscape::UI::ClipboardManager *cm = Inkscape::UI::ClipboardManager::get();
+    Glib::ustring pathid = cm->getShapeOrTextObjectId(SP_ACTIVE_DESKTOP);
+
+    linkitem(pathid);
 }
 
 } /* namespace LivePathEffect */

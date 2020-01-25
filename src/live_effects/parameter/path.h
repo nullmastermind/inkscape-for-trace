@@ -61,6 +61,7 @@ public:
 
     void paste_param_path(const char *svgd);
     void on_paste_button_click();
+    void linkitem(Glib::ustring pathid);
 
 protected:
     Geom::PathVector _pathvector;   // this is primary data storage, since it is closest to SVG.

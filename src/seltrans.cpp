@@ -282,6 +282,10 @@ void Inkscape::SelTrans::grab(Geom::Point const &p, gdouble x, gdouble y, bool s
         _items_const.push_back(it);
         _items_affines.push_back(it->i2dt_affine());
         _items_centers.push_back(it->getCenter()); // for content-dragging, we need to remember original centers
+        SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(it);
+        if (lpeitem && lpeitem->hasPathEffectRecursive()) {
+            sp_lpe_item_update_patheffect(lpeitem, false, false);
+        }
     }
 
     if (y != -1 && _desktop->is_yaxisdown()) {

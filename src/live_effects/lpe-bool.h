@@ -26,6 +26,7 @@ public:
     ~LPEBool() override;
 
     void doEffect(SPCurve *curve) override;
+    void doBeforeEffect(SPLPEItem const *lpeitem) override;
     void resetDefaults(SPItem const *item) override;
     void doOnVisibilityToggled(SPLPEItem const * /*lpeitem*/) override;
     void doOnRemove(SPLPEItem const * /*lpeitem*/) override;
@@ -59,7 +60,8 @@ private:
     BoolParam hide_linked;
     BoolParam swap_operands;
     BoolParam rmv_inner;
-    Geom::Affine prev;
+    SPItem *operand;
+    size_t contdown;
 };
 
 }; //namespace LivePathEffect

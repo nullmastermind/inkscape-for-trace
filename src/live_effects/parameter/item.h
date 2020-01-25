@@ -42,6 +42,7 @@ public:
     void addCanvasIndicators(SPLPEItem const* lpeitem, std::vector<Geom::PathVector> &hp_vec) override;
     sigc::signal <void> signal_item_pasted;
     sigc::signal <void> signal_item_changed;
+    void linkitem(Glib::ustring itemid);
     Geom::Affine last_transform;
     bool changed; /* this gets set whenever the path is changed (this is set to true, and then the signal_item_changed signal is emitted).
                    * the user must set it back to false if she wants to use it sensibly */
@@ -63,7 +64,6 @@ protected:
     virtual void linked_modified_callback(SPObject *linked_obj, guint flags);
     virtual void linked_transformed_callback(Geom::Affine const *rel_transf, SPItem */*moved_item*/);
     void on_link_button_click();
-
     void emit_changed();
 
     gchar * defvalue;

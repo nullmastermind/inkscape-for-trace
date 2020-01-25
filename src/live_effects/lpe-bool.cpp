@@ -21,7 +21,9 @@
 #include "2geom/svg-path-parser.h"
 #include "display/curve.h"
 #include "object/sp-shape.h"
+#include "seltrans.h"
 #include "svg/svg.h"
+#include "ui/tools/select-tool.h"
 
 #include "helper/geom.h"
 
@@ -90,8 +92,9 @@ LPEBool::LPEBool(LivePathEffectObject *lpeobject)
     registerParameter(&rmv_inner);
     registerParameter(&fill_type_this);
     registerParameter(&fill_type_operand);
-    prev = Geom::identity();
     show_orig_path = true;
+    operand = dynamic_cast<SPItem *>(operand_path.getObject());
+    contdown = 0;
 }
 
 LPEBool::~LPEBool()
@@ -361,11 +364,74 @@ static fill_typ GetFillTyp(SPItem *item)
     }
 }
 
+void LPEBool::doBeforeEffect(SPLPEItem const *lpeitem)
+{
+    // operand->set_transform(i2anc_affine(sp_lpe_item, sp_lpe_item->parent));
+    SPDocument *document = getSPDoc();
+    if (!document) {
+        return;
+    }
+    Inkscape::XML::Document *xml_doc = document->getReprDoc();
+    SPItem *current_operand = dynamic_cast<SPItem *>(operand_path.getObject());
+    if (!current_operand) {
+        if (operand) {
+            operand->setHidden(false);
+        }
+        operand = nullptr;
+    }
+    if (current_operand && operand != current_operand) {
+        if (operand) {
+            operand->setHidden(false);
+        }
+        operand = current_operand;
+    }
+    if (current_operand && 
+        current_operand->parent &&
+        sp_lpe_item &&
+        sp_lpe_item->parent != current_operand->parent)
+    {
+        Inkscape::XML::Node *copy = current_operand->getRepr()->duplicate(xml_doc);
+        operand = dynamic_cast<SPItem *>(sp_lpe_item->parent->appendChildRepr(copy));
+        Inkscape::GC::release(copy);
+        current_operand->deleteObject();
+        Glib::ustring itemid = operand->getId();
+        operand_path.linkitem(itemid);
+    }
+    // TODO: make 2 methods to globaly inform to a LPE item when is grabbed
+    // and when the transform is applyed both callers can be in Inkscape::SelTrans in grab and ungrab functions
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    Inkscape::UI::Tools::SelectTool *selectool = dynamic_cast<Inkscape::UI::Tools::SelectTool*>(desktop->event_context);
+    if (selectool) {
+        Inkscape::SelTrans *seltrans = selectool->_seltrans;
+        Inkscape::Selection *selection = desktop->getSelection();
+        if (desktop && 
+            selection &&
+            current_operand && 
+            current_operand->isHidden() && 
+            hide_linked && 
+            seltrans->isGrabbed()) 
+        {
+            selection->add(current_operand);
+            contdown = 3;
+        } 
+        if (contdown == 1 &&
+            desktop && 
+            selection &&
+            current_operand && 
+            current_operand->isHidden() && 
+            hide_linked)
+        {
+            selection->remove(current_operand);
+        }
+        if (contdown > 0) {
+            --contdown;
+        }
+    }
+}
+
 void LPEBool::doEffect(SPCurve *curve)
 {
     Geom::PathVector path_in = curve->get_pathvector();
-    SPItem *operand = dynamic_cast<SPItem *>(operand_path.getObject());
-
     if (operand == SP_ITEM(current_shape)) {
         g_warning("operand and current shape are the same");
         operand_path.param_set_default();
@@ -382,16 +448,13 @@ void LPEBool::doEffect(SPCurve *curve)
         bool_op_ex op = bool_operation.get_value();
         bool swap =  !(swap_operands.get_value());
 
-        // operand->set_transform(i2anc_affine(sp_lpe_item, sp_lpe_item->parent));
-        Geom::Affine current = sp_item_transform_repr(sp_lpe_item);
-        if (!is_load) {
-            operand->doWriteTransform(prev.inverse() * current);
-        }
+        Geom::Affine current_affine = sp_item_transform_repr(sp_lpe_item);
+        Geom::Affine operand_affine = sp_item_transform_repr(operand);
+
         Geom::PathVector operand_pv = operand_path.get_pathvector();
-        if (!is_load) {
-            operand_pv *= current.inverse();
-        }
-        prev = current;
+        path_in *= current_affine;
+        operand_pv *= operand_affine;
+
         Geom::PathVector path_a = swap ? operand_pv : path_in;
         Geom::PathVector path_b = swap ? path_in : operand_pv;
 
@@ -422,7 +485,7 @@ void LPEBool::doEffect(SPCurve *curve)
         } else {
             path_out = sp_pathvector_boolop(path_a, path_b, to_bool_op(op), fill_a, fill_b);
         }
-        curve->set_pathvector(path_out);
+        curve->set_pathvector(path_out * current_affine.inverse());
     }
 }
 
