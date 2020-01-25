@@ -1050,7 +1050,11 @@ void InkscapePreferences::initPageUI()
     _page_ui.add_line( false, "", _ui_yaxisdown, "",
                        _("When off, origin is at lower left corner and y-axis points up"), true);
 
-
+    
+    _mouse_grabsize.init("/options/grabsize/value", 1, 7, 1, 2, 3, 0);
+    _page_ui.add_line(false, _("_Handle size:"), _mouse_grabsize, "",
+                         _("Set the relative size of node handles"), true);
+                         
     // Theme
     _page_theme.add_group_header(_("Theme"));
     {
@@ -1448,10 +1452,6 @@ void InkscapePreferences::initPageIO()
     _mouse_thres.init ( "/options/dragtolerance/value", 0.0, 20.0, 1.0, 1.0, 4.0, true, false);
     _page_mouse.add_line( false, _("_Click/drag threshold:"), _mouse_thres, _("pixels"),
                            _("Maximum mouse drag (in screen pixels) which is considered a click, not a drag"), false);
-
-    _mouse_grabsize.init("/options/grabsize/value", 1, 7, 1, 2, 3, 0);
-    _page_mouse.add_line(false, _("_Handle size:"), _mouse_grabsize, "",
-                         _("Set the relative size of node handles"), true);
 
     _mouse_use_ext_input.init( _("Use pressure-sensitive tablet (requires restart)"), "/options/useextinput/value", true);
     _page_mouse.add_line(false, "",_mouse_use_ext_input, "",
