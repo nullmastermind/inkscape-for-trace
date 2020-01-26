@@ -351,6 +351,14 @@ InkscapeApplication::get_documents()
 InkscapeWindow*
 InkscapeApplication::window_open(SPDocument* document)
 {
+    // Once we've removed Inkscape::Application (separating GUI from non-GUI stuff)
+    // it will be more easy to start up the GUI after-the-fact. Until then, prevent
+    // opening a window if GUI not selected at start-up time.
+    if (!_with_gui) {
+        std::cerr << "InkscapeApplication::window_open: Not in gui mode!" << std::endl;
+        return nullptr;
+    }
+
     InkscapeWindow* window = new InkscapeWindow(document);
     // TODO Add window to application. (Instead of in InkscapeWindow constructor.)
 
