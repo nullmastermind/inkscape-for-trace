@@ -342,13 +342,7 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
     pb.moveTo(start);
     build_from_sbasis(pb, B[0], tol, false);
     unsigned prev_i = 0;
-    LineJoinType jointypeorig = jointype;
     for (unsigned i=1; i < B.size(); i++) {
-        if (Geom::sbasis_size(B[i]) == 2 && Geom::sbasis_size(B[prev_i]) == 2) {
-            jointype = LINEJOIN_MITER;
-        } else {
-            jointype = jointypeorig;
-        }
         // if segment is degenerate, skip it
         // the degeneracy/constancy test had to be loosened (eps > 1e-5) 
         if (B[i].isConstant(1e-4)) {
@@ -562,6 +556,7 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
                 }
             }
         } else {
+            pb.lineTo(B[i].at0());
             build_from_sbasis(pb, B[i], tol, false);
         }
 

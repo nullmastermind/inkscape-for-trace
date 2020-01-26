@@ -571,34 +571,6 @@ bool ClipboardManagerImpl::pastePathEffect(ObjectSet *set)
         if ( clipnode ) {
             gchar const *effectstack = clipnode->attribute("inkscape:path-effect");
             if ( effectstack ) {
-                std::istringstream iss(effectstack);
-                std::string href;
-                bool samedoc = true;
-                while (std::getline(iss, href, ';'))
-                {
-                    gchar const *hrefgchar = href.c_str();
-                    if (hrefgchar) {
-                        SPObject *obj = sp_uri_reference_resolve(SP_ACTIVE_DOCUMENT, hrefgchar);
-                        SPObject *objclip = sp_uri_reference_resolve(_clipboardSPDoc, hrefgchar);
-                        if (!obj || !objclip) {
-                            samedoc = false;
-                        } else {
-                            LivePathEffectObject *objlpe = dynamic_cast<LivePathEffectObject *>(obj);
-                            LivePathEffectObject *objcliplpe = dynamic_cast<LivePathEffectObject *>(objclip);
-                            if (objlpe &&
-                                objcliplpe &&
-                                !objlpe->is_similar(objcliplpe)) 
-                            {
-                                samedoc = false;
-                            }
-                        }
-                    }
-                }
-                // We not need import in the same doc because LPEObjects are forked on
-                //_applyPathEffect
-                if (!samedoc) {
-                   // set->document()->importDefs(tempdoc);
-                }
                 set->document()->importDefs(tempdoc);
                 // make sure all selected items are converted to paths first (i.e. rectangles)
                 set->toLPEItems();
@@ -1212,8 +1184,7 @@ void ClipboardManagerImpl::_applyPathEffect(SPItem *item, gchar const *effectsta
     }
 
     SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
-    if (lpeitem && effectstack)
-    {
+    if (lpeitem && effectstack) {
         std::istringstream iss(effectstack);
         std::string href;
         while (std::getline(iss, href, ';'))

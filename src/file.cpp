@@ -997,7 +997,7 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
     selection->setReprList(pasted_objects);
     for (auto item : selection->items()) {
         SPLPEItem *pasted_lpe_item = dynamic_cast<SPLPEItem *>(item);
-        if (pasted_lpe_item){
+        if (pasted_lpe_item) {
             pasted_lpe_item->forkPathEffectsIfNecessary(1);
         }
     }

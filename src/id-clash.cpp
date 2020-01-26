@@ -289,7 +289,7 @@ change_clashing_ids(SPDocument *imported_doc, SPDocument *current_doc,
 
         LivePathEffectObject *lpeobj = dynamic_cast<LivePathEffectObject *>(elem);
         if (lpeobj) {
-            SPObject *cd_obj =  current_doc->getObjectById(id);
+            SPObject *cd_obj = current_doc->getObjectById(id);
             LivePathEffectObject *cd_lpeobj = dynamic_cast<LivePathEffectObject *>(cd_obj);
             if (cd_lpeobj && lpeobj->is_similar(cd_lpeobj)) {
                 fix_clashing_ids = false;
