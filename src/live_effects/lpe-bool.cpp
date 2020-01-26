@@ -385,46 +385,59 @@ void LPEBool::doBeforeEffect(SPLPEItem const *lpeitem)
         }
         operand = current_operand;
     }
-    if (current_operand && 
-        current_operand->parent &&
+    if (operand && 
+        operand->parent &&
         sp_lpe_item &&
-        sp_lpe_item->parent != current_operand->parent)
+        sp_lpe_item->parent != operand->parent)
     {
-        Inkscape::XML::Node *copy = current_operand->getRepr()->duplicate(xml_doc);
+        Inkscape::XML::Node *copy = operand->getRepr()->duplicate(xml_doc);
         operand = dynamic_cast<SPItem *>(sp_lpe_item->parent->appendChildRepr(copy));
         Inkscape::GC::release(copy);
-        current_operand->deleteObject();
+        operand->deleteObject();
         Glib::ustring itemid = operand->getId();
         operand_path.linkitem(itemid);
     }
     // TODO: make 2 methods to globaly inform to a LPE item when is grabbed
     // and when the transform is applyed both callers can be in Inkscape::SelTrans in grab and ungrab functions
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    Inkscape::UI::Tools::SelectTool *selectool = dynamic_cast<Inkscape::UI::Tools::SelectTool*>(desktop->event_context);
-    if (selectool) {
-        Inkscape::SelTrans *seltrans = selectool->_seltrans;
+    if (desktop && operand) {
         Inkscape::Selection *selection = desktop->getSelection();
-        if (desktop && 
-            selection &&
-            current_operand && 
-            current_operand->isHidden() && 
-            hide_linked && 
-            seltrans->isGrabbed()) 
-        {
-            selection->add(current_operand);
-            contdown = 3;
-        } 
-        if (contdown == 1 &&
-            desktop && 
-            selection &&
-            current_operand && 
-            current_operand->isHidden() && 
-            hide_linked)
-        {
-            selection->remove(current_operand);
-        }
-        if (contdown > 0) {
-            --contdown;
+        Inkscape::UI::Tools::SelectTool *selectool = dynamic_cast<Inkscape::UI::Tools::SelectTool*>(desktop->event_context);
+        if (selectool) {
+            Inkscape::SelTrans *seltrans = selectool->_seltrans;
+            if (desktop && 
+                selection &&
+                operand && 
+                operand->isHidden() && 
+                hide_linked && 
+                seltrans->isGrabbed()) 
+            {
+                selection->add(operand);
+                contdown = 3;
+            } 
+            if (contdown == 1 &&
+                desktop && 
+                selection &&
+                operand && 
+                operand->isHidden() && 
+                hide_linked)
+            {
+                selection->remove(operand);
+            }
+            if (contdown > 0) {
+                --contdown;
+            }
+            if (operand_path.linksToPath() && operand) {
+                SPItem * itemsel = selection->singleItem();
+                if (operand->isHidden() && 
+                    hide_linked &&
+                    itemsel &&
+                    itemsel == operand) 
+                {
+                    hide_linked.param_setValue(false);
+                    hide_linked.write_to_SVG();
+                }
+            }
         }
     }
 }

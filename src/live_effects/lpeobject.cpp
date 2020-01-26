@@ -166,6 +166,34 @@ livepatheffect_on_repr_attr_changed ( Inkscape::XML::Node * /*repr*/,
     lpeobj->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
+// Caution using this function, just compare id and same type of 
+// effect, we use on clipboard to do not fork in same doc on pastepatheffect
+bool LivePathEffectObject::is_similar(LivePathEffectObject *that)
+{
+    if (this && that) {
+        const char * thisid = this->getId();
+        const char * thatid = that->getId();
+        //std::cout << thisid << "---" << thatid << std::endl;
+        if (!thisid ||
+            !thatid ||
+            strcmp(thisid, thatid) != 0) 
+        {
+            return false;
+        }
+        //std::cout << "22222222sssssssssssss222222" << std::endl;
+        Inkscape::LivePathEffect::Effect * thislpe = this->get_lpe();
+        Inkscape::LivePathEffect::Effect * thatlpe = that->get_lpe();
+        if (thatlpe && 
+            thislpe && 
+            thislpe->getName() != thatlpe->getName()) 
+        {
+            return false;
+        }
+        //std::cout << "2222222" << thatlpe->getName() << "2222222" << std::endl;
+    }
+    return true;
+}
+
 /**
  * If this has other users, create a new private duplicate and return it
  * returns 'this' when no forking was necessary (and therefore no duplicate was made)

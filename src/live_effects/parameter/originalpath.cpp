@@ -129,6 +129,7 @@ OriginalPathParam::on_select_original_button_click()
     Inkscape::Selection *selection = desktop->getSelection();
     selection->clear();
     selection->set(original);
+    SP_OBJECT(param_effect->getLPEObj())->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
 } /* namespace LivePathEffect */

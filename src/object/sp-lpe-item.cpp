@@ -331,7 +331,7 @@ void SPLPEItem::notifyTransform(Geom::Affine const &postmul)
         LivePathEffectObject *lpeobj = lperef->lpeobject;
         if (lpeobj) {
             Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
-            if (lpe) {
+            if (lpe && !lpe->is_load) {
                 lpe->transform_multiply(postmul, false);
             }
         }
@@ -1242,10 +1242,11 @@ bool SPLPEItem::forkPathEffectsIfNecessary(unsigned int nr_of_allowed_users, boo
             LivePathEffectObject *lpeobj = it->lpeobject;
             if (lpeobj) {
                 LivePathEffectObject *forked_lpeobj = lpeobj->fork_private_if_necessary(nr_of_allowed_users);
-                if (forked_lpeobj != lpeobj) {
+                if (forked_lpeobj && forked_lpeobj != lpeobj) {
                     forked = true;
                     old_lpeobjs.push_back(lpeobj);
                     new_lpeobjs.push_back(forked_lpeobj);
+                    forked_lpeobj->get_lpe()->is_load = true;
                 }
             }
         }

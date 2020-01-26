@@ -36,6 +36,8 @@ public:
     Inkscape::LivePathEffect::EffectType effecttype;
 
     bool effecttype_set;
+    // dont check values only structure and ID
+    bool is_similar(LivePathEffectObject *that);
 
     LivePathEffectObject * fork_private_if_necessary(unsigned int nr_of_allowed_users = 1);
 

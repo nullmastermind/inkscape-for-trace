@@ -61,6 +61,7 @@
 #include "3rdparty/libcroco/cr-sel-eng.h"
 #include "3rdparty/libcroco/cr-selector.h"
 
+#include "live_effects/lpeobject.h"
 #include "object/persp3d.h"
 #include "object/sp-factory.h"
 #include "object/sp-defs.h"
@@ -1803,21 +1804,39 @@ void SPDocument::_importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, 
         SPObject *src = source->getObjectByRepr(def);
 
         // Prevent duplicates of solid swatches by checking if equivalent swatch already exists
-        if (src && SP_IS_GRADIENT(src)) {
-            SPGradient *s_gr = SP_GRADIENT(src);
+        SPGradient *s_gr = dynamic_cast<SPGradient *>(src);
+        LivePathEffectObject *s_lpeobj = dynamic_cast<LivePathEffectObject *>(src);
+        if (src && (s_gr || s_lpeobj)) {
             for (auto& trg: getDefs()->children) {
-                if ((src != &trg) && SP_IS_GRADIENT(&trg)) {
-                    SPGradient *t_gr = SP_GRADIENT(&trg);
-                    if (t_gr && s_gr->isEquivalent(t_gr)) {
-                         // Change object references to the existing equivalent gradient
-                         Glib::ustring newid = trg.getId();
-                         if(newid != defid){  // id could be the same if it is a second paste into the same document
-                             change_def_references(src, &trg);
-                         }
-                         gchar *longid = g_strdup_printf("%s_%9.9d", DuplicateDefString.c_str(), stagger++);
-                         def->setAttribute("id", longid );
-                         g_free(longid);
-                         // do NOT break here, there could be more than 1 duplicate!
+                SPGradient *t_gr = dynamic_cast<SPGradient *>(&trg);
+                if (src != &trg && s_gr && t_gr) {
+                    if (s_gr->isEquivalent(t_gr)) {
+                        // Change object references to the existing equivalent gradient
+                        Glib::ustring newid = trg.getId();
+                        if(newid != defid){  // id could be the same if it is a second paste into the same document
+                            change_def_references(src, &trg);
+                        }
+                        gchar *longid = g_strdup_printf("%s_%9.9d", DuplicateDefString.c_str(), stagger++);
+                        def->setAttribute("id", longid );
+                        g_free(longid);
+                        // do NOT break here, there could be more than 1 duplicate!
+                    }
+                }
+                LivePathEffectObject *t_lpeobj = dynamic_cast<LivePathEffectObject *>(&trg);
+                //std::cout << "zzzzzzzzzzzz" << std::endl;
+                if (src != &trg && s_lpeobj && t_lpeobj) {
+                  //  std::cout << "zzvnvncvnvncvnccvnzzzzzzzzzz" << std::endl;
+                    if (t_lpeobj->is_similar(s_lpeobj)) {
+                    //    std::cout << "zzzzz4333333333333333333333zzzzzzz" << std::endl;
+                        // Change object references to the existing equivalent gradient
+                        Glib::ustring newid = trg.getId();
+                        if(newid != defid){  // id could be the same if it is a second paste into the same document
+                            change_def_references(src, &trg);
+                        }
+                        gchar *longid = g_strdup_printf("%s_%9.9d", DuplicateDefString.c_str(), stagger++);
+                        def->setAttribute("id", longid );
+                        g_free(longid);
+                        // do NOT break here, there could be more than 1 duplicate!
                     }
                 }
             }
@@ -1830,24 +1849,41 @@ void SPDocument::_importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, 
         Glib::ustring defid = def->attribute("id");
         if( defid.find( DuplicateDefString ) != Glib::ustring::npos )continue; // this one already handled
         SPObject *src = source->getObjectByRepr(def);
-        if (src && SP_IS_GRADIENT(src)) {
-            SPGradient *s_gr = SP_GRADIENT(src);
+        LivePathEffectObject *s_lpeobj = dynamic_cast<LivePathEffectObject *>(src);
+        SPGradient *s_gr = dynamic_cast<SPGradient *>(src);
+        if (src && (s_gr || s_lpeobj)) {
             for (Inkscape::XML::Node *laterDef = def->next() ; laterDef ; laterDef = laterDef->next()) {
                 SPObject *trg = source->getObjectByRepr(laterDef);
-                if(trg && (src != trg) && SP_IS_GRADIENT(trg)) {
-                     Glib::ustring newid = trg->getId();
-                     if( newid.find( DuplicateDefString ) != Glib::ustring::npos )continue; // this one already handled
-                     SPGradient *t_gr = SP_GRADIENT(trg);
-                     if (t_gr && s_gr->isEquivalent(t_gr)) {
-                         // Change object references to the existing equivalent gradient
-                         // two id's in the clipboard should never be the same, so always change references
-                         change_def_references(trg, src);
-                         gchar *longid = g_strdup_printf("%s_%9.9d", DuplicateDefString.c_str(), stagger++);
-                         laterDef->setAttribute("id", longid );
-                         g_free(longid);
-                         // do NOT break here, there could be more than 1 duplicate!
-                     }
+                SPGradient *t_gr = dynamic_cast<SPGradient *>(trg);
+                if(trg && (src != trg) && s_gr && t_gr) {
+                    Glib::ustring newid = trg->getId();
+                    if( newid.find( DuplicateDefString ) != Glib::ustring::npos )continue; // this one already handled
+                    if (t_gr && s_gr->isEquivalent(t_gr)) {
+                        // Change object references to the existing equivalent gradient
+                        // two id's in the clipboard should never be the same, so always change references
+                        change_def_references(trg, src);
+                        gchar *longid = g_strdup_printf("%s_%9.9d", DuplicateDefString.c_str(), stagger++);
+                        laterDef->setAttribute("id", longid );
+                        g_free(longid);
+                        // do NOT break here, there could be more than 1 duplicate!
+                    }
                 }
+                LivePathEffectObject *t_lpeobj = dynamic_cast<LivePathEffectObject *>(trg);
+                if(trg && (src != trg) && s_lpeobj && t_lpeobj) {
+                    Glib::ustring newid = trg->getId();
+                    if( newid.find( DuplicateDefString ) != Glib::ustring::npos )continue; // this one already handled
+                    //std::cout << "11111111111" << std::endl;
+                    if (t_lpeobj->is_similar(s_lpeobj)) {
+                      //  std::cout << "22222222222222" << std::endl;
+                        // Change object references to the existing equivalent gradient
+                        // two id's in the clipboard should never be the same, so always change references
+                        change_def_references(trg, src);
+                        gchar *longid = g_strdup_printf("%s_%9.9d", DuplicateDefString.c_str(), stagger++);
+                        laterDef->setAttribute("id", longid );
+                        g_free(longid);
+                        // do NOT break here, there could be more than 1 duplicate!
+                    }
+                } 
             }
         }
     }

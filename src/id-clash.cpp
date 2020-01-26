@@ -22,6 +22,7 @@
 #include "extract-uri.h"
 #include "id-clash.h"
 
+#include "live_effects/lpeobject.h"
 #include "object/sp-gradient.h"
 #include "object/sp-object.h"
 #include "object/sp-paint-server.h"
@@ -284,6 +285,15 @@ change_clashing_ids(SPDocument *imported_doc, SPDocument *current_doc,
                     fix_clashing_ids = false;
                  }
              }
+        }
+
+        LivePathEffectObject *lpeobj = dynamic_cast<LivePathEffectObject *>(elem);
+        if (lpeobj) {
+            SPObject *cd_obj =  current_doc->getObjectById(id);
+            LivePathEffectObject *cd_lpeobj = dynamic_cast<LivePathEffectObject *>(cd_obj);
+            if (cd_lpeobj && lpeobj->is_similar(cd_lpeobj)) {
+                fix_clashing_ids = false;
+            }
         }
 
         if (fix_clashing_ids) {

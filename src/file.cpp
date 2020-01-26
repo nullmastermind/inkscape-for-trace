@@ -975,9 +975,9 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
     }
 
     std::vector<Inkscape::XML::Node*> pasted_objects_not;
-    if(clipboard)
+    if(clipboard) //???? Removed dead code can cause any bug, need to reimplement undead
     for (Inkscape::XML::Node *obj = clipboard->firstChild() ; obj ; obj = obj->next()) {
-    	if(target_document->getObjectById(obj->attribute("id"))) continue;
+        if(target_document->getObjectById(obj->attribute("id"))) continue;
         Inkscape::XML::Node *obj_copy = obj->duplicate(target_document->getReprDoc());
         SPObject * pasted = desktop->currentLayer()->appendChildRepr(obj_copy);
         Inkscape::GC::release(obj_copy);
@@ -995,9 +995,16 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
 
     // Change the selection to the freshly pasted objects
     selection->setReprList(pasted_objects);
-
+    for (auto item : selection->items()) {
+        SPLPEItem *pasted_lpe_item = dynamic_cast<SPLPEItem *>(item);
+        if (pasted_lpe_item){
+            pasted_lpe_item->forkPathEffectsIfNecessary(1);
+        }
+    }
     // Apply inverse of parent transform
     selection->applyAffine(desktop->dt2doc() * doc2parent * desktop->doc2dt(), true, false, false);
+
+
 
     // Update (among other things) all curves in paths, for bounds() to work
     target_document->ensureUpToDate();

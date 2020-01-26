@@ -312,6 +312,7 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
     lpe->getRepr()->setAttribute("interpolator_type", "CubicBezierJohan");
     lpe->getRepr()->setAttribute("interpolator_beta", "0.2");
     lpe->getRepr()->setAttribute("miter_limit", "4");
+    lpe->getRepr()->setAttribute("scale_width", "1");
     lpe->getRepr()->setAttribute("linejoin_type", "extrp_arc");
     DocumentUndo::setUndoSensitive(document, saved);
 }
@@ -443,6 +444,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
         if (!swidth) {
             swidth = swidth/2;
         }
+        swidth = std::abs(swidth);
         if (SP_IS_PENCIL_CONTEXT(dc)) {
             if (dc->tablet_enabled) {
                 std::vector<Geom::Point> points;

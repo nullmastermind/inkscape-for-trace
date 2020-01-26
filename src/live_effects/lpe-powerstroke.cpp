@@ -244,8 +244,11 @@ LPEPowerStroke::doOnApply(SPLPEItem const* lpeitem)
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         Glib::ustring pref_path_pp = "/live_effects/powerstroke/powerpencil";
         bool powerpencil = prefs->getBool(pref_path_pp, false);
+        bool clipboard = offset_points.data().size() > 0;
         if (!powerpencil) {
             applyStyle(item);
+        }
+        if (!clipboard && !powerpencil) {
             item->updateRepr();
             if (pathv.empty()) {
                 points.emplace_back(0.2,width );
@@ -339,7 +342,13 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
     pb.moveTo(start);
     build_from_sbasis(pb, B[0], tol, false);
     unsigned prev_i = 0;
+    LineJoinType jointypeorig = jointype;
     for (unsigned i=1; i < B.size(); i++) {
+        if (Geom::sbasis_size(B[i]) == 2 && Geom::sbasis_size(B[prev_i]) == 2) {
+            jointype = LINEJOIN_MITER;
+        } else {
+            jointype = jointypeorig;
+        }
         // if segment is degenerate, skip it
         // the degeneracy/constancy test had to be loosened (eps > 1e-5) 
         if (B[i].isConstant(1e-4)) {
