@@ -332,7 +332,8 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
 /* per definition, each discontinuity should be fixed with a join-ending, as defined by linejoin_type
 */
     Geom::PathBuilder pb;
-    if (B.empty()) {
+    Geom::OptRect bbox = bounds_fast(B);
+    if (B.empty() || !bbox) {
         return pb.peek().front();
     }
 
@@ -437,33 +438,85 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
                     solutions = circle1.intersect(circle2);
                     if (solutions.size() == 2) {
                         Geom::Point sol(0.,0.);
-                        if ( dot(tang2, solutions[0].point() - B[i].at0()) > 0 ) {
+                        bool solok = true;
+                        bool point0bad = false;
+                        bool point1bad = false;
+                        if ( dot(tang2, solutions[0].point() - B[i].at0()) > 0) 
+                        {
                             // points[0] is bad, choose points[1]
-                            sol = solutions[1].point();
-                        } else if ( dot(tang2, solutions[1].point() - B[i].at0()) > 0 ) { // points[0] could be good, now check points[1]
+                            point0bad = true;
+                        }
+                        if ( dot(tang2, solutions[1].point() - B[i].at0()) > 0) 
+                        { 
                             // points[1] is bad, choose points[0]
-                            sol = solutions[0].point();
-                        } else {
+                            point1bad = true;
+                        } 
+                        if (!point0bad && !point1bad ) {
                             // both points are good, choose nearest
                             sol = ( distanceSq(B[i].at0(), solutions[0].point()) < distanceSq(B[i].at0(), solutions[1].point()) ) ?
                                     solutions[0].point() : solutions[1].point();
+                        } else if (!point0bad) {
+                            sol = solutions[0].point();
+                        } else if (!point1bad) {
+                            sol = solutions[1].point();
+                        } else {
+                            solok = false;
                         }
+                        (*bbox).expandBy (bbox->width()/4);
 
-                        Geom::EllipticalArc *arc0 = circle1.arc(B[prev_i].at1(), 0.5*(B[prev_i].at1()+sol), sol);
-                        Geom::EllipticalArc *arc1 = circle2.arc(sol, 0.5*(sol+B[i].at0()), B[i].at0());
-
+                        if (!(*bbox).contains(sol)) {
+                            solok = false;
+                        }
+                        Geom::EllipticalArc *arc0 = nullptr;
+                        Geom::EllipticalArc *arc1 = nullptr;
+                        if (solok) {
+                            arc0 = circle1.arc(B[prev_i].at1(), 0.5*(B[prev_i].at1()+sol), sol);
+                            arc1 = circle2.arc(sol, 0.5*(sol+B[i].at0()), B[i].at0());
+                            
+                            if (arc0) {
+                                build_from_sbasis(pb,arc0->toSBasis(), tol, false);
+                            } else if (arc1) {
+                                boost::optional<Geom::Point> p = intersection_point( B[prev_i].at1(), tang1,
+                                                                                B[i].at0(), tang2 );
+                                if (p) {
+                                    // check size of miter
+                                    Geom::Point point_on_path = B[prev_i].at1() - rot90(tang1) * width;
+                                    Geom::Coord len = distance(*p, point_on_path);
+                                    if (len <= fabs(width) * miter_limit) {
+                                        // miter OK
+                                        pb.lineTo(*p);
+                                    }
+                                }
+                            }
+                            if (arc1) {
+                                build_from_sbasis(pb,arc1->toSBasis(), tol, false);
+                            } else if (arc0) {
+                                pb.lineTo(B[i].at0());
+                            }
+                        }
+                        if (!solok || !(arc0 && arc1)) {
+                            // fall back to miter
+                            boost::optional<Geom::Point> p = intersection_point( B[prev_i].at1(), tang1,
+                                                                                B[i].at0(), tang2 );
+                            if (p) {
+                                // check size of miter
+                                Geom::Point point_on_path = B[prev_i].at1() - rot90(tang1) * width;
+                                Geom::Coord len = distance(*p, point_on_path);
+                                if (len <= fabs(width) * miter_limit) {
+                                    // miter OK
+                                    pb.lineTo(*p);
+                                }
+                            }
+                            pb.lineTo(B[i].at0());
+                        }
                         if (arc0) {
-                            build_from_sbasis(pb,arc0->toSBasis(), tol, false);
                             delete arc0;
                             arc0 = nullptr;
                         }
                         if (arc1) {
-                            build_from_sbasis(pb,arc1->toSBasis(), tol, false);
                             delete arc1;
                             arc1 = nullptr;
                         }
-
-                        break;
                     } else {
                         // fall back to miter
                         boost::optional<Geom::Point> p = intersection_point( B[prev_i].at1(), tang1,
