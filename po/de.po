@@ -15,7 +15,7 @@
 # Benjamin Weis <benjamin.weis@gmx.com>, 2014.
 # Heiko Wöhrle <mail@heikowoehrle.de>, 2014.
 # Sönke Roggatz <s.roggatz@mailing-werkstatt.de>, 2015.
-# Maren Hachmann <marenhachmann@yahoo.com>, 2015, 2016, 2019.
+# Maren Hachmann <marenhachmann@yahoo.com>, 2015, 2016, 2019, 2020.
 # Patrick Storz <eduard.braun2@gmx.de>, 2015-2019.
 # Michael Rack <miohna@freenet.de>, 2018.
 # Frank Beckmann, 2019.
@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2019-12-02 14:57+0100\n"
-"PO-Revision-Date: 2019-12-09 01:43+0100\n"
+"PO-Revision-Date: 2020-01-26 23:52+0100\n"
 "Last-Translator: Maren Hachmann <marenhachmann@yahoo.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -34296,7 +34296,7 @@ msgstr ""
 #: ../share/extensions/jessyInk_autoTexts.py:43
 #, python-brace-format
 msgid "Text Element '{0}' is not suitable."
-msgstr ""
+msgstr "Textelement '{0}' ist ungeeignet."
 
 #: ../share/extensions/jessyInk_effects.py:42
 msgid ""
@@ -34469,7 +34469,7 @@ msgstr "Sie dürfen nur zwei Pfade auswählen."
 
 #: ../share/extensions/path_envelope.py:39
 msgid "Selected path is too short. Must be four or more nodes."
-msgstr ""
+msgstr "Der gewählte Pfad ist zu kurz, die Mindestlänge beträgt 4 Knoten."
 
 #: ../share/extensions/pathalongpath.py:191
 #: ../share/extensions/pathscatter.py:190 ../share/extensions/perspective.py:47
@@ -38553,6 +38553,10 @@ msgid ""
 "extension will export a PNG file for each rectangle into the directory with "
 "the name of the {rectangle ID}.png (use Object Properties to set this)."
 msgstr ""
+"Diese Erweiterung exportiert pro Rechteck in der angegebenen Ebene"
+" (standardmäßig 'slices') eine PNG-Datei und speichert diese im gewählten"
+" Verzeichnis unter dem Namen {Rechteck-ID}.png. Die ID kann im Dialog"
+" 'Objekteigenschaften' angepasst werden."
 
 #: ../share/extensions/layer2png.inx:17
 msgid ""
@@ -38561,6 +38565,11 @@ msgid ""
 "previously generated, it will color the rectangle RED. For new exports that "
 "did not previously exist, the rectangle will be GREEN."
 msgstr ""
+"Wenn eine Datei dieses Namens bereits existiert, wird das entsprechende"
+" Rechteck übersprungen und grau eingefärbt. Wenn das Kästchen 'Vorhandene"
+" Exportdateien überschreiben' angehakt ist, und die Datei überschrieben"
+" wurde, färbt sich das Rechteck rot. Wenn ein Bereich zum ersten Mal"
+" exportiert wurde, färbt sich das Rechteck grün."
 
 #: ../share/extensions/layer2png.inx:18
 msgid ""
