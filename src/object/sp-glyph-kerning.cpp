@@ -49,9 +49,7 @@ void SPGlyphKerning::release()
 
 GlyphNames::GlyphNames(const gchar* value)
 {
-    if (value) {
-        names = g_strdup(value);
-    }
+    names = value ? g_strdup(value) : nullptr;
 }
 
 GlyphNames::~GlyphNames()
