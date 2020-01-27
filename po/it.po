@@ -5,7 +5,7 @@
 # Alessio Frusciante <algol@firenze.linux.it>, 2002-2003.
 # Luca Ferretti <elle.uca@infinito.it>, 2005.
 # Luca Bruno <lucab@debian.org>, 2005-2009.
-# Firas Hanife <FirasHanife@gmail.com>, 2014-2019.
+# Firas Hanife <FirasHanife@gmail.com>, 2014-2020.
 # Germano Gasparini <grigio60@gmail.com>, 2019.
 #
 msgid ""
@@ -72,7 +72,7 @@ msgstr "Sfocature"
 
 #: ../share/filters/filters.svg.h:12
 msgid "Edges are partly feathered out"
-msgstr "I bordi sono parzialmente spiumati"
+msgstr "I bordi sono parzialmente sfumati"
 
 #: ../share/filters/filters.svg.h:14
 msgid "Jigsaw Piece"
@@ -9627,7 +9627,7 @@ msgstr "Parallelo"
 
 #: ../src/live_effects/effect.cpp:757
 msgid "Create a draggable line that will always be parallel to a two-node path"
-msgstr "Crea una linea "
+msgstr "Crea una linea parallela a due nodi di un tracciato"
 
 #: ../src/live_effects/effect.cpp:767
 msgid "Perpendicular bisector"
@@ -9659,7 +9659,7 @@ msgstr "test stack doEffect"
 
 #: ../src/live_effects/effect.cpp:800
 msgid "Test LPE"
-msgstr ""
+msgstr "Test LPE"
 
 #: ../src/live_effects/effect.cpp:810
 msgid "Dynamic stroke"
@@ -11497,7 +11497,6 @@ msgstr ""
 "Disegna le linee di misurazione e il testo sul lato opposto del tracciato"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:88
-#, fuzzy
 msgid "Scale sensitive"
 msgstr "Adatta dimensione"
 
@@ -11507,6 +11506,8 @@ msgstr "Adatta dimensione"
 msgid ""
 "When the path is grouped and the group is then scaled, adjust the dimensions."
 msgstr ""
+"Quando il tracciato è raggruppato e il gruppo è ridimensionato, adatta la "
+"dimensione."
 
 #: ../src/live_effects/lpe-measure-segments.cpp:89
 msgid "Localize number format"
@@ -11776,14 +11777,13 @@ msgid "Fuse original path and mirror image into a single path"
 msgstr "Fonde il tracciato originale e quello riflesso in un unico tracciato"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:58
-#, fuzzy
 msgid "Fuse opposite sides"
-msgstr "Fusione opposta"
+msgstr "Fondi tracciati opposti"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:58
-#, fuzzy
 msgid "Picks the part on the other side of the mirror line as the original."
-msgstr "Fonde considerando il tracciato riflesso come originale"
+msgstr ""
+"Fonde la parte di tracciato che supera la linea di riflessione dell'originale."
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:59
 msgid ""
@@ -13682,7 +13682,7 @@ msgstr " da "
 
 #: ../src/object/sp-tref.cpp:238 ../src/object/sp-use.cpp:271
 msgid "[orphaned]"
-msgstr ""
+msgstr "[orfano]"
 
 #: ../src/object/sp-tspan.cpp:221
 #, fuzzy
@@ -13812,7 +13812,7 @@ msgid ""
 "Inkscape will run with default settings, and new settings will not be saved. "
 msgstr ""
 "Inkscape verrà eseguito con le impostazioni predefinite, e le nuove "
-"impostazioni non verranno salvate."
+"impostazioni non verranno salvate. "
 
 #: ../src/preferences.cpp:129
 #, c-format
@@ -15516,7 +15516,6 @@ msgid "Enable on-canvas alignment handles."
 msgstr "Abilita maniglie di allineamento sul canvas"
 
 #: ../src/ui/dialog/attrdialog.cpp:92
-#, fuzzy
 msgid "Add a new attribute"
 msgstr "Aggiungi un nuovo attributo"
 
@@ -15535,7 +15534,7 @@ msgstr "Valore"
 
 #: ../src/ui/dialog/attrdialog.cpp:155
 msgid "Shift+Return new line"
-msgstr ""
+msgstr "Maiusc+Enter nuova linea"
 
 #: ../src/ui/dialog/attrdialog.cpp:358
 msgid "<b>Click</b> attribute to edit."
@@ -16876,7 +16875,7 @@ msgstr "Compressione"
 
 #: ../src/ui/dialog/export.cpp:146
 msgid "pHYs dpi"
-msgstr ""
+msgstr "dpi fisici"
 
 #: ../src/ui/dialog/export.cpp:151
 msgid "Hide all except selected"
@@ -16985,6 +16984,8 @@ msgid ""
 "Will force-set the physical dpi for the png file. Set this to 72 if you're "
 "planning to work on your png with Photoshop"
 msgstr ""
+"Forza i dpi fisici per il file png. Imposta a 72 se il file sarà modificato "
+"con Photoshop"
 
 #: ../src/ui/dialog/export.cpp:492
 msgid "bitmap"
@@ -17079,10 +17080,9 @@ msgstr "Attiva anteprima"
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:129
 msgid "Export as SVG 1.1 per settings in Preference Dialog."
-msgstr ""
+msgstr "Esporta come SVG 1.1 secondo le impostazioni in Preferenze"
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:252
-#, fuzzy
 msgid "_Open"
 msgstr "_Apri"
 
@@ -19152,14 +19152,12 @@ msgid "Transport and Map Symbols"
 msgstr "Simboli mappe e trasporti"
 
 #: ../src/ui/dialog/glyphs.cpp:385
-#, fuzzy
 msgid "Alchemical Symbols"
-msgstr "Simboli Khmer"
+msgstr "Simboli alchemici"
 
 #: ../src/ui/dialog/glyphs.cpp:386
-#, fuzzy
 msgid "Geometric Shapes Extended"
-msgstr "Forme geometriche"
+msgstr "Forme geometriche esteso"
 
 #: ../src/ui/dialog/glyphs.cpp:387
 #, fuzzy
@@ -19171,9 +19169,8 @@ msgid "Supplemental Symbols and Pictographs"
 msgstr "Simboli e pittogrammi supplementari"
 
 #: ../src/ui/dialog/glyphs.cpp:389
-#, fuzzy
 msgid "Chess Symbols"
-msgstr "Simboli Khmer"
+msgstr "Simboli scacchi"
 
 #: ../src/ui/dialog/glyphs.cpp:390
 msgid "Symbols and Pictographs Extended-A"
@@ -19807,14 +19804,14 @@ msgstr ""
 "richiesti non sono disponibili nel sistema"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:481
-#, fuzzy
 msgid "Use SVG2 auto-flowed text"
-msgstr "Crea testo dinamico"
+msgstr "Usa testo dinamico automatico SVG2"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:482
 msgid ""
 "Use SVG2 auto-flowed text instead of SVG1.2 auto-flowed text. (Recommended)"
 msgstr ""
+"Usa il testo dinamico automatico di SVG2 invece di SVG1.2. (consigliato)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:489
 msgid "Font directories"
@@ -19888,7 +19885,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:520
 msgid "Use legacy Gradient Editor"
-msgstr "Usa vecchio Editor di gradiente"
+msgstr "Usa Editor di gradiente legacy"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:522
 msgid ""
@@ -19930,27 +19927,23 @@ msgstr "Strumento LPE"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:862
 #: ../src/ui/dialog/inkscape-preferences.cpp:1155
-#, fuzzy
 msgid "Color for symbolic icons:"
-msgstr "Imposta adattamento simboli in spazio icona."
+msgstr "Colore per icone simboliche:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:864
 #: ../src/ui/dialog/inkscape-preferences.cpp:1157
-#, fuzzy
 msgid "Color for symbolic success icons:"
-msgstr "Imposta adattamento simboli in spazio icona."
+msgstr "Colore per icone simboliche di successo:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:866
 #: ../src/ui/dialog/inkscape-preferences.cpp:1159
-#, fuzzy
 msgid "Color for symbolic warning icons:"
-msgstr "Imposta adattamento simboli in spazio icona."
+msgstr "Colore per icone simboliche di avviso:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:868
 #: ../src/ui/dialog/inkscape-preferences.cpp:1161
-#, fuzzy
 msgid "Color for symbolic error icons:"
-msgstr "Imposta adattamento simboli in spazio icona."
+msgstr "Colore per icone simboliche di errore:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:923
 msgid "System default"
@@ -20514,9 +20507,8 @@ msgid "Base color for icons. Some icons changes need reload"
 msgstr "Colore delle icone. Alcune modifiche richiedono riapertura"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1185
-#, fuzzy
 msgid "Highlights"
-msgstr "Miscela evidenziazione:"
+msgstr "Colore evidenziazione"
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1202
@@ -20525,6 +20517,8 @@ msgid ""
 "Highlights colors, some symbolic icon themes use it. Some icons changes need "
 "reload"
 msgstr ""
+"Colori di evidenziazione utilizzati da alcuni temi di icone simboliche. "
+"Alcune icone richiedono riapertura"
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1208
@@ -20533,6 +20527,8 @@ msgid ""
 "Reset theme colors, some symbolic icon themes use it. Some icons changes "
 "need reload"
 msgstr ""
+"Reimposta i colori del tema utilizzati da alcuni temi di icone simboliche. "
+"Alcune icone richiedono riapertura"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1195
 msgctxt "Icon size"
@@ -20609,6 +20605,9 @@ msgid ""
 "determines which icons to display by using the 'show-icons' attribute in its "
 "'menus.xml' file. (requires restart)"
 msgstr ""
+"Mostra le icone nei menu. Il tema determina in modo predefinito le icone da "
+"mostrare utilizzando l'attributo 'show-icons' nel file 'menus.xml'. (richiede "
+"riapertura)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1220
 msgid "Theme"
@@ -23289,7 +23288,7 @@ msgstr "Id non valido! "
 
 #: ../src/ui/dialog/object-properties.cpp:422
 msgid "Id exists! "
-msgstr "Id già esistente!"
+msgstr "Id già esistente! "
 
 #: ../src/ui/dialog/object-properties.cpp:428
 msgid "Set object ID"
@@ -23435,7 +23434,7 @@ msgstr ""
 
 #: ../src/ui/dialog/objects.cpp:1912
 msgid "Is object clipped and/or masked?"
-msgstr "Oggetto con fissaggio e/o maschera"
+msgstr "Oggetto con fissaggio e/o maschera?"
 
 #: ../src/ui/dialog/objects.cpp:1923
 msgid ""
@@ -23835,9 +23834,8 @@ msgstr ""
 "Nome del font come compare nei selettori e nella proprietà css font-family."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:462
-#, fuzzy
 msgid "Units per em"
-msgstr "Unità utente per "
+msgstr "Unità per em"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:462
 msgid "Number of display units each letter takes up."
@@ -25934,7 +25932,6 @@ msgid "No gradient"
 msgstr "Nessun gradiente"
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:143
-#, fuzzy
 msgid "Nothing Selected"
 msgstr "Nessuna selezione"
 
@@ -31342,12 +31339,11 @@ msgstr "Ingrandisce gli oggetti selezionati"
 
 #: ../src/verbs.cpp:2702
 msgid "_Grow on screen"
-msgstr ""
+msgstr "In_grandisci relativo schermo"
 
 #: ../src/verbs.cpp:2703
-#, fuzzy
 msgid "Make selected objects bigger relative to screen"
-msgstr "Ingrandisce gli oggetti selezionati rispetto a"
+msgstr "Ingrandisce gli oggetti selezionati relativamente allo schermo"
 
 #: ../src/verbs.cpp:2704
 msgid "_Double size"
@@ -31359,7 +31355,7 @@ msgstr "Raddoppia la dimensione degli oggetti selezionati"
 
 #: ../src/verbs.cpp:2706
 msgid "_Shrink"
-msgstr ""
+msgstr "_Riduci"
 
 #: ../src/verbs.cpp:2706
 msgid "Make selected objects smaller"
@@ -31367,12 +31363,11 @@ msgstr "Riduce gli oggetti selezionati"
 
 #: ../src/verbs.cpp:2708
 msgid "_Shrink on screen"
-msgstr ""
+msgstr "_Riduci relativo schermo"
 
 #: ../src/verbs.cpp:2709
-#, fuzzy
 msgid "Make selected objects smaller relative to screen"
-msgstr "Ordina gli oggetti selezionati in una tabella o in un cerchio"
+msgstr "Riduce gli oggetti selezionati relativamente allo schermo"
 
 #: ../src/verbs.cpp:2710
 msgid "_Halve size"
@@ -31461,14 +31456,14 @@ msgid "Convert selected object's stroke to paths"
 msgstr "Converte in tracciati i contorni degli oggetti selezionati"
 
 #: ../src/verbs.cpp:2737
-#, fuzzy
 msgid "_Stroke to Path Legacy"
-msgstr "Da _contorno a tracciato"
+msgstr "Da _contorno a tracciato legacy"
 
 #: ../src/verbs.cpp:2738
-#, fuzzy
 msgid "Convert selected object's stroke to paths legacy mode"
-msgstr "Converte in tracciati i contorni degli oggetti selezionati"
+msgstr ""
+"Converte in tracciati i contorni degli oggetti selezionati usando la modalità "
+"legacy"
 
 #: ../src/verbs.cpp:2739
 msgid "Si_mplify"
@@ -33002,29 +32997,23 @@ msgstr "Rimuovi uno script incorporato"
 
 #: ../src/verbs.cpp:3212 ../src/verbs.cpp:3213 ../src/verbs.cpp:3228
 #: ../src/verbs.cpp:3229
-#, fuzzy
 msgid "Align edges of objects to the top-left corner of the anchor"
-msgstr "Allinea margine destro dell'oggetto al margine sinistro del fisso"
+msgstr "Allinea margini dell'oggetto all'angolo alto sinistro del fisso"
 
 #: ../src/verbs.cpp:3216 ../src/verbs.cpp:3217 ../src/verbs.cpp:3232
 #: ../src/verbs.cpp:3233
-#, fuzzy
 msgid "Align edges of objects to the top-right corner of the anchor"
-msgstr "Allinea lato sinistro dell'oggetto al lato destro del fisso"
+msgstr "Allinea margini dell'oggetto all'angolo alto destro del fisso"
 
 #: ../src/verbs.cpp:3220 ../src/verbs.cpp:3221 ../src/verbs.cpp:3236
 #: ../src/verbs.cpp:3237
-#, fuzzy
 msgid "Align edges of objects to the bottom-right corner of the anchor"
-msgstr ""
-"Allinea il margine superiore dell'oggetto al margine inferiore del fisso"
+msgstr "Allinea margini dell'oggetto all'angolo basso destro del fisso"
 
 #: ../src/verbs.cpp:3224 ../src/verbs.cpp:3225 ../src/verbs.cpp:3240
 #: ../src/verbs.cpp:3241
-#, fuzzy
 msgid "Align edges of objects to the bottom-left corner of the anchor"
-msgstr ""
-"Allinea il margine superiore dell'oggetto al margine inferiore del fisso"
+msgstr "Allinea margini dell'oggetto all'angolo basso sinistro del fisso"
 
 #: ../src/verbs.cpp:3244
 msgid "Center on horizontal and vertical axis"
@@ -33331,9 +33320,8 @@ msgid "<b>Pattern fill</b>"
 msgstr "<b>Motivo</b>"
 
 #: ../src/widgets/paint-selector.cpp:1408
-#, fuzzy
 msgid "<b>Hatch fill</b>"
-msgstr "<b>Campione</b>"
+msgstr "<b>Trama</b>"
 
 #: ../src/widgets/paint-selector.cpp:1508
 msgid "<b>Swatch fill</b>"
@@ -33779,9 +33767,8 @@ msgid "_Help"
 msgstr "_Aiuto"
 
 #: ../share/ui/inkscape-application.glade:25
-#, fuzzy
 msgid "_About"
-msgstr "Informazioni"
+msgstr "_Informazioni"
 
 #: ../share/extensions/convert2dashes.py:40
 msgid "Total number of objects not converted: {}\n"
@@ -33800,7 +33787,7 @@ msgstr ""
 
 #: ../share/extensions/embedimage.py:76
 msgid "File not found \"{}\". Unable to embed image."
-msgstr ""
+msgstr "File non trovato \"{}\". Impossibile incorporare l'immagine."
 
 #: ../share/extensions/embedimage.py:90
 #, python-format
