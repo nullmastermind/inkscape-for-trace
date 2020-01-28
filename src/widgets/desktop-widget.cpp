@@ -657,14 +657,21 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     label_z->set_name("ZLabel");
     auto label_r = Gtk::manage(new Gtk::Label(_("R:")));
     label_r->set_name("RLabel");
+
     dtw->_coord_status_x->set_halign(Gtk::ALIGN_END);
     dtw->_coord_status_y->set_halign(Gtk::ALIGN_END);
     dtw->_coord_status->attach(*dtw->_coord_status_x, 2, 0, 1, 1);
     dtw->_coord_status->attach(*dtw->_coord_status_y, 2, 1, 1, 1);
+
     dtw->_coord_status->attach(*label_z, 3, 0, 1, 2);
-    dtw->_coord_status->attach(*label_r, 5, 0, 1, 2);
     dtw->_coord_status->attach(*dtw->_zoom_status, 4, 0, 1, 2);
+
+    dtw->_coord_status->attach(*label_r, 5, 0, 1, 2);
     dtw->_coord_status->attach(*dtw->_rotation_status, 6, 0, 1, 2);
+
+    auto sep_end = Gtk::manage(new Gtk::Separator(Gtk::ORIENTATION_VERTICAL));
+    sep_end->set_name("CoordinateSeparatorEnd");
+    dtw->_coord_status->attach(*sep_end, 7, 0, 1, 2);
 
     sp_set_font_size_smaller(GTK_WIDGET(dtw->_coord_status->gobj()));
 
