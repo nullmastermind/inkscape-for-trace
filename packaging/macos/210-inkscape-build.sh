@@ -48,9 +48,9 @@ make install
 
 ### patch Poppler library locations ############################################
 
-relocate_dependency $LIB_DIR/libpoppler.85.dylib $BIN_DIR/inkscape
+relocate_dependency $LIB_DIR/libpoppler.94.dylib $BIN_DIR/inkscape
 relocate_dependency $LIB_DIR/libpoppler-glib.8.dylib $BIN_DIR/inkscape
-relocate_dependency $LIB_DIR/libpoppler.85.dylib $LIB_DIR/inkscape/libinkscape_base.dylib
+relocate_dependency $LIB_DIR/libpoppler.94.dylib $LIB_DIR/inkscape/libinkscape_base.dylib
 relocate_dependency $LIB_DIR/libpoppler-glib.8.dylib $LIB_DIR/inkscape/libinkscape_base.dylib
 
 ### patch OpenMP library locations #############################################

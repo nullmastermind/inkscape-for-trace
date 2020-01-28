@@ -24,7 +24,6 @@ mkdir -p $ARTIFACT_DIR
   BUILD_DIR=$SRC_DIR/gtk-mac-bundler.build
   mkdir -p $BUILD_DIR
 
-  cp $SRC_DIR/gtk-mac-bundler*/examples/gtk3-launcher.sh $BUILD_DIR
   cp $SELF_DIR/inkscape.bundle $BUILD_DIR
   cp $SELF_DIR/inkscape.plist $BUILD_DIR
 
@@ -54,9 +53,9 @@ mv $APP_DIR.tmp $APP_DIR
 
 # Patch library link paths.
 
-relocate_dependency @executable_path/../Resources/lib/inkscape/libinkscape_base.dylib $APP_EXE_DIR/Inkscape-bin
+relocate_dependency @executable_path/../Resources/lib/inkscape/libinkscape_base.dylib $APP_EXE_DIR/inkscape
 
-relocate_dependency @loader_path/../libpoppler.85.dylib $APP_LIB_DIR/inkscape/libinkscape_base.dylib
+relocate_dependency @loader_path/../libpoppler.94.dylib $APP_LIB_DIR/inkscape/libinkscape_base.dylib
 relocate_dependency @loader_path/../libpoppler-glib.8.dylib $APP_LIB_DIR/inkscape/libinkscape_base.dylib
 
 relocate_neighbouring_libs $APP_LIB_DIR
@@ -195,11 +194,3 @@ done
 for gir in $SRC_DIR/*.gir; do
   jhbuild run g-ir-compiler -o $APP_LIB_DIR/girepository-1.0/$(basename -s .gir $gir).typelib $gir
 done
-
-### remove launch script #######################################################
-
-rm $APP_EXE_DIR/Inkscape
-
-### rename binary ##############################################################
-
-mv $APP_EXE_DIR/Inkscape-bin $APP_EXE_DIR/inkscape

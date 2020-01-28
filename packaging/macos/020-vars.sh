@@ -25,7 +25,7 @@ export MAKEFLAGS="-j $CORES"
 # Gtk support policy is to support operating system releases up to 5 years
 # back. See https://gitlab.gnome.org/GNOME/gtk-osx/blob/master/README.md
 #
-# gtk 3.24.13 does not builds with 10.10 SDK
+# gtk 3.24.13 does not build with 10.10 SDK
 # (undeclared identifier NSWindowCollectionBehaviorFullScreenDisallowsTiling)
 
 # The current setup is
@@ -37,7 +37,7 @@ export SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX${MACOSX_DEPLOYMEN
 
 ### build system/toolset version ###############################################
 
-TOOLSET_VERSION=0.29
+TOOLSET_VERSION=0.30
 
 ### ramdisk ####################################################################
 
@@ -133,36 +133,36 @@ APP_PLIST=$APP_CON_DIR/Info.plist
 # These are the versioned URLs of Inkscape dependencies that are not part of
 # any JHBuild moduleset. (They are candidates for a custom Inkscape moduleset.)
 
-URL_BOOST=https://dl.bintray.com/boostorg/release/1.69.0/source/boost_1_69_0.tar.bz2
+URL_BOOST=https://dl.bintray.com/boostorg/release/1.72.0/source/boost_1_72_0.tar.bz2
 URL_CPPUNIT=https://dev-www.libreoffice.org/src/cppunit-1.14.0.tar.gz
-URL_DOUBLE_CONVERSION=https://github.com/google/double-conversion/archive/v3.1.4.tar.gz
+URL_DOUBLE_CONVERSION=https://github.com/google/double-conversion/archive/v3.1.5.tar.gz
 URL_GC=https://github.com/ivmai/bdwgc/releases/download/v8.0.4/gc-8.0.4.tar.gz
 
 # This is one commit ahead of GDL_3_34_0.
 # Fixes https://gitlab.gnome.org/GNOME/gdl/issues/2
 URL_GDL=https://gitlab.gnome.org/GNOME/gdl/-/archive/9f11ad3ca8cef85b075419b30036d73648498dfe/gdl-9f11ad3ca8cef85b075419b30036d73648498dfe.tar.gz
 
-URL_GHOSTSCRIPT=https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs927/ghostscript-9.27.tar.gz
-URL_GSL=http://ftp.fau.de/gnu/gsl/gsl-2.5.tar.gz
-URL_GTK_MAC_BUNDLER=https://github.com/dehesselle/gtk-mac-bundler/archive/24651a002b029b4703c378dfb368305af4d88752.tar.gz
+URL_GHOSTSCRIPT=https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs950/ghostscript-9.50.tar.gz
+URL_GSL=http://ftp.fau.de/gnu/gsl/gsl-2.6.tar.gz
+URL_GTK_MAC_BUNDLER=https://github.com/dehesselle/gtk-mac-bundler/archive/f96a9daf2236814af7ace7a2fa91bbfb4f077779.tar.gz
 URL_GTK_OSX=https://raw.githubusercontent.com/dehesselle/gtk-osx/inkscape
 URL_GTK_OSX_SETUP=$URL_GTK_OSX/gtk-osx-setup.sh
 URL_GTK_OSX_MODULESET=$URL_GTK_OSX/modulesets-stable/gtk-osx.modules
-URL_IMAGEMAGICK=https://github.com/ImageMagick/ImageMagick6/archive/6.9.7-10.tar.gz
+URL_IMAGEMAGICK=https://github.com/ImageMagick/ImageMagick6/archive/6.9.10-89.tar.gz
 URL_INKSCAPE=https://gitlab.com/inkscape/inkscape
 URL_INKSCAPE_DMG_ICNS=https://github.com/dehesselle/mibap/raw/master/inkscape_dmg.icns
 URL_LIBCDR=https://github.com/LibreOffice/libcdr/archive/libcdr-0.1.5.tar.gz
 URL_LIBREVENGE=https://ayera.dl.sourceforge.net/project/libwpd/librevenge/librevenge-0.0.4/librevenge-0.0.4.tar.gz
-URL_LIBVISIO=https://github.com/LibreOffice/libvisio/archive/libvisio-0.1.6.tar.gz
+URL_LIBVISIO=https://github.com/LibreOffice/libvisio/archive/libvisio-0.1.7.tar.gz
 URL_LIBWPG=https://netcologne.dl.sourceforge.net/project/libwpg/libwpg/libwpg-0.3.3/libwpg-0.3.3.tar.xz
-URL_OPENJPEG=https://github.com/uclouvain/openjpeg/archive/v2.3.0.tar.gz
-URL_OPENMP=https://github.com/llvm/llvm-project/releases/download/llvmorg-7.1.0/openmp-7.1.0.src.tar.xz
+URL_OPENJPEG=https://github.com/uclouvain/openjpeg/archive/v2.3.1.tar.gz
+URL_OPENMP=https://github.com/llvm/llvm-project/releases/download/llvmorg-9.0.1/openmp-9.0.1.src.tar.xz
 URL_PNG2ICNS=https://github.com/bitboss-ca/png2icns/archive/v0.1.tar.gz
-URL_POPPLER=https://gitlab.freedesktop.org/poppler/poppler/-/archive/poppler-0.74.0/poppler-poppler-0.74.0.tar.gz
-URL_POTRACE=http://potrace.sourceforge.net/download/1.15/potrace-1.15.tar.gz
+URL_POPPLER=https://gitlab.freedesktop.org/poppler/poppler/-/archive/poppler-0.84.0/poppler-poppler-0.84.0.tar.gz
+URL_POTRACE=http://potrace.sourceforge.net/download/1.16/potrace-1.16.tar.gz
 
 # This is the relocatable framework to be bundled with the app.
-URL_PYTHON3_BIN=https://github.com/dehesselle/py3framework/releases/download/py374.3/py374_framework_3.tar.xz
+URL_PYTHON3_BIN=https://github.com/dehesselle/py3framework/releases/download/py376.1/py376_framework_1.tar.xz
 
 # These two are for JHBuild only (it fails to download and install its own Python).
 URL_PYTHON36_SRC=https://github.com/dehesselle/py3framework/archive/py369.3.tar.gz
@@ -173,13 +173,13 @@ URL_TOOLSET=https://github.com/dehesselle/mibap/releases/download/v$TOOLSET_VERS
 
 ### Python packages ############################################################
 
-PYTHON_CAIROSVG=cairosvg==2.4.0
-PYTHON_CAIROCFFI=cairocffi==1.0.2
-PYTHON_DMGBUILD=dmgbuild==1.3.2
-PYTHON_LXML=lxml==4.4.0
-PYTHON_NUMPY=numpy==1.16.4   # 1.17.0 breaks (no investigation yet)
-PYTHON_PYCAIRO=pycairo==1.18.1
-PYTHON_PYGOBJECT=PyGObject==3.32.2
+PYTHON_CAIROSVG=cairosvg==2.4.2
+PYTHON_CAIROCFFI=cairocffi==1.1.0
+PYTHON_DMGBUILD=dmgbuild==1.3.3
+PYTHON_LXML=lxml==4.4.2
+PYTHON_NUMPY=numpy==1.18.1
+PYTHON_PYCAIRO=pycairo==1.19.0
+PYTHON_PYGOBJECT=PyGObject==3.34.0
 PYTHON_SCOUR=scour==0.37
 PYTHON_PYSERIAL=pyserial==3.4
 
