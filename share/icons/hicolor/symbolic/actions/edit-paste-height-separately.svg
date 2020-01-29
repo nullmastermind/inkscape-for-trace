@@ -8,7 +8,7 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    inkscape:version="1.1-dev (3d47766, 2020-01-22)"
-   sodipodi:docname="edit-paste-hight-separatly-symbolic.svg"
+   sodipodi:docname="edit-paste-height-separately-symbolic.svg"
    viewBox="0 0 16 16"
    height="16"
    width="16"
@@ -28,16 +28,7 @@
   </metadata>
   <defs
      id="defs7578" />
-  <style
-     id="s0">
-.success { fill:#009909; }
-.warning { fill:#FF1990; }
-.error { fill:#00AAFF; }
-</style>
-  <style
-     id="s2">
-@import '../../highlights.css';
-</style>
+
   <sodipodi:namedview
      inkscape:snap-midpoints="true"
      inkscape:snap-smooth-nodes="true"
@@ -108,7 +99,7 @@
        height="1.999992"
        x="56.070339"
        y="571.36212"
-       class="success" />
+        />
     <rect
        style="opacity:0.999;fill-opacity:1;stroke:none;stroke-width:0.831517;stroke-linejoin:round;paint-order:stroke fill markers"
        id="rect5975"
@@ -116,7 +107,7 @@
        height="1.999992"
        x="48.070339"
        y="571.36212"
-       class="success" />
+        />
     <rect
        style="opacity:0.999;fill-opacity:1;stroke:none;stroke-width:0.831517;stroke-linejoin:round;paint-order:stroke fill markers"
        id="rect5977"
@@ -124,9 +115,9 @@
        height="1.999992"
        x="56.070339"
        y="579.36212"
-       class="success" />
+        />
     <rect
-       class="success"
+       
        y="579.36212"
        x="48.070339"
        height="1.999992"

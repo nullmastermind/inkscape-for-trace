@@ -97,38 +97,6 @@
        d="m 50.600669,567.36218 h 4.93934 c 0.293803,0 0.53033,0.23653 0.53033,0.53033 v 1.92767 c 0,0.2938 -0.236527,0.53033 -0.53033,0.53033 h -4.93934 c -0.293803,0 -0.53033,-0.23653 -0.53033,-0.53033 v -1.92767 c 0,-0.2938 0.236527,-0.53033 0.53033,-0.53033 z"
        id="rect27710"
        inkscape:connector-curvature="0" />
-    <rect
-       style="opacity:0.999;fill:#009909;fill-opacity:1;stroke:none;stroke-width:0.831517;stroke-linejoin:round;paint-order:stroke fill markers"
-       id="rect5973"
-       width="2"
-       height="1.999992"
-       x="56.070339"
-       y="571.36212"
-       class="success" />
-    <rect
-       style="opacity:0.999;fill:#009909;fill-opacity:1;stroke:none;stroke-width:0.831517;stroke-linejoin:round;paint-order:stroke fill markers"
-       id="rect5975"
-       width="2"
-       height="1.999992"
-       x="48.070339"
-       y="571.36212"
-       class="success" />
-    <rect
-       style="opacity:0.999;fill:#009909;fill-opacity:1;stroke:none;stroke-width:0.831517;stroke-linejoin:round;paint-order:stroke fill markers"
-       id="rect5977"
-       width="2"
-       height="1.999992"
-       x="56.070339"
-       y="579.36212"
-       class="success" />
-    <rect
-       class="success"
-       y="579.36212"
-       x="48.070339"
-       height="1.999992"
-       width="2"
-       id="rect5971"
-       style="opacity:0.999;fill:#009909;fill-opacity:1;stroke:none;stroke-width:0.831517;stroke-linejoin:round;paint-order:stroke fill markers" />
     <path
        inkscape:connector-curvature="0"
        id="path27714"
