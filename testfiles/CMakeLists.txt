@@ -31,7 +31,9 @@ set(TEST_SOURCES
 	object-test
 	sp-glyph-kerning-test
 	cairo-utils-test
-    svg-extension-test)
+        svg-extension-test
+	curve-test
+	2geom-characterization-test)
 
 set(TEST_LIBS
     ${GTEST_LIBRARIES}

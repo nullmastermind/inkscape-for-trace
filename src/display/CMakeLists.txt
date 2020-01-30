@@ -72,7 +72,6 @@ set(display_SRC
 	canvas-temporary-item-list.h
 	canvas-temporary-item.h
 	canvas-text.h
-	curve-test.h
 	curve.h
 	drawing-context.h
 	drawing-group.h

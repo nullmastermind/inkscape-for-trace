@@ -663,7 +663,7 @@ SPCurve::nodes_in_path() const
         // and therefore any path has at least one valid node
         size_t psize = std::max<size_t>(1, it.size_closed());
         nr += psize;
-        if (it.closed()) {
+        if (it.closed() && it.size_closed() > 0) {
             const Geom::Curve &closingline = it.back_closed();
             // the closing line segment is always of type
             // Geom::LineSegment.
