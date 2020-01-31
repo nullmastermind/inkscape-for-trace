@@ -7,6 +7,7 @@
 # Luca Bruno <lucab@debian.org>, 2005-2009.
 # Firas Hanife <FirasHanife@gmail.com>, 2014-2020.
 # Germano Gasparini <grigio60@gmail.com>, 2019.
+# Marco Riva <oelimar@mail.com>, 2019.
 #
 msgid ""
 msgstr ""
@@ -15236,7 +15237,7 @@ msgstr ""
 "Luca Bruno (lucab@debian.org)\n"
 "Luca Ferretti (elle.uca@infinito.it)\n"
 "Francesco Ricci (tardo2002@libero.it)\n"
-"Germano Gasparini (grigio60@gmail.com)"
+"Germano Gasparini (grigio60@gmail.com)\n"
 "Marco Riva (oelimar@mail.com)"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:210
