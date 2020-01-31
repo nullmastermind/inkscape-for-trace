@@ -19,6 +19,7 @@
 #include "object/sp-object.h"
 #include "Layout-TNG-Scanline-Maker.h"
 #include <limits>
+#include "livarot/Shape.h"
 
 namespace Inkscape {
 namespace Text {
@@ -272,7 +273,8 @@ class Layout::Calculator
 
     void _outputLine(ParagraphInfo const &para,
                      FontMetrics const &line_height,
-                     std::vector<ChunkInfo> const &chunk_info);
+                     std::vector<ChunkInfo> const &chunk_info,
+                     bool hidden);
 
     static inline PangoLogAttr const &_charAttributes(ParagraphInfo const &para,
                                                       UnbrokenSpanPosition const &span_pos)
@@ -541,7 +543,8 @@ double Layout::Calculator::_getChunkLeftWithAlignment(ParagraphInfo const &para,
  */
 void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                                      FontMetrics const &line_height,
-                                     std::vector<ChunkInfo> const &chunk_info)
+                                     std::vector<ChunkInfo> const &chunk_info,
+                                     bool hidden)
 {
     TRACE(("  Start _outputLine: ascent %f, descent %f, top of box %f\n", line_height.ascent, line_height.descent, _scanline_maker->yCoordinate() ));
     if (chunk_info.empty()) {
@@ -554,6 +557,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
     Layout::Line new_line;
     new_line.in_paragraph = _flow._paragraphs.size() - 1;
     new_line.baseline_y = _scanline_maker->yCoordinate();
+    new_line.hidden = hidden;
 
     // The y coordinate is at the beginning edge of the line box (top for horizontal text, left
     // edge for vertical lr text, right edge for vertical rl text. We align, by default to the
@@ -575,14 +579,17 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
     _flow._lines.push_back(new_line);
 
     for (std::vector<ChunkInfo>::const_iterator it_chunk = chunk_info.begin() ; it_chunk != chunk_info.end() ; it_chunk++) {
-
         double add_to_each_whitespace;
         // add the chunk to the list
         Layout::Chunk new_chunk;
         new_chunk.in_line = _flow._lines.size() - 1;
 
         TRACE(("    New chunk: in_line: %d\n", new_chunk.in_line));
-        new_chunk.left_x = _getChunkLeftWithAlignment(para, it_chunk, &add_to_each_whitespace);
+        if (hidden) {
+            new_chunk.left_x = it_chunk->x; // Don't align. We'll place below last shape.
+        } else {
+            new_chunk.left_x = _getChunkLeftWithAlignment(para, it_chunk, &add_to_each_whitespace);
+        }
 
         // we may also have y move orders to deal with here (dx, dy and rotate are done per span)
 
@@ -803,6 +810,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                     new_glyph.in_character = _flow._characters.size();
                     new_glyph.rotation = glyph_rotate;
                     new_glyph.orientation = ORIENTATION_UPRIGHT; // Only effects vertical text
+                    new_glyph.hidden = hidden; // SVG 2 overflow
 
                     // Advance does not include kerning but Pango <= 1.43 gives wrong advances for verical upright text.
                     double glyph_h_advance = new_span.font_size * font->Advance(new_glyph.glyph, false);
@@ -1022,7 +1030,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                         new_character.in_span = _flow._spans.size();
                         new_character.x = x_in_span;
                         new_character.char_attributes = para.char_attributes[unbroken_span.char_index_in_para + char_index_in_unbroken_span];
-                        new_character.in_glyph = _flow._glyphs.size() - 1;
+                        new_character.in_glyph = (hidden ? -1 : _flow._glyphs.size() - 1);
                         _flow._characters.push_back(new_character);
 
                         // Letter/word spacing and justification
@@ -1653,19 +1661,45 @@ unsigned Layout::Calculator::_buildSpansForPara(ParagraphInfo *para) const
 }
 
 /**
- * Reinitialises the variables required on completion of one shape and
- * moving on to the next. Returns false if there are no more shapes to wrap
- * in to.
+ * Moves onto next shape with a new scanline_maker.
+ * If there is no next shape, creates an infinite scanline maker to stash remaining text.
+ * Returns false if an infinite scanline maker is created.
  */
 bool Layout::Calculator::_goToNextWrapShape()
 {
+    if (_flow._input_wrap_shapes.size() == 0) {
+        // Shouldn't happen.
+        std::cerr << "Layout::Calculator::_goToNextWrapShape() called for text without shapes!" << std::endl;
+        return false;
+    }
+
+    if (_current_shape_index >= _flow._input_wrap_shapes.size()) {
+        // Shouldn't happen.
+        std::cerr << "Layout::Calculator::_goToNextWrapShape(): shape index too large!" << std::endl;
+    }
+
+    _current_shape_index++;
+
     delete _scanline_maker;
     _scanline_maker = nullptr;
-    _current_shape_index++;
-    if (_current_shape_index == _flow._input_wrap_shapes.size()) return false;
-    _scanline_maker = new ShapeScanlineMaker(_flow._input_wrap_shapes[_current_shape_index].shape, _block_progression);
-    TRACE(("begin wrap shape %u\n", _current_shape_index));
-    return true;
+
+    if (_current_shape_index < _flow._input_wrap_shapes.size()) {
+        _scanline_maker = new ShapeScanlineMaker(_flow._input_wrap_shapes[_current_shape_index].shape, _block_progression);
+        TRACE(("begin wrap shape %u\n", _current_shape_index));
+        return true;
+    } else {
+        // Out of shapes, create infinite scanline maker to stash overflow.
+
+        // First find a suitable position for overflow text.  (index - 1 exists since we just incremented index)
+        double x = _flow._input_wrap_shapes[_current_shape_index - 1].shape->leftX;
+        double y = _flow._input_wrap_shapes[_current_shape_index - 1].shape->bottomY;
+
+        _scanline_maker = new InfiniteScanlineMaker(x, y, _block_progression);
+        TRACE(("out of wrap shapes, stash leftover\n"));
+        return false;
+    }
+
+    // Shouldn't reach
 }
 
 /**
@@ -1681,7 +1715,7 @@ bool Layout::Calculator::_goToNextWrapShape()
  * can never be smaller than the line_box_strut (which is determined
  * by the block level value of line_height). The return
  * value is false only if we've run out of shapes to wrap inside (and
- * hence couldn't create any chunks).
+ * hence stashed overflow).
  */
 bool Layout::Calculator::_findChunksForLine(ParagraphInfo const &para,
                                             UnbrokenSpanPosition *start_span_pos,
@@ -1696,21 +1730,29 @@ bool Layout::Calculator::_findChunksForLine(ParagraphInfo const &para,
     *line_box_height = *strut_height;
     TRACE(("    initial line_box_height (em size): %f\n", line_box_height->emSize() ));
 
+    bool truncated = false;
+
     UnbrokenSpanPosition span_pos;
     for( ; ; ) {
         // Get regions where one can place one line of text (can be more than one, if filling a
         // donut for example).
         std::vector<ScanlineMaker::ScanRun> scan_runs;
-        scan_runs = _scanline_maker->makeScanline(*line_box_height); // Only one line with "InfiniteScanlineMaker
+        scan_runs = _scanline_maker->makeScanline(*line_box_height); // 1 scan run with "InfiniteScanlineMaker"
 
         // If scan_runs is empty, we must have reached the bottom of a shape. Go to next shape.
         while (scan_runs.empty()) {
-            // Only used by ShapeScanlineMaker
-            if (!_goToNextWrapShape()) return false;  // no more shapes to wrap in to
-
+            // Reset for new shape.
             *line_box_height = *strut_height;
+
+            // Only used by ShapeScanlineMaker
+            if (!_goToNextWrapShape()) {
+                truncated = true;
+            }
+
+            // If we've run out of shapes, this will be the infinite line scanline maker with one scan_run).
             scan_runs = _scanline_maker->makeScanline(*line_box_height);
         }
+
 
         TRACE(("    finding line fit y=%f, %lu scan runs\n", scan_runs.front().y, scan_runs.size()));
         chunk_info->clear();
@@ -1725,8 +1767,9 @@ bool Layout::Calculator::_findChunksForLine(ParagraphInfo const &para,
                 break;
             }
 
-            if (!chunk_info->empty() && !chunk_info->back().broken_spans.empty())
+            if (!chunk_info->empty() && !chunk_info->back().broken_spans.empty()) {
                 span_pos = chunk_info->back().broken_spans.back().end;
+            }
         }
 
         if (scan_run_index == scan_runs.size()) break;  // ie when buildChunksInScanRun() succeeded
@@ -1735,8 +1778,8 @@ bool Layout::Calculator::_findChunksForLine(ParagraphInfo const &para,
 
     *start_span_pos = span_pos;
     TRACE(("    final line_box_height: %f\n", line_box_height->emSize() ));
-    TRACE(("  end _findChunksForLine: chunks: %lu\n", chunk_info->size()));
-    return true;
+    TRACE(("  end _findChunksForLine: chunks: %lu, truncated: %s\n", chunk_info->size(), truncated ? "true" : "false"));
+    return !truncated;
 }
 
 /**
@@ -1999,18 +2042,20 @@ bool Layout::Calculator::calculate()
 
     ParagraphInfo para;
     FontMetrics line_box_height; // Current value of line box height for line.
+    bool keep_going = true; // Set false if we ran out of space and had to stash overflow.
     for(para.first_input_index = 0 ; para.first_input_index < _flow._input_stream.size() ; ) {
+
         // jump to the next wrap shape if this is a SHAPE_BREAK control code
         if (_flow._input_stream[para.first_input_index]->Type() == CONTROL_CODE) {
             InputStreamControlCode const *control_code = static_cast<InputStreamControlCode const *>(_flow._input_stream[para.first_input_index]);
             if (control_code->code == SHAPE_BREAK) {
                 TRACE(("shape break control code\n"));
-                if (!_goToNextWrapShape()) break;
-                continue;
+                if (!_goToNextWrapShape()) {
+                    std::cerr << "Layout::Calculator::calculate: Found SHAPE_BREAK but out of shapes!" << std::endl;
+                }
+                continue; // Go to next paragraph (paragraph only contained control code).
             }
         }
-        if (_scanline_maker == nullptr)
-            break;       // we're trying to flow past the last wrap shape
 
         // Break things up into little pango units with unique direction, gravity, etc.
         _buildPangoItemizationForPara(&para);
@@ -2035,20 +2080,26 @@ bool Layout::Calculator::calculate()
         span_pos.char_byte = 0;
         span_pos.char_index = 0;
 
-        bool keep_going = true;
-        do {   // for each line in the paragraph
+        do {   // Until end of paragraph
             TRACE(("begin line\n"));
 
             std::vector<ChunkInfo> line_chunk_info;
-            if (!_findChunksForLine(para, &span_pos, &line_chunk_info, &line_box_height, &strut_height )) {
+
+            // Fill line.
+            // If we've run out of space, we've put the remaining text in a single line and
+            // returned false. If we ran out of space on previous paragraph, we continue with
+            // single-line scan-line maker.
+            bool flowed =_findChunksForLine(para, &span_pos, &line_chunk_info, &line_box_height, &strut_height );
+            if (!flowed) {
                 keep_going = false;
-                break;   // out of shapes to wrap in to
             }
 
             if (line_box_height.emSize() < 0.001 && line_chunk_info.empty()) {
-                keep_going = false;
-                break;   // No room for text and not useful to try again at same place.
+                // We need to avoid an infinite (or semi-infinite) loop.
+                std::cerr << "Layout::Calculator::calculate: No room for text and line advance is very small" << std::endl;
+                return false; // For the moment
             }
+
 
             // For Inkscape multi-line text (using role="line") we run into a problem if the first
             // line is empty - namely, there is no character to attach a 'y' attribute value. The
@@ -2076,14 +2127,18 @@ bool Layout::Calculator::calculate()
                 _scanline_maker->setNewYCoordinate(top_of_line_box);
             }
 
-            _outputLine(para, line_box_height, line_chunk_info);
+            // !keep_going --> truncated --> hidden
+            _outputLine(para, line_box_height, line_chunk_info, !keep_going);
+
             _scanline_maker->setLineHeight( line_box_height );
             _scanline_maker->completeLine(); // Increments y by line height
             TRACE(("end line\n"));
         } while (span_pos.iter_span != para.unbroken_spans.end());
 
         TRACE(("para %lu end\n\n", _flow._paragraphs.size() - 1));
+
         if (keep_going) {
+            // We have more to do, setup next section.
             bool is_empty_para = _flow._characters.empty() || _flow._characters.back().line(&_flow).in_paragraph != _flow._paragraphs.size() - 1;
             if ((is_empty_para && para_end_input_index + 1 >= _flow._input_stream.size())
                 || para_end_input_index + 1 < _flow._input_stream.size()) {
@@ -2133,17 +2188,17 @@ bool Layout::Calculator::calculate()
                 _flow._characters.push_back(new_character);
             }
         }
+
         para.free();
         para.first_input_index = para_end_input_index + 1;
-    }
+    } // Loop over paras
 
     para.free();
     if (_scanline_maker) {
         delete _scanline_maker;
-        _flow._input_truncated = false;
-    } else {
-        _flow._input_truncated = true;
     }
+
+    _flow._input_truncated = !keep_going;
 
     if (_flow.textLength._set) {
         // Calculate the adjustment needed to meet the textLength

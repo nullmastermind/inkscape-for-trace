@@ -147,6 +147,9 @@ void Layout::show(DrawingGroup *in_arena, Geom::OptRect const &paintbox) const
     double phase0 = 0.0;
     for (unsigned span_index = 0 ; span_index < _spans.size() ; span_index++) {
         if (_input_stream[_spans[span_index].in_input_stream_item]->Type() != TEXT_SOURCE) continue;
+
+        if (_spans[span_index].line(this).hidden) continue; // Line corresponds to text overflow. Don't show!
+
         InputStreamTextSource const *text_source = static_cast<InputStreamTextSource const *>(_input_stream[_spans[span_index].in_input_stream_item]);
 
         text_source->style->text_decoration_data.tspan_width             =  _spans[span_index].width();
@@ -219,6 +222,7 @@ Geom::OptRect Layout::bounds(Geom::Affine const &transform, int start, int lengt
 {
     Geom::OptRect bbox;
     for (unsigned glyph_index = 0 ; glyph_index < _glyphs.size() ; glyph_index++) {
+        if (_glyphs[glyph_index].hidden) continue; // To do: This and the next line should represent the same thing, use on or the other.
         if (_characters[_glyphs[glyph_index].in_character].in_glyph == -1) continue;
         if (start != -1 && (int) _glyphs[glyph_index].in_character < start) continue;
         if (length != -1) {

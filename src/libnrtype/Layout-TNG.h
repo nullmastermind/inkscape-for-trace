@@ -515,6 +515,9 @@ public:
     \a it. If \a it == end() the result is undefined. */
     inline int characterAt(iterator const &it) const;
 
+    /** Returns true if the text at \a it is hidden (i.e. overflowed). */
+    bool isHidden(iterator const &it) const;
+
     /** Discovers where the character pointed to by \a it came from, by
     retrieving the object that was passed to the call to appendText() or
     appendControlCode() which generated that output. If \a it == end()
@@ -805,6 +808,7 @@ private:
     struct Glyph {
         int glyph;
         unsigned in_character;
+        bool hidden;
         float x;         /// relative to the start of the chunk
         float y;         /// relative to the current line's baseline
         float rotation;  /// absolute, modulo any object transforms, which we don't know about
@@ -861,6 +865,7 @@ private:
         unsigned in_paragraph;
         double baseline_y;
         unsigned in_shape;
+        bool hidden;
     };
 
     // A paragraph. SVG 2 does not contain native paragraphs.

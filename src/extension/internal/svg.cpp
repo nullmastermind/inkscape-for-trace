@@ -417,6 +417,11 @@ static void insert_text_fallback( Inkscape::XML::Node *repr, SPDocument *origina
                 // need to check if it breaks anything:
                 line_tspan->setAttribute("sodipodi:role", "line");
 
+                // Hide overflow tspan (one line of text).
+                if (text->layout.isHidden(it)) {
+                    line_tspan->setAttribute("style", "visibility:hidden");
+                }
+
                 Geom::Point line_anchor_point = text->layout.characterAnchorPoint(it);
                 double line_x = line_anchor_point[Geom::X];
                 double line_y = line_anchor_point[Geom::Y];

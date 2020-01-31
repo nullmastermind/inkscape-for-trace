@@ -27,6 +27,7 @@
 #include <cstring>
 #include <string>
 #include <glibmm/i18n.h>
+#include <glibmm/regex.h>
 
 #include "attributes.h"
 #include "document.h"
@@ -67,6 +68,9 @@ void SPTSpan::build(SPDocument *doc, Inkscape::XML::Node *repr) {
         this->readAttr( "sodipodi:role" );
     // }
 
+    // We'll intercept "style" to strip "visibility" property (SVG 1.1 fallback for SVG 2 text) then pass it on.
+    this->readAttr( "style" );
+
     SPItem::build(doc, repr);
 }
 
@@ -87,6 +91,15 @@ void SPTSpan::set(SPAttributeEnum key, const gchar* value) {
                 }
                 break;
                 
+            case SP_ATTR_STYLE:
+                if (value) {
+                    Glib::ustring style(value);
+                    Glib::RefPtr<Glib::Regex> regex = Glib::Regex::create("visibility\\s*:\\s*hidden;*");
+                    Glib::ustring stripped = regex->replace_literal(style, 0, "", static_cast<Glib::RegexMatchFlags >(0));
+                    Inkscape::XML::Node *repr = getRepr();
+                    repr->setAttributeOrRemoveIfEmpty("style", stripped);
+                }
+                // Fall through
             default:
                 SPItem::set(key, value);
                 break;
@@ -251,6 +264,8 @@ void SPTextPath::build(SPDocument *doc, Inkscape::XML::Node *repr) {
     this->readAttr( "startOffset" );
     this->readAttr( "side" );
     this->readAttr( "xlink:href" );
+
+    this->readAttr( "style");
 
     SPItem::build(doc, repr);
 }
