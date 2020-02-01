@@ -1,9 +1,6 @@
 ../share/extensions/convert2dashes.py
-../share/extensions/dimension.py
-../share/extensions/draw_from_triangle.py
 ../share/extensions/dxf_input.py
 ../share/extensions/embedimage.py
-../share/extensions/extrude.py
 ../share/extensions/generate_voronoi.py
 ../share/extensions/gimp_xcf.py
 ../share/extensions/hershey.py
@@ -31,10 +28,8 @@
 ../share/extensions/pathscatter.py
 ../share/extensions/perspective.py
 ../share/extensions/plotter.py
-../share/extensions/polyhedron_3d.py
 ../share/extensions/print_win32_vector.py
 ../share/extensions/replace_font.py
-../share/extensions/restack.py
 ../share/extensions/voronoi2svg.py
 ../share/extensions/web_set_att.py
 ../share/extensions/web_transmit_att.py

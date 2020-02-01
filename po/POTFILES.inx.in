@@ -109,6 +109,7 @@
 ../share/extensions/path_mesh_m2p.inx
 ../share/extensions/path_mesh_p2m.inx
 ../share/extensions/path_number_nodes.inx
+../share/extensions/path_to_absolute.inx
 ../share/extensions/pathalongpath.inx
 ../share/extensions/pathscatter.inx
 ../share/extensions/pdflatex.inx
