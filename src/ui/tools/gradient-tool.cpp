@@ -800,7 +800,7 @@ static void sp_gradient_drag(GradientTool &rc, Geom::Point const pt, guint /*sta
             // Starting from empty space:
             // Sort items so that the topmost comes last
         	std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
-            sort(items.begin(),items.end(),sp_item_repr_compare_position);
+            sort(items.begin(),items.end(),sp_item_repr_compare_position_bool);
             // take topmost
             vector = sp_gradient_vector_for_object(document, desktop, SP_ITEM(items.back()), fill_or_stroke);
         }

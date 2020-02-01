@@ -32,6 +32,7 @@
 
 //class SPGuideConstraint;
 #include "sp-guide-constraint.h"
+#include "xml/repr.h"
 
 class SPClipPath;
 class SPClipPathReference;
@@ -454,6 +455,14 @@ Geom::Affine sp_item_transform_repr (SPItem *item);
 /* fixme: - these are evil, but OK */
 
 int sp_item_repr_compare_position(SPItem const *first, SPItem const *second);
+
+static bool sp_item_repr_compare_position_bool(SPObject const *first, SPObject const *second)
+{
+    return sp_repr_compare_position(((SPItem*)first)->getRepr(),
+            ((SPItem*)second)->getRepr())<0;
+}
+
+
 SPItem *sp_item_first_item_child (SPObject *obj);
 SPItem const *sp_item_first_item_child (SPObject const *obj);
 

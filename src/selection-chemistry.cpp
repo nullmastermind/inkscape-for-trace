@@ -1002,12 +1002,6 @@ static SPObject *prev_sibling(SPObject *child)
     return prev;
 }
 
-bool sp_item_repr_compare_position_bool(SPObject const *first, SPObject const *second)
-{
-    return sp_repr_compare_position(((SPItem*)first)->getRepr(),
-            ((SPItem*)second)->getRepr())<0;
-}
-
 void ObjectSet::raise(bool skip_undo){
 
     if(isEmpty()){
