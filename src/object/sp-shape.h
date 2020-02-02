@@ -52,7 +52,8 @@ public:
     // bbox cache
     mutable bool bbox_geom_cache_is_valid = false;
     mutable bool bbox_vis_cache_is_valid = false;
-    mutable Geom::Affine bbox_transform_cache;
+    mutable Geom::Affine bbox_geom_cache_transform;
+    mutable Geom::Affine bbox_vis_cache_transform;
     mutable Geom::OptRect bbox_geom_cache;
     mutable Geom::OptRect bbox_vis_cache;
 
@@ -75,7 +76,9 @@ public:
 	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 
 	Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype) const override;
-	void print(SPPrintContext* ctx) override;
+    Geom::OptRect either_bbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype, bool cache_is_valid,
+                              Geom::OptRect bbox_cache, Geom::Affine const &transform_cache) const;
+    void print(SPPrintContext* ctx) override;
 
 	Inkscape::DrawingItem* show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) override;
 	void hide(unsigned int key) override;

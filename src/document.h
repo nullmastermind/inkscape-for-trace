@@ -139,7 +139,7 @@ public:
     bool rerouting_handler();
 
     void requestModified();
-    bool _updateDocument(); // Used by stand-alone sp_document_idle_handler
+    bool _updateDocument(int flags); // Used by stand-alone sp_document_idle_handler
     int ensureUpToDate();
 
     bool addResource(char const *key, SPObject *object);
