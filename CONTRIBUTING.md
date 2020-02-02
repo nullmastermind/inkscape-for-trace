@@ -107,6 +107,13 @@ Now we can run `inkscape` that we have built, with the latest resources and code
 ./bin/inkscape
 ```
 
+Profiling
+---------
+
+To run with profiling, add `-DWITH_PROFILING=ON` to the above cmake script. Compiling and running will be slower and the gmon file will apear only after Inkscape quits.
+
+See: https://wiki.inkscape.org/wiki/index.php/Profiling
+
 Testing
 -------
 
