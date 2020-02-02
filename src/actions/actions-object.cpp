@@ -85,10 +85,38 @@ object_set_property(const Glib::VariantBase& value, InkscapeApplication *app)
 }
 
 
+void
+object_unlink(InkscapeApplication *app)
+{
+    auto selection = app->get_active_selection();
+
+    // We should not have to do this!
+    auto document  = app->get_active_document();
+    selection->setDocument(document);
+
+    selection->unlink();
+}
+
+
+void
+object_to_path(InkscapeApplication *app)
+{
+    auto selection = app->get_active_selection();
+
+    // We should not have to do this!
+    auto document  = app->get_active_document();
+    selection->setDocument(document);
+
+    selection->toCurves();
+}
+
+
 std::vector<std::vector<Glib::ustring>> raw_data_object =
 {
-    {"object-set-attribute",      "ObjectSetAttribute",      "Object",     N_("Set an attribute on selected objects (expermental).") },
+    {"object-set-attribute",      "ObjectSetAttribute",      "Object",     N_("Set an attribute on selected objects (experimental).")},
     {"object-set-property",       "ObjectSetProperty",       "Object",     N_("Set a property on selected objects (experimental).")  },
+    {"object-unlink",             "ObjectUnlink",            "Object",     N_("Unlink clones.")                                      },
+    {"object-to-path",            "ObjectSetProperty",       "Object",     N_("Convert shapes to paths.")                            }
 };
 
 template<class T>
@@ -105,6 +133,8 @@ add_actions_object(ConcreteInkscapeApplication<T>* app)
 
     app->add_action_with_parameter( "object-set-attribute",     String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_set_attribute),      app));
     app->add_action_with_parameter( "object-set-property",      String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_set_property),       app));
+    app->add_action(                "object-unlink",                    sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_unlink),             app));
+    app->add_action(                "object-to-path",                   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_to_path),            app));
 
 #endif
 
