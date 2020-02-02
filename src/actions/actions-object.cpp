@@ -86,7 +86,7 @@ object_set_property(const Glib::VariantBase& value, InkscapeApplication *app)
 
 
 void
-object_unlink(InkscapeApplication *app)
+object_unlink_clones(InkscapeApplication *app)
 {
     auto selection = app->get_active_selection();
 
@@ -115,7 +115,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_object =
 {
     {"object-set-attribute",      "ObjectSetAttribute",      "Object",     N_("Set an attribute on selected objects (experimental).")},
     {"object-set-property",       "ObjectSetProperty",       "Object",     N_("Set a property on selected objects (experimental).")  },
-    {"object-unlink",             "ObjectUnlink",            "Object",     N_("Unlink clones.")                                      },
+    {"object-unlink-clones",      "ObjectUnlinkClones",      "Object",     N_("Unlink clones.")                                      },
     {"object-to-path",            "ObjectSetProperty",       "Object",     N_("Convert shapes to paths.")                            }
 };
 
@@ -133,7 +133,7 @@ add_actions_object(ConcreteInkscapeApplication<T>* app)
 
     app->add_action_with_parameter( "object-set-attribute",     String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_set_attribute),      app));
     app->add_action_with_parameter( "object-set-property",      String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_set_property),       app));
-    app->add_action(                "object-unlink",                    sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_unlink),             app));
+    app->add_action(                "object-unlink-clones",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_unlink_clones),      app));
     app->add_action(                "object-to-path",                   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_to_path),            app));
 
 #endif
