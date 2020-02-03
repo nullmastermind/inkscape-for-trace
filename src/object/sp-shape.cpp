@@ -496,24 +496,15 @@ Geom::OptRect SPShape::either_bbox(Geom::Affine const &transform, SPItem::BBoxTy
     Geom::OptRect bbox;
 
     // Return the cache if possible.
-    auto delta = transform * transform_cache.inverse();
+    auto delta = transform_cache.inverse() * transform;
     if (cache_is_valid && bbox_cache && delta.isTranslation()) {
 
         // Don't re-adjust the cache if we haven't moved
         if (!delta.isNonzeroTranslation()) {
             return bbox_cache;
         }
-
-        // Remove rotate and skew from both transformations as they cause bbox growth
-        auto prev =
-            Geom::Affine(transform_cache[0], 0.0, 0.0, transform_cache[3], transform_cache[4], transform_cache[5]);
-        auto next = Geom::Affine(transform[0], 0.0, 0.0, transform[3], transform[4], transform[5]);
-
-        // Unapply previous scale and translation; and apply the latest, this keeps the scaling
-        // factors constant for clones, document units and scales in parent groups.
-        return Geom::Rect(Geom::Point(bbox_cache->left(), bbox_cache->top()),
-                          Geom::Point(bbox_cache->right(), bbox_cache->bottom())) *
-               prev.inverse() * next;
+        // delta is pure translation so it's safe to use it as is
+        return *bbox_cache * delta;
     }
 
     if (!this->_curve || this->_curve->get_pathvector().empty()) {
