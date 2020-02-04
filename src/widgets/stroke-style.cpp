@@ -555,7 +555,9 @@ void StrokeStyle::unitChangedCB()
 void
 StrokeStyle::selectionModifiedCB(guint flags)
 {
-    if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_PARENT_MODIFIED_FLAG)) {
+    // We care deeply about only updating when the style is updated
+    // if we update on other flags, we slow inkscape down when dragging
+    if (flags & (SP_OBJECT_STYLE_MODIFIED_FLAG)) {
         updateLine();
     }
 }
