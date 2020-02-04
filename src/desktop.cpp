@@ -970,14 +970,17 @@ SPDesktop::set_display_area( Geom::Rect const &r, double border, bool log)
 
 
 /**
- * Return viewbox dimensions. FixMe: Doesn't handle rotation. FixMe InvertedY
+ * Return canvas viewbox bounding box in desktop coordinates
+ *
+ * @fixme Will be improved for non-90° rotations in https://gitlab.com/inkscape/inkscape/-/merge_requests/1399
  */
 Geom::Rect SPDesktop::get_display_area(bool use_integer_viewbox) const
 {
+    // viewbox in world coordinates
     Geom::Rect const viewbox = use_integer_viewbox ? canvas->getViewboxIntegers() : canvas->getViewbox();
-    double const scale = _current_affine.getZoom();
 
-    return viewbox * Geom::Scale(1. / scale, yaxisdir() / scale);
+    // display area in desktop coordinates
+    return viewbox * w2d();
 }
 
 /**
