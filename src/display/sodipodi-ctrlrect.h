@@ -42,6 +42,7 @@ public:
     void init();
     void setColor(guint32 b, bool h, guint f);
     void setShadow(int s, guint c);
+    void setInvert(bool invert);
     void setRectangle(Geom::Rect const &r);
     void setDashed(bool d);
     void setCheckerboard(bool d);
@@ -57,6 +58,7 @@ private:
 
     bool _has_fill;
     bool _dashed;
+    bool _inverted;
     bool _checkerboard;
 
     Geom::OptIntRect _area;

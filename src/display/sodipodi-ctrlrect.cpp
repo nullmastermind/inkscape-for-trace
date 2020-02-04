@@ -88,6 +88,7 @@ void CtrlRect::init()
     _border_color = 0x000000ff;
     _fill_color = 0xffffffff;
     _shadow_color = 0x000000ff;
+    _inverted = false;
 }
 
 
@@ -118,6 +119,10 @@ void CtrlRect::render(SPCanvasBuf *buf)
         Geom::Point rect_transformed[4];
         for (unsigned i = 0; i < 4; ++i) {
             rect_transformed[i] = _rect.corner(i) * _affine;
+        }
+
+        if(_inverted) {
+            cairo_set_operator(buf->ct, CAIRO_OPERATOR_DIFFERENCE);
         }
 
         // Draw shadow first. Shadow extends under rectangle to reduce aliasing effects.
@@ -272,6 +277,11 @@ void CtrlRect::setShadow(int s, guint c)
 {
     _shadow_width = s;
     _shadow_color = c;
+    _requestUpdate();
+}
+
+void CtrlRect::setInvert(bool invert) {
+    _inverted = invert;
     _requestUpdate();
 }
 
