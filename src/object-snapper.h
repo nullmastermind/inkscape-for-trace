@@ -12,9 +12,9 @@
  */
 
 #include "snapper.h"
-#include "splivarot.h"
 #include "snap-candidate.h"
 
+class SPDesktop;
 class SPNamedView;
 class SPItem;
 class SPObject;

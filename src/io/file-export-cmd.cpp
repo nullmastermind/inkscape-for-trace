@@ -18,6 +18,7 @@
 #include <png.h> // PNG export
 
 #include "document.h"
+#include "object/object-set.h"
 #include "object/sp-item.h"
 #include "object/sp-root.h"
 #include "object/sp-text.h"

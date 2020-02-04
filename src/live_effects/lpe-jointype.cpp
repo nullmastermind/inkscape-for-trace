@@ -57,7 +57,7 @@ static const Util::EnumDataConverter<unsigned> JoinTypeConverter(JoinTypeData, s
 LPEJoinType::LPEJoinType(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     line_width(_("Line width"), _("Thickness of the stroke"), "line_width", &wr, this, 1.),
-    linecap_type(_("Line cap"), _("The end shape of the stroke"), "linecap_type", CapTypeConverter, &wr, this, butt_straight),
+    linecap_type(_("Line cap"), _("The end shape of the stroke"), "linecap_type", CapTypeConverter, &wr, this, BUTT_FLAT),
     linejoin_type(_("Join:"), _("Determines the shape of the path's corners"),  "linejoin_type", JoinTypeConverter, &wr, this, JOIN_EXTRAPOLATE),
     //start_lean(_("Start path lean"), _("Start path lean"), "start_lean", &wr, this, 0.),
     //end_lean(_("End path lean"), _("End path lean"), "end_lean", &wr, this, 0.),

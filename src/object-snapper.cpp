@@ -24,6 +24,7 @@
 #include "preferences.h"
 #include "text-editing.h"
 
+#include "splivarot.h"   // curve_for_item, pathvector_for_curves
 #include "object/sp-clippath.h"
 #include "object/sp-flowtext.h"
 #include "object/sp-image.h"

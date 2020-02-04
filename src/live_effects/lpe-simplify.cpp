@@ -12,6 +12,8 @@
 #include "ui/tools/node-tool.h"
 #include "ui/icon-names.h"
 
+#include "splivarot.h"     // Path_for_pathvector, simplify paths
+
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 

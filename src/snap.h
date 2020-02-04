@@ -33,6 +33,7 @@ enum SPGuideDragType { // used both here and in desktop-events.cpp
     SP_DRAG_NONE
 };
 
+class SPDocument;
 class SPGuide;
 class SPNamedView;
 

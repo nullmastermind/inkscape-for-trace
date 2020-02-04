@@ -55,6 +55,7 @@
 #include "text-editing.h"
 
 // For SVG 2 text flow
+#include "livarot/Path.h"
 #include "livarot/Shape.h"
 #include "display/curve.h"
 

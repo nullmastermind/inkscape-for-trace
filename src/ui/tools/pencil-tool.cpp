@@ -39,6 +39,8 @@
 #include "display/curve.h"
 #include "display/sp-canvas.h"
 
+#include "livarot/Path.h"  // Simplify paths
+
 #include "live_effects/lpe-powerstroke-interpolators.h"
 #include "live_effects/lpe-powerstroke.h"
 #include "live_effects/lpe-simplify.h"
