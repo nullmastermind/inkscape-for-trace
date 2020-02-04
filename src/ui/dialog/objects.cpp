@@ -121,7 +121,7 @@ enum {
  * Xml node observer for observing objects in the document
  */
 class ObjectsPanel::ObjectWatcher : public Inkscape::XML::NodeObserver {
-public:    
+public:
     /**
      * Creates a new object watcher
      * @param pnl The panel to which the object watcher belongs
@@ -182,7 +182,7 @@ public:
             }
         }
     }
-    
+
     /**
      * Objects panel to which this watcher belongs
      */
@@ -454,8 +454,7 @@ bool ObjectsPanel::_processQueue() {
     }
 
     _blockAllSignals(false);
-    _objectsSelected(_desktop->selection); //Set the tree selection
-    _checkTreeSelection(); //Handle button sensitivity
+    _objectsSelected(_desktop->selection); //Set the tree selection; will also invoke _checkTreeSelection()
     _pending_update = false;
     return false; // Return false to kill the timeout signal that kept calling _processQueue
 }
@@ -818,6 +817,8 @@ void ObjectsPanel::_checkTreeSelection()
     for (auto & it : _watchingNonBottom) {
         it->set_sensitive( sensitiveNonBottom );
     }
+
+    _tree.set_reorderable(sensitive); // Reorderable means that we allow drag-and-drop, but we only allow that when at least one row is selected
 }
 
 /**
@@ -1155,60 +1156,89 @@ void ObjectsPanel::_storeHighlightTarget(const Gtk::TreeModel::iterator& iter)
 }
 
 /*
- * Drap and drop within the tree
+ * Drag and drop within the tree
  */
 bool ObjectsPanel::_handleDragDrop(const Glib::RefPtr<Gdk::DragContext>& /*context*/, int x, int y, guint /*time*/)
 {
-    int cell_x = 0, cell_y = 0;
-    Gtk::TreeModel::Path target_path;
-    Gtk::TreeView::Column *target_column;
-    
     //Set up our defaults and clear the source vector
     _dnd_into = false;
     _dnd_target = nullptr;
     _dnd_source.clear();
-    
+    _dnd_source_includes_layer = false;
+
     //Add all selected items to the source vector
     _tree.get_selection()->selected_foreach_iter(sigc::mem_fun(*this, &ObjectsPanel::_storeDragSource));
 
-    if (_tree.get_path_at_pos (x, y, target_path, target_column, cell_x, cell_y)) {
-        // Are we before, inside or after the drop layer
-        Gdk::Rectangle rect;
-        _tree.get_background_area (target_path, *target_column, rect);
-        int cell_height = rect.get_height();
-        _dnd_into = (cell_y > (int)(cell_height * 1/4) && cell_y <= (int)(cell_height * 3/4));
-        if (cell_y > (int)(cell_height * 3/4)) {
+    bool cancel_dnd = false;
+    bool dnd_to_top_at_end = false;
+
+    Gtk::TreeModel::Path target_path;
+    Gtk::TreeViewDropPosition pos;
+    if (_tree.get_dest_row_at_pos(x, y, target_path, pos)) {
+        // SPItem::moveTo() will be used to move the selected items to their new position, but
+        // moveTo() can only "drop before"; we therefore need to find the next path and drop
+        // the selection just before it, instead of "dropping after" the target path
+        if (pos == Gtk::TREE_VIEW_DROP_AFTER) {
             Gtk::TreeModel::Path next_path = target_path;
-            next_path.next();
+            if (_tree.row_expanded(next_path)) {
+                next_path.down(); // The next path is at a lower level in the hierarchy, i.e. in a layer or group
+            } else {
+                next_path.next(); // The next path is at the same level
+            }
+            // A next path might however not be present, if we're dropping at the end of the tree view
             if (_store->iter_is_valid(_store->get_iter(next_path))) {
                 target_path = next_path;
             } else {
-                // Dragging to the "end"
+                // Dragging to the "end" of the treeview ; we'll get the parent group or layer of the last
+                // item, and drop into that parent
                 Gtk::TreeModel::Path up_path = target_path;
                 up_path.up();
                 if (_store->iter_is_valid(_store->get_iter(up_path))) {
-                    // Drop into parent
+                    // Drop into the parent of the last item
                     target_path = up_path;
                     _dnd_into = true;
                 } else {
-                    // Drop into the top level
-                    _dnd_target = nullptr;
+                    // Drop into the top level, completely at the end of the treeview;
+                    dnd_to_top_at_end = true;
                 }
             }
         }
-        Gtk::TreeModel::iterator iter = _store->get_iter(target_path);
-        if (_store->iter_is_valid(iter)) {
-            Gtk::TreeModel::Row row = *iter;
-            //Set the drop target.  If we're not dropping into a group, we cannot
-            //drop into it, so set _dnd_into false.
-            _dnd_target = row[_model->_colObject];
-            if (!(SP_IS_GROUP(_dnd_target))) _dnd_into = false;
+
+        if (dnd_to_top_at_end) {
+            g_assert(_dnd_target == nullptr);
+        } else {
+            // Find the SPItem corresponding to the target_path/row at which we're dropping our selection
+            Gtk::TreeModel::iterator iter = _store->get_iter(target_path);
+            if (_store->iter_is_valid(iter)) {
+                Gtk::TreeModel::Row row = *iter;
+                _dnd_target = row[_model->_colObject]; //Set the drop target
+                if ((pos == Gtk::TREE_VIEW_DROP_INTO_OR_BEFORE) or (pos == Gtk::TREE_VIEW_DROP_INTO_OR_AFTER)) {
+                    // Trying to drop into a layer or group
+                    if (SP_IS_GROUP(_dnd_target)) {
+                        _dnd_into = true;
+                    } else {
+                        // If the target is not a group (or layer), then we cannot drop into it (unless we
+                        // would create a group on the fly), so we will cancel the drag and drop action.
+                        cancel_dnd = true;
+                    }
+                }
+                // If the source selection contains a layer however, then it can not be dropped ...
+                bool c1 = target_path.size() > 1;                   // .. below the top-level
+                bool c2 = SP_IS_GROUP(_dnd_target) and _dnd_into;   // .. or in any group (at the top level)
+                if (_dnd_source_includes_layer and (c1 or c2)) {
+                    cancel_dnd = true;
+                }
+            } else {
+                cancel_dnd = true;
+            }
         }
     }
 
-    _takeAction(DRAGNDROP);
+    if (not cancel_dnd) {
+        _takeAction(DRAGNDROP);
+    }
 
-    return false;
+    return true; // If True: then we're signaling here that nothing needs to be done by the TreeView; we're updating ourselves..
 }
 
 /**
@@ -1219,36 +1249,37 @@ void ObjectsPanel::_storeDragSource(const Gtk::TreeModel::iterator& iter)
 {
     Gtk::TreeModel::Row row = *iter;
     SPItem* item = row[_model->_colObject];
-    if (item)
-    {
+    if (item) {
         _dnd_source.push_back(item);
+        if (SP_IS_GROUP(item) && (SP_GROUP(item)->layerMode() == SPGroup::LAYER)) {
+            _dnd_source_includes_layer = true;
+        }
     }
 }
 
 /*
- * Move a layer in response to a drag & drop action
+ * Move a selection of items in response to a drag & drop action
  */
 void ObjectsPanel::_doTreeMove( )
 {
     g_assert(_desktop != nullptr);
     g_assert(_document != nullptr);
-    
+
     std::vector<gchar *> idvector;
-    
+
     //Clear the desktop selection
     _desktop->selection->clear();
     while (!_dnd_source.empty())
     {
         SPItem *obj = _dnd_source.back();
         _dnd_source.pop_back();
-        
+
         if (obj != _dnd_target) {
             //Store the object id (for selection later) and move the object
             idvector.push_back(g_strdup(obj->getId()));
             obj->moveTo(_dnd_target, _dnd_into);
         }
     }
-    
     //Select items
     while (!idvector.empty()) {
         //Grab the id from the vector, get the item in the document and select it
@@ -1517,6 +1548,7 @@ bool ObjectsPanel::_executeAction()
             case DRAGNDROP:
             {
                 _doTreeMove( );
+                // The notifyChildOrderChanged signal will ensure that the TreeView gets updated
             }
             break;
         }
@@ -1861,7 +1893,7 @@ ObjectsPanel::ObjectsPanel() :
     //Set up the tree
     _tree.set_model( _store );
     _tree.set_headers_visible(true);
-    _tree.set_reorderable(true);
+    _tree.set_reorderable(false); // Reorderable means that we allow drag-and-drop, but we only allow that when at least one row is selected
     _tree.enable_model_drag_dest (Gdk::ACTION_MOVE);
 
     //Create the column CellRenderers

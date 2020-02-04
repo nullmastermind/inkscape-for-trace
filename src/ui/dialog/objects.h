@@ -126,6 +126,9 @@ private:
     //Drag & drop target item
     SPItem* _dnd_target;
     
+    // Whether the drag sources include a layer
+    bool _dnd_source_includes_layer;
+
     //List of items to change the highlight on
     std::vector<SPItem*> _highlight_target;
 
