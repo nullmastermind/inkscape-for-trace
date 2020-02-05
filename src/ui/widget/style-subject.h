@@ -58,6 +58,12 @@ public:
 protected:
     virtual void _afterDesktopSwitch(SPDesktop */*desktop*/) {}
     void _emitChanged() { _changed_signal.emit(); }
+    void _emitModified(Inkscape::Selection* selection, guint flags) {
+        // Do not say this object has styles unless it's style has been modified
+        if (flags & (SP_OBJECT_STYLE_MODIFIED_FLAG)) {
+            _emitChanged();
+        }
+    }
 
 private:
     sigc::signal<void> _changed_signal;
