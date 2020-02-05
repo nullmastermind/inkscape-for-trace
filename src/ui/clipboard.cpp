@@ -1018,7 +1018,11 @@ void ClipboardManagerImpl::_copyTextPath(SPTextPath *tp)
     if (!path) {
         return;
     }
-    _copyIgnoreDup(path->getRepr(), _doc, _defs);
+    // textpaths that aren't in defs (on the canvas) shouldn't be copied because if
+    // both objects are being copied already, this ends up stealing the refs id.
+    if(path->parent && SP_IS_DEFS(path->parent)) {
+        _copyIgnoreDup(path->getRepr(), _doc, _defs);
+    }
 }
 
 
