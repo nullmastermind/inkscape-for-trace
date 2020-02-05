@@ -60,6 +60,7 @@ static void set_extensions_env()
 #endif
 }
 
+#ifdef __APPLE__
 static void set_macos_app_bundle_env(gchar const *program_dir)
 {
     std::string bundle_contents_dir;
@@ -124,6 +125,7 @@ static void set_macos_app_bundle_env(gchar const *program_dir)
     Glib::setenv("DYLD_LIBRARY_PATH", bundle_resources_lib_dir + ":"
             + bundle_resources_lib_dir + "/gdk-pixbuf-2.0/2.10.0/loaders");
 }
+#endif
 
 int main(int argc, char *argv[])
 {

@@ -77,6 +77,7 @@ static int completeDropTargetsCount = 0;
 static guint nui_drop_target_entries = G_N_ELEMENTS(ui_drop_target_entries);
 
 /* Drag and Drop */
+static
 void
 ink_drag_data_received(GtkWidget *widget,
                          GdkDragContext *drag_context,
@@ -447,6 +448,7 @@ ink_drag_data_received(GtkWidget *widget,
 
 #include "ui/tools/gradient-tool.h"
 
+static
 void ink_drag_motion( GtkWidget */*widget*/,
                         GdkDragContext */*drag_context*/,
                         gint /*x*/, gint /*y*/,

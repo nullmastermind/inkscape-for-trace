@@ -28,26 +28,6 @@ namespace Inkscape {
 namespace UI {
 namespace Widget {
 
-namespace {
-
-void hideCallback(GObject * /*object*/, gpointer dock_ptr)
-{
-    g_return_if_fail( dock_ptr != nullptr );
-
-    Dock *dock = static_cast<Dock *>(dock_ptr);
-    dock->hide();
-}
-
-void unhideCallback(GObject * /*object*/, gpointer dock_ptr)
-{
-    g_return_if_fail( dock_ptr != nullptr );
-
-    Dock *dock = static_cast<Dock *>(dock_ptr);
-    dock->show();
-}
-
-}
-
 const int Dock::_default_empty_width = 0;
 const int Dock::_default_dock_bar_width = 36;
 

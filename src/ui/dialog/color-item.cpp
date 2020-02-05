@@ -128,11 +128,6 @@ ColorItem::handleLeaveNotify(GdkEventCrossing* /*event*/) {
     return false;
 }
 
-static void dieDieDie( GObject *obj, gpointer user_data )
-{
-    g_message("die die die %p  %p", obj, user_data );
-}
-
 static bool getBlock( std::string& dst, guchar ch, std::string const & str )
 {
     bool good = false;

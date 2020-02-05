@@ -456,7 +456,7 @@ Geom::Affine sp_item_transform_repr (SPItem *item);
 
 int sp_item_repr_compare_position(SPItem const *first, SPItem const *second);
 
-static bool sp_item_repr_compare_position_bool(SPObject const *first, SPObject const *second)
+inline bool sp_item_repr_compare_position_bool(SPObject const *first, SPObject const *second)
 {
     return sp_repr_compare_position(((SPItem*)first)->getRepr(),
             ((SPItem*)second)->getRepr())<0;

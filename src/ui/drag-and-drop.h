@@ -18,25 +18,6 @@
 
 void ink_drag_setup(Gtk::Widget* win);
 
-static void ink_drag_data_received(GtkWidget *widget,
-                                     GdkDragContext *drag_context,
-                                     gint x, gint y,
-                                     GtkSelectionData *data,
-                                     guint info,
-                                     guint event_time,
-                                     gpointer user_data);
-static void ink_drag_motion( GtkWidget *widget,
-                               GdkDragContext *drag_context,
-                               gint x, gint y,
-                               GtkSelectionData *data,
-                               guint info,
-                               guint event_time,
-                               gpointer user_data );
-static void ink_drag_leave( GtkWidget *widget,
-                              GdkDragContext *drag_context,
-                              guint event_time,
-                              gpointer user_data );
-
 #endif // SEEN_CANVAS_DRAG_AND_DROP_H
 
 /*

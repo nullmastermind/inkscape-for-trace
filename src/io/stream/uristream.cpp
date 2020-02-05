@@ -14,72 +14,12 @@
 
 #include "uristream.h"
 #include "io/sys.h"
-#include <string>
-#include <cstring>
 
 
 namespace Inkscape
 {
 namespace IO
 {
-
-/*
- * URI scheme types
- */
-#define SCHEME_NONE 0
-#define SCHEME_FILE 1
-#define SCHEME_DATA 2
-
-/*
- * A temporary modification of Jon Cruz's portable fopen().
- * Simplified a bit, since we will always use binary
-*/
-
-#define FILE_READ  1
-#define FILE_WRITE 2
-
-static FILE *fopen_utf8name( char const *utf8name, int mode )
-{
-    FILE *fp = nullptr;
-    if (!utf8name)
-        {
-        return nullptr;
-        }
-    if (mode!=FILE_READ && mode!=FILE_WRITE)
-        {
-        return nullptr;
-        }
-
-#ifndef _WIN32
-    gchar *filename = g_filename_from_utf8( utf8name, -1, nullptr, nullptr, nullptr );
-    if ( filename ) {
-        if (mode == FILE_READ)
-            fp = std::fopen(filename, "rb");
-        else
-            fp = std::fopen(filename, "wb");
-        g_free(filename);
-    }
-#else
-    {
-        gunichar2 *wideName = g_utf8_to_utf16( utf8name, -1, NULL, NULL, NULL );
-        if ( wideName )  {
-            if (mode == FILE_READ)
-                fp = _wfopen( (wchar_t*)wideName, L"rb" );
-            else
-                fp = _wfopen( (wchar_t*)wideName, L"wb" );
-            g_free( wideName );
-        } else {
-            gchar *safe = Inkscape::IO::sanitizeString(utf8name);
-            g_message("Unable to convert filename from UTF-8 to UTF-16 [%s]", safe);
-            g_free(safe);
-        }
-    }
-#endif
-
-    return fp;
-}
-
-
 
 //#########################################################################
 //# F I L E    I N P U T    S T R E A M

@@ -202,8 +202,6 @@ static void sp_text_toolbox_select_cb( GtkEntry* entry, GtkEntryIconPosition /*p
   selection->setList(selectList);
 }
 
-static void text_toolbox_watch_ec(SPDesktop* dt, Inkscape::UI::Tools::ToolBase* ec, GObject* holder);
-
 namespace Inkscape {
 namespace UI {
 namespace Toolbar {

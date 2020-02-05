@@ -441,16 +441,6 @@ GtkWidget *ToolboxFactory::createSnapToolbox()
     return toolboxNewCommon( tb, BAR_SNAP, GTK_POS_LEFT );
 }
 
-static GtkWidget* createCustomSlider( GtkAdjustment *adjustment, gdouble climbRate, guint digits, Inkscape::UI::Widget::UnitTracker *unit_tracker)
-{
-    auto adj = Glib::wrap(adjustment, true);
-    auto inkSpinner = new Inkscape::UI::Widget::SpinButton(adj, climbRate, digits);
-    inkSpinner->addUnitTracker(unit_tracker);
-    inkSpinner = Gtk::manage( inkSpinner );
-    GtkWidget *widget = GTK_WIDGET( inkSpinner->gobj() );
-    return widget;
-}
-
 void ToolboxFactory::setToolboxDesktop(GtkWidget *toolbox, SPDesktop *desktop)
 {
     sigc::connection *conn = static_cast<sigc::connection*>(g_object_get_data(G_OBJECT(toolbox),

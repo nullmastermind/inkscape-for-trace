@@ -149,8 +149,6 @@ static MeshTool *get_mesh_tool()
 }
 
 
-static void mesh_toolbox_watch_ec(SPDesktop* dt, Inkscape::UI::Tools::ToolBase* ec, GObject* holder);
-
 namespace Inkscape {
 namespace UI {
 namespace Toolbar {
