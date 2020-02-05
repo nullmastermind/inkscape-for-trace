@@ -634,7 +634,8 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     dtw->_coord_status = Gtk::manage(new Gtk::Grid());
     dtw->_coord_status->set_name("CoordinateAndZStatus");
     dtw->_coord_status->set_row_spacing(0);
-    dtw->_coord_status->set_column_spacing(2);
+    dtw->_coord_status->set_column_spacing(10);
+    dtw->_coord_status->set_margin_end(10);
     auto sep = Gtk::manage(new Gtk::Separator(Gtk::ORIENTATION_VERTICAL));
     sep->set_name("CoordinateSeparator");
     dtw->_coord_status->attach(*sep, 0, 0, 1, 2);
@@ -668,10 +669,6 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 
     dtw->_coord_status->attach(*label_r, 5, 0, 1, 2);
     dtw->_coord_status->attach(*dtw->_rotation_status, 6, 0, 1, 2);
-
-    auto sep_end = Gtk::manage(new Gtk::Separator(Gtk::ORIENTATION_VERTICAL));
-    sep_end->set_name("CoordinateSeparatorEnd");
-    dtw->_coord_status->attach(*sep_end, 7, 0, 1, 2);
 
     sp_set_font_size_smaller(GTK_WIDGET(dtw->_coord_status->gobj()));
 
