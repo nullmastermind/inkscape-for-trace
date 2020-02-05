@@ -803,7 +803,7 @@ static void ArcAnglesAndCenter(Geom::Point const &iS, Geom::Point const &iE,
 
 void Path::DoArc(Geom::Point const &iS, Geom::Point const &iE,
                  double const rx, double const ry, double const angle,
-                 bool const large, bool const wise, double const /*tresh*/)
+                 bool const large, bool const wise, double const tresh)
 {
     /* TODO: Check that our behaviour is standards-conformant if iS and iE are (much) further
        apart than the diameter.  Also check that we do the right thing for negative radius.
@@ -825,13 +825,17 @@ void Path::DoArc(Geom::Point const &iS, Geom::Point const &iE,
     Geom::Scale const ar(rx, ry);
     Geom::Rotate cb(sang);
     Geom::Rotate cbangle(angle*M_PI/180.0);
+    double max_ang = 2 * acos ( 1 - tresh / (fmax(rx, ry) / fmin(rx,ry)) );
+    max_ang = fmin (max_ang, M_PI / 2 );
+    int const num_sectors = abs(sang - eang) / max_ang + 1;
 
     if (wise) {
 
-        double const incr = -0.1/sqrt(ar.vector().length());
+
         if ( sang < eang ) {
             sang += 2*M_PI;
         }
+        double const incr = (eang - sang) / num_sectors;
         Geom::Rotate const omega(incr);
         for (double b = sang + incr ; b > eang ; b += incr) {
             cb = omega * cb;
@@ -840,10 +844,10 @@ void Path::DoArc(Geom::Point const &iS, Geom::Point const &iE,
 
     } else {
 
-        double const incr = 0.1/sqrt(ar.vector().length());
         if ( sang > eang ) {
             sang -= 2*M_PI;
         }
+        double const incr = (eang - sang) / num_sectors;
         Geom::Rotate const omega(incr);
         for (double b = sang + incr ; b < eang ; b += incr) {
             cb = omega * cb;
@@ -948,7 +952,7 @@ void Path::RecBezierTo(const Geom::Point &iP,
 
 void Path::DoArc(Geom::Point const &iS, Geom::Point const &iE,
                  double const rx, double const ry, double const angle,
-                 bool const large, bool const wise, double const /*tresh*/, int const piece)
+                 bool const large, bool const wise, double const tresh, int const piece)
 {
     /* TODO: Check that our behaviour is standards-conformant if iS and iE are (much) further
        apart than the diameter.  Also check that we do the right thing for negative radius.
@@ -971,11 +975,15 @@ void Path::DoArc(Geom::Point const &iS, Geom::Point const &iE,
     Geom::Rotate cb(sang);
     Geom::Rotate cbangle(angle*M_PI/180.0);
 
+    double max_ang = 2 * acos ( 1 - tresh / (fmax(rx, ry) / fmin(rx,ry)) );
+    max_ang = fmin (max_ang, M_PI / 2 );
+    int const num_sectors = abs(sang - eang) / max_ang + 1;
+
     if (wise) {
-        double const incr = -0.1/sqrt(ar.vector().length());
         if ( sang < eang ) {
             sang += 2*M_PI;
         }
+        double const incr = (eang - sang) / num_sectors;
         Geom::Rotate const omega(incr);
         for (double b = sang + incr; b > eang; b += incr) {
             cb = omega * cb;
@@ -984,10 +992,10 @@ void Path::DoArc(Geom::Point const &iS, Geom::Point const &iE,
 
     } else {
 
-        double const incr = 0.1/sqrt(ar.vector().length());
         if ( sang > eang ) {
             sang -= 2 * M_PI;
         }
+        double const incr = (eang - sang) / num_sectors;
         Geom::Rotate const omega(incr);
         for (double b = sang + incr ; b < eang ; b += incr) {
             cb = omega * cb;
