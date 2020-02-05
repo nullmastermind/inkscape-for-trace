@@ -23,6 +23,7 @@ set(TEST_SOURCES
 	object-set-test
 	object-style-test
 	style-elem-test
+	style-internal-test
 	style-test
 	svg-stringstream-test
 	sp-gradient-test
