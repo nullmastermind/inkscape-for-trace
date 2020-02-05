@@ -197,9 +197,8 @@ if ((a_status) != CR_OK) \
  */
 #define PEEK_NEXT_CHAR(a_this, a_to_char) \
 {\
-enum CRStatus pnc_status ; \
-pnc_status = cr_tknzr_peek_char  (PRIVATE (a_this)->tknzr, a_to_char) ; \
-CHECK_PARSING_STATUS (pnc_status, TRUE) \
+status = cr_tknzr_peek_char (PRIVATE (a_this)->tknzr, a_to_char) ; \
+CHECK_PARSING_STATUS (status, TRUE) \
 }
 
 /**
