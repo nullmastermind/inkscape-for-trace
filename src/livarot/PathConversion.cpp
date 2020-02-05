@@ -971,15 +971,11 @@ void Path::DoArc(Geom::Point const &iS, Geom::Point const &iE,
     Geom::Rotate cb(sang);
     Geom::Rotate cbangle(angle*M_PI/180.0);
 
-    // This calulculation tells us how many segments we should need for
-    // a smooth curve based on the arc we're trying to convert.
-    int const num_sectors = abs(sang - eang) * 2 / M_PI + 1;
-
     if (wise) {
+        double const incr = -0.1/sqrt(ar.vector().length());
         if ( sang < eang ) {
-            sang += 2 * M_PI;
+            sang += 2*M_PI;
         }
-        double const incr = (eang - sang) / num_sectors;
         Geom::Rotate const omega(incr);
         for (double b = sang + incr; b > eang; b += incr) {
             cb = omega * cb;
@@ -987,10 +983,11 @@ void Path::DoArc(Geom::Point const &iS, Geom::Point const &iE,
         }
 
     } else {
+
+        double const incr = 0.1/sqrt(ar.vector().length());
         if ( sang > eang ) {
             sang -= 2 * M_PI;
         }
-        double const incr = (eang - sang) / num_sectors;
         Geom::Rotate const omega(incr);
         for (double b = sang + incr ; b < eang ; b += incr) {
             cb = omega * cb;
