@@ -808,7 +808,7 @@ void Path::DoArc(Geom::Point const &iS, Geom::Point const &iE,
     /* TODO: Check that our behaviour is standards-conformant if iS and iE are (much) further
        apart than the diameter.  Also check that we do the right thing for negative radius.
        (Same for the other DoArc functions in this file.) */
-    if ( rx <= 0.0001 || ry <= 0.0001 ) {
+    if ( rx <= 0.0001 || ry <= 0.0001 || tresh <= 1e-8) {
         return;
         // We always add a lineto afterwards, so this is fine.
         // [on ajoute toujours un lineto apres, donc c bon]
@@ -825,7 +825,7 @@ void Path::DoArc(Geom::Point const &iS, Geom::Point const &iE,
     Geom::Scale const ar(rx, ry);
     Geom::Rotate cb(sang);
     Geom::Rotate cbangle(angle*M_PI/180.0);
-    double max_ang = 2 * acos ( 1 - tresh / (fmax(rx, ry) / fmin(rx,ry)) );
+    double max_ang = 2 * acos ( 1 - tresh / (fmax(rx, ry) ) );
     max_ang = fmin (max_ang, M_PI / 2 );
     int const num_sectors = abs(sang - eang) / max_ang + 1;
 
@@ -957,7 +957,7 @@ void Path::DoArc(Geom::Point const &iS, Geom::Point const &iE,
     /* TODO: Check that our behaviour is standards-conformant if iS and iE are (much) further
        apart than the diameter.  Also check that we do the right thing for negative radius.
        (Same for the other DoArc functions in this file.) */
-    if ( rx <= 0.0001 || ry <= 0.0001 ) {
+    if ( rx <= 0.0001 || ry <= 0.0001 || tresh <= 1e-8 ) {
         return;
         // We always add a lineto afterwards, so this is fine.
         // [on ajoute toujours un lineto apres, donc c bon]
@@ -975,7 +975,7 @@ void Path::DoArc(Geom::Point const &iS, Geom::Point const &iE,
     Geom::Rotate cb(sang);
     Geom::Rotate cbangle(angle*M_PI/180.0);
 
-    double max_ang = 2 * acos ( 1 - tresh / (fmax(rx, ry) / fmin(rx,ry)) );
+    double max_ang = 2 * acos ( 1 - tresh / fmax(rx, ry)  );
     max_ang = fmin (max_ang, M_PI / 2 );
     int const num_sectors = abs(sang - eang) / max_ang + 1;
 

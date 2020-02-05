@@ -186,13 +186,13 @@ sp_pathvector_boolop(Geom::PathVector const &pathva, Geom::PathVector const &pat
             Path* swap=originaux[0];originaux[0]=originaux[1];originaux[1]=swap;
             int   swai=origWind[0];origWind[0]=origWind[1];origWind[1]=(fill_typ)swai;
         }
-        originaux[0]->ConvertWithBackData(1.0);
+        originaux[0]->ConvertWithBackData(0.1);
 
         originaux[0]->Fill(theShape, 0);
 
         theShapeA->ConvertToShape(theShape, origWind[0]);
 
-        originaux[1]->ConvertWithBackData(1.0);
+        originaux[1]->ConvertWithBackData(0.1);
 
         originaux[1]->Fill(theShape, 1,false,false,false); //do not closeIfNeeded
 
