@@ -1,3 +1,6 @@
 [submodule "share/extensions"]
 	path = share/extensions
 	url = https://gitlab.com/inkscape/extensions.git
+[submodule "src/3rdparty/2geom"]
+	path = src/3rdparty/2geom
+	url = https://gitlab.com/sizmailov/lib2geom.git  #fixme: use inkscape repo
