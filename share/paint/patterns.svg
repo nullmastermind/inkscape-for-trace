@@ -648,7 +648,8 @@
        id="Camouflage"
        inkscape:stockid="Camouflage">
       <g
-         id="g3410">
+         id="g3410"
+         transform="translate(-89,-270)">
         <path
            style="fill:#344a33;"
            d="M 89,270 L 480,270 L 480,680 L 89,680 L 89,270 z"
