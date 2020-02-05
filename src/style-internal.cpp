@@ -2097,6 +2097,9 @@ SPIDashArray::merge( const SPIBase* const parent ) {
 bool
 SPIDashArray::operator==(const SPIBase& rhs) {
     if (const SPIDashArray *r = dynamic_cast<const SPIDashArray *>(&rhs)) {
+        if (values.size() != r->values.size()) {
+            return false;
+        }
         for (int i = 0; i < values.size(); i++) {
             if (values[i] != r->values[i]) {
                 return false;
