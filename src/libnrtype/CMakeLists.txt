@@ -31,3 +31,5 @@ add_inkscape_lib(nrtype_LIB "${nrtype_SRC}")
 if(NOT BUILD_SHARED_LIBS)
     target_link_libraries(nrtype_LIB inkscape_base)
 endif()
+
+target_link_libraries(nrtype_LIB PUBLIC 2Geom::2geom)

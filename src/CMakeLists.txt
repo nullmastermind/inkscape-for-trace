@@ -286,7 +286,6 @@ add_subdirectory(ui)
 add_subdirectory(util)
 add_subdirectory(widgets)
 add_subdirectory(xml)
-add_subdirectory(2geom)
 
 # Directories containing lists files that describe building internal libraries
 add_subdirectory(3rdparty)
@@ -364,7 +363,6 @@ set(INKSCAPE_TARGET_LIBS
         vpsc_LIB
         livarot_LIB
         uemf_LIB
-        2geom_LIB
         depixelize_LIB
         autotrace_LIB
         util_LIB
@@ -379,7 +377,13 @@ if(WITH_DBUS)
 endif()
 
 # Link the inkscape_base library against all external dependencies
-target_link_libraries(inkscape_base PRIVATE ${INKSCAPE_TARGET_LIBS} PUBLIC ${INKSCAPE_LIBS})
+target_link_libraries(inkscape_base
+    PRIVATE
+        ${INKSCAPE_TARGET_LIBS}
+    PUBLIC
+        2Geom::2geom
+        ${INKSCAPE_LIBS}
+  )
 
 # Link inkscape and inkview against inkscape_base
 target_link_libraries(inkscape inkscape_base)

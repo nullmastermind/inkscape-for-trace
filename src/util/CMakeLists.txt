@@ -33,4 +33,5 @@ set(util_SRC
 )
 
 add_inkscape_lib(util_LIB "${util_SRC}")
+target_link_libraries(util_LIB PUBLIC 2Geom::2geom)
 # add_inkscape_source("${util_SRC}")

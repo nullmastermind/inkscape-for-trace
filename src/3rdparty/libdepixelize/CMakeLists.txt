@@ -21,3 +21,4 @@ set(libdepixelize_SRC
 )
 
 add_inkscape_lib(depixelize_LIB "${libdepixelize_SRC}")
+target_link_libraries(depixelize_LIB PUBLIC 2Geom::2geom)
