@@ -31,7 +31,6 @@ IGNORE_PATHS = [
     "patches",
     "po",
     "share",
-    "src/2geom",
     "src/3rdparty",
     "testfiles/cli_tests/testcases",
     "testfiles/rendering_tests/fonts/LICENSES",

@@ -4,7 +4,7 @@ Inkscape license
 Most Inkscape source code is available under the GNU General Public License, version 2 or later.
 
 Notable exceptions are:
-- some libraries in src/3rdparty and src/2geom (mostly GNU Lesser General Public License or Mozilla Public License).
+- some libraries in src/3rdparty and 2geom (mostly GNU Lesser General Public License or Mozilla Public License).
 - a few files copied from GIMP, which are available under GNU (L)GPL version 3 or later.
 - a few files which are dual-licensed, which means that they offer the additional permission to alternatively use them under another license.
 

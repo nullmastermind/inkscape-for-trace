@@ -115,7 +115,7 @@ codeprotect:
   needs: []
   script:
     - git fetch https://gitlab.com/inkscape/inkscape.git
-    - git diff FETCH_HEAD -U0 --no-color src/2geom/ src/3rdparty/adaptagrams/ src/3rdparty/libdepixelize src/3rdparty/libuemf | tee forbidden
+    - git diff FETCH_HEAD -U0 --no-color src/3rdparty/adaptagrams/ src/3rdparty/libdepixelize src/3rdparty/libuemf | tee forbidden
     - if [[ -s forbidden ]]; then echo "This commit modifies files that are in an dependency library. Make sure you update upstream first, *then* force the merge in Inkscape."; false; fi
 
   #### All files should have a licence
@@ -190,7 +190,7 @@ clangtidyfull:linux:
   needs: []
   script:
     # skip files which clangtidy-helper.sh will revert anyway
-    - find src/3rdparty src/2geom -name CMakeLists.txt | xargs tee
+    - find src/3rdparty -name CMakeLists.txt | xargs tee
     - bash buildtools/clangtidy-helper.sh
 
     ### scan-build is a static analysis tool. This job is *slow*.
