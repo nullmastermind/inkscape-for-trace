@@ -598,6 +598,9 @@ void AttrDialog::nameEdited (const Glib::ustring& path, const Glib::ustring& nam
                 return;
             }
         }
+        if(std::any_of(name.begin(), name.end(), isspace)) {
+            return;
+        }
         // Copy old value and remove old name
         Glib::ustring value;
         if (!old_name.empty()) {
