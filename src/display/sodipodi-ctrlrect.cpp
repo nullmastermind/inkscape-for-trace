@@ -256,8 +256,9 @@ void CtrlRect::update(Geom::Affine const &affine, unsigned int flags)
     if (_area) {
         Geom::IntRect area = *_area;
         // Windows glitches sometimes in cairo, possibly due to the way the surface is cleared.
-        // Increasing '_area' won't work as the box must be drown 'inside' the updated area.
-        sp_canvas_update_bbox( this, area[X].min(), area[Y].min(), area[X].max()+1, area[Y].max()+1);
+        // Increasing '_area' won't work as the box must be drawn 'inside' the updated area.
+        sp_canvas_update_bbox(this, area.left(), area.top(), area.right() + 1, area.bottom() + 1);
+
     } else {
         std::cerr << "CtrlRect::update: No area!!" << std::endl;
     }
