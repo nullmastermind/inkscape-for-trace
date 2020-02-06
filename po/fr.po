@@ -5831,7 +5831,7 @@ msgstr "Obscurcir"
 #: ../src/extension/internal/filter/transparency.h:63
 #: ../src/filter-enums.cpp:55 ../src/ui/dialog/input.cpp:369
 msgid "Screen"
-msgstr "Superposition"
+msgstr "Écran"
 
 #: ../src/extension/internal/filter/blurs.h:195
 #: ../src/extension/internal/filter/blurs.h:342
@@ -23091,7 +23091,7 @@ msgstr "Désactivé"
 #: ../src/ui/dialog/input.cpp:348
 msgctxt "Input device"
 msgid "Screen"
-msgstr "Superposition"
+msgstr "Écran"
 
 #: ../src/ui/dialog/input.cpp:349 ../src/ui/dialog/input.cpp:370
 msgid "Window"
