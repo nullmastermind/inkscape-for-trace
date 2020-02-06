@@ -175,9 +175,7 @@ FillNStroke::~FillNStroke()
  */
 void FillNStroke::selectionModifiedCB( guint flags )
 {
-    if (flags & ( SP_OBJECT_MODIFIED_FLAG |
-                   SP_OBJECT_PARENT_MODIFIED_FLAG |
-                   SP_OBJECT_STYLE_MODIFIED_FLAG) ) {
+    if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
 #ifdef SP_FS_VERBOSE
         g_message("selectionModifiedCB(%d) on %p", flags, this);
 #endif
