@@ -212,6 +212,7 @@
 ../src/object/sp-tspan.cpp
 ../src/object/sp-use.cpp
 ../src/path-chemistry.cpp
+../src/path/path-object-set.cpp
 ../src/preferences-skeleton.h
 ../src/preferences.cpp
 ../src/rdf.cpp

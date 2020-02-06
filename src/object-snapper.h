@@ -19,6 +19,7 @@ class SPNamedView;
 class SPItem;
 class SPObject;
 class SPPath;
+class SPDesktop;
 
 namespace Inkscape
 {

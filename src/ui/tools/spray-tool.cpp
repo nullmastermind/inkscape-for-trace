@@ -42,7 +42,6 @@
 #include "message-context.h"
 #include "path-chemistry.h"
 #include "selection.h"
-#include "splivarot.h"
 #include "verbs.h"
 
 #include "display/cairo-utils.h"

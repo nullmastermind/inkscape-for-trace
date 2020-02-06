@@ -66,6 +66,8 @@
 #include "object/sp-guide.h"
 #include "object/sp-namedview.h"
 
+#include "path/path-outline.h"
+
 #include "ui/dialog/align-and-distribute.h"
 #include "ui/dialog/clonetiler.h"
 #include "ui/dialog/dialog-manager.h"
@@ -1228,10 +1230,10 @@ void SelectionVerb::perform(SPAction *action, void *data)
             break;
         case SP_VERB_SELECTION_OUTLINE:
             selection->toCurves(true);
-            sp_selected_path_outline(dt);
+            selection->strokesToPaths();
             break;
         case SP_VERB_SELECTION_OUTLINE_LEGACY:
-            sp_selected_path_outline(dt, true);
+            selection->strokesToPaths(true);
             break;
         case SP_VERB_SELECTION_SIMPLIFY:
             selection->toCurves(true);

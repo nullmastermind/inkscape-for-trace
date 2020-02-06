@@ -35,13 +35,13 @@
 #include "sp-path.h"
 #include "preferences.h"
 #include "attributes.h"
+#include "path/path-outline.h" // For bound box calculation
+
 #include "svg/svg.h"
 #include "svg/path-string.h"
 #include "live_effects/lpeobject.h"
 
 #include "helper/mathfns.h" // for triangle_area()
-
-#include "splivarot.h" // for bounding box calculation
 
 #define noSHAPE_VERBOSE
 
@@ -521,7 +521,7 @@ Geom::OptRect SPShape::either_bbox(Geom::Affine const &transform, SPItem::BBoxTy
         // convert the stroke to a path and calculate that path's geometric bbox
 
         if (!this->style->stroke.isNone()) {
-            Geom::PathVector *pathv = item_outline(this, true);  // calculate bbox_only
+            Geom::PathVector *pathv = item_to_outline(this, true);  // calculate bbox_only
 
             if (pathv) {
                 bbox |= bounds_exact_transformed(*pathv, transform);
@@ -689,6 +689,7 @@ Geom::OptRect SPShape::either_bbox(Geom::Affine const &transform, SPItem::BBoxTy
             }
         }
     }
+
 
     return bbox;
 }

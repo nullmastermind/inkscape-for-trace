@@ -132,7 +132,7 @@ public:
             _document = desktop->getDocument(); 
     };
     ObjectSet(SPDocument* doc): _desktop(nullptr), _document(doc) {};
-    ObjectSet(): _desktop(nullptr), _document(nullptr) {};
+    ObjectSet(): _desktop(nullptr), _document(nullptr) {}; // Used in spray-tool.h.
     virtual ~ObjectSet();
     
     void setDocument(SPDocument* doc){
@@ -404,6 +404,10 @@ public:
     void toCurves(bool skip_undo = false);
     void toLPEItems();
     void pathReverse();
+
+    // path operations
+    // in path/path-object-set.cpp
+    bool strokesToPaths(bool legacy = false, bool skip_undo = false);
 
     // Boolean operations
     // in splivarot.cpp

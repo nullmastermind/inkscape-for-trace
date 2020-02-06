@@ -39,11 +39,6 @@ void sp_selected_path_create_updating_inset (SPDesktop *desktop);
 void sp_selected_path_create_offset_object_zero (SPDesktop *desktop);
 void sp_selected_path_create_updating_offset_object_zero (SPDesktop *desktop);
 
-// outline of a curve
-// uses the stroke-width
-void sp_selected_path_outline (SPDesktop *desktop, bool legacy = false);
-bool sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy);
-Geom::PathVector* item_outline(SPItem const *item, bool bbox_only = false);
 
 // simplifies a path (removes small segments and the like)
 void sp_selected_path_simplify (SPDesktop *desktop);

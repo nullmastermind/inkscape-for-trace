@@ -38,7 +38,6 @@
 #include "message-stack.h"
 #include "rubberband.h"
 #include "selection.h"
-#include "splivarot.h"
 #include "verbs.h"
 
 #include "display/cairo-utils.h"

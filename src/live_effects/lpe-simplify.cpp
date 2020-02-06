@@ -4,13 +4,17 @@
  */
 
 #include <gtkmm.h>
+
 #include "live_effects/lpe-simplify.h"
+
+#include "splivarot.h"
 #include "display/curve.h"
 #include "helper/geom.h"
-#include <2geom/svg-path-parser.h>
 #include "svg/svg.h"
-#include "ui/tools/node-tool.h"
 #include "ui/icon-names.h"
+#include "ui/tools/node-tool.h"
+
+#include <2geom/svg-path-parser.h>
 
 #include "splivarot.h"     // Path_for_pathvector, simplify paths
 

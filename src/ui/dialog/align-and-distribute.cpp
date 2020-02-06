@@ -177,7 +177,7 @@ void ActionAlign::do_action(SPDesktop *desktop, int index)
     if (sel_as_group) {
         if (focus) {
             // use bounding box of all selected elements except the "focused" element
-            Inkscape::ObjectSet copy;
+            Inkscape::ObjectSet copy(desktop);
             copy.add(selection->objects().begin(), selection->objects().end());
             copy.remove(focus);
             b = copy.preferredBounds();

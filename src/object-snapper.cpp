@@ -21,6 +21,7 @@
 #include "desktop.h"
 #include "document.h"
 #include "inkscape.h"
+#include "splivarot.h"
 #include "preferences.h"
 #include "text-editing.h"
 

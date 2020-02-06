@@ -107,7 +107,20 @@ object_to_path(InkscapeApplication *app)
     auto document  = app->get_active_document();
     selection->setDocument(document);
 
-    selection->toCurves();
+    selection->toCurves();  // TODO: Rename toPaths()
+}
+
+
+void
+object_stroke_to_path(InkscapeApplication *app)
+{
+    auto selection = app->get_active_selection();
+
+    // We should not have to do this!
+    auto document  = app->get_active_document();
+    selection->setDocument(document);
+
+    selection->strokesToPaths();
 }
 
 
@@ -115,8 +128,9 @@ std::vector<std::vector<Glib::ustring>> raw_data_object =
 {
     {"object-set-attribute",      "ObjectSetAttribute",      "Object",     N_("Set an attribute on selected objects (experimental).")},
     {"object-set-property",       "ObjectSetProperty",       "Object",     N_("Set a property on selected objects (experimental).")  },
-    {"object-unlink-clones",      "ObjectUnlinkClones",      "Object",     N_("Unlink clones.")                                      },
-    {"object-to-path",            "ObjectSetProperty",       "Object",     N_("Convert shapes to paths.")                            }
+    {"object-unlink-clones",      "ObjectUnlinkClones",      "Object",     N_("Unlink clones and symbols.")                          },
+    {"object-to-path",            "ObjectToPath",            "Object",     N_("Convert shapes to paths.")                            },
+    {"object-stroke-to-path",     "ObjectStrokeToPath",      "Object",     N_("Convert strokes to paths.")                           }
 };
 
 template<class T>
@@ -135,6 +149,7 @@ add_actions_object(ConcreteInkscapeApplication<T>* app)
     app->add_action_with_parameter( "object-set-property",      String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_set_property),       app));
     app->add_action(                "object-unlink-clones",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_unlink_clones),      app));
     app->add_action(                "object-to-path",                   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_to_path),            app));
+    app->add_action(                "object-stroke-to-path",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_stroke_to_path),     app));
 
 #endif
 

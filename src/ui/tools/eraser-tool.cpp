@@ -49,7 +49,6 @@
 #include "rubberband.h"
 #include "selection-chemistry.h"
 #include "selection.h"
-#include "splivarot.h"
 #include "verbs.h"
 
 #include "display/sp-canvas.h"

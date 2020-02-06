@@ -25,6 +25,7 @@
 #include "object/sp-flowtext.h"
 #include "object/sp-namedview.h"
 #include "object/sp-object-group.h"
+#include "object/object-set.h"
 #include "path-chemistry.h" // sp_item_list_to_curves
 #include "text-editing.h" // te_update_layout_now_recursive
 #include "selection-chemistry.h" // fit_canvas_to_drawing

@@ -1,0 +1,11 @@
+
+
+This directory contains code related to path manipulations.
+
+To do:
+
+* Move all path manipulation related code here (livarot, etc.).
+* Merge code into lib2geom if possible.
+* Get rid of livarot
+* Remove GUI dependencies.
+* Find a better place to put directory.
