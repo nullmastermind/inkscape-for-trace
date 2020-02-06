@@ -17,6 +17,7 @@ run-clang-tidy -fix -header-filter='.*' "$@" > /dev/null || true
 
 # revert all fixes in protected directories
 git checkout ../src/3rdparty/
+(cd ../src/3rdparty/2geom && git checkout . )
 
 git diff | tee clang_tidy_diff
 
