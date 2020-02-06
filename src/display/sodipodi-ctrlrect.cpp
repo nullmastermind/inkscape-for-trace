@@ -220,7 +220,7 @@ void CtrlRect::render(SPCanvasBuf *buf)
             cairo_stroke_preserve(buf->ct);
         }
 
-        cairo_new_path( buf->ct ); // Clear path or get weird artifacts.
+        cairo_new_path(buf->ct); // Clear path or get weird artifacts.
         cairo_restore(buf->ct);
     }
 }
@@ -255,7 +255,9 @@ void CtrlRect::update(Geom::Affine const &affine, unsigned int flags)
 
     if (_area) {
         Geom::IntRect area = *_area;
-        sp_canvas_update_bbox( this, area[X].min(), area[Y].min(), area[X].max(), area[Y].max() );
+        // Windows glitches sometimes in cairo, possibly due to the way the surface is cleared.
+        // Increasing '_area' won't work as the box must be drown 'inside' the updated area.
+        sp_canvas_update_bbox( this, area[X].min(), area[Y].min(), area[X].max()+1, area[Y].max()+1);
     } else {
         std::cerr << "CtrlRect::update: No area!!" << std::endl;
     }
