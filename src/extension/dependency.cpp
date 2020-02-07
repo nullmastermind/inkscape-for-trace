@@ -185,12 +185,11 @@ bool Dependency::check ()
                 } /* PASS THROUGH!!! */ // TODO: the pass-through seems wrong - either it's relative or not.
                 case LOCATION_ABSOLUTE: {
                     // TODO: should we check if the directory actually is absolute and/or sanitize the filename somehow?
-                    if (!Glib::file_test(location, filetest)) {
-                        return false;
+                    if (Glib::file_test(location, filetest)) {
+                        _absolute_location = location;
+                        break;
                     }
-                    _absolute_location = location;
-                    break;
-                }
+                } /* PASS THROUGH!!! */ // NOTE: We are really forgiving to extension writers.
                 case LOCATION_INX: {
                     std::string base_directory = _extension->get_base_directory();
                     if (base_directory.empty()) {
@@ -198,16 +197,25 @@ bool Dependency::check ()
                                   "which is unknown for extension '%s'", _string, _extension->get_id());
                     }
                     std::string absolute_location = Glib::build_filename(base_directory, location);
-                    if (!Glib::file_test(absolute_location, filetest)) {
-                        return false;
+                    if (Glib::file_test(absolute_location, filetest)) {
+                        _absolute_location = absolute_location;
+                        break;
                     }
-                    _absolute_location = absolute_location;
-                    break;
-                }
+                } /* PASS THROUGH!!! */
                 /* The default case is to look in the path */
                 case LOCATION_PATH:
                 default: {
                     // TODO: we can likely use g_find_program_in_path (or its glibmm equivalent) for executable types
+
+                    /* Look for depricated locations first, this comes from each of the PASSTHROUGHs */
+                    auto deprloc = g_build_filename("inkex", "deprecated-simple", location.c_str(), NULL);
+                    std::string temploc2 =
+                        Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::EXTENSIONS, deprloc, false, true);
+                    if (Glib::file_test(temploc2, filetest)) {
+                        location = temploc2;
+                        _absolute_location = temploc2;
+                        break;
+                    }
 
                     gchar * path = g_strdup(g_getenv("PATH"));
 
