@@ -446,6 +446,16 @@ MarkerComboBox::create_marker_image(unsigned psize, gchar const *mname,
         return nullptr;
     }
 
+    /* Get from cache right away */
+    gchar *cache_name = g_strconcat(combo_id, mname, NULL);
+    Glib::ustring key = svg_preview_cache.cache_key(source->getDocumentURI(), cache_name, psize);
+    g_free (cache_name);
+    GdkPixbuf *pixbuf = svg_preview_cache.get_preview_from_cache(key); // no ref created
+    if(pixbuf) {
+        Gtk::Image *pb = Glib::wrap(GTK_IMAGE(gtk_image_new_from_pixbuf(pixbuf)));
+        return pb;
+    }
+
     // Create a copy repr of the marker with id="sample"
     Inkscape::XML::Document *xml_doc = sandbox->getReprDoc();
     Inkscape::XML::Node *mrepr = marker->getRepr()->duplicate(xml_doc);
@@ -518,16 +528,9 @@ MarkerComboBox::create_marker_image(unsigned psize, gchar const *mname,
     }
 
     /* Update to renderable state */
-    gchar *cache_name = g_strconcat(combo_id, mname, NULL);
-    Glib::ustring key = svg_preview_cache.cache_key(source->getDocumentURI(), cache_name, psize);
-    g_free (cache_name);
-    GdkPixbuf *pixbuf = svg_preview_cache.get_preview_from_cache(key); // no ref created
-
-    if (!pixbuf) {
-        pixbuf = render_pixbuf(drawing, 0.8, *dbox, psize);
-        svg_preview_cache.set_preview_in_cache(key, pixbuf);
-        g_object_unref(pixbuf); // reference is held by svg_preview_cache
-    }
+    pixbuf = render_pixbuf(drawing, 0.8, *dbox, psize);
+    svg_preview_cache.set_preview_in_cache(key, pixbuf);
+    g_object_unref(pixbuf); // reference is held by svg_preview_cache
 
     // Create widget
     Gtk::Image *pb = Glib::wrap(GTK_IMAGE(gtk_image_new_from_pixbuf(pixbuf)));
