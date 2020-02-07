@@ -249,7 +249,7 @@ void StyleSwatch::setStyle(SPCSSAttr *css)
     Glib::ustring css_string;
     sp_repr_css_write_string (_css, css_string);
 
-    SPStyle style(SP_ACTIVE_DOCUMENT);
+    SPStyle style(_desktop ? _desktop->getDocument() : nullptr);
     if (!css_string.empty()) {
         style.mergeString(css_string.c_str());
     }

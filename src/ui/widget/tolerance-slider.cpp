@@ -177,7 +177,7 @@ void ToleranceSlider::update (double val)
     if (_wr->isUpdating())
         return;
 
-    SPDesktop *dt = SP_ACTIVE_DESKTOP;
+    SPDesktop *dt = _wr->desktop();
     if (!dt) 
         return;
 

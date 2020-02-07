@@ -34,6 +34,11 @@ Registry::setUpdating (bool upd)
     _updating = upd;
 }
 
+void Registry::setDesktop(SPDesktop *desktop)
+{ //
+    _desktop = desktop;
+}
+
 //====================================================
 
 

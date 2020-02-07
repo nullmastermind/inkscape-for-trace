@@ -116,10 +116,11 @@ void EntityLineEntry::load_from_preferences()
 void
 EntityLineEntry::on_changed()
 {
-    if (_wr->isUpdating()) return;
+    if (_wr->isUpdating() || !_wr->desktop())
+        return;
 
     _wr->setUpdating (true);
-    SPDocument *doc = SP_ACTIVE_DOCUMENT;
+    SPDocument *doc = _wr->desktop()->getDocument();
     Glib::ustring text = static_cast<Gtk::Entry*>(_packable)->get_text();
     if (rdf_set_work_entity (doc, _entity, text.c_str())) {
         if (doc->isSensitive()) {
@@ -178,10 +179,11 @@ void EntityMultiLineEntry::load_from_preferences()
 void
 EntityMultiLineEntry::on_changed()
 {
-    if (_wr->isUpdating()) return;
+    if (_wr->isUpdating() || !_wr->desktop())
+        return;
 
     _wr->setUpdating (true);
-    SPDocument *doc = SP_ACTIVE_DOCUMENT;
+    SPDocument *doc = _wr->desktop()->getDocument();
     Gtk::ScrolledWindow *s = static_cast<Gtk::ScrolledWindow*>(_packable);
     Gtk::TextView *tv = static_cast<Gtk::TextView*>(s->get_child());
     Glib::ustring text = tv->get_buffer()->get_text();

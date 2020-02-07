@@ -162,18 +162,6 @@ PageSizer::PageSizer(Registry & _wr)
     _portraitButton.set_group (group);
     _portraitButton.set_active (true);
 
-    // Setting default custom unit to document unit
-    SPDesktop *dt = SP_ACTIVE_DESKTOP;
-    SPNamedView *nv = dt->getNamedView();
-    _wr.setUpdating (true);
-    if (nv->page_size_units) {
-        _dimensionUnits.setUnit(nv->page_size_units->abbr);
-    } else if (nv->display_units) {
-        _dimensionUnits.setUnit(nv->display_units->abbr);
-    }
-    _wr.setUpdating (false);
-
-
     //## Set up custom size frame
     _customFrame.set_label(_("Custom size"));
     pack_start (_customFrame, false, false, 0);
@@ -270,10 +258,6 @@ PageSizer::PageSizer(Registry & _wr)
     _viewboxTable.attach(_viewboxW,      0, 1, 1, 1);
     _viewboxTable.attach(_viewboxH,      1, 1, 1, 1);
     _viewboxTable.attach(_viewboxSpacer, 2, 0, 3, 1);
-
-    _wr.setUpdating (true);
-    updateScaleUI();
-    _wr.setUpdating (false);
 }
 
 
@@ -338,8 +322,10 @@ PageSizer::setDim (Inkscape::Util::Quantity w, Inkscape::Util::Quantity h, bool 
 
     _unit = w.unit->abbr;
 
-    if (SP_ACTIVE_DESKTOP && !_widgetRegistry->isUpdating()) {
-        SPDocument *doc = SP_ACTIVE_DESKTOP->getDocument();
+    SPDesktop *dt = _widgetRegistry->desktop();
+
+    if (dt && !_widgetRegistry->isUpdating()) {
+        SPDocument *doc = dt->getDocument();
         Inkscape::Util::Quantity const old_height = doc->getHeight();
         doc->setWidthAndHeight (w, h, changeSize);
         // The origin for the user is in the lower left corner; this point should remain stationary when
@@ -460,7 +446,7 @@ PageSizer::find_paper_size (Inkscape::Util::Quantity w, Inkscape::Util::Quantity
 void
 PageSizer::fire_fit_canvas_to_selection_or_drawing()
 {
-    SPDesktop *dt = SP_ACTIVE_DESKTOP;
+    SPDesktop *dt = _widgetRegistry->desktop();
     if (!dt) {
         return;
     }
@@ -468,7 +454,7 @@ PageSizer::fire_fit_canvas_to_selection_or_drawing()
     SPNamedView *nv;
     Inkscape::XML::Node *nv_repr;
 
-    if ((doc = SP_ACTIVE_DESKTOP->getDocument())
+    if ((doc = dt->getDocument())
         && (nv = sp_document_namedview(doc, nullptr))
         && (nv_repr = nv->getRepr())) {
         _lockMarginUpdate = true;
@@ -583,13 +569,20 @@ PageSizer::updateScaleUI()
     _changedvw_connection.block();
     _changedvh_connection.block();
 
-    SPDesktop *dt = SP_ACTIVE_DESKTOP;
+    SPDesktop *dt = _widgetRegistry->desktop();
     if (dt) {
         SPDocument *doc = dt->getDocument();
 
         // Update scale
         Geom::Scale scale = doc->getDocumentScale();
         SPNamedView *nv = dt->getNamedView();
+
+        // Setting default custom unit to document unit
+        if (nv->page_size_units) {
+            _dimensionUnits.setUnit(nv->page_size_units->abbr);
+        } else if (nv->display_units) {
+            _dimensionUnits.setUnit(nv->display_units->abbr);
+        }
 
         std::stringstream ss;
         ss << _("User units per ") << nv->display_units->abbr << "." ;
@@ -677,7 +670,7 @@ PageSizer::on_scale_changed()
     double value = _scaleX.getValue();
     if( value > 0 ) {
 
-        SPDesktop *dt = SP_ACTIVE_DESKTOP;
+        SPDesktop *dt = _widgetRegistry->desktop();
         if (dt) {
             SPDocument *doc = dt->getDocument();
             SPNamedView *nv = dt->getNamedView();
@@ -707,7 +700,7 @@ PageSizer::on_viewbox_changed()
     double viewboxH = _viewboxH.getValue();
 
     if( viewboxW > 0 && viewboxH > 0) {
-        SPDesktop *dt = SP_ACTIVE_DESKTOP;
+        SPDesktop *dt = _widgetRegistry->desktop();
         if (dt) {
             SPDocument *doc = dt->getDocument();
             _lockViewboxUpdate = true;

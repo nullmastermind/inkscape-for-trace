@@ -1519,6 +1519,8 @@ void DocumentProperties::setDesktop(SPDesktop *desktop)
 
     Panel::setDesktop(desktop);
 
+    _wr.setDesktop(desktop);
+
     if (desktop) {
         _handleDocumentReplaced(desktop, desktop->getDocument());
     }

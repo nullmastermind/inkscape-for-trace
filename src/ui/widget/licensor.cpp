@@ -59,10 +59,11 @@ LicenseItem::LicenseItem (struct rdf_license_t const* license, EntityEntry* enti
 /// \pre it is assumed that the license URI entry is a Gtk::Entry
 void LicenseItem::on_toggled()
 {
-    if (_wr.isUpdating()) return;
+    if (_wr.isUpdating() || !_wr.desktop())
+        return;
 
     _wr.setUpdating (true);
-    SPDocument *doc = SP_ACTIVE_DOCUMENT;
+    SPDocument *doc = _wr.desktop()->getDocument();
     rdf_set_license (doc, _lic->details ? _lic : nullptr);
     if (doc->isSensitive()) {
         DocumentUndo::done(doc, SP_VERB_NONE, _("Document license updated"));

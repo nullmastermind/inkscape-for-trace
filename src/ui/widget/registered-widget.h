@@ -103,8 +103,10 @@ protected:
         Inkscape::XML::Node *local_repr = repr;
         SPDocument *local_doc = doc;
         if (!local_repr) {
-            // no repr specified, use active desktop's namedview's repr
-            SPDesktop* dt = SP_ACTIVE_DESKTOP;
+            SPDesktop* dt = _wr->desktop();
+            if (!dt) {
+                return;
+            }
             local_repr = reinterpret_cast<SPObject *>(dt->getNamedView())->getRepr();
             local_doc = dt->getDocument();
         }

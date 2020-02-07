@@ -10,9 +10,7 @@
 #ifndef INKSCAPE_UI_WIDGET_REGISTRY__H
 #define INKSCAPE_UI_WIDGET_REGISTRY__H
 
-namespace Gtk {
-    class Object;
-}
+class SPDesktop;
 
 namespace Inkscape {
 namespace UI {
@@ -26,8 +24,13 @@ public:
     bool               isUpdating();
     void               setUpdating (bool);
 
+    SPDesktop *desktop() const { return _desktop; }
+    void setDesktop(SPDesktop *desktop);
+
 protected:
     bool _updating;
+
+    SPDesktop *_desktop = nullptr;
 };
 
 } // namespace Dialog

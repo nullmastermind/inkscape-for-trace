@@ -401,10 +401,11 @@ RegisteredColorPicker::on_changed (guint32 rgba)
     Inkscape::XML::Node *local_repr = repr;
     SPDocument *local_doc = doc;
     if (!local_repr) {
-        // no repr specified, use active desktop's namedview's repr
-        SPDesktop *dt = SP_ACTIVE_DESKTOP;
-        if (!dt)
+        SPDesktop *dt = _wr->desktop();
+        if (!dt) {
+            _wr->setUpdating(false);
             return;
+        }
         local_repr = dt->getNamedView()->getRepr();
         local_doc = dt->getDocument();
     }
