@@ -181,7 +181,7 @@ void Inkscape::SelCue::_newItemBboxes()
                 SP_CTRLRECT(box)->setRectangle(*b);
                 SP_CTRLRECT(box)->setColor(0xffffffa0, false, 0);
                 SP_CTRLRECT(box)->setDashed(true);
-                SP_CTRLRECT(box)->setInvert(true);
+                SP_CTRLRECT(box)->setInvert(false);
                 SP_CTRLRECT(box)->setShadow(1, 0x0000c0a0);
 
                 sp_canvas_item_move_to_z(box, 0);
