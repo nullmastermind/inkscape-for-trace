@@ -867,6 +867,15 @@ StrokeStyle::updateLine()
 
     Inkscape::Selection *sel = desktop ? desktop->getSelection() : nullptr;
 
+    if (!sel || sel->isEmpty()) {
+        // Nothing selected, grey-out all controls in the stroke-style dialog
+        table->set_sensitive(false);
+
+        update = false;
+
+        return;
+    }
+
     FillOrStroke kind = GPOINTER_TO_INT(get_data("kind")) ? FILL : STROKE;
 
     // create temporary style
@@ -881,14 +890,7 @@ StrokeStyle::updateLine()
 
     SPIPaint &targPaint = *query.getFillOrStroke(kind == FILL);
 
-    if (!sel || sel->isEmpty()) {
-        // Nothing selected, grey-out all controls in the stroke-style dialog
-        table->set_sensitive(false);
-
-        update = false;
-
-        return;
-    } else {
+    {
         table->set_sensitive(true);
 
         if (result_sw == QUERY_STYLE_MULTIPLE_AVERAGED) {
