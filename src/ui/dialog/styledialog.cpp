@@ -481,6 +481,9 @@ void StyleDialog::readStyleElement()
     }
     if (!obj) {
         obj = getDesktop()->getDocument()->getXMLDialogSelectedObject();
+        if (obj && !obj->getRepr()) {
+            obj = nullptr; // treat detached object as no selection
+        }
     }
 
     Glib::ustring gladefile = get_filename(Inkscape::IO::Resource::UIS, "dialog-css.glade");
