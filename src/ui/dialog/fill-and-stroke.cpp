@@ -58,12 +58,12 @@ FillAndStroke::FillAndStroke()
 {
     Gtk::Box *contents = _getContents();
     contents->set_spacing(2);
-
     contents->pack_start(_notebook, true, true);
 
     _notebook.append_page(*_page_fill, _createPageTabLabel(_("_Fill"), INKSCAPE_ICON("object-fill")));
     _notebook.append_page(*_page_stroke_paint, _createPageTabLabel(_("Stroke _paint"), INKSCAPE_ICON("object-stroke")));
     _notebook.append_page(*_page_stroke_style, _createPageTabLabel(_("Stroke st_yle"), INKSCAPE_ICON("object-stroke-style")));
+    _notebook.set_vexpand(true);
 
     _notebook.signal_switch_page().connect(sigc::mem_fun(this, &FillAndStroke::_onSwitchPage));
 
@@ -71,7 +71,7 @@ FillAndStroke::FillAndStroke()
     _layoutPageStrokePaint();
     _layoutPageStrokeStyle();
 
-    contents->pack_start(_composite_settings, true, true, 0);
+    contents->pack_end(_composite_settings, Gtk::PACK_SHRINK);
 
     show_all_children();
 
