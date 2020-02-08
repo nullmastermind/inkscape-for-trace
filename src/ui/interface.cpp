@@ -64,7 +64,7 @@ sp_ui_new_view()
 
     ConcreteInkscapeApplication<Gtk::Application>* app = &(ConcreteInkscapeApplication<Gtk::Application>::get_instance());
 
-    InkscapeWindow* win = app->window_open (document);
+    app->window_open(document);
 }
 
 void

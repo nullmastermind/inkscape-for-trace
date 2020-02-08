@@ -727,7 +727,6 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
     // remember important aspects of the source path, to be restored
     gint pos = repr_source->position();
     Inkscape::XML::Node *parent = repr_source->parent();
-    gchar const *id = repr_source->attribute("id");
     // remove source paths
     clear();
     for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); l++){

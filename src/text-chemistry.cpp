@@ -40,17 +40,6 @@
 using Inkscape::DocumentUndo;
 
 static SPItem *
-flowtext_in_selection(Inkscape::Selection *selection)
-{
-	auto items = selection->items();
-    for(auto i=items.begin();i!=items.end();++i){
-        if (SP_IS_FLOWTEXT(*i))
-            return *i;
-    }
-    return nullptr;
-}
-
-static SPItem *
 text_or_flowtext_in_selection(Inkscape::Selection *selection)
 {
     auto items = selection->items();

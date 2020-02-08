@@ -1857,8 +1857,6 @@ void ZoomVerb::perform(SPAction *action, void *data)
 
     SPDocument *doc = dt->getDocument();
 
-    Inkscape::XML::Node *repr = dt->namedview->getRepr();
-
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     gdouble zoom_inc   =
         prefs->getDoubleLimited( "/options/zoomincrement/value",  M_SQRT2, 1.01, 10 );

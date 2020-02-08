@@ -980,7 +980,6 @@ SPLPEItem::applyToClipPathOrMask(SPItem *clip_mask, SPItem* to, Inkscape::LivePa
 {
     SPGroup*   group = dynamic_cast<SPGroup  *>(clip_mask);
     SPShape*   shape = dynamic_cast<SPShape  *>(clip_mask);
-    SPLPEItem* tolpe = dynamic_cast<SPLPEItem*>(to);
     SPRoot *root = this->document->getRoot();
     if (group) {
         std::vector<SPItem*> item_list = sp_item_group_item_list(group);

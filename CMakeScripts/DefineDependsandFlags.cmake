@@ -18,6 +18,8 @@ list(APPEND INKSCAPE_INCS ${PROJECT_SOURCE_DIR}
 if(WITH_ASAN)
     list(APPEND INKSCAPE_CXX_FLAGS "-fsanitize=address -fno-omit-frame-pointer")
     list(APPEND INKSCAPE_LIBS "-fsanitize=address")
+    list(APPEND INKSCAPE_LIBS "-Wno-mismatched-tags")
+    list(APPEND INKSCAPE_LIBS "-Wno-switch")
 else()
     # Undefine first, to suppress 'warning: "_FORTIFY_SOURCE" redefined'
     list(APPEND INKSCAPE_CXX_FLAGS "-U_FORTIFY_SOURCE")
@@ -31,6 +33,7 @@ list(APPEND INKSCAPE_CXX_FLAGS "-Werror=format-security")       # e.g.: printf(v
 list(APPEND INKSCAPE_CXX_FLAGS_DEBUG "-Og")                     # -Og for _FORTIFY_SOURCE. One could add -Weffc++ here to see approx. 6000 warnings
 list(APPEND INKSCAPE_CXX_FLAGS_DEBUG "-Wcomment")
 list(APPEND INKSCAPE_CXX_FLAGS_DEBUG "-Wunused-function")
+list(APPEND INKSCAPE_CXX_FLAGS_DEBUG "-Wunused-variable")
 list(APPEND INKSCAPE_CXX_FLAGS_DEBUG "-D_GLIBCXX_ASSERTIONS")
 if (CMAKE_COMPILER_IS_GNUCC)
     list(APPEND INKSCAPE_CXX_FLAGS_DEBUG "-fexceptions -grecord-gcc-switches -fasynchronous-unwind-tables")

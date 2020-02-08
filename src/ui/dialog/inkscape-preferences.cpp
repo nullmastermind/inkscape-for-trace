@@ -783,7 +783,6 @@ void InkscapePreferences::themeChange()
                 dark = true;
             }
         }
-        Gtk::Widget *dialog_window = Glib::wrap(gobj());
         bool toggled = prefs->getBool("/theme/darkTheme", false) != dark;
         if (dark) {
             prefs->setBool("/theme/darkTheme", true);

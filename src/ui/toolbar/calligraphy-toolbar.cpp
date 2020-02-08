@@ -421,7 +421,6 @@ CalligraphyToolbar::build_presets_list()
     auto presets = get_presets_list();
 
     for (auto & preset : presets) {
-        GtkTreeIter iter;
         Glib::ustring preset_name = prefs->getString(preset + "/name");
 
         if (!preset_name.empty()) {

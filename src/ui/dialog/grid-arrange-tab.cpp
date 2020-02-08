@@ -306,7 +306,6 @@ g_print("\n row = %f     col = %f selection x= %f selection y = %f", total_row_h
              }
 
              for (auto item:current_row) {
-                 Inkscape::XML::Node *repr = item->getRepr();
                  Geom::OptRect b = item->documentVisualBounds();
                  Geom::Point min;
                  if (b) {

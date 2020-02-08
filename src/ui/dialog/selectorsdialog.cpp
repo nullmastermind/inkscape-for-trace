@@ -421,7 +421,6 @@ void SelectorsDialog::_resized()
     }
     _updating = true;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool dir = !prefs->getBool("/dialogs/selectors/vertical", true);
     int max = int(_paned.property_max_position() * 0.95);
     int min = int(_paned.property_max_position() * 0.05);
     if (_paned.property_position() > max) {

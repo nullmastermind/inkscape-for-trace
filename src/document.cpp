@@ -397,8 +397,6 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
         rroot->addChild(rnew, nullptr);
         // clean up
         Inkscape::GC::release(rnew);
-    } else {
-        Inkscape::XML::Node *nv_repr = sp_item_group_get_child_by_name(document->root, nullptr, "sodipodi:namedview")->getRepr();
     }
 
     // Defs

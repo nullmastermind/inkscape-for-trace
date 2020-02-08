@@ -1642,7 +1642,6 @@ bool CairoRenderContext::renderImage(Inkscape::Pixbuf *pb,
     int h = pb->height();
 
     // TODO: reenable merge_opacity if useful
-    float opacity = _state->opacity;
 
     cairo_surface_t *image_surface = pb->getSurfaceRaw();
     if (cairo_surface_status(image_surface)) {

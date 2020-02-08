@@ -26,8 +26,6 @@
 namespace {
 
 static void   sp_canvas_rotate_destroy(SPCanvasItem *item);
-static void   sp_canvas_rotate_update (SPCanvasItem *item, Geom::Affine const &affine, unsigned int flags);
-static void   sp_canvas_rotate_render (SPCanvasItem *item, SPCanvasBuf *buf);
 static int    sp_canvas_rotate_event  (SPCanvasItem *item, GdkEvent *event);
 
 } // namespace
@@ -39,8 +37,6 @@ G_DEFINE_TYPE(SPCanvasRotate, sp_canvas_rotate, SP_TYPE_CANVAS_ITEM);
 static void sp_canvas_rotate_class_init (SPCanvasRotateClass *klass)
 {
     klass->destroy = sp_canvas_rotate_destroy;
-    //klass->update  = sp_canvas_rotate_update;
-    //klass->render  = sp_canvas_rotate_render;
     klass->event   = sp_canvas_rotate_event;
 }
 
@@ -62,86 +58,6 @@ static void sp_canvas_rotate_destroy (SPCanvasItem *object)
     if (SP_CANVAS_ITEM_CLASS(sp_canvas_rotate_parent_class)->destroy) {
         SP_CANVAS_ITEM_CLASS(sp_canvas_rotate_parent_class)->destroy(object);
     }
-}
-
-// NOT USED... TOO SLOW
-static void sp_canvas_rotate_update( SPCanvasItem *item, Geom::Affine const &/*affine*/, unsigned int /*flags*/ )
-{
-    SPCanvasRotate *cr = SP_CANVAS_ROTATE(item);
-
-    if (cr->surface_copy == nullptr) {
-        // std::cout << "sp_canvas_rotate_update: surface_copy is NULL" << std::endl;
-        return;
-    }
-
-    // Destroy surface_rotated if it already exists.
-    if (cr->surface_rotated != nullptr) {
-        cairo_surface_destroy (cr->surface_rotated);
-        cr->surface_rotated = nullptr;
-    }
-
-    // Create rotated surface
-    cr->surface_rotated = ink_cairo_surface_create_identical(cr->surface_copy);
-    double width  = cairo_image_surface_get_width  (cr->surface_rotated);
-    double height = cairo_image_surface_get_height (cr->surface_rotated);
-    cairo_t *context = cairo_create( cr->surface_rotated );
-    cairo_set_operator( context, CAIRO_OPERATOR_SOURCE );
-    cairo_translate(    context, width/2.0, height/2.0 );
-    cairo_rotate(       context, Geom::rad_from_deg(-cr->angle) );
-    cairo_translate(    context, -width/2.0, -height/2.0 );
-    cairo_set_source_surface( context, cr->surface_copy, 0, 0 );
-    cairo_paint(        context );
-    cairo_destroy(      context);
-
-    // We cover the entire canvas
-    item->x1 = -G_MAXINT;
-    item->y1 = -G_MAXINT;
-    item->x2 = G_MAXINT;
-    item->y2 = G_MAXINT;
-
-    item->canvas->requestRedraw(item->x1, item->y1, item->x2, item->y2);
-}
-
-// NOT USED... TOO SLOW
-static void sp_canvas_rotate_render( SPCanvasItem *item, SPCanvasBuf *buf)
-{
-    // std::cout << "sp_canvas_rotate_render:" << std::endl;
-    // std::cout << "  buf->rect:         " << buf->rect << std::endl;
-    // std::cout << "  buf->canvas_rect: " << buf->canvas_rect << std::endl;
-    SPCanvasRotate *cr = SP_CANVAS_ROTATE(item);
-    auto ct = buf->ct;
-
-    if (!ct) {
-        return;
-    }
-
-    if (cr->surface_rotated == nullptr ) {
-        // std::cout << "  surface_rotated is NULL" << std::endl;
-        return;
-    }
-
-    // Draw rotated canvas
-    cairo_save (ct);
-    cairo_translate (ct,
-                     buf->canvas_rect.left() - buf->rect.left(),
-                     buf->canvas_rect.top()  - buf->rect.top() );
-    cairo_set_operator (ct, CAIRO_OPERATOR_SOURCE );
-    cairo_set_source_surface (ct, cr->surface_rotated, 0, 0 );
-    cairo_paint   (ct);
-    cairo_restore (ct);
-
-
-    // Draw line from center to cursor
-    cairo_save (ct);
-    cairo_translate   (ct, -buf->rect.left(), -buf->rect.top());
-    cairo_new_path    (ct);
-    cairo_move_to     (ct, cr->center[Geom::X], cr->center[Geom::Y]);
-    cairo_rel_line_to (ct, cr->cursor[Geom::X], cr->cursor[Geom::Y]);
-    cairo_set_line_width (ct, 2);
-    ink_cairo_set_source_rgba32 (ct, 0xff00007f);
-    cairo_stroke (ct);
-    cairo_restore (ct);
-
 }
 
 static int sp_canvas_rotate_event  (SPCanvasItem *item, GdkEvent *event)

@@ -98,11 +98,8 @@ static void sp_desktop_widget_class_init (SPDesktopWidgetClass *klass);
 static void sp_desktop_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation);
 static void sp_desktop_widget_realize (GtkWidget *widget);
 
-static void sp_desktop_widget_adjustment_value_changed (GtkAdjustment *adj, SPDesktopWidget *dtw);
-
 static gdouble sp_dtw_zoom_value_to_display (gdouble value);
 static gdouble sp_dtw_zoom_display_to_value (gdouble value);
-static void sp_dtw_zoom_menu_handler (SPDesktop *dt, gdouble factor);
 
 SPViewWidgetClass *dtw_parent_class;
 
@@ -1043,7 +1040,6 @@ void
 SPDesktopWidget::color_profile_event(EgeColorProfTracker */*tracker*/, SPDesktopWidget *dtw)
 {
     // Handle profile changes
-    GdkScreen* screen = gtk_widget_get_screen(GTK_WIDGET(dtw));
     GdkWindow *window = gtk_widget_get_window(gtk_widget_get_toplevel(GTK_WIDGET(dtw)));
 
     // Figure out the ID for the monitor
@@ -1080,7 +1076,6 @@ SPDesktopWidget::update_guides_lock()
 
     auto doc  = desktop->getDocument();
     auto nv   = desktop->getNamedView();
-    auto repr = nv->getRepr();
 
     if ( down != nv->lockguides ) {
         nv->lockguides = down;
@@ -2396,7 +2391,6 @@ SPDesktopWidget::on_ruler_box_button_release_event(GdkEventButton *event, Gtk::E
 
         if (!_ruler_dragged) {
             // Ruler click (without drag) toggle the guide visibility on and off
-            Inkscape::XML::Node *repr = desktop->namedview->getRepr();
             sp_namedview_toggle_guides(desktop->getDocument(), desktop->namedview);
         }
 

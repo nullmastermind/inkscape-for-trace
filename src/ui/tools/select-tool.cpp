@@ -904,7 +904,6 @@ bool SelectTool::root_handler(GdkEvent* event) {
             }
 
             gdouble const nudge = prefs->getDoubleLimited("/options/nudgedistance/value", 2, 0, 1000, "px"); // in px
-            gdouble const offset = prefs->getDoubleLimited("/options/defaultscale/value", 2, 0, 1000, "px");
             int const snaps = prefs->getInt("/options/rotationsnapsperpi/value", 12);
             auto const y_dir = desktop->yaxisdir();
 

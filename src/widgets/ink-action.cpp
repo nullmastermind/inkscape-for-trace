@@ -157,7 +157,6 @@ void ink_action_set_property( GObject* obj, guint propId, const GValue *value, G
 
 static GtkWidget* ink_action_create_menu_item( GtkAction* action )
 {
-    InkAction* act = INK_ACTION( action );
     GtkWidget* item = GTK_ACTION_CLASS(ink_action_parent_class)->create_menu_item( action );
 
     return item;

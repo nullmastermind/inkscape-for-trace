@@ -297,7 +297,6 @@ void FillNStroke::performUpdate()
                     } else if (SP_IS_MESHGRADIENT(server)) {
                         SPGradient *array = SP_GRADIENT(server)->getArray();
                         psel->setGradientMesh( SP_MESHGRADIENT(array) );
-                        SPMeshGradient *mg = SP_MESHGRADIENT(server);
                         psel->updateMeshList( SP_MESHGRADIENT( array ));
 #endif
                     } else if (SP_IS_PATTERN(server)) {
@@ -623,8 +622,6 @@ void FillNStroke::updateFromPaint()
         case SPPaintSelector::MODE_GRADIENT_MESH:
 
             if (!items.empty()) {
-                SPGradientType const gradient_type = SP_GRADIENT_TYPE_MESH;
-
                 SPCSSAttr *css = nullptr;
                 if (kind == FILL) {
                     // HACK: reset fill-opacity - that 0.75 is annoying; BUT remove this when we have an opacity slider for all tabs

@@ -194,7 +194,6 @@ void
 Selection::setBackup ()
 {
     SPDesktop *desktop = this->desktop();
-    SPDocument *document = SP_ACTIVE_DOCUMENT;
     Inkscape::UI::Tools::NodeTool *tool = nullptr;
     if (desktop) {
         Inkscape::UI::Tools::ToolBase *ec = desktop->event_context;
@@ -283,7 +282,6 @@ Selection::restoreBackup()
         if (node) {
             Inkscape::UI::SubpathList sp = node->nodeList().subpathList();
             for (auto & l : _seldata) {
-                SPPath * path = dynamic_cast<SPPath *>(document->getObjectById(l.first));
                 gint sp_count = 0;
                 for (Inkscape::UI::SubpathList::iterator j = sp.begin(); j != sp.end(); ++j, ++sp_count) {
                     if(sp_count == l.second.first) {

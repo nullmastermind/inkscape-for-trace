@@ -120,7 +120,6 @@ bool
 InkScale::on_motion_notify_event(GdkEventMotion* motion_event) {
 
   double x = motion_event->x;
-  double y = motion_event->y;
 
   if (_dragging) {
 

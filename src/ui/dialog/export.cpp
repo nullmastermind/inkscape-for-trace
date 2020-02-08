@@ -982,7 +982,6 @@ void Export::onExport ()
     bool do_interlace = (interlacing.get_active());
     float pHYs = 0;
     int zlib = zlib_compression.get_active_row_number() ;
-    const char* const modes_list[]={"Gray_1", "Gray_2","Gray_4","Gray_8","Gray_16","RGB_8","RGB_16","GrayAlpha_8","GrayAlpha_16","RGBA_8","RGBA_16"};
     int colortypes[] = {0,0,0,0,0,2,2,4,4,6,6}; //keep in sync with modes_list in Export constructor. values are from libpng doc.
     int bitdepths[] = {1,2,4,8,16,8,16,8,16,8,16};
     int color_type = colortypes[bitdepth_cb.get_active_row_number()] ;

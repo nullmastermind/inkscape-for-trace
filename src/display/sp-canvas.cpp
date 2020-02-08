@@ -1475,7 +1475,6 @@ int SPCanvas::pickCurrentItem(GdkEvent *event)
 
 gint SPCanvas::handle_doubleclick(GtkWidget *widget, GdkEventButton *event)
 {
-    SPCanvas *canvas = SP_CANVAS(widget);
     // Maybe we want to use double click on canvas so retain here
     return 0;
 }
@@ -1573,7 +1572,6 @@ gint SPCanvas::handle_button(GtkWidget *widget, GdkEventButton *event)
         }
         if (canvas->_split_hover) {
             retval = TRUE;
-            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
             bool spliter_clicked = false;
             bool reset = false;
             if (!canvas->_split_dragging) {
@@ -1658,7 +1656,6 @@ void SPCanvas::set_cursor(GtkWidget *widget)
         }  
     } else if (canvas->_split_hover) {
         if (canvas->_changecursor != 3) {
-            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
             if (_split_vertical) {
                 cursor = gdk_cursor_new_from_name(display, "ew-resize");
             } else {
@@ -1696,7 +1693,6 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
         return FALSE;
     
     Geom::IntPoint cursor_pos = Geom::IntPoint(event->x, event->y);
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         
     if (desktop && desktop->splitMode()) {
         if (canvas->_spliter &&
@@ -1904,7 +1900,6 @@ void SPCanvas::paintXRayBuffer(Geom::IntRect const &paint_rect, Geom::IntRect co
     if (!canvas_rect.contains(paint_rect) && !canvas_rect.intersects(paint_rect)) {
         return;
     }
-    Geom::IntRect rect_moved = Geom::IntRect::from_xywh(_x0, _y0, _x0 + paint_rect.width(), _y0 + paint_rect.height());
     SPCanvasBuf buf;
     buf.buf = nullptr;
     buf.buf_rowstride = 0;

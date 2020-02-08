@@ -313,8 +313,6 @@ void PreviewHolder::calcGridSize( const Gtk::Widget* item, int itemCount, int& n
             req.width = currW;
         }
 
-        auto hs = _scroller->get_hscrollbar();
-
         if (_wrap && item != nullptr) {
 
             // Get width of bar.

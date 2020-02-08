@@ -278,8 +278,6 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
         return;
     }
     if (SP_IS_PENCIL_CONTEXT(dc)) {
-        PencilTool *pt = SP_PENCIL_CONTEXT(dc);
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         if (dc->tablet_enabled) {
             SPObject *elemref = nullptr;
             if ((elemref = document->getObjectById("power_stroke_preview"))) {

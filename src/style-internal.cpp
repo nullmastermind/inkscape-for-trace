@@ -1150,7 +1150,6 @@ const Glib::ustring SPIEastAsian::get_value() const
     if (this->inherit) return Glib::ustring("inherit");
     if (this->value == 0) return Glib::ustring("normal");
     auto ret = Glib::ustring("");
-    unsigned j = 1;
     auto enums = enum_font_variant_east_asian;
     for (unsigned i = 0; enums[i].key; ++i) {
         if (this->value & (1 << i)) {
@@ -1306,7 +1305,6 @@ SPIShapes::read( gchar const *str) {
         return;
     }
     SPDocument* document = object->document;
-    Inkscape::XML::Node *text_repr = object->getRepr();
 
     // Clear previously set listeners
     for (auto shape_id : shape_ids) {
