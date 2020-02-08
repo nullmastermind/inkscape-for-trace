@@ -753,25 +753,20 @@ static void sp_flood_do_flood_fill(ToolBase *event_context, GdkEvent *event, boo
         return;
     }
     
-    double zoom_scale = desktop->current_zoom();
-    
     // Render 160% of the physical display to the render pixel buffer, so that available
     // fill areas off the screen can be included in the fill.
     double padding = 1.6;
 
     Geom::Rect screen = desktop->get_display_area();
 
-    unsigned int width = (int)ceil(screen.width() * zoom_scale * padding);
-    unsigned int height = (int)ceil(screen.height() * zoom_scale * padding);
+    // image space is world space with an offset
+    Geom::Rect const screen_world = screen * desktop->d2w();
+    Geom::IntPoint const img_dims = (screen_world.dimensions() * padding).ceil();
+    Geom::Affine const world2img = Geom::Translate((img_dims - screen_world.dimensions()) / 2.0 - screen_world.min());
+    Geom::Affine const doc2img = desktop->doc2dt() * desktop->d2w() * world2img;
 
-    Geom::Point origin = screen.corner(desktop->is_yaxisdown() ? 0 : 3)
-        * desktop->doc2dt();
-                    
-    origin[Geom::X] += (screen.width() * ((1 - padding) / 2));
-    origin[Geom::Y] += (screen.height() * ((1 - padding) / 2));
-    
-    Geom::Scale scale(zoom_scale, zoom_scale);
-    Geom::Affine affine = scale * Geom::Translate(-origin * scale);
+    auto const width = img_dims.x();
+    auto const height = img_dims.y();
 
     int stride = cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, width);
     guchar *px = g_new(guchar, stride * height);
@@ -783,7 +778,7 @@ static void sp_flood_do_flood_fill(ToolBase *event_context, GdkEvent *event, boo
         unsigned dkey = SPItem::display_key_new(1);
         Inkscape::Drawing drawing;
         Inkscape::DrawingItem *root = document->getRoot()->invoke_show( drawing, dkey, SP_ITEM_SHOW_DISPLAY);
-        root->setTransform(affine);
+        root->setTransform(doc2img);
         drawing.setRoot(root);
 
         Geom::IntRect final_bbox = Geom::IntRect::from_xywh(0, 0, width, height);
@@ -874,15 +869,12 @@ static void sp_flood_do_flood_fill(ToolBase *event_context, GdkEvent *event, boo
         fill_points = r->getPoints();
     }
 
-    for (unsigned int i = 0; i < fill_points.size(); i++) {
-        Geom::Point pw = fill_points[i]
-            * Geom::Scale(1. / zoom_scale)
-            * desktop->doc2dt().withoutTranslation()
-            * desktop->doc2dt()
-            * affine;
+    auto const img_max_indices = Geom::Rect::from_xywh(0, 0, width - 1, height - 1);
 
-        pw[Geom::X] = (int)MIN(width - 1, MAX(0, pw[Geom::X]));
-        pw[Geom::Y] = (int)MIN(height - 1, MAX(0, pw[Geom::Y]));
+    for (unsigned int i = 0; i < fill_points.size(); i++) {
+        Geom::Point pw = fill_points[i] * world2img;
+
+        pw = img_max_indices.clamp(pw);
 
         if (is_touch_fill) {
             if (i == 0) {
@@ -1077,10 +1069,7 @@ static void sp_flood_do_flood_fill(ToolBase *event_context, GdkEvent *event, boo
     if (min_x > trace_padding) { min_x -= trace_padding; }
     if (max_x < (width - 1 - trace_padding)) { max_x += trace_padding; }
 
-    Geom::Point min_start = Geom::Point(min_x, min_y);
-    
-    affine = scale * Geom::Translate(-origin * scale - min_start);
-    Geom::Affine inverted_affine = Geom::Affine(affine).inverse();
+    Geom::Affine inverted_affine = Geom::Translate(min_x, min_y) * doc2img.inverse();
     
     do_trace(bci, trace_px, desktop, inverted_affine, min_x, max_x, min_y, max_y, union_with_selection);
 

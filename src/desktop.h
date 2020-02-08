@@ -448,8 +448,11 @@ public:
      */
     void show_dialogs();
 
+    // TODO return const ref instead of copy
     Geom::Affine w2d() const; //transformation from window to desktop coordinates (zoom/rotate).
     Geom::Point w2d(Geom::Point const &p) const;
+    /// Transformation from desktop to window coordinates
+    Geom::Affine d2w() const { return _current_affine.d2w(); }
     Geom::Point d2w(Geom::Point const &p) const;
     const Geom::Affine& doc2dt() const;
     Geom::Affine dt2doc() const;
