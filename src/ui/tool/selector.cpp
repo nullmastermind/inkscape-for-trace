@@ -39,7 +39,7 @@ public:
         setVisible(false);
         _rubber = static_cast<CtrlRect*>(sp_canvas_item_new(_desktop->getControls(),
         SP_TYPE_CTRLRECT, nullptr));
-        _rubber->setColor(0xffffcfff, false, 0x0);
+        _rubber->setColor(0x8080ffff, false, 0x0);
         _rubber->setInvert(true);
         sp_canvas_item_hide(_rubber);
     }
