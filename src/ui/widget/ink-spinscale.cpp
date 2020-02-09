@@ -146,7 +146,10 @@ InkScale::on_motion_notify_event(GdkEventMotion* motion_event) {
     // Can't see how to do this the C++ way since GdkEventMotion
     // is a structure with a C window member. There is a gdkmm
     // wrapping function for Gdk::EventMotion but only in unstable.
-    gdk_window_set_cursor( motion_event->window, cursor->gobj() );
+
+    // If the cursor theme doesn't have the `sb_up_arrow` cursor then the pointer will be NULL
+    if (cursor)
+      gdk_window_set_cursor( motion_event->window, cursor->gobj() );
   }
 
   return false;
