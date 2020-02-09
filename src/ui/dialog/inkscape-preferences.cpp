@@ -322,6 +322,36 @@ void InkscapePreferences::AddNewObjectsStyle(DialogPage &p, Glib::ustring const 
 void InkscapePreferences::initPageTools()
 {
     Gtk::TreeModel::iterator iter_tools = this->AddPage(_page_tools, _("Tools"), PREFS_PAGE_TOOLS);
+    this->AddPage(_page_selector, _("Selector"), iter_tools, PREFS_PAGE_TOOLS_SELECTOR);
+    this->AddPage(_page_node, _("Node"), iter_tools, PREFS_PAGE_TOOLS_NODE);
+    
+    // shapes
+    Gtk::TreeModel::iterator iter_shapes = this->AddPage(_page_shapes, _("Shapes"), iter_tools, PREFS_PAGE_TOOLS_SHAPES);
+    this->AddPage(_page_rectangle, _("Rectangle"), iter_shapes, PREFS_PAGE_TOOLS_SHAPES_RECT);
+    this->AddPage(_page_ellipse, _("Ellipse"), iter_shapes, PREFS_PAGE_TOOLS_SHAPES_ELLIPSE);
+    this->AddPage(_page_star, _("Star"), iter_shapes, PREFS_PAGE_TOOLS_SHAPES_STAR);
+    this->AddPage(_page_3dbox, _("3D Box"), iter_shapes, PREFS_PAGE_TOOLS_SHAPES_3DBOX);
+    this->AddPage(_page_spiral, _("Spiral"), iter_shapes, PREFS_PAGE_TOOLS_SHAPES_SPIRAL);
+    
+    this->AddPage(_page_pen, _("Pen"), iter_tools, PREFS_PAGE_TOOLS_PEN);
+    this->AddPage(_page_pencil, _("Pencil"), iter_tools, PREFS_PAGE_TOOLS_PENCIL);
+    this->AddPage(_page_calligraphy, _("Calligraphy"), iter_tools, PREFS_PAGE_TOOLS_CALLIGRAPHY);
+    this->AddPage(_page_text, C_("ContextVerb", "Text"), iter_tools, PREFS_PAGE_TOOLS_TEXT);
+
+    this->AddPage(_page_gradient, _("Gradient"), iter_tools, PREFS_PAGE_TOOLS_GRADIENT);
+    this->AddPage(_page_dropper, _("Dropper"), iter_tools, PREFS_PAGE_TOOLS_DROPPER);
+    this->AddPage(_page_paintbucket, _("Paint Bucket"), iter_tools, PREFS_PAGE_TOOLS_PAINTBUCKET);
+    
+    this->AddPage(_page_tweak, _("Tweak"), iter_tools, PREFS_PAGE_TOOLS_TWEAK);
+    this->AddPage(_page_spray, _("Spray"), iter_tools, PREFS_PAGE_TOOLS_SPRAY);
+    this->AddPage(_page_eraser, _("Eraser"), iter_tools, PREFS_PAGE_TOOLS_ERASER);
+    this->AddPage(_page_connector, _("Connector"), iter_tools, PREFS_PAGE_TOOLS_CONNECTOR);
+#ifdef WITH_LPETOOL
+    this->AddPage(_page_lpetool, _("LPE Tool"), iter_tools, PREFS_PAGE_TOOLS_LPETOOL);
+#endif // WITH_LPETOOL
+    this->AddPage(_page_zoom, _("Zoom"), iter_tools, PREFS_PAGE_TOOLS_ZOOM);
+    this->AddPage(_page_measure, C_("ContextVerb", "Measure"), iter_tools, PREFS_PAGE_TOOLS_MEASURE);
+    
     _path_tools = _page_list.get_model()->get_path(iter_tools);
 
     _page_tools.add_group_header( _("Bounding box to use"));
@@ -346,7 +376,6 @@ void InkscapePreferences::initPageTools()
     _connector_ignore_text.init( _("Don't attach connectors to text objects"), "/tools/connector/ignoretext", true);
 
     //Selector
-    this->AddPage(_page_selector, _("Selector"), iter_tools, PREFS_PAGE_TOOLS_SELECTOR);
 
 
     AddSelcueCheckbox(_page_selector, "/tools/select", false);
@@ -370,7 +399,6 @@ void InkscapePreferences::initPageTools()
                             _("Each selected object displays its bounding box"));
 
     //Node
-    this->AddPage(_page_node, _("Node"), iter_tools, PREFS_PAGE_TOOLS_NODE);
     AddSelcueCheckbox(_page_node, "/tools/nodes", true);
     AddGradientCheckbox(_page_node, "/tools/nodes", true);
     _page_node.add_group_header( _("Path outline"));
@@ -397,52 +425,42 @@ void InkscapePreferences::initPageTools()
     _page_node.add_line( true, "", _t_node_delete_preserves_shape, "", _("Move handles next to deleted nodes to resemble original shape; hold Ctrl to get the other behavior"));
 
     //Tweak
-    this->AddPage(_page_tweak, _("Tweak"), iter_tools, PREFS_PAGE_TOOLS_TWEAK);
     this->AddNewObjectsStyle(_page_tweak, "/tools/tweak", _("Object paint style"));
     AddSelcueCheckbox(_page_tweak, "/tools/tweak", true);
     AddGradientCheckbox(_page_tweak, "/tools/tweak", false);
 
     //Zoom
-    this->AddPage(_page_zoom, _("Zoom"), iter_tools, PREFS_PAGE_TOOLS_ZOOM);
     AddSelcueCheckbox(_page_zoom, "/tools/zoom", true);
     AddGradientCheckbox(_page_zoom, "/tools/zoom", false);
 
     //Measure
-    this->AddPage(_page_measure, C_("ContextVerb", "Measure"), iter_tools, PREFS_PAGE_TOOLS_MEASURE);
     PrefCheckButton* cb = Gtk::manage( new PrefCheckButton);
     cb->init ( _("Ignore first and last points"), "/tools/measure/ignore_1st_and_last", true);
     _page_measure.add_line( false, "", *cb, "", _("The start and end of the measurement tool's control line will not be considered for calculating lengths. Only lengths between actual curve intersections will be displayed."));
 
     //Shapes
-    Gtk::TreeModel::iterator iter_shapes = this->AddPage(_page_shapes, _("Shapes"), iter_tools, PREFS_PAGE_TOOLS_SHAPES);
     _path_shapes = _page_list.get_model()->get_path(iter_shapes);
     this->AddSelcueCheckbox(_page_shapes, "/tools/shapes", true);
     this->AddGradientCheckbox(_page_shapes, "/tools/shapes", true);
 
     //Rectangle
-    this->AddPage(_page_rectangle, _("Rectangle"), iter_shapes, PREFS_PAGE_TOOLS_SHAPES_RECT);
     this->AddNewObjectsStyle(_page_rectangle, "/tools/shapes/rect");
     this->AddConvertGuidesCheckbox(_page_rectangle, "/tools/shapes/rect", true);
 
     //3D box
-    this->AddPage(_page_3dbox, _("3D Box"), iter_shapes, PREFS_PAGE_TOOLS_SHAPES_3DBOX);
     this->AddNewObjectsStyle(_page_3dbox, "/tools/shapes/3dbox");
     this->AddConvertGuidesCheckbox(_page_3dbox, "/tools/shapes/3dbox", true);
 
     //Ellipse
-    this->AddPage(_page_ellipse, _("Ellipse"), iter_shapes, PREFS_PAGE_TOOLS_SHAPES_ELLIPSE);
     this->AddNewObjectsStyle(_page_ellipse, "/tools/shapes/arc");
 
     //Star
-    this->AddPage(_page_star, _("Star"), iter_shapes, PREFS_PAGE_TOOLS_SHAPES_STAR);
     this->AddNewObjectsStyle(_page_star, "/tools/shapes/star");
 
     //Spiral
-    this->AddPage(_page_spiral, _("Spiral"), iter_shapes, PREFS_PAGE_TOOLS_SHAPES_SPIRAL);
     this->AddNewObjectsStyle(_page_spiral, "/tools/shapes/spiral");
 
     //Pencil
-    this->AddPage(_page_pencil, _("Pencil"), iter_tools, PREFS_PAGE_TOOLS_PENCIL);
     this->AddSelcueCheckbox(_page_pencil, "/tools/freehand/pencil", true);
     this->AddNewObjectsStyle(_page_pencil, "/tools/freehand/pencil");
     this->AddDotSizeSpinbutton(_page_pencil, "/tools/freehand/pencil", 3.0);
@@ -452,13 +470,11 @@ void InkscapePreferences::initPageTools()
                             _("If on, the sketch result will be the normal average of all sketches made, instead of averaging the old result with the new sketch"));
 
     //Pen
-    this->AddPage(_page_pen, _("Pen"), iter_tools, PREFS_PAGE_TOOLS_PEN);
     this->AddSelcueCheckbox(_page_pen, "/tools/freehand/pen", true);
     this->AddNewObjectsStyle(_page_pen, "/tools/freehand/pen");
     this->AddDotSizeSpinbutton(_page_pen, "/tools/freehand/pen", 3.0);
 
     //Calligraphy
-    this->AddPage(_page_calligraphy, _("Calligraphy"), iter_tools, PREFS_PAGE_TOOLS_CALLIGRAPHY);
     this->AddSelcueCheckbox(_page_calligraphy, "/tools/calligraphic", false);
     this->AddNewObjectsStyle(_page_calligraphy, "/tools/calligraphic");
     _page_calligraphy.add_line( false, "", _calligrapy_use_abs_size, "",
@@ -467,7 +483,6 @@ void InkscapePreferences::initPageTools()
                             _("If on, each newly created object will be selected (deselecting previous selection)"));
 
     //Text
-    this->AddPage(_page_text, C_("ContextVerb", "Text"), iter_tools, PREFS_PAGE_TOOLS_TEXT);
     this->AddSelcueCheckbox(_page_text, "/tools/text", true);
     this->AddGradientCheckbox(_page_text, "/tools/text", true);
     {
@@ -499,21 +514,17 @@ void InkscapePreferences::initPageTools()
     this->AddNewObjectsStyle(_page_text, "/tools/text");
 
     //Spray
-    this->AddPage(_page_spray, _("Spray"), iter_tools, PREFS_PAGE_TOOLS_SPRAY);
     AddSelcueCheckbox(_page_spray, "/tools/spray", true);
     AddGradientCheckbox(_page_spray, "/tools/spray", false);
 
     //Eraser
-    this->AddPage(_page_eraser, _("Eraser"), iter_tools, PREFS_PAGE_TOOLS_ERASER);
     this->AddNewObjectsStyle(_page_eraser, "/tools/eraser");
 
     //Paint Bucket
-    this->AddPage(_page_paintbucket, _("Paint Bucket"), iter_tools, PREFS_PAGE_TOOLS_PAINTBUCKET);
     this->AddSelcueCheckbox(_page_paintbucket, "/tools/paintbucket", false);
     this->AddNewObjectsStyle(_page_paintbucket, "/tools/paintbucket");
 
     //Gradient
-    this->AddPage(_page_gradient, _("Gradient"), iter_tools, PREFS_PAGE_TOOLS_GRADIENT);
     this->AddSelcueCheckbox(_page_gradient, "/tools/gradient", true);
     _misc_forkvectors.init( _("Prevent sharing of gradient definitions"), "/options/forkgradientvectors/value", true);
     _page_gradient.add_line( false, "", _misc_forkvectors, "",
@@ -528,12 +539,10 @@ void InkscapePreferences::initPageTools()
 
 
     //Dropper
-    this->AddPage(_page_dropper, _("Dropper"), iter_tools, PREFS_PAGE_TOOLS_DROPPER);
     this->AddSelcueCheckbox(_page_dropper, "/tools/dropper", true);
     this->AddGradientCheckbox(_page_dropper, "/tools/dropper", true);
 
     //Connector
-    this->AddPage(_page_connector, _("Connector"), iter_tools, PREFS_PAGE_TOOLS_CONNECTOR);
     this->AddSelcueCheckbox(_page_connector, "/tools/connector", true);
     _page_connector.add_line(false, "", _connector_ignore_text, "",
             _("If on, connector attachment points will not be shown for text objects"));
@@ -541,7 +550,6 @@ void InkscapePreferences::initPageTools()
 #ifdef WITH_LPETOOL
     //LPETool
     //disabled, because the LPETool is not finished yet.
-    this->AddPage(_page_lpetool, _("LPE Tool"), iter_tools, PREFS_PAGE_TOOLS_LPETOOL);
     this->AddNewObjectsStyle(_page_lpetool, "/tools/lpetool");
 #endif // WITH_LPETOOL
 }
