@@ -149,12 +149,12 @@ if(WIN32)
   install(CODE "execute_process(COMMAND gtk-update-icon-cache \${CMAKE_INSTALL_PREFIX}/share/icons/Adwaita)")
 
   # translations for libraries (we usually shouldn't need many)
-  file(GLOB inkscape_translations RELATIVE ${CMAKE_SOURCE_DIR}/po/ ${CMAKE_SOURCE_DIR}/po/*.po)
-  foreach(translation ${inkscape_translations})
-    get_filename_component(translation ${translation} NAME_WE)
-    install(DIRECTORY ${MINGW_PATH}/share/locale/${translation}
+  get_inkscape_languages()
+  foreach(language_code ${INKSCAPE_LANGUAGE_CODES})
+    string(MAKE_C_IDENTIFIER "${language_code}" language_code_escaped)
+    install(DIRECTORY ${MINGW_PATH}/share/locale/${language_code}
       DESTINATION share/locale
-      COMPONENT translations
+      COMPONENT translations.${language_code_escaped}
       FILES_MATCHING
       PATTERN "*glib20.mo"
       PATTERN "*gtk30.mo"

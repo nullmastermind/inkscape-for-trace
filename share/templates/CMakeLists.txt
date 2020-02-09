@@ -16,7 +16,7 @@ install(FILES ${_FILES} "README" DESTINATION ${INKSCAPE_SHARE_INSTALL}/templates
 # create localized versions of default.svg
 if(ENABLE_NLS)
   file(GLOB POFILES ${CMAKE_SOURCE_DIR}/po/*.po)
-    foreach(pofile ${POFILES})
+  foreach(pofile ${POFILES})
     string(REGEX REPLACE "(.+(\\\\|/))+" "${CMAKE_BINARY_DIR}/po/" pofile ${pofile})
     string(REGEX REPLACE "\\.po$" ".gmo" pofile ${pofile})
     list(APPEND GMOFILES "${pofile}")
@@ -31,8 +31,14 @@ if(ENABLE_NLS)
   )
   add_custom_target(default_templates ALL DEPENDS default_templates.timestamp)
 
-  install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} DESTINATION ${INKSCAPE_SHARE_INSTALL}
-    FILES_MATCHING PATTERN "*.svg" PATTERN "CMakeFiles" EXCLUDE )
+  get_inkscape_languages()
+  foreach(language_code ${INKSCAPE_LANGUAGE_CODES})
+    string(MAKE_C_IDENTIFIER "${language_code}" language_code_escaped)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/default.${language_code}.svg
+      DESTINATION ${INKSCAPE_SHARE_INSTALL}/templates
+      COMPONENT translations.${language_code_escaped}
+      OPTIONAL)
+  endforeach()
 else()
   message(STATUS "Generation of localized default templates will be skipped (building without NLS)")
 endif()

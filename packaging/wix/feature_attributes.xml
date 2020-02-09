@@ -21,6 +21,9 @@
   <CPackWiXFragment Id="CM_G_group_2_inkscape_data" AllowAdvertise="no" InstallDefault="local">
     <Component Id="dummy2" Directory="INSTALL_ROOT" Guid="7405B66E-65E5-403B-B407-E39025587E46" KeyPath="yes" />
   </CPackWiXFragment>
+  <CPackWiXFragment Id="CM_G_group_3_translations" AllowAdvertise="no" InstallDefault="local">
+    <Component Id="dummy3" Directory="INSTALL_ROOT" Guid="C2A35C47-B012-4DDF-B486-DD6A8DF42F5D" KeyPath="yes" />
+  </CPackWiXFragment>
 
   <CPackWiXFragment Id="CM_C_inkscape" AllowAdvertise="no" InstallDefault="local" />
   <CPackWiXFragment Id="CM_C_python" AllowAdvertise="no" InstallDefault="local" />
@@ -28,5 +31,5 @@
   <CPackWiXFragment Id="CM_C_extensions" AllowAdvertise="no" InstallDefault="local" />
   <CPackWiXFragment Id="CM_C_tutorials" AllowAdvertise="no" InstallDefault="local" />
   <CPackWiXFragment Id="CM_C_dictionaries" AllowAdvertise="no" InstallDefault="local" />
-  <CPackWiXFragment Id="CM_C_translations" AllowAdvertise="no" InstallDefault="local" />
+  <!-- should also include every single CM_C_translations.* but adding them manually does not seem reasonable --> 
 </CPackWiXPatch>

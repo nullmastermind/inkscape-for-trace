@@ -166,11 +166,21 @@ cpack_add_component(dictionaries
                     DESCRIPTION "Dictionaries for some common languages for spell checking in Inkscape"
                     INSTALL_TYPES full)
 
-cpack_add_component(translations
+cpack_add_component_group(
+                    group_3_translations
                     DISPLAY_NAME "Translations"
-                    DESCRIPTION "Translations and localized content for Inkscape"
-                    INSTALL_TYPES full)
+                    DESCRIPTION "Translations and localized content for Inkscape")
+get_inkscape_languages()
+list(LENGTH INKSCAPE_LANGUAGE_CODES length)
+math(EXPR length "${length} - 1")
+foreach(index RANGE ${length})
+    list(GET INKSCAPE_LANGUAGE_CODES ${index} language_code)
+    list(GET INKSCAPE_LANGUAGE_NAMES ${index} language_name)
+    string(MAKE_C_IDENTIFIER "${language_code}" language_code_escaped)
+    cpack_add_component(translations.${language_code_escaped}
+                        DISPLAY_NAME "${language_name}"
+                        GROUP "group_3_translations"
+                        INSTALL_TYPES full)
+endforeach()
 
-# TODO: Add localized content to translation component
-# TODO: Split translations into individual components
 # TODO: Separate themes and make optional depending on size
