@@ -127,6 +127,7 @@ static void sp_gradient_selector_init(SPGradientSelector *sel)
     sel->treeview->set_model(gvs->store);
     sel->treeview->set_headers_clickable (true);
     sel->treeview->set_search_column(1);
+    sel->treeview->set_vexpand();
     sel->icon_renderer = Gtk::manage(new Gtk::CellRendererPixbuf());
     sel->text_renderer = Gtk::manage(new Gtk::CellRendererText());
 
