@@ -66,73 +66,14 @@ if(WIN32)
     # -----------------------------------------------------------------------------
     # 'dist-win-exe' - generate .exe installer (NSIS) for Windows
     # -----------------------------------------------------------------------------
-    find_program (makensis makensis PATHS "C:/Program Files/NSIS"
-                                          "C:/Program Files (x86)/NSIS")
-    if(NOT makensis)
-        set(makensis echo "Could not find 'makensis'. Please add it to your search path." && exit 1 &&)
-    endif()
-
-    # default target with good but slow compression
-    add_custom_target(dist-win-exe
-        COMMAND ${makensis} /D"INKSCAPE_DIST_DIR=${CMAKE_INSTALL_PREFIX}"
-                            /D"OutFile=${CMAKE_BINARY_DIR}/${INKSCAPE_DIST_PREFIX}.exe"
-                            "${CMAKE_SOURCE_DIR}/packaging/win32/inkscape.nsi")
-
-    # fast target with low compression for testing
-    add_custom_target(dist-win-exe-fast
-        COMMAND ${makensis} /X"SetCompressor /FINAL /SOLID bzip2"
-                            /D"INKSCAPE_DIST_DIR=${CMAKE_INSTALL_PREFIX}"
-                            /D"OutFile=${CMAKE_BINARY_DIR}/${INKSCAPE_DIST_PREFIX}.exe"
-                            "${CMAKE_SOURCE_DIR}/packaging/win32/inkscape.nsi")
-
-    add_dependencies(dist-win-exe install/strip)
-    add_dependencies(dist-win-exe-fast install/strip)
+    add_custom_target(dist-win-exe COMMAND ${CMAKE_CPACK_COMMAND} -G NSIS)
+    add_dependencies(dist-win-exe install/strip) # TODO: we'd only need to depend on the "all" target
 
     # -----------------------------------------------------------------------------
     # 'dist-win-msi' - generate .exe installer (NSIS) for Windows
     # -----------------------------------------------------------------------------
-    file(GLOB wix_dirs "C:/Program Files/WiX Toolset*/bin")
-    file(GLOB wix_dirs_x86 "C:/Program Files (x86)/WiX Toolset*/bin")
-    find_program (candle candle PATHS ${wix_dirs} ${wix_dirs_x86})
-    find_program (light  light  PATHS ${wix_dirs} ${wix_dirs_x86})
-    if(NOT candle)
-        set(candle echo "Could not find 'candle' (part of WiX Toolset). Please add it to your search path." && exit 1 &&)
-    endif()
-    if(NOT light)
-        set(light echo "Could not find 'light' (part of WiX Toolset). Please add it to your search path." && exit 1 &&)
-    endif()
-
-    # default target with fair but slow compression
-    add_custom_target(dist-win-msi
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/packaging/wix ${CMAKE_BINARY_DIR}/wix
-        COMMAND cd wix
-        COMMAND ${CMAKE_COMMAND} -E env INKSCAPE_DIST_PATH=${CMAKE_INSTALL_PREFIX}
-                    python ${CMAKE_SOURCE_DIR}/packaging/wix/files.py
-        COMMAND ${CMAKE_COMMAND} -E env INKSCAPE_DIST_PATH=${CMAKE_INSTALL_PREFIX}
-                    python ${CMAKE_SOURCE_DIR}/packaging/wix/version.py
-        COMMAND ${candle} inkscape.wxs -ext WiXUtilExtension
-        COMMAND ${candle} files.wxs
-        COMMAND ${light} -ext WixUIExtension -ext WiXUtilExtension inkscape.wixobj files.wixobj
-                         -o ${CMAKE_BINARY_DIR}/${INKSCAPE_DIST_PREFIX}.msi
-             || echo "WiX exited with non-zero exit code (which is a known issue and usually does not prevent creation of an installer). If you can, please fix it, though!")
-
-    # moderately fast target with no compression for testing
-    add_custom_target(dist-win-msi-fast
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/packaging/wix ${CMAKE_BINARY_DIR}/wix
-        COMMAND cd wix
-        COMMAND sed -i 's/CompressionLevel="high"/CompressionLevel="none"/' inkscape.wxs
-        COMMAND ${CMAKE_COMMAND} -E env INKSCAPE_DIST_PATH=${CMAKE_INSTALL_PREFIX}
-                    python ${CMAKE_SOURCE_DIR}/packaging/wix/files.py
-        COMMAND ${CMAKE_COMMAND} -E env INKSCAPE_DIST_PATH=${CMAKE_INSTALL_PREFIX}
-                    python ${CMAKE_SOURCE_DIR}/packaging/wix/version.py
-        COMMAND ${candle} inkscape.wxs -ext WiXUtilExtension
-        COMMAND ${candle} files.wxs
-        COMMAND ${light} -ext WixUIExtension -ext WiXUtilExtension inkscape.wixobj files.wixobj
-                         -o ${CMAKE_BINARY_DIR}/${INKSCAPE_DIST_PREFIX}.msi
-             || echo "WiX exited with non-zero exit code (which is a known issue and usually does not prevent creation of an installer). If you can, please fix it, though!")
-
-    add_dependencies(dist-win-msi install/strip)
-    add_dependencies(dist-win-msi-fast install/strip)
+    add_custom_target(dist-win-msi COMMAND ${CMAKE_CPACK_COMMAND} -G WIX)
+    add_dependencies(dist-win-msi install/strip) # TODO: we'd only need to depend on the "all" target
 
     # -----------------------------------------------------------------------------
     # 'dist-win-all' - generate all 'dist' targets for Windows
