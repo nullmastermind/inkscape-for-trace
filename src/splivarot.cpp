@@ -764,6 +764,7 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
         }
 
         // add all the pieces resulting from cut or slice
+        std::vector <Inkscape::XML::Node*> selection;
         for (int i=0;i<nbRP;i++) {
             gchar *d = resPath[i]->svg_dump_path();
 
@@ -799,11 +800,12 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
             // move to the saved position
             parent->addChildAtPos(repr, pos);
 
-            add(doc->getObjectByRepr(repr));
+            selection.push_back(repr);
             Inkscape::GC::release(repr);
 
             delete resPath[i];
         }
+        setReprList(selection);
         if ( resPath ) free(resPath);
 
     } else {
@@ -824,7 +826,7 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
 
         parent->addChildAtPos(repr, pos);
 
-        add(doc->getObjectByRepr(repr));
+        set(repr);
         Inkscape::GC::release(repr);
     }
 
