@@ -772,6 +772,14 @@ SPDesktopWidget::updateTitle(gchar const* uri)
         // Name += Inkscape::version_string;
         // Name += ")";
 
+        // use same title for document-specific dialogs
+        if (_dock) {
+            GdlDockMaster *master = nullptr;
+            g_object_get(GDL_DOCK_OBJECT(_dock->getGdlWidget()), "master", &master, nullptr);
+            g_object_set(master, "default-title", Name.c_str(), nullptr);
+            gdl_dock_master_foreach_toplevel(master, FALSE, (GFunc)gdl_dock_object_set_long_name, (void *)Name.c_str());
+        }
+
         window->set_title (Name);
     }
 }
