@@ -247,17 +247,7 @@ DockItem::show_all()
 void
 DockItem::present()
 {
-
-    if (!isIconified() && !isAttached()) {
-        show();
-    }
-    // tabbed
-    else if (getPlacement() == GDL_DOCK_CENTER) {
-        int i = gtk_notebook_page_num(GTK_NOTEBOOK(gtk_widget_get_parent(_gdl_dock_item)),
-                                       GTK_WIDGET (_gdl_dock_item));
-        if (i >= 0)
-            gtk_notebook_set_current_page(GTK_NOTEBOOK(gtk_widget_get_parent(_gdl_dock_item)), i);
-    }
+    gdl_dock_object_present(GDL_DOCK_OBJECT(_gdl_dock_item), nullptr);
 
     // always grab focus, even if we're already present
     grab_focus();
