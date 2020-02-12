@@ -34,6 +34,9 @@ ArrangeDialog::ArrangeDialog()
 {
     Gtk::Box *contents = this->_getContents();
 
+    _gridArrangeTab = Gtk::manage(_gridArrangeTab);
+    _polarArrangeTab = Gtk::manage(_polarArrangeTab);
+
     _notebook.append_page(*_gridArrangeTab, C_("Arrange dialog", "Rectangular grid"));
     _notebook.append_page(*_polarArrangeTab, C_("Arrange dialog", "Polar Coordinates"));
     _arrangeBox.pack_start(_notebook);
@@ -63,6 +66,12 @@ void ArrangeDialog::_apply()
 		_polarArrangeTab->arrange();
 		break;
 	}
+}
+
+void ArrangeDialog::setDesktop(SPDesktop *desktop)
+{
+    Panel::setDesktop(desktop);
+    _gridArrangeTab->setDesktop(desktop);
 }
 
 } //namespace Dialog

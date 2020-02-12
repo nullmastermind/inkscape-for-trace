@@ -51,6 +51,8 @@ public:
 	ArrangeDialog();
 	~ArrangeDialog() override = default;;
 
+    void setDesktop(SPDesktop *) override;
+
     /**
      * Callback from Apply
      */

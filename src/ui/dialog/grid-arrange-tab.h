@@ -28,6 +28,8 @@
 #include <gtkmm/radiobutton.h>
 #include <gtkmm/radiobuttongroup.h>
 
+class SPDesktop;
+
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
@@ -71,12 +73,9 @@ private:
 
     ArrangeDialog         *Parent;
 
-    bool userHidden;
     bool updating;
 
     Gtk::Box               TileBox;
-    Gtk::Button           *TileOkButton;
-    Gtk::Button           *TileCancelButton;
 
     // Number selected label
     Gtk::Label            SelectionContentsLabel;
@@ -128,6 +127,11 @@ private:
     // Column width
     Gtk::Box              ColumnWidthBox;
     Inkscape::UI::Widget::SpinButton ColumnWidthSpinner;
+
+    sigc::connection _selection_changed_connection;
+
+  public:
+    void setDesktop(SPDesktop *);
 };
 
 } //namespace Dialog
