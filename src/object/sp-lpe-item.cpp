@@ -54,6 +54,17 @@ typedef std::list<std::string> HRefList;
 static std::string patheffectlist_svg_string(PathEffectList const & list);
 static std::string hreflist_svg_string(HRefList const & list);
 
+namespace {
+    void clear_path_effect_list(PathEffectList* const l) {
+        PathEffectList::iterator it =  l->begin();
+        while ( it !=  l->end()) {
+            (*it)->unlink();
+            delete *it;
+            it = l->erase(it);
+        }
+    }
+}
+
 SPLPEItem::SPLPEItem()
     : SPItem()
     , path_effects_enabled(1)
@@ -83,7 +94,7 @@ void SPLPEItem::release() {
     delete this->lpe_modified_connection_list;
     this->lpe_modified_connection_list = nullptr;
 
-    this->path_effect_list->clear();
+    clear_path_effect_list(this->path_effect_list);
     // delete the list itself
     delete this->path_effect_list;
     this->path_effect_list = nullptr;
@@ -107,13 +118,8 @@ void SPLPEItem::set(SPAttributeEnum key, gchar const* value) {
                 }
 
                 this->lpe_modified_connection_list->clear();
-                // Clear the path effect list
-                PathEffectList::iterator it =  this->path_effect_list->begin();
-                while ( it !=  this->path_effect_list->end()) {
-                    (*it)->unlink();
-                    delete *it;
-                    it = this->path_effect_list->erase(it);
-                }
+                clear_path_effect_list(this->path_effect_list);
+
                 // Parse the contents of "value" to rebuild the path effect reference list
                 if ( value ) {
                     std::istringstream iss(value);
