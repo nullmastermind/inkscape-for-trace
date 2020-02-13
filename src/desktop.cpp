@@ -1054,14 +1054,14 @@ SPDesktop::zoom_page()
 void
 SPDesktop::zoom_page_width()
 {
-    Geom::Rect const a = get_display_area();
-
     if (doc()->getWidth().value("px") < 1.0) {
         return;
     }
 
-    Geom::Rect d(Geom::Point(0, a.midpoint()[Geom::Y]),
-                 Geom::Point(doc()->getWidth().value("px"), a.midpoint()[Geom::Y]));
+    auto const center_y = current_center().y();
+
+    Geom::Rect d(Geom::Point(0, center_y), //
+                 Geom::Point(doc()->getWidth().value("px"), center_y));
 
     set_display_area(d, 10);
 }

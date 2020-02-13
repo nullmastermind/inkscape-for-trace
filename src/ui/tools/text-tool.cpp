@@ -1653,7 +1653,7 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
 
         // scroll to show cursor
         if (scroll_to_see) {
-            Geom::Point const center = SP_EVENT_CONTEXT(tc)->desktop->get_display_area().midpoint();
+            Geom::Point const center = SP_EVENT_CONTEXT(tc)->desktop->current_center();
             if (Geom::L2(d0 - center) > Geom::L2(d1 - center))
                 // unlike mouse moves, here we must scroll all the way at first shot, so we override the autoscrollspeed
                 SP_EVENT_CONTEXT(tc)->desktop->scroll_to_point(d0, 1.0);

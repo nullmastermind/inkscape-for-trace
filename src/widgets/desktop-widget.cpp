@@ -804,7 +804,6 @@ void SPDesktopWidget::on_size_allocate(Gtk::Allocation &allocation)
 
     if (this->get_realized()) {
         SPDesktopWidget *dtw = this;
-        Geom::Rect const area = dtw->desktop->get_display_area();
         Geom::Rect const d_canvas = dtw->desktop->getCanvas()->getViewbox();
         Geom::Point midpoint = dtw->desktop->w2d(d_canvas.midpoint());
 
@@ -813,11 +812,9 @@ void SPDesktopWidget::on_size_allocate(Gtk::Allocation &allocation)
         parent_type::on_size_allocate(allocation);
 
         if (dtw->get_sticky_zoom_active()) {
-            /* Find new visible area */
-            Geom::Rect newarea = dtw->desktop->get_display_area();
             /* Calculate adjusted zoom */
-            double oldshortside = MIN(   area.width(),    area.height());
-            double newshortside = MIN(newarea.width(), newarea.height());
+            double oldshortside = d_canvas.minExtent();
+            double newshortside = dtw->desktop->getCanvas()->getViewbox().minExtent();
             zoom *= newshortside / oldshortside;
         }
         dtw->desktop->zoom_absolute_center_point (midpoint, zoom);
@@ -1887,8 +1884,7 @@ SPDesktopWidget::zoom_value_changed()
 void
 SPDesktopWidget::zoom_menu_handler(double factor)
 {
-    Geom::Rect const d = desktop->get_display_area();
-    desktop->zoom_absolute_center_point (d.midpoint(), factor);
+    desktop->zoom_absolute_center_point(desktop->current_center(), factor);
 }
 
 void

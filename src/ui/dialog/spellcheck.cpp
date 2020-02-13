@@ -567,7 +567,7 @@ SpellCheck::nextWord()
             _rects.push_back(rect);
 
             // scroll to make it all visible
-            Geom::Point const center = desktop->get_display_area().midpoint();
+            Geom::Point const center = desktop->current_center();
             area.expandBy(0.5 * mindim);
             Geom::Point scrollto;
             double dist = 0;

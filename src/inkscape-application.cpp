@@ -237,7 +237,7 @@ InkscapeApplication::document_revert(SPDocument* document)
 
             // Remember current zoom and view.
             double zoom = desktop->current_zoom();
-            Geom::Point c = desktop->get_display_area().midpoint();
+            Geom::Point c = desktop->current_center();
 
             bool reverted = document_swap (it2, new_document);
 

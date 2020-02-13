@@ -757,10 +757,9 @@ static void sp_flood_do_flood_fill(ToolBase *event_context, GdkEvent *event, boo
     // fill areas off the screen can be included in the fill.
     double padding = 1.6;
 
-    Geom::Rect screen = desktop->get_display_area();
-
     // image space is world space with an offset
-    Geom::Rect const screen_world = screen * desktop->d2w();
+    Geom::Rect const screen_world = desktop->canvas->getViewbox();
+    Geom::Rect const screen = screen_world * desktop->w2d();
     Geom::IntPoint const img_dims = (screen_world.dimensions() * padding).ceil();
     Geom::Affine const world2img = Geom::Translate((img_dims - screen_world.dimensions()) / 2.0 - screen_world.min());
     Geom::Affine const doc2img = desktop->doc2dt() * desktop->d2w() * world2img;

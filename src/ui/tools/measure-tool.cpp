@@ -169,20 +169,9 @@ Geom::Point calcAngleDisplayAnchor(SPDesktop *desktop, double angle, double base
 
     // We now have the ideal position, but need to see if it will fit/work.
 
-    Geom::Rect visibleArea = desktop->get_display_area();
-    // Bring it in to "title safe" for the anchor point
-    Geom::Point textBox = desktop->w2d(Geom::Point(fontsize * 3, fontsize / 2));
-    textBox[Geom::Y] = std::abs(textBox[Geom::Y]);
-
-    visibleArea = Geom::Rect(visibleArea.min()[Geom::X] + textBox[Geom::X],
-                             visibleArea.min()[Geom::Y] + textBox[Geom::Y],
-                             visibleArea.max()[Geom::X] - textBox[Geom::X],
-                             visibleArea.max()[Geom::Y] - textBox[Geom::Y]);
-
-    where[Geom::X] = std::min(where[Geom::X], visibleArea.max()[Geom::X]);
-    where[Geom::X] = std::max(where[Geom::X], visibleArea.min()[Geom::X]);
-    where[Geom::Y] = std::min(where[Geom::Y], visibleArea.max()[Geom::Y]);
-    where[Geom::Y] = std::max(where[Geom::Y], visibleArea.min()[Geom::Y]);
+    Geom::Rect screen_world = desktop->canvas->getViewbox();
+    screen_world.expandBy(fontsize * -3, fontsize / -2);
+    where = desktop->w2d(screen_world.clamp(desktop->d2w(where)));
 
     return where;
 }
@@ -351,8 +340,9 @@ MeasureTool::MeasureTool()
     this->knot_end->setStroke(0x0000007f, 0x0000007f, 0x0000007f, 0x0000007f);
     this->knot_end->setShape(SP_KNOT_SHAPE_CIRCLE);
     this->knot_end->updateCtrl();
-    Geom::Rect display_area = desktop->get_display_area();
-    if(display_area.interiorContains(start_p) && display_area.interiorContains(end_p) && end_p != Geom::Point()) {
+    Geom::Rect screen_world = desktop->canvas->getViewbox();
+    if (screen_world.interiorContains(desktop->d2w(start_p)) && //
+        screen_world.interiorContains(desktop->d2w(end_p)) && end_p != Geom::Point()) {
         this->knot_start->moveto(start_p);
         this->knot_start->show();
         this->knot_end->moveto(end_p);
