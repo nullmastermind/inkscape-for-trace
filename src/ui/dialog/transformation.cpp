@@ -339,12 +339,6 @@ void Transformation::layoutPageSkew()
 void Transformation::layoutPageTransform()
 {
     _units_transform.setUnitType(UNIT_TYPE_LINEAR);
-    // Setting default unit to document unit
-    SPDesktop *dt = getDesktop();
-    SPNamedView *nv = dt->getNamedView();
-    if (nv->display_units) {
-        _units_transform.setUnit(nv->display_units->abbr);
-    }
     _units_transform.set_tooltip_text(_("E and F units"));
 
     _scalar_transform_a.setWidgetSizeRequest(65, -1);
@@ -1150,6 +1144,7 @@ void Transformation::setDesktop(SPDesktop*desktop)
     SPNamedView *nv = desktop->getNamedView();
     if (nv->display_units) {
         _units_move.setUnit(nv->display_units->abbr);
+        _units_transform.setUnit(nv->display_units->abbr);
     }
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
