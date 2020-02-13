@@ -565,7 +565,7 @@ ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
     this->set_option_context_summary(_("Process (or open) one or more files."));
     this->set_option_context_description(Glib::ustring("\n") + _("Examples:") + '\n'
             + "  " + Glib::ustring::compose(_("Export input SVG (%1) to PDF (%2) format:"), "in.svg", "out.pdf") + '\n'
-            + '\t' + "inkscape --export-file=out.pdf in.svg\n"
+            + '\t' + "inkscape --export-filename=out.pdf in.svg\n"
             + "  " + Glib::ustring::compose(_("Export input files (%1) to PNG format keeping original name (%2):"), "in1.svg, in2.svg", "in1.png, in2.png") + '\n'
             + '\t' + "inkscape --export-type=png in1.svg in2.svg\n"
             + "  " + Glib::ustring::compose(_("See %1 and %2 for more details."), "'man inkscape'", "http://wiki.inkscape.org/wiki/index.php/Using_the_Command_Line"));
@@ -587,7 +587,7 @@ ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
 
     // Export - File and File Type
     _start_main_option_section(_("File export"));
-    this->add_main_option_entry(T::OPTION_TYPE_FILENAME, "export-file",            'o', N_("Output file name (file type is guessed from extension)"),       N_("FILENAME"));
+    this->add_main_option_entry(T::OPTION_TYPE_FILENAME, "export-filename",        'o', N_("Output file name (file type is guessed from extension)"),       N_("FILENAME"));
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-overwrite",      '\0', N_("Overwrite input file"),                                                     "");
     this->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-type",           '\0', N_("File type(s) to export: [svg,png,ps,eps,pdf,tex,emf,wmf,xaml]"), N_("TYPE[,TYPE]*"));
 
@@ -952,7 +952,7 @@ ConcreteInkscapeApplication<T>::process_document(SPDocument* document, std::stri
         shell();
     }
 
-    // Only if --export-file, --export-type, or --export-overwrite are used.
+    // Only if --export-filename, --export-type, or --export-overwrite are used.
     if (_auto_export) {
         // Save... can't use action yet.
         _file_export.do_export(document, output_path);
@@ -1011,7 +1011,7 @@ ConcreteInkscapeApplication<T>::on_open(const Gio::Application::type_vec_files& 
 
     if (files.size() > 1 && !_file_export.export_filename.empty()) {
         std::cerr << "ConcreteInkscapeApplication<Gtk::Application>::on_open: "
-                     "Can't use '--export-file' with multiple input files "
+                     "Can't use '--export-filename' with multiple input files "
                      "(output file would be overwritten for each input file). "
                      "Please use '--export-type' instead and rename manually."
                   << std::endl;
@@ -1198,7 +1198,7 @@ ConcreteInkscapeApplication<T>::on_handle_local_options(const Glib::RefPtr<Glib:
     // Listed in order that they appear in constructor.
     if (options->contains("pipe")                  ||
 
-        options->contains("export-file")           ||
+        options->contains("export-filename")       ||
         options->contains("export-overwrite")      ||
         options->contains("export-type")           ||
 
@@ -1253,7 +1253,7 @@ ConcreteInkscapeApplication<T>::on_handle_local_options(const Glib::RefPtr<Glib:
 
 
     // Enable auto-export
-    if (options->contains("export-file")      ||
+    if (options->contains("export-filename")  ||
         options->contains("export-type")      ||
         options->contains("export-overwrite")
         ) {
@@ -1338,8 +1338,8 @@ ConcreteInkscapeApplication<T>::on_handle_local_options(const Glib::RefPtr<Glib:
 
 
     // ==================== EXPORT =====================
-    if (options->contains("export-file")) {
-        options->lookup_value("export-file",      _file_export.export_filename);
+    if (options->contains("export-filename")) {
+        options->lookup_value("export-filename",  _file_export.export_filename);
     }
 
     if (options->contains("export-type")) {

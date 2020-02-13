@@ -65,13 +65,13 @@ InkFileExportCmd::do_export(SPDocument* doc, std::string filename_in)
     std::string export_type_filename;
     std::vector<Glib::ustring> export_type_list;
 
-    // Get export type from filename supplied with --export-file
+    // Get export type from filename supplied with --export-filename
     if (!export_filename.empty() && export_filename != "-") {
         auto extension_pos = export_filename.find_last_of('.');
         if (extension_pos == std::string::npos) {
             if (export_type.empty()) {
                 std::cerr << "InkFileExportCmd::do_export: No export type specified. "
-                          << "Append a supported file extension to filename provided with --export-file or "
+                          << "Append a supported file extension to filename provided with --export-filename or "
                           << "provide one or more extensions separately using --export-type" << std::endl;
                 return;
             } else {
@@ -113,7 +113,7 @@ InkFileExportCmd::do_export(SPDocument* doc, std::string filename_in)
 
         export_type_current = type;
 
-        // Check for consistency between extension of --export-file and --export-type if both are given
+        // Check for consistency between extension of --export-filename and --export-type if both are given
         if (!export_type_filename.empty() && (type != export_type_filename)) {
             std::cerr << "InkFileExportCmd::do_export: "
                       << "Ignoring extension of export filename (" << export_type_filename << ") "
@@ -153,7 +153,7 @@ InkFileExportCmd::get_filename_out(std::string filename_in, std::string object_i
         return "-";
     }
 
-    // Use filename provided as --export-file if given (and append proper extension).
+    // Use filename provided with --export-filename if given (and append proper extension).
     if (!export_filename.empty()) {
         return export_filename + "." + export_type_current;
     }
