@@ -44,6 +44,7 @@ Svgz::init()
             "<name>" N_("SVGZ Input") "</name>\n"
             "<id>" SP_MODULE_KEY_INPUT_SVGZ "</id>\n"
             "<dependency type=\"extension\">" SP_MODULE_KEY_INPUT_SVG "</dependency>\n"
+            SVG_COMMON_INPUT_PARAMS
             "<input>\n"
                 "<extension>.svgz</extension>\n"
                 "<mimetype>image/svg+xml-compressed</mimetype>\n"
