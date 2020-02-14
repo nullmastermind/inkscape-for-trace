@@ -831,6 +831,14 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
         // SPDocument * ret = SPDocument::createNewDoc(file->get_uri().c_str(), true);
         SPDocument * ret = SPDocument::createNewDoc(uri, true);
 
+        // What is display unit doing here?
+        Glib::ustring display_unit = doc->getDisplayUnit()->abbr;
+        double width = ret->getWidth().value(display_unit);
+        double height = ret->getHeight().value(display_unit);
+        if (width < 0 || height < 0) {
+            return nullptr;
+        }
+
         // Create image node
         Inkscape::XML::Document *xml_doc = doc->getReprDoc();
         Inkscape::XML::Node *image_node = xml_doc->createElement("svg:image");
@@ -841,10 +849,6 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
         double svgdpi = mod->get_param_float("svgdpi");
         image_node->setAttribute("inkscape:svg-dpi", Glib::ustring::format(svgdpi));
 
-        // What is display unit doing here?
-        Glib::ustring display_unit = doc->getDisplayUnit()->abbr;
-        double width  = ret->getWidth().value(display_unit);
-        double height = ret->getHeight().value(display_unit);
         image_node->setAttribute("width", Glib::ustring::format(width));
         image_node->setAttribute("height", Glib::ustring::format(height));
 

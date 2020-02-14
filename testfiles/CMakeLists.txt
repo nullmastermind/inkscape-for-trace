@@ -29,7 +29,9 @@ set(TEST_SOURCES
 	svg-stringstream-test
 	sp-gradient-test
 	object-test
-	sp-glyph-kerning-test)
+	sp-glyph-kerning-test
+	cairo-utils-test
+    svg-extension-test)
 
 set(TEST_LIBS
     ${GTEST_LIBRARIES}

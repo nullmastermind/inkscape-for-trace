@@ -317,7 +317,12 @@ Pixbuf *Pixbuf::create_from_data_uri(gchar const *uri_data, double svgdpi)
         Inkscape::Util::Quantity svgHeight = svgDoc->getHeight();
         const double svgWidth_px = svgWidth.value("px");
         const double svgHeight_px = svgHeight.value("px");
-
+        if (svgWidth_px < 0 || svgHeight_px < 0) {
+            g_warning("create_from_data_uri: malformed document: svgWidth_px=%f, svgHeight_px=%f", svgWidth_px,
+                      svgHeight_px);
+            return nullptr;
+        }
+        
         // Now get the resized values
         const int scaledSvgWidth  = round(svgWidth_px/(96.0/dpi));
         const int scaledSvgHeight = round(svgHeight_px/(96.0/dpi));
@@ -421,6 +426,11 @@ Pixbuf *Pixbuf::create_from_buffer(gchar *&&data, gsize len, double svgdpi, std:
                 Inkscape::Util::Quantity svgHeight = svgDoc->getHeight();
                 const double svgWidth_px = svgWidth.value("px");
                 const double svgHeight_px = svgHeight.value("px");
+                if (svgWidth_px < 0 || svgHeight_px < 0) {
+                    g_warning("create_from_buffer: malformed document: svgWidth_px=%f, svgHeight_px=%f", svgWidth_px,
+                              svgHeight_px);
+                    return nullptr;
+                }
 
                 // Now get the resized values
                 const int scaledSvgWidth  = round(svgWidth_px/(96.0/dpi));
