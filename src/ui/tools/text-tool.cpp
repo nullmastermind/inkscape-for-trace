@@ -19,6 +19,7 @@
 #include <glibmm/i18n.h>
 #include <glibmm/regex.h>
 
+#include "display/sp-canvas.h"
 #include <display/sp-ctrlline.h>
 #include <display/sodipodi-ctrlrect.h>
 #include <display/sp-ctrlquadr.h>
@@ -493,6 +494,7 @@ bool TextTool::root_handler(GdkEvent* event) {
             }
             break;
         case GDK_MOTION_NOTIFY: {
+            if (this->desktop && this->desktop->canvas->_scrooling) return true;
             if (this->creating && (event->motion.state & GDK_BUTTON1_MASK) && !this->space_panning) {
                 if ( this->within_tolerance
                      && ( abs( (gint) event->motion.x - this->xp ) < this->tolerance )
