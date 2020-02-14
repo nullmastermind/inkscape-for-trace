@@ -178,9 +178,9 @@ clangtidy:linux:
     - master@inkscape/inkscape
   script:
     - git fetch https://gitlab.com/inkscape/inkscape.git
-    # "borrow" a 2geom file to dump header includes
-    - git diff FETCH_HEAD --name-only | (grep '^src/.*\.h$' || true) | sed 's/^src/#include"../;s/$/"/' | tee src/2geom/geom.cpp
-    - git diff FETCH_HEAD --name-only | grep '^src/.*\.cpp$' | tee clang_tidy_files
+    # "borrow" a 3rdparty file to dump header includes
+    - git diff FETCH_HEAD --name-only -- '**.h' | sed 's!.*!#include"../../../../&"!' | tee src/3rdparty/adaptagrams/libcola/box.cpp
+    - git diff FETCH_HEAD --name-only -- '**.cpp' | tee clang_tidy_files
     - bash buildtools/clangtidy-helper.sh $(cat clang_tidy_files)
 
 clangtidyfull:linux:

@@ -26,8 +26,7 @@
 
 class SvgzImportTest : public DocPerCaseTest {
   public:
-    SvgzImportTest() {}
-    void TestBody()
+    void TestBody() override
     {
         ASSERT_TRUE(_doc != nullptr);
         ASSERT_TRUE(_doc->getRoot() != nullptr);
