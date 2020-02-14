@@ -342,6 +342,7 @@ void element_child_removed(Inkscape::XML::Node *repr, Inkscape::XML::Node *child
         // remove dummy when all children gone
         (!repr->firstChild() && repr_to_child(data, nullptr, &iter))) {
         gtk_tree_store_remove (GTK_TREE_STORE(data->tree->store), &iter);
+        gtk_tree_selection_unselect_all(gtk_tree_view_get_selection(GTK_TREE_VIEW(data->tree)));
     }
 }
 

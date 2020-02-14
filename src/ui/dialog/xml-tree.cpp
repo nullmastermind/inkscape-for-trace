@@ -511,7 +511,7 @@ void XmlTree::set_dt_select(Inkscape::XML::Node *repr)
              * equipped to deal with them */
             selection->set(SP_ITEM(object));
             current_desktop->getDocument()->setXMLDialogSelectedObject(nullptr);
-    } else if (object && !current_desktop->isLayer(object)) {
+    } else if (!object || !current_desktop->isLayer(object)) {
         current_desktop->getDocument()->setXMLDialogSelectedObject(object);
         selection->clear();
     }
