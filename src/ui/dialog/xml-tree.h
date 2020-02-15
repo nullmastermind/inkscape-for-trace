@@ -116,6 +116,15 @@ private:
       * Callback for a node in the tree being selected
       */
     static void on_tree_select_row(GtkTreeSelection *selection, gpointer data);
+    /**
+     * Callback for deferring the `on_tree_select_row` response in order to
+     * skip invalid intermediate selection states. In particular,
+     * `gtk_tree_store_remove` makes an undesired selection that we will
+     * immediately revert and don't want to an early response for.
+     */
+    static gboolean deferred_on_tree_select_row(gpointer);
+    /// Event source ID for the last scheduled `deferred_on_tree_select_row` event.
+    guint deferred_on_tree_select_row_id = 0;
 
     /**
       * Callback when a node is moved in the tree

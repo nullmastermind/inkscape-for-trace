@@ -505,16 +505,16 @@ void XmlTree::set_dt_select(Inkscape::XML::Node *repr)
     blocked++;
     if ( object && in_dt_coordsys(*object)
          && !(SP_IS_STRING(object) ||
+                current_desktop->isLayer(object) ||
                 SP_IS_ROOT(object)     ) )
     {
             /* We cannot set selection to root or string - they are not items and selection is not
              * equipped to deal with them */
             selection->set(SP_ITEM(object));
-            current_desktop->getDocument()->setXMLDialogSelectedObject(nullptr);
-    } else if (!object || !current_desktop->isLayer(object)) {
-        current_desktop->getDocument()->setXMLDialogSelectedObject(object);
-        selection->clear();
     }
+
+    current_desktop->getDocument()->setXMLDialogSelectedObject(object);
+
     blocked--;
 
 } // end of set_dt_select()
@@ -524,6 +524,21 @@ void XmlTree::on_tree_select_row(GtkTreeSelection *selection, gpointer data)
 {
     XmlTree *self = static_cast<XmlTree *>(data);
 
+    // Defer the update after all events have been processed. Allows skipping
+    // of invalid intermediate selection states, like the automatic next row
+    // selection after `gtk_tree_store_remove`.
+    if (self->deferred_on_tree_select_row_id == 0) {
+        self->deferred_on_tree_select_row_id = //
+            g_idle_add(XmlTree::deferred_on_tree_select_row, data);
+    }
+}
+
+gboolean XmlTree::deferred_on_tree_select_row(gpointer data)
+{
+    XmlTree *self = static_cast<XmlTree *>(data);
+
+    self->deferred_on_tree_select_row_id = 0;
+
     GtkTreeIter   iter;
     GtkTreeModel *model;
 
@@ -532,13 +547,14 @@ void XmlTree::on_tree_select_row(GtkTreeSelection *selection, gpointer data)
         self->selected_repr = nullptr;
     }
 
+    GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(self->tree));
 
     if (!gtk_tree_selection_get_selected (selection, &model, &iter)) {
         // Nothing selected, update widgets
         self->propagate_tree_select(nullptr);
         self->set_dt_select(nullptr);
         self->on_tree_unselect_row_disable();
-        return;
+        return FALSE;
     }
 
     Inkscape::XML::Node *repr = sp_xmlview_tree_node_get_repr(model, &iter);
@@ -555,6 +571,8 @@ void XmlTree::on_tree_select_row(GtkTreeSelection *selection, gpointer data)
     self->tree_reset_context();
 
     self->on_tree_select_row_enable(&iter);
+
+    return FALSE;
 }
 
 
