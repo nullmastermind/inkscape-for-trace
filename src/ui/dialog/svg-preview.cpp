@@ -451,7 +451,13 @@ SVGPreview::SVGPreview()
     set_size_request(200, 300);
 }
 
-SVGPreview::~SVGPreview() { delete document; }
+SVGPreview::~SVGPreview()
+{
+    if (viewer) {
+        viewer->setDocument(nullptr);
+    }  
+    delete document; 
+}
 
 } // namespace Dialog
 } // namespace UI
