@@ -55,10 +55,6 @@ MarkerComboBox::MarkerComboBox(gchar const *id, int l) :
     empty_image = sp_get_icon_image("no-marker", Gtk::ICON_SIZE_SMALL_TOOLBAR);
 
     sandbox = ink_markers_preview_doc ();
-    desktop = SP_ACTIVE_DESKTOP;
-    doc = desktop->getDocument();
-
-    modified_connection = doc->getDefs()->connectModified( sigc::hide(sigc::hide(sigc::bind(sigc::ptr_fun(&MarkerComboBox::handleDefsModified), this))) );
 
     init_combo();
     this->get_style_context()->add_class("combobright");
@@ -76,16 +72,15 @@ MarkerComboBox::~MarkerComboBox() {
     }
 }
 
-void MarkerComboBox::setDesktop(SPDesktop *desktop)
+void MarkerComboBox::setDocument(SPDocument *document)
 {
-    if (this->desktop != desktop) {
+    if (doc != document) {
 
         if (doc) {
             modified_connection.disconnect();
         }
 
-        this->desktop = desktop;
-        doc = desktop->getDocument();
+        doc = document;
 
         if (doc) {
             modified_connection = doc->getDefs()->connectModified( sigc::hide(sigc::hide(sigc::bind(sigc::ptr_fun(&MarkerComboBox::handleDefsModified), this))) );
@@ -135,24 +130,6 @@ MarkerComboBox::init_combo()
     if (updating)
         return;
 
-    const gchar *active = nullptr;
-    if (get_active()) {
-        active = get_active()->get_value(marker_columns.marker);
-    }
-
-    if (!doc) {
-        Gtk::TreeModel::Row row = *(marker_store->append());
-        row[marker_columns.label] = _("No document selected");
-        row[marker_columns.marker] = g_strdup("None");
-        row[marker_columns.image] = NULL;
-        row[marker_columns.stock] = false;
-        row[marker_columns.history] = false;
-        row[marker_columns.separator] = false;
-        set_sensitive(false);
-        set_current(nullptr);
-        return;
-    }
-
     static SPDocument *markers_doc = nullptr;
 
     // add separator
@@ -163,9 +140,6 @@ MarkerComboBox::init_combo()
     row_sep[marker_columns.stock] = false;
     row_sep[marker_columns.history] = false;
     row_sep[marker_columns.separator] = true;
-
-    // load markers from the current doc
-    sp_marker_list_from_doc(doc, true);
 
     // find and load markers.svg
     if (markers_doc == nullptr) {
@@ -178,15 +152,10 @@ MarkerComboBox::init_combo()
 
     // load markers from markers.svg
     if (markers_doc) {
-        doc->ensureUpToDate();
         sp_marker_list_from_doc(markers_doc, false);
     }
 
     set_sensitive(true);
-
-    /* Set history */
-    set_selected(active);
-
 }
 
 /**

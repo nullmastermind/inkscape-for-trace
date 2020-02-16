@@ -385,10 +385,6 @@ StrokeStyle::StrokeStyle() :
     paintOrderMSF->set_tooltip_text(_("Markers, Stroke, Fill")); 
 
     i++;
-
-    setDesktop(desktop);
-    updateLine();
-
 }
 
 StrokeStyle::~StrokeStyle()
@@ -404,13 +400,32 @@ void StrokeStyle::setDesktop(SPDesktop *desktop)
         if (this->desktop) {
             selectModifiedConn.disconnect();
             selectChangedConn.disconnect();
+            _document_replaced_connection.disconnect();
         }
         this->desktop = desktop;
-        if (desktop && desktop->selection) {
+
+        if (!desktop) {
+            return;
+        }
+
+        if (desktop->selection) {
             selectChangedConn = desktop->selection->connectChanged(sigc::hide(sigc::mem_fun(*this, &StrokeStyle::selectionChangedCB)));
             selectModifiedConn = desktop->selection->connectModified(sigc::hide<0>(sigc::mem_fun(*this, &StrokeStyle::selectionModifiedCB)));
         }
+
+        _document_replaced_connection =
+            desktop->connectDocumentReplaced(sigc::mem_fun(this, &StrokeStyle::_handleDocumentReplaced));
+
+        _handleDocumentReplaced(nullptr, desktop->getDocument());
+
         updateLine();
+    }
+}
+
+void StrokeStyle::_handleDocumentReplaced(SPDesktop *, SPDocument *document)
+{
+    for (MarkerComboBox *combo : { startMarkerCombo, midMarkerCombo, endMarkerCombo }) {
+        combo->setDocument(document);
     }
 }
 
@@ -951,9 +966,6 @@ StrokeStyle::updateLine()
         setPaintOrder (nullptr);
     }
 
-    if (!sel || sel->isEmpty())
-        return;
-
     std::vector<SPItem*> const objects(sel->items().begin(), sel->items().end());
     if (objects.size()) {
         SPObject *const object = objects[0];
@@ -1012,6 +1024,10 @@ static inline double calcScaleLineWidth(const double width_typed, SPItem *const 
 void
 StrokeStyle::scaleLine()
 {
+    if (!desktop) {
+        return;
+    }
+
     if (update) {
         return;
     }
@@ -1274,8 +1290,6 @@ StrokeStyle::updateAllMarkers(std::vector<SPItem*> const &objects, bool skip_und
 
         // Per SVG spec, text objects cannot have markers; disable combobox if only texts are selected
         combo->set_sensitive(!all_texts);
-
-        combo->setDesktop(desktop);
 
         SPObject *marker = nullptr;
 

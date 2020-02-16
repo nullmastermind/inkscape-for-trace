@@ -206,6 +206,9 @@ private:
     sigc::connection unitChangedConn;
     
     Inkscape::Util::Unit const *_old_unit;
+
+    void _handleDocumentReplaced(SPDesktop *, SPDocument *);
+    sigc::connection _document_replaced_connection;
 };
 
 } // namespace Inkscape

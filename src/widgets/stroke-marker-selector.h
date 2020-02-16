@@ -18,7 +18,6 @@
 
 #include <sigc++/signal.h>
 
-#include "desktop.h"
 #include "document.h"
 #include "inkscape.h"
 
@@ -41,7 +40,7 @@ public:
     MarkerComboBox(gchar const *id, int loc);
     ~MarkerComboBox() override;
 
-    void setDesktop(SPDesktop *desktop);
+    void setDocument(SPDocument *);
 
     sigc::signal<void> changed_signal;
 
@@ -62,8 +61,7 @@ private:
     int loc;
     bool updating;
     guint markerCount;
-    SPDesktop *desktop;
-    SPDocument *doc;
+    SPDocument *doc = nullptr;
     SPDocument *sandbox;
     Gtk::Image  *empty_image;
     Gtk::CellRendererPixbuf image_renderer;
