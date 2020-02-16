@@ -118,9 +118,6 @@ LayerPropertiesDialog::_apply()
     g_assert(_strategy != nullptr);
 
     _strategy->perform(*this);
-    DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), SP_VERB_NONE,
-                       _("Add layer"));
-
     _close();
 }
 
@@ -333,8 +330,7 @@ void LayerPropertiesDialog::Rename::perform(LayerPropertiesDialog &dialog) {
                                          (gchar *)name.c_str(),
                                          FALSE
     );
-    DocumentUndo::done(desktop->getDocument(), SP_VERB_NONE, 
-                       _("Rename layer"));
+    DocumentUndo::done(desktop->getDocument(), SP_VERB_LAYER_RENAME, _("Rename layer"));
     // TRANSLATORS: This means "The layer has been renamed"
     desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Renamed layer"));
 }
@@ -370,6 +366,7 @@ void LayerPropertiesDialog::Create::perform(LayerPropertiesDialog &dialog) {
     }
     desktop->getSelection()->clear();
     desktop->setCurrentLayer(new_layer);
+    DocumentUndo::done(desktop->getDocument(), SP_VERB_LAYER_NEW, _("Add layer"));
     desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("New layer created."));
 }
 

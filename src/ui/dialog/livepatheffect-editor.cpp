@@ -577,7 +577,7 @@ void LivePathEffectEditor::on_effect_selection_changed()
                     if (item) {
                         sel->clear();
                         sel->add(item);
-                         Inkscape::UI::Tools::sp_update_helperpath();
+                         Inkscape::UI::Tools::sp_update_helperpath(current_desktop);
                     }
                 }
             }

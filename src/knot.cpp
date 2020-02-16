@@ -257,7 +257,7 @@ static int sp_knot_handler(SPCanvasItem */*item*/, GdkEvent *event, SPKnot *knot
                 consumed = TRUE;
             }
         }
-        Inkscape::UI::Tools::sp_update_helperpath();
+        Inkscape::UI::Tools::sp_update_helperpath(knot->desktop);
         break;
     case GDK_MOTION_NOTIFY:
         if (!(event->motion.state & GDK_BUTTON1_MASK) && knot->flags & SP_KNOT_DRAGGING) {
@@ -288,7 +288,7 @@ static int sp_knot_handler(SPCanvasItem */*item*/, GdkEvent *event, SPKnot *knot
                 grabbed = FALSE;
                 moved = FALSE;
                 consumed = TRUE;
-                Inkscape::UI::Tools::sp_update_helperpath();
+                Inkscape::UI::Tools::sp_update_helperpath(knot->desktop);
             }
         } else if (grabbed && knot->desktop && knot->desktop->event_context &&
                    !knot->desktop->event_context->space_panning) {

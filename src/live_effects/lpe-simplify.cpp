@@ -149,7 +149,7 @@ LPESimplify::doEffect(SPCurve *curve)
     Geom::PathVector result = Geom::parse_svg_path(pathliv->svg_dump_path());
     generateHelperPathAndSmooth(result);
     curve->set_pathvector(result);
-    Inkscape::UI::Tools::sp_update_helperpath();
+    update_helperpath();
 }
 
 void

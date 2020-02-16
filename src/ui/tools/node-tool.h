@@ -98,7 +98,7 @@ private:
     void update_tip(GdkEvent *event);
     void handleControlUiStyleChange();
 };
-    void sp_update_helperpath();
+void sp_update_helperpath(SPDesktop *desktop);
 }
 
 }

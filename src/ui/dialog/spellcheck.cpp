@@ -215,6 +215,8 @@ void SpellCheck::setDesktop(SPDesktop *desktop)
 {
     Panel::setDesktop(desktop);
 
+    this->desktop = desktop;
+
     {
         if (_working) {
             // Stop and start on the new desktop
@@ -360,10 +362,10 @@ bool SpellCheck::updateSpeller() {
 #endif
 }
 
-bool
-SpellCheck::init(SPDesktop *d)
+void SpellCheck::onStart()
 {
-    desktop = d;
+    if (!desktop)
+        return;
 
     start_button.set_sensitive(false);
 
@@ -372,7 +374,7 @@ SpellCheck::init(SPDesktop *d)
     clearRects();
 
     if (!updateSpeller())
-        return false;
+        return;
 
     _root = desktop->getDocument()->getRoot();
 
@@ -384,7 +386,7 @@ SpellCheck::init(SPDesktop *d)
 
     _working = true;
 
-    return true;
+    doSpellcheck();
 }
 
 void
@@ -394,8 +396,6 @@ SpellCheck::finished ()
 
     clearRects();
     disconnect();
-
-    //desktop->clearWaitingCursor();
 
     tree_view.unset_model();
     tree_view.set_sensitive(false);
@@ -418,7 +418,6 @@ SpellCheck::finished ()
 
     _seen_objects.clear();
 
-    desktop = nullptr;
     _root = nullptr;
 
     _working = false;
@@ -512,8 +511,6 @@ SpellCheck::nextWord()
 
     if (have == 0) { // not found in any!
         _stops ++;
-
-        //desktop->clearWaitingCursor();
 
         // display it in window
         {
@@ -649,8 +646,6 @@ void SpellCheck::doSpellcheck ()
 
     banner_label.set_markup(_("<i>Checking...</i>"));
 
-    //desktop->setWaitingCursor();
-
     while (_working)
         if (nextWord())
             break;
@@ -763,13 +758,6 @@ void
 SpellCheck::onStop ()
 {
     finished();
-}
-
-void
-SpellCheck::onStart ()
-{
-    if (init (SP_ACTIVE_DESKTOP))
-        doSpellcheck();
 }
 
 void SpellCheck::onLanguageChanged()

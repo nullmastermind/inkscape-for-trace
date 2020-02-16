@@ -64,7 +64,7 @@ Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (prefs->getBool("/theme/symbolicIcons", false)) {
         Gtk::IconInfo iconinfo = icon_theme->lookup_icon(icon_name + Glib::ustring("-symbolic"), size, Gtk::ICON_LOOKUP_FORCE_SIZE);
-        if (iconinfo && SP_ACTIVE_DESKTOP->getToplevel()) {
+        if (iconinfo) {
             bool was_symbolic = false;
             Glib::ustring css_str = "";
             Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");

@@ -127,9 +127,12 @@ static void redirSecondaryClick( GtkMenuItem *menuitem, gpointer /*user_data*/ )
 
 static void editGradientImpl( SPDesktop* desktop, SPGradient* gr )
 {
+    g_assert(desktop != nullptr);
+    g_assert(desktop->doc() != nullptr);
+
     if ( gr ) {
         bool shown = false;
-        if ( desktop && desktop->doc() ) {
+        {
             Inkscape::Selection *selection = desktop->getSelection();
             std::vector<SPItem*> const items(selection->items().begin(), selection->items().end());
             if (!items.empty()) {
@@ -161,7 +164,7 @@ static void editGradientImpl( SPDesktop* desktop, SPGradient* gr )
                 // Invoke the gradient tool
                 Inkscape::Verb *verb = Inkscape::Verb::get( SP_VERB_CONTEXT_GRADIENT );
                 if ( verb ) {
-                    SPAction *action = verb->get_action( Inkscape::ActionContext( ( Inkscape::UI::View::View * ) SP_ACTIVE_DESKTOP ) );
+                    SPAction *action = verb->get_action(Inkscape::ActionContext(desktop));
                     if ( action ) {
                         sp_action_perform( action, nullptr );
                     }

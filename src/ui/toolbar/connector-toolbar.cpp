@@ -194,13 +194,13 @@ ConnectorToolbar::create( SPDesktop *desktop)
 void
 ConnectorToolbar::path_set_avoid()
 {
-    Inkscape::UI::Tools::cc_selection_set_avoid(true);
+    Inkscape::UI::Tools::cc_selection_set_avoid(_desktop, true);
 }
 
 void
 ConnectorToolbar::path_set_ignore()
 {
-    Inkscape::UI::Tools::cc_selection_set_avoid(false);
+    Inkscape::UI::Tools::cc_selection_set_avoid(_desktop, false);
 }
 
 void

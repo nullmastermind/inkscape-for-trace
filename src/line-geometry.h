@@ -72,13 +72,6 @@ std::pair<Geom::Point, Geom::Point> side_of_intersection (Geom::Point const &A, 
                                                           Geom::Point const &C, Geom::Point const &D,
                                                           Geom::Point const &pt, Geom::Point const &dir);
 
-/*** For debugging purposes: Draw a knot/node of specified size and color at the given position ***/
-void create_canvas_point(Geom::Point const &pos, unsigned int size = 4, guint32 rgba = 0xff00007f);
-
-/*** For debugging purposes: Draw a line between the specified points ***/
-void create_canvas_line(Geom::Point const &p1, Geom::Point const &p2, guint32 rgba = 0xff00007f);
-
-
 /** A function to print out the Line.  It just prints out the coordinates of start point and
     direction on the given output stream */
 inline std::ostream &operator<< (std::ostream &out_file, const Line &in_line) {

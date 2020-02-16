@@ -66,7 +66,6 @@ void ObjectCompositeSettings::setSubject(StyleSubject *subject) {
     if (subject) {
         _subject = subject;
         _subject_changed = _subject->connectChanged(sigc::mem_fun(*this, &ObjectCompositeSettings::_subjectChanged));
-        _subject->setDesktop(SP_ACTIVE_DESKTOP);
     }
 }
 

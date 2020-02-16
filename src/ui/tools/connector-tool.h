@@ -145,7 +145,7 @@ private:
     void _reroutingFinish(Geom::Point *const p);
 };
 
-void cc_selection_set_avoid(bool const set_ignore);
+void cc_selection_set_avoid(SPDesktop *, bool const set_ignore);
 void cc_create_connection_point(ConnectorTool* cc);
 void cc_remove_connection_point(ConnectorTool* cc);
 bool cc_item_is_connector(SPItem *item);

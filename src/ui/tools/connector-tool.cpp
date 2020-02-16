@@ -1287,9 +1287,8 @@ bool cc_item_is_connector(SPItem *item)
 }
 
 
-void cc_selection_set_avoid(bool const set_avoid)
+void cc_selection_set_avoid(SPDesktop *desktop, bool const set_avoid)
 {
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (desktop == nullptr) {
         return;
     }

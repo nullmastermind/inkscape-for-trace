@@ -39,8 +39,13 @@ void KnotHolderEntity::create(SPDesktop *desktop, SPItem *item, KnotHolder *pare
                               SPKnotShapeType shape, SPKnotModeType mode, guint32 color)
 {
     if (!desktop) {
-        desktop = SP_ACTIVE_DESKTOP;
+        desktop = parent->getDesktop();
     }
+
+    g_assert(item == parent->getItem());
+    g_assert(desktop && desktop == parent->getDesktop());
+
+    g_assert(knot == nullptr);
     knot = new SPKnot(desktop, tip);
 
     this->parent_holder = parent;

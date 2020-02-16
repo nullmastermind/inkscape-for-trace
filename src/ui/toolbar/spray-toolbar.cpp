@@ -510,7 +510,7 @@ SprayToolbar::toggle_picker()
     prefs->setBool("/tools/spray/picker", active);
     if(active){
         prefs->setBool("/dialogs/clonetiler/dotrace", false);
-        SPDesktop *dt = SP_ACTIVE_DESKTOP;
+        SPDesktop *dt = _desktop;
         if (Inkscape::UI::Dialog::CloneTiler *ct = get_clone_tiler_panel(dt)){
             dt->_dlg_mgr->showDialog("CloneTiler");
             ct->show_page_trace();

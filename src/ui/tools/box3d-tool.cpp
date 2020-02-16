@@ -393,15 +393,6 @@ bool Box3dTool::root_handler(GdkEvent* event) {
             ret = true;
             break;
 
-        /* FOR DEBUGGING PURPOSES
-        case GDK_O:
-            if (MOD__CTRL(event) && MOD__SHIFT(event)) {
-                Box3D::create_canvas_point(persp3d_get_VP(document()->getCurrentPersp3D(), Proj::W).affine(), 7, 0xff00ff00);
-            }
-            ret = true;
-            break;
-        */
-
         case GDK_KEY_g:
         case GDK_KEY_G:
             if (MOD__SHIFT_ONLY(event)) {

@@ -896,12 +896,12 @@ StrokeStyle::updateLine()
     // create temporary style
     SPStyle query(SP_ACTIVE_DOCUMENT);
     // query into it
-    int result_sw = sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_STROKEWIDTH);
-    int result_ml = sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_STROKEMITERLIMIT);
-    int result_cap = sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_STROKECAP);
-    int result_join = sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_STROKEJOIN);
+    int result_sw = sp_desktop_query_style(desktop, &query, QUERY_STYLE_PROPERTY_STROKEWIDTH);
+    int result_ml = sp_desktop_query_style(desktop, &query, QUERY_STYLE_PROPERTY_STROKEMITERLIMIT);
+    int result_cap = sp_desktop_query_style(desktop, &query, QUERY_STYLE_PROPERTY_STROKECAP);
+    int result_join = sp_desktop_query_style(desktop, &query, QUERY_STYLE_PROPERTY_STROKEJOIN);
 
-    int result_order = sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_PAINTORDER);
+    int result_order = sp_desktop_query_style(desktop, &query, QUERY_STYLE_PROPERTY_PAINTORDER);
 
     SPIPaint &targPaint = *query.getFillOrStroke(kind == FILL);
 
@@ -914,7 +914,7 @@ StrokeStyle::updateLine()
             // same width, or only one object; no sense to keep percent, switch to absolute
             Inkscape::Util::Unit const *tempunit = unitSelector->getUnit();
             if (tempunit->type != Inkscape::Util::UNIT_TYPE_LINEAR) {
-                unitSelector->setUnit(SP_ACTIVE_DESKTOP->getNamedView()->display_units->abbr);
+                unitSelector->setUnit(desktop->getNamedView()->display_units->abbr);
             }
         }
 

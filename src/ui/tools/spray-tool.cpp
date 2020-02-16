@@ -446,8 +446,8 @@ double randomize01(double val, double rand)
     return CLAMP(val, 0, 1); // this should be unnecessary with the above provisions, but just in case...
 }
 
-guint32 getPickerData(Geom::IntRect area){
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+static guint32 getPickerData(Geom::IntRect area, SPDesktop *desktop)
+{
     double R = 0, G = 0, B = 0, A = 0;
     cairo_surface_t *s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, area.width(), area.height());
     sp_canvas_arena_render_surface(SP_CANVAS_ARENA(desktop->getDrawing()), s, area);
@@ -535,11 +535,11 @@ static bool fit_item(SPDesktop *desktop,
     double height_transformed = bbox_procesed->height();
     Geom::Point mid_point = desktop->d2w(bbox_procesed->midpoint() * desktop->doc2dt());
     Geom::IntRect area = Geom::IntRect::from_xywh(floor(mid_point[Geom::X]), floor(mid_point[Geom::Y]), 1, 1);
-    guint32 rgba = getPickerData(area);
+    guint32 rgba = getPickerData(area, desktop);
     guint32 rgba2 = 0xffffff00;
     Geom::Rect rect_sprayed(desktop->d2w(Geom::Point(bbox_left_main,bbox_top_main)), desktop->d2w(Geom::Point(bbox_right_main,bbox_bottom_main)));
     if (!rect_sprayed.hasZeroArea()) {
-        rgba2 = getPickerData(rect_sprayed.roundOutwards());
+        rgba2 = getPickerData(rect_sprayed.roundOutwards(), desktop);
     }
     if(pick_no_overlap) {
         if(rgba != rgba2) {
@@ -623,9 +623,9 @@ static bool fit_item(SPDesktop *desktop,
     if(picker || over_transparent || over_no_transparent){
         if(!no_overlap){
             doc->ensureUpToDate();
-            rgba = getPickerData(area);
+            rgba = getPickerData(area, desktop);
             if (!rect_sprayed.hasZeroArea()) {
-                rgba2 = getPickerData(rect_sprayed.roundOutwards());
+                rgba2 = getPickerData(rect_sprayed.roundOutwards(), desktop);
             }
         }
         if(pick_no_overlap){

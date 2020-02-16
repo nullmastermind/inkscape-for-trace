@@ -955,11 +955,10 @@ void LayersPanel::setDesktop( SPDesktop* desktop )
         _layerChangedConnection.disconnect();
         _layerUpdatedConnection.disconnect();
         _changedConnection.disconnect();
-        if ( _desktop ) {
-            _desktop = nullptr;
-        }
 
-        _desktop = Panel::getDesktop();
+        _desktop = desktop;
+        _subject.setDesktop(desktop);
+
         if ( _desktop ) {
             //setLabel( _desktop->doc()->name );
 

@@ -86,7 +86,6 @@ public:
     virtual void acceptParamPath (SPPath const* param_path);
     static int acceptsNumClicks(EffectType type);
     int acceptsNumClicks() const { return acceptsNumClicks(effectType()); }
-    void doAcceptPathPreparations(SPLPEItem *lpeitem);
     SPShape * getCurrentShape() const { return current_shape; };
     void setCurrentShape(SPShape * shape) { current_shape = shape; }
     void processObjects(LPEAction lpe_action);

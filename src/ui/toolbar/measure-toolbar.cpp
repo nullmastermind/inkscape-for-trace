@@ -48,18 +48,12 @@ using Inkscape::Util::Unit;
 using Inkscape::DocumentUndo;
 using Inkscape::UI::Tools::MeasureTool;
 
-/** Temporary hack: Returns the node tool in the active desktop.
- * Will go away during tool refactoring. */
-static MeasureTool *get_measure_tool()
+static MeasureTool *get_measure_tool(SPDesktop *desktop)
 {
-    MeasureTool *tool = nullptr;
-    if (SP_ACTIVE_DESKTOP ) {
-        Inkscape::UI::Tools::ToolBase *ec = SP_ACTIVE_DESKTOP->event_context;
-        if (SP_IS_MEASURE_CONTEXT(ec)) {
-            tool = static_cast<MeasureTool*>(ec);
-        }
+    if (desktop) {
+        return dynamic_cast<MeasureTool *>(desktop->event_context);
     }
-    return tool;
+    return nullptr;
 }
 
 
@@ -244,7 +238,7 @@ MeasureToolbar::fontsize_value_changed()
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setDouble(Glib::ustring("/tools/measure/fontsize"),
             _font_size_adj->get_value());
-        MeasureTool *mt = get_measure_tool();
+        MeasureTool *mt = get_measure_tool(_desktop);
         if (mt) {
             mt->showCanvasItems();
         }
@@ -257,7 +251,7 @@ MeasureToolbar::unit_changed(int /* notUsed */)
     Glib::ustring const unit = _tracker->getActiveUnit()->abbr;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setString("/tools/measure/unit", unit);
-    MeasureTool *mt = get_measure_tool();
+    MeasureTool *mt = get_measure_tool(_desktop);
     if (mt) {
         mt->showCanvasItems();
     }
@@ -270,7 +264,7 @@ MeasureToolbar::precision_value_changed()
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setInt(Glib::ustring("/tools/measure/precision"),
             _precision_adj->get_value());
-        MeasureTool *mt = get_measure_tool();
+        MeasureTool *mt = get_measure_tool(_desktop);
         if (mt) {
             mt->showCanvasItems();
         }
@@ -284,7 +278,7 @@ MeasureToolbar::scale_value_changed()
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setDouble(Glib::ustring("/tools/measure/scale"),
             _scale_adj->get_value());
-        MeasureTool *mt = get_measure_tool();
+        MeasureTool *mt = get_measure_tool(_desktop);
         if (mt) {
             mt->showCanvasItems();
         }
@@ -298,7 +292,7 @@ MeasureToolbar::offset_value_changed()
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setDouble(Glib::ustring("/tools/measure/offset"),
             _offset_adj->get_value());
-        MeasureTool *mt = get_measure_tool();
+        MeasureTool *mt = get_measure_tool(_desktop);
         if (mt) {
             mt->showCanvasItems();
         }
@@ -316,7 +310,7 @@ MeasureToolbar::toggle_only_selected()
     } else {
         _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Measure all."));
     }
-    MeasureTool *mt = get_measure_tool();
+    MeasureTool *mt = get_measure_tool(_desktop);
     if (mt) {
         mt->showCanvasItems();
     }
@@ -333,7 +327,7 @@ MeasureToolbar::toggle_ignore_1st_and_last()
     } else {
         _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Start and end measures active."));
     }
-    MeasureTool *mt = get_measure_tool();
+    MeasureTool *mt = get_measure_tool(_desktop);
     if (mt) {
         mt->showCanvasItems();
     }
@@ -350,7 +344,7 @@ MeasureToolbar::toggle_show_in_between()
     } else {
         _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Compute max length."));
     }
-    MeasureTool *mt = get_measure_tool();
+    MeasureTool *mt = get_measure_tool(_desktop);
     if (mt) {
         mt->showCanvasItems();
     }
@@ -367,7 +361,7 @@ MeasureToolbar::toggle_show_hidden()
     } else {
         _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Show visible crossings."));
     }
-    MeasureTool *mt = get_measure_tool();
+    MeasureTool *mt = get_measure_tool(_desktop);
     if (mt) {
         mt->showCanvasItems();
     }
@@ -384,7 +378,7 @@ MeasureToolbar::toggle_all_layers()
     } else {
         _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Use current layer in the measure."));
     }
-    MeasureTool *mt = get_measure_tool();
+    MeasureTool *mt = get_measure_tool(_desktop);
     if (mt) {
         mt->showCanvasItems();
     }
@@ -393,7 +387,7 @@ MeasureToolbar::toggle_all_layers()
 void 
 MeasureToolbar::reverse_knots()
 {
-    MeasureTool *mt = get_measure_tool();
+    MeasureTool *mt = get_measure_tool(_desktop);
     if (mt) {
         mt->reverseKnots();
     }
@@ -402,7 +396,7 @@ MeasureToolbar::reverse_knots()
 void 
 MeasureToolbar::to_phantom()
 {
-    MeasureTool *mt = get_measure_tool();
+    MeasureTool *mt = get_measure_tool(_desktop);
     if (mt) {
         mt->toPhantom();
     }
@@ -411,7 +405,7 @@ MeasureToolbar::to_phantom()
 void 
 MeasureToolbar::to_guides()
 {
-    MeasureTool *mt = get_measure_tool();
+    MeasureTool *mt = get_measure_tool(_desktop);
     if (mt) {
         mt->toGuides();
     }
@@ -420,7 +414,7 @@ MeasureToolbar::to_guides()
 void 
 MeasureToolbar::to_item()
 {
-    MeasureTool *mt = get_measure_tool();
+    MeasureTool *mt = get_measure_tool(_desktop);
     if (mt) {
         mt->toItem();
     }
@@ -429,7 +423,7 @@ MeasureToolbar::to_item()
 void 
 MeasureToolbar::to_mark_dimension()
 {
-    MeasureTool *mt = get_measure_tool();
+    MeasureTool *mt = get_measure_tool(_desktop);
     if (mt) {
         mt->toMarkDimension();
     }

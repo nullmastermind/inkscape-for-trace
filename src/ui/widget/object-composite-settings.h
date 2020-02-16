@@ -47,7 +47,7 @@ private:
     Glib::ustring   _opacity_tag;
     Glib::ustring   _isolation_tag;
 
-    StyleSubject *_subject;
+    StyleSubject *_subject = nullptr;
 
     SimpleFilterModifier _filter_modifier;
 

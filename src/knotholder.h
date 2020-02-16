@@ -70,6 +70,9 @@ public:
 
     bool knot_mouseover() const;
 
+    SPDesktop *getDesktop() { return desktop; }
+    SPItem *getItem() { return item; }
+
     friend class Inkscape::UI::ShapeEditor; // FIXME why?
     friend class Inkscape::LivePathEffect::SatellitesArrayParam;                       // why?
     friend class Inkscape::LivePathEffect::PowerStrokePointArrayParamKnotHolderEntity; // why?

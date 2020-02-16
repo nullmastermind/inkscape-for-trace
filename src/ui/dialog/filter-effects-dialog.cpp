@@ -1433,7 +1433,10 @@ void FilterEffectsDialog::FilterModifier::on_document_replaced(SPDesktop * /*des
 // When the selection changes, show the active filter(s) in the dialog
 void FilterEffectsDialog::FilterModifier::on_change_selection()
 {
-    Inkscape::Selection *selection = SP_ACTIVE_DESKTOP->getSelection();
+    if (!_desktop)
+        return;
+
+    Inkscape::Selection *selection = _desktop->getSelection();
     update_selection(selection);
 }
 

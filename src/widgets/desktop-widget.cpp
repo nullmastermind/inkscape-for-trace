@@ -849,7 +849,7 @@ void SPDesktopWidget::on_realize()
     gchar *gtkThemeName;
     gboolean gtkApplicationPreferDarkTheme;
     GtkSettings *settings = gtk_settings_get_default();
-    Gtk::Window *window = SP_ACTIVE_DESKTOP->getToplevel();
+    Gtk::Container *window = get_toplevel();
     if (settings && window) {
         g_object_get(settings, "gtk-theme-name", &gtkThemeName, NULL);
         g_object_get(settings, "gtk-application-prefer-dark-theme", &gtkApplicationPreferDarkTheme, NULL);

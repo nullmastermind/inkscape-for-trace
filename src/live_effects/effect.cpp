@@ -1298,32 +1298,6 @@ void Effect::doBeforeEffect_impl(SPLPEItem const* lpeitem)
     update_helperpath();
 }
 
-/**
- * Effects can have a parameter path set before they are applied by accepting a nonzero number of
- * mouse clicks. This method activates the pen context, which waits for the specified number of
- * clicks. Override Effect::acceptsNumClicks() to return the number of expected mouse clicks.
- */
-void
-Effect::doAcceptPathPreparations(SPLPEItem *lpeitem)
-{
-    // switch to pen context
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP; // TODO: Is there a better method to find the item's desktop?
-    if (!tools_isactive(desktop, TOOLS_FREEHAND_PEN)) {
-        tools_switch(desktop, TOOLS_FREEHAND_PEN);
-    }
-
-    Inkscape::UI::Tools::ToolBase *ec = desktop->event_context;
-    Inkscape::UI::Tools::PenTool *pc = SP_PEN_CONTEXT(ec);
-    pc->expecting_clicks_for_LPE = this->acceptsNumClicks();
-    pc->waiting_LPE = this;
-    pc->waiting_item = lpeitem;
-    pc->polylines_only = true;
-
-    ec->desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE,
-        g_strdup_printf(_("Please specify a parameter path for the LPE '%s' with %d mouse clicks"),
-                        getName().c_str(), acceptsNumClicks()));
-}
-
 void
 Effect::writeParamsToSVG() {
     std::vector<Inkscape::LivePathEffect::Parameter *>::iterator p;
@@ -1498,7 +1472,7 @@ Effect::addCanvasIndicators(SPLPEItem const*/*lpeitem*/, std::vector<Geom::PathV
  */
 void
 Effect::update_helperpath() {
-    Inkscape::UI::Tools::sp_update_helperpath();
+    Inkscape::UI::Tools::sp_update_helperpath(SP_ACTIVE_DESKTOP);
 }
 
 /**

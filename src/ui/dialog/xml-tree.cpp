@@ -60,12 +60,6 @@ XmlTree::XmlTree()
     , new_window(nullptr)
     , _updating(false)
 {
-
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (!desktop) {
-        return;
-    }
-
     Gtk::Box *root = _getContents();
     Gtk::Box *contents = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
     status.set_halign(Gtk::ALIGN_START);

@@ -78,7 +78,6 @@ FillAndStroke::FillAndStroke()
 
 FillAndStroke::~FillAndStroke()
 {
-    _composite_settings.setSubject(nullptr);
 }
 
 void FillAndStroke::setDesktop(SPDesktop *desktop)
@@ -96,7 +95,7 @@ void FillAndStroke::setDesktop(SPDesktop *desktop)
         if (strokeStyleWdgt) {
             sp_stroke_style_widget_set_desktop(strokeStyleWdgt, desktop);
         }
-        _composite_settings.setSubject(&_subject);
+        _subject.setDesktop(desktop);
     }
 }
 

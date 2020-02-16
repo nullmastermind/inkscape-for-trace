@@ -340,15 +340,6 @@ Find::Find()
 
     show_all_children();
 
-    Inkscape::Selection *selection = SP_ACTIVE_DESKTOP->getSelection();
-    SPItem *item = selection->singleItem();
-    if (item) {
-        if (dynamic_cast<SPText *>(item) || dynamic_cast<SPFlowtext *>(item)) {
-            Glib::ustring str = sp_te_get_string_multiline(item);
-            entry_find.getEntry()->set_text(str);
-        }
-    }
-
     button_find.set_can_default();
     //button_find.grab_default(); // activatable by Enter
     entry_find.getEntry()->grab_focus();
@@ -361,15 +352,25 @@ Find::~Find()
 
 void Find::setDesktop(SPDesktop *desktop)
 {
+    selectChangedConn.disconnect();
+
     Panel::setDesktop(desktop);
 
-    {
-        {
-            selectChangedConn.disconnect();
+    if (!desktop)
+        return;
+
+    auto selection = desktop->getSelection();
+
+    if (selection) {
+        SPItem *item = selection->singleItem();
+        if (item && entry_find.getEntry()->get_text_length() == 0) {
+            Glib::ustring str = sp_te_get_string_multiline(item);
+            if (!str.empty()) {
+                entry_find.getEntry()->set_text(str);
+            }
         }
-        if (desktop && desktop->selection) {
-            selectChangedConn = desktop->selection->connectChanged(sigc::hide(sigc::mem_fun(*this, &Find::onSelectionChange)));
-        }
+
+        selectChangedConn = selection->connectChanged(sigc::hide(sigc::mem_fun(*this, &Find::onSelectionChange)));
     }
 }
 

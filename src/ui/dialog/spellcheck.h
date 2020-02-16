@@ -93,11 +93,6 @@ private:
     void    nextText ();
 
     /**
-     * Initialize the controls and aspell
-     */
-    bool    init (SPDesktop *desktop);
-
-    /**
      * Cleanup after spellcheck is finished
      */
     void    finished ();

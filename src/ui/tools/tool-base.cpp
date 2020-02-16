@@ -1240,7 +1240,7 @@ void sp_event_root_menu_popup(SPDesktop *desktop, SPItem *item, GdkEvent *event)
     }
 
     ContextMenu* CM = new ContextMenu(desktop, item);
-    Gtk::Window *window = SP_ACTIVE_DESKTOP->getToplevel();
+    Gtk::Window *window = desktop->getToplevel();
     if (window) {
         if (window->get_style_context()->has_class("dark")) {
             CM->get_style_context()->add_class("dark");

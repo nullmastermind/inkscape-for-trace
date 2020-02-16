@@ -213,7 +213,7 @@ void
 Box3DToolbar::vp_state_changed(Proj::Axis axis)
 {
     // TODO: Take all selected perspectives into account
-    auto sel_persps = SP_ACTIVE_DESKTOP->getSelection()->perspList();
+    auto sel_persps = _desktop->getSelection()->perspList();
     if (sel_persps.empty()) {
         // this can happen when the document is created; we silently ignore it
         return;

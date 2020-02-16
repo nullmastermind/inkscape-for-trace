@@ -22,9 +22,6 @@
 #include "ui/control-manager.h"
 #include <boost/optional.hpp>
 
-#define SP_MEASURE_CONTEXT(obj) (dynamic_cast<Inkscape::UI::Tools::MeasureTool*>((Inkscape::UI::Tools::ToolBase*)obj))
-#define SP_IS_MEASURE_CONTEXT(obj) (dynamic_cast<const Inkscape::UI::Tools::MeasureTool*>((const Inkscape::UI::Tools::ToolBase*)obj) != NULL)
-
 class SPKnot;
 
 namespace Inkscape {

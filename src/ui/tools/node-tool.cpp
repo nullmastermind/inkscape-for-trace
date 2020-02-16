@@ -286,7 +286,7 @@ void NodeTool::setup() {
     }
 
     this->desktop->emitToolSubselectionChanged(nullptr); // sets the coord entry fields to inactive
-    sp_update_helperpath();
+    sp_update_helperpath(desktop);
 }
 
 // Clean selection on tool change
@@ -297,8 +297,8 @@ void NodeTool::finish()
 }
 
 // show helper paths of the applied LPE, if any
-void sp_update_helperpath() {
-    SPDesktop * desktop = SP_ACTIVE_DESKTOP;
+void sp_update_helperpath(SPDesktop *desktop)
+{
     if (!desktop || !tools_isactive(desktop, TOOLS_NODES)) {
         return;
     }
@@ -471,7 +471,7 @@ void NodeTool::selection_changed(Inkscape::Selection *sel) {
     _current_selection = vec;
     this->_multipath->setItems(shapes);
     this->update_tip(nullptr);
-    sp_update_helperpath();
+    sp_update_helperpath(desktop);
     // This not need to be called canvas is updated on selection change on setItems
     // this->desktop->updateNow();
 }
@@ -503,7 +503,7 @@ bool NodeTool::root_handler(GdkEvent* event) {
     switch (event->type)
     {
     case GDK_MOTION_NOTIFY: {
-        sp_update_helperpath();
+        sp_update_helperpath(desktop);
         SPItem *over_item = nullptr;
         combine_motion_events(desktop->canvas, event->motion, 0);
         over_item = sp_event_context_find_item(desktop, event_point(event->button), FALSE, TRUE);

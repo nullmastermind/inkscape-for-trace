@@ -187,27 +187,6 @@ boost::optional<Geom::Point> Line::intersection_with_viewbox (SPDesktop *desktop
     return this->intersect (line);
 }
 
-void create_canvas_point(Geom::Point const &pos, unsigned int size, guint32 rgba)
-{
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    SPCanvasItem * canvas_pt = sp_canvas_item_new(desktop->getControls(), SP_TYPE_CTRL,
-                          "size", size,
-                          "filled", 1,
-                          "fill_color", rgba,
-                          "stroked", 1,
-                          "stroke_color", 0x000000ff,
-                          NULL);
-    SP_CTRL(canvas_pt)->moveto(pos);
-}
-
-void create_canvas_line(Geom::Point const &p1, Geom::Point const &p2, guint32 rgba)
-{
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    SPCtrlLine *line = ControlManager::getManager().createControlLine(desktop->getControls(), p1, p2);
-    line->setRgba32(rgba);
-    sp_canvas_item_show(line);
-}
-
 } // namespace Box3D 
  
 /*

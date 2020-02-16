@@ -90,12 +90,11 @@ ObjectAttributes::~ObjectAttributes ()
 
 void ObjectAttributes::widget_setup ()
 {
-    if (blocked)
-    {
+    if (blocked || !getDesktop()) {
         return;
     }
     
-    Inkscape::Selection *selection = SP_ACTIVE_DESKTOP->getSelection();
+    Inkscape::Selection *selection = getDesktop()->getSelection();
     SPItem *item = selection->singleItem();
     if (!item)
     {

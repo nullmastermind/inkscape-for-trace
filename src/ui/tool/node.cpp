@@ -297,7 +297,7 @@ void Handle::move(Geom::Point const &new_pos)
         bspline_weight = _pm()._bsplineHandlePosition(this, false);
         this->other()->setPosition(_pm()._bsplineHandleReposition(this->other(), bspline_weight));
     }
-    Inkscape::UI::Tools::sp_update_helperpath();
+    Inkscape::UI::Tools::sp_update_helperpath(_desktop);
 }
 
 void Handle::setPosition(Geom::Point const &p)
@@ -839,7 +839,7 @@ void Node::move(Geom::Point const &new_pos)
             nextNode->back()->setPosition(_pm()._bsplineHandleReposition(nextNode->back(), nextNodeWeight));
         }
     }
-    Inkscape::UI::Tools::sp_update_helperpath();
+    Inkscape::UI::Tools::sp_update_helperpath(_desktop);
 }
 
 void Node::transform(Geom::Affine const &m)
