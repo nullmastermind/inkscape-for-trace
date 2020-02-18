@@ -303,6 +303,7 @@ if(WIN32)
   install(FILES
     ${MINGW_BIN}/gdb.exe
     ${MINGW_BIN}/libreadline8.dll
+    ${MINGW_BIN}/libxxhash.dll
     DESTINATION bin)
   install(DIRECTORY
     ${MINGW_PATH}/share/gdb
