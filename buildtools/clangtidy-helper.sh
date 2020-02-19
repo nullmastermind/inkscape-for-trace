@@ -16,8 +16,7 @@ cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 run-clang-tidy -fix -header-filter='.*' "$@" > /dev/null || true
 
 # revert all fixes in protected directories
-git checkout ../src/3rdparty/
-(cd ../src/3rdparty/2geom && git checkout . )
+git checkout --recurse-submodules ../src/3rdparty
 
 git diff | tee clang_tidy_diff
 
