@@ -1,0 +1,35 @@
+<!--
+  set attributes for all features:
+    - AllowAdvertise="no" (to hide "This feature will be installed when required")
+    - InstallDefault="local" (to hide "This feature will be installed to run from network")
+
+  this is ugly - investigate making this auto-updating
+  see also https://gitlab.kitware.com/cmake/cmake/merge_requests/742
+
+
+  Empty features (i.e. features that only contain other features but no components)
+  need dummy components to ensure InstallDefault="local" works.
+  see http://windows-installer-xml-wix-toolset.687559.n2.nabble.com/Removing-Install-to-Run-From-Network-Feature-Option-td688625.html
+-->
+
+<CPackWiXPatch>
+  <CPackWiXFragment Id="#PRODUCTFEATURE" AllowAdvertise="no" InstallDefault="local" />
+
+  <CPackWiXFragment Id="CM_G_group_1_program_files" AllowAdvertise="no" InstallDefault="local" Absent="disallow">
+    <Component Id="dummy1" Directory="INSTALL_ROOT" Guid="7D08CAE1-A5A8-4C4B-A2B4-E97E2EA10FE4" KeyPath="yes" />
+  </CPackWiXFragment>
+  <CPackWiXFragment Id="CM_G_group_2_inkscape_data" AllowAdvertise="no" InstallDefault="local">
+    <Component Id="dummy2" Directory="INSTALL_ROOT" Guid="7405B66E-65E5-403B-B407-E39025587E46" KeyPath="yes" />
+  </CPackWiXFragment>
+  <CPackWiXFragment Id="CM_G_group_3_translations" AllowAdvertise="no" InstallDefault="local">
+    <Component Id="dummy3" Directory="INSTALL_ROOT" Guid="C2A35C47-B012-4DDF-B486-DD6A8DF42F5D" KeyPath="yes" />
+  </CPackWiXFragment>
+
+  <CPackWiXFragment Id="CM_C_inkscape" AllowAdvertise="no" InstallDefault="local" />
+  <CPackWiXFragment Id="CM_C_python" AllowAdvertise="no" InstallDefault="local" />
+  <CPackWiXFragment Id="CM_C_examples" AllowAdvertise="no" InstallDefault="local" />
+  <CPackWiXFragment Id="CM_C_extensions" AllowAdvertise="no" InstallDefault="local" />
+  <CPackWiXFragment Id="CM_C_tutorials" AllowAdvertise="no" InstallDefault="local" />
+  <CPackWiXFragment Id="CM_C_dictionaries" AllowAdvertise="no" InstallDefault="local" />
+  <!-- should also include every single CM_C_translations.* but adding them manually does not seem reasonable --> 
+</CPackWiXPatch>

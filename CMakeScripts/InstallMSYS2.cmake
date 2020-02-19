@@ -149,11 +149,12 @@ if(WIN32)
   install(CODE "execute_process(COMMAND gtk-update-icon-cache \${CMAKE_INSTALL_PREFIX}/share/icons/Adwaita)")
 
   # translations for libraries (we usually shouldn't need many)
-  file(GLOB inkscape_translations RELATIVE ${CMAKE_SOURCE_DIR}/po/ ${CMAKE_SOURCE_DIR}/po/*.po)
-  foreach(translation ${inkscape_translations})
-    get_filename_component(translation ${translation} NAME_WE)
-    install(DIRECTORY ${MINGW_PATH}/share/locale/${translation}
+  get_inkscape_languages()
+  foreach(language_code ${INKSCAPE_LANGUAGE_CODES})
+    string(MAKE_C_IDENTIFIER "${language_code}" language_code_escaped)
+    install(DIRECTORY ${MINGW_PATH}/share/locale/${language_code}
       DESTINATION share/locale
+      COMPONENT translations.${language_code_escaped}
       FILES_MATCHING
       PATTERN "*glib20.mo"
       PATTERN "*gtk30.mo"
@@ -224,7 +225,8 @@ if(WIN32)
 
   # Aspell dictionaries
   install(DIRECTORY ${MINGW_LIB}/aspell-0.60
-    DESTINATION lib)
+    DESTINATION lib
+    COMPONENT dictionaries)
 
   # Aspell backend for Enchant (gtkspell uses Enchant to access Aspell dictionaries)
   install(FILES
@@ -258,16 +260,20 @@ if(WIN32)
   install(FILES
     ${MINGW_BIN}/python3.exe
     RENAME python.exe
-    DESTINATION bin)
+    DESTINATION bin
+    COMPONENT python)
   install(FILES
     ${MINGW_BIN}/python3w.exe
     RENAME pythonw.exe
-    DESTINATION bin)
+    DESTINATION bin
+    COMPONENT python)
   install(FILES
     ${MINGW_BIN}/libpython${python_version}.dll
-    DESTINATION bin)
+    DESTINATION bin
+    COMPONENT python)
   install(DIRECTORY ${MINGW_LIB}/python${python_version}
     DESTINATION lib
+    COMPONENT python
     PATTERN "python${python_version}/site-packages" EXCLUDE # specify individual packages to install below
     PATTERN "python${python_version}/test" EXCLUDE # we don't need the Python testsuite
     PATTERN "*.pyc" EXCLUDE
@@ -280,6 +286,7 @@ if(WIN32)
     list_files_pacman(${package} paths)
     install_list(FILES ${paths}
       ROOT ${MINGW_PATH}
+      COMPONENT python
       INCLUDE ${site_packages} # only include content from "site-packages" (we might consider to install everything)
       EXCLUDE ".pyc$"
     )
@@ -291,13 +298,15 @@ if(WIN32)
     install_list(FILES ${paths}
       ROOT ${MINGW_PATH}/${site_packages}
       DESTINATION ${site_packages}/
+      COMPONENT python
       EXCLUDE "^\\.\\.\\/" # exclude content in parent directories (notably scripts installed to /bin)
       EXCLUDE ".pyc$"
     )
   endforeach()
   install(CODE
-    "MESSAGE(\"Pre-compiling Python byte-code (.pyc files)\")
-     execute_process(COMMAND \${CMAKE_INSTALL_PREFIX}/bin/python -m compileall -qq \${CMAKE_INSTALL_PREFIX})")
+    "MESSAGE(\"Pre-compiling Python distribution to byte-code (.pyc files)\")
+     execute_process(COMMAND \${CMAKE_INSTALL_PREFIX}/bin/python -m compileall -qq \${CMAKE_INSTALL_PREFIX}/lib/python${python_version})"
+    COMPONENT python)
 
   # gdb
   install(FILES

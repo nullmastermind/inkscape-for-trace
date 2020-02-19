@@ -132,13 +132,14 @@ endfunction(list_files_pip)
 #   FILES       - the list of files (absolute or relative paths)
 #   ROOT        - the root to search the files in (if file paths are relative)
 #   DESTINATION - the destination where to install files to
+#   COMPONENT   - cpack component
 #   INCLUDE     - a (list of) regular expression(s) specifying which files to include
 #                 (omit or leave empty to include all files)
 #   EXCLUDE     - a (list of) regular expression(s) specifying which files to exclude
 #                 (takes precedence over include rules)
 function(install_list)
     # parse arguments
-    set(oneValueArgs ROOT DESTINATION)
+    set(oneValueArgs ROOT DESTINATION COMPONENT)
     set(multiValueArgs FILES INCLUDE EXCLUDE)
     cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
@@ -172,7 +173,67 @@ function(install_list)
         # install if file should be included
         if(${include_file})
             get_filename_component(directory ${file} DIRECTORY)
-            install(FILES "${ARG_ROOT}/${file}" DESTINATION "${ARG_DESTINATION}${directory}")
+            install(
+                FILES "${ARG_ROOT}/${file}"
+                DESTINATION "${ARG_DESTINATION}${directory}"
+                COMPONENT "${ARG_COMPONENT}"
+            )
         endif()
     endforeach()
 endfunction(install_list)
+
+
+
+# Parses "inkscape-preferences.cpp" to get the current list of interface translations
+#
+# Results are cached in the variables
+#   - INKSCAPE_LANGUAGE_CODES
+#   - INKSCAPE_LANGUAGE_NAMES
+function(get_inkscape_languages)
+    if(NOT DEFINED INKSCAPE_LANGUAGE_CODES)
+        file(READ "${CMAKE_SOURCE_DIR}/src/ui/dialog/inkscape-preferences.cpp" file_content)
+
+        string(REGEX MATCH   "Glib::ustring languages\\[\\] = \\{([^\\}]+)\\};" languages "${file_content}")
+        string(REGEX REPLACE "Glib::ustring languages\\[\\] = \\{([^\\}]+)\\};" "\\1" languages "${languages}")
+        string(REGEX MATCHALL [[_\(\"([^\\"]+)\"\)]] languages "${languages}")
+        string(REGEX REPLACE  [[_\(\"([^\\"]+)\"\)]] "\\1" languages "${languages}")
+
+        string(REGEX MATCH   "Glib::ustring langValues\\[\\] = \\{([^\\}]+)\\};" langValues "${file_content}")
+        string(REGEX REPLACE "Glib::ustring langValues\\[\\] = \\{([^\\}]+)\\};" "\\1" langValues "${langValues}")
+        string(REGEX MATCHALL [[\"([^\\"]*)\"]] langValues "${langValues}")
+        string(REGEX REPLACE  [[\"([^\\"]*)\"]] "\\1" langValues "${langValues}")
+
+        list(REMOVE_AT languages 0)
+        list(REMOVE_AT langValues 0)
+
+        set(INKSCAPE_LANGUAGE_CODES "${langValues}" CACHE INTERNAL "")
+        set(INKSCAPE_LANGUAGE_NAMES "${languages}" CACHE INTERNAL "")
+    endif()
+endfunction(get_inkscape_languages)
+
+
+
+# Filters out translated content from the list of files, then makes sure it is
+# installed as part of the matching cpack translations component
+#
+# Filter is based on filename.${language_code}.ext naming scheme
+function(filter_and_install_translated_content file_list destination)
+    set(remaining_files ${${file_list}})
+
+    get_inkscape_languages()
+    foreach(language_code ${INKSCAPE_LANGUAGE_CODES})
+        set(translated_files ${remaining_files})
+        set(regex "\\.${language_code}\\.[a-z]+$")
+        list(FILTER translated_files INCLUDE REGEX "${regex}")
+        list(FILTER remaining_files  EXCLUDE REGEX "${regex}")
+
+        if(translated_files)
+            string(MAKE_C_IDENTIFIER "${language_code}" language_code_escaped)
+            install(FILES ${translated_files}
+                DESTINATION ${destination}
+                COMPONENT translations.${language_code_escaped})
+        endif()
+    endforeach()
+
+    set(${file_list} ${remaining_files} PARENT_SCOPE)
+endfunction(filter_and_install_translated_content)

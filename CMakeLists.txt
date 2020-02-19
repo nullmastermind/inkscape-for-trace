@@ -33,6 +33,7 @@ include(CMakeScripts/ConfigEnv.cmake)
 include(GNUInstallDirs) # for the CMAKE_INSTALL_LIBDIR variable
 
 project(inkscape)
+set(CMAKE_INSTALL_DEFAULT_COMPONENT_NAME inkscape) # needs to be before any install() commands
 
 include(CMakeScripts/ConfigPaths.cmake)
 
@@ -233,12 +234,6 @@ add_custom_target(clean-all
 # Install Target
 # -----------------------------------------------------------------------------
 add_subdirectory(share)
-
-install(FILES
-	AUTHORS
-	TRANSLATORS
-	DESTINATION ${INKSCAPE_SHARE_INSTALL}/doc)
-
 include(CMakeScripts/Install.cmake)
 
 # -----------------------------------------------------------------------------
@@ -278,7 +273,6 @@ message("-----------------------------------------------------------------------
 message("PROJECT_NAME:            ${PROJECT_NAME}")
 message("INKSCAPE_VERSION:        ${INKSCAPE_VERSION}")
 message("INKSCAPE_DIST_PREFIX:    ${INKSCAPE_DIST_PREFIX}")
-message("INKSCAPE_CPACK_PREFIX:   ${INKSCAPE_CPACK_PREFIX}")
 message("")
 
 # cmake info

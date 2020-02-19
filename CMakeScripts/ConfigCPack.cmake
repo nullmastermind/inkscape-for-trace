@@ -6,236 +6,181 @@
 ## General ##
 
 set(CPACK_PACKAGE_NAME "Inkscape")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Open-source vector graphics editor")
 set(CPACK_PACKAGE_VENDOR "Inkscape")
-set(CPACK_PACKAGE_CONTACT "Inkscape developers <inkscape-devel@lists.sourceforge.net>")
-set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_SOURCE_DIR}/README.md")
-set(CPACK_PACKAGE_HOMEPAGE_URL "https://inkscape.org")
-set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSES/GPL-3.0.txt")
-set(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/README.md")
-set(CPACK_PACKAGE_VERSION_MAJOR ${INKSCAPE_VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MAJOR ${INKSCAPE_VERSION_MAJOR}) # TODO: Can be set via project(), see CMAKE_PROJECT_VERSION_PATCH
 set(CPACK_PACKAGE_VERSION_MINOR ${INKSCAPE_VERSION_MINOR})
 set(CPACK_PACKAGE_VERSION_PATCH ${INKSCAPE_VERSION_PATCH})
-set(CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}/share/branding/inkscape.ico")
+set(CPACK_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}-${INKSCAPE_VERSION_SUFFIX}")
+set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_SOURCE_DIR}/README.md") # TODO: Where is this used? Do we need a better source?
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Open-source vector graphics editor")
+set(CPACK_PACKAGE_HOMEPAGE_URL "https://inkscape.org")
+set(CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}/share/branding/inkscape.svg") # TODO: Can any generator make use of this?
+set(CPACK_PACKAGE_CONTACT "Inkscape developers <inkscape-devel@lists.inkscape.org>")
 
-set(CPACK_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}~${INKSCAPE_VERSION_SUFFIX}")
-set(CPACK_SOURCE_IGNORE_FILES "~$;[.]swp$;/[.]svn/;/[.]git/;.gitignore;/build/;/obj*/;cscope.*;.gitlab*;.coveragerc;*.md;")
-set(INKSCAPE_CPACK_PREFIX ${PROJECT_NAME}-${INKSCAPE_VERSION}_${INKSCAPE_REVISION_DATE}_${INKSCAPE_REVISION_HASH})
-set(CPACK_SOURCE_PACKAGE_FILE_NAME ${INKSCAPE_CPACK_PREFIX})
-set(CPACK_PACKAGE_FILE_NAME ${INKSCAPE_CPACK_PREFIX})
-set(CPACK_PACKAGE_INSTALL_DIRECTORY "inkscape")
-set(CPACK_SOURCE_GENERATOR "TXZ")
+set(CPACK_PACKAGE_FILE_NAME ${INKSCAPE_DIST_PREFIX})
+set(CPACK_PACKAGE_CHECKSUM "SHA256")
+
 set(CPACK_PACKAGE_EXECUTABLES "inkscape;Inkscape;inkview;Inkview")
+set(CPACK_CREATE_DESKTOP_LINKS "inkscape")
+if(WIN32)
+    set(CPACK_PACKAGE_INSTALL_DIRECTORY "Inkscape")
+else()
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "inkscape")
+endif()
+
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSES/GPL-3.0.txt")
+set(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/README.md")
+# set( CPACK_RESOURCE_FILE_WELCOME "${CMAKE_SOURCE_DIR}/README.md") # TODO: can we use this?
+
 set(CPACK_STRIP_FILES TRUE)
 set(CPACK_WARN_ON_ABSOLUTE_INSTALL_DESTINATION TRUE)
-configure_file("${CMAKE_SOURCE_DIR}/CMakeScripts/CPack.cmake" "${CMAKE_BINARY_DIR}/CMakeScripts/CPack.cmake" @ONLY)
+
+# specific config for source packaging (note this is used by the 'dist' target)
+set(CPACK_SOURCE_GENERATOR "TXZ")
+set(CPACK_SOURCE_PACKAGE_FILE_NAME ${INKSCAPE_DIST_PREFIX})
+set(CPACK_SOURCE_IGNORE_FILES "~$;[.]swp$;/[.]svn/;/[.]git/;.gitignore;/build/;/obj*/;cscope.*;.gitlab*;.coveragerc;*.md;")
+
+
+
+
+# this allows to override above configuration per cpack generator at CPack-time
 set(CPACK_PROJECT_CONFIG_FILE "${CMAKE_BINARY_DIR}/CMakeScripts/CPack.cmake")
-
-## Windows ##
-
-if (WIN32)
-    set(CPACK_GENERATOR "ZIP")
-    ### nsis generator
-    find_package(NSIS)
-    if (NSIS_MAKE)
-        set(CPACK_GENERATOR "${CPACK_GENERATOR};NSIS")
-        set(CPACK_NSIS_DISPLAY_NAME "Inkscape")
-        set(CPACK_NSIS_COMPRESSOR "/SOLID zlib")
-        set(CPACK_NSIS_MENU_LINKS "https://inkscape.org/" "Inkscape homepage")
-    endif (NSIS_MAKE)
-
-    #WIX
-    set(CPACK_WIX_UPGRADE_GUID "4d5fedaa-84a0-48be-bd2a-08246398361a")
-    set(CPACK_WIX_PRODUCT_ICON "${CMAKE_SOURCE_DIR}/share/branding/inkscape.ico")
-    set(CPACK_WIX_UI_BANNER  "${CMAKE_SOURCE_DIR}/packaging/wix/Bitmaps/banner.bmp")
-    set(CPACK_WIX_UI_DIALOG  "${CMAKE_SOURCE_DIR}/packaging/wix/Bitmaps/dialog.bmp")
-endif (WIN32)
-
-## Linux ##
-
-### DEB ###
-if(UNIX)
-    SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libaspell15 (>= 0.60.7~20110707), libatkmm-1.6-1v5 (>= 2.24.0), libc6 (>= 2.14), libcairo2 (>= 1.14.0), libcairomm-1.0-1v5 (>= 1.12.0), libcdr-0.1-1, libdbus-glib-1-2 (>= 0.88), libfontconfig1 (>= 2.12), libfreetype6 (>= 2.2.1), libgc1c2 (>= 1:7.2d), libgcc1 (>= 1:4.0), libgdk-pixbuf2.0-0 (>= 2.22.0), libgdl-3-5 (>= 3.8.1), libglib2.0-0 (>= 2.41.1), libglibmm-2.4-1v5 (>= 2.54.0), libgomp1 (>= 4.9), libgsl23, libgslcblas0, libgtk-3-0 (>= 3.21.5), libgtkmm-3.0-1v5 (>= 3.22.0), libgtkspell3-3-0, libharfbuzz0b (>= 1.2.6), libjpeg8 (>= 8c), liblcms2-2 (>= 2.2+git20110628), libmagick++-6.q16-7 (>= 8:6.9.6.8), libpango-1.0-0 (>= 1.37.2), libpangocairo-1.0-0 (>= 1.14.0), libpangoft2-1.0-0 (>= 1.37.2), libpangomm-1.4-1v5 (>= 2.40.0), libpng16-16 (>= 1.6.2-1), libpoppler-glib8 (>= 0.18.0), libpoppler68 (>= 0.57.0), libpotrace0, librevenge-0.0-0, libsigc++-2.0-0v5 (>= 2.8.0), libsoup2.4-1 (>= 2.41.90), libstdc++6 (>= 5.2), libvisio-0.1-1, libwpg-0.3-3, libx11-6, libxml2 (>= 2.7.4), libxslt1.1 (>= 1.1.25), zlib1g (>= 1:1.1.4)")
-    IF(NOT CPACK_DEBIAN_PACKAGE_ARCHITECTURE)
-      FIND_PROGRAM(DPKG_CMD dpkg)
-      IF(NOT DPKG_CMD)
-        MESSAGE(STATUS "Can not find dpkg in your path, default to amd64.")
-        SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE amd64)
-      ENDIF(NOT DPKG_CMD)
-        EXECUTE_PROCESS(COMMAND "${DPKG_CMD}" --print-architecture
-            OUTPUT_VARIABLE CPACK_DEBIAN_PACKAGE_ARCHITECTURE
-            OUTPUT_STRIP_TRAILING_WHITESPACE
-        )
-    ENDIF(NOT CPACK_DEBIAN_PACKAGE_ARCHITECTURE)
-    SET(CPACK_DEBIAN_PACKAGE_SECTION "graphics")
-    SET(CPACK_DEBIAN_PACKAGE_RECOMMENDS "aspell, imagemagick, libwmf-bin, perlmagick, python-numpy, python-lxml, python-scour, python-uniconvertor")
-    SET(CPACK_DEBIAN_PACKAGE_SUGGESTS "dia, libsvg-perl, libxml-xql-perl, pstoedit, python-uniconvertor, ruby")
-    install(FILES ${CMAKE_SOURCE_DIR}/COPYING RENAME copyright DESTINATION ${SHARE_INSTALL}/doc/inkscape/)
-endif(UNIX)
-
-### RPM ###
-
-
-## MacOS ##
-
-#[[
-.. variable:: CPACK_DMG_VOLUME_NAME
-
- The volume name of the generated disk image. Defaults to
- CPACK_PACKAGE_FILE_NAME.
-
-.. variable:: CPACK_DMG_FORMAT
-
- The disk image format. Common values are ``UDRO`` (UDIF read-only), ``UDZO`` (UDIF
- zlib-compressed) or ``UDBZ`` (UDIF bzip2-compressed). Refer to ``hdiutil(1)`` for
- more information on other available formats. Defaults to ``UDZO``.
-
-.. variable:: CPACK_DMG_DS_STORE
-
- Path to a custom ``.DS_Store`` file. This ``.DS_Store`` file can be used to
- specify the Finder window position/geometry and layout (such as hidden
- toolbars, placement of the icons etc.). This file has to be generated by
- the Finder (either manually or through AppleScript) using a normal folder
- from which the ``.DS_Store`` file can then be extracted.
-
-.. variable:: CPACK_DMG_DS_STORE_SETUP_SCRIPT
-
- Path to a custom AppleScript file.  This AppleScript is used to generate
- a ``.DS_Store`` file which specifies the Finder window position/geometry and
- layout (such as hidden toolbars, placement of the icons etc.).
- By specifying a custom AppleScript there is no need to use
- ``CPACK_DMG_DS_STORE``, as the ``.DS_Store`` that is generated by the AppleScript
- will be packaged.
-
-.. variable:: CPACK_DMG_BACKGROUND_IMAGE
-
- Path to an image file to be used as the background.  This file will be
- copied to ``.background``/``background.<ext>``, where ``<ext>`` is the original image file
- extension.  The background image is installed into the image before
- ``CPACK_DMG_DS_STORE_SETUP_SCRIPT`` is executed or ``CPACK_DMG_DS_STORE`` is
- installed.  By default no background image is set.
-
-.. variable:: CPACK_DMG_DISABLE_APPLICATIONS_SYMLINK
-
- Default behaviour is to include a symlink to ``/Applications`` in the DMG.
- Set this option to ``ON`` to avoid adding the symlink.
-
-.. variable:: CPACK_DMG_SLA_DIR
-
-  Directory where license and menu files for different languages are stored.
-  Setting this causes CPack to look for a ``<language>.menu.txt`` and
-  ``<language>.license.txt`` file for every language defined in
-  ``CPACK_DMG_SLA_LANGUAGES``. If both this variable and
-  ``CPACK_RESOURCE_FILE_LICENSE`` are set, CPack will only look for the menu
-  files and use the same license file for all languages.
-
-.. variable:: CPACK_DMG_SLA_LANGUAGES
-
-  Languages for which a license agreement is provided when mounting the
-  generated DMG. A menu file consists of 9 lines of text. The first line is
-  is the name of the language itself, uppercase, in English (e.g. German).
-  The other lines are translations of the following strings:
-
-  - Agree
-  - Disagree
-  - Print
-  - Save...
-  - You agree to the terms of the License Agreement when you click the
-    "Agree" button.
-  - Software License Agreement
-  - This text cannot be saved. The disk may be full or locked, or the file
-    may be locked.
-  - Unable to print. Make sure you have selected a printer.
-
-  For every language in this list, CPack will try to find files
-  ``<language>.menu.txt`` and ``<language>.license.txt`` in the directory
-  specified by the ``CPACK_DMG_SLA_DIR`` variable.
-
-.. variable:: CPACK_COMMAND_HDIUTIL
-
- Path to the ``hdiutil(1)`` command used to operate on disk image files on
- macOS. This variable can be used to override the automatically detected
- command (or specify its location if the auto-detection fails to find it).
-
-.. variable:: CPACK_COMMAND_SETFILE
-
- Path to the ``SetFile(1)`` command used to set extended attributes on files and
- directories on macOS. This variable can be used to override the
- automatically detected command (or specify its location if the
- auto-detection fails to find it).
-
- .. variable:: CPACK_COMMAND_REZ
-
- Path to the ``Rez(1)`` command used to compile resources on macOS. This
- variable can be used to override the automatically detected command (or
- specify its location if the auto-detection fails to find it).
+configure_file("${CMAKE_SOURCE_DIR}/CMakeScripts/CPack.cmake" "${CMAKE_BINARY_DIR}/CMakeScripts/CPack.cmake" @ONLY)
 
 
 
-#Variables specific to CPack Bundle generator
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Installers built on macOS using the Bundle generator use the
-aforementioned DragNDrop (``CPACK_DMG_xxx``) variables, plus the following
-Bundle-specific parameters (``CPACK_BUNDLE_xxx``).
+## Generator-specific configuration ##
 
-.. variable:: CPACK_BUNDLE_NAME
+# NSIS (Windows .exe installer)
+set(CPACK_NSIS_MUI_ICON "${CMAKE_SOURCE_DIR}/share/branding/inkscape.ico")
+set(CPACK_NSIS_MUI_WELCOMEFINISHPAGE_BITMAP "${CMAKE_SOURCE_DIR}/packaging/nsis/welcomefinish.bmp")
+set(CPACK_NSIS_INSTALLED_ICON_NAME "bin/inkscape.exe")
+set(CPACK_NSIS_HELP_LINK "${CPACK_PACKAGE_HOMEPAGE_URL}")
+set(CPACK_NSIS_URL_INFO_ABOUT "${CPACK_PACKAGE_HOMEPAGE_URL}")
+set(CPACK_NSIS_MENU_LINKS "${CPACK_PACKAGE_HOMEPAGE_URL}" "Inkscape Homepage")
+set(CPACK_NSIS_COMPRESSOR "/SOLID lzma") # zlib|bzip2|lzma
+set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL "ON")
+set(CPACK_NSIS_MODIFY_PATH "ON") # while the name does not suggest it, this also provides the possibility to add desktop icons
+set(CPACK_NSIS_MUI_FINISHPAGE_RUN "inkscape") # TODO: this results in instance with administrative privileges!
 
- The name of the generated bundle. This appears in the OSX finder as the
- bundle name. Required.
+set(CPACK_NSIS_COMPRESSOR "${CPACK_NSIS_COMPRESSOR}\n  SetCompressorDictSize 64") # hack (improve compression)
+set(CPACK_NSIS_COMPRESSOR "${CPACK_NSIS_COMPRESSOR}\n  BrandingText '${CPACK_PACKAGE_DESCRIPTION_SUMMARY}'") # hack (overwrite BrandingText)
+set(CPACK_NSIS_COMPRESSOR "${CPACK_NSIS_COMPRESSOR}\n  !define MUI_COMPONENTSPAGE_SMALLDESC") # hack (better components page layout)
 
-.. variable:: CPACK_BUNDLE_PLIST
+set(CPACK_NSIS_COMPRESSOR "${CPACK_NSIS_COMPRESSOR}\n  ReserveFile 'NSIS.InstallOptions.ini'") # more hacks (see https://gitlab.kitware.com/cmake/cmake/merge_requests/4171)
+set(CPACK_NSIS_COMPRESSOR "${CPACK_NSIS_COMPRESSOR}\n  ReserveFile '\\\${NSISDIR}\\\\Contrib\\\\Modern UI\\\\ioSpecial.ini'") # hack
+set(CPACK_NSIS_COMPRESSOR "${CPACK_NSIS_COMPRESSOR}\n  ReserveFile '${CMAKE_SOURCE_DIR}\\\\packaging\\\\nsis\\\\header.bmp'") # hack
+set(CPACK_NSIS_COMPRESSOR "${CPACK_NSIS_COMPRESSOR}\n  ReserveFile '${CMAKE_SOURCE_DIR}\\\\packaging\\\\nsis\\\\welcomefinish.bmp'") # hack
+set(CPACK_NSIS_COMPRESSOR "${CPACK_NSIS_COMPRESSOR}\n  !insertmacro MUI_RESERVEFILE_INSTALLOPTIONS") # hack
+set(CPACK_NSIS_COMPRESSOR "${CPACK_NSIS_COMPRESSOR}\n  !insertmacro MUI_RESERVEFILE_LANGDLL") # hack
+set(CPACK_NSIS_COMPRESSOR "${CPACK_NSIS_COMPRESSOR}\n  ReserveFile /plugin 'InstallOptions.dll' 'StartMenu.dll' 'System.dll' 'UserInfo.dll'") # hack
 
- Path to an OSX plist file that will be used for the generated bundle. This
- assumes that the caller has generated or specified their own Info.plist
- file. Required.
+file(TO_NATIVE_PATH "${CMAKE_SOURCE_DIR}/packaging/nsis/fileassoc.nsh" native_path)
+string(REPLACE "\\" "\\\\" native_path "${native_path}")
+set(CPACK_NSIS_EXTRA_PREINSTALL_COMMANDS "!include ${native_path}")
+set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "\
+  !insertmacro APP_ASSOCIATE 'svg' 'Inkscape.SVG' 'Scalable Vector Graphics' '$INSTDIR\\\\bin\\\\inkscape.exe,0' 'Open with Inkscape' '$INSTDIR\\\\bin\\\\inkscape.exe \\\"%1\\\"'\n\
+  !insertmacro APP_ASSOCIATE 'svgz' 'Inkscape.SVGZ' 'Compressed Scalable Vector Graphics' '$INSTDIR\\\\bin\\\\inkscape.exe,0' 'Open with Inkscape' '$INSTDIR\\\\bin\\\\inkscape.exe \\\"%1\\\"'\n\
+  !insertmacro UPDATEFILEASSOC")
+set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "\
+  !insertmacro APP_UNASSOCIATE 'svg' 'Inkscape.SVG'\n\
+  !insertmacro APP_UNASSOCIATE 'svgz' 'Inkscape.SVGZ'\n\
+  !insertmacro UPDATEFILEASSOC")
 
-.. variable:: CPACK_BUNDLE_ICON
+# WIX (Windows .msi installer)
+set(CPACK_WIX_UPGRADE_GUID "4d5fedaa-84a0-48be-bd2a-08246398361a")
+set(CPACK_WIX_PRODUCT_ICON "${CMAKE_SOURCE_DIR}/share/branding/inkscape.ico")
+set(CPACK_WIX_UI_BANNER "${CMAKE_SOURCE_DIR}/packaging/wix/Bitmaps/banner.bmp")
+set(CPACK_WIX_UI_DIALOG "${CMAKE_SOURCE_DIR}/packaging/wix/Bitmaps/dialog.bmp")
+set(CPACK_WIX_PROPERTY_ARPHELPLINK "${CPACK_PACKAGE_HOMEPAGE_URL}")
+set(CPACK_WIX_PROPERTY_ARPURLINFOABOUT "${CPACK_PACKAGE_HOMEPAGE_URL}")
+set(CPACK_WIX_PROPERTY_ARPURLUPDATEINFO "${CPACK_PACKAGE_HOMEPAGE_URL}/release")
+set(CPACK_WIX_ROOT_FEATURE_DESCRIPTION "${CPACK_PACKAGE_DESCRIPTION_SUMMARY}")
+set(CPACK_WIX_LIGHT_EXTRA_FLAGS "-dcl:high") # set high compression
 
- Path to an OSX icon file that will be used as the icon for the generated
- bundle. This is the icon that appears in the OSX finder for the bundle, and
- in the OSX dock when the bundle is opened. Required.
+set(CPACK_WIX_PATCH_FILE "${CMAKE_SOURCE_DIR}/packaging/wix/file_association.xml"
+                         "${CMAKE_SOURCE_DIR}/packaging/wix/feature_attributes.xml")
 
-.. variable:: CPACK_BUNDLE_STARTUP_COMMAND
-
- Path to a startup script. This is a path to an executable or script that
- will be run whenever an end-user double-clicks the generated bundle in the
- OSX Finder. Optional.
-
-.. variable:: CPACK_BUNDLE_APPLE_CERT_APP
-
- The name of your Apple supplied code signing certificate for the application.
- The name usually takes the form ``Developer ID Application: [Name]`` or
- ``3rd Party Mac Developer Application: [Name]``. If this variable is not set
- the application will not be signed.
-
-.. variable:: CPACK_BUNDLE_APPLE_ENTITLEMENTS
-
- The name of the ``Plist`` file that contains your apple entitlements for sandboxing
- your application. This file is required for submission to the Mac App Store.
-
- .. variable:: CPACK_BUNDLE_APPLE_CODESIGN_FILES
-
- A list of additional files that you wish to be signed. You do not need to
- list the main application folder, or the main executable. You should
- list any frameworks and plugins that are included in your app bundle.
-
-.. variable:: CPACK_BUNDLE_APPLE_CODESIGN_PARAMETER
-
- Additional parameter that will passed to ``codesign``.
- Default value: ``--deep -f``
-
-.. variable:: CPACK_COMMAND_CODESIGN
-
- Path to the ``codesign(1)`` command used to sign applications with an
- Apple cert. This variable can be used to override the automatically
- detected command (or specify its location if the auto-detection fails
- to find it).
-
+# DEB (Linux .deb bundle)
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libaspell15 (>= 0.60.7~20110707), libatkmm-1.6-1v5 (>= 2.24.0), libc6 (>= 2.14), libcairo2 (>= 1.14.0), libcairomm-1.0-1v5 (>= 1.12.0), libcdr-0.1-1, libdbus-glib-1-2 (>= 0.88), libfontconfig1 (>= 2.12), libfreetype6 (>= 2.2.1), libgc1c2 (>= 1:7.2d), libgcc1 (>= 1:4.0), libgdk-pixbuf2.0-0 (>= 2.22.0), libgdl-3-5 (>= 3.8.1), libglib2.0-0 (>= 2.41.1), libglibmm-2.4-1v5 (>= 2.54.0), libgomp1 (>= 4.9), libgsl23, libgslcblas0, libgtk-3-0 (>= 3.21.5), libgtkmm-3.0-1v5 (>= 3.22.0), libgtkspell3-3-0, libharfbuzz0b (>= 1.2.6), libjpeg8 (>= 8c), liblcms2-2 (>= 2.2+git20110628), libmagick++-6.q16-7 (>= 8:6.9.6.8), libpango-1.0-0 (>= 1.37.2), libpangocairo-1.0-0 (>= 1.14.0), libpangoft2-1.0-0 (>= 1.37.2), libpangomm-1.4-1v5 (>= 2.40.0), libpng16-16 (>= 1.6.2-1), libpoppler-glib8 (>= 0.18.0), libpoppler68 (>= 0.57.0), libpotrace0, librevenge-0.0-0, libsigc++-2.0-0v5 (>= 2.8.0), libsoup2.4-1 (>= 2.41.90), libstdc++6 (>= 5.2), libvisio-0.1-1, libwpg-0.3-3, libx11-6, libxml2 (>= 2.7.4), libxslt1.1 (>= 1.1.25), zlib1g (>= 1:1.1.4)")
+set(CPACK_DEBIAN_PACKAGE_SECTION "graphics")
+set(CPACK_DEBIAN_PACKAGE_RECOMMENDS "aspell, imagemagick, libwmf-bin, perlmagick, python-numpy, python-lxml, python-scour, python-uniconvertor")
+set(CPACK_DEBIAN_PACKAGE_SUGGESTS "dia, libsvg-perl, libxml-xql-perl, pstoedit, python-uniconvertor, ruby")
 
 
- See also : PackageMaker 
 
- #]]
 
+## load cpack module (do this *after* all the CPACK_* variables have been set)
 include(CPack)
+
+
+
+
+## Component definition
+#  - variable names are UPPER CASE, even if component names are lower case
+#  - components/groups are ordered alphabetically by component/group name; groups always come first
+#  - empty (e.g. OS-specific) components are discarded automatically
+
+cpack_add_install_type(full    DISPLAY_NAME Full)
+cpack_add_install_type(compact DISPLAY_NAME Compact) # no translations, dictionaries, examples, etc.
+cpack_add_install_type(minimal DISPLAY_NAME Minimal) # minimal "working" set-up, excluding everything non-essential
+
+cpack_add_component_group(
+                    group_1_program_files
+                    DISPLAY_NAME "Program Files"
+                    EXPANDED)
+cpack_add_component(inkscape
+                    DISPLAY_NAME "Inkscape SVG Editor"
+                    DESCRIPTION "Inkscape core files and dependencies"
+                    GROUP "group_1_program_files"
+                    REQUIRED)
+cpack_add_component(python
+                    DISPLAY_NAME "Python"
+                    DESCRIPTION "Python interpreter (required to run Inkscape extensions)"
+                    GROUP "group_1_program_files"
+                    INSTALL_TYPES full compact)
+
+cpack_add_component_group(
+                    group_2_inkscape_data
+                    DISPLAY_NAME "Inkscape Data"
+                    EXPANDED)
+cpack_add_component(extensions
+                    DISPLAY_NAME "Extensions"
+                    DESCRIPTION "Inkscape extensions (including many import and export plugins)"
+                    GROUP "group_2_inkscape_data"
+                    INSTALL_TYPES full compact)
+cpack_add_component(examples
+                    DISPLAY_NAME "Examples"
+                    DESCRIPTION "Example files created in Inkscape"
+                    GROUP "group_2_inkscape_data"
+                    INSTALL_TYPES full)
+cpack_add_component(tutorials
+                    DISPLAY_NAME "Tutorials"
+                    DESCRIPTION "Tutorials teaching Inkscape usage"
+                    GROUP "group_2_inkscape_data"
+                    INSTALL_TYPES full)
+
+cpack_add_component(dictionaries
+                    DISPLAY_NAME "Dictionaries"
+                    DESCRIPTION "Dictionaries for some common languages for spell checking in Inkscape"
+                    INSTALL_TYPES full)
+
+cpack_add_component_group(
+                    group_3_translations
+                    DISPLAY_NAME "Translations"
+                    DESCRIPTION "Translations and localized content for Inkscape")
+get_inkscape_languages()
+list(LENGTH INKSCAPE_LANGUAGE_CODES length)
+math(EXPR length "${length} - 1")
+foreach(index RANGE ${length})
+    list(GET INKSCAPE_LANGUAGE_CODES ${index} language_code)
+    list(GET INKSCAPE_LANGUAGE_NAMES ${index} language_name)
+    string(MAKE_C_IDENTIFIER "${language_code}" language_code_escaped)
+    cpack_add_component(translations.${language_code_escaped}
+                        DISPLAY_NAME "${language_name}"
+                        GROUP "group_3_translations"
+                        INSTALL_TYPES full)
+endforeach()
+
+# TODO: Separate themes and make optional depending on size
