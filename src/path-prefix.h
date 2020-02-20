@@ -36,6 +36,7 @@
    and back into the root install dir. */
 #  define INKSCAPE_LIBPREFIX      "/../.."
 #  define INKSCAPE_DATADIR_REAL   BR_DATADIR( INKSCAPE_LIBPREFIX "/share")
+#  define INKSCAPE_SYSTEMDIR      BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape")
 #  define INKSCAPE_ATTRRELDIR     BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/attributes" )
 #  define INKSCAPE_DOCDIR         BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/doc" )
 #  define INKSCAPE_EXAMPLESDIR    BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/examples" )
@@ -59,6 +60,7 @@
 #    define CREATE_PALETTESDIR    BR_DATADIR( INKSCAPE_LIBPREFIX "/share/create/swatches" )
 #elif defined ENABLE_OSX_APP_LOCATIONS // TODO: Is ENABLE_OSX_APP_LOCATIONS still in use?
 #    define INKSCAPE_DATADIR_REAL "Contents/Resources/share"
+#    define INKSCAPE_SYSTEMDIR    "Contents/Resources/share/inkscape"
 #    define INKSCAPE_ATTRRELDIR   "Contents/Resources/share/inkscape/attributes"
 #    define INKSCAPE_DOCDIR       "Contents/Resources/share/inkscape/doc"
 #    define INKSCAPE_EXAMPLESDIR  "Contents/Resources/share/inkscape/examples"
@@ -82,6 +84,7 @@
 #    define CREATE_PALETTESDIR   "/Library/Application Support/create/swatches"
 #else
 #    define INKSCAPE_DATADIR_REAL append_inkscape_datadir()
+#    define INKSCAPE_SYSTEMDIR    append_inkscape_datadir("inkscape/")
 #    define INKSCAPE_ATTRRELDIR   append_inkscape_datadir("inkscape/attributes")
 #    define INKSCAPE_BINDDIR      append_inkscape_datadir("inkscape/bind")
 #    define INKSCAPE_DOCDIR       append_inkscape_datadir("inkscape/doc")
