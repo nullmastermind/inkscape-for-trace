@@ -7,6 +7,7 @@ set(svg_SRC
 	stringstream.cpp
 	strip-trailing-zeros.cpp
 	svg-affine.cpp
+	svg-affine-parser.cpp
 	svg-color.cpp
 	svg-angle.cpp
 	svg-length.cpp
