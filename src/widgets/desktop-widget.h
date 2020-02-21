@@ -80,23 +80,23 @@ class SPDesktopWidget : public SPViewWidget {
     void on_realize() override;
     void on_unrealize() override;
 
-    unsigned int update : 1;
-
     sigc::connection modified_connection;
 
-    SPDesktop *desktop;
+    SPDesktop *desktop = nullptr;
 
-    Gtk::Window *window;
+    Gtk::Window *window = nullptr;
 
 private:
     // Flags for ruler event handling
-    bool _ruler_clicked; ///< True if the ruler has been clicked
-    bool _ruler_dragged; ///< True if a drag on the ruler is occurring
+    bool _ruler_clicked = false; ///< True if the ruler has been clicked
+    bool _ruler_dragged = false; ///< True if a drag on the ruler is occurring
 
-    SPCanvasItem *_active_guide; ///< The guide currently being handled during a ruler event
+    bool update = false;
+
+    SPCanvasItem *_active_guide = nullptr; ///< The guide currently being handled during a ruler event
     Geom::Point _normal; ///< Normal to the guide currently being handled during ruler event
-    int _xp; ///< x coordinate for start of drag
-    int _yp; ///< y coordinate for start of drag
+    int _xp = 0; ///< x coordinate for start of drag
+    int _yp = 0; ///< y coordinate for start of drag
 
     // The root vbox of the window layout.
     Gtk::Box *_vbox;
@@ -132,7 +132,7 @@ private:
     sigc::connection _rotation_status_value_changed_connection;
     sigc::connection _rotation_status_populate_popup_connection;
 
-    Inkscape::UI::Widget::Dock *_dock;
+    Inkscape::UI::Widget::Dock *_dock = nullptr;
 
     Gtk::Scrollbar *_hscrollbar;
     Gtk::Scrollbar *_vscrollbar;
@@ -152,7 +152,7 @@ private:
     Inkscape::UI::Widget::Ruler *_vruler;
     Gtk::Allocation _allocation;
 
-    unsigned int _interaction_disabled_counter;
+    unsigned int _interaction_disabled_counter = 0;
 
     Geom::Point _ruler_origin;
     double _dt2r;
