@@ -507,9 +507,7 @@ SPDesktopWidget::SPDesktopWidget()
 		                false, false);
 
     // Layer Selector
-    dtw->layer_selector = new Inkscape::UI::Widget::LayerSelector(nullptr);
-    // FIXME: need to unreference on container destruction to avoid leak
-    dtw->layer_selector->reference();
+    dtw->layer_selector = Gtk::manage(new Inkscape::UI::Widget::LayerSelector(nullptr));
     dtw->_statusbar->pack_start(*dtw->layer_selector, false, false, 1);
 
     // Select Status
@@ -698,7 +696,6 @@ SPDesktopWidget::on_unrealize()
         }
 
         dtw->layer_selector->setDesktop(nullptr);
-        dtw->layer_selector->unreference();
         INKSCAPE.remove_desktop(dtw->desktop); // clears selection and event_context
         dtw->modified_connection.disconnect();
         dtw->desktop->destroy();
