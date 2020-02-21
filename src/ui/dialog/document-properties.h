@@ -246,6 +246,8 @@ private:
     // nodes connected to listeners
     Inkscape::XML::Node *_repr_namedview = nullptr;
     Inkscape::XML::Node *_repr_root = nullptr;
+
+    sigc::connection _document_replaced_connection;
 };
 
 } // namespace Dialog

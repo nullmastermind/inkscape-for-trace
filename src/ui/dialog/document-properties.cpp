@@ -170,8 +170,6 @@ DocumentProperties::DocumentProperties()
     _grids_button_new.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::onNewGrid));
     _grids_button_remove.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::onRemoveGrid));
 
-    signalDocumentReplaced().connect(sigc::mem_fun(*this, &DocumentProperties::_handleDocumentReplaced));
-
     _rum_deflt._changed_connection.block();
     _rum_deflt.getUnitMenu()->signal_changed().connect(sigc::mem_fun(*this, &DocumentProperties::onDocUnitChange));
 }
@@ -1511,6 +1509,7 @@ void DocumentProperties::_handleDocumentReplaced(SPDesktop* desktop, SPDocument 
 void DocumentProperties::setDesktop(SPDesktop *desktop)
 {
     if (_repr_root) {
+        _document_replaced_connection.disconnect();
         _repr_root->removeListenerByData(this);
         _repr_root = nullptr;
         _repr_namedview->removeListenerByData(this);
@@ -1523,6 +1522,9 @@ void DocumentProperties::setDesktop(SPDesktop *desktop)
 
     if (desktop) {
         _handleDocumentReplaced(desktop, desktop->getDocument());
+
+        _document_replaced_connection =
+            signalDocumentReplaced().connect(sigc::mem_fun(*this, &DocumentProperties::_handleDocumentReplaced));
     }
 }
 
