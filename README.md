@@ -3,9 +3,9 @@ Inkscape. Draw Freely.
 
 [https://www.inkscape.org/](https://www.inkscape.org/)
 
-Inkscape is an open source drawing tool with capabilities similar to
-Illustrator, Freehand, and CorelDRAW that uses the W3C standard scalable
-vector graphics format (SVG). Some supported SVG features include
+Inkscape is an open source drawing tool with capabilities comparable to
+the Industry standard that uses the W3C standard scalable vector graphics
+format (SVG). Some supported SVG features include
 basic shapes, paths, text, markers, clones, alpha blending, transforms,
 gradients, and grouping. In addition, Inkscape supports Creative Commons
 meta-data, node-editing, layers, complex path operations, text-on-path,

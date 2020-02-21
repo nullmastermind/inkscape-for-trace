@@ -84,8 +84,8 @@ options:
 =head1 DESCRIPTION
 
 B<Inkscape> is a GUI editor for B<Scalable Vector Graphics (SVG)> format
-drawing files, with capabilities similar to B<Adobe Illustrator>,
-B<CorelDraw>, B<Xara Xtreme>, etc. Inkscape features include versatile
+drawing files, with capabilities comparable to the Industry standard.
+Inkscape features include versatile
 shapes, bezier paths, freehand drawing, multi-line text, text on path,
 alpha blending, arbitrary affine transforms, gradient and pattern fills,
 node editing, many export and import formats including PNG and PDF,

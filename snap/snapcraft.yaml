@@ -5,8 +5,8 @@ version: devel # Replaced at build time ^^^
 summary: Vector Graphics Editor
 license: GPL-3.0
 description: >
- An Open Source vector graphics editor, with capabilities similar to
- Illustrator, CorelDraw, or Xara X, using the W3C standard Scalable Vector
+ An Open Source vector graphics editor, with capabilities comparable to
+ the Industry standard, using the W3C standard Scalable Vector
  Graphics (SVG) file format.
 
  Inkscape supports many advanced SVG features (markers, clones, alpha blending,

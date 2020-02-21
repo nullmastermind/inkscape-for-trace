@@ -11,9 +11,9 @@
   <summary>Vector Graphics Editor</summary>
   <description>
     <p>
-      An Open Source vector graphics editor, with capabilities similar to
-      Illustrator, CorelDraw, or Xara X, using the W3C standard Scalable Vector
-      Graphics (SVG) file format.
+      An Open Source vector graphics editor, with capabilities comparable to
+      the Industry standard, using the W3C standard Scalable Vector Graphics
+      (SVG) file format.
     </p>
     <p>
       Inkscape supports many advanced SVG features (markers, clones, alpha blending,
