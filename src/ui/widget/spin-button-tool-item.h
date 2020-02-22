@@ -3,6 +3,10 @@
 #define SEEN_SPIN_BUTTON_TOOL_ITEM_H
 
 #include <gtkmm/toolitem.h>
+#include <unordered_map>
+#include <utility>
+
+#include "2geom/math-utils.h"
 
 namespace Gtk {
 class Box;
@@ -22,23 +26,37 @@ class SpinButton;
 class SpinButtonToolItem : public Gtk::ToolItem
 {
 private:
-    typedef std::vector< std::pair<double, Glib::ustring> > NumericMenuData;
+    using ValueLabel = std::pair<double, Glib::ustring>;
+    using NumericMenuData = std::map<double, Glib::ustring>;
 
-    Glib::ustring  _name;           ///< A unique ID for the widget (NOT translatable)
-    SpinButton    *_btn;            ///< The spin-button within the widget
-    Glib::ustring  _label_text;     ///< A string to use in labels for the widget (translatable)
-    double         _last_val;       ///< The last value of the adjustment
-    bool           _transfer_focus; ///< Whether or not to transfer focus
+    Glib::ustring  _name;                  ///< A unique ID for the widget (NOT translatable)
+    SpinButton    *_btn;                   ///< The spin-button within the widget
+    Glib::ustring  _label_text;            ///< A string to use in labels for the widget (translatable)
+    double         _last_val = 0.0;        ///< The last value of the adjustment
+    bool           _transfer_focus = false; ///< Whether or not to transfer focus
 
     Gtk::Box    *_hbox;       ///< Horizontal box, to store widgets
     Gtk::Widget *_label;      ///< A text label to describe the setting
     Gtk::Widget *_icon;       ///< An icon to describe the setting
 
     /** A widget that grabs focus when this one loses it */
-    Gtk::Widget * _focus_widget;
+    Gtk::Widget * _focus_widget = nullptr;
 
     // Custom values and labels to add to the numeric popup-menu
     NumericMenuData _custom_menu_data;
+
+    // To show or not to show upper/lower limit of the adjustment
+    bool _show_upper_limit = false;
+    bool _show_lower_limit = false;
+
+    // sort in decreasing order
+    bool _sort_decreasing = false;
+
+    // digits of adjustment
+    int _digits;
+
+    // just a wrapper for Geom::decimal_round to simplify calls
+    double round_to_precision(double value);
 
     // Event handlers
     bool on_btn_focus_in_event(GdkEventFocus  *focus_event);
@@ -74,10 +92,24 @@ public:
     void set_focus_widget(Gtk::Widget *widget);
     void grab_button_focus();
 
-    void set_custom_numeric_menu_data(std::vector<double>&              values,
+    void set_custom_numeric_menu_data(const std::vector<double>&        values,
                                       const std::vector<Glib::ustring>& labels = std::vector<Glib::ustring>());
+
+    void set_custom_numeric_menu_data(const std::vector<ValueLabel> &value_labels);
+
+    void set_custom_numeric_menu_data(const std::vector<double>&                       values,
+                                      const std::unordered_map<double, Glib::ustring>& sparse_labels);
+
     Glib::RefPtr<Gtk::Adjustment> get_adjustment();
     void set_icon(const Glib::ustring& icon_name);
+
+    // display limits
+    void show_upper_limit(bool show = true);
+    void show_lower_limit(bool show = true);
+    void show_limits     (bool show = true);
+
+    // sorting order
+    void sort_decreasing(bool decreasing = true);
 };
 } // namespace Widget
 } // namespace UI

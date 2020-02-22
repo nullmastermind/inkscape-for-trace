@@ -14,6 +14,8 @@ inkscape_devel_source.tar.bz2
 *~
 *.rej
 .vscode
+.clangd/
+compile_commands.json
 
 # Snap packaging specific rules
 /snap/.snapcraft/

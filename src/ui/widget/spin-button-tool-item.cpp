@@ -2,11 +2,13 @@
 
 #include "spin-button-tool-item.h"
 
+#include <algorithm>
 #include <gtkmm/box.h>
 #include <gtkmm/image.h>
 #include <gtkmm/radiomenuitem.h>
 #include <gtkmm/toolbar.h>
 
+#include <cmath>
 #include <utility>
 
 #include "spinbutton.h"
@@ -196,7 +198,7 @@ SpinButtonToolItem::process_tab(int increment)
 
         auto test_index = my_index + increment; // The index of the item we want to check
 
-        // Loop through tool items as long as we're within the bounds of the toolbar and
+        // Loop through tool items as long as we're within the limits of the toolbar and
         // we haven't yet found our new item to focus on
         while(test_index > 0 && test_index <= n_items && !handled) {
 
@@ -273,54 +275,48 @@ SpinButtonToolItem::create_numeric_menu()
 
     // Get values for the adjustment
     auto adj = _btn->get_adjustment();
-    auto adj_value = adj->get_value();
-    auto lower = adj->get_lower();
-    auto upper = adj->get_upper();
-    auto step = adj->get_step_increment();
+    auto adj_value = round_to_precision(adj->get_value());
+    auto lower = round_to_precision(adj->get_lower());
+    auto upper = round_to_precision(adj->get_upper());
     auto page = adj->get_page_increment();
-
-    auto digits = _btn->get_digits();
-
-    // A number a little smaller than the smallest increment that can be
-    // displayed in the spinbutton entry.
-    //
-    // For example, if digits = 0, we are displaying integers only and
-    // epsilon = 0.9 * 10^-0 = 0.9
-    //
-    // For digits = 1, we get epsilon = 0.9 * 10^-1 = 0.09
-    // For digits = 2, we get epsilon = 0.9 * 10^-2 = 0.009 etc...
-    auto epsilon = 0.9 * pow(10.0, -float(digits));
 
     // Start by setting some fixed values based on the adjustment's
     // parameters.
     NumericMenuData values;
-    values.push_back(std::make_pair(upper,            ""));
-    values.push_back(std::make_pair(adj_value + page, ""));
-    values.push_back(std::make_pair(adj_value + step, ""));
-    values.push_back(std::make_pair(adj_value,        ""));
-    values.push_back(std::make_pair(adj_value - step, ""));
-    values.push_back(std::make_pair(adj_value - page, ""));
-    values.push_back(std::make_pair(lower,            ""));
 
-    // Now add any custom items
+    // first add all custom items (necessary)
     for (auto custom_data : _custom_menu_data) {
-        values.push_back(custom_data);
+        values.emplace(custom_data);
     }
 
-    // Sort the numeric menu items into reverse numerical order (largest at top of menu)
-    std::sort   (begin(values), end(values));
-    std::reverse(begin(values), end(values));
+    values.emplace(adj_value, "");
 
-    for (auto value : values)
-    {
+    // for quick page changes using mouse, step can changes can be done with +/- buttons on
+    // SpinButton
+    values.emplace(::fmin(adj_value + page, upper), "");
+    values.emplace(::fmax(adj_value - page, lower), "");
+
+    // add upper/lower limits to options
+    if (_show_upper_limit) {
+        values.emplace(upper, "");
+    }
+    if (_show_lower_limit) {
+        values.emplace(lower, "");
+    }
+
+    auto add_item = [&numeric_menu, this, &group, adj_value](ValueLabel value){
         auto numeric_menu_item = create_numeric_menu_item(&group, value.first, value.second);
         numeric_menu->append(*numeric_menu_item);
 
-        if (fabs(adj_value - value.first) < epsilon) {
-            // If the adjustment value is very close to the value of this menu item,
-            // make this menu item active
+        if (adj_value == value.first) {
             numeric_menu_item->set_active();
         }
+    };
+
+    if (_sort_decreasing) {
+        std::for_each(values.crbegin(), values.crend(), add_item);
+    } else {
+        std::for_each(values.cbegin(), values.cend(), add_item);
     }
 
     return numeric_menu;
@@ -365,9 +361,7 @@ SpinButtonToolItem::SpinButtonToolItem(const Glib::ustring            name,
     : _btn(Gtk::manage(new SpinButton(adjustment, climb_rate, digits))),
       _name(std::move(name)),
       _label_text(label_text),
-      _last_val(0.0),
-      _transfer_focus(false),
-      _focus_widget(nullptr)
+      _digits(digits)
 {
     set_margin_start(3);
     set_margin_end(3);
@@ -489,28 +483,101 @@ SpinButtonToolItem::grab_button_focus()
     _btn->grab_focus();
 }
 
+/**
+ * \brief A wrapper of Geom::decimal_round to remember precision
+ */
+double
+SpinButtonToolItem::round_to_precision(double value) {
+    return Geom::decimal_round(value, _digits);
+}
+
+/**
+ * \brief     [discouraged] Set numeric data option in Radio menu.
+ *
+ * \param[in] values  values to provide as options
+ * \param[in] labels  label to show for the value at same index in values.
+ *
+ * \detail    Use is advised only when there are no labels.
+ *            This is discouraged in favor of other overloads of the function, due to error prone
+ *            usage. Using two vectors for related data, undermining encapsulation.
+ */
 void
-SpinButtonToolItem::set_custom_numeric_menu_data(std::vector<double>&              values,
+SpinButtonToolItem::set_custom_numeric_menu_data(const std::vector<double>&        values,
                                                  const std::vector<Glib::ustring>& labels)
 {
-    if(values.size() != labels.size() && !labels.empty()) {
-        g_warning("Cannot add custom menu items.  Value and label arrays are different sizes");
+
+    if (values.size() != labels.size() && !labels.empty()) {
+        g_warning("Cannot add custom menu items. Value and label arrays are different sizes");
         return;
     }
 
     _custom_menu_data.clear();
 
-    int i = 0;
+    if (labels.empty()) {
+        for (const auto &value : values) {
+            _custom_menu_data.emplace(round_to_precision(value), "");
+        }
+        return;
+    }
 
-    for (auto value : values) {
-        if(labels.empty()) {
-            _custom_menu_data.push_back(std::make_pair(value, ""));
-        }
-        else {
-            _custom_menu_data.push_back(std::make_pair(value, labels[i++]));
-        }
+    int i = 0;
+    for (const auto &value : values) {
+        _custom_menu_data.emplace(round_to_precision(value), labels[i++]);
     }
 }
+
+/**
+ * \brief     Set numeric data options for Radio menu (densely labeled data).
+ *
+ * \param[in] value_labels  value and labels to provide as options
+ *
+ * \detail    Should be used when most of the values have an associated label (densely labeled data)
+ *
+ */
+void
+SpinButtonToolItem::set_custom_numeric_menu_data(const std::vector<ValueLabel>& value_labels) {
+    _custom_menu_data.clear();
+    for(const auto& value_label : value_labels) {
+        _custom_menu_data.emplace(round_to_precision(value_label.first), value_label.second);
+    }
+}
+
+
+/**
+ * \brief     Set numeric data options for Radio menu (sparsely labeled data).
+ *
+ * \param[in] values         values without labels
+ * \param[in] sparse_labels  value and labels to provide as options
+ *
+ * \detail    Should be used when very few values have an associated label (sparsely labeled data).
+ *            Duplicate values in vector and map are acceptable but, values labels in map are
+ *            preferred. Avoid using duplicate values intentionally though.
+ *
+ */
+void
+SpinButtonToolItem::set_custom_numeric_menu_data(const std::vector<double> &values,
+                                                      const std::unordered_map<double, Glib::ustring> &sparse_labels)
+{
+    _custom_menu_data.clear();
+
+    for(const auto& value_label : sparse_labels) {
+        _custom_menu_data.emplace(round_to_precision(value_label.first), value_label.second);
+    }
+
+    for(const auto& value : values) {
+        _custom_menu_data.emplace(round_to_precision(value), "");
+    }
+
+}
+
+
+void SpinButtonToolItem::show_upper_limit(bool show) { _show_upper_limit = show; }
+
+void SpinButtonToolItem::show_lower_limit(bool show) { _show_lower_limit = show; }
+
+void SpinButtonToolItem::show_limits(bool show) { _show_upper_limit = _show_lower_limit = show; }
+
+void SpinButtonToolItem::sort_decreasing(bool decreasing) { _sort_decreasing = decreasing; }
 
 Glib::RefPtr<Gtk::Adjustment>
 SpinButtonToolItem::get_adjustment()
