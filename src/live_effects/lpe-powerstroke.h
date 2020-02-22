@@ -13,9 +13,10 @@
 #ifndef INKSCAPE_LPE_POWERSTROKE_H
 #define INKSCAPE_LPE_POWERSTROKE_H
 
-#include "live_effects/parameter/enum.h"
 #include "live_effects/effect.h"
 #include "live_effects/parameter/bool.h"
+#include "live_effects/parameter/enum.h"
+#include "live_effects/parameter/hidden.h"
 #include "live_effects/parameter/powerstrokepointarray.h"
 
 namespace Inkscape {
@@ -49,7 +50,8 @@ public:
     void adjustForNewPath(Geom::PathVector const & path_in);
 
     PowerStrokePointArrayParam offset_points;
-
+    HiddenParam nodes;
+    bool is_loaded;
 private:
     BoolParam sort_points;
     EnumParam<unsigned> interpolator_type;

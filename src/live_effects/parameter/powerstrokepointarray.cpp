@@ -8,8 +8,9 @@
 #include "ui/dialog/lpe-powerstroke-properties.h"
 #include "live_effects/parameter/powerstrokepointarray.h"
 
-#include "live_effects/effect.h"
 #include "knotholder.h"
+#include "live_effects/effect.h"
+#include "live_effects/lpe-powerstroke.h"
 
 
 #include <2geom/piecewise.h>
@@ -65,10 +66,12 @@ void PowerStrokePointArrayParam::param_transform_multiply(Geom::Affine const &po
 void
 PowerStrokePointArrayParam::recalculate_controlpoints_for_new_pwd2(Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in)
 {
-    if (!last_pwd2.empty()) {
-        if (last_pwd2.size() > pwd2_in.size()) {
-            // Path has become shorter: rescale offsets
-            double factor = (double)pwd2_in.size() / (double)last_pwd2.size();
+    Inkscape::LivePathEffect::LPEPowerStroke *lpe = dynamic_cast<Inkscape::LivePathEffect::LPEPowerStroke *>(param_effect);
+    if (lpe) {
+        auto nodes_str = lpe->nodes.param_getSVGValue();
+        size_t nodesprev = std::stoi(nodes_str);
+        if (lpe->is_loaded || last_pwd2.size() > pwd2_in.size()) {
+            double factor = (double)pwd2_in.size() / (double)nodesprev;
             for (auto & i : _vector) {
                 i[Geom::X] *= factor;
             }
@@ -82,7 +85,6 @@ PowerStrokePointArrayParam::recalculate_controlpoints_for_new_pwd2(Geom::Piecewi
                 i[Geom::X] = t;
             }
         }
-
         write_to_SVG();
     }
 }

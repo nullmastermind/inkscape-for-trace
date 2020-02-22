@@ -1560,7 +1560,6 @@ Effect::defaultParamSet()
     Glib::ustring effectname = (Glib::ustring)Inkscape::LivePathEffect::LPETypeConverter.get_label(effectType());
     Glib::ustring effectkey = (Glib::ustring)Inkscape::LivePathEffect::LPETypeConverter.get_key(effectType());
     std::vector<Parameter *>::iterator it = param_vector.begin();
-    Inkscape::UI::Widget::Registry * wr;
     bool has_params = false;
     while (it != param_vector.end()) {
         if ((*it)->widget_is_visible) {

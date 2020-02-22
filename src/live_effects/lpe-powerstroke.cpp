@@ -163,7 +163,8 @@ LPEPowerStroke::LPEPowerStroke(LivePathEffectObject *lpeobject) :
     start_linecap_type(_("Start cap:"), _("Determines the shape of the path's start"), "start_linecap_type", LineCapTypeConverter, &wr, this, LINECAP_ZERO_WIDTH),
     linejoin_type(_("Join:"), _("Determines the shape of the path's corners"), "linejoin_type", LineJoinTypeConverter, &wr, this, LINEJOIN_ROUND),
     miter_limit(_("Miter limit:"), _("Maximum length of the miter (in units of stroke width)"), "miter_limit", &wr, this, 4.),
-    end_linecap_type(_("End cap:"), _("Determines the shape of the path's end"), "end_linecap_type", LineCapTypeConverter, &wr, this, LINECAP_ZERO_WIDTH)
+    end_linecap_type(_("End cap:"), _("Determines the shape of the path's end"), "end_linecap_type", LineCapTypeConverter, &wr, this, LINECAP_ZERO_WIDTH),
+    nodes("nodes", "", "nodes", &wr, this, "", false) //hidden parameter no need to translate
 {
     show_orig_path = true;
 
@@ -181,11 +182,13 @@ LPEPowerStroke::LPEPowerStroke(LivePathEffectObject *lpeobject) :
     registerParameter(&miter_limit);
     registerParameter(&scale_width);
     registerParameter(&end_linecap_type);
+    registerParameter(&nodes);
     scale_width.param_set_range(0.0, Geom::infinity());
     scale_width.param_set_increments(0.1, 0.1);
     scale_width.param_set_digits(4);
     recusion_limit = 0;
     has_recursion = false;
+    is_loaded = true;
 }
 
 LPEPowerStroke::~LPEPowerStroke() = default;
@@ -194,9 +197,28 @@ void
 LPEPowerStroke::doBeforeEffect(SPLPEItem const *lpeItem)
 {
     offset_points.set_scale_width(scale_width);
+    auto nodes_str = nodes.param_getSVGValue();
+    size_t nodesnow = 0;
+    // allow update power stroke on paste path effect
+    if (!pathvector_before_effect.empty()) {
+        nodesnow = pathvector_before_effect[0].size();
+    }
+    if (is_loaded && !pathvector_before_effect.empty() && nodes_str != "") {
+        size_t nodesprev = std::stoi(nodes_str);
+        if (nodes_str != "" && nodesnow != nodesprev) {
+            adjustForNewPath(pathvector_before_effect);
+        }
+    }
+    nodes.param_setValue(Glib::ustring::format(nodesnow), true);
     if (has_recursion) {
         has_recursion = false;
         adjustForNewPath(pathvector_before_effect);
+    }
+    if (!is_load && !is_loaded) {
+        is_loaded = true;
+    }
+    if (is_load) {
+        is_loaded = false;
     }
 }
 
@@ -469,11 +491,12 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
                         }
                         Geom::EllipticalArc *arc0 = nullptr;
                         Geom::EllipticalArc *arc1 = nullptr;
+                        bool build = false;
                         if (solok) {
                             arc0 = circle1.arc(B[prev_i].at1(), 0.5*(B[prev_i].at1()+sol), sol);
                             arc1 = circle2.arc(sol, 0.5*(sol+B[i].at0()), B[i].at0());
-                            
                             if (arc0) {
+                                // FIX: Some assertions errors here
                                 build_from_sbasis(pb,arc0->toSBasis(), tol, false);
                             } else if (arc1) {
                                 boost::optional<Geom::Point> p = intersection_point( B[prev_i].at1(), tang1,
@@ -485,16 +508,17 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
                                     if (len <= fabs(width) * miter_limit) {
                                         // miter OK
                                         pb.lineTo(*p);
+                                        build = true;
                                     }
                                 }
                             }
-                            if (arc1) {
+                            if (build) {
                                 build_from_sbasis(pb,arc1->toSBasis(), tol, false);
                             } else if (arc0) {
                                 pb.lineTo(B[i].at0());
                             }
                         }
-                        if (!solok || !(arc0 && arc1)) {
+                        if (!solok || !(arc0 && build)) {
                             // fall back to miter
                             boost::optional<Geom::Point> p = intersection_point( B[prev_i].at1(), tang1,
                                                                                 B[i].at0(), tang2 );
@@ -520,7 +544,7 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
                     } else {
                         // fall back to miter
                         boost::optional<Geom::Point> p = intersection_point( B[prev_i].at1(), tang1,
-                                                                             B[i].at0(), tang2 );
+                                                                            B[i].at0(), tang2 );
                         if (p) {
                             // check size of miter
                             Geom::Point point_on_path = B[prev_i].at1() - rot90(tang1) * width;
