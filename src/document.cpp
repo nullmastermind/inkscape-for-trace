@@ -520,7 +520,6 @@ SPDocument *SPDocument::createNewDoc(gchar const *document_uri, bool keepalive, 
 
     if (document_uri) {
         Inkscape::XML::Node *rroot;
-        gchar *s, *p;
         /* Try to fetch repr from file */
         rdoc = sp_repr_read_file(document_uri, SP_SVG_NS_URI);
         /* If file cannot be loaded, return NULL without warning */
@@ -529,22 +528,19 @@ SPDocument *SPDocument::createNewDoc(gchar const *document_uri, bool keepalive, 
         /* If xml file is not svg, return NULL without warning */
         /* fixme: destroy document */
         if (strcmp(rroot->name(), "svg:svg") != 0) return nullptr;
-        s = g_strdup(document_uri);
-        p = strrchr(s, '/');
-        if (p) {
-            document_name = g_strdup(p + 1);
-            p[1] = '\0';
-            document_base = g_strdup(s);
-        } else {
-            document_base = nullptr;
-            document_name = g_strdup(document_uri);
-        }
+
         if (make_new) {
             document_base = nullptr;
             document_uri = nullptr;
             document_name = g_strdup_printf(_("New document %d"), ++doc_count);
+        } else {
+            document_base = g_path_get_dirname(document_uri);
+            document_name = g_path_get_basename(document_uri);
+            if (strcmp(document_base, ".") == 0) {
+                g_free(document_base);
+                document_base = nullptr;
+            }
         }
-        g_free(s);
     } else {
         if (make_new) {
             document_name = g_strdup_printf(_("Memory document %d"), ++doc_mem_count);
