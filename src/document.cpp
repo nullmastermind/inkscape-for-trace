@@ -499,10 +499,10 @@ SPDocument *SPDocument::createChildDoc(std::string const &document_uri)
     // Load a fresh document from the svg source.
     if(!document) {
         std::string path;
-        if(document_uri.find('/') == -1) {
-            path = this->getDocumentBase() + document_uri;
-        } else {
+        if (Glib::path_is_absolute(document_uri)) {
             path = document_uri;
+        } else {
+            path = this->getDocumentBase() + document_uri;
         }
         document = createNewDoc(path.c_str(), false, false, this);
     }
