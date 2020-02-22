@@ -33,6 +33,7 @@ IGNORE_PATHS = [
     "share",
     "src/2geom",
     "src/3rdparty",
+    "testfiles/cli_tests/testcases",
     "testfiles/rendering_tests/fonts/LICENSES",
 ]
 
@@ -42,11 +43,14 @@ IGNORE_FILE_ENDINGS = [
     ".bz2",
     ".dia",
     ".dll",
+    ".eps",
     ".kate-swp",
     ".ods",
     ".otf",
+    ".pdf",
     ".png",
     ".po",
+    ".ps",
     ".rc",
     ".svg",
     ".ttf",
