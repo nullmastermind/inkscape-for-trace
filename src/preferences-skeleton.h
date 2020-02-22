@@ -246,7 +246,7 @@ R"=====(
   </group>
 
   <group id="options">
-    <group id="renderingcache" size="64" />
+    <group id="renderingcache" size="512" />
     <group id="useoldpdfexporter" value="0" />
     <group id="highlightoriginal" value="1" />
     <group id="relinkclonesonduplicate" value="0" />
