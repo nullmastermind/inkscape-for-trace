@@ -945,6 +945,9 @@ ConcreteInkscapeApplication<T>::process_document(SPDocument* document, std::stri
 
     // process_file
     for (auto action: _command_line_actions) {
+        if (!Gio::Application::has_action(action.first)) {
+            std::cerr << "ConcreteInkscapeApplication<T>::process_document: Unknown action name: " <<  action.first << std::endl;
+        }
         Gio::Application::activate_action( action.first, action.second );
     }
 
