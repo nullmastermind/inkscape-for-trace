@@ -50,6 +50,9 @@ foreach(source ${TEST_SOURCES})
     set_tests_properties(${source} PROPERTIES ENVIRONMENT "${CMAKE_CTEST_ENV}")
 	add_dependencies(tests ${source})
 endforeach()
+
+
+add_subdirectory(cli_tests)
 add_subdirectory(rendering_tests)
 
 
