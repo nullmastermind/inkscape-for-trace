@@ -1304,7 +1304,7 @@ ConcreteInkscapeApplication<T>::on_handle_local_options(const Glib::RefPtr<Glib:
         options->lookup_value("query-id", query_id);
         if (!query_id.empty()) {
             _command_line_actions.push_back(
-                std::make_pair("select-via-id", Glib::Variant<Glib::ustring>::create(query_id)));
+                std::make_pair("select-by-id", Glib::Variant<Glib::ustring>::create(query_id)));
         }
     }
 
