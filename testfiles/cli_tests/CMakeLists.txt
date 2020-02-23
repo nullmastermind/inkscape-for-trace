@@ -51,7 +51,10 @@ function(add_cli_test name)
         file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/testcases/${ARG_REFERENCE_FILENAME}" ARG_REFERENCE_FILENAME)
         add_test(NAME ${testname}_compare
             COMMAND sh ${CMAKE_CURRENT_SOURCE_DIR}/compare.sh "${ARG_OUTPUT_FILENAME}" "${ARG_REFERENCE_FILENAME}")
-        set_tests_properties(${testname}_compare PROPERTIES ENVIRONMENT "${CMAKE_CTEST_ENV}" DEPENDS ${testname})
+        set_tests_properties(${testname}_compare PROPERTIES
+            ENVIRONMENT "${CMAKE_CTEST_ENV}"
+            DEPENDS ${testname}
+            SKIP_REGULAR_EXPRESSION "Skipping comparison test.")
     endif()
 endfunction(add_cli_test)
 

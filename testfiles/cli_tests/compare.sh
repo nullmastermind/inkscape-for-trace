@@ -7,8 +7,28 @@ command -v compare >/dev/null 2>&1 || { echo >&2 "I require ImageMagick's 'compa
 OUTPUT_FILENAME=$1
 REFERENCE_FILENAME=$2
 
-convert ${OUTPUT_FILENAME} ${OUTPUT_FILENAME}.png
-convert ${REFERENCE_FILENAME} ${OUTPUT_FILENAME}_reference.png
+# check if input files exist
+if [ ! -f ${OUTPUT_FILENAME} ]; then
+    echo "Error: Test file '${OUTPUT_FILENAME}' not found."
+    exit 1
+fi
+if [ ! -f ${REFERENCE_FILENAME} ]; then
+    echo "Error: Reference file '${REFERENCE_FILENAME}' not found."
+    exit 1
+fi
 
-compare -metric AE ${OUTPUT_FILENAME}.png ${OUTPUT_FILENAME}_reference.png ${OUTPUT_FILENAME}-compare.png
-exit $?
+# convert testfile and reference file to PNG format
+if ! convert ${OUTPUT_FILENAME} ${OUTPUT_FILENAME}.png; then
+    echo "Warning: Failed to convert test file '${OUTPUT_FILENAME}' to PNG format. Skipping comparison test."
+    exit 1
+fi
+if ! convert ${REFERENCE_FILENAME} ${OUTPUT_FILENAME}_reference.png; then
+    echo "Warning: Failed to convert reference file '${REFERENCE_FILENAME}' to PNG format. Skipping comparison test."
+    exit 1
+fi
+
+# compare files
+if ! compare -metric AE ${OUTPUT_FILENAME}.png ${OUTPUT_FILENAME}_reference.png ${OUTPUT_FILENAME}_compare.png; then
+    echo && echo "Error: Comparison failed."
+    exit 1
+fi
