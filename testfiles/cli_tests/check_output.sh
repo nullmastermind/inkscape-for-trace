@@ -7,6 +7,7 @@ command -v compare >/dev/null 2>&1 || { echo >&2 "I require ImageMagick's 'compa
 OUTPUT_FILENAME=$1
 REFERENCE_FILENAME=$2
 EXPECTED_FILES=$3
+TEST_SCRIPT=$4
 
 # check if expected files exist
 for file in ${EXPECTED_FILES}; do
@@ -37,6 +38,24 @@ if [ -n "${REFERENCE_FILENAME}" ]; then
     # compare files
     if ! compare -metric AE ${OUTPUT_FILENAME}.png ${OUTPUT_FILENAME}_reference.png ${OUTPUT_FILENAME}_compare.png; then
         echo && echo "Error: Comparison failed."
+        exit 1
+    fi
+fi
+
+# if additional test file is specified, check existence and execute the command
+if [ -n "${TEST_SCRIPT}" ]; then
+    script=${TEST_SCRIPT%%;*}
+    arguments=${TEST_SCRIPT#*;}
+    IFS_OLD=$IFS IFS=';' arguments_array=($arguments) IFS=$IFS_OLD
+
+    if [ ! -f "${script}" ]; then
+        echo "Error: Additional test script file '${script}' not found."
+        exit 1
+    fi
+
+    if ! sh ${script} "${arguments_array[@]}"; then
+        echo "Error: Additional test script failed."
+        echo "Full call: sh ${script} $(printf "\"%s\" " "${arguments_array[@]}")"
         exit 1
     fi
 fi

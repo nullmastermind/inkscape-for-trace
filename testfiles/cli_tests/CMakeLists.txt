@@ -3,10 +3,7 @@
 
 # Helper function to add a CLI test
 #
-# Run an Inkscape command line and check for pass/fail condition:
-# - by default only exit status is checked
-# - optionally: pass/fail for specific command line output
-# - optionally: compare output with a pre-rendered file
+# Run an Inkscape command line and check for pass/fail condition (by default only exit status is checked)
 #
 # Command line options:
 #   INPUT_FILENAME     - name of input file (optional)
@@ -21,10 +18,11 @@
 #   REFERENCE_FILENAME - compare OUTPUT_FILENAME with this pre-rendered reference file
 #                        both files are converted to PNG and compared with ImageMagick's 'compare'
 #   EXPECTED_FILES     - verify the command produced the expected files (i.e. they exist on disk)
+#   TEST_SCRIPT        - additional script to run after performing all checks and before cleaning up
 function(add_cli_test name)
     # parse arguments
     set(oneValueArgs INPUT_FILENAME OUTPUT_FILENAME PASS_FOR_OUTPUT FAIL_FOR_OUTPUT REFERENCE_FILENAME)
-    set(multiValueArgs PARAMETERS EXPECTED_FILES)
+    set(multiValueArgs PARAMETERS EXPECTED_FILES TEST_SCRIPT)
     cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
     set(testname  cli_${name})
@@ -48,16 +46,20 @@ function(add_cli_test name)
     endif()
 
     # add test to check output files
-    if(DEFINED ARG_REFERENCE_FILENAME OR DEFINED ARG_EXPECTED_FILES)
+    if(DEFINED ARG_REFERENCE_FILENAME OR DEFINED ARG_EXPECTED_FILES OR DEFINED ARG_TEST_SCRIPT)
         if(DEFINED ARG_REFERENCE_FILENAME)
             file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/testcases/${ARG_REFERENCE_FILENAME}" ARG_REFERENCE_FILENAME)
         endif()
         if(DEFINED ARG_EXPECTED_FILES)
             string(REPLACE ";" " " ARG_EXPECTED_FILES "${ARG_EXPECTED_FILES}")
         endif()
+        if(DEFINED ARG_TEST_SCRIPT)
+            set(ARG_TEST_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/${ARG_TEST_SCRIPT}")
+        endif()
 
         add_test(NAME ${testname}_check_output
-            COMMAND sh ${CMAKE_CURRENT_SOURCE_DIR}/check_output.sh "${ARG_OUTPUT_FILENAME}" "${ARG_REFERENCE_FILENAME}" "${ARG_EXPECTED_FILES}")
+            COMMAND sh ${CMAKE_CURRENT_SOURCE_DIR}/check_output.sh
+                    "${ARG_OUTPUT_FILENAME}" "${ARG_REFERENCE_FILENAME}" "${ARG_EXPECTED_FILES}" "${ARG_TEST_SCRIPT}")
         set_tests_properties(${testname}_check_output PROPERTIES
             ENVIRONMENT "${CMAKE_CTEST_ENV}"
             DEPENDS ${testname}
@@ -93,6 +95,16 @@ add_cli_test(export_png    PARAMETERS --export-type=png INPUT_FILENAME shapes.sv
 add_cli_test(export_ps     PARAMETERS --export-type=ps  INPUT_FILENAME shapes.svg OUTPUT_FILENAME shapes.ps  REFERENCE_FILENAME shapes_expected.ps)
 add_cli_test(export_eps    PARAMETERS --export-type=eps INPUT_FILENAME shapes.svg OUTPUT_FILENAME shapes.eps REFERENCE_FILENAME shapes_expected.eps)
 add_cli_test(export_pdf    PARAMETERS --export-type=pdf INPUT_FILENAME shapes.svg OUTPUT_FILENAME shapes.pdf REFERENCE_FILENAME shapes_expected.pdf)
+
+# test PDF export options
+add_cli_test(export_latex  PARAMETERS --export-type=pdf --export-latex
+                           INPUT_FILENAME text.svg OUTPUT_FILENAME text.pdf
+                           EXPECTED_FILES text.pdf text.pdf_tex
+                           TEST_SCRIPT match_regex.sh "text.pdf_tex" "some text")
+add_cli_test(export_text_to_path
+                           PARAMETERS --export-text-to-path
+                           INPUT_FILENAME text.svg OUTPUT_FILENAME text.svg
+                           TEST_SCRIPT match_regex_fail.sh "text.svg" "<text")
 
 # test librevenge formats
 if(WITH_LIBCDR)
