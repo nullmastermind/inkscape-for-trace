@@ -28,11 +28,11 @@ if [ -n "${REFERENCE_FILENAME}" ]; then
     # convert testfile and reference file to PNG format
     if ! convert ${OUTPUT_FILENAME} ${OUTPUT_FILENAME}.png; then
         echo "Warning: Failed to convert test file '${OUTPUT_FILENAME}' to PNG format. Skipping comparison test."
-        exit 1
+        exit 42
     fi
     if ! convert ${REFERENCE_FILENAME} ${OUTPUT_FILENAME}_reference.png; then
         echo "Warning: Failed to convert reference file '${REFERENCE_FILENAME}' to PNG format. Skipping comparison test."
-        exit 1
+        exit 42
     fi
 
     # compare files

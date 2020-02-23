@@ -58,12 +58,10 @@ function(add_cli_test name)
         endif()
 
         add_test(NAME ${testname}_check_output
-            COMMAND sh ${CMAKE_CURRENT_SOURCE_DIR}/check_output.sh
+            COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/check_output.sh
                     "${ARG_OUTPUT_FILENAME}" "${ARG_REFERENCE_FILENAME}" "${ARG_EXPECTED_FILES}" "${ARG_TEST_SCRIPT}")
         set_tests_properties(${testname}_check_output PROPERTIES
-            ENVIRONMENT "${CMAKE_CTEST_ENV}"
-            DEPENDS ${testname}
-            SKIP_REGULAR_EXPRESSION "Skipping comparison test.")
+            ENVIRONMENT "${CMAKE_CTEST_ENV}" DEPENDS ${testname} SKIP_RETURN_CODE 42)
     endif()
 endfunction(add_cli_test)
 
