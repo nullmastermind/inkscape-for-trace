@@ -14,28 +14,34 @@ for file in ${EXPECTED_FILES}; do
 done
 
 # if reference file is given check if input files exist and continue with comparison
-test -n "${REFERENCE_FILENAME}" || exit 0
-if [ ! -f "${OUTPUT_FILENAME}" ]; then
-    echo "Error: Test file '${OUTPUT_FILENAME}' not found."
-    exit 1
-fi
-if [ ! -f "${REFERENCE_FILENAME}" ]; then
-    echo "Error: Reference file '${REFERENCE_FILENAME}' not found."
-    exit 1
+if [ -n "${REFERENCE_FILENAME}" ]; then
+    if [ ! -f "${OUTPUT_FILENAME}" ]; then
+        echo "Error: Test file '${OUTPUT_FILENAME}' not found."
+        exit 1
+    fi
+    if [ ! -f "${REFERENCE_FILENAME}" ]; then
+        echo "Error: Reference file '${REFERENCE_FILENAME}' not found."
+        exit 1
+    fi
+
+    # convert testfile and reference file to PNG format
+    if ! convert ${OUTPUT_FILENAME} ${OUTPUT_FILENAME}.png; then
+        echo "Warning: Failed to convert test file '${OUTPUT_FILENAME}' to PNG format. Skipping comparison test."
+        exit 1
+    fi
+    if ! convert ${REFERENCE_FILENAME} ${OUTPUT_FILENAME}_reference.png; then
+        echo "Warning: Failed to convert reference file '${REFERENCE_FILENAME}' to PNG format. Skipping comparison test."
+        exit 1
+    fi
+
+    # compare files
+    if ! compare -metric AE ${OUTPUT_FILENAME}.png ${OUTPUT_FILENAME}_reference.png ${OUTPUT_FILENAME}_compare.png; then
+        echo && echo "Error: Comparison failed."
+        exit 1
+    fi
 fi
 
-# convert testfile and reference file to PNG format
-if ! convert ${OUTPUT_FILENAME} ${OUTPUT_FILENAME}.png; then
-    echo "Warning: Failed to convert test file '${OUTPUT_FILENAME}' to PNG format. Skipping comparison test."
-    exit 1
-fi
-if ! convert ${REFERENCE_FILENAME} ${OUTPUT_FILENAME}_reference.png; then
-    echo "Warning: Failed to convert reference file '${REFERENCE_FILENAME}' to PNG format. Skipping comparison test."
-    exit 1
-fi
-
-# compare files
-if ! compare -metric AE ${OUTPUT_FILENAME}.png ${OUTPUT_FILENAME}_reference.png ${OUTPUT_FILENAME}_compare.png; then
-    echo && echo "Error: Comparison failed."
-    exit 1
-fi
+# cleanup
+for file in ${OUTPUT_FILENAME}{,.png,_reference.png,_compare.png} ${EXPECTED_FILES}; do
+    rm -f ${file}
+done
