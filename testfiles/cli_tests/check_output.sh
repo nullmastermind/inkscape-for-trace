@@ -6,13 +6,20 @@ command -v compare >/dev/null 2>&1 || { echo >&2 "I require ImageMagick's 'compa
 
 OUTPUT_FILENAME=$1
 REFERENCE_FILENAME=$2
+EXPECTED_FILES=$3
 
-# check if input files exist
-if [ ! -f ${OUTPUT_FILENAME} ]; then
+# check if expected files exist
+for file in ${EXPECTED_FILES}; do
+    test -f "${file}" || { echo "Error: Expected file '${file}' not found."; exit 1; }
+done
+
+# if reference file is given check if input files exist and continue with comparison
+test -n "${REFERENCE_FILENAME}" || exit 0
+if [ ! -f "${OUTPUT_FILENAME}" ]; then
     echo "Error: Test file '${OUTPUT_FILENAME}' not found."
     exit 1
 fi
-if [ ! -f ${REFERENCE_FILENAME} ]; then
+if [ ! -f "${REFERENCE_FILENAME}" ]; then
     echo "Error: Reference file '${REFERENCE_FILENAME}' not found."
     exit 1
 fi
