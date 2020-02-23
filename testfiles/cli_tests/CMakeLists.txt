@@ -87,3 +87,23 @@ add_cli_test(export_png    PARAMETERS --export-type=png INPUT_FILENAME shapes.sv
 add_cli_test(export_ps     PARAMETERS --export-type=ps  INPUT_FILENAME shapes.svg OUTPUT_FILENAME shapes.ps  REFERENCE_FILENAME shapes_expected.ps)
 add_cli_test(export_eps    PARAMETERS --export-type=eps INPUT_FILENAME shapes.svg OUTPUT_FILENAME shapes.eps REFERENCE_FILENAME shapes_expected.eps)
 add_cli_test(export_pdf    PARAMETERS --export-type=pdf INPUT_FILENAME shapes.svg OUTPUT_FILENAME shapes.pdf REFERENCE_FILENAME shapes_expected.pdf)
+
+# test librevenge formats
+if(WITH_LIBCDR)
+  add_cli_test(import_cdr  PARAMETERS --export-type=png
+                           INPUT_FILENAME librevenge_formats/corel_draw.cdr OUTPUT_FILENAME format_corel_draw.png
+                           REFERENCE_FILENAME librevenge_formats/corel_draw_expected.png)
+endif()
+if(WITH_LIBVISIO)
+  add_cli_test(import_vsd  PARAMETERS --export-type=png
+                           INPUT_FILENAME librevenge_formats/visio.vsd OUTPUT_FILENAME format_visio.vsd.png
+                           REFERENCE_FILENAME librevenge_formats/visio.vsd_expected.png)
+  add_cli_test(import_vsdx PARAMETERS --export-type=png
+                           INPUT_FILENAME librevenge_formats/visio.vsdx OUTPUT_FILENAME format_visio.vsdx.png
+                           REFERENCE_FILENAME librevenge_formats/visio.vsdx_expected.png)
+endif()
+if(WITH_LIBWPG)
+  add_cli_test(import_wpg  PARAMETERS --export-type=png
+                           INPUT_FILENAME librevenge_formats/word_perfect.wpg OUTPUT_FILENAME format_word_perfect.png
+                           REFERENCE_FILENAME librevenge_formats/word_perfect_expected.png)
+endif()
