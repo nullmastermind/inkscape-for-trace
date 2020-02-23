@@ -83,7 +83,7 @@ sudo apt-get install ninja-build ccache
 Next we prepare a build directory with a symlink to Inkscape's share folder, add a profile dir and set the bin folder (optional):
 
 ```bash
-ln -s share share/inkscape
+ln -s $PWD/share ./share/inkscape
 mkdir -p build/conf
 cd build
 export INKSCAPE_PROFILE_DIR=$PWD/conf
