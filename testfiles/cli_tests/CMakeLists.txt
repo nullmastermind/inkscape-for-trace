@@ -74,8 +74,14 @@ add_cli_test(version       PARAMETERS --version)
 add_cli_test(version_known PARAMETERS --version FAIL_FOR_OUTPUT unknown)
 
 # check --query family of parameters
-add_cli_test(query_x       PARAMETERS --query-id=rect2 --query-x INPUT_FILENAME rects.svg PASS_FOR_OUTPUT 110)
-add_cli_test(query_y       PARAMETERS --query-id=rect2 --query-y INPUT_FILENAME rects.svg PASS_FOR_OUTPUT 20)
+string(CONCAT query_all_expected "rect1,10,10,80,80\n"
+                                 "rect2,110,20,80,70\n"
+                                 "rect3,210,30,80,60")
+add_cli_test(query_x       PARAMETERS --query-id=rect2 --query-x      INPUT_FILENAME rects.svg PASS_FOR_OUTPUT 110)
+add_cli_test(query_y       PARAMETERS --query-id=rect2 --query-y      INPUT_FILENAME rects.svg PASS_FOR_OUTPUT 20)
+add_cli_test(query_width   PARAMETERS --query-id=rect2 --query-width  INPUT_FILENAME rects.svg PASS_FOR_OUTPUT 80)
+add_cli_test(query_height  PARAMETERS --query-id=rect2 --query-height INPUT_FILENAME rects.svg PASS_FOR_OUTPUT 70)
+add_cli_test(query_all     PARAMETERS --query-id=rect2 --query-all    INPUT_FILENAME rects.svg PASS_FOR_OUTPUT ${query_all_expected})
 
 # check --export-type
 add_cli_test(export_type   PARAMETERS --export-type=svg,png,ps,eps,pdf,emf,wmf,xaml
