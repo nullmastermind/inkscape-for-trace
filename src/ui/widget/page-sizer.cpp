@@ -577,13 +577,6 @@ PageSizer::updateScaleUI()
         Geom::Scale scale = doc->getDocumentScale();
         SPNamedView *nv = dt->getNamedView();
 
-        // Setting default custom unit to document unit
-        if (nv->page_size_units) {
-            _dimensionUnits.setUnit(nv->page_size_units->abbr);
-        } else if (nv->display_units) {
-            _dimensionUnits.setUnit(nv->display_units->abbr);
-        }
-
         std::stringstream ss;
         ss << _("User units per ") << nv->display_units->abbr << "." ;
         _scaleLabel.set_text( ss.str() );
