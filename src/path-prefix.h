@@ -84,7 +84,7 @@
 #    define CREATE_PALETTESDIR   "/Library/Application Support/create/swatches"
 #else
 #    define INKSCAPE_DATADIR_REAL append_inkscape_datadir()
-#    define INKSCAPE_SYSTEMDIR    append_inkscape_datadir("inkscape/")
+#    define INKSCAPE_SYSTEMDIR    append_inkscape_datadir("inkscape")
 #    define INKSCAPE_ATTRRELDIR   append_inkscape_datadir("inkscape/attributes")
 #    define INKSCAPE_BINDDIR      append_inkscape_datadir("inkscape/bind")
 #    define INKSCAPE_DOCDIR       append_inkscape_datadir("inkscape/doc")
