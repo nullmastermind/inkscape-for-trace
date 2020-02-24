@@ -19,10 +19,13 @@
 #                        both files are converted to PNG and compared with ImageMagick's 'compare'
 #   EXPECTED_FILES     - verify the command produced the expected files (i.e. they exist on disk)
 #   TEST_SCRIPT        - additional script to run after performing all checks and before cleaning up
+#
+# Other options:
+#   ENVIRONMENT        - Additional environment variables to set while running the test
 function(add_cli_test name)
     # parse arguments
     set(oneValueArgs INPUT_FILENAME OUTPUT_FILENAME PASS_FOR_OUTPUT FAIL_FOR_OUTPUT REFERENCE_FILENAME)
-    set(multiValueArgs PARAMETERS EXPECTED_FILES TEST_SCRIPT)
+    set(multiValueArgs PARAMETERS EXPECTED_FILES TEST_SCRIPT ENVIRONMENT)
     cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
     set(testname  cli_${name})
@@ -33,6 +36,9 @@ function(add_cli_test name)
     if(DEFINED ARG_INPUT_FILENAME)
         set(ARG_INPUT_FILENAME "${CMAKE_CURRENT_SOURCE_DIR}/testcases/${ARG_INPUT_FILENAME}")
         set(ARG_PARAMETERS ${ARG_PARAMETERS} ${ARG_INPUT_FILENAME})
+    endif()
+    if(DEFINED ARG_ENVIRONMENT)
+        list(APPEND CMAKE_CTEST_ENV ${ARG_ENVIRONMENT})
     endif()
 
     # add test for main command line
@@ -72,6 +78,23 @@ endfunction(add_cli_test)
 # check if we can run inkscape and the revision is known
 add_cli_test(version       PARAMETERS --version)
 add_cli_test(version_known PARAMETERS --version FAIL_FOR_OUTPUT unknown)
+
+# check --system-data-directory and --user-data-directory
+# TODO: Can we make these tests more specific without making too many assumptions?
+add_cli_test(system_data_directory PARAMETERS --system-data-directory PASS_FOR_OUTPUT "inkscape\n$")
+add_cli_test(user_data_directory   PARAMETERS --user-data-directory   PASS_FOR_OUTPUT "inkscape\n$")
+
+# check whether INKSCAPE_DATADIR / INKSCAPE_PROFILE_DIR environment variables work
+# TODO: INKSCAPE_PROFILE_DIR does not seem to be sanitized at all (i.e. is used verbatim by Inkscape)
+set(fancy_dir "i_certainly_do_not_exist")
+file(TO_NATIVE_PATH "${fancy_dir}/inkscape" expected_dir)
+string(REPLACE "\\" "\\\\" expected_dir "${expected_dir}")
+add_cli_test(inkscape_datadir      PARAMETERS --system-data-directory
+                                   ENVIRONMENT INKSCAPE_DATADIR=${fancy_dir}
+                                   PASS_FOR_OUTPUT "${expected_dir}\n$")
+add_cli_test(inkscape_profile_dir  PARAMETERS --user-data-directory
+                                   ENVIRONMENT INKSCAPE_PROFILE_DIR=${fancy_dir}/inkscape
+                                   PASS_FOR_OUTPUT "${fancy_dir}/inkscape\n$")
 
 # check --query family of parameters
 string(CONCAT query_all_expected "rect1,10,10,80,80\n"
