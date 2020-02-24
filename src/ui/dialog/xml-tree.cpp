@@ -524,6 +524,10 @@ void XmlTree::on_tree_select_row(GtkTreeSelection *selection, gpointer data)
 {
     XmlTree *self = static_cast<XmlTree *>(data);
 
+    if (self->blocked) {
+        return;
+    }
+
     // Defer the update after all events have been processed. Allows skipping
     // of invalid intermediate selection states, like the automatic next row
     // selection after `gtk_tree_store_remove`.
