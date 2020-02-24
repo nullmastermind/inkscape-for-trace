@@ -36,12 +36,6 @@ print_inkscape_version()
 }
 
 void
-print_extension_directory()
-{
-    std::cout << INKSCAPE_EXTENSIONDIR << std::endl;
-}
-
-void
 print_system_data_directory()
 {
     std::cout << INKSCAPE_SYSTEMDIR << std::endl;
@@ -225,9 +219,8 @@ quit_inkscape(InkscapeApplication* app)
 std::vector<std::vector<Glib::ustring>> raw_data_base =
 {
     {"inkscape-version",          "InkscapeVersion",         "Base",       N_("Print Inkscape version and exit.")                   },
-    {"extension-directory",       "InkscapeExtensionsDir",   "Base",       N_("Print Extensions directory and exit.")               },
-    {"system-data-directory",     "InkscapeSystemDir",       "Base",       N_("Print System data directory and exit.")              },
-    {"user-data-directory",       "InkscapeUserDir",         "Base",       N_("Print User data directory and exit.")                },
+    {"system-data-directory",     "InkscapeSystemDir",       "Base",       N_("Print system data directory and exit.")              },
+    {"user-data-directory",       "InkscapeUserDir",         "Base",       N_("Print user data directory and exit.")                },
     {"verb-list",                 "InkscapeVerbs",           "Base",       N_("Print a list of verbs and exit.")                    },
     {"verb",                      "Verb",                    "Base",       N_("Execute verb(s).")                                   },
     {"vacuum-defs",               "VacuumDefs",              "Base",       N_("Remove unused definitions (gradients, etc.).")       },
@@ -250,7 +243,6 @@ add_actions_base(ConcreteInkscapeApplication<T>* app)
 {
     // Note: "radio" actions are just an easy way to set type without using templating.
     app->add_action(               "inkscape-version",                                    sigc::ptr_fun(&print_inkscape_version)                 );
-    app->add_action(               "extension-directory",                                 sigc::ptr_fun(&print_extension_directory)              );
     app->add_action(               "system-data-directory",                               sigc::ptr_fun(&print_system_data_directory)            );
     app->add_action(               "user-data-directory",                                 sigc::ptr_fun(&print_user_data_directory)              );
     app->add_action(               "verb-list",                                           sigc::ptr_fun(&print_verb_list)                        );

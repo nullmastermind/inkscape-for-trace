@@ -573,7 +573,6 @@ ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
 
     // General
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "version",                 'V', N_("Print Inkscape version"),                                                  "");
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "extension-directory",     'x', N_("Print system extension directory"),                                        "");
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "system-data-directory",  '\0', N_("Print system data directory"),                                             "");
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "user-data-directory",    '\0', N_("Print user data directory"),                                               "");
 
@@ -1159,11 +1158,6 @@ ConcreteInkscapeApplication<T>::on_handle_local_options(const Glib::RefPtr<Glib:
     // These are processed first as they result in immediate program termination.
     if (options->contains("version")) {
         T::activate_action("inkscape-version");
-        return EXIT_SUCCESS;
-    }
-
-    if (options->contains("extension-directory")) {
-        T::activate_action("extension-directory");
         return EXIT_SUCCESS;
     }
 
