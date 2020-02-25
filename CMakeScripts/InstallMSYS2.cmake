@@ -253,6 +253,12 @@ if(WIN32)
       DESTINATION bin)
   endif()
 
+  # Install gdbus helper to avoid warnings printed to command line
+  # (GApplication unconditionally tries to establish a dbus connection)
+  install(FILES
+    ${MINGW_BIN}/gdbus.exe
+    DESTINATION bin)
+
   # Python (use executable names without version number for compatibility with python from python.org)
   file(GLOB python_version ${MINGW_BIN}/libpython3.[0-9]*.dll)
   string(REGEX REPLACE "${MINGW_BIN}/libpython(3\.[0-9]+)\.dll" "\\1" python_version ${python_version})
