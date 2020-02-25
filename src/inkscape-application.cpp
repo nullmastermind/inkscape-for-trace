@@ -522,7 +522,7 @@ ConcreteInkscapeApplication<T>::_start_main_option_section(const Glib::ustring& 
 
 template<class T>
 ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
-    : T("org.inkscape.application.with_gui",
+    : T("org.inkscape.Inkscape",
                        Gio::APPLICATION_HANDLES_OPEN | // Use default file opening.
                        Gio::APPLICATION_NON_UNIQUE )
     , InkscapeApplication()

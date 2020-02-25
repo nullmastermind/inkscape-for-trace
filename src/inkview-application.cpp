@@ -43,7 +43,7 @@
 // after calling on_handle_local_options() are assumed to be filenames.
 
 InkviewApplication::InkviewApplication()
-    : Gtk::Application("org.inkscape.application.inkview",
+    : Gtk::Application("org.inkscape.Inkview",
                        Gio::APPLICATION_HANDLES_OPEN | // Use default file opening.
                        Gio::APPLICATION_NON_UNIQUE   ) // Allows different instances of Inkview to run at same time.
     , fullscreen(false)
