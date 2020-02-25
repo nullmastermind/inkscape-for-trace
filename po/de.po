@@ -8721,7 +8721,7 @@ msgid "Overwrite input file"
 msgstr "Eingabedatei überschreiben"
 
 #: ../src/inkscape-application.cpp:551
-msgid "File type(s) to export: [svg,png,ps,eps,pdf,tex,emf,wmf,xaml]"
+msgid "File type(s) to export: [svg,png,ps,eps,pdf,emf,wmf,xaml]"
 msgstr ""
 "Dateityp(en), die zum Export zur Verfügung stehen: [svg,png,ps,psf,tex,emf,"
 "wmf,xaml]"

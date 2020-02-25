@@ -8771,7 +8771,7 @@ msgstr "Export : écraser le fichier d'entrée."
 
 #: ../src/inkscape-application.cpp:551
 #, fuzzy
-msgid "File type(s) to export: [svg,png,ps,eps,pdf,tex,emf,wmf,xaml]"
+msgid "File type(s) to export: [svg,png,ps,eps,pdf,emf,wmf,xaml]"
 msgstr "Export : type de fichier (svg, png, ps, psf, tex, emf, wmf, xaml)"
 
 #: ../src/inkscape-application.cpp:554

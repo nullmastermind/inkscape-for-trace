@@ -8671,7 +8671,7 @@ msgstr "Dışa Aktar: Girdi dosyasının üzerine yaz."
 
 #: ../src/inkscape-application.cpp:551
 #, fuzzy
-msgid "File type(s) to export: [svg,png,ps,eps,pdf,tex,emf,wmf,xaml]"
+msgid "File type(s) to export: [svg,png,ps,eps,pdf,emf,wmf,xaml]"
 msgstr "Dışa Aktar: Dosya tipi:[svg,png,ps,psf,tex,emf,wmf,xaml]"
 
 #: ../src/inkscape-application.cpp:554

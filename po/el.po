@@ -9124,8 +9124,8 @@ msgstr "Αντικατάσταση αρχείου εισόδου"
 
 #
 #: ../src/inkscape-application.cpp:551
-msgid "File type(s) to export: [svg,png,ps,eps,pdf,tex,emf,wmf,xaml]"
-msgstr "Τύποι αρχείου για εξαγωγή: [svg,png,ps,eps,pdf,tex,emf,wmf,xaml]"
+msgid "File type(s) to export: [svg,png,ps,eps,pdf,emf,wmf,xaml]"
+msgstr "Τύποι αρχείου για εξαγωγή: [svg,png,ps,eps,pdf,emf,wmf,xaml]"
 
 # #-#-#-#-#  libgnomeui.master.el.po (el)  #-#-#-#-#
 # #-#-#-#-#  memory.el.po (abiword 1.0)  #-#-#-#-#

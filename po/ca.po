@@ -8609,7 +8609,7 @@ msgid "Overwrite input file"
 msgstr "Sobreescriu el fitxer d'entrada"
 
 #: ../src/inkscape-application.cpp:551
-msgid "File type(s) to export: [svg,png,ps,eps,pdf,tex,emf,wmf,xaml]"
+msgid "File type(s) to export: [svg,png,ps,eps,pdf,emf,wmf,xaml]"
 msgstr "Tipus de fitxer a exportar: [svg,png,ps,psf,tex,emf,wmf,xaml]"
 
 #: ../src/inkscape-application.cpp:554

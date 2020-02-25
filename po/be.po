@@ -9295,7 +9295,7 @@ msgstr "_Пісаць файл сэсіі:"
 
 #
 #: ../src/inkscape-application.cpp:551
-msgid "File type(s) to export: [svg,png,ps,eps,pdf,tex,emf,wmf,xaml]"
+msgid "File type(s) to export: [svg,png,ps,eps,pdf,emf,wmf,xaml]"
 msgstr ""
 
 #: ../src/inkscape-application.cpp:554

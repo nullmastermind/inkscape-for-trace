@@ -8513,7 +8513,7 @@ msgid "Overwrite input file"
 msgstr "Gainidatzi sarrerako fitxategia"
 
 #: ../src/inkscape-application.cpp:551
-msgid "File type(s) to export: [svg,png,ps,eps,pdf,tex,emf,wmf,xaml]"
+msgid "File type(s) to export: [svg,png,ps,eps,pdf,emf,wmf,xaml]"
 msgstr "Esportaziorako fitxategi motak: [svg,png,ps,pdf,tex,emf,wmf,xaml]"
 
 #: ../src/inkscape-application.cpp:554
