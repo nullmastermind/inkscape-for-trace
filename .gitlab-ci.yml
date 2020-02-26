@@ -31,7 +31,6 @@ inkscape:linux:
     - export CCACHE_DIR=${PWD}/ccache
   script:
     - mkdir -p build/conf
-    - ln -s . share/inkscape
     - cd build
     - cmake .. -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX:PATH=$PWD/install_dir/ -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
     - make -j3 install
