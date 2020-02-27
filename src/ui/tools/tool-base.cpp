@@ -1339,7 +1339,7 @@ guint get_latin_keyval(GdkEventKey const *event, guint *consumed_modifiers /*= N
             &keyval, nullptr, nullptr, &modifiers);
 
     if (consumed_modifiers) {
-#ifndef GDK_WINDOWING_QUARTZ
+#if !defined(GDK_WINDOWING_QUARTZ) || GTK_CHECK_VERSION(3, 24, 13)
         *consumed_modifiers = modifiers;
 #else
         // gdk_quartz_keymap_translate_keyboard_state fills the `consumed_modifiers`
