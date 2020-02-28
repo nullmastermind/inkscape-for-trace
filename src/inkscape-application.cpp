@@ -10,6 +10,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <regex>
 
 #include <glibmm/i18n.h>  // Internationalization
 
@@ -61,6 +62,11 @@
 // Native Language Support - shouldn't this always be used?
 #include "helper/gettext.h"   // gettext init
 #endif // ENABLE_NLS
+
+#ifdef WITH_GNU_READLINE
+#include <readline/readline.h>
+#include <readline/history.h>
+#endif
 
 #include "io/resource.h"
 using Inkscape::IO::Resource::UIS;
@@ -362,8 +368,6 @@ InkscapeApplication::window_open(SPDocument* document)
     InkscapeWindow* window = new InkscapeWindow(document);
     // TODO Add window to application. (Instead of in InkscapeWindow constructor.)
 
-    SPDesktop* desktop = window->get_desktop();
-
     // To be removed (add once per window)!
     INKSCAPE.add_document(document);
 
@@ -400,7 +404,7 @@ InkscapeApplication::window_close(InkscapeWindow* window)
         if (document) {
 
             // To be removed (remove once per window)!
-            bool last = INKSCAPE.remove_document(document);
+            /* bool last = */ INKSCAPE.remove_document(document);
 
             // Leave active document alone (maybe should find new active window and reset variables).
             _active_selection = nullptr;
@@ -1101,6 +1105,61 @@ ConcreteInkscapeApplication<T>::parse_actions(const Glib::ustring& input, action
     }
 }
 
+#ifdef WITH_GNU_READLINE
+
+// For use in shell mode. Command completion of action names.
+char* readline_generator (const char* text, int state)
+{
+    static std::vector<Glib::ustring> actions;
+
+    // Fill the vector of action names.
+    if (actions.size() == 0) {
+        ConcreteInkscapeApplication<Gtk::Application>* app = &(ConcreteInkscapeApplication<Gtk::Application>::get_instance());
+        actions = app->list_actions();
+        std::sort(actions.begin(), actions.end());
+    }
+
+    static int list_index = 0;
+    static int len = 0;
+
+    if (!state) {
+        list_index = 0;
+        len = strlen(text);
+    }
+
+    const char* name = nullptr;
+    while (list_index < actions.size()) {
+        name = actions[list_index].c_str();
+        list_index++;
+        if (strncmp (name, text, len) == 0) {
+            return (strdup(name));
+        }
+    }
+
+    return ((char*)nullptr);
+}
+
+char** readline_completion(const char* text, int start, int end)
+{
+    char **matches = (char**)nullptr;
+
+    // Match actions names, but only at start of line.
+    // It would be nice to also match action names after a ';' but it's not possible as text won't include ';'.
+    if (start == 0) {
+        matches = rl_completion_matches (text, readline_generator);
+    }
+
+    return (matches);
+}
+
+void readline_init()
+{
+    rl_readline_name = "inkscape";
+    rl_attempted_completion_function = readline_completion;
+}
+#endif // WITH_GNU_READLINE
+
+
 // Once we don't need to create a window just to process verbs!
 template<class T>
 void
@@ -1113,13 +1172,41 @@ ConcreteInkscapeApplication<T>::shell()
         std::cout << "Only verbs that don't require a desktop may be used." << std::endl;
     }
 
+#ifdef WITH_GNU_READLINE
+    static bool init = false;
+    if (!init) {
+        readline_init();
+        init = true;
+    }
+#endif
+
     std::string input;
     while (true) {
-        std::cout << "> ";
-        std::string input;
-        std::getline(std::cin, input);
 
-        if (std::cin.eof() || input == "quit") break;
+        std::string input;
+
+#ifdef WITH_GNU_READLINE
+        char *readline_input = readline("> ");
+        if (readline_input) {
+            input = readline_input;
+            add_history(readline_input);
+        }
+        free(readline_input);
+#else
+        std::cout << "> ";
+        std::getline(std::cin, input);
+#endif
+
+        // Remove trailing space
+        input = std::regex_replace(input, std::regex(" +$"), "");
+
+        if (std::cin.eof() || input == "quit" || input == "q") {
+            if (_with_gui) {
+                Gio::Application::quit(); // Force closing windows.
+            } else {
+                break;
+            }
+        }
 
         action_vector_t action_vector;
         parse_actions(input, action_vector);
@@ -1434,11 +1521,12 @@ void
 ConcreteInkscapeApplication<Gtk::Application>::on_quit()
 {
     // Delete all windows (quit() doesn't do this).
+    /*
     std::vector<Gtk::Window*> windows = get_windows();
     for (auto window: windows) {
         // Do something
     }
-
+    */
     quit();
 }
 
