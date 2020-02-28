@@ -111,6 +111,12 @@ add_cli_test(export_type   PARAMETERS --export-type=svg,png,ps,eps,pdf,emf,wmf,x
                            INPUT_FILENAME empty.svg OUTPUT_FILENAME empty
                            EXPECTED_FILES empty.svg empty.png empty.ps empty.eps empty.pdf empty.emf empty.wmf empty.xaml)
 
+# test basic support of SVG export functionality
+add_cli_test(export_svg    PARAMETERS --export-type=svg INPUT_FILENAME shapes.svg OUTPUT_FILENAME shapes.svg REFERENCE_FILENAME shapes.svg)
+add_cli_test(export_plain  PARAMETERS --export-type=svg --export-plain-svg
+                           INPUT_FILENAME shapes.svg OUTPUT_FILENAME shapes.svg REFERENCE_FILENAME shapes.svg
+                           TEST_SCRIPT match_regex_fail.sh "shapes.svg" "inkscape:|sodipodi:")
+
 # test basic support of export functionality into various formats
 add_cli_test(export_png    PARAMETERS --export-type=png INPUT_FILENAME shapes.svg OUTPUT_FILENAME shapes.png REFERENCE_FILENAME shapes_expected.png)
 add_cli_test(export_ps     PARAMETERS --export-type=ps  INPUT_FILENAME shapes.svg OUTPUT_FILENAME shapes.ps  REFERENCE_FILENAME shapes_expected.ps)

@@ -26,11 +26,14 @@ if [ -n "${REFERENCE_FILENAME}" ]; then
     fi
 
     # convert testfile and reference file to PNG format
-    if ! convert ${OUTPUT_FILENAME} ${OUTPUT_FILENAME}.png; then
+    # - use internal MSVG delegate in SVG conversions for reproducibility reasons (avoid inkscape or rsvg delegates)
+    [ "${OUTPUT_FILENAME##*.}"    = "svg" ] && delegate1=MSVG:
+    [ "${REFERENCE_FILENAME##*.}" = "svg" ] && delegate2=MSVG:
+    if ! convert ${delegate1}${OUTPUT_FILENAME} ${OUTPUT_FILENAME}.png; then
         echo "Warning: Failed to convert test file '${OUTPUT_FILENAME}' to PNG format. Skipping comparison test."
         exit 42
     fi
-    if ! convert ${REFERENCE_FILENAME} ${OUTPUT_FILENAME}_reference.png; then
+    if ! convert ${delegate2}${REFERENCE_FILENAME} ${OUTPUT_FILENAME}_reference.png; then
         echo "Warning: Failed to convert reference file '${REFERENCE_FILENAME}' to PNG format. Skipping comparison test."
         exit 42
     fi
