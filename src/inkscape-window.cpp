@@ -24,7 +24,8 @@
 #include "object/sp-namedview.h"  // TODO Remove need for this!
 
 #include "ui/drag-and-drop.h"  // Move to canvas?
-#include "ui/interface.h" // main menu
+#include "ui/interface.h" // main menu, sp_ui_close_view()
+
 #include "ui/monitor.h" // get_monitor_geometry_at_point()
 
 #include "ui/desktop/menubar.h"
@@ -174,6 +175,16 @@ InkscapeWindow::on_focus_in_event(GdkEventFocus* event)
 
     return Gtk::ApplicationWindow::on_focus_in_event(event);
 }
+
+// Called when a window is closed via the 'X' in the window bar.
+bool
+InkscapeWindow::on_delete_event(GdkEventAny* event)
+{
+    if (_app) {
+        _app->destroy_window(this);
+    }
+    return true;
+};
 
 /*
   Local Variables:
