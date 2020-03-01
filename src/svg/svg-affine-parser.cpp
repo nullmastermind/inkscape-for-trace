@@ -989,6 +989,8 @@ static const int svg_transform_en_main = 334;
 // https://www.w3.org/TR/css-transforms-1/#svg-syntax
 bool sp_svg_transform_read(gchar const *str, Geom::Affine *transform)
 {
+    if (str == nullptr)
+        return false;
 
     std::vector<double> params;
     Geom::Affine final_transform (Geom::identity());
