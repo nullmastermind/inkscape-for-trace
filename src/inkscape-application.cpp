@@ -1181,9 +1181,8 @@ ConcreteInkscapeApplication<T>::shell()
     }
 #endif
 
-    std::string input;
-    while (true) {
-
+    while (std::cin.good()) {
+        bool eof = false;
         std::string input;
 
 #ifdef WITH_GNU_READLINE
@@ -1191,6 +1190,8 @@ ConcreteInkscapeApplication<T>::shell()
         if (readline_input) {
             input = readline_input;
             add_history(readline_input);
+        } else {
+            eof = true;
         }
         free(readline_input);
 #else
@@ -1201,12 +1202,8 @@ ConcreteInkscapeApplication<T>::shell()
         // Remove trailing space
         input = std::regex_replace(input, std::regex(" +$"), "");
 
-        if (std::cin.eof() || input == "quit" || input == "q") {
-            if (_with_gui) {
-                Gio::Application::quit(); // Force closing windows.
-            } else {
-                break;
-            }
+        if (eof || input == "quit" || input == "q") {
+            break;
         }
 
         action_vector_t action_vector;
@@ -1219,6 +1216,10 @@ ConcreteInkscapeApplication<T>::shell()
         // vetted first.
         Glib::RefPtr<Glib::MainContext> context = Glib::MainContext::get_default();
         while (context->iteration(false)) {};
+    }
+
+    if (_with_gui) {
+        Gio::Application::quit(); // Force closing windows.
     }
 }
 
