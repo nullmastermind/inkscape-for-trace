@@ -10,6 +10,8 @@
 #ifndef SEEN_SP_DOCUMENT_UNDO_H
 #define SEEN_SP_DOCUMENT_UNDO_H
 
+#include <glib.h>   // gboolean, gchar
+
 namespace Glib {
     class ustring;
 }

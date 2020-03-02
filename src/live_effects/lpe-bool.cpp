@@ -27,10 +27,12 @@
 
 #include "helper/geom.h"
 
-#include "splivarot.h"
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
 #include "livarot/path-description.h"
+
+#include "path/path-boolop.h"
+#include "path/path-util.h"
 
 namespace Inkscape {
 namespace LivePathEffect {

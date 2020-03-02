@@ -408,6 +408,7 @@ public:
     // path operations
     // in path/path-object-set.cpp
     bool strokesToPaths(bool legacy = false, bool skip_undo = false);
+    bool simplifyPaths(bool skip_undo = false);
 
     // Boolean operations
     // in splivarot.cpp

@@ -20,6 +20,7 @@
 
 #include "inkscape.h"             // Inkscape::Application
 #include "selection.h"            // Selection
+#include "path/path-simplify.h"
 
 
 // No sanity checking is done... should probably add.
@@ -124,13 +125,27 @@ object_stroke_to_path(InkscapeApplication *app)
 }
 
 
+void
+object_simplify_path(InkscapeApplication *app)
+{
+    auto selection = app->get_active_selection();
+
+    // We should not have to do this!
+    auto document  = app->get_active_document();
+    selection->setDocument(document);
+
+    selection->simplifyPaths();
+}
+
+
 std::vector<std::vector<Glib::ustring>> raw_data_object =
 {
     {"object-set-attribute",      "ObjectSetAttribute",      "Object",     N_("Set an attribute on selected objects (experimental).")},
     {"object-set-property",       "ObjectSetProperty",       "Object",     N_("Set a property on selected objects (experimental).")  },
     {"object-unlink-clones",      "ObjectUnlinkClones",      "Object",     N_("Unlink clones and symbols.")                          },
     {"object-to-path",            "ObjectToPath",            "Object",     N_("Convert shapes to paths.")                            },
-    {"object-stroke-to-path",     "ObjectStrokeToPath",      "Object",     N_("Convert strokes to paths.")                           }
+    {"object-stroke-to-path",     "ObjectStrokeToPath",      "Object",     N_("Convert strokes to paths.")                           },
+    {"object-simplify-path",      "ObjectSimplifyPath",      "Object",     N_("Simplify paths, reducing node counts.")               }
 };
 
 template<class T>
@@ -150,6 +165,7 @@ add_actions_object(ConcreteInkscapeApplication<T>* app)
     app->add_action(                "object-unlink-clones",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_unlink_clones),      app));
     app->add_action(                "object-to-path",                   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_to_path),            app));
     app->add_action(                "object-stroke-to-path",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_stroke_to_path),     app));
+    app->add_action(                "object-simplify-path",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_simplify_path),      app));
 
 #endif
 

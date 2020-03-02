@@ -213,7 +213,9 @@
 ../src/object/sp-tspan.cpp
 ../src/object/sp-use.cpp
 ../src/path-chemistry.cpp
+../src/path/path-boolop.cpp
 ../src/path/path-object-set.cpp
+../src/path/path-offset.cpp
 ../src/preferences-skeleton.h
 ../src/preferences.cpp
 ../src/rdf.cpp
@@ -222,7 +224,6 @@
 ../src/seltrans-handles.cpp
 ../src/seltrans.cpp
 ../src/shortcuts.cpp
-../src/splivarot.cpp
 ../src/text-chemistry.cpp
 ../src/text-editing.cpp
 ../src/trace/depixelize/inkscape-depixelize.cpp

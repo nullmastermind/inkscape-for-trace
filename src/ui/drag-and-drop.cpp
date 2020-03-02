@@ -21,7 +21,6 @@
 #include "gradient-drag.h"
 #include "file.h"
 #include "inkscape.h" // SP_ACTIVE_DESKTOP
-#include "splivarot.h"
 #include "style.h"
 
 #include "display/sp-canvas.h" // window to world transform
@@ -32,6 +31,8 @@
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
 #include "object/sp-flowtext.h"
+
+#include "path/path-util.h"
 
 #include "svg/svg-color.h" // write color
 

@@ -28,6 +28,8 @@
 #include <cstdint>
 #include <3rdparty/libuemf/symbol_convert.h>
 
+#include "emf-inout.h"
+
 #include "clear-n_.h"
 #include "display/drawing-item.h"
 #include "display/drawing.h"
@@ -37,16 +39,15 @@
 #include "extension/output.h"
 #include "extension/print.h"
 #include "extension/system.h"
-#include "inkscape.h" // even though it is included indirectly by emf-inout.h
 #include "object/sp-path.h"
 #include "object/sp-root.h"
+#include "path/path-boolop.h"
 #include "print.h"
 #include "svg/css-ostringstream.h"
 #include "svg/svg.h"
-#include "util/units.h" // even though it is included indirectly by emf-inout.h
+#include "util/units.h"
 
 #include "emf-print.h"
-#include "emf-inout.h"
 
 #define PRINT_EMF "org.inkscape.print.emf"
 

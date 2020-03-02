@@ -20,8 +20,8 @@
 #include <2geom/pathvector.h>
 
 #include "extension/implementation/implementation.h"
-#include "splivarot.h"
 #include "display/canvas-bpath.h"
+#include "livarot/LivarotDefs.h"  // FillRule
 
 class SPGradient;
 class SPObject;

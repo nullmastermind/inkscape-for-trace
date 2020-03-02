@@ -47,7 +47,6 @@
 #include "selection-chemistry.h"
 #include "seltrans.h"
 #include "shortcuts.h"
-#include "splivarot.h"
 #include "text-chemistry.h"
 
 #include "display/curve.h"
@@ -66,7 +65,9 @@
 #include "object/sp-guide.h"
 #include "object/sp-namedview.h"
 
+#include "path/path-offset.h"
 #include "path/path-outline.h"
+#include "path/path-simplify.h"
 
 #include "ui/dialog/align-and-distribute.h"
 #include "ui/dialog/clonetiler.h"
@@ -1236,8 +1237,7 @@ void SelectionVerb::perform(SPAction *action, void *data)
             selection->strokesToPaths(true);
             break;
         case SP_VERB_SELECTION_SIMPLIFY:
-            selection->toCurves(true);
-            sp_selected_path_simplify(dt);
+            selection->simplifyPaths();
             break;
         case SP_VERB_SELECTION_REVERSE:
             selection->toCurves(true);

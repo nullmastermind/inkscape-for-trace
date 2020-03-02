@@ -41,6 +41,7 @@
 #include "display/drawing.h"
 #include "display/drawing-item.h"
 #include "clear-n_.h"
+#include "path/path-boolop.h"
 #include "svg/svg.h"
 #include "util/units.h" // even though it is included indirectly by wmf-inout.h
 #include "inkscape.h" // even though it is included indirectly by wmf-inout.h

@@ -44,7 +44,6 @@
 #include "inkscape.h"
 #include "message-context.h"
 #include "selection.h"
-#include "splivarot.h"
 #include "verbs.h"
 
 #include "display/cairo-utils.h"
@@ -55,10 +54,13 @@
 
 #include "include/macros.h"
 
+#include "livarot/Path.h"
 #include "livarot/Shape.h"
 
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
+
+#include "path/path-util.h"
 
 #include "ui/pixmaps/cursor-calligraphy.xpm"
 

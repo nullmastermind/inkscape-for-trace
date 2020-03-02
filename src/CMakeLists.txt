@@ -81,7 +81,6 @@ set(inkscape_SRC
   snapped-line.cpp
   snapped-point.cpp
   snapper.cpp
-  splivarot.cpp
   sp-cursor.cpp
   sp-item-notify-moveto.cpp 
   style-internal.cpp
@@ -196,7 +195,6 @@ set(inkscape_SRC
   sp-guide-attachment.h
   sp-guide-constraint.h
   sp-item-notify-moveto.h
-  splivarot.h
   streq.h
   strneq.h
   style-enums.h

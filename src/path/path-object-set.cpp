@@ -21,7 +21,7 @@
 
 #include "object/object-set.h"
 #include "path/path-outline.h"
-
+#include "path/path-simplify.h"
 
 using Inkscape::ObjectSet;
 
@@ -75,6 +75,74 @@ ObjectSet::strokesToPaths(bool legacy, bool skip_undo)
   }
 
   return did;
+}
+
+bool
+ObjectSet::simplifyPaths(bool skip_undo)
+{
+    if (desktop() && isEmpty()) {
+        desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>path(s)</b> to simplify."));
+        return false;
+    }
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    double threshold = prefs->getDouble("/options/simplifythreshold/value", 0.003);
+    bool justCoalesce = prefs->getBool(  "/options/simplifyjustcoalesce/value", false);
+
+    // Keep track of accelerated simplify
+    static gint64 previous_time = 0;
+    static gdouble multiply = 1.0;
+
+    // Get the current time
+    gint64 current_time = g_get_monotonic_time();
+
+    // Was the previous call to this function recent? (<0.5 sec)
+    if (previous_time > 0 && current_time - previous_time < 500000) {
+
+        // add to the threshold 1/2 of its original value
+        multiply  += 0.5;
+        threshold *= multiply;
+
+    } else {
+        // reset to the default
+        multiply = 1;
+    }
+
+    // Remember time for next call
+    previous_time = current_time;
+
+    // set "busy" cursor
+    if (desktop()) {
+        desktop()->setWaitingCursor();
+    }
+
+    Geom::OptRect selectionBbox = visualBounds();
+    if (!selectionBbox) {
+        std::cerr << "ObjectSet::: selection has no visual bounding box!" << std::endl;
+        return false;
+    }
+    double size = L2(selectionBbox->dimensions());
+
+    int pathsSimplified = 0;
+    std::vector<SPItem *> my_items(items().begin(), items().end());
+    for (auto item : my_items) {
+        pathsSimplified += path_simplify(item, threshold, justCoalesce, size);
+    }
+
+    if (pathsSimplified > 0 && !skip_undo) {
+        DocumentUndo::done(document(), SP_VERB_SELECTION_SIMPLIFY,  _("Simplify"));
+    }
+
+    if (desktop()) {
+        desktop()->clearWaitingCursor();
+        if (pathsSimplified > 0) {
+            desktop()->messageStack()->flashF(Inkscape::NORMAL_MESSAGE, _("<b>%d</b> paths simplified."), pathsSimplified);
+        } else {
+            desktop()->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No paths</b> to simplify in the selection."));
+        }
+    }
+
+    return (pathsSimplified > 0);
 }
 
 /*

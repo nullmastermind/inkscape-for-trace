@@ -21,11 +21,9 @@
 #include "desktop.h"
 #include "document.h"
 #include "inkscape.h"
-#include "splivarot.h"
 #include "preferences.h"
 #include "text-editing.h"
 
-#include "splivarot.h"   // curve_for_item, pathvector_for_curves
 #include "object/sp-clippath.h"
 #include "object/sp-flowtext.h"
 #include "object/sp-image.h"
@@ -37,6 +35,8 @@
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
 #include "object/sp-use.h"
+
+#include "path/path-util.h"  // curve_for_item
 
 #include "svg/svg.h"
 
@@ -433,9 +433,6 @@ void Inkscape::ObjectSnapper::_collectPaths(Geom::Point /*p*/,
                             }*/
                             if (curve) {
                                 // We will get our own copy of the pathvector, which must be freed at some point
-
-                                // Geom::PathVector *pv = pathvector_for_curve(root_item, curve, true, true, Geom::identity(), (*i).additional_affine);
-
                                 Geom::PathVector *pv = new Geom::PathVector(curve->get_pathvector());
                                 (*pv) *= root_item->i2dt_affine() * (*i).additional_affine * _snapmanager->getDesktop()->doc2dt(); // (_edit_transform * _i2d_transform);
 
@@ -491,12 +488,8 @@ void Inkscape::ObjectSnapper::_snapPaths(IntermSnapResults &isr,
             // TODO fix the function to be const correct:
             SPCurve *curve = curve_for_item(const_cast<SPPath*>(selected_path));
             if (curve) {
-                Geom::PathVector *pathv = pathvector_for_curve(const_cast<SPPath*>(selected_path),
-                                                               curve,
-                                                               true,
-                                                               true,
-                                                               Geom::identity(),
-                                                               Geom::identity()); // We will get our own copy of the path, which must be freed at some point
+                Geom::PathVector *pathv = new Geom::PathVector(curve->get_pathvector()); // Must be freed.
+                *pathv *= selected_path->i2doc_affine();
                 _paths_to_snap_to->push_back(SnapCandidatePath(pathv, SNAPTARGET_PATH, Geom::OptRect(), true));
                 curve->unref();
             }

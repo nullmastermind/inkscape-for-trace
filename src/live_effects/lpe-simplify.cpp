@@ -7,16 +7,14 @@
 
 #include "live_effects/lpe-simplify.h"
 
-#include "splivarot.h"
 #include "display/curve.h"
 #include "helper/geom.h"
+#include "path/path-util.h"
 #include "svg/svg.h"
 #include "ui/icon-names.h"
 #include "ui/tools/node-tool.h"
 
 #include <2geom/svg-path-parser.h>
-
-#include "splivarot.h"     // Path_for_pathvector, simplify paths
 
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>

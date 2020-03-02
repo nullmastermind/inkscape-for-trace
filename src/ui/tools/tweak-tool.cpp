@@ -33,13 +33,13 @@
 #include "message-context.h"
 #include "path-chemistry.h"
 #include "selection.h"
-#include "splivarot.h"
 #include "verbs.h"
 
 #include "display/canvas-arena.h"
 #include "display/curve.h"
 #include "display/sp-canvas.h"
 
+#include "livarot/Path.h"
 #include "livarot/Shape.h"
 
 #include "object/box3d.h"
@@ -52,6 +52,9 @@
 #include "object/sp-radial-gradient.h"
 #include "object/sp-stop.h"
 #include "object/sp-text.h"
+
+#include "path/path-util.h"
+
 #include "style.h"
 
 #include "ui/pixmaps/cursor-tweak-attract.xpm"
