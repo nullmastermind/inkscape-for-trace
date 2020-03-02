@@ -79,6 +79,10 @@ endfunction(add_cli_test)
 add_cli_test(version       PARAMETERS --version)
 add_cli_test(version_known PARAMETERS --version FAIL_FOR_OUTPUT unknown)
 
+# --action-list and --verb-list
+add_cli_test(action_list   PARAMETERS --action-list PASS_FOR_OUTPUT "file-new")
+add_cli_test(verb_list     PARAMETERS --verb-list   PASS_FOR_OUTPUT "FileNew:")
+
 # check --system-data-directory and --user-data-directory
 # TODO: Can we make these tests more specific without making too many assumptions?
 add_cli_test(system_data_directory PARAMETERS --system-data-directory PASS_FOR_OUTPUT "inkscape\n$")
