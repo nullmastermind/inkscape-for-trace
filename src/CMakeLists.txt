@@ -329,26 +329,26 @@ if(WIN32)
   configure_file(inkscape.rc ${CMAKE_BINARY_DIR}/src/inkview.rc)
   configure_file(inkscape-manifest.xml ${CMAKE_BINARY_DIR}/src/inkview-manifest.xml)
   list(APPEND view_SRC ${CMAKE_BINARY_DIR}/src/inkview.rc)
-  
-  # Build console applications as wrappers around inkscape/inkview.exe as GUI applications can't print to the console.
-  add_executable(inkscape_com winconsole.cpp)
+endif()
+
+# make executables for inkscape and inkview
+add_executable(inkscape ${main_SRC})
+add_executable(inkview ${view_SRC})
+if(WIN32)
+  # Make the same executables again, but this time as console application (GUI applications can't print to the console)
+  add_executable(inkscape_com ${main_SRC})
   set_target_properties(inkscape_com
                         PROPERTIES
                           LINK_FLAGS "-mconsole"
                           OUTPUT_NAME "inkscape"
                           SUFFIX ".com")
-  add_executable(inkview_com winconsole.cpp)
+  add_executable(inkview_com ${view_SRC})
   set_target_properties(inkview_com
                         PROPERTIES
                           LINK_FLAGS "-mconsole"
                           OUTPUT_NAME "inkview"
                           SUFFIX ".com")
 endif()
-
-# make executables for inkscape and inkview
-add_executable(inkscape ${main_SRC})
-add_executable(inkview ${view_SRC})
-
 
 
 set(INKSCAPE_TARGET_LIBS
@@ -384,6 +384,10 @@ target_link_libraries(inkscape_base PRIVATE ${INKSCAPE_TARGET_LIBS} PUBLIC ${INK
 # Link inkscape and inkview against inkscape_base
 target_link_libraries(inkscape inkscape_base)
 target_link_libraries(inkview inkscape_base)
+if(WIN32)
+    target_link_libraries(inkscape_com inkscape_base)
+    target_link_libraries(inkview_com inkscape_base)
+endif()
 
 
 

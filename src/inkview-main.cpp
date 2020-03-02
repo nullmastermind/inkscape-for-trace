@@ -14,11 +14,23 @@
  *
  */
 
+#ifdef _WIN32
+#include <windows.h> // SetConsoleOutputCP
+#include <fcntl.h> // _O_BINARY
+#endif
 
 #include "inkview-application.h"
 
 int main(int argc, char *argv[])
 {
+#ifdef _WIN32
+    // temporarily switch console encoding to UTF8 while Inkscape runs
+    // as everything else is a mess and it seems to work just fine
+    SetConsoleOutputCP(CP_UTF8);
+    fflush(stdout); // empty buffer, just to be safe (see warning in documentation for _setmode)
+    _setmode(_fileno(stdout), _O_BINARY); // binary mode seems required for this to work properly
+#endif
+
     auto application = InkviewApplication::create();
 
     return application->run(argc, argv);
