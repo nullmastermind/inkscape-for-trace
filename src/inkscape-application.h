@@ -152,6 +152,7 @@ public:
                                     bool add_to_recent = true, bool replace_empty = true);
     bool              destroy_window(InkscapeWindow* window);
     void              destroy_all();
+    void              print_action_list();
 
 protected:
     void on_startup()  override;

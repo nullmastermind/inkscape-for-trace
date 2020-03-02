@@ -1165,7 +1165,8 @@ template<class T>
 void
 ConcreteInkscapeApplication<T>::shell()
 {
-    std::cout << "Inkscape interactive shell mode. Type 'quit' to quit." << std::endl;
+    std::cout << "Inkscape interactive shell mode. Type 'action-list' to list all actions. " 
+              << "Type 'quit' to quit." << std::endl;
     std::cout << " Input of the form:" << std::endl;
     std::cout << " action1:arg1; action2;arg2; verb1; verb2; ..." << std::endl;
     if (!_with_gui) {
@@ -1264,12 +1265,7 @@ ConcreteInkscapeApplication<T>::on_handle_local_options(const Glib::RefPtr<Glib:
     }
 
     if (options->contains("action-list")) {
-        std::vector<Glib::ustring> actions = T::list_actions();
-        std::sort(actions.begin(), actions.end());
-        for (auto action : actions) {
-            std::cout << std::left << std::setw(20) << action
-                      << ":  " << _action_extra_data.get_tooltip_for_action(action) << std::endl;
-        }
+        T::activate_action("action-list");
         return EXIT_SUCCESS;
     }
 
@@ -1528,6 +1524,18 @@ ConcreteInkscapeApplication<Gtk::Application>::on_quit()
     }
     */
     quit();
+}
+
+template<class T>
+void
+ConcreteInkscapeApplication<T>::print_action_list()
+{
+    std::vector<Glib::ustring> actions = T::list_actions();
+    std::sort(actions.begin(), actions.end());
+    for (auto action : actions) {
+        std::cout << std::left << std::setw(20) << action
+                  << ":  " << _action_extra_data.get_tooltip_for_action(action) << std::endl;
+    }
 }
 
 //   ======================== macOS =============================
