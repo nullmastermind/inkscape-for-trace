@@ -169,6 +169,7 @@ int main(int argc, char *argv[])
 #elif defined _WIN32
     // temporarily switch console encoding to UTF8 while Inkscape runs
     // as everything else is a mess and it seems to work just fine
+    const unsigned int initial_cp = GetConsoleOutputCP();
     SetConsoleOutputCP(CP_UTF8);
     fflush(stdout); // empty buffer, just to be safe (see warning in documentation for _setmode)
     _setmode(_fileno(stdout), _O_BINARY); // binary mode seems required for this to work properly
@@ -176,11 +177,20 @@ int main(int argc, char *argv[])
 
     set_extensions_env();
 
+    int ret;
     if (gtk_init_check(NULL, NULL)) {
         g_set_prgname("org.inkscape.Inkscape");
-        return (ConcreteInkscapeApplication<Gtk::Application>::get_instance()).run(argc, argv);
-    } else
-        return (ConcreteInkscapeApplication<Gio::Application>::get_instance()).run(argc, argv);
+        ret = (ConcreteInkscapeApplication<Gtk::Application>::get_instance()).run(argc, argv);
+    } else {
+        ret = (ConcreteInkscapeApplication<Gio::Application>::get_instance()).run(argc, argv);
+    }
+
+#ifdef _WIN32
+    // switch back to initial console encoding
+    SetConsoleOutputCP(initial_cp);
+#endif
+
+    return ret;
 }
 
 /*
