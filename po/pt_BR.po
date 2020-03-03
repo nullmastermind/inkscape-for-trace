@@ -534,7 +534,6 @@ msgstr "Cera iridiscente"
 msgid "Waxy texture which keeps its iridescence through color fill change"
 msgstr "Textura de cera que mantem sua iridescência através da mudança da cor de preenchimento"
 
-
 #: ../share/filters/filters.svg.h:178
 msgid "Eroded Metal"
 msgstr "Metal erodido"
@@ -761,7 +760,7 @@ msgstr "Microscópio Eletrônico"
 
 #: ../share/filters/filters.svg.h:284
 msgid "Bevel, crude light, discoloration and glow like in electronic microscopy"
-msgstr "Relevo, luz simples, descoloração e incandescência microscópica"
+msgstr "Relevo, luz simples, descoloração e brilho eletrônico microscópico"
 
 #: ../share/filters/filters.svg.h:286
 msgid "Tartan"
