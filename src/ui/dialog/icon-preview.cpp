@@ -90,6 +90,8 @@ IconPreviewPanel::IconPreviewPanel() :
     UI::Widget::Panel("/dialogs/iconpreview", SP_VERB_VIEW_ICON_PREVIEW),
     desktop(nullptr),
     document(nullptr),
+    drawing(nullptr),
+    visionkey(0),
     timer(nullptr),
     renderTimer(nullptr),
     pending(false),
@@ -310,9 +312,17 @@ void IconPreviewPanel::setDocument( SPDocument *document )
 {
     if (this->document != document) {
         docModConn.disconnect();
-
+        if (drawing) {
+            this->document->getRoot()->invoke_hide(visionkey);
+            delete drawing;
+            drawing = nullptr;
+        }
         this->document = document;
         if (this->document) {
+            drawing = new Inkscape::Drawing();
+            visionkey = SPItem::display_key_new(1);
+            drawing->setRoot(this->document->getRoot()->invoke_show(*drawing, visionkey, SP_ITEM_SHOW_DISPLAY));
+
             if ( Inkscape::Preferences::get()->getBool("/iconpreview/autoRefresh", true) ) {
                 docModConn = this->document->connectModified(sigc::hide(sigc::mem_fun(this, &IconPreviewPanel::queueRefresh)));
             }
@@ -615,16 +625,10 @@ void IconPreviewPanel::renderPreview( SPObject* obj )
     g_message("%s setting up to render '%s' as the icon", getTimestr().c_str(), id );
 #endif // ICON_VERBOSE
 
-    Inkscape::Drawing drawing;
-
-    /* Create drawing items and set transform */
-    unsigned int visionkey = SPItem::display_key_new(1);
-    drawing.setRoot(doc->getRoot()->invoke_show( drawing, visionkey, SP_ITEM_SHOW_DISPLAY ));
-
     for ( int i = 0; i < numEntries; i++ ) {
         unsigned unused;
         int stride = cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, sizes[i]);
-        guchar * px = sp_icon_doc_icon( doc, drawing, id, sizes[i], unused);
+        guchar *px = sp_icon_doc_icon(doc, *drawing, id, sizes[i], unused);
 //         g_message( " size %d %s", sizes[i], (px ? "worked" : "failed") );
         if ( px ) {
             memcpy( pixMem[i], px, sizes[i] * stride );
@@ -638,7 +642,6 @@ void IconPreviewPanel::renderPreview( SPObject* obj )
     }
     updateMagnify();
 
-    doc->getRoot()->invoke_hide(visionkey);
     renderTimer->stop();
     minDelay = std::max( 0.1, renderTimer->elapsed() * 3.0 );
 #if ICON_VERBOSE
