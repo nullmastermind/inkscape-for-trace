@@ -229,7 +229,6 @@ void PaintServersDialog::load_sources()
     // Extract out paints from files in share/paint.
     for (auto &path : get_filenames(Inkscape::IO::Resource::PAINT, { ".svg" })) {
         SPDocument *document = SPDocument::createNewDoc(path.c_str(), FALSE);
-        Glib::ustring document_title = Glib::ustring(document->getRoot()->title());
 
         load_document(document);
     }
