@@ -12,6 +12,16 @@ error()   { echo -e "\e[1;31m\nError: ${1}\n\e[0m";  exit 1; }
 # reduce time required to install packages by disabling pacman's disk space checking
 sed -i 's/^CheckSpace/#CheckSpace/g' /etc/pacman.conf
 
+# if repo.msys2.org is unreachable, sort mirror lists by response time and use one of the remaining mirrors
+wget --no-verbose --tries=1 --timeout=10 repo.msys2.org 2> /dev/nul || {
+    warning "repo.msys2.org is unreachable; using a fall-back mirror"
+    for repo in msys ${MSYSTEM_PREFIX#/*}; do
+        echo $repo
+        grep -v .cn /etc/pacman.d/mirrorlist.$repo > /etc/pacman.d/mirrorlist.$repo.bak
+        rankmirrors --repo $repo /etc/pacman.d/mirrorlist.$repo.bak > /etc/pacman.d/mirrorlist.$repo
+    done
+}
+
 # remove Ada and ObjC compilers (they cause update conflicts, see https://github.com/msys2/MINGW-packages/issues/5434)
 pacman -R $MINGW_PACKAGE_PREFIX-gcc-{ada,objc} --noconfirm
 
@@ -40,7 +50,7 @@ wget -nv https://github.com/dejavu-fonts/dejavu-fonts/releases/download/version_
 message "--- Installing dependencies"
 source ../buildtools/msys2installdeps.sh
 pacman -S $MINGW_PACKAGE_PREFIX-{ccache,gtest,ntldd-git,ghostscript} $PACMAN_OPTIONS
- 
+
 export CCACHE_DIR=$(cygpath -a ccache)
 ccache --max-size=500M
 ccache --set-config=sloppiness=include_file_ctime,include_file_mtime
