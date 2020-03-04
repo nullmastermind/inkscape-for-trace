@@ -122,10 +122,8 @@ void SPShape::update(SPCtx* ctx, guint flags) {
     // Any update can change the bounding box,
     // so the cached version can no longer be used.
     // But the idle checker usually is just moving the objects around.
-    if (!(flags & SP_OBJECT_IDLE_UPDATE_CHECK)) {
-        bbox_vis_cache_is_valid = false;
-        bbox_geom_cache_is_valid = false;
-    }
+    bbox_vis_cache_is_valid = false;
+    bbox_geom_cache_is_valid = false;
 
     // std::cout << "SPShape::update(): " << (getId()?getId():"null") << std::endl;
     SPLPEItem::update(ctx, flags);

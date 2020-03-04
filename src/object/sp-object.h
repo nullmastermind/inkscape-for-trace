@@ -34,12 +34,9 @@ class SPObject;
 #define SP_OBJECT_USER_MODIFIED_FLAG_A (1 << 5)
 #define SP_OBJECT_USER_MODIFIED_FLAG_B (1 << 6)
 #define SP_OBJECT_USER_MODIFIED_FLAG_C (1 << 7)
-/* Set when updating objects during the idle handler to change
-   how caching should work during idle events. */
-#define SP_OBJECT_IDLE_UPDATE_CHECK (1 << 8)
 
 /* Convenience */
-#define SP_OBJECT_FLAGS_ALL 0x1ff
+#define SP_OBJECT_FLAGS_ALL 0xff
 
 /* Flags that mark object as modified */
 /* Object, Child, Style, Viewport, User */

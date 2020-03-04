@@ -1262,7 +1262,7 @@ gint SPDocument::ensureUpToDate()
 bool
 SPDocument::idle_handler()
 {
-    bool status = !_updateDocument(SP_OBJECT_IDLE_UPDATE_CHECK); // method TRUE if it does NOT need further modification, so invert
+    bool status = !_updateDocument(0); // method TRUE if it does NOT need further modification, so invert
     if (!status) {
         modified_connection.disconnect();
     }
