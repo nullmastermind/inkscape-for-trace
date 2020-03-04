@@ -90,9 +90,15 @@ InkFileExportCmd::do_export(SPDocument* doc, std::string filename_in)
 
     // Determine actual type(s) for export.
     if (export_use_hints) {
-        // "hack" for --export-hints (hints presume PNG export)
+        // Override type if --export-use-hints is used (hints presume PNG export for now)
+        // TODO: There's actually no reason to presume. We could allow to export to any format using hints!
+        if (export_id.empty() && !export_area_drawing) {
+            std::cerr << "InkFileExportCmd::do_export: "
+                      << "--export-use-hints can only be used with --export-id or --export-area-drawing." << std::endl;
+            return;
+        }
         if (export_type_list.size() > 1 || (export_type_list.size() == 1 && export_type_list[0] != "png")) {
-            std::cerr << "InkFileExportCmd::do_export: --export-hints can only be used with PNG export! "
+            std::cerr << "InkFileExportCmd::do_export: --export-use-hints can only be used with PNG export! "
                       << "Ignoring --export-type=" << export_type << "." << std::endl;
         }
         if (!export_filename.empty()) {
@@ -314,11 +320,6 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string filename_in)
 {
     bool filename_from_hint = false;
     gdouble dpi = 0.0;
-
-    if (export_use_hints && (export_id.empty() && !export_area_drawing)) {
-        std::cerr << "InkFileExportCmd: "
-                  << "--export-use-hints can only be used with --export-id or --export-area-drawing; ignored." << std::endl;;
-    }
 
     guint32 bgcolor = 0x00000000;
     if (!export_background.empty()) {

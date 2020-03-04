@@ -142,6 +142,14 @@ add_cli_test(export_text_to_path
                            INPUT_FILENAME text.svg OUTPUT_FILENAME text.svg
                            TEST_SCRIPT match_regex_fail.sh "text.svg" "<text")
 
+# --export-use-hints
+add_cli_test(export_hints1 PARAMETERS --export-use-hints --export-id=rect1 INPUT_FILENAME export_hints.svg
+                           PASS_FOR_OUTPUT "Area 10:10:90:70 exported to 103 x 77 pixels \\(123 dpi\\)"
+                           EXPECTED_FILES "${CMAKE_CURRENT_SOURCE_DIR}/testcases/export_hints_rectangle.png")
+add_cli_test(export_hints2 PARAMETERS --export-use-hints --export-area-drawing INPUT_FILENAME export_hints.svg
+                           PASS_FOR_OUTPUT "Area 10:10:180:70 exported to 197 x 69 pixels \\(111 dpi\\)"
+                           EXPECTED_FILES "${CMAKE_CURRENT_SOURCE_DIR}/testcases/export_hints_drawing.png")
+
 # test librevenge formats
 if(WITH_LIBCDR)
   # add_cli_test(import_cdr  PARAMETERS --export-type=png   # fails to open (regression in libcdr 1.6.0)

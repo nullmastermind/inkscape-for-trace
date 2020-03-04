@@ -958,7 +958,7 @@ ConcreteInkscapeApplication<T>::process_document(SPDocument* document, std::stri
         shell();
     }
 
-    // Only if --export-filename, --export-type, or --export-overwrite are used.
+    // Only if --export-filename, --export-type --export-overwrite, or --export-use-hints are used.
     if (_auto_export) {
         // Save... can't use action yet.
         _file_export.do_export(document, output_path);
@@ -1336,7 +1336,8 @@ ConcreteInkscapeApplication<T>::on_handle_local_options(const Glib::RefPtr<Glib:
     // Enable auto-export
     if (options->contains("export-filename")  ||
         options->contains("export-type")      ||
-        options->contains("export-overwrite")
+        options->contains("export-overwrite") ||
+        options->contains("export-use-hints")
         ) {
         _auto_export = true;
     }

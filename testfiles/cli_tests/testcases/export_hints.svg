@@ -1,0 +1,7 @@
+<!-- Note: inkscape:export-ydpi is actually ignored, see src/ui/dialog/export.cpp and src/io/file-export-cmd.cpp -->
+
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="190" height="80"
+     inkscape:export-filename="export_hints_drawing.png" inkscape:export-xdpi="111" inkscape:export-ydpi="222">
+  <rect id="rect1" x="10" y="10" width="80" height="60" fill="#00f" inkscape:export-filename="export_hints_rectangle.png" inkscape:export-xdpi="123" inkscape:export-ydpi="456"/>
+  <rect id="rect2" x="100" y="10" width="80" height="60" fill="#f00"/>
+</svg>
