@@ -16,7 +16,6 @@ sed -i 's/^CheckSpace/#CheckSpace/g' /etc/pacman.conf
 wget --no-verbose --tries=1 --timeout=10 repo.msys2.org 2> /dev/nul || {
     warning "repo.msys2.org is unreachable; using a fall-back mirror"
     for repo in msys ${MSYSTEM_PREFIX#/*}; do
-        echo $repo
         grep -v .cn /etc/pacman.d/mirrorlist.$repo > /etc/pacman.d/mirrorlist.$repo.bak
         rankmirrors --repo $repo /etc/pacman.d/mirrorlist.$repo.bak > /etc/pacman.d/mirrorlist.$repo
     done
@@ -93,7 +92,11 @@ INKSCAPE_DATADIR=inkscape_datadir bin/inkscape.exe -V >/dev/null || error "unins
 err=$(INKSCAPE_DATADIR=inkscape_datadir bin/inkscape.exe -V 2>&1 >/dev/null)
 if [ -n "$err" ]; then warning "uninstalled executable produces output on stderr:"; echo "$err"; fi
 # run tests
-ninja check || error "tests failed"
+ninja check || {
+    7z a testfiles.7z testfiles
+    appveyor PushArtifact testfiles.7z
+    error "tests failed"
+}
 
 message "##### BUILD SUCCESSFUL #####\n\n"
 
