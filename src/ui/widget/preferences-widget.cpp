@@ -903,9 +903,8 @@ void PrefOpenFolder::onRelatedButtonClickedCallback()
     Glib::spawn_async("", argv, Glib::SpawnFlags::SPAWN_SEARCH_PATH);
 #else
     gchar *path = g_filename_to_uri(relatedEntry->get_text().c_str(), NULL, NULL);
-    Glib::ustring xgd = "xdg-open ";
-    xgd += path;
-    system((xgd).c_str());
+    std::vector<std::string> argv = { "xdg-open", path };
+    Glib::spawn_async("", argv, Glib::SpawnFlags::SPAWN_SEARCH_PATH);
     g_free(path);
 #endif
 }
