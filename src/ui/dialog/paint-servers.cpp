@@ -430,8 +430,6 @@ void PaintServersDialog::on_item_activated(const Gtk::TreeModel::Path& path)
     Glib::ustring paint = (*iter)[columns->paint];
     Glib::RefPtr<Gdk::Pixbuf> pixbuf = (*iter)[columns->pixbuf];
     Glib::ustring document_title = (*iter)[columns->document];
-    Glib::ustring attribute = target_selected ? "fill:" : "stroke:";
-    Glib::ustring new_value(attribute + paint);
     SPDocument *document = document_map[document_title];
     SPObject *paint_server = document->getObjectById(id);
     SPDocument *document_target = desktop->getDocument();
@@ -466,45 +464,12 @@ void PaintServersDialog::on_item_activated(const Gtk::TreeModel::Path& path)
         items.insert(std::end(items), std::begin(current_items), std::end(current_items));
     }
 
-    static Glib::RefPtr<Glib::Regex> regex_url = Glib::Regex::create("url\\(#([A-z0-9\\-_\\.#])*\\)");
-
     for (auto item : items) {
-        // FIXME - maybe the item doesn't have that attribute
-        Glib::ustring style = item->getAttribute("style", nullptr);
-        int search_start = style.find(attribute, 0);
-        int search_end = style.find(";", search_start) - search_start;
-        Glib::ustring previous_value = style.substr(search_start + 5, search_end - 5);
-
-        // Set attribute for each selected item
-        style.replace(search_start, search_end, new_value);
-        item->setAttribute("style", style);
-
-        // Remove previous paint server, if it exists
-        if (regex_url->match(previous_value)) {
-            previous_value = previous_value.substr(4, previous_value.size() - 5);
-            std::vector<SPObject *> defs = desktop->getDocument()->getDefs()->childList(true);
-            auto it  = find_if(defs.begin(), defs.end(),
-                [&previous_value](const SPObject *obj) {return previous_value.compare(obj->getId());}
-            );
-
-            // Check if it actually exists
-            if (it != defs.end()) {
-                // linear and radial gradients reference another target gradient
-                // remove the target gradient only if it's not referenced by
-                // other elements
-                if (dynamic_cast<SPGradient *>(*it)) {
-                    if ((*it)->hrefList.size() && !(*it)->hrefList.front()->isReferenced()) {
-                        (*it)->hrefList.front()->deleteObject(true, true);
-                    }
-                }
-
-                // if no other elements reference this paint server, remove it
-                if (!(*it)->isReferenced()) {
-                    (*it)->deleteObject(true, true);
-                }
-            }
-        }
+        item->style->getFillOrStroke(target_selected)->read(paint.c_str());
+        item->updateRepr();
     }
+
+    document_target->collectOrphans();
 }
 
 std::vector<SPObject*> PaintServersDialog::extract_elements(SPObject* item)
@@ -537,4 +502,4 @@ std::vector<SPObject*> PaintServersDialog::extract_elements(SPObject* item)
   fill-column:99
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=2:tabstop=8:softtabstop=2:fileencoding=utf-8:textwidth=99 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
