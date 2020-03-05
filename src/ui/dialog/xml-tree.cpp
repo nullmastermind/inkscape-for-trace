@@ -845,9 +845,18 @@ void XmlTree::cmd_duplicate_node()
 void XmlTree::cmd_delete_node()
 {
     g_assert(selected_repr != nullptr);
+
+    Inkscape::XML::Node *parent = selected_repr->parent();
+
     sp_repr_unparent(selected_repr);
 
-    reinterpret_cast<SPObject *>(current_desktop->currentLayer())->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    if (parent) {
+        auto parentobject = current_document->getObjectByRepr(parent);
+        if (parentobject) {
+            parentobject->requestDisplayUpdate(SP_OBJECT_CHILD_MODIFIED_FLAG);
+        }
+    }
+
     DocumentUndo::done(current_document, SP_VERB_DIALOG_XML_EDITOR, Q_("Undo History / XML dialog|Delete node"));
 }
 
