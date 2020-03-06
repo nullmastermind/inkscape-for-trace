@@ -417,7 +417,7 @@ bool Layout::Calculator::_measureUnbrokenSpan(ParagraphInfo const &para,
             // with upright orientation (pre 1.44.0).
             font_instance *font = para.pango_items[span->end.iter_span->pango_item_index].font;
             double font_size = span->start.iter_span->font_size;
-            double glyph_h_advance = font_size * font->Advance(info->glyph, false);
+          //double glyph_h_advance = font_size * font->Advance(info->glyph, false);
             double glyph_v_advance = font_size * font->Advance(info->glyph, true );
 
             if (_block_progression == LEFT_TO_RIGHT || _block_progression == RIGHT_TO_LEFT) {

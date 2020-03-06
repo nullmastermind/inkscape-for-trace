@@ -66,7 +66,6 @@ guint32 hsv_to_rgb(double h, double s, double v) {
     double b = v;
 
     if (s != 0.0) {
-        double c = s * v;
         if (h == 1.0) h = 0.0;
         h *= 6.0;
 
@@ -615,7 +614,6 @@ ColorWheel::on_motion_notify_event(GdkEventMotion* event)
     const int height = allocation.get_height();
     double cx = width/2.0;
     double cy = height/2.0;
-    double r = std::min(cx, cy) * (1 - _ring_width);
 
     if (_mode == DRAG_H) {
 

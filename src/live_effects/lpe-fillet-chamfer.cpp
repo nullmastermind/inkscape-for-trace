@@ -390,7 +390,6 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
                 _pathvector_satellites->recalculateForNewPathVector(pathvres, satellite);
                 satellites = _pathvector_satellites->getSatellites();
                 write = true;
-                SPDesktop *desktop = SP_ACTIVE_DESKTOP;
             }
         }
         

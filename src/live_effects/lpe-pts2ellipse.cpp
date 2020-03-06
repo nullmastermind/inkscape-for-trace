@@ -204,7 +204,6 @@ void LPEPts2Ellipse::gen_perspective_frame_paths(Geom::PathVector &path_out, con
 {
     Geom::Point pts0[4] = { { -1.0, -1.0 }, { +1.0, -1.0 }, { +1.0, +1.0 }, { -1.0, +1.0 } };
     // five_pts.resize(4);
-    int h = 0;
     Geom::Affine affine2;
     // const double rot_angle = deg2rad(rot_axes); // negative for ccw rotation
     affine2 *= Geom::Rotate(-rot_angle);

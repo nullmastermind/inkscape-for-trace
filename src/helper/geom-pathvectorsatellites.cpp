@@ -205,8 +205,8 @@ void PathVectorSatellites::recalculateForNewPathVector(Geom::PathVector const pa
     Satellites satellites;
     bool found = false;
     //TODO evaluate fix on nodes at same position
-    size_t number_nodes = count_pathvector_nodes(pathv);
-    size_t previous_number_nodes = getTotalSatellites();
+    // size_t number_nodes = count_pathvector_nodes(pathv);
+    // size_t previous_number_nodes = getTotalSatellites();
     for (const auto & i : pathv) {
         std::vector<Satellite> path_satellites;
         size_t count = count_path_nodes(i);

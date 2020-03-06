@@ -842,7 +842,6 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
         return;
     }
     //Avoid crashes on previews
-    Inkscape::XML::Node *root = document->getReprRoot();
     Geom::Affine parentaffinetransform = i2anc_affine(SP_OBJECT(lpeitem->parent), SP_OBJECT(document->getRoot()));
     Geom::Affine affinetransform = i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(document->getRoot()));
     Geom::Affine itemtransform = affinetransform * parentaffinetransform.inverse();
@@ -889,7 +888,6 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
             std::sort (result.begin(), result.end());
             Geom::Path path;
             Geom::Point prevpoint(Geom::infinity(),Geom::infinity());
-            size_t counter = 0;
             bool started = false;
             Geom::Point point = Geom::Point();
             for (auto & iter : result) {

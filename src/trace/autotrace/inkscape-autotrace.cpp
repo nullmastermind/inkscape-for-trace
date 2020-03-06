@@ -38,13 +38,13 @@ extern "C" {
 
 using Glib::ustring;
 
-static void updateGui()
-{
-    //## Allow the GUI to update
-    Gtk::Main::iteration(false); // at least once, non-blocking
-    while (Gtk::Main::events_pending())
-        Gtk::Main::iteration();
-}
+// static void updateGui()
+// {
+//     //## Allow the GUI to update
+//     Gtk::Main::iteration(false); // at least once, non-blocking
+//     while (Gtk::Main::events_pending())
+//         Gtk::Main::iteration();
+// }
 
 namespace Inkscape {
 
@@ -63,7 +63,7 @@ static guchar* to_3channels(GdkPixbuf* input) {
             guchar alpha = *(pix + row * rs + col * 4 + 3);
             guchar white = 255 - alpha;
             for(int chan=0;chan<3;chan++) {
-                guchar *pnew = (pix + row * rs + col * 3 + chan);
+                // guchar *pnew = (pix + row * rs + col * 3 + chan);
                 guchar *pold = (pix + row * rs + col * 4 + chan);
                 out[x++] = (guchar)(((int)(*pold) * (int)alpha / 256) + white);
             }
@@ -120,7 +120,7 @@ std::vector<TracingEngineResult> AutotraceTracingEngine::trace(Glib::RefPtr<Gdk:
     
     at_splines_type *splines = at_splines_new_full(bitmap, opts, NULL, NULL, NULL, NULL, test_cancel, &keepGoing);
     // at_output_write_func wfunc = at_output_get_handler_by_suffix("svg");
-    at_spline_writer *wfunc = at_output_get_handler_by_suffix("svg");
+    // at_spline_writer *wfunc = at_output_get_handler_by_suffix("svg");
 
 
     int height = splines->height;

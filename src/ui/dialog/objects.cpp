@@ -799,7 +799,6 @@ bool ObjectsPanel::_selectItemCallback(const Gtk::TreeModel::iterator& iter, boo
 bool ObjectsPanel::_clearPrevSelectionState( const Gtk::TreeModel::iterator& iter) {
     Gtk::TreeModel::Row row = *iter;
     row[_model->_colPrevSelectionState] = false;
-    SPItem *item = row[_model->_colObject];
     return false;
 }
 
@@ -896,7 +895,7 @@ bool ObjectsPanel::_handleKeyEvent(GdkEventKey *event)
         return true;
 
     // handle events for the treeview
-    bool empty = _desktop->selection->isEmpty();
+    //  bool empty = _desktop->selection->isEmpty();
 
     switch (Inkscape::UI::Tools::get_latin_keyval(event)) {
         case GDK_KEY_Return:
@@ -2165,8 +2164,6 @@ ObjectsPanel::ObjectsPanel() :
     }
 
     //Set up the color selection dialog
-    GtkWidget *dlg = GTK_WIDGET(_colorSelectorDialog.gobj());
-
     _colorSelectorDialog.hide();
     _colorSelectorDialog.set_title (_("Select Highlight Color"));
     _colorSelectorDialog.set_border_width (4);

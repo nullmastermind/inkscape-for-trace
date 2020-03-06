@@ -152,7 +152,6 @@ LPEPowerMask::setMask(){
     if (!document || !mask) {
         return;
     }
-    Inkscape::XML::Node *root = document->getReprRoot();
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     Inkscape::XML::Node *box = nullptr;
     Inkscape::XML::Node *filter = nullptr;
@@ -315,8 +314,6 @@ void sp_inverse_powermask(Inkscape::Selection *sel) {
             if (lpeitem) {
                 SPMask *mask = lpeitem->getMaskObject();
                 if (mask) {
-                    Inkscape::XML::Document *xml_doc = document->getReprDoc();
-                    Inkscape::XML::Node *parent = mask->getRepr();
                     Effect::createAndApply(POWERMASK, SP_ACTIVE_DOCUMENT, lpeitem);
                     Effect* lpe = lpeitem->getCurrentLPE();
                     LPEPowerMask *powermask = dynamic_cast<LPEPowerMask *>(lpe);

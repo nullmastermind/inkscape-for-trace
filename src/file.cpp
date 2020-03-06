@@ -369,8 +369,8 @@ sp_file_open_dialog(Gtk::Window &parentWindow, gpointer /*object*/, gpointer /*d
     //# User selected something.  Get name and type
     Glib::ustring fileName = openDialogInstance->getFilename();
 
-    Inkscape::Extension::Extension *fileType =
-            openDialogInstance->getSelectionType();
+    // Inkscape::Extension::Extension *fileType =
+    //         openDialogInstance->getSelectionType();
 
     //# Code to check & open if multiple files.
     std::vector<Glib::ustring> flist = openDialogInstance->getFilenames();

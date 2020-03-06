@@ -73,7 +73,6 @@ void LPEFillBetweenMany::doEffect (SPCurve * curve)
     if (transf != Geom::identity()) {
         sp_lpe_item->doWriteTransform(Geom::identity());
     }
-    bool closedlink = false;
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     Inkscape::Selection *selection = nullptr;
     if (desktop) {

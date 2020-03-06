@@ -141,7 +141,7 @@ Geom::PathVector LPEDashedStroke::doEffect_path(Geom::PathVector const &path_in)
                 Geom::Path segment = path_it.portion(p_index, p_index + 1);
                 if(unifysegment) {
                     double integral;
-                    double fractional = modf((*curve_it1).length()/(dashsize_fixed + holesize_fixed), &integral);
+                    // double fractional = modf((*curve_it1).length()/(dashsize_fixed + holesize_fixed), &integral);
                     numberdashes_fixed = (size_t)integral + 1;
                     numberholes = numberdashes_fixed - 1;
                     ammount = numberdashes_fixed + numberholes;

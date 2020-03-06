@@ -130,7 +130,6 @@ void LPERoughen::doOnApply(SPLPEItem const *lpeitem)
             Glib::ustring displace_y_str = Glib::ustring::format((*bbox).height() / 100.0);
             Glib::ustring max_segment_size_str =
                 Glib::ustring::format(std::min((*bbox).height(), (*bbox).width()) / 100.0);
-            double height = (*bbox).height();
             if (!valid) {
                 if (strcmp(key, "method") == 0) {
                     param->param_readSVGValue("size");

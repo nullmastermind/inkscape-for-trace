@@ -1305,7 +1305,6 @@ namespace Widget {
       }
 
       // East Asian
-      bool default_variant = _asian_default_variant.get_active();
       bool jis78           = _asian_jis78.get_active();
       bool jis83           = _asian_jis83.get_active();
       bool jis90           = _asian_jis90.get_active();
@@ -1381,15 +1380,12 @@ namespace Widget {
       else if ( _caps_titling.get_active()    ) markup += "titl=1,";
 
       // Numeric
-      bool default_style = _numeric_default_style.get_active();
       bool lining        = _numeric_lining.get_active();
       bool old_style     = _numeric_old_style.get_active();
 
-      bool default_width = _numeric_default_width.get_active();
       bool proportional  = _numeric_proportional.get_active();
       bool tabular       = _numeric_tabular.get_active();
 
-      bool default_fractions = _numeric_default_fractions.get_active();
       bool diagonal          = _numeric_diagonal.get_active();
       bool stacked           = _numeric_stacked.get_active();
 
@@ -1406,14 +1402,13 @@ namespace Widget {
       if (slashed_zero)    markup += "zero=1,";
 
       // East Asian
-      bool default_variant = _asian_default_variant.get_active();
       bool jis78           = _asian_jis78.get_active();
       bool jis83           = _asian_jis83.get_active();
       bool jis90           = _asian_jis90.get_active();
       bool jis04           = _asian_jis04.get_active();
       bool simplified      = _asian_simplified.get_active();
       bool traditional     = _asian_traditional.get_active();
-      bool asian_width     = _asian_default_width.get_active();
+      //bool asian_width     = _asian_default_width.get_active();
       bool fwid            = _asian_full_width.get_active();
       bool pwid            = _asian_proportional_width.get_active();
       bool ruby            = _asian_ruby.get_active();

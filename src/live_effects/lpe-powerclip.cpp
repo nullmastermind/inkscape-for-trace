@@ -154,7 +154,6 @@ void LPEPowerClip::add()
                     Glib::ustring uri = Glib::ustring("url(#") + newclip + Glib::ustring(")");
                     parent = clip_path->getRepr()->duplicate(xml_doc);
                     parent->setAttribute("id", newclip);
-                    Inkscape::XML::Node *defs = clip_path->getRepr()->parent();
                     clip_path = SP_OBJECT(document->getDefs()->appendChildRepr(parent));
                     Inkscape::GC::release(parent);
                     sp_lpe_item->setAttribute("clip-path", uri);

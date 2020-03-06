@@ -689,7 +689,6 @@ KnotHolderEntityCrossingSwitcher::knot_click(guint state)
     unsigned s = lpe->selectedCrossing;
     if (s < lpe->crossing_points.size()){
         if (state & GDK_SHIFT_MASK){
-            int sign = lpe->crossing_points[s].sign;
             for (unsigned p = 0; p < lpe->crossing_points.size(); p++) {
                 lpe->crossing_points[p].sign = ((lpe->crossing_points[p].sign + 2) % 3) - 1;
             }

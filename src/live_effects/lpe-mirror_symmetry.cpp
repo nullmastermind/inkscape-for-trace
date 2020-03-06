@@ -89,7 +89,6 @@ LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem)
         return;
     }
     container = dynamic_cast<SPObject *>(sp_lpe_item->parent);
-    Inkscape::XML::Node *root = document->getReprRoot();
 
     if (split_items && !discard_orig_path) {
         Geom::Line ls((Geom::Point)start_point, (Geom::Point)end_point);
@@ -284,7 +283,7 @@ LPEMirrorSymmetry::cloneD(SPObject *orig, SPObject *dest, bool reset)
     if (!document) {
         return;
     }
-    Inkscape::XML::Document *xml_doc = document->getReprDoc();
+
     if ( SP_IS_GROUP(orig) && SP_IS_GROUP(dest) && SP_GROUP(orig)->getItemCount() == SP_GROUP(dest)->getItemCount() ) {
         if (reset) {
             cloneStyle(orig, dest);
@@ -434,7 +433,6 @@ LPEMirrorSymmetry::doOnApply (SPLPEItem const* lpeitem)
     end_point.param_update_default(point_b);
     center_point.param_setValue(point_c);
     previous_center = center_point;
-    SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeitem);
 }
 
 

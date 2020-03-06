@@ -358,7 +358,6 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         add(*_line_height_units_item);
     }
 
-    Gtk::SeparatorToolItem *separator = Gtk::manage(new Gtk::SeparatorToolItem());
     /* Alignment */
     {
         UI::Widget::ComboToolItemColumns columns;
@@ -963,7 +962,7 @@ TextToolbar::align_mode_changed(int mode)
     auto itemlist= selection->items();
     for (auto i : itemlist) {
         SPText *text = dynamic_cast<SPText *>(i);
-        SPFlowtext *flowtext = dynamic_cast<SPFlowtext *>(i);
+        // SPFlowtext *flowtext = dynamic_cast<SPFlowtext *>(i);
         if (text) {
             SPItem *item = i;
 
@@ -1264,7 +1263,6 @@ TextToolbar::lineheight_value_changed()
     Unit const *unit = _tracker->getActiveUnit();
     // @Tav same disabled unit
     g_return_if_fail(unit != nullptr);
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     // This nonsense is to get SP_CSS_UNIT_xx value corresponding to unit so
     // we can save it (allows us to adjust line height value when unit changes).
@@ -1828,7 +1826,6 @@ void TextToolbar::selection_changed(Inkscape::Selection *selection) // don't bot
     // Only flowed text can be justified, only normal text can be kerned...
     // Find out if we have flowed text now so we can use it several places
     gboolean isFlow = false;
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     std::vector<SPItem *> to_work;
     for (auto i : itemlist) {
         SPItem *item = dynamic_cast<SPItem *>(i);
@@ -2255,8 +2252,6 @@ void TextToolbar::prepare_inner()
     if (tc) {
         Inkscape::Text::Layout *layout = const_cast<Inkscape::Text::Layout *>(te_get_layout(tc->text));
         if (layout) {
-            Inkscape::Preferences   *prefs    = Inkscape::Preferences::get();
-            SPDesktop               *desktop  = SP_ACTIVE_DESKTOP;
             SPDocument              *doc      = SP_ACTIVE_DOCUMENT;
             SPObject                *spobject = dynamic_cast<SPObject   *>(tc->text);
             SPItem                  *spitem   = dynamic_cast<SPItem     *>(tc->text);
@@ -2277,7 +2272,7 @@ void TextToolbar::prepare_inner()
                         if (content != "\n") {
                             Inkscape::XML::Node *rstring = xml_doc->createTextNode(content.c_str());
                             Inkscape::XML::Node *rtspan  = xml_doc->createElement("svg:tspan");
-                            Inkscape::XML::Node *rnl     = xml_doc->createTextNode("\n");
+                            //Inkscape::XML::Node *rnl     = xml_doc->createTextNode("\n");
                             rtspan->setAttribute("sodipodi:role", "line");
                             rtspan->addChild(rstring, nullptr);
                             text->getRepr()->addChild(rtspan, child->getRepr());
@@ -2337,8 +2332,6 @@ void TextToolbar::prepare_inner()
             }
             containers.push_back(start);
             for (auto container : containers) {
-                //we store the parent style to apply to the childs unselected
-                const gchar * style = container->getRepr()->attribute("style");
                 Inkscape::XML::Node *prevchild = container->getRepr(); 
                 std::vector<SPObject*> childs = container->childList(false);
                 for (auto child : childs) {
@@ -2465,7 +2458,6 @@ void TextToolbar::subselection_changed(gpointer texttool)
             std::cout << "    ::::::::::::::::::::::::::::::::::::::::::::: " << std::endl;
 #endif
             gint startline = layout->paragraphIndex(start_selection);
-            gint endline   = layout->paragraphIndex(end_selection);
             if (start_selection == end_selection) {
                 this->_outer = true;
                 gint counter = 0;
