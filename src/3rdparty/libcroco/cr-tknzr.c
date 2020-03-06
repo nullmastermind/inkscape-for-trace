@@ -2538,7 +2538,7 @@ cr_tknzr_get_next_token (CRTknzr * a_this, CRToken ** a_tk)
                 /*process the fallback cases here */
 
                 if (next_char == '\\'
-                    || (cr_utils_is_nonascii (next_bytes[0]) == TRUE)
+                    || (cr_utils_is_nonascii (next_char) == TRUE)
                     || ((next_char >= 'a') && (next_char <= 'z'))
                     || ((next_char >= 'A') && (next_char <= 'Z'))) {
                         status = cr_tknzr_parse_ident (a_this, &str);
