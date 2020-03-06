@@ -152,6 +152,7 @@ set(object_SRC
   sp-root.h
   sp-script.h
   sp-shape.h
+  sp-shape-reference.h
   sp-solid-color.h
   sp-spiral.h
   sp-star.h

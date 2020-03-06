@@ -31,6 +31,8 @@
 #include "object/sp-filter.h"
 #include "object/sp-filter-reference.h"
 #include "object/sp-paint-server-reference.h"
+#include "object/sp-shape-reference.h"
+
 #include "object/uri.h"
 
 #include "svg/svg-icc-color.h"
@@ -661,11 +663,14 @@ class SPIShapes : public SPIString
 
 public:
     SPIShapes() = default;
-
+    ~SPIShapes() override;  // Clear and delete hrefs.
+    void hrefs_clear();
     void read( gchar const *str ) override;
 
 public:
     std::vector<Glib::ustring> shape_ids;
+    std::vector<SPShapeReference *> hrefs;
+    //std::vector<std::unique_ptr<SPShapeReference> > hrefs;
 };
 
 /// Color type internal to SPStyle, FIXME Add string value to store SVG named color.

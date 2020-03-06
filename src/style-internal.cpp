@@ -1284,6 +1284,21 @@ SPIString::operator==(const SPIBase& rhs) {
 
 // SPIShapes ------------------------------------------------------------
 
+SPIShapes::~SPIShapes() {
+    hrefs_clear();
+}
+
+void
+SPIShapes::hrefs_clear() {
+    for (auto href : hrefs) {
+        if (href->getObject()) {
+            href->detach(); // Decreases href count of shape.
+        }
+        delete href;
+    }
+    hrefs.clear();
+}
+
 // Used to add/remove listeners for text wrapped in shapes.
 // Note: this is done differently than for patterns, etc. where presentation attributes can be used.
 // 'shape-inside' and 'shape-subtract' are only properties.
@@ -1315,6 +1330,7 @@ SPIShapes::read( gchar const *str) {
         }
     }
     shape_ids.clear();
+    hrefs_clear();
 
     // Add new listeners
     std::vector<Glib::ustring> shapes_url = Glib::Regex::split_simple(" ", str);
@@ -1323,6 +1339,8 @@ SPIShapes::read( gchar const *str) {
         if ( shape_url.compare(0,5,"url(#") != 0 || shape_url.compare(shape_url.size()-1,1,")") != 0 ){
             std::cerr << "SPIShapes::read: Invalid shape value: " << shape_url << std::endl;
         } else {
+            auto uri = extract_uri(shape_url.c_str()); // Do before we erase "url(#"
+
             shape_url.erase(0,5);
             shape_url.erase(shape_url.size()-1,1);
 
@@ -1332,6 +1350,15 @@ SPIShapes::read( gchar const *str) {
             if (shape_object) {
                 Inkscape::XML::Node *shape_node = shape_object->getRepr();
                 shape_node->addListener(&text_shape_events, object);
+
+                // This ups the href count of the shape. This is required so that vacuuming a
+                // document does not delete shapes stored in <defs>. Since this is required, it
+                // might make sense to follow the filter or pattern pattern (no pun intended)
+                // rather than add the listner above.
+                SPShapeReference *href = new SPShapeReference(object);
+                // ref->changedSignal().connect(sigc::bind(sigc::ptr_func(sp_shape_ref_changed), style));
+                href->attach(Inkscape::URI(uri.c_str()));
+                hrefs.emplace_back(href);
             }
         }
     }

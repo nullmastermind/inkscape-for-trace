@@ -1670,7 +1670,10 @@ void SPObject::objectTrace( std::string text, bool in, unsigned flags ) {
 std::ostream &operator<<(std::ostream &out, const SPObject &o)
 {
     out << (o.getId()?o.getId():"No ID")
-        << " cloned: " << std::boolalpha << (bool)o.cloned;
+        << " cloned: " << std::boolalpha << (bool)o.cloned
+        << " ref: " << o.refCount
+        << " href: " << o.hrefcount
+        << " total href: " << o._total_hrefcount;
     return out;
 }
 /*
