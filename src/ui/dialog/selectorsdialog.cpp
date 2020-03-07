@@ -972,11 +972,13 @@ Glib::ustring SelectorsDialog::_getIdList(std::vector<SPObject *> sel)
 
     Glib::ustring str;
     for (auto& obj: sel) {
-        str += "#" + Glib::ustring(obj->getId()) + ", ";
-    }
-    if (!str.empty()) {
-        str.erase(str.size()-1); // Remove space at end. c++11 has pop_back() but not ustring.
-        str.erase(str.size()-1); // Remove comma at end.
+        char const *id = obj->getId();
+        if (id) {
+            if (!str.empty()) {
+                str.append(", ");
+            }
+            str.append("#").append(id);
+        }
     }
     return str;
 }
