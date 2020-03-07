@@ -1079,6 +1079,7 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
                             g->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
                             DocumentUndo::done( _desktop->doc() , SP_VERB_DIALOG_OBJECTS,
                                             newValue? _("Layer to group") : _("Group to layer"));
+                            _pushTreeSelectionToCurrent();
                         }
                     } /*else if (col == _tree.get_column(COL_INSERTORDER - 1)) {
                         if (SP_IS_GROUP(item))
