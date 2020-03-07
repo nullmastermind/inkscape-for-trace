@@ -1308,6 +1308,10 @@ void InkscapePreferences::initPageUI()
                             _("Same as Normal but may work better with some window managers"));
 #endif
 
+    // Dialogs suffer many problems on macOS. Better to keep things simple and not support
+    // semi-transparent windows. The slow transparency animation is perceived like a bug.
+    // See https://gitlab.com/inkscape/inkscape/issues/676
+#ifndef __APPLE__
     _page_windows.add_group_header( _("Dialog Transparency"));
     _win_trans_focus.init("/dialogs/transparency/on-focus", 0.5, 1.0, 0.01, 0.1, 1.0, false, false);
     _page_windows.add_line( true, _("_Opacity when focused:"), _win_trans_focus, "", "", false);
@@ -1315,6 +1319,7 @@ void InkscapePreferences::initPageUI()
     _page_windows.add_line( true, _("Opacity when _unfocused:"), _win_trans_blur, "", "", false);
     _win_trans_time.init("/dialogs/transparency/animate-time", 0, 1000, 10, 100, 100, true, false);
     _page_windows.add_line( true, _("_Time of opacity change animation:"), _win_trans_time, "ms", "", false);
+#endif
 
 
     _page_windows.add_group_header( _("Miscellaneous"));
