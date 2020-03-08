@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="120mm" height="105mm" version="1.1" viewBox="0 0 120 105" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+ xmlns="http://www.w3.org/2000/svg">
+  <rect x="15" y="15" width="50" height="30" rx="5" fill="royalblue" />
+  <path id="MyStar" d="m100.96 68.703-20.799-1.1756-12.76 16.461-5.3089-20.138-19.604-7.0445 17.518-11.27 0.64404-20.815 16.136 13.172 20.002-5.8198-7.5458 19.411z" fill="red" stroke-width="1.5" stroke="purple" />
+  <rect x="29" y="21" width="53" height="53" fill="yellow" fill-opacity="0.7" />
+  <path d="M 56,69 A 18,18 0 0 1 38,87 18,18 0 0 1 20,69 18,18 0 0 1 38,51 18,18 0 0 1 56,69 Z" fill="green" stroke-width="1" stroke="black" />
+  <rect id="MyRect" x="24.5" y="18.5" width="70" height="60" fill="none" inkscape:export-ydpi="600" inkscape:export-xdpi="600" inkscape:export-filename="export-use-hints.png"
+ />
+</svg>

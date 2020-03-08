@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="185px" height="100px">
+  <rect x="4.888" y="5.333" width="175" height="90"  fill="#fff" stroke="#000"      id="rect_misaligned" />
+
+  <rect x="10"    y="10"    width="80"  height="80"  fill="none"  stroke="#000"      id="rect_1" />
+  <rect x="15"    y="15"    width="70"  height="70"  fill="none"  stroke="#000"      id="rect_2" />
+  <rect x="20"    y="20"    width="60"  height="60"  fill="none"  stroke="#000"      id="rect_3" />
+  <rect x="25"    y="25"    width="50"  height="50"  fill="none"  stroke="#000"      id="rect_4" />
+  <rect x="30.5"  y="30.5"  width="40"  height="40"  fill="red"   fill-opacity="0.2" id="quad_1" /> 
+  <rect x="35.5"  y="35.5"  width="30"  height="30"  fill="red"   fill-opacity="0.2" id="quad_2" /> 
+  <rect x="40.5"  y="40.5"  width="20"  height="20"  fill="red"   fill-opacity="0.2" id="quad_3" /> 
+  <rect x="45.5"  y="45.5"  width="10"  height="10"  fill="red"   fill-opacity="0.2" id="quad_4" /> 
+
+  <rect x="95.5"  y="10.5"  width="80"  height="80"  fill="none"  stroke="#000"      id="rect_snapped_1" />
+  <rect x="100.5" y="15.5"  width="70"  height="70"  fill="none"  stroke="#000"      id="rect_snapped_2" />
+  <rect x="105.5" y="20.5"  width="60"  height="60"  fill="none"  stroke="#000"      id="rect_snapped_3" />
+  <rect x="110.5" y="25.5"  width="50"  height="50"  fill="none"  stroke="#000"      id="rect_snapped_4" />
+  <rect x="115"   y="30"    width="40"  height="40"  fill="green" fill-opacity="0.2" id="quad_snapped_1" /> 
+  <rect x="120"   y="35"    width="30"  height="30"  fill="green" fill-opacity="0.2" id="quad_snapped_2" /> 
+  <rect x="125"   y="40"    width="20"  height="20"  fill="green" fill-opacity="0.2" id="quad_snapped_3" /> 
+  <rect x="130"   y="45"    width="10"  height="10"  fill="green" fill-opacity="0.2" id="quad_snapped_4" /> 
+</svg>
