@@ -174,6 +174,8 @@ add_custom_target(check-license-headers WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} CO
 # -----------------------------------------------------------------------------
 # Test Harness
 # -----------------------------------------------------------------------------
+
+# find googletest
 find_package(GTest) # gtest 1.8.0 and later already include gmock
 if(GTEST_FOUND AND EXISTS "${GTEST_INCLUDE_DIR}/gmock" AND IS_DIRECTORY "${GTEST_INCLUDE_DIR}/gmock")
     set(GMOCK_PRESENT ON)
@@ -195,26 +197,41 @@ else()
         message("No gmock/gtest found! Perhaps you wish to run 'bash download-gtest.sh' to download it.")
     endif()
 endif()
+
+# set-up testing if googletest present
 if(GMOCK_PRESENT)
     enable_testing()
-    set(CMAKE_CTEST_COMMAND ctest -V)
-    if(WIN32)
-        set(CMAKE_CTEST_ENV INKSCAPE_DATADIR=${CMAKE_BINARY_DIR}/inkscape_datadir)
-    endif()
-    add_subdirectory(testfiles EXCLUDE_FROM_ALL)
-    add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} DEPENDS tests)
-    add_dependencies(check inkscape)
 
-    if(WIN32)
-        # create symlink "inkscape_datadir" to use as INKSCAPE_DATADIR
-        file(TO_NATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/share inkscape_share)
-        add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/inkscape_datadir
-            COMMAND mkdir inkscape_datadir
-            COMMAND mklink /D inkscape_datadir\\inkscape ${inkscape_share}
-        )
-        add_custom_target(inkscape_datadir_symlink DEPENDS ${CMAKE_BINARY_DIR}/inkscape_datadir)
-        add_dependencies(check inkscape_datadir_symlink)
+    # create symlink "inkscape_datadir" to use as INKSCAPE_DATADIR
+    # - ensures tests can be run without installing the project
+    # - also helpful for running Inkscape uninstalled: 'INKSVAPE_DATADIR=inkscape_datadir bin/inkscape'
+    set(INKSCAPE_DATADIR ${CMAKE_BINARY_DIR}/inkscape_datadir)
+    if(NOT EXISTS ${INKSCAPE_DATADIR}/inkscape)
+        set(link_source ${INKSCAPE_DATADIR}/inkscape)
+        set(link_target ${CMAKE_SOURCE_DIR}/share)
+        message(STATUS "Creating link '${link_source}' --> '${link_target}'")
+        execute_process(COMMAND mkdir inkscape_datadir)
+        execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${link_target} ${link_source}
+                        RESULT_VARIABLE result)
+        if(result)
+            message(WARNING "Creation of link failed: ${result}")
+        endif()
     endif()
+
+    if(EXISTS ${INKSCAPE_DATADIR}/inkscape)
+        set(CMAKE_CTEST_ENV INKSCAPE_DATADIR=${INKSCAPE_DATADIR})
+    else()
+        message(WARNING "Directory 'inkscape_datadir/inkscape' missing. Tests might not run properly.\n"
+                        "Possible solutions:\n"
+                        " - create a suitable symlink yourself, e.g.\n"
+                        "   ln -s ${CMAKE_SOURCE_DIR}/share ${INKSCAPE_DATADIR}/inkscape\n"
+                        " - run '${CMAKE_MAKE_PROGRAM} install' before running tests (only for not relocatable packages.\n"
+                        " - set the environment variable 'INKSCAPE_DATADIR' manually (every time you run tests)")
+    endif()
+
+    add_subdirectory(testfiles EXCLUDE_FROM_ALL)
+    add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} -V DEPENDS tests)
+    add_dependencies(check inkscape)
 endif()
 
 
