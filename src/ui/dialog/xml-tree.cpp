@@ -846,6 +846,8 @@ void XmlTree::cmd_delete_node()
 {
     g_assert(selected_repr != nullptr);
 
+    current_document->setXMLDialogSelectedObject(nullptr);
+
     Inkscape::XML::Node *parent = selected_repr->parent();
 
     sp_repr_unparent(selected_repr);
