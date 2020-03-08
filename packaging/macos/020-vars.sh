@@ -22,26 +22,22 @@ export MAKEFLAGS="-j $CORES"
 
 ### target OS version ##########################################################
 
-# Gtk support policy is to support operating system releases up to 5 years
-# back. See https://gitlab.gnome.org/GNOME/gtk-osx/blob/master/README.md
-#
-# gtk 3.24.13 does not build with 10.10 SDK
-# (undeclared identifier NSWindowCollectionBehaviorFullScreenDisallowsTiling)
-
-# The current setup is
+# The current build setup is
 #   - Xcode 11.3.1
 #   - OS X El Capitan 10.11 SDK (part of Xcode 7.3.1)
 #   - macOS Mojave 10.14.6
+
 export MACOSX_DEPLOYMENT_TARGET=10.11
-export SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX${MACOSX_DEPLOYMENT_TARGET}.sdk
+[ -z $SDKROOT_DIR ] && SDKROOT_DIR=/Library/Developer/CommandLineTools/SDKs
+export SDKROOT=$SDKROOT_DIR/MacOSX${MACOSX_DEPLOYMENT_TARGET}.sdk
 
 ### build system/toolset version ###############################################
 
-TOOLSET_VERSION=0.30
+TOOLSET_VERSION=0.31
 
 ### ramdisk ####################################################################
 
-# Using the toolset dmg, a small writable overlay required.
+# Using the toolset dmg, a small writable overlay is required.
 OVERLAY_RAMDISK_SIZE=2   # unit is GiB
 
 ### toolset root directory #####################################################
@@ -145,7 +141,7 @@ URL_GDL=https://gitlab.gnome.org/GNOME/gdl/-/archive/9f11ad3ca8cef85b075419b3003
 URL_GHOSTSCRIPT=https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs950/ghostscript-9.50.tar.gz
 URL_GSL=http://ftp.fau.de/gnu/gsl/gsl-2.6.tar.gz
 URL_GTK_MAC_BUNDLER=https://github.com/dehesselle/gtk-mac-bundler/archive/f96a9daf2236814af7ace7a2fa91bbfb4f077779.tar.gz
-URL_GTK_OSX=https://raw.githubusercontent.com/dehesselle/gtk-osx/inkscape
+URL_GTK_OSX=https://raw.githubusercontent.com/dehesselle/gtk-osx/inkscape-1.0.x-1
 URL_GTK_OSX_SETUP=$URL_GTK_OSX/gtk-osx-setup.sh
 URL_GTK_OSX_MODULESET=$URL_GTK_OSX/modulesets-stable/gtk-osx.modules
 URL_IMAGEMAGICK=https://github.com/ImageMagick/ImageMagick6/archive/6.9.10-89.tar.gz

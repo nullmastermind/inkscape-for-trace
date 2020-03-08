@@ -51,11 +51,4 @@ ln -s $(pwd)/png2icns.sh $BIN_DIR
 
 save_file $URL_PYTHON3_BIN
 
-### copy a charset.alias to lib for gtk-mac-bundler ############################
-
-# This wasn't necessary before, but since recent gtk-osx upstream updates,
-# whatever package did install the file in LIB_DIR, isn't doing it any longer.
-
-cp $TMP_DIR/jhbuild/build/pkg-config-*/glib/glib/libcharset/charset.alias $LIB_DIR
-
 # vim: expandtab:shiftwidth=2:tabstop=2:softtabstop=2 :
