@@ -270,9 +270,6 @@ protected:
     UI::Widget::PrefCheckButton _win_hide_task;
     UI::Widget::PrefCheckButton _win_save_viewport;
     UI::Widget::PrefCheckButton _win_zoom_resize;
-    UI::Widget::PrefSpinButton _win_trans_focus; /**< The dialog transparency setting for when the dialog is focused. */
-    UI::Widget::PrefSpinButton _win_trans_blur;  /**< The dialog transparency setting for when the dialog is out of focus. */
-    UI::Widget::PrefSpinButton _win_trans_time;  /**< How much time to go from one transparency setting to another */
 
     UI::Widget::PrefCheckButton _pencil_average_all_sketches;
 

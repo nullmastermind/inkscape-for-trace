@@ -235,10 +235,6 @@ R"=====(
     <group id="input" />
     <group id="colorpickerwindow" />
     <group id="undo-history" />
-    <group id="transparency"
-       on-focus="1.0"
-       on-blur="0.50"
-       animate-time="100" />
   </group>
   <group id="printing">
     <settings id="ps"/>

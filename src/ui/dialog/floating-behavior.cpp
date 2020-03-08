@@ -40,34 +40,6 @@ FloatingBehavior::FloatingBehavior(Dialog &dialog) :
     signal_delete_event().connect(sigc::mem_fun(_dialog, &Inkscape::UI::Dialog::Dialog::_onDeleteEvent));
 
     sp_transientize(GTK_WIDGET(_d->gobj()));
-
-    // Dialogs suffer many problems on macOS. Better to keep things simple and not support
-    // semi-transparent windows. The slow transparency animation is perceived like a bug.
-    // See https://gitlab.com/inkscape/inkscape/issues/676
-#ifndef __APPLE__
-
-    // install CSS to control focused/unfocused opacity and transition time
-    // TODO: currently needs a restart (but seems reasonable, considering anybody will hardly ever change these)
-    // TODO: Do we even need all of this cruft? Three preferences to control dialog opacity seem like overkill.
-    static auto provider = Gtk::CssProvider::create();
-    static bool provider_added = false;
-    if (!provider_added) {
-        auto const screen = Gdk::Screen::get_default();
-        Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-        provider_added = true;
-    }
-
-    _d->set_name("inkscape_floating_dialog");
-    std::string css_str = Glib::ustring::compose("#inkscape_floating_dialog {"
-                                                 "    transition: opacity %1s ease-out;"
-                                                 "    opacity: %2;"
-                                                 "}"
-                                                 "#inkscape_floating_dialog:backdrop {"
-                                                 "    opacity: %3;"
-                                                 "}",
-                                                 (double)_trans_time / 1000, _trans_focus, _trans_blur);
-    provider->load_from_data(css_str);
-#endif
 }
 
 FloatingBehavior::~FloatingBehavior()
