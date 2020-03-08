@@ -57,8 +57,7 @@ Dock::Dock(Gtk::Orientation orientation)
     _paned->set_name("DockBoxPane");
     // transfer ownership of `_gdl_dock` to `_paned` with `manage()`
     _paned->pack1(*Gtk::manage(Glib::wrap(GTK_WIDGET(_gdl_dock))), false,  false);
-    _paned->pack2(_filler,                            true,   false);
-    //                                                resize, shrink
+    _paned->pack2(_filler, /* resize */ false, /* shrink */ true);
 
     _dock_box = Gtk::manage(new Gtk::Box(orientation == Gtk::ORIENTATION_HORIZONTAL ?
                                          Gtk::ORIENTATION_VERTICAL : Gtk::ORIENTATION_HORIZONTAL));
