@@ -505,12 +505,9 @@ bool NodeTool::root_handler(GdkEvent* event) {
     case GDK_MOTION_NOTIFY: {
         sp_update_helperpath();
         SPItem *over_item = nullptr;
-        if (!desktop->canvas->_scrooling || MOD__CTRL(event) || MOD__SHIFT(event) || MOD__ALT(event)) {
-            desktop->canvas->_scrooling = false;
-            combine_motion_events(desktop->canvas, event->motion, 0);
-            over_item = sp_event_context_find_item(desktop, event_point(event->button), FALSE, TRUE);
-        }
-
+        combine_motion_events(desktop->canvas, event->motion, 0);
+        over_item = sp_event_context_find_item(desktop, event_point(event->button), FALSE, TRUE);
+        
         Geom::Point const motion_w(event->motion.x, event->motion.y);
         Geom::Point const motion_dt(this->desktop->w2d(motion_w));
 

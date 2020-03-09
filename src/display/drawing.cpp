@@ -143,12 +143,14 @@ Drawing::cacheLimit() const
     return _cache_limit;
 }
 void
-Drawing::setCacheLimit(Geom::OptIntRect const &r)
+Drawing::setCacheLimit(Geom::OptIntRect const &r, bool update_cache)
 {
     _cache_limit = r;
-    for (auto _cached_item : _cached_items)
-    {
-        _cached_item->_markForUpdate(DrawingItem::STATE_CACHE, false);
+    if (update_cache) {
+        for (auto _cached_item : _cached_items)
+        {
+            _cached_item->_markForUpdate(DrawingItem::STATE_CACHE, false);
+        }
     }
 }
 void

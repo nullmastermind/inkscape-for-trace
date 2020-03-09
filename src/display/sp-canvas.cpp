@@ -1017,7 +1017,6 @@ static void sp_canvas_init(SPCanvas *canvas)
     canvas->_changecursor = 0;
     canvas->_splits = 0;
     canvas->_totalelapsed = 0;
-    canvas->_scrooling = false;
     canvas->_idle_time = g_get_monotonic_time();
     canvas->_is_dragging = false;
 
@@ -2554,7 +2553,6 @@ gint SPCanvas::idle_handler(gpointer data)
     }
     if (ret) {
         // Reset idle id
-        canvas->_scrooling = false;
         now = g_get_monotonic_time();
         elapsed = now - canvas->_idle_time;
         canvas->_totalelapsed += elapsed;
@@ -2582,7 +2580,6 @@ gint SPCanvas::idle_handler(gpointer data)
     if (ret) {
         // Reset idle id
         canvas->_idle_id = 0;
-        canvas->_scrooling = false;
     }
 #endif
     return !ret;
@@ -2705,8 +2702,12 @@ void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrol
         cairo_region_intersect_rectangle(_clean_region, &crect);
     }
 
-    if (SP_CANVAS_ITEM_GET_CLASS(_root)->viewbox_changed) {
-        SP_CANVAS_ITEM_GET_CLASS(_root)->viewbox_changed(_root, new_area);
+    SPCanvasArena *arena = SP_CANVAS_ARENA(desktop->drawing);
+    if (arena) {
+        Geom::IntRect expanded = new_area;
+        Geom::IntPoint expansion(new_area.width()/2, new_area.height()/2);
+        expanded.expandBy(expansion);
+        arena->drawing.setCacheLimit(expanded, false);
     }
 
     if (!clear) {
@@ -2727,7 +2728,6 @@ void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrol
                         }
                     }
                 }
-                canvas->_scrooling = true;
                 gdk_window_scroll(getWindow(this), -dx, -dy);
             }
         }
