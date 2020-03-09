@@ -175,63 +175,16 @@ add_custom_target(check-license-headers WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} CO
 # Test Harness
 # -----------------------------------------------------------------------------
 
-# find googletest
-find_package(GTest) # gtest 1.8.0 and later already include gmock
-if(GTEST_FOUND AND EXISTS "${GTEST_INCLUDE_DIR}/gmock" AND IS_DIRECTORY "${GTEST_INCLUDE_DIR}/gmock")
-    set(GMOCK_PRESENT ON)
-else()
-    unset(GTEST_FOUND)
-    if(NOT GMOCK_DIR)
-        find_path(GMOCK_DIR
-              NAMES src/gmock.cc
-              PATHS "$ENV{GMOCK_DIR}"
-                "/usr/src/googletest/googlemock"
-                    "/usr/src/gmock"
-                "${CMAKE_SOURCE_DIR}/gtest/gtest/googlemock"
-             )
-    endif(NOT GMOCK_DIR)
-    if(EXISTS "${GMOCK_DIR}" AND IS_DIRECTORY "${GMOCK_DIR}")
-        set(GMOCK_PRESENT ON)
+include(CTest)
+if(BUILD_TESTING)
+    find_package(GTest)
+    if(GTEST_FOUND)
+        add_subdirectory(testfiles EXCLUDE_FROM_ALL)
     else()
-        set(GMOCK_PRESENT OFF)
-        message("No gmock/gtest found! Perhaps you wish to run 'bash download-gtest.sh' to download it.")
+        set(BUILD_TESTING OFF)
+        message(WARNING "No gtest found! Disabling testing...\n"
+                        "Consider installing it via package manager (install 'libgtest-dev' or equivalent).")
     endif()
-endif()
-
-# set-up testing if googletest present
-if(GMOCK_PRESENT)
-    enable_testing()
-
-    # create symlink "inkscape_datadir" to use as INKSCAPE_DATADIR
-    # - ensures tests can be run without installing the project
-    # - also helpful for running Inkscape uninstalled: 'INKSVAPE_DATADIR=inkscape_datadir bin/inkscape'
-    set(INKSCAPE_DATADIR ${CMAKE_BINARY_DIR}/inkscape_datadir)
-    if(NOT EXISTS ${INKSCAPE_DATADIR}/inkscape)
-        set(link_source ${INKSCAPE_DATADIR}/inkscape)
-        set(link_target ${CMAKE_SOURCE_DIR}/share)
-        message(STATUS "Creating link '${link_source}' --> '${link_target}'")
-        execute_process(COMMAND mkdir inkscape_datadir)
-        execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${link_target} ${link_source}
-                        RESULT_VARIABLE result)
-        if(result)
-            message(WARNING "Creation of link failed: ${result}")
-        endif()
-    endif()
-
-    if(EXISTS ${INKSCAPE_DATADIR}/inkscape)
-        set(CMAKE_CTEST_ENV INKSCAPE_DATADIR=${INKSCAPE_DATADIR})
-    else()
-        message(WARNING "Directory 'inkscape_datadir/inkscape' missing. Tests might not run properly.\n"
-                        "Possible solutions:\n"
-                        " - create a suitable symlink yourself, e.g.\n"
-                        "   ln -s ${CMAKE_SOURCE_DIR}/share ${INKSCAPE_DATADIR}/inkscape\n"
-                        " - run '${CMAKE_MAKE_PROGRAM} install' before running tests (only for not relocatable packages.\n"
-                        " - set the environment variable 'INKSCAPE_DATADIR' manually (every time you run tests)")
-    endif()
-
-    add_subdirectory(testfiles EXCLUDE_FROM_ALL)
-    add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} -V DEPENDS tests)
-    add_dependencies(check inkscape)
 endif()
 
 
@@ -316,7 +269,6 @@ endif()
 message("ENABLE_LCMS:             ${ENABLE_LCMS}")
 message("ENABLE_POPPLER:          ${ENABLE_POPPLER}")
 message("ENABLE_POPPLER_CAIRO:    ${ENABLE_POPPLER_CAIRO}")
-message("GMOCK_PRESENT:           ${GMOCK_PRESENT}")
 message("WITH_GNU_READLINE:       ${WITH_GNU_READLINE}")
 message("WITH_DBUS:               ${WITH_DBUS}")
 message("WITH_GTKSPELL:           ${WITH_GTKSPELL}")
@@ -327,8 +279,10 @@ message("WITH_LIBVISIO:           ${WITH_LIBVISIO}")
 message("WITH_LIBWPG:             ${WITH_LIBWPG}")
 message("WITH_NLS:                ${WITH_NLS}")
 message("WITH_OPENMP:             ${WITH_OPENMP}")
-message("WITH_PROFILING:          ${WITH_PROFILING}")
 message("WITH_JEMALLOC:           ${WITH_JEMALLOC}")
+
+message("WITH_PROFILING:          ${WITH_PROFILING}")
+message("BUILD_TESTING:           ${BUILD_TESTING}")
 
 if(WIN32)
 message("")
