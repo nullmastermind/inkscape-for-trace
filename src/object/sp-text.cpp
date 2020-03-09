@@ -37,6 +37,7 @@
 #include "document.h"
 #include "preferences.h"
 #include "desktop.h"
+#include "desktop-style.h"
 #include "sp-namedview.h"
 #include "inkscape.h"
 #include "xml/quote.h"
@@ -1142,13 +1143,24 @@ SPItem *create_text_with_rectangle (SPDesktop *desktop, Geom::Point p0, Geom::Po
     // Add rectangle to defs.
     defs_repr->addChild(rect_repr, nullptr);
 
+    // Apply desktop style (do before adding "shape-inside").
+    sp_desktop_apply_style_tool(desktop, text_repr, "/tools/text", true);
+    SPCSSAttr *css = sp_repr_css_attr(text_repr, "style" );
+    Geom::Affine const local(text_object->i2doc_affine());
+    double const ex(local.descrim());
+    if ( (ex != 0.0) && (ex != 1.0) ) {
+        sp_css_attr_scale(css, 1/ex);
+    }
+
+    sp_repr_css_set_property (css, "white-space", "pre");  // Respect new lines.
+
     // Link rectangle to text
     std::string value("url(#");
     value += rect_repr->attribute("id");
     value += ")";
-    SPCSSAttr* css = sp_repr_css_attr (text_repr, "style");
     sp_repr_css_set_property (css, "shape-inside", value.c_str());
     sp_repr_css_set(text_repr, css, "style");
+
     sp_repr_css_attr_unref(css);
 
     /* Create <tspan> */

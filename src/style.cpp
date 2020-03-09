@@ -535,9 +535,6 @@ SPStyle::clear() {
         filter.href = nullptr;
     }
 
-    shape_inside.hrefs_clear();
-    shape_subtract.hrefs_clear();
-
     if (document) {
         filter.href = new SPFilterReference(document);
         filter.href->changedSignal().connect(sigc::bind(sigc::ptr_fun(sp_style_filter_ref_changed), this));

@@ -660,23 +660,9 @@ bool TextTool::root_handler(GdkEvent* event) {
 
                             SPItem *text = create_text_with_rectangle (desktop, this->p0, p1);
 
-                            /* Get "shape-inside" */
-                            auto shape_inside = text->style->shape_inside;
-
-                            /* Set style */
-                            sp_desktop_apply_style_tool(desktop, text->getRepr(), "/tools/text", true);
-                            SPCSSAttr *css = sp_repr_css_attr(text->getRepr(), "style" );
-                            Geom::Affine const local(text->i2doc_affine());
-                            double const ex(local.descrim());
-                            if ( (ex != 0.0) && (ex != 1.0) ) {
-                                sp_css_attr_scale(css, 1/ex);
-                            }
-                            sp_repr_css_set_property (css, "shape-inside", shape_inside.value()); // Restore (over-written by desktop style).
-                            sp_repr_css_set_property (css, "white-space", "pre");                 // Respect new lines.
-                            text->setCSS(css,"style");
-                            sp_repr_css_attr_unref(css);
-
                             desktop->getSelection()->set(text);
+                            SPCSSAttr *css = sp_repr_css_attr(text->getRepr(), "style" );
+                            sp_repr_css_attr_unref(css);
 
                         } else {
                             // SVG 1.2 text

@@ -662,10 +662,10 @@ class SPIShapes : public SPIString
 {
 
 public:
-    SPIShapes() = default;
-    ~SPIShapes() override;  // Clear and delete hrefs.
-    void hrefs_clear();
+    SPIShapes();
+    SPIShapes(const SPIShapes &) = delete; // Copying causes problems with hrefs.
     void read( gchar const *str ) override;
+    void clear() override;
 
 public:
     std::vector<Glib::ustring> shape_ids;
