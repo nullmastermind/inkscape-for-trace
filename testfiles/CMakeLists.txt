@@ -67,13 +67,14 @@ set(TEST_LIBS
 add_library(cpp_test_object_library OBJECT unittest.cpp doc-per-case-test.cpp)
 
 add_custom_target(tests)
-foreach(source ${TEST_SOURCES})
-    add_executable(${source} src/${source}.cpp $<TARGET_OBJECTS:cpp_test_object_library>)
-    target_include_directories(${source} SYSTEM PRIVATE ${GTEST_INCLUDE_DIRS})
-    target_link_libraries(${source} ${TEST_LIBS})
-    add_test(NAME ${source} COMMAND ${source})
-    set_tests_properties(${source} PROPERTIES ENVIRONMENT "${CMAKE_CTEST_ENV}")
-    add_dependencies(tests ${source})
+foreach(test_source ${TEST_SOURCES})
+    string(REPLACE "-test" "" testname "test_${test_source}")
+    add_executable(${testname} src/${test_source}.cpp $<TARGET_OBJECTS:cpp_test_object_library>)
+    target_include_directories(${testname} SYSTEM PRIVATE ${GTEST_INCLUDE_DIRS})
+    target_link_libraries(${testname} ${TEST_LIBS})
+    add_test(NAME ${testname} COMMAND ${testname})
+    set_tests_properties(${testname} PROPERTIES ENVIRONMENT "${CMAKE_CTEST_ENV}")
+    add_dependencies(tests ${testname})
 endforeach()
 
 
