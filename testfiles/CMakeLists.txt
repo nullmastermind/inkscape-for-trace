@@ -64,9 +64,11 @@ set(TEST_LIBS
     ${GTEST_LIBRARIES}
     inkscape_base)
 
+add_library(cpp_test_object_library OBJECT unittest.cpp doc-per-case-test.cpp)
+
 add_custom_target(tests)
 foreach(source ${TEST_SOURCES})
-    add_executable(${source} src/${source}.cpp unittest.cpp doc-per-case-test.cpp)
+    add_executable(${source} src/${source}.cpp $<TARGET_OBJECTS:cpp_test_object_library>)
     target_include_directories(${source} SYSTEM PRIVATE ${GTEST_INCLUDE_DIRS})
     target_link_libraries(${source} ${TEST_LIBS})
     add_test(NAME ${source} COMMAND ${source})
