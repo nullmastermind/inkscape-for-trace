@@ -177,8 +177,6 @@ private:
     void _attrtoggler();
     void _toggleDirection(Gtk::RadioButton *vertical);
     void _resized();
-    void _childresized();
-    void _panedresized(Gtk::Allocation allocation);
     bool in_dt_coordsys(SPObject const &item);
 
     /**
