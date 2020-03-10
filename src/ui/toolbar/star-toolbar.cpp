@@ -72,7 +72,7 @@ StarToolbar::StarToolbar(SPDesktop *desktop) :
     add(*_mode_item);
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool isFlatSided = prefs->getBool("/tools/shapes/star/isflatsided", true);
+    bool isFlatSided = prefs->getBool("/tools/shapes/star/isflatsided", false);
 
     /* Flatsided checkbox */
     {
@@ -510,7 +510,7 @@ StarToolbar::event_attr_changed(Inkscape::XML::Node *repr, gchar const *name,
     toolbar->_freeze = true;
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool isFlatSided = prefs->getBool("/tools/shapes/star/isflatsided", true);
+    bool isFlatSided = prefs->getBool("/tools/shapes/star/isflatsided", false);
 
     if (!strcmp(name, "inkscape:randomized")) {
         double randomized = 0.0;
