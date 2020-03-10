@@ -28,6 +28,8 @@
 #include "display/sp-canvas.h"
 #include "ui/widget/style-subject.h"
 
+constexpr double BLUR_MULTIPLIER = 4.0;
+
 namespace Inkscape {
 namespace UI {
 namespace Widget {
@@ -98,7 +100,8 @@ ObjectCompositeSettings::_blendBlurValueChanged()
     double radius;
     if (bbox) {
         double perimeter = bbox->dimensions()[Geom::X] + bbox->dimensions()[Geom::Y];   // fixme: this is only half the perimeter, is that correct?
-        radius = _filter_modifier.get_blur_value() * perimeter / 400;
+        double blur_value = _filter_modifier.get_blur_value() / 100.0;
+        radius = blur_value * blur_value * perimeter / BLUR_MULTIPLIER;
     } else {
         radius = 0;
     }
@@ -284,7 +287,7 @@ ObjectCompositeSettings::_subjectChanged() {
                     bbox->dimensions()[Geom::Y]; // fixme: this is only half the perimeter, is that correct?
                 // update blur widget value
                 float radius = query.filter_gaussianBlur_deviation.value;
-                float percent = radius * 400 / perimeter; // so that for a square, 100% == half side
+                float percent = std::sqrt(radius * BLUR_MULTIPLIER / perimeter) * 100;
                 _filter_modifier.set_blur_value(percent);
             }
             break;
