@@ -34,6 +34,13 @@ else()
 endif()
 
 
+# Set custom profile directory for tests using environment variable.
+# Copy CTestCustom.cmake into binary dir, where it will be picked up automatically by ctest for cleanup.
+set(INKSCAPE_TEST_PROFILE_DIR ${CMAKE_CURRENT_BINARY_DIR}/test_profile_dir)
+set(INKSCAPE_TEST_PROFILE_DIR_ENV INKSCAPE_PROFILE_DIR=${INKSCAPE_TEST_PROFILE_DIR})
+configure_file(CTestCustom.cmake.in ${CMAKE_BINARY_DIR}/CTestCustom.cmake)
+
+
 
 ### tests using gtest
 include_directories("${CMAKE_SOURCE_DIR}/src/3rdparty/adaptagrams") # TODO: remove this hack
@@ -73,7 +80,7 @@ foreach(test_source ${TEST_SOURCES})
     target_include_directories(${testname} SYSTEM PRIVATE ${GTEST_INCLUDE_DIRS})
     target_link_libraries(${testname} ${TEST_LIBS})
     add_test(NAME ${testname} COMMAND ${testname})
-    set_tests_properties(${testname} PROPERTIES ENVIRONMENT "${CMAKE_CTEST_ENV}")
+    set_tests_properties(${testname} PROPERTIES ENVIRONMENT "${INKSCAPE_TEST_PROFILE_DIR_ENV}/${testname};${CMAKE_CTEST_ENV}")
     add_dependencies(tests ${testname})
 endforeach()
 

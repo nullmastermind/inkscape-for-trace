@@ -37,8 +37,15 @@ function(add_cli_test name)
         set(ARG_INPUT_FILENAME "${CMAKE_CURRENT_SOURCE_DIR}/testcases/${ARG_INPUT_FILENAME}")
         set(ARG_PARAMETERS ${ARG_PARAMETERS} ${ARG_INPUT_FILENAME})
     endif()
+    
+    set(CMAKE_CTEST_ENV "${INKSCAPE_TEST_PROFILE_DIR_ENV}/${testname};${CMAKE_CTEST_ENV}")
     if(DEFINED ARG_ENVIRONMENT)
-        list(APPEND CMAKE_CTEST_ENV ${ARG_ENVIRONMENT})
+        if(ARG_ENVIRONMENT STREQUAL "unset")
+            unset(CMAKE_CTEST_ENV)
+        else()
+            # variables might already be set, however the last value wins
+            list(APPEND CMAKE_CTEST_ENV ${ARG_ENVIRONMENT})  
+        endif()
     endif()
 
     # add test for main command line
@@ -83,10 +90,10 @@ add_cli_test(version_known PARAMETERS --version FAIL_FOR_OUTPUT unknown)
 add_cli_test(action_list   PARAMETERS --action-list PASS_FOR_OUTPUT "file-new")
 add_cli_test(verb_list     PARAMETERS --verb-list   PASS_FOR_OUTPUT "FileNew:")
 
-# check --system-data-directory and --user-data-directory
+# check --system-data-directory and --user-data-directory (unset variables to override our override)
 # TODO: Can we make these tests more specific without making too many assumptions?
-add_cli_test(system_data_directory PARAMETERS --system-data-directory PASS_FOR_OUTPUT "inkscape\n$")
-add_cli_test(user_data_directory   PARAMETERS --user-data-directory   PASS_FOR_OUTPUT "inkscape\n$")
+add_cli_test(system_data_directory PARAMETERS --system-data-directory ENVIRONMENT unset PASS_FOR_OUTPUT "inkscape\n$")
+add_cli_test(user_data_directory   PARAMETERS --user-data-directory   ENVIRONMENT unset PASS_FOR_OUTPUT "inkscape\n$")
 
 # check whether INKSCAPE_DATADIR / INKSCAPE_PROFILE_DIR environment variables work
 # TODO: INKSCAPE_PROFILE_DIR does not seem to be sanitized at all (i.e. is used verbatim by Inkscape)

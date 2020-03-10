@@ -39,7 +39,9 @@ set(RENDERING_TESTS
 
 foreach(rendering_test ${RENDERING_TESTS})
     set(testname "render_${rendering_test}")
-    add_test(NAME ${testname} COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/test.sh ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/inkscape ${CMAKE_CURRENT_SOURCE_DIR}/${rendering_test}  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/testfiles/rendering_tests )
-    set_tests_properties(${testname} PROPERTIES ENVIRONMENT "${CMAKE_CTEST_ENV}")
+    add_test(NAME ${testname}
+             COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/test.sh ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/inkscape ${CMAKE_CURRENT_SOURCE_DIR}/${rendering_test}
+             WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/testfiles/rendering_tests)
+    set_tests_properties(${testname} PROPERTIES ENVIRONMENT "${INKSCAPE_TEST_PROFILE_DIR_ENV}/${testname};${CMAKE_CTEST_ENV}")
 endforeach()
 

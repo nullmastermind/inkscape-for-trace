@@ -1,0 +1,5 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+# Cleanup test-specific profile directories whenever running tests (before and after, just to be safe)
+set(CTEST_CUSTOM_PRE_TEST  "rm -rf ${INKSCAPE_TEST_PROFILE_DIR}")
+set(CTEST_CUSTOM_POST_TEST "rm -rf ${INKSCAPE_TEST_PROFILE_DIR}")
