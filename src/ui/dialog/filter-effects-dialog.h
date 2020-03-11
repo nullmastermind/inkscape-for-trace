@@ -109,6 +109,7 @@ private:
         void remove_filter();
         void duplicate_filter();
         void rename_filter();
+        void select_filter_elements();
 
         /**
          * Stores the current desktop.

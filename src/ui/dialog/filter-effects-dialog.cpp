@@ -1368,11 +1368,17 @@ FilterEffectsDialog::FilterModifier::FilterModifier(FilterEffectsDialog& d)
     _menu = create_popup_menu(*this,
                               sigc::mem_fun(*this, &FilterModifier::duplicate_filter),
                               sigc::mem_fun(*this, &FilterModifier::remove_filter));
-    
-    Gtk::MenuItem *item = Gtk::manage(new Gtk::MenuItem(_("R_ename"), true));
-    item->signal_activate().connect(sigc::mem_fun(*this, &FilterModifier::rename_filter));    
-    item->show();
-    _menu->append(*item);
+
+    Gtk::MenuItem *rename_item = Gtk::manage(new Gtk::MenuItem(_("R_ename"), true));
+    rename_item->signal_activate().connect(sigc::mem_fun(*this, &FilterModifier::rename_filter));
+    rename_item->show();
+    _menu->append(*rename_item);
+    _menu->accelerate(*this);
+
+    Gtk::MenuItem *select_item = Gtk::manage(new Gtk::MenuItem(_("Select"), true));
+    select_item->signal_activate().connect(sigc::mem_fun(*this, &FilterModifier::select_filter_elements));
+    select_item->show();
+    _menu->append(*select_item);
     _menu->accelerate(*this);
 
     _list.get_selection()->signal_changed().connect(sigc::mem_fun(*this, &FilterModifier::on_filter_selection_changed));
@@ -1617,6 +1623,7 @@ void FilterEffectsDialog::FilterModifier::filter_list_button_release(GdkEventBut
 	auto items = _menu->get_children();
 	items[0]->set_sensitive(sensitive);
         items[1]->set_sensitive(sensitive);
+        items[3]->set_sensitive(sensitive);
 
         _menu->popup_at_pointer(reinterpret_cast<GdkEvent *>(event));
     }
@@ -1695,6 +1702,33 @@ void FilterEffectsDialog::FilterModifier::duplicate_filter()
 void FilterEffectsDialog::FilterModifier::rename_filter()
 {
     _list.set_cursor(_model->get_path(_list.get_selection()->get_selected()), *_list.get_column(1), true);
+}
+
+void FilterEffectsDialog::FilterModifier::select_filter_elements()
+{
+    SPFilter *filter = get_selected_filter();
+
+    if(!filter)
+        return;
+
+    std::vector<SPItem*> x,y;
+    std::vector<SPItem*> items;
+    std::vector<SPItem*> all = get_all_items(x, _desktop->currentRoot(), _desktop, false, false, true, y);
+    for(SPItem *item: all) {
+        if (!item->style) {
+            continue;
+        }
+
+        SPIFilter const &ifilter = item->style->filter;
+        if (ifilter.href) {
+            const SPObject *obj = ifilter.href->getObject();
+            if (obj && obj == (SPObject *)filter) {
+                items.push_back(item);
+            }
+        }
+    }
+    Inkscape::Selection *selection = _desktop->getSelection();
+    selection->setList(items);
 }
 
 FilterEffectsDialog::CellRendererConnection::CellRendererConnection()
