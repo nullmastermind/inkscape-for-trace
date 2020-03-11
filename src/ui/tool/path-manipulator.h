@@ -149,7 +149,6 @@ private:
     Geom::Affine _d2i_transform; ///< desktop-to-item transform
     Geom::Affine _i2d_transform; ///< item-to-desktop transform, inverse of _d2i_transform
     Geom::Affine _edit_transform; ///< additional transform to apply to editing controls
-    unsigned _num_selected; ///< number of selected nodes
     bool _show_handles;
     bool _show_outline;
     bool _show_path_direction;

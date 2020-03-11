@@ -114,7 +114,6 @@ PathManipulator::PathManipulator(MultiPathManipulator &mpm, SPObject *path,
     , _dragpoint(new CurveDragPoint(*this))
     , /* XML Tree being used here directly while it shouldn't be*/_observer(new PathManipulatorObserver(this, path->getRepr()))
     , _edit_transform(et)
-    , _num_selected(0)
     , _show_handles(true)
     , _show_outline(false)
     , _show_path_direction(false)
@@ -261,7 +260,7 @@ void PathManipulator::invertSelectionInSubpaths()
 /** Insert a new node in the middle of each selected segment. */
 void PathManipulator::insertNodes()
 {
-    if (_num_selected < 2) return;
+    if (_selection.size() < 2) return;
 
     for (auto & _subpath : _subpaths) {
         for (NodeList::iterator j = _subpath->begin(); j != _subpath->end(); ++j) {
@@ -313,7 +312,7 @@ add_or_replace_if_extremum(std::vector< std::pair<NodeList::iterator, double> > 
 /** Insert a new node at the extremum of the selected segments. */
 void PathManipulator::insertNodeAtExtremum(ExtremumType extremum)
 {
-    if (_num_selected < 2) return;
+    if (_selection.size() < 2) return;
 
     double sign    = (extremum == EXTR_MIN_X || extremum == EXTR_MIN_Y) ? -1. : 1.;
     Geom::Dim2 dim = (extremum == EXTR_MIN_X || extremum == EXTR_MAX_X) ? Geom::X : Geom::Y;
@@ -360,7 +359,7 @@ void PathManipulator::insertNodeAtExtremum(ExtremumType extremum)
  * This is equivalent to breaking, except that it doesn't split into subpaths. */
 void PathManipulator::duplicateNodes()
 {
-    if (_num_selected == 0) return;
+    if (_selection.empty()) return;
 
     for (auto & _subpath : _subpaths) {
         for (NodeList::iterator j = _subpath->begin(); j != _subpath->end(); ++j) {
@@ -401,7 +400,7 @@ void PathManipulator::duplicateNodes()
 /** Replace contiguous selections of nodes in each subpath with one node. */
 void PathManipulator::weldNodes(NodeList::iterator preserve_pos)
 {
-    if (_num_selected < 2) return;
+    if (_selection.size() < 2) return;
     hideDragPoint();
 
     bool pos_valid = preserve_pos;
@@ -476,7 +475,7 @@ void PathManipulator::weldNodes(NodeList::iterator preserve_pos)
 /** Remove nodes in the middle of selected segments. */
 void PathManipulator::weldSegments()
 {
-    if (_num_selected < 2) return;
+    if (_selection.size() < 2) return;
     hideDragPoint();
 
     for (auto sp : _subpaths) {
@@ -583,7 +582,7 @@ void PathManipulator::breakNodes()
  * in a way that attempts to preserve the original shape of the curve. */
 void PathManipulator::deleteNodes(bool keep_shape)
 {
-    if (_num_selected == 0) return;
+    if (_selection.empty()) return;
     hideDragPoint();
 
     for (SubpathList::iterator i = _subpaths.begin(); i != _subpaths.end();) {
@@ -706,7 +705,7 @@ unsigned PathManipulator::_deleteStretch(NodeList::iterator start, NodeList::ite
 /** Removes selected segments */
 void PathManipulator::deleteSegments()
 {
-    if (_num_selected == 0) return;
+    if (_selection.empty()) return;
     hideDragPoint();
 
     for (SubpathList::iterator i = _subpaths.begin(); i != _subpaths.end();) {
@@ -800,7 +799,7 @@ void PathManipulator::reverseSubpaths(bool selected_only)
 /** Make selected segments curves / lines. */
 void PathManipulator::setSegmentType(SegmentType type)
 {
-    if (_num_selected == 0) return;
+    if (_selection.empty()) return;
     for (auto & _subpath : _subpaths) {
         for (NodeList::iterator j = _subpath->begin(); j != _subpath->end(); ++j) {
             NodeList::iterator k = j.next();
@@ -1070,7 +1069,7 @@ NodeList::iterator PathManipulator::extremeNode(NodeList::iterator origin, bool 
 {
     NodeList::iterator match;
     double extr_dist = closest ? HUGE_VAL : -HUGE_VAL;
-    if (_num_selected == 0 && !search_unselected) return match;
+    if (_selection.empty() && !search_unselected) return match;
 
     for (auto & _subpath : _subpaths) {
         for (NodeList::iterator j = _subpath->begin(); j != _subpath->end(); ++j) {
@@ -1619,9 +1618,6 @@ void PathManipulator::_selectionChangedM(std::vector<SelectableControlPoint *> p
 
 void PathManipulator::_selectionChanged(SelectableControlPoint *p, bool selected)
 {
-    if (selected) ++_num_selected;
-    else --_num_selected;
-
     // don't do anything if we do not show handles
     if (!_show_handles) return;
 
