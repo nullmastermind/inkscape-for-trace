@@ -478,6 +478,11 @@ void on_row_changed(GtkTreeModel *tree_model, GtkTreePath *path, GtkTreeIter *it
     }
     tree->dndactive = FALSE;
 
+    NodeData *data = nullptr;
+    gtk_tree_model_get(tree_model, iter, STORE_DATA_COL, &data, -1);
+    gtk_tree_row_reference_free(data->rowref);
+    data->rowref = tree_iter_to_ref(tree, iter);
+
     Inkscape::XML::Node *repr = sp_xmlview_tree_node_get_repr(tree_model, iter);
     GtkTreeIter new_parent;
     if (!gtk_tree_model_iter_parent(tree_model, &new_parent, iter)) {
@@ -781,4 +786,4 @@ gboolean search_equal_func(GtkTreeModel *model, gint /*column*/, const gchar *ke
   fill-column:99
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=4:softtabstop=4:fileencoding=utf-8 :
