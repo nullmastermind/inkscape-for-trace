@@ -1037,6 +1037,7 @@ void spdc_create_single_dot(ToolBase *ec, Geom::Point const &pt, char const *too
     Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
     repr->setAttribute("sodipodi:type", "arc");
     SPItem *item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
+    item->transform = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
     Inkscape::GC::release(repr);
 
     // apply the tool's current style
@@ -1064,6 +1065,7 @@ void spdc_create_single_dot(ToolBase *ec, Geom::Point const &pt, char const *too
 
     Geom::Affine const i2d (item->i2dt_affine ());
     Geom::Point pp = pt * i2d.inverse();
+
     double rad = 0.5 * prefs->getDouble(tool_path + "/dot-size", 3.0);
     if (!strcmp(tool, "/tools/calligraphic"))
         rad = 0.0333 * prefs->getDouble(tool_path + "/width", 3.0) / desktop->current_zoom() / desktop->getDocument()->getDocumentScale()[Geom::X];
@@ -1084,6 +1086,7 @@ void spdc_create_single_dot(ToolBase *ec, Geom::Point const &pt, char const *too
     sp_repr_set_svg_double (repr, "sodipodi:rx", rad * stroke_width);
     sp_repr_set_svg_double (repr, "sodipodi:ry", rad * stroke_width);
     item->updateRepr();
+    item->doWriteTransform(item->transform, nullptr, true);
 
     desktop->getSelection()->set(item);
 
