@@ -149,9 +149,10 @@ void SPConnEndPair::writeRepr(Inkscape::XML::Node *const repr) const
             repr->setAttribute(attr_strs[handle_ix], str);
         }
     }
-    repr->setAttribute("inkscape:connector-curvature", Glib::Ascii::dtostr(_connCurvature));
-    if (_connType == SP_CONNECTOR_POLYLINE || _connType == SP_CONNECTOR_ORTHOGONAL)
+    if (_connType == SP_CONNECTOR_POLYLINE || _connType == SP_CONNECTOR_ORTHOGONAL) {
+        repr->setAttribute("inkscape:connector-curvature", Glib::Ascii::dtostr(_connCurvature));
         repr->setAttribute("inkscape:connector-type", _connType == SP_CONNECTOR_POLYLINE ? "polyline" : "orthogonal" );
+    }
 }
 
 void SPConnEndPair::getAttachedItems(SPItem *h2attItem[2]) const {
