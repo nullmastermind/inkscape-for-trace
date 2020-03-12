@@ -91,11 +91,7 @@ public:
     /** @brief Construct an unit vector from its angle.
      * The angle is specified in radians, in the mathematical convention (increasing
      * counter-clockwise from +X). */
-    static Point polar(Coord angle) {
-        Point ret;
-        sincos(angle, ret[Y], ret[X]);
-        return ret;
-    }
+    static Point polar(Coord angle);
     /// @}
 
     /// @name Access the coordinates of a point

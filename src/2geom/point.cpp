@@ -35,6 +35,7 @@
 
 #include <assert.h>
 #include <math.h>
+#include <2geom/angle.h>
 #include <2geom/coord.h>
 #include <2geom/point.h>
 #include <2geom/transforms.h>
@@ -64,6 +65,27 @@ namespace Geom {
  * this is undefined. The result is a point identical to that obtained by right-multiplying.
  *
  * @ingroup Primitives */
+
+Point Point::polar(Coord angle) {
+    Point ret;
+    Coord remainder = Angle(angle).radians0();
+    if (are_near(remainder, 0) || are_near(remainder, 2*M_PI)) {
+        ret[X] = 1;
+        ret[Y] = 0;
+    } else if (are_near(remainder, M_PI/2)) {
+        ret[X] = 0;
+        ret[Y] = 1;
+    } else if (are_near(remainder, M_PI)) {
+        ret[X] = -1;
+        ret[Y] = 0;
+    } else if (are_near(remainder, 3*M_PI/2)) {
+        ret[X] = 0;
+        ret[Y] = -1;
+    } else {
+        sincos(angle, ret[Y], ret[X]);
+    }
+    return ret;
+}
 
 /** @brief Normalize the vector representing the point.
  * After this method returns, the length of the vector will be 1 (unless both coordinates are

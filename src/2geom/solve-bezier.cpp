@@ -63,6 +63,7 @@ void convex_hull_marching(Bezier const &src_bz, Bezier bz,
         bz = bz.deflate();
         solutions.push_back(left_t);
     }
+    std::cout << std::endl;
     if (bz.order() > 0) {
     
         int old_sign = SGN(bz[0]);

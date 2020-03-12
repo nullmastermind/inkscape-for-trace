@@ -398,7 +398,7 @@ std::vector<Point> intersect(xAx const & C1, xAx const & C2) {
 
 
     } else {
-        std::cout << "What?\n";
+        std::cout << "What?" << std::endl;
         ;//std::cout << D << "\n";
     }
     return res;

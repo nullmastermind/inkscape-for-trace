@@ -129,6 +129,12 @@ double hausdorfl(D2<SBasis>& A, D2<SBasis> const &B,
 double hausdorf(D2<SBasis> &A, D2<SBasis> const &B,
                 double m_precision,
                 double *a_t=NULL, double *b_t=NULL);
+
+/**
+ * Check if two line segments intersect. If they are collinear, the result is undefined.
+ * @return True if line segments AB and CD intersect
+ */
+bool non_collinear_segments_intersect(const Point &A, const Point &B, const Point &C, const Point &D);
 }
 
 #endif // !LIB2GEOM_SEEN_BASIC_INTERSECTION_H

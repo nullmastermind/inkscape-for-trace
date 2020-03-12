@@ -859,9 +859,9 @@ int EllipticalArc::winding(Point const &p) const
     }
 
     bool initial_left = larc.contains(ia);
-    bool initial_right = !initial_left; //rarc.contains(ia);
-    bool final_right = rarc.contains(fa);
-    bool final_left = !final_right;//larc.contains(fa);
+    bool initial_right = !initial_left; // rarc.contains(ia);
+    bool final_left = larc.contains(fa);
+    bool final_right = !final_left; //  rarc.contains(fa);
 
     int result = 0;
     if (inside || left) {

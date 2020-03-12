@@ -473,6 +473,12 @@ double hausdorf(D2<SBasis>& A, D2<SBasis> const& B,
     
     return h_dist;
 }
+
+bool non_collinear_segments_intersect(const Point &A, const Point &B, const Point &C, const Point &D)
+{
+    return cross(D - C, A - C) * cross(D - C, B - C) < 0 && //
+           cross(B - A, C - A) * cross(B - A, D - A) < 0;
+}
 };
 
 /*

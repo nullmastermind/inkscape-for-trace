@@ -304,6 +304,11 @@ Ellipse &Ellipse::operator*=(Affine const& m)
         _rays[Y] = 0;
         _angle = atan2(v);
         return *this;
+    } else if (mwot.isScale(0) && _angle.radians() == 0) {
+        _rays[X] = _rays[X] * mwot[0];
+        _rays[Y] = _rays[Y] * mwot[3];
+        _center = new_center;
+        return *this;
     }
 
     std::vector<double> coeff = coefficients();
