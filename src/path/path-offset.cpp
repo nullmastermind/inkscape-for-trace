@@ -37,8 +37,7 @@
 
 #include "style.h"
 
-#include "util/units.h"            // to get abbr for document units
-
+#define MIN_OFFSET 0.01
 
 using Inkscape::DocumentUndo;
 
@@ -49,7 +48,7 @@ void
 sp_selected_path_offset(SPDesktop *desktop)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    double prefOffset = prefs->getDouble("/options/defaultoffsetwidth/value", 1.0, desktop->getDocument()->getDisplayUnit()->abbr);
+    double prefOffset = prefs->getDouble("/options/defaultoffsetwidth/value", 1.0, "px");
 
     sp_selected_path_do_offset(desktop, true, prefOffset);
 }
@@ -57,7 +56,7 @@ void
 sp_selected_path_inset(SPDesktop *desktop)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    double prefOffset = prefs->getDouble("/options/defaultoffsetwidth/value", 1.0, desktop->getDocument()->getDisplayUnit()->abbr);
+    double prefOffset = prefs->getDouble("/options/defaultoffsetwidth/value", 1.0, "px");
 
     sp_selected_path_do_offset(desktop, false, prefOffset);
 }
@@ -141,11 +140,16 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
     {
         {
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-            o_width = prefs->getDouble("/options/defaultoffsetwidth/value", 1.0, desktop->getDocument()->getDisplayUnit()->abbr);
+            o_width = prefs->getDouble("/options/defaultoffsetwidth/value", 1.0, "px");
+            auto i2doc = item->i2doc_affine();
+            i2doc *= transform;
+            gdouble const sw = hypot(i2doc[0], i2doc[1]);
+            gdouble const sh = hypot(i2doc[2], i2doc[3]);
+            o_width /= sqrt(fabs(sw * sh));
         }
 
-        if (o_width < 0.01){
-            o_width = 0.01;
+        if (o_width < MIN_OFFSET) {
+            o_width = MIN_OFFSET;
         }
     }
 
@@ -274,6 +278,12 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
     delete orig;
 }
 
+/**
+ * Apply offset to selected paths
+ * @param desktop Targetted desktop
+ * @param expand True if offset expands, False if it shrinks paths
+ * @param prefOffset Size of offset in pixels
+ */
 void
 sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
 {
@@ -330,10 +340,16 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
                     break;
             }
 
-            o_width = prefOffset;
+            // scale to account for transforms and document units
+            auto i2doc = item->i2doc_affine();
+            i2doc *= transform;
+            gdouble const sw = hypot(i2doc[0], i2doc[1]);
+            gdouble const sh = hypot(i2doc[2], i2doc[3]);
+            o_width = prefOffset / sqrt(fabs(sw * sh));
 
-            if (o_width < 0.1)
-                o_width = 0.1;
+            if (o_width < MIN_OFFSET) {
+                o_width = MIN_OFFSET;
+            }
             o_miter = i_style->stroke_miterlimit.value * o_width;
         }
 
