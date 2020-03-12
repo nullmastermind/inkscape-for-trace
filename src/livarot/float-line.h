@@ -18,7 +18,6 @@
 #include "livarot/LivarotDefs.h"
 
 class IntLigne;
-class BitLigne;
 
 /// A coverage portion ("run") with floating point boundaries.
 struct float_ligne_run {

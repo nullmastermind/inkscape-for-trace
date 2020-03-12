@@ -13,7 +13,6 @@
 #include <string>
 
 #include "bad-uri-exception.h"
-#include "livarot/Path.h"
 #include "preferences.h"
 #include "sp-shape.h"
 #include "sp-text.h"
@@ -36,7 +35,6 @@ static void sp_usepath_delete_self(SPObject *deleted, SPTagUsePath *offset);
 SPTagUsePath::SPTagUsePath(SPObject* i_owner):SPTagUseReference(i_owner)
 {
     owner=i_owner;
-    originalPath = nullptr;
     sourceDirty=false;
     sourceHref = nullptr;
     sourceRepr = nullptr;
@@ -48,9 +46,6 @@ SPTagUsePath::SPTagUsePath(SPObject* i_owner):SPTagUseReference(i_owner)
 
 SPTagUsePath::~SPTagUsePath()
 {
-    delete originalPath;
-    originalPath = nullptr;
-
     _changed_connection.disconnect(); // to do before unlinking
 
     quit_listening();

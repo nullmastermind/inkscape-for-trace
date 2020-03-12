@@ -28,7 +28,6 @@ set(livarot_SRC
 	AVL.h
 	AlphaLigne.h
 	BitLigne.h
-	Livarot.h
 	LivarotDefs.h
 	Path.h
 	Shape.h

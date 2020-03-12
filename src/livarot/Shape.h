@@ -51,7 +51,6 @@ enum
   shape_polypatch = 2                // a graph without intersection; each face is a polygon (not yet used)
 };
 
-class IntLigne;
 class BitLigne;
 class AlphaLigne;
 

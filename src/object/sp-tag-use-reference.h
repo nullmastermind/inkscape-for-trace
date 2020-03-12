@@ -18,8 +18,6 @@
 #include "sp-item.h"
 #include "uri-references.h"
 
-class Path;
-
 namespace Inkscape {
 namespace XML {
     class Node;
@@ -43,7 +41,6 @@ protected:
 
 class SPTagUsePath : public SPTagUseReference {
 public:
-    Path *originalPath;
     bool sourceDirty;
 
     SPObject            *owner;

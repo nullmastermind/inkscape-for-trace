@@ -24,7 +24,6 @@
 class Path;
 class Shape;
 class flow_dest;
-class FloatLigne;
 
 class SPFlowregion : public SPItem {
 public:
