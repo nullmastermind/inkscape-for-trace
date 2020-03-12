@@ -106,6 +106,9 @@ add_cli_test(inkscape_datadir      PARAMETERS --system-data-directory
 add_cli_test(inkscape_profile_dir  PARAMETERS --user-data-directory
                                    ENVIRONMENT INKSCAPE_PROFILE_DIR=${fancy_dir}/inkscape
                                    PASS_FOR_OUTPUT "${fancy_dir}/inkscape\n$")
+add_cli_test(inkscape_profile_dir_handle_illegal
+                                   ENVIRONMENT INKSCAPE_PROFILE_DIR=invalid:dir
+                                   INPUT_FILENAME empty.svg OUTPUT_FILENAME empty.svg)
 
 # check --query family of parameters
 string(CONCAT query_all_expected "rect1,10,10,80,80\n"

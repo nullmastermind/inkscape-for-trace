@@ -851,14 +851,18 @@ Extension::error_file_open ()
 void
 Extension::error_file_close ()
 {
-    fclose(error_file);
+    if (error_file) {
+        fclose(error_file);
+    }
 };
 
 /** \brief A function to write to the error log file. */
 void
 Extension::error_file_write (Glib::ustring text)
 {
-    g_fprintf(error_file, "%s\n", text.c_str());
+    if (error_file) {
+        g_fprintf(error_file, "%s\n", text.c_str());
+    }
 };
 
 /** \brief  A widget to represent the inside of an AutoGUI widget */
