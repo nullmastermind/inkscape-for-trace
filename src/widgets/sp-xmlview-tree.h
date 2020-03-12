@@ -32,7 +32,6 @@ struct SPXMLViewTree
 	GtkTreeStore *store;
 	Inkscape::XML::Node * repr;
 	gint blocked;
-    gboolean dndactive;
 };
 
 struct SPXMLViewTreeClass
