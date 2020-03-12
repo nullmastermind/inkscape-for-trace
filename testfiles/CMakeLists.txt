@@ -2,7 +2,9 @@
 # -----------------------------------------------------------------------------
 
 # custom "check" target with proper dependencies (builds inkscape and tests)
-add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} -V DEPENDS tests)
+add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} -V
+                        DEPENDS tests
+                        WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 add_dependencies(check inkscape)
 
 
