@@ -99,9 +99,10 @@ inkscape:mac:
   # cf ./_clang-format and https://inkscape.org/develop/coding-style/
 
 codequality:
-  stage: build
+  stage: test
   except:
     - schedules
+  needs: []
   script:
     - git fetch https://gitlab.com/inkscape/inkscape.git
     - echo "Your commit does not comply exactly with the clang-format style checker.\nPlease review the following diff or apply it with\n \$ git apply <<EOF"
@@ -114,9 +115,10 @@ codequality:
     # Ideally, we should remove all this code and use them as packaged libraries. Unfortunately this check only works for merge requests.
 
 codeprotect:
-  stage: build
+  stage: test
   except:
     - schedules
+  needs: []
   script:
     - git fetch https://gitlab.com/inkscape/inkscape.git
     - git diff FETCH_HEAD -U0 --no-color src/2geom/ src/3rdparty/adaptagrams/ src/3rdparty/libdepixelize src/3rdparty/libuemf | tee forbidden
@@ -125,7 +127,8 @@ codeprotect:
   #### All files should have a licence
 
 check-license-headers:
-  stage: build
+  stage: test
+  needs: []
   except:
     - schedules
   script:
@@ -138,9 +141,10 @@ check-license-headers:
     #  (artifacts from this job are also used to generate translations statistics for the website)
 
 translations:
-  stage: build
+  stage: test
   except:
     - schedules
+  needs: []
   script:
     # make sure dependencies for inkscape.pot are up-to-date
     - mkdir build && cd build && cmake .. && make inkscape_pot && cd .. || exit 1
@@ -171,10 +175,11 @@ translations:
   ### clang-tidy is an utility to check that some c++ code good practices and patterns are respected. We use it at 1% of its possibilities (only when it suggests fixes).
 
 clangtidy:linux:
-  stage: build
+  stage: test
   except:
     - schedules
     - master@inkscape/inkscape
+  needs: []
   script:
     - git fetch https://gitlab.com/inkscape/inkscape.git
     # "borrow" a 3rdparty file to dump header includes
@@ -183,11 +188,12 @@ clangtidy:linux:
     - bash buildtools/clangtidy-helper.sh $(cat clang_tidy_files)
 
 clangtidyfull:linux:
-  stage: build
+  stage: test
   except:
     - schedules
   only:
     - master@inkscape/inkscape
+  needs: []
   script:
     # skip files which clangtidy-helper.sh will revert anyway
     - find src/3rdparty src/2geom -name CMakeLists.txt | xargs tee
@@ -196,10 +202,11 @@ clangtidyfull:linux:
     ### scan-build is a static analysis tool. This job is *slow*.
 
 clang:
-  stage: build
+  stage: test
   only:
     variables:
       - $SCHEDULED_JOB_NAME == "clang"
+  needs: []
   script:
     - apt-get update -yqq && apt-get install -y clang
     - mkdir -p clang-build
@@ -238,6 +245,7 @@ test:linux:
     - schedules
   dependencies:
     - inkscape:linux
+  needs: ["inkscape:linux"]
   script:
     - sed -i '/<policy domain="coder" rights="none"/d' /etc/ImageMagick-6/policy.xml
     - cd build
