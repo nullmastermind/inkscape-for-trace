@@ -52,7 +52,6 @@ enum EffectType {
     MEASURE_SEGMENTS,
     FILLET_CHAMFER,
     BOOL_OP,
-    EMBRODERY_STITCH,
     POWERCLIP,
     POWERMASK,
     PTS2ELLIPSE,
@@ -72,6 +71,7 @@ enum EffectType {
     PATH_LENGTH,
     RECURSIVE_SKELETON,
     TEXT_LABEL,
+    EMBRODERY_STITCH,
     INVALID_LPE // This must be last (I made it such that it is not needed anymore I think..., Don't trust on it being
                 // last. - johan)
 };

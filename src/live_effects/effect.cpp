@@ -595,20 +595,6 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , false //experimental
     },
     {
-        EMBRODERY_STITCH
-        , N_("Embroidery stitch") //label
-        , "embrodery_stitch" //key
-        , "embrodery-stitch" //icon
-        , "Embroidery stitch" //untranslated name
-        , N_("Embroidery stitch") //description
-        , true  //on_path
-        , true  //on_shape
-        , true  //on_group
-        , false //on_image
-        , false //on_text
-        , false //experimental
-    },
-    {
         POWERCLIP
         , N_("Power clip") //label
         , "powerclip" //key
@@ -874,6 +860,20 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , false //on_image
         , false //on_text
         , true //experimental
+    },
+    {
+        EMBRODERY_STITCH
+        , N_("Embroidery stitch") //label
+        , "embrodery_stitch" //key
+        , "embrodery-stitch" //icon
+        , "Embroidery stitch" //untranslated name
+        , N_("Embroidery stitch") //description
+        , true  //on_path
+        , true  //on_shape
+        , true  //on_group
+        , false //on_image
+        , false //on_text
+        , false //experimental
     },
 #endif
 
