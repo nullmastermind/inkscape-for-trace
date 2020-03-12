@@ -122,7 +122,7 @@ void Preferences::_load()
         // Does the profile directory exist?
         if (!g_file_test(_prefs_dir, G_FILE_TEST_EXISTS)) {
             // No - create the profile directory
-            if (g_mkdir(_prefs_dir, 0755)) {
+            if (g_mkdir_with_parents(_prefs_dir, 0755)) {
                 // the creation failed
                 //_reportError(Glib::ustring::compose(_("Cannot create profile directory %1."),
                 //    Glib::filename_to_utf8(_prefs_dir)), not_saved);
