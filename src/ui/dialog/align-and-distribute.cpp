@@ -1133,11 +1133,11 @@ AlignAndDistribute::AlignAndDistribute()
 
     // Notebook for individual transformations
 
-    contents->pack_start(_alignFrame, true, true);
-    contents->pack_start(_distributeFrame, true, true);
-    contents->pack_start(_rearrangeFrame, true, true);
-    contents->pack_start(_removeOverlapFrame, true, true);
-    contents->pack_start(_nodesFrame, true, false);
+    contents->pack_start(_alignFrame, Gtk::PACK_SHRINK);
+    contents->pack_start(_distributeFrame, Gtk::PACK_SHRINK);
+    contents->pack_start(_rearrangeFrame, Gtk::PACK_SHRINK);
+    contents->pack_start(_removeOverlapFrame, Gtk::PACK_SHRINK);
+    contents->pack_start(_nodesFrame, Gtk::PACK_SHRINK);
 
     //Connect to the global tool change signal
     _toolChangeConn = INKSCAPE.signal_eventcontext_set.connect(sigc::hide<0>(sigc::bind(sigc::ptr_fun(&on_tool_changed), this)));
