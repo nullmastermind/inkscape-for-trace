@@ -402,24 +402,28 @@ void LPEBool::doBeforeEffect(SPLPEItem const *lpeitem)
         Inkscape::Selection *selection = desktop->getSelection();
         Inkscape::UI::Tools::SelectTool *selectool =
             dynamic_cast<Inkscape::UI::Tools::SelectTool *>(desktop->event_context);
-        if (selectool) {
-            Inkscape::SelTrans *seltrans = selectool->_seltrans;
-            if (desktop && selection && operand && operand->isHidden() && hide_linked && seltrans->isGrabbed()) {
-                selection->add(operand);
-                contdown = 3;
-            }
-            if (contdown == 1 && desktop && selection && operand && operand->isHidden() && hide_linked) {
-                selection->remove(operand);
-            }
-            if (contdown > 0) {
-                --contdown;
-            }
-            if (operand_path.linksToPath() && operand) {
-                SPItem *itemsel = selection->singleItem();
-                if (operand->isHidden() && hide_linked && itemsel && itemsel == operand) {
-                    hide_linked.param_setValue(false);
-                    hide_linked.write_to_SVG();
-                }
+        gint cdown = 2;
+        if (selectool && selectool->_seltrans && selectool->_seltrans->isGrabbed()) {
+            cdown = 3;
+        }
+        if (!is_load && desktop && selection && operand && operand->isHidden() && hide_linked && contdown != 1) {
+            selection->add(operand);
+            contdown = cdown;
+        }
+        if (contdown == 1 && desktop && selection && operand && operand->isHidden() && hide_linked) {
+            selection->remove(operand);
+        }
+        if (contdown > 0) {
+            --contdown;
+        }
+        if (is_load) {
+            contdown = 1;
+        }
+        if (operand_path.linksToPath() && operand) {
+            SPItem *itemsel = selection->singleItem();
+            if (operand->isHidden() && hide_linked && itemsel && itemsel == operand) {
+                hide_linked.param_setValue(false);
+                hide_linked.write_to_SVG();
             }
         }
     }
