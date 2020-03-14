@@ -630,13 +630,7 @@ void GlyphsPanel::insertText()
         }
 
         if (!glyphs.empty()) {
-            Glib::ustring combined;
-            gchar *str = sp_te_get_string_multiline(textItem);
-            if (str) {
-                combined = str;
-                g_free(str);
-                str = nullptr;
-            }
+            Glib::ustring combined = sp_te_get_string_multiline(textItem);
             combined += glyphs;
             sp_te_set_repr_text_multiline(textItem, combined.c_str());
             DocumentUndo::done(targetDesktop->doc(), SP_VERB_CONTEXT_TEXT, _("Append text"));

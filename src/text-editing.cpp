@@ -883,16 +883,16 @@ static void sp_te_get_ustring_multiline(SPObject const *root, Glib::ustring *str
 
 /** Gets a text-only representation of the given text or flowroot object,
 replacing line break elements with '\n'. The return value must be free()d. */
-gchar *
+Glib::ustring
 sp_te_get_string_multiline (SPItem const *text)
 {
     Glib::ustring string;
     bool pending_line_break = false;
 
-    if (!SP_IS_TEXT(text) && !SP_IS_FLOWTEXT(text)) return nullptr;
-    sp_te_get_ustring_multiline(text, &string, &pending_line_break);
-    if (string.empty()) return nullptr;
-    return strdup(string.data());
+    if (SP_IS_TEXT(text) || SP_IS_FLOWTEXT(text)) {
+        sp_te_get_ustring_multiline(text, &string, &pending_line_break);
+    }
+    return string;
 }
 
 /** Gets a text-only representation of the characters in a text or flowroot

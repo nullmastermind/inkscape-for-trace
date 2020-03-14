@@ -210,11 +210,10 @@ void TextEdit::onReadSelection ( gboolean dostyle, gboolean /*docontent*/ )
         apply_button.set_sensitive ( false );
         setasdefault_button.set_sensitive ( true );
 
-        gchar *str;
-        str = sp_te_get_string_multiline (text);
-        if (str) {
+        Glib::ustring str = sp_te_get_string_multiline(text);
+        if (!str.empty()) {
             if (items == 1) {
-                gtk_text_buffer_set_text (text_buffer, str, strlen (str));
+                gtk_text_buffer_set_text(text_buffer, str.c_str(), str.raw().size());
                 gtk_text_buffer_set_modified (text_buffer, FALSE);
             }
             phrase = str;

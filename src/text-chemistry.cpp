@@ -433,7 +433,8 @@ text_unflow ()
             // font size multiplier
             double ex = (flowtext->transform).descrim();
 
-            if (sp_te_get_string_multiline(flowtext) == nullptr) { // flowtext is empty
+            Glib::ustring text_string = sp_te_get_string_multiline(flowtext);
+            if (text_string.empty()) { // flowtext is empty
                 continue;
             }
 
@@ -457,9 +458,7 @@ text_unflow ()
             rtspan->setAttribute("sodipodi:role", "line"); // otherwise, why bother creating the tspan?
             rtext->addChild(rtspan, nullptr);
 
-            gchar *text_string = sp_te_get_string_multiline(flowtext);
-            Inkscape::XML::Node *text_repr = xml_doc->createTextNode(text_string); // FIXME: transfer all formatting!!!
-            free(text_string);
+            Inkscape::XML::Node *text_repr = xml_doc->createTextNode(text_string.c_str()); // FIXME: transfer all formatting!!!
             rtspan->appendChild(text_repr);
 
             flowtext->parent->getRepr()->appendChild(rtext);

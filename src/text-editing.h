@@ -59,7 +59,7 @@ Inkscape::Text::Layout::iterator sp_te_replace(SPItem *item, Inkscape::Text::Lay
 Inkscape::Text::Layout::iterator sp_te_insert_line (SPItem *text, Inkscape::Text::Layout::iterator const &position);
 bool sp_te_delete (SPItem *item, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, iterator_pair &iter_pair);
 
-char *sp_te_get_string_multiline(SPItem const *text);
+Glib::ustring sp_te_get_string_multiline(SPItem const *text);
 Glib::ustring sp_te_get_string_multiline(SPItem const *text, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end);
 void sp_te_set_repr_text_multiline(SPItem *text, char const *str);
 

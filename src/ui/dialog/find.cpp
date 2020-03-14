@@ -344,8 +344,7 @@ Find::Find()
     SPItem *item = selection->singleItem();
     if (item) {
         if (dynamic_cast<SPText *>(item) || dynamic_cast<SPFlowtext *>(item)) {
-            gchar *str;
-            str = sp_te_get_string_multiline (item);
+            Glib::ustring str = sp_te_get_string_multiline(item);
             entry_find.getEntry()->set_text(str);
         }
     }
@@ -462,12 +461,10 @@ bool Find::item_text_match (SPItem *item, const gchar *find, bool exact, bool ca
         return false;
     }
 
-    if (dynamic_cast<SPText *>(item) || dynamic_cast<SPFlowtext *>(item)) {
-        const gchar *item_text = sp_te_get_string_multiline (item);
-        if (item_text == nullptr) {
-            return false;
-        }
-        bool found = find_strcmp(item_text, find, exact, casematch);
+    Glib::ustring item_text = sp_te_get_string_multiline(item);
+
+    if (!item_text.empty()) {
+        bool found = find_strcmp(item_text.c_str(), find, exact, casematch);
 
         if (found && replace) {
             Glib::ustring ufind = find;
@@ -481,7 +478,7 @@ bool Find::item_text_match (SPItem *item, const gchar *find, bool exact, bool ca
             }
 
             gchar* replace_text  = g_strdup(entry_replace.getEntry()->get_text().c_str());
-            gsize n = find_strcmp_pos(item_text, ufind.c_str(), exact, casematch);
+            gsize n = find_strcmp_pos(item_text.c_str(), ufind.c_str(), exact, casematch);
             static Inkscape::Text::Layout::iterator _begin_w;
             static Inkscape::Text::Layout::iterator _end_w;
             while (n != std::string::npos) {
@@ -489,7 +486,7 @@ bool Find::item_text_match (SPItem *item, const gchar *find, bool exact, bool ca
                 _end_w = layout->charIndexToIterator(n + strlen(find));
                 sp_te_replace(item, _begin_w, _end_w, replace_text);
                 item_text = sp_te_get_string_multiline (item);
-                n = find_strcmp_pos(item_text, ufind.c_str(), exact, casematch, n + strlen(replace_text) + 1);
+                n = find_strcmp_pos(item_text.c_str(), ufind.c_str(), exact, casematch, n + strlen(replace_text) + 1);
             }
 
             g_free(replace_text);
