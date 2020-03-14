@@ -24,7 +24,6 @@
 ../share/extensions/jessyInk_view.py
 ../share/extensions/markers_strokepaint.py
 ../share/extensions/path_envelope.py
-../share/extensions/pathalongpath.py
 ../share/extensions/pathscatter.py
 ../share/extensions/perspective.py
 ../share/extensions/plotter.py
