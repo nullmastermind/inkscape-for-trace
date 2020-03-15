@@ -127,6 +127,7 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
     }
 
     Geom::Affine const transform(item->transform);
+    auto scaling_factor = item->i2doc_affine().descrim();
 
     item->doWriteTransform(Geom::identity());
 
@@ -138,17 +139,10 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
 
     float o_width = 0;
     {
-        {
-            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-            o_width = prefs->getDouble("/options/defaultoffsetwidth/value", 1.0, "px");
-            auto i2doc = item->i2doc_affine();
-            i2doc *= transform;
-            gdouble const sw = hypot(i2doc[0], i2doc[1]);
-            gdouble const sh = hypot(i2doc[2], i2doc[3]);
-            o_width /= sqrt(fabs(sw * sh));
-        }
-
-        if (o_width < MIN_OFFSET) {
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        o_width = prefs->getDouble("/options/defaultoffsetwidth/value", 1.0, "px");
+        o_width /= scaling_factor;
+        if (scaling_factor == 0 || o_width < MIN_OFFSET) {
             o_width = MIN_OFFSET;
         }
     }
@@ -316,6 +310,7 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
             continue;
 
         Geom::Affine const transform(item->transform);
+        auto scaling_factor = item->i2doc_affine().descrim();
 
         item->doWriteTransform(Geom::identity());
 
@@ -341,13 +336,9 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
             }
 
             // scale to account for transforms and document units
-            auto i2doc = item->i2doc_affine();
-            i2doc *= transform;
-            gdouble const sw = hypot(i2doc[0], i2doc[1]);
-            gdouble const sh = hypot(i2doc[2], i2doc[3]);
-            o_width = prefOffset / sqrt(fabs(sw * sh));
+            o_width = prefOffset / scaling_factor;
 
-            if (o_width < MIN_OFFSET) {
+            if (scaling_factor == 0 || o_width < MIN_OFFSET) {
                 o_width = MIN_OFFSET;
             }
             o_miter = i_style->stroke_miterlimit.value * o_width;
