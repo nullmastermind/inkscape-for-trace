@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2019-12-13 15:49+0100\n"
-"PO-Revision-Date: 2019-12-26 10:49+0100\n"
+"PO-Revision-Date: 2020-03-15 20:42+0100\n"
 "Last-Translator: Tomáš Marný\n"
 "Language-Team: Josef Vybíral (josef.vybiral@gmail.com); Ivan Řihošek "
 "(osmdesat@seznam.cz); Tobiczech (tobiczech@gmail.com); Tomáš Marný (tomik."
@@ -819,9 +819,8 @@ msgid "Roughen all inside shapes"
 msgstr "Zdrsnit všechny vnitřní tvary"
 
 #: ../share/filters/filters.svg.h:322
-#, fuzzy
 msgid "Evanescent"
-msgstr "Evanescenční"
+msgstr "Evanescentní"
 
 #: ../share/filters/filters.svg.h:324
 msgid ""
@@ -3423,7 +3422,7 @@ msgstr "Celnice"
 #: ../share/symbols/symbols.h:89 ../share/symbols/symbols.h:90
 msgctxt "Symbol"
 msgid "Immigration"
-msgstr "Přistěhovalectví"
+msgstr "Imigrační kontrola"
 
 #: ../share/symbols/symbols.h:91 ../share/symbols/symbols.h:92
 msgctxt "Symbol"
@@ -4098,11 +4097,11 @@ msgstr "Typografické plátno"
 
 #: ../share/templates/templates.h:1
 msgid "Empty typography canvas with helping guidelines."
-msgstr "Prázdné typografické plátno s pomocnými pokyny."
+msgstr "Prázdné typografické plátno s pomocnými vodítky."
 
 #: ../share/templates/templates.h:1
 msgid "guidelines typography canvas"
-msgstr "pokyny typografické plátno"
+msgstr "vodítka typografické plátno"
 
 #: ../share/templates/templates.h:1
 msgid "No Layers"
@@ -8714,10 +8713,9 @@ msgstr "SOUBOR"
 msgid "Overwrite input file"
 msgstr "Přepsat vstupní soubor"
 
-#
 #: ../src/inkscape-application.cpp:551
 msgid "File type(s) to export: [svg,png,ps,eps,pdf,emf,wmf,xaml]"
-msgstr "Typ(y) souborů pro export: [svg,png,ps,eps,pdf,emf,wmf,xaml]"
+msgstr ""
 
 #: ../src/inkscape-application.cpp:554
 msgid "Export geometry"
@@ -8955,7 +8953,7 @@ msgstr "Rozhraní"
 # File: ../src/inkscape-application.cpp, line: 604
 #: ../src/inkscape-application.cpp:604
 msgid "Console interface only (no visible GUI)"
-msgstr ""
+msgstr "Pouze rozhraní konzoly (žádné viditelné GUI)"
 
 #
 # File: ../src/inkscape-application.cpp, line: 605
@@ -8970,15 +8968,14 @@ msgid "Close GUI after executing all actions/verbs"
 msgstr ""
 
 #: ../src/inkscape-application.cpp:608
-#, fuzzy
 msgid "Start Inkscape in interactive shell mode"
-msgstr "Spustit Inkscape v interaktivním příkazořádkovém režimu."
+msgstr "Spustit Inkscape v interaktivním režimu shellu"
 
 #
 # File: ../src/inkscape-application.cpp, line: 611
 #: ../src/inkscape-application.cpp:611
 msgid "D-Bus"
-msgstr ""
+msgstr "D-Bus"
 
 #
 # File: ../src/inkscape-application.cpp, line: 612
@@ -9215,7 +9212,7 @@ msgstr "Vytvořit Kochův fraktál"
 
 #: ../src/live_effects/effect.cpp:175
 msgid "Knot"
-msgstr ""
+msgstr "Uzel"
 
 #: ../src/live_effects/effect.cpp:179
 #, fuzzy
@@ -9319,9 +9316,8 @@ msgid ""
 msgstr ""
 
 #: ../src/live_effects/effect.cpp:331
-#, fuzzy
 msgid "Lattice Deformation 2"
-msgstr "Informace o stránce"
+msgstr "Deformace podle mřížky 2"
 
 #: ../src/live_effects/effect.cpp:335
 msgid "Warp an object's shape based on a 5x5 grid"
@@ -9340,9 +9336,8 @@ msgstr ""
 "roztažením, nebo vytvořením iluze 3D perspektivy"
 
 #: ../src/live_effects/effect.cpp:359
-#, fuzzy
 msgid "Interpolate points"
-msgstr "Interpolace"
+msgstr "Interpolovat body"
 
 #
 # File: ../src/live_effects/effect.cpp, line: 361
@@ -9350,10 +9345,9 @@ msgstr "Interpolace"
 msgid ""
 "Connect the nodes of the object (e.g. corresponding to data points) by different "
 "types of lines."
-msgstr ""
+msgstr "Spojit uzly objektu (např. odpovídající datovým bodům) různými typy čar."
 
 #: ../src/live_effects/effect.cpp:373
-#, fuzzy
 msgid "Transform by 2 points"
 msgstr "Transformace podle 2 bodů"
 
@@ -9401,9 +9395,8 @@ msgid ""
 msgstr ""
 
 #: ../src/live_effects/effect.cpp:443
-#, fuzzy
 msgid "Taper stroke"
-msgstr "Vzorkovaný obrys"
+msgstr "Zúžit tah"
 
 #: ../src/live_effects/effect.cpp:447
 msgid "Let the path's ends narrow down to a tip"
@@ -9450,7 +9443,7 @@ msgstr ""
 
 #: ../src/live_effects/effect.cpp:514 ../src/selection-chemistry.cpp:2949
 msgid "Fill between many"
-msgstr ""
+msgstr "Výplň mezi mnoha"
 
 #: ../src/live_effects/effect.cpp:518
 msgid ""
@@ -9475,25 +9468,26 @@ msgid "Turn the path into a bounding box that entirely encompasses another path"
 msgstr ""
 
 #: ../src/live_effects/effect.cpp:557
-#, fuzzy
 msgid "Measure Segments"
-msgstr "Měřidlo"
+msgstr "Měření částí"
 
 #: ../src/live_effects/effect.cpp:561
 msgid ""
 "Add dimensioning for distances between nodes, optionally with projection and many "
 "other configuration options"
 msgstr ""
+"Přidat kóty pro vzdálenosti mezi uzly, volitelně s projekcí a mnoha dalšími "
+"konfiguračními možnostmi"
 
 #: ../src/live_effects/effect.cpp:571
 msgid "Corners (Fillet/Chamfer)"
-msgstr ""
+msgstr "Rohy (zaoblení/zkosení)"
 
 #: ../src/live_effects/effect.cpp:575
 msgid ""
 "Adjust the shape of a path's corners, rounding them to a specified radius, or "
 "cutting them off"
-msgstr ""
+msgstr "Upravit tvar rohů cesty, zaoblit je na určitý poloměr nebo je oříznout"
 
 #: ../src/live_effects/effect.cpp:585
 msgid "Boolean operation"
@@ -9645,9 +9639,8 @@ msgid ""
 msgstr ""
 
 #: ../src/live_effects/effect.cpp:824
-#, fuzzy
 msgid "Lattice Deformation"
-msgstr "Informace o stránce"
+msgstr "Deformace podle mřížky"
 
 #: ../src/live_effects/effect.cpp:828
 msgid "Deform an object using a 4x4 grid"
@@ -10915,9 +10908,8 @@ msgid "Overrides the miter limit and forces a join."
 msgstr ""
 
 #: ../src/live_effects/lpe-knot.cpp:353
-#, fuzzy
 msgid "_Gap length:"
-msgstr "Délka:"
+msgstr "_Délka mezery:"
 
 #: ../src/live_effects/lpe-knot.cpp:353
 msgid "Size of hidden region of lower string"
@@ -10935,7 +10927,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-knot.cpp:359
 msgid "_Both gaps"
-msgstr ""
+msgstr "_Obě mezery"
 
 #: ../src/live_effects/lpe-knot.cpp:359
 #, fuzzy
@@ -10944,30 +10936,27 @@ msgstr "Vytvoří křivku danou tvarem vzájemného překryvu vybraných křivek
 
 #: ../src/live_effects/lpe-knot.cpp:360
 msgid "_Groups: Inverse"
-msgstr ""
+msgstr "_Skupiny: Obráceně"
 
 #: ../src/live_effects/lpe-knot.cpp:360
 msgid "Use other stroke width, useful in groups with different stroke widths"
 msgstr "Použít jinou šířku tahu, užitečné ve skupinách s různými šířkami tahu"
 
 #: ../src/live_effects/lpe-knot.cpp:366
-#, fuzzy
 msgid "S_witcher size:"
-msgstr "Velikost videa:"
+msgstr "_Velikost přepínače:"
 
 #: ../src/live_effects/lpe-knot.cpp:366
 msgid "Orientation indicator/switcher size"
-msgstr ""
+msgstr "Indikátor orientace/velikost přepínače"
 
 #: ../src/live_effects/lpe-knot.cpp:367
-#, fuzzy
 msgid "Crossing Signs"
-msgstr "Křížový hluk"
+msgstr "Značky protínání"
 
 #: ../src/live_effects/lpe-knot.cpp:367
-#, fuzzy
 msgid "Crossings signs"
-msgstr "Křížový hluk"
+msgstr "Značky protínání"
 
 #: ../src/live_effects/lpe-knot.cpp:661
 msgid ""
@@ -11210,19 +11199,16 @@ msgid ""
 msgstr ""
 
 #: ../src/live_effects/lpe-lattice2.cpp:233
-#, fuzzy
 msgid "Reset grid"
-msgstr "Odebrat mřížku"
+msgstr "Resetovat mřížku"
 
 #: ../src/live_effects/lpe-lattice2.cpp:269 ../src/live_effects/lpe-lattice2.cpp:287
-#, fuzzy
 msgid "Show Points"
-msgstr "Body"
+msgstr "Zobrazit body"
 
 #: ../src/live_effects/lpe-lattice2.cpp:285
-#, fuzzy
 msgid "Hide Points"
-msgstr "Body"
+msgstr "Skrýt body"
 
 #: ../src/live_effects/lpe-line_segment.cpp:24 ../src/ui/toolbar/lpe-toolbar.cpp:127
 msgid "Closed"
@@ -20263,7 +20249,7 @@ msgstr "Změnit motiv ikon:"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1145
 #: ../src/ui/dialog/inkscape-preferences.cpp:2556
 msgid "Open icons folder"
-msgstr ""
+msgstr "Otevřít složku ikon"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1146
 #: ../src/ui/dialog/inkscape-preferences.cpp:2557
@@ -28005,7 +27991,7 @@ msgstr ""
 
 #: ../src/ui/tools/measure-tool.cpp:750
 msgid "Add guides from measure tool"
-msgstr ""
+msgstr "Přidat vodítka z nástroje pro měření"
 
 #: ../src/ui/tools/measure-tool.cpp:770
 msgid "Keep last measure on the canvas, for reference"
@@ -30973,7 +30959,7 @@ msgstr "Vrstvu _navrch"
 
 #: ../src/verbs.cpp:2773
 msgid "Raise the current layer to the top"
-msgstr "Přesune nynější vrstvu úplně nahoru"
+msgstr "Přesunout nynější vrstvu úplně nahoru"
 
 #: ../src/verbs.cpp:2775
 msgid "Layer to _Bottom"
@@ -30981,7 +30967,7 @@ msgstr "Vrstvu _dospod"
 
 #: ../src/verbs.cpp:2776
 msgid "Lower the current layer to the bottom"
-msgstr "Posune nynější vrstvu zcela naspod"
+msgstr "Posunout nynější vrstvu zcela naspod"
 
 #: ../src/verbs.cpp:2777
 msgid "_Raise Layer"
@@ -30989,7 +30975,7 @@ msgstr "Posunout vrstvu _výše"
 
 #: ../src/verbs.cpp:2777
 msgid "Raise the current layer"
-msgstr "Posune nynější vrstvu o úroveň výše"
+msgstr "Posunout nynější vrstvu o úroveň výše"
 
 #: ../src/verbs.cpp:2779
 msgid "_Lower Layer"
@@ -30997,7 +30983,7 @@ msgstr "Posunout vrstvu _níže"
 
 #: ../src/verbs.cpp:2779
 msgid "Lower the current layer"
-msgstr "Posune nynější vrstvu o úroveň níže"
+msgstr "Posunout nynější vrstvu o úroveň níže"
 
 #: ../src/verbs.cpp:2781
 msgid "D_uplicate Current Layer"
@@ -31009,11 +30995,11 @@ msgstr "Zduplikuje existující vrstvu"
 
 #: ../src/verbs.cpp:2783
 msgid "_Delete Current Layer"
-msgstr "_Smazat současnou vrstvu"
+msgstr "_Odstranit aktuální vrstvu"
 
 #: ../src/verbs.cpp:2783
 msgid "Delete the current layer"
-msgstr "Smaže nynější vrstvu"
+msgstr "Odstranit aktuální vrstvu"
 
 #: ../src/verbs.cpp:2785
 msgid "_Show/hide other layers"
@@ -32924,30 +32910,30 @@ msgid ""
 "always best.\n"
 msgstr ""
 "\n"
-"Tento dialog umožňuje automaticky převést rastrovou grafiku na vektorové cesty. "
+"  Tento dialog umožňuje automaticky převést rastrovou grafiku na vektorové cesty. "
 "Pro různé případy použití je k dispozici několik možností:\n"
-"* \"Oříznutí jasu\" detekuje oblasti, které jsou tmavší než prahová hodnota, a "
+" * \"Oříznutí jasu\" detekuje oblasti, které jsou tmavší než prahová hodnota, a "
 "vytvoří cestu, která je uzavře (pomocí potrace).\n"
-"* \"Detekce hran\" detekuje změny větší než daná prahová hodnota v jasu barevných "
-"záplat a vytváří cesty k jejich oddělení (pomocí potrace).\n"
-"* \"Kvantizace barev\" rozdělí obrázek na daný počet barev a oddělí je cestou "
+" * \"Detekce hran\" detekuje změny větší než daná prahová hodnota v jasu "
+"barevných záplat a vytváří cesty k jejich oddělení (pomocí potrace).\n"
+" * \"Kvantizace barev\" rozdělí obrázek na daný počet barev a oddělí je cestou "
 "(pomocí potrace).\n"
-"* \"Autotrace\" používá algoritmus autotrace s danou možností.\n"
-"* \"Sledování středů\" se pokouší vektorizovat kresbu čar (s autotrace).\n"
-"* \"Vícenásobné skenování\" odděluje obrázek do několika skenů, v závislosti na "
+" * \"Autotrace\" používá algoritmus autotrace s danou možností.\n"
+" * \"Sledování středů\" se pokouší vektorizovat kresbu čar (s autotrace).\n"
+" * \"Vícenásobné skenování\" odděluje obrázek do několika skenů, v závislosti na "
 "jasu, separaci barev nebo úrovních šedé, a vytváří pro ně několik cest. Může také "
 "použít autotrace.\n"
 " * Karta \"Pixel art\" umožňuje použít depixelizační algoritmus pro vektorizaci "
 "pixelartových obrázků.\n"
 "\n"
-"* POZNÁMKA:\n"
-"1) Před trasováním si uložte svou práci\n"
-"2) Sledujte počet pixelů: \"Vektorizovat Pixel art\" vytváří jednu cestu na "
+" * POZNÁMKA:\n"
+"  1) Před trasováním si uložte svou práci\n"
+"  2) Sledujte počet pixelů: \"Vektorizovat Pixel art\" vytváří jednu cestu na "
 "pixel. Nedoporučuje se pro obrázky, které nejsou pixel art.\n"
-"3) Autotrace je pomalejší než potrace, nedoporučuje se pro velké obrázky. "
+"  3) Autotrace je pomalejší než potrace, nedoporučuje se pro velké obrázky. "
 "Doporučuje se předzpracování obrázků pro zvýšení kontrastu.\n"
-"4) Pokud je vaším cílem získat několik uzlů a dobrou přesnost, ruční trasování je "
-"vždy nejlepší.\n"
+"  4) Pokud je vaším cílem získat několik uzlů a dobrou přesnost, ruční trasování "
+"je vždy nejlepší.\n"
 
 #: ../share/ui/dialog-trace.glade:136
 msgid "Create a single path or create a group of paths"
@@ -40065,7 +40051,7 @@ msgstr "Velikost vizitky:"
 
 #: ../share/extensions/template_business_card.inx:7
 msgid "74mm x 52mm (A8)"
-msgstr "74 mm × 52 mm (A8"
+msgstr "74 mm × 52 mm (A8)"
 
 #: ../share/extensions/template_business_card.inx:8
 msgid "85mm x 55mm (Europe)"
@@ -41398,6 +41384,10 @@ msgstr ""
 #: ../share/ui/units.xml:99
 msgid "Half of font height"
 msgstr ""
+
+#
+#~ msgid "File type(s) to export: [svg,png,ps,eps,pdf,tex,emf,wmf,xaml]"
+#~ msgstr "Typ(y) souborů pro export: [svg,png,ps,eps,pdf,tex,emf,wmf,xaml]"
 
 #~ msgid "Report this triangle's properties"
 #~ msgstr "Nahlásit vlastnosti tohoto trojúhelníku"
