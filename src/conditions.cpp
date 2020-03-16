@@ -11,6 +11,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <vector>
 #include <set>
 
 #include <glibmm/ustring.h>
@@ -54,13 +55,12 @@ bool sp_item_evaluate(SPItem const *item) {
 
 #define ISALNUM(c)    (((c) >= 'a' && (c) <= 'z') || ((c) >= 'A' && (c) <= 'Z') || ((c) >= '0' && (c) <= '9'))
 
-static gchar *preprocessLanguageCode(gchar *lngcode) {
-    if ( nullptr == lngcode )
+// TODO: review and modernize this function
+static gchar *preprocessLanguageCode(const gchar *language_code) {
+    if ( nullptr == language_code || strcmp(language_code, "") == 0)
         return nullptr;
 
-    lngcode = g_strstrip(lngcode);
-    if ( 0 == *lngcode )
-        return lngcode;
+    gchar *lngcode = g_strdup(language_code);
     for ( unsigned int i = 0 ; i < strlen(lngcode) ; i++ ) {
         if ( lngcode[i] >= 'A' && lngcode[i] <= 'Z' ) {
             lngcode[i] = g_ascii_tolower(lngcode[i]);
@@ -68,11 +68,11 @@ static gchar *preprocessLanguageCode(gchar *lngcode) {
             lngcode[i] = '-';
         } else if ( !ISALNUM(lngcode[i]) && '-' != lngcode[i] ) {
             // only alpha numeric characters and '-' may be contained in language code
-            lngcode[0] = 0;
-            break;
+            g_free(lngcode);
+            return nullptr;
         }
     }
-    
+
     return lngcode;
 }
 
@@ -106,25 +106,20 @@ static bool evaluateSystemLanguage(SPItem const *item, gchar const *value) {
         return false;
 
     SPDocument *document = item->document;
-    Glib::ustring document_language = document->getLanguage();
+    const auto document_languages = document->getLanguages();
 
-    if (document_language.size() == 0)
+    if (document_languages.size() == 0)
         return false;
 
-    bool match = true;
-    strlist = g_strsplit( document_language.c_str(), ",", 0);
-    for ( int i = 0 ; (str = strlist[i]) ; i++ ) {
-        gchar *lngcode = preprocessLanguageCode(str);
-        if ( 0 == *lngcode )
-            continue;
-        if ( language_codes.find(lngcode) != language_codes.end() ) {
-            match = true;
-            break;
+    for (const auto &language : document_languages) {
+        gchar *lngcode = preprocessLanguageCode(language.c_str());
+        if (lngcode && (language_codes.find(lngcode) != language_codes.end())) {
+            g_free(lngcode);
+            return true;
         }
-        match = false;
+        g_free(lngcode);
     }
-    g_strfreev(strlist);
-    return match;
+    return false;
 }
 
 static std::vector<Glib::ustring> splitByWhitespace(gchar const *value) {

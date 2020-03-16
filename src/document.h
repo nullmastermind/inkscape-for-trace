@@ -182,7 +182,7 @@ public:
     Inkscape::XML::Document const *getReprDoc() const { return rdoc; }
 
 
-    Glib::ustring getLanguage() const;
+    std::vector<Glib::ustring> getLanguages() const;
 
     // Styling
     CRCascade    *getStyleCascade() { return style_cascade; }

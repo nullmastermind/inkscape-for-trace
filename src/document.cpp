@@ -37,6 +37,7 @@
 #define noSP_DOCUMENT_DEBUG_IDLE
 #define noSP_DOCUMENT_DEBUG_UNDO
 
+#include <vector>
 #include <string>
 #include <cstring>
 
@@ -1124,37 +1125,35 @@ SPObject *SPDocument::getObjectByRepr(Inkscape::XML::Node *repr) const
         return nullptr;
 }
 
-Glib::ustring SPDocument::getLanguage() const
+/** Returns preferred document languages (from most to least preferred)
+ *
+ * This currently includes (in order):
+ * - language set in RDF metadata
+ * - languages suitable for system locale (influenced by Inkscape GUI locale preference)
+ */
+std::vector<Glib::ustring> SPDocument::getLanguages() const
 {
-    gchar const *document_language = rdf_get_work_entity(this, rdf_find_entity("language"));
-    if (document_language) {
-        while (isspace(*document_language))
-            document_language++;
-    }
-    if ( !document_language || 0 == *document_language) {
-        // retrieve system language
-        document_language = getenv("LC_ALL");
-        if ( nullptr == document_language || *document_language == 0 ) {
-            document_language = getenv ("LC_MESSAGES");
-        }
-        if ( nullptr == document_language || *document_language == 0 ) {
-            document_language = getenv ("LANG");
-        }
-        if ( nullptr == document_language || *document_language == 0 ) {
-            document_language = getenv ("LANGUAGE");
-        }
+    std::vector<Glib::ustring> document_languages;
 
-        if ( nullptr != document_language ) {
-            const char *pos = strchr(document_language, '_');
-            if ( nullptr != pos ) {
-                return Glib::ustring(document_language, pos - document_language);
-            }
+    // get language from RDF
+    gchar const *rdf_language = rdf_get_work_entity(this, rdf_find_entity("language"));
+    if (rdf_language) {
+        gchar *rdf_language_stripped = g_strstrip(g_strdup(rdf_language));
+        if (strcmp(rdf_language_stripped, "") != 0) {
+            document_languages.emplace_back(rdf_language_stripped);
         }
+        g_free(rdf_language_stripped);
     }
 
-    if ( nullptr == document_language )
-        return Glib::ustring();
-    return document_language;
+    // get language from system locale (will also match the interface language preference as we set LANG accordingly)
+    // TODO: This includes locales with encodings like "de_DE.UTF-8" - is this useful or should we skip these?
+    // TODO: This includes the default "C" locale - is this useful or should we skip it?
+    const gchar * const * names = g_get_language_names();
+    for (int i=0; names[i]; i++) {
+        document_languages.emplace_back(names[i]);
+    }
+
+    return document_languages;
 }
 
 /* Object modification root handler */
