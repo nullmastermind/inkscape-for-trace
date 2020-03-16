@@ -250,8 +250,12 @@ InkFileExportCmd::do_export_svg(SPDocument* doc, std::string filename_in)
         }
     }
 
-    if(export_area_drawing) {
+    if (export_area_drawing) {
         fit_canvas_to_drawing(doc, export_margin != 0 ? true : false);
+    } else if (export_area_page || export_id.empty() ) {
+        if (export_margin) {
+            doc->fitToRect(doc->getViewBox(), true);
+        }
     }
 
 
@@ -277,9 +281,9 @@ InkFileExportCmd::do_export_svg(SPDocument* doc, std::string filename_in)
                 // If -j then remove all other objects to complete the "crop"
                 doc->getRoot()->cropToObject(obj);
             }
-            Inkscape::ObjectSet s(doc);
-            s.set(obj);
-            if (!export_area_page) {
+            if (!(export_area_page || export_area_drawing)) {
+                Inkscape::ObjectSet s(doc);
+                s.set(obj);
                 s.fitCanvas(export_margin ? true : false);
             }
         }
