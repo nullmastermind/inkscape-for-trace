@@ -47,8 +47,7 @@ ExpirationTimer::ExpirationTimer (Extension * in_extension):
         timer_list->next = this;
     }
 
-    expiration.assign_current_time();
-    expiration += timeout;
+    expiration = Glib::DateTime::create_now_utc().add_seconds(timeout);
     
     if (!timer_started) {
         Glib::signal_timeout().connect(sigc::ptr_fun(&timer_func), timeout * 1000 / TIMER_SCALE_VALUE);
@@ -106,14 +105,13 @@ ExpirationTimer::~ExpirationTimer()
 void
 ExpirationTimer::touch ()
 {
-    Glib::TimeVal current;
-    current.assign_current_time();
+    auto const current = Glib::DateTime::create_now_utc();
 
-    long time_left = (long)(expiration.as_double() - current.as_double());
+    auto time_left = expiration.difference(current);
     if (time_left < 0) time_left = 0;
     time_left /= 2;
 
-    expiration = current + timeout + time_left;
+    expiration = current.add(time_left).add_seconds(timeout);
     return;
 }
 
@@ -126,9 +124,8 @@ ExpirationTimer::expired () const
 {
     if (locked > 0) return false;
 
-    Glib::TimeVal current;
-    current.assign_current_time();
-    return expiration < current;
+    auto const current = Glib::DateTime::create_now_utc();
+    return expiration.difference(current) < 0;
 }
 
 // int idle_cnt = 0;

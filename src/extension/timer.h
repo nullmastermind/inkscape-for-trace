@@ -16,7 +16,7 @@
 
 #include <cstddef>
 #include <sigc++/sigc++.h>
-#include <glibmm/timeval.h>
+#include <glibmm/datetime.h>
 
 namespace Inkscape {
 namespace Extension {
@@ -28,7 +28,7 @@ class ExpirationTimer {
     static ExpirationTimer * timer_list;
     /** \brief Which timer was on top when we started the idle loop */
     static ExpirationTimer * idle_start;
-    /** \brief What the current timeout is */
+    /** \brief What the current timeout is (in seconds) */
     static long timeout;
     /** \brief Has the timer been started? */
     static bool timer_started;
@@ -38,7 +38,7 @@ class ExpirationTimer {
     /** \brief Next entry in the list */
     ExpirationTimer * next;
     /** \brief When this timer expires */
-    Glib::TimeVal expiration;
+    Glib::DateTime expiration;
     /** \brief What extension this function relates to */
     Extension * extension;
 
