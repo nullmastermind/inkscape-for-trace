@@ -219,3 +219,20 @@ add_cli_test(export-dpi_pdf PARAMETERS --export-dpi=12 --export-type=pdf INPUT_F
 add_cli_test(export-dpi_ps  PARAMETERS --export-dpi=12 --export-type=ps  INPUT_FILENAME filter.svg OUTPUT_FILENAME export-dpi.ps  REFERENCE_FILENAME export-dpi_expected.ps  )
 add_cli_test(export-dpi_eps PARAMETERS --export-dpi=12 --export-type=eps INPUT_FILENAME filter.svg OUTPUT_FILENAME export-dpi.eps REFERENCE_FILENAME export-dpi_expected.eps )
 # EMF, WMF: doesn't make sense
+
+# --export-width
+add_cli_test(export-width_png                  PARAMETERS --export-width=380                                      --export-type=png INPUT_FILENAME export_hints.svg OUTPUT_FILENAME export-width.png  REFERENCE_FILENAME export-width_expected.png )
+add_cli_test(export-width_export-dpi_png       PARAMETERS --export-width=380 --export-dpi=300                     --export-type=png INPUT_FILENAME export_hints.svg OUTPUT_FILENAME export-width2.png REFERENCE_FILENAME export-width_expected.png )
+add_cli_test(export-width_export-use-hints_png PARAMETERS --export-width=380 --export-use-hints --export-id=rect1 --export-type=png
+                                               INPUT_FILENAME export_hints.svg
+                                               PASS_FOR_OUTPUT "Area 10:10:90:70 exported to 380 x 285 pixels \\(456 dpi\\)"
+                                               EXPECTED_FILES "${CMAKE_CURRENT_SOURCE_DIR}/testcases/export_hints_rectangle.png" )
+# SVG, PDF, PS, EPS, EMF, WMF: doesn't make sense
+
+# --export-height
+add_cli_test(export-height_png                  PARAMETERS --export-height=40                                      --export-type=png INPUT_FILENAME export_hints.svg OUTPUT_FILENAME export-height.png  REFERENCE_FILENAME export-height_expected.png )
+add_cli_test(export-height_export-dpi_png       PARAMETERS --export-height=40 --export-dpi=300                     --export-type=png INPUT_FILENAME export_hints.svg OUTPUT_FILENAME export-height2.png REFERENCE_FILENAME export-height_expected.png )
+add_cli_test(export-height_export-use-hints_png PARAMETERS --export-height=40 --export-use-hints --export-id=rect1 --export-type=png
+                                                INPUT_FILENAME export_hints.svg PASS_FOR_OUTPUT "Area 10:10:90:70 exported to 53 x 40 pixels \\(64 dpi\\)"
+                                                EXPECTED_FILES "${CMAKE_CURRENT_SOURCE_DIR}/testcases/export_hints_rectangle.png" )
+# SVG, PDF, PS, EPS, EMF, WMF: doesn't make sense
