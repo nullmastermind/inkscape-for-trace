@@ -129,7 +129,7 @@ InkscapeApplication::document_open(const Glib::RefPtr<Gio::File>& file)
         document->setVirgin(false); // Prevents replacing document in same window during file open.
 
         document_add (document);
-    } else {
+    } else if (!cancelled) {
         std::cerr << "InkscapeApplication::document_open: Failed to open: " << file->get_parse_name() << std::endl;
 
         gchar *text = g_strdup_printf(_("Failed to load the requested file %s"), file->get_parse_name().c_str());

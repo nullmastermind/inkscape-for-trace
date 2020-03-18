@@ -119,7 +119,7 @@ SPDocument *open(Extension *key, gchar const *filename)
     }
 
     if (!imod->prefs(filename)) {
-        return nullptr;
+        throw Input::open_cancelled();
     }
 
     SPDocument *doc = imod->open(filename);
