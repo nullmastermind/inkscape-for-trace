@@ -36,6 +36,7 @@
 
 #include "object/sp-root.h"       // Inkscape version.
 
+#include "ui/interface.h"         // sp_ui_error_dialog
 #include "ui/dialog/font-substitution.h"  // Warn user about font substitution.
 #include "ui/widget/panel.h"      // Panel prep
 #include "widgets/desktop-widget.h" // Close without saving dialog
@@ -130,6 +131,10 @@ InkscapeApplication::document_open(const Glib::RefPtr<Gio::File>& file)
         document_add (document);
     } else {
         std::cerr << "InkscapeApplication::document_open: Failed to open: " << file->get_parse_name() << std::endl;
+
+        gchar *text = g_strdup_printf(_("Failed to load the requested file %s"), file->get_parse_name().c_str());
+        sp_ui_error_dialog(text);
+        g_free(text);
     }
 
     return document;
@@ -1165,7 +1170,7 @@ template<class T>
 void
 ConcreteInkscapeApplication<T>::shell()
 {
-    std::cout << "Inkscape interactive shell mode. Type 'action-list' to list all actions. " 
+    std::cout << "Inkscape interactive shell mode. Type 'action-list' to list all actions. "
               << "Type 'quit' to quit." << std::endl;
     std::cout << " Input of the form:" << std::endl;
     std::cout << " action1:arg1; action2;arg2; verb1; verb2; ..." << std::endl;

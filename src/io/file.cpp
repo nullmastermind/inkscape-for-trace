@@ -93,6 +93,8 @@ ink_file_open(const Glib::RefPtr<Gio::File>& file, bool &cancelled)
 
     std::string path = file->get_path();
 
+    // TODO: It's useless to catch these exceptions here (and below) unless we do something with them.
+    //       If we can't properly handle them (e.g. by showing a user-visible message) don't catch them!
     try {
         doc = Inkscape::Extension::open(nullptr, path.c_str());
     } catch (Inkscape::Extension::Input::no_extension_found &e) {
@@ -105,6 +107,7 @@ ink_file_open(const Glib::RefPtr<Gio::File>& file, bool &cancelled)
     }
 
     // Try to open explicitly as SVG.
+    // TODO: Why is this necessary? Shouldn't this be handled by the first call already? 
     if (doc == nullptr && !cancelled) {
         try {
             doc = Inkscape::Extension::open(Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG), path.c_str());
