@@ -85,9 +85,9 @@ ink_file_open(const Glib::ustring& data)
  * Open a document.
  */
 SPDocument*
-ink_file_open(const Glib::RefPtr<Gio::File>& file, bool &cancelled)
+ink_file_open(const Glib::RefPtr<Gio::File>& file, bool *cancelled_param)
 {
-    cancelled = false;
+    bool cancelled = false;
 
     SPDocument *doc = nullptr;
 
@@ -107,7 +107,7 @@ ink_file_open(const Glib::RefPtr<Gio::File>& file, bool &cancelled)
     }
 
     // Try to open explicitly as SVG.
-    // TODO: Why is this necessary? Shouldn't this be handled by the first call already? 
+    // TODO: Why is this necessary? Shouldn't this be handled by the first call already?
     if (doc == nullptr && !cancelled) {
         try {
             doc = Inkscape::Extension::open(Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG), path.c_str());
@@ -121,16 +121,18 @@ ink_file_open(const Glib::RefPtr<Gio::File>& file, bool &cancelled)
         }
     }
 
-    if (doc == nullptr) {
-        std::cerr << "ink_file_open: '" << path << "' cannot be opened!" << std::endl;
-    } else {
-
+    if (doc != nullptr) {
         // This is the only place original values should be set.
         SPRoot *root = doc->getRoot();
         root->original.inkscape = root->version.inkscape;
         root->original.svg      = root->version.svg;
+    } else if (!cancelled) {
+        std::cerr << "ink_file_open: '" << path << "' cannot be opened!" << std::endl;
     }
 
+    if (cancelled_param) {
+        *cancelled_param = cancelled;
+    }
     return doc;
 }
 

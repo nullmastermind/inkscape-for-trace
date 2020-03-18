@@ -72,7 +72,7 @@ public:
     void                  document_add(SPDocument* document);
 
     SPDocument*           document_new(const std::string &Template);
-    SPDocument*           document_open(const Glib::RefPtr<Gio::File>& file);
+    SPDocument*           document_open(const Glib::RefPtr<Gio::File>& file, bool *cancelled = nullptr);
     SPDocument*           document_open(const std::string& data);
     bool                  document_swap(InkscapeWindow* window, SPDocument* document);
     bool                  document_revert(SPDocument* document);

@@ -119,22 +119,17 @@ InkscapeApplication::document_new(const std::string &Template)
 
 // Open a document, add it to app.
 SPDocument*
-InkscapeApplication::document_open(const Glib::RefPtr<Gio::File>& file)
+InkscapeApplication::document_open(const Glib::RefPtr<Gio::File>& file, bool *cancelled)
 {
     // Open file
-    bool cancelled = false;
     SPDocument *document = ink_file_open(file, cancelled);
 
     if (document) {
         document->setVirgin(false); // Prevents replacing document in same window during file open.
 
         document_add (document);
-    } else if (!cancelled) {
+    } else if (cancelled == nullptr || !(*cancelled)) {
         std::cerr << "InkscapeApplication::document_open: Failed to open: " << file->get_parse_name() << std::endl;
-
-        gchar *text = g_strdup_printf(_("Failed to load the requested file %s"), file->get_parse_name().c_str());
-        sp_ui_error_dialog(text);
-        g_free(text);
     }
 
     return document;
@@ -805,9 +800,10 @@ ConcreteInkscapeApplication<Gtk::Application>::create_window(const Glib::RefPtr<
 {
     SPDocument* document = nullptr;
     InkscapeWindow* window = nullptr;
+    bool cancelled = false;
 
     if (file) {
-        document = document_open (file);
+        document = document_open(file, &cancelled);
         if (document) {
 
             if (add_to_recent) {
@@ -821,9 +817,13 @@ ConcreteInkscapeApplication<Gtk::Application>::create_window(const Glib::RefPtr<
 
             window = create_window (document, replace);
 
-        } else {
+        } else if (!cancelled) {
             std::cerr << "ConcreteInkscapeApplication<T>::create_window: Failed to load: "
                       << file->get_parse_name() << std::endl;
+
+            gchar *text = g_strdup_printf(_("Failed to load the requested file %s"), file->get_parse_name().c_str());
+            sp_ui_error_dialog(text);
+            g_free(text);
         }
 
     } else {
