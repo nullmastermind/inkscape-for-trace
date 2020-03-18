@@ -293,7 +293,7 @@ SPDocument *CdrInput::open(Inkscape::Extension::Input * /*mod*/, const gchar * u
                dlg = new CdrImportDialog(tmpSVGOutput);
                if (!dlg->showDialog()) {
                     delete dlg;
-                    return nullptr;
+                    throw Input::open_cancelled();
                }
           }
 

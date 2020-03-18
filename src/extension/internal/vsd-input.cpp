@@ -293,7 +293,7 @@ SPDocument *VsdInput::open(Inkscape::Extension::Input * /*mod*/, const gchar * u
                dlg = new VsdImportDialog(tmpSVGOutput);
                if (!dlg->showDialog()) {
                     delete dlg;
-                    return nullptr;
+                    throw Input::open_cancelled();
                }
           }
 

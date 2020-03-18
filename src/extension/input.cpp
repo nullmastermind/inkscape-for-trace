@@ -155,10 +155,6 @@ Input::open (const gchar *uri)
 
     SPDocument *const doc = imp->open(this, uri);
 
-    if (imp->wasCancelled()) {
-        throw Input::open_cancelled();
-    }
-
     return doc;
 }
 

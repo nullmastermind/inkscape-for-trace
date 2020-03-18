@@ -141,9 +141,6 @@ public:
     SPDocument *open( Inkscape::Extension::Input *mod,
                                 const gchar *uri ) override;
     static void         init( );
-    bool wasCancelled() override;
-private:
-    bool _cancelled;
 };
 
 } // namespace Implementation

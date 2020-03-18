@@ -640,11 +640,6 @@ void PdfImportDialog::_setPreviewPage(int page) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool
-PdfInput::wasCancelled () {
-    return _cancelled;
-}
-
 #ifdef HAVE_POPPLER_CAIRO
 /// helper method
 static cairo_status_t
@@ -662,8 +657,6 @@ static cairo_status_t
  */
 SPDocument *
 PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
-
-    _cancelled = false;
 
     // Initialize the globalParams variable for poppler
     if (!globalParams) {
@@ -748,10 +741,9 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
     if (INKSCAPE.use_gui()) {
         dlg = new PdfImportDialog(pdf_doc, uri);
         if (!dlg->showDialog()) {
-            _cancelled = true;
             delete dlg;
             delete pdf_doc;
-            return nullptr;
+            throw Input::open_cancelled();
         }
     }
 
