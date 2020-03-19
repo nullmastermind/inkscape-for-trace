@@ -10,6 +10,8 @@
 
 #include <iostream>
 #include <iomanip>
+#include <cerrno>  // History file
+#include <fstream> // History file
 #include <regex>
 
 #include <glibmm/i18n.h>  // Internationalization
@@ -1192,10 +1194,24 @@ ConcreteInkscapeApplication<T>::shell()
     }
 
 #ifdef WITH_GNU_READLINE
+    // This should not be a ustring!
+    Glib::ustring history_file =
+        Inkscape::IO::Resource::get_path_ustring(Inkscape::IO::Resource::USER,
+                                                 Inkscape::IO::Resource::NONE, "shell.history");
     static bool init = false;
     if (!init) {
         readline_init();
+        using_history();
         init = true;
+
+        // Create history file if does not exist (or read_history() produces error).
+        std::fstream test(history_file, std::ios::out | std::ios::app);
+        test.close();
+
+        int error = read_history(history_file.c_str());
+        if (error) {
+            std::cerr << "read_history error: " << std::strerror(error) << " " << history_file << std::endl;
+        }
     }
 #endif
 
@@ -1207,7 +1223,9 @@ ConcreteInkscapeApplication<T>::shell()
         char *readline_input = readline("> ");
         if (readline_input) {
             input = readline_input;
-            add_history(readline_input);
+            if (input != "quit" && input != "q") {
+                add_history(readline_input);
+            }
         } else {
             eof = true;
         }
@@ -1235,6 +1253,14 @@ ConcreteInkscapeApplication<T>::shell()
         Glib::RefPtr<Glib::MainContext> context = Glib::MainContext::get_default();
         while (context->iteration(false)) {};
     }
+
+#ifdef WITH_GNU_READLINE
+    int error = append_history(200, history_file.c_str()); // ToDo: Make number a preference.
+    if (error) {
+        std::cerr << "append_history error: " << std::strerror(error) << " " << history_file << std::endl;
+    }
+    history_truncate_file(history_file.c_str(), 200);
+#endif
 
     if (_with_gui) {
         Gio::Application::quit(); // Force closing windows.
