@@ -14910,7 +14910,7 @@ msgstr "Z_dejmij maskę"
 
 #: ../src/ui/contextmenu.cpp:474
 msgid "Create Clip G_roup"
-msgstr "Utwórz przycięcie grópy"
+msgstr "Utwórz przycięcie grupy"
 
 #: ../src/ui/contextmenu.cpp:481
 msgid "Set Cl_ip"
