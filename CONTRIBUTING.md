@@ -121,6 +121,9 @@ Before landing a patch, the unit tests should pass.
 
 See: http://wiki.inkscape.org/wiki/index.php/CMake#Using_CMake_to_run_tests
 
+General Guidelines for developers
+----------------------------------
+
 * If you are new, fork the inkscape project (https://gitlab.com/inkscape/inkscape) and create a new branch for each bug/feature you want to work on.
 * Merge requests (MR) are encouraged for the smallest of contributions. This helps other developers review the code you've written and check for the mistakes that may have slipped by you.
 * Before working on anything big, be sure to discuss your idea with us (IRC or RocketChat). Someone else might already have plans you can build upon and we will try to guide you !
