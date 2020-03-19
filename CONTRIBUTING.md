@@ -126,7 +126,7 @@ General Guidelines for developers
 
 * If you are new, fork the inkscape project (https://gitlab.com/inkscape/inkscape) and create a new branch for each bug/feature you want to work on.
 * Merge requests (MR) are encouraged for the smallest of contributions. This helps other developers review the code you've written and check for the mistakes that may have slipped by you.
-* Before working on anything big, be sure to discuss your idea with us (IRC or RocketChat). Someone else might already have plans you can build upon and we will try to guide you !
+* Before working on anything big, be sure to discuss your idea with us ([IRC](irc://irc.freenode.org/#inkscape) or [RocketChat](https://chat.inkscape.org/)). Someone else might already have plans you can build upon and we will try to guide you !
 * Carefully explain your ideas and the changes you've made along with their importance in the MR. Feel free to use pictures !
 * Write informative commit messages. Try to keep your MR current instead of creating a new one. Rebase your MR sometimes. Set the CI time to a reasonably high value (like 2 hour).
 * Check the "Allow commits from members who can merge to this target branch" option while submitting the MR.
