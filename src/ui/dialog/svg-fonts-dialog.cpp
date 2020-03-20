@@ -726,7 +726,7 @@ void SvgFontsDialog::glyph_advance_edit(const Glib::ustring&, const Glib::ustrin
 
     SPGlyph* glyph = (*i)[_GlyphsListColumns.glyph_node];
     //XML Tree being directly used here while it shouldn't be.
-    std::istringstream is(str);
+    std::istringstream is(str.raw());
     double value;
     // Check if input valid
     if ((is >> value)) {

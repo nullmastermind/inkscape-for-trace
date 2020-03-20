@@ -510,7 +510,7 @@ std::vector<TracingEngineResult> PotraceTracingEngine::traceBrightnessMulti(GdkP
                     ustring style = ustring::compose("fill-opacity:1.0;fill:#%1%2%3", twohex(grayVal), twohex(grayVal), twohex(grayVal) );
 
                     //g_message("### GOT '%s' \n", style.c_str());
-                    TracingEngineResult result(style, d, nodeCount);
+                    TracingEngineResult result(style.raw(), d, nodeCount);
                     results.push_back(result);
 
                     if (!multiScanStack) {
@@ -577,7 +577,7 @@ std::vector<TracingEngineResult> PotraceTracingEngine::traceQuant(GdkPixbuf * th
                     ustring style = ustring::compose("fill:#%1%2%3", twohex(rgb.r), twohex(rgb.g), twohex(rgb.b) );
 
                     //g_message("### GOT '%s' \n", style.c_str());
-                    TracingEngineResult result(style, d, nodeCount);
+                    TracingEngineResult result(style.raw(), d, nodeCount);
                     results.push_back(result);
 
                     SPDesktop *desktop = SP_ACTIVE_DESKTOP;

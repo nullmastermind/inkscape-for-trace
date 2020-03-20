@@ -35,6 +35,13 @@ namespace IO {
 
 namespace Resource {
 
+static void get_filenames_from_path(std::vector<Glib::ustring> &files, std::string const &path,
+                                    std::vector<const char *> const &extensions = {},
+                                    std::vector<const char *> const &exclusions = {});
+
+static void get_foldernames_from_path(std::vector<Glib::ustring> &folders, std::string const &path,
+                                      std::vector<const char *> const &exclusions = {});
+
 #define INKSCAPE_PROFILE_DIR "inkscape"
 
 gchar *_get_path(Domain domain, Type type, char const *filename)
@@ -128,6 +135,16 @@ Glib::ustring get_path_ustring(Domain domain, Type type, char const *filename)
     }
     return result;
 }
+std::string get_path_string(Domain domain, Type type, char const *filename)
+{
+    std::string result;
+    char *path = _get_path(domain, type, filename);
+    if (path) {
+        result = path;
+        g_free(path);
+    }
+    return result;
+}
 
 /*
  * Same as get_path, but checks for file's existence and falls back
@@ -142,7 +159,12 @@ Glib::ustring get_path_ustring(Domain domain, Type type, char const *filename)
  */
 Glib::ustring get_filename(Type type, char const *filename, bool localized, bool silent)
 {
-    Glib::ustring result;
+    return get_filename_string(type, filename, localized, silent);
+}
+
+std::string get_filename_string(Type type, char const *filename, bool localized, bool silent)
+{
+    std::string result;
 
     char *user_filename = nullptr;
     char *sys_filename = nullptr;
@@ -154,7 +176,7 @@ Glib::ustring get_filename(Type type, char const *filename, bool localized, bool
     localized = localized && strcmp(_("en"), "en");
 
     if (localized) {
-        Glib::ustring localized_filename = filename;
+        std::string localized_filename = filename;
         localized_filename.insert(localized_filename.rfind('.'), ".");
         localized_filename.insert(localized_filename.rfind('.'), _("en"));
 
@@ -167,16 +189,16 @@ Glib::ustring get_filename(Type type, char const *filename, bool localized, bool
     // impose the following load order:
     //   USER (localized) > USER > SYSTEM (localized) > SYSTEM
     if (localized && file_test(user_filename_localized, G_FILE_TEST_EXISTS)) {
-        result = Glib::ustring(user_filename_localized);
+        result = user_filename_localized;
         g_info("Found localized version of resource file '%s' in profile directory:\n\t%s", filename, result.c_str());
     } else if (file_test(user_filename, G_FILE_TEST_EXISTS)) {
-        result = Glib::ustring(user_filename);
+        result = user_filename;
         g_info("Found resource file '%s' in profile directory:\n\t%s", filename, result.c_str());
     } else if (localized && file_test(sys_filename_localized, G_FILE_TEST_EXISTS)) {
-        result = Glib::ustring(sys_filename_localized);
+        result = sys_filename_localized;
         g_info("Found localized version of resource file '%s' in system directory:\n\t%s", filename, result.c_str());
     } else if (file_test(sys_filename, G_FILE_TEST_EXISTS)) {
-        result = Glib::ustring(sys_filename);
+        result = sys_filename;
         g_info("Found resource file '%s' in system directory:\n\t%s", filename, result.c_str());
     } else if (!silent) {
         if (localized) {
@@ -204,21 +226,28 @@ Glib::ustring get_filename(Type type, char const *filename, bool localized, bool
  */
 Glib::ustring get_filename(Glib::ustring path, Glib::ustring filename)
 {
+    return get_filename(path.raw(), filename.raw());
+}
+
+std::string get_filename(std::string const& path, std::string const& filename)
+{
     // Test if it's a filename and get the parent directory instead
     if (Glib::file_test(path, Glib::FILE_TEST_IS_REGULAR)) {
-        return get_filename(g_path_get_dirname(path.c_str()), filename);
+        auto dirname = Glib::path_get_dirname(path);
+        g_assert(!Glib::file_test(dirname, Glib::FILE_TEST_IS_REGULAR)); // recursion sanity check
+        return get_filename(dirname, filename);
     }
     if (g_path_is_absolute(filename.c_str())) {
         if (Glib::file_test(filename, Glib::FILE_TEST_EXISTS)) {
             return filename;
         }
     } else {
-        Glib::ustring ret = Glib::build_filename(path, filename);
+        auto ret = Glib::build_filename(path, filename);
         if (Glib::file_test(ret, Glib::FILE_TEST_EXISTS)) {
             return ret;
         }
     }
-    return Glib::ustring();
+    return {};
 }
 
 /*
@@ -232,22 +261,22 @@ Glib::ustring get_filename(Glib::ustring path, Glib::ustring filename)
 std::vector<Glib::ustring> get_filenames(Type type, std::vector<const char *> extensions, std::vector<const char *> exclusions)
 {
     std::vector<Glib::ustring> ret;
-    get_filenames_from_path(ret, get_path_ustring(USER, type), extensions, exclusions);
-    get_filenames_from_path(ret, get_path_ustring(SYSTEM, type), extensions, exclusions);
-    get_filenames_from_path(ret, get_path_ustring(CREATE, type), extensions, exclusions);
+    get_filenames_from_path(ret, get_path_string(USER, type), extensions, exclusions);
+    get_filenames_from_path(ret, get_path_string(SYSTEM, type), extensions, exclusions);
+    get_filenames_from_path(ret, get_path_string(CREATE, type), extensions, exclusions);
     return ret;
 }
 
 std::vector<Glib::ustring> get_filenames(Domain domain, Type type, std::vector<const char *> extensions, std::vector<const char *> exclusions)
 {
     std::vector<Glib::ustring> ret;
-    get_filenames_from_path(ret, get_path_ustring(domain, type), extensions, exclusions);
+    get_filenames_from_path(ret, get_path_string(domain, type), extensions, exclusions);
     return ret;
 }
 std::vector<Glib::ustring> get_filenames(Glib::ustring path, std::vector<const char *> extensions, std::vector<const char *> exclusions)
 {
     std::vector<Glib::ustring> ret;
-    get_filenames_from_path(ret, path, extensions, exclusions);
+    get_filenames_from_path(ret, path.raw(), extensions, exclusions);
     return ret;
 }
 
@@ -290,7 +319,8 @@ std::vector<Glib::ustring> get_foldernames(Glib::ustring path, std::vector<const
  * extensions - Only add files with these extensions, they must be duplicated
  * exclusions - Exclude files that exactly match these names.
  */
-void get_filenames_from_path(std::vector<Glib::ustring> &files, Glib::ustring path, std::vector<const char *> extensions, std::vector<const char *> exclusions)
+void get_filenames_from_path(std::vector<Glib::ustring> &files, std::string const &path,
+                             std::vector<const char *> const &extensions, std::vector<const char *> const &exclusions)
 {
     if(!Glib::file_test(path, Glib::FILE_TEST_IS_DIR)) {
         return;
@@ -313,7 +343,7 @@ void get_filenames_from_path(std::vector<Glib::ustring> &files, Glib::ustring pa
         }
 
         // Reject any filename which isn't a regular file
-        Glib::ustring filename = Glib::build_filename(path, file);
+        auto filename = Glib::build_filename(path, file);
 
         if(Glib::file_test(filename, Glib::FILE_TEST_IS_DIR)) {
             get_filenames_from_path(files, filename, extensions, exclusions);
@@ -334,6 +364,12 @@ void get_filenames_from_path(std::vector<Glib::ustring> &files, Glib::ustring pa
 void get_foldernames_from_path(std::vector<Glib::ustring> &folders, Glib::ustring path,
                                std::vector<const char *> exclusions)
 {
+    get_foldernames_from_path(folders, path.raw(), exclusions);
+}
+
+void get_foldernames_from_path(std::vector<Glib::ustring> &folders, std::string const &path,
+                               std::vector<const char *> const &exclusions)
+{
     if (!Glib::file_test(path, Glib::FILE_TEST_IS_DIR)) {
         return;
     }
@@ -350,7 +386,7 @@ void get_foldernames_from_path(std::vector<Glib::ustring> &folders, Glib::ustrin
         }
 
         // Reject any filename which isn't a regular file
-        Glib::ustring filename = Glib::build_filename(path, file);
+        auto filename = Glib::build_filename(path, file);
 
         if (Glib::file_test(filename, Glib::FILE_TEST_IS_DIR) && !reject) {
             folders.push_back(filename);

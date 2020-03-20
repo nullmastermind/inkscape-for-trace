@@ -161,7 +161,7 @@ InkFileExportCmd::get_filename_out(std::string filename_in, std::string object_i
 
     // Use filename provided with --export-filename if given (and append proper extension).
     if (!export_filename.empty()) {
-        return export_filename + "." + export_type_current;
+        return export_filename + "." + export_type_current.raw();
     }
 
     // Check for pipe
@@ -177,17 +177,17 @@ InkFileExportCmd::get_filename_out(std::string filename_in, std::string object_i
     }
 
     std::string extension = filename_in.substr(extension_pos+1);
-    if (export_overwrite && export_type_current == extension) {
+    if (export_overwrite && export_type_current.raw() == extension) {
         return filename_in;
     } else {
         std::string tag;
-        if (export_type_current == extension) {
+        if (export_type_current.raw() == extension) {
             tag = "_out";
         }
         if (!object_id.empty()) {
             tag = "_" + object_id;
         }
-        return (filename_in.substr(0,extension_pos) + tag + "." + export_type_current);
+        return (filename_in.substr(0,extension_pos) + tag + "." + export_type_current.raw());
     }
 
     // We need a valid file name to write to unless we're using PNG export hints.
@@ -268,7 +268,7 @@ InkFileExportCmd::do_export_svg(SPDocument* doc, std::string filename_in)
 
     for (auto object : objects) {
 
-        std::string filename_out = get_filename_out(filename_in, object);
+        std::string filename_out = get_filename_out(filename_in, object.raw());
         if (filename_out.empty()) {
             return 1;
         }
@@ -365,7 +365,7 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string filename_in)
 
     for (auto object_id : objects) {
 
-        std::string filename_out = get_filename_out(filename_in, object_id);
+        std::string filename_out = get_filename_out(filename_in, object_id.raw());
 
         std::vector<SPItem*> items;
 
@@ -638,7 +638,7 @@ InkFileExportCmd::do_export_ps_pdf(SPDocument* doc, std::string filename_in, std
         const gchar *pdfver_param_name = "PDFversion";
         if (!export_pdf_level.empty()) {
             // combine "PDF " and the given command line
-            std::string version_gui_string = std::string("PDF-") + export_pdf_level;
+            std::string version_gui_string = std::string("PDF-") + export_pdf_level.raw();
             try {
                 // first, check if the given pdf version is selectable in the ComboBox
                 if ((*i)->get_param_optiongroup_contains("PDFversion", version_gui_string.c_str())) {
@@ -681,7 +681,7 @@ InkFileExportCmd::do_export_ps_pdf(SPDocument* doc, std::string filename_in, std
 
     for (auto object : objects) {
 
-        std::string filename_out = get_filename_out(filename_in, object);
+        std::string filename_out = get_filename_out(filename_in, object.raw());
         if (filename_out.empty()) {
             return 1;
         }

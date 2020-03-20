@@ -333,7 +333,7 @@ Quantity UnitTable::parseQuantity(Glib::ustring const &q) const
     double value = 0;
     Glib::RefPtr<Glib::Regex> value_regex = Glib::Regex::create("[-+]*[\\d+]*[\\.,]*[\\d+]*[eE]*[-+]*\\d+");
     if (value_regex->match(q, match_info)) {
-        std::istringstream tmp_v(match_info.fetch(0));
+        std::istringstream tmp_v(match_info.fetch(0).raw());
         tmp_v >> value;
     }
     int start_pos, end_pos;

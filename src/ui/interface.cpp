@@ -91,7 +91,7 @@ sp_ui_close_view(GtkWidget */*widget*/)
 
         SPDocument* old_document = window->get_document();
 
-        Glib::ustring template_path = sp_file_default_template_uri();
+        auto template_path = sp_file_default_template_uri();
         SPDocument *doc = app->document_new (template_path);
 
         app->document_swap (window, doc);

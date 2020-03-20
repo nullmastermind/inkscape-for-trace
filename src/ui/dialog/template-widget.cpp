@@ -87,7 +87,7 @@ void TemplateWidget::display(TemplateLoadTab::TemplateData data)
     _short_description_label.set_text(_current_template.short_description);
 
     if (data.preview_name != ""){
-        std::string imagePath = Glib::build_filename(Glib::path_get_dirname(_current_template.path),  _current_template.preview_name);
+        std::string imagePath = Glib::build_filename(Glib::path_get_dirname(_current_template.path), _current_template.preview_name.raw());
         _preview_image.set(imagePath);
         _preview_image.show();
     }

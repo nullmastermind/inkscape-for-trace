@@ -255,7 +255,7 @@ ColorItem::ColorItem(ege::PaintDef::ColorType type) :
 }
 
 ColorItem::ColorItem( unsigned int r, unsigned int g, unsigned int b, Glib::ustring& name ) :
-    def( r, g, b, name ),
+    def( r, g, b, name.raw() ),
     _isFill(false),
     _isStroke(false),
     _isLive(false),

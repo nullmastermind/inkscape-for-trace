@@ -106,6 +106,8 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
+static std::string create_filepath_from_id(Glib::ustring, const Glib::ustring &);
+
 /** A list of strings that is used both in the preferences, and in the
     data fields to describe the various values of \c selection_type. */
 static const char * selection_names[SELECTION_NUMBER_OF] = {
@@ -538,17 +540,17 @@ Glib::RefPtr<Gtk::Adjustment> Export::createSpinbutton( gchar const * /*key*/, f
 } // end of createSpinbutton()
 
 
-Glib::ustring Export::create_filepath_from_id (Glib::ustring id, const Glib::ustring &file_entry_text)
+std::string create_filepath_from_id(Glib::ustring id, const Glib::ustring &file_entry_text)
 {
     if (id.empty())
     {   /* This should never happen */
         id = "bitmap";
     }
 
-    Glib::ustring directory;
+    std::string directory;
 
     if (!file_entry_text.empty()) {
-        directory = Glib::path_get_dirname(file_entry_text);
+        directory = Glib::path_get_dirname(file_entry_text.raw());
     }
 
     if (directory.empty()) {
@@ -563,8 +565,7 @@ Glib::ustring Export::create_filepath_from_id (Glib::ustring id, const Glib::ust
         directory = Inkscape::IO::Resource::homedir_path(nullptr);
     }
 
-    Glib::ustring filename = Glib::build_filename(directory, id+".png");
-    return filename;
+    return Glib::build_filename(directory, id.raw() + ".png");
 }
 
 void Export::onBatchClicked ()
@@ -916,7 +917,7 @@ Gtk::Dialog * Export::create_progress_dialog (Glib::ustring progress_text) {
 }
 
 // FIXME: Some lib function should be available to do this ...
-Glib::ustring Export::filename_add_extension (Glib::ustring filename, Glib::ustring extension)
+static Glib::ustring filename_add_extension(Glib::ustring filename, Glib::ustring extension)
 {
     auto pos = int(filename.size()) - int(extension.size());
     if (pos > 0 && filename[pos - 1] == '.' && filename.substr(pos).lowercase() == extension.lowercase()) {
@@ -926,12 +927,12 @@ Glib::ustring Export::filename_add_extension (Glib::ustring filename, Glib::ustr
     return filename + "." + extension;
 }
 
-Glib::ustring Export::absolutize_path_from_document_location (SPDocument *doc, const Glib::ustring &filename)
+static std::string absolutize_path_from_document_location(SPDocument *doc, const std::string &filename)
 {
-    Glib::ustring path;
+    std::string path;
     //Make relative paths go from the document location, if possible:
     if (!Glib::path_is_absolute(filename) && doc->getDocumentURI()) {
-        Glib::ustring dirname = Glib::path_get_dirname(doc->getDocumentURI());
+        auto dirname = Glib::path_get_dirname(doc->getDocumentURI());
         if (!dirname.empty()) {
             path = Glib::build_filename(dirname, filename);
         }
@@ -1004,7 +1005,7 @@ void Export::onExport ()
 
             // retrieve export filename hint
             const gchar *filename = item->getRepr()->attribute("inkscape:export-filename");
-            Glib::ustring path;
+            std::string path;
             if (!filename) {
                 Glib::ustring tmp;
                 path = create_filepath_from_id(item->getId(), tmp);
@@ -1099,7 +1100,7 @@ void Export::onExport ()
         Glib::ustring const filename_ext = filename_add_extension(filename, "png");
         filename_entry.set_text(filename_ext);
         filename_entry.set_position(filename_ext.length());
-        Glib::ustring path = absolutize_path_from_document_location(doc, filename_ext);
+        std::string path = absolutize_path_from_document_location(doc, filename_ext.raw());
 
         Glib::ustring dirname = Glib::path_get_dirname(path);
         if ( dirname.empty()
@@ -1117,7 +1118,7 @@ void Export::onExport ()
             return;
         }
 
-        Glib::ustring fn = path_get_basename (path);
+        auto fn = Glib::path_get_basename(path);
 
         /* TRANSLATORS: %1 will be the filename, %2 the width, and %3 the height of the image */
         prog_dlg = create_progress_dialog (Glib::ustring::compose(_("Exporting %1 (%2 x %3)"), fn, width, height));

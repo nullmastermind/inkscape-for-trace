@@ -89,7 +89,7 @@ const Glib::ustring& ParamString::set(const Glib::ustring in)
 
 std::string ParamString::value_to_string() const
 {
-    return _value;
+    return _value.raw();
 }
 
 

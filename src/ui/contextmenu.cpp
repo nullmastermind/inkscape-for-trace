@@ -22,6 +22,7 @@
 
 #include "contextmenu.h"
 
+#include <glibmm/convert.h>
 #include <glibmm/i18n.h>
 #include <glibmm/miscutils.h>
 
@@ -764,8 +765,8 @@ void ContextMenu::ImageEdit()
     GError* errThing = nullptr;
     Glib::ustring bmpeditor = getImageEditorName();
     Glib::ustring cmdline = bmpeditor;
-    Glib::ustring name;
-    Glib::ustring fullname;
+    std::string name;
+    std::string fullname;
 
 #ifdef _WIN32
     // g_spawn_command_line_sync parsing is done according to Unix shell rules,
@@ -795,7 +796,7 @@ void ContextMenu::ImageEdit()
 
         if (strncmp (href,"file:",5) == 0) {
         // URI to filename conversion
-          name = g_filename_from_uri(href, nullptr, nullptr);
+          name = Glib::filename_from_uri(href);
         } else {
           name.append(href);
         }

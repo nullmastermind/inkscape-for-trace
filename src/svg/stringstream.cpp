@@ -27,8 +27,10 @@ Inkscape::SVGOStringStream::SVGOStringStream()
 }
 
 Inkscape::SVGOStringStream &
-operator<<(Inkscape::SVGOStringStream &os, float d)
+Inkscape::SVGOStringStream::operator<<(double d)
 {
+    auto &os = *this;
+
     /* Try as integer first. */
     {
         int const n = int(d);
@@ -48,29 +50,9 @@ operator<<(Inkscape::SVGOStringStream &os, float d)
 }
 
 Inkscape::SVGOStringStream &
-operator<<(Inkscape::SVGOStringStream &os, double d)
+Inkscape::SVGOStringStream::operator<<(Geom::Point const & p)
 {
-    /* Try as integer first. */
-    {
-        int const n = int(d);
-        if (d == n) {
-            os << n;
-            return os;
-        }
-    }
-
-    std::ostringstream s;
-    s.imbue(std::locale::classic());
-    s.flags(os.setf(std::ios::showpoint));
-    s.precision(os.precision());
-    s << d;
-    os << strip_trailing_zeros(s.str());
-    return os;
-}
-
-Inkscape::SVGOStringStream &
-operator<<(Inkscape::SVGOStringStream &os, Geom::Point const & p)
-{
+    auto &os = *this;
     os << p[0] << ',' << p[1];
     return os;
 }

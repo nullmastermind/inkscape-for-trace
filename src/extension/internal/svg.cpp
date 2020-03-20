@@ -142,7 +142,7 @@ static void remove_marker_auto_start_reverse(Inkscape::XML::Node *repr,
 
         if (matchInfo.matches()) {
 
-            std::string marker_name = matchInfo.fetch(1);
+            auto marker_name = matchInfo.fetch(1).raw();
             Inkscape::XML::Node *marker = sp_repr_lookup_child (defs, "id", marker_name.c_str());
             if (marker) {
 
@@ -150,7 +150,7 @@ static void remove_marker_auto_start_reverse(Inkscape::XML::Node *repr,
                 if (strncmp(marker->attribute("orient"), "auto-start-reverse", 17)==0) {
 
                     // See if a reversed marker already exists.
-                    Glib::ustring marker_name_reversed = marker_name + "_reversed";
+                    auto marker_name_reversed = marker_name + "_reversed";
                     Inkscape::XML::Node *marker_reversed =
                         sp_repr_lookup_child (defs, "id", marker_name_reversed.c_str());
 

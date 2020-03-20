@@ -403,7 +403,7 @@ sp_recent_open(Gtk::RecentChooser* recentchooser)
 {
     Glib::ustring uri = recentchooser->get_current_uri();
 
-    Glib::RefPtr<Gio::File> file = Gio::File::create_for_uri(uri);
+    Glib::RefPtr<Gio::File> file = Gio::File::create_for_uri(uri.raw());
 
     ConcreteInkscapeApplication<Gtk::Application>* app = &(ConcreteInkscapeApplication<Gtk::Application>::get_instance());
 

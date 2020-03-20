@@ -11,10 +11,9 @@
 #define SVG_CSS_OSTRINGSTREAM_H_INKSCAPE
 
 #include <sstream>
+#include <type_traits>
 
 namespace Inkscape {
-
-typedef std::ios_base &(*std_oct_type)(std::ios_base &);
 
 /**
  * A thin wrapper around std::ostringstream, but writing floating point numbers in the format
@@ -27,32 +26,16 @@ private:
 public:
     CSSOStringStream();
 
-#define INK_CSS_STR_OP(_t) \
-    CSSOStringStream &operator<<(_t arg) {  \
-        ostr << arg;    \
-        return *this;   \
+    template <typename T,
+              // disable this template for float and double
+              typename std::enable_if<!std::is_floating_point<T>::value, int>::type = 0>
+    CSSOStringStream &operator<<(T const &arg)
+    {
+        ostr << arg;
+        return *this;
     }
 
-    INK_CSS_STR_OP(char)
-    INK_CSS_STR_OP(signed char)
-    INK_CSS_STR_OP(unsigned char)
-    INK_CSS_STR_OP(short)
-    INK_CSS_STR_OP(unsigned short)
-    INK_CSS_STR_OP(int)
-    INK_CSS_STR_OP(unsigned int)
-    INK_CSS_STR_OP(long)
-    INK_CSS_STR_OP(unsigned long)
-    INK_CSS_STR_OP(char const *)
-    INK_CSS_STR_OP(signed char const *)
-    INK_CSS_STR_OP(unsigned char const *)
-    INK_CSS_STR_OP(std::string const &)
-    INK_CSS_STR_OP(std_oct_type)
-
-#undef INK_CSS_STR_OP
-
-    char const *gcharp() const {
-        return ostr.str().c_str();
-    }
+    CSSOStringStream &operator<<(double);
 
     std::string str() const {
         return ostr.str();
@@ -68,10 +51,6 @@ public:
 };
 
 }
-
-Inkscape::CSSOStringStream &operator<<(Inkscape::CSSOStringStream &os, float d);
-
-Inkscape::CSSOStringStream &operator<<(Inkscape::CSSOStringStream &os, double d);
 
 
 #endif /* !SVG_CSS_OSTRINGSTREAM_H_INKSCAPE */

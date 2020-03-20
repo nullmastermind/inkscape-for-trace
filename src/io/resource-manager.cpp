@@ -167,7 +167,7 @@ bool ResourceManagerImpl::extractFilepath( Glib::ustring const &href, std::strin
 
     uri.clear();
 
-    std::string scheme = Glib::uri_parse_scheme(href);
+    auto scheme = Glib::uri_parse_scheme(href.raw());
     if ( !scheme.empty() ) {
         // TODO debug g_message("Scheme is now [%s]", scheme.c_str());
         if ( scheme == "file" ) {
@@ -198,7 +198,7 @@ bool ResourceManagerImpl::reconstructFilepath( Glib::ustring const &href, std::s
 
     uri.clear();
 
-    std::string scheme = Glib::uri_parse_scheme(href);
+    auto scheme = Glib::uri_parse_scheme(href.raw());
     if ( !scheme.empty() ) {
         if ( scheme == "file" ) {
             // try to build a relative filename for URIs like "file:image.png"
@@ -263,7 +263,7 @@ std::map<Glib::ustring, Glib::ustring> ResourceManagerImpl::locateLinks(Glib::us
     std::vector< Glib::RefPtr<Gtk::RecentInfo> > recentItems = recentMgr->get_items();
     for (auto & recentItem : recentItems) {
         Glib::ustring uri = recentItem->get_uri();
-        std::string scheme = Glib::uri_parse_scheme(uri);
+        auto scheme = Glib::uri_parse_scheme(uri.raw());
         if ( scheme == "file" ) {
             try {
                 std::string path = Glib::filename_from_uri(uri);
@@ -288,7 +288,7 @@ std::map<Glib::ustring, Glib::ustring> ResourceManagerImpl::locateLinks(Glib::us
             std::string origPath = uri;
 
             if ( !Glib::path_is_absolute(uri) ) {
-                uri = Glib::build_filename(docbase, uri);
+                uri = Glib::build_filename(docbase.raw(), uri);
                 // TODO debug g_message("         not absolute. Fixing up as [%s]", uri.c_str());
             }
 
@@ -296,7 +296,7 @@ std::map<Glib::ustring, Glib::ustring> ResourceManagerImpl::locateLinks(Glib::us
 
             // search in parent folders
             if (!exists) {
-                exists = searchUpwards( docbase, origPath, uri );
+                exists = searchUpwards( docbase.raw(), origPath, uri );
             }
 
             // Check if the MRU bases point us to it.
@@ -311,7 +311,7 @@ std::map<Glib::ustring, Glib::ustring> ResourceManagerImpl::locateLinks(Glib::us
             if ( exists ) {
                 if ( Glib::path_is_absolute( uri ) ) {
                     // TODO debug g_message("Need to convert to relative if possible [%s]", uri.c_str());
-                    uri = convertPathToRelative( uri, docbase );
+                    uri = convertPathToRelative( uri, docbase.raw() );
                 }
 
                 bool isAbsolute = Glib::path_is_absolute( uri );

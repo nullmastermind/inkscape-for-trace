@@ -30,11 +30,11 @@ public:
 
     static cmsHTRANSFORM getDisplayTransform();
 
-    static Glib::ustring getDisplayId( int monitor );
+    static std::string getDisplayId(int monitor);
 
     static Glib::ustring setDisplayPer( void* buf, unsigned int bufLen, int monitor );
 
-    static cmsHTRANSFORM getDisplayPer( Glib::ustring const& id );
+    static cmsHTRANSFORM getDisplayPer(std::string const &id);
 
     static std::vector<Glib::ustring> getDisplayNames();
 

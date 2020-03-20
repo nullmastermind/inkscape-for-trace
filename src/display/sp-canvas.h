@@ -273,7 +273,7 @@ public:
 
 #if defined(HAVE_LIBLCMS2)
     bool _enable_cms_display_adj;
-    Glib::ustring _cms_key;
+    std::string _cms_key;
 #endif // defined(HAVE_LIBLCMS2)
 
     bool _is_scrolling;

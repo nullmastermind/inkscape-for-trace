@@ -714,8 +714,8 @@ bool sp_repr_save_rebased_file(Document *doc, gchar const *const filename, gchar
         return false;
     }
 
-    Glib::ustring old_href_abs_base;
-    Glib::ustring new_href_abs_base;
+    std::string old_href_abs_base;
+    std::string new_href_abs_base;
 
     if (old_base) {
         old_href_abs_base = old_base;
@@ -728,8 +728,8 @@ bool sp_repr_save_rebased_file(Document *doc, gchar const *const filename, gchar
         if (Glib::path_is_absolute(for_filename)) {
             new_href_abs_base = Glib::path_get_dirname(for_filename);
         } else {
-            Glib::ustring const cwd = Glib::get_current_dir();
-            Glib::ustring const for_abs_filename = Glib::build_filename(cwd, for_filename);
+            std::string const cwd = Glib::get_current_dir();
+            std::string const for_abs_filename = Glib::build_filename(cwd, for_filename);
             new_href_abs_base = Glib::path_get_dirname(for_abs_filename);
         }
 

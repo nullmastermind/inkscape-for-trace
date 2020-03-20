@@ -25,11 +25,17 @@ Inkscape::CSSOStringStream::CSSOStringStream()
     ostr.precision(prefs->getInt("/options/svgoutput/numericprecision", 8));
 }
 
-static void
-write_num(Inkscape::CSSOStringStream &os, unsigned const prec, double const d)
+Inkscape::CSSOStringStream &Inkscape::CSSOStringStream::operator<<(double d)
 {
+    // Try as integer first
+    long const n = long(d);
+    if (d == n) {
+        *this << n;
+        return *this;
+    }
+
     char buf[32];  // haven't thought about how much is really required.
-    switch (prec) {
+    switch (precision()) {
         case 9: g_ascii_formatd(buf, sizeof(buf), "%.9f", d); break;
         case 8: g_ascii_formatd(buf, sizeof(buf), "%.8f", d); break;
         case 7: g_ascii_formatd(buf, sizeof(buf), "%.7f", d); break;
@@ -42,38 +48,8 @@ write_num(Inkscape::CSSOStringStream &os, unsigned const prec, double const d)
         case 0: g_ascii_formatd(buf, sizeof(buf), "%.0f", d); break;
         case 10: default: g_ascii_formatd(buf, sizeof(buf), "%.10f", d); break;
     }
+    auto &os = *this;
     os << strip_trailing_zeros(buf);
-}
-
-Inkscape::CSSOStringStream &
-operator<<(Inkscape::CSSOStringStream &os, float const d)
-{
-    /* Try as integer first. */
-    {
-        long const n = long(d);
-        if (d == n) {
-            os << n;
-            return os;
-        }
-    }
-
-    write_num(os, os.precision(), d);
-    return os;
-}
-
-Inkscape::CSSOStringStream &
-operator<<(Inkscape::CSSOStringStream &os, double const d)
-{
-    /* Try as integer first. */
-    {
-        long const n = long(d);
-        if (d == n) {
-            os << n;
-            return os;
-        }
-    }
-
-    write_num(os, os.precision(), d);
     return os;
 }
 

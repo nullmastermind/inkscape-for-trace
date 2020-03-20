@@ -275,7 +275,7 @@ TraceDialogImpl2::TraceDialogImpl2()
                                         /*"CB_live",*/ "CB_SIOX",   "CBT_SS",      "CBT_MS",     "B_RESET",
                                         "B_STOP",      "B_OK",      "mainBox",     "choice_tab", "choice_scan",
                                         "previewArea" };
-    Glib::ustring gladefile = get_filename(Inkscape::IO::Resource::UIS, "dialog-trace.glade");
+    auto gladefile = get_filename_string(Inkscape::IO::Resource::UIS, "dialog-trace.glade");
     try {
         builder = Gtk::Builder::create_from_file(gladefile);
     } catch (const Glib::Error &ex) {

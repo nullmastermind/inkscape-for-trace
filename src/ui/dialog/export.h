@@ -241,9 +241,6 @@ private:
      * Utility filename and path functions
      */
     void set_default_filename ();
-    Glib::ustring create_filepath_from_id (Glib::ustring id, const Glib::ustring &file_entry_text);
-    Glib::ustring filename_add_extension (Glib::ustring filename, Glib::ustring extension);
-    Glib::ustring absolutize_path_from_document_location (SPDocument *doc, const Glib::ustring &filename);
 
     /*
      * Currently selected export area type

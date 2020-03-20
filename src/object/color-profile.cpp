@@ -1191,9 +1191,9 @@ void free_transforms()
     }
 }
 
-Glib::ustring Inkscape::CMSSystem::getDisplayId( int monitor )
+std::string Inkscape::CMSSystem::getDisplayId(int monitor)
 {
-    Glib::ustring id;
+    std::string id;
 
     if ( monitor >= 0 && monitor < static_cast<int>(perMonitorProfiles.size()) ) {
         MemProfile& item = perMonitorProfiles[monitor];
@@ -1231,7 +1231,7 @@ Glib::ustring Inkscape::CMSSystem::setDisplayPer( gpointer buf, guint bufLen, in
     return id;
 }
 
-cmsHTRANSFORM Inkscape::CMSSystem::getDisplayPer( Glib::ustring const& id )
+cmsHTRANSFORM Inkscape::CMSSystem::getDisplayPer(std::string const &id)
 {
     cmsHTRANSFORM result = nullptr;
     if ( id.empty() ) {

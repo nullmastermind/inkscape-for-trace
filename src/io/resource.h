@@ -57,9 +57,17 @@ Util::ptr_shared get_path(Domain domain, Type type,
 
 Glib::ustring get_path_ustring(Domain domain, Type type,
                                 char const *filename=nullptr);
+std::string get_path_string(Domain domain, Type type, char const *filename = nullptr);
 
+std::string get_filename_string(Type type, char const *filename, bool localized = false, bool silent = false);
 Glib::ustring get_filename(Type type, char const *filename, bool localized = false, bool silent = false);
+// TODO consolidate with Glib::StdStringView
 Glib::ustring get_filename(Glib::ustring path, Glib::ustring filename);
+std::string get_filename(std::string const& path, std::string const& filename);
+inline std::string get_filename(const char *path, const char *filename)
+{
+    return get_filename(std::string(path), std::string(filename));
+}
 
 std::vector<Glib::ustring> get_filenames(Type type,
                                 std::vector<const char *> extensions={},
@@ -78,11 +86,6 @@ std::vector<Glib::ustring> get_foldernames(Type type, std::vector<const char *> 
 std::vector<Glib::ustring> get_foldernames(Domain domain, Type type, std::vector<const char *> exclusions = {});
 
 std::vector<Glib::ustring> get_foldernames(Glib::ustring path, std::vector<const char *> exclusions = {});
-
-void get_filenames_from_path(std::vector<Glib::ustring> &files,
-                              Glib::ustring path,
-                              std::vector<const char *> extensions={},
-                              std::vector<const char *> exclusions={});
 
 void get_foldernames_from_path(std::vector<Glib::ustring> &files, Glib::ustring path,
                                std::vector<const char *> exclusions = {});

@@ -1036,7 +1036,7 @@ void OdfOutput::preprocess(ZipFile &zf, Inkscape::XML::Node *node)
 
                 imageTable[href] = newName;
 
-                auto ze = zf.newEntry(newName, "");
+                auto ze = zf.newEntry(newName.raw(), "");
                 ze->setUncompressedData(uri.getContents());
                 ze->finish();
             } catch (...) {

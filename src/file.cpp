@@ -126,14 +126,13 @@ SPDesktop *sp_file_new(const std::string &templ)
     return desktop;
 }
 
-Glib::ustring sp_file_default_template_uri()
+std::string sp_file_default_template_uri()
 {
-    return Inkscape::IO::Resource::get_filename(TEMPLATES, "default.svg", true);
+    return Inkscape::IO::Resource::get_filename_string(TEMPLATES, "default.svg", true);
 }
 
 SPDesktop* sp_file_new_default()
 {
-    Glib::ustring templateUri = sp_file_default_template_uri();
     SPDesktop* desk = sp_file_new(sp_file_default_template_uri());
     //rdf_add_from_preferences( SP_ACTIVE_DOCUMENT );
 

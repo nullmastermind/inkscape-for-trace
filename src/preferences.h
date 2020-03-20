@@ -490,9 +490,10 @@ public:
     /*@}*/
 
 
-    Glib::ustring getPrefsFilename() {
-        return _prefs_filename;
-    }
+    /**
+     * Get the preferences file name in UTF-8.
+     */
+    Glib::ustring getPrefsFilename() const;
 
     /**
      * @name Update preference values.

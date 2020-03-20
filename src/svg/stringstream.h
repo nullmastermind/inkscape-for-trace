@@ -12,12 +12,11 @@
 
 #include <sstream>
 #include <string>
+#include <type_traits>
 
 #include <2geom/forward.h>
 
 namespace Inkscape {
-
-typedef std::ios_base &(*std_oct_type)(std::ios_base &);
 
 class SVGOStringStream {
 private:
@@ -26,32 +25,18 @@ private:
 public:
     SVGOStringStream();
 
-#define INK_SVG_STR_OP(_t) \
-    SVGOStringStream &operator<<(_t arg) {  \
-        ostr << arg;    \
-        return *this;   \
+    template <typename T,
+              // disable this template for float and double
+              typename std::enable_if<!std::is_floating_point<T>::value, int>::type = 0>
+    SVGOStringStream &operator<<(T const &arg)
+    {
+        static_assert(!std::is_base_of<Geom::Point, T>::value, "");
+        ostr << arg;
+        return *this;
     }
 
-    INK_SVG_STR_OP(char)
-    INK_SVG_STR_OP(signed char)
-    INK_SVG_STR_OP(unsigned char)
-    INK_SVG_STR_OP(short)
-    INK_SVG_STR_OP(unsigned short)
-    INK_SVG_STR_OP(int)
-    INK_SVG_STR_OP(unsigned int)
-    INK_SVG_STR_OP(long)
-    INK_SVG_STR_OP(unsigned long)
-    INK_SVG_STR_OP(char const *)
-    INK_SVG_STR_OP(signed char const *)
-    INK_SVG_STR_OP(unsigned char const *)
-    INK_SVG_STR_OP(std::string const &)
-    INK_SVG_STR_OP(std_oct_type)
-
-#undef INK_SVG_STR_OP
-
-    char const *gcharp() const {
-        return ostr.str().c_str();
-    }
+    SVGOStringStream &operator<<(double);
+    SVGOStringStream &operator<<(Geom::Point const &);
 
     std::string str() const {
         return ostr.str();
@@ -90,12 +75,6 @@ public:
 };
 
 }
-
-Inkscape::SVGOStringStream &operator<<(Inkscape::SVGOStringStream &os, float d);
-
-Inkscape::SVGOStringStream &operator<<(Inkscape::SVGOStringStream &os, double d);
-
-Inkscape::SVGOStringStream &operator<<(Inkscape::SVGOStringStream &os, Geom::Point const & p);
 
 #endif
 

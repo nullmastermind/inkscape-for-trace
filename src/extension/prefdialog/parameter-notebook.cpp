@@ -184,7 +184,7 @@ const Glib::ustring& ParamNotebook::set(const int in)
 
 std::string ParamNotebook::value_to_string() const
 {
-    return _value;
+    return _value.raw();
 }
 
 

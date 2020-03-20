@@ -851,12 +851,12 @@ int Script::execute (const std::list<std::string> &in_command,
     // assemble the rest of argv
     std::copy(in_params.begin(), in_params.end(), std::back_inserter(argv));
     if (!filein.empty()) {
-        if(Glib::path_is_absolute(filein))
-            argv.push_back(filein);
+        if(Glib::path_is_absolute(filein.raw()))
+            argv.push_back(filein.raw());
         else {
             std::vector<std::string> buildargs;
             buildargs.push_back(Glib::get_current_dir());
-            buildargs.push_back(filein);
+            buildargs.push_back(filein.raw());
             argv.push_back(Glib::build_filename(buildargs));
         }
     }
@@ -954,7 +954,7 @@ bool Script::file_listener::read(Glib::IOCondition condition) {
 
 bool Script::file_listener::toFile(const Glib::ustring &name) {
     try {
-        Glib::RefPtr<Glib::IOChannel> stdout_file = Glib::IOChannel::create_from_file(name, "w");
+        Glib::RefPtr<Glib::IOChannel> stdout_file = Glib::IOChannel::create_from_file(name.raw(), "w");
         stdout_file->set_encoding();
         stdout_file->write(_string);
     } catch (Glib::FileError &e) {

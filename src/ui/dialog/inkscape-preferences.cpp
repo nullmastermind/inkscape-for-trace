@@ -596,7 +596,7 @@ void InkscapePreferences::get_highlight_colors(guint32 &colorsetbase, guint32 &c
     if (prefs->getBool("/theme/darkTheme", false)) {
         prefix = ".dark ";
     }
-    Glib::ustring higlight = get_filename(ICONS, Glib::ustring(themeiconname + "/highlights.css").c_str(), false, true);
+    auto higlight = get_filename_string(ICONS, (themeiconname + "/highlights.css").c_str(), false, true);
     if (!higlight.empty()) {
         std::ifstream ifs(higlight);
         std::string content((std::istreambuf_iterator<char>(ifs)), (std::istreambuf_iterator<char>()));

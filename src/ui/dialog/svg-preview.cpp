@@ -153,7 +153,7 @@ void SVGPreview::showImage(Glib::ustring &theFileName)
             std::cerr << "SVGPreview::showImage: Failed to open file: " << theFileName << std::endl;
         } else {
 
-            std::string token;
+            Glib::ustring token;
 
             Glib::MatchInfo match_info;
             Glib::RefPtr<Glib::Regex> regex1 = Glib::Regex::create("width=\"(.*)\"");

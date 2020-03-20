@@ -204,7 +204,7 @@ void FilletChamferPropertiesDialog::_setSatellite(Satellite satellite)
         _fillet_chamfer_position_label.set_label(_("Position (%):"));
     } else {
         _flexible = false;
-        std::string posConcat = Glib::ustring::compose (_("%1:"), distance_or_radius);
+        auto posConcat = Glib::ustring::compose (_("%1:"), distance_or_radius);
         _fillet_chamfer_position_label.set_label(_(posConcat.c_str()));
         position = _amount;
     }

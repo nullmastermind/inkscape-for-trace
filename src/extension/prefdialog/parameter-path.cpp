@@ -49,7 +49,7 @@ ParamPath::ParamPath(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *e
     }
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    _value = prefs->getString(pref_name());
+    _value = prefs->getString(pref_name()).raw();
 
     if (_value.empty() && value) {
         _value = value;
@@ -143,7 +143,7 @@ public:
  */
 void ParamPathEntry::changed_text()
 {
-    std::string data = this->get_text();
+    auto data = this->get_text();
     _pref->set(data.c_str());
     if (_changeSignal != nullptr) {
         _changeSignal->emit();

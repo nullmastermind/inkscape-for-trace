@@ -973,6 +973,11 @@ void Preferences::unload(bool save)
     }
 }
 
+Glib::ustring Preferences::getPrefsFilename() const
+{ //
+    return Glib::filename_to_utf8(_prefs_filename);
+}
+
 Preferences *Preferences::_instance = nullptr;
 
 

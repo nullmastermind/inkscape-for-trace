@@ -474,7 +474,7 @@ void StyleDialog::readStyleElement()
         }
     }
 
-    Glib::ustring gladefile = get_filename(Inkscape::IO::Resource::UIS, "dialog-css.glade");
+    auto gladefile = get_filename_string(Inkscape::IO::Resource::UIS, "dialog-css.glade");
     Glib::RefPtr<Gtk::Builder> _builder;
     try {
         _builder = Gtk::Builder::create_from_file(gladefile);
@@ -1087,22 +1087,22 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
                 styleContent = styleContent + selectoritem + ";\n";
             }
         }
-        styleContent = styleContent + "\n" + selector + " { \n";
+        styleContent.append("\n").append(selector.raw()).append(" { \n");
     }
     selectorpos = _deleted_pos;
     for (auto &row : store->children()) {
         selector = row[_mColumns._colSelector];
         selectorpos = row[_mColumns._colSelectorPos];
-        Glib::ustring opencomment = "";
-        Glib::ustring closecomment = "";
+        const char *opencomment = "";
+        const char *closecomment = "";
         if (selector != "style_properties" && selector != "attributes") {
             opencomment = row[_mColumns._colActive] ? "    " : "  /*";
             closecomment = row[_mColumns._colActive] ? "\n" : "*/\n";
         }
-        Glib::ustring name = row[_mColumns._colName];
-        Glib::ustring value = row[_mColumns._colValue];
+        Glib::ustring const &name = row[_mColumns._colName];
+        Glib::ustring const &value = row[_mColumns._colValue];
         if (!(name.empty() && value.empty())) {
-            styleContent = styleContent + opencomment + name + ":" + value + ";" + closecomment;
+            styleContent = styleContent + opencomment + name.raw() + ":" + value.raw() + ";" + closecomment;
         }
     }
     if (selector != "style_properties" && selector != "attributes") {
@@ -1125,8 +1125,8 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
             }
         }
         for (auto &row : store->children()) {
-            Glib::ustring name = row[_mColumns._colName];
-            Glib::ustring value = row[_mColumns._colValue];
+            Glib::ustring const &name = row[_mColumns._colName];
+            Glib::ustring const &value = row[_mColumns._colValue];
             if (!(name.empty() && value.empty())) {
                 _updating = true;
                 obj->getRepr()->setAttribute(name, value);

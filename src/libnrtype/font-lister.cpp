@@ -893,9 +893,9 @@ void FontLister::fill_css(SPCSSAttr *css, Glib::ustring fontspec)
             regex->match(token, matchInfo);
             if (matchInfo.matches()) {
                 variations += "'";
-                variations += matchInfo.fetch(1);
+                variations += matchInfo.fetch(1).raw();
                 variations += "' ";
-                variations += matchInfo.fetch(2);
+                variations += matchInfo.fetch(2).raw();
                 variations += ", ";
             }
         }

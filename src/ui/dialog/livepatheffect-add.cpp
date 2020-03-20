@@ -82,7 +82,7 @@ LivePathEffectAdd::LivePathEffectAdd()
     , _applied(false)
     , _showfavs(false)
 {
-    Glib::ustring gladefile = get_filename(Inkscape::IO::Resource::UIS, "dialog-livepatheffect-add.glade");
+    auto gladefile = get_filename_string(Inkscape::IO::Resource::UIS, "dialog-livepatheffect-add.glade");
     try {
         _builder = Gtk::Builder::create_from_file(gladefile);
     } catch (const Glib::Error &ex) {
@@ -107,7 +107,7 @@ LivePathEffectAdd::LivePathEffectAdd()
                                    Gdk::ENTER_NOTIFY_MASK | Gdk::LEAVE_NOTIFY_MASK | Gdk::KEY_PRESS_MASK);
     _LPESelectorFlowBox->signal_set_focus_child().connect(sigc::mem_fun(*this, &LivePathEffectAdd::on_focus));
     
-    gladefile = get_filename(Inkscape::IO::Resource::UIS, "dialog-livepatheffect-effect.glade");
+    gladefile = get_filename_string(Inkscape::IO::Resource::UIS, "dialog-livepatheffect-effect.glade");
     for (int i = 0; i < static_cast<int>(converter._length); ++i) {
         Glib::RefPtr<Gtk::Builder> builder_effect;
         try {
@@ -488,7 +488,7 @@ bool LivePathEffectAdd::on_filter(Gtk::FlowBoxChild *child)
         size_t s = childclass.find("LPEIndex", 0);
         if (s != -1) {
             childclass = childclass.erase(0, 8);
-            pos = std::stoi(childclass);
+            pos = std::stoi(childclass.raw());
         }
     }
     const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *data = &converter.data(pos);

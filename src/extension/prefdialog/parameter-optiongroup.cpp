@@ -68,12 +68,12 @@ ParamOptionGroup::ParamOptionGroup(Inkscape::XML::Node *xml, Inkscape::Extension
     std::unordered_set<std::string> texts;
     std::unordered_set<std::string> values;
     for (auto choice : choices) {
-        auto ret1 = texts.emplace(choice->_text);
+        auto ret1 = texts.emplace(choice->_text.raw());
         if (!ret1.second) {
             g_warning("Duplicate option text ('%s') for parameter '%s' in extension '%s'.",
                       choice->_text.c_str(), _name, _extension->get_id());
         }
-        auto ret2 = values.emplace(choice->_value);
+        auto ret2 = values.emplace(choice->_value.raw());
         if (!ret2.second) {
             g_warning("Duplicate option value ('%s') for parameter '%s' in extension '%s'.",
                       choice->_value.c_str(), _name, _extension->get_id());
@@ -148,7 +148,7 @@ bool ParamOptionGroup::contains(const Glib::ustring text) const
 
 std::string ParamOptionGroup::value_to_string() const
 {
-    return _value;
+    return _value.raw();
 }
 
 /**

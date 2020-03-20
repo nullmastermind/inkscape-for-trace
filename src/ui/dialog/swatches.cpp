@@ -73,8 +73,6 @@ enum {
 #define VBLOCK 16
 #define PREVIEW_PIXBUF_WIDTH 128
 
-void _loadPaletteFile( gchar const *filename, gboolean user=FALSE );
-
 std::list<SwatchPage*> userSwatchPages;
 std::list<SwatchPage*> systemSwatchPages;
 static std::map<SPDocument*, SwatchPage*> docPalettes;
@@ -401,9 +399,10 @@ static bool parseNum( char*& str, int& val ) {
 }
 
 
+static
 void _loadPaletteFile(Glib::ustring path, gboolean user/*=FALSE*/)
 {
-    Glib::ustring filename = Glib::path_get_basename(path);
+    auto filename = Glib::path_get_basename(path.raw());
     char block[1024];
     FILE *f = Inkscape::IO::fopen_utf8name(path.c_str(), "r");
     if ( f ) {
@@ -1307,8 +1306,8 @@ void SwatchesPanel::_updateFromSelection()
 {
     SwatchPage *docPalette = (docPalettes.find(_currentDocument) != docPalettes.end()) ? docPalettes[_currentDocument] : nullptr;
     if ( docPalette ) {
-        Glib::ustring fillId;
-        Glib::ustring strokeId;
+        std::string fillId;
+        std::string strokeId;
 
         SPStyle tmpStyle(_currentDesktop->getDocument());
         int result = sp_desktop_query_style( _currentDesktop, &tmpStyle, QUERY_STYLE_PROPERTY_FILL );

@@ -33,8 +33,8 @@ static void set_extensions_env()
     g_free(program_dir);
 
     // add various locations to PYTHONPATH so extensions find their modules
-    auto extensiondir_user = get_path_ustring(Inkscape::IO::Resource::USER, Inkscape::IO::Resource::EXTENSIONS);
-    auto extensiondir_system = get_path_ustring(Inkscape::IO::Resource::SYSTEM, Inkscape::IO::Resource::EXTENSIONS);
+    auto extensiondir_user = get_path_string(Inkscape::IO::Resource::USER, Inkscape::IO::Resource::EXTENSIONS);
+    auto extensiondir_system = get_path_string(Inkscape::IO::Resource::SYSTEM, Inkscape::IO::Resource::EXTENSIONS);
 
     auto pythonpath = extensiondir_user + G_SEARCHPATH_SEPARATOR + extensiondir_system;
 

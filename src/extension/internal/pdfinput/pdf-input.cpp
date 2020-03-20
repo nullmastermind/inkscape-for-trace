@@ -329,7 +329,7 @@ PdfImportDialog::PdfImportDialog(PDFDoc *doc, const gchar */*uri*/)
     _render_thumb = true;
 
     // Create PopplerDocument
-    Glib::ustring filename = _pdf_doc->getFileName()->getCString();
+    std::string filename = _pdf_doc->getFileName()->getCString();
     if (!Glib::path_is_absolute(filename)) {
         filename = Glib::build_filename(Glib::get_current_dir(),filename);
     }
@@ -858,7 +858,7 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
 #ifdef HAVE_POPPLER_CAIRO
         // the poppler import
 
-        Glib::ustring full_path = uri;
+        std::string full_path = uri;
         if (!Glib::path_is_absolute(uri)) {
             full_path = Glib::build_filename(Glib::get_current_dir(),uri);
         }

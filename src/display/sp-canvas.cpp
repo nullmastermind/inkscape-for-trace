@@ -1035,7 +1035,7 @@ static void sp_canvas_init(SPCanvas *canvas)
 
 #if defined(HAVE_LIBLCMS2)
     canvas->_enable_cms_display_adj = false;
-    new (&canvas->_cms_key) Glib::ustring("");
+    new (&canvas->_cms_key) decltype(canvas->_cms_key)();
 #endif // defined(HAVE_LIBLCMS2)
 }
 

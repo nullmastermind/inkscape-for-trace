@@ -35,7 +35,7 @@ class Window;
 }
 
 // Get the name of the default template uri
-Glib::ustring sp_file_default_template_uri();
+std::string sp_file_default_template_uri();
 
 /*######################
 ## N E W

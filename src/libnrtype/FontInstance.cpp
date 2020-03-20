@@ -256,7 +256,7 @@ void font_instance::InitTheFace(bool loadgsub)
                     regex->match(token, matchInfo);
                     if (matchInfo.matches()) {
 
-                        float value = std::stod(matchInfo.fetch(2));  // Should clamp value
+                        float value = std::stod(matchInfo.fetch(2).raw());  // Should clamp value
 
                         // Translate the "named" axes.
                         Glib::ustring name = matchInfo.fetch(1);
@@ -712,10 +712,10 @@ Inkscape::Pixbuf* font_instance::PixBuf(int glyph_id)
                 svg = regex->replace_literal(svg, 0, viewbox, static_cast<Glib::RegexMatchFlags >(0));
 
                 // Insert group with required transform to map glyph to new viewbox.
-                double x = std::stod(matchInfo.fetch(1));
-                double y = std::stod(matchInfo.fetch(2));
-                double w = std::stod(matchInfo.fetch(3));
-                double h = std::stod(matchInfo.fetch(4));
+                double x = std::stod(matchInfo.fetch(1).raw());
+                double y = std::stod(matchInfo.fetch(2).raw());
+                double w = std::stod(matchInfo.fetch(3).raw());
+                double h = std::stod(matchInfo.fetch(4).raw());
                 // std::cout << " x: " << x
                 //           << " y: " << y
                 //           << " w: " << w
@@ -776,7 +776,7 @@ Inkscape::Pixbuf* font_instance::PixBuf(int glyph_id)
             // std::cout << svg << std::endl;
 
             // Finally create pixbuf!
-            pixbuf = Inkscape::Pixbuf::create_from_buffer(svg);
+            pixbuf = Inkscape::Pixbuf::create_from_buffer(svg.raw());
 
             // And cache it.
             glyph_iter->second.pixbuf = pixbuf;

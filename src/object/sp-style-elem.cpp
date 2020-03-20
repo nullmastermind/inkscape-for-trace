@@ -223,7 +223,7 @@ import_style_cb (CRDocHandler *a_handler,
     }
 
     // Get file
-    Glib::ustring import_file =
+    auto import_file =
         Inkscape::IO::Resource::get_filename (document->getDocumentURI(), a_uri->stryng->str);
 
     // Parse file

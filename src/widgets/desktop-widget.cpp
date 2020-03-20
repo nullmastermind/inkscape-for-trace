@@ -614,7 +614,7 @@ SPDesktopWidget::SPDesktopWidget()
 #if defined(HAVE_LIBLCMS2)
     bool fromDisplay = prefs->getBool( "/options/displayprofile/from_display");
     if ( fromDisplay ) {
-        Glib::ustring id = Inkscape::CMSSystem::getDisplayId( 0 );
+        auto id = Inkscape::CMSSystem::getDisplayId(0);
 
         bool enabled = false;
         dtw->_canvas->_cms_key = id;
