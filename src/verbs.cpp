@@ -298,6 +298,25 @@ public:
 }; // HelpVerb class
 
 /**
+ * A class to encompass all of the verbs which open an URL.
+ */
+class HelpUrlVerb : public HelpVerb {
+private:
+    static void perform(SPAction *action, void *mydata);
+protected:
+    SPAction *make_action(Inkscape::ActionContext const & context) override;
+public:
+    /** Use the HelpVerb initializer with the same parameters. */
+    HelpUrlVerb(unsigned int const code,
+                gchar const *id,
+                gchar const *name,
+                gchar const *tip,
+                gchar const *image) :
+        HelpVerb(code, id, name, tip, image)
+    { }
+}; // HelpUrlVerb class
+
+/**
  * A class to encompass all of the verbs which deal with tutorial operations.
  */
 class TutorialVerb : public Verb {
@@ -513,6 +532,19 @@ SPAction *DialogVerb::make_action(Inkscape::ActionContext const & context)
  * @return The built action.
  */
 SPAction *HelpVerb::make_action(Inkscape::ActionContext const & context)
+{
+    return make_action_helper(context, &perform);
+}
+
+/**
+ * Create an action for a \c HelpUrlVerb.
+ *
+ * Calls \c make_action_helper with the \c vector.
+ *
+ * @param  context  Which context the action should be created for.
+ * @return The built action.
+ */
+SPAction *HelpUrlVerb::make_action(Inkscape::ActionContext const & context)
 {
     return make_action_helper(context, &perform);
 }
@@ -2099,7 +2131,7 @@ void ZoomVerb::perform(SPAction *action, void *data)
         default:
             break;
     }
-    // this is not needed canvas is updated correctly in all 
+    // this is not needed canvas is updated correctly in all
     // dt->updateNow();
 
 } // end of sp_verb_action_zoom_perform()
@@ -2247,6 +2279,59 @@ void HelpVerb::perform(SPAction *action, void *data)
             break;
     }
 } // end of sp_verb_action_help_perform()
+
+/**
+ * Decode the verb code and take appropriate action.
+ */
+void HelpUrlVerb::perform(SPAction *action, void *data)
+{
+    // get current window
+    g_return_if_fail(ensure_desktop_valid(action));
+    SPDesktop *desktop = sp_action_get_desktop(action);
+    Gtk::Window *window = desktop->getToplevel();
+
+    // get URL
+    Glib::ustring url;
+
+    static const char *lang = _("en");      // TODO: strip /en/ for English version?
+    static const char *version = "-master"; // TODO: make this auto-updating?
+
+    switch (reinterpret_cast<std::size_t>(data)) {
+        case SP_VERB_HELP_URL_ASK_QUESTION:
+            url = "https://inkscape.org/ask/";
+            break;
+        case SP_VERB_HELP_URL_MAN:
+            url = Glib::ustring::compose("https://inkscape.org/%1/doc/inkscape-man%2.html", lang, version);
+            break;
+        case SP_VERB_HELP_URL_FAQ:
+            url = Glib::ustring::compose("https://inkscape.org/%1/learn/faq/", lang);
+            break;
+        case SP_VERB_HELP_URL_KEYS:
+            url = Glib::ustring::compose("https://inkscape.org/%1/doc/keys%2.html", lang, version);
+            break;
+        case SP_VERB_HELP_URL_RELEASE_NOTES:
+            url = Glib::ustring::compose("https://inkscape.org/%1/release/inkscape%2", lang, version);
+            break;
+        case SP_VERB_HELP_URL_REPORT_BUG:
+            url = Glib::ustring::compose("https://inkscape.org/%1/contribute/report-bugs/", lang);
+            break;
+        case SP_VERB_HELP_URL_MANUAL:
+            url = "http://tavmjong.free.fr/INKSCAPE/MANUAL/html/index.php";
+            break;
+        case SP_VERB_HELP_URL_SVG11_SPEC:
+            url = "http://www.w3.org/TR/SVG11/";
+            break;
+        case SP_VERB_HELP_URL_SVG2_SPEC:
+            url = "http://www.w3.org/TR/SVG2/";
+            break;
+        default:
+            g_assert_not_reached();
+            return;
+    }
+
+    // open URL for current window
+    sp_help_open_url(url, window);
+}
 
 /**
  * Decode the verb code and take appropriate action.
@@ -3103,6 +3188,27 @@ Verb *Verb::_base_verbs[] = {
                  INKSCAPE_ICON("inkscape-logo")),
     // new HelpVerb(SP_VERB_SHOW_LICENSE, "ShowLicense", N_("_License"),
     //           N_("Distribution terms"), /*"show_license"*/"inkscape_options"),
+
+    // Help URLs
+    // TODO: Better tooltips
+    new HelpUrlVerb(SP_VERB_HELP_URL_ASK_QUESTION, "HelpUrlAskQuestion",
+                    N_("Ask Us a Question"), N_("Ask Us a Question"), nullptr),
+    new HelpUrlVerb(SP_VERB_HELP_URL_MAN, "HelpUrlMan",
+                    N_("Command Line Options"), N_("Command Line Options"), nullptr),
+    new HelpUrlVerb(SP_VERB_HELP_URL_FAQ, "HelpUrlFAQ",
+                    N_("FAQ"), N_("FAQ"), nullptr),
+    new HelpUrlVerb(SP_VERB_HELP_URL_KEYS, "HelpUrlKeys",
+                    N_("Keys and Mouse Reference"), N_("Keys and Mouse Reference"), nullptr),
+    new HelpUrlVerb(SP_VERB_HELP_URL_RELEASE_NOTES, "HelpUrlReleaseNotes",
+                    N_("New in This Version"), N_("New in This Version"), nullptr),
+    new HelpUrlVerb(SP_VERB_HELP_URL_REPORT_BUG, "HelpUrlReportBug",
+                    N_("Report a Bug"), N_("Report a Bug"), nullptr),
+    new HelpUrlVerb(SP_VERB_HELP_URL_MANUAL, "HelpUrlManual",
+                    N_("Inkscape Manual"), N_("Inkscape Manual"), nullptr),
+    new HelpUrlVerb(SP_VERB_HELP_URL_SVG11_SPEC, "HelpUrlSvg11Spec",
+                    N_("SVG 1.1 Specification"), N_("SVG 1.1 Specification"), nullptr),
+    new HelpUrlVerb(SP_VERB_HELP_URL_SVG2_SPEC, "HelpUrlSvg2Spec",
+                    N_("SVG 2 Specification"), N_("SVG 2 Specification"), nullptr),
 
     // Tutorials
     new TutorialVerb(SP_VERB_TUTORIAL_BASIC, "TutorialsBasic", N_("Inkscape: _Basic"),

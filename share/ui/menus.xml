@@ -288,9 +288,9 @@
        <effects-list/>
    </submenu>
    <submenu name="_Help">
-       <verb verb-id="org.inkscape.help.manual" />
-       <verb verb-id="org.inkscape.help.keys" />
-       <verb verb-id="org.inkscape.help.askaquestion" />
+       <verb verb-id="HelpUrlManual" />
+       <verb verb-id="HelpUrlKeys" />
+       <verb verb-id="HelpUrlAskQuestion" />
        <submenu name="Tutorials">
            <verb verb-id="TutorialsBasic" />
            <verb verb-id="TutorialsShapes" />
@@ -303,11 +303,12 @@
            <verb verb-id="TutorialsTips" />
        </submenu>
        <!--verb verb-id="org.inkscape.dialogs.extensioneditor" /-->
-       <verb verb-id="org.inkscape.help.commandline" />
-       <verb verb-id="org.inkscape.help.faq" />
-       <verb verb-id="org.inkscape.help.relnotes" />
-       <verb verb-id="org.inkscape.help.reportabug" />
-       <verb verb-id="org.inkscape.help.svgspec" />
+       <verb verb-id="HelpUrlMan" />
+       <verb verb-id="HelpUrlFAQ" />
+       <verb verb-id="HelpUrlReleaseNotes" />
+       <verb verb-id="HelpUrlReportBug" />
+       <verb verb-id="HelpUrlSvg11Spec" />
+       <verb verb-id="HelpUrlSvg2Spec" />
        <separator/>
        <verb verb-id="HelpAboutMemory" />
        <verb verb-id="HelpAbout" show-icons="true"/>

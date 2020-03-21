@@ -33,6 +33,25 @@ void sp_help_about()
     Inkscape::UI::Dialog::AboutBox::show_about();
 }
 
+/** Open an URL in the the default application
+*
+* See documentation of gtk_show_uri_on_window() for details
+*
+* @param url    URL to be opened
+* @param window Parent window for which the URL is opened
+*/
+void sp_help_open_url(Glib::ustring url, Gtk::Window *window)
+{
+    // TODO: Find gtkmm/glibmm alternative for gtk_show_uri_on_window (currently not wrapped)
+    //       Do we really need a window reference here? It's the way recommended by gtk, though.
+    GError *error = nullptr;
+    gtk_show_uri_on_window(window->gobj(), url.c_str(), GDK_CURRENT_TIME, &error);
+    if (error) {
+        g_warning ("Unable to show '%s': %s", url.c_str(), error->message);
+        g_error_free (error);
+    }
+}
+
 void sp_help_open_tutorial(Glib::ustring name)
 {
     Glib::ustring filename = name + ".svg";
