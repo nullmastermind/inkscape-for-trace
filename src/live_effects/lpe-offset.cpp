@@ -231,7 +231,7 @@ LPEOffset::sp_get_offset(Geom::Point origin)
         if (origin[Geom::Y] < initial[Geom::Y]) {
             ret_offset *= -1;
         }
-        return Inkscape::Util::Quantity::convert(ret_offset, display_unit.c_str(), unit.get_abbreviation());
+        return Inkscape::Util::Quantity::convert(ret_offset, "px", unit.get_abbreviation()) * this->scale;
     }
     int winding_value = filled_rule_pathv.winding(origin); 
     bool inset = false;
@@ -243,7 +243,7 @@ LPEOffset::sp_get_offset(Geom::Point origin)
     if (inset) {
         ret_offset *= -1;
     }
-    return Inkscape::Util::Quantity::convert(ret_offset, display_unit.c_str(), unit.get_abbreviation());
+    return Inkscape::Util::Quantity::convert(ret_offset, "px", unit.get_abbreviation()) * this->scale;
 }
 
 void
@@ -260,17 +260,17 @@ LPEOffset::doBeforeEffect (SPLPEItem const* lpeitem)
     if (!document) {
         return;
     }
-    display_unit = document->getDisplayUnit()->abbr.c_str();
     if (prev_unit != unit.get_abbreviation()) {
         offset.param_set_value(Inkscape::Util::Quantity::convert(offset, prev_unit, unit.get_abbreviation()));
     }
     prev_unit = unit.get_abbreviation();
     SPGroup const *group = dynamic_cast<SPGroup const *>(lpeitem);
+    this->scale = lpeitem->i2doc_affine().descrim();
     if (group) {
         helper_path.clear();
         Geom::Point origin = Geom::Point(boundingbox_X.min(), boundingbox_Y.min());
         Geom::Point endpont = Geom::Point(boundingbox_X.min(), boundingbox_Y.min());
-        endpont[Geom::Y] = endpont[Geom::Y] + Inkscape::Util::Quantity::convert(offset, unit.get_abbreviation(), display_unit.c_str());
+        endpont[Geom::Y] = endpont[Geom::Y] + Inkscape::Util::Quantity::convert(offset, unit.get_abbreviation(), "px")/ this->scale;
         Geom::Path hp(origin);
         hp.appendNew<Geom::LineSegment>(endpont);
         helper_path.push_back(hp);
@@ -365,7 +365,7 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
         double gap_size = -0.01;
         bool closed = original.closed();
         double to_offset =
-            Inkscape::Util::Quantity::convert(std::abs(offset), unit.get_abbreviation(), display_unit.c_str());
+            Inkscape::Util::Quantity::convert(std::abs(offset), unit.get_abbreviation(), "px") / this->scale;
         if (to_offset <= 0.01) {
             return path_in;
         }

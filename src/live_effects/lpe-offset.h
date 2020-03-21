@@ -54,8 +54,8 @@ private:
     BoolParam attempt_force_join;
     BoolParam update_on_knot_move;
     Geom::Point offset_pt;
-    Glib::ustring display_unit;
     Glib::ustring prev_unit;
+    double scale = 1; //take document scale and additional parent transformations into account
     KnotHolderEntity * _knot_entity;
     Geom::PathVector filled_rule_pathv;
     Geom::PathVector helper_path;
