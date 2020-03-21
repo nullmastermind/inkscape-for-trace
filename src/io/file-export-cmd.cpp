@@ -254,7 +254,8 @@ InkFileExportCmd::do_export_svg(SPDocument* doc, std::string filename_in)
         fit_canvas_to_drawing(doc, export_margin != 0 ? true : false);
     } else if (export_area_page || export_id.empty() ) {
         if (export_margin) {
-            doc->fitToRect(doc->getViewBox(), true);
+            doc->ensureUpToDate();
+            doc->fitToRect(*(doc->preferredBounds()), true);
         }
     }
 
