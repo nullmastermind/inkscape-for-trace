@@ -362,7 +362,6 @@
 ../src/ui/widget/spin-scale.cpp
 ../src/ui/widget/spin-slider.cpp
 ../src/ui/widget/style-swatch.cpp
-../src/util/ege-tags.cpp
 ../src/util/enums.h
 ../src/vanishing-point.cpp
 ../src/verbs.cpp
