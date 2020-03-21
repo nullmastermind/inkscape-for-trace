@@ -11,7 +11,7 @@
 #include "file.h"
 
 #include <iostream>
-#include <gtkmm.h>
+#include <giomm.h>
 
 #include "document.h"
 #include "document-undo.h"

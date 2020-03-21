@@ -13,7 +13,7 @@
 #define INK_FILE_EXPORT_CMD_H
 
 #include <iostream>
-#include <gtkmm.h>
+#include <glibmm.h>
 
 class SPDocument;
 

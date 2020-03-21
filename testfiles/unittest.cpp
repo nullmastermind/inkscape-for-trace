@@ -12,7 +12,7 @@
 
 #include "gtest/gtest.h"
 
-#include <gtkmm.h>
+#include <glib.h>
 
 #include "inkgc/gc-core.h"
 #include "inkscape.h"

@@ -16,7 +16,6 @@
 #include "uxmanager.h"
 #include "desktop.h"
 #include "ui/monitor.h"
-#include "util/ege-tags.h"
 #include "widgets/toolbox.h"
 
 class TrackItem
@@ -109,12 +108,6 @@ UXManager::~UXManager()
 UXManagerImpl::UXManagerImpl() :
     _widescreen(false)
 {
-    ege::TagSet tags;
-    tags.setLang("en");
-
-    tags.addTag(ege::Tag("General"));
-    tags.addTag(ege::Tag("Icons"));
-
     // Figure out if we're on a widescreen display
     Gdk::Rectangle monitor_geometry = Inkscape::UI::get_monitor_geometry_primary();
     int const width  = monitor_geometry.get_width();

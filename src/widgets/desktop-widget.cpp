@@ -69,7 +69,6 @@
 // TEMP
 #include "ui/desktop/menubar.h"
 
-#include "util/ege-appear-time-tracker.h"
 #include "util/units.h"
 
 // We're in the "widgets" directory, so no need to explicitly prefix these:
@@ -86,7 +85,6 @@ using Inkscape::DocumentUndo;
 using Inkscape::UI::Widget::UnitTracker;
 using Inkscape::UI::UXManager;
 using Inkscape::UI::ToolboxFactory;
-using ege::AppearTimeTracker;
 using Inkscape::Util::unit_table;
 
 

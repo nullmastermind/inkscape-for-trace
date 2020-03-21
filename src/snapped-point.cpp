@@ -10,8 +10,6 @@
  *  Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <gtk/gtk.h>
-
 #include <utility>
 #include "snapped-point.h"
 #include "preferences.h"

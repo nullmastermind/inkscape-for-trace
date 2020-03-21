@@ -1,8 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 set(util_SRC
-	ege-appear-time-tracker.cpp
-	ege-tags.cpp
 	expression-evaluator.cpp
 	share.cpp
 	units.cpp
@@ -13,8 +11,6 @@ set(util_SRC
 	# Headers
 	const_char_ptr.h
 	copy.h
-	ege-appear-time-tracker.h
-	ege-tags.h
 	enums.h
 	expression-evaluator.h
 	find-if-before.h

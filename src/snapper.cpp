@@ -10,7 +10,7 @@
  *  Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <gtk/gtk.h>
+#include <glib.h> // g_assert
 
 #include "snapper.h"
 

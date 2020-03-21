@@ -57,7 +57,7 @@
 #include "ui/dialog/svg-fonts-dialog.h"
 #include "ui/dialog/text-edit.h"
 #include "ui/dialog/xml-tree.h"
-#include "util/ege-appear-time-tracker.h"
+
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
@@ -288,23 +288,10 @@ void DialogManager::showDialog(gchar const *name, bool grabfocus) {
  * Shows the named dialog, creating it if necessary.
  */
 void DialogManager::showDialog(GQuark name, bool /*grabfocus*/) {
-    bool wantTiming = Inkscape::Preferences::get()->getBool("/dialogs/debug/trackAppear", false);
-    GTimer *timer = (wantTiming) ? g_timer_new() : nullptr; // if needed, must be created/started before getDialog()
     Dialog *dialog = getDialog(name);
     if ( dialog ) {
-        if ( wantTiming ) {
-            gchar const * nameStr = g_quark_to_string(name);
-            ege::AppearTimeTracker *tracker = new ege::AppearTimeTracker(timer, dialog->gobj(), nameStr);
-            tracker->setAutodelete(true);
-            timer = nullptr;
-        }
         // should check for grabfocus, but lp:1348927 prevents it
         dialog->present();
-    }
-
-    if ( timer ) {
-        g_timer_destroy(timer);
-        timer = nullptr;
     }
 }
 

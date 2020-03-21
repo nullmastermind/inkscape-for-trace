@@ -11,7 +11,6 @@
 #include <iostream>
 
 #include <giomm.h>  // Not <gtkmm.h>! To eventually allow a headless version!
-#include <gtkmm.h>
 #include <glibmm/i18n.h>
 
 #include "actions-window.h"

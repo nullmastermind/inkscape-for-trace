@@ -8,7 +8,7 @@
  * Released under GNU LGPL v2.1+, read the file 'COPYING' for more information.
  */
 /* Defines String::ucompose(fmt, arg...) for easy, i18n-friendly
- * composition of strings with Gtkmm >= 1.3.* (see www.gtkmm.org).
+ * composition of strings with Glibmm >= 1.3.* (see www.gtkmm.org).
  * Uses Glib::ustring instead of std::string which doesn't work with
  * Gtkmm due to character encoding troubles with stringstreams.
  *

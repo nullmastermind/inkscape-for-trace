@@ -27,7 +27,6 @@
 #include "message-stack.h"
 #include "message-context.h"
 #include "ui/tools/node-tool.h"
-#include <gtk/gtk.h>
 
 using Inkscape::DocumentUndo;
 

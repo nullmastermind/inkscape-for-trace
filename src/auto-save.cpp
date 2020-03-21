@@ -16,7 +16,6 @@
 #include <sstream>
 
 #include <glibmm/i18n.h> // Internationalization
-#include <gtkmm.h>
 
 #include "auto-save.h"
 #include "document.h"

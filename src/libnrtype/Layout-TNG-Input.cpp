@@ -18,7 +18,6 @@
 #define PANGO_ENABLE_ENGINE
 #endif
 
-#include <gtk/gtk.h>
 #include "Layout-TNG.h"
 #include "style.h"
 #include "svg/svg-length.h"

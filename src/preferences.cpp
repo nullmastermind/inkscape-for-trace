@@ -19,7 +19,6 @@
 #include <glibmm/convert.h>
 #include <glibmm/i18n.h>
 #include <glib/gstdio.h>
-#include <gtk/gtk.h>
 #include "preferences.h"
 #include "preferences-skeleton.h"
 #include "inkscape.h"
