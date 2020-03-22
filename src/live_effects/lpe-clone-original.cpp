@@ -148,9 +148,7 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
     }
     //Attributes
     SPShape * shape_origin = SP_SHAPE(origin);
-    SPPath  * path_origin  = SP_PATH(origin);
     SPShape * shape_dest   = SP_SHAPE(dest);
-    SPPath  * path_dest    = SP_PATH(dest);
     SPMask  * mask_origin  = SP_ITEM(origin)->getMaskObject();
     SPMask  * mask_dest    = SP_ITEM(dest)->getMaskObject();
     if(mask_origin && mask_dest) {
