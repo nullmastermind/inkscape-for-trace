@@ -85,8 +85,9 @@ static bool evaluateSystemLanguage(SPItem const *item, gchar const *value) {
     gchar **strlist = g_strsplit( value, ",", 0);
 
     for ( int i = 0 ; (str = strlist[i]) ; i++ ) {
+        str = g_strstrip(str);
         gchar *lngcode = preprocessLanguageCode(str);
-        if ( 0 == *lngcode )
+        if (lngcode == nullptr)
             continue;
         language_codes.insert(lngcode);
 
@@ -95,7 +96,7 @@ static bool evaluateSystemLanguage(SPItem const *item, gchar const *value) {
         {
             // if subtag is used, primary tag is still a perfect match
             *pos = 0;
-            if ( language_codes.find(lngcode) == language_codes.end() ) {
+            if (strlen(lngcode) && language_codes.find(lngcode) == language_codes.end()) {
                 language_codes.insert(lngcode);
             }
         }
