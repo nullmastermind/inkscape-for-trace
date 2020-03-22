@@ -12,21 +12,18 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "help.h"
+
 #include <glibmm.h>
 #include <glibmm/i18n.h>
+#include <gtkmm.h>
 
 #include "inkscape-application.h"
 
-#include "help.h"
+#include "include/gtkmm_version.h"
 #include "io/resource.h"
-#include "io/sys.h"
-#include "path-prefix.h"
+#include "ui/interface.h" // sp_ui_error_dialog
 #include "ui/dialog/aboutbox.h"
-#include "ui/interface.h"
-
-
-using namespace Inkscape::IO::Resource;
-
 
 void sp_help_about()
 {
@@ -34,29 +31,36 @@ void sp_help_about()
 }
 
 /** Open an URL in the the default application
-*
-* See documentation of gtk_show_uri_on_window() for details
-*
-* @param url    URL to be opened
-* @param window Parent window for which the URL is opened
-*/
-void sp_help_open_url(Glib::ustring url, Gtk::Window *window)
+ *
+ * See documentation of gtk_show_uri_on_window() for details
+ *
+ * @param url    URL to be opened
+ * @param window Parent window for which the URL is opened
+ */
+// TODO: Do we really need a window reference here? It's the way recommended by gtk, though.
+void sp_help_open_url(const Glib::ustring &url, Gtk::Window *window)
 {
-    // TODO: Find gtkmm/glibmm alternative for gtk_show_uri_on_window (currently not wrapped)
-    //       Do we really need a window reference here? It's the way recommended by gtk, though.
+#if GTKMM_CHECK_VERSION(3,24,0)
+    try {
+        window->show_uri(url, GDK_CURRENT_TIME);
+    } catch (const Glib::Error &e) {
+        g_warning("Unable to show '%s': %s", url.c_str(), e.what().c_str());
+    }
+#else
     GError *error = nullptr;
     gtk_show_uri_on_window(window->gobj(), url.c_str(), GDK_CURRENT_TIME, &error);
     if (error) {
-        g_warning ("Unable to show '%s': %s", url.c_str(), error->message);
-        g_error_free (error);
+        g_warning("Unable to show '%s': %s", url.c_str(), error->message);
+        g_error_free(error);
     }
+#endif
 }
 
 void sp_help_open_tutorial(Glib::ustring name)
 {
     Glib::ustring filename = name + ".svg";
 
-    filename = get_filename(TUTORIALS, filename.c_str(), true);
+    filename = Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::TUTORIALS, filename.c_str(), true);
     if (!filename.empty()) {
         Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(filename);
         ConcreteInkscapeApplication<Gtk::Application>* app = &(ConcreteInkscapeApplication<Gtk::Application>::get_instance());
