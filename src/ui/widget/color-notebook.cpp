@@ -119,8 +119,6 @@ void ColorNotebook::_initUI()
         _addPage(_available_pages[i]);
     }
 
-    sp_set_font_size_smaller(_buttonbox);
-
     gtk_widget_set_margin_start(_buttonbox, XPAD);
     gtk_widget_set_margin_end(_buttonbox, XPAD);
     gtk_widget_set_margin_top(_buttonbox, YPAD);
@@ -190,7 +188,6 @@ void ColorNotebook::_initUI()
     gtk_box_pack_start(GTK_BOX(rgbabox), GTK_WIDGET(rgba_entry->gobj()), FALSE, FALSE, 0);
     gtk_label_set_mnemonic_widget(GTK_LABEL(_rgbal), GTK_WIDGET(rgba_entry->gobj()));
 
-    sp_set_font_size_smaller(rgbabox);
     gtk_widget_show_all(rgbabox);
 
 #if defined(HAVE_LIBLCMS2)

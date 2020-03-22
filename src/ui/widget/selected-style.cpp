@@ -175,7 +175,6 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
     for (int i = SS_FILL; i <= SS_STROKE; i++) {
 
         _na[i].set_markup (_("N/A"));
-        sp_set_font_size_smaller (GTK_WIDGET(_na[i].gobj()));
         _na[i].show_all();
         __na[i] = (_("Nothing selected"));
 
@@ -184,22 +183,18 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
         } else {
             _none[i].set_markup (C_("Stroke", "<i>None</i>"));
         }
-        sp_set_font_size_smaller (GTK_WIDGET(_none[i].gobj()));
         _none[i].show_all();
         __none[i] = (i == SS_FILL)? (C_("Fill and stroke", "No fill, middle-click for black fill")) : (C_("Fill and stroke", "No stroke, middle-click for black stroke"));
 
         _pattern[i].set_markup (_("Pattern"));
-        sp_set_font_size_smaller (GTK_WIDGET(_pattern[i].gobj()));
         _pattern[i].show_all();
         __pattern[i] = (i == SS_FILL)? (_("Pattern (fill)")) : (_("Pattern (stroke)"));
 
         _hatch[i].set_markup(_("Hatch"));
-        sp_set_font_size_smaller(GTK_WIDGET(_hatch[i].gobj()));
         _hatch[i].show_all();
         __hatch[i] = (i == SS_FILL) ? (_("Hatch (fill)")) : (_("Hatch (stroke)"));
 
         _lgradient[i].set_markup (_("<b>L</b>"));
-        sp_set_font_size_smaller (GTK_WIDGET(_lgradient[i].gobj()));
         _lgradient[i].show_all();
         __lgradient[i] = (i == SS_FILL)? (_("Linear gradient (fill)")) : (_("Linear gradient (stroke)"));
 
@@ -209,7 +204,6 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
         _gradient_box_l[i].show_all();
 
         _rgradient[i].set_markup (_("<b>R</b>"));
-        sp_set_font_size_smaller (GTK_WIDGET(_rgradient[i].gobj()));
         _rgradient[i].show_all();
         __rgradient[i] = (i == SS_FILL)? (_("Radial gradient (fill)")) : (_("Radial gradient (stroke)"));
 
@@ -220,7 +214,6 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
 
 #ifdef WITH_MESH
         _mgradient[i].set_markup (_("<b>M</b>"));
-        sp_set_font_size_smaller (GTK_WIDGET(_mgradient[i].gobj()));
         _mgradient[i].show_all();
         __mgradient[i] = (i == SS_FILL)? (_("Mesh gradient (fill)")) : (_("Mesh gradient (stroke)"));
 
@@ -231,12 +224,10 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
 #endif
 
         _many[i].set_markup (_("Different"));
-        sp_set_font_size_smaller (GTK_WIDGET(_many[i].gobj()));
         _many[i].show_all();
         __many[i] = (i == SS_FILL)? (_("Different fills")) : (_("Different strokes"));
 
         _unset[i].set_markup (_("<b>Unset</b>"));
-        sp_set_font_size_smaller (GTK_WIDGET(_unset[i].gobj()));
         _unset[i].show_all();
         __unset[i] = (i == SS_FILL)? (_("Unset fill")) : (_("Unset stroke"));
 
@@ -245,13 +236,11 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
 
         // TRANSLATORS: A means "Averaged"
         _averaged[i].set_markup (_("<b>a</b>"));
-        sp_set_font_size_smaller (GTK_WIDGET(_averaged[i].gobj()));
         _averaged[i].show_all();
         __averaged[i] = (i == SS_FILL)? (_("Fill is averaged over selected objects")) : (_("Stroke is averaged over selected objects"));
 
         // TRANSLATORS: M means "Multiple"
         _multiple[i].set_markup (_("<b>m</b>"));
-        sp_set_font_size_smaller (GTK_WIDGET(_multiple[i].gobj()));
         _multiple[i].show_all();
         __multiple[i] = (i == SS_FILL)? (_("Multiple selected objects have the same fill")) : (_("Multiple selected objects have the same stroke"));
 
@@ -362,8 +351,6 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
         _popup_sw.attach(_popup_sw_remove, 0,1, row, row+1);
         row++;
 
-        sp_set_font_size_smaller (GTK_WIDGET(_popup_sw.gobj()));
-
         _popup_sw.show_all();
     }
 
@@ -380,7 +367,6 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
     _stroke.pack_start(_stroke_width_place, Gtk::PACK_SHRINK);
 
     _opacity_sb.set_adjustment(_opacity_adjustment);
-    sp_set_font_size_smaller (GTK_WIDGET(_opacity_sb.gobj()));
     _opacity_sb.set_size_request (SELECTED_STYLE_SB_WIDTH, -1);
     _opacity_sb.set_sensitive (false);
 
@@ -401,16 +387,6 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
     pack_start(_table, true, true, 2);
 
     set_size_request (SELECTED_STYLE_WIDTH, -1);
-
-    sp_set_font_size_smaller (GTK_WIDGET(_opacity_label.gobj()));
-    sp_set_font_size_smaller (GTK_WIDGET(_opacity_sb.gobj()));
-    sp_set_font_size_smaller (GTK_WIDGET(_fill_place.gobj()));
-    sp_set_font_size_smaller (GTK_WIDGET(_fill_flag_place.gobj()));
-    sp_set_font_size_smaller (GTK_WIDGET(_stroke_place.gobj()));
-    sp_set_font_size_smaller (GTK_WIDGET(_stroke_flag_place.gobj()));
-    sp_set_font_size_smaller (GTK_WIDGET(_stroke_width.gobj()));
-    sp_set_font_size_smaller (GTK_WIDGET(_fill_label.gobj()));
-    sp_set_font_size_smaller (GTK_WIDGET(_stroke_label.gobj()));
 
     _drop[SS_FILL] = new DropTracker();
     ((DropTracker*)_drop[SS_FILL])->parent = this;

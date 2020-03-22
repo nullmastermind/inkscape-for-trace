@@ -158,14 +158,6 @@ StyleSwatch::StyleSwatch(SPCSSAttr *css, gchar const *main_tip)
 
     set_size_request (STYLE_SWATCH_WIDTH, -1);
 
-    sp_set_font_size_smaller (GTK_WIDGET(_opacity_value.gobj()));
-    sp_set_font_size_smaller (GTK_WIDGET(_stroke_width.gobj()));
-    for (int i = SS_FILL; i <= SS_STROKE; i++) {
-        sp_set_font_size_smaller (GTK_WIDGET(_value[i].gobj()));
-        sp_set_font_size_smaller (GTK_WIDGET(_place[i].gobj()));
-        sp_set_font_size_smaller (GTK_WIDGET(_label[i].gobj()));
-    }
-
     setStyle (css);
 
     _swatch.signal_button_press_event().connect(sigc::mem_fun(*this, &StyleSwatch::on_click));

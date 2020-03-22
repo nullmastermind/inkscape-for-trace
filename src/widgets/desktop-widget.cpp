@@ -607,8 +607,6 @@ SPDesktopWidget::SPDesktopWidget()
     dtw->_coord_status->attach(*label_r, 5, 0, 1, 2);
     dtw->_coord_status->attach(*dtw->_rotation_status, 6, 0, 1, 2);
 
-    sp_set_font_size_smaller(GTK_WIDGET(dtw->_coord_status->gobj()));
-
     dtw->_statusbar->pack_end(*dtw->_coord_status, false, false);
 
     // --------------- Color Management ---------------- //

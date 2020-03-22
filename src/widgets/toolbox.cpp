@@ -698,7 +698,6 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
             // and also store a pointer to it inside the toolbox.  This allows the
             // active toolbar to be changed.
             gtk_container_add(GTK_CONTAINER(toolbox), holder);
-            sp_set_font_size_smaller( holder );
             gtk_widget_set_name( holder, aux_toolboxes[i].ui_name );
 
             // TODO: We could make the toolbox a custom subclass of GtkEventBox

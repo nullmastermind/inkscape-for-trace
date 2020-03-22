@@ -66,50 +66,6 @@ Gtk::HBox * spw_hbox(Gtk::Grid * table, int width, int col, int row)
   return hb;
 }
 
-static void
-sp_set_font_size_recursive (GtkWidget *w, gpointer font)
-{
-    guint size = GPOINTER_TO_UINT (font);
-
-        auto css_provider = gtk_css_provider_new();
-
-        const double pt_size = size / static_cast<double>(PANGO_SCALE);
-        std::ostringstream css_data;
-        css_data << "GtkWidget {\n"
-                 << "  font-size: " << pt_size << "pt;\n"
-                 << "}\n";
-
-        gtk_css_provider_load_from_data(css_provider,
-                                        css_data.str().c_str(),
-                                        -1, nullptr);
-
-        auto style_context = gtk_widget_get_style_context(w);
-        gtk_style_context_add_provider(style_context,
-                                       GTK_STYLE_PROVIDER(css_provider),
-                                       GTK_STYLE_PROVIDER_PRIORITY_USER);
-
-    if (GTK_IS_CONTAINER(w)) {
-        gtk_container_foreach (GTK_CONTAINER(w), (GtkCallback) sp_set_font_size_recursive, font);
-    }
-
-        g_object_unref(css_provider);
-}
-
-void
-sp_set_font_size (GtkWidget *w, guint font)
-{
-    sp_set_font_size_recursive (w, GUINT_TO_POINTER(font));
-}
-
-void
-sp_set_font_size_smaller (GtkWidget *w)
-{
-    PangoContext *pc = gtk_widget_get_pango_context (w);
-    PangoFontDescription* pfd = pango_context_get_font_description (pc);
-    guint size = pango_font_description_get_size (pfd);
-    sp_set_font_size_recursive (w, GUINT_TO_POINTER((int) (0.8*size)));
-}
-
 /**
  * Finds the descendant of w which has the data with the given key and returns the data, or NULL if there's none.
  */
