@@ -427,11 +427,11 @@ LPEMirrorSymmetry::doOnApply (SPLPEItem const* lpeitem)
     Point point_a(boundingbox_X.max(), boundingbox_Y.min());
     Point point_b(boundingbox_X.max(), boundingbox_Y.max());
     Point point_c(boundingbox_X.max(), boundingbox_Y.middle());
-    start_point.param_setValue(point_a);
+    start_point.param_setValue(point_a, true);
     start_point.param_update_default(point_a);
-    end_point.param_setValue(point_b);
+    end_point.param_setValue(point_b, true);
     end_point.param_update_default(point_b);
-    center_point.param_setValue(point_c);
+    center_point.param_setValue(point_c, true);
     previous_center = center_point;
 }
 
@@ -489,6 +489,10 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                 crossed.push_back(c.ta);
             }
             std::sort(crossed.begin(), crossed.end());
+            bool swamped = false;
+            if (crossed.size()) {
+                swamped = crossed[0] > crossed[crossed.size() - 1];
+            }
             for (unsigned int i = 0; i < crossed.size(); i++) {
                 double time_end = crossed[i];
                 if (time_start != time_end && time_end - time_start > Geom::EPSILON) {
@@ -508,10 +512,8 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                                     portion.setFinal(portion.initialPoint());
                                     portion.close();
                                 }
-                            } else {
-                                if (path_it.closed()) {
-                                    portion.close();
-                                }
+                            } else if (path_it.closed() && swamped) {
+                                portion.close();
                             }
                             tmp_pathvector.push_back(portion);
                         }
@@ -539,8 +541,14 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                             tmp_pathvector.push_back(portion);
                         } else {
                             if (cs.size() > 1 && tmp_pathvector.size() > 0 && tmp_pathvector[0].size() > 0 ) {
-                                portion.setFinal(tmp_pathvector[0].initialPoint());
-                                portion.setInitial(tmp_pathvector[0].finalPoint());
+                                if (swamped || !split_items) {
+                                    portion.setFinal(tmp_pathvector[0].initialPoint());
+                                    portion.setInitial(tmp_pathvector[0].finalPoint());
+                                } else {
+                                    tmp_pathvector[0] = tmp_pathvector[0].reversed();
+                                    portion = portion.reversed();
+                                    portion.setInitial(tmp_pathvector[0].finalPoint());
+                                }
                                 tmp_pathvector[0].append(portion);
                             } else {
                                 tmp_pathvector.push_back(portion);
