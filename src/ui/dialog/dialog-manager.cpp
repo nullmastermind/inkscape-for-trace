@@ -290,8 +290,47 @@ void DialogManager::showDialog(gchar const *name, bool grabfocus) {
 void DialogManager::showDialog(GQuark name, bool /*grabfocus*/) {
     Dialog *dialog = getDialog(name);
     if ( dialog ) {
+        dialogs_unhide();
         // should check for grabfocus, but lp:1348927 prevents it
         dialog->present();
+    }
+}
+
+void
+DialogManager::dialogs_hide()
+{
+    _dialogs_toggle = false;
+
+    for(auto &item : _dialog_map) {
+        item.second->onHideF12();
+    }
+
+    for(auto &item : _app_dialog_map) {
+        item.second->onHideF12();
+    }
+}
+
+void
+DialogManager::dialogs_unhide()
+{
+    _dialogs_toggle = true;
+    
+    for(auto &item : _dialog_map) {
+        item.second->onShowF12();
+    }
+
+    for(auto &item : _app_dialog_map) {
+        item.second->onShowF12();
+    }
+}
+
+void
+DialogManager::dialogs_toggle()
+{
+    if(_dialogs_toggle) {
+        dialogs_hide();
+    } else {
+        dialogs_unhide();
     }
 }
 

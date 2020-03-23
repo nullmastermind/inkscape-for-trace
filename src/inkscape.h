@@ -129,10 +129,6 @@ public:
     SPDesktop * next_desktop ();
     SPDesktop * prev_desktop ();
     
-    void dialogs_hide ();
-    void dialogs_unhide ();
-    void dialogs_toggle ();
-    
     void external_change ();
     void selection_modified (Inkscape::Selection *selection, guint flags);
     void selection_changed (Inkscape::Selection * selection);
@@ -183,10 +179,6 @@ public:
     
     // inkscape is quitting
     sigc::signal<void> signal_shut_down;
-    // user pressed F12
-    sigc::signal<void> signal_dialogs_hide;
-    // user pressed F12
-    sigc::signal<void> signal_dialogs_unhide;
     // a document was changed by some external means (undo or XML editor); this
     // may not be reflected by a selection change and thus needs a separate signal
     sigc::signal<void> signal_external_change;
@@ -223,7 +215,6 @@ public:
     std::vector<SPDesktop *> * _desktops;
 
     unsigned refCount;
-    bool _dialogs_toggle;
     guint _mapalt;
     guint _trackalt;
     static bool _crashIsHappening;

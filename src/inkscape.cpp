@@ -198,7 +198,6 @@ Application::Application(bool use_gui) :
     _menus(nullptr),
     _desktops(nullptr),
     refCount(1),
-    _dialogs_toggle(TRUE),
     _mapalt(GDK_MOD1_MASK),
     _trackalt(FALSE),
     _use_gui(use_gui)
@@ -963,34 +962,6 @@ void
 Application::switch_desktops_prev()
 {
     prev_desktop()->presentWindow();
-}
-
-void
-Application::dialogs_hide()
-{
-    signal_dialogs_hide.emit();
-    _dialogs_toggle = false;
-}
-
-
-
-void
-Application::dialogs_unhide()
-{
-    signal_dialogs_unhide.emit();
-    _dialogs_toggle = true;
-}
-
-
-
-void
-Application::dialogs_toggle()
-{
-    if (_dialogs_toggle) {
-        dialogs_hide();
-    } else {
-        dialogs_unhide();
-    }
 }
 
 void

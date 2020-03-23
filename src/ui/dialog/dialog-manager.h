@@ -48,6 +48,11 @@ public:
     void showDialog(gchar const *name, bool grabfocus=true);
     void showDialog(GQuark name, bool grabfocus=true);
 
+    //functions for hiding and showing dialogs
+    void dialogs_hide();
+    void dialogs_unhide();
+    void dialogs_toggle();
+
 protected:
     DialogManager(DialogManager const &d); // no copy
     DialogManager& operator=(DialogManager const &d); // no assign
@@ -56,6 +61,9 @@ protected:
     DialogMap _dialog_map; //< map of already created dialogs
     static DialogMap _app_dialog_map; //< map of application-level dialogs
     static unsigned _app_dialog_map_refcount;
+
+private:
+    bool _dialogs_toggle = true; //< F12 toggle state
 };
 
 } // namespace Dialog

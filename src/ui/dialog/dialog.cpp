@@ -91,8 +91,6 @@ Dialog::Dialog(Behavior::BehaviorFactory behavior_factory, const char *prefs_pat
     Gtk::Widget *widg = &static_cast<Gtk::Widget &>(*_behavior);
     _connections.emplace_back(
         INKSCAPE.signal_activate_desktop.connect(sigc::mem_fun(*this, &Dialog::onDesktopActivated)));
-    _connections.emplace_back(INKSCAPE.signal_dialogs_hide.connect(sigc::mem_fun(*this, &Dialog::onHideF12)));
-    _connections.emplace_back(INKSCAPE.signal_dialogs_unhide.connect(sigc::mem_fun(*this, &Dialog::onShowF12)));
     _connections.emplace_back(INKSCAPE.signal_shut_down.connect(sigc::mem_fun(*this, &Dialog::onShutdown)));
     _connections.emplace_back(
         INKSCAPE.signal_change_theme.connect(sigc::bind(sigc::ptr_fun(&sp_add_top_window_classes), widg)));

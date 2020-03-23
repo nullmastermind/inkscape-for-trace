@@ -1244,7 +1244,6 @@ void SelectionVerb::perform(SPAction *action, void *data)
             SelectionHelper::reverse(dt);
             break;
         case SP_VERB_SELECTION_TRACE:
-            INKSCAPE.dialogs_unhide();
             dt->_dlg_mgr->showDialog("Trace");
             break;
         case SP_VERB_SELECTION_CREATE_BITMAP:
@@ -1260,7 +1259,6 @@ void SelectionVerb::perform(SPAction *action, void *data)
             selection->breakApart();
             break;
         case SP_VERB_SELECTION_ARRANGE:
-            INKSCAPE.dialogs_unhide();
             dt->_dlg_mgr->showDialog("TileDialog"); //FIXME: denis: What's this string (to be changed)
             break;
         default:
@@ -2095,7 +2093,6 @@ void ZoomVerb::perform(SPAction *action, void *data)
             dt->toggleColorProfAdjust();
             break;
         case SP_VERB_VIEW_ICON_PREVIEW:
-            INKSCAPE.dialogs_unhide();
             dt->_dlg_mgr->showDialog("IconPreviewPanel");
             break;
 
@@ -2112,11 +2109,6 @@ void ZoomVerb::perform(SPAction *action, void *data)
  */
 void DialogVerb::perform(SPAction *action, void *data)
 {
-    if (reinterpret_cast<std::size_t>(data) != SP_VERB_DIALOG_TOGGLE) {
-        // unhide all when opening a new dialog
-        INKSCAPE.dialogs_unhide();
-    }
-
     g_return_if_fail(ensure_desktop_valid(action));
     SPDesktop *dt = sp_action_get_desktop(action);
     g_assert(dt->_dlg_mgr != nullptr);
@@ -2181,7 +2173,7 @@ void DialogVerb::perform(SPAction *action, void *data)
             dt->_dlg_mgr->showDialog("UndoHistory");
             break;
         case SP_VERB_DIALOG_TOGGLE:
-            INKSCAPE.dialogs_toggle();
+            dt->_dlg_mgr->dialogs_toggle();
             break;
         case SP_VERB_DIALOG_CLONETILER:
             //clonetiler_dialog();
@@ -2249,7 +2241,6 @@ void HelpVerb::perform(SPAction *action, void *data)
             // show_panel( *panel, "dialogs.aboutextensions", SP_VERB_HELP_ABOUT_EXTENSIONS );
             break;
         case SP_VERB_HELP_MEMORY:
-            INKSCAPE.dialogs_unhide();
             dt->_dlg_mgr->showDialog("Memory");
             break;
         default:

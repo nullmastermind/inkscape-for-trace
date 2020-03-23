@@ -833,7 +833,6 @@ void ContextMenu::ImageEdit()
 
 void ContextMenu::ImageTraceBitmap()
 {
-    INKSCAPE.dialogs_unhide();
     _desktop->_dlg_mgr->showDialog("Trace");
 }
 
