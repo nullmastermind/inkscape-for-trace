@@ -253,7 +253,7 @@ FontSelector::get_fontspec(bool use_variations) {
         std::cerr << "FontSelector::get_fontspec: empty style!" << std::endl;
     }
 
-    Glib::ustring fontspec = family + " ";
+    Glib::ustring fontspec = family + ", ";
 
     if (use_variations) {
         // Clip any font_variation data in 'style' as we'll replace it.
@@ -289,7 +289,7 @@ FontSelector::style_cell_data_func (Gtk::CellRenderer *renderer, Gtk::TreeIter c
     (*iter).get_value(1, style);
 
     Glib::ustring style_escaped  = Glib::Markup::escape_text( style );
-    Glib::ustring font_desc = Glib::Markup::escape_text( family + " " + style );
+    Glib::ustring font_desc = Glib::Markup::escape_text( family + ", " + style );
     Glib::ustring markup;
 
     markup = "<span font='" + font_desc + "'>" + style_escaped + "</span>";
