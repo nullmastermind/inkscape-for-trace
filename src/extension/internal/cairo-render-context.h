@@ -138,7 +138,7 @@ public:
     void setPathVector(Geom::PathVector const &pv);
 
     void pushLayer();
-    void popLayer();
+    void popLayer(cairo_operator_t composite = CAIRO_OPERATOR_CLEAR);
 
     void tagBegin(const char* link);
     void tagEnd();

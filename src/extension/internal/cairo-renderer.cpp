@@ -634,7 +634,13 @@ void CairoRenderer::renderItem(CairoRenderContext *ctx, SPItem *item)
 
     CairoRenderState *state = ctx->getCurrentState();
     state->need_layer = ( state->mask || state->clip_path || state->opacity != 1.0 );
-
+    SPStyle* style = item->style;
+    SPGroup * group = dynamic_cast<SPGroup *>(item);
+    bool blend = false;
+    if (group && style->mix_blend_mode.set && style->mix_blend_mode.value != SP_CSS_BLEND_NORMAL) {
+        state->need_layer = true;
+        blend = true;
+    } 
     // Draw item on a temporary surface so a mask, clip-path, or opacity can be applied to it.
     if (state->need_layer) {
         state->merge_opacity = FALSE;
@@ -644,8 +650,11 @@ void CairoRenderer::renderItem(CairoRenderContext *ctx, SPItem *item)
     sp_item_invoke_render(item, ctx);
 
     if (state->need_layer)
-        ctx->popLayer(); // This applies clipping/masking
-
+        if (blend) {
+            ctx->popLayer(ink_css_blend_to_cairo_operator(style->mix_blend_mode.value)); // This applies clipping/masking
+        } else {
+            ctx->popLayer(); // This applies clipping/masking
+        }
     ctx->popState();
 }
 

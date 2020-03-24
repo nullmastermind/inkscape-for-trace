@@ -551,7 +551,7 @@ void CairoRenderContext::pushLayer()
 }
 
 void
-CairoRenderContext::popLayer()
+CairoRenderContext::popLayer(cairo_operator_t composite)
 {
     g_assert( _is_valid );
 
@@ -645,6 +645,9 @@ CairoRenderContext::popLayer()
 
                 if (!mask) {
                     cairo_pop_group_to_source(_cr);
+                    if (composite != CAIRO_OPERATOR_CLEAR){
+                        cairo_set_operator(_cr, composite);
+                    }
                     cairo_mask_surface(_cr, clip_mask, 0, 0);
                     _renderer->destroyContext(clip_ctx);
                 }
@@ -732,6 +735,9 @@ CairoRenderContext::popLayer()
             }
 
             cairo_pop_group_to_source(_cr);
+            if (composite != CAIRO_OPERATOR_CLEAR){
+                cairo_set_operator(_cr, composite);
+            }
             if (_clip_mode == CLIP_MODE_PATH) {
                 // we have to do the clipping after cairo_pop_group_to_source
                 _renderer->applyClipPath(this, clip_path);
@@ -743,6 +749,9 @@ CairoRenderContext::popLayer()
     } else {
         // No clip path or mask
         cairo_pop_group_to_source(_cr);
+        if (composite != CAIRO_OPERATOR_CLEAR){
+            cairo_set_operator(_cr, composite);
+        }
         if (opacity == 1.0)
             cairo_paint(_cr);
         else
