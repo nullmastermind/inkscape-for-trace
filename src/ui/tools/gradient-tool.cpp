@@ -492,7 +492,7 @@ bool GradientTool::root_handler(GdkEvent* event) {
                     SPGradient *priv = sp_item_set_gradient(item, vector, new_type, fsmode);
                     sp_gradient_reset_to_userspace(priv, item);
                 }
-
+                desktop->redrawDesktop();;
                 DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_GRADIENT,
                                    _("Create default gradient"));
             }

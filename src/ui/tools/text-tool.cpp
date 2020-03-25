@@ -291,7 +291,7 @@ bool TextTool::item_handler(SPItem* item, GdkEvent* event) {
             }
             break;
         case GDK_2BUTTON_PRESS:
-            if (event->button.button == 1 && this->text) {
+            if (event->button.button == 1 && this->text && this->dragging) {
                 Inkscape::Text::Layout const *layout = te_get_layout(this->text);
                 if (layout) {
                     if (!layout->isStartOfWord(this->text_sel_start))
@@ -306,7 +306,7 @@ bool TextTool::item_handler(SPItem* item, GdkEvent* event) {
             }
             break;
         case GDK_3BUTTON_PRESS:
-            if (event->button.button == 1 && this->text) {
+            if (event->button.button == 1 && this->text && this->dragging) {
                 this->text_sel_start.thisStartOfLine();
                 this->text_sel_end.thisEndOfLine();
                 sp_text_context_update_cursor(this);
