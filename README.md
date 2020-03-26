@@ -3,7 +3,7 @@ Inkscape. Draw Freely.
 
 [https://www.inkscape.org/](https://www.inkscape.org/)
 
-Inkscape is an open source vector graphics editor. It offers a rich set
+Inkscape is a Free and open source vector graphics editor. It offers a rich set
 of features and is widely used for both artistic and technical illustrations
 such as cartoons, clip art, logos, typography, diagramming and flowcharting.
 It uses vector graphics to allow for sharp printouts and renderings at
