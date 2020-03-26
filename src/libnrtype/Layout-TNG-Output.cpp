@@ -428,8 +428,11 @@ void Layout::showGlyphs(CairoRenderContext *ctx) const
         if (_characters[_glyphs[glyph_index].in_character].in_glyph == -1) {
             // invisible glyphs
             unsigned same_character = _glyphs[glyph_index].in_character;
-            while (_glyphs[glyph_index].in_character == same_character)
+            while (_glyphs[glyph_index].in_character == same_character) {
                 glyph_index++;
+                if (glyph_index == _glyphs.size())
+                    return;
+            }
             continue;
         }
         Span const &span = _spans[_characters[_glyphs[glyph_index].in_character].in_span];
