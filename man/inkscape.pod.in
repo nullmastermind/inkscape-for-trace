@@ -83,15 +83,16 @@ options:
 
 =head1 DESCRIPTION
 
-B<Inkscape> is a GUI editor for B<Scalable Vector Graphics (SVG)> format
-drawing files, with capabilities comparable to the Industry standard.
-Inkscape features include versatile
-shapes, bezier paths, freehand drawing, multi-line text, text on path,
-alpha blending, arbitrary affine transforms, gradient and pattern fills,
-node editing, many export and import formats including PNG and PDF,
-grouping, layers, live clones, and a lot more.  The interface is
-designed to be comfortable and efficient for skilled users, while
-remaining conformant to B<GNOME> standards so that users familiar with
+B<Inkscape> is an open source vector graphics editor. It offers a rich set of
+features and is widely used for both artistic and technical illustrations such
+as cartoons, clip art, logos, typography, diagramming and flowcharting.
+It uses vector graphics to allow for sharp printouts and renderings at
+unlimited resolution and is not bound to a fixed number of pixels like raster
+graphics. Inkscape uses the standardized B<SVG> file format as its main format,
+which is supported by many other applications including web browsers.
+
+The interface is designed to be comfortable and efficient for skilled users,
+while remaining conformant to B<GNOME> standards so that users familiar with
 other GNOME applications can learn its interface rapidly.
 
 B<SVG> is a W3C standard XML format for 2D vector drawing. It allows
