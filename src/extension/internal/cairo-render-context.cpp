@@ -1584,7 +1584,11 @@ CairoRenderContext::renderPathVector(Geom::PathVector const & pathv, SPStyle con
 
     bool need_layer = ( !_state->merge_opacity && !_state->need_layer &&
                         ( _state->opacity != 1.0 || _state->clip_path != nullptr || _state->mask != nullptr ) );
-
+    bool blend = false;
+    if (style->mix_blend_mode.set && style->mix_blend_mode.value != SP_CSS_BLEND_NORMAL) {
+        need_layer = true;
+        blend = true;
+    }
     if (!need_layer)
         cairo_save(_cr);
     else
@@ -1596,10 +1600,6 @@ CairoRenderContext::renderPathVector(Geom::PathVector const & pathv, SPStyle con
         } else {
             cairo_set_fill_rule(_cr, CAIRO_FILL_RULE_WINDING);
         }
-    }
-
-    if (style->mix_blend_mode.set && style->mix_blend_mode.value) {
-        cairo_set_operator(_cr, ink_css_blend_to_cairo_operator(style->mix_blend_mode.value));
     }
 
     setPathVector(pathv);
@@ -1628,10 +1628,15 @@ CairoRenderContext::renderPathVector(Geom::PathVector const & pathv, SPStyle con
             cairo_fill(_cr);
     }
 
-    if (need_layer)
-        popLayer();
-    else
+    if (need_layer) {
+        if (blend) {
+            popLayer(ink_css_blend_to_cairo_operator(style->mix_blend_mode.value));
+        } else {
+            popLayer();
+        }
+    } else {
         cairo_restore(_cr);
+    }
 
     return true;
 }
