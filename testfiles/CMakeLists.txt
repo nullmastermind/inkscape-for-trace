@@ -71,7 +71,7 @@ set(TEST_SOURCES
     lpe-bool-test
     sp-item-group-test)
 
-add_library(cpp_test_static_library STATIC unittest.cpp doc-per-case-test.cpp)
+add_library(cpp_test_static_library SHARED unittest.cpp doc-per-case-test.cpp)
 target_link_libraries(cpp_test_static_library PUBLIC ${GTEST_LIBRARIES} inkscape_base)
 
 add_custom_target(tests)
