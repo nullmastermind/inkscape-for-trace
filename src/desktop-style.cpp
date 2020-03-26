@@ -462,7 +462,8 @@ stroke_average_width (const std::vector<SPItem*> &objects)
 
         double width = item->style->stroke_width.computed * i2dt.descrim();
 
-        if ( item->style->stroke.isNone() || std::isnan(width)) {
+        // Width becomes NaN when scaling a diagonal line to a horizontal line (lp:825840)
+        if ( std::isnan(width)) {
             ++n_notstroked;   // do not count nonstroked objects
             continue;
         } else {
@@ -779,15 +780,6 @@ objects_query_strokewidth (const std::vector<SPItem*> &objects, SPStyle *style_r
         }
         SPStyle *style = obj->style;
         if (!style) {
-            continue;
-        }
-
-        if ( style->stroke.isNone() && !(
-                 style->marker.set       || // stroke width affects markers, so if there's no
-                 style->marker_start.set || // stroke but only markers then we should
-                 style->marker_mid.set   || // still calculate the stroke width
-                 style->marker_end.set))
-        {
             continue;
         }
 
