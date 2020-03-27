@@ -3796,7 +3796,7 @@ void ObjectSet::createBitmapCopy()
 
         // Clean up
         Inkscape::GC::release(repr);
-        g_object_unref(pb);
+        delete pb;
 
         // Complete undoable transaction
         DocumentUndo::done(doc, SP_VERB_SELECTION_CREATE_BITMAP,
