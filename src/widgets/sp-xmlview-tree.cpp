@@ -26,6 +26,9 @@ struct NodeData {
     NodeData(SPXMLViewTree *tree, GtkTreeIter *node, Inkscape::XML::Node *repr);
     ~NodeData();
 };
+
+// currently dragged node
+Inkscape::XML::Node *dragging_repr = nullptr;
 } // namespace
 
 enum { STORE_TEXT_COL = 0, STORE_DATA_COL, STORE_N_COLS };
@@ -495,6 +498,7 @@ void on_drag_data_received(GtkWidget * /*wgt*/, GdkDragContext * /*context*/, in
         NodeData *data = sp_xmlview_tree_node_get_data(model, &iter);
         if (data) {
             data->dragging = true;
+            dragging_repr = data->repr;
         }
     }
 }
@@ -661,17 +665,30 @@ gboolean do_drag_motion(GtkWidget *widget, GdkDragContext *context, gint x, gint
         SPXMLViewTree *tree = SP_XMLVIEW_TREE(user_data);
         GtkTreeIter iter;
         gtk_tree_model_get_iter(GTK_TREE_MODEL(tree->store), &iter, path);
+        auto repr = sp_xmlview_tree_node_get_repr(GTK_TREE_MODEL(tree->store), &iter);
+
+        // 0. don't drop on self (also handled by on_row_changed but nice to not have drop highlight for it)
+        if (repr == dragging_repr) {
+            goto finally;
+        }
 
         // 1. only xml elements can be dragged
-        if (sp_xmlview_tree_node_get_repr (GTK_TREE_MODEL(tree->store), &iter)->type() == Inkscape::XML::ELEMENT_NODE) {
-            // 2. new roots cannot be created eg. by dragging a node off into space
-            if (gtk_tree_path_get_depth(path) > 0) {
-                // 3. elements must be at least children of the root <svg:svg> element
-                if (gtk_tree_path_up(path) && gtk_tree_path_up(path)) {
-                    action = GDK_ACTION_MOVE;
-                }
-            }
+        if (repr->type() != Inkscape::XML::ELEMENT_NODE) {
+            goto finally;
         }
+
+        // 3. elements must be at least children of the root <svg:svg> element
+        if (gtk_tree_path_get_depth(path) < 2) {
+            goto finally;
+        }
+
+        action = GDK_ACTION_MOVE;
+    }
+
+finally:
+    if (action == 0) {
+        // remove drop highlight
+        gtk_tree_view_set_drag_dest_row(GTK_TREE_VIEW(widget), nullptr, pos /* ignored */);
     }
 
     gtk_tree_path_free(path);
