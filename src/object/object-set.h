@@ -153,10 +153,7 @@ public:
      *
      * @param the xml node of the item to add
      */
-    void add(XML::Node *repr) {
-        if(document() && repr)
-            add(document()->getObjectById(repr->attribute("id")));
-    }
+    void add(XML::Node *repr);
 
     /**  Add items from an STL iterator range to the selection.
      *  \param from the begin iterator
@@ -192,10 +189,7 @@ public:
      * @param obj the object to select
      */
     void set(SPObject *object, bool persist_selection_context = false);
-    void set(XML::Node *repr) {
-        if(document() && repr)
-            set(document()->getObjectById(repr->attribute("id")));
-    }
+    void set(XML::Node *repr);
     /**
      * Unselects all selected objects.
      */

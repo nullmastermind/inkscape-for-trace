@@ -43,6 +43,15 @@ bool ObjectSet::add(SPObject* object, bool nosignal) {
     return true;
 }
 
+void ObjectSet::add(XML::Node *repr)
+{
+    if (document() && repr) {
+        SPObject *obj = document()->getObjectByRepr(repr);
+        assert(obj == document()->getObjectById(repr->attribute("id")));
+        add(obj);
+    }
+}
+
 bool ObjectSet::remove(SPObject* object) {
     g_return_val_if_fail(object != nullptr, false);
     g_return_val_if_fail(SP_IS_OBJECT(object), false);
@@ -245,12 +254,22 @@ void ObjectSet::set(SPObject *object, bool persist_selection_context) {
         return dynamic_cast<Inkscape::Selection*>(this)->_emitChanged(persist_selection_context);
 }
 
+void ObjectSet::set(XML::Node *repr)
+{
+    if (document() && repr) {
+        SPObject *obj = document()->getObjectByRepr(repr);
+        assert(obj == document()->getObjectById(repr->attribute("id")));
+        set(obj);
+    }
+}
+
 void ObjectSet::setReprList(std::vector<XML::Node*> const &list) {
     if(!document())
         return;
     clear();
     for (auto iter = list.rbegin(); iter != list.rend(); ++iter) {
-        SPObject *obj = document()->getObjectById((*iter)->attribute("id"));
+        SPObject *obj = document()->getObjectByRepr(*iter);
+        assert(obj == document()->getObjectById((*iter)->attribute("id")));
         if (obj) {
             add(obj, true);
         }

@@ -331,8 +331,8 @@ SPPattern *SPPattern::_chain() const
     repr->setAttribute("xlink:href", parent_ref);
 
     defsrepr->addChild(repr, nullptr);
-    const gchar *child_id = repr->attribute("id");
-    SPObject *child = document->getObjectById(child_id);
+    SPObject *child = document->getObjectByRepr(repr);
+    assert(child == document->getObjectById(repr->attribute("id")));
     g_assert(SP_IS_PATTERN(child));
 
     return SP_PATTERN(child);
