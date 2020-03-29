@@ -134,7 +134,6 @@ public:
     void selection_changed (Inkscape::Selection * selection);
     void subselection_changed (SPDesktop *desktop);
     void selection_set (Inkscape::Selection * selection);
-    void readStyleSheets(bool forceupd = false);
     Glib::ustring get_symbolic_colors();
     void eventcontext_set (Inkscape::UI::Tools::ToolBase * eventcontext);
     

@@ -66,26 +66,55 @@ void SPStyleElem::set(SPAttributeEnum key, const gchar* value) {
     }
 }
 
-
-static void
-child_add_rm_cb(Inkscape::XML::Node *, Inkscape::XML::Node *, Inkscape::XML::Node *,
-                void *const data)
+/**
+ * Callback for changing the content of a <style> child text node
+ */
+static void content_changed_cb(Inkscape::XML::Node *, gchar const *, gchar const *, void *const data)
 {
     SPObject *obj = reinterpret_cast<SPObject *>(data);
     g_assert(data != nullptr);
     obj->read_content();
+    obj->document->getRoot()->emitModified(SP_OBJECT_MODIFIED_CASCADE);
 }
 
-static void
-content_changed_cb(Inkscape::XML::Node *, gchar const *, gchar const *,
-                   void *const data)
+static Inkscape::XML::NodeEventVector const textNodeEventVector = {
+    nullptr,            // child_added
+    nullptr,            // child_removed
+    nullptr,            // attr_changed
+    content_changed_cb, // content_changed
+    nullptr,            // order_changed
+};
+
+/**
+ * Callback for adding a text child to a <style> node
+ */
+static void child_add_cb(Inkscape::XML::Node *, Inkscape::XML::Node *child, Inkscape::XML::Node *, void *const data)
 {
     SPObject *obj = reinterpret_cast<SPObject *>(data);
     g_assert(data != nullptr);
+
+    if (child->type() == TEXT_NODE) {
+        child->addListener(&textNodeEventVector, obj);
+    }
+
     obj->read_content();
-    obj->document->getRoot()->emitModified( SP_OBJECT_MODIFIED_CASCADE );
 }
 
+/**
+ * Callback for removing a (text) child from a <style> node
+ */
+static void child_rm_cb(Inkscape::XML::Node *, Inkscape::XML::Node *child, Inkscape::XML::Node *, void *const data)
+{
+    SPObject *obj = reinterpret_cast<SPObject *>(data);
+
+    child->removeListenerByData(obj);
+
+    obj->read_content();
+}
+
+/**
+ * Callback for rearranging text nodes inside a <style> node
+ */
 static void
 child_order_changed_cb(Inkscape::XML::Node *, Inkscape::XML::Node *,
                        Inkscape::XML::Node *, Inkscape::XML::Node *,
@@ -203,14 +232,18 @@ import_style_cb (CRDocHandler *a_handler,
     CRStatus const parse_status =
         cr_parser_parse_file (parser, reinterpret_cast<const guchar *>(import_file.c_str()), CR_UTF_8);
     if (parse_status == CR_OK) {
-        if (!document->getStyleSheet()) {
+        // TODO Imported style sheets should be stored as a statement,
+        // not appended to any top-level list which discards their position
+        // in the parent sheet.
+        auto *cascade = document->getStyleCascade();
+        auto *topsheet = cr_cascade_get_sheet(cascade, ORIGIN_AUTHOR);
+        if (!topsheet) {
             // if the style is the first style sheet that we've seen, set the document's
             // first style sheet to this style and create a cascade object with it.
-            document->setStyleSheet(stylesheet);
-            cr_cascade_set_sheet(document->getStyleCascade(), document->getStyleSheet(), ORIGIN_AUTHOR);
+            cr_cascade_set_sheet(cascade, stylesheet, ORIGIN_AUTHOR);
         } else {
             // If not the first, then chain up this style_sheet
-            cr_stylesheet_append_import(document->getStyleSheet(), stylesheet);
+            cr_stylesheet_append_import(topsheet, stylesheet);
         }
     } else {
         std::cerr << "import_style_cb: Could not parse: " << import_file << std::endl;
@@ -454,7 +487,58 @@ void update_style_recursively( SPObject *object ) {
     }
 }
 
+/**
+ * Get the list of styles.
+ * Currently only used for testing.
+ */
+std::vector<std::unique_ptr<SPStyle>> SPStyleElem::get_styles() const
+{
+    std::vector<std::unique_ptr<SPStyle>> styles;
+
+    if (style_sheet) {
+        auto count = cr_stylesheet_nr_rules(style_sheet);
+        for (int x = 0; x < count; ++x) {
+            CRStatement *statement = cr_stylesheet_statement_get_from_list(style_sheet, x);
+            styles.emplace_back(new SPStyle(document));
+            styles.back()->mergeStatement(statement);
+        }
+    }
+
+    return styles;
+}
+
+/**
+ * Remove `style_sheet` from the document style cascade and destroy it.
+ * @post style_sheet is NULL
+ */
+static void clear_style_sheet(SPStyleElem &self)
+{
+    if (!self.style_sheet) {
+        return;
+    }
+
+    auto *next = self.style_sheet->next;
+    auto *cascade = self.document->getStyleCascade();
+    auto *topsheet = cr_cascade_get_sheet(cascade, ORIGIN_AUTHOR);
+
+    cr_stylesheet_unlink(self.style_sheet);
+
+    if (topsheet == self.style_sheet) {
+        // will unref style_sheet
+        cr_cascade_set_sheet(cascade, next, ORIGIN_AUTHOR);
+    } else if (!topsheet) {
+        cr_stylesheet_unref(self.style_sheet);
+    }
+
+    self.style_sheet = nullptr;
+}
+
 void SPStyleElem::read_content() {
+    // TODO On modification (observer callbacks), clearing and re-appending to
+    // the cascade can change the positon of a stylesheet relative to other
+    // sheets in the document. We need a better way to update a style sheet
+    // which preserves the position.
+    clear_style_sheet(*this);
 
     // First, create the style-sheet object and track it in this
     // element so that it can be edited. It'll be combined with
@@ -475,14 +559,15 @@ void SPStyleElem::read_content() {
         cr_parser_parse_buf (parser, reinterpret_cast<const guchar *>(text.c_str()), text.bytes(), CR_UTF_8);
 
     if (parse_status == CR_OK) {
-        if(!document->getStyleSheet()) {
+        auto *cascade = document->getStyleCascade();
+        auto *topsheet = cr_cascade_get_sheet(cascade, ORIGIN_AUTHOR);
+        if (!topsheet) {
             // if the style is the first style sheet that we've seen, set the document's
             // first style sheet to this style and create a cascade object with it.
-            document->setStyleSheet(style_sheet);
-            cr_cascade_set_sheet (document->getStyleCascade(), document->getStyleSheet(), ORIGIN_AUTHOR);
+            cr_cascade_set_sheet(cascade, style_sheet, ORIGIN_AUTHOR);
         } else {
             // If not the first, then chain up this style_sheet
-            cr_stylesheet_append_stylesheet (document->getStyleSheet(), style_sheet);
+            cr_stylesheet_append_stylesheet(topsheet, style_sheet);
         }
     } else {
         cr_stylesheet_destroy (style_sheet);
@@ -494,40 +579,19 @@ void SPStyleElem::read_content() {
 
     cr_parser_destroy(parser);
     delete parse_tmp;
-    gint count = 0;
-    if (style_sheet) {
-        // Record each css statement as an SPStyle
-        count = cr_stylesheet_nr_rules(style_sheet);
-    }
-    // Clean out any previous styles
-    for (auto& style:styles)
-        sp_style_unref(style);
-    styles.clear();
-
-    for (gint x = 0; x < count; x++) {
-        SPStyle *item = new SPStyle(nullptr, nullptr);
-        CRStatement *statement = cr_stylesheet_statement_get_from_list(style_sheet, x);
-        item->mergeStatement(statement);
-        styles.push_back(item);
-    }
     // If style sheet has changed, we need to cascade the entire object tree, top down
     // Get root, read style, loop through children
     update_style_recursively( (SPObject *)document->getRoot() );
     // cr_stylesheet_dump (document->getStyleSheet(), stdout);
 }
 
-/**
- * Does addListener(fns, data) on \a repr and all of its descendents.
- */
-static void
-rec_add_listener(Inkscape::XML::Node &repr,
-                 Inkscape::XML::NodeEventVector const *const fns, void *const data)
-{
-    repr.addListener(fns, data);
-    for (Inkscape::XML::Node *child = repr.firstChild(); child != nullptr; child = child->next()) {
-        rec_add_listener(*child, fns, data);
-    }
-}
+static Inkscape::XML::NodeEventVector const nodeEventVector = {
+    child_add_cb,           // child_added
+    child_rm_cb,            // child_removed
+    nullptr,                // attr_changed
+    nullptr,                // content_changed
+    child_order_changed_cb, // order_changed
+};
 
 void SPStyleElem::build(SPDocument *document, Inkscape::XML::Node *repr) {
     read_content();
@@ -535,22 +599,24 @@ void SPStyleElem::build(SPDocument *document, Inkscape::XML::Node *repr) {
     readAttr( "type" );
     readAttr( "media" );
 
-    static Inkscape::XML::NodeEventVector const nodeEventVector = {
-        child_add_rm_cb,   // child_added
-        child_add_rm_cb,   // child_removed
-        nullptr,   // attr_changed
-        content_changed_cb,   // content_changed
-        child_order_changed_cb,   // order_changed
-    };
-    rec_add_listener(*repr, &nodeEventVector, this);
+    repr->addListener(&nodeEventVector, this);
+    for (Inkscape::XML::Node *child = repr->firstChild(); child != nullptr; child = child->next()) {
+        if (child->type() == TEXT_NODE) {
+            child->addListener(&textNodeEventVector, this);
+        }
+    }
 
     SPObject::build(document, repr);
 }
 
 void SPStyleElem::release() {
-    for (auto& style:styles)
-        sp_style_unref(style);
-    styles.clear();
+    getRepr()->removeListenerByData(this);
+    for (Inkscape::XML::Node *child = getRepr()->firstChild(); child != nullptr; child = child->next()) {
+        child->removeListenerByData(this);
+    }
+
+    clear_style_sheet(*this);
+
     SPObject::release();
 }
 

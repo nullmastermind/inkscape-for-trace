@@ -13,6 +13,9 @@
 #include "sp-object.h"
 #include "media.h"
 
+#include <memory>
+#include <vector>
+
 class SPStyleElem : public SPObject {
 public:
     SPStyleElem();
@@ -23,7 +26,8 @@ public:
 
     Media media;
     bool is_css;
-    std::vector<SPStyle *> styles;
+
+    std::vector<std::unique_ptr<SPStyle>> get_styles() const;
 
     void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
     void set(SPAttributeEnum key, char const* value) override;

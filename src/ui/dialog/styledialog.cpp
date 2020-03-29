@@ -1151,7 +1151,6 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
             result = "* > .inkscapehacktmp{}";
         }
         textNode->setContent(result.c_str());
-        INKSCAPE.readStyleSheets(true);
         if (empty) {
             textNode->setContent("");
         }

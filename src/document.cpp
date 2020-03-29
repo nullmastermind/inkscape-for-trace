@@ -101,7 +101,6 @@ SPDocument::SPDocument() :
     rroot(nullptr),
     root(nullptr),
     style_cascade(cr_cascade_new(nullptr, nullptr, nullptr)),
-    style_sheet(nullptr),
     ref_count(0),
     document_uri(nullptr),
     document_base(nullptr),

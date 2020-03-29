@@ -452,30 +452,6 @@ void Application::add_gtk_css()
     Gtk::StyleContext::add_provider_for_screen(screen, colorizeprovider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 }
 
-void Application::readStyleSheets(bool forceupd)
-{
-    SPDocument *document = SP_ACTIVE_DOCUMENT;
-    Inkscape::XML::Node *root = document->getReprRoot();
-    std::vector<Inkscape::XML::Node *> styles;
-    for (unsigned i = 0; i < root->childCount(); ++i) {
-        Inkscape::XML::Node *child = root->nthChild(i);
-        if (child && strcmp(child->name(), "svg:style") == 0) {
-            styles.push_back(child);
-        }
-    }
-    if (forceupd || styles.size() > 1) {
-        document->setStyleSheet(nullptr);
-        for (auto style : styles) {
-            gchar const *id = style->attribute("id");
-            if (id) {
-                SPStyleElem *styleelem = dynamic_cast<SPStyleElem *>(document->getObjectById(id));
-                styleelem->read_content();
-            }
-        }
-        document->getRoot()->emitModified(SP_OBJECT_MODIFIED_CASCADE);
-    }
-}
-
 /** Sets the keyboard modifier to map to Alt.
  *
  * Zero switches off mapping, as does '1', which is the default.

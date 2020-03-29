@@ -688,7 +688,6 @@ void SelectorsDialog::_writeStyleElement()
         styleContent = "* > .inkscapehacktmp{}";
     }
     textNode->setContent(styleContent.c_str());
-    INKSCAPE.readStyleSheets(true);
     if (empty) {
         styleContent = "";
         textNode->setContent(styleContent.c_str());

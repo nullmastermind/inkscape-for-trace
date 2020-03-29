@@ -186,8 +186,6 @@ public:
 
     // Styling
     CRCascade    *getStyleCascade() { return style_cascade; }
-    CRStyleSheet *getStyleSheet()   { return style_sheet; }
-    void const setStyleSheet(CRStyleSheet* sheet) { style_sheet = sheet; }
 
     // File information --------------------
 
@@ -316,7 +314,6 @@ private:
 
     // Styling
     CRCascade *style_cascade;
-    CRStyleSheet *style_sheet;
 
     // File information ----------------------
     char *document_uri;   ///< A filename (not a URI yet), or NULL
