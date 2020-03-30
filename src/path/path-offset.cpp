@@ -417,6 +417,9 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
             res->Reset();
             theRes->ConvertToForme(res);
 
+            res->ConvertEvenLines(0.1);
+            res->Simplify(0.1);
+
             delete theShape;
             delete theRes;
         }
