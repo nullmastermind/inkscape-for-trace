@@ -259,7 +259,6 @@ InkscapeApplication::document_revert(SPDocument* document)
         std::cerr << "InkscapeApplication::revert_document: Document not found!" << std::endl;
         return false;
     }
-    INKSCAPE.readStyleSheets();
     return true;
 }
 
@@ -948,7 +947,6 @@ ConcreteInkscapeApplication<T>::process_document(SPDocument* document, std::stri
     _active_selection = context.getSelection();
     _active_view      = context.getView();
 
-    INKSCAPE.readStyleSheets(); // What is this doing here???
     document->ensureUpToDate(); // Or queries don't work!
 
     // process_file

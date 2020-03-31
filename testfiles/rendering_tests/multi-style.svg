@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="80"
+   height="80"
+   viewBox="0 0 80 80"
+   version="1.1">
+  <style
+     id="first">
+rect { fill: #800000; }
+/* class "c1" is redefined several times, only the last one counts */
+.c1 { fill: #ff0000; }
+.c2 { fill: #ff9900; }
+</style>
+  <defs>
+    <style
+       id="insidedefs">
+rect { fill: #ffff00; }
+.c1 { fill: #008000; }
+.c3 { fill: #00ff00; }
+</style>
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       id="background"
+       width="80"
+       height="80" />
+    <rect
+       width="20"
+       height="20" />
+    <rect
+       width="20"
+       height="20"
+       x="30"
+       class="c1" />
+    <rect
+       width="20"
+       height="20"
+       x="60"
+       class="c2" />
+    <rect
+       width="20"
+       height="20"
+       class="c3"
+       y="30" />
+    <rect
+       class="c4"
+       width="20"
+       height="20"
+       x="30"
+       y="30" />
+    <rect
+       class="c5"
+       width="20"
+       height="20"
+       x="60"
+       y="30" />
+    <style
+       id="insidegroup">
+#background { fill: white; }
+.c5 { fill: #00ccff; }
+/* nested CSS selector (with XML entity because not using CDATA) */
+g.g1 &gt; rect { fill: #00ffcc; }
+</style>
+    <rect
+       class="c5"
+       width="20"
+       height="20"
+       y="60" />
+    <rect
+       width="20"
+       height="20"
+       x="30"
+       y="60" />
+    <g
+       class="g1">
+      <rect
+         width="20"
+         height="20"
+         x="60"
+         y="60" />
+    </g>
+  </g>
+  <style
+     id="last"><!-- using CDATA --><![CDATA[
+rect { fill: #0000ff; }
+.c1 { fill: #990099; }
+.c4 { fill: #ff00ff; }
+]]></style>
+</svg>
