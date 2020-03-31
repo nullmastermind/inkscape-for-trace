@@ -934,12 +934,25 @@ void SPCanvasGroup::remove(SPCanvasItem *item)
 
 G_DEFINE_TYPE(SPCanvas, sp_canvas, GTK_TYPE_WIDGET);
 
+static void sp_canvas_finalize(GObject *object)
+{
+    SPCanvas *canvas = SP_CANVAS(object);
+
+#if defined(HAVE_LIBLCMS2)
+    using S = decltype(canvas->_cms_key);
+    canvas->_cms_key.~S();
+#endif
+
+    G_OBJECT_CLASS(sp_canvas_parent_class)->finalize(object);
+}
+
 void sp_canvas_class_init(SPCanvasClass *klass)
 {
     GObjectClass   *object_class = G_OBJECT_CLASS(klass);
     GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
 
     object_class->dispose = SPCanvas::dispose;
+    object_class->finalize = sp_canvas_finalize;
 
     widget_class->realize              = SPCanvas::handle_realize;
     widget_class->unrealize            = SPCanvas::handle_unrealize;
@@ -1064,9 +1077,6 @@ void SPCanvas::dispose(GObject *object)
     }
 
     canvas->shutdownTransients();
-#if defined(HAVE_LIBLCMS2)
-    canvas->_cms_key.~ustring();
-#endif
     if (G_OBJECT_CLASS(sp_canvas_parent_class)->dispose) {
         (* G_OBJECT_CLASS(sp_canvas_parent_class)->dispose)(object);
     }
