@@ -1359,7 +1359,7 @@ msgstr "Arame Farpado"
 
 #: ../share/filters/filters.svg.h:508
 msgid "Marbled transparency effect which conforms to image detected edges"
-msgstr ""
+msgstr "Efeito de transparência em mármore em conforme com as bordas detectadas na imagem"
 
 #: ../share/filters/filters.svg.h:510
 #, fuzzy
@@ -1368,7 +1368,7 @@ msgstr "Nenhuma pintura"
 
 #: ../share/filters/filters.svg.h:512
 msgid "Thick acrylic paint texture with high texture depth"
-msgstr ""
+msgstr "Textura de tinta acrílica espessa com alta profundidade de textura"
 
 #: ../share/filters/filters.svg.h:514
 #, fuzzy
@@ -1423,6 +1423,8 @@ msgid ""
 "Creates an approximative semi-transparent and colorizable image of the "
 "saturation levels"
 msgstr ""
+"Cria uma imagem aproximada semitransparente e colorida dos"
+"níveis de saturação"
 
 #: ../share/filters/filters.svg.h:530
 #, fuzzy
@@ -1440,7 +1442,7 @@ msgstr "Imprimir avisos"
 
 #: ../share/filters/filters.svg.h:536
 msgid "Thick glossy and translucent paint texture with high depth"
-msgstr ""
+msgstr "Textura de tinta espessa brilhante e translúcida com alta profundidade"
 
 #: ../share/filters/filters.svg.h:538
 #, fuzzy
@@ -1449,7 +1451,7 @@ msgstr "Ciano"
 
 #: ../share/filters/filters.svg.h:540
 msgid "Canvas texture with an HSL sensitive height map"
-msgstr ""
+msgstr "Textura de tela com um mapa de altura sensível ao HSL"
 
 #: ../share/filters/filters.svg.h:542
 #, fuzzy
@@ -1478,7 +1480,7 @@ msgstr "Mais claro"
 
 #: ../share/filters/filters.svg.h:552
 msgid "Bright metallic effect for any color"
-msgstr ""
+msgstr "Efeito metálico brilhante para qualquer cor"
 
 #: ../share/filters/filters.svg.h:554
 msgid "Deep Colors Plastic"
@@ -1526,7 +1528,7 @@ msgstr ""
 
 #: ../share/filters/filters.svg.h:572
 msgid "Metallic foil effect combining two lighting types and variable crumple"
-msgstr ""
+msgstr "Efeito de folha metálica combinando dois tipos de iluminação e amarrotamento variável"
 
 #: ../share/filters/filters.svg.h:574
 msgid "Soft Colors"
@@ -1553,7 +1555,7 @@ msgstr "Metal incandescente"
 
 #: ../share/filters/filters.svg.h:584
 msgid "Random rounded living cells like fill"
-msgstr ""
+msgstr "Células vivas arredondadas aleatórias como preenchimento"
 
 #: ../share/filters/filters.svg.h:586
 #, fuzzy
@@ -1562,7 +1564,7 @@ msgstr "Presença"
 
 #: ../share/filters/filters.svg.h:588
 msgid "Oversaturate colors which can be fluorescent in real world"
-msgstr ""
+msgstr "Cores supersaturadas que podem ser fluorescentes no mundo real"
 
 #: ../share/filters/filters.svg.h:590
 msgid "Pixellize"
@@ -1656,7 +1658,7 @@ msgstr "_Modo de mistura:"
 
 #: ../share/filters/filters.svg.h:628
 msgid "Blend an image with its hue opposite"
-msgstr ""
+msgstr "Misture uma imagem com seu tom oposto"
 
 #: ../share/filters/filters.svg.h:630
 #, fuzzy
@@ -1665,7 +1667,7 @@ msgstr "Rotacionar Matiz"
 
 #: ../share/filters/filters.svg.h:632
 msgid "Fades hue progressively to white"
-msgstr ""
+msgstr "Desbota o tom gradualmente para branco"
 
 #: ../share/filters/filters.svg.h:634
 #: ../src/extension/internal/bitmap/swirl.cpp:38
@@ -1733,7 +1735,7 @@ msgstr "Desenho"
 
 #: ../share/filters/filters.svg.h:660
 msgid "Enhance and redraw color edges in 1 bit black and white"
-msgstr ""
+msgstr "Aprimore e redesenhe as bordas coloridas em preto e branco de 1 bit"
 
 #: ../share/filters/filters.svg.h:662
 msgid "Poster Draw"
@@ -1741,7 +1743,7 @@ msgstr "Poster de Desenho"
 
 #: ../share/filters/filters.svg.h:664
 msgid "Enhance and redraw edges around posterized areas"
-msgstr ""
+msgstr "Aprimore e redesenhe as bordas em torno das áreas posterizadas"
 
 #: ../share/filters/filters.svg.h:666
 #, fuzzy
