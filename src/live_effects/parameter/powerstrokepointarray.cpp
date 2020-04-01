@@ -68,10 +68,8 @@ PowerStrokePointArrayParam::recalculate_controlpoints_for_new_pwd2(Geom::Piecewi
 {
     Inkscape::LivePathEffect::LPEPowerStroke *lpe = dynamic_cast<Inkscape::LivePathEffect::LPEPowerStroke *>(param_effect);
     if (lpe) {
-        auto nodes_str = lpe->nodes.param_getSVGValue();
-        size_t nodesprev = std::stoi(nodes_str);
-        if (lpe->is_loaded || last_pwd2.size() > pwd2_in.size()) {
-            double factor = (double)pwd2_in.size() / (double)nodesprev;
+        if (last_pwd2.size() > pwd2_in.size()) {
+            double factor = (double)pwd2_in.size() / (double)last_pwd2.size();
             for (auto & i : _vector) {
                 i[Geom::X] *= factor;
             }

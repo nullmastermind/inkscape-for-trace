@@ -69,7 +69,7 @@ private:
     void _setStartpoint(Geom::Point const &p);
     void _setEndpoint(Geom::Point const &p);
     void _finishEndpoint();
-    void _addFreehandPoint(Geom::Point const &p, guint state);
+    void _addFreehandPoint(Geom::Point const &p, guint state, bool last);
     void _fitAndSplit();
     void _interpolate();
     void _sketchInterpolate();
@@ -78,6 +78,7 @@ private:
     void _endpointSnap(Geom::Point &p, guint const state);
     std::vector<Geom::Point> _wps;
     SPCurve * _curve;
+    SPCurve *_pressure_curve;
     Geom::Point _req_tangent;
     bool _is_drawing;
     PencilState _state;
