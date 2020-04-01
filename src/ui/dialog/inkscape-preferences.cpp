@@ -554,21 +554,30 @@ void InkscapePreferences::initPageTools()
 #endif // WITH_LPETOOL
 }
 
-static void _inkscape_fill_gtk(const gchar *path, GHashTable *t)
+static void _inkscape_fill_gtk(const gchar *path, std::map<Glib::ustring, bool> &dark_themes)
 {
     const gchar *dir_entry;
     GDir *dir = g_dir_open(path, 0, NULL);
-
     if (!dir)
         return;
-
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    Glib::ustring themename = prefs->getString("/theme/gtkTheme");
     while ((dir_entry = g_dir_read_name(dir))) {
         gchar *filename = g_build_filename(path, dir_entry, "gtk-3.0", "gtk.css", NULL);
+        bool has_prefer_dark = false;
 
-        if (g_file_test(filename, G_FILE_TEST_IS_REGULAR) && !g_hash_table_contains(t, dir_entry))
-            g_hash_table_add(t, g_strdup(dir_entry));
-
+        Glib::ustring theme = dir_entry;
+        gchar *filenamedark = g_build_filename(path, dir_entry, "gtk-3.0", "gtk-dark.css", NULL);
+        if (g_file_test(filenamedark, G_FILE_TEST_IS_REGULAR))
+            has_prefer_dark = true;
+        if (dark_themes.find(theme) != dark_themes.end() && !has_prefer_dark) {
+            continue;
+        }
+        if (g_file_test(filename, G_FILE_TEST_IS_REGULAR)) {
+            dark_themes[theme] = has_prefer_dark;
+        }
         g_free(filename);
+        g_free(filenamedark);
     }
 
     g_dir_close(dir);
@@ -775,19 +784,57 @@ void InkscapePreferences::themeChange()
 {
     Gtk::Window *window = SP_ACTIVE_DESKTOP->getToplevel();
     if (window) {
+
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        bool darktheme = prefs->getBool("/theme/preferDarkTheme", false);
-        Glib::ustring themename = prefs->getString("/theme/gtkTheme");
-        Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
+        Glib::ustring current_theme = prefs->getString("/theme/gtkTheme");
         GtkSettings *settings = gtk_settings_get_default();
-        g_object_set(settings, "gtk-theme-name", themename.c_str(), NULL);
-        g_object_set(settings, "gtk-application-prefer-dark-theme", darktheme, NULL);
-        bool dark = darktheme || themename.find(":dark") != -1;
+        _dark_theme.get_parent()->set_no_show_all(false);
+        if (dark_themes[current_theme]) {
+            _dark_theme.get_parent()->show_all();
+        } else {
+            _dark_theme.get_parent()->hide();
+        }
+
+        g_object_set(settings, "gtk-theme-name", current_theme.c_str(), NULL);
+        bool dark = current_theme.find(":dark") != std::string::npos;
         if (!dark) {
             Glib::RefPtr<Gtk::StyleContext> stylecontext = window->get_style_context();
             Gdk::RGBA rgba;
             bool background_set = stylecontext->lookup_color("theme_bg_color", rgba);
-            if (background_set && rgba.get_red() + rgba.get_green() + rgba.get_blue() < 1.0) {
+            if (background_set && (0.299 * rgba.get_red() + 0.587 * rgba.get_green() + 0.114 * rgba.get_blue()) < 0.5) {
+                dark = true;
+            }
+        }
+        bool toggled = prefs->getBool("/theme/darkTheme", false) != dark;
+        if (dark) {
+            prefs->setBool("/theme/darkTheme", true);
+            window->get_style_context()->add_class("dark");
+            window->get_style_context()->remove_class("bright");
+        } else {
+            prefs->setBool("/theme/darkTheme", false);
+            window->get_style_context()->add_class("bright");
+            window->get_style_context()->remove_class("dark");
+        }
+        INKSCAPE.signal_change_theme.emit();
+        resetIconsColors(toggled);
+    }
+}
+
+void InkscapePreferences::preferDarkThemeChange()
+{
+    Gtk::Window *window = SP_ACTIVE_DESKTOP->getToplevel();
+    if (window) {
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        bool dark_theme = prefs->getBool("/theme/preferDarkTheme", false);
+        Glib::ustring current_theme = prefs->getString("/theme/gtkTheme");
+        GtkSettings *settings = gtk_settings_get_default();
+        g_object_set(settings, "gtk-application-prefer-dark-theme", dark_theme, NULL);
+        bool dark = current_theme.find(":dark") != std::string::npos;
+        if (!dark) {
+            Glib::RefPtr<Gtk::StyleContext> stylecontext = window->get_style_context();
+            Gdk::RGBA rgba;
+            bool background_set = stylecontext->lookup_color("theme_bg_color", rgba);
+            if (background_set && (0.299 * rgba.get_red() + 0.587 * rgba.get_green() + 0.114 * rgba.get_blue()) < 0.5) {
                 dark = true;
             }
         }
@@ -1064,66 +1111,90 @@ void InkscapePreferences::initPageUI()
                          
     // Theme
     _page_theme.add_group_header(_("Theme"));
+    _dark_theme.init(_("Use dark theme"), "/theme/preferDarkTheme", false);
+    Glib::ustring current_theme = prefs->getString("/theme/gtkTheme");
+    Glib::ustring default_theme = prefs->getString("/theme/defaultTheme");
+    Glib::ustring theme = "";
     {
         using namespace Inkscape::IO::Resource;
-        GHashTable *t;
-        GHashTableIter iter;
-        gchar *theme, *path;
+        gchar *path;
         gchar **builtin_themes;
-        GList *list, *l;
-        guint i;
+        guint i, j;
         const gchar *const *dirs;
 
-        t = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, NULL);
         /* Builtin themes */
         builtin_themes = g_resources_enumerate_children("/org/gtk/libgtk/theme", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
         for (i = 0; builtin_themes[i] != NULL; i++) {
-            if (g_str_has_suffix(builtin_themes[i], "/"))
-                g_hash_table_add(t, g_strndup(builtin_themes[i], strlen(builtin_themes[i]) - 1));
+            if (g_str_has_suffix(builtin_themes[i], "/")) {
+                theme = builtin_themes[i];
+                theme.resize(theme.size() - 1);
+                Glib::ustring theme_path = "/org/gtk/libgtk/theme";
+                theme_path += "/" + theme;
+                gchar **builtin_themes_files =
+                    g_resources_enumerate_children(theme_path.c_str(), G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
+                bool has_prefer_dark = false;
+                if (builtin_themes_files != NULL) {
+                    for (j = 0; builtin_themes_files[j] != NULL; j++) {
+                        Glib::ustring file = builtin_themes_files[j];
+                        if (file == "gtk-dark.css") {
+                            has_prefer_dark = true;
+                        }
+                    }
+                }
+                g_strfreev(builtin_themes_files);
+                dark_themes[theme] = has_prefer_dark;
+            }
         }
         g_strfreev(builtin_themes);
 
         path = g_build_filename(g_get_user_data_dir(), "themes", NULL);
-        _inkscape_fill_gtk(path, t);
+        _inkscape_fill_gtk(path, dark_themes);
         g_free(path);
 
         path = g_build_filename(g_get_home_dir(), ".themes", NULL);
-        _inkscape_fill_gtk(path, t);
+        _inkscape_fill_gtk(path, dark_themes);
         g_free(path);
 
         dirs = g_get_system_data_dirs();
         for (i = 0; dirs[i]; i++) {
             path = g_build_filename(dirs[i], "themes", NULL);
-            _inkscape_fill_gtk(path, t);
+            _inkscape_fill_gtk(path, dark_themes);
             g_free(path);
         }
 
-        list = NULL;
-        g_hash_table_iter_init(&iter, t);
-        while (g_hash_table_iter_next(&iter, (gpointer *)&theme, NULL))
-            list = g_list_insert_sorted(list, theme, (GCompareFunc)strcmp);
-
         std::vector<Glib::ustring> labels;
         std::vector<Glib::ustring> values;
-        for (l = list; l; l = l->next) {
-            theme = (gchar *)l->data;
-            labels.emplace_back(theme);
+        std::map<Glib::ustring, bool>::iterator it = dark_themes.begin();
+        // Iterate over the map using Iterator till end.
+        for (std::pair<std::string, int> element : dark_themes) {
+            Glib::ustring theme = element.first;
+            it++;
+            if (theme == default_theme) {
+                continue;
+            }
             values.emplace_back(theme);
+            labels.emplace_back(theme);
         }
-        labels.emplace_back(_("Use system theme"));
-        values.push_back(prefs->getString("/theme/defaultTheme"));
-        g_list_free(list);
-        g_hash_table_destroy(t);
-
+        Glib::ustring default_theme_label = _("Use system theme");
+        default_theme_label += " (" + default_theme + ")";
+        labels.emplace_back(default_theme_label);
+        values.push_back(default_theme);
         _gtk_theme.init("/theme/gtkTheme", labels, values, "Adwaita");
         _page_theme.add_line(false, _("Change GTK theme:"), _gtk_theme, "", "", false);
         _gtk_theme.signal_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::themeChange));
     }
     _sys_user_themes_dir_copy.init(g_build_filename(g_get_user_data_dir(), "themes", NULL), _("Open themes folder"));
     _page_theme.add_line(true, _("User themes:"), _sys_user_themes_dir_copy, "", _("Location of the user’s themes"), true, Gtk::manage(new Gtk::Box()));
-    _dark_theme.init(_("Use dark theme"), "/theme/preferDarkTheme", false);
     _page_theme.add_line(true, "", _dark_theme, "", _("Use dark theme"), true);
-    _dark_theme.signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::themeChange));
+
+    if (dark_themes[current_theme]) {
+        _dark_theme.get_parent()->set_no_show_all(false);
+        _dark_theme.get_parent()->show_all();
+    } else {
+        _dark_theme.get_parent()->set_no_show_all(true);
+        _dark_theme.get_parent()->hide();
+    }
+    _dark_theme.signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::preferDarkThemeChange));
     // Icons
     _page_theme.add_group_header(_("Icons"));
     {
@@ -1131,6 +1202,7 @@ void InkscapePreferences::initPageUI()
         auto folders = get_foldernames(ICONS, { "application" });
         std::vector<Glib::ustring> labels;
         std::vector<Glib::ustring> values;
+        Glib::ustring default_icon_theme = prefs->getString("/theme/defaultIconTheme");
         for (auto &folder : folders) {
             // from https://stackoverflow.com/questions/8520560/get-a-file-name-from-a-path#8520871
             // Maybe we can link boost path utilities
@@ -1140,7 +1212,9 @@ void InkscapePreferences::initPageUI()
             if (std::string::npos != last_slash_idx) {
                 folder.erase(0, last_slash_idx + 1);
             }
-
+            if (folder == default_icon_theme || (default_icon_theme == "Adwaita" && folder == "hicolor")) {
+                continue;
+            }
             labels.push_back(folder);
             values.push_back(folder);
         }
@@ -1148,8 +1222,14 @@ void InkscapePreferences::initPageUI()
         std::sort(values.begin(), values.end());
         labels.erase(unique(labels.begin(), labels.end()), labels.end());
         values.erase(unique(values.begin(), values.end()), values.end());
-        labels.emplace_back(_("Use system icons"));
-        values.push_back(prefs->getString("/theme/defaultIconTheme"));
+        values.push_back(default_icon_theme);
+        if (default_icon_theme == "Adwaita") {
+            default_icon_theme = "hicolor";
+        }
+        Glib::ustring default_icon_label = _("Use system icons");
+        default_icon_label += " (" + default_icon_theme + ")";
+        labels.emplace_back(default_icon_label);
+
         _icon_theme.init("/theme/iconTheme", labels, values, "hicolor");
         _page_theme.add_line(false, _("Change icon theme:"), _icon_theme, "", "", false);
         _icon_theme.signal_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicThemeCheck));

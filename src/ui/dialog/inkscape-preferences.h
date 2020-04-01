@@ -585,6 +585,7 @@ protected:
 
 private:
   void themeChange();
+  void preferDarkThemeChange();
   void symbolicThemeCheck();
   void toggleSymbolic();
   void changeIconsColors();
@@ -594,6 +595,7 @@ private:
   void get_highlight_colors(guint32 &colorsetbase, guint32 &colorsetsuccess, guint32 &colorsetwarning,
                             guint32 &colorseterror);
 
+  std::map<Glib::ustring, bool> dark_themes;
   InkscapePreferences();
   InkscapePreferences(InkscapePreferences const &d);
   InkscapePreferences operator=(InkscapePreferences const &d);

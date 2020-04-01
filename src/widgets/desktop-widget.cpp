@@ -849,12 +849,12 @@ void SPDesktopWidget::on_realize()
     if (settings && window) {
         g_object_get(settings, "gtk-theme-name", &gtkThemeName, NULL);
         g_object_get(settings, "gtk-application-prefer-dark-theme", &gtkApplicationPreferDarkTheme, NULL);
-        bool dark = gtkApplicationPreferDarkTheme || Glib::ustring(gtkThemeName).find(":dark") != -1;
+        bool dark = Glib::ustring(gtkThemeName).find(":dark") != std::string::npos;
         if (!dark) {
             Glib::RefPtr<Gtk::StyleContext> stylecontext = window->get_style_context();
             Gdk::RGBA rgba;
             bool background_set = stylecontext->lookup_color("theme_bg_color", rgba);
-            if (background_set && rgba.get_red() + rgba.get_green() + rgba.get_blue() < 1.0) {
+            if (background_set && (0.299 * rgba.get_red() + 0.587 * rgba.get_green() + 0.114 * rgba.get_blue()) < 0.5) {
                 dark = true;
             }
         }
