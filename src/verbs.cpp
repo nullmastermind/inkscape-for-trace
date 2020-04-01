@@ -2298,7 +2298,7 @@ void HelpUrlVerb::perform(SPAction *action, void *data)
 
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_HELP_URL_ASK_QUESTION:
-            url = "https://inkscape.org/ask/";
+            url = Glib::ustring::compose("https://inkscape.org/%1/community/", lang, version);
             break;
         case SP_VERB_HELP_URL_MAN:
             url = Glib::ustring::compose("https://inkscape.org/%1/doc/inkscape-man%2.html", lang, version);
