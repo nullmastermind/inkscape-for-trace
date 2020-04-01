@@ -30,7 +30,6 @@ if(WIN32)
     ${MINGW_BIN}/libcairo-gobject-[0-9]*.dll
     ${MINGW_BIN}/libcairomm-1.0-[0-9]*.dll
     ${MINGW_BIN}/libcdr-0.[0-9]*.dll
-    ${MINGW_BIN}/libcroco-0.6-[0-9]*.dll
     ${MINGW_BIN}/libcrypto-1_[0-9]*.dll
     ${MINGW_BIN}/libcurl-[0-9]*.dll
     ${MINGW_BIN}/libdatrie-[0-9]*.dll
