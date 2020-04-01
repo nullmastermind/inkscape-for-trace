@@ -69,14 +69,6 @@ set(CPACK_NSIS_COMPRESSOR "${CPACK_NSIS_COMPRESSOR}\n  SetCompressorDictSize 64"
 set(CPACK_NSIS_COMPRESSOR "${CPACK_NSIS_COMPRESSOR}\n  BrandingText '${CPACK_PACKAGE_DESCRIPTION_SUMMARY}'") # hack (overwrite BrandingText)
 set(CPACK_NSIS_COMPRESSOR "${CPACK_NSIS_COMPRESSOR}\n  !define MUI_COMPONENTSPAGE_SMALLDESC") # hack (better components page layout)
 
-set(CPACK_NSIS_COMPRESSOR "${CPACK_NSIS_COMPRESSOR}\n  ReserveFile 'NSIS.InstallOptions.ini'") # more hacks (see https://gitlab.kitware.com/cmake/cmake/merge_requests/4171)
-set(CPACK_NSIS_COMPRESSOR "${CPACK_NSIS_COMPRESSOR}\n  ReserveFile '\\\${NSISDIR}\\\\Contrib\\\\Modern UI\\\\ioSpecial.ini'") # hack
-set(CPACK_NSIS_COMPRESSOR "${CPACK_NSIS_COMPRESSOR}\n  ReserveFile '${CMAKE_SOURCE_DIR}\\\\packaging\\\\nsis\\\\header.bmp'") # hack
-set(CPACK_NSIS_COMPRESSOR "${CPACK_NSIS_COMPRESSOR}\n  ReserveFile '${CMAKE_SOURCE_DIR}\\\\packaging\\\\nsis\\\\welcomefinish.bmp'") # hack
-set(CPACK_NSIS_COMPRESSOR "${CPACK_NSIS_COMPRESSOR}\n  !insertmacro MUI_RESERVEFILE_INSTALLOPTIONS") # hack
-set(CPACK_NSIS_COMPRESSOR "${CPACK_NSIS_COMPRESSOR}\n  !insertmacro MUI_RESERVEFILE_LANGDLL") # hack
-set(CPACK_NSIS_COMPRESSOR "${CPACK_NSIS_COMPRESSOR}\n  ReserveFile /plugin 'InstallOptions.dll' 'StartMenu.dll' 'System.dll' 'UserInfo.dll'") # hack
-
 file(TO_NATIVE_PATH "${CMAKE_SOURCE_DIR}/packaging/nsis/fileassoc.nsh" native_path)
 string(REPLACE "\\" "\\\\" native_path "${native_path}")
 set(CPACK_NSIS_EXTRA_PREINSTALL_COMMANDS "!include ${native_path}")
