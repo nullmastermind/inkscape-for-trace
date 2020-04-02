@@ -834,6 +834,7 @@ void PencilTool::addPowerStrokePencil()
                 pspreview->getRepr()->setAttribute("start_linecap_type", LineCapTypeConverter.get_key(cap));
                 pspreview->getRepr()->setAttribute("end_linecap_type", LineCapTypeConverter.get_key(cap));
                 pspreview->getRepr()->setAttribute("sort_points", "true");
+                pspreview->getRepr()->setAttribute("not_jump", "true");
                 if (!this->points.size()) {
                     Geom::Point default_point((path.size()/2.0), 0.5);
                     this->points.push_back(default_point);

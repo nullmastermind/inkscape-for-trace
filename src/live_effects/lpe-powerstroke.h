@@ -50,6 +50,7 @@ public:
     void adjustForNewPath(Geom::PathVector const & path_in);
 
     PowerStrokePointArrayParam offset_points;
+    BoolParam not_jump;
 private:
     BoolParam sort_points;
     EnumParam<unsigned> interpolator_type;

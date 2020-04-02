@@ -11,6 +11,8 @@
 #include "knotholder.h"
 #include "live_effects/effect.h"
 #include "live_effects/lpe-powerstroke.h"
+#include <2geom/sbasis-2d.h>
+#include <2geom/bezier-to-sbasis.h>
 
 
 #include <2geom/piecewise.h>
@@ -177,14 +179,43 @@ PowerStrokePointArrayParamKnotHolderEntity::knot_set(Geom::Point const &p, Geom:
     if (!valid_index(_index)) {
         return;
     }
-    /// @todo how about item transforms???
+    static gint prev_index = 0;
     Piecewise<D2<SBasis> > const & pwd2 = _pparam->get_pwd2();
+    Piecewise<D2<SBasis> > pwd2port = _pparam->get_pwd2();
+    Geom::Point s = snap_knot_position(p, state);    
+    double t2 = 0;
+    LPEPowerStroke *ps = dynamic_cast<LPEPowerStroke *>(_pparam->param_effect);
+    if (ps && ps->not_jump) {
+        s = p;
+        t2 = _pparam->_vector.at(_index)[Geom::X];
+        Geom::PathVector pathv = path_from_piecewise(pwd2port, 0.001);
+        pathv[0] = pathv[0].portion(std::max(std::floor(t2) - 1, 0.0), std::min(std::ceil(t2) + 1, (double)pathv[0].size()));
+        pwd2port = paths_to_pw(pathv);
+    }
+    /// @todo how about item transforms???
+    
     Piecewise<D2<SBasis> > const & n = _pparam->get_pwd2_normal();
-
-    Geom::Point const s = snap_knot_position(p, state);
-    double t = nearest_time(s, pwd2);
-    double offset = dot(s - pwd2.valueAt(t), n.valueAt(t));
-    _pparam->_vector.at(_index) = Geom::Point(t, offset/_pparam->_scale_width);
+    gint index = std::floor(nearest_time(s, pwd2));
+    bool bigjump = false;
+    if (std::abs(prev_index - index) > 1) {
+        bigjump = true;
+    } else {
+        prev_index = index;
+    }
+    double t = nearest_time(s, pwd2port);
+    double offset = 0.0;
+    if (ps && ps->not_jump) {
+        double tpos = t + std::max(std::floor(t2) - 1, 0.0);
+        double prevpos = _pparam->_vector.at(_index)[Geom::X];
+        if (bigjump) {
+            tpos = prevpos;
+        }
+        offset = dot(s - pwd2.valueAt(tpos), n.valueAt(tpos));
+        _pparam->_vector.at(_index) = Geom::Point(tpos, offset/_pparam->_scale_width);
+    } else {
+        offset = dot(s - pwd2.valueAt(t), n.valueAt(t));
+        _pparam->_vector.at(_index) = Geom::Point(t, offset/_pparam->_scale_width);
+    }
     if (_pparam->_vector.size() == 1 ) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setDouble("/live_effects/powerstroke/width", offset);

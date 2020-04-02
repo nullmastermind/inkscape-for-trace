@@ -319,6 +319,7 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
     lpe->getRepr()->setAttribute("start_linecap_type", "zerowidth");
     lpe->getRepr()->setAttribute("end_linecap_type", "zerowidth");
     lpe->getRepr()->setAttribute("sort_points", "true");
+    lpe->getRepr()->setAttribute("not_jump", "false");
     lpe->getRepr()->setAttribute("interpolator_type", "CubicBezierJohan");
     lpe->getRepr()->setAttribute("interpolator_beta", "0.2");
     lpe->getRepr()->setAttribute("miter_limit", "4");
