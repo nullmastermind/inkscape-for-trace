@@ -207,7 +207,9 @@ bool PencilTool::_handleButtonPress(GdkEventButton const &bevent) {
 
         /* Test whether we hit any anchor. */
         SPDrawAnchor *anchor = spdc_test_inside(this, button_w);
-
+        if (tablet_enabled) {
+            anchor = nullptr;
+        }
         pencil_drag_origin_w = Geom::Point(bevent.x,bevent.y);
         pencil_within_tolerance = true;
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -260,7 +262,9 @@ bool PencilTool::_handleButtonPress(GdkEventButton const &bevent) {
                     }
                     m.unSetup();
                 }
-                this->sa = anchor;
+                if (!tablet_enabled) {
+                    this->sa = anchor;
+                }
                 this->_setStartpoint(p);
                 ret = true;
                 break;
@@ -319,9 +323,8 @@ bool PencilTool::_handleMotionNotify(GdkEventMotion const &mevent) {
     // (indicating they intend to move the object, not click), then always process the
     // motion notify coordinates as given (no snapping back to origin)
     pencil_within_tolerance = false;
-
+    
     anchor = spdc_test_inside(this, Geom::Point(mevent.x,mevent.y));
-
 
     switch (this->_state) {
         case SP_PENCIL_CONTEXT_ADDLINE:
@@ -804,36 +807,38 @@ void PencilTool::addPowerStrokePencil()
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
             Glib::ustring pref_path_pp = "/live_effects/powerstroke/powerpencil";
             prefs->setBool(pref_path_pp, true);
-            if (this->points.size()) {
-                Effect::createAndApply(POWERSTROKE, SP_ACTIVE_DESKTOP->doc(), lpeitem);
-                Effect *lpe = lpeitem->getCurrentLPE();
-                Inkscape::LivePathEffect::LPEPowerStroke *pspreview = static_cast<LPEPowerStroke *>(lpe);
-                if (pspreview) {
-                    sp_lpe_item_enable_path_effects(lpeitem, false);
-                    Glib::ustring pref_path = "/live_effects/powerstroke/interpolator_type";
-                    bool valid = prefs->getEntry(pref_path).isValid();
-                    if (!valid) {
-                        pspreview->getRepr()->setAttribute("interpolator_type", "CentripetalCatmullRom");
-                    }
-                    pref_path = "/live_effects/powerstroke/linejoin_type";
-                    valid = prefs->getEntry(pref_path).isValid();
-                    if (!valid) {
-                        pspreview->getRepr()->setAttribute("linejoin_type", "spiro");
-                    }
-                    pref_path = "/live_effects/powerstroke/interpolator_beta";
-                    valid = prefs->getEntry(pref_path).isValid();
-                    if (!valid) {
-                        pspreview->getRepr()->setAttribute("interpolator_beta", "0.75");
-                    }
-                    gint cap = prefs->getInt("/live_effects/powerstroke/powerpencilcap", 4);
-                    pspreview->getRepr()->setAttribute("start_linecap_type", LineCapTypeConverter.get_key(cap));
-                    pspreview->getRepr()->setAttribute("end_linecap_type", LineCapTypeConverter.get_key(cap));
-                    pspreview->getRepr()->setAttribute("sort_points", "true");
-                    pspreview->offset_points.param_set_and_write_new_value(this->points);
-                    sp_lpe_item_enable_path_effects(lpeitem, true);
-                    sp_lpe_item_update_patheffect(lpeitem, false, true);
-                    pp->setAttribute("style", "fill:#888888;opacity:1;fill-rule:nonzero;stroke:none;");
-                                    }
+            Effect::createAndApply(POWERSTROKE, SP_ACTIVE_DESKTOP->doc(), lpeitem);
+            Effect *lpe = lpeitem->getCurrentLPE();
+            Inkscape::LivePathEffect::LPEPowerStroke *pspreview = static_cast<LPEPowerStroke *>(lpe);
+            if (pspreview) {
+                sp_lpe_item_enable_path_effects(lpeitem, false);
+                Glib::ustring pref_path = "/live_effects/powerstroke/interpolator_type";
+                bool valid = prefs->getEntry(pref_path).isValid();
+                if (!valid) {
+                    pspreview->getRepr()->setAttribute("interpolator_type", "CentripetalCatmullRom");
+                }
+                pref_path = "/live_effects/powerstroke/linejoin_type";
+                valid = prefs->getEntry(pref_path).isValid();
+                if (!valid) {
+                    pspreview->getRepr()->setAttribute("linejoin_type", "spiro");
+                }
+                pref_path = "/live_effects/powerstroke/interpolator_beta";
+                valid = prefs->getEntry(pref_path).isValid();
+                if (!valid) {
+                    pspreview->getRepr()->setAttribute("interpolator_beta", "0.75");
+                }
+                gint cap = prefs->getInt("/live_effects/powerstroke/powerpencilcap", 4);
+                pspreview->getRepr()->setAttribute("start_linecap_type", LineCapTypeConverter.get_key(cap));
+                pspreview->getRepr()->setAttribute("end_linecap_type", LineCapTypeConverter.get_key(cap));
+                pspreview->getRepr()->setAttribute("sort_points", "true");
+                if (!this->points.size()) {
+                    Geom::Point default_point((path.size()/2.0), 0.5);
+                    this->points.push_back(default_point);
+                }
+                pspreview->offset_points.param_set_and_write_new_value(this->points);
+                sp_lpe_item_enable_path_effects(lpeitem, true);
+                sp_lpe_item_update_patheffect(lpeitem, false, true);
+                pp->setAttribute("style", "fill:#888888;opacity:1;fill-rule:nonzero;stroke:none;");
             }
             if (curvepressure) {
                 curvepressure->unref();
@@ -877,7 +882,7 @@ void PencilTool::_addFreehandPoint(Geom::Point const &p, guint /*state*/, bool l
         double pressure_shrunk = (((this->pressure - 0.25) * 1.25) * (max - min)) + min;
         double pressure_computed = pressure_shrunk * (dezoomify_factor / 5.0);
         if (p != this->p[this->_npoints - 1]) {
-            if (this->pressure < 0.25) {
+            if (this->pressure < 0.15) {
                 this->_wps.emplace_back(distance, 0);
             } else {
                 this->_wps.emplace_back(distance, pressure_computed);
