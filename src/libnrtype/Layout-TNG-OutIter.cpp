@@ -542,12 +542,21 @@ void Layout::queryCursorShape(iterator const &it, Geom::Point &position, double 
                 position[Geom::X] = point[Geom::X] - tangent[Geom::Y] * span->baseline_shift;
                 position[Geom::Y] = point[Geom::Y] + tangent[Geom::X] * span->baseline_shift;
             }
+
         } else {
             // text is not on a path
+
+            bool last_char_is_newline = false;
             if (it._char_index >= _characters.size()) {
                 span = &_spans.back();
                 position[Geom::X] = _chunks[span->in_chunk].left_x + span->x_end;
                 rotation = _glyphs.empty() ? 0.0 : _glyphs.back().rotation;
+
+                // Check if last character is new line.
+                if (_characters.back().the_char == '\n') {
+                    last_char_is_newline = true;
+                    position[Geom::X] = chunkAnchorPoint(it)[Geom::X];
+                }
             } else {
                 span = &_spans[_characters[it._char_index].in_span];
                 position[Geom::X] = _chunks[span->in_chunk].left_x + span->x_start + _characters[it._char_index].x;
@@ -563,7 +572,19 @@ void Layout::queryCursorShape(iterator const &it, Geom::Point &position, double 
                     span = &_spans[_characters[it._char_index - 1].in_span];
             }
             position[Geom::Y] = span->line(this).baseline_y + span->baseline_shift + span->y_offset;
+
+            if (last_char_is_newline) {
+                // Move cursor to empty new line.
+                double vertical_scale = _glyphs.empty() ? 1.0 : _glyphs.back().vertical_scale;
+                if (_directions_are_orthogonal(_blockProgression(), TOP_TO_BOTTOM)) {
+                    // Vertical text
+                    position[Geom::Y] -= vertical_scale * span->line_height.emSize();
+                } else {
+                    position[Geom::Y] += vertical_scale * span->line_height.emSize();
+                }
+            }
         }
+
         // up to now *position is the baseline point, not the final point which will be the bottom of the descent
         double vertical_scale = _glyphs.empty() ? 1.0 : _glyphs.back().vertical_scale;
 

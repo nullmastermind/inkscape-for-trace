@@ -825,6 +825,7 @@ private:
         unsigned in_span;
         float x;      /// relative to the start of the *span* (so we can do block-progression)
         PangoLogAttr char_attributes;
+        gchar the_char = '#';
         int in_glyph;   /// will be -1 if this character has no visual representation
         inline Span      const & span     (Layout const *l) const {return                                     l->_spans[in_span];}
         inline Chunk     const & chunk    (Layout const *l) const {return                          l->_chunks[l->_spans[in_span].in_chunk];}

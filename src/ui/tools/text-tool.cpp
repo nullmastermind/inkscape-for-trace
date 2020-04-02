@@ -905,12 +905,18 @@ bool TextTool::root_handler(GdkEvent* event) {
                                     this->nascent_object = false; // we don't need it anymore, having created a real <text>
                                 }
 
-                                iterator_pair enter_pair;
-                                bool success = sp_te_delete(this->text, this->text_sel_start, this->text_sel_end, enter_pair);
-                                (void)success; // TODO cleanup
-                                this->text_sel_start = this->text_sel_end = enter_pair.first;
-
-                                this->text_sel_start = this->text_sel_end = sp_te_insert_line(this->text, this->text_sel_start);
+                                SPText* text_element = dynamic_cast<SPText*>(text);
+                                if (text_element && (text_element->has_shape_inside() /*|| text_element->has_inline_size()*/)) {
+                                    // Handle new line like any other character.
+                                    this->text_sel_start = this->text_sel_end = sp_te_insert(this->text, this->text_sel_start, "\n");
+                                } else {
+                                    // Replace new line by either <tspan sodipodi:role="line" or <flowPara>.
+                                    iterator_pair enter_pair;
+                                    bool success = sp_te_delete(this->text, this->text_sel_start, this->text_sel_end, enter_pair);
+                                    (void)success; // TODO cleanup
+                                    this->text_sel_start = this->text_sel_end = enter_pair.first;
+                                    this->text_sel_start = this->text_sel_end = sp_te_insert_line(this->text, this->text_sel_start);
+                                }
 
                                 sp_text_context_update_cursor(this);
                                 sp_text_context_update_text_selection(this);
@@ -1304,14 +1310,19 @@ bool sp_text_paste_inline(ToolBase *ec)
         Glib::ustring const clip_text = refClipboard->wait_for_text();
 
         if (!clip_text.empty()) {
+
+            bool is_svg2 = false;
             SPText *textitem = dynamic_cast<SPText *>(tc->text);
             if (textitem) {
+                is_svg2 = textitem->has_shape_inside() /*|| textitem->has_inline_size()*/; // Do now since hiding messes this up.
                 textitem->hide_shape_inside();
             }
+
             SPFlowtext *flowtext = dynamic_cast<SPFlowtext *>(tc->text);
             if (flowtext) {
                 flowtext->fix_overflow_flowregion(false);
             }
+
             // Fix for 244940
             // The XML standard defines the following as valid characters
             // (Extensible Markup Language (XML) 1.0 (Fourth Edition) paragraph 2.2)
@@ -1348,11 +1359,15 @@ bool sp_text_paste_inline(ToolBase *ec)
             Glib::ustring::size_type begin = 0;
             for ( ; ; ) {
                 Glib::ustring::size_type end = text.find('\n', begin);
-                if (end == Glib::ustring::npos) {
+
+                if (end == Glib::ustring::npos || is_svg2) {
+                    // Paste everything
                     if (begin != text.length())
                         tc->text_sel_start = tc->text_sel_end = sp_te_replace(tc->text, tc->text_sel_start, tc->text_sel_end, text.substr(begin).c_str());
                     break;
                 }
+
+                // Paste up to new line, add line, repeat.
                 tc->text_sel_start = tc->text_sel_end = sp_te_replace(tc->text, tc->text_sel_start, tc->text_sel_end, text.substr(begin, end - begin).c_str());
                 tc->text_sel_start = tc->text_sel_end = sp_te_insert_line(tc->text, tc->text_sel_start);
                 begin = end + 1;
@@ -1682,6 +1697,7 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
             SP_CTRLRECT(tc->frame)->setColor(0x0000ff7f, false, 0);
         }
 
+        // Frame around text
         if (SP_IS_FLOWTEXT(tc->text)) {
             SPItem *frame = SP_FLOWTEXT(tc->text)->get_frame (nullptr); // first frame only
             if (frame) {

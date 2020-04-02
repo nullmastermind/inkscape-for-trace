@@ -383,6 +383,15 @@ bool Layout::Calculator::_measureUnbrokenSpan(ParagraphInfo const &para,
     do {
         PangoLogAttr const &char_attributes = _charAttributes(para, span->end);
 
+        // guint32 c = *Glib::ustring::const_iterator(span->end.iter_span->input_stream_first_character.base() + span->end.char_byte);
+        // std::cout << "        char_byte: " << span->end.char_byte
+        //           << "  char_index: " << span->end.char_index
+        //           << "  c: " << c << " " << char(c==10 ? '␤' : c)
+        //           << "  line: "      << std::boolalpha << char_attributes.is_line_break
+        //           << "  mandatory: " << std::boolalpha << char_attributes.is_mandatory_break // Note, break is before character!
+        //           << "  char: "      << std::boolalpha << char_attributes.is_char_break
+        //           << std::endl;
+
         if (char_attributes.is_mandatory_break && span->end != span->start) {
             TRACE(("      is_mandatory_break  ************\n"));
             *last_emergency_break_span = *last_break_span = *span;
@@ -788,6 +797,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                         // if we're looking at a soft hyphen and it's not the last glyph in the
                         // chunk we don't draw the glyph but we still need to add to _characters
                         Layout::Character new_character;
+                        new_character.the_char = *iter_source_text;
                         new_character.in_span = _flow._spans.size();     // the span hasn't been added yet, so no -1
                         new_character.char_attributes = para.char_attributes[unbroken_span.char_index_in_para + char_index_in_unbroken_span];
                         new_character.in_glyph = -1;
@@ -840,6 +850,11 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                     new_glyph.x = current_x;
                     new_glyph.y =_y_offset;
                     new_glyph.advance = glyph_width;
+
+                    if (*iter_source_text == '\n') {
+                        // Line feeds should take zero space but they are given 'space' width.
+                        new_glyph.advance = 0.0;
+                    }
 
                     // y-coordinate is flipped between vertical and horizontal text...
                     // delta_y is common offset but applied with opposite sign
@@ -1027,6 +1042,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
 
                         // Store character info
                         Layout::Character new_character;
+                        new_character.the_char = *iter_source_text;
                         new_character.in_span = _flow._spans.size();
                         new_character.x = x_in_span;
                         new_character.char_attributes = para.char_attributes[unbroken_span.char_index_in_para + char_index_in_unbroken_span];
@@ -1418,8 +1434,8 @@ unsigned Layout::Calculator::_buildSpansForPara(ParagraphInfo *para) const
         } else if (_flow._input_stream[input_index]->Type() == TEXT_SOURCE && pango_item_index < para->pango_items.size()) {
             Layout::InputStreamTextSource const *text_source = static_cast<Layout::InputStreamTextSource const *>(_flow._input_stream[input_index]);
             unsigned char_index_in_source = 0;
-
             unsigned span_start_byte_in_source = 0;
+
             // we'll need to make several spans from each text source, based on the rules described about the UnbrokenSpan definition
             for ( ; ; ) {
                 /* we need to change spans at every change of PangoItem, source stream change,
@@ -1823,7 +1839,6 @@ bool Layout::Calculator::_buildChunksInScanRun(ParagraphInfo const &para,
     BrokenSpan new_span;
     new_span.end = start_span_pos;
     while (new_span.end.iter_span != para.unbroken_spans.end()) {    // this loops once for each UnbrokenSpan
-
         new_span.start = new_span.end;
 
         // force a chunk change at x or y attribute change
@@ -1866,6 +1881,12 @@ bool Layout::Calculator::_buildChunksInScanRun(ParagraphInfo const &para,
         if (!span_fitted) break;
 
         if (new_span.end.iter_span == para.unbroken_spans.end()) {
+            last_span_at_break = new_span;
+            break;
+        }
+
+        PangoLogAttr const &char_attributes = _charAttributes(para, new_span.end);
+        if (char_attributes.is_mandatory_break) {
             last_span_at_break = new_span;
             break;
         }
@@ -2136,7 +2157,6 @@ bool Layout::Calculator::calculate()
         } while (span_pos.iter_span != para.unbroken_spans.end());
 
         TRACE(("para %lu end\n\n", _flow._paragraphs.size() - 1));
-
         if (keep_going) {
             // We have more to do, setup next section.
             bool is_empty_para = _flow._characters.empty() || _flow._characters.back().line(&_flow).in_paragraph != _flow._paragraphs.size() - 1;
@@ -2171,6 +2191,7 @@ bool Layout::Calculator::calculate()
                 // we've got to add an invisible character between paragraphs so that we can position iterators
                 // (and hence cursors) both before and after the paragraph break
                 Layout::Character new_character;
+                new_character.the_char = '@';
                 new_character.in_span = _flow._spans.size() - 1;
                 new_character.char_attributes.is_line_break = 1;
                 new_character.char_attributes.is_mandatory_break = 1;

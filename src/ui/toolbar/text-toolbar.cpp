@@ -2261,6 +2261,7 @@ void TextToolbar::prepare_inner()
             if (!spobject) {
                 return;
             }
+
             // We check for external files with text nodes direct children of text elemet
             // and wrap it into a tspan elements as inkscape do.
             if (text) {
@@ -2283,6 +2284,7 @@ void TextToolbar::prepare_inner()
                     }
                 }
             }
+
             // Here we remove temporary the shape to allow layout calculate where are the warp_end and warpo_start
             // position if one of this are hiden because the previous line height changed
             if (text) {

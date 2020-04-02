@@ -415,7 +415,7 @@ static void insert_text_fallback( Inkscape::XML::Node *repr, SPDocument *origina
 
                 // This could be useful if one wants to edit in an old version of Inkscape but we
                 // need to check if it breaks anything:
-                line_tspan->setAttribute("sodipodi:role", "line");
+                // line_tspan->setAttribute("sodipodi:role", "line");
 
                 // Hide overflow tspan (one line of text).
                 if (text->layout.isHidden(it)) {

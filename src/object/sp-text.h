@@ -117,6 +117,9 @@ private:
     void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const override;
     Geom::Affine set_transform(Geom::Affine const &transform) override;
 
+    // For 'inline-size', need to also remove any 'x' and 'y' added by SVG 1.1 fallback.
+    void remove_svg11_fallback();
+
     bool is_horizontal() const;
     bool has_inline_size() const;
     bool has_shape_inside() const;

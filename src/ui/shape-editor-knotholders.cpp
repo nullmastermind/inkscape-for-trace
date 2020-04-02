@@ -1823,6 +1823,7 @@ TextKnotHolderEntityInlineSize::knot_click(unsigned int state)
 
     if (state & GDK_CONTROL_MASK) {
         text->style->inline_size.clear();
+        text->remove_svg11_fallback();
     }
 
     text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
