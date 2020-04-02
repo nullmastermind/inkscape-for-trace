@@ -880,16 +880,17 @@ void PencilTool::_addFreehandPoint(Geom::Point const &p, guint /*state*/, bool l
         }
         double dezoomify_factor = 0.05 * 1000 / SP_EVENT_CONTEXT(this)->desktop->current_zoom();
         double pressure_shrunk = (((this->pressure - 0.25) * 1.25) * (max - min)) + min;
-        double pressure_computed = pressure_shrunk * (dezoomify_factor / 5.0);
+        double pressure_computed = pressure_shrunk * dezoomify_factor;
+        double pressure_computed_scaled = pressure_computed * SP_ACTIVE_DOCUMENT->getDocumentScale().inverse()[Geom::X];
         if (p != this->p[this->_npoints - 1]) {
             if (this->pressure < 0.15) {
                 this->_wps.emplace_back(distance, 0);
             } else {
-                this->_wps.emplace_back(distance, pressure_computed);
+                this->_wps.emplace_back(distance, pressure_computed_scaled);
             }
         }
         if (pressure_computed > 0.5) {
-            Geom::Circle pressure_dot(p, pressure_computed * 4);
+            Geom::Circle pressure_dot(p, pressure_computed);
             Geom::Piecewise<Geom::D2<Geom::SBasis>> pressure_piecewise;
             pressure_piecewise.push_cut(0);
             pressure_piecewise.push(pressure_dot.toSBasis(), 1);
