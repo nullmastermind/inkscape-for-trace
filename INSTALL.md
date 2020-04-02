@@ -4,7 +4,20 @@ Installation
 Basic Installation
 ------------------
 
-Inkscape version 0.92 and newer can be build using CMake:
+
+For building on Windows, please click [here](
+https://wiki.inkscape.org/wiki/index.php?title=Compiling_Inkscape_on_Windows_with_MSYS2)
+
+For building on Mac, please click [here](
+https://wiki.inkscape.org/wiki/index.php?title=CompilingMacOsX)
+
+For building on ChromeOS, please click [here](
+https://wiki.inkscape.org/wiki/index.php?title=Compiling_Inkscape_on_Chrome_OS)
+
+Platforms such as Windows and Mac require a lot more and are considered
+a developer and packager task. These instructions are kept on the Inkscape [wiki](https://wiki.inkscape.org/wiki/index.php?title=Compiling_Inkscape).
+
+For other OS, such as Linux, Inkscape version 0.92 and newer can be built using CMake:
 
 ```sh
 mkdir build
@@ -14,8 +27,6 @@ make
 make install
 ```
 
-Other platforms such as Windows and Mac require a lot more and are considered
-a developer and packager task. These instructions are kept on the Inkscape wiki.
 
 Running Without Installing
 --------------------------
