@@ -182,7 +182,8 @@ void MultiPathManipulator::setItems(std::set<ShapeRecord> const &s)
 
     // add newly selected items
     for (const auto & r : shapes) {
-        if (!SP_IS_PATH(r.object) && !IS_LIVEPATHEFFECT(r.object)) continue;
+        LivePathEffectObject *lpobj = dynamic_cast<LivePathEffectObject *>(r.object);
+        if (!SP_IS_PATH(r.object) && !lpobj) continue;
         std::shared_ptr<PathManipulator> newpm(new PathManipulator(*this, (SPPath*) r.object,
             r.edit_transform, _getOutlineColor(r.role, r.object), r.lpe_key));
         newpm->showHandles(_show_handles);

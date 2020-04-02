@@ -44,7 +44,8 @@ LPEObjectReference::~LPEObjectReference()
 
 bool LPEObjectReference::_acceptObject(SPObject * const obj) const
 {
-    if (IS_LIVEPATHEFFECT(obj)) {
+    LivePathEffectObject *lpobj = dynamic_cast<LivePathEffectObject *>(obj);
+    if (lpobj) {
         return URIReference::_acceptObject(obj);
     } else {
         return false;

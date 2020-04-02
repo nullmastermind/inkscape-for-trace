@@ -74,7 +74,8 @@ bool URIReference::_acceptObject(SPObject *obj) const
     std::set<SPObject *> done;
     SPObject *owner = getOwner();
     //allow LPE as owner has any URI attached
-    if (!owner || IS_LIVEPATHEFFECT(owner))
+    LivePathEffectObject *lpobj = dynamic_cast<LivePathEffectObject *>(obj);
+    if (!owner || lpobj)
         return true;
     
     while (owner->cloned) {

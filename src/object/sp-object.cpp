@@ -449,12 +449,11 @@ void SPObject::requestOrphanCollection() {
         // leave it
     } else if (dynamic_cast<SPScript *>(this)) {
         // leave it
-  
     } else if ((! prefs->getBool("/options/cleanupswatches/value", false)) && SP_IS_PAINT_SERVER(this) && static_cast<SPPaintServer*>(this)->isSwatch() ) {
         // leave it
     } else if (IS_COLORPROFILE(this)) {
         // leave it
-    } else if (IS_LIVEPATHEFFECT(this)) {
+    } else if (dynamic_cast<LivePathEffectObject *>(this)) {
         document->queueForOrphanCollection(this);
     } else {
         document->queueForOrphanCollection(this);
