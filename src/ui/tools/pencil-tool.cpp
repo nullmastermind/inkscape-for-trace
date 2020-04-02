@@ -765,6 +765,8 @@ void PencilTool::addPowerStrokePencil()
             if (!lpeitem) {
                 return;
             }
+            bool sensitive = Inkscape::DocumentUndo::getUndoSensitive(document);
+            Inkscape::DocumentUndo::setUndoSensitive(document, false);
             tol = prefs->getDoubleLimited("/tools/freehand/pencil/tolerance", 10.0, 0.0, 100.0) + 30;
             if (tol > 30) {
                 tol = tol / (130.0 * (132.0 - tol));
@@ -799,6 +801,7 @@ void PencilTool::addPowerStrokePencil()
                 sp_lpe_item_update_patheffect(lpeitem, false, true);
                 curvepressure = powerpreview->getCurve();
                 if (curvepressure->is_empty()) {
+                    Inkscape::DocumentUndo::setUndoSensitive(document, sensitive);
                     return;
                 }
                 path = curvepressure->get_pathvector()[0];
@@ -844,6 +847,7 @@ void PencilTool::addPowerStrokePencil()
                 curvepressure->unref();
             }
             prefs->setBool(pref_path_pp, false);
+            Inkscape::DocumentUndo::setUndoSensitive(document, sensitive);
         }
     }
 }
@@ -878,16 +882,15 @@ void PencilTool::_addFreehandPoint(Geom::Point const &p, guint /*state*/, bool l
         if (min > max) {
             min = max;
         }
+        if (this->pressure < 0.15) {
+            this->pressure = 0.15;
+        }
         double dezoomify_factor = 0.05 * 1000 / SP_EVENT_CONTEXT(this)->desktop->current_zoom();
         double pressure_shrunk = (((this->pressure - 0.25) * 1.25) * (max - min)) + min;
         double pressure_computed = pressure_shrunk * dezoomify_factor;
         double pressure_computed_scaled = pressure_computed * SP_ACTIVE_DOCUMENT->getDocumentScale().inverse()[Geom::X];
         if (p != this->p[this->_npoints - 1]) {
-            if (this->pressure < 0.15) {
-                this->_wps.emplace_back(distance, 0);
-            } else {
-                this->_wps.emplace_back(distance, pressure_computed_scaled);
-            }
+            this->_wps.emplace_back(distance, pressure_computed_scaled);
         }
         if (pressure_computed > 0.5) {
             Geom::Circle pressure_dot(p, pressure_computed);

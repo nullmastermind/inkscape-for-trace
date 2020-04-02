@@ -286,8 +286,11 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
                 sp_desktop_apply_style_tool(desktop, successor->getRepr(),
                                             Glib::ustring("/tools/freehand/pencil").data(), false);
                 spdc_apply_style(successor);
-                item->deleteObject(true);
-                item = successor;
+                sp_object_ref(item);
+                item->deleteObject(false);
+                item->setSuccessor(successor);
+                sp_object_unref(item);
+                item = dynamic_cast<SPItem *>(successor);
                 dc->selection->set(item);
                 item->setLocked(false);
                 dc->white_item = item;

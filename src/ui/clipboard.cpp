@@ -1190,8 +1190,10 @@ void ClipboardManagerImpl::_applyPathEffect(SPItem *item, gchar const *effectsta
             if (!obj) {
                 return;
             }
-            LivePathEffectObject *lpeobj = LIVEPATHEFFECT(obj);
-            lpeitem->addPathEffect(lpeobj);
+            LivePathEffectObject *lpeobj = dynamic_cast<LivePathEffectObject *>(obj);
+            if (lpeobj) {
+                lpeitem->addPathEffect(lpeobj);
+            }
         }
         // for each effect in the stack, check if we need to fork it before adding it to the item
         lpeitem->forkPathEffectsIfNecessary(1);

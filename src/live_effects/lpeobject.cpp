@@ -198,7 +198,7 @@ LivePathEffectObject *LivePathEffectObject::fork_private_if_necessary(unsigned i
         Inkscape::XML::Node *dup_repr = this->getRepr()->duplicate(xml_doc);
 
         doc->getDefs()->getRepr()->addChild(dup_repr, nullptr);
-        LivePathEffectObject *lpeobj_new = LIVEPATHEFFECT( doc->getObjectByRepr(dup_repr) );
+        LivePathEffectObject *lpeobj_new = dynamic_cast<LivePathEffectObject *>(doc->getObjectByRepr(dup_repr));
 
         Inkscape::GC::release(dup_repr);
         return lpeobj_new;

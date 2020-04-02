@@ -112,7 +112,7 @@ static void
 lpeobjectreference_href_changed(SPObject */*old_ref*/, SPObject */*ref*/, LPEObjectReference *lpeobjref)
 {
     lpeobjref->quit_listening();
-    LivePathEffectObject *refobj = LIVEPATHEFFECT( lpeobjref->getObject() );
+    LivePathEffectObject *refobj = dynamic_cast<LivePathEffectObject *>( lpeobjref->getObject() );
     if ( refobj ) {
         lpeobjref->start_listening(refobj);
     }

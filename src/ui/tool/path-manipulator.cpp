@@ -1510,7 +1510,7 @@ void PathManipulator::_setGeometry()
                 return; //False we dont update LPE
             }
             pathparam->set_new_value(_spcurve->get_pathvector(), false);
-            LIVEPATHEFFECT(_path)->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            lpeobj->requestModified(SP_OBJECT_MODIFIED_FLAG);
         }
     } else if (path) {
         // return true to leave the decision on empty to the caller.
