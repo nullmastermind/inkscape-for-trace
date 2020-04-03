@@ -765,8 +765,7 @@ void PencilTool::addPowerStrokePencil()
             if (!lpeitem) {
                 return;
             }
-            bool sensitive = Inkscape::DocumentUndo::getUndoSensitive(document);
-            Inkscape::DocumentUndo::setUndoSensitive(document, false);
+            DocumentUndo::ScopedInsensitive tmp(document);
             tol = prefs->getDoubleLimited("/tools/freehand/pencil/tolerance", 10.0, 0.0, 100.0) + 30;
             if (tol > 30) {
                 tol = tol / (130.0 * (132.0 - tol));
@@ -801,7 +800,6 @@ void PencilTool::addPowerStrokePencil()
                 sp_lpe_item_update_patheffect(lpeitem, false, true);
                 curvepressure = powerpreview->getCurve();
                 if (curvepressure->is_empty()) {
-                    Inkscape::DocumentUndo::setUndoSensitive(document, sensitive);
                     return;
                 }
                 path = curvepressure->get_pathvector()[0];
@@ -847,7 +845,6 @@ void PencilTool::addPowerStrokePencil()
                 curvepressure->unref();
             }
             prefs->setBool(pref_path_pp, false);
-            Inkscape::DocumentUndo::setUndoSensitive(document, sensitive);
         }
     }
 }
