@@ -959,7 +959,9 @@ void SPText::_clearFlow(Inkscape::DrawingGroup *in_arena)
     in_arena->clearChildren();
 }
 
-// Remove 'x' and 'y' values on children (lines) or they will be interpreted as absolute positions when 'inline-size' is removed.
+/** Remove 'x' and 'y' values on children (lines) or they will be interpreted as absolute positions
+ * when 'inline-size' is removed.
+ */
 void SPText::remove_svg11_fallback() {
     for (auto& child:  children) {
         std::cout << "Found child: " << child << std::endl;
