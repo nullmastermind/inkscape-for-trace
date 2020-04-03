@@ -8245,7 +8245,7 @@ msgstr "Omple el dibuix"
 
 #: ../src/filter-enums.cpp:47
 msgid "Stroke Paint"
-msgstr "Pinta el traçat"
+msgstr "Color del traç"
 
 #: ../src/filter-enums.cpp:63 ../src/ui/widget/filter-effect-chooser.cpp:36
 msgid "Soft Light"
@@ -16905,7 +16905,7 @@ msgstr "_Emplenat"
 
 #: ../src/ui/dialog/fill-and-stroke.cpp:65
 msgid "Stroke _paint"
-msgstr "_Pinta el traç"
+msgstr "_Color del traç"
 
 #: ../src/ui/dialog/fill-and-stroke.cpp:66
 msgid "Stroke st_yle"
