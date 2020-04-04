@@ -66,6 +66,7 @@ ps_print_document_to_file(SPDocument *doc, gchar const *filename, unsigned int l
 {
     doc->ensureUpToDate();
 
+    SPRoot *root = doc->getRoot();
     SPItem *base = nullptr;
 
     bool pageBoundingBox = TRUE;
@@ -75,11 +76,12 @@ ps_print_document_to_file(SPDocument *doc, gchar const *filename, unsigned int l
         if (!base) {
             throw Inkscape::Extension::Output::export_id_not_found(exportId);
         }
+        root->cropToObject(base); // TODO: This is inconsistent in CLI (should only happen for --export-id-only)
         pageBoundingBox = exportCanvas;
     }
     else {
         // we want to export the entire document from root
-        base = doc->getRoot();
+        base = root;
         pageBoundingBox = !exportDrawing;
     }
 
@@ -88,7 +90,7 @@ ps_print_document_to_file(SPDocument *doc, gchar const *filename, unsigned int l
 
     Inkscape::Drawing drawing;
     unsigned dkey = SPItem::display_key_new(1);
-    base->invoke_show(drawing, dkey, SP_ITEM_SHOW_DISPLAY);
+    root->invoke_show(drawing, dkey, SP_ITEM_SHOW_DISPLAY);
 
     /* Create renderer and context */
     CairoRenderer *renderer = new CairoRenderer();
@@ -105,12 +107,12 @@ ps_print_document_to_file(SPDocument *doc, gchar const *filename, unsigned int l
         /* Render document */
         ret = renderer->setupDocument(ctx, doc, pageBoundingBox, bleedmargin_px, base);
         if (ret) {
-            renderer->renderItem(ctx, base);
+            renderer->renderItem(ctx, root);
             ret = ctx->finish();
         }
     }
 
-    base->invoke_hide(dkey);
+    root->invoke_hide(dkey);
 
     renderer->destroyContext(ctx);
     delete renderer;

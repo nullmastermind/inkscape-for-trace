@@ -63,6 +63,7 @@ latex_render_document_text_to_file( SPDocument *doc, gchar const *filename,
 {
     doc->ensureUpToDate();
 
+    SPRoot *root = doc->getRoot();
     SPItem *base = nullptr;
 
     bool pageBoundingBox = true;
@@ -72,11 +73,12 @@ latex_render_document_text_to_file( SPDocument *doc, gchar const *filename,
         if (!base) {
             throw Inkscape::Extension::Output::export_id_not_found(exportId);
         }
+        root->cropToObject(base); // TODO: This is inconsistent in CLI (should only happen for --export-id-only)
         pageBoundingBox = exportCanvas;
     }
     else {
         // we want to export the entire document from root
-        base = doc->getRoot();
+        base = root;
         pageBoundingBox = !exportDrawing;
     }
 
@@ -91,7 +93,7 @@ latex_render_document_text_to_file( SPDocument *doc, gchar const *filename,
         /* Render document */
         bool ret = renderer->setupDocument(doc, pageBoundingBox, bleedmargin_px, base);
         if (ret) {
-            renderer->renderItem(base);
+            renderer->renderItem(root);
         }
     }
 
