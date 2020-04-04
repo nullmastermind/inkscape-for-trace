@@ -278,6 +278,10 @@ InkFileExportCmd::do_export_svg(SPDocument* doc, std::string filename_in)
 
             // "crop" the document to the specified object, cleaning as we go.
             SPObject *obj = doc->getObjectById(object);
+            if (obj == nullptr) {
+                std::cerr << "InkFileExportCmd::do_export_svg: Object " << object << " not found in document, nothing to export." << std::endl;
+                return 1;
+            }
             if (export_id_only) {
                 // If -j then remove all other objects to complete the "crop"
                 doc->getRoot()->cropToObject(obj);
