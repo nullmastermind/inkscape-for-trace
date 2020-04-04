@@ -47,7 +47,7 @@ msgstr "Sfumature"
 
 #: ../share/filters/filters.svg.h:4
 msgid "Same as Matte jelly but with more controls"
-msgstr "Come Gelatina opaca, ma con più parametri"
+msgstr "Come Gelatina Opaca, ma con più parametri"
 
 #: ../share/filters/filters.svg.h:6
 msgid "Metal Casting"
@@ -29689,28 +29689,28 @@ msgstr "Maiuscole normali"
 #: ../src/ui/widget/font-variants.cpp:305
 msgid "Small-caps (lowercase). OpenType table: 'smcp'"
 msgstr ""
-"Le minuscole sono sostituite da lettere maiuscole piccole. OpenType table: "
+"Le minuscole sono sostituite dal maiuscoletto. OpenType table: "
 "'smcp'"
 
 #: ../src/ui/widget/font-variants.cpp:306
 msgid ""
 "All small-caps (uppercase and lowercase). OpenType tables: 'c2sc' and 'smcp'"
 msgstr ""
-"Tutte le lettere sono sostituite da lettere maiuscole piccole. OpenType "
+"Tutte le lettere sono sostituite dal maiuscoletto. OpenType "
 "table: 'c2sc' e 'smcp'"
 
 #: ../src/ui/widget/font-variants.cpp:307
 msgid "Petite-caps (lowercase). OpenType table: 'pcap'"
 msgstr ""
-"Le minuscole sono sostituite da lettere maiuscole più piccole di small caps. "
+"Le minuscole sono sostituite dal maiuscoletto ridotto. "
 "OpenType table: 'pcap'"
 
 #: ../src/ui/widget/font-variants.cpp:308
 msgid ""
 "All petite-caps (uppercase and lowercase). OpenType tables: 'c2sc' and 'pcap'"
 msgstr ""
-"Tutte le lettere sono sostituite da lettere maiuscole più piccole di small "
-"caps. OpenType table: 'pcap'"
+"Tutte le lettere sono sostituite dal maiuscoletto ridotto. "
+"OpenType table: 'pcap'"
 
 #: ../src/ui/widget/font-variants.cpp:309
 msgid ""
@@ -29767,7 +29767,7 @@ msgstr "Ordinali (a, o all'apice e simili). OpenType table: 'ordn'"
 
 #: ../src/ui/widget/font-variants.cpp:360
 msgid "Slashed zeros. OpenType table: 'zero'"
-msgstr "Zeri barrati. OpenType table: 'zero'"
+msgstr "Zero barrato. OpenType table: 'zero'"
 
 #: ../src/ui/widget/font-variants.cpp:422
 msgid "Default variant."
@@ -30104,7 +30104,7 @@ msgstr "Motivo"
 #: ../src/ui/widget/selected-style.cpp:191
 #: ../src/ui/widget/style-swatch.cpp:290
 msgid "Pattern fill"
-msgstr "Motivo"
+msgstr "Motivo del riempimento"
 
 #: ../src/ui/widget/selected-style.cpp:191
 #: ../src/ui/widget/style-swatch.cpp:290
@@ -30119,12 +30119,12 @@ msgstr "Campione"
 #: ../src/ui/widget/selected-style.cpp:196
 #, fuzzy
 msgid "Hatch fill"
-msgstr "Riempimento nero"
+msgstr "Riempimento campione"
 
 #: ../src/ui/widget/selected-style.cpp:196
 #, fuzzy
 msgid "Hatch stroke"
-msgstr "Contorno nero"
+msgstr "Contorno campione"
 
 #: ../src/ui/widget/selected-style.cpp:198
 msgid "<b>L</b>"
@@ -30268,7 +30268,7 @@ msgstr "Rendi opaco il riempimento"
 
 #: ../src/ui/widget/selected-style.cpp:291
 msgid "Make stroke opaque"
-msgstr "Rendi il contorno opaco"
+msgstr "Rendi opaco il contorno"
 
 #: ../src/ui/widget/selected-style.cpp:300
 #: ../src/ui/widget/selected-style.cpp:549 ../src/widgets/fill-style.cpp:507
@@ -31995,7 +31995,7 @@ msgstr "Colora aree delimitate"
 #: ../src/verbs.cpp:2883
 msgctxt "ContextVerb"
 msgid "LPE Edit"
-msgstr "Modifica LPE"
+msgstr "Modifica Effetti su Tracciato"
 
 #: ../src/verbs.cpp:2883
 msgid "Edit Path Effect parameters"
@@ -34328,7 +34328,7 @@ msgid ""
 "can be done with the command 'sudo apt-get install python-numpy'."
 msgstr ""
 "Errore nell'importare il modulo numpy. Tale modulo è necessario a "
-"quest'estensione, installarlo e provare nuovamente. Su sistemi derivati "
+"quest'estensione: installarlo e provare nuovamente. Su sistemi derivati "
 "Debian questo può essere fatto col comando `sudo apt-get install python-"
 "numpy`."
 
@@ -34348,7 +34348,7 @@ msgstr "Errore interno. Nessun tipo di dato selezionato\n"
 #: ../share/extensions/print_win32_vector.py:176
 #, fuzzy
 msgid "Failed to open default printer"
-msgstr "Impossibile impostare CairoRenderContext"
+msgstr "Stampante non raggiungibile"
 
 #: ../share/extensions/replace_font.py:120
 msgid ""
@@ -34610,7 +34610,7 @@ msgstr "Scala di grigi"
 
 #: ../share/extensions/color_lesshue.inx:3
 msgid "Less Hue"
-msgstr "Minor colore"
+msgstr "Minore tonalità"
 
 #: ../share/extensions/color_lesslight.inx:3
 msgid "Less Light"
@@ -34622,7 +34622,7 @@ msgstr "Minor saturazione"
 
 #: ../share/extensions/color_morehue.inx:3
 msgid "More Hue"
-msgstr "Maggior colore"
+msgstr "Maggiore tonalità"
 
 #: ../share/extensions/color_morelight.inx:3
 msgid "More Light"
@@ -34665,7 +34665,7 @@ msgid ""
 msgstr ""
 "Randomizza tonalità, saturazione, luminosità e/o opacità (opacità solo per "
 "oggetti e gruppi). Modifica i valori per limitare la differenza tra il "
-"colore originale e quello randomizzato."
+"colore originale e quello casuale."
 
 #: ../share/extensions/color_removeblue.inx:3
 msgid "Remove Blue"
@@ -34673,19 +34673,19 @@ msgstr "Rimuovi blu"
 
 #: ../share/extensions/color_removegreen.inx:3
 msgid "Remove Green"
-msgstr "Rimuovi verde"
+msgstr "Rimuovi il verde"
 
 #: ../share/extensions/color_removered.inx:3
 msgid "Remove Red"
-msgstr "Rimuovi rosso"
+msgstr "Rimuovi il rosso"
 
 #: ../share/extensions/color_replace.inx:3
 msgid "Replace color"
-msgstr "Rimpiazza colore"
+msgstr "Rimpiazza un colore"
 
 #: ../share/extensions/color_replace.inx:5
 msgid "Replace color (RRGGBB hex):"
-msgstr "Rimpiazza colore (RRGGBB esadecimale):"
+msgstr "Rimpiazza il colore (RRGGBB esadecimale):"
 
 #: ../share/extensions/color_replace.inx:5
 msgid "Color to replace"
@@ -34750,7 +34750,7 @@ msgstr "Visualizza tracciato"
 
 #: ../share/extensions/docinfo.inx:3
 msgid "DOC Info"
-msgstr ""
+msgstr "Info DOC"
 
 #: ../share/extensions/docinfo.inx:6
 #, fuzzy
@@ -34763,7 +34763,8 @@ msgid ""
 "Choose this tab if you would like to see page info previously to apply DPI "
 "Switcher."
 msgstr ""
-"Seleziona questa finestra per ottenere la lista dei caratteri usati/trovati."
+"Seleziona questa finestra per vedere l'anteprima dei risultati prima di "
+"applicare i nuovi valori di DPI."
 
 #: ../share/extensions/docinfo.inx:13 ../share/extensions/dpi90to96.inx:15
 #: ../share/extensions/dpi96to90.inx:15
@@ -34784,7 +34785,7 @@ msgstr "Dimensione punto:"
 
 #: ../share/extensions/dots.inx:9
 msgid "Starting dot number:"
-msgstr "Numero iniziale punti:"
+msgstr "Numerazione del primo punto:"
 
 #: ../share/extensions/dots.inx:10
 msgid "Step:"
@@ -34802,35 +34803,36 @@ msgid ""
 msgstr ""
 "Questa estensione sostituisce i nodi della selezione con punti numerati in "
 "base alle seguenti opzioni:\n"
-"    * Dimensione carattere: dimensione del numero del nodo (20px, 10pt...).\n"
+"    * Dimensione carattere: dimensione del numero visualizzato "
+"(20px, 10pt...).\n"
 "    * Dimensione punto: diametro dei punti posti sui nodi del tracciato "
 "(10px, 2mm...).\n"
 "    * Incremento: incremento numerazione tra due nodi."
 
 #: ../share/extensions/dpi90to96.inx:3
 msgid "DPI 90 to 96"
-msgstr "DPI 90 a 96"
+msgstr "DPI da 90 a 96"
 
 #
 # File: ../share/extensions/dpi90to96.inx, line: 7
 # File: ../share/extensions/dpi96to90.inx, line: 7
 #: ../share/extensions/dpi90to96.inx:6 ../share/extensions/dpi96to90.inx:6
 msgid "Switch DPI"
-msgstr ""
+msgstr "Cambia DPI"
 
 #: ../share/extensions/dpi90to96.inx:8
 #, fuzzy
 msgid "DPI Switch from 90 to 96"
-msgstr "DPI 90 a 96"
+msgstr "Cambia DPI da 90 a 96"
 
 #: ../share/extensions/dpi96to90.inx:3
 msgid "DPI 96 to 90"
-msgstr "DPI 96 a 90"
+msgstr "DPI da 96 a 90"
 
 #: ../share/extensions/dpi96to90.inx:8
 #, fuzzy
 msgid "DPI Switch from 96 to 90"
-msgstr "DPI 96 a 90"
+msgstr "Cambia DPI da 96 a 90"
 
 #: ../share/extensions/draw_from_triangle.inx:3
 msgid "Draw From Triangle"
@@ -35640,7 +35642,7 @@ msgstr "Larghezza area:"
 # File: ../share/extensions/gcodetools_area.inx, line: 12
 #: ../share/extensions/gcodetools_area.inx:11
 msgid "Area tool overlap (0..0.9):"
-msgstr ""
+msgstr "Sovrapposizione dell'area strumento (0..0.9)"
 
 #
 # File: ../share/extensions/gcodetools_area.inx, line: 14
@@ -46996,7 +46998,7 @@ msgstr "Metà altezza carattere"
 #~ "lower values produce more uneven paths with more nodes"
 #~ msgstr ""
 #~ "Questo valore riguarda l'uniformità delle linee a mano libera; più basso "
-#~ "è il  valore e più la linea sarà irregolare e con più nodi"
+#~ "è il valore e più la linea sarà irregolare e con più nodi"
 
 #~ msgid "Grid units"
 #~ msgstr "Unità della griglia"
