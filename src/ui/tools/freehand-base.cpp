@@ -226,7 +226,7 @@ static void spdc_paste_curve_as_freehand_shape(Geom::PathVector const &newpath, 
     Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
     static_cast<LPEPatternAlongPath*>(lpe)->pattern.set_new_value(newpath,true);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    double scale = prefs->getDouble("/live_effect/pap/width", 1);
+    double scale = prefs->getDouble("/live_effects/pap/width", 1);
     if (!scale) {
         scale = 1 / document->getDocumentScale()[0];
     }
@@ -339,7 +339,7 @@ static void spdc_apply_bend_shape(gchar const *svgd, FreehandBase *dc, SPItem *i
 
     // write bend parameters:
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    double scale = prefs->getDouble("/live_effect/bend/width", 1);
+    double scale = prefs->getDouble("/live_effects/bend/width", 1);
     if (!scale) {
         scale = 1;
     }
@@ -441,7 +441,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
         const char *stroke_width = sp_repr_css_property(css_item, "stroke-width", "0");
         double swidth;
         sp_svg_number_read_d(stroke_width, &swidth);
-        swidth = prefs->getDouble("/live_effect/power_stroke/width", swidth/2);
+        swidth = prefs->getDouble("/live_effects/powerstroke/width", swidth/2);
         if (!swidth) {
             swidth = swidth/2;
         }
