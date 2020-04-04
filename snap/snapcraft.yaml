@@ -146,7 +146,7 @@ apps:
       INKSCAPE_LOCALEDIR: ${SNAP}/share/locale
       INKSCAPE_DATADIR: ${SNAP}/share
       XDG_DATA_DIRS: ${XDG_DATA_DIRS}:${AAREALHOME}/.local/share
-    extensions: [ gnome-3-28 ]
+    extensions: [ gnome-3-34 ]
   viewer:
     command: bin/inkview
     plugs:
@@ -162,4 +162,4 @@ apps:
       INKSCAPE_LOCALEDIR: ${SNAP}/share/locale
       INKSCAPE_DATADIR: ${SNAP}/share
       XDG_DATA_DIRS: ${XDG_DATA_DIRS}:${AAREALHOME}/.local/share
-    extensions: [ gnome-3-28 ]
+    extensions: [ gnome-3-34 ]
