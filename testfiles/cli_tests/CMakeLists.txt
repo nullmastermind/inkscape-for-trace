@@ -290,8 +290,56 @@ add_cli_test(export-margin_viewbox_id_svg PARAMETERS --export-margin=50 --export
 # add_cli_test(export-margin_viewbox_id_wmf PARAMETERS --export-margin=50 --export-id=square-red --export-type=wmf INPUT_FILENAME square_mm_viewbox.svg OUTPUT_FILENAME export-margin_viewbox_id.wmf REFERENCE_FILENAME export-margin_mm_viewbox_id_expected.wmf )
 
 # --export-id=OBJECT-ID[;OBJECT-ID]*
+add_cli_test(export-id_png PARAMETERS --export-id=red --export-type=png INPUT_FILENAME theta.svg OUTPUT_FILENAME export-id.png REFERENCE_FILENAME export-id_expected.png )
+add_cli_test(export-id_svg PARAMETERS --export-id=red --export-type=svg INPUT_FILENAME theta.svg OUTPUT_FILENAME export-id.svg REFERENCE_FILENAME export-id_expected.svg )
+# PDF, PS, EPS doesn't respect --export-id-only, bug report: https://gitlab.com/inkscape/inkscape/issues/1173
+# add_cli_test(export-id_pdf PARAMETERS --export-id=red --export-type=pdf INPUT_FILENAME theta.svg OUTPUT_FILENAME export-id.pdf REFERENCE_FILENAME export-id_expected.pdf )
+# add_cli_test(export-id_ps  PARAMETERS --export-id=red --export-type=ps  INPUT_FILENAME theta.svg OUTPUT_FILENAME export-id.ps  REFERENCE_FILENAME export-id_expected.ps  )
+# add_cli_test(export-id_eps PARAMETERS --export-id=red --export-type=eps INPUT_FILENAME theta.svg OUTPUT_FILENAME export-id.eps REFERENCE_FILENAME export-id_expected.eps )
+# EMF, WMF There is no support, feature request: https://gitlab.com/inkscape/inkscape/issues/1204
+# add_cli_test(export-id_emf PARAMETERS --export-id=red --export-type=emf INPUT_FILENAME theta.svg OUTPUT_FILENAME export-id.emf REFERENCE_FILENAME export-id_expected.emf )
+# add_cli_test(export-id_wmf PARAMETERS --export-id=red --export-type=wmf INPUT_FILENAME theta.svg OUTPUT_FILENAME export-id.wmf REFERENCE_FILENAME export-id_expected.wmf )
+
+## --export-id + --export-area-page = --export-area-page
+## --export-id + --export-area-drawing = --export-area-drawing
+## --export-id + --export-area-snap → export-area-snap_export-id
+## --export-id + --export-margin → export-margin_export-id_png|svg|pdf|ps|eps|emf|wmf
+## --export-id + --export-use-hints → export-use-hints_export-id
+## --export-id + --export-use-hints + --export-width | --export-height → export-width_export-use-hints
 
 # --export-id-only
+## --export-id + --export-id-only
+add_cli_test(export-id_export-id-only_png PARAMETERS --export-id=blue --export-id-only --export-type=png INPUT_FILENAME theta.svg OUTPUT_FILENAME export-id_export-id-only.png REFERENCE_FILENAME export-id_export-id-only_expected.png )
+add_cli_test(export-id_export-id-only_svg PARAMETERS --export-id=blue --export-id-only --export-type=svg INPUT_FILENAME theta.svg OUTPUT_FILENAME export-id_export-id-only.svg REFERENCE_FILENAME export-id_export-id-only_expected.svg )
+add_cli_test(export-id_export-id-only_pdf PARAMETERS --export-id=blue --export-id-only --export-type=pdf INPUT_FILENAME theta.svg OUTPUT_FILENAME export-id_export-id-only.pdf REFERENCE_FILENAME export-id_export-id-only_expected.pdf )
+add_cli_test(export-id_export-id-only_ps  PARAMETERS --export-id=blue --export-id-only --export-type=ps  INPUT_FILENAME theta.svg OUTPUT_FILENAME export-id_export-id-only.ps  REFERENCE_FILENAME export-id_export-id-only_expected.ps  )
+add_cli_test(export-id_export-id-only_eps PARAMETERS --export-id=blue --export-id-only --export-type=eps INPUT_FILENAME theta.svg OUTPUT_FILENAME export-id_export-id-only.eps REFERENCE_FILENAME export-id_export-id-only_expected.eps )
+# EMF, WMF There is no support, feature request: https://gitlab.com/inkscape/inkscape/issues/1204
+# add_cli_test(export-id_export-id-only_emf PARAMETERS --export-id=blue --export-id-only --export-type=emf INPUT_FILENAME theta.svg OUTPUT_FILENAME export-id_export-id-only.emf REFERENCE_FILENAME export-id_export-id-only_expected.emf )
+# add_cli_test(export-id_export-id-only_wmf PARAMETERS --export-id=blue --export-id-only --export-type=wmf INPUT_FILENAME theta.svg OUTPUT_FILENAME export-id_export-id-only.wmf REFERENCE_FILENAME export-id_export-id-only_expected.wmf )
+
+## --export-id + --export-id-only + --export-area-page
+add_cli_test(export-id_export-id-only_export-area-page_png PARAMETERS --export-id=yellow --export-id-only --export-area-page --export-type=png INPUT_FILENAME theta.svg OUTPUT_FILENAME export-id_export-id-only_export-area-page.png REFERENCE_FILENAME export-id_export-id-only_export-area-page_expected.png )
+add_cli_test(export-id_export-id-only_export-area-page_svg PARAMETERS --export-id=yellow --export-id-only --export-area-page --export-type=svg INPUT_FILENAME theta.svg OUTPUT_FILENAME export-id_export-id-only_export-area-page.svg REFERENCE_FILENAME export-id_export-id-only_export-area-page_expected.svg )
+add_cli_test(export-id_export-id-only_export-area-page_pdf PARAMETERS --export-id=yellow --export-id-only --export-area-page --export-type=pdf INPUT_FILENAME theta.svg OUTPUT_FILENAME export-id_export-id-only_export-area-page.pdf REFERENCE_FILENAME export-id_export-id-only_export-area-page_expected.pdf )
+add_cli_test(export-id_export-id-only_export-area-page_ps  PARAMETERS --export-id=yellow --export-id-only --export-area-page --export-type=ps  INPUT_FILENAME theta.svg OUTPUT_FILENAME export-id_export-id-only_export-area-page.ps  REFERENCE_FILENAME export-id_export-id-only_export-area-page_expected.ps  )
+# EPS: Depents on https://gitlab.com/inkscape/inkscape/issues/1074
+# add_cli_test(export-id_export-id-only_export-area-page_eps PARAMETERS --export-id=yellow --export-id-only --export-area-page --export-type=eps INPUT_FILENAME theta.svg OUTPUT_FILENAME export-id_export-id-only_export-area-page.eps REFERENCE_FILENAME export-id_export-id-only_export-area-page_expected.eps )
+# EMF, WMF: There is no support, feature request: https://gitlab.com/inkscape/inkscape/issues/1204
+# add_cli_test(export-id_export-id-only_export-area-page_emf PARAMETERS --export-id=yellow --export-id-only --export-area-page --export-type=emf INPUT_FILENAME theta.svg OUTPUT_FILENAME export-id_export-id-only_export-area-page.emf REFERENCE_FILENAME export-id_export-id-only_export-area-page_expected.emf )
+# add_cli_test(export-id_export-id-only_export-area-page_wmf PARAMETERS --export-id=yellow --export-id-only --export-area-page --export-type=wmf INPUT_FILENAME theta.svg OUTPUT_FILENAME export-id_export-id-only_export-area-page.wmf REFERENCE_FILENAME export-id_export-id-only_export-area-page_expected.wmf )
+
+## --export-id + --export-id-only + --export-area-drawing
+# PNG, PDF, PS, EPS, EMF, WMF: Feature request: https://gitlab.com/inkscape/inkscape/issues/1215
+# add_cli_test(export-id_export-id-only_export-area-drawing_png PARAMETERS --export-id=yellow --export-id-only --export-area-drawing --export-type=png INPUT_FILENAME theta.svg OUTPUT_FILENAME export-id_export-id-only_export-area-drawing.png REFERENCE_FILENAME export-id_export-id-only_export-area-drawing_expected.png )
+add_cli_test(export-id_export-id-only_export-area-drawing_svg PARAMETERS --export-id=yellow --export-id-only --export-area-drawing --export-type=svg INPUT_FILENAME theta.svg OUTPUT_FILENAME export-id_export-id-only_export-area-drawing.svg REFERENCE_FILENAME export-id_export-id-only_export-area-drawing_expected.svg )
+# add_cli_test(export-id_export-id-only_export-area-drawing_pdf PARAMETERS --export-id=yellow --export-id-only --export-area-drawing --export-type=pdf INPUT_FILENAME theta.svg OUTPUT_FILENAME export-id_export-id-only_export-area-drawing.pdf REFERENCE_FILENAME export-id_export-id-only_export-area-drawing_expected.pdf )
+# add_cli_test(export-id_export-id-only_export-area-drawing_ps  PARAMETERS --export-id=yellow --export-id-only --export-area-drawing --export-type=ps  INPUT_FILENAME theta.svg OUTPUT_FILENAME export-id_export-id-only_export-area-drawing.ps  REFERENCE_FILENAME export-id_export-id-only_export-area-drawing_expected.ps  )
+# add_cli_test(export-id_export-id-only_export-area-drawing_eps PARAMETERS --export-id=yellow --export-id-only --export-area-drawing --export-type=eps INPUT_FILENAME theta.svg OUTPUT_FILENAME export-id_export-id-only_export-area-drawing.eps REFERENCE_FILENAME export-id_export-id-only_export-area-drawing_expected.eps )
+# add_cli_test(export-id_export-id-only_export-area-drawing_emf PARAMETERS --export-id=yellow --export-id-only --export-area-drawing --export-type=emf INPUT_FILENAME theta.svg OUTPUT_FILENAME export-id_export-id-only_export-area-drawing.emf REFERENCE_FILENAME export-id_export-id-only_export-area-drawing_expected.emf )
+# add_cli_test(export-id_export-id-only_export-area-drawing_wmf PARAMETERS --export-id=yellow --export-id-only --export-area-drawing --export-type=wmf INPUT_FILENAME theta.svg OUTPUT_FILENAME export-id_export-id-only_export-area-drawing.wmf REFERENCE_FILENAME export-id_export-id-only_export-area-drawing_expected.wmf )
+
+## --export-id + --export-id-only + --export-margin → export-margin_export-id_export-id-only_png|svg|pdf|ps|eps|emw|wmf
 
 # --export-plain-svg
 add_cli_test(export-plain-svg PARAMETERS --export-type=svg --export-plain-svg

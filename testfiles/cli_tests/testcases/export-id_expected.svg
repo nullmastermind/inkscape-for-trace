@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   sodipodi:docname="theta.svg"
+   id="svg12"
+   version="1.1"
+   height="100"
+   width="100">
+  <metadata
+     id="metadata18">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs16" />
+  <sodipodi:namedview
+     id="namedview14"
+     inkscape:window-height="480"
+     inkscape:window-width="640"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10"
+     borderopacity="1"
+     bordercolor="#666666"
+     pagecolor="#ffffff" />
+  <rect
+     id="red"
+     fill="#ff0000"
+     height="100"
+     width="100"
+     y="0"
+     x="0" />
+  <rect
+     id="green"
+     fill="#008000"
+     height="100"
+     width="100"
+     y="0"
+     x="200" />
+  <rect
+     id="blue"
+     fill="#0000ff"
+     height="100"
+     width="100"
+     y="100"
+     x="100" />
+  <rect
+     id="yellow"
+     fill="#ffff00"
+     height="100"
+     width="100"
+     y="200"
+     x="0" />
+  <rect
+     id="purple"
+     fill="#800080"
+     height="100"
+     width="100"
+     y="200"
+     x="200" />
+  <rect
+     id="red-cover"
+     fill="#ffffff"
+     height="50"
+     width="50"
+     y="25"
+     x="25" />
+  <rect
+     id="green-cover"
+     fill="#ffffff"
+     height="50"
+     width="50"
+     y="25"
+     x="225" />
+  <rect
+     id="blue-cover"
+     fill="#ffffff"
+     height="50"
+     width="50"
+     y="125"
+     x="125" />
+  <rect
+     id="yellow-cover"
+     fill="#ffffff"
+     height="50"
+     width="50"
+     y="225"
+     x="25" />
+  <rect
+     id="purple-cover"
+     fill="#ffffff"
+     height="50"
+     width="50"
+     y="225"
+     x="225" />
+</svg>
