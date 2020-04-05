@@ -31,6 +31,9 @@
 
 #include "xml/helper-observer.h"
 
+#include <memory>
+#include <vector>
+
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
@@ -63,7 +66,6 @@ class SelectorsDialog : public Widget::Panel {
     // Monitor all objects for addition/removal/attribute change
     class NodeWatcher;
     enum SelectorType { CLASS, ID, TAG };
-    std::vector<SelectorsDialog::NodeWatcher *> _nodeWatchers;
     void _nodeAdded(   Inkscape::XML::Node &repr );
     void _nodeRemoved( Inkscape::XML::Node &repr );
     void _nodeChanged( Inkscape::XML::Node &repr );
@@ -127,13 +129,14 @@ class SelectorsDialog : public Widget::Panel {
     Gtk::Button _del;
     Gtk::Button _create;
     // Reading and writing the style element.
-    Inkscape::XML::Node *_getStyleTextNode();
+    Inkscape::XML::Node *_getStyleTextNode(bool create_if_missing = false);
     void _readStyleElement();
     void _writeStyleElement();
 
     // Update watchers
-    void _addWatcherRecursive(Inkscape::XML::Node *node);
-    void _updateWatchers();
+    std::unique_ptr<Inkscape::XML::NodeObserver> m_nodewatcher;
+    std::unique_ptr<Inkscape::XML::NodeObserver> m_styletextwatcher;
+    void _updateWatchers(SPDesktop *);
     
     // Manipulate Tree
     void _addToSelector(Gtk::TreeModel::Row row);
@@ -155,6 +158,7 @@ class SelectorsDialog : public Widget::Panel {
     double _scroolpos;
     bool _scroollock;
     bool _updating;                 // Prevent cyclic actions: read <-> write, select via dialog <-> via desktop
+    Inkscape::XML::Node *m_root = nullptr;
     Inkscape::XML::Node *_textNode; // Track so we know when to add a NodeObserver.
 
     // Signals and handlers - External

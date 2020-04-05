@@ -93,9 +93,8 @@ void SelectorsDialog::NodeObserver::notifyContentChanged(Inkscape::XML::Node & /
 // (Must update objects that selectors match.)
 class SelectorsDialog::NodeWatcher : public Inkscape::XML::NodeObserver {
   public:
-    NodeWatcher(SelectorsDialog *selectorsdialog, Inkscape::XML::Node *repr)
+    NodeWatcher(SelectorsDialog *selectorsdialog)
         : _selectorsdialog(selectorsdialog)
-        , _repr(repr)
     {
         g_debug("SelectorsDialog::NodeWatcher: Constructor");
     };
@@ -104,67 +103,42 @@ class SelectorsDialog::NodeWatcher : public Inkscape::XML::NodeObserver {
                                    Inkscape::XML::Node &child,
                                    Inkscape::XML::Node */*prev*/ ) override
     {
-        if (_selectorsdialog && _repr) {
             _selectorsdialog->_nodeAdded(child);
-        }
     }
 
     void notifyChildRemoved( Inkscape::XML::Node &/*node*/,
                                      Inkscape::XML::Node &child,
                                      Inkscape::XML::Node */*prev*/ ) override
     {
-        if (_selectorsdialog && _repr) {
             _selectorsdialog->_nodeRemoved(child);
-        }
     }
 
     void notifyAttributeChanged( Inkscape::XML::Node &node,
                                          GQuark qname,
                                          Util::ptr_shared /*old_value*/,
                                          Util::ptr_shared /*new_value*/ ) override {
-        if (_selectorsdialog && _repr) {
 
-            // For the moment only care about attributes that are directly used in selectors.
-            const gchar * cname = g_quark_to_string (qname );
-            Glib::ustring name;
-            if (cname) {
-                name = cname;
-            }
+        static GQuark const CODE_id = g_quark_from_static_string("id");
+        static GQuark const CODE_class = g_quark_from_static_string("class");
 
-            if ( name == "id" || name == "class" ) {
-                _selectorsdialog->_nodeChanged(node);
-            }
+        if (qname == CODE_id || qname == CODE_class) {
+            _selectorsdialog->_nodeChanged(node);
         }
     }
 
     SelectorsDialog *_selectorsdialog;
-    Inkscape::XML::Node * _repr;  // Need to track if document changes.
 };
 
 void SelectorsDialog::_nodeAdded(Inkscape::XML::Node &node)
 {
-    g_debug("SelectorsDialog::NodeAdded");
-    _scroollock = true;
-    SelectorsDialog::NodeWatcher *w = new SelectorsDialog::NodeWatcher(this, &node);
-    node.addObserver (*w);
-    _nodeWatchers.push_back(w);
-
     _readStyleElement();
     _selectRow();
 }
 
 void SelectorsDialog::_nodeRemoved(Inkscape::XML::Node &repr)
 {
-
-    g_debug("SelectorsDialog::NodeRemoved");
-
-    _scroollock = true;
-    for (auto it = _nodeWatchers.begin(); it != _nodeWatchers.end(); ++it) {
-        if ( (*it)->_repr == &repr ) {
-            (*it)->_repr->removeObserver (**it);
-            _nodeWatchers.erase( it );
-            break;
-        }
+    if (_textNode == &repr) {
+        _textNode = nullptr;
     }
 
     _readStyleElement();
@@ -252,6 +226,10 @@ SelectorsDialog::SelectorsDialog()
     , _scroollock(false)
 {
     g_debug("SelectorsDialog::SelectorsDialog");
+
+    m_nodewatcher.reset(new SelectorsDialog::NodeWatcher(this));
+    m_styletextwatcher.reset(new SelectorsDialog::NodeObserver(this));
+
     // Tree
     Inkscape::UI::Widget::IconRenderer * addRenderer = manage(
                 new Inkscape::UI::Widget::IconRenderer() );
@@ -438,49 +416,22 @@ SelectorsDialog::~SelectorsDialog()
  * Returns the style element's text node. If there is no style element, one is created.
  * Ditto for text node.
  */
-Inkscape::XML::Node *SelectorsDialog::_getStyleTextNode()
+Inkscape::XML::Node *SelectorsDialog::_getStyleTextNode(bool create_if_missing)
 {
     g_debug("SelectorsDialog::_getStyleTextNode");
 
-    Inkscape::XML::Node *styleNode = nullptr;
-    Inkscape::XML::Node *textNode = nullptr;
-
-    Inkscape::XML::Node *root = SP_ACTIVE_DOCUMENT->getReprRoot();
-    for (unsigned i = 0; i < root->childCount(); ++i) {
-        if (Glib::ustring(root->nthChild(i)->name()) == "svg:style") {
-            styleNode = root->nthChild(i);
-            for (unsigned j = 0; j < styleNode->childCount(); ++j) {
-                if (styleNode->nthChild(j)->type() == Inkscape::XML::TEXT_NODE) {
-                    textNode = styleNode->nthChild(j);
-                }
-            }
-            if (textNode == nullptr) {
-                // Style element found but does not contain text node!
-                std::cerr << "StyleDialog::_getStyleTextNode(): No text node!" << std::endl;
-                textNode = SP_ACTIVE_DOCUMENT->getReprDoc()->createTextNode("");
-                styleNode->appendChild(textNode);
-                Inkscape::GC::release(textNode);
-            }
-            break;
-        }
-    }
-
-    if (styleNode == nullptr) {
-        // Style element not found, create one
-        styleNode = SP_ACTIVE_DOCUMENT->getReprDoc()->createElement("svg:style");
-        textNode = SP_ACTIVE_DOCUMENT->getReprDoc()->createTextNode("");
-
-        root->addChild(styleNode, nullptr);
-        Inkscape::GC::release(styleNode);
-
-        styleNode->appendChild(textNode);
-        Inkscape::GC::release(textNode);
-    }
+    auto textNode = Inkscape::get_first_style_text_node(m_root, create_if_missing);
 
     if (_textNode != textNode) {
+        if (_textNode) {
+            _textNode->removeObserver(*m_styletextwatcher);
+        }
+
         _textNode = textNode;
-        NodeObserver *no = new NodeObserver(this);
-        textNode->addObserver(*no);
+
+        if (_textNode) {
+            _textNode->addObserver(*m_styletextwatcher);
+        }
     }
 
     return textNode;
@@ -497,12 +448,9 @@ void SelectorsDialog::_readStyleElement()
     _updating = true;
     _scroollock = true;
     Inkscape::XML::Node * textNode = _getStyleTextNode();
-    if (textNode == nullptr) {
-        std::cerr << "SelectorsDialog::_readStyleElement(): No text node!" << std::endl;
-    }
 
     // Get content from style text node.
-    std::string content = (textNode->content() ? textNode->content() : "");
+    std::string content = (textNode && textNode->content()) ? textNode->content() : "";
 
     // Remove end-of-lines (check it works on Windoze).
     content.erase(std::remove(content.begin(), content.end(), '\n'), content.end());
@@ -531,6 +479,7 @@ void SelectorsDialog::_readStyleElement()
 
     // If text node is empty, return (avoids problem with negative below).
     if (tokens.size() == 0) {
+        _store->clear();
         _updating = false;
         return;
     }
@@ -615,8 +564,11 @@ void SelectorsDialog::_readStyleElement()
         row[_mColumns._colSelected] = 400;
         // Add as children, objects that match selector.
         for (auto &obj : objVec) {
+            auto *id = obj->getId();
+            if (!id)
+                continue;
             Gtk::TreeModel::Row childrow = *(_store->append(row->children()));
-            childrow[_mColumns._colSelector] = "#" + Glib::ustring(obj->getId());
+            childrow[_mColumns._colSelector] = "#" + Glib::ustring(id);
             childrow[_mColumns._colExpand] = false;
             childrow[_mColumns._colType] = colType == OBJECT;
             childrow[_mColumns._colObj] = std::vector<SPObject *>(1, obj);
@@ -681,7 +633,7 @@ void SelectorsDialog::_writeStyleElement()
     }
     // We could test if styleContent is empty and then delete the style node here but there is no
     // harm in keeping it around ...
-    Inkscape::XML::Node *textNode = _getStyleTextNode();
+    Inkscape::XML::Node *textNode = _getStyleTextNode(true);
     bool empty = false;
     if (styleContent.empty()) {
         empty = true;
@@ -701,47 +653,27 @@ void SelectorsDialog::_writeStyleElement()
     g_debug("SelectorsDialog::_writeStyleElement(): | %s |", styleContent.c_str());
 }
 
-
-void SelectorsDialog::_addWatcherRecursive(Inkscape::XML::Node *node)
-{
-
-    g_debug("SelectorsDialog::_addWatcherRecursive()");
-
-    SelectorsDialog::NodeWatcher *w = new SelectorsDialog::NodeWatcher(this, node);
-    node->addObserver(*w);
-    _nodeWatchers.push_back(w);
-
-    for (unsigned i = 0; i < node->childCount(); ++i) {
-        _addWatcherRecursive(node->nthChild(i));
-    }
-}
-
 /**
  * Update the watchers on objects.
  */
-void SelectorsDialog::_updateWatchers()
+void SelectorsDialog::_updateWatchers(SPDesktop *desktop)
 {
     g_debug("SelectorsDialog::_updateWatchers");
 
-    _updating = true;
-
-    // Remove old document watchers
-    while (!_nodeWatchers.empty()) {
-        SelectorsDialog::NodeWatcher *w = _nodeWatchers.back();
-        w->_repr->removeObserver(*w);
-        _nodeWatchers.pop_back();
-        delete w;
+    if (_textNode) {
+        _textNode->removeObserver(*m_styletextwatcher);
+        _textNode = nullptr;
     }
 
-    // Recursively add new watchers
-    if (getDesktop()) {
-        Inkscape::XML::Node *root = getDesktop()->doc()->getReprRoot();
-        _addWatcherRecursive(root);
+    if (m_root) {
+        m_root->removeSubtreeObserver(*m_nodewatcher);
+        m_root = nullptr;
     }
 
-    g_debug("SelectorsDialog::_updateWatchers(): %d", (int)_nodeWatchers.size());
-
-    _updating = false;
+    if (desktop) {
+        m_root = desktop->getDocument()->getReprRoot();
+        m_root->addSubtreeObserver(*m_nodewatcher);
+    }
 }
 /*
 void sp_get_selector_active(Glib::ustring &selector)
@@ -839,7 +771,9 @@ void SelectorsDialog::_addToSelector(Gtk::TreeModel::Row row)
         row[_mColumns._colExpand] = true;
         std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("[,]+", multiselector);
         for (auto &obj : toAddObjVec) {
-            Glib::ustring id = (obj->getId() ? obj->getId() : "");
+            auto *id = obj->getId();
+            if (!id)
+                continue;
             for (auto tok : tokens) {
                 Glib::ustring clases = sp_get_selector_classes(tok);
                 if (!clases.empty()) {
@@ -847,7 +781,7 @@ void SelectorsDialog::_addToSelector(Gtk::TreeModel::Row row)
                     std::vector<SPObject *> currentobjs = _getObjVec(multiselector);
                     bool removeclass = true;
                     for (auto currentobj : currentobjs) {
-                        if (currentobj->getId() == id) {
+                        if (g_strcmp0(currentobj->getId(), id) == 0) {
                             removeclass = false;
                         }
                     }
@@ -859,7 +793,7 @@ void SelectorsDialog::_addToSelector(Gtk::TreeModel::Row row)
             std::vector<SPObject *> currentobjs = _getObjVec(multiselector);
             bool insertid = true;
             for (auto currentobj : currentobjs) {
-                if (currentobj->getId() == id) {
+                if (g_strcmp0(currentobj->getId(), id) == 0) {
                     insertid = false;
                 }
             }
@@ -991,31 +925,10 @@ std::vector<SPObject *> SelectorsDialog::_getObjVec(Glib::ustring selector)
 {
 
     g_debug("SelectorsDialog::_getObjVec: | %s |", selector.c_str());
-    std::vector<Glib::ustring> selectordata = Glib::Regex::split_simple(";", selector);
-    if (!selectordata.empty()) {
-        selector = selectordata.back();
-    }
-    std::vector<SPObject *> objVec;
-    std::vector<Glib::ustring> tokensplus = Glib::Regex::split_simple("[,]+", selector);
-    for (auto tok : tokensplus) {
-        REMOVE_SPACES(tok);
-        std::vector<SPObject *> objVecSplited = SP_ACTIVE_DOCUMENT->getObjectsBySelector(tok);
-        for (auto obj : objVecSplited) {
-            bool insert = true;
-            for (auto objv : objVec) {
-                if (objv->getId() == obj->getId()) {
-                    insert = false;
-                }
-            }
-            if (insert) {
-                objVec.push_back(obj);
-            }
-        }
-    }
-    /* for (auto& obj: objVec) {
-        g_debug("  %s", obj->getId() ? obj->getId() : "null");
-    } */
-    return objVec;
+
+    g_assert(selector.find(";") == Glib::ustring::npos);
+
+    return getDesktop()->getDocument()->getObjectsBySelector(selector);
 }
 
 
@@ -1257,7 +1170,7 @@ void SelectorsDialog::_addSelector()
                 std::vector<SPObject *> currentobjs = _getObjVec(selectorValue);
                 bool removeclass = true;
                 for (auto currentobj : currentobjs) {
-                    if (currentobj->getId() == obj->getId()) {
+                    if (currentobj == obj) {
                         removeclass = false;
                     }
                 }
@@ -1276,8 +1189,11 @@ void SelectorsDialog::_addSelector()
         row[_mColumns._colVisible] = true;
         row[_mColumns._colSelected] = 400;
         for (auto &obj : objVec) {
+            auto *id = obj->getId();
+            if (!id)
+                continue;
             Gtk::TreeModel::Row childrow = *(_store->prepend(row->children()));
-            childrow[_mColumns._colSelector] = "#" + Glib::ustring(obj->getId());
+            childrow[_mColumns._colSelector] = "#" + Glib::ustring(id);
             childrow[_mColumns._colExpand] = false;
             childrow[_mColumns._colType] = OBJECT;
             childrow[_mColumns._colObj] = std::vector<SPObject *>(1, obj);
@@ -1392,13 +1308,13 @@ void SelectorsDialog::_handleDocumentReplaced(SPDesktop *desktop, SPDocument * /
 
     _selection_changed_connection.disconnect();
 
+    _updateWatchers(desktop);
+
     if (!desktop)
         return;
 
     _selection_changed_connection = desktop->getSelection()->connectChanged(
         sigc::hide(sigc::mem_fun(this, &SelectorsDialog::_handleSelectionChanged)));
-
-    _updateWatchers();
 
     _readStyleElement();
     _selectRow();
@@ -1436,6 +1352,7 @@ void SelectorsDialog::_handleSelectionChanged()
     g_debug("SelectorsDialog::_handleSelectionChanged()");
     _lastpath.clear();
     _treeView.get_selection()->set_mode(Gtk::SELECTION_MULTIPLE);
+    _readStyleElement();
     _selectRow();
 }
 
@@ -1483,10 +1400,6 @@ void SelectorsDialog::_selectRow()
         _del.show();
     }
     if (_updating || !getDesktop()) return; // Avoid updating if we have set row via dialog.
-    if (SP_ACTIVE_DESKTOP != getDesktop()) {
-        std::cerr << "SelectorsDialog::_selectRow: SP_ACTIVE_DESKTOP != getDesktop()" << std::endl;
-        return;
-    }
 
     _treeView.get_selection()->unselect_all();
     Gtk::TreeModel::Children children = _store->children();
@@ -1508,7 +1421,7 @@ void SelectorsDialog::_selectRow()
             Gtk::TreeModel::Children subchildren = row->children();
             for (auto subrow : subchildren) {
                 std::vector<SPObject *> objVec = subrow[_mColumns._colObj];
-                if (obj->getId() == objVec[0]->getId()) {
+                if (obj == objVec[0]) {
                     _treeView.get_selection()->select(row);
                     row[_mColumns._colVisible] = true;
                     subrow[_mColumns._colSelected] = 700;

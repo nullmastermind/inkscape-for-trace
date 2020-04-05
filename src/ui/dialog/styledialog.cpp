@@ -54,6 +54,63 @@ using Inkscape::XML::AttributeRecord;
     x.erase(x.find_last_not_of(' ') + 1);
 
 namespace Inkscape {
+
+/**
+ * Get the first <style> element's first text node. If no such node exists and
+ * `create_if_missing` is false, then return NULL.
+ *
+ * Only finds <style> elements in root or in root-level <defs>.
+ */
+XML::Node *get_first_style_text_node(XML::Node *root, bool create_if_missing)
+{
+    static GQuark const CODE_svg_style = g_quark_from_static_string("svg:style");
+    static GQuark const CODE_svg_defs = g_quark_from_static_string("svg:defs");
+
+    XML::Node *styleNode = nullptr;
+    XML::Node *textNode = nullptr;
+
+    for (auto *node = root->firstChild(); node; node = node->next()) {
+        if (node->code() == CODE_svg_defs) {
+            textNode = get_first_style_text_node(node, false);
+            if (textNode != nullptr) {
+                return textNode;
+            }
+        }
+
+        if (node->code() == CODE_svg_style) {
+            styleNode = node;
+            break;
+        }
+    }
+
+    if (styleNode == nullptr) {
+        if (!create_if_missing)
+            return nullptr;
+
+        styleNode = root->document()->createElement("svg:style");
+        root->addChild(styleNode, nullptr);
+        Inkscape::GC::release(styleNode);
+    }
+
+    for (auto *node = styleNode->firstChild(); node; node = node->next()) {
+        if (node->type() == XML::TEXT_NODE) {
+            textNode = node;
+            break;
+        }
+    }
+
+    if (textNode == nullptr) {
+        if (!create_if_missing)
+            return nullptr;
+
+        textNode = root->document()->createTextNode("");
+        styleNode->appendChild(textNode);
+        Inkscape::GC::release(textNode);
+    }
+
+    return textNode;
+}
+
 namespace UI {
 namespace Dialog {
 
@@ -88,9 +145,8 @@ void StyleDialog::NodeObserver::notifyContentChanged(Inkscape::XML::Node & /*nod
 // (Must update objects that selectors match.)
 class StyleDialog::NodeWatcher : public Inkscape::XML::NodeObserver {
   public:
-    NodeWatcher(StyleDialog *styledialog, Inkscape::XML::Node *repr)
+    NodeWatcher(StyleDialog *styledialog)
         : _styledialog(styledialog)
-        , _repr(repr)
     {
         g_debug("StyleDialog::NodeWatcher: Constructor");
     };
@@ -98,17 +154,13 @@ class StyleDialog::NodeWatcher : public Inkscape::XML::NodeObserver {
     void notifyChildAdded(Inkscape::XML::Node & /*node*/, Inkscape::XML::Node &child,
                           Inkscape::XML::Node * /*prev*/) override
     {
-        if (_styledialog && _repr) {
             _styledialog->_nodeAdded(child);
-        }
     }
 
     void notifyChildRemoved(Inkscape::XML::Node & /*node*/, Inkscape::XML::Node &child,
                             Inkscape::XML::Node * /*prev*/) override
     {
-        if (_styledialog && _repr) {
             _styledialog->_nodeRemoved(child);
-        }
     }
     /*     void notifyContentChanged(Inkscape::XML::Node &node,
                                           Inkscape::Util::ptr_shared old_content,
@@ -121,49 +173,29 @@ class StyleDialog::NodeWatcher : public Inkscape::XML::NodeObserver {
     void notifyAttributeChanged(Inkscape::XML::Node &node, GQuark qname, Util::ptr_shared /*old_value*/,
                                 Util::ptr_shared /*new_value*/) override
     {
-        if (_styledialog && _repr) {
+        static GQuark const CODE_id = g_quark_from_static_string("id");
+        static GQuark const CODE_class = g_quark_from_static_string("class");
+        static GQuark const CODE_style = g_quark_from_static_string("style");
 
-            // For the moment only care about attributes that are directly used in selectors.
-            const gchar *cname = g_quark_to_string(qname);
-            Glib::ustring name;
-            if (cname) {
-                name = cname;
-            }
-
-            if (name == "id" || name == "class" || name == "style") {
-                _styledialog->_nodeChanged(node);
-            }
+        if (qname == CODE_id || qname == CODE_class || qname == CODE_style) {
+            _styledialog->_nodeChanged(node);
         }
     }
 
     StyleDialog *_styledialog;
-    Inkscape::XML::Node *_repr; // Need to track if document changes.
 };
 
 void StyleDialog::_nodeAdded(Inkscape::XML::Node &node)
 {
-
-    g_debug("StyleDialog::_nodeAdded");
-
-    StyleDialog::NodeWatcher *w = new StyleDialog::NodeWatcher(this, &node);
-    node.addObserver(*w);
-    _nodeWatchers.push_back(w);
-
     readStyleElement();
 }
 
 void StyleDialog::_nodeRemoved(Inkscape::XML::Node &repr)
 {
-
-    g_debug("StyleDialog::_nodeRemoved");
-
-    for (auto it = _nodeWatchers.begin(); it != _nodeWatchers.end(); ++it) {
-        if ((*it)->_repr == &repr) {
-            (*it)->_repr->removeObserver(**it);
-            _nodeWatchers.erase(it);
-            break;
-        }
+    if (_textNode == &repr) {
+        _textNode = nullptr;
     }
+
     readStyleElement();
 }
 
@@ -194,6 +226,10 @@ StyleDialog::StyleDialog()
     , _deletion(false)
 {
     g_debug("StyleDialog::StyleDialog");
+
+    m_nodewatcher.reset(new StyleDialog::NodeWatcher(this));
+    m_styletextwatcher.reset(new StyleDialog::NodeObserver(this));
+
     // Pack widgets
     _mainBox.pack_start(_scrolledWindow, Gtk::PACK_EXPAND_WIDGET);
     _scrolledWindow.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
@@ -276,49 +312,22 @@ void StyleDialog::_reload() { readStyleElement(); }
  * Returns the style element's text node. If there is no style element, one is created.
  * Ditto for text node.
  */
-Inkscape::XML::Node *StyleDialog::_getStyleTextNode()
+Inkscape::XML::Node *StyleDialog::_getStyleTextNode(bool create_if_missing)
 {
     g_debug("StyleDialog::_getStyleTextNoded");
 
-    Inkscape::XML::Node *styleNode = nullptr;
-    Inkscape::XML::Node *textNode = nullptr;
-
-    Inkscape::XML::Node *root = SP_ACTIVE_DOCUMENT->getReprRoot();
-    for (unsigned i = 0; i < root->childCount(); ++i) {
-        if (Glib::ustring(root->nthChild(i)->name()) == "svg:style") {
-            styleNode = root->nthChild(i);
-            for (unsigned j = 0; j < styleNode->childCount(); ++j) {
-                if (styleNode->nthChild(j)->type() == Inkscape::XML::TEXT_NODE) {
-                    textNode = styleNode->nthChild(j);
-                }
-            }
-            if (textNode == nullptr) {
-                // Style element found but does not contain text node!
-                std::cerr << "StyleDialog::_getStyleTextNode(): No text node!" << std::endl;
-                textNode = SP_ACTIVE_DOCUMENT->getReprDoc()->createTextNode("");
-                styleNode->appendChild(textNode);
-                Inkscape::GC::release(textNode);
-            }
-            break;
-        }
-    }
-
-    if (styleNode == nullptr) {
-        // Style element not found, create one
-        styleNode = SP_ACTIVE_DOCUMENT->getReprDoc()->createElement("svg:style");
-        textNode = SP_ACTIVE_DOCUMENT->getReprDoc()->createTextNode("");
-
-        root->addChild(styleNode, nullptr);
-        Inkscape::GC::release(styleNode);
-
-        styleNode->appendChild(textNode);
-        Inkscape::GC::release(textNode);
-    }
+    auto textNode = Inkscape::get_first_style_text_node(m_root, create_if_missing);
 
     if (_textNode != textNode) {
+        if (_textNode) {
+            _textNode->removeObserver(*m_styletextwatcher);
+        }
+
         _textNode = textNode;
-        NodeObserver *no = new NodeObserver(this);
-        textNode->addObserver(*no);
+
+        if (_textNode) {
+            _textNode->addObserver(*m_styletextwatcher);
+        }
     }
 
     return textNode;
@@ -393,13 +402,10 @@ void StyleDialog::readStyleElement()
     _updating = true;
     _scroollock = true;
     Inkscape::XML::Node *textNode = _getStyleTextNode();
-    if (textNode == nullptr) {
-        std::cerr << "StyleDialog::readStyleElement: No text node!" << std::endl;
-    }
     SPDocument *document = SP_ACTIVE_DOCUMENT;
 
     // Get content from style text node.
-    std::string content = (textNode->content() ? textNode->content() : "");
+    std::string content = (textNode && textNode->content()) ? textNode->content() : "";
 
     // Remove end-of-lines (check it works on Windoze).
     content.erase(std::remove(content.begin(), content.end(), '\n'), content.end());
@@ -595,7 +601,7 @@ void StyleDialog::readStyleElement()
         if (obj) {
             bool stop = true;
             for (auto objel : objVec) {
-                if (objel->getId() == obj->getId()) {
+                if (objel == obj) {
                     stop = false;
                 }
             }
@@ -613,10 +619,8 @@ void StyleDialog::readStyleElement()
         if (!obj) {
             bool present = false;
             for (auto objv : objVec) {
-                Glib::ustring id = objv->getId();
                 for (auto objsel : selection->objects()) {
-                    Glib::ustring idsel = objsel->getId();
-                    if (idsel == id) {
+                    if (objv == objsel) {
                         present = true;
                         break;
                     }
@@ -1140,7 +1144,7 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
         }
         selectormatch = selectormatch + ")([^}]*?})((.|\n)*)";
 
-        Inkscape::XML::Node *textNode = _getStyleTextNode();
+        Inkscape::XML::Node *textNode = _getStyleTextNode(true);
         std::regex e(selectormatch.c_str());
         std::string content = (textNode->content() ? textNode->content() : "");
         std::string result;
@@ -1547,46 +1551,28 @@ bool StyleDialog::_onValueKeyReleased(GdkEventKey *event, Gtk::Entry *entry)
     return ret;
 }
 
-void StyleDialog::_addWatcherRecursive(Inkscape::XML::Node *node)
-{
-
-    g_debug("StyleDialog::_addWatcherRecursive()");
-
-    StyleDialog::NodeWatcher *w = new StyleDialog::NodeWatcher(this, node);
-    node->addObserver(*w);
-    _nodeWatchers.push_back(w);
-
-    for (unsigned i = 0; i < node->childCount(); ++i) {
-        _addWatcherRecursive(node->nthChild(i));
-    }
-}
-
 /**
  * Update the watchers on objects.
  */
-void StyleDialog::_updateWatchers()
+void StyleDialog::_updateWatchers(SPDesktop *desktop)
+
 {
     g_debug("StyleDialog::_updateWatchers");
 
-    _updating = true;
-
-    // Remove old document watchers
-    while (!_nodeWatchers.empty()) {
-        StyleDialog::NodeWatcher *w = _nodeWatchers.back();
-        w->_repr->removeObserver(*w);
-        _nodeWatchers.pop_back();
-        delete w;
+    if (_textNode) {
+        _textNode->removeObserver(*m_styletextwatcher);
+        _textNode = nullptr;
     }
 
-    if (getDesktop()) {
-        // Recursively add new watchers
-        Inkscape::XML::Node *root = SP_ACTIVE_DOCUMENT->getReprRoot();
-        _addWatcherRecursive(root);
+    if (m_root) {
+        m_root->removeSubtreeObserver(*m_nodewatcher);
+        m_root = nullptr;
     }
 
-    g_debug("StyleDialog::_updateWatchers(): %d", (int)_nodeWatchers.size());
-
-    _updating = false;
+    if (desktop) {
+        m_root = desktop->getDocument()->getReprRoot();
+        m_root->addSubtreeObserver(*m_nodewatcher);
+    }
 }
 
 
@@ -1599,18 +1585,9 @@ std::vector<SPObject *> StyleDialog::_getObjVec(Glib::ustring selector)
 {
     g_debug("StyleDialog::_getObjVec");
 
-    std::vector<Glib::ustring> selectordata = Glib::Regex::split_simple(";", selector);
-    if (!selectordata.empty()) {
-        selector = selectordata.back();
-    }
-    std::vector<SPObject *> objVec = SP_ACTIVE_DOCUMENT->getObjectsBySelector(selector);
+    g_assert(selector.find(";") == Glib::ustring::npos);
 
-    g_debug("StyleDialog::_getObjVec: | %s |", selector.c_str());
-    for (auto &obj : objVec) {
-        g_debug("  %s", obj->getId() ? obj->getId() : "null");
-    }
-
-    return objVec;
+    return getDesktop()->getDocument()->getObjectsBySelector(selector);
 }
 
 void StyleDialog::_closeDialog(Gtk::Dialog *textDialogPtr) { textDialogPtr->response(Gtk::RESPONSE_OK); }
@@ -1626,7 +1603,7 @@ void StyleDialog::_handleDocumentReplaced(SPDesktop *desktop, SPDocument * /* do
 
     _selection_changed_connection.disconnect();
 
-    _updateWatchers();
+    _updateWatchers(desktop);
 
     if (!desktop)
         return;

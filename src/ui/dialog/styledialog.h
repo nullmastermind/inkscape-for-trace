@@ -40,7 +40,13 @@
 
 #include "xml/helper-observer.h"
 
+#include <memory>
+#include <vector>
+
 namespace Inkscape {
+
+XML::Node *get_first_style_text_node(XML::Node *root, bool create_if_missing);
+
 namespace UI {
 namespace Dialog {
 
@@ -82,7 +88,6 @@ class StyleDialog : public Widget::Panel {
     class NodeWatcher;
     Glib::RefPtr<Glib::Regex> r_props = Glib::Regex::create("\\s*;\\s*");
     Glib::RefPtr<Glib::Regex> r_pair = Glib::Regex::create("\\s*:\\s*");
-    std::vector<StyleDialog::NodeWatcher *> _nodeWatchers;
     void _nodeAdded(Inkscape::XML::Node &repr);
     void _nodeRemoved(Inkscape::XML::Node &repr);
     void _nodeChanged(Inkscape::XML::Node &repr);
@@ -127,7 +132,7 @@ class StyleDialog : public Widget::Panel {
     Gtk::Box _mainBox;
     Gtk::Box _styleBox;
     // Reading and writing the style element.
-    Inkscape::XML::Node *_getStyleTextNode();
+    Inkscape::XML::Node *_getStyleTextNode(bool create_if_missing = false);
     Glib::RefPtr<Gtk::TreeModel> _selectTree(Glib::ustring selector);
     void _writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::ustring selector,
                             Glib::ustring new_selector = "");
@@ -160,8 +165,9 @@ class StyleDialog : public Widget::Panel {
     Glib::ustring _current_selector;
 
     // Update watchers
-    void _addWatcherRecursive(Inkscape::XML::Node *node);
-    void _updateWatchers();
+    std::unique_ptr<Inkscape::XML::NodeObserver> m_nodewatcher;
+    std::unique_ptr<Inkscape::XML::NodeObserver> m_styletextwatcher;
+    void _updateWatchers(SPDesktop *);
 
     // Manipulate Tree
     std::vector<SPObject *> _getObjVec(Glib::ustring selector);
@@ -169,6 +175,7 @@ class StyleDialog : public Widget::Panel {
     std::map<Glib::ustring, Glib::ustring> _owner_style;
     void _addOwnerStyle(Glib::ustring name, Glib::ustring selector);
     // Variables
+    Inkscape::XML::Node *m_root = nullptr;
     Inkscape::XML::Node *_textNode; // Track so we know when to add a NodeObserver.
     bool _updating;                 // Prevent cyclic actions: read <-> write, select via dialog <-> via desktop
 
