@@ -420,3 +420,23 @@ SPCanvas {
 #UnicodeIconView {
     font-size: 16px;
 }
+
+/* GtkTreeView: clarify drop locations (especially important for XML editor) */
+treeview.view:drop(active) {
+    border-style: solid;
+    border-width: 2px;
+}
+
+treeview.view:drop(active).after {
+    border-style: none none solid none;
+}
+
+treeview.view:drop(active).before {
+    border-style: solid none none none;
+}
+
+treeview.view:drop(active).after,
+treeview.view:drop(active).before {
+    border-width: 4px;
+    border-radius: 10px;
+}
