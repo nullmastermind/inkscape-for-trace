@@ -229,9 +229,21 @@ Gtk::PrintOperationResult Print::run(Gtk::PrintOperationAction, Gtk::Window &par
 {
     // Remember to restore the previous print settings
     _printop->set_print_settings(SP_ACTIVE_DESKTOP->printer_settings._gtk_print_settings);
-    _printop->run(Gtk::PRINT_OPERATION_ACTION_PRINT_DIALOG, parent_window);
-    SP_ACTIVE_DESKTOP->printer_settings._gtk_print_settings = _printop->get_print_settings();
-    return Gtk::PRINT_OPERATION_RESULT_APPLY;
+
+    try {
+        Gtk::PrintOperationResult res = _printop->run(Gtk::PRINT_OPERATION_ACTION_PRINT_DIALOG, parent_window);
+
+        // Save printer settings (but only on success)
+        if (res == Gtk::PRINT_OPERATION_RESULT_APPLY) {
+            SP_ACTIVE_DESKTOP->printer_settings._gtk_print_settings = _printop->get_print_settings();
+        }
+
+        return res;
+    } catch (const Glib::Error &e) {
+        g_warning("Failed to print '%s': %s", _doc->getDocumentName(), e.what().c_str());
+    }
+
+    return Gtk::PRINT_OPERATION_RESULT_ERROR;
 }
 
 
