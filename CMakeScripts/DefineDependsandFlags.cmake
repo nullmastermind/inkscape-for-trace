@@ -11,6 +11,12 @@ list(APPEND INKSCAPE_INCS ${PROJECT_SOURCE_DIR}
     ${CMAKE_BINARY_DIR}/include
 )
 
+# NDEBUG implies G_DISABLE_ASSERT
+string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE_UPPER)
+if(CMAKE_CXX_FLAGS_${CMAKE_BUILD_TYPE_UPPER} MATCHES "-DNDEBUG")
+    list(APPEND INKSCAPE_CXX_FLAGS "-DG_DISABLE_ASSERT")
+endif()
+
 # AddressSanitizer
 # Clang's AddressSanitizer can detect more memory errors and is more powerful
 # than compiling with _FORTIFY_SOURCE but has a performance impact (approx. 2x
