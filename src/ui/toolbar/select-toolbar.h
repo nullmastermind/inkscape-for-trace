@@ -46,6 +46,8 @@ private:
 
     std::vector<Gtk::ToolItem *> _context_items;
 
+    std::vector<sigc::connection> _connections;
+
     bool _update;
 
     void any_value_changed(Glib::RefPtr<Gtk::Adjustment>& adj);
@@ -60,6 +62,8 @@ private:
 
 protected:
     SelectToolbar(SPDesktop *desktop);
+
+    void on_unrealize() override;
 
 public:
     static GtkWidget * create(SPDesktop *desktop);

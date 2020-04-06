@@ -205,8 +205,10 @@ SelectToolbar::SelectToolbar(SPDesktop *desktop) :
     add(*_transform_pattern_btn);
 
     // Force update when selection changes.
-    INKSCAPE.signal_selection_modified.connect(sigc::mem_fun(*this, &SelectToolbar::on_inkscape_selection_modified));
-    INKSCAPE.signal_selection_changed.connect (sigc::mem_fun(*this, &SelectToolbar::on_inkscape_selection_changed));
+    _connections.emplace_back( //
+        INKSCAPE.signal_selection_modified.connect(sigc::mem_fun(*this, &SelectToolbar::on_inkscape_selection_modified)));
+    _connections.emplace_back(
+        INKSCAPE.signal_selection_changed.connect(sigc::mem_fun(*this, &SelectToolbar::on_inkscape_selection_changed)));
 
     // Update now.
     layout_widget_update(SP_ACTIVE_DESKTOP ? SP_ACTIVE_DESKTOP->getSelection() : nullptr);
@@ -218,6 +220,13 @@ SelectToolbar::SelectToolbar(SPDesktop *desktop) :
     }
 
     show_all();
+}
+
+void SelectToolbar::on_unrealize()
+{
+    for (auto &conn : _connections) {
+        conn.disconnect();
+    }
 }
 
 GtkWidget *
