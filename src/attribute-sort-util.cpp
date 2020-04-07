@@ -106,15 +106,14 @@ static void sp_attribute_sort_element(Node& repr) {
   }
   std::sort(my_list.begin(), my_list.end(), cmp);
   // Delete all attributes.
-  //for (auto it: my_list) {
-  for (auto & it : my_list) {
+  for (const auto& it : my_list) {
       // Removing "inkscape:label" results in crash when Layers dialog is open.
       if (it.first != "inkscape:label") {
           repr.removeAttribute(it.first);
       }
   }
   // Insert all attributes in proper order
-  for (auto & it : my_list) {
+  for (const auto& it : my_list) {
       if (it.first != "inkscape:label") {
           repr.setAttribute( it.first, it.second);
       }
@@ -160,12 +159,11 @@ static void sp_attribute_sort_style(Node& repr, SPCSSAttr& css) {
   }
   std::sort(my_list.begin(), my_list.end(), cmp);
   // Delete all attributes.
-  //for (auto it: my_list) {
-  for (auto & it : my_list) {
+  for (const auto& it : my_list) {
       sp_repr_css_set_property( &css, it.first.c_str(), nullptr );
   }
   // Insert all attributes in proper order
-  for (auto & it : my_list) {
+  for (const auto& it : my_list) {
       sp_repr_css_set_property( &css, it.first.c_str(), it.second.c_str() );
   } 
 }
