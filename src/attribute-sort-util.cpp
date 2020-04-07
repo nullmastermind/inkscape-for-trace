@@ -36,6 +36,11 @@ using Inkscape::XML::Node;
 using Inkscape::XML::AttributeRecord;
 using Inkscape::Util::List;
 
+static void sp_attribute_sort_recursive(Node *repr);
+static void sp_attribute_sort_element(Node *repr);
+static void sp_attribute_sort_style(Node *repr);
+static void sp_attribute_sort_style(Node *repr, SPCSSAttr *css);
+
 /**
  * Sort attributes by name.
  */
@@ -49,7 +54,7 @@ void sp_attribute_sort_tree(Node *repr) {
 /**
  * Sort recursively over all elements.
  */
-void sp_attribute_sort_recursive(Node *repr) {
+static void sp_attribute_sort_recursive(Node *repr) {
 
   g_return_if_fail (repr != nullptr);
 
@@ -70,8 +75,8 @@ void sp_attribute_sort_recursive(Node *repr) {
 /**
  * Compare function
  */
-bool cmp(std::pair< Glib::ustring, Glib::ustring > const &a,
-         std::pair< Glib::ustring, Glib::ustring > const &b) {
+static bool cmp(std::pair< Glib::ustring, Glib::ustring > const &a,
+                std::pair< Glib::ustring, Glib::ustring > const &b) {
     unsigned val_a = sp_attribute_lookup(a.first.c_str());
     unsigned val_b = sp_attribute_lookup(b.first.c_str());
     if (val_a == 0) return false; // Unknown attributes at end.
@@ -82,7 +87,7 @@ bool cmp(std::pair< Glib::ustring, Glib::ustring > const &a,
 /**
  * Sort attributes on an element
  */
-void sp_attribute_sort_element(Node *repr) {
+static void sp_attribute_sort_element(Node *repr) {
 
   g_return_if_fail (repr != nullptr);
   g_return_if_fail (repr->type() == Inkscape::XML::ELEMENT_NODE);
@@ -128,7 +133,7 @@ void sp_attribute_sort_element(Node *repr) {
 /**
  * Sort CSS style on an element.
  */
-void sp_attribute_sort_style(Node *repr) {
+static void sp_attribute_sort_style(Node *repr) {
 
   g_return_if_fail (repr != nullptr);
   g_return_if_fail (repr->type() == Inkscape::XML::ELEMENT_NODE);
@@ -150,7 +155,7 @@ void sp_attribute_sort_style(Node *repr) {
 /**
  * Sort CSS style on an element.
  */
-void sp_attribute_sort_style(Node* repr, SPCSSAttr *css) {
+static void sp_attribute_sort_style(Node* repr, SPCSSAttr *css) {
 
   g_return_if_fail (repr != nullptr);
   g_return_if_fail (css != nullptr);

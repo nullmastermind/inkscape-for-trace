@@ -26,27 +26,6 @@ using Inkscape::XML::Node;
  */
 void sp_attribute_sort_tree(Node *repr);
 
-/**
- * Recursively sort.
- * repr: the root node in a document or any other node.
- */
-void sp_attribute_sort_recursive(Node *repr);
-
-/**
- * Sort one element (attributes).
- */
-void sp_attribute_sort_element(Node *repr);
-
-/**
- * Sort style properties for one element.
- */
-void sp_attribute_sort_style(Node *repr);
-
-/**
- * Sort style properties for one CSS.
- */
-void sp_attribute_sort_style(Node* repr, SPCSSAttr *css);
-
 #endif /* __SP_ATTRIBUTE_SORT_UTIL_H__ */
 
 /*
