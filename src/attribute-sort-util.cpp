@@ -39,7 +39,7 @@ using Inkscape::Util::List;
 static void sp_attribute_sort_recursive(Node& repr);
 static void sp_attribute_sort_element(Node& repr);
 static void sp_attribute_sort_style(Node& repr);
-static void sp_attribute_sort_style(Node& repr, SPCSSAttr *css);
+static void sp_attribute_sort_style(Node& repr, SPCSSAttr& css);
 
 /**
  * Sort attributes by name.
@@ -134,7 +134,7 @@ static void sp_attribute_sort_style(Node& repr) {
 
   // Find element's style
   SPCSSAttr *css = sp_repr_css_attr( &repr, "style" );
-  sp_attribute_sort_style(repr, css);
+  sp_attribute_sort_style(repr, *css);
 
   // Convert css node's properties data to string and set repr node's attribute "style" to that string.
   // sp_repr_css_set( repr, css, "style"); // Don't use as it will cause loop.
@@ -149,16 +149,14 @@ static void sp_attribute_sort_style(Node& repr) {
 /**
  * Sort CSS style on an element.
  */
-static void sp_attribute_sort_style(Node& repr, SPCSSAttr *css) {
-
-  g_return_if_fail (css != nullptr);
+static void sp_attribute_sort_style(Node& repr, SPCSSAttr& css) {
 
   Glib::ustring element = repr.name();
   Glib::ustring id = (repr.attribute( "id" )==nullptr ? "" : repr.attribute( "id" ));
 
   // Loop over all properties in "style" node.
   std::vector<std::pair< Glib::ustring, Glib::ustring > > my_list;
-  for ( List<AttributeRecord const> iter = css->attributeList() ; iter ; ++iter ) {
+  for ( List<AttributeRecord const> iter = css.attributeList() ; iter ; ++iter ) {
 
     Glib::ustring property = g_quark_to_string(iter->key);
     Glib::ustring value = (const char*)iter->value;
@@ -170,11 +168,11 @@ static void sp_attribute_sort_style(Node& repr, SPCSSAttr *css) {
   // Delete all attributes.
   //for (auto it: my_list) {
   for (auto & it : my_list) {
-      sp_repr_css_set_property( css, it.first.c_str(), nullptr );
+      sp_repr_css_set_property( &css, it.first.c_str(), nullptr );
   }
   // Insert all attributes in proper order
   for (auto & it : my_list) {
-      sp_repr_css_set_property( css, it.first.c_str(), it.second.c_str() );
+      sp_repr_css_set_property( &css, it.first.c_str(), it.second.c_str() );
   } 
 }
 
