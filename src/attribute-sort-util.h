@@ -43,11 +43,6 @@ void sp_attribute_sort_element(Node *repr);
 void sp_attribute_sort_style(Node *repr);
 
 /**
- * Sort style_property for a style string
- */
-Glib::ustring sp_attribute_sort_style(Node *repr, gchar const *string);
-
-/**
  * Sort style properties for one CSS.
  */
 void sp_attribute_sort_style(Node* repr, SPCSSAttr *css);

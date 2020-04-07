@@ -150,26 +150,6 @@ void sp_attribute_sort_style(Node *repr) {
 /**
  * Sort CSS style on an element.
  */
-Glib::ustring sp_attribute_sort_style(Node *repr, gchar const *string) {
-
-  g_return_val_if_fail (repr != nullptr, NULL);
-  g_return_val_if_fail (repr->type() == Inkscape::XML::ELEMENT_NODE, NULL);
-
-  SPCSSAttr *css = sp_repr_css_attr_new();
-  sp_repr_css_attr_add_from_string( css, string );
-  sp_attribute_sort_style(repr, css);
-  Glib::ustring string_cleaned;
-  sp_repr_css_write_string (css, string_cleaned);
-
-  sp_repr_css_attr_unref( css );
-
-  return string_cleaned;
-}
-
-
-/**
- * Sort CSS style on an element.
- */
 void sp_attribute_sort_style(Node* repr, SPCSSAttr *css) {
 
   g_return_if_fail (repr != nullptr);
