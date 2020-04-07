@@ -3,7 +3,7 @@
 #
 # This file is part of the build pipeline for Inkscape on macOS.
 #
-# ### 120-python3.sh ###
+# ### 120-jhbuild-python3.sh ###
 # Install a dedicated Python 3 for JHBuild because it fails to install
 # a working Python by itself.
 
@@ -16,16 +16,6 @@ run_annotated
 
 ### install Python 3 ###########################################################
 
-get_source $URL_PYTHON36_BIN $WRK_DIR
-get_source $URL_PYTHON36_SRC   # we only need 310-package-fixed.sh
-
-sed -i "" "/^WRK_DIR/s/.*/WRK_DIR=$(escape_sed $WRK_DIR)/" 020-vars.sh
-sed -i "" '/^FRA_DIR/s/.*/FRA_DIR=$WRK_DIR/' 020-vars.sh
-
-# Using the relocatable version of the framework as starting point,
-# we're going to turn the link paths into fixed (non-relocatable) ones.
-grep -v "cp " 310-package-fixed.sh > 311-package-fixed-nocp.sh
-chmod 755 311-package-fixed-nocp.sh
-./311-package-fixed-nocp.sh
+install_source $URL_PYTHON_JHBUILD $WRK_DIR
 
 ln -sf $WRK_DIR/Python.framework/Versions/Current/bin/python3 $BIN_DIR

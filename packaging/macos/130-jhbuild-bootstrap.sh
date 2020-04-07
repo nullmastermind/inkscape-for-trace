@@ -16,7 +16,7 @@ for script in $SELF_DIR/0??-*.sh; do source $script; done
 export PYTHONUSERBASE=$DEVPREFIX
 export PIP_CONFIG_DIR=$DEVROOT/pip
 
-#run_annotated   disabled for now, breaks jhbuild interactive mode
+run_annotated
 
 ### install and configure jhbuild ##############################################
 

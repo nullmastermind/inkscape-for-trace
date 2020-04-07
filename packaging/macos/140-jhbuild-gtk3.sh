@@ -11,7 +11,7 @@
 SELF_DIR=$(F=$0; while [ ! -z $(readlink $F) ] && F=$(readlink $F); cd $(dirname $F); F=$(basename $F); [ -L $F ]; do :; done; echo $(pwd -P))
 for script in $SELF_DIR/0??-*.sh; do source $script; done
 
-#run_annotated   disabled for now, breaks jhbuild interactive mode
+run_annotated
 
 ### install prerequisites ######################################################
 
@@ -34,4 +34,3 @@ jhbuild build \
   meta-gtk-osx-freetype \
   meta-gtk-osx-gtk3 \
   meta-gtk-osx-gtkmm3
-

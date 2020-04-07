@@ -18,7 +18,7 @@
 function get_repo_version
 {
   local repo=$1
-  # do it the same way as in CMakeScripts/inkscape-verson.cmake
+  # do it the same way as in CMakeScripts/inkscape-version.cmake
   echo $(git -C $repo rev-parse --short HEAD)
 }
 
@@ -56,7 +56,7 @@ function get_comp_flag
 
 ### download and extract source tarball ########################################
 
-function get_source
+function install_source
 {
   local url=$1
   local target_dir=$2   # optional: target directory, defaults to $SRC_DIR
@@ -72,7 +72,7 @@ function get_source
   # This downloads a file and pipes it directly into tar (file is not saved
   # to disk) to extract it. Output from stderr is saved temporarily to
   # determine the directory the files have been extracted to.
-  curl -L $url | tar xv$(get_comp_flag $url) $options 2>$log
+  curl -L $(preferCachedUrl $url) | tar xv$(get_comp_flag $url) $options 2>$log
   cd $(head -1 $log | awk '{ print $2 }')
   [ $? -eq 0 ] && rm $log || echo "$FUNCNAME: check $log"
 }
@@ -256,10 +256,10 @@ function readlinkf
 
 function run_annotated
 {
-  sed 's/\(^### .* ###\).*/echo \-e "\\033[1;44m\\033[1;37m['$SELF_NAME':$(printf '%03d' $LINENO)] \1\\033[0m"/g' $SELF_DIR/$SELF_NAME |
-    sed 's/^run_annotated/#run_annotated/' |
-    sed 's/^SELF_DIR=.*/SELF_DIR='$(escape_sed $SELF_DIR)'/' |
-    bash
+  source /dev/stdin <<EOF
+$(sed 's/\(^### .* ###\).*/echo \-e "\\033[1;44m\\033[1;37m['$SELF_NAME':$(printf '%03d' $LINENO)] \1\\033[0m"/g' $SELF_DIR/$SELF_NAME |
+   sed 's/^run_annotated/#run_annotated/')
+EOF
 
   exit $?
 }
@@ -372,4 +372,33 @@ function create_dmg_device
       grep "Apple_HFS" | awk '{ print $1 }')
 
   echo $device
+}
+
+### replace URL ################################################################
+
+function preferCachedUrl
+{
+  local url=$1
+
+  # This is a placeholder function you can use to replace URLs with locally
+  # mirrored ones.
+
+  echo $url
+}
+
+### install Python package with Python.framework ###############################
+
+function pip_install
+{
+  local package=$1
+
+  local PATH_ORIGINAL=$PATH
+  export PATH=$APP_FRA_DIR/Python.framework/Versions/Current/bin:$PATH
+  
+  pip$PY3_MAJOR install \
+    --install-option="--prefix=$APP_RES_DIR" \
+    --ignore-installed \
+    $package
+  
+  export PATH=$PATH_ORIGINAL
 }

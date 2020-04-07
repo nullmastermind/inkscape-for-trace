@@ -33,6 +33,10 @@ fi
 
 [ ! -d $TMP_DIR ] && mkdir -p $TMP_DIR || true
 
+### create binary directory #################################################
+
+[ ! -d $BIN_DIR ] && mkdir -p $BIN_DIR || true
+
 ### create toolset repository directory ########################################
 
 [ ! -d $TOOLSET_REPO_DIR ] && mkdir -p $TOOLSET_REPO_DIR || true
