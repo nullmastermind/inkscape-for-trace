@@ -871,7 +871,7 @@ static void sp_repr_write_stream_root_element(Node *repr, Writer &out,
 
     // Sort attributes in a canonical order (helps with "diffing" SVG files).only if not set disable optimizations
     bool sort = !prefs->getBool("/options/svgoutput/disable_optimizations") && prefs->getBool("/options/svgoutput/sort_attributes");
-    if (sort) sp_attribute_sort_tree( repr );
+    if (sort) sp_attribute_sort_tree( *repr );
 
     Glib::QueryQuark xml_prefix=g_quark_from_static_string("xml");
 

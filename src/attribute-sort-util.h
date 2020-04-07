@@ -22,9 +22,9 @@ using Inkscape::XML::Node;
  */
 
 /**
- * Sort attributes by name.
+ * Sort attributes and CSS properties by name.
  */
-void sp_attribute_sort_tree(Node *repr);
+void sp_attribute_sort_tree(Node& repr);
 
 #endif /* __SP_ATTRIBUTE_SORT_UTIL_H__ */
 

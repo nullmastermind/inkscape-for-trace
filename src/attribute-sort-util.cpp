@@ -36,17 +36,15 @@ using Inkscape::XML::Node;
 using Inkscape::XML::AttributeRecord;
 using Inkscape::Util::List;
 
-static void sp_attribute_sort_recursive(Node *repr);
-static void sp_attribute_sort_element(Node *repr);
-static void sp_attribute_sort_style(Node *repr);
-static void sp_attribute_sort_style(Node *repr, SPCSSAttr *css);
+static void sp_attribute_sort_recursive(Node& repr);
+static void sp_attribute_sort_element(Node& repr);
+static void sp_attribute_sort_style(Node& repr);
+static void sp_attribute_sort_style(Node& repr, SPCSSAttr *css);
 
 /**
  * Sort attributes by name.
  */
-void sp_attribute_sort_tree(Node *repr) {
-
-  g_return_if_fail (repr != nullptr);
+void sp_attribute_sort_tree(Node& repr) {
 
   sp_attribute_sort_recursive( repr );
 }
@@ -54,12 +52,10 @@ void sp_attribute_sort_tree(Node *repr) {
 /**
  * Sort recursively over all elements.
  */
-static void sp_attribute_sort_recursive(Node *repr) {
+static void sp_attribute_sort_recursive(Node& repr) {
 
-  g_return_if_fail (repr != nullptr);
-
-  if( repr->type() == Inkscape::XML::ELEMENT_NODE ) {
-    Glib::ustring element = repr->name();
+  if( repr.type() == Inkscape::XML::ELEMENT_NODE ) {
+    Glib::ustring element = repr.name();
 
     // Only sort elements in svg namespace
     if( element.substr(0,4) == "svg:" ) {
@@ -67,8 +63,8 @@ static void sp_attribute_sort_recursive(Node *repr) {
     }
   }
   
-  for(Node *child=repr->firstChild() ; child ; child = child->next()) {
-    sp_attribute_sort_recursive( child );
+  for(Node *child=repr.firstChild() ; child ; child = child->next()) {
+    sp_attribute_sort_recursive( *child );
   }
 }
 
@@ -87,13 +83,12 @@ static bool cmp(std::pair< Glib::ustring, Glib::ustring > const &a,
 /**
  * Sort attributes on an element
  */
-static void sp_attribute_sort_element(Node *repr) {
+static void sp_attribute_sort_element(Node& repr) {
 
-  g_return_if_fail (repr != nullptr);
-  g_return_if_fail (repr->type() == Inkscape::XML::ELEMENT_NODE);
+  g_return_if_fail (repr.type() == Inkscape::XML::ELEMENT_NODE);
 
-  // Glib::ustring element = repr->name();
-  // Glib::ustring id = (repr->attribute( "id" )==NULL ? "" : repr->attribute( "id" ));
+  // Glib::ustring element = repr.name();
+  // Glib::ustring id = (repr.attribute( "id" )==NULL ? "" : repr.attribute( "id" ));
 
   sp_attribute_sort_style(repr);
 
@@ -101,7 +96,7 @@ static void sp_attribute_sort_element(Node *repr) {
 
   // It doesn't seem possible to sort a List directly so we dump the list into
   // a std::list and sort that. Not very efficient. Sad.
-  List<AttributeRecord const> attributes = repr->attributeList();
+  List<AttributeRecord const> attributes = repr.attributeList();
 
   std::vector<std::pair< Glib::ustring, Glib::ustring > > my_list;
   for ( List<AttributeRecord const> iter = attributes ; iter ; ++iter ) {
@@ -118,13 +113,13 @@ static void sp_attribute_sort_element(Node *repr) {
   for (auto & it : my_list) {
       // Removing "inkscape:label" results in crash when Layers dialog is open.
       if (it.first != "inkscape:label") {
-          repr->removeAttribute(it.first);
+          repr.removeAttribute(it.first);
       }
   }
   // Insert all attributes in proper order
   for (auto & it : my_list) {
       if (it.first != "inkscape:label") {
-          repr->setAttribute( it.first, it.second);
+          repr.setAttribute( it.first, it.second);
       }
   } 
 }
@@ -133,20 +128,19 @@ static void sp_attribute_sort_element(Node *repr) {
 /**
  * Sort CSS style on an element.
  */
-static void sp_attribute_sort_style(Node *repr) {
+static void sp_attribute_sort_style(Node& repr) {
 
-  g_return_if_fail (repr != nullptr);
-  g_return_if_fail (repr->type() == Inkscape::XML::ELEMENT_NODE);
+  g_return_if_fail (repr.type() == Inkscape::XML::ELEMENT_NODE);
 
   // Find element's style
-  SPCSSAttr *css = sp_repr_css_attr( repr, "style" );
+  SPCSSAttr *css = sp_repr_css_attr( &repr, "style" );
   sp_attribute_sort_style(repr, css);
 
   // Convert css node's properties data to string and set repr node's attribute "style" to that string.
   // sp_repr_css_set( repr, css, "style"); // Don't use as it will cause loop.
   Glib::ustring value;
   sp_repr_css_write_string(css, value);
-  repr->setAttributeOrRemoveIfEmpty("style", value);
+  repr.setAttributeOrRemoveIfEmpty("style", value);
 
   sp_repr_css_attr_unref( css );
 }
@@ -155,13 +149,12 @@ static void sp_attribute_sort_style(Node *repr) {
 /**
  * Sort CSS style on an element.
  */
-static void sp_attribute_sort_style(Node* repr, SPCSSAttr *css) {
+static void sp_attribute_sort_style(Node& repr, SPCSSAttr *css) {
 
-  g_return_if_fail (repr != nullptr);
   g_return_if_fail (css != nullptr);
 
-  Glib::ustring element = repr->name();
-  Glib::ustring id = (repr->attribute( "id" )==nullptr ? "" : repr->attribute( "id" ));
+  Glib::ustring element = repr.name();
+  Glib::ustring id = (repr.attribute( "id" )==nullptr ? "" : repr.attribute( "id" ));
 
   // Loop over all properties in "style" node.
   std::vector<std::pair< Glib::ustring, Glib::ustring > > my_list;
