@@ -87,9 +87,6 @@ static void sp_attribute_sort_element(Node& repr) {
 
   g_return_if_fail (repr.type() == Inkscape::XML::ELEMENT_NODE);
 
-  // Glib::ustring element = repr.name();
-  // Glib::ustring id = (repr.attribute( "id" )==NULL ? "" : repr.attribute( "id" ));
-
   sp_attribute_sort_style(repr);
 
   // Sort attributes:
@@ -150,9 +147,6 @@ static void sp_attribute_sort_style(Node& repr) {
  * Sort CSS style on an element.
  */
 static void sp_attribute_sort_style(Node& repr, SPCSSAttr& css) {
-
-  Glib::ustring element = repr.name();
-  Glib::ustring id = (repr.attribute( "id" )==nullptr ? "" : repr.attribute( "id" ));
 
   // Loop over all properties in "style" node.
   std::vector<std::pair< Glib::ustring, Glib::ustring > > my_list;
