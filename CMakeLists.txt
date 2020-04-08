@@ -205,7 +205,10 @@ add_custom_target(clean-all
 # Install Target
 # -----------------------------------------------------------------------------
 add_subdirectory(share)
-include(CMakeScripts/Install.cmake)
+
+if(WIN32)
+  include(CMakeScripts/InstallMSYS2.cmake)
+endif()
 
 # -----------------------------------------------------------------------------
 # Uninstall Target

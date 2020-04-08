@@ -29,3 +29,87 @@ if(WIN32)
      execute_process(COMMAND \${CMAKE_INSTALL_PREFIX}/bin/python -m compileall -qq \${CMAKE_INSTALL_PREFIX}/${INKSCAPE_SHARE_INSTALL})"
     COMPONENT extensions)
 endif()
+
+
+
+
+# appdata and desktop files
+if(UNIX)
+  if (ENABLE_BINRELOC)
+    set(INKSCAPE_ICONPATH "\${SNAP}/share/inkscape/branding/inkscape.svg")
+  else()
+    set(INKSCAPE_ICONPATH "org.inkscape.Inkscape")
+  endif()
+  set(INKSCAPE_MIMETYPE
+	  "image/svg+xml"
+	  "image/svg+xml-compressed"
+	  "application/vnd.corel-draw"
+	  "application/pdf"
+	  "application/postscript"
+	  "image/x-eps"
+	  "application/illustrator"
+	  "image/cgm"
+	  "image/x-wmf"
+	  "application/x-xccx"
+	  "application/x-xcgm"
+	  "application/x-xcdt"
+	  "application/x-xsk1"
+	  "application/x-xcmx"
+	  "image/x-xcdr"
+	  "application/visio"
+	  "application/x-visio"
+	  "application/vnd.visio"
+	  "application/visio.drawing"
+	  "application/vsd"
+	  "application/x-vsd"
+	  "image/x-vsd"
+	  ""
+  )
+
+  configure_file(${CMAKE_SOURCE_DIR}/org.inkscape.Inkscape.desktop.template
+    ${CMAKE_BINARY_DIR}/org.inkscape.Inkscape.desktop.in)
+
+  if(ENABLE_NLS)
+  add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/org.inkscape.Inkscape.desktop
+    DEPENDS ${LANGUAGES}
+    COMMAND ${GETTEXT_MSGFMT_EXECUTABLE}
+    --desktop
+    --template ${CMAKE_BINARY_DIR}/org.inkscape.Inkscape.desktop.in
+    -d ${CMAKE_SOURCE_DIR}/po
+    -o ${CMAKE_BINARY_DIR}/org.inkscape.Inkscape.desktop
+    --keyword=Name
+    --keyword=GenericName
+    --keyword=X-GNOME-FullName
+    --keyword=Comment
+    --keyword=Keywords
+    )
+  add_custom_target(inkscape_desktop ALL DEPENDS ${CMAKE_BINARY_DIR}/org.inkscape.Inkscape.desktop)
+
+  add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/org.inkscape.Inkscape.appdata.xml
+    DEPENDS ${LANGUAGES}
+    COMMAND ${GETTEXT_MSGFMT_EXECUTABLE}
+    --xml
+    --template ${CMAKE_SOURCE_DIR}/org.inkscape.Inkscape.appdata.xml.in
+    -d ${CMAKE_SOURCE_DIR}/po -o ${CMAKE_BINARY_DIR}/org.inkscape.Inkscape.appdata.xml
+    )
+  add_custom_target(inkscape_appdata ALL DEPENDS ${CMAKE_BINARY_DIR}/org.inkscape.Inkscape.appdata.xml)
+  else()
+    configure_file(${CMAKE_SOURCE_DIR}/org.inkscape.Inkscape.appdata.xml.in ${CMAKE_BINARY_DIR}/org.inkscape.Inkscape.appdata.xml COPYONLY)
+    configure_file(${CMAKE_BINARY_DIR}/org.inkscape.Inkscape.desktop.in
+      ${CMAKE_BINARY_DIR}/org.inkscape.Inkscape.desktop COPYONLY)
+  endif()
+
+
+  install(FILES ${CMAKE_BINARY_DIR}/org.inkscape.Inkscape.desktop
+    DESTINATION ${SHARE_INSTALL}/applications)
+  install(FILES ${CMAKE_BINARY_DIR}/org.inkscape.Inkscape.appdata.xml
+    DESTINATION ${SHARE_INSTALL}/metainfo)
+  install(FILES
+    ../AUTHORS
+    ../TRANSLATORS
+    ../COPYING
+    DESTINATION ${INKSCAPE_SHARE_INSTALL}/doc)
+
+endif()
+
+
