@@ -10,18 +10,21 @@
 #ifndef INKSCAPE_SEEN_UI_DIALOG_SAVE_TEMPLATE_H
 #define INKSCAPE_SEEN_UI_DIALOG_SAVE_TEMPLATE_H
 
-#include <gtkmm/dialog.h>
-#include <gtkmm/entry.h>
-#include <gtkmm/box.h>
-#include <gtkmm/grid.h>
-#include <gtkmm/label.h>
-#include <gtkmm/checkbutton.h>
+#include <glibmm/refptr.h>
+
+namespace Gtk {
+class Builder;
+class CheckButton;
+class Dialog;
+class Entry;
+class Window;
+}
 
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
-class SaveTemplate : public Gtk::Dialog
+class SaveTemplate
 {
 
 public:
@@ -34,24 +37,17 @@ protected:
 
 private:
 
-    Gtk::Grid grid;
+    Gtk::Dialog *dialog;
 
-    Gtk::Label name_label;
-    Gtk::Entry name_text;
+    Gtk::Entry *name;
+    Gtk::Entry *author;
+    Gtk::Entry *description;
+    Gtk::Entry *keywords;
 
-    Gtk::Label author_label;
-    Gtk::Entry author_text;
+    Gtk::CheckButton *set_default_template;
 
-    Gtk::Label description_label;
-    Gtk::Entry description_text;
-
-    Gtk::Label keywords_label;
-    Gtk::Entry keywords_text;
-
-    Gtk::CheckButton is_default_template;
-
-    SaveTemplate();
-    bool save_template(Gtk::Window &parentWindow);
+    SaveTemplate(Gtk::Window &parent);
+    void save_template(Gtk::Window &parent);
 
 };
 }

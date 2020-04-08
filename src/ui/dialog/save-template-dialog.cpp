@@ -13,87 +13,72 @@
 #include "io/resource.h"
 
 #include <glibmm/i18n.h>
+#include <gtkmm/builder.h>
+#include <gtkmm/checkbutton.h>
+#include <gtkmm/dialog.h>
+#include <gtkmm/entry.h>
+#include <gtkmm/window.h>
 
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
-SaveTemplate::SaveTemplate() :
-    Gtk::Dialog(_("Save Document as Template")),
-    name_label(_("Name: "), Gtk::ALIGN_START),
-    author_label(_("Author: "), Gtk::ALIGN_START),
-    description_label(_("Description: "), Gtk::ALIGN_START),
-    keywords_label(_("Keywords: "), Gtk::ALIGN_START),
-    is_default_template(_("Set as default template"))
-{
-    resize(400, 200);
+SaveTemplate::SaveTemplate(Gtk::Window &parent) {
 
-    name_text.set_hexpand(true);
+    std::string gladefile = get_filename_string(Inkscape::IO::Resource::UIS, "dialog-save-template.glade");
+    Glib::RefPtr<Gtk::Builder> builder;
+    try {
+        builder = Gtk::Builder::create_from_file(gladefile);
+    } catch (const Glib::Error &ex) {
+        g_warning("GtkBuilder file loading failed for save template dialog");
+        return;
+    }
 
-    grid.attach(name_label, 0, 0, 1, 1);
-    grid.attach(name_text, 1, 0, 1, 1);
+    builder->get_widget("dialog", dialog);
+    builder->get_widget("name", name);
+    builder->get_widget("author", author);
+    builder->get_widget("description", description);
+    builder->get_widget("keywords", keywords);
+    builder->get_widget("set-default", set_default_template);
 
-    grid.attach(author_label, 0, 1, 1, 1);
-    grid.attach(author_text, 1, 1, 1, 1);
+    name->signal_changed().connect(sigc::mem_fun(*this, &SaveTemplate::on_name_changed));
 
-    grid.attach(description_label, 0, 2, 1, 1);
-    grid.attach(description_text, 1, 2, 1, 1);
+    dialog->add_button(_("Cancel"), Gtk::RESPONSE_CANCEL);
+    dialog->add_button(_("Save"), Gtk::RESPONSE_OK);
 
-    grid.attach(keywords_label, 0, 3, 1, 1);
-    grid.attach(keywords_text, 1, 3, 1, 1);
+    dialog->set_response_sensitive(Gtk::RESPONSE_OK, false);
+    dialog->set_default_response(Gtk::RESPONSE_CANCEL);
 
-    auto content_area = get_content_area();
-
-    content_area->set_spacing(5);
-
-    content_area->add(grid);
-    content_area->add(is_default_template);
-
-    name_text.signal_changed().connect( sigc::mem_fun(*this,
-              &SaveTemplate::on_name_changed) );
-
-    add_button("Cancel", Gtk::RESPONSE_CANCEL);
-    add_button("Save", Gtk::RESPONSE_OK);
-
-    set_response_sensitive(Gtk::RESPONSE_OK, false);
-    set_default_response(Gtk::RESPONSE_CANCEL);
-
-    show_all();
+    dialog->set_transient_for(parent);
+    dialog->show_all();
 }
 
 void SaveTemplate::on_name_changed() {
 
-    if (name_text.get_text_length() == 0) {
-
-        set_response_sensitive(Gtk::RESPONSE_OK, false);
-    } else {
-
-        set_response_sensitive(Gtk::RESPONSE_OK, true);
-    }
+    bool has_text = name->get_text_length() != 0;
+    dialog->set_response_sensitive(Gtk::RESPONSE_OK, has_text);
 }
 
-bool SaveTemplate::save_template(Gtk::Window &parentWindow) {
+void SaveTemplate::save_template(Gtk::Window &parent) {
 
-    return sp_file_save_template(parentWindow, name_text.get_text(),
-        author_text.get_text(), description_text.get_text(),
-        keywords_text.get_text(), is_default_template.get_active());
+    sp_file_save_template(parent, name->get_text(), author->get_text(), description->get_text(),
+        keywords->get_text(), set_default_template->get_active());
 }
 
-void SaveTemplate::save_document_as_template(Gtk::Window &parentWindow) {
+void SaveTemplate::save_document_as_template(Gtk::Window &parent) {
 
-    SaveTemplate dialog;
+    SaveTemplate dialog(parent);
+    int response = dialog.dialog->run();
 
-    auto operation_done = false;
-
-    while (operation_done == false) {
-
-        auto user_response = dialog.run();
-
-        if (user_response == Gtk::RESPONSE_OK)
-            operation_done = dialog.save_template(parentWindow);
-         else
-            operation_done = true;
+    switch (response) {
+    case Gtk::RESPONSE_OK:
+        dialog.save_template(parent);
+        break;
+    default:
+        break;
     }
+
+    dialog.dialog->close();
 }
 
 }
