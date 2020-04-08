@@ -406,27 +406,27 @@ add_cli_test(inkscape_profile_dir_handle_illegal
                                    INPUT_FILENAME empty.svg OUTPUT_FILENAME empty.svg)
 
 # check if "systemLanguage" attribute is properly handled
-add_cli_test(systemLanguage_en     ENVIRONMENT LANG=en           INPUT_FILENAME     systemLanguage.svg
-                                                                 OUTPUT_FILENAME    systemLanguage_en.png
-                                                                 REFERENCE_FILENAME systemLanguage_en.png)
-add_cli_test(systemLanguage_fr     ENVIRONMENT LANG=fr_FR        INPUT_FILENAME     systemLanguage.svg
-                                                                 OUTPUT_FILENAME    systemLanguage_fr.png
-                                                                 REFERENCE_FILENAME systemLanguage_fr.png)
-add_cli_test(systemLanguage_fr2    ENVIRONMENT LANG=fr_FR.UTF-8  INPUT_FILENAME     systemLanguage.svg
-                                                                 OUTPUT_FILENAME    systemLanguage_fr2.png
-                                                                 REFERENCE_FILENAME systemLanguage_fr.png)
-add_cli_test(systemLanguage_de     ENVIRONMENT LANG=de           INPUT_FILENAME     systemLanguage.svg
-                                                                 OUTPUT_FILENAME    systemLanguage_de.png
-                                                                 REFERENCE_FILENAME systemLanguage_de.png)
-add_cli_test(systemLanguage_de-CH  ENVIRONMENT LANG=de_CH        INPUT_FILENAME     systemLanguage.svg
-                                                                 OUTPUT_FILENAME    systemLanguage_de-CH.png
-                                                                 REFERENCE_FILENAME systemLanguage_de.png)
-add_cli_test(systemLanguage_pt     ENVIRONMENT LANG=pt           INPUT_FILENAME     systemLanguage.svg
-                                                                 OUTPUT_FILENAME    systemLanguage_pt.png
-                                                                 REFERENCE_FILENAME systemLanguage_pt.png)
-add_cli_test(systemLanguage_xy     ENVIRONMENT LANG=xy           INPUT_FILENAME     systemLanguage.svg
-                                                                 OUTPUT_FILENAME    systemLanguage_xy.png
-                                                                 REFERENCE_FILENAME systemLanguage_default.png)
-add_cli_test(systemLanguage_fr_RDF ENVIRONMENT LANG=xy           INPUT_FILENAME     systemLanguage_RDF.svg
-                                                                 OUTPUT_FILENAME    systemLanguage_fr_RDF.png
-                                                                 REFERENCE_FILENAME systemLanguage_fr.png)
+add_cli_test(systemLanguage_en     ENVIRONMENT LANGUAGE=en          INPUT_FILENAME     systemLanguage.svg
+                                                                    OUTPUT_FILENAME    systemLanguage_en.png
+                                                                    REFERENCE_FILENAME systemLanguage_en.png)
+add_cli_test(systemLanguage_fr     ENVIRONMENT LANGUAGE=fr_FR       INPUT_FILENAME     systemLanguage.svg
+                                                                    OUTPUT_FILENAME    systemLanguage_fr.png
+                                                                    REFERENCE_FILENAME systemLanguage_fr.png)
+add_cli_test(systemLanguage_fr2    ENVIRONMENT LANGUAGE=fr_FR.UTF-8 INPUT_FILENAME     systemLanguage.svg
+                                                                    OUTPUT_FILENAME    systemLanguage_fr2.png
+                                                                    REFERENCE_FILENAME systemLanguage_fr.png)
+add_cli_test(systemLanguage_de     ENVIRONMENT LANGUAGE=de          INPUT_FILENAME     systemLanguage.svg
+                                                                    OUTPUT_FILENAME    systemLanguage_de.png
+                                                                    REFERENCE_FILENAME systemLanguage_de.png)
+add_cli_test(systemLanguage_de-CH  ENVIRONMENT LANGUAGE=de_CH       INPUT_FILENAME     systemLanguage.svg
+                                                                    OUTPUT_FILENAME    systemLanguage_de-CH.png
+                                                                    REFERENCE_FILENAME systemLanguage_de.png)
+add_cli_test(systemLanguage_pt     ENVIRONMENT LANGUAGE=pt          INPUT_FILENAME     systemLanguage.svg
+                                                                    OUTPUT_FILENAME    systemLanguage_pt.png
+                                                                    REFERENCE_FILENAME systemLanguage_pt.png)
+add_cli_test(systemLanguage_xy     ENVIRONMENT LANGUAGE=xy          INPUT_FILENAME     systemLanguage.svg
+                                                                    OUTPUT_FILENAME    systemLanguage_xy.png
+                                                                    REFERENCE_FILENAME systemLanguage_default.png)
+add_cli_test(systemLanguage_fr_RDF ENVIRONMENT LANGUAGE=xy          INPUT_FILENAME     systemLanguage_RDF.svg
+                                                                    OUTPUT_FILENAME    systemLanguage_fr_RDF.png
+                                                                    REFERENCE_FILENAME systemLanguage_fr.png)
