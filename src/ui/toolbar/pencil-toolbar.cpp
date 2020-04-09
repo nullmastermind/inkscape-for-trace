@@ -116,7 +116,7 @@ PencilToolbar::PencilToolbar(SPDesktop *desktop,
         }
         /* min pressure */
         {
-            auto minpressure_val = prefs->getDouble("/tools/freehand/pencil/minpressure", 10);
+            auto minpressure_val = prefs->getDouble("/tools/freehand/pencil/minpressure", 0);
             _minpressure_adj = Gtk::Adjustment::create(minpressure_val, 0, 100, 1, 0);
             _minpressure =
                 Gtk::manage(new UI::Widget::SpinButtonToolItem("pencil-minpressure", _("Min:"), _minpressure_adj, 0, 0));
@@ -128,7 +128,7 @@ PencilToolbar::PencilToolbar(SPDesktop *desktop,
         }
         /* max pressure */
         {
-            auto maxpressure_val = prefs->getDouble("/tools/freehand/pencil/maxpressure", 40);
+            auto maxpressure_val = prefs->getDouble("/tools/freehand/pencil/maxpressure", 30);
             _maxpressure_adj = Gtk::Adjustment::create(maxpressure_val, 0, 100, 1, 0);
             _maxpressure =
                 Gtk::manage(new UI::Widget::SpinButtonToolItem("pencil-maxpressure", _("Max:"), _maxpressure_adj, 0, 0));
@@ -428,7 +428,7 @@ void PencilToolbar::add_powerstroke_cap(bool tool_is_pencil)
 
     auto prefs = Inkscape::Preferences::get();
 
-    int cap = prefs->getInt("/live_effects/powerstroke/powerpencilcap", 4);
+    int cap = prefs->getInt("/live_effects/powerstroke/powerpencilcap", 2);
     _cap_item->set_active(cap);
     _cap_item->use_group_label(true);
 

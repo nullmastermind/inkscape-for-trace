@@ -828,7 +828,7 @@ void PencilTool::addPowerStrokePencil()
                 if (!valid) {
                     pspreview->getRepr()->setAttribute("interpolator_beta", "0.75");
                 }
-                gint cap = prefs->getInt("/live_effects/powerstroke/powerpencilcap", 4);
+                gint cap = prefs->getInt("/live_effects/powerstroke/powerpencilcap", 2);
                 pspreview->getRepr()->setAttribute("start_linecap_type", LineCapTypeConverter.get_key(cap));
                 pspreview->getRepr()->setAttribute("end_linecap_type", LineCapTypeConverter.get_key(cap));
                 pspreview->getRepr()->setAttribute("sort_points", "true");
@@ -874,8 +874,8 @@ void PencilTool::_addFreehandPoint(Geom::Point const &p, guint /*state*/, bool l
     }
     if (tablet_enabled && in_svg_plane(p)) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        double min = prefs->getIntLimited("/tools/freehand/pencil/minpressure", 10, 0, 100) / 100.0;
-        double max = prefs->getIntLimited("/tools/freehand/pencil/maxpressure", 40, 0, 100) / 100.0;
+        double min = prefs->getIntLimited("/tools/freehand/pencil/minpressure",  0, 0, 100) / 100.0;
+        double max = prefs->getIntLimited("/tools/freehand/pencil/maxpressure", 30, 0, 100) / 100.0;
         if (min > max) {
             min = max;
         }
