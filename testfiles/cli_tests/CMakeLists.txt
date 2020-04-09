@@ -301,6 +301,12 @@ add_cli_test(export-plain-svg PARAMETERS --export-type=svg --export-plain-svg
 # --export-ps-level=LEVEL
 
 # --export-pdf-version=VERSION
+add_cli_test(export-pdf-version-14 PARAMETERS --export-pdf-version=1.4 --export-type=pdf
+                                   INPUT_FILENAME rects.svg OUTPUT_FILENAME export-pdf-version-14.pdf
+                                   TEST_SCRIPT match_regex.sh "export-pdf-version-14.pdf" "^%PDF-1.4$")
+add_cli_test(export-pdf-version-15 PARAMETERS --export-pdf-version=1.5 --export-type=pdf
+                                   INPUT_FILENAME rects.svg OUTPUT_FILENAME export-pdf-version-15.pdf
+                                   TEST_SCRIPT match_regex.sh "export-pdf-version-15.pdf" "^%PDF-1.5$")
 
 # --export-text-to-path
 # PNG: Doesn't make sense.
