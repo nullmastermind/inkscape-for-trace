@@ -18,6 +18,7 @@
 #include <shlobj.h> // for SHGetSpecialFolderLocation
 #endif
 
+#include <glibmm/convert.h>
 #include <glibmm/i18n.h>
 #include <glibmm/miscutils.h>
 #include <glibmm/stringutils.h>
@@ -226,7 +227,8 @@ std::string get_filename_string(Type type, char const *filename, bool localized,
  */
 Glib::ustring get_filename(Glib::ustring path, Glib::ustring filename)
 {
-    return get_filename(path.raw(), filename.raw());
+    return get_filename(Glib::filename_from_utf8(path), //
+                        Glib::filename_from_utf8(filename));
 }
 
 std::string get_filename(std::string const& path, std::string const& filename)
@@ -276,7 +278,7 @@ std::vector<Glib::ustring> get_filenames(Domain domain, Type type, std::vector<c
 std::vector<Glib::ustring> get_filenames(Glib::ustring path, std::vector<const char *> extensions, std::vector<const char *> exclusions)
 {
     std::vector<Glib::ustring> ret;
-    get_filenames_from_path(ret, path.raw(), extensions, exclusions);
+    get_filenames_from_path(ret, Glib::filename_from_utf8(path), extensions, exclusions);
     return ret;
 }
 
@@ -348,7 +350,7 @@ void get_filenames_from_path(std::vector<Glib::ustring> &files, std::string cons
         if(Glib::file_test(filename, Glib::FILE_TEST_IS_DIR)) {
             get_filenames_from_path(files, filename, extensions, exclusions);
         } else if(Glib::file_test(filename, Glib::FILE_TEST_IS_REGULAR) && !reject) {
-            files.push_back(filename);
+            files.push_back(Glib::filename_to_utf8(filename));
         }
         file = dir.read_name();
     }
@@ -364,7 +366,7 @@ void get_filenames_from_path(std::vector<Glib::ustring> &files, std::string cons
 void get_foldernames_from_path(std::vector<Glib::ustring> &folders, Glib::ustring path,
                                std::vector<const char *> exclusions)
 {
-    get_foldernames_from_path(folders, path.raw(), exclusions);
+    get_foldernames_from_path(folders, Glib::filename_from_utf8(path), exclusions);
 }
 
 void get_foldernames_from_path(std::vector<Glib::ustring> &folders, std::string const &path,
@@ -389,7 +391,7 @@ void get_foldernames_from_path(std::vector<Glib::ustring> &folders, std::string 
         auto filename = Glib::build_filename(path, file);
 
         if (Glib::file_test(filename, Glib::FILE_TEST_IS_DIR) && !reject) {
-            folders.push_back(filename);
+            folders.push_back(Glib::filename_to_utf8(filename));
         }
         file = dir.read_name();
     }

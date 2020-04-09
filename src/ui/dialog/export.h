@@ -17,6 +17,9 @@
 #include <gtkmm/expander.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/comboboxtext.h>
+#include <gtkmm/checkbutton.h>
+#include <gtkmm/radiobutton.h>
+#include <gtkmm/spinbutton.h>
 
 #include "ui/widget/panel.h"
 

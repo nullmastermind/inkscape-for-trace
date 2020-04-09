@@ -24,8 +24,9 @@
 #include <gtkmm/grid.h>
 #include <gtkmm/spinbutton.h>
 
-#include <glibmm/i18n.h>
+#include <glibmm/convert.h>
 #include <glibmm/miscutils.h>
+#include <glibmm/i18n.h>
 
 #include <gdl/gdl-dock-item.h>
 
@@ -550,7 +551,7 @@ std::string create_filepath_from_id(Glib::ustring id, const Glib::ustring &file_
     std::string directory;
 
     if (!file_entry_text.empty()) {
-        directory = Glib::path_get_dirname(file_entry_text.raw());
+        directory = Glib::path_get_dirname(Glib::filename_from_utf8(file_entry_text));
     }
 
     if (directory.empty()) {
@@ -565,7 +566,7 @@ std::string create_filepath_from_id(Glib::ustring id, const Glib::ustring &file_
         directory = Inkscape::IO::Resource::homedir_path(nullptr);
     }
 
-    return Glib::build_filename(directory, id.raw() + ".png");
+    return Glib::build_filename(directory, Glib::filename_from_utf8(id) + ".png");
 }
 
 void Export::onBatchClicked ()
@@ -1100,7 +1101,7 @@ void Export::onExport ()
         Glib::ustring const filename_ext = filename_add_extension(filename, "png");
         filename_entry.set_text(filename_ext);
         filename_entry.set_position(filename_ext.length());
-        std::string path = absolutize_path_from_document_location(doc, filename_ext.raw());
+        std::string path = absolutize_path_from_document_location(doc, Glib::filename_from_utf8(filename_ext));
 
         Glib::ustring dirname = Glib::path_get_dirname(path);
         if ( dirname.empty()
@@ -1273,7 +1274,6 @@ void Export::onExport ()
 void Export::onBrowse ()
 {
     GtkWidget *fs;
-    Glib::ustring filename;
     SPDesktop *desktop = getDesktop();
 
     fs = gtk_file_chooser_dialog_new (_("Select a filename for exporting"),
@@ -1289,7 +1289,7 @@ void Export::onBrowse ()
 
     gtk_window_set_modal(GTK_WINDOW (fs), true);
 
-    filename = filename_entry.get_text();
+    std::string filename = Glib::filename_from_utf8(filename_entry.get_text());
 
     if (filename.empty()) {
         Glib::ustring tmp;

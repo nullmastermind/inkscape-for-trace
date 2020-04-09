@@ -159,9 +159,11 @@ InkFileExportCmd::get_filename_out(std::string filename_in, std::string object_i
         return "-";
     }
 
+    auto const export_type_current_native = Glib::filename_from_utf8(export_type_current);
+
     // Use filename provided with --export-filename if given (and append proper extension).
     if (!export_filename.empty()) {
-        return export_filename + "." + export_type_current.raw();
+        return export_filename + "." + export_type_current_native;
     }
 
     // Check for pipe
@@ -177,17 +179,17 @@ InkFileExportCmd::get_filename_out(std::string filename_in, std::string object_i
     }
 
     std::string extension = filename_in.substr(extension_pos+1);
-    if (export_overwrite && export_type_current.raw() == extension) {
+    if (export_overwrite && export_type_current_native == extension) {
         return filename_in;
     } else {
         std::string tag;
-        if (export_type_current.raw() == extension) {
+        if (export_type_current_native == extension) {
             tag = "_out";
         }
         if (!object_id.empty()) {
             tag = "_" + object_id;
         }
-        return (filename_in.substr(0,extension_pos) + tag + "." + export_type_current.raw());
+        return filename_in.substr(0, extension_pos) + tag + "." + export_type_current_native;
     }
 
     // We need a valid file name to write to unless we're using PNG export hints.
@@ -268,7 +270,7 @@ InkFileExportCmd::do_export_svg(SPDocument* doc, std::string filename_in)
 
     for (auto object : objects) {
 
-        std::string filename_out = get_filename_out(filename_in, object.raw());
+        std::string filename_out = get_filename_out(filename_in, Glib::filename_from_utf8(object));
         if (filename_out.empty()) {
             return 1;
         }
@@ -365,7 +367,7 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string filename_in)
 
     for (auto object_id : objects) {
 
-        std::string filename_out = get_filename_out(filename_in, object_id.raw());
+        std::string filename_out = get_filename_out(filename_in, Glib::filename_from_utf8(object_id));
 
         std::vector<SPItem*> items;
 
@@ -681,7 +683,7 @@ InkFileExportCmd::do_export_ps_pdf(SPDocument* doc, std::string filename_in, std
 
     for (auto object : objects) {
 
-        std::string filename_out = get_filename_out(filename_in, object.raw());
+        std::string filename_out = get_filename_out(filename_in, Glib::filename_from_utf8(object));
         if (filename_out.empty()) {
             return 1;
         }

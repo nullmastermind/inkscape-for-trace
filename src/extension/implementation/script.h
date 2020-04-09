@@ -97,6 +97,7 @@ private:
         bool read(Glib::IOCondition condition);
         Glib::ustring string () { return _string; };
         bool toFile(const Glib::ustring &name);
+        bool toFile(const std::string &name);
     };
 
     int execute (const std::list<std::string> &in_command,

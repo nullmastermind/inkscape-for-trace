@@ -851,14 +851,10 @@ int Script::execute (const std::list<std::string> &in_command,
     // assemble the rest of argv
     std::copy(in_params.begin(), in_params.end(), std::back_inserter(argv));
     if (!filein.empty()) {
-        if(Glib::path_is_absolute(filein.raw()))
-            argv.push_back(filein.raw());
-        else {
-            std::vector<std::string> buildargs;
-            buildargs.push_back(Glib::get_current_dir());
-            buildargs.push_back(filein.raw());
-            argv.push_back(Glib::build_filename(buildargs));
-        }
+        auto filein_native = Glib::filename_from_utf8(filein);
+        if (!Glib::path_is_absolute(filein_native))
+            filein_native = Glib::build_filename(Glib::get_current_dir(), filein_native);
+        argv.push_back(filein_native);
     }
 
     //for(int i=0;i<argv.size(); ++i){printf("%s ",argv[i].c_str());}printf("\n");
@@ -953,8 +949,12 @@ bool Script::file_listener::read(Glib::IOCondition condition) {
 }
 
 bool Script::file_listener::toFile(const Glib::ustring &name) {
+    return toFile(Glib::filename_from_utf8(name));
+}
+
+bool Script::file_listener::toFile(const std::string &name) {
     try {
-        Glib::RefPtr<Glib::IOChannel> stdout_file = Glib::IOChannel::create_from_file(name.raw(), "w");
+        Glib::RefPtr<Glib::IOChannel> stdout_file = Glib::IOChannel::create_from_file(name, "w");
         stdout_file->set_encoding();
         stdout_file->write(_string);
     } catch (Glib::FileError &e) {
