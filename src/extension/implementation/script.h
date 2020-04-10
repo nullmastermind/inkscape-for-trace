@@ -110,11 +110,10 @@ private:
     /** \brief  A definition of an interpreter, which can be specified
         in the INX file, but we need to know what to call */
     struct interpreter_t {
-        gchar const *identity;    /**< The ID that is in the INX file */
-        gchar const *prefstring;  /**< The preferences key that can override the default */
-        gchar const *defaultval;  /**< The default value if there are no preferences */
+	std::string              prefstring;   /**< The preferences key that can override the default */
+	std::vector<std::string> defaultvals;  /**< The default values to check if the preferences are wrong */
     };
-    static interpreter_t const interpreterTab[];
+    static const std::map<std::string, interpreter_t> interpreterTab;
 
     std::string resolveInterpreterExecutable(const Glib::ustring &interpNameArg);
 

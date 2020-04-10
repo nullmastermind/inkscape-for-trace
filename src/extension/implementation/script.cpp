@@ -71,20 +71,20 @@ void Script::pump_events () {
     given script.  It also tracks the preference to use to overwrite
     the given interpreter to a custom one per user.
 */
-Script::interpreter_t const Script::interpreterTab[] = {
+const std::map<std::string, Script::interpreter_t> Script::interpreterTab = {
 #ifdef _WIN32
-        { "perl",   "perl-interpreter",   "wperl"   },
-        { "python", "python-interpreter", "pythonw" },
+        { "perl",    {"perl-interpreter",    {"wperl"             }}},
+        { "python",  {"python-interpreter",  {"pythonw"           }}},
 #elif defined __APPLE__
-        { "perl",   "perl-interpreter",   "perl"    },
-        { "python", "python-interpreter", "python3" },
+        { "perl",    {"perl-interpreter",    {"perl"              }}},
+        { "python",  {"python-interpreter",  {"python3"           }}},
 #else
-        { "perl",   "perl-interpreter",   "perl"    },
-        { "python", "python-interpreter", "python"  },
+        { "perl",    {"perl-interpreter",    {"perl"              }}},
+        { "python",  {"python-interpreter",  {"python3", "python" }}},
 #endif
-        { "ruby",   "ruby-interpreter",   "ruby"    },
-        { "shell",  "shell-interpreter",  "sh"      },
-        { nullptr,  nullptr,              nullptr   }
+        { "python2", {"python2-interpreter", {"python2", "python" }}},
+        { "ruby",    {"ruby-interpreter",    {"ruby"    }}},
+        { "shell",   {"shell-interpreter",   {"sh"      }}},
 };
 
 
@@ -96,44 +96,41 @@ Script::interpreter_t const Script::interpreterTab[] = {
 */
 std::string Script::resolveInterpreterExecutable(const Glib::ustring &interpNameArg)
 {
-    interpreter_t const *interp = nullptr;
-    bool foundInterp = false;
-    for (interp =  interpreterTab ; interp->identity ; interp++ ){
-        if (interpNameArg == interp->identity) {
-            foundInterp = true;
-            break;
-        }
-    }
-
-    // Do we have a supported interpreter type?
-    if (!foundInterp) {
+    // 0. Do we have a supported interpreter type?
+    auto interp = interpreterTab.find(interpNameArg);
+    if (interp == interpreterTab.end()) {
         g_critical("Script::resolveInterpreterExecutable(): unknown script interpreter '%s'", interpNameArg.c_str());
         return "";
     }
-    std::string interpreter_path = Glib::filename_from_utf8(interp->defaultval);
 
-    // 1.  Check preferences for an override.
-    // Note: this must be an absolute path.
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Glib::ustring prefInterp = prefs->getString("/extensions/" + Glib::ustring(interp->prefstring));
+    std::list<Glib::ustring> searchList;
+    std::copy(interp->second.defaultvals.begin(), interp->second.defaultvals.end(), std::back_inserter(searchList));
+
+    // 1. Check preferences for an override.
+    auto prefs = Inkscape::Preferences::get();
+    auto prefInterp = prefs->getString("/extensions/" + Glib::ustring(interp->second.prefstring));
 
     if (!prefInterp.empty()) {
-        interpreter_path = Glib::filename_from_utf8(prefInterp);
+	searchList.push_front(prefInterp);
     }
 
-    // 2. Search the path.
-    // Do this on all systems, for consistency.
-    // PATH is set up to contain the Python and Perl binary directories
-    // on Windows, so no extra code is necessary.
-    if (!Glib::path_is_absolute(interpreter_path)) {
-        std::string found_path = Glib::find_program_in_path(interpreter_path);
-        if (found_path.empty()) {
-            g_critical("Script::resolveInterpreterExecutable(): failed to locate script interpreter '%s'; "
-                       "'%s' not found on PATH", interpNameArg.c_str(), interpreter_path.c_str());
+    // 2. Search for things in the path if they're there or an absolute
+    for (const auto& binname : searchList) {
+        auto interpreter_path = Glib::filename_from_utf8(binname);
+
+        if (!Glib::path_is_absolute(interpreter_path)) {
+            auto found_path = Glib::find_program_in_path(interpreter_path);
+            if (!found_path.empty()) {
+                return found_path;
+            }
+        } else {
+            return interpreter_path;
         }
-        interpreter_path = found_path;
     }
-    return interpreter_path;
+
+    // 3. Error
+    g_critical("Script::resolveInterpreterExecutable(): failed to locate script interpreter '%s'", interpNameArg.c_str());
+    return "";
 }
 
 /** \brief     This function creates a script object and sets up the
