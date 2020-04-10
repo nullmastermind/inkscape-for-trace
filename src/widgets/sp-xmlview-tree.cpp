@@ -667,19 +667,32 @@ gboolean do_drag_motion(GtkWidget *widget, GdkDragContext *context, gint x, gint
         gtk_tree_model_get_iter(GTK_TREE_MODEL(tree->store), &iter, path);
         auto repr = sp_xmlview_tree_node_get_repr(GTK_TREE_MODEL(tree->store), &iter);
 
+        bool const drop_into = pos != GTK_TREE_VIEW_DROP_BEFORE && //
+                               pos != GTK_TREE_VIEW_DROP_AFTER;
+
         // 0. don't drop on self (also handled by on_row_changed but nice to not have drop highlight for it)
         if (repr == dragging_repr) {
             goto finally;
         }
 
-        // 1. only xml elements can be dragged
-        if (repr->type() != Inkscape::XML::ELEMENT_NODE) {
+        // 1. only xml elements can have children
+        if (drop_into && repr->type() != Inkscape::XML::ELEMENT_NODE) {
             goto finally;
         }
 
         // 3. elements must be at least children of the root <svg:svg> element
         if (gtk_tree_path_get_depth(path) < 2) {
             goto finally;
+        }
+
+        // 4. drag node specific limitations
+        if (dragging_repr) {
+            // sodipodi:namedview can't be re-parented
+            static GQuark const CODE_sodipodi_namedview = g_quark_from_static_string("sodipodi:namedview");
+            if (dragging_repr->code() == CODE_sodipodi_namedview &&
+                (dragging_repr->parent() != repr->parent() || drop_into)) {
+                goto finally;
+            }
         }
 
         action = GDK_ACTION_MOVE;
