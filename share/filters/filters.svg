@@ -2014,7 +2014,7 @@ sodipodi:docname="filters.svg">
 </feComponentTransfer>
 <feComposite in2="SourceGraphic" operator="in" />
 </filter>
-<filter id="f199" style="color-interpolation-filters:sRGB;" inkscape:menu="Image Paint and Draw" inkscape:menu-tooltip="" inkscape:label="Poster Color Fun">
+<filter id="f199" style="color-interpolation-filters:sRGB;" inkscape:menu="Image Paint and Draw" inkscape:menu-tooltip="Poster Color Fun" inkscape:label="Poster Color Fun">
 <feColorMatrix type="hueRotate" values="0" result="result4" />
 <feColorMatrix result="result7" type="saturate" values="1" />
 <feGaussianBlur stdDeviation="1.5" result="result3" />
