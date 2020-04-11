@@ -19,16 +19,23 @@
 #ifndef INKSCAPE_UI_DIALOG_TEXT_EDIT_H
 #define INKSCAPE_UI_DIALOG_TEXT_EDIT_H
 
-#include <gtkmm/box.h>
-#include <gtkmm/notebook.h>
-#include <gtkmm/button.h>
-#include <gtkmm/frame.h>
-#include <gtkmm/scrolledwindow.h>
+#include <glibmm/refptr.h>
+
 #include "ui/widget/panel.h"
 #include "ui/widget/frame.h"
 
 #include "ui/widget/font-selector.h"
 #include "ui/widget/font-variants.h"
+
+namespace Gtk {
+class Box;
+class Button;
+class ButtonBox;
+class Label;
+class Notebook;
+class TextBuffer;
+class TextView;
+}
 
 class SPItem;
 class font_instance;
@@ -92,7 +99,6 @@ protected:
      */
     void onChange ();
     void onFontFeatures (Gtk::Widget * widgt, int pos);
-    static void onTextChange (GtkTextBuffer *text_buffer, TextEdit *self);
     
     /**
      * Callback invoked when the user modifies the font through the dialog or the tools control bar.
@@ -137,32 +143,24 @@ private:
     /*
      * All the dialogs widgets
      */
-    Gtk::Notebook notebook;
 
     // Tab 1: Font ---------------------- //
-    Gtk::VBox font_vbox;
-
     Inkscape::UI::Widget::FontSelector font_selector;
     Inkscape::UI::Widget::FontVariations font_variations;
-    Gtk::Label preview_label;  // Share with variants tab?
+    Gtk::Label *preview_label;  // Share with variants tab?
 
     // Tab 2: Text ---------------------- //
-    Gtk::VBox text_vbox;
-
-    Gtk::ScrolledWindow scroller;
-    GtkWidget *text_view; // TODO - Convert this to a Gtk::TextView, but GtkSpell doesn't seem to work with it
-    GtkTextBuffer *text_buffer;
+    Gtk::TextView *text_view;
+    Glib::RefPtr<Gtk::TextBuffer> text_buffer;
 
     // Tab 3: Features  ----------------- //
-    Gtk::VBox feat_vbox;
     Inkscape::UI::Widget::FontVariants font_features;
-    Gtk::Label preview_label2; // Could reparent preview_label but having a second label is probably easier.
+    Gtk::Label *preview_label2; // Could reparent preview_label but having a second label is probably easier.
 
     // Shared ------- ------------------ //
-    Gtk::HBox button_row;
-    Gtk::Button setasdefault_button;
-    Gtk::Button close_button;
-    Gtk::Button apply_button;
+    Gtk::Button *setasdefault_button;
+    Gtk::Button *close_button;
+    Gtk::Button *apply_button;
 
     // Signals
     sigc::connection selectChangedConn;

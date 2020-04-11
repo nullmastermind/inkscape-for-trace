@@ -26,6 +26,15 @@
 #include <glibmm/i18n.h>
 #include <glibmm/markup.h>
 
+#include <gtkmm/box.h>
+#include <gtkmm/builder.h>
+#include <gtkmm/button.h>
+#include <gtkmm/buttonbox.h>
+#include <gtkmm/label.h>
+#include <gtkmm/notebook.h>
+#include <gtkmm/textbuffer.h>
+#include <gtkmm/textview.h>
+
 #ifdef WITH_GSPELL
 # include <gspell/gspell.h>
 #endif
@@ -47,6 +56,7 @@
 #include "object/sp-text.h"
 #include "object/sp-textpath.h"
 
+#include "io/resource.h"
 #include "svg/css-ostringstream.h"
 #include "ui/icon-names.h"
 #include "ui/toolbar/text-toolbar.h"
@@ -61,9 +71,6 @@ namespace Dialog {
 
 TextEdit::TextEdit()
     : UI::Widget::Panel("/dialogs/textandfont", SP_VERB_DIALOG_TEXT),
-      setasdefault_button(_("Set as _default")),
-      close_button(_("_Close"), true),
-      apply_button(_("_Apply"), true),
       selectChangedConn(),
       subselChangedConn(),
       selectModifiedConn(),
@@ -76,39 +83,37 @@ TextEdit::TextEdit()
       samplephrase(_("AaBbCcIiPpQq12369$\342\202\254\302\242?.;/()"))
 {
 
-    /* Font tab -------------------------------- */
+    std::string gladefile = get_filename_string(Inkscape::IO::Resource::UIS, "dialog-text-edit.glade");
+    Glib::RefPtr<Gtk::Builder> builder;
+    try {
+        builder = Gtk::Builder::create_from_file(gladefile);
+    } catch (const Glib::Error &ex) {
+        g_warning("GtkBuilder file loading failed for save template dialog");
+        return;
+    }
 
-    /* Font selector */
-    // Do nothing.
+    Gtk::Box *contents;
+    Gtk::Notebook *notebook;
+    Gtk::Box *font_box;
+    Gtk::Box *feat_box;
 
-    /* Font preview */
-    preview_label.set_ellipsize (Pango::ELLIPSIZE_END);
-    preview_label.set_justify (Gtk::JUSTIFY_CENTER);
-    preview_label.set_line_wrap (false);
+    builder->get_widget("contents", contents);
+    builder->get_widget("notebook", notebook);
+    builder->get_widget("font_box", font_box);
+    builder->get_widget("feat_box", feat_box);
+    builder->get_widget("preview_label", preview_label);
+    builder->get_widget("preview_label2", preview_label2);
+    builder->get_widget("text_view", text_view);
+    builder->get_widget("setasdefault_button", setasdefault_button);
+    builder->get_widget("close_button", close_button);
+    builder->get_widget("apply_button", apply_button);
 
-    font_vbox.set_border_width(4);
-    font_vbox.pack_start(font_selector, true, true);
-    font_vbox.pack_start(preview_label, false, false, 4);
+    text_buffer = Glib::RefPtr<Gtk::TextBuffer>::cast_static(builder->get_object("text_buffer"));
 
-    /* Features tab ---------------------------- */
-
-    /* Features preview */
-    preview_label2.set_ellipsize (Pango::ELLIPSIZE_END);
-    preview_label2.set_justify (Gtk::JUSTIFY_CENTER);
-    preview_label2.set_line_wrap (false);
-
-    feat_vbox.set_border_width(4);
-    feat_vbox.pack_start(font_features, true, true);
-    feat_vbox.pack_start(preview_label2, false, false, 4);
-
-    /* Text tab -------------------------------- */
-    scroller.set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
-    scroller.set_shadow_type(Gtk::SHADOW_IN);
-
-    text_buffer = gtk_text_buffer_new (nullptr);
-    text_view = gtk_text_view_new_with_buffer (text_buffer);
-    g_object_unref(text_buffer);
-    gtk_text_view_set_wrap_mode ((GtkTextView *) text_view, GTK_WRAP_WORD);
+    font_box->pack_start(font_selector, true, true);
+    font_box->reorder_child(font_selector, 0);
+    feat_box->pack_start(font_features, true, true);
+    feat_box->reorder_child(font_features, 0);
 
 #ifdef WITH_GSPELL
     /*
@@ -117,44 +122,22 @@ TextEdit::TextEdit()
        gtkspell_set_language call in; see advanced.c example in gtkspell docs).
        onReadSelection looks like a suitable place.
     */
-    GspellTextView *gspell_view = gspell_text_view_get_from_gtk_text_view(GTK_TEXT_VIEW(text_view));
+    GspellTextView *gspell_view = gspell_text_view_get_from_gtk_text_view(text_view->gobj());
     gspell_text_view_basic_setup(gspell_view);
 #endif
 
-    gtk_widget_set_size_request (text_view, -1, 64);
-    gtk_text_view_set_editable (GTK_TEXT_VIEW (text_view), TRUE);
-    scroller.add(*Gtk::manage(Glib::wrap(text_view)));
-    text_vbox.pack_start(scroller, true, true, 0);
-
-    /* Notebook -----------------------------------*/
-    notebook.set_name( "TextEdit Notebook" );
-    notebook.append_page(font_vbox, _("_Font"), true);
-    notebook.append_page(feat_vbox, _("_Features"), true);
-    notebook.append_page(text_vbox, _("_Text"), true);
-
-    /* Buttons (below notebook) ------------------ */
-    setasdefault_button.set_use_underline(true);
-    apply_button.set_can_default();
-    button_row.pack_start(setasdefault_button, false, false, 0);
-    button_row.pack_end(close_button, false, false, VB_MARGIN);
-    button_row.pack_end(apply_button, false, false, VB_MARGIN);
-
-    Gtk::Box *contents = _getContents();
-    contents->set_name("TextEdit Dialog Box");
-    contents->set_spacing(4);
-    contents->pack_start(notebook, true, true);
-    contents->pack_start(button_row, false, false, VB_MARGIN);
+    _setContents(contents);
 
     /* Signal handlers */
-    g_signal_connect ( G_OBJECT (text_buffer), "changed", G_CALLBACK (onTextChange), this );
-    setasdefault_button.signal_clicked().connect(sigc::mem_fun(*this, &TextEdit::onSetDefault));
-    apply_button.signal_clicked().connect(sigc::mem_fun(*this, &TextEdit::onApply));
-    close_button.signal_clicked().connect(sigc::bind(_signal_response.make_slot(), GTK_RESPONSE_CLOSE));
-    fontChangedConn = font_selector.connectChanged (sigc::mem_fun(*this, &TextEdit::onFontChange));
+    text_buffer->signal_changed().connect(sigc::mem_fun(*this, &TextEdit::onChange));
+    setasdefault_button->signal_clicked().connect(sigc::mem_fun(*this, &TextEdit::onSetDefault));
+    apply_button->signal_clicked().connect(sigc::mem_fun(*this, &TextEdit::onApply));
+    close_button->signal_clicked().connect(sigc::bind(_signal_response.make_slot(), GTK_RESPONSE_CLOSE));
+    fontChangedConn = font_selector.connectChanged(sigc::mem_fun(*this, &TextEdit::onFontChange));
     fontFeaturesChangedConn = font_features.connectChanged(sigc::mem_fun(*this, &TextEdit::onChange));
-    notebook.signal_switch_page().connect(sigc::mem_fun(*this, &TextEdit::onFontFeatures));
+    notebook->signal_switch_page().connect(sigc::mem_fun(*this, &TextEdit::onFontFeatures));
 
-    font_selector.set_name ("TextEdit");
+    font_selector.set_name("TextEdit");
 
     show_all_children();
 }
@@ -195,31 +178,28 @@ void TextEdit::onReadSelection ( gboolean dostyle, gboolean /*docontent*/ )
     if (text)
     {
         guint items = getSelectedTextCount ();
-        if (items == 1) {
-            gtk_widget_set_sensitive (text_view, TRUE);
-        } else {
-            gtk_widget_set_sensitive (text_view, FALSE);
-        }
-        apply_button.set_sensitive ( false );
-        setasdefault_button.set_sensitive ( true );
+        bool has_one_item = items == 1;
+        text_view->set_sensitive(has_one_item);
+        apply_button->set_sensitive(false);
+        setasdefault_button->set_sensitive(true);
 
         Glib::ustring str = sp_te_get_string_multiline(text);
         if (!str.empty()) {
-            if (items == 1) {
-                gtk_text_buffer_set_text(text_buffer, str.c_str(), str.raw().size());
-                gtk_text_buffer_set_modified (text_buffer, FALSE);
+            if (has_one_item) {
+                text_buffer->set_text(str);
+                text_buffer->set_modified(false);
             }
             phrase = str;
 
         } else {
-            gtk_text_buffer_set_text (text_buffer, "", 0);
+            text_buffer->set_text("");
         }
 
         text->getRepr(); // was being called but result ignored. Check this.
     } else {
-        gtk_widget_set_sensitive (text_view, FALSE);
-        apply_button.set_sensitive ( false );
-        setasdefault_button.set_sensitive ( false );
+        text_view->set_sensitive(false);
+        apply_button->set_sensitive(false);
+        setasdefault_button->set_sensitive(false);
     }
 
     if (dostyle && text) {
@@ -272,8 +252,8 @@ void TextEdit::onReadSelection ( gboolean dostyle, gboolean /*docontent*/ )
 void TextEdit::setPreviewText (Glib::ustring font_spec, Glib::ustring font_features, Glib::ustring phrase)
 {
     if (font_spec.empty()) {
-        preview_label.set_markup("");
-        preview_label2.set_markup("");
+        preview_label->set_markup("");
+        preview_label2->set_markup("");
         return;
     }
 
@@ -314,8 +294,8 @@ void TextEdit::setPreviewText (Glib::ustring font_spec, Glib::ustring font_featu
     }
     markup += ">" + phrase_escaped + "</span>";
 
-    preview_label.set_markup (markup);
-    preview_label2.set_markup (markup);
+    preview_label->set_markup (markup);
+    preview_label2->set_markup (markup);
 }
 
 
@@ -359,16 +339,15 @@ void TextEdit::onSelectionChange()
 
 void TextEdit::updateObjectText ( SPItem *text )
 {
-        GtkTextIter start, end;
+    Gtk::TextIter start, end;
 
-        // write text
-        if (gtk_text_buffer_get_modified (text_buffer)) {
-            gtk_text_buffer_get_bounds (text_buffer, &start, &end);
-            gchar *str = gtk_text_buffer_get_text (text_buffer, &start, &end, TRUE);
-            sp_te_set_repr_text_multiline (text, str);
-            g_free (str);
-            gtk_text_buffer_set_modified (text_buffer, FALSE);
-        }
+    // write text
+    if (text_buffer->get_modified()) {
+        text_buffer->get_bounds(start, end);
+        Glib::ustring str = text_buffer->get_text(start, end);
+        sp_te_set_repr_text_multiline (text, str.c_str());
+        text_buffer->set_modified(false);
+    }
 }
 
 SPCSSAttr *TextEdit::fillTextStyle ()
@@ -412,7 +391,7 @@ void TextEdit::onSetDefault()
 
     sp_repr_css_attr_unref (css);
 
-    setasdefault_button.set_sensitive ( false );
+    setasdefault_button->set_sensitive ( false );
 }
 
 void TextEdit::onApply()
@@ -440,7 +419,7 @@ void TextEdit::onApply()
     if (items == 0) {
         // no text objects; apply style to prefs for new objects
         prefs->mergeStyle("/tools/text/style", css);
-        setasdefault_button.set_sensitive ( false );
+        setasdefault_button->set_sensitive ( false );
 
     } else if (items == 1) {
         // exactly one text object; now set its text, too
@@ -466,7 +445,7 @@ void TextEdit::onApply()
     // complete the transaction
     DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
                        _("Set text style"));
-    apply_button.set_sensitive ( false );
+    apply_button->set_sensitive ( false );
 
     sp_repr_css_attr_unref (css);
 
@@ -496,28 +475,21 @@ void TextEdit::onChange()
         return;
     }
 
-    GtkTextIter start;
-    GtkTextIter end;
-    gtk_text_buffer_get_bounds (text_buffer, &start, &end);
-    gchar *str = gtk_text_buffer_get_text(text_buffer, &start, &end, TRUE);
+    Gtk::TextIter start, end;
+    text_buffer->get_bounds(start, end);
+    Glib::ustring str = text_buffer->get_text(start, end);
 
     Glib::ustring fontspec = font_selector.get_fontspec();
     Glib::ustring features = font_features.get_markup();
-    const gchar *phrase = str && *str ? str : samplephrase.c_str();
+    const Glib::ustring& phrase = str.empty() ? samplephrase : str;
     setPreviewText(fontspec, features, phrase);
-    g_free (str);
 
     SPItem *text = getSelectedTextItem();
     if (text) {
-        apply_button.set_sensitive ( true );
+        apply_button->set_sensitive ( true );
     }
 
-    setasdefault_button.set_sensitive ( true);
-}
-
-void TextEdit::onTextChange (GtkTextBuffer *text_buffer, TextEdit *self)
-{
-    self->onChange();
+    setasdefault_button->set_sensitive ( true);
 }
 
 void TextEdit::onFontChange(Glib::ustring fontspec)
