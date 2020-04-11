@@ -19477,7 +19477,7 @@ msgstr "Konpondu marrazten ez diren kolore-graduatzailea"
 msgid ""
 "When on, will attempt to work around bugs in certain GTK themes drawing "
 "color sliders"
-msgstr "Gaitzen denean, GTK-ko gai batzuen kolore-graduatzaileen marrazketako akats batzuk konpontzen saiatuko da"
+msgstr "Gaitzen denean, GTK jantzi batzuen kolore-graduatzaileen marrazketako akats batzuk konpontzen saiatuko da"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1012
 msgid "Clear list"
@@ -19568,20 +19568,20 @@ msgstr "Desaktibatuta dagoenean, jatorria beheko ezkerreko izkinan dago eta Y ar
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1056
 msgid "Theme changes"
-msgstr "Gai-aldaketak"
+msgstr "Jantzi-aldaketak"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1103
 msgid "Use system theme"
-msgstr "Erabili sistemaren gaia"
+msgstr "Erabili sistemaren jantzia"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1109
 msgid "Change Gtk theme:"
-msgstr "Aldatu Gt gaia:"
+msgstr "Aldatu Gtk jantzia:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1112
 #: ../src/ui/dialog/inkscape-preferences.cpp:1113
 msgid "Use dark theme"
-msgstr "Erabili gai iluna"
+msgstr "Erabili jantzi iluna"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1116
 msgid "Display icons"
@@ -19593,7 +19593,7 @@ msgstr "Erabili sistemaren ikonoak"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1142
 msgid "Change icon theme:"
-msgstr "Aldatu ikonoen gaia:"
+msgstr "Aldatu ikonoen jantzia:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1146
 msgid "Use symbolic icons"
@@ -19625,7 +19625,7 @@ msgstr "Argi-ukituen koloreak, zenbait ikono sinbolikok erabiltzen dituzte. Ikon
 msgid ""
 "Reset theme colors, some symbolic icon themes use it. Some icons changes "
 "need reload"
-msgstr "Berrezarri gaiaren koloreak, zenbait ikono sinbolikok erabiltzen dituzte. Ikonoen zenbait aldaketak birkargatzea behar dute"
+msgstr "Berrezarri jantziaren koloreak, zenbait ikono sinbolikok erabiltzen dituzte. Ikonoen zenbait aldaketak birkargatzea behar dute"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1192
 msgctxt "Icon size"
@@ -19683,7 +19683,7 @@ msgstr "Ez"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1210
 msgid "Theme decides"
-msgstr "Gaiak erabakitzen du"
+msgstr "Jantziak erabakitzen du"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1213
 msgid "Show icons in menus:"
@@ -19694,11 +19694,11 @@ msgid ""
 "You can either enable or disable all icons in menus. By default the theme "
 "determines which icons to display by using the 'show-icons' attribute in its "
 "'menus.xml' file. (requires restart)"
-msgstr "Menuetako ikono guztiak gaitu edo desgaitu ditzakezu. Modu lehenetsian, gaiak erabakitzen du zein ikono bistaratuko diren, 'menus.xml' fitxategiko 'show-icons' atributua erabilita. (derrigorrezkoa berrabiaraztea)"
+msgstr "Menuetako ikono guztiak gaitu edo desgaitu ditzakezu. Modu lehenetsian, jantziak erabakitzen du zein ikono bistaratuko diren, 'menus.xml' fitxategiko 'show-icons' atributua erabilita. (derrigorrezkoa berrabiaraztea)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1217
 msgid "Theme"
-msgstr "Gaia"
+msgstr "Jantzia"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1220
 msgid "Save and restore window geometry for each document"
@@ -21530,15 +21530,15 @@ msgstr "Erabiltzailearen hedapenen kokalekua"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2561
 msgid "Open themes folder"
-msgstr "Ireki gaien karpeta"
+msgstr "Ireki jantzien karpeta"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2562
 msgid "User themes: "
-msgstr "Erabiltzaile-gaiak: "
+msgstr "Erabiltzaile-jantziak: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2562
 msgid "Location of the user’s themes"
-msgstr "Erabiltzaile-gaien kokalekua"
+msgstr "Erabiltzaile-jantzien kokalekua"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2565
 msgid "Open icons folder"
@@ -21666,11 +21666,11 @@ msgstr "Sistemaren datuen kokalekuak"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2642
 msgid "Icon theme: "
-msgstr "Ikonoen gaia: "
+msgstr "Ikonoen jantzia: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2642
 msgid "Locations of icon themes"
-msgstr "Ikonoen gaien kokalekuak"
+msgstr "Ikonoen jantzien kokalekuak"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2644
 msgid "System"
