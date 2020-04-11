@@ -3,7 +3,7 @@ file(GLOB _FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.svg")
 
 add_custom_command(
   OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/templates.h
-  COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/i18n.py ${_FILES} > ${CMAKE_CURRENT_SOURCE_DIR}/templates.h
+  COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/i18n.py ${_FILES} > ${CMAKE_CURRENT_SOURCE_DIR}/templates.h
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/i18n.py ${_FILES}
 )
@@ -24,7 +24,7 @@ if(ENABLE_NLS)
 
   add_custom_command(
     OUTPUT default_templates.timestamp
-    COMMAND python ./create_default_templates.py ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR}
+    COMMAND python3 ./create_default_templates.py ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR}
     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/default.svg ${CMAKE_CURRENT_SOURCE_DIR}/create_default_templates.py ${GMOFILES}
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     COMMENT "Generating localized default templates"

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Creates localized default templates
 # (uses default.svg as base and reads localized strings directly from .po/.gmo files)

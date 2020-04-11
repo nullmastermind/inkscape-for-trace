@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 add_custom_command(
   OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/patterns.svg.h
-  COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/i18n.py ${CMAKE_CURRENT_SOURCE_DIR}/patterns.svg > ${CMAKE_CURRENT_SOURCE_DIR}/patterns.svg.h
+  COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/i18n.py ${CMAKE_CURRENT_SOURCE_DIR}/patterns.svg > ${CMAKE_CURRENT_SOURCE_DIR}/patterns.svg.h
   MAIN_DEPENDENCY ${CMAKE_CURRENT_SOURCE_DIR}/patterns.svg
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/i18n.py
 )

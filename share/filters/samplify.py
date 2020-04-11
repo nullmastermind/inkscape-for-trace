@@ -5,15 +5,15 @@
 #
 # Run it thus:
 #
-#    python samplify.py sample.svg filters.svg > out.svg
+#    python3 samplify.py sample.svg filters.svg > out.svg
 #
 # It requires 'inkscape' in executable path for dimension queries.
 
-import sys, os, string
+import sys, os, string, subprocess
 from lxml import etree
 
 if len(sys.argv) < 3:
-    sys.stderr.write ("Usage: python samplify.py sample.svg filters.svg > out.svg\n")
+    sys.stderr.write ("Usage: python3 samplify.py sample.svg filters.svg > out.svg\n")
     sys.exit(1)
 
 # namespaces we need to be aware of
@@ -31,7 +31,7 @@ u'xml'      :u'http://www.w3.org/XML/1998/namespace'
 # helper function to add namespace URI to a name
 def addNS(tag, ns=None):
     val = tag
-    if ns!=None and len(ns)>0 and NSS.has_key(ns) and len(tag)>0 and tag[0]!='{':
+    if ns!=None and len(ns)>0 and ns in NSS and len(tag)>0 and tag[0]!='{':
         val = "{%s}%s" % (NSS[ns], tag)
     return val
 
@@ -88,10 +88,8 @@ q = {'x':0,'y':0,'width':0,'height':0}
 file = sys.argv[1]
 id = tdoc.getroot().attrib["id"]
 for query in q.keys():
-    f,err = os.popen3('inkscape --query-%s --query-id=%s "%s"' % (query,id,file))[1:]
-    q[query] = float(f.read())
-    f.close()
-    err.close()
+    f = subprocess.Popen(["inkscape", "--query-%s"%query, "--query-id=%s"%id, "%s"%file], stdout=subprocess.PIPE)
+    q[query] = float(f.stdout.read())
 
 # add some margins
 q['width'] = q['width'] * 1.3
@@ -138,7 +136,7 @@ for ch in root.getchildren():
                 newroot.append(text)
 
                 if a_tooltip not in fi.keys():
-                    print "no menu-tooltip for", fi.attrib["id"]
+                    print("no menu-tooltip for", fi.attrib["id"])
                     sys.exit()
 
                 text = etree.Element(e_text, nsmap=NSS)
@@ -156,5 +154,5 @@ total_height = (len(menus) + 1) * q['height']
 tout.getroot().attrib['width'] = str(total_width)
 tout.getroot().attrib['height'] = str(total_height)
 
-print etree.tostring(tout, encoding='UTF-8')
+print(etree.tostring(tout, encoding='UTF-8'))
 
