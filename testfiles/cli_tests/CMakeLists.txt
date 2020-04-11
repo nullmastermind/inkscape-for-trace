@@ -335,6 +335,25 @@ add_cli_test(export-latex PARAMETERS --export-type=pdf,ps,eps --export-latex
                           TEST_SCRIPT match_regex.sh "export-latex.pdf_tex" "some text")
 
 # --export-ignore-filters
+## testing exporting with filters
+add_cli_test(export-with-filters_svg  PARAMETERS --export-type=svg INPUT_FILENAME offset.svg OUTPUT_FILENAME export-with-filters.svg REFERENCE_FILENAME export-with-filters_expected.svg)
+add_cli_test(export-with-filters_png  PARAMETERS --export-type=png INPUT_FILENAME offset.svg OUTPUT_FILENAME export-with-filters.png REFERENCE_FILENAME export-with-filters_expected.png)
+add_cli_test(export-with-filters_ps   PARAMETERS --export-type=ps  INPUT_FILENAME offset.svg OUTPUT_FILENAME export-with-filters.ps  REFERENCE_FILENAME export-with-filters_expected.ps )
+add_cli_test(export-with-filters_eps  PARAMETERS --export-type=eps INPUT_FILENAME offset.svg OUTPUT_FILENAME export-with-filters.eps REFERENCE_FILENAME export-with-filters_expected.eps)
+add_cli_test(export-with-filters_pdf  PARAMETERS --export-type=pdf INPUT_FILENAME offset.svg OUTPUT_FILENAME export-with-filters.pdf REFERENCE_FILENAME export-with-filters_expected.pdf)
+# EMF, WMF: No support for exporting filters. Feature request: https://gitlab.com/inkscape/inbox/issues/2275
+# add_cli_test(export-with-filters_emf  PARAMETERS --export-type=emf INPUT_FILENAME offset.svg OUTPUT_FILENAME export-with-filters.emf REFERENCE_FILENAME export-with-filters_expected.emf)
+# add_cli_test(export-with-filters_wmf  PARAMETERS --export-type=wmf INPUT_FILENAME offset.svg OUTPUT_FILENAME export-with-filters.wmf REFERENCE_FILENAME export-with-filters_expected.wmf)
+## --export-ignore-filters
+# SVG, PNG: No support for --export-ignore-filters. Feature request: https://gitlab.com/inkscape/inbox/issues/2275
+# add_cli_test(export-ignore-filters_svg  PARAMETERS --export-ignore-filters --export-type=svg INPUT_FILENAME offset.svg OUTPUT_FILENAME export-ignore-filters.svg REFERENCE_FILENAME export-ignore-filters_expected.svg)
+# add_cli_test(export-ignore-filters_png  PARAMETERS --export-ignore-filters --export-type=png INPUT_FILENAME offset.svg OUTPUT_FILENAME export-ignore-filters.png REFERENCE_FILENAME export-ignore-filters_expected.png)
+add_cli_test(export-ignore-filters_ps   PARAMETERS --export-ignore-filters --export-type=ps  INPUT_FILENAME offset.svg OUTPUT_FILENAME export-ignore-filters.ps  REFERENCE_FILENAME export-ignore-filters_expected.ps )
+# EPS: Works, but depends on https://gitlab.com/inkscape/inkscape/issues/1074
+# add_cli_test(export-ignore-filters_eps  PARAMETERS --export-ignore-filters --export-type=eps INPUT_FILENAME offset.svg OUTPUT_FILENAME export-ignore-filters.eps REFERENCE_FILENAME export-ignore-filters_expected.eps)
+add_cli_test(export-ignore-filters_pdf  PARAMETERS --export-ignore-filters --export-type=pdf INPUT_FILENAME offset.svg OUTPUT_FILENAME export-ignore-filters.pdf REFERENCE_FILENAME export-ignore-filters_expected.pdf)
+add_cli_test(export-ignore-filters_emf  PARAMETERS --export-ignore-filters --export-type=emf INPUT_FILENAME offset.svg OUTPUT_FILENAME export-ignore-filters.emf REFERENCE_FILENAME export-ignore-filters_expected.emf)
+add_cli_test(export-ignore-filters_wmf  PARAMETERS --export-ignore-filters --export-type=wmf INPUT_FILENAME offset.svg OUTPUT_FILENAME export-ignore-filters.wmf REFERENCE_FILENAME export-ignore-filters_expected.wmf)
 
 # --export-use-hints
 add_cli_test(export-use-hints_export-id           PARAMETERS --export-use-hints --export-id=rect1 INPUT_FILENAME export_hints.svg
