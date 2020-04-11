@@ -64,9 +64,6 @@ static GtkTargetEntry ui_drop_target_entries [] = {
     {(gchar *)"image/svg",                    0, SVG_DATA        },
     {(gchar *)"image/png",                    0, PNG_DATA        },
     {(gchar *)"image/jpeg",                   0, JPEG_DATA       },
-#if ENABLE_MAGIC_COLORS
-    {(gchar *)"application/x-inkscape-color", 0, APP_X_INKY_COLOR},
-#endif // ENABLE_MAGIC_COLORS
     {(gchar *)"application/x-oswb-color",     0, APP_OSWB_COLOR  },
     {(gchar *)"application/x-color",          0, APP_X_COLOR     },
     {(gchar *)"application/x-inkscape-paste", 0, APP_X_INK_PASTE }
@@ -92,83 +89,6 @@ ink_drag_data_received(GtkWidget *widget,
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
     switch (info) {
-#if ENABLE_MAGIC_COLORS
-        case APP_X_INKY_COLOR:
-        {
-            int destX = 0;
-            int destY = 0;
-            gtk_widget_translate_coordinates( widget, &(desktop->canvas->widget), x, y, &destX, &destY );
-            Geom::Point where( sp_canvas_window_to_world( desktop->canvas, Geom::Point( destX, destY ) ) );
-
-            SPItem *item = desktop->getItemAtPoint( where, true );
-            if ( item )
-            {
-                bool fillnotstroke = (drag_context->action != GDK_ACTION_MOVE);
-
-                if ( data->length >= 8 ) {
-                    cmsHPROFILE srgbProf = cmsCreate_sRGBProfile();
-
-                    gchar c[64] = {0};
-                    // Careful about endian issues.
-                    guint16* dataVals = (guint16*)data->data;
-                    sp_svg_write_color( c, sizeof(c),
-                                        SP_RGBA32_U_COMPOSE(
-                                            0x0ff & (dataVals[0] >> 8),
-                                            0x0ff & (dataVals[1] >> 8),
-                                            0x0ff & (dataVals[2] >> 8),
-                                            0xff // can't have transparency in the color itself
-                                            //0x0ff & (data->data[3] >> 8),
-                                            ));
-                    SPCSSAttr *css = sp_repr_css_attr_new();
-                    bool updatePerformed = false;
-
-                    if ( data->length > 14 ) {
-                        int flags = dataVals[4];
-
-                        // piggie-backed palette entry info
-                        int index = dataVals[5];
-                        Glib::ustring palName;
-                        for ( int i = 0; i < dataVals[6]; i++ ) {
-                            palName += (gunichar)dataVals[7+i];
-                        }
-
-                        // Now hook in a magic tag of some sort.
-                        if ( !palName.empty() && (flags & 1) ) {
-                            gchar* str = g_strdup_printf("%d|", index);
-                            palName.insert( 0, str );
-                            g_free(str);
-                            str = 0;
-
-                            item->setAttribute(
-                                fillnotstroke ? "inkscape:x-fill-tag":"inkscape:x-stroke-tag",
-                                palName.c_str(),
-                                false );
-                            item->updateRepr();
-
-                            sp_repr_css_set_property( css, fillnotstroke ? "fill":"stroke", c );
-                            updatePerformed = true;
-                        }
-                    }
-
-                    if ( !updatePerformed ) {
-                        sp_repr_css_set_property( css, fillnotstroke ? "fill":"stroke", c );
-                    }
-
-                    sp_desktop_apply_css_recursive( item, css, true );
-                    item->updateRepr();
-
-                    SPDocumentUndo::done( doc , SP_VERB_NONE,
-                                      _("Drop color"));
-
-                    if ( srgbProf ) {
-                        cmsCloseProfile( srgbProf );
-                    }
-                }
-            }
-        }
-        break;
-#endif // ENABLE_MAGIC_COLORS
-
         case APP_X_COLOR:
         {
             int destX = 0;

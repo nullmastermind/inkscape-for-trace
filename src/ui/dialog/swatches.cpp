@@ -515,9 +515,6 @@ void _loadPaletteFile(Glib::ustring path, gboolean user/*=FALSE*/)
                         userSwatchPages.push_back(onceMore);
                     else
                         systemSwatchPages.push_back(onceMore);
-#if ENABLE_MAGIC_COLORS
-                    ColorItem::_wireMagicColors( onceMore );
-#endif // ENABLE_MAGIC_COLORS
                 } else {
                     delete onceMore;
                 }
