@@ -26,10 +26,8 @@
 #include <glibmm/i18n.h>
 #include <glibmm/markup.h>
 
-#ifdef WITH_GTKSPELL
-extern "C" {
-# include <gtkspell/gtkspell.h>
-}
+#ifdef WITH_GSPELL
+# include <gspell/gspell.h>
 #endif
 
 #include "desktop-style.h"
@@ -112,18 +110,15 @@ TextEdit::TextEdit()
     g_object_unref(text_buffer);
     gtk_text_view_set_wrap_mode ((GtkTextView *) text_view, GTK_WRAP_WORD);
 
-#ifdef WITH_GTKSPELL
+#ifdef WITH_GSPELL
     /*
        TODO: Use computed xml:lang attribute of relevant element, if present, to specify the
        language (either as 2nd arg of gtkspell_new_attach, or with explicit
        gtkspell_set_language call in; see advanced.c example in gtkspell docs).
        onReadSelection looks like a suitable place.
     */
-    GtkSpellChecker * speller = gtk_spell_checker_new();
-
-    if (! gtk_spell_checker_attach(speller, GTK_TEXT_VIEW(text_view))) {
-        g_print("gtkspell error:\n");
-    }
+    GspellTextView *gspell_view = gspell_text_view_get_from_gtk_text_view(GTK_TEXT_VIEW(text_view));
+    gspell_text_view_basic_setup(gspell_view);
 #endif
 
     gtk_widget_set_size_request (text_view, -1, 64);

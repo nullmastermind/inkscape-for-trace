@@ -81,7 +81,7 @@
 #cmakedefine WITH_DBUS 1
 
 /* enable gtk spelling widget */
-#cmakedefine WITH_GTKSPELL 1
+#cmakedefine WITH_GSPELL 1
 
 /* Image/Graphics Magick++ support for bitmap effects */
 #cmakedefine WITH_MAGICK 1
