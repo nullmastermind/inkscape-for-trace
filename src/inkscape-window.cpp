@@ -48,8 +48,6 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
 
     set_resizable(true);
 
-    ink_drag_setup(this);
-
      // =============== Build interface ===============
 
     // Main box
@@ -63,6 +61,8 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     _desktop_widget->window = this;
     _desktop_widget->show();
     _desktop = _desktop_widget->desktop;
+
+    ink_drag_setup(_desktop_widget);
 
     // Menu bar (must come after desktop widget creation as we need _desktop)
     // _menubar = build_menubar(_desktop);

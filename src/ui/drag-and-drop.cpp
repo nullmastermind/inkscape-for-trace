@@ -17,11 +17,13 @@
 #include <glibmm/i18n.h>  // Internationalization
 
 #include "desktop-style.h"
+#include "document.h"
 #include "document-undo.h"
 #include "gradient-drag.h"
 #include "file.h"
-#include "inkscape.h" // SP_ACTIVE_DESKTOP
+#include "selection.h"
 #include "style.h"
+#include "verbs.h"
 
 #include "display/sp-canvas.h" // window to world transform
 
@@ -40,6 +42,7 @@
 #include "ui/interface.h"
 #include "ui/tools/tool-base.h"
 
+#include "widgets/desktop-widget.h"
 #include "widgets/ege-paint-def.h"
 
 using Inkscape::DocumentUndo;
@@ -83,10 +86,11 @@ ink_drag_data_received(GtkWidget *widget,
                          GtkSelectionData *data,
                          guint info,
                          guint /*event_time*/,
-                         gpointer /*user_data*/)
+                         gpointer user_data)
 {
-    SPDocument *doc = SP_ACTIVE_DOCUMENT;
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    auto dtw = static_cast<SPDesktopWidget *>(user_data);
+    SPDesktop *desktop = dtw->desktop;
+    SPDocument *doc = desktop->doc();
 
     switch (info) {
         case APP_X_COLOR:
@@ -367,8 +371,7 @@ ink_drag_data_received(GtkWidget *widget,
     }
 }
 
-#include "ui/tools/gradient-tool.h"
-
+#if 0
 static
 void ink_drag_motion( GtkWidget */*widget*/,
                         GdkDragContext */*drag_context*/,
@@ -392,9 +395,10 @@ static void ink_drag_leave( GtkWidget */*widget*/,
 {
 //     g_message("drag-n-drop leave                at %d", event_time);
 }
+#endif
 
 void
-ink_drag_setup(Gtk::Widget* win)
+ink_drag_setup(SPDesktopWidget* dtw)
 {
     if ( completeDropTargets == nullptr || completeDropTargetsCount == 0 )
     {
@@ -422,17 +426,20 @@ ink_drag_setup(Gtk::Widget* win)
         }
     }
 
-    gtk_drag_dest_set((GtkWidget*)win->gobj(),
+    GtkWidget *widget = GTK_WIDGET(dtw->desktop->canvas);
+
+    gtk_drag_dest_set(widget,
                       GTK_DEST_DEFAULT_ALL,
                       completeDropTargets,
                       completeDropTargetsCount,
                       GdkDragAction(GDK_ACTION_COPY | GDK_ACTION_MOVE));
 
-    g_signal_connect(G_OBJECT(win->gobj()),
+    g_signal_connect(G_OBJECT(widget),
                      "drag_data_received",
                      G_CALLBACK(ink_drag_data_received),
-                     NULL);
+                     dtw);
 
+#if 0
     g_signal_connect(G_OBJECT(win->gobj()),
                      "drag_motion",
                      G_CALLBACK(ink_drag_motion),
@@ -442,6 +449,7 @@ ink_drag_setup(Gtk::Widget* win)
                      "drag_leave",
                      G_CALLBACK(ink_drag_leave),
                      NULL);
+#endif
 }
 
 

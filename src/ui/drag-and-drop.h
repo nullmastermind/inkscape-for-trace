@@ -14,9 +14,9 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <gtkmm.h>
+class SPDesktopWidget;
 
-void ink_drag_setup(Gtk::Widget* win);
+void ink_drag_setup(SPDesktopWidget *);
 
 #endif // SEEN_CANVAS_DRAG_AND_DROP_H
 

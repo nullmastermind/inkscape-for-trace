@@ -22,6 +22,7 @@
 #include <sigc++/sigc++.h>
 #include <vector>
 #include <set>
+#include <gdk/gdk.h>
 #include <glib.h>
 #include <glibmm/ustring.h>
 
