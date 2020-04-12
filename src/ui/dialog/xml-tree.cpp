@@ -443,6 +443,14 @@ Inkscape::XML::Node *XmlTree::get_dt_select()
 }
 
 
+/**
+ * Like SPDesktop::isLayer(), but ignores SPGroup::effectiveLayerMode().
+ */
+static bool isRealLayer(SPObject const *object)
+{
+    auto group = dynamic_cast<SPGroup const *>(object);
+    return group && group->layerMode() == SPGroup::LAYER;
+}
 
 void XmlTree::set_dt_select(Inkscape::XML::Node *repr)
 {
@@ -466,14 +474,17 @@ void XmlTree::set_dt_select(Inkscape::XML::Node *repr)
     }
 
     blocked++;
-    if ( object && in_dt_coordsys(*object)
-         && !(SP_IS_STRING(object) ||
-                current_desktop->isLayer(object) ||
-                SP_IS_ROOT(object)     ) )
-    {
-            /* We cannot set selection to root or string - they are not items and selection is not
-             * equipped to deal with them */
-            selection->set(SP_ITEM(object));
+
+    if (!object || !in_dt_coordsys(*object)) {
+        // object not on canvas
+    } else if (isRealLayer(object)) {
+        current_desktop->setCurrentLayer(object);
+    } else {
+        if (SP_IS_GROUP(object->parent)) {
+            current_desktop->setCurrentLayer(object->parent);
+        }
+
+        selection->set(SP_ITEM(object));
     }
 
     current_desktop->getDocument()->setXMLDialogSelectedObject(object);
@@ -927,20 +938,20 @@ bool XmlTree::in_dt_coordsys(SPObject const &item)
 {
     /* Definition based on sp_item_i2doc_affine. */
     SPObject const *child = &item;
-    g_return_val_if_fail(child != nullptr, false);
-    for(;;) {
-        if (!SP_IS_ITEM(child)) {
-            return false;
-        }
+    while (SP_IS_ITEM(child)) {
         SPObject const * const parent = child->parent;
         if (parent == nullptr) {
-            break;
+            g_assert(SP_IS_ROOT(child));
+            if (child == &item) {
+                // item is root
+                return false;
+            }
+            return true;
         }
         child = parent;
     }
-    g_assert(SP_IS_ROOT(child));
-    /* Relevance: Otherwise, I'm not sure whether to return true or false. */
-    return true;
+    g_assert(!SP_IS_ROOT(child));
+    return false;
 }
 
 }
