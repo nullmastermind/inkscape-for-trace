@@ -52,15 +52,16 @@ static void pi_content_changed (Inkscape::XML::Node * repr, const gchar * old_co
 
 static gboolean ref_to_sibling (NodeData *node, Inkscape::XML::Node * ref, GtkTreeIter *);
 static gboolean repr_to_child (NodeData *node, Inkscape::XML::Node * repr, GtkTreeIter *);
-GtkTreeRowReference  *tree_iter_to_ref (SPXMLViewTree * tree, GtkTreeIter* iter);
+static GtkTreeRowReference *tree_iter_to_ref(SPXMLViewTree *, GtkTreeIter *);
 static gboolean tree_ref_to_iter (SPXMLViewTree * tree, GtkTreeIter* iter, GtkTreeRowReference  *ref);
 
-gboolean search_equal_func (GtkTreeModel *model, gint column, const gchar *key, GtkTreeIter *iter, gpointer search_data);
-gboolean foreach_func (GtkTreeModel *model, GtkTreePath  *path, GtkTreeIter  *iter, gpointer user_data);
+static gboolean search_equal_func(GtkTreeModel *, gint column, const gchar *key, GtkTreeIter *, gpointer search_data);
+static gboolean foreach_func(GtkTreeModel *, GtkTreePath *, GtkTreeIter *, gpointer user_data);
 
-void on_row_changed(GtkTreeModel *tree_model, GtkTreePath *path, GtkTreeIter *iter, gpointer user_data);
-void on_drag_data_received(GtkWidget *wgt, GdkDragContext *context, int x, int y, GtkSelectionData *seldata, guint info, guint time, gpointer userdata);
-gboolean do_drag_motion(GtkWidget *widget, GdkDragContext *context, gint x, gint y, guint time, gpointer user_data);
+static void on_row_changed(GtkTreeModel *, GtkTreePath *, GtkTreeIter *, gpointer user_data);
+static void on_drag_begin(GtkWidget *, GdkDragContext *, gpointer userdata);
+static void on_drag_end(GtkWidget *, GdkDragContext *, gpointer userdata);
+static gboolean do_drag_motion(GtkWidget *, GdkDragContext *, gint x, gint y, guint time, gpointer user_data);
 
 static const Inkscape::XML::NodeEventVector element_repr_events = {
         element_child_added,
@@ -169,7 +170,8 @@ GtkWidget *sp_xmlview_tree_new(Inkscape::XML::Node * repr, void * /*factory*/, v
 
     sp_xmlview_tree_set_repr (tree, repr);
 
-    g_signal_connect(GTK_TREE_VIEW(tree), "drag_data_received",  G_CALLBACK(on_drag_data_received), tree);
+    g_signal_connect(GTK_TREE_VIEW(tree), "drag-begin", G_CALLBACK(on_drag_begin), tree);
+    g_signal_connect(GTK_TREE_VIEW(tree), "drag-end", G_CALLBACK(on_drag_end), tree);
     g_signal_connect(GTK_TREE_VIEW(tree), "drag-motion",  G_CALLBACK(do_drag_motion), tree);
     g_signal_connect(GTK_TREE_VIEW(tree), "test-expand-row", G_CALLBACK(on_test_expand_row), nullptr);
 
@@ -482,9 +484,7 @@ void pi_content_changed(Inkscape::XML::Node *repr, const gchar * /*old_content*/
 /*
  * Save the source path on drag start, will need it in on_row_changed() when moving a row
  */
-void on_drag_data_received(GtkWidget * /*wgt*/, GdkDragContext * /*context*/, int /*x*/, int /*y*/,
-			   GtkSelectionData * /*seldata*/, guint /*info*/, guint /*time*/,
-			   gpointer userdata)
+void on_drag_begin(GtkWidget *, GdkDragContext *, gpointer userdata)
 {
     SPXMLViewTree *tree = static_cast<SPXMLViewTree *>(userdata);
     if (!tree) {
@@ -500,6 +500,45 @@ void on_drag_data_received(GtkWidget * /*wgt*/, GdkDragContext * /*context*/, in
             data->dragging = true;
             dragging_repr = data->repr;
         }
+    }
+}
+
+/**
+ * Finalize what happended in `on_row_changed` and clean up what was set up in `on_drag_begin`
+ */
+void on_drag_end(GtkWidget *, GdkDragContext *, gpointer userdata)
+{
+    if (!dragging_repr)
+        return;
+
+    auto tree = static_cast<SPXMLViewTree *>(userdata);
+    auto selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));
+    bool failed = false;
+
+    GtkTreeIter iter;
+    if (sp_xmlview_tree_get_repr_node(tree, dragging_repr, &iter)) {
+        NodeData *data = sp_xmlview_tree_node_get_data(GTK_TREE_MODEL(tree->store), &iter);
+
+        if (data && data->dragging) {
+            // dragging flag was not cleared in `on_row_changed`, this indicates a failed drag
+            data->dragging = false;
+            failed = true;
+        } else {
+            // Reselect the dragged row
+            gtk_tree_selection_select_iter(selection, &iter);
+        }
+    } else {
+#ifndef GTK_ISSUE_2510_IS_FIXED
+        // https://gitlab.gnome.org/GNOME/gtk/issues/2510
+        gtk_tree_selection_unselect_all(selection);
+#endif
+    }
+
+    dragging_repr = nullptr;
+
+    if (!failed) {
+        // Signal that a drag and drop has completed successfully
+        g_signal_emit_by_name(G_OBJECT(tree), "tree_move", GUINT_TO_POINTER(1));
     }
 }
 
@@ -554,9 +593,8 @@ void on_row_changed(GtkTreeModel *tree_model, GtkTreePath *path, GtkTreeIter *it
 
     NodeData *data_new_parent = sp_xmlview_tree_node_get_data(tree_model, &new_parent);
     if (data_new_parent && data_new_parent->expanded) {
-        // Reselect the dragged row
-        GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));
-        gtk_tree_selection_select_iter(selection, iter);
+        // Reselect the dragged row in `on_drag_end` instead of here, because of
+        // https://gitlab.gnome.org/GNOME/gtk/-/issues/2510
     } else {
         // convert to dummy node
         delete data;
@@ -564,9 +602,6 @@ void on_row_changed(GtkTreeModel *tree_model, GtkTreePath *path, GtkTreeIter *it
     }
 
     tree->blocked--;
-
-    // Signal that a drag and drop has completed successfully
-    g_signal_emit_by_name(G_OBJECT (tree), "tree_move", GUINT_TO_POINTER(1) );
 }
 
 /*
@@ -661,6 +696,10 @@ gboolean do_drag_motion(GtkWidget *widget, GdkDragContext *context, gint x, gint
 
     int action = 0;
 
+    if (!dragging_repr) {
+        goto finally;
+    }
+
     if (path) {
         SPXMLViewTree *tree = SP_XMLVIEW_TREE(user_data);
         GtkTreeIter iter;
@@ -686,7 +725,7 @@ gboolean do_drag_motion(GtkWidget *widget, GdkDragContext *context, gint x, gint
         }
 
         // 4. drag node specific limitations
-        if (dragging_repr) {
+        {
             // sodipodi:namedview can't be re-parented
             static GQuark const CODE_sodipodi_namedview = g_quark_from_static_string("sodipodi:namedview");
             if (dragging_repr->code() == CODE_sodipodi_namedview &&
