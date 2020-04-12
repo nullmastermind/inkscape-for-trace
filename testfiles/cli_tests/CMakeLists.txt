@@ -303,9 +303,29 @@ add_cli_test(export-plain-svg PARAMETERS --export-type=svg --export-plain-svg
 # --export-pdf-version=VERSION
 
 # --export-text-to-path
-add_cli_test(export-text-to-path PARAMETERS --export-text-to-path
-                                 INPUT_FILENAME text.svg OUTPUT_FILENAME text.svg
-                                 TEST_SCRIPT match_regex_fail.sh "text.svg" "<text")
+# PNG: Doesn't make sense.
+# EMF/WMF: No way to check.
+add_cli_test(preserve-text_pdf       PARAMETERS --export-type=pdf
+                                     INPUT_FILENAME text.svg OUTPUT_FILENAME preserve-text.pdf
+                                     TEST_SCRIPT match_regex.sh "preserve-text.pdf" "/FontDescriptor")
+add_cli_test(preserve-text_ps        PARAMETERS --export-type=ps
+                                     INPUT_FILENAME text.svg OUTPUT_FILENAME preserve-text.ps
+                                     TEST_SCRIPT match_regex.sh "preserve-text.ps" "^%%BeginResource: font")
+add_cli_test(preserve-text_eps       PARAMETERS --export-type=eps
+                                     INPUT_FILENAME text.svg OUTPUT_FILENAME preserve-text.eps
+                                     TEST_SCRIPT match_regex.sh "preserve-text.eps" "^%%BeginResource: font")
+add_cli_test(export-text-to-path_svg PARAMETERS --export-text-to-path --export-type=svg
+                                     INPUT_FILENAME text.svg OUTPUT_FILENAME export-text-to-path.svg
+                                     TEST_SCRIPT match_regex_fail.sh "export-text-to-path.svg" "<text")
+add_cli_test(export-text-to-path_pdf PARAMETERS --export-text-to-path --export-type=pdf
+                                     INPUT_FILENAME text.svg OUTPUT_FILENAME export-text-to-path.pdf
+                                     TEST_SCRIPT match_regex_fail.sh "export-text-to-path.pdf" "/FontDescriptor")
+add_cli_test(export-text-to-path_ps  PARAMETERS --export-text-to-path --export-type=ps
+                                     INPUT_FILENAME text.svg OUTPUT_FILENAME export-text-to-path.ps
+                                     TEST_SCRIPT match_regex_fail.sh "export-text-to-path.ps" "^%%BeginResource: font")
+add_cli_test(export-text-to-path_eps PARAMETERS --export-text-to-path --export-type=eps
+                                     INPUT_FILENAME text.svg OUTPUT_FILENAME export-text-to-path.eps
+                                     TEST_SCRIPT match_regex_fail.sh "export-text-to-path.eps" "^%%BeginResource: font")
 
 # --export-latex
 # PDF, PS, EPS only function by design.
