@@ -116,7 +116,9 @@ LPEPatternAlongPath::~LPEPatternAlongPath()
 
 void LPEPatternAlongPath::transform_multiply(Geom::Affine const &postmul, bool /*set*/)
 {
-    pattern.param_transform_multiply(postmul, false);
+    if (sp_lpe_item && sp_lpe_item->pathEffectsEnabled() && sp_lpe_item->optimizeTransforms()) {
+        pattern.param_transform_multiply(postmul, false);
+    }
 }
 
 void

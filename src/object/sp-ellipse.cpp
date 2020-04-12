@@ -500,7 +500,6 @@ void SPGenericEllipse::set_shape()
 
 Geom::Affine SPGenericEllipse::set_transform(Geom::Affine const &xform)
 {
-    notifyTransform(xform);
     if (pathEffectsEnabled() && !optimizeTransforms()) {
         return xform;
     }

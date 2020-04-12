@@ -21,9 +21,7 @@
 #include "2geom/svg-path-parser.h"
 #include "display/curve.h"
 #include "object/sp-shape.h"
-#include "seltrans.h"
 #include "svg/svg.h"
-#include "ui/tools/select-tool.h"
 
 #include "helper/geom.h"
 
@@ -96,15 +94,10 @@ LPEBool::LPEBool(LivePathEffectObject *lpeobject)
     registerParameter(&fill_type_operand);
     show_orig_path = true;
     operand = dynamic_cast<SPItem *>(operand_path.getObject());
-    contdown = 0;
 }
 
 LPEBool::~LPEBool()
 = default;
-
-void LPEBool::resetDefaults(SPItem const * /*item*/)
-{
-}
 
 bool cmp_cut_position(const Path::cut_position &a, const Path::cut_position &b)
 {
@@ -387,6 +380,9 @@ void LPEBool::doBeforeEffect(SPLPEItem const *lpeitem)
         }
         operand = current_operand;
     }
+    if (operand) {
+        operand->setHidden(hide_linked);
+    }
     if (operand && operand->parent && sp_lpe_item && sp_lpe_item->parent != operand->parent) {
         Inkscape::XML::Node *copy = operand->getRepr()->duplicate(xml_doc);
         operand = dynamic_cast<SPItem *>(sp_lpe_item->parent->appendChildRepr(copy));
@@ -395,37 +391,12 @@ void LPEBool::doBeforeEffect(SPLPEItem const *lpeitem)
         Glib::ustring itemid = operand->getId();
         operand_path.linkitem(itemid);
     }
-    // TODO: make 2 methods to globaly inform to a LPE item when is grabbed
-    // and when the transform is applyed both callers can be in Inkscape::SelTrans in grab and ungrab functions
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (desktop && operand) {
-        Inkscape::Selection *selection = desktop->getSelection();
-        Inkscape::UI::Tools::SelectTool *selectool =
-            dynamic_cast<Inkscape::UI::Tools::SelectTool *>(desktop->event_context);
-        gint cdown = 2;
-        if (selectool && selectool->_seltrans && selectool->_seltrans->isGrabbed()) {
-            cdown = 3;
-        }
-        if (!is_load && desktop && selection && operand && operand->isHidden() && hide_linked && contdown != 1) {
-            selection->add(operand);
-            contdown = cdown;
-        }
-        if (contdown == 1 && desktop && selection && operand && operand->isHidden() && hide_linked) {
-            selection->remove(operand);
-        }
-        if (contdown > 0) {
-            --contdown;
-        }
-        if (is_load) {
-            contdown = 1;
-        }
-        if (operand_path.linksToPath() && operand) {
-            SPItem *itemsel = selection->singleItem();
-            if (operand->isHidden() && hide_linked && itemsel && itemsel == operand) {
-                hide_linked.param_setValue(false);
-                hide_linked.write_to_SVG();
-            }
-        }
+}
+
+void LPEBool::transform_multiply(Geom::Affine const &postmul, bool /*set*/)
+{
+    if (operand) {
+        operand->transform *= sp_item_transform_repr(sp_lpe_item).inverse() * postmul;
     }
 }
 
@@ -439,12 +410,7 @@ void LPEBool::doEffect(SPCurve *curve)
     }
 
     if (operand_path.linksToPath() && operand) {
-        if (!operand->isHidden() && hide_linked) {
-            operand->setHidden(true);
-        }
-        if (operand->isHidden() && !hide_linked) {
-            operand->setHidden(false);
-        }
+
         bool_op_ex op = bool_operation.get_value();
         bool swap =  !(swap_operands.get_value());
 

@@ -37,10 +37,12 @@ LPEEnvelope::~LPEEnvelope()
 
 void LPEEnvelope::transform_multiply(Geom::Affine const &postmul, bool /*set*/)
 {
-    bend_path1.param_transform_multiply(postmul, false);
-    bend_path2.param_transform_multiply(postmul, false);
-    bend_path3.param_transform_multiply(postmul, false);
-    bend_path4.param_transform_multiply(postmul, false);
+    if (sp_lpe_item && sp_lpe_item->pathEffectsEnabled() && sp_lpe_item->optimizeTransforms()) {
+        bend_path1.param_transform_multiply(postmul, false);
+        bend_path2.param_transform_multiply(postmul, false);
+        bend_path3.param_transform_multiply(postmul, false);
+        bend_path4.param_transform_multiply(postmul, false);
+    }
 }
 
 void

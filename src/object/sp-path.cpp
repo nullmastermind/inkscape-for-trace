@@ -343,7 +343,6 @@ Geom::Affine SPPath::set_transform(Geom::Affine const &transform) {
     if (!_curve) { // 0 nodes, nothing to transform
         return Geom::identity();
     }
-
     if (pathEffectsEnabled() && !optimizeTransforms()) {
         return transform;
     }
@@ -352,7 +351,6 @@ Geom::Affine SPPath::set_transform(Geom::Affine const &transform) {
     } else {
         _curve->transform(transform);
     }
-    notifyTransform(transform);
     // Adjust stroke
     this->adjust_stroke(transform.descrim());
 

@@ -69,10 +69,12 @@ LPEPerspectiveEnvelope::~LPEPerspectiveEnvelope()
 
 void LPEPerspectiveEnvelope::transform_multiply(Geom::Affine const &postmul, bool /*set*/)
 {
-    up_left_point.param_transform_multiply(postmul, false);
-    up_right_point.param_transform_multiply(postmul, false);
-    down_left_point.param_transform_multiply(postmul, false);
-    down_right_point.param_transform_multiply(postmul, false);
+    if (sp_lpe_item && sp_lpe_item->pathEffectsEnabled() && sp_lpe_item->optimizeTransforms()) {
+        up_left_point.param_transform_multiply(postmul, false);
+        up_right_point.param_transform_multiply(postmul, false);
+        down_left_point.param_transform_multiply(postmul, false);
+        down_right_point.param_transform_multiply(postmul, false);
+    }
 }
 
 bool pointInTriangle(Geom::Point const &p, std::vector<Geom::Point> points)

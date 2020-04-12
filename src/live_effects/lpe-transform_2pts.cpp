@@ -119,8 +119,10 @@ LPETransform2Pts::doOnApply(SPLPEItem const* lpeitem)
 
 void LPETransform2Pts::transform_multiply(Geom::Affine const &postmul, bool /*set*/)
 {
-    start.param_transform_multiply(postmul, false);
-    end.param_transform_multiply(postmul, false);
+    if (sp_lpe_item && sp_lpe_item->pathEffectsEnabled() && sp_lpe_item->optimizeTransforms()) {
+        start.param_transform_multiply(postmul, false);
+        end.param_transform_multiply(postmul, false);
+    }
 }
 
 void

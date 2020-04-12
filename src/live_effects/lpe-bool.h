@@ -27,7 +27,7 @@ public:
 
     void doEffect(SPCurve *curve) override;
     void doBeforeEffect(SPLPEItem const *lpeitem) override;
-    void resetDefaults(SPItem const *item) override;
+    void transform_multiply(Geom::Affine const &postmul, bool set) override;
     void doOnVisibilityToggled(SPLPEItem const * /*lpeitem*/) override;
     void doOnRemove(SPLPEItem const * /*lpeitem*/) override;
 
@@ -61,7 +61,6 @@ private:
     BoolParam swap_operands;
     BoolParam rmv_inner;
     SPItem *operand;
-    size_t contdown;
 };
 
 }; //namespace LivePathEffect

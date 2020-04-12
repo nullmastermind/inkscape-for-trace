@@ -49,7 +49,9 @@ LPEInterpolate::~LPEInterpolate() = default;
 
 void LPEInterpolate::transform_multiply(Geom::Affine const &postmul, bool /*set*/)
 {
-    trajectory_path.param_transform_multiply(postmul, false);
+    if (sp_lpe_item && sp_lpe_item->pathEffectsEnabled() && sp_lpe_item->optimizeTransforms()) {
+        trajectory_path.param_transform_multiply(postmul, false);
+    }
 }
 
 /*

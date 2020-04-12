@@ -498,8 +498,6 @@ Geom::Affine SPStar::set_transform(Geom::Affine const &xform)
     if (!xform.withoutTranslation().isUniformScale()) {
         return xform;
     }
-    notifyTransform(xform);
-
 
     /* Calculate star start in parent coords. */
     Geom::Point pos( this->center * xform );

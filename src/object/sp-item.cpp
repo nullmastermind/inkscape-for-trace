@@ -1531,6 +1531,7 @@ void SPItem::doWriteTransform(Geom::Affine const &transform, Geom::Affine const 
     // If onSetTransform is not overridden, CItem::onSetTransform will return the transform it was given as a parameter.
     // onSetTransform cannot be pure due to the fact that not all visible Items are transformable.
     SPLPEItem * lpeitem = SP_LPE_ITEM(this);
+    lpeitem->notifyTransform(transform);
     if ( // run the object's set_transform (i.e. embed transform) only if:
         (dynamic_cast<SPText *>(this) && firstChild() && dynamic_cast<SPTextPath *>(firstChild())) ||
              (!preserve && // user did not chose to preserve all transforms

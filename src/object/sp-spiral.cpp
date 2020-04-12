@@ -416,7 +416,6 @@ Geom::Affine SPSpiral::set_transform(Geom::Affine const &xform)
     if (!xform.withoutTranslation().isUniformScale()) {
         return xform;
     }
-    notifyTransform(xform);
     /* Calculate spiral start in parent coords. */
     Geom::Point pos( Geom::Point(this->cx, this->cy) * xform );
 
