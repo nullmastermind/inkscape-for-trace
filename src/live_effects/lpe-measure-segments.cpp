@@ -779,7 +779,7 @@ getNodes(SPItem * item, Geom::Affine transform, bool onbbox, bool centers, bool 
             current_nodes.insert(current_nodes.end(), nodes.begin(), nodes.end());
         }
     } else if (shape && !bboxonly) {
-        SPCurve * c = shape->getCurveForEdit();
+        SPCurve * c = shape->getCurve();
         current_nodes = transformNodes(c->get_pathvector().nodes(), transform);
         c->unref();
     } else if ((text || flowtext) && !bboxonly) {
@@ -934,7 +934,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
             fontsize = Inkscape::Util::Quantity::convert(newfontsize, "pt", display_unit.c_str());
             fontsizechanged = true;
         }
-        SPCurve *c = shape->getCurveForEdit();
+        SPCurve *c = shape->getCurve();
         Geom::Point prev_stored = Geom::Point(0,0);
         Geom::Point start_stored = Geom::Point(0,0);
         Geom::Point end_stored = Geom::Point(0,0); 
@@ -992,7 +992,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     if (elemref){
                         SPPath* path = dynamic_cast<SPPath *>(elemref);
                         if (path) {
-                            SPCurve* prevcurve = path->getCurveForEdit();
+                            SPCurve* prevcurve = path->getCurve();
                             if (prevcurve) {
                                 prev_stored = *prevcurve->first_point();
                             }
@@ -1007,7 +1007,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     if (elemref) {
                         SPPath* path = dynamic_cast<SPPath *>(elemref);
                         if (path) {
-                            SPCurve* startcurve = path->getCurveForEdit();
+                            SPCurve* startcurve = path->getCurve();
                             if (startcurve) {
                                 start_stored = *startcurve->first_point();
                             }
@@ -1022,7 +1022,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     if (elemref) {
                         SPPath* path = dynamic_cast<SPPath *>(elemref);
                         if (path) {
-                            SPCurve* endcurve = path->getCurveForEdit();
+                            SPCurve* endcurve = path->getCurve();
                             if (endcurve) {
                                 end_stored = *endcurve->first_point();
                             }
@@ -1037,7 +1037,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     if (elemref) {
                         SPPath* path = dynamic_cast<SPPath *>(elemref);
                         if (path) {
-                            SPCurve* nextcurve = path->getCurveForEdit();
+                            SPCurve* nextcurve = path->getCurve();
                             if (nextcurve) {
                                 next_stored = *nextcurve->first_point();
                             }
