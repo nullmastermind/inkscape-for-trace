@@ -1,7 +1,7 @@
 WARNING: Do not update these files directly!
 
 Their source can be found in the inkscape-docs project, see
-http://bazaar.launchpad.net/~inkscape.dev/inkscape-docs/trunk/files/head:/man/
+https://gitlab.com/inkscape/inkscape-docs/documentation/-/tree/master/man
 
 If you need to update the man pages update inkscape.pod in the linked repository
 and generate localized man pages using the scripts provided there.
