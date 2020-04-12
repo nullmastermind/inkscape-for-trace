@@ -538,6 +538,9 @@ Geom::Point KnotHolderEntityOffsetPoint::knot_get() const
 {
     SPGroup * group = dynamic_cast<SPGroup *>(item);
     LPEOffset * lpe = dynamic_cast<LPEOffset *> (_effect);
+    if (!lpe->update_on_knot_move) {
+        return lpe->offset_pt;
+    }
     Geom::Point nearest = lpe->offset_pt;
     Geom::PathVector out = SP_SHAPE(item)->getCurve(true)->get_pathvector();
     if (lpe->offset_pt == Geom::Point(Geom::infinity(), Geom::infinity())) {
