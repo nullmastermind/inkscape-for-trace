@@ -308,10 +308,11 @@ add_cli_test(export-text-to-path PARAMETERS --export-text-to-path
                                  TEST_SCRIPT match_regex_fail.sh "text.svg" "<text")
 
 # --export-latex
-add_cli_test(export-latex PARAMETERS --export-type=pdf --export-latex
-                          INPUT_FILENAME text.svg OUTPUT_FILENAME text.pdf
-                          EXPECTED_FILES text.pdf text.pdf_tex
-                          TEST_SCRIPT match_regex.sh "text.pdf_tex" "some text")
+# PDF, PS, EPS only function by design.
+add_cli_test(export-latex PARAMETERS --export-type=pdf,ps,eps --export-latex
+                          INPUT_FILENAME text.svg OUTPUT_FILENAME export-latex
+                          EXPECTED_FILES export-latex.pdf export-latex.pdf_tex export-latex.ps export-latex.ps_tex export-latex.eps export-latex.eps_tex
+                          TEST_SCRIPT match_regex.sh "export-latex.pdf_tex" "some text")
 
 # --export-ignore-filters
 
