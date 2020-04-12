@@ -21,6 +21,8 @@
 #include "live_effects/parameter/text.h"
 #include "live_effects/parameter/point.h"
 #include "live_effects/lpegroupbbox.h"
+// this is only to fillrule
+#include "livarot/Shape.h"
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -31,6 +33,8 @@ enum RotateMethod {
     RM_FUSE,
     RM_END
 };
+
+typedef FillRule FillRuleBool;
 
 class LPECopyRotate : public Effect, GroupBBoxEffect {
 public:
@@ -46,7 +50,7 @@ public:
     void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/) override;
     Gtk::Widget * newWidget() override;
     void cloneStyle(SPObject *orig, SPObject *dest);
-    Geom::PathVector doEffect_path_post (Geom::PathVector const & path_in);
+    Geom::PathVector doEffect_path_post (Geom::PathVector const & path_in, FillRuleBool fillrule);
     void toItem(Geom::Affine transform, size_t i, bool reset);
     void cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bool reset);
     Inkscape::XML::Node * createPathBase(SPObject *elemref);
