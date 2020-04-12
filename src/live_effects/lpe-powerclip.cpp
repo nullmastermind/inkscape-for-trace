@@ -170,7 +170,11 @@ void LPEPowerClip::add()
         Inkscape::GC::release(clip_path_node);
         elemref = document->getObjectByRepr(clip_path_node);
         if (elemref) {
-            elemref->setAttribute("style", "fill-rule:evenodd");
+            if (childitem) {
+                elemref->setAttribute("style", childitem->getAttribute("style"));
+            } else {
+                elemref->setAttribute("style", "fill-rule:evenodd");
+            }        
             elemref->setAttribute("class", "powerclip");
             elemref->setAttribute("id", getId());
             gchar *str = sp_svg_write_path(getClipPathvector());
@@ -218,6 +222,14 @@ LPEPowerClip::doOnRemove (SPLPEItem const* /*lpeitem*/)
     if (!document) {
         return;
     }
+    if (keep_paths) {
+        SPObject *clip_path = sp_lpe_item->getClipObject();
+        if (clip_path) {
+            SPLPEItem *childitem = dynamic_cast<SPLPEItem *>(clip_path->childList(true).front());
+            childitem->deleteObject();
+        }
+        return;
+    }
     _updating = true;
     SPObject *elemref = document->getObjectById(getId().c_str());
     if (elemref) {
@@ -263,9 +275,8 @@ void sp_remove_powerclip(Inkscape::Selection *sel)
             SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(*i);
             if (lpeitem) {
                 if (lpeitem->hasPathEffect() && lpeitem->pathEffectsEnabled()) {
-                    for (PathEffectList::iterator it = lpeitem->path_effect_list->begin();
-                         it != lpeitem->path_effect_list->end(); ++it) {
-                        LivePathEffectObject *lpeobj = (*it)->lpeobject;
+                    for (auto &it : *lpeitem->path_effect_list) {
+                        LivePathEffectObject *lpeobj = it->lpeobject;
                         if (!lpeobj) {
                             /** \todo Investigate the cause of this.
                              * For example, this happens when copy pasting an object with LPE applied. Probably because
@@ -274,9 +285,8 @@ void sp_remove_powerclip(Inkscape::Selection *sel)
                             g_warning("SPLPEItem::performPathEffect - NULL lpeobj in list!");
                             return;
                         }
-                        Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
-                        if (lpe->getName() == "Power clip") {
-                            lpeitem->setCurrentPathEffect(*it);
+                        if (LPETypeConverter.get_key(lpeobj->effecttype) == "powerclip") {
+                            lpeitem->setCurrentPathEffect(it);
                             lpeitem->removeCurrentPathEffect(false);
                             break;
                         }
@@ -305,7 +315,9 @@ void sp_inverse_powerclip(Inkscape::Selection *sel) {
                     }
                     Effect::createAndApply(POWERCLIP, SP_ACTIVE_DOCUMENT, lpeitem);
                     Effect* lpe = lpeitem->getCurrentLPE();
-                    lpe->getRepr()->setAttribute("inverse", "true");
+                    if (lpe) {
+                        lpe->getRepr()->setAttribute("inverse", "true");
+                    }
                 }
             }
         }

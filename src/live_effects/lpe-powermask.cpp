@@ -59,7 +59,7 @@ LPEPowerMask::doOnApply (SPLPEItem const * lpeitem)
     SPObject * mask = item->getMaskObject();
     bool hasit = false;
     if (lpeitem->hasPathEffect() && lpeitem->pathEffectsEnabled()) {
-        for (auto & it : *lpeitem->path_effect_list)
+        for (auto &it : *lpeitem->path_effect_list)
         {
             LivePathEffectObject *lpeobj = it->lpeobject;;
             if (!lpeobj) {
@@ -69,8 +69,7 @@ LPEPowerMask::doOnApply (SPLPEItem const * lpeitem)
                 g_warning("SPLPEItem::performPathEffect - NULL lpeobj in list!");
                 return;
             }
-            Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
-            if (lpe->getName() == "powermask") {
+            if (LPETypeConverter.get_key(lpeobj->effecttype) == "powermask") {
                 hasit = true;
                 break;
             }
@@ -265,7 +264,7 @@ LPEPowerMask::setMask(){
             elemref = mask->appendChildRepr(box);
             Inkscape::GC::release(box);
         }
-        box->setPosition(1);
+        box->setPosition(0);
     } else if ((elemref = document->getObjectById(box_id))) {
         elemref->deleteObject(true);
     }
@@ -288,6 +287,9 @@ LPEPowerMask::doOnRemove (SPLPEItem const* lpeitem)
 {
     SPMask *mask = lpeitem->getMaskObject();
     if (mask) {
+        if (keep_paths) {
+            return;
+        }
         invert.param_setValue(false);
         //wrap.param_setValue(false);
         background.param_setValue(false);
@@ -316,8 +318,7 @@ void sp_inverse_powermask(Inkscape::Selection *sel) {
                 if (mask) {
                     Effect::createAndApply(POWERMASK, SP_ACTIVE_DOCUMENT, lpeitem);
                     Effect* lpe = lpeitem->getCurrentLPE();
-                    LPEPowerMask *powermask = dynamic_cast<LPEPowerMask *>(lpe);
-                    if (powermask) {
+                    if (lpe) {
                         lpe->getRepr()->setAttribute("invert", "false");
                         lpe->getRepr()->setAttribute("is_visible", "true");
                         lpe->getRepr()->setAttribute("hide_mask", "false");
@@ -333,23 +334,23 @@ void sp_inverse_powermask(Inkscape::Selection *sel) {
 void sp_remove_powermask(Inkscape::Selection *sel) {
     if (!sel->isEmpty()) {
         auto selList = sel->items();
-        for(auto i = boost::rbegin(selList); i != boost::rend(selList); ++i) {
-            SPLPEItem* lpeitem = dynamic_cast<SPLPEItem*>(*i);
+        for (auto i = boost::rbegin(selList); i != boost::rend(selList); ++i) {
+            SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(*i);
             if (lpeitem) {
                 if (lpeitem->hasPathEffect() && lpeitem->pathEffectsEnabled()) {
-                    for (auto & it : *lpeitem->path_effect_list)
-                    {
+                    for (auto & it : *lpeitem->path_effect_list) {
                         LivePathEffectObject *lpeobj = it->lpeobject;
                         if (!lpeobj) {
                             /** \todo Investigate the cause of this.
-                             * For example, this happens when copy pasting an object with LPE applied. Probably because the object is pasted while the effect is not yet pasted to defs, and cannot be found.
-                            */
+                             * For example, this happens when copy pasting an object with LPE applied. Probably because
+                             * the object is pasted while the effect is not yet pasted to defs, and cannot be found.
+                             */
                             g_warning("SPLPEItem::performPathEffect - NULL lpeobj in list!");
                             return;
                         }
-                        Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
-                        if (lpe->getName() == "powermask") {
-                            lpe->doOnRemove(lpeitem);
+                        if (LPETypeConverter.get_key(lpeobj->effecttype) == "powermask") {
+                            lpeitem->setCurrentPathEffect(it);
+                            lpeitem->removeCurrentPathEffect(false);
                             break;
                         }
                     }

@@ -1611,27 +1611,24 @@ void ObjectVerb::perform( SPAction *action, void *data)
             break;
         case SP_VERB_OBJECT_SET_INVERSE_MASK:
             sel->setMask(false, false);
-            Inkscape::DocumentUndo::setUndoSensitive(dt->getDocument(), false);
             Inkscape::LivePathEffect::sp_inverse_powermask(sp_action_get_selection(action));
-            Inkscape::DocumentUndo::setUndoSensitive(dt->getDocument(), true);
+            DocumentUndo::done(dt->getDocument(), SP_VERB_OBJECT_SET_INVERSE_MASK, _("_Set Inverse (LPE)"));
             break;
         case SP_VERB_OBJECT_EDIT_MASK:
             sel->editMask(false);
             break;
         case SP_VERB_OBJECT_UNSET_MASK:
-            Inkscape::DocumentUndo::setUndoSensitive(dt->getDocument(), false);
             Inkscape::LivePathEffect::sp_remove_powermask(sp_action_get_selection(action));
-            Inkscape::DocumentUndo::setUndoSensitive(dt->getDocument(), true);
             sel->unsetMask(false);
+            DocumentUndo::done(dt->getDocument(), SP_VERB_OBJECT_UNSET_MASK, _("Release mask"));
             break;
         case SP_VERB_OBJECT_SET_CLIPPATH:
             sel->setMask(true, false);
             break;
         case SP_VERB_OBJECT_SET_INVERSE_CLIPPATH:
             sel->setMask(true, false);
-            Inkscape::DocumentUndo::setUndoSensitive(dt->getDocument(), false);
             Inkscape::LivePathEffect::sp_inverse_powerclip(sp_action_get_selection(action));
-            Inkscape::DocumentUndo::setUndoSensitive(dt->getDocument(), true);
+            DocumentUndo::done(dt->getDocument(), SP_VERB_OBJECT_SET_INVERSE_CLIPPATH, _("_Set Inverse (LPE)"));
             break;
         case SP_VERB_OBJECT_CREATE_CLIP_GROUP:
             sel->setClipGroup();
@@ -1640,10 +1637,10 @@ void ObjectVerb::perform( SPAction *action, void *data)
             sel->editMask(true);
             break;
         case SP_VERB_OBJECT_UNSET_CLIPPATH:
-            Inkscape::DocumentUndo::setUndoSensitive(dt->getDocument(), false);
             Inkscape::LivePathEffect::sp_remove_powerclip(sp_action_get_selection(action));
-            Inkscape::DocumentUndo::setUndoSensitive(dt->getDocument(), true);
             sel->unsetMask(true);
+            DocumentUndo::done(dt->getDocument(), SP_VERB_OBJECT_UNSET_CLIPPATH, _("Release clipping path"));
+            
             break;
         default:
             break;
