@@ -726,10 +726,14 @@ gboolean do_drag_motion(GtkWidget *widget, GdkDragContext *context, gint x, gint
 
         // 4. drag node specific limitations
         {
-            // sodipodi:namedview can't be re-parented
+            // nodes which can't be re-parented (because the document holds pointers to them which must stay valid)
             static GQuark const CODE_sodipodi_namedview = g_quark_from_static_string("sodipodi:namedview");
-            if (dragging_repr->code() == CODE_sodipodi_namedview &&
-                (dragging_repr->parent() != repr->parent() || drop_into)) {
+            static GQuark const CODE_svg_defs = g_quark_from_static_string("svg:defs");
+
+            bool const no_reparenting = dragging_repr->code() == CODE_sodipodi_namedview || //
+                                        dragging_repr->code() == CODE_svg_defs;
+
+            if (no_reparenting && (drop_into || dragging_repr->parent() != repr->parent())) {
                 goto finally;
             }
         }
