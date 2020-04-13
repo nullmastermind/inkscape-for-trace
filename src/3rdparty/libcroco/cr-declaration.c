@@ -202,47 +202,36 @@ cr_declaration_parse_list_from_buf (const guchar * a_str,
                         status = CR_ERROR;
                 goto cleanup;
         }
-        status = cr_parser_try_to_skip_spaces_and_comments (parser);
-        if (status != CR_OK)
-                goto cleanup;
 
-        status = cr_parser_parse_declaration (parser, &property,
-                                              &value, &important);
-        if (status != CR_OK || !property) {
+        for (gboolean first = TRUE;; first = FALSE) {
+                status = cr_parser_try_to_skip_spaces_and_comments (parser);
                 if (status != CR_OK)
-                        status = CR_ERROR;
-                goto cleanup;
-        }
-        result = cr_declaration_new (NULL, property, value);
-        if (result) {
-                property = NULL;
-                value = NULL;
-                result->important = important;
-        }
-        /*now, go parse the other declarations */
-        for (;;) {
-                guint32 c = 0;
-
-                cr_parser_try_to_skip_spaces_and_comments (parser);
-                status = cr_tknzr_peek_char (tokenizer, &c);
-                if (status != CR_OK) {
-                        if (status == CR_END_OF_INPUT_ERROR)
-                                status = CR_OK;
                         goto cleanup;
+
+                if (!first) {
+                        guint32 c = 0;
+
+                        status = cr_tknzr_peek_char (tokenizer, &c);
+                        if (status != CR_OK) {
+                                goto cleanup;
+                        }
+                        if (c == ';') {
+                                status = cr_tknzr_read_char (tokenizer, &c);
+                        } else {
+                                cr_tknzr_read_char (tokenizer, &c);
+                                continue; // try to keep reading until we reach the end or a ;
+                        }
+                        important = FALSE;
+
+                        status = cr_parser_try_to_skip_spaces_and_comments (parser);
+                        if (status != CR_OK)
+                                goto cleanup;
                 }
-                if (c == ';') {
-                        status = cr_tknzr_read_char (tokenizer, &c);
-                } else {
-                        cr_tknzr_read_char (tokenizer, &c);
-                        continue; // try to keep reading until we reach the end or a ;
-                }
-                important = FALSE;
-                cr_parser_try_to_skip_spaces_and_comments (parser);
+
                 status = cr_parser_parse_declaration (parser, &property,
                                                       &value, &important);
                 if (status != CR_OK || !property) {
                         if (status == CR_END_OF_INPUT_ERROR) {
-                                status = CR_OK; // simply the end of input, do not delete what we got so far, just finish
                                 break;
                         } else {
                                 continue; // even if one declaration is broken, it's no reason to discard others (see http://www.w3.org/TR/CSS21/syndata.html#declaration)
@@ -251,7 +240,11 @@ cr_declaration_parse_list_from_buf (const guchar * a_str,
                 cur_decl = cr_declaration_new (NULL, property, value);
                 if (cur_decl) {
                         cur_decl->important = important;
-                        result = cr_declaration_append (result, cur_decl);
+                        if (result) {
+                                result = cr_declaration_append (result, cur_decl);
+                        } else {
+                                result = cur_decl;
+                        }
                         property = NULL;
                         value = NULL;
                         cur_decl = NULL;
@@ -261,6 +254,10 @@ cr_declaration_parse_list_from_buf (const guchar * a_str,
         }
 
       cleanup:
+
+        if (status == CR_END_OF_INPUT_ERROR && result) {
+                status = CR_OK;
+        }
 
         if (parser) {
                 cr_parser_destroy (parser);
