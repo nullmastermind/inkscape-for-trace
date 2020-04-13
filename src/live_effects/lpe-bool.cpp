@@ -47,8 +47,9 @@ static const Util::EnumData<LPEBool::bool_op_ex> BoolOpData[LPEBool::bool_op_ex_
     // bool_op_cut is called "Division" in the manu, see sp_selected_path_cut
     // bool_op_slice is called "Cut path" in the menu, see sp_selected_path_slice
     { LPEBool::bool_op_ex_slice, N_("cut"), "slice" },
-    { LPEBool::bool_op_ex_slice_inside, N_("cut inside"), "slice-inside" },
-    { LPEBool::bool_op_ex_slice_outside, N_("cut outside"), "slice-outside" },
+    // Comneted in 1.0 don't work properly
+    // { LPEBool::bool_op_ex_slice_inside, N_("cut inside"), "slice-inside" },
+    // { LPEBool::bool_op_ex_slice_outside, N_("cut outside"), "slice-outside" },
 };
 
 static const Util::EnumDataConverter<LPEBool::bool_op_ex> BoolOpConverter(BoolOpData, sizeof(BoolOpData) / sizeof(*BoolOpData));
@@ -414,7 +415,7 @@ void LPEBool::doEffect(SPCurve *curve)
     if (operand_path.linksToPath() && operand) {
 
         bool_op_ex op = bool_operation.get_value();
-        bool swap =  !(swap_operands.get_value());
+        bool swap =  swap_operands.get_value();
 
         Geom::Affine current_affine = sp_item_transform_repr(sp_lpe_item);
         Geom::Affine operand_affine = sp_item_transform_repr(operand);
@@ -423,8 +424,8 @@ void LPEBool::doEffect(SPCurve *curve)
         path_in *= current_affine;
         operand_pv *= operand_affine;
 
-        Geom::PathVector path_a = swap ? operand_pv : path_in;
-        Geom::PathVector path_b = swap ? path_in : operand_pv;
+        Geom::PathVector path_a = swap ? path_in : operand_pv;
+        Geom::PathVector path_b = swap ? operand_pv : path_in;
 
         // TODO: I would like to use the original objects fill rule if the UI selected rule is fill_justDont.
         // But it doesn't seem possible to access them from here, because SPCurve is not derived from SPItem.
@@ -442,17 +443,30 @@ void LPEBool::doEffect(SPCurve *curve)
         }
 
         Geom::PathVector path_out;
-
-        if (op == bool_op_ex_slice) {
-            // For slicing, the bool op is added to the line group which is sliced, not the cut path. This swapped order is correct.
-            path_out = sp_pathvector_boolop(path_b, path_a, to_bool_op(op), fill_b, fill_a);
-        } else if (op == bool_op_ex_slice_inside) {
+        if (op == bool_op_ex_cut) {
+            // we do in two pass because wrong sp_pathvector_boolop diference, in commnet they sugest make this to fix
+            path_out = sp_pathvector_boolop(path_a, path_b, to_bool_op(bool_op_ex_inters), fill_a, fill_b);
+            Geom::PathVector path_out_2 = sp_pathvector_boolop(path_b, path_a, to_bool_op(bool_op_ex_diff), fill_b, fill_a);
+            path_out.insert(path_out.end(), path_out_2.begin(), path_out_2.end());
+        } else if (op == bool_op_ex_slice) {
+            // For slicing, the bool op is added to the line group which is sliced, not the cut path. This swapped order is correct            path_out = sp_pathvector_boolop(path_b, path_a, to_bool_op(op), fill_b, fill_a);
+        
+        /*} else if (op == bool_op_ex_slice_inside) {
             path_out = sp_pathvector_boolop_slice_intersect(path_a, path_b, true, fill_a, fill_b);
         } else if (op == bool_op_ex_slice_outside) {
             path_out = sp_pathvector_boolop_slice_intersect(path_a, path_b, false, fill_a, fill_b);
+        } */ 
         } else {
             path_out = sp_pathvector_boolop(path_a, path_b, to_bool_op(op), fill_a, fill_b);
         }
+        /*
+        Maybe add a bit simplify?
+        Geom::PathVector pathv = path_out * current_affine.inverse();
+        gdouble size  = Geom::L2(pathv.boundsFast()->dimensions());
+        Path* pathliv = Path_for_pathvector(pathv);
+        pathliv->ConvertEvenLines(0.00002 * size);
+        pathliv->Simplify(0.00002 * size);
+        pathv = Geom::parse_svg_path(pathliv->svg_dump_path()); */
         curve->set_pathvector(path_out * current_affine.inverse());
     }
 }

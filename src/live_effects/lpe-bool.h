@@ -38,8 +38,9 @@ public:
         bool_op_ex_symdiff   = bool_op_symdiff,
         bool_op_ex_cut       = bool_op_cut,
         bool_op_ex_slice     = bool_op_slice,
-        bool_op_ex_slice_inside,            // like bool_op_slice, but leaves only the contour pieces inside of the cut path
-        bool_op_ex_slice_outside,           // like bool_op_slice, but leaves only the contour pieces outside of the cut path
+        // Comneted in 1.0 don't work properly
+        // bool_op_ex_slice_inside,            // like bool_op_slice, but leaves only the contour pieces inside of the cut path
+        // bool_op_ex_slice_outside,           // like bool_op_slice, but leaves only the contour pieces outside of the cut path
         bool_op_ex_count
     };
 
