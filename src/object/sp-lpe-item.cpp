@@ -200,10 +200,10 @@ bool SPLPEItem::performPathEffect(SPCurve *curve, SPShape *current, bool is_clip
     }
 
     if (this->hasPathEffect() && this->pathEffectsEnabled()) {
-        size_t path_effect_list_size =  this->path_effect_list->size();
-        for (auto & it : *this->path_effect_list)
-        {
-            LivePathEffectObject *lpeobj = it->lpeobject;
+        PathEffectList path_effect_list(*this->path_effect_list);
+        size_t path_effect_list_size = path_effect_list.size();
+        for (auto &lperef : path_effect_list) {
+            LivePathEffectObject *lpeobj = lperef->lpeobject;
             if (!lpeobj) {
                 /** \todo Investigate the cause of this.
                  * For example, this happens when copy pasting an object with LPE applied. Probably because the object is pasted while the effect is not yet pasted to defs, and cannot be found.
@@ -296,9 +296,8 @@ bool SPLPEItem::optimizeTransforms()
     if (dynamic_cast<SPGroup *>(this)) {
         return false;
     }
-    std::list<Inkscape::LivePathEffect::LPEObjectReference *>::iterator i;
-    for (i = this->path_effect_list->begin(); i != this->path_effect_list->end(); ++i) {
-        Inkscape::LivePathEffect::LPEObjectReference *lperef = (*i);
+    PathEffectList path_effect_list(*this->path_effect_list);
+    for (auto &lperef : path_effect_list) {
         if (!lperef) {
             continue;
         }
@@ -328,9 +327,8 @@ bool SPLPEItem::optimizeTransforms()
  */
 void SPLPEItem::notifyTransform(Geom::Affine const &postmul)
 {
-    std::list<Inkscape::LivePathEffect::LPEObjectReference *>::iterator i;
-    for (i = this->path_effect_list->begin(); i != this->path_effect_list->end(); ++i) {
-        Inkscape::LivePathEffect::LPEObjectReference *lperef = (*i);
+    PathEffectList path_effect_list(*this->path_effect_list);
+    for (auto &lperef : path_effect_list) {
         if (!lperef) {
             continue;
         }
@@ -689,9 +687,8 @@ void SPLPEItem::removeAllPathEffects(bool keep_paths)
             return;
         }
     }
-    std::list<Inkscape::LivePathEffect::LPEObjectReference *>::iterator i;
-    for (i = this->path_effect_list->begin(); i != this->path_effect_list->end(); ++i) {
-        Inkscape::LivePathEffect::LPEObjectReference *lperef = (*i);
+    PathEffectList path_effect_list(*this->path_effect_list);
+    for (auto &lperef : path_effect_list) {
         if (!lperef) {
             continue;
         }
@@ -764,9 +761,9 @@ bool SPLPEItem::hasBrokenPathEffect() const
     }
 
     // go through the list; if some are unknown or invalid, return true
-    for (PathEffectList::const_iterator it = path_effect_list->begin(); it != path_effect_list->end(); ++it)
-    {
-        LivePathEffectObject *lpeobj = (*it)->lpeobject;
+    PathEffectList path_effect_list(*this->path_effect_list);
+    for (auto &lperef : path_effect_list) {
+        LivePathEffectObject *lpeobj = lperef->lpeobject;
         if (!lpeobj || !lpeobj->get_lpe()) {
             return true;
         }
@@ -811,9 +808,9 @@ bool SPLPEItem::hasPathEffectOnClipOrMask(SPLPEItem * shape) const
         return false;
     }
 
-    for (auto & it : *this->path_effect_list)
-    {
-        LivePathEffectObject *lpeobj = it->lpeobject;
+    PathEffectList path_effect_list(*this->path_effect_list);
+    for (auto &lperef : path_effect_list) {
+        LivePathEffectObject *lpeobj = lperef->lpeobject;
         if (!lpeobj) {
             continue;
         }
@@ -846,9 +843,9 @@ bool SPLPEItem::hasPathEffect() const
     }
 
     // go through the list; if some are unknown or invalid, we are not an LPE item!
-    for (PathEffectList::const_iterator it = path_effect_list->begin(); it != path_effect_list->end(); ++it)
-    {
-        LivePathEffectObject *lpeobj = (*it)->lpeobject;
+    PathEffectList path_effect_list(*this->path_effect_list);
+    for (auto &lperef : path_effect_list) {
+        LivePathEffectObject *lpeobj = lperef->lpeobject;
         if (!lpeobj || !lpeobj->get_lpe()) {
             return false;
         }
@@ -1041,9 +1038,9 @@ SPLPEItem::applyToClipPathOrMask(SPItem *clip_mask, SPItem* to, Inkscape::LivePa
 Inkscape::LivePathEffect::Effect*
 SPLPEItem::getPathEffectOfType(int type)
 {
-    std::list<Inkscape::LivePathEffect::LPEObjectReference *>::iterator i;
-    for (i = path_effect_list->begin(); i != path_effect_list->end(); ++i) {
-        LivePathEffectObject *lpeobj = (*i)->lpeobject;
+    PathEffectList path_effect_list(*this->path_effect_list);
+    for (auto &lperef : path_effect_list) {
+        LivePathEffectObject *lpeobj = lperef->lpeobject;
         if (lpeobj) {
             Inkscape::LivePathEffect::Effect* lpe = lpeobj->get_lpe();
             if (lpe && (lpe->effectType() == type)) {

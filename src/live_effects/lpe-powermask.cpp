@@ -59,9 +59,9 @@ LPEPowerMask::doOnApply (SPLPEItem const * lpeitem)
     SPObject * mask = item->getMaskObject();
     bool hasit = false;
     if (lpeitem->hasPathEffect() && lpeitem->pathEffectsEnabled()) {
-        for (auto &it : *lpeitem->path_effect_list)
-        {
-            LivePathEffectObject *lpeobj = it->lpeobject;;
+        PathEffectList path_effect_list(*lpeitem->path_effect_list);
+        for (auto &lperef : path_effect_list) {
+            LivePathEffectObject *lpeobj = lperef->lpeobject;
             if (!lpeobj) {
                 /** \todo Investigate the cause of this.
                  * For example, this happens when copy pasting an object with LPE applied. Probably because the object is pasted while the effect is not yet pasted to defs, and cannot be found.
@@ -338,8 +338,9 @@ void sp_remove_powermask(Inkscape::Selection *sel) {
             SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(*i);
             if (lpeitem) {
                 if (lpeitem->hasPathEffect() && lpeitem->pathEffectsEnabled()) {
-                    for (auto & it : *lpeitem->path_effect_list) {
-                        LivePathEffectObject *lpeobj = it->lpeobject;
+                    PathEffectList path_effect_list(*lpeitem->path_effect_list);
+                    for (auto &lperef : path_effect_list) {
+                        LivePathEffectObject *lpeobj = lperef->lpeobject;
                         if (!lpeobj) {
                             /** \todo Investigate the cause of this.
                              * For example, this happens when copy pasting an object with LPE applied. Probably because
@@ -349,7 +350,7 @@ void sp_remove_powermask(Inkscape::Selection *sel) {
                             return;
                         }
                         if (LPETypeConverter.get_key(lpeobj->effecttype) == "powermask") {
-                            lpeitem->setCurrentPathEffect(it);
+                            lpeitem->setCurrentPathEffect(lperef);
                             lpeitem->removeCurrentPathEffect(false);
                             break;
                         }
