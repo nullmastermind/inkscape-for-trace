@@ -384,10 +384,12 @@ void LPEBool::doBeforeEffect(SPLPEItem const *lpeitem)
         operand->setHidden(hide_linked);
     }
     if (operand && operand->parent && sp_lpe_item && sp_lpe_item->parent != operand->parent) {
+        // TODO: reposition new operand on doOnRemove if keep_paths is false
         Inkscape::XML::Node *copy = operand->getRepr()->duplicate(xml_doc);
-        operand = dynamic_cast<SPItem *>(sp_lpe_item->parent->appendChildRepr(copy));
+        SPItem *relocated_operand = dynamic_cast<SPItem *>(sp_lpe_item->parent->appendChildRepr(copy));
         Inkscape::GC::release(copy);
         operand->deleteObject();
+        operand = relocated_operand;
         Glib::ustring itemid = operand->getId();
         operand_path.linkitem(itemid);
     }

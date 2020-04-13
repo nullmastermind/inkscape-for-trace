@@ -67,7 +67,8 @@ set(TEST_SOURCES
     cairo-utils-test
     svg-extension-test
     curve-test
-    2geom-characterization-test)
+    2geom-characterization-test
+    lpe-bool-test)
 
 set(TEST_LIBS
     ${GTEST_LIBRARIES}
