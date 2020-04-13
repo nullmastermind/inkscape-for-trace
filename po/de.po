@@ -31779,7 +31779,7 @@ msgstr "Die Auswahl auf die darunterliegende Ebene verschieben"
 
 #: ../src/verbs.cpp:2925
 msgid "Move Selection to Layer..."
-msgstr "Auswahl zur anderer Ebene verschieben"
+msgstr "Auswahl zur anderer Ebene verschieben…"
 
 #: ../src/verbs.cpp:2927
 msgid "Layer to _Top"
@@ -32746,7 +32746,7 @@ msgstr "Prototyp-Dialog"
 
 #: ../src/verbs.cpp:3192
 msgid "P_references..."
-msgstr "Einstellungen"
+msgstr "Einstellungen…"
 
 #: ../src/verbs.cpp:3193
 msgid "Edit global Inkscape preferences"
