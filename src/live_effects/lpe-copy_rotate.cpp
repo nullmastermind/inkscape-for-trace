@@ -519,15 +519,12 @@ LPECopyRotate::doEffect_path (Geom::PathVector const & path_in)
     Geom::OptRect trianglebounds = divider.boundsFast();
     divider.close();
     half_dir = unit_vector(Geom::middle_point(line_start,line_end) - (Geom::Point)origin);
-    FillRuleBool fillrule;
-    if (current_shape->style && current_shape->style->fill_rule.set) {
-        if (current_shape->style->fill_rule.computed == SP_WIND_RULE_EVENODD) {
-            fillrule = (FillRuleBool)fill_oddEven;
-        } else {
-            fillrule = (FillRuleBool)fill_nonZero;
-        }
-    } else {
-        fillrule = (FillRuleBool)fill_nonZero;
+    FillRuleBool fillrule = fill_nonZero;
+    if (current_shape->style && 
+        current_shape->style->fill_rule.set &&
+        current_shape->style->fill_rule.computed == SP_WIND_RULE_EVENODD) 
+    {
+        fillrule = (FillRuleBool)fill_oddEven;
     }
     if (method != RM_NORMAL) {
         if (method != RM_KALEIDOSCOPE) {
@@ -541,17 +538,51 @@ LPECopyRotate::doEffect_path (Geom::PathVector const & path_in)
         Geom::PathVector triangle;
         triangle.push_back(divider);
         path_out = sp_pathvector_boolop(path_out, triangle, bool_op_inters, fillrule, fillrule);
-        /* std::unique_ptr<Geom::PathIntersectionGraph> pig(new Geom::PathIntersectionGraph(triangle, path_out));
-        if (pig && !path_out.empty() && !triangle.empty()) {
-            path_out = pig->getIntersection();
-        } */
-        path_out *= Geom::Translate(half_dir * gap);
         if ( !split_items ) {
-            path_out *= Geom::Translate(half_dir * gap).inverse();
             path_out = doEffect_path_post(path_out, fillrule);
+        } else {
+            path_out *= Geom::Translate(half_dir * gap);
         }
     } else {
         path_out = doEffect_path_post(path_in, fillrule);
+    }
+    if (!split_items && method != RM_NORMAL) {
+        Geom::PathVector path_out_tmp;
+        for (const auto & path_it : path_out) {
+            if (path_it.empty()) {
+                continue;
+            }
+            Geom::Path::const_iterator curve_it1 = path_it.begin();
+            Geom::Path::const_iterator curve_endit = path_it.end_default();
+            Geom::Path res;
+            if (path_it.closed()) {
+                const Geom::Curve &closingline = path_it.back_closed(); 
+                // the closing line segment is always of type 
+                // Geom::LineSegment.
+                if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
+                    // closingline.isDegenerate() did not work, because it only checks for
+                    // *exact* zero length, which goes wrong for relative coordinates and
+                    // rounding errors...
+                    // the closing line segment has zero-length. So stop before that one!
+                    curve_endit = path_it.end_open();
+                }
+            }
+            while (curve_it1 != curve_endit) {
+                if (!Geom::are_near(curve_it1->initialPoint(), curve_it1->pointAt(0.5), 0.05)) {
+                    if (!res.empty()) {
+                        res.setFinal(curve_it1->initialPoint());
+                    }
+                    Geom::Curve *c = curve_it1->duplicate();
+                    res.append(c);
+                }
+                ++curve_it1;
+            }
+            if (path_it.closed()) {
+                res.close();
+            }
+            path_out_tmp.push_back(res);
+        }
+        path_out = path_out_tmp;
     }
     return pathv_to_linear_and_cubic_beziers(path_out);
 }
@@ -594,15 +625,6 @@ LPECopyRotate::doEffect_path_post (Geom::PathVector const & path_in, FillRuleBoo
             } else {
                 output_pv = join_pv;
             }
-            /*
-	    std::unique_ptr<Geom::PathIntersectionGraph> pig(new Geom::PathIntersectionGraph(output_pv, join_pv));
-            if (pig) {
-                if (!output_pv.empty()) {
-                    output_pv = pig->getUnion();
-                } else {
-                    output_pv = join_pv;
-                }
-            } */
         } else {
             t = pre * Geom::Rotate(-Geom::rad_from_deg(starting_angle)) * r * rot * Geom::Rotate(Geom::rad_from_deg(starting_angle)) * Geom::Translate(origin);
             if(mirror_copies && i%2 != 0) {
