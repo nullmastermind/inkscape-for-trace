@@ -28,6 +28,7 @@
 #include <2geom/angle.h>
 #include <2geom/curve.h>
 #include "object/sp-shape.h"
+#include "path/path-boolop.h"
 #include "knot-holder-entity.h"
 #include "knotholder.h"
 #include "util/units.h"
@@ -75,7 +76,7 @@ LPEOffset::LPEOffset(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     unit(_("Unit"), _("Unit of measurement"), "unit", &wr, this, "mm"),
     offset(_("Offset:"), _("Offset"), "offset", &wr, this, 0.0),
-    linejoin_type(_("Join:"), _("Determines the shape of the path's corners"),  "linejoin_type", JoinTypeConverter, &wr, this, JOIN_ROUND),
+    linejoin_type(_("Join:"), _("Determines the shape of the path's corners"),  "linejoin_type", JoinTypeConverter, &wr, this, JOIN_MITER),
     miter_limit(_("Miter limit:"), _("Maximum length of the miter join (in units of stroke width)"), "miter_limit", &wr, this, 4.0),
     attempt_force_join(_("Force miter"), _("Overrides the miter limit and forces a join."), "attempt_force_join", &wr, this, true),
     update_on_knot_move(_("Live update"), _("Update while moving handle"), "update_on_knot_move", &wr, this, true)
@@ -371,6 +372,16 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
         if (to_offset <= 0.01) {
             return path_in;
         }
+        Geom::OptRect original_bounds = original.boundsFast();
+        double original_height = 0;
+        double original_width = 0;
+        if (original_bounds) {
+            original_height = (*original_bounds).height();
+            original_width = (*original_bounds).width();
+        }
+        if (path_inside && (offset * 2 > (original_height + original_width) / 2.0)) {
+            continue;
+        }
         Geom::Path with_dir = half_outline(original, 
                                 to_offset,
                                 (attempt_force_join ? std::numeric_limits<double>::max() : miter_limit),
@@ -392,13 +403,10 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
         bool reversed = false;
         Geom::OptRect against_dir_bounds = against_dir.boundsFast();
         Geom::OptRect with_dir_bounds = with_dir.boundsFast();
-        Geom::OptRect original_bounds = original.boundsFast();
         double with_dir_height = 0;
         double against_dir_height = 0;
-        double original_height = 0;
         double with_dir_width = 0;
         double against_dir_width = 0;
-        double original_width = 0;
         if (with_dir_bounds) {
             with_dir_height = (*with_dir_bounds).height();
             with_dir_width = (*with_dir_bounds).width();
@@ -406,10 +414,6 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
         if (against_dir_bounds) {
             against_dir_height = (*against_dir_bounds).height();
             against_dir_width = (*against_dir_bounds).width();
-        }
-        if (original_bounds) {
-            original_height = (*original_bounds).height();
-            original_width = (*original_bounds).width();
         }
         reversed = against_dir_bounds.contains(with_dir_bounds) == false;
         // We can have a strange result for the bounding box container
@@ -457,7 +461,7 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
         }
         //big = sp_get_outer(big);
         //gap = sp_get_outer(gap);
-        
+
         if (!closed) {
             tmp.push_back(small);
             double smalldist = sp_get_distance_point(tmp, offset_pt);
@@ -474,9 +478,7 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
         }
         bool fix_reverse = (original_width + original_height) / 2.0  > to_offset * 2;
         if (offset < 0) {
-            if (fix_reverse) {
-                tmp.push_back(gap);
-            }
+            tmp.push_back(gap);
         } else {
             if (path_inside) {
                 if (fix_reverse) {
@@ -494,9 +496,8 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
 
     if (offset < 0) {
         sp_flatten(ret_outline, fill_nonZero);
-        std::unique_ptr<Geom::PathIntersectionGraph> pig(new Geom::PathIntersectionGraph(ret, ret_outline));
-        if (pig && !ret_outline.empty() && !ret.empty()) {
-            ret = pig->getAminusB();
+        if (!ret_outline.empty() && !ret.empty()) {
+            ret = sp_pathvector_boolop(ret_outline, ret, bool_op_diff, fill_nonZero, fill_oddEven);
         }
     }
 
