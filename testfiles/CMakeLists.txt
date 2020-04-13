@@ -68,7 +68,8 @@ set(TEST_SOURCES
     svg-extension-test
     curve-test
     2geom-characterization-test
-    lpe-bool-test)
+    lpe-bool-test
+    sp-item-group-test)
 
 set(TEST_LIBS
     ${GTEST_LIBRARIES}

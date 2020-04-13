@@ -906,9 +906,9 @@ void SPGroup::update_patheffect(bool write) {
 
     this->resetClipPathAndMaskLPE();
     if (hasPathEffect() && pathEffectsEnabled()) {
-        for (auto & it : *this->path_effect_list)
-        {
-            LivePathEffectObject *lpeobj = it->lpeobject;
+        PathEffectList path_effect_list(*this->path_effect_list);
+        for (auto &lperef : path_effect_list) {
+            LivePathEffectObject *lpeobj = lperef->lpeobject;
             if (lpeobj) {
                 Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
                 if (lpe) {

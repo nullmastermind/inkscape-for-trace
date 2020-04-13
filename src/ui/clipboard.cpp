@@ -929,8 +929,9 @@ void ClipboardManagerImpl::_copyUsedDefs(SPItem *item)
     SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
     if (lpeitem) {
         if (lpeitem->hasPathEffect()) {
-            for (auto & it : *lpeitem->path_effect_list){
-                LivePathEffectObject *lpeobj = it->lpeobject;
+            PathEffectList path_effect_list( *lpeitem->path_effect_list);
+            for (auto &lperef : path_effect_list) {
+                LivePathEffectObject *lpeobj = lperef->lpeobject;
                 if (lpeobj) {
                   _copyNode(lpeobj->getRepr(), _doc, _defs);
                 }
