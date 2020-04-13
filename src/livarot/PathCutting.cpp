@@ -270,10 +270,15 @@ void Path::DashSubPath(int spL, int spP, std::vector<path_lineto> const &orig_pt
   }
 }
 
-Geom::PathVector *
+/**
+ * Make a Geom::PathVector version of the path description.
+ *
+ * \return A PathVector copy of the path description
+ */
+Geom::PathVector
 Path::MakePathVector()
 {
-    Geom::PathVector *pv = new Geom::PathVector();
+    Geom::PathVector pv;
     Geom::Path * currentpath = nullptr;
 
     Geom::Point   lastP,bezSt,bezEn;
@@ -298,8 +303,8 @@ Path::MakePathVector()
             case descr_moveto:
             {
                 PathDescrMoveTo *nData = dynamic_cast<PathDescrMoveTo *>(descr_cmd[i]);
-                pv->push_back(Geom::Path());
-                currentpath = &pv->back();
+                pv.push_back(Geom::Path());
+                currentpath = &pv.back();
                 currentpath->start(Geom::Point(nData->p[0], nData->p[1]));
                 lastP = nData->p;
             }

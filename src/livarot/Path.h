@@ -193,7 +193,7 @@ public:
   void  LoadPath(Geom::Path const &path, Geom::Affine const &tr, bool doTransformation, bool append = false);
   void  LoadPathVector(Geom::PathVector const &pv, Geom::Affine const &tr, bool doTransformation);
   void  LoadPathVector(Geom::PathVector const &pv);
-  Geom::PathVector* MakePathVector();
+  Geom::PathVector MakePathVector();
 
   void  Transform(const Geom::Affine &trans);
 

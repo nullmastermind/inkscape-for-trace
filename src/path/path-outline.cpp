@@ -56,11 +56,11 @@ item_find_paths(const SPItem *item, Geom::PathVector& fill, Geom::PathVector& st
         return false;
     }
 
-    SPCurve *curve = nullptr;
+    std::unique_ptr<SPCurve> curve;
     if (shape) {
-        curve = shape->getCurve();
+        curve.reset(shape->getCurve());
     } else if (text) {
-        curve = text->getNormalizedBpath();
+        curve.reset(text->getNormalizedBpath());
     } else {
         std::cerr << "item_find_paths: item not shape or text!" << std::endl;
         return false;
@@ -152,9 +152,7 @@ item_find_paths(const SPItem *item, Geom::PathVector& fill, Geom::PathVector& st
     origin->Outline(offset, 0.5 * stroke_width, join, butt, 0.5 * miter);
 
     if (bbox_only) {
-
-        stroke = *(offset->MakePathVector());
-
+        stroke = offset->MakePathVector();
     } else {
         // Clean-up shape
 
@@ -167,8 +165,11 @@ item_find_paths(const SPItem *item, Geom::PathVector& fill, Geom::PathVector& st
         theOffset->ConvertToShape(theShape, fill_positive); // Create an intersection free polygon (theOffset), step2.
         theOffset->ConvertToForme(origin, 1, &offset); // Turn shape into contour (stored in origin).
 
-        stroke = *(origin->MakePathVector()); // Note origin was replaced above by stroke!
+        stroke = origin->MakePathVector(); // Note origin was replaced above by stroke!
     }
+
+    delete origin;
+    delete offset;
 
     // std::cout << "    fill:   " << sp_svg_write_path(fill)   << "  count: " << fill.curveCount() << std::endl;
     // std::cout << "    stroke: " << sp_svg_write_path(stroke) << "  count: " << stroke.curveCount() << std::endl;
