@@ -910,7 +910,7 @@ void ContextMenu::MakeTextMenu ()
     mi->show();
     insert(*mi,positionOfLastDialog++);
 
-#if HAVE_ASPELL
+#if WITH_GSPELL
     /* Spellcheck dialog */
     mi = Gtk::manage(new Gtk::MenuItem(_("Check Spellin_g..."), true));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::SpellcheckSettings));
@@ -930,7 +930,7 @@ void ContextMenu::TextSettings ()
 
 void ContextMenu::SpellcheckSettings ()
 {
-#if HAVE_ASPELL
+#if WITH_GSPELL
     if (_desktop->selection->isEmpty()) {
         _desktop->selection->set(_item);
     }

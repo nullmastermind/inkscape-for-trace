@@ -50,9 +50,6 @@
 /* Use OpenMP (via cmake) */
 #cmakedefine HAVE_OPENMP 1
 
-/* Use aspell for built-in spellchecker */
-#cmakedefine HAVE_ASPELL 1
-
 /* Use libpoppler for direct PDF import */
 #cmakedefine HAVE_POPPLER 1
 
@@ -80,7 +77,7 @@
 /* Build in dbus */
 #cmakedefine WITH_DBUS 1
 
-/* enable gtk spelling widget */
+/* enable gtk spelling widget and built-in spellchecker */
 #cmakedefine WITH_GSPELL 1
 
 /* Image/Graphics Magick++ support for bitmap effects */

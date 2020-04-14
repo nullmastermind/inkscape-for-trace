@@ -554,7 +554,7 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
 #endif
                         }
                     } else if (true
-#ifndef HAVE_ASPELL
+#ifndef WITH_GSPELL
                         && strcmp(verb_name.c_str(), "DialogSpellcheck") != 0
 #endif
                         ) {

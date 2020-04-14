@@ -33,9 +33,9 @@
 
 #include "text-editing.h"
 
-#if HAVE_ASPELL
-#include <aspell.h>
-#endif  /* HAVE_ASPELL */
+#if WITH_GSPELL
+#include <gspell/gspell.h>
+#endif  /* WITH_GSPELL */
 
 class SPDesktop;
 class SPObject;
@@ -51,7 +51,7 @@ namespace Dialog {
 /**
  *
  * A dialog widget to checking spelling of text elements in the document
- * Uses ASpell and one of the languages set in the users preference file
+ * Uses gspell and one of the languages set in the users preference file
  *
  */
 class SpellCheck : public Widget::Panel {
@@ -168,9 +168,9 @@ private:
 
     SPObject *_root;
 
-#if HAVE_ASPELL
-    AspellSpeller *_speller = nullptr;
-#endif  /* HAVE_ASPELL */
+#if WITH_GSPELL
+    GspellChecker *_checker = nullptr;
+#endif  /* WITH_GSPELL */
 
     /**
      * list of canvasitems (currently just rects) that mark misspelled things on canvas

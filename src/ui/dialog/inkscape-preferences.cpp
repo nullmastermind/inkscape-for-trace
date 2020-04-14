@@ -59,7 +59,7 @@
 
 #include "widgets/desktop-widget.h"
 
-#if HAVE_ASPELL
+#if WITH_GSPELL
 # include "ui/dialog/spellcheck.h" // for get_available_langs
 # ifdef _WIN32
 #  include <windows.h>
@@ -2574,7 +2574,7 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
 
 void InkscapePreferences::initPageSpellcheck()
 {
-#if HAVE_ASPELL
+#if WITH_GSPELL
 
     std::vector<Glib::ustring> languages;
     std::vector<Glib::ustring> langValues;
@@ -2582,6 +2582,7 @@ void InkscapePreferences::initPageSpellcheck()
     languages.emplace_back(C_("Spellchecker language", "None"));
     langValues.emplace_back("");
 
+    // TODO: revisit that now that Gspell supports language name.
     for (auto const &lang : SpellCheck::get_available_langs()) {
         languages.emplace_back(lang);
         langValues.emplace_back(lang);

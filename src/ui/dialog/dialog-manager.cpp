@@ -49,7 +49,7 @@
 #include "ui/dialog/objects.h"
 #include "ui/dialog/selectorsdialog.h"
 
-#if HAVE_ASPELL
+#if WITH_GSPELL
 # include "ui/dialog/spellcheck.h"
 #endif
 
@@ -140,7 +140,7 @@ DialogManager::DialogManager() {
         registerFactory("InputDevices",        &create<InputDialog,          FloatingBehavior>);
         registerFactory("TextFont",            &create<TextEdit,             FloatingBehavior>);
 
-#if HAVE_ASPELL
+#if WITH_GSPELL
         registerFactory("SpellCheck",          &create<SpellCheck,           FloatingBehavior>);
 #endif
 
@@ -181,7 +181,7 @@ DialogManager::DialogManager() {
         registerFactory("InputDevices",        &create<InputDialog,          DockBehavior>);
         registerFactory("TextFont",            &create<TextEdit,             DockBehavior>);
 
-#if HAVE_ASPELL
+#if WITH_GSPELL
         registerFactory("SpellCheck",          &create<SpellCheck,           DockBehavior>);
 #endif
 

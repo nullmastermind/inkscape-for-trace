@@ -54,28 +54,23 @@ namespace UI {
 namespace Dialog {
 
 /**
- * Get the list of installed aspell dictionaries/languages
+ * Get the list of installed dictionaries/languages
  */
 std::vector<std::string> SpellCheck::get_available_langs()
 {
     std::vector<std::string> langs;
 
-#if HAVE_ASPELL
-    auto *config = new_aspell_config();
-    auto const *dlist = get_aspell_dict_info_list(config);
-    auto *elements = aspell_dict_info_list_elements(dlist);
-
-    for (AspellDictInfo const *entry; (entry = aspell_dict_info_enumeration_next(elements)) != nullptr;) {
-        // skip duplicates (I get "de_DE" twice)
-        if (!langs.empty() && langs.back() == entry->name) {
-            continue;
-        }
-
-        langs.emplace_back(entry->name);
-    }
-
-    delete_aspell_dict_info_enumeration(elements);
-    delete_aspell_config(config);
+#if WITH_GSPELL
+    // TODO: write a gspellmm library.
+    // TODO: why is this not const?
+    GList *list = const_cast<GList *>(gspell_language_get_available());
+    g_list_foreach(list, [](gpointer data, gpointer user_data) {
+        GspellLanguage *language = reinterpret_cast<GspellLanguage*>(data);
+        std::vector<std::string> *langs = reinterpret_cast<std::vector<std::string>*>(user_data);
+        const gchar *code = gspell_language_get_code(language);
+        //const gchar *name = gspell_language_get_name(language);
+        langs->push_back(code);
+    }, &langs);
 #endif
 
     return langs;
@@ -123,7 +118,7 @@ SpellCheck::SpellCheck () :
         _langs = get_available_langs();
 
         if (_langs.empty()) {
-            banner_label.set_markup("<i>No aspell dictionaries installed</i>");
+            banner_label.set_markup("<i>No dictionaries installed</i>");
         }
     }
 
@@ -328,35 +323,17 @@ SpellCheck::nextText()
 }
 
 void SpellCheck::deleteSpeller() {
-#if HAVE_ASPELL
-    if (_speller) {
-        aspell_speller_save_all_word_lists(_speller);
-        delete_aspell_speller(_speller);
-        _speller = nullptr;
-    }
-#endif
 }
 
 bool SpellCheck::updateSpeller() {
-#if HAVE_ASPELL
-    deleteSpeller();
-
+#if WITH_GSPELL
     auto lang = dictionary_combo.get_active_text();
     if (!lang.empty()) {
-        AspellConfig *config = new_aspell_config();
-        aspell_config_replace(config, "lang", lang.c_str());
-        aspell_config_replace(config, "encoding", "UTF-8");
-        AspellCanHaveError *ret = new_aspell_speller(config);
-        delete_aspell_config(config);
-        if (aspell_error(ret) != nullptr) {
-            banner_label.set_text(aspell_error_message(ret));
-            delete_aspell_can_have_error(ret);
-        } else {
-            _speller = to_aspell_speller(ret);
-        }
+        const GspellLanguage *language = gspell_language_lookup(lang.c_str());
+        _checker = gspell_checker_new(language);
     }
 
-    return _speller != nullptr;
+    return _checker != nullptr;
 #else
     return false;
 #endif
@@ -502,12 +479,12 @@ SpellCheck::nextWord()
 
     int have = 0;
 
-#if HAVE_ASPELL
-    // run it by all active spellers
-    if (_speller) {
-        have += aspell_speller_check(_speller, _word.c_str(), -1);
+#if WITH_GSPELL
+    if (_checker) {
+        GError *error = nullptr;
+        have += gspell_checker_check_word(_checker, _word.c_str(), -1, &error);
     }
-#endif  /* HAVE_ASPELL */
+#endif  /* WITH_GSPELL */
 
     if (have == 0) { // not found in any!
         _stops ++;
@@ -590,20 +567,27 @@ SpellCheck::nextWord()
                 sp_text_context_place_cursor (SP_TEXT_CONTEXT(desktop->event_context), _text, _begin_w);
         } 
 
-#if HAVE_ASPELL
+#if WITH_GSPELL
 
         // get suggestions
         model = Gtk::ListStore::create(tree_columns);
         tree_view.set_model(model);
         unsigned n_sugg = 0;
 
-        if (_speller) {
-            const AspellWordList *wl = aspell_speller_suggest(_speller, _word.c_str(), -1);
-            AspellStringEnumeration * els = aspell_word_list_elements(wl);
-            const char *sugg;
-            Gtk::TreeModel::iterator iter;
+        if (_checker) {
+            GSList *list = gspell_checker_get_suggestions(_checker, _word.c_str(), -1);
+            std::vector<std::string> suggs;
 
-            while ((sugg = aspell_string_enumeration_next(els)) != nullptr) {
+            // TODO: use a better API for that, or figure out how to make gspellmm.
+            g_slist_foreach(list, [](gpointer data, gpointer user_data) {
+                const gchar *suggestion = reinterpret_cast<const gchar*>(data);
+                std::vector<std::string> *suggs = reinterpret_cast<std::vector<std::string>*>(user_data);
+                suggs->push_back(suggestion);
+            }, &suggs);
+            g_slist_free_full(list, g_free);
+
+            Gtk::TreeModel::iterator iter;
+            for (std::string sugg : suggs) {
                 iter = model->append();
                 Gtk::TreeModel::Row row = *iter;
                 row[tree_columns.suggestions] = sugg;
@@ -613,12 +597,11 @@ SpellCheck::nextWord()
                     tree_view.get_selection()->select(iter);
                 }
             }
-            delete_aspell_string_enumeration(els);
         }
 
         accept_button.set_sensitive(n_sugg > 0);
 
-#endif  /* HAVE_ASPELL */
+#endif  /* WITH_GSPELL */
 
         return true;
 
@@ -722,11 +705,11 @@ void SpellCheck::onAccept ()
 void
 SpellCheck::onIgnore ()
 {
-#if HAVE_ASPELL
-    if (_speller) {
-        aspell_speller_add_to_session(_speller, _word.c_str(), -1);
+#if WITH_GSPELL
+    if (_checker) {
+        gspell_checker_add_word_to_session(_checker, _word.c_str(), -1);
     }
-#endif  /* HAVE_ASPELL */
+#endif  /* WITH_GSPELL */
 
     deleteLastRect();
     doSpellcheck();
@@ -744,11 +727,11 @@ SpellCheck::onAdd ()
 {
     _adds++;
 
-#if HAVE_ASPELL
-    if (_speller) {
-        aspell_speller_add_to_personal(_speller, _word.c_str(), -1);
+#if WITH_GSPELL
+    if (_checker) {
+        gspell_checker_add_word_to_personal(_checker, _word.c_str(), -1);
     }
-#endif  /* HAVE_ASPELL */
+#endif  /* WITH_GSPELL */
 
     deleteLastRect();
     doSpellcheck();

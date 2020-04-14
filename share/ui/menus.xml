@@ -276,7 +276,7 @@
        <separator/>
        <verb verb-id="SelectionTextRemoveKerns" />
        <separator/>
-       <verb verb-id="DialogSpellcheck" />  <!-- depends on HAVE_ASPELL -->
+       <verb verb-id="DialogSpellcheck" />  <!-- depends on WITH_GSPELL -->
    </submenu>
    <submenu name="Filter_s">
        <filters-list/>

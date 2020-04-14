@@ -833,7 +833,7 @@ Verb *Verb::getbyid(gchar const *id, bool verbose)
     }
 
     if (verb == nullptr
-#ifndef HAVE_ASPELL
+#ifndef WITH_GSPELL
                 && strcmp(id, "DialogSpellcheck") != 0
 #endif
             ) {
@@ -2193,7 +2193,7 @@ void DialogVerb::perform(SPAction *action, void *data)
         case SP_VERB_DIALOG_FIND:
             dt->_dlg_mgr->showDialog("Find");
             break;
-#if HAVE_ASPELL
+#if WITH_GSPELL
         case SP_VERB_DIALOG_SPELLCHECK:
             dt->_dlg_mgr->showDialog("SpellCheck");
             break;
@@ -3148,7 +3148,7 @@ Verb *Verb::_base_verbs[] = {
                    N_("View and edit CSS selectors and styles"), INKSCAPE_ICON("dialog-selectors")),
     new DialogVerb(SP_VERB_DIALOG_FIND, "DialogFind", N_("_Find/Replace..."), N_("Find objects in document"),
                    INKSCAPE_ICON("edit-find")),
-#if HAVE_ASPELL
+#if WITH_GSPELL
     new DialogVerb(SP_VERB_DIALOG_SPELLCHECK, "DialogSpellcheck", N_("Check Spellin_g..."),
                    N_("Check spelling of text in document"), INKSCAPE_ICON("tools-check-spelling")),
 #endif
