@@ -78,6 +78,7 @@ A4,                         210,    297, mm
 US Letter,                  8.5,     11, in
 US Legal,                   8.5,     14, in
 US Executive,              7.25,   10.5, in
+US Ledger/Tabloid,           11,     17, in
 A0,                         841,   1189, mm
 A1,                         594,    841, mm
 A2,                         420,    594, mm
@@ -124,7 +125,6 @@ E6,                         140,    200, mm
 CSE,                        462,    649, pt
 US #10 Envelope,            9.5,  4.125, in
 DL Envelope,                220,    110, mm
-Ledger/Tabloid,              11,     17, in
 Banner 468x60,              468,     60, px
 Icon 16x16,                  16,     16, px
 Icon 32x32,                  32,     32, px
