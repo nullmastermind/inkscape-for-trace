@@ -15,6 +15,10 @@
 
 SELF_NAME=$(basename $0)
 
+### nesting level when trapping errors #########################################
+
+ERRTRACE_COUNT=0
+
 ### multithreading #############################################################
 
 CORES=$(sysctl -n hw.ncpu)   # use all available cores
@@ -33,7 +37,7 @@ export SDKROOT=$SDKROOT_DIR/MacOSX${MACOSX_DEPLOYMENT_TARGET}.sdk
 
 ### build system/toolset version ###############################################
 
-TOOLSET_VERSION=0.32
+TOOLSET_VERSION=0.33
 
 ### ramdisk ####################################################################
 
@@ -157,9 +161,12 @@ URL_GDL=https://gitlab.gnome.org/GNOME/gdl/-/archive/9f11ad3ca8cef85b075419b3003
 URL_GHOSTSCRIPT=https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs950/ghostscript-9.50.tar.gz
 # https://www.gnu.org/software/gsl/
 URL_GSL=http://ftp.fau.de/gnu/gsl/gsl-2.6.tar.gz
+# Google Testing and Mocking Framework
+# https://github.com/google/googletest
+URL_GTEST=https://github.com/google/googletest/archive/release-1.10.0.tar.gz
 # https://github.com/dehesselle/gtk-osx
 # Forked from https://gitlab.gnome.org/GNOME/gtk-osx
-URL_GTK_OSX=https://raw.githubusercontent.com/dehesselle/gtk-osx/inkscape-1.0.x  # FIXME: not tagged
+URL_GTK_OSX=https://raw.githubusercontent.com/dehesselle/gtk-osx/inkscape-1.0.x-2
 URL_GTK_OSX_SETUP=$URL_GTK_OSX/gtk-osx-setup.sh
 URL_GTK_OSX_MODULESET=$URL_GTK_OSX/modulesets-stable/gtk-osx.modules
 # https://legacy.imagemagick.org

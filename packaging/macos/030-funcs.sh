@@ -239,31 +239,6 @@ function readlinkf
   echo $(pwd -P)/$file
 }
 
-### run script and echo comments enclosed by three hashes ######################
-
-# This little magic trick
-#   - reads the current file
-#   - turns every line that matches "### text here ###" into an echo statement
-#     (whatever follows after the last three hashes is ignored)
-#   - adds script name and line number as prefix
-#   - sets background color for that 'echo' to blue
-#   - removes the call to 'run_annotated' to avoid recursion
-#   - sets SELF_DIR to the correct value (piping into bash breaks it)
-#
-# Known side effects:
-#   - SELF_NAME no longer works (is now "bash")
-#   - interactive JHBuild (e.g. on error) breaks
-
-function run_annotated
-{
-  source /dev/stdin <<EOF
-$(sed 's/\(^### .* ###\).*/echo \-e "\\033[1;44m\\033[1;37m['$SELF_NAME':$(printf '%03d' $LINENO)] \1\\033[0m"/g' $SELF_DIR/$SELF_NAME |
-   sed 's/^run_annotated/#run_annotated/')
-EOF
-
-  exit $?
-}
-
 ### create disk image ##########################################################
 
 function create_dmg
@@ -401,4 +376,30 @@ function pip_install
     $package
   
   export PATH=$PATH_ORIGINAL
+}
+
+### this function is called on "trap ERR" ###################################### 
+
+# macOS' old bash 3.x has a bug that causes the line number of the error
+# to point to the function entry instead of the command inside the function.
+
+function catch_error
+{
+    local file=$1
+    local line=$2
+    local func=$3
+    local command=$4
+    local rc=$5
+
+    [ -z $func ] && func="main" || true
+
+    ((ERRTRACE_COUNT++))
+
+    case $ERRTRACE_COUNT in
+        1) echo -e "\033[97m\033[101m\033[1m[$file:$line] $func failed with rc=$rc\033[39m\033[49m\033[0m"
+           echo -e "\033[93m$command\033[39m"
+           ;;
+        *) echo -e "[$file:$line] <- $func"
+           ;;
+    esac
 }

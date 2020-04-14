@@ -12,8 +12,6 @@
 SELF_DIR=$(F=$0; while [ ! -z $(readlink $F) ] && F=$(readlink $F); cd $(dirname $F); F=$(basename $F); [ -L $F ]; do :; done; echo $(pwd -P))
 for script in $SELF_DIR/0??-*.sh; do source $script; done
 
-run_annotated
-
 ### install additional GNOME libraries #########################################
 
 # adwaita-icon-theme - icons used by Inkscape/GTK
@@ -117,3 +115,8 @@ cmake_make_makeinstall
 
 install_source $URL_GHOSTSCRIPT
 configure_make_makeinstall
+
+### install Google Testing and Mocking Framework ###############################
+
+install_source $URL_GTEST
+cmake_make_makeinstall

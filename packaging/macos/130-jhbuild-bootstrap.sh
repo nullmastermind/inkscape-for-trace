@@ -16,8 +16,6 @@ for script in $SELF_DIR/0??-*.sh; do source $script; done
 export PYTHONUSERBASE=$DEVPREFIX
 export PIP_CONFIG_DIR=$DEVROOT/pip
 
-run_annotated
-
 ### install and configure jhbuild ##############################################
 
 bash <(curl -s $URL_GTK_OSX_SETUP)   # run jhbuild setup script
