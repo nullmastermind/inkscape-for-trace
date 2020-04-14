@@ -200,7 +200,6 @@ void ObjectProperties::_init()
     // pressing enter in the label field is the same as clicking Set:
     _spin_dpi.signal_activate().connect(sigc::mem_fun(this, &ObjectProperties::_labelChanged));
 
-
     /* Image rendering */
     /* Create the label for the object ImageRendering */
     _label_image_rendering.set_label(_label_image_rendering.get_label() + " ");
@@ -366,10 +365,20 @@ void ObjectProperties::update()
             _combo_image_rendering.show();
             _label_image_rendering.show();
             _combo_image_rendering.set_active(obj->style->image_rendering.value);
+            if (obj->getAttribute("inkscape:svg-dpi")) {
+                _spin_dpi.set_value(std::stod(obj->getAttribute("inkscape:svg-dpi")));
+                _spin_dpi.show();
+                _label_dpi.show();
+            } else {
+                _spin_dpi.hide();
+                _label_dpi.hide();
+            }
         } else {
             _combo_image_rendering.hide();
             _combo_image_rendering.unset_active();
             _label_image_rendering.hide();
+            _spin_dpi.hide();
+            _label_dpi.hide();
         }
 
         /* Description */
