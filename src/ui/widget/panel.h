@@ -57,7 +57,7 @@ public:
      * @param verb_num the dialog verb.
      */
     Panel(gchar const *prefs_path = nullptr, int verb_num = 0);
-    ~Panel() override;
+    ~Panel() override = default;
 
     gchar const *getPrefsPath() const;
     
@@ -88,7 +88,8 @@ protected:
     /**
      * Returns a pointer to a Gtk::Box containing the child widgets.
      */
-    Gtk::Box *_getContents() { return &_contents; }
+    Gtk::Box *_getContents() { return _contents; }
+    void _setContents(Gtk::Box *contents);
     virtual void _apply();
 
     virtual void _handleResponse(int response_id);
@@ -114,7 +115,7 @@ private:
 
     int              _verb_num;
 
-    Gtk::VBox        _contents;
+    Gtk::Box        *_contents;
     Gtk::ButtonBox  *_action_area;  //< stores response buttons
 
     /* A map to store which widget that emits a certain response signal */

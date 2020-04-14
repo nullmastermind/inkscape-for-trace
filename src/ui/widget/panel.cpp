@@ -62,13 +62,20 @@ Panel::Panel(gchar const *prefs_path, int verb_num) :
 
     signal_unmap().connect([this]() { this->setDesktop(nullptr); });
 
-    pack_start(_contents, true, true);
+    _contents = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
+    pack_start(*_contents, true, true);
 
     show_all_children();
 }
 
-Panel::~Panel()
-= default;
+void Panel::_setContents(Gtk::Box *contents) {
+    if (_contents) {
+        remove(*_contents);
+        delete _contents;
+    }
+    _contents = contents;
+    pack_start(*_contents, true, true);
+}
 
 void Panel::present()
 {
