@@ -548,7 +548,7 @@ void DocumentProperties::populate_linked_profiles_box()
         _emb_profiles_observer.set((*(current.begin()))->parent);
     }
 
-    std::set<Inkscape::ColorProfile *, Inkscape::ColorProfile::pointerComparator> _current;
+    std::set<Inkscape::ColorProfile *> _current;
     std::transform(current.begin(),
                    current.end(),
                    std::inserter(_current, _current.begin()),

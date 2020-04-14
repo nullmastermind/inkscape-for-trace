@@ -680,7 +680,7 @@ void ColorICCSelectorImpl::_profilesChanged(std::string const &name)
     int index = 1;
     std::vector<SPObject *> current = SP_ACTIVE_DOCUMENT->getResourceList("iccprofile");
 
-    std::set<Inkscape::ColorProfile *, Inkscape::ColorProfile::pointerComparator> _current;
+    std::set<Inkscape::ColorProfile *> _current;
     std::transform(current.begin(),
                    current.end(),
                    std::inserter(_current, _current.begin()),

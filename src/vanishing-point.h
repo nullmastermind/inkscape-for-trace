@@ -113,12 +113,6 @@ private:
 
 struct VPDrag;
 
-struct less_ptr : public std::binary_function<VanishingPoint *, VanishingPoint *, bool> {
-    bool operator()(VanishingPoint *vp1, VanishingPoint *vp2) {
-        return GPOINTER_TO_INT(vp1) < GPOINTER_TO_INT(vp2);
-    }
-};
-
 struct VPDragger {
 public:
     VPDragger(VPDrag *parent, Geom::Point p, VanishingPoint &vp);
@@ -143,7 +137,7 @@ public:
 
     unsigned int numberOfBoxes(); // the number of boxes linked to all VPs of the dragger
     VanishingPoint *findVPWithBox(SPBox3D *box);
-    std::set<VanishingPoint*, less_ptr> VPsOfSelectedBoxes();
+    std::set<VanishingPoint*> VPsOfSelectedBoxes();
 
     bool hasPerspective(const Persp3D *persp);
     void mergePerspectives(); // remove duplicate perspectives

@@ -18,9 +18,9 @@ message("Binary Dir: ${CMAKE_CURRENT_BINARY_DIR}")
 # -----------------------------------------------------------------------------
 # CMake Configuration
 # -----------------------------------------------------------------------------
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-# set(CMAKE_CXX_EXTENSIONS OFF) # enforces -std=c++11 instead of -std=gnu++11
+# set(CMAKE_CXX_EXTENSIONS OFF) # enforces -std=c++17 instead of -std=gnu++17
                                 # TODO: build currently fails with it as we actually depend on GNU compiler extensions...
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMakeScripts/Modules")

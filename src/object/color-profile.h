@@ -48,11 +48,6 @@ public:
 
     bool operator<(ColorProfile const &other) const;
 
-    // we use std::set with pointers to ColorProfile, just having operator< isn't enough to sort these
-    struct pointerComparator {
-        bool operator()(const ColorProfile * const & a, const ColorProfile * const & b) { return (*a) < (*b); };
-    };
-
     friend cmsHPROFILE colorprofile_get_handle( SPDocument*, unsigned int*, char const* );
     friend class CMSSystem;
 
