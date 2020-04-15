@@ -14,6 +14,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <giomm/application.h>
 #include <gtkmm/clipboard.h>
 #include "ui/clipboard.h"
 
@@ -182,6 +183,13 @@ ClipboardManagerImpl::ClipboardManagerImpl()
     _preferred_targets.emplace_back("WCF_ENHMETAFILE"); // seen on Wine
     _preferred_targets.emplace_back("application/pdf");
     _preferred_targets.emplace_back("image/x-adobe-illustrator");
+
+    // Clipboard requests on app termination can cause undesired extension
+    // popup windows. Clearing the clipboard can prevent this.
+    auto application = Gio::Application::get_default();
+    if (application) {
+        application->signal_shutdown().connect_notify([this]() { this->_discardInternalClipboard(); });
+    }
 }
 
 
@@ -1300,7 +1308,8 @@ SPDocument *ClipboardManagerImpl::_retrieveClipboard(Glib::ustring required_targ
  */
 void ClipboardManagerImpl::_onGet(Gtk::SelectionData &sel, guint /*info*/)
 {
-    g_assert( _clipboardSPDoc != nullptr );
+    if (_clipboardSPDoc == nullptr)
+        return;
 
     Glib::ustring target = sel.get_target();
     if (target == "") {
