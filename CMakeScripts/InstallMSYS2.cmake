@@ -60,9 +60,9 @@ if(WIN32)
     ${MINGW_BIN}/libgraphite[0-9]*.dll
     ${MINGW_BIN}/libgsl-[0-9]*.dll
     ${MINGW_BIN}/libgslcblas-[0-9]*.dll
+    ${MINGW_BIN}/libgspell-1-[0-9]*.dll
     ${MINGW_BIN}/libgtk-3-[0-9]*.dll
     ${MINGW_BIN}/libgtkmm-3.0-[0-9]*.dll
-    ${MINGW_BIN}/libgtkspell3-3-[0-9]*.dll
     ${MINGW_BIN}/libharfbuzz-[0-9]*.dll
     ${MINGW_BIN}/libiconv-[0-9]*.dll
     ${MINGW_BIN}/libicudt[0-9]*.dll
@@ -157,7 +157,7 @@ if(WIN32)
       FILES_MATCHING
       PATTERN "*glib20.mo"
       PATTERN "*gtk30.mo"
-      PATTERN "*gtkspell3.mo")
+      PATTERN "*gspell-1.mo")
   endforeach()
 
   install(DIRECTORY ${MINGW_PATH}/share/poppler
@@ -227,7 +227,7 @@ if(WIN32)
     DESTINATION lib
     COMPONENT dictionaries)
 
-  # Aspell backend for Enchant (gtkspell uses Enchant to access Aspell dictionaries)
+  # Aspell backend for Enchant (gspell uses Enchant to access Aspell dictionaries)
   install(FILES
     ${MINGW_LIB}/enchant-2/enchant_aspell.dll
     DESTINATION lib/enchant-2)
