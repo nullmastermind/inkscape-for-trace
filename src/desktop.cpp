@@ -236,6 +236,7 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, Inkscape::UI::View::EditWid
 
     // pinch zoom
     zoomgesture = gtk_gesture_zoom_new(GTK_WIDGET(getCanvas()));
+    gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (zoomgesture), GTK_PHASE_CAPTURE);
     g_signal_connect(zoomgesture, "begin", G_CALLBACK(_pinch_begin_handler), this);
     g_signal_connect(zoomgesture, "scale-changed", G_CALLBACK(_pinch_scale_changed_handler), this);
 
