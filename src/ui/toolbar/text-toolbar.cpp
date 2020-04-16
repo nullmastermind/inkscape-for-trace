@@ -1478,25 +1478,31 @@ TextToolbar::lineheight_unit_changed(int /* Not Used */)
         _line_height_adj->set_page_increment(1.0);
     }
     // Internal function to set line-height which is spacing mode dependent.
+    SPItem *parent = dynamic_cast<SPItem *>(*itemlist.begin());
+    SPStyle *parent_style = parent->style;
+    bool inside = false;
     if (_outer) {
-        for (auto i = itemlist.begin(); i != itemlist.end(); ++i) {
-            if (dynamic_cast<SPText *>(*i) || dynamic_cast<SPFlowtext *>(*i)) {
-                SPItem *item = *i;
-                // Scale by inverse of accumulated parent transform
-                SPCSSAttr *css_set = sp_repr_css_attr_new();
-                sp_repr_css_merge(css_set, css);
-                Geom::Affine const local(item->i2doc_affine());
-                double const ex(local.descrim());
-                if ((ex != 0.0) && (ex != 1.0)) {
-                    sp_css_attr_scale(css_set, 1 / ex);
+        if (!selection->singleItem() || parent_style->line_height.computed != 0) {
+            for (auto i = itemlist.begin(); i != itemlist.end(); ++i) {
+                if (dynamic_cast<SPText *>(*i) || dynamic_cast<SPFlowtext *>(*i)) {
+                    SPItem *item = *i;
+                    // Scale by inverse of accumulated parent transform
+                    SPCSSAttr *css_set = sp_repr_css_attr_new();
+                    sp_repr_css_merge(css_set, css);
+                    Geom::Affine const local(item->i2doc_affine());
+                    double const ex(local.descrim());
+                    if ((ex != 0.0) && (ex != 1.0)) {
+                        sp_css_attr_scale(css_set, 1 / ex);
+                    }
+                    recursively_set_properties(item, css_set);
+                    sp_repr_css_attr_unref(css_set);
                 }
-                recursively_set_properties(item, css_set);
-                sp_repr_css_attr_unref(css_set);
             }
+        } else {
+            inside = true;
         }
-    } else {
-        SPItem *parent = dynamic_cast<SPItem *>(*itemlist.begin());
-        SPStyle *parent_style = parent->style;
+    }
+    if (!_outer || inside) {
         SPCSSAttr *parent_cssatr = sp_css_attr_from_style(parent_style, SP_STYLE_FLAG_IFSET);
         Glib::ustring parent_lineheight = sp_repr_css_property(parent_cssatr, "line-height", "1.25");
         SPCSSAttr *cssfit = sp_repr_css_attr_new();
@@ -2483,6 +2489,10 @@ void TextToolbar::subselection_changed(gpointer texttool)
                         }
                         _cusor_numbers = sp_desktop_query_style(SP_ACTIVE_DESKTOP, &_query_cursor, QUERY_STYLE_PROPERTY_FONTNUMBERS);
                         tc->text_sel_start = start_selection;
+                        wrap_start = tc->text_sel_start;
+                        wrap_end = tc->text_sel_end;
+                        wrap_start.thisStartOfLine();
+                        wrap_end.thisEndOfLine();
                         _updating = false;
                         break;
                     }
