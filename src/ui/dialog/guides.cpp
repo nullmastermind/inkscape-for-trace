@@ -91,6 +91,14 @@ void GuidelinePropertiesDialog::_modeChanged()
 
 void GuidelinePropertiesDialog::_onOK()
 {
+    this->_onOKimpl();
+    DocumentUndo::done(_guide->document, SP_VERB_NONE,
+                       _("Set guide properties"));
+
+}
+
+void GuidelinePropertiesDialog::_onOKimpl()
+{
     double deg_angle = _spin_angle.getValue(DEG);
     if (!_mode)
         deg_angle += _oldangle;
@@ -132,9 +140,6 @@ void GuidelinePropertiesDialog::_onOK()
     // don't know why, but introduced: 761f7da58cd6d625b88c24eee6fae1b7fa3bfcdd
 
     _guide->set_color(r, g, b, true);
-
-    DocumentUndo::done(_guide->document, SP_VERB_NONE, 
-                       _("Set guide properties"));
 }
 
 void GuidelinePropertiesDialog::_onDelete()
@@ -147,7 +152,8 @@ void GuidelinePropertiesDialog::_onDelete()
 
 void GuidelinePropertiesDialog::_onDuplicate()
 {
-    _guide->duplicate();
+    _guide = _guide->duplicate();
+    this->_onOKimpl();
     DocumentUndo::done(_guide->document, SP_VERB_NONE, _("Duplicate guide"));
 }
 
