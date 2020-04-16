@@ -43,6 +43,7 @@ enum Type {
     THEMES,
     UIS,
     PIXMAPS,
+    DOCS
 };
 
 enum Domain {
