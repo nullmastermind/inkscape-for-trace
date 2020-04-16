@@ -51,6 +51,7 @@ protected:
     void _setup();
 
     void _onOK();
+    void _onOKimpl();
     void _onDelete();
     void _onDuplicate();
 
