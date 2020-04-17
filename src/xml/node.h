@@ -13,7 +13,6 @@
 #ifndef SEEN_INKSCAPE_XML_NODE_H
 #define SEEN_INKSCAPE_XML_NODE_H
 
-#include <glibmm/ustring.h>
 #include "gc-anchored.h"
 #include "util/list.h"
 #include "util/const_char_ptr.h"

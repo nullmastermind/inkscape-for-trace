@@ -12,8 +12,7 @@
 #ifndef __SP_ATTRIBUTE_SORT_UTIL_H__
 #define __SP_ATTRIBUTE_SORT_UTIL_H__
 
-#include <glibmm/ustring.h>
-#include "xml/sp-css-attr.h"
+#include "xml/node.h"
 
 using Inkscape::XML::Node;
 
