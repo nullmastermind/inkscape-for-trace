@@ -209,18 +209,18 @@ public:
     Application& operator=(Application const&); // no assign
     Application* operator&() const; // no pointer access
 
-    Inkscape::XML::Document * _menus;
+    Inkscape::XML::Document *_menus = nullptr;
     std::map<SPDocument *, int> _document_set;
     std::map<SPDocument *, AppSelectionModel *> _selection_models;
-    std::vector<SPDesktop *> * _desktops;
+    std::vector<SPDesktop *> *_desktops = nullptr;
 
-    unsigned refCount;
-    guint _mapalt;
-    guint _trackalt;
+    unsigned refCount = 1;
+    guint _mapalt = GDK_MOD1_MASK;
+    guint _trackalt = false;
     static bool _crashIsHappening;
-    bool _use_gui;
-    gint _pdf_page;
-    bool _pdf_poppler;
+    bool _use_gui = false;
+    gint _pdf_page = 1;
+    bool _pdf_poppler = false;
 };
 
 } // namespace Inkscape
