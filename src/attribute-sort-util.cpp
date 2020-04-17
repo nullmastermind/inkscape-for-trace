@@ -25,10 +25,13 @@
 #include <utility>      // std::pair
 #include <algorithm>    // std::sort
 
+#include <glibmm/ustring.h>
+
 #include "attribute-sort-util.h"
 
 #include "xml/repr.h"
 #include "xml/attribute-record.h"
+#include "xml/sp-css-attr.h"
 
 #include "attributes.h"
 
