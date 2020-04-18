@@ -104,6 +104,15 @@ add_cli_test(user-data-directory   PARAMETERS --user-data-directory   ENVIRONMEN
 # --pdf-page=PAGE
 
 # --pdf-poppler
+add_cli_test(pdf-poppler-mesh-import
+                        PARAMETERS --pdf-poppler
+                        INPUT_FILENAME pdf-mesh.pdf
+                        OUTPUT_FILENAME pdf-mesh_poppler.svg
+                        TEST_SCRIPT match_regex.sh pdf-mesh_poppler.svg "<image")
+add_cli_test(pdf-internal-mesh-import
+                        INPUT_FILENAME pdf-mesh.pdf
+                        OUTPUT_FILENAME pdf-mesh_internal.svg
+                        TEST_SCRIPT match_regex_fail.sh pdf-mesh_internal.svg "<image")
 
 # --convert-dpi-method=METHOD
 
