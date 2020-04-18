@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+Test with leading semicolon in style.
+https://gitlab.com/inkscape/inkscape/-/issues/1278
+-->
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="100%" height="100%" viewBox="0 0 500 200">
+  <style type="text/css">
+    rect { fill: red; }
+    #MyRect1 { ; fill: green; }
+  </style>
+
+  <rect x="50"  y="50" width="100" height="100"  style=";fill:blue"/>
+  <rect x="200" y="50" width="100" height="100"  id="MyRect1"      />
+  <rect x="350" y="50" width="100" height="100"  style="stroke-width:0px;;;fill:blue"  />
+</svg>
