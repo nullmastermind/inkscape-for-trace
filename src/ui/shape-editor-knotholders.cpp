@@ -33,6 +33,7 @@
 #include "object/sp-spiral.h"
 #include "object/sp-star.h"
 #include "object/sp-text.h"
+#include "object/sp-textpath.h"
 
 class RectKnotHolder : public KnotHolder {
 public:
@@ -122,7 +123,17 @@ KnotHolder *createKnotHolder(SPItem *item, SPDesktop *desktop)
     } else if (dynamic_cast<SPOffset *>(item)) {
         knotholder = new OffsetKnotHolder(desktop, item, nullptr);
     } else if (dynamic_cast<SPText *>(item)) {
-        knotholder = new TextKnotHolder(desktop, item, nullptr);
+        SPText *text = dynamic_cast<SPText *>(item);
+
+        // Do not allow conversion to 'inline-size' wrapped text if on path!
+        // <textPath> might not be first child if <title> or <desc> is present.
+        bool is_on_path = false;
+        for (auto child : text->childList(false)) {
+            if (dynamic_cast<SPTextPath *>(child)) is_on_path = true;
+        }
+        if (!is_on_path) {
+            knotholder = new TextKnotHolder(desktop, item, nullptr);
+        }
     } else {
         SPFlowtext *flowtext = dynamic_cast<SPFlowtext *>(item);
         if (flowtext && flowtext->has_internal_frame()) {
