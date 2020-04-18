@@ -26,7 +26,6 @@ private:
     OriginalPathParam  linked_path;
     OriginalPathParam  second_path;
     BoolParam reverse_second;
-    BoolParam fuse;
     BoolParam join;
     BoolParam close;
 

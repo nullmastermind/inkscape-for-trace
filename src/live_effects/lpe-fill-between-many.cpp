@@ -34,7 +34,6 @@ LPEFillBetweenMany::LPEFillBetweenMany(LivePathEffectObject *lpeobject)
     : Effect(lpeobject)
     , linked_paths(_("Linked path:"), _("Paths from which to take the original path data"), "linkedpaths", &wr, this)
     , method(_("LPEs:"), _("Which LPEs of the linked paths should be considered"), "method", FLMConverter, &wr, this, FLM_BSPLINESPIRO)
-    , fuse(_("Fuse coincident points"), _("Fuse coincident points"), "fuse", &wr, this, false)
     , join(_("Join subpaths"), _("Join subpaths"), "join", &wr, this, true)
     , close(_("Close"), _("Close path"), "close", &wr, this, true)
     , autoreverse(_("Autoreverse"), _("Autoreverse"), "autoreverse", &wr, this, true)
@@ -42,7 +41,6 @@ LPEFillBetweenMany::LPEFillBetweenMany(LivePathEffectObject *lpeobject)
 {
     registerParameter(&linked_paths);
     registerParameter(&method);
-    registerParameter(&fuse);
     registerParameter(&join);
     registerParameter(&close);
     registerParameter(&autoreverse);
@@ -96,7 +94,7 @@ void LPEFillBetweenMany::doEffect (SPCurve * curve)
                     linked_path = iter->_pathvector.front();
                 }
                 if (!res_pathv.empty() && join) {
-                    if (!are_near(res_pathv.front().finalPoint(), linked_path.initialPoint(), 0.01) || !fuse) {
+                    if (!are_near(res_pathv.front().finalPoint(), linked_path.initialPoint(), 0.1)) {
                         res_pathv.front().appendNew<Geom::LineSegment>(linked_path.initialPoint());
                     } else {
                         linked_path.setInitial(res_pathv.front().finalPoint());
@@ -174,7 +172,7 @@ void LPEFillBetweenMany::doEffect (SPCurve * curve)
                     }
                     current = end;
                     if (!res_pathv.empty() && join) {
-                        if (!are_near(res_pathv.front().finalPoint(), linked_path.initialPoint(), 0.01) || !fuse) {
+                        if (!are_near(res_pathv.front().finalPoint(), linked_path.initialPoint(), 0.1)) {
                             res_pathv.front().appendNew<Geom::LineSegment>(linked_path.initialPoint());
                         } else {
                             linked_path.setInitial(res_pathv.front().finalPoint());

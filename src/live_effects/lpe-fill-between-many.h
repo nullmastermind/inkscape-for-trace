@@ -33,7 +33,6 @@ public:
 private:
     OriginalPathArrayParam linked_paths;
     EnumParam<Filllpemethod> method;
-    BoolParam fuse;
     BoolParam join;
     BoolParam close;
     BoolParam autoreverse;
