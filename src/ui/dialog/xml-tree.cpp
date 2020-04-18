@@ -156,6 +156,7 @@ XmlTree::XmlTree()
     node_box.pack_start(tree_toolbar, FALSE, TRUE, 0);
 
     Gtk::ScrolledWindow *tree_scroller = new Gtk::ScrolledWindow();
+    tree_scroller->set_overlay_scrolling(false);
     tree_scroller->set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
     tree_scroller->set_shadow_type(Gtk::SHADOW_IN);
     tree_scroller->add(*Gtk::manage(Glib::wrap(GTK_WIDGET(tree))));
