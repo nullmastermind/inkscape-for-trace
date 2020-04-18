@@ -20,14 +20,12 @@ LPEFillBetweenStrokes::LPEFillBetweenStrokes(LivePathEffectObject *lpeobject) :
     linked_path(_("Linked path:"), _("Path from which to take the original path data"), "linkedpath", &wr, this),
     second_path(_("Second path:"), _("Second path from which to take the original path data"), "secondpath", &wr, this),
     reverse_second(_("Reverse Second"), _("Reverses the second path order"), "reversesecond", &wr, this),
-    fuse(_("Fuse coincident points"), _("Fuse coincident points"), "fuse", &wr, this, false),
     join(_("Join subpaths"), _("Join subpaths"), "join", &wr, this, true),
     close(_("Close"), _("Close path"), "close", &wr, this, true)
 {
     registerParameter(&linked_path);
     registerParameter(&second_path);
     registerParameter(&reverse_second);
-    registerParameter(&fuse);
     registerParameter(&join);
     registerParameter(&close);
 }
@@ -74,7 +72,7 @@ void LPEFillBetweenStrokes::doEffect (SPCurve * curve)
                     result_second_pathv.front() = result_second_pathv.front().reversed();
                 }
                 if (join) {
-                    if (!are_near(result_linked_pathv.front().finalPoint(), result_second_pathv.front().initialPoint(),0.01) || !fuse) {
+                    if (!are_near(result_linked_pathv.front().finalPoint(), result_second_pathv.front().initialPoint(),0.1)) {
                         result_linked_pathv.front().appendNew<Geom::LineSegment>(result_second_pathv.front().initialPoint());
                     } else {
                         result_second_pathv.front().setInitial(result_linked_pathv.front().finalPoint());
