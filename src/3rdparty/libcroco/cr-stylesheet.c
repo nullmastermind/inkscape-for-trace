@@ -49,6 +49,8 @@ cr_stylesheet_new (CRStatement * a_stmts)
         if (a_stmts)
                 result->statements = a_stmts;
 
+        result->ref_count = 1;
+
         return result;
 }
 
@@ -275,8 +277,7 @@ cr_stylesheet_unref (CRStyleSheet * a_this)
 {
         g_return_val_if_fail (a_this, FALSE);
 
-        if (a_this->ref_count)
-                a_this->ref_count--;
+        a_this->ref_count--;
 
         if (!a_this->ref_count) {
                 cr_stylesheet_destroy (a_this);
