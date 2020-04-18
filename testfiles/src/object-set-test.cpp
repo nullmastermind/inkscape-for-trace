@@ -28,6 +28,8 @@ using namespace Inkscape::XML;
 class ObjectSetTest: public DocPerCaseTest {
 public:
     ObjectSetTest() {
+        N = _doc->getRoot()->children.size();
+
         A = new SPObject();
         B = new SPObject();
         C = new SPObject();
@@ -69,7 +71,7 @@ public:
         repr = _doc->getReprDoc()->createElement("svg:rect");
         _doc->getRoot()->appendChild(repr);
         r3.reset(dynamic_cast<SPRect*>(_doc->getObjectByRepr(repr)));
-        EXPECT_EQ(6, _doc->getRoot()->children.size());//metadata, defs, namedview, and those three rects.
+        EXPECT_EQ(N + 3, _doc->getRoot()->children.size());// defs, namedview, and those three rects.
         r1->x = r1->y = r2->x = r2->y = r3->x = r3->y = 0;
         r1->width = r1->height = r2->width = r2->height = r3->width = r3->height = 10;
         r1->set_shape();
@@ -104,6 +106,7 @@ public:
     std::unique_ptr<SPRect> r3;
     ObjectSet* set;
     ObjectSet* set2;
+    int N; //!< Number of root children in default document
 };
 
 #define SP_IS_CLONE(obj) (dynamic_cast<const SPUse*>(obj) != NULL)
@@ -389,7 +392,7 @@ TEST_F(ObjectSetTest, Ops) {
     set->add(r2.get());
     set->add(r3.get());
     set->duplicate();
-    EXPECT_EQ(9, _doc->getRoot()->children.size());//metadata, defs, namedview, and those 3x2 rects.
+    EXPECT_EQ(N + 6, _doc->getRoot()->children.size());// defs, namedview, and those 3x2 rects.
     EXPECT_EQ(3, set->size());
     EXPECT_FALSE(set->includes(r1.get()));
     set->deleteItems();
@@ -401,10 +404,10 @@ TEST_F(ObjectSetTest, Ops) {
     r1.release();
     r2.release();
     r3.release();
-    EXPECT_EQ(4, _doc->getRoot()->children.size());
+    EXPECT_EQ(N + 1, _doc->getRoot()->children.size());
     EXPECT_EQ(1, set->size());
     set->ungroup();
-    EXPECT_EQ(6, _doc->getRoot()->children.size());
+    EXPECT_EQ(N + 3, _doc->getRoot()->children.size());
     EXPECT_EQ(3, set->size());
     /* Uncomment this when toNextLayer is made desktop-independent
     set->group();
@@ -418,18 +421,18 @@ TEST_F(ObjectSetTest, Ops) {
     set->add(set2->singleItem());
     */
     set->clone();
-    EXPECT_EQ(9, _doc->getRoot()->children.size());
+    EXPECT_EQ(N + 6, _doc->getRoot()->children.size());
     EXPECT_EQ(3, set->size());
     EXPECT_NE(nullptr,dynamic_cast<SPUse*>(*(set->items().begin())));
     EXPECT_EQ(nullptr,dynamic_cast<SPRect*>(*(set->items().begin())));
     set->unlink();
-    EXPECT_EQ(9, _doc->getRoot()->children.size());
+    EXPECT_EQ(N + 6, _doc->getRoot()->children.size());
     EXPECT_EQ(3, set->size());
     EXPECT_EQ(nullptr,dynamic_cast<SPUse*>(*(set->items().begin())));
     EXPECT_NE(nullptr,dynamic_cast<SPRect*>(*(set->items().begin())));
     set->clone(); //creates 3 clones
     set->clone(); //creates 3 clones of clones
-    EXPECT_EQ(15, _doc->getRoot()->children.size());
+    EXPECT_EQ(N + 12, _doc->getRoot()->children.size());
     EXPECT_EQ(3, set->size());
     EXPECT_NE(nullptr,dynamic_cast<SPUse*>( ((SPUse*)(*(set->items().begin())))->get_original()));//"original is a Use"
     set->unlink(); //clone of clone of rect -> rect
@@ -438,7 +441,7 @@ TEST_F(ObjectSetTest, Ops) {
     set->clone();
     set->set(*(set->items().begin()));
     set->cloneOriginal();//get clone original
-    EXPECT_EQ(18, _doc->getRoot()->children.size());
+    EXPECT_EQ(N + 15, _doc->getRoot()->children.size());
     EXPECT_EQ(1, set->size());
     EXPECT_NE(nullptr,dynamic_cast<SPRect*>(*(set->items().begin())));
     //let's stop here.
@@ -455,7 +458,7 @@ TEST_F(ObjectSetTest, unlinkRecursiveBasic) {
     EXPECT_FALSE(containsClone(set));
     set->duplicate();
     EXPECT_FALSE(containsClone(set));
-        EXPECT_EQ(9, _doc->getRoot()->children.size());//metadata, defs, namedview, and those 3x2 rects.
+    EXPECT_EQ(N + 6, _doc->getRoot()->children.size());// defs, namedview, and those 3x2 rects.
     EXPECT_EQ(3, set->size());
     EXPECT_FALSE(set->includes(r1.get()));
     set->deleteItems();
@@ -470,11 +473,11 @@ TEST_F(ObjectSetTest, unlinkRecursiveBasic) {
     r2.release();
     r3.release();
     EXPECT_FALSE(containsClone(set));
-    EXPECT_EQ(4, _doc->getRoot()->children.size());
+    EXPECT_EQ(N + 1, _doc->getRoot()->children.size());
     EXPECT_EQ(1, set->size());
     set->ungroup();
     EXPECT_FALSE(containsClone(set));
-    EXPECT_EQ(6, _doc->getRoot()->children.size());
+    EXPECT_EQ(N + 3, _doc->getRoot()->children.size());
     EXPECT_EQ(3, set->size());
     /* Uncomment this when toNextLayer is made desktop-independent
     set->group();
@@ -489,13 +492,13 @@ TEST_F(ObjectSetTest, unlinkRecursiveBasic) {
     */
     set->clone();
     EXPECT_TRUE(containsClone(set));
-    EXPECT_EQ(9, _doc->getRoot()->children.size());
+    EXPECT_EQ(N + 6, _doc->getRoot()->children.size());
     EXPECT_EQ(3, set->size());
     EXPECT_NE(nullptr, dynamic_cast<SPUse*>(*(set->items().begin())));
     EXPECT_EQ(nullptr, dynamic_cast<SPRect*>(*(set->items().begin())));
     set->unlinkRecursive();
     EXPECT_FALSE(containsClone(set));
-    EXPECT_EQ(9, _doc->getRoot()->children.size());
+    EXPECT_EQ(N + 6, _doc->getRoot()->children.size());
     EXPECT_EQ(3, set->size());
     EXPECT_EQ(nullptr, dynamic_cast<SPUse*>(*(set->items().begin())));
     EXPECT_NE(nullptr, dynamic_cast<SPRect*>(*(set->items().begin())));
@@ -503,7 +506,7 @@ TEST_F(ObjectSetTest, unlinkRecursiveBasic) {
     EXPECT_TRUE(containsClone(set));
     set->clone(); //creates 3 clones of clones
     EXPECT_TRUE(containsClone(set));
-    EXPECT_EQ(15, _doc->getRoot()->children.size());
+    EXPECT_EQ(N + 12, _doc->getRoot()->children.size());
     EXPECT_EQ(3, set->size());
     EXPECT_NE(nullptr, dynamic_cast<SPUse*>( ((SPUse*)(*(set->items().begin())))->get_original()));//"original is a Use"
     set->unlinkRecursive(); //clone of clone of rect -> rect
@@ -514,7 +517,7 @@ TEST_F(ObjectSetTest, unlinkRecursiveBasic) {
     EXPECT_TRUE(containsClone(set));
     set->set(*(set->items().begin()));
     set->cloneOriginal();//get clone original
-    EXPECT_EQ(18, _doc->getRoot()->children.size());
+    EXPECT_EQ(N + 15, _doc->getRoot()->children.size());
     EXPECT_EQ(1, set->size());
     EXPECT_NE(nullptr, dynamic_cast<SPRect*>(*(set->items().begin())));
     TearDownTestCase();
@@ -602,10 +605,10 @@ TEST_F(ObjectSetTest, Combine) {
     r1.release();
     r2.release();
     EXPECT_EQ(1, set->size());
-    EXPECT_EQ(5, _doc->getRoot()->children.size());
+    EXPECT_EQ(N + 2, _doc->getRoot()->children.size());
     set->breakApart();
     EXPECT_EQ(2, set->size());
-    EXPECT_EQ(6, _doc->getRoot()->children.size());
+    EXPECT_EQ(N + 3, _doc->getRoot()->children.size());
     set->deleteItems();
     set->set(r3.get());
     set->toCurves();
