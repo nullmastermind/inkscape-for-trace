@@ -300,7 +300,6 @@ bool sp_file_save_backup( Glib::ustring uri ) {
 void sp_file_convert_dpi(SPDocument *doc)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Glib::ustring uri = doc->getDocumentURI();
     SPRoot *root = doc->getRoot();
 
     // See if we need to offer the user a fix for the 90->96 px per inch change.
@@ -482,7 +481,10 @@ void sp_file_convert_dpi(SPDocument *doc)
         }
 
         if (backup && (response != FILE_DPI_UNCHANGED)) {
-            sp_file_save_backup(uri);
+            const char* uri = doc->getDocumentURI();
+            if (uri) {
+                sp_file_save_backup(Glib::ustring(uri));
+            }
         }
 
         if (!(response == FILE_DPI_UNCHANGED && need_fix_units)) {
