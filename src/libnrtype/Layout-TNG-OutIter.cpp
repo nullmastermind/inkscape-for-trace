@@ -37,7 +37,7 @@ Layout::iterator Layout::_cursorXOnLineToIterator(unsigned line_index, double lo
     if (char_index == _characters.size()) return end();
     for ( ; char_index < _characters.size() ; char_index++) {
         if (_characters[char_index].chunk(this).in_line != line_index) break;
-        if (_characters[char_index].char_attributes.is_mandatory_break) break;
+        //if (_characters[char_index].char_attributes.is_mandatory_break) break;
         if (!_characters[char_index].char_attributes.is_cursor_position) continue;
 
         double delta_x =
