@@ -370,8 +370,13 @@ void sp_add_top_window_classes_callback(Gtk::Widget *widg)
 
 void sp_add_top_window_classes(Gtk::Widget *widg)
 {
-    if (widg) {
+    if (!widg) {
+        return;
+    }
+    if (!widg->get_realized()) {
         widg->signal_realize().connect(sigc::bind(sigc::ptr_fun(&sp_add_top_window_classes_callback), widg));
+    } else {
+        sp_add_top_window_classes_callback(widg);
     }
 }
 
