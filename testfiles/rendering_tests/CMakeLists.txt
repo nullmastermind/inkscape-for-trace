@@ -11,6 +11,7 @@ set(RENDERING_TESTS
     selector-important-003
 
     multi-style
+    style-parsing
 
     # -- Text tests --
     ## Many (if not all) of these tests are sensitive to the text rendering stack: FreeType, HarfBuzz, Pango.
