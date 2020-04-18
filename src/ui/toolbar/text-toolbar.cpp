@@ -2319,12 +2319,6 @@ void TextToolbar::prepare_inner()
             // and geting this and the inbetween elements
             SPObject *start = startobj;
             SPObject *end   = endobj;
-            if (start->parent != spobject) {
-                start = start->parent;
-            }
-            if (end->parent != spobject) {
-                end = end->parent;
-            }
             while (start->parent != spobject)
             {
                 start = start->parent;
@@ -2338,7 +2332,9 @@ void TextToolbar::prepare_inner()
                 containers.push_back(start);
                 start = start->getNext();
             }
-            containers.push_back(start);
+            if (start) {
+                containers.push_back(start);
+            }
             for (auto container : containers) {
                 Inkscape::XML::Node *prevchild = container->getRepr(); 
                 std::vector<SPObject*> childs = container->childList(false);
@@ -2376,7 +2372,7 @@ void TextToolbar::prepare_inner()
                     } else if (tspan) {
                         if (child->childList(false).size()) {
                             child->getRepr()->setAttribute("sodipodi:role", "line");
-                            // maybe we need to move unindent fiunction here 
+                            // maybe we need to move unindent function here 
                             // to be the same as other here
                             prevchild = unindent_node(child->getRepr(), prevchild);
                         } else {
