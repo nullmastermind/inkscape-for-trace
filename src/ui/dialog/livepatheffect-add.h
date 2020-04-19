@@ -112,6 +112,8 @@ private:
   Gtk::Box *_LPESelector;
   guint _visiblelpe;
   Glib::ustring _item_type;
+  bool _has_clip;
+  bool _has_mask;
   Gtk::FlowBoxChild *_lasteffect;
   const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *_to_add;
   bool _showfavs;
