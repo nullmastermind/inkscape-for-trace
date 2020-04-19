@@ -493,6 +493,7 @@ static void calculate_intersections(SPDesktop * /*desktop*/, SPItem* item, Geom:
     curve->transform(item->i2doc_affine());
     // Find all intersections of the control-line with this shape
     Geom::CrossingSet cs = Geom::crossings(lineseg, curve->get_pathvector());
+    curve->unref();
     Geom::delete_duplicates(cs[0]);
 
     // Reconstruct and store the points of intersection

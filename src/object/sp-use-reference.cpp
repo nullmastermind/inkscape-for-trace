@@ -201,6 +201,7 @@ void SPUsePath::refresh_source()
 
     if (originalPath != nullptr) {
         originalPath->unref();
+        originalPath = nullptr;
     }
 
     SPObject *refobj = sourceObject;
@@ -209,14 +210,12 @@ void SPUsePath::refresh_source()
     SPItem *item = SP_ITEM(refobj);
 
     if (SP_IS_SHAPE(item)) {
-        SPCurve *originalCurve = SP_SHAPE(item)->getCurve();
-        if (originalCurve != nullptr) {
-            originalPath = originalCurve->copy();
-        } else {
+        originalPath = SP_SHAPE(item)->getCurve();
+        if (originalPath == nullptr) {
             sourceDirty = true;
         }
     } else if (SP_IS_TEXT(item)) {
-        originalPath = SP_TEXT(item)->getNormalizedBpath()->copy();
+        originalPath = SP_TEXT(item)->getNormalizedBpath();
     }
 }
 

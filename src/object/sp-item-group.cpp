@@ -963,7 +963,6 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, Inkscape::LivePa
 #endif
                             g_free(str);
                         }
-                        c->unref();
                     } else {
                         // LPE was unsuccessful or doeffect stack return null. Read the old 'd'-attribute.
                         if (gchar const * value = repr->attribute("d")) {
@@ -975,6 +974,7 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, Inkscape::LivePa
                             }
                         }
                     }
+                    c->unref();
                 }
             }
         }
