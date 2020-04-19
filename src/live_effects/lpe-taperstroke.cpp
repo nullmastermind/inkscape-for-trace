@@ -482,8 +482,7 @@ void KnotHolderEntityAttachBegin::knot_set(Geom::Point const &p, Geom::Point con
         return;
     }
     
-    SPCurve* curve;
-    if (!(curve = SP_SHAPE(lpe->sp_lpe_item)->getCurve())) {
+    if (!SP_SHAPE(lpe->sp_lpe_item)->getCurve(true)) {
         // oops
         return;
     }
@@ -514,8 +513,7 @@ void KnotHolderEntityAttachEnd::knot_set(Geom::Point const &p, Geom::Point const
         return;
     }
     
-    SPCurve* curve;
-    if ( !(curve = SP_SHAPE(lpe->sp_lpe_item)->getCurve()) ) {
+    if (!SP_SHAPE(lpe->sp_lpe_item)->getCurve(true)) {
         // oops
         return;
     }

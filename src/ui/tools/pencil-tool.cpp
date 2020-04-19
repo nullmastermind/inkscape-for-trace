@@ -748,6 +748,8 @@ void PencilTool::addPowerStrokePencil()
         Geom::Affine transform_coordinate = SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->i2dt_affine().inverse();
         curvepressure->transform(transform_coordinate);
         Geom::Path path = curvepressure->get_pathvector()[0];
+        curvepressure->unref();
+
         if (!path.empty()) {
             Inkscape::XML::Document *xml_doc = document->getReprDoc();
             Inkscape::XML::Node *pp = nullptr;
@@ -798,7 +800,7 @@ void PencilTool::addPowerStrokePencil()
                     sp_lpe_item_enable_path_effects(lpeitem, true);
                 }
                 sp_lpe_item_update_patheffect(lpeitem, false, true);
-                curvepressure = powerpreview->getCurve();
+                SPCurve const *curvepressure = powerpreview->getCurve(true);
                 if (curvepressure->is_empty()) {
                     return;
                 }
@@ -840,9 +842,6 @@ void PencilTool::addPowerStrokePencil()
                 sp_lpe_item_enable_path_effects(lpeitem, true);
                 sp_lpe_item_update_patheffect(lpeitem, false, true);
                 pp->setAttribute("style", "fill:#888888;opacity:1;fill-rule:nonzero;stroke:none;");
-            }
-            if (curvepressure) {
-                curvepressure->unref();
             }
             prefs->setBool(pref_path_pp, false);
         }

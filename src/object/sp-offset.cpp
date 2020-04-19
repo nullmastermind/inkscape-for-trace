@@ -177,7 +177,7 @@ Inkscape::XML::Node* SPOffset::write(Inkscape::XML::Document *xml_doc, Inkscape:
 
 
     // Make sure the offset has curve
-    SPCurve *curve = SP_SHAPE (this)->getCurve();
+    SPCurve const *curve = SP_SHAPE(this)->getCurve(true);
 
     if (curve == nullptr) {
         this->set_shape();

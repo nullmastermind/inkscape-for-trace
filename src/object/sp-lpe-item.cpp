@@ -438,7 +438,7 @@ sp_lpe_item_create_original_path_recursive(SPLPEItem *lpeitem)
         }
     } else if (SPShape * shape = dynamic_cast<SPShape *>(lpeitem)) {
         if (!shape->getCurveBeforeLPE(true)) {
-            shape->setCurveBeforeLPE(shape->getCurve());
+            shape->setCurveBeforeLPE(shape->getCurve(true));
         }
     }
 }
@@ -506,7 +506,7 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem, bool keep_paths,
         }
     } else if (shape) {
         Inkscape::XML::Node *repr = lpeitem->getRepr();
-        SPCurve * c_lpe = shape->getCurve();
+        SPCurve const* c_lpe = shape->getCurve(true);
         if (c_lpe) {
             gchar *d_str = sp_svg_write_path(c_lpe->get_pathvector());
             if (d_str) {
@@ -593,7 +593,6 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem, bool keep_paths,
                         sp_lpe_item_update_patheffect(lpeitem, true, true);
                     }
                 }
-                c_lpe->unref();
             }
         }
     }

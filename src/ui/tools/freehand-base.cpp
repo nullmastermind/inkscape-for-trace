@@ -433,8 +433,9 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
         }
         SPShape *sp_shape = dynamic_cast<SPShape *>(item);
         if (sp_shape) {
-            curve = sp_shape->getCurve();
+            curve = sp_shape->getCurve(true);
         }
+        curve->ref();
         SPCSSAttr *css_item = sp_css_attr_from_object(item, SP_STYLE_FLAG_ALWAYS);
         const char *cstroke = sp_repr_css_property(css_item, "stroke", "none");
         const char *cfill = sp_repr_css_property(css_item, "fill", "none");
@@ -607,6 +608,8 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
                 break;
         }
         previous_shape_type = shape;
+
+        curve->unref();
 
         if (shape_applied) {
             // apply original stroke color as fill and unset stroke; then return

@@ -537,7 +537,7 @@ void SPText::_buildLayoutInit()
                         if (!(shape->_curve)) {
                             shape->set_shape();
                         }
-                        SPCurve *curve = shape->getCurve();
+                        SPCurve const *curve = shape->getCurve(true);
 
                         if ( curve ) {
                             Path *temp = new Path;
@@ -789,7 +789,7 @@ Shape* SPText::_buildExclusionShape() const
                 if (!(shape->_curve)) {
                     shape->set_shape();
                 }
-                SPCurve *curve = shape->getCurve();
+                SPCurve const *curve = shape->getCurve(true);
 
                 if ( curve ) {
                     Path *temp = new Path;
