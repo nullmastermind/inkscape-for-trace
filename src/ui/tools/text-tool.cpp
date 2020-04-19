@@ -1655,12 +1655,25 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
 
         // scroll to show cursor
         if (scroll_to_see) {
-            Geom::Point const center = SP_EVENT_CONTEXT(tc)->desktop->current_center();
-            if (Geom::L2(d0 - center) > Geom::L2(d1 - center))
-                // unlike mouse moves, here we must scroll all the way at first shot, so we override the autoscrollspeed
-                SP_EVENT_CONTEXT(tc)->desktop->scroll_to_point(d0, 1.0);
-            else
-                SP_EVENT_CONTEXT(tc)->desktop->scroll_to_point(d1, 1.0);
+
+            // We don't want to scroll outside the text box area (i.e. when there is hidden text)
+            // or we could end up in Timbuktu.
+            bool scroll = true;
+            if (SP_IS_TEXT(tc->text)) {
+                Geom::OptRect opt_frame = SP_TEXT(tc->text)->get_frame();
+                if (opt_frame && (!opt_frame->contains(p0))) {
+                    scroll = false;
+                }
+            }
+
+            if (scroll) {
+                Geom::Point const center = SP_EVENT_CONTEXT(tc)->desktop->current_center();
+                if (Geom::L2(d0 - center) > Geom::L2(d1 - center))
+                    // unlike mouse moves, here we must scroll all the way at first shot, so we override the autoscrollspeed
+                    SP_EVENT_CONTEXT(tc)->desktop->scroll_to_point(d0, 1.0);
+                else
+                    SP_EVENT_CONTEXT(tc)->desktop->scroll_to_point(d1, 1.0);
+            }
         }
 
         sp_canvas_item_show(tc->cursor);
