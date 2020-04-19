@@ -1,0 +1,9 @@
+/* SPDX-License-Identifier: GPL-2.0-or-later */
+
+/* overwritten later */
+rect { fill: red; }
+.c1 { fill: red; }
+
+/* not overwritten */
+#background { fill: white; }
+.c5 { fill: #00ccff; }

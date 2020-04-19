@@ -63,8 +63,7 @@ rect { fill: #ffff00; }
        y="30" />
     <style
        id="insidegroup">
-#background { fill: white; }
-.c5 { fill: #00ccff; }
+@import "multi-style-import-1.css";
 /* nested CSS selector (with XML entity because not using CDATA) */
 g.g1 &gt; rect { fill: #00ffcc; }
 </style>
@@ -89,8 +88,7 @@ g.g1 &gt; rect { fill: #00ffcc; }
   </g>
   <style
      id="last"><!-- using CDATA --><![CDATA[
-rect { fill: #0000ff; }
-.c1 { fill: #990099; }
+@import "multi-style-import-2.css";
 .c4 { fill: #ff00ff; }
 ]]></style>
 </svg>
