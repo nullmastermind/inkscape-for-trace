@@ -22,6 +22,7 @@
 
 #include "color-rgba.h"
 #include "desktop.h"
+#include "filter-chemistry.h"
 #include "inkscape.h"
 #include "selection.h"
 
@@ -1693,7 +1694,11 @@ objects_query_blend (const std::vector<SPItem*> &objects, SPStyle *style_res)
         }
         // defaults to blend mode = "normal"
         else {
-            blend = SP_CSS_BLEND_NORMAL;
+            if (style->filter.set && style->getFilter()) {
+                blend = filter_get_legacy_blend(obj);
+            } else {
+                blend = SP_CSS_BLEND_NORMAL;
+            }
         }
 
         if (items > 1 && blend_prev != blend)
