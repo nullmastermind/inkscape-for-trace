@@ -108,6 +108,7 @@ public:
     Inkscape::UI::Tools::ToolBase * active_event_context();
     SPDocument * active_document();
     SPDesktop * active_desktop();
+    Glib::RefPtr<Gtk::CssProvider> styleprovider;
     Glib::RefPtr<Gtk::CssProvider> themeprovider;
     Glib::RefPtr<Gtk::CssProvider> colorizeprovider;
     // Use this function to get selection model etc for a document
@@ -195,7 +196,7 @@ public:
         return _pdf_page;
     }
 
-    void add_gtk_css();
+    void add_gtk_css(bool only_providers);
     void add_icon_theme();
 
   private:

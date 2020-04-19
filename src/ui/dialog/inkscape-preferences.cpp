@@ -816,6 +816,7 @@ void InkscapePreferences::themeChange()
             window->get_style_context()->remove_class("dark");
         }
         INKSCAPE.signal_change_theme.emit();
+        INKSCAPE.add_gtk_css(true);
         resetIconsColors(toggled);
     }
 }
