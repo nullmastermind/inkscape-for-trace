@@ -462,9 +462,13 @@ LPEKnot::doEffect_path (Geom::PathVector const &path_in)
                 }
                 i0_is_under = crossing_points[p].sign != 0 && both ? true : i0_is_under;
                 if (i0_is_under && j == i0) {
-                    std::swap(i, j);
-                    std::swap(ti, tj);
-                    std::swap(flag_i, flag_j);
+                    // last check of sign makes sure we get different outputs when
+                    // path components are part of the same subpath (i == j)
+                    if (!(i == j && !both && crossing_points[p].sign * geom_sign > 0)) {
+                        std::swap(i, j);
+                        std::swap(ti, tj);
+                        std::swap(flag_i, flag_j);
+                    }
                 }
                 if (i0_is_under){
                     if ( prop_to_stroke_width.get_value() ) {
