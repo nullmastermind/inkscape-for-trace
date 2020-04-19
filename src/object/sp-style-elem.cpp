@@ -232,19 +232,10 @@ import_style_cb (CRDocHandler *a_handler,
     CRStatus const parse_status =
         cr_parser_parse_file (parser, reinterpret_cast<const guchar *>(import_file.c_str()), CR_UTF_8);
     if (parse_status == CR_OK) {
-        // TODO Imported style sheets should be stored as a statement,
-        // not appended to any top-level list which discards their position
-        // in the parent sheet.
-        auto *cascade = document->getStyleCascade();
-        auto *topsheet = cr_cascade_get_sheet(cascade, ORIGIN_AUTHOR);
-        if (!topsheet) {
-            // if the style is the first style sheet that we've seen, set the document's
-            // first style sheet to this style and create a cascade object with it.
-            cr_cascade_set_sheet(cascade, stylesheet, ORIGIN_AUTHOR);
-        } else {
-            // If not the first, then chain up this style_sheet
-            cr_stylesheet_append_import(topsheet, stylesheet);
-        }
+        g_assert(parse_tmp.stylesheet);
+        g_assert(parse_tmp.stylesheet != stylesheet);
+        stylesheet->origin = ORIGIN_AUTHOR;
+        cr_stylesheet_append_import(parse_tmp.stylesheet, stylesheet);
     } else {
         std::cerr << "import_style_cb: Could not parse: " << import_file << std::endl;
         cr_stylesheet_destroy (stylesheet);
