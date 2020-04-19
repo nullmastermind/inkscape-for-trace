@@ -931,6 +931,52 @@ void SPText::_adjustFontsizeRecursive(SPItem *item, double ex, bool is_root)
     }
 }
 
+void
+remove_newlines_recursive(SPObject* object, bool is_svg2)
+{
+    // Replace '\n' by space.
+    SPString* string = dynamic_cast<SPString *>(object);
+    if (string) {
+        static Glib::RefPtr<Glib::Regex> r = Glib::Regex::create("\n+");
+        string->string = r->replace(string->string, 0, " ", (Glib::RegexMatchFlags)0);
+        string->getRepr()->setContent(string->string.c_str());
+    }
+
+    for (auto child : object->childList(false)) {
+        remove_newlines_recursive(child, is_svg2);
+    }
+
+    // Add space at end of a line if line is created by sodipodi:role="line".
+    SPTSpan* tspan = dynamic_cast<SPTSpan *>(object);
+    if (tspan                             &&
+        tspan->role == SP_TSPAN_ROLE_LINE &&
+        tspan->getNext() != nullptr       &&  // Don't add space at end of last line.
+        !is_svg2) {                           // SVG2 uses newlines, should not have sodipodi:role.
+
+        std::vector<SPObject *> children = tspan->childList(false);
+
+        // Find last string (could be more than one if there is tspan in the middle of a tspan).
+        for (auto it = children.rbegin(); it != children.rend(); ++it) {
+            SPString* string = dynamic_cast<SPString *>(*it);
+            if (string) {
+                string->string += ' ';
+                string->getRepr()->setContent(string->string.c_str());
+                break;
+            }
+        }
+    }
+}
+
+// Prepare multi-line text for putting on path.
+void
+SPText::remove_newlines()
+{
+    remove_newlines_recursive(this, has_shape_inside() || has_inline_size());
+    style->inline_size.clear();
+    style->shape_inside.clear();
+    updateRepr();
+}
+
 void SPText::_adjustCoordsRecursive(SPItem *item, Geom::Affine const &m, double ex, bool is_root)
 {
     if (SP_IS_TSPAN(item))
