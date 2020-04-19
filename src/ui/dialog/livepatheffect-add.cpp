@@ -14,7 +14,9 @@
 #include "dialog.h"
 #include "io/resource.h"
 #include "live_effects/effect.h"
+#include "object/sp-clippath.h"
 #include "object/sp-item-group.h"
+#include "object/sp-mask.h"
 #include "object/sp-path.h"
 #include "object/sp-shape.h"
 #include "preferences.h"
@@ -500,6 +502,14 @@ bool LivePathEffectAdd::on_filter(Gtk::FlowBoxChild *child)
     } else if (_item_type == "path" && !converter.get_on_path(data->id)) {
         disable = true;
     }
+    
+    if (!_has_clip && data->id == Inkscape::LivePathEffect::POWERCLIP) {
+        disable = true;
+    }
+    if (!_has_mask && data->id == Inkscape::LivePathEffect::POWERMASK) {
+        disable = true;
+    }
+
     if (disable) {
         child->get_style_context()->add_class("lpedisabled");
     } else {
@@ -873,6 +883,16 @@ void LivePathEffectAdd::show(SPDesktop *desktop)
             SPShape *shape = dynamic_cast<SPShape *>(item);
             SPPath *path = dynamic_cast<SPPath *>(item);
             SPGroup *group = dynamic_cast<SPGroup *>(item);
+            SPObject *mask = item->getMaskObject();
+            SPObject *clip = item->getClipObject();
+            dial._has_clip = false;
+            dial._has_mask = false;
+            if (mask) {
+                dial._has_mask = true;
+            }
+            if (clip) {
+                dial._has_clip = true;
+            }
             dial._item_type = "";
             if (group) {
                 dial._item_type = "group";
