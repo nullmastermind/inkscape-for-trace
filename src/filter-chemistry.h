@@ -16,6 +16,7 @@
 #define SEEN_SP_FILTER_CHEMISTRY_H
 
 #include "display/nr-filter-types.h"
+#include "style-enums.h"
 
 class SPDocument;
 class SPFilter;
@@ -30,6 +31,8 @@ SPFilter *new_filter_simple_from_item (SPDocument *document, SPItem *item, const
 SPFilter *modify_filter_gaussian_blur_from_item (SPDocument *document, SPItem *item, double stdDeviation);
 void remove_filter (SPObject *item, bool recursive);
 void remove_filter_gaussian_blur (SPObject *item);
+void remove_filter_legacy_blend(SPObject *item);
+SPBlendMode filter_get_legacy_blend(SPObject *item);
 bool filter_is_single_gaussian_blur(SPFilter *filter);
 double get_single_gaussian_blur_radius(SPFilter *filter);
 

@@ -485,6 +485,80 @@ void remove_filter_gaussian_blur (SPObject *item)
     }
 }
 
+/**
+ * Removes blend primitive from the filter attached to given item.
+ * Get if the filter have a < 1.0 blending filter and if it remove it
+ * @params: the item to remove filtered blend
+ */
+/* TODO: the removed filter primitive may had had a named result image, so
+ * after removing, the filter may be in erroneous state, this situation should
+ * be handled gracefully */
+void remove_filter_legacy_blend(SPObject *item)
+{
+    if (item->style && item->style->filter.set && item->style->getFilter()) {
+        // Search for the first blur primitive and remove it. (if found)
+        size_t blurcount = 0;
+        size_t blendcount = 0;
+        size_t total = 0;
+        // determine whether filter is simple (blend and/or blur) or complex
+        SPFeBlend *blend = nullptr;
+        for (auto &primitive_obj:item->style->getFilter()->children) {
+            SPFilterPrimitive *primitive = dynamic_cast<SPFilterPrimitive *>(&primitive_obj);
+            if (primitive) {
+                if (dynamic_cast<SPFeBlend *>(primitive)) {
+                    blend = dynamic_cast<SPFeBlend *>(primitive);
+                    ++blendcount;
+                }
+                SPGaussianBlur *spgausian = dynamic_cast<SPGaussianBlur *>(primitive);
+                if (spgausian) {
+                    ++blurcount;
+                }
+                ++total;
+            }
+        }
+        if (blend && total == 2 && blurcount == 1) {
+            sp_repr_unparent(blend->getRepr());
+        } else if (total == 1) {
+            remove_filter(item, false);
+        }
+    }
+}
+
+/**
+ * Get if the filter have a < 1.0 blending filter 
+ * @params: the item to get filtered blend
+ */
+SPBlendMode filter_get_legacy_blend(SPObject *item)
+{
+    auto blend = SP_CSS_BLEND_NORMAL;
+    if (item->style && item->style->filter.set && item->style->getFilter()) {
+        // Search for the first blur primitive and remove it. (if found)
+        size_t blurcount = 0;
+        size_t blendcount = 0;
+        size_t total = 0;
+        // determine whether filter is simple (blend and/or blur) or complex
+        for (auto &primitive_obj:item->style->getFilter()->children) {
+            SPFilterPrimitive *primitive = dynamic_cast<SPFilterPrimitive *>(&primitive_obj);
+            if (primitive) {
+                SPFeBlend *spblend = dynamic_cast<SPFeBlend *>(primitive);
+                if (spblend) {
+                    ++blendcount;
+                    blend = (SPBlendMode)spblend->blend_mode;
+                }
+                SPGaussianBlur *spgausian = dynamic_cast<SPGaussianBlur *>(primitive);
+                if (spgausian) {
+                    ++blurcount;
+                }
+                ++total;
+            }
+        }
+        if (!((blend && total == 2 && blurcount == 1) || total == 1)) {
+            blend = SP_CSS_BLEND_NORMAL;
+        }
+    }
+    return blend;
+}
+
 bool filter_is_single_gaussian_blur(SPFilter *filter)
 {
     return (filter->children.size() == 1 &&

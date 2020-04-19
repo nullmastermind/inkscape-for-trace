@@ -26,6 +26,7 @@
 #include "svg/css-ostringstream.h"
 #include "verbs.h"
 #include "display/sp-canvas.h"
+#include "object/filters/blend.h"
 #include "ui/widget/style-subject.h"
 
 constexpr double BLUR_MULTIPLIER = 4.0;
@@ -115,6 +116,10 @@ ObjectCompositeSettings::_blendBlurValueChanged()
         SPStyle *style = item->style;
         g_assert(style != nullptr);
         bool change_blend = (item->style->mix_blend_mode.set ? item->style->mix_blend_mode.value : SP_CSS_BLEND_NORMAL) != _filter_modifier.get_blend_mode();
+        // < 1.0 filter based blend removal
+        if (!item->style->mix_blend_mode.set && item->style->filter.set && item->style->getFilter()) {
+            remove_filter_legacy_blend(item);
+        }
         item->style->mix_blend_mode.set = TRUE;
         if (item->style->isolation.value == SP_CSS_ISOLATION_ISOLATE) {
             item->style->mix_blend_mode.value = SP_CSS_BLEND_NORMAL;

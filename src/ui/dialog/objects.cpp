@@ -620,6 +620,12 @@ void ObjectsPanel::_setCompositingValues(SPItem *item)
     } else {
         _filter_modifier.set_blend_mode(item->style->mix_blend_mode.value, true);
     }
+    if (_filter_modifier.get_blend_mode() == SP_CSS_BLEND_NORMAL) {
+        if (!item->style->mix_blend_mode.set && item->style->filter.set && item->style->getFilter()) {
+            auto blend = filter_get_legacy_blend(item);
+            _filter_modifier.set_blend_mode(blend, true);
+        }
+    }
     SPGaussianBlur *spblur = nullptr;
     if (item->style->getFilter()) {
         for (auto& primitive_obj: item->style->getFilter()->children) {
@@ -1790,6 +1796,10 @@ void ObjectsPanel::_blendChangedIter(const Gtk::TreeIter &iter)
     SPItem* item = row[_model->_colObject];
     if (item)
     {
+        // < 1.0 filter based blend removal
+        if (!item->style->mix_blend_mode.set && item->style->filter.set && item->style->getFilter()) {
+            remove_filter_legacy_blend(item);
+        }
         item->style->mix_blend_mode.set = TRUE;
         if (_filter_modifier.get_blend_mode() &&
             item->style->isolation.value == SP_CSS_ISOLATION_ISOLATE) 
