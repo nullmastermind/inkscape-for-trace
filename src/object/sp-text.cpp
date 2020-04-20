@@ -437,6 +437,9 @@ Geom::Affine SPText::set_transform(Geom::Affine const &xform) {
     if (this->attributes.getTextLength()->_set)
         return xform;
 
+    if (this->style && this->style->inline_size.set)
+        return xform;
+
     /* This function takes care of scaling & translation only, we return whatever parts we can't
        handle. */
 
