@@ -1479,10 +1479,13 @@ TextToolbar::lineheight_unit_changed(int /* Not Used */)
     }
     // Internal function to set line-height which is spacing mode dependent.
     SPItem *parent = dynamic_cast<SPItem *>(*itemlist.begin());
-    SPStyle *parent_style = parent->style;
+    SPStyle *parent_style = nullptr;
+    if (parent) {
+        parent_style = parent->style;
+    }
     bool inside = false;
     if (_outer) {
-        if (!selection->singleItem() || parent_style->line_height.computed != 0) {
+        if (!selection->singleItem() || !parent_style || parent_style->line_height.computed != 0) {
             for (auto i = itemlist.begin(); i != itemlist.end(); ++i) {
                 if (dynamic_cast<SPText *>(*i) || dynamic_cast<SPFlowtext *>(*i)) {
                     SPItem *item = *i;
