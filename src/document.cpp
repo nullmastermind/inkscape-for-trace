@@ -101,7 +101,6 @@ SPDocument::SPDocument() :
     rroot(nullptr),
     root(nullptr),
     style_cascade(cr_cascade_new(nullptr, nullptr, nullptr)),
-    ref_count(0),
     document_uri(nullptr),
     document_base(nullptr),
     document_name(nullptr),
@@ -582,19 +581,12 @@ SPDocument *SPDocument::createNewDocFromMem(gchar const *buffer, gint length, bo
 
 SPDocument *SPDocument::doRef()
 {
-    ++ref_count;
-    // std::cout << "SPDocument::doRef() " << ref_count << " " << this << std::endl;
     Inkscape::GC::anchor(this);
     return this;
 }
 
 SPDocument *SPDocument::doUnref()
 {
-    --ref_count;
-    if (ref_count < 0) {
-        std::cerr << "SPDocument::doUnref(): invalid ref count! " << ref_count << std::endl;
-    }
-    // std::cout << "SPDocument::doUnref() " << ref_count << " " << this << std::endl;
     Inkscape::GC::release(this);
     return nullptr;
 }

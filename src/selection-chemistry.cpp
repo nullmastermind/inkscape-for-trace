@@ -2674,13 +2674,13 @@ void ObjectSet::relink()
     }
 
     Inkscape::UI::ClipboardManager *cm = Inkscape::UI::ClipboardManager::get();
-    const gchar *newid = cm->getFirstObjectID();
-    if (!newid) {
+    auto newid = cm->getFirstObjectID();
+    if (newid.empty()) {
         if(desktop())
             desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Copy an <b>object</b> to clipboard to relink clones to."));
         return;
     }
-    gchar *newref = g_strdup_printf("#%s", newid);
+    auto newref = "#" + newid;
 
     // Get a copy of current selection.
     bool relinked = false;
@@ -2694,8 +2694,6 @@ void ObjectSet::relink()
             relinked = true;
         }
     }
-
-    g_free(newref);
 
     if (!relinked) {
         if(desktop())

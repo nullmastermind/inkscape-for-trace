@@ -292,7 +292,6 @@ private:
     Avoid::Router *router; // Instance of the connector router
 
     // Document status -----------------------
-    int ref_count;  // Temp to check refcounting
 
     bool keepalive; ///< false if temporary document (e.g. to generate a PNG for display in a dialog).
     bool virgin ;   ///< Has the document never been touched?

@@ -252,12 +252,11 @@ void
 ItemParam::on_link_button_click()
 {
     Inkscape::UI::ClipboardManager *cm = Inkscape::UI::ClipboardManager::get();
-    const gchar * iid = cm->getFirstObjectID();
-    if (!iid) {
+    auto itemid = cm->getFirstObjectID();
+    if (itemid.empty()) {
         return;
     }
     
-    Glib::ustring itemid(iid);
     linkitem(itemid);
 }
 
