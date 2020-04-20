@@ -42,6 +42,20 @@
 
 #include "widgets/sp-xmlview-tree.h"
 
+namespace {
+/**
+ * Set the orientation of `paned` to vertical or horizontal, and make the first child resizable
+ * if vertical, and the second child resizable if horizontal.
+ * @pre `paned` has two children
+ */
+void paned_set_vertical(Gtk::Paned &paned, bool vertical)
+{
+    paned.child_property_resize(*paned.get_child1()) = vertical;
+    paned.child_property_resize(*paned.get_child2()) = !vertical;
+    paned.set_orientation(vertical ? Gtk::ORIENTATION_VERTICAL : Gtk::ORIENTATION_HORIZONTAL);
+}
+} // namespace
+
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
@@ -168,8 +182,6 @@ XmlTree::XmlTree()
     bool attrtoggler = prefs->getBool("/dialogs/xml/attrtoggler", true);
     bool dir = prefs->getBool("/dialogs/xml/vertical", true);
     attributes = new AttrDialog();
-    _paned.set_orientation(dir ? Gtk::ORIENTATION_VERTICAL : Gtk::ORIENTATION_HORIZONTAL);
-    _paned.check_resize();
     _paned.set_wide_handle(true);
     _paned.pack1(node_box, false, false);
     /* attributes */
@@ -198,6 +210,7 @@ XmlTree::XmlTree()
     actionsbox->pack_end(*_horizontal, false, false, 0);
     actionsbox->pack_end(*_vertical, false, false, 0);
     _paned.pack2(*attributes, true, false);
+    paned_set_vertical(_paned, dir);
     contents->pack_start(*actionsbox, false, false, 0);
     /* Signal handlers */
     GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(tree));
@@ -239,8 +252,7 @@ void XmlTree::_toggleDirection(Gtk::RadioButton *vertical)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool dir = vertical->get_active();
     prefs->setBool("/dialogs/xml/vertical", dir);
-    _paned.set_orientation(dir ? Gtk::ORIENTATION_VERTICAL : Gtk::ORIENTATION_HORIZONTAL);
-    _paned.check_resize();
+    paned_set_vertical(_paned, dir);
     prefs->setInt("/dialogs/xml/panedpos", _paned.property_position());
 }
 
