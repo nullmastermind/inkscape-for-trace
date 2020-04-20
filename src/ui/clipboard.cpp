@@ -104,7 +104,7 @@ public:
     Glib::ustring getPathParameter(SPDesktop* desktop) override;
     Glib::ustring getShapeOrTextObjectId(SPDesktop *desktop) override;
     std::vector<Glib::ustring> getElementsOfType(SPDesktop *desktop, gchar const* type = "*", gint maxdepth = -1) override;
-    const gchar *getFirstObjectID() override;
+    Glib::ustring getFirstObjectID() override;
 
     ClipboardManagerImpl();
     ~ClipboardManagerImpl() override;
@@ -122,7 +122,7 @@ private:
     bool _pasteImage(SPDocument *doc);
     bool _pasteText(SPDesktop *desktop);
     void _applyPathEffect(SPItem *, gchar const *);
-    SPDocument *_retrieveClipboard(Glib::ustring = "");
+    std::unique_ptr<SPDocument> _retrieveClipboard(Glib::ustring = "");
 
     // clipboard callbacks
     void _onGet(Gtk::SelectionData &, guint);
@@ -389,14 +389,13 @@ bool ClipboardManagerImpl::paste(SPDesktop *desktop, bool in_place)
     }
 
     // otherwise, use the import extensions
-    SPDocument *tempdoc = _retrieveClipboard(target);
+    auto tempdoc = _retrieveClipboard(target);
     if ( tempdoc == nullptr ) {
         _userWarn(desktop, _("Nothing on the clipboard."));
         return false;
     }
 
-    sp_import_document(desktop, tempdoc, in_place);
-    tempdoc->doUnref();
+    sp_import_document(desktop, tempdoc.get(), in_place);
 
     return true;
 }
@@ -404,17 +403,17 @@ bool ClipboardManagerImpl::paste(SPDesktop *desktop, bool in_place)
 /**
  * Returns the id of the first visible copied object.
  */
-const gchar *ClipboardManagerImpl::getFirstObjectID()
+Glib::ustring ClipboardManagerImpl::getFirstObjectID()
 {
-    SPDocument *tempdoc = _retrieveClipboard("image/x-inkscape-svg");
+    auto tempdoc = _retrieveClipboard("image/x-inkscape-svg");
     if ( tempdoc == nullptr ) {
-        return nullptr;
+        return {};
     }
 
     Inkscape::XML::Node *root = tempdoc->getReprRoot();
 
     if (!root) {
-        return nullptr;
+        return {};
     }
 
     Inkscape::XML::Node *ch = root->firstChild();
@@ -431,10 +430,13 @@ const gchar *ClipboardManagerImpl::getFirstObjectID()
     }
 
     if (ch) {
-        return ch->attribute("id");
+        char const *id = ch->attribute("id");
+        if (id) {
+            return id;
+        }
     }
 
-    return nullptr;
+    return {};
 }
 
 
@@ -453,7 +455,7 @@ bool ClipboardManagerImpl::pasteStyle(ObjectSet *set)
         return false;
     }
 
-    SPDocument *tempdoc = _retrieveClipboard("image/x-inkscape-svg");
+    auto tempdoc = _retrieveClipboard("image/x-inkscape-svg");
     if ( tempdoc == nullptr ) {
         // no document, but we can try _text_style
         if (_text_style) {
@@ -471,7 +473,7 @@ bool ClipboardManagerImpl::pasteStyle(ObjectSet *set)
     bool pasted = false;
 
     if (clipnode) {
-        set->document()->importDefs(tempdoc);
+        set->document()->importDefs(tempdoc.get());
         SPCSSAttr *style = sp_repr_css_attr(clipnode, "style");
         sp_desktop_set_style(set, set->desktop(), style);
         pasted = true;
@@ -480,7 +482,6 @@ bool ClipboardManagerImpl::pasteStyle(ObjectSet *set)
         _userWarn(set->desktop(), _("No style on the clipboard."));
     }
 
-    tempdoc->doUnref();
     return pasted;
 }
 
@@ -508,7 +509,7 @@ bool ClipboardManagerImpl::pasteSize(ObjectSet *set, bool separately, bool apply
     }
 
     // FIXME: actually, this should accept arbitrary documents
-    SPDocument *tempdoc = _retrieveClipboard("image/x-inkscape-svg");
+    auto tempdoc = _retrieveClipboard("image/x-inkscape-svg");
     if ( tempdoc == nullptr ) {
         if(set->desktop())
             _userWarn(set->desktop(), _("No size on the clipboard."));
@@ -549,7 +550,6 @@ bool ClipboardManagerImpl::pasteSize(ObjectSet *set, bool separately, bool apply
         }
         pasted = true;
     }
-    tempdoc->doUnref();
     return pasted;
 }
 
@@ -572,14 +572,14 @@ bool ClipboardManagerImpl::pastePathEffect(ObjectSet *set)
         return false;
     }
 
-    SPDocument *tempdoc = _retrieveClipboard("image/x-inkscape-svg");
+    auto tempdoc = _retrieveClipboard("image/x-inkscape-svg");
     if ( tempdoc ) {
         Inkscape::XML::Node *root = tempdoc->getReprRoot();
         Inkscape::XML::Node *clipnode = sp_repr_lookup_name(root, "inkscape:clipboard", 1);
         if ( clipnode ) {
             gchar const *effectstack = clipnode->attribute("inkscape:path-effect");
             if ( effectstack ) {
-                set->document()->importDefs(tempdoc);
+                set->document()->importDefs(tempdoc.get());
                 // make sure all selected items are converted to paths first (i.e. rectangles)
                 set->toLPEItems();
                 auto itemlist= set->items();
@@ -605,7 +605,7 @@ bool ClipboardManagerImpl::pastePathEffect(ObjectSet *set)
  */
 Glib::ustring ClipboardManagerImpl::getPathParameter(SPDesktop* desktop)
 {
-    SPDocument *tempdoc = _retrieveClipboard(); // any target will do here
+    auto tempdoc = _retrieveClipboard(); // any target will do here
     if ( tempdoc == nullptr ) {
         _userWarn(desktop, _("Nothing on the clipboard."));
         return "";
@@ -614,11 +614,10 @@ Glib::ustring ClipboardManagerImpl::getPathParameter(SPDesktop* desktop)
     Inkscape::XML::Node *path = sp_repr_lookup_name(root, "svg:path", -1); // unlimited search depth
     if ( path == nullptr ) {
         _userWarn(desktop, _("Clipboard does not contain a path."));
-        tempdoc->doUnref();
         return "";
     }
     gchar const *svgd = path->attribute("d");
-    return svgd;
+    return svgd ? svgd : "";
 }
 
 
@@ -634,7 +633,7 @@ Glib::ustring ClipboardManagerImpl::getShapeOrTextObjectId(SPDesktop *desktop)
     // but that could then return the id of the object's
     // clip path or mask, not the original path!
 
-    SPDocument *tempdoc = _retrieveClipboard(); // any target will do here
+    auto tempdoc = _retrieveClipboard(); // any target will do here
     if ( tempdoc == nullptr ) {
         _userWarn(desktop, _("Nothing on the clipboard."));
         return "";
@@ -661,11 +660,10 @@ Glib::ustring ClipboardManagerImpl::getShapeOrTextObjectId(SPDesktop *desktop)
 
     if ( repr == nullptr ) {
         _userWarn(desktop, _("Clipboard does not contain a path."));
-        tempdoc->doUnref();
         return "";
     }
     gchar const *svgd = repr->attribute("id");
-    return svgd;
+    return svgd ? svgd : "";
 }
 
 /**
@@ -676,7 +674,7 @@ Glib::ustring ClipboardManagerImpl::getShapeOrTextObjectId(SPDesktop *desktop)
 std::vector<Glib::ustring> ClipboardManagerImpl::getElementsOfType(SPDesktop *desktop, gchar const* type, gint maxdepth)
 {
     std::vector<Glib::ustring> result;
-    SPDocument *tempdoc = _retrieveClipboard(); // any target will do here
+    auto tempdoc = _retrieveClipboard(); // any target will do here
     if ( tempdoc == nullptr ) {
         _userWarn(desktop, _("Nothing on the clipboard."));
         return result;
@@ -709,7 +707,6 @@ std::vector<Glib::ustring> ClipboardManagerImpl::getElementsOfType(SPDesktop *de
     }
     if ( result.empty() ) {
         _userWarn(desktop, (Glib::ustring::compose(_("Clipboard does not contain any objects of type \"%1\"."), type)).c_str());
-        tempdoc->doUnref();
         return result;
     }
     return result;
@@ -1213,7 +1210,7 @@ void ClipboardManagerImpl::_applyPathEffect(SPItem *item, gchar const *effectsta
  * Retrieve the clipboard contents as a document.
  * @return Clipboard contents converted to SPDocument, or NULL if no suitable content was present
  */
-SPDocument *ClipboardManagerImpl::_retrieveClipboard(Glib::ustring required_target)
+std::unique_ptr<SPDocument> ClipboardManagerImpl::_retrieveClipboard(Glib::ustring required_target)
 {
     Glib::ustring best_target;
     if ( required_target == "" ) {
@@ -1290,13 +1287,12 @@ SPDocument *ClipboardManagerImpl::_retrieveClipboard(Glib::ustring required_targ
     SPDocument *tempdoc = nullptr;
     try {
         tempdoc = (*in)->open(filename);
-        tempdoc->doRef();
     } catch (...) {
     }
     g_unlink(filename);
     g_free(filename);
 
-    return tempdoc;
+    return std::unique_ptr<SPDocument>(tempdoc);
 }
 
 
