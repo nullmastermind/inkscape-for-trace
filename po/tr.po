@@ -8218,7 +8218,7 @@ msgstr "Belge kaydediliyor..."
 #. Replace with language code for your language, i.e. the name of your .po file
 #: ../src/file.cpp:893 ../src/io/resource.cpp:152 ../src/io/resource.cpp:157
 msgid "en"
-msgstr ""
+msgstr "tr"
 
 #: ../src/file.cpp:1163 ../src/ui/dialog/inkscape-preferences.cpp:2091
 #: ../src/ui/dialog/ocaldialogs.cpp:1087
