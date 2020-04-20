@@ -41,6 +41,7 @@
 #include "xml/sp-css-attr.h"
 
 static const gchar *tref_edit_message = _("You cannot edit <b>cloned character data</b>.");
+static void move_child_nodes(Inkscape::XML::Node *from_repr, Inkscape::XML::Node *to_repr, bool prepend = false);
 
 static bool tidy_xml_tree_recursively(SPObject *root, bool has_text_decoration);
 
@@ -397,16 +398,55 @@ static SPObject* split_text_object_tree_at(SPObject *split_obj, unsigned char_in
 object. If the position is in the middle of a span, the XML tree must be
 chopped in two such that the line can be created at the root of the text
 element. Returns an iterator pointing just after the inserted break. */
-Inkscape::Text::Layout::iterator sp_te_insert_line (SPItem *item, Inkscape::Text::Layout::iterator const &position)
+Inkscape::Text::Layout::iterator sp_te_insert_line (SPItem *item, Inkscape::Text::Layout::iterator &position)
 {
     // Disable newlines in a textpath; TODO: maybe on Enter in a textpath, separate it into two
     // texpaths attached to the same path, with a vertical shift
     if (SP_IS_TEXT_TEXTPATH (item) || SP_IS_TREF(item))
         return position;
         
+    Inkscape::Text::Layout const *layout = te_get_layout(item);
+
+    // If this is plain SVG 1.1 text object without a tspan with sodipodi:role="line", we need
+    // to wrap it or our custom line breaking code won't work!
+    bool need_to_wrap = false;
+    SPText* text_object = dynamic_cast<SPText *>(item);
+    if (text_object && !text_object->has_shape_inside() && !text_object->has_inline_size()) {
+
+        need_to_wrap = true;
+        for (auto child : item->childList(false)) {
+            auto tspan = dynamic_cast<SPTSpan *>(child);
+            if (tspan && tspan->role == SP_TSPAN_ROLE_LINE) {
+                // Already wrapped
+                need_to_wrap = false;
+                break;
+            }
+        }
+
+        if (need_to_wrap) {
+
+            // We'll need to rebuild layout, so store character postion:
+            int char_index = layout->iteratorToCharIndex(position);
+
+            // Create wrapping tspan.
+            Inkscape::XML::Node *text_repr = text_object->getRepr();
+            Inkscape::XML::Document *xml_doc = text_repr->document();
+            Inkscape::XML::Node *new_tspan_repr = xml_doc->createElement("svg:tspan");
+            new_tspan_repr->setAttribute("sodipodi:role", "line");
+
+            // Move text content to tspan and add tspan to text object.
+            // To do: This moves <desc> and <title> too.
+            move_child_nodes(text_repr, new_tspan_repr);
+            text_repr->appendChild(new_tspan_repr);
+
+            // Need to find new iterator.
+            text_object->rebuildLayout();
+            position = layout->charIndexToIterator(char_index);
+        }
+    }
+
     SPDesktop *desktop = SP_ACTIVE_DESKTOP; 
 
-    Inkscape::Text::Layout const *layout = te_get_layout(item);
     SPObject *split_obj = nullptr;
     Glib::ustring::iterator split_text_iter;
     if (position != layout->end()) {
@@ -414,6 +454,7 @@ Inkscape::Text::Layout::iterator sp_te_insert_line (SPItem *item, Inkscape::Text
     }
 
     if (split_obj == nullptr || is_line_break_object(split_obj)) {
+
         if (split_obj == nullptr) split_obj = item->lastChild();
 
         if (SP_IS_TREF(split_obj)) {
@@ -429,6 +470,7 @@ Inkscape::Text::Layout::iterator sp_te_insert_line (SPItem *item, Inkscape::Text
             split_obj->parent->getRepr()->addChild(new_node, split_obj->getRepr());
             Inkscape::GC::release(new_node);
         }
+
     } else if (SP_IS_STRING(split_obj)) {
 
         // If the parent is a tref, editing on this particular string is disallowed.
@@ -436,7 +478,7 @@ Inkscape::Text::Layout::iterator sp_te_insert_line (SPItem *item, Inkscape::Text
             desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, tref_edit_message);
             return position;
         }
-        
+
         Glib::ustring *string = &SP_STRING(split_obj)->string;
         unsigned char_index = 0;
         for (Glib::ustring::iterator it = string->begin() ; it != split_text_iter ; ++it)
@@ -458,6 +500,7 @@ Inkscape::Text::Layout::iterator sp_te_insert_line (SPItem *item, Inkscape::Text
         // TODO
         // I think the only case to put here is arbitrary gaps, which nobody uses yet
     }
+
     item->updateRepr();
     unsigned char_index = layout->iteratorToCharIndex(position);
     te_update_layout_now(item);
@@ -601,7 +644,7 @@ sp_te_insert(SPItem *item, Inkscape::Text::Layout::iterator const &position, gch
 /** moves all the children of \a from_repr to \a to_repr, either before
 the existing children or after them. Order is maintained. The empty
 \a from_repr is not deleted. */
-static void move_child_nodes(Inkscape::XML::Node *from_repr, Inkscape::XML::Node *to_repr, bool prepend = false)
+static void move_child_nodes(Inkscape::XML::Node *from_repr, Inkscape::XML::Node *to_repr, bool prepend)
 {
     while (from_repr->childCount()) {
         Inkscape::XML::Node *child = prepend ? from_repr->lastChild() : from_repr->firstChild();
