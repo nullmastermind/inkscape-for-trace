@@ -198,7 +198,7 @@ Gtk::Widget *LPERoughen::newWidget()
             }
             if (param->param_key == "global_randomize") {
                 Gtk::Label *global_rand = Gtk::manage(new Gtk::Label(
-                                                 Glib::ustring(_("<b>Extra roughen</b> Add a extra layer of rough")),
+                                                 Glib::ustring(_("<b>Extra roughen</b> Add an extra layer of rough")),
                                                  Gtk::ALIGN_START));
                 global_rand->set_use_markup(true);
                 vbox->pack_start(*global_rand, false, false, 2);
