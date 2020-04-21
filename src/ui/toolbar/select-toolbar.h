@@ -31,6 +31,8 @@ class UnitTracker;
 namespace Toolbar {
 
 class SelectToolbar : public Toolbar {
+    using parent_type = Toolbar;
+
 private:
     std::unique_ptr<UI::Widget::UnitTracker> _tracker;
 
