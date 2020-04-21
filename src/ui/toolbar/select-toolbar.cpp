@@ -227,6 +227,8 @@ void SelectToolbar::on_unrealize()
     for (auto &conn : _connections) {
         conn.disconnect();
     }
+
+    parent_type::on_unrealize();
 }
 
 GtkWidget *
