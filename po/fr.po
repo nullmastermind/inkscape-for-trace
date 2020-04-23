@@ -4246,7 +4246,7 @@ msgstr "_Activé"
 # File: ../src/display/canvas-grid.cpp, line: 306
 #: ../src/display/canvas-grid.cpp:306
 msgid "Makes the grid available for working with on the canvas."
-msgstr ""
+msgstr "Affiche la grille dans l'espace de travail."
 
 #: ../src/display/canvas-grid.cpp:310
 msgid "Snap to visible _grid lines only"
@@ -4538,17 +4538,14 @@ msgid "_Redo"
 msgstr "Réta_blir"
 
 #: ../src/extension/dependency.cpp:250
-#, fuzzy
 msgid "Dependency"
 msgstr "Dépendance"
 
 #: ../src/extension/dependency.cpp:251
-#, fuzzy
 msgid "type"
 msgstr "type"
 
 #: ../src/extension/dependency.cpp:252
-#, fuzzy
 msgid "location"
 msgstr "emplacement"
 
@@ -8669,7 +8666,7 @@ msgstr "fichier1 [fichier2 [fichierN]]"
 # File: ../src/inkscape-application.cpp, line: 527
 #: ../src/inkscape-application.cpp:527
 msgid "Process (or open) one or more files."
-msgstr ""
+msgstr "Traite (ou ouvre) un fichier ou plus."
 
 #: ../src/inkscape-application.cpp:528
 msgid "Examples:"
@@ -8724,7 +8721,7 @@ msgstr "PAGE"
 # File: ../src/inkscape-application.cpp, line: 495
 #: ../src/inkscape-application.cpp:543
 msgid "Use poppler when importing via commandline"
-msgstr ""
+msgstr "Utilise poppler lors de l'import en ligne de commande"
 
 #: ../src/inkscape-application.cpp:544
 msgid ""
@@ -9247,7 +9244,7 @@ msgstr "Engrenages"
 
 #: ../src/live_effects/effect.cpp:120
 msgid "Create interlocking, configurable gears based on the nodes of a path"
-msgstr ""
+msgstr "Créer des mécanismes d'engrenages configurables à partir des noeuds d'un chemin"
 
 #: ../src/live_effects/effect.cpp:130
 msgid "Pattern Along Path"
@@ -9302,6 +9299,9 @@ msgid ""
 "Make the path curl like wire, using Spiro B-Splines. This effect is usually "
 "used directly on the canvas with the Spiro mode of the drawing tools."
 msgstr ""
+"Tracer le chemin avec des boucles, en utilisant les B-splines "
+"spirographiques. Cet effet est souvent utilisé directement dans l'espace de "
+"travail avec le mode spirographique des outils de dessin."
 
 #: ../src/live_effects/effect.cpp:215
 msgid "Envelope Deformation"
@@ -9318,11 +9318,11 @@ msgstr "Interpoler les sous-chemins"
 
 #: ../src/live_effects/effect.cpp:233
 msgid "Create a stepwise transition between the 2 subpaths of a path"
-msgstr ""
+msgstr "Créer une transition progressive entre deux sous-chemins d'un chemin"
 
 #: ../src/live_effects/effect.cpp:243
 msgid "Hatches (rough)"
-msgstr "Hachures"
+ msgstr "Hachures"
 
 #: ../src/live_effects/effect.cpp:247
 msgid "Fill the object with adjustable hatching"
@@ -9347,6 +9347,8 @@ msgid ""
 "Add ruler marks to the object in adjustable intervals, using the object's "
 "stroke style."
 msgstr ""
+"Ajouter à intervalles réguliers des graduations de mesures sur un objet, en "
+"utilisant le style du contour."
 
 #: ../src/live_effects/effect.cpp:286
 msgid "Power stroke"
@@ -9384,7 +9386,7 @@ msgstr "Déformation par grille 2"
 
 #: ../src/live_effects/effect.cpp:333
 msgid "Warp an object's shape based on a 5x5 grid"
-msgstr ""
+msgstr "Déformer un objet à l'intérieur d'une grille 5×5"
 
 #: ../src/live_effects/effect.cpp:343
 msgid "Perspective/Envelope"
@@ -9395,6 +9397,8 @@ msgid ""
 "Transform the object to fit into a shape with four corners, either by "
 "stretching it or creating the illusion of a 3D-perspective"
 msgstr ""
+"Transformer un objet à l'intérieur d'un quadrilatère soit pour l'étirer, "
+"soit pour donner l'illustion d'une perspective 3D"
 
 #: ../src/live_effects/effect.cpp:357
 msgid "Interpolate points"
@@ -9407,6 +9411,8 @@ msgid ""
 "Connect the nodes of the object (e.g. corresponding to data points) by "
 "different types of lines."
 msgstr ""
+"Connecter les noeuds d'un objet (par ex. correspondant à des points de "
+"données) à l'aide de différentes styles de lignes."
 
 #: ../src/live_effects/effect.cpp:371
 msgid "Transform by 2 points"
@@ -9427,10 +9433,13 @@ msgid ""
 "Draw the handles and nodes of objects (replaces the original styling with a "
 "black stroke)"
 msgstr ""
+"Dessiner les poignées et les noeuds des objets (remplace le style original "
+"par un contour noir)"
 
 #: ../src/live_effects/effect.cpp:403
 msgid "Roughen an object by adding and randomly shifting new nodes"
-msgstr ""
+msgstr "Apporter de la rugosité à un objet en ajoutant et en décalant "
+"aléatoirement des noeuds"
 
 #: ../src/live_effects/effect.cpp:413 ../src/ui/toolbar/pencil-toolbar.cpp:268
 msgid "BSpline"
@@ -9441,6 +9450,9 @@ msgid ""
 "Create a BSpline that molds into the path's corners. This effect is usually "
 "used directly on the canvas with the BSpline mode of the drawing tools."
 msgstr ""
+"Créer une B-spline qui vient modeler les coins du chemin. Cet effet est souvent "
+"utiliser directement dans l'espace de travail avec le mode spirographique "
+"des outils de dessin."
 
 #: ../src/live_effects/effect.cpp:427
 msgid "Join type"
@@ -9500,6 +9512,8 @@ msgid ""
 "Turn the path into a fill between two other open paths (e.g. between two "
 "paths with PowerStroke applied to them)"
 msgstr ""
+"Convertit le chemin en zone de remplissage entre deux chemins ouverts "
+"(par ex. entre deux chemins avec l'ECI Contour dynamique)"
 
 #: ../src/live_effects/effect.cpp:512 ../src/selection-chemistry.cpp:2955
 msgid "Fill between many"
@@ -9510,6 +9524,8 @@ msgid ""
 "Turn the path into a fill between multiple other open paths (e.g. between "
 "paths with PowerStroke applied to them)"
 msgstr ""
+"Convertit le chemin en zone de remplissage entre plusieurs chemins ouverts "
+"(par ex. entre des chemins avec l'ECI Contour dynamique)"
 
 #: ../src/live_effects/effect.cpp:526
 msgid "Ellipse by 5 points"
@@ -9547,6 +9563,8 @@ msgid ""
 "Adjust the shape of a path's corners, rounding them to a specified radius, "
 "or cutting them off"
 msgstr ""
+"Ajuste la forme des coins d'un chemin, en les arrondissant selon un rayon "
+"donné ou en les coupant nets"
 
 #: ../src/live_effects/effect.cpp:583
 msgid "Boolean operation"
@@ -9594,7 +9612,8 @@ msgstr ""
 
 #: ../src/live_effects/effect.cpp:657
 msgid "Offset the path, optionally keeping cusp corners cusp"
-msgstr ""
+msgstr "Décale le chemin, en conservant éventuellement les points de "
+"rebroussement"
 
 #: ../src/live_effects/effect.cpp:667
 msgid "Dashed Stroke"
@@ -9605,6 +9624,8 @@ msgid ""
 "Add a dashed stroke whose dashes end exactly on a node, optionally with the "
 "same number of dashes per path segment"
 msgstr ""
+"Ajoute une ligne en pointillés qui coïncide avec les terminaisons, et qui "
+"contient éventuellement le même nombre de traits par segment"
 
 #: ../src/live_effects/effect.cpp:681
 msgid "Angle bisector"
@@ -9614,6 +9635,8 @@ msgstr "Bissectrice"
 msgid ""
 "Draw a line that halves the angle between the first three nodes of the path"
 msgstr ""
+"Dessine une ligne au milieu de l'angle entre les trois premiers nœuds du "
+"chemin"
 
 #: ../src/live_effects/effect.cpp:695
 msgid "Circle (by center and radius)"
@@ -9624,6 +9647,8 @@ msgid ""
 "Draw a circle, where the first node of the path is the center, and the last "
 "determines its radius"
 msgstr ""
+"Dessine un cercle dont le centre et le rayon sont définis par le premier et "
+"le dernier nœud du chemin"
 
 #: ../src/live_effects/effect.cpp:709
 msgid "Circle by 3 points"
@@ -9634,6 +9659,8 @@ msgid ""
 "Draw a circle whose circumference passes through the first three nodes of "
 "the path"
 msgstr ""
+"Dessine un cercle dont la circonférence passe par les trois premiers nœuds "
+"du chemin"
 
 #: ../src/live_effects/effect.cpp:723 ../share/extensions/extrude.inx:3
 msgid "Extrude"
@@ -9641,7 +9668,7 @@ msgstr "Extrusion"
 
 #: ../src/live_effects/effect.cpp:727
 msgid "Extrude the path, creating a face for each path segment"
-msgstr ""
+msgstr "Extrude le chemin en créant une face pour chaque segment"
 
 #: ../src/live_effects/effect.cpp:737
 msgid "Line Segment"
@@ -9659,7 +9686,8 @@ msgstr "Parallèle"
 
 #: ../src/live_effects/effect.cpp:755
 msgid "Create a draggable line that will always be parallel to a two-node path"
-msgstr ""
+msgstr "Crée une ligne cliquable toujours parallèle à un chemin constitué de "
+"deux nœuds"
 
 #: ../src/live_effects/effect.cpp:765
 msgid "Perpendicular bisector"
@@ -9670,6 +9698,8 @@ msgid ""
 "Draw a perpendicular line in the middle of the (imaginary) line that "
 "connects the start and end nodes"
 msgstr ""
+"Dessine une ligne perpendiculaire au milieu de la ligne (même imaginaire) "
+"qui connecte le premier et le dernier nœud"
 
 #: ../src/live_effects/effect.cpp:779
 msgid "Tangent to curve"
@@ -9680,6 +9710,8 @@ msgid ""
 "Draw a tangent with variable length and additional angle that can be moved "
 "along the path"
 msgstr ""
+"Dessine une tangente de longueur variable avec un angle supplémentaire et "
+"pouvant être déplacée le long du chemin"
 
 #: ../src/live_effects/effect.cpp:794
 msgid "doEffect stack test"
@@ -9687,7 +9719,7 @@ msgstr "Test de la pile doEffect"
 
 #: ../src/live_effects/effect.cpp:798
 msgid "Test LPE"
-msgstr ""
+msgstr "Test ECI"
 
 #: ../src/live_effects/effect.cpp:808
 msgid "Dynamic stroke"
@@ -9705,7 +9737,7 @@ msgstr "Déformation par grille"
 
 #: ../src/live_effects/effect.cpp:826
 msgid "Deform an object using a 4x4 grid"
-msgstr ""
+msgstr "Déforme un objet à l'aide d'une gille 4×4"
 
 #: ../src/live_effects/effect.cpp:836
 msgid "Path length"
@@ -9713,7 +9745,7 @@ msgstr "Longueur du chemin"
 
 #: ../src/live_effects/effect.cpp:840
 msgid "Display the total length of a (curved) path"
-msgstr ""
+msgstr "Affiche la longueur totale d'un chemin (même courbe)"
 
 #: ../src/live_effects/effect.cpp:850
 msgid "Recursive skeleton"
@@ -9804,41 +9836,35 @@ msgstr ""
 #: ../src/live_effects/lpe-parallel.cpp:51
 #: ../src/live_effects/lpe-perp_bisector.cpp:98
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:63
-#, fuzzy
 msgid "Length left:"
-msgstr "Unité de longueur :"
+msgstr "Longueur de gauche :"
 
 #: ../src/live_effects/lpe-angle_bisector.cpp:45
 #: ../src/live_effects/lpe-perp_bisector.cpp:98
-#, fuzzy
 msgid "Specifies the left end of the bisector"
-msgstr "Définit la forme des coins du chemin"
+msgstr "Définit la partie gauche de la bissectrice"
 
 #: ../src/live_effects/lpe-angle_bisector.cpp:46
 #: ../src/live_effects/lpe-parallel.cpp:52
 #: ../src/live_effects/lpe-perp_bisector.cpp:99
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:64
-#, fuzzy
 msgid "Length right:"
-msgstr "Unité de longueur :"
+msgstr "Longueur de droite :"
 
 #: ../src/live_effects/lpe-angle_bisector.cpp:46
 #: ../src/live_effects/lpe-perp_bisector.cpp:99
-#, fuzzy
 msgid "Specifies the right end of the bisector"
-msgstr "Définit la forme des coins du chemin"
+msgstr "Définit la partie droite de la bissectrice"
 
 #: ../src/live_effects/lpe-angle_bisector.cpp:85
 #: ../src/live_effects/lpe-perp_bisector.cpp:159
-#, fuzzy
 msgid "Adjust the \"left\" end of the bisector"
-msgstr "Capturer la luminosité de la couleur"
+msgstr "Ajuste la partie « gauche » de la bissectrice"
 
 #: ../src/live_effects/lpe-angle_bisector.cpp:91
 #: ../src/live_effects/lpe-perp_bisector.cpp:165
-#, fuzzy
 msgid "Adjust the \"right\" end of the bisector"
-msgstr "Capturer la luminosité de la couleur"
+msgstr "Ajuste la partie « droite » de la bissectrice"
 
 #: ../src/live_effects/lpe-attach-path.cpp:20
 msgid "Start path:"
@@ -11556,7 +11582,7 @@ msgid ""
 "Use localized number formatting, e.g. '1,0' instead of '1.0' with German "
 "locale"
 msgstr ""
-"Utilise le formatage numérique régional, p.e. 1,0 au lieu de 1.0 pour le français"
+"Utilise le formatage numérique régional, par ex. 1,0 au lieu de 1.0 pour le français"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:89
 msgid "Rotate labels"
@@ -11607,6 +11633,8 @@ msgstr "Objets liés :"
 msgid ""
 "Objects whose nodes are projected onto the path and generate new measurements"
 msgstr ""
+"Les objets dont les nœuds sont projetés sur le chemin et qui genèrent de "
+"nouvelles mesures"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:94
 msgid "Distance"
@@ -12960,12 +12988,11 @@ msgstr "Angle :"
 # File: ../src/live_effects/lpe-tangent_to_curve.cpp, line: 61
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:61
 msgid "Additional angle between tangent and curve"
-msgstr ""
+msgstr "Angle supplémentaire entre la tangente et la courbe"
 
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:62
-#, fuzzy
 msgid "Location along curve:"
-msgstr "Emplacement du cache utilisateur"
+msgstr "Position sur la courbe :"
 
 #
 # File: ../src/live_effects/lpe-tangent_to_curve.cpp, line: 62
@@ -12974,31 +13001,28 @@ msgid ""
 "Location of the point of attachment along the curve (between 0.0 and number-"
 "of-segments)"
 msgstr ""
+"Position du point d'attache le long de la courbe (entre 0,0 et le nombre de "
+"segments)"
 
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:63
-#, fuzzy
 msgid "Specifies the left end of the tangent"
-msgstr "Définit la forme des coins du chemin"
+msgstr "Définit l'extrémité gauche de la tangente"
 
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:64
-#, fuzzy
 msgid "Specifies the right end of the tangent"
-msgstr "Définit la forme des coins du chemin"
+msgstr "Définit l'extrémité droite de la tangente"
 
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:104
-#, fuzzy
 msgid "Adjust the point of attachment of the tangent"
-msgstr "Définit la forme des coins du chemin"
+msgstr "Ajuste le point d'attache de la tangente"
 
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:110
-#, fuzzy
 msgid "Adjust the <b>left</b> end of the tangent"
-msgstr "Ajuster le <b>cadre</b> du texte."
+msgstr "Ajuste l'extrémité <b>gauche</b> de la tangente"
 
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:116
-#, fuzzy
 msgid "Adjust the <b>right</b> end of the tangent"
-msgstr "Définit la forme des coins du chemin"
+msgstr "Ajuste l'extrémité <b>droite</b> de la tangente"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:68
 msgid "Extrapolated"
@@ -21345,7 +21369,6 @@ msgid "Insert Mesh Gradient JavaScript polyfill."
 msgstr "Insérer un filet de dégradé JavaScript."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1536
-#, fuzzy
 msgid "Insert Hatch Paint Server JavaScript polyfill."
 msgstr "Insérer un serveur de hachures polyfill JavaScript."
 
@@ -21911,9 +21934,8 @@ msgid "Snap defaults"
 msgstr "Magnétisme par défaut"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1837
-#, fuzzy
 msgid "Enable snapping in new documents"
-msgstr "Activée dans un nouveau document"
+msgstr "Activer le magnétisme dans les nouveaux documents"
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1677
@@ -21922,6 +21944,9 @@ msgid ""
 "Initial state of snapping in new documents and non-Inkscape SVGs. Snap "
 "status is subsequently saved per-document."
 msgstr ""
+"L'état initial du magnétisme pour les nouveaux documents et les "
+"documents SVG non créés avec Inkscape. L'état du magnétisme est ensuite "
+"enregistré dans chaque document."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1841
 msgid "Snap indicator"
@@ -23409,7 +23434,6 @@ msgid "L_ock"
 msgstr "Verr_ouiller"
 
 #: ../src/ui/dialog/object-properties.cpp:63
-#, fuzzy
 msgid "Preserve Ratio"
 msgstr "Préserver les proportions"
 
@@ -24032,7 +24056,6 @@ msgid "Average amount of horizontal space each letter takes up."
 msgstr "Proportion moyenne de l'espace horizontal pris par chaque lettre"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:458
-#, fuzzy
 msgid "Horiz. Origin X"
 msgstr "Origine X horizontale"
 
@@ -24041,7 +24064,6 @@ msgid "Average horizontal origin location for each letter."
 msgstr "Position horizontale moyenne de l'origine de chaque lettre"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:459
-#, fuzzy
 msgid "Horiz. Origin Y"
 msgstr "Origine Y horizontale"
 
@@ -24224,7 +24246,6 @@ msgid "Second Unicode range"
 msgstr "Deuxième plage Unicode"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:916
-#, fuzzy
 msgid "Kerning Value:"
 msgstr "Valeur de crénage :"
 
@@ -24241,7 +24262,6 @@ msgid "Add font"
 msgstr "Ajouter une fonte"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:1018
-#, fuzzy
 msgid "_Fonts"
 msgstr "_Police"
 
@@ -24558,11 +24578,11 @@ msgstr "Quantification des couleurs"
 
 #: ../src/ui/dialog/tracedialog.cpp:131 ../share/ui/dialog-trace.glade:160
 msgid "Autotrace"
-msgstr "Traçage automatique"
+msgstr "Autotrace"
 
 #: ../src/ui/dialog/tracedialog.cpp:137 ../share/ui/dialog-trace.glade:161
 msgid "Centerline tracing (autotrace)"
-msgstr ""
+msgstr "Traçage Centerline (autotrace)"
 
 #: ../src/ui/dialog/tracedialog.cpp:145 ../share/ui/dialog-trace.glade:455
 msgid "Brightness steps"
@@ -24574,7 +24594,7 @@ msgstr "Niveaux de gris"
 
 #: ../src/ui/dialog/tracedialog.cpp:151 ../share/ui/dialog-trace.glade:458
 msgid "Autotrace (slower)"
-msgstr "Traçage automatique (plus lent)"
+msgstr "Autotrace (plus lent)"
 
 #: ../src/ui/dialog/transformation.cpp:64
 #: ../src/ui/dialog/transformation.cpp:74
@@ -26068,7 +26088,6 @@ msgid "Delete objects touched by eraser"
 msgstr "Effacer les objets en contact avec la gomme"
 
 #: ../src/ui/toolbar/eraser-toolbar.cpp:70
-#, fuzzy
 msgid "Cut"
 msgstr "Couper"
 
@@ -26077,7 +26096,6 @@ msgid "Cut out from paths and shapes"
 msgstr "Découper chemins et formes"
 
 #: ../src/ui/toolbar/eraser-toolbar.cpp:75 ../share/extensions/frame.inx:18
-#, fuzzy
 msgid "Clip"
 msgstr "Chemin de découpe"
 
@@ -26094,7 +26112,6 @@ msgid "The width of the eraser pen (relative to the visible canvas area)"
 msgstr "Largeur de la gomme (relative à la zone de travail visible)"
 
 #: ../src/ui/toolbar/eraser-toolbar.cpp:115
-#, fuzzy
 msgid "Eraser Pressure"
 msgstr "Pression de la gomme"
 
@@ -26103,7 +26120,7 @@ msgid ""
 "How much velocity thins the stroke (> 0 makes fast strokes thinner, < 0 "
 "makes them broader, 0 makes width independent of velocity)"
 msgstr ""
-"Largeur du tracé en fonction de la vélocité. (>0 la vitesse du tracé diminue "
+"Largeur du tracé en fonction de la vélocité (>0 la vitesse du tracé diminue "
 "sa largeur, <0 l'augmente, 0 ne l'influence pas)"
 
 #: ../src/ui/toolbar/eraser-toolbar.cpp:190
@@ -26185,7 +26202,6 @@ msgid "Reverse the direction of the gradient"
 msgstr "Inverser le sens du dégradé"
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:450
-#, fuzzy
 msgid "Repeat: "
 msgstr "Répétition :"
 
@@ -26557,7 +26573,6 @@ msgstr "Bicubique"
 
 #. TRANSLATORS: Type of Smoothing. See https://en.wikipedia.org/wiki/Coons_patch
 #: ../src/ui/toolbar/mesh-toolbar.cpp:329
-#, fuzzy
 msgid "Coons: no smoothing. Bicubic: smoothing across patch boundaries."
 msgstr "Droit : pas de lissage. Bicubique : lissage sur les bords du raccords."
 
@@ -26903,15 +26918,13 @@ msgid "Shape of new paths drawn by this tool"
 msgstr "Style des nouveaux chemins dessinés avec cet outil"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:432
-#, fuzzy
 msgctxt "Cap"
 msgid "Butt"
 msgstr "Sur le nœud"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:438
-#, fuzzy
 msgid "Cap for powerstroke pressure"
-msgstr "Pression maximale (en pourcentage)"
+msgstr "Terminaison pour la pression du stylet (ECI Contour dynamique)"
 
 #: ../src/ui/toolbar/rect-toolbar.cpp:94
 msgid "W:"
@@ -27142,7 +27155,6 @@ msgid "To nodes"
 msgstr "Aux nœuds"
 
 #: ../src/ui/toolbar/snap-toolbar.cpp:114
-#, fuzzy
 msgid "Snap to cusp nodes, incl. rectangle corners"
 msgstr "Aimanter aux points de rebroussement, coins de rectangle inclus"
 
@@ -27153,7 +27165,7 @@ msgstr "Nœuds doux"
 #: ../src/ui/toolbar/snap-toolbar.cpp:122
 msgid "Snap smooth nodes, incl. quadrant points of ellipses"
 msgstr ""
-"Aimanter aux points de rebroussement, points de quadrant des ellipses inclus"
+"Aimanter aux nœuds doux, points de quadrant des ellipses inclus"
 
 #: ../src/ui/toolbar/snap-toolbar.cpp:129
 msgid "Line Midpoints"
@@ -27502,7 +27514,6 @@ msgstr ""
 
 #: ../src/ui/toolbar/spray-toolbar.cpp:347
 #: ../src/ui/toolbar/spray-toolbar.cpp:348
-#, fuzzy
 msgid "Pick from center instead of average area."
 msgstr "Capturer depuis le centre plutôt que depuis une zone moyenne."
 
@@ -27615,7 +27626,6 @@ msgid "Rounded:"
 msgstr "Arrondi :"
 
 #: ../src/ui/toolbar/star-toolbar.cpp:143
-#, fuzzy
 msgid "How rounded are the corners (0 for sharp)"
 msgstr "Quantité d'arrondi des sommets (0 pour pointu)"
 
@@ -28345,32 +28355,33 @@ msgstr ""
 "dessiner autour du point de départ"
 
 #: ../src/ui/tools/arc-tool.cpp:420
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Ellipse</b>: %s &#215; %s (constrained to golden ratio 1.618 : 1); with "
 "<b>Shift</b> to draw around the starting point"
 msgstr ""
-"<b>Rectangle</b> : %s × %s; (contraint au ratio du nombre d'or 1,618:1) ; "
+"<b>Ellipse</b> : %s × %s; (contrainte au ratio du nombre d'or 1,618:1) ; "
 "<b>Maj</b> dessiner autour du point de départ"
 
 #: ../src/ui/tools/arc-tool.cpp:424
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Ellipse</b>: %s &#215; %s (constrained to golden ratio 1 : 1.618); with "
 "<b>Shift</b> to draw around the starting point"
 msgstr ""
-"<b>Rectangle</b> : %s × %s; (contraint au ratio du nombre d'or 1:1.618) ; "
+"<b>Ellipse</b> : %s × %s; (contrainte au ratio du nombre d'or 1:1.618) ; "
 "<b>Maj</b> pour dessiner autour du point de départ"
 
 #: ../src/ui/tools/arc-tool.cpp:429
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Ellipse</b>: %s &#215; %s; with <b>Ctrl</b> to make circle, integer-"
 "ratio, or golden-ratio ellipse; with <b>Shift</b> to draw around the "
 "starting point"
 msgstr ""
-"<b>Ellipse</b> : %s × %s ; <b>Ctrl</b> pour dessiner des cercles ou des "
-"ellipses de ratio entier ; <b>Maj</b> pour dessiner autour du point de départ"
+"<b>Ellipse</b> : %s × %s ; <b>Ctrl</b> pour dessiner des cercles, des "
+"ellipses de ratio entier ou au ratio du nombre d'or ; <b>Maj</b> pour "
+"dessiner autour du point de départ"
 
 #: ../src/ui/tools/arc-tool.cpp:449
 msgid "Create ellipse"
@@ -29022,14 +29033,15 @@ msgstr ""
 "<b>Maj</b> pour dessiner autour du point de départ"
 
 #: ../src/ui/tools/rect-tool.cpp:444
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Rectangle</b>: %s &#215; %s; with <b>Ctrl</b> to make square, integer-"
 "ratio, or golden-ratio rectangle; with <b>Shift</b> to draw around the "
 "starting point"
 msgstr ""
-"<b>Rectangle</b> : %s × %s ; <b>Ctrl</b> pour forcer un rectangle carré ou "
-"de ratio entier ; <b>Maj</b> pour dessiner autour du point de départ"
+"<b>Rectangle</b> : %s × %s ; <b>Ctrl</b> pour forcer un rectangle carré, "
+"de ratio entier ou au ratio du nombre d'or ; <b>Maj</b> pour dessiner autour "
+"du point de départ"
 
 #: ../src/ui/tools/rect-tool.cpp:469
 msgid "Create rectangle"
@@ -29107,11 +29119,11 @@ msgid "<b>Alt</b>: lock spiral radius"
 msgstr "<b>Alt</b> : verrouiller le rayon de la spirale"
 
 #: ../src/ui/tools/spiral-tool.cpp:385
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Spiral</b>: radius %s, angle %.2f&#176;; with <b>Ctrl</b> to snap angle"
 msgstr ""
-"<b>Spirale</b> : rayon %s, angle %5g° ; <b>Ctrl</b> pour tourner par "
+"<b>Spirale</b> : rayon %s, angle %.2f° ; <b>Ctrl</b> pour tourner par "
 "incréments"
 
 #: ../src/ui/tools/spiral-tool.cpp:406
@@ -29170,19 +29182,19 @@ msgstr ""
 "<b>Ctrl</b> pour tourner par incréments; forcer la radialité des branches"
 
 #: ../src/ui/tools/star-tool.cpp:397
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Polygon</b>: radius %s, angle %.2f&#176;; with <b>Ctrl</b> to snap angle"
 msgstr ""
-"<b>Polygone</b> : rayon %s, angle %5g° ; <b>Ctrl</b> pour tourner par "
+"<b>Polygone</b> : rayon %s, angle %.2f° ; <b>Ctrl</b> pour tourner par "
 "incréments"
 
 #: ../src/ui/tools/star-tool.cpp:398
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Star</b>: radius %s, angle %.2f&#176;; with <b>Ctrl</b> to snap angle"
 msgstr ""
-"<b>Étoile</b> : rayon %s, angle %5g° ; <b>Ctrl</b> pour tourner/incliner par "
+"<b>Étoile</b> : rayon %s, angle %.2f° ; <b>Ctrl</b> pour tourner/incliner par "
 "incréments"
 
 #: ../src/ui/tools/star-tool.cpp:423
@@ -30062,7 +30074,6 @@ msgid "Proprietary"
 msgstr "Propriétaire"
 
 #: ../src/ui/widget/licensor.cpp:39
-#, fuzzy
 msgctxt "MetadataLicence"
 msgid "Other"
 msgstr "Autre"
@@ -30105,7 +30116,7 @@ msgstr "Verrouiller les marges"
 # File: ../src/ui/widget/page-sizer.cpp, line: 49
 #: ../src/ui/widget/page-sizer.cpp:49
 msgid "T_op:"
-msgstr ""
+msgstr "_Supérieure :"
 
 #: ../src/ui/widget/page-sizer.cpp:49
 msgid "Top margin"
@@ -30113,7 +30124,7 @@ msgstr "Marge supérieure"
 
 #: ../src/ui/widget/page-sizer.cpp:50
 msgid "L_eft:"
-msgstr "Gauch_e :"
+msgstr "_Gauche :"
 
 #: ../src/ui/widget/page-sizer.cpp:50
 msgid "Left margin"
@@ -30121,7 +30132,7 @@ msgstr "Marge de gauche"
 
 #: ../src/ui/widget/page-sizer.cpp:51
 msgid "Ri_ght:"
-msgstr "Dro_ite :"
+msgstr "_Droite :"
 
 #: ../src/ui/widget/page-sizer.cpp:51
 msgid "Right margin"
@@ -30129,7 +30140,7 @@ msgstr "Marge de droite"
 
 #: ../src/ui/widget/page-sizer.cpp:52
 msgid "Botto_m:"
-msgstr "B_as :"
+msgstr "_Inférieure :"
 
 #: ../src/ui/widget/page-sizer.cpp:52
 msgid "Bottom margin"
@@ -32880,13 +32891,12 @@ msgid "View and edit the XML tree of the document"
 msgstr "Voir et éditer l'arbre XML du document"
 
 #: ../src/verbs.cpp:3078
-#, fuzzy
 msgid "_Selectors and CSS..."
-msgstr "Ensembles de sélection..."
+msgstr "_Sélecteurs et CSS..."
 
 #: ../src/verbs.cpp:3079
 msgid "View and edit CSS selectors and styles"
-msgstr ""
+msgstr "Affiche et édite les sélecteurs et les styles CSS"
 
 #: ../src/verbs.cpp:3080
 msgid "_Find/Replace..."
@@ -33225,27 +33235,23 @@ msgstr "Supprimer un programme incorporé"
 
 #: ../src/verbs.cpp:3217 ../src/verbs.cpp:3218 ../src/verbs.cpp:3233
 #: ../src/verbs.cpp:3234
-#, fuzzy
-msgid "Align edges of objects to the top-left corner of the anchor"
-msgstr "Aligner les bords droits des objets au bord gauche de l'ancre"
+msgid "Align edges of objects to the top-left of the anchor"
+msgstr "Aligner les bords des objets au coin supérieur gauche de l'ancre"
 
 #: ../src/verbs.cpp:3221 ../src/verbs.cpp:3222 ../src/verbs.cpp:3237
 #: ../src/verbs.cpp:3238
-#, fuzzy
 msgid "Align edges of objects to the top-right corner of the anchor"
-msgstr "Aligner les bords gauches des objets au bord droit de l'ancre"
+msgstr "Aligner les bords des objets au coin supérieur droit de l'ancre"
 
 #: ../src/verbs.cpp:3225 ../src/verbs.cpp:3226 ../src/verbs.cpp:3241
 #: ../src/verbs.cpp:3242
-#, fuzzy
 msgid "Align edges of objects to the bottom-right corner of the anchor"
-msgstr "Aligner les bords supérieurs des objets avec le bas de l'ancre"
+msgstr "Aligner les bords des objets au coin inférieur droit de l'ancre"
 
 #: ../src/verbs.cpp:3229 ../src/verbs.cpp:3230 ../src/verbs.cpp:3245
 #: ../src/verbs.cpp:3246
-#, fuzzy
 msgid "Align edges of objects to the bottom-left corner of the anchor"
-msgstr "Aligner les bords supérieurs des objets avec le bas de l'ancre"
+msgstr "Aligner les bords des objets au coin inférieur gauche de l'ancre"
 
 #: ../src/verbs.cpp:3249
 msgid "Center on horizontal and vertical axis"
@@ -33266,7 +33272,7 @@ msgstr ""
 
 #: ../src/widgets/desktop-widget.cpp:612
 msgid "Rotation. (Also Ctrl+Shift+Scroll)"
-msgstr "Rotation (et Maj+Ctrl+molette)"
+msgstr "Rotation (ou Maj+Ctrl+molette)"
 
 #: ../src/widgets/desktop-widget.cpp:643
 msgid "Cursor coordinates"
@@ -33354,9 +33360,8 @@ msgid "Note:"
 msgstr "Note :"
 
 #: ../src/widgets/desktop-widget.cpp:1997
-#, fuzzy
 msgid "Centre Page"
-msgstr "Pages intérieures"
+msgstr "Centrer la page"
 
 #: ../src/widgets/desktop-widget.cpp:2383
 msgid "Create guide"
@@ -33551,9 +33556,8 @@ msgid "<b>Pattern fill</b>"
 msgstr "<b>Remplissage par motif</b>"
 
 #: ../src/widgets/paint-selector.cpp:1399
-#, fuzzy
 msgid "<b>Hatch fill</b>"
-msgstr "<b>Remplissage par échantillon</b>"
+msgstr "<b>Remplissage par hachures</b>"
 
 #: ../src/widgets/paint-selector.cpp:1497
 msgid "<b>Swatch fill</b>"
@@ -33788,6 +33792,34 @@ msgid ""
 "  4) If your goal is to get few nodes and good precision, manual tracing is "
 "always best.\n"
 msgstr ""
+"\n"
+"  Cette boîte de dialogue permet de convertir une image matricielle en "
+"chemins vectorisés. Plusieurs options sont disponibles pour différents cas "
+"d'utilisation :\n"
+" * « Seuil de luminosité » détecte les zones sombres par rapport à une valeur "
+"de seuil et crée un chemin les encerclant (en utilisant potrace).\n"
+" * « Détection de contour » détecte les variations de luminosité des surfaces "
+"colorées, qui sont supérieures à la valeur de seuil donnée et crée des chemins "
+"pour les séparer (en utilisant potrace).\n"
+" * « Quantification des couleurs » convertit l'image en un nombre de couleurs "
+"données et les sépare en des chemins distincts (en utilisant potrace).\n"
+" * « Autotrace » utilise l'algorithme autotrace avec l'option donnée.\n"
+" * « Traçage Centerline » essaie de vectoriser un dessin sous forme filaire "
+"(avec autotrace).\n"
+" * « Plusieurs passes » offre des options pour séparer l'image en plusieurs "
+"passes, à partir de la luminosité, de la séparation des couleurs ou des niveaux "
+"de gris, et crée plusieurs chemins. Peut aussi utiliser autotrace.\n"
+" * L'onglet « Pixel art » utilise l'algorithme depixelize pour vectoriser des "
+"images pixel art.\n"
+"\n"
+" * NOTES :\n"
+"  1) Enregistrer votre travail avant de lancer une vectorisation,\n"
+"  2) Compter le nombre de pixels : « Pixel art » crée un chemin par pixel. "
+"Il n'est pas recommandé pour des images qui ne sont pas du pixel art.\n"
+"  3) Autotrace est plus lent que potrace, il n'est pas recommandé pour des images volumineuses. "
+"Il est conseillé de procéder à un pré-traitement de vos images pour augmenter le contraste.\n"
+"  4) Si votre objectif est d'obtenir peu de nœuds et une bonne précision, un traçage manuel "
+"sera toujours meilleur.\n"
 
 #: ../share/ui/dialog-trace.glade:132
 msgid "Create a single path or create a group of paths"
@@ -33798,14 +33830,12 @@ msgid "Brightness threshold"
 msgstr "Seuil de luminosité"
 
 #: ../share/ui/dialog-trace.glade:224
-#, fuzzy
 msgid "Edge threshold"
-msgstr "Seuil approximatif :"
+msgstr "Seuil de contour"
 
 #: ../share/ui/dialog-trace.glade:295 ../share/ui/dialog-trace.glade:357
-#, fuzzy
 msgid "Filter iterations"
-msgstr "Paramètres généraux des filtres"
+msgstr "Itérations du filtre"
 
 #: ../share/ui/dialog-trace.glade:320 ../share/ui/dialog-trace.glade:382
 msgid "Error threshold"
@@ -33820,9 +33850,8 @@ msgid "Invert black and white regions"
 msgstr "Inverser les régions blanches et noires"
 
 #: ../share/ui/dialog-trace.glade:441
-#, fuzzy
 msgid "Single scan"
-msgstr "Unique"
+msgstr "Une seule passe"
 
 #: ../share/ui/dialog-trace.glade:473
 msgid "Apply Gaussian blur to the bitmap before tracing"
