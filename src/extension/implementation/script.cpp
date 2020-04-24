@@ -613,6 +613,8 @@ void Script::effect(Inkscape::Extension::Effect *module,
         SPDocument* vd=doc->doc();
         if (vd != nullptr)
         {
+            mydoc->changeUriAndHrefs(vd->getDocumentURI());
+
             vd->emitReconstructionStart();
             copy_doc(vd->getReprRoot(), mydoc->getReprRoot());
             vd->emitReconstructionFinish();
