@@ -20,6 +20,7 @@
 #include "desktop.h"
 
 #include "inkscape.h"
+#include "inkscape-window.h"
 #include "preview.h"
 
 namespace Inkscape {
@@ -50,7 +51,15 @@ Panel::Panel(gchar const *prefs_path, int verb_num) :
     signalResponse().connect(sigc::mem_fun(*this, &Panel::_handleResponse));
     signalActivateDesktop().connect(sigc::mem_fun(*this, &Panel::on_activate_desktop));
 
-    signal_map().connect([this]() { this->setDesktop(SP_ACTIVE_DESKTOP); });
+    signal_map().connect([this]() {
+        auto *inkwin = dynamic_cast<InkscapeWindow *>(this->get_toplevel());
+        if (inkwin) {
+            this->setDesktop(inkwin->get_desktop());
+        } else {
+            this->setDesktop(SP_ACTIVE_DESKTOP);
+        }
+    });
+
     signal_unmap().connect([this]() { this->setDesktop(nullptr); });
 
     pack_start(_contents, true, true);
