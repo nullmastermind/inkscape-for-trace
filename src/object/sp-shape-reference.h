@@ -25,8 +25,8 @@ class SPObject;
 
 class SPShapeReference : public Inkscape::URIReference {
 public:
-    SPShapeReference (SPObject *obj) : URIReference(obj) {}
-    SPShapeReference (SPDocument *doc) : URIReference(doc) {}
+    ~SPShapeReference() override;
+    SPShapeReference(SPObject *obj);
     SPShape *getObject() const {
         return static_cast<SPShape *>(URIReference::getObject());
     }
@@ -35,6 +35,12 @@ protected:
     bool _acceptObject(SPObject *obj) const override {
         return SP_IS_SHAPE(obj) && URIReference::_acceptObject(obj);
     };
+
+  private:
+    void on_shape_modified(SPObject *, unsigned flags);
+
+    sigc::connection _shape_modified_connection;
+    sigc::connection _owner_release_connection;
 };
 
 #endif // SEEN_SP_SHAPE_REFERENCE_H

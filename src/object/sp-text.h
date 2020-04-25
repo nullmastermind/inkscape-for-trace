@@ -104,10 +104,6 @@ private:
     void modified(unsigned int flags) override;
     Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 
-    /** Callback for when a shape changes and we must reflow text. */
-    static void shape_changed (Inkscape::XML::Node *repr, char const *key, char const *oldval,
-                               char const *newval, bool is_interactive, void* data);
-
     Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType type) const override;
     void print(SPPrintContext *ctx) override;
     const char* displayName() const override;
@@ -130,15 +126,6 @@ private:
     Inkscape::XML::Node* get_first_rectangle();       // Gets first shape-inside rectangle (if it exists).
     std::vector<Glib::ustring> get_shapes() const;    // Gets list of shapes in shape-inside.
     void remove_newlines();                           // Removes newlines in text.
-};
-
-// For listeners in shapes that hold wrapped text.
-static const Inkscape::XML::NodeEventVector text_shape_events = {
-    nullptr,               /* child added       */
-    nullptr,               /* child removed     */
-    SPText::shape_changed, /* attribute changed */
-    nullptr,               /* content changed   */
-    nullptr,               /* order changed     */
 };
 
 SPItem *create_text_with_inline_size (SPDesktop *desktop, Geom::Point p0, Geom::Point p1);

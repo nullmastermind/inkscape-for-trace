@@ -1284,6 +1284,10 @@ SPIString::operator==(const SPIBase& rhs) {
 
 // SPIShapes ------------------------------------------------------------
 
+SPIShapes::~SPIShapes() {
+    hrefs_clear();
+}
+
 SPIShapes::SPIShapes()
     : SPIString(false)
 {
@@ -1316,7 +1320,6 @@ SPIShapes::read( gchar const *str) {
         std::cout << "  No object" << std::endl;
         return;
     }
-    SPDocument* document = object->document;
 
     // clear(); // Already cleared! (In SPStyle::read.) Calling again causes segfault.
 
@@ -1333,28 +1336,14 @@ SPIShapes::read( gchar const *str) {
 
             shape_ids.push_back(shape_url);
 
-            SPObject* shape_object = document->getObjectById (shape_url);
-            if (shape_object) {
-                Inkscape::XML::Node *shape_node = shape_object->getRepr();
-                shape_node->addListener(&text_shape_events, object);
+            // This ups the href count of the shape. This is required so that vacuuming a
+            // document does not delete shapes stored in <defs>.
+            SPShapeReference *href = new SPShapeReference(object);
 
-                // This ups the href count of the shape. This is required so that vacuuming a
-                // document does not delete shapes stored in <defs>. Since this is required, it
-                // might make sense to follow the filter or pattern pattern (no pun intended)
-                // rather than add the listner above.
-                SPShapeReference *href = new SPShapeReference(object);
-                // ref->changedSignal().connect(sigc::bind(sigc::ptr_func(sp_shape_ref_changed), style));
-                try {
-                    href->attach(Inkscape::URI(uri.c_str()));
-                } catch (Inkscape::BadURIException &e) {
-                    g_warning("%s", e.what());
-                    href->detach();
-                    delete href;
-                    href = nullptr;
-                }
-                if (href) {
-                    hrefs.emplace_back(href);
-                }
+            if (href->try_attach(uri.c_str())) {
+                hrefs.emplace_back(href);
+            } else {
+                delete href;
             }
         }
     }
@@ -1365,32 +1354,15 @@ SPIShapes::clear() {
 
     SPIBase::clear();
 
-    // The object/repr this property is connected to..
-    SPObject* object = style->object;
-    if (!object) {
-        return;
-    }
-    SPDocument* document = object->document;
-
-    // Clear listeners
-    for (auto shape_id : shape_ids) {
-        SPObject* shape_object = document->getObjectById (shape_id);
-        if (shape_object) {
-            Inkscape::XML::Node *shape_node = shape_object->getRepr();
-            shape_node->removeListenerByData(object);
-        }
-    }
     shape_ids.clear();
 
+    hrefs_clear();
+}
+
+void SPIShapes::hrefs_clear()
+{
     for (auto href : hrefs) {
-        if (href->getObject()) {
-            SPObject* shape_object = href->getObject();
-            if (SP_IS_OBJECT(shape_object)) {
-                href->detach(); // Decreases href count of shape.
-            }
-        }
         delete href;
-        href = nullptr;
     }
     hrefs.clear();
 }

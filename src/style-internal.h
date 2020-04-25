@@ -660,14 +660,17 @@ public:
 // Differs from SPIString by creating/deleting listeners on referenced shapes.
 class SPIShapes : public SPIString
 {
+    void hrefs_clear();
 
 public:
+    ~SPIShapes() override;
     SPIShapes();
     SPIShapes(const SPIShapes &) = delete; // Copying causes problems with hrefs.
     void read( gchar const *str ) override;
     void clear() override;
 
 public:
+    // TODO eliminate shape_ids, because shape_ids[0] == hrefs[0]->getObject()->getId()
     std::vector<Glib::ustring> shape_ids;
     std::vector<SPShapeReference *> hrefs;
     //std::vector<std::unique_ptr<SPShapeReference> > hrefs;
