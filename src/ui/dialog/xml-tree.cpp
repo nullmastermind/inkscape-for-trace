@@ -51,7 +51,7 @@ namespace {
 void paned_set_vertical(Gtk::Paned &paned, bool vertical)
 {
     paned.child_property_resize(*paned.get_child1()) = vertical;
-    paned.child_property_resize(*paned.get_child2()) = !vertical;
+    assert(paned.child_property_resize(*paned.get_child2()));
     paned.set_orientation(vertical ? Gtk::ORIENTATION_VERTICAL : Gtk::ORIENTATION_HORIZONTAL);
 }
 } // namespace
