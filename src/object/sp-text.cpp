@@ -293,20 +293,6 @@ Inkscape::XML::Node *SPText::write(Inkscape::XML::Document *xml_doc, Inkscape::X
 }
 
 
-void
-SPText::shape_changed (Inkscape::XML::Node *repr, char const *key, char const *oldval,
-                       char const *newval, bool is_interactive, void* data) {
-
-    SPText* text = static_cast<SPText*>(data);
-    if (text) {
-        text->updateRepr(); // Why is this necessary, it is definitely overkill!
-        // text->rebuildLayout();
-    } else {
-        std::cerr << "SPText::shape_changed: no text object!" << std::endl;
-    }
-}
-
-
 Geom::OptRect SPText::bbox(Geom::Affine const &transform, SPItem::BBoxType type) const {
     Geom::OptRect bbox = SP_TEXT(this)->layout.bounds(transform);
 

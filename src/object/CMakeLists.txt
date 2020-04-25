@@ -62,6 +62,7 @@ set(object_SRC
   sp-root.cpp
   sp-script.cpp
   sp-shape.cpp
+  sp-shape-reference.cpp
   sp-solid-color.cpp
   sp-spiral.cpp
   sp-star.cpp
