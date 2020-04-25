@@ -1891,10 +1891,7 @@ void ZoomVerb::perform(SPAction *action, void *data)
         prefs->getDoubleLimited( "/options/rotateincrement/value", 15, 1, 90, "°" );
     rotate_inc *= M_PI/180.0;
 
-    double zcorr = 1.0;
-    Glib::ustring abbr = prefs->getString("/options/zoomcorrection/unit");
-    if (dt->namedview->display_units && (dt->namedview->display_units->abbr == abbr))
-        zcorr = prefs->getDouble("/options/zoomcorrection/value", 1.0);
+    double zcorr = prefs->getDouble("/options/zoomcorrection/value", 1.0);
 
     //Geom::Rect const d = dt->get_display_area();
 
