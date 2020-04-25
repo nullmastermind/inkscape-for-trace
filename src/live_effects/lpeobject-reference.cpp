@@ -55,7 +55,7 @@ bool LPEObjectReference::_acceptObject(SPObject * const obj) const
 void
 LPEObjectReference::link(const char *to)
 {
-    if ( to && !to[0] ) {
+    if (!to || !to[0]) {
         quit_listening();
         unlink();
     } else {
