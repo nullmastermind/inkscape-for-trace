@@ -260,8 +260,14 @@ void Handle::move(Geom::Point const &new_pos)
         Geom::Point direction = _parent->position() - node_away->position();
         Geom::Point delta = new_pos - _parent->position();
         // project the relative position on the direction line
-        Geom::Point new_delta = (Geom::dot(delta, direction)
-            / Geom::L2sq(direction)) * direction;
+        Geom::Coord direction_length = Geom::L2sq(direction);
+        Geom::Point new_delta;
+        if (direction_length == 0) {
+            // joining line has zero length - any direction is okay, prevent division by zero
+            new_delta = delta;
+        } else {
+            new_delta = (Geom::dot(delta, direction) / direction_length) * direction;
+        }
         setRelativePos(new_delta);
 
         // move the handle and its opposite the same proportion
