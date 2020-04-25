@@ -120,6 +120,9 @@ private:
     // For 'inline-size', need to also remove any 'x' and 'y' added by SVG 1.1 fallback.
     void remove_svg11_fallback();
 
+    void newline_to_sodipodi(); // 'inline-size' to Inkscape multi-line text.
+    void sodipodi_to_newline(); // Inkscape mult-line text to SVG 2 text.
+
     bool is_horizontal() const;
     bool has_inline_size() const;
     bool has_shape_inside() const;

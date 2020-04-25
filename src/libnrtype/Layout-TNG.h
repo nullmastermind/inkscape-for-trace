@@ -511,9 +511,8 @@ public:
     output, use iterator::nextStartOfWord() and friends instead. */
     inline bool isWhitespace(iterator const &it) const;
 
-    /** Returns the unicode character code of the character pointed to by
-    \a it. If \a it == end() the result is undefined. */
-    inline int characterAt(iterator const &it) const;
+    /** Returns character pointed to by \a it. If \a it == end() the result is undefined. */
+    inline gchar characterAt(iterator const &it) const;
 
     /** Returns true if the text at \a it is hidden (i.e. overflowed). */
     bool isHidden(iterator const &it) const;
@@ -1122,12 +1121,9 @@ inline unsigned Layout::shapeIndex(iterator const &it) const
 inline bool Layout::isWhitespace(iterator const &it) const
     {return it._char_index == _characters.size() || _characters[it._char_index].char_attributes.is_white;}
 
-inline int Layout::characterAt(iterator const &it) const
+inline gchar Layout::characterAt(iterator const &it) const
 {
-    SPObject *unused;
-    Glib::ustring::iterator text_iter;
-    getSourceOfCharacter(it, &unused, &text_iter);
-    return *text_iter;
+    return _characters[it._char_index].the_char;
 }
 
 inline bool Layout::isCursorPosition(iterator const &it) const

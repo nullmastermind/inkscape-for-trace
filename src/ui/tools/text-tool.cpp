@@ -906,7 +906,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                                 }
 
                                 SPText* text_element = dynamic_cast<SPText*>(text);
-                                if (text_element && (text_element->has_shape_inside() /*|| text_element->has_inline_size()*/)) {
+                                if (text_element && (text_element->has_shape_inside() || text_element->has_inline_size())) {
                                     // Handle new line like any other character.
                                     this->text_sel_start = this->text_sel_end = sp_te_insert(this->text, this->text_sel_start, "\n");
                                 } else {
