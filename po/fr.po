@@ -9472,7 +9472,7 @@ msgstr "Contour fuselé"
 
 #: ../src/live_effects/effect.cpp:445
 msgid "Let the path's ends narrow down to a tip"
-msgstr ""
+msgstr "Terminer en pointe les extrémités du chemin"
 
 #: ../src/live_effects/effect.cpp:455
 msgid "Mirror symmetry"
@@ -9483,6 +9483,9 @@ msgid ""
 "Mirror an object along a movable axis, or around the page center. The "
 "mirrored copy can be styled independently."
 msgstr ""
+"Créer une image miroir d'un objet suivant un axe de symétrie, ou "
+"par rapport au centre de la page. L'image miroir peut avoir un style "
+"indépendant de l'original."
 
 #: ../src/live_effects/effect.cpp:469
 msgid "Rotate copies"
@@ -9493,6 +9496,8 @@ msgid ""
 "Create multiple rotated copies of an object, as in a kaleidoscope. The "
 "copies can be styled independently."
 msgstr ""
+"Créer des copies d'un objet par rotation, comme dans un kaléidoscope. "
+"Chaque copie peut avoir un style indépendant de l'original."
 
 #: ../src/live_effects/effect.cpp:484
 msgid "Attach path"
@@ -9502,6 +9507,8 @@ msgstr "Joindre un chemin"
 msgid ""
 "Glue the current path's ends to a specific position on one or two other paths"
 msgstr ""
+"Accoler les extrémités du chemin actuel à une position spécifique sur un ou "
+"deux autres chemins"
 
 #: ../src/live_effects/effect.cpp:498
 msgid "Fill between strokes"
@@ -9543,6 +9550,8 @@ msgstr "Boîte englobante"
 msgid ""
 "Turn the path into a bounding box that entirely encompasses another path"
 msgstr ""
+"Transformer le chemin en boîte englobante qui entoure complètement un "
+"autre chemin"
 
 #: ../src/live_effects/effect.cpp:555
 msgid "Measure Segments"
@@ -9553,6 +9562,8 @@ msgid ""
 "Add dimensioning for distances between nodes, optionally with projection and "
 "many other configuration options"
 msgstr ""
+"Ajouter des mesures de distances entre les noeuds, éventuellement avec une "
+"projection ou d'autres options de configuration"
 
 #: ../src/live_effects/effect.cpp:569
 msgid "Fillet/Chamfer"
@@ -10002,13 +10013,12 @@ msgid "cut outside"
 msgstr "découpage extérieur"
 
 #: ../src/live_effects/lpe-bool.cpp:55 ../src/live_effects/lpe-bool.cpp:64
-#, fuzzy
 msgid "even-odd"
-msgstr "égal"
+msgstr "even-odd"
 
 #: ../src/live_effects/lpe-bool.cpp:56 ../src/live_effects/lpe-bool.cpp:65
 msgid "non-zero"
-msgstr "non nul"
+msgstr "non-zero"
 
 #: ../src/live_effects/lpe-bool.cpp:57 ../src/live_effects/lpe-bool.cpp:66
 msgid "positive"
@@ -10068,7 +10078,7 @@ msgstr "Type de remplissage :"
 
 #: ../src/live_effects/lpe-bool.cpp:81
 msgid "Fill type (winding mode) for this path"
-msgstr ""
+msgstr "Type de remplissage (mode d'imbrication) pour ce chemin"
 
 #: ../src/live_effects/lpe-bool.cpp:83
 msgid "Fill type operand:"
@@ -10076,7 +10086,7 @@ msgstr "Opérande type de remplissage :"
 
 #: ../src/live_effects/lpe-bool.cpp:83
 msgid "Fill type (winding mode) for operand path"
-msgstr ""
+msgstr "Type de remplissage (mode d'imbrication) pour le chemin opérande"
 
 #: ../src/live_effects/lpe-bounding-box.cpp:20
 #: ../src/live_effects/lpe-fill-between-many.cpp:35
@@ -10295,7 +10305,8 @@ msgstr "Intervalle"
 # File: ../src/live_effects/lpe-copy_rotate.cpp, line: 70
 #: ../src/live_effects/lpe-copy_rotate.cpp:70
 msgid "Gap space between copies, use small negative gaps to fix some joins"
-msgstr ""
+msgstr "Intervalle entre les copies ; une valeur négative facilite "
+"les fusions"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:71
 msgid "360° Copies"
@@ -13290,9 +13301,8 @@ msgid "Remove item"
 msgstr "Supprimer l'élément"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:309
-#, fuzzy
 msgid "Link itemarray parameter to item"
-msgstr "Lier les paramètres de chemin à l'élément"
+msgstr "Lier les paramètres du chemin à l'élément"
 
 #: ../src/live_effects/parameter/originalpath.cpp:64
 #: ../src/live_effects/parameter/originalpatharray.cpp:187
@@ -13329,13 +13339,12 @@ msgstr "Monter le chemin"
 #: ../src/live_effects/parameter/originalpatharray.cpp:293
 msgid "Move path down"
 msgstr "Descendre le chemin"
-
+ 
 #: ../src/live_effects/parameter/originalpatharray.cpp:311
 msgid "Remove path"
 msgstr "Supprimer le chemin"
 
 #: ../src/live_effects/parameter/originalpatharray.cpp:349
-#, fuzzy
 msgid "Link patharray parameter to path"
 msgstr "Lier les paramètres de chemin au chemin"
 
@@ -35277,7 +35286,6 @@ msgid "Report this triangle's properties"
 msgstr "Affiche les propriétés du triangle"
 
 #: ../share/extensions/draw_from_triangle.inx:44
-#, fuzzy
 msgid ""
 "This extension draws constructions about a triangle defined by the first 3 "
 "nodes of a selected path. You may select one of preset objects or create "
@@ -35321,15 +35329,15 @@ msgstr ""
 "Les éléments trilinéaires doivent être séparés par un deux-points (:).\n"
 "Les tailles de côté sont représentées sous la forme 's_a', 's_b' et 's_c'.\n"
 "Les angles correspondants sont sous la forme 'a_a', 'a_b' et 'a_c'.\n"
-"Vous pouvez également utiliser le semi-périmètre ou l'aire du triangle comme "
-"constante. Dans ce cas, écrivez 'area' ou 'semiperim'.\n"
+"Vous pouvez également utiliser le demi-périmètre ou l'aire du triangle comme "
+"constante. Dans ce cas, écrivez 'semiperim' ou 'area'.\n"
 "\n"
 "Vous pouvez utiliser les fonctions mathématiques standard de Python :\n"
-"ceil(x); fabs(x); floor(x); fmod(x,y); frexp(x); ldexp(x,i);\n"
-"modf(x); exp(x); log(x [, base]); log10(x); pow(x,y); sqrt(x);\n"
-"acos(x); asin(x); atan(x); atan2(y,x); hypot(x,y);\n"
-"cos(x); sin(x); tan(x); degrees(x); radians(x);\n"
-"cosh(x); sinh(x); tanh(x).\n"
+"ceil(x); fabs(x); floor(x); fmod(x,y); frexp(x); ldexp(x,i); \n"
+"modf(x); exp(x); log(x [, base]); log10(x); pow(x,y); sqrt(x); \n"
+"acos(x); asin(x); atan(x); atan2(y,x); hypot(x,y); \n"
+"cos(x); sin(x); tan(x); degrees(x); radians(x); \n"
+"cosh(x); sinh(x); tanh(x)\n"
 "\n"
 "Les fonctions trigonométriques inverses sont également disponibles :\n"
 "sec(x); csc(x); cot(x)\n"
@@ -35338,7 +35346,8 @@ msgstr ""
 "utilisant une fonction pouvant également contenir les tailles de côté, les "
 "angles, etc. Vous pouvez également tracer les conjuguées isogonales et "
 "isotomiques du point. Soyez conscient que cela peut provoquer une erreur de "
-"type division par zéro pour certains points.            "
+"type division par zéro pour certains points.\n"
+"            "
 
 #: ../share/extensions/dxf12_outlines.inx:3
 msgid "Desktop Cutting Plotter R12"
@@ -35982,9 +35991,8 @@ msgid "Width(px)"
 msgstr "Largeur (px)"
 
 #: ../share/extensions/frame.inx:21
-#, fuzzy
 msgid "Corner Radius"
-msgstr "Rayon intérieur"
+msgstr "Rayon des coins"
 
 #: ../share/extensions/funcplot.inx:3
 msgid "Function Plotter"
@@ -36591,7 +36599,6 @@ msgid "DXF points"
 msgstr "Points DXF"
 
 #: ../share/extensions/gcodetools_dxf_points.inx:10
-#, fuzzy
 msgid ""
 "\n"
 "\n"
@@ -36612,7 +36619,7 @@ msgstr ""
 "Vous pouvez aussi sélectionner manuellement un objet, ouvrir l'éditeur XML "
 "(Maj+Ctrl+X) et ajouter ou supprimer la balise XML « dxfpoint » avec une "
 "valeur.\n"
-"\t\t  "
+"          "
 
 #: ../share/extensions/gcodetools_dxf_points.inx:16
 msgid "Convert selection:"
@@ -36652,7 +36659,6 @@ msgid "Draw additional graphics to see engraving path"
 msgstr "Dessiner des graphismes supplémentaires pour voir le chemin gravé"
 
 #: ../share/extensions/gcodetools_engraving.inx:15
-#, fuzzy
 msgid ""
 "\n"
 "This function creates path to engrave letters or any shape with sharp "
@@ -36745,7 +36751,6 @@ msgid "Z depth:"
 msgstr "Profondeur sur l'axe Z :"
 
 #: ../share/extensions/gcodetools_graffiti.inx:41
-#, fuzzy
 msgid ""
 "\n"
 "Orientation points are used to calculate transformation (offset,scale,mirror,"
@@ -36783,7 +36788,7 @@ msgstr ""
 "\n"
 "Appuyez sur Appliquer pour créer des points de contrôles (un ensemble "
 "indépendant pour chaque calque).\n"
-"\t\t\t"
+"            "
 
 #: ../share/extensions/gcodetools_lathe.inx:4
 #: ../share/extensions/gcodetools_lathe.inx:9
@@ -36828,7 +36833,6 @@ msgid "Lathe modify path"
 msgstr "Modifier le chemin du tour"
 
 #: ../share/extensions/gcodetools_lathe.inx:22
-#, fuzzy
 msgid ""
 "\n"
 "            This function modifies path so it will be possible to be cut it "
@@ -36836,16 +36840,15 @@ msgid ""
 "        "
 msgstr ""
 "\n"
-"\t\t\tCette fonction modifie le chemin de sorte qu'il soit possible de le "
+"            Cette fonction modifie le chemin de sorte qu'il soit possible de le "
 "découper avec un coupoir rectangulaire.\n"
-"\t\t"
+"        "
 
 #: ../share/extensions/gcodetools_orientation_points.inx:4
 msgid "Orientation points"
 msgstr "Points d'orientation"
 
 #: ../share/extensions/gcodetools_orientation_points.inx:25
-#, fuzzy
 msgid ""
 "\n"
 "Orientation points are used to calculate transformation (offset,scale,mirror,"
@@ -36879,10 +36882,9 @@ msgstr ""
 "\n"
 "Appuyez sur Appliquer pour créer des points de contrôles (un ensemble "
 "indépendant pour chaque calque).\n"
-"\t\t\t"
+"      "
 
 #: ../share/extensions/gcodetools_orientation_points.inx:36
-#, fuzzy
 msgid ""
 "\n"
 "Gcodetools plug-in:\n"
@@ -36909,14 +36911,15 @@ msgstr ""
 "\n"
 "Des tutoriels, des manuels et des forums d'aide sont disponibles.\n"
 "Forum anglais :\n"
-"\thttp://www.cnc-club.ru/gcodetools\n"
+"http://www.cnc-club.ru/gcodetools\n"
 "Forum russe :\n"
-"\thttp://www.cnc-club.ru/gcodetoolsru\n"
+"http://www.cnc-club.ru/gcodetoolsru\n"
 "\n"
 "Crédits : Nick Drobchenko, Vladimir Kalyaev, John Brooker, Henry Nicolas, "
 "Chris Lusby Taylor.\n"
 "\n"
 "Gcodetools ver. 1.7\n"
+"      "
 
 #: ../share/extensions/gcodetools_prepare_path_for_plasma.inx:4
 msgid "Prepare path for plasma"
@@ -37022,7 +37025,6 @@ msgid "Just check tools"
 msgstr "Vérifier seulement les outils"
 
 #: ../share/extensions/gcodetools_tools_library.inx:25
-#, fuzzy
 msgid ""
 "\n"
 "Selected tool type fills appropriate default values. You can change these "
@@ -37044,10 +37046,9 @@ msgstr ""
 "sélectionné dans la couche supérieure.\n"
 "\n"
 "Appuyez sur Appliquer pour créer un nouvel outil.\n"
-"\t\t\t"
+"            "
 
 #: ../share/extensions/gcodetools_tools_library.inx:35
-#, fuzzy
 msgid ""
 "\n"
 "Gcodetools plug-in: converts paths to Gcode (using circular interpolation), "
@@ -37076,9 +37077,9 @@ msgstr ""
 "\n"
 "Des tutoriels, des manuels et des forums d'aide sont disponibles.\n"
 "Forum anglais :\n"
-"\thttp://www.cnc-club.ru/gcodetools\n"
+"    http://www.cnc-club.ru/gcodetools\n"
 "Forum russe :\n"
-"\thttp://www.cnc-club.ru/gcodetoolsru\n"
+"    http://www.cnc-club.ru/gcodetoolsru\n"
 "\n"
 "Crédits : Nick Drobchenko, Vladimir Kalyaev, John Brooker, Henry Nicolas, "
 "Chris Lusby Taylor.\n"
@@ -37098,7 +37099,6 @@ msgid "Size of Border (px):"
 msgstr "Taille de la bordure (px) :"
 
 #: ../share/extensions/generate_voronoi.inx:13
-#, fuzzy
 msgid ""
 "Generate a random pattern of Voronoi cells. The pattern will be accessible "
 "in the Fill and Stroke dialog. You must select an object or a group.\n"
@@ -37138,7 +37138,6 @@ msgid "File Resolution:"
 msgstr "Résolution du fichier :"
 
 #: ../share/extensions/gimp_xcf.inx:16
-#, fuzzy
 msgid ""
 "This extension exports the document to Gimp XCF format according to the "
 "following options:\n"
@@ -37154,15 +37153,15 @@ msgid ""
 msgstr ""
 "Cette extension exporte le document au format Gimp XCF en fonction des "
 "options suivantes :\n"
-"  * Enregistrer les guides : converti tous les guides en guides Gimp.\n"
-"  * Enregistrer la grille : converti la première grille rectangulaire en une "
+"    * Enregistrer les guides : convertit tous les guides en guides Gimp.\n"
+"    * Enregistrer la grille : convertit la première grille rectangulaire en une "
 "grille Gimp (notez que la grille par défaut d'Inkscape est particulièrement "
 "étroite lorsque visualisée dans Gimp).\n"
-"  * Exporter le fond : ajoute le fond du document à chaque calque converti.\n"
-"  * Résolution du fichier : résolution du fichier XCF en DPI.\n"
+"    * Exporter le fond : ajoute le fond du document à chaque calque converti.\n"
+"    * Résolution du fichier : résolution du fichier XCF en PPP.\n"
 "\n"
 "Chaque calque de premier niveau est converti en calque Gimp. Les sous-"
-"calques sont concaténés et converti avec le calque de premier niveau "
+"calques sont concaténés et convertis avec le calque de premier niveau "
 "supérieur en un calque Gimp unique."
 
 #: ../share/extensions/gimp_xcf.inx:28 ../share/extensions/gimp_xcf.inx:29
@@ -37174,14 +37173,12 @@ msgid "Cartesian Grid"
 msgstr "Grille cartésienne"
 
 #: ../share/extensions/grid_cartesian.inx:7
-#, fuzzy
 msgid "Border Thickness:"
-msgstr "Épaisseur de la bordure (px) :"
+msgstr "Épaisseur de la bordure :"
 
 #: ../share/extensions/grid_cartesian.inx:8
-#, fuzzy
 msgid "Border Thickness Unit:"
-msgstr "Épaisseur de la bordure (px) :"
+msgstr "Unité d'épaisseur de bordure :"
 
 #: ../share/extensions/grid_cartesian.inx:15
 msgid "X Axis"
@@ -37192,14 +37189,12 @@ msgid "Major X Divisions:"
 msgstr "Marques principales sur l'axe X :"
 
 #: ../share/extensions/grid_cartesian.inx:17
-#, fuzzy
 msgid "Major X Division Spacing:"
-msgstr "Espacement des marques principales sur l'axe X (px) :"
+msgstr "Espacement des marques principales sur l'axe X :"
 
 #: ../share/extensions/grid_cartesian.inx:18
-#, fuzzy
 msgid "Major X Division Spacing Unit:"
-msgstr "Espacement des marques principales sur l'axe X (px) :"
+msgstr "Unité d'espacement des marques principales sur l'axe X :"
 
 #: ../share/extensions/grid_cartesian.inx:24
 msgid "Subdivisions per Major X Division:"
@@ -37221,24 +37216,20 @@ msgstr ""
 "subdivisions (log seulement) :"
 
 #: ../share/extensions/grid_cartesian.inx:28
-#, fuzzy
 msgid "Major X Division Thickness:"
-msgstr "Épaisseur des marques principales sur l'axe X (px) :"
+msgstr "Épaisseur des marques principales sur l'axe X :"
 
 #: ../share/extensions/grid_cartesian.inx:29
-#, fuzzy
 msgid "Minor X Division Thickness:"
-msgstr "Épaisseur des marques secondaires sur l'axe X (px) :"
+msgstr "Épaisseur des marques secondaires sur l'axe X :"
 
 #: ../share/extensions/grid_cartesian.inx:30
-#, fuzzy
 msgid "Subminor X Division Thickness:"
-msgstr "Épaisseur des marques mineures sur l'axe X (px) :"
+msgstr "Épaisseur des marques mineures sur l'axe X :"
 
 #: ../share/extensions/grid_cartesian.inx:31
-#, fuzzy
 msgid "X Division Thickness Unit:"
-msgstr "Épaisseur des marques principales sur l'axe X (px) :"
+msgstr "Unité d'épaisseur des marques principales sur l'axe X :"
 
 #: ../share/extensions/grid_cartesian.inx:38
 msgid "Y Axis"
@@ -37249,14 +37240,12 @@ msgid "Major Y Divisions:"
 msgstr "Marques principales sur l'axe Y :"
 
 #: ../share/extensions/grid_cartesian.inx:40
-#, fuzzy
 msgid "Major Y Division Spacing:"
-msgstr "Espacement des marques principales sur l'axe Y (px) :"
+msgstr "Espacement des marques principales sur l'axe Y :"
 
 #: ../share/extensions/grid_cartesian.inx:41
-#, fuzzy
 msgid "Major Y Division Spacing Unit:"
-msgstr "Espacement des marques principales sur l'axe Y (px) :"
+msgstr "Unité d'espacement des marques principales sur l'axe Y :"
 
 #: ../share/extensions/grid_cartesian.inx:47
 msgid "Subdivisions per Major Y Division:"
@@ -37278,24 +37267,20 @@ msgstr ""
 "subdivisions (log seulement) :"
 
 #: ../share/extensions/grid_cartesian.inx:51
-#, fuzzy
 msgid "Major Y Division Thickness:"
-msgstr "Épaisseur des marques principales sur l'axe Y (px) :"
+msgstr "Épaisseur des marques principales sur l'axe Y :"
 
 #: ../share/extensions/grid_cartesian.inx:52
-#, fuzzy
 msgid "Minor Y Division Thickness:"
-msgstr "Épaisseur des marques secondaires sur l'axe Y (px) :"
+msgstr "Épaisseur des marques secondaires sur l'axe Y :"
 
 #: ../share/extensions/grid_cartesian.inx:53
-#, fuzzy
 msgid "Subminor Y Division Thickness:"
-msgstr "Épaisseur des marques mineures sur l'axe Y (px) :"
+msgstr "Épaisseur des marques mineures sur l'axe Y :"
 
 #: ../share/extensions/grid_cartesian.inx:54
-#, fuzzy
 msgid "Y Division Thickness Unit:"
-msgstr "Épaisseur des marques principales sur l'axe Y (px) :"
+msgstr "Unité d'épaisseur des marques principales sur l'axe Y :"
 
 #: ../share/extensions/grid_isometric.inx:3
 msgid "Isometric Grid"
@@ -37306,7 +37291,6 @@ msgid "X Divisions [x2]:"
 msgstr "Marques sur l'axe X (x2) :"
 
 #: ../share/extensions/grid_isometric.inx:7
-#, fuzzy
 msgid "Y Divisions [x2] [> 1/2 X Div]:"
 msgstr "Marques sur l'axe Y (x2, >1/2 marques X) :"
 
@@ -37535,11 +37519,12 @@ msgid "Hershey Text"
 msgstr "Texte Hershey"
 
 #: ../share/extensions/hershey.inx:12
-#, fuzzy
 msgid ""
 "\n"
 "Hershey Text\n"
-msgstr "Texte Hershey"
+msgstr ""
+"\n"
+"Texte Hershey\n"
 
 #: ../share/extensions/hershey.inx:16
 msgid ""
@@ -37549,57 +37534,53 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
+"Un outil pour remplacer le texte par des fontes au trait\n"
+"\n"
+"Version 3.0.1, 2019-07-05\n"
+"\n"
+"\n"
 
 #: ../share/extensions/hershey.inx:23
-#, fuzzy
 msgid "Font face:"
-msgstr "Type de police : "
+msgstr "Type de fonte :"
 
 #: ../share/extensions/hershey.inx:24
-#, fuzzy
 msgid "Hershey Sans 1-stroke"
-msgstr "Sans 1 pixel"
+msgstr "Hershey Sans 1 trait"
 
 #
 # File: ../share/extensions/hershey.inx, line: 25
 #: ../share/extensions/hershey.inx:25
 msgid "Hershey Sans medium"
-msgstr ""
+msgstr "Hershey Sans moyen"
 
 #: ../share/extensions/hershey.inx:27
-#, fuzzy
 msgid "Hershey Serif medium"
-msgstr "Serif moyen"
+msgstr "Hershey Serif moyen"
 
 #: ../share/extensions/hershey.inx:28
-#, fuzzy
 msgid "Hershey Serif medium italic"
-msgstr "Serif moyen italique"
+msgstr "Hershey Serif moyen italique"
 
 #: ../share/extensions/hershey.inx:30
-#, fuzzy
 msgid "Hershey Serif bold"
-msgstr "Serif gras"
+msgstr "Hershey Serif gras"
 
 #: ../share/extensions/hershey.inx:31
-#, fuzzy
 msgid "Hershey Serif bold italic"
-msgstr "Serif gras italique"
+msgstr "Hershey Serif gras italique"
 
 #: ../share/extensions/hershey.inx:33
-#, fuzzy
 msgid "Hershey Script 1-stroke"
-msgstr "Script 1 pixel"
+msgstr "Hershey Script 1 trait"
 
 #: ../share/extensions/hershey.inx:34
-#, fuzzy
 msgid "Hershey Script medium"
-msgstr "Script moyen"
+msgstr "Hershey Script moyen"
 
 #: ../share/extensions/hershey.inx:36
-#, fuzzy
 msgid "Hershey Gothic English"
-msgstr "Gothique anglais"
+msgstr "Hershey Gothique anglais"
 
 #
 # File: ../share/extensions/hershey.inx, line: 39
@@ -37661,7 +37642,7 @@ msgstr ""
 #. Block above this are derived from fonts licensed under SIL Open Font License
 #: ../share/extensions/hershey.inx:53
 msgid "Other (given below)"
-msgstr ""
+msgstr "Autres (données ci-dessous)"
 
 #
 # File: ../share/extensions/hershey.inx, line: 56
@@ -37670,11 +37651,12 @@ msgid ""
 "\n"
 "Other SVG font name or path (if \"Other\" selected above):\n"
 msgstr ""
+"\n"
+"Autre fonte ou chemin SVG (si « Autres » est sélectionné ci-dessus) :\n"
 
 #: ../share/extensions/hershey.inx:59
-#, fuzzy
 msgid "Name/Path:"
-msgstr "Nom :"
+msgstr "Nom/chemin :"
 
 #: ../share/extensions/hershey.inx:61 ../share/extensions/text_split.inx:13
 msgid "Preserve original text"
@@ -37684,7 +37666,7 @@ msgstr "Conserver le texte original"
 # File: ../share/extensions/hershey.inx, line: 65
 #: ../share/extensions/hershey.inx:65
 msgid "Utilities"
-msgstr ""
+msgstr "Utilitaires"
 
 #
 # File: ../share/extensions/hershey.inx, line: 66
@@ -37694,17 +37676,19 @@ msgid ""
 "Hershey Text Utility Functions\n"
 "  "
 msgstr ""
+"\n"
+"Utilitaires de texte Hershey\n"
+"  "
 
 #: ../share/extensions/hershey.inx:71
-#, fuzzy
 msgid "Generate font table"
-msgstr "Générer un fichier journal"
+msgstr "Générer une table de fonte"
 
 #
 # File: ../share/extensions/hershey.inx, line: 72
 #: ../share/extensions/hershey.inx:72
 msgid "Generate glyph table in selected font"
-msgstr ""
+msgstr "Générer une table de glyphes dans la fonte sélectionnée"
 
 #
 # File: ../share/extensions/hershey.inx, line: 75
@@ -37714,6 +37698,9 @@ msgid ""
 "\n"
 "Sample text to use when generating font table:"
 msgstr ""
+"\n"
+"\n"
+"Échantillon de texte pour la génération de la table de fonte :"
 
 #: ../share/extensions/hershey.inx:78
 #: ../share/extensions/render_alphabetsoup.inx:7
@@ -37745,6 +37732,26 @@ msgid ""
 "\n"
 "  "
 msgstr ""
+"\n"
+"Cette extension effectue un rendu de tout le texte du document "
+"(ou du texte sélectionné) dans une fonte spécialisée pour le "
+"trait ou pour la gravure sur traceurs.\n"
+"\n"
+"Alors que les fontes au contour classiques (par ex. TrueType) fonctionnent "
+"par remplissage d'une zone à l'intérieur d'un contour invisible, "
+"les fontes pour la gravure sont constituées de lignes ou de traits individuels, "
+"tout comme l'écriture humaine manuscrite.\n"
+"\n"
+"Les fontes pour la gravure sont employées pour créer des chemins de texte que "
+"peuvent facilement suivre des machines à commande numérique pour le dessin ou la"
+"découpe (des traceurs au routeurs CNC).\n"
+"\n"
+"Un guide d'utilisateur complet est disponible au téléchargement :\n"
+"  http://wiki.evilmadscientist.com/hershey\n"
+"\n"
+"Pour une aide avancée, cliquer sur \"Appliquer\" avec cet onglet actif.\n"
+"\n"
+"  "
 
 #: ../share/extensions/hershey.inx:108
 msgid "Credits"
@@ -37766,6 +37773,15 @@ msgid ""
 "credits embedded within the SVG fonts included with this\n"
 "distribution.\n"
 msgstr ""
+"\n"
+"Les fontes classiques Hershey incluses sont dérivées du "
+"travail du Dr. A. V. Hershey.\n"
+"\n"
+"Les fontes modernes supplémentaires « EMS » dans cette distribution sont "
+"des dérivées créées à partir de fontes sous licence SIL Open Font License.\n"
+"\n"
+"Pour toutes les informations de crédits et de licence, veuillez lire "
+"les crédits intégrés avec les fontes SVG inclus dans cette distribution.\n"
 
 #: ../share/extensions/hpgl_input.inx:3
 msgid "HPGL Input"
@@ -37841,9 +37857,8 @@ msgstr ""
 "Extensions>Exporter) pour tracer directement au travers du port série."
 
 #: ../share/extensions/hpgl_output.inx:10 ../share/extensions/plotter.inx:68
-#, fuzzy
 msgid "Plotter Settings"
-msgstr "Paramètres du traceur "
+msgstr "Paramètres du traceur"
 
 #: ../share/extensions/hpgl_output.inx:13 ../share/extensions/plotter.inx:71
 msgid "Pen number:"
@@ -37925,9 +37940,8 @@ msgstr ""
 "du nombre de stylos ci-dessus."
 
 #: ../share/extensions/hpgl_output.inx:28 ../share/extensions/plotter.inx:86
-#, fuzzy
 msgid "Plot Features"
-msgstr "Fonctionnalités du traceur "
+msgstr "Fonctionnalités du traceur"
 
 #: ../share/extensions/hpgl_output.inx:29 ../share/extensions/plotter.inx:87
 msgid "Overcut (mm):"
@@ -38120,7 +38134,6 @@ msgstr "Options de la ligne de commande"
 
 #. i18n. Please don't translate link unless the page exists in your language. Add your language code to the link this way: https://inkscape.org/doc/inkscape-man.[lang].html
 #: ../share/extensions/inkscape_help_commandline.inx:7
-#, fuzzy
 msgid "https://inkscape.org/doc/inkscape-man.html"
 msgstr "http://inkscape.org/doc/inkscape-man.fr.html"
 
@@ -38134,9 +38147,8 @@ msgstr "Référence des raccourcis clavier et souris"
 
 #. i18n. Please don't translate link unless the page exists in your language. Add your language code to the link this way: https://inkscape.org/doc/keys.[lang].html
 #: ../share/extensions/inkscape_help_keys.inx:7
-#, fuzzy
 msgid "https://inkscape.org/doc/keys.html"
-msgstr "http://inkscape.org/doc/keys092.fr.html"
+msgstr "http://inkscape.org/doc/keys.fr.html"
 
 #: ../share/extensions/inkscape_help_manual.inx:3
 msgid "Inkscape Manual"
@@ -38153,9 +38165,8 @@ msgstr "Nouveautés de cette version"
 
 #. i18n. Please don't translate link unless the page exists in your language. Add your language code to the link this way: http://wiki.inkscape.org/wiki/index.php/Release_notes/1.0/[lang]
 #: ../share/extensions/inkscape_help_relnotes.inx:7
-#, fuzzy
 msgid "http://wiki.inkscape.org/wiki/index.php/Release_notes/1.0"
-msgstr "http://wiki.inkscape.org/wiki/index.php/Release_notes/1.0"
+msgstr "http://wiki.inkscape.org/wiki/index.php/Release_notes/1.0/fr"
 
 #: ../share/extensions/inkscape_help_reportabug.inx:3
 msgid "Report a Bug"
@@ -38348,7 +38359,6 @@ msgstr ""
 #: ../share/extensions/jessyInk_uninstall.inx:23
 #: ../share/extensions/jessyInk_video.inx:14
 #: ../share/extensions/jessyInk_view.inx:20
-#, fuzzy
 msgid "JessyInk"
 msgstr "JessyInk"
 
@@ -38958,7 +38968,6 @@ msgid "Margin box"
 msgstr "Boîte de marge"
 
 #: ../share/extensions/layout_nup.inx:49
-#, fuzzy
 msgid ""
 "\n"
 "Parameters:\n"
@@ -39029,7 +39038,6 @@ msgid "Randomize angle (%):"
 msgstr "Rendre l'angle aléatoire (%) :"
 
 #: ../share/extensions/lindenmayer.inx:18
-#, fuzzy
 msgid ""
 "\n"
 "The path is generated by applying the \n"
@@ -39082,7 +39090,6 @@ msgid "Paragraph length fluctuation (sentences):"
 msgstr "Fluctuation de la longueur des paragraphes (en phrases) :"
 
 #: ../share/extensions/lorem_ipsum.inx:13
-#, fuzzy
 msgid ""
 "This effect creates the standard \"Lorem Ipsum\" pseudolatin placeholder "
 "text. If a flowed text is selected, Lorem Ipsum is added to it; otherwise a "
@@ -39090,9 +39097,11 @@ msgid ""
 "a shape (such as a path) is selected, the flowed text will flow into that "
 "shape instead of the page."
 msgstr ""
-"Cette effet crée un texte bouche-trou « Lorem Ipsum » (du pseudo-latin). Si "
+"Cet effet crée un texte bouche-trou « Lorem Ipsum » (du pseudo-latin). Si "
 "un cadre de texte est sélectionné, y ajoute Lorem Ipsum ; sinon, un nouveau "
-"cadre de texte de la taille de la page est créé dans un nouveau calque."
+"cadre de texte de la taille de la page est créé dans un nouveau calque. Si "
+"une forme (comme un chemin) est sélectionné, le cadre de texte s'ajustera "
+"à cette forme au lieu de la page."
 
 #: ../share/extensions/markers_strokepaint.inx:3
 msgid "Color Markers"
@@ -39135,7 +39144,6 @@ msgid "Measure Path"
 msgstr "Mesurer un chemin"
 
 #: ../share/extensions/measure.inx:6
-#, fuzzy
 msgid "Measurement Type:"
 msgstr "Type de mesure : "
 
@@ -39190,19 +39198,16 @@ msgid "Text anchor:"
 msgstr "Ancre de texte :"
 
 #: ../share/extensions/measure.inx:27
-#, fuzzy
 msgid "Left (Start)"
-msgstr "De gauche à droite"
+msgstr "Gauche (début)"
 
 #: ../share/extensions/measure.inx:28
-#, fuzzy
 msgid "Center (Middle)"
-msgstr "Barycentre"
+msgstr "Centre (milieu)"
 
 #: ../share/extensions/measure.inx:29
-#, fuzzy
 msgid "Right (End)"
-msgstr "Droite (px) :"
+msgstr "Droite (fin)"
 
 #: ../share/extensions/measure.inx:32
 msgid "Fixed Text"
@@ -39225,7 +39230,6 @@ msgid "Angle (°):"
 msgstr "Angle (°) :"
 
 #: ../share/extensions/measure.inx:41
-#, fuzzy
 msgid ""
 "This effect measures the length, area, or center-of-mass of the selected "
 "paths. Length and area are added as a text object with the selected units. "
@@ -39476,9 +39480,8 @@ msgid "Bar chart"
 msgstr "Diagramme en barres"
 
 #: ../share/extensions/nicechart.inx:90
-#, fuzzy
 msgid "Pie chart"
-msgstr "Diagramme en barres"
+msgstr "Camembert"
 
 #: ../share/extensions/nicechart.inx:91
 msgid "Pie chart (percentage)"
@@ -39497,7 +39500,6 @@ msgid "Number of significant digits for coordinates:"
 msgstr "Nombre de chiffres significatifs pour les coordonnées :"
 
 #: ../share/extensions/output_scour.inx:10
-#, fuzzy
 msgid ""
 "Specifies the number of significant digits that should be output for "
 "coordinates. Note that significant digits are *not* the number of decimals "
@@ -39528,7 +39530,6 @@ msgid "Convert CSS attributes to XML attributes"
 msgstr "Convertir les attributs CSS en attributs XML"
 
 #: ../share/extensions/output_scour.inx:17
-#, fuzzy
 msgid ""
 "Convert styles from style tags and inline style=\"\" declarations into XML "
 "attributes."
@@ -39541,7 +39542,6 @@ msgid "Collapse groups"
 msgstr "Réduire les groupes"
 
 #: ../share/extensions/output_scour.inx:21
-#, fuzzy
 msgid ""
 "Remove useless groups, promoting their contents up one level. Requires "
 "\"Remove unused IDs\" to be set."
@@ -39684,7 +39684,6 @@ msgid "Indentation characters:"
 msgstr "Caractères d'indentation :"
 
 #: ../share/extensions/output_scour.inx:61
-#, fuzzy
 msgid ""
 "The type of indentation used for each level of nesting in the output. "
 "Specify \"None\" to disable indentation. This option has no effect if "
@@ -39713,7 +39712,6 @@ msgid "Depth of indentation:"
 msgstr "Longueur de l'indentation :"
 
 #: ../share/extensions/output_scour.inx:68
-#, fuzzy
 msgid ""
 "The depth of the chosen type of indentation. E.g. if you choose \"2\" every "
 "nesting level in the output will be indented by two additional spaces/tabs."
@@ -39723,18 +39721,16 @@ msgstr ""
 "tabulations supplémentaires."
 
 #: ../share/extensions/output_scour.inx:71
-#, fuzzy
 msgid "Strip the \"xml:space\" attribute from the root SVG element"
 msgstr "Retirer l'attribut « xml:space » de l'élément SVG racine"
 
 #: ../share/extensions/output_scour.inx:71
-#, fuzzy
 msgid ""
 "This is useful if the input file specifies \"xml:space='preserve'\" in the "
 "root SVG element which instructs the SVG editor not to change whitespace in "
 "the document at all (and therefore overrides the options above)."
 msgstr ""
-"Cela est utile si le fichier d'entrée spécifie « xml:space='preserve' dans "
+"Cela est utile si le fichier d'entrée spécifie « xml:space='preserve' » dans "
 "l'élément SVG racine qui indique à l'éditeur SVG de ne modifier aucunement "
 "les espaces du document (et donc écrase les options ci-dessus)."
 
@@ -39759,7 +39755,6 @@ msgid "Shorten IDs"
 msgstr "Raccourcir les identifiants"
 
 #: ../share/extensions/output_scour.inx:80
-#, fuzzy
 msgid ""
 "Minimize the length of IDs using only lowercase letters, assigning the "
 "shortest values to the most-referenced elements. For instance, "
@@ -39767,7 +39762,7 @@ msgid ""
 msgstr ""
 "Minimiser la longueur des identifiants utilisant uniquement des lettres "
 "minuscules, affectant les valeurs les plus courtes aux éléments les plus "
-"souvent référencés. Par exemple, « linearGradient32 » deviendra « a » s'il "
+"souvent référencés. Par exemple, « linearGradient5621 » deviendra « a » s'il "
 "s'agit de l'élément le plus référencé."
 
 #: ../share/extensions/output_scour.inx:83
@@ -39809,7 +39804,6 @@ msgid "Preserve IDs starting with:"
 msgstr "Préserver les identifiants commençant par :"
 
 #: ../share/extensions/output_scour.inx:93
-#, fuzzy
 msgid ""
 "Preserve all IDs that start with the specified prefix (e.g. specify \"flag\" "
 "to preserve \"flag-mx\", \"flag-pt\", etc.)."
@@ -39823,7 +39817,7 @@ msgstr "La sortie en SVG optimisé est fournie par"
 
 #: ../share/extensions/output_scour.inx:102
 msgid "Scour - An SVG Scrubber"
-msgstr ""
+msgstr "Scour - Un nettoyeur SVG"
 
 #: ../share/extensions/output_scour.inx:104
 msgid "For details please refer to"
@@ -39890,7 +39884,6 @@ msgid "Samples:"
 msgstr "Échantillons :"
 
 #: ../share/extensions/param_curves.inx:20
-#, fuzzy
 msgid ""
 "Select a rectangle before calling the extension, it will determine X and Y "
 "scales.\n"
@@ -39909,9 +39902,8 @@ msgid "Y-Function:"
 msgstr "Fonction Y :"
 
 #: ../share/extensions/path_mesh_m2p.inx:3
-#, fuzzy
 msgid "Mesh-Gradient to Path"
-msgstr "Contour du filet de dégradé"
+msgstr "Filet de dégradé en chemin"
 
 #: ../share/extensions/path_mesh_m2p.inx:14
 #, fuzzy
@@ -39924,39 +39916,33 @@ msgid "Faces"
 msgstr "Facettes"
 
 #: ../share/extensions/path_mesh_m2p.inx:20
-#, fuzzy
 msgid "Mesh to path"
-msgstr "Objet en chemin"
+msgstr "Filet en chemin"
 
 #: ../share/extensions/path_mesh_m2p.inx:21
-#, fuzzy
 msgid "Convert geometry of selected meshgradient to path data"
-msgstr "Convertir les objets sélectionnés en chemins"
+msgstr "Convertit la géométrie des filets de dégradés en chemin"
 
 #: ../share/extensions/path_mesh_m2p.inx:30
 #: ../share/extensions/path_mesh_p2m.inx:25
-#, fuzzy
 msgid "Mesh"
 msgstr "Filet"
 
 #: ../share/extensions/path_mesh_p2m.inx:3
-#, fuzzy
 msgid "Path to Mesh-Gradient"
-msgstr "Filet de dégradé"
+msgstr "Chemin en filet de dégradé"
 
 #: ../share/extensions/path_mesh_p2m.inx:11
-#, fuzzy
 msgid "Convert each selected path to 1x1 mesh"
-msgstr "Convertir les objets sélectionnés en chemins"
+msgstr "Convertit chaque chemin sélectionné en chemin 1×1"
 
 #: ../share/extensions/path_mesh_p2m.inx:15
-#, fuzzy
 msgid "Path to mesh"
-msgstr "Chemin vers G-code"
+msgstr "Chemin en filet"
 
 #: ../share/extensions/path_mesh_p2m.inx:16
 msgid "Convert geometry of selected path (4 corners) to a meshgradient"
-msgstr ""
+msgstr "Convertit la géométrie du chemin sélectionné (4 coins) en filet de dégradé"
 
 #: ../share/extensions/pathalongpath.inx:3
 msgid "Pattern along Path"
@@ -40070,12 +40056,10 @@ msgid "LaTeX (pdflatex)"
 msgstr ""
 
 #: ../share/extensions/pdflatex.inx:6
-#, fuzzy
 msgid "LaTeX input:"
 msgstr "Entrée LaTeX :"
 
 #: ../share/extensions/pdflatex.inx:7
-#, fuzzy
 msgid "Additional packages (comma-separated):"
 msgstr "Paquets supplémentaires (séparés par des virgules) :"
 
@@ -40194,7 +40178,7 @@ msgstr ""
 #: ../share/extensions/pixelsnap.inx:11
 #, fuzzy
 msgid "Maximum slope to consider straight (%)"
-msgstr "Longueur maximum de segment (px) :"
+msgstr "Pente maximale des segments considérés comme droits (%)"
 
 #: ../share/extensions/plotter.inx:3
 msgid "Plot"
@@ -40207,7 +40191,6 @@ msgstr ""
 "Veuillez vous assurer que tous les objets à tracer sont convertis en chemins."
 
 #: ../share/extensions/plotter.inx:10
-#, fuzzy
 msgid "Connection Settings"
 msgstr "Paramètres de la connexion"
 
@@ -40725,54 +40708,46 @@ msgid "H (Approx. 30%)"
 msgstr "H (environ 30 %)"
 
 #: ../share/extensions/render_barcode_qrcode.inx:34
-#, fuzzy
 msgid "Invert QR code:"
-msgstr "Insérer un nœud"
+msgstr "Inverser le QR code :"
 
 #: ../share/extensions/render_barcode_qrcode.inx:35
 msgid "Square size (px):"
 msgstr "Taille du carré (px) :"
 
 #: ../share/extensions/render_barcode_qrcode.inx:36
-#, fuzzy
 msgid "Drawing type:"
-msgstr "Fondu du dessin :"
+msgstr "Type de dessin :"
 
 #: ../share/extensions/render_barcode_qrcode.inx:37
-#, fuzzy
 msgid "Smooth: neutral"
-msgstr "Adoucir"
+msgstr "Lissage : neutre"
 
 #: ../share/extensions/render_barcode_qrcode.inx:38
-#, fuzzy
 msgid "Smooth: greedy"
-msgstr "Adouci"
+msgstr "Lissage : vorace"
 
 #: ../share/extensions/render_barcode_qrcode.inx:39
-#, fuzzy
 msgid "Smooth: proud"
-msgstr "Nœuds doux"
+msgstr "Lissage : énorme"
 
 #: ../share/extensions/render_barcode_qrcode.inx:40
-#, fuzzy
 msgid "Path: simple"
-msgstr "Chemin : "
+msgstr "Chemin : simple"
 
 #: ../share/extensions/render_barcode_qrcode.inx:41
-#, fuzzy
 msgid "Path: circle"
-msgstr "Cercles entassés"
+msgstr "Chemin : cercle"
 
 #: ../share/extensions/render_barcode_qrcode.inx:42
-#, fuzzy
 msgid "Path: custom"
-msgstr "Chemin : "
+msgstr "Chemin : personnalisé"
 
 #
 # File: ../share/extensions/render_barcode_qrcode.inx, line: 44
 #: ../share/extensions/render_barcode_qrcode.inx:44
 msgid "Square sharp: obsolete"
-msgstr ""
+msgstr "Carré net : obsolète"
 
 #
 # File: ../share/extensions/render_barcode_qrcode.inx, line: 46
@@ -40846,17 +40821,14 @@ msgid "Find and Replace font"
 msgstr "Trouver et remplacer une police"
 
 #: ../share/extensions/replace_font.inx:11
-#, fuzzy
 msgid "Find font:"
-msgstr "Rechercher cette police : "
+msgstr "Rechercher la police : "
 
 #: ../share/extensions/replace_font.inx:12
-#, fuzzy
 msgid "Replace with:"
 msgstr "Remplacer par : "
 
 #: ../share/extensions/replace_font.inx:15
-#, fuzzy
 msgid "Replace all fonts with:"
 msgstr "Remplacer toutes les polices par : "
 
@@ -41048,7 +41020,6 @@ msgid "Create seamless patterns."
 msgstr "Créer des motifs sans couture."
 
 #: ../share/extensions/seamless_pattern_procedural.inx:19
-#, fuzzy
 msgid "live seamless patterns"
 msgstr "motifs sans couture existants"
 
@@ -41243,29 +41214,24 @@ msgid "Week number color:"
 msgstr "Couleur du numéro de semaine :"
 
 #: ../share/extensions/svgcalendar.inx:38
-#, fuzzy
 msgid "Fonts"
-msgstr "_Police"
+msgstr "Polices"
 
 #: ../share/extensions/svgcalendar.inx:39
-#, fuzzy
 msgid "Year font:"
-msgstr "Rechercher dans les fontes"
+msgstr "Police de l'année  :"
 
 #: ../share/extensions/svgcalendar.inx:40
-#, fuzzy
 msgid "Month font:"
-msgstr "Largeur des mois :"
+msgstr "Police du mois :"
 
 #: ../share/extensions/svgcalendar.inx:41
-#, fuzzy
 msgid "Weekday name font:"
-msgstr "Couleur des jours de la semaine :"
+msgstr "Police du jour de la semaine :"
 
 #: ../share/extensions/svgcalendar.inx:42
-#, fuzzy
 msgid "Day font:"
-msgstr "Couleur des jours :"
+msgstr "Police du jour :"
 
 #: ../share/extensions/svgcalendar.inx:44
 msgid "Localization"
@@ -41313,51 +41279,43 @@ msgstr "Encodage des caractères :"
 
 #: ../share/extensions/svgcalendar.inx:106
 msgid "Latin - iso-8859-15 - Western Europe"
-msgstr ""
+msgstr "Latin - iso-8859-15 - Europe de l'Ouest"
 
 #: ../share/extensions/svgcalendar.inx:120
 msgid "Windows - Central and Eastern Europe"
-msgstr ""
+msgstr "Windows - Europe centrale et de l'Est"
 
 #: ../share/extensions/svgcalendar.inx:121
-#, fuzzy
 msgid "Windows - Russian and more"
 msgstr "Windows - Russe et autres"
 
 #: ../share/extensions/svgcalendar.inx:122
-#, fuzzy
 msgid "Windows - Western Europe"
 msgstr "Windows - Europe de l'Ouest"
 
 #: ../share/extensions/svgcalendar.inx:123
-#, fuzzy
 msgid "Windows - Greek"
 msgstr "Windows - Grec"
 
 #: ../share/extensions/svgcalendar.inx:124
-#, fuzzy
 msgid "Windows - Turkish"
 msgstr "Windows - Turque"
 
 #: ../share/extensions/svgcalendar.inx:125
-#, fuzzy
 msgid "Windows - Hebrew"
-msgstr "Métafichier Windows"
+msgstr "Windows - Hébreu"
 
 #: ../share/extensions/svgcalendar.inx:126
-#, fuzzy
 msgid "Windows - Arabic"
-msgstr "Métafichier Windows"
+msgstr "Windows - Arabe"
 
 #: ../share/extensions/svgcalendar.inx:127
-#, fuzzy
 msgid "Windows - Baltic languages"
-msgstr "Métafichier Windows"
+msgstr "Windows - Langues baltes"
 
 #: ../share/extensions/svgcalendar.inx:128
-#, fuzzy
 msgid "Windows - Vietnamese"
-msgstr "Métafichier Windows"
+msgstr "Windows - Vietnamien"
 
 #: ../share/extensions/svgcalendar.inx:129
 msgid "UTF-32 - All languages"
@@ -41381,7 +41339,7 @@ msgstr ""
 
 #: ../share/extensions/svgfont2layers.inx:3
 msgid "Convert SVG Font to Glyph Layers"
-msgstr "Convertir la fonte SVG en un calque de glyphe"
+msgstr "Convertir la fonte SVG en calques de glyphes"
 
 #: ../share/extensions/svgfont2layers.inx:6
 msgid "Load only the first 30 glyphs (Recommended)"
@@ -41648,9 +41606,8 @@ msgstr ""
 "supportés."
 
 #: ../share/extensions/web_interactive_mockup.inx:3
-#, fuzzy
 msgid "Interactive Mockup"
-msgstr "_Interactivité"
+msgstr "Maquette web interactive"
 
 #: ../share/extensions/web_interactive_mockup.inx:8
 #: ../share/extensions/web_transmit_att.inx:9
@@ -41721,7 +41678,8 @@ msgstr "on element loaded"
 # File: ../share/extensions/web_interactive_mockup.inx, line: 22
 #: ../share/extensions/web_interactive_mockup.inx:22
 msgid "This effect adds interaction in a viewer like a web browser."
-msgstr ""
+msgstr "Cet effet ajoute de l'interactivité dans un visionneur "
+"comme un navigateur web."
 
 #
 # File: ../share/extensions/web_interactive_mockup.inx, line: 23
@@ -41729,13 +41687,12 @@ msgstr ""
 msgid ""
 "It creates a link effect by changing to viewbox from one position to another."
 msgstr ""
+"Il crée un effet de lien en changeant la vue d'une position à une autre."
 
 #: ../share/extensions/web_interactive_mockup.inx:24
-#, fuzzy
 msgid "When selecting object the last one is the one we jump to."
 msgstr ""
-"Lors d'un redimensionnement des objets, préserver la proportion des "
-"épaisseurs des contours"
+"Le saut s'effectue vers le dernier object de la sélection."
 
 #: ../share/extensions/web_interactive_mockup.inx:30
 #: ../share/extensions/web_set_att.inx:43
@@ -41937,7 +41894,6 @@ msgstr "Imposer la dimension :"
 
 #. i18n. Description duplicated in a fake value attribute in order to make it translatable
 #: ../share/extensions/webslicer_create_rect.inx:16
-#, fuzzy
 msgid "Force Dimension must be set as <width>x<height>"
 msgstr ""
 "La dimension imposée doit être définie sous la forme « <largeur>x<hauteur> »"
@@ -41971,7 +41927,7 @@ msgstr ""
 # File: ../share/extensions/webslicer_create_rect.inx, line: 11
 #: ../share/extensions/webslicer_create_rect.inx:25
 msgid "GIF"
-msgstr ""
+msgstr "GIF"
 
 #: ../share/extensions/webslicer_create_rect.inx:26
 msgid "GIF specific options"
@@ -41989,7 +41945,7 @@ msgstr "Taille de la palette :"
 # File: ../share/extensions/webslicer_create_rect.inx, line: 33
 #: ../share/extensions/webslicer_create_rect.inx:33
 msgid "HTML"
-msgstr ""
+msgstr "HTML"
 
 #: ../share/extensions/webslicer_create_rect.inx:36
 msgid "Options for HTML export"
@@ -42262,152 +42218,132 @@ msgid "Tutorials"
 msgstr "_Didacticiels"
 
 #: ../share/ui/units.xml:8
-#, fuzzy
 msgid "Percentage"
-msgstr "Pourcent"
+msgstr "Pourcentage"
 
 #: ../share/ui/units.xml:11
-#, fuzzy
 msgid "pixel"
-msgstr "pixels"
+msgstr "pixel"
 
 #
 # File: ../share/ui/units.xml, line: 15
 #: ../share/ui/units.xml:15
 msgid "CSS Pixels (96/inch)"
-msgstr ""
+msgstr "Pixels CSS (96/pouce)"
 
 #: ../share/ui/units.xml:18
-#, fuzzy
 msgid "point"
-msgstr "Point"
+msgstr "point"
 
 #: ../share/ui/units.xml:19
-#, fuzzy
 msgid "points"
-msgstr "Points"
+msgstr "points"
 
 #: ../share/ui/units.xml:22
-#, fuzzy
 msgid "PostScript points (72/inch)"
-msgstr "PostScript (*.ps)"
+msgstr "Points PostScript (72/pouce)"
 
 #
 # File: ../share/ui/units.xml, line: 25
 #: ../share/ui/units.xml:25
 msgid "pica"
-msgstr ""
+msgstr "pica"
 
 #: ../share/ui/units.xml:26
-#, fuzzy
 msgid "picas"
-msgstr "Unicasse"
+msgstr "picas"
 
 #: ../share/ui/units.xml:29
-#, fuzzy
 msgid "12 points"
-msgstr "Points DXF"
+msgstr "12 points"
 
 #
 # File: ../share/ui/units.xml, line: 32
 #: ../share/ui/units.xml:32
 msgid "inch"
-msgstr ""
+msgstr "pouce"
 
 #: ../share/ui/units.xml:33
-#, fuzzy
 msgid "inches"
-msgstr "Pouces"
+msgstr "pouces"
 
 #
 # File: ../share/ui/units.xml, line: 36
 #: ../share/ui/units.xml:36
 msgid "Inches (96 px/in)"
-msgstr ""
+msgstr "Pouces (96 px/in)"
 
 #: ../share/ui/units.xml:39
-#, fuzzy
 msgid "millimeter"
-msgstr "Millimètre"
+msgstr "millimètre"
 
 #: ../share/ui/units.xml:40
-#, fuzzy
 msgid "millimeters"
-msgstr "Millimètres"
+msgstr "millimètres"
 
 #: ../share/ui/units.xml:43
-#, fuzzy
 msgid "Millimeters (25.4 mm/in)"
-msgstr "Millimètres"
+msgstr "Millimètres (25.4 mm/in)"
 
 #: ../share/ui/units.xml:46
-#, fuzzy
 msgid "centimeter"
-msgstr "Centimètre"
+msgstr "centimètre"
 
 #: ../share/ui/units.xml:47
-#, fuzzy
 msgid "centimeters"
-msgstr "Centimètres"
+msgstr "centimètres"
 
 #: ../share/ui/units.xml:50
-#, fuzzy
 msgid "Centimeters (10 mm/cm)"
-msgstr "Centimètres"
+msgstr "Centimètres (10 mm/cm)"
 
 #: ../share/ui/units.xml:53
-#, fuzzy
 msgid "degree"
-msgstr "degrés"
+msgstr "degré"
 
 #: ../share/ui/units.xml:60
-#, fuzzy
 msgid "radian"
-msgstr "radial"
+msgstr "radian"
 
 #: ../share/ui/units.xml:61
-#, fuzzy
 msgid "radians"
-msgstr "radial"
+msgstr "radians"
 
 #
 # File: ../share/ui/units.xml, line: 64
 #: ../share/ui/units.xml:64
 msgid "Radians (180/pi deg/rad)"
-msgstr ""
+msgstr "Radians (180/pi deg/rad)"
 
 #: ../share/ui/units.xml:67
-#, fuzzy
 msgid "gradian"
-msgstr "radial"
+msgstr "grade"
 
 #: ../share/ui/units.xml:68
-#, fuzzy
 msgid "gradians"
-msgstr "radial"
+msgstr "grades"
 
 #
 # File: ../share/ui/units.xml, line: 71
 #: ../share/ui/units.xml:71
 msgid "Gradians (360/400 deg/grad)"
-msgstr ""
+msgstr "Grades (360/400 deg/grad)"
 
 #
 # File: ../share/ui/units.xml, line: 74
 #: ../share/ui/units.xml:74
 msgid "turn"
-msgstr ""
+msgstr "tour"
 
 #: ../share/ui/units.xml:75
-#, fuzzy
 msgid "turns"
-msgstr "Tours :"
+msgstr "tours"
 
 #
 # File: ../share/ui/units.xml, line: 78
 #: ../share/ui/units.xml:78
 msgid "Turns (360 deg/turn)"
-msgstr ""
+msgstr "Tours (360 deg/tour"
 
 #: ../share/ui/units.xml:81
 #, fuzzy
