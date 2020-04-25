@@ -41,9 +41,6 @@ enum FilterPrimitiveInput {
 extern const Inkscape::Util::EnumData<FilterPrimitiveInput> FPInputData[FPINPUT_END];
 extern const Inkscape::Util::EnumDataConverter<FilterPrimitiveInput> FPInputConverter;
 
-// Blend mode
-extern const Inkscape::Util::EnumData<Inkscape::Filters::FilterBlendMode> BlendModeData[Inkscape::Filters::BLEND_ENDMODE];
-extern const Inkscape::Util::EnumDataConverter<Inkscape::Filters::FilterBlendMode> BlendModeConverter;
 // ColorMatrix type
 extern const Inkscape::Util::EnumData<Inkscape::Filters::FilterColorMatrixType> ColorMatrixTypeData[Inkscape::Filters::COLORMATRIX_ENDTYPE];
 extern const Inkscape::Util::EnumDataConverter<Inkscape::Filters::FilterColorMatrixType> ColorMatrixTypeConverter;

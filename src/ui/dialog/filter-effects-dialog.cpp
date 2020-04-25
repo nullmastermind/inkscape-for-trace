@@ -62,6 +62,7 @@
 #include "svg/svg-color.h"
 
 #include "ui/dialog/filedialog.h"
+#include "ui/widget/filter-effect-chooser.h"
 #include "ui/widget/spinbutton.h"
 
 #include "io/sys.h"
@@ -2783,7 +2784,7 @@ void FilterEffectsDialog::init_settings_widgets()
     _filter_general_settings->add_multispinbutton(/*default width:*/ (double) 1.2, /*default height:*/ (double) 1.2, SP_ATTR_WIDTH, SP_ATTR_HEIGHT, _("Dimensions:"), 0, 1000, 0.01, 0.1, 2, _("Width of filter effects region"), _("Height of filter effects region"));
 
     _settings->type(NR_FILTER_BLEND);
-    _settings->add_combo(BLEND_NORMAL, SP_ATTR_MODE, _("Mode:"), BlendModeConverter);
+    _settings->add_combo(SP_CSS_BLEND_NORMAL, SP_ATTR_MODE, _("Mode:"), SPBlendModeConverter);
 
     _settings->type(NR_FILTER_COLORMATRIX);
     ComboBoxEnum<FilterColorMatrixType>* colmat = _settings->add_combo(COLORMATRIX_MATRIX, SP_ATTR_TYPE, _("Type:"), ColorMatrixTypeConverter, _("Indicates the type of matrix operation. The keyword 'matrix' indicates that a full 5x4 matrix of values will be provided. The other keywords represent convenience shortcuts to allow commonly used color operations to be performed without specifying a complete matrix."));

@@ -25,7 +25,7 @@ public:
 	SPFeBlend();
 	~SPFeBlend() override;
 
-    Inkscape::Filters::FilterBlendMode blend_mode;
+    SPBlendMode blend_mode;
     int in2;
 
 protected:

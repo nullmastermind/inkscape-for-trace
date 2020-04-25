@@ -23,7 +23,11 @@
 #include "spin-scale.h"
 #include "style-enums.h"
 
+using Inkscape::Util::EnumData;
+using Inkscape::Util::EnumDataConverter;
+
 namespace Inkscape {
+extern const Util::EnumDataConverter<SPBlendMode> SPBlendModeConverter;
 namespace UI {
 namespace Widget {
 
