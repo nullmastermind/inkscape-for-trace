@@ -28,7 +28,7 @@
 
 
 SPFeBlend::SPFeBlend()
-    : SPFilterPrimitive(), blend_mode(Inkscape::Filters::BLEND_NORMAL),
+    : SPFilterPrimitive(), blend_mode(SP_CSS_BLEND_NORMAL),
       in2(Inkscape::Filters::NR_FILTER_SLOT_NOT_SET)
 {
 }
@@ -65,73 +65,73 @@ void SPFeBlend::release() {
 	SPFilterPrimitive::release();
 }
 
-static Inkscape::Filters::FilterBlendMode sp_feBlend_readmode(gchar const *value) {
+static  SPBlendMode sp_feBlend_readmode(gchar const *value) {
     if (!value) {
-    	return Inkscape::Filters::BLEND_NORMAL;
+    	return SP_CSS_BLEND_NORMAL;
     }
 
     switch (value[0]) {
         case 'n':
             if (strncmp(value, "normal", 6) == 0)
-                return Inkscape::Filters::BLEND_NORMAL;
+                return SP_CSS_BLEND_NORMAL;
             break;
         case 'm':
             if (strncmp(value, "multiply", 8) == 0)
-                return Inkscape::Filters::BLEND_MULTIPLY;
+                return SP_CSS_BLEND_MULTIPLY;
             break;
         case 's':
             if (strncmp(value, "screen", 6) == 0)
-                return Inkscape::Filters::BLEND_SCREEN;
+                return SP_CSS_BLEND_SCREEN;
             if (strncmp(value, "saturation", 10) == 0)
-                return Inkscape::Filters::BLEND_SATURATION;
+                return SP_CSS_BLEND_SATURATION;
             break;
         case 'd':
             if (strncmp(value, "darken", 6) == 0)
-                return Inkscape::Filters::BLEND_DARKEN;
+                return SP_CSS_BLEND_DARKEN;
             if (strncmp(value, "difference", 10) == 0)
-                return Inkscape::Filters::BLEND_DIFFERENCE;
+                return SP_CSS_BLEND_DIFFERENCE;
             break;
         case 'l':
             if (strncmp(value, "lighten", 7) == 0)
-                return Inkscape::Filters::BLEND_LIGHTEN;
+                return SP_CSS_BLEND_LIGHTEN;
             if (strncmp(value, "luminosity", 10) == 0)
-                return Inkscape::Filters::BLEND_LUMINOSITY;
+                return SP_CSS_BLEND_LUMINOSITY;
             break;
         case 'o':
             if (strncmp(value, "overlay", 7) == 0)
-                return Inkscape::Filters::BLEND_OVERLAY;
+                return SP_CSS_BLEND_OVERLAY;
             break;
         case 'c':
             if (strncmp(value, "color-dodge", 11) == 0)
-                return Inkscape::Filters::BLEND_COLORDODGE;
+                return SP_CSS_BLEND_COLORDODGE;
             if (strncmp(value, "color-burn", 10) == 0)
-                return Inkscape::Filters::BLEND_COLORBURN;
+                return SP_CSS_BLEND_COLORBURN;
             if (strncmp(value, "color", 5) == 0)
-                return Inkscape::Filters::BLEND_COLOR;
+                return SP_CSS_BLEND_COLOR;
             break;
         case 'h':
             if (strncmp(value, "hard-light", 10) == 0)
-                return Inkscape::Filters::BLEND_HARDLIGHT;
+                return SP_CSS_BLEND_HARDLIGHT;
             if (strncmp(value, "hue", 3) == 0)
-                return Inkscape::Filters::BLEND_HUE;
+                return SP_CSS_BLEND_HUE;
             break;
         case 'e':
             if (strncmp(value, "exclusion", 10) == 0)
-                return Inkscape::Filters::BLEND_EXCLUSION;
+                return SP_CSS_BLEND_EXCLUSION;
         default:
-            std::cout << "Inkscape::Filters::FilterBlendMode: Unimplemented mode: " << value << std::endl;
+            std::cout << "SPBlendMode: Unimplemented mode: " << value << std::endl;
             // do nothing by default
             break;
     }
 
-    return Inkscape::Filters::BLEND_NORMAL;
+    return SP_CSS_BLEND_NORMAL;
 }
 
 /**
  * Sets a specific value in the SPFeBlend.
  */
 void SPFeBlend::set(SPAttributeEnum key, gchar const *value) {
-    Inkscape::Filters::FilterBlendMode mode;
+    SPBlendMode mode;
     int input;
 
     switch(key) {
@@ -220,38 +220,38 @@ Inkscape::XML::Node* SPFeBlend::write(Inkscape::XML::Document *doc, Inkscape::XM
 
     char const *mode;
     switch(this->blend_mode) {
-        case Inkscape::Filters::BLEND_NORMAL:
+        case SP_CSS_BLEND_NORMAL:
             mode = "normal";      break;
-        case Inkscape::Filters::BLEND_MULTIPLY:
+        case SP_CSS_BLEND_MULTIPLY:
             mode = "multiply";    break;
-        case Inkscape::Filters::BLEND_SCREEN:
+        case SP_CSS_BLEND_SCREEN:
             mode = "screen";      break;
-        case Inkscape::Filters::BLEND_DARKEN:
+        case SP_CSS_BLEND_DARKEN:
             mode = "darken";      break;
-        case Inkscape::Filters::BLEND_LIGHTEN:
+        case SP_CSS_BLEND_LIGHTEN:
             mode = "lighten";     break;
         // New
-        case Inkscape::Filters::BLEND_OVERLAY:
+        case SP_CSS_BLEND_OVERLAY:
             mode = "overlay";     break;
-        case Inkscape::Filters::BLEND_COLORDODGE:
+        case SP_CSS_BLEND_COLORDODGE:
             mode = "color-dodge"; break;
-        case Inkscape::Filters::BLEND_COLORBURN:
+        case SP_CSS_BLEND_COLORBURN:
             mode = "color-burn";  break;
-        case Inkscape::Filters::BLEND_HARDLIGHT:
+        case SP_CSS_BLEND_HARDLIGHT:
             mode = "hard-light";  break;
-        case Inkscape::Filters::BLEND_SOFTLIGHT:
+        case SP_CSS_BLEND_SOFTLIGHT:
             mode = "soft-light";  break;
-        case Inkscape::Filters::BLEND_DIFFERENCE:
+        case SP_CSS_BLEND_DIFFERENCE:
             mode = "difference";  break;
-        case Inkscape::Filters::BLEND_EXCLUSION:
+        case SP_CSS_BLEND_EXCLUSION:
             mode = "exclusion";   break;
-        case Inkscape::Filters::BLEND_HUE:
+        case SP_CSS_BLEND_HUE:
             mode = "hue";         break;
-        case Inkscape::Filters::BLEND_SATURATION:
+        case SP_CSS_BLEND_SATURATION:
             mode = "saturation";  break;
-        case Inkscape::Filters::BLEND_COLOR:
+        case SP_CSS_BLEND_COLOR:
             mode = "color";       break;
-        case Inkscape::Filters::BLEND_LUMINOSITY:
+        case SP_CSS_BLEND_LUMINOSITY:
             mode = "luminosity";  break;
         default:
             mode = nullptr;

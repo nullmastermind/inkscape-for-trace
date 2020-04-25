@@ -18,32 +18,11 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 #include <set>
-
+#include "style-enums.h"
 #include "display/nr-filter-primitive.h"
 
 namespace Inkscape {
 namespace Filters {
-
-enum FilterBlendMode {
-    BLEND_NORMAL,
-    BLEND_MULTIPLY,
-    BLEND_SCREEN,
-    BLEND_DARKEN,
-    BLEND_LIGHTEN,
-    // New in CSS Compositing and Blending Level 1
-    BLEND_OVERLAY,
-    BLEND_COLORDODGE,
-    BLEND_COLORBURN,
-    BLEND_HARDLIGHT,
-    BLEND_SOFTLIGHT,
-    BLEND_DIFFERENCE,
-    BLEND_EXCLUSION,
-    BLEND_HUE,
-    BLEND_SATURATION,
-    BLEND_COLOR,
-    BLEND_LUMINOSITY,
-    BLEND_ENDMODE,
-};
 
 class FilterBlend : public FilterPrimitive {
 public:
@@ -58,13 +37,13 @@ public:
 
     void set_input(int slot) override;
     void set_input(int input, int slot) override;
-    void set_mode(FilterBlendMode mode);
+    void set_mode(SPBlendMode mode);
 
     Glib::ustring name() override { return Glib::ustring("Blend"); }
 
 private:
-    static const std::set<FilterBlendMode> _valid_modes;
-    FilterBlendMode _blend_mode;
+    static const std::set<SPBlendMode> _valid_modes;
+    SPBlendMode _blend_mode;
     int _input2;
 };
 

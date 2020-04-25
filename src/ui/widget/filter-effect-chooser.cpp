@@ -15,11 +15,6 @@
 
 #include "document.h"
 
-
-using Inkscape::Util::EnumData;
-using Inkscape::Util::EnumDataConverter;
-
-
 namespace Inkscape {
 
 const EnumData<SPBlendMode> SPBlendModeData[SP_CSS_BLEND_ENDMODE] = {
@@ -41,12 +36,8 @@ const EnumData<SPBlendMode> SPBlendModeData[SP_CSS_BLEND_ENDMODE] = {
     { SP_CSS_BLEND_COLOR, _("Color"), "color" },
     { SP_CSS_BLEND_LUMINOSITY, _("Luminosity"), "luminosity" }
 };
-#ifdef WITH_CSSBLEND
 const EnumDataConverter<SPBlendMode> SPBlendModeConverter(SPBlendModeData, SP_CSS_BLEND_ENDMODE);
-#else
-// Disable new blend modes in GUI until widely implemented.
-const EnumDataConverter<SPBlendMode> SPBlendModeConverter(SPBlendModeData, SP_CSS_BLEND_LUMINOSITY);
-#endif
+
 
 namespace UI {
 namespace Widget {

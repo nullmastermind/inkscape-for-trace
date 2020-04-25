@@ -29,19 +29,19 @@
 namespace Inkscape {
 namespace Filters {
 
-const std::set<FilterBlendMode> FilterBlend::_valid_modes {
-        BLEND_NORMAL,      BLEND_MULTIPLY,
-        BLEND_SCREEN,      BLEND_DARKEN,
-        BLEND_LIGHTEN,     BLEND_OVERLAY,
-        BLEND_COLORDODGE,  BLEND_COLORBURN,
-        BLEND_HARDLIGHT,   BLEND_SOFTLIGHT,
-        BLEND_DIFFERENCE,  BLEND_EXCLUSION,
-        BLEND_HUE,         BLEND_SATURATION,
-        BLEND_COLOR,       BLEND_LUMINOSITY
+const std::set<SPBlendMode> FilterBlend::_valid_modes {
+        SP_CSS_BLEND_NORMAL,      SP_CSS_BLEND_MULTIPLY,
+        SP_CSS_BLEND_SCREEN,      SP_CSS_BLEND_DARKEN,
+        SP_CSS_BLEND_LIGHTEN,     SP_CSS_BLEND_OVERLAY,
+        SP_CSS_BLEND_COLORDODGE,  SP_CSS_BLEND_COLORBURN,
+        SP_CSS_BLEND_HARDLIGHT,   SP_CSS_BLEND_SOFTLIGHT,
+        SP_CSS_BLEND_DIFFERENCE,  SP_CSS_BLEND_EXCLUSION,
+        SP_CSS_BLEND_HUE,         SP_CSS_BLEND_SATURATION,
+        SP_CSS_BLEND_COLOR,       SP_CSS_BLEND_LUMINOSITY
         };
 
 FilterBlend::FilterBlend()
-    : _blend_mode(BLEND_NORMAL),
+    : _blend_mode(SP_CSS_BLEND_NORMAL),
       _input2(NR_FILTER_SLOT_NOT_SET)
 {}
 
@@ -52,42 +52,42 @@ FilterPrimitive * FilterBlend::create() {
 FilterBlend::~FilterBlend()
 = default;
 
-static inline cairo_operator_t get_cairo_op(FilterBlendMode _blend_mode)
+static inline cairo_operator_t get_cairo_op(SPBlendMode _blend_mode)
 {
     switch (_blend_mode) {
-    case BLEND_MULTIPLY:
+    case SP_CSS_BLEND_MULTIPLY:
         return CAIRO_OPERATOR_MULTIPLY;
-    case BLEND_SCREEN:
+    case SP_CSS_BLEND_SCREEN:
         return CAIRO_OPERATOR_SCREEN;
-    case BLEND_DARKEN:
+    case SP_CSS_BLEND_DARKEN:
         return CAIRO_OPERATOR_DARKEN;
-    case BLEND_LIGHTEN:
+    case SP_CSS_BLEND_LIGHTEN:
         return CAIRO_OPERATOR_LIGHTEN;
     // New in CSS Compositing and Blending Level 1
-    case BLEND_OVERLAY:
+    case SP_CSS_BLEND_OVERLAY:
         return CAIRO_OPERATOR_OVERLAY;
-    case BLEND_COLORDODGE:
+    case SP_CSS_BLEND_COLORDODGE:
         return CAIRO_OPERATOR_COLOR_DODGE;
-    case BLEND_COLORBURN:
+    case SP_CSS_BLEND_COLORBURN:
         return CAIRO_OPERATOR_COLOR_BURN;
-    case BLEND_HARDLIGHT:
+    case SP_CSS_BLEND_HARDLIGHT:
         return CAIRO_OPERATOR_HARD_LIGHT;
-    case BLEND_SOFTLIGHT:
+    case SP_CSS_BLEND_SOFTLIGHT:
         return CAIRO_OPERATOR_SOFT_LIGHT;
-    case BLEND_DIFFERENCE:
+    case SP_CSS_BLEND_DIFFERENCE:
         return CAIRO_OPERATOR_DIFFERENCE;
-    case BLEND_EXCLUSION:
+    case SP_CSS_BLEND_EXCLUSION:
         return CAIRO_OPERATOR_EXCLUSION;
-    case BLEND_HUE:
+    case SP_CSS_BLEND_HUE:
         return CAIRO_OPERATOR_HSL_HUE;
-    case BLEND_SATURATION:
+    case SP_CSS_BLEND_SATURATION:
         return CAIRO_OPERATOR_HSL_SATURATION;
-    case BLEND_COLOR:
+    case SP_CSS_BLEND_COLOR:
         return CAIRO_OPERATOR_HSL_COLOR;
-    case BLEND_LUMINOSITY:
+    case SP_CSS_BLEND_LUMINOSITY:
         return CAIRO_OPERATOR_HSL_LUMINOSITY;
 
-    case BLEND_NORMAL:
+    case SP_CSS_BLEND_NORMAL:
     default:
         return CAIRO_OPERATOR_OVER;
     }
@@ -155,7 +155,7 @@ void FilterBlend::set_input(int input, int slot) {
     if (input == 1) _input2 = slot;
 }
 
-void FilterBlend::set_mode(FilterBlendMode mode) {
+void FilterBlend::set_mode(SPBlendMode mode) {
     if (_valid_modes.count(mode))
     {
         _blend_mode = mode;

@@ -495,6 +495,9 @@ void remove_filter_gaussian_blur (SPObject *item)
  * be handled gracefully */
 void remove_filter_legacy_blend(SPObject *item)
 {
+    if (!item) {
+        return;
+    }
     if (item->style && item->style->filter.set && item->style->getFilter()) {
         // Search for the first blur primitive and remove it. (if found)
         size_t blurcount = 0;
@@ -517,7 +520,7 @@ void remove_filter_legacy_blend(SPObject *item)
             }
         }
         if (blend && total == 2 && blurcount == 1) {
-            sp_repr_unparent(blend->getRepr());
+            blend->deleteObject(true);
         } else if (total == 1) {
             remove_filter(item, false);
         }
@@ -531,6 +534,9 @@ void remove_filter_legacy_blend(SPObject *item)
 SPBlendMode filter_get_legacy_blend(SPObject *item)
 {
     auto blend = SP_CSS_BLEND_NORMAL;
+    if (!item) {
+        return blend;
+    }
     if (item->style && item->style->filter.set && item->style->getFilter()) {
         // Search for the first blur primitive and remove it. (if found)
         size_t blurcount = 0;
@@ -543,7 +549,7 @@ SPBlendMode filter_get_legacy_blend(SPObject *item)
                 SPFeBlend *spblend = dynamic_cast<SPFeBlend *>(primitive);
                 if (spblend) {
                     ++blendcount;
-                    blend = (SPBlendMode)spblend->blend_mode;
+                    blend = spblend->blend_mode;
                 }
                 SPGaussianBlur *spgausian = dynamic_cast<SPGaussianBlur *>(primitive);
                 if (spgausian) {
