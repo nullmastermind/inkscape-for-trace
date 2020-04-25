@@ -1008,14 +1008,79 @@ void SPText::_clearFlow(Inkscape::DrawingGroup *in_arena)
     in_arena->clearChildren();
 }
 
+
 /** Remove 'x' and 'y' values on children (lines) or they will be interpreted as absolute positions
  * when 'inline-size' is removed.
  */
 void SPText::remove_svg11_fallback() {
     for (auto& child:  children) {
-        std::cout << "Found child: " << child << std::endl;
         child.removeAttribute("x");
         child.removeAttribute("y");
+    }
+}
+
+/** Convert new lines in 'inline-size' text to tspans with sodipodi:role="tspan".
+ *  Note sodipodi:role="tspan" will be removed in the future!
+ */
+void SPText::newline_to_sodipodi() {
+
+    // New lines can come anywhere, we must search character-by-character.
+    auto it = layout.begin();
+    while (true) {
+        if (layout.characterAt(it) == '\n') {
+
+            // Delete newline ('\n').
+            iterator_pair pair;
+            auto it_end = it;
+            it_end.nextCharacter();
+            sp_te_delete (this, it, it_end, pair);
+            it = pair.first;
+
+            // Insert newline (sodipodi:role="line").
+            it = sp_te_insert_line(this, it);
+        }
+
+        it.nextCharacter();
+        layout.validateIterator(&it);
+
+        if (it == layout.end()) {
+            break;
+        }
+    }
+}
+
+/** Convert tspans with sodipodi:role="tspans" to '\n'.
+ *  Note sodipodi:role="tspan" will be removed in the future!
+ */
+void SPText::sodipodi_to_newline() {
+
+    // tspans with sodipodi:role="line" are only direct children of a <text> element.
+    for (auto child : childList(false)) {
+
+        auto tspan = dynamic_cast<SPTSpan *>(child);  // Could have <desc> or <title>.
+        if (tspan && tspan->role == SP_TSPAN_ROLE_LINE) {
+
+            // Remove sodipodi:role attribute.
+            tspan->removeAttribute("sodipodi:role");
+            tspan->updateRepr();
+
+            // Insert '/n' if not last line.
+            // This may screw up dx, dy, rotate but... SVG 2 text cannot have these values.
+            if (tspan != lastChild()) {
+                auto last_child = tspan->lastChild();
+                auto last_string = dynamic_cast<SPString *>(last_child);
+                if (last_string) {
+                    // Add '/n' to string.
+                    last_string->string += "\n";
+                    last_string->updateRepr();
+                } else {
+                    // Insert new string with '\n'.
+                    auto tspan_node = tspan->getRepr();
+                    auto xml_doc = tspan_node->document();
+                    tspan_node->appendChild(xml_doc->createTextNode("\n"));
+                }
+            }
+        }
     }
 }
 

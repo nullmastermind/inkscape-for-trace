@@ -63,10 +63,11 @@ void SPTSpan::build(SPDocument *doc, Inkscape::XML::Node *repr) {
     this->readAttr( "rotate" );
 
     // Strip sodipodi:role from SVG 2 flowed text.
-    SPText* text = dynamic_cast<SPText*>(parent);
-    //if (text && !(text->has_shape_inside() /*|| text->has_inline_size()*/)) {
+    // this->role = SP_TSPAN_ROLE_UNSPECIFIED;
+    SPText* text = dynamic_cast<SPText *>(parent);
+    if (text && !(text->has_shape_inside()|| text->has_inline_size())) {
         this->readAttr( "sodipodi:role" );
-        //}
+    }
 
     // We'll intercept "style" to strip "visibility" property (SVG 1.1 fallback for SVG 2 text) then pass it on.
     this->readAttr( "style" );

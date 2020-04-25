@@ -34,6 +34,7 @@
 #include "object/sp-star.h"
 #include "object/sp-text.h"
 #include "object/sp-textpath.h"
+#include "object/sp-tspan.h"
 
 class RectKnotHolder : public KnotHolder {
 public:
@@ -1770,6 +1771,7 @@ TextKnotHolderEntityInlineSize::knot_get() const
     return p;
 }
 
+// Conversion from Inkscape SVG 1.1 to SVG 2 'inline-size'.
 void
 TextKnotHolderEntityInlineSize::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, unsigned int state)
 {
@@ -1819,13 +1821,22 @@ TextKnotHolderEntityInlineSize::knot_set(Geom::Point const &p, Geom::Point const
         size = 0.0;
     }
 
+    // Set 'inline-size'.
     text->style->inline_size.setDouble(size);
     text->style->inline_size.set = true;
+
+    // Ensure we respect new lines.
+    text->style->white_space.read("pre");
+    text->style->white_space.set = true;
+
+    // Convert sodipodi:role="line" to '\n'.
+    text->sodipodi_to_newline();
 
     text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     text->updateRepr();
 }
 
+// Conversion from SVG 2 'inline-size' to Inkscape's SVG 1.1.
 void
 TextKnotHolderEntityInlineSize::knot_click(unsigned int state)
 {
@@ -1833,12 +1844,14 @@ TextKnotHolderEntityInlineSize::knot_click(unsigned int state)
     g_assert(text != nullptr);
 
     if (state & GDK_CONTROL_MASK) {
-        text->style->inline_size.clear();
-        text->remove_svg11_fallback();
-    }
 
-    text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-    text->updateRepr();
+        text->style->inline_size.clear();
+        text->remove_svg11_fallback();   // Else 'x' and 'y' will be interpreted as absolute positions.
+        text->newline_to_sodipodi();     // Convert '\n' to tspans with sodipodi:role="line".
+
+        text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+        text->updateRepr();
+    }
 }
 
 class TextKnotHolderEntityShapeInside : public KnotHolderEntity {
