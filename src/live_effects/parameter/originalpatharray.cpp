@@ -367,7 +367,7 @@ void OriginalPathArrayParam::remove_link(PathAndDirectionAndVisible* to)
 void OriginalPathArrayParam::linked_delete(SPObject */*deleted*/, PathAndDirectionAndVisible* /*to*/)
 {
     //remove_link(to);
-    
+
     param_write_to_repr(param_getSVGValue().c_str());
 }
 
@@ -407,6 +407,7 @@ void OriginalPathArrayParam::setPathVector(SPObject *linked_obj, guint /*flags*/
         return;
     }
     SPCurve *curve = nullptr;
+    SPText *text = dynamic_cast<SPText *>(linked_obj);
     if (SP_IS_SHAPE(linked_obj)) {
         SPLPEItem * lpe_item = SP_LPE_ITEM(linked_obj);
         if (_from_original_d) {
@@ -430,8 +431,22 @@ void OriginalPathArrayParam::setPathVector(SPObject *linked_obj, guint /*flags*/
         } else {
             curve = SP_SHAPE(linked_obj)->getCurve();
         }
-    } else  if (SP_IS_TEXT(linked_obj)) {
-        curve = SP_TEXT(linked_obj)->getNormalizedBpath();
+    } else if (text) {
+        bool hidden = text->isHidden();
+        if (hidden) {
+            if (to->_pathvector.empty()) {
+                text->setHidden(false);
+                curve = text->getNormalizedBpath();
+                text->setHidden(true);
+            } else {
+                if (curve == nullptr) {
+                    curve = new SPCurve();
+                }
+                curve->set_pathvector(to->_pathvector);
+            }
+        } else {
+            curve = text->getNormalizedBpath();
+        }
     }
 
     if (curve == nullptr) {

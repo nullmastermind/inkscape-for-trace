@@ -63,14 +63,6 @@ static const Util::EnumData<fill_typ> FillTypeData[] = {
 
 static const Util::EnumDataConverter<fill_typ> FillTypeConverter(FillTypeData, sizeof(FillTypeData) / sizeof(*FillTypeData));
 
-static const Util::EnumData<fill_typ> FillTypeDataThis[] = {
-    { fill_oddEven, N_("even-odd"), "oddeven" },
-    { fill_nonZero, N_("non-zero"), "nonzero" },
-    { fill_positive, N_("positive"), "positive" }
-};
-
-static const Util::EnumDataConverter<fill_typ> FillTypeConverterThis(FillTypeDataThis, sizeof(FillTypeDataThis) / sizeof(*FillTypeDataThis));
-
 LPEBool::LPEBool(LivePathEffectObject *lpeobject)
     : Effect(lpeobject)
     , operand_path(_("Operand path:"), _("Operand for the boolean operation"), "operand-path", &wr, this)
@@ -82,7 +74,7 @@ LPEBool::LPEBool(LivePathEffectObject *lpeobject)
           _("For cut operations: remove inner (non-contour) lines of cutting path to avoid invisible extra points"),
           "rmv-inner", &wr, this)
     , fill_type_this(_("Fill type this:"), _("Fill type (winding mode) for this path"), "filltype-this",
-                     FillTypeConverterThis, &wr, this, fill_oddEven)
+                     FillTypeConverter, &wr, this, fill_justDont)
     , fill_type_operand(_("Fill type operand:"), _("Fill type (winding mode) for operand path"), "filltype-operand",
                         FillTypeConverter, &wr, this, fill_justDont)
 {
@@ -381,9 +373,11 @@ void LPEBool::doBeforeEffect(SPLPEItem const *lpeitem)
         }
         operand = current_operand;
     }
-    if (operand) {
+    
+    if (operand && operand->isHidden() != hide_linked) {
         operand->setHidden(hide_linked);
     }
+
     if (operand && operand->parent && sp_lpe_item && sp_lpe_item->parent != operand->parent) {
         // TODO: reposition new operand on doOnRemove if keep_paths is false
         Inkscape::XML::Node *copy = operand->getRepr()->duplicate(xml_doc);
@@ -391,6 +385,12 @@ void LPEBool::doBeforeEffect(SPLPEItem const *lpeitem)
         Inkscape::GC::release(copy);
         operand->deleteObject();
         operand = relocated_operand;
+        if (!g_strcmp0(operand->getRepr()->attribute("sodipodi:type"), "inkscape:box3dside")) {
+            operand->getRepr()->removeAttribute("sodipodi:type");
+            if (operand->getRepr()->attribute("inkscape:box3dsidetype")) {
+                operand->getRepr()->removeAttribute("inkscape:box3dsidetype");
+            }
+        }
         Glib::ustring itemid = operand->getId();
         operand_path.linkitem(itemid);
     }
@@ -400,6 +400,11 @@ void LPEBool::transform_multiply(Geom::Affine const &postmul, bool /*set*/)
 {
     if (operand) {
         operand->transform *= sp_item_transform_repr(sp_lpe_item).inverse() * postmul;
+        if (is_visible) {
+            operand->setHidden(hide_linked);
+        } else {
+            operand->setHidden(false);
+        }
     }
 }
 
@@ -411,8 +416,7 @@ void LPEBool::doEffect(SPCurve *curve)
         operand_path.param_set_default();
         return;
     }
-
-    if (operand_path.linksToPath() && operand) {
+    if (operand_path.getObject() && operand_path.linksToPath() && operand) {
 
         bool_op_ex op = bool_operation.get_value();
         bool swap =  swap_operands.get_value();
@@ -421,22 +425,20 @@ void LPEBool::doEffect(SPCurve *curve)
         Geom::Affine operand_affine = sp_item_transform_repr(operand);
 
         Geom::PathVector operand_pv = operand_path.get_pathvector();
+        if (operand_pv.empty()) {
+            return;
+        }
         path_in *= current_affine;
         operand_pv *= operand_affine;
 
         Geom::PathVector path_a = swap ? path_in : operand_pv;
         Geom::PathVector path_b = swap ? operand_pv : path_in;
 
-        // TODO: I would like to use the original objects fill rule if the UI selected rule is fill_justDont.
-        // But it doesn't seem possible to access them from here, because SPCurve is not derived from SPItem.
-        // The nearest function in the call stack, where this is available is SPLPEItem::performPathEffect (this is then an SPItem)
-        // For the parameter curve, this is possible.
-        // fill_typ fill_this    = fill_type_this.   get_value()!=fill_justDont ? fill_type_this.get_value()    : GetFillTyp( curve ) ;
-        fill_typ fill_this    = fill_type_this.get_value();
+        fill_typ fill_this    = fill_type_this.get_value() != fill_justDont ? fill_type_this.get_value() : GetFillTyp(current_shape);
         fill_typ fill_operand = fill_type_operand.get_value() != fill_justDont ? fill_type_operand.get_value() : GetFillTyp(operand_path.getObject());
 
-        fill_typ fill_a = swap ? fill_operand : fill_this;
-        fill_typ fill_b = swap ? fill_this : fill_operand;
+        fill_typ fill_a = swap ? fill_this : fill_operand;
+        fill_typ fill_b = swap ? fill_operand : fill_this;
 
         if (rmv_inner.get_value()) {
             path_b = sp_pathvector_boolop_remove_inner(path_b, fill_b);
@@ -449,8 +451,8 @@ void LPEBool::doEffect(SPCurve *curve)
             Geom::PathVector path_out_2 = sp_pathvector_boolop(path_b, path_a, to_bool_op(bool_op_ex_diff), fill_b, fill_a);
             path_out.insert(path_out.end(), path_out_2.begin(), path_out_2.end());
         } else if (op == bool_op_ex_slice) {
-            // For slicing, the bool op is added to the line group which is sliced, not the cut path. This swapped order is correct            path_out = sp_pathvector_boolop(path_b, path_a, to_bool_op(op), fill_b, fill_a);
-        
+            // For slicing, the bool op is added to the line group which is sliced, not the cut path. This swapped order is correct            
+            path_out = sp_pathvector_boolop(path_b, path_a, to_bool_op(op), fill_b, fill_a);
         /*} else if (op == bool_op_ex_slice_inside) {
             path_out = sp_pathvector_boolop_slice_intersect(path_a, path_b, true, fill_a, fill_b);
         } else if (op == bool_op_ex_slice_outside) {

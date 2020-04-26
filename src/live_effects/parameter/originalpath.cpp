@@ -83,42 +83,6 @@ OriginalPathParam::param_newWidget()
 }
 
 void
-OriginalPathParam::linked_modified_callback(SPObject *linked_obj, guint /*flags*/)
-{
-    SPCurve *curve = nullptr;
-    if (SP_IS_SHAPE(linked_obj)) {
-        if (_from_original_d) {
-            curve = SP_SHAPE(linked_obj)->getCurveForEdit();
-        } else {
-            curve = SP_SHAPE(linked_obj)->getCurve();
-        }
-    }
-    if (SP_IS_TEXT(linked_obj)) {
-        curve = SP_TEXT(linked_obj)->getNormalizedBpath();
-    }
-
-    if (curve == nullptr) {
-        // curve invalid, set empty pathvector
-        _pathvector = Geom::PathVector();
-    } else {
-        _pathvector = curve->get_pathvector();
-        curve->unref();
-    }
-
-    must_recalculate_pwd2 = true;
-    emit_changed();
-    SP_OBJECT(param_effect->getLPEObj())->requestModified(SP_OBJECT_MODIFIED_FLAG);
-}
-
-void
-OriginalPathParam::linked_transformed_callback(Geom::Affine const * /*rel_transf*/, SPItem * /*moved_item*/)
-{
-/** \todo find good way to compensate for referenced path transform, like done for normal clones.
- *        See sp-use.cpp: sp_use_move_compensate */
-}
-
-
-void
 OriginalPathParam::on_select_original_button_click()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
