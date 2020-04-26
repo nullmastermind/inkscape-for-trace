@@ -472,8 +472,24 @@ PathParam::linked_modified_callback(SPObject *linked_obj, guint /*flags*/)
             curve = SP_SHAPE(linked_obj)->getCurve();
         }
     }
-    if (SP_IS_TEXT(linked_obj)) {
-        curve = SP_TEXT(linked_obj)->getNormalizedBpath();
+
+    SPText *text = dynamic_cast<SPText *>(linked_obj);
+    if (text) {
+        bool hidden = text->isHidden();
+        if (hidden) {
+            if (_pathvector.empty()) {
+                text->setHidden(false);
+                curve = text->getNormalizedBpath();
+                text->setHidden(true);
+            } else {
+                if (curve == nullptr) {
+                    curve = new SPCurve();
+                }
+                curve->set_pathvector(_pathvector);
+            }
+        } else {
+            curve = text->getNormalizedBpath();
+        }
     }
 
     if (curve == nullptr) {

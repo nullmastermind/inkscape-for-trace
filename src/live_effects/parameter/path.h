@@ -93,9 +93,8 @@ protected:
     void emit_changed();
 
     gchar * defvalue;
-
-private:
     bool _from_original_d;
+private:
     bool _edit_button;
     bool _copy_button;
     bool _paste_button;
