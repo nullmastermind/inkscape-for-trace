@@ -285,7 +285,6 @@ Inkscape::XML::Node *SPText::write(Inkscape::XML::Document *xml_doc, Inkscape::X
     }
 
     this->attributes.writeTo(repr);
-    this->rebuildLayout();  // copied from update(), see LP Bug 1339305
 
     SPItem::write(xml_doc, repr, flags);
 
