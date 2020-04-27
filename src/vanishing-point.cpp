@@ -111,12 +111,12 @@ static void vp_knot_moved_handler(SPKnot *knot, Geom::Point const &ppointer, gui
                 sel_boxes = sel_vp->selectedBoxes(SP_ACTIVE_DESKTOP->getSelection());
 
                 // we create a new perspective ...
-                Persp3D *new_persp = persp3d_create_xml_element(dragger->parent->document, old_persp->perspective_impl);
+                Persp3D *new_persp = Persp3D::create_xml_element(dragger->parent->document, old_persp->perspective_impl);
 
                 /* ... unlink the boxes from the old one and
                    FIXME: We need to unlink the _un_selected boxes of each VP so that
                           the correct boxes are kept with the VP being moved */
-                std::list<SPBox3D *> bx_lst = persp3d_list_of_boxes(old_persp);
+                std::list<SPBox3D *> bx_lst = old_persp->list_of_boxes();
                 for (auto & i : bx_lst) {
                     if (std::find(sel_boxes.begin(), sel_boxes.end(), i) == sel_boxes.end()) {
                         /* if a box in the VP is unselected, move it to the
@@ -425,7 +425,7 @@ guint VPDragger::numberOfBoxes()
 bool VPDragger::hasPerspective(const Persp3D *persp)
 {
     for (auto & vp : vps) {
-        if (persp3d_perspectives_coincide(persp, vp.get_perspective())) {
+        if (persp->perspectives_coincide(vp.get_perspective())) {
             return true;
         }
     }
@@ -443,9 +443,9 @@ void VPDragger::mergePerspectives()
                 /* don't merge a perspective with itself */
                 continue;
             }
-            if (persp3d_perspectives_coincide(persp1, persp2)) {
+            if (persp1->perspectives_coincide(persp2)) {
                 /* if perspectives coincide but are not the same, merge them */
-                persp3d_absorb(persp1, persp2);
+                persp1->absorb(persp2);
 
                 this->parent->swap_perspectives_of_VPs(persp2, persp1);
 
@@ -472,7 +472,7 @@ void VPDragger::updateVPs(Geom::Point const &pt)
 void VPDragger::updateZOrders()
 {
     for (auto & vp : this->vps) {
-        persp3d_update_z_orders(vp.get_perspective());
+        vp.get_perspective()->update_z_orders();
     }
 }
 
@@ -673,7 +673,7 @@ void VPDrag::drawLinesForFace(const SPBox3D *box,
     box3d_corners_for_PLs(box, axis, corners[0], corners[1], corners[2], corners[3]);
 
     g_return_if_fail(box3d_get_perspective(box));
-    Proj::Pt2 vp = persp3d_get_VP(box3d_get_perspective(box), axis);
+    Proj::Pt2 vp = box3d_get_perspective(box)->get_VP(axis);
     if (vp.is_finite()) {
         // draw perspective lines for finite VPs
         Geom::Point pt = vp.affine();

@@ -124,7 +124,7 @@ static void sp_box3d_context_ensure_persp_in_defs(SPDocument *document) {
     }
 
     if (!has_persp) {
-        document->setCurrentPersp3D(persp3d_create_xml_element (document));
+        document->setCurrentPersp3D(Persp3D::create_xml_element (document));
     }
 }
 
@@ -353,42 +353,42 @@ bool Box3dTool::root_handler(GdkEvent* event) {
             break;
 
         case GDK_KEY_bracketright:
-            persp3d_rotate_VP (document->getCurrentPersp3D(), Proj::X, 180 / snaps * y_dir, MOD__ALT(event));
+            document->getCurrentPersp3D()->rotate_VP (Proj::X, 180 / snaps * y_dir, MOD__ALT(event));
             DocumentUndo::done(document, SP_VERB_CONTEXT_3DBOX,
                              _("Change perspective (angle of PLs)"));
             ret = true;
             break;
 
         case GDK_KEY_bracketleft:
-            persp3d_rotate_VP (document->getCurrentPersp3D(), Proj::X, -180 / snaps * y_dir, MOD__ALT(event));
+            document->getCurrentPersp3D()->rotate_VP (Proj::X, -180 / snaps * y_dir, MOD__ALT(event));
             DocumentUndo::done(document, SP_VERB_CONTEXT_3DBOX,
                              _("Change perspective (angle of PLs)"));
             ret = true;
             break;
 
         case GDK_KEY_parenright:
-            persp3d_rotate_VP (document->getCurrentPersp3D(), Proj::Y, 180 / snaps * y_dir, MOD__ALT(event));
+            document->getCurrentPersp3D()->rotate_VP (Proj::Y, 180 / snaps * y_dir, MOD__ALT(event));
             DocumentUndo::done(document, SP_VERB_CONTEXT_3DBOX,
                              _("Change perspective (angle of PLs)"));
             ret = true;
             break;
 
         case GDK_KEY_parenleft:
-            persp3d_rotate_VP (document->getCurrentPersp3D(), Proj::Y, -180 / snaps * y_dir, MOD__ALT(event));
+            document->getCurrentPersp3D()->rotate_VP (Proj::Y, -180 / snaps * y_dir, MOD__ALT(event));
             DocumentUndo::done(document, SP_VERB_CONTEXT_3DBOX,
                              _("Change perspective (angle of PLs)"));
             ret = true;
             break;
 
         case GDK_KEY_braceright:
-            persp3d_rotate_VP (document->getCurrentPersp3D(), Proj::Z, 180 / snaps * y_dir, MOD__ALT(event));
+            document->getCurrentPersp3D()->rotate_VP (Proj::Z, 180 / snaps * y_dir, MOD__ALT(event));
             DocumentUndo::done(document, SP_VERB_CONTEXT_3DBOX,
                              _("Change perspective (angle of PLs)"));
             ret = true;
             break;
 
         case GDK_KEY_braceleft:
-            persp3d_rotate_VP (document->getCurrentPersp3D(), Proj::Z, -180 / snaps * y_dir, MOD__ALT(event));
+            document->getCurrentPersp3D()->rotate_VP (Proj::Z, -180 / snaps * y_dir, MOD__ALT(event));
             DocumentUndo::done(document, SP_VERB_CONTEXT_3DBOX,
                              _("Change perspective (angle of PLs)"));
             ret = true;
@@ -406,7 +406,7 @@ bool Box3dTool::root_handler(GdkEvent* event) {
         case GDK_KEY_P:
             if (MOD__SHIFT_ONLY(event)) {
                 if (document->getCurrentPersp3D()) {
-                    persp3d_print_debugging_info (document->getCurrentPersp3D());
+                    document->getCurrentPersp3D()->print_debugging_info();
                 }
                 ret = true;
             }
@@ -419,7 +419,7 @@ bool Box3dTool::root_handler(GdkEvent* event) {
                 ret = TRUE;
             }
             if (MOD__SHIFT_ONLY(event)) {
-                persp3d_toggle_VPs(selection->perspList(), Proj::X);
+                Persp3D::toggle_VPs(selection->perspList(), Proj::X);
                 this->_vpdrag->updateLines(); // FIXME: Shouldn't this be done automatically?
                 ret = true;
             }
@@ -428,7 +428,7 @@ bool Box3dTool::root_handler(GdkEvent* event) {
         case GDK_KEY_y:
         case GDK_KEY_Y:
             if (MOD__SHIFT_ONLY(event)) {
-                persp3d_toggle_VPs(selection->perspList(), Proj::Y);
+                Persp3D::toggle_VPs(selection->perspList(), Proj::Y);
                 this->_vpdrag->updateLines(); // FIXME: Shouldn't this be done automatically?
                 ret = true;
             }
@@ -437,7 +437,7 @@ bool Box3dTool::root_handler(GdkEvent* event) {
         case GDK_KEY_z:
         case GDK_KEY_Z:
             if (MOD__SHIFT_ONLY(event)) {
-                persp3d_toggle_VPs(selection->perspList(), Proj::Z);
+                Persp3D::toggle_VPs(selection->perspList(), Proj::Z);
                 this->_vpdrag->updateLines(); // FIXME: Shouldn't this be done automatically?
                 ret = true;
             }

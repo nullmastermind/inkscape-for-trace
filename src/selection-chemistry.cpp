@@ -1602,11 +1602,11 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
     for (auto & i : plist) {
         persp = (Persp3D *) i;
 
-        if (!persp3d_has_all_boxes_in_selection (persp, this)) {
+        if (!persp->has_all_boxes_in_selection (this)) {
             std::list<SPBox3D *> selboxes = box3DList(persp);
 
             // create a new perspective as a copy of the current one and link the selected boxes to it
-            transf_persp = persp3d_create_xml_element (persp->document, persp->perspective_impl);
+            transf_persp = Persp3D::create_xml_element (persp->document, persp->perspective_impl);
 
             for (auto & selboxe : selboxes)
                 box3d_switch_perspectives(selboxe, persp, transf_persp);
@@ -1614,7 +1614,7 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
             transf_persp = persp;
         }
 
-        persp3d_apply_affine_transformation(transf_persp, affine);
+        transf_persp->apply_affine_transformation(affine);
     }
     auto items_copy = items();
     for (auto l=items_copy.begin();l!=items_copy.end() ;++l) {

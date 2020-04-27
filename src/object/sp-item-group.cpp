@@ -820,7 +820,7 @@ void SPGroup::scaleChildItemsRec(Geom::Scale const &sc, Geom::Point const &p, bo
 
                         Persp3D *persp = dynamic_cast<Persp3D *>(item);
                         if (persp) {
-                            persp3d_apply_affine_transformation(persp, final);
+                            persp->apply_affine_transformation(final);
                         } else if (is_text_path && !item->transform.isIdentity()) {
                             // Save and reset current transform
                             Geom::Affine tmp(item->transform);

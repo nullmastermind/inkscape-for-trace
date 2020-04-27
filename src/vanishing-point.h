@@ -63,11 +63,11 @@ public:
     void set_pos(Proj::Pt2 const &pt);
     inline bool is_finite() const {
         g_return_val_if_fail (_persp, false);
-        return persp3d_get_VP (_persp, _axis).is_finite();
+        return _persp->get_VP (_axis).is_finite();
     }
     inline Geom::Point get_pos() const {
         g_return_val_if_fail (_persp, Geom::Point (Geom::infinity(), Geom::infinity()));
-        return persp3d_get_VP (_persp,_axis).affine();
+        return _persp->get_VP (_axis).affine();
     }
     inline Persp3D * get_perspective() const {
         return _persp;
@@ -77,10 +77,10 @@ public:
     }
 
     inline bool hasBox (SPBox3D *box) {
-        return persp3d_has_box(_persp, box);
+        return _persp->has_box(box);
     }
     inline unsigned int numberOfBoxes() const {
-        return persp3d_num_boxes(_persp);
+        return _persp->num_boxes();
     }
 
     /* returns all selected boxes sharing this perspective */
@@ -88,11 +88,11 @@ public:
 
     inline void updateBoxDisplays() const {
         g_return_if_fail (_persp);
-        persp3d_update_box_displays(_persp);
+        _persp->update_box_displays();
     }
     inline void updateBoxReprs() const {
         g_return_if_fail (_persp);
-        persp3d_update_box_reprs(_persp);
+        _persp->update_box_reprs();
     }
     inline void updatePerspRepr() const {
         g_return_if_fail (_persp);
@@ -100,7 +100,7 @@ public:
     }
     inline void printPt() const {
         g_return_if_fail (_persp);
-        persp3d_get_VP (_persp, _axis).print("");
+        _persp->get_VP (_axis).print("");
     }
     inline char const *axisString () { return Proj::string_from_axis(_axis); }
 

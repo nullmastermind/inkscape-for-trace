@@ -236,7 +236,7 @@ Persp3D *SPDocument::getCurrentPersp3D() {
     }
 
     // If not, return the first perspective in defs (which may be NULL of none exists)
-    current_persp3d = persp3d_document_first_persp (this);
+    current_persp3d = Persp3D::document_first_persp (this);
 
     return current_persp3d;
 }
@@ -258,9 +258,9 @@ void SPDocument::getPerspectivesInDefs(std::vector<Persp3D*> &list) const
 /**
 void SPDocument::initialize_current_persp3d()
 {
-    this->current_persp3d = persp3d_document_first_persp(this);
+    this->current_persp3d = Persp3D::document_first_persp(this);
     if (!this->current_persp3d) {
-        this->current_persp3d = persp3d_create_xml_element(this);
+        this->current_persp3d = Persp3D::create_xml_element(this);
     }
 }
 **/
@@ -414,9 +414,9 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
 
     // Check if the document already has a perspective (e.g., when opening an existing
     // document). If not, create a new one and set it as the current perspective.
-    document->setCurrentPersp3D(persp3d_document_first_persp(document));
+    document->setCurrentPersp3D(Persp3D::document_first_persp(document));
     if (!document->getCurrentPersp3D()) {
-        //document->setCurrentPersp3D(persp3d_create_xml_element (document));
+        //document->setCurrentPersp3D(Persp3D::create_xml_element (document));
         Persp3DImpl *persp_impl = new Persp3DImpl();
         document->setCurrentPersp3DImpl(persp_impl);
     }

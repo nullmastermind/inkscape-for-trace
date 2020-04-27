@@ -14,13 +14,13 @@
 
 namespace Box3D {
 
-PerspectiveLine::PerspectiveLine (Geom::Point const &pt, Proj::Axis const axis, Persp3D *persp) :
-        Line (pt, persp3d_get_VP(persp, axis).affine(), true)
+PerspectiveLine::PerspectiveLine (Geom::Point const &pt, Proj::Axis const axis, Persp3D const *persp) :
+        Line (pt, persp->get_VP(axis).affine(), true)
 {
     g_assert (persp != nullptr);
 
-    if (!persp3d_get_VP(persp, axis).is_finite()) {
-        Proj::Pt2 vp(persp3d_get_VP(persp, axis));
+    if (!persp->get_VP(axis).is_finite()) {
+        Proj::Pt2 vp(persp->get_VP(axis));
         this->set_direction(Geom::Point(vp[Proj::X], vp[Proj::Y]));
     }
     this->vp_dir = axis;

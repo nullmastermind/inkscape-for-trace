@@ -85,7 +85,7 @@ Box3DToolbar::Box3DToolbar(SPDesktop *desktop)
         add(*_angle_x_item);
     }
 
-    if (!persp_impl || !persp3d_VP_is_finite(persp_impl, Proj::X)) {
+    if (!persp_impl || !Persp3D::VP_is_finite(persp_impl, Proj::X)) {
         _angle_x_item->set_sensitive(true);
     } else {
         _angle_x_item->set_sensitive(false);
@@ -117,7 +117,7 @@ Box3DToolbar::Box3DToolbar(SPDesktop *desktop)
         add(*_angle_y_item);
     }
 
-    if (!persp_impl || !persp3d_VP_is_finite(persp_impl, Proj::Y)) {
+    if (!persp_impl || !Persp3D::VP_is_finite(persp_impl, Proj::Y)) {
         _angle_y_item->set_sensitive(true);
     } else {
         _angle_y_item->set_sensitive(false);
@@ -149,7 +149,7 @@ Box3DToolbar::Box3DToolbar(SPDesktop *desktop)
         add(*_angle_z_item);
     }
 
-    if (!persp_impl || !persp3d_VP_is_finite(persp_impl, Proj::Z)) {
+    if (!persp_impl || !Persp3D::VP_is_finite(persp_impl, Proj::Z)) {
         _angle_z_item->set_sensitive(true);
     } else {
         _angle_z_item->set_sensitive(false);
@@ -237,7 +237,7 @@ Box3DToolbar::vp_state_changed(Proj::Axis axis)
     }
 
     bool set_infinite = btn->get_active();
-    persp3d_set_VP_state (persp, axis, set_infinite ? Proj::VP_INFINITE : Proj::VP_FINITE);
+    persp->set_VP_state (axis, set_infinite ? Proj::VP_INFINITE : Proj::VP_FINITE);
 }
 
 void
@@ -293,7 +293,7 @@ Box3DToolbar::selection_changed(Inkscape::Selection *selection)
             _repr->addListener(&box3d_persp_tb_repr_events, this);
             _repr->synthesizeEvents(&box3d_persp_tb_repr_events, this);
 
-            selection->document()->setCurrentPersp3D(persp3d_get_from_repr(_repr));
+            selection->document()->setCurrentPersp3D(Persp3D::get_from_repr(_repr));
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
             prefs->setString("/tools/shapes/3dbox/persp", _repr->attribute("id"));
 
@@ -312,7 +312,7 @@ Box3DToolbar::resync_toolbar(Inkscape::XML::Node *persp_repr)
         return;
     }
 
-    Persp3D *persp = persp3d_get_from_repr(persp_repr);
+    Persp3D *persp = Persp3D::get_from_repr(persp_repr);
     if (!persp) {
         // Hmm, is it an error if this happens?
         return;
@@ -341,13 +341,13 @@ Box3DToolbar::set_button_and_adjustment(Persp3D                        *persp,
     // TODO: Take all selected perspectives into account but don't touch the state button if not all of them
     //       have the same state (otherwise a call to box3d_vp_z_state_changed() is triggered and the states
     //       are reset).
-    bool is_infinite = !persp3d_VP_is_finite(persp->perspective_impl, axis);
+    bool is_infinite = !Persp3D::VP_is_finite(persp->perspective_impl, axis);
 
     if (is_infinite) {
         toggle_btn->set_active(true);
         spin_btn->set_sensitive(true);
 
-        double angle = persp3d_get_infinite_angle(persp, axis);
+        double angle = persp->get_infinite_angle(axis);
         if (angle != Geom::infinity()) { // FIXME: We should catch this error earlier (don't show the spinbutton at all)
             adj->set_value(normalize_angle(angle));
         }
@@ -381,8 +381,8 @@ Box3DToolbar::event_attr_changed(Inkscape::XML::Node *repr,
         toolbar->resync_toolbar(repr);
 //    }
 
-    Persp3D *persp = persp3d_get_from_repr(repr);
-    persp3d_update_box_reprs(persp);
+    Persp3D *persp = Persp3D::get_from_repr(repr);
+    persp->update_box_reprs();
 
     toolbar->_freeze = false;
 }
