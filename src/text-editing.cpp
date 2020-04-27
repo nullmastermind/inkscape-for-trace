@@ -57,10 +57,6 @@ Inkscape::Text::Layout const * te_get_layout (SPItem const *item)
 
 static void te_update_layout_now (SPItem *item)
 {
-    if (SP_IS_TEXT(item))
-        SP_TEXT(item)->rebuildLayout();
-    else if (SP_IS_FLOWTEXT (item))
-        SP_FLOWTEXT(item)->rebuildLayout();
     item->updateRepr();
 }
 
@@ -501,7 +497,6 @@ Inkscape::Text::Layout::iterator sp_te_insert_line (SPItem *item, Inkscape::Text
         // I think the only case to put here is arbitrary gaps, which nobody uses yet
     }
 
-    item->updateRepr();
     unsigned char_index = layout->iteratorToCharIndex(position);
     te_update_layout_now(item);
     item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
@@ -630,7 +625,6 @@ sp_te_insert(SPItem *item, Inkscape::Text::Layout::iterator const &position, gch
         }
     }
 
-    item->updateRepr();
     unsigned char_index = layout->iteratorToCharIndex(position);
     te_update_layout_now(item);
     item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
