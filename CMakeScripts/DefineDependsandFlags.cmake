@@ -55,6 +55,22 @@ if(WITH_PROFILING)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pg")
 endif()
 
+include(CheckCXXSourceCompiles)
+CHECK_CXX_SOURCE_COMPILES("
+#include <atomic>
+#include <cstdint>
+std::atomic<uint64_t> x (0);
+int main() {
+  uint64_t i = x.load(std::memory_order_relaxed);
+  return 0;
+}
+"
+LIBATOMIC_NOT_NEEDED)
+IF (NOT LIBATOMIC_NOT_NEEDED)
+    message(STATUS "  Adding -latomic to the libs.")
+    list(APPEND INKSCAPE_LIBS "-latomic")
+ENDIF()
+
 
 # ----------------------------------------------------------------------------
 # Helper macros
