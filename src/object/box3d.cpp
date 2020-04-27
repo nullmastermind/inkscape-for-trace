@@ -86,7 +86,7 @@ void SPBox3D::release() {
     }
 
     // We have to store this here because the Persp3DReference gets destroyed below, but we need to
-    // access it to call persp3d_remove_box(), which cannot be called earlier because the reference
+    // access it to call Persp3D::remove_box(), which cannot be called earlier because the reference
     // needs to be destroyed first.
     Persp3D *persp = box3d_get_perspective(box);
 
@@ -97,7 +97,7 @@ void SPBox3D::release() {
     }
 
     if (persp) {
-        persp3d_remove_box (persp, box);
+        persp->remove_box (box);
         /*
         // TODO: This deletes a perspective when the last box referring to it is gone. Eventually,
         // it would be nice to have this but currently it crashes when undoing/redoing box deletion
@@ -107,7 +107,7 @@ void SPBox3D::release() {
         if (persp->perspective_impl->boxes.empty()) {
             SPDocument *doc = box->document;
             persp->deleteObject();
-            doc->setCurrentPersp3D(persp3d_document_first_persp(doc));
+            doc->setCurrentPersp3D(Persp3D::document_first_persp(doc));
         }
         */
     }
@@ -177,13 +177,13 @@ box3d_ref_changed(SPObject *old_ref, SPObject *ref, SPBox3D *box)
         sp_signal_disconnect_by_data(old_ref, box);
         Persp3D *oldPersp = dynamic_cast<Persp3D *>(old_ref);
         if (oldPersp) {
-            persp3d_remove_box(oldPersp, box);
+            oldPersp->remove_box(box);
         }
     }
     Persp3D *persp = dynamic_cast<Persp3D *>(ref);
     if ( persp && (ref != box) ) // FIXME: Comparisons sane?
     {
-        persp3d_add_box(persp, box);
+        persp->add_box(box);
     }
 }
 
@@ -721,7 +721,7 @@ box3d_set_new_z_orders_case0 (SPBox3D *box, int z_orders[6], Box3D::Axis central
 static void
 box3d_set_new_z_orders_case1 (SPBox3D *box, int z_orders[6], Box3D::Axis central_axis, Box3D::Axis fin_axis) {
     Persp3D *persp = box3d_get_perspective(box);
-    Geom::Point vp(persp3d_get_VP(persp, Box3D::toProj(fin_axis)).affine());
+    Geom::Point vp(persp->get_VP(Box3D::toProj(fin_axis)).affine());
 
     // note: in some of the case distinctions below we rely upon the fact that oaxis1 and oaxis2 are ordered
     Box3D::Axis oaxis1 = Box3D::get_remaining_axes(fin_axis).first;
@@ -931,8 +931,8 @@ box3d_recompute_z_orders (SPBox3D *box) {
     Box3D::Axis axis_infinite = Box3D::NONE;
     Geom::Point dirs[3];
     for (int i = 0; i < 3; ++i) {
-        dirs[i] = persp3d_get_PL_dir_from_pt(persp, c3, Box3D::toProj(Box3D::axes[i]));
-        if (persp3d_VP_is_finite(persp->perspective_impl, Proj::axes[i])) {
+        dirs[i] = persp->get_PL_dir_from_pt(c3, Box3D::toProj(Box3D::axes[i]));
+        if (Persp3D::VP_is_finite(persp->perspective_impl, Proj::axes[i])) {
             num_finite++;
             axis_finite = Box3D::axes[i];
         } else {
@@ -971,9 +971,9 @@ box3d_recompute_z_orders (SPBox3D *box) {
          */
         // FIXME: We should eliminate the use of Geom::Point altogether
         Box3D::Axis central_axis = Box3D::NONE;
-        Geom::Point vp_x = persp3d_get_VP(persp, Proj::X).affine();
-        Geom::Point vp_y = persp3d_get_VP(persp, Proj::Y).affine();
-        Geom::Point vp_z = persp3d_get_VP(persp, Proj::Z).affine();
+        Geom::Point vp_x = persp->get_VP(Proj::X).affine();
+        Geom::Point vp_y = persp->get_VP(Proj::Y).affine();
+        Geom::Point vp_z = persp->get_VP(Proj::Z).affine();
         Geom::Point vpx(vp_x[Geom::X], vp_x[Geom::Y]);
         Geom::Point vpy(vp_y[Geom::X], vp_y[Geom::Y]);
         Geom::Point vpz(vp_z[Geom::X], vp_z[Geom::Y]);
@@ -1121,8 +1121,8 @@ box3d_pt_lies_in_PL_sector (SPBox3D const *box, Geom::Point const &pt, int id1, 
     Geom::Point c2(box3d_get_corner_screen(box, id2, false));
 
     int ret = 0;
-    if (persp3d_VP_is_finite(persp->perspective_impl, Box3D::toProj(axis))) {
-        Geom::Point vp(persp3d_get_VP(persp, Box3D::toProj(axis)).affine());
+    if (Persp3D::VP_is_finite(persp->perspective_impl, Box3D::toProj(axis))) {
+        Geom::Point vp(persp->get_VP(Box3D::toProj(axis)).affine());
         Geom::Point v1(c1 - vp);
         Geom::Point v2(c2 - vp);
         Geom::Point w(pt - vp);
@@ -1148,10 +1148,10 @@ int
 box3d_VP_lies_in_PL_sector (SPBox3D const *box, Proj::Axis vpdir, int id1, int id2, Box3D::Axis axis) {
     Persp3D *persp = box3d_get_perspective(box);
 
-    if (!persp3d_VP_is_finite(persp->perspective_impl, vpdir)) {
+    if (!Persp3D::VP_is_finite(persp->perspective_impl, vpdir)) {
         return 0;
     } else {
-        return box3d_pt_lies_in_PL_sector(box, persp3d_get_VP(persp, vpdir).affine(), id1, id2, axis);
+        return box3d_pt_lies_in_PL_sector(box, persp->get_VP(vpdir).affine(), id1, id2, axis);
     }
 }
 
@@ -1248,8 +1248,8 @@ box3d_switch_perspectives(SPBox3D *box, Persp3D *old_persp, Persp3D *new_persp, 
         box->orig_corner7 = new_persp->perspective_impl->tmat.preimage(corner7_screen, z7, Proj::Z);
     }
 
-    persp3d_remove_box (old_persp, box);
-    persp3d_add_box (new_persp, box);
+    old_persp->remove_box (box);
+    new_persp->add_box (box);
 
     Glib::ustring href = "#";
     href += new_persp->getId();

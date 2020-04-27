@@ -27,11 +27,11 @@ public:
      * PL runs through it; otherwise it has the direction specified by the v_dir vector
      * of the VP.
      */
-    PerspectiveLine (Geom::Point const &pt, Proj::Axis const axis, Persp3D *persp);
+    PerspectiveLine (Geom::Point const &pt, Proj::Axis const axis, Persp3D const *persp);
 
 private:
     Proj::Axis vp_dir; // direction of the associated VP
-    Persp3D *persp;
+    Persp3D const *persp;
 };
 
 

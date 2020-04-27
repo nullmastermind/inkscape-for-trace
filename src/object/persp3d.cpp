@@ -195,7 +195,8 @@ void Persp3D::update(SPCtx *ctx, guint flags) {
     SPObject::update(ctx, flags);
 }
 
-Persp3D *persp3d_create_xml_element(SPDocument *document, Persp3DImpl *dup) {// if dup is given, copy the attributes over
+Persp3D *
+Persp3D::create_xml_element(SPDocument *document, Persp3DImpl *dup) {// if dup is given, copy the attributes over
     SPDefs *defs = document->getDefs();
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     Inkscape::XML::Node *repr;
@@ -246,7 +247,8 @@ Persp3D *persp3d_create_xml_element(SPDocument *document, Persp3DImpl *dup) {// 
     return reinterpret_cast<Persp3D *>( defs->get_child_by_repr(repr) );
 }
 
-Persp3D *persp3d_document_first_persp(SPDocument *document)
+Persp3D *
+Persp3D::document_first_persp(SPDocument *document)
 {
     Persp3D *first = nullptr;
     for (auto& child: document->getDefs()->children) {
@@ -305,24 +307,25 @@ Inkscape::XML::Node* Persp3D::write(Inkscape::XML::Document *xml_doc, Inkscape::
     return repr;
 }
 
-/* convenience wrapper around persp3d_get_finite_dir() and persp3d_get_infinite_dir() */
-Geom::Point persp3d_get_PL_dir_from_pt (Persp3D *persp, Geom::Point const &pt, Proj::Axis axis) {
-    if (persp3d_VP_is_finite(persp->perspective_impl, axis)) {
-        return persp3d_get_finite_dir(persp, pt, axis);
+/* convenience wrapper around Persp3D::get_finite_dir() and Persp3D::get_infinite_dir() */
+Geom::Point
+Persp3D::get_PL_dir_from_pt (Geom::Point const &pt, Proj::Axis axis) const {
+    if (Persp3D::VP_is_finite(this->perspective_impl, axis)) {
+        return this->get_finite_dir(pt, axis);
     } else {
-        return persp3d_get_infinite_dir(persp, axis);
+        return this->get_infinite_dir(axis);
     }
 }
 
 Geom::Point
-persp3d_get_finite_dir (Persp3D *persp, Geom::Point const &pt, Proj::Axis axis) {
-    Box3D::PerspectiveLine pl(pt, axis, persp);
+Persp3D::get_finite_dir (Geom::Point const &pt, Proj::Axis axis) const {
+    Box3D::PerspectiveLine pl(pt, axis, this);
     return pl.direction();
 }
 
 Geom::Point
-persp3d_get_infinite_dir (Persp3D *persp, Proj::Axis axis) {
-    Proj::Pt2 vp(persp3d_get_VP(persp, axis));
+Persp3D::get_infinite_dir (Proj::Axis axis) const {
+    Proj::Pt2 vp(this->get_VP(axis));
     if (vp[2] != 0.0) {
         g_print ("VP should be infinite but is (%f : %f : %f)\n", vp[0], vp[1], vp[2]);
         g_return_val_if_fail(vp[2] != 0.0, Geom::Point(0.0, 0.0));
@@ -331,23 +334,23 @@ persp3d_get_infinite_dir (Persp3D *persp, Proj::Axis axis) {
 }
 
 double
-persp3d_get_infinite_angle (Persp3D *persp, Proj::Axis axis) {
-    return persp->perspective_impl->tmat.get_infinite_angle(axis);
+Persp3D::get_infinite_angle (Proj::Axis axis) const {
+    return this->perspective_impl->tmat.get_infinite_angle(axis);
 }
 
 bool
-persp3d_VP_is_finite (Persp3DImpl *persp_impl, Proj::Axis axis) {
+Persp3D::VP_is_finite (Persp3DImpl *persp_impl, Proj::Axis axis) {
     return persp_impl->tmat.has_finite_image(axis);
 }
 
 void
-persp3d_toggle_VP (Persp3D *persp, Proj::Axis axis, bool set_undo) {
-    persp->perspective_impl->tmat.toggle_finite(axis);
+Persp3D::toggle_VP (Proj::Axis axis, bool set_undo) {
+    this->perspective_impl->tmat.toggle_finite(axis);
     // FIXME: Remove this repr update and rely on vp_drag_sel_modified() to do this for us
     //        On the other hand, vp_drag_sel_modified() would update all boxes;
     //        here we can confine ourselves to the boxes of this particular perspective.
-    persp3d_update_box_reprs (persp);
-    persp->updateRepr(SP_OBJECT_WRITE_EXT);
+    this->update_box_reprs();
+    this->updateRepr(SP_OBJECT_WRITE_EXT);
     if (set_undo) {
         DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), SP_VERB_CONTEXT_3DBOX,
                            _("Toggle vanishing point"));
@@ -356,48 +359,48 @@ persp3d_toggle_VP (Persp3D *persp, Proj::Axis axis, bool set_undo) {
 
 /* toggle VPs for the same axis in all perspectives of a given list */
 void
-persp3d_toggle_VPs (std::list<Persp3D *> p, Proj::Axis axis) {
-    for (auto & i : p) {
-        persp3d_toggle_VP(i, axis, false);
+Persp3D::toggle_VPs (std::list<Persp3D *> list, Proj::Axis axis) {
+    for (Persp3D *persp : list) {
+        persp->toggle_VP(axis, false);
     }
     DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), SP_VERB_CONTEXT_3DBOX,
                        _("Toggle multiple vanishing points"));
 }
 
 void
-persp3d_set_VP_state (Persp3D *persp, Proj::Axis axis, Proj::VPState state) {
-    if (persp3d_VP_is_finite(persp->perspective_impl, axis) != (state == Proj::VP_FINITE)) {
-        persp3d_toggle_VP(persp, axis);
+Persp3D::set_VP_state (Proj::Axis axis, Proj::VPState state) {
+    if (Persp3D::VP_is_finite(this->perspective_impl, axis) != (state == Proj::VP_FINITE)) {
+        this->toggle_VP(axis);
     }
 }
 
 void
-persp3d_rotate_VP (Persp3D *persp, Proj::Axis axis, double angle, bool alt_pressed) { // angle is in degrees
+Persp3D::rotate_VP (Proj::Axis axis, double angle, bool alt_pressed) { // angle is in degrees
     // FIXME: Most of this functionality should be moved to trans_mat_3x4.(h|cpp)
-    if (persp->perspective_impl->tmat.has_finite_image(axis)) {
+    if (this->perspective_impl->tmat.has_finite_image(axis)) {
         // don't rotate anything for finite VPs
         return;
     }
-    Proj::Pt2 v_dir_proj (persp->perspective_impl->tmat.column(axis));
+    Proj::Pt2 v_dir_proj (this->perspective_impl->tmat.column(axis));
     Geom::Point v_dir (v_dir_proj[0], v_dir_proj[1]);
     double a = Geom::atan2 (v_dir) * 180/M_PI;
     a += alt_pressed ? 0.5 * ((angle > 0 ) - (angle < 0)) : angle; // the r.h.s. yields +/-0.5 or angle
-    persp->perspective_impl->tmat.set_infinite_direction (axis, a);
+    this->perspective_impl->tmat.set_infinite_direction (axis, a);
 
-    persp3d_update_box_reprs (persp);
-    persp->updateRepr(SP_OBJECT_WRITE_EXT);
+    this->update_box_reprs ();
+    this->updateRepr(SP_OBJECT_WRITE_EXT);
 }
 
 void
-persp3d_apply_affine_transformation (Persp3D *persp, Geom::Affine const &xform) {
-    persp->perspective_impl->tmat *= xform;
-    persp3d_update_box_reprs(persp);
-    persp->updateRepr(SP_OBJECT_WRITE_EXT);
+Persp3D::apply_affine_transformation (Geom::Affine const &xform) {
+    this->perspective_impl->tmat *= xform;
+    this->update_box_reprs();
+    this->updateRepr(SP_OBJECT_WRITE_EXT);
 }
 
 void
-persp3d_add_box (Persp3D *persp, SPBox3D *box) {
-    Persp3DImpl *persp_impl = persp->perspective_impl;
+Persp3D::add_box (SPBox3D *box) {
+    Persp3DImpl *persp_impl = this->perspective_impl;
 
     if (!box) {
         return;
@@ -409,8 +412,8 @@ persp3d_add_box (Persp3D *persp, SPBox3D *box) {
 }
 
 void
-persp3d_remove_box (Persp3D *persp, SPBox3D *box) {
-    Persp3DImpl *persp_impl = persp->perspective_impl;
+Persp3D::remove_box (SPBox3D *box) {
+    Persp3DImpl *persp_impl = this->perspective_impl;
 
     std::vector<SPBox3D *>::iterator i = std::find (persp_impl->boxes.begin(), persp_impl->boxes.end(), box);
     if (i != persp_impl->boxes.end())
@@ -418,8 +421,8 @@ persp3d_remove_box (Persp3D *persp, SPBox3D *box) {
 }
 
 bool
-persp3d_has_box (Persp3D *persp, SPBox3D *box) {
-    Persp3DImpl *persp_impl = persp->perspective_impl;
+Persp3D::has_box (SPBox3D *box) const {
+    Persp3DImpl *persp_impl = this->perspective_impl;
 
     // FIXME: For some reason, std::find() does not seem to compare pointers "correctly" (or do we need to
     //        provide a proper comparison function?), so we manually traverse the list.
@@ -432,8 +435,8 @@ persp3d_has_box (Persp3D *persp, SPBox3D *box) {
 }
 
 void
-persp3d_update_box_displays (Persp3D *persp) {
-    Persp3DImpl *persp_impl = persp->perspective_impl;
+Persp3D::update_box_displays () {
+    Persp3DImpl *persp_impl = this->perspective_impl;
 
     if (persp_impl->boxes.empty())
         return;
@@ -443,12 +446,12 @@ persp3d_update_box_displays (Persp3D *persp) {
 }
 
 void
-persp3d_update_box_reprs (Persp3D *persp) {
-    if (!persp) {
+Persp3D::update_box_reprs () {
+    if (!this) {
         // Hmm, is it an error if this happens?
         return;
     }
-    Persp3DImpl *persp_impl = persp->perspective_impl;
+    Persp3DImpl *persp_impl = this->perspective_impl;
 
     if (persp_impl->boxes.empty())
         return;
@@ -459,8 +462,8 @@ persp3d_update_box_reprs (Persp3D *persp) {
 }
 
 void
-persp3d_update_z_orders (Persp3D *persp) {
-    Persp3DImpl *persp_impl = persp->perspective_impl;
+Persp3D::update_z_orders () {
+    Persp3DImpl *persp_impl = this->perspective_impl;
 
     if (persp_impl->boxes.empty())
         return;
@@ -473,8 +476,8 @@ persp3d_update_z_orders (Persp3D *persp) {
 //        we need a list of boxes. If we can store a list in Persp3D right from the start, this function becomes
 //        obsolete. We should do this.
 std::list<SPBox3D *>
-persp3d_list_of_boxes(Persp3D *persp) {
-    Persp3DImpl *persp_impl = persp->perspective_impl;
+Persp3D::list_of_boxes() const {
+    Persp3DImpl *persp_impl = this->perspective_impl;
 
     std::list<SPBox3D *> bx_lst;
     for (auto & boxe : persp_impl->boxes) {
@@ -484,22 +487,22 @@ persp3d_list_of_boxes(Persp3D *persp) {
 }
 
 bool
-persp3d_perspectives_coincide(const Persp3D *lhs, const Persp3D *rhs)
+Persp3D::perspectives_coincide(const Persp3D *other) const
 {
-    return lhs->perspective_impl->tmat == rhs->perspective_impl->tmat;
+    return this->perspective_impl->tmat == other->perspective_impl->tmat;
 }
 
 void
-persp3d_absorb(Persp3D *persp1, Persp3D *persp2) {
+Persp3D::absorb(Persp3D *other) {
     /* double check if we are called in sane situations */
-    g_return_if_fail (persp3d_perspectives_coincide(persp1, persp2) && persp1 != persp2);
+    g_return_if_fail (this->perspectives_coincide(other) && this != other);
 
-    // Note: We first need to copy the boxes of persp2 into a separate list;
+    // Note: We first need to copy the boxes of other into a separate list;
     //       otherwise the loop below gets confused when perspectives are reattached.
-    std::list<SPBox3D *> boxes_of_persp2 = persp3d_list_of_boxes(persp2);
+    std::list<SPBox3D *> boxes_of_persp2 = other->list_of_boxes();
 
     for (auto & i : boxes_of_persp2) {
-        box3d_switch_perspectives(i, persp2, persp1, true);
+        box3d_switch_perspectives(i, other, this, true);
         i->updateRepr(SP_OBJECT_WRITE_EXT); // so that undo/redo can do its job properly
     }
 }
@@ -516,13 +519,13 @@ persp3d_on_repr_attr_changed ( Inkscape::XML::Node * /*repr*/,
         return;
 
     Persp3D *persp = (Persp3D*) data;
-    persp3d_update_box_displays (persp);
+    persp->update_box_displays ();
 }
 
 /* checks whether all boxes linked to this perspective are currently selected */
 bool
-persp3d_has_all_boxes_in_selection (Persp3D *persp, Inkscape::ObjectSet *set) {
-    Persp3DImpl *persp_impl = persp->perspective_impl;
+Persp3D::has_all_boxes_in_selection (Inkscape::ObjectSet *set) const {
+    Persp3DImpl *persp_impl = this->perspective_impl;
 
     std::list<SPBox3D *> selboxes = set->box3DList();
 
@@ -538,16 +541,16 @@ persp3d_has_all_boxes_in_selection (Persp3D *persp, Inkscape::ObjectSet *set) {
 /* some debugging stuff follows */
 
 void
-persp3d_print_debugging_info (Persp3D *persp) {
-    Persp3DImpl *persp_impl = persp->perspective_impl;
+Persp3D::print_debugging_info () const {
+    Persp3DImpl *persp_impl = this->perspective_impl;
     g_print ("=== Info for Persp3D %d ===\n", persp_impl->my_counter);
     gchar * cstr;
     for (auto & axe : Proj::axes) {
-        cstr = persp3d_get_VP(persp, axe).coord_string();
+        cstr = this->get_VP(axe).coord_string();
         g_print ("  VP %s:   %s\n", Proj::string_from_axis(axe), cstr);
         g_free(cstr);
     }
-    cstr = persp3d_get_VP(persp, Proj::W).coord_string();
+    cstr = this->get_VP(Proj::W).coord_string();
     g_print ("  Origin: %s\n", cstr);
     g_free(cstr);
 
@@ -559,18 +562,19 @@ persp3d_print_debugging_info (Persp3D *persp) {
     g_print ("========================\n");
 }
 
-void persp3d_print_debugging_info_all(SPDocument *document)
+void
+Persp3D::print_debugging_info_all(SPDocument *document)
 {
     for (auto& child: document->getDefs()->children) {
         if (SP_IS_PERSP3D(&child)) {
-            persp3d_print_debugging_info(SP_PERSP3D(&child));
+            SP_PERSP3D(&child)->print_debugging_info();
         }
     }
-    persp3d_print_all_selected();
+    Persp3D::print_all_selected();
 }
 
 void
-persp3d_print_all_selected() {
+Persp3D::print_all_selected() {
     g_print ("\n======================================\n");
     g_print ("Selected perspectives and their boxes:\n");
 
