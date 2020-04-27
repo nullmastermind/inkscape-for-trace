@@ -146,6 +146,12 @@ SelectTool::~SelectTool() {
         g_object_unref(CursorSelectMouseover);
         CursorSelectMouseover = nullptr;
     }
+
+    if (item) {
+        sp_object_unref(item);
+        item = nullptr;
+    }
+
     this->desktop->canvas->endForcedFullRedraws();
 }
 
