@@ -738,15 +738,17 @@ bool SelectTool::root_handler(GdkEvent* event) {
                     } else { // it was just a click, or a too small rubberband
                         r->stop();
 
-                        if (this->button_press_shift && !rb_escaped && !drag_escaped) {
-                            // this was a shift+click or alt+shift+click, select what was clicked upon
-                            this->button_press_shift = false;
+                        bool shift_release = (event->button.state & GDK_SHIFT_MASK) ? true : false;
+                        bool ctrl_release = (event->button.state & GDK_CONTROL_MASK) ? true : false;
+                        bool alt_release = (event->button.state & GDK_MOD1_MASK) ? true : false;
 
-                            if (this->button_press_ctrl) {
+                        if (shift_release && !rb_escaped && !drag_escaped) {
+                            // this was a shift+click or alt+shift+click, select what was clicked upon
+
+                            if (ctrl_release) {
                                 // go into groups, honoring Alt
                                 item = sp_event_context_find_item (desktop,
                                                    Geom::Point(event->button.x, event->button.y), event->button.state & GDK_MOD1_MASK, TRUE);
-                                this->button_press_ctrl = FALSE;
                             } else {
                                 // don't go into groups, honoring Alt
                                 item = sp_event_context_find_item (desktop,
@@ -758,12 +760,9 @@ bool SelectTool::root_handler(GdkEvent* event) {
                                 item = nullptr;
                             }
 
-                        } else if ((this->button_press_ctrl || this->button_press_alt) && !rb_escaped && !drag_escaped) { // ctrl+click, alt+click
+                        } else if ((ctrl_release || alt_release) && !rb_escaped && !drag_escaped) { // ctrl+click, alt+click
                             item = sp_event_context_find_item (desktop,
-                                         Geom::Point(event->button.x, event->button.y), this->button_press_alt, this->button_press_ctrl);
-
-                            this->button_press_ctrl = FALSE;
-                            this->button_press_alt = FALSE;
+                                         Geom::Point(event->button.x, event->button.y), alt_release, ctrl_release);
 
                             if (item) {
                                 if (selection->includes(item)) {
@@ -777,7 +776,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
                             }
                         } else { // click without shift, simply deselect, unless with Alt or something was cancelled
                             if (!selection->isEmpty()) {
-                                if (!(rb_escaped) && !(drag_escaped) && !(event->button.state & GDK_MOD1_MASK)) {
+                                if (!(rb_escaped) && !(drag_escaped) && !(alt_release)) {
                                     selection->clear();
                                 }
 
