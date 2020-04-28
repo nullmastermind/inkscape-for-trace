@@ -29,7 +29,7 @@
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <cc:license
-           rdf:resource="http://creativecommons.org/licenses/by-nc-nd/2.5/" />
+           rdf:resource="http://creativecommons.org/licenses/by-nd/2.5/" />
         <dc:title>Mechanical Clock</dc:title>
         <dc:date>7 January 2007</dc:date>
         <dc:creator>
@@ -52,7 +52,7 @@
         </dc:subject>
       </cc:Work>
       <cc:License
-         rdf:about="http://creativecommons.org/licenses/by-nc-nd/2.5/">
+         rdf:about="http://creativecommons.org/licenses/by-nd/2.5/">
         <cc:permits
            rdf:resource="http://web.resource.org/cc/Reproduction" />
         <cc:permits
@@ -61,8 +61,6 @@
            rdf:resource="http://web.resource.org/cc/Notice" />
         <cc:requires
            rdf:resource="http://web.resource.org/cc/Attribution" />
-        <cc:prohibits
-           rdf:resource="http://web.resource.org/cc/CommercialUse" />
       </cc:License>
     </rdf:RDF>
   </metadata>
