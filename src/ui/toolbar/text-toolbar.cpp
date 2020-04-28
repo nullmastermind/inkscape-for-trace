@@ -232,7 +232,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
     {
         // Font list
         Inkscape::FontLister* fontlister = Inkscape::FontLister::get_instance();
-        fontlister->update_font_list( SP_ACTIVE_DESKTOP->getDocument());
+        fontlister->update_font_list(desktop->getDocument());
         Glib::RefPtr<Gtk::ListStore> store = fontlister->get_font_list();
         GtkListStore* model = store->gobj();
 
@@ -644,7 +644,7 @@ void TextToolbar::text_outer_set_style(SPCSSAttr *css)
     // Calling sp_desktop_set_style will result in a call to TextTool::_styleSet() which
     // will set the style on selected text inside the <text> element. If we want to set
     // the style on the outer <text> objects we need to bypass this call.
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    SPDesktop *desktop = _desktop;
     if(_outer) {
         // Apply css to parent text objects directly.
         for (auto i : desktop->getSelection()->items()) {
@@ -720,7 +720,7 @@ TextToolbar::fontfamily_value_changed()
         SPCSSAttr *css = sp_repr_css_attr_new ();
         fontlister->fill_css( css );
 
-        SPDesktop   *desktop    = SP_ACTIVE_DESKTOP;
+        SPDesktop   *desktop    = _desktop;
         if( desktop->getSelection()->isEmpty() ) {
             // Update default
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -801,16 +801,16 @@ TextToolbar::fontsize_value_changed()
         _freeze = true;
     }
     // If no selected objects, set default.
-    SPStyle query(SP_ACTIVE_DOCUMENT);
+    SPStyle query(_desktop->getDocument());
     int result_numbers =
-        sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTNUMBERS);
+        sp_desktop_query_style (_desktop, &query, QUERY_STYLE_PROPERTY_FONTNUMBERS);
     if (result_numbers == QUERY_STYLE_NOTHING)
     {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->mergeStyle("/tools/text/style", css);
     } else {
         // Save for undo
-        DocumentUndo::maybeDone(SP_ACTIVE_DESKTOP->getDocument(), "ttb:size", SP_VERB_NONE,
+        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:size", SP_VERB_NONE,
                              _("Text: Change font size"));
     }
 
@@ -840,14 +840,14 @@ TextToolbar::fontstyle_value_changed()
         SPCSSAttr *css = sp_repr_css_attr_new ();
         fontlister->fill_css( css );
 
-        SPDesktop   *desktop    = SP_ACTIVE_DESKTOP;
+        SPDesktop   *desktop    = _desktop;
         sp_desktop_set_style (desktop, css, true, true);
 
 
         // If no selected objects, set default.
-        SPStyle query(SP_ACTIVE_DOCUMENT);
+        SPStyle query(_desktop->getDocument());
         int result_style =
-            sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTSTYLE);
+            sp_desktop_query_style (desktop, &query, QUERY_STYLE_PROPERTY_FONTSTYLE);
         if (result_style == QUERY_STYLE_NOTHING) {
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
             prefs->mergeStyle("/tools/text/style", css);
@@ -884,8 +884,8 @@ TextToolbar::script_changed(Gtk::ToggleToolButton *btn)
 #endif
 
     // Query baseline
-    SPStyle query(SP_ACTIVE_DOCUMENT);
-    int result_baseline = sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_BASELINES);
+    SPStyle query(_desktop->getDocument());
+    int result_baseline = sp_desktop_query_style (_desktop, &query, QUERY_STYLE_PROPERTY_BASELINES);
 
     bool setSuper = false;
     bool setSub   = false;
@@ -932,12 +932,12 @@ TextToolbar::script_changed(Gtk::ToggleToolButton *btn)
     }
 
     // Apply css to selected objects.
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    SPDesktop *desktop = _desktop;
     sp_desktop_set_style (desktop, css, true, false);
 
     // Save for undo
     if(result_baseline != QUERY_STYLE_NOTHING) {
-        DocumentUndo::maybeDone(SP_ACTIVE_DESKTOP->getDocument(), "ttb:script", SP_VERB_NONE,
+        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:script", SP_VERB_NONE,
                              _("Text: Change superscript or subscript"));
     }
     _freeze = false;
@@ -955,7 +955,7 @@ TextToolbar::align_mode_changed(int mode)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setInt("/tools/text/align_mode", mode);
 
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    SPDesktop *desktop = _desktop;
 
     // move the x of all texts to preserve the same bbox
     Inkscape::Selection *selection = desktop->getSelection();
@@ -1067,9 +1067,9 @@ TextToolbar::align_mode_changed(int mode)
         }
     }
 
-    SPStyle query(SP_ACTIVE_DOCUMENT);
+    SPStyle query(_desktop->getDocument());
     int result_numbers =
-        sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTNUMBERS);
+        sp_desktop_query_style (_desktop, &query, QUERY_STYLE_PROPERTY_FONTNUMBERS);
 
     // If querying returned nothing, update default style.
     if (result_numbers == QUERY_STYLE_NOTHING)
@@ -1081,12 +1081,12 @@ TextToolbar::align_mode_changed(int mode)
     sp_desktop_set_style (desktop, css, true, true);
     if (result_numbers != QUERY_STYLE_NOTHING)
     {
-        DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), SP_VERB_CONTEXT_TEXT,
+        DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
                        _("Text: Change alignment"));
     }
     sp_repr_css_attr_unref (css);
 
-    gtk_widget_grab_focus (GTK_WIDGET(SP_ACTIVE_DESKTOP->canvas));
+    gtk_widget_grab_focus (GTK_WIDGET(_desktop->canvas));
 
     _freeze = false;
 }
@@ -1122,9 +1122,9 @@ TextToolbar::writing_mode_changed(int mode)
             }
     }
 
-    SPStyle query(SP_ACTIVE_DOCUMENT);
+    SPStyle query(_desktop->getDocument());
     int result_numbers =
-        sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_WRITINGMODES);
+        sp_desktop_query_style (_desktop, &query, QUERY_STYLE_PROPERTY_WRITINGMODES);
 
     // If querying returned nothing, update default style.
     if (result_numbers == QUERY_STYLE_NOTHING)
@@ -1133,15 +1133,15 @@ TextToolbar::writing_mode_changed(int mode)
         prefs->mergeStyle("/tools/text/style", css);
     }
 
-    sp_desktop_set_style (SP_ACTIVE_DESKTOP, css, true, true);
+    sp_desktop_set_style (_desktop, css, true, true);
     if(result_numbers != QUERY_STYLE_NOTHING)
     {
-        DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), SP_VERB_CONTEXT_TEXT,
+        DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
                        _("Text: Change writing mode"));
     }
     sp_repr_css_attr_unref (css);
 
-    gtk_widget_grab_focus (GTK_WIDGET(SP_ACTIVE_DESKTOP->canvas));
+    gtk_widget_grab_focus (GTK_WIDGET(_desktop->canvas));
 
     _freeze = false;
 }
@@ -1177,9 +1177,9 @@ TextToolbar::orientation_changed(int mode)
         }
     }
 
-    SPStyle query(SP_ACTIVE_DOCUMENT);
+    SPStyle query(_desktop->getDocument());
     int result_numbers =
-        sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_WRITINGMODES);
+        sp_desktop_query_style (_desktop, &query, QUERY_STYLE_PROPERTY_WRITINGMODES);
 
     // If querying returned nothing, update default style.
     if (result_numbers == QUERY_STYLE_NOTHING)
@@ -1188,15 +1188,15 @@ TextToolbar::orientation_changed(int mode)
         prefs->mergeStyle("/tools/text/style", css);
     }
 
-    sp_desktop_set_style (SP_ACTIVE_DESKTOP, css, true, true);
+    sp_desktop_set_style (_desktop, css, true, true);
     if(result_numbers != QUERY_STYLE_NOTHING)
     {
-        DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), SP_VERB_CONTEXT_TEXT,
+        DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
                        _("Text: Change orientation"));
     }
     sp_repr_css_attr_unref (css);
 
-    gtk_widget_grab_focus (GTK_WIDGET(SP_ACTIVE_DESKTOP->canvas));
+    gtk_widget_grab_focus (GTK_WIDGET(_desktop->canvas));
 
     _freeze = false;
 }
@@ -1226,9 +1226,9 @@ TextToolbar::direction_changed(int mode)
         }
     }
 
-    SPStyle query(SP_ACTIVE_DOCUMENT);
+    SPStyle query(_desktop->getDocument());
     int result_numbers =
-        sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_WRITINGMODES);
+        sp_desktop_query_style (_desktop, &query, QUERY_STYLE_PROPERTY_WRITINGMODES);
 
     // If querying returned nothing, update default style.
     if (result_numbers == QUERY_STYLE_NOTHING)
@@ -1237,15 +1237,15 @@ TextToolbar::direction_changed(int mode)
         prefs->mergeStyle("/tools/text/style", css);
     }
 
-    sp_desktop_set_style (SP_ACTIVE_DESKTOP, css, true, true);
+    sp_desktop_set_style (_desktop, css, true, true);
     if(result_numbers != QUERY_STYLE_NOTHING)
     {
-        DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), SP_VERB_CONTEXT_TEXT,
+        DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
                        _("Text: Change direction"));
     }
     sp_repr_css_attr_unref (css);
 
-    gtk_widget_grab_focus (GTK_WIDGET(SP_ACTIVE_DESKTOP->canvas));
+    gtk_widget_grab_focus (GTK_WIDGET(_desktop->canvas));
 
     _freeze = false;
 }
@@ -1258,7 +1258,7 @@ TextToolbar::lineheight_value_changed()
         return;
     }
     _freeze = true;
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    SPDesktop *desktop = _desktop;
     // Get user selected unit and save as preference
     Unit const *unit = _tracker->getActiveUnit();
     // @Tav same disabled unit
@@ -1345,7 +1345,7 @@ TextToolbar::lineheight_value_changed()
     }
 
     // If no selected objects, set default.
-    SPStyle query(SP_ACTIVE_DOCUMENT);
+    SPStyle query(_desktop->getDocument());
     int result_numbers = sp_desktop_query_style(desktop, &query, QUERY_STYLE_PROPERTY_FONTNUMBERS);
     if (result_numbers == QUERY_STYLE_NOTHING)
     {
@@ -1388,7 +1388,7 @@ TextToolbar::lineheight_unit_changed(int /* Not Used */)
 
     // Read current line height value
     double line_height = _line_height_adj->get_value();
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    SPDesktop *desktop = _desktop;
     Inkscape::Selection *selection = desktop->getSelection();
     auto itemlist = selection->items();
 
@@ -1559,14 +1559,14 @@ TextToolbar::lineheight_unit_changed(int /* Not Used */)
         if (_outer) {
             prepare_inner();
         }
-        DocumentUndo::maybeDone(SP_ACTIVE_DESKTOP->getDocument(), "ttb:line-height", SP_VERB_NONE,
+        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:line-height", SP_VERB_NONE,
                              _("Text: Change line-height unit"));
     }
 
     // If no selected objects, set default.
-    SPStyle query(SP_ACTIVE_DOCUMENT);
+    SPStyle query(_desktop->getDocument());
     int result_numbers =
-        sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTNUMBERS);
+        sp_desktop_query_style (_desktop, &query, QUERY_STYLE_PROPERTY_FONTNUMBERS);
     if (result_numbers == QUERY_STYLE_NOTHING)
     {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -1591,7 +1591,7 @@ void TextToolbar::fontsize_unit_changed(int /* Not Used */)
     temp_size_stream << 1 << unit->abbr;
     temp_size.read(temp_size_stream.str().c_str());
     prefs->setInt("/options/font/unitType", temp_size.unit);
-    selection_changed(SP_ACTIVE_DESKTOP->selection);
+    selection_changed(_desktop->selection);
 }
 
 void
@@ -1612,16 +1612,16 @@ TextToolbar::wordspacing_value_changed()
     text_outer_set_style(css);
 
     // If no selected objects, set default.
-    SPStyle query(SP_ACTIVE_DOCUMENT);
+    SPStyle query(_desktop->getDocument());
     int result_numbers =
-        sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTNUMBERS);
+        sp_desktop_query_style (_desktop, &query, QUERY_STYLE_PROPERTY_FONTNUMBERS);
     if (result_numbers == QUERY_STYLE_NOTHING)
     {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->mergeStyle("/tools/text/style", css);
     } else {
         // Save for undo
-        DocumentUndo::maybeDone(SP_ACTIVE_DESKTOP->getDocument(), "ttb:word-spacing", SP_VERB_NONE,
+        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:word-spacing", SP_VERB_NONE,
                              _("Text: Change word-spacing"));
     }
 
@@ -1648,9 +1648,9 @@ TextToolbar::letterspacing_value_changed()
     text_outer_set_style(css);
 
     // If no selected objects, set default.
-    SPStyle query(SP_ACTIVE_DOCUMENT);
+    SPStyle query(_desktop->getDocument());
     int result_numbers =
-        sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTNUMBERS);
+        sp_desktop_query_style (_desktop, &query, QUERY_STYLE_PROPERTY_FONTNUMBERS);
     if (result_numbers == QUERY_STYLE_NOTHING)
     {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -1659,7 +1659,7 @@ TextToolbar::letterspacing_value_changed()
     else
     {
         // Save for undo
-        DocumentUndo::maybeDone(SP_ACTIVE_DESKTOP->getDocument(), "ttb:letter-spacing", SP_VERB_NONE,
+        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:letter-spacing", SP_VERB_NONE,
                              _("Text: Change letter-spacing"));
     }
 
@@ -1680,8 +1680,8 @@ TextToolbar::dx_value_changed()
     gdouble new_dx = _dx_adj->get_value();
     bool modmade = false;
 
-    if( SP_IS_TEXT_CONTEXT((SP_ACTIVE_DESKTOP)->event_context) ) {
-        Inkscape::UI::Tools::TextTool *const tc = SP_TEXT_CONTEXT((SP_ACTIVE_DESKTOP)->event_context);
+    if( SP_IS_TEXT_CONTEXT(_desktop->event_context) ) {
+        Inkscape::UI::Tools::TextTool *const tc = SP_TEXT_CONTEXT(_desktop->event_context);
         if( tc ) {
             unsigned char_index = -1;
             TextTagAttributes *attributes =
@@ -1689,7 +1689,7 @@ TextToolbar::dx_value_changed()
             if( attributes ) {
                 double old_dx = attributes->getDx( char_index );
                 double delta_dx = new_dx - old_dx;
-                sp_te_adjust_dx( tc->text, tc->text_sel_start, tc->text_sel_end, SP_ACTIVE_DESKTOP, delta_dx );
+                sp_te_adjust_dx( tc->text, tc->text_sel_start, tc->text_sel_end, _desktop, delta_dx );
                 modmade = true;
             }
         }
@@ -1697,7 +1697,7 @@ TextToolbar::dx_value_changed()
 
     if(modmade) {
         // Save for undo
-        DocumentUndo::maybeDone(SP_ACTIVE_DESKTOP->getDocument(), "ttb:dx", SP_VERB_NONE,
+        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:dx", SP_VERB_NONE,
                              _("Text: Change dx (kern)"));
     }
     _freeze = false;
@@ -1715,8 +1715,8 @@ TextToolbar::dy_value_changed()
     gdouble new_dy = _dy_adj->get_value();
     bool modmade = false;
 
-    if( SP_IS_TEXT_CONTEXT((SP_ACTIVE_DESKTOP)->event_context) ) {
-        Inkscape::UI::Tools::TextTool *const tc = SP_TEXT_CONTEXT((SP_ACTIVE_DESKTOP)->event_context);
+    if( SP_IS_TEXT_CONTEXT(_desktop->event_context) ) {
+        Inkscape::UI::Tools::TextTool *const tc = SP_TEXT_CONTEXT(_desktop->event_context);
         if( tc ) {
             unsigned char_index = -1;
             TextTagAttributes *attributes =
@@ -1724,7 +1724,7 @@ TextToolbar::dy_value_changed()
             if( attributes ) {
                 double old_dy = attributes->getDy( char_index );
                 double delta_dy = new_dy - old_dy;
-                sp_te_adjust_dy( tc->text, tc->text_sel_start, tc->text_sel_end, SP_ACTIVE_DESKTOP, delta_dy );
+                sp_te_adjust_dy( tc->text, tc->text_sel_start, tc->text_sel_end, _desktop, delta_dy );
                 modmade = true;
             }
         }
@@ -1732,7 +1732,7 @@ TextToolbar::dy_value_changed()
 
     if(modmade) {
         // Save for undo
-        DocumentUndo::maybeDone(SP_ACTIVE_DESKTOP->getDocument(), "ttb:dy", SP_VERB_NONE,
+        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:dy", SP_VERB_NONE,
                             _("Text: Change dy"));
     }
 
@@ -1751,8 +1751,8 @@ TextToolbar::rotation_value_changed()
     gdouble new_degrees = _rotation_adj->get_value();
 
     bool modmade = false;
-    if( SP_IS_TEXT_CONTEXT((SP_ACTIVE_DESKTOP)->event_context) ) {
-        Inkscape::UI::Tools::TextTool *const tc = SP_TEXT_CONTEXT((SP_ACTIVE_DESKTOP)->event_context);
+    if( SP_IS_TEXT_CONTEXT(_desktop->event_context) ) {
+        Inkscape::UI::Tools::TextTool *const tc = SP_TEXT_CONTEXT(_desktop->event_context);
         if( tc ) {
             unsigned char_index = -1;
             TextTagAttributes *attributes =
@@ -1760,7 +1760,7 @@ TextToolbar::rotation_value_changed()
             if( attributes ) {
                 double old_degrees = attributes->getRotate( char_index );
                 double delta_deg = new_degrees - old_degrees;
-                sp_te_adjust_rotation( tc->text, tc->text_sel_start, tc->text_sel_end, SP_ACTIVE_DESKTOP, delta_deg );
+                sp_te_adjust_rotation( tc->text, tc->text_sel_start, tc->text_sel_end, _desktop, delta_deg );
                 modmade = true;
             }
         }
@@ -1768,7 +1768,7 @@ TextToolbar::rotation_value_changed()
 
     // Save for undo
     if(modmade) {
-        DocumentUndo::maybeDone(SP_ACTIVE_DESKTOP->getDocument(), "ttb:rotate", SP_VERB_NONE,
+        DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:rotate", SP_VERB_NONE,
                             _("Text: Change rotate"));
     }
 
@@ -1818,8 +1818,8 @@ void TextToolbar::selection_changed(Inkscape::Selection *selection) // don't bot
     _freeze = true;
 
     // selection defined as argument but not used, argh!!!
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    SPDocument *document = SP_ACTIVE_DOCUMENT;
+    SPDesktop *desktop = _desktop;
+    SPDocument *document = _desktop->getDocument();
     selection = desktop->getSelection();
     auto itemlist = selection->items();
 
@@ -1828,7 +1828,7 @@ void TextToolbar::selection_changed(Inkscape::Selection *selection) // don't bot
         const gchar* id = i->getId();
         std::cout << "    " << id << std::endl;
     }
-    Glib::ustring selected_text = sp_text_get_selected_text((SP_ACTIVE_DESKTOP)->event_context);
+    Glib::ustring selected_text = sp_text_get_selected_text(_desktop->event_context);
     std::cout << "  Selected text: |" << selected_text << "|" << std::endl;
 #endif
 
@@ -2136,8 +2136,8 @@ void TextToolbar::selection_changed(Inkscape::Selection *selection) // don't bot
 #endif
 
     // Kerning (xshift), yshift, rotation.  NB: These are not CSS attributes.
-    if( SP_IS_TEXT_CONTEXT((SP_ACTIVE_DESKTOP)->event_context) ) {
-        Inkscape::UI::Tools::TextTool *const tc = SP_TEXT_CONTEXT((SP_ACTIVE_DESKTOP)->event_context);
+    if( SP_IS_TEXT_CONTEXT(_desktop->event_context) ) {
+        Inkscape::UI::Tools::TextTool *const tc = SP_TEXT_CONTEXT(_desktop->event_context);
         if( tc ) {
             unsigned char_index = -1;
             TextTagAttributes *attributes =
@@ -2223,8 +2223,8 @@ TextToolbar::selection_modified(Inkscape::Selection *selection, guint /*flags*/)
 
 void TextToolbar::subselection_wrap_toggle(bool start)
 {
-    if (SP_IS_TEXT_CONTEXT((SP_ACTIVE_DESKTOP)->event_context)) {
-        Inkscape::UI::Tools::TextTool *const tc = SP_TEXT_CONTEXT((SP_ACTIVE_DESKTOP)->event_context);
+    if (SP_IS_TEXT_CONTEXT(_desktop->event_context)) {
+        Inkscape::UI::Tools::TextTool *const tc = SP_TEXT_CONTEXT(_desktop->event_context);
         if (tc) {
             _updating = true;
             Inkscape::Text::Layout const *layout = te_get_layout(tc->text);
@@ -2257,11 +2257,11 @@ void TextToolbar::subselection_wrap_toggle(bool start)
 */  
 void TextToolbar::prepare_inner()
 {
-    Inkscape::UI::Tools::TextTool *const tc = SP_TEXT_CONTEXT((SP_ACTIVE_DESKTOP)->event_context);
+    Inkscape::UI::Tools::TextTool *const tc = SP_TEXT_CONTEXT(_desktop->event_context);
     if (tc) {
         Inkscape::Text::Layout *layout = const_cast<Inkscape::Text::Layout *>(te_get_layout(tc->text));
         if (layout) {
-            SPDocument              *doc      = SP_ACTIVE_DOCUMENT;
+            SPDocument              *doc      = _desktop->getDocument();
             SPObject                *spobject = dynamic_cast<SPObject   *>(tc->text);
             SPItem                  *spitem   = dynamic_cast<SPItem     *>(tc->text);
             SPText                  *text     = dynamic_cast<SPText     *>(tc->text);
@@ -2422,7 +2422,7 @@ Inkscape::XML::Node *TextToolbar::unindent_node(Inkscape::XML::Node *repr, Inksc
     if (parent) {
         Inkscape::XML::Node *grandparent = parent->parent();
         if (grandparent) {
-            SPDocument *doc = SP_ACTIVE_DOCUMENT;
+            SPDocument *doc = _desktop->getDocument();
             Inkscape::XML::Document *xml_doc = doc->getReprDoc();
             Inkscape::XML::Node *newrepr = repr->duplicate(xml_doc);
             parent->removeChild(repr);
@@ -2477,7 +2477,7 @@ void TextToolbar::subselection_changed(gpointer texttool)
                         Inkscape::Text::Layout::iterator prev = layout->charIndexToIterator(origin_selection - 1);
                         //TODO: find a better way to init
                         _updating = true;
-                        SPStyle query(SP_ACTIVE_DOCUMENT);
+                        SPStyle query(_desktop->getDocument());
                         _query_cursor = query;
                         Inkscape::Text::Layout::iterator start_line = tc->text_sel_start;
                         start_line.thisStartOfLine();
@@ -2486,7 +2486,7 @@ void TextToolbar::subselection_changed(gpointer texttool)
                         } else {
                             tc->text_sel_start = prev;
                         }
-                        _cusor_numbers = sp_desktop_query_style(SP_ACTIVE_DESKTOP, &_query_cursor, QUERY_STYLE_PROPERTY_FONTNUMBERS);
+                        _cusor_numbers = sp_desktop_query_style(_desktop, &_query_cursor, QUERY_STYLE_PROPERTY_FONTNUMBERS);
                         tc->text_sel_start = start_selection;
                         wrap_start = tc->text_sel_start;
                         wrap_end = tc->text_sel_end;

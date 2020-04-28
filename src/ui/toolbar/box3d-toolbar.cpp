@@ -32,7 +32,7 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
-#include "inkscape.h"
+#include "selection.h"
 #include "verbs.h"
 
 #include "object/box3d.h"
@@ -293,7 +293,7 @@ Box3DToolbar::selection_changed(Inkscape::Selection *selection)
             _repr->addListener(&box3d_persp_tb_repr_events, this);
             _repr->synthesizeEvents(&box3d_persp_tb_repr_events, this);
 
-            SP_ACTIVE_DOCUMENT->setCurrentPersp3D(persp3d_get_from_repr(_repr));
+            selection->document()->setCurrentPersp3D(persp3d_get_from_repr(_repr));
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
             prefs->setString("/tools/shapes/3dbox/persp", _repr->attribute("id"));
 

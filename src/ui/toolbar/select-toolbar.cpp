@@ -25,7 +25,7 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
-#include "inkscape.h"
+#include "selection.h"
 #include "message-stack.h"
 #include "selection-chemistry.h"
 #include "verbs.h"
@@ -204,14 +204,17 @@ SelectToolbar::SelectToolbar(SPDesktop *desktop) :
     _transform_pattern_btn->signal_toggled().connect(sigc::mem_fun(*this, &SelectToolbar::toggle_pattern));
     add(*_transform_pattern_btn);
 
+    assert(desktop);
+    auto *selection = desktop->getSelection();
+
     // Force update when selection changes.
     _connections.emplace_back( //
-        INKSCAPE.signal_selection_modified.connect(sigc::mem_fun(*this, &SelectToolbar::on_inkscape_selection_modified)));
+        selection->connectModified(sigc::mem_fun(*this, &SelectToolbar::on_inkscape_selection_modified)));
     _connections.emplace_back(
-        INKSCAPE.signal_selection_changed.connect(sigc::mem_fun(*this, &SelectToolbar::on_inkscape_selection_changed)));
+        selection->connectChanged(sigc::mem_fun(*this, &SelectToolbar::on_inkscape_selection_changed)));
 
     // Update now.
-    layout_widget_update(SP_ACTIVE_DESKTOP ? SP_ACTIVE_DESKTOP->getSelection() : nullptr);
+    layout_widget_update(selection);
 
     for (auto item : _context_items) {
         if ( item->is_sensitive() ) {
@@ -254,7 +257,7 @@ SelectToolbar::any_value_changed(Glib::RefPtr<Gtk::Adjustment>& adj)
     }
     _update = true;
 
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    SPDesktop *desktop = _desktop;
     Inkscape::Selection *selection = desktop->getSelection();
     SPDocument *document = desktop->getDocument();
 
@@ -417,8 +420,8 @@ SelectToolbar::layout_widget_update(Inkscape::Selection *sel)
 void
 SelectToolbar::on_inkscape_selection_modified(Inkscape::Selection *selection, guint flags)
 {
-    if ((_desktop->getSelection() == selection) // only respond to changes in our desktop
-        && (flags & (SP_OBJECT_MODIFIED_FLAG        |
+    assert(_desktop->getSelection() == selection);
+    if ((flags & (SP_OBJECT_MODIFIED_FLAG        |
                      SP_OBJECT_PARENT_MODIFIED_FLAG |
                      SP_OBJECT_CHILD_MODIFIED_FLAG   )))
     {
@@ -429,7 +432,8 @@ SelectToolbar::on_inkscape_selection_modified(Inkscape::Selection *selection, gu
 void
 SelectToolbar::on_inkscape_selection_changed(Inkscape::Selection *selection)
 {
-    if (_desktop->getSelection() == selection) { // only respond to changes in our desktop
+    assert(_desktop->getSelection() == selection);
+    {
         bool setActive = (selection && !selection->isEmpty());
 
         for (auto item : _context_items) {
