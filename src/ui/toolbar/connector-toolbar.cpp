@@ -37,7 +37,7 @@
 #include "document-undo.h"
 #include "enums.h"
 #include "graphlayout.h"
-#include "inkscape.h"
+#include "selection.h"
 #include "verbs.h"
 
 #include "object/sp-namedview.h"
@@ -347,7 +347,8 @@ ConnectorToolbar::spacing_changed()
 void
 ConnectorToolbar::graph_layout()
 {
-    if (!SP_ACTIVE_DESKTOP) {
+    assert(_desktop);
+    if (!_desktop) {
         return;
     }
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -356,13 +357,13 @@ ConnectorToolbar::graph_layout()
     int saved_compensation = prefs->getInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
     prefs->setInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
 
-    auto tmp = SP_ACTIVE_DESKTOP->getSelection()->items();
+    auto tmp = _desktop->getSelection()->items();
     std::vector<SPItem *> vec(tmp.begin(), tmp.end());
     graphlayout(vec);
 
     prefs->setInt("/options/clonecompensation/value", saved_compensation);
 
-    DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), SP_VERB_DIALOG_ALIGN_DISTRIBUTE, _("Arrange connector network"));
+    DocumentUndo::done(_desktop->getDocument(), SP_VERB_DIALOG_ALIGN_DISTRIBUTE, _("Arrange connector network"));
 }
 
 void

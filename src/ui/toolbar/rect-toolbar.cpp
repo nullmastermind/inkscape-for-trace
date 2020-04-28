@@ -34,7 +34,7 @@
 
 #include "desktop.h"
 #include "document-undo.h"
-#include "inkscape.h"
+#include "selection.h"
 #include "verbs.h"
 
 #include "object/sp-namedview.h"

@@ -34,7 +34,6 @@
 #include <gtkmm/separatortoolitem.h>
 
 #include "desktop.h"
-#include "inkscape.h"
 
 #include "ui/icon-names.h"
 #include "ui/simple-pref-pusher.h"

@@ -33,7 +33,6 @@
 
 #include "desktop.h"
 #include "document-undo.h"
-#include "inkscape.h"
 #include "message-stack.h"
 
 #include "ui/icon-names.h"
