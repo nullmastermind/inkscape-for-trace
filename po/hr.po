@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Incscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2020-04-20 22:20+0200\n"
-"PO-Revision-Date: 2020-04-21 23:37+0200\n"
+"PO-Revision-Date: 2020-04-28 00:05+0200\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: \n"
 "Language: hr\n"
@@ -508,7 +508,7 @@ msgstr "Listovi"
 #: ../share/filters/filters.svg.h:271 ../share/filters/filters.svg.h:639
 #: ../share/extensions/pathscatter.inx:3
 msgid "Scatter"
-msgstr "Razbacano"
+msgstr "Razbacaj"
 
 #: ../share/filters/filters.svg.h:168
 msgid "Leaves on the ground in Fall, or living foliage"
@@ -1139,7 +1139,7 @@ msgid ""
 "Creates colorizable blotches which smoothly flow over the edges of the lines "
 "at their crossings"
 msgstr ""
-"Stvara obojene pjege s glatkim prijelazom preko ruba linija, koje se križu"
+"Stvara obojene pjege s glatkim prijelazom preko ruba linija gdje se križaju"
 
 #: ../share/filters/filters.svg.h:434
 msgid "Dark and Glow"
@@ -1298,7 +1298,7 @@ msgstr "Tekuć i valovit ekspresionistički efekt"
 
 #: ../share/filters/filters.svg.h:506
 msgid "Marbled Ink"
-msgstr "Marmorirana tinta"
+msgstr "Mramorirana tinta"
 
 #: ../share/filters/filters.svg.h:508
 msgid "Marbled transparency effect which conforms to image detected edges"
@@ -1559,7 +1559,7 @@ msgstr "Pretvori slike u gust žele"
 
 #: ../share/filters/filters.svg.h:626
 msgid "Blend Opposites"
-msgstr "Stapljanje suprotnih"
+msgstr "Stapanje suprotnih"
 
 #: ../share/filters/filters.svg.h:628
 msgid "Blend an image with its hue opposite"
@@ -1692,7 +1692,7 @@ msgstr "Vrtložno obojenje"
 
 #: ../share/filters/filters.svg.h:694
 msgid "Cross Noise B"
-msgstr "Ukrižen šum B"
+msgstr "Ukrižan šum B"
 
 #: ../share/filters/filters.svg.h:696
 msgid "Adds a small scale crossy graininess"
@@ -1700,7 +1700,7 @@ msgstr "Dodaje sitnu ukrižnu zrnastu strukturu"
 
 #: ../share/filters/filters.svg.h:698
 msgid "Cross Noise"
-msgstr "Ukrižen šum"
+msgstr "Ukrižan šum"
 
 #: ../share/filters/filters.svg.h:700
 msgid "Adds a small scale screen like graininess"
@@ -4979,7 +4979,7 @@ msgstr "Točka bijele:"
 #: ../src/extension/internal/bitmap/level.cpp:46
 #: ../src/extension/internal/bitmap/levelChannel.cpp:68
 msgid "Gamma Correction:"
-msgstr "Gama-korekcija:"
+msgstr "Korekcija gamuta:"
 
 #: ../src/extension/internal/bitmap/level.cpp:52
 msgid ""
@@ -5179,7 +5179,7 @@ msgstr ""
 
 #: ../src/extension/internal/bitmap/swirl.cpp:40
 msgid "Degrees:"
-msgstr "Stupnjeva:"
+msgstr "Stupnjevi:"
 
 #: ../src/extension/internal/bitmap/swirl.cpp:46
 msgid "Swirl selected bitmap(s) around center point"
@@ -5226,7 +5226,7 @@ msgstr "Promijeni odabrane bitmape uzduž sinusnih valova"
 
 #: ../src/extension/internal/bluredge.cpp:130
 msgid "Inset/Outset Halo"
-msgstr "Dodaj/Oduzmi efekt korone (Halo-efekt)"
+msgstr "Dodaj/Oduzmi halo-efekt"
 
 #: ../src/extension/internal/bluredge.cpp:132
 msgid "Width in px of the halo"
@@ -5783,7 +5783,7 @@ msgstr "Pomnoži"
 #: ../src/extension/internal/filter/transparency.h:65
 #: ../src/filter-enums.cpp:57 ../src/ui/widget/filter-effect-chooser.cpp:30
 msgid "Lighten"
-msgstr "Posvjetli"
+msgstr "Posvijetli"
 
 #: ../src/extension/internal/filter/blurs.h:205
 msgid "Combine vertical and horizontal blur"
@@ -5799,7 +5799,7 @@ msgstr "Mutna maska na rubu, bez mijenjanja sadržaja"
 
 #: ../src/extension/internal/filter/blurs.h:326
 msgid "Out of Focus"
-msgstr "Neoštro"
+msgstr "Neizoštreno"
 
 #: ../src/extension/internal/filter/blurs.h:332
 #: ../src/extension/internal/filter/distort.h:76
@@ -6277,7 +6277,7 @@ msgstr "Linearno"
 
 #: ../src/extension/internal/filter/color.h:508 ../src/filter-enums.cpp:115
 msgid "Gamma"
-msgstr "Gama"
+msgstr "Gamut"
 
 #: ../src/extension/internal/filter/color.h:517
 msgid "Basic component transfer structure"
@@ -6588,7 +6588,7 @@ msgstr "Prekriveno"
 #: ../src/extension/internal/filter/color.h:1581 ../src/filter-enums.cpp:60
 #: ../src/ui/widget/filter-effect-chooser.cpp:33
 msgid "Color Dodge"
-msgstr "Posvjetljena boja"
+msgstr "Posvijetljena boja"
 
 #: ../src/extension/internal/filter/color.h:1582 ../src/filter-enums.cpp:61
 #: ../src/ui/widget/filter-effect-chooser.cpp:34
@@ -7027,7 +7027,7 @@ msgstr "Višebojno"
 #: ../src/extension/internal/filter/paint.h:76
 #: ../share/extensions/jessyInk_keyBindings.inx:21
 msgid "Drawing mode"
-msgstr "Način crtanja"
+msgstr "Modus crtanja"
 
 #: ../src/extension/internal/filter/paint.h:77
 msgid "Drawing blend:"
@@ -7048,7 +7048,7 @@ msgstr "Zrnatost"
 
 #: ../src/extension/internal/filter/paint.h:93
 msgid "Grain mode"
-msgstr "Način zrnatosti"
+msgstr "Modus zrnatosti"
 
 #: ../src/extension/internal/filter/paint.h:98
 #: ../src/extension/internal/filter/transparency.h:208
@@ -9019,54 +9019,54 @@ msgstr "Premjesti ručku"
 #. TRANSLATORS: This refers to the pattern that's inside the object
 #: ../src/knotholder.cpp:357
 msgid "<b>Move</b> the pattern fill inside the object"
-msgstr "<b>Pomakni</b> mustru ispune unutar objekta"
+msgstr "<b>Pomakni</b> ispunu mustre unutar objekta"
 
 #: ../src/knotholder.cpp:360
 msgid "<b>Scale</b> the pattern fill; uniformly if with <b>Ctrl</b>"
-msgstr "<b>Skaliraj</b> mustru ispune; proporcionalno sa <b>Ctrl</b>"
+msgstr "<b>Skaliraj</b> ispunu mustre; proporcionalno sa <b>Ctrl</b>"
 
 #: ../src/knotholder.cpp:364
 msgid "<b>Rotate</b> the pattern fill; with <b>Ctrl</b> to snap angle"
-msgstr "<b>Rotiraj</b> mustru ispune; sa <b>Ctrl</b> za privlačenje na kut"
+msgstr "<b>Rotiraj</b> ispunu mustre; sa <b>Ctrl</b> za privlačenje na kut"
 
 #. TRANSLATORS: This refers to the pattern that's inside the object
 #: ../src/knotholder.cpp:378
 msgid "<b>Move</b> the pattern stroke inside the object"
-msgstr "<b>Pomakni</b> mustru linije unutar objekta"
+msgstr "<b>Pomakni</b> liniju mustre unutar objekta"
 
 #: ../src/knotholder.cpp:381
 msgid "<b>Scale</b> the pattern stroke; uniformly if with <b>Ctrl</b>"
-msgstr "<b>Skaliraj</b> mustru linije; proporcionalno sa <b>Ctrl</b>"
+msgstr "<b>Skaliraj</b> liniju mustre; proporcionalno sa <b>Ctrl</b>"
 
 #: ../src/knotholder.cpp:385
 msgid "<b>Rotate</b> the pattern stroke; with <b>Ctrl</b> to snap angle"
-msgstr "<b>Rotiraj</b> mustru linije; sa <b>Ctrl</b> za privlačenje na kut"
+msgstr "<b>Rotiraj</b> liniju mustre; sa <b>Ctrl</b> za privlačenje na kut"
 
 #. TRANSLATORS: This refers to the hatch that's inside the object
 #: ../src/knotholder.cpp:403
 msgid "<b>Move</b> the hatch fill inside the object"
-msgstr "<b>Pomakni</b> mrežu ispune unutar objekta"
+msgstr "<b>Pomakni</b> ispunu mreže unutar objekta"
 
 #: ../src/knotholder.cpp:406
 msgid "<b>Scale</b> the hatch fill; uniformly if with <b>Ctrl</b>"
-msgstr "<b>Skaliraj</b> mrežu ispune; proporcionalno sa <b>Ctrl</b>"
+msgstr "<b>Skaliraj</b> ispunu mreže; proporcionalno sa <b>Ctrl</b>"
 
 #: ../src/knotholder.cpp:410
 msgid "<b>Rotate</b> the hatch fill; with <b>Ctrl</b> to snap angle"
-msgstr "<b>Rotiraj</b> mrežu ispune; sa <b>Ctrl</b> za privlačenje na kut"
+msgstr "<b>Rotiraj</b> ispunu mreže; sa <b>Ctrl</b> za privlačenje na kut"
 
 #. TRANSLATORS: This refers to the pattern that's inside the object
 #: ../src/knotholder.cpp:424
 msgid "<b>Move</b> the hatch stroke inside the object"
-msgstr "<b>Pomakni</b> mrežu linije unutar objekta"
+msgstr "<b>Pomakni</b> liniju mreže unutar objekta"
 
 #: ../src/knotholder.cpp:427
 msgid "<b>Scale</b> the hatch stroke; uniformly if with <b>Ctrl</b>"
-msgstr "<b>Skaliraj</b> mrežu linije; proporcionalno sa <b>Ctrl</b>"
+msgstr "<b>Skaliraj</b> liniju mreže; proporcionalno sa <b>Ctrl</b>"
 
 #: ../src/knotholder.cpp:431
 msgid "<b>Rotate</b> the hatch stroke; with <b>Ctrl</b> to snap angle"
-msgstr "<b>Rotiraj</b> mrežu linije; sa <b>Ctrl</b> za privlačenje na kut"
+msgstr "<b>Rotiraj</b> liniju mreže; sa <b>Ctrl</b> za privlačenje na kut"
 
 #: ../src/knotholder.cpp:445 ../src/knotholder.cpp:447
 msgid "<b>Resize</b> the filter effect region"
@@ -10075,7 +10075,7 @@ msgstr "Proširi stazu"
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:44
 #: ../src/live_effects/lpe-pts2ellipse.cpp:53
 msgid "Method:"
-msgstr "Način rada:"
+msgstr "Metoda:"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:65
 msgid "Rotate methods"
@@ -11626,8 +11626,8 @@ msgid ""
 "Set mode of transformation. Either freely defined by mirror line or "
 "constrained to certain symmetry points."
 msgstr ""
-"Postavi način transformacije. Ili se slobodno definiraju linijom zrcaljenja "
-"ili se ograničavaju na određene točke simetrije."
+"Postavi način transformacije. Slobodno definirana linijom zrcaljenja ili "
+"ograničena na određene točke simetrije."
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:56
 msgid "Discard original path"
@@ -11752,12 +11752,12 @@ msgstr "Jednom, rastegnuto"
 #: ../src/live_effects/lpe-patternalongpath.cpp:66
 #: ../share/extensions/pathalongpath.inx:11
 msgid "Repeated"
-msgstr "Ponovljeno"
+msgstr "Ponavljajuće"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:67
 #: ../share/extensions/pathalongpath.inx:12
 msgid "Repeated, stretched"
-msgstr "Ponovljeno, rastegnuto"
+msgstr "Ponavljajuće, rastegnuto"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:73
 msgid "Pattern source:"
@@ -11850,7 +11850,7 @@ msgstr "Perspektiva izljeva"
 
 #: ../src/live_effects/lpe-perspective-envelope.cpp:49
 msgid "Type"
-msgstr "Art"
+msgstr "Vrsta"
 
 #: ../src/live_effects/lpe-perspective-envelope.cpp:49
 msgid "Select the type of deformation"
@@ -12104,7 +12104,7 @@ msgid ""
 "(only for methods \"Auto ellipse\" and \"Force circle\")"
 msgstr ""
 "Stvori otvoreni luk (otvorenu elipsu) na osnovi prve i zadnje točke\n"
-"(samo za način rada „Automatska elipsa” i „Prisili kružnicu”)"
+"(samo za metode „Automatska elipsa” i „Prisili kružnicu”)"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:69
 msgid "_Other arc side"
@@ -12582,7 +12582,7 @@ msgstr "Zagladi kutove:"
 
 #: ../src/live_effects/lpe-simplify.cpp:27
 msgid "Max degree difference on handles to perform a smooth"
-msgstr "Maks. razlika u stupnjevima između ručki, za realizaciju izglađivanja"
+msgstr "Maks. razlika u stupnjevima između ručki, za realizaciju zaglađivanja"
 
 #: ../src/live_effects/lpe-simplify.cpp:30
 msgid "Paths separately"
@@ -12590,7 +12590,7 @@ msgstr "Staze pojedinačno"
 
 #: ../src/live_effects/lpe-simplify.cpp:30
 msgid "Simplifying paths (separately)"
-msgstr "Pojednostavni staze (pojedinačno)"
+msgstr "Pojednostavljenje staza (pojedinačno)"
 
 #: ../src/live_effects/lpe-simplify.cpp:32
 msgid "Just coalesce"
@@ -12698,8 +12698,8 @@ msgid ""
 "Scale factor relating curvature and length of construction lines (try "
 "5*offset)"
 msgstr ""
-"Faktor skaliranja u svezi sa zakrivljenošću i duljinom konstrukcijskih "
-"linija (pokušaj s 5 * odmak)"
+"Faktor skaliranja u vezi sa zakrivljenošću i duljinom konstrukcijskih linija "
+"(pokušaj s 5 * odmak)"
 
 #: ../src/live_effects/lpe-sketch.cpp:54
 msgid "Max. length:"
@@ -12852,7 +12852,7 @@ msgstr "Elastično"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:33
 msgid "Elastic transform mode"
-msgstr "Način rada za elastičnu transformaciju"
+msgstr "Način rada elastične transformacije"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:34
 msgid "From original width"
@@ -13586,19 +13586,19 @@ msgstr "U odabiru <b>nema staza</b> za sjedinjavanje."
 
 #: ../src/path-chemistry.cpp:199
 msgid "Select <b>path(s)</b> to break apart."
-msgstr "Odaberi <b>staze</b> za razdvajanje."
+msgstr "Odaberi <b>staze</b> za rastavljanje."
 
 #: ../src/path-chemistry.cpp:203
 msgid "Breaking apart paths..."
-msgstr "Razdvajanje staze …"
+msgstr "Rastavljanje staze …"
 
 #: ../src/path-chemistry.cpp:288
 msgid "Break apart"
-msgstr "Razdvoji"
+msgstr "Rastavi"
 
 #: ../src/path-chemistry.cpp:292
 msgid "<b>No path(s)</b> to break apart in the selection."
-msgstr "U odabiru <b>nema staza</b> za razdvajanje."
+msgstr "U odabiru <b>nema staza</b> za rastavljanje."
 
 #: ../src/path-chemistry.cpp:300
 msgid "Select <b>object(s)</b> to convert to path."
@@ -16099,11 +16099,11 @@ msgstr "Odaberi <b>objekt</b>, čije popločene klonove želiš razdvojiti."
 
 #: ../src/ui/dialog/clonetiler.cpp:1987
 msgid "Unclump tiled clones"
-msgstr "Razgrupiraj popločene klonove"
+msgstr "Raspodijeli popločene klonove"
 
 #: ../src/ui/dialog/clonetiler.cpp:2016
 msgid "Select <b>one object</b> whose tiled clones to remove."
-msgstr "Odaberi <b>objekt</b>, čije popločene klonove želiš ukloniti."
+msgstr "Odaberi <b>objekt</b>, čije popločene klonove želiš raspodijeliti ."
 
 #: ../src/ui/dialog/clonetiler.cpp:2039
 msgid "Delete tiled clones"
@@ -17516,7 +17516,7 @@ msgid ""
 "multiply, darken and lighten."
 msgstr ""
 "Osnovni filtar <b>feBlend</b> pruža četiri načina stapanja: ekran, pomnoži, "
-"zatamni i posvjetli."
+"zatamni i posvijetli."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2868
 msgid ""
@@ -17825,7 +17825,7 @@ msgstr "Vrste objekata"
 
 #: ../src/ui/dialog/find.cpp:103
 msgid "_Find"
-msgstr "_Nađi"
+msgstr "_Pronađi"
 
 #: ../src/ui/dialog/find.cpp:104
 msgid "_Replace All"
@@ -18872,15 +18872,15 @@ msgstr "Hangul Jamo prošireno-B"
 
 #: ../src/ui/dialog/glyphs.cpp:364
 msgid "High Surrogates"
-msgstr "Visoke zamjene"
+msgstr "Gornji zamjenski znakovi"
 
 #: ../src/ui/dialog/glyphs.cpp:365
 msgid "High Private Use Surrogates"
-msgstr "Visoke zamjene za privatnu upotrebu"
+msgstr "Gornji zamjenski znakovi privatnog područja"
 
 #: ../src/ui/dialog/glyphs.cpp:366
 msgid "Low Surrogates"
-msgstr "Niske zamjene"
+msgstr "Donji zamjenski znakovi"
 
 #: ../src/ui/dialog/glyphs.cpp:367
 msgid "Private Use Area"
@@ -18940,7 +18940,7 @@ msgstr "Emotikoni"
 
 #: ../src/ui/dialog/glyphs.cpp:383
 msgid "Ornamental Dingbats"
-msgstr "Ukrasni Dingbats"
+msgstr "Dingbats ukrasi"
 
 #: ../src/ui/dialog/glyphs.cpp:384
 msgid "Transport and Map Symbols"
@@ -19592,13 +19592,12 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:490
 msgid "Show font samples in the drop-down list"
-msgstr "Prikaži primjer fonta u padajućem popisu"
+msgstr "Prikaži primjer fonta u izborniku fontova"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:491
 msgid ""
 "Show font samples alongside font names in the drop-down list in Text bar"
-msgstr ""
-"Prikaži primjer fonta pored imena fonta, u padajućem popisu u traci teksta"
+msgstr "Prikaži primjer fonta pored njegovog imena u izborniku fontova"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:493
 msgid "Show font substitution warning dialog"
@@ -21203,7 +21202,7 @@ msgstr "Automatsko spremanje"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1725
 msgid "Behavior"
-msgstr "Karakteristike"
+msgstr "Ponašanje"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1729
 msgid "_Simplification threshold:"
@@ -21776,7 +21775,7 @@ msgid ""
 "path, Boolean operations, Combine, Break apart"
 msgstr ""
 "Sljedeće stazne operacije će odvojiti klonove: Liniju u stazu, Objekt u "
-"stazu, Booleova operacija, Sjedini, Razdvoji"
+"stazu, Booleova operacija, Sjedini, Rastavi"
 
 #. TRANSLATORS: Heading for the Inkscape Preferences "Clones" Page
 #: ../src/ui/dialog/inkscape-preferences.cpp:1933
@@ -22294,7 +22293,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2531
 msgid "System info"
-msgstr "Informacije sustava"
+msgstr "Podaci sustava"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2535
 msgid "Reset Preferences"
@@ -22447,7 +22446,7 @@ msgstr "Mjesto spremanja sustavskih datoteka"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2630
 msgid "Icon theme: "
-msgstr "Ikone tema: "
+msgstr "Tema ikona: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2630
 msgid "Locations of icon themes"
@@ -22904,12 +22903,12 @@ msgstr "Arcrole (dodatna uloga):"
 #: ../src/ui/dialog/object-attributes.cpp:49
 #: ../share/extensions/polyhedron_3d.inx:76
 msgid "Show:"
-msgstr "Show (prikaži):"
+msgstr "Prikaži:"
 
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/linking.html#AElementXLinkActuateAttribute
 #: ../src/ui/dialog/object-attributes.cpp:51
 msgid "Actuate:"
-msgstr "Actuate (prijeđi):"
+msgstr "Actuate (uključi):"
 
 #: ../src/ui/dialog/object-attributes.cpp:56
 msgid "URL:"
@@ -23228,12 +23227,12 @@ msgstr "Promijeni"
 #: ../share/extensions/interp_att_g.inx:13
 #: ../share/extensions/markers_strokepaint.inx:17
 msgid "Fill"
-msgstr "Ispunu"
+msgstr "Ispuna"
 
 #: ../src/ui/dialog/paint-servers.cpp:109 ../share/extensions/frame.inx:6
 #: ../share/extensions/markers_strokepaint.inx:21
 msgid "Stroke"
-msgstr "Liniju"
+msgstr "Linija"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:37
 msgctxt "Polar arrange tab"
@@ -24615,7 +24614,7 @@ msgstr "Poveži čvorove"
 #: ../src/ui/tool/multi-path-manipulator.cpp:427
 #: ../src/ui/toolbar/node-toolbar.cpp:164
 msgid "Break nodes"
-msgstr "Razdvoji čvorove"
+msgstr "Rastavi čvorove"
 
 #: ../src/ui/tool/multi-path-manipulator.cpp:434
 msgid "Delete nodes"
@@ -25631,7 +25630,7 @@ msgstr ""
 #: ../src/ui/toolbar/eraser-toolbar.cpp:205
 #: ../src/ui/toolbar/eraser-toolbar.cpp:206
 msgid "Break apart cut items"
-msgstr "Razdvoji izrezane objekte"
+msgstr "Rastavi izrezane objekte"
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:133
 #: ../src/ui/toolbar/gradient-toolbar.cpp:153
@@ -26145,7 +26144,7 @@ msgstr "Spoji odabrane čvorove"
 
 #: ../src/ui/toolbar/node-toolbar.cpp:165
 msgid "Break path at selected nodes"
-msgstr "Razdvoji stazu na odabranim čvorovima"
+msgstr "Rastavi stazu na odabranim čvorovima"
 
 #: ../src/ui/toolbar/node-toolbar.cpp:174
 msgid "Join with segment"
@@ -28723,7 +28722,7 @@ msgstr ""
 
 #: ../src/ui/tools/text-tool.cpp:647
 msgid "Type text; <b>Enter</b> to start new line."
-msgstr "Upiši tekst; <b>Enter</b> za novi redak."
+msgstr "Upiši tekst; pritisni <b>Enter</b> za novi redak."
 
 #: ../src/ui/tools/text-tool.cpp:684
 msgid "Flowed text is created."
@@ -28783,11 +28782,11 @@ msgstr "Podreži manje"
 
 #: ../src/ui/tools/text-tool.cpp:1159
 msgid "Rotate counterclockwise"
-msgstr "Rotiraj na lijevo"
+msgstr "Rotiraj nalijevo"
 
 #: ../src/ui/tools/text-tool.cpp:1179
 msgid "Rotate clockwise"
-msgstr "Rotiraj na desno"
+msgstr "Rotiraj nadesno"
 
 #: ../src/ui/tools/text-tool.cpp:1195
 msgid "Contract line spacing"
@@ -29328,7 +29327,7 @@ msgstr "JIS04"
 #: ../src/ui/widget/font-variants.cpp:193
 msgctxt "Font feature"
 msgid "Simplified"
-msgstr "Pojednostavljenji"
+msgstr "Pojednostavljeni"
 
 #: ../src/ui/widget/font-variants.cpp:194
 msgctxt "Font feature"
@@ -31203,11 +31202,11 @@ msgstr "Sjedini nekoliko staza u jednu"
 #. Advanced tutorial for more info
 #: ../src/verbs.cpp:2908
 msgid "Break _Apart"
-msgstr "_Razdvoji"
+msgstr "_Rastavi"
 
 #: ../src/verbs.cpp:2909
 msgid "Break selected paths into subpaths"
-msgstr "Razdvoji odabrane staze u podstaze"
+msgstr "Rastavi odabrane staze u podstaze"
 
 #: ../src/verbs.cpp:2910
 msgid "_Arrange..."
@@ -32760,7 +32759,7 @@ msgstr ""
 
 #: ../src/widgets/desktop-widget.cpp:611
 msgid "Rotation. (Also Ctrl+Shift+Scroll)"
-msgstr "Rotacija. (Također s Ctrl+Shift+vrtnja mišem)"
+msgstr "Rotacija. (Također sa Ctrl+Shift+vrtnja mišem)"
 
 #: ../src/widgets/desktop-widget.cpp:643
 msgid "Cursor coordinates"
@@ -33072,7 +33071,7 @@ msgstr "Deblj_ina:"
 
 #: ../src/widgets/stroke-style.cpp:214
 msgid "Dashes:"
-msgstr "Linija:"
+msgstr "Crtice:"
 
 #. TRANSLATORS: Path markers are an SVG feature that allows you to attach arbitrary shapes
 #. (arrowheads, bullets, faces, whatever) to the start, end, or middle nodes of a path.
@@ -33942,7 +33941,7 @@ msgstr "nije moguće locirati oznaku: %s"
 
 #: ../share/extensions/path_envelope.py:29
 msgid "You must select two paths only."
-msgstr "Moraš odabrati samo dva elementa."
+msgstr "Moraš odabrati samo dvije staze."
 
 #: ../share/extensions/path_envelope.py:39
 msgid "Selected path is too short. Must be four or more nodes."
@@ -34092,11 +34091,11 @@ msgstr "Dodaj čvorove"
 
 #: ../share/extensions/addnodes.inx:5
 msgid "Division method:"
-msgstr "Način podjele:"
+msgstr "Metoda podjele:"
 
 #: ../share/extensions/addnodes.inx:6
 msgid "By max. segment length"
-msgstr "Po maksimalnoj duljini segmenta"
+msgstr "Maksimalnom duljinom segmenta"
 
 #: ../share/extensions/addnodes.inx:9
 msgid "Maximum segment length (px):"
@@ -34401,7 +34400,7 @@ msgstr "Vizualiziraj staze"
 
 #: ../share/extensions/docinfo.inx:3
 msgid "DOC Info"
-msgstr "Informacije dokumenta"
+msgstr "Podaci dokumenta"
 
 #: ../share/extensions/docinfo.inx:8 ../share/extensions/dpi90to96.inx:15
 #: ../share/extensions/dpi96to90.inx:15
@@ -34529,15 +34528,15 @@ msgstr "Prilagođene točke i opcije"
 
 #: ../share/extensions/draw_from_triangle.inx:30
 msgid "Custom Point Specified By:"
-msgstr "Prilagođena točka, određena sa:"
+msgstr "Prilagođena točka određena s:"
 
 #: ../share/extensions/draw_from_triangle.inx:31
 msgid "Trilinear Coordinates"
-msgstr "Trilinearne koordinate"
+msgstr "Trilinearnim koordinatama"
 
 #: ../share/extensions/draw_from_triangle.inx:32
 msgid "Triangle Function"
-msgstr "Funkcija trokuta"
+msgstr "Funkcijom trokuta"
 
 #: ../share/extensions/draw_from_triangle.inx:34
 msgid "Point At:"
@@ -34597,7 +34596,7 @@ msgid ""
 "            "
 msgstr ""
 "Ovo proširenje crta konstrukciju okolo trokuta, određenu s prva 3 čvora "
-"odabrane staze. Možeš odabrati jedan preddefiniran ogjekt ili stvoriti "
+"odabrane staze. Možeš odabrati jedan preddefiniran objekt ili stvoriti "
 "vlastite.\n"
 "            \n"
 "Sve mjerne jedinice su Inkscapeove piksel jedinice. Kutovi su u radijanima.\n"
@@ -34605,12 +34604,12 @@ msgstr ""
 "trokuta.\n"
 "Upiši kao funkcije duljine staze ili kutova.\n"
 "Trilinearni elementi trebaju biti rastavljeni dvotočkom: „:”\n"
-"Duljine strana se prikazuju kao „s_a”, „s_b” i „s_c”.\n"
-"Njihovi odgovarajući kotovi su „a_a”, „a_b” i „a_c”.\n"
-"Možeš također koristiti semi-perimetar i područje trokuta kao konstante. Za "
+"Duljine strana prikazuju se kao „s_a”, „s_b” i „s_c”.\n"
+"Njihovi odgovarajući kutovi su „a_a”, „a_b” i „a_c”.\n"
+"Također možeš koristiti semi-perimetar i područje trokuta kao konstante. Za "
 "njih upiši „area” ili „semiperim”.\n"
 "\n"
-"Možeš koristiti bilo koje standardne matematičke funkcije Pythona:\n"
+"Možeš koristiti bilo koje standardne matematičke Python funkcije:\n"
 "ceil(x); fabs(x); floor(x); fmod(x,y); frexp(x); ldexp(x,i); \n"
 "modf(x); exp(x); log(x [, base]); log10(x); pow(x,y); sqrt(x); \n"
 "acos(x); asin(x); atan(x); atan2(y,x); hypot(x,y); \n"
@@ -34620,9 +34619,9 @@ msgstr ""
 "Također su dostupne inverzne trigonometrijske funkcije:\n"
 "sec(x); csc(x); cot(x)\n"
 "\n"
-"Možeš odrediti polumjer kruga okolo prilagođene točke, korištenjem formule, "
+"Možeš odrediti polumjer kruga okolo prilagođene točke, korištenjem formule "
 "koja uz to može sadržati duljinu strane, kutove, itd. Možeš također iscrtati "
-"isogonalne i isotomičke konjugacije točke. To može prouzročiti grešku "
+"izogonalne i izotomičke konjugacije točke. To može prouzročiti grešku "
 "dijeljenja s nulom za određene točke.\n"
 "            "
 
@@ -34909,7 +34908,7 @@ msgstr "Izdvoji samo odabrane slike"
 
 #: ../share/extensions/extractimage.inx:6
 msgid "Path to save image:"
-msgstr "Staza za spremanje slike:"
+msgstr "Staza za spremanje slika:"
 
 #: ../share/extensions/extrude.inx:6
 msgid "Lines"
@@ -34949,7 +34948,7 @@ msgstr "Dubina:"
 
 #: ../share/extensions/foldablebox.inx:8
 msgid "Tab Proportion:"
-msgstr "Tab Proporcija:"
+msgstr "Proporcija jezičaka:"
 
 #: ../share/extensions/foldablebox.inx:16
 msgid "Add Guide Lines"
@@ -35108,7 +35107,7 @@ msgstr "Crtaj osi"
 
 #: ../share/extensions/funcplot.inx:45
 msgid "Add x-axis endpoints"
-msgstr "Dodaj krajnje točke osi X"
+msgstr "Dodaj krajnje točke osi x"
 
 #: ../share/extensions/gcodetools_about.inx:4
 #: ../share/extensions/gcodetools_about.inx:8
@@ -36151,7 +36150,7 @@ msgstr "Mjerna jedinica za debljinu ruba:"
 
 #: ../share/extensions/grid_cartesian.inx:14
 msgid "X Axis"
-msgstr "X osi"
+msgstr "Os x"
 
 #: ../share/extensions/grid_cartesian.inx:15
 msgid "Major X Divisions:"
@@ -36199,7 +36198,7 @@ msgstr "Mjerna jedinica za debljinu X podjele:"
 
 #: ../share/extensions/grid_cartesian.inx:37
 msgid "Y Axis"
-msgstr "Y osi"
+msgstr "Os y"
 
 #: ../share/extensions/grid_cartesian.inx:38
 msgid "Major Y Divisions:"
@@ -36299,7 +36298,7 @@ msgstr "Obodne oznake:"
 
 #: ../share/extensions/grid_polar.inx:9 ../share/ui/units.xml:57
 msgid "Degrees"
-msgstr "Stupnjeva"
+msgstr "Stupnjevi"
 
 #: ../share/extensions/grid_polar.inx:11
 msgid "Circumferential Label Size (px):"
@@ -36355,7 +36354,7 @@ msgstr "Pod-podjele u glavnoj kutnoj podjeli:"
 
 #: ../share/extensions/grid_polar.inx:26
 msgid "Minor Angle Division End 'n' Divs. Before Centre:"
-msgstr "Pomoćna kutna podjela, završava „n” podjela prije središta:"
+msgstr "Pomoćna kutna podjela, završava s „n” podjela prije središta:"
 
 #: ../share/extensions/grid_polar.inx:27
 msgid "Major Angular Division Thickness (px):"
@@ -36460,7 +36459,7 @@ msgstr "Ručni rezač"
 
 #: ../share/extensions/guillotine.inx:8
 msgid "Directory to save images to:"
-msgstr "Direktrorij za spremanje slika:"
+msgstr "Mapa za spremanje slika:"
 
 #: ../share/extensions/guillotine.inx:9
 msgid "Image name (without extension):"
@@ -36859,7 +36858,7 @@ msgstr ""
 
 #: ../share/extensions/hpgl_output.inx:15
 msgid "Rotation (°, Clockwise):"
-msgstr "Rotacija (°, u smjeru kazaljke na satu):"
+msgstr "Rotacija (°, nadesno):"
 
 #: ../share/extensions/hpgl_output.inx:15 ../share/extensions/plotter.inx:73
 msgid "Rotation of the drawing (Default: 0°)"
@@ -36867,19 +36866,19 @@ msgstr "Rotacija crteža (standardno: 0 °)"
 
 #: ../share/extensions/hpgl_output.inx:21 ../share/extensions/plotter.inx:79
 msgid "Mirror X axis"
-msgstr "Zrcali os X"
+msgstr "Zrcali os x"
 
 #: ../share/extensions/hpgl_output.inx:21 ../share/extensions/plotter.inx:79
 msgid "Check this to mirror the X axis (Default: Unchecked)"
-msgstr "Aktiviraj, za zrcaljenje osi X (standardno: neaktivirano)"
+msgstr "Aktiviraj, za zrcaljenje osi x (standardno: neaktivirano)"
 
 #: ../share/extensions/hpgl_output.inx:22 ../share/extensions/plotter.inx:80
 msgid "Mirror Y axis"
-msgstr "Zrcali os Y"
+msgstr "Zrcali os y"
 
 #: ../share/extensions/hpgl_output.inx:22 ../share/extensions/plotter.inx:80
 msgid "Check this to mirror the Y axis (Default: Unchecked)"
-msgstr "Aktiviraj, za zrcaljenje osi Y (standardno: neaktivirano)"
+msgstr "Aktiviraj, za zrcaljenje osi y (standardno: neaktivirano)"
 
 #: ../share/extensions/hpgl_output.inx:23 ../share/extensions/plotter.inx:81
 msgid "Center zero point"
@@ -36904,7 +36903,7 @@ msgstr ""
 
 #: ../share/extensions/hpgl_output.inx:27 ../share/extensions/plotter.inx:85
 msgid "Plot Features"
-msgstr "Karakteristike plotanja"
+msgstr "Funkcije plotanja"
 
 #: ../share/extensions/hpgl_output.inx:28 ../share/extensions/plotter.inx:86
 msgid "Overcut (mm):"
@@ -36985,8 +36984,8 @@ msgid ""
 "All these settings depend on the plotter you use, for more information "
 "please consult the manual or homepage for your plotter."
 msgstr ""
-"Sve te postavke ovise o ploteru kojeg koristiš. Za daljnje informacija "
-"pročitaj priručnik ili web stranice proizvođača."
+"Sve ove postavke ovise o korištenom ploteru. Za daljnje informacije pročitaj "
+"priručnik ili web-stranice proizvođača."
 
 #: ../share/extensions/hpgl_output.inx:41
 msgid "Export an HP Graphics Language file"
@@ -37020,11 +37019,11 @@ msgstr "Omjer slike"
 
 #: ../share/extensions/image_attributes.inx:20
 msgid "preserveAspectRatio attribute:"
-msgstr "svojstvo „preserveAspectRatio” (zadrži omjer):"
+msgstr "Svojstvo „preserveAspectRatio” (zadrži omjer):"
 
 #: ../share/extensions/image_attributes.inx:33
 msgid "meetOrSlice:"
-msgstr "svojstvo „meetOrSlice”:"
+msgstr "Svojstvo „meetOrSlice”:"
 
 #: ../share/extensions/image_attributes.inx:38
 #: ../share/extensions/image_attributes.inx:54
@@ -37060,7 +37059,7 @@ msgstr "Primijeni svojstvo na nadređenu grupu odabira"
 
 #: ../share/extensions/image_attributes.inx:59
 msgid "Apply attribute to SVG root"
-msgstr "Primijeni svojstvo na osnova SVG-a"
+msgstr "Primijeni svojstvo na osnovu SVG-a"
 
 #: ../share/extensions/ink2canvas.inx:3
 msgid "Convert to html5 canvas"
@@ -37160,7 +37159,7 @@ msgid ""
 "If you selected \"Other\" above, you must specify the details for this "
 "\"other\" here."
 msgstr ""
-"Ako odabereš „Drugo”, moraš ovdje odrediti podatke, koji se odnose na "
+"Ako odabereš „Drugo”, onda ovdje moraš odrediti podatke koji se odnose na "
 "„Drugo”."
 
 #: ../share/extensions/interp_att_g.inx:20
@@ -37309,7 +37308,7 @@ msgstr "Bez (standardno)"
 #: ../share/extensions/jessyInk_transitions.inx:12
 #: ../share/extensions/jessyInk_transitions.inx:20
 msgid "Appear"
-msgstr "Pojava"
+msgstr "Trenutno pojavljivanje"
 
 #: ../share/extensions/jessyInk_effects.inx:13
 msgid "Fade in"
@@ -37398,11 +37397,11 @@ msgstr "Tipkovne funkcije"
 
 #: ../share/extensions/jessyInk_keyBindings.inx:6
 msgid "Slide mode"
-msgstr "Rad s folijama"
+msgstr "Modus folija"
 
 #: ../share/extensions/jessyInk_keyBindings.inx:7
 msgid "Back (with effects):"
-msgstr "Natrag (s efektima):"
+msgstr "Prethodna (s efektima):"
 
 #: ../share/extensions/jessyInk_keyBindings.inx:8
 msgid "Next (with effects):"
@@ -37410,7 +37409,7 @@ msgstr "Sljedeća (s efektima):"
 
 #: ../share/extensions/jessyInk_keyBindings.inx:9
 msgid "Back (without effects):"
-msgstr "Natrag (bez efekata):"
+msgstr "Prethodna (bez efekata):"
 
 #: ../share/extensions/jessyInk_keyBindings.inx:10
 msgid "Next (without effects):"
@@ -37428,11 +37427,11 @@ msgstr "Zadnja folija:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx:13
 msgid "Switch to index mode:"
-msgstr "Prijeđi na sadržaj:"
+msgstr "Prijeđi na modus sadržaja:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx:14
 msgid "Switch to drawing mode:"
-msgstr "Prijeđi na crtanje:"
+msgstr "Prijeđi na modus crtanja:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx:15
 msgid "Set duration:"
@@ -37457,7 +37456,7 @@ msgstr "Izvezi prezentaciju:"
 #: ../share/extensions/jessyInk_keyBindings.inx:22
 #: ../share/extensions/jessyInk_keyBindings.inx:49
 msgid "Switch to slide mode:"
-msgstr "Prijeđi na foliju:"
+msgstr "Prijeđi na modus folija:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx:23
 msgid "Set path width to default:"
@@ -37561,7 +37560,7 @@ msgstr "Povećaj broj stupaca:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx:52
 msgid "Set number of columns to default:"
-msgstr "Postavi broj stupaca na standardni:"
+msgstr "Postavi standardni broj stupaca:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx:55
 msgid ""
@@ -37732,11 +37731,11 @@ msgstr "Variranje čvorova"
 
 #: ../share/extensions/jitternodes.inx:7
 msgid "Maximum displacement in X (px):"
-msgstr "Maksimalno premještanje u x-smjeru (px):"
+msgstr "Maksimalno premještanje u smjeru x (px):"
 
 #: ../share/extensions/jitternodes.inx:8
 msgid "Maximum displacement in Y (px):"
-msgstr "Maksimalno premještanje u y-smjeru (px):"
+msgstr "Maksimalno premještanje u smjeru y (px):"
 
 #: ../share/extensions/jitternodes.inx:10
 msgid "Shift node handles"
@@ -37804,7 +37803,7 @@ msgid ""
 "extension will export a PNG file for each rectangle into the directory with "
 "the name of the {rectangle ID}.png (use Object Properties to set this)."
 msgstr ""
-"Ako stvoriš sloj (standardni naziv „izresci”) koji sadrži pravokutnike, ovo "
+"Ako stvoriš sloj (standardni naziv „slices”) koji sadrži pravokutnike, ovo "
 "će proširenje izvesti PNG datoteku za svaki pravokutnik u mapu s imenom "
 "{rectangle ID}.png (za postavljanje imena koristi „Svojstva objekta”)."
 
@@ -37826,8 +37825,8 @@ msgid ""
 "\". Icon mode will create a square export for each dimension in \"Sizes\"."
 msgstr ""
 "Ako želiš stvoriti (kvadratične) ikone različitih veličina, odaberi „Modus "
-"ikona”. Modus ikona će stvorit kvadratični izvoz za svaku dimenziju u stavci "
-"„Veličine”."
+"ikona”. Modus ikona će stvoriti kvadratičan izvoz za svaku dimenziju u "
+"stavci „Veličine”."
 
 #: ../share/extensions/layers2svgfont.inx:3
 msgid "3 - Convert Glyph Layers to SVG Font"
@@ -38195,7 +38194,7 @@ msgstr "Desno (kraj)"
 
 #: ../share/extensions/measure.inx:31
 msgid "Fixed Text"
-msgstr "Fiksirani tekst"
+msgstr "Fiksiran tekst"
 
 #: ../share/extensions/measure.inx:33
 msgid "Start of Path"
@@ -38332,7 +38331,7 @@ msgstr "Prikaži sljedeći grafem"
 
 #: ../share/extensions/nicechart.inx:29
 msgid "NiceCharts"
-msgstr "Lijepi grafikoni"
+msgstr "Lijepi dijagrami"
 
 #: ../share/extensions/nicechart.inx:32
 msgid "Data"
@@ -38348,15 +38347,15 @@ msgstr "Upiši potpuni put do CSV datoteke:"
 
 #: ../share/extensions/nicechart.inx:37
 msgid "Delimiter:"
-msgstr "Odjeljivač:"
+msgstr "Znak razdvajanja:"
 
 #: ../share/extensions/nicechart.inx:38
 msgid "Column that contains the keys:"
-msgstr "Stupac, koji sadržava ključeve:"
+msgstr "Stupac s ključevima:"
 
 #: ../share/extensions/nicechart.inx:39
 msgid "Column that contains the values:"
-msgstr "Stupac, koji sadržava vrijednosti:"
+msgstr "Stupac s vrijednostima:"
 
 #: ../share/extensions/nicechart.inx:40
 msgid "File encoding (e.g. utf-8):"
@@ -38364,7 +38363,7 @@ msgstr "Kodiranje znakova (npr. utf-8):"
 
 #: ../share/extensions/nicechart.inx:41
 msgid "First line contains headings"
-msgstr "Prvi red sadrži naslove"
+msgstr "Prvi redak sadrži naslove"
 
 #: ../share/extensions/nicechart.inx:43
 msgid "Direct input"
@@ -38372,7 +38371,7 @@ msgstr "Direktan unos"
 
 #: ../share/extensions/nicechart.inx:44
 msgid "Type in comma separated values:"
-msgstr "Upiši vrijednosti, zarezom razdvojene:"
+msgstr "Upiši zarezom odvojene vrijednosti:"
 
 #: ../share/extensions/nicechart.inx:45
 msgid "(format like this: apples:3,bananas:5)"
@@ -38925,7 +38924,7 @@ msgstr "Pretvori geometriju odabrane staze (4 kuta) u mrežni gradijent"
 
 #: ../share/extensions/path_number_nodes.inx:3
 msgid "Number Nodes"
-msgstr "Obrojčani čvorovi"
+msgstr "Numerirani čvorovi"
 
 #: ../share/extensions/path_number_nodes.inx:8
 msgid "Dot size:"
@@ -38949,10 +38948,10 @@ msgid ""
 "first node of the path.\n"
 "    * Step: numbering step between two nodes."
 msgstr ""
-"Ovo proširenje zamjenjuje čvorove odabira s numeriranim točkama, uz upotrebu "
-"sljedećeg:\n"
-"    * Veličina fonta: veličina brojčanih oznaka čvora (20px, 12pt…).\n"
-"    * Veličina točke: polumjer točke postavljene na čvorove (10px, 2mm…).\n"
+"Ovo proširenje zamijenjuje čvorove odabira s numeriranim točkama, uz "
+"upotrebu sljedećih opcija:\n"
+"    * Veličina fonta: veličina brojčanih oznaka čvora (20 px, 12 pt …).\n"
+"    * Veličina točke: promjer točke postavljene na čvorove (10 px, 2 mm …).\n"
 "    * Početni broj: prvi broj u nizu, postavljen za prvi čvor na stazi.\n"
 "    * Koraci: korak u brojčanom nizu između dva čvora."
 
@@ -39025,19 +39024,19 @@ msgstr "Rastegni razmake do ispunjavanja cijele duljine staze"
 
 #: ../share/extensions/pathscatter.inx:14
 msgid "Original pattern will be:"
-msgstr "Izvorna mustra će biti:"
+msgstr "Izvorna mustra će se:"
 
 #: ../share/extensions/pathscatter.inx:15
 msgid "Moved"
-msgstr "Premješteni"
+msgstr "Premjestiti"
 
 #: ../share/extensions/pathscatter.inx:16
 msgid "Copied"
-msgstr "Kopirani"
+msgstr "Kopirati"
 
 #: ../share/extensions/pathscatter.inx:17
 msgid "Cloned"
-msgstr "Klonirani"
+msgstr "Klonirati"
 
 #: ../share/extensions/pathscatter.inx:20
 msgid "If pattern is a group, pick group members"
@@ -39172,7 +39171,7 @@ msgid ""
 "with a non-zero odd width are snapped to midpoints, so they align correctly"
 msgstr ""
 "Privuci odabrane staze, slike i pravokutnike na granice piksela. Potezi s ne-"
-"nulnom neparnom širinom se privlače do srednjih točaka, tako da se ispravno "
+"nulnom neparnom širinom privlače se do srednjih točaka, tako da se ispravno "
 "poravnaju"
 
 #
@@ -39199,7 +39198,7 @@ msgstr ""
 # File: ../share/extensions/pixelsnap.inx, line: 16
 #: ../share/extensions/pixelsnap.inx:10
 msgid "Maximum slope to consider straight (%)"
-msgstr "Maksimalna kosina koja se uzima kao ravan (%)"
+msgstr "Maksimalna kosina koja se uzima kao ravno (%)"
 
 #: ../share/extensions/plotter.inx:3
 msgid "Plot"
@@ -39365,7 +39364,7 @@ msgstr ""
 
 #: ../share/extensions/plotter.inx:73
 msgid "Rotation (°, clockwise):"
-msgstr "Rotacija (u stupnjevima, u smjeru kazaljke na satu):"
+msgstr "Rotacija (°, nadesno):"
 
 #: ../share/extensions/polyhedron_3d.inx:3
 msgid "3D Polyhedron"
@@ -39457,19 +39456,19 @@ msgstr "Vrsta objekta:"
 
 #: ../share/extensions/polyhedron_3d.inx:28
 msgid "Face-Specified"
-msgstr "Određeno plohom"
+msgstr "Određena plohom"
 
 #: ../share/extensions/polyhedron_3d.inx:29
 msgid "Edge-Specified"
-msgstr "Određeno rubom"
+msgstr "Određena rubom"
 
 #: ../share/extensions/polyhedron_3d.inx:30
 msgid "Clockwise wound object"
-msgstr "Objekt, okrenut u smjeru kazaljke na satu"
+msgstr "Okreni objekt u smjeru kazaljke na satu"
 
 #: ../share/extensions/polyhedron_3d.inx:33
 msgid "Rotate around:"
-msgstr "Rotiraj po:"
+msgstr "Rotiraj oko:"
 
 #: ../share/extensions/polyhedron_3d.inx:34
 #: ../share/extensions/polyhedron_3d.inx:39
@@ -39478,7 +39477,7 @@ msgstr "Rotiraj po:"
 #: ../share/extensions/polyhedron_3d.inx:54
 #: ../share/extensions/polyhedron_3d.inx:59
 msgid "X-Axis"
-msgstr "X-osi"
+msgstr "osi x"
 
 #: ../share/extensions/polyhedron_3d.inx:35
 #: ../share/extensions/polyhedron_3d.inx:40
@@ -39487,7 +39486,7 @@ msgstr "X-osi"
 #: ../share/extensions/polyhedron_3d.inx:55
 #: ../share/extensions/polyhedron_3d.inx:60
 msgid "Y-Axis"
-msgstr "Y-osi"
+msgstr "osi y"
 
 #: ../share/extensions/polyhedron_3d.inx:36
 #: ../share/extensions/polyhedron_3d.inx:41
@@ -39496,7 +39495,7 @@ msgstr "Y-osi"
 #: ../share/extensions/polyhedron_3d.inx:56
 #: ../share/extensions/polyhedron_3d.inx:61
 msgid "Z-Axis"
-msgstr "Z-osi"
+msgstr "osi z"
 
 #: ../share/extensions/polyhedron_3d.inx:37
 #: ../share/extensions/polyhedron_3d.inx:42
@@ -39515,7 +39514,7 @@ msgstr "Rotacija (°):"
 #: ../share/extensions/polyhedron_3d.inx:53
 #: ../share/extensions/polyhedron_3d.inx:58
 msgid "Then rotate around:"
-msgstr "Zatim rotiraj po:"
+msgstr "Zatim rotiraj oko:"
 
 #: ../share/extensions/polyhedron_3d.inx:65
 msgid "Scaling factor:"
@@ -39563,11 +39562,11 @@ msgstr "Svjetlo Z:"
 
 #: ../share/extensions/polyhedron_3d.inx:78
 msgid "Edges"
-msgstr "Rubovi"
+msgstr "Rubove"
 
 #: ../share/extensions/polyhedron_3d.inx:79
 msgid "Vertices"
-msgstr "Vrhovi"
+msgstr "Vrhove"
 
 #: ../share/extensions/polyhedron_3d.inx:81
 msgid "Draw back-facing polygons"
@@ -39627,7 +39626,7 @@ msgstr "Kontrolni klin"
 
 #: ../share/extensions/printing_marks.inx:13
 msgid "Page Information"
-msgstr "Informacije stranice"
+msgstr "Podaci stranice"
 
 #: ../share/extensions/printing_marks.inx:15
 msgid "Positioning"
@@ -39766,15 +39765,15 @@ msgstr "Kvadratno oštro: zastarjelo"
 
 #: ../share/extensions/render_barcode_qrcode.inx:45
 msgid "Smooth square value (0-1):"
-msgstr "Zaglađena kvadratna vrijednost(0–1):"
+msgstr "Zaglađena kvadratna vrijednost (0 – 1):"
 
 #: ../share/extensions/render_barcode_qrcode.inx:46
 msgid ""
 "For Path: custom set the path in relative coordinates (0,0)=(left,up) square "
 "size 1.0 "
 msgstr ""
-"Za stazu: postavi pirlagođenu stazu relativnim koordinatama (0,0)=(lijevo,"
-"gore) kvadratna valičina 1,0 "
+"Za stazu: postavi stazu pirlagođeno u relativne koordinate (0,0)=(lijevo,"
+"gore) kvadratna veličina 1,0 "
 
 #: ../share/extensions/render_barcode_qrcode.inx:47
 msgid "Path string (Path: custom) or symbol #url:"
@@ -39833,15 +39832,15 @@ msgstr "Pronađi i zamijeni font"
 
 #: ../share/extensions/replace_font.inx:10
 msgid "Find font:"
-msgstr "Nađi font:"
+msgstr "Pronađi font:"
 
 #: ../share/extensions/replace_font.inx:11
 msgid "Replace with:"
-msgstr "Zamijeni sa:"
+msgstr "Zamijeni s:"
 
 #: ../share/extensions/replace_font.inx:14
 msgid "Replace all fonts with:"
-msgstr "Zamijeni sve fontove sa:"
+msgstr "Zamijeni sve fontove s:"
 
 #: ../share/extensions/replace_font.inx:16
 msgid "List all fonts"
@@ -39851,11 +39850,11 @@ msgstr "Stvori popis svih fontova"
 msgid ""
 "Choose this tab if you would like to see a list of the fonts used/found."
 msgstr ""
-"Odaberi ovu karticu, ako želiš vidjeti popis korištenih/nađenih fontova."
+"Odaberi ovu karticu, ako želiš vidjeti popis korištenih/pronađenih fontova."
 
 #: ../share/extensions/replace_font.inx:21
 msgid "Work on:"
-msgstr "Radi na:"
+msgstr "Obradi:"
 
 #: ../share/extensions/replace_font.inx:22
 msgid "Entire drawing"
@@ -39863,7 +39862,7 @@ msgstr "Cijeli crtež"
 
 #: ../share/extensions/replace_font.inx:23
 msgid "Selected objects only"
-msgstr "Samo odabrani objekti"
+msgstr "Samo odabrane objekte"
 
 #: ../share/extensions/restack.inx:3
 msgid "Restack"
@@ -40028,15 +40027,15 @@ msgstr "Spirograf"
 
 #: ../share/extensions/spirograph.inx:5
 msgid "R - Ring Radius (px):"
-msgstr "R – Polumjer prstena (px):"
+msgstr "R – polumjer prstena (px):"
 
 #: ../share/extensions/spirograph.inx:6
 msgid "r - Gear Radius (px):"
-msgstr "r – Polumjer zupčanika (px):"
+msgstr "r – polumjer zupčanika (px):"
 
 #: ../share/extensions/spirograph.inx:7
 msgid "d - Pen Radius (px):"
-msgstr "d – Polumjer pisaljke (px):"
+msgstr "d – polumjer pisaljke (px):"
 
 #: ../share/extensions/spirograph.inx:8
 msgid "Gear Placement:"
@@ -40108,7 +40107,7 @@ msgstr "Mjesec (0 za sve):"
 
 #: ../share/extensions/svgcalendar.inx:9
 msgid "Fill empty day boxes with next month's days"
-msgstr "Ispuni prazne okvire dana, s danima sljedečeg mjeseca"
+msgstr "Ispuni prazne okvire dana, s danima sljedećeg mjeseca"
 
 #: ../share/extensions/svgcalendar.inx:10
 msgid "Show week number"
@@ -40145,7 +40144,7 @@ msgstr "Automatski postavi veličinu i položaj"
 
 #: ../share/extensions/svgcalendar.inx:23
 msgid "The options below have no influence when the above is checked."
-msgstr "Daljnje opcije nemaju utjecaja, ako je gornje aktivirano."
+msgstr "Daljnje opcije nemaju utjecaja, ako je gornja opcija aktivirana."
 
 #: ../share/extensions/svgcalendar.inx:24
 msgid "Months per line:"
@@ -40317,7 +40316,7 @@ msgstr "Pretvori SVG font u slojeve grafema"
 
 #: ../share/extensions/svgfont2layers.inx:5
 msgid "Stop after (30 Recommended)"
-msgstr "Prekini nakon (30 preporučeno)"
+msgstr "Prekini nakon (preporučuje se 30)"
 
 #: ../share/extensions/synfig_output.inx:3
 msgid "Synfig Output"
@@ -40781,23 +40780,23 @@ msgstr "Kut c (°):"
 
 #: ../share/extensions/triangle.inx:12
 msgid "From Three Sides"
-msgstr "Od tri strane"
+msgstr "S tri stranice"
 
 #: ../share/extensions/triangle.inx:13
 msgid "From Sides a, b and Angle c"
-msgstr "Od strana a, b i kuta c"
+msgstr "Sa stranicama a, b i kutom c"
 
 #: ../share/extensions/triangle.inx:14
 msgid "From Sides a, b and Angle a"
-msgstr "Od strana a, b i kuta a"
+msgstr "Sa stranicama a, b i kutom a"
 
 #: ../share/extensions/triangle.inx:15
 msgid "From Side a and Angles a, b"
-msgstr "Od strane a i kutova a, b"
+msgstr "Sa stranicom a i kutovima a, b"
 
 #: ../share/extensions/triangle.inx:16
 msgid "From Side c and Angles a, b"
-msgstr "Od strane c i kutova a, b"
+msgstr "Sa stranicom c i kutovima a, b"
 
 #: ../share/extensions/ungroup_deep.inx:3
 msgid "Deep Ungroup"
@@ -40999,7 +40998,7 @@ msgstr "Vrijednost koja se postavlja:"
 #: ../share/extensions/web_set_att.inx:22
 #: ../share/extensions/web_transmit_att.inx:20
 msgid "Compatibility with previews code to this event:"
-msgstr "Kompaktibilnost s kȏdom pregleda na ovaj događaj:"
+msgstr "Kompatibilnost s kodom pregleda na ovaj događaj:"
 
 #: ../share/extensions/web_set_att.inx:23
 #: ../share/extensions/web_transmit_att.inx:21
@@ -41015,7 +41014,7 @@ msgstr "Pokreni prije"
 #: ../share/extensions/web_transmit_att.inx:25
 msgid "The next parameter is useful when you select more than two elements"
 msgstr ""
-"Sljedeći parametar je koristan, prilikom odabira dvaju ili više elemenata"
+"Sljedeći parametar je koristan prilikom odabira dvaju ili više elemenata"
 
 #: ../share/extensions/web_set_att.inx:28
 msgid "Source and destination of setting:"
@@ -41165,7 +41164,7 @@ msgstr "Prisili dimenziju:"
 #. i18n. Description duplicated in a fake value attribute in order to make it translatable
 #: ../share/extensions/webslicer_create_rect.inx:15
 msgid "Force Dimension must be set as <width>x<height>"
-msgstr "„Prisili dimenziju” mora biti postavljeno kao <širina> × <visina>"
+msgstr "„Prisili dimenziju” mora biti postavljeno kao <širina>x<visina>"
 
 #: ../share/extensions/webslicer_create_rect.inx:16
 msgid "If set, this will replace DPI."
@@ -41572,7 +41571,7 @@ msgstr "centimetara"
 
 #: ../share/ui/units.xml:50
 msgid "Centimeters (10 mm/cm)"
-msgstr "Centimetra (10 mm/cm)"
+msgstr "Centimetara (10 mm/cm)"
 
 #: ../share/ui/units.xml:53
 msgid "degree"
@@ -41584,13 +41583,13 @@ msgstr "radijan"
 
 #: ../share/ui/units.xml:61
 msgid "radians"
-msgstr "radijani"
+msgstr "radijana"
 
 #
 # File: ../share/ui/units.xml, line: 64
 #: ../share/ui/units.xml:64
 msgid "Radians (180/pi deg/rad)"
-msgstr "Radijani (180/pi stupnjeva/radijana)"
+msgstr "Radijana (180/pi stupnjeva/radijana)"
 
 #: ../share/ui/units.xml:67
 msgid "gradian"
@@ -41598,13 +41597,13 @@ msgstr "gradijent"
 
 #: ../share/ui/units.xml:68
 msgid "gradians"
-msgstr "gradijenti"
+msgstr "gradijenta"
 
 #
 # File: ../share/ui/units.xml, line: 71
 #: ../share/ui/units.xml:71
 msgid "Gradians (360/400 deg/grad)"
-msgstr "Gradijenti (360/400 stupnjeva/gradijenta)"
+msgstr "Gradijenta (360/400 stupnjeva/gradijenta)"
 
 #
 # File: ../share/ui/units.xml, line: 74
@@ -41614,13 +41613,13 @@ msgstr "okretaj"
 
 #: ../share/ui/units.xml:75
 msgid "turns"
-msgstr "okretaji"
+msgstr "okretaja"
 
 #
 # File: ../share/ui/units.xml, line: 78
 #: ../share/ui/units.xml:78
 msgid "Turns (360 deg/turn)"
-msgstr "Okretaji (360 stupnjeva/okretaja)"
+msgstr "Okretaja (360 stupnjeva/okretaja)"
 
 #: ../share/ui/units.xml:81
 msgid "font-height"
