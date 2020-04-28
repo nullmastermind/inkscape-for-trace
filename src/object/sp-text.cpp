@@ -1012,7 +1012,7 @@ void SPText::newline_to_sodipodi() {
 
     // New lines can come anywhere, we must search character-by-character.
     auto it = layout.begin();
-    while (true) {
+    while (it != layout.end()) {
         if (layout.characterAt(it) == '\n') {
 
             // Delete newline ('\n').
@@ -1028,10 +1028,6 @@ void SPText::newline_to_sodipodi() {
 
         it.nextCharacter();
         layout.validateIterator(&it);
-
-        if (it == layout.end()) {
-            break;
-        }
     }
 }
 
