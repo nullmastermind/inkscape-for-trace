@@ -424,6 +424,8 @@ void SPFlowtext::_buildLayoutInput(SPObject *root, Shape const *exclusion_shape,
             }
         }
     }
+    
+    if (dynamic_cast<SPFlowpara *>(root) && !root->hasChildren()) return;
 
     if (dynamic_cast<SPFlowdiv *>(root) || dynamic_cast<SPFlowpara *>(root) || dynamic_cast<SPFlowregionbreak *>(root) || dynamic_cast<SPFlowline *>(root)) {
         if (!root->hasChildren()) {
