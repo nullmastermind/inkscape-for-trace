@@ -810,6 +810,7 @@ TextToolbar::fontsize_value_changed()
         prefs->mergeStyle("/tools/text/style", css);
     } else {
         // Save for undo
+        sp_desktop_set_style (_desktop, css, true, true);
         DocumentUndo::maybeDone(_desktop->getDocument(), "ttb:size", SP_VERB_NONE,
                              _("Text: Change font size"));
     }
