@@ -312,6 +312,11 @@ KnotHolder::knot_ungrabbed_handler(SPKnot *knot, guint state)
             }
         }
 
+        SPFilter *filter = (object->style) ? dynamic_cast<SPFilter *>(object->style->getFilter()) : nullptr;
+        if (filter) {
+            filter->updateRepr();
+        }
+
         unsigned int object_verb = SP_VERB_NONE;
 
         // TODO extract duplicated blocks:
