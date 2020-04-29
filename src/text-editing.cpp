@@ -57,6 +57,10 @@ Inkscape::Text::Layout const * te_get_layout (SPItem const *item)
 
 static void te_update_layout_now (SPItem *item)
 {
+    if (SP_IS_TEXT(item))
+        SP_TEXT(item)->rebuildLayout();
+    else if (SP_IS_FLOWTEXT (item))
+        SP_FLOWTEXT(item)->rebuildLayout();
     item->updateRepr();
 }
 
