@@ -670,10 +670,7 @@ public:
     void clear() override;
 
 public:
-    // TODO eliminate shape_ids, because shape_ids[0] == hrefs[0]->getObject()->getId()
-    std::vector<Glib::ustring> shape_ids;
     std::vector<SPShapeReference *> hrefs;
-    //std::vector<std::unique_ptr<SPShapeReference> > hrefs;
 };
 
 /// Color type internal to SPStyle, FIXME Add string value to store SVG named color.
