@@ -9777,7 +9777,7 @@ msgstr "<b>Überschriebener Standardwert:</b>"
 #: ../src/live_effects/effect.cpp:1581 ../src/live_effects/effect.cpp:1648
 #: ../share/ui/dialog-trace.glade:994
 msgid "Update"
-msgstr "Akt_ualisieren"
+msgstr "Aktualisieren"
 
 #: ../src/live_effects/effect.cpp:1582 ../src/live_effects/effect.cpp:1651
 msgid "<b>Default value:</b> <s>"
