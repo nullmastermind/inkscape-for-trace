@@ -21,8 +21,8 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2019-10-09 15:17+0200\n"
-"PO-Revision-Date: 2019-08-26 06:06+0200\n"
-"Last-Translator: Sylvain Chiron <chironsylvain@orange.fr>\n"
+"PO-Revision-Date: 2020-04-28 20:06+0200\n"
+"Last-Translator: Guillaume Audirac <guillaume.audirac@viregul.fr>\n"
 "Language-Team: français <>\n"
 "Language: fr_FR\n"
 "MIME-Version: 1.0\n"
@@ -9244,7 +9244,7 @@ msgstr "Engrenages"
 
 #: ../src/live_effects/effect.cpp:120
 msgid "Create interlocking, configurable gears based on the nodes of a path"
-msgstr "Créer des mécanismes d'engrenages configurables à partir des noeuds d'un chemin"
+msgstr "Créer des mécanismes d'engrenages configurables à partir des nœuds d'un chemin"
 
 #: ../src/live_effects/effect.cpp:130
 msgid "Pattern Along Path"
@@ -9360,6 +9360,9 @@ msgid ""
 "This effect can also be used directly on the canvas with a pressure "
 "sensitive stylus and the Pencil tool."
 msgstr ""
+"Créer un tracé calligraphique de largeur et courbure variables. "
+"Cet effet peut aussi être utilisé directement sur l'espace de travail avec "
+"un stylet sensible à la pression et l'outil de dessin à main levée."
 
 #: ../src/live_effects/effect.cpp:300 ../src/selection-chemistry.cpp:2957
 msgid "Clone original"
@@ -9379,6 +9382,8 @@ msgid ""
 "Smoothen and simplify a object. This effect is also available in the Pencil "
 "tool's tool controls."
 msgstr ""
+"Adoucir et simplifier un objet. Cet effet est aussi disponible dans les "
+"paramètres de l'outil de dessin à main levée."
 
 #: ../src/live_effects/effect.cpp:329
 msgid "Lattice Deformation 2"
@@ -9411,7 +9416,7 @@ msgid ""
 "Connect the nodes of the object (e.g. corresponding to data points) by "
 "different types of lines."
 msgstr ""
-"Connecter les noeuds d'un objet (par ex. correspondant à des points de "
+"Connecter les nœuds d'un objet (par ex. correspondant à des points de "
 "données) à l'aide de différentes styles de lignes."
 
 #: ../src/live_effects/effect.cpp:371
@@ -9433,13 +9438,13 @@ msgid ""
 "Draw the handles and nodes of objects (replaces the original styling with a "
 "black stroke)"
 msgstr ""
-"Dessiner les poignées et les noeuds des objets (remplace le style original "
+"Dessiner les poignées et les nœuds des objets (remplace le style original "
 "par un contour noir)"
 
 #: ../src/live_effects/effect.cpp:403
 msgid "Roughen an object by adding and randomly shifting new nodes"
 msgstr "Apporter de la rugosité à un objet en ajoutant et en décalant "
-"aléatoirement des noeuds"
+"aléatoirement des nœuds"
 
 #: ../src/live_effects/effect.cpp:413 ../src/ui/toolbar/pencil-toolbar.cpp:268
 msgid "BSpline"
@@ -9465,6 +9470,8 @@ msgid ""
 "Select among various join types for a object's corner nodes (mitre, rounded, "
 "extrapolated arc, ...)"
 msgstr ""
+"Sélectionne un type de jointure pour les coins d'un objet parmi différents "
+"types (raccordé, arrondi, arc extrapolé...)"
 
 #: ../src/live_effects/effect.cpp:441
 msgid "Taper stroke"
@@ -9562,7 +9569,7 @@ msgid ""
 "Add dimensioning for distances between nodes, optionally with projection and "
 "many other configuration options"
 msgstr ""
-"Ajouter des mesures de distances entre les noeuds, éventuellement avec une "
+"Ajouter des mesures de distances entre les nœuds, éventuellement avec une "
 "projection ou d'autres options de configuration"
 
 #: ../src/live_effects/effect.cpp:569
@@ -9741,6 +9748,8 @@ msgid ""
 "Create calligraphic strokes with variably shaped ends, making use of a "
 "parameter for the brush angle"
 msgstr ""
+"Créer un tracé calligraphique avec des terminaisons de formes variables, "
+"utilisant un paramètre pour l'inclinaison du pinceau"
 
 #: ../src/live_effects/effect.cpp:822
 msgid "Lattice Deformation"
@@ -10215,7 +10224,7 @@ msgstr "Autorise les transformations"
 # File: ../src/live_effects/lpe-clone-original.cpp, line: 118
 #: ../src/live_effects/lpe-clone-original.cpp:118
 msgid "No Shape Sync to Current"
-msgstr ""
+msgstr "Aucune forme déjà synchronisée"
 
 #: ../src/live_effects/lpe-constructgrid.cpp:25
 msgid "Size _X:"
@@ -10956,7 +10965,7 @@ msgstr "Épaisseur du contour"
 
 #: ../src/live_effects/lpe-jointype.cpp:60
 msgid "Line cap"
-msgstr "Couvercle de la ligne"
+msgstr "Terminaison de la ligne"
 
 #: ../src/live_effects/lpe-jointype.cpp:60
 msgid "The end shape of the stroke"
@@ -11385,7 +11394,7 @@ msgstr "Type de terminaison :"
 # File: ../src/live_effects/lpe-line_segment.cpp, line: 33
 #: ../src/live_effects/lpe-line_segment.cpp:33
 msgid "Determines on which side the line or line segment is infinite."
-msgstr ""
+msgstr "Détermine de quel côté la ligne ou le segment est infini."
 
 #: ../src/live_effects/lpe-measure-segments.cpp:59
 #: ../src/ui/toolbar/text-toolbar.cpp:527 ../share/extensions/empty_page.inx:18
@@ -11655,7 +11664,7 @@ msgstr "Distance"
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 94
 #: ../src/live_effects/lpe-measure-segments.cpp:94
 msgid "Distance of the dimension lines from the outermost node"
-msgstr ""
+msgstr "Distance des lignes de cotes depuis le nœud ultrapériphérique"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:95
 msgid "Angle of projection"
@@ -14734,7 +14743,8 @@ msgid ""
 "<b>Align</b> objects to the side clicked; <b>Shift</b> click to invert side; "
 "<b>Ctrl</b> to group whole selection."
 msgstr ""
-
+"<b>Aligne</b> les objets sur le bord désigné ; <b>Maj</b> pour inverser ; "
+"<b>Ctrl</b> pour manipuler la sélection comme un groupe."
 #
 # File: ../src/seltrans-handles.cpp, line: 24
 #: ../src/seltrans-handles.cpp:24
@@ -14742,6 +14752,7 @@ msgid ""
 "<b>Align</b> objects to center; <b>Shift</b> click to center vertically "
 "instead of horizontally."
 msgstr ""
+"<b>Centre</b> les objets horizontalement ; <b>Maj</b> pour centrer verticalement."
 
 #: ../src/seltrans.cpp:496 ../src/ui/dialog/transformation.cpp:907
 msgid "Skew"
@@ -15643,7 +15654,7 @@ msgstr "Valeur"
 
 #: ../src/ui/dialog/attrdialog.cpp:155
 msgid "Shift+Return new line"
-msgstr ""
+msgstr "Maj+Entrée pour une nouvelle ligne"
 
 #: ../src/ui/dialog/attrdialog.cpp:358
 msgid "<b>Click</b> attribute to edit."
@@ -22665,18 +22676,20 @@ msgid ""
 "Keyboard shortcut \"%1\"\n"
 "is already assigned to \"%2\""
 msgstr ""
+"Le raccourci clavier « %1 »\n"
+"est déjà assigné à « %2 »"
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 2152
 #: ../src/ui/dialog/inkscape-preferences.cpp:2314
 msgid "Reassign shortcut?"
-msgstr ""
+msgstr "Réassigné le raccourci ?"
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 2153
 #: ../src/ui/dialog/inkscape-preferences.cpp:2315
 msgid "Are you sure you want to reassign this shortcut?"
-msgstr ""
+msgstr "Êtes-vous sûr de vouloir réassigné ce raccourci ?"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2411
 msgid "Misc"
@@ -23208,17 +23221,17 @@ msgstr "Haut"
 # File: ../src/ui/dialog/livepatheffect-add.cpp, line: 472
 #: ../src/ui/dialog/livepatheffect-add.cpp:562
 msgid "You don't have any favorites yet, please disable the favorites star"
-msgstr ""
+msgstr "Vous n'avez pas encore de favoris ; veuillez désactiver l'étoile des favoris"
 
 #: ../src/ui/dialog/livepatheffect-add.cpp:566
 msgid "This is your favorite effects"
-msgstr ""
+msgstr "Liste de vos effets favoris"
 
 #: ../src/ui/dialog/livepatheffect-add.cpp:571
 #: ../src/ui/dialog/livepatheffect-add.cpp:583
 #: ../src/ui/dialog/livepatheffect-add.cpp:592
 msgid "Your search do a empty result, please try again"
-msgstr ""
+msgstr "Votre recherche ne donne aucun résultat ; essayez autre chose"
 
 #: ../src/ui/dialog/livepatheffect-editor.cpp:121
 msgid "Add path effect"
@@ -23355,7 +23368,7 @@ msgstr "Inconnu"
 
 #: ../src/ui/dialog/memory.cpp:166
 msgid "Combined"
-msgstr "Somme"
+msgstr "Total"
 
 #: ../src/ui/dialog/memory.cpp:215
 msgid "Recalculate"
@@ -23476,6 +23489,14 @@ msgid ""
 "Note that the specification of this property is not finalized. Support and "
 "interpretation of these values varies between renderers."
 msgstr ""
+"La propriété 'image-rendering' peut jouer sur la façon dont l'image matricielle est redimensionnée :\n"
+"\t• 'auto' pas de préférence (habituellement lisse mais floue)\n"
+"\t• 'optimizeQuality' pour privilégier la qualité de rendu (habituellement lisse mais floue)\n"
+"\t• 'optimizeSpeed' pour privilégier la vitesse de rendu (habituellement crénelée)\n"
+"\t• 'crisp-edges' pour redimensionner sans bords flous (souvent crénelée)\n"
+"\t• 'pixelated' pour un rendu pixélisé (crénelé)\n"
+"Notez que la spécification de cette propriété n'est pas finalisée. La compatibilité et "
+"l'interprétation varient suivant les moteurs de rendu (navigateurs...)."
 
 #: ../src/ui/dialog/object-properties.cpp:254
 msgid "Check to make the object invisible"
@@ -24056,9 +24077,8 @@ msgid "Font Attributes"
 msgstr "Attributs de fonte"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:457
-#, fuzzy
 msgid "Horiz. Advance X"
-msgstr "Retrait horizontal X"
+msgstr "Avance horizontale d'X"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:457
 msgid "Average amount of horizontal space each letter takes up."
@@ -24126,7 +24146,6 @@ msgstr ""
 "sur la lettre 'h'."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:465
-#, fuzzy
 msgid "Cap Height:"
 msgstr "Hauteur de capitale :"
 
@@ -24134,16 +24153,17 @@ msgstr "Hauteur de capitale :"
 msgid ""
 "The height of a capital letter above the baseline like the letter 'H' or 'I'."
 msgstr ""
+"Hauteur des lettres capitales au-dessus de la ligne de base comme la lettre 'H' ou 'I'."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:466
-#, fuzzy
 msgid "x Height:"
-msgstr "Hauteur x :"
+msgstr "Hauteur de x :"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:466
 msgid ""
 "The height of a lower-case letter above the baseline like the letter 'x'."
 msgstr ""
+"Hauteur des lettres minuscules au-dessus de la ligne de base comme la lettre 'x'."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:542
 msgid "glyph"
@@ -24185,7 +24205,6 @@ msgid "Set glyph unicode"
 msgstr "Définir l'unicode du glyphe"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:735
-#, fuzzy
 msgid "Set glyph advance"
 msgstr "Définir l'avance du glyphe"
 
@@ -24218,7 +24237,6 @@ msgid "Matching string"
 msgstr "Chaîne correspondante"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:817
-#, fuzzy
 msgid "Advance"
 msgstr "Avance"
 
@@ -29887,13 +29905,11 @@ msgid "Ruby"
 msgstr "Ruby"
 
 #: ../src/ui/widget/font-variants.cpp:200
-#, fuzzy
 msgctxt "Font feature"
 msgid "Feature Settings"
-msgstr "Propriétés de la fonction"
+msgstr "Propriétés de fonction"
 
 #: ../src/ui/widget/font-variants.cpp:201
-#, fuzzy
 msgctxt "Font feature"
 msgid "Selection has different Feature Settings!"
 msgstr "La sélection a des propriétés de fonction différentes !"
@@ -30058,9 +30074,8 @@ msgid "Ruby variants. OpenType table: 'ruby'."
 msgstr "Variantes ruby. Table OpenType : ruby"
 
 #: ../src/ui/widget/font-variants.cpp:482
-#, fuzzy
 msgid "Feature settings in CSS form (e.g. \"wxyz\" or \"wxyz\" 3)."
-msgstr "Propriétés de la fonction en CSS (par ex. wxyz ou wxyz 3)."
+msgstr "Propriétés de fonction en CSS (par ex. « wxyz » ou « wxyz » 3)."
 
 #: ../src/ui/widget/layer-selector.cpp:115
 msgid "Toggle current layer visibility"
@@ -32747,11 +32762,11 @@ msgstr ""
 
 #: ../src/verbs.cpp:3026
 msgid "_Split View Mode"
-msgstr "Mode d'affichage divi_sé"
+msgstr "Mode d'affichage _scindé"
 
 #: ../src/verbs.cpp:3027
 msgid "Split canvas in 2 to show outline"
-msgstr "Divise la vue en 2 pour afficher le contour"
+msgstr "Scinde la vue en 2 pour afficher le contour"
 
 #: ../src/verbs.cpp:3029
 msgid "_XRay Mode"
@@ -34060,7 +34075,7 @@ msgstr ""
 
 #: ../share/extensions/embedimage.py:78
 msgid "File not found \"{}\". Unable to embed image."
-msgstr ""
+msgstr "Fichier « {} » introuvable. Impossible d'inclure l'image."
 
 #: ../share/extensions/embedimage.py:92
 #, python-format
@@ -34786,7 +34801,7 @@ msgstr "Nombre de segments :"
 #: ../share/extensions/straightseg.inx:11
 #: ../share/extensions/summersnight.inx:9 ../share/extensions/whirl.inx:11
 msgid "Modify Path"
-msgstr "Modifier le chemin"
+msgstr "Modifier les chemins"
 
 #: ../share/extensions/aisvg.inx:3
 msgid "AI SVG Input"
@@ -34881,11 +34896,11 @@ msgstr "Plage des couleurs en entrée :"
 
 #: ../share/extensions/color_custom.inx:13
 msgid "0 - 1"
-msgstr ""
+msgstr "0 - 1"
 
 #: ../share/extensions/color_custom.inx:14
 msgid "0 - 255"
-msgstr ""
+msgstr "0 - 255"
 
 #: ../share/extensions/color_custom.inx:18
 msgid ""
@@ -35067,7 +35082,7 @@ msgstr "Visualisation de chemin"
 
 #: ../share/extensions/docinfo.inx:3
 msgid "DOC Info"
-msgstr ""
+msgstr "Info DOC"
 
 #: ../share/extensions/docinfo.inx:7
 msgid "Show page info"
@@ -35641,7 +35656,7 @@ msgstr "85mm x 55mm (Europe)"
 
 #: ../share/extensions/empty_business_card.inx:10
 msgid "90mm x 55mm (Australia, India, ...)"
-msgstr "90mm x 55mm (Australie, Inde, ...)"
+msgstr "90mm x 55mm (Australie, Inde...)"
 
 #: ../share/extensions/empty_business_card.inx:11
 msgid "91mm x 55mm (Japan)"
@@ -35649,11 +35664,11 @@ msgstr "91mm x 55mm (Japon)"
 
 #: ../share/extensions/empty_business_card.inx:12
 msgid "90mm x 54mm (China, ...)"
-msgstr "90mm x 54mm (Chine, ...)"
+msgstr "90mm x 54mm (Chine...)"
 
 #: ../share/extensions/empty_business_card.inx:13
 msgid "90mm x 50mm (India, Russia, ...)"
-msgstr "90mm x 50mm (Inde, Russie, ...)"
+msgstr "90mm x 50mm (Inde, Russie...)"
 
 #: ../share/extensions/empty_business_card.inx:14
 msgid "3.5in x 2in (United States, Canada)"
@@ -39825,7 +39840,7 @@ msgstr "Pour plus de détails, consultez"
 
 #: ../share/extensions/output_scour.inx:105
 msgid "https://github.com/scour-project/scour"
-msgstr ""
+msgstr "https://github.com/scour-project/scour"
 
 #: ../share/extensions/output_scour.inx:110
 msgid "This version of the extension is designed for"
@@ -39833,7 +39848,7 @@ msgstr "Cette version de l'extension est conçue pour"
 
 #: ../share/extensions/output_scour.inx:111
 msgid "Scour 0.31+"
-msgstr ""
+msgstr "Scour 0.31+"
 
 #: ../share/extensions/output_scour.inx:115
 msgid "Show warnings for older versions of Scour"
@@ -39906,9 +39921,8 @@ msgid "Mesh-Gradient to Path"
 msgstr "Filet de dégradé en chemin"
 
 #: ../share/extensions/path_mesh_m2p.inx:14
-#, fuzzy
 msgid "Patches"
-msgstr "Échantillon"
+msgstr "Taches"
 
 #: ../share/extensions/path_mesh_m2p.inx:15
 #: ../share/extensions/polyhedron_3d.inx:78
@@ -40053,7 +40067,7 @@ msgstr ""
 # File: ../share/extensions/pdflatex.inx, line: 3
 #: ../share/extensions/pdflatex.inx:3
 msgid "LaTeX (pdflatex)"
-msgstr ""
+msgstr "LaTeX (pdflatex)"
 
 #: ../share/extensions/pdflatex.inx:6
 msgid "LaTeX input:"
@@ -40064,9 +40078,8 @@ msgid "Additional packages (comma-separated):"
 msgstr "Paquets supplémentaires (séparés par des virgules) :"
 
 #: ../share/extensions/pdflatex.inx:12
-#, fuzzy
 msgid "Mathematics"
-msgstr "Opérateurs mathématiques"
+msgstr "Mathématiques"
 
 #: ../share/extensions/perfectboundcover.inx:3
 msgid "Perfect-Bound Cover Template"
@@ -40158,6 +40171,9 @@ msgid ""
 "Snap selected paths, images, and rectangles to pixel boundaries. Strokes "
 "with a non-zero odd width are snapped to midpoints, so they align correctly"
 msgstr ""
+"Aligne les chemins, images et rectangles sélectionnés aux frontières des pixels. "
+"Les contours de largeur impaire et non-nulle sont alignés sur les points médians "
+"et s'alignent donc correctement"
 
 #
 # File: ../share/extensions/pixelsnap.inx, line: 8
@@ -40166,6 +40182,8 @@ msgid ""
 "Snap unselected ancestors' translations (groups, layers, document height) "
 "first"
 msgstr ""
+"Aligne en premier les déplacements des ancêtres non-sélectionnés "
+"(groupes, calques, hauteur du document)"
 
 #
 # File: ../share/extensions/pixelsnap.inx, line: 9
@@ -40174,9 +40192,10 @@ msgid ""
 "Calculate offset relative to unselected ancestors' transforms (includes "
 "document height offset)"
 msgstr ""
+"Calcule le décalage relativement aux transformations des ancêtres non-sélectionnés "
+"(y compris le décalage de hauteur de document)"
 
 #: ../share/extensions/pixelsnap.inx:11
-#, fuzzy
 msgid "Maximum slope to consider straight (%)"
 msgstr "Pente maximale des segments considérés comme droits (%)"
 
@@ -41037,11 +41056,11 @@ msgstr "Jambage supérieur :"
 
 #: ../share/extensions/setup_typography_canvas.inx:8
 msgid "Caps Height:"
-msgstr "Hauteur de capitale :"
+msgstr "Hauteur de capitales :"
 
 #: ../share/extensions/setup_typography_canvas.inx:9
 msgid "X-Height:"
-msgstr "Hauteur de minuscule :"
+msgstr "Hauteur de X :"
 
 #: ../share/extensions/setup_typography_canvas.inx:10
 msgid "Descender:"
@@ -42346,52 +42365,46 @@ msgid "Turns (360 deg/turn)"
 msgstr "Tours (360 deg/tour"
 
 #: ../share/ui/units.xml:81
-#, fuzzy
 msgid "font-height"
-msgstr "Lumière ponctuelle (rayons omnidirectionnels)"
+msgstr "hauteur de fonte"
 
 #: ../share/ui/units.xml:82
-#, fuzzy
 msgid "font-heights"
-msgstr "Lumière ponctuelle (rayons omnidirectionnels)"
+msgstr "hauteurs de fonte"
 
 #: ../share/ui/units.xml:85
-#, fuzzy
 msgid "Font height"
-msgstr "Ajuster à la hauteur"
+msgstr "Hauteur de fonte"
 
 #: ../share/ui/units.xml:88
-#, fuzzy
 msgid "x-height"
-msgstr "Hauteur"
+msgstr "hauteur d'x"
 
 #: ../share/ui/units.xml:89
-#, fuzzy
 msgid "x-heights"
-msgstr "Hauteur"
+msgstr "hauteurs d'x"
 
 #: ../share/ui/units.xml:92
-#, fuzzy
 msgid "Height of letter 'x'"
-msgstr "Hauteur du papier"
+msgstr "Hauteur de la lettre 'x'"
 
 #
 # File: ../share/ui/units.xml, line: 95
 #: ../share/ui/units.xml:95
 msgid "half-em"
-msgstr ""
+msgstr "demi-cadratin"
 
 #
 # File: ../share/ui/units.xml, line: 96
 #: ../share/ui/units.xml:96
 msgid "half-ems"
-msgstr ""
+msgstr "demi-cadratins"
 
 #
 # File: ../share/ui/units.xml, line: 99
 #: ../share/ui/units.xml:99
 msgid "Half of font height"
-msgstr ""
+msgstr "Demi-hauteur de fonte"
 
 #~ msgid "  location: "
 #~ msgstr "  emplacement : "
