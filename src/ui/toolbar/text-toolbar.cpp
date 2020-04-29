@@ -1253,10 +1253,11 @@ TextToolbar::direction_changed(int mode)
 void
 TextToolbar::lineheight_value_changed()
 {
-    // quit if run by the _changed callbacks
-    if (_freeze) {
+    // quit if run by the _changed callbacks or is not text tool
+    if (_freeze || !SP_IS_TEXT_CONTEXT(_desktop->event_context)) {
         return;
     }
+        
     _freeze = true;
     SPDesktop *desktop = _desktop;
     // Get user selected unit and save as preference
@@ -1361,8 +1362,8 @@ TextToolbar::lineheight_value_changed()
 void
 TextToolbar::lineheight_unit_changed(int /* Not Used */)
 {
-    // quit if run by the _changed callbacks
-    if (_freeze) {
+    // quit if run by the _changed callbacks or is not text tool
+    if (_freeze || !SP_IS_TEXT_CONTEXT(_desktop->event_context)) {
         return;
     }
     _freeze = true;
@@ -1443,7 +1444,7 @@ TextToolbar::lineheight_unit_changed(int /* Not Used */)
             line_height *= 2;
         }
     } else if (old_unit == SP_CSS_UNIT_NONE || old_unit == SP_CSS_UNIT_PERCENT || old_unit == SP_CSS_UNIT_EM ||
-               old_unit == SP_CSS_UNIT_EX) {
+            old_unit == SP_CSS_UNIT_EX) {
         // Convert relative to absolute... for the moment use average font-size
         if (old_unit == SP_CSS_UNIT_PERCENT) {
             line_height /= 100.0;
