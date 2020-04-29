@@ -144,6 +144,10 @@ Gtk::Paned *Dock::getPaned()
 
 GtkWidget *Dock::getGdlWidget()
 {
+    //FIX issue #Inkscape125
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(_gdl_dock, &allocation);
+    gtk_widget_size_allocate(_gdl_dock, &allocation); 
     return GTK_WIDGET(_gdl_dock);
 }
 
