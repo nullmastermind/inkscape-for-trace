@@ -403,6 +403,20 @@ void FilterKnotHolderEntity::knot_set(Geom::Point const &p, Geom::Point const &o
         if(!filter) return;
         Geom::OptRect orig_bbox = item->visualBounds();
         std::unique_ptr<Geom::Rect> new_bbox(_topleft ? new Geom::Rect(p,orig_bbox->max()) : new Geom::Rect(orig_bbox->min(), p));
+
+        if (!filter->width._set) {
+            filter->width.set(SVGLength::PERCENT, 1.2);
+        }
+        if (!filter->height._set) {
+            filter->height.set(SVGLength::PERCENT, 1.2);
+        }
+        if (!filter->x._set) {
+            filter->x.set(SVGLength::PERCENT, -0.1);
+        }
+        if (!filter->y._set) {
+            filter->y.set(SVGLength::PERCENT, -0.1);
+        }
+
         if(_topleft) {
             float x_a = filter->width.computed;
             float y_a = filter->height.computed;
