@@ -1331,11 +1331,6 @@ SPIShapes::read( gchar const *str) {
         } else {
             auto uri = extract_uri(shape_url.c_str()); // Do before we erase "url(#"
 
-            shape_url.erase(0,5);
-            shape_url.erase(shape_url.size()-1,1);
-
-            shape_ids.push_back(shape_url);
-
             // This ups the href count of the shape. This is required so that vacuuming a
             // document does not delete shapes stored in <defs>.
             SPShapeReference *href = new SPShapeReference(object);
@@ -1353,8 +1348,6 @@ void
 SPIShapes::clear() {
 
     SPIBase::clear();
-
-    shape_ids.clear();
 
     hrefs_clear();
 }

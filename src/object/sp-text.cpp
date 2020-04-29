@@ -45,6 +45,7 @@
 
 #include "sp-title.h"
 #include "sp-desc.h"
+#include "sp-rect.h"
 #include "sp-text.h"
 
 #include "sp-shape.h"
@@ -516,9 +517,9 @@ void SPText::_buildLayoutInit()
             }
 
             // Find inside shape curves
-            for (auto shape_id : style->shape_inside.shape_ids) {
+            for (auto *href : style->shape_inside.hrefs) {
+                auto shape = href->getObject();
 
-                    SPShape *shape = dynamic_cast<SPShape *>(document->getObjectById( shape_id ));
                     if ( shape ) {
 
                         // This code adapted from sp-flowregion.cpp: GetDest()
@@ -769,9 +770,9 @@ Shape* SPText::_buildExclusionShape() const
     std::unique_ptr<Shape> result(new Shape()); // Union of all exclusion shapes
     std::unique_ptr<Shape> shape_temp(new Shape());
 
-    for(auto shape_id : style->shape_subtract.shape_ids) {
+    for (auto *href : style->shape_subtract.hrefs) {
+        auto shape = href->getObject();
 
-            SPShape *shape = dynamic_cast<SPShape *>(document->getObjectById( shape_id ));
             if ( shape ) {
                 // This code adapted from sp-flowregion.cpp: GetDest()
                 if (!(shape->_curve)) {
@@ -1139,35 +1140,21 @@ Geom::OptRect SPText::get_frame()
 // Find the node of the first rectangle (if it exists) in 'shape-inside'.
 Inkscape::XML::Node* SPText::get_first_rectangle()
 {
-    Inkscape::XML::Node* first_rectangle = nullptr;
-
-    Inkscape::XML::Node *our_ref = getRepr();
-
     if (style->shape_inside.set) {
 
-        std::vector<Glib::ustring> shapes = get_shapes();
-
-        for (auto shape: shapes) {
-
-            Inkscape::XML::Node *item =
-                sp_repr_lookup_descendant (our_ref->root(), "id", shape.c_str());
-
-            if (item && strncmp("svg:rect", item->name(), 8) == 0) {
+        for (auto *href : style->shape_inside.hrefs) {
+            auto *shape = href->getObject();
+            if (dynamic_cast<SPRect*>(shape)) {
+                auto *item = shape->getRepr();
+                g_return_val_if_fail(item, nullptr);
+                assert(strncmp("svg:rect", item->name(), 8) == 0);
                 return item;
-                break;
             }
         }
     }
 
-    return first_rectangle;
+    return nullptr;
 }
-
-// Get a list of shape in 'shape-inside' as a vector of strings.
-std::vector<Glib::ustring> SPText::get_shapes() const
-{
-    return style->shape_inside.shape_ids;
-}
-
 
 SPItem *create_text_with_inline_size (SPDesktop *desktop, Geom::Point p0, Geom::Point p1)
 {

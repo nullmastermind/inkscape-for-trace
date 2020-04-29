@@ -209,7 +209,11 @@ find_references(SPObject *elem, refmap_type &refmap)
     for (unsigned i = 0; i < NUM_SPISHAPES_PROPERTIES; ++i) {
         const SPIShapes SPStyle::*prop = SPIShapes_members[i];
         const SPIShapes *shapes = &(style->*prop);
-        for (const auto &shape_id : shapes->shape_ids) {
+        for (auto *href : shapes->hrefs) {
+            auto obj = href->getObject();
+            if (!obj)
+                continue;
+            auto shape_id = obj->getId();
             IdReference idref = { REF_SHAPES, elem, SPIShapes_properties[i] };
             refmap[shape_id].push_back(idref);
         }

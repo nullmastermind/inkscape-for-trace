@@ -31,8 +31,11 @@ template<typename InIter>
 text_refs_t text_categorize_refs(SPDocument *doc, InIter begin, InIter end, text_ref_t which) {
     text_refs_t res;
     std::set<Glib::ustring> int_ext;
-    auto idVisitor = [doc, which, &res, &int_ext](const Glib::ustring &id) {
-        auto ref_obj = doc->getObjectById(id);
+    auto idVisitor = [which, &res, &int_ext](SPShapeReference *href) {
+        auto ref_obj = href->getObject();
+        if (!ref_obj)
+            return;
+        auto id = ref_obj->getId();
         if (sp_repr_is_def(ref_obj->getRepr())) {
             if (which & TEXT_REF_DEF) {
                 res.emplace_back(id, TEXT_REF_DEF);
@@ -54,10 +57,10 @@ text_refs_t text_categorize_refs(SPDocument *doc, InIter begin, InIter end, text
             auto crnt_obj = doc->getObjectByRepr(crnt);
             assert(crnt_obj == doc->getObjectById(crnt->attribute("id")));
             {
-                const auto &inside_ids = crnt_obj->style->shape_inside.shape_ids;
+                const auto &inside_ids = crnt_obj->style->shape_inside.hrefs;
                 std::for_each(inside_ids.begin(), inside_ids.end(), idVisitor);
 
-                const auto &subtract_ids = crnt_obj->style->shape_subtract.shape_ids;
+                const auto &subtract_ids = crnt_obj->style->shape_subtract.hrefs;
                 std::for_each(subtract_ids.begin(), subtract_ids.end(), idVisitor);
             }
             // Do not recurse into svg:text elements children
