@@ -61,3 +61,10 @@ spinbutton undershoot {
 #DesktopMainTable spinbutton{
     font-family: sans-serif;
 }
+/*
+* TODO: Consider move to style.css. this get a errot rendering because
+* Canvas is resized on chage data of the bar making strange redraws
+*/
+#DesktopStatusBar{
+    min-height:40px;
+}
