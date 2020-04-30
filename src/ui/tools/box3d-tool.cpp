@@ -184,6 +184,7 @@ bool Box3dTool::root_handler(GdkEvent* event) {
     static bool dragging;
 
     SPDocument *document = desktop->getDocument();
+    auto const y_dir = desktop->yaxisdir();
     Inkscape::Selection *selection = desktop->getSelection();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int const snaps = prefs->getInt("/options/rotationsnapsperpi/value", 12);
@@ -352,42 +353,42 @@ bool Box3dTool::root_handler(GdkEvent* event) {
             break;
 
         case GDK_KEY_bracketright:
-            persp3d_rotate_VP (document->getCurrentPersp3D(), Proj::X, -180/snaps, MOD__ALT(event));
+            persp3d_rotate_VP (document->getCurrentPersp3D(), Proj::X, 180 / snaps * y_dir, MOD__ALT(event));
             DocumentUndo::done(document, SP_VERB_CONTEXT_3DBOX,
                              _("Change perspective (angle of PLs)"));
             ret = true;
             break;
 
         case GDK_KEY_bracketleft:
-            persp3d_rotate_VP (document->getCurrentPersp3D(), Proj::X, 180/snaps, MOD__ALT(event));
+            persp3d_rotate_VP (document->getCurrentPersp3D(), Proj::X, -180 / snaps * y_dir, MOD__ALT(event));
             DocumentUndo::done(document, SP_VERB_CONTEXT_3DBOX,
                              _("Change perspective (angle of PLs)"));
             ret = true;
             break;
 
         case GDK_KEY_parenright:
-            persp3d_rotate_VP (document->getCurrentPersp3D(), Proj::Y, -180/snaps, MOD__ALT(event));
+            persp3d_rotate_VP (document->getCurrentPersp3D(), Proj::Y, 180 / snaps * y_dir, MOD__ALT(event));
             DocumentUndo::done(document, SP_VERB_CONTEXT_3DBOX,
                              _("Change perspective (angle of PLs)"));
             ret = true;
             break;
 
         case GDK_KEY_parenleft:
-            persp3d_rotate_VP (document->getCurrentPersp3D(), Proj::Y, 180/snaps, MOD__ALT(event));
+            persp3d_rotate_VP (document->getCurrentPersp3D(), Proj::Y, -180 / snaps * y_dir, MOD__ALT(event));
             DocumentUndo::done(document, SP_VERB_CONTEXT_3DBOX,
                              _("Change perspective (angle of PLs)"));
             ret = true;
             break;
 
         case GDK_KEY_braceright:
-            persp3d_rotate_VP (document->getCurrentPersp3D(), Proj::Z, -180/snaps, MOD__ALT(event));
+            persp3d_rotate_VP (document->getCurrentPersp3D(), Proj::Z, 180 / snaps * y_dir, MOD__ALT(event));
             DocumentUndo::done(document, SP_VERB_CONTEXT_3DBOX,
                              _("Change perspective (angle of PLs)"));
             ret = true;
             break;
 
         case GDK_KEY_braceleft:
-            persp3d_rotate_VP (document->getCurrentPersp3D(), Proj::Z, 180/snaps, MOD__ALT(event));
+            persp3d_rotate_VP (document->getCurrentPersp3D(), Proj::Z, -180 / snaps * y_dir, MOD__ALT(event));
             DocumentUndo::done(document, SP_VERB_CONTEXT_3DBOX,
                              _("Change perspective (angle of PLs)"));
             ret = true;
