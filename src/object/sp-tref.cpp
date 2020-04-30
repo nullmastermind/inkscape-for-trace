@@ -64,12 +64,12 @@ SPTRef::~SPTRef() {
 void SPTRef::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPItem::build(document, repr);
 
-    this->readAttr( "xlink:href" );
-    this->readAttr( "x" );
-    this->readAttr( "y" );
-    this->readAttr( "dx" );
-    this->readAttr( "dy" );
-    this->readAttr( "rotate" );
+    this->readAttr(SP_ATTR_XLINK_HREF);
+    this->readAttr(SP_ATTR_X);
+    this->readAttr(SP_ATTR_Y);
+    this->readAttr(SP_ATTR_DX);
+    this->readAttr(SP_ATTR_DY);
+    this->readAttr(SP_ATTR_ROTATE);
 }
 
 void SPTRef::release() {

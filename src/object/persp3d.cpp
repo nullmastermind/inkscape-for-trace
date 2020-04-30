@@ -67,10 +67,10 @@ Persp3D::~Persp3D() = default;
 void Persp3D::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPObject::build(document, repr);
 
-    this->readAttr( "inkscape:vp_x" );
-    this->readAttr( "inkscape:vp_y" );
-    this->readAttr( "inkscape:vp_z" );
-    this->readAttr( "inkscape:persp3d-origin" );
+    this->readAttr(SP_ATTR_INKSCAPE_PERSP3D_VP_X);
+    this->readAttr(SP_ATTR_INKSCAPE_PERSP3D_VP_Y);
+    this->readAttr(SP_ATTR_INKSCAPE_PERSP3D_VP_Z);
+    this->readAttr(SP_ATTR_INKSCAPE_PERSP3D_ORIGIN);
 
     if (repr) {
         repr->addListener (&persp3d_repr_events, this);

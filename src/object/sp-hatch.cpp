@@ -70,15 +70,15 @@ void SPHatch::build(SPDocument* doc, Inkscape::XML::Node* repr)
 {
     SPPaintServer::build(doc, repr);
 
-    readAttr("hatchUnits");
-    readAttr("hatchContentUnits");
-    readAttr("hatchTransform");
-    readAttr("x");
-    readAttr("y");
-    readAttr("pitch");
-    readAttr("rotate");
-    readAttr("xlink:href");
-    readAttr( "style" );
+    readAttr(SP_ATTR_HATCHUNITS);
+    readAttr(SP_ATTR_HATCHCONTENTUNITS);
+    readAttr(SP_ATTR_HATCHTRANSFORM);
+    readAttr(SP_ATTR_X);
+    readAttr(SP_ATTR_Y);
+    readAttr(SP_ATTR_PITCH);
+    readAttr(SP_ATTR_ROTATE);
+    readAttr(SP_ATTR_XLINK_HREF);
+    readAttr(SP_ATTR_STYLE);
 
     // Register ourselves
     doc->addResource("hatch", this);

@@ -151,7 +151,7 @@ void SPFlowtext::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 
     SPItem::build(doc, repr);
 
-    this->readAttr( "inkscape:layoutOptions" );     // must happen after css has been read
+    this->readAttr(SP_ATTR_LAYOUT_OPTIONS);     // must happen after css has been read
 }
 
 void SPFlowtext::set(SPAttributeEnum key, const gchar* value) {

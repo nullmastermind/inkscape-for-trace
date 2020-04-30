@@ -40,13 +40,13 @@ void SPFeFuncNode::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPObject::build(document, repr);
 
     //Read values of key attributes from XML nodes into object.
-    this->readAttr( "type" );
-    this->readAttr( "tableValues" );
-    this->readAttr( "slope" );
-    this->readAttr( "intercept" );
-    this->readAttr( "amplitude" );
-    this->readAttr( "exponent" );
-    this->readAttr( "offset" );
+    this->readAttr(SP_ATTR_TYPE);
+    this->readAttr(SP_ATTR_TABLEVALUES);
+    this->readAttr(SP_ATTR_SLOPE);
+    this->readAttr(SP_ATTR_INTERCEPT);
+    this->readAttr(SP_ATTR_AMPLITUDE);
+    this->readAttr(SP_ATTR_EXPONENT);
+    this->readAttr(SP_ATTR_OFFSET);
 
 
 //is this necessary?
@@ -175,13 +175,13 @@ void SPFeFuncNode::set(SPAttributeEnum key, gchar const *value) {
 void SPFeFuncNode::update(SPCtx *ctx, guint flags) {
     std::cout << "SPFeFuncNode::update" << std::endl;
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
-        this->readAttr( "type" );
-        this->readAttr( "tableValues" );
-        this->readAttr( "slope" );
-        this->readAttr( "intercept" );
-        this->readAttr( "amplitude" );
-        this->readAttr( "exponent" );
-        this->readAttr( "offset" );
+        this->readAttr(SP_ATTR_TYPE);
+        this->readAttr(SP_ATTR_TABLEVALUES);
+        this->readAttr(SP_ATTR_SLOPE);
+        this->readAttr(SP_ATTR_INTERCEPT);
+        this->readAttr(SP_ATTR_AMPLITUDE);
+        this->readAttr(SP_ATTR_EXPONENT);
+        this->readAttr(SP_ATTR_OFFSET);
     }
 
     SPObject::update(ctx, flags);

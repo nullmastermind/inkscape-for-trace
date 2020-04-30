@@ -131,14 +131,14 @@ SPImage::~SPImage() = default;
 void SPImage::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPItem::build(document, repr);
 
-    this->readAttr( "xlink:href" );
-    this->readAttr( "x" );
-    this->readAttr( "y" );
-    this->readAttr( "width" );
-    this->readAttr( "height" );
-    this->readAttr("inkscape:svg-dpi");
-    this->readAttr( "preserveAspectRatio" );
-    this->readAttr( "color-profile" );
+    this->readAttr(SP_ATTR_XLINK_HREF);
+    this->readAttr(SP_ATTR_X);
+    this->readAttr(SP_ATTR_Y);
+    this->readAttr(SP_ATTR_WIDTH);
+    this->readAttr(SP_ATTR_HEIGHT);
+    this->readAttr(SP_ATTR_SVG_DPI);
+    this->readAttr(SP_ATTR_PRESERVEASPECTRATIO);
+    this->readAttr(SP_PROP_COLOR_PROFILE);
 
     /* Register */
     document->addResource("image", this);

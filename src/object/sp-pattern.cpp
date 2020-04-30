@@ -66,17 +66,17 @@ void SPPattern::build(SPDocument *doc, Inkscape::XML::Node *repr)
 {
     SPPaintServer::build(doc, repr);
 
-    this->readAttr("patternUnits");
-    this->readAttr("patternContentUnits");
-    this->readAttr("patternTransform");
-    this->readAttr("x");
-    this->readAttr("y");
-    this->readAttr("width");
-    this->readAttr("height");
-    this->readAttr("viewBox");
-    this->readAttr("preserveAspectRatio");
-    this->readAttr("xlink:href");
-    this->readAttr("style");
+    this->readAttr(SP_ATTR_PATTERNUNITS);
+    this->readAttr(SP_ATTR_PATTERNCONTENTUNITS);
+    this->readAttr(SP_ATTR_PATTERNTRANSFORM);
+    this->readAttr(SP_ATTR_X);
+    this->readAttr(SP_ATTR_Y);
+    this->readAttr(SP_ATTR_WIDTH);
+    this->readAttr(SP_ATTR_HEIGHT);
+    this->readAttr(SP_ATTR_VIEWBOX);
+    this->readAttr(SP_ATTR_PRESERVEASPECTRATIO);
+    this->readAttr(SP_ATTR_XLINK_HREF);
+    this->readAttr(SP_ATTR_STYLE);
 
     /* Register ourselves */
     doc->addResource("pattern", this);

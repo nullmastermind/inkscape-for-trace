@@ -114,10 +114,10 @@ SPPath::~SPPath() = default;
 
 void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
     /* Are these calls actually necessary? */
-    this->readAttr( "marker" );
-    this->readAttr( "marker-start" );
-    this->readAttr( "marker-mid" );
-    this->readAttr( "marker-end" );
+    this->readAttr(SP_PROP_MARKER);
+    this->readAttr(SP_PROP_MARKER_START);
+    this->readAttr(SP_PROP_MARKER_MID);
+    this->readAttr(SP_PROP_MARKER_END);
 
     sp_conn_end_pair_build(this);
 
@@ -175,7 +175,7 @@ void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
     }
 
 
-    // this->readAttr( "inkscape:original-d" ); // bug #1299948
+    // this->readAttr(SP_ATTR_INKSCAPE_ORIGINAL_D); // bug #1299948
     // Why we take the long way of doing this probably needs some explaining:
     //
     // Normally upon being built, reading the inkscape:original-d attribute
@@ -209,7 +209,7 @@ void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
             _curve_before_lpe = curve->ref();
         }
     }
-    this->readAttr( "d" );
+    this->readAttr(SP_ATTR_D);
 
     /* d is a required attribute */
     char const *d = this->getAttribute("d", nullptr);

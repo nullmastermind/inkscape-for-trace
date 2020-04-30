@@ -76,15 +76,15 @@ SPMarker::~SPMarker() = default;
  * \see SPObject::build()
  */
 void SPMarker::build(SPDocument *document, Inkscape::XML::Node *repr) {
-    this->readAttr( "markerUnits" );
-    this->readAttr( "refX" );
-    this->readAttr( "refY" );
-    this->readAttr( "markerWidth" );
-    this->readAttr( "markerHeight" );
-    this->readAttr( "orient" );
-    this->readAttr( "viewBox" );
-    this->readAttr( "preserveAspectRatio" );
-    this->readAttr( "style" );
+    this->readAttr(SP_ATTR_MARKERUNITS);
+    this->readAttr(SP_ATTR_REFX);
+    this->readAttr(SP_ATTR_REFY);
+    this->readAttr(SP_ATTR_MARKERWIDTH);
+    this->readAttr(SP_ATTR_MARKERHEIGHT);
+    this->readAttr(SP_ATTR_ORIENT);
+    this->readAttr(SP_ATTR_VIEWBOX);
+    this->readAttr(SP_ATTR_PRESERVEASPECTRATIO);
+    this->readAttr(SP_ATTR_STYLE);
 
     SPGroup::build(document, repr);
 }

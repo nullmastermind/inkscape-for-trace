@@ -78,11 +78,11 @@ SPUse::~SPUse() {
 void SPUse::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPItem::build(document, repr);
 
-    this->readAttr( "x" );
-    this->readAttr( "y" );
-    this->readAttr( "width" );
-    this->readAttr( "height" );
-    this->readAttr( "xlink:href" );
+    this->readAttr(SP_ATTR_X);
+    this->readAttr(SP_ATTR_Y);
+    this->readAttr(SP_ATTR_WIDTH);
+    this->readAttr(SP_ATTR_HEIGHT);
+    this->readAttr(SP_ATTR_XLINK_HREF);
 
     // We don't need to create child here:
     // reading xlink:href will attach ref, and that will cause the changed signal to be emitted,
@@ -456,7 +456,7 @@ void SPUse::move_compensate(Geom::Affine const *mp) {
     }
 
     // restore item->transform field from the repr, in case it was changed by seltrans
-    this->readAttr ("transform");
+    this->readAttr (SP_ATTR_TRANSFORM);
 
 
     // calculate the compensation matrix and the advertized movement matrix

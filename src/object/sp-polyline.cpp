@@ -27,7 +27,7 @@ SPPolyLine::~SPPolyLine() = default;
 void SPPolyLine::build(SPDocument * document, Inkscape::XML::Node * repr) {
     SPShape::build(document, repr);
 
-    this->readAttr("points");
+    this->readAttr(SP_ATTR_POINTS);
 }
 
 void SPPolyLine::set(SPAttributeEnum key, const gchar* value) {

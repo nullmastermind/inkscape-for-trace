@@ -46,16 +46,16 @@ void SPStar::build(SPDocument * document, Inkscape::XML::Node * repr) {
 	// CPPIFY: see header file
     SPShape::build(document, repr);
 
-    this->readAttr( "sodipodi:cx" );
-    this->readAttr( "sodipodi:cy" );
-    this->readAttr( "sodipodi:sides" );
-    this->readAttr( "sodipodi:r1" );
-    this->readAttr( "sodipodi:r2" );
-    this->readAttr( "sodipodi:arg1" );
-    this->readAttr( "sodipodi:arg2" );
-    this->readAttr( "inkscape:flatsided" );
-    this->readAttr( "inkscape:rounded" );
-    this->readAttr( "inkscape:randomized" );
+    this->readAttr(SP_ATTR_SODIPODI_CX);
+    this->readAttr(SP_ATTR_SODIPODI_CY);
+    this->readAttr(SP_ATTR_SODIPODI_SIDES);
+    this->readAttr(SP_ATTR_SODIPODI_R1);
+    this->readAttr(SP_ATTR_SODIPODI_R2);
+    this->readAttr(SP_ATTR_SODIPODI_ARG1);
+    this->readAttr(SP_ATTR_SODIPODI_ARG2);
+    this->readAttr(SP_ATTR_INKSCAPE_FLATSIDED);
+    this->readAttr(SP_ATTR_INKSCAPE_ROUNDED);
+    this->readAttr(SP_ATTR_INKSCAPE_RANDOMIZED);
 }
 
 Inkscape::XML::Node* SPStar::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {

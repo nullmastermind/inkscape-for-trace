@@ -44,8 +44,8 @@ void SPFeFlood::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPFilterPrimitive::build(document, repr);
 
 	/*LOAD ATTRIBUTES FROM REPR HERE*/
-	this->readAttr( "flood-opacity" );
-	this->readAttr( "flood-color" );
+	this->readAttr(SP_PROP_FLOOD_OPACITY);
+	this->readAttr(SP_PROP_FLOOD_COLOR);
 }
 
 /**

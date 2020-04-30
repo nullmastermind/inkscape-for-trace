@@ -67,7 +67,7 @@ SPMeshpatch::~SPMeshpatch() = default;
 void SPMeshpatch::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 	SPObject::build(doc, repr);
 
-	this->readAttr( "tensor" );
+	this->readAttr(SP_ATTR_TENSOR);
 }
 
 /**

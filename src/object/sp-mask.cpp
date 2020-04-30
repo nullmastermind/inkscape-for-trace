@@ -48,9 +48,9 @@ SPMask::~SPMask() = default;
 void SPMask::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 	SPObjectGroup::build(doc, repr);
 
-	this->readAttr( "maskUnits" );
-	this->readAttr( "maskContentUnits" );
-	this->readAttr( "style" );
+	this->readAttr(SP_ATTR_MASKUNITS);
+	this->readAttr(SP_ATTR_MASKCONTENTUNITS);
+	this->readAttr(SP_ATTR_STYLE);
 
 	/* Register ourselves */
 	doc->addResource("mask", this);

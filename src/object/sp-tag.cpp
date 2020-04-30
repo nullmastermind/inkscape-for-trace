@@ -63,7 +63,7 @@ void SPTag::moveTo(SPObject *target, gboolean intoafter) {
 void
 SPTag::build(SPDocument *document, Inkscape::XML::Node *repr)
 {
-    readAttr( "inkscape:expanded" );
+    readAttr(SP_ATTR_INKSCAPE_EXPANDED);
     SPObject::build(document, repr);
 }
 

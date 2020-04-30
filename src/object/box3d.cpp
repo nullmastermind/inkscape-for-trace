@@ -71,9 +71,9 @@ void SPBox3D::build(SPDocument *document, Inkscape::XML::Node *repr) {
     if ( document ) {
         persp_ref->changedSignal().connect(sigc::bind(sigc::ptr_fun(box3d_ref_changed), this));
 
-        readAttr( "inkscape:perspectiveID" );
-        readAttr( "inkscape:corner0" );
-        readAttr( "inkscape:corner7" );
+        readAttr(SP_ATTR_INKSCAPE_BOX3D_PERSPECTIVE_ID);
+        readAttr(SP_ATTR_INKSCAPE_BOX3D_CORNER0);
+        readAttr(SP_ATTR_INKSCAPE_BOX3D_CORNER7);
     }
 }
 

@@ -40,8 +40,8 @@ void SPFeMorphology::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPFilterPrimitive::build(document, repr);
 
 	/*LOAD ATTRIBUTES FROM REPR HERE*/
-	this->readAttr( "operator" );
-	this->readAttr( "radius" );
+	this->readAttr(SP_ATTR_OPERATOR);
+	this->readAttr(SP_ATTR_RADIUS);
 }
 
 /**

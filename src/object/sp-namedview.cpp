@@ -191,63 +191,63 @@ static void sp_namedview_generate_old_grid(SPNamedView * /*nv*/, SPDocument *doc
 void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPObjectGroup::build(document, repr);
 
-    this->readAttr( "inkscape:document-units" );
-    this->readAttr( "units" );
-    this->readAttr( "viewonly" );
-    this->readAttr( "showguides" );
-    this->readAttr( "showgrid" );
-    this->readAttr( "gridtolerance" );
-    this->readAttr( "guidetolerance" );
-    this->readAttr( "objecttolerance" );
-    this->readAttr( "guidecolor" );
-    this->readAttr( "guideopacity" );
-    this->readAttr( "guidehicolor" );
-    this->readAttr( "guidehiopacity" );
-    this->readAttr( "showborder" );
-    this->readAttr( "inkscape:showpageshadow" );
-    this->readAttr( "borderlayer" );
-    this->readAttr( "bordercolor" );
-    this->readAttr( "borderopacity" );
-    this->readAttr( "pagecolor" );
-    this->readAttr( "inkscape:pagecheckerboard" );
-    this->readAttr( "inkscape:pageopacity" );
-    this->readAttr( "inkscape:pageshadow" );
-    this->readAttr( "inkscape:zoom" );
-    this->readAttr( "inkscape:rotation" );
-    this->readAttr( "inkscape:cx" );
-    this->readAttr( "inkscape:cy" );
-    this->readAttr( "inkscape:window-width" );
-    this->readAttr( "inkscape:window-height" );
-    this->readAttr( "inkscape:window-x" );
-    this->readAttr( "inkscape:window-y" );
-    this->readAttr( "inkscape:window-maximized" );
-    this->readAttr( "inkscape:snap-global" );
-    this->readAttr( "inkscape:snap-bbox" );
-    this->readAttr( "inkscape:snap-nodes" );
-    this->readAttr( "inkscape:snap-others" );
-    this->readAttr( "inkscape:snap-from-guide" );
-    this->readAttr( "inkscape:snap-center" );
-    this->readAttr( "inkscape:snap-smooth-nodes" );
-    this->readAttr( "inkscape:snap-midpoints" );
-    this->readAttr( "inkscape:snap-object-midpoints" );
-    this->readAttr( "inkscape:snap-text-baseline" );
-    this->readAttr( "inkscape:snap-bbox-edge-midpoints" );
-    this->readAttr( "inkscape:snap-bbox-midpoints" );
-    this->readAttr( "inkscape:snap-to-guides" );
-    this->readAttr( "inkscape:snap-grids" );
-    this->readAttr( "inkscape:snap-intersection-paths" );
-    this->readAttr( "inkscape:object-paths" );
-    this->readAttr( "inkscape:snap-perpendicular" );
-    this->readAttr( "inkscape:snap-tangential" );
-    this->readAttr( "inkscape:snap-path-clip" );
-    this->readAttr( "inkscape:snap-path-mask" );
-    this->readAttr( "inkscape:object-nodes" );
-    this->readAttr( "inkscape:bbox-paths" );
-    this->readAttr( "inkscape:bbox-nodes" );
-    this->readAttr( "inkscape:snap-page" );
-    this->readAttr( "inkscape:current-layer" );
-    this->readAttr( "inkscape:connector-spacing" );
-    this->readAttr( "inkscape:lockguides" );
+    this->readAttr(SP_ATTR_INKSCAPE_DOCUMENT_UNITS);
+    this->readAttr(SP_ATTR_UNITS);
+    this->readAttr(SP_ATTR_VIEWONLY);
+    this->readAttr(SP_ATTR_SHOWGUIDES);
+    this->readAttr(SP_ATTR_SHOWGRIDS);
+    this->readAttr(SP_ATTR_GRIDTOLERANCE);
+    this->readAttr(SP_ATTR_GUIDETOLERANCE);
+    this->readAttr(SP_ATTR_OBJECTTOLERANCE);
+    this->readAttr(SP_ATTR_GUIDECOLOR);
+    this->readAttr(SP_ATTR_GUIDEOPACITY);
+    this->readAttr(SP_ATTR_GUIDEHICOLOR);
+    this->readAttr(SP_ATTR_GUIDEHIOPACITY);
+    this->readAttr(SP_ATTR_SHOWBORDER);
+    this->readAttr(SP_ATTR_SHOWPAGESHADOW);
+    this->readAttr(SP_ATTR_BORDERLAYER);
+    this->readAttr(SP_ATTR_BORDERCOLOR);
+    this->readAttr(SP_ATTR_BORDEROPACITY);
+    this->readAttr(SP_ATTR_PAGECOLOR);
+    this->readAttr(SP_ATTR_INKSCAPE_PAGECHECKERBOARD);
+    this->readAttr(SP_ATTR_INKSCAPE_PAGEOPACITY);
+    this->readAttr(SP_ATTR_INKSCAPE_PAGESHADOW);
+    this->readAttr(SP_ATTR_INKSCAPE_ZOOM);
+    this->readAttr(SP_ATTR_INKSCAPE_ROTATION);
+    this->readAttr(SP_ATTR_INKSCAPE_CX);
+    this->readAttr(SP_ATTR_INKSCAPE_CY);
+    this->readAttr(SP_ATTR_INKSCAPE_WINDOW_WIDTH);
+    this->readAttr(SP_ATTR_INKSCAPE_WINDOW_HEIGHT);
+    this->readAttr(SP_ATTR_INKSCAPE_WINDOW_X);
+    this->readAttr(SP_ATTR_INKSCAPE_WINDOW_Y);
+    this->readAttr(SP_ATTR_INKSCAPE_WINDOW_MAXIMIZED);
+    this->readAttr(SP_ATTR_INKSCAPE_SNAP_GLOBAL);
+    this->readAttr(SP_ATTR_INKSCAPE_SNAP_BBOX);
+    this->readAttr(SP_ATTR_INKSCAPE_SNAP_NODE);
+    this->readAttr(SP_ATTR_INKSCAPE_SNAP_OTHERS);
+    this->readAttr(SP_ATTR_INKSCAPE_SNAP_FROM_GUIDE);
+    this->readAttr(SP_ATTR_INKSCAPE_SNAP_ROTATION_CENTER);
+    this->readAttr(SP_ATTR_INKSCAPE_SNAP_NODE_SMOOTH);
+    this->readAttr(SP_ATTR_INKSCAPE_SNAP_LINE_MIDPOINT);
+    this->readAttr(SP_ATTR_INKSCAPE_SNAP_OBJECT_MIDPOINT);
+    this->readAttr(SP_ATTR_INKSCAPE_SNAP_TEXT_BASELINE);
+    this->readAttr(SP_ATTR_INKSCAPE_SNAP_BBOX_EDGE_MIDPOINT);
+    this->readAttr(SP_ATTR_INKSCAPE_SNAP_BBOX_MIDPOINT);
+    this->readAttr(SP_ATTR_INKSCAPE_SNAP_GUIDE);
+    this->readAttr(SP_ATTR_INKSCAPE_SNAP_GRID);
+    this->readAttr(SP_ATTR_INKSCAPE_SNAP_PATH_INTERSECTION);
+    this->readAttr(SP_ATTR_INKSCAPE_SNAP_PATH);
+    this->readAttr(SP_ATTR_INKSCAPE_SNAP_PERP);
+    this->readAttr(SP_ATTR_INKSCAPE_SNAP_TANG);
+    this->readAttr(SP_ATTR_INKSCAPE_SNAP_PATH_CLIP);
+    this->readAttr(SP_ATTR_INKSCAPE_SNAP_PATH_MASK);
+    this->readAttr(SP_ATTR_INKSCAPE_SNAP_NODE_CUSP);
+    this->readAttr(SP_ATTR_INKSCAPE_SNAP_BBOX_EDGE);
+    this->readAttr(SP_ATTR_INKSCAPE_SNAP_BBOX_CORNER);
+    this->readAttr(SP_ATTR_INKSCAPE_SNAP_PAGE_BORDER);
+    this->readAttr(SP_ATTR_INKSCAPE_CURRENT_LAYER);
+    this->readAttr(SP_ATTR_INKSCAPE_CONNECTOR_SPACING);
+    this->readAttr(SP_ATTR_INKSCAPE_LOCKGUIDES);
 
     /* Construct guideline list */
     for (auto& o: children) {
@@ -257,7 +257,7 @@ void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
             //g_object_set(G_OBJECT(g), "color", nv->guidecolor, "hicolor", nv->guidehicolor, NULL);
             g->setColor(this->guidecolor);
             g->setHiColor(this->guidehicolor);
-            g->readAttr( "inkscape:color" );
+            g->readAttr(SP_ATTR_INKSCAPE_COLOR);
         }
     }
 
@@ -321,7 +321,7 @@ void SPNamedView::set(SPAttributeEnum key, const gchar* value) {
 
             for(auto guide : this->guides) {
                 guide->setColor(this->guidecolor);
-                guide->readAttr("inkscape:color");
+                guide->readAttr(SP_ATTR_INKSCAPE_COLOR);
             }
 
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -332,7 +332,7 @@ void SPNamedView::set(SPAttributeEnum key, const gchar* value) {
 
             for(auto guide : this->guides) {
                 guide->setColor(this->guidecolor);
-                guide->readAttr("inkscape:color");
+                guide->readAttr(SP_ATTR_INKSCAPE_COLOR);
             }
 
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -664,7 +664,7 @@ void SPNamedView::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *r
             //g_object_set(G_OBJECT(g), "color", this->guidecolor, "hicolor", this->guidehicolor, NULL);
             g->setColor(this->guidecolor);
             g->setHiColor(this->guidehicolor);
-            g->readAttr("inkscape:color");
+            g->readAttr(SP_ATTR_INKSCAPE_COLOR);
 
             if (this->editable) {
                 for(auto view : this->views) {

@@ -63,15 +63,15 @@ SPFilter::~SPFilter() = default;
  */
 void SPFilter::build(SPDocument *document, Inkscape::XML::Node *repr) {
     //Read values of key attributes from XML nodes into object.
-    this->readAttr( "style" ); // struct not derived from SPItem, we need to do this ourselves.
-    this->readAttr( "filterUnits" );
-    this->readAttr( "primitiveUnits" );
-    this->readAttr( "x" );
-    this->readAttr( "y" );
-    this->readAttr( "width" );
-    this->readAttr( "height" );
-    this->readAttr( "filterRes" );
-    this->readAttr( "xlink:href" );
+    this->readAttr(SP_ATTR_STYLE); // struct not derived from SPItem, we need to do this ourselves.
+    this->readAttr(SP_ATTR_FILTERUNITS);
+    this->readAttr(SP_ATTR_PRIMITIVEUNITS);
+    this->readAttr(SP_ATTR_X);
+    this->readAttr(SP_ATTR_Y);
+    this->readAttr(SP_ATTR_WIDTH);
+    this->readAttr(SP_ATTR_HEIGHT);
+    this->readAttr(SP_ATTR_FILTERRES);
+    this->readAttr(SP_ATTR_XLINK_HREF);
     this->_refcount = 0;
 
 	SPObject::build(document, repr);

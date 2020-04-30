@@ -411,16 +411,16 @@ void SPItem::moveTo(SPItem *target, bool intoafter) {
 void SPItem::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPItem* object = this;
 
-    object->readAttr( "style" );
-    object->readAttr( "transform" );
-    object->readAttr( "clip-path" );
-    object->readAttr( "mask" );
-    object->readAttr( "sodipodi:insensitive" );
-    object->readAttr( "inkscape:transform-center-x" );
-    object->readAttr( "inkscape:transform-center-y" );
-    object->readAttr( "inkscape:connector-avoid" );
-    object->readAttr( "inkscape:connection-points" );
-    object->readAttr( "inkscape:highlight-color" );
+    object->readAttr(SP_ATTR_STYLE);
+    object->readAttr(SP_ATTR_TRANSFORM);
+    object->readAttr(SP_PROP_CLIP_PATH);
+    object->readAttr(SP_PROP_MASK);
+    object->readAttr(SP_ATTR_SODIPODI_INSENSITIVE);
+    object->readAttr(SP_ATTR_TRANSFORM_CENTER_X);
+    object->readAttr(SP_ATTR_TRANSFORM_CENTER_Y);
+    object->readAttr(SP_ATTR_CONNECTOR_AVOID);
+    object->readAttr(SP_ATTR_CONNECTION_POINTS);
+    object->readAttr(SP_ATTR_INKSCAPE_HIGHLIGHT_COLOR);
 
     SPObject::build(document, repr);
 }

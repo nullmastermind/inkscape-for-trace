@@ -28,8 +28,8 @@ SPSymbol::SPSymbol() : SPGroup(), SPViewBox() {
 SPSymbol::~SPSymbol() = default;
 
 void SPSymbol::build(SPDocument *document, Inkscape::XML::Node *repr) {
-    this->readAttr( "viewBox" );
-    this->readAttr( "preserveAspectRatio" );
+    this->readAttr(SP_ATTR_VIEWBOX);
+    this->readAttr(SP_ATTR_PRESERVEASPECTRATIO);
 
     SPGroup::build(document, repr);
 }

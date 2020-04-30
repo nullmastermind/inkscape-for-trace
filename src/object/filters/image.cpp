@@ -57,8 +57,8 @@ void SPFeImage::build(SPDocument *document, Inkscape::XML::Node *repr)
 
     /*LOAD ATTRIBUTES FROM REPR HERE*/
 
-    this->readAttr( "preserveAspectRatio" );
-    this->readAttr( "xlink:href" );
+    this->readAttr(SP_ATTR_PRESERVEASPECTRATIO);
+    this->readAttr(SP_ATTR_XLINK_HREF);
 }
 
 /**

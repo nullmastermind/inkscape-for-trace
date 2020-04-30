@@ -43,11 +43,11 @@ void SPFeTurbulence::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPFilterPrimitive::build(document, repr);
 
 	/*LOAD ATTRIBUTES FROM REPR HERE*/
-	this->readAttr( "baseFrequency" );
-	this->readAttr( "numOctaves" );
-	this->readAttr( "seed" );
-	this->readAttr( "stitchTiles" );
-	this->readAttr( "type" );
+	this->readAttr(SP_ATTR_BASEFREQUENCY);
+	this->readAttr(SP_ATTR_NUMOCTAVES);
+	this->readAttr(SP_ATTR_SEED);
+	this->readAttr(SP_ATTR_STITCHTILES);
+	this->readAttr(SP_ATTR_TYPE);
 }
 
 /**

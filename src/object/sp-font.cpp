@@ -40,12 +40,12 @@ SPFont::~SPFont() = default;
 void SPFont::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPObject::build(document, repr);
 
-	this->readAttr( "horiz-origin-x" );
-	this->readAttr( "horiz-origin-y" );
-	this->readAttr( "horiz-adv-x" );
-	this->readAttr( "vert-origin-x" );
-	this->readAttr( "vert-origin-y" );
-	this->readAttr( "vert-adv-y" );
+	this->readAttr(SP_ATTR_HORIZ_ORIGIN_X);
+	this->readAttr(SP_ATTR_HORIZ_ORIGIN_Y);
+	this->readAttr(SP_ATTR_HORIZ_ADV_X);
+	this->readAttr(SP_ATTR_VERT_ORIGIN_X);
+	this->readAttr(SP_ATTR_VERT_ORIGIN_Y);
+	this->readAttr(SP_ATTR_VERT_ADV_Y);
 
 	document->addResource("font", this);
 }
@@ -149,12 +149,12 @@ void SPFont::set(SPAttributeEnum key, const gchar *value) {
  */
 void SPFont::update(SPCtx *ctx, guint flags) {
     if (flags & (SP_OBJECT_MODIFIED_FLAG)) {
-        this->readAttr( "horiz-origin-x" );
-        this->readAttr( "horiz-origin-y" );
-        this->readAttr( "horiz-adv-x" );
-        this->readAttr( "vert-origin-x" );
-        this->readAttr( "vert-origin-y" );
-        this->readAttr( "vert-adv-y" );
+        this->readAttr(SP_ATTR_HORIZ_ORIGIN_X);
+        this->readAttr(SP_ATTR_HORIZ_ORIGIN_Y);
+        this->readAttr(SP_ATTR_HORIZ_ADV_X);
+        this->readAttr(SP_ATTR_VERT_ORIGIN_X);
+        this->readAttr(SP_ATTR_VERT_ORIGIN_Y);
+        this->readAttr(SP_ATTR_VERT_ADV_Y);
     }
 
     SPObject::update(ctx, flags);

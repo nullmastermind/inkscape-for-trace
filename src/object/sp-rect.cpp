@@ -40,12 +40,12 @@ void SPRect::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 
     SPShape::build(doc, repr);
 
-    this->readAttr("x");
-    this->readAttr("y");
-    this->readAttr("width");
-    this->readAttr("height");
-    this->readAttr("rx");
-    this->readAttr("ry");
+    this->readAttr(SP_ATTR_X);
+    this->readAttr(SP_ATTR_Y);
+    this->readAttr(SP_ATTR_WIDTH);
+    this->readAttr(SP_ATTR_HEIGHT);
+    this->readAttr(SP_ATTR_RX);
+    this->readAttr(SP_ATTR_RY);
 
 #ifdef OBJECT_TRACE
     objectTrace( "SPRect::build", false );

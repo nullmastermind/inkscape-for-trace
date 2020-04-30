@@ -56,15 +56,15 @@ void SPFeConvolveMatrix::build(SPDocument *document, Inkscape::XML::Node *repr) 
 	SPFilterPrimitive::build(document, repr);
 
 	/*LOAD ATTRIBUTES FROM REPR HERE*/
-	this->readAttr( "order" );
-	this->readAttr( "kernelMatrix" );
-	this->readAttr( "divisor" );
-	this->readAttr( "bias" );
-	this->readAttr( "targetX" );
-	this->readAttr( "targetY" );
-	this->readAttr( "edgeMode" );
-	this->readAttr( "kernelUnitLength" );
-	this->readAttr( "preserveAlpha" );
+	this->readAttr(SP_ATTR_ORDER);
+	this->readAttr(SP_ATTR_KERNELMATRIX);
+	this->readAttr(SP_ATTR_DIVISOR);
+	this->readAttr(SP_ATTR_BIAS);
+	this->readAttr(SP_ATTR_TARGETX);
+	this->readAttr(SP_ATTR_TARGETY);
+	this->readAttr(SP_ATTR_EDGEMODE);
+	this->readAttr(SP_ATTR_KERNELUNITLENGTH);
+	this->readAttr(SP_ATTR_PRESERVEALPHA);
 }
 
 /**

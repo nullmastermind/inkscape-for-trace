@@ -55,13 +55,13 @@ SPFilterPrimitive::~SPFilterPrimitive() = default;
 void SPFilterPrimitive::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPFilterPrimitive* object = this;
 
-    object->readAttr( "style" ); // struct not derived from SPItem, we need to do this ourselves.
-    object->readAttr( "in" );
-    object->readAttr( "result" );
-    object->readAttr( "x" );
-    object->readAttr( "y" );
-    object->readAttr( "width" );
-    object->readAttr( "height" );
+    object->readAttr(SP_ATTR_STYLE); // struct not derived from SPItem, we need to do this ourselves.
+    object->readAttr(SP_ATTR_IN);
+    object->readAttr(SP_ATTR_RESULT);
+    object->readAttr(SP_ATTR_X);
+    object->readAttr(SP_ATTR_Y);
+    object->readAttr(SP_ATTR_WIDTH);
+    object->readAttr(SP_ATTR_HEIGHT);
 
     SPObject::build(document, repr);
 }

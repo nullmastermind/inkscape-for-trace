@@ -290,11 +290,11 @@ void SPGradient::build(SPDocument *document, Inkscape::XML::Node *repr)
         }
     }
 
-    this->readAttr( "gradientUnits" );
-    this->readAttr( "gradientTransform" );
-    this->readAttr( "spreadMethod" );
-    this->readAttr( "xlink:href" );
-    this->readAttr( "osb:paint" );
+    this->readAttr(SP_ATTR_GRADIENTUNITS);
+    this->readAttr(SP_ATTR_GRADIENTTRANSFORM);
+    this->readAttr(SP_ATTR_SPREADMETHOD);
+    this->readAttr(SP_ATTR_XLINK_HREF);
+    this->readAttr(SP_ATTR_OSB_SWATCH);
 
     // Register ourselves
     document->addResource("gradient", this);

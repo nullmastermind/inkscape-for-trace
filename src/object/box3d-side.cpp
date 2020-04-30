@@ -39,7 +39,7 @@ Box3DSide::~Box3DSide() = default;
 void Box3DSide::build(SPDocument * document, Inkscape::XML::Node * repr) {
     SPPolygon::build(document, repr);
 
-    this->readAttr( "inkscape:box3dsidetype" );
+    this->readAttr(SP_ATTR_INKSCAPE_BOX3D_SIDE_TYPE);
 }
 
 

@@ -65,11 +65,11 @@ void SPGuide::build(SPDocument *document, Inkscape::XML::Node *repr)
 {
     SPObject::build(document, repr);
 
-    this->readAttr( "inkscape:color" );
-    this->readAttr( "inkscape:label" );
-    this->readAttr( "inkscape:locked" );
-    this->readAttr( "orientation" );
-    this->readAttr( "position" );
+    this->readAttr(SP_ATTR_INKSCAPE_COLOR);
+    this->readAttr(SP_ATTR_INKSCAPE_LABEL);
+    this->readAttr(SP_ATTR_INKSCAPE_LOCKED);
+    this->readAttr(SP_ATTR_ORIENTATION);
+    this->readAttr(SP_ATTR_POSITION);
 
     /* Register */
     document->addResource("guide", this);

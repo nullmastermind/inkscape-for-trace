@@ -56,21 +56,21 @@ SPTSpan::SPTSpan() : SPItem() {
 SPTSpan::~SPTSpan() = default;
 
 void SPTSpan::build(SPDocument *doc, Inkscape::XML::Node *repr) {
-    this->readAttr( "x" );
-    this->readAttr( "y" );
-    this->readAttr( "dx" );
-    this->readAttr( "dy" );
-    this->readAttr( "rotate" );
+    this->readAttr(SP_ATTR_X);
+    this->readAttr(SP_ATTR_Y);
+    this->readAttr(SP_ATTR_DX);
+    this->readAttr(SP_ATTR_DY);
+    this->readAttr(SP_ATTR_ROTATE);
 
     // Strip sodipodi:role from SVG 2 flowed text.
     // this->role = SP_TSPAN_ROLE_UNSPECIFIED;
     SPText* text = dynamic_cast<SPText *>(parent);
     if (text && !(text->has_shape_inside()|| text->has_inline_size())) {
-        this->readAttr( "sodipodi:role" );
+        this->readAttr(SP_ATTR_SODIPODI_ROLE);
     }
 
     // We'll intercept "style" to strip "visibility" property (SVG 1.1 fallback for SVG 2 text) then pass it on.
-    this->readAttr( "style" );
+    this->readAttr(SP_ATTR_STYLE);
 
     SPItem::build(doc, repr);
 }
@@ -257,16 +257,16 @@ SPTextPath::~SPTextPath() {
 }
 
 void SPTextPath::build(SPDocument *doc, Inkscape::XML::Node *repr) {
-    this->readAttr( "x" );
-    this->readAttr( "y" );
-    this->readAttr( "dx" );
-    this->readAttr( "dy" );
-    this->readAttr( "rotate" );
-    this->readAttr( "startOffset" );
-    this->readAttr( "side" );
-    this->readAttr( "xlink:href" );
+    this->readAttr(SP_ATTR_X);
+    this->readAttr(SP_ATTR_Y);
+    this->readAttr(SP_ATTR_DX);
+    this->readAttr(SP_ATTR_DY);
+    this->readAttr(SP_ATTR_ROTATE);
+    this->readAttr(SP_ATTR_STARTOFFSET);
+    this->readAttr(SP_ATTR_SIDE);
+    this->readAttr(SP_ATTR_XLINK_HREF);
 
-    this->readAttr( "style");
+    this->readAttr(SP_ATTR_STYLE);
 
     SPItem::build(doc, repr);
 }

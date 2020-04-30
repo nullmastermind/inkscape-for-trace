@@ -44,13 +44,13 @@ SPSpiral::~SPSpiral() = default;
 void SPSpiral::build(SPDocument * document, Inkscape::XML::Node * repr) {
     SPShape::build(document, repr);
 
-    this->readAttr("sodipodi:cx");
-    this->readAttr("sodipodi:cy");
-    this->readAttr("sodipodi:expansion");
-    this->readAttr("sodipodi:revolution");
-    this->readAttr("sodipodi:radius");
-    this->readAttr("sodipodi:argument");
-    this->readAttr("sodipodi:t0");
+    this->readAttr(SP_ATTR_SODIPODI_CX);
+    this->readAttr(SP_ATTR_SODIPODI_CY);
+    this->readAttr(SP_ATTR_SODIPODI_EXPANSION);
+    this->readAttr(SP_ATTR_SODIPODI_REVOLUTION);
+    this->readAttr(SP_ATTR_SODIPODI_RADIUS);
+    this->readAttr(SP_ATTR_SODIPODI_ARGUMENT);
+    this->readAttr(SP_ATTR_SODIPODI_T0);
 }
 
 Inkscape::XML::Node* SPSpiral::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {

@@ -75,18 +75,18 @@ SPText::~SPText()
 };
 
 void SPText::build(SPDocument *doc, Inkscape::XML::Node *repr) {
-    this->readAttr( "x" );
-    this->readAttr( "y" );
-    this->readAttr( "dx" );
-    this->readAttr( "dy" );
-    this->readAttr( "rotate" );
+    this->readAttr(SP_ATTR_X);
+    this->readAttr(SP_ATTR_Y);
+    this->readAttr(SP_ATTR_DX);
+    this->readAttr(SP_ATTR_DY);
+    this->readAttr(SP_ATTR_ROTATE);
 
     // textLength and friends
-    this->readAttr( "textLength" );
-    this->readAttr( "lengthAdjust" );
+    this->readAttr(SP_ATTR_TEXTLENGTH);
+    this->readAttr(SP_ATTR_LENGTHADJUST);
     SPItem::build(doc, repr);
     css = nullptr;
-    this->readAttr( "sodipodi:linespacing" );    // has to happen after the styles are read
+    this->readAttr(SP_ATTR_SODIPODI_LINESPACING);    // has to happen after the styles are read
 }
 
 void SPText::release() {

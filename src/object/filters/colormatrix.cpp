@@ -41,8 +41,8 @@ void SPFeColorMatrix::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPFilterPrimitive::build(document, repr);
 
 	/*LOAD ATTRIBUTES FROM REPR HERE*/
-	this->readAttr( "type" );
-	this->readAttr( "values" );
+	this->readAttr(SP_ATTR_TYPE);
+	this->readAttr(SP_ATTR_VALUES);
 }
 
 /**

@@ -49,10 +49,10 @@ void SPMeshGradient::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPGradient::build(document, repr);
 
     // Start coordinate of meshgradient
-    this->readAttr( "x" );
-    this->readAttr( "y" );
+    this->readAttr(SP_ATTR_X);
+    this->readAttr(SP_ATTR_Y);
 
-    this->readAttr( "type" );
+    this->readAttr(SP_ATTR_TYPE);
 
 #ifdef OBJECT_TRACE
     objectTrace( "SPMeshGradient::build", false );

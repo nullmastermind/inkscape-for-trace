@@ -78,7 +78,7 @@ SPLPEItem::SPLPEItem()
 SPLPEItem::~SPLPEItem() = default;
 
 void SPLPEItem::build(SPDocument *document, Inkscape::XML::Node *repr) {
-    this->readAttr( "inkscape:path-effect" );
+    this->readAttr(SP_ATTR_INKSCAPE_PATH_EFFECT);
 
     SPItem::build(document, repr);
 }

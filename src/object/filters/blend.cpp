@@ -44,8 +44,8 @@ void SPFeBlend::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPFilterPrimitive::build(document, repr);
 
     /*LOAD ATTRIBUTES FROM REPR HERE*/
-    this->readAttr( "mode" );
-    this->readAttr( "in2" );
+    this->readAttr(SP_ATTR_MODE);
+    this->readAttr(SP_ATTR_IN2);
 
     /* Unlike normal in, in2 is required attribute. Make sure, we can call
      * it by some name. */
@@ -163,8 +163,8 @@ void SPFeBlend::set(SPAttributeEnum key, gchar const *value) {
  */
 void SPFeBlend::update(SPCtx *ctx, guint flags) {
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
-        this->readAttr( "mode" );
-        this->readAttr( "in2" );
+        this->readAttr(SP_ATTR_MODE);
+        this->readAttr(SP_ATTR_IN2);
     }
 
     /* Unlike normal in, in2 is required attribute. Make sure, we can call

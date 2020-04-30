@@ -58,27 +58,27 @@ void SPGenericEllipse::build(SPDocument *document, Inkscape::XML::Node *repr)
 
     switch ( type ) {
         case SP_GENERIC_ELLIPSE_ARC:
-            this->readAttr("sodipodi:cx");
-            this->readAttr("sodipodi:cy");
-            this->readAttr("sodipodi:rx");
-            this->readAttr("sodipodi:ry");
-            this->readAttr("sodipodi:start");
-            this->readAttr("sodipodi:end");
-            this->readAttr("sodipodi:open");
-            this->readAttr("sodipodi:arc-type");
+            this->readAttr(SP_ATTR_SODIPODI_CX);
+            this->readAttr(SP_ATTR_SODIPODI_CY);
+            this->readAttr(SP_ATTR_SODIPODI_RX);
+            this->readAttr(SP_ATTR_SODIPODI_RY);
+            this->readAttr(SP_ATTR_SODIPODI_START);
+            this->readAttr(SP_ATTR_SODIPODI_END);
+            this->readAttr(SP_ATTR_SODIPODI_OPEN);
+            this->readAttr(SP_ATTR_SODIPODI_ARC_TYPE);
             break;
 
         case SP_GENERIC_ELLIPSE_CIRCLE:
-            this->readAttr("cx");
-            this->readAttr("cy");
-            this->readAttr("r");
+            this->readAttr(SP_ATTR_CX);
+            this->readAttr(SP_ATTR_CY);
+            this->readAttr(SP_ATTR_R);
             break;
 
         case SP_GENERIC_ELLIPSE_ELLIPSE:
-            this->readAttr("cx");
-            this->readAttr("cy");
-            this->readAttr("rx");
-            this->readAttr("ry");
+            this->readAttr(SP_ATTR_CX);
+            this->readAttr(SP_ATTR_CY);
+            this->readAttr(SP_ATTR_RX);
+            this->readAttr(SP_ATTR_RY);
             break;
 
         default:

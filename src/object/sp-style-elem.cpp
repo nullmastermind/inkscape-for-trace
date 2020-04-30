@@ -587,7 +587,7 @@ static Inkscape::XML::NodeEventVector const nodeEventVector = {
 void SPStyleElem::build(SPDocument *document, Inkscape::XML::Node *repr) {
     read_content();
 
-    readAttr( "type" );
+    readAttr(SP_ATTR_TYPE);
     readAttr( "media" );
 
     repr->addListener(&nodeEventVector, this);

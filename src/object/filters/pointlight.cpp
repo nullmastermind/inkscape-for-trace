@@ -44,9 +44,9 @@ void SPFePointLight::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPObject::build(document, repr);
 
     //Read values of key attributes from XML nodes into object.
-    this->readAttr( "x" );
-    this->readAttr( "y" );
-    this->readAttr( "z" );
+    this->readAttr(SP_ATTR_X);
+    this->readAttr(SP_ATTR_Y);
+    this->readAttr(SP_ATTR_Z);
 
 //is this necessary?
     document->addResource("fepointlight", this);
@@ -150,9 +150,9 @@ void SPFePointLight::set(SPAttributeEnum key, gchar const *value) {
 void SPFePointLight::update(SPCtx *ctx, guint flags) {
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         /* do something to trigger redisplay, updates? */
-        this->readAttr( "x" );
-        this->readAttr( "y" );
-        this->readAttr( "z" );
+        this->readAttr(SP_ATTR_X);
+        this->readAttr(SP_ATTR_Y);
+        this->readAttr(SP_ATTR_Z);
     }
 
     SPObject::update(ctx, flags);

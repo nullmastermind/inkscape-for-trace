@@ -41,8 +41,8 @@ void SPFeDistantLight::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPObject::build(document, repr);
 
     //Read values of key attributes from XML nodes into object.
-    this->readAttr( "azimuth" );
-    this->readAttr( "elevation" );
+    this->readAttr(SP_ATTR_AZIMUTH);
+    this->readAttr(SP_ATTR_ELEVATION);
 
 //is this necessary?
     document->addResource("fedistantlight", this);
@@ -124,8 +124,8 @@ void SPFeDistantLight::set(SPAttributeEnum key, gchar const *value) {
 void SPFeDistantLight::update(SPCtx *ctx, guint flags) {
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         /* do something to trigger redisplay, updates? */
-        this->readAttr( "azimuth" );
-        this->readAttr( "elevation" );
+        this->readAttr(SP_ATTR_AZIMUTH);
+        this->readAttr(SP_ATTR_ELEVATION);
     }
 
     SPObject::update(ctx, flags);

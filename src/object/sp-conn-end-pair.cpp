@@ -77,10 +77,10 @@ void SPConnEndPair::release()
 
 void sp_conn_end_pair_build(SPObject *object)
 {
-    object->readAttr( "inkscape:connector-type" );
-    object->readAttr( "inkscape:connection-start" );
-    object->readAttr( "inkscape:connection-end" );
-    object->readAttr( "inkscape:connector-curvature" );
+    object->readAttr(SP_ATTR_CONNECTOR_TYPE);
+    object->readAttr(SP_ATTR_CONNECTION_START);
+    object->readAttr(SP_ATTR_CONNECTION_END);
+    object->readAttr(SP_ATTR_CONNECTOR_CURVATURE);
 }
 
 

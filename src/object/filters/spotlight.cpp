@@ -44,14 +44,14 @@ void SPFeSpotLight::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPObject::build(document, repr);
 
     //Read values of key attributes from XML nodes into object.
-    this->readAttr( "x" );
-    this->readAttr( "y" );
-    this->readAttr( "z" );
-    this->readAttr( "pointsAtX" );
-    this->readAttr( "pointsAtY" );
-    this->readAttr( "pointsAtZ" );
-    this->readAttr( "specularExponent" );
-    this->readAttr( "limitingConeAngle" );
+    this->readAttr(SP_ATTR_X);
+    this->readAttr(SP_ATTR_Y);
+    this->readAttr(SP_ATTR_Z);
+    this->readAttr(SP_ATTR_POINTSATX);
+    this->readAttr(SP_ATTR_POINTSATY);
+    this->readAttr(SP_ATTR_POINTSATZ);
+    this->readAttr(SP_ATTR_SPECULAREXPONENT);
+    this->readAttr(SP_ATTR_LIMITINGCONEANGLE);
 
 //is this necessary?
     document->addResource("fespotlight", this);
@@ -265,14 +265,14 @@ void SPFeSpotLight::set(SPAttributeEnum key, gchar const *value) {
 void SPFeSpotLight::update(SPCtx *ctx, guint flags) {
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         /* do something to trigger redisplay, updates? */
-        this->readAttr( "x" );
-        this->readAttr( "y" );
-        this->readAttr( "z" );
-        this->readAttr( "pointsAtX" );
-        this->readAttr( "pointsAtY" );
-        this->readAttr( "pointsAtZ" );
-        this->readAttr( "specularExponent" );
-        this->readAttr( "limitingConeAngle" );
+        this->readAttr(SP_ATTR_X);
+        this->readAttr(SP_ATTR_Y);
+        this->readAttr(SP_ATTR_Z);
+        this->readAttr(SP_ATTR_POINTSATX);
+        this->readAttr(SP_ATTR_POINTSATY);
+        this->readAttr(SP_ATTR_POINTSATZ);
+        this->readAttr(SP_ATTR_SPECULAREXPONENT);
+        this->readAttr(SP_ATTR_LIMITINGCONEANGLE);
     }
 
     SPObject::update(ctx, flags);

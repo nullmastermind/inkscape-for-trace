@@ -28,9 +28,9 @@ SPSolidColor::~SPSolidColor() = default;
 void SPSolidColor::build(SPDocument* doc, Inkscape::XML::Node* repr) {
     SPPaintServer::build(doc, repr);
 
-    this->readAttr( "style" );
-    this->readAttr( "solid-color" );
-    this->readAttr( "solid-opacity" );
+    this->readAttr(SP_ATTR_STYLE);
+    this->readAttr(SP_PROP_SOLID_COLOR);
+    this->readAttr(SP_PROP_SOLID_OPACITY);
 }
 
 /**

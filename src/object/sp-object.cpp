@@ -657,11 +657,11 @@ void SPObject::build(SPDocument *document, Inkscape::XML::Node *repr) {
     /* Nothing specific here */
     debug("id=%p, typename=%s", object, g_type_name_from_instance((GTypeInstance*)object));
 
-    object->readAttr("xml:space");
-    object->readAttr("lang");
-    object->readAttr("xml:lang");   // "xml:lang" overrides "lang" per spec, read it last.
-    object->readAttr("inkscape:label");
-    object->readAttr("inkscape:collect");
+    object->readAttr(SP_ATTR_XML_SPACE);
+    object->readAttr(SP_ATTR_LANG);
+    object->readAttr(SP_ATTR_XML_LANG);   // "xml:lang" overrides "lang" per spec, read it last.
+    object->readAttr(SP_ATTR_INKSCAPE_LABEL);
+    object->readAttr(SP_ATTR_INKSCAPE_COLLECT);
 
     // Inherit if not set
     if (lang.empty() && object->parent) {
@@ -1006,6 +1006,18 @@ void SPObject::setKeyValue(SPAttributeEnum key, gchar const *value)
     //g_assert(SP_IS_OBJECT(object));
 
     this->set(key, value);
+}
+
+void SPObject::readAttr(SPAttributeEnum keyid)
+{
+    char const *key = sp_attribute_name(keyid);
+
+    assert(key != nullptr);
+    assert(getRepr() != nullptr);
+
+    char const *value = getRepr()->attribute(key);
+
+    setKeyValue(keyid, value);
 }
 
 void SPObject::readAttr(gchar const *key)

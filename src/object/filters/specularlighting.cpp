@@ -65,11 +65,11 @@ void SPFeSpecularLighting::build(SPDocument *document, Inkscape::XML::Node *repr
 	SPFilterPrimitive::build(document, repr);
 
 	/*LOAD ATTRIBUTES FROM REPR HERE*/
-	this->readAttr( "surfaceScale" );
-	this->readAttr( "specularConstant" );
-	this->readAttr( "specularExponent" );
-	this->readAttr( "kernelUnitLength" );
-	this->readAttr( "lighting-color" );
+	this->readAttr(SP_ATTR_SURFACESCALE);
+	this->readAttr(SP_ATTR_SPECULARCONSTANT);
+	this->readAttr(SP_ATTR_SPECULAREXPONENT);
+	this->readAttr(SP_ATTR_KERNELUNITLENGTH);
+	this->readAttr(SP_PROP_LIGHTING_COLOR);
 }
 
 /**
@@ -195,11 +195,11 @@ void SPFeSpecularLighting::set(SPAttributeEnum key, gchar const *value) {
  */
 void SPFeSpecularLighting::update(SPCtx *ctx, guint flags) {
     if (flags & (SP_OBJECT_MODIFIED_FLAG)) {
-        this->readAttr( "surfaceScale" );
-        this->readAttr( "specularConstant" );
-        this->readAttr( "specularExponent" );
-        this->readAttr( "kernelUnitLength" );
-        this->readAttr( "lighting-color" );
+        this->readAttr(SP_ATTR_SURFACESCALE);
+        this->readAttr(SP_ATTR_SPECULARCONSTANT);
+        this->readAttr(SP_ATTR_SPECULAREXPONENT);
+        this->readAttr(SP_ATTR_KERNELUNITLENGTH);
+        this->readAttr(SP_PROP_LIGHTING_COLOR);
     }
 
     SPFilterPrimitive::update(ctx, flags);

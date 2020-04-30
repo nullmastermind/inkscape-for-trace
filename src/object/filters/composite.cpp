@@ -43,16 +43,16 @@ SPFeComposite::~SPFeComposite() = default;
 void SPFeComposite::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPFilterPrimitive::build(document, repr);
 
-	this->readAttr( "operator" );
+	this->readAttr(SP_ATTR_OPERATOR);
 
 	if (this->composite_operator == COMPOSITE_ARITHMETIC) {
-		this->readAttr( "k1" );
-		this->readAttr( "k2" );
-		this->readAttr( "k3" );
-		this->readAttr( "k4" );
+		this->readAttr(SP_ATTR_K1);
+		this->readAttr(SP_ATTR_K2);
+		this->readAttr(SP_ATTR_K3);
+		this->readAttr(SP_ATTR_K4);
 	}
 
-	this->readAttr( "in2" );
+	this->readAttr(SP_ATTR_IN2);
 
 	/* Unlike normal in, in2 is required attribute. Make sure, we can call
 	 * it by some name. */

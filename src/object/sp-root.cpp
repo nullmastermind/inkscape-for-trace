@@ -64,16 +64,16 @@ void SPRoot::build(SPDocument *document, Inkscape::XML::Node *repr)
         repr->setAttribute("version", SVG_VERSION);
     }
 
-    this->readAttr("version");
-    this->readAttr("inkscape:version");
+    this->readAttr(SP_ATTR_VERSION);
+    this->readAttr(SP_ATTR_INKSCAPE_VERSION);
     /* It is important to parse these here, so objects will have viewport build-time */
-    this->readAttr("x");
-    this->readAttr("y");
-    this->readAttr("width");
-    this->readAttr("height");
-    this->readAttr("viewBox");
-    this->readAttr("preserveAspectRatio");
-    this->readAttr("onload");
+    this->readAttr(SP_ATTR_X);
+    this->readAttr(SP_ATTR_Y);
+    this->readAttr(SP_ATTR_WIDTH);
+    this->readAttr(SP_ATTR_HEIGHT);
+    this->readAttr(SP_ATTR_VIEWBOX);
+    this->readAttr(SP_ATTR_PRESERVEASPECTRATIO);
+    this->readAttr(SP_ATTR_ONLOAD);
 
     SPGroup::build(document, repr);
 

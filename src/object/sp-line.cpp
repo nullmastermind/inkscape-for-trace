@@ -33,10 +33,10 @@ SPLine::~SPLine() = default;
 void SPLine::build(SPDocument * document, Inkscape::XML::Node * repr) {
     SPShape::build(document, repr);
 
-    this->readAttr( "x1" );
-    this->readAttr( "y1" );
-    this->readAttr( "x2" );
-    this->readAttr( "y2" );
+    this->readAttr(SP_ATTR_X1);
+    this->readAttr(SP_ATTR_Y1);
+    this->readAttr(SP_ATTR_X2);
+    this->readAttr(SP_ATTR_Y2);
 }
 
 void SPLine::set(SPAttributeEnum key, const gchar* value) {

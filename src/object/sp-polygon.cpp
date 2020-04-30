@@ -32,7 +32,7 @@ void SPPolygon::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
     SPShape::build(document, repr);
 
-    object->readAttr( "points" );
+    object->readAttr(SP_ATTR_POINTS);
 }
 
 /*

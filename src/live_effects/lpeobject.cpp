@@ -49,7 +49,7 @@ void LivePathEffectObject::build(SPDocument *document, Inkscape::XML::Node *repr
 
     SPObject::build(document, repr);
 
-    this->readAttr( "effect" );
+    this->readAttr(SP_PROP_PATH_EFFECT);
 
     if (repr) {
         repr->addListener (&livepatheffect_repr_events, this);

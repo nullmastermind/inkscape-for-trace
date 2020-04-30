@@ -45,10 +45,10 @@ void SPFeDisplacementMap::build(SPDocument *document, Inkscape::XML::Node *repr)
 	SPFilterPrimitive::build(document, repr);
 
 	/*LOAD ATTRIBUTES FROM REPR HERE*/
-	this->readAttr( "scale" );
-	this->readAttr( "in2" );
-	this->readAttr( "xChannelSelector" );
-	this->readAttr( "yChannelSelector" );
+	this->readAttr(SP_ATTR_SCALE);
+	this->readAttr(SP_ATTR_IN2);
+	this->readAttr(SP_ATTR_XCHANNELSELECTOR);
+	this->readAttr(SP_ATTR_YCHANNELSELECTOR);
 
 	/* Unlike normal in, in2 is required attribute. Make sure, we can call
 	 * it by some name. */

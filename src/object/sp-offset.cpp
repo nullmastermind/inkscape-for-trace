@@ -113,7 +113,7 @@ void SPOffset::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
     //XML Tree being used directly here while it shouldn't be.
     if (this->getRepr()->attribute("inkscape:radius")) {
-        this->readAttr( "inkscape:radius" );
+        this->readAttr(SP_ATTR_INKSCAPE_RADIUS);
     } else {
         //XML Tree being used directly here (as object->getRepr) 
         //in all the below lines in the block while it shouldn't be.
@@ -121,21 +121,21 @@ void SPOffset::build(SPDocument *document, Inkscape::XML::Node *repr) {
         this->setAttribute("inkscape:radius", oldA);
         this->removeAttribute("sodipodi:radius");
 
-        this->readAttr( "inkscape:radius" );
+        this->readAttr(SP_ATTR_INKSCAPE_RADIUS);
     }
 
     if (this->getRepr()->attribute("inkscape:original")) {
-        this->readAttr( "inkscape:original" );
+        this->readAttr(SP_ATTR_INKSCAPE_ORIGINAL);
     } else {
         gchar const *oldA = this->getRepr()->attribute("sodipodi:original");
         this->setAttribute("inkscape:original", oldA);
         this->removeAttribute("sodipodi:original");
 
-        this->readAttr( "inkscape:original" );
+        this->readAttr(SP_ATTR_INKSCAPE_ORIGINAL);
     }
 
     if (this->getRepr()->attribute("xlink:href")) {
-        this->readAttr( "xlink:href" );
+        this->readAttr(SP_ATTR_XLINK_HREF);
     } else {
         gchar const *oldA = this->getRepr()->attribute("inkscape:href");
 
@@ -155,7 +155,7 @@ void SPOffset::build(SPDocument *document, Inkscape::XML::Node *repr) {
             this->removeAttribute("inkscape:href");
         }
 
-        this->readAttr( "xlink:href" );
+        this->readAttr(SP_ATTR_XLINK_HREF);
     }
 }
 
@@ -1042,7 +1042,7 @@ static void sp_offset_move_compensate(Geom::Affine const *mp, SPItem */*original
     }
 
     // calculate the compensation matrix and the advertized movement matrix
-    self->readAttr("transform");
+    self->readAttr(SP_ATTR_TRANSFORM);
 
     Geom::Affine t = self->transform;
     Geom::Affine offset_move = t.inverse() * m * t;

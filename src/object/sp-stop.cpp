@@ -34,9 +34,9 @@ SPStop::~SPStop() = default;
 void SPStop::build(SPDocument* doc, Inkscape::XML::Node* repr) {
     SPObject::build(doc, repr);
 
-    this->readAttr( "style" );
-    this->readAttr( "offset" );
-    this->readAttr( "path" ); // For mesh
+    this->readAttr(SP_ATTR_STYLE);
+    this->readAttr(SP_ATTR_OFFSET);
+    this->readAttr(SP_PROP_STOP_PATH); // For mesh
     SPObject::build(doc, repr);
 }
 

@@ -723,6 +723,7 @@ public:
      * Read value of key attribute from XML node into object.
      */
     void readAttr(char const *key);
+    void readAttr(SPAttributeEnum keyid);
 
     char const *getTagName(SPException *ex) const;
 

@@ -35,7 +35,7 @@ SPFeMergeNode::~SPFeMergeNode() = default;
  * sp-object-repr.cpp's repr_name_entries array.
  */
 void SPFeMergeNode::build(SPDocument */*document*/, Inkscape::XML::Node */*repr*/) {
-	this->readAttr( "in" );
+	this->readAttr(SP_ATTR_IN);
 }
 
 /**
