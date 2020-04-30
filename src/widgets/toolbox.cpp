@@ -725,7 +725,15 @@ void update_aux_toolbox(SPDesktop * /*desktop*/, ToolBase *eventcontext, GtkWidg
         } else {
             gtk_widget_hide(sub_toolbox);
         }
+        //FIX issue #Inkscape686
+        GtkAllocation allocation;
+        gtk_widget_get_allocation(sub_toolbox, &allocation);
+        gtk_widget_size_allocate(sub_toolbox, &allocation);
     }
+    //FIX issue #Inkscape125
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(toolbox, &allocation);
+    gtk_widget_size_allocate(toolbox, &allocation);  
 }
 
 void setup_commands_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
