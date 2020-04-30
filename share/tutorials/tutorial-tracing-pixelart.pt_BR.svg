@@ -283,50 +283,50 @@
  </g>
  <use xlink:href="#bf" inkscape:label="Footer" sodipodi:insensitive="true"/>
  <g inkscape:groupmode="layer" inkscape:label="Content">
-  <text x="20" y="122" fill="#000000" font-family="Liberation Serif,Times New Roman,serif" font-size="16" style="line-height:100%" xml:space="preserve"><tspan fill="#000000" sodipodi:role="line">Tutorial<tspan fill="#de5f3a"> | </tspan><tspan font-style="italic">描繪像素圖案</tspan></tspan></text>
+  <text x="20" y="122" fill="#000000" font-family="Liberation Serif,Times New Roman,serif" font-size="16" style="line-height:100%" xml:space="preserve"><tspan fill="#000000" sodipodi:role="line">Tutorial<tspan fill="#de5f3a"> | </tspan><tspan font-style="italic">Vetorizar Arte de Píxeis</tspan></tspan></text>
   <rect id="bb" x="40" y="134" width="264" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.2" font-style="italic" style="line-height:150%">
    <flowRegion>
     <use xlink:href="#bb"/>
    </flowRegion>
-   <flowDiv xml:space="preserve">在功能強大的向量繪圖軟體出現以前...</flowDiv>
+   <flowDiv xml:space="preserve">Antes de termos acesso a programas de edição de gráficos vetoriais...</flowDiv>
   </flowRoot>
-  <rect id="ba" x="40" y="152.64" width="264" height="1e3px" display="none"/>
+  <rect id="ba" x="40" y="152.8" width="264" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.2" font-style="italic" style="line-height:150%">
    <flowRegion>
     <use xlink:href="#ba"/>
    </flowRegion>
-   <flowDiv xml:space="preserve">甚至在 640x480 電腦出現以前...</flowDiv>
+   <flowDiv xml:space="preserve">Mesmo antes de usarmos telas de computador com resolução de 640x480...</flowDiv>
   </flowRoot>
-  <rect id="az" x="40" y="171.19" width="264" height="1e3px" display="none"/>
+  <rect id="az" x="40" y="171.51" width="264" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.2" font-style="italic" style="line-height:150%">
    <flowRegion>
     <use xlink:href="#az"/>
    </flowRegion>
-   <flowDiv xml:space="preserve">用低解析度顯示器玩遊戲其畫面通常看起來都像是由許多細小的像素組成。</flowDiv>
+   <flowDiv xml:space="preserve">Era comum jogar jogos de video game com píxeis criados especialmente para telas de baixa resolução.</flowDiv>
   </flowRoot>
-  <rect id="ay" x="40" y="189.88" width="264" height="1e3px" display="none"/>
+  <rect id="ay" x="40" y="201.1" width="264" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.2" font-style="italic" style="line-height:150%">
    <flowRegion>
     <use xlink:href="#ay"/>
    </flowRegion>
-   <flowDiv xml:space="preserve">我們現在將這類的圖形稱為「像素圖案」。</flowDiv>
+   <flowDiv xml:space="preserve">Este tipo de arte nascida nesta época nós chamamos de "Arte em Píxeis".</flowDiv>
   </flowRoot>
-  <rect id="ax" x="20" y="208.63" width="300" height="1e3px" display="none"/>
+  <rect id="ax" x="20" y="219.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ax"/>
    </flowRegion>
-   <flowDiv xml:space="preserve">Inkscape 是藉由 <flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">libdepixelize</flowSpan> 將這些「特殊」像素圖片轉換成向量圖。你也可以試試其他類型的圖片，但是記住：若產生的向量圖效果不佳，請改用另一種 Inkscape 點陣圖描繪器 - potrace。</flowDiv>
+   <flowDiv xml:space="preserve">O Inkscape inclui o programa <flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">libdepixelize</flowSpan> que oferece a capacidade de vetorizar automaticamente estas imagens "especiais" de Arte de Píxeis. Pode tentar usar esta ferramenta noutros tipos de imagens, mas tenha em conta que o resultado não será tão bom quanto o da ferramenta tradicional do Inkscape de Vetorizar Imagens Bitmap.</flowDiv>
   </flowRoot>
-  <rect id="aw" x="20" y="248.21" width="300" height="1e3px" display="none"/>
+  <rect id="aw" x="20" y="269.34" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#aw"/>
    </flowRegion>
-   <flowDiv xml:space="preserve">讓我們用簡單的圖片來示範這款描繪引擎的能力。下面左側有一張範例點陣圖 (從自由開放的 Pixel Cup 項目取得的圖片)，而右側是轉換成向量圖形的成果。</flowDiv>
+   <flowDiv xml:space="preserve">Vamos começar com uma imagem de amostra para mostrar os recursos desse mecanismo rastreador. Abaixo, há um exemplo de uma imagem rasterizada (tirada de uma entrada Liberated Pixel Cup) à esquerda e sua saída vetorizada à direita.</flowDiv>
   </flowRoot>
-  <g transform="translate(10 279.22)">
+  <g transform="translate(10 309.94)">
    <image x="78.958" y="5.9336" width="81.042" height="82.571" xlink:href="data:image/png;base64,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 7V/otDX4FA/ZBAAAAABJRU5ErkJggg== "/>
    <g transform="matrix(1.5291 0 0 1.5291 160 5.9336)">
     <path d="m0 0.5v-0.5h53v54h-53v-53.5m26.125 51.875q0.125 0.375 0.375 0.375t0.375-0.375 0.25-0.75 0.375-0.625 0.375-0.625 0.125-0.875v-0.5l0.375-0.125q0.375-0.125 0.5-0.5t0.125-0.875 0-1v-0.5 0.75-0.25q0-0.25-0.09375-0.40625l-0.09375-0.15625 0.09374 0.15626 0.54688-0.04687q0.54688-0.04689 0.92188-0.17189t0.625-0.375 0.625-0.375 0.875-0.125 0.875-0.125 0.625-0.375 0.625-0.375 0.75-0.25 0.625-0.375 0.5-0.5 0.5-0.5 0.5-0.5 0.35938-0.60938l0.10938-0.35938-0.21875-0.03125 0.21875 0.03125q0.21875 0.03125 0.40625 0.09375l0.1875 0.0625-0.5625-0.1875 0.375 0.125q0.375 0.125 0.625 0.375t0.625 0.375 0.75 0 0.5-0.5 0-0.75-0.375-0.625-0.375-0.625l-0.125-0.375 0.375-0.125q0.375-0.125 0.625-0.375t0.5-0.5 0.5-0.5 0.5-0.5 0.375-0.625 0.25-0.75 0.375-0.625 0.375-0.625 0.125-0.875 0.125-0.875 0.375-0.625 0.375-0.625 0.17188-0.92188l0.04687-0.54688-0.15626-0.09374 0.15625 0.09375q0.15626 0.09374 0.40626 0.09374h0.25-0.75 0.5q0.5 0 1 0t0.875-0.125 0.625-0.375 0.625-0.375 0.75-0.25 0.5-0.5l0.125-0.375h0.5q0.5 0 0.875-0.125t0.375-0.375-0.375-0.375-0.75-0.25-0.625-0.375-0.625-0.375-0.75-0.25-0.625-0.375-0.625-0.375-0.875-0.125-1 0h-0.5 0.75-0.25q-0.25 0-0.375 0.125l-0.125 0.125 0.125-0.125-0.0625-0.5625q-0.0625-0.5625-0.1875-0.9375t-0.375-0.625-0.375-0.625-0.125-0.875-0.125-0.875-0.375-0.625-0.375-0.625-0.25-0.75-0.375-0.625-0.5-0.5-0.5-0.5-0.5-0.5-0.625-0.375l-0.375-0.125 0.125-0.375q0.125-0.375 0.375-0.625t0.375-0.625 0-0.75-0.5-0.5-0.75 0-0.625 0.375-0.625 0.375l-0.375 0.125 0.5625-0.1875-0.1875 0.0625q-0.1875 0.0625-0.40625 0.09375l-0.21875 0.03125 0.21875-0.03125-0.10938-0.35938q-0.10938-0.35938-0.35938-0.60938t-0.5-0.5-0.5-0.5-0.5-0.5-0.625-0.375-0.75-0.25-0.625-0.375-0.625-0.375-0.875-0.125-0.875-0.125-0.625-0.375-0.625-0.375-0.92188-0.17188l-0.54688-0.046875-0.09375 0.15625 0.09375-0.15625q0.09375-0.15625 0.09375-0.40625v-0.25 0.75-0.5q0-0.5 0-1t-0.125-0.875-0.375-0.625-0.375-0.625-0.25-0.75-0.375-0.625-0.375-0.625-0.25-0.75-0.375-0.375-0.375 0.375-0.25 0.75-0.375 0.625-0.375 0.625-0.25 0.75-0.375 0.625-0.375 0.625-0.125 0.875 0.125 0.875 0.375 0.625 0.375 0.625 0.25 0.75 0.375 0.625 0.375 0.625 0 0.75-0.375 0.625-0.5 0.5-0.5 0.5-0.375 0.625-0.125 0.875 0 1 0 1 0 1 0 1 0.125 0.875 0.5 0.5l0.375 0.125-0.125 0.375q-0.125 0.375-0.5 0.5t-0.875 0.125h-0.5v-0.5q0-0.5-0.125-0.875t-0.5-0.5-0.875-0.125-1 0h-0.5l-0.125-0.375q-0.125-0.375-0.375-0.625t-0.5-0.5-0.5-0.5-0.375-0.625-0.125-0.875-0.125-0.875-0.375-0.625-0.5-0.5-0.625-0.375-0.875-0.125-0.875-0.125-0.625-0.375-0.625-0.375-0.75 0-0.5 0.5 0 0.75 0.375 0.625 0.375 0.625l0.125 0.375-0.375 0.125q-0.375 0.125-0.625 0.375t-0.5 0.5-0.5 0.5-0.5 0.5-0.375 0.625-0.25 0.75-0.375 0.625-0.375 0.625-0.125 0.875-0.125 0.875-0.375 0.625-0.375 0.625-0.1875 0.9375l-0.0625 0.5625 0.125 0.125-0.125-0.125q-0.125-0.125-0.375-0.125h-0.25 0.75-0.5q-0.5 0-1 0t-0.875 0.125-0.625 0.375-0.625 0.375-0.75 0.25-0.625 0.375-0.625 0.375-0.75 0.25-0.375 0.375 0.375 0.375 0.875 0.125h0.5l0.125 0.375q0.125 0.375 0.5 0.5t0.75 0.25 0.625 0.375 0.625 0.375 0.875 0.125 1 0h0.5-0.75 0.25q0.25 0 0.40625-0.09375l0.15625-0.09375-0.15625 0.09375 0.046875 0.54688q0.046875 0.54688 0.17188 0.92188t0.375 0.625 0.375 0.625 0.125 0.875 0.125 0.875 0.375 0.625 0.375 0.625 0.25 0.75 0.375 0.625 0.5 0.5 0.5 0.5 0.5 0.5 0.625 0.375l0.375 0.125-0.125 0.375q-0.125 0.375-0.375 0.625t-0.375 0.625 0 0.75 0.5 0.5 0.75 0 0.625-0.375 0.625-0.375l0.375-0.125-0.5625 0.1875 0.1875-0.0625q0.1875-0.0625 0.40625-0.09375l0.21875-0.03125-0.21875 0.03126 0.10938 0.35938q0.10938 0.35936 0.35938 0.60936t0.5 0.5 0.5 0.5 0.5 0.5 0.625 0.375 0.75 0.25 0.625 0.375 0.625 0.375 0.875 0.125 0.875 0.125 0.625 0.375 0.625 0.375 0.92188 0.17188l0.54688 0.04687 0.09374-0.15626-0.09375 0.15625q-0.09374 0.15626-0.09374 0.40626v0.25-0.75 0.5q0 0.5 0 1t0.125 0.875 0.5 0.5l0.375 0.125v0.5q0 0.5 0.125 0.875t0.375 0.625 0.375 0.625 0.25 0.75m-6.125-38.875q0.25 0.25 0.5 0.25t0.5-0.25 0.5-0.5 0.25-0.5-0.25-0.5-0.5-0.5-0.5-0.25-0.5 0.25-0.5 0.5-0.25 0.5 0.25 0.5 0.5 0.5m-1-10q0.25 0.25 0.5 0.25t0.5-0.25 0.5-0.5 0.25-0.5-0.25-0.5-0.5-0.5-0.5-0.25-0.5 0.25-0.5 0.5-0.25 0.5 0.25 0.5 0.5 0.5m-5 6q0.25 0.25 0.5 0.25t0.5-0.25 0.5-0.5 0.25-0.5-0.25-0.5-0.5-0.5-0.5-0.25-0.5 0.25-0.5 0.5-0.25 0.5 0.25 0.5 0.5 0.5" fill-opacity="0" inkscape:connector-curvature="0"/>
@@ -568,14 +568,14 @@
     <path d="m26 49.5v-0.5h1v0.5q0 0.5-0.125 0.875t-0.375 0.375-0.375-0.375-0.125-0.875" fill="#f8e9c7" inkscape:connector-curvature="0"/>
    </g>
   </g>
-  <rect id="av" x="20" y="379.72" width="300" height="1e3px" display="none"/>
+  <rect id="av" x="20" y="410.45" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#av"/>
    </flowRegion>
-   <flowDiv xml:space="preserve">libdepixelize 使用 Kopf-Lischinski 演算法來將圖片轉變成向量圖形。這種演算法混合使用多種電腦科學技術想法和數學概念，使該算法用在像素圖案上能夠產生很棒的效果。值得注意的是此演算法會完全地忽略透明色版。libdepixelize 目前沒有擴充功能提供專門處理這類的圖片，但是所有含有透明色版的像素圖案仍可以像 Kopf-Lischinski 能辨識的圖片一樣得到相近的結果。</flowDiv>
+   <flowDiv xml:space="preserve">o motor libdepixelize usa o algoritmo Kopf-Lischinski para vetorizar imagens. Este algoritmo usa ideias de várias técnicas da ciência da computação e conceitos matemáticos para produzir um bom resultado em imagens de Arte de Píxeis. Algo a notar é o canal alfa (transparência) que é completamente ignorado pelo algoritmo. O libdepixelize não tem neste momento extensões que suportem totalmente este tipo de imagens, mas todas as imagens de Arte de Píxeis com suporte de canal alfa estão a produzir resultados similares às imagens de referência reconhecidos por Kopf-Lischinski.</flowDiv>
   </flowRoot>
-  <g transform="translate(8.9286 447.78)">
+  <g transform="translate(8.9286 499.62)">
    <image x="77.286" y="3.3616e-6" width="167.57" height="47.878" xlink:href="data:image/png;base64,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 xz7jf4MwidrFWy5FAAAAAElFTkSuQmCC "/>
    <g transform="matrix(.74809 0 0 .74809 77.286 47.878)">
     <path d="m0 0.5v-0.5h3l-0.125 0.375q-0.125 0.375-0.375 0.625t-0.5 0.5-0.5 0.5-0.375 0.625-0.125 0.875 0 1 0.125 0.875 0.375 0.625 0.375 0.625 0.25 0.75 0.375 0.625 0.375 0.625 0.25 0.75 0.375 0.625 0.375 0.625 0.25 0.75 0.375 0.625 0.25 0.5-0.375 0.375-0.875 0.125-0.875 0.125-0.625 0.375-0.5 0.5-0.5 0.5-0.625 0.375l-0.375 0.125v-14.5" fill-opacity="0" inkscape:connector-curvature="0"/>
@@ -939,52 +939,50 @@
     <path d="m206.11 59.609q0.14063-0.35938 0.54688-0.45312l0.40625-0.09375 0.125-0.125-0.125 0.125q-0.125 0.125-0.1875 0.3125l-0.0625 0.1875 0.0937-0.28125 0.0938-0.28125-0.125 0.375q-0.125 0.375-0.5 0.5l-0.375 0.125 0.5625-0.1875-0.1875 0.0625q-0.1875 0.0625-0.40625 0.09375l-0.21875 0.03125 0.10937-0.01563 0.10938-0.01563 0.14062-0.35938" fill="#cd8b6a" inkscape:connector-curvature="0"/>
    </g>
   </g>
-  <rect id="au" x="20" y="555.54" width="300" height="1e3px" display="none"/>
+  <rect id="au" x="20" y="607.38" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#au"/>
    </flowRegion>
-   <flowDiv xml:space="preserve">上面的圖片有透明色版，但結果是正常的。不過若你的像素圖案結果不正常且你認為原因出在透明色版，請聯絡 libdepixelize 維護人員 (例如，在專案網頁上填寫程式錯誤回報) 而他會很樂意改進演算法。如果維護人員不知道圖片結果異常的原因便無法改進演算法。</flowDiv>
+   <flowDiv xml:space="preserve">A imagem acima tem um canal alfa e o resultado está bom. Mesmo assim, se encontrar uma imagem de Arte de Píxeis com um mau resultado e acredita que o problema é o canal alfa, então contacte o responsável pelo libdepixelize (isto é, submeta um bug na página do projeto) e nós ficaremos contentes por integrar novas funcionalidades e correções. Nós não poderemos melhorar o programa se não soubermos que tipos de imagens dão maus resultados.</flowDiv>
   </flowRoot>
-  <rect id="at" x="20" y="604.86" width="300" height="1e3px" display="none"/>
+  <rect id="at" x="20" y="676.32" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#at"/>
    </flowRegion>
-   <flowDiv xml:space="preserve">The image below is a screenshot of <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Pixel art</flowSpan> dialog in the English localisation. You can open this dialog using the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Path</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Trace Bitmap</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Pixel art</flowSpan> menu or right-clicking on an image object and then <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Trace Bitmap</flowSpan>. </flowDiv>
+   <flowDiv xml:space="preserve">A imagem abaixo é uma captura de tela do diálogo de <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Arte em Píxeis</flowSpan> na localização em inglês. Você pode abrir este diálogo usando o menu de arte <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Caminho</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Vetorizar Bitmap</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Arte em Píxeis</flowSpan> ou clicar direito em um objeto de imagem e, em seguida, <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Vetorizar Bitmap</flowSpan>.</flowDiv>
   </flowRoot>
-  <image transform="translate(20 651.85)" x="87.5" width="125" height="103.34" sodipodi:absref="/home/gellert/workspace/inkscape/documentation/tutorials/tracing-pixelart/pixelart-dialog.png" xlink:href="pixelart-dialog.png"/>
-  <rect id="as" x="20" y="767.2" width="300" height="1e3px" display="none"/>
+  <image transform="translate(20 734.11)" x="87.5" width="125" height="103.34" sodipodi:absref="/home/gellert/workspace/inkscape/documentation/tutorials/tracing-pixelart/pixelart-dialog.png" xlink:href="pixelart-dialog.png"/>
+  <rect id="as" x="20" y="849.45" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#as"/>
    </flowRegion>
-   <flowDiv xml:space="preserve">對話窗分成兩個區塊：試探法（Heuristics） 和輸出。試探法是專為進階使用者設計的，但是預設值也夠一般用途，不必擔心參數的設定；因此試探法的部分留到後面講解，先從輸出開始談起。</flowDiv>
+   <flowDiv xml:space="preserve">Este painel tem duas seções: Heurísticas e saída. As Heurísticas destinam-se a utilizações avançadas, mas estas já têm uma configuração padrão para casos gerais que produz bons resultados. Mas não nos preocupemos com esta parte agora. Ficará para mais tarde. Começaremos pela explicação da secção Saída.</flowDiv>
   </flowRoot>
-  <rect id="ar" x="20" y="806.07" width="300" height="1e3px" display="none"/>
+  <rect id="ar" x="20" y="898.64" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ar"/>
    </flowRegion>
-   <flowDiv xml:space="preserve">Kopf-Lischinski 演算法就像編譯器的作用一樣 (從高階程式語言的觀點來看)，將資料轉換成許多種不同類型的表現形式。在每個階段中演算法給予我們探索此表現手法潛在應用的機會。某些運算過程產生的圖案有正確的視覺表現 (像造形范氏晶格圖案輸出)，而有些則沒有 (像相似度圖形)。在 libdepixelize 的開發過程中許多使用者不斷詢問能否加入匯出這些處理過程圖形功能的可能性，最後原始的 libdepixelize 作者同意加入這些使用者所期望的功能。</flowDiv>
+   <flowDiv xml:space="preserve">O algoritmo Kopf-Lischinski funciona (de um ponto de vista de alto-nível) como um compilador, convertendo os dados ao longo de vários tipos de representação. Em cada passo, o algoritmo tem a oportunidade de explorar operações que esta representação fornece. Algumas destas representações intermédias têm uma representação visual correta (como a saída Voronoi do gráfico da célula reformulada) e algumas não têm (como o gráfico de similaridade). Durante o desenvolvimento do libdepixelize, os utilizadores pediram muitas vezes para adicionar a possibilidade de exportar estes passos intermédios para o libdepixelize e o autor original aceitou este pedido.</flowDiv>
   </flowRoot>
-  <rect id="aq" x="20" y="876.74" width="300" height="1e3px" display="none"/>
+  <rect id="aq" x="20" y="990.48" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#aq"/>
    </flowRegion>
-   <flowDiv xml:space="preserve">The default output should give the smoothest result and is probably what you
-want. You saw already the default output on the first samples of this
-tutorial. If you want to try it yourself, just open the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Trace Bitmap</flowSpan> dialog, select <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Pixel art</flowSpan> tab and click in <flowSpan font-family="Liberation Sans,Arial,sans-serif">OK</flowSpan> after choosing some image on Inkscape. </flowDiv>
+   <flowDiv xml:space="preserve">A saída padrão deve fornecer o resultado mais suave e provavelmente é o que você deseja. Você já viu a saída padrão nos primeiros exemplos deste tutorial. Se você quiser tentar você mesmo, basta abrir a caixa de diálogo <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Vetorizar Bitmap</flowSpan>, selecione a guia<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Arte em Píxeis</flowSpan> e clique em <flowSpan font-family="Liberation Sans,Arial,sans-serif">OK</flowSpan> depois de escolher alguma imagem no Inkscape.</flowDiv>
   </flowRoot>
-  <rect id="ap" x="20" y="926.12" width="300" height="1e3px" display="none"/>
+  <rect id="ap" x="20" y="1040" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ap"/>
    </flowRegion>
-   <flowDiv xml:space="preserve">從下面範例圖你可以看到范氏晶格 (Voronoi) 輸出結果且這屬於「重塑型像素圖」，晶格單元 (以前的像素) 會轉變成相連像素讓圖案有相同外觀。不會建立任何曲線而影像會持續以直線構成。當你放大影像時則會有差異。以前像素不會與對角相鄰的像素共用邊緣，即使會圖形會變成有相同的外觀。但現在 (感謝色彩相似度圖形和試探法讓你可以得到更好的運算結果) 卻能夠讓兩的對角單元共用邊緣 (以前一個頂點只能由兩個對角單元所共用)。</flowDiv>
+   <flowDiv xml:space="preserve">Pode-se ver a saída Voronoi abaixo que consiste numa "imagem de píxeis com a forma alterada", onde as células (que anteriormente eram píxeis) foram alteradas quanto à forma para ligar píxeis que fazem parte do mesmo recurso. Nenhuma curva é criada e a imagem continua a ser composta por linhas retas. A diferença pode ser observada quando se amplia a imagem. Os píxeis anteriores não podiam partilhar uma borda com um vizinho na diagonal, mesmo que tenham sido colocados para fazer parte do mesmo recurso. Mas agora (graças à similaridade das cores e às heurísticas que podem ser ajustadas para obter melhores resultados), é possível fazer com que duas células diagonais partilhem uma borda (anteriormente apenas vértices únicos eram partilhados por duas células diagonais).</flowDiv>
   </flowRoot>
-  <g transform="translate(20 1005.6)">
+  <g transform="translate(20 1150.4)">
    <image x="38" width="224" height="64" xlink:href="data:image/png;base64,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 xz7jf4MwidrFWy5FAAAAAElFTkSuQmCC "/>
    <g transform="translate(38 64)">
     <path d="m0 0h1v1h-1" fill-opacity="0" inkscape:connector-curvature="0"/>
@@ -15325,42 +15323,42 @@ tutorial. If you want to try it yourself, just open the <flowSpan fill="#6495ED"
     <path d="m223 63h1v1h-1" fill-opacity="0" inkscape:connector-curvature="0"/>
    </g>
   </g>
-  <rect id="ao" x="20" y="1145.6" width="300" height="1e3px" display="none"/>
+  <rect id="ao" x="20" y="1290.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ao"/>
    </flowRegion>
-   <flowDiv xml:space="preserve">標準貝氏雲形線輸出會有平滑的圖形，因為前面敘述的范氏晶格輸出會轉換成二次貝茲曲線，但轉換不會是 1:1，原因是當演算法要在可見色彩之中達成區塊間網格不連續 (T-junction) 時，試探法會多次運算決定哪些曲線會合併成一條曲線。對於該階段試探法的提示：你無法調整它們。</flowDiv>
+   <flowDiv xml:space="preserve">A saída padrão B-splines fornecerá resultados suaves, porque a saída anterior do Voronoi será convertida em curvas quadráticas de Bézier. No entanto, a conversão não será 1: 1 porque existem mais heurísticas trabalhando para decidir quais curvas serão mescladas em uma quando o algoritmo atingir uma junção T entre as cores visíveis. Uma dica sobre as heurísticas deste estágio: você não pode ajustá-las.</flowDiv>
   </flowRoot>
-  <rect id="an" x="20" y="1195" width="300" height="1e3px" display="none"/>
+  <rect id="an" x="20" y="1350.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#an"/>
    </flowRegion>
-   <flowDiv xml:space="preserve">由 libdepixelize (Inkscape 目前不提供圖形介面，因為本身處於實驗且尚未開發完整階段) 匯出的最後一張輸出結果是用「最佳化曲線」移除貝氏雲形線的階梯現象。此運算階段同時執行了邊界偵測技術來避免某些外觀變得平滑，以及三角測量技術來修正最佳化後的節點位置。當 libdepixelize 的開發脫離「實驗階段」時 (希望是不久之後)，你應該就可以個別地停用這些功能的任何一項。</flowDiv>
+   <flowDiv xml:space="preserve">A etapa final do libdepixelize (atualmente não exportável pela interface do Inkscape por ser experimental e incompleto) é "otimizar curvas" para remover o efeito de escada das curvas B-spline. Esta etapa também usa uma técnica de deteção de bordas para prevenir que algumas características sejam suavizadas e uma técnica de triangulação para corrigir a posição dos nós após a otimização. É possível desativar cada uma destas características quando a saída deixar de estar no "estado experimental" no libdepixelize (esperamos que seja brevemente).</flowDiv>
   </flowRoot>
-  <rect id="am" x="20" y="1255.9" width="300" height="1e3px" display="none"/>
+  <rect id="am" x="20" y="1420.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#am"/>
    </flowRegion>
-   <flowDiv xml:space="preserve">圖形介面中的試探法部分讓你可以調整 libdepixelize 的試探法參數以決定程式遇到 2x2 像素時哪兩個對角像素有相同的顏色。libdepixelize 的問題就是「圖案中哪些關聯性是我該保留的？」。程式會試著對不一致的對角像素套用所有試探法並保留比較好的關聯性。如果出現兩個一樣好的情形時，則關聯性都會被刪除。</flowDiv>
+   <flowDiv xml:space="preserve">A secção das heurísticas na interface permite afinar as heurísticas usadas pelo libdepixelize para decidir o que fazer quando encontra um bloco de píxel 2x2 onde as duas diagonais têm cores similares. "Que ligação devo manter?" é o que o libdepixelize pergunta. Este tenta aplicar todas as heurísticas às diagonais em conflito e mantém a ligação ao vencedor. Se ocorrer um empate, ambas as ligações são eliminadas.</flowDiv>
   </flowRoot>
-  <rect id="al" x="20" y="1305.4" width="300" height="1e3px" display="none"/>
+  <rect id="al" x="20" y="1480.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#al"/>
    </flowRegion>
-   <flowDiv xml:space="preserve">若你想要分析每次試探法的效果並用這些數字做其他有趣的試驗，那麼范氏晶格就是最佳的輸出方式。你可以簡單地在范氏晶格輸出中看到更多試探法的效果，而當你滿意自己的設定值時，你便能將輸出類型改成你想要的那一種。</flowDiv>
+   <flowDiv xml:space="preserve">Para analisar o efeito de cada heurística e experimentar vários valores, a melhor saída é a Voronoi. Pode-se ver melhor os efeitos das heurísticas na saída Voronoi e quando estiver bom, pode-se mudar o tipo de saída para o pretendido.</flowDiv>
   </flowRoot>
-  <rect id="ak" x="20" y="1344.3" width="300" height="1e3px" display="none"/>
+  <rect id="ak" x="20" y="1519.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ak"/>
    </flowRegion>
-   <flowDiv xml:space="preserve">下面的圖片顯示每次只有開啟一種試探法的貝氏雲形線輸出。請注意用紫色圓圈特別標示的位置，那是每種試探法執行時結果不同的地方。</flowDiv>
+   <flowDiv xml:space="preserve">A imagem abaixo tem uma imagem e a saída B-Spline com apenas uma das heurísticas ativadas para cada tentativa. Preste atenção aos círculos púrpuras que destacam as diferenças entre a performance de cada heurística.</flowDiv>
   </flowRoot>
-  <g transform="translate(-141.21 1092.6)" inkscape:label="Layer 1">
+  <g transform="translate(-141.21 1278.1)" inkscape:label="Layer 1">
    <image x="250.21" y="287.93" width="61" height="63" xlink:href="data:image/png;base64,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 "/>
    <image x="250.21" y="350.93" width="61" height="63" xlink:href="data:image/png;base64,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 "/>
    <image x="250.21" y="413.93" width="61" height="63" xlink:href="data:image/png;base64,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 "/>
@@ -15741,89 +15739,89 @@ tutorial. If you want to try it yourself, just open the <flowSpan fill="#6495ED"
    <circle cx="366.46" cy="329.16" r="3.0948" fill="none" stroke="#f0f" stroke-width="1.1"/>
    <circle cx="360.46" cy="341.92" r="2.5145" fill="none" stroke="#f0f" stroke-width="1.1"/>
   </g>
-  <rect id="aj" x="20" y="1581.6" width="300" height="1e3px" display="none"/>
+  <rect id="aj" x="20" y="1767" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#aj"/>
    </flowRegion>
-   <flowDiv xml:space="preserve">第一次試驗 (最上面的圖片)，我們只啟用曲線試探法。這種試探法會試著保留相連一起的長曲線。你會注意到結果很類似最後一張圖片，而最後一張是套用稀疏像素試探法的結果。不同的地方是它的「強度」更均衡且遇到真的會影響到保留連接性時只會把高的數值作為投票值。這裡的「均衡」一詞代表的定義/概念是根據「人類直覺」給定的像素資料庫分析而來。其他差異則是遇到相連部分群組成大型圖塊而不是長曲線 (想像一下棋盤) 時試探法無法決定該怎麼做。</flowDiv>
+   <flowDiv xml:space="preserve">Para a primeira tentativa (imagem no topo), apenas foi ativada a heurística curvas. Esta heurística tenta manter ligadas as curvas longas. Pode-se notar que este resultado é semelhante à última imagem, onde é aplicada a heurística de píxeis dispersos. Difere na sua "força" que é mais justa e apenas atribui um valor alto ao voto quando é realmente importante manter estas ligações. O conceito/definição de "justo" aqui é baseado na "intuição humana" na base de dados de píxeis analisados. Outra diferença é que esta heurística não consegue decidir o que fazer quando as ligações agrupam grandes blocos em vez de curvas longas (tal como num tabuleiro de xadrez).</flowDiv>
   </flowRoot>
-  <rect id="ai" x="20" y="1653.1" width="300" height="1e3px" display="none"/>
+  <rect id="ai" x="20" y="1858.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ai"/>
    </flowRegion>
-   <flowDiv xml:space="preserve">第二次試驗 (中間那幅圖片)，我們只啟用孤立試探法。試探法只有試著保留相連部分，換言之圖片結果是含有固定權重投票的某些隔離像素 (孤立)。這種情形與其他試探法處理不相同，但該試探法仍然很棒且有助於得到更好的結果。</flowDiv>
+   <flowDiv xml:space="preserve">Para a segunda tentativa (a imagem do meio) apenas foi ativada a heurística Ilhas. A única coisa que esta heurística faz é tentar manter a ligação que de outra forma poderia resultar em vários píxeis isolados (ilhas) com um peso de voto constante. Este tipo de situação não é comum como a situação que acontece com as outras heurísticas, mas esta heurística é excelente e ajuda a obter melhores resultados.</flowDiv>
   </flowRoot>
-  <rect id="ah" x="20" y="1691.9" width="300" height="1e3px" display="none"/>
+  <rect id="ah" x="20" y="1918.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ah"/>
    </flowRegion>
-   <flowDiv xml:space="preserve">第三次試驗 (底下的那張圖片)，我們只啟用稀疏像素試探法。這種試探法會試著保留與前景顏色相連的曲線。試探法藉由分析不一致曲線周圍的像素區域來找到前景顏色。使用這種試探法，你不只能夠調整「強度」，也可以調整要分析的像素區域。但記住一件事，當你增加像素區域分析的最大「強度」時其投票也會增加，你可能會需要修改投票的倍數。原始的 libdepixelize 作者認為此種試探法太貪心因而比較喜歡將倍數改為「0.25」。</flowDiv>
+   <flowDiv xml:space="preserve">Para a terceira tentativa (a imagem do fundo), apenas se ativou a heurística Píxeis Dispersos. Esta heurística tenta manter as curvas ligadas à cor do fundo. Para descobrir qual é a cor do fundo a heurística analisa uma janela com os píxeis à volta das curvas em conflito. Nesta heurística pode-se afinar a "força", assim como a janela de píxeis que analisa. Notar que quando se aumenta a janela de píxeis analisados, a "força" máxima para o seu voto aumentará também e poderá ser melhor ajustar o multiplicador para o seu voto. O autor original do libdepixelize acha que esta heurística é demasiada "gananciosa" e prefere usar o valor "0.25" no multiplicador.</flowDiv>
   </flowRoot>
-  <rect id="ag" x="20" y="1762.6" width="300" height="1e3px" display="none"/>
+  <rect id="ag" x="20" y="2010.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ag"/>
    </flowRegion>
-   <flowDiv xml:space="preserve">即使曲線試探法和稀疏像素試探法會得到類似的結果，你仍會想都啟用這兩種試探法，因為曲線試探法可能極為保守地保留輪廓像素重要曲線，而某些情形只有稀疏像素試探法能符合需求。</flowDiv>
+   <flowDiv xml:space="preserve">Mesmo que o resultado da heurística curvas e píxeis dispersos dêem resultados similares, você pode querer manter ambos habilitados, porque a heurística curvas pode fornecer uma segurança extra para que as curvas importantes dos píxeis de contorno não sejam descartadas e há casos que apenas podem ser respondidos pela heurística píxeis dispersos.</flowDiv>
   </flowRoot>
-  <rect id="af" x="20" y="1801.4" width="300" height="1e3px" display="none"/>
+  <rect id="af" x="20" y="2059.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#af"/>
    </flowRegion>
-   <flowDiv xml:space="preserve">小技巧提示：你可以將倍數/權重設定值設定為零來停用所有的試探法。你也能將任何一種試探法的倍數/權重數值設為負值讓結果產生與原理相反的效果。至於你為什麼想用反向行為去取代用標準行為所得到的良好畫質結果呢？因為你能這麼做...因為你可能想要一種有「人造感」的效果...不管什麼原因...你就是可以這樣做。</flowDiv>
+   <flowDiv xml:space="preserve">Dica: Você pode desativar todas as heurísticas, definindo seus valores de multiplicador / peso como zero. Você pode fazer qualquer ato heurístico contra seus princípios usando valores negativos para seus valores multiplicadores / peso. Por que você desejaria substituir o comportamento criado para oferecer melhor qualidade pelo comportamento oposto? Porque você pode ... porque você pode querer um resultado "artístico" ... tanto faz ... você pode.</flowDiv>
   </flowRoot>
-  <rect id="ae" x="20" y="1850.8" width="300" height="1e3px" display="none"/>
+  <rect id="ae" x="20" y="2119.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ae"/>
    </flowRegion>
-   <flowDiv xml:space="preserve">就這樣！上面所述就是 libdepixelize 初次發佈版本提供的全部選項。但假如 libdepixelize 原始作者和創作導師的研究能夠成功，那麼你可能能使用更多額外的選項，甚至能讓用 libdepixelize 產生良好結果的圖片範圍變得更廣。希望他們開發過程順利。</flowDiv>
+   <flowDiv xml:space="preserve">E é isto! Para este lançamento inicial do libdepixelize, estas são todas as opções disponíveis. Mas se a pesquisa do autor original do libdepixelize e o seu mentor criativo for bem sucedida, poderemos ter no futuro outras opções e outros tipos de imagens adequadas nas quais o libdepixelize pode dar bons resultados. Deseje a eles boa sorte.</flowDiv>
   </flowRoot>
-  <rect id="ad" x="20" y="1900.2" width="300" height="1e3px" display="none"/>
+  <rect id="ad" x="20" y="2168.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ad"/>
    </flowRegion>
-   <flowDiv xml:space="preserve">這篇文章使用的所有圖片都來自 Liberated Pixel Cup 以避免著作權問題。連結：</flowDiv>
+   <flowDiv xml:space="preserve">Todas as imagens usadas aqui são provenientes de Liberated Pixel Cup para evitar problemas de direitos autorais. Os links são:</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 1924.5)" r="2"/>
-  <rect id="ac" x="40" y="1918.5" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 2201.1)" r="2"/>
+  <rect id="ac" x="40" y="2195.1" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ac"/>
    </flowRegion>
    <flowDiv xml:space="preserve"><flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://opengameart.org/content/memento</flowSpan></flowDiv>
   </flowRoot>
-  <circle transform="translate(35 1942)" r="2"/>
-  <rect id="ab" x="40" y="1936" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 2218.6)" r="2"/>
+  <rect id="ab" x="40" y="2212.6" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ab"/>
    </flowRegion>
    <flowDiv xml:space="preserve"><flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://opengameart.org/content/rpg-enemies-bathroom-tiles</flowSpan></flowDiv>
   </flowRoot>
-  <use x="47" y="1989.4645252" xlink:href="#be" inkscape:label="icon-credits-authors"/>
-  <rect id="bi" x="70" y="1983.5" width="230" height="1e3px" display="none"/>
+  <use x="47" y="2266.0947517" xlink:href="#be" inkscape:label="icon-credits-authors"/>
+  <rect id="bi" x="70" y="2260.1" width="230" height="1e3px" display="none"/>
   <flowRoot fill="#999999" font-family="Liberation Sans,Arial,sans-serif" font-size="6" text-align="left" style="line-height:120%">
    <flowRegion>
     <use xlink:href="#bi"/>
    </flowRegion>
    <flowDiv xml:space="preserve">Vinícius dos Santos Oliveira; Nicolas Dufour; Kris De Gussem; Gellért Gyuris</flowDiv>
   </flowRoot>
-  <use x="47" y="2007.1276111" xlink:href="#bc" inkscape:label="icon-credits-translators"/>
-  <rect id="bg" x="70" y="2001.1" width="230" height="1e3px" display="none"/>
+  <use x="47" y="2283.7578376" xlink:href="#bc" inkscape:label="icon-credits-translators"/>
+  <rect id="bg" x="70" y="2277.8" width="230" height="1e3px" display="none"/>
   <flowRoot fill="#999999" font-family="Liberation Sans,Arial,sans-serif" font-size="6" text-align="left" style="line-height:120%">
    <flowRegion>
     <use xlink:href="#bg"/>
    </flowRegion>
-   <flowDiv xml:space="preserve"/>
+   <flowDiv xml:space="preserve">Victor Westmann — 2019</flowDiv>
   </flowRoot>
-  <use x="47" y="2019.1276111" xlink:href="#bd" inkscape:label="icon-credits-designer"/>
-  <rect id="bh" x="70" y="2013.1" width="230" height="1e3px" display="none"/>
+  <use x="47" y="2300.1640876" xlink:href="#bd" inkscape:label="icon-credits-designer"/>
+  <rect id="bh" x="70" y="2294.2" width="230" height="1e3px" display="none"/>
   <flowRoot fill="#999999" font-family="Liberation Sans,Arial,sans-serif" font-size="6" text-align="left" style="line-height:120%">
    <flowRegion>
     <use xlink:href="#bh"/>
@@ -15832,7 +15830,7 @@ tutorial. If you want to try it yourself, just open the <flowSpan fill="#6495ED"
   </flowRoot>
  </g>
  <defs>
-  <g id="bf" transform="translate(0 1860.7)">
+  <g id="bf" transform="translate(0 2141.8)">
    <defs xmlns:cc="http://creativecommons.org/ns#" xmlns:osb="http://www.openswatchbook.org/uri/2009/osb">
     <filter id="c" x="-.0061708" y="-.0058384" width="1.0123" height="1.0117" color-interpolation-filters="sRGB" inkscape:collect="always">
      <feGaussianBlur inkscape:collect="always" stdDeviation="1.4349239"/>
