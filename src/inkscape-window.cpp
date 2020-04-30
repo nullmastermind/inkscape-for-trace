@@ -122,6 +122,10 @@ InkscapeWindow::setup_view()
     //       the window, but a call to hide() causes Inkscape to just exit since the migration to Gtk::Application
     show();
 
+    // TODO: Extra call seems to ensure toolbar widgets are visible after programmatic resize
+    // (incomplete workaround for https://gitlab.com/inkscape/inkscape/issues/125)
+    check_resize();
+
     sp_namedview_zoom_and_view_from_document(_desktop);
     sp_namedview_update_layers_from_document(_desktop);
 
