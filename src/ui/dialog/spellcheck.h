@@ -48,6 +48,8 @@ class Preferences;
 namespace UI {
 namespace Dialog {
 
+using LanguagePair = std::pair<std::string, std::string>;
+
 /**
  *
  * A dialog widget to checking spelling of text elements in the document
@@ -61,7 +63,7 @@ public:
 
     static SpellCheck &getInstance() { return *new SpellCheck(); }
 
-    static std::vector<std::string> get_available_langs();
+    static std::vector<LanguagePair> get_available_langs();
 
 private:
 
@@ -227,7 +229,7 @@ private:
 
     Inkscape::Preferences *_prefs;
 
-    std::vector<std::string> _langs;
+    std::vector<LanguagePair> _langs;
 
     /*
      *  Dialogs widgets

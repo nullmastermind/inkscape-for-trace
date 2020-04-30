@@ -2583,9 +2583,9 @@ void InkscapePreferences::initPageSpellcheck()
     langValues.emplace_back("");
 
     // TODO: revisit that now that Gspell supports language name.
-    for (auto const &lang : SpellCheck::get_available_langs()) {
-        languages.emplace_back(lang);
-        langValues.emplace_back(lang);
+    for (const LanguagePair &pair : SpellCheck::get_available_langs()) {
+        languages.emplace_back(pair.first);
+        langValues.emplace_back(pair.second);
     }
 
     _spell_language.init( "/dialogs/spellcheck/lang", &languages[0], &langValues[0], languages.size(), languages[0]);

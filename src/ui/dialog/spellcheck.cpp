@@ -56,9 +56,9 @@ namespace Dialog {
 /**
  * Get the list of installed dictionaries/languages
  */
-std::vector<std::string> SpellCheck::get_available_langs()
+std::vector<LanguagePair> SpellCheck::get_available_langs()
 {
-    std::vector<std::string> langs;
+    std::vector<LanguagePair> langs;
 
 #if WITH_GSPELL
     // TODO: write a gspellmm library.
@@ -66,10 +66,10 @@ std::vector<std::string> SpellCheck::get_available_langs()
     GList *list = const_cast<GList *>(gspell_language_get_available());
     g_list_foreach(list, [](gpointer data, gpointer user_data) {
         GspellLanguage *language = reinterpret_cast<GspellLanguage*>(data);
-        std::vector<std::string> *langs = reinterpret_cast<std::vector<std::string>*>(user_data);
+        std::vector<LanguagePair> *langs = reinterpret_cast<std::vector<LanguagePair>*>(user_data);
+        const gchar *name = gspell_language_get_name(language);
         const gchar *code = gspell_language_get_code(language);
-        //const gchar *name = gspell_language_get_name(language);
-        langs->push_back(code);
+        langs->emplace_back(name, code);
     }, &langs);
 #endif
 
@@ -107,7 +107,13 @@ SpellCheck::SpellCheck () :
     for (const char *langkey : { "lang", "lang2", "lang3" }) {
         auto lang = _prefs->getString(_prefs_path + langkey);
         if (!lang.empty()) {
-            _langs.push_back(lang);
+#if WITH_GSPELL
+            const GspellLanguage *language = gspell_language_lookup(lang.c_str());
+            const gchar *name = gspell_language_get_name(language);
+            _langs.emplace_back(name, lang);
+#else
+            _langs.emplace_back(lang, lang);
+#endif
         }
     }
 
@@ -132,8 +138,8 @@ SpellCheck::SpellCheck () :
     tree_view.append_column(_("Suggestions:"), tree_columns.suggestions);
 
     if (!_langs.empty()) {
-        for (auto const &lang : _langs) {
-            dictionary_combo.append(lang);
+        for (const LanguagePair &pair : _langs) {
+            dictionary_combo.append(pair.second, pair.first);
         }
         dictionary_combo.set_active(0);
     }
@@ -327,7 +333,7 @@ void SpellCheck::deleteSpeller() {
 
 bool SpellCheck::updateSpeller() {
 #if WITH_GSPELL
-    auto lang = dictionary_combo.get_active_text();
+    auto lang = dictionary_combo.get_active_id();
     if (!lang.empty()) {
         const GspellLanguage *language = gspell_language_lookup(lang.c_str());
         _checker = gspell_checker_new(language);
