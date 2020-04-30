@@ -18,7 +18,7 @@ Inkview – program za prikaz SVG-a i prezentacija.
 
 =head1 SAŽETAK
 
-C<inkview [opcije] [ime_datoteke …]>
+C<inkview [opcije] [datoteka …]>
 
 opcije:
 
@@ -104,7 +104,7 @@ pregledavanjem svih datoteka.
 
 =item * F11: uključi/isključi prikaz preko cijelog ekrana
 
-=item * Escape ili Q: izlaz
+=item * Escape ili Q: zatvori program
 
 =back
 
@@ -131,11 +131,11 @@ L<http://www.inkscape.org/>
 
 =head1 AUTORI
 
-Vidi L<inkscape(1)>
+Pogledaj L<inkscape(1)>
 
 =head1 AUTORSKA PRAVA I LICENCA
 
-B<Copyright (C)> 1999. – 2018. Nositelji autorskih prava su autori.
+B<Copyright (C)> 1999. – 2020. Nositelji autorskih prava su autori.
 
 B<Inkscape> je slobodan softver. Redistribucija i/ili promjena programa je
 moguća pod uslovima, zadanima općom javnom licencom verzije 3 ili novijom.

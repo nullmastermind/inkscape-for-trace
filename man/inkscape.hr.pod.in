@@ -18,89 +18,80 @@ Inkscape – program za uređivanje SVG grafika (skalabilne vektorske grafike).
 
 =head1 SAŽETAK
 
-C<inkscape [options] [filename_1 filename_2 ...]>
+C<inkscape [opcije] [datoteka_1 datoteka_2 …]>
 
 opcije:
 
     -?, --help
     -V, --version
-    -x, --extension-directory
-        --verb-list
-        --action-list
+        --system-data-directory
+        --user-data-directory
 
-        --export-type=FILE_TYPE
-        --export-filename=FILENAME
+    -p, --pipe
+        --pdf-page=STRANICA
+        --pdf-poppler
+        --convert-dpi-method=METODA
+        --no-convert-text-baseline-spacing
 
-    -a, --export-area=x0:y0:x1:y1
+    -o, --export-filename=DATOTEKA
+        --export-overwrite
+        --export-type=VRSTA[,VRSTA]*
+
     -C, --export-area-page
     -D, --export-area-drawing
+    -a, --export-area=x0:y0:x1:y1
         --export-area-snap
-        --export-margin=VALUE
-    -i, --export-id=ID
-    -j, --export-id-only
-    -t, --export-use-hints
-    -b, --export-background=COLOR
-    -y, --export-background-opacity=VALUE
     -d, --export-dpi=DPI
-    -w, --export-width=WIDTH
-    -h, --export-height=HEIGHT
+    -w, --export-width=ŠIRINA
+    -h, --export-height=VISINA
+        --export-margin=MARGINA
 
-    -P, --export-ps=IME_DATOTEKE
-    -E, --export-eps=IME_DATOTEKE
-    -A, --export-pdf=IME_DATOTEKE
+    -i, --export-id=ID-OBJEKTA[;ID-OBJEKTA]*
+    -j, --export-id-only
+    -l, --export-plain-svg
+        --export-ps-level=RAZINA
         --export-pdf-version=VERZIJA
-        --export-latex
-
-    --export-ps-level {2,3}
-
     -T, --export-text-to-path
+        --export-latex
         --export-ignore-filters
+    -t, --export-use-hints
+    -b, --export-background=BOJA
+    -y, --export-background-opacity=VRIJEDNOST
 
-    -l, --export-plain-svg=IME_DATOTEKE
-
-    -m, --export-wmf=IME_DATOTEKE
-    -M, --export-emf=IME_DATOTEKE
-
-    -p, --print=PISAČ
-
-    -I, --query-id=ID
+    -I, --query-id=ID-OBJEKTA[,ID-OBJEKTA]*
+    -S, --query-all
     -X, --query-x
     -Y, --query-y
     -W, --query-width
     -H, --query-height
-    -S, --query-all
-
-
-
-        --verb=VERB-ID
-        --select=OBJECT-ID
-
-
-
-        --shell
-
-    -g, --with-gui
-    -z, --without-gui
 
         --vacuum-defs
-        --no-convert-text-baseline-spacing
-        --convert-dpi-method=METODA
+        --select=ID-OBJEKTA[,ID-OBJEKTA]*
+        --actions=RADNJA(:ARGUMETN)[;RADNJA(:ARGUMENT)]*
+        --action-list
+        --verb=NAREDBA[;NAREDBA]*
+        --verb-list
 
-        --g-fatal-warnings
+    -g, --with-gui
+        --batch-process
+        --shell
+
+
 
 =head1 OPIS
 
-B<Inkscape> je uređivač s grafičkim sučeljem za obradu datoteka u B<Scalable
-Vector Graphics (SVG)> formatu (skalabilne vektorske grafike), te pruža
-slične mogućnosti kao B<Adobe Illustrator>, B<CorelDraw>, B<Xara Xtreme>,
-itd. Inkscape omogućuje izradu raznih oblika, bezier krivulja, prostoručno
-crtanje, višeredni tekst, tekst na stazi, prozirnost, proizvoljne povezane
-transformacije, gradijente i ispune s uzorcima, obradu čvorova, razne
-formate za izvoz i uvoz, uključujući PNG i PDF, grupiranje objekata,
-slojeve, „žive” klonove, i još mnogo drugoga. Sučelje je izrađeno na način,
-koji iskusnim korisnicima omogućuje udoban i učinkovit način rada, a
-istovremeno je usklađen s B<GNOME> standardom, kako bi korisnici koji su
-upoznati s GNOME programima, mogli brzo naučiti upotrebu sučelja.
+B<Inkscape> is a Free and open source vector graphics editor. It offers a
+rich set of features and is widely used for both artistic and technical
+illustrations such as cartoons, clip art, logos, typography, diagramming and
+flowcharting.  It uses vector graphics to allow for sharp printouts and
+renderings at unlimited resolution and is not bound to a fixed number of
+pixels like raster graphics. Inkscape uses the standardized B<SVG> file
+format as its main format, which is supported by many other applications
+including web browsers.
+
+The interface is designed to be comfortable and efficient for skilled users,
+while remaining conformant to B<GNOME> standards so that users familiar with
+other GNOME applications can learn its interface rapidly.
 
 B<SVG> je standardni XML format za 2D vektorsko crtanje, koji je definirao
 W3C. Omogućuje definiranje objekata u crtežu, koristeći staze i jednostavne
@@ -121,57 +112,105 @@ uvjetima ovog standarda.
 
 =item B<-?>, B<--help>
 
-Shows a help message.
+Prikazuje poruku pomoći.
 
 =item B<-V>, B<--version>
 
-Shows the Inkscape version and build date.
+Prikazuje Inkscape verziju i datum izgradnje.
 
-=item B<-x>, B<--extension-directory>
+=item B<--system-data-directory>
 
-Lists the current extension directory that Inkscape is configured to use and
-then exits. This is used for external extensions to use the same
-configuration as the original Inkscape installation.
+Ispisuje mapu sustava u kojoj se spremaju datoteke koje se isporučuju s
+Inkscapeom. To uključuje datoteke koje Inkscape treba za pokretanje (poput
+definicija jedinica, ugrađena mapiranja tipki, datoteke koje opisuju izgled
+korisničkog sučelja, teme ikona itd.), osnovna proširenja, resurse (filtri,
+fontovi, markeri, palete boja, simboli, predloške) i dokumentaciju (datoteke
+SVG primjera, vježbe).
 
-=item B<--verb-list>
+Mjesto na kojem Inkscape očekuje mapu sustava može se prepisati varijablom
+okruženja L <INKSCAPE_DATADIR>.
 
-Lists all the verbs that are available in Inkscape by ID. This ID can be
-used in defining keymaps or menus. It can also be used with the L<--verb>
-command line option.
+=item B<--user-data-directory>
 
-=item B<--action-list>
+Ispisuje mapu korisničkih profila u kojem se spremaju datoteke s podacima i
+postavkama korisnika. Prilagođena proširenja i resursi (filtri, fontovi,
+markeri, palete boja, simboli, predlošci) moraju se instalirati u podmape
+ove mape. Osim toga, smještanje datoteke s istim imenom kao neke datoteke u
+mapi sustava ovdje, omogućuje nadjačavanje većine standardnih postavki u
+mapi sustava (npr. standardni predlošci, datoteke korisničkog sučelja itd.).
 
-Prints a list of all available actions.
+Standardno mjesto mape korisničkog profila može se prepisati varijablom
+okruženja L <INKSCAPE_PROFILE_DIR>.
 
-=item B<--export-type>=I<FILE_TYPE>
+=item B<-p>, B<--pipe>
 
-Specify the file type to export to. Possible values: svg, png, ps, eps, pdf,
-emf, wmf, xaml. If both L<--export-filename> and L<--export-type> are given,
-the file name extension must match the type.
+Čita ulaznu datoteku iz standardnog ulaza (stdin).
 
-=item B<--export-filename>=I<FILENAME>
+=item B<--pdf-page>=I<STRANICA>
 
-Specify the filename for the exported file here. If both
-L<--export-filename> and L<--export-type> are given, the file name extension
-must match the type.
+Uvozi zadanu stranicu pdf datoteke. Brojenje započinje s brojem 1.
 
-=item B<-a> I<x0:y0:x1:y1>, B<--export-area>=I<x0:y0:x1:y1>
+=item B<--pdf-poppler>
 
-Za izvoz u PNG format, postavi SVG-korisničku mjernu jedinicu za izvozno
-područje (u Inkscape SVG-datotekama se uobičajeno koriste bezimene
-jedinice). Standardno se izvozi cijela stranica dokumenta. Točka (0,0) se
-nalazi u dojnjem lijevom uglu.
+Inkscape standardno uvozi PDF datoteke putem interne biblioteke (izvedene iz
+popplera). Tekst se sprema kao tekst. Mreže se pretvaraju u pločice. Umjesto
+toga, upotrijebi L<--pdf-poppler> za uvoz putem vanjske biblioteke (poppler
+s cairo pozadinskim sustavom). Tekst se sastoji od grupe, koja sadrži
+klonirane grafeme, gdje je svaki grafem staza. Slike su spremljene unutar
+dokumenta. Mreže uzrokuju iscrtavanje cijelog dokumenta u obliku rasterske
+slike.
+
+=item B<--convert-dpi-method>=I<METODA>
+
+Odaberi metodu za skaliranje starijih (prije-0.92) verzija datoteka, koje
+zbog prelaska iz 90 DPI na 96 DPI rezoluciju mogu biti nešto manje
+prikazane. Moguće vrijednosti su "none" bez promijena (dokument će biti
+prikazan sa 94% orginalne vrijednosti), "scale-viewbox" dokument će biti kao
+cijelina skaliran (pojedinačne veličine ostaju iste), i "scale-document"
+(sve veličine će biti skalirane pojedinačno).
+
+=item B<--no-convert-text-baseline-spacing>
+
+Ne ispravljaj razmak između redaka starijih datoteka prilikom otvaranja
+automatski (starijih od 0.92). Inkscape 0.92 primjenjuje CSS standardnu
+definiciju osobine 'line-height', koja odudara od starijih verzija. Zadani
+razmak između redaka starijih verzija Inkscapea od 0.92, bit će prilagođen
+prilikom učitavanja, kako bi se sačuvao prijelom teksta. Ova opcija u
+naredbenom retku omogućuje zanemarivanje ovog podešavanja.
+
+=item B<-o>, B<--export-filename>=I<DATOTEKA>
+
+Postavlja ime izlazne datoteke. Standardno se koristi ime ulazne
+datoteke. Ako se koristi i L <--export-type>, datotečni nastavak će se
+prilagoditi prema potrebi (ili dodati). Inače će se vrsta datoteke za izvoz
+odrediti na osnovi nastavka zadane datoteke.
+
+Upotreba posebne datoteke "-" omogućuje Inkscapeu zapisati slikovne podatke
+u standardni izlaz (stdout).
+
+=item B<--export-overwrite>
+
+Prepisuje datoteku unosa.
+
+=item B<--export-type>=I<VRSTA[,VRSTA]*>
+
+Odredi vrstu datoteke za izvoz. Moguće vrijednosti su: svg, png, ps, eps,
+pdf, emf, wmf, xaml. Moguće je izvesti više od jedne vrste istovremeno.
+
+Misli na to, da PostScript ne dozvoljava transparenciju, tako da će svi
+transparentni objekti u originalnom SVG formatu biti izvezeni
+rasterom. Korišteni fontovi se ne ugrađuju kompletno, već kao
+podskupine. Zadano izvozno područje je stranica. Možeš ga odrediti i na
+crtež pomoću L<--export-area-drawing>.
+
+Misli na to, da PDF format zadržava transparentnost u izvornom SVG-u.
 
 =item B<-C>, B<--export-area-page>
 
-Prilikom izvoza u SVG, PNG, PDF, PS i EPS formate, izvozno područje je
-stranica. Ovo je zadano za PNG, PDF i PS, tako da to nije potrebno posebno
-odrediti, ukoliko se ne koristi L<--export-id> za izvoz određenog
-objekta. Međutim, za EPS ovo nije zadano. Dapače, specifikacija EPS formata
-ne dozvoljava da granični okvir prelazi izvan svojeg sadržaja. To znači, ako
-se L<--export-area-page> koristi za izvoz u EPS format, granični okvir
-stranice će biti smanjen na veličinu objekta, ukoliko je ovaj manji od
-veličine stranice.
+Prilikom izvoza u SVG, PNG, PDF i PS formate, izvozno područje je
+stranica. Ovo je zadano za SVG, PNG, PDF i PS, tako da to nije potrebno
+posebno odrediti, ukoliko se ne koristi L<--export-id> za izvoz određenog
+objekta. Ova opcija trenutačno ne podržava EPS format.
 
 =item B<-D>, B<--export-area-drawing>
 
@@ -181,6 +220,13 @@ objekt, ukoliko se koristi L<--export-id>). S ovom opcijom, izvezena slika
 će prikazati sve vidljive objekte dokumenta, bez rubova ili isječaka. Ovo je
 zadano područje za izvoz u EPS format. Za izvoz u PNG format, naredba se
 može koristiti zajedno s L<--export-use-hints>.
+
+=item B<-a> I<x0:y0:x1:y1>, B<--export-area>=I<x0:y0:x1:y1>
+
+Za izvoz u PNG format, postavi SVG-korisničku mjernu jedinicu za izvozno
+područje (u Inkscape SVG-datotekama se uobičajeno koriste bezimene
+jedinice). Standardno se izvozi cijela stranica dokumenta. Točka (0,0) se
+nalazi u dojnjem lijevom uglu.
 
 =item B<--export-area-snap>
 
@@ -192,19 +238,6 @@ poravnanja piksela, čak i ako izvoziš granični okvir nekog objekta
 (L<--export-id> ili L<--export-area-drawing>), koji sam po sebi ne koristi
 poravnanje piksela.
 
-=item B<--export-margin>=I<VRIJEDNOST>
-
-Dodaje rub na područje izvoza. Veličina ruba je određena u jedinicama
-veličine stranice (za SVG) ili milimetrima (za PS /EPS/ PDF). Opcija
-trenutno nema efekta na drugim formatima izvoza.
-
-=item B<-b> I<BOJA>, B<--export-background>=I<BOJA>
-
-Boja pozadine za izvezenu PNG datoteku. Može biti zadana bilo kojim nizom za
-određivanje boje, koji SVG podržava, npr. „#ff007f” ili „rgb(255, 0,
-128)”. Ako se boja ne zada, postavlja se boja, koja je određena u postavkama
-dokumenta (spremljena u pagecolor= svojstvu za sodipodi:namedview).
-
 =item B<-d> I<DPI>, B<--export-dpi>=I<DPI>
 
 Rezolucija za izvoz u PNG format. Koristi se također za iscrtavanje objekata
@@ -215,16 +248,11 @@ jednoj SVG korisničkoj jedinici (px, tzv. „korisnička jedinica”), te izvoz
 1 bitmap piksel. Ova vrijednost nadjačava DPI savjet, ako se koristi uz
 L<--export-use-hints>.
 
-=item B<-e> I<IME_DATOTEKE>, B<--export-png>=I<IME_DATOTEKE>
+=item B<-w> I<ŠIRINA>, B<--export-width>=I<ŠIRINA>
 
-Odredi ime datoteke za PNG izvoz. Ako datoteka već postoji, datoteka će biti
-prepisana, bez traženja dozvole za prepisivanje. Koristi `-' kao ime
-datoteke za ispis podataka slike na standardni izlaz(stdout).
-
-=item B<-g>, B<--with-gui>
-
-Pokušaj koristiti grafičko sučelje(GUI) (na Unix sustavu koristi X server,
-čak i ako $DISPLAY nije postavljen).
+Širina stvorenog bitmapa, u pikselima. Ova vrijednost nadjačava postavku
+L<--export-dpi> (ili DPI savjet, ako se koristi zajedno s
+L<--export-use-hints>).
 
 =item B<-h> I<VISINA>, B<--export-height>=I<VISINA>
 
@@ -232,12 +260,23 @@ Visina stvorenog bitmapa, u pikselima. Ova vrijednost nadjačava postavku
 L<--export-dpi> (ili DPI savjet, ako se koristi zajedno s
 L<--export-use-hints>).
 
-=item B<-i> I<ID>, B<--export-id>=I<ID>
+=item B<--export-margin>=I<MARGINA>
+
+Dodaje marginu okolo područja izvoza. Veličina margine određena je u
+jedinicama veličine stranice (za SVG) ili milimetrima (za PS/PDF). Opcija
+trenutačno nema efekta na druge formate izvoza.
+
+=item B<-i> I<ID>, B<--export-id>=I<ID-OBJEKTA[;ID-OBJEKTA]*>
 
 Za izvoz u PNG, PS, EPS, PDF i običan SVG format, ovo je ID vrijednost
 svojstva objekta koji želiš izvesti iz dokumenta – ostali objekti se ne
-izvoze. Granični okvir objekta je zadan kao područje izvoza – nadjačaj ovu
-postavku pomoću L<--export-area> (samo za PNG) ili L<--export-area-page>.
+izvoze. Granični okvir objekta je standardno određuje područje izvoza –
+nadjačaj ovu postavku pomoću L<--export-area> (samo za PNG) ili
+L<--export-area-page>.
+
+Ako odrediš mnoge vrijednosti s popisom objekata odvojenih zarezom, svaka će
+se izvesti zasebno. U tom će se slučaju izvezene datoteke zvati ovako:
+[datoteka_unosa]_[ID].[vrsta_izvoza]
 
 =item B<-j>, B<--export-id-only>
 
@@ -247,65 +286,75 @@ izvozu, čak ni u slučaju da prekrivaju izvezeni objekt. Bez upotrebe
 L<--export-id>, ova će opcija biti zanemarena. U slučaju izvoza u PDF
 format, ovo je zadano, tako da ova opcija nema utjecaja.
 
-=item B<-l>, B<--export-plain-svg>=I<IME_DATOTEKE>
+=item B<-l>, B<--export-plain-svg>
 
 Izvezi dokumente u obični SVG format, bez sodipodi: ili inkscape: znakovnih
-mjesta i bez RDF meta-podataka. Koristi `-' kao ime datoteke za ispis
-podataka slike na standardni izlaz(stdout).
+mjesta i bez RDF metapodataka. Koristi L<--export-filename> za određivanje
+datoteke.
 
-=item B<--verb>=I<ID-IDENTIFIKATORA>, B<--select>=I<ID-IDENTIFIKATORA>
+=item B<--export-ps-level>=I<RAZINA>
 
-Ove dvije opcije rade zajednički, kako bi omogućile osnovno skriptanje za
-Inkscape putem naredbenog retka. U naredbenom retku se mogu koristiti koliko
-god puta bilo potrebno, te se izvršavaju redom na svaki određeni dokument.
+Odrdi verziju jezika za PS i EPS izvoz. Podržane su PostScript razina 2 i
+3. Standardno se koristi 3.
 
-Naredba L<--verb> će izvršiti radnju identifikatora, kao da je odarana
-pomoću izbornika ili gumba. Dijaloški okviri će se pojaviti, ukoliko su dio
-identifikatora. Za stvaranje popisa ID-ova identifikatora, koristi
-opcionalnu naredbu L<--verb-list>.
+=item B<--export-pdf-version>=I<VERZIJA>
 
-Naredbom L<--select> se odabiru objekti s određenim ID oznakama. Time se
-omogućuje upotreba raznih identifikatora, koji utječu na objekte. Za
-uklanjanje svih odabira, koristi C<--verb=EditDeselect>. Mogući ID-ovi
-objekata ovise o odabranom dokumentu.
+Odaberi PDF verziju za izvezenu PDF datoteku. Ovom se opcijom prikazuje
+izbornik PDF verzija, koji se koristi u dijaloškom okviru grafičkog sučelja
+za PDF izvoz. U izborniku moraš odrediti jednu moguću verziju,
+npr. „1.4”. Zadana vrijednost za PDF izvoz je verzija „1.4”.
 
-Opcija  L<--verb>  treba grafičko sučelje (GUI) i stoga se ne može koristiti
-zajedno sa  L<--z>  opcijom.
+=item B<-T>, B<--export-text-to-path>
 
+Konvertiraj tekstualne objekte u staze prilikom izvoza, ukoliko je moguće
+(za izvoz u PS, EPS, PDF i SVG formate).
 
+=item B<--export-latex>
 
-=item B<-p> I<PISAČ>, B<--print>=I<PISAČ>
+(za izvoz u PS, EPS i PDF format) Koristi se za stvaranje slika za LaTeX
+dokumente, u kojima je tekst slike posložen LaTeX-om. Prilikom izvoza u
+PDF/PS/EPS format, ova opcija razdvaja izvoz u PDF/PS/EPS datoteku
+(npr. određeno pomoću --export-pdf) i u LaTeX datoteku. Tekst se neće
+ispisati u PDF/PS/EPS datoteku. Umjesto toga će se pojaviti u LaTeX
+datoteci. Ova LaTeX datoteka uključuje PDF/PS/EPS. Unosom
+(\input{image.tex}), LaTeX datoteka u tvojem LaTeX dokumentu će prikazati
+sliku, a sav tekst će biti posložen LaTeX-om. Pogledaj završnu LaTeX
+datoteku za daljnje informacije. Također pogledaj GNUPlot-ov ’epslatex'
+izlazni terminal.
 
-Ispiši dokument određenim pisačem, koristeći 'lpr -P PISAČ'. Alternativno
-možeš koristiti '| COMMAND' za određivanje izlaza ili '> IME_DATOTEKE' za
-ispis PostScripta u datoteku, umjesto ispisa pisačem. Pripazi, da koristiš
-ispravne navodnike za tvoj terminal, npr.
+=item B<--export-ignore-filters>
 
-    inkscape --print='| ps2pdf - moj_dokument.pdf' moj_dokument.svg
+Izvezi objekte s filterom (npr. sa zamućenjem) u vektorskom formatu,
+zanemarujući pri tome filtre (za izvoz u PS, EPS i PDF formate). Svi objekti
+s filterom se iscrtavaju pomoću L<--export-dpi> (zadano je 96 dpi),
+zadržavajuči pri tome izgled.
 
 =item B<-t>, B<--export-use-hints>
 
-Koristi ime datoteke za izvoz, kao i DPI savjete, koji su spremljeni u
-izvezeni objekt (samo s L<--export-id>). Ovi savjeti se postavljaju
-automatski prilikom izvoza odabira, direktno iz Inkscapea. Znači, ako na
-primjer iz Inkscape sučelja izvoziš oblik s ID oznakom id="path231" kao
-/home/me/oblik.png s rezolucijom od 300 DPI iz datoteke dokument.svg, i
-spremiš taj dokument, bit ćeš u stanju ponovo izvesti taj oblik u istu
-datoteku s jednakom rezolucijom, koristeći
+Tijekom izvoza u PNG, koristi datoteku za izvoz, kao i DPI savjete, koji su
+spremljeni u izvezenom objektu (samo s L<--export-id>). Ovi se savjeti
+postavljaju automatski prilikom izvoza odabira, direktno u Inkscapeu. Znači,
+ako na primjer iz Inkscape sučelja izvoziš oblik s ID oznakom id="path231"
+kao /home/me/oblik.png s rezolucijom od 300 DPI-a iz datoteke dokument.svg,
+i ako taj dokument spremiš, bit ćeš u stanju ponovo izvesti taj oblik u istu
+datoteku s jednakom rezolucijom, pomoću
 
     inkscape -i path231 -t dokument.svg
 
 Ako koristiš L<--export-dpi>, L<--export-width> ili L<--export-height> s
 ovom opcijom, tada će se DPI savjet zanemariti, te će se koristiti
-vrijednost iz naredbenog retka. Ako koristiš L<--export-png> s ovom opcijom,
-tada će se savjet za ime datoteke zanemariti, te će se koristiti vrijednost
+vrijednost iz naredbenog retka. Ako koristiš L<--export-filename> s ovom
+opcijom, tada će se savjet datoteke zanemariti, te će se koristiti datoteka
 iz naredbenog retka.
 
-=item B<-w> I<ŠIRINA>, B<--export-width>=I<ŠIRINA>
+=item B<-b> I<BOJA>, B<--export-background>=I<BOJA>
 
-Širina stvorenog bitmapa, u pikselima. Ova vrijednost nadjačava postavku
-L<--export-dpi> (ili DPI savjet, ako se koristi zajedno s
-L<--export-use-hints>).
+Boja pozadine za izvezenu PNG datoteku. Može biti zadana bilo kojim nizom za
+određivanje boje, koji SVG podržava, npr. „#ff007f” ili „rgb(255, 0,
+128)”. Ako se boja ne zada, postavlja se boja, koja je određena u postavkama
+dokumenta (spremljena u pagecolor= svojstvu za sodipodi:namedview).
+
+
 
 =item B<-y> I<VRIJEDNOST>, B<--export-background-opacity>=I<VRIJEDNOST>
 
@@ -317,85 +366,20 @@ neprozirnost stranice kako je zadana u Inkscapeovim postavkama za dokument
 nije zadano, ali je korištena opcija -b, tada će se koristiti vrijednost 255
 (neprozirno).
 
-=item B<-P> I<IME_DATOTEKE>, B<--export-ps>=I<IME_DATOTEKE>
+=item B<-I>, B<--query-id>=I<ID-OBJEKTA[,ID-OBJEKTA]*>
 
-Izvezi dokument(e) u PostScript format. Misli na to, da PostScript ne
-dozvoljava prozirnost, tako da će svi prozirni objekti u originalnom SVG
-formatu biti izvezeni rasterom. Korišteni fontovi se ne ugrađuju cjelovito,
-već kao podskupine. Zadano izvozno područje je stranica. Područje možeš
-odrediti i na crtež, korištenjem L<--export-area-drawing>. Možeš odrediti
-L<--export-id> za izvoz pojedinačnog objekta (svi ostali su sakriveni). U
-tom slučaju je izvozno područje granični okvir objekta, no može se odrediti
-i stranica pomoću L<--export-area-page>. Koristi `-' kao ime datoteke za
-ispis podataka slike na standardni izlaz(stdout).
+Postavi ID oznaku objekta, čije dimenzije tražiš. Ako nije postavljena,
+opcije upita će vratiti dimenzije crteža (tj. sve objekte dokumenta), a ne
+dimenzije stranice ili prikaznog okvira, tzv. viewbox.
 
-=item B<-E> I<IME_DATOTEKE>, B<--export-eps>=I<IME_DATOTEKE>
+Ako odrediš mnoge vrijednosti s popisom objekata odvojenih zarezom, bilo
+koji upit za geometriju (npr. L<--query-x>) vratit će zarezom odvojeni popis
+vrijednosti koji odgovara popisu objekata u I<--query-id>.
 
-Izvezi dokumente u EPS format. Misli na to, da PostScript ne dozvoljava
-prozirnost, tako da će svi prozirni objekti u originalnom SVG formatu biti
-izvezeni rasterom. Korišteni fontovi se ne ugrađuju cjelovito, već kao
-podskupine. Zadano izvozno područje je crtež. Područje možeš odrediti i na
-stranicu, no za to pregledaj ograničenja za L<--export-area-page>. Možeš
-odrediti L<--export-id> za izvoz pojedinačnog objekta (svi ostali su
-sakriveni). Koristi `-' kao ime datoteke za ispis podataka slike na
-standardni izlaz(stdout).
+=item B<-S>, B<--query-all>
 
-=item B<-A> I<IME_DATOTEKE>, B<--export-pdf>=I<IME_DATOTEKE>
-
-Izvezi dokumente u PDF format. Ovaj format zadržava prozirnost iz
-originalnog SVG-a. Korišteni fontovi se ne ugrađuju cjelovito, već kao
-podskupine. Zadano izvozno područje je stranica. Područje možeš odrediti i
-na crtež, korištenjem L<--export-area-drawing>. Možeš odrediti
-L<--export-id> za izvoz pojedinačnog objekta (svi ostali su sakriveni). U
-tom slučaju je izvozno područje granični okvir objekta, no može se odrediti
-i stranica pomoću L<--export-area-page>. Koristi `-' kao ime datoteke za
-ispis podataka slike na standardni izlaz(stdout).
-
-=item B<--export-pdf-version>=I<PDF-VERZIJA>
-
-Odaberi PDF verziju za izvezenu PDF datoteku. Ovom se opcijom prikazuje
-izbornik PDF verzija, koji se koristi u dijaloškom okviru grafičkog sučelja
-za PDF izvoz. U izborniku moraš odrediti jednu moguću verziju,
-npr. „1.4”. Zadana vrijednost za PDF izvoz je verzija „1.4”.
-
-=item B<--export-latex>
-
-(za izvoz u PS, EPS i PDF format) Koristi se za stvaranje slika za LaTeX
-dokumente, u kojima je tekst slike posložen LaTeX-om. Prilikom izvoza u
-PDF/PS/EPS format, ova opcija razdvaja izvoz u PDF/PS/EPS datoteku
-(npr. određeno pomoću --export-pdf) i u LaTeX datoteku. Tekst neće biti
-izvezen u PDF/PS/EPS datoteku. Umjesto toga će biti izvezen u LaTeX
-datoteku. Ova LaTeX datoteka uključuje PDF/PS/EPS. Unosom
-(\input{image.tex}), LaTeX datoteka u tvojem LaTeX dokumentu će prikazati
-sliku, a sav tekst će biti posložen LaTeX-om. Pogledaj završnu LaTeX
-datoteku za daljnje informacije. Također pogledaj 'epslatex' ostvaraj
-GNUPlot terminala.
-
-=item B<-T>, B<--export-text-to-path>
-
-Konvertiraj tekstualne objekte u staze prilikom izvoza, ukoliko je moguće
-(za izvoz u PS, EPS, PDF i SVG formate).
-
-=item B<--export-ignore-filters>
-
-Izvezi objekte s filterom (npr. sa zamućenjem) u vektorskom formatu,
-zanemarujući pri tome filtre (za izvoz u PS, EPS i PDF formate). Svi objekti
-s filterom se iscrtavaju pomoću L<--export-dpi> (zadano je 96 dpi),
-zadržavajuči pri tome izgled.
-
-=item B<-m> I<IME_DATOTEKE>, B<--export-wmf>=I<IME_DATOTEKE>
-
-Izvozi dokument(e) u Windows Metafile (WMF) Format.
-
-=item B<-M> I<IME_DATOTEKE>, B<--export-emf>=I<IME_DATOTEKE>
-
-Izvozi dokument(e) u Enhanced Windows Metafile (EMF) Format.
-
-=item B<-I>, B<--query-id>
-
-Set the ID(s) of the object(s) whose dimensions are queried in a
-comma-separated list. If not set, query options will return the dimensions
-of the drawing (i.e. all document objects), not the page or viewbox.
+Ispisuje zarezom razdijeljeni popis svih objekata u dokumentu, s njihovim
+definiranim ID oznakama i vrijednostima za x, y, širinu i visinu.
 
 =item B<-X>, B<--query-x>
 
@@ -421,10 +405,69 @@ Upitaj visinu crteža ili, ako je zadano, visinu objekta s
 L<--query-id>. Rezultirajuća vrijednost je u px (SVG-korisnička mjerna
 jedinica).
 
-=item B<-S>, B<--query-all>
+=item B<--vacuum-defs>
 
-Ispisuje zarezom razdijeljeni popis svih objekata u dokumentu, s njihovim
-definiranim ID oznakama i vrijednostima za x, y, širinu i visinu.
+Ukloni sve stavke iz C<E<lt>defsE<gt>> odjeljka SVG datoteke. Ako se ova
+opcija pokreće zajedno s L<--export-plain-svg>, onda će samo izvezene
+datoteke biti time pogođene. Ako se opcija koristi sama, određena će
+datoteka biti promijenjena.
+
+=item B<--select>=I<ID-OBJEKTA[,ID-OBJEKTA]*>
+
+Naredbom L<--select> odabiru se objekti s određenim ID oznakama. Moguće je
+odabrati mnoge objekte pomoću zarezom odvojenog popisa. Time se omogućuje
+upotreba raznih naredbi, koji utječu na objekte. Za uklanjanje svih odabira,
+koristi C<--verb=EditDeselect>. Mogući ID-ovi objekata ovise o odabranom
+dokumentu za učitavanje.
+
+=item B<--actions>=I<RADNJA(:ARGUMENT)[;RADNJA(:ARGUMENT)]*>
+
+Radnje su nova metoda za pozivanje funkcija s jednim opcionalnim
+parametrom. Za dobivanje popisa dostupnih ID-ova radnji, koristi opciju
+naredbenog retka L <--action-list>. Na kraju će se sve naredbe zamijeniti
+radnjama. Privremeno se bilo koja naredba može upotrijebiti kao radnja (bez
+parametra). Napominjemo da većina naredbi zahtijeva grafičko sučelje (čak i
+ako ga ne koriste). Za automatsko zatvaranje sučelja nakon obrade,
+upotrijebi L <--batch-process>. Pored toga, sve opcije za izvoz imaju
+odgovarajuće radnje (ukloni crtice '--' ispred opcije i zamijeni znak
+jednakosti '=' s dvotočkom ':').
+
+Ako se koriste samo radnje, mora se koristiti L<--batch-process>.
+
+Izvoz se može prisiliti bilo kada radnjom export-do. To omogućuje višestruki
+izvoz iz jedne datoteke.
+
+=item B<--action-list>
+
+Ispisuje popis svih dostupnih radnji.
+
+=item B<--verb>=I<NAREDBA[;NAREDBA]*>
+
+Naredba L<--verb> izvršit će određenu radnju ili popis radnji, kao da su
+odarane pomoću izbornika ili gumba. Dijaloški okviri će se pojaviti, ukoliko
+su dio naredbe. Za stvaranje popisa dodstupnih ID-ova naredbi, koristi
+opciju naredbenog retka L<--verb-list>.
+
+Naredba L<--verb> zahtijeva grafičko sučelje.
+
+Zajedno s L <--select> pruža neke osnovne skripte za Inkscape u naredbenom
+retku. Obje mogu po potrebi dobiti više argumenata u naredbenom retku i
+izvršavaju se redom u svakom dokumentu.
+
+=item B<--verb-list>
+
+Prikazuje sve naredbe koje su dostupne u Inkscapeu, njihovim ID oznakama. ID
+oznake se mogu koristiti za određivanje mapiranja tipkovnice ili
+izbornika. Može se koristiti i s opcijom L<--verb> u naredbenom retku.
+
+=item B<-g>, B<--with-gui>
+
+Pokušaj koristiti grafičko sučelje(GUI) (na Unix sustavu koristi X server,
+čak i ako $DISPLAY nije postavljen).
+
+=item B<--batch-process>
+
+Zatvori grafičko sučelje nakon izvršavanja svih radnji ili naredbi.
 
 =item B<--shell>
 
@@ -434,46 +477,17 @@ potrebe za ponovnim pokretanjem Inkscapea za svaku naredbu zasebno. Ovaj
 način upita je najkorisniji prilikom korištenja skripta i servera: ne pruža
 nove mogućnosti, međutim omogućuje povećanje brzine i potrebnog spremnika za
 bilo koji skript, koji uzastopno poziva Inkscape za izvršavanje zadataka u
-naredbenom retku (npr. izvoz ili konvertiranje). Svaka naredba u terminalu
-mora biti valjana Inkscape naredba, bez imena Inkscape programa, npr.:
+naredbenom retku (npr. izvoz ili konvertiranje).
 
-    datoteka.svg --export-pdf=datoteka.pdf
+U modusu ljuske, Inkscape kao unos očekuje niz radnji (ili naredbi). Oni će
+se obrađivati redak po redak – znači kad se pritisne enter. Moguće je (ali
+nije nužno) sve radnje staviti u jedan redak.
 
-=item B<--vacuum-defs>
+Sljedeći primjer otvara datoteku i izvozi je u dva različita formata, zatim
+otvara drugu datoteku i izvozi jedan objekt:
 
-Ukloni sve stavke iz C<E<lt>defsE<gt>> odjeljka SVG datoteke. Ako se ova
-opcija pokreće zajedno s L<--export-plain-svg>, onda će samo izvezene
-datoteke biti time pogođene. Ako se opcija koristi sama, određena će
-datoteka biti promijenjena.
-
-=item B<--no-convert-text-baseline-spacing>
-
-Ne ispravljaj razmak između redaka starijih datoteka prilikom otvaranja
-automatski (starijih od 0.92). Inkscape 0.92 primjenjuje CSS standardnu
-definiciju osobine 'line-height', koja odudara od starijih verzija. Zadani
-razmak između redaka starijih verzija Inkscapea od 0.92, bit će prilagođen
-prilikom učitavanja, kako bi se sačuvao prijelom teksta. Ova opcija u
-naredbenom retku omogućuje zanemarivanje ovog podešavanja.
-
-=item B<--convert-dpi-method>=I<METODA>
-
-Odaberi metodu za skaliranje starijih (prije-0.92) verzija datoteka, koje
-zbog prelaska iz 90 DPI na 96 DPI rezoluciju mogu biti nešto manje
-prikazane. Moguće vrijednosti su "none" bez promijena (dokument će biti
-prikazan sa 94% orginalne vrijednosti), "scale-viewbox" dokument će biti kao
-cijelina skaliran (pojedinačne veličine ostaju iste), i "scale-document"
-(sve veličine će biti skalirane pojedinačno).
-
-=item B<-z>, B<--without-gui>
-
-Ne otvaraj grafičko sučelje (GUI) (na Unix sustavu, ne koristi X server);
-obradi datoteku samo putem konzole. Ovo se pretpostavlja za -p, -e, -l, i za
---vacuum-defs opcije. To se ne može koristiti zajedno sa  --verb opcijom.
-
-=item B<--g-fatal-warnings>
-
-Ova standardna GTK opcija prisiljava prekid programa u slučaju da je došlo
-do (uglavnom bezopasnih) upozorenja (korisno za pronalaženje grešaka).
+    file-open:datoteka1.svg; export-type:pdf; export-do; export-type:png; export-do
+    file-open:datoteka2.svg; export-id:rect2; export-id-only; export-filename:rect_only.svg; export-do
 
 =back
 
@@ -484,7 +498,7 @@ Datoteka za osnovnu konfiguraciju se nalazi u
 Inkscapeu mogu promijeniti (uglavnom u dijaloškom sučelju za Inkscape
 postavke). U pod-direktoriju se mogu spremiti i vlastite:
 
-B<$HOME>/.config/inkscape/extensions/ – proširenja.
+B<$HOME>/.config/inkscape/extensions/ – efekti proširenja.
 
 B<$HOME>/.config/inkscape/icons/ – ikone.
 
@@ -503,63 +517,87 @@ tom ispisu.
 
 =head1 PRIMJERI
 
-Mada je B<Inkscape> namijenjen za rad u grafičkom sučelju, može se također
+Mada je B<Inkscape> namijenjen za rad s grafičkim sučeljem, može se također
 koristiti za obradu SVG-ova putem naredbenog retka.
 
 Otvori SVG datoteku u grafičkom sučelju:
 
-    inkscape ime_datoteke.svg
-
-Ispiši SVG datoteku putem naredbenog retka:
-
-    inkscape ime_datoteke.svg -p '| lpr'
+    inkscape datoteka.svg
 
 Izvezi SVG datoteku u PNG format sa zadanom rezolucijom od 96 DPI (jedna
 SVG-korisnička mjerna jedinica je jednaka jednom bitmap piksleu):
 
-    inkscape ime_datoteke.svg --export-png=ime_datoteke.png
+    inkscape --export-filename=datoteka.png datoteka.svg
 
-Isto kao prijašnje, ali prisili veličinu PNG datoteke da bude 600 × 400
+Isto kao prethodno, ali prisili veličinu PNG datoteke da bude 600 × 400
 piksela:
 
-    inkscape ime_datoteke.svg --export-png=ime_datoteke.png -w600 -h400
+    inkscape --export-filename=datoteka.png -w 600 -h 400 datoteka.svg
 
-Isto kao prijašnje, ali izvezi crtež (granični okvir svih objekata), a ne
+Isto kao prethodno, ali izvezi crtež (granični okvir svih objekata), a ne
 stranicu:
 
-    inkscape ime_datoteke.svg --export-png=ime_datoteke.png --export-area-drawing
+    inkscape --export-filename=datoteka.png --export-area-drawing datoteka.svg
 
-Izvezi objekt s oznakom id="text1555" u PNG format, koristeći pri tome ime
-za datoteku i rezoluciju, koje su već korištene prilikom posljednjeg izvoza
-iz sučelja:
+Izvezi dvije različite datoteke u četiri različite datotečne formate:
 
-    inkscape ime_datoteke.svg --export-id=text1555 --export-use-hints
+    inkscape --export-type=png,ps,eps,pdf datoteka1.svg datoteka2.svg
 
-Isto kao prijašnje, ali koristi rezoluciju od 96 DPI, odredi ime datoteke,
-te privuci izvezeno područje na najbližu višu cjelobrojnu vrijednost SVG
+Izvezi objekt s oznakom id="text1555" u PNG format, koristeći pri tome
+datoteku i rezoluciju rezultata, koje su već korištene prilikom zadnjeg
+izvoza iz sučelja:
+
+    inkscape --export-id=text1555 --export-use-hints datoteka.svg
+
+Isto kao prethodno, ali koristi rezoluciju od 96 DPI, odredi datoteku, te
+privuci izvezeno područje na najbližu višu cjelobrojnu vrijednost SVG
 korisničkih jedinica (kako bi se zadržalo poravnavanje piksela, te smanjilo
 zaglađivanje):
 
-    inkscape ime_datoteke.svg --export-id=text1555 --export-png=text.png --export-area-snap
+    inkscape --export-id=text1555 --export-filename=tekst.png --export-area-snap datoteka.svg
 
 Konvertiraj Inkscape SVG dokument u obični SVG:
 
-    inkscape ime_datoteke1.svg --export-plain-svg=ime_datoteke2.svg
+    inkscape --export-plain-svg --export-filename=datoteka2.svg datoteka1.svg
 
 Konvertiraj SVG dokument u EPS, konvertiraj sav tekst u staze:
 
-    inkscape ime_datoteke.svg --export-eps=ime_datoteke.eps --export-text-to-path
+    inkscape --export-filename=datoteka.eps --export-text-to-path datoteka.svg
 
 Upitaj širinu objekta s oznakom id="text1555":
 
-    inkscape ime_datoteke.svg --query-width --query-id text1555
+    inkscape --query-width --query-id=text1555 datoteka.svg
 
-Dupliciraj objekt s oznakom id="path1555", rotiraj duplikat za 90 stupnjeva,
-spremi SVG i izađi:
+Dupliciraj objekte s oznakama id="path1555" i id="rect835", rotiraj
+duplikate za 90 stupnjeva, spremi SVG i zatvori program:
 
-    inkscape ime_datoteke.svg --select=path1555 --verb=EditDuplicate --verb=ObjectRotate90 --verb=FileSave --verb=FileClose
+    inkscape --select=path1555,rect835 --verb="EditDuplicate;ObjectRotate90;FileSave;FileQuit" datoteka.svg
 
+Odaberi sve objekte s oznakom elipse, rotiraj ih za 30 stupnjeva, spremi SVG
+i zatvori program:
 
+    inkscape --actions="select-via-element:ellipse;transform-rotate:30;FileSave;FileClose" --batch-process datoteka.svg
+
+Izvezi objekt s ID oznakom „MojTrokut” s polu-transparetnom ljubičastom
+pozadinom u datoteku trokut_ljubičasti.png i s crvenom pozadinom u datoteku
+trokut_crveni.png.
+
+    inkscape --actions="export-id:MojTrokut; export-id-only; export-background:purple; export-background-opacity:0.5;export-filename:trokut_ljubičasti.png; export-do; export-background:red; export-background-opacity:1; export-filename:trokut_crveni.png" datoteka.svg
+
+Čitaj SVG datoteku iz standardnog ulaza (stdin) i izvezi je u PDF format:
+
+    cat datoteka.svg | inkscape --pipe --export-filename=datoteka.pdf
+
+Izvezi SVG datoteku u PNG format i ispiši je u standardni izlaz
+(stdout). Nakon toga je konvertiraj u JPG format pomoću programa
+ImageMagick:
+
+    inkscape --export-type=png --export-filename=- datoteka.svg | convert - datoteka.jpg
+
+Isto kao prethodno, ali također čita iz procesa (u ovom slučaju je moguće
+zanemariti --export-filename)
+
+    cat datoteka.svg | inkscape --pipe --export-type=png | convert - datoteka.jpg
 
 =head1 VARIABLE OKRUŽENJA
 
@@ -631,8 +669,8 @@ I<Document Object Model (DOM): Level 2 Core> I<W3C preporuka, 13. studenog
 
 =head1 NAPOMENE O GRAFIČKOM SUČELJU
 
-Za upoznavanje s grafičkim sučeljem programa, pročitaj vježbe, koje se
-nalaze u izborniku Pomoć > Vježbe.
+Za upoznavanje s grafičkim sučeljem programa, pročitaj priručnik (Pomoć >
+Priručnik za Inkscape) i vježbe (Pomoć > Vježbe).
 
 Osim SVG formata, Inkscape može uvesti (Datoteka > Uvezi) i većinu bitmap
 formata (PNG, BMP, JPG, XPM, GIF, itd.), neformatirani tekst (zahtijeva
@@ -712,7 +750,7 @@ dijeljenje ikona, oblikovanja umjetničkih djela za web stranice, itd.
 
 =head1 AUTORI
 
-Temeljni kȏd je nastao zahvaljujući velikom broju ljudi, koji su pridonijeli
+Temeljni kȏd nastao je zahvaljujući velikom broju ljudi, koji su pridonijeli
 razvitku programa. Popis koji slijedi zasigurno nije cjelovit, no ipak služi
 kao prikaz mnogobrojnih pojedinaca, koji su pomogli stvoriti ovaj program:
 
@@ -720,7 +758,7 @@ ${INKSCAPE_AUTHORS}
 
 =head1 AUTORSKA PRAVA I LICENCA
 
-B<Copyright (C)> 1999. – 2018. Nositelji autorskih prava su autori.
+B<Copyright (C)> 1999. – 2020. Nositelji autorskih prava su autori.
 
 B<Inkscape> je slobodan softver. Redistribucija i/ili promjena programa je
 moguća pod uslovima, zadanima općom javnom licencom verzije 3 ili novijom.
