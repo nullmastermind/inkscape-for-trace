@@ -4,7 +4,7 @@
 #
 # Hizkuntza Politikarako Sailburuordetza <hizkpol@ej-gv.es>, 2005.
 # Iñaki Larrañaga Murgoitio <dooteo@zundan.com>, 2006, 2007, 2008, 2009, 2010, 2014.
-# Asier Sarasua Garmendia <asier.sarasua@gmail.com>, 2018, 2019.
+# Asier Sarasua Garmendia <asier.sarasua@gmail.com>, 2018, 2019, 2020.
 #
 msgid ""
 msgstr "Project-Id-Version: inkscape 0.91\n"
@@ -1301,7 +1301,7 @@ msgstr "B grabaketa alfa"
 #: ../share/filters/filters.svg.h:516
 msgid ""
 "Gives a controllable roughness engraving effect to bitmaps and materials"
-msgstr "grabatu baten gogortasunezko efektu kontrolagarri bat eskaintzen du bit-mapa eta materialei"
+msgstr "Grabatuen gisako gogortasun-efektu kontrolagarria ematen die bit-mapei eta materialei"
 
 #: ../share/filters/filters.svg.h:518
 msgid "Lapping"
@@ -4336,7 +4336,7 @@ msgstr "murriztapena"
 
 #: ../src/display/snap-indicator.cpp:188
 msgid "Bounding box corner"
-msgstr "muga-koadroaren izkina"
+msgstr "Muga-koadroaren izkina"
 
 #: ../src/display/snap-indicator.cpp:191
 msgid "Bounding box midpoint"
@@ -4348,7 +4348,7 @@ msgstr "Muga-koadroaren alboaren erdigunea"
 
 #: ../src/display/snap-indicator.cpp:197 ../src/ui/tool/node.cpp:1636
 msgid "Smooth node"
-msgstr "nodo leuna"
+msgstr "Nodo leuna"
 
 #: ../src/display/snap-indicator.cpp:200
 msgid "Cusp node"
@@ -5058,7 +5058,7 @@ msgstr "Lagindu berriro"
 #: ../src/extension/internal/bitmap/sample.cpp:49
 msgid ""
 "Alter the resolution of selected image by resizing it to the given pixel size"
-msgstr "Aldatu hautatutako irudiaren bereizmena emandako pixel-tamainara aldatuz."
+msgstr "Aldatu hautatutako irudiaren bereizmena emandako pixel-tamainara aldatuz"
 
 #: ../src/extension/internal/bitmap/shade.cpp:41
 msgid "Shade"
@@ -5657,7 +5657,7 @@ msgstr "Nahastea:"
 #: ../src/extension/internal/filter/transparency.h:64
 #: ../src/filter-enums.cpp:56
 msgid "Darken"
-msgstr "ilundu"
+msgstr "Ilundu"
 
 #: ../src/extension/internal/filter/blurs.h:194
 #: ../src/extension/internal/filter/blurs.h:341
@@ -6854,11 +6854,11 @@ msgstr "Leuna"
 
 #: ../src/extension/internal/filter/morphology.h:196
 msgid "Fill opacity:"
-msgstr "Betegarriaren opakutasuna"
+msgstr "Betegarriaren opakutasuna:"
 
 #: ../src/extension/internal/filter/morphology.h:197
 msgid "Stroke opacity:"
-msgstr "Trazuaren opakutasuna"
+msgstr "Trazuaren opakutasuna:"
 
 #: ../src/extension/internal/filter/morphology.h:207
 msgid "Adds a colorizable outline"
@@ -6920,7 +6920,7 @@ msgstr "Aldaera:"
 
 #: ../src/extension/internal/filter/overlays.h:69
 msgid "Dilatation:"
-msgstr "Dilatazioa"
+msgstr "Dilatazioa:"
 
 #: ../src/extension/internal/filter/overlays.h:70
 msgid "Erosion:"
@@ -7979,7 +7979,7 @@ msgstr "Eguneratu dokumentua"
 
 #: ../src/file.cpp:181
 msgid "Document not saved yet.  Cannot revert."
-msgstr "Dokumentua ez da gorde oraindik. Ezin da leheneratu"
+msgstr "Dokumentua ez da gorde oraindik. Ezin da leheneratu."
 
 #: ../src/file.cpp:187
 msgid "Changes will be lost! Are you sure you want to reload document %1?"
@@ -8370,7 +8370,7 @@ msgstr "%s honetarako: %s%s"
 msgid ""
 "%s for: %s%s; drag with <b>Ctrl</b> to snap angle, with <b>Ctrl+Alt</b> to "
 "preserve angle, with <b>Ctrl+Shift</b> to scale around center"
-msgstr "%2$s%3$s(r)en %1$s; arrastatu <b>Ctrl</b> teklarekin angelua atxikitzeko, <b>Ctrl+Alt</b> angelua mantentzeko, <b>Ctrl+Shift</b> zentruaren inguruan eskalateko."
+msgstr "%s%s(r)en %s; arrastatu <b>Ctrl</b> teklarekin angelua atxikitzeko, <b>Ctrl+Alt</b> angelua mantentzeko, <b>Ctrl+Shift</b> zentruaren inguruan eskalateko."
 
 #: ../src/gradient-drag.cpp:1486
 msgid ""
@@ -8428,7 +8428,7 @@ msgstr "fitxategia1 [fitxategia2 [fitxategiaN]]"
 # File: ../src/inkscape-application.cpp, line: 527
 #: ../src/inkscape-application.cpp:527
 msgid "Process (or open) one or more files."
-msgstr "Prozesatu (edo ireki) fitxategi bat edo gehiago"
+msgstr "Prozesatu (edo ireki) fitxategi bat edo gehiago."
 
 #: ../src/inkscape-application.cpp:528
 msgid "Examples:"
@@ -8522,7 +8522,7 @@ msgstr "Esportatu geometria"
 
 #: ../src/inkscape-application.cpp:555
 msgid "Area to export is page"
-msgstr "Esportatuko den area orria da."
+msgstr "Esportatuko den area orria da"
 
 #: ../src/inkscape-application.cpp:556
 msgid "Area to export is whole drawing (ignoring page size)"
@@ -11357,7 +11357,7 @@ msgstr "Mantendu bidearen ispilatutako zatia soilik, kendu jatorrizkoa."
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:57
 msgid "Fuse original path and mirror image into a single path"
-msgstr "Fusionatu jatorrizko bidea eta ispilu-irudia bide bakar batean."
+msgstr "Fusionatu jatorrizko bidea eta ispilu-irudia bide bakar batean"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:58
 msgid "Fuse opposite sides"
@@ -12493,7 +12493,7 @@ msgstr "Konoei aplikatuko zaien leuntze kopurua"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:79
 msgid "Join type:"
-msgstr "Elkartze mota"
+msgstr "Elkartze mota:"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:79
 msgid "Join type for non-smooth nodes"
@@ -13314,7 +13314,7 @@ msgstr "%s ez da baliozko direktorioa."
 #: ../src/preferences.cpp:160
 #, c-format
 msgid "Failed to create the preferences file %s."
-msgstr "Huts egin du hobespenen %s fitxategia sortu"
+msgstr "Huts egin du hobespenen %s fitxategia sortzeak."
 
 #: ../src/preferences.cpp:196
 #, c-format
@@ -13446,7 +13446,7 @@ msgstr "Baliabidearen erreferentzia ez-anbiguoa emandako testuinguruan"
 
 #: ../src/rdf.cpp:265
 msgid "A related resource from which the described resource is derived"
-msgstr "erlazionatutako baliabidea (azaldutako baliabidea hortik eratortzen dena)"
+msgstr "Erlazionatutako baliabidea (azaldutako baliabidea hortik eratortzen dena)"
 
 #: ../src/rdf.cpp:267
 msgid "Relation:"
@@ -13632,7 +13632,7 @@ msgstr "Hautatu beherantz pilatuko diren <b>objektua(k)</b>."
 
 #: ../src/selection-chemistry.cpp:1194
 msgid "We hit bottom."
-msgstr "Behealdera iritsi gara"
+msgstr "Behealdera iritsi gara."
 
 #. TRANSLATORS: undo history: "stack down" means to lower an object of its ordinal position by 1
 #: ../src/selection-chemistry.cpp:1202
@@ -13719,7 +13719,7 @@ msgstr "Eraman hautapena geruzara"
 
 #: ../src/selection-chemistry.cpp:1613 ../src/seltrans.cpp:400
 msgid "Cannot transform an embedded SVG."
-msgstr "Ezin da kapsulatutako SVG eraldatu"
+msgstr "Ezin da kapsulatutako SVGa eraldatu."
 
 #: ../src/selection-chemistry.cpp:1779
 msgid "Remove transform"
@@ -14330,7 +14330,7 @@ msgstr "<b>Ez dago testu mugikorrik</b> bihurtzeko hautapenean."
 
 #: ../src/text-editing.cpp:43
 msgid "You cannot edit <b>cloned character data</b>."
-msgstr "Ezin duzu <b>klonatutako karakterearen datuak</b> editatu"
+msgstr "Ezin dira <b>klonatutako karakterearen datuak</b> editatu."
 
 #: ../src/trace/depixelize/inkscape-depixelize.cpp:82
 msgid ""
@@ -14627,7 +14627,7 @@ msgid ""
 "Open Source Scalable Vector Graphics Editor\n"
 "Draw Freely."
 msgstr "Grafiko Bektorial Eskalakorren kode irekiko editorea\n"
-"Marraztu libre"
+"Marraztu libre."
 
 #. TRANSLATORS: This is the filename of the `About Inkscape' picture in
 #. the `screens' directory.  Thus the translation of "about.svg" should be
@@ -14649,8 +14649,7 @@ msgstr "about.eu.svg"
 #. one per line in the form of: name surname (email). Use \n for newline.
 #: ../src/ui/dialog/aboutbox.cpp:181
 msgid "translator-credits"
-msgstr "Hizkuntza Politikarako Sailburuordetza <hizkpol@ej-gv.es>\n"
-"Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>"
+msgstr "translator-credits"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:212
 #: ../src/ui/dialog/align-and-distribute.cpp:930
@@ -14670,7 +14669,7 @@ msgstr "Koadroen arteko gutxieneko tarte horizontala (px)"
 #: ../src/ui/dialog/align-and-distribute.cpp:475
 msgctxt "Gap"
 msgid "_H:"
-msgstr "_Ñ"
+msgstr "_H:"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:483
 msgid "Minimum vertical gap (in px units) between bounding boxes"
@@ -16968,7 +16967,7 @@ msgstr "Berretzailea:"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2824
 msgid "Exponent for specular term, larger is more \"shiny\"."
-msgstr "Ispilu-terminoaren berretzailea, handiagoa \"distiratsuagoa\" da"
+msgstr "Ispilu-terminoaren berretzailea, handiagoa \"distiratsuagoa\" da."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2833
 msgid ""
@@ -19063,7 +19062,7 @@ msgstr "Gradiente linealaren _angelua:"
 #: ../src/ui/dialog/inkscape-preferences.cpp:526
 msgid ""
 "Default angle of new linear gradients in degrees (clockwise from horizontal)"
-msgstr "Gradiente lineal berrien angelu lehenetsia gradutan (erlojuaren norantzan horizontaletik)"
+msgstr "Gradiente lineal berrien angelu lehenetsia gradutan (erlojuaren noranzkoan horizontaletik)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:530
 msgid "Dropper"
@@ -19477,7 +19476,7 @@ msgstr "Konpondu marrazten ez diren kolore-graduatzailea"
 msgid ""
 "When on, will attempt to work around bugs in certain GTK themes drawing "
 "color sliders"
-msgstr "Gaitzen denean, GTK jantzi batzuen kolore-graduatzaileen marrazketako akats batzuk konpontzen saiatuko da"
+msgstr "Gaitzen denean, GTK gai batzuen kolore-graduatzaileen marrazketako akats batzuk konpontzen saiatuko da"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1012
 msgid "Clear list"
@@ -19568,20 +19567,20 @@ msgstr "Desaktibatuta dagoenean, jatorria beheko ezkerreko izkinan dago eta Y ar
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1056
 msgid "Theme changes"
-msgstr "Jantzi-aldaketak"
+msgstr "Gai-aldaketak"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1103
 msgid "Use system theme"
-msgstr "Erabili sistemaren jantzia"
+msgstr "Erabili sistemaren gaia"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1109
 msgid "Change Gtk theme:"
-msgstr "Aldatu Gtk jantzia:"
+msgstr "Aldatu Gtk gaia:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1112
 #: ../src/ui/dialog/inkscape-preferences.cpp:1113
 msgid "Use dark theme"
-msgstr "Erabili jantzi iluna"
+msgstr "Erabili gai iluna"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1116
 msgid "Display icons"
@@ -19593,7 +19592,7 @@ msgstr "Erabili sistemaren ikonoak"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1142
 msgid "Change icon theme:"
-msgstr "Aldatu ikonoen jantzia:"
+msgstr "Aldatu ikonoen gaia:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1146
 msgid "Use symbolic icons"
@@ -19625,7 +19624,7 @@ msgstr "Argi-ukituen koloreak, zenbait ikono sinbolikok erabiltzen dituzte. Ikon
 msgid ""
 "Reset theme colors, some symbolic icon themes use it. Some icons changes "
 "need reload"
-msgstr "Berrezarri jantziaren koloreak, zenbait ikono sinbolikok erabiltzen dituzte. Ikonoen zenbait aldaketak birkargatzea behar dute"
+msgstr "Berrezarri gaiaren koloreak, zenbait ikono sinbolikok erabiltzen dituzte. Ikonoen zenbait aldaketak birkargatzea behar dute"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1192
 msgctxt "Icon size"
@@ -19683,7 +19682,7 @@ msgstr "Ez"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1210
 msgid "Theme decides"
-msgstr "Jantziak erabakitzen du"
+msgstr "Gaiak erabakitzen du"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1213
 msgid "Show icons in menus:"
@@ -19694,11 +19693,11 @@ msgid ""
 "You can either enable or disable all icons in menus. By default the theme "
 "determines which icons to display by using the 'show-icons' attribute in its "
 "'menus.xml' file. (requires restart)"
-msgstr "Menuetako ikono guztiak gaitu edo desgaitu ditzakezu. Modu lehenetsian, jantziak erabakitzen du zein ikono bistaratuko diren, 'menus.xml' fitxategiko 'show-icons' atributua erabilita. (derrigorrezkoa berrabiaraztea)"
+msgstr "Menuetako ikono guztiak gaitu edo desgaitu ditzakezu. Modu lehenetsian, gaiak erabakitzen du zein ikono bistaratuko diren, 'menus.xml' fitxategiko 'show-icons' atributua erabilita. (derrigorrezkoa berrabiaraztea)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1217
 msgid "Theme"
-msgstr "Jantzia"
+msgstr "Gaia"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1220
 msgid "Save and restore window geometry for each document"
@@ -20881,7 +20880,7 @@ msgid ""
 "When on, angles are displayed with 0 at north, 0 to 360 range, positive "
 "clockwise; otherwise with 0 at east, -180 to 180 range, positive "
 "counterclockwise"
-msgstr "Gaituta dagoenean angeluak erlojuaren norantzan handiagotuz bistaratzen dira, 0 (iparra) - 360 barrutian. Bestela, erlojuaren aurkako norantzan handiagotzen dira, -180 eta 180 arteko barrutian, 0 ekia izanik."
+msgstr "Gaituta dagoenean angeluak erlojuaren noranzkoan handiagotuz bistaratzen dira, 0 (iparra) - 360 barrutian. Bestela, erlojuaren aurkako noranzkoan handiagotzen dira, -180 eta 180 arteko barrutian, 0 ekia izanik."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1891
 msgctxt "Rotation angle"
@@ -21145,7 +21144,7 @@ msgstr "Ezarri memoriaren kopurua dokumentuko (marrazkiaren errendatutako zatiak
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2011
 msgid "Rendering tile multiplier:"
-msgstr "Errendatze-lauza biderkatzailea"
+msgstr "Errendatze-lauzaren biderkatzailea:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2012
 msgid ""
@@ -21530,15 +21529,15 @@ msgstr "Erabiltzailearen hedapenen kokalekua"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2561
 msgid "Open themes folder"
-msgstr "Ireki jantzien karpeta"
+msgstr "Ireki gaien karpeta"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2562
 msgid "User themes: "
-msgstr "Erabiltzaile-jantziak: "
+msgstr "Erabiltzaile-gaiak: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2562
 msgid "Location of the user’s themes"
-msgstr "Erabiltzaile-jantzien kokalekua"
+msgstr "Erabiltzaile-gaien kokalekua"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2565
 msgid "Open icons folder"
@@ -21666,11 +21665,11 @@ msgstr "Sistemaren datuen kokalekuak"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2642
 msgid "Icon theme: "
-msgstr "Ikonoen jantzia: "
+msgstr "Ikonoen gaia: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2642
 msgid "Locations of icon themes"
-msgstr "Ikonoen jantzien kokalekuak"
+msgstr "Ikonoen gaien kokalekuak"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2644
 msgid "System"
@@ -23439,11 +23438,11 @@ msgstr "Aplikatu eraldaketa hautapenari"
 
 #: ../src/ui/dialog/transformation.cpp:304
 msgid "Rotate in a counterclockwise direction"
-msgstr "Biratu erlojuaren aurkako norantzan"
+msgstr "Biratu erlojuaren aurkako noranzkoan"
 
 #: ../src/ui/dialog/transformation.cpp:311
 msgid "Rotate in a clockwise direction"
-msgstr "Biraketa erlojuaren norantzan"
+msgstr "Biraketa erlojuaren noranzkoan"
 
 #: ../src/ui/dialog/transformation.cpp:826
 #: ../src/ui/dialog/transformation.cpp:837
@@ -24173,7 +24172,7 @@ msgstr "<b>Biraketaren zentrua</b>: arrastatu eraldaketen jatorria aldatzeko"
 #: ../src/ui/toolbar/spiral-toolbar.cpp:241
 #: ../src/ui/toolbar/star-toolbar.cpp:67 ../src/ui/toolbar/star-toolbar.cpp:479
 msgid "<b>New:</b>"
-msgstr "<b>Berria</b>:"
+msgstr "<b>Berria:</b>"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:96 ../src/ui/toolbar/rect-toolbar.cpp:139
 msgid "Rx:"
@@ -24260,7 +24259,7 @@ msgstr "Arkua: Aldatu arku mota"
 #: ../src/ui/toolbar/spiral-toolbar.cpp:254
 #: ../src/ui/toolbar/star-toolbar.cpp:481
 msgid "<b>Change:</b>"
-msgstr "<b>Aldatu</b>:"
+msgstr "<b>Aldatu:</b>"
 
 #. TRANSLATORS: PL is short for 'perspective line'
 #: ../src/ui/toolbar/box3d-toolbar.cpp:79
@@ -24781,7 +24780,7 @@ msgstr "Estekatu gradienteak erlazionatutako gradiente guztiak aldatzeko"
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:441
 msgid "Reverse the direction of the gradient"
-msgstr "Alderantzikatu gradientearen norantza"
+msgstr "Alderantzikatu gradientearen noranzkoa"
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:450
 msgid "Repeat: "
@@ -25698,7 +25697,7 @@ msgstr "Atxiki goierpinen nodoei, laukizuzenen izkinei barne"
 
 #: ../src/ui/toolbar/snap-toolbar.cpp:121
 msgid "Smooth nodes"
-msgstr "Leundu nodoak"
+msgstr "Nodo leunak"
 
 #: ../src/ui/toolbar/snap-toolbar.cpp:122
 msgid "Snap smooth nodes, incl. quadrant points of ellipses"
@@ -27722,7 +27721,7 @@ msgstr "%s. Arrastatu edo klik egin <b>eskala txikiagotzeko</b>; Shift teklareki
 msgid ""
 "%s. Drag or click to <b>rotate clockwise</b>; with Shift, "
 "<b>counterclockwise</b>."
-msgstr "%s. Arrastatu edo klik egin <b>erlojuaren norantzan biratzeko</b>; Shift teklarekin <b>erlojuaren aurkako norantzan</b>."
+msgstr "%s. Arrastatu edo klik egin <b>erlojuaren noranzkoan biratzeko</b>; Shift teklarekin <b>erlojuaren aurkako noranzkoan</b>."
 
 #: ../src/ui/tools/tweak-tool.cpp:189
 #, c-format
@@ -27921,7 +27920,7 @@ msgstr "Kolore-kudeaketa"
 
 #: ../src/ui/widget/color-notebook.cpp:161
 msgid "Out of gamut!"
-msgstr "Kolore-gamatik kanpo."
+msgstr "Kolore-gamatik kanpo"
 
 #: ../src/ui/widget/color-notebook.cpp:168
 msgid "Too much ink!"
@@ -31677,7 +31676,7 @@ msgstr "Bere burua gurutzatzen duen edozein bide edo edo azpibideek zuloak sortz
 #: ../src/widgets/paint-selector.cpp:252
 msgid ""
 "Fill is solid unless a subpath is counterdirectional (fill-rule: nonzero)"
-msgstr "Betegarria lisoa da azpibide bat aurkako norantzakoa ez bada (betetze-araua: zero ez denean)"
+msgstr "Betegarria lisoa da azpibide bat aurkako noranzkokoa ez bada (betetze-araua: zero ez denean)"
 
 #: ../src/widgets/paint-selector.cpp:596
 msgid "<b>No objects</b>"
@@ -31851,7 +31850,7 @@ msgstr "Markatzaileak, trazua, betegarria"
 
 #: ../src/widgets/stroke-style.cpp:503
 msgid "Set markers"
-msgstr "Ezarri markatzaileak:"
+msgstr "Ezarri markatzaileak"
 
 #: ../src/widgets/stroke-style.cpp:1079 ../src/widgets/stroke-style.cpp:1168
 msgid "Set stroke style"
@@ -33765,7 +33764,7 @@ msgstr "SVG unitatea:"
 
 #: ../share/extensions/empty_generic.inx:19
 msgid "Canvas background:"
-msgstr "Oihalaren atzeko planoa"
+msgstr "Oihalaren atzeko planoa:"
 
 #: ../share/extensions/empty_generic.inx:21
 #: ../share/extensions/empty_page.inx:23
@@ -35073,7 +35072,7 @@ msgstr "Sareta kartesiarra"
 
 #: ../share/extensions/grid_cartesian.inx:7
 msgid "Border Thickness:"
-msgstr "Ertzaren lodiera"
+msgstr "Ertzaren lodiera:"
 
 #: ../share/extensions/grid_cartesian.inx:8
 msgid "Border Thickness Unit:"
@@ -36315,19 +36314,19 @@ msgstr "Azken diapositiba:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx:14
 msgid "Switch to index mode:"
-msgstr "Aldatu indizearen modura:"
+msgstr "Aldatu indize-modura:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx:15
 msgid "Switch to drawing mode:"
-msgstr "Aldatu marrazketaren modura:"
+msgstr "Aldatu marrazketa-modura:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx:16
 msgid "Set duration:"
-msgstr "Ezarri iraupena"
+msgstr "Ezarri iraupena:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx:17
 msgid "Add slide:"
-msgstr "2. alboa"
+msgstr "Gehitu diapositiba:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx:18
 msgid "Toggle progress bar:"
@@ -37899,7 +37898,7 @@ msgstr "Seriekoa"
 
 #: ../share/extensions/plotter.inx:15
 msgid "Parallel port:"
-msgstr "Ataka paraleloa"
+msgstr "Ataka paraleloa:"
 
 #: ../share/extensions/plotter.inx:15
 msgid ""
@@ -37957,7 +37956,7 @@ msgstr "Zure serieko konexioaren paritatea. marrazle gehienek ezarpen lehenetsia
 
 #: ../share/extensions/plotter.inx:52
 msgid "Serial flow control:"
-msgstr "Serieko fluxu-kontrola"
+msgstr "Serieko fluxu-kontrola:"
 
 #: ../share/extensions/plotter.inx:52
 msgid ""
@@ -39694,7 +39693,7 @@ msgstr "Bihurritze kopurua:"
 
 #: ../share/extensions/whirl.inx:7
 msgid "Rotation is clockwise"
-msgstr "Biraketa erlojuaren norantzan"
+msgstr "Biraketa erlojuaren noranzkoan"
 
 #: ../share/extensions/wireframe_sphere.inx:3
 msgid "Wireframe Sphere"
