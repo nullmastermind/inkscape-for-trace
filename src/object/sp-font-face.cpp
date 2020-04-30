@@ -322,8 +322,8 @@ void SPFontFace::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	this->readAttr(SP_ATTR_UNICODE_RANGE);
 	this->readAttr(SP_ATTR_UNITS_PER_EM);
 	this->readAttr(SP_ATTR_PANOSE_1);
-	this->readAttr( "stem-v" );
-	this->readAttr( "stem-h" );
+	this->readAttr(SP_ATTR_STEMV);
+	this->readAttr(SP_ATTR_STEMH);
 	this->readAttr(SP_ATTR_SLOPE);
 	this->readAttr(SP_ATTR_CAP_HEIGHT);
 	this->readAttr(SP_ATTR_X_HEIGHT);
@@ -335,8 +335,8 @@ void SPFontFace::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	this->readAttr(SP_ATTR_IDEOGRAPHIC);
 	this->readAttr(SP_ATTR_ALPHABETIC);
 	this->readAttr(SP_ATTR_MATHEMATICAL);
-	this->readAttr( "ranging" );
-	this->readAttr( "v-ideogaphic" );
+	this->readAttr(SP_ATTR_HANGING);
+	this->readAttr(SP_ATTR_V_IDEOGRAPHIC);
 	this->readAttr(SP_ATTR_V_ALPHABETIC);
 	this->readAttr(SP_ATTR_V_MATHEMATICAL);
 	this->readAttr(SP_ATTR_V_HANGING);

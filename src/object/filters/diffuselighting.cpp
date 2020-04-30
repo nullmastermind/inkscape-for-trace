@@ -186,7 +186,7 @@ void SPFeDiffuseLighting::update(SPCtx *ctx, guint flags) {
     if (flags & (SP_OBJECT_MODIFIED_FLAG)) {
         this->readAttr(SP_ATTR_SURFACESCALE);
         this->readAttr(SP_ATTR_DIFFUSECONSTANT);
-        this->readAttr( "kernelUnit" );
+        this->readAttr(SP_ATTR_KERNELUNITLENGTH);
         this->readAttr(SP_PROP_LIGHTING_COLOR);
     }
 

@@ -588,7 +588,9 @@ void SPStyleElem::build(SPDocument *document, Inkscape::XML::Node *repr) {
     read_content();
 
     readAttr(SP_ATTR_TYPE);
+#if 0
     readAttr( "media" );
+#endif
 
     repr->addListener(&nodeEventVector, this);
     for (Inkscape::XML::Node *child = repr->firstChild(); child != nullptr; child = child->next()) {
