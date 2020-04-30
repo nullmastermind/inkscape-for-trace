@@ -10,36 +10,18 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <cstdio>
+#include <boost/core/demangle.hpp>
 #include <cstring>
 #include <map>
 #include <memory>
 #include <string>
 #include "debug/demangle.h"
-#include "util/format.h"
 
 namespace Inkscape {
 
 namespace Debug {
 
 namespace {
-
-char const *demangle_helper(char const *name) {
-    char buffer[1024];
-    char const *result;
-    FILE *stream=popen(Util::format("c++filt %s", name), "r");
-    if (fgets(buffer, sizeof(buffer), stream)) {
-        size_t len=strlen(buffer);
-        if ( buffer[len-1] == '\n' ) {
-            buffer[len-1] = '\000';
-        }
-        result = strdup(buffer);
-    } else {
-        result = name;
-    }
-    pclose(stream);
-    return result;
-}
 
 struct string_less_than {
     bool operator()(char const *a, char const *b) const {
@@ -58,7 +40,7 @@ std::shared_ptr<std::string> demangle(char const *name) {
         return (*found).second;
     }
 
-    char const *result = demangle_helper(name);
+    std::string result = boost::core::demangle(name);
     return mangle_cache[name] = std::make_shared<std::string>(result);
 }
 
