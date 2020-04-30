@@ -404,8 +404,7 @@ Geom::Affine SPText::set_transform(Geom::Affine const &xform) {
     // See if 'shape-inside' has rectangle
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (prefs->getBool("/tools/text/use_svg2", true)) {
-        Inkscape::XML::Node* rectangle = get_first_rectangle();
-        if (rectangle) {
+        if (style->shape_inside.set) {
             return xform;
         }
     }
