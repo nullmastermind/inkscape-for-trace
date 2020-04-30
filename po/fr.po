@@ -7561,7 +7561,7 @@ msgid ""
 "not work in all browsers.)"
 msgstr ""
 "Lorsqu'une image est agrandie, la lisser ou bien conserver des blocs (gros "
-"pixels). Non supporté par certains navigateurs."
+"pixels). Non géré par certains navigateurs."
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:209
 #: ../src/extension/internal/svg.cpp:684
@@ -18794,7 +18794,7 @@ msgstr "Alphabet bassa"
 
 #: ../src/ui/dialog/glyphs.cpp:160
 msgid "Caucasian Albanian"
-msgstr ""
+msgstr "Aghbanien"
 
 #: ../src/ui/dialog/glyphs.cpp:161
 msgid "Duployan"
@@ -18810,7 +18810,7 @@ msgstr "Grantha"
 
 #: ../src/ui/dialog/glyphs.cpp:164
 msgid "Kjohki"
-msgstr ""
+msgstr "Khojki"
 
 #: ../src/ui/dialog/glyphs.cpp:165
 msgid "Khudawadi, Sindhi"
@@ -23575,7 +23575,7 @@ msgstr "Montrer l'objet"
 
 #: ../src/ui/dialog/objects.cpp:407
 msgid "no-id"
-msgstr ""
+msgstr "aucun-id"
 
 #: ../src/ui/dialog/objects.cpp:874
 msgid "Unhide objects"
@@ -34042,7 +34042,7 @@ msgstr "Pixel art"
 
 #: ../share/ui/dialog-trace.glade:991
 msgid "SIOX"
-msgstr ""
+msgstr "SIOX"
 
 #: ../share/ui/dialog-trace.glade:995
 msgid "Cover the area you want to select as the foreground"
@@ -34115,7 +34115,7 @@ msgid ""
 "The HPGL data contained unknown (unsupported) commands, there is a "
 "possibility that the drawing is missing some content."
 msgstr ""
-"Les données HPGL contiennent des commandes inconnues (et non supportées), et "
+"Les données HPGL contiennent des commandes inconnues (et non gérées), et "
 "certains contenus pourraient ne pas apparaître sur le dessin."
 
 #: ../share/extensions/hpgl_output.py:55
@@ -35577,7 +35577,7 @@ msgstr ""
 "- Format DXF d'AutoCAD Version 14.\n"
 "- Le paramètre unité de base spécifie dans quelle unité les coordonnées sont "
 "générées (96 px = 1 in).\n"
-"- Types d'éléments supportés :\n"
+"- Types d'éléments acceptés :\n"
 "    - chemins (lignes et splines) ;\n"
 "    - rectangles ;\n"
 "    - clones (la référence croisée vers l'original est perdue).\n"
@@ -39587,7 +39587,7 @@ msgid ""
 "Inkscape, Sodipodi and Adobe Illustrator."
 msgstr ""
 "Ne pas supprimer les éléments et attributs spécifiques de l'éditeur. "
-"Actuellement supportés : Inkscape, Sodipodi et Adobe Illustrator."
+"Actuellement pris en charge : Inkscape, Sodipodi et Adobe Illustrator."
 
 #: ../share/extensions/output_scour.inx:31
 msgid "Keep unreferenced definitions"
@@ -40352,7 +40352,7 @@ msgstr ""
 
 #: ../share/extensions/plotter.inx:66
 msgid "Parallel (LPT) connections are not supported."
-msgstr "Les connexions sur port parallèle (LPT) ne sont pas supportées."
+msgstr "Les connexions sur port parallèle (LPT) ne sont pas prises en charge."
 
 #: ../share/extensions/plotter.inx:73
 msgid ""
@@ -41622,7 +41622,7 @@ msgid ""
 msgstr ""
 "Sélectionnez un ensemble d'objets. Leurs barycentres seront utilisés comme "
 "sites du diagramme de Voronoï. Les objets de type texte ne sont pas "
-"supportés."
+"pris en charge."
 
 #: ../share/extensions/web_interactive_mockup.inx:3
 msgid "Interactive Mockup"
@@ -42162,7 +42162,7 @@ msgstr "image;éditeur;vectoriel;dessin;"
 # File: ../org.inkscape.Inkscape.desktop.template, line: 17
 #: ../org.inkscape.Inkscape.desktop.template:17
 msgid "${INKSCAPE_ICONPATH}"
-msgstr ""
+msgstr "${INKSCAPE_ICONPATH}"
 
 #: ../org.inkscape.Inkscape.desktop.template:21
 msgid "New Drawing"
