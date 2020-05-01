@@ -287,12 +287,15 @@ void DialogManager::showDialog(gchar const *name, bool grabfocus) {
 /**
  * Shows the named dialog, creating it if necessary.
  */
-void DialogManager::showDialog(GQuark name, bool /*grabfocus*/) {
+void DialogManager::showDialog(GQuark name, bool grabfocus) {
     Dialog *dialog = getDialog(name);
     if ( dialog ) {
-        dialogs_unhide();
-        // should check for grabfocus, but lp:1348927 prevents it
-        dialog->present();
+        if (grabfocus) {
+            dialogs_unhide();
+            dialog->present();
+        } else {
+            dialog->show();
+        }
     }
 }
 

@@ -14,7 +14,6 @@
 #define INKSCAPE_UI_WIDGET_DOCK_H
 
 #include <gtkmm/box.h>
-#include <list>
 #include "ui/widget/dock-item.h"
 
 struct _GdlDock;
@@ -42,7 +41,6 @@ public:
 
     Gtk::Widget& getWidget();     //< return the top widget
     Gtk::Paned *getParentPaned();
-    Gtk::Paned *getPaned();
 
     GtkWidget* getGdlWidget();    //< return the top gdl widget
 
@@ -63,28 +61,27 @@ public:
     //! Disconnect all signals and clear all unowned pointers
     void releaseAllReferences();
 
+    //! Restore the layout
+    void restoreLayout();
+    void saveLayout();
+
 protected:
 
     std::vector<sigc::connection> _connections;
 
-    std::list<const DockItem *> _dock_items;   //< added dock items
+    std::vector<DockItem *> _dock_items;   //< added dock items
 
     /** Interface widgets, will be packed like 
      * _scrolled_window -> (_dock_box -> (_paned -> (_dock -> _filler) | _dock_bar))
      */
     Gtk::Box            *_dock_box;
-    Gtk::Paned          *_paned;
     GtkWidget           *_gdl_dock;
     GdlDockBar          *_gdl_dock_bar;
-    Gtk::Box             _filler;
+    GdlDockLayout       *_gdl_layout;
     Gtk::ScrolledWindow *_scrolled_window;
 
     /** Internal signal handlers */
     void _onLayoutChanged();
-    void _onPanedButtonEvent(GdkEventButton *event);
-
-    static gboolean _on_paned_button_event(GtkWidget *widget, GdkEventButton *event, 
-                                           gpointer user_data);
 
     /** GdlDock signal proxy structures */
     static const Glib::SignalProxyInfo _signal_layout_changed_proxy;

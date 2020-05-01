@@ -68,6 +68,7 @@
 #include "ui/tools/tool-base.h"
 #include "ui/tools/box3d-tool.h"
 #include "ui/tools/select-tool.h"
+#include "ui/widget/dock.h"
 
 #include "widgets/desktop-widget.h"
 
@@ -2191,6 +2192,10 @@ SPDesktop::show_dialogs()
 
             _dlg_mgr->showDialog(iter->first.c_str(), false); // without grabbing focus, we need focus to remain on the canvas
         }
+    }
+
+    if (auto *dock = getDock()) {
+        dock->restoreLayout();
     }
 }
 /*

@@ -16,7 +16,7 @@
 #endif
 
 #include "dock.h"
-#include "inkscape.h"
+#include "io/resource.h"
 #include "preferences.h"
 #include "desktop.h"
 
@@ -31,29 +31,32 @@ namespace Widget {
 const int Dock::_default_empty_width = 0;
 const int Dock::_default_dock_bar_width = 36;
 
+/**
+ * Get the file name of the user's dock layout.
+ * @return Pointer to static string.
+ */
+static const char *get_docklayout_filename()
+{
+    static auto *filename = Inkscape::IO::Resource::profile_path("docklayout.xml");
+    return filename;
+}
 
 Dock::Dock(Gtk::Orientation orientation)
     : _gdl_dock(gdl_dock_new()),
       _gdl_dock_bar(GDL_DOCK_BAR(gdl_dock_bar_new(G_OBJECT(_gdl_dock)))),
       _scrolled_window (Gtk::manage(new Gtk::ScrolledWindow))
 {
+    _gdl_layout = gdl_dock_layout_new(G_OBJECT(_gdl_dock));
+
     gtk_widget_set_name(_gdl_dock, "GdlDock");
 
     gtk_orientable_set_orientation(GTK_ORIENTABLE(_gdl_dock_bar),
                                    static_cast<GtkOrientation>(orientation));
 
-    _filler.set_name("DockBoxFiller");
-
-    _paned = Gtk::manage(new Gtk::Paned(orientation));
-    _paned->set_name("DockBoxPane");
-    // transfer ownership of `_gdl_dock` to `_paned` with `manage()`
-    _paned->pack1(*Gtk::manage(Glib::wrap(GTK_WIDGET(_gdl_dock))), false,  false);
-    _paned->pack2(_filler, /* resize */ false, /* shrink */ true);
-
     _dock_box = Gtk::manage(new Gtk::Box(orientation == Gtk::ORIENTATION_HORIZONTAL ?
                                          Gtk::ORIENTATION_VERTICAL : Gtk::ORIENTATION_HORIZONTAL));
     _dock_box->set_name("DockBox");
-    _dock_box->pack_start(*_paned, Gtk::PACK_EXPAND_WIDGET);
+    _dock_box->pack_start(*Gtk::manage(Glib::wrap(GTK_WIDGET(_gdl_dock))));
     _dock_box->pack_end(*Gtk::manage(Glib::wrap(GTK_WIDGET(_gdl_dock_bar))), Gtk::PACK_SHRINK);
 
     _scrolled_window->set_name("DockScrolledWindow");
@@ -65,6 +68,18 @@ Dock::Dock(Gtk::Orientation orientation)
     GdlSwitcherStyle gdl_switcher_style =
         static_cast<GdlSwitcherStyle>(prefs->getIntLimited("/options/dock/switcherstyle",
                                                                       GDL_SWITCHER_STYLE_BOTH, 0, 4));
+
+    auto filleritem = gdl_dock_item_new("filleritem", "",
+                                        static_cast<GdlDockItemBehavior>(        //
+                                            GDL_DOCK_ITEM_BEH_NEVER_FLOATING |   //
+                                            GDL_DOCK_ITEM_BEH_NEVER_HORIZONTAL | //
+                                            GDL_DOCK_ITEM_BEH_LOCKED |           //
+                                            GDL_DOCK_ITEM_BEH_CANT_DOCK_CENTER | //
+                                            GDL_DOCK_ITEM_BEH_CANT_CLOSE | GDL_DOCK_ITEM_BEH_CANT_ICONIFY |
+                                            GDL_DOCK_ITEM_BEH_NO_GRIP));
+    gdl_dock_add_item(GDL_DOCK(_gdl_dock),
+                      GDL_DOCK_ITEM(filleritem),
+                      GDL_DOCK_BOTTOM);
 
     GdlDockMaster *master = GDL_DOCK_MASTER(gdl_dock_object_get_master(GDL_DOCK_OBJECT(_gdl_dock)));
 
@@ -78,11 +93,7 @@ Dock::Dock(Gtk::Orientation orientation)
 
     gdl_dock_bar_set_style(_gdl_dock_bar, gdl_dock_bar_style);
 
-    g_signal_connect(_paned->gobj(), "button-press-event", G_CALLBACK(_on_paned_button_event), (void *)this);
-    g_signal_connect(_paned->gobj(), "button-release-event", G_CALLBACK(_on_paned_button_event), (void *)this);
-
-    _connections.emplace_back(
-        signal_layout_changed().connect(sigc::mem_fun(*this, &Inkscape::UI::Widget::Dock::_onLayoutChanged)));
+    _scrolled_window->show_all();
 }
 
 Dock::~Dock()
@@ -97,9 +108,34 @@ void Dock::releaseAllReferences()
         conn.disconnect();
     }
 
-    g_signal_handlers_disconnect_by_data(_paned->gobj(), this);
+    saveLayout();
 
     _dock_items.clear();
+}
+
+/**
+ * Restore the layout from the config file and connect the "layout-changed" signal.
+ *
+ * This method must only be called once.
+ */
+void Dock::restoreLayout()
+{
+    if (!_dock_items.empty() && //
+        gdl_dock_layout_load_from_file(_gdl_layout, get_docklayout_filename())) {
+        gdl_dock_layout_load_layout(_gdl_layout, nullptr);
+    }
+
+    _connections.emplace_back(
+        signal_layout_changed().connect(sigc::mem_fun(*this, &Inkscape::UI::Widget::Dock::_onLayoutChanged)));
+}
+
+/**
+ * Store the layout to the config file.
+ */
+void Dock::saveLayout()
+{
+    gdl_dock_layout_save_layout(_gdl_layout, nullptr);
+    gdl_dock_layout_save_to_file(_gdl_layout, get_docklayout_filename());
 }
 
 void Dock::addItem(DockItem& item, GdlDockPlacement placement)
@@ -123,12 +159,6 @@ Gtk::Paned *Dock::getParentPaned()
     return (parent != nullptr ? dynamic_cast<Gtk::Paned *>(parent) : nullptr);
 }
 
-
-Gtk::Paned *Dock::getPaned()
-{
-    return _paned;
-}
-
 GtkWidget *Dock::getGdlWidget()
 {
     return GTK_WIDGET(_gdl_dock);
@@ -136,12 +166,8 @@ GtkWidget *Dock::getGdlWidget()
 
 bool Dock::isEmpty() const
 {
-    std::list<const DockItem *>::const_iterator
-        i = _dock_items.begin(),
-        e = _dock_items.end();
-
-    for (; i != e; ++i) {
-        if ((*i)->getState() == DockItem::DOCKED_STATE) {
+    for (auto *item : _dock_items) {
+        if (item->getState() == DockItem::DOCKED_STATE) {
             return false;
         }
     }
@@ -151,12 +177,8 @@ bool Dock::isEmpty() const
 
 bool Dock::hasIconifiedItems() const
 {
-    std::list<const DockItem *>::const_iterator
-        i = _dock_items.begin(),
-        e = _dock_items.end();
-
-    for (; i != e; ++i) {
-        if ((*i)->isIconified()) {
+    for (auto *item : _dock_items) {
+        if (item->isIconified()) {
             return true;
         }
     }
@@ -176,23 +198,18 @@ void Dock::show()
 
 void Dock::toggleDockable(int width, int height)
 {
-    static int prev_horizontal_position, prev_vertical_position;
+    static int prev_horizontal_position = 0;
 
     Gtk::Paned *parent_paned = getParentPaned();
 
     if (width > 0 && height > 0) {
         prev_horizontal_position = parent_paned->get_position();
-        prev_vertical_position = _paned->get_position();
 
         if (getWidget().get_width() < width)
             parent_paned->set_position(parent_paned->get_width() - width);
 
-        if (_paned->get_position() < height)
-            _paned->set_position(height);
-
     } else {
         parent_paned->set_position(prev_horizontal_position);
-        _paned->set_position(prev_vertical_position);
     }
 }
 
@@ -221,37 +238,8 @@ Dock::signal_layout_changed()
 void Dock::_onLayoutChanged()
 {
     if (isEmpty()) {
-        if (hasIconifiedItems()) {
-            _paned->get_child1()->set_size_request(-1, -1);
-            _scrolled_window->set_size_request(_default_dock_bar_width);
-        } else {
-            _paned->get_child1()->set_size_request(-1, -1);
-            _scrolled_window->set_size_request(_default_empty_width);
-        }
         getParentPaned()->set_position(10000);
-
-    } else {
-        // unset any forced size requests
-        _paned->get_child1()->set_size_request(-1, -1);
-        _scrolled_window->set_size_request(-1);
     }
-}
-
-void
-Dock::_onPanedButtonEvent(GdkEventButton *event)
-{
-    if (event->button == 1 && event->type == GDK_BUTTON_PRESS)
-        /* unset size request when starting a drag */
-        _paned->get_child1()->set_size_request(-1, -1);
-}
-
-gboolean 
-Dock::_on_paned_button_event(GtkWidget */*widget*/, GdkEventButton *event, gpointer user_data)
-{
-    if (Dock *dock = static_cast<Dock *>(user_data))
-        dock->_onPanedButtonEvent(event);
-
-    return FALSE;
 }
 
 const Glib::SignalProxyInfo

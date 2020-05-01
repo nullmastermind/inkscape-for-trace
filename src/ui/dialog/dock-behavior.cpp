@@ -45,12 +45,6 @@ DockBehavior::DockBehavior(Dialog &dialog) :
     _connections.emplace_back(_signal_hide_connection);
     _connections.emplace_back(
         signal_show().connect(sigc::mem_fun(*this, &Inkscape::UI::Dialog::Behavior::DockBehavior::_onShow)));
-    _connections.emplace_back(_dock_item.signal_state_changed().connect(
-        sigc::mem_fun(*this, &Inkscape::UI::Dialog::Behavior::DockBehavior::_onStateChanged)));
-
-    if (_dock_item.getState() == Widget::DockItem::FLOATING_STATE) {
-        _onStateChanged(Widget::DockItem::DOCKED_STATE, Widget::DockItem::FLOATING_STATE);
-    }
 }
 
 DockBehavior::~DockBehavior() {
@@ -187,12 +181,8 @@ void
 DockBehavior::_onStateChanged(Widget::DockItem::State /*prev_state*/,
                               Widget::DockItem::State new_state)
 {
-// TODO probably need to avoid window calls unless the state is different. Check.
-
-    if (new_state == Widget::DockItem::FLOATING_STATE) {
-        if (Gtk::Window *floating_win = _dock_item.getWindow())
-            sp_transientize(GTK_WIDGET(floating_win->gobj()));
-    }
+    // TODO remove method
+    g_assert_not_reached();
 }
 
 void

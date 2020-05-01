@@ -10,8 +10,7 @@
 
 #include "ui/widget/dock.h"
 
-#include "desktop.h"
-#include "inkscape.h"
+#include "preferences.h"
 #include "ui/icon-loader.h"
 #include "ui/icon-names.h"
 #include <glibmm/exceptionhandler.h>
@@ -141,8 +140,11 @@ DockItem::get_size(int& width, int& height)
 void
 DockItem::resize(int width, int height)
 {
+    // Not needed anymore, see Dock::restoreLayout()
+#if 0
     if (_window)
         _window->resize(width, height);
+#endif
 }
 
 
@@ -156,8 +158,11 @@ DockItem::move(int x, int y)
 void
 DockItem::set_position(Gtk::WindowPosition position)
 {
+    // Not needed anymore, see Dock::restoreLayout()
+#if 0
     if (_window)
         _window->set_position(position);
+#endif
 }
 
 void
@@ -200,7 +205,9 @@ DockItem::isFloating() const
 bool
 DockItem::isIconified() const
 {
-    return GDL_DOCK_ITEM_ICONIFIED (_gdl_dock_item);
+    gboolean iconified = false;
+    g_object_get(_gdl_dock_item, "iconified", &iconified, nullptr);
+    return iconified;
 }
 
 DockItem::State
@@ -394,6 +401,22 @@ DockItem::_onDragEnd(bool)
 void
 DockItem::_onRealize()
 {
+    if (isFloating()) {
+        auto window = dynamic_cast<Gtk::Window *>(getWidget().get_toplevel());
+        if (window) {
+            // Note: Not using `sp_transientize` here because it uses `SP_ACTIVE_DESKTOP`
+            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+            if (prefs->getInt("/options/transientpolicy/value", 1)) {
+                auto appwindow = dynamic_cast<Gtk::Window *>(_dock.getWidget().get_toplevel());
+                if (appwindow) {
+                    window->set_transient_for(*appwindow);
+                }
+            }
+
+            window->set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
+        }
+    }
+
     if (_grab_focus_on_realize) {
         _grab_focus_on_realize = false;
         grab_focus();
@@ -415,8 +438,6 @@ DockItem::_onStateChanged(State /*prev_state*/, State new_state)
     _signal_key_press_event_connection.disconnect();
 
     _window = getWindow();
-    if(_window)
-        _window->set_type_hint(Gdk::WINDOW_TYPE_HINT_NORMAL);
 
     if (new_state == FLOATING_STATE && _window) {
         _signal_hide_connection =

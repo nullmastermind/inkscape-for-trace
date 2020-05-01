@@ -203,7 +203,7 @@ R"=====(
     <group id="textandfont"/>
     <group id="transformation" applyseparately="0"/>
     <group id="align"/>
-    <group id="xml"/>
+    <group id="xml" h="500" w="300" />
     <group id="find"/>
     <group id="spellcheck" w="200" h="250" ignorenumbers="1"/>
     <group id="documentoptions" state="1"/>
@@ -228,7 +228,7 @@ R"=====(
     <group id="iconpreview" />
     <group id="aboutextensions" />
     <group id="treeeditor" />
-    <group id="layers" maxDepth="20"/>
+    <group id="layers" maxDepth="20" w="200" h="300" />
     <group id="extensioneditor" />
     <group id="trace" state="1" />
     <group id="script" />
