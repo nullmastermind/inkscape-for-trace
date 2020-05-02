@@ -358,8 +358,8 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
     Geom::PathVector ret;
     Geom::PathVector open_ret;
     Geom::PathVector ret_outline;
-    for (Geom::PathVector::const_iterator path_it = filled_rule_pathv.begin(); path_it != filled_rule_pathv.end(); ++path_it) {
-        Geom::Path original = (*path_it);
+    for (const auto & path_it : filled_rule_pathv) {
+        Geom::Path original = path_it;
         if (original.empty()) {
             continue;
         }

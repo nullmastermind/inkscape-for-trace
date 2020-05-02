@@ -1221,16 +1221,16 @@ writePath(Writer &outs, Geom::PathVector const &pathv,
     // convert the path to only lineto's and cubic curveto's:
     Geom::PathVector pv = pathv_to_linear_and_cubic_beziers(pathv * tf * Geom::Translate(xoff, yoff) * Geom::Scale(1000.));
 
-        for (Geom::PathVector::const_iterator pit = pv.begin(); pit != pv.end(); ++pit) {
+        for (const auto & pit : pv) {
 
-            double destx = pit->initialPoint()[X];
-            double desty = pit->initialPoint()[Y];
+            double destx = pit.initialPoint()[X];
+            double desty = pit.initialPoint()[Y];
             if (fabs(destx)<1.0) destx = 0.0;   // Why is this needed? Shouldn't we just round all numbers then?
             if (fabs(desty)<1.0) desty = 0.0;
             outs.printf("M %.3f %.3f ", destx, desty);
             nrPoints++;
 
-            for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_closed(); ++cit) {
+            for (Geom::Path::const_iterator cit = pit.begin(); cit != pit.end_closed(); ++cit) {
 
                 if( is_straight_curve(*cit) )
                 {
@@ -1255,7 +1255,7 @@ writePath(Writer &outs, Geom::PathVector const &pathv,
                 nrPoints++;
             }
 
-            if (pit->closed()) {
+            if (pit.closed()) {
                 outs.printf("Z");
             }
         }

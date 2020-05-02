@@ -45,7 +45,7 @@ public:
 
 protected:
     void _addProperty(char const *name, std::shared_ptr<std::string>&& value) {
-        _properties.push_back(PropertyPair(name, std::move(value)));
+        _properties.emplace_back(name, std::move(value));
     }
     void _addProperty(char const *name, char const *value) {
         _addProperty(name, std::make_shared<std::string>(value));

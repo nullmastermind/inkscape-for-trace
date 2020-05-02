@@ -85,8 +85,8 @@ ObjectSet::combine(bool skip_undo)
     }
     std::vector<Inkscape::XML::Node*> converted;
     bool did = sp_item_list_to_curves(to_paths, items_copy, converted);
-    for (std::vector<Inkscape::XML::Node*>::const_iterator i = converted.begin(); i != converted.end(); ++i)
-        items_copy.push_back((SPItem*)doc->getObjectByRepr(*i));
+    for (auto i : converted)
+        items_copy.push_back((SPItem*)doc->getObjectByRepr(i));
 
     items_copy = sp_degroup_list (items_copy); // converting to path may have added more groups, descend again
 
@@ -210,9 +210,7 @@ ObjectSet::breakApart(bool skip_undo)
     bool did = false;
 
     std::vector<SPItem*> itemlist(items().begin(), items().end());
-    for (std::vector<SPItem*>::const_iterator i = itemlist.begin(); i != itemlist.end(); ++i){
-
-        SPItem *item = *i;
+    for (auto item : itemlist){
 
         SPPath *path = dynamic_cast<SPPath *>(item);
         if (!path) {

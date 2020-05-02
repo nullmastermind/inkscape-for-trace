@@ -193,8 +193,8 @@ LPEPowerMask::setMask(){
     Glib::ustring g_data_id = mask_id + (Glib::ustring)"_container";
     if((elemref = document->getObjectById(g_data_id))){
         std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(elemref));
-        for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
-            Inkscape::XML::Node *mask_node = (*iter)->getRepr();
+        for (auto iter : item_list) {
+            Inkscape::XML::Node *mask_node = iter->getRepr();
             elemref->getRepr()->removeChild(mask_node);
             mask->getRepr()->appendChild(mask_node);
             Inkscape::GC::release(mask_node);
@@ -202,8 +202,8 @@ LPEPowerMask::setMask(){
         elemref->deleteObject(true);
     }
     std::vector<SPObject*> mask_list = mask->childList(true);
-    for ( std::vector<SPObject*>::const_iterator iter=mask_list.begin();iter!=mask_list.end();++iter) {
-        SPItem * mask_data = SP_ITEM(*iter);
+    for (auto iter : mask_list) {
+        SPItem * mask_data = SP_ITEM(iter);
         Inkscape::XML::Node *mask_node = mask_data->getRepr();
         if (! strcmp(mask_data->getId(), box_id.c_str())){
             continue;

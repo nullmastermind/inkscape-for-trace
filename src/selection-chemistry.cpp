@@ -325,8 +325,7 @@ static void sp_selection_copy_impl(std::vector<SPItem*> const &items, std::vecto
     sort(sorted_items.begin(),sorted_items.end(),sp_object_compare_position_bool);
 
     // Copy item reprs:
-    for (std::vector<SPItem*>::const_iterator i = sorted_items.begin(); i != sorted_items.end(); ++i) {
-        SPItem *item = *i;
+    for (auto item : sorted_items) {
         if (item) {
             sp_selection_copy_one(item->getRepr(), item->i2doc_affine(), clip, xml_doc);
         } else {
@@ -346,8 +345,7 @@ static std::vector<Inkscape::XML::Node*> sp_selection_paste_impl(SPDocument *doc
 
     std::vector<Inkscape::XML::Node*> copied;
     // add objects to document
-    for (std::vector<Inkscape::XML::Node*>::const_iterator l = clip.begin(); l != clip.end(); ++l) {
-        Inkscape::XML::Node *repr = *l;
+    for (auto repr : clip) {
         Inkscape::XML::Node *copy = repr->duplicate(xml_doc);
 
         // premultiply the item transform by the accumulated parent transform in the paste layer
@@ -757,9 +755,7 @@ Inkscape::XML::Node* ObjectSet::group() {
     gint topmost = p.back()->position();
     Inkscape::XML::Node *topmost_parent = p.back()->parent();
 
-    for(std::vector<Inkscape::XML::Node*>::const_iterator i = p.begin(); i != p.end(); ++i){
-        Inkscape::XML::Node *current = *i;
-
+    for(auto current : p){
         if (current->parent() == topmost_parent) {
             Inkscape::XML::Node *spnew = current->duplicate(xml_doc);
             sp_repr_unparent(current);
@@ -864,8 +860,8 @@ static void ungroup_impl(ObjectSet *set)
     // If any of the clones refer to the groups, unlink them and replace them with successors
     // in the items list.
     std::vector<SPUse*> clones_to_unlink;
-    for (std::vector<SPItem*>::const_iterator item = items.begin(); item != items.end(); ++item) {
-        SPUse *use = dynamic_cast<SPUse *>(*item);
+    for (auto item : items) {
+        SPUse *use = dynamic_cast<SPUse *>(item);
 
         SPItem *original = use;
         while (dynamic_cast<SPUse *>(original)) {
@@ -935,15 +931,15 @@ sp_degroup_list(std::vector<SPItem*> &items)
 {
     std::vector<SPItem*> out;
     bool has_groups = false;
-    for (std::vector<SPItem*>::const_iterator item=items.begin();item!=items.end();++item) {
-        SPGroup *group = dynamic_cast<SPGroup *>(*item);
+    for (auto item : items) {
+        SPGroup *group = dynamic_cast<SPGroup *>(item);
         if (!group) {
-            out.push_back(*item);
+            out.push_back(item);
         } else {
             has_groups = true;
             std::vector<SPItem*> members = sp_item_group_item_list(group);
-            for (std::vector<SPItem*>::const_iterator member=members.begin();member!=members.end();++member) {
-                out.push_back(*member);
+            for (auto member : members) {
+                out.push_back(member);
             }
             members.clear();
         }
@@ -1028,8 +1024,7 @@ void ObjectSet::raise(bool skip_undo){
 
     // Iterate over all objects in the selection (starting from top).
     if (selected) {
-        for (std::vector<SPItem*>::const_iterator item=rev.begin();item!=rev.end();++item) {
-            SPObject *child = *item;
+        for (auto child : rev) {
             // for each selected object, find the next sibling
             for (SPObject *newref = child->getNext(); newref; newref = newref->getNext()) {
                 // if the sibling is an item AND overlaps our selection,
@@ -1071,8 +1066,7 @@ void ObjectSet::raiseToTop(bool skip_undo) {
     std::vector<Inkscape::XML::Node*> rl(xmlNodes().begin(), xmlNodes().end());
     sort(rl.begin(),rl.end(),sp_repr_compare_position_bool);
 
-    for (std::vector<Inkscape::XML::Node*>::const_iterator l=rl.begin(); l!=rl.end();++l) {
-        Inkscape::XML::Node *repr =(*l);
+    for (auto repr : rl) {
         repr->setPosition(-1);
     }
     if (document() && !skip_undo) {
@@ -1950,9 +1944,9 @@ void sp_select_same_fill_stroke_style(SPDesktop *desktop, gboolean fill, gboolea
     auto items = selection->items();
 
     std::vector<SPItem*> tmp;
-    for (std::vector<SPItem*>::const_iterator iter=all_list.begin();iter!=all_list.end();++iter) {
-        if(!SP_IS_GROUP(*iter)){
-            tmp.push_back(*iter);
+    for (auto iter : all_list) {
+        if(!SP_IS_GROUP(iter)){
+            tmp.push_back(iter);
         }
     }
     all_list=tmp;
@@ -2166,8 +2160,7 @@ std::vector<SPItem*> sp_get_same_style(SPItem *sel, std::vector<SPItem*> &src, S
         objects_query_strokewidth (objects, sel_style_for_width);
     }
     bool match_g;
-    for (std::vector<SPItem*>::const_iterator i=src.begin();i!=src.end();++i) {
-        SPItem *iter = *i;
+    for (auto iter : src) {
         if (iter) {
             match_g=true;
             SPStyle *iter_style = iter->style;
@@ -2638,8 +2631,7 @@ void ObjectSet::clone()
 
     std::vector<Inkscape::XML::Node*> newsel;
 
-    for(std::vector<Inkscape::XML::Node*>::const_iterator i=reprs.begin();i!=reprs.end();++i){
-        Inkscape::XML::Node *sel_repr = *i;
+    for(auto sel_repr : reprs){
         Inkscape::XML::Node *parent = sel_repr->parent();
 
         Inkscape::XML::Node *clone = xml_doc->createElement("svg:use");
@@ -3032,8 +3024,7 @@ void ObjectSet::toMarker(bool apply)
     if (apply) {
         // Delete objects so that their clones don't get alerted;
         // the objects will be restored inside the marker element.
-        for (std::vector<SPItem*>::const_iterator i=items_.begin();i!=items_.end();++i){
-            SPObject *item = *i;
+        for (auto item : items_){
             item->deleteObject(false);
         }
     }
@@ -3061,8 +3052,8 @@ static void sp_selection_to_guides_recursive(SPItem *item, bool wholegroups) {
     SPGroup *group = dynamic_cast<SPGroup *>(item);
     if (group && !dynamic_cast<SPBox3D *>(item) && !wholegroups) {
         std::vector<SPItem*> items=sp_item_group_item_list(group);
-        for (std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();++i){
-            sp_selection_to_guides_recursive(*i, wholegroups);
+        for (auto item : items){
+            sp_selection_to_guides_recursive(item, wholegroups);
         }
     } else {
         item->convert_to_guides();
@@ -3089,8 +3080,8 @@ void ObjectSet::toGuides()
     // and its entry in the selection list is invalid (crash).
     // Therefore: first convert all, then delete all.
 
-    for (std::vector<SPItem*>::const_iterator i=items_.begin();i!=items_.end();++i){
-        sp_selection_to_guides_recursive(*i, wholegroups);
+    for (auto item : items_){
+        sp_selection_to_guides_recursive(item, wholegroups);
     }
 
     if (deleteitems) {
@@ -3399,8 +3390,8 @@ void ObjectSet::tile(bool apply)
 
     // create a list of duplicates
     std::vector<Inkscape::XML::Node*> repr_copies;
-    for (std::vector<SPItem*>::const_iterator i=items_.begin();i!=items_.end();++i){
-        Inkscape::XML::Node *dup = (*i)->getRepr()->duplicate(xml_doc);
+    for (auto item : items_){
+        Inkscape::XML::Node *dup = item->getRepr()->duplicate(xml_doc);
         repr_copies.push_back(dup);
     }
 
@@ -3408,8 +3399,7 @@ void ObjectSet::tile(bool apply)
 
     if (apply) {
         // delete objects so that their clones don't get alerted; this object will be restored shortly
-        for (std::vector<SPItem*>::const_iterator i=items_.begin();i!=items_.end();++i){
-            SPObject *item = *i;
+        for (auto item : items_){
             item->deleteObject(false);
         }
     }
@@ -3836,9 +3826,7 @@ void ObjectSet::setClipGroup()
     Inkscape::XML::Node *inner = xml_doc->createElement("svg:g");
     inner->setAttribute("inkscape:label", "Clip");
 
-    for(std::vector<Inkscape::XML::Node*>::const_iterator i=p.begin();i!=p.end();++i){
-        Inkscape::XML::Node *current = *i;
-
+    for(auto current : p){
         if (current->parent() == topmost_parent) {
             Inkscape::XML::Node *spnew = current->duplicate(xml_doc);
             sp_repr_unparent(current);
@@ -4090,8 +4078,8 @@ void ObjectSet::setClipGroup()
 
     }
 
-    for (std::vector<SPItem*>::const_iterator i = items_to_delete.begin(); i != items_to_delete.end(); ++i) {
-        SPObject *item = reinterpret_cast<SPObject*>(*i);
+    for (auto i : items_to_delete) {
+        SPObject *item = reinterpret_cast<SPObject*>(i);
         item->deleteObject(false);
         items_to_select.erase(std::remove(items_to_select.begin(), items_to_select.end(), item), items_to_select.end());
     }
@@ -4134,10 +4122,10 @@ void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
 
     // SPObject* refers to a group containing the clipped path or mask itself,
     // whereas SPItem* refers to the item being clipped or masked
-    for (std::vector<SPItem*>::const_iterator i=items_.begin();i!=items_.end();++i){
+    for (auto i : items_){
         if (remove_original) {
             // remember referenced mask/clippath, so orphaned masks can be moved back to document
-            SPItem *item = *i;
+            SPItem *item = i;
             SPObject *obj_ref = nullptr;
 
             if (apply_clip_path) {
@@ -4152,9 +4140,9 @@ void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
             }
         }
 
-        (*i)->setAttribute(attributeName, "none");
+        i->setAttribute(attributeName, "none");
 
-        SPGroup *group = dynamic_cast<SPGroup *>(*i);
+        SPGroup *group = dynamic_cast<SPGroup *>(i);
         if (ungroup_masked && group) {
                 // if we had previously enclosed masked object in group,
                 // add it to list so we can ungroup it later

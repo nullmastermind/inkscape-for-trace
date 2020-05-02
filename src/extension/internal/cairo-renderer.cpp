@@ -314,8 +314,8 @@ static void sp_group_render(SPGroup *group, CairoRenderContext *ctx)
     CairoRenderer *renderer = ctx->getRenderer();
 
     std::vector<SPObject*> l(group->childList(false));
-    for(std::vector<SPObject*>::const_iterator x = l.begin(); x!= l.end(); ++x){
-        SPItem *item = dynamic_cast<SPItem*>(*x);
+    for(auto x : l){
+        SPItem *item = dynamic_cast<SPItem*>(x);
         if (item) {
             renderer->renderItem(ctx, item);
         }
@@ -393,8 +393,8 @@ static void sp_anchor_render(SPAnchor *a, CairoRenderContext *ctx)
     std::vector<SPObject*> l(a->childList(false));
     if (a->href)
         ctx->tagBegin(a->href);
-    for(std::vector<SPObject*>::const_iterator x = l.begin(); x!= l.end(); ++x){
-        SPItem *item = dynamic_cast<SPItem*>(*x);
+    for(auto x : l){
+        SPItem *item = dynamic_cast<SPItem*>(x);
         if (item) {
             renderer->renderItem(ctx, item);
         }

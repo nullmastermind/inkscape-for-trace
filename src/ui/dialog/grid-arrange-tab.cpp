@@ -160,8 +160,7 @@
             items.insert(items.end(), selection->items().begin(), selection->items().end());
         }
 
-        for(std::vector<SPItem*>::const_iterator i = items.begin();i!=items.end(); ++i){
-            SPItem *item = *i;
+        for(auto item : items){
             Geom::OptRect b = item->documentVisualBounds();
             if (!b) {
                 continue;

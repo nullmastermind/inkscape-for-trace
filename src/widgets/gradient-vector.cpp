@@ -275,10 +275,10 @@ static void sp_gvs_rebuild_gui_full(SPGradientVectorSelector *gvs)
     std::vector<SPGradient *> gl;
     if (gvs->gr) {
         std::vector<SPObject *> gradients = gvs->gr->document->getResourceList("gradient");
-        for (std::vector<SPObject *>::const_iterator it = gradients.begin(); it != gradients.end(); ++it) {
-            SPGradient* grad = SP_GRADIENT(*it);
+        for (auto gradient : gradients) {
+            SPGradient* grad = SP_GRADIENT(gradient);
             if ( grad->hasStops() && (grad->isSwatch() == gvs->swatched) ) {
-                gl.push_back(SP_GRADIENT(*it));
+                gl.push_back(SP_GRADIENT(gradient));
             }
         }
     }

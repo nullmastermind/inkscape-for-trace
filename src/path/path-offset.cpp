@@ -290,8 +290,7 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
 
     bool did = false;
     std::vector<SPItem*> il(selection->items().begin(), selection->items().end());
-    for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); l++){
-        SPItem *item = *l;
+    for (auto item : il){
         SPCurve *curve = nullptr;
 
         if (!SP_IS_SHAPE(item) && !SP_IS_TEXT(item) && !SP_IS_FLOWTEXT(item))

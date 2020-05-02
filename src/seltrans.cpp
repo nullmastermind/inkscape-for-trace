@@ -549,8 +549,7 @@ void Inkscape::SelTrans::stamp()
             _stamp_cache = l;
         }
 
-        for(std::vector<SPItem*>::const_iterator x=l.begin();x!=l.end(); ++x) {
-            SPItem *original_item = *x;
+        for(auto original_item : l) {
             Inkscape::XML::Node *original_repr = original_item->getRepr();
 
             // remember parent

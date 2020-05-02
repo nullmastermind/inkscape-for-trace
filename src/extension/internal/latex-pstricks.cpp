@@ -269,15 +269,15 @@ PrintLatex::print_pathvector(SVGOStringStream &os, Geom::PathVector const &pathv
 
     os << "\\newpath\n";
 
-    for(Geom::PathVector::const_iterator it = pathv.begin(); it != pathv.end(); ++it) {
+    for(const auto & it : pathv) {
 
-        os << "\\moveto(" << it->initialPoint()[Geom::X] << "," << it->initialPoint()[Geom::Y] << ")\n";
+        os << "\\moveto(" << it.initialPoint()[Geom::X] << "," << it.initialPoint()[Geom::Y] << ")\n";
 
-        for(Geom::Path::const_iterator cit = it->begin(); cit != it->end_open(); ++cit) {
+        for(Geom::Path::const_iterator cit = it.begin(); cit != it.end_open(); ++cit) {
             print_2geomcurve(os, *cit);
         }
 
-        if (it->closed()) {
+        if (it.closed()) {
             os << "\\closepath\n";
         }
 

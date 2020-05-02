@@ -307,8 +307,8 @@ void sp_inverse_powerclip(Inkscape::Selection *sel) {
                 SPClipPath *clip_path = SP_ITEM(lpeitem)->getClipObject();
                 if(clip_path) {
                     std::vector<SPObject*> clip_path_list = clip_path->childList(true);
-                    for (std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
-                        SPUse *use = dynamic_cast<SPUse*>(*iter);
+                    for (auto iter : clip_path_list) {
+                        SPUse *use = dynamic_cast<SPUse*>(iter);
                         if (use) {
                             g_warning("We can`t add inverse clip on clones");
                             return;

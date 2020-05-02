@@ -41,8 +41,8 @@ Path::~Path()
 void Path::Affiche()
 {
     std::cout << "path: " << descr_cmd.size() << " commands." << std::endl;
-    for (std::vector<PathDescr*>::const_iterator i = descr_cmd.begin(); i != descr_cmd.end(); ++i) {
-        (*i)->dump(std::cout);
+    for (auto i : descr_cmd) {
+        i->dump(std::cout);
         std::cout << std::endl;
     }
 
@@ -71,11 +71,9 @@ void Path::Copy(Path * who)
         
     descr_cmd.clear();
         
-    for (std::vector<PathDescr*>::const_iterator i = who->descr_cmd.begin();
-         i != who->descr_cmd.end();
-         ++i)
+    for (auto i : who->descr_cmd)
     {
-        descr_cmd.push_back((*i)->clone());
+        descr_cmd.push_back(i->clone());
     }
 }
 

@@ -614,8 +614,7 @@ Geom::Interval SPHatch::bounds() const
     Geom::Interval result;
     std::vector<SPHatchPath const *> children(hatchPaths());
 
-    for (ConstChildIterator iter = children.begin(); iter != children.end(); ++iter) {
-        SPHatchPath const *child = *iter;
+    for (auto child : children) {
         if (result.extent() == 0) {
             result = child->bounds();
         } else {

@@ -281,13 +281,13 @@ OriginalItemArrayParam::on_link_button_click()
     
     bool foundOne = false;
     Inkscape::SVGOStringStream os;
-    for (std::vector<ItemAndActive*>::const_iterator iter = _vector.begin(); iter != _vector.end(); ++iter) {
+    for (auto iter : _vector) {
         if (foundOne) {
             os << "|";
         } else {
             foundOne = true;
         }
-        os << (*iter)->href << "," << ((*iter)->actived ? "1" : "0");
+        os << iter->href << "," << (iter->actived ? "1" : "0");
     }
     for (auto itemid : itemsid) {
         // add '#' at start to make it an uri.

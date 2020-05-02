@@ -277,8 +277,7 @@ void SPDocument::collectOrphans() {
     while (!_collection_queue.empty()) {
         std::vector<SPObject *> objects(_collection_queue);
         _collection_queue.clear();
-        for (std::vector<SPObject *>::const_iterator iter = objects.begin(); iter != objects.end(); ++iter) {
-            SPObject *object = *iter;
+        for (auto object : objects) {
             object->collectOrphan();
             sp_object_unref(object, nullptr);
         }
@@ -1403,8 +1402,8 @@ static SPItem *find_item_at_point(std::deque<SPItem*> *nodes, unsigned int dkey,
     SPItem *seen = nullptr;
     SPItem *child;
     bool seen_upto = (!upto);
-    for (std::deque<SPItem*>::const_iterator i = nodes->begin(); i != nodes->end(); ++i) {
-        child = *i;
+    for (auto node : *nodes) {
+        child = node;
         if (!seen_upto){
             if(child == upto)
                 seen_upto = true;

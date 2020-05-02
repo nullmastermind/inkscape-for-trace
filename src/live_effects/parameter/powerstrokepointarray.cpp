@@ -51,12 +51,11 @@ void PowerStrokePointArrayParam::param_transform_multiply(Geom::Affine const &po
     if (transform_stroke) {
         std::vector<Geom::Point> result;
         result.reserve(_vector.size()); // reserve space for the points that will be added in the for loop
-        for (std::vector<Geom::Point>::const_iterator point_it = _vector.begin(), e = _vector.end();
-             point_it != e; ++point_it)
+        for (auto point_it : _vector)
         {
             // scale each width knot with the average scaling in X and Y
-            Geom::Coord const A = (*point_it)[Geom::Y] * postmul.descrim();
-            result.emplace_back((*point_it)[Geom::X], A);
+            Geom::Coord const A = point_it[Geom::Y] * postmul.descrim();
+            result.emplace_back(point_it[Geom::X], A);
         }
         param_set_and_write_new_value(result);
     }

@@ -164,12 +164,12 @@ void SPMask::update(SPCtx* ctx, unsigned int flags) {
 
     std::vector<SPObject *> children = this->childList(true);
 
-    for (std::vector<SPObject *>::const_iterator child = children.begin();child != children.end();++child) {
-        if (flags || ((*child)->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
-            (*child)->updateDisplay(ctx, flags);
+    for (auto child : children) {
+        if (flags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
+            child->updateDisplay(ctx, flags);
         }
         
-        sp_object_unref(*child);
+        sp_object_unref(child);
     }
 
     for (SPMaskView *v = this->display; v != nullptr; v = v->next) {
@@ -194,12 +194,12 @@ void SPMask::modified(unsigned int flags) {
 
     std::vector<SPObject *> children = this->childList(true);
 
-    for (std::vector<SPObject *>::const_iterator child = children.begin();child != children.end();++child) {
-        if (flags || ((*child)->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
-            (*child)->emitModified(flags);
+    for (auto child : children) {
+        if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
+            child->emitModified(flags);
         }
         
-        sp_object_unref(*child);
+        sp_object_unref(child);
     }
 }
 
@@ -227,8 +227,7 @@ sp_mask_create (std::vector<Inkscape::XML::Node*> &reprs, SPDocument *document)
     const gchar *mask_id = repr->attribute("id");
     SPObject *mask_object = document->getObjectById(mask_id);
     
-    for (std::vector<Inkscape::XML::Node*>::const_iterator it = reprs.begin(); it != reprs.end(); ++it) {
-        Inkscape::XML::Node *node = (*it);
+    for (auto node : reprs) {
         mask_object->appendChildRepr(node);
     }
 

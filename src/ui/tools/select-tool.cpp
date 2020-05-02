@@ -456,8 +456,7 @@ void SelectTool::sp_select_context_cycle_through_items(Inkscape::Selection *sele
 }
 
 void SelectTool::sp_select_context_reset_opacities() {
-    for (std::vector<SPItem *>::const_iterator l = this->cycling_items_cmp.begin(); l != this->cycling_items_cmp.end(); ++l ) {
-        SPItem *item = *l;
+    for (auto item : this->cycling_items_cmp) {
         if (item) {
             Inkscape::DrawingItem *arenaitem = item->get_arenaitem(desktop->dkey);
             arenaitem->setOpacity(SP_SCALE24_TO_FLOAT(item->style->opacity.value));
@@ -837,13 +836,12 @@ bool SelectTool::root_handler(GdkEvent* event) {
 
             if(item_lists_differ) {
                 this->sp_select_context_reset_opacities();
-                for (std::vector<SPItem *>::const_iterator l = this->cycling_items_cmp.begin(); l != this->cycling_items_cmp.end(); ++l) 
-                    selection->remove(*l); // deselects the previous content of the cycling loop
+                for (auto l : this->cycling_items_cmp) 
+                    selection->remove(l); // deselects the previous content of the cycling loop
                 this->cycling_items_cmp = (this->cycling_items);
 
                 // set opacities in new stack
-                for(std::vector<SPItem *>::const_iterator l = this->cycling_items.begin(); l != this->cycling_items.end(); ++l) {
-                    SPItem *item =*l;
+                for(auto item : this->cycling_items) {
                     if (item) {
                         Inkscape::DrawingItem *arenaitem = item->get_arenaitem(desktop->dkey);
                         arenaitem->setOpacity(0.3);

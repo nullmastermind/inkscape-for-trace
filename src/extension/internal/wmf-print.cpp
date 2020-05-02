@@ -955,11 +955,11 @@ bool PrintWmf::print_simple_shape(Geom::PathVector const &pathv, const Geom::Aff
     int curves = 0;
     char *rec  = nullptr;
 
-    for (Geom::PathVector::const_iterator pit = pv.begin(); pit != pv.end(); ++pit) {
+    for (const auto & pit : pv) {
         moves++;
         nodes++;
 
-        for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_open(); ++cit) {
+        for (Geom::Path::const_iterator cit = pit.begin(); cit != pit.end_open(); ++cit) {
             nodes++;
 
             if (is_straight_curve(*cit)) {
@@ -979,11 +979,11 @@ bool PrintWmf::print_simple_shape(Geom::PathVector const &pathv, const Geom::Aff
 
     /**  For all Subpaths in the <path> */
 
-    for (Geom::PathVector::const_iterator pit = pv.begin(); pit != pv.end(); ++pit) {
+    for (const auto & pit : pv) {
         using Geom::X;
         using Geom::Y;
 
-        Geom::Point p0 = pit->initialPoint();
+        Geom::Point p0 = pit.initialPoint();
 
         p0[X] = (p0[X] * PX2WORLD);
         p0[Y] = (p0[Y] * PX2WORLD);
@@ -997,7 +997,7 @@ bool PrintWmf::print_simple_shape(Geom::PathVector const &pathv, const Geom::Aff
 
         /**  For all segments in the subpath */
 
-        for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_open(); ++cit) {
+        for (Geom::Path::const_iterator cit = pit.begin(); cit != pit.end_open(); ++cit) {
             if (is_straight_curve(*cit)) {
                 //Geom::Point p0 = cit->initialPoint();
                 Geom::Point p1 = cit->finalPoint();
@@ -1226,9 +1226,9 @@ unsigned int PrintWmf::print_pathv(Geom::PathVector const &pathv, const Geom::Af
             a closed path as an open one. */
         int nPolys = 0;
         int totPoints = 0;
-        for (Geom::PathVector::const_iterator pit = pv.begin(); pit != pv.end(); ++pit) {
-            totPoints += 1 + pit->size_default();  // big array, will hold all points, for all polygons.  Size_default ignores first point in each path.
-            if (pit->end_default() == pit->end_closed()) {
+        for (const auto & pit : pv) {
+            totPoints += 1 + pit.size_default();  // big array, will hold all points, for all polygons.  Size_default ignores first point in each path.
+            if (pit.end_default() == pit.end_closed()) {
                 nPolys++;
             } else {
                 nPolys = 0;
@@ -1248,22 +1248,22 @@ unsigned int PrintWmf::print_pathv(Geom::PathVector const &pathv, const Geom::Af
                 return(false);
             }
 
-            for (Geom::PathVector::const_iterator pit = pv.begin(); pit != pv.end(); ++pit) {
+            for (const auto & pit : pv) {
                 using Geom::X;
                 using Geom::Y;
 
 
-                *n16ptr++ = pit->size_default();  // points in the subpath
+                *n16ptr++ = pit.size_default();  // points in the subpath
 
                 /**  For each segment in the subpath */
 
-                Geom::Point p1 = pit->initialPoint(); // This point is special, it isn't in the iterator
+                Geom::Point p1 = pit.initialPoint(); // This point is special, it isn't in the iterator
 
                 p1[X] = (p1[X] * PX2WORLD);
                 p1[Y] = (p1[Y] * PX2WORLD);
                 *pt16ptr++ = point16_set((int32_t) round(p1[X]), (int32_t) round(p1[Y]));
 
-                for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_open(); ++cit) {
+                for (Geom::Path::const_iterator cit = pit.begin(); cit != pit.end_open(); ++cit) {
                     Geom::Point p1 = cit->finalPoint();
 
                     p1[X] = (p1[X] * PX2WORLD);
@@ -1279,20 +1279,20 @@ unsigned int PrintWmf::print_pathv(Geom::PathVector const &pathv, const Geom::Af
             free(pt16hold);
             free(n16hold);
         } else { // one or more polyline or polygons (but not all polygons, that would be the preceding case)
-            for (Geom::PathVector::const_iterator pit = pv.begin(); pit != pv.end(); ++pit) {
+            for (const auto & pit : pv) {
                 using Geom::X;
                 using Geom::Y;
 
                 /* Malformatted Polylines with a sequence like M L M M L have been seen, the 2nd M does nothing
                    and that point must not go into the output. */
-                if (!(pit->size_default())) {
+                if (!(pit.size_default())) {
                     continue;
                 }
                 /*  Figure out how many points there are, make an array big enough to hold them, and store
                     all the points.  This is the same for open or closed path.  This gives the upper bound for
                     the number of points.  The actual number used is calculated on the fly.
                 */
-                int nPoints = 1 + pit->size_default();
+                int nPoints = 1 + pit.size_default();
 
                 pt16hold = pt16ptr = (U_POINT16 *) malloc(nPoints * sizeof(U_POINT16));
                 if (!pt16ptr) {
@@ -1301,14 +1301,14 @@ unsigned int PrintWmf::print_pathv(Geom::PathVector const &pathv, const Geom::Af
 
                 /**  For each segment in the subpath */
 
-                Geom::Point p1 = pit->initialPoint(); // This point is special, it isn't in the iterator
+                Geom::Point p1 = pit.initialPoint(); // This point is special, it isn't in the iterator
 
                 p1[X] = (p1[X] * PX2WORLD);
                 p1[Y] = (p1[Y] * PX2WORLD);
                 *pt16ptr++ = point16_set((int32_t) round(p1[X]), (int32_t) round(p1[Y]));
                 nPoints = 1;
 
-                for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_default(); ++cit, nPoints++) {
+                for (Geom::Path::const_iterator cit = pit.begin(); cit != pit.end_default(); ++cit, nPoints++) {
                     Geom::Point p1 = cit->finalPoint();
 
                     p1[X] = (p1[X] * PX2WORLD);
@@ -1316,7 +1316,7 @@ unsigned int PrintWmf::print_pathv(Geom::PathVector const &pathv, const Geom::Af
                     *pt16ptr++ = point16_set((int32_t) round(p1[X]), (int32_t) round(p1[Y]));
                 }
 
-                if (pit->end_default() == pit->end_closed()) {
+                if (pit.end_default() == pit.end_closed()) {
                     rec = U_WMRPOLYGON_set(nPoints,  pt16hold);
                     if (!rec || wmf_append((U_METARECORD *)rec, wt, U_REC_FREE)) {
                         g_error("Fatal programming error in PrintWmf::print_pathv at U_WMRPOLYGON_set");

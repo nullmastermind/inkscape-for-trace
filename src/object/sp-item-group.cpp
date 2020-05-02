@@ -158,9 +158,7 @@ void SPGroup::update(SPCtx *ctx, unsigned int flags) {
     }
     childflags &= SP_OBJECT_MODIFIED_CASCADE;
     std::vector<SPObject*> l=this->childList(true, SPObject::ActionUpdate);
-    for(std::vector<SPObject*> ::const_iterator i=l.begin();i!=l.end();++i){
-        SPObject *child = *i;
-
+    for(auto child : l){
         if (childflags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             SPItem *item = dynamic_cast<SPItem *>(child);
             if (item) {
@@ -209,9 +207,7 @@ void SPGroup::modified(guint flags) {
     }
 
     std::vector<SPObject*> l=this->childList(true);
-    for(std::vector<SPObject*>::const_iterator i=l.begin();i!=l.end();++i){
-        SPObject *child = *i;
-
+    for(auto child : l){
         if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->emitModified(flags);
         }
@@ -279,8 +275,7 @@ Geom::OptRect SPGroup::bbox(Geom::Affine const &transform, SPItem::BBoxType bbox
 
     // TODO CPPIFY: replace this const_cast later
     std::vector<SPObject*> l = const_cast<SPGroup*>(this)->childList(false, SPObject::ActionBBox);
-    for(std::vector<SPObject*>::const_iterator i=l.begin();i!=l.end();++i){
-        SPObject *o = *i;
+    for(auto o : l){
         SPItem *item = dynamic_cast<SPItem *>(o);
         if (item && !item->isHidden()) {
             Geom::Affine const ct(item->transform * transform);
@@ -346,9 +341,7 @@ Inkscape::DrawingItem *SPGroup::show (Inkscape::Drawing &drawing, unsigned int k
 
 void SPGroup::hide (unsigned int key) {
     std::vector<SPObject*> l=this->childList(false, SPObject::ActionShow);
-    for(std::vector<SPObject*>::const_iterator i=l.begin();i!=l.end();++i){
-        SPObject *o = *i;
-
+    for(auto o : l){
         SPItem *item = dynamic_cast<SPItem *>(o);
         if (item) {
             item->invoke_hide(key);
@@ -877,8 +870,7 @@ gint SPGroup::getItemCount() const {
 void SPGroup::_showChildren (Inkscape::Drawing &drawing, Inkscape::DrawingItem *ai, unsigned int key, unsigned int flags) {
     Inkscape::DrawingItem *ac = nullptr;
     std::vector<SPObject*> l=this->childList(false, SPObject::ActionShow);
-    for(std::vector<SPObject*>::const_iterator i=l.begin();i!=l.end();++i){
-        SPObject *o = *i;
+    for(auto o : l){
         SPItem * child = dynamic_cast<SPItem *>(o);
         if (child) {
             ac = child->invoke_show (drawing, key, flags);

@@ -156,8 +156,7 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
         std::vector<SPObject*> mask_list_dest = mask_dest->childList(true);
         if (mask_list.size() == mask_list_dest.size()) {
             size_t i = 0;
-            for ( std::vector<SPObject*>::const_iterator iter=mask_list.begin();iter!=mask_list.end();++iter) {
-                SPObject * mask_data = *iter;
+            for (auto mask_data : mask_list) {
                 SPObject * mask_dest_data = mask_list_dest[i];
                 cloneAttrbutes(mask_data, mask_dest_data, attributes, css_properties);
                 i++;
@@ -172,8 +171,7 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
         std::vector<SPObject*> clippath_list_dest = clippath_dest->childList(true);
         if (clippath_list.size() == clippath_list_dest.size()) {
             size_t i = 0;
-            for ( std::vector<SPObject*>::const_iterator iter=clippath_list.begin();iter!=clippath_list.end();++iter) {
-                SPObject * clippath_data = *iter;
+            for (auto clippath_data : clippath_list) {
                 SPObject * clippath_dest_data = clippath_list_dest[i];
                 cloneAttrbutes(clippath_data, clippath_dest_data, attributes, css_properties);
                 i++;

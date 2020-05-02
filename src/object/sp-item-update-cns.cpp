@@ -24,11 +24,8 @@ void sp_item_update_cns(SPItem &item, SPDesktop const &desktop)
     /* effic: It might be nice to avoid an n^2 algorithm, but in practice n will be
        small enough that it's still usually more efficient. */
 
-    for (std::vector<SPGuideConstraint>::const_iterator fi(found_cns.begin()),
-             fiEnd(found_cns.end());
-         fi != fiEnd; ++fi)
+    for (auto cn : found_cns)
     {
-        SPGuideConstraint const &cn = *fi;
         if ( std::find(item.constraints.begin(),
                   item.constraints.end(),
                   cn)

@@ -400,8 +400,8 @@ sp_lpe_item_create_original_path_recursive(SPLPEItem *lpeitem)
     SPClipPath *clip_path = SP_ITEM(lpeitem)->getClipObject();
     if(clip_path) {
         std::vector<SPObject*> clip_path_list = clip_path->childList(true);
-        for ( std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
-            SPLPEItem * clip_data = dynamic_cast<SPLPEItem *>(*iter);
+        for (auto iter : clip_path_list) {
+            SPLPEItem * clip_data = dynamic_cast<SPLPEItem *>(iter);
             sp_lpe_item_create_original_path_recursive(clip_data);
         }
     }
@@ -409,15 +409,14 @@ sp_lpe_item_create_original_path_recursive(SPLPEItem *lpeitem)
     SPMask *mask_path = SP_ITEM(lpeitem)->getMaskObject();
     if(mask_path) {
         std::vector<SPObject*> mask_path_list = mask_path->childList(true);
-        for ( std::vector<SPObject*>::const_iterator iter = mask_path_list.begin(); iter != mask_path_list.end();++iter) {
-            SPLPEItem * mask_data = dynamic_cast<SPLPEItem *>(*iter);
+        for (auto iter : mask_path_list) {
+            SPLPEItem * mask_data = dynamic_cast<SPLPEItem *>(iter);
             sp_lpe_item_create_original_path_recursive(mask_data);
         }
     }
     if (SP_IS_GROUP(lpeitem)) {
         std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(lpeitem));
-        for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
-            SPObject *subitem = *iter;
+        for (auto subitem : item_list) {
             if (SP_IS_LPE_ITEM(subitem)) {
                 sp_lpe_item_create_original_path_recursive(SP_LPE_ITEM(subitem));
             }
@@ -455,8 +454,8 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem, bool keep_paths,
     SPClipPath *clip_path = item->getClipObject();
     if(clip_path) {
         std::vector<SPObject*> clip_path_list = clip_path->childList(true);
-        for ( std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
-            SPLPEItem* clip_data = dynamic_cast<SPLPEItem*>(*iter);
+        for (auto iter : clip_path_list) {
+            SPLPEItem* clip_data = dynamic_cast<SPLPEItem*>(iter);
             if (clip_data) {
                 sp_lpe_item_cleanup_original_path_recursive(clip_data, keep_paths, lpeitem && !lpeitem->hasPathEffectRecursive(), true);
             }
@@ -466,8 +465,8 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem, bool keep_paths,
     SPMask *mask_path = item->getMaskObject();
     if(mask_path) {
         std::vector<SPObject*> mask_path_list = mask_path->childList(true);
-        for ( std::vector<SPObject*>::const_iterator iter = mask_path_list.begin(); iter != mask_path_list.end();++iter) {
-            SPLPEItem* mask_data = dynamic_cast<SPLPEItem*>(*iter);
+        for (auto iter : mask_path_list) {
+            SPLPEItem* mask_data = dynamic_cast<SPLPEItem*>(iter);
             if (mask_data) {
                 sp_lpe_item_cleanup_original_path_recursive(mask_data, keep_paths, lpeitem && !lpeitem->hasPathEffectRecursive(), true);
             }
@@ -476,8 +475,8 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem, bool keep_paths,
 
     if (group) {
         std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(lpeitem));
-        for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
-            SPLPEItem* subitem = dynamic_cast<SPLPEItem*>(*iter);
+        for (auto iter : item_list) {
+            SPLPEItem* subitem = dynamic_cast<SPLPEItem*>(iter);
             if (subitem) {
                 sp_lpe_item_cleanup_original_path_recursive(subitem, keep_paths);
             }
@@ -873,8 +872,8 @@ SPLPEItem::resetClipPathAndMaskLPE(bool fromrecurse)
         SPShape*   shape = dynamic_cast<SPShape  *>(this);
         if (group) {
             std::vector<SPItem*> item_list = sp_item_group_item_list(group);
-            for ( std::vector<SPItem*>::const_iterator iter2=item_list.begin();iter2!=item_list.end();++iter2) {
-                SPLPEItem * subitem = dynamic_cast<SPLPEItem *>(*iter2);
+            for (auto iter2 : item_list) {
+                SPLPEItem * subitem = dynamic_cast<SPLPEItem *>(iter2);
                 if (subitem) {
                     subitem->resetClipPathAndMaskLPE(true);
                 }
@@ -894,13 +893,13 @@ SPLPEItem::resetClipPathAndMaskLPE(bool fromrecurse)
     SPClipPath *clip_path = this->getClipObject();
     if(clip_path) {
         std::vector<SPObject*> clip_path_list = clip_path->childList(true);
-        for ( std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
-            SPGroup*   group = dynamic_cast<SPGroup  *>(*iter);
-            SPShape*   shape = dynamic_cast<SPShape  *>(*iter);
+        for (auto iter : clip_path_list) {
+            SPGroup*   group = dynamic_cast<SPGroup  *>(iter);
+            SPShape*   shape = dynamic_cast<SPShape  *>(iter);
             if (group) {
                 std::vector<SPItem*> item_list = sp_item_group_item_list(group);
-                for ( std::vector<SPItem*>::const_iterator iter2=item_list.begin();iter2!=item_list.end();++iter2) {
-                    SPLPEItem * subitem = dynamic_cast<SPLPEItem *>(*iter2);
+                for (auto iter2 : item_list) {
+                    SPLPEItem * subitem = dynamic_cast<SPLPEItem *>(iter2);
                     if (subitem) {
                         subitem->resetClipPathAndMaskLPE(true);
                     }
@@ -920,13 +919,13 @@ SPLPEItem::resetClipPathAndMaskLPE(bool fromrecurse)
     SPMask *mask = this->getMaskObject();
     if(mask) {
         std::vector<SPObject*> mask_list = mask->childList(true);
-        for ( std::vector<SPObject*>::const_iterator iter=mask_list.begin();iter!=mask_list.end();++iter) {
-            SPGroup*   group = dynamic_cast<SPGroup  *>(*iter);
-            SPShape*   shape = dynamic_cast<SPShape  *>(*iter);
+        for (auto iter : mask_list) {
+            SPGroup*   group = dynamic_cast<SPGroup  *>(iter);
+            SPShape*   shape = dynamic_cast<SPShape  *>(iter);
             if (group) {
                 std::vector<SPItem*> item_list = sp_item_group_item_list(group);
-                for ( std::vector<SPItem*>::const_iterator iter2=item_list.begin();iter2!=item_list.end();++iter2) {
-                    SPLPEItem * subitem = dynamic_cast<SPLPEItem *>(*iter2);
+                for (auto iter2 : item_list) {
+                    SPLPEItem * subitem = dynamic_cast<SPLPEItem *>(iter2);
                     if (subitem) {
                         subitem->resetClipPathAndMaskLPE(true);
                     }
@@ -954,8 +953,7 @@ SPLPEItem::applyToClipPath(SPItem* to, Inkscape::LivePathEffect::Effect *lpe)
     SPClipPath *clip_path = to->getClipObject();
     if(clip_path) {
         std::vector<SPObject*> clip_path_list = clip_path->childList(true);
-        for ( std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
-            SPObject * clip_data = *iter;
+        for (auto clip_data : clip_path_list) {
             applyToClipPathOrMask(SP_ITEM(clip_data), to, lpe);
         }
     }
@@ -970,8 +968,7 @@ SPLPEItem::applyToMask(SPItem* to, Inkscape::LivePathEffect::Effect *lpe)
     SPMask *mask = to->getMaskObject();
     if(mask) {
         std::vector<SPObject*> mask_list = mask->childList(true);
-        for ( std::vector<SPObject*>::const_iterator iter=mask_list.begin();iter!=mask_list.end();++iter) {
-            SPObject * mask_data = *iter;
+        for (auto mask_data : mask_list) {
             applyToClipPathOrMask(SP_ITEM(mask_data), to, lpe);
         }
     }
@@ -985,8 +982,7 @@ SPLPEItem::applyToClipPathOrMask(SPItem *clip_mask, SPItem* to, Inkscape::LivePa
     SPRoot *root = this->document->getRoot();
     if (group) {
         std::vector<SPItem*> item_list = sp_item_group_item_list(group);
-        for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
-            SPItem *subitem = *iter;
+        for (auto subitem : item_list) {
             applyToClipPathOrMask(subitem, to, lpe);
         }
     } else if (shape) {

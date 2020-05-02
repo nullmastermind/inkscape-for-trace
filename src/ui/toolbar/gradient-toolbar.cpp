@@ -87,8 +87,7 @@ void gr_apply_gradient(Inkscape::Selection *selection, GrDrag *drag, SPGradient 
     // First try selected dragger
     if (drag && !drag->selected.empty()) {
         GrDragger *dragger = *(drag->selected.begin());
-        for(std::vector<GrDraggable *>::const_iterator i = dragger->draggables.begin(); i != dragger->draggables.end(); ++i) { //for all draggables of dragger
-            GrDraggable *draggable =  *i;
+        for(auto draggable : dragger->draggables) { //for all draggables of dragger
             gr_apply_gradient_to_item(draggable->item, gr, initialType, initialMode, draggable->fill_or_stroke);
         }
         return;
@@ -114,10 +113,10 @@ int gr_vector_list(Glib::RefPtr<Gtk::ListStore> store, SPDesktop *desktop,
     SPDocument *document = desktop->getDocument();
     std::vector<SPObject *> gl;
     std::vector<SPObject *> gradients = document->getResourceList( "gradient" );
-    for (std::vector<SPObject *>::const_iterator it = gradients.begin(); it != gradients.end(); ++it) {
-        SPGradient *grad = SP_GRADIENT(*it);
+    for (auto gradient : gradients) {
+        SPGradient *grad = SP_GRADIENT(gradient);
         if ( grad->hasStops() && !grad->isSolid() ) {
-            gl.push_back(*it);
+            gl.push_back(gradient);
         }
     }
 
@@ -167,8 +166,8 @@ int gr_vector_list(Glib::RefPtr<Gtk::ListStore> store, SPDesktop *desktop,
         }
 
         int idx = 0;
-        for (std::vector<SPObject *>::const_iterator it = gl.begin(); it != gl.end(); ++it) {
-            SPGradient *gradient = SP_GRADIENT(*it);
+        for (auto it : gl) {
+            SPGradient *gradient = SP_GRADIENT(it);
 
             Glib::ustring label = gr_prepare_label(gradient);
             Glib::RefPtr<Gdk::Pixbuf> pixbuf = sp_gradient_to_pixbuf_ref(gradient, 64, 16);
@@ -243,8 +242,7 @@ void gr_read_selection( Inkscape::Selection *selection,
     if (drag && !drag->selected.empty()) {
         // GRADIENTFIXME: make this work for more than one selected dragger?
         GrDragger *dragger = *(drag->selected.begin());
-        for(std::vector<GrDraggable *>::const_iterator i = dragger->draggables.begin(); i != dragger->draggables.end(); ++i) { //for all draggables of dragger
-            GrDraggable *draggable = *i;
+        for(auto draggable : dragger->draggables) { //for all draggables of dragger
             SPGradient *gradient = sp_item_gradient_get_vector(draggable->item, draggable->fill_or_stroke);
             SPGradientSpread spread = sp_item_gradient_get_spread(draggable->item, draggable->fill_or_stroke);
 
