@@ -106,7 +106,7 @@ codequality:
   script:
     - git fetch https://gitlab.com/inkscape/inkscape.git
     - echo "Your commit does not comply exactly with the clang-format style checker.\nPlease review the following diff or apply it with\n \$ git apply <<EOF"
-    - git diff FETCH_HEAD -U0 --no-color | clang-format-diff-6.0 -p1 -style file | tee clang_format_diff
+    - git diff FETCH_HEAD -U0 --no-color | clang-format-diff -p1 -style file | tee clang_format_diff
     - echo "EOF"
     - if [[ -s clang_format_diff ]]; then false; fi
   allow_failure: true
