@@ -141,7 +141,6 @@ private:
 
     // Tab 1: Font ---------------------- //
     Gtk::VBox font_vbox;
-    Gtk::Label font_label;
 
     Inkscape::UI::Widget::FontSelector font_selector;
     Inkscape::UI::Widget::FontVariations font_variations;
@@ -149,7 +148,6 @@ private:
 
     // Tab 2: Text ---------------------- //
     Gtk::VBox text_vbox;
-    Gtk::Label text_label;
 
     Gtk::ScrolledWindow scroller;
     GtkWidget *text_view; // TODO - Convert this to a Gtk::TextView, but GtkSpell doesn't seem to work with it
@@ -158,7 +156,6 @@ private:
     // Tab 3: Features  ----------------- //
     Gtk::VBox feat_vbox;
     Inkscape::UI::Widget::FontVariants font_features;
-    Gtk::Label feat_label;
     Gtk::Label preview_label2; // Could reparent preview_label but having a second label is probably easier.
 
     // Shared ------- ------------------ //
