@@ -54,8 +54,7 @@ save_file $URL_PYTHON
 
 ### install compiler cache #####################################################
 
-install_source $URL_CCACHE
-configure_make_makeinstall
+jhbuild build ccache
 
 ################################################################################
 

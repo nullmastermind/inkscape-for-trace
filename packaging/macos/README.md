@@ -8,13 +8,15 @@ This folder contains the scripts that make up the build pipeline for Inkscape on
 
 ℹ️ _These tend to change as development progresses (as they already have a few times) and I won't deny that there's usually more than one way to do something, but I can only support what I use myself. So feel free to experiment and deviate, but know that __it is dangerous to go alone! Take this 🗡️.___
 
-- __A clean environment is key.__
+- A __clean environment__ is key.
   - Make sure there are no remnants from other build environments (e.g. MacPorts, Fink, Homebrew) on your system.
     - Rule of thumb: clear out `/usr/local`.
-  - Use macOS Mojave 10.14.6 with Xcode 11.3.1.
-  - Copy OS X El Capitan 10.11 SDK from Xcode 7.3.1 to `/Library/Developer/CommandLineTools/SDKs/MacOSX10.11.sdk`.
+  - Use a dedicated user account to avoid any interference with the environment (e.g. no custom settings in `.profile`, `.bashrc`, etc.).
 
-- __Use a dedicated user account__ to avoid any interference with the environment (e.g. no custom settings in `.profile`, `.bashrc`, etc.).
+- There are __version recommendations__.
+  - macOS Mojave 10.14.6
+  - Xcode 11.3.1
+  - OS X El Capitan 10.11 SDK from Xcode 7.3.1, default path `/Library/Developer/CommandLineTools/SDKs/MacOSX10.11.sdk`
 
 - A somewhat decent __internet connection__ for all the downloads.
 
@@ -62,7 +64,7 @@ This folder contains the scripts that make up the build pipeline for Inkscape on
    ./install_toolset.sh
    ```
 
-   You should know what that actually does:
+   This will
 
    - download a disk image (about 1.6 GiB) to `/Users/Shared/work/repo`
    - mount the disk image to `/Users/Shared/work/$TOOLSET_VERSION`
