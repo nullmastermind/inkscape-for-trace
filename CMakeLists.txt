@@ -131,6 +131,8 @@ option(WITH_ASAN "Compile with Clang's AddressSanitizer (for debugging purposes)
 
 option(WITH_FUZZ "Compile for fuzzing purpose (use 'make fuzz' only)" OFF)
 mark_as_advanced(WITH_FUZZ)
+option(WITH_MANPAGE_COMPRESSION "gzips manpages if gzip is available" ON)
+mark_as_advanced(WITH_MANPAGE_COMPRESSION)
 
 option(ENABLE_BINRELOC "Enable relocatable binaries" OFF)
 
