@@ -6,11 +6,6 @@
 
 export DEBIAN_FRONTEND=noninteractive
 
-# Backported pango (from 18.10) for variable font support
-add-apt-repository -y ppa:bryce/pango1.0
-apt-get update -yqq
-apt-get install -y libpango1.0-0 libpango1.0-dev
-
 ########################################################################
 # Build Inkscape and install to appdir/
 ########################################################################
