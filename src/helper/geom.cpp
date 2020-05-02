@@ -504,12 +504,12 @@ pathv_to_linear( Geom::PathVector const &pathv, double /*maxdisp*/)
     
     // Now all path segments are either already lines, or they are beziers.
 
-    for (Geom::PathVector::const_iterator pit = tmppath.begin(); pit != tmppath.end(); ++pit) {
+    for (const auto & pit : tmppath) {
         output.push_back( Geom::Path() );
-        output.back().start( pit->initialPoint() );
-        output.back().close( pit->closed() );
+        output.back().start( pit.initialPoint() );
+        output.back().close( pit.closed() );
 
-        for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_open(); ++cit) {
+        for (Geom::Path::const_iterator cit = pit.begin(); cit != pit.end_open(); ++cit) {
             if (is_straight_curve(*cit)) {
                 Geom::LineSegment ls(cit->initialPoint(), cit->finalPoint());
                 output.back().append(ls);

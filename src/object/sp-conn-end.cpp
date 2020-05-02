@@ -59,8 +59,7 @@ static bool try_get_intersect_point_with_item_recursive(Geom::PathVector& conn_p
         // consider all first-order children
         double child_pos = 0.0;
         std::vector<SPItem*> g = sp_item_group_item_list(group);
-        for (std::vector<SPItem*>::const_iterator i = g.begin();i!=g.end();++i) {
-            SPItem* child_item = *i;
+        for (auto child_item : g) {
             try_get_intersect_point_with_item_recursive(conn_pv, child_item,
                     item_transform * child_item->transform, child_pos);
             if (intersect_pos < child_pos)
@@ -84,9 +83,7 @@ static bool try_get_intersect_point_with_item_recursive(Geom::PathVector& conn_p
     // iterate over all Crossings
     //TODO: check correctness of the following code: inner loop uses loop variable
     //      with a name identical to the loop variable of the outer loop. Then rename.
-    for (Geom::CrossingSet::const_iterator i = cross.begin(); i != cross.end(); ++i) {
-        const Geom::Crossings& cr = *i;
-
+    for (const auto & cr : cross) {
         for (const auto & cr_pt : cr) {
             if ( intersect_pos < cr_pt.ta)
                 intersect_pos = cr_pt.ta;

@@ -464,8 +464,8 @@ void  Path::LoadPathVector(Geom::PathVector const &pv, Geom::Affine const &tr, b
     // (the fix is of course to fix 2geom and then remove this if-statement, and just execute the 'else'-clause)
     if (doTransformation) {
         Geom::PathVector pvbezier = pathv_to_linear_and_cubic_beziers(pv);
-        for(Geom::PathVector::const_iterator it = pvbezier.begin(); it != pvbezier.end(); ++it) {
-            LoadPath(*it, tr, doTransformation, true);
+        for(const auto & it : pvbezier) {
+            LoadPath(it, tr, doTransformation, true);
         }
     } else {
         for(const auto & it : pv) {
@@ -487,13 +487,13 @@ double Path::Length()
     Geom::Point lastP = pts[0].p;
 
     double len = 0;
-    for (std::vector<path_lineto>::const_iterator i = pts.begin(); i != pts.end(); ++i) {
+    for (const auto & pt : pts) {
 
-        if ( i->isMoveTo != polyline_moveto ) {
-            len += Geom::L2(i->p - lastP);
+        if ( pt.isMoveTo != polyline_moveto ) {
+            len += Geom::L2(pt.p - lastP);
         }
 
-        lastP = i->p;
+        lastP = pt.p;
     }
     
     return len;
@@ -510,14 +510,14 @@ double Path::Surface()
     Geom::Point lastP = lastM;
 
     double surf = 0;
-    for (std::vector<path_lineto>::const_iterator i = pts.begin(); i != pts.end(); ++i) {
+    for (const auto & pt : pts) {
 
-        if ( i->isMoveTo == polyline_moveto ) {
+        if ( pt.isMoveTo == polyline_moveto ) {
             surf += Geom::cross(lastM, lastM - lastP);
-            lastP = lastM = i->p;
+            lastP = lastM = pt.p;
         } else {
-            surf += Geom::cross(i->p, i->p - lastP);
-            lastP = i->p;
+            surf += Geom::cross(pt.p, pt.p - lastP);
+            lastP = pt.p;
         }
         
     }
@@ -905,25 +905,25 @@ Path::cut_position* Path::CurvilignToPosition(int nbCv, double *cvAbs, int &nbCu
     Geom::Point lastM = pts[0].p;
     Geom::Point lastP = lastM;
 
-    for (std::vector<path_lineto>::const_iterator i = pts.begin(); i != pts.end(); ++i) {
+    for (const auto & pt : pts) {
 
-        if ( i->isMoveTo == polyline_moveto ) {
+        if ( pt.isMoveTo == polyline_moveto ) {
 
-            lastP = lastM = i->p;
-            lastT = i->t;
-            lastPiece = i->piece;
+            lastP = lastM = pt.p;
+            lastT = pt.t;
+            lastPiece = pt.piece;
 
         } else {
             
-            double const add = Geom::L2(i->p - lastP);
+            double const add = Geom::L2(pt.p - lastP);
             double curPos = len;
             double curAdd = add;
             
             while ( curAdd > 0.0001 && curCv < nbCv && curPos + curAdd >= cvAbs[curCv] ) {
                 double const theta = (cvAbs[curCv] - len) / add;
                 res = (cut_position*) g_realloc(res, (nbCut + 1) * sizeof(cut_position));
-                res[nbCut].piece = i->piece;
-                res[nbCut].t = theta * i->t + (1 - theta) * ( (lastPiece != i->piece) ? 0 : lastT);
+                res[nbCut].piece = pt.piece;
+                res[nbCut].t = theta * pt.t + (1 - theta) * ( (lastPiece != pt.piece) ? 0 : lastT);
                 nbCut++;
                 curAdd -= cvAbs[curCv] - curPos;
                 curPos = cvAbs[curCv];
@@ -931,9 +931,9 @@ Path::cut_position* Path::CurvilignToPosition(int nbCv, double *cvAbs, int &nbCu
             }
             
             len += add;
-            lastPiece = i->piece;
-            lastP = i->p;
-            lastT = i->t;
+            lastPiece = pt.piece;
+            lastP = pt.p;
+            lastT = pt.t;
         }
     }
     

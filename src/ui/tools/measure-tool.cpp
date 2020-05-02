@@ -500,17 +500,17 @@ static void calculate_intersections(SPDesktop * /*desktop*/, SPItem* item, Geom:
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool show_hidden = prefs->getBool("/tools/measure/show_hidden", true);
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    for (Geom::Crossings::const_iterator m = cs[0].begin(); m != cs[0].end(); ++m) {
+    for (const auto & m : cs[0]) {
         if (!show_hidden) {
             double eps = 0.0001;
-            if (((*m).ta > eps &&
-             item == desktop->getItemAtPoint(desktop->d2w(desktop->dt2doc(lineseg[0].pointAt((*m).ta - eps))), true, nullptr)) ||
-            ((*m).ta + eps < 1 &&
-             item == desktop->getItemAtPoint(desktop->d2w(desktop->dt2doc(lineseg[0].pointAt((*m).ta + eps))), true, nullptr))) {
-                intersections.push_back((*m).ta);
+            if ((m.ta > eps &&
+             item == desktop->getItemAtPoint(desktop->d2w(desktop->dt2doc(lineseg[0].pointAt(m.ta - eps))), true, nullptr)) ||
+            (m.ta + eps < 1 &&
+             item == desktop->getItemAtPoint(desktop->d2w(desktop->dt2doc(lineseg[0].pointAt(m.ta + eps))), true, nullptr))) {
+                intersections.push_back(m.ta);
             }
         } else {
-            intersections.push_back((*m).ta);
+            intersections.push_back(m.ta);
         }
     }
 }
@@ -1277,9 +1277,9 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, bool to_phantom,
     }
     std::vector<double> intersection_times;
     bool only_selected = prefs->getBool("/tools/measure/only_selected", false);
-    for (std::vector<SPItem*>::const_iterator i=items.begin(); i!=items.end(); ++i) {
-        SPItem *item = *i;
-        if (!desktop->getSelection()->includes(*i) && only_selected) {
+    for (auto i : items) {
+        SPItem *item = i;
+        if (!desktop->getSelection()->includes(i) && only_selected) {
             continue;
         }
         if(all_layers || (layer_model && layer_model->layerForObject(item) == current_layer)){

@@ -1822,12 +1822,12 @@ unsigned int PrintEmf::draw_pathv_to_EMF(Geom::PathVector const &pathv, const Ge
     /**
      * For all Subpaths in the <path>
      */
-    for (Geom::PathVector::const_iterator pit = pv.begin(); pit != pv.end(); ++pit) {
+    for (const auto & pit : pv) {
         using Geom::X;
         using Geom::Y;
 
 
-        Geom::Point p0 = pit->initialPoint();
+        Geom::Point p0 = pit.initialPoint();
 
         p0[X] = (p0[X] * PX2WORLD);
         p0[Y] = (p0[Y] * PX2WORLD);
@@ -1841,7 +1841,7 @@ unsigned int PrintEmf::draw_pathv_to_EMF(Geom::PathVector const &pathv, const Ge
         /**
          * For all segments in the subpath
          */
-        for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_open(); ++cit) {
+        for (Geom::Path::const_iterator cit = pit.begin(); cit != pit.end_open(); ++cit) {
             if (is_straight_curve(*cit)) {
                 //Geom::Point p0 = cit->initialPoint();
                 Geom::Point p1 = cit->finalPoint();
@@ -1901,7 +1901,7 @@ unsigned int PrintEmf::draw_pathv_to_EMF(Geom::PathVector const &pathv, const Ge
             }
         }
 
-        if (pit->end_default() == pit->end_closed()) {  // there may be multiples of this on a single path
+        if (pit.end_default() == pit.end_closed()) {  // there may be multiples of this on a single path
             rec = U_EMRCLOSEFIGURE_set();
             if (!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)) {
                 g_error("Fatal programming error in PrintEmf::print_pathv at U_EMRCLOSEFIGURE_set");

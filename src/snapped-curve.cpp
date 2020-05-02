@@ -70,8 +70,8 @@ Inkscape::SnappedPoint Inkscape::SnappedCurve::intersect(SnappedCurve const &cur
         // There might be multiple intersections: find the closest
         Geom::Coord best_dist = Geom::infinity();
         Geom::Point best_p = Geom::Point(Geom::infinity(), Geom::infinity());
-        for (Geom::Crossings::const_iterator i = cs.begin(); i != cs.end(); ++i) {
-            Geom::Point p_ix = this->_curve->pointAt((*i).ta);
+        for (const auto & c : cs) {
+            Geom::Point p_ix = this->_curve->pointAt(c.ta);
             Geom::Coord dist = Geom::distance(p_ix, p);
 
             // Test if we have two segments (curves) from the same path..
@@ -79,8 +79,8 @@ Inkscape::SnappedPoint Inkscape::SnappedCurve::intersect(SnappedCurve const &cur
                 // Never try to intersect a segment with itself
                 if (this->_num_segm == curve._num_segm) continue;
                 // Two subsequent segments (curves) in a path will have a common node; this node is not considered to be an intersection
-                if (this->_num_segm == curve._num_segm + 1 && (*i).ta == 0 && (*i).tb == 1) continue;
-                if (this->_num_segm + 1 == curve._num_segm && (*i).ta == 1 && (*i).tb == 0) continue;
+                if (this->_num_segm == curve._num_segm + 1 && c.ta == 0 && c.tb == 1) continue;
+                if (this->_num_segm + 1 == curve._num_segm && c.ta == 1 && c.tb == 0) continue;
             }
 
             if (dist < best_dist) {
@@ -131,8 +131,8 @@ Inkscape::SnappedPoint Inkscape::SnappedCurve::intersect(SnappedLine const &line
         // There might be multiple intersections: find the closest
         Geom::Coord best_dist = Geom::infinity();
         Geom::Point best_p = Geom::Point(Geom::infinity(), Geom::infinity());
-        for (Geom::Crossings::const_iterator i = cs.begin(); i != cs.end(); ++i) {
-            Geom::Point p_ix = this->_curve->pointAt((*i).ta);
+        for (const auto & c : cs) {
+            Geom::Point p_ix = this->_curve->pointAt(c.ta);
             Geom::Coord dist = Geom::distance(p_ix, p);
 
             if (dist < best_dist) {

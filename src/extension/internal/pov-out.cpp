@@ -325,12 +325,12 @@ bool PovOutput::doCurve(SPItem *item, const String &id)
     /**
      * For all Subpaths in the <path>
      */
-    for (Geom::PathVector::const_iterator pit = pathv.begin(); pit != pathv.end(); ++pit)
+    for (const auto & pit : pathv)
     {
         /**
          * For all segments in the subpath, including extra closing segment defined by 2geom
          */
-        for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_closed(); ++cit)
+        for (Geom::Path::const_iterator cit = pit.begin(); cit != pit.end_closed(); ++cit)
         {
 
             // Skip zero length segments.
@@ -360,15 +360,15 @@ bool PovOutput::doCurve(SPItem *item, const String &id)
     /**
      * For all Subpaths in the <path>
      */
-    for (Geom::PathVector::const_iterator pit = pathv.begin(); pit != pathv.end(); ++pit)
+    for (const auto & pit : pathv)
         {
 
-        cminmax.expandTo(pit->initialPoint());
+        cminmax.expandTo(pit.initialPoint());
 
         /**
          * For all segments in the subpath, including extra closing segment defined by 2geom
          */
-        for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_closed(); ++cit)
+        for (Geom::Path::const_iterator cit = pit.begin(); cit != pit.end_closed(); ++cit)
             {
 
             // Skip zero length segments

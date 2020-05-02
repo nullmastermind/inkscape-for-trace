@@ -315,13 +315,13 @@ OriginalPathArrayParam::on_link_button_click()
     }
     bool foundOne = false;
     Inkscape::SVGOStringStream os;
-    for (std::vector<PathAndDirectionAndVisible*>::const_iterator iter = _vector.begin(); iter != _vector.end(); ++iter) {
+    for (auto iter : _vector) {
         if (foundOne) {
             os << "|";
         } else {
             foundOne = true;
         }
-        os << (*iter)->href << "," << ((*iter)->reversed ? "1" : "0") << "," << ((*iter)->visibled ? "1" : "0");
+        os << iter->href << "," << (iter->reversed ? "1" : "0") << "," << (iter->visibled ? "1" : "0");
     }
     for (auto pathid : pathsid) {
         // add '#' at start to make it an uri.

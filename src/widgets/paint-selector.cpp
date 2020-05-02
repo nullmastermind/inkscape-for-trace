@@ -807,10 +807,10 @@ ink_mesh_list_get (SPDocument *source)
 
 
     std::vector<SPObject *> meshes = source->getResourceList("gradient");
-    for (std::vector<SPObject *>::const_iterator it = meshes.begin(); it != meshes.end(); ++it) {
-        if (SP_IS_MESHGRADIENT(*it) &&
-            SP_GRADIENT(*it) == SP_GRADIENT(*it)->getArray()) {  // only if this is a root mesh
-            pl.push_back(SP_MESHGRADIENT(*it));
+    for (auto meshe : meshes) {
+        if (SP_IS_MESHGRADIENT(meshe) &&
+            SP_GRADIENT(meshe) == SP_GRADIENT(meshe)->getArray()) {  // only if this is a root mesh
+            pl.push_back(SP_MESHGRADIENT(meshe));
         }
     }
     return pl;
@@ -1146,9 +1146,9 @@ ink_pattern_list_get (SPDocument *source)
         return pl;
 
     std::vector<SPObject *> patterns = source->getResourceList("pattern");
-    for (std::vector<SPObject *>::const_iterator it = patterns.begin(); it != patterns.end(); ++it) {
-        if (SP_PATTERN(*it) == SP_PATTERN(*it)->rootPattern()) {  // only if this is a root pattern
-            pl.push_back(SP_PATTERN(*it));
+    for (auto pattern : patterns) {
+        if (SP_PATTERN(pattern) == SP_PATTERN(pattern)->rootPattern()) {  // only if this is a root pattern
+            pl.push_back(SP_PATTERN(pattern));
         }
     }
 

@@ -117,8 +117,7 @@ void fix_line_spacing(SPObject *o)
     SPILengthOrNormal lineheight = o->style->line_height;
     bool inner = false;
     std::vector<SPObject *> cl = o->childList(false);
-    for (std::vector<SPObject *>::const_iterator ci = cl.begin(); ci != cl.end(); ++ci) {
-        SPObject *i = *ci;
+    for (auto i : cl) {
         if ((SP_IS_TSPAN(i) && is_line(i)) || SP_IS_FLOWPARA(i) || SP_IS_FLOWDIV(i)) {
             // if no line-height attribute, set it
             gchar *l = g_strdup_printf("%f", lineheight.value);
@@ -139,8 +138,8 @@ void fix_line_spacing(SPObject *o)
 void fix_font_name(SPObject *o)
 {
     std::vector<SPObject *> cl = o->childList(false);
-    for (std::vector<SPObject *>::const_iterator ci = cl.begin(); ci != cl.end(); ++ci)
-        fix_font_name(*ci);
+    for (auto ci : cl)
+        fix_font_name(ci);
     std::string prev = o->style->font_family.value();
     if (prev == "Sans")
         o->style->font_family.read("sans-serif");
@@ -158,8 +157,7 @@ void fix_font_size(SPObject *o)
         return;
     bool inner = false;
     std::vector<SPObject *> cl = o->childList(false);
-    for (std::vector<SPObject *>::const_iterator ci = cl.begin(); ci != cl.end(); ++ci) {
-        SPObject *i = *ci;
+    for (auto i : cl) {
         fix_font_size(i);
         if ((SP_IS_TSPAN(i) && is_line(i)) || SP_IS_FLOWPARA(i) || SP_IS_FLOWDIV(i)) {
             inner = true;
@@ -182,8 +180,8 @@ void sp_file_text_run_recursive(void (*f)(SPObject *), SPObject *o)
         f(o);
     else {
         std::vector<SPObject *> cl = o->childList(false);
-        for (std::vector<SPObject *>::const_iterator ci = cl.begin(); ci != cl.end(); ++ci)
-            sp_file_text_run_recursive(f, *ci);
+        for (auto ci : cl)
+            sp_file_text_run_recursive(f, ci);
     }
 }
 
@@ -221,20 +219,20 @@ void _fix_pre_v1_empty_lines(SPObject *o)
     std::vector<SPObject *> cl = o->childList(false);
     bool begin = true;
     std::string cur_y = "";
-    for (std::vector<SPObject *>::const_iterator ci = cl.begin(); ci != cl.end(); ++ci) {
-        if (!SP_IS_TSPAN(*ci))
+    for (auto ci : cl) {
+        if (!SP_IS_TSPAN(ci))
             continue;
-        if (!is_line(*ci))
+        if (!is_line(ci))
             continue;
-        if (!(*ci)->childList(false).empty()) {
+        if (!ci->childList(false).empty()) {
             if (begin)
-                cur_y = (*ci)->getAttribute("y") ? (*ci)->getAttribute("y") : cur_y;
+                cur_y = ci->getAttribute("y") ? ci->getAttribute("y") : cur_y;
             begin = false;
         } else {
-            (*ci)->removeAttribute("style");
-            (*ci)->updateRepr();
+            ci->removeAttribute("style");
+            ci->updateRepr();
             if (begin) {
-                (*ci)->deleteObject();
+                ci->deleteObject();
             }
         }
         if (cur_y != "")
@@ -556,9 +554,8 @@ void sp_file_convert_dpi(SPDocument *doc)
                 }
             }
 
-            for (std::vector<Inkscape::CanvasGrid *>::const_iterator it = nv->grids.begin(); it != nv->grids.end();
-                 ++it) {
-                Inkscape::CanvasXYGrid *xy = dynamic_cast<Inkscape::CanvasXYGrid *>(*it);
+            for (auto grid : nv->grids) {
+                Inkscape::CanvasXYGrid *xy = dynamic_cast<Inkscape::CanvasXYGrid *>(grid);
                 if (xy) {
                     // std::cout << "A grid: " << xy->getSVGName() << std::endl;
                     // std::cout << "  Origin: " << xy->origin

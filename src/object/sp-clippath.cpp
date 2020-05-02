@@ -283,8 +283,7 @@ const gchar *SPClipPath::create (std::vector<Inkscape::XML::Node*> &reprs, SPDoc
     const gchar *id = repr->attribute("id");
     SPObject *clip_path_object = document->getObjectById(id);
 
-    for (std::vector<Inkscape::XML::Node*>::const_iterator it = reprs.begin(); it != reprs.end(); ++it) {
-        Inkscape::XML::Node *node = (*it);
+    for (auto node : reprs) {
         clip_path_object->appendChildRepr(node);
     }
 

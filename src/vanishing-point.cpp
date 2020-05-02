@@ -510,8 +510,8 @@ VPDrag::~VPDrag()
     this->sel_changed_connection.disconnect();
     this->sel_modified_connection.disconnect();
 
-    for (std::vector<VPDragger *>::const_iterator i = this->draggers.begin(); i != this->draggers.end(); ++i) {
-        delete (*i);
+    for (auto dragger : this->draggers) {
+        delete dragger;
     }
     this->draggers.clear();
 
@@ -526,8 +526,7 @@ VPDrag::~VPDrag()
  */
 VPDragger *VPDrag::getDraggerFor(VanishingPoint const &vp)
 {
-    for (std::vector<VPDragger *>::const_iterator i = this->draggers.begin(); i != this->draggers.end(); ++i) {
-        VPDragger *dragger = *i;
+    for (auto dragger : this->draggers) {
         for (std::list<VanishingPoint>::iterator j = dragger->vps.begin(); j != dragger->vps.end(); ++j) {
             // TODO: Should we compare the pointers or the VPs themselves!?!?!?!
             if (*j == vp) {
@@ -541,8 +540,8 @@ VPDragger *VPDrag::getDraggerFor(VanishingPoint const &vp)
 void VPDrag::printDraggers()
 {
     g_print("=== VPDrag info: =================================\n");
-    for (std::vector<VPDragger *>::const_iterator i = this->draggers.begin(); i != this->draggers.end(); ++i) {
-        (*i)->printVPs();
+    for (auto dragger : this->draggers) {
+        dragger->printVPs();
         g_print("========\n");
     }
     g_print("=================================================\n");
@@ -556,8 +555,8 @@ void VPDrag::updateDraggers()
     if (this->dragging)
         return;
     // delete old draggers
-    for (std::vector<VPDragger *>::const_iterator i = this->draggers.begin(); i != this->draggers.end(); ++i) {
-        delete (*i);
+    for (auto dragger : this->draggers) {
+        delete dragger;
     }
     this->draggers.clear();
 
@@ -630,8 +629,7 @@ void VPDrag::updateBoxHandles()
 
 void VPDrag::updateBoxReprs()
 {
-    for (std::vector<VPDragger *>::const_iterator i = this->draggers.begin(); i != this->draggers.end(); ++i) {
-        VPDragger *dragger = *i;
+    for (auto dragger : this->draggers) {
         for (auto & vp : dragger->vps) {
             vp.updateBoxReprs();
         }
@@ -640,8 +638,7 @@ void VPDrag::updateBoxReprs()
 
 void VPDrag::updateBoxDisplays()
 {
-    for (std::vector<VPDragger *>::const_iterator i = this->draggers.begin(); i != this->draggers.end(); ++i) {
-        VPDragger *dragger = *i;
+    for (auto dragger : this->draggers) {
         for (auto & vp : dragger->vps) {
             vp.updateBoxDisplays();
         }
@@ -730,8 +727,7 @@ void VPDrag::addDragger(VanishingPoint &vp)
     }
     Geom::Point p = vp.get_pos();
 
-    for (std::vector<VPDragger *>::const_iterator i = this->draggers.begin(); i != this->draggers.end(); ++i) {
-        VPDragger *dragger = *i;
+    for (auto dragger : this->draggers) {
         if (Geom::L2(dragger->point - p) < MERGE_DIST) {
             // distance is small, merge this draggable into dragger, no need to create new dragger
             dragger->addVP(vp);
@@ -747,8 +743,8 @@ void VPDrag::addDragger(VanishingPoint &vp)
 void VPDrag::swap_perspectives_of_VPs(Persp3D *persp2, Persp3D *persp1)
 {
     // iterate over all VP in all draggers and replace persp2 with persp1
-    for (std::vector<VPDragger *>::const_iterator i = this->draggers.begin(); i != this->draggers.end(); ++i) {
-        for (auto & vp : (*i)->vps) {
+    for (auto dragger : this->draggers) {
+        for (auto & vp : dragger->vps) {
             if (vp.get_perspective() == persp2) {
                 vp.set_perspective(persp1);
             }

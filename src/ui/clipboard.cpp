@@ -753,8 +753,8 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
     }
 
     sorted_items.insert(sorted_items.end(),cloned_elements.begin(),cloned_elements.end());
-    for(std::vector<SPObject*>::const_iterator i=sorted_items.begin();i!=sorted_items.end();++i){
-        SPItem *item = dynamic_cast<SPItem*>(*i);
+    for(auto sorted_item : sorted_items){
+        SPItem *item = dynamic_cast<SPItem*>(sorted_item);
         if (item) {
             Inkscape::XML::Node *obj = item->getRepr();
             Inkscape::XML::Node *obj_copy;

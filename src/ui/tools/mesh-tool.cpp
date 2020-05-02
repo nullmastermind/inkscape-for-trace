@@ -318,9 +318,7 @@ sp_mesh_context_corner_operation (MeshTool *rc, MeshCornerOperation operation )
     // For all selected draggers (a dragger may include draggerables from different meshes).
     for (auto dragger : drag->selected) {
         // For all draggables of dragger (a draggable corresponds to a unique mesh).
-        for (std::vector<GrDraggable *>::const_iterator j = dragger->draggables.begin(); j != dragger->draggables.end() ; ++j) { 
-            GrDraggable *d = *j;
-
+        for (auto d : dragger->draggables) { 
             // Only mesh corners
             if( d->point_type != POINT_MG_CORNER ) continue;
 
@@ -569,13 +567,12 @@ bool MeshTool::root_handler(GdkEvent* event) {
                 sp_mesh_context_over_line(this, Geom::Point(event->motion.x, event->motion.y), false);
 
             if (!over_line.empty()) {
-                for (std::vector<SPCtrlCurve *>::const_iterator it = over_line.begin();
-                     it != over_line.end(); ++it ) {
-                    SPItem *item = (*it)->item;
+                for (auto it : over_line) {
+                    SPItem *item = it->item;
                     Inkscape::PaintTarget fill_or_stroke =
-                        (*it)->is_fill ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE;
-                    GrDragger* dragger0 = drag->getDraggerFor(item, POINT_MG_CORNER, (*it)->corner0, fill_or_stroke);
-                    GrDragger* dragger1 = drag->getDraggerFor(item, POINT_MG_CORNER, (*it)->corner1, fill_or_stroke);
+                        it->is_fill ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE;
+                    GrDragger* dragger0 = drag->getDraggerFor(item, POINT_MG_CORNER, it->corner0, fill_or_stroke);
+                    GrDragger* dragger1 = drag->getDraggerFor(item, POINT_MG_CORNER, it->corner1, fill_or_stroke);
                     bool add    = (event->button.state & GDK_SHIFT_MASK);
                     bool toggle = (event->button.state & GDK_CONTROL_MASK);
                     if ( !add && !toggle ) {

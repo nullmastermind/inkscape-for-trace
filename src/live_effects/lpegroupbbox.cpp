@@ -45,8 +45,8 @@ GroupBBoxEffect::clip_mask_bbox(SPLPEItem *item, Geom::Affine transform)
     SPGroup * group = dynamic_cast<SPGroup *>(item);
     if (group) {
         std::vector<SPItem*> item_list = sp_item_group_item_list(group);
-        for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
-            SPLPEItem * subitem = dynamic_cast<SPLPEItem *>(*iter);
+        for (auto iter : item_list) {
+            SPLPEItem * subitem = dynamic_cast<SPLPEItem *>(iter);
             if (subitem) {
                 bbox.unionWith(clip_mask_bbox(subitem, affine));
             }

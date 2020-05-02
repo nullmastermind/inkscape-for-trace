@@ -330,8 +330,7 @@ ConnectorToolbar::spacing_changed()
 
     std::vector<SPItem *> items;
     items = get_avoided_items(items, _desktop->currentRoot(), _desktop);
-    for (std::vector<SPItem *>::const_iterator iter = items.begin(); iter != items.end(); ++iter ) {
-        SPItem *item = *iter;
+    for (auto item : items) {
         Geom::Affine m = Geom::identity();
         avoid_item_move(&m, item);
         modmade = true;

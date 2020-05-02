@@ -1791,8 +1791,8 @@ bool SPDesktopWidget::onFocusInEvent(GdkEventFocus*)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (prefs->getBool("/options/bitmapautoreload/value", true)) {
         std::vector<SPObject *> imageList = (desktop->doc())->getResourceList("image");
-        for (std::vector<SPObject *>::const_iterator it = imageList.begin(); it != imageList.end(); ++it) {
-            SPImage* image = SP_IMAGE(*it);
+        for (auto it : imageList) {
+            SPImage* image = SP_IMAGE(it);
             image->refresh_if_outdated();
         }
     }

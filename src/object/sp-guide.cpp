@@ -56,8 +56,8 @@ void SPGuide::setColor(guint32 c)
 {
     color = c;
 
-    for(std::vector<SPGuideLine *>::const_iterator it = this->views.begin(); it != this->views.end(); ++it) {
-        sp_guideline_set_color(*it, this->color);
+    for(auto view : this->views) {
+        sp_guideline_set_color(view, this->color);
     }
 }
 
@@ -77,8 +77,8 @@ void SPGuide::build(SPDocument *document, Inkscape::XML::Node *repr)
 
 void SPGuide::release()
 {
-    for(std::vector<SPGuideLine *>::const_iterator it = this->views.begin(); it != this->views.end(); ++it) {
-        sp_guideline_delete(*it);
+    for(auto view : this->views) {
+        sp_guideline_delete(view);
     }
     this->views.clear();
 
@@ -376,8 +376,8 @@ void SPGuide::moveto(Geom::Point const point_on_line, bool const commit)
     if(this->locked) {
         return;
     }
-    for(std::vector<SPGuideLine *>::const_iterator it = this->views.begin(); it != this->views.end(); ++it) {
-        sp_guideline_set_position(*it, point_on_line);
+    for(auto view : this->views) {
+        sp_guideline_set_position(view, point_on_line);
     }
 
     /* Calling sp_repr_set_point must precede calling sp_item_notify_moveto in the commit
@@ -430,8 +430,8 @@ void SPGuide::set_normal(Geom::Point const normal_to_line, bool const commit)
     if(this->locked) {
         return;
     }
-    for(std::vector<SPGuideLine *>::const_iterator it = this->views.begin(); it != this->views.end(); ++it) {
-        sp_guideline_set_normal(*it, normal_to_line);
+    for(auto view : this->views) {
+        sp_guideline_set_normal(view, normal_to_line);
     }
 
     /* Calling sp_repr_set_svg_point must precede calling sp_item_notify_moveto in the commit

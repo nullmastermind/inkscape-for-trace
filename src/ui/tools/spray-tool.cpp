@@ -463,8 +463,7 @@ static guint32 getPickerData(Geom::IntRect area, SPDesktop *desktop)
 }
 
 static void showHidden(std::vector<SPItem *> items_down){
-    for (std::vector<SPItem *>::const_iterator k=items_down.begin(); k!=items_down.end(); ++k) {
-        SPItem *item_hidden = *k;
+    for (auto item_hidden : items_down) {
         item_hidden->setHidden(false);
         item_hidden->updateRepr();
     }

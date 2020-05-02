@@ -1013,11 +1013,11 @@ void SPItem::getSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscap
                     // Please note the recursive call here!
                     item->getSnappoints(p_clip_or_mask, snapprefs);
                     // Take into account the transformation of the item being clipped or masked
-                    for (std::vector<Inkscape::SnapCandidatePoint>::const_iterator p_orig = p_clip_or_mask.begin(); p_orig != p_clip_or_mask.end(); ++p_orig) {
+                    for (const auto & p_orig : p_clip_or_mask) {
                         // All snappoints are in desktop coordinates, but the item's transformation is
                         // in document coordinates. Hence the awkward construction below
-                        Geom::Point pt = desktop->dt2doc((*p_orig).getPoint()) * i2dt_affine();
-                        p.emplace_back(pt, (*p_orig).getSourceType(), (*p_orig).getTargetType());
+                        Geom::Point pt = desktop->dt2doc(p_orig.getPoint()) * i2dt_affine();
+                        p.emplace_back(pt, p_orig.getSourceType(), p_orig.getTargetType());
                     }
                 }
             }

@@ -315,8 +315,7 @@ sp_gradient_context_add_stops_between_selected_stops (GradientTool *rc)
     if (these_stops.empty() && drag->numSelected() == 1) {
         // if a single stop is selected, add between that stop and the next one
         GrDragger *dragger = *(drag->selected.begin());
-        for (std::vector<GrDraggable *>::const_iterator j = dragger->draggables.begin(); j != dragger->draggables.end(); ++j) {
-            GrDraggable *d = *j;
+        for (auto d : dragger->draggables) {
             if (d->point_type == POINT_RG_FOCUS) {
                 /*
                  *  There are 2 draggables at the center (start) of a radial gradient
@@ -576,8 +575,8 @@ bool GradientTool::root_handler(GdkEvent* event) {
             bool over_line = false;
 
             if (!drag->lines.empty()) {
-                for (std::vector<SPCtrlLine *>::const_iterator l = drag->lines.begin(); l != drag->lines.end(); ++l) {
-                    over_line |= sp_gradient_context_is_over_line (this, (SPItem*) (*l), Geom::Point(event->motion.x, event->motion.y));
+                for (auto line : drag->lines) {
+                    over_line |= sp_gradient_context_is_over_line (this, (SPItem*) line, Geom::Point(event->motion.x, event->motion.y));
                 }
             }
 

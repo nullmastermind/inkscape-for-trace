@@ -345,9 +345,9 @@ void SvgFontsDialog::update_fonts()
     std::vector<SPObject *> fonts = document->getResourceList( "font" );
 
     _model->clear();
-    for (std::vector<SPObject *>::const_iterator it = fonts.begin(); it != fonts.end(); ++it) {
+    for (auto font : fonts) {
         Gtk::TreeModel::Row row = *_model->append();
-        SPFont* f = SP_FONT(*it);
+        SPFont* f = SP_FONT(font);
         row[_columns.spfont] = f;
         row[_columns.svgfont] = new SvgFont(f);
         const gchar* lbl = f->label();

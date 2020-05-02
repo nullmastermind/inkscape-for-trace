@@ -205,10 +205,8 @@ std::string SPColor::toString() const
             css << " ";
         }
         css << "icc-color(" << icc->colorProfile;
-        for (std::vector<double>::const_iterator i(icc->colors.begin()),
-                 iEnd(icc->colors.end());
-             i != iEnd; ++i) {
-            css << ", " << *i;
+        for (double color : icc->colors) {
+            css << ", " << color;
         }
         css << ')';
     }

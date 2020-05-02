@@ -146,9 +146,7 @@ static int gr_drag_style_query(SPStyle *style, int property, gpointer data)
 
         int count = 0;
         for(auto d : drag->selected) { //for all selected draggers
-            for(std::vector<GrDraggable *>::const_iterator it2 = d->draggables.begin(); it2 != d->draggables.end(); ++it2 ) { //for all draggables of dragger
-                GrDraggable *draggable = *it2;
-
+            for(auto draggable : d->draggables) { //for all draggables of dragger
                 if (ret == QUERY_STYLE_NOTHING) {
                     ret = QUERY_STYLE_SINGLE;
                 } else if (ret == QUERY_STYLE_SINGLE) {
@@ -202,8 +200,8 @@ Glib::ustring GrDrag::makeStopSafeColor( gchar const *str, bool &isNull )
         if ( pos != Glib::ustring::npos ) {
             Glib::ustring targetName = colorStr.substr(pos + 5, colorStr.length() - 6);
             std::vector<SPObject *> gradients = desktop->doc()->getResourceList("gradient");
-            for (std::vector<SPObject *>::const_iterator it = gradients.begin(); it != gradients.end(); ++it) {
-                SPGradient* grad = SP_GRADIENT(*it);
+            for (auto gradient : gradients) {
+                SPGradient* grad = SP_GRADIENT(gradient);
                 if ( targetName == grad->getId() ) {
                     SPGradient *vect = grad->getVector();
                     SPStop *firstStop = (vect) ? vect->getFirstStop() : grad->getFirstStop();
@@ -295,8 +293,7 @@ bool GrDrag::styleSet( const SPCSSAttr *css )
     }
 
     for(auto d : selected) { //for all selected draggers
-        for(std::vector<GrDraggable *>::const_iterator it2 = d->draggables.begin(); it2 != d->draggables.end(); ++it2 ) { //for all draggables of dragger
-            GrDraggable *draggable = *it2; 
+        for(auto draggable : d->draggables) { //for all draggables of dragger
             local_change = true;
             sp_item_gradient_stop_set_style(draggable->item, draggable->point_type, draggable->point_i, draggable->fill_or_stroke, stop);
         }
@@ -317,9 +314,7 @@ guint32 GrDrag::getColor()
     int count = 0;
 
     for(auto d : selected) { //for all selected draggers
-        for(std::vector<GrDraggable *>::const_iterator it2 = d->draggables.begin(); it2 != d->draggables.end(); ++it2 ) { //for all draggables of dragger
-            GrDraggable *draggable = *it2; 
-
+        for(auto draggable : d->draggables) { //for all draggables of dragger
             guint32 c = sp_item_gradient_stop_query_style (draggable->item, draggable->point_type, draggable->point_i, draggable->fill_or_stroke);
             cf[0] += SP_RGBA32_R_F (c);
             cf[1] += SP_RGBA32_G_F (c);
@@ -564,15 +559,12 @@ bool GrDrag::dropColor(SPItem */*item*/, gchar const *c, Geom::Point p)
     Glib::ustring toUse = makeStopSafeColor( c, stopIsNull );
 
     // first, see if we can drop onto one of the existing draggers
-    for(std::vector<GrDragger *>::const_iterator i = draggers.begin(); i != draggers.end(); ++i) { //for all draggers
-        GrDragger *d = *i ;
-
+    for(auto d : draggers) { //for all draggers
         if (Geom::L2(p - d->point)*desktop->current_zoom() < 5) {
            SPCSSAttr *stop = sp_repr_css_attr_new ();
            sp_repr_css_set_property( stop, "stop-color", stopIsNull ? nullptr : toUse.c_str() );
            sp_repr_css_set_property( stop, "stop-opacity", "1" );
-           for(std::vector<GrDraggable *>::const_iterator j = d->draggables.begin(); j != d->draggables.end(); ++j) { //for all draggables of dragger
-               GrDraggable *draggable = *j;
+           for(auto draggable : d->draggables) { //for all draggables of dragger
                local_change = true;
                sp_item_gradient_stop_set_style (draggable->item, draggable->point_type, draggable->point_i, draggable->fill_or_stroke, stop);
            }
@@ -673,8 +665,8 @@ GrDrag::~GrDrag()
     }
 
     deselect_all();
-    for (std::vector<GrDragger *>::const_iterator it = this->draggers.begin(); it != this->draggers.end(); ++it) {
-        delete (*it);
+    for (auto dragger : this->draggers) {
+        delete dragger;
     }
     this->draggers.clear();
     this->selected.clear();
@@ -768,8 +760,7 @@ static void gr_knot_moved_handler(SPKnot *knot, Geom::Point const &ppointer, gui
             if (dragger->mayMerge(d_new) && Geom::L2 (d_new->point - p) < snap_dist) {
 
                 // Merge draggers:
-                for (std::vector<GrDraggable *>::const_iterator i = dragger->draggables.begin(); i != dragger->draggables.end(); ++i) {
-                    GrDraggable *draggable = *i; 
+                for (auto draggable : dragger->draggables) {
                     // copy draggable to d_new:
                     GrDraggable *da_new = new GrDraggable (draggable->item, draggable->point_type, draggable->point_i, draggable->fill_or_stroke);
                     d_new->addDraggable (da_new);
@@ -1029,8 +1020,7 @@ static void gr_knot_moved_midpoint_handler(SPKnot */*knot*/, Geom::Point const &
     }
     Geom::Point displacement = p - dragger->point;
 
-    for (std::vector<GrDragger *>::const_iterator i = moving.begin(); i!= moving.end(); ++i ) {
-        GrDragger *drg = *i;
+    for (auto drg : moving) {
         SPKnot *drgknot = drg->knot;
         Geom::Point this_move = displacement;
         if (state & GDK_MOD1_MASK) {
@@ -1061,8 +1051,7 @@ static void gr_knot_mousedown_handler(SPKnot */*knot*/, unsigned int /*state*/, 
     GrDrag *drag = dragger->parent;
 
     // Turn off all mesh handle highlighting
-    for(std::vector<GrDragger *>::const_iterator it = drag->draggers.begin(); it != drag->draggers.end(); ++it) { //for all selected draggers
-        GrDragger *d = *it;
+    for(auto d : drag->draggers) { //for all selected draggers
         d->highlightCorner(false);
     }
 
@@ -1206,9 +1195,7 @@ static void gr_knot_doubleclicked_handler(SPKnot */*knot*/, guint /*state*/, gpo
  */
 void GrDragger::fireDraggables(bool write_repr, bool scale_radial, bool merging_focus)
 {
-    for (std::vector<GrDraggable *>::const_iterator i = this->draggables.begin(); i != this->draggables.end(); ++i) {
-        GrDraggable *draggable = *i;
-
+    for (auto draggable : this->draggables) {
         // set local_change flag so that selection_changed callback does not regenerate draggers
         this->parent->local_change = true;
 
@@ -1251,8 +1238,7 @@ void GrDragger::updateControlSizes()
  */
 bool GrDragger::isA(GrPointType point_type)
 {
-    for (std::vector<GrDraggable *>::const_iterator i = this->draggables.begin(); i != this->draggables.end(); ++i) {
-        GrDraggable *draggable = *i; 
+    for (auto draggable : this->draggables) {
         if (draggable->point_type == point_type) {
             return true;
         }
@@ -1265,8 +1251,7 @@ bool GrDragger::isA(GrPointType point_type)
  */
 bool GrDragger::isA(SPItem *item, GrPointType point_type, gint point_i, Inkscape::PaintTarget fill_or_stroke)
 {
-    for (std::vector<GrDraggable *>::const_iterator i = this->draggables.begin(); i != this->draggables.end(); ++i) {
-        GrDraggable *draggable = *i; 
+    for (auto draggable : this->draggables) {
         if ( (draggable->point_type == point_type) && (draggable->point_i == point_i) && (draggable->item == item) && (draggable->fill_or_stroke == fill_or_stroke) ) {
             return true;
         }
@@ -1279,8 +1264,7 @@ bool GrDragger::isA(SPItem *item, GrPointType point_type, gint point_i, Inkscape
  */
 bool GrDragger::isA(SPItem *item, GrPointType point_type, Inkscape::PaintTarget fill_or_stroke)
 {
-    for (std::vector<GrDraggable *>::const_iterator i = this->draggables.begin(); i != this->draggables.end(); ++i) {
-        GrDraggable *draggable = *i; 
+    for (auto draggable : this->draggables) {
         if ( (draggable->point_type == point_type) && (draggable->item == item) && (draggable->fill_or_stroke == fill_or_stroke) ) {
             return true;
         }
@@ -1312,10 +1296,8 @@ bool GrDragger::mayMerge(GrDragger *other)
     if (this == other)
         return false;
 
-    for (std::vector<GrDraggable *>::const_iterator i = this->draggables.begin(); i != this->draggables.end(); ++i) {
-        GrDraggable *da1 = *i; 
-        for (std::vector<GrDraggable *>::const_iterator j = other->draggables.begin(); j != other->draggables.end(); ++j) {
-            GrDraggable *da2 = *j; 
+    for (auto da1 : this->draggables) {
+        for (auto da2 : other->draggables) {
             if (!da1->mayMerge(da2))
                 return false;
         }
@@ -1325,8 +1307,7 @@ bool GrDragger::mayMerge(GrDragger *other)
 
 bool GrDragger::mayMerge(GrDraggable *da2)
 {
-    for (std::vector<GrDraggable *>::const_iterator i = this->draggables.begin(); i != this->draggables.end(); ++i) {
-        GrDraggable *da1 = *i; 
+    for (auto da1 : this->draggables) {
         if (!da1->mayMerge(da2))
             return false;
     }
@@ -1392,9 +1373,7 @@ GrDragger::moveMeshHandles ( Geom::Point pc_old,  MeshNodeOperation op )
 
     // Loop over all draggables in moved corner
     std::map<SPGradient*, std::vector<guint> > dragger_corners;
-    for (std::vector<GrDraggable *>::const_iterator j = draggables.begin(); j != draggables.end(); ++j ) {
-        GrDraggable *draggable = *j; 
-
+    for (auto draggable : draggables) {
         SPItem *item           = draggable->item;
         gint    point_type     = draggable->point_type;
         gint    point_i        = draggable->point_i;
@@ -1540,8 +1519,7 @@ void GrDragger::moveThisToDraggable(SPItem *item, GrPointType point_type, gint p
 
     this->knot->moveto(this->point);
 
-    for (std::vector<GrDraggable *>::const_iterator j = draggables.begin(); j != draggables.end(); ++j ) {
-        GrDraggable *da = *j; 
+    for (auto da : draggables) {
         if ( (da->item == item) &&
              (da->point_type == point_type) &&
              (point_i == -1 || da->point_i == point_i) &&
@@ -1584,8 +1562,7 @@ void GrDragger::updateMidstopDependencies(GrDraggable *draggable, bool write_rep
  */
 void GrDragger::updateDependencies(bool write_repr)
 {
-    for (std::vector<GrDraggable *>::const_iterator j = draggables.begin(); j != draggables.end(); ++j ) {
-        GrDraggable *draggable = *j; 
+    for (auto draggable : draggables) {
         switch (draggable->point_type) {
             case POINT_LG_BEGIN:
                 {
@@ -1709,8 +1686,8 @@ GrDragger::~GrDragger()
     knot_unref(this->knot);
 
     // delete all draggables
-    for (std::vector<GrDraggable *>::const_iterator j = this->draggables.begin(); j != this->draggables.end(); ++j ) {
-        delete (*j);
+    for (auto draggable : this->draggables) {
+        delete draggable;
     }
     this->draggables.clear();
 }
@@ -1719,8 +1696,7 @@ GrDragger::~GrDragger()
  * Select the dragger which has the given draggable.
  */
 GrDragger *GrDrag::getDraggerFor(GrDraggable *d) {
-    for (std::vector<GrDragger *>::const_iterator i = this->draggers.begin(); i != this->draggers.end(); ++i ) {
-        GrDragger *dragger = *i;
+    for (auto dragger : this->draggers) {
         for (std::vector<GrDraggable *>::const_iterator j = dragger->draggables.begin(); j != dragger->draggables.end(); ++j ) {
             if (d == *j) {
                 return dragger;
@@ -1735,8 +1711,7 @@ GrDragger *GrDrag::getDraggerFor(GrDraggable *d) {
  */
 GrDragger *GrDrag::getDraggerFor(SPItem *item, GrPointType point_type, gint point_i, Inkscape::PaintTarget fill_or_stroke)
 {
-    for (std::vector<GrDragger *>::const_iterator i = this->draggers.begin(); i != this->draggers.end(); ++i ) {
-        GrDragger *dragger = *i;
+    for (auto dragger : this->draggers) {
         for (std::vector<GrDraggable *>::const_iterator j = dragger->draggables.begin(); j != dragger->draggables.end(); ++j ) {
             GrDraggable *da2 = *j; 
             if ( (da2->item == item) &&
@@ -1963,8 +1938,7 @@ void GrDrag::deselectAll()
  */
 void GrDrag::selectAll()
 {
-    for (std::vector<GrDragger *>::const_iterator l = this->draggers.begin(); l != this->draggers.end(); ++l) {
-        GrDragger *d = *l; 
+    for (auto d : this->draggers) {
         setSelected (d, true, true);
     }
 }
@@ -1974,8 +1948,7 @@ void GrDrag::selectAll()
  */
 void GrDrag::selectByCoords(std::vector<Geom::Point> coords)
 {
-    for (std::vector<GrDragger *>::const_iterator l = this->draggers.begin(); l != this->draggers.end(); ++l) {
-        GrDragger *d = *l; 
+    for (auto d : this->draggers) {
         for (auto coord : coords) {
             if (Geom::L2 (d->point - coord) < 1e-4) {
                 setSelected (d, true, true);
@@ -1989,9 +1962,8 @@ void GrDrag::selectByCoords(std::vector<Geom::Point> coords)
  */
 void GrDrag::selectByStop(SPStop *stop, bool add_to_selection, bool override )
 {
-    for (std::vector<GrDragger *>::const_iterator l = this->draggers.begin(); l != this->draggers.end(); ++l) {
+    for (auto dragger : this->draggers) {
 
-        GrDragger *dragger = *l; 
         for (std::vector<GrDraggable *>::const_iterator j = dragger->draggables.begin(); j != dragger->draggables.end(); ++j) {
 
             GrDraggable *d = *j;
@@ -2010,8 +1982,7 @@ void GrDrag::selectByStop(SPStop *stop, bool add_to_selection, bool override )
  */
 void GrDrag::selectRect(Geom::Rect const &r)
 {
-    for (std::vector<GrDragger *>::const_iterator l = this->draggers.begin(); l != this->draggers.end(); ++l) {
-        GrDragger *d = *l;
+    for (auto d : this->draggers) {
         if (r.contains(d->point)) {
            setSelected (d, true, true);
         }
@@ -2141,8 +2112,7 @@ GrDragger* GrDrag::addDragger(GrDraggable *draggable)
 {
     Geom::Point p = getGradientCoords(draggable->item, draggable->point_type, draggable->point_i, draggable->fill_or_stroke);
 
-    for (std::vector<GrDragger *>::const_iterator l = this->draggers.begin(); l != this->draggers.end(); ++l) {
-        GrDragger *dragger = *l;
+    for (auto dragger : this->draggers) {
         if (dragger->mayMerge (draggable) && Geom::L2 (dragger->point - p) < MERGE_DIST) {
             // distance is small, merge this draggable into dragger, no need to create new dragger
             dragger->addDraggable (draggable);
@@ -2393,8 +2363,8 @@ void GrDrag::updateDraggers()
 {
     selected.clear();
     // delete old draggers
-    for (std::vector<GrDragger *>::const_iterator l = this->draggers.begin(); l != this->draggers.end(); ++l) {
-        delete (*l);
+    for (auto dragger : this->draggers) {
+        delete dragger;
     }
     this->draggers.clear();
 
@@ -2481,8 +2451,7 @@ bool GrDrag::mouseOver()
 {
     static bool mouse_out = false;
     // added knot mouse out for future use
-    for (std::vector<GrDragger *>::const_iterator l = this->draggers.begin(); l != this->draggers.end(); ++l) {
-        GrDragger *d = *l; 
+    for (auto d : this->draggers) {
         if (d->knot && (d->knot->flags & SP_KNOT_MOUSEOVER)) {
             mouse_out = true;
             updateLines();
@@ -2716,8 +2685,8 @@ void GrDrag::selected_reverse_vector()
     if (selected.empty())
         return;
 
-    for(std::vector<GrDraggable *>::const_iterator it = (*(selected.begin()))->draggables.begin(); it != (*(selected.begin()))->draggables.end(); ++it) {
-        sp_item_gradient_reverse_vector ((*it)->item, (*it)->fill_or_stroke);
+    for(auto draggable : (*(selected.begin()))->draggables) {
+        sp_item_gradient_reverse_vector (draggable->item, draggable->fill_or_stroke);
     }
 }
 
@@ -2792,8 +2761,7 @@ void GrDrag::selected_move(double x, double y, bool write_repr, bool scale_radia
         Geom::Point p = ls.pointAt(ls.nearestTime(dragger->point + Geom::Point(x,y)));
         Geom::Point displacement = p - dragger->point;
 
-        for(std::vector<GrDragger *>::const_iterator i = moving.begin(); i!= moving.end();++i) {
-            GrDragger *drg = *i;
+        for(auto drg : moving) {
             SPKnot *drgknot = drg->knot;
             drg->point += displacement;
             drgknot->moveto(drg->point);
@@ -2938,8 +2906,7 @@ void GrDrag::deleteSelected(bool just_one)
 
     while (!selected.empty()) {
         GrDragger *dragger = *(selected.begin());
-        for(std::vector<GrDraggable *>::const_iterator drgble = dragger->draggables.begin(); drgble != dragger->draggables.end(); ++drgble) {
-            GrDraggable *draggable = *drgble;
+        for(auto draggable : dragger->draggables) {
             SPGradient *gradient = getGradient(draggable->item, draggable->fill_or_stroke);
             SPGradient *vector   = sp_gradient_get_forked_vector_if_necessary (gradient, false);
 

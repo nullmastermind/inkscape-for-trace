@@ -196,8 +196,8 @@ ink_drag_data_received(GtkWidget *widget,
 
                         SPGradient* matches = nullptr;
                         std::vector<SPObject *> gradients = doc->getResourceList("gradient");
-                        for (std::vector<SPObject *>::const_iterator item = gradients.begin(); item != gradients.end(); ++item) {
-                            SPGradient* grad = SP_GRADIENT(*item);
+                        for (auto gradient : gradients) {
+                            SPGradient* grad = SP_GRADIENT(gradient);
                             if ( color.descr == grad->getId() ) {
                                 if ( grad->hasStops() ) {
                                     matches = grad;

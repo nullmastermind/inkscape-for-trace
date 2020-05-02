@@ -685,9 +685,9 @@ void EraserTool::set_to_accumulated() {
                     Inkscape::Rubberband *r = Inkscape::Rubberband::get(this->desktop);
                     std::vector<SPItem*> touched;
                     touched = document->getItemsAtPoints(this->desktop->dkey, r->getPoints());
-                    for (std::vector<SPItem*>::const_iterator i = touched.begin();i!=touched.end();++i) {
-                        if(selection->includes(*i)){
-                            toWorkOn.push_back((*i));
+                    for (auto i : touched) {
+                        if(selection->includes(i)){
+                            toWorkOn.push_back(i);
                         }
                     }
                 } else {
@@ -698,11 +698,11 @@ void EraserTool::set_to_accumulated() {
 
             if ( !toWorkOn.empty() ) {
                 if (eraser_mode  == ERASER_MODE_CUT) {
-                    for (std::vector<SPItem*>::const_iterator i = toWorkOn.begin(); i != toWorkOn.end(); ++i){
-                        SPItem *item = *i;
+                    for (auto i : toWorkOn){
+                        SPItem *item = i;
                         SPUse *use = dynamic_cast<SPUse *>(item);
                         if (SP_IS_PATH(item) && SP_PATH(item)->nodesInPath () == 2){
-                            SPItem *item = *i;
+                            SPItem *item = i;
                             item->deleteObject(true);
                             workDone = true;
                         } else if (SP_IS_GROUP(item) || use ) {
@@ -742,8 +742,8 @@ void EraserTool::set_to_accumulated() {
                                 if ( !selection->isEmpty() ) {
                                     // If the item was not completely erased, track the new remainder.
                                     std::vector<SPItem*> nowSel(selection->items().begin(), selection->items().end());
-                                    for (std::vector<SPItem*>::const_iterator i2 = nowSel.begin();i2!=nowSel.end();++i2) {
-                                        remainingItems.push_back(*i2);
+                                    for (auto i2 : nowSel) {
+                                        remainingItems.push_back(i2);
                                     }
                                 }
                             } else {
@@ -754,9 +754,8 @@ void EraserTool::set_to_accumulated() {
                 } else if (eraser_mode == ERASER_MODE_CLIP) {
                     if (!this->nowidth) {
                         remainingItems.clear();
-                        for (std::vector<SPItem*>::const_iterator i = toWorkOn.begin(); i != toWorkOn.end(); ++i){
+                        for (auto item : toWorkOn){
                             selection->clear();
-                            SPItem *item = *i;
                             Geom::OptRect bbox = item->documentVisualBounds();
                             Inkscape::XML::Document *xml_doc = this->desktop->doc()->getReprDoc();
                             Inkscape::XML::Node* dup = this->repr->duplicate(xml_doc);
@@ -824,8 +823,7 @@ void EraserTool::set_to_accumulated() {
                         }
                     }
                 } else {
-                    for (std::vector<SPItem*>::const_iterator i = toWorkOn.begin();i!=toWorkOn.end();++i) {
-                        SPItem *item = *i;
+                    for (auto item : toWorkOn) {
                         item->deleteObject(true);
                         workDone = true;
                     }

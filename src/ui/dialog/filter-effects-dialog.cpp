@@ -1582,9 +1582,9 @@ void FilterEffectsDialog::FilterModifier::update_filters()
 
     _model->clear();
 
-    for (std::vector<SPObject *>::const_iterator it = filters.begin(); it != filters.end(); ++it) {
+    for (auto filter : filters) {
         Gtk::TreeModel::Row row = *_model->append();
-        SPFilter* f = SP_FILTER(*it);
+        SPFilter* f = SP_FILTER(filter);
         row[_columns.filter] = f;
         const gchar* lbl = f->label();
         const gchar* id = f->getId();

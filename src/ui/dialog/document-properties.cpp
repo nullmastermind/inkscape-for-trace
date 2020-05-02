@@ -488,8 +488,7 @@ void DocumentProperties::linkSelectedProfile()
         Glib::ustring name = (*iter)[_AvailableProfilesListColumns.nameColumn];
 
         std::vector<SPObject *> current = SP_ACTIVE_DOCUMENT->getResourceList( "iccprofile" );
-        for (std::vector<SPObject *>::const_iterator it = current.begin(); it != current.end(); ++it) {
-            SPObject* obj = *it;
+        for (auto obj : current) {
             Inkscape::ColorProfile* prof = reinterpret_cast<Inkscape::ColorProfile*>(obj);
             if (!strcmp(prof->href, file.c_str()))
                 return;
@@ -632,8 +631,7 @@ void DocumentProperties::removeSelectedProfile(){
         }
     }
     std::vector<SPObject *> current = SP_ACTIVE_DOCUMENT->getResourceList( "iccprofile" );
-    for (std::vector<SPObject *>::const_iterator it = current.begin(); it != current.end(); ++it) {
-        SPObject* obj = *it;
+    for (auto obj : current) {
         Inkscape::ColorProfile* prof = reinterpret_cast<Inkscape::ColorProfile*>(obj);
         if (!name.compare(prof->name)){
             prof->deleteObject(true, false);
@@ -1107,8 +1105,7 @@ void DocumentProperties::removeExternalScript(){
     }
 
     std::vector<SPObject *> current = SP_ACTIVE_DOCUMENT->getResourceList( "script" );
-    for (std::vector<SPObject *>::const_iterator it = current.begin(); it != current.end(); ++it) {
-        SPObject* obj = *it;
+    for (auto obj : current) {
         if (obj) {
             SPScript* script = dynamic_cast<SPScript *>(obj);
             if (script && (name == script->xlinkhref)) {
@@ -1185,8 +1182,7 @@ void DocumentProperties::changeEmbeddedScript(){
 
     bool voidscript=true;
     std::vector<SPObject *> current = SP_ACTIVE_DOCUMENT->getResourceList( "script" );
-    for (std::vector<SPObject *>::const_iterator it = current.begin(); it != current.end(); ++it) {
-        SPObject* obj = *it;
+    for (auto obj : current) {
         if (id == obj->getId()){
             int count = (int) obj->children.size();
 
@@ -1225,8 +1221,7 @@ void DocumentProperties::editEmbeddedScript(){
 
     Inkscape::XML::Document *xml_doc = SP_ACTIVE_DOCUMENT->getReprDoc();
     std::vector<SPObject *> current = SP_ACTIVE_DOCUMENT->getResourceList( "script" );
-    for (std::vector<SPObject *>::const_iterator it = current.begin(); it != current.end(); ++it) {
-        SPObject* obj = *it;
+    for (auto obj : current) {
         if (id == obj->getId()){
 
             //XML Tree being used directly here while it shouldn't be.
@@ -1257,8 +1252,7 @@ void DocumentProperties::populate_script_lists(){
         g_assert(obj != nullptr);
         _scripts_observer.set(obj->parent);
     }
-    for (std::vector<SPObject *>::const_iterator it = current.begin(); it != current.end(); ++it) {
-        SPObject* obj = *it;
+    for (auto obj : current) {
         SPScript* script = dynamic_cast<SPScript *>(obj);
         g_assert(script != nullptr);
         if (script->xlinkhref)
@@ -1291,11 +1285,11 @@ void DocumentProperties::update_gridspage()
     }
 
     //add tabs
-    for(std::vector<Inkscape::CanvasGrid *>::const_iterator it = nv->grids.begin(); it != nv->grids.end(); ++it) {
-        if (!(*it)->repr->attribute("id")) continue; // update_gridspage is called again when "id" is added
-        Glib::ustring name((*it)->repr->attribute("id"));
+    for(auto grid : nv->grids) {
+        if (!grid->repr->attribute("id")) continue; // update_gridspage is called again when "id" is added
+        Glib::ustring name(grid->repr->attribute("id"));
         const char *icon = nullptr;
-        switch ((*it)->getGridType()) {
+        switch (grid->getGridType()) {
             case GRID_RECTANGULAR:
                 icon = "grid-rectangular";
                 break;
@@ -1305,7 +1299,7 @@ void DocumentProperties::update_gridspage()
             default:
                 break;
         }
-        _grids_notebook.append_page(*(*it)->newWidget(), _createPageTabLabel(name, icon));
+        _grids_notebook.append_page(*grid->newWidget(), _createPageTabLabel(name, icon));
     }
     _grids_notebook.show_all();
 

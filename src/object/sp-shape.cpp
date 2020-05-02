@@ -1299,8 +1299,8 @@ void SPShape::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape:
                 cs = self_crossings(path_it); // This can be slow!
 
                 if (!cs.empty()) { // There might be multiple intersections...
-                    for (Geom::Crossings::const_iterator i = cs.begin(); i != cs.end(); ++i) {
-                        Geom::Point p_ix = path_it.pointAt((*i).ta);
+                    for (const auto & c : cs) {
+                        Geom::Point p_ix = path_it.pointAt(c.ta);
                         p.emplace_back(p_ix * i2dt, Inkscape::SNAPSOURCE_PATH_INTERSECTION, Inkscape::SNAPTARGET_PATH_INTERSECTION);
                     }
                 }

@@ -552,9 +552,7 @@ flowtext_to_text()
 
     std::vector<Inkscape::XML::Node*> reprs;
     std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
-    for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();++i){
-
-        SPItem *item = *i;
+    for(auto item : items){
 
         if (!SP_IS_FLOWTEXT(item))
             continue;

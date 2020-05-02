@@ -207,9 +207,9 @@ Glib::ustring LayerManager::getNextLayerName( SPObject* obj, gchar const *label)
     std::vector<SPObject *> layers = _document->getResourceList("layer");
     SPObject *root=_desktop->currentRoot();
     if ( root ) {
-        for (std::vector<SPObject *>::const_iterator iter = layers.begin(); iter != layers.end(); ++iter) { 
-            if (*iter != obj)
-                currentNames.insert( (*iter)->label() ? Glib::ustring((*iter)->label()) : Glib::ustring() );
+        for (auto layer : layers) { 
+            if (layer != obj)
+                currentNames.insert( layer->label() ? Glib::ustring(layer->label()) : Glib::ustring() );
         }
     }
 
