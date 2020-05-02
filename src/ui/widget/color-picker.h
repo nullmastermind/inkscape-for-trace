@@ -57,7 +57,7 @@ protected:
     void on_clicked() override;
     virtual void on_changed (guint32);
 
-    ColorPreview        _preview;
+    ColorPreview *_preview;
 
     /*const*/ Glib::ustring _title;
     sigc::signal<void,guint32> _changed_signal;

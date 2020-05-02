@@ -30,12 +30,15 @@ namespace Widget {
 
 ColorPicker::ColorPicker (const Glib::ustring& title, const Glib::ustring& tip,
                           guint32 rgba, bool undo)
-          : _preview(rgba), _title(title), _rgba(rgba), _undo(undo),
-           _colorSelectorDialog("dialogs.colorpickerwindow")
+    : _preview(new ColorPreview(rgba))
+    , _title(title)
+    , _rgba(rgba)
+    , _undo(undo)
+    , _colorSelectorDialog("dialogs.colorpickerwindow")
 {
     setupDialog(title);
-    _preview.show();
-    add (_preview);
+    _preview->show();
+    add(*Gtk::manage(_preview));
     set_tooltip_text (tip);
     _selected_color.signal_changed.connect(sigc::mem_fun(this, &ColorPicker::_onSelectedColorChanged));
     _selected_color.signal_dragged.connect(sigc::mem_fun(this, &ColorPicker::_onSelectedColorChanged));
@@ -68,7 +71,7 @@ void ColorPicker::setRgba32 (guint32 rgba)
 {
     if (_in_use) return;
 
-    _preview.setRgba32 (rgba);
+    _preview->setRgba32 (rgba);
     _rgba = rgba;
     if (_color_selector)
     {
@@ -114,7 +117,7 @@ void ColorPicker::_onSelectedColorChanged() {
     }
 
     guint32 rgba = _selected_color.value();
-    _preview.setRgba32(rgba);
+    _preview->setRgba32(rgba);
 
     if (_undo && SP_ACTIVE_DESKTOP) {
         DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), SP_VERB_NONE,
