@@ -83,9 +83,6 @@ public:
                          const guint32 rgba,
                          bool undo) : Labelled(label, tip, new ColorPicker(title, tip, rgba, undo)) {}
 
-    ~LabelledColorPicker() override
-        { static_cast<ColorPicker*>(_widget)->~ColorPicker(); }
-
     void setRgba32 (guint32 rgba)
         { static_cast<ColorPicker*>(_widget)->setRgba32 (rgba); }
 

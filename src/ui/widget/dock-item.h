@@ -96,8 +96,6 @@ private:
 
     State _prev_state;        //< last known state
 
-    int _prev_position;
-
     Gtk::Window *_window;     //< reference to floating window, if any 
     int _x, _y;               //< last known position of window, if floating
 

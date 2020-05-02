@@ -228,7 +228,10 @@ void ScalarUnit::on_unit_changed()
     g_assert(_unit_menu != nullptr);
 
     Glib::ustring abbr = _unit_menu->getUnitAbbr();
-    _suffix->set_label(abbr);
+
+    if (_suffix) {
+        _suffix->set_label(abbr);
+    }
 
     Inkscape::Util::Unit const *new_unit = unit_table.getUnit(abbr);
     Inkscape::Util::Unit const *old_unit = unit_table.getUnit(lastUnits);

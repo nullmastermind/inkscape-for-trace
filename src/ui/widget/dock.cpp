@@ -34,22 +34,13 @@ const int Dock::_default_dock_bar_width = 36;
 
 Dock::Dock(Gtk::Orientation orientation)
     : _gdl_dock(gdl_dock_new()),
-#if WITH_GDL_3_6
       _gdl_dock_bar(GDL_DOCK_BAR(gdl_dock_bar_new(G_OBJECT(_gdl_dock)))),
-#else
-      _gdl_dock_bar(GDL_DOCK_BAR(gdl_dock_bar_new(GDL_DOCK(_gdl_dock)))),
-#endif
       _scrolled_window (Gtk::manage(new Gtk::ScrolledWindow))
 {
     gtk_widget_set_name(_gdl_dock, "GdlDock");
 
-#if WITH_GDL_3_6
     gtk_orientable_set_orientation(GTK_ORIENTABLE(_gdl_dock_bar),
                                    static_cast<GtkOrientation>(orientation));
-#else
-    gdl_dock_bar_set_orientation(_gdl_dock_bar,
-                                 static_cast<GtkOrientation>(orientation));
-#endif
 
     _filler.set_name("DockBoxFiller");
 

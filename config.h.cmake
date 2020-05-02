@@ -35,8 +35,8 @@
 /* Whether the Cairo PDF backend is available */
 #cmakedefine PANGO_ENABLE_ENGINE 1
 
-/* Build with GDL 3.6 or higher */
-#cmakedefine WITH_GDL_3_6 1
+/* Build with GDL 3.35 or higher */
+#cmakedefine WITH_GDL_3_35 1
 
 /* Define to 1 if you have the <ieeefp.h> header file. */
 #cmakedefine HAVE_IEEEFP_H 1

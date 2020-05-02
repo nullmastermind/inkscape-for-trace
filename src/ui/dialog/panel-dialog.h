@@ -143,7 +143,7 @@ PanelDialog<B> *PanelDialog<B>::create()
 template <typename B> template <typename P>
 PanelDialog<B> *PanelDialog<B>::_create()
 {
-    UI::Widget::Panel &panel = P::getInstance();
+    UI::Widget::Panel &panel = *Gtk::manage(&P::getInstance());
     return new PanelDialog<B>(panel, panel.getPrefsPath(), panel.getVerb());
 }
 

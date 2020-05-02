@@ -274,17 +274,17 @@ pkg_check_modules(
     gdkmm-3.0>=3.22
     gtk+-3.0>=3.22
     gdk-3.0>=3.22
-    gdl-3.0>=3.4
+    gdl-3.0>=3.6
     )
 list(APPEND INKSCAPE_CXX_FLAGS ${GTK3_CFLAGS_OTHER})
 list(APPEND INKSCAPE_INCS_SYS ${GTK3_INCLUDE_DIRS})
 list(APPEND INKSCAPE_LIBS ${GTK3_LIBRARIES})
 link_directories(${GTK3_LIBRARY_DIRS})
 
-pkg_check_modules(GDL_3_6 gdl-3.0>=3.6)
-if("${GDL_3_6_FOUND}")
-    message(STATUS "Using GDL 3.6 or higher")
-    set (WITH_GDL_3_6 ON)
+pkg_check_modules(GDL_3_35 gdl-3.0>=3.35)
+if("${GDL_3_35_FOUND}")
+    message(STATUS "Using GDL 3.35 or higher")
+    set (WITH_GDL_3_35 ON)
 endif()
 
 pkg_check_modules(GTKSPELL3 gtkspell3-3.0)

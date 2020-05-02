@@ -25,7 +25,7 @@ Labelled::Labelled(Glib::ustring const &label, Glib::ustring const &tooltip,
                    bool mnemonic)
     : _widget(widget),
       _label(new Gtk::Label(label, Gtk::ALIGN_START, Gtk::ALIGN_CENTER, mnemonic)),
-      _suffix(new Gtk::Label(suffix, Gtk::ALIGN_START))
+      _suffix(nullptr)
 {
     g_assert(g_utf8_validate(icon.c_str(), -1, nullptr));
     if (icon != "") {
