@@ -63,9 +63,6 @@ namespace Dialog {
 
 TextEdit::TextEdit()
     : UI::Widget::Panel("/dialogs/textandfont", SP_VERB_DIALOG_TEXT),
-      font_label(_("_Font"), true),
-      text_label(_("_Text"), true),
-      feat_label(_("_Features"), true),
       setasdefault_button(_("Set as _default")),
       close_button(_("_Close"), true),
       apply_button(_("_Apply"), true),
@@ -112,6 +109,7 @@ TextEdit::TextEdit()
 
     text_buffer = gtk_text_buffer_new (nullptr);
     text_view = gtk_text_view_new_with_buffer (text_buffer);
+    g_object_unref(text_buffer);
     gtk_text_view_set_wrap_mode ((GtkTextView *) text_view, GTK_WRAP_WORD);
 
 #ifdef WITH_GTKSPELL
@@ -135,9 +133,9 @@ TextEdit::TextEdit()
 
     /* Notebook -----------------------------------*/
     notebook.set_name( "TextEdit Notebook" );
-    notebook.append_page(font_vbox, font_label);
-    notebook.append_page(feat_vbox, feat_label);
-    notebook.append_page(text_vbox, text_label);
+    notebook.append_page(font_vbox, _("_Font"), true);
+    notebook.append_page(feat_vbox, _("_Features"), true);
+    notebook.append_page(text_vbox, _("_Text"), true);
 
     /* Buttons (below notebook) ------------------ */
     setasdefault_button.set_use_underline(true);
@@ -229,15 +227,16 @@ void TextEdit::onReadSelection ( gboolean dostyle, gboolean /*docontent*/ )
         setasdefault_button.set_sensitive ( false );
     }
 
-    if (dostyle) {
+    if (dostyle && text) {
+        auto *desktop = getDesktop();
 
         // create temporary style
-        SPStyle query(SP_ACTIVE_DOCUMENT);
+        SPStyle query(desktop->getDocument());
 
         // Query style from desktop into it. This returns a result flag and fills query with the
         // style of subselection, if any, or selection
 
-        int result_numbers = sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTNUMBERS);
+        int result_numbers = sp_desktop_query_style (desktop, &query, QUERY_STYLE_PROPERTY_FONTNUMBERS);
 
         // If querying returned nothing, read the style from the text tool prefs (default style for new texts).
         if (result_numbers == QUERY_STYLE_NOTHING) {
@@ -261,9 +260,9 @@ void TextEdit::onReadSelection ( gboolean dostyle, gboolean /*docontent*/ )
         selected_fontsize = size;
         // Update font features (variant) widget
         //int result_features =
-        sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTVARIANTS);
+        sp_desktop_query_style (desktop, &query, QUERY_STYLE_PROPERTY_FONTVARIANTS);
         int result_features =
-            sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTFEATURESETTINGS);
+            sp_desktop_query_style (desktop, &query, QUERY_STYLE_PROPERTY_FONTFEATURESETTINGS);
         font_features.update( &query, result_features == QUERY_STYLE_MULTIPLE_DIFFERENT, fontspec );
         Glib::ustring features = font_features.get_markup();
 
@@ -327,10 +326,10 @@ void TextEdit::setPreviewText (Glib::ustring font_spec, Glib::ustring font_featu
 
 SPItem *TextEdit::getSelectedTextItem ()
 {
-    if (!SP_ACTIVE_DESKTOP)
+    if (!getDesktop())
         return nullptr;
 
-    auto tmp= SP_ACTIVE_DESKTOP->getSelection()->items();
+    auto tmp= getDesktop()->getSelection()->items();
 	for(auto i=tmp.begin();i!=tmp.end();++i)
     {
         if (SP_IS_TEXT(*i) || SP_IS_FLOWTEXT(*i))
@@ -343,12 +342,12 @@ SPItem *TextEdit::getSelectedTextItem ()
 
 unsigned TextEdit::getSelectedTextCount ()
 {
-    if (!SP_ACTIVE_DESKTOP)
+    if (!getDesktop())
         return 0;
 
     unsigned int items = 0;
 
-    auto tmp= SP_ACTIVE_DESKTOP->getSelection()->items();
+    auto tmp= getDesktop()->getSelection()->items();
 	for(auto i=tmp.begin();i!=tmp.end();++i)
     {
         if (SP_IS_TEXT(*i) || SP_IS_FLOWTEXT(*i))
@@ -450,7 +449,7 @@ void TextEdit::onApply()
 
     } else if (items == 1) {
         // exactly one text object; now set its text, too
-        SPItem *item = SP_ACTIVE_DESKTOP->getSelection()->singleItem();
+        SPItem *item = desktop->getSelection()->singleItem();
         if (SP_IS_TEXT (item) || SP_IS_FLOWTEXT(item)) {
             updateObjectText (item);
             SPStyle *item_style = item->style;
@@ -470,14 +469,14 @@ void TextEdit::onApply()
     }
 
     // complete the transaction
-    DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), SP_VERB_CONTEXT_TEXT,
+    DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
                        _("Set text style"));
     apply_button.set_sensitive ( false );
 
     sp_repr_css_attr_unref (css);
 
     Inkscape::FontLister* font_lister = Inkscape::FontLister::get_instance();
-    font_lister->update_font_list(SP_ACTIVE_DESKTOP->getDocument());
+    font_lister->update_font_list(desktop->getDocument());
 
     blocked = false;
 }
@@ -534,21 +533,19 @@ void TextEdit::onFontChange(Glib::ustring fontspec)
 
 void TextEdit::setDesktop(SPDesktop *desktop)
 {
+    selectModifiedConn.disconnect();
+    subselChangedConn.disconnect();
+    selectChangedConn.disconnect();
+
     Panel::setDesktop(desktop);
 
     {
-        {
-            selectModifiedConn.disconnect();
-            subselChangedConn.disconnect();
-            selectChangedConn.disconnect();
-        }
         if (desktop && desktop->selection) {
             selectChangedConn = desktop->selection->connectChanged(sigc::hide(sigc::mem_fun(*this, &TextEdit::onSelectionChange)));
             subselChangedConn = desktop->connectToolSubselectionChanged(sigc::hide(sigc::mem_fun(*this, &TextEdit::onSelectionChange)));
             selectModifiedConn = desktop->selection->connectModified(sigc::hide<0>(sigc::mem_fun(*this, &TextEdit::onSelectionModified)));
+            onReadSelection(TRUE, TRUE);
         }
-        //widget_setup();
-        onReadSelection (TRUE, TRUE);
     }
 }
 
