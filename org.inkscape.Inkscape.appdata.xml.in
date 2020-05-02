@@ -40,26 +40,42 @@
     </screenshot>
   </screenshots>
   <releases>
-    <release version="1.0-beta2" date="2019-12-01">
+    <release version="1.0" date="2020-05-01">
       <description>
-        <p>Second beta package for the next version of Inkscape, for testing.</p>
+        <p>Inkscape 1.0</p>
+        <ul>
+          <li>Theming support and more new customization options</li>
+          <li>Better HiDPI (high resolution) screen support</li>
+          <li>Native support for macOS with a signed and notarized .dmg file</li>
+          <li>Coordinate origin in top left corner by default</li>
+          <li>Canvas rotation and mirroring</li>
+          <li>On-Canvas alignment of objects</li>
+          <li>Split view and X-Ray modes</li>
+          <li>PowerPencil for drawing editable, variable width strokes with a pressure sensitive graphics tablet</li>
+          <li>New PNG export options</li>
+          <li>Integrated centerline tracing for vectorizing line drawings</li>
+          <li>Searchable Symbols dialog</li>
+          <li>New Live Path Effect (LPE) selection dialog</li>
+          <li>New Corners (Fillet/chamfer) LPE, (lossless) Boolean Operation LPE (experimental), Offset LPE and Measure Segments LPE (and more!)</li>
+          <li>Path operations, deselection of a large number of paths as well as grouping/ungrouping are much faster now</li>
+          <li>Much improved text line-height settings</li>
+          <li>Variable fonts support (only if compiled with pango library version >= 1.41.1)</li>
+          <li>Browser-compatible flowed text</li>
+          <li>Extensions programming interface updated, with many new options - Note: this introduces breaking changes, some third-party extensions will have to be updated to work with Inkscape 1.0</li>
+          <li>Python 3 support for extensions</li>
+        </ul>
       </description>
-  </release>
-    <release version="1.0-beta" date="2019-09-07">
+      <url>http://wiki.inkscape.org/wiki/index.php/Release_notes/1.0</url>
+    </release>
+    <release version="0.92.5" date="2020-04-08">
       <description>
-        <p>Beta package for the next version of Inkscape, for testing.</p>
+        <ul>
+          <li>Bugfix release</li>
+          <li>More python3 compatibility for extensions</li>
+	</ul>
+	  <url>https://wiki.inkscape.org/wiki/index.php/Release_notes/0.92.5</url>
       </description>
-  </release>
-    <release version="1.0-alpha2" date="2019-06-02">
-      <description>
-        <p>This is the second public alpha release of Inkscape 1.0!</p>
-      </description>
-  </release>
-    <release version="1.0-alpha" date="2019-01-04">
-      <description>
-        <p>This is the first public alpha release of Inkscape 1.0!</p>
-      </description>
-  </release>
+    </release>
     <release version="0.92.4" date="2019-01-16">
       <description>
         <p>New 0.92.x bugfix release.</p>
