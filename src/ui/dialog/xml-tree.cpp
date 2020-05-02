@@ -281,14 +281,8 @@ void XmlTree::present()
 
 XmlTree::~XmlTree ()
 {
-    set_tree_desktop(nullptr);
-    if (current_desktop) {
-        current_desktop->getDocument()->setXMLDialogSelectedObject(nullptr);
-    }
+    assert(!current_desktop);
     _message_changed_connection.disconnect();
-    _message_context = nullptr;
-    _message_stack = nullptr;
-    _message_changed_connection.~connection();
 }
 
 void XmlTree::setDesktop(SPDesktop *desktop)
@@ -314,9 +308,17 @@ void XmlTree::set_tree_desktop(SPDesktop *desktop)
         return;
     }
 
+    if (deferred_on_tree_select_row_id != 0) {
+        g_source_destroy(g_main_context_find_source_by_id(nullptr, deferred_on_tree_select_row_id));
+        deferred_on_tree_select_row_id = 0;
+    }
+
     if (current_desktop) {
         sel_changed_connection.disconnect();
         document_replaced_connection.disconnect();
+
+        // TODO: Why is this a document property?
+        current_desktop->getDocument()->setXMLDialogSelectedObject(nullptr);
     }
     current_desktop = desktop;
     if (desktop) {
@@ -511,7 +513,7 @@ void XmlTree::on_tree_select_row(GtkTreeSelection *selection, gpointer data)
 {
     XmlTree *self = static_cast<XmlTree *>(data);
 
-    if (self->blocked) {
+    if (self->blocked || !self->current_desktop) {
         return;
     }
 

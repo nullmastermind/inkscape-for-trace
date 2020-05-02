@@ -25,7 +25,6 @@ DockItem::DockItem(Dock& dock, const Glib::ustring& name, const Glib::ustring& l
                    const Glib::ustring& icon_name, State state, GdlDockPlacement placement) :
     _dock(dock),
     _prev_state(state),
-    _prev_position(0),
     _window(nullptr),
     _x(0),
     _y(0),
@@ -92,7 +91,7 @@ DockItem::~DockItem()
     _signal_key_press_event_connection.disconnect();
 
     // https://gitlab.gnome.org/GNOME/gdl/issues/2
-#ifdef GDL_VERSION_AT_LEAST_3_35
+#ifdef WITH_GDL_3_35
     gdl_dock_item_unbind(GDL_DOCK_ITEM(_gdl_dock_item));
 #endif
 }
