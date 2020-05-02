@@ -357,10 +357,10 @@ bool LayersPanel::_checkForSelected(const Gtk::TreePath &path, const Gtk::TreeIt
 
 void LayersPanel::_layersChanged()
 {
-//    g_message("_layersChanged()");
-    if (_desktop) {
-        SPDocument* document = _desktop->doc();
-        g_return_if_fail(document != nullptr); // bug #158: Crash on File>Quit
+    assert(_desktop);
+    SPDocument* document = _desktop->doc();
+
+    if (document) {
         SPRoot* root = document->getRoot();
         if ( root ) {
             _selectedConnection.block();
