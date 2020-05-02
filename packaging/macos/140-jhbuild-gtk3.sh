@@ -20,11 +20,6 @@ jhbuild build \
   openssl \
   python3
 
-# harfbuzz needs icu
-
-jhbuild build \
-  icu
-
 ### install GTK3 libraries #####################################################
 
 jhbuild build \
