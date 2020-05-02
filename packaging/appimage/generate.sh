@@ -29,6 +29,7 @@ cd appdir/
 ########################################################################
 
 # Bundle all of glibc; this should eventually be done by linuxdeployqt
+apt update
 apt-get download libc6
 find *.deb -exec dpkg-deb -x {} . \;
 rm *deb
