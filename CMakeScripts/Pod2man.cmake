@@ -53,7 +53,7 @@ macro(pod2man PODFILE_FULL RELEASE SECTION CENTER)
             COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/fix-roff-punct "${MANFILE_TEMP}" > ${MANFILE_FULL}
             DEPENDS ${MANFILE_TEMP}
         )
-        if(GZIP)
+        if(GZIP AND WITH_MANPAGE_COMPRESSION)
             add_custom_command(
                 OUTPUT ${MANFILE_FULL_GZ}
 	        COMMAND ${GZIP} -f -k --best -n "${MANFILE_FULL}"
@@ -67,7 +67,7 @@ macro(pod2man PODFILE_FULL RELEASE SECTION CENTER)
                 RENAME ${NAME}.${SECTION}.gz
                 DESTINATION ${MANFILE_DEST}
             )
-        else(GZIP)
+        else()
             add_custom_target(${MANPAGE_TARGET} ALL
                 DEPENDS ${MANFILE_FULL}
             )
