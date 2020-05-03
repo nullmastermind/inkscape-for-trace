@@ -13,7 +13,7 @@ cd build
 
 cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
-run-clang-tidy -fix -header-filter='.*' "$@" > /dev/null
+run-clang-tidy -fix -header-filter='.*' "$@" > /dev/null || true
 
 # revert all fixes in protected directories
 git checkout ../src/3rdparty/ ../src/2geom/
