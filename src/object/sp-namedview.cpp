@@ -811,18 +811,6 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
             }
         }
         if ((w > 0) && (h > 0)) {
-#ifndef _WIN32
-            gint dx= 0;
-            gint dy = 0;
-            gint dw = 0;
-            gint dh = 0;
-            desktop->getWindowGeometry(dx, dy, dw, dh);
-            if ((w != dw) || (h != dh)) {
-                // Don't show dialogs when window is initially resized on OSX/Linux due to gdl dock bug
-                // This will happen on sp_desktop_widget_size_allocate
-                show_dialogs = FALSE;
-            }
-#endif
             desktop->setWindowSize(w, h);
             if (move_to_screen) {
                 desktop->setWindowPosition(Geom::Point(nv->window_x, nv->window_y));

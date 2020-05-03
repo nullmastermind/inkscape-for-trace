@@ -801,11 +801,6 @@ void SPDesktopWidget::on_size_allocate(Gtk::Allocation &allocation)
             zoom *= newshortside / oldshortside;
         }
         dtw->desktop->zoom_absolute_center_point (midpoint, zoom);
-
-        // TODO - Should call show_dialogs() from sp_namedview_window_from_document only.
-        // But delaying the call to here solves dock sizing issues on OS X, (see #171579)
-        dtw->desktop->show_dialogs();
-
     } else {
         parent_type::on_size_allocate(allocation);
     }
