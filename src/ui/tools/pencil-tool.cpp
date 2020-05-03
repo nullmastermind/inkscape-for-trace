@@ -22,7 +22,6 @@
 #include "ui/tools/pencil-tool.h"
 #include <2geom/bezier-utils.h>
 #include <2geom/circle.h>
-#include <2geom/intersection-graph.h>
 #include <2geom/sbasis-to-bezier.h>
 #include <2geom/svg-path-parser.h>
 
@@ -50,6 +49,7 @@
 
 #include "object/sp-lpe-item.h"
 #include "object/sp-path.h"
+#include "path/path-boolop.h"
 #include "style.h"
 
 #include "ui/pixmaps/cursor-pencil.xpm"
@@ -893,10 +893,8 @@ void PencilTool::_addFreehandPoint(Geom::Point const &p, guint /*state*/, bool l
             pressure_piecewise.push(pressure_dot.toSBasis(), 1);
             Geom::PathVector pressure_path = Geom::path_from_piecewise(pressure_piecewise, 0.1);
             Geom::PathVector previous_presure = this->_pressure_curve->get_pathvector();
-            std::unique_ptr<Geom::PathIntersectionGraph> pig(
-                new Geom::PathIntersectionGraph(pressure_path, previous_presure));
-            if (pig && !pressure_path.empty() && !previous_presure.empty()) {
-                pressure_path = pig->getUnion();
+            if (!pressure_path.empty() && !previous_presure.empty()) {
+                pressure_path = sp_pathvector_boolop(pressure_path, previous_presure, bool_op_union, fill_nonZero, fill_nonZero);
             }
             this->_pressure_curve->set_pathvector(pressure_path);
             sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), this->_pressure_curve);
