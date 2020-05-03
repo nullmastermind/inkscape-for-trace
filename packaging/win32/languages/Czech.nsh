@@ -4,7 +4,7 @@ ${LangFileString} CaptionDescription "Open source editor škálovatelné vektoro
 ${LangFileString} LICENSE_BOTTOM_TEXT "$(^Name) je vydáván pod General Public License (GPL). Licenční ujednání je zde pouze z informačních důvodů. $_CLICK"
 ${LangFileString} DIFFERENT_USER "Inkscape byl nainstalován uživatelem $0.$\r$\nInstalace nemusí být dokončena správně pokud v ní budete pokračovat!$\r$\nProsím přihlaste se jako $0 a spusťte instalaci znovu."
 ${LangFileString} WANT_UNINSTALL_BEFORE "$R1 je již nainstalován. $\nChcete před instalací odstranit předchozí verzi $(^Name) ?"
-${LangFileString} OK_CANCEL_DESC "$\n$\nStiskněte OK pro pokračování, CANCEL pro přerušení."
+${LangFileString} OK_CANCEL_DESC "$\n$\nStiskněte OK pro pokračování, STORNO pro přerušení."
 ${LangFileString} NO_ADMIN "Nemáte administrátorská oprávnění.$\r$\nInstalace Inkscape pro všechny uživatele nemusí být úspěšně dokončena.$\r$\nZrušte označení volby 'Pro všechny uživatele'."
 ${LangFileString} NOT_SUPPORTED "Inkscape neběží na Windows 95/98/ME!$\r$\nPro podrobnější informace se prosím obraťte na oficiální webové stránky."
 ${LangFileString} Full "Plná"
