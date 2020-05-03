@@ -880,7 +880,7 @@ void SPDesktopWidget::on_realize()
     auto osxapp = gtkosx_application_get();
     auto menushell = static_cast<Gtk::MenuShell *>(dtw->menubar());
     if (osxapp && menushell && window) {
-        menushell->set_parent(*window);
+        menushell->hide();
         gtkosx_application_set_menu_bar(osxapp, menushell->gobj());
         // using quartz accelerators gives menu shortcuts priority over everything else,
         // messes up text input because Inkscape has single key shortcuts (e.g. 1-6).
@@ -1665,12 +1665,7 @@ SPDesktopWidget::SPDesktopWidget(SPDocument *document)
     dtw->_menubar = build_menubar(dtw->desktop);
     dtw->_menubar->set_name("MenuBar");
     dtw->_menubar->show_all();
-
-#ifdef GDK_WINDOWING_QUARTZ
-    // native macOS menu: do this later because we don't have the window handle yet
-#else
     dtw->_vbox->pack_start(*dtw->_menubar, false, false);
-#endif
 
     dtw->layoutWidgets();
 
