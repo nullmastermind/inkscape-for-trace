@@ -587,16 +587,10 @@ SPDocument *SPDocument::createNewDocFromMem(gchar const *buffer, gint length, bo
     return doc;
 }
 
-SPDocument *SPDocument::doRef()
+std::unique_ptr<SPDocument> SPDocument::doRef()
 {
     Inkscape::GC::anchor(this);
-    return this;
-}
-
-SPDocument *SPDocument::doUnref()
-{
-    Inkscape::GC::release(this);
-    return nullptr;
+    return std::unique_ptr<SPDocument>(this);
 }
 
 /// guaranteed not to return nullptr

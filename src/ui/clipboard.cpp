@@ -139,7 +139,7 @@ private:
     void _userWarn(SPDesktop *, char const *);
 
     // private properites
-    SPDocument *_clipboardSPDoc; ///< Document that stores the clipboard until someone requests it
+    std::unique_ptr<SPDocument> _clipboardSPDoc; ///< Document that stores the clipboard until someone requests it
     Inkscape::XML::Node *_defs; ///< Reference to the clipboard document's defs node
     Inkscape::XML::Node *_root; ///< Reference to the clipboard's root node
     Inkscape::XML::Node *_clipnode; ///< The node that holds extra information
@@ -267,7 +267,7 @@ void ClipboardManagerImpl::copy(ObjectSet *set)
 
     _createInternalClipboard();   // construct a new clipboard document
     _copySelection(set);   // copy all items in the selection to the internal clipboard
-    fit_canvas_to_drawing(_clipboardSPDoc);
+    fit_canvas_to_drawing(_clipboardSPDoc.get());
 
     _setClipboardTargets();
 }
@@ -296,7 +296,7 @@ void ClipboardManagerImpl::copyPathParameter(Inkscape::LivePathEffect::PathParam
     _root->appendChild(pathnode);
     Inkscape::GC::release(pathnode);
 
-    fit_canvas_to_drawing(_clipboardSPDoc);
+    fit_canvas_to_drawing(_clipboardSPDoc.get());
     _setClipboardTargets();
 }
 
@@ -355,7 +355,7 @@ void ClipboardManagerImpl::copySymbol(Inkscape::XML::Node* symbol, gchar const* 
     sp_repr_set_point(_clipnode, "min", Geom::Point(0,0));
     sp_repr_set_point(_clipnode, "max", Geom::Point(0,0));
 
-    fit_canvas_to_drawing(_clipboardSPDoc);
+    fit_canvas_to_drawing(_clipboardSPDoc.get());
     _setClipboardTargets();
 }
 
@@ -1195,7 +1195,7 @@ void ClipboardManagerImpl::_applyPathEffect(SPItem *item, gchar const *effectsta
         std::string href;
         while (std::getline(iss, href, ';'))
         {
-            SPObject *obj = sp_uri_reference_resolve(_clipboardSPDoc, href.c_str());
+            SPObject *obj = sp_uri_reference_resolve(_clipboardSPDoc.get(), href.c_str());
             if (!obj) {
                 return;
             }
@@ -1358,7 +1358,8 @@ void ClipboardManagerImpl::_onGet(Gtk::SelectionData &sel, guint /*info*/)
                 bgcolor |= SP_COLOR_F_TO_U(opacity);
             }
             std::vector<SPItem*> x;
-            sp_export_png_file(_clipboardSPDoc, filename, area, width, height, dpi, dpi, bgcolor, nullptr, nullptr, true, x);
+            sp_export_png_file(_clipboardSPDoc.get(), filename, area, width, height, dpi, dpi, bgcolor, nullptr,
+                               nullptr, true, x);
         }
         else
         {
@@ -1368,7 +1369,7 @@ void ClipboardManagerImpl::_onGet(Gtk::SelectionData &sel, guint /*info*/)
             }
 
 
-            (*out)->save(_clipboardSPDoc, filename, true);
+            (*out)->save(_clipboardSPDoc.get(), filename, true);
         }
         g_file_get_contents(filename, &data, &len, nullptr);
 
@@ -1401,7 +1402,7 @@ void ClipboardManagerImpl::_onClear()
 void ClipboardManagerImpl::_createInternalClipboard()
 {
     if ( _clipboardSPDoc == nullptr ) {
-        _clipboardSPDoc = SPDocument::createNewDoc(nullptr, false, true);
+        _clipboardSPDoc.reset(SPDocument::createNewDoc(nullptr, false, true));
         //g_assert( _clipboardSPDoc != NULL );
         _defs = _clipboardSPDoc->getDefs()->getRepr();
         _doc = _clipboardSPDoc->getReprDoc();
@@ -1430,7 +1431,6 @@ void ClipboardManagerImpl::_createInternalClipboard()
 void ClipboardManagerImpl::_discardInternalClipboard()
 {
     if ( _clipboardSPDoc != nullptr ) {
-        _clipboardSPDoc->doUnref();
         _clipboardSPDoc = nullptr;
         _defs = nullptr;
         _doc = nullptr;
@@ -1583,7 +1583,7 @@ void ClipboardManagerImpl::_setClipboardTargets()
                 gchar *filename = g_build_filename( g_get_user_cache_dir(), "inkscape-clipboard-export.emf", NULL );
 
                 try {
-                    (*out)->save(_clipboardSPDoc, filename);
+                    (*out)->save(_clipboardSPDoc.get(), filename);
                     HENHMETAFILE hemf = GetEnhMetaFileA(filename);
                     if (hemf) {
                         SetClipboardData(CF_ENHMETAFILE, hemf);

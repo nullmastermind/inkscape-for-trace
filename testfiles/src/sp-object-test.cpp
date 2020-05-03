@@ -23,6 +23,7 @@ using namespace Inkscape::XML;
 class SPObjectTest: public DocPerCaseTest {
 public:
     SPObjectTest() {
+        auto *const _doc = this->_doc.get();
         a = new SPItem();
         b = new SPItem();
         c = new SPItem();

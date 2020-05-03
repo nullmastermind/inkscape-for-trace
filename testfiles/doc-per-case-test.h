@@ -29,7 +29,7 @@ protected:
 
     static void TearDownTestCase();
 
-    static SPDocument *_doc;
+    static std::unique_ptr<SPDocument> _doc;
 };
 
 /*

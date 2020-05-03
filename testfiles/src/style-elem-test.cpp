@@ -37,14 +37,12 @@ rect { fill: green; opacity:1.0; }\
 .cls2 { fill: green; opacity:0.5; }\
 </style>\
 </svg>";
-        doc = SPDocument::createNewDocFromMem(docString, static_cast<int>(strlen(docString)), false);
+        doc.reset(SPDocument::createNewDocFromMem(docString, static_cast<int>(strlen(docString)), false));
     }
 
-    ~ObjectTest() override {
-        doc->doUnref();
-    }
+    ~ObjectTest() override = default;
 
-    SPDocument *doc;
+    std::unique_ptr<SPDocument> doc;
 };
 
 /*

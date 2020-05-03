@@ -22,6 +22,7 @@
 #include <cstddef>
 #include <deque>
 #include <map>
+#include <memory>
 #include <vector>
 
 #include <boost/ptr_container/ptr_list.hpp>
@@ -128,8 +129,8 @@ public:
     void setVirgin(bool Virgin) { virgin = Virgin; }
     bool getVirgin() { return virgin; }
 
-    SPDocument *doRef();
-    SPDocument *doUnref();
+    //! Increment reference count by one and return a self-dereferencing pointer.
+    std::unique_ptr<SPDocument> doRef();
 
     bool isModifiedSinceSave() const { return modified_since_save; }
     bool isModifiedSinceAutoSave() const { return modified_since_autosave; }
@@ -433,6 +434,13 @@ public:
     void emitReconstructionFinish();
     void emitResizedSignal(double width, double height);
 };
+
+namespace std {
+template <>
+struct default_delete<SPDocument> {
+    void operator()(SPDocument *ptr) const { Inkscape::GC::release(ptr); }
+};
+}; // namespace std
 
 /*
  * Ideas: How to overcome style invalidation nightmare

@@ -1068,7 +1068,7 @@ SPDesktopWidget::shutdown()
     g_assert(desktop != nullptr);
 
     if (INKSCAPE.sole_desktop_for_document(*desktop)) {
-        SPDocument *doc = desktop->doc();
+        std::unique_ptr<SPDocument> doc(desktop->doc()->doRef());
         if (doc->isModifiedSinceSave()) {
             auto toplevel_window = window;
             Glib::ustring message = g_markup_printf_escaped(
@@ -1096,12 +1096,9 @@ SPDesktopWidget::shutdown()
             switch (response) {
             case GTK_RESPONSE_YES:
             {
-                doc->doRef();
                 sp_namedview_document_from_window(desktop);
-                if (sp_file_save_document(*window, doc)) {
-                    doc->doUnref();
-                } else { // save dialog cancelled or save failed
-                    doc->doUnref();
+                if (!sp_file_save_document(*window, doc.get())) {
+                    // save dialog cancelled or save failed
                     return TRUE;
                 }
 
@@ -1147,12 +1144,8 @@ SPDesktopWidget::shutdown()
             switch (response) {
             case GTK_RESPONSE_YES:
             {
-                doc->doRef();
-
-                if (sp_file_save_dialog(*window, doc, Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG)) {
-                    doc->doUnref();
-                } else { // save dialog cancelled or save failed
-                    doc->doUnref();
+                if (!sp_file_save_dialog(*window, doc.get(), Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG)) {
+                    // save dialog cancelled or save failed
                     return TRUE;
                 }
 

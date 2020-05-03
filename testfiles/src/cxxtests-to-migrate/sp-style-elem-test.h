@@ -20,20 +20,11 @@
 class SPStyleElemTest : public CxxTest::TestSuite
 {
 public:
-    SPDocument* _doc;
+    std::unique_ptr<SPDocument> _doc;
 
-    SPStyleElemTest() :
-        _doc(0)
-    {
-    }
+    SPStyleElemTest() = default;
 
-    virtual ~SPStyleElemTest()
-    {
-        if ( _doc )
-        {
-            _doc->doUnref();
-        }
-    }
+    virtual ~SPStyleElemTest() = default;
 
     static void createSuiteSubclass( SPStyleElemTest *& dst )
     {
@@ -63,7 +54,7 @@ public:
     void testSetType()
     {
         SPStyleElem *style_elem = new SPStyleElem();
-        SP_OBJECT(style_elem)->document = _doc;
+        SP_OBJECT(style_elem)->document = _doc.get();
 
         SP_OBJECT(style_elem)->setKeyValue( SPAttr::TYPE, "something unrecognized");
         TS_ASSERT( !style_elem->is_css );
@@ -89,7 +80,7 @@ public:
         }
 
         SPStyleElem *style_elem = new SPStyleElem();
-        SP_OBJECT(style_elem)->document = _doc;
+        SP_OBJECT(style_elem)->document = _doc.get();
 
         SP_OBJECT(style_elem)->setKeyValue( SPAttr::TYPE, "text/css");
         Inkscape::XML::Node *repr = _doc->getReprDoc()->createElement("svg:style");
@@ -117,7 +108,7 @@ public:
         SPStyleElem *style_elem = new SPStyleElem();
         Inkscape::XML::Node *const repr = _doc->getReprDoc()->createElement("svg:style");
         repr->setAttribute("type", "text/css");
-        style_elem->invoke_build( _doc, repr, false);
+        style_elem->invoke_build( _doc.get(), repr, false);
         TS_ASSERT( style_elem->is_css );
         TS_ASSERT( style_elem->media.print );
         TS_ASSERT( style_elem->media.screen );
@@ -147,7 +138,7 @@ public:
         repr->setAttribute("type", "text/css");
         Inkscape::XML::Node *const content_repr = _doc->getReprDoc()->createTextNode(".myclass { }");
         repr->addChild(content_repr, NULL);
-        style_elem->invoke_build(_doc, repr, false);
+        style_elem->invoke_build(_doc.get(), repr, false);
         TS_ASSERT( style_elem->is_css );
         TS_ASSERT( _doc->style_cascade );
         CRStyleSheet const *const stylesheet = cr_cascade_get_sheet(_doc->style_cascade, ORIGIN_AUTHOR);

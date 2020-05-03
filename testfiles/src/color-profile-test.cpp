@@ -37,7 +37,7 @@ protected:
         DocPerCaseTest::SetUp();
         _prof = new Inkscape::ColorProfile();
         ASSERT_TRUE( _prof != NULL );
-        _prof->document = _doc;
+        _prof->document = _doc.get();
     }
 
     void TearDown() override

@@ -1005,7 +1005,7 @@ bool FileOpenDialogImplWin32::set_svg_preview()
 
     gchar *utf8string = g_utf16_to_utf8((const gunichar2*)_path_string,
         _MAX_PATH, NULL, NULL, NULL);
-    SPDocument *svgDoc = SPDocument::createNewDoc (utf8string, 0);
+    std::unique_ptr<SPDocument> svgDoc(SPDocument::createNewDoc(utf8string, 0));
     g_free(utf8string);
 
     // Check the document loaded properly
@@ -1014,7 +1014,6 @@ bool FileOpenDialogImplWin32::set_svg_preview()
     }
     if (svgDoc->getRoot() == NULL)
     {
-        svgDoc->doUnref();
         return false;
     }
 
@@ -1034,10 +1033,11 @@ bool FileOpenDialogImplWin32::set_svg_preview()
     const int scaledSvgHeight = round(scaleFactor * svgHeight_px);
 
     const double dpi = 96*scaleFactor;
-    Inkscape::Pixbuf * pixbuf = sp_generate_internal_bitmap(svgDoc, NULL, 0, 0, svgWidth_px, svgHeight_px, scaledSvgWidth, scaledSvgHeight, dpi, dpi, (guint32) 0xffffff00, NULL);
+    Inkscape::Pixbuf *pixbuf =
+        sp_generate_internal_bitmap(svgDoc.get(), NULL, 0, 0, svgWidth_px, svgHeight_px, scaledSvgWidth,
+                                    scaledSvgHeight, dpi, dpi, (guint32)0xffffff00, NULL);
 
     // Tidy up
-    svgDoc->doUnref();
     if (pixbuf == NULL) {
         return false;
     }

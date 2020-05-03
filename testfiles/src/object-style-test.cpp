@@ -45,14 +45,12 @@ rect { fill: #808080; opacity:0.5; }\
   <rect id='eight' class='fosize' style='stroke-width: 50%;'/>\
 </g>\
 </svg>";
-        doc = SPDocument::createNewDocFromMem(docString, static_cast<int>(strlen(docString)), false);
+        doc.reset(SPDocument::createNewDocFromMem(docString, static_cast<int>(strlen(docString)), false));
     }
 
-    ~ObjectTest() override {
-        doc->doUnref();
-    }
+    ~ObjectTest() override = default;
 
-    SPDocument *doc;
+    std::unique_ptr<SPDocument> doc;
 };
 
 /*

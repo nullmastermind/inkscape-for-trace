@@ -17,8 +17,6 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     if ( !Inkscape::Application::exists() )
         Inkscape::Application::create(false);
     //void* a= sp_repr_read_mem((const char*)data, size, 0);
-    SPDocument *doc = SPDocument::createNewDocFromMem( (const char*)data, size, 0);
-    if(doc)
-        doc->doUnref();
+    auto doc = std::unique_ptr<SPDocument>(SPDocument::createNewDocFromMem((const char *)data, size, 0));
     return 0;
 }

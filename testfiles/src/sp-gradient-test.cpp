@@ -44,7 +44,7 @@ TEST_F(SPGradientTest, Init) {
 }
 
 TEST_F(SPGradientTest, SetGradientTransform) {
-    SP_OBJECT(gr)->document = _doc;
+    SP_OBJECT(gr)->document = _doc.get();
 
     SP_OBJECT(gr)->setKeyValue(SPAttr::GRADIENTTRANSFORM, "translate(5, 8)");
     EXPECT_TRUE(Geom::are_near(Geom::Affine(Geom::Translate(5.0, 8.0)), gr->gradientTransform));
@@ -57,7 +57,7 @@ TEST_F(SPGradientTest, SetGradientTransform) {
 }
 
 TEST_F(SPGradientTest, Write) {
-    SP_OBJECT(gr)->document = _doc;
+    SP_OBJECT(gr)->document = _doc.get();
 
     SP_OBJECT(gr)->setKeyValue(SPAttr::GRADIENTTRANSFORM, "matrix(0, 1, -1, 0, 0, 0)");
     Document *xml_doc = _doc->getReprDoc();
@@ -76,7 +76,7 @@ TEST_F(SPGradientTest, Write) {
 }
 
 TEST_F(SPGradientTest, GetG2dGetGs2dSetGs2) {
-    SP_OBJECT(gr)->document = _doc;
+    SP_OBJECT(gr)->document = _doc.get();
 
     Geom::Affine grXform(2, 1,
                          1, 3,

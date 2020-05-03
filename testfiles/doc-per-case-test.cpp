@@ -14,7 +14,7 @@
 
 #include "inkscape.h"
 
-SPDocument *DocPerCaseTest::_doc = 0;
+std::unique_ptr<SPDocument> DocPerCaseTest::_doc = nullptr;
 
 DocPerCaseTest::DocPerCaseTest() :
     ::testing::Test()
@@ -29,16 +29,13 @@ void DocPerCaseTest::SetUpTestCase()
         Inkscape::Application::create(false);
     }
 
-    _doc = SPDocument::createNewDoc( NULL, TRUE, true );
-    ASSERT_TRUE( _doc != NULL );
+    _doc.reset(SPDocument::createNewDoc( NULL, TRUE, true ));
+    ASSERT_TRUE(bool(_doc));
 }
 
 void DocPerCaseTest::TearDownTestCase()
 {
-    if (_doc) {
-        _doc->doUnref();
-        _doc = NULL;
-    }
+    _doc.reset();
 }
 
 /*

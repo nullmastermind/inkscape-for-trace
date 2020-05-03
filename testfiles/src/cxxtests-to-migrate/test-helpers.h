@@ -43,16 +43,12 @@ T* createSuiteAndDocument( void (*fun)(T*&) )
         Inkscape::Application::create(false);
     }
 
-    SPDocument* tmp = SPDocument::createNewDoc( NULL, TRUE, true );
+    auto tmp = std::unique_ptr<SPDocument>(SPDocument::createNewDoc(NULL, TRUE, true));
     if ( tmp ) {
         fun( suite );
         if ( suite )
         {
-            suite->_doc = tmp;
-        }
-        else
-        {
-            tmp->doUnref();
+            suite->_doc = std::move(tmp);
         }
     }
 

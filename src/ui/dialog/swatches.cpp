@@ -1017,8 +1017,6 @@ public:
             gradientRsrcChanged.disconnect();
             defsChanged.disconnect();
             defsModified.disconnect();
-            doc->doUnref();
-            doc = nullptr;
         }
     }
 
@@ -1035,7 +1033,7 @@ public:
     static int timerRefCount;
     static sigc::connection refreshTimer;
 
-    SPDocument *doc;
+    std::unique_ptr<SPDocument> doc;
     bool updatePending;
     double lastGradientUpdate;
     sigc::connection gradientRsrcChanged;
@@ -1067,7 +1065,7 @@ bool DocTrack::handleTimerCB()
     for (auto track : needCallback) {
         if ( std::find(docTrackings.begin(), docTrackings.end(), track) != docTrackings.end() ) { // Just in case one gets deleted while we are looping
             // Note: calling handleDefsModified will call queueUpdateIfNeeded and thus update the time and flag.
-            SwatchesPanel::handleDefsModified(track->doc);
+            SwatchesPanel::handleDefsModified(track->doc.get());
         }
     }
 
@@ -1078,7 +1076,7 @@ bool DocTrack::queueUpdateIfNeeded( SPDocument *doc )
 {
     bool deferProcessing = false;
     for (auto track : docTrackings) {
-        if ( track->doc == doc ) {
+        if ( track->doc.get() == doc ) {
             double now = timer->elapsed();
             double elapsed = now - track->lastGradientUpdate;
 
@@ -1114,7 +1112,7 @@ void SwatchesPanel::_trackDocument( SwatchesPanel *panel, SPDocument *document )
             }
             if (!found) {
                 for (std::vector<DocTrack*>::iterator it = docTrackings.begin(); it != docTrackings.end(); ++it){
-                    if ((*it)->doc == oldDoc) {
+                    if ((*it)->doc.get() == oldDoc) {
                         delete *it;
                         docTrackings.erase(it);
                         break;

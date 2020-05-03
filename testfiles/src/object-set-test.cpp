@@ -28,6 +28,7 @@ using namespace Inkscape::XML;
 class ObjectSetTest: public DocPerCaseTest {
 public:
     ObjectSetTest() {
+        auto *const _doc = this->_doc.get();
         N = _doc->getRoot()->children.size();
 
         A = new SPObject();
@@ -366,7 +367,7 @@ TEST_F(ObjectSetTest, TwoSets) {
 }
 
 TEST_F(ObjectSetTest, SetRemoving) {
-    ObjectSet *objectSet = new ObjectSet(_doc);
+    ObjectSet *objectSet = new ObjectSet(_doc.get());
     A->attach(B, nullptr);
     objectSet->add(A);
     objectSet->add(C);
