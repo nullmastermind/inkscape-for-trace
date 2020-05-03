@@ -20,16 +20,12 @@
 
 #include "inkscape-preferences.h"
 
+#include <fstream>
+
 #include <gio/gio.h>
-#include <glibmm/fileutils.h>
-#include <glibmm/i18n.h>
-#include <glibmm/markup.h>
-#include <glibmm/miscutils.h>
 #include <gtk/gtksettings.h>
-#include <gtkmm/cssprovider.h>
-#include <gtkmm/main.h>
-#include <gtkmm/recentinfo.h>
-#include <gtkmm/recentmanager.h>
+#include <glibmm/i18n.h>
+#include <gtkmm.h>
 
 #include "auto-save.h"
 #include "cms-system.h"
@@ -44,26 +40,24 @@
 #include "selection-chemistry.h"
 #include "selection.h"
 #include "shortcuts.h"
+#include "style.h"
 #include "verbs.h"
 
-/* #include "display/cairo-utils.h" */
 #include "display/canvas-grid.h"
 #include "display/nr-filter-gaussian.h"
 
 #include "extension/internal/gdkpixbuf-input.h"
 
-#include "include/gtkmm_version.h"
-
 #include "io/resource.h"
-#include "io/sys.h"
 
 #include "object/color-profile.h"
-#include "style.h"
+
 #include "svg/svg-color.h"
+
 #include "ui/interface.h"
 #include "ui/widget/style-swatch.h"
+
 #include "widgets/desktop-widget.h"
-#include <fstream>
 
 #if HAVE_ASPELL
 # include "ui/dialog/spellcheck.h" // for get_available_langs
