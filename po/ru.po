@@ -1280,7 +1280,7 @@ msgstr "Грубая прозрачность"
 
 #: ../share/filters/filters.svg.h:488
 msgid "Adds a turbulent transparency which displaces pixels at the same time"
-msgstr "Добавить турбулентную прозрачность с одновременным смещением пикселов"
+msgstr "Добавить турбулентную прозрачность с одновременным смещением пикселей"
 
 #: ../share/filters/filters.svg.h:490
 msgid "Gouache"
@@ -1513,7 +1513,7 @@ msgstr "Пикселизация"
 
 #: ../share/filters/filters.svg.h:591
 msgid "Pixel Tools"
-msgstr "Инструменты для работы с пикселами"
+msgstr "Инструменты для работы с пикселями"
 
 #: ../share/filters/filters.svg.h:592
 msgid "Reduce or remove antialiasing around shapes"
@@ -5031,8 +5031,8 @@ msgstr "Среднее значение"
 msgid ""
 "Replace each pixel component with the median color in a circular neighborhood"
 msgstr ""
-"Заменить цвет каждого пиксела на усреднённое значение цвета окружающих "
-"пикселов"
+"Заменить цвет каждого пикселя на усреднённое значение цвета окружающих "
+"пикселей"
 
 #: ../src/extension/internal/bitmap/modulate.cpp:41
 msgid "HSB Adjust"
@@ -5196,7 +5196,7 @@ msgid ""
 "Randomly scatter pixels in selected bitmap(s), within the given radius of "
 "the original position"
 msgstr ""
-"Случайным образом распределить пикселы выделенных растровых изображений в "
+"Случайным образом распределить пиксели выделенных растровых изображений в "
 "заданном радиусе от исходного положения"
 
 #: ../src/extension/internal/bitmap/swirl.cpp:40
@@ -5256,7 +5256,7 @@ msgstr "Втяжка/оттяжка ореола"
 
 #: ../src/extension/internal/bluredge.cpp:132
 msgid "Width in px of the halo"
-msgstr "Ширина ореола в пикселах"
+msgstr "Ширина ореола в пикселях"
 
 #: ../src/extension/internal/bluredge.cpp:133
 msgid "Number of steps:"
@@ -8746,7 +8746,7 @@ msgstr "DPI"
 #: ../src/inkscape-application.cpp:560
 msgid "Bitmap width in pixels (overrides --export-dpi)"
 msgstr ""
-"Ширина растрового изображения в пикселах (переопределяет --export-dpi)."
+"Ширина растрового изображения в пикселях (переопределяет --export-dpi)."
 
 #: ../src/inkscape-application.cpp:560
 msgid "WIDTH"
@@ -8755,7 +8755,7 @@ msgstr "ШИРИНА"
 #: ../src/inkscape-application.cpp:561
 msgid "Bitmap height in pixels (overrides --export-dpi)"
 msgstr ""
-"Высота растрового изображения в пикселах (переопределяет --export-dpi)."
+"Высота растрового изображения в пикселях (переопределяет --export-dpi)."
 
 #: ../src/inkscape-application.cpp:561
 msgid "HEIGHT"
@@ -14266,7 +14266,7 @@ msgstr "Вращение"
 
 #: ../src/selection-chemistry.cpp:2242
 msgid "Rotate by pixels"
-msgstr "Вращение по пикселам"
+msgstr "Вращение по пикселям"
 
 #: ../src/selection-chemistry.cpp:2295
 msgid "Scale by whole factor"
@@ -15270,7 +15270,7 @@ msgstr "Расставить"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:473
 msgid "Minimum horizontal gap (in px units) between bounding boxes"
-msgstr "Минимальный горизонтальный интервал между рамками (в пикселах)"
+msgstr "Минимальный горизонтальный интервал между рамками (в пикселях)"
 
 #. TRANSLATORS: "H:" stands for horizontal gap
 #: ../src/ui/dialog/align-and-distribute.cpp:475
@@ -15280,7 +15280,7 @@ msgstr "_Г:"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:483
 msgid "Minimum vertical gap (in px units) between bounding boxes"
-msgstr "Минимальный вертикальный интервал между рамками (в пикселах)"
+msgstr "Минимальный вертикальный интервал между рамками (в пикселях)"
 
 #. TRANSLATORS: Vertical gap
 #: ../src/ui/dialog/align-and-distribute.cpp:485
@@ -16576,7 +16576,7 @@ msgstr "Всегда прилипать"
 
 #: ../src/ui/dialog/document-properties.cpp:122
 msgid "Snapping distance, in screen pixels, for snapping to objects"
-msgstr "Зона прилипания к объектам, в экранных пикселах"
+msgstr "Зона прилипания к объектам, в экранных пикселях"
 
 #: ../src/ui/dialog/document-properties.cpp:122
 msgid "Always snap to objects, regardless of their distance"
@@ -16624,7 +16624,7 @@ msgstr "Прилипать только если _ближе чем:"
 
 #: ../src/ui/dialog/document-properties.cpp:132
 msgid "Snapping distance, in screen pixels, for snapping to guides"
-msgstr "Зона прилипания к направляющим, в экранных пикселах"
+msgstr "Зона прилипания к направляющим, в экранных пикселях"
 
 #: ../src/ui/dialog/document-properties.cpp:132
 msgid "Always snap to guides, regardless of the distance"
@@ -16997,7 +16997,7 @@ msgstr "<b>Размер изображения</b>"
 
 #: ../src/ui/dialog/export.cpp:258 ../src/ui/dialog/export.cpp:269
 msgid "pixels at"
-msgstr "пикселов при"
+msgstr "пикселей при"
 
 #: ../src/ui/dialog/export.cpp:264
 msgid "dp_i"
@@ -17484,8 +17484,8 @@ msgid ""
 "the formula k1*i1*i2 + k2*i1 + k3*i2 + k4 where i1 and i2 are the pixel "
 "values of the first and second inputs respectively."
 msgstr ""
-"Если выбран арифметический оператор, каждый получаемый пиксел вычисляется по "
-"формуле k1*i1*i2 + k2*i1 + k3*i2 + k4, где i1 и i2 — пикселы первого и "
+"Если выбран арифметический оператор, каждый получаемый пиксель вычисляется по "
+"формуле k1*i1*i2 + k2*i1 + k3*i2 + k4, где i1 и i2 — пиксели первого и "
 "второго входов, соответственно."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2767
@@ -17522,7 +17522,7 @@ msgid ""
 "X coordinate of the target point in the convolve matrix. The convolution is "
 "applied to pixels around this point."
 msgstr ""
-"Координата X конечной точки матрицы свёртки. Свёртка применяется к пикселам "
+"Координата X конечной точки матрицы свёртки. Свёртка применяется к пикселям "
 "вокруг этой точки."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2773
@@ -17530,7 +17530,7 @@ msgid ""
 "Y coordinate of the target point in the convolve matrix. The convolution is "
 "applied to pixels around this point."
 msgstr ""
-"Координата Y конечной точки матрицы свёртки. Свёртка применяется к пикселам "
+"Координата Y конечной точки матрицы свёртки. Свёртка применяется к пикселям "
 "вокруг этой точки."
 
 #. TRANSLATORS: for info on "Kernel", see http://en.wikipedia.org/wiki/Kernel_(matrix)
@@ -17548,7 +17548,7 @@ msgid ""
 "would lead to a common blur effect."
 msgstr ""
 "Эта матрица описывает операцию свёртки, которая будет применена к входящему "
-"изображению для вычисления цветов пикселов на выходе. Различные комбинации "
+"изображению для вычисления цветов пикселей на выходе. Различные комбинации "
 "значений дают различные визуальные эффекты. Тождественная матрица даст "
 "эффект размытия движением, в то время как матрица, заполненная постоянным "
 "ненулевым значением, даст обычный эффект размытия."
@@ -17591,7 +17591,7 @@ msgid ""
 "that the matrix operations can be applied when the kernel is positioned at "
 "or near the edge of the input image."
 msgstr ""
-"Определяет, как расширить входящее изображение цветными пикселами, чтобы "
+"Определяет, как расширить входящее изображение цветными пикселями, чтобы "
 "матричные операции могли работать с ядром, расположенным на крае изображения "
 "или близко к нему."
 
@@ -17762,7 +17762,7 @@ msgid ""
 "grayscale, modifying color saturation and changing color hue."
 msgstr ""
 "Примитив <b>feColorMatrix</b> применяет матричное преобразование к цвету "
-"каждого пиксела. Таким образом можно обесцвечивать, повышать насыщенность и "
+"каждого пикселя. Таким образом можно обесцвечивать, повышать насыщенность и "
 "менять тон."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2872
@@ -17787,7 +17787,7 @@ msgstr ""
 "Примитив <b>feComposite</b> совмещает два изображения, используя один из "
 "режимов смешивания Портера-Даффа или арифметический оператор из стандарта "
 "SVG. Режимы совмещения Портера-Даффа — по сути, логические операции между "
-"значениями соответствующих пикселов этих изображений."
+"значениями соответствующих пикселей этих изображений."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2880
 msgid ""
@@ -17822,9 +17822,9 @@ msgid ""
 "how far the pixel should come from. Classical examples are whirl and pinch "
 "effects."
 msgstr ""
-"Примитив <b>feDisplacementMap</b> смещает пикселы первого входа, используя "
-"пикселы второго в качестве карты смещения, показывающей, как далеко должны "
-"отойти пикселы. Типичные эффекты, создаваемые при помощи карты смещения — "
+"Примитив <b>feDisplacementMap</b> смещает пиксели первого входа, используя "
+"пиксели второго в качестве карты смещения, показывающей, как далеко должны "
+"отойти пиксели. Типичные эффекты, создаваемые при помощи карты смещения — "
 "завихрение и щипок."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2892
@@ -20950,14 +20950,14 @@ msgstr "_Чувствительность захвата:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1444
 msgid "pixels (requires restart)"
-msgstr "пикселов (требуется перезапуск)"
+msgstr "пикселей (требуется перезапуск)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1445
 msgid ""
 "How close on the screen you need to be to an object to be able to grab it "
 "with mouse (in screen pixels)"
 msgstr ""
-"Насколько близко (в пикселах) нужно подвести курсор мыши к объекту, чтобы "
+"Насколько близко (в пикселях) нужно подвести курсор мыши к объекту, чтобы "
 "ухватить его мышью"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1447
@@ -20969,13 +20969,13 @@ msgstr "Порог _щелчка/перетаскивания:"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1804
 #: ../src/ui/dialog/inkscape-preferences.cpp:1814 ../share/ui/units.xml:12
 msgid "pixels"
-msgstr "пикселов"
+msgstr "пикселей"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1448
 msgid ""
 "Maximum mouse drag (in screen pixels) which is considered a click, not a drag"
 msgstr ""
-"Максимальное количество пикселов, перетаскивание на которое\n"
+"Максимальное количество пикселей, перетаскивание на которое\n"
 "воспринимается как щелчок, а не как перетаскивание"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1451
@@ -21658,7 +21658,7 @@ msgid ""
 "One mouse wheel notch scrolls by this distance in screen pixels "
 "(horizontally with Shift)"
 msgstr ""
-"На это расстояние в пикселах изображение сдвигается одним щелчком\n"
+"На это расстояние в пикселях изображение сдвигается одним щелчком\n"
 "колёсика мыши (с нажатой клавишей Shift — по горизонтали)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1802
@@ -21672,7 +21672,7 @@ msgstr "_Шаг прокрутки:"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1805
 msgid "Pressing Ctrl+arrow key scrolls by this distance (in screen pixels)"
 msgstr ""
-"На это расстояние в пикселах изображение сдвигается при нажатии Ctrl+стрелки"
+"На это расстояние в пикселях изображение сдвигается при нажатии Ctrl+стрелки"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1807
 msgid "_Acceleration:"
@@ -21711,7 +21711,7 @@ msgid ""
 "How far (in screen pixels) you need to be from the canvas edge to trigger "
 "autoscroll; positive is outside the canvas, negative is within the canvas"
 msgstr ""
-"Насколько далеко (в пикселах) нужно отстоять от края окна, чтобы\n"
+"Насколько далеко (в пикселях) нужно отстоять от края окна, чтобы\n"
 "включилась автопрокрутка; положительные значения — за пределами окна,\n"
 "отрицательные — внутри окна"
 
@@ -21852,7 +21852,7 @@ msgstr "_Стрелки двигают на:"
 msgid ""
 "Pressing an arrow key moves selected object(s) or node(s) by this distance"
 msgstr ""
-"На это расстояние (в SVG пикселах) выделенный объект или узел перемещается "
+"На это расстояние (в SVG пикселях) выделенный объект или узел перемещается "
 "по нажатию клавиши со стрелкой"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1872
@@ -21862,7 +21862,7 @@ msgstr "Шаг масштабирования по &gt; и &lt;:"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1873
 msgid "Pressing > or < scales selection up or down by this increment"
 msgstr ""
-"На эту величину (в SVG пикселах) изменяется размер выделения по нажатию "
+"На эту величину (в SVG пикселях) изменяется размер выделения по нажатию "
 "клавиш > и <"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1875
@@ -21872,7 +21872,7 @@ msgstr "Втя_жка и оттяжка на:"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1876
 msgid "Inset and Outset commands displace the path by this distance"
 msgstr ""
-"На это расстояние (в SVG пикселах) команды втяжки и оттяжки смещают контур"
+"На это расстояние (в SVG пикселях) команды втяжки и оттяжки смещают контур"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1877
 msgid "Compass-like display of angles"
@@ -23076,7 +23076,7 @@ msgstr "Выключение контурного эффекта"
 
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:43
 msgid "Radius (pixels):"
-msgstr "Радиус (в пикселах):"
+msgstr "Радиус (в пикселях):"
 
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:54
 msgid "Chamfer subdivisions:"
@@ -26549,8 +26549,8 @@ msgid ""
 "The maximum allowed difference between the clicked pixel and the neighboring "
 "pixels to be counted in the fill"
 msgstr ""
-"Максимально допустимая разница между щёлкнутым пикселом и соседними "
-"пикселами, попадающими в заливку"
+"Максимально допустимая разница между щёлкнутым пикселем и соседними "
+"пикселями, попадающими в заливку"
 
 #: ../src/ui/toolbar/paintbucket-toolbar.cpp:102
 msgid "Grow/shrink by:"
@@ -33573,8 +33573,8 @@ msgstr ""
 "\n"
 " * ПРИМЕЧАНИЕ:\n"
 "  1) Сохраняйте результаты работы перед векторизацией\n"
-"  2) Следите за счётчиком пикселов: «Векторизация пиксельной графики» "
-"создаёт по контуру для каждого пиксела. Данный метод не рекомендуется "
+"  2) Следите за счётчиком пикселей: «Векторизация пиксельной графики» "
+"создаёт по контуру для каждого пикселя. Данный метод не рекомендуется "
 "использовать для изображений, не являющихся пиксельной графикой.\n"
 "  3) Автоматическая векторизация медленнее, чем метод potrace, и поэтому не "
 "рекомендована для больших изображений. Рекомендуется предварительно "
@@ -33677,7 +33677,7 @@ msgstr ""
 
 #: ../share/ui/dialog-trace.glade:632
 msgid "Speckles of up to this many pixels will be suppressed"
-msgstr "Пятна такого диаметра в пикселах будут подавлены"
+msgstr "Пятна такого диаметра в пикселях будут подавлены"
 
 #: ../share/ui/dialog-trace.glade:644
 msgid "Increase this to smooth corners more"
@@ -33709,7 +33709,7 @@ msgstr "Кривые (множитель)"
 
 #: ../share/ui/dialog-trace.glade:732
 msgid "Avoid single disconnected pixels"
-msgstr "Избегать одиночных разъединённых пикселов"
+msgstr "Избегать одиночных разъединённых пикселей"
 
 #: ../share/ui/dialog-trace.glade:733
 msgid "Islands (weight)"
@@ -33724,7 +33724,7 @@ msgid ""
 "Sparse pixels\n"
 "(window radius)"
 msgstr ""
-"Разреженные пикселы\n"
+"Разреженные пиксели\n"
 "(радиус окна)"
 
 #: ../share/ui/dialog-trace.glade:758
@@ -33732,7 +33732,7 @@ msgid ""
 "Sparse pixels\n"
 "(multiplier)"
 msgstr ""
-"Разреженные пикселы\n"
+"Разреженные пиксели\n"
 "(множитель)"
 
 #: ../share/ui/dialog-trace.glade:770 ../share/ui/dialog-trace.glade:813
@@ -35047,7 +35047,7 @@ msgstr ""
 "определённого первыми тремя узлами выбранного контура. Вы можете выбрать "
 "нужные из готовых конструкций или создать собственные.\n"
 "            \n"
-"Единица измерения — пикселы Inkscape. Углы задаются в радианах.\n"
+"Единица измерения — пиксели Inkscape. Углы задаются в радианах.\n"
 "\n"
 "Вы можете указать точку при помощи трилинейных координат или функции центра "
 "треугольника. В качестве функции указывайте длины сторон или углы.\n"
@@ -35146,7 +35146,7 @@ msgstr ""
 "- поддерживаются файлы AutoCAD Release 13 и новее.\n"
 "- для ручного масштабирования предполагается, что единица измерения в "
 "рисунке DXF — мм.\n"
-"- предполагается, что рисунок SVG — в пикселах с разрешением 96 dpi.\n"
+"- предполагается, что рисунок SVG — в пикселях с разрешением 96 dpi.\n"
 "- коэффициент масштабирования и начало координат применяются только к "
 "ручному масштабированию.\n"
 "- при «Автоматическом масштабировании» результат будет соответствовать "
@@ -35191,7 +35191,7 @@ msgstr "пика"
 #: ../share/extensions/dxf_outlines.inx:13
 #: ../share/extensions/render_gears.inx:10
 msgid "px"
-msgstr "пиксел"
+msgstr "пиксель"
 
 #: ../share/extensions/dxf_outlines.inx:14
 #: ../share/extensions/gcodetools_area.inx:85
@@ -35289,7 +35289,7 @@ msgid ""
 msgstr ""
 "- Формат DXF AutoCAD Release 14.\n"
 "- Параметр основной единицы измерения определяет, в каких единицах будут "
-"выводиться координаты (90 пикселов = 1 дюйм).\n"
+"выводиться координаты (90 пикселей = 1 дюйм).\n"
 "- Поддерживаемые типы элементов:\n"
 "    - пути (линии и сплайны);\n"
 "    - прямоугольники;\n"
@@ -41584,7 +41584,7 @@ msgstr "Единица ширины:"
 #: ../share/extensions/webslicer_create_group.inx:11
 #: ../share/extensions/webslicer_create_group.inx:16
 msgid "Pixel (fixed)"
-msgstr "Пиксел (фиксированная)"
+msgstr "Пиксель (фиксированная)"
 
 #: ../share/extensions/webslicer_create_group.inx:12
 #: ../share/extensions/webslicer_create_group.inx:17
@@ -41959,13 +41959,13 @@ msgstr "Проценты"
 
 #: ../share/ui/units.xml:11
 msgid "pixel"
-msgstr "пиксел"
+msgstr "пиксель"
 
 #
 # File: ../share/ui/units.xml, line: 15
 #: ../share/ui/units.xml:15
 msgid "CSS Pixels (96/inch)"
-msgstr "CSS-пикселы (96/дюйм)"
+msgstr "CSS-пиксели (96/дюйм)"
 
 #: ../share/ui/units.xml:18
 msgid "point"
@@ -42007,7 +42007,7 @@ msgstr "дюймы"
 # File: ../share/ui/units.xml, line: 36
 #: ../share/ui/units.xml:36
 msgid "Inches (96 px/in)"
-msgstr "Дюймы (96 пикселов/дюйм)"
+msgstr "Дюймы (96 пикселей/дюйм)"
 
 #: ../share/ui/units.xml:39
 msgid "millimeter"
@@ -42420,7 +42420,7 @@ msgstr "Половина кегля данного шрифта"
 #~ msgstr "Текстовая метка, присоединённая к контуру"
 
 #~ msgid "Pixel"
-#~ msgstr "Пиксел"
+#~ msgstr "Пиксель"
 
 #~ msgid "Pica"
 #~ msgstr "Пика"
@@ -42438,7 +42438,7 @@ msgstr "Половина кегля данного шрифта"
 #~ msgstr "Единицы кегля"
 
 #~ msgid "Always output text size in pixels (px)"
-#~ msgstr "Всегда выводить кегль текста в пикселах (px)"
+#~ msgstr "Всегда выводить кегль текста в пикселях (px)"
 
 #~ msgid ""
 #~ "The 'image-rendering' property can influence how a bitmap is up-scaled:\n"
@@ -42704,7 +42704,7 @@ msgstr "Половина кегля данного шрифта"
 #~ "Векторизовать с оптимальным определением краев по алгоритму J. Canny"
 
 #~ msgid "Brightness cutoff for adjacent pixels (determines edge thickness)"
-#~ msgstr "Порог яркости для смежных пикселов (определяет толщину краев)"
+#~ msgstr "Порог яркости для смежных пикселей (определяет толщину краев)"
 
 #~ msgid "T_hreshold:"
 #~ msgstr "По_рог:"
@@ -42781,7 +42781,7 @@ msgstr "Половина кегля данного шрифта"
 
 #~ msgid "Create paths using Kopf-Lischinski algorithm to vectorize pixel art"
 #~ msgstr ""
-#~ "Создание контуров по алгоритму Kopf-Lischinski для векторизации пиксел-"
+#~ "Создание контуров по алгоритму Kopf-Lischinski для векторизации пиксель-"
 #~ "арта"
 
 #, fuzzy
@@ -43490,7 +43490,7 @@ msgstr "Половина кегля данного шрифта"
 
 #, fuzzy
 #~ msgid "pixelsnap.py"
-#~ msgstr "пикселов при"
+#~ msgstr "пикселей при"
 
 #, fuzzy
 #~ msgid "polyhedron_3d.py"
@@ -45001,7 +45001,7 @@ msgstr "Половина кегля данного шрифта"
 #~ "Попытка связать с %p уже связанный объект дока %p (текущий мастер: %p)"
 
 #~ msgid "Position of the divider in pixels"
-#~ msgstr "Положение делителя в пикселах"
+#~ msgstr "Положение делителя в пикселях"
 
 #~ msgid "Sticky"
 #~ msgstr "Sticky"
@@ -45938,7 +45938,7 @@ msgstr "Половина кегля данного шрифта"
 #~ msgstr "Pc"
 
 #~ msgid "Pixels"
-#~ msgstr "Пикселы"
+#~ msgstr "Пиксели"
 
 #~ msgid "Px"
 #~ msgstr "Px"
@@ -48791,7 +48791,7 @@ msgstr "Половина кегля данного шрифта"
 #~ msgstr ""
 #~ "corner-always-threshold <угол-в-градусах>: если угол в пикселе меньше "
 #~ "указанного значения, рассматривать это как угол, даже если он находится в "
-#~ "интервале значений «corner-surround» пикселов другого угла; значение по "
+#~ "интервале значений «corner-surround» пикселей другого угла; значение по "
 #~ "умолчанию: 60. "
 
 #
@@ -48800,7 +48800,7 @@ msgstr "Половина кегля данного шрифта"
 #~ "corner-surround <unsigned>: number of pixels on either side of a point to "
 #~ "consider when determining if that point is a corner; default is 4. "
 #~ msgstr ""
-#~ "corner-surround <беззнаковое-цвлое-число>: количество пикселов с каждой "
+#~ "corner-surround <беззнаковое-цвлое-число>: количество пикселей с каждой "
 #~ "стороны точки, учитываемое при определении того, является ли точка углом; "
 #~ "значение по умолчанию: 4. "
 
@@ -48811,8 +48811,8 @@ msgstr "Половина кегля данного шрифта"
 #~ "its successor(s) meet at an angle smaller than this, it's a corner; "
 #~ "default is 100. "
 #~ msgstr ""
-#~ "corner-threshold <угол-в-градусах>: если пиксел, а также последующие и "
-#~ "предшествующие ему пикселы сходятся под углом, меньшим, чем указанный, "
+#~ "corner-threshold <угол-в-градусах>: если пиксель, а также последующие и "
+#~ "предшествующие ему пиксели сходятся под углом, меньшим, чем указанный, "
 #~ "считать это углом; значение по умолчанию: 100. "
 
 #
@@ -48822,7 +48822,7 @@ msgstr "Половина кегля данного шрифта"
 #~ "pixels than this; default is 2.0. "
 #~ msgstr ""
 #~ "error-threshold <вещественное-число>: разделять аппроксимирующие кривые, "
-#~ "отстоящие друг от друга более чем на указанное число пикселов; значение "
+#~ "отстоящие друг от друга более чем на указанное число пикселей; значение "
 #~ "по умолчанию: 2.0. "
 
 #
