@@ -107,6 +107,8 @@ parts:
       - libsvg-perl
       - libxml-xql-perl
       - ruby
+      - python3-gi
+      - python3-gi-cairo
     prime:
       - -lib/inkscape/*.a
     override-build: |
