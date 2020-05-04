@@ -22777,9 +22777,8 @@ msgid "None"
 msgstr "Nessuno"
 
 #: ../src/ui/dialog/input.cpp:669
-#, fuzzy
 msgid "Axes count:"
-msgstr "Quantità"
+msgstr "Numero assi:"
 
 #: ../src/ui/dialog/input.cpp:675
 #, fuzzy
@@ -22787,9 +22786,8 @@ msgid "axis:"
 msgstr "Raggio:"
 
 #: ../src/ui/dialog/input.cpp:688
-#, fuzzy
 msgid "Button count:"
-msgstr "Bottone"
+msgstr "Numero tasti:"
 
 #: ../src/ui/dialog/input.cpp:836
 msgid "Tablet"
@@ -22830,11 +22828,11 @@ msgstr "Pressione"
 
 #: ../src/ui/dialog/input.cpp:1433
 msgid "X tilt"
-msgstr ""
+msgstr "Inclinazione X"
 
 #: ../src/ui/dialog/input.cpp:1433
 msgid "Y tilt"
-msgstr ""
+msgstr "Inclinazione Y"
 
 #: ../src/ui/dialog/input.cpp:1433 ../src/ui/widget/color-wheel-selector.cpp:31
 msgid "Wheel"
@@ -25885,14 +25883,12 @@ msgid "Cut out from paths and shapes"
 msgstr "Taglia tracciati e forme in parti"
 
 #: ../src/ui/toolbar/eraser-toolbar.cpp:75 ../share/extensions/frame.inx:17
-#, fuzzy
 msgid "Clip"
-msgstr "Fissa a:"
+msgstr "Fissa"
 
 #: ../src/ui/toolbar/eraser-toolbar.cpp:76
-#, fuzzy
 msgid "Clip from objects"
-msgstr "Taglia dagli oggetti"
+msgstr "Fissa da oggetti"
 
 #: ../src/ui/toolbar/eraser-toolbar.cpp:98
 msgid "(no width)"
@@ -36544,6 +36540,17 @@ msgid ""
 "concatenated and converted with their first level parent layer into a single "
 "Gimp layer."
 msgstr ""
+"Questa estensione esporta il documento nel formato Gimp XCF secondo queste "
+"opzioni:\n"
+"    * Salva guide: converte tutte le guide in guide Gimp.\n"
+"    * Salva griglia: converte la prima griglia rettangolare in una griglia "
+"Gimp (nota che la griglia predefinita di Inkscape è molto fitta in Gimp.)\n"
+"    * Salva sfondo: aggiunge lo sfondo del documento ad ogni livello "
+"convertito.\n"
+"    * Risoluzione file: risoluzione del file XCF in DPI.\n"
+"\n"
+"Ogni primo livello viene convertito ad un livello Gimp. I suoi sottolivelli "
+"saranno concatenati al loro primo livello in unico livello Gimp."
 
 #: ../share/extensions/gimp_xcf.inx:27 ../share/extensions/gimp_xcf.inx:28
 msgid "GIMP XCF maintaining layers (*.xcf)"
