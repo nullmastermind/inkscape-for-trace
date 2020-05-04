@@ -801,6 +801,7 @@ getNodes(SPItem * item, Geom::Affine transform, bool onbbox, bool centers, bool 
                 continue;
             }
             std::vector< Point > letter_nodes = transformNodes(curve->get_pathvector().nodes(), transform);
+            curve->unref();
             current_nodes.insert(current_nodes.end(),letter_nodes.begin(),letter_nodes.end());
             if (iter == te_get_layout(item)->end()) {
                 break;
