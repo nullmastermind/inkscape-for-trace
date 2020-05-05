@@ -319,8 +319,8 @@ public:
      */
     sigc::signal<void, SPObject *, SPObject *> signal_stroke_ps_changed;
 
-    SPObject       *getFilter()          { return (filter.href) ? filter.href->getObject() : nullptr; }
-    SPObject const *getFilter()    const { return (filter.href) ? filter.href->getObject() : nullptr; }
+    SPFilter       *getFilter()          { return (filter.href) ? filter.href->getObject() : nullptr; }
+    SPFilter const *getFilter()    const { return (filter.href) ? filter.href->getObject() : nullptr; }
     Inkscape::URI const *getFilterURI() const { return (filter.href) ? filter.href->getURI() : nullptr; }
 
     SPPaintServer       *getFillPaintServer()         { return (fill.value.href) ? fill.value.href->getObject() : nullptr; }
