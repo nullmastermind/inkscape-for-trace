@@ -375,7 +375,7 @@ SPFilter *modify_filter_gaussian_blur_from_item(SPDocument *document, SPItem *it
         return new_filter_simple_from_item(document, item, "normal", radius);
     }
 
-    SPFilter *filter = SP_FILTER(item->style->getFilter());
+    SPFilter *filter = item->style->getFilter();
     if (!filter) {
         // We reach here when filter.set is true, but the href is not found in the document
         return new_filter_simple_from_item(document, item, "normal", radius);

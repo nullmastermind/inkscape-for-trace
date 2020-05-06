@@ -1460,7 +1460,7 @@ void FilterEffectsDialog::FilterModifier::update_selection(Selection *sel)
         return;
     }
 
-    std::set<SPObject*> used;
+    std::set<SPFilter*> used;
     auto itemlist= sel->items();
     for(auto i=itemlist.begin(); itemlist.end() != i; ++i) {
         SPObject *obj = *i;

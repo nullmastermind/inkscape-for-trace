@@ -312,7 +312,7 @@ KnotHolder::knot_ungrabbed_handler(SPKnot *knot, guint state)
             }
         }
 
-        SPFilter *filter = (object->style) ? dynamic_cast<SPFilter *>(object->style->getFilter()) : nullptr;
+        SPFilter *filter = (object->style) ? object->style->getFilter() : nullptr;
         if (filter) {
             filter->updateRepr();
         }
