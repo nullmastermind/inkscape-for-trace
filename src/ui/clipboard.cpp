@@ -876,7 +876,7 @@ void ClipboardManagerImpl::_copyUsedDefs(SPItem *item)
     {
         SPBox3D *box = dynamic_cast<SPBox3D *>(item);
         if (box) {
-            _copyNode(box3d_get_perspective(box)->getRepr(), _doc, _defs);
+            _copyNode(box->get_perspective()->getRepr(), _doc, _defs);
         }
     }
 

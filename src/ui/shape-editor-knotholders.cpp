@@ -606,7 +606,7 @@ Box3DKnotHolderEntity::knot_get_generic(SPItem *item, unsigned int knot_id) cons
 {
     SPBox3D *box = dynamic_cast<SPBox3D *>(item);
     if (box) {
-        return box3d_get_corner_screen(box, knot_id);
+        return box->get_corner_screen(knot_id);
     } else {
         return Geom::Point(); // TODO investigate proper fallback
     }
@@ -629,9 +629,9 @@ Box3DKnotHolderEntity::knot_set_generic(SPItem *item, unsigned int knot_id, Geom
         movement = Box3D::Z;
     }
 
-    box3d_set_corner (box, knot_id, s * i2dt, movement, (state & GDK_CONTROL_MASK));
-    box3d_set_z_orders(box);
-    box3d_position_set(box);
+    box->set_corner (knot_id, s * i2dt, movement, (state & GDK_CONTROL_MASK));
+    box->set_z_orders();
+    box->position_set();
 }
 
 class Box3DKnotHolderEntity0 : public Box3DKnotHolderEntity {
@@ -750,7 +750,7 @@ Box3DKnotHolderEntityCenter::knot_get() const
 {
     SPBox3D *box = dynamic_cast<SPBox3D *>(item);
     if (box) {
-        return box3d_get_center_screen(box);
+        return box->get_center_screen();
     } else {
         return Geom::Point(); // TODO investigate proper fallback
     }
@@ -813,11 +813,11 @@ Box3DKnotHolderEntityCenter::knot_set(Geom::Point const &new_pos, Geom::Point co
     g_assert(box != nullptr);
     Geom::Affine const i2dt (item->i2dt_affine ());
 
-    box3d_set_center(box, s * i2dt, origin * i2dt, !(state & GDK_SHIFT_MASK) ? Box3D::XY : Box3D::Z,
-                      state & GDK_CONTROL_MASK);
+    box->set_center(s * i2dt, origin * i2dt, !(state & GDK_SHIFT_MASK) ? Box3D::XY : Box3D::Z,
+                    state & GDK_CONTROL_MASK);
 
-    box3d_set_z_orders(box);
-    box3d_position_set(box);
+    box->set_z_orders();
+    box->position_set();
 }
 
 Box3DKnotHolder::Box3DKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFunc relhandler) :

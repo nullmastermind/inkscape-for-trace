@@ -488,7 +488,7 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
     {
         SPBox3D *box = dynamic_cast<SPBox3D *>(group);
         if (box) {
-            group = box3d_convert_to_group(box);
+            group = box->convert_to_group();
         }
     }
 
@@ -807,7 +807,7 @@ void SPGroup::scaleChildItemsRec(Geom::Scale const &sc, Geom::Point const &p, bo
                                 SPBox3D *box = dynamic_cast<SPBox3D *>(item);
                                 if (box) {
                                     // Force recalculation from perspective
-                                    box3d_position_set(box);
+                                    box->position_set();
                                 } else if (item->getAttribute("inkscape:connector-type") != nullptr
                                            && (item->getAttribute("inkscape:connection-start") == nullptr
                                                || item->getAttribute("inkscape:connection-end") == nullptr)) {

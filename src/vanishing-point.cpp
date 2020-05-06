@@ -117,11 +117,11 @@ static void vp_knot_moved_handler(SPKnot *knot, Geom::Point const &ppointer, gui
                    FIXME: We need to unlink the _un_selected boxes of each VP so that
                           the correct boxes are kept with the VP being moved */
                 std::list<SPBox3D *> bx_lst = old_persp->list_of_boxes();
-                for (auto & i : bx_lst) {
-                    if (std::find(sel_boxes.begin(), sel_boxes.end(), i) == sel_boxes.end()) {
+                for (auto & box : bx_lst) {
+                    if (std::find(sel_boxes.begin(), sel_boxes.end(), box) == sel_boxes.end()) {
                         /* if a box in the VP is unselected, move it to the
                            newly created perspective so that it doesn't get dragged **/
-                        box3d_switch_perspectives(i, old_persp, new_persp);
+                        box->switch_perspectives(old_persp, new_persp);
                     }
                 }
             }
@@ -569,7 +569,7 @@ void VPDrag::updateDraggers()
         if (box) {
             VanishingPoint vp;
             for (int i = 0; i < 3; ++i) {
-                vp.set(box3d_get_perspective(box), Proj::axes[i]);
+                vp.set(box->get_perspective(), Proj::axes[i]);
                 addDragger(vp);
             }
         }
@@ -670,10 +670,10 @@ void VPDrag::drawLinesForFace(const SPBox3D *box,
 
     const size_t NUM_CORNERS = 4;
     Geom::Point corners[NUM_CORNERS];
-    box3d_corners_for_PLs(box, axis, corners[0], corners[1], corners[2], corners[3]);
+    box->corners_for_PLs(axis, corners[0], corners[1], corners[2], corners[3]);
 
-    g_return_if_fail(box3d_get_perspective(box));
-    Proj::Pt2 vp = box3d_get_perspective(box)->get_VP(axis);
+    g_return_if_fail(box->get_perspective());
+    Proj::Pt2 vp = box->get_perspective()->get_VP(axis);
     if (vp.is_finite()) {
         // draw perspective lines for finite VPs
         Geom::Point pt = vp.affine();
@@ -691,7 +691,7 @@ void VPDrag::drawLinesForFace(const SPBox3D *box,
     else {
         // draw perspective lines for infinite VPs
         boost::optional<Geom::Point> pts[NUM_CORNERS];
-        Persp3D *persp = box3d_get_perspective(box);
+        Persp3D *persp = box->get_perspective();
         SPDesktop *desktop = SP_ACTIVE_DESKTOP; // FIXME: Store the desktop in VPDrag
 
         for (size_t i = 0; i < NUM_CORNERS; i++) {

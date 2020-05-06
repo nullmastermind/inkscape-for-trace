@@ -1609,7 +1609,7 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
             transf_persp = Persp3D::create_xml_element (persp->document, persp->perspective_impl);
 
             for (auto & selboxe : selboxes)
-                box3d_switch_perspectives(selboxe, persp, transf_persp);
+                selboxe->switch_perspectives(persp, transf_persp);
         } else {
             transf_persp = persp;
         }

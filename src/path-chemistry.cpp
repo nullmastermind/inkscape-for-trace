@@ -374,7 +374,7 @@ sp_item_list_to_curves(const std::vector<SPItem*> &items, std::vector<SPItem*>& 
         SPBox3D *box = dynamic_cast<SPBox3D *>(item);
         if (box) {
             // convert 3D box to ordinary group of paths; replace the old element in 'selected' with the new group
-            Inkscape::XML::Node *repr = box3d_convert_to_group(box)->getRepr();
+            Inkscape::XML::Node *repr = box->convert_to_group()->getRepr();
             
             if (repr) {
                 to_select.insert(to_select.begin(),repr);

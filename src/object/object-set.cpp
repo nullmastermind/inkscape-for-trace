@@ -353,7 +353,7 @@ boost::optional<Geom::Point> ObjectSet::center() const {
 std::list<Persp3D *> const ObjectSet::perspList() {
     std::list<Persp3D *> pl;
     for (auto & _3dboxe : _3dboxes) {
-        Persp3D *persp = box3d_get_perspective(_3dboxe);
+        Persp3D *persp = _3dboxe->get_perspective();
         if (std::find(pl.begin(), pl.end(), persp) == pl.end())
             pl.push_back(persp);
     }
@@ -364,7 +364,7 @@ std::list<SPBox3D *> const ObjectSet::box3DList(Persp3D *persp) {
     std::list<SPBox3D *> boxes;
     if (persp) {
         for (auto box : _3dboxes) {
-            if (persp == box3d_get_perspective(box)) {
+            if (persp == box->get_perspective()) {
                 boxes.push_back(box);
             }
         }
@@ -375,7 +375,7 @@ std::list<SPBox3D *> const ObjectSet::box3DList(Persp3D *persp) {
 }
 
 void ObjectSet::_add3DBoxesRecursively(SPObject *obj) {
-    std::list<SPBox3D *> boxes = box3d_extract_boxes(obj);
+    std::list<SPBox3D *> boxes = SPBox3D::extract_boxes(obj);
 
     for (auto box : boxes) {
         _3dboxes.push_back(box);
@@ -383,7 +383,7 @@ void ObjectSet::_add3DBoxesRecursively(SPObject *obj) {
 }
 
 void ObjectSet::_remove3DBoxesRecursively(SPObject *obj) {
-    std::list<SPBox3D *> boxes = box3d_extract_boxes(obj);
+    std::list<SPBox3D *> boxes = SPBox3D::extract_boxes(obj);
 
     for (auto box : boxes) {
         std::list<SPBox3D *>::iterator b = std::find(_3dboxes.begin(), _3dboxes.end(), box);

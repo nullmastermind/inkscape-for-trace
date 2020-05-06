@@ -441,7 +441,7 @@ Persp3D::update_box_displays () {
     if (persp_impl->boxes.empty())
         return;
     for (auto & boxe : persp_impl->boxes) {
-        box3d_position_set(boxe);
+        boxe->position_set();
     }
 }
 
@@ -457,7 +457,7 @@ Persp3D::update_box_reprs () {
         return;
     for (auto & boxe : persp_impl->boxes) {
         boxe->updateRepr(SP_OBJECT_WRITE_EXT);
-        box3d_set_z_orders(boxe);
+        boxe->set_z_orders();
     }
 }
 
@@ -468,7 +468,7 @@ Persp3D::update_z_orders () {
     if (persp_impl->boxes.empty())
         return;
     for (auto & boxe : persp_impl->boxes) {
-        box3d_set_z_orders(boxe);
+        boxe->set_z_orders();
     }
 }
 
@@ -501,9 +501,9 @@ Persp3D::absorb(Persp3D *other) {
     //       otherwise the loop below gets confused when perspectives are reattached.
     std::list<SPBox3D *> boxes_of_persp2 = other->list_of_boxes();
 
-    for (auto & i : boxes_of_persp2) {
-        box3d_switch_perspectives(i, other, this, true);
-        i->updateRepr(SP_OBJECT_WRITE_EXT); // so that undo/redo can do its job properly
+    for (auto & box : boxes_of_persp2) {
+        box->switch_perspectives(other, this, true);
+        box->updateRepr(SP_OBJECT_WRITE_EXT); // so that undo/redo can do its job properly
     }
 }
 
@@ -556,7 +556,7 @@ Persp3D::print_debugging_info () const {
 
     g_print ("  Boxes: ");
     for (auto & boxe : persp_impl->boxes) {
-        g_print ("%d (%d)  ", boxe->my_counter, box3d_get_perspective(boxe)->perspective_impl->my_counter);
+        g_print ("%d (%d)  ", boxe->my_counter, boxe->get_perspective()->perspective_impl->my_counter);
     }
     g_print ("\n");
     g_print ("========================\n");

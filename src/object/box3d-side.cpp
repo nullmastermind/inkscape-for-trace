@@ -177,20 +177,20 @@ void Box3DSide::set_shape() {
 
     SPCurve *c = new SPCurve();
 
-    if (!box3d_get_corner_screen(box, corners[0]).isFinite() ||
-        !box3d_get_corner_screen(box, corners[1]).isFinite() ||
-        !box3d_get_corner_screen(box, corners[2]).isFinite() ||
-        !box3d_get_corner_screen(box, corners[3]).isFinite() )
+    if (!box->get_corner_screen(corners[0]).isFinite() ||
+        !box->get_corner_screen(corners[1]).isFinite() ||
+        !box->get_corner_screen(corners[2]).isFinite() ||
+        !box->get_corner_screen(corners[3]).isFinite() )
     {
         g_warning ("Trying to draw a 3D box side with invalid coordinates.\n");
         delete c;
         return;
     }
 
-    c->moveto(box3d_get_corner_screen(box, corners[0]));
-    c->lineto(box3d_get_corner_screen(box, corners[1]));
-    c->lineto(box3d_get_corner_screen(box, corners[2]));
-    c->lineto(box3d_get_corner_screen(box, corners[3]));
+    c->moveto(box->get_corner_screen(corners[0]));
+    c->lineto(box->get_corner_screen(corners[1]));
+    c->lineto(box->get_corner_screen(corners[2]));
+    c->lineto(box->get_corner_screen(corners[3]));
     c->closepath();
 
     /* Reset the shape's curve to the "original_curve"

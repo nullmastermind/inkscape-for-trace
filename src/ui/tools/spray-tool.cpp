@@ -886,7 +886,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
         SPBox3D *box = dynamic_cast<SPBox3D *>(item);
         if (box) {
             // convert 3D boxes to ordinary groups before spraying their shapes
-            item = box3d_convert_to_group(box);
+            item = box->convert_to_group();
             set->add(item);
         }
     }
