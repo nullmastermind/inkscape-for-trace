@@ -598,35 +598,30 @@ LaTeXTextRenderer::sp_item_invoke_render(SPItem *item)
 
     SPRoot *root = dynamic_cast<SPRoot *>(item);
     if (root) {
-        sp_root_render(root);
-    } else {
-        SPGroup *group = dynamic_cast<SPGroup *>(item);
-        if (group) {
-            sp_group_render(group);
-        } else {
-            SPUse *use = dynamic_cast<SPUse *>(item);
-            if (use) {
-                sp_use_render(use);
-            } else {
-                SPText *text = dynamic_cast<SPText *>(item);
-                if (text) {
-                    sp_text_render(text);
-                } else {
-                    SPFlowtext *flowtext = dynamic_cast<SPFlowtext *>(item);
-                    if (flowtext) {
-                        sp_flowtext_render(flowtext);
-                    } else {
-                        // Only PDFLaTeX supports importing a single page of a graphics file,
-                        // so only PDF backend gets interleaved text/graphics
-                        if (_pdflatex && (_omittext_state == EMPTY || _omittext_state == NEW_PAGE_ON_GRAPHIC)) {
-                            writeGraphicPage();
-                        }
-                        _omittext_state = GRAPHIC_ON_TOP;
-                    }
-                }
-            }
-        }
+        return sp_root_render(root);
     }
+    SPGroup *group = dynamic_cast<SPGroup *>(item);
+    if (group) {
+        return sp_group_render(group);
+    }
+    SPUse *use = dynamic_cast<SPUse *>(item);
+    if (use) {
+        return sp_use_render(use);
+    }
+    SPText *text = dynamic_cast<SPText *>(item);
+    if (text) {
+        return sp_text_render(text);
+    }
+    SPFlowtext *flowtext = dynamic_cast<SPFlowtext *>(item);
+    if (flowtext) {
+        return sp_flowtext_render(flowtext);
+    }
+    // Only PDFLaTeX supports importing a single page of a graphics file,
+    // so only PDF backend gets interleaved text/graphics
+    if (_pdflatex && (_omittext_state == EMPTY || _omittext_state == NEW_PAGE_ON_GRAPHIC)) {
+        writeGraphicPage();
+    }
+    _omittext_state = GRAPHIC_ON_TOP;
 }
 
 void
