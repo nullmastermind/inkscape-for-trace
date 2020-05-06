@@ -229,6 +229,11 @@ iconview *:hover {
     padding:5px;
 }
 
+#LPESelectorFlowBox image{
+    background-color:@theme_bg_color;
+    border-color:transparent;
+}
+
 #LPEExperimental image {
     color: transparent;
 }
