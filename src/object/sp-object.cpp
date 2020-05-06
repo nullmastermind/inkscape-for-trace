@@ -201,8 +201,8 @@ public:
     : BaseRefCountEvent(name)
     {
         _addProperty("object", Util::format("%p", object).pointer());
-        _addProperty("class", Debug::demangle(g_type_name(G_TYPE_FROM_INSTANCE(object))));
-        _addProperty("new-refcount", Util::format("%d", G_OBJECT(object)->ref_count + bias).pointer());
+        _addProperty("class", Debug::demangle(typeid(*object).name()));
+        _addProperty("new-refcount", Util::format("%d", object->refCount + bias).pointer());
     }
 };
 

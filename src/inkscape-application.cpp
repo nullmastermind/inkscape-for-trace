@@ -29,6 +29,7 @@
 #include "include/glibmm_version.h"
 
 #include "inkgc/gc-core.h"        // Garbage Collecting init
+#include "debug/logger.h"         // INKSCAPE_DEBUG_LOG support
 
 #include "io/file.h"              // File open (command line).
 #include "io/resource.h"          // TEMPLATE
@@ -534,6 +535,11 @@ ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
     // ==================== Initializations =====================
     // Garbage Collector
     Inkscape::GC::init();
+
+#ifndef NDEBUG
+    // Use environment variable INKSCAPE_DEBUG_LOG=log.txt for event logging
+    Inkscape::Debug::Logger::init();
+#endif
 
 #ifdef ENABLE_NLS
     // Native Language Support (shouldn't this always be used?).
