@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
- * TODO: insert short description here
+ * In case the real menu cannot be loaded from its designated XML file,
+ * provide a skeleton menu to be at least able to quit the application.
  *//*
  * Authors: see git history
  *
