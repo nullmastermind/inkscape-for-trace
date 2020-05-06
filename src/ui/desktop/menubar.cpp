@@ -504,6 +504,12 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
                     Inkscape::Verb *verb = Inkscape::Verb::getbyid(verb_name.c_str());
                     if (verb != nullptr && verb->get_code() != SP_VERB_NONE) {
 
+#ifdef GDK_WINDOWING_QUARTZ
+                        if (verb->get_code() == SP_VERB_FILE_QUIT) {
+                            continue;
+                        }
+#endif
+
                         SPAction* action = verb->get_action(Inkscape::ActionContext(view));
                         if (menu_ptr->attribute("check") != nullptr) {
                             Gtk::MenuItem *menuitem = build_menu_check_item_from_verb(action);
