@@ -399,7 +399,7 @@ void FilterKnotHolderEntity::knot_set(Geom::Point const &p, Geom::Point const &o
     }
 
     if (state)  {
-        SPFilter *filter = (item->style && item->style->filter.href) ? dynamic_cast<SPFilter *>(item->style->getFilter()) : nullptr;
+        SPFilter *filter = (item->style) ? item->style->getFilter() : nullptr;
         if(!filter) return;
         Geom::OptRect orig_bbox = item->visualBounds();
         std::unique_ptr<Geom::Rect> new_bbox(_topleft ? new Geom::Rect(p,orig_bbox->max()) : new Geom::Rect(orig_bbox->min(), p));
@@ -442,7 +442,7 @@ void FilterKnotHolderEntity::knot_set(Geom::Point const &p, Geom::Point const &o
 
 Geom::Point FilterKnotHolderEntity::knot_get() const
 {
-    SPFilter *filter = (item->style && item->style->filter.href) ? dynamic_cast<SPFilter *>(item->style->getFilter()) : nullptr;
+    SPFilter *filter = (item->style) ? item->style->getFilter() : nullptr;
     if(!filter) return Geom::Point(Geom::infinity(), Geom::infinity());
     Geom::OptRect r = item->visualBounds();
     if (_topleft) return Geom::Point(r->min());

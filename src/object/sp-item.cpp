@@ -814,7 +814,7 @@ Geom::OptRect SPItem::visualBounds(Geom::Affine const &transform, bool wfilter, 
     Geom::OptRect bbox;
 
 
-    SPFilter *filter = (style && style->filter.href) ? dynamic_cast<SPFilter *>(style->getFilter()) : nullptr;
+    SPFilter *filter = style ? style->getFilter() : nullptr;
     if (filter && wfilter) {
         // call the subclass method
     	// CPPIFY

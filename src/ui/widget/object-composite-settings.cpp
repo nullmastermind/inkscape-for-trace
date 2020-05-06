@@ -128,7 +128,7 @@ ObjectCompositeSettings::_blendBlurValueChanged()
         }
 
         if (radius == 0 && item->style->filter.set
-            && filter_is_single_gaussian_blur(SP_FILTER(item->style->getFilter()))) {
+            && filter_is_single_gaussian_blur(item->style->getFilter())) {
             remove_filter(item, false);
         } else if (radius != 0) {
             SPFilter *filter = modify_filter_gaussian_blur_from_item(document, item, radius);
