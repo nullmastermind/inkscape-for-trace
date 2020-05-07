@@ -253,11 +253,11 @@ const char* SPBox3D::display_name() {
 void SPBox3D::position_set()
 {
     /* This draws the curve and calls requestDisplayUpdate() for each side (the latter is done in
-       box3d_side_position_set() to avoid update conflicts with the parent box) */
+       Box3DSide::position_set() to avoid update conflicts with the parent box) */
     for (auto& obj: this->children) {
         Box3DSide *side = dynamic_cast<Box3DSide *>(&obj);
         if (side) {
-            box3d_side_position_set(side);
+            side->position_set();
         }
     }
 }
@@ -1278,7 +1278,7 @@ SPGroup *SPBox3D::convert_to_group()
     for (auto& obj: this->children) {
         Box3DSide *side = dynamic_cast<Box3DSide *>(&obj);
         if (side) {
-            Inkscape::XML::Node *repr = box3d_side_convert_to_path(side);
+            Inkscape::XML::Node *repr = side->convert_to_path();
             grepr->appendChild(repr);
         } else {
             g_warning("Non-side item encountered as child of a 3D box.");

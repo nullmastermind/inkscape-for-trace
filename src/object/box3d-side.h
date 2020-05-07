@@ -40,16 +40,16 @@ public:
 	void update(SPCtx *ctx, unsigned int flags) override;
 
 	void set_shape() override;
+
+    void position_set(); // FIXME: Replace this by Box3DSide::set_shape??
+
+    Glib::ustring axes_string() const;
+
+    Persp3D *perspective() const;
+
+
+    Inkscape::XML::Node *convert_to_path() const;
 };
-
-void box3d_side_position_set (Box3DSide *side); // FIXME: Replace this by box3d_side_set_shape??
-
-Glib::ustring box3d_side_axes_string(Box3DSide *side);
-
-Persp3D *box3d_side_perspective(Box3DSide *side);
-
-
-Inkscape::XML::Node *box3d_side_convert_to_path(Box3DSide *side);
 
 #endif // SEEN_BOX3D_SIDE_H
 

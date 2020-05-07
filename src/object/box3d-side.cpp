@@ -139,11 +139,11 @@ int Box3DSide::getFaceId()
 }
 
 void
-box3d_side_position_set (Box3DSide *side) {
-	side->set_shape();
+Box3DSide::position_set () {
+	this->set_shape();
 
     // This call is responsible for live update of the sides during the initial drag
-    side->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 void Box3DSide::set_shape() {
@@ -161,7 +161,7 @@ void Box3DSide::set_shape() {
         return;
     }
 
-    Persp3D *persp = box3d_side_perspective(this);
+    Persp3D *persp = this->perspective();
 
     if (!persp) {
         return;
@@ -217,21 +217,21 @@ void Box3DSide::set_shape() {
     c->unref();
 }
 
-Glib::ustring box3d_side_axes_string(Box3DSide *side)
+Glib::ustring Box3DSide::axes_string() const
 {
-    Glib::ustring result(Box3D::string_from_axes((Box3D::Axis) (side->dir1 ^ side->dir2)));
+    Glib::ustring result(Box3D::string_from_axes((Box3D::Axis) (this->dir1 ^ this->dir2)));
 
-    switch ((Box3D::Axis) (side->dir1 ^ side->dir2)) {
+    switch ((Box3D::Axis) (this->dir1 ^ this->dir2)) {
         case Box3D::XY:
-            result += ((side->front_or_rear == Box3D::FRONT) ? "front" : "rear");
+            result += ((this->front_or_rear == Box3D::FRONT) ? "front" : "rear");
             break;
 
         case Box3D::XZ:
-            result += ((side->front_or_rear == Box3D::FRONT) ? "top" : "bottom");
+            result += ((this->front_or_rear == Box3D::FRONT) ? "top" : "bottom");
             break;
 
         case Box3D::YZ:
-            result += ((side->front_or_rear == Box3D::FRONT) ? "right" : "left");
+            result += ((this->front_or_rear == Box3D::FRONT) ? "right" : "left");
             break;
 
         default:
@@ -252,19 +252,19 @@ box3d_side_compute_corner_ids(Box3DSide *side, unsigned int corners[4]) {
 }
 
 Persp3D *
-box3d_side_perspective(Box3DSide *side) {
-    SPBox3D *box = side ? dynamic_cast<SPBox3D *>(side->parent) : nullptr;
+Box3DSide::perspective() const {
+    SPBox3D *box = dynamic_cast<SPBox3D *>(this->parent);
     return box ? box->persp_ref->getObject() : nullptr;
 }
 
-Inkscape::XML::Node *box3d_side_convert_to_path(Box3DSide *side) {
+Inkscape::XML::Node *Box3DSide::convert_to_path() const {
     // TODO: Copy over all important attributes (see sp_selected_item_to_curved_repr() for an example)
-    SPDocument *doc = side->document;
+    SPDocument *doc = this->document;
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
 
     Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
-    repr->setAttribute("d", side->getAttribute("d"));
-    repr->setAttribute("style", side->getAttribute("style"));
+    repr->setAttribute("d", this->getAttribute("d"));
+    repr->setAttribute("style", this->getAttribute("style"));
 
     return repr;
 }

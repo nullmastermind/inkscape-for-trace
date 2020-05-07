@@ -513,7 +513,7 @@ void Box3dTool::drag(guint /*state*/) {
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
             Glib::ustring descr = "/desktop/";
-            descr += box3d_side_axes_string(side);
+            descr += side->axes_string();
             descr += "/style";
 
             Glib::ustring cur_style = prefs->getString(descr);    
@@ -526,11 +526,11 @@ void Box3dTool::drag(guint /*state*/) {
             } else {
                 // use default style 
                 Glib::ustring tool_path = Glib::ustring::compose("/tools/shapes/3dbox/%1",
-                        box3d_side_axes_string(side));
+                        side->axes_string());
                 desktop->applyCurrentOrToolStyle (side, tool_path, false);
             }
 
-            side->updateRepr(); // calls box3d_side_write() and updates, e.g., the axes string description
+            side->updateRepr(); // calls Box3DSide::write() and updates, e.g., the axes string description
         }
 
         this->box3d->set_z_orders();

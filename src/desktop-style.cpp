@@ -207,7 +207,7 @@ sp_desktop_set_style(Inkscape::ObjectSet *set, SPDesktop *desktop, SPCSSAttr *cs
             Box3DSide *side = dynamic_cast<Box3DSide *>(obj);
             if (side) {
                 prefs->mergeStyle(
-                        Glib::ustring("/desktop/") + box3d_side_axes_string(side) + "/style", css_write);
+                        Glib::ustring("/desktop/") + side->axes_string() + "/style", css_write);
             }
         }
         sp_repr_css_attr_unref(css_write);
