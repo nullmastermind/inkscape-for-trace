@@ -23,7 +23,6 @@
 #include <glibmm/i18n.h>
 
 #include "desktop-style.h"
-#include "gradient-selector.h"
 #include "inkscape.h"
 #include "paint-selector.h"
 #include "path-prefix.h"
@@ -47,6 +46,7 @@
 #include "ui/icon-names.h"
 #include "ui/widget/color-notebook.h"
 
+#include "widgets/gradient-selector.h"
 #include "widgets/swatch-selector.h"
 #include "widgets/widget-sizes.h"
 

@@ -42,7 +42,7 @@
 
 #include "display/sp-canvas.h"
 
-#include "widgets/paint-selector.h"
+#include "ui/widget/paint-selector.h"
 
 
 // These can be deleted once we sort out the libart dependence.

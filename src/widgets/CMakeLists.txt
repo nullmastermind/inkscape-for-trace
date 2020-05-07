@@ -8,7 +8,6 @@ set(widgets_SRC
 	gradient-selector.cpp
 	gradient-vector.cpp
 	ink-action.cpp
-	paint-selector.cpp
 	sp-attribute-widget.cpp
 	sp-color-selector.cpp
 	sp-xmlview-tree.cpp
@@ -29,7 +28,6 @@ set(widgets_SRC
 	gradient-selector.h
 	gradient-vector.h
 	ink-action.h
-	paint-selector.h
 	sp-attribute-widget.h
 	sp-color-selector.h
 	sp-xmlview-tree.h
