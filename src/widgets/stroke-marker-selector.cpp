@@ -20,7 +20,6 @@
 
 #include "desktop-style.h"
 #include "path-prefix.h"
-#include "stroke-style.h"
 
 #include "helper/stock-items.h"
 #include "ui/icon-loader.h"
@@ -35,7 +34,9 @@
 #include "ui/cache/svg_preview_cache.h"
 #include "ui/dialog-events.h"
 #include "ui/util.h"
+
 #include "ui/widget/spinbutton.h"
+#include "ui/widget/stroke-style.h"
 
 static Inkscape::UI::Cache::SvgPreview svg_preview_cache;
 

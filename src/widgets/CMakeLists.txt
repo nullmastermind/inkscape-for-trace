@@ -3,7 +3,6 @@
 set(widgets_SRC
 	desktop-widget.cpp
 	ege-paint-def.cpp
-	fill-style.cpp
 	gradient-image.cpp
 	gradient-selector.cpp
 	gradient-vector.cpp
@@ -14,7 +13,6 @@ set(widgets_SRC
 	spinbutton-events.cpp
 	spw-utilities.cpp
 	stroke-marker-selector.cpp
-	stroke-style.cpp
 	swatch-selector.cpp
 	toolbox.cpp
 
@@ -22,7 +20,6 @@ set(widgets_SRC
 	# Headers
 	desktop-widget.h
 	ege-paint-def.h
-	fill-style.h
 	gradient-image.h
 	gradient-selector.h
 	gradient-vector.h
@@ -33,7 +30,6 @@ set(widgets_SRC
 	spinbutton-events.h
 	spw-utilities.h
 	stroke-marker-selector.h
-	stroke-style.h
 	swatch-selector.h
 	toolbox.h
 	widget-sizes.h

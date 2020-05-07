@@ -170,6 +170,7 @@ set(ui_SRC
 	widget/entity-entry.cpp
 	widget/entry.cpp
 	widget/filter-effect-chooser.cpp
+	widget/fill-style.cpp
 	widget/font-button.cpp
     widget/font-selector.cpp
     widget/font-selector-toolbar.cpp
@@ -208,6 +209,7 @@ set(ui_SRC
 	widget/spin-scale.cpp
 	widget/spin-slider.cpp
 	widget/spinbutton.cpp
+	widget/stroke-style.cpp
 	widget/style-subject.cpp
 	widget/style-swatch.cpp
 	widget/text.cpp
@@ -403,6 +405,7 @@ set(ui_SRC
 	widget/dock.h
 	widget/entity-entry.h
 	widget/entry.h
+	widget/fill-style.h
 	widget/filter-effect-chooser.h
 	widget/font-button.h
     widget/font-selector.h
@@ -444,6 +447,7 @@ set(ui_SRC
 	widget/spin-scale.h
 	widget/spin-slider.h
 	widget/spinbutton.h
+	widget/stroke-style.h
 	widget/style-subject.h
 	widget/style-swatch.h
 	widget/text.h

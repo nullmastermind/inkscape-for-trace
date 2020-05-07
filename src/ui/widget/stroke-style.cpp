@@ -18,7 +18,6 @@
 
 #define noSP_SS_VERBOSE
 
-#include "desktop-widget.h"
 #include "stroke-style.h"
 
 #include "object/sp-marker.h"

@@ -29,10 +29,10 @@
 
 #include "ui/icon-loader.h"
 #include "ui/icon-names.h"
-#include "ui/widget/notebook-page.h"
 
-#include "widgets/fill-style.h"
-#include "widgets/stroke-style.h"
+#include "ui/widget/fill-style.h"
+#include "ui/widget/stroke-style.h"
+#include "ui/widget/notebook-page.h"
 
 
 namespace Inkscape {
