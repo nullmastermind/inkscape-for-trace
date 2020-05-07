@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Incscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2020-04-20 22:20+0200\n"
-"PO-Revision-Date: 2020-04-28 00:05+0200\n"
+"PO-Revision-Date: 2020-05-07 13:47+0200\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: \n"
 "Language: hr\n"
@@ -427,7 +427,7 @@ msgstr "Neravnine"
 
 #: ../share/filters/filters.svg.h:132
 msgid "Flexible bubbles effect with some displacement"
-msgstr "Efekt promijenjivih mjehurića, s ponekim pomakom"
+msgstr "Efekt promjenjivih mjehurića, s ponekim pomakom"
 
 #: ../share/filters/filters.svg.h:134
 msgid "Glowing Bubble"
@@ -1625,7 +1625,7 @@ msgid ""
 "Overlays two copies with different blur amounts and modifiable blend and "
 "composite"
 msgstr ""
-"Prekriva dvije kopije s različitim količinama mutnoće i promijenjivim "
+"Prekriva dvije kopije s različitim količinama mutnoće i promjenjivim "
 "stapanjem i sastavljanjima"
 
 #: ../share/filters/filters.svg.h:658
@@ -7501,13 +7501,13 @@ msgstr "Bez (automatski)"
 #: ../src/extension/internal/svg.cpp:738
 #: ../src/ui/dialog/inkscape-preferences.cpp:2102
 msgid "Smooth (optimizeQuality)"
-msgstr "Zaglađeno (optimiraj kvalitetu)"
+msgstr "Zaglađeno (optimirana kvaliteta)"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:211
 #: ../src/extension/internal/svg.cpp:739
 #: ../src/ui/dialog/inkscape-preferences.cpp:2102
 msgid "Blocky (optimizeSpeed)"
-msgstr "Grubo (optimiraj brzinu)"
+msgstr "Grubo (optimirana brzina)"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:214
 #: ../src/extension/internal/svg.cpp:742
@@ -7783,17 +7783,16 @@ msgstr "Vrsta uvoza SVG slike:"
 
 #: ../src/extension/internal/svg.cpp:731
 msgid "Include SVG image as editable object(s) in the current file"
-msgstr "Uključi SVG slike kao promijenjive objekte u trenutačnu datoteku"
+msgstr "Uključi SVG slike kao promjenjive objekte u trenutačnu datoteku"
 
 #: ../src/extension/internal/svg.cpp:732
 msgid "Embed the SVG file in a image tag (not editable in this document)"
-msgstr ""
-"Ugradi SVG datoteku u slikovni element (nepromijenjiva u ovom dokumentu)"
+msgstr "Ugradi SVG datoteku u oznaku za slike (nepromjenjiva u ovom dokumentu)"
 
 #: ../src/extension/internal/svg.cpp:733
 msgid "Link the SVG file in a image tag (not editable in this document)."
 msgstr ""
-"Poveži SVG datoteku u slikovni element (nepromijenjiva u ovom dokumentu)."
+"Poveži SVG datoteku u oznaku za slike (nepromjenjiva u ovom dokumentu)."
 
 #: ../src/extension/internal/svg.cpp:746
 msgid "Scalable Vector Graphic (*.svg)"
@@ -8552,13 +8551,14 @@ msgid ""
 "tutorials/"
 msgstr ""
 "Vježbe nisu instalirane.\n"
-"Za Linux moraš instalirati „inkscape-vježbe”; za Windows, ponovo pokreni "
-"postavljanje programa i odaberi „Vježbe”.\n"
-"Vježbe možeš nači i na https://inkscape.org/learn/tutorials/"
+"Za Linux se moraju instalirati „inkscape-vježbe”; za Windows se mora ponovo "
+"pokrenuti instalacija programa i odabrati „Vježbe”.\n"
+"Vježbe je moguće naći i na https://inkscape.org/hr/nauci/vjezbe/"
 
 #: ../src/inkscape-application.cpp:317
 msgid "Broken links have been changed to point to existing files."
-msgstr "Prekinuti linkovi biti će postavljeni na mjesto u postojećoj datoteci."
+msgstr ""
+"Pokvarene poveznice su promijenjene, tako da ukazuju na postojeće datoteke."
 
 #
 # File: ../src/inkscape-application.cpp, line: 526
@@ -8587,8 +8587,7 @@ msgstr "Izvezi ulazni SVG (%1) u PDF (%2) format:"
 #: ../src/inkscape-application.cpp:568
 msgid "Export input files (%1) to PNG format keeping original name (%2):"
 msgstr ""
-"Izvezi ulazni SVG (%1) u PNG format, zadržavajući pri tome originalno ime "
-"(%2):"
+"Izvezi ulazni SVG (%1) u PNG format, zadržavajući pri tome izvorno ime (%2):"
 
 #
 # File: ../src/inkscape-application.cpp, line: 533
@@ -9277,8 +9276,8 @@ msgid ""
 "Draw the handles and nodes of objects (replaces the original styling with a "
 "black stroke)"
 msgstr ""
-"Iscrtaj ručke i čvorove objekata (nadomješta originalno stiliziranje sa "
-"crnom linijom)"
+"Iscrtaj ručke i čvorove objekata (nadomješta izvorno stiliziranje sa crnom "
+"linijom)"
 
 #: ../src/live_effects/effect.cpp:405
 msgid "Roughen an object by adding and randomly shifting new nodes"
@@ -9770,7 +9769,7 @@ msgstr "Staza savijanja:"
 
 #: ../src/live_effects/lpe-bendpath.cpp:57
 msgid "Path along which to bend the original path"
-msgstr "Staza, uzduž koje će se orginalna staza savijati"
+msgstr "Staza, uzduž koje će se izvorna staza savijati"
 
 #: ../src/live_effects/lpe-bendpath.cpp:59
 #: ../src/live_effects/lpe-patternalongpath.cpp:75
@@ -9793,7 +9792,7 @@ msgstr "Skaliraj širinu staze u jedinicama njezine duljine"
 
 #: ../src/live_effects/lpe-bendpath.cpp:61
 msgid "_Original path is vertical"
-msgstr "_Orginalna staza je okomita"
+msgstr "_Izvorna staza je okomita"
 
 #: ../src/live_effects/lpe-bendpath.cpp:61
 msgid "Rotates the original 90 degrees, before bending it along the bend path"
@@ -10022,7 +10021,7 @@ msgstr "Povezan element:"
 
 #: ../src/live_effects/lpe-clone-original.cpp:42
 msgid "Item from which to take the original data"
-msgstr "Element iz kojeg se preuzimaju originalni podaci"
+msgstr "Element iz kojeg se preuzimaju izvorni podaci"
 
 #: ../src/live_effects/lpe-clone-original.cpp:43
 msgid "Shape"
@@ -10124,7 +10123,7 @@ msgstr "Broj kopija"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:70
 msgid "Number of copies of the original path"
-msgstr "Broj kopija orginalne staze"
+msgstr "Broj kopija izvorne staze"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:71
 msgid "Gap"
@@ -10428,7 +10427,7 @@ msgstr "Gornja staza savijanja:"
 
 #: ../src/live_effects/lpe-envelope.cpp:18
 msgid "Top path along which to bend the original path"
-msgstr "Gornja staza uzduž koje se savija orginalna staza"
+msgstr "Gornja staza uzduž koje se savija izvorna staza"
 
 #: ../src/live_effects/lpe-envelope.cpp:19
 msgid "Right bend path:"
@@ -10436,7 +10435,7 @@ msgstr "Desna staza savijanja:"
 
 #: ../src/live_effects/lpe-envelope.cpp:19
 msgid "Right path along which to bend the original path"
-msgstr "Desna staza uzduž koje se savija orginalna staza"
+msgstr "Desna staza uzduž koje se savija izvorna staza"
 
 #: ../src/live_effects/lpe-envelope.cpp:20
 msgid "Bottom bend path:"
@@ -10444,7 +10443,7 @@ msgstr "Donja staza savijanja:"
 
 #: ../src/live_effects/lpe-envelope.cpp:20
 msgid "Bottom path along which to bend the original path"
-msgstr "Donja staza uzduž koje se savija orginalna staza"
+msgstr "Donja staza uzduž koje se savija izvorna staza"
 
 #: ../src/live_effects/lpe-envelope.cpp:21
 msgid "Left bend path:"
@@ -10452,7 +10451,7 @@ msgstr "Lijeva staza savijanja:"
 
 #: ../src/live_effects/lpe-envelope.cpp:21
 msgid "Left path along which to bend the original path"
-msgstr "Lijeva staza uzduž koje se savija orginalna staza"
+msgstr "Lijeva staza uzduž koje se savija izvorna staza"
 
 #: ../src/live_effects/lpe-envelope.cpp:22
 msgid "_Enable left &amp; right paths"
@@ -10484,7 +10483,7 @@ msgstr "Sa Spiro ili B-krivuljama"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:35
 msgid "Paths from which to take the original path data"
-msgstr "Staze iz kojih se uzimaju orginalni podaci staze"
+msgstr "Staze iz kojih se uzimaju izvorni podaci staze"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:36
 msgid "LPE's on linked:"
@@ -10524,7 +10523,7 @@ msgstr "Druga staza:"
 
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:21
 msgid "Second path from which to take the original path data"
-msgstr "Druga staza iz koje se uzimaju orginalni podaci staze"
+msgstr "Druga staza iz koje se uzimaju izvorni podaci staze"
 
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:22
 msgid "Reverse Second"
@@ -11631,7 +11630,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:56
 msgid "Discard original path"
-msgstr "Napusti orginalnu stazu"
+msgstr "Odbaci stazu originala"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:56
 msgid "Only keep mirrored part of the path, remove the original."
@@ -11639,7 +11638,7 @@ msgstr "Zadrži samo zrcaljeni dio staze, ukloni original."
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:57
 msgid "Fuse original path and mirror image into a single path"
-msgstr "Spoji orginalnu stazu i zrcaljenu sliku u jednu stazu"
+msgstr "Spoji stazu originala i zrcaljenu sliku u jednu stazu"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:58
 msgid "Fuse opposite sides"
@@ -12158,7 +12157,7 @@ msgstr "Staza _izvora"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:76
 msgid "Show the original source path"
-msgstr "Prikaži orginalni izvor staze"
+msgstr "Prikaži stazu originala"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:219
 msgid "Frequency randomness:"
@@ -12652,7 +12651,7 @@ msgid ""
 "Maximum distance between ends of original and approximating paths (relative "
 "to maximum length)"
 msgstr ""
-"Maksimalni razmak između krajeva orginalnih i približnih staza (relativno "
+"Maksimalni razmak između krajeva orginala i približnih staza (relativno "
 "prema maksimalnoj duljini)"
 
 #: ../src/live_effects/lpe-sketch.cpp:43
@@ -12661,7 +12660,7 @@ msgstr "Prosječni odmak:"
 
 #: ../src/live_effects/lpe-sketch.cpp:44
 msgid "Average distance each stroke is away from the original path"
-msgstr "Prosječna udaljenost svake linije od orginalne staze"
+msgstr "Prosječna udaljenost svake linije od staze originala"
 
 #: ../src/live_effects/lpe-sketch.cpp:45
 msgid "Max. tremble:"
@@ -12856,7 +12855,7 @@ msgstr "Način rada elastične transformacije"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:34
 msgid "From original width"
-msgstr "Od orginalne širine"
+msgstr "Od širine originala"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:35
 msgid "Lock length"
@@ -13019,7 +13018,7 @@ msgstr "Ime"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:120
 msgid "Link item parameter to item"
-msgstr "Poveži parametar elementa sa stavkom"
+msgstr "Poveži parametar elementa sa elementom"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:157
 msgid "Remove Item"
@@ -13051,7 +13050,7 @@ msgstr "Ukloni element"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:305
 msgid "Link itemarray parameter to item"
-msgstr "Poveži parametar itemarray sa stazom"
+msgstr "Poveži parametar niza elementa sa stazom"
 
 #: ../src/live_effects/parameter/originalpath.cpp:64
 #: ../src/live_effects/parameter/originalpatharray.cpp:183
@@ -13095,7 +13094,7 @@ msgstr "Ukloni stazu"
 
 #: ../src/live_effects/parameter/originalpatharray.cpp:339
 msgid "Link patharray parameter to path"
-msgstr "Poveži parametre uzoraka sa stazom"
+msgstr "Poveži parametar niza staze sa stazom"
 
 #: ../src/live_effects/parameter/path.cpp:223
 msgid "Edit on-canvas"
@@ -13347,7 +13346,7 @@ msgstr "[loša referenca]: %s"
 #: ../src/object/sp-image.cpp:541 ../src/object/sp-image.cpp:558
 #, c-format
 msgid "%d &#215; %d: %s"
-msgstr "%d &#215; %d: %s"
+msgstr "%d × %d: %s"
 
 #: ../src/object/sp-item-group.cpp:305 ../share/extensions/frame.inx:18
 msgid "Group"
@@ -14407,7 +14406,7 @@ msgstr "Ukloni iz bloka simbola za podešavanje simbola"
 
 #: ../src/selection-describer.cpp:192
 msgid "Use <b>Shift+D</b> to look up original"
-msgstr "Koristi <b>Shift+D</b> za pronalaženje izvornika"
+msgstr "Koristi <b>Shift+D</b> za pronalaženje originala"
 
 #: ../src/selection-describer.cpp:198
 msgid "Use <b>Shift+D</b> to look up path"
@@ -19541,8 +19540,8 @@ msgid ""
 "Move handles next to deleted nodes to resemble original shape; hold Ctrl to "
 "get the other behavior"
 msgstr ""
-"Premjesti ručke u blizinu uklonjenih čvorova, za dobivanje orginalnog "
-"oblika; drži Ctrl za drukčije ponašanje"
+"Premjesti ručke u blizinu uklonjenih čvorova, za dobivanje oblika originala; "
+"drži Ctrl za drukčije ponašanje"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:428
 msgid "Object paint style"
@@ -20778,7 +20777,7 @@ msgstr "Svojstva u istom retku"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1471
 msgid "Put attributes on the same line as the element tag"
-msgstr "Ispiši svojstva i označni kȏd elementa u isti redak"
+msgstr "Ispiši svojstva i oznaku elementa u isti redak"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1474
 msgid "_Indent, spaces:"
@@ -20883,7 +20882,7 @@ msgstr "Ukloni svojstva"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1504
 msgid "Delete invalid or non-useful attributes from element tag"
-msgstr "Ukloni nevaljana ili nepotrebna svojstva iz označnog kȏda elementa"
+msgstr "Ukloni nevaljana ili nepotrebna svojstva iz oznake elementa"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1507
 msgid "Inappropriate Style Properties Actions"
@@ -20945,7 +20944,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1526
 msgid "Editing"
-msgstr "Uređivanje"
+msgstr "Uređivanja"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1527
 msgid ""
@@ -21028,15 +21027,15 @@ msgstr "Percepcijski"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1561
 msgid "Relative Colorimetric"
-msgstr "Relativna kolorimetrija"
+msgstr "Relativno kolorimetrijski"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1561
 msgid "Absolute Colorimetric"
-msgstr "Apsolutna kolorimetrija"
+msgstr "Apsolutno kolorimetrijski"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1565
 msgid "(Note: Color management has been disabled in this build)"
-msgstr "(Napomena: Upravljanje bojama je onemogućeno u ovoj verziji)"
+msgstr "(Napomena: Upravljanje bojama je deaktivirano u ovoj gradnji)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1569
 msgid "Display adjustment"
@@ -21061,15 +21060,15 @@ msgstr "Preuzmi profil ekrana"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1587
 msgid "Retrieve profiles from those attached to displays via XICC"
-msgstr "Preuzmi profile vezane za ekrane putem XICC-a"
+msgstr "Preuzmi profile povezanih ekrana putem XICC-a"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1589
 msgid "Retrieve profiles from those attached to displays"
-msgstr "Preuzmi profile vezane za ekrane"
+msgstr "Preuzmi profile povezanih ekrana"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1594
 msgid "Display rendering intent:"
-msgstr "Način iscrtavanja:"
+msgstr "Način iscrtavanja ekrana:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1595
 msgid "The rendering intent to use to calibrate display output"
@@ -21660,7 +21659,7 @@ msgid ""
 "original angle"
 msgstr ""
 "Kad je aktivirano, prilikom rotacije vodilice, kutovi koraka rotacije će "
-"biti relativni prema početnom kutu"
+"biti relativni prema izvornom kutu"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1889
 msgid "_Zoom in/out by:"
@@ -21669,7 +21668,7 @@ msgstr "_Zumiraj u koracima od:"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1889 ../share/ui/units.xml:4
 #: ../share/ui/units.xml:5
 msgid "%"
-msgstr "%"
+msgstr " %"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1890
 msgid ""
@@ -21729,7 +21728,7 @@ msgid ""
 "example, a rotated clone will move in a different direction than its original"
 msgstr ""
 "Svaki klon se pomiče u skladu s vrijednošću svojstva „transform=”. Npr., "
-"rotirani klon će se pomicati u drugom sjmeru od originala"
+"rotirani klon će se pomicati u jednom drugom sjmeru od originala"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1915
 msgid "Deleting original: clones"
@@ -21758,8 +21757,8 @@ msgid ""
 "instead of the old original"
 msgstr ""
 "Prilikom dupliciranja odabira, koji sadrži klon i njegov original (možda čak "
-"i u grupi), poveži duplicirani klon s dupliciranim originalom, umjesto s "
-"izvornim originalom"
+"i u grupi), poveži duplicirani klon s dupliciranim originalom, umjesto sa "
+"starim originalom"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1927
 msgid "Unlinking clones"
@@ -22767,7 +22766,7 @@ msgstr "Stvori i primijeni efekt staze"
 
 #: ../src/ui/dialog/livepatheffect-editor.cpp:481
 msgid "Create and apply Clone original path effect"
-msgstr "Stvori i primijeni efekt staze „Kloniraj orginal”"
+msgstr "Stvori i primijeni efekt „Kloniraj izvornu stazu”"
 
 #: ../src/ui/dialog/livepatheffect-editor.cpp:504
 msgid "Remove path effect"
@@ -23660,7 +23659,7 @@ msgstr "Nedostajući grafem:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:800
 msgid "From selection..."
-msgstr "Preuzmi iz odabranog područja …"
+msgstr "Iz odabira …"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:815
 msgid "Glyph name"
@@ -26876,8 +26875,7 @@ msgid ""
 "Variation of the rotation of the sprayed objects; 0% for the same rotation "
 "than the original object"
 msgstr ""
-"Promjena rotacije sprejanih objekata; 0 % za istu rotaciju kao orginalni "
-"objekt"
+"Promjena rotacije sprejanih objekata; 0 % za istu rotaciju kao izvorni objekt"
 
 #: ../src/ui/toolbar/spray-toolbar.cpp:185
 msgid "(high scale variation)"
@@ -26894,7 +26892,7 @@ msgid ""
 "Variation in the scale of the sprayed objects; 0% for the same scale than "
 "the original object"
 msgstr ""
-"Promjena veličine sprejanih objekata; 0 % za istu vrijednost kao orginalni "
+"Promjena veličine sprejanih objekata; 0 % za istu vrijednost kao izvorni "
 "objekt"
 
 #: ../src/ui/toolbar/spray-toolbar.cpp:203
@@ -26974,7 +26972,7 @@ msgid ""
 "advanced effects. In clone mode original fill or stroke colors must be unset."
 msgstr ""
 "Odaberi boju iz crteža. Možeš koristiti dijalog „Stvori višestruke klonove” "
-"za napredne efekte. U modusu kloniranja, orginalna boja ispune ili linije ne "
+"za napredne efekte. U modusu kloniranja, izvorne boje ispune ili linije ne "
 "smije biti postavljena."
 
 #: ../src/ui/toolbar/spray-toolbar.cpp:314
@@ -27823,8 +27821,8 @@ msgid ""
 "<b>Ellipse</b>: %s &#215; %s (constrained to ratio %d:%d); with <b>Shift</b> "
 "to draw around the starting point"
 msgstr ""
-"<b>Elipsa</b>: %s &#215; %s; (ograničeno na odnos %d:%d); <b>Shift</b> za "
-"crtanje okolo početne točke"
+"<b>Elipsa</b>: %s × %s; (ograničeno na odnos %d:%d); <b>Shift</b> za crtanje "
+"okolo početne točke"
 
 #: ../src/ui/tools/arc-tool.cpp:420
 #, c-format
@@ -27832,8 +27830,8 @@ msgid ""
 "<b>Ellipse</b>: %s &#215; %s (constrained to golden ratio 1.618 : 1); with "
 "<b>Shift</b> to draw around the starting point"
 msgstr ""
-"<b>Elipsa</b>: %s &#215; %s (u omjeru zlatnog reza 1,618 : 1); sa <b>Shift</"
-"b> za crtanje okolo početne točke"
+"<b>Elipsa</b>: %s × %s (u omjeru zlatnog reza 1,618 : 1); sa <b>Shift</b> za "
+"crtanje okolo početne točke"
 
 #: ../src/ui/tools/arc-tool.cpp:424
 #, c-format
@@ -27841,8 +27839,8 @@ msgid ""
 "<b>Ellipse</b>: %s &#215; %s (constrained to golden ratio 1 : 1.618); with "
 "<b>Shift</b> to draw around the starting point"
 msgstr ""
-"<b>Elipsa</b>: %s &#215; %s (u omjeru zlatnog reza 1 : 1,618); sa <b>Shift</"
-"b> za crtanje okolo početne točke"
+"<b>Elipsa</b>: %s × %s (u omjeru zlatnog reza 1 : 1,618); sa <b>Shift</b> za "
+"crtanje okolo početne točke"
 
 #: ../src/ui/tools/arc-tool.cpp:429
 #, c-format
@@ -27851,9 +27849,9 @@ msgid ""
 "ratio, or golden-ratio ellipse; with <b>Shift</b> to draw around the "
 "starting point"
 msgstr ""
-"<b>Elipsa</b>: %s &#215; %s; sa <b>Ctrl</b> za stvaranje kružnice u omjeru, "
-"koji je određen cijelim brojevima ili stvaranje elipse u omjeru zlatnog "
-"reza; sa <b>Shift</b> za crtanje okolo početne točke"
+"<b>Elipsa</b>: %s × %s; sa <b>Ctrl</b> za stvaranje kružnice u omjeru, koji "
+"je određen cijelim brojevima ili stvaranje elipse u omjeru zlatnog reza; sa "
+"<b>Shift</b> za crtanje okolo početne točke"
 
 #: ../src/ui/tools/arc-tool.cpp:449
 msgid "Create ellipse"
@@ -28496,7 +28494,7 @@ msgid ""
 "<b>Rectangle</b>: %s &#215; %s (constrained to ratio %d:%d); with <b>Shift</"
 "b> to draw around the starting point"
 msgstr ""
-"<b>Pravokutnik</b>: %s &#215; %s (odnos stranica %d : %d); <b>Shift</b> za "
+"<b>Pravokutnik</b>: %s × %s (odnos stranica %d : %d); <b>Shift</b> za "
 "crtanje okolo početne točke"
 
 #: ../src/ui/tools/rect-tool.cpp:434
@@ -28505,8 +28503,8 @@ msgid ""
 "<b>Rectangle</b>: %s &#215; %s (constrained to golden ratio 1.618 : 1); with "
 "<b>Shift</b> to draw around the starting point"
 msgstr ""
-"<b>Pravokutnik</b>: %s &#215; %s (odnos stranica u zlatnom presjeku 1,618 : "
-"1); <b>Shift</b> za crtanje okolo početne točke"
+"<b>Pravokutnik</b>: %s × %s (odnos stranica u zlatnom presjeku 1,618 : 1); "
+"<b>Shift</b> za crtanje okolo početne točke"
 
 #: ../src/ui/tools/rect-tool.cpp:438
 #, c-format
@@ -28514,8 +28512,8 @@ msgid ""
 "<b>Rectangle</b>: %s &#215; %s (constrained to golden ratio 1 : 1.618); with "
 "<b>Shift</b> to draw around the starting point"
 msgstr ""
-"<b>Pravokutnik</b>: %s &#215; %s (odnos stranica u zlatnom presjeku 1 : "
-"1,618); <b>Shift</b> za crtanje okolo početne točke"
+"<b>Pravokutnik</b>: %s × %s (odnos stranica u zlatnom presjeku 1 : 1,618); "
+"<b>Shift</b> za crtanje okolo početne točke"
 
 #: ../src/ui/tools/rect-tool.cpp:444
 #, c-format
@@ -28524,9 +28522,9 @@ msgid ""
 "ratio, or golden-ratio rectangle; with <b>Shift</b> to draw around the "
 "starting point"
 msgstr ""
-"<b>Pravokutnik</b>: %s &#215; %s; sa <b>Ctrl</b> za crtanje kvadrata u "
-"omjeru, koji je određen cijelim brojevima ili stvaranje pravokutnika u "
-"omjeru zlatnog reza; <b>Shift</b> za crtanje okolo početne točke"
+"<b>Pravokutnik</b>: %s × %s; sa <b>Ctrl</b> za crtanje kvadrata u omjeru, "
+"koji je određen cijelim brojevima ili stvaranje pravokutnika u omjeru "
+"zlatnog reza; <b>Shift</b> za crtanje okolo početne točke"
 
 #: ../src/ui/tools/rect-tool.cpp:465
 msgid "Create rectangle"
@@ -28706,7 +28704,7 @@ msgstr "Unicode (<b>Enter</b> za dovršavanje): "
 #: ../src/ui/tools/text-tool.cpp:524
 #, c-format
 msgid "<b>Flowed text frame</b>: %s &#215; %s"
-msgstr "<b>Okvir prelamajućeg teksta</b>: %s &#215; %s"
+msgstr "<b>Okvir prelamajućeg teksta</b>: %s × %s"
 
 #: ../src/ui/tools/text-tool.cpp:587
 msgid "<b>Click</b> to edit the text, <b>drag</b> to select part of the text."
@@ -30692,15 +30690,15 @@ msgstr "Odaberi izvorni objekt s kojim je odabrani klon povezan"
 
 #: ../src/verbs.cpp:2746
 msgid "Clone original path (LPE)"
-msgstr "Kloniraj orginalnu stazu (LPE efekt)"
+msgstr "Kloniraj izvornu stazu (LPE)"
 
 #: ../src/verbs.cpp:2747
 msgid ""
 "Creates a new path, applies the Clone original LPE, and refers it to the "
 "selected path"
 msgstr ""
-"Stvara novu stazu, primijenjuje „Kloniraj originalnu stazu (LPE efekt)”, i "
-"dodaje referencu na odabranu stazu"
+"Stvara novu stazu, primijenjuje Kloniraj izvorni LPE, i dodaje referencu na "
+"odabranu stazu"
 
 #: ../src/verbs.cpp:2748
 msgid "Objects to _Marker"
@@ -31144,7 +31142,7 @@ msgstr "Po_vezan odmak"
 
 #: ../src/verbs.cpp:2887
 msgid "Create a dynamic offset object linked to the original path"
-msgstr "Stvori objekt s dinamičnim odmakom, povezan s originalnom stazom"
+msgstr "Stvori objekt s dinamičnim odmakom, povezan s izvornom stazom"
 
 #: ../src/verbs.cpp:2889
 msgid "_Stroke to Path"
@@ -34210,7 +34208,7 @@ msgstr "Funkcija plave:"
 
 #: ../share/extensions/color_custom.inx:10
 msgid "Input (r,g,b) Color Range:"
-msgstr "Ulazni (r,g,b) raspon boja:"
+msgstr "Raspon boja ulaza (r,g,b):"
 
 #: ../share/extensions/color_custom.inx:11
 msgid "0 - 1"
@@ -35242,7 +35240,7 @@ msgid ""
 msgstr ""
 "\n"
 "„Stvori odmak područja”: stvara višestruke Inkscape odmake staze, za ispunu "
-"orginalnog područja staze, do vrijednosti za „Širina područja”.\n"
+"izvornog područja staze, do vrijednosti za „Širina područja”.\n"
 "\n"
 "Konture počinju s „½ D” do ukupne širine od „Širina područja” u „D” "
 "koracima, gdje je D uzeto iz definicije najbližeg alata (vrijednost za "
@@ -35630,7 +35628,7 @@ msgstr "Zagladi konveksne kutove, koji su između ove vrijednosti i 180 °:"
 
 #: ../share/extensions/gcodetools_engraving.inx:10
 msgid "Maximum distance for engraving (mm/inch):"
-msgstr "Maksimalna udaljenost za graviranje (mm/inč):"
+msgstr "Maksimalna udaljenost za graviranje (mm/in):"
 
 #: ../share/extensions/gcodetools_engraving.inx:11
 msgid "Accuracy factor (2 low to 10 high):"
@@ -35933,7 +35931,7 @@ msgstr "Polumjer unutarnje-vanjske staze za kružnu stazu:"
 
 #: ../share/extensions/gcodetools_prepare_path_for_plasma.inx:18
 msgid "Replace original path"
-msgstr "Zamijeni orginalnu stazu"
+msgstr "Zamijeni izvornu stazu"
 
 #: ../share/extensions/gcodetools_prepare_path_for_plasma.inx:19
 msgid "Do not add in-out reference points"
@@ -36621,7 +36619,7 @@ msgstr "Ime/Staza:"
 
 #: ../share/extensions/hershey.inx:58 ../share/extensions/text_split.inx:12
 msgid "Preserve original text"
-msgstr "Očuvaj orginalni tekst"
+msgstr "Očuvaj izvorni tekst"
 
 #
 # File: ../share/extensions/hershey.inx, line: 65
@@ -41376,7 +41374,7 @@ msgid ""
 "Illustrator, CorelDraw, or Xara X, using the W3C standard Scalable Vector "
 "Graphics (SVG) file format."
 msgstr ""
-"Uređivač vektorskih grafika, otvorenog kȏda, s funkcijama usporedivima s "
+"Uređivač vektorskih grafika, otvorenog koda, s funkcijama usporedivima s "
 "programima Illustrator, CorelDraw ili Xara X, koristi W3C-ov standardni "
 "datotečni format SVG (skalabilne vektorske grafike)."
 
