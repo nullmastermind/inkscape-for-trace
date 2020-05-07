@@ -180,7 +180,7 @@ add_custom_target(check-license-headers WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} CO
 if(BUILD_TESTING OR NOT DEFINED BUILD_TESTING)
     find_package(GTest)
     if(GTEST_FOUND)
-        set(DART_TESTING_TIMEOUT 60 CACHE STRING "Test timeout") # if running for > 60 s something must be wrong)
+        set(DART_TESTING_TIMEOUT 180 CACHE STRING "Test timeout") # if running for > 180 s something must be wrong)
         include(CTest)
         add_subdirectory(testfiles EXCLUDE_FROM_ALL)
     else()
