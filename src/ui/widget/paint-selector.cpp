@@ -45,9 +45,9 @@
 
 #include "ui/icon-names.h"
 #include "ui/widget/color-notebook.h"
+#include "ui/widget/swatch-selector.h"
 
 #include "widgets/gradient-selector.h"
-#include "widgets/swatch-selector.h"
 #include "widgets/widget-sizes.h"
 
 #include "xml/repr.h"

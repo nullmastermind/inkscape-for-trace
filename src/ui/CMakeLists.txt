@@ -212,6 +212,7 @@ set(ui_SRC
 	widget/stroke-style.cpp
 	widget/style-subject.cpp
 	widget/style-swatch.cpp
+	widget/swatch-selector.cpp
 	widget/text.cpp
 	widget/tolerance-slider.cpp
 	widget/unit-menu.cpp
@@ -450,6 +451,7 @@ set(ui_SRC
 	widget/stroke-style.h
 	widget/style-subject.h
 	widget/style-swatch.h
+	widget/swatch-selector.h
 	widget/text.h
 	widget/tolerance-slider.h
 	widget/unit-menu.h

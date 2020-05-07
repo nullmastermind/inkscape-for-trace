@@ -13,7 +13,6 @@ set(widgets_SRC
 	spinbutton-events.cpp
 	spw-utilities.cpp
 	stroke-marker-selector.cpp
-	swatch-selector.cpp
 	toolbox.cpp
 
 	# -------
@@ -30,7 +29,6 @@ set(widgets_SRC
 	spinbutton-events.h
 	spw-utilities.h
 	stroke-marker-selector.h
-	swatch-selector.h
 	toolbox.h
 	widget-sizes.h
 )

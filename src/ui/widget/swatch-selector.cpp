@@ -15,7 +15,6 @@
 #include "document-undo.h"
 #include "document.h"
 #include "gradient-chemistry.h"
-#include "gradient-selector.h"
 #include "verbs.h"
 
 #include "object/sp-stop.h"
@@ -24,6 +23,8 @@
 #include "svg/svg-color.h"
 
 #include "ui/widget/color-notebook.h"
+
+#include "widgets/gradient-selector.h"
 
 #include "xml/node.h"
 
