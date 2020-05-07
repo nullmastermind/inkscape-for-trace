@@ -43,7 +43,7 @@ struct SPGradientVectorSelector {
 
     /* Gradient vectors store */
     Glib::RefPtr<Gtk::ListStore> store;
-    SPGradientSelector::ModelColumns *columns;
+    GradientSelector::ModelColumns *columns;
 
     sigc::connection gradient_release_connection;
     sigc::connection defs_release_connection;

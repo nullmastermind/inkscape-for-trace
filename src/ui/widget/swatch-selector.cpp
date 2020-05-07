@@ -39,14 +39,13 @@ SwatchSelector::SwatchSelector() :
 {
     using Inkscape::UI::Widget::ColorNotebook;
 
-    GtkWidget *gsel = sp_gradient_selector_new();
-    _gsel = SP_GRADIENT_SELECTOR(gsel);
+    _gsel = Gtk::manage(new GradientSelector());
     g_object_set_data( G_OBJECT(gobj()), "base", this );
-    _gsel->setMode(SPGradientSelector::MODE_SWATCH);
+    _gsel->setMode(GradientSelector::MODE_SWATCH);
 
-    gtk_widget_show(gsel);
+    _gsel->show();
 
-    pack_start(*Gtk::manage(Glib::wrap(gsel)));
+    pack_start(*_gsel);
 
     Gtk::Widget *color_selector = Gtk::manage(new ColorNotebook(_selected_color));
     color_selector->show();
@@ -64,7 +63,7 @@ SwatchSelector::~SwatchSelector()
     _gsel = nullptr;
 }
 
-SPGradientSelector *SwatchSelector::getGradientSelector()
+GradientSelector *SwatchSelector::getGradientSelector()
 {
     return _gsel;
 }
@@ -104,24 +103,6 @@ void SwatchSelector::_changedCb()
                                _("Change swatch color"));
         }
     }
-}
-
-void SwatchSelector::connectGrabbedHandler( GCallback handler, void *data )
-{
-    GObject* obj = G_OBJECT(_gsel);
-    g_signal_connect( obj, "grabbed", handler, data );
-}
-
-void SwatchSelector::connectDraggedHandler( GCallback handler, void *data )
-{
-    GObject* obj = G_OBJECT(_gsel);
-    g_signal_connect( obj, "dragged", handler, data );
-}
-
-void SwatchSelector::connectReleasedHandler( GCallback handler, void *data )
-{
-    GObject* obj = G_OBJECT(_gsel);
-    g_signal_connect( obj, "released", handler, data );
 }
 
 void SwatchSelector::connectchangedHandler( GCallback handler, void *data )

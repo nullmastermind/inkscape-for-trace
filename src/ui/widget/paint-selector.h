@@ -29,7 +29,7 @@ class SPMeshGradient;
 class SPDesktop;
 class SPPattern;
 class SPStyle;
-struct SPGradientSelector;
+class GradientSelector;
 
 namespace Gtk {
 class Label;
@@ -89,7 +89,7 @@ private:
     Gtk::RadioButton *_nonzero;
 
     Gtk::Box   *_frame;
-    GtkWidget  *_selector;
+    Gtk::Box   *_selector;
     Gtk::Label *_label;
     GtkWidget  *_patternmenu;
 
@@ -119,7 +119,7 @@ private:
     void set_style_buttons(Gtk::ToggleButton *active);
     void set_mode_multiple();
     void set_mode_none();
-    SPGradientSelector * getGradientFromData() const;
+    GradientSelector * getGradientFromData() const;
     void clear_frame();
     void set_mode_unset();
     void set_mode_color(PaintSelector::Mode mode);
@@ -131,10 +131,10 @@ private:
     void set_mode_hatch(PaintSelector::Mode mode);
     void set_mode_swatch(PaintSelector::Mode mode);
 
-    static void gradient_grabbed( SPGradientSelector *csel, PaintSelector *psel);
-    static void gradient_dragged( SPGradientSelector *csel, PaintSelector *psel);
-    static void gradient_released(SPGradientSelector *csel, PaintSelector *psel);
-    static void gradient_changed( SPGradientSelector *csel, PaintSelector *psel);
+    void gradient_grabbed();
+    void gradient_dragged();
+    void gradient_released();
+    void gradient_changed(SPGradient *gr);
 
     static void mesh_change( GtkWidget *widget, PaintSelector *psel);
     static void mesh_destroy(GtkWidget *widget, PaintSelector *psel);

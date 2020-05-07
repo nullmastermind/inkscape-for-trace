@@ -16,7 +16,7 @@
 class SPDocument;
 class SPGradient;
 struct SPColorSelector;
-struct SPGradientSelector;
+class GradientSelector;
 
 namespace Inkscape {
 namespace UI {
@@ -28,14 +28,11 @@ public:
     SwatchSelector();
     ~SwatchSelector() override;
 
-    void connectGrabbedHandler( GCallback handler, void *data );
-    void connectDraggedHandler( GCallback handler, void *data );
-    void connectReleasedHandler( GCallback handler, void *data );
     void connectchangedHandler( GCallback handler, void *data );
 
     void setVector(SPDocument *doc, SPGradient *vector);
 
-    SPGradientSelector *getGradientSelector();
+    GradientSelector *getGradientSelector();
 
 private:
     void _grabbedCb();
@@ -43,7 +40,7 @@ private:
     void _releasedCb();
     void _changedCb();
 
-    SPGradientSelector *_gsel;
+    GradientSelector *_gsel;
     Inkscape::UI::SelectedColor _selected_color;
     bool _updating_color;
 };
