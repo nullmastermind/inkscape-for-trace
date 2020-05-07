@@ -144,8 +144,6 @@ struct SPCanvasClass {
 
 namespace {
 
-gint const UPDATE_PRIORITY = G_PRIORITY_DEFAULT_IDLE;
-
 GdkWindow *getWindow(SPCanvas *canvas)
 {
     return gtk_widget_get_window(reinterpret_cast<GtkWidget *>(canvas));
@@ -2598,10 +2596,13 @@ gint SPCanvas::idle_handler(gpointer data)
 void SPCanvas::addIdle()
 {
     if (_idle_id == 0) {
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        guint redrawPriority = prefs->getIntLimited("/options/redrawpriority/value", G_PRIORITY_HIGH_IDLE, G_PRIORITY_HIGH_IDLE, G_PRIORITY_DEFAULT_IDLE);
+
 #ifdef DEBUG_PERFORMANCE
         _idle_time = g_get_monotonic_time();
 #endif
-        _idle_id = gdk_threads_add_idle_full(UPDATE_PRIORITY, idle_handler, this, nullptr);
+        _idle_id = gdk_threads_add_idle_full(redrawPriority, idle_handler, this, nullptr);
 #ifdef DEBUG_PERFORMANCE
         g_message("[%i] launched %f", _idle_id, _totalelapsed / (double)1000000);
 #endif
