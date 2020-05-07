@@ -25,7 +25,6 @@
 #include "desktop-style.h"
 #include "desktop.h"
 #include "document-undo.h"
-#include "fill-n-stroke-factory.h"
 #include "fill-style.h" // to get sp_fill_style_widget_set_desktop
 #include "gradient-chemistry.h"
 
@@ -81,24 +80,11 @@ struct { gchar const *key; gint value; } const SPMarkerNames[] = {
     {nullptr, -1}
 };
 
-/**
- * Creates an instance of a paint style widget.
- */
-Gtk::Widget *sp_stroke_style_paint_widget_new();
-
-/**
- * Creates an instance of a line style widget.
- */
-Gtk::Widget *sp_stroke_style_line_widget_new();
-
-/**
- * Switches a line or paint style widget to track the given desktop.
- */
-void sp_stroke_style_widget_set_desktop(Gtk::Widget *widget, SPDesktop *desktop);
-
 SPObject *getMarkerObj(gchar const *n, SPDocument *doc);
 
 namespace Inkscape {
+namespace UI {
+namespace Widget {
 class StrokeStyleButton;
 
 class StrokeStyle : public Gtk::Box
@@ -210,6 +196,8 @@ private:
     sigc::connection _document_replaced_connection;
 };
 
+} // namespace Widget
+} // namespace UI
 } // namespace Inkscape
 
 #endif // SEEN_DIALOGS_STROKE_STYLE_H

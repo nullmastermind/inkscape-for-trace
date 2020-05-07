@@ -39,31 +39,6 @@ using Inkscape::DocumentUndo;
 using Inkscape::Util::unit_table;
 
 /**
- * Creates a new widget for the line stroke paint.
- */
-Gtk::Widget *sp_stroke_style_paint_widget_new()
-{
-    return Inkscape::Widgets::createStyleWidget( STROKE );
-}
-
-/**
- * Creates a new widget for the line stroke style.
- */
-Gtk::Widget *sp_stroke_style_line_widget_new()
-{
-    return Inkscape::Widgets::createStrokeStyleWidget();
-}
-
-void sp_stroke_style_widget_set_desktop(Gtk::Widget *widget, SPDesktop *desktop)
-{
-    Inkscape::StrokeStyle *ss = dynamic_cast<Inkscape::StrokeStyle*>(widget);
-    if (ss) {
-        ss->setDesktop(desktop);
-    }
-}
-
-
-/**
  * Extract the actual name of the link
  * e.g. get mTriangle from url(#mTriangle).
  * \return Buffer containing the actual name, allocated from GLib;
@@ -101,7 +76,8 @@ SPObject* getMarkerObj(gchar const *n, SPDocument *doc)
 }
 
 namespace Inkscape {
-
+namespace UI {
+namespace Widget {
 
 /**
  * Construct a stroke-style radio button with a given icon
@@ -127,16 +103,6 @@ StrokeStyle::StrokeStyleButton::StrokeStyleButton(Gtk::RadioButtonGroup &grp,
     g_assert(px != nullptr);
     px->show();
     add(*px);
-}
-
-/**
- * Create the fill or stroke style widget, and hook up all the signals.
- */
-Gtk::Widget *Inkscape::Widgets::createStrokeStyleWidget( )
-{
-    StrokeStyle *strokeStyle = new StrokeStyle();
-
-    return strokeStyle;
 }
 
 StrokeStyle::StrokeStyle() :
@@ -1329,8 +1295,8 @@ StrokeStyle::updateAllMarkers(std::vector<SPItem*> const &objects, bool skip_und
 
 }
 
-
-
+} // namespace Widget
+} // namespace UI
 } // namespace Inkscape
 
 

@@ -22,7 +22,6 @@ set(widgets_SRC
 	# Headers
 	desktop-widget.h
 	ege-paint-def.h
-	fill-n-stroke-factory.h
 	fill-style.h
 	gradient-image.h
 	gradient-selector.h

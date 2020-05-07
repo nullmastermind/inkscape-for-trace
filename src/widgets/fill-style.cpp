@@ -19,13 +19,11 @@
 
 #define noSP_FS_VERBOSE
 
-#include <gtkmm/box.h>
 #include <glibmm/i18n.h>
 
 #include "desktop-style.h"
 #include "desktop.h"
 #include "document-undo.h"
-#include "fill-n-stroke-factory.h"
 #include "fill-style.h"
 #include "gradient-chemistry.h"
 #include "inkscape.h"
@@ -42,8 +40,6 @@
 
 #include "display/sp-canvas.h"
 
-#include "ui/widget/paint-selector.h"
-
 
 // These can be deleted once we sort out the libart dependence.
 
@@ -51,71 +47,9 @@
 
 /* Fill */
 
-
-Gtk::Widget *sp_fill_style_widget_new()
-{
-    return Inkscape::Widgets::createStyleWidget( FILL );
-}
-
-
 namespace Inkscape {
-
-class FillNStroke : public Gtk::VBox
-{
-public:
-    FillNStroke( FillOrStroke k );
-    ~FillNStroke() override;
-
-    void setFillrule(UI::Widget::PaintSelector::FillRule mode);
-
-    void setDesktop(SPDesktop *desktop);
-
-private:
-    void paintModeChangeCB(UI::Widget::PaintSelector::Mode mode);
-    void paintChangedCB();
-    static gboolean dragDelayCB(gpointer data);
-
-    void selectionModifiedCB(guint flags);
-    void eventContextCB(SPDesktop *desktop, Inkscape::UI::Tools::ToolBase *eventcontext);
-
-    void dragFromPaint();
-    void updateFromPaint();
-
-    void performUpdate();
-
-    FillOrStroke kind;
-    SPDesktop *desktop;
-    UI::Widget::PaintSelector *psel;
-    guint32 lastDrag;
-    guint dragId;
-    bool update;
-    sigc::connection selectChangedConn;
-    sigc::connection subselChangedConn;
-    sigc::connection selectModifiedConn;
-    sigc::connection eventContextConn;
-};
-
-} // namespace Inkscape
-
-void sp_fill_style_widget_set_desktop(Gtk::Widget *widget, SPDesktop *desktop)
-{
-    Inkscape::FillNStroke *fs = dynamic_cast<Inkscape::FillNStroke*>(widget);
-    if (fs) {
-        fs->setDesktop(desktop);
-    }
-}
-
-namespace Inkscape {
-
-/**
- * Create the fill or stroke style widget, and hook up all the signals.
- */
-Gtk::Widget *Inkscape::Widgets::createStyleWidget( FillOrStroke kind )
-{
-    FillNStroke *filler = new FillNStroke(kind);
-
-    return filler;
-}
+namespace UI {
+namespace Widget {
 
 FillNStroke::FillNStroke( FillOrStroke k ) :
     Gtk::VBox(),
@@ -780,6 +714,8 @@ void FillNStroke::updateFromPaint()
     update = false;
 }
 
+} // namespace Widget
+} // namespace UI
 } // namespace Inkscape
 
 /*

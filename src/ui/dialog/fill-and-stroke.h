@@ -26,7 +26,9 @@ namespace Inkscape {
 namespace UI {
 
 namespace Widget {
+class FillNStroke;
 class NotebookPage;
+class StrokeStyle;
 }
 
 namespace Dialog {
@@ -71,9 +73,9 @@ private:
     FillAndStroke& operator=(FillAndStroke const &d) = delete;
 
     SPDesktop *targetDesktop;
-    Gtk::Widget *fillWdgt;
-    Gtk::Widget *strokeWdgt;
-    Gtk::Widget *strokeStyleWdgt;
+    UI::Widget::FillNStroke *fillWdgt;
+    UI::Widget::FillNStroke *strokeWdgt;
+    UI::Widget::StrokeStyle *strokeStyleWdgt;
 };
 
 } // namespace Dialog

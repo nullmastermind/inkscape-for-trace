@@ -15,15 +15,59 @@
 #ifndef SEEN_DIALOGS_SP_FILL_STYLE_H
 #define SEEN_DIALOGS_SP_FILL_STYLE_H
 
+#include "ui/widget/paint-selector.h"
+
+#include <gtkmm/box.h>
+
 namespace Gtk {
 class Widget;
 }
 
 class SPDesktop;
 
-Gtk::Widget *sp_fill_style_widget_new();
+namespace Inkscape {
+namespace UI {
+namespace Widget {
 
-void sp_fill_style_widget_set_desktop(Gtk::Widget *widget, SPDesktop *desktop);
+class FillNStroke : public Gtk::VBox
+{
+public:
+    FillNStroke( FillOrStroke k );
+    ~FillNStroke() override;
+
+    void setFillrule(PaintSelector::FillRule mode);
+
+    void setDesktop(SPDesktop *desktop);
+
+private:
+    void paintModeChangeCB(UI::Widget::PaintSelector::Mode mode);
+    void paintChangedCB();
+    static gboolean dragDelayCB(gpointer data);
+
+    void selectionModifiedCB(guint flags);
+    void eventContextCB(SPDesktop *desktop, Inkscape::UI::Tools::ToolBase *eventcontext);
+
+    void dragFromPaint();
+    void updateFromPaint();
+
+    void performUpdate();
+
+    FillOrStroke kind;
+    SPDesktop *desktop;
+    UI::Widget::PaintSelector *psel;
+    guint32 lastDrag;
+    guint dragId;
+    bool update;
+    sigc::connection selectChangedConn;
+    sigc::connection subselChangedConn;
+    sigc::connection selectModifiedConn;
+    sigc::connection eventContextConn;
+};
+
+} // namespace Widget
+} // namespace UI
+} // namespace Inkscape
+
 
 #endif // SEEN_DIALOGS_SP_FILL_STYLE_H
 
