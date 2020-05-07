@@ -31847,7 +31847,7 @@ msgstr "Mostra o oculta els regles del llenç"
 
 #: ../src/verbs.cpp:2972
 msgid "Scroll_bars"
-msgstr "_Barres de desplaçament"
+msgstr "Barr_es de desplaçament"
 
 #: ../src/verbs.cpp:2973
 msgid "Show or hide the canvas scrollbars"
@@ -31883,7 +31883,7 @@ msgstr "Mostra o amaga la barra d'ordres (sota el menú)"
 
 #: ../src/verbs.cpp:2981
 msgid "Sn_ap Controls Bar"
-msgstr "_Barra de controls d'ajustament"
+msgstr "B_arra de controls d'ajustament"
 
 #: ../src/verbs.cpp:2982
 msgid "Show or hide the snapping controls"
@@ -31891,7 +31891,7 @@ msgstr "Mostra o amaga els controls d'ajustament"
 
 #: ../src/verbs.cpp:2983
 msgid "T_ool Controls Bar"
-msgstr "_Barra de controls d'eines"
+msgstr "Barra _de controls d'eines"
 
 #: ../src/verbs.cpp:2984
 msgid "Show or hide the Tool Controls bar"
@@ -35368,7 +35368,7 @@ msgstr "Alçada de seguretat Z per G00 movent-se sobre blanc:"
 #: ../share/extensions/gcodetools_orientation_points.inx:17
 #: ../share/extensions/gcodetools_path_to_gcode.inx:44
 msgid "Units (mm or in):"
-msgstr "Unitats (mm or in):"
+msgstr "Unitats (mm o in):"
 
 #: ../share/extensions/gcodetools_area.inx:88
 #: ../share/extensions/gcodetools_dxf_points.inx:34
