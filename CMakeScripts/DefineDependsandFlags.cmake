@@ -255,10 +255,16 @@ else()
 endif()
 
 if(APPLE)
+  # gtk+-3.0.pc should have targets=quartz (or not targets=x11)
+  if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.4")
+    pkg_get_variable(GTK3_TARGETS gtk+-3.0 targets)
+  endif()
+  if(NOT("${GTK3_TARGETS}" MATCHES "x11"))
     pkg_check_modules(MacIntegration REQUIRED gtk-mac-integration-gtk3)
     list(APPEND INKSCAPE_INCS_SYS ${MacIntegration_INCLUDE_DIRS})
     sanitize_ldflags_for_libs(MacIntegration_LDFLAGS)
     list(APPEND INKSCAPE_LIBS ${MacIntegration_LDFLAGS})
+  endif()
 endif()
 
 # ----------------------------------------------------------------------------
