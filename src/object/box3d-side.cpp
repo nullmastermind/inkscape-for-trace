@@ -20,8 +20,9 @@
 #include "svg/svg.h"
 #include "attributes.h"
 #include "inkscape.h"
-#include "persp3d.h"
-#include "persp3d-reference.h"
+#include "object/persp3d.h"
+#include "object/persp3d-reference.h"
+#include "object/box3d.h"
 #include "ui/tools/box3d-tool.h"
 #include "desktop-style.h"
 

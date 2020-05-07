@@ -16,6 +16,7 @@
 #include "perspective-line.h"
 #include "sp-root.h"
 #include "sp-defs.h"
+#include "box3d.h"
 
 #include "attributes.h"
 #include "document-undo.h"

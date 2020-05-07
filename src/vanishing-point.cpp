@@ -28,6 +28,7 @@
 #include "display/sp-ctrlline.h"
 
 #include "object/sp-namedview.h"
+#include "object/box3d.h"
 
 #include "ui/shape-editor.h"
 #include "ui/tools/tool-base.h"

@@ -30,9 +30,11 @@
 
 #include "toolbar.h"
 
-#include <gtkmm/adjustment.h>
-
 #include "axis-manip.h"
+
+namespace Gtk {
+class Adjustment;
+}
 
 class Persp3D;
 class SPDesktop;

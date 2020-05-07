@@ -21,7 +21,6 @@
 #include "selection.h"
 
 #include "object/persp3d.h"
-#include "object/box3d.h"
 
 #include "ui/control-manager.h" // TODO break enums out separately
 

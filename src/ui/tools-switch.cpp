@@ -29,6 +29,7 @@
 #include "object/sp-star.h"
 #include "object/sp-spiral.h"
 #include "object/sp-text.h"
+#include "object/box3d.h"
 
 // TODO: How many of these are actually needed?
 #include "ui/tools/arc-tool.h"
