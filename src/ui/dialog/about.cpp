@@ -33,12 +33,9 @@ static Gtk::Notebook *tabs = nullptr;
 void close_about_screen() {
     window->hide();
 }
-
-void show_license() {
-    tabs->set_current_page(2);
-}
-void show_credits() {
-    tabs->set_current_page(1);
+void copy_version() {
+    auto clipboard = Gtk::Clipboard::get();
+    clipboard->set_text(Inkscape::version_string);
 }
 
 void AboutDialog::show_about() {
@@ -63,21 +60,12 @@ void AboutDialog::show_about() {
         //gtk_builder_connect_signals(builder->gobj(), NULL);
 
         // When automatic handling fails
-        Gtk::Button *close_button;
-        builder->get_widget("close", close_button);
-        if(close_button) close_button->signal_clicked().connect( sigc::ptr_fun(&close_about_screen) );
-
-        Gtk::Button *license_button;
-        builder->get_widget("license", license_button);
-        if(license_button) license_button->signal_clicked().connect( sigc::ptr_fun(&show_license) );
-
-        Gtk::Button *credits_button;
-        builder->get_widget("credits", credits_button);
-        if(credits_button) credits_button->signal_clicked().connect( sigc::ptr_fun(&show_credits) );
-
-        Gtk::Label *version;
+        Gtk::Button *version;
         builder->get_widget("version", version);
-        if(version) version->set_text(Inkscape::version_string);
+        if(version) {
+            version->set_label(Inkscape::version_string);
+            version->signal_clicked().connect( sigc::ptr_fun(&copy_version) );
+        }
 
         // Render the about screen image via inkscape SPDocument
         auto filename = Resource::get_filename(Resource::SCREENS, "about.svg", true, false);
@@ -104,13 +92,22 @@ void AboutDialog::show_about() {
             g_error("Error loading about screen SVG.");
         }
 
-        Gtk::TextView *credits;
-        builder->get_widget("credits-text", credits);
-        if(credits) {
+        Gtk::TextView *authors;
+        builder->get_widget("credits-authors", authors);
+        if(authors) {
             std::ifstream fn(Resource::get_filename(Resource::DOCS, "AUTHORS"));
             std::string str((std::istreambuf_iterator<char>(fn)),
                              std::istreambuf_iterator<char>());
-            credits->get_buffer()->set_text(str.c_str());
+            authors->get_buffer()->set_text(str.c_str());
+        }
+
+        Gtk::TextView *translators;
+        builder->get_widget("credits-translators", translators);
+        if(translators) {
+            std::ifstream fn(Resource::get_filename(Resource::DOCS, "TRANSLATORS"));
+            std::string str((std::istreambuf_iterator<char>(fn)),
+                             std::istreambuf_iterator<char>());
+            translators->get_buffer()->set_text(str.c_str());
         }
 
         Gtk::TextView *license;

@@ -1,28 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.22.2 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
-  <object class="GtkImage" id="credits-image">
+  <object class="GtkImage" id="copy-icon">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-add</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="license-image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-about</property>
-    <property name="icon_size">1</property>
+    <property name="margin_right">3</property>
+    <property name="stock">gtk-copy</property>
   </object>
   <object class="GtkWindow" id="about-screen-window">
     <property name="name">about</property>
     <property name="can_focus">False</property>
-    <property name="title" translatable="yes">About Inkscape</property>
+    <property name="title" translatable="yes">Inkscape. Draw freely.</property>
     <property name="resizable">False</property>
     <property name="window_position">center-always</property>
     <property name="icon_name">help-about</property>
     <property name="gravity">north</property>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
     <child>
@@ -35,9 +29,9 @@
           <object class="GtkNotebook" id="tabs">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="tab_pos">bottom</property>
-            <property name="show_tabs">False</property>
             <property name="show_border">False</property>
+            <property name="enable_popup">True</property>
+            <property name="group_name">about_stack</property>
             <child>
               <object class="GtkAspectFrame" id="aspect-frame">
                 <property name="width_request">750</property>
@@ -54,18 +48,28 @@
               </object>
             </child>
             <child type="tab">
-              <placeholder/>
+              <object class="GtkLabel" id="about-label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Official splash artwork of this version</property>
+                <property name="hexpand">True</property>
+                <property name="label" translatable="yes">About</property>
+              </object>
+              <packing>
+                <property name="tab_fill">False</property>
+              </packing>
             </child>
             <child>
-              <object class="GtkBox">
+              <object class="GtkBox" id="authors-box">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkLabel">
+                  <object class="GtkLabel" id="header-authors">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;Thanks to everyone who has contributed to Inkscape!&lt;/b&gt;&lt;/big&gt; </property>
+                    <property name="margin_top">3</property>
+                    <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;Do you want to get involved with Inkscape? &lt;a href="https://inkscape.org/contribute/"&gt;Check this page!&lt;/a&gt;&lt;/b&gt;&lt;/big&gt;</property>
                     <property name="use_markup">True</property>
                   </object>
                   <packing>
@@ -76,12 +80,12 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkScrolledWindow">
+                  <object class="GtkScrolledWindow" id="content-author">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="shadow_type">in</property>
                     <child>
-                      <object class="GtkTextView" id="credits-text">
+                      <object class="GtkTextView" id="credits-authors">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="left_margin">10</property>
@@ -104,10 +108,82 @@
               </packing>
             </child>
             <child type="tab">
-              <placeholder/>
+              <object class="GtkLabel" id="authors-label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">List of authors that contributed to the code</property>
+                <property name="hexpand">True</property>
+                <property name="label" translatable="yes">Authors</property>
+              </object>
+              <packing>
+                <property name="position">1</property>
+                <property name="tab_fill">False</property>
+              </packing>
             </child>
             <child>
-              <object class="GtkBox">
+              <object class="GtkBox" id="translators-box">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="header-translators">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_top">3</property>
+                    <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;Do you want to contribute to translation activities? &lt;a href="https://inkscape.org/contribute/translations/"&gt;Join us here!&lt;/a&gt;&lt;/b&gt;&lt;/big&gt;</property>
+                    <property name="use_markup">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="padding">4</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkScrolledWindow" id="content-translators">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <object class="GtkTextView" id="credits-translators">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="left_margin">10</property>
+                        <property name="right_margin">10</property>
+                        <property name="top_margin">10</property>
+                        <property name="bottom_margin">10</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="padding">4</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="position">2</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="translators-label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">List of translators</property>
+                <property name="hexpand">True</property>
+                <property name="label" translatable="yes">Translators</property>
+              </object>
+              <packing>
+                <property name="position">2</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="license-box">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
@@ -136,144 +212,91 @@
                 </child>
               </object>
               <packing>
-                <property name="position">2</property>
+                <property name="position">3</property>
+                <property name="tab_fill">False</property>
               </packing>
             </child>
             <child type="tab">
-              <placeholder/>
+              <object class="GtkLabel" id="license-label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Full license text</property>
+                <property name="hexpand">True</property>
+                <property name="label" translatable="yes">License</property>
+              </object>
+              <packing>
+                <property name="position">3</property>
+                <property name="tab_fill">False</property>
+              </packing>
             </child>
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">True</property>
+            <property name="fill">False</property>
             <property name="position">0</property>
           </packing>
         </child>
         <child>
-          <object class="GtkBox">
+          <object class="GtkBox" id="about-screen-footer">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_top">2</property>
-            <property name="margin_bottom">2</property>
+            <property name="margin_left">5</property>
+            <property name="margin_right">5</property>
+            <property name="margin_top">1</property>
+            <property name="margin_bottom">5</property>
             <child>
-              <object class="GtkLabel" id="version">
+              <object class="GtkLabel" id="copyright">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label">$version</property>
-                <property name="use_markup">True</property>
-                <property name="selectable">True</property>
-                <property name="single_line_mode">True</property>
-                <property name="xalign">0</property>
+                <property name="margin_left">10</property>
+                <property name="label" translatable="yes" context="Brief copyright notice at the footer of the About screen">© 2019 Inkscape Developers</property>
+                <property name="wrap">True</property>
+                <property name="wrap_mode">char</property>
               </object>
               <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="padding">8</property>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
                 <property name="position">0</property>
               </packing>
             </child>
             <child>
-              <object class="GtkBox">
+              <object class="GtkLinkButton" id="website">
+                <property name="label">www.inkscape.org</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <child>
-                  <object class="GtkLabel" id="copyright">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">© 2019</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Inkscape Developers</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="padding">5</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
+                <property name="can_focus">True</property>
+                <property name="focus_on_click">False</property>
+                <property name="receives_default">True</property>
+                <property name="tooltip_text" translatable="yes">Link to the official website</property>
+                <property name="margin_left">15</property>
+                <property name="relief">none</property>
+                <property name="uri">https://inkscape.org/?about-screen=1</property>
               </object>
               <packing>
                 <property name="expand">True</property>
-                <property name="fill">True</property>
+                <property name="fill">False</property>
                 <property name="position">1</property>
               </packing>
             </child>
             <child>
-              <object class="GtkBox">
+              <object class="GtkButton" id="version">
+                <property name="label" translatable="yes">$version</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <child>
-                  <object class="GtkLinkButton">
-                    <property name="label">inkscape.org</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="relief">none</property>
-                    <property name="uri">https://inkscape.org/?about-screen=1</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="license">
-                    <property name="label" translatable="yes">License</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="valign">center</property>
-                    <property name="image">license-image</property>
-                    <signal name="clicked" handler="close_about_screen" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="pack_type">end</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="credits">
-                    <property name="label" translatable="yes">Authors</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="valign">center</property>
-                    <property name="image">credits-image</property>
-                    <property name="image_position">top</property>
-                    <signal name="clicked" handler="close_about_screen" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="pack_type">end</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="image">copy-icon</property>
+                <property name="always_show_image">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">2</property>
+                <property name="position">3</property>
               </packing>
             </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="position">2</property>
           </packing>
         </child>
       </object>
