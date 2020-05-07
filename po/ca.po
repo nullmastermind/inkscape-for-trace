@@ -31883,7 +31883,7 @@ msgstr "Mostra o amaga la barra d'ordres (sota el menú)"
 
 #: ../src/verbs.cpp:2981
 msgid "Sn_ap Controls Bar"
-msgstr "_Ajusta la barra de controls"
+msgstr "_Barra de controls d'ajustament"
 
 #: ../src/verbs.cpp:2982
 msgid "Show or hide the snapping controls"
@@ -31891,11 +31891,11 @@ msgstr "Mostra o amaga els controls d'ajustament"
 
 #: ../src/verbs.cpp:2983
 msgid "T_ool Controls Bar"
-msgstr "_Barra d'eines de control"
+msgstr "_Barra de controls d'eines"
 
 #: ../src/verbs.cpp:2984
 msgid "Show or hide the Tool Controls bar"
-msgstr "Mostra o amaga la barra de les eines de control"
+msgstr "Mostra o amaga la barra de controls d'eines"
 
 #: ../src/verbs.cpp:2985
 msgid "_Toolbox"
@@ -32357,7 +32357,7 @@ msgstr "Inkscape: _vectoritzar"
 
 #: ../src/verbs.cpp:3130
 msgid "Using bitmap tracing"
-msgstr "Fes servirr la vectorització de mapes de bits"
+msgstr "Fes servir la vectorització de mapes de bits"
 
 #: ../src/verbs.cpp:3132
 msgid "Inkscape: Tracing Pixel Art"
@@ -32373,7 +32373,7 @@ msgstr "Inkscape: _cal·ligrafia"
 
 #: ../src/verbs.cpp:3135
 msgid "Using the Calligraphy pen tool"
-msgstr "Fes servirr l'eina de la ploma cal·ligràfica"
+msgstr "Fes servir l'eina de la ploma cal·ligràfica"
 
 #: ../src/verbs.cpp:3136
 msgid "Inkscape: _Interpolate"
@@ -39180,7 +39180,7 @@ msgid ""
 "Using wrong settings can under certain circumstances cause Inkscape to freeze. "
 "Always save your work before plotting!"
 msgstr ""
-"Fes servirr paràmetres equivocats, sota certes circumstàncies, pot bloquejar "
+"Fes servir paràmetres equivocats, sota certes circumstàncies, pot bloquejar "
 "l'Inkscape. Deseu sempre els treballs abans de començar a traçar."
 
 #: ../share/extensions/plotter.inx:64
