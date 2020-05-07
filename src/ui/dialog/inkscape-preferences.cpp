@@ -2700,6 +2700,7 @@ void InkscapePreferences::initPageBitmaps()
 
 void InkscapePreferences::initKeyboardShortcuts(Gtk::TreeModel::iterator iter_ui)
 {
+    // ------- Shortcut file --------
     std::vector<Glib::ustring> fileNames;
     std::vector<Glib::ustring> fileLabels;
 
@@ -2712,9 +2713,11 @@ void InkscapePreferences::initKeyboardShortcuts(Gtk::TreeModel::iterator iter_ui
 
     _page_keyshortcuts.add_line( false, _("Shortcut file:"), _kb_filelist, "", tooltip.c_str(), false);
 
+    // -------- Search --------
     _kb_search.init("/options/kbshortcuts/value", true);
     _page_keyshortcuts.add_line( false, _("Search:"), _kb_search, "", "", true);
 
+    // ---------- Tree --------
     _kb_store = Gtk::TreeStore::create( _kb_columns );
     _kb_store->set_sort_column ( GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, Gtk::SORT_ASCENDING ); // only sort in onKBListKeyboardShortcuts()
 
@@ -2731,19 +2734,27 @@ void InkscapePreferences::initKeyboardShortcuts(Gtk::TreeModel::iterator iter_ui
 
     _kb_tree.set_expander_column(*_kb_tree.get_column(0));
 
+    // Name
     _kb_tree.get_column(0)->set_resizable(true);
     _kb_tree.get_column(0)->set_clickable(true);
     _kb_tree.get_column(0)->set_fixed_width (200);
 
+    // Shortcut
     _kb_tree.get_column(1)->set_resizable(true);
     _kb_tree.get_column(1)->set_clickable(true);
     _kb_tree.get_column(1)->set_fixed_width (150);
     //_kb_tree.get_column(1)->add_attribute(_kb_shortcut_renderer.property_text(), _kb_columns.shortcut);
     _kb_tree.get_column(1)->set_cell_data_func(_kb_shortcut_renderer, sigc::ptr_fun(InkscapePreferences::onKBShortcutRenderer));
 
+    // Description
+    auto desc_renderer = dynamic_cast<Gtk::CellRendererText*>(_kb_tree.get_column_cell_renderer(2));
+    desc_renderer->property_wrap_mode() = Pango::WRAP_WORD;
+    desc_renderer->property_wrap_width() = 600;
     _kb_tree.get_column(2)->set_resizable(true);
     _kb_tree.get_column(2)->set_clickable(true);
+    _kb_tree.get_column(2)->set_expand(true);
 
+    // ID
     _kb_tree.get_column(3)->set_resizable(true);
     _kb_tree.get_column(3)->set_clickable(true);
 
@@ -2761,6 +2772,7 @@ void InkscapePreferences::initKeyboardShortcuts(Gtk::TreeModel::iterator iter_ui
 
     row++;
 
+    // ------ Reset/Import/Export -------
     auto box_buttons = Gtk::manage(new Gtk::ButtonBox);
 
     box_buttons->set_layout(Gtk::BUTTONBOX_END);
@@ -3037,6 +3049,88 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
             _kb_tree.get_selection()->select(sel_path);
         }
     }
+
+    // Gio::Actions
+
+    // We need to find three lists of actions: application, window, and document.
+    ConcreteInkscapeApplication<Gtk::Application>* app = &(ConcreteInkscapeApplication<Gtk::Application>::get_instance());
+
+    std::vector<Glib::ustring> actions; // All actions (app, win, doc)
+
+    std::vector<Glib::ustring> actions_app = app->list_actions();
+    for (auto action : actions_app) {
+        actions.push_back(action);
+        // actions.push_back("app." + action);
+    }
+
+    InkscapeWindow* win = app->InkscapeApplication::get_active_window();
+    if (win) {
+        std::vector<Glib::ustring> actions_win = win->list_actions();
+        for (auto action : actions_win) {
+            actions.push_back(action);
+            //actions.push_back("win." + action);
+        }
+
+        // SPDocument* document = win->get_document();
+        // std::vector<Glib::ustring> actions_doc = document->getActionGroup()->list_actions();
+        // for (auto action : actions_doc) {
+        //     actions.push_back("doc." + action);
+        // }
+
+    } else {
+        std::cerr << "InkscapePreferences: Didn't find Inkscape window for shortcuts!" << std::endl;
+    }
+
+    InkActionExtraData& action_data = app->get_action_extra_data();
+
+    // Sort actions by section
+    auto action_sort =
+        [&](Glib::ustring &a, Glib::ustring &b) {
+            return action_data.get_section_for_action(a) < action_data.get_section_for_action(b);
+        };
+    std::sort (actions.begin(), actions.end(), action_sort);
+
+    Glib::ustring old_section;
+    Gtk::TreeStore::iterator iter_group;
+    for (auto action : actions) {
+
+        Glib::ustring section = action_data.get_section_for_action(action);
+        if (section.empty()) section = "Misc";
+        if (section != old_section) {
+            iter_group = _kb_store->append();
+            Glib::ustring name = "Gio::Actions: " + section;
+            (*iter_group)[_kb_columns.name] = name;
+            (*iter_group)[_kb_columns.shortcut] = "";
+            (*iter_group)[_kb_columns.description] = "";
+            (*iter_group)[_kb_columns.shortcutid] = 0;
+            (*iter_group)[_kb_columns.id] = "";
+            (*iter_group)[_kb_columns.user_set] = 0;
+            old_section = section;
+        }
+
+        // Find accelerator
+        std::vector<Glib::ustring> keys = app->get_accels_for_action(action);
+        // std::cout << "action: ";
+        // for (auto key : keys) {
+        //     std::cout << key << ", ";
+        // }
+        // std::cout << std::endl;
+
+        Glib::ustring shortcut_label;
+        if (!keys.empty()) {
+            shortcut_label = Glib::Markup::escape_text(keys[0]);
+        }
+
+        // Add the verb to the group
+        Gtk::TreeStore::iterator row = _kb_store->append(iter_group->children());
+        (*row)[_kb_columns.name] = action_data.get_label_for_action(action);
+        (*row)[_kb_columns.shortcut] = shortcut_label;
+        (*row)[_kb_columns.description] = action_data.get_tooltip_for_action(action);
+        (*row)[_kb_columns.shortcutid] = 0;
+        (*row)[_kb_columns.id] =  action;
+        (*row)[_kb_columns.user_set] = false;
+    }
+
 
     // re-order once after updating (then disable ordering again to increase performance)
     _kb_store->set_sort_column (_kb_columns.id, Gtk::SORT_ASCENDING );
