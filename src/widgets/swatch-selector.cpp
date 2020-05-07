@@ -27,10 +27,9 @@
 
 #include "xml/node.h"
 
-namespace Inkscape
-{
-namespace Widgets
-{
+namespace Inkscape {
+namespace UI {
+namespace Widget {
 
 SwatchSelector::SwatchSelector() :
     Gtk::VBox(),
@@ -151,7 +150,8 @@ void SwatchSelector::setVector(SPDocument */*doc*/, SPGradient *vector)
 */
 }
 
-} // namespace Widgets
+} // namespace Widget
+} // namespace UI
 } // namespace Inkscape
 
 

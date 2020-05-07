@@ -58,7 +58,6 @@
 
 #include <gtkmm/label.h>
 
-using Inkscape::Widgets::SwatchSelector;
 using Inkscape::UI::SelectedColor;
 
 #ifdef SP_PS_VERBOSE

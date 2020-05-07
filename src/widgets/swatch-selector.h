@@ -18,10 +18,9 @@ class SPGradient;
 struct SPColorSelector;
 struct SPGradientSelector;
 
-namespace Inkscape
-{
-namespace Widgets
-{
+namespace Inkscape {
+namespace UI {
+namespace Widget {
 
 class SwatchSelector : public Gtk::VBox
 {
@@ -50,7 +49,8 @@ private:
 };
 
 
-} // namespace Widgets
+} // namespace Widget
+} // namespace UI
 } // namespace Inkscape
 
 #endif // SEEN_SP_SWATCH_SELECTOR_H
