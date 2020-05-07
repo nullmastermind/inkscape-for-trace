@@ -13,8 +13,7 @@
 #define SEEN_SP_PAINT_SELECTOR_H
 
 #include <glib.h>
-#include <gtk/gtk.h>
-
+#include <gtkmm/box.h>
 #include "color.h"
 #include "fill-or-stroke.h"
 
@@ -30,19 +29,23 @@ class SPMeshGradient;
 class SPDesktop;
 class SPPattern;
 class SPStyle;
+struct SPGradientSelector;
 
-#define SP_TYPE_PAINT_SELECTOR (sp_paint_selector_get_type ())
-#define SP_PAINT_SELECTOR(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_PAINT_SELECTOR, SPPaintSelector))
-#define SP_PAINT_SELECTOR_CLASS(k) (G_TYPE_CHECK_CLASS_CAST ((k), SP_TYPE_PAINT_SELECTOR, SPPaintSelectorClass))
-#define SP_IS_PAINT_SELECTOR(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_PAINT_SELECTOR))
-#define SP_IS_PAINT_SELECTOR_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE ((k), SP_TYPE_PAINT_SELECTOR))
+namespace Gtk {
+class Label;
+class RadioButton;
+class ToggleButton;
+}
+
+namespace Inkscape {
+namespace UI {
+namespace Widget {
 
 /**
  * Generic paint selector widget.
  */
-struct SPPaintSelector {
-    GtkBox  vbox;
-
+class PaintSelector : public Gtk::Box {
+public:
     enum Mode {
         MODE_EMPTY,
         MODE_MULTIPLE,
@@ -64,69 +67,119 @@ struct SPPaintSelector {
         FILLRULE_EVENODD
     } ;
 
-    guint update : 1;
+private:
+    guint _update : 1;
 
-    Mode mode;
+    Mode _mode;
 
-    GtkWidget *style;
-    GtkWidget *none;
-    GtkWidget *solid;
-    GtkWidget *gradient;
-    GtkWidget *radial;
+    Gtk::Box  *_style;
+    Gtk::ToggleButton *_none;
+    Gtk::ToggleButton *_solid;
+    Gtk::ToggleButton *_gradient;
+    Gtk::ToggleButton *_radial;
 #ifdef WITH_MESH
-    GtkWidget *mesh;
+    Gtk::ToggleButton *_mesh;
 #endif
-    GtkWidget *pattern;
-    GtkWidget *swatch;
-    GtkWidget *unset;
+    Gtk::ToggleButton *_pattern;
+    Gtk::ToggleButton *_swatch;
+    Gtk::ToggleButton *_unset;
 
-    GtkWidget *fillrulebox;
-    GtkWidget *evenodd, *nonzero;
+    Gtk::Box *_fillrulebox;
+    Gtk::RadioButton *_evenodd;
+    Gtk::RadioButton *_nonzero;
 
-    GtkWidget *frame, *selector;
-    GtkWidget *label;
+    Gtk::Box   *_frame;
+    GtkWidget  *_selector;
+    Gtk::Label *_label;
+    GtkWidget  *_patternmenu;
 
-    Inkscape::UI::SelectedColor *selected_color;
-    bool updating_color;
+    Inkscape::UI::SelectedColor *_selected_color;
+    bool _updating_color;
 
-    static Mode getModeForStyle(SPStyle const & style, FillOrStroke kind);
-
-    void setMode( Mode mode );
-    void setFillrule( FillRule fillrule );
-
-    void setColorAlpha( SPColor const &color, float alpha );
     void getColorAlpha( SPColor &color, gfloat &alpha ) const;
 
+    static gboolean isSeparator (GtkTreeModel *model, GtkTreeIter *iter, gpointer data);
+
+private:
+    sigc::signal<void, FillRule> _signal_fillrule_changed;
+    sigc::signal<void>           _signal_dragged;
+    sigc::signal<void, Mode>     _signal_mode_changed;
+    sigc::signal<void>           _signal_grabbed;
+    sigc::signal<void>           _signal_released;
+    sigc::signal<void>           _signal_changed;
+
+    Gtk::ToggleButton * style_button_add(gchar const *px, PaintSelector::Mode mode, gchar const *tip);
+    void style_button_toggled(Gtk::ToggleButton *tb);
+    void fillrule_toggled(Gtk::ToggleButton *tb);
+    void onSelectedColorGrabbed();
+    void onSelectedColorDragged();
+    void onSelectedColorReleased();
+    void onSelectedColorChanged();
+    void set_mode_empty();
+    void set_style_buttons(Gtk::ToggleButton *active);
+    void set_mode_multiple();
+    void set_mode_none();
+    SPGradientSelector * getGradientFromData() const;
+    void clear_frame();
+    void set_mode_unset();
+    void set_mode_color(PaintSelector::Mode mode);
+    void set_mode_gradient(PaintSelector::Mode mode);
+#ifdef WITH_MESH
+    void set_mode_mesh(PaintSelector::Mode mode);
+#endif
+    void set_mode_pattern(PaintSelector::Mode mode);
+    void set_mode_hatch(PaintSelector::Mode mode);
+    void set_mode_swatch(PaintSelector::Mode mode);
+
+    static void gradient_grabbed( SPGradientSelector *csel, PaintSelector *psel);
+    static void gradient_dragged( SPGradientSelector *csel, PaintSelector *psel);
+    static void gradient_released(SPGradientSelector *csel, PaintSelector *psel);
+    static void gradient_changed( SPGradientSelector *csel, PaintSelector *psel);
+
+    static void mesh_change( GtkWidget *widget, PaintSelector *psel);
+    static void mesh_destroy(GtkWidget *widget, PaintSelector *psel);
+    
+    static void pattern_change( GtkWidget *widget, PaintSelector *psel);
+    static void pattern_destroy(GtkWidget *widget, PaintSelector *psel);
+
+public:
+    PaintSelector(FillOrStroke kind);
+    ~PaintSelector();
+
+    inline decltype(_signal_fillrule_changed) signal_fillrule_changed() const {return _signal_fillrule_changed;}
+    inline decltype(_signal_dragged)          signal_dragged()          const {return _signal_dragged;}
+    inline decltype(_signal_mode_changed)     signal_mode_changed()     const {return _signal_mode_changed;}
+    inline decltype(_signal_grabbed)          signal_grabbed()          const {return _signal_grabbed;}
+    inline decltype(_signal_released)         signal_released()         const {return _signal_released;}
+    inline decltype(_signal_changed)          signal_changed()          const {return _signal_changed;}
+
+    void setMode(Mode mode);
+    static Mode getModeForStyle(SPStyle const & style, FillOrStroke kind);
+    void setFillrule( FillRule fillrule );
+    void setColorAlpha( SPColor const &color, float alpha );
+    void setSwatch( SPGradient *vector );
     void setGradientLinear( SPGradient *vector );
     void setGradientRadial( SPGradient *vector );
 #ifdef WITH_MESH
     void setGradientMesh(SPMeshGradient *array);
 #endif
-    void setSwatch( SPGradient *vector );
-
     void setGradientProperties( SPGradientUnits units, SPGradientSpread spread );
     void getGradientProperties( SPGradientUnits &units, SPGradientSpread &spread ) const;
-
-    void pushAttrsToGradient( SPGradient *gr ) const;
-    SPGradient *getGradientVector();
 
 #ifdef WITH_MESH
     SPMeshGradient * getMeshGradient();
     void updateMeshList( SPMeshGradient *pat );
 #endif
 
-    SPPattern * getPattern();
     void updatePatternList( SPPattern *pat );
-
-    static gboolean isSeparator (GtkTreeModel *model, GtkTreeIter *iter, gpointer data);
+    inline decltype(_mode) get_mode() const {return _mode;}
 
     // TODO move this elsewhere:
     void setFlatColor( SPDesktop *desktop, const gchar *color_property, const gchar *opacity_property );
 
-    void onSelectedColorGrabbed();
-    void onSelectedColorDragged();
-    void onSelectedColorReleased();
-    void onSelectedColorChanged();
+    SPGradient *getGradientVector();
+    void pushAttrsToGradient( SPGradient *gr ) const;
+    SPPattern * getPattern();
 };
 
 enum {
@@ -138,25 +191,9 @@ enum {
     COMBO_N_COLS      = 4
 };
 
-/// The SPPaintSelector vtable
-struct SPPaintSelectorClass {
-    GtkBoxClass parent_class;
-
-    void (* mode_changed) (SPPaintSelector *psel, SPPaintSelector::Mode mode);
-
-    void (* grabbed) (SPPaintSelector *psel);
-    void (* dragged) (SPPaintSelector *psel);
-    void (* released) (SPPaintSelector *psel);
-    void (* changed) (SPPaintSelector *psel);
-    void (* fillrule_changed) (SPPaintSelector *psel, SPPaintSelector::FillRule fillrule);
-};
-
-GType sp_paint_selector_get_type ();
-
-SPPaintSelector *sp_paint_selector_new(FillOrStroke kind);
-
-
-
+}
+}
+}
 #endif // SEEN_SP_PAINT_SELECTOR_H
 
 /*

@@ -32,7 +32,6 @@
 #include "ui/widget/notebook-page.h"
 
 #include "widgets/fill-style.h"
-#include "widgets/paint-selector.h"
 #include "widgets/stroke-style.h"
 
 

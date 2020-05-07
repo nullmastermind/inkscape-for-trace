@@ -66,17 +66,14 @@ public:
     FillNStroke( FillOrStroke k );
     ~FillNStroke() override;
 
-    void setFillrule( SPPaintSelector::FillRule mode );
+    void setFillrule(UI::Widget::PaintSelector::FillRule mode);
 
     void setDesktop(SPDesktop *desktop);
 
 private:
-    static void paintModeChangeCB(SPPaintSelector *psel, SPPaintSelector::Mode mode, FillNStroke *self);
-    static void paintChangedCB(SPPaintSelector *psel, FillNStroke *self);
-    static void paintDraggedCB(SPPaintSelector *psel, FillNStroke *self);
+    void paintModeChangeCB(UI::Widget::PaintSelector::Mode mode);
+    void paintChangedCB();
     static gboolean dragDelayCB(gpointer data);
-
-    static void fillruleChangedCB( SPPaintSelector *psel, SPPaintSelector::FillRule mode, FillNStroke *self );
 
     void selectionModifiedCB(guint flags);
     void eventContextCB(SPDesktop *desktop, Inkscape::UI::Tools::ToolBase *eventcontext);
@@ -88,7 +85,7 @@ private:
 
     FillOrStroke kind;
     SPDesktop *desktop;
-    SPPaintSelector *psel;
+    UI::Widget::PaintSelector *psel;
     guint32 lastDrag;
     guint dragId;
     bool update;
@@ -134,24 +131,15 @@ FillNStroke::FillNStroke( FillOrStroke k ) :
     eventContextConn()
 {
     // Add and connect up the paint selector widget:
-    psel = sp_paint_selector_new(kind);
-    gtk_widget_show(GTK_WIDGET(psel));
-    gtk_container_add(GTK_CONTAINER(gobj()), GTK_WIDGET(psel));
-    g_signal_connect( G_OBJECT(psel), "mode_changed",
-                      G_CALLBACK(paintModeChangeCB),
-                      this );
+    psel = Gtk::manage(new UI::Widget::PaintSelector(kind));
+    psel->show();
+    add(*psel);
+    psel->signal_mode_changed().connect(sigc::mem_fun(*this, &FillNStroke::paintModeChangeCB));
+    psel->signal_dragged().connect(sigc::mem_fun(*this, &FillNStroke::dragFromPaint));
+    psel->signal_changed().connect(sigc::mem_fun(*this, &FillNStroke::paintChangedCB));
 
-    g_signal_connect( G_OBJECT(psel), "dragged",
-                      G_CALLBACK(paintDraggedCB),
-                      this );
-
-    g_signal_connect( G_OBJECT(psel), "changed",
-                      G_CALLBACK(paintChangedCB),
-                      this );
     if (kind == FILL) {
-        g_signal_connect( G_OBJECT(psel), "fillrule_changed",
-                          G_CALLBACK(fillruleChangedCB),
-                          this );
+        psel->signal_fillrule_changed().connect(sigc::mem_fun(*this, &FillNStroke::setFillrule));
     }
 
     performUpdate();
@@ -253,7 +241,7 @@ void FillNStroke::performUpdate()
         case QUERY_STYLE_NOTHING:
         {
             /* No paint at all */
-            psel->setMode(SPPaintSelector::MODE_EMPTY);
+            psel->setMode(UI::Widget::PaintSelector::MODE_EMPTY);
             break;
         }
 
@@ -261,12 +249,12 @@ void FillNStroke::performUpdate()
         case QUERY_STYLE_MULTIPLE_AVERAGED: // TODO: treat this slightly differently, e.g. display "averaged" somewhere in paint selector
         case QUERY_STYLE_MULTIPLE_SAME:
         {
-            SPPaintSelector::Mode pselmode = SPPaintSelector::getModeForStyle(query, kind);
+            auto pselmode = UI::Widget::PaintSelector::getModeForStyle(query, kind);
             psel->setMode(pselmode);
 
             if (kind == FILL) {
                 psel->setFillrule(query.fill_rule.computed == ART_WIND_RULE_NONZERO?
-                                  SPPaintSelector::FILLRULE_NONZERO : SPPaintSelector::FILLRULE_EVENODD);
+                                  UI::Widget::PaintSelector::FILLRULE_NONZERO : UI::Widget::PaintSelector::FILLRULE_EVENODD);
             }
 
             if (targPaint.set && targPaint.isColor()) {
@@ -310,7 +298,7 @@ void FillNStroke::performUpdate()
 
         case QUERY_STYLE_MULTIPLE_DIFFERENT:
         {
-            psel->setMode(SPPaintSelector::MODE_MULTIPLE);
+            psel->setMode(UI::Widget::PaintSelector::MODE_MULTIPLE);
             break;
         }
     }
@@ -321,32 +309,21 @@ void FillNStroke::performUpdate()
 /**
  * When the mode is changed, invoke a regular changed handler.
  */
-void FillNStroke::paintModeChangeCB( SPPaintSelector * /*psel*/,
-                                     SPPaintSelector::Mode /*mode*/,
-                                     FillNStroke *self )
+void FillNStroke::paintModeChangeCB(UI::Widget::PaintSelector::Mode /*mode*/)
 {
 #ifdef SP_FS_VERBOSE
-    g_message("paintModeChangeCB(psel, mode, self:%p)", self);
+    g_message("paintModeChangeCB()");
 #endif
-    if (self && !self->update) {
-        self->updateFromPaint();
+    if (!update) {
+        updateFromPaint();
     }
 }
 
-void FillNStroke::fillruleChangedCB( SPPaintSelector * /*psel*/,
-                                     SPPaintSelector::FillRule mode,
-                                     FillNStroke *self )
-{
-    if (self) {
-        self->setFillrule(mode);
-    }
-}
-
-void FillNStroke::setFillrule( SPPaintSelector::FillRule mode )
+void FillNStroke::setFillrule( UI::Widget::PaintSelector::FillRule mode )
 {
     if (!update && desktop) {
         SPCSSAttr *css = sp_repr_css_attr_new();
-        sp_repr_css_set_property(css, "fill-rule", (mode == SPPaintSelector::FILLRULE_EVENODD) ? "evenodd":"nonzero");
+        sp_repr_css_set_property(css, "fill-rule", (mode == UI::Widget::PaintSelector::FILLRULE_EVENODD) ? "evenodd":"nonzero");
 
         sp_desktop_set_style(desktop, css);
 
@@ -366,18 +343,6 @@ static gchar const *undo_S_label_2 = "stroke:flatcolor:2";
 
 static gchar const *undo_F_label = undo_F_label_1;
 static gchar const *undo_S_label = undo_S_label_1;
-
-
-void FillNStroke::paintDraggedCB(SPPaintSelector * /*psel*/, FillNStroke *self)
-{
-#ifdef SP_FS_VERBOSE
-    g_message("paintDraggedCB(psel, spw:%p)", self);
-#endif
-    if (self && !self->update) {
-        self->dragFromPaint();
-    }
-}
-
 
 gboolean FillNStroke::dragDelayCB(gpointer data)
 {
@@ -431,8 +396,8 @@ void FillNStroke::dragFromPaint()
 
     update = true;
 
-    switch (psel->mode) {
-        case SPPaintSelector::MODE_SOLID_COLOR:
+    switch (psel->get_mode()) {
+        case UI::Widget::PaintSelector::MODE_SOLID_COLOR:
         {
             // local change, do not update from selection
             dragId = g_timeout_add_full(G_PRIORITY_DEFAULT, 100, dragDelayCB, this, nullptr);
@@ -444,7 +409,7 @@ void FillNStroke::dragFromPaint()
 
         default:
             g_warning( "file %s: line %d: Paint %d should not emit 'dragged'",
-                       __FILE__, __LINE__, psel->mode );
+                       __FILE__, __LINE__, psel->get_mode() );
             break;
     }
     update = false;
@@ -457,13 +422,13 @@ This is called (at least) when:
 3  you changed a gradient selector parameter (e.g. spread)
 Must update repr.
  */
-void FillNStroke::paintChangedCB( SPPaintSelector * /*psel*/, FillNStroke *self )
+void FillNStroke::paintChangedCB()
 {
 #ifdef SP_FS_VERBOSE
-    g_message("paintChangedCB(psel, spw:%p)", self);
+    g_message("paintChangedCB()");
 #endif
-    if (self && !self->update) {
-        self->updateFromPaint();
+    if (!update) {
+        updateFromPaint();
     }
 }
 
@@ -479,18 +444,18 @@ void FillNStroke::updateFromPaint()
 
     std::vector<SPItem*> const items(selection->items().begin(), selection->items().end());
 
-    switch (psel->mode) {
-        case SPPaintSelector::MODE_EMPTY:
+    switch (psel->get_mode()) {
+        case UI::Widget::PaintSelector::MODE_EMPTY:
             // This should not happen.
             g_warning( "file %s: line %d: Paint %d should not emit 'changed'",
-                       __FILE__, __LINE__, psel->mode);
+                       __FILE__, __LINE__, psel->get_mode());
             break;
-        case SPPaintSelector::MODE_MULTIPLE:
+        case UI::Widget::PaintSelector::MODE_MULTIPLE:
             // This happens when you switch multiple objects with different gradients to flat color;
             // nothing to do here.
             break;
 
-        case SPPaintSelector::MODE_NONE:
+        case UI::Widget::PaintSelector::MODE_NONE:
         {
             SPCSSAttr *css = sp_repr_css_attr_new();
             sp_repr_css_set_property(css, (kind == FILL) ? "fill" : "stroke", "none");
@@ -505,7 +470,7 @@ void FillNStroke::updateFromPaint()
             break;
         }
 
-        case SPPaintSelector::MODE_SOLID_COLOR:
+        case UI::Widget::PaintSelector::MODE_SOLID_COLOR:
         {
             if (kind == FILL) {
                 // FIXME: fix for GTK breakage, see comment in SelectedStyle::on_opacity_changed; here it results in losing release events
@@ -535,14 +500,14 @@ void FillNStroke::updateFromPaint()
             break;
         }
 
-        case SPPaintSelector::MODE_GRADIENT_LINEAR:
-        case SPPaintSelector::MODE_GRADIENT_RADIAL:
-        case SPPaintSelector::MODE_SWATCH:
+        case UI::Widget::PaintSelector::MODE_GRADIENT_LINEAR:
+        case UI::Widget::PaintSelector::MODE_GRADIENT_RADIAL:
+        case UI::Widget::PaintSelector::MODE_SWATCH:
             if (!items.empty()) {
-                SPGradientType const gradient_type = ( psel->mode != SPPaintSelector::MODE_GRADIENT_RADIAL
+                SPGradientType const gradient_type = ( psel->get_mode() != UI::Widget::PaintSelector::MODE_GRADIENT_RADIAL
                                                        ? SP_GRADIENT_TYPE_LINEAR
                                                        : SP_GRADIENT_TYPE_RADIAL );
-                bool createSwatch = (psel->mode == SPPaintSelector::MODE_SWATCH);
+                bool createSwatch = (psel->get_mode() == UI::Widget::PaintSelector::MODE_SWATCH);
 
                 SPCSSAttr *css = nullptr;
                 if (kind == FILL) {
@@ -619,7 +584,7 @@ void FillNStroke::updateFromPaint()
             break;
 
 #ifdef WITH_MESH
-        case SPPaintSelector::MODE_GRADIENT_MESH:
+        case UI::Widget::PaintSelector::MODE_GRADIENT_MESH:
 
             if (!items.empty()) {
                 SPCSSAttr *css = nullptr;
@@ -717,7 +682,7 @@ void FillNStroke::updateFromPaint()
             break;
 #endif
 
-        case SPPaintSelector::MODE_PATTERN:
+        case UI::Widget::PaintSelector::MODE_PATTERN:
 
             if (!items.empty()) {
 
@@ -779,7 +744,7 @@ void FillNStroke::updateFromPaint()
 
             break;
 
-        case SPPaintSelector::MODE_UNSET:
+        case UI::Widget::PaintSelector::MODE_UNSET:
             if (!items.empty()) {
                 SPCSSAttr *css = sp_repr_css_attr_new();
                 if (kind == FILL) {
@@ -808,7 +773,7 @@ void FillNStroke::updateFromPaint()
             g_warning( "file %s: line %d: Paint selector should not be in "
                        "mode %d",
                        __FILE__, __LINE__,
-                       psel->mode );
+                       psel->get_mode());
             break;
     }
 

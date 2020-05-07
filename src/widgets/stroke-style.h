@@ -50,7 +50,6 @@
 #include "ui/icon-names.h"
 #include "ui/widget/spinbutton.h"
 
-#include "widgets/paint-selector.h"
 #include "widgets/spw-utilities.h"
 #include "widgets/stroke-marker-selector.h"
 

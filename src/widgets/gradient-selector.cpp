@@ -24,7 +24,6 @@
 #include "gradient-vector.h"
 #include "id-clash.h"
 #include "inkscape.h"
-#include "paint-selector.h"
 #include "preferences.h"
 #include "verbs.h"
 
