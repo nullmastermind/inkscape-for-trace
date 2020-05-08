@@ -338,7 +338,7 @@ Geom::PathVector* item_to_outline(SPItem const *item, bool exclude_markers)
 
 static
 void item_to_paths_add_marker( SPObject *marker_object, Geom::Affine marker_transform,
-                               Geom::Scale stroke_scale, Geom::Affine transform,
+                               Geom::Scale stroke_scale,
                                Inkscape::XML::Node *g_repr, Inkscape::XML::Document *xml_doc,
                                SPDocument * doc, bool legacy)
 {
@@ -354,7 +354,7 @@ void item_to_paths_add_marker( SPObject *marker_object, Geom::Affine marker_tran
         tr = stroke_scale * tr;
     }
     // total marker transform
-    tr = marker_item->transform * marker->c2p * tr * transform;
+    tr = marker_item->transform * marker->c2p * tr;
 
     if (marker_item->getRepr()) {
         Inkscape::XML::Node *m_repr = marker_item->getRepr()->duplicate(xml_doc);
@@ -515,13 +515,11 @@ item_to_paths(SPItem *item, bool legacy)
             markers = g_repr;
         }
 
-        Geom::Affine const transform(item->transform);
-
         // START marker
         for (int i = 0; i < 2; i++) {  // SP_MARKER_LOC and SP_MARKER_LOC_START
             if ( SPObject *marker_obj = shape->_marker[i] ) {
                 Geom::Affine const m (sp_shape_marker_get_transform_at_start(fill_path.front().front()));
-                item_to_paths_add_marker( marker_obj, m, scale, transform,
+                item_to_paths_add_marker( marker_obj, m, scale,
                                           markers, xml_doc, doc, legacy);
             }
         }
@@ -537,7 +535,7 @@ item_to_paths(SPItem *item, bool legacy)
                      ! ((path_it == (fill_path.end()-1)) && (path_it->size_default() == 0)) ) // if this is the last path and it is a moveto-only, there is no mid marker there
                 {
                     Geom::Affine const m (sp_shape_marker_get_transform_at_start(path_it->front()));
-                    item_to_paths_add_marker( midmarker_obj, m, scale, transform,
+                    item_to_paths_add_marker( midmarker_obj, m, scale,
                                               markers, xml_doc, doc, legacy);
                 }
 
@@ -551,7 +549,7 @@ item_to_paths(SPItem *item, bool legacy)
                          * there should be a midpoint marker between last segment and closing straight line segment
                          */
                         Geom::Affine const m (sp_shape_marker_get_transform(*curve_it1, *curve_it2));
-                        item_to_paths_add_marker( midmarker_obj, m, scale, transform,
+                        item_to_paths_add_marker( midmarker_obj, m, scale,
                                                   markers, xml_doc, doc, legacy);
 
                         ++curve_it1;
@@ -563,7 +561,7 @@ item_to_paths(SPItem *item, bool legacy)
                 if ( path_it != (fill_path.end()-1) && !path_it->empty()) {
                     Geom::Curve const &lastcurve = path_it->back_default();
                     Geom::Affine const m = sp_shape_marker_get_transform_at_end(lastcurve);
-                    item_to_paths_add_marker( midmarker_obj, m, scale, transform,
+                    item_to_paths_add_marker( midmarker_obj, m, scale,
                                               markers, xml_doc, doc, legacy);
                 }
             }
@@ -582,7 +580,7 @@ item_to_paths(SPItem *item, bool legacy)
                 Geom::Curve const &lastcurve = path_last[index];
 
                 Geom::Affine const m = sp_shape_marker_get_transform_at_end(lastcurve);
-                item_to_paths_add_marker( marker_obj, m, scale, transform,
+                item_to_paths_add_marker( marker_obj, m, scale,
                                           markers, xml_doc, doc, legacy);
             }
         }
