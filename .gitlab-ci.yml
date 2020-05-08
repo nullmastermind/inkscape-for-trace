@@ -71,11 +71,6 @@ inkscape:mac:
   stage: build
   tags:
     - mac
-  only:
-    - branches@inkscape/inkscape
-    - branches@dehesselle/inkscape
-  except:
-    - schedules
   before_script:
     - packaging/macos/install_toolset.sh
   script:
@@ -86,7 +81,6 @@ inkscape:mac:
     expire_in: 1 year
     paths:
       - artifacts/
-  allow_failure: true
 
 
 ###########################
