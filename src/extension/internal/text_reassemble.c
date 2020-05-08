@@ -452,7 +452,7 @@ int TR_kern_gap(FNT_SPECS *fsp, TCHUNK_SPECS *tsp, TCHUNK_SPECS *ptsp, int kern_
 */
 double TR_baseline(TR_INFO *tri, int src, double *ymax, double *ymin){
    double       baseline=0;
-   volatile double tmp=0.0; /* This MUST be volatile */
+   double       tmp=0.0;
    double       yheight;
    int          last;
    int          i;
@@ -485,11 +485,6 @@ double TR_baseline(TR_INFO *tri, int src, double *ymax, double *ymin){
              yheight = fsp->face->bbox.yMax - fsp->face->bbox.yMin;
              if(ymax){
                 tmp = tpi->chunks[trec].fs * (((double)fsp->face->bbox.yMax)/yheight);
-                /* gcc 4.6.3 had a bizarre optimization error for -O2 and -O3 where *ymax <= tmp was 
-                   not true when *ymax == tmp, as verified by examining the binary representations.
-                   This was apparently due to retained excess precision.  Making tmp volatile 
-                   forces it to be stored into a 64 bit location, dropping the extra 12 bits from 
-                   the 80 bit register.  */
                 if(*ymax <= tmp){
                    *ymax = tmp;
                     baseline = bri->rects[trec].yll - tpi->chunks[trec].boff;
