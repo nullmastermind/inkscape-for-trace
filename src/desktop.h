@@ -194,6 +194,7 @@ public:
     unsigned int interaction_disabled_counter;
     bool waiting_cursor;
     bool showing_dialogs;
+    bool rotation_locked;
     /// \todo fixme: This has to be implemented in different way */
     guint guides_active : 1;
 
@@ -365,6 +366,9 @@ public:
     void zoom_quick(bool enable = true);
     /** \brief  Returns whether the desktop is in quick zoom mode or not */
     bool quick_zoomed() { return _quick_zoom_enabled; }
+
+    void toggle_rotation_lock() { rotation_locked = !rotation_locked; }
+    bool get_rotation_lock() const { return rotation_locked; }
 
     void zoom_grab_focus();
 

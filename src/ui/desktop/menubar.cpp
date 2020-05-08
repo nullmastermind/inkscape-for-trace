@@ -266,7 +266,11 @@ checkitem_update(Gtk::CheckMenuItem* menuitem, SPAction* action)
         } else if (id == "ToggleGuides") {
             active = dt->namedview->getGuides();
 
-        } else if (id == "ViewCmsToggle") {
+        } else if (id == "ToggleRotation") {
+            active = dt->get_rotation_lock();
+
+        }
+        else if (id == "ViewCmsToggle") {
             active = dt->colorProfAdjustEnabled();
         }
         else if (id == "ViewSplitModeToggle") {
