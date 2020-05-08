@@ -1964,7 +1964,7 @@ void ZoomVerb::perform(SPAction *action, void *data)
         case SP_VERB_ZOOM_CENTER_PAGE:
             dt->zoom_center_page();
             break;
-        case SP_VERB_TOGGLE_ROTATION:
+        case SP_VERB_TOGGLE_ROTATION_LOCK:
             dt->toggle_rotation_lock();
             break;
         case SP_VERB_ROTATE_CW:
@@ -3044,7 +3044,7 @@ Verb *Verb::_base_verbs[] = {
                  INKSCAPE_ICON("show-grid")),
     new ZoomVerb(SP_VERB_TOGGLE_GUIDES, "ToggleGuides", N_("G_uides"),
                  N_("Show or hide guides (drag from a ruler to create a guide)"), INKSCAPE_ICON("show-guides")),
-    new ZoomVerb(SP_VERB_TOGGLE_ROTATION, "ToggleRotation", N_("Lock Rotation"),
+    new ZoomVerb(SP_VERB_TOGGLE_ROTATION_LOCK, "ToggleRotationLock", N_("Lock rotation"),
                  N_("Lock canvas rotation"), nullptr),
     new ZoomVerb(SP_VERB_TOGGLE_SNAPPING, "ToggleSnapGlobal", N_("Snap"), N_("Enable snapping"), INKSCAPE_ICON("snap")),
     new ZoomVerb(SP_VERB_TOGGLE_COMMANDS_TOOLBAR, "ToggleCommandsToolbar", N_("_Commands Bar"),

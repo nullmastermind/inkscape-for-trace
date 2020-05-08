@@ -266,7 +266,7 @@ checkitem_update(Gtk::CheckMenuItem* menuitem, SPAction* action)
         } else if (id == "ToggleGuides") {
             active = dt->namedview->getGuides();
 
-        } else if (id == "ToggleRotation") {
+        } else if (id == "ToggleRotationLock") {
             active = dt->get_rotation_lock();
 
         }
