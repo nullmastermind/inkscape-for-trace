@@ -46,6 +46,11 @@ DockItem::DockItem(Dock& dock, const Glib::ustring& name, const Glib::ustring& l
     if ( _icon_pixbuf ) {
         _gdl_dock_item = gdl_dock_item_new_with_pixbuf_icon( name.c_str(), long_name.c_str(),
                                                              _icon_pixbuf->gobj(), gdl_dock_behavior );
+#ifndef WITH_GDL_3_35
+        // Leak a reference because GDL could crash us
+        // https://gitlab.gnome.org/GNOME/gdl/issues/2
+        g_object_ref(_gdl_dock_item);
+#endif
     } else {
         _gdl_dock_item = gdl_dock_item_new(name.c_str(), long_name.c_str(), gdl_dock_behavior);
     }
@@ -89,11 +94,6 @@ DockItem::~DockItem()
 
     _signal_hide_connection.disconnect();
     _signal_key_press_event_connection.disconnect();
-
-    // https://gitlab.gnome.org/GNOME/gdl/issues/2
-#ifdef WITH_GDL_3_35
-    gdl_dock_item_unbind(GDL_DOCK_ITEM(_gdl_dock_item));
-#endif
 }
 
 Gtk::Widget&

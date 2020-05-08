@@ -66,12 +66,8 @@ Dock::Dock(Gtk::Orientation orientation)
         static_cast<GdlSwitcherStyle>(prefs->getIntLimited("/options/dock/switcherstyle",
                                                                       GDL_SWITCHER_STYLE_BOTH, 0, 4));
 
-    GdlDockMaster* master = nullptr;
-    
-    g_object_get(GDL_DOCK_OBJECT(_gdl_dock),
-            "master", &master,
-            NULL);
-    
+    GdlDockMaster *master = GDL_DOCK_MASTER(gdl_dock_object_get_master(GDL_DOCK_OBJECT(_gdl_dock)));
+
     g_object_set(master,
             "switcher-style", gdl_switcher_style,
             NULL);
