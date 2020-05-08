@@ -251,6 +251,9 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, Inkscape::UI::View::EditWid
         setDisplayModeNormal();
     }
 
+    // Get default locked status
+    rotation_locked = prefs->getBool("/options/rotationlock");
+
     // The order in which these canvas items are added determines the z-order. It's therefore
     // important to add the tempgroup (which will contain the snapindicator) before adding the
     // controls. Only this way one will be able to quickly (before the snap indicator has
