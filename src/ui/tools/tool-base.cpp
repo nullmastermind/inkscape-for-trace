@@ -827,7 +827,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 desktop->rotate_relative_keep_point(scroll_dt, rotate_inc);
             }
 
-        } else if (event->scroll.state & GDK_SHIFT_MASK) {
+        } else if (shift && !ctrl) {
            /* shift + wheel, pan left--right */
 
             switch (event->scroll.direction) {
