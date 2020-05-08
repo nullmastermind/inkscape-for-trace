@@ -46,8 +46,11 @@ private:
     ScalarParam line_width;
     ScalarParam attach_start;
     ScalarParam attach_end;
-    ScalarParam smoothing;
+    ScalarParam start_smoothing;
+    ScalarParam end_smoothing;
     EnumParam<unsigned> join_type;
+    EnumParam<unsigned> start_shape;
+    EnumParam<unsigned> end_shape;
     ScalarParam miter_limit;
 
     Geom::Point start_attach_point;
