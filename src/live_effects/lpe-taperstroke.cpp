@@ -70,15 +70,15 @@ static const Util::EnumData<unsigned> JoinType[] = {
 
 enum TaperShape {
     TAPER_MIDDLE,
-    TAPER_START,
-    TAPER_END,
+    TAPER_RIGHT,
+    TAPER_LEFT,
     LAST_SHAPE
 };
 
 static const Util::EnumData<unsigned> TaperShapeType[] = {
     {TAPER_MIDDLE, N_("Middle"), "middle"},
-    {TAPER_START,  N_("Start"),  "start"},
-    {TAPER_END,    N_("End"),    "end"},
+    {TAPER_LEFT,   N_("Left"),   "left"},
+    {TAPER_RIGHT,  N_("Right"),  "right"},
 };
 
 static const Util::EnumDataConverter<unsigned> JoinTypeConverter(JoinType, sizeof (JoinType)/sizeof(*JoinType));
@@ -92,8 +92,8 @@ LPETaperStroke::LPETaperStroke(LivePathEffectObject *lpeobject) :
     start_smoothing(_("Start smoothing:"), _("Amount of smoothing to apply to the start taper"), "start_smoothing", &wr, this, 0.5),
     end_smoothing(_("End smoothing:"), _("Amount of smoothing to apply to the end taper"), "end_smoothing", &wr, this, 0.5),
     join_type(_("Join type:"), _("Join type for non-smooth nodes"), "jointype", JoinTypeConverter, &wr, this, JOIN_EXTRAPOLATE),
-    start_shape(_("Start shape:"), _("Direction of the taper at the path start"), "start_shape", TaperShapeTypeConverter, &wr, this, TAPER_MIDDLE),
-    end_shape(_("End shape:"), _("Direction of the taper at the path end"), "end_shape", TaperShapeTypeConverter, &wr, this, TAPER_MIDDLE),
+    start_shape(_("Start direction:"), _("Direction of the taper at the path start"), "start_shape", TaperShapeTypeConverter, &wr, this, TAPER_MIDDLE),
+    end_shape(_("End direction:"), _("Direction of the taper at the path end"), "end_shape", TaperShapeTypeConverter, &wr, this, TAPER_MIDDLE),
     miter_limit(_("Miter limit:"), _("Limit for miter joins"), "miter_limit", &wr, this, 100.)
 {
     show_orig_path = true;
@@ -312,10 +312,10 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
         pat_str.imbue(std::locale::classic());
 
         switch (start_shape.get_value()) {
-            case TAPER_START:
+            case TAPER_RIGHT:
                 pat_str << "M 1,0 Q " << 1 - (double)start_smoothing << ",0 0,1 L 1,1";
                 break;
-            case TAPER_END:
+            case TAPER_LEFT:
                 pat_str << "M 1,0 L 0,0 Q " << 1 - (double)start_smoothing << ",1 1,1";
                 break;
             default:
@@ -351,10 +351,10 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
         pat_str_1.imbue(std::locale::classic());
 
         switch (end_shape.get_value()) {
-            case TAPER_START:
+            case TAPER_RIGHT:
                 pat_str_1 << "M 0,1 L 1,1 Q " << (double)end_smoothing << ",0 0,0";
                 break;
-            case TAPER_END:
+            case TAPER_LEFT:
                 pat_str_1 << "M 0,1 Q " << (double)end_smoothing << ",1 1,0 L 0,0";
                 break;
             default:
