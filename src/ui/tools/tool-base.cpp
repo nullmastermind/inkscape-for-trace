@@ -397,7 +397,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
             break;
 
         case 2:
-            if (event->button.state & GDK_CONTROL_MASK && !desktop->get_rotation_lock()) {
+            if ((event->button.state & GDK_CONTROL_MASK) && !desktop->get_rotation_lock()) {
                 // On screen canvas rotation preview
 
                 // Grab background before doing anything else
