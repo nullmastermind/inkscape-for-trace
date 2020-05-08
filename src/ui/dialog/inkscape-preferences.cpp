@@ -1098,9 +1098,9 @@ void InkscapePreferences::initPageUI()
     _page_ui.add_line( false, "", _ui_yaxisdown, "",
                        _("When off, origin is at lower left corner and y-axis points up"), true);
 
-    _ui_rotationlock.init(_("Lock documentation rotation by default"), "/options/rotationlock", false);
+    _ui_rotationlock.init(_("Lock canvas rotation by default"), "/options/rotationlock", false);
     _page_ui.add_line(false, "", _ui_rotationlock, "",
-                       _("When enabled, common actions which normally rotate the document no longer do so by default"), true);
+                       _("When enabled, common actions which normally rotate the canvas no longer do so by default"), true);
 
     
     _mouse_grabsize.init("/options/grabsize/value", 1, 7, 1, 2, 3, 0);
