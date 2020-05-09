@@ -144,7 +144,7 @@ private:
 
 public:
     PaintSelector(FillOrStroke kind);
-    ~PaintSelector();
+    ~PaintSelector() override;
 
     inline decltype(_signal_fillrule_changed) signal_fillrule_changed() const {return _signal_fillrule_changed;}
     inline decltype(_signal_dragged)          signal_dragged()          const {return _signal_dragged;}
