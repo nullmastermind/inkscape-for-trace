@@ -66,14 +66,14 @@ static const Util::EnumData<unsigned> JoinType[] = {
 };
 
 enum TaperShape {
-    TAPER_MIDDLE,
+    TAPER_CENTER,
     TAPER_RIGHT,
     TAPER_LEFT,
     LAST_SHAPE
 };
 
 static const Util::EnumData<unsigned> TaperShapeType[] = {
-    {TAPER_MIDDLE, N_("Middle"), "middle"},
+    {TAPER_CENTER, N_("Center"), "center"},
     {TAPER_LEFT,   N_("Left"),   "left"},
     {TAPER_RIGHT,  N_("Right"),  "right"},
 };
@@ -89,8 +89,8 @@ LPETaperStroke::LPETaperStroke(LivePathEffectObject *lpeobject) :
     start_smoothing(_("Start smoothing:"), _("Amount of smoothing to apply to the start taper"), "start_smoothing", &wr, this, 0.5),
     end_smoothing(_("End smoothing:"), _("Amount of smoothing to apply to the end taper"), "end_smoothing", &wr, this, 0.5),
     join_type(_("Join type:"), _("Join type for non-smooth nodes"), "jointype", JoinTypeConverter, &wr, this, JOIN_EXTRAPOLATE),
-    start_shape(_("Start direction:"), _("Direction of the taper at the path start"), "start_shape", TaperShapeTypeConverter, &wr, this, TAPER_MIDDLE),
-    end_shape(_("End direction:"), _("Direction of the taper at the path end"), "end_shape", TaperShapeTypeConverter, &wr, this, TAPER_MIDDLE),
+    start_shape(_("Start direction:"), _("Direction of the taper at the path start"), "start_shape", TaperShapeTypeConverter, &wr, this, TAPER_CENTER),
+    end_shape(_("End direction:"), _("Direction of the taper at the path end"), "end_shape", TaperShapeTypeConverter, &wr, this, TAPER_CENTER),
     miter_limit(_("Miter limit:"), _("Limit for miter joins"), "miter_limit", &wr, this, 100.)
 {
     show_orig_path = true;
