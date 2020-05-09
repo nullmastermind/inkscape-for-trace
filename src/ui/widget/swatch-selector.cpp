@@ -23,8 +23,7 @@
 #include "svg/svg-color.h"
 
 #include "ui/widget/color-notebook.h"
-
-#include "widgets/gradient-selector.h"
+#include "ui/widget/gradient-selector.h"
 
 #include "xml/node.h"
 

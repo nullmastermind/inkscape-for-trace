@@ -16,11 +16,11 @@
 class SPDocument;
 class SPGradient;
 struct SPColorSelector;
-class GradientSelector;
 
 namespace Inkscape {
 namespace UI {
 namespace Widget {
+class GradientSelector;
 
 class SwatchSelector : public Gtk::VBox
 {

@@ -16,9 +16,10 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "ui/widget/gradient-selector.h"
+
 #include <gtkmm/liststore.h>
 #include <sigc++/connection.h>
-#include "gradient-selector.h"
 
 #define SP_TYPE_GRADIENT_VECTOR_SELECTOR (sp_gradient_vector_selector_get_type ())
 #define SP_GRADIENT_VECTOR_SELECTOR(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_GRADIENT_VECTOR_SELECTOR, SPGradientVectorSelector))
@@ -43,7 +44,7 @@ struct SPGradientVectorSelector {
 
     /* Gradient vectors store */
     Glib::RefPtr<Gtk::ListStore> store;
-    GradientSelector::ModelColumns *columns;
+    Inkscape::UI::Widget::GradientSelector::ModelColumns *columns;
 
     sigc::connection gradient_release_connection;
     sigc::connection defs_release_connection;

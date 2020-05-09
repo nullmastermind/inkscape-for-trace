@@ -120,7 +120,7 @@ static void sp_gradient_vector_selector_init(SPGradientVectorSelector *gvs)
     new (&gvs->defs_release_connection) sigc::connection();
     new (&gvs->defs_modified_connection) sigc::connection();
 
-    gvs->columns = new GradientSelector::ModelColumns();
+    gvs->columns = new Inkscape::UI::Widget::GradientSelector::ModelColumns();
     gvs->store = Gtk::ListStore::create(*gvs->columns);
     new (&gvs->tree_select_connection) sigc::connection();
 

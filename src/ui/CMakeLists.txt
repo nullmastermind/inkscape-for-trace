@@ -177,6 +177,7 @@ set(ui_SRC
 	widget/font-variants.cpp
 	widget/font-variations.cpp
 	widget/frame.cpp
+	widget/gradient-selector.cpp
 	widget/highlight-picker.cpp
 	widget/imagetoggler.cpp
     widget/ink-color-wheel.cpp
@@ -414,6 +415,7 @@ set(ui_SRC
 	widget/font-variants.h
     widget/font-variations.h
 	widget/frame.h
+	widget/gradient-selector.h
 	widget/highlight-picker.h
 	widget/insertordericon.h
 	widget/imagetoggler.h

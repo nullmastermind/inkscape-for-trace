@@ -21,7 +21,6 @@
 #include "document-undo.h"
 #include "document.h"
 #include "gradient-chemistry.h"
-#include "gradient-vector.h"
 #include "id-clash.h"
 #include "inkscape.h"
 #include "preferences.h"
@@ -34,6 +33,12 @@
 #include "ui/icon-loader.h"
 
 #include "ui/icon-names.h"
+
+#include "widgets/gradient-vector.h"
+
+namespace Inkscape {
+namespace UI {
+namespace Widget {
 
 void
 GradientSelector::style_button(Gtk::Button *btn, char const *iconName)
@@ -570,6 +575,10 @@ GradientSelector::add_vector_clicked()
 
     Inkscape::GC::release(repr);
 }
+
+} // namespace Widget
+} // namespace UI
+} // namespace Inkscape
 
 /*
   Local Variables:

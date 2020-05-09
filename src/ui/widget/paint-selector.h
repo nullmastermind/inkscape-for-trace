@@ -29,7 +29,6 @@ class SPMeshGradient;
 class SPDesktop;
 class SPPattern;
 class SPStyle;
-class GradientSelector;
 
 namespace Gtk {
 class Label;
@@ -40,6 +39,8 @@ class ToggleButton;
 namespace Inkscape {
 namespace UI {
 namespace Widget {
+
+class GradientSelector;
 
 /**
  * Generic paint selector widget.

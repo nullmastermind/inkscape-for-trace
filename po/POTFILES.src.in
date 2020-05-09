@@ -352,6 +352,7 @@
 ../src/ui/widget/font-selector-toolbar.cpp
 ../src/ui/widget/font-selector.cpp
 ../src/ui/widget/font-variants.cpp
+../src/ui/widget/gradient-selector.cpp
 ../src/ui/widget/layer-selector.cpp
 ../src/ui/widget/licensor.cpp
 ../src/ui/widget/object-composite-settings.cpp
@@ -371,7 +372,6 @@
 ../src/verbs.cpp
 ../src/widgets/desktop-widget.cpp
 ../src/widgets/ege-paint-def.cpp
-../src/widgets/gradient-selector.cpp
 ../src/widgets/gradient-vector.cpp
 ../src/widgets/sp-attribute-widget.cpp
 ../src/widgets/sp-color-selector.cpp

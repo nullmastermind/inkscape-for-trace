@@ -36,6 +36,10 @@ class ScrolledWindow;
 class TreeView;
 }
 
+
+namespace Inkscape {
+namespace UI {
+namespace Widget {
 class GradientSelector : public Gtk::Box {
 public:
     enum SelectorMode {
@@ -138,6 +142,10 @@ public:
     void setSpread(SPGradientSpread spread);
     SPGradientSpread getSpread();
 };
+
+} // namespace Widget
+} // namespace UI
+} // namespace Inkscape
 
 #endif // SEEN_GRADIENT_SELECTOR_H
 
