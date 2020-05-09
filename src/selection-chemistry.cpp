@@ -4368,6 +4368,9 @@ void ObjectSet::fillBetweenMany()
 
     doc->ensureUpToDate();
 
+    clear();
+    add(fillRepr);
+
     DocumentUndo::done(doc, SP_VERB_SELECTION_FILL_BETWEEN_MANY,
                 _("Create linked fill object between paths"));
 }
