@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 set(live_effects_SRC
 	effect.cpp
+	fill-conversion.cpp
 	lpe-angle_bisector.cpp
 	lpe-attach-path.cpp
 	lpe-bendpath.cpp
@@ -94,6 +95,7 @@ set(live_effects_SRC
 	# Headers
 	effect-enum.h
 	effect.h
+	fill-conversion.h
 	lpe-angle_bisector.h
 	lpe-attach-path.h
 	lpe-bendpath.h

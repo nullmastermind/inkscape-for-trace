@@ -5,7 +5,7 @@
  * for otherwise constant-width paths.
  *
  * Authors:
- *   Liam P White <inkscapebrony@gmail.com>
+ *   Liam P White
  *
  * Copyright (C) 2014-2020 Authors
  *
@@ -13,23 +13,20 @@
  */
 
 #include "live_effects/lpe-taperstroke.h"
+#include "live_effects/fill-conversion.h"
 
 #include <2geom/circle.h>
 #include <2geom/sbasis-to-bezier.h>
 
-#include "desktop-style.h"
-
 #include "helper/geom-nodetype.h"
 #include "helper/geom-pathstroke.h"
+#include "object/sp-shape.h"
 #include "display/curve.h"
 #include "svg/svg-color.h"
 #include "svg/css-ostringstream.h"
 #include "svg/svg.h"
 
 #include "knotholder.h"
-
-#include "object/sp-shape.h"
-#include "object/sp-object-group.h"
 #include "style.h"
 
 // TODO due to internal breakage in glibmm headers, this must be last:
@@ -127,82 +124,40 @@ void LPETaperStroke::transform_multiply(Geom::Affine const &postmul, bool /*set*
 
 void LPETaperStroke::doOnApply(SPLPEItem const* lpeitem)
 {
-    if (SP_IS_SHAPE(lpeitem)) {
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        SPLPEItem* item = const_cast<SPLPEItem*>(lpeitem);
-        double width = (lpeitem && lpeitem->style) ? lpeitem->style->stroke_width.computed : 1.;
-
-        SPCSSAttr *css = sp_repr_css_attr_new ();
-        if (lpeitem->style->stroke.isPaintserver()) {
-            SPPaintServer * server = lpeitem->style->getStrokePaintServer();
-            if (server) {
-                Glib::ustring str;
-                str += "url(#";
-                str += server->getId();
-                str += ")";
-                sp_repr_css_set_property (css, "fill", str.c_str());
-            }
-        } else if (lpeitem->style->stroke.isColor()) {
-            gchar c[64];
-            sp_svg_write_color (c, sizeof(c), lpeitem->style->stroke.value.color.toRGBA32(SP_SCALE24_TO_FLOAT(lpeitem->style->stroke_opacity.value)));
-            sp_repr_css_set_property (css, "fill", c);
-        } else {
-            sp_repr_css_set_property (css, "fill", "none");
-        }
-
-        sp_repr_css_set_property(css, "fill-rule", "nonzero");
-        sp_repr_css_set_property(css, "stroke", "none");
-
-        sp_desktop_apply_css_recursive(item, css, true);
-        sp_repr_css_attr_unref (css);
-        Glib::ustring pref_path = (Glib::ustring)"/live_effects/" +
-                                       (Glib::ustring)LPETypeConverter.get_key(effectType()).c_str() +
-                                       (Glib::ustring)"/" + 
-                                       (Glib::ustring)"stroke_width";
-        bool valid = prefs->getEntry(pref_path).isValid();
-        if(!valid){
-            line_width.param_set_value(width);
-        }
-        line_width.write_to_SVG();
-    } else {
+    if (!SP_IS_SHAPE(lpeitem)) {
         printf("WARNING: It only makes sense to apply Taper stroke to paths (not groups).\n");
     }
-}
 
-// from LPEPowerStroke -- sets stroke color from existing fill color
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    SPShape* item = SP_SHAPE(lpeitem);
+
+    double width = (lpeitem && lpeitem->style) ? lpeitem->style->stroke_width.computed : 1.;
+
+    lpe_shape_convert_stroke_and_fill(item);
+
+    Glib::ustring pref_path = (Glib::ustring)"/live_effects/" +
+                                    (Glib::ustring)LPETypeConverter.get_key(effectType()).c_str() +
+                                    (Glib::ustring)"/" + 
+                                    (Glib::ustring)"stroke_width";
+
+    bool valid = prefs->getEntry(pref_path).isValid();
+
+    if (!valid) {
+        line_width.param_set_value(width);
+    }
+
+    line_width.write_to_SVG();
+}
 
 void LPETaperStroke::doOnRemove(SPLPEItem const* lpeitem)
 {
-    if (SP_IS_SHAPE(lpeitem)) {
-        SPLPEItem *item = const_cast<SPLPEItem*>(lpeitem);
-
-        SPCSSAttr *css = sp_repr_css_attr_new ();
-        if (lpeitem->style->fill.isPaintserver()) {
-            SPPaintServer * server = lpeitem->style->getFillPaintServer();
-            if (server) {
-                Glib::ustring str;
-                str += "url(#";
-                str += server->getId();
-                str += ")";
-                sp_repr_css_set_property (css, "stroke", str.c_str());
-            }
-        } else if (lpeitem->style->fill.isColor()) {
-            gchar c[64];
-            sp_svg_write_color (c, sizeof(c), lpeitem->style->fill.value.color.toRGBA32(SP_SCALE24_TO_FLOAT(lpeitem->style->fill_opacity.value)));
-            sp_repr_css_set_property (css, "stroke", c);
-        } else {
-            sp_repr_css_set_property (css, "stroke", "none");
-        }
-
-        Inkscape::CSSOStringStream os;
-        os << fabs(line_width);
-        sp_repr_css_set_property (css, "stroke-width", os.str().c_str());
-
-        sp_repr_css_set_property(css, "fill", "none");
-
-        sp_desktop_apply_css_recursive(item, css, true);
-        sp_repr_css_attr_unref (css);
+    if (!SP_IS_SHAPE(lpeitem)) {
+        return;
     }
+
+    SPShape *item = SP_SHAPE(lpeitem);
+
+    lpe_shape_revert_stroke_and_fill(item, line_width);
 }
 
 using Geom::Piecewise;
