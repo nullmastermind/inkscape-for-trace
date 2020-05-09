@@ -543,19 +543,21 @@ Geom::Point KnotHolderEntityOffsetPoint::knot_get() const
         return lpe->offset_pt;
     }
     Geom::Point nearest = lpe->offset_pt;
-    Geom::PathVector out = SP_SHAPE(item)->getCurve(true)->get_pathvector();
+    
     if (lpe->offset_pt == Geom::Point(Geom::infinity(), Geom::infinity())) {
         if (group) {
             nearest = Geom::Point(lpe->boundingbox_X.min(), lpe->boundingbox_Y.min());
         } else {
+            Geom::PathVector out = SP_SHAPE(item)->getCurve(true)->get_pathvector();
             nearest = lpe->get_default_point(out);
+            boost::optional<Geom::PathVectorTime> pathvectortime = out.nearestTime(nearest);
+            if (pathvectortime) {
+                Geom::PathTime pathtime = pathvectortime->asPathTime();
+                nearest = out[(*pathvectortime).path_index].pointAt(pathtime.curve_index + pathtime.t);
+            }
         }
     }
-    boost::optional<Geom::PathVectorTime> pathvectortime = out.nearestTime(nearest);
-    if (pathvectortime) {
-        Geom::PathTime pathtime = pathvectortime->asPathTime();
-        nearest = out[(*pathvectortime).path_index].pointAt(pathtime.curve_index + pathtime.t);
-    }
+    
     return nearest;
 }
 
