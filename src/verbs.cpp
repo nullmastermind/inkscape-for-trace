@@ -1202,6 +1202,9 @@ void SelectionVerb::perform(SPAction *action, void *data)
         case SP_VERB_SELECTION_UNGROUP_POP_SELECTION:
         selection->popFromGroup();
             break;
+        case SP_VERB_SELECTION_FILL_BETWEEN_MANY:
+            selection->fillBetweenMany();
+            break;
         default:
             handled = false;
             break;
@@ -2824,6 +2827,8 @@ Verb *Verb::_base_verbs[] = {
                       N_("Break selected paths into subpaths"), INKSCAPE_ICON("path-break-apart")),
     new SelectionVerb(SP_VERB_SELECTION_ARRANGE, "DialogArrange", N_("_Arrange..."),
                       N_("Arrange selected objects in a table or circle"), INKSCAPE_ICON("dialog-rows-and-columns")),
+    new SelectionVerb(SP_VERB_SELECTION_FILL_BETWEEN_MANY, "SelectionFillBetweenMany", N_("Fill between paths"),
+                      N_("Create a fill object using the selected paths"), nullptr),
     // Layer
     new LayerVerb(SP_VERB_LAYER_NEW, "LayerNew", N_("_Add Layer..."), N_("Create a new layer"),
                   INKSCAPE_ICON("layer-new")),

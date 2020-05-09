@@ -4323,6 +4323,55 @@ void ObjectSet::swapFillStroke()
                 _("Swap fill and stroke of an object"));
 }
 
+void ObjectSet::fillBetweenMany()
+{
+    if (isEmpty()) {
+        if (desktop()) {
+            desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>path(s)</b> to create fill between."));
+        }
+
+        return;
+    }
+
+    SPDocument *doc  = document();
+    SPObject *defs   = doc->getDefs();
+    SPObject *effect = nullptr;
+
+    Inkscape::XML::Node *effectRepr = doc->getReprDoc()->createElement("inkscape:path-effect");
+    Inkscape::XML::Node *fillRepr   = doc->getReprDoc()->createElement("svg:path");
+
+    Glib::ustring acc;
+    Glib::ustring pathTarget;
+
+    for (auto&& item : items()) {
+        acc += "#";
+        acc += item->getId();
+        acc += ",0,1|";
+    }
+
+    effectRepr->setAttribute("effect", "fill_between_many");
+    effectRepr->setAttribute("method", "originald");
+    effectRepr->setAttribute("linkedpaths", acc.c_str());
+    defs->appendChild(effectRepr);
+
+    effect = doc->getObjectByRepr(effectRepr);
+    pathTarget += "#";
+    pathTarget += effect->getId();
+
+    fillRepr->setAttribute("inkscape:original-d", "M 0,0");
+    fillRepr->setAttribute("inkscape:path-effect", pathTarget.c_str());
+    fillRepr->setAttribute("d", "M 0,0");
+
+    SPObject *last = items().back();
+
+    last->parent->appendChild(fillRepr);
+
+    doc->ensureUpToDate();
+
+    DocumentUndo::done(doc, SP_VERB_SELECTION_FILL_BETWEEN_MANY,
+                _("Create linked fill object between paths"));
+}
+
 /**
  * \param with_margins margins defined in the xml under <sodipodi:namedview>
  *                     "fit-margin-..." attributes.  See SPDocument::fitToRect.
