@@ -19,6 +19,15 @@ namespace Inkscape {
 
 namespace Debug {
 
+#ifdef NDEBUG
+// Make event tracking a no-op for non-debug builds
+template <typename = void> struct EventTracker {
+    template <typename... Args> EventTracker(Args &&...) {}
+    template <typename, typename... Args> void set(Args &&...) {}
+    void clear() {}
+};
+#else
+
 struct NoInitialEvent {};
 
 template <typename Event=NoInitialEvent> class EventTracker;
@@ -207,6 +216,8 @@ template <> class EventTracker<NoInitialEvent> : public EventTrackerBase {
 public:
     EventTracker() : EventTrackerBase(false) {}
 };
+
+#endif
 
 }
 
