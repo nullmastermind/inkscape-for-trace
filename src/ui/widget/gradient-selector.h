@@ -20,9 +20,9 @@
 #include <gtkmm/liststore.h>
 #include <gtkmm/scrolledwindow.h>
 
-#include <vector>
 #include "object/sp-gradient-spread.h"
 #include "object/sp-gradient-units.h"
+#include <vector>
 
 class SPDocument;
 class SPGradient;
@@ -34,22 +34,17 @@ class CellRendererPixbuf;
 class CellRendererText;
 class ScrolledWindow;
 class TreeView;
-}
+} // namespace Gtk
 
 
 namespace Inkscape {
 namespace UI {
 namespace Widget {
 class GradientSelector : public Gtk::Box {
-public:
-    enum SelectorMode {
-        MODE_LINEAR,
-        MODE_RADIAL,
-        MODE_SWATCH
-    };
+  public:
+    enum SelectorMode { MODE_LINEAR, MODE_RADIAL, MODE_SWATCH };
 
-    class ModelColumns : public Gtk::TreeModel::ColumnRecord
-    {
+    class ModelColumns : public Gtk::TreeModel::ColumnRecord {
       public:
         ModelColumns()
         {
@@ -64,13 +59,12 @@ public:
         Gtk::TreeModelColumn<Glib::ustring> name;
         Gtk::TreeModelColumn<unsigned long> color;
         Gtk::TreeModelColumn<gint> refcount;
-        Gtk::TreeModelColumn<SPGradient*> data;
-        Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > pixbuf;
-
+        Gtk::TreeModelColumn<SPGradient *> data;
+        Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf>> pixbuf;
     };
 
 
-private:
+  private:
     sigc::signal<void> _signal_grabbed;
     sigc::signal<void> _signal_dragged;
     sigc::signal<void> _signal_released;
@@ -84,20 +78,20 @@ private:
     GtkWidget *_vectors;
 
     /* Tree */
-    bool _checkForSelected(const Gtk::TreePath& path, const Gtk::TreeIter& iter, SPGradient *vector);
+    bool _checkForSelected(const Gtk::TreePath &path, const Gtk::TreeIter &iter, SPGradient *vector);
     bool onKeyPressEvent(GdkEventKey *event);
     void onTreeSelection();
-    void onGradientRename( const Glib::ustring& path_string, const Glib::ustring& new_text);
+    void onGradientRename(const Glib::ustring &path_string, const Glib::ustring &new_text);
     void onTreeNameColClick();
     void onTreeColorColClick();
     void onTreeCountColClick();
 
-    Gtk::TreeView     *_treeview;
+    Gtk::TreeView *_treeview;
     Gtk::ScrolledWindow *_scrolled_window;
     ModelColumns *_columns;
     Glib::RefPtr<Gtk::ListStore> _store;
-    Gtk::CellRendererPixbuf* _icon_renderer;
-    Gtk::CellRendererText* _text_renderer;
+    Gtk::CellRendererPixbuf *_icon_renderer;
+    Gtk::CellRendererText *_text_renderer;
 
     /* Editing buttons */
     Gtk::Button *_edit;
@@ -111,8 +105,8 @@ private:
     bool _safelyInit;
     bool _blocked;
 
-    std::vector<Gtk::Widget*> _nonsolid;
-    std::vector<Gtk::Widget*> _swatch_widgets;
+    std::vector<Gtk::Widget *> _nonsolid;
+    std::vector<Gtk::Widget *> _swatch_widgets;
 
     void selectGradientInTree(SPGradient *vector);
     void moveSelection(int amount, bool down = true, bool toEnd = false);
@@ -125,14 +119,14 @@ private:
     void delete_vector_clicked();
     void vector_set(SPGradientVectorSelector *gvs, SPGradient *gr);
 
-public:
+  public:
     GradientSelector();
     ~GradientSelector() override;
 
-    inline decltype(_signal_changed)  signal_changed()  const {return _signal_changed;}
-    inline decltype(_signal_grabbed)  signal_grabbed()  const {return _signal_grabbed;}
-    inline decltype(_signal_dragged)  signal_dragged()  const {return _signal_dragged;}
-    inline decltype(_signal_released) signal_released() const {return _signal_released;}
+    inline decltype(_signal_changed) signal_changed() const { return _signal_changed; }
+    inline decltype(_signal_grabbed) signal_grabbed() const { return _signal_grabbed; }
+    inline decltype(_signal_dragged) signal_dragged() const { return _signal_dragged; }
+    inline decltype(_signal_released) signal_released() const { return _signal_released; }
 
     SPGradient *getVector();
     void setVector(SPDocument *doc, SPGradient *vector);

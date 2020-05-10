@@ -29,17 +29,16 @@ namespace Inkscape {
 namespace UI {
 namespace Widget {
 
-class FillNStroke : public Gtk::VBox
-{
-public:
-    FillNStroke( FillOrStroke k );
+class FillNStroke : public Gtk::VBox {
+  public:
+    FillNStroke(FillOrStroke k);
     ~FillNStroke() override;
 
     void setFillrule(PaintSelector::FillRule mode);
 
     void setDesktop(SPDesktop *desktop);
 
-private:
+  private:
     void paintModeChangeCB(UI::Widget::PaintSelector::Mode mode);
     void paintChangedCB();
     static gboolean dragDelayCB(gpointer data);
