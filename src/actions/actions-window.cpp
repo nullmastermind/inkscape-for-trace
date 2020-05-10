@@ -51,8 +51,8 @@ window_close(InkscapeApplication *app)
 
 std::vector<std::vector<Glib::ustring>> raw_data_window =
 {
-    {"window-open",               "WindowOpen",              "Window",     N_("Open a window for the active document. GUI only.")   },
-    {"window-close",              "WindowClose",             "Window",     N_("Close the active window.")                           }
+    {"app.window-open",               "WindowOpen",              "Window",     N_("Open a window for the active document. GUI only.")   },
+    {"app.window-close",              "WindowClose",             "Window",     N_("Close the active window.")                           }
 };
 
 template <class T>

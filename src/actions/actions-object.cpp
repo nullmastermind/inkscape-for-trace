@@ -140,12 +140,12 @@ object_simplify_path(InkscapeApplication *app)
 
 std::vector<std::vector<Glib::ustring>> raw_data_object =
 {
-    {"object-set-attribute",      "ObjectSetAttribute",      "Object",     N_("Set or update an attribute on selected objects. Usage: object-set-attribute:attribute name, attribute value;")},
-    {"object-set-property",       "ObjectSetProperty",       "Object",     N_("Set or update a property on selected objects. Usage: object-set-property:property name, property value;")},
-    {"object-unlink-clones",      "ObjectUnlinkClones",      "Object",     N_("Unlink clones and symbols.")                          },
-    {"object-to-path",            "ObjectToPath",            "Object",     N_("Convert shapes to paths.")                            },
-    {"object-stroke-to-path",     "ObjectStrokeToPath",      "Object",     N_("Convert strokes to paths.")                           },
-    {"object-simplify-path",      "ObjectSimplifyPath",      "Object",     N_("Simplify paths, reducing node counts.")               }
+    {"app.object-set-attribute",      "ObjectSetAttribute",      "Object",     N_("Set or update an attribute on selected objects. Usage: object-set-attribute:attribute name, attribute value;")},
+    {"app.object-set-property",       "ObjectSetProperty",       "Object",     N_("Set or update a property on selected objects. Usage: object-set-property:property name, property value;")},
+    {"app.object-unlink-clones",      "ObjectUnlinkClones",      "Object",     N_("Unlink clones and symbols.")                          },
+    {"app.object-to-path",            "ObjectToPath",            "Object",     N_("Convert shapes to paths.")                            },
+    {"app.object-stroke-to-path",     "ObjectStrokeToPath",      "Object",     N_("Convert strokes to paths.")                           },
+    {"app.object-simplify-path",      "ObjectSimplifyPath",      "Object",     N_("Simplify paths, reducing node counts.")               }
 };
 
 template<class T>

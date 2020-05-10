@@ -91,9 +91,9 @@ file_close(InkscapeApplication *app)
 
 std::vector<std::vector<Glib::ustring>> raw_data_file =
 {
-    {"file-open",                 "FileOpen",                "File",       N_("Open file.")                                         },
-    {"file-new",                  "FileNew",                 "File",       N_("Open new document using template.")                  },
-    {"file-close",                "FileClose",               "File",       N_("Close active document.")                             }
+    {"app.file-open",                 "FileOpen",                "File",       N_("Open file.")                                         },
+    {"app.file-new",                  "FileNew",                 "File",       N_("Open new document using template.")                  },
+    {"app.file-close",                "FileClose",               "File",       N_("Close active document.")                             }
 };
 
 template <class T>

@@ -1538,8 +1538,9 @@ ConcreteInkscapeApplication<T>::print_action_list()
     std::vector<Glib::ustring> actions = T::list_actions();
     std::sort(actions.begin(), actions.end());
     for (auto action : actions) {
+        Glib::ustring fullname("app." + action);
         std::cout << std::left << std::setw(20) << action
-                  << ":  " << _action_extra_data.get_tooltip_for_action(action) << std::endl;
+                  << ":  " << _action_extra_data.get_tooltip_for_action(fullname) << std::endl;
     }
 }
 

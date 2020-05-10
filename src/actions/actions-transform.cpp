@@ -83,13 +83,13 @@ transform_remove(InkscapeApplication *app)
     Inkscape::DocumentUndo::done(app->get_active_document(), 0, "ActionTransformRemoveTransform");
 }
 
-
+// SHOULD REALLY BE DOC LEVEL ACTIONS
 std::vector<std::vector<Glib::ustring>> raw_data_transform =
 {
-   {"transform-translate",       "TransformTranslate",      "Transform",  N_("Translate selected objects (dx,dy).")                 },
-   {"transform-rotate",          "TransformRotate",         "Transform",  N_("Rotate selected objects by degrees.")                 },
-   {"transform-scale",           "TransformScale",          "Transform",  N_("Scale selected objects by scale factor.")             },
-   {"transform-remove",          "TransformRemove",         "Transform",  N_("Remove any transforms from selected objects.")        }
+   {"app.transform-translate",       "TransformTranslate",      "Transform",  N_("Translate selected objects (dx,dy).")                 },
+   {"app.transform-rotate",          "TransformRotate",         "Transform",  N_("Rotate selected objects by degrees.")                 },
+   {"app.transform-scale",           "TransformScale",          "Transform",  N_("Scale selected objects by scale factor.")             },
+   {"app.transform-remove",          "TransformRemove",         "Transform",  N_("Remove any transforms from selected objects.")        }
 };
 
 template<class T>

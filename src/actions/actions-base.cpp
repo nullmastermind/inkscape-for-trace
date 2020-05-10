@@ -218,24 +218,24 @@ quit_inkscape(InkscapeApplication* app)
 
 std::vector<std::vector<Glib::ustring>> raw_data_base =
 {
-    {"inkscape-version",          "InkscapeVersion",         "Base",       N_("Print Inkscape version and exit.")                   },
-    {"system-data-directory",     "InkscapeSystemDir",       "Base",       N_("Print system data directory and exit.")              },
-    {"user-data-directory",       "InkscapeUserDir",         "Base",       N_("Print user data directory and exit.")                },
-    {"action-list",               "InkscapeActions",         "Base",       N_("Print a list of actions and exit.")                  },
-    {"verb-list",                 "InkscapeVerbs",           "Base",       N_("Print a list of verbs and exit.")                    },
-    {"verb",                      "Verb",                    "Base",       N_("Execute verb(s).")                                   },
-    {"vacuum-defs",               "VacuumDefs",              "Base",       N_("Remove unused definitions (gradients, etc.).")       },
-    {"quit-inkscape",             "QuitInkscape",            "Base",       N_("Immediately quit Inkscape.")                         },
+    {"app.inkscape-version",          "InkscapeVersion",         "Base",       N_("Print Inkscape version and exit.")                   },
+    {"app.system-data-directory",     "InkscapeSystemDir",       "Base",       N_("Print system data directory and exit.")              },
+    {"app.user-data-directory",       "InkscapeUserDir",         "Base",       N_("Print user data directory and exit.")                },
+    {"app.action-list",               "InkscapeActions",         "Base",       N_("Print a list of actions and exit.")                  },
+    {"app.verb-list",                 "InkscapeVerbs",           "Base",       N_("Print a list of verbs and exit.")                    },
+    {"app.verb",                      "Verb",                    "Base",       N_("Execute verb(s).")                                   },
+    {"app.vacuum-defs",               "VacuumDefs",              "Base",       N_("Remove unused definitions (gradients, etc.).")       },
+    {"app.quit-inkscape",             "QuitInkscape",            "Base",       N_("Immediately quit Inkscape.")                         },
 
-    {"open-page",                 "ImportPageNumber",        "Import",     N_("Import page number.")                                },
-    {"convert-dpi-method",        "ImportDPIMethod",         "Import",     N_("Import DPI convert method.")                         },
-    {"no-convert-baseline",       "ImportBaselineConvert",   "Import",     N_("Import convert text baselines.")                     },
+    {"app.open-page",                 "ImportPageNumber",        "Import",     N_("Import page number.")                                },
+    {"app.convert-dpi-method",        "ImportDPIMethod",         "Import",     N_("Import DPI convert method.")                         },
+    {"app.no-convert-baseline",       "ImportBaselineConvert",   "Import",     N_("Import convert text baselines.")                     },
 
-    {"query-x",                   "QueryX",                  "Query",      N_("Query 'x' value(s) of selected objects.")            },
-    {"query-y",                   "QueryY",                  "Query",      N_("Query 'y' value(s) of selected objects.")            },
-    {"query-width",               "QueryWidth",              "Query",      N_("Query 'width' value(s) of object(s).")               },
-    {"query-height",              "QueryHeight",             "Query",      N_("Query 'height' value(s) of object(s).")              },
-    {"query-all",                 "QueryAll",                "Query",      N_("Query 'x', 'y', 'width', and 'height'.")             }
+    {"app.query-x",                   "QueryX",                  "Query",      N_("Query 'x' value(s) of selected objects.")            },
+    {"app.query-y",                   "QueryY",                  "Query",      N_("Query 'y' value(s) of selected objects.")            },
+    {"app.query-width",               "QueryWidth",              "Query",      N_("Query 'width' value(s) of object(s).")               },
+    {"app.query-height",              "QueryHeight",             "Query",      N_("Query 'height' value(s) of object(s).")              },
+    {"app.query-all",                 "QueryAll",                "Query",      N_("Query 'x', 'y', 'width', and 'height'.")             }
 };
 
 template<class T>
