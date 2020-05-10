@@ -49,16 +49,12 @@ void GradientSelector::style_button(Gtk::Button *btn, char const *iconName)
 }
 
 GradientSelector::GradientSelector()
-    : _safelyInit(true)
-    , _blocked(false)
+    : _blocked(false)
     , _mode(MODE_LINEAR)
     , _gradientUnits(SP_GRADIENT_UNITS_USERSPACEONUSE)
     , _gradientSpread(SP_GRADIENT_SPREAD_PAD)
 {
     set_orientation(Gtk::ORIENTATION_VERTICAL);
-
-    new (&_nonsolid) std::vector<Gtk::Widget *>();
-    new (&_swatch_widgets) std::vector<Gtk::Widget *>();
 
     /* Vectors */
     _vectors = sp_gradient_vector_selector_new(nullptr, nullptr);
@@ -157,12 +153,6 @@ GradientSelector::GradientSelector()
 
 GradientSelector::~GradientSelector()
 {
-    if (_safelyInit) {
-        _safelyInit = false;
-        _nonsolid.~vector<Gtk::Widget *>();
-        _swatch_widgets.~vector<Gtk::Widget *>();
-    }
-
     if (_icon_renderer) {
         delete _icon_renderer;
         _icon_renderer = nullptr;

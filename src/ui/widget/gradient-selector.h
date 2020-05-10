@@ -102,7 +102,6 @@ class GradientSelector : public Gtk::Box {
     /* Position widget */
     GtkWidget *position;
 
-    bool _safelyInit;
     bool _blocked;
 
     std::vector<Gtk::Widget *> _nonsolid;
