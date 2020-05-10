@@ -4323,6 +4323,18 @@ void ObjectSet::swapFillStroke()
                 _("Swap fill and stroke of an object"));
 }
 
+/**
+ * Creates a linked fill between all the objects in the current selection using
+ * the "Fill Between Many" LPE. After this method completes, the linked fill
+ * created becomes the new selection, so as to facilitate quick styling of the
+ * fill.
+ *
+ * All objects referred to must have an ID. If an ID does not exist, it will be
+ * created.
+ *
+ * As an additional timesaver, the fill object is created below the bottommost
+ * object in the selection.
+ */
 void ObjectSet::fillBetweenMany()
 {
     if (isEmpty()) {
@@ -4344,6 +4356,13 @@ void ObjectSet::fillBetweenMany()
     Glib::ustring pathTarget;
 
     for (auto&& item : items()) {
+        // Force-assign id if there is none present
+        if (!item->getId()) {
+            gchar *id = sp_object_get_unique_id(item, nullptr);
+            item->set(SP_ATTR_ID, id);
+            g_free(id);
+        }
+
         acc += "#";
         acc += item->getId();
         acc += ",0,1|";
@@ -4362,17 +4381,18 @@ void ObjectSet::fillBetweenMany()
     fillRepr->setAttribute("inkscape:path-effect", pathTarget.c_str());
     fillRepr->setAttribute("d", "M 0,0");
 
-    SPObject *last = items().back();
+    // Get bottommost element in selection to create fill underneath
+    SPObject *first = *std::min_element(items().begin(), items().end(), sp_object_compare_position);
+    SPObject *prev  = first->getPrev();
 
-    last->parent->appendChild(fillRepr);
+    first->parent->addChild(fillRepr, prev ? prev->getRepr() : nullptr);
 
     doc->ensureUpToDate();
 
     clear();
     add(fillRepr);
 
-    DocumentUndo::done(doc, SP_VERB_SELECTION_FILL_BETWEEN_MANY,
-                _("Create linked fill object between paths"));
+    DocumentUndo::done(doc, SP_VERB_SELECTION_FILL_BETWEEN_MANY, _("Create linked fill object between paths"));
 }
 
 /**
