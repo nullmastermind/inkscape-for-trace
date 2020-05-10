@@ -29,7 +29,7 @@ namespace Inkscape {
 namespace UI {
 namespace Widget {
 
-class FillNStroke : public Gtk::VBox {
+class FillNStroke : public Gtk::Box {
   public:
     FillNStroke(FillOrStroke k);
     ~FillNStroke() override;

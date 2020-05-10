@@ -52,7 +52,7 @@ namespace UI {
 namespace Widget {
 
 FillNStroke::FillNStroke(FillOrStroke k)
-    : Gtk::VBox()
+    : Gtk::Box(Gtk::ORIENTATION_VERTICAL)
     , kind(k)
     , desktop(nullptr)
     , psel(nullptr)
