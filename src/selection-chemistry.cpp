@@ -4360,6 +4360,7 @@ void ObjectSet::fillBetweenMany()
         if (!item->getId()) {
             gchar *id = sp_object_get_unique_id(item, nullptr);
             item->set(SP_ATTR_ID, id);
+            item->updateRepr();
             g_free(id);
         }
 
@@ -4382,7 +4383,7 @@ void ObjectSet::fillBetweenMany()
     fillRepr->setAttribute("d", "M 0,0");
 
     // Get bottommost element in selection to create fill underneath
-    SPObject *first = *std::min_element(items().begin(), items().end(), sp_object_compare_position);
+    SPObject *first = *std::min_element(items().begin(), items().end(), sp_object_compare_position_bool);
     SPObject *prev  = first->getPrev();
 
     first->parent->addChild(fillRepr, prev ? prev->getRepr() : nullptr);
