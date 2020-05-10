@@ -23,11 +23,13 @@
 #include "include/gtkmm_version.h"
 #include "io/resource.h"
 #include "ui/interface.h" // sp_ui_error_dialog
-#include "ui/dialog/aboutbox.h"
+#include "ui/dialog/about.h"
+
+using namespace Inkscape::IO::Resource;
 
 void sp_help_about()
 {
-    Inkscape::UI::Dialog::AboutBox::show_about();
+    Inkscape::UI::Dialog::AboutDialog::show_about();
 }
 
 /** Open an URL in the the default application

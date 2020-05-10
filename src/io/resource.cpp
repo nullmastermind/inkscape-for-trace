@@ -68,6 +68,7 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
                 case TUTORIALS: temp = INKSCAPE_TUTORIALSDIR; break;
                 case UIS: temp = INKSCAPE_UIDIR; break;
                 case PIXMAPS: temp = INKSCAPE_PIXMAPSDIR; break;
+                case DOCS: temp = INKSCAPE_DOCDIR; break;
                 default: temp = "";
             }
             path = g_strdup(temp);

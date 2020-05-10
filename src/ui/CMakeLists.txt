@@ -87,7 +87,7 @@ set(ui_SRC
 	tools/tweak-tool.cpp
 	tools/zoom-tool.cpp
 
-	dialog/aboutbox.cpp
+	dialog/about.cpp
 	dialog/align-and-distribute.cpp
 	dialog/calligraphic-profile-rename.cpp
 	dialog/clonetiler.cpp
@@ -248,7 +248,7 @@ set(ui_SRC
 
         desktop/menubar.cpp
 
-	dialog/aboutbox.h
+	dialog/about.h
 	dialog/align-and-distribute.h
 	dialog/arrange-tab.h
 	dialog/behavior.h
