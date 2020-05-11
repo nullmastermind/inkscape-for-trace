@@ -699,6 +699,7 @@ void SPLPEItem::removeAllPathEffects(bool keep_paths)
                 lpe->doOnRemove(this);
             }
         }
+        lperef->unlink();
     }
     this->path_effect_list->clear();
     this->removeAttribute("inkscape:path-effect");
