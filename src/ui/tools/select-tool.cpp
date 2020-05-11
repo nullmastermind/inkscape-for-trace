@@ -635,6 +635,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
                         }
 
                         if (!_seltrans->isEmpty()) {
+                            sp_event_context_discard_delayed_snap_event(this);
                             _seltrans->moveTo(p, event->button.state);
                         }
 
