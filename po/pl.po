@@ -20256,7 +20256,7 @@ msgstr "Kolor bazowy ikon. Zmiana niektórych ikon wymaga ponownego załadowania
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1198
 msgid "Highlights"
-msgstr "Podśweitlenia"
+msgstr "Podświetlenia"
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1202
