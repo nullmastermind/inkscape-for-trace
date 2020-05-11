@@ -120,7 +120,6 @@ class GradientSelector : public Gtk::Box {
 
   public:
     GradientSelector();
-    ~GradientSelector() override;
 
     inline decltype(_signal_changed) signal_changed() const { return _signal_changed; }
     inline decltype(_signal_grabbed) signal_grabbed() const { return _signal_grabbed; }

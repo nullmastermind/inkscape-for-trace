@@ -25,112 +25,121 @@
 #include "object/sp-gradient.h"
 #include "object/sp-stop.h"
 
-static void sp_gradient_image_size_request (GtkWidget *widget, GtkRequisition *requisition);
-
-static void sp_gradient_image_destroy(GtkWidget *object);
-static void sp_gradient_image_get_preferred_width(GtkWidget *widget, 
-                                                   gint *minimal_width,
-                                                   gint *natural_width);
-
-static void sp_gradient_image_get_preferred_height(GtkWidget *widget, 
-                                                    gint *minimal_height,
-                                                    gint *natural_height);
-static gboolean sp_gradient_image_draw(GtkWidget *widget, cairo_t *cr);
-static void sp_gradient_image_gradient_release (SPObject *, SPGradientImage *im);
-static void sp_gradient_image_gradient_modified (SPObject *, guint flags, SPGradientImage *im);
-static void sp_gradient_image_update (SPGradientImage *img);
-
-G_DEFINE_TYPE(SPGradientImage, sp_gradient_image, GTK_TYPE_WIDGET);
-
-static void sp_gradient_image_class_init(SPGradientImageClass *klass)
+namespace Inkscape {
+namespace UI {
+namespace Widget {
+GradientImage::GradientImage(SPGradient *gradient)
+    : _gradient(nullptr)
 {
-        GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
-
-        widget_class->get_preferred_width = sp_gradient_image_get_preferred_width;
-        widget_class->get_preferred_height = sp_gradient_image_get_preferred_height;
-        widget_class->draw = sp_gradient_image_draw;
-        widget_class->destroy = sp_gradient_image_destroy;
+    set_has_window(false);
+    set_gradient(gradient);
 }
 
-static void
-sp_gradient_image_init (SPGradientImage *image)
+GradientImage::~GradientImage()
 {
-        gtk_widget_set_has_window (GTK_WIDGET(image), FALSE);
+    if (_gradient) {
+        _release_connection.disconnect();
+        _modified_connection.disconnect();
+        _gradient = nullptr;
+    }
 
-        image->gradient = nullptr;
-
-        new (&image->release_connection) sigc::connection();
-        new (&image->modified_connection) sigc::connection();
+    _release_connection.~connection();
+    _modified_connection.~connection();
 }
 
-static void sp_gradient_image_destroy(GtkWidget *object)
-{
-        SPGradientImage *image = SP_GRADIENT_IMAGE (object);
-
-        if (image->gradient) {
-                image->release_connection.disconnect();
-                image->modified_connection.disconnect();
-                image->gradient = nullptr;
-        }
-
-        image->release_connection.~connection();
-        image->modified_connection.~connection();
-
-        if (GTK_WIDGET_CLASS(sp_gradient_image_parent_class)->destroy)
-            GTK_WIDGET_CLASS(sp_gradient_image_parent_class)->destroy(object);
-}
-
-static void sp_gradient_image_size_request(GtkWidget * /*widget*/, GtkRequisition *requisition)
+void
+GradientImage::size_request(GtkRequisition *requisition) const
 {
     requisition->width = 54;
     requisition->height = 12;
 }
 
-static void sp_gradient_image_get_preferred_width(GtkWidget *widget, gint *minimal_width, gint *natural_width)
+void
+GradientImage::get_preferred_width_vfunc(int &minimal_width, int &natural_width) const
 {
-        GtkRequisition requisition;
-        sp_gradient_image_size_request(widget, &requisition);
-        *minimal_width = *natural_width = requisition.width;
+    GtkRequisition requisition;
+    size_request(&requisition);
+    minimal_width = natural_width = requisition.width;
 }
 
-static void sp_gradient_image_get_preferred_height(GtkWidget *widget, gint *minimal_height, gint *natural_height)
+void
+GradientImage::get_preferred_height_vfunc(int &minimal_height, int &natural_height) const
 {
-        GtkRequisition requisition;
-        sp_gradient_image_size_request(widget, &requisition);
-        *minimal_height = *natural_height = requisition.height;
+    GtkRequisition requisition;
+    size_request(&requisition);
+    minimal_height = natural_height = requisition.height;
 }
 
-static gboolean sp_gradient_image_draw(GtkWidget *widget, cairo_t *ct)
+bool
+GradientImage::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
 {
-    SPGradientImage *image = SP_GRADIENT_IMAGE(widget);
-    SPGradient *gr = image->gradient;
-    GtkAllocation allocation;
-    gtk_widget_get_allocation(widget, &allocation);
+    auto allocation = get_allocation();
     
     cairo_pattern_t *check = ink_cairo_pattern_create_checkerboard();
+    auto ct = cr->cobj();
+
     cairo_set_source(ct, check);
     cairo_paint(ct);
     cairo_pattern_destroy(check);
 
-        if (gr) {
-        cairo_pattern_t *p = gr->create_preview_pattern(allocation.width);
+    if (_gradient) {
+        auto p = _gradient->create_preview_pattern(allocation.get_width());
         cairo_set_source(ct, p);
         cairo_paint(ct);
         cairo_pattern_destroy(p);
     }
     
-    return TRUE;
+    return true;
 }
 
-GtkWidget *
-sp_gradient_image_new (SPGradient *gradient)
+void
+GradientImage::set_gradient(SPGradient *gradient)
 {
-        SPGradientImage *image = SP_GRADIENT_IMAGE(g_object_new(SP_TYPE_GRADIENT_IMAGE, nullptr));
+    if (_gradient) {
+        _release_connection.disconnect();
+        _modified_connection.disconnect();
+    }
 
-        sp_gradient_image_set_gradient (image, gradient);
+    _gradient = gradient;
 
-        return GTK_WIDGET(image);
+    if (gradient) {
+        _release_connection = gradient->connectRelease(sigc::mem_fun(this, &GradientImage::gradient_release));
+        _modified_connection = gradient->connectModified(sigc::mem_fun(this, &GradientImage::gradient_modified));
+    }
+
+    update();
 }
+
+void
+GradientImage::gradient_release(SPObject *)
+{
+    if (_gradient) {
+        _release_connection.disconnect();
+        _modified_connection.disconnect();
+    }
+
+    _gradient = nullptr;
+
+    update();
+}
+
+void
+GradientImage::gradient_modified(SPObject *, guint /*flags*/)
+{
+    update();
+}
+
+void
+GradientImage::update()
+{
+    if (get_is_drawable()) {
+        queue_draw();
+    }
+}
+
+} // namespace Widget
+} // namespace UI
+} // namespace Inkscape
 
 GdkPixbuf*
 sp_gradient_to_pixbuf (SPGradient *gr, int width, int height)
@@ -228,50 +237,6 @@ sp_gradstop_to_pixbuf_ref (SPStop *stop, int width, int height)
 }
 
 
-void
-sp_gradient_image_set_gradient (SPGradientImage *image, SPGradient *gradient)
-{
-        if (image->gradient) {
-                image->release_connection.disconnect();
-                image->modified_connection.disconnect();
-        }
-
-        image->gradient = gradient;
-
-        if (gradient) {
-                image->release_connection = gradient->connectRelease(sigc::bind<1>(sigc::ptr_fun(&sp_gradient_image_gradient_release), image));
-                image->modified_connection = gradient->connectModified(sigc::bind<2>(sigc::ptr_fun(&sp_gradient_image_gradient_modified), image));
-        }
-
-        sp_gradient_image_update (image);
-}
-
-static void
-sp_gradient_image_gradient_release (SPObject *, SPGradientImage *image)
-{
-        if (image->gradient) {
-                image->release_connection.disconnect();
-                image->modified_connection.disconnect();
-        }
-
-        image->gradient = nullptr;
-
-        sp_gradient_image_update (image);
-}
-
-static void
-sp_gradient_image_gradient_modified (SPObject *, guint /*flags*/, SPGradientImage *image)
-{
-        sp_gradient_image_update (image);
-}
-
-static void
-sp_gradient_image_update (SPGradientImage *image)
-{
-        if (gtk_widget_is_drawable (GTK_WIDGET(image))) {
-                gtk_widget_queue_draw (GTK_WIDGET (image));
-        }
-}
 
 /*
   Local Variables:

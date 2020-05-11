@@ -198,18 +198,18 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
         _lgradient[i].show_all();
         __lgradient[i] = (i == SS_FILL)? (_("Linear gradient (fill)")) : (_("Linear gradient (stroke)"));
 
-        _gradient_preview_l[i] =  GTK_WIDGET(sp_gradient_image_new (nullptr));
+        _gradient_preview_l[i] = Gtk::manage(new GradientImage(nullptr));
         _gradient_box_l[i].pack_start(_lgradient[i]);
-        _gradient_box_l[i].pack_start(*(Glib::wrap(_gradient_preview_l[i])));
+        _gradient_box_l[i].pack_start(*_gradient_preview_l[i]);
         _gradient_box_l[i].show_all();
 
         _rgradient[i].set_markup (_("<b>R</b>"));
         _rgradient[i].show_all();
         __rgradient[i] = (i == SS_FILL)? (_("Radial gradient (fill)")) : (_("Radial gradient (stroke)"));
 
-        _gradient_preview_r[i] = GTK_WIDGET(sp_gradient_image_new (nullptr));
+        _gradient_preview_r[i] = Gtk::manage(new GradientImage(nullptr));
         _gradient_box_r[i].pack_start(_rgradient[i]);
-        _gradient_box_r[i].pack_start(*(Glib::wrap(_gradient_preview_r[i])));
+        _gradient_box_r[i].pack_start(*_gradient_preview_r[i]);
         _gradient_box_r[i].show_all();
 
 #ifdef WITH_MESH
@@ -217,9 +217,9 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
         _mgradient[i].show_all();
         __mgradient[i] = (i == SS_FILL)? (_("Mesh gradient (fill)")) : (_("Mesh gradient (stroke)"));
 
-        _gradient_preview_m[i] = GTK_WIDGET(sp_gradient_image_new (nullptr));
+        _gradient_preview_m[i] = Gtk::manage(new GradientImage(nullptr));
         _gradient_box_m[i].pack_start(_mgradient[i]);
-        _gradient_box_m[i].pack_start(*(Glib::wrap(_gradient_preview_m[i])));
+        _gradient_box_m[i].pack_start(*_gradient_preview_m[i]);
         _gradient_box_m[i].show_all();
 #endif
 
@@ -433,9 +433,6 @@ SelectedStyle::~SelectedStyle()
 
     for (int i = SS_FILL; i <= SS_STROKE; i++) {
         delete _color_preview[i];
-        // FIXME: do we need this? the destroy methods are not exported
-        //sp_gradient_image_destroy(GTK_OBJECT(_gradient_preview_l[i]));
-        //sp_gradient_image_destroy(GTK_OBJECT(_gradient_preview_r[i]));
     }
 
     delete (DropTracker*)_drop[SS_FILL];
@@ -959,20 +956,20 @@ SelectedStyle::update()
 
                     if (SP_IS_LINEARGRADIENT(server)) {
                         SPGradient *vector = SP_GRADIENT(server)->getVector();
-                        sp_gradient_image_set_gradient(SP_GRADIENT_IMAGE(_gradient_preview_l[i]), vector);
+                        _gradient_preview_l[i]->set_gradient(vector);
                         place->add(_gradient_box_l[i]);
                         place->set_tooltip_text(__lgradient[i]);
                         _mode[i] = SS_LGRADIENT;
                     } else if (SP_IS_RADIALGRADIENT(server)) {
                         SPGradient *vector = SP_GRADIENT(server)->getVector();
-                        sp_gradient_image_set_gradient(SP_GRADIENT_IMAGE(_gradient_preview_r[i]), vector);
+                        _gradient_preview_r[i]->set_gradient(vector);
                         place->add(_gradient_box_r[i]);
                         place->set_tooltip_text(__rgradient[i]);
                         _mode[i] = SS_RGRADIENT;
 #ifdef WITH_MESH
                     } else if (SP_IS_MESHGRADIENT(server)) {
                         SPGradient *array = SP_GRADIENT(server)->getArray();
-                        sp_gradient_image_set_gradient(SP_GRADIENT_IMAGE(_gradient_preview_m[i]), array);
+                        _gradient_preview_m[i]->set_gradient(array);
                         place->add(_gradient_box_m[i]);
                         place->set_tooltip_text(__mgradient[i]);
                         _mode[i] = SS_MGRADIENT;

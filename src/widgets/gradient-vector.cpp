@@ -785,7 +785,7 @@ static GtkWidget * sp_gradient_vector_widget_new(SPGradient *gradient, SPStop *s
 {
     using Inkscape::UI::Widget::ColorNotebook;
 
-    GtkWidget *vb, *w, *f;
+    GtkWidget *vb, *f;
 
     g_return_val_if_fail(gradient != nullptr, NULL);
     g_return_val_if_fail(SP_IS_GRADIENT(gradient), NULL);
@@ -794,10 +794,10 @@ static GtkWidget * sp_gradient_vector_widget_new(SPGradient *gradient, SPStop *s
     gtk_box_set_homogeneous(GTK_BOX(vb), FALSE);
     g_signal_connect(G_OBJECT(vb), "destroy", G_CALLBACK(sp_gradient_vector_widget_destroy), NULL);
 
-    w = sp_gradient_image_new(gradient);
+    auto w = Gtk::manage(new Inkscape::UI::Widget::GradientImage(gradient));
     g_object_set_data(G_OBJECT(vb), "preview", w);
-    gtk_widget_show(w);
-    gtk_box_pack_start(GTK_BOX(vb), w, TRUE, TRUE, PAD);
+    w->show();
+    gtk_box_pack_start(GTK_BOX(vb), GTK_WIDGET(w->gobj()), TRUE, TRUE, PAD);
 
     sp_repr_add_listener(gradient->getRepr(), &grad_edit_dia_repr_events, vb);
 
@@ -1080,8 +1080,8 @@ static void sp_gradient_vector_widget_load_gradient(GtkWidget *widget, SPGradien
         g_object_set_data(G_OBJECT(widget), "updating_color", reinterpret_cast<void*>(0));
 
         /* Fill preview */
-        GtkWidget *w = static_cast<GtkWidget *>(g_object_get_data(G_OBJECT(widget), "preview"));
-        sp_gradient_image_set_gradient(SP_GRADIENT_IMAGE(w), gradient);
+        auto w = static_cast<Inkscape::UI::Widget::GradientImage *>(g_object_get_data(G_OBJECT(widget), "preview"));
+        w->set_gradient(gradient);
 
         update_stop_list(GTK_WIDGET(widget), gradient, nullptr);
 

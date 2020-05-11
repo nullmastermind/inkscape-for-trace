@@ -151,18 +151,6 @@ GradientSelector::GradientSelector()
     hb->show_all();
 }
 
-GradientSelector::~GradientSelector()
-{
-    if (_icon_renderer) {
-        delete _icon_renderer;
-        _icon_renderer = nullptr;
-    }
-    if (_text_renderer) {
-        delete _text_renderer;
-        _text_renderer = nullptr;
-    }
-}
-
 void GradientSelector::setSpread(SPGradientSpread spread)
 {
     _gradientSpread = spread;

@@ -14,42 +14,53 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <gtk/gtk.h>
 #include <glibmm/refptr.h>
+#include <gtkmm/widget.h>
 
 class SPGradient;
+class SPObject;
 class SPStop;
+
 namespace Gdk {
     class Pixbuf;
 }
 
 #include <sigc++/connection.h>
 
-#define SP_TYPE_GRADIENT_IMAGE (sp_gradient_image_get_type ())
-#define SP_GRADIENT_IMAGE(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_GRADIENT_IMAGE, SPGradientImage))
-#define SP_GRADIENT_IMAGE_CLASS(k) (G_TYPE_CHECK_CLASS_CAST ((k), SP_TYPE_GRADIENT_IMAGE, SPGradientImageClass))
-#define SP_IS_GRADIENT_IMAGE(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_GRADIENT_IMAGE))
-#define SP_IS_GRADIENT_IMAGE_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE ((k), SP_TYPE_GRADIENT_IMAGE))
+namespace Inkscape {
+namespace UI {
+namespace Widget {
+class GradientImage : public Gtk::Widget {
+  private:
+    SPGradient *_gradient;
 
-struct SPGradientImage {
-    GtkWidget widget;
-    SPGradient *gradient;
+    sigc::connection _release_connection;
+    sigc::connection _modified_connection;
 
-    sigc::connection release_connection;
-    sigc::connection modified_connection;
+    void gradient_release(SPObject *obj);
+    void gradient_modified(SPObject *obj, guint flags);
+    void update();
+    void size_request(GtkRequisition *requisition) const;
+
+  protected:
+    void get_preferred_width_vfunc(int &minimum_width, int &natural_width) const override;
+    void get_preferred_height_vfunc(int &minimum_height, int &natural_height) const override;
+    bool on_draw(const Cairo::RefPtr<Cairo::Context> &cr) override;
+
+  public:
+    GradientImage(SPGradient *gradient);
+    ~GradientImage();
+
+    void set_gradient(SPGradient *gr);
 };
 
-struct SPGradientImageClass {
-    GtkWidgetClass parent_class;
-};
+} // namespace Widget
+} // namespace UI
+} // namespace Inkscape
 
-GType sp_gradient_image_get_type ();
-
-GtkWidget *sp_gradient_image_new (SPGradient *gradient);
 GdkPixbuf *sp_gradient_to_pixbuf (SPGradient *gr, int width, int height);
 Glib::RefPtr<Gdk::Pixbuf> sp_gradient_to_pixbuf_ref (SPGradient *gr, int width, int height);
 Glib::RefPtr<Gdk::Pixbuf> sp_gradstop_to_pixbuf_ref (SPStop     *gr, int width, int height);
-void sp_gradient_image_set_gradient (SPGradientImage *gi, SPGradient *gr);
 
 #endif
 
