@@ -108,7 +108,7 @@ CompositeUndoStackObserver::_remove_one(UndoObserverRecordList& list, UndoStackO
 {
 	UndoStackObserverRecord eq_comp(o);
 
-	UndoObserverRecordList::iterator i = std::find_if(list.begin(), list.end(), std::bind1st(std::equal_to< UndoStackObserverRecord >(), eq_comp));
+	UndoObserverRecordList::iterator i = std::find_if(list.begin(), list.end(), std::bind(std::equal_to< UndoStackObserverRecord >(), std::placeholders::_1, eq_comp ));
 
 	if (i != list.end()) {
 		list.erase(i);
@@ -123,7 +123,7 @@ CompositeUndoStackObserver::_mark_one(UndoObserverRecordList& list, UndoStackObs
 {
 	UndoStackObserverRecord eq_comp(o);
 
-	UndoObserverRecordList::iterator i = std::find_if(list.begin(), list.end(), std::bind1st(std::equal_to< UndoStackObserverRecord >(), eq_comp));
+	UndoObserverRecordList::iterator i = std::find_if(list.begin(), list.end(), std::bind(std::equal_to< UndoStackObserverRecord >(), std::placeholders::_1, eq_comp));
 
 	if (i != list.end()) {
 		(*i).to_remove = true;
