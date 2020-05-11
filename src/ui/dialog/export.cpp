@@ -123,10 +123,10 @@ static const char * selection_labels[SELECTION_NUMBER_OF] = {
 Export::Export () :
     UI::Widget::Panel("/dialogs/export/", SP_VERB_DIALOG_EXPORT),
     current_key(SELECTION_PAGE),
+    manual_key(SELECTION_PAGE),
     original_name(),
     doc_export_name(),
     filename_modified(false),
-    was_empty(true),
     update(false),
     togglebox(true, 0),
     area_box(false, 3),
@@ -201,7 +201,7 @@ Export::Export () :
             }
             selectiontype_buttons[i]->set_mode(false);
             togglebox.pack_start(*selectiontype_buttons[i], false, true, 0);
-            selectiontype_buttons[i]->signal_clicked().connect(sigc::mem_fun(*this, &Export::onAreaToggled));
+            selectiontype_buttons[i]->signal_clicked().connect(sigc::mem_fun(*this, &Export::onAreaTypeToggled));
         }
 
         auto t = new Gtk::Grid();
@@ -392,13 +392,11 @@ Export::Export () :
     setExporting(false);
 
     findDefaultSelection();
-    onAreaToggled();
+    refreshArea();
 }
 
 Export::~Export ()
 {
-    was_empty = TRUE;
-
     selectModifiedConn.disconnect();
     subselChangedConn.disconnect();
     selectChangedConn.disconnect();
@@ -629,27 +627,16 @@ inline void Export::findDefaultSelection()
 
 
 /**
- * If selection changed or a different document activated, we must
- * recalculate any chosen areas.
+ * If selection changed and "Export area" is set to "Selection"
+ * recalculate bounds when the selection changes
  */
 void Export::onSelectionChanged()
 {
     Inkscape::Selection *selection = SP_ACTIVE_DESKTOP->getSelection();
-
-    if ((current_key == SELECTION_DRAWING || current_key == SELECTION_PAGE) &&
-            (SP_ACTIVE_DESKTOP->getSelection())->isEmpty() == false &&
-            was_empty) {
+    if (manual_key != SELECTION_CUSTOM && selection) {
         current_key = SELECTION_SELECTION;
-        selectiontype_buttons[current_key]->set_active(true);
+        refreshArea();
     }
-    was_empty = (SP_ACTIVE_DESKTOP->getSelection())->isEmpty();
-
-    if ( selection &&
-            SELECTION_CUSTOM != current_key) {
-        onAreaToggled();
-    }
-
-    updateCheckbuttons ();
 }
 
 void Export::onSelectionModified ( guint /*flags*/ )
@@ -691,12 +678,11 @@ void Export::onSelectionModified ( guint /*flags*/ )
 }
 
 /// Called when one of the selection buttons was toggled.
-void Export::onAreaToggled ()
-{
+void Export::onAreaTypeToggled() {
     if (update) {
         return;
     }
-
+    
     /* Find which button is active */
     selection_type key = current_key;
     for (int i = 0; i < SELECTION_NUMBER_OF; i++) {
@@ -704,7 +690,15 @@ void Export::onAreaToggled ()
             key = (selection_type)i;
         }
     }
+    manual_key = current_key = key;
 
+    refreshArea();
+}
+
+/// Called when area needs to be refreshed
+/// Area type changed, unit changed, initialization
+void Export::refreshArea ()
+{
     if ( SP_ACTIVE_DESKTOP )
     {
         SPDocument *doc;
@@ -715,7 +709,7 @@ void Export::onAreaToggled ()
         /* Notice how the switch is used to 'fall through' here to get
            various backups.  If you modify this without noticing you'll
            probably screw something up. */
-        switch (key) {
+        switch (current_key) {
         case SELECTION_SELECTION:
             if ((SP_ACTIVE_DESKTOP->getSelection())->isEmpty() == false)
             {
@@ -724,39 +718,42 @@ void Export::onAreaToggled ()
                    do we break, otherwise we fall through to the
                    drawing */
                 // std::cout << "Using selection: SELECTION" << std::endl;
-                key = SELECTION_SELECTION;
+                current_key = SELECTION_SELECTION;
                 break;
             }
         case SELECTION_DRAWING:
-            /** \todo
-             * This returns wrong values if the document has a viewBox.
-             */
-            bbox = doc->getRoot()->desktopVisualBounds();
-            /* If the drawing is valid, then we'll use it and break
-               otherwise we drop through to the page settings */
-            if (bbox) {
-                // std::cout << "Using selection: DRAWING" << std::endl;
-                key = SELECTION_DRAWING;
-                break;
+            if (manual_key == SELECTION_DRAWING || manual_key == SELECTION_SELECTION) {
+                /** \todo
+                 * This returns wrong values if the document has a viewBox.
+                 */
+                bbox = doc->getRoot()->desktopVisualBounds();
+                /* If the drawing is valid, then we'll use it and break
+                   otherwise we drop through to the page settings */
+                if (bbox) {
+                    // std::cout << "Using selection: DRAWING" << std::endl;
+                    current_key= SELECTION_DRAWING;
+                    break;
+                }
             }
         case SELECTION_PAGE:
-            bbox = Geom::Rect(Geom::Point(0.0, 0.0),
-                              Geom::Point(doc->getWidth().value("px"), doc->getHeight().value("px")));
+            if (manual_key == SELECTION_PAGE){
+                bbox = Geom::Rect(Geom::Point(0.0, 0.0),
+                        Geom::Point(doc->getWidth().value("px"), doc->getHeight().value("px")));
 
-            // std::cout << "Using selection: PAGE" << std::endl;
-            key = SELECTION_PAGE;
-            break;
+                // std::cout << "Using selection: PAGE" << std::endl;
+                current_key= SELECTION_PAGE;
+                break;
+            }
         case SELECTION_CUSTOM:
+            current_key = SELECTION_CUSTOM;
         default:
             break;
         } // switch
 
-        current_key = key;
-
         // remember area setting
         prefs->setString("/dialogs/export/exportarea/value", selection_names[current_key]);
 
-        if ( key != SELECTION_CUSTOM && bbox ) {
+        if ( current_key != SELECTION_CUSTOM && bbox ) {
             setArea ( bbox->min()[Geom::X],
                       bbox->min()[Geom::Y],
                       bbox->max()[Geom::X],
@@ -770,7 +767,7 @@ void Export::onAreaToggled ()
         Glib::ustring filename;
         float xdpi = 0.0, ydpi = 0.0;
 
-        switch (key) {
+        switch (current_key) {
         case SELECTION_PAGE:
         case SELECTION_DRAWING: {
             SPDocument * doc = SP_ACTIVE_DOCUMENT;
@@ -947,7 +944,7 @@ static std::string absolutize_path_from_document_location(SPDocument *doc, const
 // Called when unit is changed
 void Export::onUnitChanged()
 {
-    onAreaToggled();
+    refreshArea();
 }
 
 void Export::onHideExceptSelected ()

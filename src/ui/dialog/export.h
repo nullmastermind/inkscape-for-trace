@@ -120,7 +120,8 @@ private:
     /**
      * One of the area select radio buttons was pressed
      */
-    void onAreaToggled();
+    void onAreaTypeToggled();
+    void refreshArea();
 
     /**
      * Export button callback
@@ -247,8 +248,13 @@ private:
 
     /*
      * Currently selected export area type
+     * can be changed by code
      */
     selection_type current_key;
+    /*
+     * Manually selected export area type(only changed by buttons)
+     */
+    selection_type manual_key;
     /*
      * Original name for the export object
      */
@@ -258,7 +264,7 @@ private:
      * Was the Original name modified
      */
     bool filename_modified;
-    bool was_empty;
+
     /*
      * Flag to stop simultaneous updates
      */
