@@ -11,9 +11,9 @@ set -e
 mkdir -p build
 cd build
 
-cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=ON || true
 
-run-clang-tidy -fix -header-filter='.*' "$@" > /dev/null || true
+run-clang-tidy -quiet -fix -header-filter='.*' "$@" || true
 
 # revert all fixes in protected directories
 git checkout --recurse-submodules ../src/3rdparty
