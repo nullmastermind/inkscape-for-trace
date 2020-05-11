@@ -4383,7 +4383,8 @@ void ObjectSet::fillBetweenMany()
     fillRepr->setAttribute("d", "M 0,0");
 
     // Get bottommost element in selection to create fill underneath
-    SPObject *first = *std::min_element(items().begin(), items().end(), sp_object_compare_position_bool);
+    auto&& items_ = std::vector<SPObject*>(items().begin(), items().end());
+    SPObject *first = *std::min_element(items_.begin(), items_.end(), sp_object_compare_position_bool);
     SPObject *prev  = first->getPrev();
 
     first->parent->addChild(fillRepr, prev ? prev->getRepr() : nullptr);
