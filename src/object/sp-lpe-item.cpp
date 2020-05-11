@@ -699,9 +699,8 @@ void SPLPEItem::removeAllPathEffects(bool keep_paths)
                 lpe->doOnRemove(this);
             }
         }
-        lperef->unlink();
     }
-    this->path_effect_list->clear();
+    clear_path_effect_list(this->path_effect_list);
     this->removeAttribute("inkscape:path-effect");
     if (!keep_paths) {
         // Make sure that ellipse is stored as <svg:circle> or <svg:ellipse> if possible.
