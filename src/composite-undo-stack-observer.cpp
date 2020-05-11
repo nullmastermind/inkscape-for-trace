@@ -11,6 +11,7 @@
  */
 
 #include <algorithm>
+#include <functional>
 
 #include "composite-undo-stack-observer.h"
 #include "xml/event.h"
