@@ -347,6 +347,20 @@ add_cli_test(export-plain-svg PARAMETERS --export-type=svg --export-plain-svg
                               TEST_SCRIPT match_regex_fail.sh "shapes.svg" "inkscape:|sodipodi:")
 
 # --export-ps-level=LEVEL
+add_cli_test(export-ps-level_2          PARAMETERS --export-ps-level=2 --export-type=ps INPUT_FILENAME gradient.svg OUTPUT_FILENAME export-ps-level-2.ps REFERENCE_FILENAME export-ps-level-2_expected.ps )
+add_cli_test(export-ps-level_2_content  PARAMETERS --export-ps-level=2 --export-type=ps
+                                        INPUT_FILENAME gradient.svg OUTPUT_FILENAME export-ps-level-2.ps
+                                        TEST_SCRIPT match_regex.sh "export-ps-level-2.ps" "%%LanguageLevel: 2")
+add_cli_test(export-ps-level_3          PARAMETERS --export-ps-level=3 --export-type=ps INPUT_FILENAME gradient.svg OUTPUT_FILENAME export-ps-level-3.ps REFERENCE_FILENAME export-ps-level-3_expected.ps )
+add_cli_test(export-ps-level_3_content  PARAMETERS --export-ps-level=3 --export-type=ps
+                                        INPUT_FILENAME gradient.svg OUTPUT_FILENAME export-ps-level-3.ps
+                                        TEST_SCRIPT match_regex.sh "export-ps-level-3.ps" "%%LanguageLevel: 3")
+add_cli_test(export-eps-level_2_content PARAMETERS --export-ps-level=2 --export-type=eps
+                                        INPUT_FILENAME gradient.svg OUTPUT_FILENAME export-ps-level-2.ps
+                                        TEST_SCRIPT match_regex.sh "export-ps-level-2.eps" "%%LanguageLevel: 2")
+add_cli_test(export-eps-level_3_content PARAMETERS --export-ps-level=3 --export-type=eps
+                                        INPUT_FILENAME gradient.svg OUTPUT_FILENAME export-ps-level-3.ps
+                                        TEST_SCRIPT match_regex.sh "export-ps-level-3.eps" "%%LanguageLevel: 3")
 
 # --export-pdf-version=VERSION
 add_cli_test(export-pdf-version-14 PARAMETERS --export-pdf-version=1.4 --export-type=pdf
