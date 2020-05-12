@@ -6,7 +6,6 @@ set(widgets_SRC
 	gradient-vector.cpp
 	ink-action.cpp
 	sp-attribute-widget.cpp
-	sp-color-selector.cpp
 	sp-xmlview-tree.cpp
 	spinbutton-events.cpp
 	spw-utilities.cpp
@@ -20,7 +19,6 @@ set(widgets_SRC
 	gradient-vector.h
 	ink-action.h
 	sp-attribute-widget.h
-	sp-color-selector.h
 	sp-xmlview-tree.h
 	spinbutton-events.h
 	spw-utilities.h
