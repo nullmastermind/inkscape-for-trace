@@ -45,9 +45,9 @@
 #include "ui/tools/mesh-tool.h"
 #include "ui/widget/color-preview.h"
 #include "ui/widget/combo-tool-item.h"
+#include "ui/widget/gradient-image.h"
 #include "ui/widget/spin-button-tool-item.h"
 
-#include "widgets/gradient-image.h"
 #include "widgets/spinbutton-events.h"
 
 using Inkscape::DocumentUndo;

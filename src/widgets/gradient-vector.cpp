@@ -54,8 +54,7 @@
 #include "ui/selected-color.h"
 #include "ui/widget/color-notebook.h"
 #include "ui/widget/color-preview.h"
-
-#include "widgets/gradient-image.h"
+#include "ui/widget/gradient-image.h"
 
 #include "xml/repr.h"
 

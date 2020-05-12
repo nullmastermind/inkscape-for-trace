@@ -47,9 +47,9 @@
 #include "ui/dialog/panel-dialog.h"
 #include "ui/tools/tool-base.h"
 #include "ui/widget/color-preview.h"
+#include "ui/widget/gradient-image.h"
 
 #include "widgets/ege-paint-def.h"
-#include "widgets/gradient-image.h"
 #include "widgets/spinbutton-events.h"
 #include "widgets/spw-utilities.h"
 #include "widgets/widget-sizes.h"
