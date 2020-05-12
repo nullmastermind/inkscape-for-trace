@@ -13,7 +13,7 @@ cd build
 
 cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
-run-clang-tidy -quiet -fix -header-filter='.*' "$@" || true
+run-clang-tidy -quiet -fix -header-filter='.*' "$@" > /dev/null || true
 
 # revert all fixes in protected directories
 git checkout --recurse-submodules ../src/3rdparty
