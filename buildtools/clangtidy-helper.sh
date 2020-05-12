@@ -11,7 +11,7 @@ set -e
 mkdir -p build
 cd build
 
-cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=ON || true
+cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 run-clang-tidy -quiet -fix -header-filter='.*' "$@" || true
 
