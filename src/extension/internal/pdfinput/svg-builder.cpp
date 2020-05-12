@@ -1395,7 +1395,7 @@ void SvgBuilder::addChar(GfxState *state, double x, double y,
 
     // Skip control characters, found in LaTeX generated PDFs
     // https://gitlab.com/inkscape/inkscape/-/issues/1369
-    if (u[0] < 0x80 && g_ascii_iscntrl(u[0]) && !g_ascii_isspace(u[0])) {
+    if (uLen > 0 && u[0] < 0x80 && g_ascii_iscntrl(u[0]) && !g_ascii_isspace(u[0])) {
         g_warning("Skipping ASCII control character %u", u[0]);
         _text_position += Geom::Point(dx, dy);
         return;
