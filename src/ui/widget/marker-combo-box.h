@@ -31,10 +31,13 @@ class Container;
 class Adjustment;
 }
 
+namespace Inkscape {
+namespace UI {
+namespace Widget {
+
 /**
  * ComboBox derived class for selecting stroke markers.
  */
-
 class MarkerComboBox : public Gtk::ComboBox {
 public:
     MarkerComboBox(gchar const *id, int loc);
@@ -104,6 +107,9 @@ private:
     sigc::connection modified_connection;
 };
 
+} // namespace Widget
+} // namespace UI
+} // namespace Inkscape
 #endif // SEEN_SP_MARKER_SELECTOR_NEW_H
 
 /*

@@ -9,7 +9,6 @@ set(widgets_SRC
 	sp-xmlview-tree.cpp
 	spinbutton-events.cpp
 	spw-utilities.cpp
-	stroke-marker-selector.cpp
 	toolbox.cpp
 
 	# -------
@@ -22,7 +21,6 @@ set(widgets_SRC
 	sp-xmlview-tree.h
 	spinbutton-events.h
 	spw-utilities.h
-	stroke-marker-selector.h
 	toolbox.h
 	widget-sizes.h
 )

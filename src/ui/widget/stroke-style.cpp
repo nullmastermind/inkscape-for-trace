@@ -30,6 +30,7 @@
 
 #include "ui/icon-loader.h"
 #include "ui/widget/dash-selector.h"
+#include "ui/widget/marker-combo-box.h"
 #include "ui/widget/unit-menu.h"
 
 #include "widgets/style-utils.h"

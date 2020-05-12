@@ -50,7 +50,6 @@
 #include "ui/widget/spinbutton.h"
 
 #include "widgets/spw-utilities.h"
-#include "widgets/stroke-marker-selector.h"
 
 #include "xml/repr.h"
 
@@ -66,6 +65,7 @@ namespace Inkscape {
     namespace UI {
         namespace Widget {
             class DashSelector;
+            class MarkerComboBox;
             class UnitMenu;
         }
     }

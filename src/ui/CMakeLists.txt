@@ -191,6 +191,7 @@ set(ui_SRC
 	widget/layer-selector.cpp
 	widget/layertypeicon.cpp
 	widget/licensor.cpp
+	widget/marker-combo-box.cpp
 	widget/notebook-page.cpp
 	widget/object-composite-settings.cpp
 	widget/page-sizer.cpp
@@ -430,6 +431,7 @@ set(ui_SRC
 	widget/layer-selector.h
 	widget/layertypeicon.h
 	widget/licensor.h
+	widget/marker-combo-box.h
 	widget/notebook-page.h
 	widget/object-composite-settings.h
 	widget/page-sizer.h

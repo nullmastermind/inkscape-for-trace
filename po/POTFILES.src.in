@@ -355,6 +355,7 @@
 ../src/ui/widget/gradient-selector.cpp
 ../src/ui/widget/layer-selector.cpp
 ../src/ui/widget/licensor.cpp
+../src/ui/widget/marker-combo-box.cpp
 ../src/ui/widget/object-composite-settings.cpp
 ../src/ui/widget/page-sizer.cpp
 ../src/ui/widget/paint-selector.cpp
@@ -374,5 +375,4 @@
 ../src/widgets/ege-paint-def.cpp
 ../src/widgets/gradient-vector.cpp
 ../src/widgets/sp-attribute-widget.cpp
-../src/widgets/stroke-marker-selector.cpp
 ../src/widgets/toolbox.cpp
