@@ -287,7 +287,7 @@ list(APPEND INKSCAPE_INCS_SYS ${GTK3_INCLUDE_DIRS})
 list(APPEND INKSCAPE_LIBS ${GTK3_LIBRARIES})
 link_directories(${GTK3_LIBRARY_DIRS})
 
-pkg_check_modules(GDL_3_35 gdl-3.0>=3.35)
+pkg_check_modules(GDL_3_35 QUIET gdl-3.0>=3.35)
 if("${GDL_3_35_FOUND}")
     message(STATUS "Using GDL 3.35 or higher")
     set (WITH_GDL_3_35 ON)
