@@ -3,4 +3,7 @@ add_subdirectory(libcroco)
 add_subdirectory(libdepixelize)
 add_subdirectory(adaptagrams)
 add_subdirectory(autotrace)
-add_subdirectory(2geom)
+
+if(NOT 2GEOM_FOUND)
+    add_subdirectory(2geom)
+endif()

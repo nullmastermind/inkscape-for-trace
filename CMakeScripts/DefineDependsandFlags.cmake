@@ -162,6 +162,10 @@ list(APPEND INKSCAPE_INCS_SYS ${BOEHMGC_INCLUDE_DIRS})
 list(APPEND INKSCAPE_LIBS ${BOEHMGC_LIBRARIES})
 add_definitions(${BOEHMGC_DEFINITIONS})
 
+# This package isn’t marked REQUIRED, because we fallback to the
+# src/3rdparty/2geom submodule if it isn’t available system-wide.
+find_package(2Geom)
+
 if(ENABLE_POPPLER)
     find_package(PopplerCairo)
     if(POPPLER_FOUND)
