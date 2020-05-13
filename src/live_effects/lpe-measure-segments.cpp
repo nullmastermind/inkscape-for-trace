@@ -832,6 +832,21 @@ getNodes(SPItem * item, Geom::Affine transform, bool onbbox, bool centers, bool 
     return current_nodes;
 }
 
+static void extractFirstPoint(Geom::Point & dest, const Glib::ustring & lpobjid, const char *const prefix, const gint idx, SPDocument *const document)
+{
+    Glib::ustring id = Glib::ustring(prefix);
+    id += Glib::ustring::format(idx);
+    id += "-";
+    id += lpobjid;
+    auto path = dynamic_cast<SPPath *>(document->getObjectById(id));
+    if (path) {
+        SPCurve* curve = path->getCurve();
+        if (curve) {
+            dest = *curve->first_point();
+        }
+        curve->unref();
+    }
+}
 
 void
 LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
@@ -985,66 +1000,10 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                 std::string listsegments(blacklist_str.raw() + ",");
                 listsegments.erase(std::remove(listsegments.begin(), listsegments.end(), ' '), listsegments.end());
                 if (isWhitelist(counter, listsegments, (bool)whitelist) && !Geom::are_near(start, end)) {
-                    Glib::ustring idprev = Glib::ustring("infoline-on-start-");
-                    idprev += Glib::ustring::format(counter-1);
-                    idprev += "-";
-                    idprev += lpobjid;
-                    SPObject *elemref = document->getObjectById(idprev.c_str());
-                    if (elemref){
-                        SPPath* path = dynamic_cast<SPPath *>(elemref);
-                        if (path) {
-                            SPCurve* prevcurve = path->getCurve();
-                            if (prevcurve) {
-                                prev_stored = *prevcurve->first_point();
-                            }
-                            prevcurve->unref();
-                        }
-                    }
-                    Glib::ustring idstart = Glib::ustring("infoline-on-start-");
-                    idstart += Glib::ustring::format(counter);
-                    idstart += "-";
-                    idstart += lpobjid;
-                    elemref = document->getObjectById(idstart.c_str());
-                    if (elemref) {
-                        SPPath* path = dynamic_cast<SPPath *>(elemref);
-                        if (path) {
-                            SPCurve* startcurve = path->getCurve();
-                            if (startcurve) {
-                                start_stored = *startcurve->first_point();
-                            }
-                            startcurve->unref();
-                        }
-                    }
-                    Glib::ustring idend = Glib::ustring("infoline-on-end-");
-                    idend += Glib::ustring::format(counter);
-                    idend += "-";
-                    idend += lpobjid;
-                    elemref = document->getObjectById(idend.c_str());
-                    if (elemref) {
-                        SPPath* path = dynamic_cast<SPPath *>(elemref);
-                        if (path) {
-                            SPCurve* endcurve = path->getCurve();
-                            if (endcurve) {
-                                end_stored = *endcurve->first_point();
-                            }
-                            endcurve->unref();
-                        }
-                    }
-                    Glib::ustring idnext = Glib::ustring("infoline-on-start-");
-                    idnext += Glib::ustring::format(counter+1);
-                    idnext += "-";
-                    idnext += lpobjid;
-                    elemref = document->getObjectById(idnext.c_str());
-                    if (elemref) {
-                        SPPath* path = dynamic_cast<SPPath *>(elemref);
-                        if (path) {
-                            SPCurve* nextcurve = path->getCurve();
-                            if (nextcurve) {
-                                next_stored = *nextcurve->first_point();
-                            }
-                            nextcurve->unref();
-                        }
-                    }
+                    extractFirstPoint(prev_stored, lpobjid, "infoline-on-start-", counter-1, document);
+                    extractFirstPoint(start_stored, lpobjid, "infoline-on-start-", counter, document);
+                    extractFirstPoint(end_stored, lpobjid, "infoline-on-end-", counter, document);
+                    extractFirstPoint(next_stored, lpobjid, "infoline-on-start-", counter+1, document);
                     Glib::ustring infoline_on_start = "infoline-on-start-";
                     infoline_on_start += Glib::ustring::format(counter);
                     infoline_on_start += "-";
