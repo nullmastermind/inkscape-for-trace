@@ -54,6 +54,7 @@
 #include "ui/shape-editor.h"
 #include "ui/widget/canvas.h"
 
+#include "ui/event-debug.h"
 #include "xml/attribute-record.h"
 #include "xml/node-event-vector.h"
 #include "xml/sp-css-attr.h"
@@ -428,6 +429,11 @@ static void show_curr_uni_char(TextTool *const tc)
 }
 
 bool TextTool::root_handler(GdkEvent* event) {
+
+#if EVENT_DEBUG
+    ui_dump_event(reinterpret_cast<GdkEvent *>(event), "TextTool::root_handler");
+#endif
+
     indicator->hide();
 
     sp_text_context_validate_cursor_iterators(this);

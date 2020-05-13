@@ -469,7 +469,7 @@ private:
 
     char * _full_tip; // includes shortcut
 
-    unsigned int _shortcut;
+    unsigned long long int _shortcut;
 
     /** Name of the image that represents the verb. */
     char const * _image;

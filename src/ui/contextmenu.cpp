@@ -40,10 +40,10 @@
 #include "selection.h"
 #include "selection-chemistry.h"
 #include "shortcuts.h"
+#include "verbs.h"
 
 #include "helper/action-context.h"
 #include "helper/action.h"
-#include "ui/icon-loader.h"
 
 #include "include/gtkmm_version.h"
 
@@ -59,7 +59,8 @@
 
 #include "ui/dialog/dialog-manager.h"
 #include "ui/dialog/layer-properties.h"
-#include "verbs.h"
+#include "ui/icon-loader.h"
+#include "ui/shortcuts.h"
 
 using Inkscape::DocumentUndo;
 
@@ -290,7 +291,7 @@ void ContextMenu::AppendItemFromVerb(Inkscape::Verb *verb, bool show_icon)
         // Now create the label and add it to the menu item (with mnemonic)
         auto const label = Gtk::manage(new Gtk::AccelLabel(action->name, true));
         label->set_xalign(0.0);
-        sp_shortcut_add_accelerator(GTK_WIDGET(item->gobj()), sp_shortcut_get_primary(verb));
+        Inkscape::Shortcuts::getInstance().add_accelerator(item, action->verb);
         label->set_accel_widget(*item);
 
         // If there is an image associated with the action, then we can add it as an icon for the menu item

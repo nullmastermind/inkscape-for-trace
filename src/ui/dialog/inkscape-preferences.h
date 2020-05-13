@@ -514,7 +514,7 @@ protected:
         Gtk::TreeModelColumn<Glib::ustring> id;
         Gtk::TreeModelColumn<Glib::ustring> shortcut;
         Gtk::TreeModelColumn<Glib::ustring> description;
-        Gtk::TreeModelColumn<unsigned int> shortcutid;
+        Gtk::TreeModelColumn<unsigned long long int> shortcutid;
         Gtk::TreeModelColumn<unsigned int> user_set;
     };
     ModelColumns _kb_columns;

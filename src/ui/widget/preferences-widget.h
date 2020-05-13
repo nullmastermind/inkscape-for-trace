@@ -188,6 +188,13 @@ public:
     void init(Glib::ustring const &prefs_path, std::vector<Glib::ustring> labels, std::vector<Glib::ustring> values,
               Glib::ustring default_value);
 
+    /**
+     * Initialize a combo box with a vector of Glib::ustring pairs.
+     */
+    void init(Glib::ustring const &prefs_path,
+              std::vector<std::pair<Glib::ustring, Glib::ustring>> labels_and_values,
+              Glib::ustring default_value);
+
   protected:
     Glib::ustring _prefs_path;
     std::vector<int> _values;

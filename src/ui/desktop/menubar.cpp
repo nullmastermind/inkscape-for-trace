@@ -27,7 +27,6 @@
 #include "inkscape-application.h" // Open recent
 
 #include "message-context.h"
-#include "shortcuts.h"
 
 #include "helper/action.h"
 #include "helper/action-context.h"
@@ -36,6 +35,7 @@
 
 #include "ui/contextmenu.h" // Shift to make room for icons
 #include "ui/icon-loader.h"
+#include "ui/shortcuts.h"
 #include "ui/view/view.h"
 #include "ui/uxmanager.h"   // To Do: Convert to actions
 
@@ -195,7 +195,7 @@ build_menu_item_from_verb(SPAction* action,
     Gtk::AccelLabel* label = Gtk::manage(new Gtk::AccelLabel(action->name, true));
     label->set_xalign(0.0);
     label->set_accel_widget(*menuitem);
-    sp_shortcut_add_accelerator((GtkWidget*)menuitem->gobj(), sp_shortcut_get_primary(action->verb));
+    Inkscape::Shortcuts::getInstance().add_accelerator(menuitem, action->verb);
 
     // If there is an image associated with the action, we can add it as an icon for the menu item.
     if (show_icon && action->image) {
@@ -322,13 +322,8 @@ checkitem_update(Gtk::CheckMenuItem* menuitem, SPAction* action)
 static Gtk::CheckMenuItem*
 build_menu_check_item_from_verb(SPAction* action)
 {
-    // This does not work for some reason!
-    // Gtk::CheckMenuItem* menuitem = Gtk::manage(new Gtk::CheckMenuItem(action->name, true));
-    // sp_shortcut_add_accelerator(GTK_WIDGET(menuitem->gobj()), sp_shortcut_get_primary(action->verb));
-
-    GtkWidget *item = gtk_check_menu_item_new_with_mnemonic(action->name);
-    sp_shortcut_add_accelerator(item, sp_shortcut_get_primary(action->verb));
-    Gtk::CheckMenuItem* menuitem = Gtk::manage(Glib::wrap(GTK_CHECK_MENU_ITEM(item)));
+    Gtk::CheckMenuItem* menuitem = Gtk::manage(new Gtk::CheckMenuItem(action->name, true));
+    Inkscape::Shortcuts::getInstance().add_accelerator(menuitem, action->verb);
 
     // Set initial state before connecting signals.
     checkitem_update(menuitem, action);

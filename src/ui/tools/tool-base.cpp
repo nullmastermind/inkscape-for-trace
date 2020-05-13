@@ -19,15 +19,12 @@
 #include <gdkmm/display.h>
 #include <glibmm/i18n.h>
 
-#include "shortcuts.h"
-#include "file.h"
-
 #include "desktop-events.h"
 #include "desktop-style.h"
 #include "desktop.h"
+#include "file.h"
 #include "gradient-drag.h"
 #include "knot-ptr.h"
-#include "include/macros.h"
 #include "message-context.h"
 #include "rubberband.h"
 #include "selcue.h"
@@ -38,15 +35,18 @@
 #include "display/control/canvas-item-rotate.h"
 
 #include "include/gtkmm_version.h"
+#include "include/macros.h"
 
 #include "object/sp-guide.h"
 
 #include "ui/contextmenu.h"
 #include "ui/event-debug.h"
 #include "ui/interface.h"
+
 #include "ui/modifiers.h"
 #include "ui/shape-editor.h"
-#include "ui/tools-switch.h"
+#include "ui/shortcuts.h"
+
 #include "ui/tool/commit-events.h"
 #include "ui/tool/control-point.h"
 #include "ui/tool/event-utils.h"
@@ -58,6 +58,11 @@
 #include "ui/tools/select-tool.h"
 #include "ui/tools/tool-base.h"
 #include "ui/widget/canvas.h"
+
+#include "ui/tools-switch.h"
+#include "ui/tools/lpe-tool.h"
+#include "ui/tools/node-tool.h"
+#include "ui/tools/tool-base.h"
 
 #include "widgets/desktop-widget.h"
 
@@ -333,7 +338,10 @@ bool ToolBase::_keyboardMove(GdkEventKey const &event, Geom::Point const &dir)
 
 bool ToolBase::root_handler(GdkEvent* event) {
 
-    // ui_dump_event (event, "ToolBase::root_handler");
+#ifdef EVENT_DUMP
+    ui_dump_event (event, "ToolBase::root_handler");
+#endif
+
     static Geom::Point button_w;
     static unsigned int panning = 0;
     static unsigned int panning_cursor = 0;
@@ -579,12 +587,10 @@ bool ToolBase::root_handler(GdkEvent* event) {
         // GDK insists on stealing these keys (F1 for no idea what, tab for cycling widgets
         // in the editing window). So we resteal them back and run our regular shortcut
         // invoker on them.
-        unsigned int shortcut;
         case GDK_KEY_Tab:
         case GDK_KEY_ISO_Left_Tab:
         case GDK_KEY_F1:
-            shortcut = sp_shortcut_get_for_event((GdkEventKey*)event);
-            ret = sp_shortcut_invoke(shortcut, desktop);
+            ret = Inkscape::Shortcuts::getInstance().invoke_verb(&event->key, SP_ACTIVE_DESKTOP);
             break;
 
         case GDK_KEY_Q:
@@ -1123,6 +1129,9 @@ void sp_event_context_read(ToolBase *ec, gchar const *key) {
 gint sp_event_context_root_handler(ToolBase * event_context,
         GdkEvent * event)
 {
+#ifdef EVENT_DEBUG
+    ui_dump_event(reinterpret_cast<GdkEvent *>(event), "sp_event_context_root_handler");
+#endif
 
     if (!event_context->_uses_snap) {
         return sp_event_context_virtual_root_handler(event_context, event);
@@ -1156,6 +1165,9 @@ gint sp_event_context_root_handler(ToolBase * event_context,
 }
 
 gint sp_event_context_virtual_root_handler(ToolBase * event_context, GdkEvent * event) {
+#ifdef EVENT_DEBUG
+    ui_dump_event(reinterpret_cast<GdkEvent *>(event), "sp_event_context_virtual_root_handler");
+#endif
     gint ret = false;
 
     if (event_context) {

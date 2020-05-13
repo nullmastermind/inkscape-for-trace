@@ -34,7 +34,6 @@
 #include <glibmm/i18n.h>
 #include <gtkmm/toolitem.h>
 
-#include "shortcuts.h"
 #include "verbs.h"
 #include "helper/action.h"
 #include "ui/widget/button.h"
@@ -66,23 +65,6 @@ GtkToolItem * sp_toolbox_button_item_new_from_verb_with_doubleclick(GtkWidget *t
     b->show();
     auto b_toolitem = Gtk::manage(new Gtk::ToolItem());
     b_toolitem->add(*b);
-
-    unsigned int shortcut = sp_shortcut_get_primary(verb);
-    if (shortcut != GDK_KEY_VoidSymbol) {
-        gchar *key = sp_shortcut_get_label(shortcut);
-        gchar *tip = g_strdup_printf ("%s (%s)", action->tip, key);
-        if ( t ) {
-           gtk_toolbar_insert(GTK_TOOLBAR(t), b_toolitem->gobj(), -1);
-           b->set_tooltip_text(tip);
-        }
-        g_free(tip);
-        g_free(key);
-    } else {
-        if ( t ) {
-            gtk_toolbar_insert(GTK_TOOLBAR(t), b_toolitem->gobj(), -1);
-            b->set_tooltip_text(action->tip);
-        }
-    }
 
     return GTK_TOOL_ITEM(b_toolitem->gobj());
 }

@@ -39,6 +39,7 @@
 
 #include "ui/interface.h"         // sp_ui_error_dialog
 #include "ui/dialog/font-substitution.h"  // Warn user about font substitution.
+#include "ui/shortcuts.h"         // Shortcuts... init
 #include "ui/widget/panel.h"      // Panel prep
 #include "widgets/desktop-widget.h" // Close without saving dialog
 
@@ -779,6 +780,9 @@ ConcreteInkscapeApplication<Gtk::Application>::create_window(SPDocument *documen
         window = window_open (document);
     }
     window->show();
+
+    // Shortcuts (after application and window created).
+    Inkscape::Shortcuts::getInstance().init();
 
     return window;
 }

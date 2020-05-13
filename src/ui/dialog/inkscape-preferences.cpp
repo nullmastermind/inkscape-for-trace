@@ -42,7 +42,6 @@
 #include "selcue.h"
 #include "selection-chemistry.h"
 #include "selection.h"
-#include "shortcuts.h"
 #include "style.h"
 #include "verbs.h"
 
@@ -58,6 +57,7 @@
 #include "svg/svg-color.h"
 
 #include "ui/interface.h"
+#include "ui/shortcuts.h"
 #include "ui/widget/style-swatch.h"
 
 #include "widgets/desktop-widget.h"
@@ -2701,12 +2701,8 @@ void InkscapePreferences::initPageBitmaps()
 void InkscapePreferences::initKeyboardShortcuts(Gtk::TreeModel::iterator iter_ui)
 {
     // ------- Shortcut file --------
-    std::vector<Glib::ustring> fileNames;
-    std::vector<Glib::ustring> fileLabels;
-
-    sp_shortcut_get_file_names(&fileLabels, &fileNames);
-
-    _kb_filelist.init( "/options/kbshortcuts/shortcutfile", &fileLabels[0], &fileNames[0], fileLabels.size(), fileNames[0]);
+    auto labels_and_names = Inkscape::Shortcuts::get_file_names();
+    _kb_filelist.init( "/options/kbshortcuts/shortcutfile", labels_and_names, labels_and_names[0].second);
 
     Glib::ustring tooltip(_("Select a file of predefined shortcuts to use. Any customized shortcuts you create will be added separately to "));
     tooltip += Glib::ustring(IO::Resource::get_path(IO::Resource::USER, IO::Resource::KEYS, "default.xml"));
@@ -2819,27 +2815,25 @@ void InkscapePreferences::initKeyboardShortcuts(Gtk::TreeModel::iterator iter_ui
 
 void InkscapePreferences::onKBList()
 {
-    sp_shortcut_init();
     onKBListKeyboardShortcuts();
 }
 
 void InkscapePreferences::onKBReset()
 {
-    sp_shortcuts_delete_all_from_file();
-    sp_shortcut_init();
+    Inkscape::Shortcuts::getInstance().clear_user_shortcuts();
     onKBListKeyboardShortcuts();
 }
 
 void InkscapePreferences::onKBImport()
 {
-    if (sp_shortcut_file_import()) {
+    if (Inkscape::Shortcuts::getInstance().import_shortcuts()) {
         onKBListKeyboardShortcuts();
     }
 }
 
 void InkscapePreferences::onKBExport()
 {
-    sp_shortcut_file_export();
+    Inkscape::Shortcuts::getInstance().export_shortcuts();
 }
 
 bool InkscapePreferences::onKBSearchKeyEvent(GdkEventKey * /*event*/)
@@ -2852,41 +2846,55 @@ void InkscapePreferences::onKBTreeCleared(const Glib::ustring& path)
 {
     Gtk::TreeModel::iterator iter = _kb_filter->get_iter(path);
     Glib::ustring id = (*iter)[_kb_columns.id];
-    unsigned int const current_shortcut_id = (*iter)[_kb_columns.shortcutid];
+    unsigned long long int const current_shortcut_id = (*iter)[_kb_columns.shortcutid];
 
     // Remove current shortcut from file
-    sp_shortcut_delete_from_file(id.c_str(), current_shortcut_id);
+    Inkscape::Shortcuts::getInstance().remove_user_shortcut(id, current_shortcut_id);
 
-    sp_shortcut_init();
     onKBListKeyboardShortcuts();
-
 }
 
 void InkscapePreferences::onKBTreeEdited (const Glib::ustring& path, guint accel_key, Gdk::ModifierType accel_mods, guint hardware_keycode)
 {
+    Inkscape::Shortcuts& shortcuts = Inkscape::Shortcuts::getInstance();
+
     Gtk::TreeModel::iterator iter = _kb_filter->get_iter(path);
 
     Glib::ustring id = (*iter)[_kb_columns.id];
     Glib::ustring current_shortcut = (*iter)[_kb_columns.shortcut];
-    unsigned int const current_shortcut_id = (*iter)[_kb_columns.shortcutid];
+    unsigned long long int const current_shortcut_id = (*iter)[_kb_columns.shortcutid];
 
-    Inkscape::Verb *const verb = Inkscape::Verb::getbyid(id.c_str());
-    if (!verb) {
-        return;
-    }
+    GdkEventKey event;
+    event.keyval = accel_key;
+    event.state = accel_mods;
+    event.hardware_keycode = hardware_keycode;
+    unsigned long long int const new_shortcut_id =  shortcuts.get_from_event(&event);
 
-    unsigned int const new_shortcut_id =  sp_shortcut_get_from_gdk_event(accel_key, accel_mods, hardware_keycode);
     if (new_shortcut_id && (new_shortcut_id != current_shortcut_id)) {
         // check if there is currently a verb assigned to this shortcut; if yes ask if the shortcut should be reassigned
-        Inkscape::Verb *current_verb = sp_shortcut_get_verb(new_shortcut_id);
+        Glib::ustring action_name;
+        Inkscape::Verb *current_verb = shortcuts.get_verb_from_shortcut(new_shortcut_id);
         if (current_verb) {
-            Glib::ustring verb_name = _(current_verb->get_name());
+            action_name = _(current_verb->get_name());
             Glib::ustring::size_type pos = 0;
-            while ((pos = verb_name.find('_', pos)) != verb_name.npos) { // strip mnemonics
-                verb_name.erase(pos, 1);
+            while ((pos = action_name.find('_', pos)) != action_name.npos) { // strip mnemonics
+                action_name.erase(pos, 1);
             }
-            Glib::ustring message = Glib::ustring::compose(_("Keyboard shortcut \"%1\"\nis already assigned to \"%2\""),
-                                                           sp_shortcut_get_label(new_shortcut_id), verb_name);
+        } else {
+            Glib::ustring accel = Gtk::AccelGroup::name(accel_key, accel_mods);
+            ConcreteInkscapeApplication<Gtk::Application>* app =
+                &(ConcreteInkscapeApplication<Gtk::Application>::get_instance());
+            std::vector<Glib::ustring> actions = app->get_actions_for_accel(accel);
+            if (!actions.empty()) {
+                action_name = actions[0];
+            }
+        }
+
+        if (!action_name.empty()) {
+            // Warn user about duplicated shortcuts.
+            Glib::ustring message =
+                Glib::ustring::compose(_("Keyboard shortcut \"%1\"\nis already assigned to \"%2\""),
+                                       shortcuts.get_label(new_shortcut_id), action_name);
             Gtk::MessageDialog dialog(message, false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO, true);
             dialog.set_title(_("Reassign shortcut?"));
             dialog.set_secondary_text(_("Are you sure you want to reassign this shortcut?"));
@@ -2897,14 +2905,13 @@ void InkscapePreferences::onKBTreeEdited (const Glib::ustring& path, guint accel
             }
         }
 
-        // Delete current shortcut if it existed
-        sp_shortcut_delete_from_file(id.c_str(), current_shortcut_id);
-        // Delete any references to the new shortcut
-        sp_shortcut_delete_from_file(id.c_str(), new_shortcut_id);
-        // Add the new shortcut
-        sp_shortcut_add_to_file(id.c_str(), new_shortcut_id);
+        // Delete current shortcut if it existed.
+        shortcuts.remove_user_shortcut(id, current_shortcut_id);
+        // Delete any other uses of the new shortcut.
+        shortcuts.remove_user_shortcut(id, new_shortcut_id);
+        // Add the new shortcut.
+        shortcuts.add_user_shortcut(id, new_shortcut_id);
 
-        sp_shortcut_init();
         onKBListKeyboardShortcuts();
     }
 }
@@ -2959,6 +2966,8 @@ void InkscapePreferences::onKBShortcutRenderer(Gtk::CellRenderer *renderer, Gtk:
 
 void InkscapePreferences::onKBListKeyboardShortcuts()
 {
+    Inkscape::Shortcuts& shortcuts = Inkscape::Shortcuts::getInstance();
+
     // Save the current selection
     Gtk::TreeStore::iterator iter = _kb_tree.get_selection()->get_selected();
     Glib::ustring selected_id = "";
@@ -3024,15 +3033,10 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
         }
 
         // Get the shortcut label
-        unsigned int shortcut_id = sp_shortcut_get_primary(verb);
+        unsigned long long int shortcut_id = shortcuts.get_shortcut_from_verb(verb);
         Glib::ustring shortcut_label = "";
         if (shortcut_id != GDK_KEY_VoidSymbol) {
-            gchar* str = sp_shortcut_get_label(shortcut_id);
-            if (str) {
-                shortcut_label = Glib::Markup::escape_text(str);
-                g_free(str);
-                str = nullptr;
-            }
+            shortcut_label = Glib::Markup::escape_text(shortcuts.get_label(shortcut_id));
         }
         // Add the verb to the group
         Gtk::TreeStore::iterator row = _kb_store->append(iter_group->children());
@@ -3041,7 +3045,7 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
         (*row)[_kb_columns.description] = verb->get_short_tip() ? _(verb->get_short_tip()) : "";
         (*row)[_kb_columns.shortcutid] = shortcut_id;
         (*row)[_kb_columns.id] = verb->get_id();
-        (*row)[_kb_columns.user_set] = sp_shortcut_is_user_set(verb);
+        (*row)[_kb_columns.user_set] = shortcuts.is_user_set(verb);
 
         if (selected_id == verb->get_id()) {
             Gtk::TreeStore::Path sel_path = _kb_filter->convert_child_path_to_path(_kb_store->get_path(row));
@@ -3059,16 +3063,15 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
 
     std::vector<Glib::ustring> actions_app = app->list_actions();
     for (auto action : actions_app) {
-        actions.push_back(action);
-        // actions.push_back("app." + action);
+        actions.push_back("app." + action);
     }
 
     InkscapeWindow* win = app->InkscapeApplication::get_active_window();
+
     if (win) {
         std::vector<Glib::ustring> actions_win = win->list_actions();
         for (auto action : actions_win) {
-            actions.push_back(action);
-            //actions.push_back("win." + action);
+            actions.push_back("win." + action);
         }
 
         // SPDocument* document = win->get_document();
@@ -3092,6 +3095,8 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
 
     Glib::ustring old_section;
     Gtk::TreeStore::iterator iter_group;
+
+    // Sort actions by sections
     for (auto action : actions) {
 
         Glib::ustring section = action_data.get_section_for_action(action);
@@ -3108,17 +3113,24 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
             old_section = section;
         }
 
-        // Find accelerator
+        // Find accelerators
         std::vector<Glib::ustring> keys = app->get_accels_for_action(action);
-        // std::cout << "action: ";
-        // for (auto key : keys) {
-        //     std::cout << key << ", ";
-        // }
-        // std::cout << std::endl;
-
         Glib::ustring shortcut_label;
-        if (!keys.empty()) {
-            shortcut_label = Glib::Markup::escape_text(keys[0]);
+        for (auto key : keys) {
+            shortcut_label += key + ", ";
+        }
+        if (shortcut_label.size() > 1) {
+            shortcut_label.erase(shortcut_label.size()-2);
+        }
+        shortcut_label = Glib::Markup::escape_text(shortcut_label);
+
+        // Find primary (i.e. first) shortcut.
+        unsigned long long int shortcut_id = 0;
+        if (keys.size() > 0) {
+            unsigned int key = 0;
+            Gdk::ModifierType mod = Gdk::ModifierType(0);
+            Gtk::AccelGroup::parse(keys[0], key, mod);
+            shortcut_id = key + ((unsigned long long int)mod << 32);
         }
 
         // Add the verb to the group
@@ -3126,9 +3138,15 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
         (*row)[_kb_columns.name] = action_data.get_label_for_action(action);
         (*row)[_kb_columns.shortcut] = shortcut_label;
         (*row)[_kb_columns.description] = action_data.get_tooltip_for_action(action);
-        (*row)[_kb_columns.shortcutid] = 0;
+        (*row)[_kb_columns.shortcutid] = shortcut_id;
         (*row)[_kb_columns.id] =  action;
-        (*row)[_kb_columns.user_set] = false;
+        (*row)[_kb_columns.user_set] = shortcuts.is_user_set(action);
+
+        if (selected_id == action) {
+            Gtk::TreeStore::Path sel_path = _kb_filter->convert_child_path_to_path(_kb_store->get_path(row));
+            _kb_tree.expand_to_path(sel_path);
+            _kb_tree.get_selection()->select(sel_path);
+        }
     }
 
 
@@ -3139,7 +3157,6 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
     if (selected_id.empty()) {
         _kb_tree.expand_to_path(_kb_store->get_path(_kb_store->get_iter("0:1")));
     }
-
 }
 
 void InkscapePreferences::initPageSpellcheck()

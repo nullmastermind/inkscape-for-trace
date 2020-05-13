@@ -14,6 +14,7 @@ set(ui_SRC
 	shape-editor.cpp
 	shape-editor-knotholders.cpp
         simple-pref-pusher.cpp
+        shortcuts.cpp
 	tool-factory.cpp
 	tools-switch.cpp
         util.cpp
@@ -247,6 +248,7 @@ set(ui_SRC
 	selected-color.h
 	shape-editor.h
         simple-pref-pusher.h
+        shortcuts.h
 	tool-factory.h
 	tools-switch.h
         util.h

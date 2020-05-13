@@ -55,6 +55,8 @@
 #include "ui/tools/tool-base.h"
 #include "ui/widget/canvas.h"  // Desktop hidden in g_object data.
 
+#include "ui/event-debug.h"
+
 #include "widgets/desktop-widget.h"
 
 #include "xml/repr.h"
@@ -68,6 +70,9 @@ static void init_extended();
 
 bool sp_desktop_root_handler(GdkEvent *event, SPDesktop *desktop)
 {
+#ifdef EVENT_DEBUG
+    ui_dump_event(reinterpret_cast<GdkEvent *>(event), "sp_desktop_root_handler");
+#endif
     static bool watch = false;
     static bool first = true;
 
@@ -99,6 +104,10 @@ static SPGuideDragType drag_type = SP_DRAG_NONE;
 
 bool sp_dt_guide_event(GdkEvent *event, Inkscape::CanvasItemGuideLine *guide_item, SPGuide *guide)
 {
+#ifdef EVENT_DEBUG
+    ui_dump_event(reinterpret_cast<GdkEvent *>(event), "sp_dt_guide_event");
+#endif
+
     static bool moved = false;
     bool ret = false;
 

@@ -678,6 +678,30 @@ void PrefCombo::init(Glib::ustring const &prefs_path, std::vector<Glib::ustring>
     this->set_active(row);
 }
 
+void PrefCombo::init(Glib::ustring const &prefs_path,
+                     std::vector<std::pair<Glib::ustring, Glib::ustring>> labels_and_values,
+                     Glib::ustring default_value)
+{
+    _prefs_path = prefs_path;
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    Glib::ustring value = prefs->getString(_prefs_path);
+    if (value.empty()) {
+        value = default_value;
+    }
+
+    int row = 0;
+    int i = 0;
+    for (auto entry : labels_and_values) {
+        this->append(entry.first);
+        _ustr_values.push_back(entry.second);
+        if (value == entry.second) {
+            row = i;
+        }
+        ++i;
+    }
+    this->set_active(row);
+}
+
 void PrefCombo::on_changed()
 {
     if (this->get_visible()) //only take action if user changed value

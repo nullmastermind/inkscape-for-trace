@@ -657,4 +657,7 @@ override) the bindings in the main default.xml.
   <modifier action="trans-fixed-ratio" modifiers="Ctrl"/>
   <modifier action="trans-off-center" modifiers="Shift"/>
   <modifier action="trans-snapping" modifiers="Shift"/>
+<!-- Actions -->
+   <!-- Test -->
+   <bind gaction="app.inkscape-version" keys="&lt;Shift&gt;v" />
 </keys>

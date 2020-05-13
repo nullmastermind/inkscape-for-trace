@@ -17,8 +17,9 @@
 
 #include "inkscape-window.h"
 #include "inkscape.h"   // SP_ACTIVE_DESKTOP
+#include "desktop-events.h" // Handle key events
 #include "enums.h"      // PREFS_WINDOW_GEOMETRY_NONE
-#include "shortcuts.h"
+
 #include "inkscape-application.h"
 
 #include "actions/actions-canvas-transform.h"
@@ -33,6 +34,9 @@
 #include "ui/desktop/menubar.h"
 
 #include "ui/drag-and-drop.h"
+
+#include "ui/event-debug.h"
+#include "ui/shortcuts.h"
 
 #include "widgets/desktop-widget.h"
 
@@ -151,15 +155,30 @@ inline bool is_Cmd_Q(GdkEventKey *event)
 bool
 InkscapeWindow::on_key_press_event(GdkEventKey* event)
 {
-    // Need to call base class method first or text tool won't work!
-    // Intercept Cmd-Q on macOS to not bypass confirmation dialog
-    bool done = !is_Cmd_Q(event) && Gtk::Window::on_key_press_event(event);
+#ifdef EVENT_DEBUG
+    ui_dump_event(reinterpret_cast<GdkEvent *>(event), "\nInkscapeWindow::on_key_press_event");
+#endif
+
+    // Key press and release events are sent first to Gtk::Window for processing as accelerators
+    // and menomics before bubbling up from the "grab" widget (unlike other events which always
+    // bubble up). This would means that key combinations used for accelerators won't reach our
+    // tool event handlers (and as we use single keys for accelerators, we wouldn't even be able to
+    // type text!). We need to run our tool event handlers firs for key event before giving
+    // Gtk::Window a crack at them.
+    // See https://developer.gnome.org/gtk3/stable/chap-input-handling.html (Event Propogation)
+    bool done = sp_desktop_root_handler(reinterpret_cast<GdkEvent *>(event), _desktop);
     if (done) {
         return true;
     }
 
-    unsigned shortcut = sp_shortcut_get_for_event(event);
-    return sp_shortcut_invoke (shortcut, _desktop);
+    // Intercept Cmd-Q on macOS to not bypass confirmation dialog
+    done = !is_Cmd_Q(event) && Gtk::Window::on_key_press_event(event);
+    if (done) {
+        return true;
+    }
+
+    // Verbs get last crack at events.
+    return Inkscape::Shortcuts::getInstance().invoke_verb(event, _desktop);
 }
 
 bool

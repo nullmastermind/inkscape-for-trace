@@ -24,9 +24,12 @@
 
 #include "desktop.h"
 #include "inkscape.h"
-#include "shortcuts.h"
 #include "verbs.h"
 
+#include "helper/action-context.h"
+#include "helper/action.h"
+
+#include "ui/shortcuts.h"
 #include "ui/interface.h"
 #include "ui/monitor.h"
 #include "ui/tool/event-utils.h"
@@ -80,13 +83,29 @@ Dialog::Dialog(Behavior::BehaviorFactory behavior_factory, const char *prefs_pat
       _is_active_desktop(true),
       _behavior(nullptr)
 {
-    gchar title[500];
 
+    // Set dialog title with shortcut.
     if (verb_num) {
-        sp_ui_dialog_title_string (Inkscape::Verb::get(verb_num), title);
+        Inkscape::Verb *verb = Inkscape::Verb::get(verb_num);
+
+        SPAction *action = verb->get_action(Inkscape::ActionContext());
+        if (action) {
+
+            gchar *atitle = sp_action_get_title(action);
+            if (atitle) {
+                _title = atitle;
+            }
+
+            unsigned long long int shortcut = Inkscape::Shortcuts::getInstance().get_shortcut_from_verb(action->verb);
+            if (shortcut != GDK_KEY_VoidSymbol) {
+                Glib::ustring key = Inkscape::Shortcuts::get_label(shortcut);
+                if (!key.empty()) {
+                    _title += " (" + key + ")";
+                }
+            }
+        }
     }
 
-    _title = title;
     _behavior = behavior_factory(*this);
     _desktop = SP_ACTIVE_DESKTOP;
 
@@ -301,9 +320,7 @@ bool Dialog::_onEvent(GdkEvent *event)
 
 bool Dialog::_onKeyPress(GdkEventKey *event)
 {
-    unsigned int shortcut;
-    shortcut = sp_shortcut_get_for_event((GdkEventKey*)event);
-    return sp_shortcut_invoke(shortcut, SP_ACTIVE_DESKTOP);
+    return Inkscape::Shortcuts::getInstance().invoke_verb(event, SP_ACTIVE_DESKTOP);
 }
 
 void Dialog::_apply()

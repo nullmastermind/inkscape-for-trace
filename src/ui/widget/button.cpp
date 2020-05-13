@@ -18,8 +18,8 @@
 #include "button.h"
 #include "helper/action-context.h"
 #include "helper/action.h"
-#include "shortcuts.h"
 #include "ui/icon-loader.h"
+#include "ui/shortcuts.h"
 
 namespace Inkscape {
 namespace UI {
@@ -113,6 +113,7 @@ Button::perform_action()
     }
 }
 
+// Used by buttons to select tools.
 Button::Button(GtkIconSize   size,
                    ButtonType  type,
                    SPAction     *action,
@@ -212,27 +213,27 @@ Button::action_set_active(bool active)
 void
 Button::set_composed_tooltip(SPAction *action)
 {
+    Glib::ustring tip;
+
     if (action) {
-        unsigned int shortcut = sp_shortcut_get_primary(action->verb);
-        if (shortcut != GDK_KEY_VoidSymbol) {
-            // there's both action and shortcut
-
-            gchar *key = sp_shortcut_get_label(shortcut);
-
-            gchar *tip = g_strdup_printf("%s (%s)", action->tip, key);
-            set_tooltip_text(tip);
-            g_free(tip);
-            g_free(key);
-        } else {
-            // action has no shortcut
-            set_tooltip_text(action->tip);
+        if (action->tip) {
+            tip = action->tip;
         }
-    } else {
-        // no action
-        set_tooltip_text(nullptr);
+
+        unsigned long long int shortcut = Inkscape::Shortcuts::getInstance().get_shortcut_from_verb(action->verb);
+        if (shortcut != GDK_KEY_VoidSymbol) {
+            // Action with shortcut.
+            Glib::ustring key = Inkscape::Shortcuts::get_label(shortcut);
+            if (!key.empty()) {
+                tip += " (" + key + ")";
+            }
+        }
     }
+
+    set_tooltip_text(tip.c_str());
 }
 
+// Used by object-lock, zoom-original, color-management.
 Button::Button(GtkIconSize               size,
                    ButtonType              type,
                    Inkscape::UI::View::View *view,

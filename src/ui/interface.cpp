@@ -120,35 +120,6 @@ sp_ui_close_all()
 }
 
 
-void
-sp_ui_dialog_title_string(Inkscape::Verb *verb, gchar *c)
-{
-    SPAction     *action;
-    unsigned int shortcut;
-    gchar        *s;
-    gchar        *atitle;
-
-    action = verb->get_action(Inkscape::ActionContext());
-    if (!action)
-        return;
-
-    atitle = sp_action_get_title(action);
-
-    s = g_stpcpy(c, atitle);
-
-    g_free(atitle);
-
-    shortcut = sp_shortcut_get_primary(verb);
-    if (shortcut!=GDK_KEY_VoidSymbol) {
-        gchar* key = sp_shortcut_get_label(shortcut);
-        s = g_stpcpy(s, " (");
-        s = g_stpcpy(s, key);
-        g_stpcpy(s, ")");
-        g_free(key);
-    }
-}
-
-
 Glib::ustring getLayoutPrefPath( Inkscape::UI::View::View *view )
 {
     Glib::ustring prefPath;

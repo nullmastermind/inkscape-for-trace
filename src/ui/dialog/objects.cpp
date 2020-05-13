@@ -27,7 +27,6 @@
 #include "filter-chemistry.h"
 #include "inkscape.h"
 #include "layer-manager.h"
-#include "shortcuts.h"
 #include "verbs.h"
 
 #include "helper/action.h"
@@ -47,6 +46,7 @@
 #include "ui/dialog-events.h"
 #include "ui/icon-names.h"
 #include "ui/selected-color.h"
+#include "ui/shortcuts.h"
 #include "ui/tools-switch.h"
 #include "ui/tools/node-tool.h"
 
@@ -879,13 +879,12 @@ bool ObjectsPanel::_handleKeyEvent(GdkEventKey *event)
     if (!_desktop)
         return false;
 
-    unsigned int shortcut;
-    shortcut = sp_shortcut_get_for_event(event);
+    unsigned long long int shortcut = Inkscape::Shortcuts::get_from_event(event);
 
     switch (shortcut) {
         // how to get users key binding for the action “start-interactive-search” ??
         // ctrl+f is just the default
-        case GDK_KEY_f | SP_SHORTCUT_CONTROL_MASK:
+        case GDK_KEY_f | ((unsigned long long int)GDK_CONTROL_MASK << 32):
             return false;
             break;
         // shall we slurp ctrl+w to close panel?
@@ -900,9 +899,10 @@ bool ObjectsPanel::_handleKeyEvent(GdkEventKey *event)
     }
 
     // invoke user defined shortcuts first
-    bool done = sp_shortcut_invoke(shortcut, _desktop);
-    if (done)
+    bool done = Inkscape::Shortcuts::getInstance().invoke_verb(event, _desktop);
+    if (done) {
         return true;
+    }
 
     // handle events for the treeview
     //  bool empty = _desktop->selection->isEmpty();

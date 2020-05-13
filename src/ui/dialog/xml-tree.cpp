@@ -29,7 +29,6 @@
 #include "inkscape.h"
 #include "message-context.h"
 #include "message-stack.h"
-#include "shortcuts.h"
 #include "verbs.h"
 
 #include "object/sp-root.h"
@@ -747,11 +746,6 @@ void XmlTree::on_document_uri_set(gchar const * /*uri*/, SPDocument * /*document
 {
 /*
  * Seems to be no way to set the title on a docked dialog
-    gchar title[500];
-    sp_ui_dialog_title_string(Inkscape::Verb::get(SP_VERB_DIALOG_XML_EDITOR), title);
-    gchar *t = g_strdup_printf("%s: %s", document->getName(), title);
-    //gtk_window_set_title(GTK_WINDOW(dlg), t);
-    g_free(t);
 */
 }
 

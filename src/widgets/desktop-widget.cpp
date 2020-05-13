@@ -38,7 +38,6 @@
 #include "file.h"
 #include "inkscape-version.h"
 #include "verbs.h"
-#include "shortcuts.h"
 
 #include "display/control/canvas-axonomgrid.h"
 #include "display/control/canvas-item-drawing.h"
@@ -1418,9 +1417,6 @@ SPDesktopWidget::SPDesktopWidget(SPDocument *document)
     dtw->_dt2r = 1. / namedview->display_units->factor;
 
     dtw->_ruler_origin = Geom::Point(0,0); //namedview->gridorigin;   Why was the grid origin used here?
-
-    // Loading the shortcuts first will allow initial strings to be correct.
-    sp_shortcut_ensure_init();
 
     // This section seems backwards!
     dtw->desktop = new SPDesktop();

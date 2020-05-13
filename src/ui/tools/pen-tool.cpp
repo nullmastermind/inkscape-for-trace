@@ -32,7 +32,6 @@
 #include "message-stack.h"
 #include "selection-chemistry.h"
 #include "selection.h"
-#include "shortcuts.h"
 #include "verbs.h"
 
 #include "display/curve.h"
@@ -45,6 +44,7 @@
 #include "ui/pixmaps/cursor-pen.xpm"
 
 #include "ui/draw-anchor.h"
+#include "ui/shortcuts.h"
 #include "ui/tools-switch.h"
 #include "ui/tools/pen-tool.h"
 
@@ -992,8 +992,8 @@ bool PenTool::_handleKeyPress(GdkEvent *event) {
 
     // Check for undo if we have started drawing a path.
     if (this->npoints > 0) {
-        unsigned int shortcut = sp_shortcut_get_for_event((GdkEventKey*)event);
-        Inkscape::Verb* verb = sp_shortcut_get_verb(shortcut);
+        unsigned long long int shortcut = Inkscape::Shortcuts::get_from_event((GdkEventKey*)event);
+        Inkscape::Verb* verb = Inkscape::Shortcuts::getInstance().get_verb_from_shortcut(shortcut);
         if (verb) {
             unsigned int vcode = verb->get_code();
             if (vcode == SP_VERB_EDIT_UNDO)

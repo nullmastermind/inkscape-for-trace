@@ -46,7 +46,6 @@
 #include "path-chemistry.h"
 #include "selection-chemistry.h"
 #include "seltrans.h"
-#include "shortcuts.h"
 #include "text-chemistry.h"
 
 #include "display/curve.h"
@@ -88,6 +87,7 @@
 #include "ui/icon-names.h"
 #include "ui/interface.h"
 #include "ui/shape-editor.h"
+#include "ui/shortcuts.h"
 #include "ui/tools-switch.h"
 #include "ui/tools/freehand-base.h"
 #include "ui/tools/node-tool.h"
@@ -706,18 +706,16 @@ gchar const *Verb::get_tip()
 {
     gchar const *result = nullptr;
     if (_tip) {
-        unsigned int shortcut = sp_shortcut_get_primary(this);
+        unsigned long long int shortcut = Inkscape::Shortcuts::getInstance().get_shortcut_from_verb(this);
         if ( (shortcut != _shortcut) || !_full_tip) {
             if (_full_tip) {
                 g_free(_full_tip);
                 _full_tip = nullptr;
             }
             _shortcut = shortcut;
-            gchar* shortcutString = sp_shortcut_get_label(shortcut);
-            if (shortcutString) {
-                _full_tip = g_strdup_printf("%s (%s)", _(_tip), shortcutString);
-                g_free(shortcutString);
-                shortcutString = nullptr;
+            Glib::ustring shortcutString = Inkscape::Shortcuts::get_label(shortcut);
+            if (!shortcutString.empty()) {
+                _full_tip = g_strdup_printf("%s (%s)", _(_tip), shortcutString.c_str());
             } else {
                 _full_tip = g_strdup(_(_tip));
             }

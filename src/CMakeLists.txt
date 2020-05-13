@@ -73,7 +73,6 @@ set(inkscape_SRC
   selection.cpp
   seltrans-handles.cpp
   seltrans.cpp
-  shortcuts.cpp
   snap-preferences.cpp
   snap.cpp
   snapped-curve.cpp
@@ -180,7 +179,6 @@ set(inkscape_SRC
   selection.h
   seltrans-handles.h
   seltrans.h
-  shortcuts.h
   snap-candidate.h
   snap-enums.h
   snap-preferences.h
