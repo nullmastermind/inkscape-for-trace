@@ -3,7 +3,6 @@
 set(widgets_SRC
 	desktop-widget.cpp
 	ege-paint-def.cpp
-	gradient-vector.cpp
 	ink-action.cpp
 	sp-attribute-widget.cpp
 	sp-xmlview-tree.cpp
@@ -15,7 +14,6 @@ set(widgets_SRC
 	# Headers
 	desktop-widget.h
 	ege-paint-def.h
-	gradient-vector.h
 	ink-action.h
 	sp-attribute-widget.h
 	sp-xmlview-tree.h

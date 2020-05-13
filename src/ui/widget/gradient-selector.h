@@ -26,7 +26,6 @@
 
 class SPDocument;
 class SPGradient;
-struct SPGradientVectorSelector;
 
 namespace Gtk {
 class Button;
@@ -40,6 +39,8 @@ class TreeView;
 namespace Inkscape {
 namespace UI {
 namespace Widget {
+class GradientVectorSelector;
+
 class GradientSelector : public Gtk::Box {
   public:
     enum SelectorMode { MODE_LINEAR, MODE_RADIAL, MODE_SWATCH };
@@ -75,7 +76,7 @@ class GradientSelector : public Gtk::Box {
     SPGradientSpread _gradientSpread;
 
     /* Vector selector */
-    GtkWidget *_vectors;
+    GradientVectorSelector *_vectors;
 
     /* Tree */
     bool _checkForSelected(const Gtk::TreePath &path, const Gtk::TreeIter &iter, SPGradient *vector);
@@ -116,7 +117,7 @@ class GradientSelector : public Gtk::Box {
     void add_vector_clicked();
     void edit_vector_clicked();
     void delete_vector_clicked();
-    void vector_set(SPGradientVectorSelector *gvs, SPGradient *gr);
+    void vector_set(SPGradient *gr);
 
   public:
     GradientSelector();

@@ -31,7 +31,7 @@
 #include "message-context.h"
 #include "svg/svg-color.h"
 #include "verbs.h"
-#include "widgets/gradient-vector.h"
+#include "ui/widget/gradient-vector-selector.h"
 
 
 namespace Inkscape {

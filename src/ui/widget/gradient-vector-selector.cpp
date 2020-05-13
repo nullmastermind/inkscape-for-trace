@@ -20,20 +20,18 @@
  *
  */
 
+#include "ui/widget/gradient-vector-selector.h"
+
 #include <set>
 
 #include <glibmm.h>
 #include <glibmm/i18n.h>
-
-
-
 
 #include "gradient-chemistry.h"
 #include "inkscape.h"
 #include "preferences.h"
 #include "desktop.h"
 #include "document-undo.h"
-#include "gradient-vector.h"
 #include "layer-manager.h"
 #include "include/macros.h"
 #include "selection-chemistry.h"
@@ -61,23 +59,9 @@
 using Inkscape::DocumentUndo;
 using Inkscape::UI::SelectedColor;
 
-enum {
-    VECTOR_SET,
-    LAST_SIGNAL
-};
-
-static void sp_gradient_vector_selector_destroy(GtkWidget *object);
-
-static void sp_gvs_gradient_release(SPObject *obj, SPGradientVectorSelector *gvs);
-static void sp_gvs_defs_release(SPObject *defs, SPGradientVectorSelector *gvs);
-static void sp_gvs_defs_modified(SPObject *defs, guint flags, SPGradientVectorSelector *gvs);
-
-static void sp_gvs_rebuild_gui_full(SPGradientVectorSelector *gvs);
 static SPStop *get_selected_stop( GtkWidget *vb);
 void gr_get_usage_counts(SPDocument *doc, std::map<SPGradient *, gint> *mapUsageCount );
 unsigned long sp_gradient_to_hhssll(SPGradient *gr);
-
-static guint signals[LAST_SIGNAL] = {0};
 
 // TODO FIXME kill these globals!!!
 static GtkWidget *dlg = nullptr;
@@ -85,91 +69,52 @@ static win_data wd;
 static gint x = -1000, y = -1000, w = 0, h = 0; // impossible original values to make sure they are read from prefs
 static Glib::ustring const prefs_path = "/dialogs/gradienteditor/";
 
-G_DEFINE_TYPE(SPGradientVectorSelector, sp_gradient_vector_selector, GTK_TYPE_BOX);
+namespace Inkscape {
+namespace UI {
+namespace Widget {
 
-static void sp_gradient_vector_selector_class_init(SPGradientVectorSelectorClass *klass)
+GradientVectorSelector::GradientVectorSelector(SPDocument *doc, SPGradient *gr)
+    : _idlabel(true)
+    , _swatched(false)
+    , _doc(nullptr)
+    , _gr(nullptr)
 {
-    GObjectClass *gobject_class = G_OBJECT_CLASS(klass);
+    _columns = new GradientSelector::ModelColumns();
+    _store = Gtk::ListStore::create(*_columns);
+    set_orientation(Gtk::ORIENTATION_VERTICAL);
 
-    signals[VECTOR_SET] = g_signal_new( "vector_set",
-                                        G_TYPE_FROM_CLASS(gobject_class),
-                                        G_SIGNAL_RUN_LAST,
-                                        G_STRUCT_OFFSET(SPGradientVectorSelectorClass, vector_set),
-                                        nullptr, nullptr,
-                                        g_cclosure_marshal_VOID__POINTER,
-                                        G_TYPE_NONE, 1,
-                                        G_TYPE_POINTER);
-
-    GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
-    widget_class->destroy = sp_gradient_vector_selector_destroy;
-}
-
-static void sp_gradient_vector_selector_init(SPGradientVectorSelector *gvs)
-{
-    gtk_orientable_set_orientation(GTK_ORIENTABLE(gvs), GTK_ORIENTATION_VERTICAL);
-
-    gvs->idlabel = TRUE;
-
-    gvs->swatched = false;
-
-    gvs->doc = nullptr;
-    gvs->gr = nullptr;
-
-    new (&gvs->gradient_release_connection) sigc::connection();
-    new (&gvs->defs_release_connection) sigc::connection();
-    new (&gvs->defs_modified_connection) sigc::connection();
-
-    gvs->columns = new Inkscape::UI::Widget::GradientSelector::ModelColumns();
-    gvs->store = Gtk::ListStore::create(*gvs->columns);
-    new (&gvs->tree_select_connection) sigc::connection();
-
-}
-
-static void sp_gradient_vector_selector_destroy(GtkWidget *object)
-{
-    SPGradientVectorSelector *gvs = SP_GRADIENT_VECTOR_SELECTOR(object);
-
-    if (gvs->gr) {
-        gvs->gradient_release_connection.disconnect();
-        gvs->tree_select_connection.disconnect();
-        gvs->gr = nullptr;
-    }
-
-    if (gvs->doc) {
-        gvs->defs_release_connection.disconnect();
-        gvs->defs_modified_connection.disconnect();
-        gvs->doc = nullptr;
-    }
-
-    gvs->gradient_release_connection.~connection();
-    gvs->defs_release_connection.~connection();
-    gvs->defs_modified_connection.~connection();
-    gvs->tree_select_connection.~connection();
-
-    if ((GTK_WIDGET_CLASS(sp_gradient_vector_selector_parent_class))->destroy) {
-        (GTK_WIDGET_CLASS(sp_gradient_vector_selector_parent_class))->destroy(object);
-    }
-}
-
-GtkWidget *sp_gradient_vector_selector_new(SPDocument *doc, SPGradient *gr)
-{
-    GtkWidget *gvs;
-
-    g_return_val_if_fail(!gr || SP_IS_GRADIENT(gr), NULL);
-    g_return_val_if_fail(!gr || (gr->document == doc), NULL);
-
-    gvs = static_cast<GtkWidget*>(g_object_new(SP_TYPE_GRADIENT_VECTOR_SELECTOR, nullptr));
+    // g_return_val_if_fail(!gr || SP_IS_GRADIENT(gr), NULL);
+    // g_return_val_if_fail(!gr || (gr->document == doc), NULL);
 
     if (doc) {
-        sp_gradient_vector_selector_set_gradient(SP_GRADIENT_VECTOR_SELECTOR(gvs), doc, gr);
+        set_gradient(doc, gr);
     } else {
-        sp_gvs_rebuild_gui_full(SP_GRADIENT_VECTOR_SELECTOR(gvs));
+        rebuild_gui_full();
     }
-
-    return gvs;
 }
 
-void sp_gradient_vector_selector_set_gradient(SPGradientVectorSelector *gvs, SPDocument *doc, SPGradient *gr)
+GradientVectorSelector::~GradientVectorSelector()
+{
+    if (_gr) {
+        _gradient_release_connection.disconnect();
+        _tree_select_connection.disconnect();
+        _gr = nullptr;
+    }
+
+    if (_doc) {
+        _defs_release_connection.disconnect();
+        _defs_modified_connection.disconnect();
+        _doc = nullptr;
+    }
+
+    _gradient_release_connection.~connection();
+    _defs_release_connection.~connection();
+    _defs_modified_connection.~connection();
+    _tree_select_connection.~connection();
+}
+
+
+void GradientVectorSelector::set_gradient(SPDocument *doc, SPGradient *gr)
 {
 //     g_message("sp_gradient_vector_selector_set_gradient(%p, %p, %p) [%s] %d %d", gvs, doc, gr,
 //               (gr ? gr->getId():"N/A"),
@@ -177,64 +122,149 @@ void sp_gradient_vector_selector_set_gradient(SPGradientVectorSelector *gvs, SPD
 //               (gr ? gr->isSolid() : -1));
     static gboolean suppress = FALSE;
 
-    g_return_if_fail(gvs != nullptr);
-    g_return_if_fail(SP_IS_GRADIENT_VECTOR_SELECTOR(gvs));
     g_return_if_fail(!gr || (doc != nullptr));
     g_return_if_fail(!gr || SP_IS_GRADIENT(gr));
     g_return_if_fail(!gr || (gr->document == doc));
     g_return_if_fail(!gr || gr->hasStops());
 
-    if (doc != gvs->doc) {
+    if (doc != _doc) {
         /* Disconnect signals */
-        if (gvs->gr) {
-            gvs->gradient_release_connection.disconnect();
-            gvs->gr = nullptr;
+        if (_gr) {
+            _gradient_release_connection.disconnect();
+            _gr = nullptr;
         }
-        if (gvs->doc) {
-            gvs->defs_release_connection.disconnect();
-            gvs->defs_modified_connection.disconnect();
-            gvs->doc = nullptr;
+        if (_doc) {
+            _defs_release_connection.disconnect();
+            _defs_modified_connection.disconnect();
+            _doc = nullptr;
         }
 
         // Connect signals
         if (doc) {
-            gvs->defs_release_connection = doc->getDefs()->connectRelease(sigc::bind<1>(sigc::ptr_fun(&sp_gvs_defs_release), gvs));
-            gvs->defs_modified_connection = doc->getDefs()->connectModified(sigc::bind<2>(sigc::ptr_fun(&sp_gvs_defs_modified), gvs));
+            _defs_release_connection = doc->getDefs()->connectRelease(sigc::mem_fun(this, &GradientVectorSelector::defs_release));
+            _defs_modified_connection = doc->getDefs()->connectModified(sigc::mem_fun(this, &GradientVectorSelector::defs_modified));
         }
         if (gr) {
-            gvs->gradient_release_connection = gr->connectRelease(sigc::bind<1>(sigc::ptr_fun(&sp_gvs_gradient_release), gvs));
+            _gradient_release_connection = gr->connectRelease(sigc::mem_fun(this, &GradientVectorSelector::gradient_release));
         }
-        gvs->doc = doc;
-        gvs->gr = gr;
-        sp_gvs_rebuild_gui_full(gvs);
-        if (!suppress) g_signal_emit(G_OBJECT(gvs), signals[VECTOR_SET], 0, gr);
-    } else if (gr != gvs->gr) {
+        _doc = doc;
+        _gr = gr;
+        rebuild_gui_full();
+        if (!suppress) _signal_vector_set.emit(gr);
+    } else if (gr != _gr) {
         // Harder case - keep document, rebuild list and stuff
         // fixme: (Lauris)
         suppress = TRUE;
-        sp_gradient_vector_selector_set_gradient(gvs, nullptr, nullptr);
-        sp_gradient_vector_selector_set_gradient(gvs, doc, gr);
+        set_gradient(nullptr, nullptr);
+        set_gradient(doc, gr);
         suppress = FALSE;
-        g_signal_emit(G_OBJECT(gvs), signals[VECTOR_SET], 0, gr);
+        _signal_vector_set.emit(gr);
     }
     /* The case of setting NULL -> NULL is not very interesting */
 }
 
-SPDocument *sp_gradient_vector_selector_get_document(SPGradientVectorSelector *gvs)
+void
+GradientVectorSelector::gradient_release(SPObject * /*obj*/)
 {
-    g_return_val_if_fail(gvs != nullptr, NULL);
-    g_return_val_if_fail(SP_IS_GRADIENT_VECTOR_SELECTOR(gvs), NULL);
+    /* Disconnect gradient */
+    if (_gr) {
+        _gradient_release_connection.disconnect();
+        _gr = nullptr;
+    }
 
-    return gvs->doc;
+    /* Rebuild GUI */
+    rebuild_gui_full();
 }
 
-SPGradient *sp_gradient_vector_selector_get_gradient(SPGradientVectorSelector *gvs)
+void
+GradientVectorSelector::defs_release(SPObject * /*defs*/)
 {
-    g_return_val_if_fail(gvs != nullptr, NULL);
-    g_return_val_if_fail(SP_IS_GRADIENT_VECTOR_SELECTOR(gvs), NULL);
+    _doc = nullptr;
 
-    return gvs->gr;
+    _defs_release_connection.disconnect();
+    _defs_modified_connection.disconnect();
+
+    /* Disconnect gradient as well */
+    if (_gr) {
+        _gradient_release_connection.disconnect();
+        _gr = nullptr;
+    }
+
+    /* Rebuild GUI */
+    rebuild_gui_full();
 }
+
+void
+GradientVectorSelector::defs_modified(SPObject *defs, guint flags)
+{
+    /* fixme: We probably have to check some flags here (Lauris) */
+    rebuild_gui_full();
+}
+
+void
+GradientVectorSelector::rebuild_gui_full()
+{
+    _tree_select_connection.block();
+
+    /* Clear old list, if there is any */
+    _store->clear();
+
+    /* Pick up all gradients with vectors */
+    std::vector<SPGradient *> gl;
+    if (_gr) {
+        auto gradients = _gr->document->getResourceList("gradient");
+        for (auto gradient : gradients) {
+            SPGradient* grad = SP_GRADIENT(gradient);
+            if ( grad->hasStops() && (grad->isSwatch() == _swatched) ) {
+                gl.push_back(SP_GRADIENT(gradient));
+            }
+        }
+    }
+
+    /* Get usage count of all the gradients */
+    std::map<SPGradient *, gint> usageCount;
+    gr_get_usage_counts(_doc, &usageCount);
+
+    if (!_doc) {
+        Gtk::TreeModel::Row row = *(_store->append());
+        row[_columns->name] = _("No document selected");
+
+    } else if (gl.empty()) {
+        Gtk::TreeModel::Row row = *(_store->append());
+        row[_columns->name] = _("No gradients in document");
+
+    } else if (!_gr) {
+        Gtk::TreeModel::Row row = *(_store->append());
+        row[_columns->name] =  _("No gradient selected");
+
+    } else {
+        for (auto gr:gl) {
+            unsigned long hhssll = sp_gradient_to_hhssll(gr);
+            GdkPixbuf *pixb = sp_gradient_to_pixbuf (gr, 64, 18);
+            Glib::ustring label = gr_prepare_label(gr);
+
+            Gtk::TreeModel::Row row = *(_store->append());
+            row[_columns->name] = label.c_str();
+            row[_columns->color] = hhssll;
+            row[_columns->refcount] = usageCount[gr];
+            row[_columns->data] = gr;
+            row[_columns->pixbuf] = Glib::wrap(pixb);
+        }
+    }
+
+    _tree_select_connection.unblock();
+}
+
+void
+GradientVectorSelector::setSwatched()
+{
+    _swatched = true;
+    rebuild_gui_full();
+}
+
+} // namespace Widget
+} // namespace UI
+} // namespace Inkscape
 
 Glib::ustring gr_prepare_label (SPObject *obj)
 {
@@ -262,60 +292,6 @@ Glib::ustring gr_ellipsize_text(Glib::ustring const &src, size_t maxlen)
     return src;
 }
 
-static void sp_gvs_rebuild_gui_full(SPGradientVectorSelector *gvs)
-{
-
-    gvs->tree_select_connection.block();
-
-    /* Clear old list, if there is any */
-    gvs->store->clear();
-
-    /* Pick up all gradients with vectors */
-    std::vector<SPGradient *> gl;
-    if (gvs->gr) {
-        std::vector<SPObject *> gradients = gvs->gr->document->getResourceList("gradient");
-        for (auto gradient : gradients) {
-            SPGradient* grad = SP_GRADIENT(gradient);
-            if ( grad->hasStops() && (grad->isSwatch() == gvs->swatched) ) {
-                gl.push_back(SP_GRADIENT(gradient));
-            }
-        }
-    }
-
-    /* Get usage count of all the gradients */
-    std::map<SPGradient *, gint> usageCount;
-    gr_get_usage_counts(gvs->doc, &usageCount);
-
-    if (!gvs->doc) {
-        Gtk::TreeModel::Row row = *(gvs->store->append());
-        row[gvs->columns->name] = _("No document selected");
-
-    } else if (gl.empty()) {
-        Gtk::TreeModel::Row row = *(gvs->store->append());
-        row[gvs->columns->name] = _("No gradients in document");
-
-    } else if (!gvs->gr) {
-        Gtk::TreeModel::Row row = *(gvs->store->append());
-        row[gvs->columns->name] =  _("No gradient selected");
-
-    } else {
-        for (auto gr:gl) {
-            unsigned long hhssll = sp_gradient_to_hhssll(gr);
-            GdkPixbuf *pixb = sp_gradient_to_pixbuf (gr, 64, 18);
-            Glib::ustring label = gr_prepare_label(gr);
-
-            Gtk::TreeModel::Row row = *(gvs->store->append());
-            row[gvs->columns->name] = label.c_str();
-            row[gvs->columns->color] = hhssll;
-            row[gvs->columns->refcount] = usageCount[gr];
-            row[gvs->columns->data] = gr;
-            row[gvs->columns->pixbuf] = Glib::wrap(pixb);
-        }
-    }
-
-    gvs->tree_select_connection.unblock();
-
-}
 
 /*
  *  Return a "HHSSLL" version of the first stop color so we can sort by it
@@ -387,46 +363,7 @@ void gr_get_usage_counts(SPDocument *doc, std::map<SPGradient *, gint> *mapUsage
     }
 }
 
-static void sp_gvs_gradient_release(SPObject */*obj*/, SPGradientVectorSelector *gvs)
-{
-    /* Disconnect gradient */
-    if (gvs->gr) {
-        gvs->gradient_release_connection.disconnect();
-        gvs->gr = nullptr;
-    }
 
-    /* Rebuild GUI */
-    sp_gvs_rebuild_gui_full(gvs);
-}
-
-static void sp_gvs_defs_release(SPObject */*defs*/, SPGradientVectorSelector *gvs)
-{
-    gvs->doc = nullptr;
-
-    gvs->defs_release_connection.disconnect();
-    gvs->defs_modified_connection.disconnect();
-
-    /* Disconnect gradient as well */
-    if (gvs->gr) {
-        gvs->gradient_release_connection.disconnect();
-        gvs->gr = nullptr;
-    }
-
-    /* Rebuild GUI */
-    sp_gvs_rebuild_gui_full(gvs);
-}
-
-static void sp_gvs_defs_modified(SPObject */*defs*/, guint /*flags*/, SPGradientVectorSelector *gvs)
-{
-    /* fixme: We probably have to check some flags here (Lauris) */
-    sp_gvs_rebuild_gui_full(gvs);
-}
-
-void SPGradientVectorSelector::setSwatched()
-{
-    swatched = true;
-    sp_gvs_rebuild_gui_full(this);
-}
 
 /*##################################################################
   ###                 Vector Editing Widget
@@ -903,7 +840,7 @@ static GtkWidget * sp_gradient_vector_widget_new(SPGradient *gradient, SPStop *s
     g_object_set_data(G_OBJECT(vb), "cselector", selected_color);
     g_object_set_data(G_OBJECT(vb), "updating_color", reinterpret_cast<void*>(0));
     selected_color->signal_changed.connect(sigc::bind(sigc::ptr_fun(&sp_gradient_vector_color_changed), selected_color, G_OBJECT(vb)));
-    selected_color->signal_dragged.connect(sigc::bind(sigc::ptr_fun(&sp_gradient_vector_color_changed), selected_color, G_OBJECT(vb)));
+    selected_color->signal_dragged.connect(sigc::bind(sigc::ptr_fun(&sp_gradient_vector_color_dragged), selected_color, G_OBJECT(vb)));
 
     Gtk::Widget *color_selector = Gtk::manage(new ColorNotebook(*selected_color));
     color_selector->show();
@@ -1112,15 +1049,21 @@ static void sp_gradient_vector_dialog_destroy(GtkWidget * /*object*/, gpointer /
     conn->disconnect();
     delete conn;
 
+    // FIXME: This connection never appears to be set
     conn = static_cast<sigc::connection *>(g_object_get_data(obj, "dialog-hide-connection"));
-    assert(conn != NULL);
-    conn->disconnect();
-    delete conn;
 
+    if (conn) {
+        conn->disconnect();
+        delete conn;
+    }
+
+    // FIXME: This connection never appears to be set
     conn = static_cast<sigc::connection *>(g_object_get_data(obj, "dialog-unhide-connection"));
-    assert(conn != NULL);
-    conn->disconnect();
-    delete conn;
+
+    if (conn) {
+        conn->disconnect();
+        delete conn;
+    }
 
     wd.win = dlg = nullptr;
     wd.stop = 0;
@@ -1160,7 +1103,9 @@ static void sp_gradient_vector_widget_destroy(GtkWidget *object, gpointer /*data
         g_assert( modified_connection != nullptr );
         release_connection->disconnect();
         modified_connection->disconnect();
-        sp_signal_disconnect_by_data(gradient, object);
+        
+        // FIXME: Commented this out as it causes Glib critical
+        // sp_signal_disconnect_by_data(gradient, object);
 
         if (gradient->getRepr()) {
             sp_repr_remove_listener_by_data(gradient->getRepr(), object);

@@ -353,6 +353,7 @@
 ../src/ui/widget/font-selector.cpp
 ../src/ui/widget/font-variants.cpp
 ../src/ui/widget/gradient-selector.cpp
+../src/ui/widget/gradient-vector-selector.cpp
 ../src/ui/widget/layer-selector.cpp
 ../src/ui/widget/licensor.cpp
 ../src/ui/widget/marker-combo-box.cpp
@@ -373,6 +374,5 @@
 ../src/verbs.cpp
 ../src/widgets/desktop-widget.cpp
 ../src/widgets/ege-paint-def.cpp
-../src/widgets/gradient-vector.cpp
 ../src/widgets/sp-attribute-widget.cpp
 ../src/widgets/toolbox.cpp

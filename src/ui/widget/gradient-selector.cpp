@@ -34,7 +34,7 @@
 
 #include "ui/icon-names.h"
 
-#include "widgets/gradient-vector.h"
+#include "ui/widget/gradient-vector-selector.h"
 
 namespace Inkscape {
 namespace UI {
@@ -57,13 +57,12 @@ GradientSelector::GradientSelector()
     set_orientation(Gtk::ORIENTATION_VERTICAL);
 
     /* Vectors */
-    _vectors = sp_gradient_vector_selector_new(nullptr, nullptr);
-    auto gvs = SP_GRADIENT_VECTOR_SELECTOR(_vectors);
-    _store = gvs->store;
-    _columns = gvs->columns;
+    _vectors = Gtk::manage(new GradientVectorSelector(nullptr, nullptr));
+    _store = _vectors->get_store();
+    _columns = _vectors->get_columns();
 
     _treeview = Gtk::manage(new Gtk::TreeView());
-    _treeview->set_model(gvs->store);
+    _treeview->set_model(_store);
     _treeview->set_headers_clickable(true);
     _treeview->set_search_column(1);
     _treeview->set_vexpand();
@@ -97,8 +96,8 @@ GradientSelector::GradientSelector()
     name_column->signal_clicked().connect(sigc::mem_fun(this, &GradientSelector::onTreeNameColClick));
     count_column->signal_clicked().connect(sigc::mem_fun(this, &GradientSelector::onTreeCountColClick));
 
-    gvs->tree_select_connection =
-        _treeview->get_selection()->signal_changed().connect(sigc::mem_fun(this, &GradientSelector::onTreeSelection));
+    auto tree_select_connection = _treeview->get_selection()->signal_changed().connect(sigc::mem_fun(this, &GradientSelector::onTreeSelection));
+    _vectors->set_tree_select_connection(tree_select_connection);
     _text_renderer->signal_edited().connect(sigc::mem_fun(this, &GradientSelector::onGradientRename));
 
     _scrolled_window = Gtk::manage(new Gtk::ScrolledWindow());
@@ -172,8 +171,7 @@ void GradientSelector::setMode(SelectorMode mode)
             auto icon_column = _treeview->get_column(0);
             icon_column->set_title(_("Swatch"));
 
-            auto vs = SP_GRADIENT_VECTOR_SELECTOR(_vectors);
-            vs->setSwatched();
+            _vectors->setSwatched();
         } else {
             for (auto &it : _nonsolid) {
                 it->show_all();
@@ -348,7 +346,7 @@ void GradientSelector::onTreeSelection()
     }
 
     if (obj) {
-        vector_set(nullptr, SP_GRADIENT(obj));
+        vector_set(SP_GRADIENT(obj));
     }
 }
 
@@ -384,7 +382,7 @@ void GradientSelector::setVector(SPDocument *doc, SPGradient *vector)
         return;
     }
 
-    sp_gradient_vector_selector_set_gradient(SP_GRADIENT_VECTOR_SELECTOR(_vectors), doc, vector);
+    _vectors->set_gradient(doc, vector);
 
     selectGradientInTree(vector);
 
@@ -433,12 +431,11 @@ void GradientSelector::setVector(SPDocument *doc, SPGradient *vector)
 
 SPGradient *GradientSelector::getVector()
 {
-    /* fixme: */
-    return SP_GRADIENT_VECTOR_SELECTOR(_vectors)->gr;
+    return _vectors->get_gradient();
 }
 
 
-void GradientSelector::vector_set(SPGradientVectorSelector * /*gvs*/, SPGradient *gr)
+void GradientSelector::vector_set(SPGradient *gr)
 {
     if (!_blocked) {
         _blocked = true;
@@ -475,7 +472,7 @@ void GradientSelector::edit_vector_clicked()
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (prefs->getBool("/dialogs/gradienteditor/showlegacy", false)) {
         // Legacy gradient dialog
-        auto dialog = sp_gradient_vector_editor_new(SP_GRADIENT_VECTOR_SELECTOR(_vectors)->gr);
+        auto dialog = sp_gradient_vector_editor_new(_vectors->get_gradient());
         gtk_widget_show(dialog);
     } else {
         // Invoke the gradient tool
@@ -491,12 +488,12 @@ void GradientSelector::edit_vector_clicked()
 
 void GradientSelector::add_vector_clicked()
 {
-    auto doc = sp_gradient_vector_selector_get_document(SP_GRADIENT_VECTOR_SELECTOR(_vectors));
+    auto doc = _vectors->get_document();
 
     if (!doc)
         return;
 
-    auto gr = sp_gradient_vector_selector_get_gradient(SP_GRADIENT_VECTOR_SELECTOR(_vectors));
+    auto gr = _vectors->get_gradient();
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
 
     Inkscape::XML::Node *repr = nullptr;
@@ -523,7 +520,7 @@ void GradientSelector::add_vector_clicked()
         gr = SP_GRADIENT(doc->getObjectByRepr(repr));
     }
 
-    sp_gradient_vector_selector_set_gradient(SP_GRADIENT_VECTOR_SELECTOR(_vectors), doc, gr);
+    _vectors->set_gradient(doc, gr);
 
     selectGradientInTree(gr);
 

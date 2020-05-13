@@ -50,7 +50,7 @@
 
 #include "ui/tools/tool-base.h"
 
-#include "widgets/gradient-vector.h"
+#include "ui/widget/gradient-vector-selector.h"
 
 #define noSP_GR_VERBOSE
 

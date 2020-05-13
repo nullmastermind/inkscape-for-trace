@@ -179,6 +179,7 @@ set(ui_SRC
 	widget/frame.cpp
 	widget/gradient-image.cpp
 	widget/gradient-selector.cpp
+	widget/gradient-vector-selector.cpp
 	widget/highlight-picker.cpp
 	widget/imagetoggler.cpp
     widget/ink-color-wheel.cpp
@@ -419,6 +420,7 @@ set(ui_SRC
 	widget/frame.h
 	widget/gradient-image.h
 	widget/gradient-selector.h
+	widget/gradient-vector-selector.h
 	widget/highlight-picker.h
 	widget/insertordericon.h
 	widget/imagetoggler.h

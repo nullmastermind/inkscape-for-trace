@@ -45,7 +45,7 @@
 
 #include "ui/previewholder.h"
 #include "widgets/desktop-widget.h"
-#include "widgets/gradient-vector.h"
+#include "ui/widget/gradient-vector-selector.h"
 #include "display/cairo-utils.h"
 
 #include "object/sp-defs.h"
