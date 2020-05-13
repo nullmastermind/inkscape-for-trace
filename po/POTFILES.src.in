@@ -225,7 +225,6 @@
 ../src/selection-describer.cpp
 ../src/seltrans-handles.cpp
 ../src/seltrans.cpp
-../src/shortcuts.cpp
 ../src/text-chemistry.cpp
 ../src/text-editing.cpp
 ../src/trace/depixelize/inkscape-depixelize.cpp
@@ -290,6 +289,7 @@
 ../src/ui/interface.cpp
 ../src/ui/modifiers.cpp
 ../src/ui/shape-editor-knotholders.cpp
+../src/ui/shortcuts.cpp
 ../src/ui/tool/curve-drag-point.cpp
 ../src/ui/tool/multi-path-manipulator.cpp
 ../src/ui/tool/node.cpp
