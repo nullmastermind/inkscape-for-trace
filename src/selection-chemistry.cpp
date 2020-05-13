@@ -2594,7 +2594,7 @@ void ObjectSet::editMask(bool /*clip*/)
  */
 void scroll_to_show_item(SPDesktop *desktop, SPItem *item)
 {
-    Geom::Rect dbox = desktop->get_display_area();
+    auto dbox = desktop->get_display_area();
     Geom::OptRect sbox = item->desktopVisualBounds();
 
     if ( sbox && dbox.contains(*sbox) == false ) {

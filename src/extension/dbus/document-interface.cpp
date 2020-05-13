@@ -614,7 +614,7 @@ document_interface_document_get_display_area (DocumentInterface *doc_interface)
   if (!desk) {
       return NULL;
   }
-  Geom::Rect const d = desk->get_display_area();
+  Geom::Rect const d = desk->get_display_area().bounds();
   
   GArray * dArr = g_array_new (TRUE, TRUE, sizeof(double));
 

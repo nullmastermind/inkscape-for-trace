@@ -677,7 +677,7 @@ bool SPDesktop::isLayer(SPObject *object) const
  */
 bool SPDesktop::isWithinViewport (SPItem *item) const
 {
-    Geom::Rect const viewport = get_display_area();
+    auto const viewport = get_display_area();
     Geom::OptRect const bbox = item->desktopVisualBounds();
     if (bbox) {
         return viewport.intersects(*bbox);
@@ -983,17 +983,15 @@ SPDesktop::set_display_area( Geom::Rect const &r, double border, bool log)
 
 
 /**
- * Return canvas viewbox bounding box in desktop coordinates
- *
- * @fixme Will be improved for non-90° rotations in https://gitlab.com/inkscape/inkscape/-/merge_requests/1399
+ * Return canvas viewbox in desktop coordinates
  */
-Geom::Rect SPDesktop::get_display_area(bool use_integer_viewbox) const
+Geom::Parallelogram SPDesktop::get_display_area(bool use_integer_viewbox) const
 {
     // viewbox in world coordinates
     Geom::Rect const viewbox = use_integer_viewbox ? canvas->getViewboxIntegers() : canvas->getViewbox();
 
     // display area in desktop coordinates
-    return viewbox * w2d();
+    return Geom::Parallelogram(viewbox) * w2d();
 }
 
 /**

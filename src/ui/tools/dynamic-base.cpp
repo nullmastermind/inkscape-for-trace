@@ -134,20 +134,20 @@ void DynamicBase::set(const Inkscape::Preferences::Entry& value) {
 
 /* Get normalized point */
 Geom::Point DynamicBase::getNormalizedPoint(Geom::Point v) const {
-    Geom::Rect drect = this->desktop->get_display_area();
+    auto drect = this->desktop->get_display_area();
 
-    double const max = MAX ( drect.dimensions()[Geom::X], drect.dimensions()[Geom::Y] );
+    double const max = drect.maxExtent();
 
-    return Geom::Point(( v[Geom::X] - drect.min()[Geom::X] ) / max,  ( v[Geom::Y] - drect.min()[Geom::Y] ) / max);
+    return (v - drect.bounds().min()) / max;
 }
 
 /* Get view point */
 Geom::Point DynamicBase::getViewPoint(Geom::Point n) const {
-    Geom::Rect drect = this->desktop->get_display_area();
+    auto drect = this->desktop->get_display_area();
 
-    double const max = MAX ( drect.dimensions()[Geom::X], drect.dimensions()[Geom::Y] );
+    double const max = drect.maxExtent();
 
-    return Geom::Point(n[Geom::X] * max + drect.min()[Geom::X], n[Geom::Y] * max + drect.min()[Geom::Y]);
+    return n * max + drect.bounds().min();
 }
 
 }

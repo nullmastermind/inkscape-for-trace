@@ -635,7 +635,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                     this->cursor->setCoords(p1, p1 - Geom::Point(0, y_dir * cursor_height));
                     if (this->imc) {
                         GdkRectangle im_cursor;
-                        Geom::Point const top_left = SP_EVENT_CONTEXT(this)->desktop->get_display_area().corner(3);
+                        Geom::Point const top_left = SP_EVENT_CONTEXT(this)->desktop->get_display_area().bounds().corner(3);
                         Geom::Point const cursor_size(0, cursor_height);
                         Geom::Point const im_position = SP_EVENT_CONTEXT(this)->desktop->d2w(p1 + cursor_size - top_left);
                         im_cursor.x = (int) floor(im_position[Geom::X]);
@@ -797,7 +797,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                         int screenlines = 1;
                         if (this->text) {
                             double spacing = sp_te_get_average_linespacing(this->text);
-                            Geom::Rect const d = desktop->get_display_area();
+                            Geom::Rect const d = desktop->get_display_area().bounds();
                             screenlines = (int) floor(fabs(d.min()[Geom::Y] - d.max()[Geom::Y])/spacing) - 1;
                             if (screenlines <= 0)
                                 screenlines = 1;

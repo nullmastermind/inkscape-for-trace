@@ -1679,7 +1679,7 @@ SPDesktopWidget::SPDesktopWidget(SPDocument *document)
 void
 SPDesktopWidget::update_rulers()
 {
-    Geom::Rect viewbox = desktop->get_display_area(true); 
+    Geom::Rect viewbox = desktop->get_display_area(true).bounds();
     // "true" means: Use integer values of the canvas for calculating the display area, similar
     // to the integer values used for positioning the grid lines. (see SPCanvas::scrollTo(), 
     // where ix and iy are rounded integer values; these values are stored in SPCanvasBuf->rect,

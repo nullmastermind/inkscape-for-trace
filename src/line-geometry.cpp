@@ -172,12 +172,9 @@ side_of_intersection (Geom::Point const &A, Geom::Point const &B, Geom::Point co
 
 boost::optional<Geom::Point> Line::intersection_with_viewbox (SPDesktop *desktop)
 {
-    Geom::Rect vb = desktop->get_display_area();
-    /* remaining viewbox corners */
-    Geom::Point ul (vb.min()[Geom::X], vb.max()[Geom::Y]);
-    Geom::Point lr (vb.max()[Geom::X], vb.min()[Geom::Y]);
+    auto vb = desktop->get_display_area();
 
-    std::pair <Geom::Point, Geom::Point> e = side_of_intersection (vb.min(), lr, vb.max(), ul, this->pt, this->v_dir);
+    std::pair <Geom::Point, Geom::Point> e = side_of_intersection (vb.corner(0), vb.corner(1), vb.corner(2), vb.corner(3), this->pt, this->v_dir);
     if (e.first == e.second) {
         // perspective line lies outside the canvas
         return boost::optional<Geom::Point>();
