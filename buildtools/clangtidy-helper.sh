@@ -13,6 +13,9 @@ cd build
 
 cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
+jq -c '.[] | select( .file | contains("3rdparty") | not)' compile_commands.json | jq -s > compile_commands2.json
+mv compile_commands2.json compile_commands.json
+
 run-clang-tidy -quiet -fix -header-filter='.*' "$@" > /dev/null || true
 
 # revert all fixes in protected directories
