@@ -32,12 +32,11 @@ namespace Widget {
 
 class GradientVectorSelector : public Gtk::Box {
   private:
-    bool _idlabel;
+    bool _idlabel  = true;
+    bool _swatched = false;
 
-    bool _swatched;
-
-    SPDocument *_doc;
-    SPGradient *_gr;
+    SPDocument *_doc = nullptr;
+    SPGradient *_gr  = nullptr;
 
     /* Gradient vectors store */
     Glib::RefPtr<Gtk::ListStore> _store;

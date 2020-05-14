@@ -74,10 +74,6 @@ namespace UI {
 namespace Widget {
 
 GradientVectorSelector::GradientVectorSelector(SPDocument *doc, SPGradient *gr)
-    : _idlabel(true)
-    , _swatched(false)
-    , _doc(nullptr)
-    , _gr(nullptr)
 {
     _columns = new GradientSelector::ModelColumns();
     _store = Gtk::ListStore::create(*_columns);
