@@ -2815,6 +2815,8 @@ void InkscapePreferences::initKeyboardShortcuts(Gtk::TreeModel::iterator iter_ui
 
 void InkscapePreferences::onKBList()
 {
+    // New file path already stored in preferences.
+    Inkscape::Shortcuts::getInstance().init();
     onKBListKeyboardShortcuts();
 }
 
