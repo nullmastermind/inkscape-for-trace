@@ -1581,16 +1581,16 @@ void PrintWmf::init()
     /* WMF print */
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
-        "<name>Windows Metafile Print</name>\n"
-        "<id>org.inkscape.print.wmf</id>\n"
-        "<param gui-hidden=\"true\" name=\"destination\" type=\"string\"></param>\n"
-        "<param gui-hidden=\"true\" name=\"textToPath\" type=\"bool\">true</param>\n"
-        "<param gui-hidden=\"true\" name=\"pageBoundingBox\" type=\"bool\">true</param>\n"
-        "<param gui-hidden=\"true\" name=\"FixPPTCharPos\" type=\"bool\">false</param>\n"
-        "<param gui-hidden=\"true\" name=\"FixPPTDashLine\" type=\"bool\">false</param>\n"
-        "<param gui-hidden=\"true\" name=\"FixPPTGrad2Polys\" type=\"bool\">false</param>\n"
-        "<param gui-hidden=\"true\" name=\"FixPPTPatternAsHatch\" type=\"bool\">false</param>\n"
-        "<print/>\n"
+            "<name>Windows Metafile Print</name>\n"
+            "<id>org.inkscape.print.wmf</id>\n"
+            "<param gui-hidden=\"true\" name=\"destination\" type=\"string\"></param>\n"
+            "<param gui-hidden=\"true\" name=\"textToPath\" type=\"bool\">true</param>\n"
+            "<param gui-hidden=\"true\" name=\"pageBoundingBox\" type=\"bool\">true</param>\n"
+            "<param gui-hidden=\"true\" name=\"FixPPTCharPos\" type=\"bool\">false</param>\n"
+            "<param gui-hidden=\"true\" name=\"FixPPTDashLine\" type=\"bool\">false</param>\n"
+            "<param gui-hidden=\"true\" name=\"FixPPTGrad2Polys\" type=\"bool\">false</param>\n"
+            "<param gui-hidden=\"true\" name=\"FixPPTPatternAsHatch\" type=\"bool\">false</param>\n"
+            "<print/>\n"
         "</inkscape-extension>", new PrintWmf());
 
     return;

@@ -32,18 +32,18 @@ Despeckle::refreshParameters(Inkscape::Extension::Effect */*module*/) {
 void
 Despeckle::init()
 {
-	Inkscape::Extension::build_from_mem(
-		"<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
-			"<name>" N_("Despeckle") "</name>\n"
-			"<id>org.inkscape.effect.bitmap.despeckle</id>\n"
-			"<effect>\n"
-				"<object-type>all</object-type>\n"
-				"<effects-menu>\n"
-					"<submenu name=\"" N_("Raster") "\" />\n"
-				"</effects-menu>\n"
-				"<menu-tip>" N_("Reduce speckle noise of selected bitmap(s)") "</menu-tip>\n"
-			"</effect>\n"
-		"</inkscape-extension>\n", new Despeckle());
+    Inkscape::Extension::build_from_mem(
+        "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
+            "<name>" N_("Despeckle") "</name>\n"
+            "<id>org.inkscape.effect.bitmap.despeckle</id>\n"
+            "<effect>\n"
+                "<object-type>all</object-type>\n"
+                "<effects-menu>\n"
+                    "<submenu name=\"" N_("Raster") "\" />\n"
+                "</effects-menu>\n"
+                "<menu-tip>" N_("Reduce speckle noise of selected bitmap(s)") "</menu-tip>\n"
+            "</effect>\n"
+        "</inkscape-extension>\n", new Despeckle());
 }
 
 }; /* namespace Bitmap */

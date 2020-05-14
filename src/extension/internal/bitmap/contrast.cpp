@@ -36,19 +36,19 @@ Contrast::refreshParameters(Inkscape::Extension::Effect *module) {
 void
 Contrast::init()
 {
-	Inkscape::Extension::build_from_mem(
-		"<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
-			"<name>" N_("Contrast") "</name>\n"
-			"<id>org.inkscape.effect.bitmap.contrast</id>\n"
-			"<param name=\"sharpen\" gui-text=\"" N_("Adjust:") "\" type=\"int\" min=\"0\" max=\"10\">0</param>\n"
-			"<effect>\n"
-				"<object-type>all</object-type>\n"
-				"<effects-menu>\n"
-					"<submenu name=\"" N_("Raster") "\" />\n"
-				"</effects-menu>\n"
-				"<menu-tip>" N_("Increase or decrease contrast in bitmap(s)") "</menu-tip>\n"
-			"</effect>\n"
-		"</inkscape-extension>\n", new Contrast());
+    Inkscape::Extension::build_from_mem(
+        "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
+            "<name>" N_("Contrast") "</name>\n"
+            "<id>org.inkscape.effect.bitmap.contrast</id>\n"
+            "<param name=\"sharpen\" gui-text=\"" N_("Adjust:") "\" type=\"int\" min=\"0\" max=\"10\">0</param>\n"
+            "<effect>\n"
+                "<object-type>all</object-type>\n"
+                "<effects-menu>\n"
+                    "<submenu name=\"" N_("Raster") "\" />\n"
+                "</effects-menu>\n"
+                "<menu-tip>" N_("Increase or decrease contrast in bitmap(s)") "</menu-tip>\n"
+            "</effect>\n"
+        "</inkscape-extension>\n", new Contrast());
 }
 
 }; /* namespace Bitmap */

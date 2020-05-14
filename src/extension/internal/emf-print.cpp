@@ -2188,18 +2188,18 @@ void PrintEmf::init()
     /* EMF print */
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
-        "<name>Enhanced Metafile Print</name>\n"
-        "<id>org.inkscape.print.emf</id>\n"
-        "<param gui-hidden=\"true\" name=\"destination\" type=\"string\"></param>\n"
-        "<param gui-hidden=\"true\" name=\"textToPath\" type=\"bool\">true</param>\n"
-        "<param gui-hidden=\"true\" name=\"pageBoundingBox\" type=\"bool\">true</param>\n"
-        "<param gui-hidden=\"true\" name=\"FixPPTCharPos\" type=\"bool\">false</param>\n"
-        "<param gui-hidden=\"true\" name=\"FixPPTDashLine\" type=\"bool\">false</param>\n"
-        "<param gui-hidden=\"true\" name=\"FixPPTGrad2Polys\" type=\"bool\">false</param>\n"
-        "<param gui-hidden=\"true\" name=\"FixPPTLinGrad\" type=\"bool\">false</param>\n"
-        "<param gui-hidden=\"true\" name=\"FixPPTPatternAsHatch\" type=\"bool\">false</param>\n"
-        "<param gui-hidden=\"true\" name=\"FixImageRot\" type=\"bool\">false</param>\n"
-        "<print/>\n"
+            "<name>Enhanced Metafile Print</name>\n"
+            "<id>org.inkscape.print.emf</id>\n"
+            "<param gui-hidden=\"true\" name=\"destination\" type=\"string\"></param>\n"
+            "<param gui-hidden=\"true\" name=\"textToPath\" type=\"bool\">true</param>\n"
+            "<param gui-hidden=\"true\" name=\"pageBoundingBox\" type=\"bool\">true</param>\n"
+            "<param gui-hidden=\"true\" name=\"FixPPTCharPos\" type=\"bool\">false</param>\n"
+            "<param gui-hidden=\"true\" name=\"FixPPTDashLine\" type=\"bool\">false</param>\n"
+            "<param gui-hidden=\"true\" name=\"FixPPTGrad2Polys\" type=\"bool\">false</param>\n"
+            "<param gui-hidden=\"true\" name=\"FixPPTLinGrad\" type=\"bool\">false</param>\n"
+            "<param gui-hidden=\"true\" name=\"FixPPTPatternAsHatch\" type=\"bool\">false</param>\n"
+            "<param gui-hidden=\"true\" name=\"FixImageRot\" type=\"bool\">false</param>\n"
+            "<print/>\n"
         "</inkscape-extension>", new PrintEmf());
 
     return;

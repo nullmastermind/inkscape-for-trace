@@ -35,20 +35,20 @@ Sample::refreshParameters(Inkscape::Extension::Effect* module) {
 void
 Sample::init()
 {
-	Inkscape::Extension::build_from_mem(
-		"<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
-			"<name>" N_("Resample") "</name>\n"
-			"<id>org.inkscape.effect.bitmap.sample</id>\n"
-			"<param name=\"width\" gui-text=\"" N_("Width:") "\" type=\"int\" min=\"0\" max=\"6400\">100</param>\n"
-			"<param name=\"height\" gui-text=\"" N_("Height:") "\" type=\"int\" min=\"0\" max=\"6400\">100</param>\n"
-			"<effect>\n"
-				"<object-type>all</object-type>\n"
-				"<effects-menu>\n"
-					"<submenu name=\"" N_("Raster") "\" />\n"
-				"</effects-menu>\n"
-				"<menu-tip>" N_("Alter the resolution of selected image by resizing it to the given pixel size") "</menu-tip>\n"
-			"</effect>\n"
-		"</inkscape-extension>\n", new Sample());
+    Inkscape::Extension::build_from_mem(
+        "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
+            "<name>" N_("Resample") "</name>\n"
+            "<id>org.inkscape.effect.bitmap.sample</id>\n"
+            "<param name=\"width\" gui-text=\"" N_("Width:") "\" type=\"int\" min=\"0\" max=\"6400\">100</param>\n"
+            "<param name=\"height\" gui-text=\"" N_("Height:") "\" type=\"int\" min=\"0\" max=\"6400\">100</param>\n"
+            "<effect>\n"
+                "<object-type>all</object-type>\n"
+                "<effects-menu>\n"
+                    "<submenu name=\"" N_("Raster") "\" />\n"
+                "</effects-menu>\n"
+                "<menu-tip>" N_("Alter the resolution of selected image by resizing it to the given pixel size") "</menu-tip>\n"
+            "</effect>\n"
+        "</inkscape-extension>\n", new Sample());
 }
 
 }; /* namespace Bitmap */

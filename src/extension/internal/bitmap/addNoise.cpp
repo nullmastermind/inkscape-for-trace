@@ -41,26 +41,26 @@ AddNoise::refreshParameters(Inkscape::Extension::Effect *module) {
 void
 AddNoise::init()
 {
-	Inkscape::Extension::build_from_mem(
-		"<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
-			"<name>" N_("Add Noise") "</name>\n"
-			"<id>org.inkscape.effect.bitmap.addNoise</id>\n"
-			"<param name=\"noiseType\" gui-text=\"" N_("Type:") "\" type=\"optiongroup\" appearance=\"combo\" >\n"
-				"<option value='Uniform Noise'>" N_("Uniform Noise") "</option>\n"
-				"<option value='Gaussian Noise'>" N_("Gaussian Noise") "</option>\n"
-				"<option value='Multiplicative Gaussian Noise'>" N_("Multiplicative Gaussian Noise") "</option>\n"
-				"<option value='Impulse Noise'>" N_("Impulse Noise") "</option>\n"
-				"<option value='Laplacian Noise'>" N_("Laplacian Noise") "</option>\n"
-				"<option value='Poisson Noise'>" N_("Poisson Noise") "</option>\n"
-			"</param>\n"
-			"<effect>\n"
-				"<object-type>all</object-type>\n"
-				"<effects-menu>\n"
-					"<submenu name=\"" N_("Raster") "\" />\n"
-				"</effects-menu>\n"
-				"<menu-tip>" N_("Add random noise to selected bitmap(s)") "</menu-tip>\n"
-			"</effect>\n"
-		"</inkscape-extension>\n", new AddNoise());
+    Inkscape::Extension::build_from_mem(
+        "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
+            "<name>" N_("Add Noise") "</name>\n"
+            "<id>org.inkscape.effect.bitmap.addNoise</id>\n"
+            "<param name=\"noiseType\" gui-text=\"" N_("Type:") "\" type=\"optiongroup\" appearance=\"combo\" >\n"
+                "<option value='Uniform Noise'>" N_("Uniform Noise") "</option>\n"
+                "<option value='Gaussian Noise'>" N_("Gaussian Noise") "</option>\n"
+                "<option value='Multiplicative Gaussian Noise'>" N_("Multiplicative Gaussian Noise") "</option>\n"
+                "<option value='Impulse Noise'>" N_("Impulse Noise") "</option>\n"
+                "<option value='Laplacian Noise'>" N_("Laplacian Noise") "</option>\n"
+                "<option value='Poisson Noise'>" N_("Poisson Noise") "</option>\n"
+            "</param>\n"
+            "<effect>\n"
+                "<object-type>all</object-type>\n"
+                "<effects-menu>\n"
+                    "<submenu name=\"" N_("Raster") "\" />\n"
+                "</effects-menu>\n"
+                "<menu-tip>" N_("Add random noise to selected bitmap(s)") "</menu-tip>\n"
+            "</effect>\n"
+        "</inkscape-extension>\n", new AddNoise());
 }
 
 }; /* namespace Bitmap */

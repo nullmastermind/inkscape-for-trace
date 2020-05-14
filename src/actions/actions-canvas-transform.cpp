@@ -122,7 +122,7 @@ canvas_transform(InkscapeWindow *win, const int& option)
 
 std::vector<std::vector<Glib::ustring>> raw_data_canvas_transform =
 {
-    {"win.canvas-zoom-in",            "ZoomIn",                  "View",       N_("Zoom in")                                            },                  
+    {"win.canvas-zoom-in",            "ZoomIn",                  "View",       N_("Zoom in")                                            },
     {"win.canvas-zoom-out",           "ZoomOut",                 "View",       N_("Zoom out")                                           },
     {"win.canvas-zoom-1-1",           "Zoom1:1",                 "View",       N_("Zoom to 1:1")                                        },
     {"win.canvas-zoom-1-2",           "Zoom1:2",                 "View",       N_("Zoom to 1:2")                                        },

@@ -2704,7 +2704,6 @@ std::cout << "BEFORE DRAW"
                           << "\n";
             tmp_rectangle << "   z\n";
 
-
             d->mask |= emr_mask;
 
             tmp_path <<   tmp_rectangle.str().c_str();

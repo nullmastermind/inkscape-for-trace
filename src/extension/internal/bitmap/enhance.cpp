@@ -31,18 +31,18 @@ Enhance::refreshParameters(Inkscape::Extension::Effect */*module*/) { }
 void
 Enhance::init()
 {
-	Inkscape::Extension::build_from_mem(
-		"<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
-			"<name>" N_("Enhance") "</name>\n"
-			"<id>org.inkscape.effect.bitmap.enhance</id>\n"
-			"<effect>\n"
-				"<object-type>all</object-type>\n"
-				"<effects-menu>\n"
-					"<submenu name=\"" N_("Raster") "\" />\n"
-				"</effects-menu>\n"
-				"<menu-tip>" N_("Enhance selected bitmap(s); minimize noise") "</menu-tip>\n"
-			"</effect>\n"
-		"</inkscape-extension>\n", new Enhance());
+    Inkscape::Extension::build_from_mem(
+        "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
+            "<name>" N_("Enhance") "</name>\n"
+            "<id>org.inkscape.effect.bitmap.enhance</id>\n"
+            "<effect>\n"
+                "<object-type>all</object-type>\n"
+                "<effects-menu>\n"
+                    "<submenu name=\"" N_("Raster") "\" />\n"
+                "</effects-menu>\n"
+                "<menu-tip>" N_("Enhance selected bitmap(s); minimize noise") "</menu-tip>\n"
+            "</effect>\n"
+        "</inkscape-extension>\n", new Enhance());
 }
 
 }; /* namespace Bitmap */

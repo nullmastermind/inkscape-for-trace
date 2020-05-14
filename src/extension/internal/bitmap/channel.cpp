@@ -44,29 +44,29 @@ Channel::refreshParameters(Inkscape::Extension::Effect *module) {
 void
 Channel::init()
 {
-	Inkscape::Extension::build_from_mem(
-		"<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
-			"<name>" N_("Channel") "</name>\n"
-			"<id>org.inkscape.effect.bitmap.channel</id>\n"
-			"<param name=\"layer\" gui-text=\"" N_("Layer:") "\" type=\"optiongroup\" appearance=\"combo\" >\n"
-				"<option value='Red Channel'>" N_("Red Channel") "</option>\n"
-				"<option value='Green Channel'>" N_("Green Channel") "</option>\n"
-				"<option value='Blue Channel'>" N_("Blue Channel") "</option>\n"
-				"<option value='Cyan Channel'>" N_("Cyan Channel") "</option>\n"
-				"<option value='Magenta Channel'>" N_("Magenta Channel") "</option>\n"
-				"<option value='Yellow Channel'>" N_("Yellow Channel") "</option>\n"
-				"<option value='Black Channel'>" N_("Black Channel") "</option>\n"
-				"<option value='Opacity Channel'>" N_("Opacity Channel") "</option>\n"
-				"<option value='Matte Channel'>" N_("Matte Channel") "</option>\n"
-			"</param>\n"
-			"<effect>\n"
-				"<object-type>all</object-type>\n"
-				"<effects-menu>\n"
-					"<submenu name=\"" N_("Raster") "\" />\n"
-				"</effects-menu>\n"
-				"<menu-tip>" N_("Extract specific channel from image") "</menu-tip>\n"
-			"</effect>\n"
-		"</inkscape-extension>\n", new Channel());
+    Inkscape::Extension::build_from_mem(
+        "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
+            "<name>" N_("Channel") "</name>\n"
+            "<id>org.inkscape.effect.bitmap.channel</id>\n"
+            "<param name=\"layer\" gui-text=\"" N_("Layer:") "\" type=\"optiongroup\" appearance=\"combo\" >\n"
+                "<option value='Red Channel'>" N_("Red Channel") "</option>\n"
+                "<option value='Green Channel'>" N_("Green Channel") "</option>\n"
+                "<option value='Blue Channel'>" N_("Blue Channel") "</option>\n"
+                "<option value='Cyan Channel'>" N_("Cyan Channel") "</option>\n"
+                "<option value='Magenta Channel'>" N_("Magenta Channel") "</option>\n"
+                "<option value='Yellow Channel'>" N_("Yellow Channel") "</option>\n"
+                "<option value='Black Channel'>" N_("Black Channel") "</option>\n"
+                "<option value='Opacity Channel'>" N_("Opacity Channel") "</option>\n"
+                "<option value='Matte Channel'>" N_("Matte Channel") "</option>\n"
+            "</param>\n"
+            "<effect>\n"
+                "<object-type>all</object-type>\n"
+                "<effects-menu>\n"
+                    "<submenu name=\"" N_("Raster") "\" />\n"
+                "</effects-menu>\n"
+                "<menu-tip>" N_("Extract specific channel from image") "</menu-tip>\n"
+            "</effect>\n"
+        "</inkscape-extension>\n", new Channel());
 }
 
 }; /* namespace Bitmap */

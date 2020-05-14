@@ -321,7 +321,7 @@ SPDocument *CdrInput::open(Inkscape::Extension::Input * /*mod*/, const gchar * u
 void CdrInput::init()
 {
     /* CDR */
-     Inkscape::Extension::build_from_mem(
+    Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Corel DRAW Input") "</name>\n"
             "<id>org.inkscape.input.cdr</id>\n"
@@ -334,7 +334,7 @@ void CdrInput::init()
         "</inkscape-extension>", new CdrInput());
 
     /* CDT */
-     Inkscape::Extension::build_from_mem(
+    Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Corel DRAW templates input") "</name>\n"
             "<id>org.inkscape.input.cdt</id>\n"
@@ -347,7 +347,7 @@ void CdrInput::init()
         "</inkscape-extension>", new CdrInput());
 
     /* CCX */
-     Inkscape::Extension::build_from_mem(
+    Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Corel DRAW Compressed Exchange files input") "</name>\n"
             "<id>org.inkscape.input.ccx</id>\n"
@@ -360,7 +360,7 @@ void CdrInput::init()
         "</inkscape-extension>", new CdrInput());
 
     /* CMX */
-     Inkscape::Extension::build_from_mem(
+    Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Corel DRAW Presentation Exchange files input") "</name>\n"
             "<id>org.inkscape.input.cmx</id>\n"

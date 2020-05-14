@@ -35,19 +35,19 @@ Solarize::refreshParameters(Inkscape::Extension::Effect* module) {
 void
 Solarize::init()
 {
-	Inkscape::Extension::build_from_mem(
-		"<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
-			"<name>" N_("Solarize") "</name>\n"
-			"<id>org.inkscape.effect.bitmap.solarize</id>\n"
-			"<param name=\"factor\" gui-text=\"" N_("Factor:") "\" type=\"float\" min=\"0\" max=\"100\">50</param>\n"
-			"<effect>\n"
-				"<object-type>all</object-type>\n"
-				"<effects-menu>\n"
-					"<submenu name=\"" N_("Raster") "\" />\n"
-				"</effects-menu>\n"
-				"<menu-tip>" N_("Solarize selected bitmap(s), like overexposing photographic film") "</menu-tip>\n"
-			"</effect>\n"
-		"</inkscape-extension>\n", new Solarize());
+    Inkscape::Extension::build_from_mem(
+        "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
+            "<name>" N_("Solarize") "</name>\n"
+            "<id>org.inkscape.effect.bitmap.solarize</id>\n"
+            "<param name=\"factor\" gui-text=\"" N_("Factor:") "\" type=\"float\" min=\"0\" max=\"100\">50</param>\n"
+            "<effect>\n"
+                "<object-type>all</object-type>\n"
+                "<effects-menu>\n"
+                    "<submenu name=\"" N_("Raster") "\" />\n"
+                "</effects-menu>\n"
+                "<menu-tip>" N_("Solarize selected bitmap(s), like overexposing photographic film") "</menu-tip>\n"
+            "</effect>\n"
+        "</inkscape-extension>\n", new Solarize());
 }
 
 }; /* namespace Bitmap */

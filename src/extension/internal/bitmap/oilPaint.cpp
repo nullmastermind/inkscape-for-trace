@@ -33,19 +33,19 @@ OilPaint::refreshParameters(Inkscape::Extension::Effect* module) {
 void
 OilPaint::init()
 {
-	Inkscape::Extension::build_from_mem(
-		"<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
-			"<name>" N_("Oil Paint") "</name>\n"
-			"<id>org.inkscape.effect.bitmap.oilPaint</id>\n"
-			"<param name=\"radius\" gui-text=\"" N_("Radius:") "\" type=\"int\" min=\"0\" max=\"50\">3</param>\n"			
-			"<effect>\n"
-				"<object-type>all</object-type>\n"
-				"<effects-menu>\n"
-					"<submenu name=\"" N_("Raster") "\" />\n"
-				"</effects-menu>\n"
-				"<menu-tip>" N_("Stylize selected bitmap(s) so that they appear to be painted with oils") "</menu-tip>\n"
-			"</effect>\n"
-		"</inkscape-extension>\n", new OilPaint());
+    Inkscape::Extension::build_from_mem(
+        "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
+            "<name>" N_("Oil Paint") "</name>\n"
+            "<id>org.inkscape.effect.bitmap.oilPaint</id>\n"
+            "<param name=\"radius\" gui-text=\"" N_("Radius:") "\" type=\"int\" min=\"0\" max=\"50\">3</param>\n"
+            "<effect>\n"
+                "<object-type>all</object-type>\n"
+                "<effects-menu>\n"
+                    "<submenu name=\"" N_("Raster") "\" />\n"
+                "</effects-menu>\n"
+                "<menu-tip>" N_("Stylize selected bitmap(s) so that they appear to be painted with oils") "</menu-tip>\n"
+            "</effect>\n"
+        "</inkscape-extension>\n", new OilPaint());
 }
 
 }; /* namespace Bitmap */

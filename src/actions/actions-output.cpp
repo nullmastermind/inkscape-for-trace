@@ -213,33 +213,33 @@ export_do(InkscapeApplication *app)
 
 std::vector<std::vector<Glib::ustring>> raw_data_output =
 {
-   {"app.export-type",               "ExportType",              "Export",     N_("Export file type.")                                  },
-   {"app.export-filename",           "ExportFileName",          "Export",     N_("Export file name.")                                  },
-   {"app.export-overwrite",          "ExportOverWrite",         "Export",     N_("Export over-write file.")                            },
+    {"app.export-type",               "ExportType",              "Export",     N_("Export file type.")                                  },
+    {"app.export-filename",           "ExportFileName",          "Export",     N_("Export file name.")                                  },
+    {"app.export-overwrite",          "ExportOverWrite",         "Export",     N_("Export over-write file.")                            },
 
-   {"app.export-area",               "ExportArea",              "Export",     N_("Export area.")                                       },
-   {"app.export-area-drawing",       "ExportAreaDrawing",       "Export",     N_("Export drawing area.")                               },
-   {"app.export-area-page",          "ExportAreaPage",          "Export",     N_("Export page area.")                                  },
-   {"app.export-margin",             "ExportMargin",            "Export",     N_("Export margin.")                                     },
-   {"app.export-area-snap",          "ExportAreaSnap",          "Export",     N_("Export snap area to integer values.")                },
-   {"app.export-width",              "ExportWidth",             "Export",     N_("Export width.")                                      },
-   {"app.export-height",             "ExportHeight",            "Export",     N_("Export height.")                                     },
+    {"app.export-area",               "ExportArea",              "Export",     N_("Export area.")                                       },
+    {"app.export-area-drawing",       "ExportAreaDrawing",       "Export",     N_("Export drawing area.")                               },
+    {"app.export-area-page",          "ExportAreaPage",          "Export",     N_("Export page area.")                                  },
+    {"app.export-margin",             "ExportMargin",            "Export",     N_("Export margin.")                                     },
+    {"app.export-area-snap",          "ExportAreaSnap",          "Export",     N_("Export snap area to integer values.")                },
+    {"app.export-width",              "ExportWidth",             "Export",     N_("Export width.")                                      },
+    {"app.export-height",             "ExportHeight",            "Export",     N_("Export height.")                                     },
 
-   {"app.export-id",                 "ExportID",                "Export",     N_("Export id(s).")                                      },
-   {"app.export-id-only",            "ExportIDOnly",            "Export",     N_("Export id(s) only.")                                 },
+    {"app.export-id",                 "ExportID",                "Export",     N_("Export id(s).")                                      },
+    {"app.export-id-only",            "ExportIDOnly",            "Export",     N_("Export id(s) only.")                                 },
 
-   {"app.export-plain-svg",          "ExportPlanSVG",           "Export",     N_("Export as plain SVG.")                               },
-   {"app.export-dpi",                "ExportDPI",               "Export",     N_("Export DPI.")                                        },
-   {"app.export-ignore-filters",     "ExportIgnoreFilters",     "Export",     N_("Export ignore filters.")                             },
-   {"app.export-text-to-path",       "ExportTextToPath",        "Export",     N_("Export convert text to paths.")                      },
-   {"app.export-ps-level",           "ExportPSLevel",           "Export",     N_("Export PostScript level.")                           },
-   {"app.export-pdf-version",        "ExportPSVersion",         "Export",     N_("Export PDF version.")                                },
-   {"app.export-latex",              "ExportLaTeX",             "Export",     N_("Export LaTeX.")                                      },
-   {"app.export-use-hints",          "ExportUseHInts",          "Export",     N_("Export using saved hints.")                          },
-   {"app.export-background",         "ExportBackground",        "Export",     N_("Export background color.")                           },
-   {"app.export-background-opacity", "ExportBackgroundOpacity", "Export",     N_("Export background opacity.")                         },
+    {"app.export-plain-svg",          "ExportPlanSVG",           "Export",     N_("Export as plain SVG.")                               },
+    {"app.export-dpi",                "ExportDPI",               "Export",     N_("Export DPI.")                                        },
+    {"app.export-ignore-filters",     "ExportIgnoreFilters",     "Export",     N_("Export ignore filters.")                             },
+    {"app.export-text-to-path",       "ExportTextToPath",        "Export",     N_("Export convert text to paths.")                      },
+    {"app.export-ps-level",           "ExportPSLevel",           "Export",     N_("Export PostScript level.")                           },
+    {"app.export-pdf-version",        "ExportPSVersion",         "Export",     N_("Export PDF version.")                                },
+    {"app.export-latex",              "ExportLaTeX",             "Export",     N_("Export LaTeX.")                                      },
+    {"app.export-use-hints",          "ExportUseHInts",          "Export",     N_("Export using saved hints.")                          },
+    {"app.export-background",         "ExportBackground",        "Export",     N_("Export background color.")                           },
+    {"app.export-background-opacity", "ExportBackgroundOpacity", "Export",     N_("Export background opacity.")                         },
 
-   {"app.export-do",                 "ExportDo",                "Export",     N_("Do export.")                                         }
+    {"app.export-do",                 "ExportDo",                "Export",     N_("Do export.")                                         }
 };
 
 template <class T>

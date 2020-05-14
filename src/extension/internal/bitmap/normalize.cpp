@@ -32,18 +32,18 @@ Normalize::refreshParameters(Inkscape::Extension::Effect* /*module*/) {
 void
 Normalize::init()
 {
-	Inkscape::Extension::build_from_mem(
-		"<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
-			"<name>" N_("Normalize") "</name>\n"
-			"<id>org.inkscape.effect.bitmap.normalize</id>\n"
-			"<effect>\n"
-				"<object-type>all</object-type>\n"
-				"<effects-menu>\n"
-					"<submenu name=\"" N_("Raster") "\" />\n"
-				"</effects-menu>\n"
-				"<menu-tip>" N_("Normalize selected bitmap(s), expanding color range to the full possible range of color") "</menu-tip>\n"
-			"</effect>\n"
-		"</inkscape-extension>\n", new Normalize());
+    Inkscape::Extension::build_from_mem(
+        "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
+            "<name>" N_("Normalize") "</name>\n"
+            "<id>org.inkscape.effect.bitmap.normalize</id>\n"
+            "<effect>\n"
+                "<object-type>all</object-type>\n"
+                "<effects-menu>\n"
+                    "<submenu name=\"" N_("Raster") "\" />\n"
+                "</effects-menu>\n"
+                "<menu-tip>" N_("Normalize selected bitmap(s), expanding color range to the full possible range of color") "</menu-tip>\n"
+            "</effect>\n"
+        "</inkscape-extension>\n", new Normalize());
 }
 
 }; /* namespace Bitmap */

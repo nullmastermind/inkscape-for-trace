@@ -32,18 +32,18 @@ Negate::refreshParameters(Inkscape::Extension::Effect* /*module*/) {
 void
 Negate::init()
 {
-	Inkscape::Extension::build_from_mem(
-		"<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
-			"<name>" N_("Negate") "</name>\n"
-			"<id>org.inkscape.effect.bitmap.negate</id>\n"
-			"<effect>\n"
-				"<object-type>all</object-type>\n"
-				"<effects-menu>\n"
-					"<submenu name=\"" N_("Raster") "\" />\n"
-				"</effects-menu>\n"
-				"<menu-tip>" N_("Negate (take inverse) selected bitmap(s)") "</menu-tip>\n"
-			"</effect>\n"
-		"</inkscape-extension>\n", new Negate());
+    Inkscape::Extension::build_from_mem(
+        "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
+            "<name>" N_("Negate") "</name>\n"
+            "<id>org.inkscape.effect.bitmap.negate</id>\n"
+            "<effect>\n"
+                "<object-type>all</object-type>\n"
+                "<effects-menu>\n"
+                    "<submenu name=\"" N_("Raster") "\" />\n"
+                "</effects-menu>\n"
+                "<menu-tip>" N_("Negate (take inverse) selected bitmap(s)") "</menu-tip>\n"
+            "</effect>\n"
+        "</inkscape-extension>\n", new Negate());
 }
 
 }; /* namespace Bitmap */

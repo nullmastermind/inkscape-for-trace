@@ -48,32 +48,32 @@ LevelChannel::refreshParameters(Inkscape::Extension::Effect* module) {
 void
 LevelChannel::init()
 {
-	Inkscape::Extension::build_from_mem(
-		"<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
-			"<name>" N_("Level (with Channel)") "</name>\n"
-			"<id>org.inkscape.effect.bitmap.levelChannel</id>\n"
-			"<param name=\"channel\" gui-text=\"" N_("Channel:") "\" type=\"optiongroup\" appearance=\"combo\" >\n"
-				"<option value='Red Channel'>" N_("Red Channel") "</option>\n"
-				"<option value='Green Channel'>" N_("Green Channel") "</option>\n"
-				"<option value='Blue Channel'>" N_("Blue Channel") "</option>\n"
-				"<option value='Cyan Channel'>" N_("Cyan Channel") "</option>\n"
-				"<option value='Magenta Channel'>" N_("Magenta Channel") "</option>\n"
-				"<option value='Yellow Channel'>" N_("Yellow Channel") "</option>\n"
-				"<option value='Black Channel'>" N_("Black Channel") "</option>\n"
-				"<option value='Opacity Channel'>" N_("Opacity Channel") "</option>\n"
-				"<option value='Matte Channel'>" N_("Matte Channel") "</option>\n"
-			"</param>\n"
-			"<param name=\"blackPoint\" gui-text=\"" N_("Black Point:") "\" type=\"float\" min=\"0.0\" max=\"100.0\">0.0</param>\n"			
-			"<param name=\"whitePoint\" gui-text=\"" N_("White Point:") "\" type=\"float\" min=\"0.0\" max=\"100.0\">100.0</param>\n"			
-			"<param name=\"midPoint\" gui-text=\"" N_("Gamma Correction:") "\" type=\"float\" min=\"0.0\" max=\"10.0\">1.0</param>\n"
-			"<effect>\n"
-				"<object-type>all</object-type>\n"
-				"<effects-menu>\n"
-					"<submenu name=\"" N_("Raster") "\" />\n"
-				"</effects-menu>\n"
-				"<menu-tip>" N_("Level the specified channel of selected bitmap(s) by scaling values falling between the given ranges to the full color range") "</menu-tip>\n"
-			"</effect>\n"
-		"</inkscape-extension>\n", new LevelChannel());
+    Inkscape::Extension::build_from_mem(
+        "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
+            "<name>" N_("Level (with Channel)") "</name>\n"
+            "<id>org.inkscape.effect.bitmap.levelChannel</id>\n"
+            "<param name=\"channel\" gui-text=\"" N_("Channel:") "\" type=\"optiongroup\" appearance=\"combo\" >\n"
+                "<option value='Red Channel'>" N_("Red Channel") "</option>\n"
+                "<option value='Green Channel'>" N_("Green Channel") "</option>\n"
+                "<option value='Blue Channel'>" N_("Blue Channel") "</option>\n"
+                "<option value='Cyan Channel'>" N_("Cyan Channel") "</option>\n"
+                "<option value='Magenta Channel'>" N_("Magenta Channel") "</option>\n"
+                "<option value='Yellow Channel'>" N_("Yellow Channel") "</option>\n"
+                "<option value='Black Channel'>" N_("Black Channel") "</option>\n"
+                "<option value='Opacity Channel'>" N_("Opacity Channel") "</option>\n"
+                "<option value='Matte Channel'>" N_("Matte Channel") "</option>\n"
+            "</param>\n"
+            "<param name=\"blackPoint\" gui-text=\"" N_("Black Point:") "\" type=\"float\" min=\"0.0\" max=\"100.0\">0.0</param>\n"
+            "<param name=\"whitePoint\" gui-text=\"" N_("White Point:") "\" type=\"float\" min=\"0.0\" max=\"100.0\">100.0</param>\n"
+            "<param name=\"midPoint\" gui-text=\"" N_("Gamma Correction:") "\" type=\"float\" min=\"0.0\" max=\"10.0\">1.0</param>\n"
+            "<effect>\n"
+                "<object-type>all</object-type>\n"
+                "<effects-menu>\n"
+                    "<submenu name=\"" N_("Raster") "\" />\n"
+                "</effects-menu>\n"
+                "<menu-tip>" N_("Level the specified channel of selected bitmap(s) by scaling values falling between the given ranges to the full color range") "</menu-tip>\n"
+            "</effect>\n"
+        "</inkscape-extension>\n", new LevelChannel());
 }
 
 }; /* namespace Bitmap */

@@ -33,19 +33,19 @@ Swirl::refreshParameters(Inkscape::Extension::Effect* module) {
 void
 Swirl::init()
 {
-	Inkscape::Extension::build_from_mem(
-		"<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
-			"<name>" N_("Swirl") "</name>\n"
-			"<id>org.inkscape.effect.bitmap.swirl</id>\n"
-			"<param name=\"degrees\" gui-text=\"" N_("Degrees:") "\" type=\"int\" min=\"-360\" max=\"360\">30</param>\n"
-			"<effect>\n"
-				"<object-type>all</object-type>\n"
-				"<effects-menu>\n"
-					"<submenu name=\"" N_("Raster") "\" />\n"
-				"</effects-menu>\n"
-				"<menu-tip>" N_("Swirl selected bitmap(s) around center point") "</menu-tip>\n"
-			"</effect>\n"
-		"</inkscape-extension>\n", new Swirl());
+    Inkscape::Extension::build_from_mem(
+        "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
+            "<name>" N_("Swirl") "</name>\n"
+            "<id>org.inkscape.effect.bitmap.swirl</id>\n"
+            "<param name=\"degrees\" gui-text=\"" N_("Degrees:") "\" type=\"int\" min=\"-360\" max=\"360\">30</param>\n"
+            "<effect>\n"
+                "<object-type>all</object-type>\n"
+                "<effects-menu>\n"
+                    "<submenu name=\"" N_("Raster") "\" />\n"
+                "</effects-menu>\n"
+                "<menu-tip>" N_("Swirl selected bitmap(s) around center point") "</menu-tip>\n"
+            "</effect>\n"
+        "</inkscape-extension>\n", new Swirl());
 }
 
 }; /* namespace Bitmap */
