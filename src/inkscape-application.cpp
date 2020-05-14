@@ -554,6 +554,13 @@ ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
     // it overrides the name used for adding recently opened files and breaks the Gtk::RecentFilter
     // Glib::set_application_name(N_("Inkscape - A Vector Drawing Program"));  // After gettext() init.
 
+    // Shortcuts
+    // Need to be setup before GUI elements are created! (Note, shortcuts appearing in GUI elements
+    // such as dialog title bars are not updated when change in the Inkscape Preferences dialog.)
+    // Shortcuts for actions can be set before the actions are created.
+    Inkscape::Shortcuts::getInstance().init();
+
+
     // ======================== Actions =========================
     add_actions_base(this);      // actions that are GUI independent
     add_actions_file(this);      // actions for file handling
@@ -562,6 +569,7 @@ ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
     add_actions_selection(this); // actions for object selection
     add_actions_transform(this); // actions for transforming selected objects
     add_actions_window(this);    // actions for windows
+
 
     // ====================== Command Line ======================
 
@@ -780,9 +788,6 @@ ConcreteInkscapeApplication<Gtk::Application>::create_window(SPDocument *documen
         window = window_open (document);
     }
     window->show();
-
-    // Shortcuts (after application and window created).
-    Inkscape::Shortcuts::getInstance().init();
 
     return window;
 }
