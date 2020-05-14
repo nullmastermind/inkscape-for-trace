@@ -253,7 +253,7 @@ GradientVectorSelector::setSwatched()
 } // namespace UI
 } // namespace Inkscape
 
-Glib::ustring gr_prepare_label (SPObject *obj)
+Glib::ustring gr_prepare_label(SPObject *obj)
 {
     const gchar *id = obj->label() ? obj->label() : obj->getId();
     if (!id) {
@@ -261,7 +261,7 @@ Glib::ustring gr_prepare_label (SPObject *obj)
     }
 
     if (strlen(id) > 14 && (!strncmp (id, "linearGradient", 14) || !strncmp (id, "radialGradient", 14)))
-        return gr_ellipsize_text (g_strdup_printf ("%s", id+14), 35);
+        return gr_ellipsize_text(id+14, 35);
     return gr_ellipsize_text (id, 35);
 }
 
