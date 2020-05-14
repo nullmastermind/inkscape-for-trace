@@ -3059,31 +3059,7 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
     // We need to find three lists of actions: application, window, and document.
     ConcreteInkscapeApplication<Gtk::Application>* app = &(ConcreteInkscapeApplication<Gtk::Application>::get_instance());
 
-    std::vector<Glib::ustring> actions; // All actions (app, win, doc)
-
-    std::vector<Glib::ustring> actions_app = app->list_actions();
-    for (auto action : actions_app) {
-        actions.push_back("app." + action);
-    }
-
-    InkscapeWindow* win = app->InkscapeApplication::get_active_window();
-
-    if (win) {
-        std::vector<Glib::ustring> actions_win = win->list_actions();
-        for (auto action : actions_win) {
-            actions.push_back("win." + action);
-        }
-
-        // SPDocument* document = win->get_document();
-        // std::vector<Glib::ustring> actions_doc = document->getActionGroup()->list_actions();
-        // for (auto action : actions_doc) {
-        //     actions.push_back("doc." + action);
-        // }
-
-    } else {
-        std::cerr << "InkscapePreferences: Didn't find Inkscape window for shortcuts!" << std::endl;
-    }
-
+    std::vector<Glib::ustring> actions = shortcuts.list_all_actions(); // All actions (app, win, doc)
     InkActionExtraData& action_data = app->get_action_extra_data();
 
     // Sort actions by section

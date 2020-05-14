@@ -27,6 +27,8 @@
 #include <gtkmm.h>
 
 #include "preferences.h"
+#include "inkscape-window.h"
+
 #include "verbs.h"
 #include "helper/action.h"
 #include "helper/action-context.h"
@@ -126,13 +128,11 @@ Shortcuts::clear()
     primary.clear();
     user_set.clear();
 
-    // NEED TO ADD WIN AND DOC!
     // Actions: We rely on Gtk for everything except user/system setting.
-    action_user_set.clear();
-    std::vector<Glib::ustring> actions = app->list_actions();
-    for (auto action : actions) {
-        app->unset_accels_for_action("app." + action);
+    for (auto action_description : app->list_action_descriptions()) {
+        app->unset_accels_for_action(action_description);
     }
+    action_user_set.clear();
 }
 
 
@@ -323,22 +323,18 @@ Shortcuts::write(Glib::RefPtr<Gio::File> file, What what) {
         }
     }
 
-    // Actions
-    // NEED TO ADD WIN AND DOC (turn into function?).
-    std::vector<Glib::ustring> actions = app->list_actions();
-    std::sort(actions.begin(), actions.end());
-    for (auto action : actions) {
-        Glib::ustring fullname("app." + action);
+    // Actions: write out all actions with accelerators.
+    for (auto action_description : app->list_action_descriptions()) {
         if ( what == All                                 ||
-            (what == System && !action_user_set[fullname]) ||
-            (what == User   &&  action_user_set[fullname]) )  
+            (what == System && !action_user_set[action_description]) ||
+            (what == User   &&  action_user_set[action_description]) )
         {
-            std::vector<Glib::ustring> accels = app->get_accels_for_action(fullname);
+            std::vector<Glib::ustring> accels = app->get_accels_for_action(action_description);
             if (!accels.empty()) {
 
                 XML::Node * node = document->createElement("bind");
 
-                node->setAttribute("gaction", fullname);
+                node->setAttribute("gaction", action_description);
 
                 Glib::ustring keys;
                 for (auto accel : accels) {
@@ -456,11 +452,40 @@ Shortcuts::invoke_verb(GdkEventKey const *event, UI::View::View *view)
 }
 
 
+// Get a list of all actions (application, window, and document), properly prefixed.
+// We need to do this ourselves as Gtk::Application does not have a function for this.
+std::vector<Glib::ustring>
+Shortcuts::list_all_actions()
+{
+    std::vector<Glib::ustring> all_actions;
+
+    std::vector<Glib::ustring> actions = app->list_actions();
+    std::sort(actions.begin(), actions.end());
+    for (auto action : actions) {
+        all_actions.emplace_back("app." + action);
+    }
+
+    auto gwindow = app->get_active_window();
+    auto window = dynamic_cast<InkscapeWindow *>(gwindow);
+    if (window) {
+        std::vector<Glib::ustring> actions = window->list_actions();
+        std::sort(actions.begin(), actions.end());
+        for (auto action : actions) {
+            all_actions.emplace_back("win." + action);
+        }
+    }
+
+    // Document (to do).
+
+    return all_actions;
+}
+
+
 // Adds to user's default.xml file.
 bool
 Shortcuts::add_user_shortcut(Glib::ustring name, unsigned long long int shortcut) {
 
-    std::cout << "Shortcuts::add_user_shortcut: " << name << ": " << std::hex << shortcut << std::endl;
+    // std::cout << "Shortcuts::add_user_shortcut: " << name << ": " << std::hex << shortcut << std::endl;
 
     // We must first remove any existing shortcuts that use the same shortcut value.
     Verb* old_verb = shortcut_to_verb_map[shortcut];
@@ -490,13 +515,11 @@ Shortcuts::add_user_shortcut(Glib::ustring name, unsigned long long int shortcut
         // If not verb, it must be an action!
         bool found = false;
 
-        // NEED TO ADD WINDOW AND DOCUMENT ACTIONS!
-        std::vector<Glib::ustring> app_actions = app->list_actions();
-        for (auto action : app_actions) {
-            if (("app." + action) == name) {
+        for (auto action : list_all_actions()) {
+            if (action == name) {
                 // Action exists
-                app->set_accel_for_action(name, accel);
-                action_user_set[name] = true;
+                app->set_accel_for_action(action, accel);
+                action_user_set[action] = true;
                 found = true;
                 break;
             }
@@ -504,7 +527,7 @@ Shortcuts::add_user_shortcut(Glib::ustring name, unsigned long long int shortcut
 
         if (!found) {
             // Oops, not an action either!
-            std::cerr << "Shortcuts::add_shortcut: No Verb or Action for " << name << std::endl;
+            std::cerr << "Shortcuts::add_user_shortcut: No Verb or Action for " << name << std::endl;
             return false;
         }
     }
@@ -531,13 +554,11 @@ Shortcuts::remove_user_shortcut(Glib::ustring name, unsigned long long int short
         removed = true;
     } else {
         // If not verb, it must be an action!
-        std::vector<Glib::ustring> actions = app->list_actions();
-        for (auto action : actions) {
-            Glib::ustring fullname("app." + action);
-            if (fullname == name) {
+        for (auto action : list_all_actions()) {
+            if (action == name) {
                 // Action exists
-                app->unset_accels_for_action(fullname);
-                action_user_set.erase(fullname);
+                app->unset_accels_for_action(action);
+                action_user_set.erase(action);
                 removed = true;
                 break;
             }
@@ -625,10 +646,10 @@ Shortcuts::shortcut_to_accelerator(unsigned long long int shortcut)
         accelerator += key;
     }
 
-    Glib::ustring accelerator2 = Gtk::AccelGroup::name(keyval, Gdk::ModifierType(modval));
-    Glib::ustring accelerator3 = Gtk::AccelGroup::get_label(keyval, Gdk::ModifierType(modval));
+    // Glib::ustring accelerator2 = Gtk::AccelGroup::name(keyval, Gdk::ModifierType(modval));
+    // Glib::ustring accelerator3 = Gtk::AccelGroup::get_label(keyval, Gdk::ModifierType(modval));
 
-    std::cout << "accelerator: " << accelerator << " " << accelerator2 << " " << accelerator3 << std::endl;
+    // std::cout << "accelerator: " << accelerator << " " << accelerator2 << " " << accelerator3 << std::endl;
     return accelerator;
 }
 

@@ -78,7 +78,8 @@ public:
     static Glib::ustring get_label(unsigned long long int shortcut);
     static Glib::ustring get_modifiers_verb(unsigned int mod_val);
     static unsigned long long int get_from_event(GdkEventKey const *event);
-    
+    std::vector<Glib::ustring> list_all_actions();
+
     // Will disappear after verbs are gone. (Use Gtk::AccelGroup functions instead for actions.)
     Glib::ustring shortcut_to_accelerator(unsigned long long int shortcut);
     unsigned long long int accelerator_to_shortcut(Glib::ustring& accelerator);
