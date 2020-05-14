@@ -428,6 +428,9 @@ SelectedStyle::~SelectedStyle()
     delete subselection_changed_connection;
     _unit_mis.clear();
 
+    _fill_place.remove();
+    _stroke_place.remove();
+
     for (int i = SS_FILL; i <= SS_STROKE; i++) {
         delete _color_preview[i];
         // FIXME: do we need this? the destroy methods are not exported
