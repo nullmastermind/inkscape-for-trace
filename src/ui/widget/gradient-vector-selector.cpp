@@ -79,9 +79,6 @@ GradientVectorSelector::GradientVectorSelector(SPDocument *doc, SPGradient *gr)
     _store = Gtk::ListStore::create(*_columns);
     set_orientation(Gtk::ORIENTATION_VERTICAL);
 
-    // g_return_val_if_fail(!gr || SP_IS_GRADIENT(gr), NULL);
-    // g_return_val_if_fail(!gr || (gr->document == doc), NULL);
-
     if (doc) {
         set_gradient(doc, gr);
     } else {
