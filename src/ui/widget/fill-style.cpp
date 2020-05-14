@@ -477,7 +477,7 @@ void FillNStroke::updateFromPaint()
 
                         if (!vector) {
                             auto gr = sp_gradient_vector_for_object(
-                                document, _desktop, reinterpret_cast<SPObject *>(item),
+                                document, _desktop, item,
                                 (kind == FILL) ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE, createSwatch);
                             if (gr && createSwatch) {
                                 gr->setSwatch();
