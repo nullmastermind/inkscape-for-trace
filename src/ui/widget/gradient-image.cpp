@@ -42,9 +42,6 @@ GradientImage::~GradientImage()
         _modified_connection.disconnect();
         _gradient = nullptr;
     }
-
-    _release_connection.~connection();
-    _modified_connection.~connection();
 }
 
 void
