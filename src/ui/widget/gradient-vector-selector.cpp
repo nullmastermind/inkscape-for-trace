@@ -99,13 +99,7 @@ GradientVectorSelector::~GradientVectorSelector()
         _defs_modified_connection.disconnect();
         _doc = nullptr;
     }
-
-    _gradient_release_connection.~connection();
-    _defs_release_connection.~connection();
-    _defs_modified_connection.~connection();
-    _tree_select_connection.~connection();
 }
-
 
 void GradientVectorSelector::set_gradient(SPDocument *doc, SPGradient *gr)
 {
