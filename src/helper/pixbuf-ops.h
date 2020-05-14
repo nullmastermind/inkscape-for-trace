@@ -16,6 +16,7 @@
 #include <glib.h>
 
 class SPDocument;
+class SPItem;
 namespace Inkscape { class Pixbuf; }
 
  bool sp_export_jpg_file (SPDocument *doc, gchar const *filename, double x0, double y0, double x1, double y1,

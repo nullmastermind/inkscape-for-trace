@@ -14,7 +14,8 @@
  */
 
 #include "sp-canvas-item.h"
-#include "2geom/line.h"
+#include <2geom/point.h>
+#include <cairo.h>
 
 class SPItem;
 

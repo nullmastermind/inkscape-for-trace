@@ -15,6 +15,7 @@
  */
 
 #include <gtkmm/bin.h>
+#include <ui/widget/preview.h>
 
 namespace Gtk {
 class Grid;

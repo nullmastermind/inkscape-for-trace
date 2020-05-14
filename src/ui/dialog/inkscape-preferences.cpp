@@ -23,7 +23,7 @@
 #include <fstream>
 
 #include <gio/gio.h>
-#include <gtk/gtksettings.h>
+#include <gtk/gtk.h>
 #include <glibmm/i18n.h>
 #include <gtkmm.h>
 

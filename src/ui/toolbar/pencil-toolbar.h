@@ -31,8 +31,15 @@
 #include "toolbar.h"
 
 #include <gtkmm/adjustment.h>
+#include <vector>
 
 class SPDesktop;
+
+namespace Gtk {
+class RadioToolButton;
+class ToggleToolButton;
+class ToolButton;
+}
 
 namespace Inkscape {
 namespace XML {

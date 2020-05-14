@@ -18,10 +18,10 @@
 
 #include "uri-references.h"
 
+#include "sp-object.h"
 #include "sp-shape.h"
 
 class SPDocument;
-class SPObject;
 
 class SPShapeReference : public Inkscape::URIReference {
 public:

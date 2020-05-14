@@ -14,6 +14,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <vector>
+
 class SPDesktop;
 class SPItem;
 

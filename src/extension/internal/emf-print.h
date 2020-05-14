@@ -18,6 +18,8 @@
 
 #include "display/canvas-bpath.h"  // for SPWindRule
 
+class SPItem;
+
 namespace Inkscape {
 namespace Extension {
 namespace Internal {

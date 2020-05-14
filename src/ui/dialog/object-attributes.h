@@ -16,6 +16,7 @@
 #include "ui/widget/panel.h"
 
 class SPAttributeTable;
+class SPItem;
 
 namespace Inkscape {
 namespace UI {

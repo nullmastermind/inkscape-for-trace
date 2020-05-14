@@ -19,9 +19,12 @@
 
 class SPDesktop;
 class SPGradient;
+class SPStop;
+class SPObject;
 
 namespace Gtk {
 class ComboBoxText;
+class RadioToolButton;
 class ToolButton;
 class ToolItem;
 }

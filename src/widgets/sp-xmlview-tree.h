@@ -14,6 +14,10 @@
 #include <gtk/gtk.h>
 #include <glib.h>
 
+namespace Inkscape::XML {
+class Node;
+}
+
 /**
  * Specialization of GtkTreeView for the XML editor
  */

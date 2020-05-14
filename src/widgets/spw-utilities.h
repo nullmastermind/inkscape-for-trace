@@ -19,6 +19,10 @@
    SPObject, that reacts to modification.
 */
 
+#include <glib.h>
+#include <glibmm/ustring.h>
+#include <gtk/gtk.h>
+
 namespace Gtk {
   class Label;
   class Grid;

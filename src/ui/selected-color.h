@@ -16,6 +16,7 @@
 
 #include <glib.h>
 #include <sigc++/signal.h>
+#include <glibmm/ustring.h>
 
 #include "color.h"
 

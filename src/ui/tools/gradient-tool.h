@@ -24,6 +24,9 @@
 #define SP_IS_GRADIENT_CONTEXT(obj) (dynamic_cast<const Inkscape::UI::Tools::GradientTool*>((const Inkscape::UI::Tools::ToolBase*)obj) != NULL)
 
 namespace Inkscape {
+
+class Selection;
+
 namespace UI {
 namespace Tools {
 

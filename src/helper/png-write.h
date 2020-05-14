@@ -16,6 +16,7 @@
  */
 
 #include <glib.h> // Only for gchar.
+#include <vector>
 
 #include <2geom/forward.h>
 

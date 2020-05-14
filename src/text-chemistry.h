@@ -15,6 +15,12 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <utility>
+#include <vector>
+#include <glibmm/ustring.h>
+
+class SPDocument;
+
 void text_put_on_path();
 void text_remove_from_path();
 void text_remove_all_kerns();

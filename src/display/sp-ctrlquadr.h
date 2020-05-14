@@ -13,7 +13,9 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <2geom/geom.h>
+#include <2geom/point.h>
+#include <glib.h>
+#include <glib-object.h>
 
 #define SP_TYPE_CTRLQUADR (sp_ctrlquadr_get_type ())
 #define SP_CTRLQUADR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_CTRLQUADR, SPCtrlQuadr))

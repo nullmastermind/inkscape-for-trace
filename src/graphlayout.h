@@ -16,6 +16,7 @@
 #define SEEN_GRAPHLAYOUT_H
 
 #include <list>
+#include <vector>
 
 class SPItem;
 

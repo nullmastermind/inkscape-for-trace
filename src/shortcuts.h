@@ -21,7 +21,7 @@
 
 #include <vector>
 #include <gdkmm/types.h>
-#include <gdk/gdktypes.h>
+#include <gdk/gdk.h>
 
 
 typedef struct _GtkAccelGroup GtkAccelGroup;

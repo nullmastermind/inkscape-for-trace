@@ -18,9 +18,12 @@
 #include <2geom/forward.h>
 #include "ui/tool/commit-events.h"
 #include "ui/tool/manipulator.h"
+#include "ui/tool/control-point.h"
 #include "enums.h"
+#include "snap-candidate.h"
 
 class SPDesktop;
+class SPCanvasGroup;
 class CtrlRect;
 namespace Inkscape {
 namespace UI {

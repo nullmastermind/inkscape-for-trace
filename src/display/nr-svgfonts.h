@@ -15,11 +15,13 @@
 
 #include <cairo.h>
 #include <sigc++/connection.h>
+#include <2geom/pathvector.h>
 
 class SvgFont;
 class SPFont;
 class SPGlyph;
 class SPMissingGlyph;
+class SPObject;
 
 extern "C" { typedef struct _GdkEventExpose GdkEventExpose; }
 

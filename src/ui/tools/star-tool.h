@@ -23,6 +23,9 @@
 class SPStar;
 
 namespace Inkscape {
+
+class Selection;
+
 namespace UI {
 namespace Tools {
 

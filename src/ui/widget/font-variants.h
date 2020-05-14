@@ -16,6 +16,7 @@
 #include <gtkmm/radiobutton.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/grid.h>
+#include <gtkmm/hvbox.h>
 
 class SPDesktop;
 class SPObject;

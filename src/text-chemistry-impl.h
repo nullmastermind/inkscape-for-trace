@@ -15,6 +15,7 @@
 #include <algorithm>
 #include "style.h"
 #include "xml/node.h"
+#include "document.h"
 
 Glib::ustring text_relink_shapes_str(gchar const *prop,
         std::map<Glib::ustring, Glib::ustring> const &old_to_new);

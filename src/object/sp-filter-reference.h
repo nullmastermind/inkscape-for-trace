@@ -11,10 +11,10 @@
 #define SEEN_SP_FILTER_REFERENCE_H
 
 #include "uri-references.h"
+#include "sp-filter.h" // Required for the static_cast.
 
 class SPObject;
 class SPDocument;
-class SPFilter;
 
 class SPFilterReference : public Inkscape::URIReference {
 public:

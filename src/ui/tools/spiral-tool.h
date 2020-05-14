@@ -26,6 +26,9 @@
 class SPSpiral;
 
 namespace Inkscape {
+
+class Selection;
+
 namespace UI {
 namespace Tools {
 

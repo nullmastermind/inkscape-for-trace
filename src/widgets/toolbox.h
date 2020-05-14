@@ -15,6 +15,8 @@
  */
 
 #include <glibmm/ustring.h>
+#include <gtk/gtk.h>
+#include <gtkmm/enums.h>
 
 #include "preferences.h"
 

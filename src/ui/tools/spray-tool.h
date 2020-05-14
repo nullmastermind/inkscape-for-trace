@@ -23,6 +23,7 @@
 
 #include <2geom/point.h>
 #include "ui/tools/tool-base.h"
+#include "object/object-set.h"
 
 #define SP_SPRAY_CONTEXT(obj) (dynamic_cast<Inkscape::UI::Tools::SprayTool*>((Inkscape::UI::Tools::ToolBase*)obj))
 #define SP_IS_SPRAY_CONTEXT(obj) (dynamic_cast<const Inkscape::UI::Tools::SprayTool*>((const Inkscape::UI::Tools::ToolBase*)obj) != NULL)

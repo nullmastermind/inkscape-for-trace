@@ -14,12 +14,17 @@
 
 
 #include <gtkmm/notebook.h>
+#include <gtkmm/radiobutton.h>
+#include <gtkmm/checkbutton.h>
 #include <glibmm/i18n.h>
 
 #include "ui/widget/panel.h"
 #include "ui/widget/notebook-page.h"
 #include "ui/widget/scalar-unit.h"
 
+namespace Gtk {
+class Button;
+}
 
 namespace Inkscape {
 namespace UI {

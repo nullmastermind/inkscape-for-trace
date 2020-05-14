@@ -13,6 +13,8 @@
 #ifndef SEEN_SHAPE_EDITOR_H
 #define SEEN_SHAPE_EDITOR_H
 
+#include <2geom/affine.h>
+
 class KnotHolder;
 class LivePathEffectObject;
 class SPDesktop;

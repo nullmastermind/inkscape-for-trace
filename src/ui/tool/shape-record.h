@@ -18,6 +18,7 @@
 #include <2geom/affine.h>
 
 class SPItem;
+class SPObject;
 namespace Inkscape {
 namespace UI {
 

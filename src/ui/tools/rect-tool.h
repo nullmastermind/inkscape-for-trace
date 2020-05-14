@@ -24,6 +24,9 @@
 class SPRect;
 
 namespace Inkscape {
+
+class Selection;
+
 namespace UI {
 namespace Tools {
 

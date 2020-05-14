@@ -20,13 +20,19 @@
 #include <cstddef>
 #include <glibmm/ustring.h>
 #include <sigc++/connection.h>
+#include <2geom/generic-interval.h>
+#include <2geom/pathvector.h>
 
 #include "svg/svg-length.h"
+#include "object/sp-object.h"
+
+class SPCurve;
 
 namespace Inkscape {
 
 class Drawing;
 class DrawingShape;
+class DrawingItem;
 
 }
 

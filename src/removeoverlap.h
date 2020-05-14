@@ -14,6 +14,8 @@
 #ifndef SEEN_REMOVEOVERLAP_H
 #define SEEN_REMOVEOVERLAP_H
 
+#include <vector>
+
 class SPItem;
 
 void removeoverlap(std::vector<SPItem*> const &items, double xGap, double yGap);

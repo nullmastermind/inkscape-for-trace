@@ -16,6 +16,8 @@
 #include <memory>
 #include <vector>
 
+#include <3rdparty/libcroco/cr-statement.h>
+
 class SPStyleElem : public SPObject {
 public:
     SPStyleElem();

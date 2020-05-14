@@ -17,6 +17,8 @@
 
 #include <memory>
 
+#include <glibmm/property.h>
+#include <glibmm/propertyproxy.h>
 #include <gtkmm/notebook.h>
 
 #include <gtkmm/paned.h>
@@ -31,6 +33,7 @@
 #include "xml/helper-observer.h"
 
 class SPFilter;
+class SPFilterPrimitive;
 
 namespace Inkscape {
 namespace UI {

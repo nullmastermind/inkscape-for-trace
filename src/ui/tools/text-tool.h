@@ -29,6 +29,9 @@ typedef struct _GtkIMContext GtkIMContext;
 struct SPCtrlLine;
 
 namespace Inkscape {
+
+class Selection;
+
 namespace UI {
 namespace Tools {
 

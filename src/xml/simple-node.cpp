@@ -13,6 +13,11 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+// clang-format off
+#include "xml/node.h"
+#include "xml/simple-node.h"
+// clang-format on
+
 #include <algorithm>
 #include <cstring>
 #include <string>
@@ -21,7 +26,6 @@
 
 #include "preferences.h"
 
-#include "xml/simple-node.h"
 #include "xml/node-event-vector.h"
 #include "xml/node-fns.h"
 #include "debug/event-tracker.h"

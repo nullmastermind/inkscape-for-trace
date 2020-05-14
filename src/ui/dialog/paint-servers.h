@@ -19,6 +19,8 @@
 #include "display/drawing.h"
 #include "ui/widget/panel.h"
 
+class SPObject;
+
 namespace Inkscape {
 namespace UI {
 namespace Dialog {

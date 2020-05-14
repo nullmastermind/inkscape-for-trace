@@ -64,6 +64,7 @@
 #include "object/sp-flowtext.h"
 #include "object/sp-guide.h"
 #include "object/sp-namedview.h"
+#include "object/sp-object.h"
 
 #include "path/path-offset.h"
 #include "path/path-outline.h"

@@ -13,6 +13,7 @@
 
 #include <memory>
 #include <vector>
+#include <glibmm/ustring.h>
 
 #include "document-subset.h"
 #include "gc-finalized.h"

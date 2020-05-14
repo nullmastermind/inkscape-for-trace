@@ -12,6 +12,10 @@
 #ifndef INKSCAPE_EXTENSION_PRINT_H__
 #define INKSCAPE_EXTENSION_PRINT_H__
 
+#include <2geom/affine.h>
+#include <2geom/generic-rect.h>
+#include <2geom/pathvector.h>
+#include <2geom/point.h>
 #include "extension.h"
 
 class SPItem;

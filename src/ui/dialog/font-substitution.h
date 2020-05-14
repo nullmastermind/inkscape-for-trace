@@ -14,6 +14,7 @@
 #define INKSCAPE_UI_FONT_SUBSTITUTION_H
 
 #include <glibmm/ustring.h>
+#include <vector>
 
 class SPItem;
 class SPDocument;

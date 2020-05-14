@@ -19,6 +19,8 @@
  */
 
 #include <2geom/forward.h>
+#include <vector>
+#include <glibmm/ustring.h>
 
 class SPCSSAttr;
 class SPDesktop;

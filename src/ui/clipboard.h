@@ -15,6 +15,7 @@
 #define SEEN_INKSCAPE_CLIPBOARD_H
 
 #include <glibmm/ustring.h>
+#include <vector>
 
 // forward declarations
 class SPDesktop;
