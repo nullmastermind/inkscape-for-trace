@@ -30,15 +30,19 @@ namespace UI {
 namespace Widget {
 
 class FillNStroke : public Gtk::Box {
-  public:
-    FillNStroke(FillOrStroke k);
-    ~FillNStroke() override;
-
-    void setFillrule(PaintSelector::FillRule mode);
-
-    void setDesktop(SPDesktop *desktop);
-
   private:
+    FillOrStroke kind;
+    SPDesktop     *_desktop   = nullptr;
+    PaintSelector *_psel      = nullptr;
+    guint32        _last_drag = 0;
+    guint          _drag_id   = 0;
+    bool           _update    = false;
+
+    sigc::connection selectChangedConn;
+    sigc::connection subselChangedConn;
+    sigc::connection selectModifiedConn;
+    sigc::connection eventContextConn;
+
     void paintModeChangeCB(UI::Widget::PaintSelector::Mode mode);
     void paintChangedCB();
     static gboolean dragDelayCB(gpointer data);
@@ -51,22 +55,17 @@ class FillNStroke : public Gtk::Box {
 
     void performUpdate();
 
-    FillOrStroke kind;
-    SPDesktop *desktop;
-    UI::Widget::PaintSelector *psel;
-    guint32 lastDrag;
-    guint dragId;
-    bool update;
-    sigc::connection selectChangedConn;
-    sigc::connection subselChangedConn;
-    sigc::connection selectModifiedConn;
-    sigc::connection eventContextConn;
+  public:
+    FillNStroke(FillOrStroke k);
+    ~FillNStroke() override;
+
+    void setFillrule(PaintSelector::FillRule mode);
+    void setDesktop(SPDesktop *desktop);
 };
 
 } // namespace Widget
 } // namespace UI
 } // namespace Inkscape
-
 
 #endif // SEEN_DIALOGS_SP_FILL_STYLE_H
 
