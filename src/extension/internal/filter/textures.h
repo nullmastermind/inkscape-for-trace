@@ -58,6 +58,7 @@ public:
 
 public:
 	static void init () {
+        // clang-format off
 		Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Ink Blot") "</name>\n"
@@ -95,6 +96,7 @@ public:
                 "<menu-tip>" N_("Inkblot on tissue or rough paper") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new InkBlot());
+        // clang-format on
 	};
 
 };
@@ -133,6 +135,7 @@ InkBlot::get_filter_text (Inkscape::Extension::Extension * ext)
 
     stroke << ext->get_param_optiongroup("stroke");
 
+    // clang-format off
 	_filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" x=\"-0.15\" width=\"1.3\" y=\"-0.15\" height=\"1.3\" inkscape:label=\"Ink Blot\" >\n"
           "<feGaussianBlur in=\"SourceGraphic\" stdDeviation=\"%s %s\" result=\"blur1\" />\n"
@@ -144,6 +147,7 @@ InkBlot::get_filter_text (Inkscape::Extension::Extension * ext)
                        freq.str().c_str(), complexity.str().c_str(), variation.str().c_str(),
                        displacement.str().c_str(), blend.str().c_str(),
                        custom.str().c_str(), stroke.str().c_str() );
+    // clang-format on
 
 	return _filter;
 

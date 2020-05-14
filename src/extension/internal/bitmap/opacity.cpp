@@ -34,6 +34,7 @@ Opacity::refreshParameters(Inkscape::Extension::Effect* module) {
 void
 Opacity::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Opacity") "</name>\n"
@@ -47,6 +48,7 @@ Opacity::init()
                 "<menu-tip>" N_("Modify opacity channel(s) of selected bitmap(s)") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new Opacity());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

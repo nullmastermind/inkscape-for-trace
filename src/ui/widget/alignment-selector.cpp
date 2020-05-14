@@ -29,6 +29,7 @@ AlignmentSelector::AlignmentSelector()
     : _container()
 {
     set_halign(Gtk::ALIGN_CENTER);
+    // clang-format off
     setupButton(INKSCAPE_ICON("boundingbox_top_left"),     _buttons[0]);
     setupButton(INKSCAPE_ICON("boundingbox_top"),          _buttons[1]);
     setupButton(INKSCAPE_ICON("boundingbox_top_right"),    _buttons[2]);
@@ -38,6 +39,7 @@ AlignmentSelector::AlignmentSelector()
     setupButton(INKSCAPE_ICON("boundingbox_bottom_left"),  _buttons[6]);
     setupButton(INKSCAPE_ICON("boundingbox_bottom"),       _buttons[7]);
     setupButton(INKSCAPE_ICON("boundingbox_bottom_right"), _buttons[8]);
+    // clang-format on
 
     _container.set_row_homogeneous();
     _container.set_column_homogeneous(true);

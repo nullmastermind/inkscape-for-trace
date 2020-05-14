@@ -235,6 +235,7 @@ select_list(InkscapeApplication* app)
 // SHOULD REALLY BE DOC ACTIONS
 std::vector<std::vector<Glib::ustring>> raw_data_selection =
 {
+    // clang-format off
     {"app.select-clear",              "SelectClear",             "Select",     N_("Selection clear")                                    },
     {"app.select",                    "Select",                  "Select",     N_("Select by ID (Deprecated)")                          },
     {"app.unselect",                  "UnSelect",                "Select",     N_("Unselect by ID (Deprecated)")                        },
@@ -246,12 +247,14 @@ std::vector<std::vector<Glib::ustring>> raw_data_selection =
     {"app.select-all",                "SelectAll",               "Select",     N_("Select all. Options: 'all' (every object including groups), 'layers', 'no-layers' (top level objects in layers), 'groups' (all groups including layers), 'no-groups' (all objects other than groups and layers, default).")},
     {"app.select-invert",             "SelectInvert",            "Select",     N_("Invert selection. Options: 'all', 'layers', 'no-layers', 'groups', 'no-groups' (default).")},
     {"app.select-list",               "SelectList",              "Select",     N_("Print a list of objects in current selection.")      }
+    // clang-format on
 };
 
 template<class T>
 void
 add_actions_selection(ConcreteInkscapeApplication<T>* app)
 {
+    // clang-format off
     app->add_action(               "select-clear",       sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_clear),              app)        );
     app->add_action_radio_string(  "select",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_by_id),              app), "null"); // Backwards compatible.
     app->add_action_radio_string(  "unselect",           sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&unselect_by_id),            app), "null"); // Match select.
@@ -263,6 +266,7 @@ add_actions_selection(ConcreteInkscapeApplication<T>* app)
     app->add_action_radio_string(  "select-all",         sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_all),                app), "null");
     app->add_action_radio_string(  "select-invert",      sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_invert),             app), "null");
     app->add_action(               "select-list",        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_list),               app)        );
+    // clang-format on
 
     app->get_action_extra_data().add_data(raw_data_selection);
 }

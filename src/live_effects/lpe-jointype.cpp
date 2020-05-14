@@ -34,6 +34,7 @@ namespace Inkscape {
 namespace LivePathEffect {
 
 static const Util::EnumData<unsigned> JoinTypeData[] = {
+    // clang-format off
     {JOIN_BEVEL,       N_("Beveled"),    "bevel"},
     {JOIN_ROUND,       N_("Rounded"),    "round"},
     {JOIN_MITER,       N_("Miter"),      "miter"},
@@ -42,6 +43,7 @@ static const Util::EnumData<unsigned> JoinTypeData[] = {
     {JOIN_EXTRAPOLATE1, N_("Extrapolated arc Alt1"), "extrp_arc1"},
     {JOIN_EXTRAPOLATE2, N_("Extrapolated arc Alt2"), "extrp_arc2"},
     {JOIN_EXTRAPOLATE3, N_("Extrapolated arc Alt3"), "extrp_arc3"},
+    // clang-format on
 };
 
 static const Util::EnumData<unsigned> CapTypeData[] = {

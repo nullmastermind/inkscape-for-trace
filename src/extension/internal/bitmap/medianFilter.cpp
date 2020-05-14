@@ -33,6 +33,7 @@ MedianFilter::refreshParameters(Inkscape::Extension::Effect* module) {
 void
 MedianFilter::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Median") "</name>\n"
@@ -46,6 +47,7 @@ MedianFilter::init()
                 "<menu-tip>" N_("Replace each pixel component with the median color in a circular neighborhood") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new MedianFilter());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

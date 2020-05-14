@@ -48,6 +48,7 @@ LevelChannel::refreshParameters(Inkscape::Extension::Effect* module) {
 void
 LevelChannel::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Level (with Channel)") "</name>\n"
@@ -74,6 +75,7 @@ LevelChannel::init()
                 "<menu-tip>" N_("Level the specified channel of selected bitmap(s) by scaling values falling between the given ranges to the full color range") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new LevelChannel());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

@@ -73,6 +73,7 @@ bool SPAttributeRelSVG::findIfValid(Glib::ustring attribute, Glib::ustring eleme
     }
     
     // Check for attributes with -, role, aria etc. to allow for more accessibility
+    // clang-format off
     if (attribute[0] == '-'
         || attribute.substr(0,4) == "role"
         || attribute.substr(0,4) == "aria"
@@ -84,6 +85,7 @@ bool SPAttributeRelSVG::findIfValid(Glib::ustring attribute, Glib::ustring eleme
         || attribute.substr(0,4) == "ns1:"  // JessyInk
         || (SPAttributeRelSVG::instance->attributesOfElements[temp].find(attribute)
             != SPAttributeRelSVG::instance->attributesOfElements[temp].end()) ) {
+    // clang-format on
         return true;
     } else {
         //g_warning( "Invalid attribute: %s used on <%s>", attribute.c_str(), element.c_str() );

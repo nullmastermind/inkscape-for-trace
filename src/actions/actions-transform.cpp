@@ -86,10 +86,12 @@ transform_remove(InkscapeApplication *app)
 // SHOULD REALLY BE DOC LEVEL ACTIONS
 std::vector<std::vector<Glib::ustring>> raw_data_transform =
 {
+    // clang-format off
    {"app.transform-translate",       "TransformTranslate",      "Transform",  N_("Translate selected objects (dx,dy).")                 },
    {"app.transform-rotate",          "TransformRotate",         "Transform",  N_("Rotate selected objects by degrees.")                 },
    {"app.transform-scale",           "TransformScale",          "Transform",  N_("Scale selected objects by scale factor.")             },
    {"app.transform-remove",          "TransformRemove",         "Transform",  N_("Remove any transforms from selected objects.")        }
+    // clang-format on
 };
 
 template<class T>
@@ -104,10 +106,12 @@ add_actions_transform(ConcreteInkscapeApplication<T>* app)
     // Debian 9 has 2.50.0
 #if GLIB_CHECK_VERSION(2, 52, 0)
 
+    // clang-format off
     app->add_action_with_parameter( "transform-translate",      String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&transform_translate),       app));
     app->add_action_with_parameter( "transform-rotate",         Double, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&transform_rotate),          app));
     app->add_action_with_parameter( "transform-scale",          Double, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&transform_scale),           app));
     app->add_action(                "transform-remove",                 sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&transform_remove),          app));
+    // clang-format on
 
 #endif
 

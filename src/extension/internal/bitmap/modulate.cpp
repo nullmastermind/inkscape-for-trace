@@ -36,6 +36,7 @@ Modulate::refreshParameters(Inkscape::Extension::Effect* module) {
 void
 Modulate::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("HSB Adjust") "</name>\n"
@@ -51,6 +52,7 @@ Modulate::init()
                 "<menu-tip>" N_("Adjust the amount of hue, saturation, and brightness in selected bitmap(s)") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new Modulate());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

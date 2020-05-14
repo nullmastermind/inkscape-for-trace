@@ -54,6 +54,7 @@ public:
     ~Crosssmooth ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Cross-smooth") "</name>\n"
@@ -80,6 +81,7 @@ public:
                 "<menu-tip>" N_("Smooth edges and angles of shapes") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new Crosssmooth());
+        // clang-format on
     };
 
 };
@@ -110,6 +112,7 @@ Crosssmooth::get_filter_text (Inkscape::Extension::Extension * ext)
         content << "SourceGraphic";
     }
 
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Cross-smooth\">\n"
           "<feGaussianBlur in=\"SourceGraphic\" stdDeviation=\"%s\" result=\"blur1\" />\n"
@@ -123,6 +126,7 @@ Crosssmooth::get_filter_text (Inkscape::Extension::Extension * ext)
         "</filter>\n", width.str().c_str(), type.str().c_str(), level.str().c_str(),
                        dilat.str().c_str(), erosion.str().c_str(), antialias.str().c_str(),
                        content.str().c_str());
+    // clang-format on
 
     return _filter;
 }; /* Cross-smooth filter */
@@ -162,6 +166,7 @@ public:
     ~Outline ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Outline") "</name>\n"
@@ -207,6 +212,7 @@ public:
                 "<menu-tip>" N_("Adds a colorizable outline") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new Outline());
+        // clang-format on
     };
 
 };
@@ -293,6 +299,7 @@ Outline::get_filter_text (Inkscape::Extension::Extension * ext)
         smooth << "5 -1";
     }
      
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" height=\"1.4\" width=\"1.4\" y=\"-0.2\" x=\"-0.2\" inkscape:label=\"Outline\">\n"
           "<feGaussianBlur in=\"SourceAlpha\" stdDeviation=\"%s\" result=\"blur1\" />\n"
@@ -313,6 +320,7 @@ Outline::get_filter_text (Inkscape::Extension::Extension * ext)
                        dilat2.str().c_str(), erosion2.str().c_str(), antialias.str().c_str(), smooth.str().c_str(),
                        a.str().c_str(), r.str().c_str(), g.str().c_str(), b.str().c_str(),
                        c4in.str().c_str(), fopacity.str().c_str(), sopacity.str().c_str() );
+    // clang-format on
 
     return _filter;
 }; /* Outline filter */

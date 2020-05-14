@@ -34,6 +34,7 @@ Wave::refreshParameters(Inkscape::Extension::Effect* module) {
 void
 Wave::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Wave") "</name>\n"
@@ -48,6 +49,7 @@ Wave::init()
                 "<menu-tip>" N_("Alter selected bitmap(s) along sine wave") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new Wave());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

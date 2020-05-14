@@ -36,6 +36,7 @@ Contrast::refreshParameters(Inkscape::Extension::Effect *module) {
 void
 Contrast::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Contrast") "</name>\n"
@@ -49,6 +50,7 @@ Contrast::init()
                 "<menu-tip>" N_("Increase or decrease contrast in bitmap(s)") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new Contrast());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

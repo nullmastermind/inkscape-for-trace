@@ -323,6 +323,7 @@ CairoEpsOutput::textToPath(Inkscape::Extension::Print * ext)
 void
 CairoPsOutput::init ()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("PostScript") "</name>\n"
@@ -351,6 +352,7 @@ CairoPsOutput::init ()
                 "<filetypetooltip>" N_("PostScript File") "</filetypetooltip>\n"
             "</output>\n"
         "</inkscape-extension>", new CairoPsOutput());
+    // clang-format on
 
     return;
 }
@@ -365,6 +367,7 @@ CairoPsOutput::init ()
 void
 CairoEpsOutput::init ()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Encapsulated PostScript") "</name>\n"
@@ -393,6 +396,7 @@ CairoEpsOutput::init ()
                 "<filetypetooltip>" N_("Encapsulated PostScript File") "</filetypetooltip>\n"
             "</output>\n"
         "</inkscape-extension>", new CairoEpsOutput());
+    // clang-format on
 
     return;
 }

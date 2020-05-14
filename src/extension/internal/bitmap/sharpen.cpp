@@ -34,6 +34,7 @@ Sharpen::refreshParameters(Inkscape::Extension::Effect* module) {
 void
 Sharpen::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Sharpen") "</name>\n"
@@ -48,6 +49,7 @@ Sharpen::init()
                 "<menu-tip>" N_("Sharpen selected bitmap(s)") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new Sharpen());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

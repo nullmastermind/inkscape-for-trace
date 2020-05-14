@@ -18,6 +18,7 @@
 
 #include "../implementation/implementation.h"
 
+// clang-format off
 #define SVG_COMMON_INPUT_PARAMS \
             "<param name='import_mode_svg' type='optiongroup' gui-text='" N_("SVG Image Import Type:") "' >\n" \
                     "<option value='include' >" N_("Include SVG image as editable object(s) in the current file") "</option>\n" \
@@ -31,6 +32,7 @@
                     "<option value='optimizeSpeed' >" N_("Blocky (optimizeSpeed)") "</option>\n" \
                   "</param>\n" \
             "<param name=\"do_not_ask\" gui-description='" N_("Hide the dialog next time and always apply the same actions.") "' gui-text=\"" N_("Don't ask again") "\" type=\"bool\" >false</param>\n"
+// clang-format on
 
 
 namespace Inkscape {

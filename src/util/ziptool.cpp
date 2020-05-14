@@ -1153,6 +1153,7 @@ struct LenBase
 
 LenBase lenBases[] =
 {
+    // clang-format off
     {   3,  1, 0 },
     {   4,  1, 0 },
     {   5,  1, 0 },
@@ -1182,6 +1183,7 @@ LenBase lenBases[] =
     { 195, 32, 5 },
     { 227, 32, 5 },
     { 258,  1, 0 }
+    // clang-format on
 };
 
 struct DistBase
@@ -1193,6 +1195,7 @@ struct DistBase
 
 DistBase distBases[] =
 {
+    // clang-format off
     {     1,    1,  0 },
     {     2,    1,  0 },
     {     3,    1,  0 },
@@ -1223,6 +1226,7 @@ DistBase distBases[] =
     { 12289, 4096, 12 },
     { 16385, 8192, 13 },
     { 24577, 8192, 13 }
+    // clang-format on
 };
 
 void Deflater::encodeDistStatic(unsigned int len, unsigned int dist)

@@ -707,6 +707,7 @@ bool PovOutput::check (Inkscape::Extension::Extension */*module*/)
 void
 PovOutput::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("PovRay Output") "</name>\n"
@@ -719,6 +720,7 @@ PovOutput::init()
             "</output>\n"
         "</inkscape-extension>",
         new PovOutput());
+    // clang-format on
 }
 
 

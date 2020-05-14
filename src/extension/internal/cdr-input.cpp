@@ -320,6 +320,7 @@ SPDocument *CdrInput::open(Inkscape::Extension::Input * /*mod*/, const gchar * u
 
 void CdrInput::init()
 {
+    // clang-format off
     /* CDR */
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
@@ -371,6 +372,7 @@ void CdrInput::init()
                 "<filetypetooltip>" N_("Open presentation exchange files saved in Corel DRAW") "</filetypetooltip>\n"
             "</input>\n"
         "</inkscape-extension>", new CdrInput());
+    // clang-format on
 
      return;
 

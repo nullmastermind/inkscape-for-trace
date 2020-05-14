@@ -27,6 +27,7 @@ using namespace Geom;
 using namespace LPEEmbroderyStitchOrdering;
 
 static const Util::EnumData<LPEEmbroderyStitch::order_method> OrderMethodData[LPEEmbroderyStitch::order_method_count] = {
+    // clang-format off
     { LPEEmbroderyStitch::order_method_no_reorder, N_("no reordering"),                                "no-reorder" },
     { LPEEmbroderyStitch::order_method_zigzag,            N_("zig-zag"),                               "zig-zag" },
     { LPEEmbroderyStitch::order_method_zigzag_rev_first,  N_("zig-zag, reverse first"),                "zig-zag-rev-first" },
@@ -36,6 +37,7 @@ static const Util::EnumData<LPEEmbroderyStitch::order_method> OrderMethodData[LP
     { LPEEmbroderyStitch::order_method_tsp_kopt_3,        N_("traveling salesman 3-opt (fast, ok)"),   "tsp-3opt" },
     { LPEEmbroderyStitch::order_method_tsp_kopt_4,        N_("traveling salesman 4-opt (seconds)"),    "tsp-4opt" },
     { LPEEmbroderyStitch::order_method_tsp_kopt_5,        N_("traveling salesman 5-opt (minutes)"),    "tsp-5opt" }
+    // clang-format on
 };
 
 static const Util::EnumDataConverter<LPEEmbroderyStitch::order_method>

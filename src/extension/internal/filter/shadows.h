@@ -53,6 +53,7 @@ public:
     ~ColorizableDropShadow ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Drop Shadow") "</name>\n"
@@ -85,6 +86,7 @@ public:
               "<menu-tip>" N_("Colorizable Drop shadow") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new ColorizableDropShadow());
+        // clang-format on
     };
 
 };
@@ -166,6 +168,7 @@ ColorizableDropShadow::get_filter_text (Inkscape::Extension::Extension * ext)
         comp2in2 << "offset";
     }
 
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Drop Shadow\">\n"
           "<feFlood flood-opacity=\"%s\" flood-color=\"rgb(%s,%s,%s)\" result=\"flood\" />\n"
@@ -177,6 +180,7 @@ ColorizableDropShadow::get_filter_text (Inkscape::Extension::Extension * ext)
                        comp1in1.str().c_str(), comp1in2.str().c_str(), comp1op.str().c_str(),
                        blur.str().c_str(), x.str().c_str(), y.str().c_str(),
                        comp2in1.str().c_str(), comp2in2.str().c_str(), comp2op.str().c_str());
+    // clang-format on
 
     return _filter;
 }; /* Drop shadow filter */

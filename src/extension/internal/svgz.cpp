@@ -38,6 +38,7 @@ namespace Internal {
 void
 Svgz::init()
 {
+    // clang-format off
     /* SVGZ in */
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
@@ -80,6 +81,7 @@ Svgz::init()
                 "<filetypetooltip>" N_("Scalable Vector Graphics format compressed with GZip") "</filetypetooltip>\n"
             "</output>\n"
         "</inkscape-extension>\n", new Svgz());
+    // clang-format on
 
     return;
 }

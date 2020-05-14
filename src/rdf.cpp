@@ -83,6 +83,7 @@ Bag example:
 </dc:subject>
 */
 
+// clang-format off
 struct rdf_double_t rdf_license_empty [] = {
     { nullptr, nullptr }
 };
@@ -222,6 +223,7 @@ struct rdf_license_t rdf_licenses [] = {
 
     { nullptr, nullptr, rdf_license_empty, }
 };
+// clang-format on
 
 #define XML_TAG_NAME_SVG      "svg:svg"
 #define XML_TAG_NAME_METADATA "svg:metadata"
@@ -235,6 +237,7 @@ struct rdf_license_t rdf_licenses [] = {
 // Remember when using the "title" and "tip" elements to pass them through
 // the localization functions when you use them!
 struct rdf_work_entity_t rdf_work_entities [] = {
+    // clang-format off
     { "title", N_("Title:"), "dc:title", RDF_CONTENT,
       N_("A name given to the resource"), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
     },
@@ -302,6 +305,7 @@ struct rdf_work_entity_t rdf_work_entities [] = {
     { nullptr, nullptr, nullptr, RDF_CONTENT,
       nullptr, RDF_FORMAT_LINE, RDF_EDIT_HARDCODED,
     }
+    // clang-format on
 };
 
 

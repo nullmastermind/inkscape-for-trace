@@ -140,12 +140,14 @@ object_simplify_path(InkscapeApplication *app)
 
 std::vector<std::vector<Glib::ustring>> raw_data_object =
 {
+    // clang-format off
     {"app.object-set-attribute",      "ObjectSetAttribute",      "Object",     N_("Set or update an attribute on selected objects. Usage: object-set-attribute:attribute name, attribute value;")},
     {"app.object-set-property",       "ObjectSetProperty",       "Object",     N_("Set or update a property on selected objects. Usage: object-set-property:property name, property value;")},
     {"app.object-unlink-clones",      "ObjectUnlinkClones",      "Object",     N_("Unlink clones and symbols.")                          },
     {"app.object-to-path",            "ObjectToPath",            "Object",     N_("Convert shapes to paths.")                            },
     {"app.object-stroke-to-path",     "ObjectStrokeToPath",      "Object",     N_("Convert strokes to paths.")                           },
     {"app.object-simplify-path",      "ObjectSimplifyPath",      "Object",     N_("Simplify paths, reducing node counts.")               }
+    // clang-format on
 };
 
 template<class T>
@@ -160,12 +162,14 @@ add_actions_object(ConcreteInkscapeApplication<T>* app)
     // Debian 9 has 2.50.0
 #if GLIB_CHECK_VERSION(2, 52, 0)
 
+    // clang-format off
     app->add_action_with_parameter( "object-set-attribute",     String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_set_attribute),      app));
     app->add_action_with_parameter( "object-set-property",      String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_set_property),       app));
     app->add_action(                "object-unlink-clones",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_unlink_clones),      app));
     app->add_action(                "object-to-path",                   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_to_path),            app));
     app->add_action(                "object-stroke-to-path",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_stroke_to_path),     app));
     app->add_action(                "object-simplify-path",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_simplify_path),      app));
+    // clang-format on
 
 #endif
 

@@ -2080,6 +2080,7 @@ void OdfOutput::save(Inkscape::Extension::Output */*mod*/, SPDocument *doc, gcha
 */
 void OdfOutput::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("OpenDocument Drawing Output") "</name>\n"
@@ -2092,6 +2093,7 @@ void OdfOutput::init()
             "</output>\n"
         "</inkscape-extension>",
         new OdfOutput());
+    // clang-format on
 }
 
 /**

@@ -190,6 +190,7 @@ GdkpixbufInput::init()
             }
             gchar *caption = g_strdup_printf(_("%s bitmap image import"), name);
 
+            // clang-format off
             gchar *xmlString = g_strdup_printf(
                 "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
                     "<name>%s</name>\n"
@@ -227,6 +228,7 @@ GdkpixbufInput::init()
                 extensions[i],
                 description
                 );
+            // clang-format off
 
             Inkscape::Extension::build_from_mem(xmlString, new GdkpixbufInput());
             g_free(xmlString);

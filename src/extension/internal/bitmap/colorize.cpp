@@ -46,6 +46,7 @@ Colorize::refreshParameters(Inkscape::Extension::Effect *module) {
 void
 Colorize::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Colorize") "</name>\n"
@@ -59,6 +60,7 @@ Colorize::init()
                 "<menu-tip>" N_("Colorize selected bitmap(s) with specified color, using given opacity") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new Colorize());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

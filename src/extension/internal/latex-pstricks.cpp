@@ -321,6 +321,7 @@ PrintLatex::textToPath(Inkscape::Extension::Print * ext)
 void PrintLatex::init()
 {
     /* SVG in */
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("LaTeX Print") "</name>\n"
@@ -329,6 +330,7 @@ void PrintLatex::init()
             "<param gui-hidden=\"true\" name=\"textToPath\" type=\"bool\">true</param>\n"
             "<print/>\n"
         "</inkscape-extension>", new PrintLatex());
+    // clang-format on
 }
 
 }  /* namespace Internal */

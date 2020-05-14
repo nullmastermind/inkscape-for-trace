@@ -35,6 +35,7 @@ Sample::refreshParameters(Inkscape::Extension::Effect* module) {
 void
 Sample::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Resample") "</name>\n"
@@ -49,6 +50,7 @@ Sample::init()
                 "<menu-tip>" N_("Alter the resolution of selected image by resizing it to the given pixel size") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new Sample());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

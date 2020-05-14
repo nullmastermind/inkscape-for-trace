@@ -45,6 +45,7 @@ public:
     ~EdgeDetect ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Edge Detect") "</name>\n"
@@ -66,6 +67,7 @@ public:
               "<menu-tip>" N_("Detect color edges in object") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new EdgeDetect());
+        // clang-format on
     };
 
 };
@@ -97,10 +99,12 @@ EdgeDetect::get_filter_text (Inkscape::Extension::Extension * ext)
         inverted << "0";
     }
     
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Edge Detect\">\n"
           "<feConvolveMatrix in=\"SourceGraphic\" kernelMatrix=\"%s\" order=\"3 3\" bias=\"%s\" divisor=\"%s\" targetX=\"1\" targetY=\"1\" preserveAlpha=\"true\" result=\"convolve\" />\n"
         "</filter>\n", matrix.str().c_str(), inverted.str().c_str(), level.str().c_str());
+    // clang-format on
 
     return _filter;
 };

@@ -153,6 +153,7 @@ SPDocument *WpgInput::open(Inkscape::Extension::Input * /*mod*/, const gchar * u
 #include "clear-n_.h"
 
 void WpgInput::init() {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("WPG Input") "</name>\n"
@@ -164,6 +165,7 @@ void WpgInput::init() {
                 "<filetypetooltip>" N_("Vector graphics format used by Corel WordPerfect") "</filetypetooltip>\n"
             "</input>\n"
         "</inkscape-extension>", new WpgInput());
+    // clang-format on
 } // init
 
 } } }  /* namespace Inkscape, Extension, Implementation */

@@ -61,10 +61,12 @@ namespace WPAP {
 } // WPAP
 
 static const Util::EnumData<PAPCopyType> PAPCopyTypeData[PAPCT_END] = {
+    // clang-format off
     {PAPCT_SINGLE,               N_("Single"),               "single"},
     {PAPCT_SINGLE_STRETCHED,     N_("Single, stretched"),    "single_stretched"},
     {PAPCT_REPEATED,             N_("Repeated"),             "repeated"},
     {PAPCT_REPEATED_STRETCHED,   N_("Repeated, stretched"),  "repeated_stretched"}
+    // clang-format on
 };
 static const Util::EnumDataConverter<PAPCopyType> PAPCopyTypeConverter(PAPCopyTypeData, PAPCT_END);
 

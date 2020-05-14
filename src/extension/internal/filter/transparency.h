@@ -49,6 +49,7 @@ public:
     ~Blend ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Blend") "</name>\n"
@@ -74,6 +75,7 @@ public:
                 "<menu-tip>" N_("Blend objects with background images or with themselves") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new Blend());
+        // clang-format on
     };
 
 };
@@ -89,10 +91,12 @@ Blend::get_filter_text (Inkscape::Extension::Extension * ext)
     source << ext->get_param_optiongroup("source");
     mode << ext->get_param_optiongroup("mode");
 
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Blend\">\n"
           "<feBlend in2=\"%s\" mode=\"%s\" result=\"blend\" />\n"
         "</filter>\n", source.str().c_str(), mode.str().c_str() );
+    // clang-format on
 
     return _filter;
 }; /* Blend filter */
@@ -126,6 +130,7 @@ public:
     ~ChannelTransparency ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
     
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Channel Transparency") "</name>\n"
@@ -145,6 +150,7 @@ public:
                 "<menu-tip>" N_("Replace RGB with transparency") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new ChannelTransparency());
+        // clang-format on
     };
 };
 
@@ -170,12 +176,14 @@ ChannelTransparency::get_filter_text (Inkscape::Extension::Extension * ext)
         invert << "xor";
     }
     
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" inkscape:label=\"Channel Transparency\" style=\"color-interpolation-filters:sRGB;\" >\n"
           "<feColorMatrix values=\"1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 %s %s %s %s 0 \" in=\"SourceGraphic\" result=\"colormatrix\" />\n"
           "<feComposite in=\"colormatrix\" in2=\"SourceGraphic\" operator=\"%s\" result=\"composite1\" />\n"
         "</filter>\n", red.str().c_str(), green.str().c_str(), blue.str().c_str(), alpha.str().c_str(),
                        invert.str().c_str());
+    // clang-format on
 
     return _filter;
 }; /* Channel transparency filter */
@@ -201,6 +209,7 @@ public:
     ~LightEraser ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
     
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Light Eraser") "</name>\n"
@@ -219,6 +228,7 @@ public:
                 "<menu-tip>" N_("Make the lightest parts of the object progressively transparent") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new LightEraser());
+        // clang-format on
     };
 };
 
@@ -245,11 +255,13 @@ LightEraser::get_filter_text (Inkscape::Extension::Extension * ext)
         erode << ext->get_param_float("expand");
     }
 
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" inkscape:label=\"Light Eraser\" style=\"color-interpolation-filters:sRGB;\" >\n"
           "<feColorMatrix values=\"1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 %s %s 0 \" result=\"colormatrix\" />\n"
           "<feComposite in2=\"colormatrix\" operator=\"arithmetic\" k2=\"%s\" result=\"composite\" />\n"
         "</filter>\n", expand.str().c_str(), erode.str().c_str(), opacity.str().c_str());
+    // clang-format on
 
     return _filter;
 }; /* Light Eraser filter */
@@ -275,6 +287,7 @@ public:
     ~Opacity ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
     
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Opacity") "</name>\n"
@@ -292,6 +305,7 @@ public:
                 "<menu-tip>" N_("Set opacity and strength of opacity boundaries") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new Opacity());
+        // clang-format on
     };
 };
 
@@ -308,11 +322,13 @@ Opacity::get_filter_text (Inkscape::Extension::Extension * ext)
     matrix << (ext->get_param_float("expand")) << " "
            << (-ext->get_param_float("erode"));
 
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" inkscape:label=\"Opacity\" style=\"color-interpolation-filters:sRGB;\" >\n"
           "<feColorMatrix values=\"1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 %s \" result=\"colormatrix\" />\n"
           "<feComposite in2=\"colormatrix\" operator=\"arithmetic\" k2=\"%s\" result=\"composite\" />\n"
         "</filter>\n", matrix.str().c_str(), opacity.str().c_str());
+    // clang-format on
 
     return _filter;
 }; /* Opacity filter */
@@ -337,6 +353,7 @@ public:
     ~Silhouette ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Silhouette") "</name>\n"
@@ -354,6 +371,7 @@ public:
                 "<menu-tip>" N_("Repaint anything visible monochrome") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new Silhouette());
+        // clang-format on
     };
 
 };
@@ -381,12 +399,14 @@ Silhouette::get_filter_text (Inkscape::Extension::Extension * ext)
         cutout << "in";
     blur << ext->get_param_float("blur");
 
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Silhouette\">\n"
           "<feFlood flood-opacity=\"%s\" flood-color=\"rgb(%s,%s,%s)\" result=\"flood\" />\n"
           "<feComposite in=\"flood\" in2=\"SourceGraphic\" operator=\"%s\" result=\"composite\" />\n"
           "<feGaussianBlur stdDeviation=\"%s\" />\n"
         "</filter>\n", a.str().c_str(), r.str().c_str(), g.str().c_str(), b.str().c_str(), cutout.str().c_str(), blur.str().c_str());
+    // clang-format on
 
     return _filter;
 }; /* Silhouette filter */

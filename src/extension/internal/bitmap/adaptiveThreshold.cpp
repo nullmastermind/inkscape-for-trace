@@ -35,6 +35,7 @@ AdaptiveThreshold::refreshParameters(Inkscape::Extension::Effect *module) {
 void
 AdaptiveThreshold::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Adaptive Threshold") "</name>\n"
@@ -50,6 +51,7 @@ AdaptiveThreshold::init()
                 "<menu-tip>" N_("Apply adaptive thresholding to selected bitmap(s)") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new AdaptiveThreshold());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

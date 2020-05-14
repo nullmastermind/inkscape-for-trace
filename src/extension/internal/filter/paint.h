@@ -67,6 +67,7 @@ public:
     ~Chromolitho ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Chromolitho") "</name>\n"
@@ -117,6 +118,7 @@ public:
                 "<menu-tip>" N_("Chromo effect with customizable edge drawing and graininess") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new Chromolitho());
+        // clang-format on
     };
 };
 
@@ -182,6 +184,7 @@ Chromolitho::get_filter_text (Inkscape::Extension::Extension * ext)
     else
         graincol << "0";
 
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Chromolitho\">\n"
           "<feComposite in=\"SourceGraphic\" in2=\"SourceGraphic\" operator=\"arithmetic\" k1=\"%s\" k2=\"1\" result=\"composite1\" />\n"
@@ -202,6 +205,7 @@ Chromolitho::get_filter_text (Inkscape::Extension::Extension * ext)
           "<feColorMatrix in=\"%s\" values=\"1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 15 0 \" result=\"colormatrix5\" />\n"
           "<feComposite in2=\"SourceGraphic\" operator=\"in\" result=\"composite2\" />\n"
         "</filter>\n", light.str().c_str(), noise.str().c_str(), b1in.str().c_str(), dblend.str().c_str(), smooth.str().c_str(), grainxf.str().c_str(), grainyf.str().c_str(), grainc.str().c_str(), grainv.str().c_str(), grainexp.str().c_str(), grainero.str().c_str(), graincol.str().c_str(), b2in.str().c_str(), gblend.str().c_str(), saturation.str().c_str(), transf.str().c_str(), transf.str().c_str(), transf.str().c_str(), col3in.str().c_str());
+    // clang-format on
 
     return _filter;
 }; /* Chromolitho filter */
@@ -228,6 +232,7 @@ public:
     ~CrossEngraving ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Cross Engraving") "</name>\n"
@@ -248,6 +253,7 @@ public:
                 "<menu-tip>" N_("Convert image to an engraving made of vertical and horizontal lines") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new CrossEngraving());
+        // clang-format on
     };
 };
 
@@ -273,6 +279,7 @@ CrossEngraving::get_filter_text (Inkscape::Extension::Extension * ext)
     else
         trans << "blend";
 
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Cross Engraving\">\n"
           "<feConvolveMatrix in=\"SourceGraphic\" targetY=\"1\" targetX=\"1\" kernelMatrix=\"0 250 0 250 %s 250 0 250 0 \" order=\"3 3\" result=\"convolve\" />\n"
@@ -287,6 +294,7 @@ CrossEngraving::get_filter_text (Inkscape::Extension::Extension * ext)
           "<feBlend in=\"flood\" in2=\"composite3\" mode=\"multiply\" result=\"blend\" />\n"
           "<feComposite in=\"%s\" in2=\"SourceGraphic\" operator=\"in\" result=\"composite4\" />\n"
         "</filter>\n", clean.str().c_str(), dilat.str().c_str(), erosion.str().c_str(), strength.str().c_str(), length.str().c_str(), length.str().c_str(), trans.str().c_str());
+    // clang-format on
 
     return _filter;
 }; /* CrossEngraving filter */
@@ -327,6 +335,7 @@ public:
     ~Drawing ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Drawing") "</name>\n"
@@ -367,6 +376,7 @@ public:
                 "<menu-tip>" N_("Convert images to duochrome drawings") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new Drawing());
+        // clang-format on
     };
 };
 
@@ -433,6 +443,7 @@ Drawing::get_filter_text (Inkscape::Extension::Extension * ext)
     else
         ios << "flood2";
     
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Drawing\">\n"
         "<feGaussianBlur in=\"SourceGraphic\" stdDeviation=\"%s\" result=\"blur1\" />\n"
@@ -465,6 +476,7 @@ Drawing::get_filter_text (Inkscape::Extension::Extension * ext)
         "<feColorMatrix values=\"1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1.3 0 \" result=\"color5\" flood-opacity=\"0.56\" />\n"
         "<feComposite in=\"%s\" in2=\"SourceGraphic\" operator=\"in\" result=\"composite8\" />\n"
         "</filter>\n", simply.str().c_str(), clean.str().c_str(), erase.str().c_str(), smooth.str().c_str(), dilat.str().c_str(), erosion.str().c_str(),  blur.str().c_str(), bdilat.str().c_str(), berosion.str().c_str(), stroker.str().c_str(), strokeg.str().c_str(), strokeb.str().c_str(), ios.str().c_str(), strokea.str().c_str(), offset.str().c_str(), offset.str().c_str(), fillr.str().c_str(), fillg.str().c_str(), fillb.str().c_str(), iof.str().c_str(), filla.str().c_str(), translucent.str().c_str());
+    // clang-format on
 
     return _filter;
 }; /* Drawing filter */
@@ -490,6 +502,7 @@ public:
     ~Electrize ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Electrize") "</name>\n"
@@ -511,6 +524,7 @@ public:
                 "<menu-tip>" N_("Electro solarization effects") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new Electrize());
+        // clang-format on
     };
 };
 
@@ -543,6 +557,7 @@ Electrize::get_filter_text (Inkscape::Extension::Extension * ext)
         values << " " << val;
     }
   
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Electrize\">\n"
           "<feGaussianBlur stdDeviation=\"%s\" result=\"blur\" />\n"
@@ -552,6 +567,7 @@ Electrize::get_filter_text (Inkscape::Extension::Extension * ext)
             "<feFuncB type=\"%s\" tableValues=\"%s\" />\n"
           "</feComponentTransfer>\n"
         "</filter>\n", blur.str().c_str(), type.str().c_str(), values.str().c_str(), type.str().c_str(), values.str().c_str(), type.str().c_str(), values.str().c_str());
+    // clang-format on
 
     return _filter;
 }; /* Electrize filter */
@@ -580,6 +596,7 @@ public:
     ~NeonDraw ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Neon Draw") "</name>\n"
@@ -606,6 +623,7 @@ public:
                 "<menu-tip>" N_("Posterize and draw smooth lines around color shapes") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new NeonDraw());
+        // clang-format on
     };
 };
 
@@ -626,6 +644,7 @@ NeonDraw::get_filter_text (Inkscape::Extension::Extension * ext)
     width << ext->get_param_float("width");
     lightness << ext->get_param_float("lightness");
 
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Neon Draw\">\n"
           "<feBlend mode=\"%s\" result=\"blend\" />\n"
@@ -646,6 +665,7 @@ NeonDraw::get_filter_text (Inkscape::Extension::Extension * ext)
           "<feComposite in=\"component2\" in2=\"blur2\" k3=\"%s\" operator=\"arithmetic\" k2=\"1\" result=\"composite1\" />\n"
           "<feComposite in=\"composite1\" in2=\"SourceGraphic\" operator=\"in\" result=\"composite2\" />\n"
         "</filter>\n", blend.str().c_str(), simply.str().c_str(), width.str().c_str(), type.str().c_str(), type.str().c_str(), type.str().c_str(), lightness.str().c_str());
+    // clang-format on
 
     return _filter;
 }; /* NeonDraw filter */
@@ -683,6 +703,7 @@ public:
     ~PointEngraving ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Point Engraving") "</name>\n"
@@ -729,6 +750,7 @@ public:
                 "<menu-tip>" N_("Convert image to a transparent point engraving") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new PointEngraving());
+        // clang-format on
     };
 
 };
@@ -794,6 +816,7 @@ PointEngraving::get_filter_text (Inkscape::Extension::Extension * ext)
     else
         iop << "flood1";
 
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" inkscape:label=\"Point Engraving\" style=\"color-interpolation-filters:sRGB;\">\n"
           "<feConvolveMatrix in=\"SourceGraphic\" kernelMatrix=\"0 250 0 250 %s 250 0 250 0\" order=\"3 3\" result=\"convolve\" />\n"
@@ -815,6 +838,7 @@ PointEngraving::get_filter_text (Inkscape::Extension::Extension * ext)
                        br.str().c_str(), bg.str().c_str(), bb.str().c_str(), ba.str().c_str(), iop.str().c_str(),
                        r.str().c_str(), g.str().c_str(), b.str().c_str(), a.str().c_str(), iof.str().c_str(),
                        a.str().c_str(), ba.str().c_str() );
+    // clang-format on
 
     return _filter;
 }; /* Point engraving filter */
@@ -846,6 +870,7 @@ public:
     ~Posterize ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Poster Paint") "</name>\n"
@@ -881,6 +906,7 @@ public:
                 "<menu-tip>" N_("Poster and painting effects") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new Posterize());
+        // clang-format on
     };
 };
 
@@ -931,6 +957,7 @@ Posterize::get_filter_text (Inkscape::Extension::Extension * ext)
     else
         antialias << "0.01";
     
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Poster Paint\">\n"
           "<feComposite operator=\"arithmetic\" k2=\"1\" result=\"composite1\" />\n"
@@ -947,6 +974,7 @@ Posterize::get_filter_text (Inkscape::Extension::Extension * ext)
           "<feGaussianBlur stdDeviation=\"%s\" result=\"blur3\" />\n"
           "<feComposite in2=\"SourceGraphic\" operator=\"in\" result=\"composite3\" />\n"
         "</filter>\n", blur1.str().c_str(), blur2.str().c_str(), blendmode.str().c_str(), presat.str().c_str(), table.str().c_str(), transf.str().c_str(), table.str().c_str(), transf.str().c_str(), table.str().c_str(), transf.str().c_str(), postsat.str().c_str(), antialias.str().c_str());
+    // clang-format on
 
     return _filter;
 }; /* Posterize filter */
@@ -969,6 +997,7 @@ public:
     ~PosterizeBasic ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Posterize Basic") "</name>\n"
@@ -985,6 +1014,7 @@ public:
                 "<menu-tip>" N_("Simple posterizing effect") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new PosterizeBasic());
+        // clang-format on
     };
 };
 
@@ -1006,6 +1036,7 @@ PosterizeBasic::get_filter_text (Inkscape::Extension::Extension * ext)
     }
     transf << " 1";
 
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Posterize Basic\">\n"
           "<feGaussianBlur stdDeviation=\"%s\" result=\"blur1\" />\n"
@@ -1016,6 +1047,7 @@ PosterizeBasic::get_filter_text (Inkscape::Extension::Extension * ext)
           "</feComponentTransfer>\n"
           "<feComposite in=\"component1\" in2=\"SourceGraphic\" operator=\"in\" />\n"
         "</filter>\n", blur.str().c_str(), transf.str().c_str(), transf.str().c_str(), transf.str().c_str());
+    // clang-format on
 
     return _filter;
 }; /* PosterizeBasic filter */

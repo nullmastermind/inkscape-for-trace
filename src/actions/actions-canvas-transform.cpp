@@ -122,6 +122,7 @@ canvas_transform(InkscapeWindow *win, const int& option)
 
 std::vector<std::vector<Glib::ustring>> raw_data_canvas_transform =
 {
+    // clang-format off
     {"win.canvas-zoom-in",            "ZoomIn",                  "View",       N_("Zoom in")                                            },
     {"win.canvas-zoom-out",           "ZoomOut",                 "View",       N_("Zoom out")                                           },
     {"win.canvas-zoom-1-1",           "Zoom1:1",                 "View",       N_("Zoom to 1:1")                                        },
@@ -134,11 +135,13 @@ std::vector<std::vector<Glib::ustring>> raw_data_canvas_transform =
     {"win.canvas-zoom-prev",          "ZoomPrev",                "View",       N_("Previous zoom (from the history of zooms)")          },
     {"win.canvas-zoom-next",          "ZoomNext",                "View",       N_("Next zoom (from the history of zooms)")              },
     {"win.canvas-zoom-center-page",   "ZoomCenterPage",          "View",       N_("Center page in window")                              },
+    // clang-format on
 };
 
 void
 add_actions_canvas_transform(InkscapeWindow* win)
 {
+    // clang-format off
     win->add_action( "canvas-zoom-in",         sigc::bind<InkscapeWindow*, int>(sigc::ptr_fun(&canvas_transform), win, INK_CANVAS_ZOOM_IN));
     win->add_action( "canvas-zoom-out",        sigc::bind<InkscapeWindow*, int>(sigc::ptr_fun(&canvas_transform), win, INK_CANVAS_ZOOM_OUT));
     win->add_action( "canvas-zoom-1-1",        sigc::bind<InkscapeWindow*, int>(sigc::ptr_fun(&canvas_transform), win, INK_CANVAS_ZOOM_1_1));
@@ -150,6 +153,7 @@ add_actions_canvas_transform(InkscapeWindow* win)
     win->add_action( "canvas-zoom-page-width", sigc::bind<InkscapeWindow*, int>(sigc::ptr_fun(&canvas_transform), win, INK_CANVAS_ZOOM_PAGE_WIDTH));
     win->add_action( "canvas-zoom-prev",       sigc::bind<InkscapeWindow*, int>(sigc::ptr_fun(&canvas_transform), win, INK_CANVAS_ZOOM_PREV));
     win->add_action( "canvas-zoom-next",       sigc::bind<InkscapeWindow*, int>(sigc::ptr_fun(&canvas_transform), win, INK_CANVAS_ZOOM_NEXT));
+    // clang-format on
 
     auto app = dynamic_cast<InkscapeApplication *>(Gio::Application::get_default().get());
     if (!app) {

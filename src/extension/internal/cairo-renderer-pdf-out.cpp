@@ -238,6 +238,7 @@ CairoRendererPdfOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, 
 void
 CairoRendererPdfOutput::init ()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>Portable Document Format</name>\n"
@@ -266,6 +267,7 @@ CairoRendererPdfOutput::init ()
                 "<filetypetooltip>PDF File</filetypetooltip>\n"
             "</output>\n"
         "</inkscape-extension>", new CairoRendererPdfOutput());
+    // clang-format on
 
     return;
 }

@@ -33,6 +33,7 @@ CycleColormap::refreshParameters(Inkscape::Extension::Effect *module) {
 void
 CycleColormap::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Cycle Colormap") "</name>\n"
@@ -46,6 +47,7 @@ CycleColormap::init()
                 "<menu-tip>" N_("Cycle colormap(s) of selected bitmap(s)") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new CycleColormap());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

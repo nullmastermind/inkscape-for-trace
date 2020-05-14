@@ -264,6 +264,7 @@ error:
 
 void GimpGrad::init ()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("GIMP Gradients") "</name>\n"
@@ -275,6 +276,7 @@ void GimpGrad::init ()
                 "<filetypetooltip>" N_("Gradients used in GIMP") "</filetypetooltip>\n"
             "</input>\n"
         "</inkscape-extension>\n", new GimpGrad());
+    // clang-format on
     return;
 }
 

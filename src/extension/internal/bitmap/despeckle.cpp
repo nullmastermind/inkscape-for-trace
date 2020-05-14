@@ -32,6 +32,7 @@ Despeckle::refreshParameters(Inkscape::Extension::Effect */*module*/) {
 void
 Despeckle::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Despeckle") "</name>\n"
@@ -44,6 +45,7 @@ Despeckle::init()
                 "<menu-tip>" N_("Reduce speckle noise of selected bitmap(s)") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new Despeckle());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

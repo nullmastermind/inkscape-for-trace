@@ -2660,6 +2660,7 @@ std::cout << "BEFORE DRAW"
             double cnx = corner.cx/2;
             double cny = corner.cy/2;
 
+            // clang-format off
             SVGOStringStream tmp_rectangle;
             tmp_rectangle << "\n"
                           << "    M "
@@ -2703,6 +2704,7 @@ std::cout << "BEFORE DRAW"
                           << pix_to_xy(d,    rc.left            ,        rc.bottom - cny    )
                           << "\n";
             tmp_rectangle << "   z\n";
+            // clang-format on
 
             d->mask |= emr_mask;
 
@@ -3631,6 +3633,7 @@ void
 Emf::init ()
 {
     /* EMF in */
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("EMF Input") "</name>\n"
@@ -3643,8 +3646,10 @@ Emf::init ()
                 "<output_extension>org.inkscape.output.emf</output_extension>\n"
             "</input>\n"
         "</inkscape-extension>", new Emf());
+    // clang-format on
 
     /* EMF out */
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("EMF Output") "</name>\n"
@@ -3667,6 +3672,7 @@ Emf::init ()
                 "<filetypetooltip>" N_("Enhanced Metafile") "</filetypetooltip>\n"
             "</output>\n"
         "</inkscape-extension>", new Emf());
+    // clang-format on
 
     return;
 }

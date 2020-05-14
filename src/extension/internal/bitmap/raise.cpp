@@ -36,6 +36,7 @@ Raise::refreshParameters(Inkscape::Extension::Effect* module) {
 void
 Raise::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Raise") "</name>\n"
@@ -51,6 +52,7 @@ Raise::init()
                 "<menu-tip>" N_("Alter lightness the edges of selected bitmap(s) to create a raised appearance") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new Raise());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

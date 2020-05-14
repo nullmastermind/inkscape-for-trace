@@ -44,6 +44,7 @@ public:
 
 public:
 	static void init () {
+		// clang-format off
 		Inkscape::Extension::build_from_mem(
 			"<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
 				"<name>" N_("Snow Crest") "</name>\n"
@@ -59,6 +60,7 @@ public:
 					"<menu-tip>" N_("Snow has fallen on object") "</menu-tip>\n"
 				"</effect>\n"
 			"</inkscape-extension>\n", new Snow());
+		// clang-format on
 	};
 
 };
@@ -71,6 +73,7 @@ Snow::get_filter_text (Inkscape::Extension::Extension * ext)
         std::ostringstream drift;
         drift << ext->get_param_float("drift");
 
+	// clang-format off
 	_filter = g_strdup_printf(
 				"<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Snow\">\n"
 					"<feConvolveMatrix order=\"3 3\" kernelMatrix=\"1 1 1 0 0 0 -1 -1 -1\" preserveAlpha=\"false\" divisor=\"3\"/>\n"
@@ -86,6 +89,7 @@ Snow::get_filter_text (Inkscape::Extension::Extension * ext)
 					"<feComposite in2=\"result5\" in=\"result4\"/>\n"
 					"<feComposite in2=\"SourceGraphic\"/>\n"
 				"</filter>\n", drift.str().c_str());
+	// clang-format on
 
 	return _filter;
 }; /* Snow filter */

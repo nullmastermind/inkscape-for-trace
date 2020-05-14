@@ -44,6 +44,7 @@ Channel::refreshParameters(Inkscape::Extension::Effect *module) {
 void
 Channel::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Channel") "</name>\n"
@@ -67,6 +68,7 @@ Channel::init()
                 "<menu-tip>" N_("Extract specific channel from image") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new Channel());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

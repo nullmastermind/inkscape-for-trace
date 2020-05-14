@@ -320,6 +320,7 @@ SPDocument *VsdInput::open(Inkscape::Extension::Input * /*mod*/, const gchar * u
 
 void VsdInput::init()
 {
+    // clang-format off
     /* VSD */
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
@@ -371,6 +372,7 @@ void VsdInput::init()
                 "<filetypetooltip>" N_("File format used by Microsoft Visio 2013 and later") "</filetypetooltip>\n"
             "</input>\n"
         "</inkscape-extension>", new VsdInput());
+    // clang-format on
 
      return;
 

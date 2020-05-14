@@ -2186,6 +2186,7 @@ unsigned int PrintEmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
 void PrintEmf::init()
 {
     /* EMF print */
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>Enhanced Metafile Print</name>\n"
@@ -2201,6 +2202,7 @@ void PrintEmf::init()
             "<param gui-hidden=\"true\" name=\"FixImageRot\" type=\"bool\">false</param>\n"
             "<print/>\n"
         "</inkscape-extension>", new PrintEmf());
+    // clang-format on
 
     return;
 }

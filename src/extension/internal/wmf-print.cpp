@@ -1579,6 +1579,7 @@ unsigned int PrintWmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
 void PrintWmf::init()
 {
     /* WMF print */
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>Windows Metafile Print</name>\n"
@@ -1592,6 +1593,7 @@ void PrintWmf::init()
             "<param gui-hidden=\"true\" name=\"FixPPTPatternAsHatch\" type=\"bool\">false</param>\n"
             "<print/>\n"
         "</inkscape-extension>", new PrintWmf());
+    // clang-format on
 
     return;
 }

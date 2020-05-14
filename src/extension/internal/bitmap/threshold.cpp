@@ -33,6 +33,7 @@ Threshold::refreshParameters(Inkscape::Extension::Effect* module) {
 void
 Threshold::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             // TRANSLATORS: see http://docs.gimp.org/en/gimp-tool-threshold.html
@@ -47,6 +48,7 @@ Threshold::init()
                 "<menu-tip>" N_("Threshold selected bitmap(s)") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new Threshold());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

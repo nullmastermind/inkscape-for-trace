@@ -922,6 +922,7 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
 
 void PdfInput::init() {
     /* PDF in */
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("PDF Input") "</name>\n"
@@ -933,8 +934,10 @@ void PdfInput::init() {
                 "<filetypetooltip>" N_("Portable Document Format") "</filetypetooltip>\n"
             "</input>\n"
         "</inkscape-extension>", new PdfInput());
+    // clang-format on
 
     /* AI in */
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("AI Input") "</name>\n"
@@ -946,6 +949,7 @@ void PdfInput::init() {
                 "<filetypetooltip>" N_("Open files saved in Adobe Illustrator 9.0 and newer versions") "</filetypetooltip>\n"
             "</input>\n"
         "</inkscape-extension>", new PdfInput());
+    // clang-format on
 } // init
 
 } } }  /* namespace Inkscape, Extension, Implementation */

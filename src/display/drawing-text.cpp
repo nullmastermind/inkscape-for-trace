@@ -275,20 +275,26 @@ DrawingText::_updateItem(Geom::IntRect const &area, UpdateContext const &ctx, un
 void DrawingText::decorateStyle(DrawingContext &dc, double vextent, double xphase, Geom::Point const &p1, Geom::Point const &p2, double thickness)
 {
     double wave[16]={
+        // clang-format off
         0.000000,  0.382499,  0.706825,  0.923651,   1.000000,  0.923651,  0.706825,  0.382499,
         0.000000, -0.382499, -0.706825, -0.923651,  -1.000000, -0.923651, -0.706825, -0.382499,
+        // clang-format on
     };
     int dashes[16]={
+        // clang-format off
         8,   7,   6,   5,
         4,   3,   2,   1,
         -8, -7,  -6,  -5,
         -4, -3,  -2,  -1
+        // clang-format on
     };
     int dots[16]={
+        // clang-format off
         4,     3,   2,   1,
         -4,   -3,  -2,  -1,
         4,     3,   2,   1,
         -4,   -3,  -2,  -1
+        // clang-format on
     };
     double   step = vextent/32.0;
     unsigned i  = 15 & (unsigned) round(xphase/step);  // xphase is >= 0.0

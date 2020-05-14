@@ -52,6 +52,7 @@ public:
     ~NoiseFill ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Noise Fill") "</name>\n"
@@ -84,6 +85,7 @@ public:
                 "<menu-tip>" N_("Basic noise fill and transparency texture") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new NoiseFill());
+        // clang-format on
     };
 
 };

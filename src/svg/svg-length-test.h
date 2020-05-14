@@ -168,6 +168,7 @@ public:
 };
 
 SvgLengthTest::test_t const SvgLengthTest::absolute_tests[12] = {
+    // clang-format off
     {"0",            SVGLength::NONE,   0        ,   0},
     {"1",            SVGLength::NONE,   1        ,   1},
     {"1.00001",      SVGLength::NONE,   1.00001  ,   1.00001},
@@ -180,11 +181,15 @@ SvgLengthTest::test_t const SvgLengthTest::absolute_tests[12] = {
     {"1.2345678mm",  SVGLength::MM  ,   1.2345678,   1.2345678f*96.0/25.4}, // TODO: More precise constants? (a 7 digit constant when the default precision is 8 digits?)
     {"123.45678cm", SVGLength::CM   , 123.45678  , 123.45678f*96.0/2.54},   // Note that svg_length_read is casting the result from g_ascii_strtod to float.
     {"73.162987in",  SVGLength::INCH,  73.162987 ,  73.162987f*96.0/1.00}};
+    // clang-format on
 SvgLengthTest::test_t const SvgLengthTest::relative_tests[3] = {
+    // clang-format off
     {"123em", SVGLength::EM,      123, 123. *  7.},
     {"123ex", SVGLength::EX,      123, 123. * 13.},
     {"123%",  SVGLength::PERCENT, 1.23, 1.23 * 19.}};
+    // clang-format on
 char const * SvgLengthTest::fail_tests[8] = {
+    // clang-format off
     "123 px",
     "123e",
     "123e+m",
@@ -193,6 +198,7 @@ char const * SvgLengthTest::fail_tests[8] = {
     "--123",
     "",
     "px"};
+    // clang-format on
 
 /*
   Local Variables:

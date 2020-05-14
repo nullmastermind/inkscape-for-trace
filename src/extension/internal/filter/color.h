@@ -70,6 +70,7 @@ public:
     ~Brilliance ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Brilliance") "</name>\n"
@@ -88,6 +89,7 @@ public:
                 "<menu-tip>" N_("Brightness filter") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new Brilliance());
+        // clang-format on
     };
 };
 
@@ -110,6 +112,7 @@ Brilliance::get_filter_text (Inkscape::Extension::Extension * ext)
         lightness << ext->get_param_float("lightness");
     }
 
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Brilliance\">\n"
           "<feColorMatrix values=\"%s %s %s 0 %s %s %s %s 0 %s %s %s %s 0 %s 0 0 0 1 0 \" />\n"
@@ -117,6 +120,7 @@ Brilliance::get_filter_text (Inkscape::Extension::Extension * ext)
                        lightness.str().c_str(), sat.str().c_str(), brightness.str().c_str(),
                        sat.str().c_str(), lightness.str().c_str(), sat.str().c_str(),
                        sat.str().c_str(), brightness.str().c_str(), lightness.str().c_str() );
+    // clang-format on
 
     return _filter;
 }; /* Brilliance filter */
@@ -150,6 +154,7 @@ public:
     ~ChannelPaint ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
     
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Channel Painting") "</name>\n"
@@ -177,6 +182,7 @@ public:
                 "<menu-tip>" N_("Replace RGB by any color") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new ChannelPaint());
+        // clang-format on
     };
 };
 
@@ -214,6 +220,7 @@ ChannelPaint::get_filter_text (Inkscape::Extension::Extension * ext)
         invert << "out";
     }
     
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Channel Painting\">\n"
           "<feColorMatrix values=\"%s\" type=\"saturate\" result=\"colormatrix1\" />\n"
@@ -229,6 +236,7 @@ ChannelPaint::get_filter_text (Inkscape::Extension::Extension * ext)
                        blue.str().c_str(), alpha.str().c_str(), floodRed.str().c_str(),
                        floodGreen.str().c_str(), floodBlue.str().c_str(), floodAlpha.str().c_str(),
                        invert.str().c_str() );
+    // clang-format on
 
     return _filter;
 }; /* Channel Painting filter */
@@ -251,6 +259,7 @@ public:
     ~ColorBlindness ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
     
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Color Blindness") "</name>\n"
@@ -288,6 +297,7 @@ public:
                 "<menu-tip>" N_("Simulate color blindness") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new ColorBlindness());
+        // clang-format on
     };
 };
 
@@ -299,10 +309,12 @@ ColorBlindness::get_filter_text (Inkscape::Extension::Extension * ext)
     std::ostringstream type;
     type << ext->get_param_optiongroup("type");
 
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" height=\"1\" width=\"1\" y=\"0\" x=\"0\" inkscape:label=\"Color Blindness\">\n"
           "<feColorMatrix values=\"%s\" type=\"matrix\" result=\"colormatrix1\" />\n"
         "</filter>\n", type.str().c_str());
+    // clang-format on
 
     return _filter;
 }; /* Color Blindness filter */
@@ -326,6 +338,7 @@ public:
     ~ColorShift ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Color Shift") "</name>\n"
@@ -342,6 +355,7 @@ public:
                 "<menu-tip>" N_("Rotate and desaturate hue") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new ColorShift());
+        // clang-format on
     };
 
 };
@@ -357,11 +371,13 @@ ColorShift::get_filter_text (Inkscape::Extension::Extension * ext)
     shift << ext->get_param_int("shift");
     sat << ext->get_param_float("sat");
 
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Color Shift\">\n"
           "<feColorMatrix type=\"hueRotate\" values=\"%s\" result=\"color1\" />\n"
           "<feColorMatrix type=\"saturate\" values=\"%s\" result=\"color2\" />\n"
         "</filter>\n", shift.str().c_str(), sat.str().c_str() );
+    // clang-format on
 
     return _filter;
 }; /* ColorShift filter */
@@ -389,6 +405,7 @@ public:
     ~Colorize ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
                 "<name>" N_("Colorize") "</name>\n"
@@ -427,6 +444,7 @@ public:
                 "<menu-tip>" N_("Blend image or object with a flood color") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new Colorize());
+        // clang-format on
     };
 
 };
@@ -462,6 +480,7 @@ Colorize::get_filter_text (Inkscape::Extension::Extension * ext)
         duotone << "1";
     }
     
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Colorize\">\n"
           "<feComposite in2=\"SourceGraphic\" operator=\"arithmetic\" k1=\"%s\" k2=\"%s\" result=\"composite1\" />\n"
@@ -474,6 +493,7 @@ Colorize::get_filter_text (Inkscape::Extension::Extension * ext)
         "</filter>\n", hlight.str().c_str(), nlight.str().c_str(), duotone.str().c_str(),
                        a.str().c_str(), r.str().c_str(), g.str().c_str(), b.str().c_str(),
                        blend1.str().c_str(), blend2.str().c_str() );
+    // clang-format on
 
     return _filter;
 }; /* Colorize filter */
@@ -496,6 +516,7 @@ public:
     ~ComponentTransfer ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Component Transfer") "</name>\n"
@@ -517,6 +538,7 @@ public:
                 "<menu-tip>" N_("Basic component transfer structure") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new ComponentTransfer());
+        // clang-format on
     };
 };
 
@@ -550,12 +572,14 @@ ComponentTransfer::get_filter_text (Inkscape::Extension::Extension * ext)
                  << "<feFuncG type=\"gamma\" amplitude=\"3\" exponent=\"3\" offset=\"0.1\" />\n"
                  << "<feFuncB type=\"gamma\" amplitude=\"3\" exponent=\"3\" offset=\"0.1\" />\n";
     }
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Component Transfer\">\n"
         "<feComponentTransfer>\n"
         "%s\n"
         "</feComponentTransfer>\n"
         "</filter>\n", CTfunction.str().c_str());
+    // clang-format on
 
     return _filter;
 }; /* ComponentTransfer filter */
@@ -581,6 +605,7 @@ public:
     ~Duochrome ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Duochrome") "</name>\n"
@@ -612,6 +637,7 @@ public:
                 "<menu-tip>" N_("Convert luminance values to a duochrome palette") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new Duochrome());
+        // clang-format on
     };
 
 };
@@ -667,6 +693,7 @@ Duochrome::get_filter_text (Inkscape::Extension::Extension * ext)
         a2 << (color2 & 0xff) / 255.0F;
     }
 
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Duochrome\">\n"
           "<feColorMatrix type=\"luminanceToAlpha\" result=\"colormatrix1\" />\n"
@@ -682,6 +709,7 @@ Duochrome::get_filter_text (Inkscape::Extension::Extension * ext)
         "</filter>\n", a1.str().c_str(), r1.str().c_str(), g1.str().c_str(), b1.str().c_str(), swap1.str().c_str(),
                        a2.str().c_str(), r2.str().c_str(), g2.str().c_str(), b2.str().c_str(), swap2.str().c_str(),
                        fluo.str().c_str() );
+    // clang-format on
 
     return _filter;
 }; /* Duochrome filter */
@@ -706,6 +734,7 @@ public:
     ~ExtractChannel ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Extract Channel") "</name>\n"
@@ -734,6 +763,7 @@ public:
                 "<menu-tip>" N_("Extract color channel as a transparent image") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new ExtractChannel());
+        // clang-format on
     };
 };
 
@@ -778,11 +808,13 @@ ExtractChannel::get_filter_text (Inkscape::Extension::Extension * ext)
         }
     }
 
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Extract Channel\">\n"
           "<feColorMatrix in=\"SourceGraphic\" values=\"%s 0 \" result=\"colormatrix\" />\n"
           "<feBlend in2=\"BackgroundImage\" mode=\"%s\" result=\"blend\" />\n"
         "</filter>\n", colors.str().c_str(), blend.str().c_str() );
+    // clang-format on
 
     return _filter;
 }; /* ExtractChannel filter */
@@ -812,6 +844,7 @@ public:
     ~FadeToBW ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Fade to Black or White") "</name>\n"
@@ -831,6 +864,7 @@ public:
                 "<menu-tip>" N_("Fade to black or white") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new FadeToBW());
+        // clang-format on
     };
 };
 
@@ -853,12 +887,14 @@ FadeToBW::get_filter_text (Inkscape::Extension::Extension * ext)
         wlevel << "0";
     }
 
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Fade to Black or White\">\n"
           "<feColorMatrix values=\"%s 0 0 0 %s 0 %s 0 0 %s 0 0 %s 0 %s 0 0 0 1 0\" />\n"
         "</filter>\n", level.str().c_str(), wlevel.str().c_str(),
                        level.str().c_str(), wlevel.str().c_str(),
                        level.str().c_str(), wlevel.str().c_str() );
+    // clang-format on
 
     return _filter;
 }; /* Fade to black or white filter */
@@ -891,6 +927,7 @@ public:
     ~Greyscale ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Greyscale") "</name>\n"
@@ -910,6 +947,7 @@ public:
                 "<menu-tip>" N_("Customize greyscale components") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new Greyscale());
+        // clang-format on
     };
 };
 
@@ -947,10 +985,13 @@ Greyscale::get_filter_text (Inkscape::Extension::Extension * ext)
         transparency << "0 0 0 1";
     }
     
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Greyscale\">\n"
           "<feColorMatrix values=\"%s 0 %s 0 %s 0 %s 0 \" />\n"
         "</filter>\n", line.str().c_str(), line.str().c_str(), line.str().c_str(), transparency.str().c_str() );
+    // clang-format on
+
     return _filter;
 }; /* Greyscale filter */
 
@@ -977,6 +1018,7 @@ public:
     ~Invert ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Invert") "</name>\n"
@@ -1001,6 +1043,7 @@ public:
                 "<menu-tip>" N_("Manage hue, lightness and transparency inversions") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new Invert());
+        // clang-format on
     };
 
 };
@@ -1080,6 +1123,7 @@ Invert::get_filter_text (Inkscape::Extension::Extension * ext)
         col5 << "0";
     }
 
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Invert\">\n"
           "%s"
@@ -1089,6 +1133,7 @@ Invert::get_filter_text (Inkscape::Extension::Extension * ext)
                        line2.str().c_str(), col5.str().c_str(),
                        line3.str().c_str(), col5.str().c_str(),
                        transparency.str().c_str() );
+    // clang-format on
 
     return _filter;
 }; /* Invert filter */
@@ -1112,6 +1157,7 @@ public:
     ~Lighting ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Lighting") "</name>\n"
@@ -1129,6 +1175,7 @@ public:
                 "<menu-tip>" N_("Modify lights and shadows separately") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new Lighting());
+        // clang-format on
     };
 };
 
@@ -1145,6 +1192,7 @@ Lighting::get_filter_text (Inkscape::Extension::Extension * ext)
     exponent << ext->get_param_float("exponent");
     offset << ext->get_param_float("offset");
 
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Lighting\">\n"
           "<feComponentTransfer in=\"blur\" result=\"component\" >\n"
@@ -1155,6 +1203,7 @@ Lighting::get_filter_text (Inkscape::Extension::Extension * ext)
         "</filter>\n", amplitude.str().c_str(), exponent.str().c_str(), offset.str().c_str(),
                        amplitude.str().c_str(), exponent.str().c_str(), offset.str().c_str(),
                        amplitude.str().c_str(), exponent.str().c_str(), offset.str().c_str() );
+    // clang-format on
 
     return _filter;
 }; /* Lighting filter */
@@ -1183,6 +1232,7 @@ public:
     ~LightnessContrast ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Lightness-Contrast") "</name>\n"
@@ -1199,6 +1249,7 @@ public:
                 "<menu-tip>" N_("Modify lightness and contrast separately") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new LightnessContrast());
+        // clang-format on
     };
 };
 
@@ -1223,12 +1274,14 @@ LightnessContrast::get_filter_text (Inkscape::Extension::Extension * ext)
     contrast5 << c5;
     lightness << ((1 - c5) * ext->get_param_float("lightness") / 100);
 
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Lightness-Contrast\">\n"
           "<feColorMatrix values=\"%s 0 0 %s %s 0 %s 0 %s %s 0 0 %s %s %s 0 0 0 1 0\" />\n"
         "</filter>\n", contrast.str().c_str(), lightness.str().c_str(), contrast5.str().c_str(),
                        contrast.str().c_str(), lightness.str().c_str(), contrast5.str().c_str(),
                        contrast.str().c_str(), lightness.str().c_str(), contrast5.str().c_str() );
+    // clang-format on
 
     return _filter;
 }; /* Lightness-Contrast filter */
@@ -1262,6 +1315,7 @@ public:
     ~NudgeRGB ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Nudge RGB") "</name>\n"
@@ -1292,6 +1346,7 @@ public:
                 "<menu-tip>" N_("Nudge RGB channels separately and blend them to different types of backgrounds") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new NudgeRGB());
+        // clang-format on
     };
 };
 
@@ -1325,6 +1380,7 @@ NudgeRGB::get_filter_text (Inkscape::Extension::Extension * ext)
     b << ((color >>  8) & 0xff);
     a << (color & 0xff) / 255.0F;
     
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Nudge RGB\">\n"
           "<feFlood flood-opacity=\"%s\" flood-color=\"rgb(%s,%s,%s)\" result=\"flood\" />\n"
@@ -1341,6 +1397,7 @@ NudgeRGB::get_filter_text (Inkscape::Extension::Extension * ext)
                        rx.str().c_str(), ry.str().c_str(),
                        gx.str().c_str(), gy.str().c_str(),
                        bx.str().c_str(), by.str().c_str() );
+    // clang-format on
 
     return _filter;
 
@@ -1374,6 +1431,7 @@ public:
     ~NudgeCMY ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Nudge CMY") "</name>\n"
@@ -1404,6 +1462,7 @@ public:
                 "<menu-tip>" N_("Nudge CMY channels separately and blend them to different types of backgrounds") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new NudgeCMY());
+        // clang-format on
     };
 };
 
@@ -1437,6 +1496,7 @@ NudgeCMY::get_filter_text (Inkscape::Extension::Extension * ext)
     b << ((color >>  8) & 0xff);
     a << (color & 0xff) / 255.0F;
     
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Nudge CMY\">\n"
           "<feFlood flood-opacity=\"%s\" flood-color=\"rgb(%s,%s,%s)\" result=\"flood\" />\n"
@@ -1453,6 +1513,7 @@ NudgeCMY::get_filter_text (Inkscape::Extension::Extension * ext)
                        cx.str().c_str(), cy.str().c_str(),
                        mx.str().c_str(), my.str().c_str(),
                        yx.str().c_str(), yy.str().c_str() );
+    // clang-format on
 
     return _filter;
 
@@ -1480,6 +1541,7 @@ public:
     ~Quadritone ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Quadritone Fantasy") "</name>\n"
@@ -1509,6 +1571,7 @@ public:
                 "<menu-tip>" N_("Replace hue by two colors") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new Quadritone());
+        // clang-format on
     };
 
 };
@@ -1530,6 +1593,7 @@ Quadritone::get_filter_text (Inkscape::Extension::Extension * ext)
     sat << ext->get_param_float("sat");
     blend2 << ext->get_param_optiongroup("blend2");
 
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Quadritone fantasy\">\n"
           "<feColorMatrix in=\"SourceGraphic\" type=\"hueRotate\" values=\"%s\" result=\"colormatrix1\" />\n"
@@ -1540,6 +1604,7 @@ Quadritone::get_filter_text (Inkscape::Extension::Extension * ext)
           "<feComposite in=\"colormatrix4\" in2=\"blend1\" operator=\"arithmetic\" k2=\"%s\" result=\"composite1\" />\n"
           "<feBlend in2=\"blend1\" mode=\"%s\" result=\"blend2\" />\n"
         "</filter>\n", dist.str().c_str(), colors.str().c_str(), blend1.str().c_str(), sat.str().c_str(), blend2.str().c_str() );
+    // clang-format on
 
     return _filter;
 }; /* Quadritone filter */
@@ -1563,6 +1628,7 @@ public:
     ~SimpleBlend ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
     
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Simple blend") "</name>\n"
@@ -1595,6 +1661,7 @@ public:
                 "<menu-tip>" N_("Simple blend filter") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new SimpleBlend());
+        // clang-format on
     };
 };
 
@@ -1616,6 +1683,7 @@ SimpleBlend::get_filter_text (Inkscape::Extension::Extension * ext)
     a << (color & 0xff) / 255.0F;
     blend << ext->get_param_optiongroup("blendmode");
 
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Simple blend\">\n"
           "<feFlood result=\"flood1\" flood-color=\"rgb(%s,%s,%s)\" flood-opacity=\"%s\" />\n"
@@ -1623,6 +1691,7 @@ SimpleBlend::get_filter_text (Inkscape::Extension::Extension * ext)
           "<feComposite operator=\"in\" in=\"blend1\" in2=\"SourceGraphic\" />\n"
         "</filter>\n", r.str().c_str(), g.str().c_str(), b.str().c_str(),
                        a.str().c_str(), blend.str().c_str());
+    // clang-format on
 
     return _filter;
 }; /* SimpleBlend filter */
@@ -1649,6 +1718,7 @@ public:
     ~Solarize ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Solarize") "</name>\n"
@@ -1668,6 +1738,7 @@ public:
                 "<menu-tip>" N_("Classic photographic solarization effect") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new Solarize());
+        // clang-format on
     };
 
 };
@@ -1693,6 +1764,7 @@ Solarize::get_filter_text (Inkscape::Extension::Extension * ext)
         blend2 << "multiply";
     }
 
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Solarize\">\n"
           "<feColorMatrix values=\"1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 1 \" />\n"
@@ -1702,6 +1774,7 @@ Solarize::get_filter_text (Inkscape::Extension::Extension * ext)
           "<feBlend in2=\"blend1\" mode=\"%s\" result=\"blend2\" />\n"
           "<feComposite in2=\"SourceGraphic\" operator=\"in\" />\n"
         "</filter>\n", rotate.str().c_str(), blend1.str().c_str(), blend2.str().c_str() );
+    // clang-format on
 
     return _filter;
 }; /* Solarize filter */
@@ -1736,6 +1809,7 @@ public:
     ~Tritone ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Tritone") "</name>\n"
@@ -1779,6 +1853,7 @@ public:
                 "<menu-tip>" N_("Create a custom tritone palette with additional glow, blend modes and hue moving") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new Tritone());
+        // clang-format on
     };
 
 };
@@ -1848,6 +1923,7 @@ Tritone::get_filter_text (Inkscape::Extension::Extension * ext)
         b6in2 << "composite";
     }
     
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Tritone\">\n"
           "<feColorMatrix type=\"hueRotate\" values=\"%s\" result=\"colormatrix1\" />\n"
@@ -1873,6 +1949,7 @@ Tritone::get_filter_text (Inkscape::Extension::Extension * ext)
                        a.str().c_str(), r.str().c_str(), g.str().c_str(), b.str().c_str(),
                        c1in2.str().c_str(), glow.str().c_str(), b6in2.str().c_str(), glowblend.str().c_str(),
                        c2in.str().c_str(), c2in2.str().c_str(), llight.str().c_str(), glight.str().c_str() );
+    // clang-format on
 
     return _filter;
 }; /* Tritone filter */

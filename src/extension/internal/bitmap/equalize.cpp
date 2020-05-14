@@ -31,6 +31,7 @@ Equalize::refreshParameters(Inkscape::Extension::Effect */*module*/) { }
 void
 Equalize::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Equalize") "</name>\n"
@@ -43,6 +44,7 @@ Equalize::init()
                 "<menu-tip>" N_("Equalize selected bitmap(s); histogram equalization") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new Equalize());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

@@ -37,6 +37,7 @@
 
 #include "input.h"
 
+// clang-format off
 /* XPM */
 static char const * core_xpm[] = {
 "16 16 4 1",
@@ -318,6 +319,7 @@ static char const * axis_on_xpm[] = {
 " ..++++++++++++++++++.. ",
 "  ....................  ",
 "                        "};
+// clang-format on
 
 using Inkscape::InputDevice;
 

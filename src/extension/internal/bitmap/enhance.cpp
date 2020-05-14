@@ -31,6 +31,7 @@ Enhance::refreshParameters(Inkscape::Extension::Effect */*module*/) { }
 void
 Enhance::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Enhance") "</name>\n"
@@ -43,6 +44,7 @@ Enhance::init()
                 "<menu-tip>" N_("Enhance selected bitmap(s); minimize noise") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new Enhance());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

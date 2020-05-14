@@ -34,6 +34,7 @@ GaussianBlur::refreshParameters(Inkscape::Extension::Effect* module) {
 void
 GaussianBlur::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Gaussian Blur") "</name>\n"
@@ -48,6 +49,7 @@ GaussianBlur::init()
                 "<menu-tip>" N_("Gaussian blur selected bitmap(s)") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new GaussianBlur());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

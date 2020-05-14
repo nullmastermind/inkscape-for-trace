@@ -33,6 +33,7 @@ OilPaint::refreshParameters(Inkscape::Extension::Effect* module) {
 void
 OilPaint::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Oil Paint") "</name>\n"
@@ -46,6 +47,7 @@ OilPaint::init()
                 "<menu-tip>" N_("Stylize selected bitmap(s) so that they appear to be painted with oils") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new OilPaint());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

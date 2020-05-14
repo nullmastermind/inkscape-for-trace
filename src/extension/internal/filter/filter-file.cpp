@@ -102,6 +102,7 @@ Filter::filters_load_node (Inkscape::XML::Node *node, gchar * menuname)
 		label = id;
 	}
 
+    // clang-format off
 	gchar * xml_str = g_strdup_printf(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>%s</name>\n"
@@ -116,6 +117,7 @@ Filter::filters_load_node (Inkscape::XML::Node *node, gchar * menuname)
                 "<menu-tip>%s</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", label, id, menu? menu : menuname, menu_tooltip? menu_tooltip : label);
+    // clang-format on
 
 	// FIXME: Bad hack: since we pull out a single filter node out of SVG file and
 	// serialize it, it loses the namespace declarations from the root, so we must provide

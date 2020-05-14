@@ -3210,6 +3210,7 @@ Wmf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
 void
 Wmf::init ()
 {
+    // clang-format off
     /* WMF in */
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
@@ -3245,6 +3246,7 @@ Wmf::init ()
                 "<filetypetooltip>" N_("Windows Metafile") "</filetypetooltip>\n"
             "</output>\n"
         "</inkscape-extension>", new Wmf());
+    // clang-format on
 
     return;
 }

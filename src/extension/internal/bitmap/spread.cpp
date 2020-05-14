@@ -33,6 +33,7 @@ Spread::refreshParameters(Inkscape::Extension::Effect* module) {
 void
 Spread::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Dither") "</name>\n"
@@ -46,6 +47,7 @@ Spread::init()
                 "<menu-tip>" N_("Randomly scatter pixels in selected bitmap(s), within the given radius of the original position") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new Spread());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

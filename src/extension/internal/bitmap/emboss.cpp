@@ -34,6 +34,7 @@ Emboss::refreshParameters(Inkscape::Extension::Effect *module) {
 void
 Emboss::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Emboss") "</name>\n"
@@ -48,6 +49,7 @@ Emboss::init()
                 "<menu-tip>" N_("Emboss selected bitmap(s); highlight edges with 3D effect") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new Emboss());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

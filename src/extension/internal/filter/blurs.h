@@ -50,6 +50,7 @@ public:
     ~Blur ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Blur") "</name>\n"
@@ -67,6 +68,7 @@ public:
                 "<menu-tip>" N_("Simple vertical and horizontal blur effect") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new Blur());
+        // clang-format on
     };
 
 };
@@ -94,11 +96,13 @@ Blur::get_filter_text (Inkscape::Extension::Extension * ext)
     }
 
 
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" %s style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Blur\">\n"
           "<feGaussianBlur stdDeviation=\"%s %s\" result=\"blur\" />\n"
           "%s"
         "</filter>\n", bbox.str().c_str(), hblur.str().c_str(), vblur.str().c_str(), content.str().c_str() );
+    // clang-format on
 
     return _filter;
 }; /* Blur filter */
@@ -121,6 +125,7 @@ public:
     ~CleanEdges ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Clean Edges") "</name>\n"
@@ -136,6 +141,7 @@ public:
                 "<menu-tip>" N_("Removes or decreases glows and jaggeries around objects edges after applying some filters") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new CleanEdges());
+        // clang-format on
     };
 
 };
@@ -149,12 +155,14 @@ CleanEdges::get_filter_text (Inkscape::Extension::Extension * ext)
 
     blur << ext->get_param_float("blur");
 
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Clean Edges\">\n"
           "<feGaussianBlur stdDeviation=\"%s\" result=\"blur\" />\n"
           "<feComposite in=\"SourceGraphic\" in2=\"blur\" operator=\"in\" result=\"composite1\" />\n"
           "<feComposite in=\"composite1\" in2=\"composite1\" k2=\"1\" operator=\"in\" result=\"composite2\" />\n"
         "</filter>\n", blur.str().c_str());
+    // clang-format on
 
     return _filter;
 }; /* CleanEdges filter */
@@ -181,6 +189,7 @@ public:
     ~CrossBlur ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Cross Blur") "</name>\n"
@@ -205,6 +214,7 @@ public:
                 "<menu-tip>" N_("Combine vertical and horizontal blur") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new CrossBlur());
+        // clang-format on
     };
 
 };
@@ -226,6 +236,7 @@ CrossBlur::get_filter_text (Inkscape::Extension::Extension * ext)
     vblur << ext->get_param_float("vblur");
     blend << ext->get_param_optiongroup("blend");
     
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Cross Blur\">\n"
           "<feColorMatrix in=\"SourceGraphic\" values=\"1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 -0.2125 -0.7154 -0.0721 1 0 \" result=\"colormatrix\" />\n"
@@ -234,6 +245,7 @@ CrossBlur::get_filter_text (Inkscape::Extension::Extension * ext)
           "<feGaussianBlur in=\"composite\" stdDeviation=\"0.01 %s\" result=\"blur2\" />\n"
           "<feBlend in=\"blur2\" in2=\"blur1\" mode=\"%s\" result=\"blend\" />\n"
         "</filter>\n", bright.str().c_str(), fade.str().c_str(), hblur.str().c_str(), vblur.str().c_str(), blend.str().c_str());
+    // clang-format on
 
     return _filter;
 }; /* Cross blur filter */
@@ -256,6 +268,7 @@ public:
     ~Feather ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Feather") "</name>\n"
@@ -271,6 +284,7 @@ public:
                 "<menu-tip>" N_("Blurred mask on the edge without altering the contents") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new Feather());
+        // clang-format on
     };
 
 };
@@ -284,6 +298,7 @@ Feather::get_filter_text (Inkscape::Extension::Extension * ext)
 
     blur << ext->get_param_float("blur");
 
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Feather\">\n"
           "<feGaussianBlur stdDeviation=\"%s\" result=\"blur\" />\n"
@@ -291,6 +306,7 @@ Feather::get_filter_text (Inkscape::Extension::Extension * ext)
           "<feComposite in2=\"composite1\" operator=\"in\" result=\"composite2\" />\n"
           "<feComposite in2=\"composite2\" operator=\"in\" result=\"composite3\" />\n"
         "</filter>\n", blur.str().c_str());
+    // clang-format on
 
     return _filter;
 }; /* Feather filter */
@@ -321,6 +337,7 @@ public:
     ~ImageBlur ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Out of Focus") "</name>\n"
@@ -355,6 +372,7 @@ public:
                 "<menu-tip>" N_("Blur eroded by white or transparency") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new ImageBlur());
+        // clang-format on
     };
 
 };
@@ -395,6 +413,7 @@ ImageBlur::get_filter_text (Inkscape::Extension::Extension * ext)
         background << "flood" ;
     }
 
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Out of Focus\">\n"
           "<feFlood flood-opacity=\"%s\" flood-color=\"rgb(%s,%s,%s)\" result=\"flood\" />\n"
@@ -407,6 +426,7 @@ ImageBlur::get_filter_text (Inkscape::Extension::Extension * ext)
         "</filter>\n", a.str().c_str(), r.str().c_str(), g.str().c_str(), b.str().c_str(),
                        hblur.str().c_str(), vblur.str().c_str(), dilat.str().c_str(), erosion.str().c_str(),
                        background.str().c_str(), blend.str().c_str(), opacity.str().c_str());
+    // clang-format on
 
     return _filter;
 }; /* Out of Focus filter */

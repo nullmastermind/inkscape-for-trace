@@ -36,6 +36,7 @@ Shade::refreshParameters(Inkscape::Extension::Effect* module) {
 void
 Shade::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Shade") "</name>\n"
@@ -51,6 +52,7 @@ Shade::init()
                 "<menu-tip>" N_("Shade selected bitmap(s) simulating distant light source") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new Shade());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

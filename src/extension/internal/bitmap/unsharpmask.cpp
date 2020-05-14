@@ -37,6 +37,7 @@ Unsharpmask::refreshParameters(Inkscape::Extension::Effect* module) {
 void
 Unsharpmask::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Unsharp Mask") "</name>\n"
@@ -53,6 +54,7 @@ Unsharpmask::init()
                 "<menu-tip>" N_("Sharpen selected bitmap(s) using unsharp mask algorithms") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new Unsharpmask());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

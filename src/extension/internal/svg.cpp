@@ -719,6 +719,7 @@ static void transform_2_to_1( Inkscape::XML::Node *repr, Inkscape::XML::Node *de
 void
 Svg::init()
 {
+    // clang-format off
     /* SVG in */
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
@@ -760,6 +761,7 @@ Svg::init()
                 "<filetypetooltip>" N_("Scalable Vector Graphics format as defined by the W3C") "</filetypetooltip>\n"
             "</output>\n"
         "</inkscape-extension>", new Svg());
+    // clang-format on
 
     return;
 }

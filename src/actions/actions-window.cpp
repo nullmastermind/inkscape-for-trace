@@ -51,8 +51,10 @@ window_close(InkscapeApplication *app)
 
 std::vector<std::vector<Glib::ustring>> raw_data_window =
 {
+    // clang-format off
     {"app.window-open",               "WindowOpen",              "Window",     N_("Open a window for the active document. GUI only.")   },
     {"app.window-close",              "WindowClose",             "Window",     N_("Close the active window.")                           }
+    // clang-format on
 };
 
 template <class T>
@@ -68,8 +70,10 @@ add_actions_window(ConcreteInkscapeApplication<T>* app)
     // Debian 9 has 2.50.0
 #if GLIB_CHECK_VERSION(2, 52, 0)
 
+    // clang-format off
     app->add_action(                "window-open",  sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&window_open),         app));
     app->add_action(                "window-close", sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&window_close),        app));
+    // clang-format on
 #else
     std::cerr << "add_actions: Some actions require Glibmm 2.52, compiled with: " << glib_major_version << "." << glib_minor_version << std::endl;
 #endif

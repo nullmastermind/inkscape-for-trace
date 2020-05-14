@@ -56,6 +56,7 @@ bool SPAttributeRelCSS::findIfValid(Glib::ustring property, Glib::ustring elemen
 
     // Don't check for properties with -, role, aria etc. to allow for more accessibility
     // FixMe: Name space list should be created when file read in.
+    // clang-format off
     if (property[0] == '-'
         || property.substr(0,4) == "role"
         || property.substr(0,4) == "aria"
@@ -67,6 +68,7 @@ bool SPAttributeRelCSS::findIfValid(Glib::ustring property, Glib::ustring elemen
         || property.substr(0,4) == "ns1:"  // JessyInk
         || (SPAttributeRelCSS::instance->propertiesOfElements[temp].find(property)
             != SPAttributeRelCSS::instance->propertiesOfElements[temp].end()) ) {
+    // clang-format on
         return true;
     } else {
         //g_warning( "Invalid attribute: %s used on <%s>", property.c_str(), element.c_str() );

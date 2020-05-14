@@ -998,6 +998,7 @@ std::string SvgBuilder::_BestMatchingFont(std::string PDFname)
  * This array holds info about translating font weight names to more or less CSS equivalents
  */
 static char *font_weight_translator[][2] = {
+    // clang-format off
     {(char*) "bold",        (char*) "bold"},
     {(char*) "light",       (char*) "300"},
     {(char*) "black",       (char*) "900"},
@@ -1014,6 +1015,7 @@ static char *font_weight_translator[][2] = {
     {(char*) "ultralight",  (char*) "200"},
     {(char*) "extralight",  (char*) "200"},
     {(char*) "thin",        (char*) "100"}
+    // clang-format on
 };
 
 /**

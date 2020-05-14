@@ -32,6 +32,7 @@ Negate::refreshParameters(Inkscape::Extension::Effect* /*module*/) {
 void
 Negate::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Negate") "</name>\n"
@@ -44,6 +45,7 @@ Negate::init()
                 "<menu-tip>" N_("Negate (take inverse) selected bitmap(s)") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new Negate());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

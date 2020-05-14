@@ -34,6 +34,7 @@ Charcoal::refreshParameters(Inkscape::Extension::Effect* module) {
 void
 Charcoal::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Charcoal") "</name>\n"
@@ -48,6 +49,7 @@ Charcoal::init()
                 "<menu-tip>" N_("Apply charcoal stylization to selected bitmap(s)") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new Charcoal());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

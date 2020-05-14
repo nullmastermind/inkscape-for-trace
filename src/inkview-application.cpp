@@ -73,12 +73,14 @@ InkviewApplication::InkviewApplication()
     // Will automatically handle character conversions.
     // Note: OPTION_TYPE_FILENAME => std::string, OPTION_TYPE_STRING => Glib::ustring.
 
+    // clang-format off
     add_main_option_entry(OPTION_TYPE_BOOL,   "version",    'V', N_("Print Inkview version"),                       "");
     add_main_option_entry(OPTION_TYPE_BOOL,   "fullscreen", 'f', N_("Launch in fullscreen mode"),                   "");
     add_main_option_entry(OPTION_TYPE_BOOL,   "recursive",  'r', N_("Search folders recursively"),                  "");
     add_main_option_entry(OPTION_TYPE_INT,    "timer",      't', N_("Change image every NUMBER seconds"), N_("NUMBER"));
     add_main_option_entry(OPTION_TYPE_DOUBLE, "scale",      's', N_("Scale image by factor NUMBER"),      N_("NUMBER"));
     add_main_option_entry(OPTION_TYPE_BOOL,   "preload",    'p', N_("Preload files"),                               "");
+    // clang-format on
 
     signal_handle_local_options().connect(sigc::mem_fun(*this, &InkviewApplication::on_handle_local_options));
 

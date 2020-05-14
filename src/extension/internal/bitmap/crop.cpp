@@ -63,6 +63,7 @@ Crop::refreshParameters(Inkscape::Extension::Effect *module) {
 void
 Crop::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
           "<name>" N_("Crop") "</name>\n"
@@ -79,6 +80,7 @@ Crop::init()
             "<menu-tip>" N_("Crop selected bitmap(s)") "</menu-tip>\n"
           "</effect>\n"
         "</inkscape-extension>\n", new Crop());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

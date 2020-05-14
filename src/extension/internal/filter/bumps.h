@@ -76,6 +76,7 @@ public:
     ~Bump ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Bump") "</name>\n"
@@ -146,6 +147,7 @@ public:
                 "<menu-tip>" N_("All purposes bump filter") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new Bump());
+        // clang-format on
     };
 
 };
@@ -239,6 +241,7 @@ Bump::get_filter_text (Inkscape::Extension::Extension * ext)
         colorize << "blur1" ;
     }
     
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Bump\">\n"
         "<feGaussianBlur in=\"SourceGraphic\" stdDeviation=\"%s\" result=\"blur1\" />\n"
@@ -258,6 +261,7 @@ Bump::get_filter_text (Inkscape::Extension::Extension * ext)
                        lightStart.str().c_str(), lightOptions.str().c_str(), lightEnd.str().c_str(),
                        floodRed.str().c_str(), floodGreen.str().c_str(), floodBlue.str().c_str(), floodAlpha.str().c_str(),
                        colorize.str().c_str(), blend.str().c_str());
+    // clang-format on
 
     return _filter;
 
@@ -305,6 +309,7 @@ public:
     ~WaxBump ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Wax Bump") "</name>\n"
@@ -366,6 +371,7 @@ public:
                 "<menu-tip>" N_("Turns an image to jelly") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new WaxBump());
+        // clang-format on
     };
 
 };
@@ -444,6 +450,7 @@ WaxBump::get_filter_text (Inkscape::Extension::Extension * ext)
     highlightblend << ext->get_param_optiongroup("highlightblend");
     transparency << ext->get_param_optiongroup("transparency");
 
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Wax Bump\">\n"
           "<feGaussianBlur in=\"SourceGraphic\" stdDeviation=\"%s\" result=\"blur1\" />\n"
@@ -472,6 +479,7 @@ WaxBump::get_filter_text (Inkscape::Extension::Extension * ext)
                        lightness.str().c_str(), height.str().c_str(), precision.str().c_str(),
                        distantElevation.str().c_str(), distantAzimuth.str().c_str(),
                        lightingblend.str().c_str(), transparency.str().c_str(), highlightblend.str().c_str() );
+    // clang-format on
 
     return _filter;
 

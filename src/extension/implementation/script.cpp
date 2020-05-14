@@ -72,6 +72,7 @@ void Script::pump_events () {
     the given interpreter to a custom one per user.
 */
 const std::map<std::string, Script::interpreter_t> Script::interpreterTab = {
+    // clang-format off
 #ifdef _WIN32
     { "perl",    {"perl-interpreter",    {"wperl"             }}},
     { "python",  {"python-interpreter",  {"pythonw"           }}},
@@ -85,6 +86,7 @@ const std::map<std::string, Script::interpreter_t> Script::interpreterTab = {
     { "python2", {"python2-interpreter", {"python2", "python" }}},
     { "ruby",    {"ruby-interpreter",    {"ruby"    }}},
     { "shell",   {"shell-interpreter",   {"sh"      }}},
+    // clang-format on
 };
 
 

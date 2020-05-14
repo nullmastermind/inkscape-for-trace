@@ -25,6 +25,7 @@ SPSelTransTypeInfo const handtypes[] = {
 };
 
 SPSelTransHandle const hands[] = {
+    // clang-format off
     //center handle will be 0 so we can reference it quickly.
     { HANDLE_CENTER,        SP_ANCHOR_CENTER,  GDK_CROSSHAIR,            12,    0.5,  0.5 },
     //handle-type           anchor-nudge       cursor                    image  x     y
@@ -53,6 +54,7 @@ SPSelTransHandle const hands[] = {
     { HANDLE_ALIGN,         SP_ANCHOR_SW,      GDK_TOP_RIGHT_CORNER,     19,    1,    1   },
     { HANDLE_ALIGN,         SP_ANCHOR_NW,      GDK_BOTTOM_RIGHT_CORNER,  20,    1,    0   },
     { HANDLE_ALIGN,         SP_ANCHOR_NE,      GDK_BOTTOM_LEFT_CORNER,   21,    0,    0   },
+    // clang-format on
 };
 
 /*

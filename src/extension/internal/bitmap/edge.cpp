@@ -33,6 +33,7 @@ Edge::refreshParameters(Inkscape::Extension::Effect *module) {
 void
 Edge::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Edge") "</name>\n"
@@ -46,6 +47,7 @@ Edge::init()
                 "<menu-tip>" N_("Highlight edges of selected bitmap(s)") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new Edge());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

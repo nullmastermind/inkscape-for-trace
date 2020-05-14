@@ -35,6 +35,7 @@ Solarize::refreshParameters(Inkscape::Extension::Effect* module) {
 void
 Solarize::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Solarize") "</name>\n"
@@ -48,6 +49,7 @@ Solarize::init()
                 "<menu-tip>" N_("Solarize selected bitmap(s), like overexposing photographic film") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new Solarize());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

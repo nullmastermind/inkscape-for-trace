@@ -41,6 +41,7 @@ PrintMetafile::~PrintMetafile()
 }
 
 static std::map<Glib::ustring, FontfixParams> _ppt_fixable_fonts = {
+    // clang-format off
     {{"Arial"},                    { 0.05,  -0.055, -0.065}},
     {{"Times New Roman"},          { 0.05,  -0.055, -0.065}},
     {{"Lucida Sans"},              {-0.025, -0.055, -0.065}},
@@ -60,6 +61,7 @@ static std::map<Glib::ustring, FontfixParams> _ppt_fixable_fonts = {
     {{"Sylfaen"},                  { 0.1,    0.0,    0.0}},
     {{"Palatino Linotype"},        { 0.175,  0.125,  0.125}},
     {{"Segoe UI"},                 { 0.1,    0.0,    0.0}},
+    // clang-format on
 };
 
 bool PrintMetafile::textToPath(Inkscape::Extension::Print *ext)
@@ -172,10 +174,12 @@ U_COLORREF PrintMetafile::weight_colors(U_COLORREF c1, U_COLORREF c2, double t)
 #define clrweight(a,b,t) ((1-t)*((double) a) + (t)*((double) b))
     U_COLORREF result;
     t = ( t > 1.0 ? 1.0 : ( t < 0.0 ? 0.0 : t));
+    // clang-format off
     result.Red      = clrweight(c1.Red,      c2.Red,      t);
     result.Green    = clrweight(c1.Green,    c2.Green,    t);
     result.Blue     = clrweight(c1.Blue,     c2.Blue,     t);
     result.Reserved = clrweight(c1.Reserved, c2.Reserved, t);
+    // clang-format on
 
     // now handle the opacity, mix the RGB with background at the weighted opacity
 

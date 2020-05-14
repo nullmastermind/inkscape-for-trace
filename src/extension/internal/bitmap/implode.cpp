@@ -33,6 +33,7 @@ Implode::refreshParameters(Inkscape::Extension::Effect* module) {
 void
 Implode::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Implode") "</name>\n"
@@ -46,6 +47,7 @@ Implode::init()
                 "<menu-tip>" N_("Implode selected bitmap(s)") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new Implode());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

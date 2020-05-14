@@ -125,11 +125,13 @@ query_all_recurse (SPObject *o)
     if (item && item->getId()) {
         Geom::OptRect area = item->documentVisualBounds();
         if (area) {
+            // clang-format off
             std::cout << item->getId()               << ","
                       << area->min()[Geom::X]        << ","
                       << area->min()[Geom::Y]        << ","
                       << area->dimensions()[Geom::X] << ","
                       << area->dimensions()[Geom::Y] << std::endl;
+            // clang-format on
         }
 
         for (auto& child: o->children) {
@@ -218,6 +220,7 @@ quit_inkscape(InkscapeApplication* app)
 
 std::vector<std::vector<Glib::ustring>> raw_data_base =
 {
+    // clang-format off
     {"app.inkscape-version",          "InkscapeVersion",         "Base",       N_("Print Inkscape version and exit.")                   },
     {"app.system-data-directory",     "InkscapeSystemDir",       "Base",       N_("Print system data directory and exit.")              },
     {"app.user-data-directory",       "InkscapeUserDir",         "Base",       N_("Print user data directory and exit.")                },
@@ -236,6 +239,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_base =
     {"app.query-width",               "QueryWidth",              "Query",      N_("Query 'width' value(s) of object(s).")               },
     {"app.query-height",              "QueryHeight",             "Query",      N_("Query 'height' value(s) of object(s).")              },
     {"app.query-all",                 "QueryAll",                "Query",      N_("Query 'x', 'y', 'width', and 'height'.")             }
+    // clang-format on
 };
 
 template<class T>
@@ -243,6 +247,7 @@ void
 add_actions_base(ConcreteInkscapeApplication<T>* app)
 {
     // Note: "radio" actions are just an easy way to set type without using templating.
+    // clang-format off
     app->add_action(               "inkscape-version",                                    sigc::ptr_fun(&print_inkscape_version)                 );
     app->add_action(               "system-data-directory",                               sigc::ptr_fun(&print_system_data_directory)            );
     app->add_action(               "user-data-directory",                                 sigc::ptr_fun(&print_user_data_directory)              );
@@ -262,6 +267,7 @@ add_actions_base(ConcreteInkscapeApplication<T>* app)
     app->add_action(               "query-width",        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&query_width),               app)        );
     app->add_action(               "query-height",       sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&query_height),              app)        );
     app->add_action(               "query-all",          sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&query_all),                 app)        );
+    // clang-format on
 
     app->get_action_extra_data().add_data(raw_data_base);
 }

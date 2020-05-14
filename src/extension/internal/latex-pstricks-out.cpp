@@ -87,6 +87,7 @@ void LatexOutput::save(Inkscape::Extension::Output * /*mod2*/, SPDocument *doc, 
 void
 LatexOutput::init ()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("LaTeX Output") "</name>\n"
@@ -98,6 +99,7 @@ LatexOutput::init ()
                 "<filetypetooltip>" N_("LaTeX PSTricks File") "</filetypetooltip>\n"
             "</output>\n"
         "</inkscape-extension>", new LatexOutput());
+    // clang-format on
 
     return;
 }

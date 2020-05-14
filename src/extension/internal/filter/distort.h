@@ -63,6 +63,7 @@ public:
     ~FeltFeather ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Felt Feather") "</name>\n"
@@ -100,6 +101,7 @@ public:
                 "<menu-tip>" N_("Blur and displace edges of shapes and pictures") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new FeltFeather());
+        // clang-format on
     };
 
 };
@@ -146,6 +148,7 @@ FeltFeather::get_filter_text (Inkscape::Extension::Extension * ext)
         map << "blur";
     }
 
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" x=\"-0.3\" width=\"1.6\" y=\"-0.3\" height=\"1.6\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Felt Feather\">\n"
           "<feGaussianBlur stdDeviation=\"%s %s\" result=\"blur\" />\n"
@@ -159,6 +162,7 @@ FeltFeather::get_filter_text (Inkscape::Extension::Extension * ext)
         "</filter>\n", hblur.str().c_str(), vblur.str().c_str(), 
                        turbulence.str().c_str(), complexity.str().c_str(), variation.str().c_str(), hfreq.str().c_str(), vfreq.str().c_str(),
                        map.str().c_str(), intensity.str().c_str(), dilat.str().c_str(), erosion.str().c_str(), stroke.str().c_str() );
+    // clang-format on
 
     return _filter;
 }; /* Felt feather filter */
@@ -186,6 +190,7 @@ public:
     ~Roughen ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Roughen") "</name>\n"
@@ -209,6 +214,7 @@ public:
                 "<menu-tip>" N_("Small-scale roughening to edges and content") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new Roughen());
+        // clang-format on
     };
 
 };
@@ -232,11 +238,13 @@ Roughen::get_filter_text (Inkscape::Extension::Extension * ext)
     variation << ext->get_param_int("variation");
     intensity << ext->get_param_float("intensity");
 
+    // clang-format off
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Roughen\">\n"
           "<feTurbulence  type=\"%s\" numOctaves=\"%s\" seed=\"%s\" baseFrequency=\"%s %s\" result=\"turbulence\" />\n"
           "<feDisplacementMap in=\"SourceGraphic\" in2=\"turbulence\" scale=\"%s\" yChannelSelector=\"G\" xChannelSelector=\"R\" />\n"
         "</filter>\n", type.str().c_str(), complexity.str().c_str(), variation.str().c_str(), hfreq.str().c_str(), vfreq.str().c_str(), intensity.str().c_str());
+    // clang-format on
 
     return _filter;
 }; /* Roughen filter */

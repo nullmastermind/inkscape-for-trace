@@ -36,6 +36,7 @@ ReduceNoise::refreshParameters(Inkscape::Extension::Effect* module) {
 void
 ReduceNoise::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Reduce Noise") "</name>\n"
@@ -49,6 +50,7 @@ ReduceNoise::init()
                 "<menu-tip>" N_("Reduce noise in selected bitmap(s) using a noise peak elimination filter") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new ReduceNoise());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

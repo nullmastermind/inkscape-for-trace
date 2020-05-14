@@ -61,6 +61,7 @@ enum ui_drop_target_info {
 };
 
 static GtkTargetEntry ui_drop_target_entries [] = {
+    // clang-format off
     {(gchar *)"text/uri-list",                0, URI_LIST        },
     {(gchar *)"image/svg+xml",                0, SVG_XML_DATA    },
     {(gchar *)"image/svg",                    0, SVG_DATA        },
@@ -69,6 +70,7 @@ static GtkTargetEntry ui_drop_target_entries [] = {
     {(gchar *)"application/x-oswb-color",     0, APP_OSWB_COLOR  },
     {(gchar *)"application/x-color",          0, APP_X_COLOR     },
     {(gchar *)"application/x-inkscape-paste", 0, APP_X_INK_PASTE }
+    // clang-format on
 };
 
 static GtkTargetEntry *completeDropTargets = nullptr;

@@ -33,6 +33,7 @@ Swirl::refreshParameters(Inkscape::Extension::Effect* module) {
 void
 Swirl::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Swirl") "</name>\n"
@@ -46,6 +47,7 @@ Swirl::init()
                 "<menu-tip>" N_("Swirl selected bitmap(s) around center point") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new Swirl());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

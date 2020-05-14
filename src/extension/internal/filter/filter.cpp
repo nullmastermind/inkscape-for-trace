@@ -200,6 +200,7 @@ void Filter::effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::Vie
 void
 Filter::filter_init (gchar const * id, gchar const * name, gchar const * submenu, gchar const * tip, gchar const * filter)
 {
+    // clang-format off
     gchar * xml_str = g_strdup_printf(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
         "<name>%s</name>\n"
@@ -213,6 +214,7 @@ Filter::filter_init (gchar const * id, gchar const * name, gchar const * submenu
         "<menu-tip>%s</menu-tip>\n"
         "</effect>\n"
         "</inkscape-extension>\n", name, id, submenu, tip);
+    // clang-format on
     Inkscape::Extension::build_from_mem(xml_str, new Filter(filter));
     g_free(xml_str);
     return;

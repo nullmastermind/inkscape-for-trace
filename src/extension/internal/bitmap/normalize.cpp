@@ -32,6 +32,7 @@ Normalize::refreshParameters(Inkscape::Extension::Effect* /*module*/) {
 void
 Normalize::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Normalize") "</name>\n"
@@ -44,6 +45,7 @@ Normalize::init()
                 "<menu-tip>" N_("Normalize selected bitmap(s), expanding color range to the full possible range of color") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new Normalize());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

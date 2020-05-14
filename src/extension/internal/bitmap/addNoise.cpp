@@ -41,6 +41,7 @@ AddNoise::refreshParameters(Inkscape::Extension::Effect *module) {
 void
 AddNoise::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Add Noise") "</name>\n"
@@ -61,6 +62,7 @@ AddNoise::init()
                 "<menu-tip>" N_("Add random noise to selected bitmap(s)") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new AddNoise());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

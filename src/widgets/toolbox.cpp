@@ -142,6 +142,7 @@ static struct {
     sp_verb_t verb;
     sp_verb_t doubleclick_verb;
 } const tools[] = {
+    // clang-format off
     { "/tools/select",           "select_tool",       SP_VERB_CONTEXT_SELECT,        SP_VERB_CONTEXT_SELECT_PREFS        },
     { "/tools/nodes",            "node_tool",         SP_VERB_CONTEXT_NODE,          SP_VERB_CONTEXT_NODE_PREFS          },
     { "/tools/tweak",            "tweak_tool",        SP_VERB_CONTEXT_TWEAK,         SP_VERB_CONTEXT_TWEAK_PREFS         },
@@ -165,6 +166,7 @@ static struct {
     { "/tools/mesh",             "mesh_tool",         SP_VERB_CONTEXT_MESH,          SP_VERB_CONTEXT_MESH_PREFS          },
     { "/tools/dropper",          "dropper_tool",      SP_VERB_CONTEXT_DROPPER,       SP_VERB_CONTEXT_DROPPER_PREFS       },
     { nullptr,                   nullptr,             0,                             0,                                  },
+    // clang-format on
 };
 
 static struct {
@@ -176,6 +178,7 @@ static struct {
     gchar const *swatch_tool;
     gchar const *swatch_tip;
 } const aux_toolboxes[] = {
+    // clang-format off
     { "/tools/select",          "select_toolbox",      Inkscape::UI::Toolbar::SelectToolbar::create,        "SelectToolbar",
       SP_VERB_INVALID,                    nullptr,                  nullptr},
     { "/tools/nodes",           "node_toolbox",        Inkscape::UI::Toolbar::NodeToolbar::create,          "NodeToolbar",
@@ -224,6 +227,7 @@ static struct {
       SP_VERB_CONTEXT_PAINTBUCKET_PREFS, "/tools/paintbucket",       N_("Style of Paint Bucket fill objects")},
     { nullptr,                  nullptr,               nullptr,                                             nullptr,
         SP_VERB_INVALID,                 nullptr,                    nullptr }
+    // clang-format on
 };
 
 

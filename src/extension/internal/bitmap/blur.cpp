@@ -34,6 +34,7 @@ Blur::refreshParameters(Inkscape::Extension::Effect *module) {
 void
 Blur::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Blur") "</name>\n"
@@ -48,6 +49,7 @@ Blur::init()
                 "<menu-tip>" N_("Blur selected bitmap(s)") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new Blur());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

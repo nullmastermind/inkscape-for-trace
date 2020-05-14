@@ -49,6 +49,7 @@ public:
     ~DiffuseLight ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Diffuse Light") "</name>\n"
@@ -67,6 +68,7 @@ public:
                 "<menu-tip>" N_("Basic diffuse bevel to use for building textures") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new DiffuseLight());
+        // clang-format on
     };
 
 };
@@ -129,6 +131,7 @@ public:
     ~MatteJelly ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Matte Jelly") "</name>\n"
@@ -148,6 +151,7 @@ public:
                 "<menu-tip>" N_("Bulging, matte jelly covering") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new MatteJelly());
+        // clang-format on
     };
 
 };
@@ -213,6 +217,7 @@ public:
     ~SpecularLight ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init () {
+        // clang-format off
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Specular Light") "</name>\n"
@@ -232,6 +237,7 @@ public:
                 "<menu-tip>" N_("Basic specular bevel to use for building textures") "</menu-tip>\n"
               "</effect>\n"
             "</inkscape-extension>\n", new SpecularLight());
+        // clang-format on
     };
 
 };

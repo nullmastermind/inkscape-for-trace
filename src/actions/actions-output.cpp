@@ -213,6 +213,7 @@ export_do(InkscapeApplication *app)
 
 std::vector<std::vector<Glib::ustring>> raw_data_output =
 {
+    // clang-format off
     {"app.export-type",               "ExportType",              "Export",     N_("Export file type.")                                  },
     {"app.export-filename",           "ExportFileName",          "Export",     N_("Export file name.")                                  },
     {"app.export-overwrite",          "ExportOverWrite",         "Export",     N_("Export over-write file.")                            },
@@ -240,6 +241,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_output =
     {"app.export-background-opacity", "ExportBackgroundOpacity", "Export",     N_("Export background opacity.")                         },
 
     {"app.export-do",                 "ExportDo",                "Export",     N_("Do export.")                                         }
+    // clang-format on
 };
 
 template <class T>
@@ -256,6 +258,7 @@ add_actions_output(ConcreteInkscapeApplication<T>* app)
 #if GLIB_CHECK_VERSION(2, 52, 0)
 
     // Matches command line options
+    // clang-format off
     app->add_action_with_parameter( "export-type",              String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_type),         app));
     app->add_action_with_parameter( "export-filename",          String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_filename),     app)); // MAY NOT WORK DUE TO std::string
     app->add_action_with_parameter( "export-overwrite",         Bool,   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_overwrite),    app));
@@ -284,6 +287,7 @@ add_actions_output(ConcreteInkscapeApplication<T>* app)
 
     // Extra
     app->add_action(                "export-do",                        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_do),           app));
+    // clang-format on
 #else
     std::cerr << "add_actions: Some actions require Glibmm 2.52, compiled with: " << glib_major_version << "." << glib_minor_version << std::endl;
 #endif

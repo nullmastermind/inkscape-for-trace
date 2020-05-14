@@ -37,6 +37,7 @@ Level::refreshParameters(Inkscape::Extension::Effect* module) {
 void
 Level::init()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Level") "</name>\n"
@@ -52,6 +53,7 @@ Level::init()
                 "<menu-tip>" N_("Level selected bitmap(s) by scaling values falling between the given ranges to the full color range") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new Level());
+    // clang-format on
 }
 
 }; /* namespace Bitmap */

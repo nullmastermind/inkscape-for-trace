@@ -30,6 +30,7 @@ namespace Inkscape {
 namespace Filters {
 
 const std::set<SPBlendMode> FilterBlend::_valid_modes {
+    // clang-format off
     SP_CSS_BLEND_NORMAL,      SP_CSS_BLEND_MULTIPLY,
     SP_CSS_BLEND_SCREEN,      SP_CSS_BLEND_DARKEN,
     SP_CSS_BLEND_LIGHTEN,     SP_CSS_BLEND_OVERLAY,
@@ -38,6 +39,7 @@ const std::set<SPBlendMode> FilterBlend::_valid_modes {
     SP_CSS_BLEND_DIFFERENCE,  SP_CSS_BLEND_EXCLUSION,
     SP_CSS_BLEND_HUE,         SP_CSS_BLEND_SATURATION,
     SP_CSS_BLEND_COLOR,       SP_CSS_BLEND_LUMINOSITY
+    // clang-format on
         };
 
 FilterBlend::FilterBlend()

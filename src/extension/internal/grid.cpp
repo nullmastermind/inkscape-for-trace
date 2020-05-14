@@ -188,6 +188,7 @@ Grid::prefs_effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View
 void
 Grid::init ()
 {
+    // clang-format off
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Grid") "</name>\n"
@@ -207,6 +208,7 @@ Grid::init ()
                 "<menu-tip>" N_("Draw a path which is a grid") "</menu-tip>\n"
             "</effect>\n"
         "</inkscape-extension>\n", new Grid());
+    // clang-format on
     return;
 }
 

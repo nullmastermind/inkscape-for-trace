@@ -109,6 +109,7 @@ DialogManager::DialogManager() {
     registerFactory("InkscapePreferences", &create<InkscapePreferences,  FloatingBehavior>);
 
     if (dialogs_type == FLOATING) {
+        // clang-format off
         registerFactory("Prototype",           &create<Prototype,            FloatingBehavior>);
         registerFactory("AlignAndDistribute",  &create<AlignAndDistribute,   FloatingBehavior>);
         registerFactory("DocumentProperties",  &create<DocumentProperties,   FloatingBehavior>);
@@ -148,9 +149,11 @@ DialogManager::DialogManager() {
         registerFactory("CloneTiler",          &create<CloneTiler,           FloatingBehavior>);
         registerFactory("XmlTree",             &create<XmlTree,              FloatingBehavior>);
         registerFactory("Selectors",           &create<SelectorsDialog,      FloatingBehavior>);
+        // clang-format on
 
     } else {
 
+        // clang-format off
         registerFactory("Prototype",           &create<Prototype,            DockBehavior>);
         registerFactory("AlignAndDistribute",  &create<AlignAndDistribute,   DockBehavior>);
         registerFactory("DocumentProperties",  &create<DocumentProperties,   DockBehavior>);
@@ -189,6 +192,7 @@ DialogManager::DialogManager() {
         registerFactory("CloneTiler",          &create<CloneTiler,           DockBehavior>);
         registerFactory("XmlTree",             &create<XmlTree,              DockBehavior>);
         registerFactory("Selectors",           &create<SelectorsDialog,      DockBehavior>);
+        // clang-format on
     }
 }
 
