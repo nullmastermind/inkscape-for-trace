@@ -56,7 +56,7 @@ class GradientVectorSelector : public Gtk::Box {
 
   public:
     GradientVectorSelector(SPDocument *doc, SPGradient *gradient);
-    ~GradientVectorSelector();
+    ~GradientVectorSelector() override;
 
     void setSwatched();
     void set_gradient(SPDocument *doc, SPGradient *gr);

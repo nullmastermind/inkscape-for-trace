@@ -49,7 +49,7 @@ class GradientImage : public Gtk::Widget {
 
   public:
     GradientImage(SPGradient *gradient);
-    ~GradientImage();
+    ~GradientImage() override;
 
     void set_gradient(SPGradient *gr);
 };
