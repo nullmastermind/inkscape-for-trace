@@ -183,14 +183,21 @@ clangtidy:linux:
 
 clangtidyfull:linux:
   stage: test
+  cache:
+    key: "cache-clang"
+    paths:
+      - ccache/
+  before_script:
+    # CCache Config
+    - mkdir -p ccache
+    - export CCACHE_BASEDIR=${PWD}
+    - export CCACHE_DIR=${PWD}/ccache
   except:
     - schedules
   only:
     - master@inkscape/inkscape
   needs: []
   script:
-    # skip files which clangtidy-helper.sh will revert anyway
-    # - find src/3rdparty -name CMakeLists.txt | xargs tee
     - bash buildtools/clangtidy-helper.sh
 
     ### scan-build is a static analysis tool. This job is *slow*.

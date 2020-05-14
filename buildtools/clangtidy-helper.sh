@@ -11,12 +11,17 @@ set -e
 mkdir -p build
 cd build
 
-cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+export CC="ccache clang"
+export CXX="ccache clang++"
 
-jq -c '.[] | select( .file | contains("3rdparty") | not)' compile_commands.json | jq -s > compile_commands2.json
-mv compile_commands2.json compile_commands.json
+cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
-run-clang-tidy -quiet -fix -header-filter='.*' "$@" > /dev/null || true
+#remove 3rdparty files from analysis, and only do those in inkscape_base target
+jq -c '.[] | select( .file | contains("3rdparty") | not) | select(.command | contains("CMakeFiles/inkscape_base")) ' compile_commands.json | jq -s > compile_commands2.json
+#treat 3rdparty code as system headers
+sed -e 's/-I\([^ ]*\)\/src\/3rdparty/-isystem \1\/src\/3rdparty/g' compile_commands2.json > compile_commands.json && rm compile_commands2.json
+
+run-clang-tidy -fix "$@" > /dev/null || true
 
 # revert all fixes in protected directories
 git checkout --recurse-submodules ../src/3rdparty
