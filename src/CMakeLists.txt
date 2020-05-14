@@ -220,6 +220,8 @@ set(inkscape_SRC
   inkscape-application.cpp
   actions/actions-extra-data.h
   actions/actions-extra-data.cpp
+  actions/actions-canvas-transform.h
+  actions/actions-canvas-transform.cpp
   actions/actions-base.h
   actions/actions-base.cpp
   actions/actions-file.h

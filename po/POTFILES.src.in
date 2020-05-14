@@ -4,6 +4,7 @@
 ../share/symbols/symbols.h
 ../share/templates/templates.h
 ../src/actions/actions-base.cpp
+../src/actions/actions-canvas-transform.cpp
 ../src/actions/actions-file.cpp
 ../src/actions/actions-object.cpp
 ../src/actions/actions-output.cpp

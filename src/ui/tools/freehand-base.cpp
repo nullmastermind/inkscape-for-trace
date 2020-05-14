@@ -207,6 +207,15 @@ bool FreehandBase::root_handler(GdkEvent* event) {
     return ret;
 }
 
+boost::optional<Geom::Point> FreehandBase::red_curve_get_last_point()
+{
+    boost::optional<Geom::Point> p;
+    if (!red_curve->is_empty()) {
+        p = red_curve->last_point();
+    }
+    return p;
+}
+
 static Glib::ustring const tool_name(FreehandBase *dc)
 {
     return ( SP_IS_PEN_CONTEXT(dc)
