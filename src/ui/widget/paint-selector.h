@@ -66,7 +66,7 @@ class PaintSelector : public Gtk::Box {
     enum FillRule { FILLRULE_NONZERO, FILLRULE_EVENODD };
 
   private:
-    guint _update : 1;
+    bool _update = false;
 
     Mode _mode;
 
