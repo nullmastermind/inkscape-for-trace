@@ -71,6 +71,10 @@ public:
     Glib::ustring valuepath;
     Glib::ustring valueediting;
 
+    // Text/comment nodes
+    Gtk::TextView *_content_tv;
+    Gtk::ScrolledWindow *_content_sw;
+
     /**
      * Status bar
      */

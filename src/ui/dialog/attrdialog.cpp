@@ -27,6 +27,20 @@
 #include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
 
+/**
+ * Return true if `node` is a text or comment node
+ */
+static bool is_text_or_comment_node(Inkscape::XML::Node const &node)
+{
+    switch (node.type()) {
+        case Inkscape::XML::TEXT_NODE:
+        case Inkscape::XML::COMMENT_NODE:
+            return true;
+        default:
+            return false;
+    }
+}
+
 static void on_attr_changed (Inkscape::XML::Node * repr,
                          const gchar * name,
                          const gchar * /*old_value*/,
@@ -42,7 +56,13 @@ static void on_content_changed (Inkscape::XML::Node * repr,
                                 gchar const * newcontent,
                                 gpointer data)
 {
-    ATTR_DIALOG(data)->onAttrChanged(repr, "content", repr->content());
+    auto self = ATTR_DIALOG(data);
+    auto buffer = self->_content_tv->get_buffer();
+    if (!buffer->get_modified()) {
+        const char *c = repr->content();
+        buffer->set_text(c ? c : "");
+    }
+    buffer->set_modified(false);
 }
 
 Inkscape::XML::NodeEventVector _repr_events = {
@@ -70,6 +90,24 @@ AttrDialog::AttrDialog()
 {
     set_size_request(20, 15);
     _mainBox.pack_start(_scrolledWindow, Gtk::PACK_EXPAND_WIDGET);
+
+    // For text and comment nodes
+    _content_tv = Gtk::manage(new Gtk::TextView());
+    _content_tv->set_wrap_mode(Gtk::WrapMode::WRAP_CHAR);
+    _content_tv->set_monospace(true);
+    _content_tv->set_border_width(4);
+    _content_tv->set_buffer(Gtk::TextBuffer::create());
+    _content_tv->get_buffer()->signal_end_user_action().connect([this]() {
+        if (_repr) {
+            _repr->setContent(_content_tv->get_buffer()->get_text().c_str());
+            setUndo(_("Type text"));
+        }
+    });
+    _content_sw = Gtk::manage(new Gtk::ScrolledWindow());
+    _content_sw->add(*_content_tv);
+    _mainBox.pack_start(*_content_sw);
+
+    // For element nodes
     _treeView.set_headers_visible(true);
     _treeView.set_hover_selection(true);
     _treeView.set_activate_on_single_click(true);
@@ -267,7 +305,6 @@ AttrDialog::~AttrDialog()
     _message_changed_connection.disconnect();
     _message_context = nullptr;
     _message_stack = nullptr;
-    _message_changed_connection.~connection();
 }
 
 void AttrDialog::startNameEdit(Gtk::CellEditable *cell, const Glib::ustring &path)
@@ -309,8 +346,7 @@ void AttrDialog::startValueEdit(Gtk::CellEditable *cell, const Glib::ustring &pa
     Gtk::TreeModel::Row row = *iter;
     if (row && this->_repr) {
         Glib::ustring name = row[_attrColumns._attributeName];
-        if (row[_attrColumns._attributeValue] != row[_attrColumns._attributeValueRender] || colwidth - 10 < width ||
-            name == "content") {
+        if (row[_attrColumns._attributeValue] != row[_attrColumns._attributeValueRender] || colwidth - 10 < width) {
             valueediting = entry->get_text();
             Gdk::Rectangle rect;
             _treeView.get_cell_area((Gtk::TreeModel::Path)iter, *_valueCol, rect);
@@ -345,6 +381,7 @@ void AttrDialog::popClosed()
  */
 void AttrDialog::setDesktop(SPDesktop* desktop)
 {
+    setRepr(nullptr);
     _desktop = desktop;
 }
 
@@ -366,6 +403,11 @@ void AttrDialog::setRepr(Inkscape::XML::Node * repr)
         Inkscape::GC::anchor(_repr); 
         _repr->addListener(&_repr_events, this);
         _repr->synthesizeEvents(&_repr_events, this);
+
+        // show either attributes or content
+        bool show_content = is_text_or_comment_node(*_repr);
+        _scrolledWindow.set_visible(!show_content);
+        _content_sw->set_visible(show_content);
     }
 }
 
@@ -460,9 +502,7 @@ void AttrDialog::onAttrDelete(Glib::ustring path)
     Gtk::TreeModel::Row row = *_store->get_iter(path);
     if (row) {
         Glib::ustring name = row[_attrColumns._attributeName];
-        if (name == "content") {
-            return;
-        } else {
+        {
             this->_store->erase(row);
             this->_repr->removeAttribute(name);
             this->setUndo(_("Delete attribute"));
@@ -489,7 +529,7 @@ bool AttrDialog::onKeyPressed(GdkEventKey *event)
             case GDK_KEY_KP_Delete: {
                 // Create new attribute (repeat code, fold into above event!)
                 Glib::ustring name = row[_attrColumns._attributeName];
-                if (name != "content") {
+                {
                     this->_store->erase(row);
                     this->_repr->removeAttribute(name);
                     this->setUndo(_("Delete attribute"));
@@ -584,9 +624,6 @@ void AttrDialog::nameEdited (const Glib::ustring& path, const Glib::ustring& nam
             grab_focus();
             return;
         }
-        if (old_name == "content") {
-            return;
-        }
         // Do not allow empty name (this would delete the attribute)
         if (name.empty()) {
             return;
@@ -655,9 +692,7 @@ void AttrDialog::valueEdited (const Glib::ustring& path, const Glib::ustring& va
             return;
         }
         if(name.empty()) return;
-        if (name == "content") {
-            _repr->setContent(value.c_str());
-        } else {
+        {
             _repr->setAttributeOrRemoveIfEmpty(name, value);
         }
         if(!value.empty()) {
