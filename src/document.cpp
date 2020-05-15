@@ -54,6 +54,8 @@
 #include "profile-manager.h"
 #include "rdf.h"
 
+#include "actions/actions-canvas-snapping.h"
+
 #include "display/drawing.h"
 
 #include "3rdparty/adaptagrams/libavoid/router.h"
@@ -137,6 +139,10 @@ SPDocument::SPDocument() :
     // XXX only for testing!
     undoStackObservers.add(console_output_undo_observer);
     _node_cache = std::deque<SPItem*>();
+
+    // Actions
+    action_group = Gio::SimpleActionGroup::create();
+    add_actions_canvas_snapping(this);
 }
 
 SPDocument::~SPDocument() {
@@ -464,6 +470,9 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
     if (defs) {
         defs->emitModified(SP_OBJECT_MODIFIED_CASCADE);
     }
+
+    // Update document level action settings
+    set_actions_canvas_snapping(document);
 
     return document;
 }

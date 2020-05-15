@@ -27,6 +27,7 @@
 #include <boost/ptr_container/ptr_list.hpp>
 
 #include <glibmm/ustring.h>
+#include <giomm/simpleactiongroup.h>
 #include <sigc++/sigc++.h>
 
 #include <2geom/affine.h>
@@ -284,6 +285,9 @@ public:
     void collectOrphans();
 
 
+    // Actions ---------------------------------
+    Glib::RefPtr<Gio::SimpleActionGroup> getActionGroup() { return action_group; }
+
     /************* Data ***************/
 private:
 
@@ -355,6 +359,8 @@ private:
 
     std::vector<SPObject *> _collection_queue; ///< Orphans
 
+    // Actions ---------------------------------
+    Glib::RefPtr<Gio::SimpleActionGroup> action_group;
 
     /*********** Signals **************/
 
