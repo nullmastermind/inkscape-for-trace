@@ -71,6 +71,11 @@ inkscape:mac:
   stage: build
   tags:
     - mac
+  rules:
+    - if: '$CI_PROJECT_NAMESPACE == "inkscape"'
+      when: always
+    - if: '$CI_PROJECT_NAMESPACE == "dehesselle"'
+      when: always
   before_script:
     - packaging/macos/install_toolset.sh
   script:
