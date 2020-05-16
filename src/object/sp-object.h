@@ -62,7 +62,7 @@ class SPObject;
 #include "version.h"
 #include "util/forward-pointer-iterator.h"
 
-enum SPAttributeEnum : unsigned;
+enum class SPAttr;
 
 class SPCSSAttr;
 class SPStyle;
@@ -241,7 +241,7 @@ public:
      * Represents the style properties, whether from presentation attributes, the <tt>style</tt>
      * attribute, or inherited.
      *
-     * private_set() doesn't handle SP_ATTR_STYLE or any presentation attributes at the
+     * private_set() doesn't handle SPAttr::STYLE or any presentation attributes at the
      * time of writing, so this is probably NULL for all SPObject's that aren't an SPItem.
      *
      * However, this gives rise to the bugs mentioned in sp_object_get_style_property.
@@ -705,7 +705,7 @@ public:
     /**
      * Call virtual set() function of object.
      */
-    void setKeyValue(SPAttributeEnum key, char const *value);
+    void setKeyValue(SPAttr key, char const *value);
 
 
     void setAttribute(Inkscape::Util::const_char_ptr key,
@@ -723,7 +723,7 @@ public:
      * Read value of key attribute from XML node into object.
      */
     void readAttr(char const *key);
-    void readAttr(SPAttributeEnum keyid);
+    void readAttr(SPAttr keyid);
 
     char const *getTagName(SPException *ex) const;
 
@@ -825,7 +825,7 @@ protected:
 
 	virtual void order_changed(Inkscape::XML::Node* child, Inkscape::XML::Node* old_repr, Inkscape::XML::Node* new_repr);
 
-	virtual void set(SPAttributeEnum key, const char* value);
+	virtual void set(SPAttr key, const char* value);
 
 	virtual void update(SPCtx* ctx, unsigned int flags);
 	virtual void modified(unsigned int flags);

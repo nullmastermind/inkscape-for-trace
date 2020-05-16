@@ -38,7 +38,7 @@ SPGaussianBlur::~SPGaussianBlur() = default;
 void SPGaussianBlur::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPFilterPrimitive::build(document, repr);
 
-    this->readAttr(SP_ATTR_STDDEVIATION);
+    this->readAttr(SPAttr::STDDEVIATION);
 }
 
 /**
@@ -51,9 +51,9 @@ void SPGaussianBlur::release() {
 /**
  * Sets a specific value in the SPGaussianBlur.
  */
-void SPGaussianBlur::set(SPAttributeEnum key, gchar const *value) {
+void SPGaussianBlur::set(SPAttr key, gchar const *value) {
     switch(key) {
-        case SP_ATTR_STDDEVIATION:
+        case SPAttr::STDDEVIATION:
             this->stdDeviation.set(value);
             this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
@@ -68,7 +68,7 @@ void SPGaussianBlur::set(SPAttributeEnum key, gchar const *value) {
  */
 void SPGaussianBlur::update(SPCtx *ctx, guint flags) {
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
-        this->readAttr(SP_ATTR_STDDEVIATION);
+        this->readAttr(SPAttr::STDDEVIATION);
     }
 
     SPFilterPrimitive::update(ctx, flags);

@@ -44,14 +44,14 @@ void SPFeSpotLight::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPObject::build(document, repr);
 
     //Read values of key attributes from XML nodes into object.
-    this->readAttr(SP_ATTR_X);
-    this->readAttr(SP_ATTR_Y);
-    this->readAttr(SP_ATTR_Z);
-    this->readAttr(SP_ATTR_POINTSATX);
-    this->readAttr(SP_ATTR_POINTSATY);
-    this->readAttr(SP_ATTR_POINTSATZ);
-    this->readAttr(SP_ATTR_SPECULAREXPONENT);
-    this->readAttr(SP_ATTR_LIMITINGCONEANGLE);
+    this->readAttr(SPAttr::X);
+    this->readAttr(SPAttr::Y);
+    this->readAttr(SPAttr::Z);
+    this->readAttr(SPAttr::POINTSATX);
+    this->readAttr(SPAttr::POINTSATY);
+    this->readAttr(SPAttr::POINTSATZ);
+    this->readAttr(SPAttr::SPECULAREXPONENT);
+    this->readAttr(SPAttr::LIMITINGCONEANGLE);
 
 //is this necessary?
     document->addResource("fespotlight", this);
@@ -72,11 +72,11 @@ void SPFeSpotLight::release() {
 /**
  * Sets a specific value in the SPFeSpotLight.
  */
-void SPFeSpotLight::set(SPAttributeEnum key, gchar const *value) {
+void SPFeSpotLight::set(SPAttr key, gchar const *value) {
     gchar *end_ptr;
 
     switch (key) {
-    case SP_ATTR_X:
+    case SPAttr::X:
         end_ptr = nullptr;
         
         if (value) {
@@ -98,7 +98,7 @@ void SPFeSpotLight::set(SPAttributeEnum key, gchar const *value) {
             this->parent->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
         }
         break;
-    case SP_ATTR_Y:
+    case SPAttr::Y:
         end_ptr = nullptr;
         
         if (value) {
@@ -120,7 +120,7 @@ void SPFeSpotLight::set(SPAttributeEnum key, gchar const *value) {
             this->parent->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
         }
         break;
-    case SP_ATTR_Z:
+    case SPAttr::Z:
         end_ptr = nullptr;
         
         if (value) {
@@ -142,7 +142,7 @@ void SPFeSpotLight::set(SPAttributeEnum key, gchar const *value) {
             this->parent->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
         }
         break;
-    case SP_ATTR_POINTSATX:
+    case SPAttr::POINTSATX:
         end_ptr = nullptr;
         
         if (value) {
@@ -164,7 +164,7 @@ void SPFeSpotLight::set(SPAttributeEnum key, gchar const *value) {
             this->parent->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
         }
         break;
-    case SP_ATTR_POINTSATY:
+    case SPAttr::POINTSATY:
         end_ptr = nullptr;
         
         if (value) {
@@ -186,7 +186,7 @@ void SPFeSpotLight::set(SPAttributeEnum key, gchar const *value) {
             this->parent->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
         }
         break;
-    case SP_ATTR_POINTSATZ:
+    case SPAttr::POINTSATZ:
         end_ptr = nullptr;
         
         if (value) {
@@ -208,7 +208,7 @@ void SPFeSpotLight::set(SPAttributeEnum key, gchar const *value) {
             this->parent->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
         }
         break;
-    case SP_ATTR_SPECULAREXPONENT:
+    case SPAttr::SPECULAREXPONENT:
         end_ptr = nullptr;
         
         if (value) {
@@ -230,7 +230,7 @@ void SPFeSpotLight::set(SPAttributeEnum key, gchar const *value) {
             this->parent->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
         }
         break;
-    case SP_ATTR_LIMITINGCONEANGLE:
+    case SPAttr::LIMITINGCONEANGLE:
         end_ptr = nullptr;
         
         if (value) {
@@ -265,14 +265,14 @@ void SPFeSpotLight::set(SPAttributeEnum key, gchar const *value) {
 void SPFeSpotLight::update(SPCtx *ctx, guint flags) {
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         /* do something to trigger redisplay, updates? */
-        this->readAttr(SP_ATTR_X);
-        this->readAttr(SP_ATTR_Y);
-        this->readAttr(SP_ATTR_Z);
-        this->readAttr(SP_ATTR_POINTSATX);
-        this->readAttr(SP_ATTR_POINTSATY);
-        this->readAttr(SP_ATTR_POINTSATZ);
-        this->readAttr(SP_ATTR_SPECULAREXPONENT);
-        this->readAttr(SP_ATTR_LIMITINGCONEANGLE);
+        this->readAttr(SPAttr::X);
+        this->readAttr(SPAttr::Y);
+        this->readAttr(SPAttr::Z);
+        this->readAttr(SPAttr::POINTSATX);
+        this->readAttr(SPAttr::POINTSATY);
+        this->readAttr(SPAttr::POINTSATZ);
+        this->readAttr(SPAttr::SPECULAREXPONENT);
+        this->readAttr(SPAttr::LIMITINGCONEANGLE);
     }
 
     SPObject::update(ctx, flags);

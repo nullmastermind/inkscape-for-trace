@@ -823,7 +823,7 @@ void StyleDialog::readStyleElement()
         for (auto iter : obj->style->properties()) {
             if (iter->style_src != SP_STYLE_SRC_UNSET) {
                 auto key = iter->id();
-                if (key != SP_PROP_FONT && key != SP_ATTR_D && key != SP_PROP_MARKER) {
+                if (key != SPAttr::FONT && key != SPAttr::D && key != SPAttr::MARKER) {
                     const gchar *attr = obj->getRepr()->attribute(iter->name().c_str());
                     if (attr) {
                         if (!hasattributes) {
@@ -1115,7 +1115,7 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
     } else if (selector == "attributes") {
         for (auto iter : obj->style->properties()) {
             auto key = iter->id();
-            if (key != SP_PROP_FONT && key != SP_ATTR_D && key != SP_PROP_MARKER) {
+            if (key != SPAttr::FONT && key != SPAttr::D && key != SPAttr::MARKER) {
                 const gchar *attr = obj->getRepr()->attribute(iter->name().c_str());
                 if (attr) {
                     _updating = true;

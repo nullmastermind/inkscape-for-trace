@@ -303,11 +303,11 @@ void ColorProfile::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
     SPObject::build(document, repr);
 
-    this->readAttr(SP_ATTR_XLINK_HREF);
-    this->readAttr(SP_ATTR_ID);
-    this->readAttr(SP_ATTR_LOCAL);
-    this->readAttr(SP_ATTR_NAME);
-    this->readAttr(SP_ATTR_RENDERING_INTENT);
+    this->readAttr(SPAttr::XLINK_HREF);
+    this->readAttr(SPAttr::ID);
+    this->readAttr(SPAttr::LOCAL);
+    this->readAttr(SPAttr::NAME);
+    this->readAttr(SPAttr::RENDERING_INTENT);
 
     // Register
     if ( document ) {
@@ -319,9 +319,9 @@ void ColorProfile::build(SPDocument *document, Inkscape::XML::Node *repr) {
 /**
  * Callback: set attribute.
  */
-void ColorProfile::set(SPAttributeEnum key, gchar const *value) {
+void ColorProfile::set(SPAttr key, gchar const *value) {
     switch (key) {
-        case SP_ATTR_XLINK_HREF:
+        case SPAttr::XLINK_HREF:
             if ( this->href ) {
                 g_free( this->href );
                 this->href = nullptr;
@@ -370,7 +370,7 @@ void ColorProfile::set(SPAttributeEnum key, gchar const *value) {
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_LOCAL:
+        case SPAttr::LOCAL:
             if ( this->local ) {
                 g_free( this->local );
                 this->local = nullptr;
@@ -379,7 +379,7 @@ void ColorProfile::set(SPAttributeEnum key, gchar const *value) {
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_NAME:
+        case SPAttr::NAME:
             if ( this->name ) {
                 g_free( this->name );
                 this->name = nullptr;
@@ -389,7 +389,7 @@ void ColorProfile::set(SPAttributeEnum key, gchar const *value) {
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_RENDERING_INTENT:
+        case SPAttr::RENDERING_INTENT:
             if ( this->intentStr ) {
                 g_free( this->intentStr );
                 this->intentStr = nullptr;

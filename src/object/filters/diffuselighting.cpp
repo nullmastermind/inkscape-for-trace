@@ -61,10 +61,10 @@ void SPFeDiffuseLighting::build(SPDocument *document, Inkscape::XML::Node *repr)
 	SPFilterPrimitive::build(document, repr);
 
 	/*LOAD ATTRIBUTES FROM REPR HERE*/
-	this->readAttr(SP_ATTR_SURFACESCALE);
-	this->readAttr(SP_ATTR_DIFFUSECONSTANT);
-	this->readAttr(SP_ATTR_KERNELUNITLENGTH);
-	this->readAttr(SP_PROP_LIGHTING_COLOR);
+	this->readAttr(SPAttr::SURFACESCALE);
+	this->readAttr(SPAttr::DIFFUSECONSTANT);
+	this->readAttr(SPAttr::KERNELUNITLENGTH);
+	this->readAttr(SPAttr::LIGHTING_COLOR);
 }
 
 /**
@@ -77,14 +77,14 @@ void SPFeDiffuseLighting::release() {
 /**
  * Sets a specific value in the SPFeDiffuseLighting.
  */
-void SPFeDiffuseLighting::set(SPAttributeEnum key, gchar const *value) {
+void SPFeDiffuseLighting::set(SPAttr key, gchar const *value) {
     gchar const *cend_ptr = nullptr;
     gchar *end_ptr = nullptr;
     
     switch(key) {
 	/*DEAL WITH SETTING ATTRIBUTES HERE*/
     //TODO test forbidden values
-        case SP_ATTR_SURFACESCALE:
+        case SPAttr::SURFACESCALE:
             end_ptr = nullptr;
 
             if (value) {
@@ -106,7 +106,7 @@ void SPFeDiffuseLighting::set(SPAttributeEnum key, gchar const *value) {
 
             this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-        case SP_ATTR_DIFFUSECONSTANT:
+        case SPAttr::DIFFUSECONSTANT:
             end_ptr = nullptr;
 
             if (value) {
@@ -131,7 +131,7 @@ void SPFeDiffuseLighting::set(SPAttributeEnum key, gchar const *value) {
 
             this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-        case SP_ATTR_KERNELUNITLENGTH:
+        case SPAttr::KERNELUNITLENGTH:
             //TODO kernelUnit
             //this->kernelUnitLength.set(value);
             /*TODOif (feDiffuseLighting->renderer) {
@@ -140,7 +140,7 @@ void SPFeDiffuseLighting::set(SPAttributeEnum key, gchar const *value) {
             */
             this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-        case SP_PROP_LIGHTING_COLOR:
+        case SPAttr::LIGHTING_COLOR:
             cend_ptr = nullptr;
             this->lighting_color = sp_svg_read_color(value, &cend_ptr, 0xffffffff);
 
@@ -184,10 +184,10 @@ void SPFeDiffuseLighting::set(SPAttributeEnum key, gchar const *value) {
  */
 void SPFeDiffuseLighting::update(SPCtx *ctx, guint flags) {
     if (flags & (SP_OBJECT_MODIFIED_FLAG)) {
-        this->readAttr(SP_ATTR_SURFACESCALE);
-        this->readAttr(SP_ATTR_DIFFUSECONSTANT);
-        this->readAttr(SP_ATTR_KERNELUNITLENGTH);
-        this->readAttr(SP_PROP_LIGHTING_COLOR);
+        this->readAttr(SPAttr::SURFACESCALE);
+        this->readAttr(SPAttr::DIFFUSECONSTANT);
+        this->readAttr(SPAttr::KERNELUNITLENGTH);
+        this->readAttr(SPAttr::LIGHTING_COLOR);
     }
 
     SPFilterPrimitive::update(ctx, flags);

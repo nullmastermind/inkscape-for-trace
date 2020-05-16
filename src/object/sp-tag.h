@@ -29,7 +29,7 @@ public:
 
     void build(SPDocument * doc, Inkscape::XML::Node *repr) override;
     //virtual void release();
-    void set(SPAttributeEnum key, const gchar* value) override;
+    void set(SPAttr key, const gchar* value) override;
     void update(SPCtx * ctx, unsigned flags) override;
 
     Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags) override;

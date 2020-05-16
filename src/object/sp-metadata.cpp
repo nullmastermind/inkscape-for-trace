@@ -76,7 +76,7 @@ void SPMetadata::release() {
     SPObject::release();
 }
 
-void SPMetadata::set(SPAttributeEnum key, const gchar* value) {
+void SPMetadata::set(SPAttr key, const gchar* value) {
     debug("0x%08x %s(%u): '%s'",(unsigned int)this,
           sp_attribute_name(key),key,value);
 

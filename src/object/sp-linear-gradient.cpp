@@ -30,33 +30,33 @@ SPLinearGradient::~SPLinearGradient() = default;
 void SPLinearGradient::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPGradient::build(document, repr);
 
-    this->readAttr(SP_ATTR_X1);
-    this->readAttr(SP_ATTR_Y1);
-    this->readAttr(SP_ATTR_X2);
-    this->readAttr(SP_ATTR_Y2);
+    this->readAttr(SPAttr::X1);
+    this->readAttr(SPAttr::Y1);
+    this->readAttr(SPAttr::X2);
+    this->readAttr(SPAttr::Y2);
 }
 
 /**
  * Callback: set attribute.
  */
-void SPLinearGradient::set(SPAttributeEnum key, const gchar* value) {
+void SPLinearGradient::set(SPAttr key, const gchar* value) {
     switch (key) {
-        case SP_ATTR_X1:
+        case SPAttr::X1:
             this->x1.readOrUnset(value, SVGLength::PERCENT, 0.0, 0.0);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_Y1:
+        case SPAttr::Y1:
             this->y1.readOrUnset(value, SVGLength::PERCENT, 0.0, 0.0);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_X2:
+        case SPAttr::X2:
             this->x2.readOrUnset(value, SVGLength::PERCENT, 1.0, 1.0);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_Y2:
+        case SPAttr::Y2:
             this->y2.readOrUnset(value, SVGLength::PERCENT, 0.0, 0.0);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;

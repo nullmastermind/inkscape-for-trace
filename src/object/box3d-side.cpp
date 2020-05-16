@@ -39,7 +39,7 @@ Box3DSide::~Box3DSide() = default;
 void Box3DSide::build(SPDocument * document, Inkscape::XML::Node * repr) {
     SPPolygon::build(document, repr);
 
-    this->readAttr(SP_ATTR_INKSCAPE_BOX3D_SIDE_TYPE);
+    this->readAttr(SPAttr::INKSCAPE_BOX3D_SIDE_TYPE);
 }
 
 
@@ -73,13 +73,13 @@ Inkscape::XML::Node* Box3DSide::write(Inkscape::XML::Document *xml_doc, Inkscape
     return repr;
 }
 
-void Box3DSide::set(SPAttributeEnum key, const gchar* value) {
+void Box3DSide::set(SPAttr key, const gchar* value) {
     // TODO: In case the box was recreated (by undo, e.g.) we need to recreate the path
     //       (along with other info?) from the parent box.
 
     /* fixme: we should really collect updates */
     switch (key) {
-        case SP_ATTR_INKSCAPE_BOX3D_SIDE_TYPE:
+        case SPAttr::INKSCAPE_BOX3D_SIDE_TYPE:
             if (value) {
                 guint desc = atoi (value);
 

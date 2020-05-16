@@ -67,7 +67,7 @@ SPGroup::SPGroup() : SPLPEItem(),
 SPGroup::~SPGroup() = default;
 
 void SPGroup::build(SPDocument *document, Inkscape::XML::Node *repr) {
-    this->readAttr(SP_ATTR_INKSCAPE_GROUPMODE);
+    this->readAttr(SPAttr::INKSCAPE_GROUPMODE);
 
     SPLPEItem::build(document, repr);
 }
@@ -306,9 +306,9 @@ gchar *SPGroup::description() const {
         ngettext(_("of <b>%d</b> object"), _("of <b>%d</b> objects"), len), len);
 }
 
-void SPGroup::set(SPAttributeEnum key, gchar const* value) {
+void SPGroup::set(SPAttr key, gchar const* value) {
     switch (key) {
-        case SP_ATTR_INKSCAPE_GROUPMODE:
+        case SPAttr::INKSCAPE_GROUPMODE:
             if ( value && !strcmp(value, "layer") ) {
                 this->setLayerMode(SPGroup::LAYER);
             } else if ( value && !strcmp(value, "maskhelper") ) {

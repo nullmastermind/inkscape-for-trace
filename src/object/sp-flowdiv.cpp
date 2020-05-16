@@ -88,7 +88,7 @@ void SPFlowdiv::build(SPDocument *doc, Inkscape::XML::Node *repr) {
 	SPItem::build(doc, repr);
 }
 
-void SPFlowdiv::set(SPAttributeEnum key, const gchar* value) {
+void SPFlowdiv::set(SPAttr key, const gchar* value) {
 	SPItem::set(key, value);
 }
 
@@ -211,7 +211,7 @@ void SPFlowtspan::build(SPDocument *doc, Inkscape::XML::Node *repr) {
 	SPItem::build(doc, repr);
 }
 
-void SPFlowtspan::set(SPAttributeEnum key, const gchar* value) {
+void SPFlowtspan::set(SPAttr key, const gchar* value) {
 	SPItem::set(key, value);
 }
 
@@ -333,7 +333,7 @@ void SPFlowpara::build(SPDocument *doc, Inkscape::XML::Node *repr) {
 	SPItem::build(doc, repr);
 }
 
-void SPFlowpara::set(SPAttributeEnum key, const gchar* value) {
+void SPFlowpara::set(SPAttr key, const gchar* value) {
 	SPItem::set(key, value);
 }
 

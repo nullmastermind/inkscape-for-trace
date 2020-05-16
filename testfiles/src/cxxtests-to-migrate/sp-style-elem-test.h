@@ -65,16 +65,16 @@ public:
         SPStyleElem *style_elem = new SPStyleElem();
         SP_OBJECT(style_elem)->document = _doc;
 
-        SP_OBJECT(style_elem)->setKeyValue( SP_ATTR_TYPE, "something unrecognized");
+        SP_OBJECT(style_elem)->setKeyValue( SPAttr::TYPE, "something unrecognized");
         TS_ASSERT( !style_elem->is_css );
 
-        SP_OBJECT(style_elem)->setKeyValue( SP_ATTR_TYPE, "text/css");
+        SP_OBJECT(style_elem)->setKeyValue( SPAttr::TYPE, "text/css");
         TS_ASSERT( style_elem->is_css );
 
-        SP_OBJECT(style_elem)->setKeyValue( SP_ATTR_TYPE, "atext/css");
+        SP_OBJECT(style_elem)->setKeyValue( SPAttr::TYPE, "atext/css");
         TS_ASSERT( !style_elem->is_css );
 
-        SP_OBJECT(style_elem)->setKeyValue( SP_ATTR_TYPE, "text/cssx");
+        SP_OBJECT(style_elem)->setKeyValue( SPAttr::TYPE, "text/cssx");
         TS_ASSERT( !style_elem->is_css );
 
         delete style_elem;
@@ -91,7 +91,7 @@ public:
         SPStyleElem *style_elem = new SPStyleElem();
         SP_OBJECT(style_elem)->document = _doc;
 
-        SP_OBJECT(style_elem)->setKeyValue( SP_ATTR_TYPE, "text/css");
+        SP_OBJECT(style_elem)->setKeyValue( SPAttr::TYPE, "text/css");
         Inkscape::XML::Node *repr = _doc->getReprDoc()->createElement("svg:style");
         SP_OBJECT(style_elem)->updateRepr(_doc->getReprDoc(), repr, SP_OBJECT_WRITE_ALL);
         {

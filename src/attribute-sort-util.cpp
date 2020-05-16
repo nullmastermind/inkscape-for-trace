@@ -76,10 +76,10 @@ static void sp_attribute_sort_recursive(Node& repr) {
  */
 static bool cmp(std::pair< Glib::ustring, Glib::ustring > const &a,
                 std::pair< Glib::ustring, Glib::ustring > const &b) {
-    unsigned val_a = sp_attribute_lookup(a.first.c_str());
-    unsigned val_b = sp_attribute_lookup(b.first.c_str());
-    if (val_a == 0) return false; // Unknown attributes at end.
-    if (val_b == 0) return true;  // Unknown attributes at end.
+    auto val_a = sp_attribute_lookup(a.first.c_str());
+    auto val_b = sp_attribute_lookup(b.first.c_str());
+    if (val_a == SPAttr::INVALID) return false; // Unknown attributes at end.
+    if (val_b == SPAttr::INVALID) return true;  // Unknown attributes at end.
     return val_a < val_b;
 }
 

@@ -71,9 +71,9 @@ void SPBox3D::build(SPDocument *document, Inkscape::XML::Node *repr) {
     if ( document ) {
         persp_ref->changedSignal().connect(sigc::bind(sigc::ptr_fun(box3d_ref_changed), this));
 
-        readAttr(SP_ATTR_INKSCAPE_BOX3D_PERSPECTIVE_ID);
-        readAttr(SP_ATTR_INKSCAPE_BOX3D_CORNER0);
-        readAttr(SP_ATTR_INKSCAPE_BOX3D_CORNER7);
+        readAttr(SPAttr::INKSCAPE_BOX3D_PERSPECTIVE_ID);
+        readAttr(SPAttr::INKSCAPE_BOX3D_CORNER0);
+        readAttr(SPAttr::INKSCAPE_BOX3D_CORNER7);
     }
 }
 
@@ -115,12 +115,12 @@ void SPBox3D::release() {
     SPGroup::release();
 }
 
-void SPBox3D::set(SPAttributeEnum key, const gchar* value) {
+void SPBox3D::set(SPAttr key, const gchar* value) {
     SPBox3D* object = this;
     SPBox3D *box = object;
 
     switch (key) {
-        case SP_ATTR_INKSCAPE_BOX3D_PERSPECTIVE_ID:
+        case SPAttr::INKSCAPE_BOX3D_PERSPECTIVE_ID:
             if ( value && box->persp_href && ( strcmp(value, box->persp_href) == 0 ) ) {
                 /* No change, do nothing. */
             } else {
@@ -147,14 +147,14 @@ void SPBox3D::set(SPAttributeEnum key, const gchar* value) {
             // FIXME: Is the following update doubled by some call in either persp3d.cpp or vanishing_point_new.cpp?
             box->position_set();
             break;
-        case SP_ATTR_INKSCAPE_BOX3D_CORNER0:
+        case SPAttr::INKSCAPE_BOX3D_CORNER0:
             if (value && strcmp(value, "0 : 0 : 0 : 0")) {
                 box->orig_corner0 = Proj::Pt3(value);
                 box->save_corner0 = box->orig_corner0;
                 box->position_set();
             }
             break;
-        case SP_ATTR_INKSCAPE_BOX3D_CORNER7:
+        case SPAttr::INKSCAPE_BOX3D_CORNER7:
             if (value && strcmp(value, "0 : 0 : 0 : 0")) {
                 box->orig_corner7 = Proj::Pt3(value);
                 box->save_corner7 = box->orig_corner7;

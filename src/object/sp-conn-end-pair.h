@@ -39,7 +39,7 @@ public:
     SPConnEndPair(SPPath *);
     ~SPConnEndPair();
     void release();
-    void setAttr(unsigned const key, char const *const value);
+    void setAttr(const SPAttr key, char const *const value);
     void writeRepr(Inkscape::XML::Node *const repr) const;
     void getAttachedItems(SPItem *[2]) const;
     void getEndpoints(Geom::Point endPts[]) const;

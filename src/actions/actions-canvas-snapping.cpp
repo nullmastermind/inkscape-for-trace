@@ -26,7 +26,7 @@
 
 // There are four snapping lists that must be connected:
 // 1. The attribute name in NamedView: e.g. "inkscape:snap-bbox".
-// 2. The SPAttributeEnum value:       e.g. SP_ATTR_INKSCAPE_SNAP_BBOX.
+// 2. The SPAttr value:       e.g. SPAttr::INKSCAPE_SNAP_BBOX.
 // 3. The Inkscape::SNAPTARGET value:  e.g. Inkscape::SNAPTARGET_BBOX_CATEGORY.
 // 4. The Gio::Action name:            e.g. "snap-bbox"
 // It seems we could simplify this somehow.
@@ -34,9 +34,9 @@
 // This might work better as a class.
 
 static void
-canvas_snapping_toggle(SPDocument* document, const int option)
+canvas_snapping_toggle(SPDocument* document, const SPAttr option)
 {
-    std::cout << "canvas_snapping_toggle: " << option << std::endl;
+    //std::cout << "canvas_snapping_toggle: " << option << std::endl;
 
     Inkscape::XML::Node* repr = document->getReprNamedView();
 
@@ -59,112 +59,112 @@ canvas_snapping_toggle(SPDocument* document, const int option)
     bool v = false;
 
     switch (option) {
-        case SP_ATTR_INKSCAPE_SNAP_GLOBAL:
+        case SPAttr::INKSCAPE_SNAP_GLOBAL:
             v = nv->getSnapGlobal();
             nv->setSnapGlobal(!v); // Calls sp_repr_set_boolean
             break;
 
         // BBox
-        case SP_ATTR_INKSCAPE_SNAP_BBOX:
+        case SPAttr::INKSCAPE_SNAP_BBOX:
             v = nv->snap_manager.snapprefs.isTargetSnappable(Inkscape::SNAPTARGET_BBOX_CATEGORY);
             sp_repr_set_boolean(repr, "inkscape:snap-bbox", !v);
             break;
 
-        case SP_ATTR_INKSCAPE_SNAP_BBOX_EDGE:
+        case SPAttr::INKSCAPE_SNAP_BBOX_EDGE:
             v = nv->snap_manager.snapprefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_BBOX_EDGE);
             sp_repr_set_boolean(repr, "inkscape:bbox-paths", !v);
             break;
 
-        case SP_ATTR_INKSCAPE_SNAP_BBOX_CORNER:
+        case SPAttr::INKSCAPE_SNAP_BBOX_CORNER:
             v = nv->snap_manager.snapprefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_BBOX_CORNER);
             sp_repr_set_boolean(repr, "inkscape:bbox-nodes", !v);
             break;
 
-        case SP_ATTR_INKSCAPE_SNAP_BBOX_EDGE_MIDPOINT:
+        case SPAttr::INKSCAPE_SNAP_BBOX_EDGE_MIDPOINT:
             v = nv->snap_manager.snapprefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_BBOX_EDGE_MIDPOINT);
             sp_repr_set_boolean(repr, "inkscape:snap-bbox-edge-midpoints", !v);
             break;
 
-        case SP_ATTR_INKSCAPE_SNAP_BBOX_MIDPOINT:
+        case SPAttr::INKSCAPE_SNAP_BBOX_MIDPOINT:
             v = nv->snap_manager.snapprefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_BBOX_MIDPOINT);
             sp_repr_set_boolean(repr, "inkscape:snap-bbox-midpoints", !v);
             break;
 
         // Nodes
-        case SP_ATTR_INKSCAPE_SNAP_NODE:
+        case SPAttr::INKSCAPE_SNAP_NODE:
             v = nv->snap_manager.snapprefs.isTargetSnappable(Inkscape::SNAPTARGET_NODE_CATEGORY);
             sp_repr_set_boolean(repr, "inkscape:snap-nodes", !v);
             break;
 
-        case SP_ATTR_INKSCAPE_SNAP_PATH:
+        case SPAttr::INKSCAPE_SNAP_PATH:
             v = nv->snap_manager.snapprefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_PATH);
             sp_repr_set_boolean(repr, "inkscape:object-paths", !v);
             break;
 
-        case SP_ATTR_INKSCAPE_SNAP_PATH_INTERSECTION:
+        case SPAttr::INKSCAPE_SNAP_PATH_INTERSECTION:
             v = nv->snap_manager.snapprefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_PATH_INTERSECTION);
             sp_repr_set_boolean(repr, "inkscape:snap-intersection-paths", !v);
             break;
 
-        case SP_ATTR_INKSCAPE_SNAP_NODE_CUSP:
+        case SPAttr::INKSCAPE_SNAP_NODE_CUSP:
             v = nv->snap_manager.snapprefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_NODE_CUSP);
             sp_repr_set_boolean(repr, "inkscape:object-nodes", !v);
             break;
 
-        case SP_ATTR_INKSCAPE_SNAP_NODE_SMOOTH:
+        case SPAttr::INKSCAPE_SNAP_NODE_SMOOTH:
             v = nv->snap_manager.snapprefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_NODE_SMOOTH);
             sp_repr_set_boolean(repr, "inkscape:snap-smooth-nodes", !v);
             break;
 
 
-        case SP_ATTR_INKSCAPE_SNAP_LINE_MIDPOINT:
+        case SPAttr::INKSCAPE_SNAP_LINE_MIDPOINT:
             v = nv->snap_manager.snapprefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_LINE_MIDPOINT);
             sp_repr_set_boolean(repr, "inkscape:snap-midpoints", !v);
             break;
 
         // Others
-        case SP_ATTR_INKSCAPE_SNAP_OTHERS:
+        case SPAttr::INKSCAPE_SNAP_OTHERS:
             v = nv->snap_manager.snapprefs.isTargetSnappable(Inkscape::SNAPTARGET_OTHERS_CATEGORY);
             sp_repr_set_boolean(repr, "inkscape:snap-others", !v);
             break;
 
-        case SP_ATTR_INKSCAPE_SNAP_OBJECT_MIDPOINT:
+        case SPAttr::INKSCAPE_SNAP_OBJECT_MIDPOINT:
             v = nv->snap_manager.snapprefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_OBJECT_MIDPOINT);
             sp_repr_set_boolean(repr, "inkscape:snap-object-midpoints", !v);
             break;
 
-        case SP_ATTR_INKSCAPE_SNAP_ROTATION_CENTER:
+        case SPAttr::INKSCAPE_SNAP_ROTATION_CENTER:
             v = nv->snap_manager.snapprefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_ROTATION_CENTER);
             sp_repr_set_boolean(repr, "inkscape:snap-center", !v);
             break;
 
-        case SP_ATTR_INKSCAPE_SNAP_TEXT_BASELINE:
+        case SPAttr::INKSCAPE_SNAP_TEXT_BASELINE:
             v = nv->snap_manager.snapprefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_TEXT_BASELINE);
             sp_repr_set_boolean(repr, "inkscape:snap-text-baseline", !v);
             break;
 
         // Page/Grid/Guides
-        case SP_ATTR_INKSCAPE_SNAP_PAGE_BORDER:
+        case SPAttr::INKSCAPE_SNAP_PAGE_BORDER:
             v = nv->snap_manager.snapprefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_PAGE_BORDER);
             sp_repr_set_boolean(repr, "inkscape:snap-page", !v);
             break;
 
-        case SP_ATTR_INKSCAPE_SNAP_GRID:
+        case SPAttr::INKSCAPE_SNAP_GRID:
             v = nv->snap_manager.snapprefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_GRID);
             sp_repr_set_boolean(repr, "inkscape:snap-grids", !v);
             break;
 
-        case SP_ATTR_INKSCAPE_SNAP_GUIDE:
+        case SPAttr::INKSCAPE_SNAP_GUIDE:
             v = nv->snap_manager.snapprefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_GUIDE);
             sp_repr_set_boolean(repr, "inkscape:snap-to-guides", !v);
             break;
 
         // Not used in default snap toolbar
-        case SP_ATTR_INKSCAPE_SNAP_PATH_CLIP:
+        case SPAttr::INKSCAPE_SNAP_PATH_CLIP:
             v = nv->snap_manager.snapprefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_PATH_CLIP);
             sp_repr_set_boolean(repr, "inkscape:snap-path-clip", !v);
             break;
-        case SP_ATTR_INKSCAPE_SNAP_PATH_MASK:
+        case SPAttr::INKSCAPE_SNAP_PATH_MASK:
             v = nv->snap_manager.snapprefs.isSnapButtonEnabled(Inkscape::SNAPTARGET_PATH_MASK);
             sp_repr_set_boolean(repr, "inkscape:snap-path-mask", !v);
             break;
@@ -216,33 +216,33 @@ add_actions_canvas_snapping(SPDocument* document)
 {
     Glib::RefPtr<Gio::SimpleActionGroup> map = document->getActionGroup();
 
-    map->add_action_bool( "snap-global-toggle",      sigc::bind<SPDocument*, int>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SP_ATTR_INKSCAPE_SNAP_GLOBAL));
+    map->add_action_bool( "snap-global-toggle",      sigc::bind<SPDocument*, SPAttr>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SPAttr::INKSCAPE_SNAP_GLOBAL));
 
-    map->add_action_bool( "snap-bbox",               sigc::bind<SPDocument*, int>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SP_ATTR_INKSCAPE_SNAP_BBOX));
-    map->add_action_bool( "snap-bbox-edge",          sigc::bind<SPDocument*, int>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SP_ATTR_INKSCAPE_SNAP_BBOX_EDGE));
-    map->add_action_bool( "snap-bbox-corner",        sigc::bind<SPDocument*, int>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SP_ATTR_INKSCAPE_SNAP_BBOX_CORNER));
-    map->add_action_bool( "snap-bbox-edge-midpoint", sigc::bind<SPDocument*, int>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SP_ATTR_INKSCAPE_SNAP_BBOX_EDGE_MIDPOINT));
-    map->add_action_bool( "snap-bbox-center",        sigc::bind<SPDocument*, int>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SP_ATTR_INKSCAPE_SNAP_BBOX_MIDPOINT));
+    map->add_action_bool( "snap-bbox",               sigc::bind<SPDocument*, SPAttr>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SPAttr::INKSCAPE_SNAP_BBOX));
+    map->add_action_bool( "snap-bbox-edge",          sigc::bind<SPDocument*, SPAttr>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SPAttr::INKSCAPE_SNAP_BBOX_EDGE));
+    map->add_action_bool( "snap-bbox-corner",        sigc::bind<SPDocument*, SPAttr>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SPAttr::INKSCAPE_SNAP_BBOX_CORNER));
+    map->add_action_bool( "snap-bbox-edge-midpoint", sigc::bind<SPDocument*, SPAttr>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SPAttr::INKSCAPE_SNAP_BBOX_EDGE_MIDPOINT));
+    map->add_action_bool( "snap-bbox-center",        sigc::bind<SPDocument*, SPAttr>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SPAttr::INKSCAPE_SNAP_BBOX_MIDPOINT));
 
-    map->add_action_bool( "snap-node-category",      sigc::bind<SPDocument*, int>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SP_ATTR_INKSCAPE_SNAP_NODE));
-    map->add_action_bool( "snap-path",               sigc::bind<SPDocument*, int>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SP_ATTR_INKSCAPE_SNAP_PATH));
-    map->add_action_bool( "snap-path-intersection",  sigc::bind<SPDocument*, int>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SP_ATTR_INKSCAPE_SNAP_PATH_INTERSECTION));
-    map->add_action_bool( "snap-node-cusp",          sigc::bind<SPDocument*, int>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SP_ATTR_INKSCAPE_SNAP_NODE_CUSP));
-    map->add_action_bool( "snap-node-smooth",        sigc::bind<SPDocument*, int>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SP_ATTR_INKSCAPE_SNAP_NODE_SMOOTH));
-    map->add_action_bool( "snap-line-midpoint",      sigc::bind<SPDocument*, int>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SP_ATTR_INKSCAPE_SNAP_LINE_MIDPOINT));
+    map->add_action_bool( "snap-node-category",      sigc::bind<SPDocument*, SPAttr>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SPAttr::INKSCAPE_SNAP_NODE));
+    map->add_action_bool( "snap-path",               sigc::bind<SPDocument*, SPAttr>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SPAttr::INKSCAPE_SNAP_PATH));
+    map->add_action_bool( "snap-path-intersection",  sigc::bind<SPDocument*, SPAttr>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SPAttr::INKSCAPE_SNAP_PATH_INTERSECTION));
+    map->add_action_bool( "snap-node-cusp",          sigc::bind<SPDocument*, SPAttr>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SPAttr::INKSCAPE_SNAP_NODE_CUSP));
+    map->add_action_bool( "snap-node-smooth",        sigc::bind<SPDocument*, SPAttr>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SPAttr::INKSCAPE_SNAP_NODE_SMOOTH));
+    map->add_action_bool( "snap-line-midpoint",      sigc::bind<SPDocument*, SPAttr>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SPAttr::INKSCAPE_SNAP_LINE_MIDPOINT));
 
-    map->add_action_bool( "snap-others",             sigc::bind<SPDocument*, int>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SP_ATTR_INKSCAPE_SNAP_OTHERS));
-    map->add_action_bool( "snap-object-midpoint",    sigc::bind<SPDocument*, int>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SP_ATTR_INKSCAPE_SNAP_OBJECT_MIDPOINT));
-    map->add_action_bool( "snap-rotation-center",    sigc::bind<SPDocument*, int>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SP_ATTR_INKSCAPE_SNAP_ROTATION_CENTER));
-    map->add_action_bool( "snap-text-baseline",      sigc::bind<SPDocument*, int>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SP_ATTR_INKSCAPE_SNAP_TEXT_BASELINE));
+    map->add_action_bool( "snap-others",             sigc::bind<SPDocument*, SPAttr>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SPAttr::INKSCAPE_SNAP_OTHERS));
+    map->add_action_bool( "snap-object-midpoint",    sigc::bind<SPDocument*, SPAttr>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SPAttr::INKSCAPE_SNAP_OBJECT_MIDPOINT));
+    map->add_action_bool( "snap-rotation-center",    sigc::bind<SPDocument*, SPAttr>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SPAttr::INKSCAPE_SNAP_ROTATION_CENTER));
+    map->add_action_bool( "snap-text-baseline",      sigc::bind<SPDocument*, SPAttr>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SPAttr::INKSCAPE_SNAP_TEXT_BASELINE));
 
-    map->add_action_bool( "snap-page-border",        sigc::bind<SPDocument*, int>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SP_ATTR_INKSCAPE_SNAP_PAGE_BORDER));
-    map->add_action_bool( "snap-grid",               sigc::bind<SPDocument*, int>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SP_ATTR_INKSCAPE_SNAP_GRID));
-    map->add_action_bool( "snap-guide",              sigc::bind<SPDocument*, int>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SP_ATTR_INKSCAPE_SNAP_GUIDE));
+    map->add_action_bool( "snap-page-border",        sigc::bind<SPDocument*, SPAttr>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SPAttr::INKSCAPE_SNAP_PAGE_BORDER));
+    map->add_action_bool( "snap-grid",               sigc::bind<SPDocument*, SPAttr>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SPAttr::INKSCAPE_SNAP_GRID));
+    map->add_action_bool( "snap-guide",              sigc::bind<SPDocument*, SPAttr>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SPAttr::INKSCAPE_SNAP_GUIDE));
 
     // Not used in toolbar
-    map->add_action_bool( "snap-path-mask",          sigc::bind<SPDocument*, int>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SP_ATTR_INKSCAPE_SNAP_PATH_MASK));
-    map->add_action_bool( "snap-path-clip",          sigc::bind<SPDocument*, int>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SP_ATTR_INKSCAPE_SNAP_PATH_CLIP));
+    map->add_action_bool( "snap-path-mask",          sigc::bind<SPDocument*, SPAttr>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SPAttr::INKSCAPE_SNAP_PATH_MASK));
+    map->add_action_bool( "snap-path-clip",          sigc::bind<SPDocument*, SPAttr>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SPAttr::INKSCAPE_SNAP_PATH_CLIP));
 
     // Check if there is already an application instance (GUI or non-GUI).
     auto app = dynamic_cast<InkscapeApplication *>(Gio::Application::get_default().get());

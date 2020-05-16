@@ -52,7 +52,7 @@ public:
 
 	void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
 
-	void set(SPAttributeEnum key, char const *value) override;
+	void set(SPAttr key, char const *value) override;
 	void update(SPCtx* ctx, unsigned int flags) override;
   void modified(unsigned int flags) override;
   bool set_rect_path_attribute(Inkscape::XML::Node *repr);

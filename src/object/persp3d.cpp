@@ -67,10 +67,10 @@ Persp3D::~Persp3D() = default;
 void Persp3D::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPObject::build(document, repr);
 
-    this->readAttr(SP_ATTR_INKSCAPE_PERSP3D_VP_X);
-    this->readAttr(SP_ATTR_INKSCAPE_PERSP3D_VP_Y);
-    this->readAttr(SP_ATTR_INKSCAPE_PERSP3D_VP_Z);
-    this->readAttr(SP_ATTR_INKSCAPE_PERSP3D_ORIGIN);
+    this->readAttr(SPAttr::INKSCAPE_PERSP3D_VP_X);
+    this->readAttr(SPAttr::INKSCAPE_PERSP3D_VP_Y);
+    this->readAttr(SPAttr::INKSCAPE_PERSP3D_VP_Z);
+    this->readAttr(SPAttr::INKSCAPE_PERSP3D_ORIGIN);
 
     if (repr) {
         repr->addListener (&persp3d_repr_events, this);
@@ -134,10 +134,10 @@ static Proj::Pt2 legacy_transform_backward(Proj::Pt2 pt, SPDocument const *doc) 
  */
 // FIXME: Currently we only read the finite positions of vanishing points;
 //        should we move VPs into their own repr (as it's done for SPStop, e.g.)?
-void Persp3D::set(SPAttributeEnum key, gchar const *value) {
+void Persp3D::set(SPAttr key, gchar const *value) {
 
     switch (key) {
-        case SP_ATTR_INKSCAPE_PERSP3D_VP_X: {
+        case SPAttr::INKSCAPE_PERSP3D_VP_X: {
             if (value) {
                 Proj::Pt2 pt (value);
                 Proj::Pt2 ptn = legacy_transform_forward(pt, document);
@@ -145,7 +145,7 @@ void Persp3D::set(SPAttributeEnum key, gchar const *value) {
             }
             break;
         }
-        case SP_ATTR_INKSCAPE_PERSP3D_VP_Y: {
+        case SPAttr::INKSCAPE_PERSP3D_VP_Y: {
             if (value) {
                 Proj::Pt2 pt (value);
                 Proj::Pt2 ptn = legacy_transform_forward(pt, document);
@@ -153,7 +153,7 @@ void Persp3D::set(SPAttributeEnum key, gchar const *value) {
             }
             break;
         }
-        case SP_ATTR_INKSCAPE_PERSP3D_VP_Z: {
+        case SPAttr::INKSCAPE_PERSP3D_VP_Z: {
             if (value) {
                 Proj::Pt2 pt (value);
                 Proj::Pt2 ptn = legacy_transform_forward(pt, document);
@@ -161,7 +161,7 @@ void Persp3D::set(SPAttributeEnum key, gchar const *value) {
             }
             break;
         }
-        case SP_ATTR_INKSCAPE_PERSP3D_ORIGIN: {
+        case SPAttr::INKSCAPE_PERSP3D_ORIGIN: {
             if (value) {
                 Proj::Pt2 pt (value);
                 Proj::Pt2 ptn = legacy_transform_forward(pt, document);

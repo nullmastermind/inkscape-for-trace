@@ -63,15 +63,15 @@ SPFilter::~SPFilter() = default;
  */
 void SPFilter::build(SPDocument *document, Inkscape::XML::Node *repr) {
     //Read values of key attributes from XML nodes into object.
-    this->readAttr(SP_ATTR_STYLE); // struct not derived from SPItem, we need to do this ourselves.
-    this->readAttr(SP_ATTR_FILTERUNITS);
-    this->readAttr(SP_ATTR_PRIMITIVEUNITS);
-    this->readAttr(SP_ATTR_X);
-    this->readAttr(SP_ATTR_Y);
-    this->readAttr(SP_ATTR_WIDTH);
-    this->readAttr(SP_ATTR_HEIGHT);
-    this->readAttr(SP_ATTR_FILTERRES);
-    this->readAttr(SP_ATTR_XLINK_HREF);
+    this->readAttr(SPAttr::STYLE); // struct not derived from SPItem, we need to do this ourselves.
+    this->readAttr(SPAttr::FILTERUNITS);
+    this->readAttr(SPAttr::PRIMITIVEUNITS);
+    this->readAttr(SPAttr::X);
+    this->readAttr(SPAttr::Y);
+    this->readAttr(SPAttr::WIDTH);
+    this->readAttr(SPAttr::HEIGHT);
+    this->readAttr(SPAttr::FILTERRES);
+    this->readAttr(SPAttr::XLINK_HREF);
     this->_refcount = 0;
 
 	SPObject::build(document, repr);
@@ -111,9 +111,9 @@ void SPFilter::release() {
 /**
  * Sets a specific value in the SPFilter.
  */
-void SPFilter::set(SPAttributeEnum key, gchar const *value) {
+void SPFilter::set(SPAttr key, gchar const *value) {
     switch (key) {
-        case SP_ATTR_FILTERUNITS:
+        case SPAttr::FILTERUNITS:
             if (value) {
                 if (!strcmp(value, "userSpaceOnUse")) {
                     this->filterUnits = SP_FILTER_UNITS_USERSPACEONUSE;
@@ -129,7 +129,7 @@ void SPFilter::set(SPAttributeEnum key, gchar const *value) {
 
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-        case SP_ATTR_PRIMITIVEUNITS:
+        case SPAttr::PRIMITIVEUNITS:
             if (value) {
                 if (!strcmp(value, "objectBoundingBox")) {
                     this->primitiveUnits = SP_FILTER_UNITS_OBJECTBOUNDINGBOX;
@@ -145,27 +145,27 @@ void SPFilter::set(SPAttributeEnum key, gchar const *value) {
 
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-        case SP_ATTR_X:
+        case SPAttr::X:
             this->x.readOrUnset(value);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-        case SP_ATTR_Y:
+        case SPAttr::Y:
             this->y.readOrUnset(value);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-        case SP_ATTR_WIDTH:
+        case SPAttr::WIDTH:
             this->width.readOrUnset(value);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-        case SP_ATTR_HEIGHT:
+        case SPAttr::HEIGHT:
             this->height.readOrUnset(value);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-        case SP_ATTR_FILTERRES:
+        case SPAttr::FILTERRES:
             this->filterRes.set(value);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-        case SP_ATTR_XLINK_HREF:
+        case SPAttr::XLINK_HREF:
             if (value) {
                 try {
                     this->href->attach(Inkscape::URI(value));

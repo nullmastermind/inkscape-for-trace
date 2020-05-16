@@ -69,7 +69,7 @@ void SPMeshrow::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 /**
  * Virtual build: set meshrow attributes from its associated XML node.
  */
-void SPMeshrow::set(SPAttributeEnum /*key*/, const gchar* /*value*/) {
+void SPMeshrow::set(SPAttr /*key*/, const gchar* /*value*/) {
 }
 
 /**

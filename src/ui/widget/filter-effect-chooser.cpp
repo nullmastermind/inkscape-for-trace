@@ -46,7 +46,7 @@ SimpleFilterModifier::SimpleFilterModifier(int flags)
     : _flags(flags)
     , _lb_blend(_("Blend mode:"))
     , _lb_isolation("Isolate") // Translate for 1.1
-    , _blend(SPBlendModeConverter, SP_ATTR_INVALID, false)
+    , _blend(SPBlendModeConverter, SPAttr::INVALID, false)
     , _blur(_("Blur (%)"), 0, 0, 100, 1, 0.1, 1)
     , _opacity(_("Opacity (%)"), 0, 0, 100, 1, 0.1, 1)
     , _notify(true)

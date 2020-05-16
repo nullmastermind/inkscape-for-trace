@@ -78,7 +78,7 @@ SPLPEItem::SPLPEItem()
 SPLPEItem::~SPLPEItem() = default;
 
 void SPLPEItem::build(SPDocument *document, Inkscape::XML::Node *repr) {
-    this->readAttr(SP_ATTR_INKSCAPE_PATH_EFFECT);
+    this->readAttr(SPAttr::INKSCAPE_PATH_EFFECT);
 
     SPItem::build(document, repr);
 }
@@ -102,9 +102,9 @@ void SPLPEItem::release() {
     SPItem::release();
 }
 
-void SPLPEItem::set(SPAttributeEnum key, gchar const* value) {
+void SPLPEItem::set(SPAttr key, gchar const* value) {
     switch (key) {
-        case SP_ATTR_INKSCAPE_PATH_EFFECT:
+        case SPAttr::INKSCAPE_PATH_EFFECT:
             {
                 this->current_path_effect = nullptr;
 

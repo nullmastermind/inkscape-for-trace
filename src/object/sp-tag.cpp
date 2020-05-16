@@ -63,7 +63,7 @@ void SPTag::moveTo(SPObject *target, gboolean intoafter) {
 void
 SPTag::build(SPDocument *document, Inkscape::XML::Node *repr)
 {
-    readAttr(SP_ATTR_INKSCAPE_EXPANDED);
+    readAttr(SPAttr::INKSCAPE_EXPANDED);
     SPObject::build(document, repr);
 }
 
@@ -71,12 +71,12 @@ SPTag::build(SPDocument *document, Inkscape::XML::Node *repr)
  * Sets a specific value in the SPTag.
  */
 void
-SPTag::set(SPAttributeEnum key, gchar const *value)
+SPTag::set(SPAttr key, gchar const *value)
 {
     
     switch (key)
     {
-        case SP_ATTR_INKSCAPE_EXPANDED:
+        case SPAttr::INKSCAPE_EXPANDED:
             if ( value && !strcmp(value, "true") ) {
                 setExpanded(true);
             }

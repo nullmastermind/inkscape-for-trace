@@ -64,16 +64,16 @@ void SPRoot::build(SPDocument *document, Inkscape::XML::Node *repr)
         repr->setAttribute("version", SVG_VERSION);
     }
 
-    this->readAttr(SP_ATTR_VERSION);
-    this->readAttr(SP_ATTR_INKSCAPE_VERSION);
+    this->readAttr(SPAttr::VERSION);
+    this->readAttr(SPAttr::INKSCAPE_VERSION);
     /* It is important to parse these here, so objects will have viewport build-time */
-    this->readAttr(SP_ATTR_X);
-    this->readAttr(SP_ATTR_Y);
-    this->readAttr(SP_ATTR_WIDTH);
-    this->readAttr(SP_ATTR_HEIGHT);
-    this->readAttr(SP_ATTR_VIEWBOX);
-    this->readAttr(SP_ATTR_PRESERVEASPECTRATIO);
-    this->readAttr(SP_ATTR_ONLOAD);
+    this->readAttr(SPAttr::X);
+    this->readAttr(SPAttr::Y);
+    this->readAttr(SPAttr::WIDTH);
+    this->readAttr(SPAttr::HEIGHT);
+    this->readAttr(SPAttr::VIEWBOX);
+    this->readAttr(SPAttr::PRESERVEASPECTRATIO);
+    this->readAttr(SPAttr::ONLOAD);
 
     SPGroup::build(document, repr);
 
@@ -97,22 +97,22 @@ void SPRoot::release()
 }
 
 
-void SPRoot::set(SPAttributeEnum key, const gchar *value)
+void SPRoot::set(SPAttr key, const gchar *value)
 {
     switch (key) {
-    case SP_ATTR_VERSION:
+    case SPAttr::VERSION:
         if (!sp_version_from_string(value, &this->version.svg)) {
             this->version.svg = this->original.svg;
         }
         break;
 
-    case SP_ATTR_INKSCAPE_VERSION:
+    case SPAttr::INKSCAPE_VERSION:
         if (!sp_version_from_string(value, &this->version.inkscape)) {
             this->version.inkscape = this->original.inkscape;
         }
         break;
 
-    case SP_ATTR_X:
+    case SPAttr::X:
         /* Valid for non-root SVG elements; ex, em not handled correctly. */
         if (!this->x.read(value)) {
             this->x.unset(SVGLength::PERCENT, 0.0, 0.0);
@@ -122,7 +122,7 @@ void SPRoot::set(SPAttributeEnum key, const gchar *value)
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_Y:
+    case SPAttr::Y:
         /* Valid for non-root SVG elements; ex, em not handled correctly. */
         if (!this->y.read(value)) {
             this->y.unset(SVGLength::PERCENT, 0.0, 0.0);
@@ -132,31 +132,31 @@ void SPRoot::set(SPAttributeEnum key, const gchar *value)
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_WIDTH:
+    case SPAttr::WIDTH:
         if (!this->width.read(value) || !(this->width.computed > 0.0)) {
             this->width.unset(SVGLength::PERCENT, 1.0, 1.0);
         }
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_HEIGHT:
+    case SPAttr::HEIGHT:
         if (!this->height.read(value) || !(this->height.computed > 0.0)) {
             this->height.unset(SVGLength::PERCENT, 1.0, 1.0);
         }
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_VIEWBOX:
+    case SPAttr::VIEWBOX:
         set_viewBox( value );
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_PRESERVEASPECTRATIO:
+    case SPAttr::PRESERVEASPECTRATIO:
         set_preserveAspectRatio( value );
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_ONLOAD:
+    case SPAttr::ONLOAD:
         this->onload = (char *) value;
         break;
 

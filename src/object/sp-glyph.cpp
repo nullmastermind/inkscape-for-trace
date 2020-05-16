@@ -37,16 +37,16 @@ void SPGlyph::build(SPDocument *document, Inkscape::XML::Node *repr)
 {
     SPObject::build(document, repr);
 
-    this->readAttr(SP_ATTR_UNICODE);
-    this->readAttr(SP_ATTR_GLYPH_NAME);
-    this->readAttr(SP_ATTR_D);
-    this->readAttr(SP_ATTR_ORIENTATION);
-    this->readAttr(SP_ATTR_ARABIC_FORM);
-    this->readAttr(SP_ATTR_LANG);
-    this->readAttr(SP_ATTR_HORIZ_ADV_X);
-    this->readAttr(SP_ATTR_VERT_ORIGIN_X);
-    this->readAttr(SP_ATTR_VERT_ORIGIN_Y);
-    this->readAttr(SP_ATTR_VERT_ADV_Y);
+    this->readAttr(SPAttr::UNICODE);
+    this->readAttr(SPAttr::GLYPH_NAME);
+    this->readAttr(SPAttr::D);
+    this->readAttr(SPAttr::ORIENTATION);
+    this->readAttr(SPAttr::ARABIC_FORM);
+    this->readAttr(SPAttr::LANG);
+    this->readAttr(SPAttr::HORIZ_ADV_X);
+    this->readAttr(SPAttr::VERT_ORIGIN_X);
+    this->readAttr(SPAttr::VERT_ORIGIN_Y);
+    this->readAttr(SPAttr::VERT_ADV_Y);
 }
 
 void SPGlyph::release() {
@@ -102,10 +102,10 @@ static glyphOrientation sp_glyph_read_orientation(gchar const *value)
     return GLYPH_ORIENTATION_BOTH;
 }
 
-void SPGlyph::set(SPAttributeEnum key, const gchar *value)
+void SPGlyph::set(SPAttr key, const gchar *value)
 {
     switch (key) {
-        case SP_ATTR_UNICODE:
+        case SPAttr::UNICODE:
         {
             this->unicode.clear();
             
@@ -116,7 +116,7 @@ void SPGlyph::set(SPAttributeEnum key, const gchar *value)
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
         }
-        case SP_ATTR_GLYPH_NAME:
+        case SPAttr::GLYPH_NAME:
         {
             this->glyph_name.clear();
             
@@ -127,7 +127,7 @@ void SPGlyph::set(SPAttributeEnum key, const gchar *value)
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
         }
-        case SP_ATTR_D:
+        case SPAttr::D:
         {
             if (this->d) {
             	g_free(this->d);
@@ -137,7 +137,7 @@ void SPGlyph::set(SPAttributeEnum key, const gchar *value)
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
         }
-        case SP_ATTR_ORIENTATION:
+        case SPAttr::ORIENTATION:
         {
             glyphOrientation orient = sp_glyph_read_orientation(value);
             
@@ -147,7 +147,7 @@ void SPGlyph::set(SPAttributeEnum key, const gchar *value)
             }
             break;
         }
-        case SP_ATTR_ARABIC_FORM:
+        case SPAttr::ARABIC_FORM:
         {
             glyphArabicForm form = sp_glyph_read_arabic_form(value);
             
@@ -157,7 +157,7 @@ void SPGlyph::set(SPAttributeEnum key, const gchar *value)
             }
             break;
         }
-        case SP_ATTR_LANG:
+        case SPAttr::LANG:
         {
             if (this->lang) {
             	g_free(this->lang);
@@ -167,7 +167,7 @@ void SPGlyph::set(SPAttributeEnum key, const gchar *value)
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
         }
-        case SP_ATTR_HORIZ_ADV_X:
+        case SPAttr::HORIZ_ADV_X:
         {
             double number = value ? g_ascii_strtod(value, nullptr) : 0;
             
@@ -177,7 +177,7 @@ void SPGlyph::set(SPAttributeEnum key, const gchar *value)
             }
             break;
         }
-        case SP_ATTR_VERT_ORIGIN_X:
+        case SPAttr::VERT_ORIGIN_X:
         {
             double number = value ? g_ascii_strtod(value, nullptr) : 0;
             
@@ -187,7 +187,7 @@ void SPGlyph::set(SPAttributeEnum key, const gchar *value)
             }
             break;
         }
-        case SP_ATTR_VERT_ORIGIN_Y:
+        case SPAttr::VERT_ORIGIN_Y:
         {
             double number = value ? g_ascii_strtod(value, nullptr) : 0;
             
@@ -197,7 +197,7 @@ void SPGlyph::set(SPAttributeEnum key, const gchar *value)
             }
             break;
         }
-        case SP_ATTR_VERT_ADV_Y:
+        case SPAttr::VERT_ADV_Y:
         {
             double number = value ? g_ascii_strtod(value, nullptr) : 0;
             
@@ -222,16 +222,16 @@ void SPGlyph::update(SPCtx *ctx, guint flags)
 {
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         /* do something to trigger redisplay, updates? */
-        this->readAttr(SP_ATTR_UNICODE);
-        this->readAttr(SP_ATTR_GLYPH_NAME);
-        this->readAttr(SP_ATTR_D);
-        this->readAttr(SP_ATTR_ORIENTATION);
-        this->readAttr(SP_ATTR_ARABIC_FORM);
-        this->readAttr(SP_ATTR_LANG);
-        this->readAttr(SP_ATTR_HORIZ_ADV_X);
-        this->readAttr(SP_ATTR_VERT_ORIGIN_X);
-        this->readAttr(SP_ATTR_VERT_ORIGIN_Y);
-        this->readAttr(SP_ATTR_VERT_ADV_Y);
+        this->readAttr(SPAttr::UNICODE);
+        this->readAttr(SPAttr::GLYPH_NAME);
+        this->readAttr(SPAttr::D);
+        this->readAttr(SPAttr::ORIENTATION);
+        this->readAttr(SPAttr::ARABIC_FORM);
+        this->readAttr(SPAttr::LANG);
+        this->readAttr(SPAttr::HORIZ_ADV_X);
+        this->readAttr(SPAttr::VERT_ORIGIN_X);
+        this->readAttr(SPAttr::VERT_ORIGIN_Y);
+        this->readAttr(SPAttr::VERT_ADV_Y);
     }
 
     SPObject::update(ctx, flags);

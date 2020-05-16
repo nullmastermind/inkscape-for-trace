@@ -40,8 +40,8 @@ void SPFeMorphology::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPFilterPrimitive::build(document, repr);
 
 	/*LOAD ATTRIBUTES FROM REPR HERE*/
-	this->readAttr(SP_ATTR_OPERATOR);
-	this->readAttr(SP_ATTR_RADIUS);
+	this->readAttr(SPAttr::OPERATOR);
+	this->readAttr(SPAttr::RADIUS);
 }
 
 /**
@@ -75,12 +75,12 @@ static Inkscape::Filters::FilterMorphologyOperator sp_feMorphology_read_operator
 /**
  * Sets a specific value in the SPFeMorphology.
  */
-void SPFeMorphology::set(SPAttributeEnum key, gchar const *value) {
+void SPFeMorphology::set(SPAttr key, gchar const *value) {
     Inkscape::Filters::FilterMorphologyOperator read_operator;
     
     switch(key) {
     /*DEAL WITH SETTING ATTRIBUTES HERE*/
-        case SP_ATTR_OPERATOR:
+        case SPAttr::OPERATOR:
             read_operator = sp_feMorphology_read_operator(value);
 
             if (read_operator != this->Operator){
@@ -88,7 +88,7 @@ void SPFeMorphology::set(SPAttributeEnum key, gchar const *value) {
                 this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
-        case SP_ATTR_RADIUS:
+        case SPAttr::RADIUS:
             this->radius.set(value);
 
             //From SVG spec: If <y-radius> is not provided, it defaults to <x-radius>.

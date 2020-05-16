@@ -37,21 +37,21 @@ SPRadialGradient::~SPRadialGradient() = default;
 void SPRadialGradient::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPGradient::build(document, repr);
 
-    this->readAttr(SP_ATTR_CX);
-    this->readAttr(SP_ATTR_CY);
-    this->readAttr(SP_ATTR_R);
-    this->readAttr(SP_ATTR_FX);
-    this->readAttr(SP_ATTR_FY);
-    this->readAttr(SP_ATTR_FR);
+    this->readAttr(SPAttr::CX);
+    this->readAttr(SPAttr::CY);
+    this->readAttr(SPAttr::R);
+    this->readAttr(SPAttr::FX);
+    this->readAttr(SPAttr::FY);
+    this->readAttr(SPAttr::FR);
 }
 
 /**
  * Set radial gradient attribute.
  */
-void SPRadialGradient::set(SPAttributeEnum key, gchar const *value) {
+void SPRadialGradient::set(SPAttr key, gchar const *value) {
 
     switch (key) {
-        case SP_ATTR_CX:
+        case SPAttr::CX:
             if (!this->cx.read(value)) {
                 this->cx.unset(SVGLength::PERCENT, 0.5, 0.5);
             }
@@ -64,7 +64,7 @@ void SPRadialGradient::set(SPAttributeEnum key, gchar const *value) {
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_CY:
+        case SPAttr::CY:
             if (!this->cy.read(value)) {
                 this->cy.unset(SVGLength::PERCENT, 0.5, 0.5);
             }
@@ -77,7 +77,7 @@ void SPRadialGradient::set(SPAttributeEnum key, gchar const *value) {
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_R:
+        case SPAttr::R:
             if (!this->r.read(value)) {
                 this->r.unset(SVGLength::PERCENT, 0.5, 0.5);
             }
@@ -85,7 +85,7 @@ void SPRadialGradient::set(SPAttributeEnum key, gchar const *value) {
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_FX:
+        case SPAttr::FX:
             if (!this->fx.read(value)) {
                 this->fx.unset(this->cx.unit, this->cx.value, this->cx.computed);
             }
@@ -93,7 +93,7 @@ void SPRadialGradient::set(SPAttributeEnum key, gchar const *value) {
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_FY:
+        case SPAttr::FY:
             if (!this->fy.read(value)) {
                 this->fy.unset(this->cy.unit, this->cy.value, this->cy.computed);
             }
@@ -101,7 +101,7 @@ void SPRadialGradient::set(SPAttributeEnum key, gchar const *value) {
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_FR:
+        case SPAttr::FR:
             if (!this->fr.read(value)) {
                 this->fr.unset(SVGLength::PERCENT, 0.0, 0.0);
             }

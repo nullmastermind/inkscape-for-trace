@@ -42,15 +42,15 @@ unsigned int sp_attribute_clean_get_prefs() {
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     unsigned int flags = 0;
-    if( prefs->getBool("/options/svgoutput/incorrect_attributes_warn") )          flags += SP_ATTR_CLEAN_ATTR_WARN;
+    if( prefs->getBool("/options/svgoutput/incorrect_attributes_warn") )          flags += SP_ATTRCLEAN_ATTR_WARN;
     if( prefs->getBool("/options/svgoutput/incorrect_attributes_remove") &&
-       !prefs->getBool("/options/svgoutput/disable_optimizations" ) )             flags += SP_ATTR_CLEAN_ATTR_REMOVE;
-    if( prefs->getBool("/options/svgoutput/incorrect_style_properties_warn") )    flags += SP_ATTR_CLEAN_STYLE_WARN;
+       !prefs->getBool("/options/svgoutput/disable_optimizations" ) )             flags += SP_ATTRCLEAN_ATTR_REMOVE;
+    if( prefs->getBool("/options/svgoutput/incorrect_style_properties_warn") )    flags += SP_ATTRCLEAN_STYLE_WARN;
     if( prefs->getBool("/options/svgoutput/incorrect_style_properties_remove" ) &&
-       !prefs->getBool("/options/svgoutput/disable_optimizations" ) )             flags += SP_ATTR_CLEAN_STYLE_REMOVE;
-    if( prefs->getBool("/options/svgoutput/style_defaults_warn") )                flags += SP_ATTR_CLEAN_DEFAULT_WARN;
+       !prefs->getBool("/options/svgoutput/disable_optimizations" ) )             flags += SP_ATTRCLEAN_STYLE_REMOVE;
+    if( prefs->getBool("/options/svgoutput/style_defaults_warn") )                flags += SP_ATTRCLEAN_DEFAULT_WARN;
     if( prefs->getBool("/options/svgoutput/style_defaults_remove") &&
-       !prefs->getBool("/options/svgoutput/disable_optimizations" ) )             flags += SP_ATTR_CLEAN_DEFAULT_REMOVE;
+       !prefs->getBool("/options/svgoutput/disable_optimizations" ) )             flags += SP_ATTRCLEAN_DEFAULT_REMOVE;
 
     return flags;
 }
@@ -92,7 +92,7 @@ void sp_attribute_clean_recursive(Node *repr, unsigned int flags) {
     Glib::ustring element = child->name();
     unsigned int flags_temp = flags;
     if( element.compare( "svg:defs" ) == 0 || element.compare( "svg:symbol" ) == 0 ) {
-      flags_temp &= ~(SP_ATTR_CLEAN_DEFAULT_WARN|SP_ATTR_CLEAN_DEFAULT_REMOVE);
+      flags_temp &= ~(SP_ATTRCLEAN_DEFAULT_WARN|SP_ATTRCLEAN_DEFAULT_REMOVE);
     }
     sp_attribute_clean_recursive( child, flags_temp );
   }
@@ -122,8 +122,8 @@ void sp_attribute_clean_element(Node *repr, unsigned int flags) {
     Glib::ustring attribute = g_quark_to_string(iter->key);
     //Glib::ustring value = (const char*)iter->value;
 
-    bool is_useful = sp_attribute_check_attribute( element, id, attribute, flags & SP_ATTR_CLEAN_ATTR_WARN );
-    if( !is_useful && (flags & SP_ATTR_CLEAN_ATTR_REMOVE) ) {
+    bool is_useful = sp_attribute_check_attribute( element, id, attribute, flags & SP_ATTRCLEAN_ATTR_WARN );
+    if( !is_useful && (flags & SP_ATTRCLEAN_ATTR_REMOVE) ) {
       attributesToDelete.insert( attribute );
     }
   }
@@ -208,11 +208,11 @@ void sp_attribute_clean_style(Node* repr, SPCSSAttr *css, unsigned int flags) {
 
     // Check if a property is applicable to an element (i.e. is font-family useful for a <rect>?).
     if( !SPAttributeRelCSS::findIfValid( property, element ) ) {
-        if( flags & SP_ATTR_CLEAN_STYLE_WARN ) {
+        if( flags & SP_ATTRCLEAN_STYLE_WARN ) {
             g_warning( "<%s id=\"%s\">: CSS Style property: \"%s\" is inappropriate.",
                        element.c_str(), id.c_str(), property );
         }
-        if( flags & SP_ATTR_CLEAN_STYLE_REMOVE ) {
+        if( flags & SP_ATTRCLEAN_STYLE_REMOVE ) {
             toDelete.insert(property);
         }
         continue;
@@ -235,11 +235,11 @@ void sp_attribute_clean_style(Node* repr, SPCSSAttr *css, unsigned int flags) {
     // If parent has same property value and property is inherited, mark for deletion.
     if ( !g_strcmp0( value, value_p ) && SPAttributeRelCSS::findIfInherit( property ) ) {
 
-        if ( flags & SP_ATTR_CLEAN_DEFAULT_WARN ) {
+        if ( flags & SP_ATTRCLEAN_DEFAULT_WARN ) {
             g_warning( "<%s id=\"%s\">: CSS Style property: \"%s\" has same value as parent (%s).",
                        element.c_str(), id.c_str(), property, value );
         }
-        if ( flags & SP_ATTR_CLEAN_DEFAULT_REMOVE ) {
+        if ( flags & SP_ATTRCLEAN_DEFAULT_REMOVE ) {
             toDelete.insert( property );
         }
         continue;
@@ -250,11 +250,11 @@ void sp_attribute_clean_style(Node* repr, SPCSSAttr *css, unsigned int flags) {
     if ( SPAttributeRelCSS::findIfDefault( property, value ) &&
          ( (css_parent != nullptr && value_p == nullptr) || !SPAttributeRelCSS::findIfInherit( property ) ) ) {
 
-        if ( flags & SP_ATTR_CLEAN_DEFAULT_WARN ) {
+        if ( flags & SP_ATTRCLEAN_DEFAULT_WARN ) {
             g_warning( "<%s id=\"%s\">: CSS Style property: \"%s\" with default value (%s) not needed.",
                        element.c_str(), id.c_str(), property, value );
         }
-        if ( flags & SP_ATTR_CLEAN_DEFAULT_REMOVE ) {
+        if ( flags & SP_ATTRCLEAN_DEFAULT_REMOVE ) {
             toDelete.insert( property );
         }
         continue;
@@ -286,11 +286,11 @@ void sp_attribute_purge_default_style(SPCSSAttr *css, unsigned int flags) {
     // If property value is same as default mark for deletion.
     if ( SPAttributeRelCSS::findIfDefault( property, value ) ) {
 
-        if ( flags & SP_ATTR_CLEAN_DEFAULT_WARN ) {
+        if ( flags & SP_ATTRCLEAN_DEFAULT_WARN ) {
             g_warning( "Preferences CSS Style property: \"%s\" with default value (%s) not needed.",
                        property, value );
         }
-        if ( flags & SP_ATTR_CLEAN_DEFAULT_REMOVE ) {
+        if ( flags & SP_ATTRCLEAN_DEFAULT_REMOVE ) {
             toDelete.insert( property );
         }
         continue;

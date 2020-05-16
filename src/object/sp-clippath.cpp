@@ -44,8 +44,8 @@ SPClipPath::~SPClipPath() = default;
 void SPClipPath::build(SPDocument* doc, Inkscape::XML::Node* repr) {
     SPObjectGroup::build(doc, repr);
 
-    this->readAttr(SP_ATTR_STYLE);
-    this->readAttr(SP_ATTR_CLIPPATHUNITS);
+    this->readAttr(SPAttr::STYLE);
+    this->readAttr(SPAttr::CLIPPATHUNITS);
 
     /* Register ourselves */
     doc->addResource("clipPath", this);
@@ -65,9 +65,9 @@ void SPClipPath::release() {
     SPObjectGroup::release();
 }
 
-void SPClipPath::set(SPAttributeEnum key, const gchar* value) {
+void SPClipPath::set(SPAttr key, const gchar* value) {
     switch (key) {
-        case SP_ATTR_CLIPPATHUNITS:
+        case SPAttr::CLIPPATHUNITS:
             this->clipPathUnits = SP_CONTENT_UNITS_USERSPACEONUSE;
             this->clipPathUnits_set = FALSE;
             

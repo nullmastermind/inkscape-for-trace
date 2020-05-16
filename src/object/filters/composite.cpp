@@ -43,16 +43,16 @@ SPFeComposite::~SPFeComposite() = default;
 void SPFeComposite::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPFilterPrimitive::build(document, repr);
 
-	this->readAttr(SP_ATTR_OPERATOR);
+	this->readAttr(SPAttr::OPERATOR);
 
 	if (this->composite_operator == COMPOSITE_ARITHMETIC) {
-		this->readAttr(SP_ATTR_K1);
-		this->readAttr(SP_ATTR_K2);
-		this->readAttr(SP_ATTR_K3);
-		this->readAttr(SP_ATTR_K4);
+		this->readAttr(SPAttr::K1);
+		this->readAttr(SPAttr::K2);
+		this->readAttr(SPAttr::K3);
+		this->readAttr(SPAttr::K4);
 	}
 
-	this->readAttr(SP_ATTR_IN2);
+	this->readAttr(SPAttr::IN2);
 
 	/* Unlike normal in, in2 is required attribute. Make sure, we can call
 	 * it by some name. */
@@ -118,14 +118,14 @@ sp_feComposite_read_operator(gchar const *value) {
 /**
  * Sets a specific value in the SPFeComposite.
  */
-void SPFeComposite::set(SPAttributeEnum key, gchar const *value) {
+void SPFeComposite::set(SPAttr key, gchar const *value) {
     int input;
     FeCompositeOperator op;
     double k_n;
     
     switch(key) {
 	/*DEAL WITH SETTING ATTRIBUTES HERE*/
-        case SP_ATTR_OPERATOR:
+        case SPAttr::OPERATOR:
             op = sp_feComposite_read_operator(value);
             if (op != this->composite_operator) {
                 this->composite_operator = op;
@@ -133,7 +133,7 @@ void SPFeComposite::set(SPAttributeEnum key, gchar const *value) {
             }
             break;
 
-        case SP_ATTR_K1:
+        case SPAttr::K1:
             k_n = value ? helperfns_read_number(value) : 0;
             if (k_n != this->k1) {
                 this->k1 = k_n;
@@ -142,7 +142,7 @@ void SPFeComposite::set(SPAttributeEnum key, gchar const *value) {
             }
             break;
 
-        case SP_ATTR_K2:
+        case SPAttr::K2:
             k_n = value ? helperfns_read_number(value) : 0;
             if (k_n != this->k2) {
                 this->k2 = k_n;
@@ -151,7 +151,7 @@ void SPFeComposite::set(SPAttributeEnum key, gchar const *value) {
             }
             break;
 
-        case SP_ATTR_K3:
+        case SPAttr::K3:
             k_n = value ? helperfns_read_number(value) : 0;
             if (k_n != this->k3) {
                 this->k3 = k_n;
@@ -160,7 +160,7 @@ void SPFeComposite::set(SPAttributeEnum key, gchar const *value) {
             }
             break;
 
-        case SP_ATTR_K4:
+        case SPAttr::K4:
             k_n = value ? helperfns_read_number(value) : 0;
             if (k_n != this->k4) {
                 this->k4 = k_n;
@@ -169,7 +169,7 @@ void SPFeComposite::set(SPAttributeEnum key, gchar const *value) {
             }
             break;
 
-        case SP_ATTR_IN2:
+        case SPAttr::IN2:
             input = this->read_in(value);
             if (input != this->in2) {
                 this->in2 = input;

@@ -35,14 +35,14 @@ SPAnchor::~SPAnchor() = default;
 void SPAnchor::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPGroup::build(document, repr);
 
-    this->readAttr(SP_ATTR_XLINK_TYPE);
-    this->readAttr(SP_ATTR_XLINK_ROLE);
-    this->readAttr(SP_ATTR_XLINK_ARCROLE);
-    this->readAttr(SP_ATTR_XLINK_TITLE);
-    this->readAttr(SP_ATTR_XLINK_SHOW);
-    this->readAttr(SP_ATTR_XLINK_ACTUATE);
-    this->readAttr(SP_ATTR_XLINK_HREF);
-    this->readAttr(SP_ATTR_TARGET);
+    this->readAttr(SPAttr::XLINK_TYPE);
+    this->readAttr(SPAttr::XLINK_ROLE);
+    this->readAttr(SPAttr::XLINK_ARCROLE);
+    this->readAttr(SPAttr::XLINK_TITLE);
+    this->readAttr(SPAttr::XLINK_SHOW);
+    this->readAttr(SPAttr::XLINK_ACTUATE);
+    this->readAttr(SPAttr::XLINK_HREF);
+    this->readAttr(SPAttr::TARGET);
 }
 
 void SPAnchor::release() {
@@ -66,30 +66,30 @@ void SPAnchor::release() {
     SPGroup::release();
 }
 
-void SPAnchor::set(SPAttributeEnum key, const gchar* value) {
+void SPAnchor::set(SPAttr key, const gchar* value) {
     switch (key) {
-	case SP_ATTR_XLINK_HREF:
+	case SPAttr::XLINK_HREF:
             g_free(this->href);
             this->href = g_strdup(value);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             this->updatePageAnchor();
             break;
-	case SP_ATTR_XLINK_TYPE:
+	case SPAttr::XLINK_TYPE:
             g_free(this->type);
             this->type = g_strdup(value);
             this->updatePageAnchor();
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-	case SP_ATTR_XLINK_ROLE:
-	case SP_ATTR_XLINK_ARCROLE:
-	case SP_ATTR_XLINK_TITLE:
+	case SPAttr::XLINK_ROLE:
+	case SPAttr::XLINK_ARCROLE:
+	case SPAttr::XLINK_TITLE:
             g_free(this->title);
             this->title = g_strdup(value);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-	case SP_ATTR_XLINK_SHOW:
-	case SP_ATTR_XLINK_ACTUATE:
-	case SP_ATTR_TARGET:
+	case SPAttr::XLINK_SHOW:
+	case SPAttr::XLINK_ACTUATE:
+	case SPAttr::TARGET:
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
 

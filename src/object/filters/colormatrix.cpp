@@ -41,8 +41,8 @@ void SPFeColorMatrix::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPFilterPrimitive::build(document, repr);
 
 	/*LOAD ATTRIBUTES FROM REPR HERE*/
-	this->readAttr(SP_ATTR_TYPE);
-	this->readAttr(SP_ATTR_VALUES);
+	this->readAttr(SPAttr::TYPE);
+	this->readAttr(SPAttr::VALUES);
 }
 
 /**
@@ -78,12 +78,12 @@ static Inkscape::Filters::FilterColorMatrixType sp_feColorMatrix_read_type(gchar
 /**
  * Sets a specific value in the SPFeColorMatrix.
  */
-void SPFeColorMatrix::set(SPAttributeEnum key, gchar const *str) {
+void SPFeColorMatrix::set(SPAttr key, gchar const *str) {
     Inkscape::Filters::FilterColorMatrixType read_type;
 
 	/*DEAL WITH SETTING ATTRIBUTES HERE*/
     switch(key) {
-        case SP_ATTR_TYPE:
+        case SPAttr::TYPE:
             read_type = sp_feColorMatrix_read_type(str);
 
             if (this->type != read_type){
@@ -91,7 +91,7 @@ void SPFeColorMatrix::set(SPAttributeEnum key, gchar const *str) {
                 this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
-        case SP_ATTR_VALUES:
+        case SPAttr::VALUES:
             if (str){
                 this->values = helperfns_read_vector(str);
                 this->value = helperfns_read_number(str, HELPERFNS_NO_WARNING);

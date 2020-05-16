@@ -266,7 +266,7 @@ void LPEMirrorSymmetry::cloneStyle(SPObject *orig, SPObject *dest)
     for (auto iter : orig->style->properties()) {
         if (iter->style_src != SP_STYLE_SRC_UNSET) {
             auto key = iter->id();
-            if (key != SP_PROP_FONT && key != SP_ATTR_D && key != SP_PROP_MARKER) {
+            if (key != SPAttr::FONT && key != SPAttr::D && key != SPAttr::MARKER) {
                 const gchar *attr = orig->getRepr()->attribute(iter->name().c_str());
                 if (attr) {
                     dest->getRepr()->setAttribute(iter->name(), attr);

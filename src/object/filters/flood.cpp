@@ -44,8 +44,8 @@ void SPFeFlood::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPFilterPrimitive::build(document, repr);
 
 	/*LOAD ATTRIBUTES FROM REPR HERE*/
-	this->readAttr(SP_PROP_FLOOD_OPACITY);
-	this->readAttr(SP_PROP_FLOOD_COLOR);
+	this->readAttr(SPAttr::FLOOD_OPACITY);
+	this->readAttr(SPAttr::FLOOD_COLOR);
 }
 
 /**
@@ -58,7 +58,7 @@ void SPFeFlood::release() {
 /**
  * Sets a specific value in the SPFeFlood.
  */
-void SPFeFlood::set(SPAttributeEnum key, gchar const *value) {
+void SPFeFlood::set(SPAttr key, gchar const *value) {
     gchar const *cend_ptr = nullptr;
     gchar *end_ptr = nullptr;
     guint32 read_color;
@@ -67,7 +67,7 @@ void SPFeFlood::set(SPAttributeEnum key, gchar const *value) {
     
     switch(key) {
 	/*DEAL WITH SETTING ATTRIBUTES HERE*/
-        case SP_PROP_FLOOD_COLOR:
+        case SPAttr::FLOOD_COLOR:
             cend_ptr = nullptr;
             read_color = sp_svg_read_color(value, &cend_ptr, 0xffffffff);
 
@@ -99,7 +99,7 @@ void SPFeFlood::set(SPAttributeEnum key, gchar const *value) {
                 this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
-        case SP_PROP_FLOOD_OPACITY:
+        case SPAttr::FLOOD_OPACITY:
             if (value) {
                 read_num = g_ascii_strtod(value, &end_ptr);
 

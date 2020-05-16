@@ -33,32 +33,32 @@ SPLine::~SPLine() = default;
 void SPLine::build(SPDocument * document, Inkscape::XML::Node * repr) {
     SPShape::build(document, repr);
 
-    this->readAttr(SP_ATTR_X1);
-    this->readAttr(SP_ATTR_Y1);
-    this->readAttr(SP_ATTR_X2);
-    this->readAttr(SP_ATTR_Y2);
+    this->readAttr(SPAttr::X1);
+    this->readAttr(SPAttr::Y1);
+    this->readAttr(SPAttr::X2);
+    this->readAttr(SPAttr::Y2);
 }
 
-void SPLine::set(SPAttributeEnum key, const gchar* value) {
+void SPLine::set(SPAttr key, const gchar* value) {
     /* fixme: we should really collect updates */
 
     switch (key) {
-        case SP_ATTR_X1:
+        case SPAttr::X1:
             this->x1.readOrUnset(value);
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_Y1:
+        case SPAttr::Y1:
             this->y1.readOrUnset(value);
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_X2:
+        case SPAttr::X2:
             this->x2.readOrUnset(value);
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_Y2:
+        case SPAttr::Y2:
             this->y2.readOrUnset(value);
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;

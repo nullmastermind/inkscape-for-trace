@@ -34,9 +34,9 @@ SPStop::~SPStop() = default;
 void SPStop::build(SPDocument* doc, Inkscape::XML::Node* repr) {
     SPObject::build(doc, repr);
 
-    this->readAttr(SP_ATTR_STYLE);
-    this->readAttr(SP_ATTR_OFFSET);
-    this->readAttr(SP_PROP_STOP_PATH); // For mesh
+    this->readAttr(SPAttr::STYLE);
+    this->readAttr(SPAttr::OFFSET);
+    this->readAttr(SPAttr::STOP_PATH); // For mesh
     SPObject::build(doc, repr);
 }
 
@@ -44,14 +44,14 @@ void SPStop::build(SPDocument* doc, Inkscape::XML::Node* repr) {
  * Virtual build: set stop attributes from its associated XML node.
  */
 
-void SPStop::set(SPAttributeEnum key, const gchar* value) {
+void SPStop::set(SPAttr key, const gchar* value) {
     switch (key) {
-        case SP_ATTR_OFFSET: {
+        case SPAttr::OFFSET: {
             this->offset = sp_svg_read_percentage(value, 0.0);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             break;
         }
-        case SP_PROP_STOP_PATH: {
+        case SPAttr::STOP_PATH: {
             if (value) {
                 this->path_string = new Glib::ustring( value );
                 //Geom::PathVector pv = sp_svg_read_pathv(value);

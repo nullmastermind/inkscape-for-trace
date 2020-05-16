@@ -70,15 +70,15 @@ void SPHatch::build(SPDocument* doc, Inkscape::XML::Node* repr)
 {
     SPPaintServer::build(doc, repr);
 
-    readAttr(SP_ATTR_HATCHUNITS);
-    readAttr(SP_ATTR_HATCHCONTENTUNITS);
-    readAttr(SP_ATTR_HATCHTRANSFORM);
-    readAttr(SP_ATTR_X);
-    readAttr(SP_ATTR_Y);
-    readAttr(SP_ATTR_PITCH);
-    readAttr(SP_ATTR_ROTATE);
-    readAttr(SP_ATTR_XLINK_HREF);
-    readAttr(SP_ATTR_STYLE);
+    readAttr(SPAttr::HATCHUNITS);
+    readAttr(SPAttr::HATCHCONTENTUNITS);
+    readAttr(SPAttr::HATCHTRANSFORM);
+    readAttr(SPAttr::X);
+    readAttr(SPAttr::Y);
+    readAttr(SPAttr::PITCH);
+    readAttr(SPAttr::ROTATE);
+    readAttr(SPAttr::XLINK_HREF);
+    readAttr(SPAttr::STYLE);
 
     // Register ourselves
     doc->addResource("hatch", this);
@@ -130,10 +130,10 @@ void SPHatch::child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref)
     //FIXME: notify all hatches that refer to this child set
 }
 
-void SPHatch::set(SPAttributeEnum key, const gchar* value)
+void SPHatch::set(SPAttr key, const gchar* value)
 {
     switch (key) {
-    case SP_ATTR_HATCHUNITS:
+    case SPAttr::HATCHUNITS:
         if (value) {
             if (!strcmp(value, "userSpaceOnUse")) {
                 _hatchUnits = UNITS_USERSPACEONUSE;
@@ -149,7 +149,7 @@ void SPHatch::set(SPAttributeEnum key, const gchar* value)
         requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_HATCHCONTENTUNITS:
+    case SPAttr::HATCHCONTENTUNITS:
         if (value) {
             if (!strcmp(value, "userSpaceOnUse")) {
                 _hatchContentUnits = UNITS_USERSPACEONUSE;
@@ -165,7 +165,7 @@ void SPHatch::set(SPAttributeEnum key, const gchar* value)
         requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_HATCHTRANSFORM: {
+    case SPAttr::HATCHTRANSFORM: {
         Geom::Affine t;
 
         if (value && sp_svg_transform_read(value, &t)) {
@@ -179,27 +179,27 @@ void SPHatch::set(SPAttributeEnum key, const gchar* value)
         requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
     }
-    case SP_ATTR_X:
+    case SPAttr::X:
         _x.readOrUnset(value);
         requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_Y:
+    case SPAttr::Y:
         _y.readOrUnset(value);
         requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_PITCH:
+    case SPAttr::PITCH:
         _pitch.readOrUnset(value);
         requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_ROTATE:
+    case SPAttr::ROTATE:
         _rotate.readOrUnset(value);
         requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_XLINK_HREF:
+    case SPAttr::XLINK_HREF:
         if (value && href == value) {
             // Href unchanged, do nothing.
         } else {

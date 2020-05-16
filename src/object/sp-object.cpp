@@ -657,11 +657,11 @@ void SPObject::build(SPDocument *document, Inkscape::XML::Node *repr) {
     /* Nothing specific here */
     debug("id=%p, typename=%s", object, g_type_name_from_instance((GTypeInstance*)object));
 
-    object->readAttr(SP_ATTR_XML_SPACE);
-    object->readAttr(SP_ATTR_LANG);
-    object->readAttr(SP_ATTR_XML_LANG);   // "xml:lang" overrides "lang" per spec, read it last.
-    object->readAttr(SP_ATTR_INKSCAPE_LABEL);
-    object->readAttr(SP_ATTR_INKSCAPE_COLLECT);
+    object->readAttr(SPAttr::XML_SPACE);
+    object->readAttr(SPAttr::LANG);
+    object->readAttr(SPAttr::XML_LANG);   // "xml:lang" overrides "lang" per spec, read it last.
+    object->readAttr(SPAttr::INKSCAPE_LABEL);
+    object->readAttr(SPAttr::INKSCAPE_COLLECT);
 
     // Inherit if not set
     if (lang.empty() && object->parent) {
@@ -884,7 +884,7 @@ void SPObject::repr_order_changed(Inkscape::XML::Node * /*repr*/, Inkscape::XML:
     object->order_changed(child, old, newer);
 }
 
-void SPObject::set(SPAttributeEnum key, gchar const* value) {
+void SPObject::set(SPAttr key, gchar const* value) {
 
 #ifdef OBJECT_TRACE
     std::stringstream temp;
@@ -892,13 +892,13 @@ void SPObject::set(SPAttributeEnum key, gchar const* value) {
     objectTrace( temp.str() );
 #endif
 
-    g_assert(key != SP_ATTR_INVALID);
+    g_assert(key != SPAttr::INVALID);
 
     SPObject* object = this;
 
     switch (key) {
 
-        case SP_ATTR_ID:
+        case SPAttr::ID:
 
             //XML Tree being used here.
             if ( !object->cloned && object->getRepr()->type() == Inkscape::XML::ELEMENT_NODE ) {
@@ -939,7 +939,7 @@ void SPObject::set(SPAttributeEnum key, gchar const* value) {
             }
             break;
 
-        case SP_ATTR_INKSCAPE_LABEL:
+        case SPAttr::INKSCAPE_LABEL:
             g_free(object->_label);
             if (value) {
                 object->_label = g_strdup(value);
@@ -950,7 +950,7 @@ void SPObject::set(SPAttributeEnum key, gchar const* value) {
             object->_default_label = nullptr;
             break;
 
-        case SP_ATTR_INKSCAPE_COLLECT:
+        case SPAttr::INKSCAPE_COLLECT:
             if ( value && !std::strcmp(value, "always") ) {
                 object->setCollectionPolicy(SPObject::ALWAYS_COLLECT);
             } else {
@@ -958,7 +958,7 @@ void SPObject::set(SPAttributeEnum key, gchar const* value) {
             }
             break;
 
-        case SP_ATTR_XML_SPACE:
+        case SPAttr::XML_SPACE:
             if (value && !std::strcmp(value, "preserve")) {
                 object->xml_space.value = SP_XML_SPACE_PRESERVE;
                 object->xml_space.set = TRUE;
@@ -973,21 +973,21 @@ void SPObject::set(SPAttributeEnum key, gchar const* value) {
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_LANG:
+        case SPAttr::LANG:
             if (value) {
                 lang = value;
                 // To do: sanity check
             }
             break;
 
-        case SP_ATTR_XML_LANG:
+        case SPAttr::XML_LANG:
             if (value) {
                 lang = value;
                 // To do: sanity check
             }
             break;
 
-        case SP_ATTR_STYLE:
+        case SPAttr::STYLE:
             object->style->readFromObject( object );
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             break;
@@ -1000,7 +1000,7 @@ void SPObject::set(SPAttributeEnum key, gchar const* value) {
 #endif
 }
 
-void SPObject::setKeyValue(SPAttributeEnum key, gchar const *value)
+void SPObject::setKeyValue(SPAttr key, gchar const *value)
 {
     //g_assert(object != NULL);
     //g_assert(SP_IS_OBJECT(object));
@@ -1008,7 +1008,7 @@ void SPObject::setKeyValue(SPAttributeEnum key, gchar const *value)
     this->set(key, value);
 }
 
-void SPObject::readAttr(SPAttributeEnum keyid)
+void SPObject::readAttr(SPAttr keyid)
 {
     char const *key = sp_attribute_name(keyid);
 
@@ -1030,7 +1030,7 @@ void SPObject::readAttr(gchar const *key)
     g_assert(this->getRepr() != nullptr);
 
     auto keyid = sp_attribute_lookup(key);
-    if (keyid != SP_ATTR_INVALID) {
+    if (keyid != SPAttr::INVALID) {
         /* Retrieve the 'key' attribute from the object's XML representation */
         gchar const *value = getRepr()->attribute(key);
 
@@ -1117,7 +1117,7 @@ Inkscape::XML::Node* SPObject::write(Inkscape::XML::Document *doc, Inkscape::XML
             }
             if(any_written) {
                 // We need to ask the object to update the style and keep things in sync
-                // see `case SP_ATTR_STYLE` above for how the style attr itself does this.
+                // see `case SPAttr::STYLE` above for how the style attr itself does this.
                 style->readFromObject(this);
                 requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             }

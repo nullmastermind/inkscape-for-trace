@@ -48,9 +48,9 @@ SPMask::~SPMask() = default;
 void SPMask::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 	SPObjectGroup::build(doc, repr);
 
-	this->readAttr(SP_ATTR_MASKUNITS);
-	this->readAttr(SP_ATTR_MASKCONTENTUNITS);
-	this->readAttr(SP_ATTR_STYLE);
+	this->readAttr(SPAttr::MASKUNITS);
+	this->readAttr(SPAttr::MASKCONTENTUNITS);
+	this->readAttr(SPAttr::STYLE);
 
 	/* Register ourselves */
 	doc->addResource("mask", this);
@@ -70,9 +70,9 @@ void SPMask::release() {
     SPObjectGroup::release();
 }
 
-void SPMask::set(SPAttributeEnum key, const gchar* value) {
+void SPMask::set(SPAttr key, const gchar* value) {
 	switch (key) {
-	case SP_ATTR_MASKUNITS:
+	case SPAttr::MASKUNITS:
 		this->maskUnits = SP_CONTENT_UNITS_OBJECTBOUNDINGBOX;
 		this->maskUnits_set = FALSE;
 		
@@ -87,7 +87,7 @@ void SPMask::set(SPAttributeEnum key, const gchar* value) {
 		
 		this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
-	case SP_ATTR_MASKCONTENTUNITS:
+	case SPAttr::MASKCONTENTUNITS:
 		this->maskContentUnits = SP_CONTENT_UNITS_USERSPACEONUSE;
 		this->maskContentUnits_set = FALSE;
 		

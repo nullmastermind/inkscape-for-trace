@@ -45,10 +45,10 @@ void SPFeDisplacementMap::build(SPDocument *document, Inkscape::XML::Node *repr)
 	SPFilterPrimitive::build(document, repr);
 
 	/*LOAD ATTRIBUTES FROM REPR HERE*/
-	this->readAttr(SP_ATTR_SCALE);
-	this->readAttr(SP_ATTR_IN2);
-	this->readAttr(SP_ATTR_XCHANNELSELECTOR);
-	this->readAttr(SP_ATTR_YCHANNELSELECTOR);
+	this->readAttr(SPAttr::SCALE);
+	this->readAttr(SPAttr::IN2);
+	this->readAttr(SPAttr::XCHANNELSELECTOR);
+	this->readAttr(SPAttr::YCHANNELSELECTOR);
 
 	/* Unlike normal in, in2 is required attribute. Make sure, we can call
 	 * it by some name. */
@@ -97,14 +97,14 @@ static FilterDisplacementMapChannelSelector sp_feDisplacementMap_readChannelSele
 /**
  * Sets a specific value in the SPFeDisplacementMap.
  */
-void SPFeDisplacementMap::set(SPAttributeEnum key, gchar const *value) {
+void SPFeDisplacementMap::set(SPAttr key, gchar const *value) {
     int input;
     double read_num;
     FilterDisplacementMapChannelSelector read_selector;
     
     switch(key) {
 	/*DEAL WITH SETTING ATTRIBUTES HERE*/
-        case SP_ATTR_XCHANNELSELECTOR:
+        case SPAttr::XCHANNELSELECTOR:
             read_selector = sp_feDisplacementMap_readChannelSelector(value);
             
             if (read_selector != this->xChannelSelector){
@@ -112,7 +112,7 @@ void SPFeDisplacementMap::set(SPAttributeEnum key, gchar const *value) {
                 this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
-        case SP_ATTR_YCHANNELSELECTOR:
+        case SPAttr::YCHANNELSELECTOR:
             read_selector = sp_feDisplacementMap_readChannelSelector(value);
             
             if (read_selector != this->yChannelSelector){
@@ -120,7 +120,7 @@ void SPFeDisplacementMap::set(SPAttributeEnum key, gchar const *value) {
                 this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
-        case SP_ATTR_SCALE:
+        case SPAttr::SCALE:
             read_num = value ? helperfns_read_number(value) : 0;
             
             if (read_num != this->scale) {
@@ -128,7 +128,7 @@ void SPFeDisplacementMap::set(SPAttributeEnum key, gchar const *value) {
                 this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
-        case SP_ATTR_IN2:
+        case SPAttr::IN2:
             input = this->read_in(value);
             
             if (input != this->in2) {

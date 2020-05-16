@@ -46,20 +46,20 @@ TEST_F(SPGradientTest, Init) {
 TEST_F(SPGradientTest, SetGradientTransform) {
     SP_OBJECT(gr)->document = _doc;
 
-    SP_OBJECT(gr)->setKeyValue(SP_ATTR_GRADIENTTRANSFORM, "translate(5, 8)");
+    SP_OBJECT(gr)->setKeyValue(SPAttr::GRADIENTTRANSFORM, "translate(5, 8)");
     EXPECT_TRUE(Geom::are_near(Geom::Affine(Geom::Translate(5.0, 8.0)), gr->gradientTransform));
 
-    SP_OBJECT(gr)->setKeyValue(SP_ATTR_GRADIENTTRANSFORM, "");
+    SP_OBJECT(gr)->setKeyValue(SPAttr::GRADIENTTRANSFORM, "");
     EXPECT_TRUE(Geom::are_near(Geom::identity(), gr->gradientTransform));
 
-    SP_OBJECT(gr)->setKeyValue(SP_ATTR_GRADIENTTRANSFORM, "rotate(90)");
+    SP_OBJECT(gr)->setKeyValue(SPAttr::GRADIENTTRANSFORM, "rotate(90)");
     EXPECT_TRUE(Geom::are_near(Geom::Affine(Geom::Rotate::from_degrees(90.0)), gr->gradientTransform));
 }
 
 TEST_F(SPGradientTest, Write) {
     SP_OBJECT(gr)->document = _doc;
 
-    SP_OBJECT(gr)->setKeyValue(SP_ATTR_GRADIENTTRANSFORM, "matrix(0, 1, -1, 0, 0, 0)");
+    SP_OBJECT(gr)->setKeyValue(SPAttr::GRADIENTTRANSFORM, "matrix(0, 1, -1, 0, 0, 0)");
     Document *xml_doc = _doc->getReprDoc();
 
     ASSERT_TRUE(xml_doc != nullptr);
@@ -121,7 +121,7 @@ TEST_F(SPGradientTest, GetG2dGetGs2dSetGs2) {
         gr->set_gs2d_matrix(funny, larger_rect, gs2d);
         EXPECT_TRUE(Geom::are_near(gr->gradientTransform, grXform, 1e-12));
 
-        SP_OBJECT(gr)->setKeyValue( SP_ATTR_GRADIENTUNITS, "userSpaceOnUse");
+        SP_OBJECT(gr)->setKeyValue( SPAttr::GRADIENTUNITS, "userSpaceOnUse");
         Geom::Affine user_g2d(gr->get_g2d_matrix(funny, larger_rect));
         Geom::Affine user_gs2d(gr->get_gs2d_matrix(funny, larger_rect));
         EXPECT_TRUE(Geom::are_near(funny, user_g2d));

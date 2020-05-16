@@ -76,15 +76,15 @@ SPMarker::~SPMarker() = default;
  * \see SPObject::build()
  */
 void SPMarker::build(SPDocument *document, Inkscape::XML::Node *repr) {
-    this->readAttr(SP_ATTR_MARKERUNITS);
-    this->readAttr(SP_ATTR_REFX);
-    this->readAttr(SP_ATTR_REFY);
-    this->readAttr(SP_ATTR_MARKERWIDTH);
-    this->readAttr(SP_ATTR_MARKERHEIGHT);
-    this->readAttr(SP_ATTR_ORIENT);
-    this->readAttr(SP_ATTR_VIEWBOX);
-    this->readAttr(SP_ATTR_PRESERVEASPECTRATIO);
-    this->readAttr(SP_ATTR_STYLE);
+    this->readAttr(SPAttr::MARKERUNITS);
+    this->readAttr(SPAttr::REFX);
+    this->readAttr(SPAttr::REFY);
+    this->readAttr(SPAttr::MARKERWIDTH);
+    this->readAttr(SPAttr::MARKERHEIGHT);
+    this->readAttr(SPAttr::ORIENT);
+    this->readAttr(SPAttr::VIEWBOX);
+    this->readAttr(SPAttr::PRESERVEASPECTRATIO);
+    this->readAttr(SPAttr::STYLE);
 
     SPGroup::build(document, repr);
 }
@@ -114,9 +114,9 @@ void SPMarker::release() {
 }
 
 
-void SPMarker::set(SPAttributeEnum key, const gchar* value) {
+void SPMarker::set(SPAttr key, const gchar* value) {
 	switch (key) {
-	case SP_ATTR_MARKERUNITS:
+	case SPAttr::MARKERUNITS:
 		this->markerUnits_set = FALSE;
 		this->markerUnits = SP_MARKER_UNITS_STROKEWIDTH;
 
@@ -132,27 +132,27 @@ void SPMarker::set(SPAttributeEnum key, const gchar* value) {
 		this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
 		break;
 
-	case SP_ATTR_REFX:
+	case SPAttr::REFX:
 	    this->refX.readOrUnset(value);
 		this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 
-	case SP_ATTR_REFY:
+	case SPAttr::REFY:
 	    this->refY.readOrUnset(value);
 		this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 
-	case SP_ATTR_MARKERWIDTH:
+	case SPAttr::MARKERWIDTH:
 	    this->markerWidth.readOrUnset(value, SVGLength::NONE, 3.0, 3.0);
 		this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 
-	case SP_ATTR_MARKERHEIGHT:
+	case SPAttr::MARKERHEIGHT:
 	    this->markerHeight.readOrUnset(value, SVGLength::NONE, 3.0, 3.0);
 		this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 
-	case SP_ATTR_ORIENT:
+	case SPAttr::ORIENT:
 		this->orient_set = FALSE;
 		this->orient_mode = MARKER_ORIENT_ANGLE;
 		this->orient = 0.0;
@@ -176,12 +176,12 @@ void SPMarker::set(SPAttributeEnum key, const gchar* value) {
 		this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 
-	case SP_ATTR_VIEWBOX:
+	case SPAttr::VIEWBOX:
             set_viewBox( value );
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
             break;
 
-	case SP_ATTR_PRESERVEASPECTRATIO:
+	case SPAttr::PRESERVEASPECTRATIO:
             set_preserveAspectRatio( value );
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
             break;

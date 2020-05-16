@@ -617,7 +617,7 @@ TEST(AttributesTest, ValuesAreKnown)
     std::vector<size_t> ids = getIdIds();
     for (size_t i = FIRST_VALID_ID; i < ids.size(); ++i) {
         if (!ids[i]) {
-            char const *name = sp_attribute_name((SPAttributeEnum)i);
+            char const *name = sp_attribute_name((SPAttr)i);
             EXPECT_TRUE(ids[i] > 0) << "Attribute string with enum " << i << " {" << name << "} not handled";
         }
     }
@@ -629,7 +629,7 @@ TEST(AttributesTest, ValuesUnique)
     std::vector<size_t> ids = getIdIds();
     for (size_t i = FIRST_VALID_ID; i < ids.size(); ++i) {
         EXPECT_LE(ids[i], size_t(1)) << "Attribute enum " << i << " used for multiple strings"
-                                     << " including {" << sp_attribute_name((SPAttributeEnum)i) << "}";
+                                     << " including {" << sp_attribute_name((SPAttr)i) << "}";
     }
 }
 

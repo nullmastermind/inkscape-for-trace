@@ -131,14 +131,14 @@ SPImage::~SPImage() = default;
 void SPImage::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPItem::build(document, repr);
 
-    this->readAttr(SP_ATTR_XLINK_HREF);
-    this->readAttr(SP_ATTR_X);
-    this->readAttr(SP_ATTR_Y);
-    this->readAttr(SP_ATTR_WIDTH);
-    this->readAttr(SP_ATTR_HEIGHT);
-    this->readAttr(SP_ATTR_SVG_DPI);
-    this->readAttr(SP_ATTR_PRESERVEASPECTRATIO);
-    this->readAttr(SP_PROP_COLOR_PROFILE);
+    this->readAttr(SPAttr::XLINK_HREF);
+    this->readAttr(SPAttr::X);
+    this->readAttr(SPAttr::Y);
+    this->readAttr(SPAttr::WIDTH);
+    this->readAttr(SPAttr::HEIGHT);
+    this->readAttr(SPAttr::SVG_DPI);
+    this->readAttr(SPAttr::PRESERVEASPECTRATIO);
+    this->readAttr(SPAttr::COLOR_PROFILE);
 
     /* Register */
     document->addResource("image", this);
@@ -172,15 +172,15 @@ void SPImage::release() {
     SPItem::release();
 }
 
-void SPImage::set(SPAttributeEnum key, const gchar* value) {
+void SPImage::set(SPAttr key, const gchar* value) {
     switch (key) {
-        case SP_ATTR_XLINK_HREF:
+        case SPAttr::XLINK_HREF:
             g_free (this->href);
             this->href = (value) ? g_strdup (value) : nullptr;
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_IMAGE_HREF_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_X:
+        case SPAttr::X:
             /* ex, em not handled correctly. */
             if (!this->x.read(value)) {
                 this->x.unset();
@@ -189,7 +189,7 @@ void SPImage::set(SPAttributeEnum key, const gchar* value) {
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_Y:
+        case SPAttr::Y:
             /* ex, em not handled correctly. */
             if (!this->y.read(value)) {
                 this->y.unset();
@@ -198,7 +198,7 @@ void SPImage::set(SPAttributeEnum key, const gchar* value) {
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_WIDTH:
+        case SPAttr::WIDTH:
             /* ex, em not handled correctly. */
             if (!this->width.read(value)) {
                 this->width.unset();
@@ -207,7 +207,7 @@ void SPImage::set(SPAttributeEnum key, const gchar* value) {
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_HEIGHT:
+        case SPAttr::HEIGHT:
             /* ex, em not handled correctly. */
             if (!this->height.read(value)) {
                 this->height.unset();
@@ -216,17 +216,17 @@ void SPImage::set(SPAttributeEnum key, const gchar* value) {
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_SVG_DPI:
+        case SPAttr::SVG_DPI:
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_IMAGE_HREF_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_PRESERVEASPECTRATIO:
+        case SPAttr::PRESERVEASPECTRATIO:
             set_preserveAspectRatio( value );
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
             break;
 
 #if defined(HAVE_LIBLCMS2)
-        case SP_PROP_COLOR_PROFILE:
+        case SPAttr::COLOR_PROFILE:
             if ( this->color_profile ) {
                 g_free (this->color_profile);
             }

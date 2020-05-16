@@ -43,11 +43,11 @@ void SPFeTurbulence::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPFilterPrimitive::build(document, repr);
 
 	/*LOAD ATTRIBUTES FROM REPR HERE*/
-	this->readAttr(SP_ATTR_BASEFREQUENCY);
-	this->readAttr(SP_ATTR_NUMOCTAVES);
-	this->readAttr(SP_ATTR_SEED);
-	this->readAttr(SP_ATTR_STITCHTILES);
-	this->readAttr(SP_ATTR_TYPE);
+	this->readAttr(SPAttr::BASEFREQUENCY);
+	this->readAttr(SPAttr::NUMOCTAVES);
+	this->readAttr(SPAttr::SEED);
+	this->readAttr(SPAttr::STITCHTILES);
+	this->readAttr(SPAttr::TYPE);
 }
 
 /**
@@ -102,7 +102,7 @@ static Inkscape::Filters::FilterTurbulenceType sp_feTurbulence_read_type(gchar c
 /**
  * Sets a specific value in the SPFeTurbulence.
  */
-void SPFeTurbulence::set(SPAttributeEnum key, gchar const *value) {
+void SPFeTurbulence::set(SPAttr key, gchar const *value) {
     int read_int;
     double read_num;
     bool read_bool;
@@ -110,7 +110,7 @@ void SPFeTurbulence::set(SPAttributeEnum key, gchar const *value) {
 
     switch(key) {
 	/*DEAL WITH SETTING ATTRIBUTES HERE*/
-        case SP_ATTR_BASEFREQUENCY:
+        case SPAttr::BASEFREQUENCY:
             this->baseFrequency.set(value);
 
             // From SVG spec: If two <number>s are provided, the first number represents
@@ -124,7 +124,7 @@ void SPFeTurbulence::set(SPAttributeEnum key, gchar const *value) {
             this->updated = false;
             this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-        case SP_ATTR_NUMOCTAVES:
+        case SPAttr::NUMOCTAVES:
             read_int = value ? (int)floor(helperfns_read_number(value)) : 1;
 
             if (read_int != this->numOctaves){
@@ -133,7 +133,7 @@ void SPFeTurbulence::set(SPAttributeEnum key, gchar const *value) {
                 this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
-        case SP_ATTR_SEED:
+        case SPAttr::SEED:
             read_num = value ? helperfns_read_number(value) : 0;
 
             if (read_num != this->seed){
@@ -142,7 +142,7 @@ void SPFeTurbulence::set(SPAttributeEnum key, gchar const *value) {
                 this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
-        case SP_ATTR_STITCHTILES:
+        case SPAttr::STITCHTILES:
             read_bool = sp_feTurbulence_read_stitchTiles(value);
 
             if (read_bool != this->stitchTiles){
@@ -151,7 +151,7 @@ void SPFeTurbulence::set(SPAttributeEnum key, gchar const *value) {
                 this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
-        case SP_ATTR_TYPE:
+        case SPAttr::TYPE:
             read_type = sp_feTurbulence_read_type(value);
 
             if (read_type != this->type){

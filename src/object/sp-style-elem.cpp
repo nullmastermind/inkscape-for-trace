@@ -34,9 +34,9 @@ SPStyleElem::SPStyleElem() : SPObject() {
 
 SPStyleElem::~SPStyleElem() = default;
 
-void SPStyleElem::set(SPAttributeEnum key, const gchar* value) {
+void SPStyleElem::set(SPAttr key, const gchar* value) {
     switch (key) {
-        case SP_ATTR_TYPE: {
+        case SPAttr::TYPE: {
             if (!value) {
                 /* TODO: `type' attribute is required.  Give error message as per
                    http://www.w3.org/TR/SVG11/implnote.html#ErrorProcessing. */
@@ -52,7 +52,7 @@ void SPStyleElem::set(SPAttributeEnum key, const gchar* value) {
         }
 
 #if 0 /* unfinished */
-        case SP_ATTR_MEDIA: {
+        case SPAttr::MEDIA: {
             parse_media(style_elem, value);
             break;
         }
@@ -587,7 +587,7 @@ static Inkscape::XML::NodeEventVector const nodeEventVector = {
 void SPStyleElem::build(SPDocument *document, Inkscape::XML::Node *repr) {
     read_content();
 
-    readAttr(SP_ATTR_TYPE);
+    readAttr(SPAttr::TYPE);
 #if 0
     readAttr( "media" );
 #endif

@@ -40,12 +40,12 @@ SPFont::~SPFont() = default;
 void SPFont::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPObject::build(document, repr);
 
-	this->readAttr(SP_ATTR_HORIZ_ORIGIN_X);
-	this->readAttr(SP_ATTR_HORIZ_ORIGIN_Y);
-	this->readAttr(SP_ATTR_HORIZ_ADV_X);
-	this->readAttr(SP_ATTR_VERT_ORIGIN_X);
-	this->readAttr(SP_ATTR_VERT_ORIGIN_Y);
-	this->readAttr(SP_ATTR_VERT_ADV_Y);
+	this->readAttr(SPAttr::HORIZ_ORIGIN_X);
+	this->readAttr(SPAttr::HORIZ_ORIGIN_Y);
+	this->readAttr(SPAttr::HORIZ_ADV_X);
+	this->readAttr(SPAttr::VERT_ORIGIN_X);
+	this->readAttr(SPAttr::VERT_ORIGIN_Y);
+	this->readAttr(SPAttr::VERT_ADV_Y);
 
 	document->addResource("font", this);
 }
@@ -75,10 +75,10 @@ void SPFont::release() {
     SPObject::release();
 }
 
-void SPFont::set(SPAttributeEnum key, const gchar *value) {
+void SPFont::set(SPAttr key, const gchar *value) {
     // TODO these are floating point, so some epsilon comparison would be good
     switch (key) {
-        case SP_ATTR_HORIZ_ORIGIN_X:
+        case SPAttr::HORIZ_ORIGIN_X:
         {
             double number = value ? g_ascii_strtod(value, nullptr) : 0;
 
@@ -88,7 +88,7 @@ void SPFont::set(SPAttributeEnum key, const gchar *value) {
             }
             break;
         }
-        case SP_ATTR_HORIZ_ORIGIN_Y:
+        case SPAttr::HORIZ_ORIGIN_Y:
         {
             double number = value ? g_ascii_strtod(value, nullptr) : 0;
 
@@ -98,7 +98,7 @@ void SPFont::set(SPAttributeEnum key, const gchar *value) {
             }
             break;
         }
-        case SP_ATTR_HORIZ_ADV_X:
+        case SPAttr::HORIZ_ADV_X:
         {
             double number = value ? g_ascii_strtod(value, nullptr) : FNT_DEFAULT_ADV;
 
@@ -108,7 +108,7 @@ void SPFont::set(SPAttributeEnum key, const gchar *value) {
             }
             break;
         }
-        case SP_ATTR_VERT_ORIGIN_X:
+        case SPAttr::VERT_ORIGIN_X:
         {
             double number = value ? g_ascii_strtod(value, nullptr) : FNT_DEFAULT_ADV / 2.0;
 
@@ -118,7 +118,7 @@ void SPFont::set(SPAttributeEnum key, const gchar *value) {
             }
             break;
         }
-        case SP_ATTR_VERT_ORIGIN_Y:
+        case SPAttr::VERT_ORIGIN_Y:
         {
             double number = value ? g_ascii_strtod(value, nullptr) : FNT_DEFAULT_ASCENT;
 
@@ -128,7 +128,7 @@ void SPFont::set(SPAttributeEnum key, const gchar *value) {
             }
             break;
         }
-        case SP_ATTR_VERT_ADV_Y:
+        case SPAttr::VERT_ADV_Y:
         {
             double number = value ? g_ascii_strtod(value, nullptr) : FNT_UNITS_PER_EM;
 
@@ -149,12 +149,12 @@ void SPFont::set(SPAttributeEnum key, const gchar *value) {
  */
 void SPFont::update(SPCtx *ctx, guint flags) {
     if (flags & (SP_OBJECT_MODIFIED_FLAG)) {
-        this->readAttr(SP_ATTR_HORIZ_ORIGIN_X);
-        this->readAttr(SP_ATTR_HORIZ_ORIGIN_Y);
-        this->readAttr(SP_ATTR_HORIZ_ADV_X);
-        this->readAttr(SP_ATTR_VERT_ORIGIN_X);
-        this->readAttr(SP_ATTR_VERT_ORIGIN_Y);
-        this->readAttr(SP_ATTR_VERT_ADV_Y);
+        this->readAttr(SPAttr::HORIZ_ORIGIN_X);
+        this->readAttr(SPAttr::HORIZ_ORIGIN_Y);
+        this->readAttr(SPAttr::HORIZ_ADV_X);
+        this->readAttr(SPAttr::VERT_ORIGIN_X);
+        this->readAttr(SPAttr::VERT_ORIGIN_Y);
+        this->readAttr(SPAttr::VERT_ADV_Y);
     }
 
     SPObject::update(ctx, flags);

@@ -1683,7 +1683,7 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
          * Same for linked offset if we are also moving its source: do not move it. */
         if (transform_textpath_with_path) {
             // Restore item->transform field from the repr, in case it was changed by seltrans.
-            item->readAttr(SP_ATTR_TRANSFORM);
+            item->readAttr(SPAttr::TRANSFORM);
         } else if (transform_flowtext_with_frame) {
             // apply the inverse of the region's transform to the <use> so that the flow remains
             // the same (even though the output itself gets transformed)
@@ -1703,7 +1703,7 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
             // transform and its move compensation are both cancelled out.
 
             // restore item->transform field from the repr, in case it was changed by seltrans
-            item->readAttr(SP_ATTR_TRANSFORM);
+            item->readAttr(SPAttr::TRANSFORM);
 
             // calculate the matrix we need to apply to the clone to cancel its induced transform from its original
             Geom::Affine parent2dt;
@@ -4359,7 +4359,7 @@ void ObjectSet::fillBetweenMany()
         // Force-assign id if there is none present
         if (!item->getId()) {
             gchar *id = sp_object_get_unique_id(item, nullptr);
-            item->set(SP_ATTR_ID, id);
+            item->set(SPAttr::ID, id);
             item->updateRepr();
             g_free(id);
         }

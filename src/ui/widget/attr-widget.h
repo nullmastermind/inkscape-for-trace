@@ -109,27 +109,27 @@ public:
 class AttrWidget
 {
 public:
-    AttrWidget(const SPAttributeEnum a, unsigned int value)
+    AttrWidget(const SPAttr a, unsigned int value)
         : _attr(a),
           _default(value)
     {}
 
-    AttrWidget(const SPAttributeEnum a, double value)
+    AttrWidget(const SPAttr a, double value)
         : _attr(a),
           _default(value)
     {}
 
-    AttrWidget(const SPAttributeEnum a, bool value)
+    AttrWidget(const SPAttr a, bool value)
         : _attr(a),
           _default(value)
     {}
     
-    AttrWidget(const SPAttributeEnum a, char* value)
+    AttrWidget(const SPAttr a, char* value)
         : _attr(a),
           _default(value)
     {}
     
-    AttrWidget(const SPAttributeEnum a)
+    AttrWidget(const SPAttr a)
         : _attr(a),
           _default()
     {}
@@ -140,7 +140,7 @@ public:
     virtual Glib::ustring get_as_attribute() const = 0;
     virtual void set_from_attribute(SPObject*) = 0;
 
-    SPAttributeEnum get_attribute() const
+    SPAttr get_attribute() const
     {
         return _attr;
     }
@@ -162,7 +162,7 @@ protected:
     }
 
 private:
-    const SPAttributeEnum _attr;
+    const SPAttr _attr;
     DefaultValueHolder _default;
     sigc::signal<void> _signal;
 };

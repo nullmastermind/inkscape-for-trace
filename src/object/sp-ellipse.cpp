@@ -58,27 +58,27 @@ void SPGenericEllipse::build(SPDocument *document, Inkscape::XML::Node *repr)
 
     switch ( type ) {
         case SP_GENERIC_ELLIPSE_ARC:
-            this->readAttr(SP_ATTR_SODIPODI_CX);
-            this->readAttr(SP_ATTR_SODIPODI_CY);
-            this->readAttr(SP_ATTR_SODIPODI_RX);
-            this->readAttr(SP_ATTR_SODIPODI_RY);
-            this->readAttr(SP_ATTR_SODIPODI_START);
-            this->readAttr(SP_ATTR_SODIPODI_END);
-            this->readAttr(SP_ATTR_SODIPODI_OPEN);
-            this->readAttr(SP_ATTR_SODIPODI_ARC_TYPE);
+            this->readAttr(SPAttr::SODIPODI_CX);
+            this->readAttr(SPAttr::SODIPODI_CY);
+            this->readAttr(SPAttr::SODIPODI_RX);
+            this->readAttr(SPAttr::SODIPODI_RY);
+            this->readAttr(SPAttr::SODIPODI_START);
+            this->readAttr(SPAttr::SODIPODI_END);
+            this->readAttr(SPAttr::SODIPODI_OPEN);
+            this->readAttr(SPAttr::SODIPODI_ARC_TYPE);
             break;
 
         case SP_GENERIC_ELLIPSE_CIRCLE:
-            this->readAttr(SP_ATTR_CX);
-            this->readAttr(SP_ATTR_CY);
-            this->readAttr(SP_ATTR_R);
+            this->readAttr(SPAttr::CX);
+            this->readAttr(SPAttr::CY);
+            this->readAttr(SPAttr::R);
             break;
 
         case SP_GENERIC_ELLIPSE_ELLIPSE:
-            this->readAttr(SP_ATTR_CX);
-            this->readAttr(SP_ATTR_CY);
-            this->readAttr(SP_ATTR_RX);
-            this->readAttr(SP_ATTR_RY);
+            this->readAttr(SPAttr::CX);
+            this->readAttr(SPAttr::CY);
+            this->readAttr(SPAttr::RX);
+            this->readAttr(SPAttr::RY);
             break;
 
         default:
@@ -92,7 +92,7 @@ void SPGenericEllipse::build(SPDocument *document, Inkscape::XML::Node *repr)
     SPShape::build(document, repr);
 }
 
-void SPGenericEllipse::set(SPAttributeEnum key, gchar const *value)
+void SPGenericEllipse::set(SPAttr key, gchar const *value)
 {
     // There are multiple ways to set internal cx, cy, rx, and ry (via SVG attributes or Sodipodi
     // attributes) thus we don't want to unset them if a read fails (e.g., when we explicitly clear
@@ -107,35 +107,35 @@ void SPGenericEllipse::set(SPAttributeEnum key, gchar const *value)
 
     SVGLength t;
     switch (key) {
-    case SP_ATTR_CX:
-    case SP_ATTR_SODIPODI_CX:
+    case SPAttr::CX:
+    case SPAttr::SODIPODI_CX:
         if( t.read(value) ) cx = t;
         cx.update( em, ex, w );
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_CY:
-    case SP_ATTR_SODIPODI_CY:
+    case SPAttr::CY:
+    case SPAttr::SODIPODI_CY:
         if( t.read(value) ) cy = t;
         cy.update( em, ex, h );
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_RX:
-    case SP_ATTR_SODIPODI_RX:
+    case SPAttr::RX:
+    case SPAttr::SODIPODI_RX:
         if( t.read(value) && t.value > 0.0 ) rx = t;
         rx.update( em, ex, w );
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_RY:
-    case SP_ATTR_SODIPODI_RY:
+    case SPAttr::RY:
+    case SPAttr::SODIPODI_RY:
         if( t.read(value) && t.value > 0.0 ) ry = t;
         ry.update( em, ex, h );
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_R:
+    case SPAttr::R:
         if( t.read(value) && t.value > 0.0 ) {
             this->ry = this->rx = t;
         }
@@ -144,7 +144,7 @@ void SPGenericEllipse::set(SPAttributeEnum key, gchar const *value)
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_SODIPODI_START:
+    case SPAttr::SODIPODI_START:
         if (value) {
             sp_svg_number_read_d(value, &this->start);
         } else {
@@ -153,7 +153,7 @@ void SPGenericEllipse::set(SPAttributeEnum key, gchar const *value)
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_SODIPODI_END:
+    case SPAttr::SODIPODI_END:
         if (value) {
             sp_svg_number_read_d(value, &this->end);
         } else {
@@ -162,7 +162,7 @@ void SPGenericEllipse::set(SPAttributeEnum key, gchar const *value)
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_SODIPODI_OPEN:
+    case SPAttr::SODIPODI_OPEN:
         // This is only for reading in old files so rely on constructor to set default.
         if (!value) { // Only set if not "true"
             this->arc_type = SP_GENERIC_ELLIPSE_ARC_TYPE_SLICE;
@@ -170,7 +170,7 @@ void SPGenericEllipse::set(SPAttributeEnum key, gchar const *value)
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_SODIPODI_ARC_TYPE:
+    case SPAttr::SODIPODI_ARC_TYPE:
         // To read in old files that use 'open', we need to not set if value is null.
         // We could also check inkscape version.
         if (value) {

@@ -339,8 +339,8 @@ SimpleNode::setAttributeImpl(gchar const *name, gchar const *value)
             gchar const *id_char = attribute("id");
             Glib::ustring id = (id_char == nullptr ? "" : id_char );
             unsigned int flags = sp_attribute_clean_get_prefs();
-            bool attr_warn   = flags & SP_ATTR_CLEAN_ATTR_WARN;
-            bool attr_remove = flags & SP_ATTR_CLEAN_ATTR_REMOVE;
+            bool attr_warn   = flags & SP_ATTRCLEAN_ATTR_WARN;
+            bool attr_remove = flags & SP_ATTRCLEAN_ATTR_REMOVE;
 
             // Check attributes
             if( (attr_warn || attr_remove) && value != nullptr ) {
@@ -353,7 +353,7 @@ SimpleNode::setAttributeImpl(gchar const *name, gchar const *value)
 
             // Check style properties -- Note: if element is not yet inserted into
             // tree (and thus has no parent), default values will not be tested.
-            if( !strcmp( name, "style" ) && (flags >= SP_ATTR_CLEAN_STYLE_WARN) ) {
+            if( !strcmp( name, "style" ) && (flags >= SP_ATTRCLEAN_STYLE_WARN) ) {
                 g_free( cleaned_value );
                 cleaned_value = g_strdup( sp_attribute_clean_style( this, value, flags ).c_str() );
                 // if( g_strcmp0( value, cleaned_value ) ) {

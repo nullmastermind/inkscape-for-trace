@@ -75,32 +75,32 @@ SPText::~SPText()
 };
 
 void SPText::build(SPDocument *doc, Inkscape::XML::Node *repr) {
-    this->readAttr(SP_ATTR_X);
-    this->readAttr(SP_ATTR_Y);
-    this->readAttr(SP_ATTR_DX);
-    this->readAttr(SP_ATTR_DY);
-    this->readAttr(SP_ATTR_ROTATE);
+    this->readAttr(SPAttr::X);
+    this->readAttr(SPAttr::Y);
+    this->readAttr(SPAttr::DX);
+    this->readAttr(SPAttr::DY);
+    this->readAttr(SPAttr::ROTATE);
 
     // textLength and friends
-    this->readAttr(SP_ATTR_TEXTLENGTH);
-    this->readAttr(SP_ATTR_LENGTHADJUST);
+    this->readAttr(SPAttr::TEXTLENGTH);
+    this->readAttr(SPAttr::LENGTHADJUST);
     SPItem::build(doc, repr);
     css = nullptr;
-    this->readAttr(SP_ATTR_SODIPODI_LINESPACING);    // has to happen after the styles are read
+    this->readAttr(SPAttr::SODIPODI_LINESPACING);    // has to happen after the styles are read
 }
 
 void SPText::release() {
     SPItem::release();
 }
 
-void SPText::set(SPAttributeEnum key, const gchar* value) {
+void SPText::set(SPAttr key, const gchar* value) {
     //std::cout << "SPText::set: " << sp_attribute_name( key ) << ": " << (value?value:"Null") << std::endl;
 
     if (this->attributes.readSingleAttribute(key, value, style, &viewport)) {
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     } else {
         switch (key) {
-            case SP_ATTR_SODIPODI_LINESPACING:
+            case SPAttr::SODIPODI_LINESPACING:
                 // convert deprecated tag to css... but only if 'line-height' missing.
                 if (value && !this->style->line_height.set) {
                     this->style->line_height.set = TRUE;
@@ -1281,16 +1281,16 @@ SPItem *create_text_with_rectangle (SPDesktop *desktop, Geom::Point p0, Geom::Po
 // Not used.
 // void TextTagAttributes::readFrom(Inkscape::XML::Node const *node)
 // {
-//     readSingleAttribute(SP_ATTR_X, node->attribute("x"));
-//     readSingleAttribute(SP_ATTR_Y, node->attribute("y"));
-//     readSingleAttribute(SP_ATTR_DX, node->attribute("dx"));
-//     readSingleAttribute(SP_ATTR_DY, node->attribute("dy"));
-//     readSingleAttribute(SP_ATTR_ROTATE, node->attribute("rotate"));
-//     readSingleAttribute(SP_ATTR_TEXTLENGTH, node->attribute("textLength"));
-//     readSingleAttribute(SP_ATTR_LENGTHADJUST, node->attribute("lengthAdjust"));
+//     readSingleAttribute(SPAttr::X, node->attribute("x"));
+//     readSingleAttribute(SPAttr::Y, node->attribute("y"));
+//     readSingleAttribute(SPAttr::DX, node->attribute("dx"));
+//     readSingleAttribute(SPAttr::DY, node->attribute("dy"));
+//     readSingleAttribute(SPAttr::ROTATE, node->attribute("rotate"));
+//     readSingleAttribute(SPAttr::TEXTLENGTH, node->attribute("textLength"));
+//     readSingleAttribute(SPAttr::LENGTHADJUST, node->attribute("lengthAdjust"));
 // }
 
-bool TextTagAttributes::readSingleAttribute(unsigned key, gchar const *value, SPStyle const *style, Geom::Rect const *viewport)
+bool TextTagAttributes::readSingleAttribute(SPAttr key, gchar const *value, SPStyle const *style, Geom::Rect const *viewport)
 {
     // std::cout << "TextTagAttributes::readSingleAttribute: key: " << key
     //           << "  value: " << (value?value:"Null") << std::endl;
@@ -1298,16 +1298,16 @@ bool TextTagAttributes::readSingleAttribute(unsigned key, gchar const *value, SP
     bool update_x = false;
     bool update_y = false;
     switch (key) {
-        case SP_ATTR_X:      attr_vector = &attributes.x;  update_x = true; break;
-        case SP_ATTR_Y:      attr_vector = &attributes.y;  update_y = true; break;
-        case SP_ATTR_DX:     attr_vector = &attributes.dx; update_x = true; break;
-        case SP_ATTR_DY:     attr_vector = &attributes.dy; update_y = true; break;
-        case SP_ATTR_ROTATE: attr_vector = &attributes.rotate; break;
-        case SP_ATTR_TEXTLENGTH:
+        case SPAttr::X:      attr_vector = &attributes.x;  update_x = true; break;
+        case SPAttr::Y:      attr_vector = &attributes.y;  update_y = true; break;
+        case SPAttr::DX:     attr_vector = &attributes.dx; update_x = true; break;
+        case SPAttr::DY:     attr_vector = &attributes.dy; update_y = true; break;
+        case SPAttr::ROTATE: attr_vector = &attributes.rotate; break;
+        case SPAttr::TEXTLENGTH:
             attributes.textLength.readOrUnset(value);
             return true;
             break;
-        case SP_ATTR_LENGTHADJUST:
+        case SPAttr::LENGTHADJUST:
             attributes.lengthAdjust = (value && !strcmp(value, "spacingAndGlyphs")?
                                         Inkscape::Text::Layout::LENGTHADJUST_SPACINGANDGLYPHS :
                                         Inkscape::Text::Layout::LENGTHADJUST_SPACING); // default is "spacing"

@@ -67,15 +67,15 @@ SPMeshpatch::~SPMeshpatch() = default;
 void SPMeshpatch::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 	SPObject::build(doc, repr);
 
-	this->readAttr(SP_ATTR_TENSOR);
+	this->readAttr(SPAttr::TENSOR);
 }
 
 /**
  * Virtual build: set meshpatch attributes from its associated XML node.
  */
-void SPMeshpatch::set(SPAttributeEnum key, const gchar* value) {
+void SPMeshpatch::set(SPAttr key, const gchar* value) {
     switch (key) {
-        case SP_ATTR_TENSOR: {
+        case SPAttr::TENSOR: {
             if (value) {
                 this->tensor_string = new Glib::ustring( value );
                 // std::cout << "sp_meshpatch_set: Tensor string: " << patch->tensor_string->c_str() << std::endl;

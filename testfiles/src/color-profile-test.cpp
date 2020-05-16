@@ -71,7 +71,7 @@ TEST_F(ColorProfileTest, SetRenderingIntent)
     };
 
     for (auto i : cases) {
-        _prof->setKeyValue( SP_ATTR_RENDERING_INTENT, i.attr);
+        _prof->setKeyValue( SPAttr::RENDERING_INTENT, i.attr);
         ASSERT_EQ( (guint)i.intVal, _prof->rendering_intent ) << i.attr;
     }
 }
@@ -84,13 +84,13 @@ TEST_F(ColorProfileTest, SetLocal)
     };
 
     for (auto & i : cases) {
-        _prof->setKeyValue( SP_ATTR_LOCAL, i);
+        _prof->setKeyValue( SPAttr::LOCAL, i);
         ASSERT_TRUE( _prof->local != NULL );
         if ( _prof->local ) {
             ASSERT_EQ( std::string(i), _prof->local );
         }
     }
-    _prof->setKeyValue( SP_ATTR_LOCAL, NULL);
+    _prof->setKeyValue( SPAttr::LOCAL, NULL);
     ASSERT_EQ( (gchar*)0, _prof->local );
 }
 
@@ -102,13 +102,13 @@ TEST_F(ColorProfileTest, SetName)
     };
 
     for (auto & i : cases) {
-        _prof->setKeyValue( SP_ATTR_NAME, i);
+        _prof->setKeyValue( SPAttr::NAME, i);
         ASSERT_TRUE( _prof->name != NULL );
         if ( _prof->name ) {
             ASSERT_EQ( std::string(i), _prof->name );
         }
     }
-    _prof->setKeyValue( SP_ATTR_NAME, NULL );
+    _prof->setKeyValue( SPAttr::NAME, NULL );
     ASSERT_EQ( (gchar*)0, _prof->name );
 }
 

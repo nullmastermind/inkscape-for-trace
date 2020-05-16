@@ -290,11 +290,11 @@ void SPGradient::build(SPDocument *document, Inkscape::XML::Node *repr)
         }
     }
 
-    this->readAttr(SP_ATTR_GRADIENTUNITS);
-    this->readAttr(SP_ATTR_GRADIENTTRANSFORM);
-    this->readAttr(SP_ATTR_SPREADMETHOD);
-    this->readAttr(SP_ATTR_XLINK_HREF);
-    this->readAttr(SP_ATTR_OSB_SWATCH);
+    this->readAttr(SPAttr::GRADIENTUNITS);
+    this->readAttr(SPAttr::GRADIENTTRANSFORM);
+    this->readAttr(SPAttr::SPREADMETHOD);
+    this->readAttr(SPAttr::XLINK_HREF);
+    this->readAttr(SPAttr::OSB_SWATCH);
 
     // Register ourselves
     document->addResource("gradient", this);
@@ -330,7 +330,7 @@ void SPGradient::release()
 /**
  * Set gradient attribute to value.
  */
-void SPGradient::set(SPAttributeEnum key, gchar const *value)
+void SPGradient::set(SPAttr key, gchar const *value)
 {
 #ifdef OBJECT_TRACE
     std::stringstream temp;
@@ -339,7 +339,7 @@ void SPGradient::set(SPAttributeEnum key, gchar const *value)
 #endif
 
     switch (key) {
-        case SP_ATTR_GRADIENTUNITS:
+        case SPAttr::GRADIENTUNITS:
             if (value) {
                 if (!strcmp(value, "userSpaceOnUse")) {
                     this->units = SP_GRADIENT_UNITS_USERSPACEONUSE;
@@ -356,7 +356,7 @@ void SPGradient::set(SPAttributeEnum key, gchar const *value)
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_GRADIENTTRANSFORM: {
+        case SPAttr::GRADIENTTRANSFORM: {
             Geom::Affine t;
             if (value && sp_svg_transform_read(value, &t)) {
                 this->gradientTransform = t;
@@ -369,7 +369,7 @@ void SPGradient::set(SPAttributeEnum key, gchar const *value)
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
         }
-        case SP_ATTR_SPREADMETHOD:
+        case SPAttr::SPREADMETHOD:
             if (value) {
                 if (!strcmp(value, "reflect")) {
                     this->spread = SP_GRADIENT_SPREAD_REFLECT;
@@ -387,7 +387,7 @@ void SPGradient::set(SPAttributeEnum key, gchar const *value)
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_XLINK_HREF:
+        case SPAttr::XLINK_HREF:
             if (value) {
                 try {
                     this->ref->attach(Inkscape::URI(value));
@@ -400,7 +400,7 @@ void SPGradient::set(SPAttributeEnum key, gchar const *value)
             }
             break;
 
-        case SP_ATTR_OSB_SWATCH:
+        case SPAttr::OSB_SWATCH:
         {
             bool newVal = (value != nullptr);
             bool modified = false;

@@ -65,11 +65,11 @@ void SPGuide::build(SPDocument *document, Inkscape::XML::Node *repr)
 {
     SPObject::build(document, repr);
 
-    this->readAttr(SP_ATTR_INKSCAPE_COLOR);
-    this->readAttr(SP_ATTR_INKSCAPE_LABEL);
-    this->readAttr(SP_ATTR_INKSCAPE_LOCKED);
-    this->readAttr(SP_ATTR_ORIENTATION);
-    this->readAttr(SP_ATTR_POSITION);
+    this->readAttr(SPAttr::INKSCAPE_COLOR);
+    this->readAttr(SPAttr::INKSCAPE_LABEL);
+    this->readAttr(SPAttr::INKSCAPE_LOCKED);
+    this->readAttr(SPAttr::ORIENTATION);
+    this->readAttr(SPAttr::POSITION);
 
     /* Register */
     document->addResource("guide", this);
@@ -90,14 +90,14 @@ void SPGuide::release()
     SPObject::release();
 }
 
-void SPGuide::set(SPAttributeEnum key, const gchar *value) {
+void SPGuide::set(SPAttr key, const gchar *value) {
     switch (key) {
-    case SP_ATTR_INKSCAPE_COLOR:
+    case SPAttr::INKSCAPE_COLOR:
         if (value) {
             this->setColor(sp_svg_read_color(value, 0x0000ff00) | 0x7f);
         }
         break;
-    case SP_ATTR_INKSCAPE_LABEL:
+    case SPAttr::INKSCAPE_LABEL:
         // this->label already freed in sp_guideline_set_label (src/display/guideline.cpp)
         // see bug #1498444, bug #1469514
         if (value) {
@@ -108,12 +108,12 @@ void SPGuide::set(SPAttributeEnum key, const gchar *value) {
 
         this->set_label(this->label, false);
         break;
-    case SP_ATTR_INKSCAPE_LOCKED:
+    case SPAttr::INKSCAPE_LOCKED:
         if (value) {
             this->set_locked(helperfns_read_bool(value, false), false);
         }
         break;
-    case SP_ATTR_ORIENTATION:
+    case SPAttr::ORIENTATION:
     {
         if (value && !strcmp(value, "horizontal")) {
             /* Visual representation of a horizontal line, constrain vertically (y coordinate). */
@@ -147,7 +147,7 @@ void SPGuide::set(SPAttributeEnum key, const gchar *value) {
         this->set_normal(this->normal_to_line, false);
     }
     break;
-    case SP_ATTR_POSITION:
+    case SPAttr::POSITION:
     {
         if (value) {
             gchar ** strarray = g_strsplit(value, ",", 2);

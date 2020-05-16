@@ -39,7 +39,7 @@ private:
     bool _sort;
 
 public:
-    ComboBoxEnum(E default_value, const Util::EnumDataConverter<E>& c, const SPAttributeEnum a = SP_ATTR_INVALID, bool sort = true)
+    ComboBoxEnum(E default_value, const Util::EnumDataConverter<E>& c, const SPAttr a = SPAttr::INVALID, bool sort = true)
         : AttrWidget(a, (unsigned int)default_value), setProgrammatically(false), _converter(c)
     {
         _sort = sort;
@@ -68,7 +68,7 @@ public:
         }
     }
 
-    ComboBoxEnum(const Util::EnumDataConverter<E>& c, const SPAttributeEnum a = SP_ATTR_INVALID, bool sort = true)
+    ComboBoxEnum(const Util::EnumDataConverter<E>& c, const SPAttr a = SPAttr::INVALID, bool sort = true)
         : AttrWidget(a, (unsigned int) 0), setProgrammatically(false), _converter(c)
     {
         _sort = sort;
@@ -197,7 +197,7 @@ public:
                           Glib::ustring const &icon = "",
                           bool mnemonic = true,
                           bool sorted = true)
-        : Labelled(label, tooltip, new ComboBoxEnum<E>(c, SP_ATTR_INVALID, sorted), suffix, icon, mnemonic)
+        : Labelled(label, tooltip, new ComboBoxEnum<E>(c, SPAttr::INVALID, sorted), suffix, icon, mnemonic)
     { 
     }
 

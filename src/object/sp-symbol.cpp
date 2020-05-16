@@ -28,8 +28,8 @@ SPSymbol::SPSymbol() : SPGroup(), SPViewBox() {
 SPSymbol::~SPSymbol() = default;
 
 void SPSymbol::build(SPDocument *document, Inkscape::XML::Node *repr) {
-    this->readAttr(SP_ATTR_VIEWBOX);
-    this->readAttr(SP_ATTR_PRESERVEASPECTRATIO);
+    this->readAttr(SPAttr::VIEWBOX);
+    this->readAttr(SPAttr::PRESERVEASPECTRATIO);
 
     SPGroup::build(document, repr);
 }
@@ -38,15 +38,15 @@ void SPSymbol::release() {
 	SPGroup::release();
 }
 
-void SPSymbol::set(SPAttributeEnum key, const gchar* value) {
+void SPSymbol::set(SPAttr key, const gchar* value) {
     switch (key) {
-    case SP_ATTR_VIEWBOX:
+    case SPAttr::VIEWBOX:
         set_viewBox( value );
         // std::cout << "Symbol: ViewBox: " << viewBox << std::endl;
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_PRESERVEASPECTRATIO:
+    case SPAttr::PRESERVEASPECTRATIO:
         set_preserveAspectRatio( value );
         // std::cout << "Symbol: Preserve aspect ratio: " << aspect_align << ", " << aspect_clip << std::endl;
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);

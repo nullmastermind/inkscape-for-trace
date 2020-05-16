@@ -44,13 +44,13 @@ SPSpiral::~SPSpiral() = default;
 void SPSpiral::build(SPDocument * document, Inkscape::XML::Node * repr) {
     SPShape::build(document, repr);
 
-    this->readAttr(SP_ATTR_SODIPODI_CX);
-    this->readAttr(SP_ATTR_SODIPODI_CY);
-    this->readAttr(SP_ATTR_SODIPODI_EXPANSION);
-    this->readAttr(SP_ATTR_SODIPODI_REVOLUTION);
-    this->readAttr(SP_ATTR_SODIPODI_RADIUS);
-    this->readAttr(SP_ATTR_SODIPODI_ARGUMENT);
-    this->readAttr(SP_ATTR_SODIPODI_T0);
+    this->readAttr(SPAttr::SODIPODI_CX);
+    this->readAttr(SPAttr::SODIPODI_CY);
+    this->readAttr(SPAttr::SODIPODI_EXPANSION);
+    this->readAttr(SPAttr::SODIPODI_REVOLUTION);
+    this->readAttr(SPAttr::SODIPODI_RADIUS);
+    this->readAttr(SPAttr::SODIPODI_ARGUMENT);
+    this->readAttr(SPAttr::SODIPODI_T0);
 }
 
 Inkscape::XML::Node* SPSpiral::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
@@ -90,10 +90,10 @@ Inkscape::XML::Node* SPSpiral::write(Inkscape::XML::Document *xml_doc, Inkscape:
     return repr;
 }
 
-void SPSpiral::set(SPAttributeEnum key, gchar const* value) {
+void SPSpiral::set(SPAttr key, gchar const* value) {
     /// \todo fixme: we should really collect updates
     switch (key) {
-    case SP_ATTR_SODIPODI_CX:
+    case SPAttr::SODIPODI_CX:
         if (!sp_svg_length_read_computed_absolute (value, &this->cx)) {
         	this->cx = 0.0;
         }
@@ -101,7 +101,7 @@ void SPSpiral::set(SPAttributeEnum key, gchar const* value) {
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_SODIPODI_CY:
+    case SPAttr::SODIPODI_CY:
         if (!sp_svg_length_read_computed_absolute (value, &this->cy)) {
         	this->cy = 0.0;
         }
@@ -109,7 +109,7 @@ void SPSpiral::set(SPAttributeEnum key, gchar const* value) {
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_SODIPODI_EXPANSION:
+    case SPAttr::SODIPODI_EXPANSION:
         if (value) {
             /** \todo
                          * FIXME: check that value looks like a (finite)
@@ -127,7 +127,7 @@ void SPSpiral::set(SPAttributeEnum key, gchar const* value) {
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_SODIPODI_REVOLUTION:
+    case SPAttr::SODIPODI_REVOLUTION:
         if (value) {
         	this->revo = g_ascii_strtod (value, nullptr);
             this->revo = CLAMP (this->revo, 0.05, 1024.0);
@@ -138,7 +138,7 @@ void SPSpiral::set(SPAttributeEnum key, gchar const* value) {
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_SODIPODI_RADIUS:
+    case SPAttr::SODIPODI_RADIUS:
         if (!sp_svg_length_read_computed_absolute (value, &this->rad)) {
         	this->rad = MAX (this->rad, 0.001);
         }
@@ -146,7 +146,7 @@ void SPSpiral::set(SPAttributeEnum key, gchar const* value) {
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_SODIPODI_ARGUMENT:
+    case SPAttr::SODIPODI_ARGUMENT:
         if (value) {
         	this->arg = g_ascii_strtod (value, nullptr);
             /** \todo
@@ -164,7 +164,7 @@ void SPSpiral::set(SPAttributeEnum key, gchar const* value) {
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_SODIPODI_T0:
+    case SPAttr::SODIPODI_T0:
         if (value) {
         	this->t0 = g_ascii_strtod (value, nullptr);
         	this->t0 = CLAMP (this->t0, 0.0, 0.999);

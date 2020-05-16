@@ -66,17 +66,17 @@ void SPPattern::build(SPDocument *doc, Inkscape::XML::Node *repr)
 {
     SPPaintServer::build(doc, repr);
 
-    this->readAttr(SP_ATTR_PATTERNUNITS);
-    this->readAttr(SP_ATTR_PATTERNCONTENTUNITS);
-    this->readAttr(SP_ATTR_PATTERNTRANSFORM);
-    this->readAttr(SP_ATTR_X);
-    this->readAttr(SP_ATTR_Y);
-    this->readAttr(SP_ATTR_WIDTH);
-    this->readAttr(SP_ATTR_HEIGHT);
-    this->readAttr(SP_ATTR_VIEWBOX);
-    this->readAttr(SP_ATTR_PRESERVEASPECTRATIO);
-    this->readAttr(SP_ATTR_XLINK_HREF);
-    this->readAttr(SP_ATTR_STYLE);
+    this->readAttr(SPAttr::PATTERNUNITS);
+    this->readAttr(SPAttr::PATTERNCONTENTUNITS);
+    this->readAttr(SPAttr::PATTERNTRANSFORM);
+    this->readAttr(SPAttr::X);
+    this->readAttr(SPAttr::Y);
+    this->readAttr(SPAttr::WIDTH);
+    this->readAttr(SPAttr::HEIGHT);
+    this->readAttr(SPAttr::VIEWBOX);
+    this->readAttr(SPAttr::PRESERVEASPECTRATIO);
+    this->readAttr(SPAttr::XLINK_HREF);
+    this->readAttr(SPAttr::STYLE);
 
     /* Register ourselves */
     doc->addResource("pattern", this);
@@ -99,10 +99,10 @@ void SPPattern::release()
     SPPaintServer::release();
 }
 
-void SPPattern::set(SPAttributeEnum key, const gchar *value)
+void SPPattern::set(SPAttr key, const gchar *value)
 {
     switch (key) {
-        case SP_ATTR_PATTERNUNITS:
+        case SPAttr::PATTERNUNITS:
             if (value) {
                 if (!strcmp(value, "userSpaceOnUse")) {
                     this->_pattern_units = UNITS_USERSPACEONUSE;
@@ -120,7 +120,7 @@ void SPPattern::set(SPAttributeEnum key, const gchar *value)
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_PATTERNCONTENTUNITS:
+        case SPAttr::PATTERNCONTENTUNITS:
             if (value) {
                 if (!strcmp(value, "userSpaceOnUse")) {
                     this->_pattern_content_units = UNITS_USERSPACEONUSE;
@@ -138,7 +138,7 @@ void SPPattern::set(SPAttributeEnum key, const gchar *value)
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_PATTERNTRANSFORM: {
+        case SPAttr::PATTERNTRANSFORM: {
             Geom::Affine t;
 
             if (value && sp_svg_transform_read(value, &t)) {
@@ -153,37 +153,37 @@ void SPPattern::set(SPAttributeEnum key, const gchar *value)
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
         }
-        case SP_ATTR_X:
+        case SPAttr::X:
             this->_x.readOrUnset(value);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_Y:
+        case SPAttr::Y:
             this->_y.readOrUnset(value);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_WIDTH:
+        case SPAttr::WIDTH:
             this->_width.readOrUnset(value);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_HEIGHT:
+        case SPAttr::HEIGHT:
             this->_height.readOrUnset(value);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_VIEWBOX:
+        case SPAttr::VIEWBOX:
             set_viewBox(value);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_PRESERVEASPECTRATIO:
+        case SPAttr::PRESERVEASPECTRATIO:
             set_preserveAspectRatio(value);
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_XLINK_HREF:
+        case SPAttr::XLINK_HREF:
             if (value && this->href == value) {
                 /* Href unchanged, do nothing. */
             }

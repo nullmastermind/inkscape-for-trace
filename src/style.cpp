@@ -70,7 +70,7 @@ static void sp_style_object_release(SPObject *object, SPStyle *style);
 static CRSelEng *sp_repr_sel_eng();
 
 /**
- * Helper class for SPStyle property member lookup by SPAttributeEnum or
+ * Helper class for SPStyle property member lookup by SPAttr or
  * by name, and for iterating over ordered members.
  */
 class SPStylePropHelper {
@@ -80,111 +80,111 @@ class SPStylePropHelper {
         _register(reinterpret_cast<SPIBasePtr>(&SPStyle::member), id) /* name unused */
 
         // SVG 2: Attributes promoted to properties
-        REGISTER_PROPERTY(SP_ATTR_D, d, "d");
+        REGISTER_PROPERTY(SPAttr::D, d, "d");
 
         // 'color' must be before 'fill', 'stroke', 'text-decoration-color', ...
-        REGISTER_PROPERTY(SP_PROP_COLOR, color, "color");
+        REGISTER_PROPERTY(SPAttr::COLOR, color, "color");
 
         // 'font-size'/'font' must be before properties that need to know em, ex size (SPILength,
         // SPILengthOrNormal)
-        REGISTER_PROPERTY(SP_PROP_FONT_STYLE, font_style, "font-style");
-        REGISTER_PROPERTY(SP_PROP_FONT_VARIANT, font_variant, "font-variant");
-        REGISTER_PROPERTY(SP_PROP_FONT_WEIGHT, font_weight, "font-weight");
-        REGISTER_PROPERTY(SP_PROP_FONT_STRETCH, font_stretch, "font-stretch");
-        REGISTER_PROPERTY(SP_PROP_FONT_SIZE, font_size, "font-size");
-        REGISTER_PROPERTY(SP_PROP_LINE_HEIGHT, line_height, "line-height");
-        REGISTER_PROPERTY(SP_PROP_FONT_FAMILY, font_family, "font-family");
-        REGISTER_PROPERTY(SP_PROP_FONT, font, "font");
-        REGISTER_PROPERTY(SP_PROP_INKSCAPE_FONT_SPEC, font_specification, "-inkscape-font-specification");
+        REGISTER_PROPERTY(SPAttr::FONT_STYLE, font_style, "font-style");
+        REGISTER_PROPERTY(SPAttr::FONT_VARIANT, font_variant, "font-variant");
+        REGISTER_PROPERTY(SPAttr::FONT_WEIGHT, font_weight, "font-weight");
+        REGISTER_PROPERTY(SPAttr::FONT_STRETCH, font_stretch, "font-stretch");
+        REGISTER_PROPERTY(SPAttr::FONT_SIZE, font_size, "font-size");
+        REGISTER_PROPERTY(SPAttr::LINE_HEIGHT, line_height, "line-height");
+        REGISTER_PROPERTY(SPAttr::FONT_FAMILY, font_family, "font-family");
+        REGISTER_PROPERTY(SPAttr::FONT, font, "font");
+        REGISTER_PROPERTY(SPAttr::INKSCAPE_FONT_SPEC, font_specification, "-inkscape-font-specification");
 
         // Font variants
-        REGISTER_PROPERTY(SP_PROP_FONT_VARIANT_LIGATURES, font_variant_ligatures, "font-variant-ligatures");
-        REGISTER_PROPERTY(SP_PROP_FONT_VARIANT_POSITION, font_variant_position, "font-variant-position");
-        REGISTER_PROPERTY(SP_PROP_FONT_VARIANT_CAPS, font_variant_caps, "font-variant-caps");
-        REGISTER_PROPERTY(SP_PROP_FONT_VARIANT_NUMERIC, font_variant_numeric, "font-variant-numeric");
-        REGISTER_PROPERTY(SP_PROP_FONT_VARIANT_ALTERNATES, font_variant_alternates, "font-variant-alternates");
-        REGISTER_PROPERTY(SP_PROP_FONT_VARIANT_EAST_ASIAN, font_variant_east_asian, "font-variant-east-asian");
-        REGISTER_PROPERTY(SP_PROP_FONT_FEATURE_SETTINGS, font_feature_settings, "font-feature-settings");
+        REGISTER_PROPERTY(SPAttr::FONT_VARIANT_LIGATURES, font_variant_ligatures, "font-variant-ligatures");
+        REGISTER_PROPERTY(SPAttr::FONT_VARIANT_POSITION, font_variant_position, "font-variant-position");
+        REGISTER_PROPERTY(SPAttr::FONT_VARIANT_CAPS, font_variant_caps, "font-variant-caps");
+        REGISTER_PROPERTY(SPAttr::FONT_VARIANT_NUMERIC, font_variant_numeric, "font-variant-numeric");
+        REGISTER_PROPERTY(SPAttr::FONT_VARIANT_ALTERNATES, font_variant_alternates, "font-variant-alternates");
+        REGISTER_PROPERTY(SPAttr::FONT_VARIANT_EAST_ASIAN, font_variant_east_asian, "font-variant-east-asian");
+        REGISTER_PROPERTY(SPAttr::FONT_FEATURE_SETTINGS, font_feature_settings, "font-feature-settings");
 
         // Variable Fonts
-        REGISTER_PROPERTY(SP_PROP_FONT_VARIATION_SETTINGS, font_variation_settings, "font-variation-settings");
+        REGISTER_PROPERTY(SPAttr::FONT_VARIATION_SETTINGS, font_variation_settings, "font-variation-settings");
 
-        REGISTER_PROPERTY(SP_PROP_TEXT_INDENT, text_indent, "text-indent");
-        REGISTER_PROPERTY(SP_PROP_TEXT_ALIGN, text_align, "text-align");
+        REGISTER_PROPERTY(SPAttr::TEXT_INDENT, text_indent, "text-indent");
+        REGISTER_PROPERTY(SPAttr::TEXT_ALIGN, text_align, "text-align");
 
-        REGISTER_PROPERTY(SP_PROP_TEXT_DECORATION, text_decoration, "text-decoration");
-        REGISTER_PROPERTY(SP_PROP_TEXT_DECORATION_LINE, text_decoration_line, "text-decoration-line");
-        REGISTER_PROPERTY(SP_PROP_TEXT_DECORATION_STYLE, text_decoration_style, "text-decoration-style");
-        REGISTER_PROPERTY(SP_PROP_TEXT_DECORATION_COLOR, text_decoration_color, "text-decoration-color");
-        REGISTER_PROPERTY(SP_PROP_TEXT_DECORATION_FILL, text_decoration_fill, "text-decoration-fill");
-        REGISTER_PROPERTY(SP_PROP_TEXT_DECORATION_STROKE, text_decoration_stroke, "text-decoration-stroke");
+        REGISTER_PROPERTY(SPAttr::TEXT_DECORATION, text_decoration, "text-decoration");
+        REGISTER_PROPERTY(SPAttr::TEXT_DECORATION_LINE, text_decoration_line, "text-decoration-line");
+        REGISTER_PROPERTY(SPAttr::TEXT_DECORATION_STYLE, text_decoration_style, "text-decoration-style");
+        REGISTER_PROPERTY(SPAttr::TEXT_DECORATION_COLOR, text_decoration_color, "text-decoration-color");
+        REGISTER_PROPERTY(SPAttr::TEXT_DECORATION_FILL, text_decoration_fill, "text-decoration-fill");
+        REGISTER_PROPERTY(SPAttr::TEXT_DECORATION_STROKE, text_decoration_stroke, "text-decoration-stroke");
 
-        REGISTER_PROPERTY(SP_PROP_LETTER_SPACING, letter_spacing, "letter-spacing");
-        REGISTER_PROPERTY(SP_PROP_WORD_SPACING, word_spacing, "word-spacing");
-        REGISTER_PROPERTY(SP_PROP_TEXT_TRANSFORM, text_transform, "text-transform");
+        REGISTER_PROPERTY(SPAttr::LETTER_SPACING, letter_spacing, "letter-spacing");
+        REGISTER_PROPERTY(SPAttr::WORD_SPACING, word_spacing, "word-spacing");
+        REGISTER_PROPERTY(SPAttr::TEXT_TRANSFORM, text_transform, "text-transform");
 
-        REGISTER_PROPERTY(SP_PROP_WRITING_MODE, writing_mode, "writing-mode");
-        REGISTER_PROPERTY(SP_PROP_DIRECTION, direction, "direction");
-        REGISTER_PROPERTY(SP_PROP_TEXT_ORIENTATION, text_orientation, "text-orientation");
-        REGISTER_PROPERTY(SP_PROP_DOMINANT_BASELINE, dominant_baseline, "dominant-baseline");
-        REGISTER_PROPERTY(SP_PROP_BASELINE_SHIFT, baseline_shift, "baseline-shift");
-        REGISTER_PROPERTY(SP_PROP_TEXT_ANCHOR, text_anchor, "text-anchor");
-        REGISTER_PROPERTY(SP_PROP_WHITE_SPACE, white_space, "white-space");
+        REGISTER_PROPERTY(SPAttr::WRITING_MODE, writing_mode, "writing-mode");
+        REGISTER_PROPERTY(SPAttr::DIRECTION, direction, "direction");
+        REGISTER_PROPERTY(SPAttr::TEXT_ORIENTATION, text_orientation, "text-orientation");
+        REGISTER_PROPERTY(SPAttr::DOMINANT_BASELINE, dominant_baseline, "dominant-baseline");
+        REGISTER_PROPERTY(SPAttr::BASELINE_SHIFT, baseline_shift, "baseline-shift");
+        REGISTER_PROPERTY(SPAttr::TEXT_ANCHOR, text_anchor, "text-anchor");
+        REGISTER_PROPERTY(SPAttr::WHITE_SPACE, white_space, "white-space");
 
-        REGISTER_PROPERTY(SP_PROP_SHAPE_INSIDE, shape_inside, "shape-inside");
-        REGISTER_PROPERTY(SP_PROP_SHAPE_SUBTRACT, shape_subtract, "shape-subtract");
-        REGISTER_PROPERTY(SP_PROP_SHAPE_PADDING, shape_padding, "shape-padding");
-        REGISTER_PROPERTY(SP_PROP_SHAPE_MARGIN, shape_margin, "shape-margin");
-        REGISTER_PROPERTY(SP_PROP_INLINE_SIZE, inline_size, "inline-size");
+        REGISTER_PROPERTY(SPAttr::SHAPE_INSIDE, shape_inside, "shape-inside");
+        REGISTER_PROPERTY(SPAttr::SHAPE_SUBTRACT, shape_subtract, "shape-subtract");
+        REGISTER_PROPERTY(SPAttr::SHAPE_PADDING, shape_padding, "shape-padding");
+        REGISTER_PROPERTY(SPAttr::SHAPE_MARGIN, shape_margin, "shape-margin");
+        REGISTER_PROPERTY(SPAttr::INLINE_SIZE, inline_size, "inline-size");
 
-        REGISTER_PROPERTY(SP_PROP_CLIP_RULE, clip_rule, "clip-rule");
-        REGISTER_PROPERTY(SP_PROP_DISPLAY, display, "display");
-        REGISTER_PROPERTY(SP_PROP_OVERFLOW, overflow, "overflow");
-        REGISTER_PROPERTY(SP_PROP_VISIBILITY, visibility, "visibility");
-        REGISTER_PROPERTY(SP_PROP_OPACITY, opacity, "opacity");
+        REGISTER_PROPERTY(SPAttr::CLIP_RULE, clip_rule, "clip-rule");
+        REGISTER_PROPERTY(SPAttr::DISPLAY, display, "display");
+        REGISTER_PROPERTY(SPAttr::OVERFLOW, overflow, "overflow");
+        REGISTER_PROPERTY(SPAttr::VISIBILITY, visibility, "visibility");
+        REGISTER_PROPERTY(SPAttr::OPACITY, opacity, "opacity");
 
-        REGISTER_PROPERTY(SP_PROP_ISOLATION, isolation, "isolation");
-        REGISTER_PROPERTY(SP_PROP_MIX_BLEND_MODE, mix_blend_mode, "mix-blend-mode");
+        REGISTER_PROPERTY(SPAttr::ISOLATION, isolation, "isolation");
+        REGISTER_PROPERTY(SPAttr::MIX_BLEND_MODE, mix_blend_mode, "mix-blend-mode");
 
-        REGISTER_PROPERTY(SP_PROP_COLOR_INTERPOLATION, color_interpolation, "color-interpolation");
-        REGISTER_PROPERTY(SP_PROP_COLOR_INTERPOLATION_FILTERS, color_interpolation_filters, "color-interpolation-filters");
+        REGISTER_PROPERTY(SPAttr::COLOR_INTERPOLATION, color_interpolation, "color-interpolation");
+        REGISTER_PROPERTY(SPAttr::COLOR_INTERPOLATION_FILTERS, color_interpolation_filters, "color-interpolation-filters");
 
-        REGISTER_PROPERTY(SP_PROP_SOLID_COLOR, solid_color, "solid-color");
-        REGISTER_PROPERTY(SP_PROP_SOLID_OPACITY, solid_opacity, "solid-opacity");
+        REGISTER_PROPERTY(SPAttr::SOLID_COLOR, solid_color, "solid-color");
+        REGISTER_PROPERTY(SPAttr::SOLID_OPACITY, solid_opacity, "solid-opacity");
 
-        REGISTER_PROPERTY(SP_PROP_VECTOR_EFFECT, vector_effect, "vector-effect");
+        REGISTER_PROPERTY(SPAttr::VECTOR_EFFECT, vector_effect, "vector-effect");
 
-        REGISTER_PROPERTY(SP_PROP_FILL, fill, "fill");
-        REGISTER_PROPERTY(SP_PROP_FILL_OPACITY, fill_opacity, "fill-opacity");
-        REGISTER_PROPERTY(SP_PROP_FILL_RULE, fill_rule, "fill-rule");
+        REGISTER_PROPERTY(SPAttr::FILL, fill, "fill");
+        REGISTER_PROPERTY(SPAttr::FILL_OPACITY, fill_opacity, "fill-opacity");
+        REGISTER_PROPERTY(SPAttr::FILL_RULE, fill_rule, "fill-rule");
 
-        REGISTER_PROPERTY(SP_PROP_STROKE, stroke, "stroke");
-        REGISTER_PROPERTY(SP_PROP_STROKE_WIDTH, stroke_width, "stroke-width");
-        REGISTER_PROPERTY(SP_PROP_STROKE_LINECAP, stroke_linecap, "stroke-linecap");
-        REGISTER_PROPERTY(SP_PROP_STROKE_LINEJOIN, stroke_linejoin, "stroke-linejoin");
-        REGISTER_PROPERTY(SP_PROP_STROKE_MITERLIMIT, stroke_miterlimit, "stroke-miterlimit");
-        REGISTER_PROPERTY(SP_PROP_STROKE_DASHARRAY, stroke_dasharray, "stroke-dasharray");
-        REGISTER_PROPERTY(SP_PROP_STROKE_DASHOFFSET, stroke_dashoffset, "stroke-dashoffset");
-        REGISTER_PROPERTY(SP_PROP_STROKE_OPACITY, stroke_opacity, "stroke-opacity");
+        REGISTER_PROPERTY(SPAttr::STROKE, stroke, "stroke");
+        REGISTER_PROPERTY(SPAttr::STROKE_WIDTH, stroke_width, "stroke-width");
+        REGISTER_PROPERTY(SPAttr::STROKE_LINECAP, stroke_linecap, "stroke-linecap");
+        REGISTER_PROPERTY(SPAttr::STROKE_LINEJOIN, stroke_linejoin, "stroke-linejoin");
+        REGISTER_PROPERTY(SPAttr::STROKE_MITERLIMIT, stroke_miterlimit, "stroke-miterlimit");
+        REGISTER_PROPERTY(SPAttr::STROKE_DASHARRAY, stroke_dasharray, "stroke-dasharray");
+        REGISTER_PROPERTY(SPAttr::STROKE_DASHOFFSET, stroke_dashoffset, "stroke-dashoffset");
+        REGISTER_PROPERTY(SPAttr::STROKE_OPACITY, stroke_opacity, "stroke-opacity");
 
-        REGISTER_PROPERTY(SP_PROP_MARKER, marker, "marker");
-        REGISTER_PROPERTY(SP_PROP_MARKER_START, marker_start, "marker-start");
-        REGISTER_PROPERTY(SP_PROP_MARKER_MID, marker_mid, "marker-mid");
-        REGISTER_PROPERTY(SP_PROP_MARKER_END, marker_end, "marker-end");
+        REGISTER_PROPERTY(SPAttr::MARKER, marker, "marker");
+        REGISTER_PROPERTY(SPAttr::MARKER_START, marker_start, "marker-start");
+        REGISTER_PROPERTY(SPAttr::MARKER_MID, marker_mid, "marker-mid");
+        REGISTER_PROPERTY(SPAttr::MARKER_END, marker_end, "marker-end");
 
-        REGISTER_PROPERTY(SP_PROP_PAINT_ORDER, paint_order, "paint-order");
+        REGISTER_PROPERTY(SPAttr::PAINT_ORDER, paint_order, "paint-order");
 
-        REGISTER_PROPERTY(SP_PROP_FILTER, filter, "filter");
+        REGISTER_PROPERTY(SPAttr::FILTER, filter, "filter");
 
-        REGISTER_PROPERTY(SP_PROP_COLOR_RENDERING, color_rendering, "color-rendering");
-        REGISTER_PROPERTY(SP_PROP_IMAGE_RENDERING, image_rendering, "image-rendering");
-        REGISTER_PROPERTY(SP_PROP_SHAPE_RENDERING, shape_rendering, "shape-rendering");
-        REGISTER_PROPERTY(SP_PROP_TEXT_RENDERING, text_rendering, "text-rendering");
+        REGISTER_PROPERTY(SPAttr::COLOR_RENDERING, color_rendering, "color-rendering");
+        REGISTER_PROPERTY(SPAttr::IMAGE_RENDERING, image_rendering, "image-rendering");
+        REGISTER_PROPERTY(SPAttr::SHAPE_RENDERING, shape_rendering, "shape-rendering");
+        REGISTER_PROPERTY(SPAttr::TEXT_RENDERING, text_rendering, "text-rendering");
 
-        REGISTER_PROPERTY(SP_PROP_ENABLE_BACKGROUND, enable_background, "enable-background");
+        REGISTER_PROPERTY(SPAttr::ENABLE_BACKGROUND, enable_background, "enable-background");
 
-        REGISTER_PROPERTY(SP_PROP_STOP_COLOR, stop_color, "stop-color");
-        REGISTER_PROPERTY(SP_PROP_STOP_OPACITY, stop_opacity, "stop-opacity");
+        REGISTER_PROPERTY(SPAttr::STOP_COLOR, stop_color, "stop-color");
+        REGISTER_PROPERTY(SPAttr::STOP_OPACITY, stop_opacity, "stop-opacity");
     }
 
     // this is a singleton, copy not allowed
@@ -202,7 +202,7 @@ public:
     /**
      * Get property pointer by enum
      */
-    SPIBase *get(SPStyle *style, SPAttributeEnum id) {
+    SPIBase *get(SPStyle *style, SPAttr id) {
         auto it = m_id_map.find(id);
         if (it != m_id_map.end()) {
             return _get(style, it->second);
@@ -233,15 +233,15 @@ public:
 private:
     SPIBase *_get(SPStyle *style, SPIBasePtr ptr) { return &(style->*ptr); }
 
-    void _register(SPIBasePtr ptr, SPAttributeEnum id) {
+    void _register(SPIBasePtr ptr, SPAttr id) {
         m_vector.push_back(ptr);
 
-        if (id != SP_ATTR_INVALID) {
+        if (id != SPAttr::INVALID) {
             m_id_map[id] = ptr;
         }
     }
 
-    std::unordered_map</* SPAttributeEnum */ int, SPIBasePtr> m_id_map;
+    std::unordered_map<SPAttr, SPIBasePtr> m_id_map;
     std::vector<SPIBasePtr> m_vector;
 };
 
@@ -500,7 +500,7 @@ SPStyle::~SPStyle() {
 const std::vector<SPIBase *> SPStyle::properties() { return this->_properties; }
 
 void
-SPStyle::clear(SPAttributeEnum id) {
+SPStyle::clear(SPAttr id) {
     SPIBase *p = _prop_helper.get(this, id);
     if (p) {
         p->clear();
@@ -590,7 +590,7 @@ SPStyle::read( SPObject *object, Inkscape::XML::Node *repr ) {
         // Shorthands are not allowed as presentation properites. Note: text-decoration and
         // font-variant are converted to shorthands in CSS 3 but can still be read as a
         // non-shorthand for compatibility with older renders, so they should not be in this list.
-        if (p->id() != SP_PROP_FONT && p->id() != SP_PROP_MARKER) {
+        if (p->id() != SPAttr::FONT && p->id() != SPAttr::MARKER) {
             p->readAttribute( repr );
         }
     }
@@ -660,17 +660,17 @@ SPStyle::readFromPrefs(Glib::ustring const &path) {
 
 // Matches sp_style_merge_property(SPStyle *style, gint id, gchar const *val)
 void
-SPStyle::readIfUnset(SPAttributeEnum id, gchar const *val, SPStyleSrc const &source ) {
+SPStyle::readIfUnset(SPAttr id, gchar const *val, SPStyleSrc const &source ) {
 
     // std::cout << "SPStyle::readIfUnset: Entrance: " << id << ": " << (val?val:"null") << std::endl;
     // To Do: If it is not too slow, use std::map instead of std::vector inorder to remove switch()
-    // (looking up SP_PROP_xxxx already uses a hash).
+    // (looking up SPAttr::xxxx already uses a hash).
     g_return_if_fail(val != nullptr);
 
     switch (id) {
             /* SVG */
             /* Clip/Mask */
-        case SP_PROP_CLIP_PATH:
+        case SPAttr::CLIP_PATH:
             /** \todo
              * This is a workaround. Inkscape only supports 'clip-path' as SVG attribute, not as
              * style property. By having both CSS and SVG attribute set, editing of clip-path
@@ -684,9 +684,9 @@ SPStyle::readIfUnset(SPAttributeEnum id, gchar const *val, SPStyleSrc const &sou
                 object->setAttribute("clip-path", val);
             }
             return;
-        case SP_PROP_MASK:
+        case SPAttr::MASK:
             /** \todo
-             * See comment for SP_PROP_CLIP_PATH
+             * See comment for SPAttr::CLIP_PATH
              */
             g_warning("attribute 'mask' given as CSS");
             
@@ -695,10 +695,10 @@ SPStyle::readIfUnset(SPAttributeEnum id, gchar const *val, SPStyleSrc const &sou
                 object->setAttribute("mask", val);
             }
             return;
-        case SP_PROP_FILTER:
+        case SPAttr::FILTER:
             if( !filter.inherit ) filter.readIfUnset( val, source );
             return;
-        case SP_PROP_COLOR_INTERPOLATION:
+        case SPAttr::COLOR_INTERPOLATION:
             // We read it but issue warning
             color_interpolation.readIfUnset( val, source );
             if( color_interpolation.value != SP_CSS_COLOR_INTERPOLATION_SRGB ) {
@@ -716,19 +716,19 @@ SPStyle::readIfUnset(SPAttributeEnum id, gchar const *val, SPStyleSrc const &sou
 }
 
 // return if is seted property
-bool SPStyle::isSet(SPAttributeEnum id)
+bool SPStyle::isSet(SPAttr id)
 {
     bool set = false;
     switch (id) {
-        case SP_PROP_CLIP_PATH:
+        case SPAttr::CLIP_PATH:
             return set;
-        case SP_PROP_MASK:
+        case SPAttr::MASK:
             return set;
-        case SP_PROP_FILTER:
+        case SPAttr::FILTER:
             if (!filter.inherit)
                 set = filter.set;
             return set;
-        case SP_PROP_COLOR_INTERPOLATION:
+        case SPAttr::COLOR_INTERPOLATION:
             // We read it but issue warning
             return color_interpolation.set;
     }
@@ -897,7 +897,7 @@ SPStyle::_mergeDecl(  CRDeclaration const *const decl, SPStyleSrc const &source 
     // std::cout << "SPStyle::_mergeDecl" << std::endl;
 
     auto prop_idx = sp_attribute_lookup(decl->property->stryng->str);
-    if (prop_idx != SP_ATTR_INVALID) {
+    if (prop_idx != SPAttr::INVALID) {
         /** \todo
          * effic: Test whether the property is already set before trying to
          * convert to string. Alternatively, set from CRTerm directly rather

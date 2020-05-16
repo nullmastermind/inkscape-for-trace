@@ -64,12 +64,12 @@ SPTRef::~SPTRef() {
 void SPTRef::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPItem::build(document, repr);
 
-    this->readAttr(SP_ATTR_XLINK_HREF);
-    this->readAttr(SP_ATTR_X);
-    this->readAttr(SP_ATTR_Y);
-    this->readAttr(SP_ATTR_DX);
-    this->readAttr(SP_ATTR_DY);
-    this->readAttr(SP_ATTR_ROTATE);
+    this->readAttr(SPAttr::XLINK_HREF);
+    this->readAttr(SPAttr::X);
+    this->readAttr(SPAttr::Y);
+    this->readAttr(SPAttr::DX);
+    this->readAttr(SPAttr::DY);
+    this->readAttr(SPAttr::ROTATE);
 }
 
 void SPTRef::release() {
@@ -86,13 +86,13 @@ void SPTRef::release() {
     SPItem::release();
 }
 
-void SPTRef::set(SPAttributeEnum key, const gchar* value) {
+void SPTRef::set(SPAttr key, const gchar* value) {
     debug("0x%p %s(%u): '%s'",this,
             sp_attribute_name(key),key,value ? value : "<no value>");
 
     if (this->attributes.readSingleAttribute(key, value, style, &viewport)) { // x, y, dx, dy, rotate
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-    } else if (key == SP_ATTR_XLINK_HREF) { // xlink:href
+    } else if (key == SPAttr::XLINK_HREF) { // xlink:href
         if ( !value ) {
             // No value
             g_free(this->href);

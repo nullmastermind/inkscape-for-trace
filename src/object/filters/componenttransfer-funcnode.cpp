@@ -40,13 +40,13 @@ void SPFeFuncNode::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPObject::build(document, repr);
 
     //Read values of key attributes from XML nodes into object.
-    this->readAttr(SP_ATTR_TYPE);
-    this->readAttr(SP_ATTR_TABLEVALUES);
-    this->readAttr(SP_ATTR_SLOPE);
-    this->readAttr(SP_ATTR_INTERCEPT);
-    this->readAttr(SP_ATTR_AMPLITUDE);
-    this->readAttr(SP_ATTR_EXPONENT);
-    this->readAttr(SP_ATTR_OFFSET);
+    this->readAttr(SPAttr::TYPE);
+    this->readAttr(SPAttr::TABLEVALUES);
+    this->readAttr(SPAttr::SLOPE);
+    this->readAttr(SPAttr::INTERCEPT);
+    this->readAttr(SPAttr::AMPLITUDE);
+    this->readAttr(SPAttr::EXPONENT);
+    this->readAttr(SPAttr::OFFSET);
 
 
 //is this necessary?
@@ -104,12 +104,12 @@ static Inkscape::Filters::FilterComponentTransferType sp_feComponenttransfer_rea
 /**
  * Sets a specific value in the SPFeFuncNode.
  */
-void SPFeFuncNode::set(SPAttributeEnum key, gchar const *value) {
+void SPFeFuncNode::set(SPAttr key, gchar const *value) {
     Inkscape::Filters::FilterComponentTransferType type;
     double read_num;
 
     switch(key) {
-        case SP_ATTR_TYPE:
+        case SPAttr::TYPE:
             type = sp_feComponenttransfer_read_type(value);
 
             if(type != this->type) {
@@ -117,13 +117,13 @@ void SPFeFuncNode::set(SPAttributeEnum key, gchar const *value) {
                 this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
-        case SP_ATTR_TABLEVALUES:
+        case SPAttr::TABLEVALUES:
             if (value){
                 this->tableValues = helperfns_read_vector(value);
                 this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
-        case SP_ATTR_SLOPE:
+        case SPAttr::SLOPE:
             read_num = value ? helperfns_read_number(value) : 1;
 
             if (read_num != this->slope) {
@@ -131,7 +131,7 @@ void SPFeFuncNode::set(SPAttributeEnum key, gchar const *value) {
                 this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
-        case SP_ATTR_INTERCEPT:
+        case SPAttr::INTERCEPT:
             read_num = value ? helperfns_read_number(value) : 0;
 
             if (read_num != this->intercept) {
@@ -139,7 +139,7 @@ void SPFeFuncNode::set(SPAttributeEnum key, gchar const *value) {
                 this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
-        case SP_ATTR_AMPLITUDE:
+        case SPAttr::AMPLITUDE:
             read_num = value ? helperfns_read_number(value) : 1;
 
             if (read_num != this->amplitude) {
@@ -147,7 +147,7 @@ void SPFeFuncNode::set(SPAttributeEnum key, gchar const *value) {
                 this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
-        case SP_ATTR_EXPONENT:
+        case SPAttr::EXPONENT:
             read_num = value ? helperfns_read_number(value) : 1;
 
             if (read_num != this->exponent) {
@@ -155,7 +155,7 @@ void SPFeFuncNode::set(SPAttributeEnum key, gchar const *value) {
                 this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
-        case SP_ATTR_OFFSET:
+        case SPAttr::OFFSET:
             read_num = value ? helperfns_read_number(value) : 0;
 
             if (read_num != this->offset) {
@@ -175,13 +175,13 @@ void SPFeFuncNode::set(SPAttributeEnum key, gchar const *value) {
 void SPFeFuncNode::update(SPCtx *ctx, guint flags) {
     std::cout << "SPFeFuncNode::update" << std::endl;
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
-        this->readAttr(SP_ATTR_TYPE);
-        this->readAttr(SP_ATTR_TABLEVALUES);
-        this->readAttr(SP_ATTR_SLOPE);
-        this->readAttr(SP_ATTR_INTERCEPT);
-        this->readAttr(SP_ATTR_AMPLITUDE);
-        this->readAttr(SP_ATTR_EXPONENT);
-        this->readAttr(SP_ATTR_OFFSET);
+        this->readAttr(SPAttr::TYPE);
+        this->readAttr(SPAttr::TABLEVALUES);
+        this->readAttr(SPAttr::SLOPE);
+        this->readAttr(SPAttr::INTERCEPT);
+        this->readAttr(SPAttr::AMPLITUDE);
+        this->readAttr(SPAttr::EXPONENT);
+        this->readAttr(SPAttr::OFFSET);
     }
 
     SPObject::update(ctx, flags);

@@ -42,7 +42,7 @@ public:
     void release() override;
     void update(SPCtx* ctx, unsigned int flags) override;
 
-    void set(SPAttributeEnum key, char const* value) override;
+    void set(SPAttr key, char const* value) override;
     void update_patheffect(bool write) override;
     Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 

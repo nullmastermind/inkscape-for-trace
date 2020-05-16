@@ -41,8 +41,8 @@ void SPFeDistantLight::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPObject::build(document, repr);
 
     //Read values of key attributes from XML nodes into object.
-    this->readAttr(SP_ATTR_AZIMUTH);
-    this->readAttr(SP_ATTR_ELEVATION);
+    this->readAttr(SPAttr::AZIMUTH);
+    this->readAttr(SPAttr::ELEVATION);
 
 //is this necessary?
     document->addResource("fedistantlight", this);
@@ -63,11 +63,11 @@ void SPFeDistantLight::release() {
 /**
  * Sets a specific value in the SPFeDistantLight.
  */
-void SPFeDistantLight::set(SPAttributeEnum key, gchar const *value) {
+void SPFeDistantLight::set(SPAttr key, gchar const *value) {
     gchar *end_ptr;
 
     switch (key) {
-    case SP_ATTR_AZIMUTH:
+    case SPAttr::AZIMUTH:
         end_ptr =nullptr;
 
         if (value) {
@@ -89,7 +89,7 @@ void SPFeDistantLight::set(SPAttributeEnum key, gchar const *value) {
             this->parent->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
         }
         break;
-    case SP_ATTR_ELEVATION:
+    case SPAttr::ELEVATION:
         end_ptr =nullptr;
 
         if (value) {
@@ -124,8 +124,8 @@ void SPFeDistantLight::set(SPAttributeEnum key, gchar const *value) {
 void SPFeDistantLight::update(SPCtx *ctx, guint flags) {
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         /* do something to trigger redisplay, updates? */
-        this->readAttr(SP_ATTR_AZIMUTH);
-        this->readAttr(SP_ATTR_ELEVATION);
+        this->readAttr(SPAttr::AZIMUTH);
+        this->readAttr(SPAttr::ELEVATION);
     }
 
     SPObject::update(ctx, flags);

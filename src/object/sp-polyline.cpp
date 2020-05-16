@@ -27,12 +27,12 @@ SPPolyLine::~SPPolyLine() = default;
 void SPPolyLine::build(SPDocument * document, Inkscape::XML::Node * repr) {
     SPShape::build(document, repr);
 
-    this->readAttr(SP_ATTR_POINTS);
+    this->readAttr(SPAttr::POINTS);
 }
 
-void SPPolyLine::set(SPAttributeEnum key, const gchar* value) {
+void SPPolyLine::set(SPAttr key, const gchar* value) {
     switch (key) {
-	case SP_ATTR_POINTS: {
+	case SPAttr::POINTS: {
             SPCurve * curve;
             const gchar * cptr;
             char * eptr;

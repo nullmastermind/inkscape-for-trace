@@ -56,15 +56,15 @@ void SPFeConvolveMatrix::build(SPDocument *document, Inkscape::XML::Node *repr) 
 	SPFilterPrimitive::build(document, repr);
 
 	/*LOAD ATTRIBUTES FROM REPR HERE*/
-	this->readAttr(SP_ATTR_ORDER);
-	this->readAttr(SP_ATTR_KERNELMATRIX);
-	this->readAttr(SP_ATTR_DIVISOR);
-	this->readAttr(SP_ATTR_BIAS);
-	this->readAttr(SP_ATTR_TARGETX);
-	this->readAttr(SP_ATTR_TARGETY);
-	this->readAttr(SP_ATTR_EDGEMODE);
-	this->readAttr(SP_ATTR_KERNELUNITLENGTH);
-	this->readAttr(SP_ATTR_PRESERVEALPHA);
+	this->readAttr(SPAttr::ORDER);
+	this->readAttr(SPAttr::KERNELMATRIX);
+	this->readAttr(SPAttr::DIVISOR);
+	this->readAttr(SPAttr::BIAS);
+	this->readAttr(SPAttr::TARGETX);
+	this->readAttr(SPAttr::TARGETY);
+	this->readAttr(SPAttr::EDGEMODE);
+	this->readAttr(SPAttr::KERNELUNITLENGTH);
+	this->readAttr(SPAttr::PRESERVEALPHA);
 }
 
 /**
@@ -103,7 +103,7 @@ static Inkscape::Filters::FilterConvolveMatrixEdgeMode sp_feConvolveMatrix_read_
 /**
  * Sets a specific value in the SPFeConvolveMatrix.
  */
-void SPFeConvolveMatrix::set(SPAttributeEnum key, gchar const *value) {
+void SPFeConvolveMatrix::set(SPAttr key, gchar const *value) {
     double read_num;
     int read_int;
     bool read_bool;
@@ -111,7 +111,7 @@ void SPFeConvolveMatrix::set(SPAttributeEnum key, gchar const *value) {
    
     switch(key) {
 	/*DEAL WITH SETTING ATTRIBUTES HERE*/
-        case SP_ATTR_ORDER:
+        case SPAttr::ORDER:
             this->order.set(value);
             
             //From SVG spec: If <orderY> is not provided, it defaults to <orderX>.
@@ -129,7 +129,7 @@ void SPFeConvolveMatrix::set(SPAttributeEnum key, gchar const *value) {
             
             this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-        case SP_ATTR_KERNELMATRIX:
+        case SPAttr::KERNELMATRIX:
             if (value){
                 this->kernelMatrixIsSet = true;
                 this->kernelMatrix = helperfns_read_vector(value);
@@ -151,7 +151,7 @@ void SPFeConvolveMatrix::set(SPAttributeEnum key, gchar const *value) {
                 g_warning("For feConvolveMatrix you MUST pass a kernelMatrix parameter!");
             }
             break;
-        case SP_ATTR_DIVISOR:
+        case SPAttr::DIVISOR:
             if (value) { 
                 read_num = helperfns_read_number(value);
                 
@@ -179,7 +179,7 @@ void SPFeConvolveMatrix::set(SPAttributeEnum key, gchar const *value) {
                 }
             }
             break;
-        case SP_ATTR_BIAS:
+        case SPAttr::BIAS:
             read_num = 0;
             if (value) {
             	read_num = helperfns_read_number(value);
@@ -190,7 +190,7 @@ void SPFeConvolveMatrix::set(SPAttributeEnum key, gchar const *value) {
                 this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
-        case SP_ATTR_TARGETX:
+        case SPAttr::TARGETX:
             if (value) {
                 read_int = (int) helperfns_read_number(value);
                 
@@ -207,7 +207,7 @@ void SPFeConvolveMatrix::set(SPAttributeEnum key, gchar const *value) {
                 }
             }
             break;
-        case SP_ATTR_TARGETY:
+        case SPAttr::TARGETY:
             if (value) {
                 read_int = (int) helperfns_read_number(value);
                 
@@ -224,7 +224,7 @@ void SPFeConvolveMatrix::set(SPAttributeEnum key, gchar const *value) {
                 }
             }
             break;
-        case SP_ATTR_EDGEMODE:
+        case SPAttr::EDGEMODE:
             read_mode = sp_feConvolveMatrix_read_edgeMode(value);
             
             if (read_mode != this->edgeMode){
@@ -232,7 +232,7 @@ void SPFeConvolveMatrix::set(SPAttributeEnum key, gchar const *value) {
                 this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
-        case SP_ATTR_KERNELUNITLENGTH:
+        case SPAttr::KERNELUNITLENGTH:
             this->kernelUnitLength.set(value);
             
             //From SVG spec: If the <dy> value is not specified, it defaults to the same value as <dx>.
@@ -242,7 +242,7 @@ void SPFeConvolveMatrix::set(SPAttributeEnum key, gchar const *value) {
             
             this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-        case SP_ATTR_PRESERVEALPHA:
+        case SPAttr::PRESERVEALPHA:
             read_bool = helperfns_read_bool(value, false);
             
             if (read_bool != this->preserveAlpha){

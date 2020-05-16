@@ -31,7 +31,7 @@ public:
 
 	void build(SPDocument *document, Inkscape::XML::Node *repr) override;
 	void release() override;
-	void set(SPAttributeEnum key, char const* value) override;
+	void set(SPAttr key, char const* value) override;
         virtual void updatePageAnchor();
 	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 

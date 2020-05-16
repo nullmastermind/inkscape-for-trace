@@ -113,7 +113,7 @@ void SPOffset::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
     //XML Tree being used directly here while it shouldn't be.
     if (this->getRepr()->attribute("inkscape:radius")) {
-        this->readAttr(SP_ATTR_INKSCAPE_RADIUS);
+        this->readAttr(SPAttr::INKSCAPE_RADIUS);
     } else {
         //XML Tree being used directly here (as object->getRepr) 
         //in all the below lines in the block while it shouldn't be.
@@ -121,21 +121,21 @@ void SPOffset::build(SPDocument *document, Inkscape::XML::Node *repr) {
         this->setAttribute("inkscape:radius", oldA);
         this->removeAttribute("sodipodi:radius");
 
-        this->readAttr(SP_ATTR_INKSCAPE_RADIUS);
+        this->readAttr(SPAttr::INKSCAPE_RADIUS);
     }
 
     if (this->getRepr()->attribute("inkscape:original")) {
-        this->readAttr(SP_ATTR_INKSCAPE_ORIGINAL);
+        this->readAttr(SPAttr::INKSCAPE_ORIGINAL);
     } else {
         gchar const *oldA = this->getRepr()->attribute("sodipodi:original");
         this->setAttribute("inkscape:original", oldA);
         this->removeAttribute("sodipodi:original");
 
-        this->readAttr(SP_ATTR_INKSCAPE_ORIGINAL);
+        this->readAttr(SPAttr::INKSCAPE_ORIGINAL);
     }
 
     if (this->getRepr()->attribute("xlink:href")) {
-        this->readAttr(SP_ATTR_XLINK_HREF);
+        this->readAttr(SPAttr::XLINK_HREF);
     } else {
         gchar const *oldA = this->getRepr()->attribute("inkscape:href");
 
@@ -155,7 +155,7 @@ void SPOffset::build(SPDocument *document, Inkscape::XML::Node *repr) {
             this->removeAttribute("inkscape:href");
         }
 
-        this->readAttr(SP_ATTR_XLINK_HREF);
+        this->readAttr(SPAttr::XLINK_HREF);
     }
 }
 
@@ -217,7 +217,7 @@ void SPOffset::release() {
     SPShape::release();
 }
 
-void SPOffset::set(SPAttributeEnum key, const gchar* value) {
+void SPOffset::set(SPAttr key, const gchar* value) {
     if ( this->sourceDirty ) {
     	refresh_offset_source(this);
     }
@@ -225,8 +225,8 @@ void SPOffset::set(SPAttributeEnum key, const gchar* value) {
     /* fixme: we should really collect updates */
     switch (key)
     {
-        case SP_ATTR_INKSCAPE_ORIGINAL:
-        case SP_ATTR_SODIPODI_ORIGINAL:
+        case SPAttr::INKSCAPE_ORIGINAL:
+        case SPAttr::SODIPODI_ORIGINAL:
             if (value == nullptr) {
             } else {
                 if (this->original) {
@@ -252,8 +252,8 @@ void SPOffset::set(SPAttributeEnum key, const gchar* value) {
             }
             break;
 
-        case SP_ATTR_INKSCAPE_RADIUS:
-        case SP_ATTR_SODIPODI_RADIUS:
+        case SPAttr::INKSCAPE_RADIUS:
+        case SPAttr::SODIPODI_RADIUS:
             if (!sp_svg_length_read_computed_absolute (value, &this->rad)) {
                 if (fabs (this->rad) < 0.01) {
                     this->rad = (this->rad < 0) ? -0.01 : 0.01;
@@ -267,8 +267,8 @@ void SPOffset::set(SPAttributeEnum key, const gchar* value) {
             }
             break;
 
-        case SP_ATTR_INKSCAPE_HREF:
-        case SP_ATTR_XLINK_HREF:
+        case SPAttr::INKSCAPE_HREF:
+        case SPAttr::XLINK_HREF:
             if ( value == nullptr ) {
                 sp_offset_quit_listening(this);
                 if ( this->sourceHref ) {
@@ -1042,7 +1042,7 @@ static void sp_offset_move_compensate(Geom::Affine const *mp, SPItem */*original
     }
 
     // calculate the compensation matrix and the advertized movement matrix
-    self->readAttr(SP_ATTR_TRANSFORM);
+    self->readAttr(SPAttr::TRANSFORM);
 
     Geom::Affine t = self->transform;
     Geom::Affine offset_move = t.inverse() * m * t;

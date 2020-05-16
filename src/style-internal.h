@@ -181,7 +181,7 @@ public:
         return !(*this == rhs);
     }
 
-    virtual SPAttributeEnum id() const { return SP_ATTR_INVALID; }
+    virtual SPAttr id() const { return SPAttr::INVALID; }
     Glib::ustring const &name() const;
 
   // To do: make private
@@ -201,7 +201,7 @@ public:
 /**
  * Decorator which overrides SPIBase::id()
  */
-template <SPAttributeEnum Id, class Base>
+template <SPAttr Id, class Base>
 class TypedSPI : public Base {
   public:
     using Base::Base;
@@ -209,8 +209,8 @@ class TypedSPI : public Base {
     /**
      * Get the attribute enum
      */
-    SPAttributeEnum id() const override { return Id; }
-    static SPAttributeEnum static_id() { return Id; }
+    SPAttr id() const override { return Id; }
+    static SPAttr static_id() { return Id; }
 
     /**
      * Upcast to the base class

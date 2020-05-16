@@ -44,8 +44,8 @@ void SPFeBlend::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPFilterPrimitive::build(document, repr);
 
     /*LOAD ATTRIBUTES FROM REPR HERE*/
-    this->readAttr(SP_ATTR_MODE);
-    this->readAttr(SP_ATTR_IN2);
+    this->readAttr(SPAttr::MODE);
+    this->readAttr(SPAttr::IN2);
 
     /* Unlike normal in, in2 is required attribute. Make sure, we can call
      * it by some name. */
@@ -130,13 +130,13 @@ static  SPBlendMode sp_feBlend_readmode(gchar const *value) {
 /**
  * Sets a specific value in the SPFeBlend.
  */
-void SPFeBlend::set(SPAttributeEnum key, gchar const *value) {
+void SPFeBlend::set(SPAttr key, gchar const *value) {
     SPBlendMode mode;
     int input;
 
     switch(key) {
 	/*DEAL WITH SETTING ATTRIBUTES HERE*/
-        case SP_ATTR_MODE:
+        case SPAttr::MODE:
             mode = sp_feBlend_readmode(value);
 
             if (mode != this->blend_mode) {
@@ -144,7 +144,7 @@ void SPFeBlend::set(SPAttributeEnum key, gchar const *value) {
                 this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
-        case SP_ATTR_IN2:
+        case SPAttr::IN2:
             input = this->read_in(value);
 
             if (input != this->in2) {
@@ -163,8 +163,8 @@ void SPFeBlend::set(SPAttributeEnum key, gchar const *value) {
  */
 void SPFeBlend::update(SPCtx *ctx, guint flags) {
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
-        this->readAttr(SP_ATTR_MODE);
-        this->readAttr(SP_ATTR_IN2);
+        this->readAttr(SPAttr::MODE);
+        this->readAttr(SPAttr::IN2);
     }
 
     /* Unlike normal in, in2 is required attribute. Make sure, we can call

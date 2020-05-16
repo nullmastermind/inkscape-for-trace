@@ -411,16 +411,16 @@ void SPItem::moveTo(SPItem *target, bool intoafter) {
 void SPItem::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPItem* object = this;
 
-    object->readAttr(SP_ATTR_STYLE);
-    object->readAttr(SP_ATTR_TRANSFORM);
-    object->readAttr(SP_PROP_CLIP_PATH);
-    object->readAttr(SP_PROP_MASK);
-    object->readAttr(SP_ATTR_SODIPODI_INSENSITIVE);
-    object->readAttr(SP_ATTR_TRANSFORM_CENTER_X);
-    object->readAttr(SP_ATTR_TRANSFORM_CENTER_Y);
-    object->readAttr(SP_ATTR_CONNECTOR_AVOID);
-    object->readAttr(SP_ATTR_CONNECTION_POINTS);
-    object->readAttr(SP_ATTR_INKSCAPE_HIGHLIGHT_COLOR);
+    object->readAttr(SPAttr::STYLE);
+    object->readAttr(SPAttr::TRANSFORM);
+    object->readAttr(SPAttr::CLIP_PATH);
+    object->readAttr(SPAttr::MASK);
+    object->readAttr(SPAttr::SODIPODI_INSENSITIVE);
+    object->readAttr(SPAttr::TRANSFORM_CENTER_X);
+    object->readAttr(SPAttr::TRANSFORM_CENTER_Y);
+    object->readAttr(SPAttr::CONNECTOR_AVOID);
+    object->readAttr(SPAttr::CONNECTION_POINTS);
+    object->readAttr(SPAttr::INKSCAPE_HIGHLIGHT_COLOR);
 
     SPObject::build(document, repr);
 }
@@ -456,12 +456,12 @@ void SPItem::release() {
     //item->_transformed_signal.~signal();
 }
 
-void SPItem::set(SPAttributeEnum key, gchar const* value) {
+void SPItem::set(SPAttr key, gchar const* value) {
     SPItem *item = this;
     SPItem* object = item;
 
     switch (key) {
-        case SP_ATTR_TRANSFORM: {
+        case SPAttr::TRANSFORM: {
             Geom::Affine t;
             if (value && sp_svg_transform_read(value, &t)) {
                 item->set_item_transform(t);
@@ -470,21 +470,21 @@ void SPItem::set(SPAttributeEnum key, gchar const* value) {
             }
             break;
         }
-        case SP_PROP_CLIP_PATH: {
+        case SPAttr::CLIP_PATH: {
             auto uri = extract_uri(value);
             if (!uri.empty() || item->clip_ref) {
                 item->getClipRef().try_attach(uri.c_str());
             }
             break;
         }
-        case SP_PROP_MASK: {
+        case SPAttr::MASK: {
             auto uri = extract_uri(value);
             if (!uri.empty() || item->mask_ref) {
                 item->getMaskRef().try_attach(uri.c_str());
             }
             break;
         }
-        case SP_ATTR_SODIPODI_INSENSITIVE:
+        case SPAttr::SODIPODI_INSENSITIVE:
         {
             item->sensitive = !value;
             for (SPItemView *v = item->display; v != nullptr; v = v->next) {
@@ -492,7 +492,7 @@ void SPItem::set(SPAttributeEnum key, gchar const* value) {
             }
             break;
         }
-        case SP_ATTR_INKSCAPE_HIGHLIGHT_COLOR:
+        case SPAttr::INKSCAPE_HIGHLIGHT_COLOR:
         {
             g_free(item->_highlightColor);
             if (value) {
@@ -502,12 +502,12 @@ void SPItem::set(SPAttributeEnum key, gchar const* value) {
             }
             break;
         }
-        case SP_ATTR_CONNECTOR_AVOID:
+        case SPAttr::CONNECTOR_AVOID:
             if (value || item->avoidRef) {
                 item->getAvoidRef().setAvoid(value);
             }
             break;
-        case SP_ATTR_TRANSFORM_CENTER_X:
+        case SPAttr::TRANSFORM_CENTER_X:
             if (value) {
                 item->transform_center_x = g_strtod(value, nullptr);
             } else {
@@ -515,7 +515,7 @@ void SPItem::set(SPAttributeEnum key, gchar const* value) {
             }
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
-        case SP_ATTR_TRANSFORM_CENTER_Y:
+        case SPAttr::TRANSFORM_CENTER_Y:
             if (value) {
                 item->transform_center_y = g_strtod(value, nullptr);
                 item->transform_center_y *= -document->yaxisdir();
@@ -524,9 +524,9 @@ void SPItem::set(SPAttributeEnum key, gchar const* value) {
             }
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
-        case SP_PROP_SYSTEM_LANGUAGE:
-        case SP_PROP_REQUIRED_FEATURES:
-        case SP_PROP_REQUIRED_EXTENSIONS:
+        case SPAttr::SYSTEM_LANGUAGE:
+        case SPAttr::REQUIRED_FEATURES:
+        case SPAttr::REQUIRED_EXTENSIONS:
             {
                 item->resetEvaluated();
                 // pass to default handler

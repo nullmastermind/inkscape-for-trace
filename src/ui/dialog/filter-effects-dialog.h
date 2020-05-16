@@ -221,11 +221,11 @@ private:
 	bool do_connection_node(const Gtk::TreeIter& row, const int input, std::vector<Gdk::Point>& points,
                                 const int ix, const int iy);
 
-        const Gtk::TreeIter find_result(const Gtk::TreeIter& start, const int attr, int& src_id);
+        const Gtk::TreeIter find_result(const Gtk::TreeIter& start, const SPAttr attr, int& src_id, const int pos);
         int find_index(const Gtk::TreeIter& target);
         void draw_connection(const Cairo::RefPtr<Cairo::Context>& cr,
-                             const Gtk::TreeIter&, const int attr, const int text_start_x,
-                             const int x1, const int y1, const int row_count);
+                             const Gtk::TreeIter&, const SPAttr attr, const int text_start_x,
+                             const int x1, const int y1, const int row_count, const int pos);
         void sanitize_connections(const Gtk::TreeIter& prim_iter);
         void on_primitive_selection_changed();
         bool on_scroll_timeout();
@@ -260,7 +260,7 @@ private:
     void set_attr_direct(const UI::Widget::AttrWidget*);
     void set_child_attr_direct(const UI::Widget::AttrWidget*);
     void set_filternode_attr(const UI::Widget::AttrWidget*);
-    void set_attr(SPObject*, const SPAttributeEnum, const gchar* val);
+    void set_attr(SPObject*, const SPAttr, const gchar* val);
     void update_settings_view();
     void update_filter_general_settings_view();
     void update_settings_sensitivity();

@@ -32,7 +32,7 @@ void SPPolygon::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
     SPShape::build(document, repr);
 
-    object->readAttr(SP_ATTR_POINTS);
+    object->readAttr(SPAttr::POINTS);
 }
 
 /*
@@ -103,9 +103,9 @@ static gboolean polygon_get_value(gchar const **p, gdouble *v)
     return true;
 }
 
-void SPPolygon::set(SPAttributeEnum key, const gchar* value) {
+void SPPolygon::set(SPAttr key, const gchar* value) {
     switch (key) {
-        case SP_ATTR_POINTS: {
+        case SPAttr::POINTS: {
             if (!value) {
                 /* fixme: The points attribute is required.  We should handle its absence as per
                  * http://www.w3.org/TR/SVG11/implnote.html#ErrorProcessing. */

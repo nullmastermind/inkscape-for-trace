@@ -114,10 +114,10 @@ SPPath::~SPPath() = default;
 
 void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
     /* Are these calls actually necessary? */
-    this->readAttr(SP_PROP_MARKER);
-    this->readAttr(SP_PROP_MARKER_START);
-    this->readAttr(SP_PROP_MARKER_MID);
-    this->readAttr(SP_PROP_MARKER_END);
+    this->readAttr(SPAttr::MARKER);
+    this->readAttr(SPAttr::MARKER_START);
+    this->readAttr(SPAttr::MARKER_MID);
+    this->readAttr(SPAttr::MARKER_END);
 
     sp_conn_end_pair_build(this);
 
@@ -175,7 +175,7 @@ void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
     }
 
 
-    // this->readAttr(SP_ATTR_INKSCAPE_ORIGINAL_D); // bug #1299948
+    // this->readAttr(SPAttr::INKSCAPE_ORIGINAL_D); // bug #1299948
     // Why we take the long way of doing this probably needs some explaining:
     //
     // Normally upon being built, reading the inkscape:original-d attribute
@@ -209,7 +209,7 @@ void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
             _curve_before_lpe = curve->ref();
         }
     }
-    this->readAttr(SP_ATTR_D);
+    this->readAttr(SPAttr::D);
 
     /* d is a required attribute */
     char const *d = this->getAttribute("d", nullptr);
@@ -232,9 +232,9 @@ void SPPath::release() {
     SPShape::release();
 }
 
-void SPPath::set(SPAttributeEnum key, const gchar* value) {
+void SPPath::set(SPAttr key, const gchar* value) {
     switch (key) {
-        case SP_ATTR_INKSCAPE_ORIGINAL_D:
+        case SPAttr::INKSCAPE_ORIGINAL_D:
             if (value) {
                 Geom::PathVector pv = sp_svg_read_pathv(value);
                 SPCurve *curve = new SPCurve(pv);
@@ -255,7 +255,7 @@ void SPPath::set(SPAttributeEnum key, const gchar* value) {
             sp_lpe_item_update_patheffect(this, true, true);
             break;
 
-       case SP_ATTR_D:
+       case SPAttr::D:
             if (value) {
                 Geom::PathVector pv = sp_svg_read_pathv(value);
                 SPCurve *curve = new SPCurve(pv);
@@ -269,20 +269,29 @@ void SPPath::set(SPAttributeEnum key, const gchar* value) {
             }
             break;
 
-        case SP_PROP_MARKER:
-        case SP_PROP_MARKER_START:
-        case SP_PROP_MARKER_MID:
-        case SP_PROP_MARKER_END:
-            sp_shape_set_marker(this, key, value);
+        case SPAttr::MARKER:
+            sp_shape_set_marker(this, SP_MARKER_LOC, value);
+            this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+            break;
+        case SPAttr::MARKER_START:
+            sp_shape_set_marker(this, SP_MARKER_LOC_START, value);
+            this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+            break;
+        case SPAttr::MARKER_MID:
+            sp_shape_set_marker(this, SP_MARKER_LOC_MID, value);
+            this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+            break;
+        case SPAttr::MARKER_END:
+            sp_shape_set_marker(this, SP_MARKER_LOC_END, value);
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_CONNECTOR_TYPE:
-        case SP_ATTR_CONNECTOR_CURVATURE:
-        case SP_ATTR_CONNECTION_START:
-        case SP_ATTR_CONNECTION_END:
-        case SP_ATTR_CONNECTION_START_POINT:
-        case SP_ATTR_CONNECTION_END_POINT:
+        case SPAttr::CONNECTOR_TYPE:
+        case SPAttr::CONNECTOR_CURVATURE:
+        case SPAttr::CONNECTION_START:
+        case SPAttr::CONNECTION_END:
+        case SPAttr::CONNECTION_START_POINT:
+        case SPAttr::CONNECTION_END_POINT:
             this->connEndPair.setAttr(key, value);
             break;
 

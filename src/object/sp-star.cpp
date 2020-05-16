@@ -46,16 +46,16 @@ void SPStar::build(SPDocument * document, Inkscape::XML::Node * repr) {
 	// CPPIFY: see header file
     SPShape::build(document, repr);
 
-    this->readAttr(SP_ATTR_SODIPODI_CX);
-    this->readAttr(SP_ATTR_SODIPODI_CY);
-    this->readAttr(SP_ATTR_SODIPODI_SIDES);
-    this->readAttr(SP_ATTR_SODIPODI_R1);
-    this->readAttr(SP_ATTR_SODIPODI_R2);
-    this->readAttr(SP_ATTR_SODIPODI_ARG1);
-    this->readAttr(SP_ATTR_SODIPODI_ARG2);
-    this->readAttr(SP_ATTR_INKSCAPE_FLATSIDED);
-    this->readAttr(SP_ATTR_INKSCAPE_ROUNDED);
-    this->readAttr(SP_ATTR_INKSCAPE_RANDOMIZED);
+    this->readAttr(SPAttr::SODIPODI_CX);
+    this->readAttr(SPAttr::SODIPODI_CY);
+    this->readAttr(SPAttr::SODIPODI_SIDES);
+    this->readAttr(SPAttr::SODIPODI_R1);
+    this->readAttr(SPAttr::SODIPODI_R2);
+    this->readAttr(SPAttr::SODIPODI_ARG1);
+    this->readAttr(SPAttr::SODIPODI_ARG2);
+    this->readAttr(SPAttr::INKSCAPE_FLATSIDED);
+    this->readAttr(SPAttr::INKSCAPE_ROUNDED);
+    this->readAttr(SPAttr::INKSCAPE_RANDOMIZED);
 }
 
 Inkscape::XML::Node* SPStar::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
@@ -91,12 +91,12 @@ Inkscape::XML::Node* SPStar::write(Inkscape::XML::Document *xml_doc, Inkscape::X
     return repr;
 }
 
-void SPStar::set(SPAttributeEnum key, const gchar* value) {
+void SPStar::set(SPAttr key, const gchar* value) {
     SVGLength::Unit unit;
 
     /* fixme: we should really collect updates */
     switch (key) {
-    case SP_ATTR_SODIPODI_SIDES:
+    case SPAttr::SODIPODI_SIDES:
         if (value) {
             this->sides = atoi (value);
             this->sides = CLAMP(this->sides, 3, 1024);
@@ -107,7 +107,7 @@ void SPStar::set(SPAttributeEnum key, const gchar* value) {
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_SODIPODI_CX:
+    case SPAttr::SODIPODI_CX:
         if (!sp_svg_length_read_ldd (value, &unit, nullptr, &this->center[Geom::X]) ||
             (unit == SVGLength::EM) ||
             (unit == SVGLength::EX) ||
@@ -118,7 +118,7 @@ void SPStar::set(SPAttributeEnum key, const gchar* value) {
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_SODIPODI_CY:
+    case SPAttr::SODIPODI_CY:
         if (!sp_svg_length_read_ldd (value, &unit, nullptr, &this->center[Geom::Y]) ||
             (unit == SVGLength::EM) ||
             (unit == SVGLength::EX) ||
@@ -129,7 +129,7 @@ void SPStar::set(SPAttributeEnum key, const gchar* value) {
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_SODIPODI_R1:
+    case SPAttr::SODIPODI_R1:
         if (!sp_svg_length_read_ldd (value, &unit, nullptr, &this->r[0]) ||
             (unit == SVGLength::EM) ||
             (unit == SVGLength::EX) ||
@@ -141,7 +141,7 @@ void SPStar::set(SPAttributeEnum key, const gchar* value) {
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_SODIPODI_R2:
+    case SPAttr::SODIPODI_R2:
         if (!sp_svg_length_read_ldd (value, &unit, nullptr, &this->r[1]) ||
             (unit == SVGLength::EM) ||
             (unit == SVGLength::EX) ||
@@ -152,7 +152,7 @@ void SPStar::set(SPAttributeEnum key, const gchar* value) {
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         return;
 
-    case SP_ATTR_SODIPODI_ARG1:
+    case SPAttr::SODIPODI_ARG1:
         if (value) {
             this->arg[0] = g_ascii_strtod (value, nullptr);
         } else {
@@ -162,7 +162,7 @@ void SPStar::set(SPAttributeEnum key, const gchar* value) {
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_SODIPODI_ARG2:
+    case SPAttr::SODIPODI_ARG2:
         if (value) {
             this->arg[1] = g_ascii_strtod (value, nullptr);
         } else {
@@ -172,7 +172,7 @@ void SPStar::set(SPAttributeEnum key, const gchar* value) {
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_INKSCAPE_FLATSIDED:
+    case SPAttr::INKSCAPE_FLATSIDED:
         if (value && !strcmp(value, "true")) {
             this->flatsided = true;
         } else {
@@ -182,7 +182,7 @@ void SPStar::set(SPAttributeEnum key, const gchar* value) {
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_INKSCAPE_ROUNDED:
+    case SPAttr::INKSCAPE_ROUNDED:
         if (value) {
             this->rounded = g_ascii_strtod (value, nullptr);
         } else {
@@ -192,7 +192,7 @@ void SPStar::set(SPAttributeEnum key, const gchar* value) {
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_INKSCAPE_RANDOMIZED:
+    case SPAttr::INKSCAPE_RANDOMIZED:
         if (value) {
             this->randomized = g_ascii_strtod (value, nullptr);
         } else {

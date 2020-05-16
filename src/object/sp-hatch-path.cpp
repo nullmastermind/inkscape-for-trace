@@ -62,9 +62,9 @@ void SPHatchPath::build(SPDocument* doc, Inkscape::XML::Node* repr)
 {
     SPObject::build(doc, repr);
 
-    readAttr(SP_ATTR_D);
-    readAttr(SP_ATTR_OFFSET);
-    readAttr(SP_ATTR_STYLE);
+    readAttr(SPAttr::D);
+    readAttr(SPAttr::OFFSET);
+    readAttr(SPAttr::STYLE);
 
     style->fill.setNone();
 }
@@ -79,10 +79,10 @@ void SPHatchPath::release()
     SPObject::release();
 }
 
-void SPHatchPath::set(SPAttributeEnum key, const gchar* value)
+void SPHatchPath::set(SPAttr key, const gchar* value)
 {
     switch (key) {
-    case SP_ATTR_D:
+    case SPAttr::D:
         if (value) {
             Geom::PathVector pv;
             _readHatchPathVector(value, pv, _continuous);
@@ -99,7 +99,7 @@ void SPHatchPath::set(SPAttributeEnum key, const gchar* value)
         requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
-    case SP_ATTR_OFFSET:
+    case SPAttr::OFFSET:
         offset.readOrUnset(value);
         requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;

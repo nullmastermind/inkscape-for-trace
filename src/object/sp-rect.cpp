@@ -40,19 +40,19 @@ void SPRect::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 
     SPShape::build(doc, repr);
 
-    this->readAttr(SP_ATTR_X);
-    this->readAttr(SP_ATTR_Y);
-    this->readAttr(SP_ATTR_WIDTH);
-    this->readAttr(SP_ATTR_HEIGHT);
-    this->readAttr(SP_ATTR_RX);
-    this->readAttr(SP_ATTR_RY);
+    this->readAttr(SPAttr::X);
+    this->readAttr(SPAttr::Y);
+    this->readAttr(SPAttr::WIDTH);
+    this->readAttr(SPAttr::HEIGHT);
+    this->readAttr(SPAttr::RX);
+    this->readAttr(SPAttr::RY);
 
 #ifdef OBJECT_TRACE
     objectTrace( "SPRect::build", false );
 #endif
 }
 
-void SPRect::set(SPAttributeEnum key, gchar const *value) {
+void SPRect::set(SPAttr key, gchar const *value) {
 
 #ifdef OBJECT_TRACE
     std::stringstream temp;
@@ -69,19 +69,19 @@ void SPRect::set(SPAttributeEnum key, gchar const *value) {
     double const ex = em * 0.5;
 
     switch (key) {
-        case SP_ATTR_X:
+        case SPAttr::X:
             this->x.readOrUnset(value);
             this->x.update( em, ex, w );
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_Y:
+        case SPAttr::Y:
             this->y.readOrUnset(value);
             this->y.update( em, ex, h );
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_WIDTH:
+        case SPAttr::WIDTH:
             if (!this->width.read(value) || this->width.value < 0.0) {
             	this->width.unset();
             }
@@ -89,7 +89,7 @@ void SPRect::set(SPAttributeEnum key, gchar const *value) {
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_HEIGHT:
+        case SPAttr::HEIGHT:
             if (!this->height.read(value) || this->height.value < 0.0) {
             	this->height.unset();
             }
@@ -97,7 +97,7 @@ void SPRect::set(SPAttributeEnum key, gchar const *value) {
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_RX:
+        case SPAttr::RX:
             if (!this->rx.read(value) || this->rx.value <= 0.0) {
             	this->rx.unset();
             }
@@ -105,7 +105,7 @@ void SPRect::set(SPAttributeEnum key, gchar const *value) {
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_RY:
+        case SPAttr::RY:
             if (!this->ry.read(value) || this->ry.value <= 0.0) {
             	this->ry.unset();
             }

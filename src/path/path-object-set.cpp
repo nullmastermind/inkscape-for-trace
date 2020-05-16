@@ -56,7 +56,7 @@ ObjectSet::strokesToPaths(bool legacy, bool skip_undo)
       // means the style contains every possible property. Once we've
       // finished the stroke to path conversion, we can eliminate
       // unneeded properties from the style element.
-      sp_attribute_clean_recursive(new_node, SP_ATTR_CLEAN_STYLE_REMOVE | SP_ATTR_CLEAN_DEFAULT_REMOVE);
+      sp_attribute_clean_recursive(new_node, SP_ATTRCLEAN_STYLE_REMOVE | SP_ATTRCLEAN_DEFAULT_REMOVE);
 
       add(new_item); // Add to selection.
       did = true;

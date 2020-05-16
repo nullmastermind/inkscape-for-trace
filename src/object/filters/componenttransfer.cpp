@@ -124,7 +124,7 @@ void SPFeComponentTransfer::release() {
 /**
  * Sets a specific value in the SPFeComponentTransfer.
  */
-void SPFeComponentTransfer::set(SPAttributeEnum key, gchar const *value) {
+void SPFeComponentTransfer::set(SPAttr key, gchar const *value) {
     switch(key) {
         /*DEAL WITH SETTING ATTRIBUTES HERE*/
         default:

@@ -57,8 +57,8 @@ void SPFeImage::build(SPDocument *document, Inkscape::XML::Node *repr)
 
     /*LOAD ATTRIBUTES FROM REPR HERE*/
 
-    this->readAttr(SP_ATTR_PRESERVEASPECTRATIO);
-    this->readAttr(SP_ATTR_XLINK_HREF);
+    this->readAttr(SPAttr::PRESERVEASPECTRATIO);
+    this->readAttr(SPAttr::XLINK_HREF);
 }
 
 /**
@@ -97,10 +97,10 @@ static void sp_feImage_href_modified(SPObject* /*old_elem*/, SPObject* new_elem,
 /**
  * Sets a specific value in the SPFeImage.
  */
-void SPFeImage::set(SPAttributeEnum key, gchar const *value) {
+void SPFeImage::set(SPAttr key, gchar const *value) {
     switch(key) {
     /*DEAL WITH SETTING ATTRIBUTES HERE*/
-        case SP_ATTR_XLINK_HREF:
+        case SPAttr::XLINK_HREF:
             if (this->href) {
                 g_free(this->href);
             }
@@ -136,7 +136,7 @@ void SPFeImage::set(SPAttributeEnum key, gchar const *value) {
             }
             break;
 
-        case SP_ATTR_PRESERVEASPECTRATIO:
+        case SPAttr::PRESERVEASPECTRATIO:
             /* Copied from sp-image.cpp */
             /* Do setup before, so we can use break to escape */
             this->aspect_align = SP_ASPECT_XMID_YMID; // Default

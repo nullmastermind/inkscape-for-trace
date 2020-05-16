@@ -20,7 +20,7 @@ namespace Widget {
 SpinScale::SpinScale(const Glib::ustring label, double value,
                      double lower, double upper,
                      double step_increment, double page_increment, int digits,
-                     const SPAttributeEnum a, const Glib::ustring tip_text)
+                     const SPAttr a, const Glib::ustring tip_text)
     : AttrWidget(a, value)
     , _inkspinscale(value, lower, upper, step_increment, page_increment, 0)
 {
@@ -41,7 +41,7 @@ SpinScale::SpinScale(const Glib::ustring label, double value,
 
 SpinScale::SpinScale(const Glib::ustring label,
                      Glib::RefPtr<Gtk::Adjustment> adjustment, int digits,
-                     const SPAttributeEnum a, const Glib::ustring tip_text)
+                     const SPAttr a, const Glib::ustring tip_text)
     : AttrWidget(a, 0.0)
     , _inkspinscale(adjustment)
 {
@@ -113,11 +113,11 @@ decltype(SpinScale::_adjustment) SpinScale::get_adjustment()
 DualSpinScale::DualSpinScale(const Glib::ustring label1, const Glib::ustring label2,
                              double value, double lower, double upper,
                              double step_increment, double page_increment, int digits,
-                             const SPAttributeEnum a,
+                             const SPAttr a,
                              const Glib::ustring tip_text1, const Glib::ustring tip_text2)
     : AttrWidget(a),
-      _s1(label1, value, lower, upper, step_increment, page_increment, digits, SP_ATTR_INVALID, tip_text1),
-      _s2(label2, value, lower, upper, step_increment, page_increment, digits, SP_ATTR_INVALID, tip_text2),
+      _s1(label1, value, lower, upper, step_increment, page_increment, digits, SPAttr::INVALID, tip_text1),
+      _s2(label2, value, lower, upper, step_increment, page_increment, digits, SPAttr::INVALID, tip_text2),
       //TRANSLATORS: "Link" means to _link_ two sliders together
       _link(C_("Sliders", "Link"))
 {

@@ -41,8 +41,8 @@ SPFeOffset::~SPFeOffset() = default;
 void SPFeOffset::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPFilterPrimitive::build(document, repr);
 
-	this->readAttr(SP_ATTR_DX);
-	this->readAttr(SP_ATTR_DY);
+	this->readAttr(SPAttr::DX);
+	this->readAttr(SPAttr::DY);
 }
 
 /**
@@ -55,11 +55,11 @@ void SPFeOffset::release() {
 /**
  * Sets a specific value in the SPFeOffset.
  */
-void SPFeOffset::set(SPAttributeEnum key, gchar const *value) {
+void SPFeOffset::set(SPAttr key, gchar const *value) {
     double read_num;
 
     switch(key) {
-        case SP_ATTR_DX:
+        case SPAttr::DX:
             read_num = value ? helperfns_read_number(value) : 0;
 
             if (read_num != this->dx) {
@@ -67,7 +67,7 @@ void SPFeOffset::set(SPAttributeEnum key, gchar const *value) {
                 this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
-        case SP_ATTR_DY:
+        case SPAttr::DY:
             read_num = value ? helperfns_read_number(value) : 0;
 
             if (read_num != this->dy) {
@@ -88,8 +88,8 @@ void SPFeOffset::set(SPAttributeEnum key, gchar const *value) {
  */
 void SPFeOffset::update(SPCtx *ctx, guint flags) {
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
-        this->readAttr(SP_ATTR_DX);
-        this->readAttr(SP_ATTR_DY);
+        this->readAttr(SPAttr::DX);
+        this->readAttr(SPAttr::DY);
     }
 
     SPFilterPrimitive::update(ctx, flags);

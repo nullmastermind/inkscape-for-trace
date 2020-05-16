@@ -32,12 +32,12 @@ public:
     SpinScale(const Glib::ustring label, double value,
               double lower, double upper,
               double step_increment, double page_increment, int digits,
-              const SPAttributeEnum a = SP_ATTR_INVALID, const Glib::ustring tip_text = "");
+              const SPAttr a = SPAttr::INVALID, const Glib::ustring tip_text = "");
 
     // Used by extensions
     SpinScale(const Glib::ustring label,
               Glib::RefPtr<Gtk::Adjustment> adjustment, int digits,
-              const SPAttributeEnum a = SP_ATTR_INVALID, const Glib::ustring tip_text = "");
+              const SPAttr a = SPAttr::INVALID, const Glib::ustring tip_text = "");
 
     Glib::ustring get_as_attribute() const override;
     void set_from_attribute(SPObject*) override;
@@ -69,7 +69,7 @@ public:
     DualSpinScale(const Glib::ustring label1, const Glib::ustring label2,
                   double value, double lower, double upper,
                   double step_increment, double page_increment, int digits,
-                  const SPAttributeEnum a,
+                  const SPAttr a,
                   const Glib::ustring tip_text1, const Glib::ustring tip_text2);
 
     Glib::ustring get_as_attribute() const override;

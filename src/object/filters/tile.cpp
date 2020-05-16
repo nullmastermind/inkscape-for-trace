@@ -47,7 +47,7 @@ void SPFeTile::release() {
 /**
  * Sets a specific value in the SPFeTile.
  */
-void SPFeTile::set(SPAttributeEnum key, gchar const *value) {
+void SPFeTile::set(SPAttr key, gchar const *value) {
     switch(key) {
 	/*DEAL WITH SETTING ATTRIBUTES HERE*/
         default:

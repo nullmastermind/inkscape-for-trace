@@ -100,7 +100,7 @@ class CheckButtonAttr : public Gtk::CheckButton, public AttrWidget
 public:
     CheckButtonAttr(bool def, const Glib::ustring& label,
                     Glib::ustring  tv, Glib::ustring  fv,
-                    const SPAttributeEnum a, char* tip_text)
+                    const SPAttr a, char* tip_text)
         : Gtk::CheckButton(label),
           AttrWidget(a, def),
           _true_val(std::move(tv)), _false_val(std::move(fv))
@@ -136,7 +136,7 @@ class SpinButtonAttr : public Inkscape::UI::Widget::SpinButton, public AttrWidge
 {
 public:
     SpinButtonAttr(double lower, double upper, double step_inc,
-                   double climb_rate, int digits, const SPAttributeEnum a, double def, char* tip_text)
+                   double climb_rate, int digits, const SPAttr a, double def, char* tip_text)
         : Inkscape::UI::Widget::SpinButton(climb_rate, digits),
           AttrWidget(a, def)
     {
@@ -173,7 +173,7 @@ public:
 template< typename T> class ComboWithTooltip : public Gtk::EventBox
 {
 public:
-    ComboWithTooltip<T>(T default_value, const Util::EnumDataConverter<T>& c, const SPAttributeEnum a = SP_ATTR_INVALID, char* tip_text = nullptr)
+    ComboWithTooltip<T>(T default_value, const Util::EnumDataConverter<T>& c, const SPAttr a = SPAttr::INVALID, char* tip_text = nullptr)
     {
         if (tip_text) {
             set_tooltip_text(tip_text);
@@ -201,7 +201,7 @@ class MultiSpinButton : public Gtk::HBox
 {
 public:
     MultiSpinButton(double lower, double upper, double step_inc,
-                    double climb_rate, int digits, std::vector<SPAttributeEnum> attrs, std::vector<double> default_values, std::vector<char*> tip_text)
+                    double climb_rate, int digits, std::vector<SPAttr> attrs, std::vector<double> default_values, std::vector<char*> tip_text)
     {
         g_assert(attrs.size()==default_values.size());
         g_assert(attrs.size()==tip_text.size());
@@ -232,7 +232,7 @@ class DualSpinButton : public Gtk::HBox, public AttrWidget
 {
 public:
     DualSpinButton(char* def, double lower, double upper, double step_inc,
-                   double climb_rate, int digits, const SPAttributeEnum a, char* tt1, char* tt2)
+                   double climb_rate, int digits, const SPAttr a, char* tt1, char* tt2)
         : AttrWidget(a, def), //TO-DO: receive default num-opt-num as parameter in the constructor
           _s1(climb_rate, digits), _s2(climb_rate, digits)
     {
@@ -298,7 +298,7 @@ private:
 class ColorButton : public Gtk::ColorButton, public AttrWidget
 {
 public:
-    ColorButton(unsigned int def, const SPAttributeEnum a, char* tip_text)
+    ColorButton(unsigned int def, const SPAttr a, char* tip_text)
         : AttrWidget(a, def)
     {
         signal_color_set().connect(signal_attr_changed().make_slot());
@@ -345,7 +345,7 @@ public:
 class EntryAttr : public Gtk::Entry, public AttrWidget
 {
 public:
-    EntryAttr(const SPAttributeEnum a, char* tip_text)
+    EntryAttr(const SPAttr a, char* tip_text)
         : AttrWidget(a)
     {
         signal_changed().connect(signal_attr_changed().make_slot());
@@ -375,7 +375,7 @@ public:
 class FilterEffectsDialog::MatrixAttr : public Gtk::Frame, public AttrWidget
 {
 public:
-    MatrixAttr(const SPAttributeEnum a, char* tip_text = nullptr)
+    MatrixAttr(const SPAttr a, char* tip_text = nullptr)
         : AttrWidget(a), _locked(false)
     {
         _model = Gtk::ListStore::create(_columns);
@@ -509,11 +509,11 @@ class FilterEffectsDialog::ColorMatrixValues : public Gtk::Frame, public AttrWid
 {
 public:
     ColorMatrixValues()
-        : AttrWidget(SP_ATTR_VALUES),
+        : AttrWidget(SPAttr::VALUES),
           // TRANSLATORS: this dialog is accessible via menu Filters - Filter editor
-          _matrix(SP_ATTR_VALUES, _("This matrix determines a linear transform on color space. Each line affects one of the color components. Each column determines how much of each color component from the input is passed to the output. The last column does not depend on input colors, so can be used to adjust a constant component value.")),
-          _saturation("", 0, 0, 1, 0.1, 0.01, 2, SP_ATTR_VALUES),
-          _angle("", 0, 0, 360, 0.1, 0.01, 1, SP_ATTR_VALUES),
+          _matrix(SPAttr::VALUES, _("This matrix determines a linear transform on color space. Each line affects one of the color components. Each column determines how much of each color component from the input is passed to the output. The last column does not depend on input colors, so can be used to adjust a constant component value.")),
+          _saturation("", 0, 0, 1, 0.1, 0.01, 2, SPAttr::VALUES),
+          _angle("", 0, 0, 360, 0.1, 0.01, 1, SPAttr::VALUES),
           _label(C_("Label", "None"), Gtk::ALIGN_START),
           _use_stored(false),
           _saturation_store(0),
@@ -614,7 +614,7 @@ static Inkscape::UI::Dialog::FileOpenDialog * selectFeImageFileInstance = nullpt
 class FileOrElementChooser : public Gtk::HBox, public AttrWidget
 {
 public:
-    FileOrElementChooser(const SPAttributeEnum a)
+    FileOrElementChooser(const SPAttr a)
         : AttrWidget(a)
     {
         pack_start(_entry, false, false);
@@ -804,7 +804,7 @@ public:
     ComponentTransferValues* add_componenttransfervalues(const Glib::ustring& label, SPFeFuncNode::Channel channel);
 
     // CheckButton
-    CheckButtonAttr* add_checkbutton(bool def, const SPAttributeEnum attr, const Glib::ustring& label,
+    CheckButtonAttr* add_checkbutton(bool def, const SPAttr attr, const Glib::ustring& label,
                                      const Glib::ustring& tv, const Glib::ustring& fv, char* tip_text = nullptr)
     {
         CheckButtonAttr* cb = new CheckButtonAttr(def, label, tv, fv, attr, tip_text);
@@ -814,7 +814,7 @@ public:
     }
 
     // ColorButton
-    ColorButton* add_color(unsigned int def, const SPAttributeEnum attr, const Glib::ustring& label, char* tip_text = nullptr)
+    ColorButton* add_color(unsigned int def, const SPAttr attr, const Glib::ustring& label, char* tip_text = nullptr)
     {
         ColorButton* col = new ColorButton(def, attr, tip_text);
         add_widget(col, label);
@@ -823,7 +823,7 @@ public:
     }
 
     // Matrix
-    MatrixAttr* add_matrix(const SPAttributeEnum attr, const Glib::ustring& label, char* tip_text)
+    MatrixAttr* add_matrix(const SPAttr attr, const Glib::ustring& label, char* tip_text)
     {
         MatrixAttr* conv = new MatrixAttr(attr, tip_text);
         add_widget(conv, label);
@@ -841,7 +841,7 @@ public:
     }
 
     // SpinScale
-    SpinScale* add_spinscale(double def, const SPAttributeEnum attr, const Glib::ustring& label,
+    SpinScale* add_spinscale(double def, const SPAttr attr, const Glib::ustring& label,
                          const double lo, const double hi, const double step_inc, const double climb, const int digits, char* tip_text = nullptr)
     {
         Glib::ustring tip_text2;
@@ -854,7 +854,7 @@ public:
     }
 
     // DualSpinScale
-    DualSpinScale* add_dualspinscale(const SPAttributeEnum attr, const Glib::ustring& label,
+    DualSpinScale* add_dualspinscale(const SPAttr attr, const Glib::ustring& label,
                                      const double lo, const double hi, const double step_inc,
                                      const double climb, const int digits,
                                      const Glib::ustring tip_text1 = "",
@@ -867,7 +867,7 @@ public:
     }
 
     // SpinButton
-    SpinButtonAttr* add_spinbutton(double defalt_value, const SPAttributeEnum attr, const Glib::ustring& label,
+    SpinButtonAttr* add_spinbutton(double defalt_value, const SPAttr attr, const Glib::ustring& label,
                                        const double lo, const double hi, const double step_inc,
                                        const double climb, const int digits, char* tip = nullptr)
     {
@@ -878,7 +878,7 @@ public:
     }
 
     // DualSpinButton
-    DualSpinButton* add_dualspinbutton(char* defalt_value, const SPAttributeEnum attr, const Glib::ustring& label,
+    DualSpinButton* add_dualspinbutton(char* defalt_value, const SPAttr attr, const Glib::ustring& label,
                                        const double lo, const double hi, const double step_inc,
                                        const double climb, const int digits, char* tip1 = nullptr, char* tip2 = nullptr)
     {
@@ -889,11 +889,11 @@ public:
     }
 
     // MultiSpinButton
-    MultiSpinButton* add_multispinbutton(double def1, double def2, const SPAttributeEnum attr1, const SPAttributeEnum attr2,
+    MultiSpinButton* add_multispinbutton(double def1, double def2, const SPAttr attr1, const SPAttr attr2,
                                          const Glib::ustring& label, const double lo, const double hi,
                                          const double step_inc, const double climb, const int digits, char* tip1 = nullptr, char* tip2 = nullptr)
     {
-        std::vector<SPAttributeEnum> attrs;
+        std::vector<SPAttr> attrs;
         attrs.push_back(attr1);
         attrs.push_back(attr2);
 
@@ -911,11 +911,11 @@ public:
             add_attr_widget(i);
         return msb;
     }
-    MultiSpinButton* add_multispinbutton(double def1, double def2, double def3, const SPAttributeEnum attr1, const SPAttributeEnum attr2,
-                                         const SPAttributeEnum attr3, const Glib::ustring& label, const double lo,
+    MultiSpinButton* add_multispinbutton(double def1, double def2, double def3, const SPAttr attr1, const SPAttr attr2,
+                                         const SPAttr attr3, const Glib::ustring& label, const double lo,
                                          const double hi, const double step_inc, const double climb, const int digits, char* tip1 = nullptr, char* tip2 = nullptr, char* tip3 = nullptr)
     {
-        std::vector<SPAttributeEnum> attrs;
+        std::vector<SPAttr> attrs;
         attrs.push_back(attr1);
         attrs.push_back(attr2);
         attrs.push_back(attr3);
@@ -938,7 +938,7 @@ public:
     }
 
     // FileOrElementChooser
-    FileOrElementChooser* add_fileorelement(const SPAttributeEnum attr, const Glib::ustring& label)
+    FileOrElementChooser* add_fileorelement(const SPAttr attr, const Glib::ustring& label)
     {
         FileOrElementChooser* foech = new FileOrElementChooser(attr);
         foech->set_desktop(_dialog.getDesktop());
@@ -948,7 +948,7 @@ public:
     }
 
     // ComboBoxEnum
-    template<typename T> ComboBoxEnum<T>* add_combo(T default_value, const SPAttributeEnum attr,
+    template<typename T> ComboBoxEnum<T>* add_combo(T default_value, const SPAttr attr,
                                   const Glib::ustring& label,
                                   const Util::EnumDataConverter<T>& conv, char* tip_text = nullptr)
     {
@@ -959,7 +959,7 @@ public:
     }
 
     // Entry
-    EntryAttr* add_entry(const SPAttributeEnum attr,
+    EntryAttr* add_entry(const SPAttr attr,
                          const Glib::ustring& label,
                          char* tip_text = nullptr)
     {
@@ -1008,10 +1008,10 @@ class FilterEffectsDialog::ComponentTransferValues : public Gtk::Frame, public A
 {
 public:
     ComponentTransferValues(FilterEffectsDialog& d, SPFeFuncNode::Channel channel)
-        : AttrWidget(SP_ATTR_INVALID),
+        : AttrWidget(SPAttr::INVALID),
           _dialog(d),
           _settings(d, _box, sigc::mem_fun(*this, &ComponentTransferValues::set_func_attr), COMPONENTTRANSFER_TYPE_ERROR),
-          _type(ComponentTransferTypeConverter, SP_ATTR_TYPE, false),
+          _type(ComponentTransferTypeConverter, SPAttr::TYPE, false),
           _channel(channel),
           _funcNode(nullptr)
     {
@@ -1022,19 +1022,19 @@ public:
         _type.signal_changed().connect(sigc::mem_fun(*this, &ComponentTransferValues::on_type_changed));
 
         _settings.type(COMPONENTTRANSFER_TYPE_LINEAR);
-        _settings.add_spinscale(1, SP_ATTR_SLOPE,     _("Slope"),     -10, 10, 0.1, 0.01, 2);
-        _settings.add_spinscale(0, SP_ATTR_INTERCEPT, _("Intercept"), -10, 10, 0.1, 0.01, 2);
+        _settings.add_spinscale(1, SPAttr::SLOPE,     _("Slope"),     -10, 10, 0.1, 0.01, 2);
+        _settings.add_spinscale(0, SPAttr::INTERCEPT, _("Intercept"), -10, 10, 0.1, 0.01, 2);
 
         _settings.type(COMPONENTTRANSFER_TYPE_GAMMA);
-        _settings.add_spinscale(1, SP_ATTR_AMPLITUDE, _("Amplitude"),   0, 10, 0.1, 0.01, 2);
-        _settings.add_spinscale(1, SP_ATTR_EXPONENT,  _("Exponent"),    0, 10, 0.1, 0.01, 2);
-        _settings.add_spinscale(0, SP_ATTR_OFFSET,    _("Offset"),    -10, 10, 0.1, 0.01, 2);
+        _settings.add_spinscale(1, SPAttr::AMPLITUDE, _("Amplitude"),   0, 10, 0.1, 0.01, 2);
+        _settings.add_spinscale(1, SPAttr::EXPONENT,  _("Exponent"),    0, 10, 0.1, 0.01, 2);
+        _settings.add_spinscale(0, SPAttr::OFFSET,    _("Offset"),    -10, 10, 0.1, 0.01, 2);
 
         _settings.type(COMPONENTTRANSFER_TYPE_TABLE);
-        _settings.add_entry(SP_ATTR_TABLEVALUES,  _("Table"));
+        _settings.add_entry(SPAttr::TABLEVALUES,  _("Table"));
 
         _settings.type(COMPONENTTRANSFER_TYPE_DISCRETE);
-        _settings.add_entry(SP_ATTR_TABLEVALUES,  _("Discrete"));
+        _settings.add_entry(SPAttr::TABLEVALUES,  _("Discrete"));
 
         //_settings.type(COMPONENTTRANSFER_TYPE_IDENTITY);
         _settings.type(-1); // Force update_and_show() to show/hide windows correctly
@@ -1155,7 +1155,7 @@ class FilterEffectsDialog::LightSourceControl : public AttrWidget
 {
 public:
     LightSourceControl(FilterEffectsDialog& d)
-        : AttrWidget(SP_ATTR_INVALID),
+        : AttrWidget(SPAttr::INVALID),
           _dialog(d),
           _settings(d, _box, sigc::mem_fun(_dialog, &FilterEffectsDialog::set_child_attr_direct), LIGHT_ENDSOURCE),
           _light_label(_("Light Source:")),
@@ -1176,20 +1176,20 @@ public:
         // FIXME: these range values are complete crap
 
         _settings.type(LIGHT_DISTANT);
-        _settings.add_spinscale(0, SP_ATTR_AZIMUTH, _("Azimuth:"), 0, 360, 1, 1, 0, _("Direction angle for the light source on the XY plane, in degrees"));
-        _settings.add_spinscale(0, SP_ATTR_ELEVATION, _("Elevation:"), 0, 360, 1, 1, 0, _("Direction angle for the light source on the YZ plane, in degrees"));
+        _settings.add_spinscale(0, SPAttr::AZIMUTH, _("Azimuth:"), 0, 360, 1, 1, 0, _("Direction angle for the light source on the XY plane, in degrees"));
+        _settings.add_spinscale(0, SPAttr::ELEVATION, _("Elevation:"), 0, 360, 1, 1, 0, _("Direction angle for the light source on the YZ plane, in degrees"));
 
         _settings.type(LIGHT_POINT);
-        _settings.add_multispinbutton(/*default x:*/ (double) 0, /*default y:*/ (double) 0, /*default z:*/ (double) 0, SP_ATTR_X, SP_ATTR_Y, SP_ATTR_Z, _("Location:"), -99999, 99999, 1, 100, 0, _("X coordinate"), _("Y coordinate"), _("Z coordinate"));
+        _settings.add_multispinbutton(/*default x:*/ (double) 0, /*default y:*/ (double) 0, /*default z:*/ (double) 0, SPAttr::X, SPAttr::Y, SPAttr::Z, _("Location:"), -99999, 99999, 1, 100, 0, _("X coordinate"), _("Y coordinate"), _("Z coordinate"));
 
         _settings.type(LIGHT_SPOT);
-        _settings.add_multispinbutton(/*default x:*/ (double) 0, /*default y:*/ (double) 0, /*default z:*/ (double) 0, SP_ATTR_X, SP_ATTR_Y, SP_ATTR_Z, _("Location:"), -99999, 99999, 1, 100, 0, _("X coordinate"), _("Y coordinate"), _("Z coordinate"));
+        _settings.add_multispinbutton(/*default x:*/ (double) 0, /*default y:*/ (double) 0, /*default z:*/ (double) 0, SPAttr::X, SPAttr::Y, SPAttr::Z, _("Location:"), -99999, 99999, 1, 100, 0, _("X coordinate"), _("Y coordinate"), _("Z coordinate"));
         _settings.add_multispinbutton(/*default x:*/ (double) 0, /*default y:*/ (double) 0, /*default z:*/ (double) 0,
-                                      SP_ATTR_POINTSATX, SP_ATTR_POINTSATY, SP_ATTR_POINTSATZ,
+                                      SPAttr::POINTSATX, SPAttr::POINTSATY, SPAttr::POINTSATZ,
                                       _("Points at:"), -99999, 99999, 1, 100, 0, _("X coordinate"), _("Y coordinate"), _("Z coordinate"));
-        _settings.add_spinscale(1, SP_ATTR_SPECULAREXPONENT, _("Specular Exponent:"), 1, 100, 1, 1, 0, _("Exponent value controlling the focus for the light source"));
+        _settings.add_spinscale(1, SPAttr::SPECULAREXPONENT, _("Specular Exponent:"), 1, 100, 1, 1, 0, _("Exponent value controlling the focus for the light source"));
         //TODO: here I have used 100 degrees as default value. But spec says that if not specified, no limiting cone is applied. So, there should be a way for the user to set a "no limiting cone" option.
-        _settings.add_spinscale(100, SP_ATTR_LIMITINGCONEANGLE, _("Cone Angle:"), 1, 100, 1, 1, 0, _("This is the angle between the spot light axis (i.e. the axis between the light source and the point to which it is pointing at) and the spot light cone. No light is projected outside this cone."));
+        _settings.add_spinscale(100, SPAttr::LIMITINGCONEANGLE, _("Cone Angle:"), 1, 100, 1, 1, 0, _("This is the angle between the spot light axis (i.e. the axis between the light source and the point to which it is pointing at) and the spot light cone. No light is projected outside this cone."));
 
         _settings.type(-1); // Force update_and_show() to show/hide windows correctly
 
@@ -2074,7 +2074,7 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
 
                 if(_in_drag != (i + 1) || row_prim != prim)
 		    {
-                    draw_connection(cr, row, i, text_start_x, outline_x, con_poly[2].get_y(), row_count);
+                    draw_connection(cr, row, SPAttr::INVALID, text_start_x, outline_x, con_poly[2].get_y(), row_count, i);
 		    }
             }
         }
@@ -2098,7 +2098,7 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
             // Draw "in" connection
             if(_in_drag != 1 || row_prim != prim)
 		{
-                draw_connection(cr, row, SP_ATTR_IN, text_start_x, outline_x, con_poly[2].get_y(), row_count);
+                draw_connection(cr, row, SPAttr::IN, text_start_x, outline_x, con_poly[2].get_y(), row_count, -1);
 		}
 
             if(inputs == 2) {
@@ -2124,7 +2124,7 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
                 // Draw "in2" connection
                 if(_in_drag != 2 || row_prim != prim)
 		    {
-                    draw_connection(cr, row, SP_ATTR_IN2, text_start_x, outline_x, con_poly[2].get_y(), row_count);
+                    draw_connection(cr, row, SPAttr::IN2, text_start_x, outline_x, con_poly[2].get_y(), row_count, -1);
 		    }
             }
         }
@@ -2145,9 +2145,9 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
 }
 
 void FilterEffectsDialog::PrimitiveList::draw_connection(const Cairo::RefPtr<Cairo::Context>& cr,
-                                                         const Gtk::TreeIter& input, const int attr,
+                                                         const Gtk::TreeIter& input, const SPAttr attr,
                                                          const int text_start_x, const int x1, const int y1,
-                                                         const int row_count)
+                                                         const int row_count, const int pos)
 {
     cr->save();
 
@@ -2163,7 +2163,7 @@ void FilterEffectsDialog::PrimitiveList::draw_connection(const Cairo::RefPtr<Cai
                          (bg_color.alpha + fg_color.alpha)/2.0};
 
     int src_id = 0;
-    Gtk::TreeIter res = find_result(input, attr, src_id);
+    Gtk::TreeIter res = find_result(input, attr, src_id, pos);
 
     const bool is_first = input == get_model()->children().begin();
     const bool is_merge = SP_IS_FEMERGE((SPFilterPrimitive*)(*input)[_columns.primitive]);
@@ -2261,7 +2261,8 @@ bool FilterEffectsDialog::PrimitiveList::do_connection_node(const Gtk::TreeIter&
 }
 
 const Gtk::TreeIter FilterEffectsDialog::PrimitiveList::find_result(const Gtk::TreeIter& start,
-                                                                    const int attr, int& src_id)
+                                                                    const SPAttr attr, int& src_id,
+                                                                    const int pos)
 {
     SPFilterPrimitive* prim = (*start)[_columns.primitive];
     Gtk::TreeIter target = _model->children().end();
@@ -2271,7 +2272,7 @@ const Gtk::TreeIter FilterEffectsDialog::PrimitiveList::find_result(const Gtk::T
         int c = 0;
         bool found = false;
         for (auto& o: prim->children) {
-            if(c == attr && SP_IS_FEMERGENODE(&o)) {
+            if(c == pos && SP_IS_FEMERGENODE(&o)) {
                 image = SP_FEMERGENODE(&o)->input;
                 found = true;
             }
@@ -2281,9 +2282,9 @@ const Gtk::TreeIter FilterEffectsDialog::PrimitiveList::find_result(const Gtk::T
             return target;
     }
     else {
-        if(attr == SP_ATTR_IN)
+        if(attr == SPAttr::IN)
             image = prim->image_in;
-        else if(attr == SP_ATTR_IN2) {
+        else if(attr == SPAttr::IN2) {
             if(SP_IS_FEBLEND(prim))
                 image = SP_FEBLEND(prim)->in2;
             else if(SP_IS_FECOMPOSITE(prim))
@@ -2473,7 +2474,7 @@ bool FilterEffectsDialog::PrimitiveList::on_button_release_event(GdkEventButton*
                                                _("Remove merge node"));
                             (*get_selection()->get_selected())[_columns.primitive] = prim;
                         } else {
-                            _dialog.set_attr(&o, SP_ATTR_IN, in_val);
+                            _dialog.set_attr(&o, SPAttr::IN, in_val);
                         }
                         handled = true;
                         break;
@@ -2490,15 +2491,15 @@ bool FilterEffectsDialog::PrimitiveList::on_button_release_event(GdkEventButton*
                     prim->getRepr()->appendChild(repr);
                     SPFeMergeNode *node = SP_FEMERGENODE(prim->document->getObjectByRepr(repr));
                     Inkscape::GC::release(repr);
-                    _dialog.set_attr(node, SP_ATTR_IN, in_val);
+                    _dialog.set_attr(node, SPAttr::IN, in_val);
                     (*get_selection()->get_selected())[_columns.primitive] = prim;
                 }
             }
             else {
                 if(_in_drag == 1)
-                    _dialog.set_attr(prim, SP_ATTR_IN, in_val);
+                    _dialog.set_attr(prim, SPAttr::IN, in_val);
                 else if(_in_drag == 2)
-                    _dialog.set_attr(prim, SP_ATTR_IN2, in_val);
+                    _dialog.set_attr(prim, SPAttr::IN2, in_val);
             }
         }
 
@@ -2780,14 +2781,14 @@ void FilterEffectsDialog::init_settings_widgets()
     _settings_initialized = true;
 
     _filter_general_settings->type(0);
-    _filter_general_settings->add_multispinbutton(/*default x:*/ (double) -0.1, /*default y:*/ (double) -0.1, SP_ATTR_X, SP_ATTR_Y, _("Coordinates:"), -100, 100, 0.01, 0.1, 2, _("X coordinate of the left corners of filter effects region"), _("Y coordinate of the upper corners of filter effects region"));
-    _filter_general_settings->add_multispinbutton(/*default width:*/ (double) 1.2, /*default height:*/ (double) 1.2, SP_ATTR_WIDTH, SP_ATTR_HEIGHT, _("Dimensions:"), 0, 1000, 0.01, 0.1, 2, _("Width of filter effects region"), _("Height of filter effects region"));
+    _filter_general_settings->add_multispinbutton(/*default x:*/ (double) -0.1, /*default y:*/ (double) -0.1, SPAttr::X, SPAttr::Y, _("Coordinates:"), -100, 100, 0.01, 0.1, 2, _("X coordinate of the left corners of filter effects region"), _("Y coordinate of the upper corners of filter effects region"));
+    _filter_general_settings->add_multispinbutton(/*default width:*/ (double) 1.2, /*default height:*/ (double) 1.2, SPAttr::WIDTH, SPAttr::HEIGHT, _("Dimensions:"), 0, 1000, 0.01, 0.1, 2, _("Width of filter effects region"), _("Height of filter effects region"));
 
     _settings->type(NR_FILTER_BLEND);
-    _settings->add_combo(SP_CSS_BLEND_NORMAL, SP_ATTR_MODE, _("Mode:"), SPBlendModeConverter);
+    _settings->add_combo(SP_CSS_BLEND_NORMAL, SPAttr::MODE, _("Mode:"), SPBlendModeConverter);
 
     _settings->type(NR_FILTER_COLORMATRIX);
-    ComboBoxEnum<FilterColorMatrixType>* colmat = _settings->add_combo(COLORMATRIX_MATRIX, SP_ATTR_TYPE, _("Type:"), ColorMatrixTypeConverter, _("Indicates the type of matrix operation. The keyword 'matrix' indicates that a full 5x4 matrix of values will be provided. The other keywords represent convenience shortcuts to allow commonly used color operations to be performed without specifying a complete matrix."));
+    ComboBoxEnum<FilterColorMatrixType>* colmat = _settings->add_combo(COLORMATRIX_MATRIX, SPAttr::TYPE, _("Type:"), ColorMatrixTypeConverter, _("Indicates the type of matrix operation. The keyword 'matrix' indicates that a full 5x4 matrix of values will be provided. The other keywords represent convenience shortcuts to allow commonly used color operations to be performed without specifying a complete matrix."));
     _color_matrix_values = _settings->add_colormatrixvalues(_("Value(s):"));
     colmat->signal_attr_changed().connect(sigc::mem_fun(*this, &FilterEffectsDialog::update_color_matrix));
 
@@ -2798,79 +2799,79 @@ void FilterEffectsDialog::init_settings_widgets()
     _settings->add_componenttransfervalues(_("A:"), SPFeFuncNode::A);
 
     _settings->type(NR_FILTER_COMPOSITE);
-    _settings->add_combo(COMPOSITE_OVER, SP_ATTR_OPERATOR, _("Operator:"), CompositeOperatorConverter);
-    _k1 = _settings->add_spinscale(0, SP_ATTR_K1, _("K1:"), -10, 10, 0.1, 0.01, 2, _("If the arithmetic operation is chosen, each result pixel is computed using the formula k1*i1*i2 + k2*i1 + k3*i2 + k4 where i1 and i2 are the pixel values of the first and second inputs respectively."));
-    _k2 = _settings->add_spinscale(0, SP_ATTR_K2, _("K2:"), -10, 10, 0.1, 0.01, 2, _("If the arithmetic operation is chosen, each result pixel is computed using the formula k1*i1*i2 + k2*i1 + k3*i2 + k4 where i1 and i2 are the pixel values of the first and second inputs respectively."));
-    _k3 = _settings->add_spinscale(0, SP_ATTR_K3, _("K3:"), -10, 10, 0.1, 0.01, 2, _("If the arithmetic operation is chosen, each result pixel is computed using the formula k1*i1*i2 + k2*i1 + k3*i2 + k4 where i1 and i2 are the pixel values of the first and second inputs respectively."));
-    _k4 = _settings->add_spinscale(0, SP_ATTR_K4, _("K4:"), -10, 10, 0.1, 0.01, 2, _("If the arithmetic operation is chosen, each result pixel is computed using the formula k1*i1*i2 + k2*i1 + k3*i2 + k4 where i1 and i2 are the pixel values of the first and second inputs respectively."));
+    _settings->add_combo(COMPOSITE_OVER, SPAttr::OPERATOR, _("Operator:"), CompositeOperatorConverter);
+    _k1 = _settings->add_spinscale(0, SPAttr::K1, _("K1:"), -10, 10, 0.1, 0.01, 2, _("If the arithmetic operation is chosen, each result pixel is computed using the formula k1*i1*i2 + k2*i1 + k3*i2 + k4 where i1 and i2 are the pixel values of the first and second inputs respectively."));
+    _k2 = _settings->add_spinscale(0, SPAttr::K2, _("K2:"), -10, 10, 0.1, 0.01, 2, _("If the arithmetic operation is chosen, each result pixel is computed using the formula k1*i1*i2 + k2*i1 + k3*i2 + k4 where i1 and i2 are the pixel values of the first and second inputs respectively."));
+    _k3 = _settings->add_spinscale(0, SPAttr::K3, _("K3:"), -10, 10, 0.1, 0.01, 2, _("If the arithmetic operation is chosen, each result pixel is computed using the formula k1*i1*i2 + k2*i1 + k3*i2 + k4 where i1 and i2 are the pixel values of the first and second inputs respectively."));
+    _k4 = _settings->add_spinscale(0, SPAttr::K4, _("K4:"), -10, 10, 0.1, 0.01, 2, _("If the arithmetic operation is chosen, each result pixel is computed using the formula k1*i1*i2 + k2*i1 + k3*i2 + k4 where i1 and i2 are the pixel values of the first and second inputs respectively."));
 
     _settings->type(NR_FILTER_CONVOLVEMATRIX);
-    _convolve_order = _settings->add_dualspinbutton((char*)"3", SP_ATTR_ORDER, _("Size:"), 1, 5, 1, 1, 0, _("width of the convolve matrix"), _("height of the convolve matrix"));
-    _convolve_target = _settings->add_multispinbutton(/*default x:*/ (double) 0, /*default y:*/ (double) 0, SP_ATTR_TARGETX, SP_ATTR_TARGETY, _("Target:"), 0, 4, 1, 1, 0, _("X coordinate of the target point in the convolve matrix. The convolution is applied to pixels around this point."), _("Y coordinate of the target point in the convolve matrix. The convolution is applied to pixels around this point."));
+    _convolve_order = _settings->add_dualspinbutton((char*)"3", SPAttr::ORDER, _("Size:"), 1, 5, 1, 1, 0, _("width of the convolve matrix"), _("height of the convolve matrix"));
+    _convolve_target = _settings->add_multispinbutton(/*default x:*/ (double) 0, /*default y:*/ (double) 0, SPAttr::TARGETX, SPAttr::TARGETY, _("Target:"), 0, 4, 1, 1, 0, _("X coordinate of the target point in the convolve matrix. The convolution is applied to pixels around this point."), _("Y coordinate of the target point in the convolve matrix. The convolution is applied to pixels around this point."));
     //TRANSLATORS: for info on "Kernel", see http://en.wikipedia.org/wiki/Kernel_(matrix)
-    _convolve_matrix = _settings->add_matrix(SP_ATTR_KERNELMATRIX, _("Kernel:"), _("This matrix describes the convolve operation that is applied to the input image in order to calculate the pixel colors at the output. Different arrangements of values in this matrix result in various possible visual effects. An identity matrix would lead to a motion blur effect (parallel to the matrix diagonal) while a matrix filled with a constant non-zero value would lead to a common blur effect."));
+    _convolve_matrix = _settings->add_matrix(SPAttr::KERNELMATRIX, _("Kernel:"), _("This matrix describes the convolve operation that is applied to the input image in order to calculate the pixel colors at the output. Different arrangements of values in this matrix result in various possible visual effects. An identity matrix would lead to a motion blur effect (parallel to the matrix diagonal) while a matrix filled with a constant non-zero value would lead to a common blur effect."));
     _convolve_order->signal_attr_changed().connect(sigc::mem_fun(*this, &FilterEffectsDialog::convolve_order_changed));
-    _settings->add_spinscale(0, SP_ATTR_DIVISOR, _("Divisor:"), 0, 1000, 1, 0.1, 2, _("After applying the kernelMatrix to the input image to yield a number, that number is divided by divisor to yield the final destination color value. A divisor that is the sum of all the matrix values tends to have an evening effect on the overall color intensity of the result."));
-    _settings->add_spinscale(0, SP_ATTR_BIAS, _("Bias:"), -10, 10, 1, 0.01, 1, _("This value is added to each component. This is useful to define a constant value as the zero response of the filter."));
-    _settings->add_combo(CONVOLVEMATRIX_EDGEMODE_DUPLICATE, SP_ATTR_EDGEMODE, _("Edge Mode:"), ConvolveMatrixEdgeModeConverter, _("Determines how to extend the input image as necessary with color values so that the matrix operations can be applied when the kernel is positioned at or near the edge of the input image."));
-    _settings->add_checkbutton(false, SP_ATTR_PRESERVEALPHA, _("Preserve Alpha"), "true", "false", _("If set, the alpha channel won't be altered by this filter primitive."));
+    _settings->add_spinscale(0, SPAttr::DIVISOR, _("Divisor:"), 0, 1000, 1, 0.1, 2, _("After applying the kernelMatrix to the input image to yield a number, that number is divided by divisor to yield the final destination color value. A divisor that is the sum of all the matrix values tends to have an evening effect on the overall color intensity of the result."));
+    _settings->add_spinscale(0, SPAttr::BIAS, _("Bias:"), -10, 10, 1, 0.01, 1, _("This value is added to each component. This is useful to define a constant value as the zero response of the filter."));
+    _settings->add_combo(CONVOLVEMATRIX_EDGEMODE_DUPLICATE, SPAttr::EDGEMODE, _("Edge Mode:"), ConvolveMatrixEdgeModeConverter, _("Determines how to extend the input image as necessary with color values so that the matrix operations can be applied when the kernel is positioned at or near the edge of the input image."));
+    _settings->add_checkbutton(false, SPAttr::PRESERVEALPHA, _("Preserve Alpha"), "true", "false", _("If set, the alpha channel won't be altered by this filter primitive."));
 
     _settings->type(NR_FILTER_DIFFUSELIGHTING);
-    _settings->add_color(/*default: white*/ 0xffffffff, SP_PROP_LIGHTING_COLOR, _("Diffuse Color:"), _("Defines the color of the light source"));
-    _settings->add_spinscale(1, SP_ATTR_SURFACESCALE, _("Surface Scale:"), -5, 5, 0.01, 0.001, 3, _("This value amplifies the heights of the bump map defined by the input alpha channel"));
-    _settings->add_spinscale(1, SP_ATTR_DIFFUSECONSTANT, _("Constant:"), 0, 5, 0.1, 0.01, 2, _("This constant affects the Phong lighting model."));
-    _settings->add_dualspinscale(SP_ATTR_KERNELUNITLENGTH, _("Kernel Unit Length:"), 0.01, 10, 1, 0.01, 1);
+    _settings->add_color(/*default: white*/ 0xffffffff, SPAttr::LIGHTING_COLOR, _("Diffuse Color:"), _("Defines the color of the light source"));
+    _settings->add_spinscale(1, SPAttr::SURFACESCALE, _("Surface Scale:"), -5, 5, 0.01, 0.001, 3, _("This value amplifies the heights of the bump map defined by the input alpha channel"));
+    _settings->add_spinscale(1, SPAttr::DIFFUSECONSTANT, _("Constant:"), 0, 5, 0.1, 0.01, 2, _("This constant affects the Phong lighting model."));
+    _settings->add_dualspinscale(SPAttr::KERNELUNITLENGTH, _("Kernel Unit Length:"), 0.01, 10, 1, 0.01, 1);
     _settings->add_lightsource();
 
     _settings->type(NR_FILTER_DISPLACEMENTMAP);
-    _settings->add_spinscale(0, SP_ATTR_SCALE, _("Scale:"), 0, 100, 1, 0.01, 1, _("This defines the intensity of the displacement effect."));
-    _settings->add_combo(DISPLACEMENTMAP_CHANNEL_ALPHA, SP_ATTR_XCHANNELSELECTOR, _("X displacement:"), DisplacementMapChannelConverter, _("Color component that controls the displacement in the X direction"));
-    _settings->add_combo(DISPLACEMENTMAP_CHANNEL_ALPHA, SP_ATTR_YCHANNELSELECTOR, _("Y displacement:"), DisplacementMapChannelConverter, _("Color component that controls the displacement in the Y direction"));
+    _settings->add_spinscale(0, SPAttr::SCALE, _("Scale:"), 0, 100, 1, 0.01, 1, _("This defines the intensity of the displacement effect."));
+    _settings->add_combo(DISPLACEMENTMAP_CHANNEL_ALPHA, SPAttr::XCHANNELSELECTOR, _("X displacement:"), DisplacementMapChannelConverter, _("Color component that controls the displacement in the X direction"));
+    _settings->add_combo(DISPLACEMENTMAP_CHANNEL_ALPHA, SPAttr::YCHANNELSELECTOR, _("Y displacement:"), DisplacementMapChannelConverter, _("Color component that controls the displacement in the Y direction"));
 
     _settings->type(NR_FILTER_FLOOD);
-    _settings->add_color(/*default: black*/ 0, SP_PROP_FLOOD_COLOR, _("Flood Color:"), _("The whole filter region will be filled with this color."));
-    _settings->add_spinscale(1, SP_PROP_FLOOD_OPACITY, _("Opacity:"), 0, 1, 0.1, 0.01, 2);
+    _settings->add_color(/*default: black*/ 0, SPAttr::FLOOD_COLOR, _("Flood Color:"), _("The whole filter region will be filled with this color."));
+    _settings->add_spinscale(1, SPAttr::FLOOD_OPACITY, _("Opacity:"), 0, 1, 0.1, 0.01, 2);
 
     _settings->type(NR_FILTER_GAUSSIANBLUR);
-    _settings->add_dualspinscale(SP_ATTR_STDDEVIATION, _("Standard Deviation:"), 0.01, 100, 1, 0.01, 2, _("The standard deviation for the blur operation."));
+    _settings->add_dualspinscale(SPAttr::STDDEVIATION, _("Standard Deviation:"), 0.01, 100, 1, 0.01, 2, _("The standard deviation for the blur operation."));
 
     _settings->type(NR_FILTER_MERGE);
     _settings->add_no_params();
 
     _settings->type(NR_FILTER_MORPHOLOGY);
-    _settings->add_combo(MORPHOLOGY_OPERATOR_ERODE, SP_ATTR_OPERATOR, _("Operator:"), MorphologyOperatorConverter, _("Erode: performs \"thinning\" of input image.\nDilate: performs \"fattening\" of input image."));
-    _settings->add_dualspinscale(SP_ATTR_RADIUS, _("Radius:"), 0, 100, 1, 0.01, 1);
+    _settings->add_combo(MORPHOLOGY_OPERATOR_ERODE, SPAttr::OPERATOR, _("Operator:"), MorphologyOperatorConverter, _("Erode: performs \"thinning\" of input image.\nDilate: performs \"fattening\" of input image."));
+    _settings->add_dualspinscale(SPAttr::RADIUS, _("Radius:"), 0, 100, 1, 0.01, 1);
 
     _settings->type(NR_FILTER_IMAGE);
-    _settings->add_fileorelement(SP_ATTR_XLINK_HREF, _("Source of Image:"));
-    _image_x = _settings->add_entry(SP_ATTR_X,_("X"),_("X"));
+    _settings->add_fileorelement(SPAttr::XLINK_HREF, _("Source of Image:"));
+    _image_x = _settings->add_entry(SPAttr::X,_("X"),_("X"));
     _image_x->signal_attr_changed().connect(sigc::mem_fun(*this, &FilterEffectsDialog::image_x_changed));
     //This commented because we want the default empty value of X or Y and couldent get it from SpinButton
-    //_image_y = _settings->add_spinbutton(0, SP_ATTR_Y, _("Y:"), -DBL_MAX, DBL_MAX, 1, 1, 5, _("Y"));
-    _image_y = _settings->add_entry(SP_ATTR_Y,_("Y"),_("Y"));
+    //_image_y = _settings->add_spinbutton(0, SPAttr::Y, _("Y:"), -DBL_MAX, DBL_MAX, 1, 1, 5, _("Y"));
+    _image_y = _settings->add_entry(SPAttr::Y,_("Y"),_("Y"));
     _image_y->signal_attr_changed().connect(sigc::mem_fun(*this, &FilterEffectsDialog::image_y_changed));
     _settings->type(NR_FILTER_OFFSET);
-    _settings->add_checkbutton(false, SP_ATTR_PRESERVEALPHA, _("Preserve Alpha"), "true", "false", _("If set, the alpha channel won't be altered by this filter primitive."));
-    _settings->add_spinscale(0, SP_ATTR_DX, _("Delta X:"), -100, 100, 1, 0.01, 2, _("This is how far the input image gets shifted to the right"));
-    _settings->add_spinscale(0, SP_ATTR_DY, _("Delta Y:"), -100, 100, 1, 0.01, 2, _("This is how far the input image gets shifted downwards"));
+    _settings->add_checkbutton(false, SPAttr::PRESERVEALPHA, _("Preserve Alpha"), "true", "false", _("If set, the alpha channel won't be altered by this filter primitive."));
+    _settings->add_spinscale(0, SPAttr::DX, _("Delta X:"), -100, 100, 1, 0.01, 2, _("This is how far the input image gets shifted to the right"));
+    _settings->add_spinscale(0, SPAttr::DY, _("Delta Y:"), -100, 100, 1, 0.01, 2, _("This is how far the input image gets shifted downwards"));
 
     _settings->type(NR_FILTER_SPECULARLIGHTING);
-    _settings->add_color(/*default: white*/ 0xffffffff, SP_PROP_LIGHTING_COLOR, _("Specular Color:"), _("Defines the color of the light source"));
-    _settings->add_spinscale(1, SP_ATTR_SURFACESCALE, _("Surface Scale:"), -5, 5, 0.1, 0.01, 2, _("This value amplifies the heights of the bump map defined by the input alpha channel"));
-    _settings->add_spinscale(1, SP_ATTR_SPECULARCONSTANT, _("Constant:"), 0, 5, 0.1, 0.01, 2, _("This constant affects the Phong lighting model."));
-    _settings->add_spinscale(1, SP_ATTR_SPECULAREXPONENT, _("Exponent:"), 1, 50, 1, 0.01, 1, _("Exponent for specular term, larger is more \"shiny\"."));
-    _settings->add_dualspinscale(SP_ATTR_KERNELUNITLENGTH, _("Kernel Unit Length:"), 0.01, 10, 1, 0.01, 1);
+    _settings->add_color(/*default: white*/ 0xffffffff, SPAttr::LIGHTING_COLOR, _("Specular Color:"), _("Defines the color of the light source"));
+    _settings->add_spinscale(1, SPAttr::SURFACESCALE, _("Surface Scale:"), -5, 5, 0.1, 0.01, 2, _("This value amplifies the heights of the bump map defined by the input alpha channel"));
+    _settings->add_spinscale(1, SPAttr::SPECULARCONSTANT, _("Constant:"), 0, 5, 0.1, 0.01, 2, _("This constant affects the Phong lighting model."));
+    _settings->add_spinscale(1, SPAttr::SPECULAREXPONENT, _("Exponent:"), 1, 50, 1, 0.01, 1, _("Exponent for specular term, larger is more \"shiny\"."));
+    _settings->add_dualspinscale(SPAttr::KERNELUNITLENGTH, _("Kernel Unit Length:"), 0.01, 10, 1, 0.01, 1);
     _settings->add_lightsource();
 
     _settings->type(NR_FILTER_TILE);
     _settings->add_no_params();
 
     _settings->type(NR_FILTER_TURBULENCE);
-//    _settings->add_checkbutton(false, SP_ATTR_STITCHTILES, _("Stitch Tiles"), "stitch", "noStitch");
-    _settings->add_combo(TURBULENCE_TURBULENCE, SP_ATTR_TYPE, _("Type:"), TurbulenceTypeConverter, _("Indicates whether the filter primitive should perform a noise or turbulence function."));
-    _settings->add_dualspinscale(SP_ATTR_BASEFREQUENCY, _("Base Frequency:"), 0, 1, 0.001, 0.01, 3);
-    _settings->add_spinscale(1, SP_ATTR_NUMOCTAVES, _("Octaves:"), 1, 10, 1, 1, 0);
-    _settings->add_spinscale(0, SP_ATTR_SEED, _("Seed:"), 0, 1000, 1, 1, 0, _("The starting number for the pseudo random number generator."));
+//    _settings->add_checkbutton(false, SPAttr::STITCHTILES, _("Stitch Tiles"), "stitch", "noStitch");
+    _settings->add_combo(TURBULENCE_TURBULENCE, SPAttr::TYPE, _("Type:"), TurbulenceTypeConverter, _("Indicates whether the filter primitive should perform a noise or turbulence function."));
+    _settings->add_dualspinscale(SPAttr::BASEFREQUENCY, _("Base Frequency:"), 0, 1, 0.001, 0.01, 3);
+    _settings->add_spinscale(1, SPAttr::NUMOCTAVES, _("Octaves:"), 1, 10, 1, 1, 0);
+    _settings->add_spinscale(0, SPAttr::SEED, _("Seed:"), 0, 1000, 1, 1, 0, _("The starting number for the pseudo random number generator."));
 }
 
 void FilterEffectsDialog::add_primitive()
@@ -3041,7 +3042,7 @@ void FilterEffectsDialog::set_child_attr_direct(const AttrWidget* input)
     set_attr(_primitive_list.get_selected()->firstChild(), input->get_attribute(), input->get_as_attribute().c_str());
 }
 
-void FilterEffectsDialog::set_attr(SPObject* o, const SPAttributeEnum attr, const gchar* val)
+void FilterEffectsDialog::set_attr(SPObject* o, const SPAttr attr, const gchar* val)
 {
     if(!_locked) {
         _attr_lock = true;

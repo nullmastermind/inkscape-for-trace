@@ -77,10 +77,10 @@ void SPConnEndPair::release()
 
 void sp_conn_end_pair_build(SPObject *object)
 {
-    object->readAttr(SP_ATTR_CONNECTOR_TYPE);
-    object->readAttr(SP_ATTR_CONNECTION_START);
-    object->readAttr(SP_ATTR_CONNECTION_END);
-    object->readAttr(SP_ATTR_CONNECTOR_CURVATURE);
+    object->readAttr(SPAttr::CONNECTOR_TYPE);
+    object->readAttr(SPAttr::CONNECTION_START);
+    object->readAttr(SPAttr::CONNECTION_END);
+    object->readAttr(SPAttr::CONNECTOR_CURVATURE);
 }
 
 
@@ -93,10 +93,10 @@ static void avoid_conn_transformed(Geom::Affine const */*mp*/, SPItem *moved_ite
 }
 
 
-void SPConnEndPair::setAttr(unsigned const key, gchar const *const value)
+void SPConnEndPair::setAttr(const SPAttr key, gchar const *const value)
 {
     switch (key) {
-    case SP_ATTR_CONNECTOR_TYPE:
+    case SPAttr::CONNECTOR_TYPE:
         if (value && (strcmp(value, "polyline") == 0 || strcmp(value, "orthogonal") == 0)) {
             int new_conn_type = strcmp(value, "polyline") ? SP_CONNECTOR_ORTHOGONAL : SP_CONNECTOR_POLYLINE;
 
@@ -123,7 +123,7 @@ void SPConnEndPair::setAttr(unsigned const key, gchar const *const value)
             }
         }
         break;
-    case SP_ATTR_CONNECTOR_CURVATURE:
+    case SPAttr::CONNECTOR_CURVATURE:
         if (value) {
             _connCurvature = g_strtod(value, nullptr);
             if (_connRef && _connRef->isInitialised()) {
@@ -132,9 +132,9 @@ void SPConnEndPair::setAttr(unsigned const key, gchar const *const value)
             }
         }
         break;
-    case SP_ATTR_CONNECTION_START:
-    case SP_ATTR_CONNECTION_END:
-        this->_connEnd[(key == SP_ATTR_CONNECTION_START ? 0 : 1)]->setAttacherHref(value, _path);
+    case SPAttr::CONNECTION_START:
+    case SPAttr::CONNECTION_END:
+        this->_connEnd[(key == SPAttr::CONNECTION_START ? 0 : 1)]->setAttacherHref(value, _path);
         break;
     }
 }

@@ -191,63 +191,63 @@ static void sp_namedview_generate_old_grid(SPNamedView * /*nv*/, SPDocument *doc
 void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPObjectGroup::build(document, repr);
 
-    this->readAttr(SP_ATTR_INKSCAPE_DOCUMENT_UNITS);
-    this->readAttr(SP_ATTR_UNITS);
-    this->readAttr(SP_ATTR_VIEWONLY);
-    this->readAttr(SP_ATTR_SHOWGUIDES);
-    this->readAttr(SP_ATTR_SHOWGRIDS);
-    this->readAttr(SP_ATTR_GRIDTOLERANCE);
-    this->readAttr(SP_ATTR_GUIDETOLERANCE);
-    this->readAttr(SP_ATTR_OBJECTTOLERANCE);
-    this->readAttr(SP_ATTR_GUIDECOLOR);
-    this->readAttr(SP_ATTR_GUIDEOPACITY);
-    this->readAttr(SP_ATTR_GUIDEHICOLOR);
-    this->readAttr(SP_ATTR_GUIDEHIOPACITY);
-    this->readAttr(SP_ATTR_SHOWBORDER);
-    this->readAttr(SP_ATTR_SHOWPAGESHADOW);
-    this->readAttr(SP_ATTR_BORDERLAYER);
-    this->readAttr(SP_ATTR_BORDERCOLOR);
-    this->readAttr(SP_ATTR_BORDEROPACITY);
-    this->readAttr(SP_ATTR_PAGECOLOR);
-    this->readAttr(SP_ATTR_INKSCAPE_PAGECHECKERBOARD);
-    this->readAttr(SP_ATTR_INKSCAPE_PAGEOPACITY);
-    this->readAttr(SP_ATTR_INKSCAPE_PAGESHADOW);
-    this->readAttr(SP_ATTR_INKSCAPE_ZOOM);
-    this->readAttr(SP_ATTR_INKSCAPE_ROTATION);
-    this->readAttr(SP_ATTR_INKSCAPE_CX);
-    this->readAttr(SP_ATTR_INKSCAPE_CY);
-    this->readAttr(SP_ATTR_INKSCAPE_WINDOW_WIDTH);
-    this->readAttr(SP_ATTR_INKSCAPE_WINDOW_HEIGHT);
-    this->readAttr(SP_ATTR_INKSCAPE_WINDOW_X);
-    this->readAttr(SP_ATTR_INKSCAPE_WINDOW_Y);
-    this->readAttr(SP_ATTR_INKSCAPE_WINDOW_MAXIMIZED);
-    this->readAttr(SP_ATTR_INKSCAPE_SNAP_GLOBAL);
-    this->readAttr(SP_ATTR_INKSCAPE_SNAP_BBOX);
-    this->readAttr(SP_ATTR_INKSCAPE_SNAP_NODE);
-    this->readAttr(SP_ATTR_INKSCAPE_SNAP_OTHERS);
-    this->readAttr(SP_ATTR_INKSCAPE_SNAP_FROM_GUIDE);
-    this->readAttr(SP_ATTR_INKSCAPE_SNAP_ROTATION_CENTER);
-    this->readAttr(SP_ATTR_INKSCAPE_SNAP_NODE_SMOOTH);
-    this->readAttr(SP_ATTR_INKSCAPE_SNAP_LINE_MIDPOINT);
-    this->readAttr(SP_ATTR_INKSCAPE_SNAP_OBJECT_MIDPOINT);
-    this->readAttr(SP_ATTR_INKSCAPE_SNAP_TEXT_BASELINE);
-    this->readAttr(SP_ATTR_INKSCAPE_SNAP_BBOX_EDGE_MIDPOINT);
-    this->readAttr(SP_ATTR_INKSCAPE_SNAP_BBOX_MIDPOINT);
-    this->readAttr(SP_ATTR_INKSCAPE_SNAP_GUIDE);
-    this->readAttr(SP_ATTR_INKSCAPE_SNAP_GRID);
-    this->readAttr(SP_ATTR_INKSCAPE_SNAP_PATH_INTERSECTION);
-    this->readAttr(SP_ATTR_INKSCAPE_SNAP_PATH);
-    this->readAttr(SP_ATTR_INKSCAPE_SNAP_PERP);
-    this->readAttr(SP_ATTR_INKSCAPE_SNAP_TANG);
-    this->readAttr(SP_ATTR_INKSCAPE_SNAP_PATH_CLIP);
-    this->readAttr(SP_ATTR_INKSCAPE_SNAP_PATH_MASK);
-    this->readAttr(SP_ATTR_INKSCAPE_SNAP_NODE_CUSP);
-    this->readAttr(SP_ATTR_INKSCAPE_SNAP_BBOX_EDGE);
-    this->readAttr(SP_ATTR_INKSCAPE_SNAP_BBOX_CORNER);
-    this->readAttr(SP_ATTR_INKSCAPE_SNAP_PAGE_BORDER);
-    this->readAttr(SP_ATTR_INKSCAPE_CURRENT_LAYER);
-    this->readAttr(SP_ATTR_INKSCAPE_CONNECTOR_SPACING);
-    this->readAttr(SP_ATTR_INKSCAPE_LOCKGUIDES);
+    this->readAttr(SPAttr::INKSCAPE_DOCUMENT_UNITS);
+    this->readAttr(SPAttr::UNITS);
+    this->readAttr(SPAttr::VIEWONLY);
+    this->readAttr(SPAttr::SHOWGUIDES);
+    this->readAttr(SPAttr::SHOWGRIDS);
+    this->readAttr(SPAttr::GRIDTOLERANCE);
+    this->readAttr(SPAttr::GUIDETOLERANCE);
+    this->readAttr(SPAttr::OBJECTTOLERANCE);
+    this->readAttr(SPAttr::GUIDECOLOR);
+    this->readAttr(SPAttr::GUIDEOPACITY);
+    this->readAttr(SPAttr::GUIDEHICOLOR);
+    this->readAttr(SPAttr::GUIDEHIOPACITY);
+    this->readAttr(SPAttr::SHOWBORDER);
+    this->readAttr(SPAttr::SHOWPAGESHADOW);
+    this->readAttr(SPAttr::BORDERLAYER);
+    this->readAttr(SPAttr::BORDERCOLOR);
+    this->readAttr(SPAttr::BORDEROPACITY);
+    this->readAttr(SPAttr::PAGECOLOR);
+    this->readAttr(SPAttr::INKSCAPE_PAGECHECKERBOARD);
+    this->readAttr(SPAttr::INKSCAPE_PAGEOPACITY);
+    this->readAttr(SPAttr::INKSCAPE_PAGESHADOW);
+    this->readAttr(SPAttr::INKSCAPE_ZOOM);
+    this->readAttr(SPAttr::INKSCAPE_ROTATION);
+    this->readAttr(SPAttr::INKSCAPE_CX);
+    this->readAttr(SPAttr::INKSCAPE_CY);
+    this->readAttr(SPAttr::INKSCAPE_WINDOW_WIDTH);
+    this->readAttr(SPAttr::INKSCAPE_WINDOW_HEIGHT);
+    this->readAttr(SPAttr::INKSCAPE_WINDOW_X);
+    this->readAttr(SPAttr::INKSCAPE_WINDOW_Y);
+    this->readAttr(SPAttr::INKSCAPE_WINDOW_MAXIMIZED);
+    this->readAttr(SPAttr::INKSCAPE_SNAP_GLOBAL);
+    this->readAttr(SPAttr::INKSCAPE_SNAP_BBOX);
+    this->readAttr(SPAttr::INKSCAPE_SNAP_NODE);
+    this->readAttr(SPAttr::INKSCAPE_SNAP_OTHERS);
+    this->readAttr(SPAttr::INKSCAPE_SNAP_FROM_GUIDE);
+    this->readAttr(SPAttr::INKSCAPE_SNAP_ROTATION_CENTER);
+    this->readAttr(SPAttr::INKSCAPE_SNAP_NODE_SMOOTH);
+    this->readAttr(SPAttr::INKSCAPE_SNAP_LINE_MIDPOINT);
+    this->readAttr(SPAttr::INKSCAPE_SNAP_OBJECT_MIDPOINT);
+    this->readAttr(SPAttr::INKSCAPE_SNAP_TEXT_BASELINE);
+    this->readAttr(SPAttr::INKSCAPE_SNAP_BBOX_EDGE_MIDPOINT);
+    this->readAttr(SPAttr::INKSCAPE_SNAP_BBOX_MIDPOINT);
+    this->readAttr(SPAttr::INKSCAPE_SNAP_GUIDE);
+    this->readAttr(SPAttr::INKSCAPE_SNAP_GRID);
+    this->readAttr(SPAttr::INKSCAPE_SNAP_PATH_INTERSECTION);
+    this->readAttr(SPAttr::INKSCAPE_SNAP_PATH);
+    this->readAttr(SPAttr::INKSCAPE_SNAP_PERP);
+    this->readAttr(SPAttr::INKSCAPE_SNAP_TANG);
+    this->readAttr(SPAttr::INKSCAPE_SNAP_PATH_CLIP);
+    this->readAttr(SPAttr::INKSCAPE_SNAP_PATH_MASK);
+    this->readAttr(SPAttr::INKSCAPE_SNAP_NODE_CUSP);
+    this->readAttr(SPAttr::INKSCAPE_SNAP_BBOX_EDGE);
+    this->readAttr(SPAttr::INKSCAPE_SNAP_BBOX_CORNER);
+    this->readAttr(SPAttr::INKSCAPE_SNAP_PAGE_BORDER);
+    this->readAttr(SPAttr::INKSCAPE_CURRENT_LAYER);
+    this->readAttr(SPAttr::INKSCAPE_CONNECTOR_SPACING);
+    this->readAttr(SPAttr::INKSCAPE_LOCKGUIDES);
 
     /* Construct guideline list */
     for (auto& o: children) {
@@ -257,7 +257,7 @@ void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
             //g_object_set(G_OBJECT(g), "color", nv->guidecolor, "hicolor", nv->guidehicolor, NULL);
             g->setColor(this->guidecolor);
             g->setHiColor(this->guidehicolor);
-            g->readAttr(SP_ATTR_INKSCAPE_COLOR);
+            g->readAttr(SPAttr::INKSCAPE_COLOR);
         }
     }
 
@@ -275,15 +275,15 @@ void SPNamedView::release() {
     SPObjectGroup::release();
 }
 
-void SPNamedView::set(SPAttributeEnum key, const gchar* value) {
+void SPNamedView::set(SPAttr key, const gchar* value) {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool global_snapping = prefs->getBool("/options/snapdefault/value", true);
     switch (key) {
-    case SP_ATTR_VIEWONLY:
+    case SPAttr::VIEWONLY:
             this->editable = (!value);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_SHOWGUIDES:
+    case SPAttr::SHOWGUIDES:
             if (!value) { // show guides if not specified, for backwards compatibility
                 this->showguides = TRUE;
             } else {
@@ -292,7 +292,7 @@ void SPNamedView::set(SPAttributeEnum key, const gchar* value) {
             sp_namedview_setup_guides(this);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_SHOWGRIDS:
+    case SPAttr::SHOWGRIDS:
             if (!value) { // don't show grids if not specified, for backwards compatibility
                 this->grids_visible = false;
             } else {
@@ -300,19 +300,19 @@ void SPNamedView::set(SPAttributeEnum key, const gchar* value) {
             }
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_GRIDTOLERANCE:
+    case SPAttr::GRIDTOLERANCE:
             this->snap_manager.snapprefs.setGridTolerance(value ? g_ascii_strtod(value, nullptr) : 10000);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_GUIDETOLERANCE:
+    case SPAttr::GUIDETOLERANCE:
             this->snap_manager.snapprefs.setGuideTolerance(value ? g_ascii_strtod(value, nullptr) : 20);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_OBJECTTOLERANCE:
+    case SPAttr::OBJECTTOLERANCE:
             this->snap_manager.snapprefs.setObjectTolerance(value ? g_ascii_strtod(value, nullptr) : 20);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_GUIDECOLOR:
+    case SPAttr::GUIDECOLOR:
             this->guidecolor = (this->guidecolor & 0xff) | (DEFAULTGUIDECOLOR & 0xffffff00);
 
             if (value) {
@@ -321,23 +321,23 @@ void SPNamedView::set(SPAttributeEnum key, const gchar* value) {
 
             for(auto guide : this->guides) {
                 guide->setColor(this->guidecolor);
-                guide->readAttr(SP_ATTR_INKSCAPE_COLOR);
+                guide->readAttr(SPAttr::INKSCAPE_COLOR);
             }
 
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_GUIDEOPACITY:
+    case SPAttr::GUIDEOPACITY:
             this->guidecolor = (this->guidecolor & 0xffffff00) | (DEFAULTGUIDECOLOR & 0xff);
             sp_nv_read_opacity(value, &this->guidecolor);
 
             for(auto guide : this->guides) {
                 guide->setColor(this->guidecolor);
-                guide->readAttr(SP_ATTR_INKSCAPE_COLOR);
+                guide->readAttr(SPAttr::INKSCAPE_COLOR);
             }
 
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_GUIDEHICOLOR:
+    case SPAttr::GUIDEHICOLOR:
             this->guidehicolor = (this->guidehicolor & 0xff) | (DEFAULTGUIDEHICOLOR & 0xffffff00);
 
             if (value) {
@@ -349,7 +349,7 @@ void SPNamedView::set(SPAttributeEnum key, const gchar* value) {
 
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_GUIDEHIOPACITY:
+    case SPAttr::GUIDEHIOPACITY:
             this->guidehicolor = (this->guidehicolor & 0xffffff00) | (DEFAULTGUIDEHICOLOR & 0xff);
             sp_nv_read_opacity(value, &this->guidehicolor);
             for(auto guide : this->guides) {
@@ -358,189 +358,189 @@ void SPNamedView::set(SPAttributeEnum key, const gchar* value) {
 
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_SHOWBORDER:
+    case SPAttr::SHOWBORDER:
             this->showborder = (value) ? sp_str_to_bool (value) : TRUE;
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_BORDERLAYER:
+    case SPAttr::BORDERLAYER:
             this->borderlayer = SP_BORDER_LAYER_BOTTOM;
             if (value && !strcasecmp(value, "true")) this->borderlayer = SP_BORDER_LAYER_TOP;
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_BORDERCOLOR:
+    case SPAttr::BORDERCOLOR:
             this->bordercolor = (this->bordercolor & 0xff) | (DEFAULTBORDERCOLOR & 0xffffff00);
             if (value) {
                 this->bordercolor = (this->bordercolor & 0xff) | sp_svg_read_color (value, this->bordercolor);
             }
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_BORDEROPACITY:
+    case SPAttr::BORDEROPACITY:
             this->bordercolor = (this->bordercolor & 0xffffff00) | (DEFAULTBORDERCOLOR & 0xff);
             sp_nv_read_opacity(value, &this->bordercolor);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_PAGECOLOR:
+    case SPAttr::PAGECOLOR:
             this->pagecolor = (this->pagecolor & 0xff) | (DEFAULTPAGECOLOR & 0xffffff00);
             if (value) {
                 this->pagecolor = (this->pagecolor & 0xff) | sp_svg_read_color(value, this->pagecolor);
             }
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_PAGECHECKERBOARD:
+    case SPAttr::INKSCAPE_PAGECHECKERBOARD:
             this->pagecheckerboard = (value) ? sp_str_to_bool (value) : false;
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_PAGEOPACITY:
+    case SPAttr::INKSCAPE_PAGEOPACITY:
             this->pagecolor = (this->pagecolor & 0xffffff00) | (DEFAULTPAGECOLOR & 0xff);
             sp_nv_read_opacity(value, &this->pagecolor);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_PAGESHADOW:
+    case SPAttr::INKSCAPE_PAGESHADOW:
             this->pageshadow = value? atoi(value) : 2; // 2 is the default
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_SHOWPAGESHADOW:
+    case SPAttr::SHOWPAGESHADOW:
             this->showpageshadow = (value) ? sp_str_to_bool(value) : TRUE;
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_ZOOM:
+    case SPAttr::INKSCAPE_ZOOM:
             this->zoom = value ? g_ascii_strtod(value, nullptr) : 0; // zero means not set
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_ROTATION:
+    case SPAttr::INKSCAPE_ROTATION:
             this->rotation = value ? g_ascii_strtod(value, nullptr) : 0; // zero means not set
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_CX:
+    case SPAttr::INKSCAPE_CX:
             this->cx = value ? g_ascii_strtod(value, nullptr) : HUGE_VAL; // HUGE_VAL means not set
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_CY:
+    case SPAttr::INKSCAPE_CY:
             this->cy = value ? g_ascii_strtod(value, nullptr) : HUGE_VAL; // HUGE_VAL means not set
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_WINDOW_WIDTH:
+    case SPAttr::INKSCAPE_WINDOW_WIDTH:
             this->window_width = value? atoi(value) : -1; // -1 means not set
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_WINDOW_HEIGHT:
+    case SPAttr::INKSCAPE_WINDOW_HEIGHT:
             this->window_height = value ? atoi(value) : -1; // -1 means not set
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_WINDOW_X:
+    case SPAttr::INKSCAPE_WINDOW_X:
             this->window_x = value ? atoi(value) : 0;
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_WINDOW_Y:
+    case SPAttr::INKSCAPE_WINDOW_Y:
             this->window_y = value ? atoi(value) : 0;
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_WINDOW_MAXIMIZED:
+    case SPAttr::INKSCAPE_WINDOW_MAXIMIZED:
             this->window_maximized = value ? atoi(value) : 0;
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_SNAP_GLOBAL:
+    case SPAttr::INKSCAPE_SNAP_GLOBAL:
             this->snap_manager.snapprefs.setSnapEnabledGlobally(value ? sp_str_to_bool(value) : global_snapping);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_SNAP_BBOX:
+    case SPAttr::INKSCAPE_SNAP_BBOX:
             this->snap_manager.snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_BBOX_CATEGORY, value ? sp_str_to_bool(value) : FALSE);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_SNAP_NODE:
+    case SPAttr::INKSCAPE_SNAP_NODE:
             this->snap_manager.snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_NODE_CATEGORY, value ? sp_str_to_bool(value) : TRUE);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_SNAP_OTHERS:
+    case SPAttr::INKSCAPE_SNAP_OTHERS:
             this->snap_manager.snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_OTHERS_CATEGORY, value ? sp_str_to_bool(value) : TRUE);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_SNAP_ROTATION_CENTER:
+    case SPAttr::INKSCAPE_SNAP_ROTATION_CENTER:
             this->snap_manager.snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_ROTATION_CENTER, value ? sp_str_to_bool(value) : FALSE);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_SNAP_GRID:
+    case SPAttr::INKSCAPE_SNAP_GRID:
             this->snap_manager.snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_GRID, value ? sp_str_to_bool(value) : TRUE);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_SNAP_GUIDE:
+    case SPAttr::INKSCAPE_SNAP_GUIDE:
             this->snap_manager.snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_GUIDE, value ? sp_str_to_bool(value) : TRUE);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_SNAP_NODE_SMOOTH:
+    case SPAttr::INKSCAPE_SNAP_NODE_SMOOTH:
             this->snap_manager.snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_NODE_SMOOTH, value ? sp_str_to_bool(value) : FALSE);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_SNAP_LINE_MIDPOINT:
+    case SPAttr::INKSCAPE_SNAP_LINE_MIDPOINT:
             this->snap_manager.snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_LINE_MIDPOINT, value ? sp_str_to_bool(value) : FALSE);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_SNAP_OBJECT_MIDPOINT:
+    case SPAttr::INKSCAPE_SNAP_OBJECT_MIDPOINT:
             this->snap_manager.snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_OBJECT_MIDPOINT, value ? sp_str_to_bool(value) : FALSE);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_SNAP_TEXT_BASELINE:
+    case SPAttr::INKSCAPE_SNAP_TEXT_BASELINE:
             this->snap_manager.snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_TEXT_BASELINE, value ? sp_str_to_bool(value) : FALSE);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_SNAP_BBOX_EDGE_MIDPOINT:
+    case SPAttr::INKSCAPE_SNAP_BBOX_EDGE_MIDPOINT:
             this->snap_manager.snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_BBOX_EDGE_MIDPOINT, value ? sp_str_to_bool(value) : FALSE);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_SNAP_BBOX_MIDPOINT:
+    case SPAttr::INKSCAPE_SNAP_BBOX_MIDPOINT:
             this->snap_manager.snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_BBOX_MIDPOINT, value ? sp_str_to_bool(value) : FALSE);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_SNAP_PATH_INTERSECTION:
+    case SPAttr::INKSCAPE_SNAP_PATH_INTERSECTION:
             this->snap_manager.snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_PATH_INTERSECTION, value ? sp_str_to_bool(value) : FALSE);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_SNAP_PATH:
+    case SPAttr::INKSCAPE_SNAP_PATH:
             this->snap_manager.snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_PATH, value ? sp_str_to_bool(value) : FALSE);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_SNAP_PERP:
+    case SPAttr::INKSCAPE_SNAP_PERP:
             this->snap_manager.snapprefs.setSnapPerp(value ? sp_str_to_bool(value) : FALSE);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_SNAP_TANG:
+    case SPAttr::INKSCAPE_SNAP_TANG:
             this->snap_manager.snapprefs.setSnapTang(value ? sp_str_to_bool(value) : FALSE);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_SNAP_PATH_CLIP:
+    case SPAttr::INKSCAPE_SNAP_PATH_CLIP:
             this->snap_manager.snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_PATH_CLIP, value ? sp_str_to_bool(value) : FALSE);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_SNAP_PATH_MASK:
+    case SPAttr::INKSCAPE_SNAP_PATH_MASK:
             this->snap_manager.snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_PATH_MASK, value ? sp_str_to_bool(value) : FALSE);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_SNAP_NODE_CUSP:
+    case SPAttr::INKSCAPE_SNAP_NODE_CUSP:
             this->snap_manager.snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_NODE_CUSP, value ? sp_str_to_bool(value) : TRUE);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_SNAP_BBOX_EDGE:
+    case SPAttr::INKSCAPE_SNAP_BBOX_EDGE:
             this->snap_manager.snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_BBOX_EDGE, value ? sp_str_to_bool(value) : FALSE);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_SNAP_BBOX_CORNER:
+    case SPAttr::INKSCAPE_SNAP_BBOX_CORNER:
             this->snap_manager.snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_BBOX_CORNER, value ? sp_str_to_bool(value) : FALSE);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_SNAP_PAGE_BORDER:
+    case SPAttr::INKSCAPE_SNAP_PAGE_BORDER:
             this->snap_manager.snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_PAGE_BORDER, value ? sp_str_to_bool(value) : FALSE);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_CURRENT_LAYER:
+    case SPAttr::INKSCAPE_CURRENT_LAYER:
             this->default_layer_id = value ? g_quark_from_string(value) : 0;
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_CONNECTOR_SPACING:
+    case SPAttr::INKSCAPE_CONNECTOR_SPACING:
             this->connector_spacing = value ? g_ascii_strtod(value, nullptr) :
                     defaultConnSpacing;
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
-    case SP_ATTR_INKSCAPE_DOCUMENT_UNITS: {
+    case SPAttr::INKSCAPE_DOCUMENT_UNITS: {
             /* The default display unit if the document doesn't override this: e.g. for files saved as
              * `plain SVG', or non-inkscape files, or files created by an inkscape 0.40 &
              * earlier.
@@ -572,7 +572,7 @@ void SPNamedView::set(SPAttributeEnum key, const gchar* value) {
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     }
-    case SP_ATTR_UNITS: {
+    case SPAttr::UNITS: {
         // Only used in "Custom size" section of Document Properties dialog
             Inkscape::Util::Unit const *new_unit = nullptr;
 
@@ -596,7 +596,7 @@ void SPNamedView::set(SPAttributeEnum key, const gchar* value) {
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     }
-    case SP_ATTR_INKSCAPE_LOCKGUIDES:
+    case SPAttr::INKSCAPE_LOCKGUIDES:
             this->lockguides = value ? sp_str_to_bool(value) : FALSE;
             this->lockGuides();
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -664,7 +664,7 @@ void SPNamedView::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *r
             //g_object_set(G_OBJECT(g), "color", this->guidecolor, "hicolor", this->guidehicolor, NULL);
             g->setColor(this->guidecolor);
             g->setHiColor(this->guidehicolor);
-            g->readAttr(SP_ATTR_INKSCAPE_COLOR);
+            g->readAttr(SPAttr::INKSCAPE_COLOR);
 
             if (this->editable) {
                 for(auto view : this->views) {

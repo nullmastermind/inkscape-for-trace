@@ -78,11 +78,11 @@ SPUse::~SPUse() {
 void SPUse::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPItem::build(document, repr);
 
-    this->readAttr(SP_ATTR_X);
-    this->readAttr(SP_ATTR_Y);
-    this->readAttr(SP_ATTR_WIDTH);
-    this->readAttr(SP_ATTR_HEIGHT);
-    this->readAttr(SP_ATTR_XLINK_HREF);
+    this->readAttr(SPAttr::X);
+    this->readAttr(SPAttr::Y);
+    this->readAttr(SPAttr::WIDTH);
+    this->readAttr(SPAttr::HEIGHT);
+    this->readAttr(SPAttr::XLINK_HREF);
 
     // We don't need to create child here:
     // reading xlink:href will attach ref, and that will cause the changed signal to be emitted,
@@ -107,29 +107,29 @@ void SPUse::release() {
     SPItem::release();
 }
 
-void SPUse::set(SPAttributeEnum key, const gchar* value) {
+void SPUse::set(SPAttr key, const gchar* value) {
     switch (key) {
-        case SP_ATTR_X:
+        case SPAttr::X:
             this->x.readOrUnset(value);
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_Y:
+        case SPAttr::Y:
             this->y.readOrUnset(value);
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_WIDTH:
+        case SPAttr::WIDTH:
             this->width.readOrUnset(value, SVGLength::PERCENT, 1.0, 1.0);
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_HEIGHT:
+        case SPAttr::HEIGHT:
             this->height.readOrUnset(value, SVGLength::PERCENT, 1.0, 1.0);
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 
-        case SP_ATTR_XLINK_HREF: {
+        case SPAttr::XLINK_HREF: {
             if ( value && this->href && ( strcmp(value, this->href) == 0 ) ) {
                 /* No change, do nothing. */
             } else {
@@ -456,7 +456,7 @@ void SPUse::move_compensate(Geom::Affine const *mp) {
     }
 
     // restore item->transform field from the repr, in case it was changed by seltrans
-    this->readAttr (SP_ATTR_TRANSFORM);
+    this->readAttr (SPAttr::TRANSFORM);
 
 
     // calculate the compensation matrix and the advertized movement matrix

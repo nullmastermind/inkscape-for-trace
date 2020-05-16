@@ -88,7 +88,7 @@ protected:
     void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) override;
     void remove_child(Inkscape::XML::Node* child) override;
 
-    void set(SPAttributeEnum key, const char* value) override;
+    void set(SPAttr key, const char* value) override;
 
     void update(SPCtx* ctx, unsigned int flags) override;
 

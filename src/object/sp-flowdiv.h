@@ -43,7 +43,7 @@ protected:
 	void update(SPCtx* ctx, unsigned int flags) override;
 	void modified(unsigned int flags) override;
 
-	void set(SPAttributeEnum key, char const* value) override;
+	void set(SPAttr key, char const* value) override;
 	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 };
 
@@ -58,7 +58,7 @@ protected:
 	void update(SPCtx* ctx, unsigned int flags) override;
 	void modified(unsigned int flags) override;
 
-	void set(SPAttributeEnum key, char const* value) override;
+	void set(SPAttr key, char const* value) override;
 	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 };
 
@@ -73,7 +73,7 @@ protected:
 	void update(SPCtx* ctx, unsigned int flags) override;
 	void modified(unsigned int flags) override;
 
-	void set(SPAttributeEnum key, char const* value) override;
+	void set(SPAttr key, char const* value) override;
 	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 };
 

@@ -13,7 +13,7 @@
 
 #include "toolbar.h"
 
-enum SPAttributeEnum : unsigned;
+enum class SPAttr;
 
 namespace Inkscape {
 namespace UI {
@@ -43,7 +43,7 @@ private:
     Gtk::ToggleToolButton *_snap_to_grids_item;
     Gtk::ToggleToolButton *_snap_to_guides_item;
 
-    void on_snap_toggled(SPAttributeEnum attr);
+    void on_snap_toggled(SPAttr attr);
 
 protected:
     SnapToolbar(SPDesktop *desktop);

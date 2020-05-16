@@ -28,16 +28,16 @@ SPSolidColor::~SPSolidColor() = default;
 void SPSolidColor::build(SPDocument* doc, Inkscape::XML::Node* repr) {
     SPPaintServer::build(doc, repr);
 
-    this->readAttr(SP_ATTR_STYLE);
-    this->readAttr(SP_PROP_SOLID_COLOR);
-    this->readAttr(SP_PROP_SOLID_OPACITY);
+    this->readAttr(SPAttr::STYLE);
+    this->readAttr(SPAttr::SOLID_COLOR);
+    this->readAttr(SPAttr::SOLID_OPACITY);
 }
 
 /**
  * Virtual build: set solidcolor attributes from its associated XML node.
  */
 
-void SPSolidColor::set(SPAttributeEnum key, const gchar* value) {
+void SPSolidColor::set(SPAttr key, const gchar* value) {
 
     if (SP_ATTRIBUTE_IS_CSS(key)) {
         style->clear(key);
