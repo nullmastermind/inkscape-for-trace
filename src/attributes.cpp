@@ -603,10 +603,7 @@ sp_attribute_lookup(gchar const *key)
 gchar const *
 sp_attribute_name(SPAttr id)
 {
-    if ((int)id >= n_attrs) {
-        return nullptr;
-    }
-
+    g_assert((int)id < n_attrs);
     return props[(int)id].name;
 }
 
