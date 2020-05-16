@@ -35,7 +35,7 @@ SPFeMergeNode::~SPFeMergeNode() = default;
  * sp-object-repr.cpp's repr_name_entries array.
  */
 void SPFeMergeNode::build(SPDocument */*document*/, Inkscape::XML::Node */*repr*/) {
-	this->readAttr(SPAttr::IN);
+	this->readAttr(SPAttr::IN_);
 }
 
 /**
@@ -51,7 +51,7 @@ void SPFeMergeNode::release() {
 void SPFeMergeNode::set(SPAttr key, gchar const *value) {
     SPFeMerge *parent = SP_FEMERGE(this->parent);
 
-    if (key == SPAttr::IN) {
+    if (key == SPAttr::IN_) {
         int input = parent->read_in(value);
         if (input != this->input) {
             this->input = input;

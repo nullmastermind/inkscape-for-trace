@@ -221,7 +221,7 @@ static SPStyleProp const props[] = {
     {SPAttr::PRIMITIVEUNITS, "primitiveUnits"},
     {SPAttr::FILTERRES, "filterRes"},
     /* Filter primitives common */
-    {SPAttr::IN, "in"},
+    {SPAttr::IN_, "in"},
     {SPAttr::RESULT, "result"},
     /*feBlend*/
     {SPAttr::MODE, "mode"},

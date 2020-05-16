@@ -2098,7 +2098,7 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
             // Draw "in" connection
             if(_in_drag != 1 || row_prim != prim)
 		{
-                draw_connection(cr, row, SPAttr::IN, text_start_x, outline_x, con_poly[2].get_y(), row_count, -1);
+                draw_connection(cr, row, SPAttr::IN_, text_start_x, outline_x, con_poly[2].get_y(), row_count, -1);
 		}
 
             if(inputs == 2) {
@@ -2282,7 +2282,7 @@ const Gtk::TreeIter FilterEffectsDialog::PrimitiveList::find_result(const Gtk::T
             return target;
     }
     else {
-        if(attr == SPAttr::IN)
+        if(attr == SPAttr::IN_)
             image = prim->image_in;
         else if(attr == SPAttr::IN2) {
             if(SP_IS_FEBLEND(prim))
@@ -2474,7 +2474,7 @@ bool FilterEffectsDialog::PrimitiveList::on_button_release_event(GdkEventButton*
                                                _("Remove merge node"));
                             (*get_selection()->get_selected())[_columns.primitive] = prim;
                         } else {
-                            _dialog.set_attr(&o, SPAttr::IN, in_val);
+                            _dialog.set_attr(&o, SPAttr::IN_, in_val);
                         }
                         handled = true;
                         break;
@@ -2491,13 +2491,13 @@ bool FilterEffectsDialog::PrimitiveList::on_button_release_event(GdkEventButton*
                     prim->getRepr()->appendChild(repr);
                     SPFeMergeNode *node = SP_FEMERGENODE(prim->document->getObjectByRepr(repr));
                     Inkscape::GC::release(repr);
-                    _dialog.set_attr(node, SPAttr::IN, in_val);
+                    _dialog.set_attr(node, SPAttr::IN_, in_val);
                     (*get_selection()->get_selected())[_columns.primitive] = prim;
                 }
             }
             else {
                 if(_in_drag == 1)
-                    _dialog.set_attr(prim, SPAttr::IN, in_val);
+                    _dialog.set_attr(prim, SPAttr::IN_, in_val);
                 else if(_in_drag == 2)
                     _dialog.set_attr(prim, SPAttr::IN2, in_val);
             }

@@ -505,7 +505,7 @@ SPStyle::clear(SPAttr id) {
     if (p) {
         p->clear();
     } else {
-        g_warning("Unimplemented style property %d", id);
+        g_warning("Unimplemented style property %d", (int)id);
     }
 }
 
@@ -711,7 +711,7 @@ SPStyle::readIfUnset(SPAttr id, gchar const *val, SPStyleSrc const &source ) {
     if (p) {
         p->readIfUnset(val, source);
     } else {
-        g_warning("Unimplemented style property %d", id);
+        g_warning("Unimplemented style property %d", (int)id);
     }
 }
 
@@ -737,7 +737,7 @@ bool SPStyle::isSet(SPAttr id)
     if (p) {
         return p->set;
     } else {
-        g_warning("Unimplemented style property %d", id);
+        g_warning("Unimplemented style property %d", (int)id);
         return set;
     }
 }

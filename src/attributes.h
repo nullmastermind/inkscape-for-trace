@@ -220,7 +220,7 @@ enum class SPAttr {
     PRIMITIVEUNITS,
     FILTERRES,
     /* Filter primitives common */
-    IN,
+    IN_,
     RESULT,
     /*feBlend*/
     MODE,

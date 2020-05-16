@@ -56,7 +56,7 @@ void SPFilterPrimitive::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPFilterPrimitive* object = this;
 
     object->readAttr(SPAttr::STYLE); // struct not derived from SPItem, we need to do this ourselves.
-    object->readAttr(SPAttr::IN);
+    object->readAttr(SPAttr::IN_);
     object->readAttr(SPAttr::RESULT);
     object->readAttr(SPAttr::X);
     object->readAttr(SPAttr::Y);
@@ -80,7 +80,7 @@ void SPFilterPrimitive::set(SPAttr key, gchar const *value) {
 
     int image_nr;
     switch (key) {
-        case SPAttr::IN:
+        case SPAttr::IN_:
             if (value) {
                 image_nr = this->read_in(value);
             } else {
