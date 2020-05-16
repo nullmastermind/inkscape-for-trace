@@ -139,7 +139,7 @@ class SPStylePropHelper {
 
         REGISTER_PROPERTY(SPAttr::CLIP_RULE, clip_rule, "clip-rule");
         REGISTER_PROPERTY(SPAttr::DISPLAY, display, "display");
-        REGISTER_PROPERTY(SPAttr::OVERFLOW, overflow, "overflow");
+        REGISTER_PROPERTY(SPAttr::OVERFLOW_, overflow, "overflow");
         REGISTER_PROPERTY(SPAttr::VISIBILITY, visibility, "visibility");
         REGISTER_PROPERTY(SPAttr::OPACITY, opacity, "opacity");
 

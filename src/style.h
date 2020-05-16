@@ -208,7 +208,7 @@ public:
     T<SPAttr::DISPLAY, SPIEnum<SPCSSDisplay>> display;
 
     /** overflow */
-    T<SPAttr::OVERFLOW, SPIEnum<SPOverflow>> overflow;
+    T<SPAttr::OVERFLOW_, SPIEnum<SPOverflow>> overflow;
 
     /** visibility */
     T<SPAttr::VISIBILITY, SPIEnum<SPVisibility>> visibility;

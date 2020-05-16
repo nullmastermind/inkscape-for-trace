@@ -458,7 +458,7 @@ enum class SPAttr {
 
     /* Misc. Display */
     DISPLAY,
-    OVERFLOW,
+    OVERFLOW_,
     VISIBILITY,
 
     /* Clip/Mask */

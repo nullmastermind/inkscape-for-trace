@@ -456,7 +456,7 @@ static SPStyleProp const props[] = {
 
     /* Misc. Display */
     {SPAttr::DISPLAY, "display"},
-    {SPAttr::OVERFLOW, "overflow"},
+    {SPAttr::OVERFLOW_, "overflow"},
     {SPAttr::VISIBILITY, "visibility"},
 
     /* Clip/Mask */
