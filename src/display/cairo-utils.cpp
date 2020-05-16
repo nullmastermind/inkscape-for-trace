@@ -463,11 +463,14 @@ Pixbuf *Pixbuf::create_from_buffer(gchar *&&data, gsize len, double svgdpi, std:
                 const int scaledSvgWidth  = round(svgWidth_px/(96.0/dpi));
                 const int scaledSvgHeight = round(svgHeight_px/(96.0/dpi));
 
-                buf = sp_generate_internal_bitmap(svgDoc, nullptr, 0, 0, svgWidth_px, svgHeight_px, scaledSvgWidth, scaledSvgHeight, dpi, dpi, (guint32) 0xffffff00, nullptr)->getPixbufRaw();
+                pb = sp_generate_internal_bitmap(svgDoc, nullptr, 0, 0, svgWidth_px, svgHeight_px, scaledSvgWidth,
+                                                 scaledSvgHeight, dpi, dpi, 0xffffff00);
+                buf = pb->getPixbufRaw();
 
                 // Tidy up
                 svgDoc->doUnref();
                 if (buf == nullptr) {
+                    delete pb;
                     return nullptr;
                 }
                 is_svg = true;
@@ -494,11 +497,14 @@ Pixbuf *Pixbuf::create_from_buffer(gchar *&&data, gsize len, double svgdpi, std:
             }
             
             buf = gdk_pixbuf_loader_get_pixbuf(loader);
+            if (buf) {
+                // gdk_pixbuf_loader_get_pixbuf returns a borrowed reference
+                g_object_ref(buf);
+                pb = new Pixbuf(buf);
+            }
         }
 
-        if (buf) {
-            g_object_ref(buf);
-            pb = new Pixbuf(buf);
+        if (pb) {
             pb->_path = fn;
             if (!is_svg) {
                 GdkPixbufFormat *fmt = gdk_pixbuf_loader_get_format(loader);
