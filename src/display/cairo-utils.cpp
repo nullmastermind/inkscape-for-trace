@@ -351,16 +351,19 @@ Pixbuf *Pixbuf::create_from_data_uri(gchar const *uri_data, double svgdpi)
         const int scaledSvgWidth  = round(svgWidth_px/(96.0/dpi));
         const int scaledSvgHeight = round(svgHeight_px/(96.0/dpi));
 
-        GdkPixbuf *buf = sp_generate_internal_bitmap(svgDoc, nullptr, 0, 0, svgWidth_px, svgHeight_px, scaledSvgWidth, scaledSvgHeight, dpi, dpi, (guint32) 0xffffff00, nullptr)->getPixbufRaw();
+        assert(!pixbuf);
+        pixbuf = sp_generate_internal_bitmap(svgDoc, nullptr, 0, 0, svgWidth_px, svgHeight_px, scaledSvgWidth,
+                                             scaledSvgHeight, dpi, dpi, 0xffffff00, nullptr);
+        GdkPixbuf const *buf = pixbuf->getPixbufRaw();
+
         // Tidy up
         svgDoc->doUnref();
         if (buf == nullptr) {
             std::cerr << "Pixbuf::create_from_data: failed to load contents: " << std::endl;
+            delete pixbuf;
             g_free(decoded);
             return nullptr;
         } else {
-            g_object_ref(buf);
-            pixbuf = new Pixbuf(buf);
             pixbuf->_setMimeData(decoded, decoded_len, "svg+xml");
         }
     }

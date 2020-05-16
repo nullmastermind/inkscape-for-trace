@@ -1044,7 +1044,8 @@ bool FileOpenDialogImplWin32::set_svg_preview()
 
     // Create the GDK pixbuf
     _mutex->lock();
-    _preview_bitmap_image = Glib::wrap(pixbuf->getPixbufRaw());
+    _preview_bitmap_image = Glib::wrap(pixbuf->getPixbufRaw(), /* ref */ true);
+    delete pixbuf;
     _preview_document_width = svgWidth_px;
     _preview_document_height = svgHeight_px;
     _preview_image_width = scaledSvgWidth;
