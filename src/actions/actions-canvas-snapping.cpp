@@ -244,7 +244,12 @@ add_actions_canvas_snapping(SPDocument* document)
     map->add_action_bool( "snap-path-mask",          sigc::bind<SPDocument*, int>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SP_ATTR_INKSCAPE_SNAP_PATH_MASK));
     map->add_action_bool( "snap-path-clip",          sigc::bind<SPDocument*, int>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SP_ATTR_INKSCAPE_SNAP_PATH_CLIP));
 
-    auto app = &(ConcreteInkscapeApplication<Gtk::Application>::get_instance());
+    // check if there is already an application instance (GUI or non-GUI)
+    auto app = dynamic_cast<InkscapeApplication *>(Gio::Application::get_default().get());
+    if (!app) {
+        // fallback: create a non-GUI instance
+        app = &(ConcreteInkscapeApplication<Gio::Application>::get_instance());
+    }
     app->get_action_extra_data().add_data(raw_data_canvas_snapping);
 }
 
