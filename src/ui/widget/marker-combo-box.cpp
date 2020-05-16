@@ -223,20 +223,6 @@ const gchar * MarkerComboBox::get_active_marker_uri()
     return marker;
 }
 
-void MarkerComboBox::set_active_history() {
-
-    const gchar *markid = get_active()->get_value(marker_columns.marker);
-
-    // If forked from a stockid, add the stockid
-    SPObject const *marker = doc->getObjectById(markid);
-    if (marker && marker->getRepr()->attribute("inkscape:stockid")) {
-        markid = marker->getRepr()->attribute("inkscape:stockid");
-    }
-
-    set_selected(markid);
-}
-
-
 void MarkerComboBox::set_selected(const gchar *name, gboolean retry/*=true*/) {
 
     if (!name) {

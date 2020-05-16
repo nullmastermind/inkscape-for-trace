@@ -125,7 +125,6 @@ private:
 
     void updateLine();
     void updateAllMarkers(std::vector<SPItem*> const &objects, bool skip_undo = false);
-    void updateMarkerHist(SPMarkerLoc const which);
     void setDashSelectorFromStyle(Inkscape::UI::Widget::DashSelector *dsel, SPStyle *style);
     void setJoinType (unsigned const jointype);
     void setCapType (unsigned const captype);

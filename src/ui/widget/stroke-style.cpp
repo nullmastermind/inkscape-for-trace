@@ -460,11 +460,6 @@ void StrokeStyle::markerSelectCB(MarkerComboBox *marker_combo, StrokeStyle *spw,
     gchar const *combo_id = marker_combo->get_id();
     sp_repr_css_set_property(css, combo_id, marker);
 
-    // Also update the marker combobox, so the document's markers
-    // show up at the top of the combobox
-//    sp_stroke_style_line_update( SP_WIDGET(spw), desktop ? desktop->getSelection() : NULL);
-    //spw->updateMarkerHist(which);
-
     Inkscape::Selection *selection = spw->desktop->getSelection();
     auto itemlist= selection->items();
     for(auto i=itemlist.begin();i!=itemlist.end();++i){
@@ -488,31 +483,6 @@ void StrokeStyle::markerSelectCB(MarkerComboBox *marker_combo, StrokeStyle *spw,
 
     spw->update = false;
 };
-
-void StrokeStyle::updateMarkerHist(SPMarkerLoc const which)
-{
-    switch (which) {
-        case SP_MARKER_LOC_START:
-            startMarkerConn.block();
-            startMarkerCombo->set_active_history();
-            startMarkerConn.unblock();
-            break;
-
-        case SP_MARKER_LOC_MID:
-            midMarkerConn.block();
-            midMarkerCombo->set_active_history();
-            midMarkerConn.unblock();
-            break;
-
-        case SP_MARKER_LOC_END:
-            endMarkerConn.block();
-            endMarkerCombo->set_active_history();
-            endMarkerConn.unblock();
-            break;
-        default:
-            g_assert_not_reached();
-    }
-}
 
 /**
  * Callback for when UnitMenu widget is modified.
