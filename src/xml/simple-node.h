@@ -21,7 +21,6 @@
 #include "xml/node.h"
 #include "xml/attribute-record.h"
 #include "xml/composite-node-observer.h"
-#include "util/list-container.h"
 
 namespace Inkscape {
 

@@ -18,8 +18,6 @@ set(util_SRC
 	fixed_point.h
 	format.h
 	forward-pointer-iterator.h
-	list-container-test.h
-	list-container.h
 	list-copy.h
 	list.h
 	longest-common-suffix.h
