@@ -262,7 +262,7 @@ test:linux:
     when: always
 
 
-# uploads the clang scan to user.gitlab.io/inkscape/
+# uploads the clang scan and documentation to user.gitlab.io/inkscape/
 pages:
   stage: deploy
   cache:
@@ -278,8 +278,8 @@ pages:
     - mkdir -p public/
     - sed "s/%DATE%/$(date '+%B %d, %Y')/" buildtools/ci-index.html > public/index.html
     - if test -e scan; then rm -fr public/scan-build && cp -rv scan/* public/scan-build; fi
-    - if test -e doc/doxygen; then cp -rv doc/doxygen/html/. public/doxygen; fi
-    - if test -e doc/doxygen-extensions; then cp -rv doc/doxygen-extensions/html/. public/doxygen-extensions; fi
+    - if test -e doc/doxygen; then rm -fr public/doxygen && cp -rv doc/doxygen/html/. public/doxygen; fi
+    - if test -e doc/doxygen-extensions; then rm -fr public/doxygen-extensions && cp -rv doc/doxygen-extensions/html/. public/doxygen-extensions; fi
   artifacts:
     paths:
       - public
