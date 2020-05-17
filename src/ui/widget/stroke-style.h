@@ -134,9 +134,6 @@ private:
     void setPaintOrderButtons(Gtk::ToggleButton *active);
     void scaleLine();
     void setScaledDash(SPCSSAttr *css, int ndash, double *dash, double offset, double scale);
-    void setMarkerColor(SPObject *marker, int loc, SPItem *item);
-    SPObject *forkMarker(SPObject *marker, int loc, SPItem *item);
-    const char *getItemColorForMarker(SPItem *item, Inkscape::PaintTarget fill_or_stroke, int loc);
 
     StrokeStyleButton * makeRadioButton(Gtk::RadioButtonGroup &grp,
                                         char const            *icon,
