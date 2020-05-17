@@ -553,10 +553,10 @@ std::vector<size_t> getIdIds()
     ids.reserve(all_attrs.size()); // minimize memory thrashing
     for (auto & all_attr : all_attrs) {
         auto id = sp_attribute_lookup(all_attr.attr.c_str());
-        if (id >= ids.size()) {
-            ids.resize(id + 1);
+        if ((int)id >= ids.size()) {
+            ids.resize((int)id + 1);
         }
-        ids[id]++;
+        ids[(int)id]++;
     }
 
     return ids;
@@ -568,7 +568,7 @@ TEST(AttributesTest, SupportedKnown)
     std::vector<AttributeInfo> all_attrs = getKnownAttrs();
     for (AttrItr it(all_attrs.begin()); it != all_attrs.end(); ++it) {
         auto id = sp_attribute_lookup(it->attr.c_str());
-        EXPECT_EQ(it->supported, id != 0u) << "Matching for attribute '" << it->attr << "'";
+        EXPECT_EQ(it->supported, id != SPAttr::INVALID) << "Matching for attribute '" << it->attr << "'";
     }
 }
 
