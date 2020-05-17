@@ -9,6 +9,7 @@
 # liushuyu011 <liushuyu_011@163.com>, 2015.
 # Mingye Wang <arthur200126@gmail.com>, 2015.
 # Aron Xu <happyaron.xu@gmail.com>, 2016.
+# 驿窗 <classenu@163.com>, 2020.
 #
 msgid ""
 msgstr ""
@@ -1474,7 +1475,6 @@ msgid "Pixellize"
 msgstr "像素化"
 
 #: ../share/filters/filters.svg.h:591
-#, fuzzy
 msgid "Pixel Tools"
 msgstr "像素工具"
 
@@ -6638,7 +6638,7 @@ msgstr "输出"
 #: ../src/ui/widget/selected-style.cpp:127
 #: ../src/ui/widget/style-swatch.cpp:121
 msgid "Stroke:"
-msgstr "笔刷："
+msgstr "描边："
 
 #: ../src/extension/internal/filter/distort.h:80
 #: ../src/extension/internal/filter/textures.h:77
@@ -6884,7 +6884,7 @@ msgstr "填充不透明度："
 
 #: ../src/extension/internal/filter/morphology.h:197
 msgid "Stroke opacity:"
-msgstr "笔刷不透明度："
+msgstr "描边不透明度："
 
 #: ../src/extension/internal/filter/morphology.h:207
 msgid "Adds a colorizable outline"
@@ -7059,11 +7059,11 @@ msgstr "图像在填充上面"
 #: ../src/extension/internal/filter/paint.h:355
 #: ../share/extensions/markers_strokepaint.inx:24
 msgid "Stroke color"
-msgstr "笔刷颜色"
+msgstr "描边颜色"
 
 #: ../src/extension/internal/filter/paint.h:356
 msgid "Image on stroke"
-msgstr "笔刷图像"
+msgstr "描边图像"
 
 #: ../src/extension/internal/filter/paint.h:367
 msgid "Convert images to duochrome drawings"
@@ -7282,7 +7282,7 @@ msgstr "自定义"
 
 #: ../src/extension/internal/filter/textures.h:84
 msgid "Custom stroke options"
-msgstr "自定义笔刷选项"
+msgstr "自定义描边选项"
 
 #: ../src/extension/internal/filter/textures.h:85
 msgid "k1:"
@@ -8185,7 +8185,7 @@ msgstr "填充绘制"
 
 #: ../src/filter-enums.cpp:47
 msgid "Stroke Paint"
-msgstr "笔刷绘制"
+msgstr "描边绘制"
 
 #: ../src/filter-enums.cpp:63
 msgid "Soft Light"
@@ -8379,7 +8379,7 @@ msgstr ""
 #: ../src/gradient-drag.cpp:1465 ../src/gradient-drag.cpp:1474
 #: ../src/gradient-drag.cpp:1481
 msgid " (stroke)"
-msgstr " (笔刷)"
+msgstr " (描边)"
 
 #: ../src/gradient-drag.cpp:1471
 #, c-format
@@ -9138,7 +9138,7 @@ msgstr ""
 
 #: ../src/live_effects/effect.cpp:286
 msgid "Power stroke"
-msgstr "神奇笔刷"
+msgstr "神奇描边"
 
 #: ../src/live_effects/effect.cpp:290
 msgid ""
@@ -9157,7 +9157,7 @@ msgstr "复制原本路径"
 msgid ""
 "Let an object take on the shape, fill, stroke and/or other attributes of "
 "another object."
-msgstr "选择所有带有系统填充和笔刷的对象作为选择的对象"
+msgstr "选择所有带有系统填充和描边的对象作为选择的对象"
 
 #
 # File: ../src/live_effects/effect.cpp, line: 319
@@ -9245,7 +9245,7 @@ msgstr ""
 
 #: ../src/live_effects/effect.cpp:441
 msgid "Taper stroke"
-msgstr "笔刷锥化"
+msgstr "描边锥化"
 
 #: ../src/live_effects/effect.cpp:445
 msgid "Let the path's ends narrow down to a tip"
@@ -9282,7 +9282,7 @@ msgstr ""
 
 #: ../src/live_effects/effect.cpp:498
 msgid "Fill between strokes"
-msgstr "笔刷间填充"
+msgstr "描边间填充"
 
 #: ../src/live_effects/effect.cpp:502
 msgid ""
@@ -9386,7 +9386,7 @@ msgstr ""
 #: ../src/live_effects/effect.cpp:667
 #, fuzzy
 msgid "Dashed Stroke"
-msgstr "笔刷"
+msgstr "描边"
 
 #: ../src/live_effects/effect.cpp:671
 msgid ""
@@ -9479,7 +9479,7 @@ msgstr ""
 
 #: ../src/live_effects/effect.cpp:808
 msgid "Dynamic stroke"
-msgstr "动态笔刷"
+msgstr "动态描边"
 
 #: ../src/live_effects/effect.cpp:812
 msgid ""
@@ -10677,7 +10677,7 @@ msgstr "内插法类型："
 msgid ""
 "Determines which kind of interpolator will be used to interpolate between "
 "stroke width along the path"
-msgstr "决定笔刷宽度之间沿着路径内插要使用哪一种内插法"
+msgstr "决定描边宽度之间沿着路径内插要使用哪一种内插法"
 
 #: ../src/live_effects/lpe-jointype.cpp:36
 #: ../src/live_effects/lpe-offset.cpp:62
@@ -10749,7 +10749,7 @@ msgstr "峰"
 
 #: ../src/live_effects/lpe-jointype.cpp:59
 msgid "Thickness of the stroke"
-msgstr "笔刷粗细"
+msgstr "描边粗细"
 
 #: ../src/live_effects/lpe-jointype.cpp:60
 msgid "Line cap"
@@ -10757,7 +10757,7 @@ msgstr "线端"
 
 #: ../src/live_effects/lpe-jointype.cpp:60
 msgid "The end shape of the stroke"
-msgstr "笔刷端点形状"
+msgstr "描边端点形状"
 
 #. TRANSLATORS: The line join style specifies the shape to be used at the
 #. corners of paths. It can be "miter", "round" or "bevel".
@@ -10784,7 +10784,7 @@ msgstr "斜切限制："
 #: ../src/live_effects/lpe-jointype.cpp:64
 #: ../src/live_effects/lpe-offset.cpp:80
 msgid "Maximum length of the miter join (in units of stroke width)"
-msgstr "斜切接合的最大长度(单位为笔刷宽度单位)"
+msgstr "斜切接合的最大长度(单位为描边宽度单位)"
 
 #: ../src/live_effects/lpe-jointype.cpp:65
 #: ../src/live_effects/lpe-offset.cpp:81
@@ -10807,7 +10807,7 @@ msgstr "下方绳子的隐藏长度"
 
 #: ../src/live_effects/lpe-knot.cpp:357
 msgid "_In units of stroke width"
-msgstr "使用笔刷宽度的单位(_I)"
+msgstr "使用描边宽度的单位(_I)"
 
 #: ../src/live_effects/lpe-knot.cpp:358
 msgid ""
@@ -12005,7 +12005,7 @@ msgstr "决定路径起始的形状"
 #: ../src/live_effects/lpe-powerstroke.cpp:165
 #: ../src/widgets/stroke-style.cpp:311
 msgid "Maximum length of the miter (in units of stroke width)"
-msgstr "斜面最大长度(以笔刷宽度为单位)"
+msgstr "斜面最大长度(以描边宽度为单位)"
 
 #: ../src/live_effects/lpe-powerstroke.cpp:166
 msgid "End cap:"
@@ -12274,7 +12274,7 @@ msgstr "创建粗/细路径"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:233
 msgid "Simulate a stroke of varying width"
-msgstr "模拟一个宽度有变化的笔刷"
+msgstr "模拟一个宽度有变化的描边"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:234
 msgid "Bend hatches"
@@ -12599,7 +12599,7 @@ msgstr "简化仅合并"
 
 #: ../src/live_effects/lpe-sketch.cpp:32
 msgid "Strokes:"
-msgstr "笔刷："
+msgstr "描边："
 
 #: ../src/live_effects/lpe-sketch.cpp:32
 msgid "Draw that many approximating strokes"
@@ -12607,7 +12607,7 @@ msgstr "绘制这么多条近似笔迹"
 
 #: ../src/live_effects/lpe-sketch.cpp:33
 msgid "Max stroke length:"
-msgstr "笔刷最大长度："
+msgstr "描边最大长度："
 
 #: ../src/live_effects/lpe-sketch.cpp:34
 msgid "Maximum length of approximating strokes"
@@ -12615,11 +12615,11 @@ msgstr "近似笔迹的最大长度"
 
 #: ../src/live_effects/lpe-sketch.cpp:35
 msgid "Stroke length variation:"
-msgstr "笔刷长度变化量："
+msgstr "描边长度变化量："
 
 #: ../src/live_effects/lpe-sketch.cpp:36
 msgid "Random variation of stroke length (relative to maximum length)"
-msgstr "笔刷长度的随机变化量(相对于最大长度)"
+msgstr "描边长度的随机变化量(相对于最大长度)"
 
 #: ../src/live_effects/lpe-sketch.cpp:37
 msgid "Max. overlap:"
@@ -12627,7 +12627,7 @@ msgstr "重叠最大值："
 
 #: ../src/live_effects/lpe-sketch.cpp:38
 msgid "How much successive strokes should overlap (relative to maximum length)"
-msgstr "相邻笔刷的重叠量(相对于最大长度)"
+msgstr "相邻描边的重叠量(相对于最大长度)"
 
 #: ../src/live_effects/lpe-sketch.cpp:39
 msgid "Overlap variation:"
@@ -12653,7 +12653,7 @@ msgstr "平均偏移量："
 
 #: ../src/live_effects/lpe-sketch.cpp:44
 msgid "Average distance each stroke is away from the original path"
-msgstr "每个笔刷与原始路径的平均距离"
+msgstr "每个描边与原始路径的平均距离"
 
 #: ../src/live_effects/lpe-sketch.cpp:45
 msgid "Max. tremble:"
@@ -12790,7 +12790,7 @@ msgstr "外推"
 #: ../src/live_effects/lpe-taperstroke.cpp:75 ../share/extensions/edge3d.inx:9
 #: ../share/extensions/nicechart.inx:62
 msgid "Stroke width:"
-msgstr "笔刷宽度："
+msgstr "描边宽度："
 
 #: ../src/live_effects/lpe-taperstroke.cpp:75
 msgid "The (non-tapered) width of the path"
@@ -13131,7 +13131,7 @@ msgid ""
 "+click</b> adds a control point, <b>Ctrl+Alt+click</b> deletes it, <b>Shift"
 "+click</b> launches width dialog."
 msgstr ""
-"<b>笔刷宽度控制点</b>：拖动以更改笔刷宽度。<b>Ctrl+单击</b>添加控制点，"
+"<b>描边宽度控制点</b>：拖动以更改描边宽度。<b>Ctrl+单击</b>添加控制点，"
 "<b>Ctrl+Alt+单击</b>删除，<b>Shift+单击</b>启动宽度对话框。"
 
 #: ../src/live_effects/parameter/random.cpp:156
@@ -14333,7 +14333,7 @@ msgstr "页面适合选区"
 #: ../src/selection-chemistry.cpp:4328 ../src/verbs.cpp:2653
 #, fuzzy
 msgid "Swap fill and stroke of an object"
-msgstr "交换填充和笔刷"
+msgstr "交换填充和描边"
 
 #: ../src/selection-chemistry.cpp:4356 ../src/verbs.cpp:3157
 msgid "Fit Page to Drawing"
@@ -14581,16 +14581,16 @@ msgstr "不能确定选中用来执行差、异或、分割或者剪切路径的
 
 #: ../src/splivarot.cpp:1591
 msgid "Select <b>stroked path(s)</b> to convert stroke to path."
-msgstr "选择<b>带笔刷的路径</b>把笔刷转换到路径。"
+msgstr "选择<b>带描边的路径</b>把描边转换到路径。"
 
 #: ../src/splivarot.cpp:1607
 msgid "Convert stroke to path"
-msgstr "把笔刷转化成路径"
+msgstr "把描边转化成路径"
 
 #. TRANSLATORS: "to outline" means "to convert stroke to path"
 #: ../src/splivarot.cpp:1610
 msgid "<b>No stroked paths</b> in the selection."
-msgstr "所选内容中<b>没有带笔刷的路径</b>。"
+msgstr "所选内容中<b>没有带描边的路径</b>。"
 
 #: ../src/splivarot.cpp:1681
 msgid "Selected object is <b>not a path</b>, cannot inset/outset."
@@ -14879,7 +14879,7 @@ msgstr "选择相同扩展名的全部"
 
 #: ../src/ui/contextmenu.cpp:384
 msgid "Fill and Stroke"
-msgstr "填充和笔刷"
+msgstr "填充和描边"
 
 #: ../src/ui/contextmenu.cpp:391
 msgid "Fill Color"
@@ -14887,11 +14887,11 @@ msgstr "填充颜色"
 
 #: ../src/ui/contextmenu.cpp:398
 msgid "Stroke Color"
-msgstr "笔刷颜色"
+msgstr "描边颜色"
 
 #: ../src/ui/contextmenu.cpp:405
 msgid "Stroke Style"
-msgstr "笔刷样式"
+msgstr "描边样式"
 
 #: ../src/ui/contextmenu.cpp:412
 msgid "Object Type"
@@ -14979,7 +14979,7 @@ msgstr "提取图像..."
 #: ../src/ui/contextmenu.cpp:883 ../src/ui/contextmenu.cpp:903
 #: ../src/verbs.cpp:3048
 msgid "_Fill and Stroke..."
-msgstr "填充和笔刷(_F)..."
+msgstr "填充和描边(_F)..."
 
 #: ../src/ui/contextmenu.cpp:909 ../src/verbs.cpp:3073
 msgid "_Text and Font..."
@@ -15955,7 +15955,7 @@ msgstr "每一个克隆对象的大小由拾取值得那个点的值决定"
 msgid ""
 "Each clone is painted by the picked color (the original must have unset fill "
 "or stroke)"
-msgstr "每一个克隆对象通过拾取的颜色绘制(原始对象没有设置填充或者笔刷属性)"
+msgstr "每一个克隆对象通过拾取的颜色绘制(原始对象没有设置填充或者描边属性)"
 
 #: ../src/ui/dialog/clonetiler.cpp:953
 msgid "Each clone's opacity is determined by the picked value in that point"
@@ -16110,7 +16110,7 @@ msgstr "<small>随机：</small>"
 #, c-format
 msgid ""
 "Color: <b>%s</b>; <b>Click</b> to set fill, <b>Shift+click</b> to set stroke"
-msgstr "颜色：<b>%s</b>；<b>单击</b> 设置填充，<b>Shift+单击</b> 设置笔刷"
+msgstr "颜色：<b>%s</b>；<b>单击</b> 设置填充，<b>Shift+单击</b> 设置描边"
 
 #: ../src/ui/dialog/color-item.cpp:473
 msgid "Change color definition"
@@ -16118,7 +16118,7 @@ msgstr "改变颜色定义"
 
 #: ../src/ui/dialog/color-item.cpp:607
 msgid "Remove stroke color"
-msgstr "移除笔刷颜色"
+msgstr "移除描边颜色"
 
 #: ../src/ui/dialog/color-item.cpp:607
 msgid "Remove fill color"
@@ -16126,7 +16126,7 @@ msgstr "移除填充色"
 
 #: ../src/ui/dialog/color-item.cpp:612
 msgid "Set stroke color to none"
-msgstr "设置笔刷颜色为无"
+msgstr "设置描边颜色为无"
 
 #: ../src/ui/dialog/color-item.cpp:612
 msgid "Set fill color to none"
@@ -16134,7 +16134,7 @@ msgstr "设置填充颜色为无"
 
 #: ../src/ui/dialog/color-item.cpp:630
 msgid "Set stroke color from swatch"
-msgstr "从色盘中设置笔刷颜色"
+msgstr "从色盘中设置描边颜色"
 
 #: ../src/ui/dialog/color-item.cpp:630
 msgid "Set fill color from swatch"
@@ -16654,9 +16654,8 @@ msgid "pHYs dpi"
 msgstr ""
 
 #: ../src/ui/dialog/export.cpp:151
-#, fuzzy
 msgid "Hide all except selected"
-msgstr "隐藏所有未被选取的对象(_L)"
+msgstr "隐藏所有未选定对象"
 
 #: ../src/ui/dialog/export.cpp:152
 msgid "Close when complete"
@@ -16766,7 +16765,7 @@ msgstr "位图"
 #, c-format
 msgid "B_atch export %d selected object"
 msgid_plural "B_atch export %d selected objects"
-msgstr[0] "批次导出 %d 选择的对象(_A)"
+msgstr[0] "批次导出 %d 个选定对象(_A)"
 
 #: ../src/ui/dialog/export.cpp:912
 msgid "Export in progress"
@@ -16918,11 +16917,11 @@ msgstr "填充(_F)"
 
 #: ../src/ui/dialog/fill-and-stroke.cpp:63
 msgid "Stroke _paint"
-msgstr "笔刷绘制(_P)"
+msgstr "描边绘制(_P)"
 
 #: ../src/ui/dialog/fill-and-stroke.cpp:64
 msgid "Stroke st_yle"
-msgstr "笔刷样式(_Y)"
+msgstr "描边样式(_Y)"
 
 #. TRANSLATORS: this dialog is accessible via menu Filters - Filter editor
 #: ../src/ui/dialog/filter-effects-dialog.cpp:513
@@ -18725,7 +18724,7 @@ msgstr "附加的注音符号"
 
 #: ../src/ui/dialog/glyphs.cpp:334
 msgid "CJK Strokes"
-msgstr "CJK 笔刷"
+msgstr "CJK 描边"
 
 #: ../src/ui/dialog/glyphs.cpp:335
 msgid "Katakana Phonetic Extensions"
@@ -19110,11 +19109,11 @@ msgstr "Ctrl+单击“点”尺寸(_D)："
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:216
 msgid "times current stroke width"
-msgstr "倍于当前笔刷宽度"
+msgstr "倍于当前描边宽度"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:217
 msgid "Size of dots created with Ctrl+click (relative to current stroke width)"
-msgstr "使用 Ctrl+单击 时创建的点的大小(相对当前笔刷宽度)"
+msgstr "使用 Ctrl+单击 时创建的点的大小(相对当前描边宽度)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:225
 msgid "Base simplify:"
@@ -19570,7 +19569,7 @@ msgid ""
 "When on, the Gradient Edit button in the Fill & Stroke dialog will show the "
 "legacy Gradient Editor dialog, when off the Gradient Tool will be used"
 msgstr ""
-"当打开时，在填充和笔刷对话框中的渐变编辑按钮将会显示旧式渐变编辑器对话框；当"
+"当打开时，在填充和描边对话框中的渐变编辑按钮将会显示旧式渐变编辑器对话框；当"
 "关闭时则使用渐变工具"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:525
@@ -21184,7 +21183,7 @@ msgstr "选择"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1780
 #: ../src/ui/toolbar/select-toolbar.cpp:179
 msgid "Scale stroke width"
-msgstr "缩放笔刷宽度"
+msgstr "缩放描边宽度"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1781
 msgid "Scale rounded corners in rectangles"
@@ -21205,7 +21204,7 @@ msgstr "保持"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1788
 #: ../src/ui/toolbar/select-toolbar.cpp:180
 msgid "When scaling objects, scale the stroke width by the same proportion"
-msgstr "缩放对象时，按照相同比例缩放笔刷宽度"
+msgstr "缩放对象时，按照相同比例缩放描边宽度"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1790
 #: ../src/ui/toolbar/select-toolbar.cpp:187
@@ -21215,12 +21214,12 @@ msgstr "缩放矩形时，缩放圆角半径"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1792
 #: ../src/ui/toolbar/select-toolbar.cpp:194
 msgid "Move gradients (in fill or stroke) along with the objects"
-msgstr "随对象缩放渐变(填充或笔刷)"
+msgstr "随对象缩放渐变(填充或描边)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1794
 #: ../src/ui/toolbar/select-toolbar.cpp:201
 msgid "Move patterns (in fill or stroke) along with the objects"
-msgstr "随对象缩放图案(填充或笔刷)"
+msgstr "随对象缩放图案(填充或描边)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1795
 msgid "Store transformation"
@@ -21243,7 +21242,7 @@ msgstr "变换"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1803
 #, fuzzy
 msgid "Scale dashes with stroke"
-msgstr "笔刷端点形状"
+msgstr "描边端点形状"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1804
 msgid "When changing stroke width, scale dash array"
@@ -21684,14 +21683,14 @@ msgstr "剪裁路径和蒙版"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1979
 msgid "Stroke Style Markers"
-msgstr "笔刷样式标记"
+msgstr "描边样式标记"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1981
 #: ../src/ui/dialog/inkscape-preferences.cpp:1983
 msgid ""
 "Stroke color same as object, fill color either object fill color or marker "
 "fill color"
-msgstr "笔刷颜色和对象一样，填充颜色和对象填充色或者标记填充色系统"
+msgstr "描边颜色和对象一样，填充颜色和对象填充色或者标记填充色系统"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1987
 msgid "Markers"
@@ -23114,7 +23113,7 @@ msgstr "填充"
 #: ../src/ui/dialog/paint-servers.cpp:109 ../share/extensions/frame.inx:7
 #: ../share/extensions/markers_strokepaint.inx:22
 msgid "Stroke"
-msgstr "笔刷"
+msgstr "描边"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:37
 msgctxt "Polar arrange tab"
@@ -25143,7 +25142,7 @@ msgstr "输入设备的倾斜度改变笔尖的角度"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:178
 msgid "(perpendicular to stroke, \"brush\")"
-msgstr "(垂直于笔刷, “笔刷”)"
+msgstr "(垂直于描边, “笔刷”)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:178
 msgid "(almost fixed, default)"
@@ -25161,7 +25160,7 @@ msgstr "固定："
 msgid ""
 "Angle behavior (0 = nib always perpendicular to stroke direction, 100 = "
 "fixed angle)"
-msgstr "角度行为(0 = 笔尖总是垂直于笔刷方向，100 = 固定角度)"
+msgstr "角度行为(0 = 笔尖总是垂直于描边方向，100 = 固定角度)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:196
 #: ../src/ui/toolbar/eraser-toolbar.cpp:145
@@ -25381,7 +25380,7 @@ msgstr "指定"
 #: ../src/ui/toolbar/dropper-toolbar.cpp:72
 msgid ""
 "If alpha was picked, assign it to selection as fill or stroke transparency"
-msgstr "如果透明通道已拾取, 把它传给选区作为填充或笔刷的透明度"
+msgstr "如果透明通道已拾取, 把它传给选区作为填充或描边的透明度"
 
 #: ../src/ui/toolbar/eraser-toolbar.cpp:66
 #, fuzzy
@@ -25486,12 +25485,12 @@ msgstr "在填充里面创建渐变"
 #: ../src/ui/toolbar/gradient-toolbar.cpp:379
 #: ../src/ui/toolbar/mesh-toolbar.cpp:198
 msgid "stroke"
-msgstr "笔刷"
+msgstr "描边"
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:380
 #: ../src/ui/toolbar/mesh-toolbar.cpp:199
 msgid "Create gradient in the stroke"
-msgstr "在笔刷里面创建渐变"
+msgstr "在描边里面创建渐变"
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:429
 msgid "Link gradients"
@@ -25813,11 +25812,11 @@ msgstr "编辑填充网格"
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:257
 msgid "Edit Stroke"
-msgstr "编辑笔刷"
+msgstr "编辑描边"
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:258
 msgid "Edit stroke mesh"
-msgstr "编辑笔刷网格"
+msgstr "编辑描边网格"
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:266
 #: ../src/ui/toolbar/node-toolbar.cpp:333
@@ -26335,11 +26334,11 @@ msgstr "按照工具栏变换"
 
 #: ../src/ui/toolbar/select-toolbar.cpp:450
 msgid "Now <b>stroke width</b> is <b>scaled</b> when objects are scaled."
-msgstr "对象缩放<b>笔刷宽度</b>也会跟着<b>缩放</b>。"
+msgstr "对象缩放<b>描边宽度</b>也会跟着<b>缩放</b>。"
 
 #: ../src/ui/toolbar/select-toolbar.cpp:452
 msgid "Now <b>stroke width</b> is <b>not scaled</b> when objects are scaled."
-msgstr "对象缩放<b>笔刷宽度不会</b>跟着<b>缩放</b>。"
+msgstr "对象缩放<b>描边宽度不会</b>跟着<b>缩放</b>。"
 
 #: ../src/ui/toolbar/select-toolbar.cpp:463
 msgid ""
@@ -26771,7 +26770,7 @@ msgstr "应用最近选择的颜色填充"
 #: ../src/ui/toolbar/spray-toolbar.cpp:326
 #, fuzzy
 msgid "Apply picked color to stroke"
-msgstr "应用最近选择的颜色到笔刷"
+msgstr "应用最近选择的颜色到描边"
 
 #: ../src/ui/toolbar/spray-toolbar.cpp:336
 #: ../src/ui/toolbar/spray-toolbar.cpp:337
@@ -27563,7 +27562,7 @@ msgid ""
 "average color in area; with <b>Alt</b> to pick inverse color; <b>Ctrl+C</b> "
 "to copy the color under mouse to clipboard"
 msgstr ""
-"<b>单击</b>以设置填充，<b>Shift+单击</b>以设置笔刷；<b>拖动</b>以平均区域里颜"
+"<b>单击</b>以设置填充，<b>Shift+单击</b>以设置描边；<b>拖动</b>以平均区域里颜"
 "色；按住 <b>Alt</b> 拾取反色；按 <b>Ctrl+C</b> 以复制鼠标下的颜色到剪贴板"
 
 #: ../src/ui/tools-switch.cpp:107
@@ -27577,7 +27576,7 @@ msgid ""
 "object's fill and stroke to the current setting."
 msgstr ""
 "<b>单击</b>以填充一个被包围的区域，<b>Shift+单击</b>以联合当前选区和新的填充"
-"内容，<b>Ctrl+单击</b>以使用当前设置替换单击对象的填充和笔刷设置。"
+"内容，<b>Ctrl+单击</b>以使用当前设置替换单击对象的填充和描边设置。"
 
 #: ../src/ui/tools-switch.cpp:109
 msgid "<b>Drag</b> to erase."
@@ -27727,11 +27726,11 @@ msgstr "<b>松开鼠标</b> 以设置颜色。"
 
 #: ../src/ui/tools/eraser-tool.cpp:436
 msgid "<b>Drawing</b> an eraser stroke"
-msgstr "正在 <b>绘制</b> 橡皮擦笔刷"
+msgstr "正在 <b>绘制</b> 橡皮擦描边"
 
 #: ../src/ui/tools/eraser-tool.cpp:859
 msgid "Draw eraser stroke"
-msgstr "绘制橡皮擦笔刷"
+msgstr "绘制橡皮擦描边"
 
 #: ../src/ui/tools/flood-tool.cpp:89
 msgid "Visible Colors"
@@ -29362,9 +29361,8 @@ msgid "Margins"
 msgstr "边距"
 
 #: ../src/ui/widget/page-sizer.cpp:231
-#, fuzzy
 msgid "_Resize page to drawing or selection (Ctrl+Shift+R)"
-msgstr "缩放页面到绘图或选区(_R)"
+msgstr "缩放页面到绘图或选区(Ctrl+Shift+R)"
 
 #: ../src/ui/widget/page-sizer.cpp:232
 msgid ""
@@ -29496,7 +29494,7 @@ msgstr "填充图案"
 #: ../src/ui/widget/selected-style.cpp:191
 #: ../src/ui/widget/style-swatch.cpp:290
 msgid "Pattern stroke"
-msgstr "笔刷图案"
+msgstr "描边图案"
 
 #: ../src/ui/widget/selected-style.cpp:193
 #, fuzzy
@@ -29511,7 +29509,7 @@ msgstr "黑色填充"
 #: ../src/ui/widget/selected-style.cpp:196
 #, fuzzy
 msgid "Hatch stroke"
-msgstr "黑色笔刷"
+msgstr "黑色描边"
 
 #: ../src/ui/widget/selected-style.cpp:198
 msgid "<b>L</b>"
@@ -29525,7 +29523,7 @@ msgstr "线性渐变填充"
 #: ../src/ui/widget/selected-style.cpp:201
 #: ../src/ui/widget/style-swatch.cpp:282
 msgid "Linear gradient stroke"
-msgstr "线性渐变笔刷"
+msgstr "线性渐变描边"
 
 #: ../src/ui/widget/selected-style.cpp:208
 msgid "<b>R</b>"
@@ -29551,7 +29549,7 @@ msgstr "网格渐变填充"
 
 #: ../src/ui/widget/selected-style.cpp:222
 msgid "Mesh gradient stroke"
-msgstr "网格渐变笔刷"
+msgstr "网格渐变描边"
 
 #: ../src/ui/widget/selected-style.cpp:230
 msgid "Different"
@@ -29563,7 +29561,7 @@ msgstr "相差填充"
 
 #: ../src/ui/widget/selected-style.cpp:233
 msgid "Different strokes"
-msgstr "相差笔刷"
+msgstr "相差描边"
 
 #: ../src/ui/widget/selected-style.cpp:235
 #: ../src/ui/widget/style-swatch.cpp:312
@@ -29583,7 +29581,7 @@ msgstr "取消填充"
 #: ../src/ui/widget/selected-style.cpp:583
 #: ../src/ui/widget/style-swatch.cpp:314 ../src/widgets/fill-style.cpp:808
 msgid "Unset stroke"
-msgstr "取消笔刷"
+msgstr "取消描边"
 
 #: ../src/ui/widget/selected-style.cpp:241
 msgid "Flat color fill"
@@ -29591,7 +29589,7 @@ msgstr "平面颜色填充"
 
 #: ../src/ui/widget/selected-style.cpp:241
 msgid "Flat color stroke"
-msgstr "平面颜色笔刷"
+msgstr "平面颜色描边"
 
 #. TRANSLATORS: A means "Averaged"
 #: ../src/ui/widget/selected-style.cpp:244
@@ -29604,7 +29602,7 @@ msgstr "平均填充已选对象"
 
 #: ../src/ui/widget/selected-style.cpp:247
 msgid "Stroke is averaged over selected objects"
-msgstr "平均笔刷已选对象"
+msgstr "平均描边已选对象"
 
 #. TRANSLATORS: M means "Multiple"
 #: ../src/ui/widget/selected-style.cpp:250
@@ -29617,7 +29615,7 @@ msgstr "多选对象填充相同"
 
 #: ../src/ui/widget/selected-style.cpp:253
 msgid "Multiple selected objects have the same stroke"
-msgstr "多选对象笔刷相同"
+msgstr "多选对象描边相同"
 
 #: ../src/ui/widget/selected-style.cpp:255
 msgid "Edit fill..."
@@ -29625,7 +29623,7 @@ msgstr "编辑填充..."
 
 #: ../src/ui/widget/selected-style.cpp:255
 msgid "Edit stroke..."
-msgstr "编辑笔刷..."
+msgstr "编辑描边..."
 
 #: ../src/ui/widget/selected-style.cpp:259
 msgid "Last set color"
@@ -29645,7 +29643,7 @@ msgstr "粘贴颜色"
 
 #: ../src/ui/widget/selected-style.cpp:287 ../src/verbs.cpp:2652
 msgid "Swap fill and stroke"
-msgstr "交换填充和笔刷"
+msgstr "交换填充和描边"
 
 #: ../src/ui/widget/selected-style.cpp:291
 #: ../src/ui/widget/selected-style.cpp:592
@@ -29655,7 +29653,7 @@ msgstr "使填充不透明"
 
 #: ../src/ui/widget/selected-style.cpp:291
 msgid "Make stroke opaque"
-msgstr "使笔刷不透明"
+msgstr "使描边不透明"
 
 #: ../src/ui/widget/selected-style.cpp:300
 #: ../src/ui/widget/selected-style.cpp:549 ../src/widgets/fill-style.cpp:507
@@ -29665,7 +29663,7 @@ msgstr "移除填充"
 #: ../src/ui/widget/selected-style.cpp:300
 #: ../src/ui/widget/selected-style.cpp:558 ../src/widgets/fill-style.cpp:507
 msgid "Remove stroke"
-msgstr "移除笔刷"
+msgstr "移除描边"
 
 #: ../src/ui/widget/selected-style.cpp:613
 msgid "Apply last set color to fill"
@@ -29673,7 +29671,7 @@ msgstr "应用最近设置的颜色填充"
 
 #: ../src/ui/widget/selected-style.cpp:625
 msgid "Apply last set color to stroke"
-msgstr "应用最近设置的颜色到笔刷"
+msgstr "应用最近设置的颜色到描边"
 
 #: ../src/ui/widget/selected-style.cpp:636
 msgid "Apply last selected color to fill"
@@ -29681,7 +29679,7 @@ msgstr "应用最近选择的颜色填充"
 
 #: ../src/ui/widget/selected-style.cpp:647
 msgid "Apply last selected color to stroke"
-msgstr "应用最近选择的颜色到笔刷"
+msgstr "应用最近选择的颜色到描边"
 
 #: ../src/ui/widget/selected-style.cpp:673
 msgid "Invert fill"
@@ -29689,7 +29687,7 @@ msgstr "反向填充"
 
 #: ../src/ui/widget/selected-style.cpp:697
 msgid "Invert stroke"
-msgstr "反向笔刷"
+msgstr "反向描边"
 
 #: ../src/ui/widget/selected-style.cpp:709
 msgid "White fill"
@@ -29697,7 +29695,7 @@ msgstr "白色填充"
 
 #: ../src/ui/widget/selected-style.cpp:721
 msgid "White stroke"
-msgstr "白色笔刷"
+msgstr "白色描边"
 
 #: ../src/ui/widget/selected-style.cpp:733
 msgid "Black fill"
@@ -29705,7 +29703,7 @@ msgstr "黑色填充"
 
 #: ../src/ui/widget/selected-style.cpp:745
 msgid "Black stroke"
-msgstr "黑色笔刷"
+msgstr "黑色描边"
 
 #: ../src/ui/widget/selected-style.cpp:788
 msgid "Paste fill"
@@ -29713,11 +29711,11 @@ msgstr "粘贴填充"
 
 #: ../src/ui/widget/selected-style.cpp:806
 msgid "Paste stroke"
-msgstr "粘贴笔刷"
+msgstr "粘贴描边"
 
 #: ../src/ui/widget/selected-style.cpp:913
 msgid "Change stroke width"
-msgstr "改变笔刷宽度"
+msgstr "改变描边宽度"
 
 #: ../src/ui/widget/selected-style.cpp:1020
 msgid ", drag to adjust, middle-click to remove"
@@ -29726,7 +29724,7 @@ msgstr ""
 #: ../src/ui/widget/selected-style.cpp:1104
 #, c-format
 msgid "Stroke width: %.5g%s%s"
-msgstr "笔刷宽度：%.5g%s%s"
+msgstr "描边宽度：%.5g%s%s"
 
 #: ../src/ui/widget/selected-style.cpp:1108
 msgid " (averaged)"
@@ -29799,12 +29797,12 @@ msgstr ""
 #: ../src/ui/widget/selected-style.cpp:1451
 #: ../src/ui/widget/selected-style.cpp:1465
 msgid "Adjust stroke width"
-msgstr "调整笔刷宽度"
+msgstr "调整描边宽度"
 
 #: ../src/ui/widget/selected-style.cpp:1452
 #, c-format
 msgid "Adjusting <b>stroke width</b>: was %.3g, now <b>%.3g</b> (diff %.3g)"
-msgstr "调整 <b>笔刷宽度</b>：从 %.3g 到 <b>%.3g</b>(相差 %.3g)"
+msgstr "调整 <b>描边宽度</b>：从 %.3g 到 <b>%.3g</b>(相差 %.3g)"
 
 #. TRANSLATORS: "Link" means to _link_ two sliders together
 #: ../src/ui/widget/spin-scale.cpp:122 ../src/ui/widget/spin-slider.cpp:116
@@ -29828,7 +29826,7 @@ msgstr "填充：%06x/%.3g"
 #: ../src/ui/widget/style-swatch.cpp:302
 #, c-format
 msgid "Stroke: %06x/%.3g"
-msgstr "笔刷：%06x/%.3g"
+msgstr "描边：%06x/%.3g"
 
 #: ../src/ui/widget/style-swatch.cpp:307
 msgctxt "Fill and stroke"
@@ -29843,12 +29841,12 @@ msgstr "无填充"
 #: ../src/ui/widget/style-swatch.cpp:309
 msgctxt "Fill and stroke"
 msgid "No stroke"
-msgstr "无笔刷"
+msgstr "无描边"
 
 #: ../src/ui/widget/style-swatch.cpp:334
 #, c-format
 msgid "Stroke width: %.5g%s"
-msgstr "笔刷宽度：%.5g%s"
+msgstr "描边宽度：%.5g%s"
 
 #: ../src/ui/widget/style-swatch.cpp:350
 #, c-format
@@ -30091,9 +30089,8 @@ msgid "Save a copy of the document under a new name"
 msgstr "使用新名字保存文档副本"
 
 #: ../src/verbs.cpp:2523
-#, fuzzy
 msgid "Save Template..."
-msgstr "模板(_T)..."
+msgstr "保存为模板..."
 
 #: ../src/verbs.cpp:2524
 #, fuzzy
@@ -30435,12 +30432,12 @@ msgstr "在所有可见并且未锁定的层中全选"
 
 #: ../src/verbs.cpp:2617
 msgid "Fill _and Stroke"
-msgstr "填充和笔刷(_A)..."
+msgstr "填充和描边(_A)..."
 
 #: ../src/verbs.cpp:2618
 msgid ""
 "Select all objects with the same fill and stroke as the selected objects"
-msgstr "选择所有带有系统填充和笔刷的对象作为选择的对象"
+msgstr "选择所有带有系统填充和描边的对象作为选择的对象"
 
 #: ../src/verbs.cpp:2620
 msgid "_Fill Color"
@@ -30452,21 +30449,21 @@ msgstr "选择带有相同填充的所有对象为选择的对象"
 
 #: ../src/verbs.cpp:2622
 msgid "_Stroke Color"
-msgstr "笔刷颜色(_S)"
+msgstr "描边颜色(_S)"
 
 #: ../src/verbs.cpp:2623
 msgid "Select all objects with the same stroke as the selected objects"
-msgstr "选择所有带有相同笔刷的对象作为选择对象"
+msgstr "选择所有带有相同描边的对象作为选择对象"
 
 #: ../src/verbs.cpp:2625
 msgid "Stroke St_yle"
-msgstr "笔刷样式(_Y)"
+msgstr "描边样式(_Y)"
 
 #: ../src/verbs.cpp:2626
 msgid ""
 "Select all objects with the same stroke style (width, dash, markers) as the "
 "selected objects"
-msgstr "选择所有带有相同笔刷样式(宽度、画线、标记)的对象为选择的对象"
+msgstr "选择所有带有相同描边样式(宽度、画线、标记)的对象为选择的对象"
 
 #: ../src/verbs.cpp:2629
 msgid "_Object Type"
@@ -30609,9 +30606,8 @@ msgid "_Pop Selected Objects out of Group"
 msgstr "组合选中对象"
 
 #: ../src/verbs.cpp:2677
-#, fuzzy
 msgid "Pop selected objects out of group"
-msgstr "组合选中对象"
+msgstr "所选对象脱离群组"
 
 #: ../src/verbs.cpp:2680
 msgid "_Put on Path"
@@ -30681,7 +30677,7 @@ msgstr "剪切路径(_P)"
 
 #: ../src/verbs.cpp:2704
 msgid "Cut the bottom path's stroke into pieces, removing fill"
-msgstr "把底部路径的笔刷分割成片, 去除填充"
+msgstr "把底部路径的描边分割成片, 去除填充"
 
 #: ../src/verbs.cpp:2705
 #, fuzzy
@@ -30812,21 +30808,21 @@ msgstr "创建一个链接到原始路径的动态偏移对象"
 
 #: ../src/verbs.cpp:2740
 msgid "_Stroke to Path"
-msgstr "笔刷转化成路径(_S)"
+msgstr "描边转化成路径(_S)"
 
 #: ../src/verbs.cpp:2741
 msgid "Convert selected object's stroke to paths"
-msgstr "把已选对象的笔刷转化成路径"
+msgstr "把已选对象的描边转化成路径"
 
 #: ../src/verbs.cpp:2742
 #, fuzzy
 msgid "_Stroke to Path Legacy"
-msgstr "笔刷转化成路径(_S)"
+msgstr "描边转化成路径(_S)"
 
 #: ../src/verbs.cpp:2743
 #, fuzzy
 msgid "Convert selected object's stroke to paths legacy mode"
-msgstr "把已选对象的笔刷转化成路径"
+msgstr "把已选对象的描边转化成路径"
 
 #: ../src/verbs.cpp:2744
 msgid "Si_mplify"
@@ -31918,7 +31914,7 @@ msgstr "编辑文档元数据(同文档一起保存)"
 msgid ""
 "Edit objects' colors, gradients, arrowheads, and other fill and stroke "
 "properties..."
-msgstr "编辑对象的颜色、渐变、箭头和其他填充和笔刷属性..."
+msgstr "编辑对象的颜色、渐变、箭头和其他填充和描边属性..."
 
 #: ../src/verbs.cpp:3054
 msgid "_Unicode Characters..."
@@ -32262,9 +32258,8 @@ msgid "Fit the page to the drawing"
 msgstr "适合画布到绘图"
 
 #: ../src/verbs.cpp:3160
-#, fuzzy
 msgid "_Resize Page to Selection"
-msgstr "页面适合选区"
+msgstr "页面设置为选区大小"
 
 #: ../src/verbs.cpp:3161
 msgid ""
@@ -32490,7 +32485,7 @@ msgstr "设置填充颜色"
 
 #: ../src/widgets/fill-style.cpp:444 ../src/widgets/fill-style.cpp:522
 msgid "Set stroke color"
-msgstr "设置笔刷颜色"
+msgstr "设置描边颜色"
 
 #: ../src/widgets/fill-style.cpp:620
 msgid "Set gradient on fill"
@@ -32498,7 +32493,7 @@ msgstr "设置填充渐变"
 
 #: ../src/widgets/fill-style.cpp:620
 msgid "Set gradient on stroke"
-msgstr "设置笔刷渐变"
+msgstr "设置描边渐变"
 
 #: ../src/widgets/fill-style.cpp:720
 #, fuzzy
@@ -32508,7 +32503,7 @@ msgstr "设置填充图案"
 #: ../src/widgets/fill-style.cpp:720
 #, fuzzy
 msgid "Set mesh on stroke"
-msgstr "设置笔刷图案"
+msgstr "设置描边图案"
 
 #: ../src/widgets/fill-style.cpp:781
 msgid "Set pattern on fill"
@@ -32516,7 +32511,7 @@ msgstr "设置填充图案"
 
 #: ../src/widgets/fill-style.cpp:782
 msgid "Set pattern on stroke"
-msgstr "设置笔刷图案"
+msgstr "设置描边图案"
 
 #: ../src/widgets/gradient-selector.cpp:187
 msgid "Create a duplicate gradient"
@@ -32686,7 +32681,7 @@ msgstr "无"
 
 #: ../src/widgets/stroke-style.cpp:186
 msgid "Stroke width"
-msgstr "笔刷宽度"
+msgstr "描边宽度"
 
 #: ../src/widgets/stroke-style.cpp:188
 msgctxt "Stroke width"
@@ -32765,27 +32760,27 @@ msgstr "方头端点"
 #: ../src/widgets/stroke-style.cpp:361
 #, fuzzy
 msgid "Fill, Stroke, Markers"
-msgstr "笔刷样式标记"
+msgstr "描边样式标记"
 
 #: ../src/widgets/stroke-style.cpp:365
 #, fuzzy
 msgid "Stroke, Fill, Markers"
-msgstr "笔刷样式标记"
+msgstr "描边样式标记"
 
 #: ../src/widgets/stroke-style.cpp:369
 #, fuzzy
 msgid "Fill, Markers, Stroke"
-msgstr "填充和笔刷"
+msgstr "填充和描边"
 
 #: ../src/widgets/stroke-style.cpp:377
 #, fuzzy
 msgid "Markers, Fill, Stroke"
-msgstr "填充和笔刷"
+msgstr "填充和描边"
 
 #: ../src/widgets/stroke-style.cpp:381
 #, fuzzy
 msgid "Stroke, Markers, Fill"
-msgstr "笔刷样式标记"
+msgstr "描边样式标记"
 
 #: ../src/widgets/stroke-style.cpp:385
 msgid "Markers, Stroke, Fill"
@@ -32797,7 +32792,7 @@ msgstr "设置标记"
 
 #: ../src/widgets/stroke-style.cpp:1079 ../src/widgets/stroke-style.cpp:1168
 msgid "Set stroke style"
-msgstr "设置笔刷样式"
+msgstr "设置描边样式"
 
 #: ../src/widgets/stroke-style.cpp:1300
 msgid "Set marker color"
@@ -35016,7 +35011,7 @@ msgstr ""
 #: ../share/extensions/frame.inx:8
 #, fuzzy
 msgid "Stroke Color:"
-msgstr "笔刷颜色"
+msgstr "描边颜色"
 
 #: ../share/extensions/frame.inx:11
 msgid "Fill Color:"
@@ -36072,7 +36067,7 @@ msgid ""
 "join of the pattern at the edges. Use a negative border to reduce the size "
 "of the pattern and get an empty border."
 msgstr ""
-"生产一个沃罗努瓦单元的随机图案。图案将可以在填充和笔刷对话框中访问。您必须选"
+"生产一个沃罗努瓦单元的随机图案。图案将可以在填充和描边对话框中访问。您必须选"
 "择一个对象或一个组。\n"
 "\n"
 "如果边框为 0，图案将会在边界处中断。使用一个正数边框，最好大于单元尺寸，可以"
@@ -38045,7 +38040,7 @@ msgstr "填充"
 
 #: ../share/extensions/markers_strokepaint.inx:13
 msgid "Invert fill and stroke colors"
-msgstr "反转填充和笔刷颜色"
+msgstr "反转填充和描边颜色"
 
 #: ../share/extensions/markers_strokepaint.inx:14
 msgid "Assign alpha"
@@ -38057,7 +38052,7 @@ msgstr "指定充填颜色"
 
 #: ../share/extensions/markers_strokepaint.inx:23
 msgid "Assign stroke color"
-msgstr "指定笔刷颜色"
+msgstr "指定描边颜色"
 
 #: ../share/extensions/measure.inx:3
 msgid "Measure Path"
@@ -39467,11 +39462,11 @@ msgstr "填充不透明度 (%)："
 
 #: ../share/extensions/polyhedron_3d.inx:71
 msgid "Stroke opacity (%):"
-msgstr "笔刷不透明度 (%)："
+msgstr "描边不透明度 (%)："
 
 #: ../share/extensions/polyhedron_3d.inx:72
 msgid "Stroke width (px):"
-msgstr "笔刷宽度 (px)："
+msgstr "描边宽度 (px)："
 
 #: ../share/extensions/polyhedron_3d.inx:73
 msgid "Shading"
@@ -39579,7 +39574,7 @@ msgstr "Postscript 输入"
 
 #: ../share/extensions/render_alphabetsoup.inx:3
 msgid "Alphabet Soup"
-msgstr "胡言乱语字母汤"
+msgstr "随机字符效果"
 
 #: ../share/extensions/render_barcode.inx:3
 msgid "Classic"
@@ -41378,7 +41373,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Maximal stroke width"
-#~ msgstr "缩放笔刷宽度"
+#~ msgstr "缩放描边宽度"
 
 #, fuzzy
 #~ msgid "Pen roundness:"
@@ -42309,7 +42304,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "fill stroke stroke-width"
-#~ msgstr "缩放笔刷宽度"
+#~ msgstr "缩放描边宽度"
 
 #, fuzzy
 #~ msgid "flatten.py"
@@ -43518,19 +43513,19 @@ msgstr ""
 #~ msgstr "固定宽度(_X)："
 
 #~ msgid "Consider 'Interruption width' as a ratio of stroke width"
-#~ msgstr "将“间断宽度”设置为笔刷宽度的比例"
+#~ msgstr "将“间断宽度”设置为描边宽度的比例"
 
 #~ msgid "St_roke width"
-#~ msgstr "笔刷宽度(_R)"
+#~ msgstr "描边宽度(_R)"
 
 #~ msgid "Add the stroke width to the interruption size"
-#~ msgstr "将笔刷宽度添加到间断长度中"
+#~ msgstr "将描边宽度添加到间断长度中"
 
 #~ msgid "_Crossing path stroke width"
-#~ msgstr "交叉路径的笔刷宽度(_C)"
+#~ msgstr "交叉路径的描边宽度(_C)"
 
 #~ msgid "Add crossed stroke width to the interruption size"
-#~ msgstr "将交叉线的笔刷宽度添加到间断长度中"
+#~ msgstr "将交叉线的描边宽度添加到间断长度中"
 
 #~ msgid "Drag to select a crossing, click to flip it"
 #~ msgstr "拖曳可选取交叉点，单击可翻转交叉点"
@@ -43939,7 +43934,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Use stock"
-#~ msgstr "粘贴笔刷"
+#~ msgstr "粘贴描边"
 
 #, fuzzy
 #~ msgid "Accel Group"
