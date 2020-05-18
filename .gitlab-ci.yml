@@ -72,6 +72,8 @@ inkscape:mac:
   tags:
     - mac
   rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: never
     - if: '$CI_PROJECT_NAMESPACE == "inkscape"'
       when: always
     - if: '$CI_PROJECT_NAMESPACE == "dehesselle"'
