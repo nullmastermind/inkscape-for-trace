@@ -152,7 +152,7 @@ add_actions_canvas_transform(InkscapeWindow* win)
     win->add_action( "canvas-zoom-prev",       sigc::bind<InkscapeWindow*, int>(sigc::ptr_fun(&canvas_transform), win, INK_CANVAS_ZOOM_PREV));
     win->add_action( "canvas-zoom-next",       sigc::bind<InkscapeWindow*, int>(sigc::ptr_fun(&canvas_transform), win, INK_CANVAS_ZOOM_NEXT));
 
-    auto app = &(ConcreteInkscapeApplication<Gtk::Application>::get_instance());
+    auto app = dynamic_cast<InkscapeApplication *>(Gio::Application::get_default().get());
     if (!app) {
         std::cerr << "add_actions_canvas_transform: no app!" << std::endl;
         return;
