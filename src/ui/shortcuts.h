@@ -89,12 +89,16 @@ public:
 
     static std::vector<std::pair<Glib::ustring, Glib::ustring>> get_file_names();
 
+    void update_gui_text_recursive(Gtk::Widget* widget);
+
     // Dialogs
     bool import_shortcuts();
     bool export_shortcuts();
 
     // Debug
     void dump();
+
+    void dump_all_recursive(Gtk::Widget* widget);
 
 private:
 

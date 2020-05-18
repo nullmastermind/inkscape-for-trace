@@ -93,8 +93,11 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     signal_focus_in_event().connect(    sigc::mem_fun(*_desktop_widget, &SPDesktopWidget::onFocusInEvent));
 
 
-    // ================ Window Options ==============
+    // ================ Window Options ===============
     setup_view();
+
+    // ========= Update text for Accellerators =======
+    Inkscape::Shortcuts::getInstance().update_gui_text_recursive(this);
 }
 
 // Change a document, leaving desktop/view the same. (Eventually move all code here.)

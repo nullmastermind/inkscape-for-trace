@@ -53,7 +53,6 @@ set(ui_SRC
 	toolbar/pencil-toolbar.cpp
 	toolbar/rect-toolbar.cpp
 	toolbar/select-toolbar.cpp
-	toolbar/snap-toolbar.cpp
 	toolbar/spiral-toolbar.cpp
 	toolbar/spray-toolbar.cpp
 	toolbar/star-toolbar.cpp
@@ -355,7 +354,6 @@ set(ui_SRC
 	toolbar/pencil-toolbar.h
 	toolbar/rect-toolbar.h
 	toolbar/select-toolbar.h
-	toolbar/snap-toolbar.h
 	toolbar/spiral-toolbar.h
 	toolbar/spray-toolbar.h
 	toolbar/star-toolbar.h

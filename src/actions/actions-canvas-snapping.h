@@ -18,6 +18,8 @@ class SPDocument;
 void add_actions_canvas_snapping(SPDocument* document);
 void set_actions_canvas_snapping(SPDocument* document);
 
+std::vector<std::vector<Glib::ustring>> get_extra_data_canvas_snapping();
+
 #endif // INK_ACTIONS_CANVAS_SNAPPING_H
 
 /*

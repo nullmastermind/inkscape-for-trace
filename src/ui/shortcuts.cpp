@@ -473,9 +473,20 @@ Shortcuts::list_all_actions()
         for (auto action : actions) {
             all_actions.emplace_back("win." + action);
         }
-    }
 
-    // Document (to do).
+        auto document = window->get_document();
+        if (document) {
+            auto map = document->getActionGroup();
+            if (map) {
+                std::vector<Glib::ustring> actions = map->list_actions();
+                for (auto action : actions) {
+                    all_actions.emplace_back("doc." + action);
+                }
+            } else {
+                std::cerr << "Shortcuts::list_all_actions: No document map!" << std::endl;
+            }
+        }
+    }
 
     return all_actions;
 }
@@ -485,8 +496,6 @@ Shortcuts::list_all_actions()
 bool
 Shortcuts::add_user_shortcut(Glib::ustring name, unsigned long long int shortcut) {
 
-    // std::cout << "Shortcuts::add_user_shortcut: " << name << ": " << std::hex << shortcut << std::endl;
-
     // We must first remove any existing shortcuts that use the same shortcut value.
     Verb* old_verb = shortcut_to_verb_map[shortcut];
     if (old_verb) {
@@ -495,7 +504,6 @@ Shortcuts::add_user_shortcut(Glib::ustring name, unsigned long long int shortcut
         shortcut_to_verb_map.erase(shortcut);
     }
 
-    // Need to add win and doc.
     Glib::ustring accel = shortcut_to_accelerator(shortcut);
     std::vector<Glib::ustring> actions = app->get_actions_for_accel(accel);
     for (auto action : actions) {
@@ -702,11 +710,13 @@ Shortcuts::get_from_event(GdkEventKey const *event)
     // convert to lower case and don't consume the "shift" modifier.
     bool is_case_convertible = !(gdk_keyval_is_upper(keyval) && gdk_keyval_is_lower(keyval));
     if (is_case_convertible) {
-        keyval = gdk_keyval_to_lower(keyval);
+        keyval = gdk_keyval_to_lower(keyval);  // keyval not actually used! (copied from legacy code)
         consumed_modifiers &= ~ GDK_SHIFT_MASK;
     }
 
-    return (keyval | (initial_modifiers &~ consumed_modifiers) << 32);
+    // std::cout << "  Keyval:    " << std::hex << keyval << std::endl;
+    // std::cout << "  Modifiers: " << std::hex << (initial_modifiers & ~consumed_modifiers) << std::endl;
+    return (event->keyval | (initial_modifiers &~ consumed_modifiers) << 32);
 }
 
 
@@ -789,6 +799,65 @@ Shortcuts::get_file_names()
     return names_and_paths;
 }
 
+/*
+ * Update text with shortcuts.
+ * Inkscape includes shortcuts in tooltips and in dialog titles. They need to be updated
+ * anytime a tooltip is changed.
+ */
+void
+Shortcuts::update_gui_text_recursive(Gtk::Widget* widget)
+{
+    // NOT what we want
+    // auto activatable = dynamic_cast<Gtk::Activatable *>(widget);
+
+    // We must do this until GTK4
+    GtkWidget* gwidget = widget->gobj();
+    bool is_actionable = GTK_IS_ACTIONABLE(gwidget);
+
+    if (is_actionable) {
+        const gchar* gaction = gtk_actionable_get_action_name(GTK_ACTIONABLE(gwidget));
+        if (gaction) {
+            Glib::ustring action = gaction;
+            std::vector<Glib::ustring> accels = app->get_accels_for_action(action);
+
+            // Get current tooltip.
+            Glib::ustring tooltip = widget->get_tooltip_text();
+            if (!tooltip.empty()) {
+
+                // Get rid of old accels. (Include space, so we don't erase a shortcut using '['.)
+                auto i = tooltip.find_last_of("[");
+                if (i != std::string::npos) {
+                    tooltip.erase(i);
+                }
+
+                // Add new primary accelerator.
+                if (accels.size() > 0) {
+                    if (tooltip.size() > 1 && tooltip[tooltip.size()-1] != ' ') {
+                        tooltip += " ";
+                    }
+
+                    // Convert to more user friendly notation.
+                    unsigned int key = 0;
+                    Gdk::ModifierType mod = Gdk::ModifierType(0);
+                    Gtk::AccelGroup::parse(accels[0], key, mod);
+                    tooltip += "[" + Gtk::AccelGroup::get_label(key, mod) + "]";
+                }
+            }
+
+            // Update tooltip.
+            widget->set_tooltip_text(tooltip);
+        }
+    }
+
+    auto container = dynamic_cast<Gtk::Container *>(widget);
+    if (container) {
+        auto children = container->get_children();
+        for (auto child : children) {
+            update_gui_text_recursive(child);
+        }
+    }
+
+}
 
 // Dialogs
 
@@ -890,6 +959,43 @@ Shortcuts::dump() {
         }
     }
 }
+
+void
+Shortcuts::dump_all_recursive(Gtk::Widget* widget)
+{
+    static unsigned int indent = 0;
+    ++indent;
+    for (int i = 0; i < indent; ++i) std::cout << "  ";
+
+    // NOT what we want
+    // auto activatable = dynamic_cast<Gtk::Activatable *>(widget);
+
+    // We must do this until GTK4
+    GtkWidget* gwidget = widget->gobj();
+    bool is_actionable = GTK_IS_ACTIONABLE(gwidget);
+    Glib::ustring action;
+    if (is_actionable) {
+        const gchar* gaction = gtk_actionable_get_action_name( GTK_ACTIONABLE(gwidget) );
+        if (gaction) {
+            action = gaction;
+        }
+    }
+
+    std::cout << widget->get_name()
+              << ":   actionable: " << std::boolalpha << is_actionable
+              << ":   " << widget->get_tooltip_text()
+              << ":   " << action
+              << std::endl;
+    auto container = dynamic_cast<Gtk::Container *>(widget);
+    if (container) {
+        auto children = container->get_children();
+        for (auto child : children) {
+            dump_all_recursive(child);
+        }
+    }
+    --indent;
+}
+
 
 } // Namespace
 

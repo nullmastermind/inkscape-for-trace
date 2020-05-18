@@ -28,10 +28,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <gtkmm/box.h>
-#include <gtkmm/action.h>
-#include <gtkmm/actiongroup.h>
-#include <gtkmm/toolitem.h>
+#include <gtkmm.h>
 #include <glibmm/i18n.h>
 
 #include "desktop-style.h"
@@ -80,7 +77,7 @@
 #include "ui/toolbar/paintbucket-toolbar.h"
 #include "ui/toolbar/pencil-toolbar.h"
 #include "ui/toolbar/select-toolbar.h"
-#include "ui/toolbar/snap-toolbar.h"
+//#include "ui/toolbar/snap-toolbar.h"
 #include "ui/toolbar/spray-toolbar.h"
 #include "ui/toolbar/spiral-toolbar.h"
 #include "ui/toolbar/star-toolbar.h"
@@ -233,8 +230,6 @@ static struct {
 
 static Glib::RefPtr<Gtk::ActionGroup> create_or_fetch_actions( SPDesktop* desktop );
 
-static void setup_snap_toolbox(GtkWidget *toolbox, SPDesktop *desktop);
-
 static void setup_tool_toolbox(GtkWidget *toolbox, SPDesktop *desktop);
 static void update_tool_toolbox(SPDesktop *desktop, ToolBase *eventcontext, GtkWidget *toolbox);
 
@@ -320,18 +315,6 @@ static Glib::RefPtr<Gtk::ActionGroup> create_or_fetch_actions( SPDesktop* deskto
         SP_VERB_SELECTION_GROUP,
         SP_VERB_SELECTION_OUTLINE,
         SP_VERB_SELECTION_UNGROUP,
-        SP_VERB_ZOOM_1_1,
-        SP_VERB_ZOOM_1_2,
-        SP_VERB_ZOOM_2_1,
-        SP_VERB_ZOOM_DRAWING,
-        SP_VERB_ZOOM_IN,
-        SP_VERB_ZOOM_NEXT,
-        SP_VERB_ZOOM_OUT,
-        SP_VERB_ZOOM_PAGE,
-        SP_VERB_ZOOM_PAGE_WIDTH,
-        SP_VERB_ZOOM_PREV,
-        SP_VERB_ZOOM_SELECTION,
-        SP_VERB_ZOOM_CENTER_PAGE
     };
 
     GtkIconSize toolboxSize = ToolboxFactory::prefToSize("/toolbox/small");
@@ -387,7 +370,7 @@ static GtkWidget* toolboxNewCommon( GtkWidget* tb, BarId id, GtkPositionType /*h
 {
     g_object_set_data(G_OBJECT(tb), "desktop", nullptr);
 
-    gtk_widget_set_sensitive(tb, FALSE);
+    gtk_widget_set_sensitive(tb, TRUE);
 
     GtkWidget *hb = gtk_event_box_new(); // A simple, neutral container.
     gtk_widget_set_name(hb, "ToolboxCommon");
@@ -441,6 +424,33 @@ GtkWidget *ToolboxFactory::createSnapToolbox()
     gtk_widget_set_name(tb, "SnapToolbox");
     gtk_box_set_homogeneous(GTK_BOX(tb), FALSE);
 
+    Glib::ustring snap_toolbar_builder_file = get_filename(UIS, "snap-toolbar.ui");
+    auto builder = Gtk::Builder::create();
+    try
+    {
+        builder->add_from_file(snap_toolbar_builder_file);
+    }
+    catch (const Glib::Error& ex)
+    {
+        std::cerr << "ToolboxFactor::createSnapToolbox: " << snap_toolbar_builder_file << " file not read! " << ex.what() << std::endl;
+    }
+
+    Gtk::Toolbar* toolbar = nullptr;
+    builder->get_widget("snap-toolbar", toolbar);
+    if (!toolbar) {
+        std::cerr << "InkscapeWindow: Failed to load snap toolbar!" << std::endl;
+    } else {
+        gtk_box_pack_start(GTK_BOX(tb), GTK_WIDGET(toolbar->gobj()), false, false, 0);
+
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        if ( prefs->getBool("/toolbox/icononly", true) ) {
+            toolbar->set_toolbar_style( Gtk::TOOLBAR_ICONS );
+        }
+
+        GtkIconSize toolboxSize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
+        toolbar->set_icon_size (static_cast<Gtk::IconSize>(toolboxSize));
+    }
+
     return toolboxNewCommon( tb, BAR_SNAP, GTK_POS_LEFT );
 }
 
@@ -472,8 +482,8 @@ void ToolboxFactory::setToolboxDesktop(GtkWidget *toolbox, SPDesktop *desktop)
             break;
 
         case BAR_SNAP:
-            setup_func = setup_snap_toolbox;
-            update_func = updateSnapToolbox;
+            setup_func = nullptr;
+            update_func = nullptr;
             break;
         default:
             g_warning("Unexpected toolbox id encountered.");
@@ -497,7 +507,7 @@ void ToolboxFactory::setToolboxDesktop(GtkWidget *toolbox, SPDesktop *desktop)
         update_func(desktop, desktop->event_context, toolbox);
         *conn = desktop->connectEventContextChanged(sigc::bind (sigc::ptr_fun(update_func), toolbox));
     } else {
-        gtk_widget_set_sensitive(toolbox, FALSE);
+        gtk_widget_set_sensitive(toolbox, TRUE);
     }
 
 } // end of sp_toolbox_set_desktop()
@@ -748,32 +758,6 @@ void update_commands_toolbox(SPDesktop * /*desktop*/, ToolBase * /*eventcontext*
 {
 }
 
-void setup_snap_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
-{
-    Glib::ustring sizePref("/toolbox/secondary");
-    auto toolBar = Inkscape::UI::Toolbar::SnapToolbar::create(desktop);
-    auto prefs = Inkscape::Preferences::get();
-
-    if ( prefs->getBool("/toolbox/icononly", true) ) {
-        gtk_toolbar_set_style( GTK_TOOLBAR(toolBar), GTK_TOOLBAR_ICONS );
-    }
-
-    GtkIconSize toolboxSize = ToolboxFactory::prefToSize(sizePref.c_str());
-    gtk_toolbar_set_icon_size( GTK_TOOLBAR(toolBar), static_cast<GtkIconSize>(toolboxSize) );
-
-    GtkPositionType pos = static_cast<GtkPositionType>(GPOINTER_TO_INT(g_object_get_data( G_OBJECT(toolbox), HANDLE_POS_MARK )));
-    auto orientation = ((pos == GTK_POS_LEFT) || (pos == GTK_POS_RIGHT)) ? GTK_ORIENTATION_HORIZONTAL : GTK_ORIENTATION_VERTICAL;
-    gtk_orientable_set_orientation (GTK_ORIENTABLE(toolBar), orientation);
-    gtk_toolbar_set_show_arrow(GTK_TOOLBAR(toolBar), TRUE);
-
-    GtkWidget* child = gtk_bin_get_child(GTK_BIN(toolbox));
-    if ( child ) {
-        gtk_container_remove( GTK_CONTAINER(toolbox), child );
-    }
-
-    gtk_container_add( GTK_CONTAINER(toolbox), toolBar );
-}
-
 Glib::ustring ToolboxFactory::getToolboxName(GtkWidget* toolbox)
 {
     Glib::ustring name;
@@ -794,18 +778,6 @@ Glib::ustring ToolboxFactory::getToolboxName(GtkWidget* toolbox)
     }
 
     return name;
-}
-
-void ToolboxFactory::updateSnapToolbox(SPDesktop *desktop, ToolBase * /*eventcontext*/, GtkWidget *toolbox)
-{
-    auto tb = dynamic_cast<Inkscape::UI::Toolbar::SnapToolbar*>(Glib::wrap(GTK_TOOLBAR(gtk_bin_get_child(GTK_BIN(toolbox)))));
-
-    if (!tb) {
-        std::cerr << "Can't get snap toolbar" << std::endl;
-        return;
-    }
-
-    Inkscape::UI::Toolbar::SnapToolbar::update(tb);
 }
 
 void ToolboxFactory::showAuxToolbox(GtkWidget *toolbox_toplevel)

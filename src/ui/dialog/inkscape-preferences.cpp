@@ -3092,22 +3092,26 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
         }
 
         // Find accelerators
-        std::vector<Glib::ustring> keys = app->get_accels_for_action(action);
+        std::vector<Glib::ustring> accels = app->get_accels_for_action(action);
         Glib::ustring shortcut_label;
-        for (auto key : keys) {
-            shortcut_label += key + ", ";
+        for (auto accel : accels) {
+            // Convert to more user friendly notation.
+            unsigned int key = 0;
+            Gdk::ModifierType mod = Gdk::ModifierType(0);
+            Gtk::AccelGroup::parse(accel, key, mod);
+            shortcut_label = Gtk::AccelGroup::get_label(key, mod) + ", ";
         }
+
         if (shortcut_label.size() > 1) {
             shortcut_label.erase(shortcut_label.size()-2);
         }
-        shortcut_label = Glib::Markup::escape_text(shortcut_label);
 
         // Find primary (i.e. first) shortcut.
         unsigned long long int shortcut_id = 0;
-        if (keys.size() > 0) {
+        if (accels.size() > 0) {
             unsigned int key = 0;
             Gdk::ModifierType mod = Gdk::ModifierType(0);
-            Gtk::AccelGroup::parse(keys[0], key, mod);
+            Gtk::AccelGroup::parse(accels[0], key, mod);
             shortcut_id = key + ((unsigned long long int)mod << 32);
         }
 
@@ -3135,6 +3139,9 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
     if (selected_id.empty()) {
         _kb_tree.expand_to_path(_kb_store->get_path(_kb_store->get_iter("0:1")));
     }
+
+    // Update all GUI text that includes shortcuts.
+    shortcuts.update_gui_text_recursive(app->Gtk::Application::get_active_window());
 }
 
 void InkscapePreferences::initPageSpellcheck()

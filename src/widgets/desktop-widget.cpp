@@ -1515,8 +1515,6 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
                 } // if child is a container
             } // children
         } // if aux_toolbox is a container
-
-        ToolboxFactory::updateSnapToolbox(this->desktop, nullptr, this->snap_toolbox);
     }
 }
 

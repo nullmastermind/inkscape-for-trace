@@ -36,8 +36,6 @@
 static void
 canvas_snapping_toggle(SPDocument* document, const SPAttr option)
 {
-    //std::cout << "canvas_snapping_toggle: " << option << std::endl;
-
     Inkscape::XML::Node* repr = document->getReprNamedView();
 
     if (repr == nullptr) {

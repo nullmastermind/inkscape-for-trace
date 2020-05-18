@@ -660,4 +660,8 @@ override) the bindings in the main default.xml.
 <!-- Actions -->
    <!-- Test -->
    <bind gaction="app.inkscape-version" keys="&lt;Shift&gt;v" />
+  <!-- Actions -->
+  <bind gaction="app.inkscape-version"      keys="&lt;Shift&gt;v" />
+  <bind gaction="doc.snap-global-toggle"    keys="percent"/>
+
 </keys>

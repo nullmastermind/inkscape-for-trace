@@ -2082,12 +2082,6 @@ void ZoomVerb::perform(SPAction *action, void *data)
         case SP_VERB_TOGGLE_GUIDES:
             sp_namedview_toggle_guides(doc, dt->namedview);
             break;
-        case SP_VERB_TOGGLE_SNAPPING:
-        {
-            DocumentUndo::ScopedInsensitive _no_undo(doc);
-            dt->toggleSnapGlobal();
-            break;
-        }
         case SP_VERB_TOGGLE_GRID:
             dt->toggleGrids();
             break;
@@ -3064,7 +3058,6 @@ Verb *Verb::_base_verbs[] = {
                  N_("Show or hide guides (drag from a ruler to create a guide)"), INKSCAPE_ICON("show-guides")),
     new ZoomVerb(SP_VERB_TOGGLE_ROTATION_LOCK, "ToggleRotationLock", N_("Lock rotation"),
                  N_("Lock canvas rotation"), nullptr),
-    new ZoomVerb(SP_VERB_TOGGLE_SNAPPING, "ToggleSnapGlobal", N_("Snap"), N_("Enable snapping"), INKSCAPE_ICON("snap")),
     new ZoomVerb(SP_VERB_TOGGLE_COMMANDS_TOOLBAR, "ToggleCommandsToolbar", N_("_Commands Bar"),
                  N_("Show or hide the Commands bar (under the menu)"), nullptr),
     new ZoomVerb(SP_VERB_TOGGLE_SNAP_TOOLBAR, "ToggleSnapToolbar", N_("Sn_ap Controls Bar"),
