@@ -17,6 +17,8 @@
 #include "inkgc/gc-core.h"
 #include "inkscape.h"
 
+#include <giomm/init.h>
+
 int main(int argc, char **argv) {
 
     // setup general environment
@@ -26,10 +28,8 @@ int main(int argc, char **argv) {
 
     // If possible, unit tests shouldn't require a GUI session
     // since this won't generally be available in auto-builders
-    // int tmpArgc = 1;
-    // char const *tmp[] = {"foo", ""};
-    // char **tmpArgv = const_cast<char **>(tmp);
-    // Gtk::Main(tmpArgc, tmpArgv);
+
+    Gio::init();
 
     Inkscape::GC::init();
 
