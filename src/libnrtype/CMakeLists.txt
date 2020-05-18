@@ -29,7 +29,7 @@ add_inkscape_lib(nrtype_LIB "${nrtype_SRC}")
 # we have circular references between nrtype_LIB and inkscape_base!
 # this workaround prevents undefined references in nrtype_LIB when building static libraries (likely link order problem)
 if(NOT BUILD_SHARED_LIBS)
-    target_link_libraries(nrtype_LIB inkscape_base)
+	target_link_libraries(nrtype_LIB PRIVATE inkscape_base)
 endif()
 
 target_link_libraries(nrtype_LIB PUBLIC 2Geom::2geom)
