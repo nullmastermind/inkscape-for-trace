@@ -1,7 +1,7 @@
 Inkscape. Draw Freely.
 ======================
 
-[https://www.inkscape.org/](https://www.inkscape.org/)
+[https://inkscape.org/](https://inkscape.org/)
 
 Inkscape is a Free and open source vector graphics editor. It offers a rich set
 of features and is widely used for both artistic and technical illustrations
