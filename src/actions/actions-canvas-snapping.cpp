@@ -244,11 +244,11 @@ add_actions_canvas_snapping(SPDocument* document)
     map->add_action_bool( "snap-path-mask",          sigc::bind<SPDocument*, int>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SP_ATTR_INKSCAPE_SNAP_PATH_MASK));
     map->add_action_bool( "snap-path-clip",          sigc::bind<SPDocument*, int>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SP_ATTR_INKSCAPE_SNAP_PATH_CLIP));
 
-    // check if there is already an application instance (GUI or non-GUI)
+    // Check if there is already an application instance (GUI or non-GUI).
     auto app = dynamic_cast<InkscapeApplication *>(Gio::Application::get_default().get());
     if (!app) {
-        // fallback: create a non-GUI instance
-        app = &(ConcreteInkscapeApplication<Gio::Application>::get_instance());
+        std::cerr << "add_actions_canvas_snapping: no app!" << std::endl;
+        return;
     }
     app->get_action_extra_data().add_data(raw_data_canvas_snapping);
 }
@@ -262,7 +262,17 @@ set_actions_canvas_snapping_helper (Glib::RefPtr<Gio::SimpleActionGroup>& map, G
     // We can't enable/disable action directly! (Gio::Action can "get" enabled value but can not
     // "set" it! We need to cast to Gio::SimpleAction)
     Glib::RefPtr<Gio::Action> action = map->lookup_action(action_name);
+    if (!action) {
+        std::cerr << "set_actions_canvas_snapping_helper: action " << action_name << " missing!" << std::endl;
+        return;
+    }
+
     auto simple = Glib::RefPtr<Gio::SimpleAction>::cast_dynamic(action);
+    if (!simple) {
+        std::cerr << "set_actions_canvas_snapping_helper: action " << action_name << " not SimpleAction!" << std::endl;
+        return;
+    }
+
     simple->change_state(state);
     simple->set_enabled(enabled);
 }
@@ -292,9 +302,8 @@ set_actions_canvas_snapping(SPDocument* document)
         return;
     }
 
-    bool global = nv->snap_manager.snapprefs.getSnapEnabledGlobally();       
-    Glib::RefPtr<Gio::Action> action = map->lookup_action( "snap-global-toggle");
-    action->change_state(global);
+    bool global = nv->snap_manager.snapprefs.getSnapEnabledGlobally();
+    set_actions_canvas_snapping_helper(map, "snap-global-toggle", global, true); // Always enabled
 
     bool bbox = nv->snap_manager.snapprefs.isTargetSnappable(Inkscape::SNAPTARGET_BBOX_CATEGORY);
     set_actions_canvas_snapping_helper(map, "snap-bbox", bbox, global);
