@@ -12,7 +12,6 @@
     <child>
       <object class="GtkToggleToolButton">
         <property name="visible">True</property>
-        <property name="tooltip_text" translatable="true">Enable snapping</property>
         <property name="action_name">doc.snap-global-toggle</property>
         <property name="icon_name">snap</property>
         <property name="label" translatable="true">Snapping New</property>
@@ -30,7 +29,6 @@
     <child>
       <object class="GtkToggleToolButton">
         <property name="visible">True</property>
-        <property name="tooltip_text" translatable="true">Snap bounding boxes</property>
         <property name="action_name">doc.snap-bbox</property>
         <property name="icon_name">snap</property>
         <property name="label" translatable="true">Bounding box</property>
@@ -40,7 +38,6 @@
     <child>
       <object class="GtkToggleToolButton">
         <property name="visible">True</property>
-        <property name="tooltip_text" translatable="true">Snap to edges of a bounding box</property>
         <property name="action_name">doc.snap-bbox-edge</property>
         <property name="icon_name">snap-bounding-box-edges</property>
         <property name="label" translatable="true">Bounding box edges</property>
@@ -50,7 +47,6 @@
     <child>
       <object class="GtkToggleToolButton">
         <property name="visible">True</property>
-        <property name="tooltip_text" translatable="true">Snap bounding box corners</property>
         <property name="action_name">doc.snap-bbox-corner</property>
         <property name="icon_name">snap-bounding-box-corners</property>
         <property name="label" translatable="true">Bounding box corners</property>
@@ -60,7 +56,6 @@
     <child>
       <object class="GtkToggleToolButton">
         <property name="visible">True</property>
-        <property name="tooltip_text" translatable="true">Snap midpoints of bounding box edges</property>
         <property name="action_name">doc.snap-bbox-edge-midpoint</property>
         <property name="icon_name">snap-bounding-box-midpoints</property>
         <property name="label" translatable="true">BBox Edge Midpoints</property>
@@ -70,7 +65,6 @@
     <child>
       <object class="GtkToggleToolButton">
         <property name="visible">True</property>
-        <property name="tooltip_text" translatable="true">Snapping centers of bounding boxes</property>
         <property name="action_name">doc.snap-bbox-center</property>
         <property name="icon_name">snap-bounding-box-center</property>
         <property name="label" translatable="true">BBox Centers</property>
@@ -88,7 +82,6 @@
     <child>
       <object class="GtkToggleToolButton">
         <property name="visible">True</property>
-        <property name="tooltip_text" translatable="true">Snap nodes, paths, and handles</property>
         <property name="action_name">doc.snap-node-category</property>
         <property name="icon_name">snap</property>
         <property name="label" translatable="true">Nodes</property>
@@ -98,7 +91,6 @@
     <child>
       <object class="GtkToggleToolButton">
         <property name="visible">True</property>
-        <property name="tooltip_text" translatable="true">Snap to paths</property>
         <property name="action_name">doc.snap-path</property>
         <property name="icon_name">snap-nodes-path</property>
         <property name="label" translatable="true">Paths</property>
@@ -108,7 +100,6 @@
     <child>
       <object class="GtkToggleToolButton">
         <property name="visible">True</property>
-        <property name="tooltip_text" translatable="true">Snap to path intersections</property>
         <property name="action_name">doc.snap-path-intersection</property>
         <property name="icon_name">snap-nodes-intersection</property>
         <property name="label" translatable="true">Path intersections</property>
@@ -118,7 +109,6 @@
     <child>
       <object class="GtkToggleToolButton">
         <property name="visible">True</property>
-        <property name="tooltip_text" translatable="true">Snap cusp nodes, incl. rectangle corners</property>
         <property name="action_name">doc.snap-node-cusp</property>
         <property name="icon_name">snap-nodes-cusp</property>
         <property name="label" translatable="true">To nodes</property>
@@ -128,7 +118,6 @@
     <child>
       <object class="GtkToggleToolButton">
         <property name="visible">True</property>
-        <property name="tooltip_text" translatable="true">Snap smooth nodes, incl. quadrant points of ellipses</property>
         <property name="action_name">doc.snap-node-smooth</property>
         <property name="icon_name">snap-nodes-smooth</property>
         <property name="label" translatable="true">Smooth nodes</property>
@@ -138,7 +127,6 @@
     <child>
       <object class="GtkToggleToolButton">
         <property name="visible">True</property>
-        <property name="tooltip_text" translatable="true">Snap midpoints of line segments</property>
         <property name="action_name">doc.snap-line-midpoint</property>
         <property name="icon_name">snap-nodes-midpoint</property>
         <property name="label" translatable="true">Line midpoints</property>
@@ -156,7 +144,6 @@
     <child>
       <object class="GtkToggleToolButton">
         <property name="visible">True</property>
-        <property name="tooltip_text" translatable="true">Snap other points (centers, guide origins, gradient handles, etc.)</property>
         <property name="action_name">doc.snap-others</property>
         <property name="icon_name">snap</property>
         <property name="label" translatable="true">Others</property>
@@ -166,7 +153,6 @@
     <child>
       <object class="GtkToggleToolButton">
         <property name="visible">True</property>
-        <property name="tooltip_text" translatable="true">Snap centers of objects</property>
         <property name="action_name">doc.snap-object-midpoint</property>
         <property name="icon_name">snap-nodes-center</property>
         <property name="label" translatable="true">Object Centers</property>
@@ -176,7 +162,6 @@
     <child>
       <object class="GtkToggleToolButton">
         <property name="visible">True</property>
-        <property name="tooltip_text" translatable="true">Snap an item's rotation center</property>
         <property name="action_name">doc.snap-rotation-center</property>
         <property name="icon_name">snap-nodes-rotation-center</property>
         <property name="label" translatable="true">Rotation Centers</property>
@@ -186,7 +171,6 @@
     <child>
       <object class="GtkToggleToolButton">
         <property name="visible">True</property>
-        <property name="tooltip_text" translatable="true">Snap text anchors and baselines</property>
         <property name="action_name">doc.snap-text-baseline</property>
         <property name="icon_name">snap-text-baseline</property>
         <property name="label" translatable="true">Text baseline</property>
@@ -204,7 +188,6 @@
     <child>
       <object class="GtkToggleToolButton">
         <property name="visible">True</property>
-        <property name="tooltip_text" translatable="true">Snap to the page border</property>
         <property name="action_name">doc.snap-page-border</property>
         <property name="icon_name">snap-page</property>
         <property name="label" translatable="true">Page border</property>
@@ -214,7 +197,6 @@
     <child>
       <object class="GtkToggleToolButton">
         <property name="visible">True</property>
-        <property name="tooltip_text" translatable="true">Snap to grids</property>
         <property name="action_name">doc.snap-grid</property>
         <property name="icon_name">grid-rectangular</property>
         <property name="label" translatable="true">Grids</property>
@@ -224,7 +206,6 @@
     <child>
       <object class="GtkToggleToolButton">
         <property name="visible">True</property>
-        <property name="tooltip_text" translatable="true">Snap guides</property>
         <property name="action_name">doc.snap-guide</property>
         <property name="icon_name">guides</property>
         <property name="label" translatable="true">Guides</property>

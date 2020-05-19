@@ -799,6 +799,10 @@ Shortcuts::get_file_names()
     return names_and_paths;
 }
 
+// void on_foreach(Gtk::Widget& widget) {
+//     std::cout <<  "on_foreach: " << widget.get_name() << std::endl;;
+// }
+
 /*
  * Update text with shortcuts.
  * Inkscape includes shortcuts in tooltips and in dialog titles. They need to be updated
@@ -807,6 +811,7 @@ Shortcuts::get_file_names()
 void
 Shortcuts::update_gui_text_recursive(Gtk::Widget* widget)
 {
+
     // NOT what we want
     // auto activatable = dynamic_cast<Gtk::Activatable *>(widget);
 
@@ -817,31 +822,29 @@ Shortcuts::update_gui_text_recursive(Gtk::Widget* widget)
     if (is_actionable) {
         const gchar* gaction = gtk_actionable_get_action_name(GTK_ACTIONABLE(gwidget));
         if (gaction) {
+
             Glib::ustring action = gaction;
             std::vector<Glib::ustring> accels = app->get_accels_for_action(action);
 
-            // Get current tooltip.
-            Glib::ustring tooltip = widget->get_tooltip_text();
-            if (!tooltip.empty()) {
+            Glib::ustring tooltip;
+            InkscapeApplication* iapp = dynamic_cast<InkscapeApplication *>(app.get());
+            if (iapp) {
+                tooltip = iapp->get_action_extra_data().get_tooltip_for_action(action);
+            }
 
-                // Get rid of old accels. (Include space, so we don't erase a shortcut using '['.)
-                auto i = tooltip.find_last_of("[");
-                if (i != std::string::npos) {
-                    tooltip.erase(i);
+            // Add new primary accelerator.
+            if (accels.size() > 0) {
+
+                // Add space between tooltip and accel if there is a tooltip
+                if (!tooltip.empty()) {
+                    tooltip += " ";
                 }
 
-                // Add new primary accelerator.
-                if (accels.size() > 0) {
-                    if (tooltip.size() > 1 && tooltip[tooltip.size()-1] != ' ') {
-                        tooltip += " ";
-                    }
-
-                    // Convert to more user friendly notation.
-                    unsigned int key = 0;
-                    Gdk::ModifierType mod = Gdk::ModifierType(0);
-                    Gtk::AccelGroup::parse(accels[0], key, mod);
-                    tooltip += "[" + Gtk::AccelGroup::get_label(key, mod) + "]";
-                }
+                // Convert to more user friendly notation.
+                unsigned int key = 0;
+                Gdk::ModifierType mod = Gdk::ModifierType(0);
+                Gtk::AccelGroup::parse(accels[0], key, mod);
+                tooltip += "(" + Gtk::AccelGroup::get_label(key, mod) + ")";
             }
 
             // Update tooltip.

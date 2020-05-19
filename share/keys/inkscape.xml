@@ -171,50 +171,7 @@ override) the bindings in the main default.xml.
 
   <bind action="SprayPrefs" />
 
-<!-- Zoom -->
-
-  <bind key="plus" action="ZoomIn" display="true" />
-  <bind key="plus" modifiers="Shift" action="ZoomIn" />
-  <bind key="equal" action="ZoomIn" />
-  <bind key="equal" modifiers="Shift" action="ZoomIn" />
-  <bind key="KP_Add" action="ZoomIn" />
-
-  <bind key="minus" action="ZoomOut" display="true" />
-  <bind key="minus" modifiers="Shift" action="ZoomOut" />
-  <bind key="underscore" action="ZoomOut" />
-  <bind key="underscore" modifiers="Shift" action="ZoomOut" />
-  <bind key="KP_Subtract" action="ZoomOut" />
-
-  <bind key="1" action="Zoom1:0" display="true" />
-  <bind key="1" modifiers="Shift" action="Zoom1:0" />
-  <bind key="KP_1" action="Zoom1:0" />
-  <bind key="2" action="Zoom1:2" display="true" />
-  <bind key="2" modifiers="Shift" action="Zoom1:2" />
-  <bind key="KP_2" action="Zoom1:2" />
-  <bind key="3" action="ZoomSelection" display="true" />
-  <bind key="3" modifiers="Shift" action="ZoomSelection" />
-  <bind key="KP_3" action="ZoomSelection" />
-  <bind key="4" action="ZoomDrawing" display="true" />
-  <bind key="4" modifiers="Shift" action="ZoomDrawing" />
-  <bind key="KP_4" action="ZoomDrawing" />
-  <bind key="4" modifiers="Primary" action="ZoomCenterPage"  display="true"/>
-  <bind key="4" modifiers="Primary" action="ZoomCenterPage" />
-  <bind key="KP_4" modifiers="Primary" action="ZoomCenterPage" />
-  <bind key="5" action="ZoomPage" display="true" />
-  <bind key="5" modifiers="Shift" action="ZoomPage" />
-  <bind key="KP_5" action="ZoomPage" />
-  <bind key="KP_Begin" action="ZoomPage" />
-  <bind key="6" action="ZoomPageWidth" display="true" />
-  <bind key="6" modifiers="Shift" action="ZoomPageWidth" />
-  <bind key="KP_6" action="ZoomPageWidth" />
-
-  <bind key="e" modifiers="Primary" action="ZoomPageWidth" />
-
-  <bind key="grave" modifiers="Shift" action="ZoomNext" display="true" /> <!-- ` -->
-  <bind key="asciitilde" modifiers="Shift" action="ZoomNext" /> <!-- ~ -->
-  <bind key="KP_9" action="ZoomNext" />
-  <bind key="grave" action="ZoomPrev" display="true" /> <!-- ` -->
-  <bind key="KP_8" action="ZoomPrev" />
+<!-- Zoom: See actions below -->
 
 <!-- View -->
 
@@ -232,9 +189,6 @@ override) the bindings in the main default.xml.
 
   <bind key="bar" modifiers="Shift" action="ToggleGuides" /> <!-- | -->
   <bind key="bar" action="ToggleGuides" display="true" />
-
-  <bind key="percent" action="ToggleSnapGlobal" display="true" /> <!-- % -->
-  <bind key="percent" modifiers="Shift" action="ToggleSnapGlobal" />
 
   <bind action="ToggleCommandsToolbar" />
   <bind action="ToggleSnapToolbar" />
@@ -661,7 +615,23 @@ override) the bindings in the main default.xml.
    <!-- Test -->
    <bind gaction="app.inkscape-version" keys="&lt;Shift&gt;v" />
   <!-- Actions -->
+
+  <!-- Base -->
   <bind gaction="app.inkscape-version"      keys="&lt;Shift&gt;v" />
+
+  <!-- Snapping -->
   <bind gaction="doc.snap-global-toggle"    keys="percent"/>
 
+  <!-- View -->
+  <bind gaction="win.canvas-zoom-in"               keys="plus,  equal,       KP_Add" />
+  <bind gaction="win.canvas-zoom-out"              keys="minus, underscore,  KP_Subtract" />
+  <bind gaction="win.canvas-zoom-1-1"              keys="1,                  KP_1"/>
+  <bind gaction="win.canvas-zoom-1-2"              keys="2,                  KP_2"/>
+  <bind gaction="win.canvas-zoom-selection"        keys="3,                  KP_3"/>
+  <bind gaction="win.canvas-zoom-drawing"          keys="4,                  KP_4"/>
+  <bind gaction="win.canvas-zoom-page"             keys="5,                  KP_5"/>
+  <bind gaction="win.canvas-zoom-page-width"       keys="6, &lt;primary&gt;e,KP_6"/>
+  <bind gaction="win.canvas-zoom-center-page"      keys="&lt;primary&gt;4,&lt;primary&gt;KP_4"/>
+  <bind gaction="win.canvas-zoom-prev"             keys="grave,              KP_8"/>
+  <bind gaction="win.canvas-zoom-next"             keys="asciitilde,         KP_9"/>
 </keys>

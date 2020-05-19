@@ -1912,76 +1912,6 @@ void ZoomVerb::perform(SPAction *action, void *data)
     Geom::Point midpoint = dt->w2d(d_canvas.midpoint()); // Midpoint of drawing on canvas.
 
     switch (reinterpret_cast<std::size_t>(data)) {
-        case SP_VERB_ZOOM_IN:
-        {
-            gint mul = 1 + Inkscape::UI::Tools::gobble_key_events(
-                 GDK_KEY_KP_Add, 0); // with any mask
-            // FIXME what if zoom out is bound to something other than subtract?
-            // While drawing with the pen/pencil tool, zoom towards the end of the unfinished path
-            if (dynamic_cast<Inkscape::UI::Tools::PencilTool *>(ec) ||
-                dynamic_cast<Inkscape::UI::Tools::PenTool    *>(ec)  ) {
-                SPCurve const *rc = SP_DRAW_CONTEXT(ec)->red_curve.get();
-                if (!rc->is_empty()) {
-                    Geom::Point const zoom_to (*rc->last_point());
-                    dt->zoom_relative_keep_point(zoom_to, mul*zoom_inc);
-                    break;
-                }
-            }
-
-            dt->zoom_relative_center_point( midpoint, mul*zoom_inc);
-            break;
-        }
-        case SP_VERB_ZOOM_OUT:
-        {
-            gint mul = 1 + Inkscape::UI::Tools::gobble_key_events(
-                 GDK_KEY_KP_Subtract, 0); // with any mask
-            // While drawing with the pen/pencil tool, zoom away from the end of the unfinished path
-            if (dynamic_cast<Inkscape::UI::Tools::PencilTool *>(ec) ||
-                dynamic_cast<Inkscape::UI::Tools::PenTool    *>(ec)  ) {
-                 SPCurve const *rc = SP_DRAW_CONTEXT(ec)->red_curve.get();
-                if (!rc->is_empty()) {
-                    Geom::Point const zoom_to (*rc->last_point());
-                    dt->zoom_relative_keep_point(zoom_to, 1 / (mul*zoom_inc));
-                    break;
-                }
-            }
-
-            dt->zoom_relative_center_point( midpoint, 1 / (mul*zoom_inc) );
-            break;
-        }
-        case SP_VERB_ZOOM_1_1:
-            dt->zoom_absolute_center_point( midpoint, 1.0 * zcorr );
-            break;
-        case SP_VERB_ZOOM_1_2:
-            dt->zoom_absolute_center_point( midpoint, 0.5 * zcorr );
-            break;
-        case SP_VERB_ZOOM_2_1:
-            dt->zoom_absolute_center_point( midpoint, 2.0 * zcorr );
-            break;
-        case SP_VERB_ZOOM_PAGE:
-            dt->zoom_page();
-            break;
-        case SP_VERB_ZOOM_PAGE_WIDTH:
-            dt->zoom_page_width();
-            break;
-        case SP_VERB_ZOOM_DRAWING:
-            dt->zoom_drawing();
-            break;
-        case SP_VERB_ZOOM_SELECTION:
-            dt->zoom_selection();
-            break;
-        case SP_VERB_ZOOM_NEXT:
-            dt->next_transform();
-            break;
-        case SP_VERB_ZOOM_PREV:
-            dt->prev_transform();
-            break;
-        case SP_VERB_ZOOM_CENTER_PAGE:
-            dt->zoom_center_page();
-            break;
-        case SP_VERB_TOGGLE_ROTATION_LOCK:
-            dt->toggle_rotation_lock();
-            break;
         case SP_VERB_ROTATE_CW:
         {
             gint mul = 1 + Inkscape::UI::Tools::gobble_key_events( GDK_KEY_parenleft, 0);
@@ -3014,25 +2944,6 @@ Verb *Verb::_base_verbs[] = {
                     N_("Open Preferences for the LPETool tool"), nullptr),
 
     // Zoom
-    new ZoomVerb(SP_VERB_ZOOM_IN, "ZoomIn", N_("Zoom In"), N_("Zoom in"), INKSCAPE_ICON("zoom-in")),
-    new ZoomVerb(SP_VERB_ZOOM_OUT, "ZoomOut", N_("Zoom Out"), N_("Zoom out"), INKSCAPE_ICON("zoom-out")),
-    new ZoomVerb(SP_VERB_ZOOM_NEXT, "ZoomNext", N_("Nex_t Zoom"), N_("Next zoom (from the history of zooms)"),
-                 INKSCAPE_ICON("zoom-next")),
-    new ZoomVerb(SP_VERB_ZOOM_PREV, "ZoomPrev", N_("Pre_vious Zoom"), N_("Previous zoom (from the history of zooms)"),
-                 INKSCAPE_ICON("zoom-previous")),
-    new ZoomVerb(SP_VERB_ZOOM_1_1, "Zoom1:0", N_("Zoom 1:_1"), N_("Zoom to 1:1"), INKSCAPE_ICON("zoom-original")),
-    new ZoomVerb(SP_VERB_ZOOM_1_2, "Zoom1:2", N_("Zoom 1:_2"), N_("Zoom to 1:2"), INKSCAPE_ICON("zoom-half-size")),
-    new ZoomVerb(SP_VERB_ZOOM_2_1, "Zoom2:1", N_("_Zoom 2:1"), N_("Zoom to 2:1"), INKSCAPE_ICON("zoom-double-size")),
-    new ZoomVerb(SP_VERB_ZOOM_PAGE, "ZoomPage", N_("_Page"), N_("Zoom to fit page in window"),
-                 INKSCAPE_ICON("zoom-fit-page")),
-    new ZoomVerb(SP_VERB_ZOOM_PAGE_WIDTH, "ZoomPageWidth", N_("Page _Width"), N_("Zoom to fit page width in window"),
-                 INKSCAPE_ICON("zoom-fit-width")),
-    new ZoomVerb(SP_VERB_ZOOM_DRAWING, "ZoomDrawing", N_("_Drawing"), N_("Zoom to fit drawing in window"),
-                 INKSCAPE_ICON("zoom-fit-drawing")),
-    new ZoomVerb(SP_VERB_ZOOM_SELECTION, "ZoomSelection", N_("_Selection"), N_("Zoom to fit selection in window"),
-                 INKSCAPE_ICON("zoom-fit-selection")),
-    new ZoomVerb(SP_VERB_ZOOM_CENTER_PAGE, "ZoomCenterPage", N_("_Center Page"), N_("Center page in window"),
-                 INKSCAPE_ICON("zoom-center-page")),
 
     new ZoomVerb(SP_VERB_ROTATE_CW, "RotateClockwise", N_("Rotate Clockwise"), N_("Rotate canvas clockwise"), nullptr),
     new ZoomVerb(SP_VERB_ROTATE_CCW, "RotateCounterClockwise", N_("Rotate Counter-Clockwise"),

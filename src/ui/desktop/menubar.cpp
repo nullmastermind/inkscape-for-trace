@@ -31,6 +31,8 @@
 #include "helper/action.h"
 #include "helper/action-context.h"
 
+#include "io/resource.h"    // UI File location
+
 #include "object/sp-namedview.h"
 
 #include "ui/contextmenu.h" // Shift to make room for icons
@@ -470,14 +472,40 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
                 }
 
                 Gtk::MenuItem* menuitem = Gtk::manage(new Gtk::MenuItem(_(name), true));
-                Gtk::Menu* submenu = Gtk::manage(new Gtk::Menu());
-                build_menu(submenu, menu_ptr->firstChild(), view, show_icons_curr);
-                menuitem->set_submenu(*submenu);
-                menu->append(*menuitem);
+                menuitem->set_name(name);
 
-                submenu->signal_map().connect(
-                    sigc::bind<Gtk::Menu*>(sigc::ptr_fun(&shift_icons), submenu));
+                // TEMP
+                if (strcmp(name, "_Zoom") == 0) {
 
+                    auto refBuilder = Gtk::Builder::create();
+                    try
+                    {
+                        std::string filename =
+                            Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::UIS, "zoom-menu.ui");
+                        refBuilder->add_from_file(filename);
+                    }
+                    catch (const Glib::Error& err)
+                    {
+                        std::cerr << "build_menu: failed to load Zoom menu from: " << "zoom-menu.ui" << std::endl;
+                    }
+                    auto object = refBuilder->get_object("zoom-menu");
+                    auto gmenu = Glib::RefPtr<Gio::Menu>::cast_dynamic(object);
+                    if (!gmenu) {
+                        std::cerr << "build_menu: failed to build Zoom menu!" << std::endl;
+                    } else {
+                        auto submenu = Gtk::manage(new Gtk::Menu(gmenu));
+                        menuitem->set_submenu(*submenu);
+                        menu->append(*menuitem);
+                    }
+                } else {
+                    Gtk::Menu* submenu = Gtk::manage(new Gtk::Menu());
+                    build_menu(submenu, menu_ptr->firstChild(), view, show_icons_curr);
+                    menuitem->set_submenu(*submenu);
+                    menu->append(*menuitem);
+
+                    submenu->signal_map().connect(
+                        sigc::bind<Gtk::Menu*>(sigc::ptr_fun(&shift_icons), submenu));
+                }
                 continue;
             }
 

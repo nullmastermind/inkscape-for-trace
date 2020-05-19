@@ -102,7 +102,6 @@ public:
                       const gchar *e_notsp, const gchar *warn);
 
     bool load_menus();
-    bool save_menus();
     Inkscape::XML::Node * get_menus();
     
     Inkscape::UI::Tools::ToolBase * active_event_context();

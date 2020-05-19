@@ -3096,10 +3096,15 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
         Glib::ustring shortcut_label;
         for (auto accel : accels) {
             // Convert to more user friendly notation.
+
+            // ::get_label shows key pad and numeric keys identically.
+            if (accel.find("KP") != Glib::ustring::npos) {
+                shortcut_label += "Num Pad ";
+            }
             unsigned int key = 0;
             Gdk::ModifierType mod = Gdk::ModifierType(0);
             Gtk::AccelGroup::parse(accel, key, mod);
-            shortcut_label = Gtk::AccelGroup::get_label(key, mod) + ", ";
+            shortcut_label += Gtk::AccelGroup::get_label(key, mod) + ", ";
         }
 
         if (shortcut_label.size() > 1) {
@@ -3115,7 +3120,7 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
             shortcut_id = key + ((unsigned long long int)mod << 32);
         }
 
-        // Add the verb to the group
+        // Add the action to the group
         Gtk::TreeStore::iterator row = _kb_store->append(iter_group->children());
         (*row)[_kb_columns.name] = action_data.get_label_for_action(action);
         (*row)[_kb_columns.shortcut] = shortcut_label;

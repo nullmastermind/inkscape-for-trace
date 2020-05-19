@@ -34,6 +34,7 @@ enum {
     INK_CANVAS_ZOOM_DRAWING,
     INK_CANVAS_ZOOM_PAGE,
     INK_CANVAS_ZOOM_PAGE_WIDTH,
+    INK_CANVAS_ZOOM_CENTER_PAGE,
     INK_CANVAS_ZOOM_PREV,
     INK_CANVAS_ZOOM_NEXT
 };
@@ -109,6 +110,10 @@ canvas_transform(InkscapeWindow *win, const int& option)
             dt->zoom_page_width();
             break;
 
+        case INK_CANVAS_ZOOM_CENTER_PAGE:
+            dt->zoom_center_page();
+            break;
+
         case INK_CANVAS_ZOOM_PREV:
             dt->prev_transform();
             break;
@@ -134,6 +139,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_canvas_transform =
     {"win.canvas-zoom-drawing",       "ZoomDrawing",             "View",       N_("Zoom to fit drawing in window")                      },
     {"win.canvas-zoom-page",          "ZoomPage",                "View",       N_("Zoom to fit page in window")                         },
     {"win.canvas-zoom-page-width",    "ZoomPageWidth",           "View",       N_("Zoom to fit page width in window")                   },
+    {"win.canvas-zoom-center-page",   "ZoomCenterPage",          "View",       N_("Center page in window")                              },
     {"win.canvas-zoom-prev",          "ZoomPrev",                "View",       N_("Previous zoom (from the history of zooms)")          },
     {"win.canvas-zoom-next",          "ZoomNext",                "View",       N_("Next zoom (from the history of zooms)")              },
     {"win.canvas-zoom-center-page",   "ZoomCenterPage",          "View",       N_("Center page in window")                              },
@@ -153,6 +159,7 @@ add_actions_canvas_transform(InkscapeWindow* win)
     win->add_action( "canvas-zoom-drawing",    sigc::bind<InkscapeWindow*, int>(sigc::ptr_fun(&canvas_transform), win, INK_CANVAS_ZOOM_DRAWING));
     win->add_action( "canvas-zoom-page",       sigc::bind<InkscapeWindow*, int>(sigc::ptr_fun(&canvas_transform), win, INK_CANVAS_ZOOM_PAGE));
     win->add_action( "canvas-zoom-page-width", sigc::bind<InkscapeWindow*, int>(sigc::ptr_fun(&canvas_transform), win, INK_CANVAS_ZOOM_PAGE_WIDTH));
+    win->add_action( "canvas-zoom-center-page",sigc::bind<InkscapeWindow*, int>(sigc::ptr_fun(&canvas_transform), win, INK_CANVAS_ZOOM_CENTER_PAGE));
     win->add_action( "canvas-zoom-prev",       sigc::bind<InkscapeWindow*, int>(sigc::ptr_fun(&canvas_transform), win, INK_CANVAS_ZOOM_PREV));
     win->add_action( "canvas-zoom-next",       sigc::bind<InkscapeWindow*, int>(sigc::ptr_fun(&canvas_transform), win, INK_CANVAS_ZOOM_NEXT));
     // clang-format on

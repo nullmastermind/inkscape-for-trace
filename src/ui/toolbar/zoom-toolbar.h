@@ -37,9 +37,9 @@ namespace Toolbar {
 /**
  * \brief A toolbar for controlling the zoom
  */
-class ZoomToolbar : public Toolbar {
+class ZoomToolbar {
 protected:
-    ZoomToolbar(SPDesktop *desktop);
+    ZoomToolbar(SPDesktop *desktop) {};
 
 public:
     static GtkWidget * create(SPDesktop *desktop);
