@@ -282,7 +282,7 @@ R"=====(
     <group id="wheelzooms" value="0"/>
     <group id="transientpolicy" value="1"/>
     <group id="scrollingacceleration" value="0.4"/>
-    <group id="snapdelay" value="150"/>
+    <group id="snapdelay" value="0"/>
     <group id="snapweight" value="0.5"/>
     <group id="snapclosestonly" value="0"/>
     <group id="snapindicator" value="1"/>
