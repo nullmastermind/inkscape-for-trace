@@ -75,12 +75,6 @@ class GradientVectorSelector : public Gtk::Box {
 } // namespace UI
 } // namespace Inkscape
 
-
-/* fixme: rethink this (Lauris) */
-GtkWidget *sp_gradient_vector_editor_new (SPGradient *gradient, SPStop *stop = nullptr);
-
-guint32 sp_average_color(guint32 c1, guint32 c2, gdouble p = 0.5);
-
 Glib::ustring gr_prepare_label (SPObject *obj);
 Glib::ustring gr_ellipsize_text(Glib::ustring const &src, size_t maxlen);
 

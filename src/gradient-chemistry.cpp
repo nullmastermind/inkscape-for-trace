@@ -691,48 +691,6 @@ SPStop *sp_vector_add_stop(SPGradient *vector, SPStop* prev_stop, SPStop* next_s
     return newstop;
 }
 
-void sp_item_gradient_edit_stop(SPItem *item, GrPointType point_type, guint point_i, Inkscape::PaintTarget fill_or_stroke)
-{
-    SPGradient *gradient = getGradient(item, fill_or_stroke);
-
-    if (!gradient || !SP_IS_GRADIENT(gradient)) {
-        return;
-    }
-
-    SPGradient *vector = gradient->getVector();
-    switch (point_type) {
-        case POINT_LG_BEGIN:
-        case POINT_RG_CENTER:
-        case POINT_RG_FOCUS:
-        {
-            GtkWidget *dialog = sp_gradient_vector_editor_new (vector, vector->getFirstStop());
-            gtk_widget_show (dialog);
-        }
-        break;
-
-        case POINT_LG_END:
-        case POINT_RG_R1:
-        case POINT_RG_R2:
-        {
-            GtkWidget *dialog = sp_gradient_vector_editor_new (vector, sp_last_stop (vector));
-            gtk_widget_show (dialog);
-        }
-        break;
-
-        case POINT_LG_MID:
-        case POINT_RG_MID1:
-        case POINT_RG_MID2:
-        {
-            GtkWidget *dialog = sp_gradient_vector_editor_new (vector, sp_get_stop_i (vector, point_i));
-            gtk_widget_show (dialog);
-        }
-        break;
-        default:
-            g_warning( "Unhandled gradient handle" );
-            break;
-    }
-}
-
 guint32 sp_item_gradient_stop_query_style(SPItem *item, GrPointType point_type, guint point_i, Inkscape::PaintTarget fill_or_stroke)
 {
     SPGradient *gradient = getGradient(item, fill_or_stroke);

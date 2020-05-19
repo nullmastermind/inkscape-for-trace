@@ -153,19 +153,12 @@ static void editGradientImpl( SPDesktop* desktop, SPGradient* gr )
         }
 
         if (!shown) {
-            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-            if (prefs->getBool("/dialogs/gradienteditor/showlegacy", false)) {
-                // Legacy gradient dialog
-                GtkWidget *dialog = sp_gradient_vector_editor_new( gr );
-                gtk_widget_show( dialog );
-            } else {
-                // Invoke the gradient tool
-                Inkscape::Verb *verb = Inkscape::Verb::get( SP_VERB_CONTEXT_GRADIENT );
-                if ( verb ) {
-                    SPAction *action = verb->get_action(Inkscape::ActionContext(desktop));
-                    if ( action ) {
-                        sp_action_perform( action, nullptr );
-                    }
+            // Invoke the gradient tool
+            auto verb = Inkscape::Verb::get(SP_VERB_CONTEXT_GRADIENT);
+            if (verb) {
+                auto action = verb->get_action(Inkscape::ActionContext(desktop));
+                if (action) {
+                    sp_action_perform(action, nullptr);
                 }
             }
         }

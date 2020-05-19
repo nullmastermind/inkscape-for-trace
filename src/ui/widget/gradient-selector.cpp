@@ -469,19 +469,12 @@ void GradientSelector::delete_vector_clicked()
 
 void GradientSelector::edit_vector_clicked()
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (prefs->getBool("/dialogs/gradienteditor/showlegacy", false)) {
-        // Legacy gradient dialog
-        auto dialog = sp_gradient_vector_editor_new(_vectors->get_gradient());
-        gtk_widget_show(dialog);
-    } else {
-        // Invoke the gradient tool
-        Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_CONTEXT_GRADIENT);
-        if (verb) {
-            SPAction *action = verb->get_action(Inkscape::ActionContext((Inkscape::UI::View::View *)SP_ACTIVE_DESKTOP));
-            if (action) {
-                sp_action_perform(action, nullptr);
-            }
+    // Invoke the gradient tool
+    auto verb = Inkscape::Verb::get(SP_VERB_CONTEXT_GRADIENT);
+    if (verb) {
+        auto action = verb->get_action(Inkscape::ActionContext((Inkscape::UI::View::View *)SP_ACTIVE_DESKTOP));
+        if (action) {
+            sp_action_perform(action, nullptr);
         }
     }
 }
