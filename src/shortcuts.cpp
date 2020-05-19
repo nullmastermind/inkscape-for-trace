@@ -653,95 +653,90 @@ static void _read_shortcuts_file(XML::Node const *root, bool const is_user_set)
     g_return_if_fail(!strcmp(root->name(), "keys"));
     XML::NodeConstSiblingIterator iter=root->firstChild();
     for ( ; iter ; ++iter ) {
-        bool is_primary;
-
         if (!strcmp(iter->name(), "bind")) {
-            is_primary = iter->attribute("display") && strcmp(iter->attribute("display"), "false") && strcmp(iter->attribute("display"), "0");
-        } else if (!strcmp(iter->name(), "keys")) {
-            // include another keys file
-            _read_shortcuts_file(iter, is_user_set);
-            continue;
-        } else {
-            // some unknown element, do not complain
-            continue;
-        }
+            bool is_primary = iter->attribute("display") && strcmp(iter->attribute("display"), "false") && strcmp(iter->attribute("display"), "0");
 
-        gchar const *verb_name=iter->attribute("action");
-        if (!verb_name) {
-            g_warning("Missing verb name (action= attribute) for shortcut");
-            continue;
-        }
+            gchar const *verb_name=iter->attribute("action");
+            if (!verb_name) {
+                g_warning("Missing verb name (action= attribute) for shortcut");
+                continue;
+            }
 
-        Inkscape::Verb *verb=Inkscape::Verb::getbyid(verb_name);
-        if (!verb
+            Inkscape::Verb *verb=Inkscape::Verb::getbyid(verb_name);
+            if (!verb
 #ifndef WITH_GSPELL
-                && strcmp(verb_name, "DialogSpellcheck") != 0
+                    && strcmp(verb_name, "DialogSpellcheck") != 0
 #endif
-           ) {
-            g_warning("Unknown verb name: %s", verb_name);
-            continue;
-        }
+               ) {
+                g_warning("Unknown verb name: %s", verb_name);
+                continue;
+            }
 
-        gchar const *keyval_name=iter->attribute("key");
-        if (!keyval_name || !*keyval_name) {
-            // that's ok, it's just listed for reference without assignment, skip it
-            continue;
-        }
+            gchar const *keyval_name=iter->attribute("key");
+            if (!keyval_name || !*keyval_name) {
+                // that's ok, it's just listed for reference without assignment, skip it
+                continue;
+            }
 
-        guint keyval=gdk_keyval_from_name(keyval_name);
-        if (keyval == GDK_KEY_VoidSymbol || keyval == 0) {
-            g_warning("Unknown keyval %s for %s", keyval_name, verb_name);
-            continue;
-        }
+            guint keyval=gdk_keyval_from_name(keyval_name);
+            if (keyval == GDK_KEY_VoidSymbol || keyval == 0) {
+                g_warning("Unknown keyval %s for %s", keyval_name, verb_name);
+                continue;
+            }
 
-        guint modifiers=0;
+            guint modifiers=0;
 
-        gchar const *modifiers_string=iter->attribute("modifiers");
-        if (modifiers_string) {
-            gchar const *iter=modifiers_string;
-            while (*iter) {
-                size_t length=strcspn(iter, ",");
-                gchar *mod=g_strndup(iter, length);
-                if (!strcmp(mod, "Control") || !strcmp(mod, "Ctrl")) {
-                    modifiers |= SP_SHORTCUT_CONTROL_MASK;
-                } else if (!strcmp(mod, "Shift")) {
-                    modifiers |= SP_SHORTCUT_SHIFT_MASK;
-                } else if (!strcmp(mod, "Alt")) {
-                    modifiers |= SP_SHORTCUT_ALT_MASK;
-                } else if (!strcmp(mod, "Super")) {
-                    modifiers |= SP_SHORTCUT_SUPER_MASK;
-                } else if (!strcmp(mod, "Hyper") || !strcmp(mod, "Cmd")) {
-                    modifiers |= SP_SHORTCUT_HYPER_MASK;
-                } else if (!strcmp(mod, "Meta")) {
-                    modifiers |= SP_SHORTCUT_META_MASK;
-                } else if (!strcmp(mod, "Primary")) {
-                    auto display = Gdk::Display::get_default();
-                    if (display) {
-                        GdkKeymap* keymap = display->get_keymap();
-                        GdkModifierType mod =
-                            gdk_keymap_get_modifier_mask (keymap, GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR);
-                        gdk_keymap_add_virtual_modifiers(keymap, &mod);
-                        if (mod & GDK_CONTROL_MASK)
-                            modifiers |= SP_SHORTCUT_CONTROL_MASK;
-                        else if (mod & GDK_META_MASK)
-                            modifiers |= SP_SHORTCUT_META_MASK;
-                        else {
-                            g_warning("unsupported primary accelerator ");
+            gchar const *modifiers_string=iter->attribute("modifiers");
+            if (modifiers_string) {
+                gchar const *iter=modifiers_string;
+                while (*iter) {
+                    size_t length=strcspn(iter, ",");
+                    gchar *mod=g_strndup(iter, length);
+                    if (!strcmp(mod, "Control") || !strcmp(mod, "Ctrl")) {
+                        modifiers |= SP_SHORTCUT_CONTROL_MASK;
+                    } else if (!strcmp(mod, "Shift")) {
+                        modifiers |= SP_SHORTCUT_SHIFT_MASK;
+                    } else if (!strcmp(mod, "Alt")) {
+                        modifiers |= SP_SHORTCUT_ALT_MASK;
+                    } else if (!strcmp(mod, "Super")) {
+                        modifiers |= SP_SHORTCUT_SUPER_MASK;
+                    } else if (!strcmp(mod, "Hyper") || !strcmp(mod, "Cmd")) {
+                        modifiers |= SP_SHORTCUT_HYPER_MASK;
+                    } else if (!strcmp(mod, "Meta")) {
+                        modifiers |= SP_SHORTCUT_META_MASK;
+                    } else if (!strcmp(mod, "Primary")) {
+                        auto display = Gdk::Display::get_default();
+                        if (display) {
+                            GdkKeymap* keymap = display->get_keymap();
+                            GdkModifierType mod =
+                                gdk_keymap_get_modifier_mask (keymap, GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR);
+                            gdk_keymap_add_virtual_modifiers(keymap, &mod);
+                            if (mod & GDK_CONTROL_MASK)
+                                modifiers |= SP_SHORTCUT_CONTROL_MASK;
+                            else if (mod & GDK_META_MASK)
+                                modifiers |= SP_SHORTCUT_META_MASK;
+                            else {
+                                g_warning("unsupported primary accelerator ");
+                                modifiers |= SP_SHORTCUT_CONTROL_MASK;
+                            }
+                        } else {
                             modifiers |= SP_SHORTCUT_CONTROL_MASK;
                         }
                     } else {
-                        modifiers |= SP_SHORTCUT_CONTROL_MASK;
+                        g_warning("Unknown modifier %s for %s", mod, verb_name);
                     }
-                } else {
-                    g_warning("Unknown modifier %s for %s", mod, verb_name);
+                    g_free(mod);
+                    iter += length;
+                    if (*iter) iter++;
                 }
-                g_free(mod);
-                iter += length;
-                if (*iter) iter++;
             }
-        }
 
-        sp_shortcut_set(keyval | modifiers, verb, is_primary, is_user_set);
+            sp_shortcut_set(keyval | modifiers, verb, is_primary, is_user_set);
+
+        } else if (!strcmp(iter->name(), "keys")) {
+            // include another keys file
+            _read_shortcuts_file(iter, is_user_set);
+        }
     }
 }
 
