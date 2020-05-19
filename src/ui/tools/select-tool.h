@@ -36,9 +36,7 @@ public:
 
 	bool dragging;
 	bool moved;
-	bool button_press_shift;
-	bool button_press_ctrl;
-	bool button_press_alt;
+	guint button_press_state;
 
         std::vector<SPItem *> cycling_items;
         std::vector<SPItem *> cycling_items_cmp;

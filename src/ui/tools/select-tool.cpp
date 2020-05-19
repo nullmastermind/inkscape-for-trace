@@ -93,9 +93,7 @@ SelectTool::SelectTool()
     : ToolBase(nullptr)
     , dragging(false)
     , moved(false)
-    , button_press_shift(false)
-    , button_press_ctrl(false)
-    , button_press_alt(false)
+    , button_press_state(0)
     , cycling_wrap(true)
     , item(nullptr)
     , grabbed(nullptr)
@@ -207,7 +205,7 @@ bool SelectTool::sp_select_context_abort() {
                 }
 
                 sp_object_unref( this->item, nullptr);
-            } else if (this->button_press_ctrl) {
+            } else if (this->button_press_state & GDK_CONTROL_MASK) {
                 // NOTE:  This is a workaround to a bug.
                 // When the ctrl key is held, sc->item is not defined
                 // so in this case (only), we skip the object doc check
@@ -295,9 +293,7 @@ bool SelectTool::item_handler(SPItem* item, GdkEvent* event) {
                 within_tolerance = true;
 
                 // remember what modifiers were on before button press
-                this->button_press_shift = (event->button.state & GDK_SHIFT_MASK) ? true : false;
-                this->button_press_ctrl = (event->button.state & GDK_CONTROL_MASK) ? true : false;
-                this->button_press_alt = (event->button.state & GDK_MOD1_MASK) ? true : false;
+                this->button_press_state = event->button.state;
 
                 if (event->button.state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK | GDK_MOD1_MASK)) {
                     // if shift or ctrl was pressed, do not move objects;
@@ -537,9 +533,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
                 this->grabbed = SP_CANVAS_ITEM(desktop->acetate);
 
                 // remember what modifiers were on before button press
-                this->button_press_shift = (event->button.state & GDK_SHIFT_MASK) ? true : false;
-                this->button_press_ctrl = (event->button.state & GDK_CONTROL_MASK) ? true : false;
-                this->button_press_alt = (event->button.state & GDK_MOD1_MASK) ? true : false;
+                this->button_press_state = event->button.state;
 
                 this->moved = FALSE;
 
@@ -569,7 +563,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
                 // motion notify coordinates as given (no snapping back to origin)
                 within_tolerance = false;
 
-                if (this->button_press_ctrl || (this->button_press_alt && !this->button_press_shift && !selection->isEmpty())) {
+                if (this->button_press_state & GDK_CONTROL_MASK || (this->button_press_state & GDK_MOD1_MASK && !this->button_press_state & GDK_SHIFT_MASK && !selection->isEmpty())) {
                     // if it's not click and ctrl or alt was pressed (the latter with some selection
                     // but not with shift) we want to drag rather than rubberband
                     this->dragging = TRUE;
@@ -594,7 +588,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
                         item_at_point = desktop->getItemAtPoint(Geom::Point(xp, yp), FALSE);
                     }
 
-                    if (item_at_point || this->moved || this->button_press_alt) {
+                    if (item_at_point || this->moved || this->button_press_state & GDK_MOD1_MASK) {
                         // drag only if starting from an item, or if something is already grabbed, or if alt-dragging
                         if (!this->moved) {
                             item_in_group = desktop->getItemAtPoint(Geom::Point(event->button.x, event->button.y), TRUE);
@@ -618,7 +612,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
                             // if neither a group nor an item (possibly in a group) at point are selected, set selection to the item at point
                             if ((!item_in_group || !selection->includes(item_in_group)) &&
                                 (!group_at_point || !selection->includes(group_at_point))
-                                && !this->button_press_alt) {
+                                && !this->button_press_state & GDK_MOD1_MASK) {
                                 // select what is under cursor
                                 if (!_seltrans->isEmpty()) {
                                     _seltrans->resetState();
@@ -805,9 +799,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
                 Inkscape::Rubberband::get(desktop)->stop(); // might have been started in another tool!
             }
 
-            this->button_press_shift = false;
-            this->button_press_ctrl = false;
-            this->button_press_alt = false;
+            this->button_press_state = 0;
             break;
 
         case GDK_SCROLL: {
