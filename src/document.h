@@ -105,6 +105,8 @@ class SPDocument : public Inkscape::GC::Managed<>,
 {
 
 public:
+    /// For sanity check in SPObject::requestDisplayUpdate
+    unsigned update_in_progress = 0;
 
     /************ Functions *****************/
 

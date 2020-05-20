@@ -63,8 +63,6 @@
 //#define OBJECT_TRACE
 unsigned SPObject::indent_level = 0;
 
-guint update_in_progress = 0; // guard against update-during-update
-
 Inkscape::XML::NodeEventVector object_event_vector = {
     SPObject::repr_child_added,
     SPObject::repr_child_removed,
@@ -1219,12 +1217,8 @@ void SPObject::requestDisplayUpdate(unsigned int flags)
 {
     g_return_if_fail( this->document != nullptr );
 
-    // update_in_progress is a global variable. It can be come greater than one when reading in a second
-    // document (as in creating the broken image bitmap). It is still an important warning so we don't
-    // remove it entirely. We probably shouldn't be calling requestDisplayUpdate in the set() methods.
-    if (update_in_progress > 2) {
-        g_print("WARNING: Requested update while update in progress, counter = %d\n", update_in_progress);
-    }
+    // expect no nested update calls
+    assert(!document->update_in_progress);
 
     /* requestModified must be used only to set one of SP_OBJECT_MODIFIED_FLAG or
      * SP_OBJECT_CHILD_MODIFIED_FLAG */
@@ -1268,7 +1262,7 @@ void SPObject::updateDisplay(SPCtx *ctx, unsigned int flags)
     objectTrace( "SPObject::updateDisplay" );
 #endif
 
-    update_in_progress ++;
+    assert(++(document->update_in_progress));
 
 #ifdef SP_OBJECT_DEBUG_CASCADE
     g_print("Update %s:%s %x %x %x\n", g_type_name_from_instance((GTypeInstance *) this), getId(), flags, this->uflags, this->mflags);
@@ -1307,7 +1301,7 @@ void SPObject::updateDisplay(SPCtx *ctx, unsigned int flags)
         g_warning("SPObject::updateDisplay(SPCtx *ctx, unsigned int flags) : throw in ((SPObjectClass *) G_OBJECT_GET_CLASS(this))->update(this, ctx, flags);");
     }
 
-    update_in_progress --;
+    assert((document->update_in_progress)--);
 
 #ifdef OBJECT_TRACE
     objectTrace( "SPObject::updateDisplay", false );
