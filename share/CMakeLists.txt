@@ -110,6 +110,9 @@ if(UNIX)
     ../TRANSLATORS
     ../COPYING
     DESTINATION ${INKSCAPE_SHARE_INSTALL}/doc)
+  install(FILES
+    bash-completion/completions/inkscape
+    DESTINATION ${SHARE_INSTALL}/bash-completion/completions)
 
 endif()
 
