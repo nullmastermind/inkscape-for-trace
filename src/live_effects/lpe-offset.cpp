@@ -206,7 +206,6 @@ sp_get_distance_point(Geom::PathVector pathv, Geom::Point origin) {
                     pa = pathv[(*pathvectortime).path_index].pointAt(pathtime.curve_index + 1);
                     pb = pathv[(*pathvectortime).path_index].pointAt(pathtime.curve_index + 2);
                 }
-                line;
                 line.setPoints(pa, pb);
                 line.setAngle(line.angle() + Geom::rad_from_deg(90));
                 Geom::Point nearestline = line.pointAt(line.nearestTime(origin));

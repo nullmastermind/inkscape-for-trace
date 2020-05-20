@@ -170,7 +170,7 @@ livepatheffect_on_repr_attr_changed ( Inkscape::XML::Node * /*repr*/,
 // effect, we use on clipboard to do not fork in same doc on pastepatheffect
 bool LivePathEffectObject::is_similar(LivePathEffectObject *that)
 {
-    if (this && that) {
+    if (that) {
         const char *thisid = this->getId();
         const char *thatid = that->getId();
         if (!thisid || !thatid || strcmp(thisid, thatid) != 0) {

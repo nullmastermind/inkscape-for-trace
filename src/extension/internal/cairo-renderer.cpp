@@ -649,12 +649,13 @@ void CairoRenderer::renderItem(CairoRenderContext *ctx, SPItem *item)
     ctx->transform(item->transform);
     sp_item_invoke_render(item, ctx);
 
-    if (state->need_layer)
+    if (state->need_layer) {
         if (blend) {
             ctx->popLayer(ink_css_blend_to_cairo_operator(style->mix_blend_mode.value)); // This applies clipping/masking
         } else {
             ctx->popLayer(); // This applies clipping/masking
         }
+    }
     ctx->popState();
 }
 

@@ -448,10 +448,6 @@ Persp3D::update_box_displays () {
 
 void
 Persp3D::update_box_reprs () {
-    if (!this) {
-        // Hmm, is it an error if this happens?
-        return;
-    }
     Persp3DImpl *persp_impl = this->perspective_impl;
 
     if (persp_impl->boxes.empty())

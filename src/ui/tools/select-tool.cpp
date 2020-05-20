@@ -563,7 +563,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
                 // motion notify coordinates as given (no snapping back to origin)
                 within_tolerance = false;
 
-                if (this->button_press_state & GDK_CONTROL_MASK || (this->button_press_state & GDK_MOD1_MASK && !this->button_press_state & GDK_SHIFT_MASK && !selection->isEmpty())) {
+                if ((this->button_press_state & GDK_CONTROL_MASK) || ((this->button_press_state & GDK_MOD1_MASK) && !(this->button_press_state & GDK_SHIFT_MASK) && !selection->isEmpty())) {
                     // if it's not click and ctrl or alt was pressed (the latter with some selection
                     // but not with shift) we want to drag rather than rubberband
                     this->dragging = TRUE;
@@ -612,7 +612,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
                             // if neither a group nor an item (possibly in a group) at point are selected, set selection to the item at point
                             if ((!item_in_group || !selection->includes(item_in_group)) &&
                                 (!group_at_point || !selection->includes(group_at_point))
-                                && !this->button_press_state & GDK_MOD1_MASK) {
+                                && !(this->button_press_state & GDK_MOD1_MASK)) {
                                 // select what is under cursor
                                 if (!_seltrans->isEmpty()) {
                                     _seltrans->resetState();
