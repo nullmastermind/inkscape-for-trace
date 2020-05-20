@@ -117,7 +117,8 @@ MarkerComboBox::refreshHistory()
      * to avoid unnecessary refreshes when things like gradients change
     */
     if (markerCount != ml.size()) {
-        const char *active = get_active()->get_value(marker_columns.marker);
+        auto iter = get_active();
+        const char *active = iter ? iter->get_value(marker_columns.marker) : nullptr;
         sp_marker_list_from_doc(doc, true);
         set_selected(active);
         markerCount = ml.size();
