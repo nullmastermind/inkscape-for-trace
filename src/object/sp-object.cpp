@@ -1217,8 +1217,13 @@ void SPObject::requestDisplayUpdate(unsigned int flags)
 {
     g_return_if_fail( this->document != nullptr );
 
+#ifndef NDEBUG
     // expect no nested update calls
-    assert(!document->update_in_progress);
+    if (document->update_in_progress) {
+        // observed with LPE on <rect>
+        g_print("WARNING: Requested update while update in progress, counter = %d\n", document->update_in_progress);
+    }
+#endif
 
     /* requestModified must be used only to set one of SP_OBJECT_MODIFIED_FLAG or
      * SP_OBJECT_CHILD_MODIFIED_FLAG */
