@@ -39,7 +39,7 @@ include(CMakeScripts/ConfigPaths.cmake)
 
 set(PROJECT_NAME inkscape)
 
-# see https://gitlab.com/inkscape/inkscape/issues/551 for versioning suffixes
+# see https://gitlab.com/inkscape/inkscape/-/issues/551 for versioning suffixes
 set(INKSCAPE_VERSION_MAJOR  1)
 set(INKSCAPE_VERSION_MINOR  1)
 set(INKSCAPE_VERSION_PATCH  0)

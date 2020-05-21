@@ -23,7 +23,7 @@ set(xgettext_options -cTRANSLATORS -j --keyword=_ --keyword=N_ --keyword=Q_:1g -
 # Due to a bug in old xgettext versions, we cannot use '--its='.
 # Instead, we use GETTEXTDATADIR=. to refer to the po/its/*.its files.
 # This requires a .loc file for each .its file. See po/its/units.loc for an example.
-# See https://gitlab.com/inkscape/inkscape/issues/271 for details.
+# See https://gitlab.com/inkscape/inkscape/-/issues/271 for details.
 # This workaround is necessary for Debian 9, so roughly until ca 2021.
 set(its_workaround ${CMAKE_COMMAND} -E env GETTEXTDATADIR=.)
 

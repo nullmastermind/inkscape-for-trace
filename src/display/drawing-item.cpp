@@ -802,7 +802,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     // cairo_get_matrix(dc.raw(), &cairo_matrix);
     // cairo_set_matrix(ict.raw(), &cairo_matrix);
     // For the moment we disable caching for patterns,
-    //   see https://gitlab.com/inkscape/inkscape/issues/309
+    //   see https://gitlab.com/inkscape/inkscape/-/issues/309
 
     unsigned render_result = RENDER_OK;
 

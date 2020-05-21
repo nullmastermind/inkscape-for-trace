@@ -205,7 +205,7 @@ void sp_file_convert_text_baseline_spacing(SPDocument *doc)
 
 
 /**
- * Implements a fix for https://gitlab.com/inkscape/inkscape/issues/45
+ * Implements a fix for https://gitlab.com/inkscape/inkscape/-/issues/45
  * Line spacing for empty lines was handled differently before 1.0
  * and in particular with the first empty lines or with how style attributes
  * are processed in empty lines (line  =  tspan with sodipodi:role="line")

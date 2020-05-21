@@ -2,7 +2,7 @@
 /**
  * @file
  * Test that svgz (= compressed SVG) import/drag-and-drop
- * is working: https://gitlab.com/inkscape/inkscape/issues/906 .
+ * is working: https://gitlab.com/inkscape/inkscape/-/issues/906 .
  *
  */
 /*

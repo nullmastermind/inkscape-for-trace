@@ -37,7 +37,7 @@
 
   <g style="fill:none;stroke:black;stroke-width:0.5px;font-size:42px;font-family:serif;text-anchor:middle">
 
-    <!-- bug https://gitlab.com/inkscape/inkscape/issues/469 -->
+    <!-- bug https://gitlab.com/inkscape/inkscape/-/issues/469 -->
     <text xml:space="preserve"
           x="300"
           y="50"
@@ -78,7 +78,7 @@
           y="400"
           style="font-family:'Lohit Telugu'">తెలుగులో</text>
 
-    <!-- Teluga bug https://gitlab.com/inkscape/inkscape/issues/394 -->
+    <!-- Teluga bug https://gitlab.com/inkscape/inkscape/-/issues/394 -->
     <text xml:space="preserve"
           x="300"
           y="450"

@@ -350,7 +350,7 @@ Available options:
   • cut
 
 ] functionality incomplete currently, does not hide linked operand, see https:/
-/gitlab.com/inkscape/inkscape/merge_requests/20#note_100799480
+/gitlab.com/inkscape/inkscape/-/merge_requests/20#note_100799480
 
   • Boolean Operations LPE
 
@@ -581,7 +581,7 @@ Plot extension
 The new option 'Convert objects to paths' will take care of converting
 everything to a path non-destructively before the data is sent to the plotter.
 [gives wrong error message, maybe not working? https://gitlab.com/inkscape/
-inkscape/commit/dd3b6aa099175e2244e1e04dde45bf21a966425e#note_100908512]
+inkscape/-/commit/dd3b6aa099175e2244e1e04dde45bf21a966425e#note_100908512]
 
 Palettes
 

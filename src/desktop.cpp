@@ -2173,7 +2173,7 @@ SPDesktop::show_dialogs()
         if (visible) {
 
 #ifdef GDK_WINDOWING_WAYLAND
-            // Hack to prevent crash with Wayland. See: https://gitlab.com/inkscape/inkscape/issues/454
+            // Hack to prevent crash with Wayland. See: https://gitlab.com/inkscape/inkscape/-/issues/454
             if (iter->first == "InkscapePreferences") {
                 Glib::ustring session_type  = Glib::getenv("XDG_SESSION_TYPE");  // Window session
                 Glib::ustring session_type2 = Glib::getenv("GDK_BACKEND");       // Possible override
