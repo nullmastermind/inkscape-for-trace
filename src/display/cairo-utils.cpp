@@ -159,7 +159,8 @@ Pixbuf::Pixbuf(cairo_surface_t *s)
     : _pixbuf(gdk_pixbuf_new_from_data(
         cairo_image_surface_get_data(s), GDK_COLORSPACE_RGB, TRUE, 8,
         cairo_image_surface_get_width(s), cairo_image_surface_get_height(s),
-        cairo_image_surface_get_stride(s), nullptr, nullptr))
+        cairo_image_surface_get_stride(s),
+        ink_cairo_pixbuf_cleanup, s))
     , _surface(s)
     , _mod_time(0)
     , _pixel_format(PF_CAIRO)
@@ -197,7 +198,6 @@ Pixbuf::~Pixbuf()
 {
     if (_cairo_store) {
         g_object_unref(_pixbuf);
-        cairo_surface_destroy(_surface);
     } else {
         cairo_surface_destroy(_surface);
         g_object_unref(_pixbuf);
