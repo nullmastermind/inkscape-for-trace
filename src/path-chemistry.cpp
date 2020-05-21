@@ -311,13 +311,14 @@ void ObjectSet::toCurves(bool skip_undo)
     }
     std::vector<SPItem*> selected(items().begin(), items().end());
     std::vector<Inkscape::XML::Node*> to_select;
-    clear();
     std::vector<SPItem*> items(selected);
 
     did = sp_item_list_to_curves(items, selected, to_select);
 
-    setReprList(to_select);
-    addList(selected);
+    if (did) {
+        setReprList(to_select);
+        addList(selected);
+    }
 
     if (desktop()) {
         desktop()->clearWaitingCursor();
@@ -389,13 +390,16 @@ sp_item_list_to_curves(const std::vector<SPItem*> &items, std::vector<SPItem*>& 
         
         SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
         if (lpeitem) {
-            selected.erase(remove(selected.begin(), selected.end(), item), selected.end());
             lpeitem->removeAllPathEffects(true);
             SPObject *elemref = document->getObjectById(id);
-            if (elemref) {
-                //If the LPE item is a shape is converted to a path so we need to reupdate the item
-                item = dynamic_cast<SPItem *>(elemref);
-                selected.push_back(item);
+            if (elemref != item) {
+                selected.erase(remove(selected.begin(), selected.end(), item), selected.end());
+                if (elemref) {
+                    //If the LPE item is a shape is converted to a path so we need to reupdate the item
+                    item = dynamic_cast<SPItem *>(elemref);
+                    selected.push_back(item);
+                    did = true;
+                }
             }
         }
         
