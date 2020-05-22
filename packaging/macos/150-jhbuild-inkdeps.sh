@@ -12,16 +12,13 @@
 SELF_DIR=$(F=$0; while [ ! -z $(readlink $F) ] && F=$(readlink $F); cd $(dirname $F); F=$(basename $F); [ -L $F ]; do :; done; echo $(pwd -P))
 for script in $SELF_DIR/0??-*.sh; do source $script; done
 
-### install additional GNOME libraries #########################################
+### install Inkscape dependencies ##############################################
 
 # Part of gtk-osx module sets.
 
 jhbuild build \
-  adwaita-icon-theme \
   gtkspell3 \
   libsoup
-
-### install Inkscape dependencies ##############################################
 
 # Part of inkscape module set.
 

@@ -37,7 +37,7 @@ export SDKROOT=$SDKROOT_DIR/MacOSX${MACOSX_DEPLOYMENT_TARGET}.sdk
 
 ### build system/toolset version ###############################################
 
-TOOLSET_VERSION=0.34
+TOOLSET_VERSION=0.35
 
 ### ramdisk ####################################################################
 
@@ -143,7 +143,7 @@ PY3_BUILD=1  # custom framework build number
 
 # https://github.com/dehesselle/gtk-osx
 # Forked from https://gitlab.gnome.org/GNOME/gtk-osx
-URL_GTK_OSX=https://raw.githubusercontent.com/dehesselle/gtk-osx/inkscape-1.0.x-4
+URL_GTK_OSX=https://raw.githubusercontent.com/dehesselle/gtk-osx/inkscape-1.0.x-5
 URL_GTK_OSX_SETUP=$URL_GTK_OSX/gtk-osx-setup.sh
 URL_GTK_OSX_MODULESET=$URL_GTK_OSX/modulesets-stable/gtk-osx.modules
 
