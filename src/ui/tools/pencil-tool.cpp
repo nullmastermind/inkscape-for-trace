@@ -236,9 +236,9 @@ bool PencilTool::_handleButtonPress(GdkEventButton const &bevent) {
                     p = anchor->dp;
                     //Put the start overwrite curve always on the same direction
                     if (anchor->start) {
-                        this->sa_overwrited =  anchor->curve->create_reverse();
+                        this->sa_overwrited = anchor->curve->create_reverse();
                     } else {
-                        this->sa_overwrited =  anchor->curve->copy();
+                        this->sa_overwrited = anchor->curve->copy();
                     }
                     desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Continuing selected path"));
                 } else {
@@ -353,7 +353,7 @@ bool PencilTool::_handleMotionNotify(GdkEventMotion const &mevent) {
 
                 if ( !this->sa && !this->green_anchor ) {
                     /* Create green anchor */
-                    this->green_anchor = sp_draw_anchor_new(this, this->green_curve, TRUE, this->p[0]);
+                    this->green_anchor = sp_draw_anchor_new(this, this->green_curve.get(), TRUE, this->p[0]);
                 }
                 if (anchor) {
                     p = anchor->dp;
@@ -1027,7 +1027,7 @@ void PencilTool::_interpolate() {
             }
         }
         if (!tablet_enabled) {
-            sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), this->green_curve);
+            sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), this->green_curve.get());
         }
         /* Fit and draw and copy last point */
         g_assert(!this->green_curve->is_empty());
@@ -1118,7 +1118,7 @@ void PencilTool::_sketchInterpolate() {
         this->green_curve->reset();
         this->green_curve->set_pathvector(Geom::path_from_piecewise(this->sketch_interpolation, 0.01));
         if (!tablet_enabled) {
-            sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), this->green_curve);
+            sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), this->green_curve.get());
         }
         /* Fit and draw and copy last point */
         g_assert(!this->green_curve->is_empty());
@@ -1201,11 +1201,10 @@ void PencilTool::_fitAndSplit() {
 
 
         this->green_curve->append_continuous(this->red_curve, 0.0625);
-        SPCurve *curve = this->red_curve->copy();
+        auto curve = this->red_curve->copy();
 
         /// \todo fixme:
-        SPCanvasItem *cshape = sp_canvas_bpath_new(this->desktop->getSketch(), curve, true);
-        curve->unref();
+        SPCanvasItem *cshape = sp_canvas_bpath_new(this->desktop->getSketch(), curve.get(), true);
 
         this->highlight_color = SP_ITEM(this->desktop->currentLayer())->highlight_color();
         if((unsigned int)prefs->getInt("/tools/nodes/highlight_color", 0xff0000ff) == this->highlight_color){

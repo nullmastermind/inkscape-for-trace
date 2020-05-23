@@ -54,6 +54,7 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 #include "verbs.h"
 
 #include "display/cairo-utils.h"
+#include "display/curve.h"
 #include "display/sp-canvas.h"
 
 #include "helper/png-write.h"

@@ -14,6 +14,7 @@
  */
 
 #include <map>
+#include <memory>
 #include <string>
 
 #include <2geom/point.h>
@@ -70,11 +71,11 @@ public:
 
     // Red curve
     SPCanvasItem *red_bpath;
-    SPCurve *red_curve;
+    std::unique_ptr<SPCurve> red_curve;
     guint32 red_color;
 
     // Green curve
-    SPCurve *green_curve;
+    std::unique_ptr<SPCurve> green_curve;
 
     // The new connector
     SPItem *newconn;

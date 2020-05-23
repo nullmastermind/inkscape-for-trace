@@ -229,10 +229,10 @@ void ConnectorTool::setup()
     sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(this->red_bpath), 0x00000000,
             SP_WIND_RULE_NONZERO);
     /* Create red curve */
-    this->red_curve = new SPCurve();
+    this->red_curve = std::make_unique<SPCurve>();
 
     /* Create green curve */
-    this->green_curve = new SPCurve();
+    green_curve = std::make_unique<SPCurve>();
 
     // Notice the initial selection.
     //cc_selection_changed(this->selection, (gpointer) this);
@@ -629,10 +629,10 @@ bool ConnectorTool::_handleMotionNotify(GdkEventMotion const &mevent)
         sp_conn_reroute_path_immediate(path);
 
         // Copy this to the temporary visible path
-        this->red_curve = path->getCurveForEdit();
+        this->red_curve.reset(path->getCurveForEdit());
         this->red_curve->transform(i2d);
 
-        sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), this->red_curve, true);
+        sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), this->red_curve.get(), true);
         ret = true;
         break;
     }
@@ -822,9 +822,9 @@ void ConnectorTool::_setSubsequentPoint(Geom::Point const p)
     this->newConnRef->makePathInvalid();
     this->newConnRef->router()->processTransaction();
     // Recreate curve from libavoid route.
-    recreateCurve( this->red_curve, this->newConnRef, this->curvature );
+    recreateCurve(red_curve.get(), this->newConnRef, this->curvature);
     this->red_curve->transform(desktop->doc2dt());
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), this->red_curve, true);
+    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), red_curve.get(), true);
 }
 
 
@@ -835,20 +835,17 @@ void ConnectorTool::_setSubsequentPoint(Geom::Point const p)
  */
 void ConnectorTool::_concatColorsAndFlush()
 {
-    SPCurve *c = this->green_curve;
-    this->green_curve = new SPCurve();
+    auto c = std::make_unique<SPCurve>();
+    std::swap(c, green_curve);
 
     this->red_curve->reset();
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), nullptr);
 
     if (c->is_empty()) {
-        c->unref();
         return;
     }
 
-    this->_flushWhite(c);
-
-    c->unref();
+    this->_flushWhite(c.get());
 }
 
 
@@ -860,17 +857,8 @@ void ConnectorTool::_concatColorsAndFlush()
  *
  */
 
-void ConnectorTool::_flushWhite(SPCurve *gc)
+void ConnectorTool::_flushWhite(SPCurve *c)
 {
-    SPCurve *c;
-
-    if (gc) {
-        c = gc;
-        c->ref();
-    } else {
-        return;
-    }
-
     /* Now we have to go back to item coordinates at last */
     c->transform(desktop->dt2doc());
 
@@ -927,8 +915,6 @@ void ConnectorTool::_flushWhite(SPCurve *gc)
         Inkscape::GC::release(repr);
     }
 
-    c->unref();
-
     DocumentUndo::done(doc, SP_VERB_CONTEXT_CONNECTOR, _("Create connector"));
 }
 
@@ -936,7 +922,7 @@ void ConnectorTool::_flushWhite(SPCurve *gc)
 void ConnectorTool::_finishSegment(Geom::Point const /*p*/)
 {
     if (!this->red_curve->is_empty()) {
-        this->green_curve->append_continuous(this->red_curve, 0.0625);
+        green_curve->append_continuous(*red_curve);
 
         this->p[0] = this->p[3];
         this->p[1] = this->p[4];
@@ -1042,10 +1028,10 @@ static gboolean endpt_handler(SPKnot */*knot*/, GdkEvent *event, ConnectorTool *
             }
 
             // Show the red path for dragging.
-            cc->red_curve = SP_PATH(cc->clickeditem)->getCurveForEdit();
+            cc->red_curve.reset(SP_PATH(cc->clickeditem)->getCurveForEdit());
             Geom::Affine i2d = (cc->clickeditem)->i2dt_affine();
             cc->red_curve->transform(i2d);
-            sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(cc->red_bpath), cc->red_curve, true);
+            sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(cc->red_bpath), cc->red_curve.get(), true);
 
             cc->clickeditem->setHidden(true);
 
@@ -1257,7 +1243,7 @@ void cc_create_connection_point(ConnectorTool* cc)
 static bool cc_item_is_shape(SPItem *item)
 {
     if (SP_IS_PATH(item)) {
-        const SPCurve * curve = (SP_SHAPE(item))->_curve;
+        const SPCurve *curve = static_cast<SPShape *>(item)->_curve.get();
         if ( curve && !(curve->is_closed()) ) {
             // Open paths are connectors.
             return false;

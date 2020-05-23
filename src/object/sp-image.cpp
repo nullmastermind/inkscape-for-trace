@@ -165,9 +165,7 @@ void SPImage::release() {
     }
 #endif // defined(HAVE_LIBLCMS2)
 
-    if (this->curve) {
-        this->curve = this->curve->unref();
-    }
+    curve.reset();
 
     SPItem::release();
 }
@@ -741,25 +739,11 @@ static void sp_image_set_curve( SPImage *image )
 {
     //create a curve at the image's boundary for snapping
     if ((image->height.computed < MAGIC_EPSILON_TOO) || (image->width.computed < MAGIC_EPSILON_TOO) || (image->getClipObject())) {
-        if (image->curve) {
-            image->curve = image->curve->unref();
-        }
     } else {
         Geom::OptRect rect = image->bbox(Geom::identity(), SPItem::VISUAL_BBOX);
-        SPCurve *c = nullptr;
         
         if (rect->isFinite()) {
-            c = SPCurve::new_from_rect(*rect, true);
-        }
-
-        if (image->curve) {
-            image->curve = image->curve->unref();
-        }
-
-        if (c) {
-            image->curve = c->ref();
-
-            c->unref();
+            image->curve = SPCurve::new_from_rect(*rect, true);
         }
     }
 }
@@ -767,13 +751,12 @@ static void sp_image_set_curve( SPImage *image )
 /**
  * Return duplicate of curve (if any exists) or NULL if there is no curve
  */
-SPCurve *SPImage::get_curve() const
+std::unique_ptr<SPCurve> SPImage::get_curve() const
 {
-    SPCurve *result = nullptr;
     if (curve) {
-        result = curve->copy();
+        return curve->copy();
     }
-    return result;
+    return {};
 }
 
 void sp_embed_image(Inkscape::XML::Node *image_node, Inkscape::Pixbuf *pb)

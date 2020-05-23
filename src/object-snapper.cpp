@@ -36,6 +36,7 @@
 #include "object/sp-text.h"
 #include "object/sp-use.h"
 
+#include "display/curve.h"
 #include "path/path-util.h"  // curve_for_item
 
 #include "svg/svg.h"
@@ -486,12 +487,11 @@ void Inkscape::ObjectSnapper::_snapPaths(IntermSnapResults &isr,
          * */
         if (node_tool_active) {
             // TODO fix the function to be const correct:
-            SPCurve *curve = curve_for_item(const_cast<SPPath*>(selected_path));
+            auto curve = curve_for_item(const_cast<SPPath *>(selected_path));
             if (curve) {
                 Geom::PathVector *pathv = new Geom::PathVector(curve->get_pathvector()); // Must be freed.
                 *pathv *= selected_path->i2doc_affine();
                 _paths_to_snap_to->push_back(SnapCandidatePath(pathv, SNAPTARGET_PATH, Geom::OptRect(), true));
-                curve->unref();
             }
         }
     }
@@ -751,7 +751,7 @@ Geom::PathVector* Inkscape::ObjectSnapper::_getBorderPathv() const
 
 Geom::PathVector* Inkscape::ObjectSnapper::_getPathvFromRect(Geom::Rect const rect) const
 {
-    SPCurve const *border_curve = SPCurve::new_from_rect(rect, true);
+    auto const border_curve = SPCurve::new_from_rect(rect, true);
     if (border_curve) {
         Geom::PathVector *dummy = new Geom::PathVector(border_curve->get_pathvector());
         return dummy;

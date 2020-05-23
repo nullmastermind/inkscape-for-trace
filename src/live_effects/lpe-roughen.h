@@ -20,6 +20,8 @@
 #include "live_effects/parameter/bool.h"
 #include "live_effects/parameter/random.h"
 
+#include <memory>
+
 namespace Inkscape {
 namespace LivePathEffect {
 
@@ -49,12 +51,14 @@ public:
     virtual double sign(double randNumber);
     virtual Geom::Point randomize(double max_length, bool is_node = false);
     void doBeforeEffect(SPLPEItem const * lpeitem) override;
-    virtual SPCurve const * addNodesAndJitter(Geom::Curve const * A, Geom::Point &prev, Geom::Point &last_move, double t, bool last);
-    virtual SPCurve *jitter(Geom::Curve const * A,  Geom::Point &prev, Geom::Point &last_move);
     virtual Geom::Point tPoint(Geom::Point A, Geom::Point B, double t = 0.5);
     Gtk::Widget *newWidget() override;
 
 private:
+    std::unique_ptr<SPCurve> addNodesAndJitter(Geom::Curve const *A, Geom::Point &prev, Geom::Point &last_move,
+                                               double t, bool last);
+    std::unique_ptr<SPCurve> jitter(Geom::Curve const *A, Geom::Point &prev, Geom::Point &last_move);
+
     EnumParam<DivisionMethod> method;
     ScalarParam max_segment_size;
     ScalarParam segments;

@@ -1001,11 +1001,9 @@ bool CalligraphicTool::accumulate() {
 		return false; // failure
 	}
 
-	SPCurve *rev_cal2 = this->cal2->create_reverse();
+        auto rev_cal2 = this->cal2->create_reverse();
 
 	if ((rev_cal2->get_segment_count() <= 0) || rev_cal2->first_path()->closed()) {
-		rev_cal2->unref();
-
 		this->cal1->reset();
 		this->cal2->reset();
 
@@ -1023,13 +1021,11 @@ bool CalligraphicTool::accumulate() {
 
 	add_cap(this->accumulated, dc_cal1_lastseg->finalPoint(), rev_cal2_firstseg->initialPoint(), this->cap_rounding);
 
-	this->accumulated->append(rev_cal2, true);
+	this->accumulated->append(*rev_cal2, true);
 
 	add_cap(this->accumulated, rev_cal2_lastseg->finalPoint(), dc_cal1_firstseg->initialPoint(), this->cap_rounding);
 
 	this->accumulated->closepath();
-
-	rev_cal2->unref();
 
 	this->cal1->reset();
 	this->cal2->reset();
@@ -1140,9 +1136,8 @@ void CalligraphicTool::fit_and_split(bool release) {
             SPCanvasItem *cbp = sp_canvas_item_new(desktop->getSketch(),
                                                    SP_TYPE_CANVAS_BPATH,
                                                    nullptr);
-            SPCurve *curve = this->currentcurve->copy();
-            sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH (cbp), curve, true);
-            curve->unref();
+            auto curve = this->currentcurve->copy();
+            sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(cbp), curve.get(), true);
 
             guint32 fillColor = sp_desktop_get_color_tool (desktop, "/tools/calligraphic", true);
             //guint32 strokeColor = sp_desktop_get_color_tool (desktop, "/tools/calligraphic", false);

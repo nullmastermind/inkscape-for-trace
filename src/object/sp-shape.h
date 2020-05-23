@@ -23,6 +23,8 @@
 #include "sp-lpe-item.h"
 #include "sp-marker-loc.h"
 
+#include <memory>
+
 #define SP_SHAPE(obj) (dynamic_cast<SPShape*>((SPObject*)obj))
 #define SP_IS_SHAPE(obj) (dynamic_cast<const SPShape*>((SPObject*)obj) != NULL)
 
@@ -44,7 +46,7 @@ public:
     SPCurve * getCurveBeforeLPE (unsigned int owner = FALSE) const;
     SPCurve * getCurveForEdit (unsigned int owner = FALSE) const;
     void setCurve (SPCurve *curve, unsigned int owner = FALSE);
-    void setCurveBeforeLPE (SPCurve *new_curve, unsigned int owner = FALSE);
+    void setCurveBeforeLPE(SPCurve const *new_curve);
     void setCurveInsync (SPCurve *curve, unsigned int owner = FALSE);
     int hasMarkers () const;
     int numberOfMarkers (int type) const;
@@ -57,10 +59,12 @@ public:
     mutable Geom::OptRect bbox_geom_cache;
     mutable Geom::OptRect bbox_vis_cache;
 
+  protected:
+    std::unique_ptr<SPCurve> _curve_before_lpe;
 
+    // "temporarily" since 2012
 public: // temporarily public, until SPPath is properly classed, etc.
-    SPCurve *_curve_before_lpe;
-    SPCurve *_curve;
+    std::unique_ptr<SPCurve> _curve;
 
 public:
     SPMarker *_marker[SP_MARKER_LOC_QTY];

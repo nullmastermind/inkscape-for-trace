@@ -57,7 +57,7 @@ Inkscape::XML::Node* Box3DSide::write(Inkscape::XML::Document *xml_doc, Inkscape
     this->set_shape();
 
     /* Duplicate the path */
-    SPCurve const *curve = this->_curve;
+    SPCurve const *curve = this->_curve.get();
 
     //Nulls might be possible if this called iteratively
     if ( !curve ) {

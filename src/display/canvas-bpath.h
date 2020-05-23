@@ -21,6 +21,8 @@
 
 #include "sp-canvas-item.h"
 
+#include <memory>
+
 struct SPCanvasBPath;
 struct SPCanvasBPathClass;
 struct SPCanvasGroup;
@@ -68,7 +70,7 @@ struct SPCanvasBPath {
     SPCanvasItem item;
 
     /* Line def */
-    SPCurve *curve;
+    std::unique_ptr<SPCurve> curve;
     Geom::Affine affine;
 
     /* Fill attributes */

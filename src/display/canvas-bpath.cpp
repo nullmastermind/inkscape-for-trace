@@ -61,9 +61,8 @@ static void sp_canvas_bpath_destroy(SPCanvasItem *object)
 {
     SPCanvasBPath *cbp = SP_CANVAS_BPATH (object);
 
-    if (cbp->curve) {
-        cbp->curve = cbp->curve->unref();
-    }
+    // C++ member in C-allocated struct
+    std::destroy_at(&cbp->curve);
 
     if (SP_CANVAS_ITEM_CLASS(sp_canvas_bpath_parent_class)->destroy)
         (* SP_CANVAS_ITEM_CLASS(sp_canvas_bpath_parent_class)->destroy) (object);
@@ -190,6 +189,11 @@ sp_canvas_bpath_new (SPCanvasGroup *parent, SPCurve *curve, bool phantom_line)
 
     SPCanvasItem *item = sp_canvas_item_new (parent, SP_TYPE_CANVAS_BPATH, nullptr);
 
+    auto cbp = SP_CANVAS_BPATH(item);
+
+    // C++ member in C-allocated struct
+    new (&cbp->curve) decltype(cbp->curve)();
+
     sp_canvas_bpath_set_bpath (SP_CANVAS_BPATH (item), curve, phantom_line);
 
     return item;
@@ -202,13 +206,8 @@ sp_canvas_bpath_set_bpath (SPCanvasBPath *cbp, SPCurve *curve, bool phantom_line
     g_return_if_fail (SP_IS_CANVAS_BPATH (cbp));
 
     cbp->phantom_line = phantom_line;
-    if (cbp->curve) {
-        cbp->curve = cbp->curve->unref();
-    }
 
-    if (curve) {
-        cbp->curve = curve->ref();
-    }
+    cbp->curve = curve ? curve->ref() : nullptr;
 
     sp_canvas_item_request_update (SP_CANVAS_ITEM (cbp));
 }

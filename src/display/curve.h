@@ -18,17 +18,24 @@
 #include <cstddef>
 #include <boost/optional.hpp>
 #include <list>
+#include <memory>
+#include <utility>
+
+class SPCurve;
 
 /**
  * Wrapper around a Geom::PathVector object.
  */
 class SPCurve {
+    //! Preferred smart pointer type for SPCurve
+    using smart_pointer = ::std::unique_ptr<SPCurve>;
+
 public:
     /* Constructors */
     explicit SPCurve();
     explicit SPCurve(Geom::PathVector  pathv);
-    explicit SPCurve(std::list<SPCurve *> const& pathv);
-    static SPCurve * new_from_rect(Geom::Rect const &rect, bool all_four_sides = false);
+
+    static smart_pointer new_from_rect(Geom::Rect const &rect, bool all_four_sides = false);
 
     virtual ~SPCurve();
 
@@ -39,10 +46,14 @@ public:
     void set_pathvector(Geom::PathVector const & new_pathv);
     Geom::PathVector const & get_pathvector() const;
 
-    SPCurve * ref();
-    SPCurve * unref();
+    smart_pointer ref();
+    smart_pointer copy() const;
 
-    SPCurve * copy() const;
+    [[deprecated("Use std::unique_ptr<SPCurve>")]] std::nullptr_t unref()
+    {
+        _unref();
+        return nullptr;
+    }
 
     size_t get_segment_count() const;
     size_t nodes_in_path() const;
@@ -79,18 +90,56 @@ public:
     void move_endpoints(Geom::Point const &, Geom::Point const &);
     void last_point_additive_move(Geom::Point const & p);
 
-    void append(SPCurve const *curve2, bool use_lineto);
-    SPCurve * append_continuous(SPCurve const *c1, double tolerance);
-    SPCurve * create_reverse() const;
+    void append(SPCurve const &curve2, bool use_lineto = false);
+    [[deprecated("Use reference overload")]] void append(SPCurve const *curve2, bool use_lineto)
+    {
+        append(*curve2, use_lineto);
+    }
 
-    std::list<SPCurve *> split() const;
-    static SPCurve * concat(std::list<SPCurve *> l);
+    void append_continuous(SPCurve const &c1, double tolerance = 0.0625) { append_continuous(&c1, tolerance); }
+    SPCurve * append_continuous(SPCurve const *c1, double tolerance);
+
+    smart_pointer create_reverse() const;
+
+    std::list<smart_pointer> split() const;
+
+    friend class std::default_delete<SPCurve>;
+    friend class CurveTest; // for ref count test
+
+private:
+    void _unref();
 
 protected:
     size_t _refcount;
 
     Geom::PathVector _pathv;
 };
+
+/**
+ * Specialized deleter allows using std::unique_ptr<SPCurve> with shared references.
+ *
+ * @verbatim
+   auto curve1 = std::make_unique<SPCurve>();
+   auto curve2 = curve1->ref();
+   @endverbatim
+ *
+ * Is equivalent to:
+ * @verbatim
+   auto curve1 = new SPCurve();
+   auto curve2 = curve1->ref().release();
+   curve2->unref();
+   curve1->unref();
+   @endverbatim
+ */
+template <>
+inline void ::std::default_delete<SPCurve>::operator()(SPCurve *ptr) const
+// This is `noexcept` in libc++ but not in libstdc++
+#ifdef _LIBCPP_VERSION
+    noexcept
+#endif
+{
+    ptr->_unref();
+}
 
 #endif // !SEEN_DISPLAY_CURVE_H
 

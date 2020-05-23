@@ -37,11 +37,10 @@ SPDrawAnchor *sp_draw_anchor_new(Inkscape::UI::Tools::FreehandBase *dc, SPCurve 
         return nullptr;
     }
 
-    SPDrawAnchor *a = g_new(SPDrawAnchor, 1);
+    SPDrawAnchor *a = new SPDrawAnchor;
 
     a->dc = dc;
-    a->curve = curve;
-    curve->ref();
+    a->curve = curve->ref();
     a->start = start;
     a->active = FALSE;
     a->dp = delta;
@@ -54,18 +53,19 @@ SPDrawAnchor *sp_draw_anchor_new(Inkscape::UI::Tools::FreehandBase *dc, SPCurve 
     return a;
 }
 
+SPDrawAnchor::~SPDrawAnchor()
+{
+    if (ctrl) {
+        sp_canvas_item_destroy(ctrl);
+    }
+}
+
 /**
  * Destroys the anchor's canvas item and frees the anchor object.
  */
 SPDrawAnchor *sp_draw_anchor_destroy(SPDrawAnchor *anchor)
 {
-    if (anchor->curve) {
-        anchor->curve->unref();
-    }
-    if (anchor->ctrl) {
-        sp_canvas_item_destroy(anchor->ctrl);
-    }
-    g_free(anchor);
+    delete anchor;
     return nullptr;
 }
 

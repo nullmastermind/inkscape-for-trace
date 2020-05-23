@@ -363,9 +363,9 @@ lpetool_context_reset_limiting_bbox(LpeTool *lc)
     B *= doc2dt;
 
     Geom::Rect rect(A, B);
-    SPCurve *curve = SPCurve::new_from_rect(rect);
+    auto curve = SPCurve::new_from_rect(rect);
 
-    lc->canvas_bbox = sp_canvas_bpath_new (lc->getDesktop()->getControls(), curve);
+    lc->canvas_bbox = sp_canvas_bpath_new(lc->getDesktop()->getControls(), curve.get());
     sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(lc->canvas_bbox), 0x0000ffff, 0.8, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT, 5, 5);
 }
 

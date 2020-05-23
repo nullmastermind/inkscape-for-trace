@@ -16,6 +16,8 @@
 #include "display/drawing-item.h"
 #include "display/nr-style.h"
 
+#include <memory>
+
 class SPStyle;
 class SPCurve;
 
@@ -46,7 +48,7 @@ protected:
     void _renderMarkers(DrawingContext &dc, Geom::IntRect const &area, unsigned flags,
                         DrawingItem *stop_at);
 
-    SPCurve *_curve;
+    std::unique_ptr<SPCurve> _curve;
     NRStyle _nrstyle;
 
     DrawingItem *_last_pick;

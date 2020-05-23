@@ -41,8 +41,6 @@ DrawingShape::DrawingShape(Drawing &drawing)
 
 DrawingShape::~DrawingShape()
 {
-    if (_curve)
-        _curve->unref();
 }
 
 void
@@ -50,14 +48,7 @@ DrawingShape::setPath(SPCurve *curve)
 {
     _markForRendering();
 
-    if (_curve) {
-        _curve->unref();
-        _curve = nullptr;
-    }
-    if (curve) {
-        _curve = curve;
-        curve->ref();
-    }
+    _curve = curve ? curve->ref() : nullptr;
 
     _markForUpdate(STATE_ALL, false);
 }

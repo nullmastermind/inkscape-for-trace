@@ -21,6 +21,8 @@ class CurveTest : public ::testing::Test {
     Geom::Path path3;
     Geom::Path path4;
 
+    static size_t get_refcount(SPCurve const *curve) { return curve->_refcount; }
+
   protected:
     CurveTest()
         : path4(Geom::Point(3, 5)) // Just a moveto
@@ -40,6 +42,19 @@ class CurveTest : public ::testing::Test {
         path3.append(Geom::LineSegment(Geom::Point(6, 4), Geom::Point(2, 4)));
     }
 };
+
+TEST_F(CurveTest, testRefCount)
+{
+    auto c1 = std::make_unique<SPCurve>();
+    ASSERT_EQ(get_refcount(c1.get()), 1);
+    {
+        auto c2 = c1->ref();
+        ASSERT_EQ(c2.get(), c1.get());
+        ASSERT_EQ(get_refcount(c1.get()), 2);
+        ASSERT_EQ(get_refcount(c2.get()), 2);
+    }
+    ASSERT_EQ(get_refcount(c1.get()), 1);
+}
 
 TEST_F(CurveTest, testGetSegmentCount)
 {

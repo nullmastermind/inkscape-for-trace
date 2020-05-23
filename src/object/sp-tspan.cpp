@@ -370,7 +370,7 @@ void refresh_textpath_source(SPTextPath* tp)
             delete tp->originalPath;
         }
 
-        SPCurve* curve_copy;
+        std::unique_ptr<SPCurve> curve_copy;
         if (tp->side == SP_TEXT_PATH_SIDE_LEFT) {
             curve_copy = tp->sourcePath->originalPath->copy();
         } else {
@@ -381,8 +381,6 @@ void refresh_textpath_source(SPTextPath* tp)
         tp->originalPath = new Path;
         tp->originalPath->LoadPathVector(curve_copy->get_pathvector(), item->transform, true);
         tp->originalPath->ConvertWithBackData(0.01);
-
-        curve_copy->unref();
     }
 }
 

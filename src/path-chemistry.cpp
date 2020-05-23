@@ -236,12 +236,12 @@ ObjectSet::breakApart(bool skip_undo)
         item->deleteObject(false);
 
 
-        std::list<SPCurve *> list = curve->split();
+        auto list = curve->split();
 
         curve->unref();
 
         std::vector<Inkscape::XML::Node*> reprs;
-        for (auto curve:list) {
+        for (auto const &curve : list) {
 
             Inkscape::XML::Node *repr = parent->document()->createElement("svg:path");
             repr->setAttribute("style", style);
@@ -262,7 +262,7 @@ ObjectSet::breakApart(bool skip_undo)
             parent->addChildAtPos(repr, pos);
 
             // if it's the first one, restore id
-            if (curve == *(list.begin()))
+            if (curve == list.front())
                 repr->setAttribute("id", id);
 
             reprs.push_back(repr);
@@ -607,7 +607,7 @@ ObjectSet::pathReverse()
 
         did = true;
 
-        SPCurve *rcurve = path->getCurveForEdit(true)->create_reverse();
+        auto rcurve = path->getCurveForEdit(true)->create_reverse();
 
         gchar *str = sp_svg_write_path(rcurve->get_pathvector());
         if ( path->hasPathEffectRecursive() ) {
@@ -616,8 +616,6 @@ ObjectSet::pathReverse()
             path->setAttribute("d", str);
         }
         g_free(str);
-
-        rcurve->unref();
 
         // reverse nodetypes order (Bug #179866)
         gchar *nodetypes = g_strdup(path->getRepr()->attribute("sodipodi:nodetypes"));

@@ -21,10 +21,13 @@
 
 #include <glibmm/ustring.h>
 #include "svg/svg-length.h"
-#include "display/curve.h"
 #include "sp-item.h"
 #include "viewbox.h"
 #include "sp-dimensions.h"
+
+class SPCurve;
+
+#include <memory>
 
 #define SP_IMAGE(obj) (dynamic_cast<SPImage*>((SPObject*)obj))
 #define SP_IS_IMAGE(obj) (dynamic_cast<const SPImage*>((SPObject*)obj) != NULL)
@@ -43,7 +46,7 @@ public:
     double dpi;
     double prev_width, prev_height;
 
-    SPCurve *curve; // This curve is at the image's boundary for snapping
+    std::unique_ptr<SPCurve> curve; // This curve is at the image's boundary for snapping
 
     char *href;
 #if defined(HAVE_LIBLCMS2)
@@ -71,7 +74,7 @@ public:
     void apply_profile(Inkscape::Pixbuf *pixbuf);
 #endif // defined(HAVE_LIBLCMS2)
 
-    SPCurve *get_curve () const;
+    std::unique_ptr<SPCurve> get_curve() const;
     void refresh_if_outdated();
 };
 

@@ -69,7 +69,7 @@ LPEParallel::doOnApply (SPLPEItem const* lpeitem)
         item->removeCurrentPathEffect(false);
         return;
     }
-    SPCurve const *curve = SP_SHAPE(lpeitem)->_curve;
+    SPCurve const *curve = static_cast<SPShape const *>(lpeitem)->_curve.get();
 
     A = *(curve->first_point());
     B = *(curve->last_point());

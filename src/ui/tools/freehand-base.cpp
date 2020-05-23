@@ -141,17 +141,17 @@ void FreehandBase::setup() {
     sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(this->blue_bpath), this->blue_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
 
     // Create blue curve
-    this->blue_curve = new SPCurve();
+    this->blue_curve.reset(new SPCurve());
 
     // Create green curve
-    this->green_curve = new SPCurve();
+    this->green_curve.reset(new SPCurve());
 
     // No green anchor by default
     this->green_anchor = nullptr;
     this->green_closed = FALSE;
 
     // Create start anchor alternative curve
-    this->sa_overwrited = new SPCurve();
+    this->sa_overwrited.reset(new SPCurve());
 
     this->attach = TRUE;
     spdc_attach_selection(this, this->selection);
@@ -445,7 +445,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
         if (sp_shape) {
             curve = sp_shape->getCurve(true);
         }
-        curve->ref();
+        auto curveref = curve->ref();
         SPCSSAttr *css_item = sp_css_attr_from_object(item, SP_STYLE_FLAG_ALWAYS);
         const char *cstroke = sp_repr_css_property(css_item, "stroke", "none");
         const char *cfill = sp_repr_css_property(css_item, "fill", "none");
@@ -489,7 +489,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
             case TRIANGLE_OUT:
             {
                 // "triangle out"
-                guint curve_length = curve->get_segment_count();
+                guint curve_length = curveref->get_segment_count();
                 std::vector<Geom::Point> points(1);
                 points[0] = Geom::Point(0, swidth);
                 //points[0] *= i2anc_affine(static_cast<SPItem *>(item->parent), NULL).inverse();
@@ -502,7 +502,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
             case ELLIPSE:
             {
                 // "ellipse"
-                SPCurve *c = new SPCurve();
+                auto c = std::make_unique<SPCurve>();
                 const double C1 = 0.552;
                 c->moveto(0, SHAPE_HEIGHT/2);
                 c->curveto(0, (1 - C1) * SHAPE_HEIGHT/2, (1 - C1) * SHAPE_LENGTH/2, 0, SHAPE_LENGTH/2, 0);
@@ -511,7 +511,6 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
                 c->curveto((1 - C1) * SHAPE_LENGTH/2, SHAPE_HEIGHT, 0, (1 + C1) * SHAPE_HEIGHT/2, 0, SHAPE_HEIGHT/2);
                 c->closepath();
                 spdc_paste_curve_as_freehand_shape(c->get_pathvector(), dc, item);
-                c->unref();
 
                 shape_applied = true;
                 break;
@@ -619,8 +618,6 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
         }
         previous_shape_type = shape;
 
-        curve->unref();
-
         if (shape_applied) {
             // apply original stroke color as fill and unset stroke; then return
             SPCSSAttr *css = sp_repr_css_attr_new();
@@ -685,14 +682,14 @@ static void spdc_attach_selection(FreehandBase *dc, Inkscape::Selection */*sel*/
 
         // Curve list
         // We keep it in desktop coordinates to eliminate calculation errors
-        SPCurve *norm = SP_PATH(item)->getCurveForEdit();
+        auto norm = std::unique_ptr<SPCurve>(static_cast<SPPath *>(item)->getCurveForEdit());
         norm->transform((dc->white_item)->i2dt_affine());
         g_return_if_fail( norm != nullptr );
         dc->white_curves = norm->split();
-        norm->unref();
 
         // Anchor list
-        for (auto c:dc->white_curves) {
+        for (auto const &c_smart_ptr : dc->white_curves) {
+            auto *c = c_smart_ptr.get();
             g_return_if_fail( c->get_segment_count() > 0 );
             if ( !c->is_closed() ) {
                 SPDrawAnchor *a;
@@ -759,26 +756,19 @@ void spdc_endpoint_snap_free(ToolBase* const ec, Geom::Point& p, boost::optional
     m.unSetup();
 }
 
-static SPCurve *reverse_then_unref(SPCurve *orig)
-{
-    SPCurve *ret = orig->create_reverse();
-    orig->unref();
-    return ret;
-}
-
 void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
 {
     // Concat RBG
-    SPCurve *c = dc->green_curve;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     // Green
-    dc->green_curve = new SPCurve();
+    auto c = std::make_unique<SPCurve>();
+    std::swap(c, dc->green_curve);
     for (auto i : dc->green_bpaths)
         sp_canvas_item_destroy(i);
     dc->green_bpaths.clear();
 
     // Blue
-    c->append_continuous(dc->blue_curve, 0.0625);
+    c->append_continuous(dc->blue_curve.get(), 0.0625);
     dc->blue_curve->reset();
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->blue_bpath), nullptr);
 
@@ -790,7 +780,6 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->red_bpath), nullptr);
 
     if (c->is_empty()) {
-        c->unref();
         return;
     }
 
@@ -803,8 +792,7 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
         dc->getDesktop()->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Path is closed."));
         c->closepath_current();
         // Closed path, just flush
-        spdc_flush_white(dc, c);
-        c->unref();
+        spdc_flush_white(dc, c.get());
         return;
     }
 
@@ -816,13 +804,12 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
     {
         // We hit bot start and end of single curve, closing paths
         dc->getDesktop()->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Closing path."));
-        dc->sa_overwrited->append_continuous(c, 0.0625);
-        c->unref();
+        dc->sa_overwrited->append_continuous(c.get(), 0.0625);
         dc->sa_overwrited->closepath_current();
         if (!dc->white_curves.empty()) {
             dc->white_curves.erase(std::find(dc->white_curves.begin(),dc->white_curves.end(), dc->sa->curve));
         }
-        dc->white_curves.push_back(dc->sa_overwrited);
+        dc->white_curves.push_back(std::move(dc->sa_overwrited));
         spdc_flush_white(dc, nullptr);
         return;
     }
@@ -831,63 +818,64 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
         if (!dc->white_curves.empty()) {
             dc->white_curves.erase(std::find(dc->white_curves.begin(),dc->white_curves.end(), dc->sa->curve));
         }
-        SPCurve *s = dc->sa_overwrited;
-        s->append_continuous(c, 0.0625);
-        c->unref();
-        c = s->ref();
+        dc->sa_overwrited->append_continuous(c.get(), 0.0625);
+        c = std::move(dc->sa_overwrited);
     } else /* Step D - test end */ if (dc->ea) {
-        SPCurve *e = dc->ea->curve;
+        auto e = std::move(dc->ea->curve);
         if (!dc->white_curves.empty()) {
             dc->white_curves.erase(std::find(dc->white_curves.begin(),dc->white_curves.end(), e));
         }
         if (!dc->ea->start) {
-            e = reverse_then_unref(e);
+            e = e->create_reverse();
         }
         if(prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || 
             prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2){
-                e = reverse_then_unref(e);
+                e = e->create_reverse();
                 Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*e->last_segment());
-                SPCurve *lastSeg = new SPCurve();
+                auto lastSeg = std::make_unique<SPCurve>();
                 if(cubic){
                     lastSeg->moveto((*cubic)[0]);
                     lastSeg->curveto((*cubic)[1],(*cubic)[3],(*cubic)[3]);
                     if( e->get_segment_count() == 1){
-                        e = lastSeg;
+                        e = std::move(lastSeg);
                     }else{
                         //we eliminate the last segment
                         e->backspace();
                         //and we add it again with the recreation
-                        e->append_continuous(lastSeg, 0.0625);
+                        e->append_continuous(lastSeg.get(), 0.0625);
                     }
                 }
-                e = reverse_then_unref(e);
+                e = e->create_reverse();
         }
-        c->append_continuous(e, 0.0625);
-        e->unref();
+        c->append_continuous(e.get(), 0.0625);
     }
     if (forceclosed) 
     {
         dc->getDesktop()->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Path is closed."));
         c->closepath_current();
     }
-    spdc_flush_white(dc, c);
-
-    c->unref();
+    spdc_flush_white(dc, c.get());
 }
 
 static void spdc_flush_white(FreehandBase *dc, SPCurve *gc)
 {
-    SPCurve *c;
+    std::unique_ptr<SPCurve> c;
+
     if (! dc->white_curves.empty()) {
         g_assert(dc->white_item);
-        c = SPCurve::concat(dc->white_curves);
+
+        // c = concat(white_curves)
+        c = std::make_unique<SPCurve>();
+        for (auto const &wc : dc->white_curves) {
+            c->append(*wc);
+        }
+
         dc->white_curves.clear();
         if (gc) {
             c->append(gc, FALSE);
         }
     } else if (gc) {
-        c = gc;
-        c->ref();
+        c = gc->ref();
     } else {
         return;
     }
@@ -928,19 +916,19 @@ static void spdc_flush_white(FreehandBase *dc, SPCurve *gc)
             if (!dc->white_item) {
                 dc->white_item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
             }
-            spdc_check_for_and_apply_waiting_LPE(dc, dc->white_item, c, false);
+            spdc_check_for_and_apply_waiting_LPE(dc, dc->white_item, c.get(), false);
         }
         if (!dc->white_item) {
             // Attach repr
             SPItem *item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
             dc->white_item = item;
             //Bend needs the transforms applied after, Other effects best before
-            spdc_check_for_and_apply_waiting_LPE(dc, item, c, true);
+            spdc_check_for_and_apply_waiting_LPE(dc, item, c.get(), true);
             Inkscape::GC::release(repr);
             item->transform = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
             item->updateRepr();
             item->doWriteTransform(item->transform, nullptr, true);
-            spdc_check_for_and_apply_waiting_LPE(dc, item, c, false);
+            spdc_check_for_and_apply_waiting_LPE(dc, item, c.get(), false);
             dc->selection->set(repr);
             if(previous_shape_type == BEND_CLIPBOARD){
                 repr->parent()->removeChild(repr);
@@ -956,8 +944,6 @@ static void spdc_flush_white(FreehandBase *dc, SPCurve *gc)
         // in sync immediately.
         spdc_selection_modified(desktop->getSelection(), 0, dc);
     }
-
-    c->unref();
 
     // Flush pending updates
     doc->ensureUpToDate();
@@ -987,8 +973,6 @@ static void spdc_reset_white(FreehandBase *dc)
         // We do not hold refcount
         dc->white_item = nullptr;
     }
-    for (auto i: dc->white_curves)
-        i->unref();
     dc->white_curves.clear();
     for (auto i:dc->white_anchors)
         sp_draw_anchor_destroy(i);
@@ -1011,21 +995,15 @@ static void spdc_free_colors(FreehandBase *dc)
         sp_canvas_item_destroy(SP_CANVAS_ITEM(dc->blue_bpath));
         dc->blue_bpath = nullptr;
     }
-    if (dc->blue_curve) {
-        dc->blue_curve = dc->blue_curve->unref();
-    }
+    dc->blue_curve.reset();
     
     // Overwrite start anchor curve
-    if (dc->sa_overwrited) {
-        dc->sa_overwrited = dc->sa_overwrited->unref();
-    }
+    dc->sa_overwrited.reset();
     // Green
     for (auto i : dc->green_bpaths)
         sp_canvas_item_destroy(i);
     dc->green_bpaths.clear();
-    if (dc->green_curve) {
-        dc->green_curve = dc->green_curve->unref();
-    }
+    dc->green_curve.reset();
     if (dc->green_anchor) {
         dc->green_anchor = sp_draw_anchor_destroy(dc->green_anchor);
     }
@@ -1035,8 +1013,6 @@ static void spdc_free_colors(FreehandBase *dc)
         // We do not hold refcount
         dc->white_item = nullptr;
     }
-    for (auto i: dc->white_curves)
-        i->unref();
     dc->white_curves.clear();
     for (auto i:dc->white_anchors)
         sp_draw_anchor_destroy(i);

@@ -41,19 +41,10 @@ SPCurve::SPCurve(Geom::PathVector  pathv)
     _pathv(std::move(pathv))
 {}
 
-//concat constructor
-SPCurve::SPCurve(std::list<SPCurve *> const& l) : _refcount(1)
-{
-    for (auto c:l) {
-        _pathv.insert( _pathv.end(), c->get_pathvector().begin(), c->get_pathvector().end() );
-    }
-}
-
-
-SPCurve *
+SPCurve::smart_pointer //
 SPCurve::new_from_rect(Geom::Rect const &rect, bool all_four_sides)
 {
-    SPCurve *c =  new SPCurve();
+    auto c = std::make_unique<SPCurve>();
 
     Geom::Point p = rect.corner(0);
     c->moveto(p);
@@ -104,65 +95,50 @@ SPCurve::get_segment_count() const
 
 /**
  * Increase _refcount of curve.
- *
- * \todo should this be shared with other refcounting code?
  */
-SPCurve *
+SPCurve::smart_pointer //
 SPCurve::ref()
 {
     _refcount += 1;
 
-    return this;
+    return smart_pointer(this);
 }
 
 /**
  * Decrease refcount of curve, with possible destruction.
- *
- * \todo should this be shared with other refcounting code?
  */
-SPCurve *
-SPCurve::unref()
+void SPCurve::_unref()
 {
     _refcount -= 1;
 
     if (_refcount < 1) {
         delete this;
     }
-
-    return nullptr;
 }
 
 /**
  * Create new curve from this curve's pathvector array.
  */
-SPCurve *
+SPCurve::smart_pointer //
 SPCurve::copy() const
 {
-    return new SPCurve(_pathv);
+    return std::make_unique<SPCurve>(_pathv);
 }
-
-/**
- * Return new curve that is the concatenation of all curves in list.
- */
-SPCurve *
-SPCurve::concat(std::list<SPCurve *> l){
-    return new SPCurve(l);
-};
 
 /**
  * Returns a list of new curves corresponding to the subpaths in \a curve.
  * 2geomified
  */
-std::list<SPCurve *>
+std::list<SPCurve::smart_pointer> //
 SPCurve::split() const
 {
-    std::list<SPCurve *> l;
+    std::list<smart_pointer> l;
 
     for (const auto & path_it : _pathv) {
         Geom::PathVector newpathv;
         newpathv.push_back(path_it);
         SPCurve * newcurve = new SPCurve(newpathv);
-        l.push_back(newcurve);
+        l.emplace_back(newcurve);
     }
 
     return l;
@@ -497,12 +473,10 @@ SPCurve::last_point() const
  * with all its markers drawn facing the other direction.
  * Reverses the order of subpaths as well
  **/
-SPCurve *
+SPCurve::smart_pointer //
 SPCurve::create_reverse() const
 {
-    SPCurve *new_curve = new SPCurve(_pathv.reversed());
-
-    return new_curve;
+    return std::make_unique<SPCurve>(_pathv.reversed());
 }
 
 /**
@@ -511,14 +485,14 @@ SPCurve::create_reverse() const
  * if \a use_lineto is true, combine \a this's last path and \a curve2's first path and add the rest of the paths in \a curve2 to \a this.
  */
 void
-SPCurve::append(SPCurve const *curve2,
+SPCurve::append(SPCurve const &curve2,
                 bool use_lineto)
 {
-    if (curve2->is_empty())
+    if (curve2.is_empty())
         return;
 
     if (use_lineto) {
-        Geom::PathVector::const_iterator it = curve2->_pathv.begin();
+        Geom::PathVector::const_iterator it = curve2._pathv.begin();
         if ( ! _pathv.empty() ) {
             Geom::Path & lastpath = _pathv.back();
             lastpath.appendNew<Geom::LineSegment>( (*it).initialPoint() );
@@ -527,11 +501,11 @@ SPCurve::append(SPCurve const *curve2,
             _pathv.push_back( (*it) );
         }
 
-        for (++it; it != curve2->_pathv.end(); ++it) {
+        for (++it; it != curve2._pathv.end(); ++it) {
             _pathv.push_back( (*it) );
         }
     } else {
-        for (const auto & it : curve2->_pathv) {
+        for (const auto &it : curve2._pathv) {
             _pathv.push_back( it );
         }
     }
@@ -579,7 +553,7 @@ SPCurve::append_continuous(SPCurve const *c1, double tolerance)
         }
 
     } else {
-        append(c1, true);
+        append(*c1, true);
     }
 
     return this;

@@ -20,6 +20,8 @@
 #include "ui/tools/tool-base.h"
 #include "live_effects/effect-enum.h"
 
+#include <memory>
+
 struct SPCanvasItem;
 class SPCurve;
 struct SPDrawAnchor;
@@ -60,26 +62,27 @@ public:
 
     // Red - Last segement as it's drawn.
     SPCanvasItem *red_bpath;
+    // TODO make private, use std::unique_ptr<SPCurve>, add public const getter
     SPCurve *red_curve;
     boost::optional<Geom::Point> red_curve_get_last_point();
 
     // Blue - New path after LPE as it's drawn.
     SPCanvasItem *blue_bpath;
-    SPCurve *blue_curve;
+    std::unique_ptr<SPCurve> blue_curve;
 
     // Green - New path as it's drawn.
     std::vector<SPCanvasItem*> green_bpaths;
-    SPCurve *green_curve;
+    std::unique_ptr<SPCurve> green_curve;
     SPDrawAnchor *green_anchor;
     gboolean green_closed; // a flag meaning we hit the green anchor, so close the path on itself
 
     // White
     SPItem *white_item;
-    std::list<SPCurve *> white_curves;
+    std::list<std::unique_ptr<SPCurve>> white_curves;
     std::vector<SPDrawAnchor*> white_anchors;
 
     // Temporary modified curve when start anchor
-    SPCurve *sa_overwrited;
+    std::unique_ptr<SPCurve> sa_overwrited;
 
     // Start anchor
     SPDrawAnchor *sa;

@@ -97,13 +97,9 @@ void SPShape::release() {
         }
     }
     
-    if (this->_curve) {
-        this->_curve = this->_curve->unref();
-    }
+    _curve.reset();
     
-    if (this->_curve_before_lpe) {
-        this->_curve_before_lpe = this->_curve_before_lpe->unref();
-    }
+    _curve_before_lpe.reset();
 
     SPLPEItem::release();
 }
@@ -165,7 +161,7 @@ void SPShape::update(SPCtx* ctx, guint flags) {
             Inkscape::DrawingShape *sh = dynamic_cast<Inkscape::DrawingShape *>(v->arenaitem);
 
             if (flags & SP_OBJECT_MODIFIED_FLAG) {
-                sh->setPath(this->_curve);
+                sh->setPath(this->_curve.get());
             }
         }
     }
@@ -869,7 +865,7 @@ Inkscape::DrawingItem* SPShape::show(Inkscape::Drawing &drawing, unsigned int /*
 
     bool has_markers = this->hasMarkers();
 
-    s->setPath(this->_curve);
+    s->setPath(this->_curve.get());
 
     /* This stanza checks that an object's marker style agrees with
      * the marker objects it has allocated.  sp_shape_set_marker ensures
@@ -1108,39 +1104,18 @@ void SPShape::set_shape() {
  */
 void SPShape::setCurve(SPCurve *new_curve, unsigned int owner)
 {
-    if (_curve) {
-        _curve = _curve->unref();
-    }
-
-    if (new_curve) {
-        if (owner) {
-            _curve = new_curve->ref();
-        } else {
-            _curve = new_curve->copy();
-        }
-    }
+    setCurveInsync(new_curve, owner);
 
     this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 
 /**
- * Sets _curve_before_lpe to refer to the curve.
+ * Sets _curve_before_lpe to a copy of `new_curve`
  */
-void
-SPShape::setCurveBeforeLPE(SPCurve *new_curve, unsigned int owner)
+void SPShape::setCurveBeforeLPE(SPCurve const *new_curve)
 {
-    if (_curve_before_lpe) {
-        _curve_before_lpe = _curve_before_lpe->unref();
-    }
-
-    if (new_curve) {
-        if (owner) {
-            _curve_before_lpe = new_curve->ref();
-        } else {
-            _curve_before_lpe = new_curve->copy();
-        }
-    }
+    _curve_before_lpe = new_curve ? new_curve->copy() : nullptr;
 }
 
 /**
@@ -1148,16 +1123,14 @@ SPShape::setCurveBeforeLPE(SPCurve *new_curve, unsigned int owner)
  */
 void SPShape::setCurveInsync(SPCurve *new_curve, unsigned int owner)
 {
-    if (_curve) {
-        _curve = _curve->unref();
-    }
-
     if (new_curve) {
         if (owner) {
             _curve = new_curve->ref();
         } else {
             _curve = new_curve->copy();
         }
+    } else {
+        _curve = nullptr;
     }
 }
 
@@ -1165,14 +1138,17 @@ void SPShape::setCurveInsync(SPCurve *new_curve, unsigned int owner)
 /**
  * Return curve (if any exists) or NULL if there is no curve
  * if owner == 0 return a copy
+ *
+ * @todo Split into two functions, one returning a borrowed pointer and one
+ * return `std::unique_ptr<SPCurve>` (or use SPCurve::copy() at the call site)
  */
 SPCurve * SPShape::getCurve(unsigned int owner) const
 {
     if (_curve) {
         if(owner) {
-            return _curve;
+            return _curve.get(); // borrowed
         }
-        return _curve->copy();
+        return _curve->copy().release(); // owned
     }
 
     return nullptr;
@@ -1181,14 +1157,16 @@ SPCurve * SPShape::getCurve(unsigned int owner) const
 /**
  * Return  curve *before* LPE (if any exists) or NULL if there is no curve
  * if owner == 0 return a copy
+ *
+ * @todo See getCurve() ownership issue
  */
 SPCurve * SPShape::getCurveBeforeLPE(unsigned int owner) const
 {
     if (_curve_before_lpe) {
         if (owner) {
-            return _curve_before_lpe;
+            return _curve_before_lpe.get(); // borrowed
         }
-        return _curve_before_lpe->copy();
+        return _curve_before_lpe->copy().release(); // owned
     } 
     return nullptr;
 }
@@ -1196,14 +1174,16 @@ SPCurve * SPShape::getCurveBeforeLPE(unsigned int owner) const
 /**
  * Return curve for edit
  * if owner == 0 return a copy
+ *
+ * @todo See getCurve() ownership issue
  */
 SPCurve * SPShape::getCurveForEdit(unsigned int owner) const
 {
     if (_curve_before_lpe) {
         if (owner) {
-            return _curve_before_lpe;
+            return _curve_before_lpe.get(); // borrowed
         }
-        return _curve_before_lpe->copy();
+        return _curve_before_lpe->copy().release(); // owned
     }
     return getCurve(owner);
 }

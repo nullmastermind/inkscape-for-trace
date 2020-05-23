@@ -199,15 +199,7 @@ void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
     {
         // Write the value to _curve_before_lpe, do not recalculate effects
         Geom::PathVector pv = sp_svg_read_pathv(s);
-        SPCurve *curve = new SPCurve(pv);
-        
-        if (_curve_before_lpe) {
-            _curve_before_lpe = _curve_before_lpe->unref();
-        }
-
-        if (curve) {
-            _curve_before_lpe = curve->ref();
-        }
+        _curve_before_lpe.reset(new SPCurve(pv));
     }
     this->readAttr(SPAttr::D);
 
