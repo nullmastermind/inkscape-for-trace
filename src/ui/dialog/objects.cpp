@@ -2322,7 +2322,7 @@ void SPItem::setHighlightColor(guint32 const color)
         Inkscape::UI::Tools::ToolBase *ec = SP_ACTIVE_DESKTOP->event_context;
         if (INK_IS_NODE_TOOL(ec)) {
             tool = static_cast<NodeTool*>(ec);
-            tools_switch(tool->desktop, TOOLS_NODES);
+            tools_switch(tool->getDesktop(), TOOLS_NODES);
         }
     }
 }
@@ -2336,7 +2336,7 @@ void SPItem::unsetHighlightColor()
         Inkscape::UI::Tools::ToolBase *ec = SP_ACTIVE_DESKTOP->event_context;
         if (INK_IS_NODE_TOOL(ec)) {
             tool = static_cast<NodeTool*>(ec);
-            tools_switch(tool->desktop, TOOLS_NODES);
+            tools_switch(tool->getDesktop(), TOOLS_NODES);
         }
     }
 }

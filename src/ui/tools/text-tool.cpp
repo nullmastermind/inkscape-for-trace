@@ -338,15 +338,15 @@ bool TextTool::item_handler(SPItem* item, GdkEvent* event) {
 
 static void sp_text_context_setup_text(TextTool *tc)
 {
-    ToolBase *ec = SP_EVENT_CONTEXT(tc);
+    SPDesktop *desktop = tc->getDesktop();
 
     /* Create <text> */
-    Inkscape::XML::Document *xml_doc = ec->desktop->doc()->getReprDoc();
+    Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
     Inkscape::XML::Node *rtext = xml_doc->createElement("svg:text");
     rtext->setAttribute("xml:space", "preserve"); // we preserve spaces in the text objects we create
 
     /* Set style */
-    sp_desktop_apply_style_tool(ec->desktop, rtext, "/tools/text", true);
+    sp_desktop_apply_style_tool(desktop, rtext, "/tools/text", true);
 
     sp_repr_set_svg_double(rtext, "x", tc->pdoc[Geom::X]);
     sp_repr_set_svg_double(rtext, "y", tc->pdoc[Geom::Y]);
@@ -361,16 +361,16 @@ static void sp_text_context_setup_text(TextTool *tc)
     Inkscape::XML::Node *rstring = xml_doc->createTextNode("");
     rtspan->addChild(rstring, nullptr);
     Inkscape::GC::release(rstring);
-    SPItem *text_item = SP_ITEM(ec->desktop->currentLayer()->appendChildRepr(rtext));
+    SPItem *text_item = SP_ITEM(desktop->currentLayer()->appendChildRepr(rtext));
     /* fixme: Is selection::changed really immediate? */
     /* yes, it's immediate .. why does it matter? */
-    ec->desktop->getSelection()->set(text_item);
+    desktop->getSelection()->set(text_item);
     Inkscape::GC::release(rtext);
-    text_item->transform = SP_ITEM(ec->desktop->currentLayer())->i2doc_affine().inverse();
+    text_item->transform = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
 
     text_item->updateRepr();
     text_item->doWriteTransform(text_item->transform, nullptr, true);
-    DocumentUndo::done(ec->desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
+    DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
                _("Create text"));
 }
 
@@ -395,8 +395,8 @@ static void insert_uni_char(TextTool *const tc)
     if ( !g_unichar_isprint(static_cast<gunichar>(uv))
          && !(g_unichar_validate(static_cast<gunichar>(uv)) && (g_unichar_type(static_cast<gunichar>(uv)) == G_UNICODE_PRIVATE_USE) ) ) {
         // This may be due to bad input, so it goes to statusbar.
-        tc->desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE,
-                                           _("Non-printable character"));
+        tc->getDesktop()->messageStack()->flash(Inkscape::ERROR_MESSAGE,
+                                                _("Non-printable character"));
     } else {
         if (!tc->text) { // printable key; create text if none (i.e. if nascent_object)
             sp_text_context_setup_text(tc);
@@ -410,7 +410,7 @@ static void insert_uni_char(TextTool *const tc)
         tc->text_sel_start = tc->text_sel_end = sp_te_replace(tc->text, tc->text_sel_start, tc->text_sel_end, u);
         sp_text_context_update_cursor(tc);
         sp_text_context_update_text_selection(tc);
-        DocumentUndo::done(tc->desktop->getDocument(), SP_VERB_DIALOG_TRANSFORM,
+        DocumentUndo::done(tc->getDesktop()->getDocument(), SP_VERB_DIALOG_TRANSFORM,
                _("Insert Unicode character"));
     }
 }
@@ -458,7 +458,7 @@ bool TextTool::root_handler(GdkEvent* event) {
     sp_text_context_validate_cursor_iterators(this);
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    this->tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
+    tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
 
     switch (event->type) {
         case GDK_BUTTON_PRESS:
@@ -635,13 +635,13 @@ bool TextTool::root_handler(GdkEvent* event) {
                     this->cursor->setCoords(p1, p1 - Geom::Point(0, y_dir * cursor_height));
                     if (this->imc) {
                         GdkRectangle im_cursor;
-                        Geom::Point const top_left = SP_EVENT_CONTEXT(this)->desktop->get_display_area().bounds().corner(3);
+                        Geom::Point const top_left = desktop->get_display_area().bounds().corner(3);
                         Geom::Point const cursor_size(0, cursor_height);
-                        Geom::Point const im_position = SP_EVENT_CONTEXT(this)->desktop->d2w(p1 + cursor_size - top_left);
+                        Geom::Point const im_position = desktop->d2w(p1 + cursor_size - top_left);
                         im_cursor.x = (int) floor(im_position[Geom::X]);
                         im_cursor.y = (int) floor(im_position[Geom::Y]);
                         im_cursor.width = 0;
-                        im_cursor.height = (int) -floor(SP_EVENT_CONTEXT(this)->desktop->d2w(cursor_size)[Geom::Y]);
+                        im_cursor.height = (int) -floor(desktop->d2w(cursor_size)[Geom::Y]);
                         gtk_im_context_set_cursor_location(this->imc, &im_cursor);
                     }
                     this->message_context->set(Inkscape::NORMAL_MESSAGE, _("Type text; <b>Enter</b> to start new line.")); // FIXME:: this is a copy of a string from _update_cursor below, do not desync
@@ -1378,7 +1378,7 @@ bool sp_text_paste_inline(ToolBase *ec)
             if (flowtext) {
                 flowtext->fix_overflow_flowregion(true);
             }
-            DocumentUndo::done(ec->desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
+            DocumentUndo::done(ec->getDesktop()->getDocument(), SP_VERB_CONTEXT_TEXT,
                                _("Paste text"));
 
             return true;
@@ -1520,16 +1520,14 @@ void TextTool::_selectionChanged(Inkscape::Selection *selection)
 {
     g_assert(selection != nullptr);
 
-    ToolBase *ec = SP_EVENT_CONTEXT(this);
-
-    ec->shape_editor->unset_item();
+    shape_editor->unset_item();
     SPItem *item = selection->singleItem();
     if (item && (
             (SP_IS_FLOWTEXT(item) && SP_FLOWTEXT(item)->has_internal_frame()) ||
             (SP_IS_TEXT(item) &&
              !(SP_TEXT(item)->has_shape_inside() && !SP_TEXT(item)->get_first_rectangle()))
             )) {
-        ec->shape_editor->set_item(item);
+        shape_editor->set_item(item);
     }
 
     if (this->text && (item != this->text)) {
@@ -1577,7 +1575,7 @@ bool TextTool::_styleSet(SPCSSAttr const *css)
         sptext->updateRepr();
     }
 
-    DocumentUndo::done(this->desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
+    DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
                _("Set text style"));
     sp_text_context_update_cursor(this);
     sp_text_context_update_text_selection(this);
@@ -1645,7 +1643,9 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
 {
     // due to interruptible display, tc may already be destroyed during a display update before
     // the cursor update (can't do both atomically, alas)
-    if (!tc->desktop) return;
+    if (!tc->getDesktop()) return;
+
+    SPDesktop* desktop = tc->getDesktop();
 
     if (tc->text) {
         Geom::Point p0, p1;
@@ -1667,12 +1667,12 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
             }
 
             if (scroll) {
-                Geom::Point const center = SP_EVENT_CONTEXT(tc)->desktop->current_center();
+                Geom::Point const center = desktop->current_center();
                 if (Geom::L2(d0 - center) > Geom::L2(d1 - center))
                     // unlike mouse moves, here we must scroll all the way at first shot, so we override the autoscrollspeed
-                    SP_EVENT_CONTEXT(tc)->desktop->scroll_to_point(d0, 1.0);
+                    desktop->scroll_to_point(d0, 1.0);
                 else
-                    SP_EVENT_CONTEXT(tc)->desktop->scroll_to_point(d1, 1.0);
+                    desktop->scroll_to_point(d1, 1.0);
             }
         }
 
@@ -1682,9 +1682,9 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
         /* fixme: ... need another transformation to get canvas widget coordinate space? */
         if (tc->imc) {
             GdkRectangle im_cursor = { 0, 0, 1, 1 };
-            Geom::Point const top_left = SP_EVENT_CONTEXT(tc)->desktop->get_display_area().corner(3);
-            Geom::Point const im_d0 = SP_EVENT_CONTEXT(tc)->desktop->d2w(d0 - top_left);
-            Geom::Point const im_d1 = SP_EVENT_CONTEXT(tc)->desktop->d2w(d1 - top_left);
+            Geom::Point const top_left = desktop->get_display_area().corner(3);
+            Geom::Point const im_d0 =    desktop->d2w(d0 - top_left);
+            Geom::Point const im_d1 =    desktop->d2w(d1 - top_left);
             im_cursor.x = (int) floor(im_d0[Geom::X]);
             im_cursor.y = (int) floor(im_d1[Geom::Y]);
             im_cursor.width = (int) floor(im_d1[Geom::X]) - im_cursor.x;
@@ -1722,7 +1722,7 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
                 }
             }
 
-            SP_EVENT_CONTEXT(tc)->message_context->setF(Inkscape::NORMAL_MESSAGE, ngettext("Type or edit flowed text (%d character%s); <b>Enter</b> to start new paragraph.", "Type or edit flowed text (%d characters%s); <b>Enter</b> to start new paragraph.", nChars), nChars, trunc);
+            tc->message_context->setF(Inkscape::NORMAL_MESSAGE, ngettext("Type or edit flowed text (%d character%s); <b>Enter</b> to start new paragraph.", "Type or edit flowed text (%d characters%s); <b>Enter</b> to start new paragraph.", nChars), nChars, trunc);
 
         } else if (SP_IS_TEXT(tc->text)) {
 
@@ -1741,7 +1741,7 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
 
         } else {
 
-            SP_EVENT_CONTEXT(tc)->message_context->setF(Inkscape::NORMAL_MESSAGE, ngettext("Type or edit text (%d character%s); <b>Enter</b> to start new line.", "Type or edit text (%d characters%s); <b>Enter</b> to start new line.", nChars), nChars, trunc);
+            tc->message_context->setF(Inkscape::NORMAL_MESSAGE, ngettext("Type or edit text (%d character%s); <b>Enter</b> to start new line.", "Type or edit text (%d characters%s); <b>Enter</b> to start new line.", nChars), nChars, trunc);
         }
 
     } else {
@@ -1749,18 +1749,18 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
         sp_canvas_item_hide(tc->frame);
         tc->show = FALSE;
         if (!tc->nascent_object) {
-            SP_EVENT_CONTEXT(tc)->message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> to select or create text, <b>drag</b> to create flowed text; then type.")); // FIXME: this is a copy of string from tools-switch, do not desync
+            tc->message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> to select or create text, <b>drag</b> to create flowed text; then type.")); // FIXME: this is a copy of string from tools-switch, do not desync
         }
     }
 
-    SP_EVENT_CONTEXT(tc)->desktop->emitToolSubselectionChanged((gpointer)tc);
+    desktop->emitToolSubselectionChanged((gpointer)tc);
 }
 
 static void sp_text_context_update_text_selection(TextTool *tc)
 {
     // due to interruptible display, tc may already be destroyed during a display update before
     // the selection update (can't do both atomically, alas)
-    if (!tc->desktop) return;
+    if (!tc->getDesktop()) return;
 
     for (auto & text_selection_quad : tc->text_selection_quads) {
         sp_canvas_item_hide(text_selection_quad);
@@ -1773,7 +1773,7 @@ static void sp_text_context_update_text_selection(TextTool *tc)
         quads = sp_te_create_selection_quads(tc->text, tc->text_sel_start, tc->text_sel_end, (tc->text)->i2dt_affine());
     for (unsigned i = 0 ; i < quads.size() ; i += 4) {
         SPCanvasItem *quad_canvasitem;
-        quad_canvasitem = sp_canvas_item_new(tc->desktop->getControls(), SP_TYPE_CTRLQUADR, nullptr);
+        quad_canvasitem = sp_canvas_item_new(tc->getDesktop()->getControls(), SP_TYPE_CTRLQUADR, nullptr);
         // FIXME: make the color settable in prefs
         // for now, use semitrasparent blue, as cairo cannot do inversion :(
         sp_ctrlquadr_set_rgba32(SP_CTRLQUADR(quad_canvasitem), 0x00777777);
@@ -1862,7 +1862,7 @@ static void sptc_commit(GtkIMContext */*imc*/, gchar *string, TextTool *tc)
 
 void sp_text_context_place_cursor (TextTool *tc, SPObject *text, Inkscape::Text::Layout::iterator where)
 {
-    tc->desktop->selection->set (text);
+    tc->getDesktop()->selection->set (text);
     tc->text_sel_start = tc->text_sel_end = where;
     sp_text_context_update_cursor(tc);
     sp_text_context_update_text_selection(tc);
@@ -1870,7 +1870,7 @@ void sp_text_context_place_cursor (TextTool *tc, SPObject *text, Inkscape::Text:
 
 void sp_text_context_place_cursor_at (TextTool *tc, SPObject *text, Geom::Point const p)
 {
-    tc->desktop->selection->set (text);
+    tc->getDesktop()->selection->set (text);
     sp_text_context_place_cursor (tc, text, sp_te_get_position_by_coords(tc->text, p));
 }
 

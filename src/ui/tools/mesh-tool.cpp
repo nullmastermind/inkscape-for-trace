@@ -220,7 +220,7 @@ sp_mesh_context_select_next (ToolBase *event_context)
 
     GrDragger *d = drag->select_next();
 
-    event_context->desktop->scroll_to_point(d->point, 1.0);
+    event_context->getDesktop()->scroll_to_point(d->point, 1.0);
 }
 
 void
@@ -231,7 +231,7 @@ sp_mesh_context_select_prev (ToolBase *event_context)
 
     GrDragger *d = drag->select_prev();
 
-    event_context->desktop->scroll_to_point(d->point, 1.0);
+    event_context->getDesktop()->scroll_to_point(d->point, 1.0);
 }
 
 /**
@@ -240,12 +240,10 @@ Returns vector of control lines mouse is over. Returns only first if 'first' is 
 static std::vector<SPCtrlCurve *>
 sp_mesh_context_over_line (MeshTool *rc, Geom::Point event_p, bool first = true)
 {
-    SPDesktop *desktop = SP_EVENT_CONTEXT (rc)->desktop;
+    const SPDesktop *desktop = rc->getDesktop();
 
     //Translate mouse point into proper coord system
     rc->mousepoint_doc = desktop->w2d(event_p);
-
-    double tolerance = (double) SP_EVENT_CONTEXT(rc)->tolerance;
 
     GrDrag *drag = rc->_grdrag;
 
@@ -260,7 +258,7 @@ sp_mesh_context_over_line (MeshTool *rc, Geom::Point event_p, bool first = true)
         Geom::Point nearest = b( coord );
 
         double dist_screen = Geom::L2 (rc->mousepoint_doc - nearest) * desktop->current_zoom();
-        if (dist_screen < tolerance) {
+        if (dist_screen < rc->tolerance) {
             selected.push_back(curve);
             if (first) {
                 break;
@@ -283,17 +281,16 @@ static void sp_mesh_context_split_near_point(MeshTool *rc, SPItem *item,  Geom::
 
     // item is the selected item. mouse_p the location in doc coordinates of where to add the stop
 
-    ToolBase *ec = SP_EVENT_CONTEXT(rc);
-    SPDesktop *desktop = SP_EVENT_CONTEXT (rc)->desktop;
+    const SPDesktop *desktop = rc->getDesktop();
 
-    double tolerance = (double) ec->tolerance;
+    double tolerance = (double) rc->tolerance;
 
-    ec->get_drag()->addStopNearPoint (item, mouse_p, tolerance/desktop->current_zoom());
+    rc->get_drag()->addStopNearPoint (item, mouse_p, tolerance/desktop->current_zoom());
 
     DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_MESH,
                        _("Split mesh row/column"));
 
-    ec->get_drag()->updateDraggers();
+    rc->get_drag()->updateDraggers();
 }
 
 /**
@@ -433,7 +430,7 @@ sp_mesh_context_fit_mesh_in_bbox (MeshTool *rc)
     std::cout << "sp_mesh_context_fit_mesh_in_bbox: entrance: Entrance"<< std::endl;
 #endif
 
-    SPDesktop *desktop = SP_EVENT_CONTEXT (rc)->desktop;
+    const SPDesktop *desktop = rc->getDesktop();
 
     Inkscape::Selection *selection = desktop->getSelection();
     if (selection == nullptr) {
@@ -954,7 +951,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
 
 // Creates a new mesh gradient.
 static void sp_mesh_new_default(MeshTool &rc) {
-    SPDesktop *desktop = SP_EVENT_CONTEXT(&rc)->desktop;
+    const SPDesktop *desktop = rc.getDesktop();
     Inkscape::Selection *selection = desktop->getSelection();
     SPDocument *document = desktop->getDocument();
 

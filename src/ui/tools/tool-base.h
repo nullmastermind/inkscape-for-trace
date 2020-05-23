@@ -26,10 +26,6 @@
 
 #include "preferences.h"
 
-namespace Glib {
-    class ustring;
-}
-
 class GrDrag;
 class SPDesktop;
 class SPItem;
@@ -39,12 +35,8 @@ namespace Inkscape {
     class SelCue;
 }
 
-#define SP_EVENT_CONTEXT(obj) (dynamic_cast<Inkscape::UI::Tools::ToolBase*>((Inkscape::UI::Tools::ToolBase*)obj))
-#define SP_IS_EVENT_CONTEXT(obj) (dynamic_cast<const Inkscape::UI::Tools::ToolBase*>((const Inkscape::UI::Tools::ToolBase*)obj) != NULL)
-
 namespace Inkscape {
 namespace UI {
-
 
 class ShapeEditor;
 
@@ -140,14 +132,9 @@ void sp_event_context_snap_delay_handler(ToolBase *ec, gpointer const dse_item, 
  * plus few abstract base classes. Writing a new tool involves
  * subclassing ToolBase.
  */
-class ToolBase
-    : public sigc::trackable
+class ToolBase : public sigc::trackable
 {
 public:
-    void enableSelectionCue (bool enable=true);
-    void enableGrDrag (bool enable=true);
-    bool deleteSelectedDrag(bool just_one);
-
     ToolBase(gchar const *const *cursor_shape, bool uses_snap=true);
 
     virtual ~ToolBase();
@@ -155,89 +142,95 @@ public:
     ToolBase(const ToolBase&) = delete;
     ToolBase& operator=(const ToolBase&) = delete;
 
-    Inkscape::Preferences::Observer *pref_observer;
-    Glib::RefPtr<Gdk::Cursor> cursor;
+    virtual void setup();
+    virtual void finish();
+    virtual void set(const Inkscape::Preferences::Entry& val);
+    virtual bool root_handler(GdkEvent *event);
+    virtual bool item_handler(SPItem *item, GdkEvent *event);
 
-    gint xp, yp;           ///< where drag started
-    gint tolerance;
-    bool _button1on;
-    bool _button2on;
-    bool _button3on;
-    bool within_tolerance;  ///< are we still within tolerance of origin
+    bool block_button(GdkEvent *event);
 
-    SPItem *item_to_select; ///< the item where mouse_press occurred, to
-                            ///< be selected if this is a click not drag
+    virtual const std::string& getPrefsPath() = 0;
+    void enableSelectionCue (bool enable=true);
+    void enableGrDrag (bool enable=true);
+    bool deleteSelectedDrag(bool just_one);
 
     Inkscape::MessageContext *defaultMessageContext() const {
         return message_context.get();
     }
 
+    GrDrag *get_drag () { return _grdrag; }
+
+    void setDesktop(SPDesktop *desktop_in) { desktop = desktop_in; }
+    SPDesktop *getDesktop() { return desktop; }
+
+
+    /**
+     * An observer that relays pref changes to the derived classes.
+     */
+    class ToolPrefObserver: public Inkscape::Preferences::Observer {
+    public:
+        ToolPrefObserver(Glib::ustring const &path, ToolBase *ec)
+            : Inkscape::Preferences::Observer(path)
+            , ec(ec)
+        {
+        }
+
+        void notify(Inkscape::Preferences::Entry const &val) override {
+            ec->set(val);
+        }
+
+    private:
+        ToolBase * const ec;
+    };
+
+// private:
+    Inkscape::Preferences::Observer *pref_observer = nullptr;
+    Glib::RefPtr<Gdk::Cursor> cursor;
+
+    gint xp = 0;           ///< where drag started
+    gint yp = 0;           ///< where drag started
+    gint tolerance = 0;
+    bool within_tolerance = false;  ///< are we still within tolerance of origin
+    bool _button1on = false;
+    bool _button2on = false;
+    bool _button3on = false;
+    SPItem *item_to_select = nullptr; ///< the item where mouse_press occurred, to
+                                      ///< be selected if this is a click not drag
+
+    bool space_panning = false;
+    bool rotating_mode = false;;
+
     std::unique_ptr<Inkscape::MessageContext> message_context;
+    Inkscape::SelCue *_selcue = nullptr;
 
-    Inkscape::SelCue *_selcue;
+    GrDrag *_grdrag = nullptr;
 
-    GrDrag *_grdrag;
+    ShapeEditor* shape_editor = nullptr;
 
-    GrDrag *get_drag () {
-        return _grdrag;
-    }
+    bool _dse_callback_in_process = false;
 
-    ShapeEditor* shape_editor;
+    bool _uses_snap = false;
+    DelayedSnapEvent *_delayed_snap_event = nullptr;
 
-    bool space_panning;
-    bool rotating_mode;
+// private:
+    void sp_event_context_update_cursor();
 
-    DelayedSnapEvent *_delayed_snap_event;
-    bool _dse_callback_in_process;
-
-	virtual void setup();
-	virtual void finish();
-
-	// Is called by our pref_observer if a preference has been changed.
-	virtual void set(const Inkscape::Preferences::Entry& val);
-    virtual bool root_handler(GdkEvent *event);
-    virtual bool item_handler(SPItem *item, GdkEvent *event);
-    bool block_button(GdkEvent *event);
-
-    virtual const std::string& getPrefsPath() = 0;
-
-	/**
-	 * An observer that relays pref changes to the derived classes.
-	 */
-	class ToolPrefObserver: public Inkscape::Preferences::Observer {
-	public:
-	    ToolPrefObserver(Glib::ustring const &path, ToolBase *ec)
-	        : Inkscape::Preferences::Observer(path)
-	        , ec(ec)
-	    {
-	    }
-
-	    void notify(Inkscape::Preferences::Entry const &val) override {
-	    	ec->set(val);
-	    }
-
-	private:
-	    ToolBase * const ec;
-	};
-
-	SPDesktop const& getDesktop() const;
-
-
-//protected:
-	void sp_event_context_update_cursor();
-
-	SPDesktop *desktop;
-    bool _uses_snap; // TODO: make protected or private
 protected:
-	/// An xpm containing the shape of the tool's cursor.
-    gchar const *const *cursor_shape;
     bool sp_event_context_knot_mouseover() const;
 
     void set_high_motion_precision(bool high_precision = true);
 
+    /// An xpm containing the shape of the tool's cursor.
+    gchar const *const *cursor_shape;
+
+    SPDesktop *desktop = nullptr;
+
 private:
-  bool _keyboardMove(GdkEventKey const &event, Geom::Point const &dir);
-  void sp_event_context_set_cursor(GdkCursorType cursor_type);
+
+    bool _keyboardMove(GdkEventKey const &event, Geom::Point const &dir);
+    void sp_event_context_set_cursor(GdkCursorType cursor_type);
+
 };
 
 void sp_event_context_read(ToolBase *ec, gchar const *key);

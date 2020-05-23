@@ -228,10 +228,10 @@ static void spdc_paste_curve_as_freehand_shape(Geom::PathVector const &newpath, 
     using namespace Inkscape::LivePathEffect;
 
     // TODO: Don't paste path if nothing is on the clipboard
-    SPDocument *document = dc->desktop->doc();
+    SPDocument *document = dc->getDesktop()->doc();
     bool saved = DocumentUndo::getUndoSensitive(document);
     DocumentUndo::setUndoSensitive(document, false);
-    Effect::createAndApply(PATTERN_ALONG_PATH, dc->desktop->doc(), item);
+    Effect::createAndApply(PATTERN_ALONG_PATH, document, item);
     Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
     static_cast<LPEPatternAlongPath*>(lpe)->pattern.set_new_value(newpath,true);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -281,8 +281,8 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
                                          gint maxrecursion = 0)
 {
     using namespace Inkscape::LivePathEffect;
-    SPDocument *document = SP_ACTIVE_DOCUMENT;
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    SPDesktop *desktop = dc->getDesktop();
+    SPDocument *document = desktop->getDocument();
     if (!document || !desktop) {
         return;
     }
@@ -310,7 +310,7 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
     }
     bool saved = DocumentUndo::getUndoSensitive(document);
     DocumentUndo::setUndoSensitive(document, false);
-    Effect::createAndApply(POWERSTROKE, dc->desktop->doc(), item);
+    Effect::createAndApply(POWERSTROKE, document, item);
     Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
 
     static_cast<LPEPowerStroke*>(lpe)->offset_points.param_set_and_write_new_value(points);
@@ -335,15 +335,15 @@ static void spdc_apply_bend_shape(gchar const *svgd, FreehandBase *dc, SPItem *i
     if ( use ) {
         return;
     }
-    SPDocument *document = SP_ACTIVE_DOCUMENT;
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    SPDesktop *desktop = dc->getDesktop();
+    SPDocument *document = desktop->getDocument();
     if (!document || !desktop) {
         return;
     }
     bool saved = DocumentUndo::getUndoSensitive(document);
     DocumentUndo::setUndoSensitive(document, false);
     if(!SP_IS_LPE_ITEM(item) || !SP_LPE_ITEM(item)->hasPathEffectOfType(BEND_PATH)){
-        Effect::createAndApply(BEND_PATH, dc->desktop->doc(), item);
+        Effect::createAndApply(BEND_PATH, document, item);
     }
     Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
 
@@ -364,8 +364,8 @@ static void spdc_apply_bend_shape(gchar const *svgd, FreehandBase *dc, SPItem *i
 
 static void spdc_apply_simplify(std::string threshold, FreehandBase *dc, SPItem *item)
 {
-    SPDocument *document = SP_ACTIVE_DOCUMENT;
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    const SPDesktop *desktop = dc->getDesktop();
+    SPDocument *document = desktop->getDocument();
     if (!document || !desktop) {
         return;
     }
@@ -435,11 +435,11 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
             sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);
         }
         if (prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1) {
-            Effect::createAndApply(SPIRO, dc->desktop->doc(), item);
+            Effect::createAndApply(SPIRO, dc->getDesktop()->getDocument(), item);
         }
 
         if (prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2) {
-            Effect::createAndApply(BSPLINE, dc->desktop->doc(), item);
+            Effect::createAndApply(BSPLINE, dc->getDesktop()->getDocument(), item);
         }
         SPShape *sp_shape = dynamic_cast<SPShape *>(item);
         if (sp_shape) {
@@ -635,7 +635,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
             return;
         }
         if (dc->waiting_LPE_type != INVALID_LPE) {
-            Effect::createAndApply(dc->waiting_LPE_type, dc->desktop->doc(), item);
+            Effect::createAndApply(dc->waiting_LPE_type, dc->getDesktop()->getDocument(), item);
             dc->waiting_LPE_type = INVALID_LPE;
 
             if (SP_IS_LPETOOL_CONTEXT(dc)) {
@@ -709,14 +709,14 @@ static void spdc_attach_selection(FreehandBase *dc, Inkscape::Selection */*sel*/
 }
 
 
-void spdc_endpoint_snap_rotation(ToolBase const *const ec, Geom::Point &p, Geom::Point const &o,
+void spdc_endpoint_snap_rotation(ToolBase* const ec, Geom::Point &p, Geom::Point const &o,
                                  guint state)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     unsigned const snaps = abs(prefs->getInt("/options/rotationsnapsperpi/value", 12));
 
-    SnapManager &m = ec->desktop->namedview->snap_manager;
-    m.setup(ec->desktop);
+    SnapManager &m = ec->getDesktop()->namedview->snap_manager;
+    m.setup(ec->getDesktop());
 
     bool snap_enabled = m.snapprefs.getSnapEnabledGlobally();
     if (state & GDK_SHIFT_MASK) {
@@ -738,9 +738,9 @@ void spdc_endpoint_snap_rotation(ToolBase const *const ec, Geom::Point &p, Geom:
 }
 
 
-void spdc_endpoint_snap_free(ToolBase const * const ec, Geom::Point& p, boost::optional<Geom::Point> &start_of_line, guint const /*state*/)
+void spdc_endpoint_snap_free(ToolBase* const ec, Geom::Point& p, boost::optional<Geom::Point> &start_of_line, guint const /*state*/)
 {
-    SPDesktop *dt = ec->desktop;
+    const SPDesktop *dt = ec->getDesktop();
     SnapManager &m = dt->namedview->snap_manager;
     Inkscape::Selection *selection = dt->getSelection();
 
@@ -800,7 +800,7 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
          ( dc->green_anchor && dc->green_anchor->active)) 
     {
         // We hit green anchor, closing Green-Blue-Red
-        dc->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Path is closed."));
+        dc->getDesktop()->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Path is closed."));
         c->closepath_current();
         // Closed path, just flush
         spdc_flush_white(dc, c);
@@ -815,7 +815,7 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
               || dc->sa->curve->is_closed() ) )
     {
         // We hit bot start and end of single curve, closing paths
-        dc->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Closing path."));
+        dc->getDesktop()->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Closing path."));
         dc->sa_overwrited->append_continuous(c, 0.0625);
         c->unref();
         dc->sa_overwrited->closepath_current();
@@ -867,7 +867,7 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
     }
     if (forceclosed) 
     {
-        dc->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Path is closed."));
+        dc->getDesktop()->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Path is closed."));
         c->closepath_current();
     }
     spdc_flush_white(dc, c);
@@ -892,14 +892,14 @@ static void spdc_flush_white(FreehandBase *dc, SPCurve *gc)
         return;
     }
 
+    SPDesktop *desktop = dc->getDesktop();
+    SPDocument *doc = desktop->getDocument();
+    Inkscape::XML::Document *xml_doc = doc->getReprDoc();
+
     // Now we have to go back to item coordinates at last
     c->transform( dc->white_item
                 ? (dc->white_item)->dt2i_affine()
-                : dc->desktop->dt2doc() );
-
-    SPDesktop *desktop = dc->desktop;
-    SPDocument *doc = desktop->getDocument();
-    Inkscape::XML::Document *xml_doc = doc->getReprDoc();
+                :  desktop->dt2doc() );
 
     if ( c && !c->is_empty() ) {
         // We actually have something to write
@@ -1048,7 +1048,7 @@ void spdc_create_single_dot(ToolBase *ec, Geom::Point const &pt, char const *too
             || !strcmp(tool, "/tools/calligraphic") );
     Glib::ustring tool_path = tool;
 
-    SPDesktop *desktop = ec->desktop;
+    SPDesktop *desktop = ec->getDesktop();
     Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
     Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
     repr->setAttribute("sodipodi:type", "arc");

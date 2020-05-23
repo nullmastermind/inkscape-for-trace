@@ -45,7 +45,7 @@ SPDrawAnchor *sp_draw_anchor_new(Inkscape::UI::Tools::FreehandBase *dc, SPCurve 
     a->start = start;
     a->active = FALSE;
     a->dp = delta;
-    a->ctrl = ControlManager::getManager().createControl(dc->getDesktop().getControls(), Inkscape::CTRL_TYPE_ANCHOR);
+    a->ctrl = ControlManager::getManager().createControl(dc->getDesktop()->getControls(), Inkscape::CTRL_TYPE_ANCHOR);
 
     SP_CTRL(a->ctrl)->moveto(delta);
 
@@ -77,7 +77,7 @@ SPDrawAnchor *sp_draw_anchor_test(SPDrawAnchor *anchor, Geom::Point w, bool acti
 {
     SPCtrl *ctrl = SP_CTRL(anchor->ctrl);
 
-    if ( activate && ( Geom::LInfty( w - anchor->dc->getDesktop().d2w(anchor->dp) ) <= (ctrl->box.width() / 2.0) ) ) {
+    if ( activate && ( Geom::LInfty( w - anchor->dc->getDesktop()->d2w(anchor->dp) ) <= (ctrl->box.width() / 2.0) ) ) {
         if (!anchor->active) {
             ControlManager::getManager().setControlResize(anchor->ctrl, 4);
             g_object_set(anchor->ctrl, "fill_color", FILL_COLOR_MOUSEOVER, NULL);

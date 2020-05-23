@@ -132,9 +132,9 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed);
  *  @param o origin point.
  *  @param state  keyboard state to check if ctrl or shift was pressed.
  */
-void spdc_endpoint_snap_rotation(ToolBase const *const ec, Geom::Point &p, Geom::Point const &o, guint state);
+void spdc_endpoint_snap_rotation(ToolBase* const ec, Geom::Point &p, Geom::Point const &o, guint state);
 
-void spdc_endpoint_snap_free(ToolBase const *ec, Geom::Point &p, boost::optional<Geom::Point> &start_of_line, guint state);
+void spdc_endpoint_snap_free(ToolBase* const ec, Geom::Point &p, boost::optional<Geom::Point> &start_of_line, guint state);
 
 /**
  * If we have an item and a waiting LPE, apply the effect to the item

@@ -293,12 +293,12 @@ int lpetool_item_has_construction(LpeTool */*lc*/, SPItem *item)
 bool
 lpetool_try_construction(LpeTool *lc, Inkscape::LivePathEffect::EffectType const type)
 {
-    Inkscape::Selection *selection = lc->desktop->getSelection();
+    Inkscape::Selection *selection = lc->getDesktop()->getSelection();
     SPItem *item = selection->singleItem();
 
     // TODO: should we check whether type represents a valid geometric construction?
     if (item && SP_IS_LPE_ITEM(item) && Inkscape::LivePathEffect::Effect::acceptsNumClicks(type) == 0) {
-        Inkscape::LivePathEffect::Effect::createAndApply(type, lc->desktop->getDocument(), item);
+        Inkscape::LivePathEffect::Effect::createAndApply(type, lc->getDesktop()->getDocument(), item);
         return true;
     }
     return false;
@@ -310,7 +310,7 @@ lpetool_context_switch_mode(LpeTool *lc, Inkscape::LivePathEffect::EffectType co
     int index = lpetool_mode_to_index(type);
     if (index != -1) {
         lc->mode = type;
-        auto tb = dynamic_cast<UI::Toolbar::LPEToolbar*>(lc->desktop->get_toolbar_by_name("LPEToolToolbar"));
+        auto tb = dynamic_cast<UI::Toolbar::LPEToolbar*>(lc->getDesktop()->get_toolbar_by_name("LPEToolToolbar"));
 
         if(tb) {
             tb->set_mode(index);
@@ -354,18 +354,18 @@ lpetool_context_reset_limiting_bbox(LpeTool *lc)
     if (!prefs->getBool("/tools/lpetool/show_bbox", true))
         return;
 
-    SPDocument *document = lc->desktop->getDocument();
+    SPDocument *document = lc->getDesktop()->getDocument();
 
     Geom::Point A, B;
     lpetool_get_limiting_bbox_corners(document, A, B);
-    Geom::Affine doc2dt(lc->desktop->doc2dt());
+    Geom::Affine doc2dt(lc->getDesktop()->doc2dt());
     A *= doc2dt;
     B *= doc2dt;
 
     Geom::Rect rect(A, B);
     SPCurve *curve = SPCurve::new_from_rect(rect);
 
-    lc->canvas_bbox = sp_canvas_bpath_new (lc->desktop->getControls(), curve);
+    lc->canvas_bbox = sp_canvas_bpath_new (lc->getDesktop()->getControls(), curve);
     sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(lc->canvas_bbox), 0x0000ffff, 0.8, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT, 5, 5);
 }
 
@@ -390,14 +390,14 @@ void
 lpetool_create_measuring_items(LpeTool *lc, Inkscape::Selection *selection)
 {
     if (!selection) {
-        selection = lc->desktop->getSelection();
+        selection = lc->getDesktop()->getSelection();
     }
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool show = prefs->getBool("/tools/lpetool/show_measuring_info",  true);
 
     SPPath *path;
     SPCanvasText *canvas_text;
-    SPCanvasGroup *tmpgrp = lc->desktop->getTempGroup();
+    SPCanvasGroup *tmpgrp = lc->getDesktop()->getTempGroup();
     gchar *arc_length;
     double lengthval;
     auto items= selection->items();
@@ -406,7 +406,7 @@ lpetool_create_measuring_items(LpeTool *lc, Inkscape::Selection *selection)
             path = SP_PATH(*i);
             SPCurve const *curve = path->getCurve(true);
             Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = paths_to_pw(curve->get_pathvector());
-            canvas_text = (SPCanvasText *) sp_canvastext_new(tmpgrp, lc->desktop, Geom::Point(0,0), "");
+            canvas_text = (SPCanvasText *) sp_canvastext_new(tmpgrp, lc->getDesktop(), Geom::Point(0,0), "");
             if (!show)
                 sp_canvas_item_hide(SP_CANVAS_ITEM(canvas_text));
 

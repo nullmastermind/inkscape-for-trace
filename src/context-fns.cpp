@@ -234,7 +234,7 @@ Geom::Point Inkscape::setup_for_drag_start(SPDesktop *desktop, Inkscape::UI::Too
 
     Geom::Point const p(ev->button.x, ev->button.y);
     ec->item_to_select = Inkscape::UI::Tools::sp_event_context_find_item(desktop, p, ev->button.state & GDK_MOD1_MASK, TRUE);
-    return ec->desktop->w2d(p);
+    return ec->getDesktop()->w2d(p);
 }
 
 

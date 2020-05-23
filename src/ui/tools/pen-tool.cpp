@@ -253,7 +253,7 @@ bool PenTool::hasWaitingLPE() {
 /**
  * Snaps new node relative to the previous node.
  */
-void PenTool::_endpointSnap(Geom::Point &p, guint const state) const {
+void PenTool::_endpointSnap(Geom::Point &p, guint const state) {
     // Paraxial kicks in after first line has set the angle (before then it's a free line)
     bool poly = this->polylines_paraxial && !this->green_curve->is_unset();
 
@@ -282,7 +282,7 @@ void PenTool::_endpointSnap(Geom::Point &p, guint const state) const {
 /**
  * Snaps new node's handle relative to the new node.
  */
-void PenTool::_endpointSnapHandle(Geom::Point &p, guint const state) const {
+void PenTool::_endpointSnapHandle(Geom::Point &p, guint const state) {
     g_return_if_fail(( this->npoints == 2 ||
             this->npoints == 5   ));
 

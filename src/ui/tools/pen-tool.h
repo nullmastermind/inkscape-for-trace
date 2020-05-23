@@ -142,8 +142,8 @@ private:
     void _lastpointMove(gdouble x, gdouble y);
     void _redrawAll();
 
-    void _endpointSnapHandle(Geom::Point &p, guint const state) const;
-    void _endpointSnap(Geom::Point &p, guint const state) const;
+    void _endpointSnapHandle(Geom::Point &p, guint const state);
+    void _endpointSnap(Geom::Point &p, guint const state);
 
     void _cancel();
 };

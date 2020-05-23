@@ -131,12 +131,12 @@ void CalligraphicTool::setup() {
     this->cal1 = new SPCurve();
     this->cal2 = new SPCurve();
 
-    this->currentshape = sp_canvas_item_new(this->desktop->getSketch(), SP_TYPE_CANVAS_BPATH, nullptr);
+    this->currentshape = sp_canvas_item_new(desktop->getSketch(), SP_TYPE_CANVAS_BPATH, nullptr);
     sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(this->currentshape), DDC_RED_RGBA, SP_WIND_RULE_EVENODD);
     sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(this->currentshape), 0x00000000, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
 
     /* fixme: Cannot we cascade it to root more clearly? */
-    g_signal_connect(G_OBJECT(this->currentshape), "event", G_CALLBACK(sp_desktop_root_handler), this->desktop);
+    g_signal_connect(G_OBJECT(this->currentshape), "event", G_CALLBACK(sp_desktop_root_handler), desktop);
 
     {
         /* TODO: have a look at DropperTool::setup where the same is done.. generalize? */
@@ -144,7 +144,7 @@ void CalligraphicTool::setup() {
 
         SPCurve *c = new SPCurve(path);
 
-        this->hatch_area = sp_canvas_bpath_new(this->desktop->getControls(), c, true);
+        this->hatch_area = sp_canvas_bpath_new(desktop->getControls(), c, true);
 
         c->unref();
 
@@ -292,7 +292,7 @@ bool CalligraphicTool::apply(Geom::Point p) {
         // 1b. fixed dc->angle (absolutely flat nib):
         a1 = ( this->angle / 180.0 ) * M_PI;
     }
-    a1 *= -this->desktop->yaxisdir();
+    a1 *= -desktop->yaxisdir();
     a1 = fmod(a1, M_PI);
     if (a1 > 0.5*M_PI) {
         a1 -= M_PI;
@@ -358,8 +358,8 @@ void CalligraphicTool::brush() {
 
     // get the real brush point, not the same as pointer (affected by hatch tracking and/or mass
     // drag)
-    Geom::Point brush = this->getViewPoint(this->cur);
-    Geom::Point brush_w = SP_EVENT_CONTEXT(this)->desktop->d2w(brush);
+    Geom::Point brush = getViewPoint(this->cur);
+    Geom::Point brush_w = desktop->d2w(brush);
 
     double trace_thick = 1;
     if (this->trace_bg) {
@@ -367,7 +367,7 @@ void CalligraphicTool::brush() {
         double R, G, B, A;
         Geom::IntRect area = Geom::IntRect::from_xywh(brush_w.floor(), Geom::IntPoint(1, 1));
         cairo_surface_t *s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1, 1);
-        sp_canvas_arena_render_surface(SP_CANVAS_ARENA(this->desktop->getDrawing()), s, area);
+        sp_canvas_arena_render_surface(SP_CANVAS_ARENA(desktop->getDrawing()), s, area);
         ink_cairo_surface_average_color_premul(s, R, G, B, A);
         cairo_surface_destroy(s);
         double max = MAX (MAX (R, G), B);
@@ -407,7 +407,7 @@ void CalligraphicTool::brush() {
 
     double dezoomify_factor = 0.05 * 1000;
     if (!this->abs_width) {
-        dezoomify_factor /= SP_EVENT_CONTEXT(this)->desktop->current_zoom();
+        dezoomify_factor /= desktop->current_zoom();
     }
 
     Geom::Point del_left = dezoomify_factor * (width + tremble_left) * this->ang;
@@ -786,7 +786,7 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
             this->message_context->clear();
             ret = TRUE;
         } else if (!this->dragging && event->button.button == 1 && !this->space_panning){
-            spdc_create_single_dot(this, this->desktop->w2d(motion_w), "/tools/calligraphic", event->button.state);
+            spdc_create_single_dot(this, desktop->w2d(motion_w), "/tools/calligraphic", event->button.state);
         }
         break;
     }

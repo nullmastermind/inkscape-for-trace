@@ -243,7 +243,7 @@ bool ControlPoint::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, G
     {
         return false;
     }
-    if(event_context->desktop !=_desktop)
+    if(event_context->getDesktop() !=_desktop)
     {
         g_warning ("ControlPoint: desktop pointers not equal!");
         //return false;

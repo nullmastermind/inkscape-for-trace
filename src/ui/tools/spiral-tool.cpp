@@ -325,7 +325,6 @@ bool SpiralTool::root_handler(GdkEvent* event) {
 }
 
 void SpiralTool::drag(Geom::Point const &p, guint state) {
-    SPDesktop *desktop = SP_EVENT_CONTEXT(this)->desktop;
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int const snaps = prefs->getInt("/options/rotationsnapsperpi/value", 12);

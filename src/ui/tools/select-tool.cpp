@@ -213,15 +213,15 @@ bool SelectTool::sp_select_context_abort() {
             }
             this->item = nullptr;
 
-            SP_EVENT_CONTEXT(this)->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Move canceled."));
+            desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Move canceled."));
             return true;
         }
     } else {
         if (Inkscape::Rubberband::get(desktop)->is_started()) {
             Inkscape::Rubberband::get(desktop)->stop();
             rb_escaped = 1;
-            SP_EVENT_CONTEXT(this)->defaultMessageContext()->clear();
-            SP_EVENT_CONTEXT(this)->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Selection canceled."));
+            defaultMessageContext()->clear();
+            desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Selection canceled."));
             return true;
         }
     }

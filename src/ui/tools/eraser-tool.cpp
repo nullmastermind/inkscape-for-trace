@@ -336,7 +336,7 @@ void EraserTool::brush() {
 
     double dezoomify_factor = 0.05 * 1000;
     if (!this->abs_width) {
-        dezoomify_factor /= SP_EVENT_CONTEXT(this)->desktop->current_zoom();
+        dezoomify_factor /= desktop->current_zoom();
     }
 
     Geom::Point del_left = dezoomify_factor * (width + tremble_left) * this->ang;
@@ -360,7 +360,7 @@ sp_erc_update_toolbox (SPDesktop *desktop, const gchar *id, double value)
 }
 
 void EraserTool::cancel() {
-    SPDesktop *desktop = SP_EVENT_CONTEXT(this)->desktop;
+
     this->dragging = FALSE;
     this->is_drawing = false;
     sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));

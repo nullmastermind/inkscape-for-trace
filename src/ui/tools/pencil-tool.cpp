@@ -879,10 +879,10 @@ void PencilTool::_addFreehandPoint(Geom::Point const &p, guint /*state*/, bool l
         if (min > max) {
             min = max;
         }
-        double dezoomify_factor = 0.05 * 1000 / SP_EVENT_CONTEXT(this)->desktop->current_zoom();
+        double dezoomify_factor = 0.05 * 1000 / desktop->current_zoom();
         double pressure_shrunk = (((this->pressure - 0.25) * 1.25) * (max - min)) + min;
         double pressure_computed = std::abs(pressure_shrunk * dezoomify_factor);
-        double pressure_computed_scaled = std::abs(pressure_computed * SP_ACTIVE_DOCUMENT->getDocumentScale().inverse()[Geom::X]);
+        double pressure_computed_scaled = std::abs(pressure_computed * desktop->getDocument()->getDocumentScale().inverse()[Geom::X]);
         if (p != this->p[this->_npoints - 1]) {
             this->_wps.emplace_back(distance, pressure_computed_scaled);
         }
@@ -920,7 +920,7 @@ void PencilTool::powerStrokeInterpolate(Geom::Path const path)
     Geom::Point previous = Geom::Point(Geom::infinity(), 0);
     bool increase = false;
     size_t i = 0;
-    double dezoomify_factor = 0.05 * 1000 / SP_EVENT_CONTEXT(this)->desktop->current_zoom();
+    double dezoomify_factor = 0.05 * 1000 / desktop->current_zoom();
     double limit = 6 * dezoomify_factor;
     double max =
         std::max(this->_wps.back()[Geom::X] - (this->_wps.back()[Geom::X] / 10), this->_wps.back()[Geom::X] - limit);

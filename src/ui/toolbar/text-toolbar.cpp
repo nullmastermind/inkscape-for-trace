@@ -2450,7 +2450,7 @@ void TextToolbar::subselection_changed(gpointer texttool)
     if (_updating) {
         return;
     }
-    Inkscape::UI::Tools::TextTool *const tc = SP_TEXT_CONTEXT(SP_EVENT_CONTEXT(texttool));
+    Inkscape::UI::Tools::TextTool *const tc = SP_TEXT_CONTEXT(texttool);
     if (tc) {
         Inkscape::Text::Layout const *layout = te_get_layout(tc->text);
         if (layout) {

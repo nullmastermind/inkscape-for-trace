@@ -259,7 +259,7 @@ void TweakTool::setup() {
 
         SPCurve *c = new SPCurve(path);
 
-        this->dilate_area = sp_canvas_bpath_new(this->desktop->getControls(), c);
+        this->dilate_area = sp_canvas_bpath_new(desktop->getControls(), c);
         c->unref();
         sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(this->dilate_area), 0x00000000,(SPWindRule)0);
         sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(this->dilate_area), 0xff9900ff, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
@@ -278,7 +278,7 @@ void TweakTool::setup() {
     sp_event_context_read(this, "dos");
     sp_event_context_read(this, "doo");
 
-    this->style_set_connection = this->desktop->connectSetStyle( // catch style-setting signal in this tool
+    this->style_set_connection = desktop->connectSetStyle( // catch style-setting signal in this tool
         //sigc::bind(sigc::ptr_fun(&sp_tweak_context_style_set), this)
    		sigc::mem_fun(this, &TweakTool::set_style)
     );
@@ -331,14 +331,14 @@ static double
 get_dilate_radius (TweakTool *tc)
 {
     // 10 times the pen width:
-    return 500 * tc->width/SP_EVENT_CONTEXT(tc)->desktop->current_zoom();
+    return 500 * tc->width/tc->getDesktop()->current_zoom();
 }
 
 static double
 get_path_force (TweakTool *tc)
 {
     double force = 8 * (tc->usepressure? tc->pressure : TC_DEFAULT_PRESSURE)
-        /sqrt(SP_EVENT_CONTEXT(tc)->desktop->current_zoom());
+        /sqrt(tc->getDesktop()->current_zoom());
     if (force > 3) {
         force += 4 * (force - 3);
     }
@@ -1029,8 +1029,8 @@ return did;
     static bool
 sp_tweak_dilate (TweakTool *tc, Geom::Point event_p, Geom::Point p, Geom::Point vector, bool reverse)
 {
-    Inkscape::Selection *selection = tc->desktop->getSelection();
-    SPDesktop *desktop = SP_EVENT_CONTEXT(tc)->desktop;
+    SPDesktop *desktop = tc->getDesktop();
+    Inkscape::Selection *selection = desktop->getSelection();
 
     if (selection->isEmpty()) {
         return false;
@@ -1039,7 +1039,7 @@ sp_tweak_dilate (TweakTool *tc, Geom::Point event_p, Geom::Point p, Geom::Point 
     bool did = false;
     double radius = get_dilate_radius(tc);
 
-    SPItem *item_at_point = SP_EVENT_CONTEXT(tc)->desktop->getItemAtPoint(event_p, TRUE);
+    SPItem *item_at_point = tc->getDesktop()->getItemAtPoint(event_p, TRUE);
 
     bool do_fill = false, do_stroke = false, do_opacity = false;
     guint32 fill_goal = sp_desktop_get_color_tool(desktop, "/tools/tweak", true, &do_fill);
@@ -1117,7 +1117,7 @@ sp_tweak_dilate (TweakTool *tc, Geom::Point event_p, Geom::Point p, Geom::Point 
 sp_tweak_update_area (TweakTool *tc)
 {
     double radius = get_dilate_radius(tc);
-    Geom::Affine const sm (Geom::Scale(radius, radius) * Geom::Translate(SP_EVENT_CONTEXT(tc)->desktop->point()));
+    Geom::Affine const sm (Geom::Scale(radius, radius) * Geom::Translate(tc->getDesktop()->point()));
     sp_canvas_item_affine_absolute(tc->dilate_area, sm);
     sp_canvas_item_show(tc->dilate_area);
 }
@@ -1125,7 +1125,7 @@ sp_tweak_update_area (TweakTool *tc)
     static void
 sp_tweak_switch_mode (TweakTool *tc, gint mode, bool with_shift)
 {
-    auto tb = dynamic_cast<UI::Toolbar::TweakToolbar*>(SP_EVENT_CONTEXT(tc)->desktop->get_toolbar_by_name("TweakToolbar"));
+    auto tb = dynamic_cast<UI::Toolbar::TweakToolbar*>(tc->getDesktop()->get_toolbar_by_name("TweakToolbar"));
 
     if(tb) {
         tb->set_mode(mode);
@@ -1145,7 +1145,7 @@ sp_tweak_switch_mode_temporarily (TweakTool *tc, gint mode, bool with_shift)
     // Juggling about so that prefs have the old value but tc->mode and the button show new mode:
     gint now_mode = prefs->getInt("/tools/tweak/mode", 0);
 
-    auto tb = dynamic_cast<UI::Toolbar::TweakToolbar*>(SP_EVENT_CONTEXT(tc)->desktop->get_toolbar_by_name("TweakToolbar"));
+    auto tb = dynamic_cast<UI::Toolbar::TweakToolbar*>(tc->getDesktop()->get_toolbar_by_name("TweakToolbar"));
 
     if(tb) {
         tb->set_mode(mode);
@@ -1156,8 +1156,8 @@ sp_tweak_switch_mode_temporarily (TweakTool *tc, gint mode, bool with_shift)
     // button has changed prefs, restore
     prefs->setInt("/tools/tweak/mode", now_mode);
     // changing prefs changed tc->mode, restore back :
-   tc->mode = mode;
-   tc->update_cursor(with_shift);
+    tc->mode = mode;
+    tc->update_cursor(with_shift);
 }
 
 bool TweakTool::root_handler(GdkEvent* event) {

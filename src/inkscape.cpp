@@ -731,9 +731,8 @@ void
 Application::eventcontext_set (Inkscape::UI::Tools::ToolBase * eventcontext)
 {
     g_return_if_fail (eventcontext != nullptr);
-    g_return_if_fail (SP_IS_EVENT_CONTEXT (eventcontext));
 
-    if (DESKTOP_IS_ACTIVE (eventcontext->desktop)) {
+    if (DESKTOP_IS_ACTIVE (eventcontext->getDesktop())) {
         signal_eventcontext_set.emit(eventcontext);
     }
 }
