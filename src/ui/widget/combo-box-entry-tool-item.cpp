@@ -69,8 +69,7 @@ ComboBoxEntryToolItem::ComboBoxEntryToolItem(Glib::ustring name,
       _warning(nullptr),
       _warning_cb(nullptr),
       _warning_cb_id(0),
-      _warning_cb_blocked(false),
-      _altx_name(nullptr)
+      _warning_cb_blocked(false)
 {
     set_name(name);
 
@@ -148,11 +147,6 @@ ComboBoxEntryToolItem::ComboBoxEntryToolItem(Glib::ustring name,
         // Add pop-up entry completion if required
         if( _popup ) {
             popup_enable();
-        }
-
-        // Add altx_name if required
-        if( _altx_name ) {
-            g_object_set_data( G_OBJECT( child ), _altx_name, _entry );
         }
 
         // Add signal for GtkEntry to check if finished typing.
@@ -423,18 +417,6 @@ void
 ComboBoxEntryToolItem::set_warning_cb(gpointer warning_cb)
 {
     _warning_cb = warning_cb;
-}
-
-void
-ComboBoxEntryToolItem::set_altx_name(const gchar* altx_name)
-{
-    g_free(_altx_name);
-    _altx_name = g_strdup( altx_name );
-
-    // Widget may not have been created....
-    if(_entry) {
-        g_object_set_data( G_OBJECT(_entry), _altx_name, _entry );
-    }
 }
 
 // Internal ---------------------------------------------------

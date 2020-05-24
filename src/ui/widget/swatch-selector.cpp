@@ -39,7 +39,6 @@ SwatchSelector::SwatchSelector() :
     using Inkscape::UI::Widget::ColorNotebook;
 
     _gsel = Gtk::manage(new GradientSelector());
-    g_object_set_data( G_OBJECT(gobj()), "base", this );
     _gsel->setMode(GradientSelector::MODE_SWATCH);
 
     _gsel->show();

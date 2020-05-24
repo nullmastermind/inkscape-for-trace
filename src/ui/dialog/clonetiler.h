@@ -16,7 +16,6 @@
 #include "ui/widget/color-picker.h"
 
 namespace Gtk {
-    class CheckButton;
     class ComboBox;
     class ToggleButton;
 }
@@ -33,6 +32,7 @@ namespace Inkscape {
 namespace UI {
 
 namespace Widget {
+    class CheckButtonInternal;
     class UnitMenu;
 }
 
@@ -96,7 +96,7 @@ protected:
                  Glib::ustring const &pref);
     void remove(bool do_undo = true);
     void reset();
-    void reset_recursive(GtkWidget *w);
+    void reset_recursive(Gtk::Widget *w);
     void switch_to_create();
     void switch_to_fill();
     void unclump();
@@ -146,8 +146,8 @@ private:
     CloneTiler(CloneTiler const &d) = delete;
     CloneTiler& operator=(CloneTiler const &d) = delete;
 
-    Gtk::CheckButton *_b;
-    Gtk::CheckButton *_cb_keep_bbox;
+    UI::Widget::CheckButtonInternal *_b;
+    UI::Widget::CheckButtonInternal *_cb_keep_bbox;
     GtkWidget *nb;
     Inkscape::UI::Widget::ColorPicker *color_picker;
     GtkSizeGroup* table_row_labels;

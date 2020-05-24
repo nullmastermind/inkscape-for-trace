@@ -54,39 +54,7 @@
 
 #include "ui/uxmanager.h"
 
-#include "widgets/spinbutton-events.h"
-
 using Inkscape::UI::UXManager;
-
-/*
-class PencilToleranceObserver : public Inkscape::Preferences::Observer {
-public:
-    PencilToleranceObserver(Glib::ustring const &path, GObject *x) : Observer(path), _obj(x)
-    {
-        g_object_set_data(_obj, "prefobserver", this);
-    }
-    virtual ~PencilToleranceObserver() {
-        if (g_object_get_data(_obj, "prefobserver") == this) {
-            g_object_set_data(_obj, "prefobserver", NULL);
-        }
-    }
-    virtual void notify(Inkscape::Preferences::Entry const &val) {
-        GObject* tbl = _obj;
-        if (g_object_get_data( tbl, "freeze" )) {
-            return;
-        }
-        g_object_set_data( tbl, "freeze", GINT_TO_POINTER(TRUE) );
-
-        GtkAdjustment * adj = GTK_ADJUSTMENT(g_object_get_data(tbl, "tolerance"));
-
-        double v = val.getDouble(adj->value);
-        gtk_adjustment_set_value(adj, v);
-        g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
-    }
-private:
-    GObject *_obj;
-};
-*/
 
 namespace Inkscape {
 namespace UI {

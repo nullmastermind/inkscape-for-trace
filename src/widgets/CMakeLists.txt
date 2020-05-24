@@ -6,7 +6,6 @@ set(widgets_SRC
 	ink-action.cpp
 	sp-attribute-widget.cpp
 	sp-xmlview-tree.cpp
-	spinbutton-events.cpp
 	spw-utilities.cpp
 	toolbox.cpp
 
@@ -17,7 +16,6 @@ set(widgets_SRC
 	ink-action.h
 	sp-attribute-widget.h
 	sp-xmlview-tree.h
-	spinbutton-events.h
 	spw-utilities.h
 	toolbox.h
 	widget-sizes.h

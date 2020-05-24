@@ -28,7 +28,10 @@
 #include "ui/toolbar/text-toolbar.h"
 
 /* To do:
- *   Fix altx. Need to store
+ *   Fix altx.  The setToolboxFocusTo method now just searches for a named widget.
+ *   We just need to do the following:
+ *   * Set the name of the family_combo child widget
+ *   * Change the setToolboxFocusTo() argument in tools/text-tool to point to that widget name
  */
 
 void family_cell_data_func(const Gtk::TreeModel::const_iterator iter, Gtk::CellRendererText* cell ) {
@@ -68,8 +71,6 @@ FontSelectorToolbar::FontSelectorToolbar ()
     Gtk::Entry* entry = family_combo.get_entry();
     entry->signal_icon_press().connect (sigc::mem_fun(*this, &FontSelectorToolbar::on_icon_pressed));
     entry->signal_key_press_event().connect (sigc::mem_fun(*this, &FontSelectorToolbar::on_key_press_event), false); // false => connect first
-    entry->set_data (Glib::Quark("altx-text"), entry); // Desktop will set focus to entry with Alt-x.
-
 
     Glib::RefPtr<Gtk::EntryCompletion> completion = Gtk::EntryCompletion::create();
     completion->set_model (font_lister->get_font_list());

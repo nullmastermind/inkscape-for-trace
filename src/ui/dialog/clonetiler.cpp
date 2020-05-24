@@ -59,6 +59,27 @@ using Inkscape::Util::unit_table;
 
 namespace Inkscape {
 namespace UI {
+
+namespace Widget {
+/**
+ * Simple extension of Gtk::CheckButton, which adds a flag
+ * to indicate whether the box should be unticked when reset
+ */
+class CheckButtonInternal : public Gtk::CheckButton {
+  private:
+    bool _uncheckable = false;
+  public:
+    CheckButtonInternal() = default;
+
+    CheckButtonInternal(const Glib::ustring &label)
+        : Gtk::CheckButton(label)
+    {}
+
+    void set_uncheckable(const bool val = true) { _uncheckable = val; }
+    bool get_uncheckable() const { return _uncheckable; }
+};
+}
+
 namespace Dialog {
 
 #define SB_MARGIN 1
@@ -779,8 +800,8 @@ CloneTiler::CloneTiler () :
             gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
             gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
 
-            _b = Gtk::manage(new Gtk::CheckButton(_("Trace the drawing under the clones/sprayed items")));
-            _b->set_data("uncheckable", GINT_TO_POINTER(TRUE));
+            _b = Gtk::manage(new UI::Widget::CheckButtonInternal(_("Trace the drawing under the clones/sprayed items")));
+            _b->set_uncheckable();
             bool old = prefs->getBool(prefs_path + "dotrace");
             _b->set_active(old);
             _b->set_tooltip_text(_("For each clone/sprayed item, pick a value from the drawing in its location and apply it"));
@@ -1095,7 +1116,7 @@ CloneTiler::CloneTiler () :
             auto hb = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, VB_MARGIN));
             gtk_box_pack_start (GTK_BOX (mainbox), GTK_WIDGET(hb->gobj()), FALSE, FALSE, 0);
 
-            _cb_keep_bbox = Gtk::manage(new Gtk::CheckButton(_("Use saved size and position of the tile")));
+            _cb_keep_bbox = Gtk::manage(new UI::Widget::CheckButtonInternal(_("Use saved size and position of the tile")));
             auto keepbbox = prefs->getBool(prefs_path + "keepbbox", true);
             _cb_keep_bbox->set_active(keepbbox);
             _cb_keep_bbox->set_tooltip_text(_("Pretend that the size and position of the tile are the same "
@@ -2522,7 +2543,7 @@ Gtk::Widget * CloneTiler::checkbox(const char          *tip,
                                    const Glib::ustring &attr)
 {
     auto hb = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, VB_MARGIN));
-    auto b  = Gtk::manage(new Gtk::CheckButton());
+    auto b  = Gtk::manage(new UI::Widget::CheckButtonInternal());
     b->set_tooltip_text(tip);
 
     auto const prefs = Inkscape::Preferences::get();
@@ -2532,7 +2553,7 @@ Gtk::Widget * CloneTiler::checkbox(const char          *tip,
     hb->pack_start(*b, false, true);
     b->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &CloneTiler::checkbox_toggled), b, attr));
 
-    b->set_data("uncheckable", GINT_TO_POINTER(true));
+    b->set_uncheckable();
 
     return hb;
 }
@@ -2581,9 +2602,9 @@ Gtk::Widget * CloneTiler::spinbox(const char          *tip,
         a->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this, &CloneTiler::value_changed), a, attr));
 
         if (exponent) {
-            sb->set_data ("oneable", GINT_TO_POINTER(TRUE));
+            sb->set_oneable();
         } else {
-            sb->set_data ("zeroable", GINT_TO_POINTER(TRUE));
+            sb->set_zeroable();
         }
     }
 
@@ -2622,42 +2643,44 @@ void CloneTiler::pick_to(Gtk::ToggleButton *tb, Glib::ustring const &pref)
 }
 
 
-void CloneTiler::reset_recursive(GtkWidget *w)
+void CloneTiler::reset_recursive(Gtk::Widget *w)
 {
-    if (w && G_IS_OBJECT(w)) {
+    if (w) {
+        auto sb = dynamic_cast<Inkscape::UI::Widget::SpinButton *>(w);
+        auto tb = dynamic_cast<Inkscape::UI::Widget::CheckButtonInternal *>(w);
+
         {
-            int r = GPOINTER_TO_INT (g_object_get_data(G_OBJECT(w), "zeroable"));
-            if (r && GTK_IS_SPIN_BUTTON(w)) { // spinbutton
-                GtkAdjustment *a = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(w));
-                gtk_adjustment_set_value (a, 0);
+            if (sb && sb->get_zeroable()) { // spinbutton
+                auto a = sb->get_adjustment();
+                a->set_value(0);
             }
         }
         {
-            int r = GPOINTER_TO_INT (g_object_get_data(G_OBJECT(w), "oneable"));
-            if (r && GTK_IS_SPIN_BUTTON(w)) { // spinbutton
-                GtkAdjustment *a = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(w));
-                gtk_adjustment_set_value (a, 1);
+            if (sb && sb->get_oneable()) { // spinbutton
+                auto a = sb->get_adjustment();
+                a->set_value(1);
             }
         }
         {
-            int r = GPOINTER_TO_INT (g_object_get_data(G_OBJECT(w), "uncheckable"));
-            if (r && GTK_IS_TOGGLE_BUTTON(w)) { // checkbox
-                gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(w), FALSE);
+            if (tb && tb->get_uncheckable()) { // checkbox
+                tb->set_active(false);
             }
         }
     }
 
-    if (GTK_IS_CONTAINER(w)) {
-        std::vector<Gtk::Widget*> c = Glib::wrap(GTK_CONTAINER(w))->get_children();
-        for ( auto i : c ) {
-            reset_recursive(i->gobj());
+    auto container = dynamic_cast<Gtk::Container *>(w);
+
+    if (container) {
+        auto c = container->get_children();
+        for (auto i : c) {
+            reset_recursive(i);
         }
     }
 }
 
 void CloneTiler::reset()
 {
-    reset_recursive(GTK_WIDGET(this->gobj()));
+    reset_recursive(this);
 }
 
 void CloneTiler::table_attach(GtkWidget *table, Gtk::Widget *widget, float align, int row, int col)

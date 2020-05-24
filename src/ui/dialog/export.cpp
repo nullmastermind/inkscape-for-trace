@@ -107,6 +107,31 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
+class ExportProgressDialog : public Gtk::Dialog {
+  private:
+      Gtk::ProgressBar *_progress = nullptr;
+      Export *_export_panel = nullptr;
+      int _current = 0;
+      int _total = 0;
+
+  public:
+      ExportProgressDialog(const Glib::ustring &title, bool modal = false)
+          : Gtk::Dialog(title, modal)
+      {}
+
+      inline void set_export_panel(const decltype(_export_panel) export_panel) { _export_panel = export_panel; }
+      inline decltype(_export_panel) get_export_panel() const { return _export_panel; }
+
+      inline void set_progress(const decltype(_progress) progress) { _progress = progress; }
+      inline decltype(_progress) get_progress() const { return _progress; }
+
+      inline void set_current(const int current) { _current = current; }
+      inline int get_current() const { return _current; }
+
+      inline void set_total(const int total) { _total = total; }
+      inline int get_total() const { return _total; }
+};
+
 static std::string create_filepath_from_id(Glib::ustring, const Glib::ustring &);
 
 /** A list of strings that is used both in the preferences, and in the
@@ -846,14 +871,14 @@ void Export::onProgressCancel ()
 /// Called for every progress iteration
 unsigned int Export::onProgressCallback(float value, void *dlg)
 {
-    Gtk::Dialog *dlg2 = reinterpret_cast<Gtk::Dialog*>(dlg);
+    auto dlg2 = reinterpret_cast<ExportProgressDialog*>(dlg);
 
-    Export *self = reinterpret_cast<Export *>(dlg2->get_data("exportPanel"));
+    auto self = dlg2->get_export_panel();
     if (self->interrupted)
         return FALSE;
     
-    gint current = GPOINTER_TO_INT(dlg2->get_data("current"));
-    gint total = GPOINTER_TO_INT(dlg2->get_data("total"));
+    auto current = dlg2->get_current();
+    auto total = dlg2->get_total();
     if (total > 0) {
         double completed = current;
         completed /= static_cast<double>(total);
@@ -861,7 +886,7 @@ unsigned int Export::onProgressCallback(float value, void *dlg)
         value = completed + (value / static_cast<double>(total));
     }
 
-    Gtk::ProgressBar *prg = reinterpret_cast<Gtk::ProgressBar *>(dlg2->get_data("progress"));
+    auto prg = dlg2->get_progress();
     prg->set_fraction(value);
 
     if (self) {
@@ -895,13 +920,15 @@ void Export::setExporting(bool exporting, Glib::ustring const &text)
     }
 }
 
-Gtk::Dialog * Export::create_progress_dialog (Glib::ustring progress_text) {
-    Gtk::Dialog *dlg = new Gtk::Dialog(_("Export in progress"), TRUE);
+ExportProgressDialog *
+Export::create_progress_dialog(Glib::ustring progress_text)
+{
+    auto dlg = new ExportProgressDialog(_("Export in progress"), true);
     dlg->set_transient_for( *(INKSCAPE.active_desktop()->getToplevel()) );
 
     Gtk::ProgressBar *prg = new Gtk::ProgressBar ();
     prg->set_text(progress_text);
-    dlg->set_data ("progress", prg);
+    dlg->set_progress(prg);
     auto CA = dlg->get_content_area();
     CA->pack_start(*prg, FALSE, FALSE, 4);
 
@@ -988,7 +1015,7 @@ void Export::onExport ()
         }
 
         prog_dlg = create_progress_dialog(Glib::ustring::compose(_("Exporting %1 files"), num));
-        prog_dlg->set_data("exportPanel", this);
+        prog_dlg->set_export_panel(this);
         setExporting(true, Glib::ustring::compose(_("Exporting %1 files"), num));
 
         gint export_count = 0;
@@ -997,8 +1024,8 @@ void Export::onExport ()
         for(auto i = itemlist.begin();i!=itemlist.end() && !interrupted ;++i){
             SPItem *item = *i;
 
-            prog_dlg->set_data("current", GINT_TO_POINTER(n));
-            prog_dlg->set_data("total", GINT_TO_POINTER(num));
+            prog_dlg->set_current(n);
+            prog_dlg->set_total(num);
             onProgressCallback(0.0, prog_dlg);
 
             // retrieve export filename hint
@@ -1120,11 +1147,11 @@ void Export::onExport ()
 
         /* TRANSLATORS: %1 will be the filename, %2 the width, and %3 the height of the image */
         prog_dlg = create_progress_dialog (Glib::ustring::compose(_("Exporting %1 (%2 x %3)"), fn, width, height));
-        prog_dlg->set_data("exportPanel", this);
+        prog_dlg->set_export_panel(this);
         setExporting(true, Glib::ustring::compose(_("Exporting %1 (%2 x %3)"), fn, width, height));
 
-        prog_dlg->set_data("current", GINT_TO_POINTER(0));
-        prog_dlg->set_data("total", GINT_TO_POINTER(0));
+        prog_dlg->set_current(0);
+        prog_dlg->set_total(0);
 
         auto area = Geom::Rect(Geom::Point(x0, y0), Geom::Point(x1, y1)) * desktop->dt2doc();
 
@@ -1539,9 +1566,7 @@ void Export::areaYChange(Glib::RefPtr<Gtk::Adjustment>& adj)
     height = floor ((y1 - y0) * ydpi / DPI_BASE + 0.5);
 
     if (height < SP_EXPORT_MIN_SIZE) {
-        //const gchar *key;
         height = SP_EXPORT_MIN_SIZE;
-        //key = (const gchar *)g_object_get_data(G_OBJECT (adj), "key");
         if (adj == y1_adj) {
             //if (!strcmp (key, "y0")) {
             y1 = y0 + height * DPI_BASE / ydpi;

@@ -455,7 +455,7 @@ ZoomCorrRulerSlider::on_spinbutton_value_changed()
 
 void
 ZoomCorrRulerSlider::on_unit_changed() {
-    if (GPOINTER_TO_INT(_unit.get_data("sensitive")) == 0) {
+    if (!_unit.get_sensitive()) {
         // when the unit menu is initialized, the unit is set to the default but
         // it needs to be reset later so we don't perform the change in this case
         return;
@@ -505,9 +505,9 @@ ZoomCorrRulerSlider::init(int ruler_width, int ruler_height, double lower, doubl
     _sb.set_halign(Gtk::ALIGN_CENTER);
     _sb.set_valign(Gtk::ALIGN_END);
 
-    _unit.set_data("sensitive", GINT_TO_POINTER(0));
+    _unit.set_sensitive(false);
     _unit.setUnitType(UNIT_TYPE_LINEAR);
-    _unit.set_data("sensitive", GINT_TO_POINTER(1));
+    _unit.set_sensitive(true);
     _unit.setUnit(prefs->getString("/options/zoomcorrection/unit"));
     _unit.set_halign(Gtk::ALIGN_CENTER);
     _unit.set_valign(Gtk::ALIGN_END);

@@ -48,6 +48,7 @@ namespace Widget {
 class Button;
 class LayerSelector;
 class SelectedStyle;
+class SpinButton;
 class Ruler;
 } // namespace Widget
 } // namespace UI
@@ -119,13 +120,13 @@ private:
 
     Gtk::Label *_coord_status_x;
     Gtk::Label *_coord_status_y;
-    Gtk::SpinButton *_zoom_status;
+    Inkscape::UI::Widget::SpinButton *_zoom_status;
     sigc::connection _zoom_status_input_connection;
     sigc::connection _zoom_status_output_connection;
     sigc::connection _zoom_status_value_changed_connection;
     sigc::connection _zoom_status_populate_popup_connection;
     Gtk::Label *_select_status;
-    Gtk::SpinButton *_rotation_status;
+    Inkscape::UI::Widget::SpinButton *_rotation_status = nullptr;
 
     sigc::connection _rotation_status_input_connection;
     sigc::connection _rotation_status_output_connection;

@@ -84,13 +84,6 @@ sp_dialog_defocus_on_enter (GtkWidget *w)
 gboolean
 sp_dialog_event_handler (GtkWindow *win, GdkEvent *event, gpointer data)
 {
-
-// if the focus is inside the Text and Font textview, do nothing
-    GObject *dlg = G_OBJECT(data);
-    if (g_object_get_data (dlg, "eatkeys")) {
-        return FALSE;
-    }
-
     gboolean ret = FALSE;
 
     switch (event->type) {

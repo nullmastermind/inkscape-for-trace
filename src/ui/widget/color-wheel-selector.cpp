@@ -138,7 +138,7 @@ void ColorWheelSelector::_adjustmentChanged()
     }
 
     _color.preserveICC();
-    _color.setAlpha(ColorScales::getScaled(_alpha_adjustment->gobj()));
+    _color.setAlpha(ColorScales::getScaled(_alpha_adjustment));
 }
 
 void ColorWheelSelector::_sliderGrabbed()
@@ -160,7 +160,7 @@ void ColorWheelSelector::_sliderChanged()
     }
 
     _color.preserveICC();
-    _color.setAlpha(ColorScales::getScaled(_alpha_adjustment->gobj()));
+    _color.setAlpha(ColorScales::getScaled(_alpha_adjustment));
 }
 
 void ColorWheelSelector::_wheelChanged()
@@ -209,7 +209,7 @@ void ColorWheelSelector::_updateDisplay()
 
     _slider->setColors(start, mid, end);
 
-    ColorScales::setScaled(_alpha_adjustment->gobj(), _color.alpha());
+    ColorScales::setScaled(_alpha_adjustment, _color.alpha());
 
     _updating = false;
 }

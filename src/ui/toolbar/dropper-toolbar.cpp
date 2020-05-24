@@ -30,7 +30,7 @@
 #include "dropper-toolbar.h"
 #include "document-undo.h"
 #include "preferences.h"
-#include "widgets/spinbutton-events.h"
+#include "desktop.h"
 
 namespace Inkscape {
 namespace UI {
@@ -44,15 +44,14 @@ void DropperToolbar::on_pick_alpha_button_toggled()
     prefs->setInt( "/tools/dropper/pick", active );
 
     _set_alpha_button->set_sensitive(active);
-
-    spinbutton_defocus(GTK_WIDGET(gobj()));
+    gtk_widget_grab_focus(GTK_WIDGET(_desktop->canvas));
 }
 
 void DropperToolbar::on_set_alpha_button_toggled()
 {
     auto prefs = Inkscape::Preferences::get();
     prefs->setBool( "/tools/dropper/setalpha", _set_alpha_button->get_active( ) );
-    spinbutton_defocus(GTK_WIDGET(gobj()));
+    gtk_widget_grab_focus(GTK_WIDGET(_desktop->canvas));
 }
 
 /*

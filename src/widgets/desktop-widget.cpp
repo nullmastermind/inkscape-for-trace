@@ -72,7 +72,6 @@
 #include "util/units.h"
 
 // We're in the "widgets" directory, so no need to explicitly prefix these:
-#include "spinbutton-events.h"
 #include "spw-utilities.h"
 #include "toolbox.h"
 #include "widget-sizes.h"
@@ -516,9 +515,9 @@ SPDesktopWidget::SPDesktopWidget()
 
     // Zoom status spinbutton ---------------
     auto zoom_adj = Gtk::Adjustment::create(100.0, log(SP_DESKTOP_ZOOM_MIN)/log(2), log(SP_DESKTOP_ZOOM_MAX)/log(2), 0.1);
-    dtw->_zoom_status = Gtk::manage(new Gtk::SpinButton(zoom_adj));
+    dtw->_zoom_status = Gtk::manage(new Inkscape::UI::Widget::SpinButton(zoom_adj));
 
-    dtw->_zoom_status->set_data("dtw", dtw->_canvas);
+    dtw->_zoom_status->set_defocus_widget(Glib::wrap(GTK_WIDGET(dtw->_canvas)));
     dtw->_zoom_status->set_tooltip_text(_("Zoom"));
     dtw->_zoom_status->set_size_request(STATUS_ZOOM_WIDTH, -1);
     dtw->_zoom_status->set_width_chars(6);
@@ -528,8 +527,6 @@ SPDesktopWidget::SPDesktopWidget()
     // Callbacks
     dtw->_zoom_status_input_connection  = dtw->_zoom_status->signal_input().connect(sigc::mem_fun(dtw, &SPDesktopWidget::zoom_input));
     dtw->_zoom_status_output_connection = dtw->_zoom_status->signal_output().connect(sigc::mem_fun(dtw, &SPDesktopWidget::zoom_output));
-    g_signal_connect (G_OBJECT (dtw->_zoom_status->gobj()), "focus-in-event", G_CALLBACK (spinbutton_focus_in), dtw->_zoom_status->gobj());
-    g_signal_connect (G_OBJECT (dtw->_zoom_status->gobj()), "key-press-event", G_CALLBACK (spinbutton_keypress), dtw->_zoom_status->gobj());
     dtw->_zoom_status_value_changed_connection = dtw->_zoom_status->signal_value_changed().connect(sigc::mem_fun(dtw, &SPDesktopWidget::zoom_value_changed));
     dtw->_zoom_status_populate_popup_connection = dtw->_zoom_status->signal_populate_popup().connect(sigc::mem_fun(dtw, &SPDesktopWidget::zoom_populate_popup));
 
@@ -543,8 +540,14 @@ SPDesktopWidget::SPDesktopWidget()
 
     // Rotate status spinbutton ---------------
     auto rotation_adj = Gtk::Adjustment::create(0, -360.0, 360.0, 1.0);
-    dtw->_rotation_status = Gtk::manage(new Gtk::SpinButton(rotation_adj));
-    dtw->_rotation_status->set_data("dtw", dtw->_canvas);
+
+    dtw->_rotation_status = Gtk::manage(new Inkscape::UI::Widget::SpinButton(rotation_adj));
+
+    // FIXME: This is a bit of a hack, to avoid the ExpressionEvaluator struggling to parse the
+    //        degree symbol.  It would be better to improve ExpressionEvaluator so it copes
+    dtw->_rotation_status->set_dont_evaluate(true);
+
+    dtw->_rotation_status->set_defocus_widget(Glib::wrap(GTK_WIDGET(dtw->_canvas)));
     dtw->_rotation_status->set_tooltip_text(_("Rotation. (Also Ctrl+Shift+Scroll)"));
     dtw->_rotation_status->set_size_request(STATUS_ROTATION_WIDTH, -1);
     dtw->_rotation_status->set_width_chars(7);
@@ -554,10 +557,8 @@ SPDesktopWidget::SPDesktopWidget()
     dtw->_rotation_status->set_update_policy(Gtk::UPDATE_ALWAYS);
 
     // Callbacks
-    dtw->_rotation_status_input_connection  = dtw->_rotation_status->signal_input().connect(sigc::mem_fun(dtw, &SPDesktopWidget::rotation_input));
+    dtw->_rotation_status_input_connection  = dtw->_rotation_status->signal_input().connect(sigc::mem_fun(dtw, &SPDesktopWidget::rotation_input), false);
     dtw->_rotation_status_output_connection = dtw->_rotation_status->signal_output().connect(sigc::mem_fun(dtw, &SPDesktopWidget::rotation_output));
-    g_signal_connect (G_OBJECT (dtw->_rotation_status->gobj()), "focus-in-event", G_CALLBACK (spinbutton_focus_in), dtw->_rotation_status->gobj());
-    g_signal_connect (G_OBJECT (dtw->_rotation_status->gobj()), "key-press-event", G_CALLBACK (spinbutton_keypress), dtw->_rotation_status->gobj());
     dtw->_rotation_status_value_changed_connection = dtw->_rotation_status->signal_value_changed().connect(sigc::mem_fun(dtw, &SPDesktopWidget::rotation_value_changed));
     dtw->_rotation_status_populate_popup_connection = dtw->_rotation_status->signal_populate_popup().connect(sigc::mem_fun(dtw, &SPDesktopWidget::rotation_populate_popup));
 
@@ -1730,15 +1731,11 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
                         if ( name == "TextToolbar" || name == "MeasureToolbar")
                             continue;
 
-                        gpointer t = sp_search_by_data_recursive(GTK_WIDGET(j->gobj()), (gpointer) "unit-tracker");
-                        if (t == nullptr) // didn't find any tracker data
-                            continue;
+                        auto tracker = dynamic_cast<UnitTracker*>(sp_search_by_name_recursive(j, "unit-tracker"));
 
-                        UnitTracker *tracker = reinterpret_cast<UnitTracker*>( t );
-                        if (tracker == nullptr) // it's null when inkscape is first opened
-                            continue;
-
-                        tracker->setActiveUnit( nv->display_units );
+                        if (tracker) { // it's null when inkscape is first opened
+                            tracker->setActiveUnit( nv->display_units );
+                        }
                     } // grandchildren
                 } // if child is a container
             } // children
@@ -1843,8 +1840,7 @@ SPDesktopWidget::zoom_value_changed()
     _zoom_status_value_changed_connection.block();
     desktop->zoom_absolute_center_point (midpoint, zoom_factor);
     _zoom_status_value_changed_connection.unblock();
-
-    spinbutton_defocus(GTK_WIDGET(_zoom_status->gobj()));
+    _zoom_status->defocus();
 }
 
 void
@@ -1977,7 +1973,7 @@ SPDesktopWidget::rotation_value_changed()
     desktop->rotate_absolute_center_point (midpoint, rotate_factor);
     _rotation_status_value_changed_connection.unblock();
 
-    spinbutton_defocus(GTK_WIDGET(_rotation_status->gobj()));
+    _rotation_status->defocus();
 }
 
 void

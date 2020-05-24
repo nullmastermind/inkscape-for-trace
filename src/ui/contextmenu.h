@@ -69,8 +69,9 @@ class ContextMenu : public Gtk::Menu
         SPDesktop *_desktop; //pointer to the desktop the user was currently working on at the time the ContextMenu is created
         
         int positionOfLastDialog;
-        
+
         Gtk::MenuItem MIGroup; //menu entry to enter a group
+        SPObject *_MIGroup_group; // Group to enter when MIGroup is activated
         Gtk::MenuItem MIParent; //menu entry to leave a group
         
         /**

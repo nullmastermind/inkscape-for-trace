@@ -56,7 +56,6 @@ ColorScales::ColorScales(SelectedColor &color, SPColorScalesMode mode)
 {
     for (gint i = 0; i < 5; i++) {
         _l[i] = nullptr;
-        _a[i] = nullptr;
         _s[i] = nullptr;
         _b[i] = nullptr;
     }
@@ -71,7 +70,6 @@ ColorScales::~ColorScales()
 {
     for (gint i = 0; i < 5; i++) {
         _l[i] = nullptr;
-        _a[i] = nullptr;
         _s[i] = nullptr;
         _b[i] = nullptr;
     }
@@ -87,7 +85,7 @@ void ColorScales::_initUI(SPColorScalesMode mode)
     GtkWidget *t = GTK_WIDGET(gobj());
 
     /* Create components */
-    for (i = 0; i < static_cast<gint>(G_N_ELEMENTS(_a)); i++) {
+    for (i = 0; i < 5; i++) {
         /* Label */
         _l[i] = gtk_label_new("");
 
@@ -101,9 +99,9 @@ void ColorScales::_initUI(SPColorScalesMode mode)
         gtk_grid_attach(GTK_GRID(t), _l[i], 0, i, 1, 1);
 
         /* Adjustment */
-        _a[i] = GTK_ADJUSTMENT(gtk_adjustment_new(0.0, 0.0, _rangeLimit, 1.0, 10.0, 10.0));
+        _a.push_back(Gtk::Adjustment::create(0.0, 0.0, _rangeLimit, 1.0, 10.0, 10.0));
         /* Slider */
-        _s[i] = Gtk::manage(new Inkscape::UI::Widget::ColorSlider(Glib::wrap(_a[i], true)));
+        _s[i] = Gtk::manage(new Inkscape::UI::Widget::ColorSlider(_a[i]));
         _s[i]->show();
 
         _s[i]->set_margin_start(XPAD);
@@ -114,7 +112,7 @@ void ColorScales::_initUI(SPColorScalesMode mode)
         gtk_grid_attach(GTK_GRID(t), _s[i]->gobj(), 1, i, 1, 1);
 
         /* Spinbutton */
-        _b[i] = gtk_spin_button_new(GTK_ADJUSTMENT(_a[i]), 1.0, 0);
+        _b[i] = gtk_spin_button_new(GTK_ADJUSTMENT(_a[i]->gobj()), 1.0, 0);
         sp_dialog_defocus_on_enter(_b[i]);
         gtk_label_set_mnemonic_widget(GTK_LABEL(_l[i]), _b[i]);
         gtk_widget_show(_b[i]);
@@ -127,10 +125,8 @@ void ColorScales::_initUI(SPColorScalesMode mode)
         gtk_widget_set_valign(_b[i], GTK_ALIGN_CENTER);
         gtk_grid_attach(GTK_GRID(t), _b[i], 2, i, 1, 1);
 
-        /* Attach channel value to adjustment */
-        g_object_set_data(G_OBJECT(_a[i]), "channel", GINT_TO_POINTER(i));
         /* Signals */
-        g_signal_connect(G_OBJECT(_a[i]), "value_changed", G_CALLBACK(_adjustmentAnyChanged), this);
+	_a[i]->signal_value_changed().connect(sigc::bind(sigc::mem_fun(this, &ColorScales::adjustment_changed),i));
         _s[i]->signal_grabbed.connect(sigc::mem_fun(this, &ColorScales::_sliderAnyGrabbed));
         _s[i]->signal_released.connect(sigc::mem_fun(this, &ColorScales::_sliderAnyReleased));
         _s[i]->signal_value_changed.connect(sigc::mem_fun(this, &ColorScales::_sliderAnyChanged));
@@ -226,16 +222,15 @@ void ColorScales::_updateDisplay()
 }
 
 /* Helpers for setting color value */
-gfloat ColorScales::getScaled(const GtkAdjustment *a)
+gfloat ColorScales::getScaled(const Glib::RefPtr<Gtk::Adjustment> &a)
 {
-    gfloat val = gtk_adjustment_get_value(const_cast<GtkAdjustment *>(a)) /
-                 gtk_adjustment_get_upper(const_cast<GtkAdjustment *>(a));
+    gfloat val = a->get_value() / a->get_upper();
     return val;
 }
 
-void ColorScales::setScaled(GtkAdjustment *a, gfloat v, bool constrained)
+void ColorScales::setScaled(Glib::RefPtr<Gtk::Adjustment> &a, gfloat v, bool constrained)
 {
-    gdouble upper = gtk_adjustment_get_upper(a);
+    auto upper = a->get_upper();
     gfloat val = v * upper;
     if (constrained) {
         // TODO: do we want preferences for these?
@@ -245,14 +240,14 @@ void ColorScales::setScaled(GtkAdjustment *a, gfloat v, bool constrained)
             val = round(val/10) * 10;
         }
     }
-    gtk_adjustment_set_value(a, val);
+    a->set_value(val);
 }
 
 void ColorScales::_setRangeLimit(gdouble upper)
 {
     _rangeLimit = upper;
     for (auto & i : _a) {
-        gtk_adjustment_set_upper(i, upper);
+        i->set_upper(upper);
     }
 }
 
@@ -361,7 +356,7 @@ void ColorScales::setMode(SPColorScalesMode mode)
     switch (mode) {
         case SP_COLOR_SCALES_MODE_RGB:
             _setRangeLimit(255.0);
-            gtk_adjustment_set_upper(_a[3], 100.0);
+            _a[3]->set_upper(100.0);
             gtk_label_set_markup_with_mnemonic(GTK_LABEL(_l[0]), _("_R:"));
             _s[0]->set_tooltip_text(_("Red"));
             gtk_widget_set_tooltip_text(_b[0], _("Red"));
@@ -392,7 +387,7 @@ void ColorScales::setMode(SPColorScalesMode mode)
             gtk_label_set_markup_with_mnemonic(GTK_LABEL(_l[0]), _("_H:"));
             _s[0]->set_tooltip_text(_("Hue"));
             gtk_widget_set_tooltip_text(_b[0], _("Hue"));
-            gtk_adjustment_set_upper(_a[0], 360.0);
+            _a[0]->set_upper(360.0);
 
             gtk_label_set_markup_with_mnemonic(GTK_LABEL(_l[1]), _("_S:"));
             _s[1]->set_tooltip_text(_("Saturation"));
@@ -428,7 +423,7 @@ void ColorScales::setMode(SPColorScalesMode mode)
             gtk_label_set_markup_with_mnemonic(GTK_LABEL(_l[0]), _("_H:"));
             _s[0]->set_tooltip_text(_("Hue"));
             gtk_widget_set_tooltip_text(_b[0], _("Hue"));
-            gtk_adjustment_set_upper(_a[0], 360.0);
+            _a[0]->set_upper(360.0);
 
             gtk_label_set_markup_with_mnemonic(GTK_LABEL(_l[1]), _("_S:"));
             _s[1]->set_tooltip_text(_("Saturation"));
@@ -499,13 +494,6 @@ void ColorScales::setMode(SPColorScalesMode mode)
 
 SPColorScalesMode ColorScales::getMode() const { return _mode; }
 
-void ColorScales::_adjustmentAnyChanged(GtkAdjustment *adjustment, ColorScales *cs)
-{
-    gint channel = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(adjustment), "channel"));
-
-    _adjustmentChanged(cs, channel);
-}
-
 void ColorScales::_sliderAnyGrabbed()
 {
     if (_updating) {
@@ -536,14 +524,14 @@ void ColorScales::_sliderAnyChanged()
     _recalcColor();
 }
 
-void ColorScales::_adjustmentChanged(ColorScales *scales, guint channel)
+void ColorScales::adjustment_changed(int channel)
 {
-    if (scales->_updating) {
+    if (_updating) {
         return;
     }
 
-    scales->_updateSliders((1 << channel));
-    scales->_recalcColor();
+    _updateSliders((1 << channel));
+    _recalcColor();
 }
 
 void ColorScales::_updateSliders(guint channels)

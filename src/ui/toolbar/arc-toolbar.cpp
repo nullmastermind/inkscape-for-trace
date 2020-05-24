@@ -50,7 +50,6 @@
 #include "ui/widget/spin-button-tool-item.h"
 #include "ui/widget/unit-tracker.h"
 
-#include "widgets/spinbutton-events.h"
 #include "widgets/widget-sizes.h"
 
 #include "xml/node-event-vector.h"

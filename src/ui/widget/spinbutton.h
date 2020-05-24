@@ -30,18 +30,13 @@ class SpinButton : public Gtk::SpinButton
 {
 public:
   SpinButton(double climb_rate = 0.0, guint digits = 0)
-    : Gtk::SpinButton(climb_rate, digits),
-      _unit_menu(nullptr),
-      _unit_tracker(nullptr),
-      _on_focus_in_value(0.)
+    : Gtk::SpinButton(climb_rate, digits)
   {
       connect_signals();
   };
+
   explicit SpinButton(Glib::RefPtr<Gtk::Adjustment>& adjustment, double climb_rate = 0.0, guint digits = 0)
-    : Gtk::SpinButton(adjustment, climb_rate, digits),
-      _unit_menu(nullptr),
-      _unit_tracker(nullptr),
-      _on_focus_in_value(0.)
+    : Gtk::SpinButton(adjustment, climb_rate, digits)
   {
       connect_signals();
   };
@@ -56,10 +51,26 @@ public:
   
   void addUnitTracker(UnitTracker* ut) { _unit_tracker = ut; };
 
+  // TODO: Might be better to just have a default value and a reset() method?
+  inline void set_zeroable(const bool zeroable = true) { _zeroable = zeroable; }
+  inline void set_oneable(const bool oneable = true) { _oneable = oneable; }
+
+  inline bool get_zeroable() const { return _zeroable; }
+  inline bool get_oneable() const { return _oneable; }
+
+  void defocus();
+
 protected:
-  UnitMenu *_unit_menu; /// Linked unit menu for unit conversion in entered expressions.
-  UnitTracker *_unit_tracker; // Linked unit tracker for unit conversion in entered expressions.
-  double _on_focus_in_value;
+  UnitMenu    *_unit_menu    = nullptr; ///< Linked unit menu for unit conversion in entered expressions.
+  UnitTracker *_unit_tracker = nullptr; ///< Linked unit tracker for unit conversion in entered expressions.
+  double _on_focus_in_value  = 0.;
+  Gtk::Widget *_defocus_widget = nullptr; ///< Widget that should grab focus when the spinbutton defocuses
+
+  bool _zeroable = false; ///< Reset-value should be zero
+  bool _oneable  = false; ///< Reset-value should be one
+
+  bool _stay = false; ///< Whether to ignore defocusing
+  bool _dont_evaluate = false; ///< Don't attempt to evaluate expressions
 
   void connect_signals();
 
@@ -85,6 +96,7 @@ protected:
      * @retval true  don't call default handler.
      */
     bool on_scroll_event(GdkEventScroll *event) override;
+
     /**
      * Handle specific keypress events, like Ctrl+Z.
      *
@@ -97,6 +109,10 @@ protected:
      * Undo the editing, by resetting the value upon when the spinbutton got focus.
      */
     void undo();
+
+  public:
+    inline void set_defocus_widget(const decltype(_defocus_widget) widget) { _defocus_widget = widget; }
+    inline void set_dont_evaluate(bool flag) { _dont_evaluate = flag; }
 };
 
 } // namespace Widget

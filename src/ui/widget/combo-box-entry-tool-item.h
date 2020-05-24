@@ -56,7 +56,6 @@ private:
     gpointer            _warning_cb; // Callback for clicking warning icon.
     gint                _warning_cb_id;
     gboolean            _warning_cb_blocked;
-    gchar              *_altx_name;  // Target for Alt-X keyboard shortcut.
 
     // Signals
     sigc::signal<void> _signal_changed;
@@ -109,8 +108,6 @@ public:
     void     set_warning(   const gchar* warning_cb );
     void     set_warning_cb(gpointer warning );
     void     set_tooltip(   const gchar* tooltip );
-
-    void     set_altx_name( const gchar* altx_name );
 
     // Accessor methods
     decltype(_model)          get_model()          const {return _model;}

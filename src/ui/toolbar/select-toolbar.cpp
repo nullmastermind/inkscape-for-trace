@@ -152,7 +152,6 @@ SelectToolbar::SelectToolbar(SPDesktop *desktop) :
     _lock_btn->set_tooltip_text(_("When locked, change both width and height by the same proportion"));
     _lock_btn->set_icon_name(INKSCAPE_ICON("object-unlocked"));
     _lock_btn->signal_toggled().connect(sigc::mem_fun(*this, &SelectToolbar::toggle_lock));
-    set_data("lock", _lock_btn->gobj());
     add(*_lock_btn);
 
     // height-value control

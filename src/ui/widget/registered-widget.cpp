@@ -25,9 +25,6 @@
 #include "svg/svg-color.h"
 #include "svg/stringstream.h"
 
-#include "widgets/spinbutton-events.h"
-
-
 namespace Inkscape {
 namespace UI {
 namespace Widget {

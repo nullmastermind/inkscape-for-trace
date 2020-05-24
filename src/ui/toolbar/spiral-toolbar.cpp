@@ -44,8 +44,6 @@
 #include "ui/widget/label-tool-item.h"
 #include "ui/widget/spin-button-tool-item.h"
 
-#include "widgets/spinbutton-events.h"
-
 #include "xml/node-event-vector.h"
 
 using Inkscape::UI::UXManager;

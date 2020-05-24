@@ -59,7 +59,6 @@
 #include "ui/widget/style-swatch.h"
 #include "ui/widget/unit-tracker.h"
 
-#include "widgets/spinbutton-events.h"
 #include "widgets/spw-utilities.h"
 #include "widgets/widget-sizes.h"
 

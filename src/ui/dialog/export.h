@@ -23,13 +23,11 @@
 
 #include "ui/widget/panel.h"
 
-namespace Gtk {
-class Dialog;
-}
-
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
+
+class ExportProgressDialog;
 
 /** What type of button is being pressed */
 enum selection_type {
@@ -216,7 +214,7 @@ private:
      *
      * @param progress_text Text to be shown in the progress bar
      */
-    Gtk::Dialog * create_progress_dialog (Glib::ustring progress_text);
+    ExportProgressDialog * create_progress_dialog(Glib::ustring progress_text);
 
     /**
      * Callback to be used in for loop to update the progress bar.
@@ -336,7 +334,7 @@ private:
 
     Gtk::ProgressBar _prog;
 
-    Gtk::Dialog *prog_dlg;
+    ExportProgressDialog *prog_dlg;
     bool interrupted; // indicates whether export needs to be interrupted (read: user pressed cancel in the progress dialog)
 
     Inkscape::Preferences *prefs;

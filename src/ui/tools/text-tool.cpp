@@ -808,7 +808,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                             case GDK_KEY_x:
                             case GDK_KEY_X:
                                 if (MOD__ALT_ONLY(event)) {
-                                    desktop->setToolboxFocusTo ("altx-text");
+                                    desktop->setToolboxFocusTo("TextFontFamilyAction_entry");
                                     return TRUE;
                                 }
                                 break;
@@ -1268,7 +1268,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                         Inkscape::Rubberband::get(desktop)->stop();
                     }
                 } else if ((group0_keyval == GDK_KEY_x || group0_keyval == GDK_KEY_X) && MOD__ALT_ONLY(event)) {
-                    desktop->setToolboxFocusTo ("altx-text");
+                    desktop->setToolboxFocusTo("TextFontFamilyAction_entry");
                     return TRUE;
                 }
             }

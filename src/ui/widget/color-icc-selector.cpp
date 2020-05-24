@@ -235,7 +235,7 @@ class ComponentUI {
     }
 
     colorspace::Component _component;
-    GtkAdjustment *_adj; // Component adjustment
+    Glib::RefPtr<Gtk::Adjustment> _adj; // Component adjustment
     Inkscape::UI::Widget::ColorSlider *_slider;
     GtkWidget *_btn;   // spinbutton
     GtkWidget *_label; // Label
@@ -251,7 +251,7 @@ class ColorICCSelectorImpl {
 
     ~ColorICCSelectorImpl();
 
-    static void _adjustmentChanged(GtkAdjustment *adjustment, ColorICCSelectorImpl *cs);
+    void _adjustmentChanged(Glib::RefPtr<Gtk::Adjustment> &adjustment);
 
     void _sliderGrabbed();
     void _sliderReleased();
@@ -279,7 +279,7 @@ class ColorICCSelectorImpl {
 
     std::vector<ComponentUI> _compUI;
 
-    GtkAdjustment *_adj; // Channel adjustment
+    Glib::RefPtr<Gtk::Adjustment> _adj; // Channel adjustment
     Inkscape::UI::Widget::ColorSlider *_slider;
     GtkWidget *_sbtn;  // Spinbutton
     GtkWidget *_label; // Label
@@ -339,7 +339,6 @@ ColorICCSelectorImpl::ColorICCSelectorImpl(ColorICCSelector *owner, SelectedColo
 
 ColorICCSelectorImpl::~ColorICCSelectorImpl()
 {
-    _adj = nullptr;
     _sbtn = nullptr;
     _label = nullptr;
 }
@@ -429,11 +428,11 @@ void ColorICCSelector::init()
         gdouble step = static_cast<gdouble>(scaleValue) / 100.0;
         gdouble page = static_cast<gdouble>(scaleValue) / 10.0;
         gint digits = (step > 0.9) ? 0 : 2;
-        _impl->_compUI[i]._adj = GTK_ADJUSTMENT(gtk_adjustment_new(0.0, 0.0, scaleValue, step, page, page));
+        _impl->_compUI[i]._adj = Gtk::Adjustment::create(0.0, 0.0, scaleValue, step, page, page);
 
         // Slider
         _impl->_compUI[i]._slider =
-            Gtk::manage(new Inkscape::UI::Widget::ColorSlider(Glib::wrap(_impl->_compUI[i]._adj, true)));
+            Gtk::manage(new Inkscape::UI::Widget::ColorSlider(_impl->_compUI[i]._adj));
 #if defined(HAVE_LIBLCMS2)
         _impl->_compUI[i]._slider->set_tooltip_text((i < things.size()) ? things[i].tip.c_str() : "");
 #else
@@ -444,7 +443,7 @@ void ColorICCSelector::init()
 
         attachToGridOrTable(t, _impl->_compUI[i]._slider->gobj(), 1, row, 1, 1, true);
 
-        _impl->_compUI[i]._btn = gtk_spin_button_new(_impl->_compUI[i]._adj, step, digits);
+        _impl->_compUI[i]._btn = gtk_spin_button_new(_impl->_compUI[i]._adj->gobj(), step, digits);
 #if defined(HAVE_LIBLCMS2)
         gtk_widget_set_tooltip_text(_impl->_compUI[i]._btn, (i < things.size()) ? things[i].tip.c_str() : "");
 #else
@@ -462,8 +461,7 @@ void ColorICCSelector::init()
 
 
         // Signals
-        g_signal_connect(G_OBJECT(_impl->_compUI[i]._adj), "value_changed",
-                         G_CALLBACK(ColorICCSelectorImpl::_adjustmentChanged), _impl);
+        _impl->_compUI[i]._adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(_impl, &ColorICCSelectorImpl::_adjustmentChanged), _impl->_compUI[i]._adj));
 
         _impl->_compUI[i]._slider->signal_grabbed.connect(sigc::mem_fun(_impl, &ColorICCSelectorImpl::_sliderGrabbed));
         _impl->_compUI[i]._slider->signal_released.connect(
@@ -483,10 +481,10 @@ void ColorICCSelector::init()
     attachToGridOrTable(t, _impl->_label, 0, row, 1, 1);
 
     // Adjustment
-    _impl->_adj = GTK_ADJUSTMENT(gtk_adjustment_new(0.0, 0.0, 100.0, 1.0, 10.0, 10.0));
+    _impl->_adj = Gtk::Adjustment::create(0.0, 0.0, 100.0, 1.0, 10.0, 10.0);
 
     // Slider
-    _impl->_slider = Gtk::manage(new Inkscape::UI::Widget::ColorSlider(Glib::wrap(_impl->_adj, true)));
+    _impl->_slider = Gtk::manage(new Inkscape::UI::Widget::ColorSlider(_impl->_adj));
     _impl->_slider->set_tooltip_text(_("Alpha (opacity)"));
     _impl->_slider->show();
 
@@ -497,7 +495,7 @@ void ColorICCSelector::init()
 
 
     // Spinbutton
-    _impl->_sbtn = gtk_spin_button_new(GTK_ADJUSTMENT(_impl->_adj), 1.0, 0);
+    _impl->_sbtn = gtk_spin_button_new(_impl->_adj->gobj(), 1.0, 0);
     gtk_widget_set_tooltip_text(_impl->_sbtn, _("Alpha (opacity)"));
     sp_dialog_defocus_on_enter(_impl->_sbtn);
     gtk_label_set_mnemonic_widget(GTK_LABEL(_impl->_label), _impl->_sbtn);
@@ -506,8 +504,7 @@ void ColorICCSelector::init()
     attachToGridOrTable(t, _impl->_sbtn, 2, row, 1, 1, false, true);
 
     // Signals
-    g_signal_connect(G_OBJECT(_impl->_adj), "value_changed", G_CALLBACK(ColorICCSelectorImpl::_adjustmentChanged),
-                     _impl);
+    _impl->_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(_impl, &ColorICCSelectorImpl::_adjustmentChanged), _impl->_adj));
 
     _impl->_slider->signal_grabbed.connect(sigc::mem_fun(_impl, &ColorICCSelectorImpl::_sliderGrabbed));
     _impl->_slider->signal_released.connect(sigc::mem_fun(_impl, &ColorICCSelectorImpl::_sliderReleased));
@@ -520,7 +517,7 @@ void ColorICCSelectorImpl::_fixupHit(GtkWidget * /*src*/, gpointer data)
 {
     ColorICCSelectorImpl *self = reinterpret_cast<ColorICCSelectorImpl *>(data);
     gtk_widget_set_sensitive(self->_fixupBtn, FALSE);
-    self->_adjustmentChanged(self->_compUI[0]._adj, self);
+    self->_adjustmentChanged(self->_compUI[0]._adj);
 }
 
 #if defined(HAVE_LIBLCMS2)
@@ -880,7 +877,7 @@ void ColorICCSelectorImpl::_updateSliders(gint ignore)
                     val = _color.color().icc->colors[i] / static_cast<gdouble>(_compUI[i]._component.scale);
                 }
             }
-            gtk_adjustment_set_value(_compUI[i]._adj, val);
+            _compUI[i]._adj->set_value(val);
         }
 
         if (_prof) {
@@ -930,13 +927,13 @@ void ColorICCSelectorImpl::_updateSliders(gint ignore)
 }
 
 
-void ColorICCSelectorImpl::_adjustmentChanged(GtkAdjustment *adjustment, ColorICCSelectorImpl *cs)
+void ColorICCSelectorImpl::_adjustmentChanged(Glib::RefPtr<Gtk::Adjustment> &adjustment)
 {
 #ifdef DEBUG_LCMS
-    g_message("/^^^^^^^^^  %p::_adjustmentChanged()", cs);
+    g_message("/^^^^^^^^^  %p::_adjustmentChanged()", this);
 #endif // DEBUG_LCMS
 
-    ColorICCSelector *iccSelector = cs->_owner;
+    ColorICCSelector *iccSelector = _owner;
     if (iccSelector->_impl->_updating) {
         return;
     }

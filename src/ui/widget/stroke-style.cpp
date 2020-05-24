@@ -421,7 +421,6 @@ StrokeStyle::makeRadioButton(Gtk::RadioButtonGroup &grp,
     StrokeStyleButton *tb = new StrokeStyleButton(grp, icon, button_type, stroke_style);
 
     hb->pack_start(*tb, false, false, 0);
-    set_data(icon, tb);
 
     tb->signal_toggled().connect(sigc::bind<StrokeStyleButton *, StrokeStyle *>(
                                      sigc::ptr_fun(&StrokeStyle::buttonToggledCB), tb, this));
@@ -857,7 +856,7 @@ StrokeStyle::updateLine()
         return;
     }
 
-    FillOrStroke kind = GPOINTER_TO_INT(get_data("kind")) ? FILL : STROKE;
+    FillOrStroke kind = STROKE;
 
     // create temporary style
     SPStyle query(SP_ACTIVE_DOCUMENT);

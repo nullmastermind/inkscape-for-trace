@@ -50,7 +50,6 @@
 #include "ui/widget/gradient-image.h"
 
 #include "widgets/ege-paint-def.h"
-#include "widgets/spinbutton-events.h"
 #include "widgets/spw-utilities.h"
 #include "widgets/widget-sizes.h"
 
@@ -413,9 +412,6 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
     _stroke_width_place.signal_button_release_event().connect(sigc::mem_fun(*this, &SelectedStyle::on_sw_click));
     _opacity_sb.signal_populate_popup().connect(sigc::mem_fun(*this, &SelectedStyle::on_opacity_menu));
     _opacity_sb.signal_value_changed().connect(sigc::mem_fun(*this, &SelectedStyle::on_opacity_changed));
-    // Connect to key-press to ensure focus is consistent with other spin buttons when using the keys vs mouse-click
-    g_signal_connect (G_OBJECT (_opacity_sb.gobj()), "key-press-event", G_CALLBACK (spinbutton_keypress), _opacity_sb.gobj());
-    g_signal_connect (G_OBJECT (_opacity_sb.gobj()), "focus-in-event", G_CALLBACK (spinbutton_focus_in), _opacity_sb.gobj());
 }
 
 SelectedStyle::~SelectedStyle()
@@ -443,7 +439,6 @@ void
 SelectedStyle::setDesktop(SPDesktop *desktop)
 {
     _desktop = desktop;
-    g_object_set_data (G_OBJECT(_opacity_sb.gobj()), "dtw", _desktop->canvas);
 
     Inkscape::Selection *selection = desktop->getSelection();
 
@@ -1166,7 +1161,6 @@ void SelectedStyle::on_opacity_changed ()
                             _("Change opacity"));
     // resume interruptibility
     _desktop->getCanvas()->endForcedFullRedraws();
-    // spinbutton_defocus(GTK_WIDGET(_opacity_sb.gobj()));
     _opacity_blocked = false;
 }
 

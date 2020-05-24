@@ -92,6 +92,7 @@ private:
     int preview_height;
     int preview_lineheight;
 
+    double *_pattern = nullptr;
 };
 
 } // namespace Widget

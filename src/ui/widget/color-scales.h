@@ -34,8 +34,8 @@ class ColorScales
 public:
     static const gchar *SUBMODE_NAMES[];
 
-    static gfloat getScaled(const GtkAdjustment *a);
-    static void setScaled(GtkAdjustment *a, gfloat v, bool constrained = false);
+    static gfloat getScaled(const Glib::RefPtr<Gtk::Adjustment> &a);
+    static void setScaled(Glib::RefPtr<Gtk::Adjustment> &a, gfloat v, bool constrained = false);
 
     ColorScales(SelectedColor &color, SPColorScalesMode mode);
     ~ColorScales() override;
@@ -49,11 +49,10 @@ protected:
     void _onColorChanged();
     void on_show() override;
 
-    static void _adjustmentAnyChanged(GtkAdjustment *adjustment, ColorScales *cs);
     void _sliderAnyGrabbed();
     void _sliderAnyReleased();
     void _sliderAnyChanged();
-    static void _adjustmentChanged(ColorScales *cs, guint channel);
+    void adjustment_changed(int channel);
 
     void _getRgbaFloatv(gfloat *rgba);
     void _getCmykaFloatv(gfloat *cmyka);
@@ -69,7 +68,7 @@ protected:
     gdouble _rangeLimit;
     gboolean _updating : 1;
     gboolean _dragging : 1;
-    GtkAdjustment *_a[5];                     /* Channel adjustments */
+    std::vector<Glib::RefPtr<Gtk::Adjustment>> _a;        /* Channel adjustments */
     Inkscape::UI::Widget::ColorSlider *_s[5]; /* Channel sliders */
     GtkWidget *_b[5];                         /* Spinbuttons */
     GtkWidget *_l[5];                         /* Labels */

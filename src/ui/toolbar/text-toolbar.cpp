@@ -256,7 +256,6 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _font_family_item->set_warning_cb( (gpointer)sp_text_toolbox_select_cb );
 
         //ink_comboboxentry_action_set_warning_callback( act, sp_text_fontfamily_select_all );
-        _font_family_item->set_altx_name( "altx-text" ); // Set Alt-X keyboard shortcut
         _font_family_item->signal_changed().connect( sigc::mem_fun(*this, &TextToolbar::fontfamily_value_changed) );
         add(*_font_family_item);
 

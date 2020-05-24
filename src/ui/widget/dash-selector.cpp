@@ -91,7 +91,7 @@ DashSelector::DashSelector()
     row[dash_columns.dash] = dashes[np-1];
     row[dash_columns.pixbuf] = Glib::wrap(sp_text_to_pixbuf((char *)"Custom"));
 
-    this->set_data("pattern", dashes[0]);
+    _pattern = dashes[0];
 }
 
 DashSelector::~DashSelector() {
@@ -184,7 +184,7 @@ void DashSelector::set_dash (int ndash, double *dash, double o)
        pos = 0;
     }
     if(pos>=0){
-       this->set_data("pattern", dashes[pos]);
+       _pattern = dashes[pos];
        this->dash_combo.set_active(pos);
        this->offset->set_value(o);
        if(pos == 10) {
@@ -199,7 +199,7 @@ void DashSelector::set_dash (int ndash, double *dash, double o)
           d[i]=dash[i];
        } // store the custom pattern
        d[ndash]=-1.0;  //terminate it
-       this->set_data("pattern", dashes[count]);
+       _pattern = dashes[count];
        this->dash_combo.set_active(count);
        this->offset->set_value(o);  // what does this do????
     }
@@ -207,10 +207,8 @@ void DashSelector::set_dash (int ndash, double *dash, double o)
 
 void DashSelector::get_dash(int *ndash, double **dash, double *off)
 {
-    double *pattern = (double*) this->get_data("pattern");
-
     int nd = 0;
-    while (pattern[nd] >= 0.0)
+    while (_pattern[nd] >= 0.0)
         nd += 1;
 
     if (nd > 0) {
@@ -218,7 +216,7 @@ void DashSelector::get_dash(int *ndash, double **dash, double *off)
             *ndash = nd;
         if (dash) {
             *dash = g_new (double, nd);
-            memcpy (*dash, pattern, nd * sizeof (double));
+            memcpy (*dash, _pattern, nd * sizeof (double));
         }
         if (off)
             *off = offset->get_value();
@@ -284,7 +282,7 @@ GdkPixbuf* DashSelector::sp_text_to_pixbuf(char *text)
 void DashSelector::on_selection ()
 {
     double *pattern = dash_combo.get_active()->get_value(dash_columns.dash);
-    this->set_data ("pattern", pattern);
+    _pattern = pattern;
 
     changed_signal.emit();
 }

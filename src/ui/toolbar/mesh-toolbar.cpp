@@ -48,8 +48,6 @@
 #include "ui/widget/gradient-image.h"
 #include "ui/widget/spin-button-tool-item.h"
 
-#include "widgets/spinbutton-events.h"
-
 using Inkscape::DocumentUndo;
 using Inkscape::UI::Tools::MeshTool;
 
