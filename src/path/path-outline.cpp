@@ -58,9 +58,9 @@ item_find_paths(const SPItem *item, Geom::PathVector& fill, Geom::PathVector& st
 
     std::unique_ptr<SPCurve> curve;
     if (shape) {
-        curve.reset(shape->getCurve());
+        curve = SPCurve::copy(shape->curve());
     } else if (text) {
-        curve.reset(text->getNormalizedBpath());
+        curve = text->getNormalizedBpath();
     } else {
         std::cerr << "item_find_paths: item not shape or text!" << std::endl;
         return false;

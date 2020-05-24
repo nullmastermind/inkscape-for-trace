@@ -275,7 +275,7 @@ bool PovOutput::doCurve(SPItem *item, const String &id)
         return true;
 
     SPShape *shape = SP_SHAPE(item);
-    if (shape->_curve->is_empty()) {
+    if (shape->curve()->is_empty()) {
         return true;
     }
 
@@ -313,7 +313,7 @@ bool PovOutput::doCurve(SPItem *item, const String &id)
 
     // convert the path to only lineto's and cubic curveto's:
     Geom::Affine tf = item->i2dt_affine();
-    Geom::PathVector pathv = pathv_to_linear_and_cubic_beziers( shape->_curve->get_pathvector() * tf );
+    Geom::PathVector pathv = pathv_to_linear_and_cubic_beziers(shape->curve()->get_pathvector() * tf);
 
     /*
      * We need to know the number of segments (NR_CURVETOs/LINETOs, including

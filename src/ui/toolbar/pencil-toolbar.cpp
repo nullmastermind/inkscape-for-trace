@@ -437,15 +437,15 @@ PencilToolbar::simplify_flatten()
                     if (dynamic_cast<Inkscape::LivePathEffect::LPESimplify *>(lpe)) {
                         SPShape * shape = dynamic_cast<SPShape *>(lpeitem);
                         if(shape){
-                            SPCurve * c = shape->getCurveForEdit();
-                            lpe->doEffect(c);
+                            auto c = SPCurve::copy(shape->curveForEdit());
+                            lpe->doEffect(c.get());
                             lpeitem->setCurrentPathEffect(*i);
                             if (lpelist.size() > 1){
                                 lpeitem->removeCurrentPathEffect(true);
-                                shape->setCurveBeforeLPE(c);
+                                shape->setCurveBeforeLPE(std::move(c));
                             } else {
                                 lpeitem->removeCurrentPathEffect(false);
-                                shape->setCurve(c, false);
+                                shape->setCurve(std::move(c));
                             }
                             break;
                         }
@@ -481,15 +481,15 @@ PencilToolbar::flatten_spiro_bspline()
                     {
                         SPShape * shape = dynamic_cast<SPShape *>(lpeitem);
                         if(shape){
-                            SPCurve * c = shape->getCurveForEdit();
-                            lpe->doEffect(c);
+                            auto c = SPCurve::copy(shape->curveForEdit());
+                            lpe->doEffect(c.get());
                             lpeitem->setCurrentPathEffect(*i);
                             if (lpelist.size() > 1){
                                 lpeitem->removeCurrentPathEffect(true);
-                                shape->setCurveBeforeLPE(c);
+                                shape->setCurveBeforeLPE(std::move(c));
                             } else {
                                 lpeitem->removeCurrentPathEffect(false);
-                                shape->setCurve(c, false);
+                                shape->setCurve(std::move(c));
                             }
                             break;
                         }
@@ -547,11 +547,11 @@ PencilToolbar::tolerance_value_changed()
                             sp_lpe_item_update_patheffect(lpeitem, false, false);
                             SPShape *sp_shape = dynamic_cast<SPShape *>(lpeitem);
                             if (sp_shape) {
-                                guint previous_curve_length = sp_shape->getCurve(true)->get_segment_count();
+                                guint previous_curve_length = sp_shape->curve()->get_segment_count();
                                 lpe_simplify->getRepr()->setAttribute("threshold", ss.str());
                                 sp_lpe_item_update_patheffect(lpeitem, false, false);
                                 simplified = true;
-                                guint curve_length = sp_shape->getCurve(true)->get_segment_count();
+                                guint curve_length = sp_shape->curve()->get_segment_count();
                                 std::vector<Geom::Point> ts = lpe_powerstroke->offset_points.data();
                                 double factor = (double)curve_length/ (double)previous_curve_length;
                                 for (auto & t : ts) {

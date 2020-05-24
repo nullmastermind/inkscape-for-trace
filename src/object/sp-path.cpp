@@ -150,12 +150,11 @@ void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
                 Glib::ustring  value = matchInfo.fetch(1);
                 Geom::PathVector pv = sp_svg_read_pathv(value.c_str());
 
-                SPCurve *curve = new SPCurve(pv);
+                auto curve = std::make_unique<SPCurve>(pv);
                 if (curve) {
 
                     // Update curve
-                    this->setCurveInsync(curve, TRUE);
-                    curve->unref();
+                    setCurveInsync(std::move(curve));
 
                     // Convert from property to attribute (convert back on write)
                     setAttributeOrRemoveIfEmpty("d", value);

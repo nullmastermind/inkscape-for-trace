@@ -443,7 +443,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
         }
         SPShape *sp_shape = dynamic_cast<SPShape *>(item);
         if (sp_shape) {
-            curve = sp_shape->getCurve(true);
+            curve = sp_shape->curve();
         }
         auto curveref = curve->ref();
         SPCSSAttr *css_item = sp_css_attr_from_object(item, SP_STYLE_FLAG_ALWAYS);
@@ -682,7 +682,8 @@ static void spdc_attach_selection(FreehandBase *dc, Inkscape::Selection */*sel*/
 
         // Curve list
         // We keep it in desktop coordinates to eliminate calculation errors
-        auto norm = std::unique_ptr<SPCurve>(static_cast<SPPath *>(item)->getCurveForEdit());
+        auto path = static_cast<SPPath *>(item);
+        auto norm = SPCurve::copy(path->curveForEdit());
         norm->transform((dc->white_item)->i2dt_affine());
         g_return_if_fail( norm != nullptr );
         dc->white_curves = norm->split();

@@ -328,8 +328,10 @@ sp_shape_update_marker_view(SPShape *shape, Inkscape::DrawingItem *ai)
     // position arguments to sp_marker_show_instance, basically counts the amount of markers.
     int counter[4] = {0};
 
-    if (!shape->_curve) return;
-    Geom::PathVector const & pathv = shape->_curve->get_pathvector();
+    if (!shape->curve())
+        return;
+
+    Geom::PathVector const &pathv = shape->curve()->get_pathvector();
     if (pathv.empty()) return;
 
     // the first vertex should get a start marker, the last an end marker, and all the others a mid marker
@@ -454,7 +456,7 @@ void SPShape::modified(unsigned int flags) {
         }
     }
 
-    if (!this->getCurve(TRUE)) { // avoid copy
+    if (!_curve) {
         sp_lpe_item_update_patheffect(this, true, false);
     }
 }
@@ -826,10 +828,10 @@ void SPShape::print(SPPrintContext* ctx) {
 
 void SPShape::update_patheffect(bool write)
 {
-    if (SPCurve *c_lpe = this->getCurveForEdit()) {
+    if (auto c_lpe = SPCurve::copy(curveForEdit())) {
         /* if a path has an lpeitem applied, then reset the curve to the _curve_before_lpe.
          * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
-        this->setCurveInsync(c_lpe);
+        this->setCurveInsync(c_lpe.get());
         SPRoot *root = this->document->getRoot();
         if (!sp_version_inside_range(root->version.inkscape, 0, 1, 0, 92)) {
             this->resetClipPathAndMaskLPE();
@@ -837,9 +839,9 @@ void SPShape::update_patheffect(bool write)
 
         bool success = false;
         if (hasPathEffect() && pathEffectsEnabled()) {
-            success = this->performPathEffect(c_lpe, SP_SHAPE(this));
+            success = this->performPathEffect(c_lpe.get(), SP_SHAPE(this));
             if (success) {
-                this->setCurveInsync(c_lpe);
+                this->setCurveInsync(c_lpe.get());
                 this->applyToClipPath(this);
                 this->applyToMask(this);
             }
@@ -854,7 +856,6 @@ void SPShape::update_patheffect(bool write)
                 repr->removeAttribute("d");
             }
         }
-        c_lpe->unref();
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     }
 }
@@ -1092,100 +1093,86 @@ void SPShape::set_shape() {
 
 /* Shape section */
 
-/**
- * Calls any registered handlers for the set_shape action
- */
+void SPShape::_setCurve(std::unique_ptr<SPCurve> &&new_curve, bool update_display)
+{
+    _curve = std::move(new_curve);
+
+    if (update_display) {
+        requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    }
+}
+void SPShape::_setCurve(SPCurve const *new_curve, bool update_display)
+{
+    _setCurve(SPCurve::copy(new_curve), update_display);
+}
 
 /**
- * Adds a curve to the shape.  If owner is specified, a reference
- * will be made, otherwise the curve will be copied into the shape.
+ * Adds a curve to the shape.
  * Any existing curve in the shape will be unreferenced first.
  * This routine also triggers a request to update the display.
  */
-void SPShape::setCurve(SPCurve *new_curve, unsigned int owner)
+void SPShape::setCurve(std::unique_ptr<SPCurve> &&new_curve)
 {
-    setCurveInsync(new_curve, owner);
-
-    this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    _setCurve(std::move(new_curve), true);
 }
-
+void SPShape::setCurve(SPCurve const *new_curve)
+{
+    _setCurve(new_curve, true);
+}
 
 /**
  * Sets _curve_before_lpe to a copy of `new_curve`
  */
+void SPShape::setCurveBeforeLPE(std::unique_ptr<SPCurve> &&new_curve)
+{
+    _curve_before_lpe = std::move(new_curve);
+}
 void SPShape::setCurveBeforeLPE(SPCurve const *new_curve)
 {
-    _curve_before_lpe = new_curve ? new_curve->copy() : nullptr;
+    setCurveBeforeLPE(SPCurve::copy(new_curve));
 }
 
 /**
- * Same as sp_shape_set_curve but without updating the display
+ * Same as setCurve() but without updating the display
  */
-void SPShape::setCurveInsync(SPCurve *new_curve, unsigned int owner)
+void SPShape::setCurveInsync(std::unique_ptr<SPCurve> &&new_curve)
 {
-    if (new_curve) {
-        if (owner) {
-            _curve = new_curve->ref();
-        } else {
-            _curve = new_curve->copy();
-        }
-    } else {
-        _curve = nullptr;
-    }
+    _setCurve(std::move(new_curve), false);
 }
-
-
-/**
- * Return curve (if any exists) or NULL if there is no curve
- * if owner == 0 return a copy
- *
- * @todo Split into two functions, one returning a borrowed pointer and one
- * return `std::unique_ptr<SPCurve>` (or use SPCurve::copy() at the call site)
- */
-SPCurve * SPShape::getCurve(unsigned int owner) const
+void SPShape::setCurveInsync(SPCurve const *new_curve)
 {
-    if (_curve) {
-        if(owner) {
-            return _curve.get(); // borrowed
-        }
-        return _curve->copy().release(); // owned
-    }
-
-    return nullptr;
+    _setCurve(new_curve, false);
 }
 
 /**
- * Return  curve *before* LPE (if any exists) or NULL if there is no curve
- * if owner == 0 return a copy
- *
- * @todo See getCurve() ownership issue
+ * Return a borrowed pointer to the curve (if any exists) or NULL if there is no curve
  */
-SPCurve * SPShape::getCurveBeforeLPE(unsigned int owner) const
+SPCurve *SPShape::curve()
+{
+    return _curve.get();
+}
+SPCurve const *SPShape::curve() const
+{
+    return _curve.get();
+}
+
+/**
+ * Return a borrowed pointer of the curve *before* LPE (if any exists) or NULL if there is no curve
+ */
+SPCurve const *SPShape::curveBeforeLPE() const
+{
+    return _curve_before_lpe.get();
+}
+
+/**
+ * Return a borrowed pointer of the curve for edit
+ */
+SPCurve const *SPShape::curveForEdit() const
 {
     if (_curve_before_lpe) {
-        if (owner) {
-            return _curve_before_lpe.get(); // borrowed
-        }
-        return _curve_before_lpe->copy().release(); // owned
-    } 
-    return nullptr;
-}
-
-/**
- * Return curve for edit
- * if owner == 0 return a copy
- *
- * @todo See getCurve() ownership issue
- */
-SPCurve * SPShape::getCurveForEdit(unsigned int owner) const
-{
-    if (_curve_before_lpe) {
-        if (owner) {
-            return _curve_before_lpe.get(); // borrowed
-        }
-        return _curve_before_lpe->copy().release(); // owned
+        return _curve_before_lpe.get();
     }
-    return getCurve(owner);
+    return curve();
 }
 
 void SPShape::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const {

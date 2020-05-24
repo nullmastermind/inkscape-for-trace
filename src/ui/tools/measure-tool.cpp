@@ -488,12 +488,12 @@ void MeasureTool::finish()
     ToolBase::finish();
 }
 
-static void calculate_intersections(SPDesktop * /*desktop*/, SPItem* item, Geom::PathVector const &lineseg, SPCurve *curve, std::vector<double> &intersections)
+static void calculate_intersections(SPDesktop * /*desktop*/, SPItem *item, Geom::PathVector const &lineseg,
+                                    std::unique_ptr<SPCurve> &&curve, std::vector<double> &intersections)
 {
     curve->transform(item->i2doc_affine());
     // Find all intersections of the control-line with this shape
     Geom::CrossingSet cs = Geom::crossings(lineseg, curve->get_pathvector());
-    curve->unref();
     Geom::delete_duplicates(cs[0]);
 
     // Reconstruct and store the points of intersection
@@ -1171,7 +1171,7 @@ void MeasureTool::showInfoBox(Geom::Point cursor, bool into_groups)
                 y_point *= desktop->doc2dt();
                 item_y = Inkscape::Util::Quantity::convert(y_point[Geom::Y] * scale, "px", unit_name);
                 if (SP_IS_SHAPE(over)) {
-                    Geom::PathVector shape = SP_SHAPE(over)->getCurve(true)->get_pathvector();
+                    Geom::PathVector shape = SP_SHAPE(over)->curve()->get_pathvector();
                     item_length = Geom::length(paths_to_pw(shape));
                     item_length = Inkscape::Util::Quantity::convert(item_length * scale, unit->abbr, unit_name);
                 }
@@ -1283,8 +1283,8 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, bool to_phantom,
             continue;
         }
         if(all_layers || (layer_model && layer_model->layerForObject(item) == current_layer)){
-            if (SP_IS_SHAPE(item)) {
-                calculate_intersections(desktop, item, lineseg, SP_SHAPE(item)->getCurve(), intersection_times);
+            if (auto shape = dynamic_cast<SPShape const *>(item)) {
+                calculate_intersections(desktop, item, lineseg, SPCurve::copy(shape->curve()), intersection_times);
             } else {
                 if (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item)) {
                     Inkscape::Text::Layout::iterator iter = te_get_layout(item)->begin();
@@ -1296,17 +1296,16 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, bool to_phantom,
                         }
 
                         // get path from iter to iter_next:
-                        SPCurve *curve = te_get_layout(item)->convertToCurves(iter, iter_next);
+                        auto curve = te_get_layout(item)->convertToCurves(iter, iter_next);
                         iter = iter_next; // shift to next glyph
                         if (!curve) {
                             continue; // error converting this glyph
                         }
                         if (curve->is_empty()) { // whitespace glyph?
-                            curve->unref();
                             continue;
                         }
 
-                        calculate_intersections(desktop, item, lineseg, curve, intersection_times);
+                        calculate_intersections(desktop, item, lineseg, std::move(curve), intersection_times);
                         if (iter == te_get_layout(item)->end()) {
                             break;
                         }

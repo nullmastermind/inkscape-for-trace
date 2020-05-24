@@ -105,24 +105,17 @@ void sp_selected_path_create_updating_inset(SPDesktop *desktop)
 
 void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool updating)
 {
-    SPCurve *curve = nullptr;
     Inkscape::Selection *selection = desktop->getSelection();
     SPItem *item = selection->singleItem();
 
-    if (item == nullptr || ( !SP_IS_SHAPE(item) && !SP_IS_TEXT(item) ) ) {
+    if (auto shape = dynamic_cast<SPShape const *>(item)) {
+        if (!shape->curve())
+            return;
+    } else if (auto text = dynamic_cast<SPText const *>(item)) {
+        if (!text->getNormalizedBpath())
+            return;
+    } else {
         desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Selected object is <b>not a path</b>, cannot inset/outset."));
-        return;
-    }
-    else if (SP_IS_SHAPE(item))
-    {
-        curve = SP_SHAPE(item)->getCurve();
-    }
-    else // Item must be SP_TEXT
-    {
-        curve = SP_TEXT(item)->getNormalizedBpath();
-    }
-        
-    if (curve == nullptr) {
         return;
     }
 
@@ -150,7 +143,6 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
     Path *orig = Path_for_item(item, true, false);
     if (orig == nullptr)
     {
-        curve->unref();
         return;
     }
 
@@ -186,8 +178,6 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
         delete theShape;
         delete theRes;
     }
-
-    curve->unref();
 
     if (res->descr_cmd.size() <= 1)
     {
@@ -291,22 +281,18 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
     bool did = false;
     std::vector<SPItem*> il(selection->items().begin(), selection->items().end());
     for (auto item : il){
-        SPCurve *curve = nullptr;
-
-        if (!SP_IS_SHAPE(item) && !SP_IS_TEXT(item) && !SP_IS_FLOWTEXT(item))
+        if (auto shape = dynamic_cast<SPShape const *>(item)) {
+            if (!shape->curve())
+                continue;
+        } else if (auto text = dynamic_cast<SPText const *>(item)) {
+            if (!text->getNormalizedBpath())
+                continue;
+        } else if (auto text = dynamic_cast<SPFlowtext const *>(item)) {
+            if (!text->getNormalizedBpath())
+                continue;
+        } else {
             continue;
-        else if (SP_IS_SHAPE(item)) {
-            curve = SP_SHAPE(item)->getCurve();
         }
-        else if (SP_IS_FLOWTEXT(item)) {
-            curve = SP_FLOWTEXT(item)->getNormalizedBpath();
-        }
-        else { // Item must be SP_TEXT
-            curve = SP_TEXT(item)->getNormalizedBpath();
-        }
-
-        if (curve == nullptr)
-            continue;
 
         Geom::Affine const transform(item->transform);
         auto scaling_factor = item->i2doc_affine().descrim();
@@ -345,7 +331,6 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
 
         Path *orig = Path_for_item(item, false);
         if (orig == nullptr) {
-            curve->unref();
             continue;
         }
 
@@ -425,7 +410,6 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
 
         did = true;
 
-        curve->unref();
         // remember the position of the item
         gint pos = item->getRepr()->position();
         // remember parent

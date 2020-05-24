@@ -302,7 +302,7 @@ KnotHolderEntityWidthPatternAlongPath::knot_set(Geom::Point const &p, Geom::Poin
     Geom::Point const s = snap_knot_position(p, state);
     SPShape const *sp_shape = dynamic_cast<SPShape const *>(SP_LPE_ITEM(item));
     if (sp_shape) {
-        SPCurve *curve_before = sp_shape->getCurveForEdit();
+        auto curve_before = SPCurve::copy(sp_shape->curveForEdit());
         if (curve_before) {
             Geom::Path const *path_in = curve_before->first_path();
             Geom::Point ptA = path_in->pointAt(Geom::PathTime(0, 0.0));
@@ -323,7 +323,6 @@ KnotHolderEntityWidthPatternAlongPath::knot_set(Geom::Point const &p, Geom::Poin
             }
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
             prefs->setDouble("/live_effects/pap/width", lpe->prop_scale);
-            curve_before->unref();
         }
     }
     sp_lpe_item_update_patheffect (SP_LPE_ITEM(item), false, true);
@@ -335,7 +334,7 @@ KnotHolderEntityWidthPatternAlongPath::knot_get() const
     LPEPatternAlongPath *lpe = dynamic_cast<LPEPatternAlongPath *> (_effect);
     SPShape const *sp_shape = dynamic_cast<SPShape const *>(SP_LPE_ITEM(item));
     if (sp_shape) {
-        SPCurve *curve_before = sp_shape->getCurveForEdit();
+        auto curve_before = SPCurve::copy(sp_shape->curveForEdit());
         if (curve_before) {
             Geom::Path const *path_in = curve_before->first_path();
             Geom::Point ptA = path_in->pointAt(Geom::PathTime(0, 0.0));
@@ -355,7 +354,6 @@ KnotHolderEntityWidthPatternAlongPath::knot_get() const
                 lpe->helper_path.push_back(hp);
                 hp.clear();
             }
-            curve_before->unref();
             return result_point;
         }
     }

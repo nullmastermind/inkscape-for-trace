@@ -406,14 +406,14 @@ void OriginalPathArrayParam::setPathVector(SPObject *linked_obj, guint /*flags*/
     if (!to) {
         return;
     }
-    SPCurve *curve = nullptr;
+    std::unique_ptr<SPCurve> curve;
     SPText *text = dynamic_cast<SPText *>(linked_obj);
-    if (SP_IS_SHAPE(linked_obj)) {
+    if (auto shape = dynamic_cast<SPShape const *>(linked_obj)) {
         SPLPEItem * lpe_item = SP_LPE_ITEM(linked_obj);
         if (_from_original_d) {
-            curve = SP_SHAPE(linked_obj)->getCurveForEdit();
+            curve = SPCurve::copy(shape->curveForEdit());
         } else if (_allow_only_bspline_spiro && lpe_item && lpe_item->hasPathEffect()){
-            curve = SP_SHAPE(linked_obj)->getCurveForEdit();
+            curve = SPCurve::copy(shape->curveForEdit());
             PathEffectList lpelist = lpe_item->getEffectList();
             PathEffectList::iterator i;
             for (i = lpelist.begin(); i != lpelist.end(); ++i) {
@@ -422,14 +422,14 @@ void OriginalPathArrayParam::setPathVector(SPObject *linked_obj, guint /*flags*/
                     Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
                     if (dynamic_cast<Inkscape::LivePathEffect::LPEBSpline *>(lpe)) {
                         Geom::PathVector hp;
-                        LivePathEffect::sp_bspline_do_effect(curve, 0, hp);
+                        LivePathEffect::sp_bspline_do_effect(curve.get(), 0, hp);
                     } else if (dynamic_cast<Inkscape::LivePathEffect::LPESpiro *>(lpe)) {
-                        LivePathEffect::sp_spiro_do_effect(curve);
+                        LivePathEffect::sp_spiro_do_effect(curve.get());
                     }
                 }
             }
         } else {
-            curve = SP_SHAPE(linked_obj)->getCurve();
+            curve = SPCurve::copy(shape->curve());
         }
     } else if (text) {
         bool hidden = text->isHidden();
@@ -440,7 +440,7 @@ void OriginalPathArrayParam::setPathVector(SPObject *linked_obj, guint /*flags*/
                 text->setHidden(true);
             } else {
                 if (curve == nullptr) {
-                    curve = new SPCurve();
+                    curve = std::make_unique<SPCurve>();
                 }
                 curve->set_pathvector(to->_pathvector);
             }
@@ -454,7 +454,6 @@ void OriginalPathArrayParam::setPathVector(SPObject *linked_obj, guint /*flags*/
         to->_pathvector = Geom::PathVector();
     } else {
         to->_pathvector = curve->get_pathvector();
-        curve->unref();
     }
     
 }

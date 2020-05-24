@@ -17,6 +17,7 @@
 #include <2geom/d2.h>
 #include <2geom/affine.h>
 #include <glibmm/ustring.h>
+#include <memory>
 #include <pango/pango-break.h>
 #include <algorithm>
 #include <vector>
@@ -416,8 +417,8 @@ public:
     /** Convert the specified range of characters into their bezier 
     outlines.
     */
-    SPCurve* convertToCurves(iterator const &from_glyph, iterator const &to_glyph) const;
-    inline SPCurve* convertToCurves() const;
+    std::unique_ptr<SPCurve> convertToCurves(iterator const &from_glyph, iterator const &to_glyph) const;
+    std::unique_ptr<SPCurve> convertToCurves() const;
 
     /** Apply the given transform to all the output presently stored in
     this object. This only transforms the glyph positions, The glyphs
@@ -1076,9 +1077,6 @@ private:
 };
 
 // ************************** inline methods
-
-inline SPCurve* Layout::convertToCurves() const
-    {return convertToCurves(begin(), end());}
 
 inline Layout::iterator Layout::begin() const
     {return iterator(this, 0, 0);}

@@ -96,7 +96,7 @@ Geom::PathVector LPEShowHandles::doEffect_path (Geom::PathVector const & path_in
         outline_path.clear();
     }
     if (original_d) {
-        SPCurve * shape_curve = current_shape->getCurveForEdit();
+        auto shape_curve = SPCurve::copy(current_shape->curveForEdit());
         if (shape_curve) {
             Geom::PathVector original_curve = shape_curve->get_pathvector();
             if(original_path) {
@@ -107,7 +107,6 @@ Geom::PathVector LPEShowHandles::doEffect_path (Geom::PathVector const & path_in
             original_pathv.insert(original_pathv.end(), original_curve.begin(), original_curve.end());
         }
         generateHelperPath(original_pathv);
-        shape_curve->unref();
     } else {
         generateHelperPath(original_pathv);
     }

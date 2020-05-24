@@ -126,6 +126,15 @@ SPCurve::copy() const
 }
 
 /**
+ * Return a copy of `curve` or NULL if `curve` is NULL
+ */
+SPCurve::smart_pointer //
+SPCurve::copy(SPCurve const *curve)
+{
+    return curve ? curve->copy() : nullptr;
+}
+
+/**
  * Returns a list of new curves corresponding to the subpaths in \a curve.
  * 2geomified
  */
@@ -315,8 +324,7 @@ SPCurve::is_closed() const
 /**
  * True if both curves are equal
  */
-bool
-SPCurve::is_equal(SPCurve * other) const
+bool SPCurve::is_equal(SPCurve const *other) const
 {
     if(other == nullptr) {
         return false;

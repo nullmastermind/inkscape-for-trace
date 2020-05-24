@@ -211,10 +211,10 @@ void LPEPowerStroke::applyStyle(SPLPEItem *lpeitem)
 void
 LPEPowerStroke::doOnApply(SPLPEItem const* lpeitem)
 {
-    if (SP_IS_SHAPE(lpeitem)) {
+    if (auto shape = dynamic_cast<SPShape const *>(lpeitem)) {
         SPLPEItem* item = const_cast<SPLPEItem*>(lpeitem);
         std::vector<Geom::Point> points;
-        Geom::PathVector const &pathv = pathv_to_linear_and_cubic_beziers(SP_SHAPE(lpeitem)->_curve->get_pathvector());
+        Geom::PathVector const &pathv = pathv_to_linear_and_cubic_beziers(shape->curve()->get_pathvector());
         double width = (lpeitem && lpeitem->style) ? lpeitem->style->stroke_width.computed / 2 : 1.;
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         Glib::ustring pref_path_pp = "/live_effects/powerstroke/powerpencil";

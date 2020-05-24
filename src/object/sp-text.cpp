@@ -522,10 +522,10 @@ void SPText::_buildLayoutInit()
                     if ( shape ) {
 
                         // This code adapted from sp-flowregion.cpp: GetDest()
-                        if (!(shape->_curve)) {
+                        if (!shape->curve()) {
                             shape->set_shape();
                         }
-                        SPCurve const *curve = shape->getCurve(true);
+                        SPCurve const *curve = shape->curve();
 
                         if ( curve ) {
                             Path *temp = new Path;
@@ -774,10 +774,10 @@ Shape* SPText::_buildExclusionShape() const
 
             if ( shape ) {
                 // This code adapted from sp-flowregion.cpp: GetDest()
-                if (!(shape->_curve)) {
+                if (!shape->curve()) {
                     shape->set_shape();
                 }
-                SPCurve const *curve = shape->getCurve(true);
+                SPCurve const *curve = shape->curve();
 
                 if ( curve ) {
                     Path *temp = new Path;
@@ -849,6 +849,10 @@ SPText::_getFirstYLength()
     return y;
 }
 
+std::unique_ptr<SPCurve> SPText::getNormalizedBpath() const
+{
+    return layout.convertToCurves();
+}
 
 void SPText::rebuildLayout()
 {

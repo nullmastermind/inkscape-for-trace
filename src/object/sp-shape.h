@@ -42,12 +42,23 @@ public:
 	SPShape();
 	~SPShape() override;
 
-    SPCurve * getCurve (unsigned int owner = FALSE) const;
-    SPCurve * getCurveBeforeLPE (unsigned int owner = FALSE) const;
-    SPCurve * getCurveForEdit (unsigned int owner = FALSE) const;
-    void setCurve (SPCurve *curve, unsigned int owner = FALSE);
+    SPCurve *curve();
+    SPCurve const *curve() const;
+    SPCurve const *curveBeforeLPE() const;
+    SPCurve const *curveForEdit() const;
+
+private:
+    void _setCurve(SPCurve const *, bool);
+    void _setCurve(std::unique_ptr<SPCurve> &&, bool);
+
+public:
+    void setCurve(SPCurve const *);
+    void setCurve(std::unique_ptr<SPCurve> &&);
+    void setCurveInsync(SPCurve const *);
+    void setCurveInsync(std::unique_ptr<SPCurve> &&);
     void setCurveBeforeLPE(SPCurve const *new_curve);
-    void setCurveInsync (SPCurve *curve, unsigned int owner = FALSE);
+    void setCurveBeforeLPE(std::unique_ptr<SPCurve> &&);
+
     int hasMarkers () const;
     int numberOfMarkers (int type) const;
 
@@ -59,11 +70,8 @@ public:
     mutable Geom::OptRect bbox_geom_cache;
     mutable Geom::OptRect bbox_vis_cache;
 
-  protected:
+protected:
     std::unique_ptr<SPCurve> _curve_before_lpe;
-
-    // "temporarily" since 2012
-public: // temporarily public, until SPPath is properly classed, etc.
     std::unique_ptr<SPCurve> _curve;
 
 public:

@@ -417,9 +417,7 @@ void SPGenericEllipse::set_shape()
         if (this->getRepr()->attribute("d")) {
             // unconditionally read the curve from d, if any, to preserve appearance
             Geom::PathVector pv = sp_svg_read_pathv(this->getRepr()->attribute("d"));
-            SPCurve *cold = new SPCurve(pv);
-            this->setCurveInsync(cold);
-            cold->unref();
+            setCurveInsync(std::make_unique<SPCurve>(pv));
         }
 
         return;
@@ -429,8 +427,6 @@ void SPGenericEllipse::set_shape()
     }
 
     this->normalize();
-
-    SPCurve *c = nullptr;
 
     // For simplicity, we use a circle with center (0, 0) and radius 1 for our calculations.
     Geom::Circle circle(0, 0, 1);
@@ -464,7 +460,8 @@ void SPGenericEllipse::set_shape()
     } else {
         pb.flush();
     }
-    c = new SPCurve(pb.peek());
+
+    auto c = std::make_unique<SPCurve>(pb.peek());
 
     // gchar *str = sp_svg_write_path(curve->get_pathvector());
     // std::cout << "  path: " << str << std::endl;
@@ -476,26 +473,20 @@ void SPGenericEllipse::set_shape()
     
     /* Reset the shape's curve to the "original_curve"
      * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
-    SPCurve * before = this->getCurveBeforeLPE();
-    bool haslpe = this->hasPathEffectOnClipOrMaskRecursive(this);
-    if (before || haslpe) {
-        if (c && before && before->get_pathvector() != c->get_pathvector()){
-            this->setCurveBeforeLPE(c);
-            sp_lpe_item_update_patheffect(this, true, false);
-        } else if(haslpe) {
-            this->setCurveBeforeLPE(c);
-        } else {
-            //This happends on undo, fix bug:#1791784
-            this->setCurveInsync(c);
-        }
-    } else {
-        this->setCurveInsync(c);
+    auto const before = this->curveBeforeLPE();
+    if (before && before->get_pathvector() != c->get_pathvector()) {
+        setCurveBeforeLPE(std::move(c));
+        sp_lpe_item_update_patheffect(this, true, false);
+        return;
     }
 
-    if (before) {
-        before->unref();
+    if (hasPathEffectOnClipOrMaskRecursive(this)) {
+        setCurveBeforeLPE(std::move(c));
+        return;
     }
-    c->unref();
+
+    // This happends on undo, fix bug:#1791784
+    setCurveInsync(std::move(c));
 }
 
 Geom::Affine SPGenericEllipse::set_transform(Geom::Affine const &xform)

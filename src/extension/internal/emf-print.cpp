@@ -1099,12 +1099,15 @@ Geom::PathVector PrintEmf::merge_PathVector_with_group(Geom::PathVector const &c
 Geom::PathVector PrintEmf::merge_PathVector_with_shape(Geom::PathVector const &combined_pathvector, SPItem const *item, const Geom::Affine &transform)
 {
     Geom::PathVector new_combined_pathvector;
-    if(!SP_IS_SHAPE(item))return(new_combined_pathvector);  // sanity test, only a shape should be passed in, return empty if something else happens
+    auto shape = dynamic_cast<SPShape const *>(item);
+
+    // sanity test, only a shape should be passed in, return empty if something else happens
+    if (!shape)
+        return new_combined_pathvector;
 
     Geom::Affine tfc = item->transform * transform;
-    SPShape *shape = SP_SHAPE(item);
-    if (shape->_curve) {
-        Geom::PathVector const & new_vect = shape->_curve->get_pathvector();
+    if (shape->curve()) {
+        Geom::PathVector const &new_vect = shape->curve()->get_pathvector();
         if(combined_pathvector.empty()){
             new_combined_pathvector = new_vect * tfc;
         }

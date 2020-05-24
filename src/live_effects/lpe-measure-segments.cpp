@@ -779,9 +779,8 @@ getNodes(SPItem * item, Geom::Affine transform, bool onbbox, bool centers, bool 
             current_nodes.insert(current_nodes.end(), nodes.begin(), nodes.end());
         }
     } else if (shape && !bboxonly) {
-        SPCurve * c = shape->getCurve();
+        SPCurve const *c = shape->curve();
         current_nodes = transformNodes(c->get_pathvector().nodes(), transform);
-        c->unref();
     } else if ((text || flowtext) && !bboxonly) {
         Inkscape::Text::Layout::iterator iter = te_get_layout(item)->begin();
         do {
@@ -791,17 +790,15 @@ getNodes(SPItem * item, Geom::Affine transform, bool onbbox, bool centers, bool 
                 break;
             }
             // get path from iter to iter_next:
-            SPCurve *curve = te_get_layout(item)->convertToCurves(iter, iter_next);
+            auto curve = te_get_layout(item)->convertToCurves(iter, iter_next);
             iter = iter_next; // shift to next glyph
             if (!curve) {
                 continue; // error converting this glyph
             }
             if (curve->is_empty()) { // whitespace glyph?
-                curve->unref();
                 continue;
             }
             std::vector< Point > letter_nodes = transformNodes(curve->get_pathvector().nodes(), transform);
-            curve->unref();
             current_nodes.insert(current_nodes.end(),letter_nodes.begin(),letter_nodes.end());
             if (iter == te_get_layout(item)->end()) {
                 break;
@@ -840,11 +837,10 @@ static void extractFirstPoint(Geom::Point & dest, const Glib::ustring & lpobjid,
     id += lpobjid;
     auto path = dynamic_cast<SPPath *>(document->getObjectById(id));
     if (path) {
-        SPCurve* curve = path->getCurve();
+        SPCurve const *curve = path->curve();
         if (curve) {
             dest = *curve->first_point();
         }
-        curve->unref();
     }
 }
 
@@ -950,16 +946,15 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
             fontsize = Inkscape::Util::Quantity::convert(newfontsize, "pt", display_unit.c_str());
             fontsizechanged = true;
         }
-        SPCurve *c = shape->getCurve();
         Geom::Point prev_stored = Geom::Point(0,0);
         Geom::Point start_stored = Geom::Point(0,0);
         Geom::Point end_stored = Geom::Point(0,0); 
         Geom::Point next_stored = Geom::Point(0,0);
         if (!active_projection) {
+            SPCurve const *c = shape->curve();
             pathvector =  pathv_to_linear_and_cubic_beziers(c->get_pathvector());
             pathvector *= affinetransform;
         }
-        c->unref();
         auto format_str = format.param_getSVGValue();
         if (format_str.empty()) {
             format.param_setValue(Glib::ustring("{measure}{unit}"));

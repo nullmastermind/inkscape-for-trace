@@ -94,7 +94,7 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
     SPLPEItem *splpeitem = const_cast<SPLPEItem *>(lpeItem);
     SPShape *shape = dynamic_cast<SPShape *>(splpeitem);
     if (shape) {
-        Geom::PathVector const pathv = pathv_to_linear_and_cubic_beziers(shape->getCurve(true)->get_pathvector());
+        Geom::PathVector const pathv = pathv_to_linear_and_cubic_beziers(shape->curve()->get_pathvector());
         Satellites satellites;
         double power = radius;
         if (!flexible) {

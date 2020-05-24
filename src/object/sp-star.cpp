@@ -364,7 +364,7 @@ void SPStar::set_shape() {
         return;
     }
 
-    SPCurve *c = new SPCurve ();
+    auto c = std::make_unique<SPCurve>();
 
     bool not_rounded = (fabs (this->rounded) < 1e-4);
 
@@ -428,25 +428,21 @@ void SPStar::set_shape() {
 
     /* Reset the shape's curve to the "original_curve"
      * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
-    SPCurve * before = this->getCurveBeforeLPE();
-    bool haslpe = this->hasPathEffectOnClipOrMaskRecursive(this);
-    if (before || haslpe) {
-        if (c && before && before->get_pathvector() != c->get_pathvector()){
-            this->setCurveBeforeLPE(c);
-            sp_lpe_item_update_patheffect(this, true, false);
-        } else if(haslpe) {
-            this->setCurveBeforeLPE(c);
-        } else {
-            //This happends on undo, fix bug:#1791784
-            this->setCurveInsync(c);
-        }
-    } else {
-        this->setCurveInsync(c);
+
+    auto const before = this->curveBeforeLPE();
+    if (before && before->get_pathvector() != c->get_pathvector()) {
+        setCurveBeforeLPE(std::move(c));
+        sp_lpe_item_update_patheffect(this, true, false);
+        return;
     }
-    if (before) {
-        before->unref();
+
+    if (hasPathEffectOnClipOrMaskRecursive(this)) {
+        setCurveBeforeLPE(std::move(c));
+        return;
     }
-    c->unref();
+
+    // This happends on undo, fix bug:#1791784
+    setCurveInsync(std::move(c));
 }
 
 void

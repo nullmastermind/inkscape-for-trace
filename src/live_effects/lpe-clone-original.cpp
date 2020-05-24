@@ -193,9 +193,9 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
         const char* attribute = (*iter);
         if (strlen(attribute) && shape_dest && shape_origin) {
             if (std::strcmp(attribute, "d") == 0) {
-                SPCurve *c = nullptr;
+                std::unique_ptr<SPCurve> c;
                 if (method == CLM_BSPLINESPIRO) {
-                    c = shape_origin->getCurveForEdit();
+                    c = SPCurve::copy(shape_origin->curveForEdit());
                     SPLPEItem * lpe_item = SP_LPE_ITEM(origin);
                     if (lpe_item) {
                         PathEffectList lpelist = lpe_item->getEffectList();
@@ -206,17 +206,17 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
                                 Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
                                 if (dynamic_cast<Inkscape::LivePathEffect::LPEBSpline *>(lpe)) {
                                     Geom::PathVector hp;
-                                    LivePathEffect::sp_bspline_do_effect(c, 0, hp);
+                                    LivePathEffect::sp_bspline_do_effect(c.get(), 0, hp);
                                 } else if (dynamic_cast<Inkscape::LivePathEffect::LPESpiro *>(lpe)) {
-                                    LivePathEffect::sp_spiro_do_effect(c);
+                                    LivePathEffect::sp_spiro_do_effect(c.get());
                                 }
                             }
                         }
                     }
                 } else if (method == CLM_ORIGINALD) {
-                    c = shape_origin->getCurveForEdit();
+                    c = SPCurve::copy(shape_origin->curveForEdit());
                 } else if(method == CLM_D){
-                    c = shape_origin->getCurve();
+                    c = SPCurve::copy(shape_origin->curve());
                 }
                 if (c && method != CLM_NONE) {
                     Geom::PathVector c_pv = c->get_pathvector();
@@ -225,10 +225,9 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
                     if (sync){
                         dest->getRepr()->setAttribute("inkscape:original-d", str);
                     }
-                    shape_dest->setCurveInsync(c);
+                    shape_dest->setCurveInsync(std::move(c));
                     dest->getRepr()->setAttribute("d", str);
                     g_free(str);
-                    c->unref();
                 } else if (method != CLM_NONE) {
                     dest->getRepr()->removeAttribute(attribute);
                 }
@@ -352,10 +351,9 @@ void
 LPECloneOriginal::doEffect (SPCurve * curve)
 {
     if (method != CLM_NONE) {
-        SPCurve *current_curve = current_shape->getCurve();
+        SPCurve const *current_curve = current_shape->curve();
         if (current_curve != nullptr) {
             curve->set_pathvector(current_curve->get_pathvector());
-            current_curve->unref();
         }
     }
 }

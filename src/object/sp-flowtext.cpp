@@ -37,6 +37,7 @@
 
 #include "livarot/Shape.h"
 
+#include "display/curve.h"
 #include "display/drawing-text.h"
 
 SPFlowtext::SPFlowtext() : SPItem(),
@@ -476,6 +477,11 @@ void SPFlowtext::rebuildLayout()
 void SPFlowtext::_clearFlow(Inkscape::DrawingGroup *in_arena)
 {
     in_arena->clearChildren();
+}
+
+std::unique_ptr<SPCurve> SPFlowtext::getNormalizedBpath() const
+{
+    return layout.convertToCurves();
 }
 
 Inkscape::XML::Node *SPFlowtext::getAsText()

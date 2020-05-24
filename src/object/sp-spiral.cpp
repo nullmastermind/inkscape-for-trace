@@ -312,7 +312,7 @@ void SPSpiral::set_shape() {
 
     this->requestModified(SP_OBJECT_MODIFIED_FLAG);
 
-    SPCurve *c = new SPCurve ();
+    auto c = std::make_unique<SPCurve>();
 
 #ifdef SPIRAL_VERBOSE
     g_print ("cx=%g, cy=%g, exp=%g, revo=%g, rad=%g, arg=%g, t0=%g\n",
@@ -336,36 +336,32 @@ void SPSpiral::set_shape() {
 
     double t;
     for (t = this->t0; t < (1.0 - tstep);) {
-        this->fitAndDraw(c, dstep, darray, hat1, hat2, &t);
+        this->fitAndDraw(c.get(), dstep, darray, hat1, hat2, &t);
 
         hat1 = -hat2;
     }
 
     if ((1.0 - t) > SP_EPSILON) {
-        this->fitAndDraw(c, (1.0 - t) / (SAMPLE_SIZE - 1.0), darray, hat1, hat2, &t);
+        this->fitAndDraw(c.get(), (1.0 - t) / (SAMPLE_SIZE - 1.0), darray, hat1, hat2, &t);
     }
 
     /* Reset the shape's curve to the "original_curve"
      * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
-    SPCurve * before = this->getCurveBeforeLPE();
-    bool haslpe = this->hasPathEffectOnClipOrMaskRecursive(this);
-    if (before || haslpe) {
-        if (c && before && before->get_pathvector() != c->get_pathvector()){
-            this->setCurveBeforeLPE(c);
-            sp_lpe_item_update_patheffect(this, true, false);
-        } else if(haslpe) {
-            this->setCurveBeforeLPE(c);
-        } else {
-            //This happends on undo, fix bug:#1791784
-            this->setCurveInsync(c);
-        }
-    } else {
-        this->setCurveInsync(c);
+
+    auto const before = this->curveBeforeLPE();
+    if (before && before->get_pathvector() != c->get_pathvector()) {
+        setCurveBeforeLPE(std::move(c));
+        sp_lpe_item_update_patheffect(this, true, false);
+        return;
     }
-    if (before) {
-        before->unref();
+
+    if (hasPathEffectOnClipOrMaskRecursive(this)) {
+        setCurveBeforeLPE(std::move(c));
+        return;
     }
-    c->unref();
+
+    // This happends on undo, fix bug:#1791784
+    setCurveInsync(std::move(c));
 }
 
 /**

@@ -930,22 +930,22 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, Inkscape::LivePa
                 top_group->applyToMask(clipmaskto, lpe);
             }
             if (sub_shape) {
-                SPCurve * c = sub_shape->getCurve();
+                auto c = SPCurve::copy(sub_shape->curve());
                 bool success = false;
                 // only run LPEs when the shape has a curve defined
                 if (c) {
                     lpe->pathvector_before_effect = c->get_pathvector();
                     c->transform(i2anc_affine(sub_shape, top_group));
-                    sub_shape->setCurveInsync(c);
+                    sub_shape->setCurveInsync(c.get());
                     if (lpe->lpeversion.param_getSVGValue() != "0") { // we are on 1 or up
                         sub_shape->bbox_vis_cache_is_valid = false;
                         sub_shape->bbox_geom_cache_is_valid = false;
                     }
-                    success = top_group->performOnePathEffect(c, sub_shape, lpe);
+                    success = top_group->performOnePathEffect(c.get(), sub_shape, lpe);
                     c->transform(i2anc_affine(sub_shape, top_group).inverse());
                     Inkscape::XML::Node *repr = sub_item->getRepr();
                     if (c && success) {
-                        sub_shape->setCurveInsync(c);
+                        sub_shape->setCurveInsync(c.get());
                         lpe->pathvector_after_effect = c->get_pathvector();
                         if (write) {
                             gchar *str = sp_svg_write_path(lpe->pathvector_after_effect);
@@ -959,14 +959,9 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, Inkscape::LivePa
                         // LPE was unsuccessful or doeffect stack return null. Read the old 'd'-attribute.
                         if (gchar const * value = repr->attribute("d")) {
                             Geom::PathVector pv = sp_svg_read_pathv(value);
-                            SPCurve *oldcurve = new (std::nothrow) SPCurve(pv);
-                            if (oldcurve) {
-                                sub_shape->setCurve(oldcurve);
-                                oldcurve->unref();
-                            }
+                            sub_shape->setCurve(std::make_unique<SPCurve>(pv));
                         }
                     }
-                    c->unref();
                 }
             }
         }

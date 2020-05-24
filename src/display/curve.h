@@ -36,6 +36,7 @@ public:
     explicit SPCurve(Geom::PathVector  pathv);
 
     static smart_pointer new_from_rect(Geom::Rect const &rect, bool all_four_sides = false);
+    static smart_pointer copy(SPCurve const *);
 
     virtual ~SPCurve();
 
@@ -61,7 +62,7 @@ public:
     bool is_empty() const;
     bool is_unset() const;
     bool is_closed() const;
-    bool is_equal(SPCurve * other) const;
+    bool is_equal(SPCurve const *other) const;
     Geom::Curve const * last_segment() const;
     Geom::Path const * last_path() const;
     Geom::Curve const * first_segment() const;

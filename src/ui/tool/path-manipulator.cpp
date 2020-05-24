@@ -1485,7 +1485,7 @@ void PathManipulator::_getGeometry()
         }
     } else if (path) {
         _spcurve->unref();
-        _spcurve = path->getCurveForEdit();
+        _spcurve = SPCurve::copy(path->curveForEdit()).release();
         // never allow NULL to sneak in here!
         if (_spcurve == nullptr) {
             _spcurve = new SPCurve();
@@ -1516,12 +1516,12 @@ void PathManipulator::_setGeometry()
         // return true to leave the decision on empty to the caller.
         // Maybe the path become empty and we want to update to empty
         if (empty()) return;
-        if (path->getCurveBeforeLPE(true)) {
-            if (!_spcurve->is_equal(path->getCurveBeforeLPE(true))) {
+        if (path->curveBeforeLPE()) {
+            if (!_spcurve->is_equal(path->curveBeforeLPE())) {
                 path->setCurveBeforeLPE(_spcurve);
                 sp_lpe_item_update_patheffect(path, true, false);
             }
-        } else if(!_spcurve->is_equal(path->getCurve(true))) {
+        } else if (!_spcurve->is_equal(path->curve())) {
             path->setCurve(_spcurve);
         }
     }

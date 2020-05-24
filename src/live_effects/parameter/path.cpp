@@ -464,12 +464,12 @@ void PathParam::linked_transformed(Geom::Affine const *rel_transf, SPItem *moved
 void
 PathParam::linked_modified_callback(SPObject *linked_obj, guint /*flags*/)
 {
-    SPCurve *curve = nullptr;
-    if (SP_IS_SHAPE(linked_obj)) {
+    std::unique_ptr<SPCurve> curve;
+    if (auto shape = dynamic_cast<SPShape const *>(linked_obj)) {
         if (_from_original_d) {
-            curve = SP_SHAPE(linked_obj)->getCurveForEdit();
+            curve = SPCurve::copy(shape->curveForEdit());
         } else {
-            curve = SP_SHAPE(linked_obj)->getCurve();
+            curve = SPCurve::copy(shape->curve());
         }
     }
 
@@ -483,7 +483,7 @@ PathParam::linked_modified_callback(SPObject *linked_obj, guint /*flags*/)
                 text->setHidden(true);
             } else {
                 if (curve == nullptr) {
-                    curve = new SPCurve();
+                    curve.reset(new SPCurve());
                 }
                 curve->set_pathvector(_pathvector);
             }
@@ -497,7 +497,6 @@ PathParam::linked_modified_callback(SPObject *linked_obj, guint /*flags*/)
         _pathvector = sp_svg_read_pathv(defvalue);
     } else {
         _pathvector = curve->get_pathvector();
-        curve->unref();
     }
 
     must_recalculate_pwd2 = true;

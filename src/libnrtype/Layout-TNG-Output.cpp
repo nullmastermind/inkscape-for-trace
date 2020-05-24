@@ -812,9 +812,14 @@ void Layout::fitToPathAlign(SVGLength const &startOffset, Path const &path)
     _path_fitted = &path;
 }
 
-SPCurve *Layout::convertToCurves(iterator const &from_glyph, iterator const &to_glyph) const
+std::unique_ptr<SPCurve> Layout::convertToCurves() const
 {
-    auto curve = new SPCurve();
+    return convertToCurves(begin(), end());
+}
+
+std::unique_ptr<SPCurve> Layout::convertToCurves(iterator const &from_glyph, iterator const &to_glyph) const
+{
+    auto curve = std::make_unique<SPCurve>();
 
     for (int glyph_index = from_glyph._glyph_index ; glyph_index < to_glyph._glyph_index ; glyph_index++) {
         Geom::Affine glyph_matrix;

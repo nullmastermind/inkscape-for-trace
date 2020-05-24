@@ -15,6 +15,8 @@
 #include "sp-item.h"
 #include "uri-references.h"
 
+#include <memory>
+
 class SPCurve;
 
 namespace Inkscape {
@@ -40,7 +42,7 @@ protected:
 
 class SPUsePath : public SPUseReference {
 public:
-    SPCurve *originalPath;
+    std::unique_ptr<SPCurve> originalPath;
     bool sourceDirty;
 
     SPObject            *owner;

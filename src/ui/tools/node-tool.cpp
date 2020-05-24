@@ -550,19 +550,20 @@ bool NodeTool::root_handler(GdkEvent* event) {
                 this->flashed_item = nullptr;
             }
 
-            if (!SP_IS_SHAPE(over_item)) {
+            auto shape = dynamic_cast<SPShape const *>(over_item);
+            if (!shape) {
                 break; // for now, handle only shapes
             }
 
             this->flashed_item = over_item;
-            SPCurve *c = SP_SHAPE(over_item)->getCurveForEdit();
+            auto c = SPCurve::copy(shape->curveForEdit());
 
             if (!c) {
                 break; // break out when curve doesn't exist
             }
 
             c->transform(over_item->i2dt_affine());
-            SPCanvasItem *flash = sp_canvas_bpath_new(desktop->getTempGroup(), c, true);
+            SPCanvasItem *flash = sp_canvas_bpath_new(desktop->getTempGroup(), c.get(), true);
 
             sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(flash),
                 //prefs->getInt("/tools/nodes/highlight_color", 0xff0000ff), 1.0,
@@ -571,8 +572,6 @@ bool NodeTool::root_handler(GdkEvent* event) {
             sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(flash), 0, SP_WIND_RULE_NONZERO);
             this->flash_tempitem = desktop->add_temporary_canvasitem(flash,
                 prefs->getInt("/tools/nodes/pathflash_timeout", 500));
-
-            c->unref();
         }
         } break; // do not return true, because we need to pass this event to the parent context
         // otherwise some features cease to work

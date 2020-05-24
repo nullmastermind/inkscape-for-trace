@@ -753,10 +753,7 @@ static void sp_image_set_curve( SPImage *image )
  */
 std::unique_ptr<SPCurve> SPImage::get_curve() const
 {
-    if (curve) {
-        return curve->copy();
-    }
-    return {};
+    return SPCurve::copy(curve.get());
 }
 
 void sp_embed_image(Inkscape::XML::Node *image_node, Inkscape::Pixbuf *pb)

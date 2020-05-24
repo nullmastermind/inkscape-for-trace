@@ -1591,7 +1591,6 @@ bool OdfOutput::writeTree(Writer &couts, Writer &souts,
     analyzeTransform(tf, rotate, xskew, yskew, xscale, yscale);
 
     //# Do our stuff
-    SPCurve *curve = nullptr;
 
     if (nodeName == "svg" || nodeName == "svg:svg")
     {
@@ -1714,12 +1713,12 @@ bool OdfOutput::writeTree(Writer &couts, Writer &souts,
         couts.writeString("</draw:frame>\n");
         return true;
     }
-    else if (SP_IS_SHAPE(item))
-    {
-        curve = SP_SHAPE(item)->getCurve();
-    }
-    else if (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item))
-    {
+
+    std::unique_ptr<SPCurve> curve;
+
+    if (auto shape = dynamic_cast<SPShape const *>(item)) {
+        curve = SPCurve::copy(shape->curve());
+    } else if (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item)) {
         curve = te_get_layout(item)->convertToCurves();
     }
 
@@ -1755,8 +1754,6 @@ bool OdfOutput::writeTree(Writer &couts, Writer &souts,
         couts.writeString(">\n");
         couts.printf("    <!-- %d nodes -->\n", nrPoints);
         couts.writeString("</draw:path>\n\n");
-
-        curve->unref();
     }
 
     return true;

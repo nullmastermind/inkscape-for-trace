@@ -554,9 +554,8 @@ collectPathsAndWidths (SPLPEItem const *lpeitem, Geom::PathVector &paths, std::v
                 collectPathsAndWidths(SP_LPE_ITEM(subitem), paths, stroke_widths);
             }
         }
-    }
-    else if (SP_IS_SHAPE(lpeitem)) {
-        SPCurve * c = SP_SHAPE(lpeitem)->getCurve();
+    } else if (auto shape = dynamic_cast<SPShape const *>(lpeitem)) {
+        SPCurve const *c = shape->curve();
         if (c) {
             Geom::PathVector subpaths = pathv_to_linear_and_cubic_beziers(c->get_pathvector());
             for (const auto & subpath : subpaths){
@@ -565,7 +564,6 @@ collectPathsAndWidths (SPLPEItem const *lpeitem, Geom::PathVector &paths, std::v
                 stroke_widths.push_back(lpeitem->style->stroke_width.computed);
             }
         }
-        c->unref();
     }
 }
 
@@ -577,7 +575,7 @@ LPEKnot::doBeforeEffect (SPLPEItem const* lpeitem)
     original_bbox(lpeitem);
     
     if (SP_IS_PATH(lpeitem)) {
-        supplied_path = SP_PATH(lpeitem)->getCurve(true)->get_pathvector();
+        supplied_path = SP_PATH(lpeitem)->curve()->get_pathvector();
     }
 
     gpaths.clear();

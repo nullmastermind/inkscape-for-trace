@@ -176,7 +176,7 @@ void Box3DSide::set_shape() {
     unsigned int corners[4];
     box3d_side_compute_corner_ids(this, corners);
 
-    SPCurve *c = new SPCurve();
+    auto c = std::make_unique<SPCurve>();
 
     if (!box->get_corner_screen(corners[0]).isFinite() ||
         !box->get_corner_screen(corners[1]).isFinite() ||
@@ -184,7 +184,6 @@ void Box3DSide::set_shape() {
         !box->get_corner_screen(corners[3]).isFinite() )
     {
         g_warning ("Trying to draw a 3D box side with invalid coordinates.\n");
-        delete c;
         return;
     }
 
@@ -196,26 +195,21 @@ void Box3DSide::set_shape() {
 
     /* Reset the shape's curve to the "original_curve"
      * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
-    SPCurve * before = this->getCurveBeforeLPE();
-    bool haslpe = this->hasPathEffectOnClipOrMaskRecursive(this);
-    if (before || haslpe) {
-        if (c && before && before->get_pathvector() != c->get_pathvector()){
-            this->setCurveBeforeLPE(c);
-            sp_lpe_item_update_patheffect(this, true, false);
-        } else if(haslpe) {
-            this->setCurveBeforeLPE(c);
-        } else {
-            //This happends on undo, fix bug:#1791784
-            this->setCurveInsync(c);
-        }
-    } else {
-        this->setCurveInsync(c);
+
+    SPCurve const *before = curveBeforeLPE();
+    if (before && before->get_pathvector() != c->get_pathvector()) {
+        setCurveBeforeLPE(std::move(c));
+        sp_lpe_item_update_patheffect(this, true, false);
+        return;
     }
 
-    if (before) {
-        before->unref();
+    if (hasPathEffectOnClipOrMaskRecursive(this)) {
+        setCurveBeforeLPE(std::move(c));
+        return;
     }
-    c->unref();
+
+    // This happends on undo, fix bug:#1791784
+    setCurveInsync(std::move(c));
 }
 
 Glib::ustring Box3DSide::axes_string() const

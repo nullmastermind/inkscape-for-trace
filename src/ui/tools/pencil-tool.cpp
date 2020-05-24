@@ -800,7 +800,7 @@ void PencilTool::addPowerStrokePencil()
                     sp_lpe_item_enable_path_effects(lpeitem, true);
                 }
                 sp_lpe_item_update_patheffect(lpeitem, false, true);
-                SPCurve const *curvepressure = powerpreview->getCurve(true);
+                SPCurve const *curvepressure = powerpreview->curve();
                 if (curvepressure->is_empty()) {
                     return;
                 }

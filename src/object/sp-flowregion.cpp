@@ -335,14 +335,14 @@ static void         UnionShape(Shape **base_shape, Shape const *add_shape)
 
 static void         GetDest(SPObject* child,Shape **computed)
 {
-	if ( child == nullptr || dynamic_cast<SPItem *>(child) == nullptr ) return;
+    auto item = dynamic_cast<SPItem *>(child);
+    if (item == nullptr)
+        return;
 
-	SPCurve *curve=nullptr;
-	Geom::Affine tr_mat;
+    std::unique_ptr<SPCurve> curve;
+    Geom::Affine tr_mat;
 
     SPObject* u_child = child;
-    SPItem *item = dynamic_cast<SPItem *>(u_child);
-    g_assert(item != nullptr);
     SPUse *use = dynamic_cast<SPUse *>(item);
     if ( use ) {
         u_child = use->child;
@@ -352,10 +352,10 @@ static void         GetDest(SPObject* child,Shape **computed)
     }
     SPShape *shape = dynamic_cast<SPShape *>(u_child);
     if ( shape ) {
-        if (!(shape->_curve)) {
+        if (!shape->curve()) {
             shape->set_shape();
         }
-        curve = shape->getCurve();
+        curve = SPCurve::copy(shape->curve());
     } else {
         SPText *text = dynamic_cast<SPText *>(u_child);
         if ( text ) {
@@ -380,9 +380,6 @@ static void         GetDest(SPObject* child,Shape **computed)
 		delete uncross;
 		delete n_shp;
 		delete temp;
-		curve->unref();
-	} else {
-//		printf("no curve\n");
 	}
 }
 

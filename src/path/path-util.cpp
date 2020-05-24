@@ -132,49 +132,40 @@ std::unique_ptr<SPCurve> curve_for_item(SPItem *item)
     if (!item) 
         return nullptr;
     
-    SPCurve *curve = nullptr;
-    if (SP_IS_SHAPE(item)) {
-        if (SP_IS_PATH(item)) {
-            curve = SP_PATH(item)->getCurveForEdit();
-        } else {
-            curve = SP_SHAPE(item)->getCurve();
-        }
-    }
-    else if (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item))
-    {
+    std::unique_ptr<SPCurve> curve;
+
+    if (auto path = dynamic_cast<SPPath const *>(item)) {
+        curve = SPCurve::copy(path->curveForEdit());
+    } else if (auto shape = dynamic_cast<SPShape const *>(item)) {
+        curve = SPCurve::copy(shape->curve());
+    } else if (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item)) {
         curve = te_get_layout(item)->convertToCurves();
+    } else if (auto image = dynamic_cast<SPImage const *>(item)) {
+        curve = image->get_curve();
     }
-    else if (SP_IS_IMAGE(item))
-    {
-        curve = static_cast<SPImage const *>(item)->get_curve().release();
-    }
-    
-    return std::unique_ptr<SPCurve>(curve);
+
+    return curve;
 }
 
 /**
  * Obtains an item's curve *before* LPE.
- * The returned SPCurve should be unreffed by the caller.
  */
 std::unique_ptr<SPCurve> curve_for_item_before_LPE(SPItem *item)
 {
     if (!item) 
         return nullptr;
     
-    SPCurve *curve = nullptr;
-    if (SP_IS_SHAPE(item)) {
-        curve = SP_SHAPE(item)->getCurveForEdit();
-    }
-    else if (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item))
-    {
+    std::unique_ptr<SPCurve> curve;
+
+    if (auto shape = dynamic_cast<SPShape const *>(item)) {
+        curve = SPCurve::copy(shape->curveForEdit());
+    } else if (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item)) {
         curve = te_get_layout(item)->convertToCurves();
+    } else if (auto image = dynamic_cast<SPImage const *>(item)) {
+        curve = image->get_curve();
     }
-    else if (SP_IS_IMAGE(item))
-    {
-        curve = static_cast<SPImage const *>(item)->get_curve().release();
-    }
-    
-    return std::unique_ptr<SPCurve>(curve);
+
+    return curve;
 }
 
 boost::optional<Path::cut_position> get_nearest_position_on_Path(Path *path, Geom::Point p, unsigned seg)

@@ -26,6 +26,8 @@
 
 #include "xml/node-event-vector.h"
 
+#include <memory>
+
 #define SP_TEXT(obj) (dynamic_cast<SPText*>((SPObject*)obj))
 #define SP_IS_TEXT(obj) (dynamic_cast<const SPText*>((SPObject*)obj) != NULL)
 
@@ -41,8 +43,7 @@ public:
 	~SPText() override;
 
     /** Converts the text object to its component curves */
-    SPCurve *getNormalizedBpath() const
-        {return layout.convertToCurves();}
+    std::unique_ptr<SPCurve> getNormalizedBpath() const;
 
     /** Completely recalculates the layout. */
     void rebuildLayout();

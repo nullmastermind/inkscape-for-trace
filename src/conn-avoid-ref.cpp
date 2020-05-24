@@ -253,7 +253,7 @@ static std::vector<Geom::Point> approxItemWithPoints(SPItem const *item, const G
     {
         auto shape = static_cast<SPShape const *>(item);
         SP_SHAPE(item)->set_shape();
-        item_curve.reset(shape->getCurve());
+        item_curve = SPCurve::copy(shape->curve());
         // make sure it has an associated curve
         if (item_curve)
         {

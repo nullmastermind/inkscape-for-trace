@@ -49,10 +49,6 @@ SPUsePath::SPUsePath(SPObject* i_owner):SPUseReference(i_owner)
 
 SPUsePath::~SPUsePath()
 {
-    if (originalPath != nullptr) {
-        originalPath->unref();
-    }
-
     _changed_connection.disconnect(); // to do before unlinking
 
     quit_listening();
@@ -199,23 +195,18 @@ void SPUsePath::refresh_source()
 {
     sourceDirty = false;
 
-    if (originalPath != nullptr) {
-        originalPath->unref();
-        originalPath = nullptr;
-    }
+    originalPath = nullptr;
 
     SPObject *refobj = sourceObject;
     if ( refobj == nullptr ) return;
-    
-    SPItem *item = SP_ITEM(refobj);
 
-    if (SP_IS_SHAPE(item)) {
-        originalPath = SP_SHAPE(item)->getCurve();
+    if (auto shape = dynamic_cast<SPShape const *>(refobj)) {
+        originalPath = SPCurve::copy(shape->curve());
         if (originalPath == nullptr) {
             sourceDirty = true;
         }
-    } else if (SP_IS_TEXT(item)) {
-        originalPath = SP_TEXT(item)->getNormalizedBpath();
+    } else if (auto text = dynamic_cast<SPText const *>(refobj)) {
+        originalPath = text->getNormalizedBpath();
     }
 }
 

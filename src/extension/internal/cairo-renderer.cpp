@@ -173,7 +173,7 @@ static void sp_shape_render_invoke_marker_rendering(SPMarker* marker, Geom::Affi
 
 static void sp_shape_render(SPShape *shape, CairoRenderContext *ctx)
 {
-    if (!shape->_curve) {
+    if (!shape->curve()) {
         return;
     }
 
@@ -181,7 +181,7 @@ static void sp_shape_render(SPShape *shape, CairoRenderContext *ctx)
 
     SPStyle* style = shape->style;
 
-    Geom::PathVector const & pathv = shape->_curve->get_pathvector();
+    Geom::PathVector const &pathv = shape->curve()->get_pathvector();
     if (pathv.empty()) {
         return;
     }

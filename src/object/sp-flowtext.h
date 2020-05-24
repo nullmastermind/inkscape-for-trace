@@ -19,6 +19,8 @@
 #include "sp-item.h"
 #include "desktop.h"
 
+#include <memory>
+
 #define SP_FLOWTEXT(obj) (dynamic_cast<SPFlowtext*>((SPObject*)obj))
 #define SP_IS_FLOWTEXT(obj) (dynamic_cast<const SPFlowtext*>((SPObject*)obj) != NULL)
 
@@ -60,9 +62,7 @@ public:
     bool _optimizeScaledText;
 
 	/** Converts the text object to its component curves */
-	SPCurve *getNormalizedBpath() const {
-		return layout.convertToCurves();
-	}
+    std::unique_ptr<SPCurve> getNormalizedBpath() const;
 
     /** Optimize scaled flow text on next set_transform. */
     void optimizeScaledText()

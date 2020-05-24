@@ -238,7 +238,7 @@ LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bo
     SPShape * shape =  SP_SHAPE(orig);
     SPPath * path =  SP_PATH(dest);
     if (shape) {
-        SPCurve *c = shape->getCurve();
+        SPCurve const *c = shape->curve();
         if (c) {
             gchar *str = sp_svg_write_path(c->get_pathvector());
             if (shape && !path) {   
@@ -254,7 +254,6 @@ LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bo
             }
             path->getRepr()->setAttribute("d", str);
             g_free(str);
-            c->unref();
         } else {
             path->getRepr()->removeAttribute("d");
         }

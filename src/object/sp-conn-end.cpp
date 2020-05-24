@@ -69,10 +69,12 @@ static bool try_get_intersect_point_with_item_recursive(Geom::PathVector& conn_p
     }
 
     // if this is not a shape, nothing to be done
-    if (!SP_IS_SHAPE(item)) return false;
+    auto shape = dynamic_cast<SPShape const *>(item);
+    if (!shape)
+        return false;
 
     // make sure it has an associated curve
-    auto item_curve = std::unique_ptr<SPCurve>(static_cast<SPShape *>(item)->getCurve());
+    auto item_curve = SPCurve::copy(shape->curve());
     if (!item_curve) return false;
 
     // apply transformations (up to common ancestor)
@@ -103,7 +105,7 @@ static bool try_get_intersect_point_with_item(SPPath* conn, SPItem* item,
         const bool at_start, double& intersect_pos)
 {
     // Copy the curve and apply transformations up to common ancestor.
-    auto conn_curve = conn->_curve->copy();
+    auto conn_curve = conn->curve()->copy();
     conn_curve->transform(conn_transform);
 
     Geom::PathVector conn_pv = conn_curve->get_pathvector();
@@ -150,7 +152,7 @@ static void sp_conn_get_route_and_redraw(SPPath *const path, const bool updatePa
 
     // Set sensible values in case there the connector ends are not
     // attached to any shapes.
-    Geom::PathVector conn_pv = path->_curve->get_pathvector();
+    Geom::PathVector conn_pv = path->curve()->get_pathvector();
     double endPos[2] = { 0.0, static_cast<double>(conn_pv[0].size()) };
 
     for (unsigned h = 0; h < 2; ++h) {
@@ -161,7 +163,7 @@ static void sp_conn_get_route_and_redraw(SPPath *const path, const bool updatePa
                         (h == 0), endPos[h]);
         }
     }
-    change_endpts(path->_curve.get(), endPos);
+    change_endpts(path->curve(), endPos);
     if (updatePathRepr) {
         path->updateRepr();
         path->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);

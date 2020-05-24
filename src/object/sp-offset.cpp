@@ -177,9 +177,7 @@ Inkscape::XML::Node* SPOffset::write(Inkscape::XML::Document *xml_doc, Inkscape:
 
 
     // Make sure the offset has curve
-    SPCurve const *curve = SP_SHAPE(this)->getCurve(true);
-
-    if (curve == nullptr) {
+    if (_curve == nullptr) {
         this->set_shape();
     }
 
@@ -943,15 +941,13 @@ sp_offset_top_point (SPOffset const * offset, Geom::Point *px)
         return;
     }
 
-    SPCurve *curve = SP_SHAPE (offset)->getCurve();
+    SPCurve const *curve = offset->curve();
 
     if (curve == nullptr)
     {
-    	// CPPIFY
-        //offset->set_shape();
     	const_cast<SPOffset*>(offset)->set_shape();
 
-        curve = SP_SHAPE (offset)->getCurve();
+        curve = offset->curve();
 
         if (curve == nullptr)
             return;
@@ -959,7 +955,6 @@ sp_offset_top_point (SPOffset const * offset, Geom::Point *px)
 
     if (curve->is_empty())
     {
-        curve->unref();
         return;
     }
 
@@ -979,7 +974,6 @@ sp_offset_top_point (SPOffset const * offset, Geom::Point *px)
 
     delete theShape;
     delete finalPath;
-    curve->unref();
 }
 
 // the listening functions
@@ -1116,15 +1110,13 @@ refresh_offset_source(SPOffset* offset)
     }
 
     SPItem  *item  = SP_ITEM (refobj);
-    SPCurve *curve = nullptr;
+    std::unique_ptr<SPCurve> curve;
 
-    if (SP_IS_SHAPE (item)) {
-        curve = SP_SHAPE (item)->getCurve ();
-    }
-    else if (SP_IS_TEXT (item)) {
-        curve = SP_TEXT (item)->getNormalizedBpath ();
-    }
-    else {
+    if (auto shape = dynamic_cast<SPShape const *>(item)) {
+        curve = SPCurve::copy(shape->curve());
+    } else if (auto text = dynamic_cast<SPText const *>(item)) {
+        curve = text->getNormalizedBpath();
+    } else {
         return;
     }
 
@@ -1134,7 +1126,6 @@ refresh_offset_source(SPOffset* offset)
 
     Path *orig = new Path;
     orig->LoadPathVector(curve->get_pathvector());
-    curve->unref();
 
     if (!item->transform.isIdentity()) {
         gchar const *t_attr = item->getRepr()->attribute("transform");

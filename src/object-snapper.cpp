@@ -425,10 +425,10 @@ void Inkscape::ObjectSnapper::_collectPaths(Geom::Point /*p*/,
                         }
 
                         if (!very_complex_path && root_item && _snapmanager->snapprefs.isTargetSnappable(SNAPTARGET_PATH, SNAPTARGET_PATH_INTERSECTION)) {
-                            SPCurve *curve = nullptr;
+                            std::unique_ptr<SPCurve> curve;
                             SPShape *shape = dynamic_cast<SPShape *>(root_item);
                             if (shape) {
-                               curve = shape->getCurve();
+                                curve = SPCurve::copy(shape->curve());
                             }/* else if (dynamic_cast<SPText *>(root_item) || dynamic_cast<SPFlowtext *>(root_item)) {
                                curve = te_get_layout(root_item)->convertToCurves();
                             }*/
@@ -438,7 +438,6 @@ void Inkscape::ObjectSnapper::_collectPaths(Geom::Point /*p*/,
                                 (*pv) *= root_item->i2dt_affine() * _candidate.additional_affine * _snapmanager->getDesktop()->doc2dt(); // (_edit_transform * _i2d_transform);
 
                                 _paths_to_snap_to->push_back(SnapCandidatePath(pv, SNAPTARGET_PATH, Geom::OptRect())); // Perhaps for speed, get a reference to the Geom::pathvector, and store the transformation besides it.
-                                curve->unref();
                             }
                         }
                     }
