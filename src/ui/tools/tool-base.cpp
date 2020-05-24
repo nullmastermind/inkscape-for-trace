@@ -89,8 +89,6 @@ static void set_event_location(SPDesktop * desktop, GdkEvent * event);
 ToolBase::ToolBase(gchar const *const *cursor_shape, bool uses_snap)
     : _uses_snap(uses_snap)
     , cursor_shape(cursor_shape)
-    , cursor(nullptr)
-    , message_context(nullptr)
 {
 }
 
