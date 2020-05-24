@@ -499,7 +499,7 @@ void DocumentProperties::linkSelectedProfile()
         Glib::ustring nameStr = tmp ? tmp : "profile"; // TODO add some auto-numbering to avoid collisions
         sanitizeName(nameStr);
         cprofRepr->setAttribute("name", nameStr);
-        cprofRepr->setAttribute("xlink:href", file);
+        cprofRepr->setAttribute("xlink:href", Glib::filename_to_uri(Glib::filename_from_utf8(file)));
         cprofRepr->setAttribute("id", file);
 
 
