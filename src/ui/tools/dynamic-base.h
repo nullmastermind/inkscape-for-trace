@@ -23,6 +23,8 @@
 #include "ui/tools/tool-base.h"
 #include "display/sp-canvas-item.h"
 
+#include <memory>
+
 struct SPCanvasItem;
 class SPCurve;
 
@@ -47,7 +49,7 @@ public:
 
 protected:
     /** accumulated shape which ultimately goes in svg:path */
-    SPCurve *accumulated;
+    std::unique_ptr<SPCurve> accumulated;
 
     /** canvas items for "committed" segments */
     std::vector<SPCanvasItem*> segments;
@@ -55,13 +57,13 @@ protected:
     /** canvas item for red "leading" segment */
     SPCanvasItem *currentshape;
     /** shape of red "leading" segment */
-    SPCurve *currentcurve;
+    std::unique_ptr<SPCurve> currentcurve;
 
     /** left edge of the stroke; combined to get accumulated */
-    SPCurve *cal1;
+    std::unique_ptr<SPCurve> cal1;
 
     /** right edge of the stroke; combined to get accumulated */
-    SPCurve *cal2;
+    std::unique_ptr<SPCurve> cal2;
 
     /** left edge points for this segment */
     Geom::Point point1[SAMPLING_SIZE];

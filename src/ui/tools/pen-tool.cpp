@@ -870,7 +870,7 @@ void PenTool::_redrawAll() {
     this->red_curve->reset();
     this->red_curve->moveto(this->p[0]);
     this->red_curve->curveto(this->p[1], this->p[2], this->p[3]);
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), this->red_curve, true);
+    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(red_bpath), red_curve.get(), true);
 
     // handles
     // hide the handlers in bspline and spiro modes
@@ -1708,8 +1708,8 @@ void PenTool::_bsplineSpiroBuild()
         }else{
             this->red_curve->curveto(this->p[1],this->p[2],this->p[3]);
         }
-        sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), this->red_curve, true);
-        curve->append_continuous(this->red_curve, 0.0625);
+        sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(red_bpath), red_curve.get(), true);
+        curve->append_continuous(*red_curve);
     }
     previous = *this->red_curve->last_point();
     if(!curve->is_unset()){
@@ -1785,7 +1785,7 @@ void PenTool::_setSubsequentPoint(Geom::Point const p, bool statusbar, guint sta
         }
     }
 
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), this->red_curve, true);
+    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(red_bpath), red_curve.get(), true);
 
     if (statusbar) {
         gchar *message;
@@ -1829,7 +1829,7 @@ void PenTool::_setCtrl(Geom::Point const p, guint const state) {
             this->red_curve->reset();
             this->red_curve->moveto(this->p[0]);
             this->red_curve->curveto(this->p[1], this->p[2], this->p[3]);
-            sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), this->red_curve, true);
+            sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(red_bpath), red_curve.get(), true);
         }
         SP_CTRL(this->c0)->moveto(this->p[2]);
         this->cl0 ->setCoords(this->p[3], this->p[2]);
@@ -1869,7 +1869,7 @@ void PenTool::_finishSegment(Geom::Point const p, guint const state) {
                 this->green_curve->append_continuous(lsegment.get(), 0.0625);
             }
         }
-        this->green_curve->append_continuous(this->red_curve, 0.0625);
+        this->green_curve->append_continuous(*red_curve);
         auto curve = this->red_curve->copy();
 
         /// \todo fixme:

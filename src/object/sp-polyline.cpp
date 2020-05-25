@@ -33,7 +33,6 @@ void SPPolyLine::build(SPDocument * document, Inkscape::XML::Node * repr) {
 void SPPolyLine::set(SPAttr key, const gchar* value) {
     switch (key) {
 	case SPAttr::POINTS: {
-            SPCurve * curve;
             const gchar * cptr;
             char * eptr;
             gboolean hascpt;
@@ -42,7 +41,7 @@ void SPPolyLine::set(SPAttr key, const gchar* value) {
             	break;
             }
 
-            curve = new SPCurve ();
+            auto curve = std::make_unique<SPCurve>();
             hascpt = FALSE;
 
             cptr = value;
@@ -91,8 +90,7 @@ void SPPolyLine::set(SPAttr key, const gchar* value) {
                 }
             }
 		
-            this->setCurve(curve);
-            curve->unref();
+            setCurve(std::move(curve));
             break;
 	}
 	default:

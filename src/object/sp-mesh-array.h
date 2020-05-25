@@ -46,6 +46,8 @@
 // For color picking
 #include "sp-item.h"
 
+#include <memory>
+
 enum SPMeshType {
   SP_MESH_TYPE_COONS,
   SP_MESH_TYPE_BICUBIC
@@ -199,8 +201,8 @@ public:
   // Update other nodes in response to a node move.
   void update_handles( unsigned int corner, std::vector< unsigned int > selected_corners, Geom::Point old_p, MeshNodeOperation op );
 
-  // Return outline path (don't forget to unref() when done with curve)
-  SPCurve * outline_path();
+  // Return outline path
+  std::unique_ptr<SPCurve> outline_path() const;
 
   // Transform array
   void transform(Geom::Affine const &m);

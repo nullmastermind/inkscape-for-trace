@@ -19,6 +19,8 @@
 #include <2geom/pathvector.h>
 // #include <future>
 
+#include <memory>
+
 class SPShape;
 
 #define DDC_MIN_PRESSURE      0.0
@@ -77,8 +79,7 @@ private:
     void _cancel();
     void _endpointSnap(Geom::Point &p, guint const state);
     std::vector<Geom::Point> _wps;
-    SPCurve * _curve;
-    SPCurve *_pressure_curve;
+    std::unique_ptr<SPCurve> _pressure_curve;
     Geom::Point _req_tangent;
     bool _is_drawing;
     PencilState _state;

@@ -323,30 +323,25 @@ void sp_update_helperpath(SPDesktop *desktop)
                 }
                 lpe->setSelectedNodePoints(selectedNodesPositions);
                 lpe->setCurrentZoom(desktop->current_zoom());
-                SPCurve *c = new SPCurve();
-                SPCurve *cc = new SPCurve();
+                auto c = std::make_unique<SPCurve>();
                 std::vector<Geom::PathVector> cs = lpe->getCanvasIndicators(lpeitem);
                 for (auto &p : cs) {
-                    cc->set_pathvector(p);
-                    c->append(cc, false);
-                    cc->reset();
+                    c->append(p);
                 }
                 if (!c->is_empty()) {
-                    SPCanvasItem *helperpath = sp_canvas_bpath_new(desktop->getTempGroup(), c, true);
+                    SPCanvasItem *helperpath = sp_canvas_bpath_new(desktop->getTempGroup(), c.get(), true);
                     sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(helperpath), 0x0000ff9A, 1.0, SP_STROKE_LINEJOIN_MITER,
                                                SP_STROKE_LINECAP_BUTT);
                     sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(helperpath), 0, SP_WIND_RULE_NONZERO);
                     sp_canvas_item_affine_absolute(helperpath, lpeitem->i2dt_affine());
                     nt->_helperpath_tmpitem.emplace_back(desktop->add_temporary_canvasitem(helperpath, 0));
-                    SPCanvasItem *helperpath_back = sp_canvas_bpath_new(desktop->getTempGroup(), c, true);
+                    SPCanvasItem *helperpath_back = sp_canvas_bpath_new(desktop->getTempGroup(), c.get(), true);
                     sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(helperpath_back), 0xFFFFFF33, 3.0, SP_STROKE_LINEJOIN_MITER,
                                                SP_STROKE_LINECAP_BUTT);
                     sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(helperpath_back), 0, SP_WIND_RULE_NONZERO);
                     sp_canvas_item_affine_absolute(helperpath_back, lpeitem->i2dt_affine());
                     nt->_helperpath_tmpitem.emplace_back(desktop->add_temporary_canvasitem(helperpath_back, 0));
                 }
-                c->unref();
-                cc->unref();
             }
         }
     }

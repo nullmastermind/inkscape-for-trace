@@ -228,12 +228,7 @@ void SPPath::set(SPAttr key, const gchar* value) {
         case SPAttr::INKSCAPE_ORIGINAL_D:
             if (value) {
                 Geom::PathVector pv = sp_svg_read_pathv(value);
-                SPCurve *curve = new SPCurve(pv);
-
-                if (curve) {
-                    this->setCurveBeforeLPE(curve);
-                    curve->unref();
-                }
+                setCurveBeforeLPE(std::make_unique<SPCurve>(pv));
             } else {
                 bool haslpe = this->hasPathEffectOnClipOrMaskRecursive(this);
                 if (!haslpe) {
@@ -249,12 +244,7 @@ void SPPath::set(SPAttr key, const gchar* value) {
        case SPAttr::D:
             if (value) {
                 Geom::PathVector pv = sp_svg_read_pathv(value);
-                SPCurve *curve = new SPCurve(pv);
-
-                if (curve) {
-                    this->setCurve(curve);
-                    curve->unref();
-                }
+                setCurve(std::make_unique<SPCurve>(pv));
             } else {
                 this->setCurve(nullptr);
             }

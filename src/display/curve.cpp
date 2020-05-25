@@ -26,21 +26,6 @@
  * Routines for SPCurve and for its Geom::PathVector
  */
 
-/* Constructors */
-
-/**
- * The returned curve's state is as if SPCurve::reset has just been called on it.
- */
-SPCurve::SPCurve()
-  : _refcount(1),
-    _pathv()
-{}
-
-SPCurve::SPCurve(Geom::PathVector  pathv)
-  : _refcount(1),
-    _pathv(std::move(pathv))
-{}
-
 SPCurve::smart_pointer //
 SPCurve::new_from_rect(Geom::Rect const &rect, bool all_four_sides)
 {
@@ -496,11 +481,15 @@ void
 SPCurve::append(SPCurve const &curve2,
                 bool use_lineto)
 {
-    if (curve2.is_empty())
+    append(curve2._pathv, use_lineto);
+}
+void SPCurve::append(Geom::PathVector const &pathv, bool use_lineto)
+{
+    if (pathv.empty())
         return;
 
     if (use_lineto) {
-        Geom::PathVector::const_iterator it = curve2._pathv.begin();
+        Geom::PathVector::const_iterator it = pathv.begin();
         if ( ! _pathv.empty() ) {
             Geom::Path & lastpath = _pathv.back();
             lastpath.appendNew<Geom::LineSegment>( (*it).initialPoint() );
@@ -509,11 +498,11 @@ SPCurve::append(SPCurve const &curve2,
             _pathv.push_back( (*it) );
         }
 
-        for (++it; it != curve2._pathv.end(); ++it) {
+        for (++it; it != pathv.end(); ++it) {
             _pathv.push_back( (*it) );
         }
     } else {
-        for (const auto &it : curve2._pathv) {
+        for (const auto &it : pathv) {
             _pathv.push_back( it );
         }
     }

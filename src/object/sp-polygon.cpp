@@ -112,7 +112,7 @@ void SPPolygon::set(SPAttr key, const gchar* value) {
                 break;
             }
 
-            SPCurve *curve = new SPCurve();
+            auto curve = std::make_unique<SPCurve>();
             gboolean hascpt = FALSE;
 
             gchar const *cptr = value;
@@ -157,8 +157,7 @@ void SPPolygon::set(SPAttr key, const gchar* value) {
                 curve->closepath();
             }
 
-            this->setCurve(curve);
-            curve->unref();
+            setCurve(std::move(curve));
             break;
         }
         default:

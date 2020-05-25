@@ -142,7 +142,7 @@ private:
     SubpathList _subpaths;
     MultiPathManipulator &_multi_path_manipulator;
     SPObject *_path; ///< can be an SPPath or an Inkscape::LivePathEffect::Effect  !!!
-    SPCurve *_spcurve; // in item coordinates
+    std::unique_ptr<SPCurve> _spcurve; // in item coordinates
     SPCanvasItem *_outline;
     CurveDragPoint *_dragpoint; // an invisible control point hovering over curve
     PathManipulatorObserver *_observer;

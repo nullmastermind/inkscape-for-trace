@@ -134,7 +134,7 @@ void FreehandBase::setup() {
     sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(this->red_bpath), this->red_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
 
     // Create red curve
-    this->red_curve = new SPCurve();
+    this->red_curve.reset(new SPCurve());
 
     // Create blue bpath
     this->blue_bpath = sp_canvas_bpath_new(this->desktop->getSketch(), nullptr);
@@ -775,7 +775,7 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
 
     // Red
     if (dc->red_curve_is_valid) {
-        c->append_continuous(dc->red_curve, 0.0625);
+        c->append_continuous(*(dc->red_curve));
     }
     dc->red_curve->reset();
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->red_bpath), nullptr);
@@ -805,7 +805,7 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
     {
         // We hit bot start and end of single curve, closing paths
         dc->getDesktop()->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Closing path."));
-        dc->sa_overwrited->append_continuous(c.get(), 0.0625);
+        dc->sa_overwrited->append_continuous(*c);
         dc->sa_overwrited->closepath_current();
         if (!dc->white_curves.empty()) {
             dc->white_curves.erase(std::find(dc->white_curves.begin(),dc->white_curves.end(), dc->sa->curve));
@@ -819,7 +819,7 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
         if (!dc->white_curves.empty()) {
             dc->white_curves.erase(std::find(dc->white_curves.begin(),dc->white_curves.end(), dc->sa->curve));
         }
-        dc->sa_overwrited->append_continuous(c.get(), 0.0625);
+        dc->sa_overwrited->append_continuous(*c);
         c = std::move(dc->sa_overwrited);
     } else /* Step D - test end */ if (dc->ea) {
         auto e = std::move(dc->ea->curve);
@@ -843,7 +843,7 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
                         //we eliminate the last segment
                         e->backspace();
                         //and we add it again with the recreation
-                        e->append_continuous(lastSeg.get(), 0.0625);
+                        e->append_continuous(*lastSeg);
                     }
                 }
                 e = e->create_reverse();
@@ -987,9 +987,7 @@ static void spdc_free_colors(FreehandBase *dc)
         sp_canvas_item_destroy(SP_CANVAS_ITEM(dc->red_bpath));
         dc->red_bpath = nullptr;
     }
-    if (dc->red_curve) {
-        dc->red_curve = dc->red_curve->unref();
-    }
+    dc->red_curve.reset();
 
     // Blue
     if (dc->blue_bpath) {

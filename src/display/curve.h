@@ -32,8 +32,10 @@ class SPCurve {
 
 public:
     /* Constructors */
-    explicit SPCurve();
-    explicit SPCurve(Geom::PathVector  pathv);
+    explicit SPCurve() = default;
+    explicit SPCurve(Geom::PathVector pathv)
+        : _pathv(std::move(pathv))
+    {}
 
     static smart_pointer new_from_rect(Geom::Rect const &rect, bool all_four_sides = false);
     static smart_pointer copy(SPCurve const *);
@@ -49,12 +51,6 @@ public:
 
     smart_pointer ref();
     smart_pointer copy() const;
-
-    [[deprecated("Use std::unique_ptr<SPCurve>")]] std::nullptr_t unref()
-    {
-        _unref();
-        return nullptr;
-    }
 
     size_t get_segment_count() const;
     size_t nodes_in_path() const;
@@ -91,6 +87,7 @@ public:
     void move_endpoints(Geom::Point const &, Geom::Point const &);
     void last_point_additive_move(Geom::Point const & p);
 
+    void append(Geom::PathVector const &, bool use_lineto = false);
     void append(SPCurve const &curve2, bool use_lineto = false);
     [[deprecated("Use reference overload")]] void append(SPCurve const *curve2, bool use_lineto)
     {
@@ -111,26 +108,13 @@ private:
     void _unref();
 
 protected:
-    size_t _refcount;
+    size_t _refcount = 1;
 
     Geom::PathVector _pathv;
 };
 
 /**
  * Specialized deleter allows using std::unique_ptr<SPCurve> with shared references.
- *
- * @verbatim
-   auto curve1 = std::make_unique<SPCurve>();
-   auto curve2 = curve1->ref();
-   @endverbatim
- *
- * Is equivalent to:
- * @verbatim
-   auto curve1 = new SPCurve();
-   auto curve2 = curve1->ref().release();
-   curve2->unref();
-   curve1->unref();
-   @endverbatim
  */
 template <>
 inline void ::std::default_delete<SPCurve>::operator()(SPCurve *ptr) const

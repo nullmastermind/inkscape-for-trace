@@ -89,7 +89,6 @@ PencilTool::PencilTool()
     , _req_tangent(0, 0)
     , _is_drawing(false)
     , sketch_n(0)
-    , _curve(nullptr)
     , _pressure_curve(nullptr)
 {
 }
@@ -99,8 +98,7 @@ void PencilTool::setup() {
     if (prefs->getBool("/tools/freehand/pencil/selcue")) {
         this->enableSelectionCue();
     }
-    this->_curve = new SPCurve();
-    this->_pressure_curve = new SPCurve();
+    this->_pressure_curve = std::make_unique<SPCurve>();
 
     FreehandBase::setup();
 
@@ -111,12 +109,6 @@ void PencilTool::setup() {
 
 
 PencilTool::~PencilTool() {
-    if (this->_curve) {
-        this->_curve->unref();
-    }
-    if (this->_pressure_curve) {
-        this->_pressure_curve->unref();
-    }
 }
 
 void PencilTool::_extinput(GdkEvent *event) {
@@ -689,7 +681,7 @@ void PencilTool::_setEndpoint(Geom::Point const &p) {
         this->red_curve->lineto(this->p[1]);
         this->red_curve_is_valid = true;
         if (!tablet_enabled) {
-            sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), this->red_curve);
+            sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(red_bpath), red_curve.get());
         }
     }
 }
@@ -723,7 +715,7 @@ static inline double square(double const x) { return x * x; }
 
 void PencilTool::addPowerStrokePencil()
 {
-    if (this->_curve) {
+    {
         SPDocument *document = SP_ACTIVE_DOCUMENT;
         if (!document) {
             return;
@@ -736,7 +728,7 @@ void PencilTool::addPowerStrokePencil()
         // worst case gives us a segment per point
         int max_segs = 4 * n_points;
         std::vector<Geom::Point> b(max_segs);
-        SPCurve *curvepressure = new SPCurve();
+        auto curvepressure = std::make_unique<SPCurve>();
         int const n_segs = Geom::bezier_fit_cubic_r(b.data(), this->ps.data(), n_points, tolerance_sq, max_segs);
         if (n_segs > 0) {
             /* Fit and draw and reset state */
@@ -748,7 +740,6 @@ void PencilTool::addPowerStrokePencil()
         Geom::Affine transform_coordinate = SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->i2dt_affine().inverse();
         curvepressure->transform(transform_coordinate);
         Geom::Path path = curvepressure->get_pathvector()[0];
-        curvepressure->unref();
 
         if (!path.empty()) {
             Inkscape::XML::Document *xml_doc = document->getReprDoc();
@@ -898,7 +889,7 @@ void PencilTool::_addFreehandPoint(Geom::Point const &p, guint /*state*/, bool l
                 pressure_path = sp_pathvector_boolop(pressure_path, previous_presure, bool_op_union, fill_nonZero, fill_nonZero);
             }
             this->_pressure_curve->set_pathvector(pressure_path);
-            sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), this->_pressure_curve);
+            sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(red_bpath), _pressure_curve.get());
         }
         if (last) {
             this->addPowerStrokePencil();
@@ -1177,7 +1168,7 @@ void PencilTool::_fitAndSplit() {
             this->red_curve->curveto(b[1], b[2], b[3]);
         }
         if (!tablet_enabled) {
-            sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), this->red_curve);
+            sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(red_bpath), red_curve.get());
         }
         this->red_curve_is_valid = true;
     } else {
@@ -1199,8 +1190,7 @@ void PencilTool::_fitAndSplit() {
                                 : Geom::unit_vector(req_vec) );
         }
 
-
-        this->green_curve->append_continuous(this->red_curve, 0.0625);
+        green_curve->append_continuous(*red_curve);
         auto curve = this->red_curve->copy();
 
         /// \todo fixme:

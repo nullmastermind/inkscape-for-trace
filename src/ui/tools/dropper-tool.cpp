@@ -84,12 +84,10 @@ void DropperTool::setup() {
     /* TODO: have a look at CalligraphicTool::setup where the same is done.. generalize? */
     Geom::PathVector path = Geom::Path(Geom::Circle(0,0,1));
 
-    SPCurve *c = new SPCurve(path);
+    auto c = std::make_unique<SPCurve>(path);
 
-    this->area = sp_canvas_bpath_new(this->desktop->getControls(), c);
+    area = sp_canvas_bpath_new(desktop->getControls(), c.get());
 
-    c->unref();
-    
     sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(this->area), 0x00000000,(SPWindRule)0);
     sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(this->area), 0x0000007f, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
     sp_canvas_item_hide(this->area);

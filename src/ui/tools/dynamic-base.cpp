@@ -65,30 +65,10 @@ DynamicBase::DynamicBase(gchar const *const *cursor_shape)
 }
 
 DynamicBase::~DynamicBase() {
-    if (this->accumulated) {
-        this->accumulated = this->accumulated->unref();
-        this->accumulated = nullptr;
-    }
-
     for (auto i:segments) {
         sp_canvas_item_destroy(SP_CANVAS_ITEM(i));
     }
     segments.clear();
-
-    if (this->currentcurve) {
-        this->currentcurve = this->currentcurve->unref();
-        this->currentcurve = nullptr;
-    }
-
-    if (this->cal1) {
-        this->cal1 = this->cal1->unref();
-        this->cal1 = nullptr;
-    }
-
-    if (this->cal2) {
-        this->cal2 = this->cal2->unref();
-        this->cal2 = nullptr;
-    }
 
     if (this->currentshape) {
         sp_canvas_item_destroy(this->currentshape);

@@ -427,10 +427,7 @@ sp_lpe_item_create_original_path_recursive(SPLPEItem *lpeitem)
             if (gchar const * value = pathrepr->attribute("d")) {
                 Geom::PathVector pv = sp_svg_read_pathv(value);
                 pathrepr->setAttribute("inkscape:original-d", value);
-                SPCurve * original = new SPCurve();
-                original->set_pathvector(pv);
-                path->setCurveBeforeLPE(original);
-                original->unref();
+                path->setCurveBeforeLPE(std::make_unique<SPCurve>(pv));
             }
         }
     } else if (SPShape * shape = dynamic_cast<SPShape *>(lpeitem)) {
@@ -1015,11 +1012,7 @@ SPLPEItem::applyToClipPathOrMask(SPItem *clip_mask, SPItem* to, Inkscape::LivePa
                      // LPE was unsuccessful or doeffect stack return null.. Read the old 'd'-attribute.
                     if (gchar const * value = shape->getAttribute("d")) {
                         Geom::PathVector pv = sp_svg_read_pathv(value);
-                        SPCurve *oldcurve = new (std::nothrow) SPCurve(pv);
-                        if (oldcurve) {
-                            SP_SHAPE(clip_mask)->setCurve(oldcurve);
-                            oldcurve->unref();
-                        }
+                        shape->setCurve(std::make_unique<SPCurve>(pv));
                     }
                 }
                 shape->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);

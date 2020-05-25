@@ -157,7 +157,6 @@ PathManipulator::~PathManipulator()
     delete _dragpoint;
     delete _observer;
     sp_canvas_item_destroy(_outline);
-    _spcurve->unref();
     clear();
 }
 
@@ -1443,7 +1442,7 @@ void PathManipulator::_updateOutline()
     Geom::PathVector pv = _spcurve->get_pathvector();
     pv *= (_edit_transform * _i2d_transform);
     // This SPCurve thing has to be killed with extreme prejudice
-    SPCurve *_hc = new SPCurve();
+    auto _hc = std::make_unique<SPCurve>();
     if (_show_path_direction) {
         // To show the direction, we append additional subpaths which consist of a single
         // linear segment that starts at the time value of 0.5 and extends for 10 pixels
@@ -1465,9 +1464,8 @@ void PathManipulator::_updateOutline()
         pv.insert(pv.end(), arrows.begin(), arrows.end());
     }
     _hc->set_pathvector(pv);
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(_outline), _hc);
+    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(_outline), _hc.get());
     sp_canvas_item_show(_outline);
-    _hc->unref();
 }
 
 /** Retrieve the geometry of the edited object from the object tree */
@@ -1480,15 +1478,13 @@ void PathManipulator::_getGeometry()
         Effect *lpe = lpeobj->get_lpe();
         if (lpe) {
             PathParam *pathparam = dynamic_cast<PathParam *>(lpe->getParameter(_lpe_key.data()));
-            _spcurve->unref();
-            _spcurve = new SPCurve(pathparam->get_pathvector());
+            _spcurve.reset(new SPCurve(pathparam->get_pathvector()));
         }
     } else if (path) {
-        _spcurve->unref();
-        _spcurve = SPCurve::copy(path->curveForEdit()).release();
+        _spcurve = SPCurve::copy(path->curveForEdit());
         // never allow NULL to sneak in here!
         if (_spcurve == nullptr) {
-            _spcurve = new SPCurve();
+            _spcurve.reset(new SPCurve());
         }
     }
 }
@@ -1518,11 +1514,11 @@ void PathManipulator::_setGeometry()
         if (empty()) return;
         if (path->curveBeforeLPE()) {
             if (!_spcurve->is_equal(path->curveBeforeLPE())) {
-                path->setCurveBeforeLPE(_spcurve);
+                path->setCurveBeforeLPE(_spcurve.get());
                 sp_lpe_item_update_patheffect(path, true, false);
             }
         } else if (!_spcurve->is_equal(path->curve())) {
-            path->setCurve(_spcurve);
+            path->setCurve(_spcurve.get());
         }
     }
 }

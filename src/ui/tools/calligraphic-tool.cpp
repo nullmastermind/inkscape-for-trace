@@ -86,8 +86,6 @@ namespace Inkscape {
 namespace UI {
 namespace Tools {
 
-static void add_cap(SPCurve *curve, Geom::Point const &from, Geom::Point const &to, double rounding);
-
 const std::string& CalligraphicTool::getPrefsPath() {
 	return CalligraphicTool::prefsPath;
 }
@@ -125,11 +123,11 @@ CalligraphicTool::~CalligraphicTool() {
 void CalligraphicTool::setup() {
     DynamicBase::setup();
 
-    this->accumulated = new SPCurve();
-    this->currentcurve = new SPCurve();
+    this->accumulated.reset(new SPCurve());
+    this->currentcurve.reset(new SPCurve());
 
-    this->cal1 = new SPCurve();
-    this->cal2 = new SPCurve();
+    this->cal1.reset(new SPCurve());
+    this->cal2.reset(new SPCurve());
 
     this->currentshape = sp_canvas_item_new(desktop->getSketch(), SP_TYPE_CANVAS_BPATH, nullptr);
     sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(this->currentshape), DDC_RED_RGBA, SP_WIND_RULE_EVENODD);
@@ -142,11 +140,9 @@ void CalligraphicTool::setup() {
         /* TODO: have a look at DropperTool::setup where the same is done.. generalize? */
         Geom::PathVector path = Geom::Path(Geom::Circle(0,0,1));
 
-        SPCurve *c = new SPCurve(path);
+        auto c = std::make_unique<SPCurve>(path);
 
-        this->hatch_area = sp_canvas_bpath_new(desktop->getControls(), c, true);
-
-        c->unref();
+        hatch_area = sp_canvas_bpath_new(desktop->getControls(), c.get(), true);
 
         sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(this->hatch_area), 0x00000000,(SPWindRule)0);
         sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(this->hatch_area), 0x0000007f, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
@@ -973,7 +969,7 @@ void CalligraphicTool::set_to_accumulated(bool unionize, bool subtract) {
 }
 
 static void
-add_cap(SPCurve *curve,
+add_cap(SPCurve &curve,
         Geom::Point const &from,
         Geom::Point const &to,
         double rounding)
@@ -983,7 +979,7 @@ add_cap(SPCurve *curve,
         double mag = Geom::L2(vel);
 
         Geom::Point v = mag * Geom::rot90( to - from ) / Geom::L2( to - from );
-        curve->curveto(from + v, to + v, to);
+        curve.curveto(from + v, to + v, to);
     }
 }
 
@@ -1017,13 +1013,13 @@ bool CalligraphicTool::accumulate() {
 
 	this->accumulated->reset(); /*  Is this required ?? */
 
-	this->accumulated->append(this->cal1, false);
+	this->accumulated->append(*cal1);
 
-	add_cap(this->accumulated, dc_cal1_lastseg->finalPoint(), rev_cal2_firstseg->initialPoint(), this->cap_rounding);
+	add_cap(*accumulated, dc_cal1_lastseg->finalPoint(), rev_cal2_firstseg->initialPoint(), cap_rounding);
 
 	this->accumulated->append(*rev_cal2, true);
 
-	add_cap(this->accumulated, rev_cal2_lastseg->finalPoint(), dc_cal1_firstseg->initialPoint(), this->cap_rounding);
+	add_cap(*accumulated, rev_cal2_lastseg->finalPoint(), dc_cal1_firstseg->initialPoint(), cap_rounding);
 
 	this->accumulated->closepath();
 
@@ -1098,10 +1094,10 @@ void CalligraphicTool::fit_and_split(bool release) {
                 }
                 // FIXME: dc->segments is always NULL at this point??
                 if (this->segments.empty()) { // first segment
-                    add_cap(this->currentcurve, b2[0], b1[0], this->cap_rounding);
+                    add_cap(*currentcurve, b2[0], b1[0], cap_rounding);
                 }
                 this->currentcurve->closepath();
-                sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->currentshape), this->currentcurve, true);
+                sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(currentshape), currentcurve.get(), true);
             }
 
             /* Current calligraphic */
@@ -1176,11 +1172,11 @@ void CalligraphicTool::draw_temporary_box() {
     }
 
     if (this->npoints >= 2) {
-        add_cap(this->currentcurve, this->point1[this->npoints-1], this->point2[this->npoints-1], this->cap_rounding);
+        add_cap(*currentcurve, point1[npoints - 1], point2[npoints - 1], cap_rounding);
     }
 
     this->currentcurve->closepath();
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->currentshape), this->currentcurve, true);
+    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(currentshape), currentcurve.get(), true);
 }
 
 }

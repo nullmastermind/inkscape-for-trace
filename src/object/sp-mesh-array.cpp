@@ -2740,10 +2740,9 @@ void SPMeshNodeArray::update_handles( guint corner, std::vector< guint > /*selec
     //         Geom::Point dsx1 = pnodes[0][1]->p - 
 }
 
-
-SPCurve * SPMeshNodeArray::outline_path() {
-
-    SPCurve *outline = new SPCurve();
+std::unique_ptr<SPCurve> SPMeshNodeArray::outline_path() const
+{
+    auto outline = std::make_unique<SPCurve>();
 
     if (nodes.empty() ) {
         std::cerr << "SPMeshNodeArray::outline_path: empty array!" << std::endl;
@@ -2801,9 +2800,8 @@ bool SPMeshNodeArray::fill_box(Geom::OptRect &box) {
         mg->gradientTransform.setIdentity();
     }
 
-    SPCurve *outline = outline_path();
+    auto outline = outline_path();
     Geom::OptRect mesh_bbox = outline->get_pathvector().boundsExact();
-    outline->unref();
 
     if ((*mesh_bbox).width() == 0 || (*mesh_bbox).height() == 0) {
         return false;

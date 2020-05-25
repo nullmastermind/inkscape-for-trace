@@ -353,13 +353,8 @@ void SPOffset::set_shape() {
 
         if ( res_d ) {
             Geom::PathVector pv = sp_svg_read_pathv(res_d);
-            SPCurve *c = new SPCurve(pv);
-            g_assert(c != nullptr);
-
-            this->setCurveInsync (c);
-            this->setCurveBeforeLPE(c);
-
-            c->unref();
+            setCurveInsync(std::make_unique<SPCurve>(pv));
+            setCurveBeforeLPE(curve());
         }
 
         return;
@@ -661,12 +656,8 @@ void SPOffset::set_shape() {
         delete orig;
 
         Geom::PathVector pv = sp_svg_read_pathv(res_d);
-        SPCurve *c = new SPCurve(pv);
-        g_assert(c != nullptr);
-
-        this->setCurveInsync (c);
-        this->setCurveBeforeLPE(c);
-        c->unref();
+        setCurveInsync(std::make_unique<SPCurve>(pv));
+        setCurveBeforeLPE(curve());
 
         free (res_d);
     }

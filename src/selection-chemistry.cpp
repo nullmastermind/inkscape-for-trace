@@ -2885,14 +2885,13 @@ void ObjectSet::cloneOriginal()
             Geom::OptRect b = original->desktopVisualBounds();
             if ( a && b && desktop()) {
                 // draw a flashing line between the objects
-                SPCurve *curve = new SPCurve();
+                auto curve = std::make_unique<SPCurve>();
                 curve->moveto(a->midpoint());
                 curve->lineto(b->midpoint());
 
-                SPCanvasItem * canvasitem = sp_canvas_bpath_new(desktop()->getTempGroup(), curve);
+                SPCanvasItem *canvasitem = sp_canvas_bpath_new(desktop()->getTempGroup(), curve.get());
                 sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(canvasitem), 0x0000ddff, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT, 5, 3);
                 sp_canvas_item_show(canvasitem);
-                curve->unref();
                 desktop()->add_temporary_canvasitem(canvasitem, 1000);
             }
         }

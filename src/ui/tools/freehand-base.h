@@ -62,8 +62,7 @@ public:
 
     // Red - Last segement as it's drawn.
     SPCanvasItem *red_bpath;
-    // TODO make private, use std::unique_ptr<SPCurve>, add public const getter
-    SPCurve *red_curve;
+    std::unique_ptr<SPCurve> red_curve;
     boost::optional<Geom::Point> red_curve_get_last_point();
 
     // Blue - New path after LPE as it's drawn.
