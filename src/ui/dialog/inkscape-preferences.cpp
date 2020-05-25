@@ -106,7 +106,7 @@ InkscapePreferences::InkscapePreferences()
     auto hbox_list_page = Gtk::manage(new Gtk::Box());
     hbox_list_page->set_border_width(12);
     hbox_list_page->set_spacing(12);
-    _getContents()->add(*hbox_list_page);
+    _setContents(hbox_list_page);
 
     //Pagelist
     Gtk::Frame* list_frame = Gtk::manage(new Gtk::Frame());
