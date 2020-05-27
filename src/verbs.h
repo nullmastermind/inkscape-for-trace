@@ -20,6 +20,7 @@
 #include <cstring>
 #include <string>
 #include <glibmm/ustring.h>
+#include <gtkmm.h>  // Gtk::AccelKey
 
 struct SPAction;
 class SPDocument;
@@ -469,7 +470,7 @@ private:
 
     char * _full_tip; // includes shortcut
 
-    unsigned long long int _shortcut;
+    Gtk::AccelKey _shortcut;
 
     /** Name of the image that represents the verb. */
     char const * _image;
@@ -574,7 +575,6 @@ public:
         _name(name),
         _tip(tip),
         _full_tip(nullptr),
-        _shortcut(0),
         _image(image),
         _code(code),
         _group(group),

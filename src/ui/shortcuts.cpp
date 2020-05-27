@@ -49,8 +49,6 @@ using namespace Inkscape::Modifiers;
 
 namespace Inkscape {
 
-unsigned long long int parse_modifier_string(gchar const *modifiers_string, gchar const *verb_name);
-
 Shortcuts::Shortcuts()
 {
     Glib::RefPtr<Gio::Application> gapp = Gio::Application::get_default();
@@ -139,6 +137,58 @@ Shortcuts::clear()
 }
 
 
+Gdk::ModifierType
+parse_modifier_string(gchar const *modifiers_string, gchar const *verb_name)
+{
+    Gdk::ModifierType modifiers(Gdk::ModifierType(0));
+    if (modifiers_string) {
+  
+        Glib::ustring str(modifiers_string);
+        std::vector<Glib::ustring> mod_vector = Glib::Regex::split_simple("\\s*,\\s*", modifiers_string);
+  
+        for (auto mod : mod_vector) {
+            if (mod == "Control" || mod == "Ctrl") {
+                modifiers |= Gdk::CONTROL_MASK;
+            } else if (mod == "Shift") {
+                modifiers |= Gdk::SHIFT_MASK;
+            } else if (mod == "Alt") {
+                modifiers |= Gdk::MOD1_MASK;
+            } else if (mod == "Super") {
+                modifiers |= Gdk::SUPER_MASK; // Not used
+            } else if (mod == "Hyper") {
+                modifiers |= Gdk::HYPER_MASK; // Not used
+            } else if (mod == "Meta") {
+                modifiers |= Gdk::META_MASK;
+            } else if (mod == "Primary") {
+  
+                // System dependent key to invoke menus. (Needed for OSX in particular.)
+                // We only read "Primary" and never write it for verbs.
+                auto display = Gdk::Display::get_default();
+                if (display) {
+                    GdkKeymap* keymap = display->get_keymap();
+                    GdkModifierType type = 
+                        gdk_keymap_get_modifier_mask (keymap, GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR);
+                    gdk_keymap_add_virtual_modifiers(keymap, &type);
+                    if (type & Gdk::CONTROL_MASK)
+                        modifiers |= Gdk::CONTROL_MASK;
+                    else if (type & Gdk::META_MASK)
+                        modifiers |= Gdk::META_MASK;
+                    else {
+                        std::cerr << "Shortcut::read: Unknown primary accelerator!" << std::endl;
+                        modifiers |= Gdk::CONTROL_MASK;
+                    }
+                } else {
+                    modifiers |= Gdk::CONTROL_MASK;
+                }
+            } else {
+                std::cerr << "Shortcut::read: Unknown GDK modifier: " << mod.c_str() << std::endl;
+            }
+        }
+    }
+    return modifiers;
+}
+
+
 // Read a shortcut file. We do not check for conflicts between verbs and actions.
 bool
 Shortcuts::read(Glib::RefPtr<Gio::File> file, bool user_set)
@@ -171,24 +221,30 @@ Shortcuts::read(Glib::RefPtr<Gio::File> file, bool user_set)
     for ( ; iter ; ++iter ) {
 
         if (strcmp(iter->name(), "modifier") == 0) {
+
             gchar const *mod_name = iter->attribute("action");
             if (!mod_name) {
-                 g_warning("Missing modifier name (action= attribute) for shortcut");
-                 continue;
+                std::cout << "Shortcuts::read: Missing modifier for action!" << std::endl;;
+                continue;
             }
+
             Modifier *mod = Modifier::get(mod_name);
-            if(mod == nullptr) {
-                 g_warning("Can't find modifier '%s'", mod_name);
-                 continue;
+            if (mod == nullptr) {
+                std::cout << "Shortcuts::read: Can't find modifer: " << mod_name << std::endl; 
+                continue;
             }
  
             // If mods isn't specified then it should use default, if it's an empty string
             // then the modifier is None (i.e. happens all the time without a modifier)
             gchar const *mod_attr = iter->attribute("modifiers");
-            if(!mod_attr) continue; // Default, do nothing and no warning
-            KeyMask user_modifier = parse_modifier_string(mod_attr, mod_name);
+            if (!mod_attr) {
+                continue; // Default, do nothing and no warning.
+            }
+
+            KeyMask user_modifier = (KeyMask) parse_modifier_string(mod_attr, mod_name);
             mod->set(user_modifier);
             continue;
+
         } else if (strcmp(iter->name(), "bind") != 0) {
             // Unknown element, do not complain.
             continue;
@@ -247,65 +303,14 @@ Shortcuts::read(Glib::RefPtr<Gio::File> file, bool user_set)
             continue;
         }
 
-        unsigned long long int modifiers = parse_modifier_string(iter->attribute("modifiers"), verb_name);
+        Gdk::ModifierType modifiers = parse_modifier_string(iter->attribute("modifiers"), verb_name);
 
-        set_verb_shortcut (keyval | modifiers << 32, verb, is_primary, user_set);
+        //set_verb_shortcut (keyval | modifiers << 32, verb, is_primary, user_set);
+        set_verb_shortcut (Gtk::AccelKey(keyval, modifiers), verb, is_primary, user_set);
     }
 
     return true;
 }
-
-unsigned long long int
-parse_modifier_string(gchar const *modifiers_string, gchar const *verb_name)
-{
-    unsigned long long int modifiers = 0; 
-    if (modifiers_string) {
-  
-        Glib::ustring str(modifiers_string);
-        std::vector<Glib::ustring> mod_vector = Glib::Regex::split_simple("\\s*,\\s*", modifiers_string);
-  
-        for (auto mod : mod_vector) {
-            if (mod == "Control" || mod == "Ctrl") {
-                modifiers |= GDK_CONTROL_MASK;
-            } else if (mod == "Shift") {
-                modifiers |= GDK_SHIFT_MASK;
-            } else if (mod == "Alt") {
-                modifiers |= GDK_MOD1_MASK;
-            } else if (mod == "Super") {
-                modifiers |= GDK_SUPER_MASK; // Not used
-            } else if (mod == "Hyper") {
-                modifiers |= GDK_HYPER_MASK; // Not used
-            } else if (mod == "Meta") {
-                modifiers |= GDK_META_MASK;
-            } else if (mod == "Primary") {
-  
-                // System dependent key to invoke menus. (Needed for OSX in particular.)
-                // We only read "Primary" and never write it for verbs.
-                auto display = Gdk::Display::get_default();
-                if (display) {
-                    GdkKeymap* keymap = display->get_keymap();
-                    GdkModifierType type = 
-                        gdk_keymap_get_modifier_mask (keymap, GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR);
-                    gdk_keymap_add_virtual_modifiers(keymap, &type);
-                    if (type & GDK_CONTROL_MASK)
-                        modifiers |= GDK_CONTROL_MASK;
-                    else if (type & GDK_META_MASK)
-                        modifiers |= GDK_META_MASK;
-                    else {
-                        std::cerr << "Shortcut::read: Unknown primary accelerator!" << std::endl;
-                        modifiers |= GDK_CONTROL_MASK;
-                    }
-                } else {
-                    modifiers |= GDK_CONTROL_MASK;
-                }
-            } else {
-                std::cerr << "Shortcut::read: Unknown GDK modifier: " << mod.c_str() << std::endl;
-            }
-        }
-    }
-    return modifiers;
-}
-
 
 // In principle, we only write User shortcuts. But for debugging, we might want to write something else.
 bool
@@ -333,8 +338,8 @@ Shortcuts::write(Glib::RefPtr<Gio::File> file, What what) {
             (what == System && !user_set[verb]) ||
             (what == User   &&  user_set[verb]) )  
         {
-            int key_val = entry.first & 0xffffffff;
-            int mod_val = entry.first >> 32;
+            unsigned int      key_val = entry.first.get_key();
+            Gdk::ModifierType mod_val = entry.first.get_mod();
 
             gchar *key = gdk_keyval_name (key_val);
             Glib::ustring mod = get_modifiers_verb (mod_val);
@@ -344,7 +349,7 @@ Shortcuts::write(Glib::RefPtr<Gio::File> file, What what) {
             node->setAttribute("key", key);
             node->setAttributeOrRemoveIfEmpty("modifiers", mod);
             node->setAttribute("action", id);
-            if (primary[verb] == entry.first) {
+            if (primary[verb].get_key() == entry.first.get_key() && primary[verb].get_mod() == entry.first.get_mod()) {
                 node->setAttribute("display", "true");
             }
             document->root()->appendChild(node);
@@ -385,7 +390,7 @@ Shortcuts::write(Glib::RefPtr<Gio::File> file, What what) {
 
 // Set a verb shortcut.
 void
-Shortcuts::set_verb_shortcut(unsigned long long int const &val, Inkscape::Verb *verb, bool is_primary, bool is_user_set)
+Shortcuts::set_verb_shortcut(const Gtk::AccelKey& val, Inkscape::Verb *verb, bool is_primary, bool is_user_set)
 {
     // val is key value in lower 32 bits and modifier in upper 32 bits.
     Inkscape::Verb *old_verb = shortcut_to_verb_map[val];
@@ -393,10 +398,10 @@ Shortcuts::set_verb_shortcut(unsigned long long int const &val, Inkscape::Verb *
 
     // Clear old verb data (if key reassigned to different verb).
     if (old_verb && old_verb != verb) {
-        unsigned long long int old_primary = primary[old_verb];
+        Gtk::AccelKey old_primary = primary[old_verb];
 
-        if (old_primary == val) {
-            primary[old_verb] = 0;
+        if (old_primary.get_key() == val.get_key() && old_primary.get_mod() == val.get_mod()) {
+            primary[old_verb] = Gtk::AccelKey();
             user_set[old_verb] = false;
         }
     }
@@ -409,7 +414,7 @@ Shortcuts::set_verb_shortcut(unsigned long long int const &val, Inkscape::Verb *
 
 
 // Return the primary shortcut for a verb or GDK_KEY_VoidSymbol if not found.
-unsigned long long int
+Gtk::AccelKey
 Shortcuts::get_shortcut_from_verb(Verb *verb)
 {
     for (auto const& it : shortcut_to_verb_map) {
@@ -418,13 +423,13 @@ Shortcuts::get_shortcut_from_verb(Verb *verb)
         }
     }
 
-    return (unsigned long long int) GDK_KEY_VoidSymbol;
+    return (Gtk::AccelKey());
 }
 
 
 // Return verb corresponding to shortcut or nullptr if no verb.
 Verb*
-Shortcuts::get_verb_from_shortcut(unsigned long long int shortcut)
+Shortcuts::get_verb_from_shortcut(const Gtk::AccelKey& shortcut)
 {
     auto it = shortcut_to_verb_map.find(shortcut);
     if (it != shortcut_to_verb_map.end()) {
@@ -465,7 +470,7 @@ Shortcuts::invoke_verb(GdkEventKey const *event, UI::View::View *view)
     // std::cout << "Shortcuts::invoke_verb: "
     //           << std::hex << event->keyval << " "
     //           << std::hex << event->state << std::endl;
-    unsigned long long int shortcut = get_from_event(event);
+    Gtk::AccelKey shortcut = get_from_event(event);
 
     Verb* verb = get_verb_from_shortcut(shortcut);
     if (verb) {
@@ -522,12 +527,12 @@ Shortcuts::list_all_actions()
 
 // Adds to user's default.xml file.
 bool
-Shortcuts::add_user_shortcut(Glib::ustring name, unsigned long long int shortcut) {
+Shortcuts::add_user_shortcut(Glib::ustring name, const Gtk::AccelKey& shortcut) {
 
     // We must first remove any existing shortcuts that use the same shortcut value.
     Verb* old_verb = shortcut_to_verb_map[shortcut];
     if (old_verb) {
-        primary[old_verb] = 0;
+        primary[old_verb] = Gtk::AccelKey();
         user_set[old_verb] = false;
         shortcut_to_verb_map.erase(shortcut);
     }
@@ -577,7 +582,7 @@ Shortcuts::add_user_shortcut(Glib::ustring name, unsigned long long int shortcut
 
 // Remove from user's default.xml file.
 bool
-Shortcuts::remove_user_shortcut(Glib::ustring name, unsigned long long int shortcut)
+Shortcuts::remove_user_shortcut(Glib::ustring name, const Gtk::AccelKey& shortcut)
 {
     bool removed = false;
 
@@ -585,7 +590,7 @@ Shortcuts::remove_user_shortcut(Glib::ustring name, unsigned long long int short
     Verb* verb = Verb::getbyid(name.c_str(), false); // Not verbose!
     if (verb) {
         shortcut_to_verb_map.erase(shortcut);
-        primary[verb] = 0;
+        primary[verb] = Gtk::AccelKey();
         user_set[verb] = false;
         removed = true;
     } else {
@@ -631,15 +636,12 @@ Shortcuts::clear_user_shortcuts()
 }
 
 Glib::ustring
-Shortcuts::get_label(unsigned long long int shortcut)
+Shortcuts::get_label(const Gtk::AccelKey& shortcut)
 {
     Glib::ustring label;
 
-    int key_val = shortcut & 0xffffffff;
-    int mod_val = shortcut >> 32;
-
-    if (key_val != GDK_KEY_VoidSymbol) {
-        label = Gtk::AccelGroup::get_label(key_val, (Gdk::ModifierType)mod_val);
+    if (!shortcut.is_null()) {
+        label = Gtk::AccelGroup::get_label(shortcut.get_key(), shortcut.get_mod());
     }
 
     return label;
@@ -649,12 +651,12 @@ Glib::ustring
 Shortcuts::get_modifiers_verb(unsigned int mod_val)
 {
     Glib::ustring modifiers;
-    if (mod_val & GDK_CONTROL_MASK) modifiers += "Ctrl,";
-    if (mod_val & GDK_SHIFT_MASK)   modifiers += "Shift,";
-    if (mod_val & GDK_MOD1_MASK)    modifiers += "Alt,";
-    if (mod_val & GDK_SUPER_MASK)   modifiers += "Super,";
-    if (mod_val & GDK_HYPER_MASK)   modifiers += "Hyper,";
-    if (mod_val & GDK_META_MASK)    modifiers += "Meta,";
+    if (mod_val & Gdk::CONTROL_MASK) modifiers += "Ctrl,";
+    if (mod_val & Gdk::SHIFT_MASK)   modifiers += "Shift,";
+    if (mod_val & Gdk::MOD1_MASK)    modifiers += "Alt,";
+    if (mod_val & Gdk::SUPER_MASK)   modifiers += "Super,";
+    if (mod_val & Gdk::HYPER_MASK)   modifiers += "Hyper,";
+    if (mod_val & Gdk::META_MASK)    modifiers += "Meta,";
 
     if (modifiers.length() > 0) {
         modifiers.resize(modifiers.size() -1);
@@ -664,18 +666,18 @@ Shortcuts::get_modifiers_verb(unsigned int mod_val)
 }
 
 Glib::ustring
-Shortcuts::shortcut_to_accelerator(unsigned long long int shortcut)
+Shortcuts::shortcut_to_accelerator(const Gtk::AccelKey& shortcut)
 {
-    unsigned int keyval = shortcut & 0xffffffff;
-    unsigned int modval = shortcut >> 32;
+    unsigned int keyval = shortcut.get_key();
+    unsigned int modval = shortcut.get_mod();
 
     Glib::ustring accelerator;
-    if (modval & GDK_CONTROL_MASK) accelerator += "<Ctrl>";
-    if (modval & GDK_SHIFT_MASK)   accelerator += "<Shift>";
-    if (modval & GDK_MOD1_MASK)    accelerator += "<Alt>";
-    if (modval & GDK_SUPER_MASK)   accelerator += "<Super>";
-    if (modval & GDK_HYPER_MASK)   accelerator += "<Hyper>";
-    if (modval & GDK_META_MASK)    accelerator += "<Meta>";
+    if (modval & Gdk::CONTROL_MASK) accelerator += "<Ctrl>";
+    if (modval & Gdk::SHIFT_MASK)   accelerator += "<Shift>";
+    if (modval & Gdk::MOD1_MASK)    accelerator += "<Alt>";
+    if (modval & Gdk::SUPER_MASK)   accelerator += "<Super>";
+    if (modval & Gdk::HYPER_MASK)   accelerator += "<Hyper>";
+    if (modval & Gdk::META_MASK)    accelerator += "<Meta>";
 
     gchar* key = gdk_keyval_name(keyval);
     if (key) {
@@ -689,26 +691,24 @@ Shortcuts::shortcut_to_accelerator(unsigned long long int shortcut)
     return accelerator;
 }
 
-unsigned long long int
-Shortcuts::accelerator_to_shortcut(Glib::ustring& accelerator)
+Gtk::AccelKey
+Shortcuts::accelerator_to_shortcut(const Glib::ustring& accelerator)
 {
-    unsigned int modval = 0;
+    Gdk::ModifierType modval = Gdk::ModifierType(0);
     std::vector<Glib::ustring> parts = Glib::Regex::split_simple("<(<.*?>)", accelerator);
     for (auto part : parts) {
-        if (part == "<Ctrl>")  modval |= GDK_CONTROL_MASK;
-        if (part == "<Shift>") modval |= GDK_SHIFT_MASK;
-        if (part == "<Alt>")   modval |= GDK_MOD1_MASK;
-        if (part == "<Super>") modval |= GDK_SUPER_MASK;
-        if (part == "<Hyper>") modval |= GDK_HYPER_MASK;
-        if (part == "<Meta>")  modval |= GDK_META_MASK;
+        if (part == "<Ctrl>")  modval |= Gdk::CONTROL_MASK;
+        if (part == "<Shift>") modval |= Gdk::SHIFT_MASK;
+        if (part == "<Alt>")   modval |= Gdk::MOD1_MASK;
+        if (part == "<Super>") modval |= Gdk::SUPER_MASK;
+        if (part == "<Hyper>") modval |= Gdk::HYPER_MASK;
+        if (part == "<Meta>")  modval |= Gdk::META_MASK;
         if (part == "<Primary>") std::cerr << "Shortcuts::accelerator_to_shortcut: need to handle 'Primary'!" << std::endl;
     }
 
-    int keyval = gdk_keyval_from_name(parts[parts.size()-1].c_str());
+    unsigned int keyval = gdk_keyval_from_name(parts[parts.size()-1].c_str());
 
-    unsigned long long int retval = keyval | (unsigned long long int)modval << 32;
-
-    return retval;
+    return Gtk::AccelKey(keyval, modval);
 }
 
 /*
@@ -726,11 +726,12 @@ Shortcuts::accelerator_to_shortcut(Glib::ustring& accelerator)
  *  - Exception: letter keys like [A-Z] always need the shift modifier,
  *               otherwise lower case and uper case keys are treated as equivalent.
  */
-unsigned long long int
+Gtk::AccelKey
 Shortcuts::get_from_event(GdkEventKey const *event)
 {
-    unsigned long long int initial_modifiers = event->state;
+    Gdk::ModifierType initial_modifiers  = Gdk::ModifierType(event->state);
     unsigned int consumed_modifiers = 0;
+    //Gdk::ModifierType consumed_modifiers = Gdk::ModifierType(0);
 
     unsigned int keyval = Inkscape::UI::Tools::get_latin_keyval(event, &consumed_modifiers);
 
@@ -739,12 +740,12 @@ Shortcuts::get_from_event(GdkEventKey const *event)
     bool is_case_convertible = !(gdk_keyval_is_upper(keyval) && gdk_keyval_is_lower(keyval));
     if (is_case_convertible) {
         keyval = gdk_keyval_to_lower(keyval);  // keyval not actually used! (copied from legacy code)
-        consumed_modifiers &= ~ GDK_SHIFT_MASK;
+        consumed_modifiers &= ~ Gdk::SHIFT_MASK;
     }
 
     // std::cout << "  Keyval:    " << std::hex << keyval << std::endl;
     // std::cout << "  Modifiers: " << std::hex << (initial_modifiers & ~consumed_modifiers) << std::endl;
-    return (event->keyval | (initial_modifiers &~ consumed_modifiers) << 32);
+    return (Gtk::AccelKey(event->keyval, Gdk::ModifierType(initial_modifiers &~ consumed_modifiers)));
 }
 
 
@@ -752,16 +753,15 @@ Shortcuts::get_from_event(GdkEventKey const *event)
 void
 Shortcuts::add_accelerator (Gtk::Widget *widget, Verb *verb)
 {
-    unsigned long long int shortcut = get_shortcut_from_verb(verb);
+    Gtk::AccelKey shortcut = get_shortcut_from_verb(verb);
     
-    if (shortcut == GDK_KEY_VoidSymbol || shortcut == 0) {
+    if (shortcut.is_null()) {
         return;
     }
 
     static Glib::RefPtr<Gtk::AccelGroup> accel_group = Gtk::AccelGroup::create();
 
-    widget->add_accelerator ("activate", accel_group, shortcut & 0xffffffff,
-                             Gdk::ModifierType(shortcut >> 32), Gtk::ACCEL_VISIBLE);
+    widget->add_accelerator ("activate", accel_group, shortcut.get_key(), shortcut.get_mod(), Gtk::ACCEL_VISIBLE);
 }
 
 
@@ -977,13 +977,15 @@ Shortcuts::dump() {
                 action = actions[0];
             }
 
-            unsigned long long int shortcut = key + ((unsigned long long int)mod << 32);
+            Gtk::AccelKey shortcut(key, mod);
             Inkscape::Verb *verb = get_verb_from_shortcut(shortcut);
             if (verb) {
                 action = verb->get_name();
             }
 
-            std::cout << "  shortcut:  " << std::setw(10) << std::hex << shortcut
+            std::cout << "  shortcut:"
+                      << "  " << std::setw(8) << std::hex << shortcut.get_mod()
+                      << "  " << std::setw(8) << std::hex << shortcut.get_key()
                       << "  " << std::setw(30) << std::left << accel
                       << "  " << action
                       << std::endl;

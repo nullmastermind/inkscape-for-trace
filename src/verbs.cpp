@@ -376,7 +376,6 @@ Verb::Verb(gchar const *id, gchar const *name, gchar const *tip, gchar const *im
     _name(name),
     _tip(tip),
     _full_tip(nullptr),
-    _shortcut(0),
     _image(image),
     _code(0),
     _group(group),
@@ -706,8 +705,8 @@ gchar const *Verb::get_tip()
 {
     gchar const *result = nullptr;
     if (_tip) {
-        unsigned long long int shortcut = Inkscape::Shortcuts::getInstance().get_shortcut_from_verb(this);
-        if ( (shortcut != _shortcut) || !_full_tip) {
+        Gtk::AccelKey shortcut = Inkscape::Shortcuts::getInstance().get_shortcut_from_verb(this);
+        if ( (shortcut.get_key() != _shortcut.get_key() && shortcut.get_mod() != shortcut.get_mod()) || !_full_tip) {
             if (_full_tip) {
                 g_free(_full_tip);
                 _full_tip = nullptr;

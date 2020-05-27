@@ -879,13 +879,13 @@ bool ObjectsPanel::_handleKeyEvent(GdkEventKey *event)
     if (!_desktop)
         return false;
 
-    unsigned long long int shortcut = Inkscape::Shortcuts::get_from_event(event);
+    Gtk::AccelKey shortcut = Inkscape::Shortcuts::get_from_event(event);
 
-    switch (shortcut) {
+    switch (shortcut.get_key()) {
         // how to get users key binding for the action “start-interactive-search” ??
         // ctrl+f is just the default
-        case GDK_KEY_f | ((unsigned long long int)GDK_CONTROL_MASK << 32):
-            return false;
+        case GDK_KEY_f:
+            if (shortcut.get_mod() | Gdk::CONTROL_MASK) return false;
             break;
         // shall we slurp ctrl+w to close panel?
 

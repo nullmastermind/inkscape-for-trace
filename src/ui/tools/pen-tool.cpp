@@ -992,7 +992,7 @@ bool PenTool::_handleKeyPress(GdkEvent *event) {
 
     // Check for undo if we have started drawing a path.
     if (this->npoints > 0) {
-        unsigned long long int shortcut = Inkscape::Shortcuts::get_from_event((GdkEventKey*)event);
+        Gtk::AccelKey shortcut = Inkscape::Shortcuts::get_from_event((GdkEventKey*)event);
         Inkscape::Verb* verb = Inkscape::Shortcuts::getInstance().get_verb_from_shortcut(shortcut);
         if (verb) {
             unsigned int vcode = verb->get_code();

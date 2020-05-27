@@ -30,6 +30,16 @@ class Document;
 class Node;
 }
 
+struct accel_key_comp
+{
+    bool operator()(const Gtk::AccelKey& key1, const Gtk::AccelKey& key2) const
+    {
+        if(key1.get_key() < key2.get_key()) return true;
+        if(key1.get_key() > key2.get_key()) return false;
+        return (key1.get_mod() < key2.get_mod());
+    }
+};
+
 class Shortcuts {
 
 public:
@@ -61,28 +71,28 @@ public:
     bool write(Glib::RefPtr<Gio::File> file, What what = User);
 
     // Will disappear after verbs are gone.
-    void set_verb_shortcut(unsigned long long int const &val, Inkscape::Verb *const verb, bool is_primary, bool is_user_set);
-    unsigned long long int get_shortcut_from_verb(Verb* verb);
-    Verb* get_verb_from_shortcut(unsigned long long int shortcut);
+    void set_verb_shortcut(const Gtk::AccelKey& shortcut, Inkscape::Verb *const verb, bool is_primary, bool is_user_set);
+    Gtk::AccelKey get_shortcut_from_verb(Verb* verb);
+    Verb* get_verb_from_shortcut(const Gtk::AccelKey& shortcut);
     bool invoke_verb(GdkEventKey const *event, UI::View::View *view);
 
     bool is_user_set(Verb* verb);
     bool is_user_set(Glib::ustring& action);
 
     // User shortcuts
-    bool add_user_shortcut(Glib::ustring name, unsigned long long int shortcut);
-    bool remove_user_shortcut(Glib::ustring name, unsigned long long int shortcut);
+    bool add_user_shortcut(Glib::ustring name, const Gtk::AccelKey& shortcut);
+    bool remove_user_shortcut(Glib::ustring name, const Gtk::AccelKey& shortcut);
     bool clear_user_shortcuts();
 
     // Utility
-    static Glib::ustring get_label(unsigned long long int shortcut);
+    static Glib::ustring get_label(const Gtk::AccelKey& shortcut);
     static Glib::ustring get_modifiers_verb(unsigned int mod_val);
-    static unsigned long long int get_from_event(GdkEventKey const *event);
+    static Gtk::AccelKey get_from_event(GdkEventKey const *event);
     std::vector<Glib::ustring> list_all_actions();
 
     // Will disappear after verbs are gone. (Use Gtk::AccelGroup functions instead for actions.)
-    Glib::ustring shortcut_to_accelerator(unsigned long long int shortcut);
-    unsigned long long int accelerator_to_shortcut(Glib::ustring& accelerator);
+    Glib::ustring shortcut_to_accelerator(const Gtk::AccelKey& shortcut);
+    Gtk::AccelKey accelerator_to_shortcut(const Glib::ustring& accelerator);
 
     // Will disappear after verbs are gone. 
     void add_accelerator(Gtk::Widget *widget, Verb* verb);
@@ -106,9 +116,9 @@ private:
     Glib::RefPtr<Gtk::Application> app;
     std::map<Glib::ustring, bool> action_user_set;
 
-    //Legacy verbs
-    std::map<unsigned long long int, Inkscape::Verb*> shortcut_to_verb_map;
-    std::map<Inkscape::Verb *, unsigned long long int> primary;  // Shown in menus, etc.
+    // Legacy verbs
+    std::map<Gtk::AccelKey, Inkscape::Verb*, accel_key_comp> shortcut_to_verb_map;
+    std::map<Inkscape::Verb *, Gtk::AccelKey> primary;  // Shown in menus, etc.
     std::map<Inkscape::Verb *, bool> user_set;
 };
 

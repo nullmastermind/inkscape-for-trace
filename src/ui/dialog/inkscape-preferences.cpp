@@ -2809,7 +2809,7 @@ void InkscapePreferences::initKeyboardShortcuts(Gtk::TreeModel::iterator iter_ui
     (*iter_group)[_kb_columns.shortcut] = "";
     (*iter_group)[_kb_columns.id] = "";
     (*iter_group)[_kb_columns.description] = "";
-    (*iter_group)[_kb_columns.shortcutid] = 0;
+    (*iter_group)[_kb_columns.shortcutid] = Gtk::AccelKey();
     (*iter_group)[_kb_columns.user_set] = 0;
 
 }
@@ -2849,7 +2849,7 @@ void InkscapePreferences::onKBTreeCleared(const Glib::ustring& path)
 {
     Gtk::TreeModel::iterator iter = _kb_filter->get_iter(path);
     Glib::ustring id = (*iter)[_kb_columns.id];
-    unsigned long long int const current_shortcut_id = (*iter)[_kb_columns.shortcutid];
+    Gtk::AccelKey current_shortcut_id = (*iter)[_kb_columns.shortcutid];
 
     // Remove current shortcut from file
     Inkscape::Shortcuts::getInstance().remove_user_shortcut(id, current_shortcut_id);
@@ -2865,15 +2865,18 @@ void InkscapePreferences::onKBTreeEdited (const Glib::ustring& path, guint accel
 
     Glib::ustring id = (*iter)[_kb_columns.id];
     Glib::ustring current_shortcut = (*iter)[_kb_columns.shortcut];
-    unsigned long long int const current_shortcut_id = (*iter)[_kb_columns.shortcutid];
+    Gtk::AccelKey const current_shortcut_id = (*iter)[_kb_columns.shortcutid];
 
     GdkEventKey event;
     event.keyval = accel_key;
     event.state = accel_mods;
     event.hardware_keycode = hardware_keycode;
-    unsigned long long int const new_shortcut_id =  shortcuts.get_from_event(&event);
+    Gtk::AccelKey const new_shortcut_id =  shortcuts.get_from_event(&event);
 
-    if (new_shortcut_id && (new_shortcut_id != current_shortcut_id)) {
+    if (!new_shortcut_id.is_null() &&
+        (new_shortcut_id.get_key() != current_shortcut_id.get_key() ||
+         new_shortcut_id.get_mod() != current_shortcut_id.get_mod())
+        ) {
         // check if there is currently a verb assigned to this shortcut; if yes ask if the shortcut should be reassigned
         Glib::ustring action_name;
         Inkscape::Verb *current_verb = shortcuts.get_verb_from_shortcut(new_shortcut_id);
@@ -3024,7 +3027,7 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
             (*iter_group)[_kb_columns.shortcut] = "";
             (*iter_group)[_kb_columns.id] = "";
             (*iter_group)[_kb_columns.description] = "";
-            (*iter_group)[_kb_columns.shortcutid] = 0;
+            (*iter_group)[_kb_columns.shortcutid] = Gtk::AccelKey();
             (*iter_group)[_kb_columns.user_set] = 0;
         }
 
@@ -3036,9 +3039,9 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
         }
 
         // Get the shortcut label
-        unsigned long long int shortcut_id = shortcuts.get_shortcut_from_verb(verb);
+        Gtk::AccelKey shortcut_id = shortcuts.get_shortcut_from_verb(verb);
         Glib::ustring shortcut_label = "";
-        if (shortcut_id != GDK_KEY_VoidSymbol) {
+        if (!shortcut_id.is_null()) {
             shortcut_label = Glib::Markup::escape_text(shortcuts.get_label(shortcut_id));
         }
         // Add the verb to the group
@@ -3089,7 +3092,7 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
             (*iter_group)[_kb_columns.name] = name;
             (*iter_group)[_kb_columns.shortcut] = "";
             (*iter_group)[_kb_columns.description] = "";
-            (*iter_group)[_kb_columns.shortcutid] = 0;
+            (*iter_group)[_kb_columns.shortcutid] = Gtk::AccelKey();
             (*iter_group)[_kb_columns.id] = "";
             (*iter_group)[_kb_columns.user_set] = 0;
             old_section = section;
@@ -3116,12 +3119,12 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
         }
 
         // Find primary (i.e. first) shortcut.
-        unsigned long long int shortcut_id = 0;
+        Gtk::AccelKey shortcut_id;
         if (accels.size() > 0) {
             unsigned int key = 0;
             Gdk::ModifierType mod = Gdk::ModifierType(0);
             Gtk::AccelGroup::parse(accels[0], key, mod);
-            shortcut_id = key + ((unsigned long long int)mod << 32);
+            shortcut_id = Gtk::AccelKey(key, mod);
         }
 
         // Add the action to the group

@@ -96,8 +96,8 @@ Dialog::Dialog(Behavior::BehaviorFactory behavior_factory, const char *prefs_pat
                 _title = atitle;
             }
 
-            unsigned long long int shortcut = Inkscape::Shortcuts::getInstance().get_shortcut_from_verb(action->verb);
-            if (shortcut != GDK_KEY_VoidSymbol) {
+            Gtk::AccelKey shortcut = Inkscape::Shortcuts::getInstance().get_shortcut_from_verb(action->verb);
+            if (!shortcut.is_null()) {
                 Glib::ustring key = Inkscape::Shortcuts::get_label(shortcut);
                 if (!key.empty()) {
                     _title += " (" + key + ")";

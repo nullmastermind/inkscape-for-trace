@@ -220,8 +220,8 @@ Button::set_composed_tooltip(SPAction *action)
             tip = action->tip;
         }
 
-        unsigned long long int shortcut = Inkscape::Shortcuts::getInstance().get_shortcut_from_verb(action->verb);
-        if (shortcut != GDK_KEY_VoidSymbol) {
+        Gtk::AccelKey shortcut = Inkscape::Shortcuts::getInstance().get_shortcut_from_verb(action->verb);
+        if (shortcut.get_key() != GDK_KEY_VoidSymbol) {
             // Action with shortcut.
             Glib::ustring key = Inkscape::Shortcuts::get_label(shortcut);
             if (!key.empty()) {
