@@ -392,6 +392,9 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
 {
     using namespace Inkscape::LivePathEffect;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+
+    auto *desktop = dc->getDesktop();
+
     if (item && SP_IS_LPE_ITEM(item)) {
         //Store the clipboard path to apply in the future without the use of clipboard
         static Geom::PathVector previous_shape_pathv;
@@ -409,7 +412,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
         Inkscape::UI::ClipboardManager *cm = Inkscape::UI::ClipboardManager::get();
         if (is_bend && 
            (shape == BEND_CLIPBOARD || (shape == LAST_APPLIED && previous_shape_type != CLIPBOARD)) && 
-            cm->paste(SP_ACTIVE_DESKTOP,true))
+            cm->paste(desktop, true))
         {
             bend_item = dc->selection->singleItem();
             if(!bend_item || (!SP_IS_SHAPE(bend_item) && !SP_IS_GROUP(bend_item))){
@@ -519,7 +522,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
             {
                 // take shape from clipboard;
                 Inkscape::UI::ClipboardManager *cm = Inkscape::UI::ClipboardManager::get();
-                if(cm->paste(SP_ACTIVE_DESKTOP,true)){
+                if(cm->paste(desktop,true)){
                     SPItem * pasted_clipboard = dc->selection->singleItem();
                     dc->selection->toCurves();
                     pasted_clipboard = dc->selection->singleItem();
@@ -553,7 +556,6 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
                 if(bend_item && (SP_IS_SHAPE(bend_item) || SP_IS_GROUP(bend_item))){
                     // If item is a SPRect, convert it to path first:
                     if ( dynamic_cast<SPRect *>(bend_item) ) {
-                        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
                         if (desktop) {
                             Inkscape::Selection *sel = desktop->getSelection();
                             if ( sel && !sel->isEmpty() ) {
@@ -1038,7 +1040,7 @@ void spdc_create_single_dot(ToolBase *ec, Geom::Point const &pt, char const *too
     double stroke_width = 3.0;
     gchar const *style_str = repr->attribute("style");
     if (style_str) {
-        SPStyle style(SP_ACTIVE_DOCUMENT);
+        SPStyle style(desktop->doc());
         style.mergeString(style_str);
         stroke_width = style.stroke_width.computed;
     }

@@ -26,7 +26,6 @@
 #include <2geom/svg-path-parser.h>
 
 #include "desktop.h"
-#include "inkscape.h"
 
 #include "context-fns.h"
 #include "desktop-style.h"
@@ -716,7 +715,7 @@ static inline double square(double const x) { return x * x; }
 void PencilTool::addPowerStrokePencil()
 {
     {
-        SPDocument *document = SP_ACTIVE_DOCUMENT;
+        SPDocument *document = desktop->doc();
         if (!document) {
             return;
         }
@@ -737,7 +736,7 @@ void PencilTool::addPowerStrokePencil()
                 curvepressure->curveto(b[4 * c + 1], b[4 * c + 2], b[4 * c + 3]);
             }
         }
-        Geom::Affine transform_coordinate = SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->i2dt_affine().inverse();
+        Geom::Affine transform_coordinate = SP_ITEM(desktop->currentLayer())->i2dt_affine().inverse();
         curvepressure->transform(transform_coordinate);
         Geom::Path path = curvepressure->get_pathvector()[0];
 
@@ -753,7 +752,7 @@ void PencilTool::addPowerStrokePencil()
             pp->setAttribute("id", "power_stroke_preview");
             Inkscape::GC::release(pp);
 
-            SPShape *powerpreview = SP_SHAPE(SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->appendChildRepr(pp));
+            SPShape *powerpreview = SP_SHAPE(SP_ITEM(desktop->currentLayer())->appendChildRepr(pp));
             SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(powerpreview);
             if (!lpeitem) {
                 return;
@@ -764,7 +763,7 @@ void PencilTool::addPowerStrokePencil()
                 tol = tol / (130.0 * (132.0 - tol));
                 Inkscape::SVGOStringStream threshold;
                 threshold << tol;
-                Effect::createAndApply(SIMPLIFY, desktop->doc(), SP_ITEM(lpeitem));
+                Effect::createAndApply(SIMPLIFY, document, SP_ITEM(lpeitem));
                 Effect *lpe = lpeitem->getCurrentLPE();
                 Inkscape::LivePathEffect::LPESimplify *simplify =
                     static_cast<Inkscape::LivePathEffect::LPESimplify *>(lpe);
@@ -801,7 +800,7 @@ void PencilTool::addPowerStrokePencil()
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
             Glib::ustring pref_path_pp = "/live_effects/powerstroke/powerpencil";
             prefs->setBool(pref_path_pp, true);
-            Effect::createAndApply(POWERSTROKE, SP_ACTIVE_DESKTOP->doc(), lpeitem);
+            Effect::createAndApply(POWERSTROKE, document, lpeitem);
             Effect *lpe = lpeitem->getCurrentLPE();
             Inkscape::LivePathEffect::LPEPowerStroke *pspreview = static_cast<LPEPowerStroke *>(lpe);
             if (pspreview) {
