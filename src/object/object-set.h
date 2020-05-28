@@ -280,7 +280,9 @@ public:
     }
     
     /**
-     * Selects exactly the specified objects.
+     * Selects the objects with the same IDs as those in `list`.
+     *
+     * @todo How about adding `setIdList(std::vector<Glib::ustring> const &list)`
      * 
      * @param list the repr list to add
      */

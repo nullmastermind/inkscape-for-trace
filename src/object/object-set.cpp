@@ -268,8 +268,13 @@ void ObjectSet::setReprList(std::vector<XML::Node*> const &list) {
         return;
     clear();
     for (auto iter = list.rbegin(); iter != list.rend(); ++iter) {
+#if 0
+        // This can fail when pasting a clone into a new document
         SPObject *obj = document()->getObjectByRepr(*iter);
         assert(obj == document()->getObjectById((*iter)->attribute("id")));
+#else
+        SPObject *obj = document()->getObjectById((*iter)->attribute("id"));
+#endif
         if (obj) {
             add(obj, true);
         }
