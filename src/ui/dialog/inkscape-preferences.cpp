@@ -2871,7 +2871,7 @@ void InkscapePreferences::onKBTreeEdited (const Glib::ustring& path, guint accel
     event.keyval = accel_key;
     event.state = accel_mods;
     event.hardware_keycode = hardware_keycode;
-    Gtk::AccelKey const new_shortcut_id =  shortcuts.get_from_event(&event);
+    Gtk::AccelKey const new_shortcut_id =  shortcuts.get_from_event(&event, true);
 
     if (!new_shortcut_id.is_null() &&
         (new_shortcut_id.get_key() != current_shortcut_id.get_key() ||
@@ -3062,13 +3062,14 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
 
     // Gio::Actions
 
-
-    ConcreteInkscapeApplication<Gtk::Application>* app = &(ConcreteInkscapeApplication<Gtk::Application>::get_instance());
+    auto app = Gio::Application::get_default();
+    auto iapp = dynamic_cast<InkscapeApplication*>(app.get());
+    auto gapp = dynamic_cast<Gtk::Application*>(app.get());
 
     // std::vector<Glib::ustring> actions = shortcuts.list_all_actions(); // All actions (app, win, doc)
 
     // Simpler and better to get action list from extra data (contains "detailed action names").
-    InkActionExtraData& action_data = app->get_action_extra_data();
+    InkActionExtraData& action_data = iapp->get_action_extra_data();
     std::vector<Glib::ustring> actions = action_data.get_actions();
 
     // Sort actions by section
@@ -3099,7 +3100,7 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
         }
 
         // Find accelerators
-        std::vector<Glib::ustring> accels = app->get_accels_for_action(action);
+        std::vector<Glib::ustring> accels = gapp->get_accels_for_action(action);
         Glib::ustring shortcut_label;
         for (auto accel : accels) {
             // Convert to more user friendly notation.
@@ -3153,7 +3154,7 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
     }
 
     // Update all GUI text that includes shortcuts.
-    shortcuts.update_gui_text_recursive(app->Gtk::Application::get_active_window());
+    shortcuts.update_gui_text_recursive(iapp->get_active_window());
 }
 
 void InkscapePreferences::initPageSpellcheck()

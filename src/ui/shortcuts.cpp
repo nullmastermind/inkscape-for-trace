@@ -727,7 +727,7 @@ Shortcuts::accelerator_to_shortcut(const Glib::ustring& accelerator)
  *               otherwise lower case and uper case keys are treated as equivalent.
  */
 Gtk::AccelKey
-Shortcuts::get_from_event(GdkEventKey const *event)
+Shortcuts::get_from_event(GdkEventKey const *event, bool fix)
 {
     Gdk::ModifierType initial_modifiers  = Gdk::ModifierType(event->state);
     unsigned int consumed_modifiers = 0;
@@ -739,13 +739,22 @@ Shortcuts::get_from_event(GdkEventKey const *event)
     // convert to lower case and don't consume the "shift" modifier.
     bool is_case_convertible = !(gdk_keyval_is_upper(keyval) && gdk_keyval_is_lower(keyval));
     if (is_case_convertible) {
-        keyval = gdk_keyval_to_lower(keyval);  // keyval not actually used! (copied from legacy code)
+        keyval = gdk_keyval_to_lower(keyval);
         consumed_modifiers &= ~ Gdk::SHIFT_MASK;
     }
 
-    // std::cout << "  Keyval:    " << std::hex << keyval << std::endl;
-    // std::cout << "  Modifiers: " << std::hex << (initial_modifiers & ~consumed_modifiers) << std::endl;
-    return (Gtk::AccelKey(event->keyval, Gdk::ModifierType(initial_modifiers &~ consumed_modifiers)));
+    // The InkscapePreferences dialog returns an event structure where the Shift modifier is not
+    // set for keys like '('. This causes '(' to be converted to '9' by get_latin_keyval. It also
+    // returns 'Shift-k' for 'K' (instead of 'Shift-K') but this is not a problem.
+    // We fix this by restoring keyval to its original value.
+    if (fix) {
+        keyval = event->keyval;
+    }
+
+    // std::cout << "Shortcuts::get_from_event: End:   "
+    //           << " Key: " << std::hex << keyval << " (" << (char)keyval << ")"
+    //           << " Mod: " << std::hex << (initial_modifiers &~ consumed_modifiers) << std::endl;
+    return (Gtk::AccelKey(keyval, Gdk::ModifierType(initial_modifiers &~ consumed_modifiers)));
 }
 
 

@@ -30,7 +30,7 @@ class Document;
 class Node;
 }
 
-struct accel_key_comp
+struct accel_key_less
 {
     bool operator()(const Gtk::AccelKey& key1, const Gtk::AccelKey& key2) const
     {
@@ -87,7 +87,7 @@ public:
     // Utility
     static Glib::ustring get_label(const Gtk::AccelKey& shortcut);
     static Glib::ustring get_modifiers_verb(unsigned int mod_val);
-    static Gtk::AccelKey get_from_event(GdkEventKey const *event);
+    static Gtk::AccelKey get_from_event(GdkEventKey const *event, bool fix = false);
     std::vector<Glib::ustring> list_all_actions();
 
     // Will disappear after verbs are gone. (Use Gtk::AccelGroup functions instead for actions.)
@@ -117,7 +117,7 @@ private:
     std::map<Glib::ustring, bool> action_user_set;
 
     // Legacy verbs
-    std::map<Gtk::AccelKey, Inkscape::Verb*, accel_key_comp> shortcut_to_verb_map;
+    std::map<Gtk::AccelKey, Inkscape::Verb*, accel_key_less> shortcut_to_verb_map;
     std::map<Inkscape::Verb *, Gtk::AccelKey> primary;  // Shown in menus, etc.
     std::map<Inkscape::Verb *, bool> user_set;
 };
