@@ -324,7 +324,7 @@ void sp_bspline_do_effect(SPCurve *curve, double helper_size, Geom::PathVector &
         if (path_it.closed()) {
             curve_n->closepath_current();
         }
-        curve->append(curve_n, false);
+        curve->append(*curve_n, false);
         curve_n->reset();
         delete curve_n;
     }
@@ -466,7 +466,7 @@ void LPEBSpline::doBSplineFromWidget(SPCurve *curve, double weight_ammount)
         if (path_it.closed()) {
             curve_n->closepath_current();
         }
-        curve->append(curve_n, false);
+        curve->append(*curve_n, false);
         curve_n->reset();
         delete curve_n;
     }

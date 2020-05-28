@@ -398,9 +398,6 @@ static void insert_text_fallback( Inkscape::XML::Node *repr, SPDocument *origina
             // For round-tripping, xml:space (or 'white-space:pre') must be set.
             repr->setAttribute("xml:space", "preserve");
 
-            Geom::Point text_anchor_point = text->layout.characterAnchorPoint(text->layout.begin());
-            // std::cout << "  text_anchor_point: " << text_anchor_point << std::endl;
-
             double text_x = 0.0;
             double text_y = 0.0;
             sp_repr_get_double(repr, "x", &text_x);

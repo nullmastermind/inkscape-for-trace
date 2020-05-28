@@ -185,7 +185,6 @@ void PathVectorSatellites::updateSatelliteType(SatelliteType satellitetype, bool
                 continue;
             }
             if (only_selected) {
-                Geom::Point satellite_point = _pathvector[i].pointAt(j);
                 if (_satellites[i][j].selected) {
                     _satellites[i][j].satellite_type = satellitetype;
                 }

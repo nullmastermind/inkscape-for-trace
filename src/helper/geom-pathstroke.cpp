@@ -392,10 +392,8 @@ void extrapolate_join_internal(join_data jd, int alternative)
     // END TESTING
 
     Geom::Point center1 = circle1.center();
-    Geom::Point center2 = circle2.center();
     double side1 = tang1[Geom::X]*(startPt[Geom::Y]-center1[Geom::Y]) - tang1[Geom::Y]*(startPt[Geom::X]-center1[Geom::X]);
-    // double side2 = tang2[Geom::X]*(  endPt[Geom::Y]-center2[Geom::Y]) - tang2[Geom::Y]*(  endPt[Geom::X]-center2[Geom::X]);
-    // std::cout << "  side1: " << side1 << "  side2: " << side2 << std::endl;
+    // std::cout << "  side1: " << side1 << std::endl;
 
     bool inc_ls = !circle1.center().isFinite();
     bool out_ls = !circle2.center().isFinite();

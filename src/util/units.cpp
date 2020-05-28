@@ -51,11 +51,6 @@ enum UnitCode {
 };
 
 // TODO: convert to constexpr in C++11, so that the above constants can be eliminated
-inline unsigned make_unit_code(char a, char b) {
-    // this should work without the casts, but let's be 100% sure
-    // also ensure that the codes are in lowercase
-    return MAKE_UNIT_CODE(a,b);
-}
 inline unsigned make_unit_code(char const *str) {
     if (!str || str[0] == 0) return 0;
     return MAKE_UNIT_CODE(str[0], str[1]);

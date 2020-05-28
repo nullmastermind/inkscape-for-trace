@@ -1750,7 +1750,6 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
     } else {
         if (desktop && desktop->event_context && desktop->xrayMode()) {
             sp_reset_spliter(canvas);
-            Geom::Point prev_orig = canvas->_xray_orig;
             canvas->_xray_orig = desktop->point(true);
             canvas->_xray_orig *= desktop->current_zoom();
             if (!SP_ACTIVE_DOCUMENT->is_yaxisdown()) {
