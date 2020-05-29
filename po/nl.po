@@ -59,15 +59,15 @@ msgstr ""
 "Project-Id-Version: inkscape 1.0\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2020-04-20 22:19+0200\n"
-"PO-Revision-Date: 2020-05-17 13:41+0100\n"
-"Last-Translator: Kris De Gussem <Kris.DeGussem@gmail.com>\n"
+"PO-Revision-Date: 2020-05-26 09:28+0200\n"
+"Last-Translator: Lars Acou <lars.acou@gmail.com>\n"
 "Language-Team: Dutch\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.6.7\n"
+"X-Generator: Poedit 2.3.1\n"
 
 #: ../share/filters/filters.svg.h:2
 msgid "Smart Jelly"
@@ -693,8 +693,7 @@ msgstr "Zwart gat"
 #: ../share/filters/filters.svg.h:279 ../share/filters/filters.svg.h:835
 #: ../share/filters/filters.svg.h:839 ../share/filters/filters.svg.h:843
 #: ../src/extension/internal/filter/morphology.h:77
-#: ../src/extension/internal/filter/morphology.h:204
-#: ../src/filter-enums.cpp:33
+#: ../src/extension/internal/filter/morphology.h:204 ../src/filter-enums.cpp:33
 msgid "Morphology"
 msgstr "Morfologie"
 
@@ -783,7 +782,7 @@ msgstr "Verstuiven"
 
 #: ../share/filters/filters.svg.h:272
 msgid "Convert to small scattered particles with some thickness"
-msgstr "Naar kleine verstrooide partikels met enige dikte omzetten"
+msgstr "Converteren naar kleine verspreide partikels met enige dikte"
 
 #: ../share/filters/filters.svg.h:274
 msgid "Warm Inside"
@@ -1407,7 +1406,7 @@ msgstr "Vulling en transparantie"
 #: ../share/filters/filters.svg.h:524
 msgid "Convert to a colorizable transparent positive or negative"
 msgstr ""
-"Naar een transparante positief of negatief omzetten met aanpasbare kleur"
+"Converteren naar een transparant positief of negatief met aanpasbare kleur"
 
 #: ../share/filters/filters.svg.h:526
 msgid "Saturation Map"
@@ -1616,7 +1615,7 @@ msgstr "Gelachtige verhoging"
 
 #: ../share/filters/filters.svg.h:624
 msgid "Convert pictures to thick jelly"
-msgstr "Afbeeldingen in dikke gel omzetten"
+msgstr "Afbeeldingen omzetten in dikke gel"
 
 #: ../share/filters/filters.svg.h:626
 msgid "Blend Opposites"
@@ -2028,7 +2027,7 @@ msgstr "Verzadigde vervaging"
 
 #: ../share/filters/filters.svg.h:840
 msgid "Converts blurred contour to posterized steps"
-msgstr "Vage contouren omzetten in verzadigde banden"
+msgstr "Vage contouren converteren naar verzadigde banden"
 
 #: ../share/filters/filters.svg.h:842
 msgid "Contouring Discrete"
@@ -4104,252 +4103,223 @@ msgid "no layers empty"
 msgstr "geen lagen leeg"
 
 #: ../src/actions/actions-base.cpp:221
-#, fuzzy
 msgid "Print Inkscape version and exit."
-msgstr "Inkscapeversie tonen"
+msgstr "Inkscapeversie tonen en afsluiten."
 
 #: ../src/actions/actions-base.cpp:222
-#, fuzzy
 msgid "Print system data directory and exit."
-msgstr "Naam van de uitbreidingenmap van het systeem tonen"
+msgstr "Mapnaam systeemdata tonen en afsluiten."
 
 #: ../src/actions/actions-base.cpp:223
 msgid "Print user data directory and exit."
-msgstr ""
+msgstr "Mapnaam gebruiker tonen en afsluiten."
 
 #: ../src/actions/actions-base.cpp:224
 msgid "Print a list of actions and exit."
-msgstr ""
+msgstr "Een lijst met acties afdrukken en afsluiten."
 
 #
 # File: ../src/inkscape-application.cpp, line: 599
 #: ../src/actions/actions-base.cpp:225
-#, fuzzy
 msgid "Print a list of verbs and exit."
-msgstr "Lijst van werkwoorden om uit te voeren"
+msgstr "Een lijst afdrukken van alle werkwoorden, en afsluiten."
 
 #: ../src/actions/actions-base.cpp:226
-#, fuzzy
 msgid "Execute verb(s)."
-msgstr "Het overtrekken starten"
+msgstr "Werkwoord(en) uitvoeren."
 
 #: ../src/actions/actions-base.cpp:227
-#, fuzzy
 msgid "Remove unused definitions (gradients, etc.)."
-msgstr "Er zijn geen ongebruikte definities in &lt;defs&gt;."
+msgstr "Ongebruikte definities verwijderen (kleurverlopen, etc.)."
 
 #: ../src/actions/actions-base.cpp:228
-#, fuzzy
 msgid "Immediately quit Inkscape."
-msgstr "Aan de slag met Inkscape"
+msgstr "Inkscape onmiddellijk afsluiten."
 
 #: ../src/actions/actions-base.cpp:230
-#, fuzzy
 msgid "Import page number."
-msgstr "Geheel getal"
+msgstr "Importeer paginanummer."
 
 #: ../src/actions/actions-base.cpp:231
 msgid "Import DPI convert method."
-msgstr ""
+msgstr "DPI-conversiemethode importeren."
 
 #: ../src/actions/actions-base.cpp:232
 #, fuzzy
 msgid "Import convert text baselines."
-msgstr "Grondlijnen van tekst verdelen"
+msgstr "Importeer conversie basislijnen tekst."
 
 #: ../src/actions/actions-base.cpp:234
-#, fuzzy
 msgid "Query 'x' value(s) of selected objects."
-msgstr "Masker(s) van geselecteerde object(en) tonen"
+msgstr "Vraag 'x' waarde van geselecteerd(e) object(en)."
 
 #: ../src/actions/actions-base.cpp:235
-#, fuzzy
 msgid "Query 'y' value(s) of selected objects."
-msgstr "Masker(s) van geselecteerde object(en) tonen"
+msgstr "Vraag 'y' waarde van geselecteerd(e) object(en)."
 
 #: ../src/actions/actions-base.cpp:236
 msgid "Query 'width' value(s) of object(s)."
-msgstr ""
+msgstr "Vraag 'breedte' waarde(n) van object(en)."
 
 #: ../src/actions/actions-base.cpp:237
 msgid "Query 'height' value(s) of object(s)."
-msgstr ""
+msgstr "Vraag 'hoogte' waarde(n) van object(en)."
 
 #: ../src/actions/actions-base.cpp:238
 msgid "Query 'x', 'y', 'width', and 'height'."
-msgstr ""
+msgstr "Vraag 'x', 'y', 'breedte' en 'hoogte'."
 
 #: ../src/actions/actions-file.cpp:94
-#, fuzzy
 msgid "Open file."
-msgstr "Open einde"
+msgstr "Bestand openen."
 
 #: ../src/actions/actions-file.cpp:95
-#, fuzzy
 msgid "Open new document using template."
-msgstr "Document opslaan als sjabloon"
+msgstr "Nieuw document openen met sjabloon."
 
 #: ../src/actions/actions-file.cpp:96
-#, fuzzy
 msgid "Close active document."
-msgstr "Overtrekken: geen actief document"
+msgstr "Actieve document sluiten."
 
 #: ../src/actions/actions-object.cpp:143
 msgid ""
 "Set or update an attribute on selected objects. Usage: object-set-attribute:"
 "attribute name, attribute value;"
 msgstr ""
+"Een attribuut instellen of bijwerken voor geselecteerde objecten. Gebruik: "
+"object-set-attribuut:attribuutnaam, attribuutwaarde;"
 
 #: ../src/actions/actions-object.cpp:144
 msgid ""
 "Set or update a property on selected objects. Usage: object-set-property:"
 "property name, property value;"
 msgstr ""
+"Een eigenschap instellen of bijwerken voor geselecteerde objecten. Gebruik: "
+"object-set-eigenschap:eigenschapnaam, eigenschapwaarde;"
 
 #: ../src/actions/actions-object.cpp:145
-#, fuzzy
 msgid "Unlink clones and symbols."
-msgstr "Kloon ontkoppelen"
+msgstr "Klonen en symbolen ontkoppelen."
 
 #: ../src/actions/actions-object.cpp:146
-#, fuzzy
 msgid "Convert shapes to paths."
-msgstr "Tekst naar paden omzetten"
+msgstr "Vormen converteren naar paden."
 
 #: ../src/actions/actions-object.cpp:147
-#, fuzzy
 msgid "Convert strokes to paths."
-msgstr "Omlijning omzetten naar pad"
+msgstr "Omlijningen converteren naar paden."
 
 #: ../src/actions/actions-object.cpp:148
 msgid "Simplify paths, reducing node counts."
-msgstr ""
+msgstr "Paden vereenvoudigen, waardoor het aantal knooppunten vermindert."
 
 #: ../src/actions/actions-output.cpp:216
-#, fuzzy
 msgid "Export file type."
-msgstr "Exporteren van %1 bestanden"
+msgstr "Bestandstype exporteren."
 
 #: ../src/actions/actions-output.cpp:217
-#, fuzzy
 msgid "Export file name."
-msgstr "Bestandsnaam kiezen"
+msgstr "Bestandsnaam exporteren."
 
 #: ../src/actions/actions-output.cpp:218
 #, fuzzy
 msgid "Export over-write file."
-msgstr "Export afgebroken."
+msgstr "Overschrijfbestand exporteren."
 
 #: ../src/actions/actions-output.cpp:220
-#, fuzzy
 msgid "Export area."
-msgstr "Export afgebroken."
+msgstr "Gebied exporteren."
 
 #: ../src/actions/actions-output.cpp:221
-#, fuzzy
 msgid "Export drawing area."
-msgstr "Bezig met exporteren"
+msgstr "Tekengebied exporteren."
 
 #: ../src/actions/actions-output.cpp:222
-#, fuzzy
 msgid "Export page area."
-msgstr "Export afgebroken."
+msgstr "Paginagebied exporteren."
 
 #: ../src/actions/actions-output.cpp:223
-#, fuzzy
 msgid "Export margin."
-msgstr "Export afgebroken."
+msgstr "Marge exporteren."
 
 #: ../src/actions/actions-output.cpp:224
+#, fuzzy
 msgid "Export snap area to integer values."
-msgstr ""
+msgstr "Kleefgebied naar gehele waarden exporteren."
 
 #: ../src/actions/actions-output.cpp:225
-#, fuzzy
 msgid "Export width."
-msgstr "Exporteren..."
+msgstr "Breedte exporteren."
 
 #: ../src/actions/actions-output.cpp:226
-#, fuzzy
 msgid "Export height."
-msgstr "Lettertypehoogte"
+msgstr "Hoogte exporteren."
 
 #: ../src/actions/actions-output.cpp:228
-#, fuzzy
 msgid "Export id(s)."
-msgstr "Exporteren..."
+msgstr "Id('s) exporteren."
 
 #: ../src/actions/actions-output.cpp:229
-#, fuzzy
 msgid "Export id(s) only."
-msgstr "Exportopties"
+msgstr "Enkel id('s) exporteren."
 
 #: ../src/actions/actions-output.cpp:231
 msgid "Export as plain SVG."
-msgstr ""
+msgstr "Exporteren als eenvoudige SVG."
 
 #: ../src/actions/actions-output.cpp:232
-#, fuzzy
 msgid "Export DPI."
-msgstr "Exporteren..."
+msgstr "DPI exporteren."
 
 #: ../src/actions/actions-output.cpp:233
-#, fuzzy
 msgid "Export ignore filters."
-msgstr "Exporteren van %1 bestanden"
+msgstr "Genegeerde filters exporteren."
 
 #: ../src/actions/actions-output.cpp:234
-#, fuzzy
 msgid "Export convert text to paths."
-msgstr "Tekst naar paden omzetten"
+msgstr "Exporteer conversie tekst naar paden."
 
 #: ../src/actions/actions-output.cpp:235
-#, fuzzy
 msgid "Export PostScript level."
-msgstr "PostScript niveau 3"
+msgstr "Postscriptlevel exporteren."
 
 #: ../src/actions/actions-output.cpp:236
-#, fuzzy
 msgid "Export PDF version."
-msgstr "Beperken tot PDF-versie:"
+msgstr "PDF-versie exporteren."
 
 #: ../src/actions/actions-output.cpp:237
-#, fuzzy
 msgid "Export LaTeX."
-msgstr "Export afgebroken."
+msgstr "LaTeX exporteren."
 
 #: ../src/actions/actions-output.cpp:238
 #, fuzzy
 msgid "Export using saved hints."
-msgstr "Exporteren van %1 bestanden"
+msgstr "Exporteren met gebruik van opgeslagen tips."
 
 #: ../src/actions/actions-output.cpp:239
-#, fuzzy
 msgid "Export background color."
-msgstr "Achtergrondkleur"
+msgstr "Achtergrondkleur exporteren."
 
 #: ../src/actions/actions-output.cpp:240
-#, fuzzy
 msgid "Export background opacity."
-msgstr "Ondoorzichtigheid achtergrond"
+msgstr "Transparantie achtergrond exporteren."
 
 #: ../src/actions/actions-output.cpp:242
-#, fuzzy
 msgid "Do export."
-msgstr "SVG-export"
+msgstr "SVG-export."
 
 #: ../src/actions/actions-selection.cpp:238
-#, fuzzy
 msgid "Selection clear"
-msgstr "Selectiegebied"
+msgstr "Selectie wissen"
 
 #: ../src/actions/actions-selection.cpp:239
+#, fuzzy
 msgid "Select by ID (Deprecated)"
-msgstr ""
+msgstr "Selecteren per ID (verouderd)"
 
 #: ../src/actions/actions-selection.cpp:240
 msgid "Unselect by ID (Deprecated)"
-msgstr ""
+msgstr "Deselecteer per ID (verouderd)"
 
 #: ../src/actions/actions-selection.cpp:241
 #, fuzzy
@@ -4358,19 +4328,19 @@ msgstr "Selecteren"
 
 #: ../src/actions/actions-selection.cpp:242
 msgid "Unselect by ID"
-msgstr ""
+msgstr "Deselecteer per ID"
 
 # De volgende zes strings beschrijven wat enkele toetsen doen.
 # Een kleine letter maakt duidelijker dat ze een voortzetting zijn.
 #: ../src/actions/actions-selection.cpp:243
 #, fuzzy
 msgid "Select by class"
-msgstr "In alle lagen selecteren"
+msgstr "Selecteren per klasse"
 
 #: ../src/actions/actions-selection.cpp:244
 #, fuzzy
 msgid "Select by SVG element (e.g. 'rect')."
-msgstr "Geselecteerd SVG element"
+msgstr "Selecteren per SVG element (bv. 'rect')."
 
 #: ../src/actions/actions-selection.cpp:245
 #, fuzzy
@@ -4378,52 +4348,53 @@ msgid "Select by CSS selector"
 msgstr "CSS selector"
 
 #: ../src/actions/actions-selection.cpp:246
+#, fuzzy
 msgid ""
 "Select all. Options: 'all' (every object including groups), 'layers', 'no-"
 "layers' (top level objects in layers), 'groups' (all groups including "
 "layers), 'no-groups' (all objects other than groups and layers, default)."
 msgstr ""
+"Selecteer alles. Opties: 'all' (elk object incl. groepen), 'layers', 'no-"
+"layers' (top level objecten in lagen), 'groups' (alle groepen incl. lagen), "
+"'no-groups' (alle objecten behalve groepen en lagen, standaard)."
 
 #: ../src/actions/actions-selection.cpp:247
+#, fuzzy
 msgid ""
 "Invert selection. Options: 'all', 'layers', 'no-layers', 'groups', 'no-"
 "groups' (default)."
 msgstr ""
+"Selectie omkeren. Opties: 'all', 'layers', 'no-layers', 'groups', 'no-"
+"groups' (default)."
 
 #: ../src/actions/actions-selection.cpp:248
-#, fuzzy
 msgid "Print a list of objects in current selection."
-msgstr "Het zoeken beperken tot de selectie"
+msgstr "Een lijst afdrukken van alle objecten in de huidige selectie."
 
 #: ../src/actions/actions-transform.cpp:89
-#, fuzzy
 msgid "Translate selected objects (dx,dy)."
-msgstr "Geselecteerde objecten ordenen"
+msgstr "Geselecteerde objecten vertalen (dx, dy)."
 
 #: ../src/actions/actions-transform.cpp:90
-#, fuzzy
 msgid "Rotate selected objects by degrees."
-msgstr "Geselecteerde objecten vergroten"
+msgstr "Geselecteerde objecten draaien in graden."
 
 #: ../src/actions/actions-transform.cpp:91
 #, fuzzy
 msgid "Scale selected objects by scale factor."
-msgstr "Geselecteerde objecten verkleinen"
+msgstr "Geselecteerde objecten schalen met factor."
 
 #: ../src/actions/actions-transform.cpp:92
-#, fuzzy
 msgid "Remove any transforms from selected objects."
-msgstr "Alle filters van geselecteerde objecten verwijderen"
+msgstr "Alle filters van geselecteerde objecten verwijderen."
 
 #: ../src/actions/actions-window.cpp:54
-#, fuzzy
 msgid "Open a window for the active document. GUI only."
-msgstr "Een nieuw venster met hetzelfde document openen"
+msgstr "Een nieuw venster met hetzelfde document openen."
 
 #: ../src/actions/actions-window.cpp:55
-#, fuzzy
 msgid "Close the active window."
-msgstr "Dit documentvenster sluiten"
+msgstr "Het actieve venster sluiten."
 
 #: ../src/auto-save.cpp:155
 msgid "Autosave failed! Could not find inkscape extension to save document."
@@ -4555,6 +4526,7 @@ msgid "_Major grid line every:"
 msgstr "Hoofdr_asterlijn elke:"
 
 #: ../src/display/canvas-axonomgrid.cpp:289 ../src/display/canvas-grid.cpp:679
+#, fuzzy
 msgid "lines"
 msgstr "rasterlijnen"
 
@@ -4744,7 +4716,7 @@ msgstr "paginahoek"
 
 #: ../src/display/snap-indicator.cpp:158
 msgid "quadrant point"
-msgstr "punt kwadrant"
+msgstr "kwadrantpunt"
 
 #: ../src/display/snap-indicator.cpp:162
 msgid "corner"
@@ -4820,7 +4792,7 @@ msgstr "Convexe hoek omhullende"
 
 #: ../src/display/snap-indicator.cpp:228
 msgid "Quadrant point"
-msgstr "Punt kwadrant"
+msgstr "Kwadrantpunt"
 
 #: ../src/display/snap-indicator.cpp:232
 msgid "Corner"
@@ -5017,8 +4989,8 @@ msgstr "Breedte:"
 #: ../src/extension/internal/bitmap/raise.cpp:44
 #: ../src/extension/internal/bitmap/sample.cpp:43
 #: ../src/ui/dialog/object-attributes.cpp:60
-#: ../src/ui/dialog/object-attributes.cpp:68
-#: ../src/ui/widget/page-sizer.cpp:60 ../share/extensions/foldablebox.inx:6
+#: ../src/ui/dialog/object-attributes.cpp:68 ../src/ui/widget/page-sizer.cpp:60
+#: ../share/extensions/foldablebox.inx:6
 #: ../share/extensions/template_desktop.inx:26
 #: ../share/extensions/template_video.inx:19
 msgid "Height:"
@@ -5690,7 +5662,7 @@ msgstr "Lettertypen invoegen"
 #: ../src/extension/internal/cairo-ps-out.cpp:378
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:251
 msgid "Convert text to paths"
-msgstr "Tekst naar paden omzetten"
+msgstr "Tekst converteren naar paden"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:337
 #: ../src/extension/internal/cairo-ps-out.cpp:379
@@ -5726,8 +5698,9 @@ msgstr "Paginagrootte document gebruiken"
 #: ../src/extension/internal/cairo-ps-out.cpp:343
 #: ../src/extension/internal/cairo-ps-out.cpp:385
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:258
+#, fuzzy
 msgid "Use exported object's size"
-msgstr "Objectgrootte gebruiken"
+msgstr "Grootte geëxporteerde object gebruiken"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:345
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:260
@@ -5901,7 +5874,7 @@ msgstr "EMF-uitvoer"
 #: ../src/extension/internal/emf-inout.cpp:3653
 #: ../src/extension/internal/wmf-inout.cpp:3232
 msgid "Convert texts to paths"
-msgstr "Tekst naar paden omzetten"
+msgstr "Tekst converteren naar paden"
 
 #: ../src/extension/internal/emf-inout.cpp:3654
 #: ../src/extension/internal/wmf-inout.cpp:3233
@@ -5921,7 +5894,7 @@ msgstr "Unicode naar lettertype Zapf Dingbats mappen"
 #: ../src/extension/internal/emf-inout.cpp:3657
 #: ../src/extension/internal/wmf-inout.cpp:3236
 msgid "Use MS Unicode PUA (0xF020-0xF0FF) for converted characters"
-msgstr "MS Unicode PUA (0xF020-0xF0FF) voor omgezette karakters gebruiken"
+msgstr "Gebruik MS Unicode PUA (0xF020-0xF0FF) voor geconverteerde karakters"
 
 #: ../src/extension/internal/emf-inout.cpp:3658
 #: ../src/extension/internal/wmf-inout.cpp:3237
@@ -5931,12 +5904,12 @@ msgstr "Compenseren voor PPT lettertypebug"
 #: ../src/extension/internal/emf-inout.cpp:3659
 #: ../src/extension/internal/wmf-inout.cpp:3238
 msgid "Convert dashed/dotted lines to single lines"
-msgstr "Streep-/puntlijnen naar enkele lijnen omzetten"
+msgstr "Streep-/puntlijnen naar enkele lijnen converteren"
 
 #: ../src/extension/internal/emf-inout.cpp:3660
 #: ../src/extension/internal/wmf-inout.cpp:3239
 msgid "Convert gradients to colored polygon series"
-msgstr "Gradiënten naar polygoonseries omzetten"
+msgstr "Gradiënten naar polygoonseries converteren"
 
 #: ../src/extension/internal/emf-inout.cpp:3661
 msgid "Use native rectangular linear gradients"
@@ -6514,15 +6487,13 @@ msgid "Transparency type:"
 msgstr "Type transparantie:"
 
 #: ../src/extension/internal/filter/bumps.h:354
-#: ../src/extension/internal/filter/morphology.h:177
-#: ../src/filter-enums.cpp:92
+#: ../src/extension/internal/filter/morphology.h:177 ../src/filter-enums.cpp:92
 msgid "Atop"
 msgstr "Bovenop"
 
 #: ../src/extension/internal/filter/bumps.h:355
 #: ../src/extension/internal/filter/distort.h:71
-#: ../src/extension/internal/filter/morphology.h:175
-#: ../src/filter-enums.cpp:90
+#: ../src/extension/internal/filter/morphology.h:175 ../src/filter-enums.cpp:90
 msgid "In"
 msgstr "In"
 
@@ -6735,7 +6706,7 @@ msgstr "Kleur 2"
 
 #: ../src/extension/internal/filter/color.h:612
 msgid "Convert luminance values to a duochrome palette"
-msgstr "Luminantiewaarden omzetten naar een twee-kleurenpalet"
+msgstr "Luminantiewaarden converteren naar een twee-kleurenpalet"
 
 #: ../src/extension/internal/filter/color.h:711
 msgid "Extract Channel"
@@ -6987,8 +6958,7 @@ msgid "Blend mode:"
 msgstr "Mengmodus:"
 
 #: ../src/extension/internal/filter/color.h:1577 ../src/filter-enums.cpp:64
-#: ../src/path/path-boolop.cpp:71
-#: ../src/ui/widget/filter-effect-chooser.cpp:37
+#: ../src/path/path-boolop.cpp:71 ../src/ui/widget/filter-effect-chooser.cpp:37
 msgid "Difference"
 msgstr "Verschil"
 
@@ -7028,8 +6998,7 @@ msgid "Hue"
 msgstr "Tint"
 
 #: ../src/extension/internal/filter/color.h:1586 ../src/filter-enums.cpp:65
-#: ../src/path/path-boolop.cpp:78
-#: ../src/ui/widget/filter-effect-chooser.cpp:38
+#: ../src/path/path-boolop.cpp:78 ../src/ui/widget/filter-effect-chooser.cpp:38
 msgid "Exclusion"
 msgstr "Uitsluiten"
 
@@ -7105,8 +7074,7 @@ msgid "Felt Feather"
 msgstr "Veren vilt"
 
 #: ../src/extension/internal/filter/distort.h:72
-#: ../src/extension/internal/filter/morphology.h:176
-#: ../src/filter-enums.cpp:91
+#: ../src/extension/internal/filter/morphology.h:176 ../src/filter-enums.cpp:91
 msgid "Out"
 msgstr "Uit"
 
@@ -7297,13 +7265,11 @@ msgstr "Afbeelding verbergen"
 msgid "Composite type:"
 msgstr "Composiettype:"
 
-#: ../src/extension/internal/filter/morphology.h:174
-#: ../src/filter-enums.cpp:89
+#: ../src/extension/internal/filter/morphology.h:174 ../src/filter-enums.cpp:89
 msgid "Over"
 msgstr "Erover"
 
-#: ../src/extension/internal/filter/morphology.h:178
-#: ../src/filter-enums.cpp:93
+#: ../src/extension/internal/filter/morphology.h:178 ../src/filter-enums.cpp:93
 msgid "XOR"
 msgstr "XOR"
 
@@ -7391,8 +7357,7 @@ msgstr "Ruis opvulling"
 #: ../share/extensions/gimp_xcf.inx:8 ../share/extensions/interp_att_g.inx:6
 #: ../share/extensions/jessyInk_uninstall.inx:6
 #: ../share/extensions/jitternodes.inx:6 ../share/extensions/layer2png.inx:6
-#: ../share/extensions/lorem_ipsum.inx:6
-#: ../share/extensions/output_scour.inx:7
+#: ../share/extensions/lorem_ipsum.inx:6 ../share/extensions/output_scour.inx:7
 #: ../share/extensions/path_mesh_m2p.inx:8
 #: ../share/extensions/path_mesh_p2m.inx:8
 #: ../share/extensions/path_number_nodes.inx:6
@@ -7501,7 +7466,8 @@ msgstr "Lengte"
 
 #: ../src/extension/internal/filter/paint.h:248
 msgid "Convert image to an engraving made of vertical and horizontal lines"
-msgstr "Afbeelding omzetten in gravure van verticale en horizontale lijnen"
+msgstr ""
+"Afbeelding converteren naar gravure van verticale en horizontale lijnen"
 
 #: ../src/extension/internal/filter/paint.h:332
 #: ../src/ui/dialog/align-and-distribute.cpp:1072
@@ -7548,7 +7514,7 @@ msgstr "Afbeelding op lijn"
 
 #: ../src/extension/internal/filter/paint.h:367
 msgid "Convert images to duochrome drawings"
-msgstr "Afbeelding in tweekleurentekening omzetten"
+msgstr "Afbeelding converteren naar tweekleurentekening"
 
 #: ../src/extension/internal/filter/paint.h:495
 msgid "Electrize"
@@ -7617,7 +7583,7 @@ msgstr "Afbeelding op punten"
 
 #: ../src/extension/internal/filter/paint.h:729
 msgid "Convert image to a transparent point engraving"
-msgstr "Afbeelding omzetten naar een transparante puntgravure"
+msgstr "Afbeelding converteren naar een transparante puntgravure"
 
 #: ../src/extension/internal/filter/paint.h:851
 msgid "Poster Paint"
@@ -7987,9 +7953,9 @@ msgstr "Verticale inspringing:"
 #: ../share/extensions/grid_isometric.inx:17
 #: ../share/extensions/grid_polar.inx:35
 #: ../share/extensions/guides_creator.inx:84 ../share/extensions/hershey.inx:7
-#: ../share/extensions/layout_nup.inx:64
-#: ../share/extensions/lindenmayer.inx:45 ../share/extensions/nicechart.inx:96
-#: ../share/extensions/param_curves.inx:41 ../share/extensions/pdflatex.inx:11
+#: ../share/extensions/layout_nup.inx:64 ../share/extensions/lindenmayer.inx:45
+#: ../share/extensions/nicechart.inx:96 ../share/extensions/param_curves.inx:41
+#: ../share/extensions/pdflatex.inx:11
 #: ../share/extensions/perfectboundcover.inx:33
 #: ../share/extensions/polyhedron_3d.inx:91
 #: ../share/extensions/printing_marks.inx:39
@@ -8115,8 +8081,8 @@ msgid ""
 "the precision set below."
 msgstr ""
 "Import via een interne bibliotheek (afgeleid van Poppler). Tekst wordt "
-"bewaard als tekst, maar witruimte ontbreekt. Meshes worden omgezet naar "
-"tegels waarvan het aantal afhangt van de hieronder ingestelde precisie."
+"bewaard als tekst, maar witruimte ontbreekt. Meshes worden geconverteerd "
+"naar tegels waarvan het aantal afhangt van de hieronder ingestelde precisie."
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:155
 msgid "rough"
@@ -8431,7 +8397,7 @@ msgstr ""
 
 #: ../src/file-update.cpp:379
 msgid "Convert legacy Inkscape file"
-msgstr "Naar legacy Inkscape bestand omzetten"
+msgstr "Naar legacy Inkscape bestand converteren"
 
 #: ../src/file-update.cpp:385
 msgid ""
@@ -8504,11 +8470,11 @@ msgid ""
 msgstr ""
 "<small>We hebben Inkscape geüpdatet conform de CSS standaard van 96 DPI voor "
 "betere browsercompatibiliteit; Voordien werd 90 DPI gehanteerd. \n"
-"Digitale illustraties voor schermweergave worden omgezet naar 96 DPI zonder "
-"schaling en zouden onaangetast blijven.\n"
+"Digitale illustraties voor schermweergave worden geconverteerd naar 96 DPI "
+"zonder schaling en zouden onaangetast blijven.\n"
 "Illustraties voor een specifieke fysieke grootte die zijn getekend bij 90 "
-"DPI zullen te klein zijn als ze zonder schaling worden omgezet naar 96 DPI. "
-"Er zijn twee methodes om te schalen:\n"
+"DPI zullen te klein zijn als ze zonder schaling worden geconverteerd naar 96 "
+"DPI. Er zijn twee methodes om te schalen:\n"
 "<b>Het hele document schalen:</b> De minst foutgevoelige methode. Dit "
 "behoudt het uiterlijk van de illustratie, inclusief filters, maskerposities, "
 "etc.\n"
@@ -8875,17 +8841,17 @@ msgstr "<b>Overgang</b> in radiaal kleurverloop"
 #: ../src/gradient-drag.cpp:99 ../src/ui/tools/gradient-tool.cpp:95
 #: ../src/ui/tools/mesh-tool.cpp:109
 msgid "Mesh gradient <b>corner</b>"
-msgstr "<b>Hoek</b> meshgradiënt"
+msgstr "<b>Hoek</b> mesh kleurverloop"
 
 #: ../src/gradient-drag.cpp:100 ../src/ui/tools/gradient-tool.cpp:96
 #: ../src/ui/tools/mesh-tool.cpp:110
 msgid "Mesh gradient <b>handle</b>"
-msgstr "<b>Handvat</b> meshgradiënt"
+msgstr "<b>Handvat</b> mesh kleurverloop"
 
 #: ../src/gradient-drag.cpp:101 ../src/ui/tools/gradient-tool.cpp:97
 #: ../src/ui/tools/mesh-tool.cpp:111
 msgid "Mesh gradient <b>tensor</b>"
-msgstr "<b>Tensor</b> meshgradiënt"
+msgstr "<b>Tensor</b> mesh kleurverloop"
 
 #: ../src/gradient-drag.cpp:551
 msgid "Added patch row or column"
@@ -9025,14 +8991,12 @@ msgid "Print Inkscape version"
 msgstr "Inkscapeversie tonen"
 
 #: ../src/inkscape-application.cpp:579
-#, fuzzy
 msgid "Print system data directory"
-msgstr "Naam van de uitbreidingenmap van het systeem tonen"
+msgstr "Mapnaam systeemdata tonen"
 
 #: ../src/inkscape-application.cpp:580
-#, fuzzy
 msgid "Print user data directory"
-msgstr "Naam van de uitbreidingenmap van het systeem tonen"
+msgstr "Mapnaam gebruiker tonen"
 
 #: ../src/inkscape-application.cpp:583
 msgid "File import"
@@ -9070,7 +9034,7 @@ msgstr ""
 
 #: ../src/inkscape-application.cpp:587
 msgid "METHOD"
-msgstr ""
+msgstr "METHODE"
 
 #
 # File: ../src/inkscape-application.cpp, line: 545
@@ -9085,31 +9049,33 @@ msgstr "Bestand exporteren"
 #
 # File: ../src/inkscape-application.cpp, line: 549
 #: ../src/inkscape-application.cpp:592
-#, fuzzy
 msgid ""
 "Output file name (defaults to input filename; file type is guessed from "
 "extension if present; use '-' to write to stdout)"
-msgstr "Uitvoerbestand (bestandstype wordt afgeleid uit de extensie)"
+msgstr ""
+"Naam uitvoerbestand (standaard is naam inputbestand; bestandstype wordt "
+"afgeleid uit de extensie indien gegeven; gebruik '-' om te schrijven naar "
+"stdout)"
 
 #: ../src/inkscape-application.cpp:592
-#, fuzzy
 msgid "FILENAME"
-msgstr "EXPORT-BESTANDSNAAM"
+msgstr "BESTANDSNAAM"
 
 #: ../src/inkscape-application.cpp:593
 msgid ""
 "Overwrite input file (otherwise add '_out' suffix if type doesn't change"
 msgstr ""
+"Overschrijf invoerbestand (anders '_out' toevoegen als het type niet wijzigt)"
 
 #
 #: ../src/inkscape-application.cpp:594
 #, fuzzy
 msgid "File type(s) to export: [svg,png,ps,eps,pdf,emf,wmf,xaml]"
-msgstr "Bestandstypes voor export: [svg,png,ps,eps,pdf,tex,emf,wmf,xaml]"
+msgstr "Bestandstypes voor export: [svg,png,ps,eps,pdf,emf,wmf,xaml]"
 
 #: ../src/inkscape-application.cpp:594
 msgid "TYPE[,TYPE]*"
-msgstr ""
+msgstr "TYPE[,TYPE]*"
 
 #: ../src/inkscape-application.cpp:597
 msgid "Export geometry"
@@ -9169,13 +9135,14 @@ msgstr "HOOGTE"
 #
 # File: ../src/inkscape-application.cpp, line: 562
 #: ../src/inkscape-application.cpp:605
-#, fuzzy
 msgid "Margin around export area: units of page size for SVG, mm for PS/PDF"
-msgstr "Marge rond exportgebied: paginaeenheden voor SVG, mm voor PS/EPS/PDF"
+msgstr ""
+"Marge rond exportgebied: eenheden van paginagrootte voor SVG, mm voor PS/EPS/"
+"PDF"
 
 #: ../src/inkscape-application.cpp:605
 msgid "MARGIN"
-msgstr ""
+msgstr "MARGE"
 
 #: ../src/inkscape-application.cpp:608
 msgid "Export options"
@@ -9207,28 +9174,27 @@ msgid "Postscript level (2 or 3); default is 3"
 msgstr "Postscript level 2 of 3, standaard 3"
 
 #: ../src/inkscape-application.cpp:612
+#, fuzzy
 msgid "LEVEL"
-msgstr ""
+msgstr "NIVEAU"
 
 #
 # File: ../src/inkscape-application.cpp, line: 570
 #: ../src/inkscape-application.cpp:613
-#, fuzzy
 msgid "PDF version (1.4 or 1.5); default is 1.5"
-msgstr "PDF (versie 1.4 of 1.5)"
+msgstr "PDF versie (1.4 of 1.5); standaard is 1.5"
 
 #: ../src/inkscape-application.cpp:613
-#, fuzzy
 msgid "VERSION"
-msgstr "PDF-VERSION"
+msgstr "VERSIE"
 
 #: ../src/inkscape-application.cpp:614
 msgid "Convert text to paths (PS/EPS/PDF/SVG)"
-msgstr "Tekst omzetten naar paden (PS/EPS/PDF/SVG)"
+msgstr "Tekst converteren naar paden (PS/EPS/PDF/SVG)"
 
 #: ../src/inkscape-application.cpp:615
 msgid "Export text separately to LaTeX file (PS/EPS/PDF)"
-msgstr "Tekst apart omzetten naar LaTeX bestand (PS/EPS/PDF)"
+msgstr "Tekst apart exporteren naar LaTeX bestand (PS/EPS/PDF)"
 
 #: ../src/inkscape-application.cpp:616
 msgid "Render objects without filters instead of rasterizing (PS/EPS/PDF)"
@@ -9266,7 +9232,7 @@ msgstr "WAARDE"
 # File: ../src/inkscape-application.cpp, line: 579
 #: ../src/inkscape-application.cpp:622
 msgid "Query object/document geometry"
-msgstr "Query object/document geometrie"
+msgstr "Vraag object/document geometrie"
 
 #: ../src/inkscape-application.cpp:623
 msgid "ID(s) of object(s) to be queried"
@@ -9413,9 +9379,8 @@ msgid "Inkview - An SVG File Viewer"
 msgstr "Inkview - een SVG viewer"
 
 #: ../src/inkview-application.cpp:69
-#, fuzzy
 msgid "path1 [path2 [pathN]]"
-msgstr "pad1 [pad2 padN]]"
+msgstr "pad1 [pad2 [padN]]"
 
 #: ../src/inkview-application.cpp:70
 msgid ""
@@ -9425,7 +9390,7 @@ msgstr ""
 
 #: ../src/inkview-application.cpp:76
 msgid "Print Inkview version"
-msgstr "Inkview versie tonen"
+msgstr "Inkviewversie tonen"
 
 #: ../src/inkview-application.cpp:77
 msgid "Launch in fullscreen mode"
@@ -9500,21 +9465,16 @@ msgstr ""
 
 #. TRANSLATORS: This refers to the pattern that's inside the object
 #: ../src/knotholder.cpp:378
-#, fuzzy
 msgid "<b>Move</b> the stroke's pattern inside the object"
-msgstr "De patroonvulling van het object <b>verplaatsen</b>"
+msgstr "Het lijnpatroon <b>verplaatsen</b>"
 
 #: ../src/knotholder.cpp:381
-#, fuzzy
 msgid "<b>Scale</b> the stroke's pattern; uniformly if with <b>Ctrl</b>"
-msgstr "De patroonvulling <b>schalen</b>; uniform indien met <b>Ctrl</b>"
+msgstr "Het lijnpatroon <b>schalen</b>; uniform indien met <b>Ctrl</b>"
 
 #: ../src/knotholder.cpp:385
-#, fuzzy
 msgid "<b>Rotate</b> the stroke's pattern; with <b>Ctrl</b> to snap angle"
-msgstr ""
-"De patroonvulling van het object <b>draaien</b>; <b>Ctrl</b> om te draaien "
-"in stappen"
+msgstr "Het lijnpatroon <b>draaien</b>; <b>Ctrl</b> om te draaien in stappen"
 
 #. TRANSLATORS: This refers to the hatch that's inside the object
 #: ../src/knotholder.cpp:403
@@ -9645,7 +9605,7 @@ msgstr "Een stapsgewijze transitie tussen 2 subpaden van een pad maken"
 
 #: ../src/live_effects/effect.cpp:245
 msgid "Hatches (rough)"
-msgstr "Ruwe krabbels"
+msgstr "Arcering (ruw)"
 
 #: ../src/live_effects/effect.cpp:249
 msgid "Fill the object with adjustable hatching"
@@ -9794,7 +9754,7 @@ msgid ""
 "Select among various join types for a object's corner nodes (mitre, rounded, "
 "extrapolated arc, ...)"
 msgstr ""
-"Selecteer een samenvoegingstype voor knopen van objecthoeken (recht hoek, "
+"Selecteer een verbindingstype voor knopen van objecthoeken (recht hoek, "
 "afgerond, geëxtrapoleerde boog, ...)"
 
 #: ../src/live_effects/effect.cpp:443
@@ -9923,7 +9883,7 @@ msgstr "Power clip"
 #: ../src/live_effects/effect.cpp:603
 msgid "Invert, hide or flatten a clip (apply like a Boolean operation)"
 msgstr ""
-"Înverteren, verbergen of uitvlakken van een clip (zoals een Booleaanse "
+"Inverteren, verbergen of uitvlakken van een clip (zoals een Booleaanse "
 "operatie)"
 
 #: ../src/live_effects/effect.cpp:613
@@ -10054,7 +10014,7 @@ msgstr "doEffect-stapeltest"
 
 #: ../src/live_effects/effect.cpp:786
 msgid "Test LPE"
-msgstr "Test LPE"
+msgstr "Test padeffect"
 
 #: ../src/live_effects/effect.cpp:796
 msgid "Dynamic stroke"
@@ -10630,15 +10590,15 @@ msgstr ""
 "verbindingen te fixen"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:72
-#, fuzzy
 msgid "Distribute evenly"
-msgstr "Verdelen"
+msgstr "Gelijkmatig verdelen"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:72
 msgid ""
 "Angle between copies is 360°/number of copies (ignores rotation angle "
 "setting)"
 msgstr ""
+"Hoek tussen kopieën is 360°/aantal kopieën (negeert rotatiehoekinstelling)"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:73
 msgid "Mirror copies"
@@ -10740,7 +10700,7 @@ msgstr "Br_eedte relatief aan lengte schalen"
 
 #: ../src/live_effects/lpe-curvestitch.cpp:44
 msgid "Scale the width of the stitch path relative to its length"
-msgstr "Schaal de breedte van het naaipad relatief tov zijn lengte"
+msgstr "Schaal de breedte van het naaipad relatief t.o.v. zijn lengte"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:18
 msgid "Number of dashes"
@@ -10763,20 +10723,20 @@ msgid "Start and end of each segment has half size"
 msgstr "Halve lengte aan begin en einde van elk segment"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:22
-#, fuzzy
 msgid "Equalize dashes"
-msgstr "Gelijkmaken"
+msgstr "Streepjes gelijk maken"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:22
 msgid ""
 "Global dash length is approximately the length of the dashes in the shortest "
 "path segment"
 msgstr ""
+"Globale lengte van streepjes is ongeveer de lengte van de streepjes in het "
+"kortste padsegment"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:24
-#, fuzzy
 msgid "Note"
-msgstr "Nota:"
+msgstr "Nota"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:24
 #: ../src/live_effects/lpe-powerclip.cpp:33
@@ -10871,6 +10831,8 @@ msgstr "Steeklengte"
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:58
 msgid "Divide path into straight segments of given length (in user units)"
 msgstr ""
+"Pad verdelen in rechte segmenten van opgegeven lengte (in door gebruiker "
+"opgegeven eenheid)"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:59
 msgid "Minimum stitch length [%]"
@@ -10880,6 +10842,7 @@ msgstr "Minimum steeklengte [%]"
 msgid ""
 "Merge stitches that are shorter than this percentage of the stitch length"
 msgstr ""
+"Steken samenvoegen die korter zijn dan dit percentage van de steeklengte"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:60
 msgid "Stitch pattern"
@@ -10898,13 +10861,14 @@ msgid ""
 "Creates gaps between stitches (use only for preview, deactivate for use with "
 "embroidery machines)"
 msgstr ""
+"Creëer opening tussen steken (enkel gebruiken voor voorbeeldweergave, "
+"deactiveer voor gebruikt met borduurmachines)"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:62
 msgid "Show stitch gap"
 msgstr "Steekafstand tonen"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:62
-#, fuzzy
 msgid "Length of the gap between stitches when showing stitches"
 msgstr "Afstand tussen steken bij het tonen van steken"
 
@@ -10973,7 +10937,6 @@ msgid "Defines the direction and magnitude of the extrusion"
 msgstr "Bepaalt de richting en mate van uitrekking"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:27
-#, fuzzy
 msgid "Without LPEs"
 msgstr "Zonder padeffecten"
 
@@ -10982,9 +10945,8 @@ msgid "With Spiro or BSpline"
 msgstr "Met Spiro of BSpline"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:29
-#, fuzzy
 msgid "With all LPEs"
-msgstr "Met padeffecten"
+msgstr "Met alle padeffecten"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:35
 msgid "Paths from which to take the original path data"
@@ -10992,11 +10954,11 @@ msgstr "Paden waar originele paddata van genomen worden"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:36
 msgid "LPEs:"
-msgstr ""
+msgstr "Padeffecten:"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:36
 msgid "Which LPEs of the linked paths should be considered"
-msgstr ""
+msgstr "Welke padeffecten van de gekoppelde paden beschouwd moeten worden"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:37
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:23
@@ -11054,8 +11016,7 @@ msgstr "Bezier forceren"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:41
 #: ../src/live_effects/lpe-ruler.cpp:40 ../share/extensions/foldablebox.inx:9
-#: ../share/extensions/interp_att_g.inx:35
-#: ../share/extensions/layout_nup.inx:7
+#: ../share/extensions/interp_att_g.inx:35 ../share/extensions/layout_nup.inx:7
 #: ../share/extensions/printing_marks.inx:20
 msgid "Unit:"
 msgstr "Eenheid:"
@@ -11067,14 +11028,12 @@ msgid "Unit"
 msgstr "Eenheid"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:44
-#, fuzzy
 msgid "Method to calculate the fillet or chamfer"
-msgstr "Methoden voor bepaling omlijsting of afschuining"
+msgstr "Methoden om omlijsting of afschuining te berekenen"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:46
-#, fuzzy
 msgid "Mode, e.g. fillet or chamfer"
-msgstr "Modus omlijsting of afschuining"
+msgstr "Modus, bv. omlijsting of afschuining"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:48
 msgid "Radius, in unit or %"
@@ -11362,11 +11321,11 @@ msgstr ""
 #: ../src/live_effects/lpe-knot.cpp:359
 #, fuzzy
 msgid "_Gaps in both"
-msgstr "_Lengte opening:"
+msgstr "_Openingen in beide"
 
 #: ../src/live_effects/lpe-knot.cpp:359
 msgid "At path intersections, both parts will have a gap"
-msgstr ""
+msgstr "Bij padkruisingen zullen beide delen een opening hebben"
 
 #: ../src/live_effects/lpe-knot.cpp:360
 msgid "_Groups: Inverse"
@@ -11391,7 +11350,6 @@ msgid "Crossing Signs"
 msgstr "Intersectietekens"
 
 #: ../src/live_effects/lpe-knot.cpp:367
-#, fuzzy
 msgid "Crossing signs"
 msgstr "Intersectietekens"
 
@@ -11867,7 +11825,8 @@ msgid ""
 "can use another LPE with different parameters to measure these."
 msgstr ""
 "Kommagescheiden lijst van segmentindices die niet gemeten moeten worden. Je "
-"kan een ander LPE met andere parameterwaarden gebruiken om deze te meten."
+"kan een ander padeffect met andere parameterwaarden gebruiken om deze te "
+"meten."
 
 #: ../src/live_effects/lpe-measure-segments.cpp:84
 msgid "Invert blacklist"
@@ -12066,8 +12025,7 @@ msgstr "Enkel max/min waarden berekenen"
 #: ../share/extensions/color_custom.inx:15
 #: ../share/extensions/color_randomize.inx:12
 #: ../share/extensions/draw_from_triangle.inx:41
-#: ../share/extensions/dxf_input.inx:26
-#: ../share/extensions/dxf_outlines.inx:34
+#: ../share/extensions/dxf_input.inx:26 ../share/extensions/dxf_outlines.inx:34
 #: ../share/extensions/gcodetools_about.inx:22
 #: ../share/extensions/gcodetools_area.inx:103
 #: ../share/extensions/gcodetools_dxf_points.inx:49
@@ -12092,15 +12050,13 @@ msgstr "Enkel max/min waarden berekenen"
 #: ../share/extensions/jessyInk_uninstall.inx:15
 #: ../share/extensions/jessyInk_video.inx:6
 #: ../share/extensions/jessyInk_view.inx:12
-#: ../share/extensions/jitternodes.inx:18
-#: ../share/extensions/layout_nup.inx:47
+#: ../share/extensions/jitternodes.inx:18 ../share/extensions/layout_nup.inx:47
 #: ../share/extensions/lindenmayer.inx:16
 #: ../share/extensions/lorem_ipsum.inx:11 ../share/extensions/measure.inx:39
 #: ../share/extensions/path_number_nodes.inx:12
 #: ../share/extensions/pathalongpath.inx:24
 #: ../share/extensions/pathscatter.inx:26 ../share/extensions/restack.inx:41
-#: ../share/extensions/text_split.inx:14
-#: ../share/extensions/voronoi2svg.inx:26
+#: ../share/extensions/text_split.inx:14 ../share/extensions/voronoi2svg.inx:26
 #: ../share/extensions/web_interactive_mockup.inx:20
 #: ../share/extensions/web_set_att.inx:33
 #: ../share/extensions/web_transmit_att.inx:31
@@ -12152,10 +12108,10 @@ msgstr ""
 "dialoogvenster Stijlen om een nieuwe stijl toe te passen.\n"
 "<b><i>Blacklists:</i></b> om sommige segmenten of projectiestappen te "
 "verbergen.\n"
-"<b><i>Meerdere Meten LPEs:</i></b> op hetzelfde object, tesamen met de "
-"blacklists, maakt dit labels en metingen met verschillende richting of "
+"<b><i>Meerdere Maten padeffecten:</i></b> op hetzelfde object, tezamen met "
+"de blacklists, maakt dit labels en metingen met verschillende richting of "
 "additionele projectie toe.\n"
-"<b><i>Standaardwaarden instellen:</i></b> voor elk LPE kunnen onderaan "
+"<b><i>Standaardwaarden instellen:</i></b> voor elk padeffect kunnen onderaan "
 "standaardwaarden ingesteld worden."
 
 #: ../src/live_effects/lpe-measure-segments.cpp:297
@@ -12247,9 +12203,8 @@ msgid "Start point of mirror line"
 msgstr "Beginpunt spiegellijn"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:60
-#, fuzzy
 msgid "Adjust start point of mirror line"
-msgstr "Beginpunt spieggellijn aanpassen"
+msgstr "Beginpunt spiegelas aanpassen"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:61
 msgid "Mirror line end"
@@ -12577,9 +12532,8 @@ msgstr ""
 "interpolatie, 1 = glad"
 
 #: ../src/live_effects/lpe-powerstroke.cpp:162
-#, fuzzy
 msgid "Width factor:"
-msgstr "W_egingsfactor:"
+msgstr "Breedtefactor:"
 
 #: ../src/live_effects/lpe-powerstroke.cpp:162
 #, fuzzy
@@ -12645,7 +12599,6 @@ msgstr "Steiner ingeschreven ellips"
 #
 # File: ../src/live_effects/lpe-pts2ellipse.cpp, line: 54
 #: ../src/live_effects/lpe-pts2ellipse.cpp:54
-#, fuzzy
 msgid ""
 "Methods to generate the ellipse\n"
 "- Auto ellipse: fits a circle (2, 3 or 4 nodes in the path) or an ellipse "
@@ -12693,14 +12646,13 @@ msgstr "_Boog"
 #
 # File: ../src/live_effects/lpe-pts2ellipse.cpp, line: 66
 #: ../src/live_effects/lpe-pts2ellipse.cpp:66
-#, fuzzy
 msgid ""
 "Generate open arc (open ellipse) based on first and last node\n"
 "(only for methods \"Auto ellipse\" and \"Force circle\")"
 msgstr ""
-"Een open boog genereren (open ellips) gebaseerd op het eerste en laatste "
-"punt\n"
-"(alleen bij methoden\"Auto ellips\" en \"Cirkel forceren\")"
+"Een open boog genereren (open ellips) gebaseerd op eerste en laatste "
+"knooppunt\n"
+"(alleen bij methoden \"Auto ellips\" en \"Cirkel forceren\")"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:69
 msgid "_Other arc side"
@@ -12715,9 +12667,8 @@ msgid "_Slice arc"
 msgstr "Boog _afsnijden"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:70
-#, fuzzy
 msgid "Create a circle / ellipse segment"
-msgstr "Cirkels, ellipsen of bogen maken"
+msgstr "Cirkel- of ellipssegment creëren"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:71
 msgid "A_xes"
@@ -12923,7 +12874,7 @@ msgstr "Breedte van 'onderzijde' naar 'bovenzijde'"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:241
 msgid "Hatches width and dir"
-msgstr "Breedte en richting krabbels"
+msgstr "Breedte en richting arcering"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:241
 msgid "Defines hatches frequency and direction"
@@ -12997,8 +12948,7 @@ msgstr "Handvatten"
 msgid "Handles options"
 msgstr "Handvatopties"
 
-#: ../src/live_effects/lpe-roughen.cpp:62
-#: ../share/extensions/jitternodes.inx:9
+#: ../src/live_effects/lpe-roughen.cpp:62 ../share/extensions/jitternodes.inx:9
 msgid "Shift nodes"
 msgstr "Knooppunten verschuiven"
 
@@ -14152,7 +14102,7 @@ msgstr "aanwezig (%s)"
 
 #: ../src/object/sp-use.cpp:248
 msgid "Unnamed Symbol"
-msgstr "Onbenoemd symbool"
+msgstr "Naamloos symbool"
 
 #. TRANSLATORS: Used for statusbar description for long <use> chains:
 #. * "Clone of: Clone of: ... in Layer 1".
@@ -14274,7 +14224,8 @@ msgstr ""
 #: ../src/path/path-object-set.cpp:32
 msgid "Select <b>stroked path(s)</b> to convert stroke to path."
 msgstr ""
-"Selecteer <b>paden</b> waarvan de omlijning omgezet moet worden naar een pad."
+"Selecteer <b>paden</b> waarvan de omlijning geconverteerd moet worden naar "
+"een pad."
 
 #: ../src/path/path-object-set.cpp:70
 msgid "<b>No stroked paths</b> in the selection."
@@ -14282,7 +14233,7 @@ msgstr "Er zijn <b>geen omlijnde paden</b> geselecteerd."
 
 #: ../src/path/path-object-set.cpp:74
 msgid "Convert stroke to path"
-msgstr "Omlijning omzetten naar pad"
+msgstr "Omlijning converteren naar pad"
 
 #: ../src/path/path-object-set.cpp:84
 msgid "Select <b>path(s)</b> to simplify."
@@ -15097,7 +15048,7 @@ msgstr[1] " in <b>%i</b> lagen"
 
 #: ../src/selection-describer.cpp:182
 msgid "Convert symbol to group to edit"
-msgstr "Symbool naar bewerkbare groep omzetten"
+msgstr "Symbool converteren naar bewerkbare groep"
 
 #: ../src/selection-describer.cpp:186
 msgid "Remove from symbols tray to edit symbol"
@@ -15334,7 +15285,7 @@ msgstr "Selecteer <b>ingekaderde tekst(en)</b> om om te zetten."
 
 #: ../src/text-chemistry.cpp:589
 msgid "Convert flowed text to text"
-msgstr "Ingekaderde tekst omzetten naar tekst"
+msgstr "Ingekaderde tekst converteren naar tekst"
 
 #: ../src/text-chemistry.cpp:595
 msgid "Flowed text(s) must be <b>visible</b> in order to be converted."
@@ -15446,9 +15397,8 @@ msgid "Clipboard does not contain a path."
 msgstr "Klembord bevat geen pad."
 
 #: ../src/ui/clipboard.cpp:709
-#, fuzzy
 msgid "Clipboard does not contain any objects of type \"%1\"."
-msgstr "Klembord bevat geen pad."
+msgstr "Klembord bevat geen objecten van het type \"%1\"."
 
 #: ../src/ui/contextmenu.cpp:71
 msgid "Go to parent"
@@ -15761,7 +15711,8 @@ msgstr "Relatief tov: "
 #: ../src/ui/dialog/align-and-distribute.cpp:945 ../src/verbs.cpp:3272
 #: ../src/verbs.cpp:3273
 msgid "Align right edges of objects to the left edge of the anchor"
-msgstr "Rechterzijden van de objecten uitlijnen op de linkerkant van het anker"
+msgstr ""
+"Rechterzijden van de objecten uitlijnen op de linkerzijde van het anker"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:948 ../src/verbs.cpp:3275
 #: ../src/verbs.cpp:3276
@@ -15977,9 +15928,8 @@ msgid "Value"
 msgstr "Waarde"
 
 #: ../src/ui/dialog/attrdialog.cpp:155
-#, fuzzy
 msgid "Shift+Return for a new line"
-msgstr "Shift+Enter nieuwe lijn"
+msgstr "Shift+Enter voor nieuwe lijn"
 
 #: ../src/ui/dialog/attrdialog.cpp:391
 msgid "<b>Click</b> attribute to edit."
@@ -16022,9 +15972,8 @@ msgstr "_Verwijderen"
 
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:60
 #: ../src/ui/dialog/export.cpp:1283
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:563
-#: ../src/ui/dialog/input.cpp:905 ../src/verbs.cpp:2586
-#: ../src/widgets/desktop-widget.cpp:1097
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:563 ../src/ui/dialog/input.cpp:905
+#: ../src/verbs.cpp:2586 ../src/widgets/desktop-widget.cpp:1097
 msgid "_Save"
 msgstr "Op_slaan"
 
@@ -16565,7 +16514,7 @@ msgstr "Omdraaien:"
 
 #: ../src/ui/dialog/clonetiler.cpp:905
 msgid "Invert the picked value"
-msgstr "Draai de geselecteerde eigenschap om"
+msgstr "Geselecteerde waarde inverteren"
 
 #: ../src/ui/dialog/clonetiler.cpp:911
 msgid "3. Apply the value to the clones':"
@@ -17333,7 +17282,6 @@ msgstr ""
 "geselecteerde"
 
 #: ../src/ui/dialog/export.cpp:170
-#, fuzzy
 msgid ""
 "Enables ADAM7 interlacing for PNG output. This results in slightly larger "
 "image files, but big images can already be displayed (slightly blurry) while "
@@ -17341,7 +17289,7 @@ msgid ""
 msgstr ""
 "ADAM7 interlacing instellen voor PNG-uitvoer. Dit resulteert in iets grotere "
 "afbeeldingen, maar grote afbeeldingen zien er sneller goed uit tijdens het "
-"laden"
+"laden."
 
 #: ../src/ui/dialog/export.cpp:172
 msgid "Once the export completes, close this dialog"
@@ -17515,11 +17463,10 @@ msgid "Enable preview"
 msgstr "Bestandsvoorbeeld tonen"
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:129
-#, fuzzy
 msgid "Export as SVG 1.1 per settings in Preferences dialog"
 msgstr ""
 "Als SVG 1.1 exporteren volgens de instellingen in het dialoogvenster "
-"Voorkeuren."
+"Voorkeuren"
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:252
 msgid "_Open"
@@ -17687,9 +17634,8 @@ msgid "Z coordinate"
 msgstr "Z-coördinaat"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1188
-#, fuzzy
 msgid "Points at:"
-msgstr "Punten op:"
+msgstr "Wijst naar:"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1189
 msgid "Specular Exponent:"
@@ -18069,7 +18015,6 @@ msgid "The standard deviation for the blur operation."
 msgstr "De standaarddeviatie voor de vervagingsbewerking."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2840
-#, fuzzy
 msgid ""
 "Erode: performs \"thinning\" of input image.\n"
 "Dilate: performs \"fattening\" of input image."
@@ -18152,7 +18097,7 @@ msgid ""
 msgstr ""
 "Het <b>feColorMatrix</b>-filtereffect past een matrixoperatie toe op de "
 "kleur van elke gerenderde pixel. Dit maakt effecten mogelijk zoals het "
-"omzetten van een object naar grijswaarden, het aanpassen van "
+"converteren van een object naar grijswaarden, het aanpassen van "
 "kleurverzadiging en het veranderen van de tint."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2907
@@ -18400,12 +18345,11 @@ msgstr "Lette_rtype"
 #: ../src/ui/dialog/find.cpp:84
 #, fuzzy
 msgid "_Desc"
-msgstr "Verlaging:"
+msgstr "_Aflopend"
 
 #: ../src/ui/dialog/find.cpp:85
-#, fuzzy
 msgid "Title"
-msgstr "Titel:"
+msgstr "Titel"
 
 #: ../src/ui/dialog/find.cpp:86
 msgid "Properties"
@@ -18540,12 +18484,12 @@ msgstr "Lettertypen doorzoeken"
 #: ../src/ui/dialog/find.cpp:155
 #, fuzzy
 msgid "Search description"
-msgstr "Objectomschrijving instellen"
+msgstr "Beschrijving zoekopdracht"
 
 #: ../src/ui/dialog/find.cpp:158
 #, fuzzy
 msgid "Search title"
-msgstr "Stijlen doorzoeken"
+msgstr "Titel zoeken"
 
 #: ../src/ui/dialog/find.cpp:161
 msgid "Search all object types"
@@ -19820,8 +19764,8 @@ msgid ""
 "Converting an object to guides places these along the object's true edges "
 "(imitating the object's shape), not along the bounding box"
 msgstr ""
-"Het omzetten van een object naar hulplijnen plaatst het langs de randen van "
-"het object (imitatie van de objectvorm), niet langs het omvattend vak"
+"Het converteren van een object naar hulplijnen plaatst deze langs de randen "
+"van het object (imitatie van de objectvorm), niet langs het omvattend vak"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:217
 msgid "Ctrl+click _dot size:"
@@ -20009,8 +19953,8 @@ msgid ""
 "When converting an object to guides, don't delete the object after the "
 "conversion"
 msgstr ""
-"Wanneer een object naar hulplijnen omgezet wordt, het object na omzetting "
-"niet verwijderen"
+"Wanneer een object naar hulplijnen geconverteerd wordt, het object na "
+"conversie niet verwijderen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:369
 msgid "Treat groups as a single object"
@@ -20890,9 +20834,8 @@ msgid "Use system theme"
 msgstr "Systeemthema gebruiken"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1183
-#, fuzzy
 msgid "Change GTK theme:"
-msgstr "Gtk thema:"
+msgstr "GTK-thema wijzigen:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1186
 #: ../src/ui/dialog/inkscape-preferences.cpp:2638
@@ -20900,9 +20843,8 @@ msgid "Open themes folder"
 msgstr "Map met thema's openen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1187
-#, fuzzy
 msgid "User themes:"
-msgstr "Gebruikersthema's: "
+msgstr "Gebruikersthema's:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1187
 #: ../src/ui/dialog/inkscape-preferences.cpp:2639
@@ -20910,9 +20852,8 @@ msgid "Location of the user’s themes"
 msgstr "Locatie van thema's van de gebruiker"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1199
-#, fuzzy
 msgid "Icons"
-msgstr "Icoon"
+msgstr "Iconen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1229
 msgid "Use system icons"
@@ -20950,9 +20891,8 @@ msgid "Icon color"
 msgstr "Icoonkleur"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1271
-#, fuzzy
 msgid "Base color for icons"
-msgstr "Standaardkleur voor iconen gebruiken"
+msgstr "Basiskleur voor iconen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1277
 msgid "Highlights"
@@ -20963,18 +20903,13 @@ msgstr "Markeringen"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1278
 #, fuzzy
 msgid "Highlight colors supported by some symbolic icon themes"
-msgstr ""
-"Keuren voor nadruk, sommige iconen gebruiken deze. Sommige wijzigingen "
-"vereisen herstart"
+msgstr "Accentkleur ondersteund door sommige symbolische icoonthema's"
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1208
 #: ../src/ui/dialog/inkscape-preferences.cpp:1284
-#, fuzzy
 msgid "Reset theme colors for some symbolic icon themes"
-msgstr ""
-"Themakleuren resetten, sommige iconen gebruiken deze. Sommige wijzigingen "
-"vereisen herstert"
+msgstr "Themakleuren resetten, sommige iconen gebruiken deze"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1287
 msgctxt "Icon size"
@@ -21002,25 +20937,26 @@ msgstr "Icoongrootte gereedschappenbalk:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1294
 msgid "Set the size for the tool icons (requires restart)"
-msgstr "De icoongrootte van de gereedschappenbalk instellen (vereist herstart)"
+msgstr "Icoongrootte van gereedschappen instellen (vereist herstart)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1297
 msgid "Control bar icon size:"
 msgstr "Icoongrootte opdrachtenbalk:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1298
-#, fuzzy
 msgid "Set the size for the icons in tools' control bars (requires restart)"
-msgstr "De icoongrootte van de opdrachtenbalk instellen (vereist herstart)"
+msgstr ""
+"Icoongrootte op de bedieningsbalk van gereedschappen instellen (vereist "
+"herstart)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1301
 msgid "Secondary toolbar icon size:"
 msgstr "Icoongrootte secundaire gereedschappenbalk:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1302
-#, fuzzy
 msgid "Set the size for the icons in secondary toolbars (requires restart)"
-msgstr "De icoongrootte van de gereedschappenbalk instellen (vereist herstart)"
+msgstr ""
+"Icoongrootte op secundaire gereedschapsbalken instellen (vereist herstart)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1305
 msgid "Yes"
@@ -21041,18 +20977,16 @@ msgstr "Iconen in menu tonen:"
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1054
 #: ../src/ui/dialog/inkscape-preferences.cpp:1309
-#, fuzzy
 msgid ""
 "You can either enable or disable all icons in menus. By default, the setting "
 "for the 'show-icons' attribute in the 'menus.xml' file determines whether to "
 "display icons in menus. (requires restart)"
 msgstr ""
-"Je kan ofwel alle iconen in- of uitschakelen in menu's. Standaard bepaalt "
-"het thema welke iconen getoond worden met behulp van het 'show-icons' "
-"attribuut in zijn 'menus.xml' bestand. (vereist herstart)"
+"U kan alle iconen in menu's in- of uitschakelen. Standaard bepaalt het thema "
+"welke iconen getoond worden met behulp van het 'show-icons' attribuut in "
+"zijn 'menus.xml' bestand. (vereist herstart)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1312
-#, fuzzy
 msgid "Themeing"
 msgstr "Thema"
 
@@ -21168,12 +21102,10 @@ msgstr ""
 "geometrie in het document op)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1359
-#, fuzzy
 msgid "Saving dialogs' status"
 msgstr "Dialoogstatus bewaren"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1361
-#, fuzzy
 msgid "Don't save dialogs' status"
 msgstr "Dialoogstatus niet bewaren"
 
@@ -21656,11 +21588,11 @@ msgstr "SVG 1.1 fallback toevoegen aan tekst."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1617
 msgid "Insert JavaScript code for mesh gradients."
-msgstr ""
+msgstr "JavaScript code invoegen voor mesh kleurverlopen."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1618
 msgid "Insert JavaScript code for SVG2 hatches."
-msgstr ""
+msgstr "JavaScript code invoegen voor SVG2 arceringen."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1620
 msgid "Adds fallback options for non-SVG 2 renderers."
@@ -21669,18 +21601,18 @@ msgstr "Fallback voor niet-SVG2 renderprogramma's toevoegen."
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1558
 #: ../src/ui/dialog/inkscape-preferences.cpp:1621
-#, fuzzy
 msgid "Adds a JavaScript polyfill for rendering meshes in web browsers."
-msgstr "JavaScript polyfill voor het renderen van meshes invoegen."
+msgstr ""
+"Voegt een JavaScript polyfill toe voor het renderen van meshes in "
+"webbrowsers."
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1559
 #: ../src/ui/dialog/inkscape-preferences.cpp:1622
-#, fuzzy
 msgid "Adds a JavaScript polyfill for rendering hatches in web browsers."
 msgstr ""
-"JavaScript polyfill voor het renderen van hatches (lineaire en absolute "
-"paden)."
+"Voegt een JavaScript polyfill toe voor het renderen van arceringen in "
+"webbrowsers."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1625
 msgid "SVG 2 to SVG 1.1"
@@ -21688,24 +21620,32 @@ msgstr "SVG 2 naar SVG 1.1"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1627
 msgid "Use correct marker direction in SVG 1.1 renderers."
-msgstr ""
+msgstr "Gebruik correcte markeringsrichting in SVG 1.1 renderers."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1628
 msgid "Use correct marker colors in SVG 1.1 renderers."
-msgstr ""
+msgstr "Gebruik correcte markeringskleuren in SVG 1.1 renderers."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1630
+#, fuzzy
 msgid ""
 "SVG 2 allows markers to automatically be reversed at the start of a path "
 "with 'auto_start_reverse'. This adds a rotated duplicate of the marker's "
 "definition."
 msgstr ""
+"SVG 2 laat toe markeringen automatisch te laten omkeren bij het begin van "
+"een pad met 'auto_start_reverse'. Dit voegt een gedraaid duplicaat van de "
+"markeringsdefinitie toe."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1631
+#, fuzzy
 msgid ""
 "SVG 2 allows markers to automatically match the stroke color by using "
 "'context_paint' or 'context_fill'. This adjusts the markers own colors."
 msgstr ""
+"SVG2 laat toe markeringen automatisch te laten matchen met de lijnkleur door "
+"'context_paint' of 'context_fill' te gebruiken. Dit past de kleur van de "
+"markeringen aan."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1633
 msgid "SVG export"
@@ -22190,7 +22130,6 @@ msgstr "Kleven inschakelen voor nieuwe documenten"
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1677
 #: ../src/ui/dialog/inkscape-preferences.cpp:1906
-#, fuzzy
 msgid ""
 "Initial state of snapping in new documents and SVG files that are opened "
 "with Inkscape for the first time. Snap status is subsequently saved per-"
@@ -22439,7 +22378,7 @@ msgstr "Verwijderen origineel: klonen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1996
 msgid "Orphaned clones are converted to regular objects"
-msgstr "Verweesde klonen worden omgezet naar normale objecten"
+msgstr "Verweesde klonen worden geconverteerd naar normale objecten"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1998
 msgid "Orphaned clones are deleted along with their original"
@@ -22627,13 +22566,13 @@ msgstr ""
 "voor tekeningen met weinig tot geen filters."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2083
-#, fuzzy
 msgid "X-ray radius:"
 msgstr "Binnenstraal:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2084
 msgid "Radius of the circular area around the mouse cursor in X-ray mode"
 msgstr ""
+"Straal van het cirkelvormige gebied rond de muisaanwijzer in X-ray modus"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2087
 #: ../src/ui/dialog/inkscape-preferences.cpp:2111
@@ -22773,7 +22712,7 @@ msgstr "Dialoogvenser koppelen of schalen tonen bij importeren SVG-afbeelding."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2166
 msgid "Store absolute file path for linked images"
-msgstr ""
+msgstr "Absolute pad voor gekoppelde afbeeldingen opslaan"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2170
 msgid ""
@@ -22784,6 +22723,12 @@ msgid ""
 "Note that this will expose your directory structure which can include "
 "personal information like your username."
 msgstr ""
+"Standaard worden afbeeldingskoppelingen indien mogelijk altijd opgeslagen "
+"als relatief pad. Als deze optie ingeschakeld is zal Inkscape daarnaast een "
+"absoluut pad ('sodipody:absref' attribute) toevoegen aan de afbeelding als "
+"fall-back om de afbeelding te kunnen lokaliseren, bijvoorbeeld als een svg-"
+"bestand wordt verplaatst. Merk op dat dit uw mappenstructuur onthult, welke "
+"persoonlijke informatie zoals uw gebruikersnaam kan bevatten."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2180
 msgid "Bitmap import/open mode:"
@@ -23265,8 +23210,7 @@ msgstr "X-helling"
 msgid "Y tilt"
 msgstr "Y-helling"
 
-#: ../src/ui/dialog/input.cpp:1433
-#: ../src/ui/widget/color-wheel-selector.cpp:31
+#: ../src/ui/dialog/input.cpp:1433 ../src/ui/widget/color-wheel-selector.cpp:31
 msgid "Wheel"
 msgstr "Wiel"
 
@@ -23421,23 +23365,22 @@ msgstr "Bov"
 #
 # File: ../src/ui/dialog/livepatheffect-add.cpp, line: 472
 #: ../src/ui/dialog/livepatheffect-add.cpp:562
-#, fuzzy
 msgid ""
 "You don't have any favorites yet. Click on the favorites star again to see "
 "all LPEs."
-msgstr "U heeft nog geen favorieten, schakel de favorietenster uit alstublieft"
+msgstr ""
+"U heeft nog geen favorieten. Klik opnieuw op de ster om alle padeffecten te "
+"zien."
 
 #: ../src/ui/dialog/livepatheffect-add.cpp:566
-#, fuzzy
 msgid "These are your favorite effects"
 msgstr "Dit zijn uw favoriete effecten"
 
 #: ../src/ui/dialog/livepatheffect-add.cpp:571
 #: ../src/ui/dialog/livepatheffect-add.cpp:583
 #: ../src/ui/dialog/livepatheffect-add.cpp:592
-#, fuzzy
 msgid "Nothing found! Please try again with different search terms."
-msgstr "Gebruik een andere zoekopdracht."
+msgstr "Geen resultaten! Probeer a.u.b. andere zoektermen."
 
 #: ../src/ui/dialog/livepatheffect-editor.cpp:120
 msgid "Add path effect"
@@ -23531,7 +23474,7 @@ msgstr "Straal"
 
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:196
 msgid "Radius approximated"
-msgstr "Benaderende straal"
+msgstr "Benaderde straal"
 
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:199
 msgid "Knot distance"
@@ -23697,13 +23640,13 @@ msgid ""
 "Note that the specification of this property is not finalized. Support and "
 "interpretation of these values varies between renderers."
 msgstr ""
-"De eigenschap 'image-rendering' beïnvloedt herschaling van een bitmap:\n"
+"De eigenschap 'image-rendering' beïnvloedt hoe een bitmap wordt geschaald:\n"
 "\t• 'auto' geen voorkeur (normaal vaag)\n"
 "\t• 'optimizeQuality' voorkeur voor renderkwaliteit (normaal vaag)\n"
-"\t• 'optimizeSpeed' voorkeur voor rendersnelheid (normaal gepixeliseerd)\n"
-"\t• 'crisp-edges' herschalen zonder vervagen randen (vaak gepixeliseerd)\n"
-"\t• 'pixelated' gepixeliseerd renderen\n"
-"Noteer dat de specificatie van deze eigenschap niet gefinaliseerd is. "
+"\t• 'optimizeSpeed' voorkeur voor rendersnelheid (normaal gepixeleerd)\n"
+"\t• 'crisp-edges' herschalen zonder vervagen randen (vaak gepixeleerd)\n"
+"\t• 'pixelated' gepixeleerd renderen\n"
+"Noteer dat de specificaties van deze eigenschap niet gefinaliseerd zijn. "
 "Ondersteuning en interpretatie van deze waarden kunnen variëren tussen "
 "verschillende softwarepakketten."
 
@@ -24188,9 +24131,8 @@ msgid "value"
 msgstr "waarde"
 
 #: ../src/ui/dialog/styledialog.cpp:779
-#, fuzzy
 msgid "This value is commented out."
-msgstr "Deze waarde is uitgecommentarieerd"
+msgstr "Deze waarde is uitgecommentarieerd."
 
 #: ../src/ui/dialog/styledialog.cpp:967
 msgid "Invalid property set"
@@ -24199,9 +24141,8 @@ msgstr "Ongeldige waarde"
 #
 # File: ../src/ui/dialog/styledialog.cpp, line: 839
 #: ../src/ui/dialog/styledialog.cpp:969
-#, fuzzy
 msgid "Used in %1"
-msgstr "Gebruikt in "
+msgstr "Gebruikt in %1"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:146
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:218
@@ -24217,32 +24158,32 @@ msgid "Font Attributes"
 msgstr "Kenmerken lettertype"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:457
-#, fuzzy
 msgid "Horiz. Advance X:"
-msgstr "Horiz. vooruitgang X"
+msgstr "Horiz. vooruitgang X:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:457
-#, fuzzy
 msgid "Default glyph width for horizontal text"
-msgstr "Tekstrichting voor normale horizontale tekst."
+msgstr "Standaard karakterbreedte voor horizontale tekst"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:458
-#, fuzzy
 msgid "Horiz. Origin X:"
-msgstr "Horiz. oorsprong X"
+msgstr "Horiz. oorsprong X:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:458
 msgid "Default X-coordinate of the origin of a glyph (for horizontal text)"
 msgstr ""
+"Standaard x-coördinaat van het begin van een karakter (voor horizontale "
+"tekst)"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:459
-#, fuzzy
 msgid "Horiz. Origin Y:"
-msgstr "Horiz. oorsprong Y"
+msgstr "Horiz. oorsprong Y:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:459
 msgid "Default Y-coordinate of the origin of a glyph (for horizontal text)"
 msgstr ""
+"Standaard y-coördinaat van het begin van een karakter (voor horizontale "
+"tekst)"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:460
 msgid "Font Face Attributes"
@@ -24253,29 +24194,27 @@ msgid "Family Name:"
 msgstr "Familie:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:461
-#, fuzzy
 msgid ""
 "Name of the font as it appears in font selectors and css font-family "
 "properties"
-msgstr ""
-"Lettertypenaam bij lettertypeselectie en css font-family eigenschappen."
+msgstr "Lettertypenaam bij lettertypeselectie en css font-family eigenschappen"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:462
-#, fuzzy
 msgid "Units per em:"
-msgstr "Eenheden per em"
+msgstr "Eenheden per em:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:462
 msgid ""
 "Display units per <italic>em</italic> (nominally width of 'M' character)"
 msgstr ""
+"Weergave eenheden per <italic>em</italic> (nominale breedte van de letter "
+"'M')"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:463
 msgid "Ascent:"
 msgstr "Verhoging:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:463
-#, fuzzy
 msgid ""
 "Amount of space taken up by ascenders like the tall line on the letter 'h'"
 msgstr ""
@@ -24286,7 +24225,6 @@ msgid "Descent:"
 msgstr "Verlaging:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:464
-#, fuzzy
 msgid "Amount of space taken up by descenders like the tail on the letter 'g'"
 msgstr "Ruimte ingenomen door staartletters zoals de staart bij de letter 'g'."
 
@@ -24295,21 +24233,19 @@ msgid "Cap Height:"
 msgstr "Hoofdletterhoogte:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:465
-#, fuzzy
 msgid ""
 "The height of a capital letter above the baseline like the letter 'H' or 'I'"
 msgstr ""
-"Hoogte van een hoofdletter, zoals de letter 'H' of 'I', boven de basislijn."
+"Hoogte van een hoofdletter boven de basislijn, zoals de letter 'H' of 'I'"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:466
 msgid "x Height:"
 msgstr "x-hoogte:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:466
-#, fuzzy
 msgid ""
 "The height of a lower-case letter above the baseline like the letter 'x'"
-msgstr "Hoogte van een kleine letter, zoals de letter 'x', boven de basislijn."
+msgstr "Hoogte van een kleine letter boven de basislijn, zoals de letter 'x'"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:542
 msgid "glyph"
@@ -24464,8 +24400,7 @@ msgid "Too large for preview"
 msgstr "Te groot voor voorbeeld"
 
 #: ../src/ui/dialog/swatches.cpp:211 ../src/ui/tools/gradient-tool.cpp:359
-#: ../src/ui/tools/gradient-tool.cpp:446
-#: ../src/widgets/gradient-vector.cpp:746
+#: ../src/ui/tools/gradient-tool.cpp:446 ../src/widgets/gradient-vector.cpp:746
 msgid "Add gradient stop"
 msgstr "Kleurverloopovergang toevoegen"
 
@@ -24485,7 +24420,7 @@ msgstr "Bewerken..."
 
 #: ../src/ui/dialog/swatches.cpp:305
 msgid "Convert"
-msgstr "Converteren"
+msgstr "Omzetten"
 
 #: ../src/ui/dialog/swatches.cpp:698
 msgid "List"
@@ -24586,9 +24521,8 @@ msgid "Symbol set"
 msgstr "Symbolenset"
 
 #: ../src/ui/dialog/symbols.cpp:154
-#, fuzzy
 msgid "Press 'Return' to start search."
-msgstr "Naar beginzoekopdracht."
+msgstr "Druk op 'Enter' om zoekopdracht te starten."
 
 #: ../src/ui/dialog/symbols.cpp:256
 msgid "Add Symbol from the current document."
@@ -24634,15 +24568,13 @@ msgid "Search in all symbol sets..."
 msgstr "In alle symbolensets zoeken..."
 
 #: ../src/ui/dialog/symbols.cpp:429
-#, fuzzy
 msgid "The first search can be slow."
 msgstr "Eerste zoekopdracht kan traag zijn."
 
 #: ../src/ui/dialog/symbols.cpp:431 ../src/ui/dialog/symbols.cpp:442
 #: ../src/ui/dialog/symbols.cpp:448 ../src/ui/dialog/symbols.cpp:455
-#, fuzzy
 msgid "No symbols found."
-msgstr "Geen symbolen gevonden"
+msgstr "Geen symbolen gevonden."
 
 #: ../src/ui/dialog/symbols.cpp:434
 msgid "Try a different search term."
@@ -24668,7 +24600,7 @@ msgstr ""
 
 #: ../src/ui/dialog/symbols.cpp:808 ../src/ui/dialog/symbols.cpp:829
 msgid "Unnamed Symbols"
-msgstr "Onbenoemde symbolen"
+msgstr "Naamloze symbolen"
 
 #: ../src/ui/dialog/symbols.cpp:949
 msgid "notitle_"
@@ -24921,7 +24853,6 @@ msgid "Rotate in a clockwise direction"
 msgstr "Rotatie met de klok mee"
 
 #: ../src/ui/dialog/transformation.cpp:342
-#, fuzzy
 msgid "E and F units"
 msgstr "Binnen en buiten"
 
@@ -25771,12 +25702,10 @@ msgstr ""
 "<b>Rotatiecentrum</b>: sleep om de oorsprong van transformaties aan te passen"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:86 ../src/ui/toolbar/arc-toolbar.cpp:469
-#: ../src/ui/toolbar/rect-toolbar.cpp:80
-#: ../src/ui/toolbar/rect-toolbar.cpp:326
+#: ../src/ui/toolbar/rect-toolbar.cpp:80 ../src/ui/toolbar/rect-toolbar.cpp:326
 #: ../src/ui/toolbar/spiral-toolbar.cpp:73
 #: ../src/ui/toolbar/spiral-toolbar.cpp:241
-#: ../src/ui/toolbar/star-toolbar.cpp:67
-#: ../src/ui/toolbar/star-toolbar.cpp:480
+#: ../src/ui/toolbar/star-toolbar.cpp:67 ../src/ui/toolbar/star-toolbar.cpp:480
 msgid "<b>New:</b>"
 msgstr "<b>Nieuw:</b>"
 
@@ -25788,8 +25717,7 @@ msgstr "Rx:"
 msgid "Horizontal radius of the circle, ellipse, or arc"
 msgstr "Horizontale straal van cirkel, ellips of boog"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:112
-#: ../src/ui/toolbar/rect-toolbar.cpp:156
+#: ../src/ui/toolbar/arc-toolbar.cpp:112 ../src/ui/toolbar/rect-toolbar.cpp:156
 msgid "Ry:"
 msgstr "Ry:"
 
@@ -26532,9 +26460,8 @@ msgstr ""
 "het omvattend vak van de huidige selectie"
 
 #: ../src/ui/toolbar/lpe-toolbar.cpp:142
-#, fuzzy
 msgid "Line Type"
-msgstr "Lijntype:"
+msgstr "Lijntype"
 
 #: ../src/ui/toolbar/lpe-toolbar.cpp:142
 msgid "Choose a line segment type"
@@ -26630,7 +26557,7 @@ msgstr "Naar hulplijnen"
 #: ../src/ui/toolbar/measure-toolbar.cpp:197
 #: ../src/ui/toolbar/measure-toolbar.cpp:198
 msgid "Convert to item"
-msgstr "In item omzetten"
+msgstr "Converteren naar item"
 
 #: ../src/ui/toolbar/measure-toolbar.cpp:206
 #: ../src/ui/toolbar/measure-toolbar.cpp:207
@@ -26679,7 +26606,7 @@ msgstr "Alle lagen in de meetlat gebruiken."
 
 #: ../src/ui/toolbar/measure-toolbar.cpp:379
 msgid "Use current layer in the measure."
-msgstr "Huidige laag in de meetlat gebruiken."
+msgstr "Huidige laag gebruiken in de meetlat."
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:167
 msgid "normal"
@@ -26790,9 +26717,8 @@ msgid "Bicubic"
 msgstr "Bicubisch"
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:334
-#, fuzzy
 msgid "Smoothing"
-msgstr "Afvlakking:"
+msgstr "Afvlakking"
 
 #. TRANSLATORS: Type of Smoothing. See https://en.wikipedia.org/wiki/Coons_patch
 #: ../src/ui/toolbar/mesh-toolbar.cpp:336
@@ -26808,12 +26734,12 @@ msgid ""
 "For web: convert to bitmap (Edit->Make bitmap copy).\n"
 "For print: export to PDF."
 msgstr ""
-"Meshgradiënten zijn deel van SVG2:\n"
-"* syntax kan veranderen.\n"
-"* implementatie in webbrowser is niet gegarandeerd.\n"
+"Mesh kleurverlopen zijn deel van SVG2:\n"
+"* Syntax kan veranderen.\n"
+"* Implementatie in webbrowser is niet gegarandeerd.\n"
 "\n"
 "Voor web: converteer naar bitmap (Bewerken->Als Bitmap kopiëren).\n"
-"Voor afdruk: exporteren naar PDF."
+"Voor afdruk: exporteer naar PDF."
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:565
 msgid "Set mesh type"
@@ -26981,9 +26907,8 @@ msgid "Show path outline (without path effects)"
 msgstr "Padindicator tonen (zonder padeffecten)"
 
 #: ../src/ui/toolbar/paintbucket-toolbar.cpp:69
-#, fuzzy
 msgid "Fill by"
-msgstr "Vullen met:"
+msgstr "Vullen met"
 
 #: ../src/ui/toolbar/paintbucket-toolbar.cpp:84
 msgid ""
@@ -27003,9 +26928,8 @@ msgid ""
 msgstr "Mate waarmee het vullingspad verdikt (positief) of verdunt (negatief)"
 
 #: ../src/ui/toolbar/paintbucket-toolbar.cpp:131
-#, fuzzy
 msgid "Close gaps"
-msgstr "Gaten opvullen:"
+msgstr "Gaten opvullen"
 
 #: ../src/ui/toolbar/paintbucket-toolbar.cpp:145
 #: ../src/ui/toolbar/spiral-toolbar.cpp:128
@@ -27104,9 +27028,8 @@ msgstr "Een sequentie van onderling loodrechte lijnstukken maken"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:299
 #: ../src/ui/toolbar/pencil-toolbar.cpp:300
-#, fuzzy
 msgid "Flatten Spiro or BSpline LPE"
-msgstr "Met Spiro of BSpline"
+msgstr "Spiro of BSpline afvlakken padeffect"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:378
 msgctxt "Freehand shape"
@@ -27143,13 +27066,12 @@ msgid "Butt"
 msgstr "Mikpunt"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:427
-#, fuzzy
 msgid "Caps"
-msgstr "Uiteinden:"
+msgstr "Uiteinden"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:427
 msgid "Line endings when drawing with pressure-sensitive PowerPencil"
-msgstr ""
+msgstr "Lijnuiteinden bij tekenen met drukgevoelig PowerPencil"
 
 #: ../src/ui/toolbar/rect-toolbar.cpp:94
 msgid "W:"
@@ -27920,8 +27842,7 @@ msgstr "Lettertypestijl"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:311
 #: ../src/ui/toolbar/text-toolbar.cpp:1954
-#: ../src/ui/widget/font-selector.cpp:32
-#: ../src/ui/widget/font-selector.cpp:148
+#: ../src/ui/widget/font-selector.cpp:32 ../src/ui/widget/font-selector.cpp:148
 msgid "Font size"
 msgstr "Lettergrootte"
 
@@ -28920,7 +28841,7 @@ msgstr "De laatste meting als referentie behouden op het canvas"
 
 #: ../src/ui/tools/measure-tool.cpp:781
 msgid "Convert measure to items"
-msgstr "Meting omzetten naar items"
+msgstr "Meting converteren naar items"
 
 #: ../src/ui/tools/measure-tool.cpp:823
 msgid "Add global measure line"
@@ -28999,9 +28920,8 @@ msgid "Inserted new row or column."
 msgstr "Nieuwe rij of kolom ingevoegd."
 
 #: ../src/ui/tools/mesh-tool.cpp:482
-#, fuzzy
 msgid "Fit mesh inside bounding box"
-msgstr "Mesh in omvattend vak passen."
+msgstr "Mesh in omvattend vak passen"
 
 #: ../src/ui/tools/mesh-tool.cpp:1021
 msgid "Create mesh"
@@ -30164,8 +30084,9 @@ msgid "Normal style."
 msgstr "Standaardstijl."
 
 #: ../src/ui/widget/font-variants.cpp:351
+#, fuzzy
 msgid "Lining numerals. OpenType table: 'lnum'"
-msgstr "Cijfers uitlijnen. OpenType: 'lnum'"
+msgstr "Cijfers uitlijnen. OpenType tabel: 'lnum'"
 
 #: ../src/ui/widget/font-variants.cpp:352
 msgid "Old style numerals. OpenType table: 'onum'"
@@ -30536,29 +30457,25 @@ msgstr "Patroon"
 
 #: ../src/ui/widget/selected-style.cpp:191
 #: ../src/ui/widget/style-swatch.cpp:282
-#, fuzzy
 msgid "Pattern (fill)"
-msgstr "Patroonvulling"
+msgstr "Patroon (vulling)"
 
 #: ../src/ui/widget/selected-style.cpp:191
 #: ../src/ui/widget/style-swatch.cpp:282
-#, fuzzy
 msgid "Pattern (stroke)"
-msgstr "Patroonlijn"
+msgstr "Patroon (lijn)"
 
 #: ../src/ui/widget/selected-style.cpp:193
 msgid "Hatch"
-msgstr "Arceer"
+msgstr "Arceren"
 
 #: ../src/ui/widget/selected-style.cpp:195
-#, fuzzy
 msgid "Hatch (fill)"
-msgstr "Vulling arceren"
+msgstr "Arceren (vulling)"
 
 #: ../src/ui/widget/selected-style.cpp:195
-#, fuzzy
 msgid "Hatch (stroke)"
-msgstr "Lijn arceren"
+msgstr "Arceren (lijn)"
 
 #: ../src/ui/widget/selected-style.cpp:197
 msgid "<b>L</b>"
@@ -30566,15 +30483,13 @@ msgstr "<b>L</b>"
 
 #: ../src/ui/widget/selected-style.cpp:199
 #: ../src/ui/widget/style-swatch.cpp:274
-#, fuzzy
 msgid "Linear gradient (fill)"
-msgstr "Lineair vulkleurverloop"
+msgstr "Lineair kleurverloop (vulling)"
 
 #: ../src/ui/widget/selected-style.cpp:199
 #: ../src/ui/widget/style-swatch.cpp:274
-#, fuzzy
 msgid "Linear gradient (stroke)"
-msgstr "Lineair lijnkleurverloop"
+msgstr "Lineair kleurverloop (lijn)"
 
 #: ../src/ui/widget/selected-style.cpp:206
 msgid "<b>R</b>"
@@ -30582,29 +30497,25 @@ msgstr "<b>R</b>"
 
 #: ../src/ui/widget/selected-style.cpp:208
 #: ../src/ui/widget/style-swatch.cpp:278
-#, fuzzy
 msgid "Radial gradient (fill)"
-msgstr "Radiaal vulkleurverloop"
+msgstr "Radiaal kleurverloop (vulling)"
 
 #: ../src/ui/widget/selected-style.cpp:208
 #: ../src/ui/widget/style-swatch.cpp:278
-#, fuzzy
 msgid "Radial gradient (stroke)"
-msgstr "Radiaal lijnkleurverloop"
+msgstr "Radiaal kleurverloop (lijn)"
 
 #: ../src/ui/widget/selected-style.cpp:216
 msgid "<b>M</b>"
 msgstr "<b>M</b>"
 
 #: ../src/ui/widget/selected-style.cpp:218
-#, fuzzy
 msgid "Mesh gradient (fill)"
-msgstr "Vulling meshgradiënt"
+msgstr "Mesh kleurverloop (vulling)"
 
 #: ../src/ui/widget/selected-style.cpp:218
-#, fuzzy
 msgid "Mesh gradient (stroke)"
-msgstr "Lijn meshgradiënt"
+msgstr "Mesh kleurverloop (lijn)"
 
 #: ../src/ui/widget/selected-style.cpp:226
 msgid "Different"
@@ -30639,12 +30550,10 @@ msgid "Unset stroke"
 msgstr "Omlijning uitzetten"
 
 #: ../src/ui/widget/selected-style.cpp:235
-#, fuzzy
 msgid "Flat color (fill)"
 msgstr "Egale vulkleur"
 
 #: ../src/ui/widget/selected-style.cpp:235
-#, fuzzy
 msgid "Flat color (stroke)"
 msgstr "Egale lijnkleur"
 
@@ -31094,7 +31003,7 @@ msgstr "Verticaal spiegelen"
 #: ../src/verbs.cpp:1615 ../src/verbs.cpp:1631 ../src/verbs.cpp:2895
 #: ../src/verbs.cpp:2903
 msgid "_Set Inverse (LPE)"
-msgstr "_Inverse instellen (LPE)"
+msgstr "_Inverse instellen (padeffect)"
 
 #: ../src/verbs.cpp:2549 ../src/verbs.cpp:3247
 msgid "Unlock all objects in the current layer"
@@ -31432,8 +31341,8 @@ msgid ""
 "Creates a new path, applies the Clone original LPE, and refers it to the "
 "selected path"
 msgstr ""
-"Maakt een nieuw pad, past de Origineel pad klonen LPE toe en linkt het aan "
-"het geselecteerde pad"
+"Maakt een nieuw pad, past het 'origineel pad klonen' padeffect toe en "
+"verwijst het naar het geselecteerde pad"
 
 #: ../src/verbs.cpp:2663
 msgid "Objects to _Marker"
@@ -31478,7 +31387,7 @@ msgstr "Groep naar symbool"
 
 #: ../src/verbs.cpp:2671
 msgid "Convert group to a symbol"
-msgstr "Groep naar symbool omzetten"
+msgstr "Groep naar symbool converteren"
 
 #: ../src/verbs.cpp:2673
 msgid "Symbol to Group"
@@ -31885,7 +31794,7 @@ msgstr "_Lijn naar pad"
 # Werkt ook voor meerdere objecten, vandaar meervoud.
 #: ../src/verbs.cpp:2805
 msgid "Convert selected object's stroke to paths"
-msgstr "Lijn van geselecteerde objecten omzetten naar paden"
+msgstr "Lijn van geselecteerde objecten converteren naar paden"
 
 #: ../src/verbs.cpp:2806
 msgid "_Stroke to Path Legacy"
@@ -31893,7 +31802,7 @@ msgstr "_Lijn naar pad (verouderd)"
 
 #: ../src/verbs.cpp:2807
 msgid "Convert selected object's stroke to paths legacy mode"
-msgstr "Oude methode voor omzetten lijn naar paden"
+msgstr "Lijn van geselecteerde objecten converteren naar paden (oude methode)"
 
 #: ../src/verbs.cpp:2808
 msgid "Si_mplify"
@@ -31924,7 +31833,7 @@ msgstr "Als _bitmap kopiëren"
 
 #: ../src/verbs.cpp:2817
 msgid "Export selection to a bitmap and insert it into document"
-msgstr "Selectie omzetten naar een bitmap en in het document plaatsen"
+msgstr "Selectie converteren naar een bitmap en in het document plaatsen"
 
 #: ../src/verbs.cpp:2819
 msgid "_Combine"
@@ -32146,7 +32055,7 @@ msgstr "_Object naar pad"
 
 #: ../src/verbs.cpp:2880
 msgid "Convert selected object to path"
-msgstr "Geselecteerd object omzetten naar pad"
+msgstr "Geselecteerde object converteren naar pad"
 
 #: ../src/verbs.cpp:2881
 msgid "_Flow into Frame"
@@ -32177,7 +32086,7 @@ msgstr "_Omzetten naar tekst"
 #: ../src/verbs.cpp:2887
 msgid "Convert flowed text to regular text object (preserves appearance)"
 msgstr ""
-"Ingekaderde tekst omzetten naar een gewoon tekstobject (met behoud van "
+"Ingekaderde tekst converteren naar een gewoon tekstobject (met behoud van "
 "uiterlijk)"
 
 #: ../src/verbs.cpp:2889
@@ -33261,9 +33170,8 @@ msgid "SVG 1.1 Specification"
 msgstr "SVG 1.1-specificatie"
 
 #: ../src/verbs.cpp:3208
-#, fuzzy
 msgid "SVG 2 Specification"
-msgstr "SVG 1.1-specificatie"
+msgstr "SVG 2 Specificatie"
 
 #: ../src/verbs.cpp:3211
 msgid "Inkscape: _Basic"
@@ -33452,14 +33360,12 @@ msgid "Align top-right corners"
 msgstr "Rechterzijden uitlijnen"
 
 #: ../src/verbs.cpp:3308 ../src/verbs.cpp:3309
-#, fuzzy
 msgid "Align bottom-right corners"
-msgstr "Onderzijden uitlijnen"
+msgstr "Rechterbenedenhoeken uitlijnen"
 
 #: ../src/verbs.cpp:3312 ../src/verbs.cpp:3313
-#, fuzzy
 msgid "Align bottom-left corners"
-msgstr "Onderzijden uitlijnen"
+msgstr "Linkerbenedenhoeken uitlijnen"
 
 #: ../src/verbs.cpp:3316 ../src/verbs.cpp:3317
 #, fuzzy
@@ -33474,13 +33380,11 @@ msgid ""
 msgstr "Objectranden uitlijnen op de linkerbenedenhoek van het anker"
 
 #: ../src/verbs.cpp:3324 ../src/verbs.cpp:3325
-#, fuzzy
 msgid ""
 "Align bottom-right corners of objects to the top-left corner of the anchor"
 msgstr "Objectranden uitlijnen op de linkerbovenhoek van het anker"
 
 #: ../src/verbs.cpp:3328 ../src/verbs.cpp:3329
-#, fuzzy
 msgid ""
 "Align bottom-left corners of objects to the top-right corner of the anchor"
 msgstr "Objectranden uitlijnen op de rechterbovenhoek van het anker"
@@ -33653,8 +33557,7 @@ msgstr "Palet"
 msgid "Rename gradient"
 msgstr "Kleurverloop hernoemen"
 
-#: ../src/widgets/gradient-vector.cpp:292
-#: ../src/widgets/paint-selector.cpp:909
+#: ../src/widgets/gradient-vector.cpp:292 ../src/widgets/paint-selector.cpp:909
 #: ../src/widgets/paint-selector.cpp:1251
 msgid "No document selected"
 msgstr "Geen document geselecteerd"
@@ -33985,7 +33888,7 @@ msgstr "Bericht"
 
 #: ../share/ui/dialog-livepatheffect-effect.glade:77
 msgid "LPEName"
-msgstr "LPENaam"
+msgstr "Naam padeffect"
 
 #: ../share/ui/dialog-livepatheffect-effect.glade:113
 msgid "Experimental"
@@ -34016,7 +33919,6 @@ msgid "Set as default template"
 msgstr "Instellen als standaardsjabloon"
 
 #: ../share/ui/dialog-trace.glade:92
-#, fuzzy
 msgid ""
 "\n"
 "  This dialog allows you to automatically convert a raster graphic into "
@@ -34063,7 +33965,7 @@ msgstr ""
 "* \"Multiple scans\" produceert na meerdere scans van de afbeelding "
 "verschillende paden afhankelijk van helderheid, kleurscheiding of "
 "grijswaarden. Dit kan ook via autotrace.\n"
-"* Het \"Pixelkunst\" tabblad laat u pixelart afbeeldingen omzetten naar "
+"* Het \"Pixelkunst\" tabblad laat u pixelart afbeeldingen converteren naar "
 "vectorpaden via het depixelize algoritme.\n"
 "\n"
 "* OPMERKING:\n"
@@ -34386,11 +34288,10 @@ msgstr ""
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 114
 #: ../share/extensions/inkex/deprecated.py:126
-#, fuzzy
 msgid "{} is now a method in the svg. Use `self.svg.namedview.center` instead."
 msgstr ""
-"{} is nu een methode in het svg bestand. Gebruik in de plaats `self.svg."
-"get_current_layer()`."
+"{} is nu een methode in het svg-bestand. Gebruik in de plaats `self.svg."
+"namedview.center`."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 125
@@ -34752,8 +34653,7 @@ msgstr ""
 "Het geselecteerde pad is te kort. Het moet tenminste vier knooppunten "
 "bevatten."
 
-#: ../share/extensions/pathscatter.py:186
-#: ../share/extensions/perspective.py:47
+#: ../share/extensions/pathscatter.py:186 ../share/extensions/perspective.py:47
 msgid "This extension requires two selected paths."
 msgstr "Deze uitbreiding vereist twee geselecteerde paden."
 
@@ -34880,11 +34780,11 @@ msgstr "Je moet een map opgeven voor de export van de deelafbeeldingen."
 
 #: ../share/extensions/webslicer_export.py:52
 msgid "Can't create '{}': {}."
-msgstr ""
+msgstr "Kan '{}': {} niet creëren."
 
 #: ../share/extensions/webslicer_export.py:54
 msgid "Dir doesn't exist '{}'."
-msgstr ""
+msgstr "Map bestaat niet '{}'."
 
 #: ../share/extensions/webslicer_export.py:58
 msgid "No slicer layer found."
@@ -34914,9 +34814,9 @@ msgstr "Maximum segmentlengte (px):"
 msgid "Number of segments:"
 msgstr "Aantal segmenten:"
 
-#: ../share/extensions/addnodes.inx:14
-#: ../share/extensions/convert2dashes.inx:8 ../share/extensions/edge3d.inx:15
-#: ../share/extensions/flatten.inx:9 ../share/extensions/fractalize.inx:10
+#: ../share/extensions/addnodes.inx:14 ../share/extensions/convert2dashes.inx:8
+#: ../share/extensions/edge3d.inx:15 ../share/extensions/flatten.inx:9
+#: ../share/extensions/fractalize.inx:10
 #: ../share/extensions/interp_att_g.inx:53
 #: ../share/extensions/jitternodes.inx:25
 #: ../share/extensions/markers_strokepaint.inx:33
@@ -35150,16 +35050,15 @@ msgstr "Te vervangen kleur"
 #: ../share/extensions/color_replace.inx:7
 #, fuzzy
 msgid "From color"
-msgstr "Kleur plakken"
+msgstr "Uit kleur"
 
 #: ../share/extensions/color_replace.inx:9
 msgid "New color"
 msgstr "Nieuwe kleur"
 
 #: ../share/extensions/color_replace.inx:10
-#, fuzzy
 msgid "To color"
-msgstr "Icoonkleur"
+msgstr "Naar kleur"
 
 #: ../share/extensions/color_rgbbarrel.inx:3
 msgid "RGB Barrel"
@@ -37619,8 +37518,7 @@ msgid "Check this to show movements between paths (Default: Unchecked)"
 msgstr ""
 "Vink dit aan om de bewegingen tussen paden te tonen (Standaard: uitgevinkt)"
 
-#: ../share/extensions/hpgl_input.inx:14
-#: ../share/extensions/hpgl_output.inx:40
+#: ../share/extensions/hpgl_input.inx:14 ../share/extensions/hpgl_output.inx:40
 msgid "HP Graphics Language file (*.hpgl)"
 msgstr "HP Graphics Language-bestand (*.hpgl)"
 
@@ -37638,9 +37536,9 @@ msgid ""
 "Please use the plotter extension (Extensions menu) to plot directly over a "
 "serial connection."
 msgstr ""
-"Zorg dat alle objecten die je wil bewaren, omgezet zijn naar paden. Gebruik "
-"de plotteruitbreiding (menu Uitbreidingen) om onmiddellijk over een seriële "
-"verbinding te plotten."
+"Zorg dat alle objecten die je wil bewaren, geconverteerd zijn naar paden. "
+"Gebruik de plotteruitbreiding (menu Uitbreidingen) om onmiddellijk via een "
+"seriële verbinding te plotten."
 
 #: ../share/extensions/hpgl_output.inx:9 ../share/extensions/plotter.inx:67
 msgid "Plotter Settings"
@@ -37795,7 +37693,7 @@ msgstr ""
 
 #: ../share/extensions/hpgl_output.inx:33 ../share/extensions/plotter.inx:92
 msgid "Convert objects to paths"
-msgstr "Converteren van objecten naar paden"
+msgstr "Objecten converteren naar paden"
 
 #
 # File: ../share/extensions/hpgl_output.inx, line: 34
@@ -38029,8 +37927,7 @@ msgstr "Stijl"
 msgid "Transformation"
 msgstr "Transformatie"
 
-#: ../share/extensions/interp_att_g.inx:32
-#: ../share/extensions/nicechart.inx:79
+#: ../share/extensions/interp_att_g.inx:32 ../share/extensions/nicechart.inx:79
 msgid "Values"
 msgstr "Waarden"
 
@@ -38671,7 +38568,7 @@ msgstr ""
 
 #: ../share/extensions/layers2svgfont.inx:3
 msgid "3 - Convert Glyph Layers to SVG Font"
-msgstr "3 - Karakterlagen in SVG-lettertype omzetten"
+msgstr "3 - Karakterlagen converteren naar SVG-lettertype"
 
 #: ../share/extensions/layers2svgfont.inx:8
 #: ../share/extensions/new_glyph_layer.inx:9
@@ -38846,7 +38743,6 @@ msgid "Randomize angle (%):"
 msgstr "Willekeurige hoek (%):"
 
 #: ../share/extensions/lindenmayer.inx:17
-#, fuzzy
 msgid ""
 "\n"
 "The path is generated by applying the \n"
@@ -38890,6 +38786,10 @@ msgstr ""
 "[: punt bewaren\n"
 "\n"
 "]: terugkeren naar bewaard punt\n"
+"\n"
+"U kan meerdere regels opgeven\n"
+"gescheiden met een puntkomma (;).\n"
+"\n"
 
 #: ../share/extensions/lorem_ipsum.inx:3
 msgid "Lorem ipsum"
@@ -38959,9 +38859,8 @@ msgid "Assign stroke color"
 msgstr "Lijnkleur instellen"
 
 #: ../share/extensions/markers_strokepaint.inx:28
-#, fuzzy
 msgid "Modify in Place"
-msgstr "Pad aanpassen"
+msgstr "Ter plaatse aanpassen"
 
 #: ../share/extensions/measure.inx:3
 msgid "Measure Path"
@@ -39097,7 +38996,7 @@ msgstr "Afstand (px):"
 #: ../share/extensions/measure.inx:52
 #, fuzzy
 msgid "Scale Factor (Real:Drawing Length):"
-msgstr "Schaalfactor (tekening:werkelijkheid) = 1:"
+msgstr "Schaalfactor (werkelijkheid:tekening):"
 
 #: ../share/extensions/measure.inx:53
 msgid "Length Unit:"
@@ -39351,18 +39250,18 @@ msgid ""
 "Convert all color specifications to #RRGGBB (or #RGB where applicable) "
 "format."
 msgstr ""
-"Alle kleurspecificaties naar #RRGGBB (of #RGB indien toepasbaar) omzetten."
+"Alle kleurspecificaties naar #RRGGBB (of #RGB indien toepasbaar) converteren."
 
 #: ../share/extensions/output_scour.inx:17
 msgid "Convert CSS attributes to XML attributes"
-msgstr "CSS-attributen omzetten in XML-attributen"
+msgstr "CSS-attributen converteren naar XML-attributen"
 
 #: ../share/extensions/output_scour.inx:17
 msgid ""
 "Convert styles from style tags and inline style=\"\" declarations into XML "
 "attributes."
 msgstr ""
-"Stijlen uit stijltags en inline style=\"\" declaraties omzetten in XML-"
+"Stijlen uit stijltags en inline style=\"\" declaraties converteren naar XML-"
 "attributen."
 
 #: ../share/extensions/output_scour.inx:21
@@ -39611,8 +39510,8 @@ msgstr ""
 "Beschrijvende ID's die manueel gemaakt werden om naar specifieke elementen "
 "of groepen te refereren of te labelen (bv. #arrowStart, #arrowEnd or "
 "#textLabels), blijven behouden, terwijl genummerde ID's (zoals deze door de "
-"meeste SVG-bewerkers, inclusief Inkscape, aangemaakt worden) verwijderd/"
-"afgekort worden."
+"meeste SVG-bewerkers, inclusief Inkscape, aangemaakt worden) zullen "
+"verwijderd/afgekort worden."
 
 #: ../share/extensions/output_scour.inx:90
 msgid "Preserve the following IDs:"
@@ -39750,7 +39649,7 @@ msgstr "Mesh naar pad"
 
 #: ../share/extensions/path_mesh_m2p.inx:19
 msgid "Convert geometry of selected meshgradient to path data"
-msgstr "Geometrie van geselecteerd meshgradiënt naar pad omzetten"
+msgstr "Geometrie van geselecteerd meshgradiënt naar pad converteren"
 
 #: ../share/extensions/path_mesh_m2p.inx:28
 #: ../share/extensions/path_mesh_p2m.inx:23
@@ -39763,7 +39662,7 @@ msgstr "Pad naar meshgradiënt"
 
 #: ../share/extensions/path_mesh_p2m.inx:9
 msgid "Convert each selected path to 1x1 mesh"
-msgstr "Geselecteerd object omzetten naar pad"
+msgstr "Geselecteerd object converteren naar pad"
 
 #: ../share/extensions/path_mesh_p2m.inx:13
 msgid "Path to mesh"
@@ -39771,7 +39670,8 @@ msgstr "Pad naar mesh"
 
 #: ../share/extensions/path_mesh_p2m.inx:14
 msgid "Convert geometry of selected path (4 corners) to a meshgradient"
-msgstr "Geometrie van geselecteerd pad (4 hoeken) omzetten naar meshgradiënt"
+msgstr ""
+"Geometrie van geselecteerd pad (4 hoeken) converteren naar meshgradiënt"
 
 #: ../share/extensions/path_number_nodes.inx:3
 msgid "Number Nodes"
@@ -39810,9 +39710,8 @@ msgstr ""
 "    * Stap: stapgrootte nummering tussen twee knooppunten."
 
 #: ../share/extensions/path_to_absolute.inx:3
-#, fuzzy
 msgid "To Absolute"
-msgstr "Absoluut"
+msgstr "Naar absoluut"
 
 #: ../share/extensions/pathalongpath.inx:3
 msgid "Pattern along Path"
@@ -40064,7 +39963,8 @@ msgstr "Plotten"
 msgid ""
 "Please make sure that all objects you want to plot are converted to paths."
 msgstr ""
-"Zorg er aub. voor dat alle objecten die je wil plotten omgezet zijn in paden."
+"Zorg er a.u.b. voor dat alle objecten die u wil plotten geconverteerd zijn "
+"naar paden."
 
 #: ../share/extensions/plotter.inx:9
 msgid "Connection Settings"
@@ -40884,7 +40784,7 @@ msgstr "X-hoogte:"
 
 #: ../share/extensions/setup_typography_canvas.inx:9
 msgid "Descender:"
-msgstr "Staarthoogte:"
+msgstr "Staartlengte:"
 
 #: ../share/extensions/spirograph.inx:3
 msgid "Spirograph"
@@ -41179,7 +41079,7 @@ msgstr ""
 
 #: ../share/extensions/svgfont2layers.inx:3
 msgid "Convert SVG Font to Glyph Layers"
-msgstr "SVG-lettertype in karakterlagen omzetten"
+msgstr "SVG-lettertype converteren naar karakterlagen"
 
 #: ../share/extensions/svgfont2layers.inx:5
 msgid "Stop after (30 Recommended)"
@@ -41559,7 +41459,6 @@ msgid "lowercase"
 msgstr "kleine letters"
 
 #: ../share/extensions/text_merge.inx:21
-#, fuzzy
 msgid "Flow text"
 msgstr "Ingekaderde tekst"
 
@@ -42241,6 +42140,10 @@ msgid ""
 "features and is widely used for both artistic and technical illustrations "
 "such as cartoons, clip art, logos, typography, diagramming and flowcharting."
 msgstr ""
+"Een gratis en open source vectortekenprogramma. Het biedt een scala aan "
+"functies en wordt alom gebruikt voor zowel artistieke als technische "
+"illustraties zoals cartoons, clip art, logo's, typografie, diagrammen en "
+"stroomschema's."
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:16
 msgid ""
@@ -42249,6 +42152,11 @@ msgid ""
 "raster graphics. Inkscape uses the standardized SVG file format as its main "
 "format, which is supported by many other applications including web browsers."
 msgstr ""
+"Er worden vector illustraties gebruikt voor haarscherpe afdrukken en "
+"weergaven op eindeloze resolutie, zonder de beperking van een vast aantal "
+"pixels zoals bij rasterillustraties. Inkscape gebruikt standaard SVG als "
+"voornaamste bestandsformaat. Dit wordt ondersteund door vele andere "
+"applicaties, inclusief webbrowsers."
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:19
 msgid ""
