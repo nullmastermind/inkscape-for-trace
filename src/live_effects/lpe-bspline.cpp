@@ -198,7 +198,7 @@ void sp_bspline_do_effect(SPCurve *curve, double helper_size, Geom::PathVector &
         Geom::Path::const_iterator curve_it1 = path_it.begin();
         Geom::Path::const_iterator curve_it2 = ++(path_it.begin());
         Geom::Path::const_iterator curve_endit = path_it.end_default();
-        SPCurve *curve_n = new SPCurve();
+        auto curve_n = std::make_unique<SPCurve>();
         Geom::Point previousNode(0, 0);
         Geom::Point node(0, 0);
         Geom::Point point_at1(0, 0);
@@ -222,7 +222,7 @@ void sp_bspline_do_effect(SPCurve *curve, double helper_size, Geom::PathVector &
           }
         }
         while (curve_it1 != curve_endit) {
-            SPCurve *in = new SPCurve();
+            auto in = std::make_unique<SPCurve>();
             in->moveto(curve_it1->initialPoint());
             in->lineto(curve_it1->finalPoint());
             cubic = dynamic_cast<Geom::CubicBezier const *>(&*curve_it1);
@@ -242,10 +242,8 @@ void sp_bspline_do_effect(SPCurve *curve, double helper_size, Geom::PathVector &
                 point_at1 = in->first_segment()->initialPoint();
                 point_at2 = in->first_segment()->finalPoint();
             }
-            in->reset();
-            delete in;
             if ( curve_it2 != curve_endit ) {
-                SPCurve *out = new SPCurve();
+                auto out = std::make_unique<SPCurve>();
                 out->moveto(curve_it2->initialPoint());
                 out->lineto(curve_it2->finalPoint());
                 cubic = dynamic_cast<Geom::CubicBezier const *>(&*curve_it2);
@@ -259,15 +257,13 @@ void sp_bspline_do_effect(SPCurve *curve, double helper_size, Geom::PathVector &
                 } else {
                     next_point_at1 = out->first_segment()->initialPoint();
                 }
-                out->reset();
-                delete out;
             }
             if (path_it.closed() && curve_it2 == curve_endit) {
-                SPCurve *start = new SPCurve();
+                auto start = std::make_unique<SPCurve>();
                 start->moveto(path_it.begin()->initialPoint());
                 start->lineto(path_it.begin()->finalPoint());
                 Geom::D2<Geom::SBasis> sbasis_start = start->first_segment()->toSBasis();
-                SPCurve *line_helper = new SPCurve();
+                auto line_helper = std::make_unique<SPCurve>();
                 cubic = dynamic_cast<Geom::CubicBezier const *>(&*path_it.begin());
                 if (cubic) {
                     line_helper->moveto(sbasis_start.valueAt(
@@ -275,10 +271,8 @@ void sp_bspline_do_effect(SPCurve *curve, double helper_size, Geom::PathVector &
                 } else {
                     line_helper->moveto(start->first_segment()->initialPoint());
                 }
-                start->reset();
-                delete start;
 
-                SPCurve *end = new SPCurve();
+                auto end = std::make_unique<SPCurve>();
                 end->moveto(curve_it1->initialPoint());
                 end->lineto(curve_it1->finalPoint());
                 Geom::D2<Geom::SBasis> sbasis_end = end->first_segment()->toSBasis();
@@ -289,11 +283,7 @@ void sp_bspline_do_effect(SPCurve *curve, double helper_size, Geom::PathVector &
                 } else {
                     line_helper->lineto(end->first_segment()->finalPoint());
                 }
-                end->reset();
-                delete end;
                 sbasis_helper = line_helper->first_segment()->toSBasis();
-                line_helper->reset();
-                delete line_helper;
                 node = sbasis_helper.valueAt(0.5);
                 curve_n->curveto(point_at1, point_at2, node);
                 curve_n->move_endpoints(node, node);
@@ -301,12 +291,10 @@ void sp_bspline_do_effect(SPCurve *curve, double helper_size, Geom::PathVector &
                 curve_n->curveto(point_at1, point_at2, curve_it1->finalPoint());
                 curve_n->move_endpoints(path_it.begin()->initialPoint(), curve_it1->finalPoint());
             } else {
-                SPCurve *line_helper = new SPCurve();
+                auto line_helper = std::make_unique<SPCurve>();
                 line_helper->moveto(point_at2);
                 line_helper->lineto(next_point_at1);
                 sbasis_helper = line_helper->first_segment()->toSBasis();
-                line_helper->reset();
-                delete line_helper;
                 previousNode = node;
                 node = sbasis_helper.valueAt(0.5);
                 Geom::CubicBezier const *cubic2 = dynamic_cast<Geom::CubicBezier const *>(&*curve_it1);
@@ -325,8 +313,6 @@ void sp_bspline_do_effect(SPCurve *curve, double helper_size, Geom::PathVector &
             curve_n->closepath_current();
         }
         curve->append(*curve_n, false);
-        curve_n->reset();
-        delete curve_n;
     }
     if(helper_size > 0.0) {
         Geom::PathVector const pathv = curve->get_pathvector();
@@ -365,7 +351,7 @@ void LPEBSpline::doBSplineFromWidget(SPCurve *curve, double weight_ammount)
         Geom::Path::const_iterator curve_it2 = ++(path_it.begin());
         Geom::Path::const_iterator curve_endit = path_it.end_default();
 
-        SPCurve *curve_n = new SPCurve();
+        auto curve_n = std::make_unique<SPCurve>();
         Geom::Point point_at0(0, 0);
         Geom::Point point_at1(0, 0);
         Geom::Point point_at2(0, 0);
@@ -387,7 +373,7 @@ void LPEBSpline::doBSplineFromWidget(SPCurve *curve, double weight_ammount)
           }
         }
         while (curve_it1 != curve_endit) {
-            SPCurve *in = new SPCurve();
+            auto in = std::make_unique<SPCurve>();
             in->moveto(curve_it1->initialPoint());
             in->lineto(curve_it1->finalPoint());
             cubic = dynamic_cast<Geom::CubicBezier const *>(&*curve_it1);
@@ -451,8 +437,6 @@ void LPEBSpline::doBSplineFromWidget(SPCurve *curve, double weight_ammount)
                     point_at2 = in->first_segment()->finalPoint();
                 }
             }
-            in->reset();
-            delete in;
             curve_n->curveto(point_at1, point_at2, point_at3);
             ++curve_it1;
             ++curve_it2;
@@ -467,8 +451,6 @@ void LPEBSpline::doBSplineFromWidget(SPCurve *curve, double weight_ammount)
             curve_n->closepath_current();
         }
         curve->append(*curve_n, false);
-        curve_n->reset();
-        delete curve_n;
     }
 }
 

@@ -166,7 +166,7 @@ void LPEPerspectiveEnvelope::doEffect(SPCurve *curve)
         if (path_it.empty())
             continue;
         //Itreadores
-        SPCurve *nCurve = new SPCurve();
+        auto nCurve = std::make_unique<SPCurve>();
         Geom::Path::const_iterator curve_it1 = path_it.begin();
         Geom::Path::const_iterator curve_endit = path_it.end_default();
 
@@ -212,9 +212,7 @@ void LPEPerspectiveEnvelope::doEffect(SPCurve *curve)
             nCurve->move_endpoints(point_at3, point_at3);
             nCurve->closepath_current();
         }
-        curve->append(nCurve, false);
-        nCurve->reset();
-        delete nCurve;
+        curve->append(*nCurve);
     }
 }
 
@@ -547,8 +545,7 @@ LPEPerspectiveEnvelope::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::v
 {
     hp_vec.clear();
 
-    SPCurve *c = new SPCurve();
-    c->reset();
+    auto c = std::make_unique<SPCurve>();
     c->moveto(up_left_point);
     c->lineto(up_right_point);
     c->lineto(down_right_point);
