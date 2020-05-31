@@ -47,6 +47,7 @@ ExtensionEditor::ExtensionEditor()
     Gtk::HBox* hbox_list_page = Gtk::manage(new Gtk::HBox());
     hbox_list_page->set_border_width(12);
     hbox_list_page->set_spacing(12);
+    hbox_list_page->set_vexpand();
     _getContents()->add(*hbox_list_page);
 
 
