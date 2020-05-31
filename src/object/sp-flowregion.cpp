@@ -319,18 +319,19 @@ const char* SPFlowregionExclude::displayName() const {
 	return _("Flow Excluded Region");
 }
 
-static void         UnionShape(Shape **base_shape, Shape const *add_shape)
+static void UnionShape(Shape *&base_shape, Shape const *add_shape)
 {
-    if (*base_shape == nullptr)
-        *base_shape = new Shape;
-	if ( (*base_shape)->hasEdges() == false ) {
-		(*base_shape)->Copy(const_cast<Shape*>(add_shape));
-	} else if ( add_shape->hasEdges() ) {
-		Shape* temp=new Shape;
-		temp->Booleen(const_cast<Shape*>(add_shape), *base_shape, bool_op_union);
-		delete *base_shape;
-		*base_shape = temp;
-	}
+    if (base_shape == nullptr)
+        base_shape = new Shape;
+
+    if (base_shape->hasEdges() == false) {
+        base_shape->Copy(const_cast<Shape *>(add_shape));
+    } else if (add_shape->hasEdges()) {
+        Shape *temp = new Shape;
+        temp->Booleen(const_cast<Shape *>(add_shape), base_shape, bool_op_union);
+        delete base_shape;
+        base_shape = temp;
+    }
 }
 
 static void         GetDest(SPObject* child,Shape **computed)
@@ -376,7 +377,7 @@ static void         GetDest(SPObject* child,Shape **computed)
 		} else {
 			uncross->ConvertToShape(n_shp,fill_nonZero);
 		}
-		UnionShape(computed, uncross);
+		UnionShape(*computed, uncross);
 		delete uncross;
 		delete n_shp;
 		delete temp;
