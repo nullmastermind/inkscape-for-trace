@@ -977,7 +977,7 @@ void PenTool::_lastpointToCurve() {
                 //we eliminate the last segment
                 this->green_curve->backspace();
                 //and we add it again with the recreation
-                this->green_curve->append_continuous(previous.get(), 0.0625);
+                green_curve->append_continuous(*previous);
             }
         }
         //if the last node is an union with another curve
@@ -1024,7 +1024,7 @@ void PenTool::_lastpointToLine() {
                 //we eliminate the last segment
                 this->green_curve->backspace();
                 //and we add it again with the recreation
-                this->green_curve->append_continuous(previous.get(), 0.0625);
+                green_curve->append_continuous(*previous);
             }
         }
         // if the last node is an union with another curve
@@ -1445,7 +1445,7 @@ void PenTool::_bsplineSpiroStartAnchorOn()
         //we eliminate the last segment
         this->sa_overwrited->backspace();
         //and we add it again with the recreation
-        this->sa_overwrited->append_continuous(last_segment.get(), 0.0625);
+        sa_overwrited->append_continuous(*last_segment);
     }
 }
 
@@ -1462,7 +1462,7 @@ void PenTool::_bsplineSpiroStartAnchorOff()
             //we eliminate the last segment
             this->sa_overwrited->backspace();
             //and we add it again with the recreation
-            this->sa_overwrited->append_continuous(last_segment.get(), 0.0625);
+            sa_overwrited->append_continuous(*last_segment);
         }
     }
 }
@@ -1624,7 +1624,7 @@ void PenTool::_bsplineSpiroEndAnchorOn()
         //we eliminate the last segment
         tmp_curve ->backspace();
         //and we add it again with the recreation
-        tmp_curve ->append_continuous(last_segment.get(), 0.0625);
+        tmp_curve ->append_continuous(*last_segment);
     }
     tmp_curve = tmp_curve->create_reverse();
     if( this->green_anchor && this->green_anchor->active )
@@ -1667,7 +1667,7 @@ void PenTool::_bsplineSpiroEndAnchorOff()
         //we eliminate the last segment
         tmp_curve ->backspace();
         //and we add it again with the recreation
-        tmp_curve ->append_continuous(last_segment.get(), 0.0625);
+        tmp_curve ->append_continuous(*last_segment);
     }
     tmp_curve = tmp_curve->create_reverse();
 
@@ -1696,7 +1696,7 @@ void PenTool::_bsplineSpiroBuild()
     }
 
     if (!this->green_curve->is_unset()){
-        curve->append_continuous(this->green_curve.get(), 0.0625);
+        curve->append_continuous(*green_curve);
     }
 
     //and the red one
@@ -1866,7 +1866,7 @@ void PenTool::_finishSegment(Geom::Point const p, guint const state) {
                 lsegment->moveto((*cubic)[0]);
                 lsegment->curveto((*cubic)[1], this->p[0] - ((*cubic)[2] - (*cubic)[3]), *this->red_curve->first_point());
                 this->green_curve->backspace();
-                this->green_curve->append_continuous(lsegment.get(), 0.0625);
+                green_curve->append_continuous(*lsegment);
             }
         }
         this->green_curve->append_continuous(*red_curve);

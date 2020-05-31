@@ -43,6 +43,25 @@ class CurveTest : public ::testing::Test {
     }
 };
 
+TEST_F(CurveTest, testMoveSemantics)
+{
+    SPCurve c1;
+    c1.moveto(2, 3);
+    c1.lineto(4, 5);
+
+    // move construction
+    SPCurve c2(std::move(c1));
+
+    ASSERT_EQ(c1.get_segment_count(), 0);
+    ASSERT_EQ(c2.get_segment_count(), 1);
+
+    // move assignment
+    c1 = std::move(c2);
+
+    ASSERT_EQ(c1.get_segment_count(), 1);
+    ASSERT_EQ(c2.get_segment_count(), 0);
+}
+
 TEST_F(CurveTest, testRefCount)
 {
     auto c1 = std::make_unique<SPCurve>();

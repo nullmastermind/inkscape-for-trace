@@ -242,9 +242,9 @@ std::unique_ptr<SPCurve> SPHatchPath::_calculateRenderCurve(View const &view) co
             Geom::Affine step_transform = Geom::Translate(0, repeatLength);
             for (int i = 0; i < segment_cnt; ++i) {
                 if (_continuous) {
-                    calculated_curve->append_continuous(segment.get(), 0.0625);
+                    calculated_curve->append_continuous(*segment);
                 } else {
-                    calculated_curve->append(segment.get(), false);
+                    calculated_curve->append(*segment);
                 }
                 segment->transform(step_transform);
             }

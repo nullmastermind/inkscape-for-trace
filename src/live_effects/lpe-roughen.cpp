@@ -301,9 +301,10 @@ void LPERoughen::doEffect(SPCurve *curve)
                         Geom::nearest_time(original->pointAt((1. / (double)splits) * t), *nCurve->last_segment());
                     tmp = addNodesAndJitter(nCurve->last_segment(), prev, last_move, time, last);
                 }
+                assert(tmp);
                 if (nCurve->get_segment_count() > 1) {
                     nCurve->backspace();
-                    nCurve->append_continuous(tmp.get(), 0.001);
+                    nCurve->append_continuous(*tmp, 0.001);
                 } else {
                     nCurve = std::move(tmp);
                 }
@@ -331,7 +332,7 @@ void LPERoughen::doEffect(SPCurve *curve)
                     out->curveto(nCurve->last_segment()->initialPoint(), oposite, nCurve->last_segment()->finalPoint());
                 }
                 nCurve->backspace();
-                nCurve->append_continuous(out, 0.001);
+                nCurve->append_continuous(*out, 0.001);
                 nCurve = nCurve->create_reverse();
             }
             if (handles == HM_ALONG_NODES && curve_it1 == curve_endit) {
@@ -343,7 +344,7 @@ void LPERoughen::doEffect(SPCurve *curve)
                     out->curveto((*cubic)[1], (*cubic)[2] - ((*cubic)[3] - nCurve->first_segment()->initialPoint()),
                                  (*cubic)[3]);
                     nCurve->backspace();
-                    nCurve->append_continuous(out, 0.001);
+                    nCurve->append_continuous(*out, 0.001);
                 }
                 nCurve = nCurve->create_reverse();
             }

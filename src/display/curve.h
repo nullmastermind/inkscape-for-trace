@@ -37,6 +37,16 @@ public:
         : _pathv(std::move(pathv))
     {}
 
+    // move
+    SPCurve(SPCurve &&other)
+        : _pathv(std::move(other._pathv))
+    {}
+    SPCurve &operator=(SPCurve &&other)
+    {
+        _pathv = std::move(other._pathv);
+        return *this;
+    }
+
     static smart_pointer new_from_rect(Geom::Rect const &rect, bool all_four_sides = false);
     static smart_pointer copy(SPCurve const *);
 
@@ -89,13 +99,8 @@ public:
 
     void append(Geom::PathVector const &, bool use_lineto = false);
     void append(SPCurve const &curve2, bool use_lineto = false);
-    [[deprecated("Use reference overload")]] void append(SPCurve const *curve2, bool use_lineto)
-    {
-        append(*curve2, use_lineto);
-    }
 
-    void append_continuous(SPCurve const &c1, double tolerance = 0.0625) { append_continuous(&c1, tolerance); }
-    SPCurve * append_continuous(SPCurve const *c1, double tolerance);
+    bool append_continuous(SPCurve const &c1, double tolerance = 0.0625);
 
     smart_pointer create_reverse() const;
 

@@ -511,49 +511,45 @@ void SPCurve::append(Geom::PathVector const &pathv, bool use_lineto)
 /**
  * Append \a c1 to \a this with possible fusing of close endpoints. If the end of this curve and the start of c1 are within tolerance distance,
  * then the startpoint of c1 is moved to the end of this curve and the first subpath of c1 is appended to the last subpath of this curve.
- * When one of the curves (this curve or the argument curve) is closed, the returned value is NULL; otherwise the returned value is this curve.
  * When one of the curves is empty, this curves path becomes the non-empty path.
+ *
+ * @param tolerance Tolerance for enpoint fusion (applied to x and y separately)
+ * @return False if one of the curves (this curve or the argument curve) is closed, true otherwise.
  */
-SPCurve *
-SPCurve::append_continuous(SPCurve const *c1, double tolerance)
+bool SPCurve::append_continuous(SPCurve const &c1, double tolerance)
 {
-    using Geom::X;
-    using Geom::Y;
-
-    g_return_val_if_fail(c1 != nullptr, NULL);
-    if ( this->is_closed() || c1->is_closed() ) {
-        return nullptr;
+    if (is_closed() || c1.is_closed()) {
+        return false;
     }
 
-    if (c1->is_empty()) {
-        return this;
+    if (c1.is_empty()) {
+        return true;
     }
 
     if (this->is_empty()) {
-        _pathv = c1->_pathv;
-        return this;
+        _pathv = c1._pathv;
+        return true;
     }
 
-    if ( (fabs((*this->last_point())[X] - (*c1->first_point())[X]) <= tolerance)
-         && (fabs((*this->last_point())[Y] - (*c1->first_point())[Y]) <= tolerance) )
-    {
+    if ((fabs(last_point()->x() - c1.first_point()->x()) <= tolerance) &&
+        (fabs(last_point()->y() - c1.first_point()->y()) <= tolerance)) {
     // c1's first subpath can be appended to this curve's last subpath
-        Geom::PathVector::const_iterator path_it = c1->_pathv.begin();
+        Geom::PathVector::const_iterator path_it = c1._pathv.begin();
         Geom::Path & lastpath = _pathv.back();
 
         Geom::Path newfirstpath(*path_it);
         newfirstpath.setInitial(lastpath.finalPoint());
         lastpath.append( newfirstpath );
 
-        for (++path_it; path_it != c1->_pathv.end(); ++path_it) {
+        for (++path_it; path_it != c1._pathv.end(); ++path_it) {
             _pathv.push_back( (*path_it) );
         }
 
     } else {
-        append(*c1, true);
+        append(c1, true);
     }
 
-    return this;
+    return true;
 }
 
 /**

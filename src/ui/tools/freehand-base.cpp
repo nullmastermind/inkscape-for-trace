@@ -771,7 +771,7 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
     dc->green_bpaths.clear();
 
     // Blue
-    c->append_continuous(dc->blue_curve.get(), 0.0625);
+    c->append_continuous(*dc->blue_curve);
     dc->blue_curve->reset();
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->blue_bpath), nullptr);
 
@@ -835,8 +835,8 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
             prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2){
                 e = e->create_reverse();
                 Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*e->last_segment());
-                auto lastSeg = std::make_unique<SPCurve>();
                 if(cubic){
+                    auto lastSeg = std::make_unique<SPCurve>();
                     lastSeg->moveto((*cubic)[0]);
                     lastSeg->curveto((*cubic)[1],(*cubic)[3],(*cubic)[3]);
                     if( e->get_segment_count() == 1){
@@ -850,7 +850,7 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
                 }
                 e = e->create_reverse();
         }
-        c->append_continuous(e.get(), 0.0625);
+        c->append_continuous(*e);
     }
     if (forceclosed) 
     {
@@ -875,7 +875,7 @@ static void spdc_flush_white(FreehandBase *dc, SPCurve *gc)
 
         dc->white_curves.clear();
         if (gc) {
-            c->append(gc, FALSE);
+            c->append(*gc);
         }
     } else if (gc) {
         c = gc->ref();
