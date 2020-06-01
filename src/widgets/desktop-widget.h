@@ -23,7 +23,6 @@
 
 #include "message.h"
 #include "ui/view/view-widget.h"
-#include "ui/view/edit-widget-interface.h"
 
 #include <cstddef>
 #include <sigc++/connection.h>
@@ -45,11 +44,12 @@ class SwatchesPanel;
 } // namespace Dialog
 
 namespace Widget {
-class Button;
-class LayerSelector;
-class SelectedStyle;
-class SpinButton;
-class Ruler;
+  class Button;
+  class LayerSelector;
+  class SelectedStyle;
+  class SpinButton;
+  class Ruler;
+  class Dock;
 } // namespace Widget
 } // namespace UI
 } // namespace Inkscape
@@ -164,86 +164,6 @@ public:
 
     EgeColorProfTracker* _tracker;
 
-    struct WidgetStub : public Inkscape::UI::View::EditWidgetInterface {
-        SPDesktopWidget *_dtw;
-        WidgetStub (SPDesktopWidget* dtw) : _dtw(dtw) {}
-
-        void setTitle (gchar const *uri) override
-        { _dtw->updateTitle (uri); }
-        Gtk::Window* getWindow() override
-        { return _dtw->window; }
-
-        void layout() override {
-            _dtw->layoutWidgets();
-        }
-
-        void present() override
-        { _dtw->presentWindow(); }
-        void getGeometry (gint &x, gint &y, gint &w, gint &h) override
-        { _dtw->getWindowGeometry (x, y, w, h); }
-        void setSize (gint w, gint h) override
-        { _dtw->setWindowSize (w, h); }
-        void setPosition (Geom::Point p) override
-        { _dtw->setWindowPosition (p); }
-        void setTransient (void* p, int transient_policy) override
-        { _dtw->setWindowTransient (p, transient_policy); }
-        Geom::Point getPointer() override
-        { return _dtw->window_get_pointer(); }
-        void setIconified() override
-        { _dtw->iconify(); }
-        void setMaximized() override
-        { _dtw->maximize(); }
-        void setFullscreen() override
-        { _dtw->fullscreen(); }
-        bool shutdown() override
-        { return _dtw->shutdown(); }
-        void destroy() override
-        {
-            auto *window = _dtw->window;
-            _dtw->window = nullptr;
-            delete window; // may also delete _dtw and this
-        }
-
-        void storeDesktopPosition() override { _dtw->storeDesktopPosition(); }
-        void requestCanvasUpdate() override { _dtw->requestCanvasUpdate(); }
-        void requestCanvasUpdateAndWait() override { _dtw->requestCanvasUpdateAndWait(); }
-        void enableInteraction() override { _dtw->enableInteraction(); }
-        void disableInteraction() override { _dtw->disableInteraction(); }
-        void activateDesktop() override { sp_dtw_desktop_activate(_dtw); }
-        void deactivateDesktop() override { sp_dtw_desktop_deactivate(_dtw); }
-        void updateRulers() override { _dtw->update_rulers(); }
-        void updateScrollbars(double scale) override { _dtw->update_scrollbars(scale); }
-        void toggleRulers() override { _dtw->toggle_rulers(); }
-        void toggleScrollbars() override { _dtw->toggle_scrollbars(); }
-        void toggleColorProfAdjust() override { _dtw->toggle_color_prof_adj(); }
-        bool colorProfAdjustEnabled() override { return _dtw->get_color_prof_adj_enabled(); }
-        void updateZoom() override { _dtw->update_zoom(); }
-        void letZoomGrabFocus() override { _dtw->letZoomGrabFocus(); }
-        void updateRotation() override { _dtw->update_rotation(); }
-        Gtk::Toolbar* get_toolbar_by_name(const Glib::ustring& name) override {return _dtw->get_toolbar_by_name(name);}
-        void setToolboxFocusTo(const gchar *id) override { _dtw->setToolboxFocusTo(id); }
-        void setToolboxAdjustmentValue(const gchar *id, double val) override
-        { _dtw->setToolboxAdjustmentValue (id, val); }
-        bool isToolboxButtonActive (gchar const* id) override
-        { return _dtw->isToolboxButtonActive (id); }
-        void setCoordinateStatus (Geom::Point p) override
-        { _dtw->setCoordinateStatus (p); }
-        void setMessage (Inkscape::MessageType type, gchar const* msg) override
-        { _dtw->setMessage (type, msg); }
-
-        bool showInfoDialog( Glib::ustring const &message ) override {
-            return _dtw->showInfoDialog( message );
-        }
-
-        bool warnDialog (Glib::ustring const &text) override
-        { return _dtw->warnDialog (text); }
-
-        Inkscape::UI::Widget::Dock* getDock () override
-        { return _dtw->getDock(); }
-    };
-
-    WidgetStub *stub;
-
     void setMessage(Inkscape::MessageType type, gchar const *message);
     Geom::Point window_get_pointer();
     bool shutdown();
@@ -295,20 +215,20 @@ public:
     void fullscreen();
     static gint ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw, bool horiz);
 
-    private:
+    void layoutWidgets();
+    void toggle_scrollbars();
+    void update_scrollbars(double scale);
+    void toggle_rulers();
+    void sticky_zoom_toggled();
+
+private:
     GtkWidget *tool_toolbox;
     GtkWidget *aux_toolbox;
     GtkWidget *commands_toolbox;
     GtkWidget *snap_toolbox;
 
-    void layoutWidgets();
-
     void namedviewModified(SPObject *obj, guint flags);
     void on_adjustment_value_changed();
-    void toggle_scrollbars();
-    void update_scrollbars(double scale);
-    void toggle_rulers();
-    void sticky_zoom_toggled();
     int zoom_input(double *new_val);
     bool zoom_output();
     void zoom_value_changed();

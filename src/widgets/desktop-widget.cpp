@@ -691,7 +691,6 @@ SPDesktopWidget::on_unrealize()
 
 SPDesktopWidget::~SPDesktopWidget()
 {
-    delete stub;
     delete _dock;
 }
 
@@ -1623,9 +1622,9 @@ SPDesktopWidget::SPDesktopWidget(SPDocument *document)
 
     dtw->_ruler_origin = Geom::Point(0,0); //namedview->gridorigin;   Why was the grid origin used here?
 
+    // This section seems backwards!
     dtw->desktop = new SPDesktop();
-    dtw->stub = new SPDesktopWidget::WidgetStub (dtw);
-    dtw->desktop->init (namedview, dtw->_canvas, dtw->stub);
+    dtw->desktop->init (namedview, dtw->_canvas, this);
     INKSCAPE.add_desktop (dtw->desktop);
 
     // Add the shape geometry to libavoid for autorouting connectors.

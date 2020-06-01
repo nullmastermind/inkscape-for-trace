@@ -162,7 +162,7 @@ SPDesktop::SPDesktop()
 }
 
 void
-SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, Inkscape::UI::View::EditWidgetInterface *widget)
+SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, SPDesktopWidget *widget)
 {
     _widget = widget;
 
@@ -537,7 +537,7 @@ void SPDesktop::_setDisplayMode(Inkscape::RenderMode mode) {
         }
     }
     redrawDesktop();
-    _widget->setTitle( this->getDocument()->getDocumentName() );
+    _widget->updateTitle( this->getDocument()->getDocumentName() );
 }
 
 void SPDesktop::_setDisplayColorMode(Inkscape::ColorMode mode) {
@@ -559,7 +559,7 @@ void SPDesktop::_setDisplayColorMode(Inkscape::ColorMode mode) {
     canvas->_colorrendermode = mode;
     _display_color_mode = mode;
     redrawDesktop();
-    _widget->setTitle( this->getDocument()->getDocumentName() );
+    _widget->updateTitle( this->getDocument()->getDocumentName() );
 }
 
 bool SPDesktop::displayModeToggle()
@@ -821,7 +821,7 @@ SPItem *SPDesktop::getGroupAtPoint(Geom::Point const &p) const
  */
 Geom::Point SPDesktop::point(bool outside_canvas) const
 {
-    Geom::Point p = _widget->getPointer();
+    Geom::Point p = _widget->window_get_pointer();
     Geom::Point pw = sp_canvas_window_to_world (canvas, p);
     Geom::Rect const r = canvas->getViewbox();
 
@@ -926,10 +926,10 @@ SPDesktop::set_display_area (bool log)
     	SP_BOX3D_CONTEXT(event_context)->_vpdrag->updateLines();
     }
 
-    _widget->updateRulers();
-    _widget->updateScrollbars(_current_affine.getZoom());
-    _widget->updateZoom();
-    _widget->updateRotation();
+    _widget->update_rulers();
+    _widget->update_scrollbars(_current_affine.getZoom());
+    _widget->update_zoom();
+    _widget->update_rotation();
 
     signal_zoom_changed.emit(_current_affine.getZoom());
 }
@@ -1327,8 +1327,8 @@ SPDesktop::scroll_absolute (Geom::Point const &point, bool is_scrolling)
 		SP_BOX3D_CONTEXT(event_context)->_vpdrag->updateLines();
 	}
 
-    _widget->updateRulers();
-    _widget->updateScrollbars(_current_affine.getZoom());
+    _widget->update_rulers();
+    _widget->update_scrollbars(_current_affine.getZoom());
 }
 
 
@@ -1396,7 +1396,7 @@ SPDesktop::is_iconified()
 void
 SPDesktop::iconify()
 {
-    _widget->setIconified();
+    _widget->iconify();
 }
 
 bool SPDesktop::is_darktheme() { return getToplevel()->get_style_context()->has_class("dark"); }
@@ -1410,7 +1410,7 @@ SPDesktop::is_maximized()
 void
 SPDesktop::maximize()
 {
-    _widget->setMaximized();
+    _widget->maximize();
 }
 
 bool
@@ -1422,7 +1422,7 @@ SPDesktop::is_fullscreen()
 void
 SPDesktop::fullscreen()
 {
-    _widget->setFullscreen();
+    _widget->fullscreen();
 }
 
 /**
@@ -1455,37 +1455,37 @@ void SPDesktop::focusMode(bool mode)
 void
 SPDesktop::getWindowGeometry (gint &x, gint &y, gint &w, gint &h)
 {
-    _widget->getGeometry (x, y, w, h);
+    _widget->getWindowGeometry (x, y, w, h);
 }
 
 void
 SPDesktop::setWindowPosition (Geom::Point p)
 {
-    _widget->setPosition (p);
+    _widget->setWindowPosition (p);
 }
 
 void
 SPDesktop::setWindowSize (gint w, gint h)
 {
-    _widget->setSize (w, h);
+    _widget->setWindowSize (w, h);
 }
 
 void
 SPDesktop::setWindowTransient (void *p, int transient_policy)
 {
-    _widget->setTransient (p, transient_policy);
+    _widget->setWindowTransient (p, transient_policy);
 }
 
 Gtk::Window*
 SPDesktop::getToplevel( )
 {
-    return _widget->getWindow();
+    return _widget->window;
 }
 
 InkscapeWindow*
 SPDesktop::getInkscapeWindow( )
 {
-    InkscapeWindow* window = dynamic_cast<InkscapeWindow*>(_widget->getWindow());
+    InkscapeWindow* window = dynamic_cast<InkscapeWindow*>(_widget->window);
     if (!window) {
         std::cerr << "SPDesktop::getInkscapeWindow: Failed to get window." << std::endl;
     }
@@ -1495,7 +1495,7 @@ SPDesktop::getInkscapeWindow( )
 void
 SPDesktop::presentWindow()
 {
-    _widget->present();
+    _widget->presentWindow();
 }
 
 bool SPDesktop::showInfoDialog( Glib::ustring const & message )
@@ -1512,7 +1512,7 @@ SPDesktop::warnDialog (Glib::ustring const &text)
 void
 SPDesktop::toggleRulers()
 {
-    _widget->toggleRulers();
+    _widget->toggle_rulers();
     Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_TOGGLE_RULERS);
     if (verb) {
         _menu_update.emit(verb->get_code(), getStateFromPref(this, "rulers"));
@@ -1522,7 +1522,7 @@ SPDesktop::toggleRulers()
 void
 SPDesktop::toggleScrollbars()
 {
-    _widget->toggleScrollbars();
+    _widget->toggle_scrollbars();
     Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_TOGGLE_SCROLLBARS);
     if (verb) {
         _menu_update.emit(verb->get_code(), getStateFromPref(this, "scrollbars"));
@@ -1546,13 +1546,15 @@ void SPDesktop::toggleToolbar(gchar const *toolbar_name, unsigned int verbenum)
 void
 SPDesktop::layoutWidget()
 {
-    _widget->layout();
+    _widget->layoutWidgets();
 }
 
 void
 SPDesktop::destroyWidget()
 {
-    _widget->destroy();
+    auto *window = _widget->window;
+    _widget->window = nullptr;
+    delete window; // may also delete _widget  Check if this is logical!
 }
 
 bool
@@ -1679,7 +1681,7 @@ void SPDesktop::clearWaitingCursor() {
 
 void SPDesktop::toggleColorProfAdjust()
 {
-    _widget->toggleColorProfAdjust();
+    _widget->toggle_color_prof_adj();
     Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_VIEW_CMS_TOGGLE);
     if (verb) {
         _menu_update.emit(verb->get_code(), colorProfAdjustEnabled());
@@ -1697,7 +1699,7 @@ void SPDesktop::toggleGuidesLock()
 
 bool SPDesktop::colorProfAdjustEnabled()
 {
-    return _widget->colorProfAdjustEnabled();
+    return _widget->get_color_prof_adj_enabled();
 }
 
 void SPDesktop::toggleGrids()
@@ -1888,7 +1890,7 @@ SPDesktop::onStatusMessage
 void
 SPDesktop::onDocumentURISet (gchar const* uri)
 {
-    _widget->setTitle(uri);
+    _widget->updateTitle(uri);
 }
 
 /**
@@ -1908,14 +1910,14 @@ void
 SPDesktop::_onActivate (SPDesktop* dt)
 {
     if (!dt->_widget) return;
-    dt->_widget->activateDesktop();
+    sp_dtw_desktop_activate(dt->_widget);
 }
 
 void
 SPDesktop::_onDeactivate (SPDesktop* dt)
 {
     if (!dt->_widget) return;
-    dt->_widget->deactivateDesktop();
+    sp_dtw_desktop_deactivate(dt->_widget);
 }
 
 void
@@ -1923,7 +1925,7 @@ SPDesktop::_onSelectionModified
 (Inkscape::Selection */*selection*/, guint /*flags*/, SPDesktop *dt)
 {
     if (!dt->_widget) return;
-    dt->_widget->updateScrollbars (dt->_current_affine.getZoom());
+    dt->_widget->update_scrollbars (dt->_current_affine.getZoom());
 }
 
 static void

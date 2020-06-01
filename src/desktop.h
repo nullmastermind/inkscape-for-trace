@@ -43,6 +43,7 @@ class SPCSSAttr;
 struct SPCanvas;
 struct SPCanvasItem;
 struct SPCanvasGroup;
+class SPDesktopWidget;
 struct DesktopPrefObserver;
 
 namespace Inkscape {
@@ -92,13 +93,6 @@ namespace Inkscape {
       namespace Widget {
 	      class Dock;
       }
-
-      namespace View {
-	      struct EditWidgetInterface;
-      }
-  }
-  namespace Whiteboard {
-      class SessionManager;
   }
   namespace Display {
       class TemporaryItemList;
@@ -255,7 +249,7 @@ public:
      */
     SPDesktop();
 
-    void init (SPNamedView* nv, SPCanvas* canvas, Inkscape::UI::View::EditWidgetInterface *widget);
+    void init (SPNamedView* nv, SPCanvas* canvas, SPDesktopWidget *widget);
     ~SPDesktop() override;
     void destroy();
 
@@ -478,7 +472,7 @@ public:
 private:
     GtkGesture *zoomgesture = nullptr;
 
-    Inkscape::UI::View::EditWidgetInterface       *_widget;
+    SPDesktopWidget       *_widget;
     std::unique_ptr<Inkscape::MessageContext> _guides_message_context;
     bool _active;
 

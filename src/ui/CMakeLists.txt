@@ -465,7 +465,6 @@ set(ui_SRC
 	widget/unit-menu.h
 	widget/unit-tracker.h
 
-	view/edit-widget-interface.h
 	view/svg-view-widget.h
 	view/view.h
 	view/view-widget.h

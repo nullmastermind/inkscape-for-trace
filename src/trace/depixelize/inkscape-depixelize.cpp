@@ -27,6 +27,8 @@
 #include "helper/geom.h"
 #include "object/sp-path.h"
 
+#include "display/cairo-templates.h"
+
 #include <svg/path-string.h>
 #include <svg/svg.h>
 #include <svg/svg-color.h>
