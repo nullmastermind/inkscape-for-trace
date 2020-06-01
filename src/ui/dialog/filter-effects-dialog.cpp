@@ -2687,7 +2687,7 @@ FilterEffectsDialog::FilterEffectsDialog()
     
     hpaned->pack1(_filter_modifier);
     hpaned->pack2(*_primitive_box);
-    _getContents()->add(*hpaned);
+    _getContents()->pack_start(*hpaned, true, true);
     
     _infobox_icon.set_halign(Gtk::ALIGN_START);
     _infobox_icon.set_valign(Gtk::ALIGN_START);
