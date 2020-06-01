@@ -320,35 +320,30 @@ SPDesktopWidget::SPDesktopWidget()
     /* Horizontal ruler */
     dtw->_hruler = Gtk::manage(new Inkscape::UI::Widget::Ruler(Gtk::ORIENTATION_HORIZONTAL));
     dtw->_hruler->set_unit(pt);
+    dtw->_hruler->set_tooltip_text(gettext(pt->name_plural.c_str()));
 
-    // We should probably get rid of this and attach the signals directly rulers.
-    dtw->_hruler_box = Gtk::manage(new Gtk::EventBox());
-    dtw->_hruler_box->set_tooltip_text(gettext(pt->name_plural.c_str()));
-    dtw->_hruler_box->add(*dtw->_hruler);
-    _connections.emplace_back(dtw->_hruler_box->signal_button_press_event().connect(
-        sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_button_press_event), dtw->_hruler_box, true)));
-    _connections.emplace_back(dtw->_hruler_box->signal_button_release_event().connect(
-        sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_button_release_event), dtw->_hruler_box, true)));
-    _connections.emplace_back(dtw->_hruler_box->signal_motion_notify_event().connect(
-        sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_motion_notify_event), dtw->_hruler_box, true)));
+    dtw->_hruler->signal_button_press_event().connect(
+        sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_button_press_event), dtw->_hruler, true));
+    dtw->_hruler->signal_button_release_event().connect(
+        sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_button_release_event), dtw->_hruler, true));
+    dtw->_hruler->signal_motion_notify_event().connect(
+        sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_motion_notify_event), dtw->_hruler, true));
 
-    dtw->_canvas_tbl->attach(*dtw->_hruler_box, 1, 0, 1, 1);
+    dtw->_canvas_tbl->attach(*dtw->_hruler, 1, 0, 1, 1);
 
     /* Vertical ruler */
     dtw->_vruler = Gtk::manage(new Inkscape::UI::Widget::Ruler(Gtk::ORIENTATION_VERTICAL));
     dtw->_vruler->set_unit(pt);
+    dtw->_vruler->set_tooltip_text(gettext(pt->name_plural.c_str()));
 
-    dtw->_vruler_box = Gtk::manage(new Gtk::EventBox());
-    dtw->_vruler_box->set_tooltip_text(gettext(pt->name_plural.c_str()));
-    dtw->_vruler_box->add(*dtw->_vruler);
-    _connections.emplace_back(dtw->_vruler_box->signal_button_press_event().connect(
-        sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_button_press_event), dtw->_vruler_box, false)));
-    _connections.emplace_back(dtw->_vruler_box->signal_button_release_event().connect(
-        sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_button_release_event), dtw->_vruler_box, false)));
-    _connections.emplace_back(dtw->_vruler_box->signal_motion_notify_event().connect(
-        sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_motion_notify_event), dtw->_vruler_box, false)));
+    dtw->_vruler->signal_button_press_event().connect(
+        sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_button_press_event), dtw->_vruler, false));
+    dtw->_vruler->signal_button_release_event().connect(
+        sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_button_release_event), dtw->_vruler, false));
+    dtw->_vruler->signal_motion_notify_event().connect(
+        sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_motion_notify_event), dtw->_vruler, false));
 
-    dtw->_canvas_tbl->attach(*dtw->_vruler_box, 0, 1, 1, 1);
+    dtw->_canvas_tbl->attach(*dtw->_vruler, 0, 1, 1, 1);
 
     // Horizontal scrollbar
     dtw->_hadj = Gtk::Adjustment::create(0.0, -4000.0, 4000.0, 10.0, 100.0, 4.0);
@@ -1741,8 +1736,8 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
             } // children
         } // if aux_toolbox is a container
 
-        _hruler_box->set_tooltip_text(gettext(nv->display_units->name_plural.c_str()));
-        _vruler_box->set_tooltip_text(gettext(nv->display_units->name_plural.c_str()));
+        _hruler->set_tooltip_text(gettext(nv->display_units->name_plural.c_str()));
+        _vruler->set_tooltip_text(gettext(nv->display_units->name_plural.c_str()));
 
         update_rulers();
         ToolboxFactory::updateSnapToolbox(this->desktop, nullptr, this->snap_toolbox);
@@ -2162,13 +2157,13 @@ SPDesktopWidget::ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget
 {
     switch (event->type) {
     case GDK_BUTTON_PRESS:
-        dtw->on_ruler_box_button_press_event(&event->button, Glib::wrap(GTK_EVENT_BOX(widget)), horiz);
+        dtw->on_ruler_box_button_press_event(&event->button, Glib::wrap(widget), horiz);
         break;
     case GDK_MOTION_NOTIFY:
-        dtw->on_ruler_box_motion_notify_event(&event->motion, Glib::wrap(GTK_EVENT_BOX(widget)), horiz);
+        dtw->on_ruler_box_motion_notify_event(&event->motion, Glib::wrap(widget), horiz);
         break;
     case GDK_BUTTON_RELEASE:
-        dtw->on_ruler_box_button_release_event(&event->button, Glib::wrap(GTK_EVENT_BOX(widget)), horiz);
+        dtw->on_ruler_box_button_release_event(&event->button, Glib::wrap(widget), horiz);
         break;
     default:
             break;
@@ -2178,7 +2173,7 @@ SPDesktopWidget::ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget
 }
 
 bool
-SPDesktopWidget::on_ruler_box_motion_notify_event(GdkEventMotion *event, Gtk::EventBox *widget, bool horiz)
+SPDesktopWidget::on_ruler_box_motion_notify_event(GdkEventMotion *event, Gtk::Widget *widget, bool horiz)
 {
     if (horiz) {
         sp_event_context_snap_delay_handler(desktop->event_context, (gpointer) widget->gobj(), (gpointer) this, event, Inkscape::UI::Tools::DelayedSnapEvent::GUIDE_HRULER);
@@ -2228,8 +2223,9 @@ SPDesktopWidget::on_ruler_box_motion_notify_event(GdkEventMotion *event, Gtk::Ev
     return false;
 }
 
+// End guide creation or toggle guides on/off.
 bool
-SPDesktopWidget::on_ruler_box_button_release_event(GdkEventButton *event, Gtk::EventBox *widget, bool horiz)
+SPDesktopWidget::on_ruler_box_button_release_event(GdkEventButton *event, Gtk::Widget *widget, bool horiz)
 {
     int wx, wy;
 
@@ -2297,8 +2293,9 @@ SPDesktopWidget::on_ruler_box_button_release_event(GdkEventButton *event, Gtk::E
     return false;
 }
 
+// Start guide creation by dragging from ruler.
 bool
-SPDesktopWidget::on_ruler_box_button_press_event(GdkEventButton *event, Gtk::EventBox *widget, bool horiz)
+SPDesktopWidget::on_ruler_box_button_press_event(GdkEventButton *event, Gtk::Widget *widget, bool horiz)
 {
     if (_ruler_clicked) // event triggerred on a double click: do no process the click
         return false;
@@ -2365,8 +2362,8 @@ SPDesktopWidget::on_ruler_box_button_press_event(GdkEventButton *event, Gtk::Eve
         _active_guide = sp_guideline_new(desktop->guides, nullptr, event_dt, _normal);
         sp_guideline_set_color(SP_GUIDELINE(_active_guide), desktop->namedview->guidehicolor);
 
+        // Ruler grabs all events until button release.
         auto window = widget->get_window()->gobj();
-
         auto seat = gdk_device_get_seat(event->device);
         gdk_seat_grab(seat,
                 window,

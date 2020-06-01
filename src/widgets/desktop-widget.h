@@ -145,9 +145,6 @@ private:
     Gtk::Grid *_canvas_tbl;
     sigc::connection _canvas_tbl_size_allocate_connection;
 
-    Gtk::EventBox *_hruler_box;
-    Gtk::EventBox *_vruler_box; // eventboxes for setting tooltips
-
     /* Rulers */
     Inkscape::UI::Widget::Ruler *_hruler;
     Inkscape::UI::Widget::Ruler *_vruler;
@@ -329,9 +326,9 @@ public:
 #endif
     static void ruler_snap_new_guide(SPDesktop *desktop, SPCanvasItem *guide, Geom::Point &event_dt, Geom::Point &normal);
     static gint event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw);
-    bool on_ruler_box_button_press_event(GdkEventButton *event, Gtk::EventBox *widget, bool horiz);
-    bool on_ruler_box_button_release_event(GdkEventButton *event, Gtk::EventBox *widget, bool horiz);
-    bool on_ruler_box_motion_notify_event(GdkEventMotion *event, Gtk::EventBox *widget, bool horiz);
+    bool on_ruler_box_button_press_event(GdkEventButton *event, Gtk::Widget *widget, bool horiz);
+    bool on_ruler_box_button_release_event(GdkEventButton *event, Gtk::Widget *widget, bool horiz);
+    bool on_ruler_box_motion_notify_event(GdkEventMotion *event, Gtk::Widget *widget, bool horiz);
 };
 
 #endif /* !SEEN_SP_DESKTOP_WIDGET_H */
