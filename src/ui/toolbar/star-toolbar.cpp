@@ -103,10 +103,19 @@ StarToolbar::StarToolbar(SPDesktop *desktop) :
 
     /* Magnitude */
     {
-        std::vector<Glib::ustring> labels = {_("triangle/tri-star"), _("square/quad-star"), _("pentagon/five-pointed star"), _("hexagon/six-pointed star"), "", "", "", "", ""};
-        std::vector<double>        values = {                     3,                     4,                               5,                             6, 7,   8, 10, 12, 20};
+        std::vector<Glib::ustring> labels = {"",
+                                             _("triangle/tri-star"),
+                                             _("square/quad-star"),
+                                             _("pentagon/five-pointed star"),
+                                             _("hexagon/six-pointed star"),
+                                             "",
+                                             "",
+                                             "",
+                                             "",
+                                             ""};
+        std::vector<double> values = {2, 3, 4, 5, 6, 7, 8, 10, 12, 20};
         auto magnitude_val = prefs->getDouble("/tools/shapes/star/magnitude", 3);
-        _magnitude_adj = Gtk::Adjustment::create(magnitude_val, 3, 1024, 1, 5);
+        _magnitude_adj = Gtk::Adjustment::create(magnitude_val, isFlatSided ? 3 : 2, 1024, 1, 5);
         _magnitude_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("star-magnitude", _("Corners:"), _magnitude_adj, 1.0, 0));
         _magnitude_item->set_tooltip_text(_("Number of corners of a polygon or star"));
         _magnitude_item->set_custom_numeric_menu_data(values, labels);
@@ -165,7 +174,7 @@ StarToolbar::StarToolbar(SPDesktop *desktop) :
     }
 
     add(*Gtk::manage(new Gtk::SeparatorToolItem()));
-    
+
     /* Reset */
     {
         _reset_item = Gtk::manage(new Gtk::ToolButton(_("Defaults")));
@@ -228,10 +237,22 @@ StarToolbar::side_mode_changed(int mode)
         SPItem *item = *i;
         if (SP_IS_STAR(item)) {
             Inkscape::XML::Node *repr = item->getRepr();
+            if (flat) {
+                gint sides = (gint)_magnitude_adj->get_value();
+                if (sides < 3) {
+                    sp_repr_set_int(repr, "sodipodi:sides", 3);
+                }
+            }
             repr->setAttribute("inkscape:flatsided", flat ? "true" : "false" );
+
             item->updateRepr();
             modmade = true;
         }
+    }
+
+    _magnitude_adj->set_lower(flat ? 3 : 2);
+    if (flat && _magnitude_adj->get_value() < 3) {
+        _magnitude_adj->set_value(3);
     }
 
     if (modmade) {
@@ -525,9 +546,11 @@ StarToolbar::event_attr_changed(Inkscape::XML::Node *repr, gchar const *name,
         if ( flatsides && !strcmp(flatsides,"false") ) {
             toolbar->_flat_item_buttons[1]->set_active();
             toolbar->_spoke_item->set_visible(true);
+            toolbar->_magnitude_adj->set_lower(2);
         } else {
             toolbar->_flat_item_buttons[0]->set_active();
             toolbar->_spoke_item->set_visible(false);
+            toolbar->_magnitude_adj->set_lower(3);
         }
     } else if ((!strcmp(name, "sodipodi:r1") || !strcmp(name, "sodipodi:r2")) && (!isFlatSided) ) {
         gdouble r1 = 1.0;

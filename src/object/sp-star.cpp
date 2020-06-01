@@ -48,12 +48,12 @@ void SPStar::build(SPDocument * document, Inkscape::XML::Node * repr) {
 
     this->readAttr(SPAttr::SODIPODI_CX);
     this->readAttr(SPAttr::SODIPODI_CY);
+    this->readAttr(SPAttr::INKSCAPE_FLATSIDED);
     this->readAttr(SPAttr::SODIPODI_SIDES);
     this->readAttr(SPAttr::SODIPODI_R1);
     this->readAttr(SPAttr::SODIPODI_R2);
     this->readAttr(SPAttr::SODIPODI_ARG1);
     this->readAttr(SPAttr::SODIPODI_ARG2);
-    this->readAttr(SPAttr::INKSCAPE_FLATSIDED);
     this->readAttr(SPAttr::INKSCAPE_ROUNDED);
     this->readAttr(SPAttr::INKSCAPE_RANDOMIZED);
 }
@@ -65,6 +65,7 @@ Inkscape::XML::Node* SPStar::write(Inkscape::XML::Document *xml_doc, Inkscape::X
 
     if (flags & SP_OBJECT_WRITE_EXT) {
         repr->setAttribute("sodipodi:type", "star");
+        sp_repr_set_boolean(repr, "inkscape:flatsided", this->flatsided);
         sp_repr_set_int (repr, "sodipodi:sides", this->sides);
         sp_repr_set_svg_double(repr, "sodipodi:cx", this->center[Geom::X]);
         sp_repr_set_svg_double(repr, "sodipodi:cy", this->center[Geom::Y]);
@@ -72,7 +73,6 @@ Inkscape::XML::Node* SPStar::write(Inkscape::XML::Document *xml_doc, Inkscape::X
         sp_repr_set_svg_double(repr, "sodipodi:r2", this->r[1]);
         sp_repr_set_svg_double(repr, "sodipodi:arg1", this->arg[0]);
         sp_repr_set_svg_double(repr, "sodipodi:arg2", this->arg[1]);
-        sp_repr_set_boolean (repr, "inkscape:flatsided", this->flatsided);
         sp_repr_set_svg_double(repr, "inkscape:rounded", this->rounded);
         sp_repr_set_svg_double(repr, "inkscape:randomized", this->randomized);
     }
@@ -99,7 +99,7 @@ void SPStar::set(SPAttr key, const gchar* value) {
     case SPAttr::SODIPODI_SIDES:
         if (value) {
             this->sides = atoi (value);
-            this->sides = CLAMP(this->sides, 3, 1024);
+            this->sides = CLAMP(this->sides, this->flatsided ? 3 : 2, 1024);
         } else {
             this->sides = 5;
         }
@@ -175,6 +175,7 @@ void SPStar::set(SPAttr key, const gchar* value) {
     case SPAttr::INKSCAPE_FLATSIDED:
         if (value && !strcmp(value, "true")) {
             this->flatsided = true;
+            this->sides = MAX(this->sides, 3);
         } else {
         	this->flatsided = false;
         }
@@ -229,7 +230,7 @@ const char* SPStar::displayName() const {
 }
 
 gchar* SPStar::description() const {
-    // while there will never be less than 3 vertices, we still need to
+    // while there will never be less than 2 or 3 vertices, we still need to
     // make calls to ngettext because the pluralization may be different
     // for various numbers >=3.  The singular form is used as the index.
     return g_strdup_printf (ngettext(_("with %d vertex"), _("with %d vertices"),
@@ -449,19 +450,20 @@ sp_star_position_set (SPStar *star, gint sides, Geom::Point center, gdouble r1, 
     g_return_if_fail (star != nullptr);
     g_return_if_fail (SP_IS_STAR (star));
 
-    star->sides = CLAMP(sides, 3, 1024);
+    star->flatsided = isflat;
     star->center = center;
     star->r[0] = MAX (r1, 0.001);
 
     if (isflat == false) {
+        star->sides = CLAMP(sides, 2, 1024);
         star->r[1] = CLAMP(r2, 0.0, star->r[0]);
     } else {
+        star->sides = CLAMP(sides, 3, 1024);
         star->r[1] = CLAMP( r1*cos(M_PI/sides) ,0.0, star->r[0] );
     }
 
     star->arg[0] = arg1;
     star->arg[1] = arg2;
-    star->flatsided = isflat;
     star->rounded = rounded;
     star->randomized = randomized;
     star->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);

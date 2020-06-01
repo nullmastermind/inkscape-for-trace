@@ -286,7 +286,9 @@ SpinButtonToolItem::create_numeric_menu()
 
     // first add all custom items (necessary)
     for (auto custom_data : _custom_menu_data) {
-        values.emplace(custom_data);
+        if (custom_data.first >= lower && custom_data.first <= upper) {
+            values.emplace(custom_data);
+        }
     }
 
     values.emplace(adj_value, "");
