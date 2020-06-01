@@ -60,6 +60,7 @@ set(TEST_SOURCES
     style-elem-test
     style-internal-test
     style-test
+    svg-color-test
     svg-stringstream-test
     sp-gradient-test
     object-test

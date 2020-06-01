@@ -22,7 +22,6 @@ set(svg_SRC
 	stringstream.h
 	strip-trailing-zeros.h
 	svg-affine-test.h
-	svg-color-test.h
 	svg-color.h
 	svg-icc-color.h
 	svg-angle.h
