@@ -62,7 +62,7 @@ std::vector<StyleRead> getStyleData()
         //	        "fill:url(#painter) #ff00ff", "#painter"),
 
 
-        //  StyleRead("fill:#ff00ff icc-color(colorChange, 0.1, 0.5, 0.1)"),
+        StyleRead("fill:#ff00ff icc-color(colorChange, 0.1, 0.5, 0.1)"),
 
         //  StyleRead("fill:url(#painter)",                     "", "#painter"),
         //  StyleRead("fill:url(#painter) none",                "", "#painter"),

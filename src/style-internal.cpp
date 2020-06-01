@@ -1623,7 +1623,7 @@ const Glib::ustring SPIPaint::get_value() const
                 ret += color_buf;
             }
             if (this->value.color.icc) {
-                ret += "icc-color(";
+                ret += " icc-color(";
                 ret += this->value.color.icc->colorProfile;
                 for(auto i: this->value.color.icc->colors) {
                     ret += ", " + Glib::ustring::format(i);
