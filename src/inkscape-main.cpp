@@ -128,8 +128,67 @@ static void set_macos_app_bundle_env(gchar const *program_dir)
 }
 #endif
 
+/**
+ * Convert some legacy 0.92.x command line options to 1.0.x options.
+ * @param[in,out] argc The main() argc argument, will be modified
+ * @param[in,out] argv The main() argv argument, will be modified
+ */
+static void convert_legacy_options(int &argc, char **&argv)
+{
+    static std::vector<char *> argv_new;
+    char *file = nullptr;
+
+    for (int i = 0; i < argc; ++i) {
+        if (g_str_equal(argv[i], "--without-gui") || g_str_equal(argv[i], "-z")) {
+            std::cerr << "Warning: Option --without-gui= is deprecated" << std::endl;
+            continue;
+        }
+
+        if (g_str_has_prefix(argv[i], "--file=")) {
+            std::cerr << "Warning: Option --file= is deprecated" << std::endl;
+            file = argv[i] + 7;
+            continue;
+        }
+
+        bool found_legacy_export = false;
+
+        for (char const *type : { "png", "pdf", "ps", "eps", "emf", "wmf", "plain-svg" }) {
+            auto s = std::string("--export-").append(type).append("=");
+            if (g_str_has_prefix(argv[i], s.c_str())) {
+                std::cerr << "Warning: Option " << s << " is deprecated" << std::endl;
+
+                if (g_str_equal(type, "plain-svg")) {
+                    argv_new.push_back(g_strdup("--export-plain-svg"));
+                    type = "svg";
+                }
+
+                argv_new.push_back(g_strdup_printf("--export-type=%s", type));
+                argv_new.push_back(g_strdup_printf("--export-filename=%s", argv[i] + s.size()));
+
+                found_legacy_export = true;
+                break;
+            }
+        }
+
+        if (found_legacy_export) {
+            continue;
+        }
+
+        argv_new.push_back(argv[i]);
+    }
+
+    if (file) {
+        argv_new.push_back(file);
+    }
+
+    argc = argv_new.size();
+    argv = argv_new.data();
+}
+
 int main(int argc, char *argv[])
 {
+    convert_legacy_options(argc, argv);
+
 #ifdef __APPLE__
     {   // Check if we're inside an application bundle and adjust environment
         // accordingly.
