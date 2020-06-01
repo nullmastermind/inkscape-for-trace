@@ -70,8 +70,8 @@ Panel::Panel(gchar const *prefs_path, int verb_num) :
 
 void Panel::_setContents(Gtk::Box *contents) {
     if (_contents) {
-        remove(*_contents);
-        delete _contents;
+        // unlinke `Gtk::Container::remove`, this will delete `_contents` if it is `Gtk::manage`d
+        gtk_container_remove(Container::gobj(), _contents->Gtk::Widget::gobj());
     }
     _contents = contents;
     pack_start(*_contents, true, true);
