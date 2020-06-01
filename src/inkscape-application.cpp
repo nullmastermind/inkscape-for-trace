@@ -1078,9 +1078,9 @@ ConcreteInkscapeApplication<T>::parse_actions(const Glib::ustring& input, action
                 Glib::VariantType type = action_ptr->get_parameter_type();
                 if (type.get_string() == "b") {
                     bool b = false;
-                    if (value == "0" || value == "true" || value.empty()) {
+                    if (value == "1" || value == "true" || value.empty()) {
                         b = true;
-                    } else if (value =="1" || value == "false") {
+                    } else if (value == "0" || value == "false") {
                         b = false;
                     } else {
                         std::cerr << "InkscapeApplication::parse_actions: Invalid boolean value: " << action << ":" << value << std::endl;
