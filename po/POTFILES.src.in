@@ -340,6 +340,7 @@
 ../src/ui/tools/text-tool.cpp
 ../src/ui/tools/tool-base.cpp
 ../src/ui/tools/tweak-tool.cpp
+../src/ui/widget/canvas-grid.cpp
 ../src/ui/widget/color-entry.cpp
 ../src/ui/widget/color-icc-selector.cpp
 ../src/ui/widget/color-notebook.cpp

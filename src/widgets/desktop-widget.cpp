@@ -59,6 +59,7 @@
 #include "ui/tools/box3d-tool.h"
 #include "ui/uxmanager.h"
 #include "ui/widget/button.h"
+#include "ui/widget/canvas-grid.h"
 #include "ui/widget/dock.h"
 #include "ui/widget/ink-ruler.h"
 #include "ui/widget/layer-selector.h"
@@ -181,7 +182,7 @@ void CMSPrefWatcher::_setCmsSensitive(bool enabled)
 {
 #if defined(HAVE_LIBLCMS2)
     for ( auto dtw : _widget_list ) {
-        auto cms_adj = dtw->get_cms_adjust();
+        auto cms_adj = dtw->GetCanvasGrid()->GetCmsAdjust();
         if ( cms_adj->get_sensitive() != enabled ) {
             dtw->cms_adjust_set_sensitive(enabled);
         }
@@ -218,29 +219,6 @@ SPDesktopWidget::window_get_pointer()
     window->get_device_position(device, x, y, m);
 
     return Geom::Point(x, y);
-}
-
-/**
- * Callback for changes in size of the canvas table (i.e. the container for
- * the canvas, the rulers etc).
- *
- * This adjusts the range of the rulers when the dock container is adjusted
- * (fixes lp:950552)
- *
- * This fix was causing the rulers to be completely redrawn when not needed.
- * Added check to see if allocation really changed.
- *
- *(Question, why is the callback being called when allocation not changed?)
- */
-void
-SPDesktopWidget::canvas_tbl_size_allocate(Gtk::Allocation& allocation)
-{
-    if (_allocation == allocation) {
-        return;
-    }
-
-    _allocation = allocation;
-    update_rulers();
 }
 
 SPDesktopWidget::SPDesktopWidget()
@@ -286,163 +264,15 @@ SPDesktopWidget::SPDesktopWidget()
     ToolboxFactory::setOrientation( dtw->tool_toolbox, GTK_ORIENTATION_VERTICAL );
     dtw->_hbox->pack_start(*Glib::wrap(dtw->tool_toolbox), false, true);
 
-    /* Canvas table wrapper */
-    auto tbl_wrapper = Gtk::manage(new Gtk::Grid()); // Is this widget really needed? No!
-    tbl_wrapper->set_name("CanvasTableWrapper");
-    dtw->_hbox->pack_start(*tbl_wrapper, true, true, 1);
-
-    /* Canvas table */
-    dtw->_canvas_tbl = Gtk::manage(new Gtk::Grid());
-    dtw->_canvas_tbl->set_name("CanvasTable");
+    /* Canvas Grid (canvas, rulers, scrollbars, etc.) */
+    dtw->_canvas_grid = Gtk::manage(new Inkscape::UI::Widget::CanvasGrid(this));
     // Added to table wrapper later either directly or via paned window shared with dock.
 
-
-
-    // Lock guides button
-    dtw->_guides_lock = Gtk::manage(new Inkscape::UI::Widget::Button(GTK_ICON_SIZE_MENU,
-                                                                     Inkscape::UI::Widget::BUTTON_TYPE_TOGGLE,
-                                                                     nullptr,
-                                                                     INKSCAPE_ICON("object-locked"),
-                                                                     _("Toggle lock of all guides in the document")));
-
-    auto guides_lock_style_provider = Gtk::CssProvider::create();
-    guides_lock_style_provider->load_from_data("GtkWidget { padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; }");
-    dtw->_guides_lock->set_name("LockGuides");
-    auto context = dtw->_guides_lock->get_style_context();
-    context->add_provider(guides_lock_style_provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    _connections.emplace_back(
-        dtw->_guides_lock->signal_toggled().connect(sigc::mem_fun(dtw, &SPDesktopWidget::update_guides_lock)));
-    dtw->_canvas_tbl->attach(*dtw->_guides_lock, 0, 0, 1, 1);
-
-    /* Rulers */
-    Inkscape::Util::Unit const *pt = unit_table.getUnit("pt");
-
-    /* Horizontal ruler */
-    dtw->_hruler = Gtk::manage(new Inkscape::UI::Widget::Ruler(Gtk::ORIENTATION_HORIZONTAL));
-    dtw->_hruler->set_unit(pt);
-    dtw->_hruler->set_tooltip_text(gettext(pt->name_plural.c_str()));
-
-    dtw->_hruler->signal_button_press_event().connect(
-        sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_button_press_event), dtw->_hruler, true));
-    dtw->_hruler->signal_button_release_event().connect(
-        sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_button_release_event), dtw->_hruler, true));
-    dtw->_hruler->signal_motion_notify_event().connect(
-        sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_motion_notify_event), dtw->_hruler, true));
-
-    dtw->_canvas_tbl->attach(*dtw->_hruler, 1, 0, 1, 1);
-
-    /* Vertical ruler */
-    dtw->_vruler = Gtk::manage(new Inkscape::UI::Widget::Ruler(Gtk::ORIENTATION_VERTICAL));
-    dtw->_vruler->set_unit(pt);
-    dtw->_vruler->set_tooltip_text(gettext(pt->name_plural.c_str()));
-
-    dtw->_vruler->signal_button_press_event().connect(
-        sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_button_press_event), dtw->_vruler, false));
-    dtw->_vruler->signal_button_release_event().connect(
-        sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_button_release_event), dtw->_vruler, false));
-    dtw->_vruler->signal_motion_notify_event().connect(
-        sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_motion_notify_event), dtw->_vruler, false));
-
-    dtw->_canvas_tbl->attach(*dtw->_vruler, 0, 1, 1, 1);
-
-    // Horizontal scrollbar
-    dtw->_hadj = Gtk::Adjustment::create(0.0, -4000.0, 4000.0, 10.0, 100.0, 4.0);
-    dtw->_hscrollbar = Gtk::manage(new Gtk::Scrollbar(dtw->_hadj));
-    dtw->_hscrollbar->set_name("HorizontalScrollbar");
-    dtw->_canvas_tbl->attach(*dtw->_hscrollbar, 1, 2, 1, 1);
-
-    // By packing the sticky zoom button and vertical scrollbar in a box it allows the canvas to
-    // expand fully to the top if the rulers are hidden.
-    // (Otherwise, the canvas is pushed down by the height of the sticky zoom button.)
-
-    // Vertical Scrollbar box
-    dtw->_vscrollbar_box = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
-    dtw->_canvas_tbl->attach(*dtw->_vscrollbar_box, 2, 0, 1, 2);
-
-    // Sticky zoom button
-    dtw->_sticky_zoom = Gtk::manage(new Inkscape::UI::Widget::Button(GTK_ICON_SIZE_MENU,
-                                                                     Inkscape::UI::Widget::BUTTON_TYPE_TOGGLE,
-                                                                     nullptr,
-                                                                     INKSCAPE_ICON("zoom-original"),
-                                                                     _("Zoom drawing if window size changes")));
-    dtw->_sticky_zoom->set_name("StickyZoom");
-    dtw->_sticky_zoom->set_active(prefs->getBool("/options/stickyzoom/value"));
-    _connections.emplace_back(
-        dtw->_sticky_zoom->signal_toggled().connect(sigc::mem_fun(dtw, &SPDesktopWidget::sticky_zoom_toggled)));
-    dtw->_vscrollbar_box->pack_start(*dtw->_sticky_zoom, false, false);
-
-    // Vertical scrollbar
-    dtw->_vadj = Gtk::Adjustment::create(0.0, -4000.0, 4000.0, 10.0, 100.0, 4.0);
-    dtw->_vscrollbar = Gtk::manage(new Gtk::Scrollbar(dtw->_vadj, Gtk::ORIENTATION_VERTICAL));
-    dtw->_vscrollbar->set_name("VerticalScrollbar");
-    dtw->_vscrollbar_box->pack_start(*dtw->_vscrollbar, true, true, 0);
-
-    gchar const* tip = "";
-    Inkscape::Verb* verb = Inkscape::Verb::get( SP_VERB_VIEW_CMS_TOGGLE );
-    if ( verb ) {
-        SPAction *act = verb->get_action(Inkscape::ActionContext(dtw->getView()));
-        if ( act && act->tip ) {
-            tip = act->tip;
-        }
-    }
-    dtw->_cms_adjust = Gtk::manage(new Inkscape::UI::Widget::Button(GTK_ICON_SIZE_MENU,
-                                                                    Inkscape::UI::Widget::BUTTON_TYPE_TOGGLE,
-                                                                    nullptr,
-                                                                    INKSCAPE_ICON("color-management"),
-                                                                    tip ));
-    dtw->_cms_adjust->set_name("CMS_Adjust");
-
-#if defined(HAVE_LIBLCMS2)
-    {
-        Glib::ustring current = prefs->getString("/options/displayprofile/uri");
-        bool enabled = current.length() > 0;
-        dtw->cms_adjust_set_sensitive(enabled );
-        if ( enabled ) {
-            bool active = prefs->getBool("/options/displayprofile/enable");
-            if ( active ) {
-                dtw->_cms_adjust->toggle_set_down(true);
-            }
-        }
-    }
-    g_signal_connect_after( G_OBJECT(dtw->_cms_adjust->gobj()), "clicked", G_CALLBACK(SPDesktopWidget::cms_adjust_toggled), dtw );
-#else
-    dtw->cms_adjust_set_sensitive(false);
-#endif // defined(HAVE_LIBLCMS2)
-
-    dtw->_canvas_tbl->attach(*dtw->_cms_adjust, 2, 2, 1, 1);
-    {
-        if (!watcher) {
-            watcher = new CMSPrefWatcher();
-        }
-        watcher->add(dtw);
-    }
     /* Canvas */
-    dtw->_canvas = SP_CANVAS(SPCanvas::createAA());
+    dtw->_canvas = _canvas_grid->GetCanvas();
 #if defined(HAVE_LIBLCMS2)
     dtw->_canvas->_enable_cms_display_adj = prefs->getBool("/options/displayprofile/enable");
 #endif // defined(HAVE_LIBLCMS2)
-    gtk_widget_set_can_focus (GTK_WIDGET (dtw->_canvas), TRUE);
-
-    dtw->_hruler->add_track_widget(*Glib::wrap(GTK_WIDGET(dtw->_canvas)));
-    dtw->_vruler->add_track_widget(*Glib::wrap(GTK_WIDGET(dtw->_canvas)));
-
-    auto css_provider  = gtk_css_provider_new();
-    auto style_context = gtk_widget_get_style_context(GTK_WIDGET(dtw->_canvas));
-
-    gtk_css_provider_load_from_data(css_provider,
-                                    "SPCanvas {\n"
-                                    " background-color: white;\n"
-                                    "}\n",
-                                    -1, nullptr);
-
-    gtk_style_context_add_provider(style_context,
-                                   GTK_STYLE_PROVIDER(css_provider),
-                                   GTK_STYLE_PROVIDER_PRIORITY_USER);
-    g_signal_connect(G_OBJECT(dtw->_canvas), "event", G_CALLBACK(SPDesktopWidget::event), dtw);
-
-    gtk_widget_set_hexpand(GTK_WIDGET(dtw->_canvas), TRUE);
-    gtk_widget_set_vexpand(GTK_WIDGET(dtw->_canvas), TRUE);
-    dtw->_canvas_tbl->attach(*Glib::wrap(GTK_WIDGET(dtw->_canvas)), 1, 1, 1, 1);
 
     /* Dock */
     bool create_dock =
@@ -454,7 +284,7 @@ SPDesktopWidget::SPDesktopWidget()
         auto paned = Gtk::manage(new Gtk::Paned());
         paned->set_name("Canvas_and_Dock");
 
-        paned->pack1(*dtw->_canvas_tbl);
+        paned->pack1(*_canvas_grid);
         paned->pack2(dtw->_dock->getWidget(), Gtk::FILL);
 
         /* Prevent the paned from catching F6 and F8 by unsetting the default callbacks */
@@ -465,19 +295,13 @@ SPDesktopWidget::SPDesktopWidget()
 
         paned->set_hexpand(true);
         paned->set_vexpand(true);
-        tbl_wrapper->attach(*paned, 1, 1, 1, 1);
+        _hbox->pack_start(*paned);
     } else {
         dtw->_dock = nullptr;
-        dtw->_canvas_tbl->set_hexpand(true);
-        dtw->_canvas_tbl->set_vexpand(true);
-        tbl_wrapper->attach(*(dtw->_canvas_tbl), 1, 1, 1, 1);
+        _canvas_grid->set_hexpand(true);
+        _canvas_grid->set_vexpand(true);
+        _hbox->pack_start(*_canvas_grid);
     }
-
-    // connect scrollbar signals
-    _connections.emplace_back(
-        dtw->_hadj->signal_value_changed().connect(sigc::mem_fun(dtw, &SPDesktopWidget::on_adjustment_value_changed)));
-    _connections.emplace_back(
-        dtw->_vadj->signal_value_changed().connect(sigc::mem_fun(dtw, &SPDesktopWidget::on_adjustment_value_changed)));
 
     // --------------- Status Tool Bar ------------------//
 
@@ -623,11 +447,7 @@ SPDesktopWidget::SPDesktopWidget()
     // ------------------ Finish Up -------------------- //
     dtw->_vbox->show_all();
 
-    gtk_widget_grab_focus (GTK_WIDGET(dtw->_canvas));
-
-    // Ensure that ruler ranges are updated correctly whenever the canvas table
-    // is resized
-    dtw->_canvas_tbl_size_allocate_connection = dtw->_canvas_tbl->signal_size_allocate().connect(sigc::mem_fun(dtw, &SPDesktopWidget::canvas_tbl_size_allocate));
+    gtk_widget_grab_focus (GTK_WIDGET(dtw->_canvas_grid->GetCanvas()));
 }
 
 /**
@@ -666,12 +486,6 @@ SPDesktopWidget::on_unrealize()
 
         // Canvas
         g_signal_handlers_disconnect_by_data(G_OBJECT(dtw->_canvas), dtw);
-
-        // CMS
-        g_signal_handlers_disconnect_by_data(G_OBJECT(dtw->_cms_adjust->gobj()), dtw);
-        g_object_unref(dtw->_tracker);
-
-        dtw->_canvas_tbl_size_allocate_connection.disconnect();
 
         if (dtw->_dock) {
             // dock and desktop both have references to dock items
@@ -989,7 +803,7 @@ void sp_dtw_color_profile_event(EgeColorProfTracker */*tracker*/, SPDesktopWidge
 void
 SPDesktopWidget::update_guides_lock()
 {
-    bool down = _guides_lock->get_active();
+    bool down = _canvas_grid->GetGuideLock()->get_active();
 
     auto doc  = desktop->getDocument();
     auto nv   = desktop->getNamedView();
@@ -1007,20 +821,20 @@ SPDesktopWidget::update_guides_lock()
 
 #if defined(HAVE_LIBLCMS2)
 void
-SPDesktopWidget::cms_adjust_toggled( GtkWidget */*button*/, gpointer data )
+SPDesktopWidget::cms_adjust_toggled()
 {
-    auto dtw = static_cast<SPDesktopWidget *>(data);
+    auto _cms_adjust = _canvas_grid->GetCmsAdjust();
 
-    bool down = dtw->_cms_adjust->get_active();
-    if ( down != dtw->_canvas->_enable_cms_display_adj ) {
-        dtw->_canvas->_enable_cms_display_adj = down;
-        dtw->desktop->redrawDesktop();
+    bool down = _cms_adjust->get_active();
+    if ( down != _canvas->_enable_cms_display_adj ) {
+        _canvas->_enable_cms_display_adj = down;
+        desktop->redrawDesktop();
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setBool("/options/displayprofile/enable", down);
         if (down) {
-            dtw->setMessage (Inkscape::NORMAL_MESSAGE, _("Color-managed display is <b>enabled</b> in this window"));
+            setMessage (Inkscape::NORMAL_MESSAGE, _("Color-managed display is <b>enabled</b> in this window"));
         } else {
-            dtw->setMessage (Inkscape::NORMAL_MESSAGE, _("Color-managed display is <b>disabled</b> in this window"));
+            setMessage (Inkscape::NORMAL_MESSAGE, _("Color-managed display is <b>disabled</b> in this window"));
         }
     }
 }
@@ -1036,7 +850,7 @@ SPDesktopWidget::cms_adjust_set_sensitive(bool enabled)
             sp_action_set_sensitive( act, enabled );
         }
     }
-    _cms_adjust->set_sensitive(enabled);
+    _canvas_grid->GetCmsAdjust()->set_sensitive(enabled);
 }
 
 void
@@ -1460,25 +1274,8 @@ void SPDesktopWidget::layoutWidgets()
         dtw->_panels->show_all();
     }
 
-    if (!prefs->getBool(pref_root + "scrollbars/state", true)) {
-        dtw->_hscrollbar->hide();
-        dtw->_vscrollbar_box->hide();
-        dtw->_cms_adjust->hide();
-    } else {
-        dtw->_hscrollbar->show_all();
-        dtw->_vscrollbar_box->show_all();
-        dtw->_cms_adjust->show_all();
-    }
-
-    if (!prefs->getBool(pref_root + "rulers/state", true)) {
-        dtw->_guides_lock->hide();
-        dtw->_hruler->hide();
-        dtw->_vruler->hide();
-    } else {
-        dtw->_guides_lock->show_all();
-        dtw->_hruler->show_all();
-        dtw->_vruler->show_all();
-    }
+    _canvas_grid->ShowScrollbars(prefs->getBool(pref_root + "scrollbars/state", true));
+    _canvas_grid->ShowRulers(    prefs->getBool(pref_root + "rulers/state",     true));
 }
 
 Gtk::Toolbar *
@@ -1634,7 +1431,7 @@ SPDesktopWidget::SPDesktopWidget(SPDocument *document)
     dtw->_selected_style->setDesktop(dtw->desktop);
 
     /* Once desktop is set, we can update rulers */
-    dtw->update_rulers();
+    dtw->_canvas_grid->UpdateRulers();
 
     dtw->setView(dtw->desktop);
 
@@ -1667,23 +1464,7 @@ SPDesktopWidget::SPDesktopWidget(SPDocument *document)
 void
 SPDesktopWidget::update_rulers()
 {
-    Geom::Rect viewbox = desktop->get_display_area(true).bounds();
-    // "true" means: Use integer values of the canvas for calculating the display area, similar
-    // to the integer values used for positioning the grid lines. (see SPCanvas::scrollTo(), 
-    // where ix and iy are rounded integer values; these values are stored in SPCanvasBuf->rect,
-    // and used for drawing the grid). By using the integer values here too, the ruler ticks 
-    // will be perfectly aligned to the grid
-
-    double lower_x = _dt2r * (viewbox.left()  - _ruler_origin[Geom::X]);
-    double upper_x = _dt2r * (viewbox.right() - _ruler_origin[Geom::X]);
-    _hruler->set_range(lower_x, upper_x);
-
-    double lower_y = _dt2r * (viewbox.bottom() - _ruler_origin[Geom::Y]);
-    double upper_y = _dt2r * (viewbox.top()    - _ruler_origin[Geom::Y]);
-    if (desktop->is_yaxisdown()) {
-        std::swap(lower_y, upper_y);
-    }
-    _vruler->set_range(lower_y, upper_y);
+    _canvas_grid->UpdateRulers();
 }
 
 
@@ -1695,8 +1476,11 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
         _dt2r = 1. / nv->display_units->factor;
         _ruler_origin = Geom::Point(0,0); //nv->gridorigin;   Why was the grid origin used here?
 
-        _vruler->set_unit(nv->getDisplayUnit());
-        _hruler->set_unit(nv->getDisplayUnit());
+        _canvas_grid->GetVRuler()->set_unit(nv->getDisplayUnit());
+        _canvas_grid->GetHRuler()->set_unit(nv->getDisplayUnit());
+        _canvas_grid->GetVRuler()->set_tooltip_text(gettext(nv->display_units->name_plural.c_str()));
+        _canvas_grid->GetHRuler()->set_tooltip_text(gettext(nv->display_units->name_plural.c_str()));
+        _canvas_grid->UpdateRulers();
 
         /* This loops through all the grandchildren of aux toolbox,
          * and for each that it finds, it performs an sp_search_by_data_recursive(),
@@ -1735,10 +1519,6 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
             } // children
         } // if aux_toolbox is a container
 
-        _hruler->set_tooltip_text(gettext(nv->display_units->name_plural.c_str()));
-        _vruler->set_tooltip_text(gettext(nv->display_units->name_plural.c_str()));
-
-        update_rulers();
         ToolboxFactory::updateSnapToolbox(this->desktop, nullptr, this->snap_toolbox);
     }
 }
@@ -1752,8 +1532,8 @@ SPDesktopWidget::on_adjustment_value_changed()
     update = true;
 
     // Do not call canvas->scrollTo directly... messes up 'offset'.
-    desktop->scroll_absolute( Geom::Point(_hadj->get_value(),
-                                          _vadj->get_value()), false);
+    desktop->scroll_absolute( Geom::Point(_canvas_grid->GetHAdj()->get_value(),
+                                          _canvas_grid->GetVAdj()->get_value()), false);
 
     update = false;
 }
@@ -1901,7 +1681,7 @@ void
 SPDesktopWidget::sticky_zoom_toggled()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setBool("/options/stickyzoom/value", _sticky_zoom->get_active());
+    prefs->setBool("/options/stickyzoom/value", _canvas_grid->GetStickyZoom()->get_active());
 }
 
 
@@ -2023,52 +1803,31 @@ SPDesktopWidget::update_rotation()
 void
 SPDesktopWidget::toggle_rulers()
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (_guides_lock->get_visible()) {
-        _guides_lock->hide();
-        _hruler->hide();
-        _vruler->hide();
-        prefs->setBool(desktop->is_fullscreen() ? "/fullscreen/rulers/state" : "/window/rulers/state", false);
-    } else {
-        _guides_lock->show_all();
-        _hruler->show_all();
-        _vruler->show_all();
-        prefs->setBool(desktop->is_fullscreen() ? "/fullscreen/rulers/state" : "/window/rulers/state", true);
-    }
+    // TODO: Turn into action and remove this function.
+    _canvas_grid->ToggleRulers();
 }
 
 void
 SPDesktopWidget::toggle_scrollbars()
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (_hscrollbar->get_visible()) {
-        _hscrollbar->hide();
-        _vscrollbar_box->hide();
-        _cms_adjust->hide();
-        prefs->setBool(desktop->is_fullscreen() ? "/fullscreen/scrollbars/state" : "/window/scrollbars/state", false);
-    } else {
-        _hscrollbar->show_all();
-        _vscrollbar_box->show_all();
-        _cms_adjust->show_all();
-        prefs->setBool(desktop->is_fullscreen() ? "/fullscreen/scrollbars/state" : "/window/scrollbars/state", true);
-    }
+    // TODO: Turn into action and remove this function.
+    _canvas_grid->ToggleScrollbars();
 }
 
 bool
 SPDesktopWidget::get_color_prof_adj_enabled() const
 {
+    auto _cms_adjust = _canvas_grid->GetCmsAdjust();
     return _cms_adjust->get_sensitive() && _cms_adjust->get_active();
 }
 
 void
 SPDesktopWidget::toggle_color_prof_adj()
 {
+    auto _cms_adjust = _canvas_grid->GetCmsAdjust();
     if (_cms_adjust->get_sensitive()) {
-        if (_cms_adjust->get_active()) {
-            _cms_adjust->toggle_set_down(false);
-        } else {
-            _cms_adjust->toggle_set_down(true);
-        }
+        bool active = _cms_adjust->get_active();
+        _cms_adjust->set_active(!active);
     }
 }
 
@@ -2116,6 +1875,8 @@ SPDesktopWidget::update_scrollbars(double scale)
     /* Viewbox is always included into scrollable region */
     carea = Geom::unify(carea, viewbox);
 
+    auto _hadj = _canvas_grid->GetHAdj();
+    auto _vadj = _canvas_grid->GetVAdj();
     set_adjustment(_hadj, carea.min()[Geom::X], carea.max()[Geom::X],
                    viewbox.dimensions()[Geom::X],
                    0.1 * viewbox.dimensions()[Geom::X],
@@ -2131,24 +1892,11 @@ SPDesktopWidget::update_scrollbars(double scale)
     update = false;
 }
 
+// TODO: Remove this.
 bool
 SPDesktopWidget::get_sticky_zoom_active() const
 {
-    return _sticky_zoom->get_active();
-}
-
-double
-SPDesktopWidget::get_hruler_thickness() const
-{
-    auto allocation = _hruler->get_allocation();
-    return allocation.get_height();
-}
-
-double
-SPDesktopWidget::get_vruler_thickness() const
-{
-    auto allocation = _vruler->get_allocation();
-    return allocation.get_width();
+    return _canvas_grid->GetStickyZoom()->get_active();
 }
 
 gint

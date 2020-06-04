@@ -45,6 +45,7 @@ class SwatchesPanel;
 
 namespace Widget {
   class Button;
+  class CanvasGrid;
   class LayerSelector;
   class SelectedStyle;
   class SpinButton;
@@ -76,6 +77,8 @@ class SPDesktopWidget : public SPViewWidget {
   public:
     SPDesktopWidget(SPDocument *document);
     ~SPDesktopWidget() override;
+
+  Inkscape::UI::Widget::CanvasGrid *GetCanvasGrid() { return _canvas_grid; }  // Temp, I hope!
 
     void on_size_allocate(Gtk::Allocation &) override;
     void on_realize() override;
@@ -112,10 +115,6 @@ private:
     Glib::RefPtr<Gtk::Adjustment> _hadj;
     Glib::RefPtr<Gtk::Adjustment> _vadj;
 
-    Gtk::ToggleButton *_guides_lock;
-
-    Inkscape::UI::Widget::Button *_cms_adjust;
-    Gtk::ToggleButton *_sticky_zoom;
     Gtk::Grid *_coord_status;
 
     Gtk::Label *_coord_status_x;
@@ -135,26 +134,19 @@ private:
 
     Inkscape::UI::Widget::Dock *_dock = nullptr;
 
-    Gtk::Scrollbar *_hscrollbar;
-    Gtk::Scrollbar *_vscrollbar;
-    Gtk::Box *_vscrollbar_box;
 
     Inkscape::UI::Widget::SelectedStyle *_selected_style;
 
-    /** A table for displaying the canvas, rulers etc */
-    Gtk::Grid *_canvas_tbl;
-    sigc::connection _canvas_tbl_size_allocate_connection;
-
-    /* Rulers */
-    Inkscape::UI::Widget::Ruler *_hruler;
-    Inkscape::UI::Widget::Ruler *_vruler;
-    Gtk::Allocation _allocation;
+    /** A grid for display the canvas, rulers, and scrollbars. */
+    Inkscape::UI::Widget::CanvasGrid *_canvas_grid;
 
     unsigned int _interaction_disabled_counter = 0;
 
+public:
     Geom::Point _ruler_origin;
     double _dt2r;
 
+private:
     SPCanvas *_canvas;
 
     std::vector<sigc::connection> _connections;
@@ -197,8 +189,6 @@ public:
     void updateNamedview();
     void update_guides_lock();
 
-    /// Get the CMS adjustment button widget
-    decltype(_cms_adjust) get_cms_adjust() const {return _cms_adjust;}
 
     void cms_adjust_set_sensitive(bool enabled);
     bool get_color_prof_adj_enabled() const;
@@ -228,7 +218,6 @@ private:
     GtkWidget *snap_toolbox;
 
     void namedviewModified(SPObject *obj, guint flags);
-    void on_adjustment_value_changed();
     int zoom_input(double *new_val);
     bool zoom_output();
     void zoom_value_changed();
@@ -238,17 +227,22 @@ private:
     bool rotation_output();
     void rotation_value_changed();
     void rotation_populate_popup(Gtk::Menu *menu);
-    void canvas_tbl_size_allocate(Gtk::Allocation &allocation);
+  //void canvas_tbl_size_allocate(Gtk::Allocation &allocation);
 
 #if defined(HAVE_LIBLCMS2)
-    static void cms_adjust_toggled( GtkWidget *button, gpointer data );
+public:
+    void cms_adjust_toggled();
+private:
     static void color_profile_event(EgeColorProfTracker *tracker, SPDesktopWidget *dtw);
 #endif
     static void ruler_snap_new_guide(SPDesktop *desktop, SPCanvasItem *guide, Geom::Point &event_dt, Geom::Point &normal);
     static gint event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw);
+
+public: // Move to CanvasGrid
     bool on_ruler_box_button_press_event(GdkEventButton *event, Gtk::Widget *widget, bool horiz);
     bool on_ruler_box_button_release_event(GdkEventButton *event, Gtk::Widget *widget, bool horiz);
     bool on_ruler_box_motion_notify_event(GdkEventMotion *event, Gtk::Widget *widget, bool horiz);
+    void on_adjustment_value_changed();
 };
 
 #endif /* !SEEN_SP_DESKTOP_WIDGET_H */

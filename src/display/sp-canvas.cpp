@@ -2382,35 +2382,35 @@ int SPCanvas::paint()
         arena = SP_CANVAS_ARENA(desktop->drawing);
         rm = arena->drawing.renderMode();
         if (split) {
-            auto window = desktop->getInkscapeWindow();
-            auto dtw = window->get_desktop_widget();
-            bool hasrullers = prefs->getBool(desktop->is_fullscreen() ? "/fullscreen/rulers/state" : "/window/rulers/state");
-            int hruler_gap = hasrullers ? dtw->get_hruler_thickness() : 1;
-            int vruler_gap = hasrullers ? dtw->get_vruler_thickness() : 1;
-            
-            split_x = !_split_vertical ? 0 : _split_value;
-            split_y = _split_vertical ? 0 : _split_value;
 
-            Geom::IntCoord coord1x =
-                allocation.x + (int((allocation.width) * split_x))  - (3 * canvas->_device_scale) - vruler_gap;
-            Geom::IntCoord coord1y =
-                allocation.y + (int((allocation.height) * split_y)) - (3 * canvas->_device_scale) - hruler_gap;
-            split_x = !_split_vertical ? 1 : _split_value;
-            split_y = _split_vertical ? 1 : _split_value;
-            Geom::IntCoord coord2x =
-                allocation.x + (int((allocation.width)  * split_x)) + (3 * canvas->_device_scale) - vruler_gap;
-            Geom::IntCoord coord2y =
-                allocation.y + (int((allocation.height) * split_y)) + (3 * canvas->_device_scale) - hruler_gap;
-            _spliter = Geom::OptIntRect(coord1x, coord1y, coord2x, coord2y);
+            // Start: Line
             split_x = !_split_vertical ? 0 : _split_value;
-            split_y = _split_vertical ? 0 : _split_value;
-            coord1x = allocation.x + (int((allocation.width ) * split_x)) - vruler_gap;
-            coord1y = allocation.y + (int((allocation.height) * split_y)) - hruler_gap;
+            split_y =  _split_vertical ? 0 : _split_value;
+            Geom::IntCoord coord1x = (int((allocation.width) * split_x))  - (3 * canvas->_device_scale);
+            Geom::IntCoord coord1y = (int((allocation.height) * split_y)) - (3 * canvas->_device_scale);
+
+            // End: Line
             split_x = !_split_vertical ? 1 : _split_value;
-            split_y = _split_vertical ? 1 : _split_value;
-            coord2x = allocation.x + allocation.width;
-            coord2y = allocation.y + allocation.height;        
+            split_y =  _split_vertical ? 1 : _split_value;
+            Geom::IntCoord coord2x = (int((allocation.width)  * split_x)) + (3 * canvas->_device_scale);
+            Geom::IntCoord coord2y = (int((allocation.height) * split_y)) + (3 * canvas->_device_scale);
+
+            _spliter = Geom::OptIntRect(coord1x, coord1y, coord2x, coord2y);
+
+            // Start: Area
+            split_x = !_split_vertical ? 0 : _split_value;
+            split_y =  _split_vertical ? 0 : _split_value;
+            coord1x = (int((allocation.width ) * split_x));
+            coord1y = (int((allocation.height) * split_y));
+
+            // End: area
+            split_x = !_split_vertical ? 1 : _split_value;
+            split_y =  _split_vertical ? 1 : _split_value;
+            coord2x = int(allocation.width);
+            coord2y = int(allocation.height);
+
             _spliter_area = Geom::OptIntRect(coord1x, coord1y, coord2x, coord2y);
+
         } else {
             sp_reset_spliter(canvas);
         }
