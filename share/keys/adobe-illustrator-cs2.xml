@@ -162,6 +162,10 @@ ToolPaintBucket: Fill bounded areas -->
   <bind key="v" modifiers="Ctrl" action="EditPaste" display="true"/>
   <bind key="V" modifiers="Ctrl" action="EditPaste"/>
   <bind key="F4" action="EditCut"/>
+  
+  <bind key="Delete" action="EditDelete" display="true" />
+  <bind key="KP_Delete" action="EditDelete" />
+  <bind key="BackSpace" action="EditDelete" />
     
   <!--  Paste in Front, Ctrl+F -->
 
