@@ -42,6 +42,13 @@ typedef struct _GdkCursor         GdkCursor;
 #define SP_IS_CANVAS_ITEM(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_CANVAS_ITEM))
 #define SP_CANVAS_ITEM_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS((o), SP_TYPE_CANVAS_ITEM, SPCanvasItemClass))
 
+enum {
+    ITEM_EVENT,
+    ITEM_LAST_SIGNAL
+};
+
+extern guint item_signals[ITEM_LAST_SIGNAL];
+
 
 /**
  * An SPCanvasItem refers to a SPCanvas and to its parent item; it has
@@ -133,6 +140,14 @@ void sp_canvas_item_hide(SPCanvasItem *item);
 void sp_canvas_item_destroy(SPCanvasItem *item);
 int sp_canvas_item_grab(SPCanvasItem *item, unsigned int event_mask, GdkCursor *cursor, guint32 etime);
 void sp_canvas_item_ungrab(SPCanvasItem *item);
+
+bool is_descendant(SPCanvasItem const *item, SPCanvasItem const *parent);
+double sp_canvas_item_invoke_point(SPCanvasItem *item, Geom::Point p, SPCanvasItem **actual_item);
+void sp_canvas_item_invoke_update(SPCanvasItem *item, Geom::Affine const &affine, unsigned int flags);
+void sp_canvas_item_finalize(GObject *gobject);
+void sp_canvas_item_real_destroy(SPCanvasItem *object);
+void sp_canvas_item_dispose(GObject *object);
+void sp_canvas_item_construct(SPCanvasItem *item, SPCanvasGroup *parent, gchar const *first_arg_name, va_list args);
 
 Geom::Affine sp_canvas_item_i2w_affine(SPCanvasItem const *item);
 

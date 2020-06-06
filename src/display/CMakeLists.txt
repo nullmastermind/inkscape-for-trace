@@ -54,6 +54,8 @@ set(display_SRC
 	sodipodi-ctrlrect.cpp
 	sp-canvas-util.cpp
 	sp-canvas.cpp
+        sp-canvas-group.cpp
+        sp-canvas-item.cpp
 	sp-ctrlcurve.cpp
 	sp-ctrlline.cpp
 	sp-ctrlquadr.cpp

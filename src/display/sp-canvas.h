@@ -287,6 +287,8 @@ void sp_canvas_world_to_window(SPCanvas const *canvas, double worldx, double wor
 Geom::Point sp_canvas_window_to_world(SPCanvas const *canvas, Geom::Point const win);
 Geom::Point sp_canvas_world_to_window(SPCanvas const *canvas, Geom::Point const world);
 
+void ungrab_default_client_pointer();
+
 #endif // SEEN_SP_CANVAS_H
 
 /*
