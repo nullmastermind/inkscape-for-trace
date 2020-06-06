@@ -2151,7 +2151,7 @@ cr_sel_eng_process_stylesheet ( CRSelEng * a_eng,
         *tab_len = *tab_size - *index;
 
         // Process other document stylesheets last
-        for (cur = a_stylesheet->next ; cur ; cur = cur->next) {
+        if (cur = a_stylesheet->next) {
                 cr_sel_eng_process_stylesheet( a_eng, a_node, cur, stmts_tab, tab_size, tab_len, index );
         }
 
