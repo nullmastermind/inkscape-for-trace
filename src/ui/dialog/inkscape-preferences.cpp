@@ -2552,6 +2552,28 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
         }
     }
 
+    // Tool mouse keys
+    Gtk::TreeStore::iterator iter_modifers = _kb_store->append();
+    (*iter_modifers)[_kb_columns.name] = _("Modifiers");
+    (*iter_modifers)[_kb_columns.shortcut] = "";
+    (*iter_modifers)[_kb_columns.id] = "";
+    (*iter_modifers)[_kb_columns.description] = "";
+    (*iter_modifers)[_kb_columns.shortcutid] = 0;
+    (*iter_modifers)[_kb_columns.user_set] = 0;
+
+    for(auto modifier: Modifier::getList()) {
+
+        // TODO: generate shortcut label and shortcut id etc
+        Gtk::TreeStore::iterator iter_modifer = _kb_store->append();
+        (*iter_modifer)[_kb_columns.name] = modifier->get_name();
+        (*iter_modifer)[_kb_columns.shortcut] = "";
+        (*iter_modifer)[_kb_columns.id] = modifier->get_id();
+        (*iter_modifer)[_kb_columns.description] = modifier->get_description();
+        (*iter_modifer)[_kb_columns.shortcutid] = 0;
+        (*iter_modifer)[_kb_columns.user_set] = modifier->is_user_set();
+
+    }
+
     // re-order once after updating (then disable ordering again to increase performance)
     _kb_store->set_sort_column (_kb_columns.id, Gtk::SORT_ASCENDING );
     _kb_store->set_sort_column ( GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, Gtk::SORT_ASCENDING );
