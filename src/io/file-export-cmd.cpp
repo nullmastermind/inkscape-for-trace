@@ -379,7 +379,7 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string filename_in)
 
         if (!object) {
             std::cerr << "InkFileExport::do_export_png: "
-                      << "Object with id=\"" << object
+                      << "Object with id=\"" << object_id
                       << "\" was not found in the document. Skipping." << std::endl;
             continue;
         }
