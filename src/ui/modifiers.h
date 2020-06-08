@@ -86,14 +86,14 @@ protected:
 
 public:
 
-    const Type get_index () { return _index; }
-    char const * get_id () { return _id; }
-    char const * get_name () { return _name; }
-    char const * get_description () { return _desc; }
-    //char const * get_group () { return _group; }
+    const Type get_index() const { return _index; }
+    char const * get_id() const { return _id; }
+    char const * get_name() const { return _name; }
+    char const * get_description() const { return _desc; }
+    //char const * get_group() const { return _group; }
 
     // Set user value
-    bool is_user_set() { return _value != NON_USER; }
+    bool is_user_set() const { return _value != NON_USER; }
     void set_value (KeyMask value) { _value = value; }
     void unset_value() { _value = NON_USER; }
 
@@ -127,6 +127,9 @@ public:
     {
         _modifier_lookup.emplace(_id, this);
     }
+    // Delete the destructor, because we are eternal
+    ~Modifier() = delete;
+
     static void list ();
     static std::vector<Inkscape::Modifier::Modifier *>getList ();
 
