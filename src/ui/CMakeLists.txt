@@ -18,6 +18,7 @@ set(ui_SRC
 	tools-switch.cpp
         util.cpp
 	uxmanager.cpp
+        modifiers.cpp
 
 	cache/svg_preview_cache.cpp
 
@@ -250,6 +251,7 @@ set(ui_SRC
 	tools-switch.h
         util.h
 	uxmanager.h
+        modifiers.h
 
 	cache/svg_preview_cache.h
 

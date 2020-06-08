@@ -13,44 +13,46 @@
 #include <vector>
 //#include <gdk/gdkkeysyms.h>
 
+namespace Inkscape {
+namespace Modifier {
+
 int SHIFT = 1; // GDK_SHIFT_MASK;
 int CTRL = 4; // GDK_CONTROL_MASK;
 int ALT = 8; // GDK_MOD1_MASK;
+int NON_USER = -1;
 
 /**
  * This anonymous enum is used to provide a list of the Shifts
  */
-enum {
-    SP_MODIFIER_INVALID,
-    // SP_MODIFIER_{TOOL_NAME}_{ACTION_NAME}
+enum Type {
+    // {TOOL_NAME}_{ACTION_NAME}
 
     // Canvas tools (applies to any tool selection)
-    SP_MODIFIER_CANVAS_SCROLL_Y,      // Scroll up and down {NOTHING+SCROLL}
-    SP_MODIFIER_CANVAS_SCROLL_X,      // Scroll left and right {SHIFT+SCROLL}
-    SP_MODIFIER_CANVAS_ZOOM,          // Zoom in and out {CTRL+SCROLL}
-    SP_MODIFIER_CANVAS_ROTATE,        // Rotate CW and CCW {CTRL+SHIFT+SCROLL}
+    CANVAS_SCROLL_Y,      // Scroll up and down {NOTHING+SCROLL}
+    CANVAS_SCROLL_X,      // Scroll left and right {SHIFT+SCROLL}
+    CANVAS_ZOOM,          // Zoom in and out {CTRL+SCROLL}
+    CANVAS_ROTATE,        // Rotate CW and CCW {CTRL+SHIFT+SCROLL}
 
     // Select tool (minus transform)
-    SP_MODIFIER_SELECT_ADD_TO,        // Add selection {SHIFT+CLICK}
-    SP_MODIFIER_SELECT_IN_GROUPS,     // Select within groups {CTRL+CLICK}
-    SP_MODIFIER_SELECT_TOUCH_PATH,    // Draw band to select {ALT+DRAG}
-    SP_MODIFIER_SELECT_ALWAYS_BOX,    // Draw box to select {SHIFT+DRAG}
-    SP_MODIFIER_SELECT_FIRST_HIT,     // Start dragging first item hit {CTRL+DRAG} (Is this an actual feature?)
+    SELECT_ADD_TO,        // Add selection {SHIFT+CLICK}
+    SELECT_IN_GROUPS,     // Select within groups {CTRL+CLICK}
+    SELECT_TOUCH_PATH,    // Draw band to select {ALT+DRAG}
+    SELECT_ALWAYS_BOX,    // Draw box to select {SHIFT+DRAG}
+    SELECT_FIRST_HIT,     // Start dragging first item hit {CTRL+DRAG} (Is this an actual feature?)
 
     // Transform handles (applies to multiple tools)
-    SP_MODIFIER_MOVE_AXIS_CONFINE,    // Limit dragging to X OR Y only {DRAG+CTRL}
-    SP_MODIFIER_SCALE_RATIO_CONFINE,  // Confine resize aspect ratio {HANDLE+CTRL}
-    SP_MODIFIER_SCALE_FROM_CENTER,    // Resize from center {HANDLE+SHIFT}
-    SP_MODIFIER_SCALE_FIXED_RATIO,    // Resize by fixed ratio sizes {HANDLE+ALT}
-    SP_MODIFIER_TRANS_FIXED_RATIO,    // Rotate/skew by fixed ratio angles {HANDLE+CTRL}
-    SP_MODIFIER_TRANS_OFF_CENTER,     // Rotate/skew from oposite corner {HANDLE+SHIFT}
+    MOVE_AXIS_CONFINE,    // Limit dragging to X OR Y only {DRAG+CTRL}
+    SCALE_RATIO_CONFINE,  // Confine resize aspect ratio {HANDLE+CTRL}
+    SCALE_FROM_CENTER,    // Resize from center {HANDLE+SHIFT}
+    SCALE_FIXED_RATIO,    // Resize by fixed ratio sizes {HANDLE+ALT}
+    TRANS_FIXED_RATIO,    // Rotate/skew by fixed ratio angles {HANDLE+CTRL}
+    TRANS_OFF_CENTER,     // Rotate/skew from oposite corner {HANDLE+SHIFT}
     // TODO: Alignment ommitted because it's UX is not completed
 
     /* Footer */
-    SP_MODIFIER_LAST
+    LAST
 };
 
-namespace Inkscape {
 
 /**
  * A class to represent ways functionality is driven by shift modifiers
@@ -58,17 +60,17 @@ namespace Inkscape {
 class Modifier {
 private:
     /** An easy to use definition of the table of modifiers by ID. */
-    typedef std::map<char const *, Modifier *> ModifierLookup;
+    typedef std::map<std::string, Modifier *> Lookup;
 
     /** A table of all the created modifers. */
-    static ModifierLookup _modifier_lookup;
+    static Lookup _modifier_lookup;
 
-    static Modifier * _modifiers[SP_MODIFIER_LAST + 1];
-    /* Plus one because there is an entry for SP_MODIFIER_LAST */
+    static Modifier * _modifiers[LAST + 1];
+    /* Plus one because there is an entry for LAST */
 
     // Fixed data defined in code and created at run time
 
-    unsigned int _index; // Index of the modifier, based on the modifier enum
+    Type _index; // Index of the modifier, based on the modifier enum
     char const * _id;    // A unique id used by keys.xml to identify it
     char const * _name;  // A descriptive name used in preferences UI
     char const * _desc;  // A more verbose description used in preferences UI
@@ -82,16 +84,16 @@ protected:
 
 public:
 
-    unsigned int get_index () { return _index; }
+    Type get_index () { return _index; }
     char const * get_id () { return _id; }
     char const * get_name () { return _name; }
     char const * get_description () { return _desc; }
     //char const * get_group () { return _group; }
 
     // Set user value
-    bool is_user_set() { return _value != -1; }
+    bool is_user_set() { return _value != NON_USER; }
     void set_value (unsigned int value) { _value = value; }
-    void unset_value() { _value = -1; }
+    void unset_value() { _value = NON_USER; }
 
     // Get value, either user defined value or default
     unsigned int get_value() {
@@ -110,7 +112,7 @@ public:
      * @param desc     Goes to \c _desc.
      * @param default_ Goes to \c _default.
      */
-    Modifier(const unsigned int index,
+    Modifier(Type index,
              char const * id,
              char const * name,
              char const * desc,
@@ -122,10 +124,10 @@ public:
         _default(default_),
         _value(-1)
     {
-        _modifier_lookup.insert(ModifierLookup::value_type(_id, this));
+        _modifier_lookup.emplace(_id, this);
     }
     static void list ();
-    static std::vector<Inkscape::Modifier *>getList ();
+    static std::vector<Inkscape::Modifier::Modifier *>getList ();
 
     /**
      * A function to turn an enum index into a modifier object.
@@ -133,10 +135,8 @@ public:
      * @param  index  The enum index to be translated
      * @return A pointer to a modifier object or a NULL if not found.
      */
-    static Modifier * get(unsigned int index) {
-        if (index <= SP_MODIFIER_LAST) {
-            return _modifiers[index];
-        }
+    static Modifier * get(Type index) {
+        return _modifiers[index];
     }
     /**
      * A function to turn a string id into a modifier object.
@@ -146,7 +146,7 @@ public:
      */
     static Modifier * get(char const * id) {
         Modifier *modifier = nullptr;
-        ModifierLookup::iterator mod_found = _modifier_lookup.find(id);
+        Lookup::iterator mod_found = _modifier_lookup.find(id);
 
         if (mod_found != _modifier_lookup.end()) {
             modifier = mod_found->second;
@@ -155,10 +155,10 @@ public:
         return modifier;
     }
 
-}; /* Modifier class */
+}; // Modifier class
 
-
-}  /* Inkscape namespace */
+}  // Modifier namespace
+}  // Inkscape namespace
 
 #endif // SEEN_SP_MODIFIERS_H
 

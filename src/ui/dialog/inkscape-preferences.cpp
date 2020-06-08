@@ -2561,7 +2561,7 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
     (*iter_modifers)[_kb_columns.shortcutid] = 0;
     (*iter_modifers)[_kb_columns.user_set] = 0;
 
-    for(auto modifier: Modifier::getList()) {
+    /*for(auto modifier: Modifier::getList()) {
 
         // TODO: generate shortcut label and shortcut id etc
         Gtk::TreeStore::iterator iter_modifer = _kb_store->append();
@@ -2572,7 +2572,7 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
         (*iter_modifer)[_kb_columns.shortcutid] = 0;
         (*iter_modifer)[_kb_columns.user_set] = modifier->is_user_set();
 
-    }
+    }*/
 
     // re-order once after updating (then disable ordering again to increase performance)
     _kb_store->set_sort_column (_kb_columns.id, Gtk::SORT_ASCENDING );
