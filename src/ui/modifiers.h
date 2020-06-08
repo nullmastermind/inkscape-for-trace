@@ -16,10 +16,12 @@
 namespace Inkscape {
 namespace Modifier {
 
-int SHIFT = 1; // GDK_SHIFT_MASK;
-int CTRL = 4; // GDK_CONTROL_MASK;
-int ALT = 8; // GDK_MOD1_MASK;
-int NON_USER = -1;
+using KeyMask = int;
+
+KeyMask NON_USER = -1;
+KeyMask SHIFT = 1; // GDK_SHIFT_MASK;
+KeyMask CTRL = 4; // GDK_CONTROL_MASK;
+KeyMask ALT = 8; // GDK_MOD1_MASK;
 
 /**
  * This anonymous enum is used to provide a list of the Shifts
@@ -75,16 +77,16 @@ private:
     char const * _name;  // A descriptive name used in preferences UI
     char const * _desc;  // A more verbose description used in preferences UI
     //char const * _group; // Optional group for preferences UI
-    unsigned int _default; // The default value if nothing set in keys.xml
+    KeyMask _default; // The default value if nothing set in keys.xml
 
     // User set data
-    signed int _value; // The value set by keys.xml, set to -1 if unset.
+    KeyMask _value; // The value set by keys.xml, set to -1 if unset.
 
 protected:
 
 public:
 
-    Type get_index () { return _index; }
+    const Type get_index () { return _index; }
     char const * get_id () { return _id; }
     char const * get_name () { return _name; }
     char const * get_description () { return _desc; }
@@ -92,11 +94,11 @@ public:
 
     // Set user value
     bool is_user_set() { return _value != NON_USER; }
-    void set_value (unsigned int value) { _value = value; }
+    void set_value (KeyMask value) { _value = value; }
     void unset_value() { _value = NON_USER; }
 
     // Get value, either user defined value or default
-    unsigned int get_value() {
+    const KeyMask get_value() {
         if(is_user_set()) {
             return _value;
         }
@@ -116,7 +118,7 @@ public:
              char const * id,
              char const * name,
              char const * desc,
-             const unsigned int default_) :
+             const KeyMask default_) :
         _index(index),
         _id(id),
         _name(name),
