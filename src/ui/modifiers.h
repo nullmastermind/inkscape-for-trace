@@ -80,7 +80,7 @@ private:
     KeyMask _default; // The default value if nothing set in keys.xml
 
     // User set data
-    KeyMask _value; // The value set by keys.xml, set to -1 if unset.
+    KeyMask _value = NON_USER; // The value set by keys.xml
 
 protected:
 
@@ -123,8 +123,7 @@ public:
         _id(id),
         _name(name),
         _desc(desc),
-        _default(default_),
-        _value(-1)
+        _default(default_)
     {
         _modifier_lookup.emplace(_id, this);
     }
