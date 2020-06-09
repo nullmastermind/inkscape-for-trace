@@ -15,6 +15,7 @@
 
 #include "marker-combo-box.h"
 
+#include <glibmm/fileutils.h>
 #include <glibmm/i18n.h>
 #include <gtkmm/icontheme.h>
 
@@ -24,6 +25,7 @@
 #include "helper/stock-items.h"
 #include "ui/icon-loader.h"
 
+#include "io/resource.h"
 #include "io/sys.h"
 
 #include "object/sp-defs.h"
@@ -149,11 +151,11 @@ MarkerComboBox::init_combo()
 
     // find and load markers.svg
     if (markers_doc == nullptr) {
-        char *markers_source = g_build_filename(INKSCAPE_MARKERSDIR, "markers.svg", NULL);
-        if (Inkscape::IO::file_test(markers_source, G_FILE_TEST_IS_REGULAR)) {
-            markers_doc = SPDocument::createNewDoc(markers_source, FALSE);
+        using namespace Inkscape::IO::Resource;
+        auto markers_source = get_path_string(SYSTEM, MARKERS, "markers.svg");
+        if (Glib::file_test(markers_source, Glib::FILE_TEST_IS_REGULAR)) {
+            markers_doc = SPDocument::createNewDoc(markers_source.c_str(), false);
         }
-        g_free(markers_source);
     }
 
     // load markers from markers.svg

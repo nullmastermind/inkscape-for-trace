@@ -27,6 +27,8 @@ namespace IO {
 namespace Resource {
 
 enum Type {
+    ATTRIBUTES,
+    EXAMPLES,
     EXTENSIONS,
     FONTS,
     ICONS,
@@ -92,6 +94,7 @@ void get_foldernames_from_path(std::vector<Glib::ustring> &files, Glib::ustring 
                                std::vector<const char *> exclusions = {});
 
 
+char const *profile_path();
 char *profile_path(const char *filename);
 char *homedir_path(const char *filename);
 char *log_path(const char *filename);

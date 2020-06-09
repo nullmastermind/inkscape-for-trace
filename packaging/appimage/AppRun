@@ -16,12 +16,8 @@ if [ ! -z $APPIMAGE ] ; then
 else
   BINARY_NAME=$(basename "$0")
 fi
-if [ ! -z "$1" ] && [ -e "$HERE/bin/$1" ] ; then
-  MAIN="$HERE/bin/$1" ; shift
-elif [ ! -z "$1" ] && [ -e "$HERE/usr/bin/$1" ] ; then
+if [ ! -z "$1" ] && [ -e "$HERE/usr/bin/$1" ] ; then
   MAIN="$HERE/usr/bin/$1" ; shift
-elif [ -e "$HERE/bin/$BINARY_NAME" ] ; then
-  MAIN="$HERE/bin/$BINARY_NAME"
 elif [ -e "$HERE/usr/bin/$BINARY_NAME" ] ; then
   MAIN="$HERE/usr/bin/$BINARY_NAME"
 else
@@ -32,7 +28,7 @@ fi
 # Prefer to run the bundled executables (e.g., Python)
 ############################################################################################
 
-export PATH="${HERE}"/usr/bin/:"${HERE}"/usr/sbin/:"${HERE}"/usr/games/:"${HERE}"/bin/:"${HERE}"/sbin/:"${PATH}"
+export PATH="${HERE}/usr/bin:${PATH}"
 
 ############################################################################################
 # Use bundled Python
@@ -62,7 +58,6 @@ if [ -e "$HERE/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2" ] ; then
   export GDK_PIXBUF_MODULEDIR=$(readlink -f "$HERE"/usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/ )
   export GDK_PIXBUF_MODULE_FILE=$(readlink -f "$HERE"/usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders.cache ) # Patched to contain no paths
   export LIBRARY_PATH=$GDK_PIXBUF_MODULEDIR:$LIBRARY_PATH # Otherwise getting "Unable to load image-loading module"
-  export INKSCAPE_DATADIR=${XDG_CONFIG_HOME:-~/.config}/inkscape-1.0-beta
   exec "${HERE}/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2" --inhibit-cache --library-path "${LIBRARY_PATH}" "${MAIN}" "$@"
 else
   exec "${MAIN}" "$@"

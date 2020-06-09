@@ -23,6 +23,7 @@
 
 #include <2geom/coord.h>
 
+#include "io/resource.h"
 #include "util/units.h"
 #include "path-prefix.h"
 #include "streq.h"
@@ -251,9 +252,9 @@ Unit UnitTable::_empty_unit;
 
 UnitTable::UnitTable()
 {
-    gchar *filename = g_build_filename(INKSCAPE_UIDIR, "units.xml", NULL);
+    using namespace Inkscape::IO::Resource;
+    auto filename = get_path_string(SYSTEM, UIS, "units.xml");
     load(filename);
-    g_free(filename);
 }
 
 UnitTable::~UnitTable()

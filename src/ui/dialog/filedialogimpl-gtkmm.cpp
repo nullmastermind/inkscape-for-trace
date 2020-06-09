@@ -252,9 +252,12 @@ FileOpenDialogImplGtk::FileOpenDialogImplGtk(Gtk::Window &parentWindow, const Gl
     set_default(*add_button(_("_Open"), Gtk::RESPONSE_OK));
 
     //###### Allow easy access to our examples folder
-    if (Inkscape::IO::file_test(INKSCAPE_EXAMPLESDIR, G_FILE_TEST_EXISTS) &&
-        Inkscape::IO::file_test(INKSCAPE_EXAMPLESDIR, G_FILE_TEST_IS_DIR) && g_path_is_absolute(INKSCAPE_EXAMPLESDIR)) {
-        add_shortcut_folder(INKSCAPE_EXAMPLESDIR);
+
+    using namespace Inkscape::IO::Resource;
+    auto examplesdir = get_path_string(SYSTEM, EXAMPLES);
+    if (Glib::file_test(examplesdir, Glib::FILE_TEST_IS_DIR) && //
+        Glib::path_is_absolute(examplesdir)) {
+        add_shortcut_folder(examplesdir);
     }
 }
 

@@ -18,9 +18,7 @@
 #include <windows.h>
 #endif
 
-#ifdef ENABLE_BINRELOC
-#include "prefix.h"
-#endif
+#include "path-prefix.h"
 
 #include <string>
 #include <glibmm.h>
@@ -30,32 +28,24 @@ namespace Inkscape {
 
 /** does all required gettext initialization and takes care of the respective locale directory paths */
 void initialize_gettext() {
+    auto localepath = Glib::getenv("INKSCAPE_LOCALEDIR");
+
+    if (localepath.empty()) {
+        localepath = Glib::build_filename(Glib::path_get_dirname(get_inkscape_datadir()), PACKAGE_LOCALE_DIR);
+    }
+
+    if (!Glib::file_test(localepath, Glib::FILE_TEST_IS_DIR)) {
+        localepath = PACKAGE_LOCALE_DIR_ABSOLUTE;
+    }
+
 #ifdef _WIN32
-    gchar *datadir = g_win32_get_package_installation_directory_of_module(NULL);
-
-    // obtain short path to executable dir and pass it
-    // to bindtextdomain (it doesn't understand UTF-8)
-    gchar *shortdatadir = g_win32_locale_filename_from_utf8(datadir);
-    gchar *localepath = g_build_filename(shortdatadir, PACKAGE_LOCALE_DIR, NULL);
-    bindtextdomain(GETTEXT_PACKAGE, localepath);
-    g_free(shortdatadir);
-    g_free(localepath);
-
-    g_free(datadir);
-#else
-# ifdef ENABLE_BINRELOC
-    bindtextdomain(GETTEXT_PACKAGE, BR_LOCALEDIR(""));
-# else
-    bindtextdomain(GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR_ABSOLUTE);
-# endif
+    // obtain short path, bindtextdomain doesn't understand UTF-8
+    auto shortlocalepath = g_win32_locale_filename_from_utf8(localepath.c_str());
+    localepath = shortlocalepath;
+    g_free(shortlocalepath);
 #endif
 
-    // Allow the user to override the locale directory by setting
-    // the environment variable INKSCAPE_LOCALEDIR.
-    char const *inkscape_localedir = g_getenv("INKSCAPE_LOCALEDIR");
-    if (inkscape_localedir != nullptr) {
-        bindtextdomain(GETTEXT_PACKAGE, inkscape_localedir);
-    }
+    bindtextdomain(GETTEXT_PACKAGE, localepath.c_str());
 
     // common setup
     bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");

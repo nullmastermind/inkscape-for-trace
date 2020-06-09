@@ -29,9 +29,6 @@
 /* always defined to indicate that i18n is enabled */
 #cmakedefine ENABLE_NLS 1
 
-/* Build with OSX .app data dir paths? */
-#cmakedefine ENABLE_OSX_APP_LOCATIONS 1
-
 /* Whether the Cairo PDF backend is available */
 #cmakedefine PANGO_ENABLE_ENGINE 1
 

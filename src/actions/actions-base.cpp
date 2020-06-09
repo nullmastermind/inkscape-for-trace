@@ -38,7 +38,7 @@ print_inkscape_version()
 void
 print_system_data_directory()
 {
-    std::cout << INKSCAPE_SYSTEMDIR << std::endl;
+    std::cout << Glib::build_filename(get_inkscape_datadir(), "inkscape") << std::endl;
 }
 
 void

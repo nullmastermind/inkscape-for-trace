@@ -59,7 +59,6 @@ set(inkscape_SRC
   path-prefix.cpp
   perspective-line.cpp
   preferences.cpp
-  prefix.cpp
   print.cpp
   profile-manager.cpp
   proj_pt.cpp
@@ -166,7 +165,6 @@ set(inkscape_SRC
   perspective-line.h
   preferences-skeleton.h
   preferences.h
-  prefix.h
   print.h
   profile-manager.h
   proj_pt.h

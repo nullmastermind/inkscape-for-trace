@@ -26,6 +26,7 @@
 
 #include "attribute-rel-svg.h"
 
+#include "io/resource.h"
 #include "path-prefix.h"
 #include "preferences.h"
 
@@ -100,8 +101,8 @@ SPAttributeRelSVG::SPAttributeRelSVG()
     std::fstream f;
     
     // Read data from standard path
-    std::string filepath = INKSCAPE_ATTRRELDIR;
-    filepath += "/svgprops";
+    using namespace Inkscape::IO::Resource;
+    auto filepath = get_path_string(SYSTEM, ATTRIBUTES, "svgprops");
 
     f.open(filepath.c_str(), std::ios::in);
 

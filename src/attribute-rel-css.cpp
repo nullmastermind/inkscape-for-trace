@@ -27,6 +27,7 @@
 
 #include "attribute-rel-css.h"
 
+#include "io/resource.h"
 #include "path-prefix.h"
 #include "preferences.h"
 
@@ -128,8 +129,9 @@ bool SPAttributeRelCSS::findIfProperty(Glib::ustring property)
 SPAttributeRelCSS::SPAttributeRelCSS()
 {
     // Read data from standard path
-    std::string filepath = INKSCAPE_ATTRRELDIR;
-    filepath += "/cssprops";
+
+    using namespace Inkscape::IO::Resource;
+    auto filepath = get_path_string(SYSTEM, ATTRIBUTES, "cssprops");
 
     // Try and load data from filepath
     if (readDataFromFileIn(filepath, SPAttributeRelCSS::prop_element_pair)) {
@@ -137,8 +139,7 @@ SPAttributeRelCSS::SPAttributeRelCSS()
     }
     
     // Read data from standard path
-    filepath = INKSCAPE_ATTRRELDIR;
-    filepath += "/css_defaults";
+    filepath = get_path_string(SYSTEM, ATTRIBUTES, "css_defaults");
     
     // Try and load data from filepath
     if (readDataFromFileIn(filepath, SPAttributeRelCSS::prop_defValue_pair)) {

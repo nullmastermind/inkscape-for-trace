@@ -18,6 +18,7 @@
 #define noSP_SS_VERBOSE
 
 #include <cstring>
+#include <glibmm/fileutils.h>
 
 #include "path-prefix.h"
 
@@ -25,6 +26,7 @@
 #include "inkscape.h"
 
 #include "io/sys.h"
+#include "io/resource.h"
 #include "stock-items.h"
 
 #include "object/sp-gradient.h"
@@ -32,10 +34,23 @@
 #include "object/sp-marker.h"
 #include "object/sp-defs.h"
 
-static SPObject *sp_gradient_load_from_svg(gchar const *name, SPDocument *current_doc);
-static SPObject *sp_marker_load_from_svg(gchar const *name, SPDocument *current_doc);
-static SPObject *sp_gradient_load_from_svg(gchar const *name, SPDocument *current_doc);
+static SPDocument *load_paint_doc(char const *basename)
+{
+    using namespace Inkscape::IO::Resource;
 
+    for (Domain const domain : {SYSTEM, CREATE}) {
+        auto const filename = get_path_string(domain, PAINT, basename);
+        if (Glib::file_test(filename, Glib::FILE_TEST_IS_REGULAR)) {
+            auto doc = SPDocument::createNewDoc(filename.c_str(), false);
+            if (doc) {
+                doc->ensureUpToDate();
+                return doc;
+            }
+        }
+    }
+
+    return nullptr;
+}
 
 // FIXME: these should be merged with the icon loading code so they
 // can share a common file/doc cache.  This function should just
@@ -44,25 +59,13 @@ static SPObject *sp_gradient_load_from_svg(gchar const *name, SPDocument *curren
 
 static SPObject * sp_marker_load_from_svg(gchar const *name, SPDocument *current_doc)
 {
-    static SPDocument *doc = nullptr;
-    static unsigned int edoc = FALSE;
     if (!current_doc) {
         return nullptr;
     }
     /* Try to load from document */
-    if (!edoc && !doc) {
-        gchar *markers = g_build_filename(INKSCAPE_MARKERSDIR, "/markers.svg", NULL);
-        if (Inkscape::IO::file_test(markers, G_FILE_TEST_IS_REGULAR)) {
-            doc = SPDocument::createNewDoc(markers, FALSE);
-        }
-        g_free(markers);
-        if (doc) {
-            doc->ensureUpToDate();
-        } else {
-            edoc = TRUE;
-        }
-    }
-    if (!edoc && doc) {
+    static SPDocument *doc = load_paint_doc("markers.svg");
+
+    if (doc) {
         /* Get the marker we want */
         SPObject *object = doc->getObjectById(name);
         if (object && SP_IS_MARKER(object)) {
@@ -82,31 +85,13 @@ static SPObject * sp_marker_load_from_svg(gchar const *name, SPDocument *current
 static SPObject *
 sp_pattern_load_from_svg(gchar const *name, SPDocument *current_doc)
 {
-    static SPDocument *doc = nullptr;
-    static unsigned int edoc = FALSE;
     if (!current_doc) {
         return nullptr;
     }
     /* Try to load from document */
-    if (!edoc && !doc) {
-        gchar *patterns = g_build_filename(INKSCAPE_PAINTDIR, "/patterns.svg", NULL);
-        if (Inkscape::IO::file_test(patterns, G_FILE_TEST_IS_REGULAR)) {
-            doc = SPDocument::createNewDoc(patterns, FALSE);
-        }
-        if (!doc) {
-            gchar *patterns = g_build_filename(CREATE_PAINTDIR, "/patterns.svg", NULL);
-            if (Inkscape::IO::file_test(patterns, G_FILE_TEST_IS_REGULAR)) {
-                doc = SPDocument::createNewDoc(patterns, FALSE);
-            }
-            g_free(patterns);
-            if (doc) {
-                doc->ensureUpToDate();
-            } else {
-                edoc = TRUE;
-            }
-        }
-    }
-    if (!edoc && doc) {
+    static SPDocument *doc = load_paint_doc("patterns.svg");
+
+    if (doc) {
         /* Get the pattern we want */
         SPObject *object = doc->getObjectById(name);
         if (object && SP_IS_PATTERN(object)) {
@@ -125,31 +110,13 @@ sp_pattern_load_from_svg(gchar const *name, SPDocument *current_doc)
 static SPObject *
 sp_gradient_load_from_svg(gchar const *name, SPDocument *current_doc)
 {
-    static SPDocument *doc = nullptr;
-    static unsigned int edoc = FALSE;
     if (!current_doc) {
         return nullptr;
     }
     /* Try to load from document */
-    if (!edoc && !doc) {
-        gchar *gradients = g_build_filename(INKSCAPE_PAINTDIR, "/gradients.svg", NULL);
-        if (Inkscape::IO::file_test(gradients, G_FILE_TEST_IS_REGULAR)) {
-            doc = SPDocument::createNewDoc(gradients, FALSE);
-        }
-        if (!doc) {
-        gchar *gradients = g_build_filename(CREATE_PAINTDIR, "/gradients.svg", NULL);
-        if (Inkscape::IO::file_test(gradients, G_FILE_TEST_IS_REGULAR)) {
-            doc = SPDocument::createNewDoc(gradients, FALSE);
-        }
-        g_free(gradients);
-        if (doc) {
-            doc->ensureUpToDate();
-        } else {
-            edoc = TRUE;
-        }
-        }
-    }
-    if (!edoc && doc) {
+    static SPDocument *doc = load_paint_doc("gradients.svg");
+
+    if (doc) {
         /* Get the gradient we want */
         SPObject *object = doc->getObjectById(name);
         if (object && SP_IS_GRADIENT(object)) {

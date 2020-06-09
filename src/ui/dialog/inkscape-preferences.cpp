@@ -2640,7 +2640,8 @@ void InkscapePreferences::initPageSystem()
     _sys_user_config.init((char const *)Inkscape::IO::Resource::profile_path(""), _("Open preferences folder"));
     _page_system.add_line(true, _("User config: "), _sys_user_config, "", _("Location of users configuration"), true);
 
-    _sys_user_extension_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::EXTENSIONS, ""),
+    auto extensions_folder = IO::Resource::get_path_string(IO::Resource::USER, IO::Resource::EXTENSIONS);
+    _sys_user_extension_dir.init(extensions_folder,
                                  _("Open extensions folder"));
     _page_system.add_line(true, _("User extensions: "), _sys_user_extension_dir, "",
                           _("Location of the user’s extensions"), true);
@@ -2696,11 +2697,12 @@ void InkscapePreferences::initPageSystem()
     _sys_tmp_files.set_editable(false);
     _page_system.add_line(true, _("Temporary files: "), _sys_tmp_files, "", _("Location of the temporary files used for autosave"), true);
 
-    _sys_data.set_text( INKSCAPE_DATADIR_REAL );
+    _sys_data.set_text(get_inkscape_datadir());
     _sys_data.set_editable(false);
     _page_system.add_line(true, _("Inkscape data: "), _sys_data, "", _("Location of Inkscape data"), true);
 
-    _sys_extension_dir.set_text(INKSCAPE_EXTENSIONDIR);
+    extensions_folder = IO::Resource::get_path_string(IO::Resource::SYSTEM, IO::Resource::EXTENSIONS);
+    _sys_extension_dir.set_text(extensions_folder);
     _sys_extension_dir.set_editable(false);
     _page_system.add_line(true, _("Inkscape extensions: "), _sys_extension_dir, "", _("Location of the Inkscape extensions"), true);
 

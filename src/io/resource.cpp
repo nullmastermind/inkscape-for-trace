@@ -47,75 +47,72 @@ static void get_foldernames_from_path(std::vector<Glib::ustring> &folders, std::
 
 gchar *_get_path(Domain domain, Type type, char const *filename)
 {
-    gchar *path=nullptr;
+    if (domain == USER) {
+        switch (type) {
+        case ATTRIBUTES:
+        case EXAMPLES:
+        case DOCS:
+        case SCREENS:
+        case TUTORIALS:
+            g_assert_not_reached();
+            domain = SYSTEM;
+        }
+    }
+
+    char const *name = nullptr;
+    char const *sysdir = nullptr;
+
     switch (domain) {
-        case SYSTEM: {
-            gchar const* temp = nullptr;
-            switch (type) {
-                case EXTENSIONS: temp = INKSCAPE_EXTENSIONDIR; break;
-                case FILTERS: temp = INKSCAPE_FILTERDIR; break;
-                case FONTS: temp = INKSCAPE_FONTSDIR; break;
-                case ICONS: temp = INKSCAPE_ICONSDIR; break;
-                case KEYS: temp = INKSCAPE_KEYSDIR; break;
-                case MARKERS: temp = INKSCAPE_MARKERSDIR; break;
-                case NONE: g_assert_not_reached(); break;
-                case PAINT: temp = INKSCAPE_PAINTDIR; break;
-                case PALETTES: temp = INKSCAPE_PALETTESDIR; break;
-                case SCREENS: temp = INKSCAPE_SCREENSDIR; break;
-                case SYMBOLS: temp = INKSCAPE_SYMBOLSDIR; break;
-                case TEMPLATES: temp = INKSCAPE_TEMPLATESDIR; break;
-                case THEMES: temp = INKSCAPE_THEMEDIR; break;
-                case TUTORIALS: temp = INKSCAPE_TUTORIALSDIR; break;
-                case UIS: temp = INKSCAPE_UIDIR; break;
-                case PIXMAPS: temp = INKSCAPE_PIXMAPSDIR; break;
-                case DOCS: temp = INKSCAPE_DOCDIR; break;
-                default: temp = "";
-            }
-            path = g_strdup(temp);
-        } break;
         case CREATE: {
-            gchar const* temp = nullptr;
+            sysdir = "create";
             switch (type) {
-                case PAINT: temp = CREATE_PAINTDIR; break;
-                case PALETTES: temp = CREATE_PALETTESDIR; break;
-                default: temp = "";
+                case PAINT: name = "paint"; break;
+                case PALETTES: name = "swatches"; break;
+                default: return nullptr;
             }
-            path = g_strdup(temp);
         } break;
         case CACHE: {
-            path = g_build_filename(g_get_user_cache_dir(), "inkscape", NULL);
+            g_assert(type == NONE);
+            return g_build_filename(g_get_user_cache_dir(), "inkscape", filename, nullptr);
         } break;
+
+        case SYSTEM:
+            sysdir = "inkscape";
         case USER: {
-            char const *name=nullptr;
             switch (type) {
+                case ATTRIBUTES: name = "attributes"; break;
+                case DOCS: name = "doc"; break;
+                case EXAMPLES: name = "examples"; break;
                 case EXTENSIONS: name = "extensions"; break;
                 case FILTERS: name = "filters"; break;
                 case FONTS: name = "fonts"; break;
                 case ICONS: name = "icons"; break;
                 case KEYS: name = "keys"; break;
                 case MARKERS: name = "markers"; break;
-                case NONE: name = ""; break;
                 case PAINT: name = "paint"; break;
                 case PALETTES: name = "palettes"; break;
+                case SCREENS: name = "screens"; break;
                 case SYMBOLS: name = "symbols"; break;
                 case TEMPLATES: name = "templates"; break;
                 case THEMES: name = "themes"; break;
+                case TUTORIALS: name = "tutorials"; break;
                 case UIS: name = "ui"; break;
                 case PIXMAPS: name = "pixmaps"; break;
-                default: return _get_path(SYSTEM, type, filename);
+                default: g_assert_not_reached();
+                         return nullptr;
             }
-            path = profile_path(name);
         } break;
     }
 
-
-    if (filename && path) {
-        gchar *temp=g_build_filename(path, filename, NULL);
-        g_free(path);
-        path = temp;
+    if (!name) {
+        return nullptr;
     }
 
-    return path;
+    if (sysdir) {
+        return g_build_filename(get_inkscape_datadir(), sysdir, name, filename, nullptr);
+    } else {
+        return g_build_filename(profile_path(), name, filename, nullptr);
+    }
 }
 
 
@@ -406,6 +403,11 @@ void get_foldernames_from_path(std::vector<Glib::ustring> &folders, std::string 
  */
 char *profile_path(const char *filename)
 {
+    return g_build_filename(profile_path(), filename, nullptr);
+}
+
+char const *profile_path()
+{
     static const gchar *prefdir = nullptr;
 
     if (!prefdir) {
@@ -478,7 +480,7 @@ char *profile_path(const char *filename)
             }
         }
     }
-    return g_build_filename(prefdir, filename, NULL);
+    return prefdir;
 }
 
 /*

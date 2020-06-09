@@ -23,14 +23,13 @@
 static void set_extensions_env()
 {
     // add inkscape to PATH, so the correct version is always available to extensions by simply calling "inkscape"
-    gchar *program_dir = get_program_dir();
+    char const *program_dir = get_program_dir();
     if (program_dir) {
         gchar const *path = g_getenv("PATH");
         gchar *new_path = g_strdup_printf("%s" G_SEARCHPATH_SEPARATOR_S "%s", program_dir, path);
         g_setenv("PATH", new_path, true);
         g_free(new_path);
     }
-    g_free(program_dir);
 
     // add various locations to PYTHONPATH so extensions find their modules
     auto extensiondir_user = get_path_string(Inkscape::IO::Resource::USER, Inkscape::IO::Resource::EXTENSIONS);
@@ -53,10 +52,9 @@ static void set_extensions_env()
 #ifdef _WIN32
     // add inkscape directory to DLL search path so dynamically linked extension modules find their libraries
     // should be fixed in Python 3.8 (https://github.com/python/cpython/commit/2438cdf0e932a341c7613bf4323d06b91ae9f1f1)
-    gchar *installation_dir = get_program_dir();
+    char const *installation_dir = get_program_dir();
     wchar_t *installation_dir_w = (wchar_t *)g_utf8_to_utf16(installation_dir, -1, NULL, NULL, NULL);
     SetDllDirectoryW(installation_dir_w);
-    g_free(installation_dir);
     g_free(installation_dir_w);
 #endif
 }
@@ -64,14 +62,11 @@ static void set_extensions_env()
 #ifdef __APPLE__
 static void set_macos_app_bundle_env(gchar const *program_dir)
 {
-    std::string bundle_contents_dir;
-    bundle_contents_dir.assign(program_dir).append("/.."); // <TheApp.app>/Contents
-
     // use bundle identifier
     // https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/MacOSXDirectories/MacOSXDirectories.html
     auto app_support_dir = Glib::getenv("HOME") + "/Library/Application Support/org.inkscape.Inkscape";
 
-    auto bundle_resources_dir       = bundle_contents_dir  + "/Resources";
+    auto bundle_resources_dir       = Glib::path_get_dirname(get_inkscape_datadir());
     auto bundle_resources_etc_dir   = bundle_resources_dir + "/etc";
     auto bundle_resources_bin_dir   = bundle_resources_dir + "/bin";
     auto bundle_resources_lib_dir   = bundle_resources_dir + "/lib";
@@ -104,9 +99,6 @@ static void set_macos_app_bundle_env(gchar const *program_dir)
 
     // GDK
     Glib::setenv("GDK_PIXBUF_MODULE_FILE", bundle_resources_lib_dir + "/gdk-pixbuf-2.0/2.10.0/loaders.cache");
-
-    // Inkscape
-    Glib::setenv("INKSCAPE_LOCALEDIR", bundle_resources_share_dir + "/locale");
 
     // fontconfig
     Glib::setenv("FONTCONFIG_PATH", bundle_resources_etc_dir + "/fonts");
@@ -193,7 +185,7 @@ int main(int argc, char *argv[])
     {   // Check if we're inside an application bundle and adjust environment
         // accordingly.
 
-        gchar *program_dir = get_program_dir();
+        char const *program_dir = get_program_dir();
         if (g_str_has_suffix(program_dir, "Contents/MacOS")) {
 
             // Step 1
@@ -222,8 +214,6 @@ int main(int argc, char *argv[])
 
             set_macos_app_bundle_env(program_dir);
         }
-
-        g_free(program_dir);
     }
 #elif defined _WIN32
     // temporarily switch console encoding to UTF8 while Inkscape runs

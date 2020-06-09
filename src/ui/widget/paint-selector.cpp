@@ -21,6 +21,7 @@
 #include <vector>
 
 #include <glibmm/i18n.h>
+#include <glibmm/fileutils.h>
 
 #include "desktop-style.h"
 #include "inkscape.h"
@@ -33,6 +34,7 @@
 #include "style.h"
 
 #include "io/sys.h"
+#include "io/resource.h"
 
 #include "object/sp-hatch.h"
 #include "object/sp-linear-gradient.h"
@@ -1053,11 +1055,11 @@ static void ink_pattern_menu_populate_menu(GtkWidget *combo, SPDocument *doc)
 
     // find and load patterns.svg
     if (patterns_doc == nullptr) {
-        char *patterns_source = g_build_filename(INKSCAPE_PAINTDIR, "patterns.svg", NULL);
-        if (Inkscape::IO::file_test(patterns_source, G_FILE_TEST_IS_REGULAR)) {
-            patterns_doc = SPDocument::createNewDoc(patterns_source, FALSE);
+        using namespace Inkscape::IO::Resource;
+        auto patterns_source = get_path_string(SYSTEM, PAINT, "patterns.svg");
+        if (Glib::file_test(patterns_source, Glib::FILE_TEST_IS_REGULAR)) {
+            patterns_doc = SPDocument::createNewDoc(patterns_source.c_str(), false);
         }
-        g_free(patterns_source);
     }
 
     // suck in from current doc
