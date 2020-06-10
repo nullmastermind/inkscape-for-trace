@@ -9,19 +9,21 @@
 
 #include <cstring>
 #include <string>
-#include <map>
 #include <vector>
-//#include <gdk/gdkkeysyms.h>
+#include <map>
+
+#include <gdk/gdk.h>
 
 namespace Inkscape {
-namespace Modifier {
+namespace Modifiers {
 
 using KeyMask = int;
 
 KeyMask NON_USER = -1;
-KeyMask SHIFT = 1; // GDK_SHIFT_MASK;
-KeyMask CTRL = 4; // GDK_CONTROL_MASK;
-KeyMask ALT = 8; // GDK_MOD1_MASK;
+KeyMask SHIFT = GDK_SHIFT_MASK;
+KeyMask CTRL = GDK_CONTROL_MASK;
+KeyMask ALT = GDK_MOD1_MASK;
+KeyMask SUPER = GDK_SUPER_MASK;
 
 /**
  * This anonymous enum is used to provide a list of the Shifts
@@ -77,10 +79,12 @@ private:
     char const * _name;  // A descriptive name used in preferences UI
     char const * _desc;  // A more verbose description used in preferences UI
     //char const * _group; // Optional group for preferences UI
-    KeyMask _default; // The default value if nothing set in keys.xml
 
-    // User set data
-    KeyMask _value = NON_USER; // The value set by keys.xml
+    // Default values if nothing is set in keys.xml
+    KeyMask _and_mask_default; // The pressed keys must have these bits set
+
+    // User set data, set by keys.xml (or other included file)
+    KeyMask _and_mask_user = NON_USER;
 
 protected:
 
@@ -93,16 +97,18 @@ public:
     //char const * get_group() const { return _group; }
 
     // Set user value
-    bool is_user_set() const { return _value != NON_USER; }
-    void set_value (KeyMask value) { _value = value; }
-    void unset_value() { _value = NON_USER; }
+    bool is_set() const { return _and_mask_user != NON_USER; }
+    void set(KeyMask and_mask) {
+        _and_mask_user = and_mask;
+    }
+    void unset() { set(NON_USER); }
 
     // Get value, either user defined value or default
-    const KeyMask get_value() {
-        if(is_user_set()) {
-            return _value;
+    const KeyMask get_and_mask() {
+        if(_and_mask_user != NON_USER) {
+            return _and_mask_user;
         }
-        return _default;
+        return _and_mask_default;
     }
 
     /**
@@ -118,20 +124,20 @@ public:
              char const * id,
              char const * name,
              char const * desc,
-             const KeyMask default_) :
+             const KeyMask and_mask) :
         _index(index),
         _id(id),
         _name(name),
         _desc(desc),
-        _default(default_)
+        _and_mask_default(and_mask)
     {
         _modifier_lookup.emplace(_id, this);
     }
     // Delete the destructor, because we are eternal
     ~Modifier() = delete;
 
-    static void list ();
-    static std::vector<Inkscape::Modifier::Modifier *>getList ();
+    static std::vector<Modifier *>getList ();
+    bool active(int button_state);
 
     /**
      * A function to turn an enum index into a modifier object.
@@ -161,8 +167,9 @@ public:
 
 }; // Modifier class
 
-}  // Modifier namespace
-}  // Inkscape namespace
+} // namespace Modifiers
+} // namespace Inkscape
+
 
 #endif // SEEN_SP_MODIFIERS_H
 

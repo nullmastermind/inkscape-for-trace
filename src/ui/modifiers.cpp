@@ -18,9 +18,7 @@
 #include "modifiers.h"
 
 namespace Inkscape {
-namespace Modifier {
-
-Modifier::Lookup Modifier::_modifier_lookup;
+namespace Modifiers {
 
 // these must be in the same order as the * enum in "modifers.h"
 Modifier *Modifier::_modifiers[] = {
@@ -46,6 +44,11 @@ Modifier *Modifier::_modifiers[] = {
     new Modifier(TRANS_OFF_CENTER, "trans-off-center", "Transform against center", "When rotating or skewing, use the far point as the anchor", SHIFT),
 };
 
+/**
+  * List all the modifiers available. Used in UI listing.
+  *
+  * @return a vector of Modifier objects.
+  */
 std::vector<Modifier *>
 Modifier::getList () {
 
@@ -58,7 +61,21 @@ Modifier::getList () {
     return modifiers;
 };
 
-} // namespace Modifier
+/**
+ * Test if this modifier is currently active.
+ *
+ * @param  button_state - The GDK button state from an event
+ * @return a boolean, true if the modifiers for this action are active.
+ */
+bool Modifier::active(int button_state)
+{
+    // TODO:
+    //  * ALT key is sometimes MOD1, MOD2 etc, if we find other ALT keys, set the ALT bit
+    //  * SUPER key could be HYPER or META, these cases need to be considered.
+    return get_and_mask() & button_state;
+}
+
+} // namespace Modifiers
 } // namespace Inkscape
 
 /*

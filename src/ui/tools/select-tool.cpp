@@ -45,6 +45,7 @@
 #include "object/box3d.h"
 #include "style.h"
 
+#include "ui/modifiers.h"
 #include "ui/pixmaps/cursor-select-d.xpm"
 #include "ui/pixmaps/cursor-select-m.xpm"
 #include "ui/pixmaps/handles.xpm"
@@ -60,6 +61,7 @@
 
 
 using Inkscape::DocumentUndo;
+using Inkscape::Modifiers::Modifier;
 
 GdkPixbuf *handles[23];
 
@@ -515,7 +517,8 @@ bool SelectTool::root_handler(GdkEvent* event) {
                 Geom::Point const button_pt(event->button.x, event->button.y);
                 Geom::Point const p(desktop->w2d(button_pt));
 
-                if (event->button.state & GDK_MOD1_MASK) {
+                if(Modifier::get(Modifiers::SELECT_TOUCH_PATH)->active(event->button.state)) {
+                //if (event->button.state & GDK_MOD1_MASK) {
                     Inkscape::Rubberband::get(desktop)->setMode(RUBBERBAND_MODE_TOUCHPATH);
                 }
 
@@ -551,6 +554,10 @@ bool SelectTool::root_handler(GdkEvent* event) {
         {
             tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
 
+            bool first_hit = Modifier::get(Modifiers::SELECT_FIRST_HIT)->active(this->button_press_state);
+            bool touch_path = Modifier::get(Modifiers::SELECT_TOUCH_PATH)->active(this->button_press_state);
+            bool always_box = Modifier::get(Modifiers::SELECT_ALWAYS_BOX)->active(this->button_press_state);
+
             if ((event->motion.state & GDK_BUTTON1_MASK) && !this->space_panning) {
                 Geom::Point const motion_pt(event->motion.x, event->motion.y);
                 Geom::Point const p(desktop->w2d(motion_pt));
@@ -564,7 +571,8 @@ bool SelectTool::root_handler(GdkEvent* event) {
                 // motion notify coordinates as given (no snapping back to origin)
                 within_tolerance = false;
 
-                if ((this->button_press_state & GDK_CONTROL_MASK) || ((this->button_press_state & GDK_MOD1_MASK) && !(this->button_press_state & GDK_SHIFT_MASK) && !selection->isEmpty())) {
+                if(first_hit || (touch_path || !(always_box) && !selection->isEmpty())) {
+                //if ((this->button_press_state & GDK_CONTROL_MASK) || ((this->button_press_state & GDK_MOD1_MASK) && !(this->button_press_state & GDK_SHIFT_MASK) && !selection->isEmpty())) {
                     // if it's not click and ctrl or alt was pressed (the latter with some selection
                     // but not with shift) we want to drag rather than rubberband
                     this->dragging = TRUE;
@@ -589,7 +597,8 @@ bool SelectTool::root_handler(GdkEvent* event) {
                         item_at_point = desktop->getItemAtPoint(Geom::Point(xp, yp), FALSE);
                     }
 
-                    if (item_at_point || this->moved || this->button_press_state & GDK_MOD1_MASK) {
+                    if (item_at_point || this->moved || touch_path) {
+                    //if (item_at_point || this->moved || this->button_press_state & GDK_MOD1_MASK) {
                         // drag only if starting from an item, or if something is already grabbed, or if alt-dragging
                         if (!this->moved) {
                             item_in_group = desktop->getItemAtPoint(Geom::Point(event->button.x, event->button.y), TRUE);
@@ -613,7 +622,8 @@ bool SelectTool::root_handler(GdkEvent* event) {
                             // if neither a group nor an item (possibly in a group) at point are selected, set selection to the item at point
                             if ((!item_in_group || !selection->includes(item_in_group)) &&
                                 (!group_at_point || !selection->includes(group_at_point))
-                                && !(this->button_press_state & GDK_MOD1_MASK)) {
+                                && !touch_path) {
+//                                && !(this->button_press_state & GDK_MOD1_MASK)) {
                                 // select what is under cursor
                                 if (!_seltrans->isEmpty()) {
                                     _seltrans->resetState();
@@ -676,7 +686,8 @@ bool SelectTool::root_handler(GdkEvent* event) {
                     } else if (this->item && !drag_escaped) {
                         // item has not been moved -> simply a click, do selecting
                         if (!selection->isEmpty()) {
-                            if (event->button.state & GDK_SHIFT_MASK) {
+                            if(Modifier::get(Modifiers::SELECT_ADD_TO)->active(event->button.state)) {
+//                            if (event->button.state & GDK_SHIFT_MASK) {
                                 // with shift, toggle selection
                                 _seltrans->resetState();
                                 selection->toggle(this->item);
