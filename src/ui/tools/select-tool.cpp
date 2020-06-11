@@ -292,18 +292,20 @@ bool SelectTool::item_handler(SPItem* item, GdkEvent* event) {
 
                 // remember what modifiers were on before button press
                 this->button_press_state = event->button.state;
+                bool first_hit = Modifier::get(Modifiers::Type::SELECT_FIRST_HIT)->active(this->button_press_state);
+                bool force_drag = Modifier::get(Modifiers::Type::SELECT_FORCE_DRAG)->active(this->button_press_state);
+                bool always_box = Modifier::get(Modifiers::Type::SELECT_ALWAYS_BOX)->active(this->button_press_state);
 
-                if (event->button.state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK | GDK_MOD1_MASK)) {
-                    // if shift or ctrl was pressed, do not move objects;
-                    // pass the event to root handler which will perform rubberband, shift-click, ctrl-click, ctrl-drag
-                } else {
+                // if shift or ctrl was pressed, do not move objects;
+                // pass the event to root handler which will perform rubberband, shift-click, ctrl-click, ctrl-drag
+                if (!(always_box || first_hit)) {
+
                     GdkWindow* window = gtk_widget_get_window (GTK_WIDGET (desktop->getCanvas()->gobj()));
-                   
+
                     this->dragging = TRUE;
                     this->moved = FALSE;
 
                     gdk_window_set_cursor(window, CursorSelectDragging);
-
 
                     // remember the clicked item in this->item:
                     if (this->item) {
@@ -311,8 +313,7 @@ bool SelectTool::item_handler(SPItem* item, GdkEvent* event) {
                         this->item = nullptr;
                     }
 
-                    this->item = sp_event_context_find_item (desktop,
-                                              Geom::Point(event->button.x, event->button.y), event->button.state & GDK_MOD1_MASK, FALSE);
+                    this->item = sp_event_context_find_item (desktop, Geom::Point(event->button.x, event->button.y), force_drag, FALSE);
                     sp_object_ref(this->item, nullptr);
 
                     rb_escaped = drag_escaped = 0;
@@ -384,7 +385,7 @@ bool SelectTool::item_handler(SPItem* item, GdkEvent* event) {
     return ret;
 }
 
-void SelectTool::sp_select_context_cycle_through_items(Inkscape::Selection *selection, GdkEventScroll *scroll_event, bool shift_pressed) {
+void SelectTool::sp_select_context_cycle_through_items(Inkscape::Selection *selection, GdkEventScroll *scroll_event) {
     if ( this->cycling_items.empty() )
         return;
 
@@ -441,7 +442,7 @@ void SelectTool::sp_select_context_cycle_through_items(Inkscape::Selection *sele
     arenaitem = cycling_cur_item->get_arenaitem(desktop->dkey);
     arenaitem->setOpacity(1.0);
 
-    if (shift_pressed) {
+    if (Modifier::get(Modifiers::Type::SELECT_ADD_TO)->active(scroll_event->state)) {
         selection->add(cycling_cur_item);
     } else {
         selection->set(cycling_cur_item);
@@ -807,10 +808,10 @@ bool SelectTool::root_handler(GdkEvent* event) {
 
             GdkEventScroll *scroll_event = (GdkEventScroll*) event;
 
-            if ( ! (scroll_event->state & GDK_MOD1_MASK)) // do nothing specific if alt was not pressed
+            // do nothing specific if alt was not pressed
+            if ( ! Modifier::get(Modifiers::Type::SELECT_CYCLE)->active(scroll_event->state))
                 break;
 
-            bool shift_pressed = scroll_event->state & GDK_SHIFT_MASK;
             is_cycling = true;
 
             /* Rebuild list of items underneath the mouse pointer */
@@ -847,7 +848,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
             this->cycling_wrap = prefs->getBool("/options/selection/cycleWrap", true);
 
             // Cycle through the items underneath the mouse pointer, one-by-one
-            this->sp_select_context_cycle_through_items(selection, scroll_event, shift_pressed);
+            this->sp_select_context_cycle_through_items(selection, scroll_event);
 
             ret = TRUE;
 

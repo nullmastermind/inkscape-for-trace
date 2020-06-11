@@ -46,6 +46,7 @@ enum class Type {
     SELECT_ALWAYS_BOX,    // Draw box to select {SHIFT+DRAG}
     SELECT_FIRST_HIT,     // Start dragging first item hit {CTRL+DRAG} (Is this an actual feature?)
     SELECT_FORCE_DRAG,    // Drag objects even if the mouse isn't over them {ALT+DRAG+Selected}
+    SELECT_CYCLE,         // Cycle through objects under cursor {ALT+SCROLL}
 
     // Transform handles (applies to multiple tools)
     MOVE_AXIS_CONFINE,    // Limit dragging to X OR Y only {DRAG+CTRL}
