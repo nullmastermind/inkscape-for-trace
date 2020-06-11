@@ -19,16 +19,18 @@ namespace Modifiers {
 
 using KeyMask = int;
 
-KeyMask NON_USER = -1;
-KeyMask SHIFT = GDK_SHIFT_MASK;
-KeyMask CTRL = GDK_CONTROL_MASK;
-KeyMask ALT = GDK_MOD1_MASK;
-KeyMask SUPER = GDK_SUPER_MASK;
+enum Key : KeyMask {
+    NON_USER = -1,
+    SHIFT = GDK_SHIFT_MASK,
+    CTRL = GDK_CONTROL_MASK,
+    ALT = GDK_MOD1_MASK,
+    SUPER = GDK_SUPER_MASK,
+};
 
 /**
  * This anonymous enum is used to provide a list of the Shifts
  */
-enum Type {
+enum class Type {
     // {TOOL_NAME}_{ACTION_NAME}
 
     // Canvas tools (applies to any tool selection)
@@ -52,9 +54,6 @@ enum Type {
     TRANS_FIXED_RATIO,    // Rotate/skew by fixed ratio angles {HANDLE+CTRL}
     TRANS_OFF_CENTER,     // Rotate/skew from oposite corner {HANDLE+SHIFT}
     // TODO: Alignment ommitted because it's UX is not completed
-
-    /* Footer */
-    LAST
 };
 
 
@@ -63,18 +62,14 @@ enum Type {
  */
 class Modifier {
 private:
-    /** An easy to use definition of the table of modifiers by ID. */
+    /** An easy to use definition of the table of modifiers by Type and ID. */
+    typedef std::map<Type, Modifier *> Container;
     typedef std::map<std::string, Modifier *> Lookup;
 
-    /** A table of all the created modifers. */
+    /** A table of all the created modifers and their ID lookups. */
+    static Container _modifiers;
     static Lookup _modifier_lookup;
 
-    static Modifier * _modifiers[LAST + 1];
-    /* Plus one because there is an entry for LAST */
-
-    // Fixed data defined in code and created at run time
-
-    Type _index; // Index of the modifier, based on the modifier enum
     char const * _id;    // A unique id used by keys.xml to identify it
     char const * _name;  // A descriptive name used in preferences UI
     char const * _desc;  // A more verbose description used in preferences UI
@@ -90,7 +85,6 @@ protected:
 
 public:
 
-    const Type get_index() const { return _index; }
     char const * get_id() const { return _id; }
     char const * get_name() const { return _name; }
     char const * get_description() const { return _desc; }
@@ -114,18 +108,15 @@ public:
     /**
      * Inititalizes the Modifier with the parameters.
      *
-     * @param index    Goes to \c _index.
      * @param id       Goes to \c _id.
      * @param name     Goes to \c _name.
      * @param desc     Goes to \c _desc.
      * @param default_ Goes to \c _default.
      */
-    Modifier(Type index,
-             char const * id,
+    Modifier(char const * id,
              char const * name,
              char const * desc,
              const KeyMask and_mask) :
-        _index(index),
         _id(id),
         _name(name),
         _desc(desc),

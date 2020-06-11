@@ -517,7 +517,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
                 Geom::Point const button_pt(event->button.x, event->button.y);
                 Geom::Point const p(desktop->w2d(button_pt));
 
-                if(Modifier::get(Modifiers::SELECT_TOUCH_PATH)->active(event->button.state)) {
+                if(Modifier::get(Modifiers::Type::SELECT_TOUCH_PATH)->active(event->button.state)) {
                 //if (event->button.state & GDK_MOD1_MASK) {
                     Inkscape::Rubberband::get(desktop)->setMode(RUBBERBAND_MODE_TOUCHPATH);
                 }
@@ -554,9 +554,9 @@ bool SelectTool::root_handler(GdkEvent* event) {
         {
             tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
 
-            bool first_hit = Modifier::get(Modifiers::SELECT_FIRST_HIT)->active(this->button_press_state);
-            bool touch_path = Modifier::get(Modifiers::SELECT_TOUCH_PATH)->active(this->button_press_state);
-            bool always_box = Modifier::get(Modifiers::SELECT_ALWAYS_BOX)->active(this->button_press_state);
+            bool first_hit = Modifier::get(Modifiers::Type::SELECT_FIRST_HIT)->active(this->button_press_state);
+            bool touch_path = Modifier::get(Modifiers::Type::SELECT_TOUCH_PATH)->active(this->button_press_state);
+            bool always_box = Modifier::get(Modifiers::Type::SELECT_ALWAYS_BOX)->active(this->button_press_state);
 
             if ((event->motion.state & GDK_BUTTON1_MASK) && !this->space_panning) {
                 Geom::Point const motion_pt(event->motion.x, event->motion.y);
@@ -686,7 +686,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
                     } else if (this->item && !drag_escaped) {
                         // item has not been moved -> simply a click, do selecting
                         if (!selection->isEmpty()) {
-                            if(Modifier::get(Modifiers::SELECT_ADD_TO)->active(event->button.state)) {
+                            if(Modifier::get(Modifiers::Type::SELECT_ADD_TO)->active(event->button.state)) {
 //                            if (event->button.state & GDK_SHIFT_MASK) {
                                 // with shift, toggle selection
                                 _seltrans->resetState();

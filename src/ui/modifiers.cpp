@@ -20,28 +20,30 @@
 namespace Inkscape {
 namespace Modifiers {
 
+Modifier::Lookup Modifier::_modifier_lookup;
+
 // these must be in the same order as the * enum in "modifers.h"
-Modifier *Modifier::_modifiers[] = {
+decltype(Modifier::_modifiers) Modifier::_modifiers {
     // Canvas modifiers
-    new Modifier(CANVAS_SCROLL_Y, "canvas-scroll-y", "Vertical scroll", "Scroll up and down", 0),
-    new Modifier(CANVAS_SCROLL_X, "canvas-scroll-x", "Horizontal scroll", "Scroll left and right", SHIFT),
-    new Modifier(CANVAS_ZOOM, "canvas-zoom", "Canvas zoom", "Zoom in and out with scroll wheel", CTRL),
-    new Modifier(CANVAS_ROTATE, "canvas-rotate", "Canavas rotate", "Rotate the canvas with scroll wheel", SHIFT & CTRL),
+    {Type::CANVAS_SCROLL_Y, new Modifier("canvas-scroll-y", "Vertical scroll", "Scroll up and down", 0)},
+    {Type::CANVAS_SCROLL_X, new Modifier("canvas-scroll-x", "Horizontal scroll", "Scroll left and right", SHIFT)},
+    {Type::CANVAS_ZOOM, new Modifier("canvas-zoom", "Canvas zoom", "Zoom in and out with scroll wheel", CTRL)},
+    {Type::CANVAS_ROTATE, new Modifier("canvs-rotate", "Canavas rotate", "Rotate the canvas with scroll wheel", SHIFT & CTRL)},
     
     // Select tool modifiers (minus transforms)
-    new Modifier(SELECT_ADD_TO, "select-add-to", "Add to selection", "Add items to existing selection", SHIFT),
-    new Modifier(SELECT_IN_GROUPS, "select-in-groups", "Select inside groups", "Ignore groups when selecting items", CTRL),
-    new Modifier(SELECT_TOUCH_PATH, "select-touch-path", "Select with touch-path", "Draw a band around items to select them", ALT),
-    new Modifier(SELECT_ALWAYS_BOX, "select-always-box", "Select with box", "Don't drag items, select more with a box", SHIFT),
-    new Modifier(SELECT_FIRST_HIT, "select-first-hit", "Select the first", "Scroll up and down", CTRL),
+    {Type::SELECT_ADD_TO, new Modifier("select-add-to", "Add to selection", "Add items to existing selection", SHIFT)},
+    {Type::SELECT_IN_GROUPS, new Modifier("select-in-groups", "Select inside groups", "Ignore groups when selecting items", CTRL)},
+    {Type::SELECT_TOUCH_PATH, new Modifier("select-touch-path", "Select with touch-path", "Draw a band around items to select them", ALT)},
+    {Type::SELECT_ALWAYS_BOX, new Modifier("select-always-box", "Select with box", "Don't drag items, select more with a box", SHIFT)},
+    {Type::SELECT_FIRST_HIT, new Modifier("select-first-hit", "Select the first", "Scroll up and down", CTRL)},
 
     // Transform handle modifiers (applies to multiple tools)
-    new Modifier(MOVE_AXIS_CONFINE, "move-confine", "Move confine", "When dragging items, confine to either x or y axis", CTRL),
-    new Modifier(SCALE_RATIO_CONFINE, "scale-confine", "Scale confine", "When resizing objects, confine the aspect ratio", CTRL),
-    new Modifier(SCALE_FROM_CENTER, "scale-from-center", "Scale from center", "When resizing obects, scale from the center", SHIFT),
-    new Modifier(SCALE_FIXED_RATIO, "scale-fixed-ratio", "Scale fixed amounts", "When resizing objects, scale by fixed amounts", ALT),
-    new Modifier(TRANS_FIXED_RATIO, "trans-fixed-ratio", "Transform in increments", "Rotate or skew by fixed amounts", CTRL),
-    new Modifier(TRANS_OFF_CENTER, "trans-off-center", "Transform against center", "When rotating or skewing, use the far point as the anchor", SHIFT),
+    {Type::MOVE_AXIS_CONFINE, new Modifier("move-confine", "Move confine", "When dragging items, confine to either x or y axis", CTRL)},
+    {Type::SCALE_RATIO_CONFINE, new Modifier("scale-confine", "Scale confine", "When resizing objects, confine the aspect ratio", CTRL)},
+    {Type::SCALE_FROM_CENTER, new Modifier("scale-from-center", "Scale from center", "When resizing obects, scale from the center", SHIFT)},
+    {Type::SCALE_FIXED_RATIO, new Modifier("scale-fixed-ratio", "Scale fixed amounts", "When resizing objects, scale by fixed amounts", ALT)},
+    {Type::TRANS_FIXED_RATIO, new Modifier("trans-fixed-ratio", "Transform in increments", "Rotate or skew by fixed amounts", CTRL)},
+    {Type::TRANS_OFF_CENTER, new Modifier("trans-off-center", "Transform against center", "When rotating or skewing, use the far point as the anchor", SHIFT)},
 };
 
 /**
@@ -54,8 +56,8 @@ Modifier::getList () {
 
     std::vector<Modifier *> modifiers;
     // Go through the dynamic modifier table
-    for (Modifier * modifier : _modifiers) { 
-        modifiers.push_back(modifier);
+    for( auto const& [key, val] : _modifiers ) {
+        modifiers.push_back(val);
     }
 
     return modifiers;
