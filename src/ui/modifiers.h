@@ -18,6 +18,7 @@ namespace Inkscape {
 namespace Modifiers {
 
 using KeyMask = int;
+using Trigger = int;
 
 enum Key : KeyMask {
     NON_USER = -1,
@@ -26,6 +27,9 @@ enum Key : KeyMask {
     ALT = GDK_MOD1_MASK,
     SUPER = GDK_SUPER_MASK,
 };
+// Triggers used for collision warnings, two tools are using the same trigger
+enum Triggers : Trigger {CLICK, DRAG, SCROLL, HANDLE};
+// TODO: We may want to further define the tool, from ANY, SELECT, NODE etc.
 
 /**
  * This anonymous enum is used to provide a list of the Shifts
@@ -75,7 +79,8 @@ private:
     char const * _id;    // A unique id used by keys.xml to identify it
     char const * _name;  // A descriptive name used in preferences UI
     char const * _desc;  // A more verbose description used in preferences UI
-    //char const * _group; // Optional group for preferences UI
+
+    Trigger _trigger; // The type of trigger used for collisions
 
     // Default values if nothing is set in keys.xml
     KeyMask _and_mask_default; // The pressed keys must have these bits set
@@ -90,7 +95,7 @@ public:
     char const * get_id() const { return _id; }
     char const * get_name() const { return _name; }
     char const * get_description() const { return _desc; }
-    //char const * get_group() const { return _group; }
+    const Trigger get_trigger() const { return _trigger; }
 
     // Set user value
     bool is_set() const { return _and_mask_user != NON_USER; }
@@ -118,11 +123,13 @@ public:
     Modifier(char const * id,
              char const * name,
              char const * desc,
-             const KeyMask and_mask) :
+             const KeyMask and_mask,
+             const Trigger trigger) :
         _id(id),
         _name(name),
         _desc(desc),
-        _and_mask_default(and_mask)
+        _and_mask_default(and_mask),
+        _trigger(trigger)
     {
         _modifier_lookup.emplace(_id, this);
     }
