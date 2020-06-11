@@ -371,6 +371,8 @@ void LaTeXTextRenderer::sp_text_render(SPText *textobj)
 
             // escape ampersands
             uspanstr = Glib::Regex::create("&")->replace_literal(uspanstr, 0, "\\&", (Glib::RegexMatchFlags)0);
+            // escape percent
+            uspanstr = Glib::Regex::create("%")->replace_literal(uspanstr, 0, "\\%", (Glib::RegexMatchFlags)0);
 
             const gchar *spanstr = uspanstr.c_str();
             if (!spanstr) {
