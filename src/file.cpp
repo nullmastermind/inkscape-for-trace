@@ -903,14 +903,9 @@ sp_file_save_template(Gtk::Window &parentWindow, Glib::ustring name,
                 Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
         }
     }
-
-    auto nodeToRemove = sp_repr_lookup_name(root, "inkscape:_templateinfo");
-
-    if (nodeToRemove != nullptr){
-
-        sp_repr_unparent(nodeToRemove);
-        delete nodeToRemove;
-    }
+    
+    // remove this node from current document after saving it as template
+    root->removeChild(templateinfo_node);
 
     DocumentUndo::setUndoSensitive(document, true);
 
