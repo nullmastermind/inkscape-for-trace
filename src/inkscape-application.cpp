@@ -1056,10 +1056,13 @@ template<class T>
 void
 ConcreteInkscapeApplication<T>::parse_actions(const Glib::ustring& input, action_vector_t& action_vector)
 {
+    const auto re_colon = Glib::Regex::create("\\s*:\\s*");
+
     // Split action list
     std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s*;\\s*", input);
     for (auto token : tokens) {
-        std::vector<Glib::ustring> tokens2 = Glib::Regex::split_simple("\\s*:\\s*", token);
+        // Note: split into 2 tokens max ("param:value"); allows value to contain colon (e.g. abs. paths on Windows)
+        std::vector<Glib::ustring> tokens2 = re_colon->split(token, 0,  static_cast<Glib::RegexMatchFlags>(0), 2);
         std::string action;
         std::string value;
         if (tokens2.size() > 0) {
