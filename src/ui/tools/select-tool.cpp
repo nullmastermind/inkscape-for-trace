@@ -208,11 +208,6 @@ bool SelectTool::sp_select_context_abort() {
                 }
 
                 sp_object_unref( this->item, nullptr);
-            } else if (this->button_press_state & GDK_CONTROL_MASK) {
-                // NOTE:  This is a workaround to a bug.
-                // When the ctrl key is held, sc->item is not defined
-                // so in this case (only), we skip the object doc check
-                DocumentUndo::undo(desktop->getDocument());
             }
             this->item = nullptr;
 
