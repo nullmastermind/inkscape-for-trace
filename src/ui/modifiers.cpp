@@ -35,7 +35,8 @@ decltype(Modifier::_modifiers) Modifier::_modifiers {
     {Type::SELECT_IN_GROUPS, new Modifier("select-in-groups", "Select inside groups", "Ignore groups when selecting items", CTRL)},
     {Type::SELECT_TOUCH_PATH, new Modifier("select-touch-path", "Select with touch-path", "Draw a band around items to select them", ALT)},
     {Type::SELECT_ALWAYS_BOX, new Modifier("select-always-box", "Select with box", "Don't drag items, select more with a box", SHIFT)},
-    {Type::SELECT_FIRST_HIT, new Modifier("select-first-hit", "Select the first", "Scroll up and down", CTRL)},
+    {Type::SELECT_FIRST_HIT, new Modifier("select-first-hit", "Select the first", "Drag the first item the mouse hits", CTRL)},
+    {Type::SELECT_FORCE_DRAG, new Modifier("select-force-drag", "Forced Drag", "Drag objects even if the mouse isn't over them.", ALT)},
 
     // Transform handle modifiers (applies to multiple tools)
     {Type::MOVE_AXIS_CONFINE, new Modifier("move-confine", "Move confine", "When dragging items, confine to either x or y axis", CTRL)},

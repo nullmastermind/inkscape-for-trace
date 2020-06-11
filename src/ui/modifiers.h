@@ -42,9 +42,10 @@ enum class Type {
     // Select tool (minus transform)
     SELECT_ADD_TO,        // Add selection {SHIFT+CLICK}
     SELECT_IN_GROUPS,     // Select within groups {CTRL+CLICK}
-    SELECT_TOUCH_PATH,    // Draw band to select {ALT+DRAG}
+    SELECT_TOUCH_PATH,    // Draw band to select {ALT+DRAG+Nothing selected}
     SELECT_ALWAYS_BOX,    // Draw box to select {SHIFT+DRAG}
     SELECT_FIRST_HIT,     // Start dragging first item hit {CTRL+DRAG} (Is this an actual feature?)
+    SELECT_FORCE_DRAG,    // Drag objects even if the mouse isn't over them {ALT+DRAG+Selected}
 
     // Transform handles (applies to multiple tools)
     MOVE_AXIS_CONFINE,    // Limit dragging to X OR Y only {DRAG+CTRL}
