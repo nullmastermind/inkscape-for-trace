@@ -322,6 +322,7 @@ Export::Export () :
         browser_im_label->pack_start(browse_label);
         browse_button.add(*browser_im_label);
         filename_box.pack_end (browse_button, false, false);
+        filename_box.pack_end(export_button, false, false);
 
         file_box.add(filename_box);
 
@@ -351,7 +352,6 @@ Export::Export () :
 
     button_box.set_border_width(3);
     button_box.pack_start(closeWhenDone, true, true, 0);
-    button_box.pack_end(export_button, false, false, 0);
 
     /*Advanced*/
     Gtk::Label *label_advanced = Gtk::manage(new Gtk::Label(_("Advanced"),true));
@@ -1398,7 +1398,7 @@ void Export::onBrowse ()
 
     gtk_widget_destroy (fs);
 
-    return;
+    onExport();
 } // end of sp_export_browse_clicked()
 
 // TODO: Move this to nr-rect-fns.h.
