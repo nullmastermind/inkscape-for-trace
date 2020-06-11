@@ -34,12 +34,13 @@
 #include "object/sp-marker.h"
 #include "object/sp-defs.h"
 
-static SPDocument *load_paint_doc(char const *basename)
+static SPDocument *load_paint_doc(char const *basename,
+                                  Inkscape::IO::Resource::Type type = Inkscape::IO::Resource::PAINT)
 {
     using namespace Inkscape::IO::Resource;
 
     for (Domain const domain : {SYSTEM, CREATE}) {
-        auto const filename = get_path_string(domain, PAINT, basename);
+        auto const filename = get_path_string(domain, type, basename);
         if (Glib::file_test(filename, Glib::FILE_TEST_IS_REGULAR)) {
             auto doc = SPDocument::createNewDoc(filename.c_str(), false);
             if (doc) {
@@ -63,7 +64,7 @@ static SPObject * sp_marker_load_from_svg(gchar const *name, SPDocument *current
         return nullptr;
     }
     /* Try to load from document */
-    static SPDocument *doc = load_paint_doc("markers.svg");
+    static SPDocument *doc = load_paint_doc("markers.svg", Inkscape::IO::Resource::MARKERS);
 
     if (doc) {
         /* Get the marker we want */
