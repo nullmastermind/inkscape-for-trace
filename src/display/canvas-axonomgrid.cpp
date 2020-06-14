@@ -358,6 +358,9 @@ CanvasAxonomGrid::updateWidgets()
 {
     if (_wr.isUpdating()) return;
 
+    //no widgets (grid created with the document, not with the dialog)
+    if (!_rcb_visible) return;
+
     _wr.setUpdating (true);
 
     _rcb_visible->setActive(visible);
