@@ -49,7 +49,6 @@
 #include "display/curve.h"
 #include "display/drawing-context.h"
 #include "display/drawing.h"
-#include "display/sp-canvas.h"
 
 #include "helper/action.h"
 
@@ -1241,7 +1240,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
 
                 sp_spray_extinput(this, event);
 
-                desktop->canvas->forceFullRedrawAfterInterruptions(3);
+                forced_redraws_start(3);
                 set_high_motion_precision();
                 this->is_drawing = true;
                 this->is_dilating = true;
@@ -1310,7 +1309,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
                         }
                         this->last_push = desktop->dt2doc(scroll_dt);
                         sp_spray_extinput(this, event);
-                        desktop->canvas->forceFullRedrawAfterInterruptions(3);
+                        forced_redraws_start(3);
                         this->is_drawing = true;
                         this->is_dilating = true;
                         this->has_dilated = false;
@@ -1338,7 +1337,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
             Geom::Point const motion_w(event->button.x, event->button.y);
             Geom::Point const motion_dt(desktop->w2d(motion_w));
 
-            desktop->canvas->endForcedFullRedraws();
+            forced_redraws_stop();
             set_high_motion_precision(false);
             this->is_drawing = false;
 

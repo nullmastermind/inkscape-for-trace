@@ -758,7 +758,6 @@ bool MultiPathManipulator::event(Inkscape::UI::Tools::ToolBase *event_context, G
         }
         break;
     case GDK_MOTION_NOTIFY:
-        combine_motion_events(_desktop->canvas, event->motion, 0);
         for (auto & i : _mmap) {
             if (i.second->event(event_context, event)) return true;
         }

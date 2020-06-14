@@ -189,7 +189,7 @@ public:
     void updateNamedview();
     void update_guides_lock();
 
-
+    // Canvas Grid Widget
     void cms_adjust_set_sensitive(bool enabled);
     bool get_color_prof_adj_enabled() const;
     void toggle_color_prof_adj();
@@ -197,9 +197,7 @@ public:
     void update_zoom();
     void update_rotation();
     void update_rulers();
-    double get_hruler_thickness() const;
-    double get_vruler_thickness() const;
-    GtkAllocation get_canvas_allocation() const;
+
     void iconify();
     void maximize();
     void fullscreen();

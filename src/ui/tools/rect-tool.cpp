@@ -33,7 +33,6 @@
 #include "verbs.h"
 
 #include "display/sp-canvas-item.h"
-#include "display/sp-canvas.h"
 
 #include "object/sp-rect.h"
 #include "object/sp-namedview.h"
@@ -377,7 +376,7 @@ void RectTool::drag(Geom::Point const pt, guint state) {
         this->rect->transform = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
         this->rect->updateRepr();
 
-        desktop->canvas->forceFullRedrawAfterInterruptions(5);
+        forced_redraws_start(5);
     }
 
     Geom::Rect const r = Inkscape::snap_rectangular_box(desktop, this->rect, pt, this->center, state);
@@ -458,7 +457,7 @@ void RectTool::finishItem() {
         this->rect->updateRepr();
         this->rect->doWriteTransform(this->rect->transform, nullptr, true);
 
-        this->desktop->canvas->endForcedFullRedraws();
+        forced_redraws_stop();
         
         this->desktop->getSelection()->set(this->rect);
 
@@ -482,7 +481,7 @@ void RectTool::cancel(){
     this->yp = 0;
     this->item_to_select = nullptr;
 
-    this->desktop->canvas->endForcedFullRedraws();
+    forced_redraws_stop();
 
     DocumentUndo::cancel(this->desktop->getDocument());
 }

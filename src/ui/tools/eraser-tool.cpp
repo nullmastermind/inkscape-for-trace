@@ -51,7 +51,6 @@
 #include "selection.h"
 #include "verbs.h"
 
-#include "display/sp-canvas.h"
 #include "display/canvas-arena.h"
 #include "display/canvas-bpath.h"
 #include "display/curve.h"
@@ -416,7 +415,7 @@ bool EraserTool::root_handler(GdkEvent* event) {
 
                 ret = TRUE;
 
-                desktop->canvas->forceFullRedrawAfterInterruptions(3);
+                forced_redraws_start(3);
                 this->is_drawing = true;
             }
             break;
@@ -459,7 +458,7 @@ bool EraserTool::root_handler(GdkEvent* event) {
         Geom::Point const motion_dt(desktop->w2d(motion_w));
 
         sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
-        desktop->canvas->endForcedFullRedraws();
+        forced_redraws_stop();
         this->is_drawing = false;
 
         if (this->dragging && event->button.button == 1 && !this->space_panning) {

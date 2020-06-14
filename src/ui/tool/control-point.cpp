@@ -257,7 +257,6 @@ bool ControlPoint::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, G
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int drag_tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
     GdkEventMotion em;
-    SPCanvas* Ca;
     switch(event->type)
     {   
     case GDK_BUTTON_PRESS:
@@ -283,9 +282,7 @@ bool ControlPoint::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, G
         return true;
         
     case GDK_MOTION_NOTIFY:
-        Ca = _desktop->canvas;
         em = event->motion;
-        combine_motion_events(Ca, em, 0);
 
         if (_event_grab && ! event_context->space_panning) {
             _desktop->snapindicator->remove_snaptarget(); 

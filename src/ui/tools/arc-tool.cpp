@@ -30,7 +30,6 @@
 #include "snap.h"
 #include "verbs.h"
 
-#include "display/sp-canvas.h"
 #include "display/sp-canvas-item.h"
 
 #include "include/macros.h"
@@ -337,7 +336,7 @@ void ArcTool::drag(Geom::Point pt, guint state) {
         this->arc->transform = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
         this->arc->updateRepr();
 
-        desktop->canvas->forceFullRedrawAfterInterruptions(5);
+        forced_redraws_start(5);
     }
 
     bool ctrl_save = false;
@@ -442,7 +441,7 @@ void ArcTool::finishItem() {
         this->arc->updateRepr();
         this->arc->doWriteTransform(this->arc->transform, nullptr, true);
 
-        desktop->canvas->endForcedFullRedraws();
+        forced_redraws_stop();
 
         desktop->getSelection()->set(this->arc);
 
@@ -466,7 +465,7 @@ void ArcTool::cancel() {
     this->yp = 0;
     this->item_to_select = nullptr;
 
-    desktop->canvas->endForcedFullRedraws();
+    forced_redraws_stop();
 
     DocumentUndo::cancel(desktop->getDocument());
 }

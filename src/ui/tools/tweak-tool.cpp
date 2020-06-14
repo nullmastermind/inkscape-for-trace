@@ -37,7 +37,6 @@
 
 #include "display/canvas-arena.h"
 #include "display/curve.h"
-#include "display/sp-canvas.h"
 
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
@@ -1183,7 +1182,7 @@ bool TweakTool::root_handler(GdkEvent* event) {
 
                 sp_tweak_extinput(this, event);
 
-                desktop->canvas->forceFullRedrawAfterInterruptions(3);
+                forced_redraws_start(3);
                 this->is_drawing = true;
                 this->is_dilating = true;
                 this->has_dilated = false;
@@ -1230,7 +1229,7 @@ bool TweakTool::root_handler(GdkEvent* event) {
             Geom::Point const motion_w(event->button.x, event->button.y);
             Geom::Point const motion_dt(desktop->w2d(motion_w));
 
-            desktop->canvas->endForcedFullRedraws();
+            forced_redraws_stop();
             this->is_drawing = false;
 
             if (this->is_dilating && event->button.button == 1 && !this->space_panning) {

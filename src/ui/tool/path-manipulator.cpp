@@ -16,8 +16,6 @@
 
 #include <utility>
 
-#include "display/sp-canvas.h"
-#include "display/sp-canvas-util.h"
 #include "display/curve.h"
 #include "display/canvas-bpath.h"
 

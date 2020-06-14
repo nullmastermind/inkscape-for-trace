@@ -21,7 +21,6 @@
 #include "snap.h"
 
 #include "display/sp-ctrlline.h"
-#include "display/sp-canvas.h"
 #include "display/sp-canvas-util.h"
 
 #include "ui/control-manager.h"

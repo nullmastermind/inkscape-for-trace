@@ -66,11 +66,6 @@ static bool const HAS_BROKEN_MOTION_HINTS = true;
 // Define this to output the time spent in a full idle loop and the number of "tiles" painted
 //#define DEBUG_PERFORMANCE 1;
 
-// Tiles are a way to minimize the number of redraws, eliminating too small redraws.
-// The canvas stores a 2D array of ints, each representing a TILE_SIZExTILE_SIZE pixels tile.
-// If any part of it is dirtied, the entire tile is dirtied (its int is nonzero) and repainted.
-#define TILE_SIZE 16
-
 void ungrab_default_client_pointer()
 {
     auto const display = Gdk::Display::get_default();
@@ -1319,25 +1314,26 @@ int SPCanvas::paintRectInternal(PaintRectSetup const *setup, Geom::IntRect const
 
     Geom::IntRect lo, hi;
 
-/*
-This test determines the redraw strategy:
+    /*
+      This test determines the redraw strategy:
 
-bw < bh (strips mode) splits across the smaller dimension of the rect and therefore (on
-horizontally-stretched windows) results in redrawing in horizontal strips (from cursor point, in
-both directions if the cursor is in the middle). This is traditional for Inkscape since old days,
-and seems to be faster for drawings with many smaller objects at zoom-out.
+      bw < bh (strips mode) splits across the smaller dimension of the rect and therefore (on
+      horizontally-stretched windows) results in redrawing in horizontal strips (from cursor point, in
+      both directions if the cursor is in the middle). This is traditional for Inkscape since old days,
+      and seems to be faster for drawings with many smaller objects at zoom-out.
 
-bw > bh (chunks mode) splits across the larger dimension of the rect and therefore paints in
-almost-square chunks, again from the cursor point. It's sometimes faster for drawings with few slow
-(e.g. blurred) objects crossing the entire screen. It also appears to be somewhat psychologically
-faster.
+      bw > bh (chunks mode) splits across the larger dimension of the rect and therefore paints in
+      almost-square chunks, again from the cursor point. It's sometimes faster for drawings with few slow
+      (e.g. blurred) objects crossing the entire screen. It also appears to be somewhat psychologically
+      faster.
 
-The default for now is the strips mode.
-*/
+      The default for now is the strips mode.
+    */
+
+    static int TILE_SIZE = 16;
+
     if (bw < bh || bh < 2 * TILE_SIZE) {
         int mid = this_rect[Geom::X].middle();
-        // Make sure that mid lies on a tile boundary
-        mid = (mid / TILE_SIZE) * TILE_SIZE;
 
         lo = Geom::IntRect(this_rect.left(), this_rect.top(), mid, this_rect.bottom());
         hi = Geom::IntRect(mid, this_rect.top(), this_rect.right(), this_rect.bottom());
@@ -1352,8 +1348,6 @@ The default for now is the strips mode.
         }
     } else {
         int mid = this_rect[Geom::Y].middle();
-        // Make sure that mid lies on a tile boundary
-        mid = (mid / TILE_SIZE) * TILE_SIZE;
 
         lo = Geom::IntRect(this_rect.left(), this_rect.top(), this_rect.right(), mid);
         hi = Geom::IntRect(this_rect.left(), mid, this_rect.right(), this_rect.bottom());
@@ -1813,7 +1807,7 @@ SPCanvasGroup *SPCanvas::getRoot()
 /**
  * Scroll screen to point 'c'. 'c' is measured in screen pixels.
  */
-void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrolling)
+void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool /*is_scrolling*/)
 {
     // To do: extract out common code with SPCanvas::handle_size_allocate()
 
@@ -2087,16 +2081,6 @@ Geom::IntRect SPCanvas::getViewboxIntegers() const
 
     gtk_widget_get_allocation (GTK_WIDGET(this), &allocation);
     return Geom::IntRect::from_xywh(_x0, _y0, allocation.width, allocation.height);
-}
-
-inline int sp_canvas_tile_floor(int x)
-{
-    return (x & (~(TILE_SIZE - 1))) / TILE_SIZE;
-}
-
-inline int sp_canvas_tile_ceil(int x)
-{
-    return ((x + (TILE_SIZE - 1)) & (~(TILE_SIZE - 1))) / TILE_SIZE;
 }
 
 void SPCanvas::dirtyRect(Geom::IntRect const &area) {

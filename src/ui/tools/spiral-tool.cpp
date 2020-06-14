@@ -31,7 +31,6 @@
 #include "verbs.h"
 
 #include "display/sp-canvas-item.h"
-#include "display/sp-canvas.h"
 
 #include "include/macros.h"
 
@@ -347,7 +346,7 @@ void SpiralTool::drag(Geom::Point const &p, guint state) {
         this->spiral->transform = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
         this->spiral->updateRepr();
 
-        desktop->canvas->forceFullRedrawAfterInterruptions(5);
+        forced_redraws_start(5);
     }
 
     SnapManager &m = desktop->namedview->snap_manager;
@@ -398,7 +397,7 @@ void SpiralTool::finishItem() {
         spiral->updateRepr(SP_OBJECT_WRITE_EXT);
         spiral->doWriteTransform(spiral->transform, nullptr, true);
 
-        this->desktop->canvas->endForcedFullRedraws();
+        forced_redraws_stop();
 
         this->desktop->getSelection()->set(this->spiral);
         
@@ -422,7 +421,7 @@ void SpiralTool::cancel() {
     this->yp = 0;
     this->item_to_select = nullptr;
 
-    this->desktop->canvas->endForcedFullRedraws();
+    forced_redraws_stop();
 
     DocumentUndo::cancel(this->desktop->getDocument());
 }

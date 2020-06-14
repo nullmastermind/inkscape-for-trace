@@ -489,11 +489,6 @@ int sp_canvas_item_grab(SPCanvasItem *item, guint event_mask, GdkCursor *cursor,
     //if (!(item->flags & SP_CANVAS_ITEM_VISIBLE))
     //    return -1;
 
-    static bool HAS_BROKEN_MOTION_HINTS = true; // See comment in sp-canvas.cpp CHECK IF STILL TRUE
-    if (HAS_BROKEN_MOTION_HINTS) {
-        event_mask &= ~GDK_POINTER_MOTION_HINT_MASK;
-    }
-
     // fixme: Top hack (Lauris)
     // fixme: If we add key masks to event mask, Gdk will abort (Lauris)
     // fixme: But Canvas actually does get key events, so all we need is routing these here

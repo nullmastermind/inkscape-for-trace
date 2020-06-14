@@ -25,7 +25,6 @@
 #include "style.h"
 #include "svg/css-ostringstream.h"
 #include "verbs.h"
-#include "display/sp-canvas.h"
 #include "object/filters/blend.h"
 #include "ui/widget/style-subject.h"
 
@@ -93,8 +92,6 @@ ObjectCompositeSettings::_blendBlurValueChanged()
         return;
     _blocked = true;
 
-    // FIXME: fix for GTK breakage, see comment in SelectedStyle::on_opacity_changed; here it results in crash 1580903
-    //sp_canvas_force_full_redraw_after_interruptions(desktop->getCanvas(), 0);
 
     Geom::OptRect bbox = _subject->getBounds(SPItem::GEOMETRIC_BBOX);
     double radius;
@@ -144,9 +141,6 @@ ObjectCompositeSettings::_blendBlurValueChanged()
     DocumentUndo::maybeDone(document, _blur_tag.c_str(), _verb_code,
                             _("Change blur/blend filter"));
 
-    // resume interruptibility
-    //sp_canvas_end_forced_full_redraws(desktop->getCanvas());
-
     _blocked = false;
 }
 
@@ -179,9 +173,6 @@ ObjectCompositeSettings::_opacityValueChanged()
     DocumentUndo::maybeDone(desktop->getDocument(), _opacity_tag.c_str(), _verb_code,
                             _("Change opacity"));
 
-    // resume interruptibility
-    //sp_canvas_end_forced_full_redraws(desktop->getCanvas());
-
     _blocked = false;
 }
 
@@ -211,9 +202,6 @@ void ObjectCompositeSettings::_isolationValueChanged()
     }
 
     DocumentUndo::maybeDone(desktop->getDocument(), _isolation_tag.c_str(), _verb_code, _("Change isolation"));
-
-    // resume interruptibility
-    // sp_canvas_end_forced_full_redraws(desktop->getCanvas());
 
     _blocked = false;
 }

@@ -107,9 +107,6 @@ private:
     int pickCurrentItem(GdkEvent *event);
     void shutdownTransients();
 
-    /// Allocates a new tile array for the canvas, copying overlapping tiles from the old array
-    void resizeTiles(int nl, int nt, int nr, int nb);
-
     /// Marks the specified area as dirty (requiring redraw)
     void dirtyRect(Geom::IntRect const &area);
     /// Marks the whole widget for redraw
@@ -243,8 +240,6 @@ public:
     /** Event on which selection of current item is based. */
     GdkEvent _pick_event;
 
-    int _close_enough;
-
     unsigned int _need_update : 1;
     unsigned int _need_repick : 1;
 
@@ -275,8 +270,6 @@ public:
     bool _enable_cms_display_adj;
     std::string _cms_key;
 #endif // defined(HAVE_LIBLCMS2)
-
-    bool _is_scrolling;
 };
 
 bool sp_canvas_world_pt_inside_window(SPCanvas const *canvas, Geom::Point const &world);

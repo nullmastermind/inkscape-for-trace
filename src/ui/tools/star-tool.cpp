@@ -30,7 +30,6 @@
 #include "selection.h"
 #include "verbs.h"
 
-#include "display/sp-canvas.h"
 #include "display/sp-canvas-item.h"
 
 #include "include/macros.h"
@@ -361,7 +360,7 @@ void StarTool::drag(Geom::Point p, guint state)
         this->star->transform = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
         this->star->updateRepr();
 
-        desktop->canvas->forceFullRedrawAfterInterruptions(5);
+        forced_redraws_start(5);
     }
 
     /* Snap corner point with no constraints */
@@ -416,7 +415,7 @@ void StarTool::finishItem() {
         this->star->set_shape();
         this->star->updateRepr(SP_OBJECT_WRITE_EXT);
         this->star->doWriteTransform(this->star->transform, nullptr, true);
-        desktop->canvas->endForcedFullRedraws();
+        forced_redraws_stop();
 
         desktop->getSelection()->set(this->star);
         DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_STAR,
@@ -440,7 +439,7 @@ void StarTool::cancel() {
     this->yp = 0;
     this->item_to_select = nullptr;
 
-    desktop->canvas->endForcedFullRedraws();
+    forced_redraws_stop();
 
     DocumentUndo::cancel(desktop->getDocument());
 }

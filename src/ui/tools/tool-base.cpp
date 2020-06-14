@@ -265,8 +265,8 @@ void sp_toggle_dropper(SPDesktop *dt) {
  * Calculates and keeps track of scroll acceleration.
  * Subroutine of sp_event_context_private_root_handler().
  */
-static gdouble accelerate_scroll(GdkEvent *event, gdouble acceleration,
-        SPCanvas */*canvas*/) {
+static gdouble accelerate_scroll(GdkEvent *event, gdouble acceleration)
+{
     guint32 time_diff = ((GdkEventKey *) event)->time - scroll_event_time;
 
     /* key pressed within 500ms ? (1/2 second) */
@@ -612,8 +612,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
         case GDK_KEY_KP_Left:
         case GDK_KEY_KP_4:
             if (MOD__CTRL_ONLY(event)) {
-                int i = (int) floor(key_scroll * accelerate_scroll(event,
-                        acceleration, desktop->getCanvas()));
+                int i = (int) floor(key_scroll * accelerate_scroll(event, acceleration));
 
                 gobble_key_events(get_latin_keyval(&event->key), GDK_CONTROL_MASK);
                 this->desktop->scroll_relative(Geom::Point(i, 0));
@@ -627,8 +626,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
         case GDK_KEY_KP_Up:
         case GDK_KEY_KP_8:
             if (MOD__CTRL_ONLY(event)) {
-                int i = (int) floor(key_scroll * accelerate_scroll(event,
-                        acceleration, desktop->getCanvas()));
+                int i = (int) floor(key_scroll * accelerate_scroll(event, acceleration));
 
                 gobble_key_events(get_latin_keyval(&event->key), GDK_CONTROL_MASK);
                 this->desktop->scroll_relative(Geom::Point(0, i));
@@ -642,8 +640,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
         case GDK_KEY_KP_Right:
         case GDK_KEY_KP_6:
             if (MOD__CTRL_ONLY(event)) {
-                int i = (int) floor(key_scroll * accelerate_scroll(event,
-                        acceleration, desktop->getCanvas()));
+                int i = (int) floor(key_scroll * accelerate_scroll(event, acceleration));
 
                 gobble_key_events(get_latin_keyval(&event->key), GDK_CONTROL_MASK);
                 this->desktop->scroll_relative(Geom::Point(-i, 0));
@@ -657,8 +654,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
         case GDK_KEY_KP_Down:
         case GDK_KEY_KP_2:
             if (MOD__CTRL_ONLY(event)) {
-                int i = (int) floor(key_scroll * accelerate_scroll(event,
-                        acceleration, desktop->getCanvas()));
+                int i = (int) floor(key_scroll * accelerate_scroll(event, acceleration));
 
                 gobble_key_events(get_latin_keyval(&event->key), GDK_CONTROL_MASK);
                 this->desktop->scroll_relative(Geom::Point(0, -i));
@@ -1064,6 +1060,28 @@ void ToolBase::set_high_motion_precision(bool high_precision) {
         window->set_event_compression(!high_precision);
     }
 }
+
+/**
+ * Force canvas to fully update after interruptions.
+ * Convenience function that just passes request to canvas.
+ */
+void
+ToolBase::forced_redraws_start(int count, bool reset)
+{
+    desktop->canvas->forceFullRedrawAfterInterruptions(count, reset);
+}
+
+
+/**
+ * End force canvas full updates.
+ * Convenience function that just passes request to canvas.
+ */
+void
+ToolBase::forced_redraws_stop()
+{
+    desktop->canvas->endForcedFullRedraws();
+}
+
 
 /**
  * Calls virtual set() function of ToolBase.

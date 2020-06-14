@@ -39,7 +39,6 @@
 #include "sp-cursor.h"
 
 #include "display/drawing-item.h"
-#include "display/sp-canvas.h"
 #include "display/sp-canvas-item.h"
 
 #include "object/box3d.h"
@@ -150,7 +149,7 @@ SelectTool::~SelectTool() {
         item = nullptr;
     }
 
-    this->desktop->canvas->endForcedFullRedraws();
+    forced_redraws_stop();
 }
 
 void SelectTool::setup() {
@@ -477,7 +476,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
     if (this->item && this->item->document == nullptr) {
         this->sp_select_context_abort();
     }
-    desktop->canvas->forceFullRedrawAfterInterruptions(5, false);
+    forced_redraws_start(5);
 
     switch (event->type) {
         case GDK_2BUTTON_PRESS:

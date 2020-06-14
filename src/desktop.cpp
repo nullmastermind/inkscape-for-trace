@@ -237,7 +237,7 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, SPDesktopWidget *widget)
     g_signal_connect (G_OBJECT (drawing), "arena_event", G_CALLBACK (_arena_handler), this);
 
     // pinch zoom
-    zoomgesture = gtk_gesture_zoom_new(GTK_WIDGET(getCanvas()));
+    zoomgesture = gtk_gesture_zoom_new(GTK_WIDGET(canvas));
     gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (zoomgesture), GTK_PHASE_CAPTURE);
     g_signal_connect(zoomgesture, "begin", G_CALLBACK(_pinch_begin_handler), this);
     g_signal_connect(zoomgesture, "scale-changed", G_CALLBACK(_pinch_scale_changed_handler), this);
@@ -437,7 +437,7 @@ SPDocument* SPDesktop::getDocument() const {
 }
 
 SPCanvas* SPDesktop::getCanvas() const {
-	return SP_CANVAS_ITEM(main)->canvas;
+	return canvas;
 }
 
 SPCanvasItem* SPDesktop::getAcetate() const {
@@ -1667,7 +1667,7 @@ void SPDesktop::setWaitingCursor()
 {
     Glib::RefPtr<Gdk::Display> display = Gdk::Display::get_default();
     Glib::RefPtr<Gdk::Cursor> waiting = Gdk::Cursor::create(display, Gdk::WATCH);
-    Glib::wrap(GTK_WIDGET(getCanvas()))->get_window()->set_cursor(waiting);
+    Glib::wrap(GTK_WIDGET(canvas))->get_window()->set_cursor(waiting);
     // GDK needs the flush for the cursor change to take effect
     display->flush();
     waiting_cursor = true;
@@ -1726,7 +1726,6 @@ void SPDesktop::toggleSplitMode()
         if (_split_canvas && _xray) {
             toggleXRay();
         }
-        SPCanvas *canvas = getCanvas();
         canvas->requestFullRedraw();
         Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_VIEW_TOGGLE_SPLIT);
         if (verb) {
@@ -1747,7 +1746,6 @@ void SPDesktop::toggleXRay()
         if (_split_canvas && _xray) {
             toggleSplitMode();
         }
-        SPCanvas *canvas = getCanvas();
         canvas->requestFullRedraw();
         Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_VIEW_TOGGLE_XRAY);
         if (verb) {

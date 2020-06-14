@@ -447,7 +447,7 @@ SPDesktopWidget::SPDesktopWidget()
     // ------------------ Finish Up -------------------- //
     dtw->_vbox->show_all();
 
-    gtk_widget_grab_focus (GTK_WIDGET(dtw->_canvas_grid->GetCanvas()));
+    gtk_widget_grab_focus (GTK_WIDGET(dtw->_canvas));
 }
 
 /**
@@ -596,17 +596,16 @@ void SPDesktopWidget::on_size_allocate(Gtk::Allocation &allocation)
 
     if (this->get_realized()) {
         SPDesktopWidget *dtw = this;
-        Geom::Rect const d_canvas = dtw->desktop->getCanvas()->getViewbox();
+        Geom::Rect const d_canvas = _canvas->getViewbox();
         Geom::Point midpoint = dtw->desktop->w2d(d_canvas.midpoint());
 
         double zoom = dtw->desktop->current_zoom();
-
         parent_type::on_size_allocate(allocation);
 
         if (dtw->get_sticky_zoom_active()) {
             /* Calculate adjusted zoom */
             double oldshortside = d_canvas.minExtent();
-            double newshortside = dtw->desktop->getCanvas()->getViewbox().minExtent();
+            double newshortside = _canvas->getViewbox().minExtent();
             zoom *= newshortside / oldshortside;
         }
         dtw->desktop->zoom_absolute_center_point (midpoint, zoom);
@@ -1609,7 +1608,7 @@ SPDesktopWidget::zoom_value_changed()
     double const zoom_factor = pow (2, _zoom_status->get_value());
 
     // Zoom around center of window
-    Geom::Rect const d_canvas = desktop->getCanvas()->getViewbox();
+    Geom::Rect const d_canvas = _canvas->getViewbox();
     Geom::Point midpoint = desktop->w2d(d_canvas.midpoint());
     _zoom_status_value_changed_connection.block();
     desktop->zoom_absolute_center_point (midpoint, zoom_factor);
@@ -1741,7 +1740,7 @@ SPDesktopWidget::rotation_value_changed()
     //           << "  (" << rotate_factor << ")" <<std::endl;
 
     // Rotate around center of window
-    Geom::Rect const d_canvas = desktop->getCanvas()->getViewbox();
+    Geom::Rect const d_canvas = _canvas->getViewbox();
     _rotation_status_value_changed_connection.block();
     Geom::Point midpoint = desktop->w2d(d_canvas.midpoint());
     desktop->rotate_absolute_center_point (midpoint, rotate_factor);
@@ -2123,14 +2122,6 @@ SPDesktopWidget::on_ruler_box_button_press_event(GdkEventButton *event, Gtk::Wid
     }
 
     return false;
-}
-
-GtkAllocation
-SPDesktopWidget::get_canvas_allocation() const
-{
-    GtkAllocation allocation;
-    gtk_widget_get_allocation(GTK_WIDGET(_canvas), &allocation);
-    return allocation;
 }
 
 void

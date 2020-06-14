@@ -221,6 +221,9 @@ protected:
 
     void set_high_motion_precision(bool high_precision = true);
 
+    void forced_redraws_start(int count, bool reset = false);
+    void forced_redraws_stop();
+
     /// An xpm containing the shape of the tool's cursor.
     gchar const *const *cursor_shape;
 

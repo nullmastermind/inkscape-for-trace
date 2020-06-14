@@ -29,7 +29,6 @@
 #include "display/canvas-bpath.h"
 #include "display/curve.h"
 #include "display/sp-canvas-group.h"
-#include "display/sp-canvas.h"
 
 #include "live_effects/effect.h"
 #include "live_effects/lpeobject.h"
@@ -190,7 +189,7 @@ NodeTool::~NodeTool() {
     destroy_group(data.outline_group);
     destroy_group(data.dragpoint_group);
     destroy_group(this->_transform_handle_group);
-    this->desktop->canvas->endForcedFullRedraws();
+    forced_redraws_stop();
 }
 
 void NodeTool::setup() {
@@ -479,7 +478,7 @@ bool NodeTool::root_handler(GdkEvent* event) {
      */
     using namespace Inkscape::UI; // pull in event helpers
 
-    desktop->getCanvas()->forceFullRedrawAfterInterruptions(5, false);
+    forced_redraws_start(5);
 
     Inkscape::Selection *selection = desktop->selection;
     static Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -500,7 +499,6 @@ bool NodeTool::root_handler(GdkEvent* event) {
     case GDK_MOTION_NOTIFY: {
         sp_update_helperpath(desktop);
         SPItem *over_item = nullptr;
-        combine_motion_events(desktop->canvas, event->motion, 0);
         over_item = sp_event_context_find_item(desktop, event_point(event->button), FALSE, TRUE);
         
         Geom::Point const motion_w(event->motion.x, event->motion.y);

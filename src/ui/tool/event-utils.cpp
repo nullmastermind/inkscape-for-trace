@@ -55,51 +55,6 @@ unsigned combine_key_events(guint keyval, gint mask)
     return i;
 }
 
-unsigned combine_motion_events(SPCanvas *canvas, GdkEventMotion &event, gint mask)
-{
-    if (canvas == nullptr) {
-        return false;
-    }
-    GdkEvent *event_next;
-    gint i = 0;
-    event.x -= canvas->_x0;
-    event.y -= canvas->_y0;
-
-    event_next = gdk_event_get();
-    // while the next event is also a motion notify
-    while (event_next && (event_next->type == GDK_MOTION_NOTIFY)
-            && (!mask || event_next->motion.state & mask))
-    {
-        if (event_next->motion.device == event.device) {
-            GdkEventMotion &next = event_next->motion;
-            event.send_event = next.send_event;
-            event.time = next.time;
-            event.x = next.x;
-            event.y = next.y;
-            event.state = next.state;
-            event.is_hint = next.is_hint;
-            event.x_root = next.x_root;
-            event.y_root = next.y_root;
-            if (event.axes && next.axes) {
-                memcpy(event.axes, next.axes, gdk_device_get_n_axes(event.device));
-            }
-        }
-
-        // kill it
-        gdk_event_free(event_next);
-        event_next = gdk_event_get();
-        i++;
-    }
-    // otherwise, put it back onto the queue
-    if (event_next) {
-        gdk_event_put(event_next);
-    }
-    event.x += canvas->_x0;
-    event.y += canvas->_y0;
-
-    return i;
-}
-
 /** Returns the modifier state valid after this event. Use this when you process events
  * that change the modifier state. Currently handles only Shift, Ctrl, Alt. */
 unsigned state_after_event(GdkEvent *event)

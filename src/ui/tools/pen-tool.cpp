@@ -38,7 +38,6 @@
 #include "display/canvas-bpath.h"
 #include "display/curve.h"
 #include "display/sodipodi-ctrl.h"
-#include "display/sp-canvas.h"
 #include "display/sp-ctrlline.h"
 
 #include "object/sp-path.h"
@@ -211,7 +210,7 @@ void PenTool::_cancel() {
     this->message_context->clear();
     this->message_context->flash(Inkscape::NORMAL_MESSAGE, _("Drawing cancelled"));
 
-    this->desktop->canvas->endForcedFullRedraws();
+    forced_redraws_stop();
 }
 
 /**
@@ -1270,7 +1269,7 @@ void PenTool::_setInitialPoint(Geom::Point const p) {
     this->npoints = 2;
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), nullptr, true);
 
-    this->desktop->canvas->forceFullRedrawAfterInterruptions(5);
+    forced_redraws_start(5);
 }
 
 /**
@@ -2012,7 +2011,7 @@ void PenTool::_finish(gboolean const closed) {
         this->green_anchor = sp_draw_anchor_destroy(this->green_anchor);
     }
 
-    this->desktop->canvas->endForcedFullRedraws();
+    forced_redraws_stop();
 
     this->_enableEvents();
 }

@@ -37,8 +37,6 @@
 #include "object/sp-star.h"
 #include "style.h"
 
-#include "display/sp-canvas.h"
-
 #include "ui/control-manager.h"
 #include "ui/shape-editor.h"
 #include "ui/tools-switch.h"

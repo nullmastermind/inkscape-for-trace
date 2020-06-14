@@ -97,10 +97,6 @@ double SPCanvasGroup::point(SPCanvasItem *item, Geom::Point p, SPCanvasItem **ac
     SPCanvasGroup *group = SP_CANVAS_GROUP(item);
     double const x = p[Geom::X];
     double const y = p[Geom::Y];
-    int x1 = (int)(x - item->canvas->_close_enough);
-    int y1 = (int)(y - item->canvas->_close_enough);
-    int x2 = (int)(x + item->canvas->_close_enough);
-    int y2 = (int)(y + item->canvas->_close_enough);
 
     double best = 0.0;
     *actual_item = nullptr;
@@ -109,7 +105,7 @@ double SPCanvasGroup::point(SPCanvasItem *item, Geom::Point p, SPCanvasItem **ac
     for (auto & it : group->items) {
         SPCanvasItem *child = &it;
 
-        if ((child->x1 <= x2) && (child->y1 <= y2) && (child->x2 >= x1) && (child->y2 >= y1)) {
+        if ((child->x1 <= x) && (x <= child->x2) && (child->y1 <= y) && (y <= child->y2)) {
             SPCanvasItem *point_item = nullptr; // cater for incomplete item implementations
 
             int pickable;
@@ -126,7 +122,7 @@ double SPCanvasGroup::point(SPCanvasItem *item, Geom::Point p, SPCanvasItem **ac
             // of the item to be focused, and have that one selected. Of course this will only work if the
             // centers are not coincident, but at least it's better than what we have now.
             // See the extensive comment in Inkscape::SelTrans::_updateHandles()
-            if (pickable && point_item && ((int) (dist + 0.5) <= item->canvas->_close_enough)) {
+            if (pickable && point_item && ((int) (dist + 0.5) <= 0)) { // THIS IS NEVER TRUE!
                 best = dist;
                 *actual_item = point_item;
             }

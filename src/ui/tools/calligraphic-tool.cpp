@@ -50,7 +50,6 @@
 #include "display/canvas-arena.h"
 #include "display/canvas-bpath.h"
 #include "display/curve.h"
-#include "display/sp-canvas.h"
 
 #include "include/macros.h"
 
@@ -472,7 +471,7 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
 
                 ret = TRUE;
 
-                desktop->canvas->forceFullRedrawAfterInterruptions(3);
+                forced_redraws_start(3);
                 set_high_motion_precision();
                 this->is_drawing = true;
                 this->just_started_drawing = true;
@@ -731,7 +730,7 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
         Geom::Point const motion_dt(desktop->w2d(motion_w));
 
         sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
-        desktop->canvas->endForcedFullRedraws();
+        forced_redraws_stop();
         set_high_motion_precision(false);
         this->is_drawing = false;
 
