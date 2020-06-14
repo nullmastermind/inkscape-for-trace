@@ -54,8 +54,9 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
         case DOCS:
         case SCREENS:
         case TUTORIALS:
-            g_assert_not_reached();
-            domain = SYSTEM;
+            // Happens for example with `get_filename_string(SCREENS, ...)`
+            // but we don't want a user configurable about screen.
+            return nullptr;
         }
     }
 
