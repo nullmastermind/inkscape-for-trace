@@ -12,6 +12,8 @@
 
 #include "selected-style.h"
 
+#include <vector>
+
 #include <gtkmm/separatormenuitem.h>
 
 
@@ -1098,7 +1100,7 @@ void SelectedStyle::opacity_1() {_opacity_sb.set_value(100);}
 
 void SelectedStyle::on_opacity_menu (Gtk::Menu *menu) {
 
-    Glib::ListHandle<Gtk::Widget *> children = menu->get_children();
+    std::vector<Gtk::Widget *> children = menu->get_children();
     for (auto iter : children) {
         menu->remove(*iter);
     }

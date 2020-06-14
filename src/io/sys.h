@@ -19,6 +19,7 @@
 #include <glib.h>
 #include <glibmm/spawn.h>
 #include <string>
+#include <vector>
 
 /*#####################
 ## U T I L I T Y
@@ -52,7 +53,7 @@ gchar* locale_to_utf8_fallback( const gchar *opsysstring,
 gchar* sanitizeString( gchar const * str );
 
 void spawn_async_with_pipes (const std::string& working_directory,
-                             const Glib::ArrayHandle<std::string>& argv,
+                             const std::vector<std::string>& argv,
                              Glib::SpawnFlags flags,
                              const sigc::slot<void>& child_setup,
                              Glib::Pid* child_pid,

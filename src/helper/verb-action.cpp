@@ -29,8 +29,9 @@
 
 #include "verb-action.h"
 
-#include <glibmm/i18n.h>
+#include <vector>
 
+#include <glibmm/i18n.h>
 #include <gtkmm/toolitem.h>
 
 #include "shortcuts.h"
@@ -154,7 +155,7 @@ void VerbAction::disconnect_proxy_vfunc(Gtk::Widget* proxy)
 void VerbAction::set_active(bool active)
 {
     this->active = active;
-    Glib::SListHandle<Gtk::Widget*> proxies = get_proxies();
+    std::vector<Gtk::Widget*> proxies = get_proxies();
     for (auto proxie : proxies) {
         Gtk::ToolItem* ti = dynamic_cast<Gtk::ToolItem*>(proxie);
         if (ti) {
