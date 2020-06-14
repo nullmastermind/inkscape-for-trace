@@ -276,10 +276,10 @@ endif()
 pkg_check_modules(
     GTK3
     REQUIRED
-    gtkmm-3.0>=3.22
-    gdkmm-3.0>=3.22
-    gtk+-3.0>=3.22
-    gdk-3.0>=3.22
+    gtkmm-3.0>=3.24
+    gdkmm-3.0>=3.24
+    gtk+-3.0>=3.24
+    gdk-3.0>=3.24
     gdl-3.0>=3.6
     )
 list(APPEND INKSCAPE_CXX_FLAGS ${GTK3_CFLAGS_OTHER})
