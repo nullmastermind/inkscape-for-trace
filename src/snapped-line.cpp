@@ -29,8 +29,6 @@ Inkscape::SnappedLineSegment::SnappedLineSegment(Geom::Point const &snapped_poin
 
 Inkscape::SnappedLineSegment::SnappedLineSegment()
 {
-    _start_point_of_line = Geom::Point(0,0);
-    _end_point_of_line = Geom::Point(0,0);
     _point = Geom::Point(0,0);
     _source = SNAPSOURCE_UNDEFINED;
     _source_num = -1;

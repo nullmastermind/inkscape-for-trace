@@ -56,20 +56,18 @@ public:
     Geom::Path path();
     Gear spawn(Geom::Point p);
 
-    Gear(int n, double m, double phi) {
-        _number_of_teeth = n;
-        _module = m;
-        _pressure_angle = phi;
-        _clearance = 0.0;
-        _angle = 0.0;
-        _centre = Geom::Point(0.0,0.0);
+    Gear(int n, double m, double phi)
+        : _number_of_teeth(n)
+        , _pressure_angle(phi)
+        , _module(m)
+    {
     }
 private:
     int _number_of_teeth;
     double _pressure_angle;
     double _module;
-    double _clearance;
-    double _angle;
+    double _clearance = 0.0;
+    double _angle = 0.0;
     Geom::Point _centre;
     D2<SBasis> _involute(double start, double stop) {
         D2<SBasis> B;

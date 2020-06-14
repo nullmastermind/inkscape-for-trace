@@ -21,11 +21,9 @@ namespace IO
 class StreamException : public std::exception
 {
 public:
-
-    StreamException(const char *theReason) noexcept
-        { reason = theReason; }
-    StreamException(Glib::ustring &theReason) noexcept
-        { reason = theReason; }
+    StreamException(Glib::ustring theReason) noexcept
+        : reason(std::move(theReason))
+    {}
     ~StreamException() noexcept override
         = default;
     char const *what() const noexcept override

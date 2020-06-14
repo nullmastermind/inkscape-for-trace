@@ -596,7 +596,7 @@ InkFileExportCmd::do_export_ps_pdf(SPDocument* doc, std::string filename_in, std
     Inkscape::Extension::db.get_output_list(o);
     Inkscape::Extension::DB::OutputList::const_iterator i = o.begin();
     while (i != o.end() && strcmp( (*i)->get_mimetype(), mime_type.c_str() ) != 0) {
-        i++;
+        ++i;
     }
 
     if (i == o.end()) {
@@ -755,7 +755,7 @@ InkFileExportCmd::do_export_win_metafile(SPDocument* doc, std::string filename_i
     Inkscape::Extension::db.get_output_list(o);
     Inkscape::Extension::DB::OutputList::const_iterator i = o.begin();
     while (i != o.end() && strcmp( (*i)->get_mimetype(), mime_type.c_str() ) != 0) {
-        i++;
+        ++i;
     }
 
     if (i == o.end())

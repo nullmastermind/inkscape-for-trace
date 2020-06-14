@@ -60,7 +60,7 @@ bool SPAttributeRelCSS::findIfValid(Glib::ustring property, Glib::ustring elemen
         || property.substr(0,4) == "role"
         || property.substr(0,4) == "aria"
         || property.substr(0,5) == "xmlns"
-        || property.substr(0,8) == "inkscape:"
+        || property.substr(0,9) == "inkscape:"
         || property.substr(0,9) == "sodipodi:"
         || property.substr(0,4) == "rdf:"
         || property.substr(0,3) == "cc:"
