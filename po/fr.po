@@ -22067,7 +22067,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1882
 msgid "&gt; and &lt; _scale by:"
-msgstr "> et < _redimensionnent de :"
+msgstr "&gt; et &lt; _redimensionnent de :"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1883
 msgid "Pressing > or < scales selection up or down by this increment"
