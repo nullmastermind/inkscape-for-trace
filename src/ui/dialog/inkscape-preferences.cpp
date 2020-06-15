@@ -2821,10 +2821,6 @@ void InkscapePreferences::on_pagelist_selection_changed()
         _page_title.set_markup("<span size='large'><b>" + col_name_escaped + "</b></span>");
         _page_frame.add(*_current_page);
         _current_page->show();
-        while (Gtk::Main::events_pending())
-        {
-            Gtk::Main::iteration();
-        }
         this->show_all_children();
         if (prefs->getInt("/dialogs/preferences/page", 0) == PREFS_PAGE_UI_THEME) {
             symbolicThemeCheck();

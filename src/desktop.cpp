@@ -2171,19 +2171,6 @@ SPDesktop::show_dialogs()
 
         int visible = prefs->getInt(pref + "/visible", 0);
         if (visible) {
-
-#ifdef GDK_WINDOWING_WAYLAND
-            // Hack to prevent crash with Wayland. See: https://gitlab.com/inkscape/inkscape/-/issues/454
-            if (iter->first == "InkscapePreferences") {
-                Glib::ustring session_type  = Glib::getenv("XDG_SESSION_TYPE");  // Window session
-                Glib::ustring session_type2 = Glib::getenv("GDK_BACKEND");       // Possible override
-                if (session_type == "wayland" && session_type2 != "x11") {
-                    std::cerr << "SPDesktop::show_dialog: Cannot restore InkscapePreferences dialog due to GTK Wayland bug." << std::endl;
-                    continue;
-                }
-            }
-#endif
-
             // Try to ensure that the panel is created attached to the correct desktop (bug 1720096).
             // There must be a better way of handling this problem!
             INKSCAPE.activate_desktop(this);
