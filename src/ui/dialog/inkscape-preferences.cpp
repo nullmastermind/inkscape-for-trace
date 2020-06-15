@@ -153,8 +153,7 @@ InkscapePreferences::InkscapePreferences()
     initPageRendering();
     initPageSpellcheck();
 
-
-    signalPresent().connect(sigc::mem_fun(*this, &InkscapePreferences::_presentPages));
+    signal_map().connect(sigc::mem_fun(*this, &InkscapePreferences::_presentPages));
 
     //calculate the size request for this dialog
     _page_list.expand_all();
@@ -346,8 +345,6 @@ void InkscapePreferences::initPageTools()
     this->AddPage(_page_zoom, _("Zoom"), iter_tools, PREFS_PAGE_TOOLS_ZOOM);
     this->AddPage(_page_measure, C_("ContextVerb", "Measure"), iter_tools, PREFS_PAGE_TOOLS_MEASURE);
     
-    _path_tools = _page_list.get_model()->get_path(iter_tools);
-
     _page_tools.add_group_header( _("Bounding box to use"));
     _t_bbox_visual.init ( _("Visual bounding box"), "/tools/bounding_box", 0, false, nullptr); // 0 means visual
     _page_tools.add_line( true, "", _t_bbox_visual, "",
@@ -433,7 +430,6 @@ void InkscapePreferences::initPageTools()
     _page_measure.add_line( false, "", *cb, "", _("The start and end of the measurement tool's control line will not be considered for calculating lengths. Only lengths between actual curve intersections will be displayed."));
 
     //Shapes
-    _path_shapes = _page_list.get_model()->get_path(iter_shapes);
     this->AddSelcueCheckbox(_page_shapes, "/tools/shapes", true);
     this->AddGradientCheckbox(_page_shapes, "/tools/shapes", true);
 
@@ -965,7 +961,6 @@ void InkscapePreferences::changeIconsColor(guint32 /*color*/)
 void InkscapePreferences::initPageUI()
 {
     Gtk::TreeModel::iterator iter_ui = this->AddPage(_page_ui, _("Interface"), PREFS_PAGE_UI);
-    _path_ui = _page_list.get_model()->get_path(iter_ui);
 
     Glib::ustring languages[] = {_("System default"),
         _("Albanian (sq)"), _("Arabic (ar)"), _("Armenian (hy)"), _("Assamese (as)"), _("Azerbaijani (az)"),
@@ -1504,7 +1499,6 @@ static void gamutColorChanged( Gtk::ColorButton* btn ) {
 void InkscapePreferences::initPageIO()
 {
     Gtk::TreeModel::iterator iter_io = this->AddPage(_page_io, _("Input/Output"), PREFS_PAGE_IO);
-    _path_io = _page_list.get_model()->get_path(iter_io);
 
     _save_use_current_dir.init( _("Use current directory for \"Save As ...\""), "/dialogs/save_as/use_current_dir", true);
     _page_io.add_line( false, "", _save_use_current_dir, "",
@@ -1797,7 +1791,6 @@ void InkscapePreferences::initPageIO()
 void InkscapePreferences::initPageBehavior()
 {
     Gtk::TreeModel::iterator iter_behavior = this->AddPage(_page_behavior, _("Behavior"), PREFS_PAGE_BEHAVIOR);
-    _path_behavior = _page_list.get_model()->get_path(iter_behavior);
 
     _misc_simpl.init("/options/simplifythreshold/value", 0.0001, 1.0, 0.0001, 0.0010, 0.0010, false, false);
     _page_behavior.add_line( false, _("_Simplification threshold:"), _misc_simpl, "",
@@ -2758,16 +2751,8 @@ bool InkscapePreferences::PresentPage(const Gtk::TreeModel::iterator& iter)
     _init = false;
     if (desired_page == row[_page_list_columns._col_id])
     {
-        if (desired_page >= PREFS_PAGE_TOOLS && desired_page <= PREFS_PAGE_TOOLS_CONNECTOR)
-            _page_list.expand_row(_path_tools, false);
-        if (desired_page >= PREFS_PAGE_TOOLS_SHAPES && desired_page <= PREFS_PAGE_TOOLS_SHAPES_SPIRAL)
-            _page_list.expand_row(_path_shapes, false);
-        if (desired_page >= PREFS_PAGE_UI && desired_page <= PREFS_PAGE_UI_KEYBOARD_SHORTCUTS)
-            _page_list.expand_row(_path_ui, false);
-        if (desired_page >= PREFS_PAGE_BEHAVIOR && desired_page <= PREFS_PAGE_BEHAVIOR_MASKS)
-            _page_list.expand_row(_path_behavior, false);
-        if (desired_page >= PREFS_PAGE_IO && desired_page <= PREFS_PAGE_IO_OPENCLIPART)
-            _page_list.expand_row(_path_io, false);
+        auto const path = _page_list.get_model()->get_path(*iter);
+        _page_list.expand_to_path(path);
         _page_list.get_selection()->select(iter);
         if (desired_page == PREFS_PAGE_UI_THEME)
             symbolicThemeCheck();
