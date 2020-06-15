@@ -1299,6 +1299,7 @@ void Export::onBrowse ()
 {
     GtkWidget *fs;
     SPDesktop *desktop = getDesktop();
+    bool accept = false;
 
     fs = gtk_file_chooser_dialog_new (_("Select a filename for exporting"),
                                       (GtkWindow*)desktop->getToplevel(),
@@ -1374,6 +1375,7 @@ void Export::onBrowse ()
         gchar *utf8string = g_utf16_to_utf8((const gunichar2*)opf.lpstrFile, _MAX_PATH, NULL, NULL, NULL);
         filename_entry.set_text(utf8string);
         filename_entry.set_position(strlen(utf8string));
+        accept = true;
         g_free(utf8string);
 
     }
@@ -1390,6 +1392,7 @@ void Export::onBrowse ()
         gchar * utf8file = g_filename_to_utf8( file, -1, nullptr, nullptr, nullptr );
         filename_entry.set_text (utf8file);
         filename_entry.set_position(strlen(utf8file));
+        accept = true;
 
         g_free(utf8file);
         g_free(file);
@@ -1398,7 +1401,9 @@ void Export::onBrowse ()
 
     gtk_widget_destroy (fs);
 
-    onExport();
+    if (accept) {
+        onExport();
+    }
 } // end of sp_export_browse_clicked()
 
 // TODO: Move this to nr-rect-fns.h.
