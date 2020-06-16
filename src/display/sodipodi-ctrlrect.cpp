@@ -50,6 +50,7 @@ static void sp_ctrlrect_class_init(CtrlRectClass *c)
 static void sp_ctrlrect_init(CtrlRect *cr)
 {
     cr->init();
+    cr->name = "CtrlRect";
 }
 
 static void sp_ctrlrect_destroy(SPCanvasItem *object)

@@ -219,6 +219,8 @@ sp_ctrl_init (SPCtrl *ctrl)
     ctrl->pixbuf = nullptr;
 
     ctrl->_point = Geom::Point(0,0);
+
+    ctrl->name = "SPCtrl";
 }
 
 static void sp_ctrl_destroy(SPCanvasItem *object)

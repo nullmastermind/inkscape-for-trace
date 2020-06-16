@@ -1,17 +1,38 @@
 
 
-This directory contains code for rendering graphics to the
-canvas. This includes rendering of SVG elements (DrawingItem and
-derived classes) as well as rendering of control items -
-nodes/handles/lines (CanvasItem and derived classes).
+This directory contains code for: rendering graphics on the canvas,
+"picking" objects on the canvas based on closeness to cursor, directing
+events (mouse button, key press, etc.) to the correct object.
+
+The code can be divided into two types: handling SVG elements
+(DrawingItem and derived classes) and handling controle items
+(SPCanvasItem and derived structures/classes).
 
 Currently we rely on the "Cairo" graphics library for rendering.
+
+DrawingItem:
+
+  Item belonging to the drawing. These are rendered via the
+  CanvasArena canvas item.
+
+ControlItem:
+
+  SPCanvasGroup: Group of Canvas items such as:
+    Sketch:   Temporary objects before they are added to document.
+    Temp:     Temporary control objects.
+    Controls: Knots, etc.
+    Grid:     All grids.
+    Guides:   All guide lines and guide-line knots.
+
+  SPCtrl:       Knots, etc.
+  CtrlRect:     Page, border, etc.
+  CtrlLine
+  BPath:        Editable paths
+  CanvasRotate: Copy of canvas for quick display while rotating.
+  Acetate:      Infinite surface to catch events not caught elsewhere.
+  CanvasArena:  Rendering drawing items.
 
 To do:
 
 * Split into three directories: drawing, canvas, common.
 * Remove SPCurve.
-
-
-
-

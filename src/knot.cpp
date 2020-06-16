@@ -121,6 +121,7 @@ SPKnot::SPKnot(SPDesktop *desktop, gchar const *tip)
                                     "stroke_color", 0x01000000,
                                     "mode", SP_KNOT_MODE_XOR,
                                     NULL);
+    this->item->name = "SPCtrl:Knot";
 
     this->_event_handler_id = g_signal_connect(G_OBJECT(this->item), "event",
                                                  G_CALLBACK(sp_knot_handler), this);

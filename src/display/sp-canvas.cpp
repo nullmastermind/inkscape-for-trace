@@ -1692,6 +1692,9 @@ int SPCanvas::doUpdate()
         return TRUE;
     }
 
+    // Uncomment to print canvas item tree.
+    // sp_canvas_item_recursive_print_tree(0, _root);
+
     // Cause the update if necessary
     if (_need_update) {
         sp_canvas_item_invoke_update(_root, Geom::identity(), 0);

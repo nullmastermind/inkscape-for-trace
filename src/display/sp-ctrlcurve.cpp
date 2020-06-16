@@ -46,6 +46,8 @@ sp_ctrlcurve_init(SPCtrlCurve *ctrlcurve)
     ctrlcurve->item=nullptr;
     ctrlcurve->corner0 = -1;
     ctrlcurve->corner1 = -1;
+
+    ctrlcurve->name = "CtrlCurve";
 }
 
 namespace {

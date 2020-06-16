@@ -50,6 +50,8 @@ static void sp_ctrlline_init(SPCtrlLine *ctrlline)
     ctrlline->s[Geom::X] = ctrlline->s[Geom::Y] = ctrlline->e[Geom::X] = ctrlline->e[Geom::Y] = 0.0;
     ctrlline->item=nullptr;
     ctrlline->is_fill = true;
+
+    ctrlline->name = "CtrlLine";
 }
 
 namespace {

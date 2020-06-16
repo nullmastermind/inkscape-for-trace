@@ -599,6 +599,26 @@ gint sp_canvas_item_order (SPCanvasItem * item)
     return -1;
 }
 
+// For debugging: Print canvas item tree.
+void
+sp_canvas_item_recursive_print_tree (unsigned level, SPCanvasItem* item)
+{
+    if (level == 0) {
+        std::cout << "Canvas Item Tree" << std::endl;
+    }
+    std::cout << "CI: ";
+    for (unsigned i = 0; i < level; ++i) {
+        std::cout << "  ";
+    }
+    std::cout << item->name << std::endl;
+
+    if (SP_IS_CANVAS_GROUP(item)) {
+        SPCanvasGroup *group = SP_CANVAS_GROUP(item);
+        for (auto & item : group->items) {
+            sp_canvas_item_recursive_print_tree(level+1, &item);
+        }
+    }
+}
 
 /*
   Local Variables:

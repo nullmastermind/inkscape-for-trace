@@ -55,6 +55,8 @@ sp_canvas_bpath_init (SPCanvasBPath * bpath)
     bpath->stroke_linecap = SP_STROKE_LINECAP_BUTT;
     bpath->stroke_miterlimit = 11.0;
     bpath->phantom_line = false;
+
+    SP_CANVAS_ITEM(bpath)->name = "BPath";
 }
 
 static void sp_canvas_bpath_destroy(SPCanvasItem *object)

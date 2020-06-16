@@ -33,9 +33,9 @@ static void sp_canvas_acetate_class_init (SPCanvasAcetateClass *klass)
 	item_class->point = sp_canvas_acetate_point;
 }
 
-static void sp_canvas_acetate_init (SPCanvasAcetate */*acetate*/)
+static void sp_canvas_acetate_init (SPCanvasAcetate *acetate)
 {
-    /* Nothing here */
+    SP_CANVAS_ITEM(acetate)->name = "Acetate";
 }
 
 static void sp_canvas_acetate_destroy(SPCanvasItem *object)

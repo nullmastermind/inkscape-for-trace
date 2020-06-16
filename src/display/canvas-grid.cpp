@@ -83,6 +83,7 @@ static void
 grid_canvasitem_init (GridCanvasItem *griditem)
 {
     griditem->grid = nullptr;
+    SP_CANVAS_ITEM(griditem)->name = "CanvasGrid";
 }
 
 static void grid_canvasitem_destroy(SPCanvasItem *object)

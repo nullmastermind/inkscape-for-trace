@@ -47,6 +47,8 @@ static void sp_canvas_rotate_init (SPCanvasRotate *rotate)
     rotate->start_angle = -1000;
     rotate->surface_copy = nullptr;
     rotate->surface_rotated = nullptr;
+
+    rotate->name = "CanvasRotate";
 }
 
 namespace {

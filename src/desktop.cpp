@@ -224,6 +224,7 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, SPDesktopWidget *widget)
     acetate = sp_canvas_item_new (root, GNOME_TYPE_CANVAS_ACETATE, nullptr);
     g_signal_connect (G_OBJECT (acetate), "event", G_CALLBACK (sp_desktop_root_handler), this);
     main = (SPCanvasGroup *) sp_canvas_item_new (root, SP_TYPE_CANVAS_GROUP, nullptr);
+    SP_CANVAS_ITEM(main)->name = "CanvasGroup:main";
     g_signal_connect (G_OBJECT (main), "event", G_CALLBACK (sp_desktop_root_handler), this);
 
     /* This is the background the page sits on. */
@@ -268,6 +269,12 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, SPDesktopWidget *widget)
     tempgroup = (SPCanvasGroup *) sp_canvas_item_new (main, SP_TYPE_CANVAS_GROUP, nullptr);
     controls  = (SPCanvasGroup *) sp_canvas_item_new (main, SP_TYPE_CANVAS_GROUP, nullptr);
 
+    SP_CANVAS_ITEM(gridgroup)->name = "CanvasGroup:Grid";
+    SP_CANVAS_ITEM(guides)->name    = "CanvasGroup:Guides";
+    SP_CANVAS_ITEM(sketch)->name    = "CanvasGroup:Sketch";
+    SP_CANVAS_ITEM(tempgroup)->name = "CanvasGroup:Temp";
+    SP_CANVAS_ITEM(controls)->name  = "CanvasGroup:Controls";
+
     // Set the select tool as the active tool.
     setEventContext("/tools/select");
 
@@ -277,7 +284,9 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, SPDesktopWidget *widget)
                        Geom::Point(document->getWidth().value("px"), document->getHeight().value("px")));
 
     SP_CTRLRECT(page)->setRectangle(d);
+    SP_CTRLRECT(page)->name = "CtrlRect:Page";
     SP_CTRLRECT(page_border)->setRectangle(d);
+    SP_CTRLRECT(page_border)->name = "CtrlRect:Border";
 
     /* the following sets the page shadow on the canvas
        It was originally set to 5, which is really cheesy!

@@ -51,6 +51,8 @@ sp_ctrlquadr_init (SPCtrlQuadr *ctrlquadr)
     ctrlquadr->p2 = Geom::Point(0, 0);
     ctrlquadr->p3 = Geom::Point(0, 0);
     ctrlquadr->p4 = Geom::Point(0, 0);
+
+    ctrlquadr->name = "CtrlQuad";
 }
 
 static void sp_ctrlquadr_destroy(SPCanvasItem *object)

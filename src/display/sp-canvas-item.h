@@ -20,6 +20,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <glibmm/ustring.h>
+
 #include <2geom/rect.h>
 #include <boost/intrusive/list.hpp>
 #include <glib-object.h>
@@ -85,6 +87,8 @@ struct SPCanvasItem {
     bool pickable;
 
     bool in_destruction;
+
+    Glib::ustring name; // For debugging.
 };
 
 GType sp_canvas_item_get_type();
@@ -157,7 +161,7 @@ void sp_canvas_item_request_update(SPCanvasItem *item);
 
 gint sp_canvas_item_order(SPCanvasItem * item);
 
-
+void sp_canvas_item_recursive_print_tree(unsigned level, SPCanvasItem* item);
 
 #endif // SEEN_SP_CANVAS_ITEM_H
 

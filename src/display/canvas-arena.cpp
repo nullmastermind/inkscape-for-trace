@@ -94,6 +94,8 @@ sp_canvas_arena_class_init (SPCanvasArenaClass *klass)
 static void
 sp_canvas_arena_init (SPCanvasArena *arena)
 {
+    SP_CANVAS_ITEM(arena)->name = "CanvasArena";
+
     arena->sticky = FALSE;
 
     new (&arena->drawing) Inkscape::Drawing(arena);

@@ -42,6 +42,7 @@ static void sp_canvas_group_class_init(SPCanvasGroupClass *klass)
 static void sp_canvas_group_init(SPCanvasGroup * group)
 {
     new (&group->items) SPCanvasItemList;
+    SP_CANVAS_ITEM(group)->name = "CanvasGroup";
 }
 
 void SPCanvasGroup::destroy(SPCanvasItem *object)

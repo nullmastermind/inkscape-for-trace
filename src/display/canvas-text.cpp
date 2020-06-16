@@ -59,6 +59,8 @@ sp_canvastext_init (SPCanvasText *canvastext)
     canvastext->outline = false;
     canvastext->background = false;
     canvastext->border = 3; // must be a constant, and not proportional to any width, height, or fontsize to allow alignment with other text boxes
+
+    canvastext->name = "CanvasText";
 }
 
 static void sp_canvastext_destroy(SPCanvasItem *object)
