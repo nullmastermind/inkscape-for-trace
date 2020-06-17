@@ -624,7 +624,7 @@ InkFileExportCmd::do_export_ps_pdf(SPDocument* doc, std::string filename_in, std
         if (export_dpi) {
             dpi = export_dpi;
             if ((dpi < 1) || (dpi > 10000.0)) {
-                g_warning("DPI value %d out of range [1 - 10000]. Using 96 dpi instead.", export_dpi);
+                g_warning("DPI value %lf out of range [1 - 10000]. Using 96 dpi instead.", export_dpi);
                 dpi = 96;
             }
         }

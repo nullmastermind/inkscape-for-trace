@@ -131,9 +131,9 @@ export_plain_svg(const Glib::VariantBase& value, InkscapeApplication *app)
 void
 export_dpi(const Glib::VariantBase& value, InkscapeApplication *app)
 {
-    Glib::Variant<int> i = Glib::VariantBase::cast_dynamic<Glib::Variant<int> >(value);
-    app->file_export()->export_dpi = i.get();
-    // std::cout << "export-dpi: " << i.get() << std::endl;
+    Glib::Variant<double> d = Glib::VariantBase::cast_dynamic<Glib::Variant<double> >(value);
+    app->file_export()->export_dpi = d.get();
+    // std::cout << "export-dpi: " << d.get() << std::endl;
 }
 
 void
@@ -157,7 +157,7 @@ export_ps_level(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<int> i = Glib::VariantBase::cast_dynamic<Glib::Variant<int> >(value);
     app->file_export()->export_ps_level = i.get();
-    // std::cout << "export-dpi: " << i.get() << std::endl;
+    // std::cout << "export-ps-level: " << i.get() << std::endl;
 }
 
 void
@@ -272,7 +272,7 @@ add_actions_output(ConcreteInkscapeApplication<T>* app)
     app->add_action_with_parameter( "export-id-only",           Bool,   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_id_only),      app));
 
     app->add_action_with_parameter( "export-plain-svg",         Bool,   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_plain_svg),    app));
-    app->add_action_with_parameter( "export-dpi",               Int,    sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_dpi),          app));
+    app->add_action_with_parameter( "export-dpi",               Double, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_dpi),          app));
     app->add_action_with_parameter( "export-ignore-filters",    Bool,   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_plain_svg),    app));
     app->add_action_with_parameter( "export-text-to-path",      Bool,   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_text_to_path), app));
     app->add_action_with_parameter( "export-ps-level",          Int,    sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_ps_level),     app));

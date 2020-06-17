@@ -51,7 +51,7 @@ public:
     int           export_width;
     int           export_height;
 
-    int           export_dpi;
+    double        export_dpi;
     bool          export_ignore_filters;
     bool          export_text_to_path;
     int           export_ps_level;
