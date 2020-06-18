@@ -11,6 +11,7 @@
  */
 
 #include <cstring>
+#include <gmodule.h>
 
 #include "xml/node-event-vector.h"
 #include "sp-xmlview-tree.h"
@@ -409,24 +410,34 @@ void element_order_changed(Inkscape::XML::Node * /*repr*/, Inkscape::XML::Node *
     }
 }
 
-Glib::ustring sp_remove_newlines_and_tabs(Glib::ustring val)
+/**
+ * Truncate `val` to `maxlen` unicode characters and replace newlines and tabs
+ * with placeholder symbols. The string is modified in place.
+ * @param[in,out] val String in UTF-8 encoding
+ */
+static void sp_remove_newlines_and_tabs(std::string &val, size_t const maxlen = 200)
 {
-    int pos;
-    Glib::ustring newlinesign = "␤";
-    Glib::ustring tabsign = "⇥";
-    while ((pos = val.find("\r\n")) != std::string::npos) {
-        val.erase(pos, 2);
-        val.insert(pos, newlinesign);
+    if (g_utf8_strlen(val.data(), maxlen * 2) > maxlen) {
+        size_t newlen = g_utf8_offset_to_pointer(val.data(), maxlen - 3) - val.data();
+        val.resize(newlen);
+        val.append("…");
     }
-    while ((pos = val.find('\n')) != std::string::npos) {
-        val.erase(pos, 1);
-        val.insert(pos, newlinesign);
+
+    struct
+    {
+        const char *query;
+        const char *replacement;
+    } replacements[] = {
+        {"\r\n", "⏎"},
+        {"\n", "⏎"},
+        {"\t", "⇥"},
+    };
+
+    for (auto const &item : replacements) {
+        for (size_t pos = 0; (pos = val.find(item.query, pos)) != std::string::npos;) {
+            val.replace(pos, strlen(item.query), item.replacement);
+        }
     }
-    while ((pos = val.find('\t')) != std::string::npos) {
-        val.erase(pos, 1);
-        val.insert(pos, tabsign);
-    }
-    return val;
 }
 
 void text_content_changed(Inkscape::XML::Node * /*repr*/, const gchar * /*old_content*/, const gchar * new_content, gpointer ptr)
@@ -435,16 +446,13 @@ void text_content_changed(Inkscape::XML::Node * /*repr*/, const gchar * /*old_co
 
     if (data->tree->blocked) return;
 
-    gchar *label = g_strdup_printf ("\"%s\"", new_content);
-    Glib::ustring nolinecontent = label;
-    nolinecontent = sp_remove_newlines_and_tabs(nolinecontent);
+    auto nolinecontent = std::string("\"").append(new_content).append("\"");
+    sp_remove_newlines_and_tabs(nolinecontent);
 
     GtkTreeIter iter;
     if (tree_ref_to_iter(data->tree, &iter,  data->rowref)) {
         gtk_tree_store_set(GTK_TREE_STORE(data->tree->store), &iter, STORE_TEXT_COL, nolinecontent.c_str(), -1);
     }
-
-    g_free (label);
 }
 
 void comment_content_changed(Inkscape::XML::Node * /*repr*/, const gchar * /*old_content*/, const gchar *new_content, gpointer ptr)
@@ -453,15 +461,13 @@ void comment_content_changed(Inkscape::XML::Node * /*repr*/, const gchar * /*old
 
     if (data->tree->blocked) return;
 
-    gchar *label = g_strdup_printf ("<!--%s-->", new_content);
-    Glib::ustring nolinecontent = label;
-    nolinecontent = sp_remove_newlines_and_tabs(nolinecontent);
+    auto nolinecontent = std::string("<!--").append(new_content).append("-->");
+    sp_remove_newlines_and_tabs(nolinecontent);
 
     GtkTreeIter iter;
     if (tree_ref_to_iter(data->tree, &iter,  data->rowref)) {
         gtk_tree_store_set(GTK_TREE_STORE(data->tree->store), &iter, STORE_TEXT_COL, nolinecontent.c_str(), -1);
     }
-    g_free (label);
 }
 
 void pi_content_changed(Inkscape::XML::Node *repr, const gchar * /*old_content*/, const gchar *new_content, gpointer ptr)
@@ -470,15 +476,13 @@ void pi_content_changed(Inkscape::XML::Node *repr, const gchar * /*old_content*/
 
     if (data->tree->blocked) return;
 
-    gchar *label = g_strdup_printf ("<?%s %s?>", repr->name(), new_content);
-    Glib::ustring nolinecontent = label;
-    nolinecontent = sp_remove_newlines_and_tabs(nolinecontent);
+    auto nolinecontent = std::string("<?").append(repr->name()).append(" ").append(new_content).append("?>");
+    sp_remove_newlines_and_tabs(nolinecontent);
 
     GtkTreeIter iter;
     if (tree_ref_to_iter(data->tree, &iter,  data->rowref)) {
         gtk_tree_store_set(GTK_TREE_STORE(data->tree->store), &iter, STORE_TEXT_COL, nolinecontent.c_str(), -1);
     }
-    g_free (label);
 }
 
 /*
