@@ -610,7 +610,13 @@ sp_canvas_item_recursive_print_tree (unsigned level, SPCanvasItem* item)
     for (unsigned i = 0; i < level; ++i) {
         std::cout << "  ";
     }
-    std::cout << item->name << std::endl;
+
+    char const *name = item->name;
+    if (!name) {
+        name = G_OBJECT_TYPE_NAME(item);
+    }
+
+    std::cout << name << std::endl;
 
     if (SP_IS_CANVAS_GROUP(item)) {
         SPCanvasGroup *group = SP_CANVAS_GROUP(item);

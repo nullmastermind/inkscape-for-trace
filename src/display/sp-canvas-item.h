@@ -20,8 +20,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <glibmm/ustring.h>
-
 #include <2geom/rect.h>
 #include <boost/intrusive/list.hpp>
 #include <glib-object.h>
@@ -88,7 +86,7 @@ struct SPCanvasItem {
 
     bool in_destruction;
 
-    Glib::ustring name; // For debugging.
+    char const *name; // For debugging.
 };
 
 GType sp_canvas_item_get_type();
