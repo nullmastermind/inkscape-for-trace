@@ -20,6 +20,7 @@
 #include <glibmm/i18n.h>
 
 #include <gtkmm/grid.h>
+#include <gtkmm/sizegroup.h>
 
 #include <2geom/transforms.h>
 
@@ -580,10 +581,9 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
     updating = false;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
-    // could not do this in gtkmm - there's no Gtk::SizeGroup public constructor (!)
-    GtkSizeGroup *_col1 = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
-    GtkSizeGroup *_col2 = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
-    GtkSizeGroup *_col3 = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
+    auto _col1 = Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL);
+    auto _col2 = Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL);
+    auto _col3 = Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL);
 
     Gtk::Box *contents = this;
 
@@ -602,7 +602,7 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
     NoOfRowsSpinner.signal_changed().connect(sigc::mem_fun(*this, &GridArrangeTab::on_col_spinbutton_changed));
     NoOfRowsSpinner.set_tooltip_text(_("Number of rows"));
     NoOfRowsBox.pack_start(NoOfRowsSpinner, false, false, MARGIN);
-    gtk_size_group_add_widget(_col1, (GtkWidget *) NoOfRowsBox.gobj());
+    _col1->add_widget(NoOfRowsBox);
 
     RowHeightButton.set_label(_("Equal _height"));
     RowHeightButton.set_use_underline(true);
@@ -628,7 +628,7 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
     XByYLabel.set_markup(" &#215; ");
     XByYLabelVBox.pack_start(XByYLabel, false, false, MARGIN);
     SpinsHBox.pack_start(XByYLabelVBox, false, false, MARGIN);
-    gtk_size_group_add_widget(_col2, GTK_WIDGET(XByYLabelVBox.gobj()));
+    _col2->add_widget(XByYLabelVBox);
 
     /*#### Number of columns ####*/
 
@@ -643,7 +643,7 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
     NoOfColsSpinner.signal_changed().connect(sigc::mem_fun(*this, &GridArrangeTab::on_row_spinbutton_changed));
     NoOfColsSpinner.set_tooltip_text(_("Number of columns"));
     NoOfColsBox.pack_start(NoOfColsSpinner, false, false, MARGIN);
-    gtk_size_group_add_widget(_col3, GTK_WIDGET(NoOfColsBox.gobj()));
+    _col3->add_widget(NoOfColsBox);
 
     ColumnWidthButton.set_label(_("Equal _width"));
     ColumnWidthButton.set_use_underline(true);

@@ -54,12 +54,6 @@ void Labelled::setWidgetSizeRequest(int width, int height)
 
 }
 
-Gtk::Widget const *
-Labelled::getWidget() const
-{
-    return _widget;
-}
-
 Gtk::Label const *
 Labelled::getLabel() const
 {

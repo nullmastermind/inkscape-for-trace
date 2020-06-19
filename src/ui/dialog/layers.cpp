@@ -88,9 +88,9 @@ void LayersPanel::_styleButton( Gtk::Button& btn, SPDesktop *desktop, unsigned i
     bool set = false;
 
     if ( iconName ) {
-        GtkWidget *child = sp_get_icon_image(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR);
-        gtk_widget_show( child );
-        btn.add( *Gtk::manage(Glib::wrap(child)) );
+        auto child = Glib::wrap(sp_get_icon_image(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR));
+        child->show();
+        btn.add(*child);
         btn.set_relief(Gtk::RELIEF_NONE);
         set = true;
     }
@@ -100,9 +100,9 @@ void LayersPanel::_styleButton( Gtk::Button& btn, SPDesktop *desktop, unsigned i
         if ( verb ) {
             SPAction *action = verb->get_action(Inkscape::ActionContext(desktop));
             if ( !set && action && action->image ) {
-                GtkWidget *child = sp_get_icon_image(action->image, GTK_ICON_SIZE_SMALL_TOOLBAR);
-                gtk_widget_show( child );
-                btn.add( *Gtk::manage(Glib::wrap(child)) );
+                auto child = Glib::wrap(sp_get_icon_image(action->image, GTK_ICON_SIZE_SMALL_TOOLBAR));
+                child->show();
+                btn.add(*child);
                 set = true;
             }
 

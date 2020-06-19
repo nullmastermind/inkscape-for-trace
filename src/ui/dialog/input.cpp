@@ -469,7 +469,7 @@ private:
     std::map<Glib::ustring, std::set<guint> > buttonMap;
     std::map<Glib::ustring, std::map<guint, std::pair<guint, gdouble> > > axesMap;
 
-    GdkInputSource lastSourceSeen;
+    Gdk::InputSource lastSourceSeen;
     Glib::ustring lastDevnameSeen;
 
     Glib::RefPtr<Gtk::TreeStore> deviceStore;
@@ -571,8 +571,7 @@ InputDialog &InputDialog::getInstance()
 
 InputDialogImpl::InputDialogImpl() :
     InputDialog(),
-
-    lastSourceSeen((GdkInputSource)-1),
+    lastSourceSeen(static_cast<Gdk::InputSource>(-1)),
     lastDevnameSeen(""),
     deviceStore(Gtk::TreeStore::create(getCols())),
     deviceIter(),
@@ -1572,7 +1571,8 @@ void InputDialogImpl::updateTestAxes( Glib::ustring const& key, GdkDevice* dev )
 
 void InputDialogImpl::mapAxesValues( Glib::ustring const& key, gdouble const * axes, GdkDevice* dev )
 {
-    guint numAxes = gdk_device_get_n_axes(dev);
+    auto device = Glib::wrap(dev);
+    auto numAxes = device->get_n_axes();
 
     static gdouble epsilon = 0.0001;
     if ( (numAxes > 0) && axes) {
@@ -1624,21 +1624,22 @@ void InputDialogImpl::mapAxesValues( Glib::ustring const& key, gdouble const * a
 Glib::ustring InputDialogImpl::getKeyFor( GdkDevice* device )
 {
     Glib::ustring key;
+    auto devicemm = Glib::wrap(device);
 
-    GdkInputSource source = gdk_device_get_source(device);
-    const gchar *name = gdk_device_get_name(device);
+    auto source = devicemm->get_source();
+    const auto name = devicemm->get_name();
 
     switch ( source ) {
-        case GDK_SOURCE_MOUSE:
+        case Gdk::SOURCE_MOUSE:
             key = "M:";
             break;
-        case GDK_SOURCE_CURSOR:
+        case Gdk::SOURCE_CURSOR:
             key = "C:";
             break;
-        case GDK_SOURCE_PEN:
+        case Gdk::SOURCE_PEN:
             key = "P:";
             break;
-        case GDK_SOURCE_ERASER:
+        case Gdk::SOURCE_ERASER:
             key = "E:";
             break;
         default:
@@ -1653,7 +1654,7 @@ bool InputDialogImpl::eventSnoop(GdkEvent* event)
 {
     int modmod = 0;
 
-    GdkInputSource source = lastSourceSeen;
+    auto source = lastSourceSeen;
     Glib::ustring devName = lastDevnameSeen;
     Glib::ustring key;
     gint hotButton = -1;
@@ -1662,11 +1663,10 @@ bool InputDialogImpl::eventSnoop(GdkEvent* event)
         case GDK_KEY_PRESS:
         case GDK_KEY_RELEASE:
         {
-            GdkEventKey* keyEvt = reinterpret_cast<GdkEventKey*>(event);
-            gchar* name = gtk_accelerator_name(keyEvt->keyval, static_cast<GdkModifierType>(keyEvt->state));
+            auto keyEvt = reinterpret_cast<GdkEventKey*>(event);
+            auto name = Gtk::AccelGroup::name(keyEvt->keyval, static_cast<Gdk::ModifierType>(keyEvt->state));
             keyVal.set_label(name);
 //             g_message("%d KEY    state:0x%08x  0x%04x [%s]", keyEvt->type, keyEvt->state, keyEvt->keyval, name);
-            g_free(name);
         }
         break;
         case GDK_BUTTON_PRESS:
@@ -1674,11 +1674,12 @@ bool InputDialogImpl::eventSnoop(GdkEvent* event)
             // fallthrough
         case GDK_BUTTON_RELEASE:
         {
-            GdkEventButton* btnEvt = reinterpret_cast<GdkEventButton*>(event);
-            if ( btnEvt->device ) {
+            auto btnEvt = reinterpret_cast<GdkEventButton*>(event);
+            auto device = Glib::wrap(btnEvt->device);
+            if (device) {
                 key = getKeyFor(btnEvt->device);
-        source = gdk_device_get_source(btnEvt->device);
-        devName = gdk_device_get_name(btnEvt->device);
+                source = device->get_source();
+                devName = device->get_name();
                 mapAxesValues(key, btnEvt->axes, btnEvt->device);
 
                 if ( buttonMap[key].find(btnEvt->button) == buttonMap[key].end() ) {
@@ -1689,7 +1690,7 @@ bool InputDialogImpl::eventSnoop(GdkEvent* event)
                 hotButton = modmod ? btnEvt->button : -1;
                 updateTestButtons(key, hotButton);
             }
-            gchar* name = gtk_accelerator_name(0, static_cast<GdkModifierType>(btnEvt->state));
+            auto name = Gtk::AccelGroup::name(0, static_cast<Gdk::ModifierType>(btnEvt->state));
             keyVal.set_label(name);
 //             g_message("%d BTN    state:0x%08x %c  %4d [%s] dev:%p [%s]  ",
 //                       btnEvt->type, btnEvt->state,
@@ -1698,19 +1699,19 @@ bool InputDialogImpl::eventSnoop(GdkEvent* event)
 //                       (btnEvt->device ? btnEvt->device->name : "null")
 
 //                 );
-            g_free(name);
         }
         break;
         case GDK_MOTION_NOTIFY:
         {
             GdkEventMotion* btnMtn = reinterpret_cast<GdkEventMotion*>(event);
-            if ( btnMtn->device ) {
+            auto device = Glib::wrap(btnMtn->device);
+            if (device) {
                 key = getKeyFor(btnMtn->device);
-        source = gdk_device_get_source(btnMtn->device);
-        devName = gdk_device_get_name(btnMtn->device);
+                source = device->get_source();
+                devName = device->get_name();
                 mapAxesValues(key, btnMtn->axes, btnMtn->device);
             }
-            gchar* name = gtk_accelerator_name(0, static_cast<GdkModifierType>(btnMtn->state));
+            auto name = Gtk::AccelGroup::name(0, static_cast<Gdk::ModifierType>(btnMtn->state));
             keyVal.set_label(name);
 //             g_message("%d MOV    state:0x%08x         [%s] dev:%p [%s] %3.2f %3.2f %3.2f %3.2f %3.2f %3.2f", btnMtn->type, btnMtn->state,
 //                       name, btnMtn->device,
@@ -1722,7 +1723,6 @@ bool InputDialogImpl::eventSnoop(GdkEvent* event)
 //                       ((btnMtn->device && btnMtn->axes && (btnMtn->device->num_axes > 4)) ? btnMtn->axes[4]:0),
 //                       ((btnMtn->device && btnMtn->axes && (btnMtn->device->num_axes > 5)) ? btnMtn->axes[5]:0)
 //                 );
-            g_free(name);
         }
         break;
         default:
@@ -1732,16 +1732,16 @@ bool InputDialogImpl::eventSnoop(GdkEvent* event)
 
     if ( (lastSourceSeen != source) || (lastDevnameSeen != devName) ) {
         switch (source) {
-            case GDK_SOURCE_MOUSE: {
+            case Gdk::SOURCE_MOUSE: {
                 testThumb.set(getPix(PIX_CORE));
                 break;
             }
-            case GDK_SOURCE_CURSOR: {
+            case Gdk::SOURCE_CURSOR: {
 //                g_message("flip to cursor");
                 testThumb.set(getPix(PIX_MOUSE));
                 break;
             }
-            case GDK_SOURCE_PEN: {
+            case Gdk::SOURCE_PEN: {
                 if (devName == _("pad")) {
 //                     g_message("flip to pad");
                     testThumb.set(getPix(PIX_SIDEBUTTONS));
@@ -1751,17 +1751,17 @@ bool InputDialogImpl::eventSnoop(GdkEvent* event)
                 }
                 break;
             }
-            case GDK_SOURCE_ERASER: {
+            case Gdk::SOURCE_ERASER: {
 //                 g_message("flip to eraser");
                 testThumb.set(getPix(PIX_ERASER));
                 break;
             }
             /// \fixme GTK3 added new GDK_SOURCEs that should be handled here!
-            case GDK_SOURCE_KEYBOARD:
-            case GDK_SOURCE_TOUCHSCREEN:
-            case GDK_SOURCE_TOUCHPAD:
-            case GDK_SOURCE_TRACKPOINT:
-            case GDK_SOURCE_TABLET_PAD:
+            case Gdk::SOURCE_KEYBOARD:
+            case Gdk::SOURCE_TOUCHSCREEN:
+            case Gdk::SOURCE_TOUCHPAD:
+            case Gdk::SOURCE_TRACKPOINT:
+            case Gdk::SOURCE_TABLET_PAD:
                  g_warning("InputDialogImpl::eventSnoop : unhandled GDK_SOURCE type!");
                  break;
         }

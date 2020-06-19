@@ -16,7 +16,11 @@
 #include "ui/widget/color-picker.h"
 
 namespace Gtk {
+    class Box;
     class ComboBox;
+    class Grid;
+    class Notebook;
+    class SizeGroup;
     class ToggleButton;
 }
 
@@ -57,8 +61,8 @@ protected:
         PICK_L
     };
 
-    GtkWidget * new_tab(GtkWidget *nb, const gchar *label);
-    GtkWidget * table_x_y_rand(int values);
+    Gtk::Box * new_tab(Gtk::Notebook *nb, const gchar *label);
+    Gtk::Grid * table_x_y_rand(int values);
     Gtk::Widget * spinbox(const char          *tip,
                           const Glib::ustring &attr,
                           double               lower,
@@ -67,8 +71,7 @@ protected:
                           bool                 exponent = false);
     Gtk::Widget * checkbox(const char          *tip,
                            const Glib::ustring &attr);
-    void table_attach(GtkWidget *table, GtkWidget *widget, float align, int row, int col);
-    void table_attach(GtkWidget *table, Gtk::Widget *widget, float align, int row, int col);
+    void table_attach(Gtk::Grid *table, Gtk::Widget *widget, float align, int row, int col);
 
     void       symgroup_changed(Gtk::ComboBox *cb);
     void       on_picker_color_changed(guint rgba);
@@ -148,9 +151,9 @@ private:
 
     UI::Widget::CheckButtonInternal *_b;
     UI::Widget::CheckButtonInternal *_cb_keep_bbox;
-    GtkWidget *nb;
+    Gtk::Notebook *nb = nullptr;
     Inkscape::UI::Widget::ColorPicker *color_picker;
-    GtkSizeGroup* table_row_labels;
+    Glib::RefPtr<Gtk::SizeGroup> table_row_labels;
     Inkscape::UI::Widget::UnitMenu *unit_menu;
 
     Glib::RefPtr<Gtk::Adjustment> fill_width;
@@ -169,9 +172,9 @@ private:
     void setDesktop(SPDesktop *desktop) override;
 
     // Variables that used to be set using GObject
-    GtkWidget *_buttons_on_tiles;
-    GtkWidget *_dotrace;
-    GtkWidget *_status;
+    Gtk::Box *_buttons_on_tiles;
+    Gtk::Box *_dotrace;
+    Gtk::Label *_status;
     Gtk::Box *_rowscols;
     Gtk::Box *_widthheight;
     

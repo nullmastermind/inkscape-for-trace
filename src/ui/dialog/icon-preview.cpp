@@ -175,9 +175,8 @@ IconPreviewPanel::IconPreviewPanel() :
         pixMem[i] = new guchar[sizes[i] * stride];
         memset( pixMem[i], 0x00, sizes[i] * stride );
 
-        GdkPixbuf *pb = gdk_pixbuf_new_from_data( pixMem[i], GDK_COLORSPACE_RGB, TRUE, 8, sizes[i], sizes[i], stride, /*(GdkPixbufDestroyNotify)g_free*/nullptr, nullptr );
-        GtkImage* img = GTK_IMAGE( gtk_image_new_from_pixbuf( pb ) );
-        images[i] = Glib::wrap(img);
+        auto pb = Gdk::Pixbuf::create_from_data(pixMem[i], Gdk::COLORSPACE_RGB, true, 8, sizes[i], sizes[i], stride);
+        images[i] = Gtk::make_managed<Gtk::Image>(pb);
         Glib::ustring label(*labels[i]);
         buttons[i] = new Gtk::ToggleToolButton(label);
         buttons[i]->set_active( i == hot );

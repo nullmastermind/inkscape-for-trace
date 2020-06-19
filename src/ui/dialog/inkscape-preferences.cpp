@@ -774,7 +774,7 @@ void InkscapePreferences::themeChange()
 
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         Glib::ustring current_theme = prefs->getString("/theme/gtkTheme");
-        GtkSettings *settings = gtk_settings_get_default();
+        auto settings = Gtk::Settings::get_default();
         _dark_theme.get_parent()->set_no_show_all(false);
         if (dark_themes[current_theme]) {
             _dark_theme.get_parent()->show_all();
@@ -782,7 +782,7 @@ void InkscapePreferences::themeChange()
             _dark_theme.get_parent()->hide();
         }
 
-        g_object_set(settings, "gtk-theme-name", current_theme.c_str(), NULL);
+        settings->property_gtk_theme_name() = current_theme;
         bool dark = current_theme.find(":dark") != std::string::npos;
         if (!dark) {
             Glib::RefPtr<Gtk::StyleContext> stylecontext = window->get_style_context();
@@ -815,8 +815,8 @@ void InkscapePreferences::preferDarkThemeChange()
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         bool dark_theme = prefs->getBool("/theme/preferDarkTheme", false);
         Glib::ustring current_theme = prefs->getString("/theme/gtkTheme");
-        GtkSettings *settings = gtk_settings_get_default();
-        g_object_set(settings, "gtk-application-prefer-dark-theme", dark_theme, NULL);
+        auto settings = Gtk::Settings::get_default();
+        settings->property_gtk_application_prefer_dark_theme() = dark_theme;
         bool dark = current_theme.find(":dark") != std::string::npos;
         if (!dark) {
             Glib::RefPtr<Gtk::StyleContext> stylecontext = window->get_style_context();
@@ -847,10 +847,10 @@ void InkscapePreferences::symbolicThemeCheck()
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
     bool symbolic = false;
-    GtkSettings *settings = gtk_settings_get_default();
+    auto settings = Gtk::Settings::get_default();
     if (settings) {
         if (themeiconname != "") {
-            g_object_set(settings, "gtk-icon-theme-name", themeiconname.c_str(), NULL);
+            settings->property_gtk_icon_theme_name() = themeiconname;
         }
     }
     if (prefs->getString("/theme/defaultIconTheme") != prefs->getString("/theme/iconTheme")) {
@@ -2602,13 +2602,15 @@ void InkscapePreferences::initPageSpellcheck()
 #endif
 }
 
-static void appendList( Glib::ustring& tmp, const gchar* const*listing )
+template <typename string_type>
+static void appendList(Glib::ustring& tmp, const std::vector<string_type> &listing)
 {
-    for (const gchar* const* ptr = listing; *ptr; ptr++) {
-        tmp += *ptr;
+    for (auto const & str : listing) {
+        tmp += str;
         tmp += "\n";
     }
 }
+
 
 void InkscapePreferences::initPageSystem()
 {
@@ -2700,7 +2702,8 @@ void InkscapePreferences::initPageSystem()
     _page_system.add_line(true, _("Inkscape extensions: "), _sys_extension_dir, "", _("Location of the Inkscape extensions"), true);
 
     Glib::ustring tmp;
-    appendList( tmp, g_get_system_data_dirs() );
+    auto system_data_dirs = Glib::get_system_data_dirs();
+    appendList(tmp, system_data_dirs);
     _sys_systemdata.get_buffer()->insert(_sys_systemdata.get_buffer()->end(), tmp);
     _sys_systemdata.set_editable(false);
     _sys_systemdata_scroll.add(_sys_systemdata);
@@ -2710,11 +2713,9 @@ void InkscapePreferences::initPageSystem()
     _page_system.add_line(true,  _("System data: "), _sys_systemdata_scroll, "", _("Locations of system data"), true);
 
     tmp = "";
-    gchar** paths = nullptr;
-    gint count = 0;
-    gtk_icon_theme_get_search_path(gtk_icon_theme_get_default(), &paths, &count);
+    auto icon_theme = Gtk::IconTheme::get_default();
+    auto paths = icon_theme->get_search_path();
     appendList( tmp, paths );
-    g_strfreev(paths);
     _sys_icon.get_buffer()->insert(_sys_icon.get_buffer()->end(), tmp);
     _sys_icon.set_editable(false);
     _sys_icon_scroll.add(_sys_icon);

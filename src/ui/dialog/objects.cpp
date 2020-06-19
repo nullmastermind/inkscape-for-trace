@@ -249,11 +249,11 @@ public:
  */
 void ObjectsPanel::_styleButton(Gtk::Button& btn, char const* iconName, char const* tooltip)
 {
-    GtkWidget *child = sp_get_icon_image(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR);
-    gtk_widget_show( child );
-    btn.add( *Gtk::manage(Glib::wrap(child)) );
+    auto child = Glib::wrap(sp_get_icon_image(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR));
+    child->show();
+    btn.add(*child);
     btn.set_relief(Gtk::RELIEF_NONE);
-    btn.set_tooltip_text (tooltip);
+    btn.set_tooltip_text(tooltip);
 }
 
 /**
@@ -888,8 +888,9 @@ bool ObjectsPanel::_handleKeyEvent(GdkEventKey *event)
 
         // defocus:
         case GDK_KEY_Escape:
-            if (_desktop->canvas) {
-                gtk_widget_grab_focus (GTK_WIDGET(_desktop->canvas));
+            auto wdg = Glib::wrap(GTK_WIDGET(_desktop->canvas));
+            if (wdg) {
+                wdg->grab_focus();
                 return true;
             }
             break;

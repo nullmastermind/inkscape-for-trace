@@ -21,7 +21,9 @@
 #include <gtkmm/buttonbox.h>
 #include <gtkmm/dialog.h>
 #include <gtkmm/entry.h>
+#include <gtkmm/filechooserdialog.h>
 #include <gtkmm/grid.h>
+#include <gtkmm/main.h>
 #include <gtkmm/spinbutton.h>
 
 #include <glibmm/convert.h>
@@ -34,6 +36,7 @@
 #include "document.h"
 #include "file.h"
 #include "inkscape.h"
+#include "inkscape-window.h"
 #include "preferences.h"
 #include "selection-chemistry.h"
 #include "verbs.h"
@@ -381,7 +384,6 @@ Export::Export () :
     antialiasing_label.set_halign(Gtk::ALIGN_START);
     auto table = new Gtk::Grid();
     expander.add(*table);
-    // gtk_container_add(GTK_CONTAINER(expander.gobj()), (GtkWidget*)(table->gobj()));
     table->set_border_width(4);
     table->attach(interlacing,0,0,1,1);
     table->attach(bitdepth_label,0,1,1,1);
@@ -895,11 +897,11 @@ unsigned int Export::onProgressCallback(float value, void *dlg)
 
     int evtcount = 0;
     while ((evtcount < 16) && gdk_events_pending()) {
-        gtk_main_iteration_do(FALSE);
+        Gtk::Main::iteration(false);
         evtcount += 1;
     }
 
-    gtk_main_iteration_do(FALSE);
+    Gtk::Main::iteration(false);
     return TRUE;
 } // end of sp_export_progress_callback()
 
@@ -1294,25 +1296,19 @@ void Export::onExport ()
 } // end of sp_export_export_clicked()
 
 /// Called when Browse button is clicked
-/// @todo refactor this code to use ui/dialogs/filedialog.cpp
+/// @todo refactor this code to use ui/dialog/filedialog.cpp
 void Export::onBrowse ()
 {
-    GtkWidget *fs;
-    SPDesktop *desktop = getDesktop();
     bool accept = false;
+    Gtk::FileChooserDialog fs(_("Select a filename for exporting"),
+                              Gtk::FILE_CHOOSER_ACTION_SAVE);
+    fs.add_button(_("_Cancel"), Gtk::RESPONSE_CANCEL);
+    fs.add_button(_("_Save"),   Gtk::RESPONSE_ACCEPT);
+    fs.set_local_only(false);
 
-    fs = gtk_file_chooser_dialog_new (_("Select a filename for exporting"),
-                                      (GtkWindow*)desktop->getToplevel(),
-                                      GTK_FILE_CHOOSER_ACTION_SAVE,
-                                      _("_Cancel"), GTK_RESPONSE_CANCEL,
-                                      _("_Save"),   GTK_RESPONSE_ACCEPT,
-                                      NULL );
+    sp_transientize(GTK_WIDGET(fs.gobj()));
 
-    gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(fs), false);
-
-    sp_transientize (fs);
-
-    gtk_window_set_modal(GTK_WINDOW (fs), true);
+    fs.set_modal(true);
 
     std::string filename = Glib::filename_from_utf8(filename_entry.get_text());
 
@@ -1321,7 +1317,7 @@ void Export::onBrowse ()
         filename = create_filepath_from_id(tmp, tmp);
     }
 
-    gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (fs), filename.c_str());
+    fs.set_filename(filename);
 
 #ifdef _WIN32
     // code in this section is borrowed from ui/dialogs/filedialogimpl-win32.cpp
@@ -1348,6 +1344,7 @@ void Export::onBrowse ()
     wcsncpy(_filename, reinterpret_cast<wchar_t*>(utf16_path_string), _MAX_PATH);
     g_free(utf16_path_string);
 
+    auto desktop = getDesktop();
     Glib::RefPtr<const Gdk::Window> parentWindow = desktop->getToplevel()->get_window();
     g_assert(parentWindow->gobj() != NULL);
 
@@ -1374,32 +1371,24 @@ void Export::onBrowse ()
         // Copy the selected file name, converting from UTF-16 to UTF-8
         gchar *utf8string = g_utf16_to_utf8((const gunichar2*)opf.lpstrFile, _MAX_PATH, NULL, NULL, NULL);
         filename_entry.set_text(utf8string);
-        filename_entry.set_position(strlen(utf8string));
+        filename_entry.set_position(-1);
         accept = true;
         g_free(utf8string);
-
     }
     g_free(extension_string);
     g_free(title_string);
 
 #else
-    if (gtk_dialog_run (GTK_DIALOG (fs)) == GTK_RESPONSE_ACCEPT)
+    if (fs.run() == Gtk::RESPONSE_ACCEPT)
     {
-        gchar *file;
+        auto file = fs.get_filename();
 
-        file = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (fs));
-
-        gchar * utf8file = g_filename_to_utf8( file, -1, nullptr, nullptr, nullptr );
-        filename_entry.set_text (utf8file);
-        filename_entry.set_position(strlen(utf8file));
+        auto utf8file = Glib::filename_to_utf8(file);
+        filename_entry.set_text(utf8file);
+        filename_entry.set_position(-1);
         accept = true;
-
-        g_free(utf8file);
-        g_free(file);
     }
 #endif
-
-    gtk_widget_destroy (fs);
 
     if (accept) {
         onExport();

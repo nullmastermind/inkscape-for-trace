@@ -33,6 +33,7 @@
 
 #include "ui/dialog-events.h"
 #include "ui/tools/tool-base.h"
+#include "ui/widget/spinbutton.h"
 
 #include "widgets/desktop-widget.h"
 
@@ -284,14 +285,14 @@ void GuidelinePropertiesDialog::_setup() {
     }
     _locked_toggle.set_active(_guide->getLocked());
 
-    // don't know what this exactly does, but it results in that the dialog closes when entering a value and pressing enter (see LP bug 484187)
-    g_signal_connect_swapped(G_OBJECT(_spin_button_x.getWidget()->gobj()), "activate",
-                              G_CALLBACK(gtk_window_activate_default), gobj());
-    g_signal_connect_swapped(G_OBJECT(_spin_button_y.getWidget()->gobj()), "activate",
-                              G_CALLBACK(gtk_window_activate_default), gobj());
-    g_signal_connect_swapped(G_OBJECT(_spin_angle.getWidget()->gobj()), "activate",
-                              G_CALLBACK(gtk_window_activate_default), gobj());
+    // This results in the dialog closing when entering a value in one of the spinbuttons and pressing enter (see LP bug 484187)
+    auto sbx = dynamic_cast<UI::Widget::SpinButton *>(_spin_button_x.getWidget());
+    auto sby = dynamic_cast<UI::Widget::SpinButton *>(_spin_button_y.getWidget());
+    auto sba = dynamic_cast<UI::Widget::SpinButton *>(_spin_button_y.getWidget());
 
+    if(sbx) sbx->signal_activate().connect(sigc::mem_fun(this, &GuidelinePropertiesDialog::on_sb_activate));
+    if(sby) sby->signal_activate().connect(sigc::mem_fun(this, &GuidelinePropertiesDialog::on_sb_activate));
+    if(sba) sba->signal_activate().connect(sigc::mem_fun(this, &GuidelinePropertiesDialog::on_sb_activate));
 
     // dialog
     set_default_response(Gtk::RESPONSE_OK);
@@ -348,6 +349,11 @@ void GuidelinePropertiesDialog::_setup() {
     property_destroy_with_parent() = true;
 }
 
+void
+GuidelinePropertiesDialog::on_sb_activate()
+{
+    activate_default();
+}
 }
 }
 }

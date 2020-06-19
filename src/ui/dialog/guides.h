@@ -83,6 +83,8 @@ private:
     bool _mode;
     Geom::Point _oldpos;
     gdouble _oldangle;
+
+    void on_sb_activate();
 };
 
 } // namespace
