@@ -30,22 +30,16 @@
 
 using Inkscape::DocumentUndo;
 
-#define KNOT_EVENT_MASK (GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | \
-             GDK_POINTER_MOTION_MASK | \
-             GDK_POINTER_MOTION_HINT_MASK | \
-             GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK)
+const int KNOT_EVENT_MASK (
+    GDK_BUTTON_PRESS_MASK   |
+    GDK_BUTTON_RELEASE_MASK |
+    GDK_POINTER_MOTION_MASK |
+    GDK_KEY_PRESS_MASK      |
+    GDK_KEY_RELEASE_MASK);
 
 const gchar *nograbenv = getenv("INKSCAPE_NO_GRAB");
 static bool nograb = (nograbenv && *nograbenv && (*nograbenv != '0'));
 
-static bool grabbed = false;
-static bool moved = false;
-
-static gint xp = 0, yp = 0; // where drag started
-static gint tolerance = 0;
-static bool within_tolerance = false;
-
-static bool transform_escaped = false; // true iff resize or rotate was cancelled by esc.
 
 void knot_ref(SPKnot* knot) {
     knot->ref_count++;
@@ -61,69 +55,42 @@ void knot_unref(SPKnot* knot) {
 static int sp_knot_handler(SPCanvasItem *item, GdkEvent *event, SPKnot *knot);
 
 SPKnot::SPKnot(SPDesktop *desktop, gchar const *tip)
-    : ref_count(1)
+    : desktop(desktop)
+    , ref_count(1)
 {
-    this->desktop = nullptr;
-    this->item = nullptr;
-    this->owner = nullptr;
-    this->flags = 0;
-
-    this->size = 8;
-    this->angle = 0;
-    this->pos = Geom::Point(0, 0);
-    this->grabbed_rel_pos = Geom::Point(0, 0);
-    this->anchor = SP_ANCHOR_CENTER;
-    this->shape = SP_KNOT_SHAPE_SQUARE;
-    this->mode = SP_KNOT_MODE_XOR;
-    this->tip = nullptr;
-    this->_event_handler_id = 0;
-    this->pressure = 0;
-
-    this->fill[SP_KNOT_STATE_NORMAL] = 0xffffff00;
-    this->fill[SP_KNOT_STATE_MOUSEOVER] = 0xff0000ff;
-    this->fill[SP_KNOT_STATE_DRAGGING] = 0xff0000ff;
-    this->fill[SP_KNOT_STATE_SELECTED] = 0x0000ffff;
-
-    this->stroke[SP_KNOT_STATE_NORMAL] = 0x01000000;
-    this->stroke[SP_KNOT_STATE_MOUSEOVER] = 0x01000000;
-    this->stroke[SP_KNOT_STATE_DRAGGING] = 0x01000000;
-    this->stroke[SP_KNOT_STATE_SELECTED] = 0x01000000;
-
-    this->image[SP_KNOT_STATE_NORMAL] = nullptr;
-    this->image[SP_KNOT_STATE_MOUSEOVER] = nullptr;
-    this->image[SP_KNOT_STATE_DRAGGING] = nullptr;
-    this->image[SP_KNOT_STATE_SELECTED] = nullptr;
-    
-    this->cursor[SP_KNOT_STATE_NORMAL] = nullptr;
-    this->cursor[SP_KNOT_STATE_MOUSEOVER] = nullptr;
-    this->cursor[SP_KNOT_STATE_DRAGGING] = nullptr;
-    this->cursor[SP_KNOT_STATE_SELECTED] = nullptr;
-
-    this->saved_cursor = nullptr;
-    this->pixbuf = nullptr;
-
-
-    this->desktop = desktop;
-    this->flags = SP_KNOT_VISIBLE;
-
     if (tip) {
         this->tip = g_strdup (tip);
     }
 
-    this->item = sp_canvas_item_new(desktop->getControls(),
-                                    SP_TYPE_CTRL,
-                                    "anchor", SP_ANCHOR_CENTER,
-                                    "size", 9,
-                                    "angle", 0.0,
-                                    "filled", TRUE,
-                                    "fill_color", 0xffffff00,
-                                    "stroked", TRUE,
-                                    "stroke_color", 0x01000000,
-                                    "mode", SP_KNOT_MODE_XOR,
-                                    NULL);
-    this->item->name = "SPCtrl:Knot";
+    stroke[SP_KNOT_STATE_NORMAL] = 0x01000000;
+    stroke[SP_KNOT_STATE_MOUSEOVER] = 0x01000000;
+    stroke[SP_KNOT_STATE_DRAGGING] = 0x01000000;
+    stroke[SP_KNOT_STATE_SELECTED] = 0x01000000;
 
-    this->_event_handler_id = g_signal_connect(G_OBJECT(this->item), "event",
+    image[SP_KNOT_STATE_NORMAL] = nullptr;
+    image[SP_KNOT_STATE_MOUSEOVER] = nullptr;
+    image[SP_KNOT_STATE_DRAGGING] = nullptr;
+    image[SP_KNOT_STATE_SELECTED] = nullptr;
+
+    cursor[SP_KNOT_STATE_NORMAL] = nullptr;
+    cursor[SP_KNOT_STATE_MOUSEOVER] = nullptr;
+    cursor[SP_KNOT_STATE_DRAGGING] = nullptr;
+    cursor[SP_KNOT_STATE_SELECTED] = nullptr;
+
+    item = sp_canvas_item_new(desktop->getControls(),
+                              SP_TYPE_CTRL,
+                              "anchor", SP_ANCHOR_CENTER,
+                              "size", 9,
+                              "angle", 0.0,
+                              "filled", true,
+                              "fill_color", 0xffffff00,
+                              "stroked", true,
+                              "stroke_color", 0x01000000,
+                              "mode", SP_KNOT_MODE_XOR,
+                              NULL);
+    item->name = "SPCtrl:Knot";
+
+    _event_handler_id = g_signal_connect(G_OBJECT(this->item), "event",
                                                  G_CALLBACK(sp_knot_handler), this);
     knot_created_callback(this);
 }
@@ -177,9 +144,9 @@ void SPKnot::startDragging(Geom::Point const &p, gint x, gint y, guint32 etime) 
     if (!nograb) {
         sp_canvas_item_grab(this->item, KNOT_EVENT_MASK, this->cursor[SP_KNOT_STATE_DRAGGING], etime);
     }
-    this->setFlag(SP_KNOT_GRABBED, TRUE);
+    this->setFlag(SP_KNOT_GRABBED, true);
 
-    grabbed = TRUE;
+    grabbed = true;
 }
 
 void SPKnot::selectKnot(bool select){
@@ -196,26 +163,25 @@ static int sp_knot_handler(SPCanvasItem */*item*/, GdkEvent *event, SPKnot *knot
 
     /* Run client universal event handler, if present */
     bool consumed = knot->event_signal.emit(knot, event);
-
     if (consumed) {
         return true;
     }
 
-    bool key_press_event_unconsumed = FALSE;
+    bool key_press_event_unconsumed = false;
 
     knot_ref(knot);
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
+    knot->tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
 
     switch (event->type) {
     case GDK_2BUTTON_PRESS:
         if (event->button.button == 1) {
             knot->doubleclicked_signal.emit(knot, event->button.state);
 
-            grabbed = FALSE;
-            moved = FALSE;
-            consumed = TRUE;
+            knot->grabbed = false;
+            knot->moved = false;
+            consumed = true;
         }
         break;
     case GDK_BUTTON_PRESS:
@@ -223,7 +189,7 @@ static int sp_knot_handler(SPCanvasItem */*item*/, GdkEvent *event, SPKnot *knot
             Geom::Point const p = knot->desktop->w2d(Geom::Point(event->button.x, event->button.y));
             knot->startDragging(p, (gint) event->button.x, (gint) event->button.y, event->button.time);
             knot->mousedown_signal.emit(knot, event->button.state);
-            consumed = TRUE;
+            consumed = true;
         }
         break;
     case GDK_BUTTON_RELEASE:
@@ -235,26 +201,26 @@ static int sp_knot_handler(SPCanvasItem */*item*/, GdkEvent *event, SPKnot *knot
             sp_event_context_discard_delayed_snap_event(knot->desktop->event_context);
             knot->pressure = 0;
 
-            if (transform_escaped) {
-                transform_escaped = false;
-                consumed = TRUE;
+            if (knot->transform_escaped) {
+                knot->transform_escaped = false;
+                consumed = true;
             } else {
-                knot->setFlag(SP_KNOT_GRABBED, FALSE);
+                knot->setFlag(SP_KNOT_GRABBED, false);
 
                 if (!nograb) {
                     sp_canvas_item_ungrab(knot->item);
                 }
 
-                if (moved) {
-                    knot->setFlag(SP_KNOT_DRAGGING, FALSE);
+                if (knot->moved) {
+                    knot->setFlag(SP_KNOT_DRAGGING, false);
                     knot->ungrabbed_signal.emit(knot, event->button.state);
                 } else {
                     knot->click_signal.emit(knot, event->button.state);
                 }
 
-                grabbed = FALSE;
-                moved = FALSE;
-                consumed = TRUE;
+                knot->grabbed = false;
+                knot->moved = false;
+                consumed = true;
             }
         }
         Inkscape::UI::Tools::sp_update_helperpath(knot->desktop);
@@ -268,42 +234,42 @@ static int sp_knot_handler(SPCanvasItem */*item*/, GdkEvent *event, SPKnot *knot
             sp_event_context_discard_delayed_snap_event(knot->desktop->event_context);
             knot->pressure = 0;
 
-            if (transform_escaped) {
-                transform_escaped = false;
-                consumed = TRUE;
+            if (knot->transform_escaped) {
+                knot->transform_escaped = false;
+                consumed = true;
             } else {
-                knot->setFlag(SP_KNOT_GRABBED, FALSE);
+                knot->setFlag(SP_KNOT_GRABBED, false);
 
                 if (!nograb) {
                     sp_canvas_item_ungrab(knot->item);
                 }
 
-                if (moved) {
-                    knot->setFlag(SP_KNOT_DRAGGING, FALSE);
+                if (knot->moved) {
+                    knot->setFlag(SP_KNOT_DRAGGING, false);
                     knot->ungrabbed_signal.emit(knot, event->motion.state);
                 } else {
                     knot->click_signal.emit(knot, event->motion.state);
                 }
 
-                grabbed = FALSE;
-                moved = FALSE;
-                consumed = TRUE;
+                knot->grabbed = false;
+                knot->moved = false;
+                consumed = true;
                 Inkscape::UI::Tools::sp_update_helperpath(knot->desktop);
             }
-        } else if (grabbed && knot->desktop && knot->desktop->event_context &&
+        } else if (knot->grabbed && knot->desktop && knot->desktop->event_context &&
                    !knot->desktop->event_context->space_panning) {
-            consumed = TRUE;
+            consumed = true;
 
-            if ( within_tolerance
-                 && ( abs( (gint) event->motion.x - xp ) < tolerance )
-                 && ( abs( (gint) event->motion.y - yp ) < tolerance ) ) {
+            if ( knot->within_tolerance
+                 && ( abs( (gint) event->motion.x - knot->xp ) < knot->tolerance )
+                 && ( abs( (gint) event->motion.y - knot->yp ) < knot->tolerance ) ) {
                 break; // do not drag if we're within tolerance from origin
             }
 
             // Once the user has moved farther than tolerance from the original location
             // (indicating they intend to move the object, not click), then always process the
             // motion notify coordinates as given (no snapping back to origin)
-            within_tolerance = false;
+            knot->within_tolerance = false;
 
             if (gdk_event_get_axis (event, GDK_AXIS_PRESSURE, &knot->pressure)) {
                 knot->pressure = CLAMP (knot->pressure, 0, 1);
@@ -311,68 +277,68 @@ static int sp_knot_handler(SPCanvasItem */*item*/, GdkEvent *event, SPKnot *knot
                 knot->pressure = 0.5;
             }
 
-            if (!moved) {
-                knot->setFlag(SP_KNOT_DRAGGING, TRUE);
+            if (!knot->moved) {
+                knot->setFlag(SP_KNOT_DRAGGING, true);
                 knot->grabbed_signal.emit(knot, event->button.state);
             }
 
             sp_event_context_snap_delay_handler(knot->desktop->event_context, nullptr, knot, (GdkEventMotion *)event, Inkscape::UI::Tools::DelayedSnapEvent::KNOT_HANDLER);
             sp_knot_handler_request_position(event, knot);
-            moved = TRUE;
+            knot->moved = true;
         }
         break;
     case GDK_ENTER_NOTIFY:
-        knot->setFlag(SP_KNOT_MOUSEOVER, TRUE);
-        knot->setFlag(SP_KNOT_GRABBED, FALSE);
+        knot->setFlag(SP_KNOT_MOUSEOVER, true);
+        knot->setFlag(SP_KNOT_GRABBED, false);
 
         if (knot->tip && knot->desktop && knot->desktop->event_context) {
             knot->desktop->event_context->defaultMessageContext()->set(Inkscape::NORMAL_MESSAGE, knot->tip);
         }
 
-        grabbed = FALSE;
-        moved = FALSE;
-        consumed = TRUE;
+        knot->grabbed = false;
+        knot->moved = false;
+        consumed = true;
         break;
     case GDK_LEAVE_NOTIFY:
-        knot->setFlag(SP_KNOT_MOUSEOVER, FALSE);
-        knot->setFlag(SP_KNOT_GRABBED, FALSE);
+        knot->setFlag(SP_KNOT_MOUSEOVER, false);
+        knot->setFlag(SP_KNOT_GRABBED, false);
 
         if (knot->tip && knot->desktop && knot->desktop->event_context) {
             knot->desktop->event_context->defaultMessageContext()->clear();
         }
 
-        grabbed = FALSE;
-        moved = FALSE;
-        consumed = TRUE;
+        knot->grabbed = false;
+        knot->moved = false;
+        consumed = true;
         break;
     case GDK_KEY_PRESS: // keybindings for knot
         switch (Inkscape::UI::Tools::get_latin_keyval(&event->key)) {
             case GDK_KEY_Escape:
-                knot->setFlag(SP_KNOT_GRABBED, FALSE);
+                knot->setFlag(SP_KNOT_GRABBED, false);
 
                 if (!nograb) {
                     sp_canvas_item_ungrab(knot->item);
                 }
 
-                if (moved) {
-                    knot->setFlag(SP_KNOT_DRAGGING, FALSE);
+                if (knot->moved) {
+                    knot->setFlag(SP_KNOT_DRAGGING, false);
 
                     knot->ungrabbed_signal.emit(knot, event->button.state);
 
                     DocumentUndo::undo(knot->desktop->getDocument());
                     knot->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Node or handle drag canceled."));
-                    transform_escaped = true;
-                    consumed = TRUE;
+                    knot->transform_escaped = true;
+                    consumed = true;
                 }
 
-                grabbed = FALSE;
-                moved = FALSE;
+                knot->grabbed = false;
+                knot->moved = false;
 
                 sp_event_context_discard_delayed_snap_event(knot->desktop->event_context);
                 break;
             default:
-                consumed = FALSE;
-                key_press_event_unconsumed = TRUE;
+                consumed = false;
+                key_press_event_unconsumed = true;
                 break;
         }
         break;
@@ -385,7 +351,7 @@ static int sp_knot_handler(SPCanvasItem */*item*/, GdkEvent *event, SPKnot *knot
     if (key_press_event_unconsumed) {
         return false; // e.g. in case "%" was pressed to toggle snapping, or Q for quick zoom (while dragging a handle)
     } else {
-        return  consumed || grabbed;
+        return  consumed || knot->grabbed;
     }
 }
 
@@ -404,11 +370,11 @@ void sp_knot_handler_request_position(GdkEvent *event, SPKnot *knot) {
 }
 
 void SPKnot::show() {
-    this->setFlag(SP_KNOT_VISIBLE, TRUE);
+    this->setFlag(SP_KNOT_VISIBLE, true);
 }
 
 void SPKnot::hide() {
-    this->setFlag(SP_KNOT_VISIBLE, FALSE);
+    this->setFlag(SP_KNOT_VISIBLE, false);
 }
 
 void SPKnot::requestPosition(Geom::Point const &p, guint state) {

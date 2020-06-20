@@ -49,20 +49,28 @@ public:
 
     int ref_count; // FIXME encapsulation
 
-    SPDesktop *desktop;   /**< Desktop we are on. */
-    SPCanvasItem *item;   /**< Our CanvasItem. */
-    SPItem *owner;        /**< Optional Owner Item */
-    unsigned int flags;
+    SPDesktop *desktop  = nullptr;                  /**< Desktop we are on. */
+    SPCanvasItem *item  = nullptr;                  /**< Our CanvasItem. */
+    SPItem *owner       = nullptr;                  /**< Optional Owner Item */
+    unsigned int flags  = SP_KNOT_VISIBLE;
 
-    unsigned int size;      /**< Always square. */
-    double angle;      /**< Angle of mesh handle. */
-    Geom::Point pos;   /**< Our desktop coordinates. */
-    Geom::Point grabbed_rel_pos;  /**< Grabbed relative position. */
-    Geom::Point drag_origin;      /**< Origin of drag. */
-    SPAnchorType anchor;    /**< Anchor. */
+    unsigned int size   = 8;                        /**< Always square. */
+    double angle        = 0.0;                      /**< Angle of mesh handle. */
+    Geom::Point pos;                                /**< Our desktop coordinates. */
+    Geom::Point grabbed_rel_pos;                    /**< Grabbed relative position. */
+    Geom::Point drag_origin;                        /**< Origin of drag. */
+    SPAnchorType anchor = SP_ANCHOR_CENTER;         /**< Anchor. */
 
-    SPKnotShapeType shape;   /**< Shape type. */
-    SPKnotModeType mode;
+    bool grabbed        = false;
+    bool moved          = false;
+    int  xp             = 0.0;                      /**< Where drag started */
+    int  yp             = 0.0;                      /**< Where drag started */
+    int  tolerance      = 0;
+    bool within_tolerance = false;
+    bool transform_escaped = false; // true iff resize or rotate was cancelled by esc.
+
+    SPKnotShapeType shape = SP_KNOT_SHAPE_SQUARE;   /**< Shape type. */
+    SPKnotModeType mode = SP_KNOT_MODE_XOR;
 
     guint32 fill[SP_KNOT_VISIBLE_STATES];
     guint32 stroke[SP_KNOT_VISIBLE_STATES];
@@ -70,14 +78,14 @@ public:
 
     GdkCursor *cursor[SP_KNOT_VISIBLE_STATES];
 
-    GdkCursor *saved_cursor;
-    void* pixbuf;
+    GdkCursor *saved_cursor = nullptr;
+    void* pixbuf            = nullptr;
 
-    char *tip;
+    char *tip               = nullptr;
 
-    unsigned long _event_handler_id;
+    unsigned long _event_handler_id = 0;
 
-    double pressure; /**< The tablet pen pressure when the knot is being dragged. */
+    double pressure         = 0.0;    /**< The tablet pen pressure when the knot is being dragged. */
 
     // FIXME: signals should NOT need to emit the object they came from, the callee should
     // be able to figure that out
