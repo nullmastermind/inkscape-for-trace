@@ -35,15 +35,16 @@
 
 #include "include/macros.h"
 
-#include "ui/pixmaps/cursor-3dbox.xpm"
-
 #include "object/box3d-side.h"
 #include "object/box3d.h"
 #include "object/sp-defs.h"
 #include "object/sp-namedview.h"
 
+#include "ui/pixmaps/cursor-3dbox.xpm"
+
 #include "ui/shape-editor.h"
 #include "ui/tools/box3d-tool.h"
+#include "ui/widget/canvas.h"  // Forced redraw
 
 #include "xml/node-event-vector.h"
 

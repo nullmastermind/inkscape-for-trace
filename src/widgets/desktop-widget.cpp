@@ -42,7 +42,6 @@
 #include "display/canvas-arena.h"
 #include "display/canvas-axonomgrid.h"
 #include "display/guideline.h"
-#include "display/sp-canvas.h"
 
 #include "extension/db.h"
 
@@ -59,6 +58,7 @@
 #include "ui/tools/box3d-tool.h"
 #include "ui/uxmanager.h"
 #include "ui/widget/button.h"
+#include "ui/widget/canvas.h"
 #include "ui/widget/canvas-grid.h"
 #include "ui/widget/dock.h"
 #include "ui/widget/ink-ruler.h"
@@ -182,7 +182,7 @@ void CMSPrefWatcher::_setCmsSensitive(bool enabled)
 {
 #if defined(HAVE_LIBLCMS2)
     for ( auto dtw : _widget_list ) {
-        auto cms_adj = dtw->GetCanvasGrid()->GetCmsAdjust();
+        auto cms_adj = dtw->get_canvas_grid()->GetCmsAdjust();
         if ( cms_adj->get_sensitive() != enabled ) {
             dtw->cms_adjust_set_sensitive(enabled);
         }
@@ -211,7 +211,7 @@ Geom::Point
 SPDesktopWidget::window_get_pointer()
 {
     int x, y;
-    auto window = Glib::wrap(GTK_WIDGET(_canvas))->get_window();
+    auto window = _canvas->get_window();
     auto display = window->get_display();
     auto seat = display->get_default_seat();
     auto device = seat->get_pointer();
@@ -270,8 +270,9 @@ SPDesktopWidget::SPDesktopWidget()
 
     /* Canvas */
     dtw->_canvas = _canvas_grid->GetCanvas();
+
 #if defined(HAVE_LIBLCMS2)
-    dtw->_canvas->_enable_cms_display_adj = prefs->getBool("/options/displayprofile/enable");
+    dtw->_canvas->set_cms_active(prefs->getBool("/options/displayprofile/enable"));
 #endif // defined(HAVE_LIBLCMS2)
 
     /* Dock */
@@ -336,7 +337,7 @@ SPDesktopWidget::SPDesktopWidget()
     auto zoom_adj = Gtk::Adjustment::create(100.0, log(SP_DESKTOP_ZOOM_MIN)/log(2), log(SP_DESKTOP_ZOOM_MAX)/log(2), 0.1);
     dtw->_zoom_status = Gtk::manage(new Inkscape::UI::Widget::SpinButton(zoom_adj));
 
-    dtw->_zoom_status->set_defocus_widget(Glib::wrap(GTK_WIDGET(dtw->_canvas)));
+    dtw->_zoom_status->set_defocus_widget(dtw->_canvas);
     dtw->_zoom_status->set_tooltip_text(_("Zoom"));
     dtw->_zoom_status->set_size_request(STATUS_ZOOM_WIDTH, -1);
     dtw->_zoom_status->set_width_chars(6);
@@ -366,7 +367,7 @@ SPDesktopWidget::SPDesktopWidget()
     //        degree symbol.  It would be better to improve ExpressionEvaluator so it copes
     dtw->_rotation_status->set_dont_evaluate(true);
 
-    dtw->_rotation_status->set_defocus_widget(Glib::wrap(GTK_WIDGET(dtw->_canvas)));
+    dtw->_rotation_status->set_defocus_widget(dtw->_canvas);
     dtw->_rotation_status->set_tooltip_text(_("Rotation. (Also Ctrl+Shift+Scroll)"));
     dtw->_rotation_status->set_size_request(STATUS_ROTATION_WIDTH, -1);
     dtw->_rotation_status->set_width_chars(7);
@@ -435,11 +436,8 @@ SPDesktopWidget::SPDesktopWidget()
     bool fromDisplay = prefs->getBool( "/options/displayprofile/from_display");
     if ( fromDisplay ) {
         auto id = Inkscape::CMSSystem::getDisplayId(0);
-
-        bool enabled = false;
-        dtw->_canvas->_cms_key = id;
-        enabled = !dtw->_canvas->_cms_key.empty();
-        dtw->cms_adjust_set_sensitive(enabled);
+        dtw->_canvas->set_cms_key(id);
+        dtw->cms_adjust_set_sensitive(!id.empty());
     }
     g_signal_connect( G_OBJECT(dtw->_tracker), "changed", G_CALLBACK(SPDesktopWidget::color_profile_event), dtw );
 #endif // defined(HAVE_LIBLCMS2)
@@ -447,7 +445,7 @@ SPDesktopWidget::SPDesktopWidget()
     // ------------------ Finish Up -------------------- //
     dtw->_vbox->show_all();
 
-    gtk_widget_grab_focus (GTK_WIDGET(dtw->_canvas));
+    dtw->_canvas->grab_focus();
 }
 
 /**
@@ -596,7 +594,7 @@ void SPDesktopWidget::on_size_allocate(Gtk::Allocation &allocation)
 
     if (this->get_realized()) {
         SPDesktopWidget *dtw = this;
-        Geom::Rect const d_canvas = _canvas->getViewbox();
+        Geom::Rect const d_canvas = _canvas->get_area_world();
         Geom::Point midpoint = dtw->desktop->w2d(d_canvas.midpoint());
 
         double zoom = dtw->desktop->current_zoom();
@@ -605,7 +603,7 @@ void SPDesktopWidget::on_size_allocate(Gtk::Allocation &allocation)
         if (dtw->get_sticky_zoom_active()) {
             /* Calculate adjusted zoom */
             double oldshortside = d_canvas.minExtent();
-            double newshortside = _canvas->getViewbox().minExtent();
+            double newshortside = _canvas->get_area_world().minExtent();
             zoom *= newshortside / oldshortside;
         }
         dtw->desktop->zoom_absolute_center_point (midpoint, zoom);
@@ -738,7 +736,7 @@ SPDesktopWidget::event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw)
 {
     if (event->type == GDK_BUTTON_PRESS) {
         // defocus any spinbuttons
-        gtk_widget_grab_focus (GTK_WIDGET(dtw->_canvas));
+        dtw->_canvas->grab_focus();
     }
 
     if ((event->type == GDK_BUTTON_PRESS) && (event->button.button == 3)) {
@@ -757,7 +755,7 @@ SPDesktopWidget::event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw)
         // and passed on by the canvas acetate (I think). --bb
 
         if ((event->type == GDK_KEY_PRESS || event->type == GDK_KEY_RELEASE)
-                && !dtw->_canvas->_current_item) {
+            && !dtw->_canvas->get_current_item()) {
             return sp_desktop_root_handler (nullptr, event, dtw->desktop);
         }
     }
@@ -783,15 +781,13 @@ SPDesktopWidget::color_profile_event(EgeColorProfTracker */*tracker*/, SPDesktop
     // Now loop through the set of monitors and figure out whether this monitor matches
     for (int i_monitor = 0; i_monitor < n_monitors; ++i_monitor) {
         auto monitor_at_index = gdk_display_get_monitor(display, i_monitor);
-        if(monitor_at_index == monitor) monitorNum = i_monitor;
+        if (monitor_at_index == monitor) monitorNum = i_monitor;
     }
 
     Glib::ustring id = Inkscape::CMSSystem::getDisplayId( monitorNum );
-    bool enabled = false;
-    dtw->_canvas->_cms_key = id;
+    dtw->_canvas->set_cms_key(id);
     dtw->requestCanvasUpdate();
-    enabled = !dtw->_canvas->_cms_key.empty();
-    dtw->cms_adjust_set_sensitive(enabled);
+    dtw->cms_adjust_set_sensitive(!id.empty());
 }
 #else // defined(HAVE_LIBLCMS2)
 void sp_dtw_color_profile_event(EgeColorProfTracker */*tracker*/, SPDesktopWidget * /*dtw*/)
@@ -825,8 +821,8 @@ SPDesktopWidget::cms_adjust_toggled()
     auto _cms_adjust = _canvas_grid->GetCmsAdjust();
 
     bool down = _cms_adjust->get_active();
-    if ( down != _canvas->_enable_cms_display_adj ) {
-        _canvas->_enable_cms_display_adj = down;
+    if ( down != _canvas->get_cms_active() ) {
+        _canvas->set_cms_active(down);
         desktop->redrawDesktop();
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setBool("/options/displayprofile/enable", down);
@@ -1009,7 +1005,7 @@ SPDesktopWidget::requestCanvasUpdate() {
     // ^^ also this->desktop != 0
     g_return_if_fail(this->desktop != nullptr);
     g_return_if_fail(this->desktop->main != nullptr);
-    gtk_widget_queue_draw (GTK_WIDGET (SP_CANVAS_ITEM (this->desktop->main)->canvas));
+    gtk_widget_queue_draw (GTK_WIDGET (SP_CANVAS_ITEM (this->desktop->main)->canvas->gobj()));
 }
 
 void
@@ -1152,7 +1148,7 @@ bool SPDesktopWidget::warnDialog (Glib::ustring const &text)
 void
 SPDesktopWidget::iconify()
 {
-    GtkWindow *topw = GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(_canvas)));
+    GtkWindow *topw = GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(_canvas->gobj())));
     if (GTK_IS_WINDOW(topw)) {
         if (desktop->is_iconified()) {
             gtk_window_deiconify(topw);
@@ -1165,7 +1161,7 @@ SPDesktopWidget::iconify()
 void
 SPDesktopWidget::maximize()
 {
-    GtkWindow *topw = GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(_canvas)));
+    GtkWindow *topw = GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(_canvas->gobj())));
     if (GTK_IS_WINDOW(topw)) {
         if (desktop->is_maximized()) {
             gtk_window_unmaximize(topw);
@@ -1193,7 +1189,7 @@ SPDesktopWidget::maximize()
 void
 SPDesktopWidget::fullscreen()
 {
-    GtkWindow *topw = GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(_canvas)));
+    GtkWindow *topw = GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(_canvas->gobj())));
     if (GTK_IS_WINDOW(topw)) {
         if (desktop->is_fullscreen()) {
             gtk_window_unfullscreen(topw);
@@ -1608,7 +1604,7 @@ SPDesktopWidget::zoom_value_changed()
     double const zoom_factor = pow (2, _zoom_status->get_value());
 
     // Zoom around center of window
-    Geom::Rect const d_canvas = _canvas->getViewbox();
+    Geom::Rect const d_canvas = _canvas->get_area_world();
     Geom::Point midpoint = desktop->w2d(d_canvas.midpoint());
     _zoom_status_value_changed_connection.block();
     desktop->zoom_absolute_center_point (midpoint, zoom_factor);
@@ -1740,7 +1736,7 @@ SPDesktopWidget::rotation_value_changed()
     //           << "  (" << rotate_factor << ")" <<std::endl;
 
     // Rotate around center of window
-    Geom::Rect const d_canvas = _canvas->getViewbox();
+    Geom::Rect const d_canvas = _canvas->get_area_world();
     _rotation_status_value_changed_connection.block();
     Geom::Point midpoint = desktop->w2d(d_canvas.midpoint());
     desktop->rotate_absolute_center_point (midpoint, rotate_factor);
@@ -1869,7 +1865,7 @@ SPDesktopWidget::update_scrollbars(double scale)
     Geom::Rect carea( Geom::Point(deskarea->left() * scale - 64, (deskarea->top() * scale + 64) * y_dir),
                     Geom::Point(deskarea->right() * scale + 64, (deskarea->bottom() * scale - 64) * y_dir)  );
 
-    Geom::Rect viewbox = _canvas->getViewbox();
+    Geom::Rect viewbox = _canvas->get_area_world();
 
     /* Viewbox is always included into scrollable region */
     carea = Geom::unify(carea, viewbox);
@@ -1930,7 +1926,7 @@ SPDesktopWidget::on_ruler_box_motion_notify_event(GdkEventMotion *event, Gtk::Wi
 
     int wx, wy;
 
-    GdkWindow *window = gtk_widget_get_window(GTK_WIDGET(_canvas));
+    GdkWindow *window = gtk_widget_get_window(GTK_WIDGET(_canvas->gobj()));
 
     gint width, height;
 
@@ -1940,7 +1936,7 @@ SPDesktopWidget::on_ruler_box_motion_notify_event(GdkEventMotion *event, Gtk::Wi
     Geom::Point const event_win(wx, wy);
 
     if (_ruler_clicked) {
-        Geom::Point const event_w(sp_canvas_window_to_world(_canvas, event_win));
+        Geom::Point event_w(_canvas->canvas_to_world(event_win));
         Geom::Point event_dt(desktop->w2d(event_w));
 
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -1975,7 +1971,7 @@ SPDesktopWidget::on_ruler_box_button_release_event(GdkEventButton *event, Gtk::W
 {
     int wx, wy;
 
-    GdkWindow *window = gtk_widget_get_window(GTK_WIDGET(_canvas));
+    GdkWindow *window = gtk_widget_get_window(GTK_WIDGET(_canvas->gobj()));
 
     gint width, height;
 
@@ -1990,7 +1986,7 @@ SPDesktopWidget::on_ruler_box_button_release_event(GdkEventButton *event, Gtk::W
         auto seat = gdk_device_get_seat(event->device);
         gdk_seat_ungrab(seat);
 
-        Geom::Point const event_w(sp_canvas_window_to_world(_canvas, event_win));
+        Geom::Point const event_w(_canvas->canvas_to_world(event_win));
         Geom::Point event_dt(desktop->w2d(event_w));
 
         if (!(event->state & GDK_SHIFT_MASK)) {
@@ -2048,7 +2044,7 @@ SPDesktopWidget::on_ruler_box_button_press_event(GdkEventButton *event, Gtk::Wid
 
     int wx, wy;
 
-    GdkWindow *window = gtk_widget_get_window(GTK_WIDGET(_canvas));
+    GdkWindow *window = gtk_widget_get_window(GTK_WIDGET(_canvas->gobj()));
 
     gint width, height;
 
@@ -2064,7 +2060,7 @@ SPDesktopWidget::on_ruler_box_button_press_event(GdkEventButton *event, Gtk::Wid
         _xp = (gint) event->x;
         _yp = (gint) event->y;
 
-        Geom::Point const event_w(sp_canvas_window_to_world(_canvas, event_win));
+        Geom::Point const event_w(_canvas->canvas_to_world(event_win));
         Geom::Point const event_dt(desktop->w2d(event_w));
 
         // calculate the normal of the guidelines when dragged from the edges of rulers.

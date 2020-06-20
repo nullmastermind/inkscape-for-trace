@@ -13,7 +13,6 @@
 #include <gdk/gdk.h>
 #include <gdk/gdkkeysyms.h>
 #include <gdkmm/display.h>
-#include "display/sp-canvas.h"
 #include "ui/tool/event-utils.h"
 
 namespace Inkscape {

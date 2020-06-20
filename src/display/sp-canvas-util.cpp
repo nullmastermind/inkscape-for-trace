@@ -16,16 +16,16 @@
 #include <2geom/affine.h>
 #include "sp-canvas-util.h"
 #include "sp-canvas-item.h"
-#include "sp-canvas.h"
+#include "ui/widget/canvas.h"
 
 void sp_canvas_update_bbox(SPCanvasItem *item, int x1, int y1, int x2, int y2)
 {
-    item->canvas->requestRedraw((int)item->x1, (int)item->y1, (int)item->x2, (int)item->y2);
+    item->canvas->redraw_area((int)item->x1, (int)item->y1, (int)item->x2, (int)item->y2);
     item->x1 = x1;
     item->y1 = y1;
     item->x2 = x2;
     item->y2 = y2;
-    item->canvas->requestRedraw((int)item->x1, (int)item->y1, (int)item->x2, (int)item->y2);
+    item->canvas->redraw_area((int)item->x1, (int)item->y1, (int)item->x2, (int)item->y2);
 }
 
 void

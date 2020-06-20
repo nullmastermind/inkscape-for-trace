@@ -984,8 +984,9 @@ DrawingItem::pick(Geom::Point const &p, double delta, unsigned flags)
         return nullptr;
     }
     // ignore invisible and insensitive items unless sticky
-    if (!(flags & PICK_STICKY) && !(_visible && _sensitive))
+    if (!(flags & PICK_STICKY) && !(_visible && _sensitive)) {
         return nullptr;
+    }
 
     bool outline = _drawing.outline() || _drawing.getOutlineSensitive();
 
@@ -993,12 +994,16 @@ DrawingItem::pick(Geom::Point const &p, double delta, unsigned flags)
         // pick inside clipping path; if NULL, it means the object is clipped away there
         if (_clip) {
             DrawingItem *cpick = _clip->pick(p, delta, flags | PICK_AS_CLIP);
-            if (!cpick) return nullptr;
+            if (!cpick) {
+                return nullptr;
+            }
         }
         // same for mask
         if (_mask) {
             DrawingItem *mpick = _mask->pick(p, delta, flags);
-            if (!mpick) return nullptr;
+            if (!mpick) {
+                return nullptr;
+            }
         }
     }
 

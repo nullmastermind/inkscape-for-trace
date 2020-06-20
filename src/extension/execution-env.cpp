@@ -25,7 +25,7 @@
 #include "desktop.h"
 #include "object/sp-namedview.h"
 
-#include "display/sp-canvas.h"
+#include "ui/widget/canvas.h"  // To get window (perverse!)
 
 namespace Inkscape {
 namespace Extension {
@@ -112,10 +112,11 @@ ExecutionEnv::createWorkingDialog () {
     }
 
     SPDesktop *desktop = (SPDesktop *)_doc;
-    GtkWidget *toplevel = gtk_widget_get_toplevel(GTK_WIDGET(desktop->canvas));
-    if (!toplevel || !gtk_widget_is_toplevel (toplevel))
+    Gtk::Widget *toplevel = desktop->getCanvas()->get_toplevel();
+    Gtk::Window *window = dynamic_cast<Gtk::Window *>(toplevel);
+    if (!window) {
         return;
-    Gtk::Window *window = Glib::wrap(GTK_WINDOW(toplevel), false);
+    }
 
     gchar * dlgmessage = g_strdup_printf(_("'%s' working, please wait..."), _(_effect->get_name()));
     _visibleDialog = new Gtk::MessageDialog(*window,

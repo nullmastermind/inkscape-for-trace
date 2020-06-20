@@ -25,8 +25,6 @@
 #include "style.h"
 #include "verbs.h"
 
-#include "display/sp-canvas.h" // window to world transform
-
 #include "extension/db.h"
 #include "extension/find_extension_by_mime.h"
 
@@ -41,6 +39,7 @@
 #include "ui/clipboard.h"
 #include "ui/interface.h"
 #include "ui/tools/tool-base.h"
+#include "ui/widget/canvas.h"  // Target, canvas to world transform.
 
 #include "widgets/desktop-widget.h"
 #include "widgets/ege-paint-def.h"
@@ -97,8 +96,9 @@ ink_drag_data_received(GtkWidget *widget,
         {
             int destX = 0;
             int destY = 0;
-            gtk_widget_translate_coordinates( widget, GTK_WIDGET(desktop->canvas), x, y, &destX, &destY );
-            Geom::Point where( sp_canvas_window_to_world( desktop->canvas, Geom::Point( destX, destY ) ) );
+            auto canvas = dtw->get_canvas();
+            gtk_widget_translate_coordinates( widget, GTK_WIDGET(canvas->gobj()), x, y, &destX, &destY );
+            Geom::Point where( canvas->canvas_to_world(Geom::Point(destX, destY)));
             Geom::Point const button_dt(desktop->w2d(where));
             Geom::Point const button_doc(desktop->dt2doc(button_dt));
 
@@ -220,8 +220,9 @@ ink_drag_data_received(GtkWidget *widget,
             if ( worked ) {
                 int destX = 0;
                 int destY = 0;
-                gtk_widget_translate_coordinates( widget, GTK_WIDGET(desktop->canvas), x, y, &destX, &destY );
-                Geom::Point where( sp_canvas_window_to_world( desktop->canvas, Geom::Point( destX, destY ) ) );
+                auto canvas = dtw->get_canvas();
+                gtk_widget_translate_coordinates( widget, GTK_WIDGET(canvas->gobj()), x, y, &destX, &destY );
+                Geom::Point where( canvas->canvas_to_world(Geom::Point(destX, destY)));
                 Geom::Point const button_dt(desktop->w2d(where));
                 Geom::Point const button_doc(desktop->dt2doc(button_dt));
 
@@ -426,15 +427,15 @@ ink_drag_setup(SPDesktopWidget* dtw)
         }
     }
 
-    GtkWidget *widget = GTK_WIDGET(dtw->desktop->canvas);
+    auto canvas = dtw->get_canvas();
 
-    gtk_drag_dest_set(widget,
+    gtk_drag_dest_set(GTK_WIDGET(canvas->gobj()),
                       GTK_DEST_DEFAULT_ALL,
                       completeDropTargets,
                       completeDropTargetsCount,
                       GdkDragAction(GDK_ACTION_COPY | GDK_ACTION_MOVE));
 
-    g_signal_connect(G_OBJECT(widget),
+    g_signal_connect(G_OBJECT(canvas->gobj()),
                      "drag_data_received",
                      G_CALLBACK(ink_drag_data_received),
                      dtw);

@@ -23,14 +23,17 @@
 #include <2geom/rect.h>
 #include <boost/intrusive/list.hpp>
 #include <glib-object.h>
+#include <cairo/cairo.h>
 
 #include "ui/control-types.h"
 
 G_BEGIN_DECLS
 
-struct SPCanvas;
-struct SPCanvasBuf;
 struct SPCanvasGroup;
+
+namespace Inkscape::UI::Widget {
+class Canvas;
+}
 
 typedef struct _SPCanvasItemClass SPCanvasItemClass;
 typedef union  _GdkEvent          GdkEvent;
@@ -49,6 +52,24 @@ enum {
 
 extern guint item_signals[ITEM_LAST_SIGNAL];
 
+enum {
+    SP_CANVAS_UPDATE_REQUESTED  = 1 << 0,
+    SP_CANVAS_UPDATE_AFFINE     = 1 << 1
+};
+
+/**
+ * Structure used when rendering canvas items.
+ */
+struct SPCanvasBuf {
+    cairo_t *ct;
+    Geom::IntRect rect;
+    Geom::IntRect canvas_rect; // visible window in world coordinates (i.e. offset by _x0, _y0)
+
+    unsigned char *buf;
+    int buf_rowstride;
+    int device_scale; // For high DPI monitors.
+    bool is_empty;
+};
 
 /**
  * An SPCanvasItem refers to a SPCanvas and to its parent item; it has
@@ -60,7 +81,7 @@ struct SPCanvasItem {
     // boost linked list member hook
     boost::intrusive::list_member_hook<> member_hook_;
 
-    SPCanvas *canvas;
+    Inkscape::UI::Widget::Canvas *canvas;
     SPCanvasItem *parent;
 
     double x1;

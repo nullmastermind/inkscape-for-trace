@@ -48,6 +48,7 @@
 #include "ui/tools-switch.h"
 #include "ui/tools/pen-tool.h"
 
+#include "ui/widget/canvas.h"
 #include "ui/widget/label-tool-item.h"
 #include "ui/widget/combo-tool-item.h"
 #include "ui/widget/spin-button-tool-item.h"
@@ -89,7 +90,7 @@ PencilToolbar::PencilToolbar(SPDesktop *desktop,
             _minpressure =
                 Gtk::manage(new UI::Widget::SpinButtonToolItem("pencil-minpressure", _("Min:"), _minpressure_adj, 0, 0));
             _minpressure->set_tooltip_text(_("Min percent of pressure"));
-            _minpressure->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+            _minpressure->set_focus_widget(desktop->canvas);
             _minpressure_adj->signal_value_changed().connect(
                 sigc::mem_fun(*this, &PencilToolbar::minpressure_value_changed));
             add(*_minpressure);
@@ -101,7 +102,7 @@ PencilToolbar::PencilToolbar(SPDesktop *desktop,
             _maxpressure =
                 Gtk::manage(new UI::Widget::SpinButtonToolItem("pencil-maxpressure", _("Max:"), _maxpressure_adj, 0, 0));
             _maxpressure->set_tooltip_text(_("Max percent of pressure"));
-            _maxpressure->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+            _maxpressure->set_focus_widget(desktop->canvas);
             _maxpressure_adj->signal_value_changed().connect(
                 sigc::mem_fun(*this, &PencilToolbar::maxpressure_value_changed));
             add(*_maxpressure);
@@ -123,7 +124,7 @@ PencilToolbar::PencilToolbar(SPDesktop *desktop,
                 Gtk::manage(new UI::Widget::SpinButtonToolItem("pencil-tolerance", _("Smoothing:"), _tolerance_adj, 1, 2));
             tolerance_item->set_tooltip_text(_("How much smoothing (simplifying) is applied to the line"));
             tolerance_item->set_custom_numeric_menu_data(values, labels);
-            tolerance_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+            tolerance_item->set_focus_widget(desktop->canvas);
             _tolerance_adj->signal_value_changed().connect(sigc::mem_fun(*this, &PencilToolbar::tolerance_value_changed));
             // ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
             add(*tolerance_item);

@@ -23,7 +23,7 @@
 #endif
 
 #include "sp-canvas-group.h"
-#include "sp-canvas.h"
+#include "ui/widget/canvas.h"
 
 // SPCanvasGroup
 G_DEFINE_TYPE(SPCanvasGroup, sp_canvas_group, SP_TYPE_CANVAS_ITEM);

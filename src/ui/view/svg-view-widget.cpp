@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
- * A light-weight widget containing an SPCanvas for rendering an SVG.
+ * A light-weight widget containing an Inkscape canvas for rendering an SVG.
  */
 /*
  * Authors:
@@ -27,13 +27,14 @@
 
 #include "2geom/transforms.h"
 
-#include "display/sp-canvas.h"
 #include "display/sp-canvas-group.h"
 #include "display/sp-canvas-item.h"
 #include "display/canvas-arena.h"
 
 #include "object/sp-item.h"
 #include "object/sp-root.h"
+
+#include "ui/widget/canvas.h"
 
 #include "util/units.h"
 
@@ -120,11 +121,10 @@ SVGViewWidget::SVGViewWidget(SPDocument* document)
     , _width(0.0)
     , _height(0.0)
 {
-    _canvas = SPCanvas::createAA();
-    add(*Glib::wrap(_canvas));
+    _canvas = Gtk::manage(new Inkscape::UI::Widget::Canvas());
 
     SPCanvasItem* item =
-        sp_canvas_item_new(SP_CANVAS(_canvas)->getRoot(), SP_TYPE_CANVAS_GROUP, nullptr);
+        sp_canvas_item_new(_canvas->get_canvas_item_root(), SP_TYPE_CANVAS_GROUP, nullptr);
     _parent = SP_CANVAS_GROUP(item);
 
     _drawing = sp_canvas_item_new (_parent, SP_TYPE_CANVAS_ARENA, nullptr);
@@ -238,7 +238,7 @@ SVGViewWidget::mouseover()
 {
     GdkDisplay *display = gdk_display_get_default();
     GdkCursor  *cursor  = gdk_cursor_new_for_display(display, GDK_HAND2);
-    GdkWindow *window = gtk_widget_get_window (GTK_WIDGET(SP_CANVAS_ITEM(_drawing)->canvas));
+    GdkWindow *window = gtk_widget_get_window (GTK_WIDGET(_canvas->gobj()));
     gdk_window_set_cursor(window, cursor);
     g_object_unref(cursor);
 }
@@ -246,7 +246,7 @@ SVGViewWidget::mouseover()
 void
 SVGViewWidget::mouseout()
 {
-    GdkWindow *window = gtk_widget_get_window (GTK_WIDGET(SP_CANVAS_ITEM(_drawing)->canvas));
+    GdkWindow *window = gtk_widget_get_window (GTK_WIDGET(_canvas->gobj()));
     gdk_window_set_cursor(window, nullptr);
 }
 

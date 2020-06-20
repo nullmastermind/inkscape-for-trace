@@ -32,7 +32,6 @@
 #include "display/curve.h"
 #include "display/sodipodi-ctrl.h"
 #include "display/sp-canvas-util.h"
-#include "display/sp-canvas.h"
 #include "display/sp-ctrlcurve.h"
 #include "display/sp-ctrlline.h"
 
@@ -52,6 +51,7 @@
 #include "ui/dialog/knot-properties.h"
 #include "ui/tools/freehand-base.h"
 #include "ui/tools/measure-tool.h"
+#include "ui/widget/canvas.h" // Canvas area
 
 #include "util/units.h"
 
@@ -169,7 +169,7 @@ Geom::Point calcAngleDisplayAnchor(SPDesktop *desktop, double angle, double base
 
     // We now have the ideal position, but need to see if it will fit/work.
 
-    Geom::Rect screen_world = desktop->canvas->getViewbox();
+    Geom::Rect screen_world = desktop->getCanvas()->get_area_world();
     screen_world.expandBy(fontsize * -3, fontsize / -2);
     where = desktop->w2d(screen_world.clamp(desktop->d2w(where)));
 
@@ -340,7 +340,7 @@ MeasureTool::MeasureTool()
     this->knot_end->setStroke(0x0000007f, 0x0000007f, 0x0000007f, 0x0000007f);
     this->knot_end->setShape(SP_KNOT_SHAPE_CIRCLE);
     this->knot_end->updateCtrl();
-    Geom::Rect screen_world = desktop->canvas->getViewbox();
+    Geom::Rect screen_world = desktop->getCanvas()->get_area_world();
     if (screen_world.interiorContains(desktop->d2w(start_p)) && //
         screen_world.interiorContains(desktop->d2w(end_p)) && end_p != Geom::Point()) {
         this->knot_start->moveto(start_p);

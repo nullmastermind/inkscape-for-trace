@@ -18,29 +18,34 @@
 
 #include <algorithm>
 #include <cstring>
-#include <string>
 #include <vector>
-
-#include "display/sp-canvas.h"
-#include "display/guideline.h"
-#include "svg/svg.h"
-#include "svg/svg-color.h"
-#include "svg/stringstream.h"
-#include "attributes.h"
-#include "sp-guide.h"
-#include "sp-item-notify-moveto.h"
 #include <glibmm/i18n.h>
-#include <xml/repr.h>
-#include <remove-last.h>
-#include "inkscape.h"
+
+#include "attributes.h"
 #include "desktop.h"
-#include "sp-root.h"
-#include "sp-namedview.h"
 #include "document-undo.h"
 #include "helper-fns.h"
+#include "inkscape.h"
+#include "remove-last.h"
 #include "verbs.h"
 
+#include "sp-guide.h"
+#include "sp-item-notify-moveto.h"
+#include "sp-namedview.h"
+#include "sp-root.h"
+
+#include "display/guideline.h"
+
+#include "svg/stringstream.h"
+#include "svg/svg-color.h"
+#include "svg/svg.h"
+
+#include "ui/widget/canvas.h"
+
+#include "xml/repr.h"
+
 using Inkscape::DocumentUndo;
+
 
 SPGuide::SPGuide()
     : SPObject()
@@ -316,10 +321,9 @@ void SPGuide::showSPGuide()
     }
 }
 
-void SPGuide::hideSPGuide(SPCanvas *canvas)
+void SPGuide::hideSPGuide(Inkscape::UI::Widget::Canvas *canvas)
 {
     g_assert(canvas != nullptr);
-    g_assert(SP_IS_CANVAS(canvas));
     for(std::vector<SPGuideLine *>::iterator it = this->views.begin(); it != this->views.end(); ++it) {
         if (canvas == SP_CANVAS_ITEM(*it)->canvas) {
             sp_guideline_delete(*it);
@@ -341,10 +345,9 @@ void SPGuide::hideSPGuide()
     }
 }
 
-void SPGuide::sensitize(SPCanvas *canvas, bool sensitive)
+void SPGuide::sensitize(Inkscape::UI::Widget::Canvas *canvas, bool sensitive)
 {
     g_assert(canvas != nullptr);
-    g_assert(SP_IS_CANVAS(canvas));
 
     for(std::vector<SPGuideLine *>::const_iterator it = this->views.begin(); it != this->views.end(); ++it) {
         if (canvas == SP_CANVAS_ITEM(*it)->canvas) {

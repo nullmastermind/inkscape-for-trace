@@ -23,9 +23,10 @@
 #include "sp-canvas-util.h"
 #include "inkscape.h"
 #include "guideline.h"
+
 #include "display/cairo-utils.h"
-#include "display/sp-canvas.h"
 #include "display/sodipodi-ctrl.h"
+
 #include "object/sp-namedview.h"
 
 static void sp_guideline_destroy(SPCanvasItem *object);

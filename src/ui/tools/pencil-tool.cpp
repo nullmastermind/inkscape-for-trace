@@ -37,7 +37,6 @@
 
 #include "display/canvas-bpath.h"
 #include "display/curve.h"
-#include "display/sp-canvas.h"
 
 #include "livarot/Path.h"  // Simplify paths
 
@@ -552,8 +551,6 @@ void PencilTool::_cancel() {
 
     this->message_context->clear();
     this->message_context->flash(Inkscape::NORMAL_MESSAGE, _("Drawing cancelled"));
-
-    this->desktop->canvas->endForcedFullRedraws();
 }
 
 bool PencilTool::_handleKeyPress(GdkEventKey const &event) {

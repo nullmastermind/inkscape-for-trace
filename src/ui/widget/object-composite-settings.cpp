@@ -92,7 +92,6 @@ ObjectCompositeSettings::_blendBlurValueChanged()
         return;
     _blocked = true;
 
-
     Geom::OptRect bbox = _subject->getBounds(SPItem::GEOMETRIC_BBOX);
     double radius;
     if (bbox) {

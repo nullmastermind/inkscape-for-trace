@@ -46,6 +46,7 @@
 #include "ui/icon-names.h"
 #include "ui/tools/connector-tool.h"
 #include "ui/uxmanager.h"
+#include "ui/widget/canvas.h"
 #include "ui/widget/spin-button-tool-item.h"
 
 #include "xml/node-event-vector.h"
@@ -105,7 +106,7 @@ ConnectorToolbar::ConnectorToolbar(SPDesktop *desktop)
     _curvature_adj = Gtk::Adjustment::create(curvature_val, 0, 100, 1.0, 10.0);
     auto curvature_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("inkscape:connector-curvature", _("Curvature:"), _curvature_adj, 1, 0));
     curvature_item->set_tooltip_text(_("The amount of connectors curvature"));
-    curvature_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+    curvature_item->set_focus_widget(desktop->canvas);
     _curvature_adj->signal_value_changed().connect(sigc::mem_fun(*this, &ConnectorToolbar::curvature_changed));
     add(*curvature_item);
 
@@ -114,7 +115,7 @@ ConnectorToolbar::ConnectorToolbar(SPDesktop *desktop)
     _spacing_adj = Gtk::Adjustment::create(spacing_val, 0, 100, 1.0, 10.0);
     auto spacing_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("inkscape:connector-spacing", _("Spacing:"), _spacing_adj, 1, 0));
     spacing_item->set_tooltip_text(_("The amount of space left around objects by auto-routing connectors"));
-    spacing_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+    spacing_item->set_focus_widget(desktop->canvas);
     _spacing_adj->signal_value_changed().connect(sigc::mem_fun(*this, &ConnectorToolbar::spacing_changed));
     add(*spacing_item);
 
@@ -132,7 +133,7 @@ ConnectorToolbar::ConnectorToolbar(SPDesktop *desktop)
     _length_adj = Gtk::Adjustment::create(length_val, 10, 1000, 10.0, 100.0);
     auto length_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("inkscape:connector-length", _("Length:"), _length_adj, 1, 0));
     length_item->set_tooltip_text(_("Ideal length for connectors when layout is applied"));
-    length_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+    length_item->set_focus_widget(desktop->canvas);
     _length_adj->signal_value_changed().connect(sigc::mem_fun(*this, &ConnectorToolbar::length_changed));
     add(*length_item);
 
@@ -416,7 +417,9 @@ ConnectorToolbar::event_attr_changed(Inkscape::XML::Node *repr,
 
         toolbar->_spacing_adj->set_value(spacing);
 
-        if(toolbar->_desktop->canvas) gtk_widget_grab_focus(GTK_WIDGET(toolbar->_desktop->canvas));
+        if (toolbar->_desktop->canvas) {
+            toolbar->_desktop->canvas->grab_focus();
+        }
     }
 }
 

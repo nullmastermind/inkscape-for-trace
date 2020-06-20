@@ -24,8 +24,6 @@
 #include "path-chemistry.h"     // copy_object_properties()
 #include "verbs.h"
 
-#include "display/sp-canvas.h"  // Disable drawing during op
-
 #include "helper/geom.h"        // pathv_to_linear_and_cubic_beziers()
 
 #include "livarot/Path.h"
@@ -34,6 +32,8 @@
 #include "object/sp-flowtext.h"
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
+
+#include "ui/widget/canvas.h"  // Disable drawing during op
 
 #include "svg/svg.h"
 
@@ -304,9 +304,9 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
     if (nullptr != desktop() && !checked) {
         SPDocument *doc = desktop()->getDocument();
         // don't redraw the canvas during the operation as that can remarkably slow down the progress
-        desktop()->getCanvas()->_drawing_disabled = true;
+        desktop()->getCanvas()->set_drawing_disabled(true);
         BoolOpErrors returnCode = ObjectSet::pathBoolOp(bop, true, true);
-        desktop()->getCanvas()->_drawing_disabled = false;
+        desktop()->getCanvas()->set_drawing_disabled(false);
 
         switch(returnCode) {
         case ERR_TOO_LESS_PATHS_1:

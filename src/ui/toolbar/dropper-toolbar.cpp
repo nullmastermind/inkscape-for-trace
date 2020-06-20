@@ -32,6 +32,8 @@
 #include "preferences.h"
 #include "desktop.h"
 
+#include "ui/widget/canvas.h" // Grab focus
+
 namespace Inkscape {
 namespace UI {
 namespace Toolbar {
@@ -44,14 +46,14 @@ void DropperToolbar::on_pick_alpha_button_toggled()
     prefs->setInt( "/tools/dropper/pick", active );
 
     _set_alpha_button->set_sensitive(active);
-    gtk_widget_grab_focus(GTK_WIDGET(_desktop->canvas));
+    _desktop->canvas->grab_focus();
 }
 
 void DropperToolbar::on_set_alpha_button_toggled()
 {
     auto prefs = Inkscape::Preferences::get();
     prefs->setBool( "/tools/dropper/setalpha", _set_alpha_button->get_active( ) );
-    gtk_widget_grab_focus(GTK_WIDGET(_desktop->canvas));
+    _desktop->canvas->grab_focus();
 }
 
 /*

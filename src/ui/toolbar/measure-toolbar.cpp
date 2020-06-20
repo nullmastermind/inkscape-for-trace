@@ -37,6 +37,7 @@
 
 #include "ui/icon-names.h"
 #include "ui/tools/measure-tool.h"
+#include "ui/widget/canvas.h"
 #include "ui/widget/combo-tool-item.h"
 #include "ui/widget/label-tool-item.h"
 #include "ui/widget/spin-button-tool-item.h"
@@ -73,7 +74,7 @@ MeasureToolbar::MeasureToolbar(SPDesktop *desktop)
         _font_size_adj = Gtk::Adjustment::create(font_size_val, 1.0, 36.0, 1.0, 4.0);
         auto font_size_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("measure-fontsize", _("Font Size:"), _font_size_adj, 0, 2));
         font_size_item->set_tooltip_text(_("The font size to be used in the measurement labels"));
-        font_size_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+        font_size_item->set_focus_widget(desktop->canvas);
         _font_size_adj->signal_value_changed().connect(sigc::mem_fun(*this, &MeasureToolbar::fontsize_value_changed));
         add(*font_size_item);
     }
@@ -84,7 +85,7 @@ MeasureToolbar::MeasureToolbar(SPDesktop *desktop)
         _precision_adj = Gtk::Adjustment::create(precision_val, 0, 10, 1, 0);
         auto precision_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("measure-precision", _("Precision:"), _precision_adj, 0, 0));
         precision_item->set_tooltip_text(_("Decimal precision of measure"));
-        precision_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+        precision_item->set_focus_widget(desktop->canvas);
         _precision_adj->signal_value_changed().connect(sigc::mem_fun(*this, &MeasureToolbar::precision_value_changed));
         add(*precision_item);
     }
@@ -95,7 +96,7 @@ MeasureToolbar::MeasureToolbar(SPDesktop *desktop)
         _scale_adj = Gtk::Adjustment::create(scale_val, 0.0, 90000.0, 1.0, 4.0);
         auto scale_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("measure-scale", _("Scale %:"), _scale_adj, 0, 3));
         scale_item->set_tooltip_text(_("Scale the results"));
-        scale_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+        scale_item->set_focus_widget(desktop->canvas);
         _scale_adj->signal_value_changed().connect(sigc::mem_fun(*this, &MeasureToolbar::scale_value_changed));
         add(*scale_item);
     }
@@ -215,7 +216,7 @@ MeasureToolbar::MeasureToolbar(SPDesktop *desktop)
         _offset_adj = Gtk::Adjustment::create(offset_val, 0.0, 90000.0, 1.0, 4.0);
         auto offset_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("measure-offset", _("Offset:"), _offset_adj, 0, 2));
         offset_item->set_tooltip_text(_("Mark dimension offset"));
-        offset_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+        offset_item->set_focus_widget(desktop->canvas);
         _offset_adj->signal_value_changed().connect(sigc::mem_fun(*this, &MeasureToolbar::offset_value_changed));
         add(*offset_item);
     }

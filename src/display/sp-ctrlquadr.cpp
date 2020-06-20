@@ -12,11 +12,13 @@
  */
 
 #include "sp-canvas-item.h"
-#include "sp-canvas.h"
 #include "sp-canvas-util.h"
 #include "sp-ctrlquadr.h"
-#include "display/cairo-utils.h"
+#include "cairo-utils.h"
+
 #include "color.h"
+
+#include "ui/widget/canvas.h"
 
 struct SPCtrlQuadr : public SPCanvasItem{
     guint32 rgba;
@@ -112,7 +114,7 @@ static void sp_ctrlquadr_update(SPCanvasItem *item, Geom::Affine const &affine, 
 {
     SPCtrlQuadr *cq = SP_CTRLQUADR(item);
 
-    item->canvas->requestRedraw((int)item->x1, (int)item->y1, (int)item->x2, (int)item->y2);
+    item->canvas->redraw_area((int)item->x1, (int)item->y1, (int)item->x2, (int)item->y2);
 
     if (SP_CANVAS_ITEM_CLASS(sp_ctrlquadr_parent_class)->update) {
         SP_CANVAS_ITEM_CLASS(sp_ctrlquadr_parent_class)->update(item, affine, flags);
@@ -132,7 +134,7 @@ static void sp_ctrlquadr_update(SPCanvasItem *item, Geom::Affine const &affine, 
     item->x2 = (int)(MAX4(p1[Geom::X], p2[Geom::X], p3[Geom::X], p4[Geom::X]));
     item->y2 = (int)(MAX4(p1[Geom::Y], p2[Geom::Y], p3[Geom::Y], p4[Geom::Y]));
 
-    item->canvas->requestRedraw((int)item->x1, (int)item->y1, (int)item->x2, (int)item->y2);
+    item->canvas->redraw_area((int)item->x1, (int)item->y1, (int)item->x2, (int)item->y2);
 }
 
 void
@@ -145,7 +147,7 @@ sp_ctrlquadr_set_rgba32 (SPCtrlQuadr *cl, guint32 rgba)
         SPCanvasItem *item;
         cl->rgba = rgba;
         item = SP_CANVAS_ITEM (cl);
-        item->canvas->requestRedraw((int)item->x1, (int)item->y1, (int)item->x2, (int)item->y2);
+        item->canvas->redraw_area((int)item->x1, (int)item->y1, (int)item->x2, (int)item->y2);
     }
 }
 

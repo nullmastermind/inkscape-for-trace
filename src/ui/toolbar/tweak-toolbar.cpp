@@ -37,6 +37,7 @@
 
 #include "ui/icon-names.h"
 #include "ui/tools/tweak-tool.h"
+#include "ui/widget/canvas.h"
 #include "ui/widget/label-tool-item.h"
 #include "ui/widget/spinbutton.h"
 #include "ui/widget/spin-button-tool-item.h"
@@ -59,7 +60,7 @@ TweakToolbar::TweakToolbar(SPDesktop *desktop)
         _width_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("tweak-width", _("Width:"), _width_adj, 0.01, 0));
         _width_item->set_tooltip_text(_("The width of the tweak area (relative to the visible canvas area)"));
         _width_item->set_custom_numeric_menu_data(values, labels);
-        _width_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+        _width_item->set_focus_widget(desktop->canvas);
         _width_adj->signal_value_changed().connect(sigc::mem_fun(*this, &TweakToolbar::width_value_changed));
         // ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
         add(*_width_item);
@@ -75,7 +76,7 @@ TweakToolbar::TweakToolbar(SPDesktop *desktop)
         _force_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("tweak-force", _("Force:"), _force_adj, 0.01, 0));
         _force_item->set_tooltip_text(_("The force of the tweak action"));
         _force_item->set_custom_numeric_menu_data(values, labels);
-        _force_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+        _force_item->set_focus_widget(desktop->canvas);
         _force_adj->signal_value_changed().connect(sigc::mem_fun(*this, &TweakToolbar::force_value_changed));
         // ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
         add(*_force_item);
@@ -186,7 +187,7 @@ TweakToolbar::TweakToolbar(SPDesktop *desktop)
         _fidelity_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("tweak-fidelity", _("Fidelity:"), _fidelity_adj, 0.01, 0));
         _fidelity_item->set_tooltip_text(_("Low fidelity simplifies paths; high fidelity preserves path features but may generate a lot of new nodes"));
         _fidelity_item->set_custom_numeric_menu_data(values, labels);
-        _fidelity_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+        _fidelity_item->set_focus_widget(desktop->canvas);
         _fidelity_adj->signal_value_changed().connect(sigc::mem_fun(*this, &TweakToolbar::fidelity_value_changed));
         add(*_fidelity_item);
     }

@@ -25,12 +25,12 @@
 #include <gdkmm.h>
 
 #include "sp-canvas-item.h"
-#include "sp-canvas.h"
 #include "sp-canvas-group.h"
 #include "sodipodi-ctrlrect.h"
 
 #include "helper/sp-marshal.h"
 
+#include "ui/widget/canvas.h"
 
 void trackLatency(GdkEvent const *event);
 
@@ -158,7 +158,7 @@ static void redraw_if_visible(SPCanvasItem *item)
         int y1 = (int)(item->y2);
 
         if (x0 !=0 || x1 !=0 || y0 !=0 || y1 !=0) {
-            item->canvas->requestRedraw((int)(item->x1 - 1), (int)(item->y1 -1), (int)(item->x2 + 1), (int)(item->y2 + 1));
+            item->canvas->redraw_area((int)(item->x1 - 1), (int)(item->y1 -1), (int)(item->x2 + 1), (int)(item->y2 + 1));
         }
     }
 }
@@ -193,24 +193,7 @@ void sp_canvas_item_dispose(GObject *object)
       }
       item->visible = FALSE;
 
-      if (item == item->canvas->_current_item) {
-          item->canvas->_current_item = nullptr;
-          item->canvas->_need_repick = TRUE;
-      }
-
-      if (item == item->canvas->_new_current_item) {
-          item->canvas->_new_current_item = nullptr;
-          item->canvas->_need_repick = TRUE;
-      }
-
-      if (item == item->canvas->_grabbed_item) {
-          item->canvas->_grabbed_item = nullptr;
-          ungrab_default_client_pointer();
-      }
-
-      if (item == item->canvas->_focused_item) {
-          item->canvas->_focused_item = nullptr;
-      }
+      item->canvas->canvas_item_clear(item);
 
       if (item->parent) {
           SP_CANVAS_GROUP(item->parent)->remove(item);
@@ -283,6 +266,7 @@ void sp_canvas_item_invoke_update(SPCanvasItem *item, Geom::Affine const &affine
  */
 double sp_canvas_item_invoke_point(SPCanvasItem *item, Geom::Point p, SPCanvasItem **actual_item)
 {
+//    std::cout << "sp_canvas_item_invoke_point: " << item->name << std::endl;
     if (SP_CANVAS_ITEM_GET_CLASS(item)->point) {
         return SP_CANVAS_ITEM_GET_CLASS (item)->point (item, p, actual_item);
     }
@@ -306,11 +290,11 @@ void sp_canvas_item_affine_absolute(SPCanvasItem *item, Geom::Affine const &affi
         if (item->parent != nullptr) {
             sp_canvas_item_request_update (item->parent);
         } else {
-            item->canvas->requestUpdate();
+            item->canvas->request_update();
         }
     }
 
-    item->canvas->_need_repick = TRUE;
+    item->canvas->set_need_repick(true);
 }
 
 /**
@@ -344,7 +328,7 @@ void sp_canvas_item_raise(SPCanvasItem *item, int positions)
     parent->items.insert(to, *item);
 
     redraw_if_visible (item);
-    item->canvas->_need_repick = TRUE;
+    item->canvas->set_need_repick();
 }
 
 void sp_canvas_item_raise_to_top(SPCanvasItem *item)
@@ -357,7 +341,7 @@ void sp_canvas_item_raise_to_top(SPCanvasItem *item)
     parent->items.erase(parent->items.iterator_to(*item));
     parent->items.push_back(*item);
     redraw_if_visible (item);
-    item->canvas->_need_repick = TRUE;
+    item->canvas->set_need_repick();
 }
 
 
@@ -395,7 +379,7 @@ void sp_canvas_item_lower(SPCanvasItem *item, int positions)
     parent->items.insert(to, *item);
 
     redraw_if_visible (item);
-    item->canvas->_need_repick = TRUE;
+    item->canvas->set_need_repick();
 }
 
 void sp_canvas_item_lower_to_bottom(SPCanvasItem *item)
@@ -408,7 +392,7 @@ void sp_canvas_item_lower_to_bottom(SPCanvasItem *item)
     parent->items.erase(parent->items.iterator_to(*item));
     parent->items.push_front(*item);
     redraw_if_visible (item);
-    item->canvas->_need_repick = TRUE;
+    item->canvas->set_need_repick();
 }
 
 bool sp_canvas_item_is_visible(SPCanvasItem *item)
@@ -436,8 +420,9 @@ void sp_canvas_item_show(SPCanvasItem *item)
     int y1 = (int)(item->y2);
 
     if (x0 !=0 || x1 !=0 || y0 !=0 || y1 !=0) {
-        item->canvas->requestRedraw((int)(item->x1), (int)(item->y1), (int)(item->x2 + 1), (int)(item->y2 + 1));
-        item->canvas->_need_repick = TRUE;
+        // This looks funny, why can't x0 be 0?
+        item->canvas->redraw_area(x0, y0, x1+1, y1+1);
+        item->canvas->set_need_repick();
     }
 }
 
@@ -461,8 +446,8 @@ void sp_canvas_item_hide(SPCanvasItem *item)
     int y1 = (int)(item->y2);
 
     if (x0 !=0 || x1 !=0 || y0 !=0 || y1 !=0) {
-        item->canvas->requestRedraw((int)item->x1, (int)item->y1, (int)(item->x2 + 1), (int)(item->y2 + 1));
-        item->canvas->_need_repick = TRUE;
+        item->canvas->redraw_area(x0, y0, x1+1, y1+1);
+        item->canvas->set_need_repick();
     }
 }
 
@@ -475,9 +460,10 @@ int sp_canvas_item_grab(SPCanvasItem *item, guint event_mask, GdkCursor *cursor,
 {
     g_return_val_if_fail (item != nullptr, -1);
     g_return_val_if_fail (SP_IS_CANVAS_ITEM (item), -1);
-    g_return_val_if_fail (gtk_widget_get_mapped (GTK_WIDGET (item->canvas)), -1);
+//    g_return_val_if_fail (gtk_widget_get_mapped (GTK_WIDGET (item->canvas)), -1);
 
-    if (item->canvas->_grabbed_item) {
+    // Don't grab if we alread have a grabbed item!
+    if (item->canvas->get_grabbed_item()) {
         return -1;
     }
 
@@ -494,7 +480,7 @@ int sp_canvas_item_grab(SPCanvasItem *item, guint event_mask, GdkCursor *cursor,
     // fixme: But Canvas actually does get key events, so all we need is routing these here
     auto display = gdk_display_get_default();
     auto seat    = gdk_display_get_default_seat(display);
-    GdkWindow *window = gtk_widget_get_window(reinterpret_cast<GtkWidget *>(item->canvas));
+    GdkWindow *window = gtk_widget_get_window(reinterpret_cast<GtkWidget *>(item->canvas->gobj()));
     gdk_seat_grab(seat,
                   window,
                   GDK_SEAT_CAPABILITY_ALL_POINTING,
@@ -504,9 +490,8 @@ int sp_canvas_item_grab(SPCanvasItem *item, guint event_mask, GdkCursor *cursor,
                   nullptr,
                   nullptr);
 
-    item->canvas->_grabbed_item = item;
-    item->canvas->_grabbed_event_mask = event_mask;
-    item->canvas->_current_item = item; // So that events go to the grabbed item
+    item->canvas->set_grabbed_item(item, event_mask);
+    item->canvas->set_current_item(item); // So that events go to the grabbed item
 
     return 0;
 }
@@ -522,12 +507,15 @@ void sp_canvas_item_ungrab(SPCanvasItem *item)
     g_return_if_fail (item != nullptr);
     g_return_if_fail (SP_IS_CANVAS_ITEM (item));
 
-    if (item->canvas->_grabbed_item != item) {
+    if (item->canvas->get_grabbed_item() != item) {
         return;
     }
 
-    item->canvas->_grabbed_item = nullptr;
-    ungrab_default_client_pointer();
+    item->canvas->set_grabbed_item(nullptr, 0);
+
+    auto const display = Gdk::Display::get_default();
+    auto const seat    = display->get_default_seat();
+    seat->ungrab();
 }
 
 /**
@@ -579,7 +567,7 @@ void sp_canvas_item_request_update(SPCanvasItem *item)
         sp_canvas_item_request_update (item->parent);
     } else {
         // Have reached the top of the tree, make sure the update call gets scheduled.
-        item->canvas->requestUpdate();
+        item->canvas->request_update();
     }
 }
 

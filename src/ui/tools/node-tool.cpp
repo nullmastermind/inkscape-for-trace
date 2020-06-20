@@ -58,7 +58,6 @@
 #include "ui/tools/node-tool.h"
 #include "ui/tools/tool-base.h"
 
-
 /** @struct NodeTool
  *
  * Node tool event context.
@@ -189,6 +188,7 @@ NodeTool::~NodeTool() {
     destroy_group(data.outline_group);
     destroy_group(data.dragpoint_group);
     destroy_group(this->_transform_handle_group);
+
     forced_redraws_stop();
 }
 

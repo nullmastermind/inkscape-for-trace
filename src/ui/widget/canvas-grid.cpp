@@ -20,8 +20,8 @@
 #include <glibmm/i18n.h>
 
 #include "canvas-grid.h"
+#include "ui/widget/canvas.h"
 
-#include "display/sp-canvas.h"
 #include "ui/widget/ink-ruler.h"
 #include "ui/icon-loader.h"
 
@@ -40,12 +40,11 @@ CanvasGrid::CanvasGrid(SPDesktopWidget *dtw)
     set_name("CanvasGrid");
 
     // Canvas
-    _canvas = SP_CANVAS(SPCanvas::createAA());
-    auto canvas = Glib::wrap(GTK_WIDGET(_canvas));
-    canvas->set_hexpand(true);
-    canvas->set_vexpand(true);
-    canvas->set_can_focus(true);
-    canvas->signal_event().connect(sigc::mem_fun(*this, &CanvasGrid::SignalEvent)); // TEMP
+    _canvas = Gtk::manage(new Inkscape::UI::Widget::Canvas());
+    _canvas->set_hexpand(true);
+    _canvas->set_vexpand(true);
+    _canvas->set_can_focus(true);
+    _canvas->signal_event().connect(sigc::mem_fun(*this, &CanvasGrid::SignalEvent)); // TEMP
 
     // Horizontal Scrollbar
     _hadj = Gtk::Adjustment::create(0.0, -4000.0, 4000.0, 10.0, 100.0, 4.0);
@@ -63,7 +62,7 @@ CanvasGrid::CanvasGrid(SPDesktopWidget *dtw)
 
     // Horizontal Ruler
     _hruler = Gtk::manage(new Inkscape::UI::Widget::Ruler(Gtk::ORIENTATION_HORIZONTAL));
-    _hruler->add_track_widget(*Glib::wrap(GTK_WIDGET(_canvas)));
+    _hruler->add_track_widget(*_canvas);
     _hruler->set_hexpand(true);
     // Tooltip/Unit set elsewhere.
 
@@ -77,7 +76,7 @@ CanvasGrid::CanvasGrid(SPDesktopWidget *dtw)
 
     // Vertical Ruler
     _vruler = Gtk::manage(new Inkscape::UI::Widget::Ruler(Gtk::ORIENTATION_VERTICAL));
-    _vruler->add_track_widget(*Glib::wrap(GTK_WIDGET(_canvas)));
+    _vruler->add_track_widget(*_canvas);
     _vruler->set_vexpand(true);
     // Tooltip/Unit set elsewhere.
 
@@ -127,7 +126,7 @@ CanvasGrid::CanvasGrid(SPDesktopWidget *dtw)
 
     // Middle row
     attach(*_vruler,      0, 1, 1, 1);
-    attach(*canvas,       1, 1, 1, 1);
+    attach(*_canvas,      1, 1, 1, 1);
     attach(*_vscrollbar,  2, 1, 1, 1);
 
     // Bottom row
@@ -205,21 +204,20 @@ CanvasGrid::ShowRulers(bool state)
     // won't expand fully.
     _show_rulers = state;
 
-    auto canvas = Glib::wrap(GTK_WIDGET(_canvas));
     if (_show_rulers) {
         // Show rulers
         _hruler->show();
         _vruler->show();
         _guide_lock->show();
-        remove(*canvas);
-        attach(*canvas, 1, 1, 1, 1);
+        remove(*_canvas);
+        attach(*_canvas, 1, 1, 1, 1);
     } else {
         // Hide rulers
         _hruler->hide();
         _vruler->hide();
         _guide_lock->hide();
-        remove(*canvas);
-        attach(*canvas, 1, 0, 1, 2);
+        remove(*_canvas);
+        attach(*_canvas, 1, 0, 1, 2);
     }
 }
 
@@ -250,7 +248,7 @@ bool
 CanvasGrid::SignalEvent(GdkEvent *event)
 {
     if (event->type == GDK_BUTTON_PRESS) {
-        gtk_widget_grab_focus (GTK_WIDGET(_canvas));
+        _canvas->grab_focus();
     }
 
     if (event->type == GDK_BUTTON_PRESS && event->button.button == 3) {
@@ -269,7 +267,7 @@ CanvasGrid::SignalEvent(GdkEvent *event)
         // and passed on by the canvas acetate (I think). --bb
 
         if ((event->type == GDK_KEY_PRESS || event->type == GDK_KEY_RELEASE)
-                && !_canvas->_current_item) {
+            && !_canvas->get_current_item()) {
             return sp_desktop_root_handler (nullptr, event, _dtw->desktop);
         }
     }

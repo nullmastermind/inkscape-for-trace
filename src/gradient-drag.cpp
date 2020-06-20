@@ -35,7 +35,6 @@
 #include "verbs.h"
 
 #include "display/sp-canvas-util.h"
-#include "display/sp-canvas.h"
 #include "display/sp-ctrlcurve.h"
 #include "display/sp-ctrlline.h"
 
@@ -51,6 +50,7 @@
 
 #include "ui/control-manager.h"
 #include "ui/tools/tool-base.h"
+#include "ui/widget/canvas.h" // Forced redraws
 
 #include "xml/sp-css-attr.h"
 
@@ -1061,7 +1061,7 @@ static void gr_knot_mousedown_handler(SPKnot */*knot*/, unsigned int /*state*/, 
         dragger_corner->highlightCorner(true);
     }
 
-    dragger->parent->desktop->canvas->forceFullRedrawAfterInterruptions(5);
+    dragger->parent->desktop->getCanvas()->forced_redraws_start(5);
 }
 
 /**
@@ -1071,7 +1071,7 @@ static void gr_knot_ungrabbed_handler(SPKnot *knot, unsigned int state, gpointer
 {
     GrDragger *dragger = (GrDragger *) data;
 
-    dragger->parent->desktop->canvas->endForcedFullRedraws();
+    dragger->parent->desktop->getCanvas()->forced_redraws_stop();
 
     dragger->point_original = dragger->point = knot->pos;
 

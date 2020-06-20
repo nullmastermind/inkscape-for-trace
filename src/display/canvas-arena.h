@@ -18,7 +18,6 @@
 
 #include "display/drawing.h"
 #include "display/drawing-item.h"
-#include "display/sp-canvas.h"
 #include "display/sp-canvas-item.h"
 
 #define SP_TYPE_CANVAS_ARENA (sp_canvas_arena_get_type ())

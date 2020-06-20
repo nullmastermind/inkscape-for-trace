@@ -15,8 +15,6 @@
 #include <gdk/gdk.h>
 #include <2geom/point.h>
 
-struct SPCanvas;
-
 namespace Inkscape {
 namespace UI {
 

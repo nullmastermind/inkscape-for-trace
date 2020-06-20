@@ -20,6 +20,7 @@ namespace Inkscape {
 namespace UI {
 namespace Widget {
 
+class Canvas;
 class Ruler;
 
 /**
@@ -38,7 +39,7 @@ public:
     void ToggleRulers();
     void UpdateRulers();
 
-    SPCanvas *GetCanvas() { return _canvas; };
+    Inkscape::UI::Widget::Canvas *GetCanvas() { return _canvas; };
 
     // Hopefully temp.
     Inkscape::UI::Widget::Ruler *GetHRuler() { return _vruler; };
@@ -56,7 +57,7 @@ private:
     bool SignalEvent(GdkEvent *event);
 
     // The Widgets
-    SPCanvas          *_canvas;
+    Inkscape::UI::Widget::Canvas *_canvas;
 
     Glib::RefPtr<Gtk::Adjustment> _hadj;
     Glib::RefPtr<Gtk::Adjustment> _vadj;

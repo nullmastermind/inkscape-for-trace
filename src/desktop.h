@@ -40,7 +40,6 @@
 #include "ui/view/view.h"
 
 class SPCSSAttr;
-struct SPCanvas;
 struct SPCanvasItem;
 struct SPCanvasGroup;
 class SPDesktopWidget;
@@ -91,6 +90,7 @@ namespace Inkscape {
       }
 
       namespace Widget {
+              class Canvas;
 	      class Dock;
       }
   }
@@ -139,7 +139,6 @@ public:
     Inkscape::UI::Dialog::DialogManager *_dlg_mgr;
     Inkscape::UI::Dialog::DialogManager *_dlg_mgr_owned = nullptr;
     SPNamedView               *namedview;
-    SPCanvas                  *canvas;
     Inkscape::LayerModel      *layers;
     /// current selection; will never generally be NULL
     Inkscape::Selection       *selection;
@@ -155,7 +154,7 @@ public:
     Inkscape::UI::Tools::ToolBase* getEventContext() const;
     Inkscape::Selection* getSelection() const;
     SPDocument* getDocument() const;
-    SPCanvas* getCanvas() const;
+    Inkscape::UI::Widget::Canvas* getCanvas() const;
     SPCanvasItem* getAcetate() const;
     SPCanvasGroup* getMain() const;
     SPCanvasGroup* getGridGroup() const;
@@ -167,6 +166,7 @@ public:
     Inkscape::MessageStack* getMessageStack() const;
     SPNamedView* getNamedView() const;
 
+    Inkscape::UI::Widget::Canvas *canvas;
     SPCanvasItem  *acetate;
     SPCanvasGroup *main;
     SPCanvasGroup *gridgroup;
@@ -249,7 +249,7 @@ public:
      */
     SPDesktop();
 
-    void init (SPNamedView* nv, SPCanvas* canvas, SPDesktopWidget *widget);
+    void init (SPNamedView* nv, Inkscape::UI::Widget::Canvas* new_canvas, SPDesktopWidget *widget);
     ~SPDesktop() override;
     void destroy();
 

@@ -53,7 +53,6 @@ set(display_SRC
 	sodipodi-ctrl.cpp
 	sodipodi-ctrlrect.cpp
 	sp-canvas-util.cpp
-	sp-canvas.cpp
         sp-canvas-group.cpp
         sp-canvas-item.cpp
 	sp-ctrlcurve.cpp
@@ -122,7 +121,6 @@ set(display_SRC
 	sp-canvas-group.h
 	sp-canvas-item.h
 	sp-canvas-util.h
-	sp-canvas.h
 	sp-ctrlcurve.h
 	sp-ctrlline.h
 	sp-ctrlquadr.h

@@ -42,6 +42,7 @@
 #include "ui/icon-names.h"
 #include "ui/tools/star-tool.h"
 #include "ui/uxmanager.h"
+#include "ui/widget/canvas.h"
 #include "ui/widget/label-tool-item.h"
 #include "ui/widget/spin-button-tool-item.h"
 
@@ -119,7 +120,7 @@ StarToolbar::StarToolbar(SPDesktop *desktop) :
         _magnitude_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("star-magnitude", _("Corners:"), _magnitude_adj, 1.0, 0));
         _magnitude_item->set_tooltip_text(_("Number of corners of a polygon or star"));
         _magnitude_item->set_custom_numeric_menu_data(values, labels);
-        _magnitude_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+        _magnitude_item->set_focus_widget(desktop->canvas);
         _magnitude_adj->signal_value_changed().connect(sigc::mem_fun(*this, &StarToolbar::magnitude_value_changed));
         _magnitude_item->set_sensitive(true);
         add(*_magnitude_item);
@@ -136,7 +137,7 @@ StarToolbar::StarToolbar(SPDesktop *desktop) :
         // Base radius is the same for the closest handle.
         _spoke_item->set_tooltip_text(_("Base radius to tip radius ratio"));
         _spoke_item->set_custom_numeric_menu_data(values, labels);
-        _spoke_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+        _spoke_item->set_focus_widget(desktop->canvas);
         _spoke_adj->signal_value_changed().connect(sigc::mem_fun(*this, &StarToolbar::proportion_value_changed));
 
         add(*_spoke_item);
@@ -152,7 +153,7 @@ StarToolbar::StarToolbar(SPDesktop *desktop) :
         _roundedness_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("star-roundedness", _("Rounded:"), _roundedness_adj));
         _roundedness_item->set_tooltip_text(_("How rounded are the corners (0 for sharp)"));
         _roundedness_item->set_custom_numeric_menu_data(values, labels);
-        _roundedness_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+        _roundedness_item->set_focus_widget(desktop->canvas);
         _roundedness_adj->signal_value_changed().connect(sigc::mem_fun(*this, &StarToolbar::rounded_value_changed));
         _roundedness_item->set_sensitive(true);
         add(*_roundedness_item);
@@ -167,7 +168,7 @@ StarToolbar::StarToolbar(SPDesktop *desktop) :
         _randomization_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("star-randomized", _("Randomized:"), _randomization_adj, 0.1, 3));
         _randomization_item->set_tooltip_text(_("Scatter randomly the corners and angles"));
         _randomization_item->set_custom_numeric_menu_data(values, labels);
-        _randomization_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+        _randomization_item->set_focus_widget(desktop->canvas);
         _randomization_adj->signal_value_changed().connect(sigc::mem_fun(*this, &StarToolbar::randomized_value_changed));
         _randomization_item->set_sensitive(true);
         add(*_randomization_item);

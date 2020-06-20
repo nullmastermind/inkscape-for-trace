@@ -29,6 +29,7 @@
 #include "ui/tool/path-manipulator.h"
 #include "ui/tools/node-tool.h"
 #include "ui/tools-switch.h"
+#include "ui/widget/canvas.h"
 
 namespace {
 

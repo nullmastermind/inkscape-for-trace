@@ -31,6 +31,7 @@
 #include "helper/geom.h"
 
 #include "svg/svg.h"
+#include "ui/widget/canvas.h" // Canvas area
 
 namespace Inkscape {
 
@@ -328,14 +329,12 @@ DrawingShape::_pickItem(Geom::Point const &p, double delta, unsigned flags)
 
     if (!_curve) return nullptr;
     if (!_style) return nullptr;
-
     bool outline = _drawing.outline() || _drawing.getOutlineSensitive();
     bool pick_as_clip = flags & PICK_AS_CLIP;
 
     if (SP_SCALE24_TO_FLOAT(_style->opacity.value) == 0 && !outline && !pick_as_clip) 
         // fully transparent, no pick unless outline mode
         return nullptr;
-
 
     gint64 tstart = g_get_monotonic_time();
 
@@ -363,7 +362,7 @@ DrawingShape::_pickItem(Geom::Point const &p, double delta, unsigned flags)
 
     // actual shape picking
     if (_drawing.arena()) {
-        Geom::Rect viewbox = _drawing.arena()->item.canvas->getViewbox();
+        Geom::Rect viewbox = _drawing.arena()->item.canvas->get_area_world();
         viewbox.expandBy (width);
         pathv_matrix_point_bbox_wind_distance(_curve->get_pathvector(), _ctm, p, nullptr, needfill? &wind : nullptr, &dist, 0.5, &viewbox);
     } else {

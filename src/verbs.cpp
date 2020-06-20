@@ -50,7 +50,6 @@
 #include "text-chemistry.h"
 
 #include "display/curve.h"
-#include "display/sp-canvas.h"
 
 #include "extension/effect.h"
 
@@ -93,6 +92,7 @@
 #include "ui/tools/freehand-base.h"
 #include "ui/tools/node-tool.h"
 #include "ui/tools/select-tool.h"
+#include "ui/widget/canvas.h"  // Canvas area
 
 using Inkscape::DocumentUndo;
 using Inkscape::UI::Dialog::ActionAlign;
@@ -1899,7 +1899,7 @@ void ZoomVerb::perform(SPAction *action, void *data)
 
     //Geom::Rect const d = dt->get_display_area();
 
-    Geom::Rect const d_canvas = dt->getCanvas()->getViewbox(); // Not SVG 'viewBox'
+    Geom::Rect const d_canvas = dt->getCanvas()->get_area_world();
     Geom::Point midpoint = dt->w2d(d_canvas.midpoint()); // Midpoint of drawing on canvas.
 
     switch (reinterpret_cast<std::size_t>(data)) {

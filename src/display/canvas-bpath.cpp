@@ -17,13 +17,16 @@
 #include "desktop.h"
 
 #include "color.h"
-#include "display/sp-canvas-group.h"
-#include "display/sp-canvas-util.h"
-#include "display/canvas-bpath.h"
-#include "display/curve.h"
-#include "display/cairo-utils.h"
+
+#include "sp-canvas-group.h"
+#include "sp-canvas-util.h"
+#include "canvas-bpath.h"
+#include "curve.h"
+#include "cairo-utils.h"
+
 #include "helper/geom.h"
-#include "display/sp-canvas.h"
+
+#include "ui/widget/canvas.h"
 
 static void sp_canvas_bpath_destroy(SPCanvasItem *object);
 
@@ -74,7 +77,7 @@ static void sp_canvas_bpath_update(SPCanvasItem *item, Geom::Affine const &affin
 {
     SPCanvasBPath *cbp = SP_CANVAS_BPATH(item);
 
-    item->canvas->requestRedraw((int)item->x1 - 1, (int)item->y1 - 1, (int)item->x2 + 1 , (int)item->y2 + 1);
+    item->canvas->redraw_area((int)item->x1 - 1, (int)item->y1 - 1, (int)item->x2 + 1 , (int)item->y2 + 1);
 
     if (reinterpret_cast<SPCanvasItemClass *>(sp_canvas_bpath_parent_class)->update) {
         reinterpret_cast<SPCanvasItemClass *>(sp_canvas_bpath_parent_class)->update(item, affine, flags);
@@ -99,7 +102,7 @@ static void sp_canvas_bpath_update(SPCanvasItem *item, Geom::Affine const &affin
         item->x2 = 0;
         item->y2 = 0;
     }
-    item->canvas->requestRedraw((int)item->x1, (int)item->y1, (int)item->x2, (int)item->y2);
+    item->canvas->redraw_area((int)item->x1, (int)item->y1, (int)item->x2, (int)item->y2);
 }
 
 static void
@@ -171,7 +174,7 @@ sp_canvas_bpath_point (SPCanvasItem *item, Geom::Point p, SPCanvasItem **actual_
         return Geom::infinity();
 
     double width = 0.5;
-    Geom::Rect viewbox = item->canvas->getViewbox();
+    Geom::Rect viewbox = item->canvas->get_area_world();
     viewbox.expandBy (width);
     double dist = Geom::infinity();
     pathv_matrix_point_bbox_wind_distance(cbp->curve->get_pathvector(), cbp->affine, p, nullptr, nullptr, &dist, 0.5, &viewbox);

@@ -14,22 +14,24 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "dialog-manager.h"
 #include <gtkmm/dialog.h>
 
 #include <gdk/gdkkeysyms.h>
 
+#include "dialog-manager.h"
+
 #include <utility>
 
-#include "inkscape.h"
-#include "ui/monitor.h"
-#include "ui/tools/tool-base.h"
 #include "desktop.h"
-
+#include "inkscape.h"
 #include "shortcuts.h"
-#include "ui/interface.h"
 #include "verbs.h"
+
+#include "ui/interface.h"
+#include "ui/monitor.h"
 #include "ui/tool/event-utils.h"
+#include "ui/tools/tool-base.h"
+#include "ui/widget/canvas.h"
 
 #define MIN_ONSCREEN_DISTANCE 50
 
@@ -320,7 +322,7 @@ void Dialog::_defocus()
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
     if (desktop) {
-        Gtk::Widget *canvas = Glib::wrap(GTK_WIDGET(desktop->canvas));
+        Gtk::Widget *canvas = desktop->canvas;
 
         // make sure the canvas window is present before giving it focus
         Gtk::Window *toplevel_window = dynamic_cast<Gtk::Window *>(canvas->get_toplevel());
@@ -341,7 +343,7 @@ void sp_add_top_window_classes_callback(Gtk::Widget *widg)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (desktop) {
-        Gtk::Widget *canvas = Glib::wrap(GTK_WIDGET(desktop->canvas));
+        Gtk::Widget *canvas = desktop->canvas;
         Gtk::Window *toplevel_window = dynamic_cast<Gtk::Window *>(canvas->get_toplevel());
         if (toplevel_window) {
             Gtk::Window *current_window = dynamic_cast<Gtk::Window *>(widg);

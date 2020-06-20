@@ -45,7 +45,6 @@
 #include "helper/action.h" //sp_action_perform
 
 #include "display/canvas-text.h" //text
-#include "display/sp-canvas.h" //text
 
 #include "extension/output.h" //IO
 #include "extension/system.h" //IO
@@ -57,6 +56,8 @@
 #include "object/sp-root.h"
 
 #include "util/units.h"
+
+#include "ui/widget/canvas.h" // Disable drawing
 
 #include "xml/repr.h" //sp_repr_document_new
 
@@ -1050,7 +1051,7 @@ void document_interface_pause_updates(DocumentInterface *doc_interface, GError *
     SPDesktop *desk = doc_interface->target.getDesktop();
     g_return_if_fail(ensure_desktop_valid(desk, error));
     doc_interface->updates = FALSE;
-    desk->canvas->_drawing_disabled = 1;
+    desk->getCanvas()->set_drawing_disabled(true);
 }
 
 void document_interface_resume_updates(DocumentInterface *doc_interface, GError ** error)
@@ -1058,7 +1059,7 @@ void document_interface_resume_updates(DocumentInterface *doc_interface, GError 
     SPDesktop *desk = doc_interface->target.getDesktop();
     g_return_if_fail(ensure_desktop_valid(desk, error));
     doc_interface->updates = TRUE;
-    desk->canvas->_drawing_disabled = 0;
+    desk->getCanvas()->set_drawing_disabled(false);
     //FIXME: use better verb than rect.
     Inkscape::DocumentUndo::done(doc_interface->target.getDocument(),  SP_VERB_CONTEXT_RECT, "Multiple actions");
 }

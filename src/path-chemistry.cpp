@@ -32,7 +32,6 @@
 #include "verbs.h"
 
 #include "display/curve.h"
-#include "display/sp-canvas.h"
 
 #include "object/box3d.h"
 #include "object/object-set.h"
@@ -40,6 +39,8 @@
 #include "object/sp-path.h"
 #include "object/sp-text.h"
 #include "style.h"
+
+#include "ui/widget/canvas.h"  // Disable drawing during ops
 
 #include "svg/svg.h"
 
@@ -202,7 +203,7 @@ ObjectSet::breakApart(bool skip_undo)
         // set "busy" cursor
         desktop()->setWaitingCursor();
         // disable redrawing during the break-apart operation for remarkable speedup for large paths
-        desktop()->getCanvas()->_drawing_disabled = true;
+        desktop()->getCanvas()->set_drawing_disabled(true);
     }
 
     bool did = false;
@@ -272,7 +273,7 @@ ObjectSet::breakApart(bool skip_undo)
     }
 
     if (desktop()) {
-        desktop()->getCanvas()->_drawing_disabled = false;
+        desktop()->getCanvas()->set_drawing_disabled(false);
         desktop()->clearWaitingCursor();
     }
 

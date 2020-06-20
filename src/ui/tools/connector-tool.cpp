@@ -88,7 +88,6 @@
 
 #include "display/canvas-bpath.h"
 #include "display/curve.h"
-#include "display/sp-canvas.h"
 
 #include "3rdparty/adaptagrams/libavoid/router.h"
 
@@ -101,6 +100,7 @@
 #include "object/sp-symbol.h"
 
 #include "ui/pixmaps/cursor-connector.xpm"
+#include "ui/widget/canvas.h"  // Enter events
 
 #include "svg/svg.h"
 
@@ -253,7 +253,7 @@ void ConnectorTool::setup()
 
     // Make sure we see all enter events for canvas items,
     // even if a mouse button is depressed.
-    desktop->canvas->_gen_all_enter_events = true;
+    desktop->getCanvas()->set_all_enter_events(true);
 }
 
 void ConnectorTool::set(const Inkscape::Preferences::Entry& val)
@@ -284,7 +284,7 @@ void ConnectorTool::finish()
     this->cc_clear_active_conn();
 
     // Restore the default event generating behaviour.
-    desktop->canvas->_gen_all_enter_events = false;
+    desktop->getCanvas()->set_all_enter_events(false);
 }
 
 //-----------------------------------------------------------------------------

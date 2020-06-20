@@ -17,7 +17,6 @@
 #include "desktop.h"
 #include "message-context.h"
 
-#include "display/sp-canvas.h"
 #include "display/snap-indicator.h"
 
 #include "object/sp-namedview.h"
@@ -27,6 +26,8 @@
 #include "ui/tool/control-point.h"
 #include "ui/tool/event-utils.h"
 #include "ui/tool/transform-handle-set.h"
+
+#include "ui/widget/canvas.h" // Forced redraws
 
 namespace Inkscape {
 namespace UI {
@@ -256,7 +257,7 @@ bool ControlPoint::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, G
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int drag_tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
-    GdkEventMotion em;
+
     switch(event->type)
     {   
     case GDK_BUTTON_PRESS:
@@ -282,25 +283,23 @@ bool ControlPoint::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, G
         return true;
         
     case GDK_MOTION_NOTIFY:
-        em = event->motion;
-
         if (_event_grab && ! event_context->space_panning) {
             _desktop->snapindicator->remove_snaptarget(); 
             bool transferred = false;
             if (!_drag_initiated) {
-                bool t = fabs(em.x - _drag_event_origin[Geom::X]) <= drag_tolerance &&
-                         fabs(em.y - _drag_event_origin[Geom::Y]) <= drag_tolerance;
+                bool t = fabs(event->motion.x - _drag_event_origin[Geom::X]) <= drag_tolerance &&
+                         fabs(event->motion.y - _drag_event_origin[Geom::Y]) <= drag_tolerance;
                 if (t){
                     return true;
                 }
 
                 // if we are here, it means the tolerance was just exceeded.
                 _drag_origin = _position;
-                transferred = grabbed(&em);
+                transferred = grabbed(&event->motion);
                 // _drag_initiated might change during the above virtual call
                 if (!_drag_initiated) {
                     // this guarantees smooth redraws while dragging
-                    _desktop->canvas->forceFullRedrawAfterInterruptions(5);
+                    _desktop->getCanvas()->forced_redraws_start(5);
                     _drag_initiated = true;
                 }
             }
@@ -309,9 +308,9 @@ bool ControlPoint::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, G
                 // dragging in progress
                 Geom::Point new_pos = _desktop->w2d(event_point(event->motion)) + pointer_offset;
                 // the new position is passed by reference and can be changed in the handlers.
-                dragged(new_pos, &em);
+                dragged(new_pos, &event->motion);
                 move(new_pos);
-                _updateDragTip(&em); // update dragging tip after moving to new position
+                _updateDragTip(&event->motion); // update dragging tip after moving to new position
 
                 _desktop->scroll_to_point(new_pos);
                 _desktop->set_coordinate_status(_position);
@@ -342,7 +341,7 @@ bool ControlPoint::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, G
 
             if (_drag_initiated) {
                 // it is the end of a drag
-                _desktop->canvas->endForcedFullRedraws();
+                _desktop->getCanvas()->forced_redraws_stop();
                 _drag_initiated = false;
                 ungrabbed(&event->button);
                 return true;
@@ -370,7 +369,7 @@ bool ControlPoint::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, G
             {
                 ungrabbed(nullptr);
                 if (_drag_initiated) {
-                    _desktop->canvas->endForcedFullRedraws();
+                    _desktop->getCanvas()->forced_redraws_stop();
                 }
             }
             _setState(STATE_NORMAL);
@@ -418,7 +417,7 @@ bool ControlPoint::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, G
 
             sp_canvas_item_ungrab(_canvas_item);
             _clearMouseover(); // this will also reset state to normal
-            _desktop->canvas->endForcedFullRedraws();
+            _desktop->getCanvas()->forced_redraws_stop();
             _event_grab = false;
             _drag_initiated = false;
 
@@ -536,7 +535,7 @@ void ControlPoint::transferGrab(ControlPoint *prev_point, GdkEventMotion *event)
     sp_canvas_item_grab(_canvas_item, _grab_event_mask, nullptr, event->time);
 
     if (!_drag_initiated) {
-        _desktop->canvas->forceFullRedrawAfterInterruptions(5);
+        _desktop->getCanvas()->forced_redraws_start(5);
         _drag_initiated = true;
     }
 

@@ -20,7 +20,9 @@
 #include "canvas-text.h"
 #include "display/cairo-utils.h"
 #include "desktop.h"
-#include "display/sp-canvas.h"
+
+#include "ui/widget/canvas.h"  // Request redraw
+
 
 static void sp_canvastext_destroy(SPCanvasItem *object);
 
@@ -123,7 +125,7 @@ sp_canvastext_update (SPCanvasItem *item, Geom::Affine const &affine, unsigned i
 {
     SPCanvasText *cl = SP_CANVASTEXT (item);
 
-    item->canvas->requestRedraw((int)item->x1, (int)item->y1, (int)item->x2, (int)item->y2);
+    item->canvas->redraw_area((int)item->x1, (int)item->y1, (int)item->x2, (int)item->y2);
 
     if (SP_CANVAS_ITEM_CLASS(sp_canvastext_parent_class)->update)
         SP_CANVAS_ITEM_CLASS(sp_canvastext_parent_class)->update(item, affine, flags);
@@ -223,7 +225,7 @@ sp_canvastext_update (SPCanvasItem *item, Geom::Affine const &affine, unsigned i
     item->y1 -= cl->anchor_offset_y;
     item->y2 -= cl->anchor_offset_y;
 
-    item->canvas->requestRedraw((int)item->x1, (int)item->y1, (int)item->x2, (int)item->y2);
+    item->canvas->redraw_area((int)item->x1, (int)item->y1, (int)item->x2, (int)item->y2);
 }
 
 SPCanvasText *sp_canvastext_new(SPCanvasGroup *parent, SPDesktop *desktop, Geom::Point pos, gchar const *new_text)

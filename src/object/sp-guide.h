@@ -26,11 +26,14 @@ extern "C" {
 }
 
 class SPDesktop;
-struct SPCanvas;
 struct SPCanvasGroup;
 struct SPGuideLine;
 #define SP_GUIDE(obj) (dynamic_cast<SPGuide*>((SPObject*)obj))
 #define SP_IS_GUIDE(obj) (dynamic_cast<const SPGuide*>((SPObject*)obj) != NULL)
+
+namespace Inkscape::UI::Widget {
+  class Canvas;
+}
 
 /* Represents the constraint on p that dot(g.direction, p) == g.position. */
 class SPGuide : public SPObject {
@@ -60,11 +63,11 @@ public:
     SPGuide *duplicate();
 
     void showSPGuide(SPCanvasGroup *group, GCallback handler);
-    void hideSPGuide(SPCanvas *canvas);
+    void hideSPGuide(Inkscape::UI::Widget::Canvas *canvas);
     void showSPGuide(); // argument-free versions
     void hideSPGuide();
 
-    void sensitize(SPCanvas *canvas, bool sensitive);
+    void sensitize(Inkscape::UI::Widget::Canvas *canvas, bool sensitive);
 
     bool isHorizontal() const { return (normal_to_line[Geom::X] == 0.); };
     bool isVertical() const { return (normal_to_line[Geom::Y] == 0.); };

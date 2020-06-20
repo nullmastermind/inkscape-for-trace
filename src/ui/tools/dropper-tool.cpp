@@ -46,6 +46,7 @@
 #include "svg/svg-color.h"
 
 #include "ui/tools/dropper-tool.h"
+#include "ui/widget/canvas.h"
 
 using Inkscape::DocumentUndo;
 
@@ -384,8 +385,8 @@ bool DropperTool::root_handler(GdkEvent* event) {
     auto xpm = (this->dropping ? (this->stroke ? cursor_dropping_s_xpm : cursor_dropping_f_xpm) :
                                  (this->stroke ? cursor_dropper_s_xpm : cursor_dropper_f_xpm));
     GdkCursor *cursor = sp_cursor_from_xpm(xpm, this->get_color(this->invert));
-    GdkWindow* window = gtk_widget_get_window(GTK_WIDGET(desktop->getCanvas()));
-    gdk_window_set_cursor(window, cursor);
+    auto window = desktop->getCanvas()->get_window();
+    gdk_window_set_cursor(window->gobj(), cursor);
 
     if (!ret) {
     	ret = ToolBase::root_handler(event);

@@ -68,6 +68,7 @@
 #include "ui/tools/tool-base.h"
 #include "ui/tools/box3d-tool.h"
 #include "ui/tools/select-tool.h"
+#include "ui/widget/canvas.h"
 #include "ui/widget/dock.h"
 
 #include "widgets/desktop-widget.h"
@@ -101,7 +102,7 @@ static void _pinch_scale_changed_handler(GtkGesture *gesture, gdouble delta, SPD
     const GdkEvent *event = gtk_gesture_get_last_event(gesture, sequence);
 
     Geom::Point button_window(event->button.x, event->button.y);
-    Geom::Point button_world = sp_canvas_window_to_world(desktop->canvas, button_window);
+    Geom::Point button_world = desktop->getCanvas()->canvas_to_world(button_window);
     Geom::Point button_dt(desktop->w2d(button_world));
 
     desktop->zoom_absolute_keep_point(button_dt, _pinch_begin_zoom * delta);
@@ -162,8 +163,10 @@ SPDesktop::SPDesktop()
 }
 
 void
-SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, SPDesktopWidget *widget)
+SPDesktop::init (SPNamedView *nv, Inkscape::UI::Widget::Canvas *acanvas, SPDesktopWidget *widget)
 {
+    namedview = nv;
+    canvas = acanvas;
     _widget = widget;
 
     // Temporary workaround for link order issues:
@@ -174,9 +177,6 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, SPDesktopWidget *widget)
     _guides_message_context = std::unique_ptr<Inkscape::MessageContext>(new Inkscape::MessageContext(messageStack()));
 
     current = prefs->getStyle("/desktop/style");
-
-    namedview = nv;
-    canvas = aCanvas;
 
     SPDocument *document = namedview->document;
     /* XXX:
@@ -216,9 +216,9 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, SPDesktopWidget *widget)
 
 
     /* Setup Canvas */
-    g_object_set_data (G_OBJECT (canvas), "SPDesktop", this);
+    canvas->set_data("SPDesktop", this); // HORRID! Used by sp_dt_guide_event.
 
-    SPCanvasGroup *root = canvas->getRoot();
+    SPCanvasGroup *root = canvas->get_canvas_item_root();
 
     /* Setup administrative layers */
     acetate = sp_canvas_item_new (root, GNOME_TYPE_CANVAS_ACETATE, nullptr);
@@ -228,7 +228,7 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, SPDesktopWidget *widget)
     g_signal_connect (G_OBJECT (main), "event", G_CALLBACK (sp_desktop_root_handler), this);
 
     /* This is the background the page sits on. */
-    canvas->setBackgroundColor(0xffffff00);
+    canvas->set_background_color(0xffffff00);
 
     page = sp_canvas_item_new (main, SP_TYPE_CTRLRECT, nullptr);
     ((CtrlRect *) page)->setColor(0x00000000, FALSE, 0x00000000);
@@ -238,7 +238,7 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, SPDesktopWidget *widget)
     g_signal_connect (G_OBJECT (drawing), "arena_event", G_CALLBACK (_arena_handler), this);
 
     // pinch zoom
-    zoomgesture = gtk_gesture_zoom_new(GTK_WIDGET(canvas));
+    zoomgesture = gtk_gesture_zoom_new(GTK_WIDGET(canvas->gobj()));
     gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (zoomgesture), GTK_PHASE_CAPTURE);
     g_signal_connect(zoomgesture, "begin", G_CALLBACK(_pinch_begin_handler), this);
     g_signal_connect(zoomgesture, "scale-changed", G_CALLBACK(_pinch_scale_changed_handler), this);
@@ -445,8 +445,8 @@ SPDocument* SPDesktop::getDocument() const {
 	return doc();
 }
 
-SPCanvas* SPDesktop::getCanvas() const {
-	return canvas;
+Inkscape::UI::Widget::Canvas* SPDesktop::getCanvas() const {
+        return canvas;
 }
 
 SPCanvasItem* SPDesktop::getAcetate() const {
@@ -533,10 +533,13 @@ void SPDesktop::redrawDesktop() {
     sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (main), _current_affine.d2w()); // redraw
 }
 
+// THIS SHOULD BE A CANVAS FUNCTION
 void SPDesktop::_setDisplayMode(Inkscape::RenderMode mode) {
+    // Why set three places?
     SP_CANVAS_ARENA (drawing)->drawing.setRenderMode(mode);
-    canvas->_rendermode = mode;
+    canvas->set_render_mode(mode);
     _display_mode = mode;
+
     if (_display_mode == Inkscape::RENDERMODE_OUTLINE) {
         if (_split_canvas) {
             toggleSplitMode();
@@ -549,6 +552,7 @@ void SPDesktop::_setDisplayMode(Inkscape::RenderMode mode) {
     _widget->updateTitle( this->getDocument()->getDocumentName() );
 }
 
+// THIS SHOULD BE A CANVAS FUNCTION
 void SPDesktop::_setDisplayColorMode(Inkscape::ColorMode mode) {
     // reload grayscale matrix from prefs
     if (mode == Inkscape::COLORMODE_GRAYSCALE) {
@@ -564,9 +568,11 @@ void SPDesktop::_setDisplayColorMode(Inkscape::ColorMode mode) {
         SP_CANVAS_ARENA (drawing)->drawing.setGrayscaleMatrix(grayscale_value_matrix);
     }
 
+    // Why set three places? FIXME
     SP_CANVAS_ARENA (drawing)->drawing.setColorMode(mode);
-    canvas->_colorrendermode = mode;
+    canvas->set_color_mode(mode);
     _display_color_mode = mode;
+
     redrawDesktop();
     _widget->updateTitle( this->getDocument()->getDocumentName() );
 }
@@ -831,8 +837,8 @@ SPItem *SPDesktop::getGroupAtPoint(Geom::Point const &p) const
 Geom::Point SPDesktop::point(bool outside_canvas) const
 {
     Geom::Point p = _widget->window_get_pointer();
-    Geom::Point pw = sp_canvas_window_to_world (canvas, p);
-    Geom::Rect const r = canvas->getViewbox();
+    Geom::Point pw = canvas->canvas_to_world(p);
+    Geom::Rect const r = canvas->get_area_world();
 
     if (r.interiorContains(pw) || outside_canvas) {
         p = w2d(pw);
@@ -926,7 +932,7 @@ SPDesktop::set_display_area (bool log)
 
     // Scroll
     Geom::Point offset = _current_affine.getOffset();
-    canvas->scrollTo(offset, true);
+    canvas->scroll_to(offset, true);
     // To do: if transform unchanged call with 'false' (redraw only newly exposed areas).
 
     /* Update perspective lines if we are in the 3D box tool (so that infinite ones are shown
@@ -935,12 +941,13 @@ SPDesktop::set_display_area (bool log)
     	SP_BOX3D_CONTEXT(event_context)->_vpdrag->updateLines();
     }
 
+    // Update GUI (TODO: should be handled by CanvasGrid).
     _widget->update_rulers();
     _widget->update_scrollbars(_current_affine.getZoom());
     _widget->update_zoom();
     _widget->update_rotation();
 
-    signal_zoom_changed.emit(_current_affine.getZoom());
+    signal_zoom_changed.emit(_current_affine.getZoom());  // Observed by path-manipulator to update arrows.
 }
 
 
@@ -968,7 +975,7 @@ void
 SPDesktop::set_display_area( Geom::Rect const &r, double border, bool log)
 {
     // Create a rectangle the size of the window aligned with origin.
-    Geom::Rect w( Geom::Point(), canvas->getViewbox().dimensions() ); // Not the SVG 'viewBox'.
+    Geom::Rect w( Geom::Point(), canvas->get_area_world().dimensions() );
 
     // Shrink window to account for border padding.
     w.expandBy( -border );
@@ -997,7 +1004,7 @@ SPDesktop::set_display_area( Geom::Rect const &r, double border, bool log)
 Geom::Parallelogram SPDesktop::get_display_area(bool use_integer_viewbox) const
 {
     // viewbox in world coordinates
-    Geom::Rect const viewbox = use_integer_viewbox ? canvas->getViewboxIntegers() : canvas->getViewbox();
+    Geom::Rect const viewbox = use_integer_viewbox ? canvas->get_area_world_int() : canvas->get_area_world();
 
     // display area in desktop coordinates
     return Geom::Parallelogram(viewbox) * w2d();
@@ -1032,7 +1039,7 @@ SPDesktop::zoom_absolute_center_point (Geom::Point const &c, double zoom)
 {
     zoom = CLAMP (zoom, SP_DESKTOP_ZOOM_MIN, SP_DESKTOP_ZOOM_MAX);
     _current_affine.setScale( Geom::Scale(zoom, yaxisdir() * zoom) );
-    Geom::Rect viewbox = canvas->getViewbox();
+    Geom::Rect viewbox = canvas->get_area_world();
     set_display_area( c, viewbox.midpoint() );
 }
 
@@ -1128,7 +1135,7 @@ void SPDesktop::zoom_center_page()
 }
 
 Geom::Point SPDesktop::current_center() const {
-    return canvas->getViewbox().midpoint() * _current_affine.w2d();
+    return canvas->get_area_world().midpoint() * _current_affine.w2d();
 }
 
 /**
@@ -1171,7 +1178,7 @@ void SPDesktop::zoom_quick(bool enable)
         }
 
         if (!zoomed) {
-            Geom::Rect const d_canvas = canvas->getViewbox(); // Not SVG 'viewBox'
+            Geom::Rect const d_canvas = canvas->get_area_world();
             Geom::Point midpoint = w2d(d_canvas.midpoint()); // Midpoint of drawing on canvas.
             zoom_relative_center_point(midpoint, 2.0);
         }
@@ -1235,7 +1242,7 @@ void
 SPDesktop::rotate_absolute_center_point (Geom::Point const &c, double rotate)
 {
     _current_affine.setRotate( rotate );
-    Geom::Rect viewbox = canvas->getViewbox();
+    Geom::Rect viewbox = canvas->get_area_world();
     set_display_area(c, viewbox.midpoint());
 }
 
@@ -1250,7 +1257,7 @@ void
 SPDesktop::rotate_relative_center_point (Geom::Point const &c, double rotate)
 {
     _current_affine.addRotate( rotate );
-    Geom::Rect viewbox = canvas->getViewbox();
+    Geom::Rect viewbox = canvas->get_area_world();
     set_display_area(c, viewbox.midpoint());
 }
 
@@ -1295,7 +1302,7 @@ void
 SPDesktop::flip_absolute_center_point (Geom::Point const &c, CanvasFlip flip)
 {
     _current_affine.setFlip(flip);
-    Geom::Rect viewbox = canvas->getViewbox();
+    Geom::Rect viewbox = canvas->get_area_world();
     set_display_area(c, viewbox.midpoint());
 }
 
@@ -1310,7 +1317,7 @@ void
 SPDesktop::flip_relative_center_point (Geom::Point const &c, CanvasFlip flip)
 {
     _current_affine.addFlip(flip);
-    Geom::Rect viewbox = canvas->getViewbox();
+    Geom::Rect viewbox = canvas->get_area_world();
     set_display_area(c, viewbox.midpoint());
 }
 
@@ -1327,7 +1334,7 @@ SPDesktop::is_flipped (CanvasFlip flip)
 void
 SPDesktop::scroll_absolute (Geom::Point const &point, bool is_scrolling)
 {
-    canvas->scrollTo(point, FALSE, is_scrolling);
+    canvas->scroll_to(point, false);
     _current_affine.setOffset( point );
 
     /*  update perspective lines if we are in the 3D box tool (so that infinite ones are shown correctly) */
@@ -1347,7 +1354,7 @@ SPDesktop::scroll_absolute (Geom::Point const &point, bool is_scrolling)
 void
 SPDesktop::scroll_relative (Geom::Point const &delta, bool is_scrolling)
 {
-    Geom::Rect const viewbox = canvas->getViewbox();
+    Geom::Rect const viewbox = canvas->get_area_world();
     scroll_absolute( viewbox.min() - delta, is_scrolling );
 }
 
@@ -1377,7 +1384,7 @@ SPDesktop::scroll_to_point (Geom::Point const &p, gdouble autoscrollspeed)
     // autoscrolldistance is in screen pixels.
     gdouble autoscrolldistance = (gdouble) prefs->getIntLimited("/options/autoscrolldistance/value", 0, -1000, 10000);
 
-    Geom::Rect w = canvas->getViewbox(); // Window in screen coordinates.
+    Geom::Rect w = canvas->get_area_world(); // Window in screen coordinates.
     w.expandBy(-autoscrolldistance);  // Shrink window
 
     Geom::Point c = d2w(p);  // Point 'p' in screen coordinates.
@@ -1658,7 +1665,7 @@ SPDesktop::emitToolSubselectionChanged(gpointer data)
 
 void SPDesktop::updateNow()
 {
-    canvas->updateNow();
+    canvas->redraw_now();
 }
 
 void
@@ -1676,7 +1683,7 @@ void SPDesktop::setWaitingCursor()
 {
     Glib::RefPtr<Gdk::Display> display = Gdk::Display::get_default();
     Glib::RefPtr<Gdk::Cursor> waiting = Gdk::Cursor::create(display, Gdk::WATCH);
-    Glib::wrap(GTK_WIDGET(canvas))->get_window()->set_cursor(waiting);
+    canvas->get_window()->set_cursor(waiting);
     // GDK needs the flush for the cursor change to take effect
     display->flush();
     waiting_cursor = true;
@@ -1735,7 +1742,7 @@ void SPDesktop::toggleSplitMode()
         if (_split_canvas && _xray) {
             toggleXRay();
         }
-        canvas->requestFullRedraw();
+        canvas->redraw_all();
         Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_VIEW_TOGGLE_SPLIT);
         if (verb) {
             _menu_update.emit(verb->get_code(), splitMode());
@@ -1755,7 +1762,7 @@ void SPDesktop::toggleXRay()
         if (_split_canvas && _xray) {
             toggleSplitMode();
         }
-        canvas->requestFullRedraw();
+        canvas->redraw_all();
         Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_VIEW_TOGGLE_XRAY);
         if (verb) {
             _menu_update.emit(verb->get_code(), xrayMode());
@@ -2029,9 +2036,9 @@ static void _namedview_modified (SPObject *obj, guint flags, SPDesktop *desktop)
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         if (nv->pagecheckerboard) {
-            desktop->canvas->setBackgroundCheckerboard(nv->pagecolor);
+            desktop->getCanvas()->set_background_checkerboard(nv->pagecolor);
         } else {
-            desktop->canvas->setBackgroundColor(nv->pagecolor);
+            desktop->getCanvas()->set_background_color(nv->pagecolor);
         }
 
         /* Show/hide page border */

@@ -22,8 +22,6 @@
 #include "shortcuts.h"
 #include "file.h"
 
-
-
 #include "desktop-events.h"
 #include "desktop-style.h"
 #include "desktop.h"
@@ -36,7 +34,6 @@
 #include "selection.h"
 #include "sp-cursor.h"
 
-#include "display/sp-canvas.h"
 #include "display/sp-canvas-group.h"
 #include "display/canvas-rotate.h"
 
@@ -56,6 +53,7 @@
 #include "ui/tool/event-utils.h"
 #include "ui/tools/node-tool.h"
 #include "ui/tool/shape-record.h"
+#include "ui/widget/canvas.h"
 
 #include "widgets/desktop-widget.h"
 
@@ -115,7 +113,7 @@ void ToolBase::setup() {
 }
 
 void ToolBase::finish() {
-    this->desktop->canvas->endForcedFullRedraws();
+    this->desktop->getCanvas()->forced_redraws_stop();
     this->enableSelectionCue(false);
 }
 
@@ -131,7 +129,7 @@ void ToolBase::set(const Inkscape::Preferences::Entry& /*val*/) {
  */
 void ToolBase::sp_event_context_set_cursor(GdkCursorType cursor_type) {
 
-    GtkWidget *w = GTK_WIDGET(this->desktop->getCanvas());
+    GtkWidget *w = GTK_WIDGET(this->desktop->getCanvas()->gobj());
     GdkDisplay *display = gdk_display_get_default();
     GdkCursor *cursor = gdk_cursor_new_for_display(display, cursor_type);
 
@@ -145,7 +143,7 @@ void ToolBase::sp_event_context_set_cursor(GdkCursorType cursor_type) {
  * Recreates and draws cursor on desktop related to ToolBase.
  */
 void ToolBase::sp_event_context_update_cursor() {
-    Gtk::Widget* w = Glib::wrap(GTK_WIDGET(desktop->getCanvas()));
+    Gtk::Widget *w = desktop->getCanvas();
     if (w->get_window()) {
         if (cursor_shape) {
 	    bool fillHasColor   = false;
@@ -379,7 +377,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
                 // Grab background before doing anything else
                 sp_canvas_rotate_start (SP_CANVAS_ROTATE(desktop->canvas_rotate),
-                                        desktop->canvas->_backing_store);
+                                        desktop->canvas->get_backing_store()->cobj());
                 sp_canvas_item_ungrab (desktop->acetate);
                 sp_canvas_item_show (desktop->canvas_rotate);
                 sp_canvas_item_grab (desktop->canvas_rotate,
@@ -518,8 +516,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
         if (panning_cursor == 1) {
             panning_cursor = 0;
-            Gtk::Widget* w = Glib::wrap(GTK_WIDGET(desktop->getCanvas()));
-            w->get_window()->set_cursor(cursor);
+            desktop->getCanvas()->get_window()->set_cursor(cursor);
         }
 
         if (within_tolerance && (panning || zoom_rb)) {
@@ -720,8 +717,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
         if (panning_cursor == 1) {
             panning_cursor = 0;
-            Gtk::Widget* w = Glib::wrap(GTK_WIDGET(desktop->getCanvas()));
-            w->get_window()->set_cursor(cursor);
+            desktop->getCanvas()->get_window()->set_cursor(cursor);
         }
 
         switch (get_latin_keyval(&event->key)) {
@@ -1068,7 +1064,7 @@ void ToolBase::set_high_motion_precision(bool high_precision) {
 void
 ToolBase::forced_redraws_start(int count, bool reset)
 {
-    desktop->canvas->forceFullRedrawAfterInterruptions(count, reset);
+    desktop->canvas->forced_redraws_start(count, reset);
 }
 
 
@@ -1079,7 +1075,7 @@ ToolBase::forced_redraws_start(int count, bool reset)
 void
 ToolBase::forced_redraws_stop()
 {
-    desktop->canvas->endForcedFullRedraws();
+    desktop->canvas->forced_redraws_stop();
 }
 
 
@@ -1333,26 +1329,12 @@ guint get_latin_keyval(GdkEventKey const *event, guint *consumed_modifiers /*= N
             &keyval, nullptr, nullptr, &modifiers);
 
     if (consumed_modifiers) {
-#if !defined(GDK_WINDOWING_QUARTZ) || GTK_CHECK_VERSION(3, 24, 13)
         *consumed_modifiers = modifiers;
-#else
-        // gdk_quartz_keymap_translate_keyboard_state fills the `consumed_modifiers`
-        // incorrectly, e.g. assigns 0xB instead of 0x0 when no modifiers pressed.
-
-        *consumed_modifiers = 0;
-
-        for (unsigned mod = 1, statemask = (event->state & GDK_MODIFIER_MASK); mod <= statemask; mod <<= 1) {
-            if ((mod & statemask)) {
-                guint keyval_no_mod = 0;
-                gdk_keymap_translate_keyboard_state(Gdk::Display::get_default()->get_keymap(), event->hardware_keycode,
-                                                    (GdkModifierType)(event->state & ~mod), group, &keyval_no_mod,
-                                                    nullptr, nullptr, nullptr);
-                if (keyval_no_mod != keyval) {
-                    *consumed_modifiers |= mod;
-                }
-            }
-        }
-#endif
+    }
+    if (keyval != event->keyval) {
+        std::cerr << "get_latin_keyval: OH OH OH keyval did change! "
+                  << "  keyval: " << keyval << " (" << (char)keyval << ")"
+                  << "  event->keyval: " << event->keyval << "(" << (char)event->keyval << ")" << std::endl;
     }
     return keyval;
 }

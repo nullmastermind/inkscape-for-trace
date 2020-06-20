@@ -30,12 +30,12 @@
 #include "selection-chemistry.h"
 #include "verbs.h"
 
-#include "display/sp-canvas.h"
 
 #include "object/sp-item-transform.h"
 #include "object/sp-namedview.h"
 
 #include "ui/icon-names.h"
+#include "ui/widget/canvas.h" // Focus widget
 #include "ui/widget/combo-tool-item.h"
 #include "ui/widget/spin-button-tool-item.h"
 #include "ui/widget/unit-tracker.h"
@@ -112,7 +112,7 @@ SelectToolbar::SelectToolbar(SPDesktop *desktop) :
                                                                 C_("Select toolbar", "X:"),
                                                                 _adj_x,
                                                                 SPIN_STEP, 3));
-    x_btn->set_focus_widget(Glib::wrap(GTK_WIDGET(_desktop->canvas)));
+    x_btn->set_focus_widget(_desktop->getCanvas());
     x_btn->set_all_tooltip_text(C_("Select toolbar", "Horizontal coordinate of selection"));
     _context_items.push_back(x_btn);
     add(*x_btn);
@@ -127,7 +127,7 @@ SelectToolbar::SelectToolbar(SPDesktop *desktop) :
                                                                 C_("Select toolbar", "Y:"),
                                                                 _adj_y,
                                                                 SPIN_STEP, 3));
-    y_btn->set_focus_widget(Glib::wrap(GTK_WIDGET(_desktop->canvas)));
+    y_btn->set_focus_widget(_desktop->getCanvas());
     y_btn->set_all_tooltip_text(C_("Select toolbar", "Vertical coordinate of selection"));
     _context_items.push_back(y_btn);
     add(*y_btn);
@@ -142,7 +142,7 @@ SelectToolbar::SelectToolbar(SPDesktop *desktop) :
                                                                 C_("Select toolbar", "W:"),
                                                                 _adj_w,
                                                                 SPIN_STEP, 3));
-    w_btn->set_focus_widget(Glib::wrap(GTK_WIDGET(_desktop->canvas)));
+    w_btn->set_focus_widget(_desktop->getCanvas());
     w_btn->set_all_tooltip_text(C_("Select toolbar", "Width of selection"));
     _context_items.push_back(w_btn);
     add(*w_btn);
@@ -164,7 +164,7 @@ SelectToolbar::SelectToolbar(SPDesktop *desktop) :
                                                                 C_("Select toolbar", "H:"),
                                                                 _adj_h,
                                                                 SPIN_STEP, 3));
-    h_btn->set_focus_widget(Glib::wrap(GTK_WIDGET(_desktop->canvas)));
+    h_btn->set_focus_widget(_desktop->getCanvas());
     h_btn->set_all_tooltip_text(C_("Select toolbar", "Height of selection"));
     _context_items.push_back(h_btn);
     add(*h_btn);
@@ -339,7 +339,7 @@ SelectToolbar::any_value_changed(Glib::RefPtr<Gtk::Adjustment>& adj)
     if (actionkey != nullptr) {
 
         // FIXME: fix for GTK breakage, see comment in SelectedStyle::on_opacity_changed
-        desktop->getCanvas()->forceFullRedrawAfterInterruptions(0);
+        desktop->getCanvas()->forced_redraws_start(0);
 
         bool transform_stroke = prefs->getBool("/options/transform/stroke", true);
         bool preserve = prefs->getBool("/options/preservetransform/value", false);
@@ -360,7 +360,7 @@ SelectToolbar::any_value_changed(Glib::RefPtr<Gtk::Adjustment>& adj)
                                 _("Transform by toolbar"));
 
         // resume interruptibility
-        desktop->getCanvas()->endForcedFullRedraws();
+        desktop->getCanvas()->forced_redraws_stop();
     }
 
     _update = false;

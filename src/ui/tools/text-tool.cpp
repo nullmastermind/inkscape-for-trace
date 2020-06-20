@@ -19,7 +19,6 @@
 #include <glibmm/i18n.h>
 #include <glibmm/regex.h>
 
-#include "display/sp-canvas.h"
 #include <display/sp-ctrlline.h>
 #include <display/sodipodi-ctrlrect.h>
 #include <display/sp-ctrlquadr.h>
@@ -54,6 +53,7 @@
 #include "ui/control-manager.h"
 #include "ui/shape-editor.h"
 #include "ui/tools/text-tool.h"
+#include "ui/widget/canvas.h"
 
 #include "xml/attribute-record.h"
 #include "xml/node-event-vector.h"
@@ -149,7 +149,7 @@ void TextTool::setup() {
 
     this->imc = gtk_im_multicontext_new();
     if (this->imc) {
-        GtkWidget *canvas = GTK_WIDGET(desktop->getCanvas());
+        GtkWidget *canvas = GTK_WIDGET(desktop->getCanvas()->gobj());
 
         /* im preedit handling is very broken in inkscape for
          * multi-byte characters.  See bug 1086769.
@@ -208,7 +208,7 @@ void TextTool::setup() {
 
 void TextTool::finish() {
     if (this->desktop) {
-        sp_signal_disconnect_by_data(this->desktop->getCanvas(), this);
+        sp_signal_disconnect_by_data(this->desktop->getCanvas()->gobj(), this);
     }
 
     this->enableGrDrag(false);

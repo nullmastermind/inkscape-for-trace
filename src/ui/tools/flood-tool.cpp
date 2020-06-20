@@ -44,7 +44,6 @@
 #include "display/drawing-context.h"
 #include "display/drawing-image.h"
 #include "display/drawing.h"
-#include "display/sp-canvas.h"
 
 #include "include/macros.h"
 
@@ -55,14 +54,14 @@
 #include "object/sp-path.h"
 #include "object/sp-root.h"
 
-#include "ui/pixmaps/cursor-paintbucket.xpm"
-
 #include "svg/svg.h"
 
 #include "trace/imagemap.h"
 #include "trace/potrace/inkscape-potrace.h"
 
+#include "ui/pixmaps/cursor-paintbucket.xpm"
 #include "ui/shape-editor.h"
+#include "ui/widget/canvas.h"  // Canvas area
 
 #include "xml/node-event-vector.h"
 
@@ -758,7 +757,7 @@ static void sp_flood_do_flood_fill(ToolBase *event_context, GdkEvent *event, boo
     double padding = 1.6;
 
     // image space is world space with an offset
-    Geom::Rect const screen_world = desktop->canvas->getViewbox();
+    Geom::Rect const screen_world = desktop->getCanvas()->get_area_world();
     Geom::Rect const screen = screen_world * desktop->w2d();
     Geom::IntPoint const img_dims = (screen_world.dimensions() * padding).ceil();
     Geom::Affine const world2img = Geom::Translate((img_dims - screen_world.dimensions()) / 2.0 - screen_world.min());
@@ -1212,8 +1211,6 @@ void FloodTool::finishItem() {
 
     if (this->item != nullptr) {
         this->item->updateRepr();
-
-        desktop->canvas->endForcedFullRedraws();
 
         desktop->getSelection()->set(this->item);
 

@@ -37,6 +37,7 @@
 #include "ui/icon-names.h"
 #include "ui/tools/gradient-tool.h"
 #include "ui/util.h"
+#include "ui/widget/canvas.h"
 #include "ui/widget/color-preview.h"
 #include "ui/widget/combo-tool-item.h"
 #include "ui/widget/gradient-image.h"
@@ -513,7 +514,7 @@ GradientToolbar::GradientToolbar(SPDesktop *desktop)
         _offset_adj = Gtk::Adjustment::create(offset_val, 0.0, 1.0, 0.01, 0.1);
         _offset_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("gradient-stopoffset", C_("Gradient", "Offset:"), _offset_adj, 0.01, 2));
         _offset_item->set_tooltip_text(_("Offset of selected stop"));
-        _offset_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+        _offset_item->set_focus_widget(desktop->canvas);
         _offset_adj->signal_value_changed().connect(sigc::mem_fun(*this, &GradientToolbar::stop_offset_adjustment_changed));
         add(*_offset_item);
         _offset_item->set_sensitive(false);

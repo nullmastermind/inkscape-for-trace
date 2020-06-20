@@ -10,18 +10,20 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <gtk/gtk.h>
+#include <2geom/point.h>
+#include <2geom/rect.h>
+
+#include "canvas-rotate.h"
+
 #include "inkscape.h"
 #include "desktop.h"
 
-#include "canvas-rotate.h"
-#include "sp-canvas.h"
 #include "cairo-utils.h"
+
 #include "ui/event-debug.h"
+#include "ui/widget/canvas.h"
 
-#include "2geom/point.h"
-#include "2geom/rect.h"
-
-#include <gtk/gtk.h>
 
 namespace {
 
@@ -69,7 +71,7 @@ static int sp_canvas_rotate_event  (SPCanvasItem *item, GdkEvent *event)
 //    ui_dump_event (event, Glib::ustring("sp_canvas_rotate_event"));
 
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    Geom::Rect viewbox = desktop->canvas->getViewbox(); // Not SVG viewbox!
+    Geom::Rect viewbox = desktop->canvas->get_area_world();
     cr->center = viewbox.midpoint();
 
     switch (event->type) {
@@ -111,7 +113,8 @@ static int sp_canvas_rotate_event  (SPCanvasItem *item, GdkEvent *event)
 
             // Update screen
             // sp_canvas_item_request_update( item );
-            sp_canvas_rotate_paint (cr, cr->canvas->_backing_store);
+            auto backing_store = item->canvas->get_backing_store();
+            sp_canvas_rotate_paint (cr, backing_store->cobj());
             break;
         }
         case GDK_BUTTON_RELEASE:

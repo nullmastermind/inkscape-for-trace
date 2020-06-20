@@ -15,9 +15,10 @@
 #include "desktop.h"
 
 #include "rubberband.h"
-#include "display/sp-canvas.h"
 #include "display/canvas-bpath.h"
 #include "display/curve.h"
+
+#include "ui/widget/canvas.h" // Forced redraws
 
 Inkscape::Rubberband *Inkscape::Rubberband::_instance = nullptr;
 
@@ -55,7 +56,7 @@ void Inkscape::Rubberband::start(SPDesktop *d, Geom::Point const &p)
     _points.push_back(_desktop->d2w(p));
     _touchpath_curve->moveto(p);
 
-    _desktop->canvas->forceFullRedrawAfterInterruptions(5);
+    _desktop->getCanvas()->forced_redraws_start(5);
 }
 
 void Inkscape::Rubberband::stop()
@@ -69,7 +70,7 @@ void Inkscape::Rubberband::stop()
     delete_canvas_items();
 
     if (_desktop) {
-        _desktop->canvas->endForcedFullRedraws();
+        _desktop->getCanvas()->forced_redraws_stop();
     }
 }
 

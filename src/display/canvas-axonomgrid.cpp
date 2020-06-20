@@ -28,7 +28,6 @@
 #include "display/cairo-utils.h"
 #include "display/canvas-grid.h"
 #include "display/sp-canvas-util.h"
-#include "display/sp-canvas.h"
 #include "document.h"
 #include "inkscape.h"
 #include "preferences.h"

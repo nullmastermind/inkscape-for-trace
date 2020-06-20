@@ -12,12 +12,13 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "display/sp-ctrlcurve.h"
-#include "display/sp-canvas-util.h"
-#include "display/cairo-utils.h"
-#include "color.h"
-#include "display/sp-canvas.h"
+#include "sp-ctrlcurve.h"
+#include "sp-canvas-util.h"
+#include "cairo-utils.h"
 
+#include "color.h"
+
+#include "ui/widget/canvas.h" // Request redraw
 namespace {
 
 static void sp_ctrlcurve_destroy(SPCanvasItem *object);
@@ -101,7 +102,7 @@ sp_ctrlcurve_update(SPCanvasItem *item, Geom::Affine const &affine, unsigned int
 {
     SPCtrlCurve *cl = SP_CTRLCURVE (item);
 
-    item->canvas->requestRedraw(item->x1, item->y1, item->x2, item->y2);
+    item->canvas->redraw_area(item->x1, item->y1, item->x2, item->y2);
 
     if (SP_CANVAS_ITEM_CLASS(sp_ctrlcurve_parent_class)->update)
         SP_CANVAS_ITEM_CLASS(sp_ctrlcurve_parent_class)->update(item, affine, flags);
@@ -144,7 +145,7 @@ sp_ctrlcurve_update(SPCanvasItem *item, Geom::Affine const &affine, unsigned int
         item->x2 = round( max_x + 1 );
         item->y2 = round( max_y + 1 );
 
-        item->canvas->requestRedraw(item->x1, item->y1, item->x2, item->y2);
+        item->canvas->redraw_area(item->x1, item->y1, item->x2, item->y2);
 
     }
 }

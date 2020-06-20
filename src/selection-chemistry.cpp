@@ -56,7 +56,6 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 
 #include "display/cairo-utils.h"
 #include "display/curve.h"
-#include "display/sp-canvas.h"
 
 #include "helper/png-write.h"
 
@@ -111,6 +110,7 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 #include "ui/tools/gradient-tool.h"
 #include "ui/tools/node-tool.h"
 #include "ui/tools/text-tool.h"
+#include "ui/widget/canvas.h"  // is_dragging()
 
 #include "xml/rebase-hrefs.h"
 #include "xml/simple-document.h"
@@ -1222,7 +1222,7 @@ void
 sp_undo(SPDesktop *desktop, SPDocument *)
 {
     // No re/undo while dragging, too dangerous.
-    if(desktop->getCanvas()->_is_dragging) return;
+    if (desktop->getCanvas()->is_dragging()) return;
 
     if (!DocumentUndo::undo(desktop->getDocument())) {
         desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Nothing to undo."));
@@ -1233,7 +1233,7 @@ void
 sp_redo(SPDesktop *desktop, SPDocument *)
 {
     // No re/undo while dragging, too dangerous.
-    if(desktop->getCanvas()->_is_dragging) return;
+    if (desktop->getCanvas()->is_dragging()) return;
 
     if (!DocumentUndo::redo(desktop->getDocument())) {
         desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Nothing to redo."));

@@ -19,11 +19,13 @@
  *
  */
 
-#include "display/sp-ctrlline.h"
-#include "display/sp-canvas-util.h"
-#include "display/cairo-utils.h"
+#include "sp-ctrlline.h"
+#include "sp-canvas-util.h"
+#include "cairo-utils.h"
+
 #include "color.h"
-#include "display/sp-canvas.h"
+
+#include "ui/widget/canvas.h"
 
 namespace {
 
@@ -108,7 +110,7 @@ void sp_ctrlline_update(SPCanvasItem *item, Geom::Affine const &affine, unsigned
 {
     SPCtrlLine *cl = SP_CTRLLINE(item);
 
-    item->canvas->requestRedraw(item->x1, item->y1, item->x2, item->y2);
+    item->canvas->redraw_area(item->x1, item->y1, item->x2, item->y2);
 
     if (SP_CANVAS_ITEM_CLASS(sp_ctrlline_parent_class)->update) {
         SP_CANVAS_ITEM_CLASS(sp_ctrlline_parent_class)->update(item, affine, flags);
@@ -130,7 +132,7 @@ void sp_ctrlline_update(SPCanvasItem *item, Geom::Affine const &affine, unsigned
         item->x2 = round(MAX(s[Geom::X], e[Geom::X]) + 1);
         item->y2 = round(MAX(s[Geom::Y], e[Geom::Y]) + 1);
 
-        item->canvas->requestRedraw(item->x1, item->y1, item->x2, item->y2);
+        item->canvas->redraw_area(item->x1, item->y1, item->x2, item->y2);
     }
 }
 
@@ -140,7 +142,7 @@ void SPCtrlLine::setRgba32(guint32 rgba)
 {
     if (rgba != this->rgba) {
         this->rgba = rgba;
-        canvas->requestRedraw(x1, y1, x2, y2);
+        canvas->redraw_area(x1, y1, x2, y2);
     }
 }
 

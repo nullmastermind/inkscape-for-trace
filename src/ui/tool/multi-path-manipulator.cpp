@@ -32,7 +32,6 @@
 #include "ui/tool/multi-path-manipulator.h"
 #include "ui/tool/path-manipulator.h"
 
-
 namespace Inkscape {
 namespace UI {
 

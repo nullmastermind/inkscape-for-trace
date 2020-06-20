@@ -38,8 +38,7 @@
 #include "object/sp-text.h"
 #include "style.h"
 
-#include "display/sp-canvas.h"
-
+#include "ui/widget/canvas.h"  // Forced redraws
 
 // These can be deleted once we sort out the libart dependence.
 
@@ -406,7 +405,7 @@ void FillNStroke::updateFromPaint()
             if (kind == FILL) {
                 // FIXME: fix for GTK breakage, see comment in SelectedStyle::on_opacity_changed; here it results in
                 // losing release events
-                _desktop->getCanvas()->forceFullRedrawAfterInterruptions(0);
+                _desktop->getCanvas()->forced_redraws_start(0);
             }
 
             _psel->setFlatColor(_desktop, (kind == FILL) ? "fill" : "stroke",
@@ -417,7 +416,7 @@ void FillNStroke::updateFromPaint()
 
             if (kind == FILL) {
                 // resume interruptibility
-                _desktop->getCanvas()->endForcedFullRedraws();
+                _desktop->getCanvas()->forced_redraws_stop();
             }
 
             // on release, toggle undo_label so that the next drag will not be lumped with this one

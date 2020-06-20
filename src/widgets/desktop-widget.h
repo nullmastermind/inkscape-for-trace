@@ -30,7 +30,7 @@
 
 // forward declaration
 typedef struct _EgeColorProfTracker EgeColorProfTracker;
-struct SPCanvas;
+
 struct SPCanvasItem;
 class SPDocument;
 class SPDesktop;
@@ -45,6 +45,7 @@ class SwatchesPanel;
 
 namespace Widget {
   class Button;
+  class Canvas;
   class CanvasGrid;
   class LayerSelector;
   class SelectedStyle;
@@ -78,7 +79,8 @@ class SPDesktopWidget : public SPViewWidget {
     SPDesktopWidget(SPDocument *document);
     ~SPDesktopWidget() override;
 
-  Inkscape::UI::Widget::CanvasGrid *GetCanvasGrid() { return _canvas_grid; }  // Temp, I hope!
+    Inkscape::UI::Widget::CanvasGrid *get_canvas_grid() { return _canvas_grid; }  // Temp, I hope!
+    Inkscape::UI::Widget::Canvas     *get_canvas()      { return _canvas; }
 
     void on_size_allocate(Gtk::Allocation &) override;
     void on_realize() override;
@@ -147,7 +149,7 @@ public:
     double _dt2r;
 
 private:
-    SPCanvas *_canvas;
+    Inkscape::UI::Widget::Canvas *_canvas = nullptr;
 
     std::vector<sigc::connection> _connections;
 

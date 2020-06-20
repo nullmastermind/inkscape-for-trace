@@ -18,10 +18,9 @@
 #include "inkscape-window.h"
 #include "desktop.h"
 
-#include "display/sp-canvas.h"
-
 #include "ui/tools-switch.h"  // TOOLS_FREEHAND_PEN, etc.
 #include "ui/tools/freehand-base.h" // SP_DRAW_CONTEXT
+#include "ui/widget/canvas.h" // Canvas area
 
 enum {
     INK_CANVAS_ZOOM_IN,
@@ -68,7 +67,7 @@ canvas_transform(InkscapeWindow *win, const int& option)
         prefs->getDoubleLimited("/options/zoomincrement/value", M_SQRT2, 1.01, 10);
 
     // Get document dependent parameters
-    Geom::Rect const canvas = dt->getCanvas()->getViewbox();  // Not SVG 'viewBox'!
+    Geom::Rect const canvas = dt->getCanvas()->get_area_world();
     Geom::Point midpoint = dt->w2d(canvas.midpoint());        // Midpoint of drawing on canvas.
 
     switch (option) {

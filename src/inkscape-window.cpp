@@ -53,6 +53,8 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     // =================== Actions ===================
     add_actions_canvas_transform(this);    // Actions to transform canvas view.
 
+    insert_action_group("doc", document->getActionGroup());
+
     // =============== Build interface ===============
 
     // Main box

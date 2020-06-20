@@ -26,10 +26,15 @@ class SPCanvasItem;
 
 namespace Inkscape {
 namespace UI {
+
+namespace Widget {
+class Canvas;
+}
+
 namespace View {
 
 /**
- * A light-weight widget containing an SPCanvas for rendering an SVG.
+ * A light-weight widget containing an Inkscape canvas for rendering an SVG.
  */
 class SVGViewWidget : public Gtk::ScrolledWindow {
 
@@ -42,7 +47,7 @@ public:
 private:
     void size_allocate(Gtk::Allocation& allocation);
 
-    GtkWidget* _canvas;
+    Inkscape::UI::Widget::Canvas *_canvas;
 
 // From SVGView ---------------------------------
 

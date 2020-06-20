@@ -14,21 +14,25 @@
 #include <cstring>
 #include <string>
 
-#include "ui/dialog/layer-properties.h"
-#include "ui/icon-loader.h"
 #include <boost/range/adaptor/filtered.hpp>
 #include <boost/range/adaptor/reversed.hpp>
+
 #include <glibmm/i18n.h>
 
 #include "desktop.h"
-
-#include "document.h"
 #include "document-undo.h"
+#include "document.h"
 #include "layer-manager.h"
+#include "verbs.h"
+
+#include "ui/dialog/layer-properties.h"
+#include "ui/icon-loader.h"
 #include "ui/icon-names.h"
 #include "ui/util.h"
+#include "ui/widget/canvas.h" // Focus widget
+
 #include "util/reverse-list.h"
-#include "verbs.h"
+
 #include "xml/node-event-vector.h"
 
 namespace Inkscape {
@@ -315,7 +319,7 @@ void LayerSelector::_setDesktopLayer() {
         _selectLayer(_desktop->currentLayer());
     }
     if (_desktop && _desktop->canvas) {
-        gtk_widget_grab_focus (GTK_WIDGET(_desktop->canvas));
+        _desktop->canvas->grab_focus();
     }
 }
 

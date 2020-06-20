@@ -49,6 +49,8 @@
 #include "ui/selected-color.h"
 #include "ui/tools-switch.h"
 #include "ui/tools/node-tool.h"
+
+#include "ui/widget/canvas.h"
 #include "ui/widget/clipmaskicon.h"
 #include "ui/widget/color-notebook.h"
 #include "ui/widget/highlight-picker.h"
@@ -888,9 +890,8 @@ bool ObjectsPanel::_handleKeyEvent(GdkEventKey *event)
 
         // defocus:
         case GDK_KEY_Escape:
-            auto wdg = Glib::wrap(GTK_WIDGET(_desktop->canvas));
-            if (wdg) {
-                wdg->grab_focus();
+            if (_desktop->canvas) {
+                _desktop->canvas->grab_focus();
                 return true;
             }
             break;

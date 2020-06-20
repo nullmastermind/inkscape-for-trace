@@ -14,15 +14,19 @@
 
 #include <gtkmm.h>
 
-#include "display/sp-canvas-util.h"
-#include "helper/sp-marshal.h"
-#include "display/canvas-arena.h"
-#include "display/cairo-utils.h"
-#include "display/drawing-context.h"
-#include "display/drawing-item.h"
-#include "display/drawing-group.h"
-#include "display/drawing-surface.h"
+#include "sp-canvas-util.h"
+#include "canvas-arena.h"
+#include "cairo-utils.h"
+#include "drawing-context.h"
+#include "drawing-item.h"
+#include "drawing-group.h"
+#include "drawing-surface.h"
+
 #include "preferences.h"
+
+#include "helper/sp-marshal.h"
+
+#include "ui/widget/canvas.h"
 
 using namespace Inkscape;
 
@@ -159,7 +163,7 @@ sp_canvas_arena_update (SPCanvasItem *item, Geom::Affine const &affine, unsigned
         DrawingItem *new_arena = arena->drawing.pick(arena->c, arena->drawing.delta, arena->sticky);
         if (new_arena != arena->active) {
             GdkEventCrossing ec;
-            ec.window = gtk_widget_get_window (GTK_WIDGET (item->canvas));
+            ec.window = gtk_widget_get_window (GTK_WIDGET (item->canvas->gobj()));
             ec.send_event = TRUE;
             ec.subwindow = ec.window;
             ec.time = GDK_CURRENT_TIME;
@@ -340,8 +344,8 @@ sp_canvas_arena_request_update (SPCanvasArena *ca, DrawingItem */*item*/)
 
 static void sp_canvas_arena_request_render(SPCanvasArena *ca, Geom::IntRect const &area)
 {
-    SPCanvas *canvas = SP_CANVAS_ITEM(ca)->canvas;
-    canvas->requestRedraw(area.left(), area.top(), area.right(), area.bottom());
+    Inkscape:UI::Widget::Canvas *canvas = SP_CANVAS_ITEM(ca)->canvas;
+    canvas->redraw_area(area.left(), area.top(), area.right(), area.bottom());
 }
 
 void

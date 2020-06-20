@@ -21,7 +21,6 @@
 #include "sodipodi-ctrlrect.h"
 #include "sp-canvas-util.h"
 #include "display/cairo-utils.h"
-#include "display/sp-canvas.h"
 #include <2geom/transforms.h>
 
 /*
