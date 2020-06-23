@@ -17,6 +17,7 @@
 #include <sigc++/sigc++.h>
 
 #include "3rdparty/adaptagrams/libavoid/connector.h"
+#include "attributes.h"
 
 
 class SPConnEnd;

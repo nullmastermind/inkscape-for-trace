@@ -27,6 +27,10 @@ class SPDesktop;
 
 namespace Inkscape {
 namespace UI {
+namespace Tools {
+class ToolBase;
+}
+
 namespace Widget {
 
 class FillNStroke : public Gtk::Box {
