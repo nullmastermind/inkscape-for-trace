@@ -54,7 +54,7 @@ LPELineSegment::doEffect_path (Geom::PathVector const & path_in)
     B = path_in.finalPoint();
 
     Geom::Rect dummyRect(bboxA, bboxB);
-    boost::optional<Geom::LineSegment> intersection_segment = Geom::Line(A, B).clip(dummyRect);
+    std::optional<Geom::LineSegment> intersection_segment = Geom::Line(A, B).clip(dummyRect);
 
     if (!intersection_segment) {
         g_print ("Possible error - no intersection with limiting bounding box.\n");

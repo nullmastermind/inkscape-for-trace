@@ -339,7 +339,7 @@ Geom::OptRect ObjectSet::documentBounds(SPItem::BBoxType type) const
 
 // If we have a selection of multiple items, then the center of the first item
 // will be returned; this is also the case in SelTrans::centerRequest()
-boost::optional<Geom::Point> ObjectSet::center() const {
+std::optional<Geom::Point> ObjectSet::center() const {
     auto items = const_cast<ObjectSet *>(this)->items();
     if (!items.empty()) {
         SPItem *first = items.back(); // from the first item in selection
@@ -351,7 +351,7 @@ boost::optional<Geom::Point> ObjectSet::center() const {
     if (bbox) {
         return bbox->midpoint();
     } else {
-        return boost::optional<Geom::Point>();
+        return std::optional<Geom::Point>();
     }
 }
 

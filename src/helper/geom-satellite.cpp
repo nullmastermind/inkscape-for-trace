@@ -16,7 +16,7 @@
 #include <2geom/path-intersection.h>
 #include <2geom/sbasis-to-bezier.h>
 #include <2geom/ray.h>
-#include <boost/optional.hpp>
+#include <optional>
 // log cache
 #ifdef _WIN32
 #include <Windows.h>

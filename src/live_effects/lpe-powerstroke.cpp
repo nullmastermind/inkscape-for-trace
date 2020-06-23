@@ -40,7 +40,7 @@ namespace Geom {
 
 /** Find the point where two straight lines cross.
 */
-static boost::optional<Point> intersection_point( Point const & origin_a, Point const & vector_a,
+static std::optional<Point> intersection_point( Point const & origin_a, Point const & vector_a,
                                            Point const & origin_b, Point const & vector_b)
 {
     Coord denom = cross(vector_a, vector_b);
@@ -48,7 +48,7 @@ static boost::optional<Point> intersection_point( Point const & origin_a, Point 
         Coord t = (cross(vector_b, origin_a) + cross(origin_b, vector_b)) / denom;
         return origin_a + t * vector_a;
     }
-    return boost::none;
+    return std::nullopt;
 }
 
 static Geom::CubicBezier sbasis_to_cubicbezier(Geom::D2<Geom::SBasis> const & sbasis_in)
@@ -319,7 +319,7 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
                        A 2Geom method was created to do exactly this :)
                        */
 
-                    boost::optional<Geom::Point> O = intersection_point( B[prev_i].at1(), tang1,
+                    std::optional<Geom::Point> O = intersection_point( B[prev_i].at1(), tang1,
                                                                               B[i].at0(), tang2 );
                     if (!O) {
                         // no center found, i.e. 180 degrees round
@@ -427,7 +427,7 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
                                 build_from_sbasis(pb,arc0->toSBasis(), tol, false);
                                 build = true;
                             } else if (arc1) {
-                                boost::optional<Geom::Point> p = intersection_point( B[prev_i].at1(), tang1,
+                                std::optional<Geom::Point> p = intersection_point( B[prev_i].at1(), tang1,
                                                                                 B[i].at0(), tang2 );
                                 if (p) {
                                     // check size of miter
@@ -448,7 +448,7 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
                         }
                         if (!solok || !(arc0 && build)) {
                             // fall back to miter
-                            boost::optional<Geom::Point> p = intersection_point( B[prev_i].at1(), tang1,
+                            std::optional<Geom::Point> p = intersection_point( B[prev_i].at1(), tang1,
                                                                                 B[i].at0(), tang2 );
                             if (p) {
                                 // check size of miter
@@ -471,7 +471,7 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
                         }
                     } else {
                         // fall back to miter
-                        boost::optional<Geom::Point> p = intersection_point( B[prev_i].at1(), tang1,
+                        std::optional<Geom::Point> p = intersection_point( B[prev_i].at1(), tang1,
                                                                             B[i].at0(), tang2 );
                         if (p) {
                             // check size of miter
@@ -495,7 +495,7 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
                     break;
                 }
                 case LINEJOIN_MITER: {
-                    boost::optional<Geom::Point> p = intersection_point( B[prev_i].at1(), tang1,
+                    std::optional<Geom::Point> p = intersection_point( B[prev_i].at1(), tang1,
                                                                          B[i].at0(), tang2 );
                     if (p) {
                         // check size of miter

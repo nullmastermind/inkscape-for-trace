@@ -125,7 +125,7 @@ void PencilTool::_endpointSnap(Geom::Point &p, guint const state) {
         if (!(state & GDK_SHIFT_MASK)) { //SHIFT disables all snapping, except the angular snapping above
                                          //After all, the user explicitly asked for angular snapping by
                                          //pressing CTRL
-            boost::optional<Geom::Point> origin = this->_npoints > 0 ? this->p[0] : boost::optional<Geom::Point>();
+            std::optional<Geom::Point> origin = this->_npoints > 0 ? this->p[0] : std::optional<Geom::Point>();
             spdc_endpoint_snap_free(this, p, origin, state);
         }
     }
@@ -980,7 +980,7 @@ void PencilTool::_interpolate() {
                 if (!tablet_enabled || c != n_segs - 1) {
                     this->green_curve->curveto(b[4 * c + 1], b[4 * c + 2], b[4 * c + 3]);
                 } else {
-                    boost::optional<Geom::Point> finalp = this->green_curve->last_point();
+                    std::optional<Geom::Point> finalp = this->green_curve->last_point();
                     if (this->green_curve->nodes_in_path() > 4 && Geom::are_near(*finalp, b[4 * c + 3], 10.0)) {
                         this->green_curve->backspace();
                         this->green_curve->curveto(*finalp, b[4 * c + 3], b[4 * c + 3]);

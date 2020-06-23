@@ -306,7 +306,7 @@ public:
      * @param snaps Number of angular increments per PI radians; E.g. if snaps = 2 then we will snap every PI/2 = 90 degrees.
      */
     Inkscape::SnappedPoint constrainedAngularSnap(Inkscape::SnapCandidatePoint const &p,
-                                                    boost::optional<Geom::Point> const &p_ref,
+                                                    std::optional<Geom::Point> const &p_ref,
                                                     Geom::Point const &o,
                                                     unsigned const snaps) const;
 

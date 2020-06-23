@@ -1911,7 +1911,7 @@ void ObjectSet::rotate(gdouble const angle_degrees)
     if (isEmpty())
         return;
 
-    boost::optional<Geom::Point> center_ = center();
+    std::optional<Geom::Point> center_ = center();
     if (!center_) {
         return;
     }
@@ -2248,7 +2248,7 @@ void ObjectSet::rotateScreen(double angle)
         return;
 
     Geom::OptRect bbox = visualBounds();
-    boost::optional<Geom::Point> center_ = center();
+    std::optional<Geom::Point> center_ = center();
 
     if ( !bbox || !center_ ) {
         return;

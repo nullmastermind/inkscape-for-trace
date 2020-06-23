@@ -17,7 +17,7 @@
 #include <memory>
 #include <unordered_map>
 #include <unordered_set>
-#include <boost/optional.hpp>
+#include <optional>
 #include <cstddef>
 #include <sigc++/sigc++.h>
 #include <2geom/forward.h>
@@ -149,8 +149,8 @@ private:
     set_type _all_points;
     std::unordered_map<SelectableControlPoint *, Geom::Point> _original_positions;
     std::unordered_map<SelectableControlPoint *, Geom::Affine> _last_trans;
-    boost::optional<double> _rot_radius;
-    boost::optional<double> _mouseover_rot_radius;
+    std::optional<double> _rot_radius;
+    std::optional<double> _mouseover_rot_radius;
     Geom::OptRect _bounds;
     TransformHandleSet *_handles;
     SelectableControlPoint *_grabbed_point, *_farthest_point;

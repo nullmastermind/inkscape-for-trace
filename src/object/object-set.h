@@ -321,7 +321,7 @@ public:
     /**
      * Returns the rotation/skew center of the selection.
      */
-    boost::optional<Geom::Point> center() const;
+    std::optional<Geom::Point> center() const;
 
     /** Returns a list of all perspectives which have a 3D box in the current selection.
        (these may also be nested in groups) */

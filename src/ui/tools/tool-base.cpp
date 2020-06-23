@@ -1430,7 +1430,7 @@ void sp_event_context_snap_delay_handler(ToolBase *ec,
         DelayedSnapEvent::DelayedSnapEventOrigin origin)
 {
     static guint32 prev_time;
-    static boost::optional<Geom::Point> prev_pos;
+    static std::optional<Geom::Point> prev_pos;
 
     if (!ec->_uses_snap || ec->_dse_callback_in_process) {
         return;

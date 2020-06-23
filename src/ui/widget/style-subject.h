@@ -11,7 +11,7 @@
 #ifndef SEEN_INKSCAPE_UI_WIDGET_STYLE_SUBJECT_H
 #define SEEN_INKSCAPE_UI_WIDGET_STYLE_SUBJECT_H
 
-#include <boost/optional.hpp>
+#include <optional>
 #include <2geom/rect.h>
 #include <cstddef>
 #include <sigc++/sigc++.h>

@@ -176,7 +176,7 @@ private:
     double _handle_x;
     double _handle_y;
 
-    boost::optional<Geom::Point> _center;
+    std::optional<Geom::Point> _center;
     bool _center_is_set; ///< we've already set _center, no need to reread it from items
 
     SPKnot *knots[NUMHANDS];

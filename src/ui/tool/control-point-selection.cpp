@@ -460,7 +460,7 @@ bool ControlPointSelection::_pointClicked(SelectableControlPoint *p, GdkEventBut
 
 void ControlPointSelection::_mouseoverChanged()
 {
-    _mouseover_rot_radius = boost::none;
+    _mouseover_rot_radius = std::nullopt;
 }
 
 void ControlPointSelection::_update()
@@ -474,7 +474,7 @@ void ControlPointSelection::_update()
 
 void ControlPointSelection::_updateBounds()
 {
-    _rot_radius = boost::none;
+    _rot_radius = std::nullopt;
     _bounds = Geom::OptRect();
     for (auto cur : _points) {
         Geom::Point p = cur->position();

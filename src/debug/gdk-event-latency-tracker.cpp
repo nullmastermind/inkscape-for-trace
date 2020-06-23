@@ -25,10 +25,10 @@ GdkEventLatencyTracker::GdkEventLatencyTracker()
     elapsed.reset();
 }
 
-boost::optional<double> GdkEventLatencyTracker::process(GdkEvent const *event) {
+std::optional<double> GdkEventLatencyTracker::process(GdkEvent const *event) {
     guint32 const timestamp=gdk_event_get_time(const_cast<GdkEvent *>(event));
     if (timestamp == GDK_CURRENT_TIME) {
-        return boost::optional<double>();
+        return std::optional<double>();
     }
     double const timestamp_seconds = timestamp / 1000.0;
 
@@ -37,7 +37,7 @@ boost::optional<double> GdkEventLatencyTracker::process(GdkEvent const *event) {
         start_seconds = timestamp_seconds;
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         skew = prefs->getDoubleLimited("/debug/latency/skew", 1.0, 0.5, 2.0);
-        return boost::optional<double>(0.0);
+        return std::optional<double>(0.0);
     } else {
         last_elapsed = elapsed.elapsed();
         last_seconds = timestamp_seconds;
@@ -49,7 +49,7 @@ boost::optional<double> GdkEventLatencyTracker::process(GdkEvent const *event) {
         } else if (delta > max_latency) {
             max_latency = delta;
         }
-        return boost::optional<double>(delta);
+        return std::optional<double>(delta);
     }
 }
 

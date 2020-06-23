@@ -53,7 +53,7 @@ canvas_zoom_helper(SPDesktop* dt, const Geom::Point& midpoint, double zoom_facto
         dynamic_cast<Inkscape::UI::Tools::PenTool    *>(dt->event_context)  ) {
 
         // Zoom around end of unfinished path.
-        boost::optional<Geom::Point> zoom_to =
+        std::optional<Geom::Point> zoom_to =
             SP_DRAW_CONTEXT(dt->event_context)->red_curve_get_last_point();
         if (zoom_to) {
             dt->zoom_relative(*zoom_to, zoom_factor);

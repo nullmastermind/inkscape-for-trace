@@ -325,7 +325,7 @@ void createAngleDisplayCurve(SPDesktop *desktop,
 
 }  // namespace
 
-boost::optional<Geom::Point> explicit_base_tmp = boost::none;
+std::optional<Geom::Point> explicit_base_tmp = std::nullopt;
 
 MeasureTool::MeasureTool()
     : ToolBase("measure.svg")
@@ -536,9 +536,9 @@ bool MeasureTool::root_handler(GdkEvent* event)
         this->knot_start->hide();
         this->knot_end->hide();
         Geom::Point const button_w(event->button.x, event->button.y);
-        explicit_base = boost::none;
-        explicit_base_tmp = boost::none;
-        last_end = boost::none;
+        explicit_base = std::nullopt;
+        explicit_base_tmp = std::nullopt;
+        last_end = std::nullopt;
 
         if (event->button.button == 1) {
             // save drag origin
@@ -1281,7 +1281,7 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, bool to_phantom,
     double baseAngle = 0;
 
     if (explicit_base) {
-        baseAngle = atan2(explicit_base.get() - start_p);
+        baseAngle = atan2(*explicit_base - start_p);
         angle -= baseAngle;
     }
 

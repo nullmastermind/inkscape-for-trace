@@ -385,10 +385,10 @@ SPCurve::first_path() const
 /**
  * Return first point of first subpath or nothing when the path is empty.
  */
-boost::optional<Geom::Point>
+std::optional<Geom::Point>
 SPCurve::first_point() const
 {
-    boost::optional<Geom::Point> retval;
+    std::optional<Geom::Point> retval;
 
     if (!is_empty()) {
         retval = _pathv.front().initialPoint();
@@ -403,10 +403,10 @@ SPCurve::first_point() const
  * returns the first point of the second path, if it exists. If there is no 2nd path, it returns the
  * first point of the first path.
  */
-boost::optional<Geom::Point>
+std::optional<Geom::Point>
 SPCurve::second_point() const
 {
-    boost::optional<Geom::Point> retval;
+    std::optional<Geom::Point> retval;
     if (!is_empty()) {
         if (_pathv.front().empty()) {
             // first path is only a moveto
@@ -427,10 +427,10 @@ SPCurve::second_point() const
 /**
  * Return the second-last point of last subpath or first point when that last subpath has only a moveto.
  */
-boost::optional<Geom::Point>
+std::optional<Geom::Point>
 SPCurve::penultimate_point() const
 {
-    boost::optional<Geom::Point> retval;
+    std::optional<Geom::Point> retval;
     if (!is_empty()) {
         Geom::Path const &lastpath = _pathv.back();
         if (!lastpath.empty()) {
@@ -448,10 +448,10 @@ SPCurve::penultimate_point() const
  * Return last point of last subpath or nothing when the curve is empty.
  * If the last path is only a moveto, then return that point.
  */
-boost::optional<Geom::Point>
+std::optional<Geom::Point>
 SPCurve::last_point() const
 {
-    boost::optional<Geom::Point> retval;
+    std::optional<Geom::Point> retval;
 
     if (!is_empty()) {
         retval = _pathv.back().finalPoint();

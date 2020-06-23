@@ -14,6 +14,7 @@
  */
 
 #include <gdk/gdk.h>
+#include <optional>
 
 #include <2geom/sbasis-to-bezier.h>
 #include <2geom/bezier-to-sbasis.h>
@@ -85,10 +86,10 @@ std::vector<Geom::Interval> complementOf(Geom::Interval I, std::vector<Geom::Int
         Geom::Interval I2 = Geom::Interval(I.max(),max);
 
         for (auto i : domain){
-            boost::optional<Geom::Interval> I1i = intersect(i,I1);
-            if (I1i && !I1i->isSingular()) ret.push_back(I1i.get());
-            boost::optional<Geom::Interval> I2i = intersect(i,I2);
-            if (I2i && !I2i->isSingular()) ret.push_back(I2i.get());
+            std::optional<Geom::Interval> I1i = intersect(i,I1);
+            if (I1i && !I1i->isSingular()) ret.push_back(*I1i);
+            std::optional<Geom::Interval> I2i = intersect(i,I2);
+            if (I2i && !I2i->isSingular()) ret.push_back(*I2i);
         }
     }
     return ret;

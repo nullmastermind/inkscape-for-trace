@@ -21,7 +21,7 @@
 #include <pango/pango-break.h>
 #include <algorithm>
 #include <vector>
-#include <boost/optional.hpp>
+#include <optional>
 #include <svg/svg-length.h>
 #include "style-enums.h"
 
@@ -532,7 +532,7 @@ public:
 
     /** For left aligned text, the leftmost end of the baseline
     For rightmost text, the rightmost... you probably got it by now ;-)*/
-    boost::optional<Geom::Point> baselineAnchorPoint() const;
+    std::optional<Geom::Point> baselineAnchorPoint() const;
 
     Geom::Path baseline() const;
 

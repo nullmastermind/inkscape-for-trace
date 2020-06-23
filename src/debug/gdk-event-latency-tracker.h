@@ -15,7 +15,7 @@
 
 typedef union _GdkEvent GdkEvent;
 #include <glibmm/timer.h>
-#include <boost/optional.hpp>
+#include <optional>
 
 namespace Inkscape {
 namespace Debug {
@@ -23,7 +23,7 @@ namespace Debug {
 class GdkEventLatencyTracker {
 public:
     GdkEventLatencyTracker();
-    boost::optional<double> process(GdkEvent const *e);
+    std::optional<double> process(GdkEvent const *e);
     double maxLatency() const { return max_latency; }
     double getSkew();
 

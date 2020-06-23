@@ -791,7 +791,7 @@ void Transformation::applyPageRotate(Inkscape::Selection *selection)
             item->rotate_rel(Geom::Rotate (angle*M_PI/180.0));
         }
     } else {
-        boost::optional<Geom::Point> center = selection->center();
+        std::optional<Geom::Point> center = selection->center();
         if (center) {
             selection->rotateRelative(*center, angle);
         }
@@ -851,7 +851,7 @@ void Transformation::applyPageSkew(Inkscape::Selection *selection)
         }
     } else { // transform whole selection
         Geom::OptRect bbox = selection->preferredBounds();
-        boost::optional<Geom::Point> center = selection->center();
+        std::optional<Geom::Point> center = selection->center();
 
         if ( bbox && center ) {
             double width  = bbox->dimensions()[Geom::X];

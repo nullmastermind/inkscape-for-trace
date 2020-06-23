@@ -26,7 +26,7 @@ Path *Path_for_item_before_LPE(SPItem *item, bool doTransformation, bool transfo
 Geom::PathVector* pathvector_for_curve(SPItem *item, SPCurve *curve, bool doTransformation, bool transformFull, Geom::Affine extraPreAffine, Geom::Affine extraPostAffine);
 std::unique_ptr<SPCurve> curve_for_item(SPItem *item);
 std::unique_ptr<SPCurve> curve_for_item_before_LPE(SPItem *item);
-boost::optional<Path::cut_position> get_nearest_position_on_Path(Path *path, Geom::Point p, unsigned seg = 0);
+std::optional<Path::cut_position> get_nearest_position_on_Path(Path *path, Geom::Point p, unsigned seg = 0);
 Geom::Point get_point_on_Path(Path *path, int piece, double t);
 
 #endif // PATH_UTIL_H

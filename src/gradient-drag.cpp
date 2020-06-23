@@ -846,7 +846,7 @@ static void gr_knot_moved_handler(SPKnot *knot, Geom::Point const &ppointer, gui
                     sp = m.constrainedAngularSnap(scp, dragger->point_original, dr_snap, 2);
                 } else {
                     // with Ctrl, snap to M_PI/snaps
-                    sp = m.constrainedAngularSnap(scp, boost::optional<Geom::Point>(), dr_snap, snaps);
+                    sp = m.constrainedAngularSnap(scp, std::optional<Geom::Point>(), dr_snap, snaps);
                 }
                 m.unSetup();
                 isr.points.push_back(sp);

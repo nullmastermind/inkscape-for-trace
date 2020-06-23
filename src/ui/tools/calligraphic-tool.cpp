@@ -502,7 +502,7 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
                     pointer = motion_dt * motion_to_curve;
 
                     // calculate the nearest point on the guide path
-                    boost::optional<Path::cut_position> position = get_nearest_position_on_Path(this->hatch_livarot_path, pointer);
+                    std::optional<Path::cut_position> position = get_nearest_position_on_Path(this->hatch_livarot_path, pointer);
                     nearest = get_point_on_Path(this->hatch_livarot_path, position->piece, position->t);
 
 

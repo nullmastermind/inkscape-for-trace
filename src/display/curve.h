@@ -16,7 +16,7 @@
 
 #include <2geom/pathvector.h>
 #include <cstddef>
-#include <boost/optional.hpp>
+#include <optional>
 #include <list>
 #include <memory>
 #include <utility>
@@ -73,10 +73,10 @@ public:
     Geom::Path const * last_path() const;
     Geom::Curve const * first_segment() const;
     Geom::Path const * first_path() const;
-    boost::optional<Geom::Point> first_point() const;
-    boost::optional<Geom::Point> last_point() const;
-    boost::optional<Geom::Point> second_point() const;
-    boost::optional<Geom::Point> penultimate_point() const;
+    std::optional<Geom::Point> first_point() const;
+    std::optional<Geom::Point> last_point() const;
+    std::optional<Geom::Point> second_point() const;
+    std::optional<Geom::Point> penultimate_point() const;
 
     void reset();
 

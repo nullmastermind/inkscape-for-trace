@@ -15,6 +15,7 @@
 
 #include <cstddef>
 #include <boost/optional.hpp>
+#include <optional>
 
 #include <sigc++/sigc++.h>
 
@@ -81,8 +82,8 @@ public:
     void knotUngrabbedHandler(SPKnot */*knot*/,  unsigned int /*state*/);
 
 private:
-    boost::optional<Geom::Point> explicit_base;
-    boost::optional<Geom::Point> last_end;
+    std::optional<Geom::Point> explicit_base;
+    std::optional<Geom::Point> last_end;
     SPKnot *knot_start = nullptr;
     SPKnot *knot_end   = nullptr;
     gint dimension_offset = 20;

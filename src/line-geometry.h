@@ -14,7 +14,7 @@
 #define SEEN_LINE_GEOMETRY_H
 
 #include <2geom/point.h>
-#include <boost/optional.hpp>
+#include <optional>
 
 #include "axis-manip.h" // FIXME: This is only for Box3D::epsilon; move that to a better location
 #include "object/persp3d.h"
@@ -30,13 +30,13 @@ public:
     Line(Line const &line);
     virtual ~Line() = default;
     Line &operator=(Line const &line);
-    virtual boost::optional<Geom::Point> intersect(Line const &line);
+    virtual std::optional<Geom::Point> intersect(Line const &line);
     inline Geom::Point direction () { return v_dir; }
     
     Geom::Point closest_to(Geom::Point const &pt); // returns the point on the line closest to pt 
 
     friend inline std::ostream &operator<< (std::ostream &out_file, const Line &in_line);
-    boost::optional<Geom::Point> intersection_with_viewbox (SPDesktop *desktop);
+    std::optional<Geom::Point> intersection_with_viewbox (SPDesktop *desktop);
     inline bool lie_on_same_side (Geom::Point const &A, Geom::Point const &B) {
         /* If A is a point in the plane and n is the normal vector of the line then
            the sign of dot(A, n) specifies the half-plane in which A lies.

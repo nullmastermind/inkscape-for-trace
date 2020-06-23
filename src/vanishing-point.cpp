@@ -682,7 +682,7 @@ void VPDrag::drawLinesForFace(const SPBox3D *box,
     }
     else {
         // draw perspective lines for infinite VPs
-        boost::optional<Geom::Point> pts[NUM_CORNERS];
+        std::optional<Geom::Point> pts[NUM_CORNERS];
         Persp3D *persp = box->get_perspective();
         SPDesktop *desktop = SP_ACTIVE_DESKTOP; // FIXME: Store the desktop in VPDrag
 

@@ -572,7 +572,7 @@ public:
 
 private :
     const SortOrder sortOrder;
-    static boost::optional<Geom::Point> center;
+    static std::optional<Geom::Point> center;
 
     static bool sort_compare(const SPItem * a,const SPItem * b) {
         if (a == nullptr) return false;
@@ -642,7 +642,7 @@ private :
 };
 
 // instantiate the private static member
-boost::optional<Geom::Point> ActionExchangePositions::center;
+std::optional<Geom::Point> ActionExchangePositions::center;
 
 class ActionUnclump : public Action {
 public :
@@ -801,7 +801,7 @@ private :
         {
         	if (SP_IS_TEXT (item) || SP_IS_FLOWTEXT (item)) {
                 Inkscape::Text::Layout const *layout = te_get_layout(item);
-                boost::optional<Geom::Point> pt = layout->baselineAnchorPoint();
+                std::optional<Geom::Point> pt = layout->baselineAnchorPoint();
                 if (pt) {
                     Geom::Point base = *pt * (item)->i2dt_affine();
                     if (base[Geom::X] < b_min[Geom::X]) b_min[Geom::X] = base[Geom::X];
@@ -886,7 +886,7 @@ private :
             {
             	if (SP_IS_TEXT (item) || SP_IS_FLOWTEXT (item)) {
                     Inkscape::Text::Layout const *layout = te_get_layout(item);
-                    boost::optional<Geom::Point> pt = layout->baselineAnchorPoint();
+                    std::optional<Geom::Point> pt = layout->baselineAnchorPoint();
                     if (pt) {
                         Geom::Point base = *pt * (item)->i2dt_affine();
                         Geom::Point t(0.0, 0.0);

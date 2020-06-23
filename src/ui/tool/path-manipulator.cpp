@@ -1731,7 +1731,7 @@ Geom::Coord PathManipulator::_updateDragPoint(Geom::Point const &evp)
 
     Geom::Affine to_desktop = _edit_transform * _i2d_transform;
     Geom::PathVector pv = _spcurve->get_pathvector();
-    boost::optional<Geom::PathVectorTime> pvp =
+    std::optional<Geom::PathVectorTime> pvp =
         pv.nearestTime(_desktop->w2d(evp) * to_desktop.inverse());
     if (!pvp) return dist;
     Geom::Point nearest_pt = _desktop->d2w(pv.pointAt(*pvp) * to_desktop);

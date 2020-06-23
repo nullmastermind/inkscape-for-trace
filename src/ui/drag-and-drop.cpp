@@ -142,7 +142,7 @@ ink_drag_data_received(GtkWidget *widget,
                         Path *livarot_path = Path_for_item(item, true, true);
                         livarot_path->ConvertWithBackData(0.04);
 
-                        boost::optional<Path::cut_position> position = get_nearest_position_on_Path(livarot_path, button_doc);
+                        std::optional<Path::cut_position> position = get_nearest_position_on_Path(livarot_path, button_doc);
                         if (position) {
                             Geom::Point nearest = get_point_on_Path(livarot_path, position->piece, position->t);
                             Geom::Point delta = nearest - button_doc;
@@ -246,7 +246,7 @@ ink_drag_data_received(GtkWidget *widget,
                         Path *livarot_path = Path_for_item(item, true, true);
                         livarot_path->ConvertWithBackData(0.04);
 
-                        boost::optional<Path::cut_position> position = get_nearest_position_on_Path(livarot_path, button_doc);
+                        std::optional<Path::cut_position> position = get_nearest_position_on_Path(livarot_path, button_doc);
                         if (position) {
                             Geom::Point nearest = get_point_on_Path(livarot_path, position->piece, position->t);
                             Geom::Point delta = nearest - button_doc;

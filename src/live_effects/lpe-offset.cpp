@@ -152,7 +152,7 @@ sp_flatten(Geom::PathVector &pathvector, FillRuleFlatten fillkind)
 Geom::Point get_nearest_point(Geom::PathVector pathv, Geom::Point point)
 {
     Geom::Point res = Geom::Point(Geom::infinity(), Geom::infinity());
-    boost::optional< Geom::PathVectorTime > pathvectortime = pathv.nearestTime(point);
+    std::optional< Geom::PathVectorTime > pathvectortime = pathv.nearestTime(point);
     if (pathvectortime) {
         Geom::PathTime pathtime = pathvectortime->asPathTime();
         res = pathv[(*pathvectortime).path_index].pointAt(pathtime.curve_index + pathtime.t);
@@ -163,8 +163,8 @@ Geom::Point get_nearest_point(Geom::PathVector pathv, Geom::Point point)
 /* double get_separation(Geom::PathVector pathv, Geom::Point point, Geom::Point point_b)
 {
     Geom::Point res = Geom::Point(Geom::infinity(), Geom::infinity());
-    boost::optional<Geom::PathVectorTime> pathvectortime = pathv.nearestTime(point);
-    boost::optional<Geom::PathVectorTime> pathvectortime_b = pathv.nearestTime(point_b);
+    std::optional<Geom::PathVectorTime> pathvectortime = pathv.nearestTime(point);
+    std::optional<Geom::PathVectorTime> pathvectortime_b = pathv.nearestTime(point_b);
     if (pathvectortime && pathvectortime_b) {
         Geom::PathTime pathtime = pathvectortime->asPathTime();
         Geom::PathTime pathtime_b = pathvectortime_b->asPathTime();

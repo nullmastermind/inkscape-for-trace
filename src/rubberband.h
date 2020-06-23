@@ -13,7 +13,7 @@
 
 #include <2geom/point.h>
 #include <2geom/rect.h>
-#include <boost/optional.hpp>
+#include <optional>
 #include <vector>
 
 /* fixme: do multidocument safe */

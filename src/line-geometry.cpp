@@ -36,9 +36,9 @@ Line::Line(Line const &line)
 
 Line &Line::operator=(Line const &line) = default;
 
-boost::optional<Geom::Point> Line::intersect(Line const &line) {
+std::optional<Geom::Point> Line::intersect(Line const &line) {
     Geom::Coord denom = Geom::dot(v_dir, line.normal);
-    boost::optional<Geom::Point> no_point;
+    std::optional<Geom::Point> no_point;
     if (fabs(denom) < 1e-6)
         return no_point;
 
@@ -56,7 +56,7 @@ void Line::set_direction(Geom::Point const &dir)
 Geom::Point Line::closest_to(Geom::Point const &pt)
 {
 	/* return the intersection of this line with a perpendicular line passing through pt */ 
-    boost::optional<Geom::Point> result = this->intersect(Line(pt, (this->v_dir).ccw(), false));
+    std::optional<Geom::Point> result = this->intersect(Line(pt, (this->v_dir).ccw(), false));
     g_return_val_if_fail (result, Geom::Point (0.0, 0.0));
     return *result;
 }
@@ -162,14 +162,14 @@ side_of_intersection (Geom::Point const &A, Geom::Point const &B, Geom::Point co
     }
 }
 
-boost::optional<Geom::Point> Line::intersection_with_viewbox (SPDesktop *desktop)
+std::optional<Geom::Point> Line::intersection_with_viewbox (SPDesktop *desktop)
 {
     auto vb = desktop->get_display_area();
 
     std::pair <Geom::Point, Geom::Point> e = side_of_intersection (vb.corner(0), vb.corner(1), vb.corner(2), vb.corner(3), this->pt, this->v_dir);
     if (e.first == e.second) {
         // perspective line lies outside the canvas
-        return boost::optional<Geom::Point>();
+        return std::optional<Geom::Point>();
     }
 
     Line line (e.first, e.second);

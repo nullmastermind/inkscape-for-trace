@@ -298,7 +298,7 @@ void SPFlowtext::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inksca
         Inkscape::Text::Layout const *layout = te_get_layout((SPItem *) this);
 
         if (layout != nullptr && layout->outputExists()) {
-            boost::optional<Geom::Point> pt = layout->baselineAnchorPoint();
+            std::optional<Geom::Point> pt = layout->baselineAnchorPoint();
 
             if (pt) {
                 p.emplace_back((*pt) * this->i2dt_affine(), Inkscape::SNAPSOURCE_TEXT_ANCHOR, Inkscape::SNAPTARGET_TEXT_ANCHOR);

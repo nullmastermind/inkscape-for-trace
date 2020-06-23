@@ -13,7 +13,7 @@
  *    Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <boost/optional.hpp>
+#include <optional>
 #include <cstdio>
 #include <list>
 

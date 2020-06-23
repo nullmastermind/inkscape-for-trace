@@ -460,7 +460,7 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
     Geom::Point origin = _last_drag_origin();
     SnapManager &sm = _desktop->namedview->snap_manager;
     bool snap = held_shift(*event) ? false : sm.someSnapperMightSnap();
-    boost::optional<Inkscape::Snapper::SnapConstraint> ctrl_constraint;
+    std::optional<Inkscape::Snapper::SnapConstraint> ctrl_constraint;
 
     // with Alt, preserve length
     if (held_alt(*event)) {
@@ -1412,7 +1412,7 @@ void Node::dragged(Geom::Point &new_pos, GdkEventMotion *event)
     // and perpendicularly and therefore the origin or direction vector must be set
     Inkscape::SnapCandidatePoint scp_free(new_pos, _snapSourceType());
 
-    boost::optional<Geom::Point> front_point, back_point;
+    std::optional<Geom::Point> front_point, back_point;
     Geom::Point origin = _last_drag_origin();
     Geom::Point dummy_cp;
     if (_front.isDegenerate()) {
@@ -1460,7 +1460,7 @@ void Node::dragged(Geom::Point &new_pos, GdkEventMotion *event)
             int snaps = prefs->getIntLimited("/options/rotationsnapsperpi/value", 12, 1, 1000);
             double min_angle = M_PI / snaps;
 
-            boost::optional<Geom::Point> fperp_point, bperp_point;
+            std::optional<Geom::Point> fperp_point, bperp_point;
             if (front_point) {
                 constraints.emplace_back(origin, *front_point);
                 fperp_point = Geom::rot90(*front_point);

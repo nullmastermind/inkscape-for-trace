@@ -199,7 +199,7 @@ void Inkscape::SelCue::_newTextBaselines()
         if (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item)) { // visualize baseline
             Inkscape::Text::Layout const *layout = te_get_layout(item);
             if (layout != nullptr && layout->outputExists()) {
-                boost::optional<Geom::Point> pt = layout->baselineAnchorPoint();
+                std::optional<Geom::Point> pt = layout->baselineAnchorPoint();
                 if (pt) {
                     auto canvas_item = new Inkscape::CanvasItemCtrl(_desktop->getCanvasControls(),
                                                                     Inkscape::CANVAS_ITEM_CTRL_SHAPE_SQUARE,

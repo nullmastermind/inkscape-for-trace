@@ -276,7 +276,7 @@ Geom::Point Layout::characterAnchorPoint(iterator const &it) const
     }
 }
 
-boost::optional<Geom::Point> Layout::baselineAnchorPoint() const
+std::optional<Geom::Point> Layout::baselineAnchorPoint() const
 {
     iterator pos = this->begin();
     Geom::Point left_pt = this->characterAnchorPoint(pos);
@@ -300,7 +300,7 @@ boost::optional<Geom::Point> Layout::baselineAnchorPoint() const
             return right_pt;
             break;
         default:
-            return boost::optional<Geom::Point>();
+            return std::optional<Geom::Point>();
             break;
     }
 }

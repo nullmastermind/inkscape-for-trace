@@ -110,7 +110,7 @@ void PathVectorSatellites::updateAmount(double radius, bool apply_no_radius, boo
     }
     for (size_t i = 0; i < _satellites.size(); ++i) {
         for (size_t j = 0; j < _satellites[i].size(); ++j) {
-            boost::optional<size_t> previous_index = boost::none;
+            std::optional<size_t> previous_index = std::nullopt;
             if (j == 0 && _pathvector[i].closed()) {
                 previous_index = count_path_nodes(_pathvector[i]) - 1;
             } else if (!_pathvector[i].closed() || j != 0) {
