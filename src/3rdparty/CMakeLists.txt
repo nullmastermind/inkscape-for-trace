@@ -4,6 +4,6 @@ add_subdirectory(libdepixelize)
 add_subdirectory(adaptagrams)
 add_subdirectory(autotrace)
 
-if(NOT 2GEOM_FOUND)
+if(NOT 2Geom_FOUND)
     add_subdirectory(2geom)
 endif()
