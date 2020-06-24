@@ -297,7 +297,7 @@ enum class SPAttr {
     GRADIENTUNITS,
     GRADIENTTRANSFORM,
     SPREADMETHOD,
-    OSB_SWATCH,
+    INKSCAPE_SWATCH,
     /* SPRadialGradient */
     FX,
     FY,

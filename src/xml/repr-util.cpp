@@ -32,9 +32,6 @@
 #include "xml/repr-sorting.h"
 
 
-#define OSB_NS_URI "http://www.openswatchbook.org/uri/2009/osb"
-
-
 struct SPXMLNs {
     SPXMLNs *next;
     unsigned int uri, prefix;
@@ -107,11 +104,11 @@ static void sp_xml_ns_register_defaults()
 
     defaults[6].uri = g_quark_from_static_string(SP_DC_NS_URI);
     defaults[6].prefix = g_quark_from_static_string("dc");
-    defaults[6].next = &defaults[7];
+    defaults[6].next = &defaults[8];
 
-    defaults[7].uri = g_quark_from_static_string(OSB_NS_URI);
-    defaults[7].prefix = g_quark_from_static_string("osb");
-    defaults[7].next = &defaults[8];
+    //defaults[7].uri = g_quark_from_static_string("https://inkscape.org/namespaces/deprecated/osb");
+    //defaults[7].prefix = g_quark_from_static_string("osb");
+    //defaults[7].next = &defaults[8];
 
     // Inkscape versions prior to 0.44 would write this namespace
     // URI instead of the correct sodipodi namespace; by adding this

@@ -90,7 +90,7 @@ void SPGradient::setSwatch( bool swatch )
     if ( swatch != isSwatch() ) {
         this->swatch = swatch; // to make isSolid() work, this happens first
         gchar const* paintVal = swatch ? (isSolid() ? "solid" : "gradient") : nullptr;
-        setAttribute( "osb:paint", paintVal);
+        setAttribute( "inkscape:swatch", paintVal);
 
         requestModified( SP_OBJECT_MODIFIED_FLAG );
     }
@@ -266,7 +266,7 @@ SPGradient::~SPGradient() = default;
 void SPGradient::build(SPDocument *document, Inkscape::XML::Node *repr)
 {
     // Work-around in case a swatch had been marked for immediate collection:
-    if ( repr->attribute("osb:paint") && repr->attribute("inkscape:collect") ) {
+    if ( repr->attribute("inkscape:swatch") && repr->attribute("inkscape:collect") ) {
         repr->removeAttribute("inkscape:collect");
     }
 
@@ -294,7 +294,7 @@ void SPGradient::build(SPDocument *document, Inkscape::XML::Node *repr)
     this->readAttr(SPAttr::GRADIENTTRANSFORM);
     this->readAttr(SPAttr::SPREADMETHOD);
     this->readAttr(SPAttr::XLINK_HREF);
-    this->readAttr(SPAttr::OSB_SWATCH);
+    this->readAttr(SPAttr::INKSCAPE_SWATCH);
 
     // Register ourselves
     document->addResource("gradient", this);
@@ -400,7 +400,7 @@ void SPGradient::set(SPAttr key, gchar const *value)
             }
             break;
 
-        case SPAttr::OSB_SWATCH:
+        case SPAttr::INKSCAPE_SWATCH:
         {
             bool newVal = (value != nullptr);
             bool modified = false;
@@ -415,7 +415,7 @@ void SPGradient::set(SPAttr key, gchar const *value)
                 Glib::ustring paintVal = ( this->hasStops() && (this->getStopCount() == 0) ) ? "solid" : "gradient";
 
                 if ( paintVal != value ) {
-                    this->setAttribute( "osb:paint", paintVal);
+                    this->setAttribute( "inkscape:swatch", paintVal);
                     modified = true;
                 }
             }
@@ -477,9 +477,9 @@ void SPGradient::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *re
     if ( ochild && SP_IS_STOP(ochild) ) {
         this->has_stops = TRUE;
         if ( this->getStopCount() > 0 ) {
-            gchar const * attr = this->getAttribute("osb:paint");
+            gchar const * attr = this->getAttribute("inkscape:swatch");
             if ( attr && strcmp(attr, "gradient") ) {
-            	this->setAttribute( "osb:paint", "gradient" );
+            	this->setAttribute( "inkscape:swatch", "gradient" );
             }
         }
     }
@@ -521,10 +521,10 @@ void SPGradient::remove_child(Inkscape::XML::Node *child)
     }
 
     if ( this->getStopCount() == 0 ) {
-        gchar const * attr = this->getAttribute("osb:paint");
+        gchar const * attr = this->getAttribute("inkscape:swatch");
 
         if ( attr && strcmp(attr, "solid") ) {
-            this->setAttribute( "osb:paint", "solid" );
+            this->setAttribute( "inkscape:swatch", "solid" );
         }
     }
 
@@ -670,12 +670,12 @@ Inkscape::XML::Node *SPGradient::write(Inkscape::XML::Document *xml_doc, Inkscap
 
     if ( (flags & SP_OBJECT_WRITE_EXT) && this->isSwatch() ) {
         if ( this->isSolid() ) {
-            repr->setAttribute( "osb:paint", "solid" );
+            repr->setAttribute( "inkscape:swatch", "solid" );
         } else {
-            repr->setAttribute( "osb:paint", "gradient" );
+            repr->setAttribute( "inkscape:swatch", "gradient" );
         }
     } else {
-        repr->removeAttribute("osb:paint");
+        repr->removeAttribute("inkscape:swatch");
     }
 
 #ifdef OBJECT_TRACE

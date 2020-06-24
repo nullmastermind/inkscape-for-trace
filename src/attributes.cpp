@@ -297,7 +297,7 @@ static SPStyleProp const props[] = {
     {SPAttr::GRADIENTUNITS, "gradientUnits"},
     {SPAttr::GRADIENTTRANSFORM, "gradientTransform"},
     {SPAttr::SPREADMETHOD, "spreadMethod"},
-    {SPAttr::OSB_SWATCH, "osb:paint"},
+    {SPAttr::INKSCAPE_SWATCH, "inkscape:swatch"},
     /* SPRadialGradient */
     {SPAttr::FX, "fx"},
     {SPAttr::FY, "fy"},

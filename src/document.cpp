@@ -444,6 +444,10 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
     // ************* Fix Document **************
     // Move to separate function?
 
+    /** Fix OSB **/
+    sp_file_fix_osb(document->getRoot());
+
+
     /** Fix baseline spacing (pre-92 files) **/
     if ( (!sp_no_convert_text_baseline_spacing)
          && sp_version_inside_range( document->root->version.inkscape, 0, 1, 0, 92 ) ) {
