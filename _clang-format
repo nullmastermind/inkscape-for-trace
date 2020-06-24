@@ -65,7 +65,7 @@ IncludeCategories:
   - Regex:           '^"'
     Priority:        2
 IncludeIsMainRegex: '(-test)?$'
-IndentCaseLabels: false
+IndentCaseLabels: true
 IndentPPDirectives: None
 IndentWidth:     4
 IndentWrappedFunctionNames: false
