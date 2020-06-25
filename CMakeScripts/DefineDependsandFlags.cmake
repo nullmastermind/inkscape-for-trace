@@ -164,12 +164,15 @@ add_definitions(${BOEHMGC_DEFINITIONS})
 
 # This package isn’t marked REQUIRED, because we fallback to the
 # src/3rdparty/2geom submodule if it isn’t available system-wide.
-find_package(2Geom 1.0.0)
+find_package(2Geom 1.0.0 QUIET)
 if(NOT 2Geom_FOUND)
-    pkg_check_modules(2Geom IMPORTED_TARGET GLOBAL 2geom>=1.0.0)
+    pkg_check_modules(2Geom QUIET IMPORTED_TARGET GLOBAL 2geom>=1.0.0)
     if(2Geom_FOUND)
         add_library(2Geom::2geom ALIAS PkgConfig::2Geom)
     endif()
+endif()
+if(NOT 2Geom_FOUND)
+    message(WARNING "lib2geom not found, falling back to the submodule in src/3rdparty/2geom")
 endif()
 
 if(ENABLE_POPPLER)
