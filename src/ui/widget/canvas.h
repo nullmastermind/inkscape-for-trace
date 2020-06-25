@@ -11,6 +11,10 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <gtkmm.h>
 
 #include <2geom/rect.h>
@@ -24,6 +28,7 @@ class SPCanvasGroup;
 class SPCanvas; // TEMP TEMP
 struct PaintRectSetup;
 
+
 namespace Inkscape {
 namespace UI {
 namespace Widget {
@@ -36,7 +41,7 @@ class Canvas : public Gtk::DrawingArea
 public:
 
     Canvas();
-    virtual ~Canvas() = default;
+    ~Canvas() override;
 
     // Geometry
     bool world_point_inside_canvas(Geom::Point const &world); // desktop-events.cpp
@@ -182,6 +187,10 @@ private:
     int _forced_redraw_limit = -1;
     int _forced_redraw_count =  0;
 
+    // Some objects (e.g. grids) when destroyed will request redraws. We need to block them when canvas
+    // is destructed. (Windows are destroyed before documents as a document may have several windows.
+    // Changes to documents should not be triggering changes to closed windows. This fix is a hack.)
+    bool _in_destruction = false;
 
     // ======= CAIRO ======= ... Keep in one place
 

@@ -21,6 +21,7 @@
 #include "canvas-grid.h"
 
 #include "color.h"          // Background color
+#include "cms-system.h"     // Color correction
 #include "preferences.h"
 
 #include "display/sp-canvas-item.h" // Canvas group TEMP TEMP TEMP
@@ -98,6 +99,13 @@ Canvas::Canvas()
   SP_CANVAS_ITEM(_root)->canvas = this;
 }
 
+Canvas::~Canvas()
+{
+    _in_destruction = true;
+
+    remove_idle();
+}
+
 /**
  * Is world point inside of canvas area?
  */
@@ -105,8 +113,8 @@ bool
 Canvas::world_point_inside_canvas(Geom::Point const &world)
 {
     Gtk::Allocation allocation = get_allocation();
-    return ( (_x0 <= world[Geom::X]) && (world[Geom::X] < _x0 + allocation.get_width())  &&
-             (_y0 <= world[Geom::Y]) && (world[Geom::Y] < _y0 + allocation.get_height())  );
+    return ( (_x0 <= world.x()) && (world.x() < _x0 + allocation.get_width()) &&
+             (_y0 <= world.y()) && (world.y() < _y0 + allocation.get_height()) );
 }
 
 /**
@@ -146,6 +154,10 @@ Canvas::get_area_world_int()
 void
 Canvas::redraw_all()
 {
+    if (_in_destruction) {
+        std::cerr << "Canvas::redraw_all: Called after canvas destroyed!" << std::endl;
+        return;
+    }
     _clean_region->intersect(Cairo::Region::create()); // Empty region (i.e. everything is dirty).
     add_idle();
 }
@@ -156,6 +168,11 @@ Canvas::redraw_all()
 void
 Canvas::redraw_area(int x0, int y0, int x1, int y1)
 {
+    if (_in_destruction) {
+        std::cerr << "Canvas::redraw_area: Called after canvas destroyed!" << std::endl;
+        return;
+    }
+
     if (x0 >= x1 || y0 >= y1) {
         return;
     }
@@ -258,14 +275,12 @@ Canvas::get_canvas_item_root()
 void
 Canvas::set_background_color(guint32 rgba)
 {
-    std::cout << "Canvas::set_background_color: " << std::hex << rgba << std::dec << std::endl;
-    // double new_r = SP_RGBA32_R_F(rgba);
-    // double new_g = SP_RGBA32_G_F(rgba);
-    // double new_b = SP_RGBA32_B_F(rgba);
-    // _background.clear();
-    // _background = Cairo::SolidPattern::create_rgb(new_r, new_g, new_b);
-    // _background_is_checkerboard = false;
-    // redraw_all();
+    double r = SP_RGBA32_R_F(rgba);
+    double g = SP_RGBA32_G_F(rgba);
+    double b = SP_RGBA32_B_F(rgba);
+    _background = Cairo::SolidPattern::create_rgb(r, g, b);
+    _background_is_checkerboard = false;
+    redraw_all();
 }
 
 /**
@@ -274,11 +289,10 @@ Canvas::set_background_color(guint32 rgba)
 void
 Canvas::set_background_checkerboard(guint32 rgba)
 {
-    std::cout << "Canvas::set_background_checkerboard" << std::endl;
-    // auto pattern = ink_cairo_pattern_create_checkerboard(rgba);
-    // _background = Cairo::RefPtr<Cairo::Pattern>(new Cairo::Pattern(pattern));
-    // _background_is_checkerboard = true;
-    // redraw_all();
+    auto pattern = ink_cairo_pattern_create_checkerboard(rgba);
+    _background = Cairo::RefPtr<Cairo::Pattern>(new Cairo::Pattern(pattern));
+    _background_is_checkerboard = true;
+    redraw_all();
 }
 
 void
@@ -544,6 +558,11 @@ Canvas::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr)
 void
 Canvas::add_idle()
 {
+    if (_in_destruction) {
+        std::cerr << "Canvas::add_idle: Called after canvas destroyed!" << std::endl;
+        return;
+    }
+
     if (get_realized()) {
         _idle_connection = Glib::signal_idle().connect(sigc::mem_fun(*this, &Canvas::on_idle), Glib::PRIORITY_LOW);
     }
@@ -559,6 +578,11 @@ Canvas::remove_idle()
 bool
 Canvas::on_idle()
 {
+    if (_in_destruction) {
+        std::cerr << "Canvas::on_idle: Called after canvas destroyed!" << std::endl;
+        return false; // Disconnect
+    }
+
     bool done = do_update();
     int n_rects = _clean_region->get_num_rectangles();
 
@@ -818,24 +842,22 @@ Canvas::paint_single_buffer(Geom::IntRect const &paint_rect, Geom::IntRect const
     cairo_surface_set_device_scale(imgs->cobj(), _device_scale, _device_scale); // No C++ API!
 
     auto cr = Cairo::Context::create(imgs);
+
+    // Paint background
     cr->save();
     cr->translate(-paint_rect.left(), -paint_rect.top());
-
-    //std::cout << "  paint_single_buffer: pattern type: " << _background->get_type() << std::endl;
     cr->set_operator(Cairo::OPERATOR_SOURCE);
-    //_background->reference();
-    //cr->set_source(_background);
-    cr->set_source_rgba(1.0, 1.0, 1.0, 1.0);
+    cr->set_source(_background);
     cr->paint();
     cr->restore();
     buf.ct = cr->cobj();
 
+    // Render drawing on top of background.
     if (_root->visible) {
         SP_CANVAS_ITEM_GET_CLASS(_root)->render(_root, &buf);
     }
 
 #if defined(HAVE_LIBLCMS2)
-    std::cout << " HAVE LIBLCMS2 ##################################" << std::endl;
     if (_cms_active) {
         cmsHTRANSFORM transf = nullptr;
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -895,9 +917,7 @@ Canvas::shift_content(Geom::IntPoint shift)
 
     // Paint background
     cr->set_operator(Cairo::Operator::OPERATOR_SOURCE);
-    //_background->reference();
-    //cr->set_source(_background);
-    cr->set_source_rgba(1.0, 1.0, 1.0, 1.0);
+    cr->set_source(_background);
     cr->paint();
 
     // Copy old background

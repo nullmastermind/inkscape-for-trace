@@ -482,9 +482,6 @@ SPDesktopWidget::on_unrealize()
         dtw->_rotation_status_value_changed_connection.disconnect();
         dtw->_rotation_status_populate_popup_connection.disconnect();
 
-        // Canvas
-        g_signal_handlers_disconnect_by_data(G_OBJECT(dtw->_canvas), dtw);
-
         if (dtw->_dock) {
             // dock and desktop both have references to dock items
             dtw->_dock->releaseAllReferences();
