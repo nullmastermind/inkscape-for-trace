@@ -22,11 +22,13 @@
 
 #include "color.h"          // Background color
 #include "cms-system.h"     // Color correction
+#include "inkscape.h"       // SP_ACTIVE_DESKTOP TEMP TEMP TEMP
 #include "preferences.h"
 
-#include "display/sp-canvas-item.h" // Canvas group TEMP TEMP TEMP
+#include "display/sp-canvas-item.h"  // Canvas group TEMP TEMP TEMP
 #include "display/sp-canvas-group.h" // Canvas group TEMP TEMP TEMP
-#include "display/cairo-utils.h"  // Checkerboard background.
+#include "display/canvas-arena.h"    // Change rendering mode
+#include "display/cairo-utils.h"     // Checkerboard background.
 
 /**
  * Helper function to update item and its children.
@@ -242,7 +244,10 @@ Canvas::scroll_to(Geom::Point const &c, bool clear)
     }
 
     // Copy backing store
-    shift_content(Geom::IntPoint(dx, dy));
+    shift_content(Geom::IntPoint(dx, dy), _backing_store);
+    if (_split_mode != Inkscape::SPLITMODE_NORMAL) {
+        shift_content(Geom::IntPoint(dx, dy), _outline_store);
+    }
 
     // Mark surface to redraw (everything outside clean region).
     Cairo::RectangleInt crect = { _x0, _y0, _allocation.get_width(), _allocation.get_height() };
@@ -293,6 +298,42 @@ Canvas::set_background_checkerboard(guint32 rgba)
     _background = Cairo::RefPtr<Cairo::Pattern>(new Cairo::Pattern(pattern));
     _background_is_checkerboard = true;
     redraw_all();
+}
+
+void
+Canvas::set_render_mode(Inkscape::RenderMode mode)
+{
+    if (_render_mode != mode) {
+        _render_mode = mode;
+        redraw_all();
+    }
+}
+
+void
+Canvas::set_color_mode(Inkscape::ColorMode mode)
+{
+    if (_color_mode != mode) {
+        _color_mode = mode;
+        redraw_all();
+    }
+}
+
+void
+Canvas::set_split_mode(Inkscape::SplitMode mode)
+{
+    if (_split_mode != mode) {
+        _split_mode = mode;
+        redraw_all();
+    }
+}
+
+void
+Canvas::set_split_direction(Inkscape::SplitDirection dir)
+{
+    if (_split_direction != dir) {
+        _split_direction = dir;
+        redraw_all();
+    }
 }
 
 void
@@ -493,7 +534,7 @@ Canvas::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr)
     int device_scale = get_scale_factor();
 
     // This is the only place we should initialize _backing_store! (Elsewhere, it's recreated.)
-    if (!_backing_store) {
+    if (!_backing_store || !_outline_store) {
         _allocation = allocation;
         _device_scale = device_scale;
 
@@ -505,14 +546,25 @@ Canvas::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr)
                                         _allocation.get_width()  * _device_scale,
                                         _allocation.get_height() * _device_scale);
         cairo_surface_set_device_scale(_backing_store->cobj(), _device_scale, _device_scale); // No C++ API!
+
+        _outline_store =
+            Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32,
+                                        _allocation.get_width()  * _device_scale,
+                                        _allocation.get_height() * _device_scale);
+        cairo_surface_set_device_scale(_outline_store->cobj(), _device_scale, _device_scale); // No C++ API!
+
+        _split_point = Geom::Point(_allocation.get_width()/2, _allocation.get_height()/2);
     }
 
     if (!(_allocation == allocation) || _device_scale != device_scale) { // "!=" for allocation not defined!
         _allocation = allocation;
         _device_scale = device_scale;
 
-        // Create new backing store and copy/shift contents.
-        shift_content(Geom::IntPoint(0, 0));
+        // Create new stores and copy/shift contents.
+        shift_content(Geom::IntPoint(0, 0), _backing_store);
+        if (_split_mode != Inkscape::SPLITMODE_NORMAL) {
+            shift_content(Geom::IntPoint(0, 0), _outline_store);
+        }
 
         // Clip the clean region to the new allocation
         Cairo::RectangleInt clip = { _x0, _y0, _allocation.get_width(), _allocation.get_height() };
@@ -523,6 +575,14 @@ Canvas::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr)
     // This is the only place the widget content is drawn!
     cr->set_source(_backing_store, 0, 0);
     cr->paint();
+
+    if (_split_mode != Inkscape::SPLITMODE_NORMAL) {
+        cr->save();
+        cr->set_source(_outline_store, 0, 0);
+        add_clippath(cr);
+        cr->paint();
+        cr->restore();
+    }
 
     // static int i = 0;
     // ++i;
@@ -737,7 +797,24 @@ Canvas::paint_rect_internal(PaintRectSetup const *setup, Geom::IntRect const &th
 
     if (bw * bh < setup->max_pixels) {
         // We are small enough!
-        paint_single_buffer(this_rect, setup->canvas_rect);
+
+        // TODO Find better solution
+        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+        SPCanvasArena *arena = SP_CANVAS_ARENA(desktop->drawing);
+
+        arena->drawing.setRenderMode(_render_mode);
+        paint_single_buffer(this_rect, setup->canvas_rect, _backing_store);
+
+        if (_split_mode != Inkscape::SPLITMODE_NORMAL) {
+            arena->drawing.setRenderMode(Inkscape::RENDERMODE_OUTLINE);
+            paint_single_buffer(this_rect, setup->canvas_rect, _outline_store);
+        }
+
+        Cairo::RectangleInt crect = { this_rect.left(), this_rect.top(), this_rect.width(), this_rect.height() };
+        _clean_region->do_union( crect );
+
+        queue_draw_area(this_rect.left() - _x0, this_rect.top() - _y0, this_rect.width(), this_rect.height());
+
         return true;
     }
 
@@ -790,12 +867,13 @@ Canvas::paint_rect_internal(PaintRectSetup const *setup, Geom::IntRect const &th
 }
 
 void
-Canvas::paint_single_buffer(Geom::IntRect const &paint_rect, Geom::IntRect const &canvas_rect)
+Canvas::paint_single_buffer(Geom::IntRect const &paint_rect, Geom::IntRect const &canvas_rect,
+                            Cairo::RefPtr<Cairo::ImageSurface> &store)
 {
-    if (!_backing_store) {
-        std::cerr << "Canvas::paint_single_buffer: _backing_store not created!" << std::endl;
+    if (!store) {
+        std::cerr << "Canvas::paint_single_buffer: store not created!" << std::endl;
         return;
-        // Maybe _backing_store not created!
+        // Maybe store not created!
     }
 
     SPCanvasBuf buf;
@@ -806,28 +884,29 @@ Canvas::paint_single_buffer(Geom::IntRect const &paint_rect, Geom::IntRect const
     buf.device_scale = _device_scale;
     buf.is_empty = true;
 
-    // Make sure the following code does not go outside of _backing_store's data
-    assert(_backing_store->get_format() == Cairo::FORMAT_ARGB32);
+    // Make sure the following code does not go outside of store's data
+    assert(store->get_format() == Cairo::FORMAT_ARGB32);
     assert(paint_rect.left()   - _x0 >= 0);
     assert(paint_rect.top()    - _y0 >= 0);
-    assert(paint_rect.right()  - _x0 <= _backing_store->get_width());
-    assert(paint_rect.bottom() - _y0 <= _backing_store->get_height());
+    assert(paint_rect.right()  - _x0 <= store->get_width());
+    assert(paint_rect.bottom() - _y0 <= store->get_height());
 
-    // Create temporary surface that draws directly to _backing_store.
-    _backing_store->flush();
+    // Create temporary surface that draws directly to store.
+    store->flush();
 
     // static int i = 0;
     // ++i;
     // std::string file = "paint_single_buffer0_" + std::to_string(i) + ".png";
-    // _backing_store->write_to_png(file);
+    // store->write_to_png(file);
 
-    unsigned char *data = _backing_store->get_data();
-    int stride = _backing_store->get_stride();
+    // Create temporary surface that draws directly to store.
+    unsigned char *data = store->get_data();
+    int stride = store->get_stride();
 
     // Check we are using the correct device scale.
     double x_scale = 1.0;
     double y_scale = 1.0;
-    cairo_surface_get_device_scale(_backing_store->cobj(), &x_scale, &y_scale); // No C++ API!
+    cairo_surface_get_device_scale(store->cobj(), &x_scale, &y_scale); // No C++ API!
     assert (_device_scale == (int)x_scale);
     assert (_device_scale == (int)y_scale);
 
@@ -881,7 +960,7 @@ Canvas::paint_single_buffer(Geom::IntRect const &paint_rect, Geom::IntRect const
     }
 #endif // defined(HAVE_LIBLCMS2)
 
-    _backing_store->mark_dirty();
+    store->mark_dirty();
 
     // Uncomment to see how Inkscape paints to rectangles on canvas.
     // cr->save();
@@ -903,17 +982,17 @@ Canvas::paint_single_buffer(Geom::IntRect const &paint_rect, Geom::IntRect const
 
 // Shift backing store (when canvas scrolled or size changed).
 void
-Canvas::shift_content(Geom::IntPoint shift)
+Canvas::shift_content(Geom::IntPoint shift, Cairo::RefPtr<Cairo::ImageSurface> &store)
 {
-    Cairo::RefPtr<::Cairo::ImageSurface> new_backing_store =
+    Cairo::RefPtr<::Cairo::ImageSurface> new_store =
         Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32,
                                     _allocation.get_width()  * _device_scale,
                                     _allocation.get_height() * _device_scale);
 
-    cairo_surface_set_device_scale(new_backing_store->cobj(), _device_scale, _device_scale); // No C++ API!
+    cairo_surface_set_device_scale(new_store->cobj(), _device_scale, _device_scale); // No C++ API!
 
-    // Copy the old backing store contents to new backing store.
-    auto cr = Cairo::Context::create(new_backing_store);
+    // Copy the old store contents to new backing store.
+    auto cr = Cairo::Context::create(new_store);
 
     // Paint background
     cr->set_operator(Cairo::Operator::OPERATOR_SOURCE);
@@ -922,17 +1001,51 @@ Canvas::shift_content(Geom::IntPoint shift)
 
     // Copy old background
     cr->translate(-shift.x(), -shift.y());
-    cr->set_source(_backing_store, 0, 0);
-    cr->paint(); // THIS WORKS
+    cr->set_source(store, 0, 0);
+    cr->paint();
 
-    _backing_store = new_backing_store;
+    store = new_store;
 
     // static int i = 0;
     // ++i;
     // std::string file = "shift_content_" + std::to_string(i) + ".png";
-    // _backing_store->write_to_png(file);
+    // _store->write_to_png(file);
 }
 
+
+// Sets clip path for Split and X-Ray modes.
+void
+Canvas::add_clippath(const Cairo::RefPtr<Cairo::Context>& cr) {
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    double radius = prefs->getIntLimited("/options/rendering/xray-radius", 100, 1, 1500);
+
+    double width  = _allocation.get_width();
+    double height = _allocation.get_height();
+    double sx     = _split_point.x();
+    double sy     = _split_point.y();
+
+    if (_split_mode == Inkscape::SPLITMODE_SPLIT) {
+        switch (_split_direction) {
+            case Inkscape::SPLITDIRECTION_NORTH:
+                cr->rectangle(0,   0, width,               sy);
+                break;
+            case Inkscape::SPLITDIRECTION_SOUTH:
+                cr->rectangle(0,  sy, width,      height - sy);
+                break;
+            case Inkscape::SPLITDIRECTION_WEST:
+                cr->rectangle(0,   0,         sx, height     );
+                break;
+            case Inkscape::SPLITDIRECTION_EAST:
+                cr->rectangle(sx,  0, width - sx, height     );
+                break;
+        }
+    } else {
+        cr->arc(sx, sy, radius, 0, 2 * M_PI);
+    }
+
+    cr->clip();
+}
 
 // This routine reacts to events from the canvas. It's main purpose is to find the canvas item
 // closest to the cursor where the event occured and then send the event (sometimes modified) to

@@ -536,7 +536,6 @@ void SPDesktop::redrawDesktop() {
 // THIS SHOULD BE A CANVAS FUNCTION
 void SPDesktop::_setDisplayMode(Inkscape::RenderMode mode) {
     // Why set three places?
-    SP_CANVAS_ARENA (drawing)->drawing.setRenderMode(mode);
     canvas->set_render_mode(mode);
     _display_mode = mode;
 
@@ -548,7 +547,6 @@ void SPDesktop::_setDisplayMode(Inkscape::RenderMode mode) {
             toggleXRay();
         }
     }
-    redrawDesktop();
     _widget->updateTitle( this->getDocument()->getDocumentName() );
 }
 
@@ -1739,10 +1737,15 @@ void SPDesktop::toggleSplitMode()
 {
     if (this->getToplevel()) {
         _split_canvas = !_split_canvas;
+        if (_split_canvas) {
+            canvas->set_split_mode(Inkscape::SPLITMODE_SPLIT);
+        } else {
+            canvas->set_split_mode(Inkscape::SPLITMODE_NORMAL);
+        }
+
         if (_split_canvas && _xray) {
             toggleXRay();
         }
-        canvas->redraw_all();
         Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_VIEW_TOGGLE_SPLIT);
         if (verb) {
             _menu_update.emit(verb->get_code(), splitMode());
@@ -1759,10 +1762,15 @@ void SPDesktop::toggleXRay()
 {
     if (this->getToplevel()) {
         _xray = !_xray;
+        if (_xray) {
+            canvas->set_split_mode(Inkscape::SPLITMODE_XRAY);
+        } else {
+            canvas->set_split_mode(Inkscape::SPLITMODE_NORMAL);
+        }
+
         if (_split_canvas && _xray) {
             toggleSplitMode();
         }
-        canvas->redraw_all();
         Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_VIEW_TOGGLE_XRAY);
         if (verb) {
             _menu_update.emit(verb->get_code(), xrayMode());

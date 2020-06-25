@@ -62,8 +62,10 @@ public:
     void set_drawing_disabled(bool disable) { _drawing_disabled = disable; } // Disable during path ops, etc.
     bool is_dragging() {return _is_dragging; }                // selection-chemistry.cpp
 
-    void set_render_mode(Inkscape::RenderMode mode) { _render_mode = mode; }
-    void set_color_mode(Inkscape::ColorMode mode) { _color_mode = mode; }
+    void set_render_mode(Inkscape::RenderMode mode);
+    void set_color_mode(Inkscape::ColorMode   mode);
+    void set_split_mode(Inkscape::SplitMode   mode);
+    void set_split_direction(Inkscape::SplitDirection dir);
 
 #if defined(HAVE_LIBLCMS2)
     void set_cms_key(std::string key) {
@@ -75,7 +77,7 @@ public:
     bool get_cms_active() { return _cms_active; }
 #endif
 
-    Cairo::RefPtr<::Cairo::ImageSurface> get_backing_store() { return _backing_store; } // Background rotation preview
+    Cairo::RefPtr<Cairo::ImageSurface> get_backing_store() { return _backing_store; } // Background rotation preview
 
     // For a GTK bug (see SelectedStyle::on_opacity_changed()).
     void forced_redraws_start(int count, bool reset = true);
@@ -115,7 +117,7 @@ protected:
     bool on_motion_notify_event( GdkEventMotion   *motion_event)   override;
 
     // Painting
-    bool on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr) override;
+    bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr) override;
 
 private:
 
@@ -131,9 +133,11 @@ private:
     bool paint();
     bool paint_rect(Cairo::RectangleInt& rect);
     bool paint_rect_internal(PaintRectSetup const *setup, Geom::IntRect const &this_rect);
-    void paint_single_buffer(Geom::IntRect const &paint_rect, Geom::IntRect const &canvas_rect);
+    void paint_single_buffer(Geom::IntRect const &paint_rect, Geom::IntRect const &canvas_rect,
+                             Cairo::RefPtr<Cairo::ImageSurface> &store);
 
-    void shift_content(Geom::IntPoint shift);
+    void shift_content(Geom::IntPoint shift, Cairo::RefPtr<Cairo::ImageSurface> &store);
+    void add_clippath(const Cairo::RefPtr<Cairo::Context>& cr);
 
     // Events
     bool pick_current_item(GdkEvent *event);
@@ -176,6 +180,9 @@ private:
     bool _need_update = false;
     SPCanvasItem *_root = nullptr;
     Inkscape::RenderMode _render_mode = Inkscape::RENDERMODE_NORMAL;
+    Inkscape::SplitMode  _split_mode  = Inkscape::SPLITMODE_NORMAL;
+    Inkscape::SplitDirection _split_direction   = Inkscape::SPLITDIRECTION_EAST;
+    Geom::Point _split_point;
     Inkscape::ColorMode  _color_mode  = Inkscape::COLORMODE_NORMAL;
 
 #if defined(HAVE_LIBLCMS2)
@@ -196,6 +203,7 @@ private:
 
     /// Image surface storing the content of the widget.
     Cairo::RefPtr<Cairo::ImageSurface> _backing_store; ///< The canvas image content. We draw to this then blit.
+    Cairo::RefPtr<Cairo::ImageSurface> _outline_store; ///< The outline image if we are in split/x-ray mode.
 
     Cairo::RefPtr<Cairo::Pattern> _background;         ///< The background of the image.
     bool _background_is_checkerboard = false;
