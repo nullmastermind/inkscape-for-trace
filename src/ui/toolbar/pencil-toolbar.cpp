@@ -163,6 +163,7 @@ PencilToolbar::PencilToolbar(SPDesktop *desktop,
     }
     if (pencil_mode) {
         use_pencil_pressure();
+        _flatten_simplify->set_visible(_simplify->get_active());
     }
 }
 
