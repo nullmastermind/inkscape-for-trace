@@ -21,7 +21,6 @@
 #include <2geom/int-rect.h>
 
 #include "display/rendermode.h"
-#include "display/canvas-split.h"
 
 class SPCanvasItem;
 class SPCanvasGroup;
