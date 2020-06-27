@@ -44,7 +44,9 @@ typedef std::list<id_changeitem_type> id_changelist_type;
 
 const char *href_like_attributes[] = {
     "inkscape:connection-end",
+    "inkscape:connection-end-point",
     "inkscape:connection-start",
+    "inkscape:connection-start-point",
     "inkscape:href",
     "inkscape:path-effect",
     "inkscape:perspectiveID",

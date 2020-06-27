@@ -52,6 +52,7 @@ public:
     SPDesktop *desktop  = nullptr;                  /**< Desktop we are on. */
     SPCanvasItem *item  = nullptr;                  /**< Our CanvasItem. */
     SPItem *owner       = nullptr;                  /**< Optional Owner Item */
+    SPItem *sub_owner   = nullptr;                  /**< Optional SubOwner Item */
     unsigned int flags  = SP_KNOT_VISIBLE;
 
     unsigned int size   = 8;                        /**< Always square. */

@@ -22,8 +22,15 @@ class SPConnEnd {
 public:
     SPConnEnd(SPObject *owner);
 
+    /*
+     * Ref points to the main object the connection end is attached to
+     * while sub_ref points to a sub-object that may be inside a symbol
+     * or clone object id. Sub_ref is optional.
+     */
     SPUseReference ref;
-    char *href;
+    SPUseReference sub_ref;
+    char *href = nullptr;
+    char *sub_href = nullptr;
 
     /** Change of href string (not a modification of the attributes of the referrent). */
     sigc::connection _changed_connection;
@@ -37,8 +44,8 @@ public:
     /** A sigc connection for owning group transformed, used to do move compensation. */
     sigc::connection _group_connection;
 
-    void setAttacherHref(char const * value, SPPath * unused);
-    //void setAttacherEndpoint(char const *, SPPath *); // not defined
+    void setAttacherHref(char const * value);
+    void setAttacherSubHref(char const * value);
 
 
 private:

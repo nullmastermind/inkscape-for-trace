@@ -22,6 +22,7 @@
 #include "display/curve.h"
 #include "xml/repr.h"
 #include "sp-path.h"
+#include "sp-use.h"
 #include "3rdparty/adaptagrams/libavoid/router.h"
 #include "document.h"
 #include "sp-item-group.h"
@@ -79,7 +80,9 @@ void sp_conn_end_pair_build(SPObject *object)
 {
     object->readAttr(SPAttr::CONNECTOR_TYPE);
     object->readAttr(SPAttr::CONNECTION_START);
+    object->readAttr(SPAttr::CONNECTION_START_POINT);
     object->readAttr(SPAttr::CONNECTION_END);
+    object->readAttr(SPAttr::CONNECTION_END_POINT);
     object->readAttr(SPAttr::CONNECTOR_CURVATURE);
 }
 
@@ -133,20 +136,36 @@ void SPConnEndPair::setAttr(const SPAttr key, gchar const *const value)
         }
         break;
     case SPAttr::CONNECTION_START:
+        this->_connEnd[0]->setAttacherHref(value);
+        break;
+    case SPAttr::CONNECTION_START_POINT:
+        this->_connEnd[0]->setAttacherSubHref(value);
+        break;
     case SPAttr::CONNECTION_END:
-        this->_connEnd[(key == SPAttr::CONNECTION_START ? 0 : 1)]->setAttacherHref(value, _path);
+        this->_connEnd[1]->setAttacherHref(value);
+        break;
+    case SPAttr::CONNECTION_END_POINT:
+        this->_connEnd[1]->setAttacherSubHref(value);
         break;
     }
 }
 
 void SPConnEndPair::writeRepr(Inkscape::XML::Node *const repr) const
 {
-    char const * const attr_strs[] = {"inkscape:connection-start", "inkscape:connection-end"};
+    char const * const attrs[] = {
+        "inkscape:connection-start", "inkscape:connection-end"};
+    char const * const point_attrs[] = {
+        "inkscape:connection-start-point", "inkscape:connection-end-point"};
     for (unsigned handle_ix = 0; handle_ix < 2; ++handle_ix) {
         const Inkscape::URI* U = this->_connEnd[handle_ix]->ref.getURI();
         if (U) {
             auto str = U->str();
-            repr->setAttribute(attr_strs[handle_ix], str);
+            repr->setAttribute(attrs[handle_ix], str);
+        }
+        const Inkscape::URI* P = this->_connEnd[handle_ix]->sub_ref.getURI();
+        if (P) {
+            auto str = P->str();
+            repr->setAttribute(point_attrs[handle_ix], str);
         }
     }
     if (_connType == SP_CONNECTOR_POLYLINE || _connType == SP_CONNECTOR_ORTHOGONAL) {
@@ -157,7 +176,29 @@ void SPConnEndPair::writeRepr(Inkscape::XML::Node *const repr) const
 
 void SPConnEndPair::getAttachedItems(SPItem *h2attItem[2]) const {
     for (unsigned h = 0; h < 2; ++h) {
-        h2attItem[h] = this->_connEnd[h]->ref.getObject();
+        auto obj = this->_connEnd[h]->ref.getObject();
+        auto sub_obj = this->_connEnd[h]->sub_ref.getObject();
+
+        if(sub_obj) {
+            // For sub objects, we have to go fishing for the virtual/shadow
+            // object which has the correct position for this use/symbol
+            SPUse *use = dynamic_cast<SPUse *>(obj);
+            if(use) {
+                auto root = use->root();
+                bool found = false;
+                for (auto& child: root->children) {
+                    if(!g_strcmp0(child.getAttribute("id"), sub_obj->getId())) {
+                        h2attItem[h] = (SPItem *) &child;
+                        found = true;
+                    }
+                }
+                if(!found) {
+                    g_warning("Couldn't find sub connector point!");
+                }
+            }
+        } else {
+            h2attItem[h] = obj;
+        }
 
         // Deal with the case of the attached object being an empty group.
         // A group containing no items does not have a valid bbox, so

@@ -97,6 +97,8 @@
 #include "object/sp-namedview.h"
 #include "object/sp-path.h"
 #include "object/sp-text.h"
+#include "object/sp-use.h"
+#include "object/sp-symbol.h"
 
 #include "ui/pixmaps/cursor-connector.xpm"
 
@@ -174,7 +176,9 @@ ConnectorTool::ConnectorTool()
     , clickeditem(nullptr)
     , clickedhandle(nullptr)
     , shref(nullptr)
+    , sub_shref(nullptr)
     , ehref(nullptr)
+    , sub_ehref(nullptr)
     , c0(nullptr)
     , c1(nullptr)
     , cl0(nullptr)
@@ -343,14 +347,23 @@ void ConnectorTool::cc_clear_active_conn()
 }
 
 
-bool ConnectorTool::_ptHandleTest(Geom::Point& p, gchar **href)
+bool ConnectorTool::_ptHandleTest(Geom::Point& p, gchar **href, gchar **subhref)
 {
     if (this->active_handle && (this->knots.find(this->active_handle) != this->knots.end())) {
         p = this->active_handle->pos;
         *href = g_strdup_printf("#%s", this->active_handle->owner->getId());
+        if(this->active_handle->sub_owner) {
+            auto id = this->active_handle->sub_owner->getAttribute("id");
+            if(id) {
+                *subhref = g_strdup_printf("#%s", id);
+            }
+        } else {
+            *subhref = nullptr;
+        }
         return true;
     }
     *href = nullptr;
+    *subhref = nullptr;
     return false;
 }
 
@@ -499,7 +512,7 @@ bool ConnectorTool::_handleButtonPress(GdkEventButton const &bevent)
                     Geom::Point p = event_dt;
 
                     // Test whether we clicked on a connection point
-                    bool found = this->_ptHandleTest(p, &this->shref);
+                    bool found = this->_ptHandleTest(p, &this->shref, &this->sub_shref);
 
                     if (!found) {
                         // This is the first point, so just snap it to the grid
@@ -525,7 +538,7 @@ bool ConnectorTool::_handleButtonPress(GdkEventButton const &bevent)
                 this->_setSubsequentPoint(p);
                 this->_finishSegment(p);
 
-                this->_ptHandleTest(p, &this->ehref);
+                this->_ptHandleTest(p, &this->ehref, &this->sub_ehref);
                 if (this->npoints != 0) {
                     this->_finish();
                 }
@@ -679,7 +692,7 @@ bool ConnectorTool::_handleButtonRelease(GdkEventButton const &revent)
             this->_setSubsequentPoint(p);
             this->_finishSegment(p);
             // Test whether we clicked on a connection point
-            this->_ptHandleTest(p, &this->ehref);
+            this->_ptHandleTest(p, &this->ehref, &this->sub_ehref);
             if (this->npoints != 0) {
                 this->_finish();
             }
@@ -759,15 +772,21 @@ void ConnectorTool::_reroutingFinish(Geom::Point *const p)
     if (p != nullptr) {
         // Test whether we clicked on a connection point
         gchar *shape_label;
-        bool found = this->_ptHandleTest(*p, &shape_label);
+        gchar *sub_label;
+        bool found = this->_ptHandleTest(*p, &shape_label, &sub_label);
 
         if (found) {
             if (this->clickedhandle == this->endpt_handle[0]) {
                 this->clickeditem->setAttribute("inkscape:connection-start", shape_label);
+                this->clickeditem->setAttribute("inkscape:connection-start-point", sub_label);
             } else {
                 this->clickeditem->setAttribute("inkscape:connection-end", shape_label);
+                this->clickeditem->setAttribute("inkscape:connection-end-point", sub_label);
             }
             g_free(shape_label);
+            if(sub_label) {
+                g_free(sub_label);
+            }
         }
     }
     this->clickeditem->setHidden(false);
@@ -887,13 +906,19 @@ void ConnectorTool::_flushWhite(SPCurve *c)
         this->newconn->setAttribute( "inkscape:connector-curvature",
                                    Glib::Ascii::dtostr(this->curvature).c_str(), nullptr );
         if (this->shref) {
-            this->newconn->setAttribute( "inkscape:connection-start", this->shref);
             connection = true;
+            this->newconn->setAttribute( "inkscape:connection-start", this->shref);
+            if(this->sub_shref) {
+                this->newconn->setAttribute( "inkscape:connection-start-point", this->sub_shref);
+            }
         }
 
         if (this->ehref) {
-            this->newconn->setAttribute( "inkscape:connection-end", this->ehref);
             connection = true;
+            this->newconn->setAttribute( "inkscape:connection-end", this->ehref);
+            if(this->sub_ehref) {
+                this->newconn->setAttribute( "inkscape:connection-end-point", this->sub_ehref);
+            }
         }
         // Process pending updates.
         this->newconn->updateRepr();
@@ -1048,15 +1073,32 @@ static gboolean endpt_handler(SPKnot */*knot*/, GdkEvent *event, ConnectorTool *
     return consumed;
 }
 
-void ConnectorTool::_activeShapeAddKnot(SPItem* item)
+void ConnectorTool::_activeShapeAddKnot(SPItem* item, SPItem* subitem)
 {
     SPKnot *knot = new SPKnot(desktop, nullptr);
-
     knot->owner = item;
-    knot->setShape(SP_KNOT_SHAPE_SQUARE);
-    knot->setSize(8);
-    knot->setAnchor(SP_ANCHOR_CENTER);
-    knot->setFill(0xffffff00, 0xff0000ff, 0xff0000ff, 0xff0000ff);
+
+    if(subitem) {
+        SPUse *use = dynamic_cast<SPUse *>(item);
+        g_assert(use != nullptr);
+        knot->sub_owner = subitem;
+        knot->setShape(SP_KNOT_SHAPE_SQUARE);
+        knot->setSize(10);
+        knot->setAnchor(SP_ANCHOR_CENTER);
+        knot->setFill(0xffffff00, 0xff0000ff, 0xff0000ff, 0xff0000ff);
+
+        // Set the point to the middle of the sub item
+        knot->setPosition(subitem->getAvoidRef().getConnectionPointPos() * desktop->doc2dt(), 0);
+    } else {
+        knot->setShape(SP_KNOT_SHAPE_SQUARE);
+        knot->setSize(8);
+        knot->setAnchor(SP_ANCHOR_CENTER);
+        knot->setFill(0xffffff00, 0xff0000ff, 0xff0000ff, 0xff0000ff);
+
+        // Set the point to the middle of the object
+        knot->setPosition(item->getAvoidRef().getConnectionPointPos() * desktop->doc2dt(), 0);
+    }
+
     knot->updateCtrl();
 
     // We don't want to use the standard knot handler.
@@ -1068,7 +1110,6 @@ void ConnectorTool::_activeShapeAddKnot(SPItem* item)
     g_signal_connect(G_OBJECT(knot->item), "event",
             G_CALLBACK(cc_generic_knot_handler), knot);
 
-    knot->setPosition(item->getAvoidRef().getConnectionPointPos() * desktop->doc2dt(), 0);
     knot->show();
     this->knots[knot] = 1;
 }
@@ -1106,11 +1147,23 @@ void ConnectorTool::_setActiveShape(SPItem *item)
         // The idea here is to try and add a group's children to solidify
         // connection handling. We react to path objects with only one node.
         for (auto& child: item->children) {
-            if (SP_IS_PATH(&child) && SP_PATH(&child)->nodesInPath() == 1) {
-                this->_activeShapeAddKnot((SPItem *) &child);
+            if(child.getAttribute("inkscape:connector")) {
+                this->_activeShapeAddKnot((SPItem *) &child, nullptr);
             }
         }
-        this->_activeShapeAddKnot(item);
+        // Special connector points in a symbol
+        SPUse *use = dynamic_cast<SPUse *>(item);
+        if(use) {
+            SPItem *orig = use->root();
+            //SPItem *orig = use->get_original();
+            for (auto& child: orig->children) {
+                if(child.getAttribute("inkscape:connector")) {
+                    this->_activeShapeAddKnot(item, (SPItem *) &child);
+                }
+            }
+        }
+        // Center point to any object
+        this->_activeShapeAddKnot(item, nullptr);
 
     } else {
         // Ensure the item's connection_points map

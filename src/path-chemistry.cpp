@@ -404,7 +404,9 @@ sp_item_list_to_curves(const std::vector<SPItem*> &items, std::vector<SPItem*>& 
             // remove connector attributes
             if (item->getAttribute("inkscape:connector-type") != nullptr) {
                 item->removeAttribute("inkscape:connection-start");
+                item->removeAttribute("inkscape:connection-start-point");
                 item->removeAttribute("inkscape:connection-end");
+                item->removeAttribute("inkscape:connection-end-point");
                 item->removeAttribute("inkscape:connector-type");
                 item->removeAttribute("inkscape:connector-curvature");
                 did = true;

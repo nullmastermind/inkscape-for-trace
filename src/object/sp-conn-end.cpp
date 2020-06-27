@@ -27,7 +27,9 @@ static void change_endpts(SPCurve *const curve, double const endPos[2]);
 
 SPConnEnd::SPConnEnd(SPObject *const owner)
     : ref(owner)
+    , sub_ref(owner)
     , href(nullptr)
+    , sub_href(nullptr)
     // Default to center connection endpoint
     , _changed_connection()
     , _delete_connection()
@@ -171,7 +173,7 @@ static void sp_conn_get_route_and_redraw(SPPath *const path, const bool updatePa
 }
 
 
-static void sp_conn_end_shape_move(Geom::Affine const */*mp*/, SPItem */*moved_item*/, SPPath *const path)
+static void sp_conn_end_shape_modified(SPObject */*moved_item*/, int /*flags*/, SPPath *const path)
 {
     if (path->connEndPair.isAutoRoutingConn()) {
         path->connEndPair.tellLibavoidNewEndpoints();
@@ -225,6 +227,10 @@ static void sp_conn_end_deleted(SPObject *, SPObject *const owner, unsigned cons
     char const * const attrs[] = {
         "inkscape:connection-start", "inkscape:connection-end"};
     owner->removeAttribute(attrs[handle_ix]);
+
+    char const * const point_attrs[] = {
+        "inkscape:connection-start-point", "inkscape:connection-end-point"};
+    owner->removeAttribute(point_attrs[handle_ix]);
     /* I believe this will trigger sp_conn_end_href_changed. */
 }
 
@@ -233,34 +239,32 @@ void sp_conn_end_detach(SPObject *const owner, unsigned const handle_ix)
     sp_conn_end_deleted(nullptr, owner, handle_ix);
 }
 
-void SPConnEnd::setAttacherHref(gchar const *value, SPPath* /*path*/)
+void SPConnEnd::setAttacherHref(gchar const *value)
 {
-    bool validRef = true;
-
-    if (value && href && strcmp(value, href) == 0) {
-        /* No change, do nothing. */
-    } else if (!value) {
-        validRef = false;
-    } else {
+    if (g_strcmp0(value, href) != 0) {
+        g_free(href);
         href = g_strdup(value);
-        // Now do the attaching, which emits the changed signal.
-        try {
-            ref.attach(Inkscape::URI(value));
-        } catch (Inkscape::BadURIException &e) {
-            /* TODO: Proper error handling as per
-            * http://www.w3.org/TR/SVG11/implnote.html#ErrorProcessing.  (Also needed for
-            * sp-use.) */
-            g_warning("%s", e.what());
-            validRef = false;
+        if (!ref.try_attach(value)) {
+            g_free(href);
+            href = nullptr;
         }
     }
+}
 
-    if (!validRef) {
-        ref.detach();
-        g_free(href);
-        href = nullptr;
+void SPConnEnd::setAttacherSubHref(gchar const *value)
+{
+    // TODO This could check the URI object is actually a sub-object
+    // of the set href. It should be done here and in setAttacherHref
+    if (g_strcmp0(value, sub_href) != 0) {
+        g_free(sub_href);
+        sub_href = g_strdup(value);
+        if (!sub_ref.try_attach(value)) {
+            g_free(sub_href);
+            sub_href = nullptr;
+        }
     }
 }
+
 
 
 void sp_conn_end_href_changed(SPObject */*old_ref*/, SPObject */*ref*/,
@@ -283,11 +287,11 @@ void sp_conn_end_href_changed(SPObject */*old_ref*/, SPObject */*ref*/,
             SPObject *parent = refobj->parent;
             if (SP_IS_GROUP(parent) && ! SP_IS_LAYER(parent)) {
                 connEnd._group_connection
-                    = SP_ITEM(parent)->connectTransformed(sigc::bind(sigc::ptr_fun(&sp_conn_end_shape_move),
+                    = SP_ITEM(parent)->connectModified(sigc::bind(sigc::ptr_fun(&sp_conn_end_shape_modified),
                                                                  path));
             }
             connEnd._transformed_connection
-                = SP_ITEM(refobj)->connectTransformed(sigc::bind(sigc::ptr_fun(&sp_conn_end_shape_move),
+                = SP_ITEM(refobj)->connectModified(sigc::bind(sigc::ptr_fun(&sp_conn_end_shape_modified),
                                                                  path));
         }
     }
