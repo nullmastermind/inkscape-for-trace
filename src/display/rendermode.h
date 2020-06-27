@@ -32,10 +32,13 @@ enum SplitMode {
 };
 
 enum SplitDirection {
+    SPLITDIRECTION_NONE,
     SPLITDIRECTION_NORTH,
     SPLITDIRECTION_EAST,
     SPLITDIRECTION_SOUTH,
-    SPLITDIRECTION_WEST
+    SPLITDIRECTION_WEST,
+    SPLITDIRECTION_HORIZONTAL, // Only used when hovering
+    SPLITDIRECTION_VERTICAL    // Only used when hovering
 };
 
 enum ColorMode {

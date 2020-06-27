@@ -1733,54 +1733,31 @@ void SPDesktop::toggleGrids()
     }
 }
 
+// This will be replaced by an action!
+void SPDesktop::setSplitMode(Inkscape::SplitMode mode) {
+    _split_canvas = (mode == Inkscape::SPLITMODE_SPLIT);
+    _xray         = (mode == Inkscape::SPLITMODE_XRAY);
+    canvas->set_split_mode(mode);
+
+    Inkscape::Verb *verb1 = Inkscape::Verb::get(SP_VERB_VIEW_TOGGLE_SPLIT);
+    if (verb1) {
+        _menu_update.emit(verb1->get_code(), _split_canvas);
+    }
+
+    Inkscape::Verb *verb2 = Inkscape::Verb::get(SP_VERB_VIEW_TOGGLE_XRAY);
+    if (verb2) {
+        _menu_update.emit(verb2->get_code(), _xray);
+    }
+}
+
 void SPDesktop::toggleSplitMode()
 {
-    if (this->getToplevel()) {
-        _split_canvas = !_split_canvas;
-        if (_split_canvas) {
-            canvas->set_split_mode(Inkscape::SPLITMODE_SPLIT);
-        } else {
-            canvas->set_split_mode(Inkscape::SPLITMODE_NORMAL);
-        }
-
-        if (_split_canvas && _xray) {
-            toggleXRay();
-        }
-        Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_VIEW_TOGGLE_SPLIT);
-        if (verb) {
-            _menu_update.emit(verb->get_code(), splitMode());
-        }
-        if (_display_mode == Inkscape::RENDERMODE_OUTLINE) {
-            if (_split_canvas) {
-                toggleSplitMode();
-            }
-        }
-    }
+    setSplitMode( _split_canvas ? Inkscape::SPLITMODE_NORMAL : Inkscape::SPLITMODE_SPLIT);
 }
 
 void SPDesktop::toggleXRay()
 {
-    if (this->getToplevel()) {
-        _xray = !_xray;
-        if (_xray) {
-            canvas->set_split_mode(Inkscape::SPLITMODE_XRAY);
-        } else {
-            canvas->set_split_mode(Inkscape::SPLITMODE_NORMAL);
-        }
-
-        if (_split_canvas && _xray) {
-            toggleSplitMode();
-        }
-        Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_VIEW_TOGGLE_XRAY);
-        if (verb) {
-            _menu_update.emit(verb->get_code(), xrayMode());
-        }
-        if (_display_mode == Inkscape::RENDERMODE_OUTLINE) {
-            if (_xray) {
-                toggleXRay();
-            }
-        }
-    }
+    setSplitMode( _xray ? Inkscape::SPLITMODE_NORMAL : Inkscape::SPLITMODE_XRAY);
 }
 
 void SPDesktop::showGrids(bool show, bool dirty_document)

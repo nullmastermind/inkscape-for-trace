@@ -21,6 +21,7 @@
 #include <2geom/int-rect.h>
 
 #include "display/rendermode.h"
+#include "display/canvas-split.h"
 
 class SPCanvasItem;
 class SPCanvasGroup;
@@ -62,6 +63,7 @@ public:
     void set_drawing_disabled(bool disable) { _drawing_disabled = disable; } // Disable during path ops, etc.
     bool is_dragging() {return _is_dragging; }                // selection-chemistry.cpp
 
+    //  Rendering modes
     void set_render_mode(Inkscape::RenderMode mode);
     void set_color_mode(Inkscape::ColorMode   mode);
     void set_split_mode(Inkscape::SplitMode   mode);
@@ -138,6 +140,7 @@ private:
 
     void shift_content(Geom::IntPoint shift, Cairo::RefPtr<Cairo::ImageSurface> &store);
     void add_clippath(const Cairo::RefPtr<Cairo::Context>& cr);
+    void set_cursor();
 
     // Events
     bool pick_current_item(GdkEvent *event);
@@ -181,8 +184,11 @@ private:
     SPCanvasItem *_root = nullptr;
     Inkscape::RenderMode _render_mode = Inkscape::RENDERMODE_NORMAL;
     Inkscape::SplitMode  _split_mode  = Inkscape::SPLITMODE_NORMAL;
+    Geom::Point _split_position;
     Inkscape::SplitDirection _split_direction   = Inkscape::SPLITDIRECTION_EAST;
-    Geom::Point _split_point;
+    Inkscape::SplitDirection _hover_direction   = Inkscape::SPLITDIRECTION_NONE;
+    bool _split_dragging = false;
+    Geom::Point _split_drag_start;
     Inkscape::ColorMode  _color_mode  = Inkscape::COLORMODE_NORMAL;
 
 #if defined(HAVE_LIBLCMS2)

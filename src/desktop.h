@@ -423,6 +423,7 @@ public:
     bool colorProfAdjustEnabled();
 
     void toggleGrids();
+    void setSplitMode(Inkscape::SplitMode mode);
     void toggleSplitMode();
     void toggleXRay();
     bool splitMode() const { return _split_canvas; };

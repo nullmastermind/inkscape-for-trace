@@ -30,6 +30,8 @@
 #include "display/canvas-arena.h"    // Change rendering mode
 #include "display/cairo-utils.h"     // Checkerboard background.
 
+#include "ui/tools/tool-base.h"      // Default cursor
+
 /**
  * Helper function to update item and its children.
  *
@@ -417,12 +419,32 @@ Canvas::on_button_event(GdkEventButton *button_event)
         default: mask = 0;  // Buttons can range at least to 9 but mask defined only to 5.
     }
 
+
     bool retval = false;
     switch (button_event->type) {
         case GDK_BUTTON_PRESS:
+
+            if (_hover_direction != Inkscape::SPLITDIRECTION_NONE) {
+                // We're hovering over Split controller.
+                _split_dragging = true;
+                _split_drag_start = Geom::Point(button_event->x, button_event->y);
+                break;
+            }
+            // Fallthrough
+
         case GDK_2BUTTON_PRESS:
+
+            if (_hover_direction != Inkscape::SPLITDIRECTION_NONE) {
+                _split_direction = _hover_direction;
+                _split_dragging = false;
+                queue_draw();
+                break;
+            }
+            // Fallthrough
+
         case GDK_3BUTTON_PRESS:
             // Pick the current item as if the button were not press and then process event.
+
             _state = button_event->state;
             pick_current_item(reinterpret_cast<GdkEvent *>(button_event));
             _state ^= mask;
@@ -432,6 +454,8 @@ Canvas::on_button_event(GdkEventButton *button_event)
         case GDK_BUTTON_RELEASE:
             // Process the event as if the button were pressed, then repick after the button has
             // been released.
+            _split_dragging = false;
+
             _state = button_event->state;
             retval = emit_event(reinterpret_cast<GdkEvent *>(button_event));
             button_event->state ^= mask;
@@ -519,6 +543,92 @@ Canvas::on_key_release_event(GdkEventKey *key_event)
 bool
 Canvas::on_motion_notify_event(GdkEventMotion *motion_event)
 {
+    Geom::IntPoint cursor_position = Geom::IntPoint(motion_event->x, motion_event->y);
+
+    // Check if we are near the edge. If so, revert to normal mode.
+    if ((_split_mode == Inkscape::SPLITMODE_SPLIT && _split_dragging) ||
+         _split_mode == Inkscape::SPLITMODE_XRAY                      ) {
+        if (cursor_position.x() < 5                             ||
+            cursor_position.y() < 5                             ||
+            cursor_position.x() - _allocation.get_width()  > -5 ||
+            cursor_position.y() - _allocation.get_height() > -5 ) {
+
+            // Reset everything.
+            _split_mode = Inkscape::SPLITMODE_NORMAL;
+            _split_position = Geom::Point(_allocation.get_width()/2, _allocation.get_height()/2);
+            set_cursor();
+            queue_draw();
+            SP_ACTIVE_DESKTOP->setSplitMode(_split_mode);
+            return true;
+        }
+    }
+
+    if (_split_mode == Inkscape::SPLITMODE_XRAY) {
+        _split_position = cursor_position;
+        queue_draw(); // Re-blit
+    }
+
+    if (_split_mode == Inkscape::SPLITMODE_SPLIT) {
+
+        Inkscape::SplitDirection hover_direction = Inkscape::SPLITDIRECTION_NONE;
+        Geom::Point difference(cursor_position - _split_position);
+
+        // Move controller
+        if (_split_dragging) {
+            Geom::Point delta = cursor_position - _split_drag_start; // We don't use _split_position
+            if (_hover_direction == Inkscape::SPLITDIRECTION_HORIZONTAL) {
+                _split_position += Geom::Point(0, delta.y());
+            } else if (_hover_direction == Inkscape::SPLITDIRECTION_VERTICAL) {
+                _split_position += Geom::Point(delta.x(), 0);
+            } else {
+                _split_position += delta;
+            }
+            _split_drag_start = cursor_position;
+            queue_draw();
+            return true;
+        }
+
+        if (Geom::distance(cursor_position, _split_position) < 20 * _device_scale) {
+
+            // We're hovering over circle, figure out which direction we are in.
+            if (difference.y() - difference.x() > 0) {
+                if (difference.y() + difference.x() > 0) {
+                    hover_direction = Inkscape::SPLITDIRECTION_SOUTH;
+                } else {
+                    hover_direction = Inkscape::SPLITDIRECTION_WEST;
+                }
+            } else {
+                if (difference.y() + difference.x() > 0) {
+                    hover_direction = Inkscape::SPLITDIRECTION_EAST;
+                } else {
+                    hover_direction = Inkscape::SPLITDIRECTION_NORTH;
+                }
+            }
+        } else if (_split_direction == Inkscape::SPLITDIRECTION_NORTH ||
+                   _split_direction == Inkscape::SPLITDIRECTION_SOUTH) {
+            if (std::abs(difference.y()) < 3 * _device_scale) {
+                // We're hovering over horizontal line
+                hover_direction = Inkscape::SPLITDIRECTION_HORIZONTAL;
+            }
+        } else {
+            if (std::abs(difference.x()) < 3 * _device_scale) {
+               // We're hovering over vertical line
+                hover_direction = Inkscape::SPLITDIRECTION_VERTICAL;
+            }
+        }
+
+        if (_hover_direction != hover_direction) {
+            _hover_direction = hover_direction;
+            set_cursor();
+            queue_draw();
+        }
+
+        if (_hover_direction != Inkscape::SPLITDIRECTION_NONE) {
+            // We're hovering, don't pick or emit event.
+            return true;
+        }
+    }
+
     _state = motion_event->state;
     pick_current_item(reinterpret_cast<GdkEvent *>(motion_event));
     bool status = emit_event(reinterpret_cast<GdkEvent *>(motion_event));
@@ -553,7 +663,7 @@ Canvas::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr)
                                         _allocation.get_height() * _device_scale);
         cairo_surface_set_device_scale(_outline_store->cobj(), _device_scale, _device_scale); // No C++ API!
 
-        _split_point = Geom::Point(_allocation.get_width()/2, _allocation.get_height()/2);
+        _split_position = Geom::Point(_allocation.get_width()/2, _allocation.get_height()/2);
     }
 
     if (!(_allocation == allocation) || _device_scale != device_scale) { // "!=" for allocation not defined!
@@ -577,10 +687,61 @@ Canvas::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr)
     cr->paint();
 
     if (_split_mode != Inkscape::SPLITMODE_NORMAL) {
+        // Add clipping path and blit outline store.
         cr->save();
         cr->set_source(_outline_store, 0, 0);
         add_clippath(cr);
         cr->paint();
+        cr->restore();
+    }
+
+    if (_split_mode == Inkscape::SPLITMODE_SPLIT) {
+
+        // Add dividing line.
+        cr->save();
+        cr->set_source_rgb(0, 0, 0);
+        cr->set_line_width(1);
+        if (_split_direction == Inkscape::SPLITDIRECTION_EAST ||
+            _split_direction == Inkscape::SPLITDIRECTION_WEST) {
+            cr->move_to((int)_split_position.x() + 0.5,                        0);
+            cr->line_to((int)_split_position.x() + 0.5, _allocation.get_height());
+            cr->stroke();
+        } else {
+            cr->move_to(                      0, (int)_split_position.y() + 0.5);
+            cr->line_to(_allocation.get_width(), (int)_split_position.y() + 0.5);
+            cr->stroke();
+        }
+        cr->restore();
+
+        // Add controller image.
+        double a = _hover_direction == Inkscape::SPLITDIRECTION_NONE ? 0.5 : 1.0;
+        cr->save();
+        cr->set_source_rgba(0.2, 0.2, 0.2, a);
+        cr->arc(_split_position.x(), _split_position.y(), 20 * _device_scale, 0, 2 * M_PI);
+        cr->fill();
+        cr->restore();
+
+        cr->save();
+        for (int i = 0; i < 4; ++i) {
+            // The four direction triangles.
+            cr->save();
+
+            // Position triangle.
+            cr->translate(_split_position.x(), _split_position.y());
+            cr->rotate((i+2)*M_PI/2.0);
+
+            // Draw triangle.
+            cr->move_to(-5 * _device_scale,  8 * _device_scale);
+            cr->line_to( 0,                 18 * _device_scale);
+            cr->line_to( 5 * _device_scale,  8 * _device_scale);
+            cr->close_path();
+
+            double b = _hover_direction == (i+1) ? 0.9 : 0.7;
+            cr->set_source_rgba(b, b, b, a);
+            cr->fill();
+
+            cr->restore();
+        }
         cr->restore();
     }
 
@@ -1022,21 +1183,22 @@ Canvas::add_clippath(const Cairo::RefPtr<Cairo::Context>& cr) {
 
     double width  = _allocation.get_width();
     double height = _allocation.get_height();
-    double sx     = _split_point.x();
-    double sy     = _split_point.y();
+    double sx     = _split_position.x();
+    double sy     = _split_position.y();
 
     if (_split_mode == Inkscape::SPLITMODE_SPLIT) {
+        // We're clipping the outline region... so it's backwards.
         switch (_split_direction) {
-            case Inkscape::SPLITDIRECTION_NORTH:
+            case Inkscape::SPLITDIRECTION_SOUTH:
                 cr->rectangle(0,   0, width,               sy);
                 break;
-            case Inkscape::SPLITDIRECTION_SOUTH:
+            case Inkscape::SPLITDIRECTION_NORTH:
                 cr->rectangle(0,  sy, width,      height - sy);
                 break;
-            case Inkscape::SPLITDIRECTION_WEST:
+            case Inkscape::SPLITDIRECTION_EAST:
                 cr->rectangle(0,   0,         sx, height     );
                 break;
-            case Inkscape::SPLITDIRECTION_EAST:
+            case Inkscape::SPLITDIRECTION_WEST:
                 cr->rectangle(sx,  0, width - sx, height     );
                 break;
         }
@@ -1046,6 +1208,49 @@ Canvas::add_clippath(const Cairo::RefPtr<Cairo::Context>& cr) {
 
     cr->clip();
 }
+
+// Change cursor
+void
+Canvas::set_cursor() {
+
+    auto display = Gdk::Display::get_default();
+
+    switch (_hover_direction) {
+
+        case Inkscape::SPLITDIRECTION_NONE:
+            get_window()->set_cursor(SP_ACTIVE_DESKTOP->event_context->cursor);
+            break;
+
+        case Inkscape::SPLITDIRECTION_NORTH:
+        case Inkscape::SPLITDIRECTION_EAST:
+        case Inkscape::SPLITDIRECTION_SOUTH:
+        case Inkscape::SPLITDIRECTION_WEST:
+        {
+            auto cursor = Gdk::Cursor::create(display, "pointer");
+            get_window()->set_cursor(cursor);
+            break;
+        }
+
+        case Inkscape::SPLITDIRECTION_HORIZONTAL:
+        {
+            auto cursor = Gdk::Cursor::create(display, "ns-resize");
+            get_window()->set_cursor(cursor);
+            break;
+        }
+
+        case Inkscape::SPLITDIRECTION_VERTICAL:
+        {
+            auto cursor = Gdk::Cursor::create(display, "ew-resize");
+            get_window()->set_cursor(cursor);
+            break;
+        }
+
+        default:
+            // Shouldn't reach.
+            std::cerr << "Canvas::set_cursor: Unknown hover direction!" << std::endl;
+    }
+}
+
 
 // This routine reacts to events from the canvas. It's main purpose is to find the canvas item
 // closest to the cursor where the event occured and then send the event (sometimes modified) to
@@ -1127,6 +1332,19 @@ Canvas::pick_current_item(GdkEvent *event)
             } else {
                 x = _pick_event.motion.x;
                 y = _pick_event.motion.y;
+            }
+
+            // If in split mode, look at where cursor is to see if one should pick with outline mode.
+            SPDesktop *desktop = SP_ACTIVE_DESKTOP; // TODO Find better solution
+            SPCanvasArena *arena = SP_CANVAS_ARENA(desktop->drawing);
+            arena->drawing.setRenderMode(_render_mode);
+            if (_split_mode == Inkscape::SPLITMODE_SPLIT) {
+                if ((_split_direction == Inkscape::SPLITDIRECTION_NORTH && y > _split_position.y()) ||
+                    (_split_direction == Inkscape::SPLITDIRECTION_SOUTH && y < _split_position.y()) ||
+                    (_split_direction == Inkscape::SPLITDIRECTION_WEST  && x > _split_position.x()) ||
+                    (_split_direction == Inkscape::SPLITDIRECTION_EAST  && x < _split_position.x()) ) {
+                    arena->drawing.setRenderMode(Inkscape::RENDERMODE_OUTLINE);
+                }
             }
 
             // Convert to world coordinates.
