@@ -32,35 +32,31 @@
 #include <poppler/glib/poppler-page.h>
 #endif
 
+#include <gdkmm/general.h>
+#include <glibmm/convert.h>
+#include <glibmm/i18n.h>
+#include <glibmm/miscutils.h>
+#include <gtk/gtk.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/drawingarea.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/radiobutton.h>
 #include <gtkmm/scale.h>
-
-#include <glibmm/convert.h>
-#include <glibmm/miscutils.h>
-#include <gtk/gtk.h>
-#include <glibmm/i18n.h>
-
-#include "ui/dialog-events.h"
-#include "ui/widget/spinbutton.h"
-#include "ui/widget/frame.h"
-
-#include "extension/system.h"
-#include "extension/input.h"
-#include "svg-builder.h"
-#include "pdf-parser.h"
+#include <utility>
 
 #include "document-undo.h"
+#include "extension/input.h"
+#include "extension/system.h"
 #include "inkscape.h"
+#include "object/sp-root.h"
+#include "pdf-parser.h"
+#include "svg-builder.h"
+#include "ui/dialog-events.h"
+#include "ui/widget/frame.h"
+#include "ui/widget/spinbutton.h"
 #include "util/units.h"
 
-#include "object/sp-root.h"
-
-
-#include <gdkmm/general.h>
 
 
 namespace {
@@ -96,12 +92,13 @@ static const gchar * crop_setting_choices[] = {
     N_("art box")
 };
 
-PdfImportDialog::PdfImportDialog(PDFDoc *doc, const gchar */*uri*/)
+PdfImportDialog::PdfImportDialog(std::shared_ptr<PDFDoc> doc, const gchar */*uri*/)
+    : _pdf_doc(std::move(doc))
 {
+    assert(_pdf_doc);
 #ifdef HAVE_POPPLER_CAIRO
     _poppler_doc = NULL;
 #endif // HAVE_POPPLER_CAIRO
-    _pdf_doc = doc;
     cancelbutton = Gtk::manage(new Gtk::Button(_("_Cancel"), true));
     okbutton     = Gtk::manage(new Gtk::Button(_("_OK"),     true));
     _labelSelect = Gtk::manage(new class Gtk::Label(_("Select page:")));
@@ -577,6 +574,7 @@ bool PdfImportDialog::_onDraw(const Cairo::RefPtr<Cairo::Context>& cr) {
 void PdfImportDialog::_setPreviewPage(int page) {
 
     _previewed_page = _pdf_doc->getCatalog()->getPage(page);
+    g_return_if_fail(_previewed_page);
     // Try to get a thumbnail from the PDF if possible
     if (!_render_thumb) {
         if (_thumb_data) {
@@ -664,13 +662,15 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
     }
 
 
+    // Open the file using poppler
     // PDFDoc is from poppler. PDFDoc is used for preview and for native import.
+    std::shared_ptr<PDFDoc> pdf_doc;
 
 #ifndef _WIN32
     // poppler does not use glib g_open. So on win32 we must use unicode call. code was copied from
     // glib gstdio.c
     GooString *filename_goo = new GooString(uri);
-    PDFDoc *pdf_doc = new PDFDoc(filename_goo, nullptr, nullptr, nullptr);   // TODO: Could ask for password
+    pdf_doc = std::make_shared<PDFDoc>(filename_goo, nullptr, nullptr, nullptr);   // TODO: Could ask for password
     //delete filename_goo;
 #else
     wchar_t *wfilename = reinterpret_cast<wchar_t*>(g_utf8_to_utf16 (uri, -1, NULL, NULL, NULL));
@@ -679,13 +679,12 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
       return NULL;
     }
 
-    PDFDoc *pdf_doc = new PDFDoc(wfilename, wcslen(wfilename), NULL, NULL, NULL);   // TODO: Could ask for password
+    pdf_doc = std::make_shared<PDFDoc>(wfilename, wcslen(wfilename), nullptr, nullptr, nullptr);   // TODO: Could ask for password
     g_free (wfilename);
 #endif
 
     if (!pdf_doc->isOk()) {
         int error = pdf_doc->getErrorCode();
-        delete pdf_doc;
         if (error == errEncrypted) {
             g_message("Document is encrypted.");
         } else if (error == errOpenFile) {
@@ -713,12 +712,11 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
         return nullptr;
     }
 
-    PdfImportDialog *dlg = nullptr;
+
+    std::unique_ptr<PdfImportDialog> dlg;
     if (INKSCAPE.use_gui()) {
-        dlg = new PdfImportDialog(pdf_doc, uri);
+        dlg = std::make_unique<PdfImportDialog>(pdf_doc, uri);
         if (!dlg->showDialog()) {
-            delete dlg;
-            delete pdf_doc;
             throw Input::open_cancelled();
         }
     }
@@ -739,12 +737,25 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
 #endif
     }
 
+    // Create Inkscape document from file
     SPDocument *doc = nullptr;
     bool saved = false;
     if(!is_importvia_poppler)
     {
         // native importer
-        doc = SPDocument::createNewDoc(nullptr, TRUE, TRUE);
+
+        // Check page exists
+        Catalog *catalog = pdf_doc->getCatalog();
+        int const num_pages = catalog->getNumPages();
+        sanitize_page_number(page_num, num_pages);
+        Page *page = catalog->getPage(page_num);
+        if (!page) {
+            std::cerr << "PDFInput::open: error opening page " << page_num << std::endl;
+            return nullptr;
+        }
+
+        // Create document
+        doc = SPDocument::createNewDoc(nullptr, true, true);
         saved = DocumentUndo::getUndoSensitive(doc);
         DocumentUndo::setUndoSensitive(doc, false); // No need to undo in this temporary document
 
@@ -765,11 +776,6 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
         _POPPLER_CONST PDFRectangle *clipToBox = nullptr;
         double crop_setting = -1.0;
         sp_repr_get_double(prefs, "cropTo", &crop_setting);
-
-        Catalog *catalog = pdf_doc->getCatalog();
-        int const num_pages = catalog->getNumPages();
-        sanitize_page_number(page_num, num_pages);
-        Page *page = catalog->getPage(page_num);
 
         if ( crop_setting >= 0.0 ) {    // Do page clipping
             int crop_choice = (int)crop_setting;
@@ -844,18 +850,21 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
         /// @todo handle password
         /// @todo check if win32 unicode needs special attention
         PopplerDocument* document = poppler_document_new_from_file(full_uri.c_str(), NULL, &error);
+        PopplerPage* page = nullptr;
 
         if(error != NULL) {
             std::cerr << "PDFInput::open: error opening document: " << full_uri << std::endl;
             g_error_free (error);
         }
 
-        if (document != NULL)
-        {
-            double width, height;
+        if (document) {
             int const num_pages = poppler_document_get_n_pages(document);
             sanitize_page_number(page_num, num_pages);
-            PopplerPage* page = poppler_document_get_page(document, page_num - 1);
+            page = poppler_document_get_page(document, page_num - 1);
+        }
+
+        if (page) {
+            double width, height;
             poppler_page_get_size(page, &width, &height);
 
             Glib::ustring output;
@@ -877,24 +886,26 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
             cairo_surface_destroy(surface);
 
             doc = SPDocument::createNewDocFromMem(output.c_str(), output.length(), TRUE);
-            
-            // Cleanup
-            // delete output;
-            g_object_unref(G_OBJECT(page));
+        } else if (document) {
+            std::cerr << "PDFInput::open: error opening page " << page_num << " of document: " << full_uri << std::endl;
+        }
+
+        // Cleanup
+        if (document) {
             g_object_unref(G_OBJECT(document));
+            if (page) {
+                g_object_unref(G_OBJECT(page));
+            }
         }
-        else
-        {
-            doc = SPDocument::createNewDoc(NULL, TRUE, TRUE);   // fallback create empty document
+
+        if (!doc) {
+            return nullptr;
         }
+
         saved = DocumentUndo::getUndoSensitive(doc);
         DocumentUndo::setUndoSensitive(doc, false); // No need to undo in this temporary document
 #endif
     }
-
-    // Cleanup
-    delete pdf_doc;
-    delete dlg;
 
     // Set viewBox if it doesn't exist
     if (!doc->getRoot()->viewBox_set) {

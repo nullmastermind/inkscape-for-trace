@@ -64,7 +64,7 @@ namespace Internal {
 class PdfImportDialog : public Gtk::Dialog
 {
 public:
-    PdfImportDialog(PDFDoc *doc, const gchar *uri);
+    PdfImportDialog(std::shared_ptr<PDFDoc> doc, const gchar *uri);
     ~PdfImportDialog() override;
 
     bool showDialog();
@@ -120,7 +120,7 @@ private:
     class Gtk::DrawingArea * _previewArea;
     class Gtk::HBox * hbox1;
 
-    PDFDoc *_pdf_doc;   // Document to be imported
+    std::shared_ptr<PDFDoc> _pdf_doc;   // Document to be imported
     int _current_page;  // Current selected page
     Page *_previewed_page;    // Currently previewed page
     unsigned char *_thumb_data; // Thumbnail image data
