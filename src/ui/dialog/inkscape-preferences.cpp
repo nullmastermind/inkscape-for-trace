@@ -2641,6 +2641,10 @@ void InkscapePreferences::initPageSystem()
     _page_system.add_line(true, _("User extensions: "), _sys_user_extension_dir, "",
                           _("Location of the user’s extensions"), true);
 
+    _sys_user_fonts_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::FONTS, ""),
+                             _("Open fonts folder"));
+    _page_system.add_line(true, _("User fonts: "), _sys_user_fonts_dir, "", _("Location of the user’s fonts"), true);
+
     _sys_user_themes_dir.init(g_build_filename(g_get_user_data_dir(), "themes", NULL), _("Open themes folder"));
     _page_system.add_line(true, _("User themes: "), _sys_user_themes_dir, "", _("Location of the user’s themes"), true);
 
@@ -2711,6 +2715,9 @@ void InkscapePreferences::initPageSystem()
     _sys_systemdata_scroll.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     _sys_systemdata_scroll.set_shadow_type(Gtk::SHADOW_IN);
     _page_system.add_line(true,  _("System data: "), _sys_systemdata_scroll, "", _("Locations of system data"), true);
+
+    _sys_fontdirs_custom.init("/options/font/custom_fontdirs", 50);
+    _page_system.add_line(true, _("Custom Font directories"), _sys_fontdirs_custom, "", _("Load additional fonts from custom locations (one path per line)"), true);
 
     tmp = "";
     auto icon_theme = Gtk::IconTheme::get_default();

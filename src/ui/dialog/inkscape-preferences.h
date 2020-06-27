@@ -361,12 +361,14 @@ protected:
     UI::Widget::PrefOpenFolder _sys_user_extension_dir;
     UI::Widget::PrefOpenFolder _sys_user_themes_dir;
     UI::Widget::PrefOpenFolder _sys_user_ui_dir;
+    UI::Widget::PrefOpenFolder _sys_user_fonts_dir;
     UI::Widget::PrefOpenFolder _sys_user_icons_dir;
     UI::Widget::PrefOpenFolder _sys_user_keys_dir;
     UI::Widget::PrefOpenFolder _sys_user_palettes_dir;
     UI::Widget::PrefOpenFolder _sys_user_templates_dir;
     UI::Widget::PrefOpenFolder _sys_user_symbols_dir;
     UI::Widget::PrefOpenFolder _sys_user_paint_servers_dir;
+    UI::Widget::PrefMultiEntry _sys_fontdirs_custom;
     Gtk::Entry                  _sys_user_cache;
     Gtk::Entry                  _sys_data;
     Gtk::TextView               _sys_icon;
