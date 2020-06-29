@@ -27,10 +27,10 @@
 #include "extension/print.h"
 #include "extension/db.h"
 #include "extension/output.h"
-#include "display/drawing.h"
 
+#include "display/drawing.h"
 #include "display/curve.h"
-#include "display/canvas-bpath.h"
+
 #include "object/sp-item.h"
 #include "object/sp-root.h"
 

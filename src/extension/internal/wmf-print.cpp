@@ -54,7 +54,7 @@
 #include "path/path-boolop.h"
 
 #include <2geom/svg-path-parser.h> // to get from SVG text to Geom::Path
-#include "display/canvas-bpath.h"  // for SPWindRule
+
 #include "display/cairo-utils.h"   // for Inkscape::Pixbuf::PF_CAIRO
 
 #include "wmf-print.h"

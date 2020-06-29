@@ -25,18 +25,19 @@
 #define PANGO_ENABLE_ENGINE
 #endif
 
+#include "cairo-render-context.h"
 
 #include <csignal>
 #include <cerrno>
 #include <2geom/pathvector.h>
 
 #include <glib.h>
-
 #include <glibmm/i18n.h>
+
 #include "display/drawing.h"
 #include "display/curve.h"
-#include "display/canvas-bpath.h"
 #include "display/cairo-utils.h"
+
 #include "object/sp-item.h"
 #include "object/sp-item-group.h"
 #include "object/sp-hatch.h"
@@ -52,7 +53,6 @@
 #include "libnrtype/FontFactory.h" // USE_PANGO_WIN32
 #endif
 
-#include "cairo-render-context.h"
 #include "cairo-renderer.h"
 #include "extension/system.h"
 

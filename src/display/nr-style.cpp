@@ -12,10 +12,11 @@
 
 #include "display/nr-style.h"
 #include "style.h"
-#include "object/sp-paint-server.h"
-#include "display/canvas-bpath.h" // contains SPStrokeJoinType, SPStrokeCapType etc. (WTF!)
+
 #include "display/drawing-context.h"
 #include "display/drawing-pattern.h"
+
+#include "object/sp-paint-server.h"
 
 void NRStyle::Paint::clear()
 {

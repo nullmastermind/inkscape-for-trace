@@ -51,7 +51,6 @@
 #include "rdf.h"
 
 #include "display/cairo-utils.h"
-#include "display/canvas-bpath.h"
 #include "display/curve.h"
 
 #include "extension/system.h"

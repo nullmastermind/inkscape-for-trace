@@ -31,7 +31,7 @@
 #include "display/drawing.h"
 
 #include "display/curve.h"
-#include "display/canvas-bpath.h"
+
 #include "object/sp-item.h"
 #include "object/sp-root.h"
 

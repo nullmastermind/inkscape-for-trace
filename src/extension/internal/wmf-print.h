@@ -15,8 +15,6 @@
 #include <3rdparty/libuemf/uwmf.h>
 #include "extension/internal/metafile-print.h"
 
-#include "display/canvas-bpath.h"  // for SPWindRule
-
 namespace Inkscape {
 namespace Extension {
 namespace Internal {

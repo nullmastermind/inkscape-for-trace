@@ -23,6 +23,8 @@
  *      http://msdn.microsoft.com/library/en-us/gdi/metafile_5hkj.asp
  */
 
+#include "emf-print.h"
+
 #include <cstring>
 #include <glibmm/miscutils.h>
 #include <3rdparty/libuemf/symbol_convert.h>
@@ -31,17 +33,23 @@
 #include <2geom/pathvector.h>
 #include <2geom/rect.h>
 #include <2geom/curves.h>
-
-#include "helper/geom.h"
-#include "helper/geom-curves.h"
-#include "util/units.h"
+#include <2geom/svg-path-parser.h> // to get from SVG text to Geom::Path
 
 #include "inkscape-version.h"
 
-#include "extension/system.h"
-#include "extension/print.h"
 #include "document.h"
 #include "path-prefix.h"
+#include "style.h"
+#include "style-enums.h"          // Fill rules
+
+#include "display/cairo-utils.h"  // for Inkscape::Pixbuf::PF_CAIRO
+#include "display/curve.h"
+
+#include "extension/system.h"
+#include "extension/print.h"
+
+#include "helper/geom.h"
+#include "helper/geom-curves.h"
 
 #include "object/sp-pattern.h"
 #include "object/sp-image.h"
@@ -52,18 +60,10 @@
 #include "object/sp-root.h"
 #include "object/sp-shape.h"
 #include "object/sp-clippath.h"
-#include "style.h"
-#include "display/cairo-utils.h"
 
 #include "path/path-boolop.h"
 
-#include "2geom/svg-path-parser.h" // to get from SVG text to Geom::Path
-#include "display/canvas-bpath.h"  // for SPWindRule
-#include "display/cairo-utils.h"  // for Inkscape::Pixbuf::PF_CAIRO
-#include "display/curve.h"
-
-#include "emf-print.h"
-
+#include "util/units.h"
 
 namespace Inkscape {
 namespace Extension {

@@ -16,8 +16,6 @@
 #include <3rdparty/libuemf/uemf.h>
 #include "extension/internal/metafile-print.h"
 
-#include "display/canvas-bpath.h"  // for SPWindRule
-
 class SPItem;
 
 namespace Inkscape {

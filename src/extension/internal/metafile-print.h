@@ -14,13 +14,15 @@
 
 #include <map>
 #include <stack>
+
 #include <glibmm/ustring.h>
 #include <3rdparty/libuemf/uemf.h>
 #include <2geom/affine.h>
 #include <2geom/pathvector.h>
 
 #include "extension/implementation/implementation.h"
-#include "display/canvas-bpath.h"
+
+#include "style-enums.h"          // Fill rule
 #include "livarot/LivarotDefs.h"  // FillRule
 
 class SPGradient;
