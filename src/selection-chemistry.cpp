@@ -33,6 +33,7 @@
 #include "selection-chemistry.h"
 
 #include "file.h"
+#include "display/canvas-bpath.h"
 
 // TODO FIXME: This should be moved into preference repr
 SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;

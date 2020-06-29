@@ -46,6 +46,7 @@
 
 #include "display/cairo-utils.h"
 #include "display/canvas-arena.h"
+#include "display/canvas-bpath.h"
 #include "display/curve.h"
 #include "display/drawing-context.h"
 #include "display/drawing.h"

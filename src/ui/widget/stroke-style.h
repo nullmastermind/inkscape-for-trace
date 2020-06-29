@@ -22,25 +22,24 @@
 #include <gtkmm/grid.h>
 #include <gtkmm/radiobutton.h>
 
+
 #include "desktop-style.h"
 #include "desktop.h"
 #include "document-undo.h"
 #include "fill-style.h" // to get sp_fill_style_widget_set_desktop
 #include "gradient-chemistry.h"
-
 #include "inkscape.h"
-#include "io/sys.h"
 #include "path-prefix.h"
 #include "preferences.h"
 #include "selection.h"
+#include "style.h"
 #include "verbs.h"
 
-#include "display/canvas-bpath.h" // for SP_STROKE_LINEJOIN_*
 #include "display/drawing.h"
 
 #include "helper/stock-items.h"
 
-#include "style.h"
+#include "io/sys.h"
 
 #include "svg/css-ostringstream.h"
 

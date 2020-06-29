@@ -16,12 +16,35 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-/* SPFontStyle */
-
-#include "display/canvas-bpath.h" // FIXME those enums belong here!
-
 #include <cstdint>
 
+/* fill-rule */
+/* clip-rule */
+enum SPWindRule : std::uint_least8_t {
+    SP_WIND_RULE_NONZERO,
+    SP_WIND_RULE_INTERSECT,
+    SP_WIND_RULE_EVENODD,
+    SP_WIND_RULE_POSITIVE
+};
+
+
+
+/* stroke-linejoin */
+enum SPStrokeJoinType : std::uint_least8_t {
+    SP_STROKE_LINEJOIN_MITER,
+    SP_STROKE_LINEJOIN_ROUND,
+    SP_STROKE_LINEJOIN_BEVEL
+};
+
+/* stroke-linecap */
+enum SPStrokeCapType : std::uint_least8_t {
+    SP_STROKE_LINECAP_BUTT,
+    SP_STROKE_LINECAP_ROUND,
+    SP_STROKE_LINECAP_SQUARE
+};
+
+
+/* SPFontStyle */
 enum SPCSSFontSize : std::int_least8_t {
     SP_CSS_FONT_SIZE_XX_SMALL,
     SP_CSS_FONT_SIZE_X_SMALL,
@@ -332,17 +355,17 @@ static SPStyleEnum const enum_fill_rule[] = {
     {nullptr, -1}
 };
 
-static SPStyleEnum const enum_stroke_linecap[] = {
-    {"butt", SP_STROKE_LINECAP_BUTT},
-    {"round", SP_STROKE_LINECAP_ROUND},
-    {"square", SP_STROKE_LINECAP_SQUARE},
-    {nullptr, -1}
-};
-
 static SPStyleEnum const enum_stroke_linejoin[] = {
     {"miter", SP_STROKE_LINEJOIN_MITER},
     {"round", SP_STROKE_LINEJOIN_ROUND},
     {"bevel", SP_STROKE_LINEJOIN_BEVEL},
+    {nullptr, -1}
+};
+
+static SPStyleEnum const enum_stroke_linecap[] = {
+    {"butt", SP_STROKE_LINECAP_BUTT},
+    {"round", SP_STROKE_LINECAP_ROUND},
+    {"square", SP_STROKE_LINECAP_SQUARE},
     {nullptr, -1}
 };
 

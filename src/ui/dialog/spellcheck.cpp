@@ -18,22 +18,18 @@
 #endif
 
 #include "spellcheck.h"
-#include "message-stack.h"
 
-#include "inkscape.h"
-#include "document.h"
 #include "desktop.h"
-
-#include "ui/dialog/dialog-manager.h"
-#include "ui/dialog/inkscape-preferences.h" // for PREFS_PAGE_SPELLCHECK
-#include "ui/tools-switch.h"
-#include "ui/tools/text-tool.h"
-
-#include "text-editing.h"
-#include "selection-chemistry.h"
-#include "display/curve.h"
 #include "document-undo.h"
+#include "document.h"
+#include "inkscape.h"
+#include "message-stack.h"
+#include "selection-chemistry.h"
+#include "text-editing.h"
 #include "verbs.h"
+
+#include "display/curve.h"
+#include "display/canvas-bpath.h"
 
 #include "object/sp-defs.h"
 #include "object/sp-flowtext.h"
@@ -42,6 +38,11 @@
 #include "object/sp-string.h"
 #include "object/sp-text.h"
 #include "object/sp-tref.h"
+
+#include "ui/dialog/dialog-manager.h"
+#include "ui/dialog/inkscape-preferences.h" // for PREFS_PAGE_SPELLCHECK
+#include "ui/tools-switch.h"
+#include "ui/tools/text-tool.h"
 
 #include <glibmm/i18n.h>
 
