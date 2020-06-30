@@ -164,7 +164,6 @@ PencilToolbar::PencilToolbar(SPDesktop *desktop,
     }
     if (pencil_mode) {
         use_pencil_pressure();
-        _flatten_simplify->set_visible(_simplify->get_active());
     }
 }
 
@@ -198,12 +197,11 @@ PencilToolbar::mode_changed(int mode)
 
     bool visible = (mode != 2);
 
-    if (_flatten_simplify) {
-        _flatten_simplify->set_visible(visible);
-    }
-
     if (_simplify) {
         _simplify->set_visible(visible);
+        if (_flatten_simplify) {
+            _flatten_simplify->set_visible(visible && _simplify->get_active());
+        }
     }
     if (tools_isactive(_desktop, TOOLS_FREEHAND_PEN)) {
         SP_PEN_CONTEXT(_desktop->event_context)->setPolylineMode();
@@ -306,6 +304,7 @@ PencilToolbar::maxpressure_value_changed()
 
 void
 PencilToolbar::use_pencil_pressure() {
+    // assumes called by pencil toolbar (and all these widgets exist)
     bool pressure = _pressure_item->get_active();
     auto prefs = Inkscape::Preferences::get();
     prefs->setBool(freehand_tool_name() + "/pressure", pressure);
@@ -316,6 +315,7 @@ PencilToolbar::use_pencil_pressure() {
         _shape_item->set_visible(false);
         _simplify->set_visible(false);
         _flatten_spiro_bspline->set_visible(false);
+        _flatten_simplify->set_visible(false);
         for (auto button : _mode_buttons) {
             button->set_sensitive(false);
         }
@@ -326,7 +326,9 @@ PencilToolbar::use_pencil_pressure() {
         _maxpressure->set_visible(false);
         _cap_item->set_visible(false);
         _shape_item->set_visible(true);
-        _simplify->set_visible(true);
+        bool simplify_visible = freehandMode != 2;
+        _simplify->set_visible(simplify_visible);
+        _flatten_simplify->set_visible(simplify_visible && _simplify->get_active());
         if (freehandMode == 1 || freehandMode == 2) {
             _flatten_spiro_bspline->set_visible(true);
         }
