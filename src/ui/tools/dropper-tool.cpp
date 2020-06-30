@@ -162,13 +162,13 @@ bool DropperTool::root_handler(GdkEvent* event) {
                 double opacity = 1.0;
                 if(!this->stroke && obj->style->fill.set) {
                     if(obj->style->fill_opacity.set) {
-                        opacity = obj->style->fill_opacity.value;
+                        opacity = SP_SCALE24_TO_FLOAT(obj->style->fill_opacity.value);
                     }
                     apply_color = obj->style->fill.value.color.toRGBA32(opacity);
                     apply_set = true;
                 } else if(this->stroke && obj->style->stroke.set) {
                     if(obj->style->stroke_opacity.set) {
-                        opacity = obj->style->stroke_opacity.value;
+                        opacity = SP_SCALE24_TO_FLOAT(obj->style->stroke_opacity.value);
                     }
                     apply_color = obj->style->stroke.value.color.toRGBA32(opacity);
                     apply_set = true;
