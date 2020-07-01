@@ -186,8 +186,8 @@ EraserToolbar::EraserToolbar(SPDesktop *desktop)
         std::vector<Glib::ustring> labels = {_("(no inertia)"), _("(slight smoothing, default)"), _("(noticeable lagging)"), "", "", _("(maximum inertia)")};
         std::vector<double>        values = {              0.0,                                2,                        10, 20, 50,                    100};
         auto mass_val = prefs->getDouble("/tools/eraser/mass", 10.0);
-        _mass = Gtk::manage(new UI::Widget::SpinButtonToolItem("eraser-mass", _("Mass:"), _mass_adj, 1, 0));
         _mass_adj = Gtk::Adjustment::create(mass_val, 0.0, 100, 1, 10.0);
+        _mass = Gtk::manage(new UI::Widget::SpinButtonToolItem("eraser-mass", _("Mass:"), _mass_adj, 1, 0));
         _mass->set_tooltip_text(_("Increase to make the eraser drag behind, as if slowed by inertia"));
         _mass->set_custom_numeric_menu_data(values, labels);
         _mass->set_focus_widget(desktop->canvas);
