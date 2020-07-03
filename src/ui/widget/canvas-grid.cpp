@@ -69,11 +69,11 @@ CanvasGrid::CanvasGrid(SPDesktopWidget *dtw)
 
     // For creating guides, etc.
     _hruler->signal_button_press_event().connect(
-        sigc::bind(sigc::mem_fun(*_dtw, &SPDesktopWidget::on_ruler_box_button_press_event),   _hruler, false));
+        sigc::bind(sigc::mem_fun(*_dtw, &SPDesktopWidget::on_ruler_box_button_press_event),   _hruler, true));
     _hruler->signal_button_release_event().connect(
-        sigc::bind(sigc::mem_fun(*_dtw, &SPDesktopWidget::on_ruler_box_button_release_event), _hruler, false));
+        sigc::bind(sigc::mem_fun(*_dtw, &SPDesktopWidget::on_ruler_box_button_release_event), _hruler, true));
     _hruler->signal_motion_notify_event().connect(
-        sigc::bind(sigc::mem_fun(*_dtw, &SPDesktopWidget::on_ruler_box_motion_notify_event),  _hruler, false));
+        sigc::bind(sigc::mem_fun(*_dtw, &SPDesktopWidget::on_ruler_box_motion_notify_event),  _hruler, true));
 
     // Vertical Ruler
     _vruler = Gtk::manage(new Inkscape::UI::Widget::Ruler(Gtk::ORIENTATION_VERTICAL));
