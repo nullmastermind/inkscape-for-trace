@@ -25,7 +25,6 @@
 class SPCanvasItem;
 class SPCanvasGroup;
 
-class SPCanvas; // TEMP TEMP
 struct PaintRectSetup;
 
 
@@ -157,11 +156,6 @@ private:
 
     int _device_scale = 1;           ///< Scale for high DPI montiors. Probably should be double.
     Gtk::Allocation _allocation;     ///< Canvas allocation, save so we know when it changes.
-
-    // Timing
-    unsigned int _idle_id = 0;
-    gint64 _idle_time     = 0;
-    gint64 _totalelapsed  = 0;
 
     // Event handling/item picking
     GdkEvent _pick_event;                       ///< Event used to find currently selected item.

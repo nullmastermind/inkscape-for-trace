@@ -635,7 +635,22 @@ Canvas::on_motion_notify_event(GdkEventMotion *motion_event)
     return status;
 }
 
-
+/*
+ * The on_draw() function is called whenever Gtk wants to update the window. This function:
+ *
+ * 1. Sets up the backing and outline stores (images). These stores are drawn to elsewhere during idles.
+ *    The backing store is always uses, rendering in which ever "render mode" the user has selected.
+ *    The outline store is only used when the "split mode" is set to 'split' or 'x-ray'.
+ *    (Changing either the render mode or split mode results in a complete redrawing the store(s).)
+ *
+ * 2. Calls shift_content() if the drawing area has changed.
+ *
+ * 3. Blits the store(s) onto the canvas, clipping the outline store as required.
+ *
+ * 4. Draws the "controller" in the 'split' split mode.
+ *
+ * 5. Calls add_idle() to update the drawing if necessary.
+ */
 bool
 Canvas::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr)
 {
@@ -784,8 +799,13 @@ Canvas::add_idle()
         return;
     }
 
-    if (get_realized()) {
-        _idle_connection = Glib::signal_idle().connect(sigc::mem_fun(*this, &Canvas::on_idle), Glib::PRIORITY_LOW);
+    if (get_realized() && !_idle_connection.connected()) {
+
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        guint redrawPriority = prefs->getIntLimited("/options/redrawpriority/value", G_PRIORITY_HIGH_IDLE, G_PRIORITY_HIGH_IDLE, G_PRIORITY_DEFAULT_IDLE);
+        // G_PRIORITY_HIGH_IDLE = 100, G_PRIORITY_DEFAULT_IDLE = 200: Higher number => lower priority.
+
+        _idle_connection = Glib::signal_idle().connect(sigc::mem_fun(*this, &Canvas::on_idle), redrawPriority);
     }
 }
 
