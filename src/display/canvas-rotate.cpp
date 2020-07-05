@@ -198,7 +198,7 @@ void sp_canvas_rotate_paint (SPCanvasRotate *canvas_rotate, cairo_surface_t *bac
     cairo_restore(      context );
     cairo_destroy(      context );
 
-    gtk_widget_queue_draw (GTK_WIDGET (canvas_rotate->canvas));
+    canvas_rotate->canvas->queue_draw();
 }
 /*
   Local Variables:
