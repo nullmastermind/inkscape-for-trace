@@ -70,6 +70,20 @@ struct PaintRectSetup {
     Geom::Point mouse_loc;
 };
 
+/**
+ * Recursively set the SPCanvasItem::canvas pointer to NULL.
+ */
+static void clear_canvas_pointer(SPCanvasItem *item)
+{
+    item->canvas = nullptr;
+
+    if (SP_IS_CANVAS_GROUP(item)) {
+        for (SPCanvasItem &child : SP_CANVAS_GROUP(item)->items) {
+            clear_canvas_pointer(&child);
+        }
+    }
+}
+
 namespace Inkscape {
 namespace UI {
 namespace Widget {
@@ -108,6 +122,8 @@ Canvas::~Canvas()
     _in_destruction = true;
 
     remove_idle();
+
+    clear_canvas_pointer(_root);
 }
 
 /**

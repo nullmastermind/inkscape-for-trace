@@ -182,18 +182,20 @@ void sp_canvas_item_dispose(GObject *object)
     {
       item->in_destruction=true;
 
-      // Hack: if this is a ctrlrect, move it to 0,0;
-      // this redraws only the stroke of the rect to be deleted,
-      // avoiding redraw of the entire area
-      if (SP_IS_CTRLRECT(item)) {
-          SP_CTRLRECT(object)->setRectangle(Geom::Rect(Geom::Point(0,0),Geom::Point(0,0)));
-          SP_CTRLRECT(object)->update(item->xform, 0);
-      } else {
-          redraw_if_visible (item);
-      }
-      item->visible = FALSE;
+      if (item->canvas) {
+          // Hack: if this is a ctrlrect, move it to 0,0;
+          // this redraws only the stroke of the rect to be deleted,
+          // avoiding redraw of the entire area
+          if (SP_IS_CTRLRECT(item)) {
+              SP_CTRLRECT(object)->setRectangle(Geom::Rect(Geom::Point(0,0),Geom::Point(0,0)));
+              SP_CTRLRECT(object)->update(item->xform, 0);
+          } else {
+              redraw_if_visible (item);
+          }
+          item->visible = FALSE;
 
-      item->canvas->canvas_item_clear(item);
+          item->canvas->canvas_item_clear(item);
+      }
 
       if (item->parent) {
           SP_CANVAS_GROUP(item->parent)->remove(item);
