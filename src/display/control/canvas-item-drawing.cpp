@@ -26,6 +26,7 @@
 #include "display/drawing-surface.h"
 
 #include "ui/widget/canvas.h"
+#include "ui/modifiers.h"
 
 namespace Inkscape {
 
@@ -255,8 +256,7 @@ bool CanvasItemDrawing::handle_event(GdkEvent *event)
 
         case GDK_SCROLL:
         {
-            bool ctrl = (event->scroll.state & GDK_CONTROL_MASK);
-            if (ctrl) {
+            if (Modifiers::Modifier::get(Modifiers::Type::CANVAS_ZOOM)->active(event->scroll.state)) {
                 /* Zoom is emitted by the canvas as well, ignore here */
                 return false;
             }

@@ -41,6 +41,7 @@
 
 #include "object/sp-guide.h"
 
+#include "ui/modifiers.h"
 #include "ui/contextmenu.h"
 #include "ui/interface.h"
 #include "ui/event-debug.h"
@@ -333,6 +334,11 @@ bool ToolBase::root_handler(GdkEvent* event) {
     bool allow_panning = prefs->getBool("/options/spacebarpans/value");
     gint ret = FALSE;
 
+    bool mod_rotate = Modifiers::Modifier::get(Modifiers::Type::CANVAS_ROTATE)->active(event->scroll.state);
+    bool mod_zoom = Modifiers::Modifier::get(Modifiers::Type::CANVAS_ZOOM)->active(event->scroll.state);
+    bool mod_scroll_x = Modifiers::Modifier::get(Modifiers::Type::CANVAS_SCROLL_X)->active(event->scroll.state);
+    bool mod_scroll_y = Modifiers::Modifier::get(Modifiers::Type::CANVAS_SCROLL_Y)->active(event->scroll.state);
+
     switch (event->type) {
     case GDK_2BUTTON_PRESS:
         if (panning) {
@@ -370,7 +376,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
             break;
 
         case 2:
-            if ((event->button.state & GDK_CONTROL_MASK) && !desktop->get_rotation_lock()) {
+            if (mod_rotate && !desktop->get_rotation_lock()) {
                 // On screen canvas rotation preview
 
                 // Grab background before doing anything else
@@ -386,7 +392,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                                                  Gdk::POINTER_MOTION_MASK,
                                                  nullptr);  // Cursor is null.
 
-            } else if (event->button.state & GDK_SHIFT_MASK) {
+            } else if (mod_zoom) {
                 zoom_rb = 2;
             } else {
                 // When starting panning, make sure there are no snap events pending because these might disable the panning again
@@ -403,7 +409,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
             break;
 
         case 3:
-            if ((event->button.state & GDK_SHIFT_MASK) || (event->button.state & GDK_CONTROL_MASK)) {
+            if (mod_scroll_x || mod_scroll_y) {
                 // When starting panning, make sure there are no snap events pending because these might disable the panning again
                 if (_uses_snap) {
                     sp_event_context_discard_delayed_snap_event(this);
@@ -524,8 +530,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
             double const zoom_inc = prefs->getDoubleLimited(
                     "/options/zoomincrement/value", M_SQRT2, 1.01, 10);
 
-            desktop->zoom_relative_keep_point(event_dt, (event->button.state
-                    & GDK_SHIFT_MASK) ? 1 / zoom_inc : zoom_inc);
+            desktop->zoom_relative_keep_point(event_dt, zoom_inc);
 
             desktop->updateNow();
             ret = TRUE;
@@ -738,8 +743,6 @@ bool ToolBase::root_handler(GdkEvent* event) {
         break;
 
     case GDK_SCROLL: {
-        bool ctrl = (event->scroll.state & GDK_CONTROL_MASK);
-        bool shift = (event->scroll.state & GDK_SHIFT_MASK);
 
         int constexpr WHEEL_SCROLL_DEFAULT = 40;
         int const wheel_scroll = prefs->getIntLimited(
@@ -749,8 +752,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
         gdouble delta_x = 0;
         gdouble delta_y = 0;
 
-        if ((ctrl & shift) && !desktop->get_rotation_lock()) {
-            /* ctrl + shift, rotate */
+        if (mod_rotate && !desktop->get_rotation_lock()) {
 
             double rotate_inc = prefs->getDoubleLimited(
                     "/options/rotateincrement/value", 15, 1, 90, "°" );
@@ -786,7 +788,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 desktop->rotate_relative_keep_point(scroll_dt, rotate_inc);
             }
 
-        } else if (shift && !ctrl) {
+        } else if (mod_scroll_x || mod_scroll_y) {
            /* shift + wheel, pan left--right */
 
             switch (event->scroll.direction) {
@@ -814,7 +816,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 break;
             }
 
-        } else if (ctrl) {
+        } else if (mod_zoom) {
             /* ctrl + wheel, zoom in--out */
             double rel_zoom;
             double const zoom_inc = prefs->getDoubleLimited(
