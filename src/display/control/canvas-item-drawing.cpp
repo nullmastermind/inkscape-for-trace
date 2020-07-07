@@ -255,10 +255,8 @@ bool CanvasItemDrawing::handle_event(GdkEvent *event)
 
         case GDK_SCROLL:
         {
-            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-            bool wheelzooms = prefs->getBool("/options/wheelzooms/value");
             bool ctrl = (event->scroll.state & GDK_CONTROL_MASK);
-            if ((ctrl && !wheelzooms) || (!ctrl && wheelzooms)) {
+            if (ctrl) {
                 /* Zoom is emitted by the canvas as well, ignore here */
                 return false;
             }

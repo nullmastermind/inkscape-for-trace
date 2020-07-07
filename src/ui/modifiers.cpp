@@ -37,7 +37,7 @@ decltype(Modifier::_modifiers) Modifier::_modifiers {
     {Type::SELECT_ALWAYS_BOX, new Modifier("select-always-box", "Select with box", "Don't drag items, select more with a box", SHIFT, DRAG)},
     {Type::SELECT_FIRST_HIT, new Modifier("select-first-hit", "Select the first", "Drag the first item the mouse hits", CTRL, DRAG)},
     {Type::SELECT_FORCE_DRAG, new Modifier("select-force-drag", "Forced Drag", "Drag objects even if the mouse isn't over them.", ALT, DRAG)},
-    {Type::SELECT_CYCLE, new Modifier("select-cycle", "Cycle through objects", "Scroll through objects under the cursor.", ALT)},
+    {Type::SELECT_CYCLE, new Modifier("select-cycle", "Cycle through objects", "Scroll through objects under the cursor.", ALT, SCROLL)},
 
     // Transform handle modifiers (applies to multiple tools)
     {Type::MOVE_AXIS_CONFINE, new Modifier("move-confine", "Move confine", "When dragging items, confine to either x or y axis", CTRL, HANDLE)},

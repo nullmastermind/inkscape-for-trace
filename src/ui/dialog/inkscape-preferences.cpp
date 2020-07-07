@@ -1881,9 +1881,6 @@ void InkscapePreferences::initPageBehavior()
     _scroll_space.init ( _("Mouse move pans when Space is pressed"), "/options/spacebarpans/value", true);
     _page_scrolling.add_line( true, "", _scroll_space, "",
                             _("When on, pressing and holding Space and dragging pans canvas"));
-    _wheel_zoom.init ( _("Mouse wheel zooms by default"), "/options/wheelzooms/value", false);
-    _page_scrolling.add_line( false, "", _wheel_zoom, "",
-                            _("When on, mouse wheel zooms without Ctrl and scrolls canvas with Ctrl; when off, it zooms with Ctrl and scrolls without Ctrl"));
     this->AddPage(_page_scrolling, _("Scrolling"), iter_behavior, PREFS_PAGE_BEHAVIOR_SCROLLING);
 
     // Snapping options

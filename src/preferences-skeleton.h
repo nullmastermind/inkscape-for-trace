@@ -278,7 +278,6 @@ R"=====(
     <group id="keyscroll" value="15"/>
     <group id="wheelscroll" value="40"/>
     <group id="spacebarpans" value="1"/>
-    <group id="wheelzooms" value="0"/>
     <group id="transientpolicy" value="1"/>
     <group id="scrollingacceleration" value="0.4"/>
     <group id="snapdelay" value="0"/>

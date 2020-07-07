@@ -740,7 +740,6 @@ bool ToolBase::root_handler(GdkEvent* event) {
     case GDK_SCROLL: {
         bool ctrl = (event->scroll.state & GDK_CONTROL_MASK);
         bool shift = (event->scroll.state & GDK_SHIFT_MASK);
-        bool wheelzooms = prefs->getBool("/options/wheelzooms/value");
 
         int constexpr WHEEL_SCROLL_DEFAULT = 40;
         int const wheel_scroll = prefs->getIntLimited(
@@ -815,7 +814,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 break;
             }
 
-        } else if ((ctrl && !wheelzooms) || (!ctrl && wheelzooms)) {
+        } else if (ctrl) {
             /* ctrl + wheel, zoom in--out */
             double rel_zoom;
             double const zoom_inc = prefs->getDoubleLimited(
