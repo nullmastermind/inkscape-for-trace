@@ -91,30 +91,32 @@ namespace Widget {
 
 Canvas::Canvas()
 {
-  // Events
-  add_events(Gdk::BUTTON_PRESS_MASK     |
-             Gdk::BUTTON_RELEASE_MASK   |
-             Gdk::ENTER_NOTIFY_MASK     |
-             Gdk::LEAVE_NOTIFY_MASK     |
-             Gdk::FOCUS_CHANGE_MASK     |
-             Gdk::KEY_PRESS_MASK        |
-             Gdk::KEY_RELEASE_MASK      |
-             Gdk::POINTER_MOTION_MASK   |
-             Gdk::SCROLL_MASK           |
-             Gdk::SMOOTH_SCROLL_MASK    );
+    set_name("InkscapeCanvas");
 
-  // Give _pick_event an initial definition.
-  _pick_event.type = GDK_LEAVE_NOTIFY;
-  _pick_event.crossing.x = 0;
-  _pick_event.crossing.y = 0;
+    // Events
+    add_events(Gdk::BUTTON_PRESS_MASK     |
+               Gdk::BUTTON_RELEASE_MASK   |
+               Gdk::ENTER_NOTIFY_MASK     |
+               Gdk::LEAVE_NOTIFY_MASK     |
+               Gdk::FOCUS_CHANGE_MASK     |
+               Gdk::KEY_PRESS_MASK        |
+               Gdk::KEY_RELEASE_MASK      |
+               Gdk::POINTER_MOTION_MASK   |
+               Gdk::SCROLL_MASK           |
+               Gdk::SMOOTH_SCROLL_MASK    );
 
-  // Drawing
-  _clean_region = Cairo::Region::create();
+    // Give _pick_event an initial definition.
+    _pick_event.type = GDK_LEAVE_NOTIFY;
+    _pick_event.crossing.x = 0;
+    _pick_event.crossing.y = 0;
 
-  _background = Cairo::SolidPattern::create_rgb(1.0, 1.0, 1.0);
+    // Drawing
+    _clean_region = Cairo::Region::create();
 
-  _root = SP_CANVAS_ITEM(g_object_new(SP_TYPE_CANVAS_GROUP, nullptr));
-  SP_CANVAS_ITEM(_root)->canvas = this;
+    _background = Cairo::SolidPattern::create_rgb(1.0, 1.0, 1.0);
+
+    _root = SP_CANVAS_ITEM(g_object_new(SP_TYPE_CANVAS_GROUP, nullptr));
+    SP_CANVAS_ITEM(_root)->canvas = this;
 }
 
 Canvas::~Canvas()
@@ -298,11 +300,13 @@ Canvas::get_canvas_item_root()
 void
 Canvas::set_background_color(guint32 rgba)
 {
-    double r = SP_RGBA32_R_F(rgba);
-    double g = SP_RGBA32_G_F(rgba);
-    double b = SP_RGBA32_B_F(rgba);
+    r = SP_RGBA32_R_F(rgba);
+    g = SP_RGBA32_G_F(rgba);
+    b = SP_RGBA32_B_F(rgba);
+
     _background = Cairo::SolidPattern::create_rgb(r, g, b);
     _background_is_checkerboard = false;
+
     redraw_all();
 }
 
@@ -312,6 +316,10 @@ Canvas::set_background_color(guint32 rgba)
 void
 Canvas::set_background_checkerboard(guint32 rgba)
 {
+    r = SP_RGBA32_R_F(rgba);
+    g = SP_RGBA32_G_F(rgba);
+    b = SP_RGBA32_B_F(rgba);
+
     auto pattern = ink_cairo_pattern_create_checkerboard(rgba);
     _background = Cairo::RefPtr<Cairo::Pattern>(new Cairo::Pattern(pattern));
     _background_is_checkerboard = true;
@@ -711,6 +719,10 @@ Canvas::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr)
         Cairo::RectangleInt clip = { _x0, _y0, _allocation.get_width(), _allocation.get_height() };
         _clean_region->intersect(clip);
     }
+
+    // Blit the background color to avoid "flicker" over undrawn regions.
+    cr->set_source_rgb(r, g, b);
+    cr->paint();
 
     // Blit from the backing store, without regard for the clean region.
     // This is the only place the widget content is drawn!

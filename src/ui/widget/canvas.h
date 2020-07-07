@@ -183,6 +183,9 @@ private:
     bool _split_dragging = false;
     Geom::Point _split_drag_start;
     Inkscape::ColorMode  _color_mode  = Inkscape::COLORMODE_NORMAL;
+    double r = 1.0; // Background
+    double g = 1.0;
+    double b = 1.0;
 
 #if defined(HAVE_LIBLCMS2)
     std::string _cms_key;
