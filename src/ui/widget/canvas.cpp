@@ -258,6 +258,14 @@ Canvas::scroll_to(Geom::Point const &c, bool clear)
     Geom::IntRect new_area = old_area + Geom::IntPoint(dx, dy);
     bool overlap = new_area.intersects(old_area);
 
+    SPCanvasArena *arena = SP_CANVAS_ARENA(SP_ACTIVE_DESKTOP->drawing);
+    if (arena) {
+        Geom::IntRect expanded = new_area;
+        Geom::IntPoint expansion(new_area.width()/2, new_area.height()/2);
+        expanded.expandBy(expansion);
+        arena->drawing.setCacheLimit(expanded, false);
+    }
+
     if (clear || !overlap) {
         redraw_all();
         return; // Check if this is OK
@@ -820,7 +828,6 @@ Canvas::add_idle()
     }
 
     if (get_realized() && !_idle_connection.connected()) {
-
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         guint redrawPriority = prefs->getIntLimited("/options/redrawpriority/value", G_PRIORITY_HIGH_IDLE, G_PRIORITY_HIGH_IDLE, G_PRIORITY_DEFAULT_IDLE);
         // G_PRIORITY_HIGH_IDLE = 100, G_PRIORITY_DEFAULT_IDLE = 200: Higher number => lower priority.
