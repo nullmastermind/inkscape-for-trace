@@ -300,9 +300,9 @@ Canvas::get_canvas_item_root()
 void
 Canvas::set_background_color(guint32 rgba)
 {
-    r = SP_RGBA32_R_F(rgba);
-    g = SP_RGBA32_G_F(rgba);
-    b = SP_RGBA32_B_F(rgba);
+    double r = SP_RGBA32_R_F(rgba);
+    double g = SP_RGBA32_G_F(rgba);
+    double b = SP_RGBA32_B_F(rgba);
 
     _background = Cairo::SolidPattern::create_rgb(r, g, b);
     _background_is_checkerboard = false;
@@ -316,10 +316,6 @@ Canvas::set_background_color(guint32 rgba)
 void
 Canvas::set_background_checkerboard(guint32 rgba)
 {
-    r = SP_RGBA32_R_F(rgba);
-    g = SP_RGBA32_G_F(rgba);
-    b = SP_RGBA32_B_F(rgba);
-
     auto pattern = ink_cairo_pattern_create_checkerboard(rgba);
     _background = Cairo::RefPtr<Cairo::Pattern>(new Cairo::Pattern(pattern));
     _background_is_checkerboard = true;
@@ -719,10 +715,6 @@ Canvas::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr)
         Cairo::RectangleInt clip = { _x0, _y0, _allocation.get_width(), _allocation.get_height() };
         _clean_region->intersect(clip);
     }
-
-    // Blit the background color to avoid "flicker" over undrawn regions.
-    cr->set_source_rgb(r, g, b);
-    cr->paint();
 
     // Blit from the backing store, without regard for the clean region.
     // This is the only place the widget content is drawn!
@@ -1208,7 +1200,13 @@ Canvas::shift_content(Geom::IntPoint shift, Cairo::RefPtr<Cairo::ImageSurface> &
     cr->set_source(_background);
     cr->paint();
 
+    // Copy old background unshifted (reduces sensation of flicker while waiting for rendering newly exposed area).
+    cr->set_source(store, 0, 0);
+    cr->paint();
+
     // Copy old background
+    cr->rectangle(-shift.x(), -shift.y(), _allocation.get_width(), _allocation.get_height());
+    cr->clip();
     cr->translate(-shift.x(), -shift.y());
     cr->set_source(store, 0, 0);
     cr->paint();
