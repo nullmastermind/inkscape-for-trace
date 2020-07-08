@@ -432,8 +432,31 @@ add_cli_test(export-use-hints_export-area-drawing PARAMETERS --export-use-hints 
                                                   EXPECTED_FILES "${CMAKE_CURRENT_SOURCE_DIR}/testcases/export_hints_drawing.png")
 
 # --export-background=COLOR
+## check for default background color and opacity
+# SVG, PDF, PS, EPS: Format not supoorted. Feature request: https://gitlab.com/inkscape/inbox/issues/2293
+# EMF, WMF: Format does not support opacity.
+ add_cli_test(export-default-background_png  PARAMETERS --export-type=png INPUT_FILENAME lambda-background.svg OUTPUT_FILENAME export-default-background.png REFERENCE_FILENAME export-default-background_expected.png)
+ add_cli_test(export-default-background_svg  PARAMETERS --export-type=svg INPUT_FILENAME lambda-background.svg OUTPUT_FILENAME export-default-background.svg REFERENCE_FILENAME export-default-background_expected.svg)
+# add_cli_test(export-default-background_pdf  PARAMETERS --export-type=pdf INPUT_FILENAME lambda-background.svg OUTPUT_FILENAME export-default-background.pdf REFERENCE_FILENAME export-default-background_expected.pdf)
+# add_cli_test(export-default-background_ps   PARAMETERS --export-type=ps  INPUT_FILENAME lambda-background.svg OUTPUT_FILENAME export-default-background.ps  REFERENCE_FILENAME export-default-background_expected.ps )
+# add_cli_test(export-default-background_eps  PARAMETERS --export-type=eps INPUT_FILENAME lambda-background.svg OUTPUT_FILENAME export-default-background.eps REFERENCE_FILENAME export-default-background_expected.eps)
+## test --export-background=COLOR
+ add_cli_test(export-background_png  PARAMETERS --export-background=yellow --export-type=png INPUT_FILENAME lambda.svg OUTPUT_FILENAME export-background.png REFERENCE_FILENAME export-background_expected.png)
+ add_cli_test(export-background_svg  PARAMETERS --export-background=yellow --export-type=svg INPUT_FILENAME lambda.svg OUTPUT_FILENAME export-background.svg REFERENCE_FILENAME export-background_expected.svg)
+# add_cli_test(export-background_pdf  PARAMETERS --export-background=yellow --export-type=pdf INPUT_FILENAME lambda.svg OUTPUT_FILENAME export-background.pdf REFERENCE_FILENAME export-background_expected.pdf)
+# add_cli_test(export-background_ps   PARAMETERS --export-background=yellow --export-type=ps  INPUT_FILENAME lambda.svg OUTPUT_FILENAME export-background.ps  REFERENCE_FILENAME export-background_expected.ps )
+# add_cli_test(export-background_eps  PARAMETERS --export-background=yellow --export-type=eps INPUT_FILENAME lambda.svg OUTPUT_FILENAME export-background.eps REFERENCE_FILENAME export-background_expected.eps)
+# add_cli_test(export-background_emf  PARAMETERS --export-background=yellow --export-type=emf INPUT_FILENAME lambda.svg OUTPUT_FILENAME export-background.emf REFERENCE_FILENAME export-background_expected.emf)
+# add_cli_test(export-background_wmf  PARAMETERS --export-background=yellow --export-type=wmf INPUT_FILENAME lambda.svg OUTPUT_FILENAME export-background.wmf REFERENCE_FILENAME export-background_expected.wmf)
 
 # --export-background-opacity=VALUE
+# SVG, PDF, PS, EPS: Format not supoorted. Feature request: https://gitlab.com/inkscape/inbox/issues/2293
+# EMF, WMF: Format does not support opacity.
+add_cli_test(export-background-opacity_png  PARAMETERS --export-background=yellow --export-background-opacity=0.5 --export-type=png INPUT_FILENAME lambda.svg OUTPUT_FILENAME export-background-opacity.png REFERENCE_FILENAME export-background-opacity_expected.png)
+ add_cli_test(export-background-opacity_svg  PARAMETERS --export-background=yellow --export-background-opacity=0.5 --export-type=svg INPUT_FILENAME lambda.svg OUTPUT_FILENAME export-background-opacity.svg REFERENCE_FILENAME export-background-opacity_expected.svg)
+# add_cli_test(export-background-opacity_pdf  PARAMETERS --export-background=yellow --export-background-opacity=0.5 --export-type=pdf INPUT_FILENAME lambda.svg OUTPUT_FILENAME export-background-opacity.pdf REFERENCE_FILENAME export-background-opacity_expected.pdf)
+# add_cli_test(export-background-opacity_ps   PARAMETERS --export-background=yellow --export-background-opacity=0.5 --export-type=ps  INPUT_FILENAME lambda.svg OUTPUT_FILENAME export-background-opacity.ps  REFERENCE_FILENAME export-background-opacity_expected.ps )
+# add_cli_test(export-background-opacity_eps  PARAMETERS --export-background=yellow --export-background-opacity=0.5 --export-type=eps INPUT_FILENAME lambda.svg OUTPUT_FILENAME export-background-opacity.eps REFERENCE_FILENAME export-background-opacity_expected.eps)
 
 # --query-id=OBJECT-ID[,OBJECT-ID]*
 

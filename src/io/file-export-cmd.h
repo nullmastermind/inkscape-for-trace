@@ -26,6 +26,7 @@ public:
 
 private:
 
+    guint32 get_bgcolor(SPDocument *doc);
     std::string get_filename_out(std::string filename_in="", std::string object_id="");
     int do_export_svg(   SPDocument* doc, std::string filename_in);
     int do_export_png(   SPDocument* doc, std::string filename_in);

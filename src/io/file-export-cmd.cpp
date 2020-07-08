@@ -54,7 +54,7 @@ InkFileExportCmd::InkFileExportCmd()
     , export_pdf_level("1.5")
     , export_latex(false)
     , export_id_only(false)
-    , export_background_opacity(0.0) // Transparent default
+    , export_background_opacity(-1) // default is unset != actively set to 0
     , export_plain_svg(false)
 {
 }
@@ -320,6 +320,41 @@ InkFileExportCmd::do_export_svg(SPDocument* doc, std::string filename_in)
     return 0;
 }
 
+guint32 InkFileExportCmd::get_bgcolor(SPDocument *doc) {
+    guint32 bgcolor = 0x00000000;
+    if (!export_background.empty()) {
+        // override the page color
+        bgcolor = sp_svg_read_color(export_background.c_str(), 0xffffff00);
+        // default is opaque if a color is given on commandline
+        if (export_background_opacity < -.5 ) {
+            export_background_opacity = 255;
+        }
+    } else {
+        // read from namedview
+        Inkscape::XML::Node *nv = doc->getReprNamedView();
+        if (nv && nv->attribute("pagecolor")){
+            bgcolor = sp_svg_read_color(nv->attribute("pagecolor"), 0xffffff00);
+        }
+    }
+
+    if (export_background_opacity > -.5) { // if the value is manually set
+        if (export_background_opacity > 1.0) {
+            float value = CLAMP (export_background_opacity, 1.0f, 255.0f);
+            bgcolor |= (guint32) floor(value);
+        } else {
+            float value = CLAMP (export_background_opacity, 0.0f, 1.0f);
+            bgcolor |= SP_COLOR_F_TO_U(value);
+        }
+    } else {
+        Inkscape::XML::Node *nv = doc->getReprNamedView();
+        if (nv && nv->attribute("inkscape:pageopacity")){
+            double opacity = 1.0;
+            sp_repr_get_double (nv, "inkscape:pageopacity", &opacity);
+            bgcolor |= SP_COLOR_F_TO_U(opacity);
+        } // else it's transparent
+    }
+    return bgcolor;
+}
 
 /**
  *  Perform a PNG export
@@ -331,33 +366,7 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string filename_in)
 {
     bool filename_from_hint = false;
     gdouble dpi = 0.0;
-
-    guint32 bgcolor = 0x00000000;
-    if (!export_background.empty()) {
-        // override the page color
-        bgcolor = sp_svg_read_color(export_background.c_str(), 0xffffff00);
-        bgcolor |= 0xff; // default is no opacity
-    } else {
-        // read from namedview
-        Inkscape::XML::Node *nv = doc->getReprNamedView();
-        if (nv && nv->attribute("pagecolor")){
-            bgcolor = sp_svg_read_color(nv->attribute("pagecolor"), 0xffffff00);
-        }
-        if (nv && nv->attribute("inkscape:pageopacity")){
-            double opacity = 1.0;
-            sp_repr_get_double (nv, "inkscape:pageopacity", &opacity);
-            bgcolor |= SP_COLOR_F_TO_U(opacity);
-        }
-    }
-    bgcolor &= (guint32) 0xffffff00;
-
-    if (export_background_opacity > 1.0) {
-        float value = CLAMP (export_background_opacity, 1.0f, 255.0f);
-        bgcolor |= (guint32) floor(value);
-    } else {
-        float value = CLAMP (export_background_opacity, 0.0f, 1.0f);
-        bgcolor |= SP_COLOR_F_TO_U(value);
-    }
+    guint32 bgcolor = get_bgcolor(doc);
 
     // Export each object in list (or root if empty).  Use ';' so in future it could be possible to selected multiple objects to export together.
     std::vector<Glib::ustring> objects = Glib::Regex::split_simple("\\s*;\\s*", export_id);
