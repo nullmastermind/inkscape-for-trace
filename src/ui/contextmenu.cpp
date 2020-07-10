@@ -160,8 +160,7 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item) :
     }
 
     if ( group && group != _desktop->currentLayer() ) {
-        /* TRANSLATORS: #%1 is the id of the group e.g. <g id="#g7">, not a number. */
-        MIGroup.set_label (Glib::ustring::compose(_("Enter group #%1"), group->getId()));
+        MIGroup.set_label (Glib::ustring::compose(_("Enter group %1"), group->defaultLabel()));
         _MIGroup_group = group;
         MIGroup.signal_activate().connect(sigc::bind(sigc::mem_fun(*this, &ContextMenu::EnterGroup),&MIGroup));
         MIGroup.show();
