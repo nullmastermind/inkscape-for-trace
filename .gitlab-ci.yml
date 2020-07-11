@@ -122,7 +122,7 @@ codeprotect:
   needs: []
   script:
     - git fetch https://gitlab.com/inkscape/inkscape.git
-    - git diff FETCH_HEAD -U0 --no-color src/3rdparty/adaptagrams/ src/3rdparty/libdepixelize src/3rdparty/libuemf | tee forbidden
+    - git diff FETCH_HEAD -U0 --no-color src/3rdparty | tee forbidden
     - if [[ -s forbidden ]]; then echo "This commit modifies files that are in an dependency library. Make sure you update upstream first, *then* force the merge in Inkscape."; false; fi
 
   #### All files should have a licence
