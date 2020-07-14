@@ -26,9 +26,8 @@
 namespace Inkscape {
 namespace LivePathEffect {
 
-static const Util::EnumData<DivisionMethod> DivisionMethodData[DM_END] = {
-    { DM_SEGMENTS, N_("By number of segments"), "segments" }, { DM_SIZE, N_("By max. segment size"), "size" }
-};
+static const Util::EnumData<DivisionMethod> DivisionMethodData[DM_END] = { { DM_SEGMENTS, N_("By number of segments"), "segments" }, 
+                                                                           { DM_SIZE, N_("By max. segment size"), "size" } };
 static const Util::EnumDataConverter<DivisionMethod> DMConverter(DivisionMethodData, DM_END);
 
 static const Util::EnumData<HandlesMethod> HandlesMethodData[HM_END] = { { HM_ALONG_NODES, N_("Along nodes"), "along" },
@@ -39,9 +38,7 @@ static const Util::EnumDataConverter<HandlesMethod> HMConverter(HandlesMethodDat
 
 LPERoughen::LPERoughen(LivePathEffectObject *lpeobject)
     : Effect(lpeobject)
-    ,
-    // initialise your parameters here:
-    method(_("Method"), _("Division method"), "method", DMConverter, &wr, this, DM_SEGMENTS)
+    , method(_("Method"), _("Division method"), "method", DMConverter, &wr, this, DM_SIZE)
     , max_segment_size(_("Max. segment size"), _("Max. segment size"), "max_segment_size", &wr, this, 10)
     , segments(_("Number of segments"), _("Number of segments"), "segments", &wr, this, 2)
     , displace_x(_("Max. displacement in X"), _("Max. displacement in X"), "displace_x", &wr, this, 10.)
@@ -79,25 +76,6 @@ LPERoughen::LPERoughen(LivePathEffectObject *lpeobject)
 
 LPERoughen::~LPERoughen() = default;
 
-/* double sp_get_perimeter(SPLPEItem const *lpeitem) {
-    double lenght = 0;
-    if (dynamic_cast<SPGroup *>(lpeitem) ) {
-    std::vector<SPItem*> const item_list = sp_item_group_item_list(lpeitem);
-    for (auto sub_item : item_list) {
-        if (sub_item) {
-            SPLPEItem *lpe_item = dynamic_cast<SPLPEItem *>(sub_item);
-            if (lpe_item) {
-                lenght += sp_get_perimeter(lpe_item);
-            }
-        }
-    }
-    if (SP_IS_SHAPE(lpeitem)) {
-        Geom::PathVector shape = SP_SHAPE(lpeitem)->getCurve(true)->get_pathvector();
-        lenght += Geom::length(paths_to_pw(shape));
-    }
-    return lenght;
-} */
-
 void LPERoughen::doOnApply(SPLPEItem const *lpeitem)
 {
     Geom::OptRect bbox = lpeitem->bounds(SPItem::GEOMETRIC_BBOX);
@@ -113,11 +91,9 @@ void LPERoughen::doOnApply(SPLPEItem const *lpeitem)
 
 
             bool valid = prefs->getEntry(pref_path).isValid();
-            // double lenght = sp_get_perimeter(lpeitem);
             Glib::ustring displace_x_str = Glib::ustring::format((*bbox).width() / 100.0);
             Glib::ustring displace_y_str = Glib::ustring::format((*bbox).height() / 100.0);
-            Glib::ustring max_segment_size_str =
-                Glib::ustring::format(std::min((*bbox).height(), (*bbox).width()) / 100.0);
+            Glib::ustring max_segment_size_str = Glib::ustring::format(std::min((*bbox).height(), (*bbox).width()) / 100.0);
             if (!valid) {
                 if (strcmp(key, "method") == 0) {
                     param->param_readSVGValue("size");
