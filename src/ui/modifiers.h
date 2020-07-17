@@ -32,7 +32,7 @@ enum Triggers : Trigger {CLICK, DRAG, SCROLL, HANDLE};
 // TODO: We may want to further define the tool, from ANY, SELECT, NODE etc.
 
 // Generate a label such as Shift+Ctrl from any KeyMask
-char * generate_label(KeyMask);
+char * generate_label(KeyMask mask);
 
 /**
  * This anonymous enum is used to provide a list of the Shifts
