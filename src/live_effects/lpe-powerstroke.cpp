@@ -423,6 +423,7 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
                             if (arc0) {
                                 // FIX: Some assertions errors here
                                 build_from_sbasis(pb,arc0->toSBasis(), tol, false);
+                                build = true;
                             } else if (arc1) {
                                 boost::optional<Geom::Point> p = intersection_point( B[prev_i].at1(), tang1,
                                                                                 B[i].at0(), tang2 );
