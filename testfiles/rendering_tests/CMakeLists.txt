@@ -37,6 +37,9 @@ set(RENDERING_TESTS
 
     # text-glyphs-vertical.svg
     ## Expected rendering generated with Pango 1.44.
+    
+    # -- LPE tests --
+    test-powerstroke-join
 )
 
 

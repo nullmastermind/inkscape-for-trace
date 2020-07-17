@@ -1,0 +1,6 @@
+<svg xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns="http://www.w3.org/2000/svg" height="103.10469" width="114.42079">
+  <defs id="defs8">
+    <inkscape:path-effect end_linecap_type="zerowidth" scale_width="1" miter_limit="4" linejoin_type="extrp_arc" start_linecap_type="zerowidth" interpolator_beta="0.2" interpolator_type="CubicBezierSmooth" sort_points="true" offset_points="0.2,6 | 1,6 | 1.8,6" lpeversion="1" is_visible="true" id="path-effect12" effect="powerstroke" />
+  </defs>
+  <path inkscape:original-d="M 37.025152,63.80944 C 62.629473,85.82239 121.42349,99.11534 92.9073,25.53973 73.516303,45.478852 29.421533,5.937486 9.304592,36.285332" inkscape:path-effect="#path-effect12"/>
+</svg>
