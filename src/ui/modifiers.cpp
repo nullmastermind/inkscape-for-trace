@@ -79,6 +79,26 @@ bool Modifier::active(int button_state)
     return get_and_mask() & button_state;
 }
 
+/**
+ * Generate a label for any modifier keys based on the mask
+ *
+ * @param  mask - The Modifier Mask such as {SHIFT & CTRL}
+ * @return a string of the keys needed for this mask to be true.
+ */
+char * generate_label(KeyMask mask)
+{
+    bool ctrl = mask & CTRL;
+    bool shift = mask & SHIFT;
+    bool alt = mask & ALT;
+
+    gchar *label = g_strdup_printf("%s%s%s%s%s",
+            (ctrl ? "Ctrl" : ""), (ctrl && (shift || alt) ? "+" : ""),
+            (shift ? "Shift" : ""), (shift && alt ? "+ " : ""),
+            (alt ? "Alt" : ""));
+
+    return label;
+}
+
 } // namespace Modifiers
 } // namespace Inkscape
 
