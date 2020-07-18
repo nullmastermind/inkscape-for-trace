@@ -62,6 +62,11 @@ SPKnot::SPKnot(SPDesktop *desktop, gchar const *tip)
         this->tip = g_strdup (tip);
     }
 
+    fill[SP_KNOT_STATE_NORMAL] = 0xffffff00;
+    fill[SP_KNOT_STATE_MOUSEOVER] = 0xff0000ff;
+    fill[SP_KNOT_STATE_DRAGGING] = 0xff0000ff;
+    fill[SP_KNOT_STATE_SELECTED] = 0x0000ffff;
+
     stroke[SP_KNOT_STATE_NORMAL] = 0x01000000;
     stroke[SP_KNOT_STATE_MOUSEOVER] = 0x01000000;
     stroke[SP_KNOT_STATE_DRAGGING] = 0x01000000;
