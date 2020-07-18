@@ -15,8 +15,13 @@ Terminal=false
 StartupNotify=true
 Icon=${INKSCAPE_ICONPATH}
 X-Ayatana-Desktop-Shortcuts=Drawing
+Actions=new-window
 
 [X-Drawing Shortcut Group]
 Name=New Drawing
 Exec=inkscape
 TargetEnvironment=Unity
+
+[Desktop Action new-window]
+Name=Open a New Window
+Exec=inkscape
