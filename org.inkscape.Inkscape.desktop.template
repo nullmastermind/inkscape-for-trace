@@ -15,7 +15,7 @@ Terminal=false
 StartupNotify=true
 Icon=${INKSCAPE_ICONPATH}
 X-Ayatana-Desktop-Shortcuts=Drawing
-Actions=new-window
+Actions=new-window;
 
 [X-Drawing Shortcut Group]
 Name=New Drawing
