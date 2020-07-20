@@ -509,13 +509,15 @@ void SPObject::cropToObject(SPObject *except)
             if (child.isAncestorOf(except)) {
                 child.cropToObject(except);
             } else if(&child != except) {
+                sp_object_ref(&child, nullptr);
                 toDelete.push_back(&child);
             }
         }
     }
     for (auto & i : toDelete) {
         // Propergating signals here causes crashes (#227)
-        i->deleteObject(false);
+        i->deleteObject(true, true);
+        sp_object_unref(i, nullptr);
     }
 }
 
