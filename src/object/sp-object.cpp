@@ -515,7 +515,6 @@ void SPObject::cropToObject(SPObject *except)
         }
     }
     for (auto & i : toDelete) {
-        // Propergating signals here causes crashes (#227)
         i->deleteObject(true, true);
         sp_object_unref(i, nullptr);
     }
