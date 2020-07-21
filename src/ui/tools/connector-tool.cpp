@@ -424,16 +424,14 @@ bool ConnectorTool::item_handler(SPItem* item, GdkEvent* event)
         }
         break;
 
-    case GDK_ENTER_NOTIFY:
-        if (!this->selected_handle) {
-            if (cc_item_is_shape(item)) {
-                this->_setActiveShape(item);
-            }
-
-            ret = true;
+    case GDK_MOTION_NOTIFY: {
+        auto last_pos = Geom::Point(event->motion.x, event->motion.y);
+        SPItem *item = desktop->getItemAtPoint(last_pos, false);
+        if (cc_item_is_shape(item)) {
+            this->_setActiveShape(item);
         }
         break;
-
+    }
     default:
         break;
     }
