@@ -380,7 +380,7 @@ sp_gradient_simplify(GradientTool *rc, double tolerance)
     std::set<SPStop *> todel;
 
     auto i = these_stops.begin();
-    auto j = next_stops.end();
+    auto j = next_stops.begin();
     for (; i != these_stops.end() && j != next_stops.end(); ++i, ++j) {
         SPStop *stop0 = *i;
         SPStop *stop1 = *j;
