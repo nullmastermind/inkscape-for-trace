@@ -22,6 +22,7 @@
 
 #include "display/rendermode.h"
 
+class SPDesktop;
 class SPCanvasItem;
 class SPCanvasGroup;
 
@@ -41,6 +42,9 @@ public:
 
     Canvas();
     ~Canvas() override;
+
+    // Structure
+    void set_desktop(SPDesktop *desktop) { _desktop = desktop; }
 
     // Geometry
     bool world_point_inside_canvas(Geom::Point const &world); // desktop-events.cpp
@@ -148,6 +152,9 @@ private:
     sigc::connection _idle_connection;  // Probably not needed (automatically disconnects).
 
     // ====== Data members =======
+
+    // Structure
+    SPDesktop * _desktop = nullptr;
 
     // Geometry
     int _x0 = 0;                     ///< World coordinate of the leftmost pixels of window.

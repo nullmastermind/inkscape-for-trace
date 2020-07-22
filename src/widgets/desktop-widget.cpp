@@ -194,33 +194,6 @@ void CMSPrefWatcher::_setCmsSensitive(bool enabled)
 
 static CMSPrefWatcher* watcher = nullptr;
 
-void
-SPDesktopWidget::setMessage (Inkscape::MessageType type, const gchar *message)
-{
-    _select_status->set_markup(message ? message : "");
-
-    // make sure the important messages are displayed immediately!
-    if (type == Inkscape::IMMEDIATE_MESSAGE && _select_status->get_is_drawable()) {
-        _select_status->queue_draw();
-    }
-
-    _select_status->set_tooltip_text(_select_status->get_text());
-}
-
-Geom::Point
-SPDesktopWidget::window_get_pointer()
-{
-    int x, y;
-    auto window = _canvas->get_window();
-    auto display = window->get_display();
-    auto seat = display->get_default_seat();
-    auto device = seat->get_pointer();
-    Gdk::ModifierType m;
-    window->get_device_position(device, x, y, m);
-
-    return Geom::Point(x, y);
-}
-
 SPDesktopWidget::SPDesktopWidget()
 {
     auto *const dtw = this;
@@ -448,6 +421,33 @@ SPDesktopWidget::SPDesktopWidget()
     dtw->_canvas->grab_focus();
 }
 
+void
+SPDesktopWidget::setMessage (Inkscape::MessageType type, const gchar *message)
+{
+    _select_status->set_markup(message ? message : "");
+
+    // make sure the important messages are displayed immediately!
+    if (type == Inkscape::IMMEDIATE_MESSAGE && _select_status->get_is_drawable()) {
+        _select_status->queue_draw();
+    }
+
+    _select_status->set_tooltip_text(_select_status->get_text());
+}
+
+Geom::Point
+SPDesktopWidget::window_get_pointer()
+{
+    int x, y;
+    auto window = _canvas->get_window();
+    auto display = window->get_display();
+    auto seat = display->get_default_seat();
+    auto device = seat->get_pointer();
+    Gdk::ModifierType m;
+    window->get_device_position(device, x, y, m);
+
+    return Geom::Point(x, y);
+}
+
 /**
  * Called before SPDesktopWidget destruction.
  * (Might be called more than once)
@@ -467,6 +467,9 @@ SPDesktopWidget::on_unrealize()
         for (auto &conn : dtw->_connections) {
             conn.disconnect();
         }
+
+        // Canvas
+        dtw->_canvas->set_desktop(nullptr); // Canvas may still attempt to draw during destruction.
 
         // Zoom
         dtw->_zoom_status_input_connection.disconnect();
@@ -1414,6 +1417,7 @@ SPDesktopWidget::SPDesktopWidget(SPDocument *document)
     // This section seems backwards!
     dtw->desktop = new SPDesktop();
     dtw->desktop->init (namedview, dtw->_canvas, this);
+    dtw->_canvas->set_desktop(desktop);
     INKSCAPE.add_desktop (dtw->desktop);
 
     // Add the shape geometry to libavoid for autorouting connectors.

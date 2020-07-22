@@ -22,7 +22,7 @@
 
 #include "color.h"          // Background color
 #include "cms-system.h"     // Color correction
-#include "inkscape.h"       // SP_ACTIVE_DESKTOP TEMP TEMP TEMP
+#include "desktop.h"
 #include "preferences.h"
 
 #include "display/sp-canvas-item.h"  // Canvas group TEMP TEMP TEMP
@@ -258,7 +258,11 @@ Canvas::scroll_to(Geom::Point const &c, bool clear)
     Geom::IntRect new_area = old_area + Geom::IntPoint(dx, dy);
     bool overlap = new_area.intersects(old_area);
 
-    SPCanvasArena *arena = SP_CANVAS_ARENA(SP_ACTIVE_DESKTOP->drawing);
+    if (!_desktop) {
+        return; // Might be in destruction
+    }
+
+    SPCanvasArena *arena = SP_CANVAS_ARENA(_desktop->drawing);
     if (arena) {
         Geom::IntRect expanded = new_area;
         Geom::IntPoint expansion(new_area.width()/2, new_area.height()/2);
@@ -586,7 +590,7 @@ Canvas::on_motion_notify_event(GdkEventMotion *motion_event)
             _split_position = Geom::Point(_allocation.get_width()/2, _allocation.get_height()/2);
             set_cursor();
             queue_draw();
-            SP_ACTIVE_DESKTOP->setSplitMode(_split_mode);
+            _desktop->setSplitMode(_split_mode);
             return true;
         }
     }
@@ -846,6 +850,12 @@ Canvas::remove_idle()
 bool
 Canvas::on_idle()
 {
+    // Desktop is destroyed before canvas.
+    if (!_desktop) {
+        std::cerr << "Canvas::on_idle: Called after desktop destroyed!" << std::endl;
+        return false;
+    }
+
     if (_in_destruction) {
         std::cerr << "Canvas::on_idle: Called after canvas destroyed!" << std::endl;
         return false; // Disconnect
@@ -1006,9 +1016,7 @@ Canvas::paint_rect_internal(PaintRectSetup const *setup, Geom::IntRect const &th
     if (bw * bh < setup->max_pixels) {
         // We are small enough!
 
-        // TODO Find better solution
-        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-        SPCanvasArena *arena = SP_CANVAS_ARENA(desktop->drawing);
+        SPCanvasArena *arena = SP_CANVAS_ARENA(_desktop->drawing);
 
         arena->drawing.setRenderMode(_render_mode);
         paint_single_buffer(this_rect, setup->canvas_rect, _backing_store);
@@ -1271,7 +1279,7 @@ Canvas::set_cursor() {
     switch (_hover_direction) {
 
         case Inkscape::SPLITDIRECTION_NONE:
-            get_window()->set_cursor(SP_ACTIVE_DESKTOP->event_context->cursor);
+            get_window()->set_cursor(_desktop->event_context->cursor);
             break;
 
         case Inkscape::SPLITDIRECTION_NORTH:
@@ -1388,8 +1396,7 @@ Canvas::pick_current_item(GdkEvent *event)
             }
 
             // If in split mode, look at where cursor is to see if one should pick with outline mode.
-            SPDesktop *desktop = SP_ACTIVE_DESKTOP; // TODO Find better solution
-            SPCanvasArena *arena = SP_CANVAS_ARENA(desktop->drawing);
+            SPCanvasArena *arena = SP_CANVAS_ARENA(_desktop->drawing);
             arena->drawing.setRenderMode(_render_mode);
             if (_split_mode == Inkscape::SPLITMODE_SPLIT) {
                 if ((_split_direction == Inkscape::SPLITDIRECTION_NORTH && y > _split_position.y()) ||
