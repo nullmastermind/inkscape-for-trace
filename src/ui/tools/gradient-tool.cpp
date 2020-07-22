@@ -366,6 +366,15 @@ sp_gradient_context_add_stops_between_selected_stops (GradientTool *rc)
 
 static double sqr(double x) {return x*x;}
 
+/**
+ * Remove unnecessary stops in the adjacent currently selected stops
+ *
+ * For selected stops that are adjacent to each other, remove
+ * stops that don't change the gradient visually, within a range of tolerance.
+ *
+ * @param rc GradientTool used to extract selected stops
+ * @param tolerance maximum difference between stop and expected color at that position
+ */
 static void
 sp_gradient_simplify(GradientTool *rc, double tolerance)
 {
@@ -385,6 +394,7 @@ sp_gradient_simplify(GradientTool *rc, double tolerance)
         SPStop *stop0 = *i;
         SPStop *stop1 = *j;
 
+        // find the next adjacent stop if it exists and is in selection
         auto i1 = std::find(these_stops.begin(), these_stops.end(), stop1);
         if (i1 != these_stops.end()) {
             if (next_stops.size()>(i1-these_stops.begin())) {
@@ -393,6 +403,7 @@ sp_gradient_simplify(GradientTool *rc, double tolerance)
                 if (todel.find(stop0)!=todel.end() || todel.find(stop2) != todel.end())
                     continue;
 
+                // compare color of stop1 to the average color of stop0 and stop2
                 guint32 const c0 = stop0->get_rgba32();
                 guint32 const c2 = stop2->get_rgba32();
                 guint32 const c1r = stop1->get_rgba32();
