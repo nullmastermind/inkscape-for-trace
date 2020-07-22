@@ -216,8 +216,6 @@ SPDesktop::init (SPNamedView *nv, Inkscape::UI::Widget::Canvas *acanvas, SPDeskt
 
 
     /* Setup Canvas */
-    canvas->set_data("SPDesktop", this); // HORRID! Used by sp_dt_guide_event.
-
     SPCanvasGroup *root = canvas->get_canvas_item_root();
 
     /* Setup administrative layers */

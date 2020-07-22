@@ -103,8 +103,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
     gint ret = FALSE;
 
     SPGuide *guide = SP_GUIDE(data);
-    SPDesktop *desktop =
-        static_cast<SPDesktop*>(item->canvas->get_data("SPDesktop"));
+    SPDesktop *desktop = item->canvas->get_desktop();
     if (!desktop) {
         std::cerr << "sp_dt_guide_event: No desktop!" << std::endl;
     }

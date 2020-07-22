@@ -45,6 +45,7 @@ public:
 
     // Structure
     void set_desktop(SPDesktop *desktop) { _desktop = desktop; }
+    SPDesktop *get_desktop() { return _desktop; }
 
     // Geometry
     bool world_point_inside_canvas(Geom::Point const &world); // desktop-events.cpp
