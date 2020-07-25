@@ -290,7 +290,7 @@ unsigned sp_text_get_length_upto(SPObject const *item, SPObject const *upto)
 static Inkscape::XML::Node* duplicate_node_without_children(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node const *old_node)
 {
     switch (old_node->type()) {
-        case Inkscape::XML::ELEMENT_NODE: {
+        case Inkscape::XML::NodeType::ELEMENT_NODE: {
             Inkscape::XML::Node *new_node = xml_doc->createElement(old_node->name());
             Inkscape::Util::List<Inkscape::XML::AttributeRecord const> attributes = old_node->attributeList();
             GQuark const id_key = g_quark_from_string("id");
@@ -301,16 +301,16 @@ static Inkscape::XML::Node* duplicate_node_without_children(Inkscape::XML::Docum
             return new_node;
         }
 
-        case Inkscape::XML::TEXT_NODE:
+        case Inkscape::XML::NodeType::TEXT_NODE:
             return xml_doc->createTextNode(old_node->content());
 
-        case Inkscape::XML::COMMENT_NODE:
+        case Inkscape::XML::NodeType::COMMENT_NODE:
             return xml_doc->createComment(old_node->content());
 
-        case Inkscape::XML::PI_NODE:
+        case Inkscape::XML::NodeType::PI_NODE:
             return xml_doc->createPI(old_node->name(), old_node->content());
 
-        case Inkscape::XML::DOCUMENT_NODE:
+        case Inkscape::XML::NodeType::DOCUMENT_NODE:
             return nullptr;   // this had better never happen
     }
     return nullptr;
@@ -1715,7 +1715,7 @@ static bool tidy_operator_repeated_spans(SPObject **item, bool /*has_text_decora
     }
 
     // merge consecutive spans with identical styles into one
-    if (first_repr->type() != Inkscape::XML::ELEMENT_NODE) return false;
+    if (first_repr->type() != Inkscape::XML::NodeType::ELEMENT_NODE) return false;
     if (strcmp(first_repr->name(), second_repr->name()) != 0) return false;
     if (is_line_break_object(second)) return false;
     gchar const *first_style = first_repr->attribute("style");

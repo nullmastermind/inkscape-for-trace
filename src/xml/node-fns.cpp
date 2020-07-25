@@ -53,7 +53,7 @@ bool id_permitted_internal_memoized(GQuark qname) {
 bool id_permitted(Node const *node) {
     g_return_val_if_fail(node != nullptr, false);
 
-    if ( node->type() != ELEMENT_NODE ) {
+    if ( node->type() != NodeType::ELEMENT_NODE ) {
         return false;
     }
 

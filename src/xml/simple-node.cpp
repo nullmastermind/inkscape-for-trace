@@ -43,7 +43,7 @@ namespace {
 std::shared_ptr<std::string> stringify_node(Node const &node) {
     gchar *string;
     switch (node.type()) {
-    case ELEMENT_NODE: {
+    case NodeType::ELEMENT_NODE: {
         char const *id=node.attribute("id");
         if (id) {
             string = g_strdup_printf("element(%p)=%s(#%s)", &node, node.name(), id);
@@ -51,13 +51,13 @@ std::shared_ptr<std::string> stringify_node(Node const &node) {
             string = g_strdup_printf("element(%p)=%s", &node, node.name());
         }
     } break;
-    case TEXT_NODE:
+    case NodeType::TEXT_NODE:
         string = g_strdup_printf("text(%p)=%s", &node, node.content());
         break;
-    case COMMENT_NODE:
+    case NodeType::COMMENT_NODE:
         string = g_strdup_printf("comment(%p)=<!--%s-->", &node, node.content());
         break;
-    case DOCUMENT_NODE:
+    case NodeType::DOCUMENT_NODE:
         string = g_strdup_printf("document(%p)", &node);
         break;
     default:
@@ -674,16 +674,16 @@ Node *SimpleNode::root() {
         parent = parent->parent();
     }
 
-    if ( parent->type() == DOCUMENT_NODE ) {
+    if ( parent->type() == NodeType::DOCUMENT_NODE ) {
         for ( Node *child = _document->firstChild() ;
               child ; child = child->next() )
         {
-            if ( child->type() == ELEMENT_NODE ) {
+            if ( child->type() == NodeType::ELEMENT_NODE ) {
                 return child;
             }
         }
         return nullptr;
-    } else if ( parent->type() == ELEMENT_NODE ) {
+    } else if ( parent->type() == NodeType::ELEMENT_NODE ) {
         return parent;
     } else {
         return nullptr;

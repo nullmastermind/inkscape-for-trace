@@ -54,10 +54,10 @@ WidgetBox::WidgetBox(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *e
                 if (widget) {
                     _children.push_back(widget);
                 }
-            } else if (child_repr->type() == XML::ELEMENT_NODE) {
+            } else if (child_repr->type() == XML::NodeType::ELEMENT_NODE) {
                 g_warning("Invalid child element ('%s') in box widget in extension '%s'.",
                           chname, _extension->get_id());
-            } else if (child_repr->type() != XML::COMMENT_NODE){
+            } else if (child_repr->type() != XML::NodeType::COMMENT_NODE){
                 g_warning("Invalid child element found in box widget in extension '%s'.", _extension->get_id());
             }
 

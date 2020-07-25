@@ -24,8 +24,6 @@
 // For font-rule
 #include "libnrtype/FontFactory.h"
 
-using Inkscape::XML::TEXT_NODE;
-
 SPStyleElem::SPStyleElem() : SPObject() {
     media_set_all(this->media);
     this->is_css = false;
@@ -93,7 +91,7 @@ static void child_add_cb(Inkscape::XML::Node *, Inkscape::XML::Node *child, Inks
     SPObject *obj = reinterpret_cast<SPObject *>(data);
     g_assert(data != nullptr);
 
-    if (child->type() == TEXT_NODE) {
+    if (child->type() == Inkscape::XML::NodeType::TEXT_NODE) {
         child->addListener(&textNodeEventVector, obj);
     }
 
@@ -153,7 +151,7 @@ concat_children(Inkscape::XML::Node const &repr)
     Glib::ustring ret;
     // effic: Initialising ret to a reasonable starting size could speed things up.
     for (Inkscape::XML::Node const *rch = repr.firstChild(); rch != nullptr; rch = rch->next()) {
-        if ( rch->type() == TEXT_NODE ) {
+        if ( rch->type() == Inkscape::XML::NodeType::TEXT_NODE ) {
             ret += rch->content();
         }
     }
@@ -594,7 +592,7 @@ void SPStyleElem::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
     repr->addListener(&nodeEventVector, this);
     for (Inkscape::XML::Node *child = repr->firstChild(); child != nullptr; child = child->next()) {
-        if (child->type() == TEXT_NODE) {
+        if (child->type() == Inkscape::XML::NodeType::TEXT_NODE) {
             child->addListener(&textNodeEventVector, this);
         }
     }

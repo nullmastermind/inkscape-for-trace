@@ -93,7 +93,7 @@ XML::Node *get_first_style_text_node(XML::Node *root, bool create_if_missing)
     }
 
     for (auto *node = styleNode->firstChild(); node; node = node->next()) {
-        if (node->type() == XML::TEXT_NODE) {
+        if (node->type() == XML::NodeType::TEXT_NODE) {
             textNode = node;
             break;
         }

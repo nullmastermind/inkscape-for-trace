@@ -26,7 +26,7 @@ Inkscape::XML::Node const *LCA(Inkscape::XML::Node const *a, Inkscape::XML::Node
         a, b, nullptr, &same_repr);
     bool OK = false;
     if (ancestor) {
-        if (ancestor->type() != Inkscape::XML::DOCUMENT_NODE) {
+        if (ancestor->type() != Inkscape::XML::NodeType::DOCUMENT_NODE) {
             OK = true;
         }
     }

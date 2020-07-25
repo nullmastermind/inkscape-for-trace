@@ -438,9 +438,9 @@ void XmlTree::set_tree_select(Inkscape::XML::Node *repr)
 void XmlTree::propagate_tree_select(Inkscape::XML::Node *repr)
 {
     if (repr &&
-       (repr->type() == Inkscape::XML::ELEMENT_NODE ||
-        repr->type() == Inkscape::XML::TEXT_NODE ||
-        repr->type() == Inkscape::XML::COMMENT_NODE))
+       (repr->type() == Inkscape::XML::NodeType::ELEMENT_NODE ||
+        repr->type() == Inkscape::XML::NodeType::TEXT_NODE ||
+        repr->type() == Inkscape::XML::NodeType::COMMENT_NODE))
     {
         attributes->setRepr(repr);
     } else {
@@ -477,7 +477,7 @@ void XmlTree::set_dt_select(Inkscape::XML::Node *repr)
 
     SPObject *object;
     if (repr) {
-        while ( ( repr->type() != Inkscape::XML::ELEMENT_NODE )
+        while ( ( repr->type() != Inkscape::XML::NodeType::ELEMENT_NODE )
                 && repr->parent() )
         {
             repr = repr->parent();
@@ -610,7 +610,7 @@ void XmlTree::on_tree_select_row_enable(GtkTreeIter *node)
     xml_node_delete_button.set_sensitive(xml_tree_node_mutable(node));
 
     //on_tree_select_row_enable_if_element
-    if (repr->type() == Inkscape::XML::ELEMENT_NODE) {
+    if (repr->type() == Inkscape::XML::NodeType::ELEMENT_NODE) {
         xml_element_new_button.set_sensitive(true);
         xml_text_new_button.set_sensitive(true);
 
@@ -647,7 +647,7 @@ void XmlTree::on_tree_select_row_enable(GtkTreeIter *node)
                   prev && prev->next() != repr ;
                   prev = prev->next() ){};
 
-            if (prev && (prev->type() == Inkscape::XML::ELEMENT_NODE)) {
+            if (prev && (prev->type() == Inkscape::XML::NodeType::ELEMENT_NODE)) {
                 indentable = TRUE;
             }
         }
@@ -906,7 +906,7 @@ void XmlTree::cmd_indent_node()
         prev = prev->next();
     }
     g_return_if_fail(prev != nullptr);
-    g_return_if_fail(prev->type() == Inkscape::XML::ELEMENT_NODE);
+    g_return_if_fail(prev->type() == Inkscape::XML::NodeType::ELEMENT_NODE);
 
     Inkscape::XML::Node* ref = nullptr;
     if (prev->firstChild()) {

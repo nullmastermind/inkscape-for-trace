@@ -77,7 +77,7 @@ void sp_attribute_clean_recursive(Node *repr, unsigned int flags) {
 
   g_return_if_fail (repr != nullptr);
 
-  if( repr->type() == Inkscape::XML::ELEMENT_NODE ) {
+  if( repr->type() == Inkscape::XML::NodeType::ELEMENT_NODE ) {
     Glib::ustring element = repr->name();
 
     // Only clean elements in svg namespace
@@ -104,7 +104,7 @@ void sp_attribute_clean_recursive(Node *repr, unsigned int flags) {
 void sp_attribute_clean_element(Node *repr, unsigned int flags) {
 
   g_return_if_fail (repr != nullptr);
-  g_return_if_fail (repr->type() == Inkscape::XML::ELEMENT_NODE);
+  g_return_if_fail (repr->type() == Inkscape::XML::NodeType::ELEMENT_NODE);
 
   Glib::ustring element = repr->name();
   Glib::ustring id = (repr->attribute( "id" )==nullptr ? "" : repr->attribute( "id" ));
@@ -141,7 +141,7 @@ void sp_attribute_clean_element(Node *repr, unsigned int flags) {
 void sp_attribute_clean_style(Node *repr, unsigned int flags) {
 
   g_return_if_fail (repr != nullptr);
-  g_return_if_fail (repr->type() == Inkscape::XML::ELEMENT_NODE);
+  g_return_if_fail (repr->type() == Inkscape::XML::NodeType::ELEMENT_NODE);
 
   // Find element's style
   SPCSSAttr *css = sp_repr_css_attr( repr, "style" );
@@ -163,7 +163,7 @@ void sp_attribute_clean_style(Node *repr, unsigned int flags) {
 Glib::ustring sp_attribute_clean_style(Node *repr, gchar const *string, unsigned int flags) {
 
   g_return_val_if_fail (repr != nullptr, NULL);
-  g_return_val_if_fail (repr->type() == Inkscape::XML::ELEMENT_NODE, NULL);
+  g_return_val_if_fail (repr->type() == Inkscape::XML::NodeType::ELEMENT_NODE, NULL);
 
   SPCSSAttr *css = sp_repr_css_attr_new();
   sp_repr_css_attr_add_from_string( css, string );

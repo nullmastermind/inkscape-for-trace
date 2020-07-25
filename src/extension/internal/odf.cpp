@@ -962,7 +962,7 @@ static void analyzeTransform(Geom::Affine &tf,
 
 static void gatherText(Inkscape::XML::Node *node, Glib::ustring &buf)
 {
-    if (node->type() == Inkscape::XML::TEXT_NODE)
+    if (node->type() == Inkscape::XML::NodeType::TEXT_NODE)
         {
         char *s = (char *)node->content();
         if (s)

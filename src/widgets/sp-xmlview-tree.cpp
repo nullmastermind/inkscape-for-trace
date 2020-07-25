@@ -245,13 +245,13 @@ add_node (SPXMLViewTree * tree, GtkTreeIter *parent, GtkTreeIter *before, Inksca
 
     gtk_tree_store_set(tree->store, &iter, STORE_DATA_COL, data, -1);
 
-	if ( repr->type() == Inkscape::XML::TEXT_NODE ) {
+	if ( repr->type() == Inkscape::XML::NodeType::TEXT_NODE ) {
 		vec = &text_repr_events;
-	} else if ( repr->type() == Inkscape::XML::COMMENT_NODE ) {
+	} else if ( repr->type() == Inkscape::XML::NodeType::COMMENT_NODE ) {
 		vec = &comment_repr_events;
-	} else if ( repr->type() == Inkscape::XML::PI_NODE ) {
+	} else if ( repr->type() == Inkscape::XML::NodeType::PI_NODE ) {
 		vec = &pi_repr_events;
-	} else if ( repr->type() == Inkscape::XML::ELEMENT_NODE ) {
+	} else if ( repr->type() == Inkscape::XML::NodeType::ELEMENT_NODE ) {
 		vec = &element_repr_events;
 	} else {
 		vec = nullptr;
@@ -259,7 +259,7 @@ add_node (SPXMLViewTree * tree, GtkTreeIter *parent, GtkTreeIter *before, Inksca
 
 	if (vec) {
 		/* cheat a little to get the text updated on nodes without id */
-        if (repr->type() == Inkscape::XML::ELEMENT_NODE && repr->attribute("id") == nullptr) {
+        if (repr->type() == Inkscape::XML::NodeType::ELEMENT_NODE && repr->attribute("id") == nullptr) {
 			element_attr_changed (repr, "id", nullptr, nullptr, false, data);
 		}
 		sp_repr_add_listener (repr, vec, data);
@@ -719,7 +719,7 @@ gboolean do_drag_motion(GtkWidget *widget, GdkDragContext *context, gint x, gint
         }
 
         // 1. only xml elements can have children
-        if (drop_into && repr->type() != Inkscape::XML::ELEMENT_NODE) {
+        if (drop_into && repr->type() != Inkscape::XML::NodeType::ELEMENT_NODE) {
             goto finally;
         }
 

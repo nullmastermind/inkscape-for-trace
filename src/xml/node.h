@@ -29,7 +29,7 @@ struct NodeEventVector;
 /**
  * @brief Enumeration containing all supported node types.
  */
-enum NodeType {
+enum class NodeType {
     DOCUMENT_NODE, ///< Top-level document node. Do not confuse with the root node.
     ELEMENT_NODE, ///< Regular element node, e.g. &lt;group /&gt;.
     TEXT_NODE, ///< Text node, e.g. "Some text" in &lt;group&gt;Some text&lt;/group&gt; is represented by a text node.

@@ -29,7 +29,7 @@ public:
     ElementNode(ElementNode const &other, Document *doc)
     : SimpleNode(other, doc) {}
 
-    Inkscape::XML::NodeType type() const override { return Inkscape::XML::ELEMENT_NODE; }
+    Inkscape::XML::NodeType type() const override { return Inkscape::XML::NodeType::ELEMENT_NODE; }
 
 protected:
     SimpleNode *_duplicate(Document* doc) const override { return new ElementNode(*this, doc); }

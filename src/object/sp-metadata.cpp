@@ -42,7 +42,7 @@ namespace {
 
 void strip_ids_recursively(Inkscape::XML::Node *node) {
     using Inkscape::XML::NodeSiblingIterator;
-    if ( node->type() == Inkscape::XML::ELEMENT_NODE ) {
+    if ( node->type() == Inkscape::XML::NodeType::ELEMENT_NODE ) {
         node->removeAttribute("id");
     }
     for ( NodeSiblingIterator iter=node->firstChild() ; iter ; ++iter ) {

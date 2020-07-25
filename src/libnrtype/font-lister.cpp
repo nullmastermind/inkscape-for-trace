@@ -402,7 +402,7 @@ void FontLister::update_font_list(SPDocument *document)
 void FontLister::update_font_data_recursive(SPObject& r, std::map<Glib::ustring, std::set<Glib::ustring>> &font_data)
 {
     // Text nodes (i.e. the content of <text> or <tspan>) do not have their own style.
-    if (r.getRepr()->type() == Inkscape::XML::TEXT_NODE) {
+    if (r.getRepr()->type() == Inkscape::XML::NodeType::TEXT_NODE) {
         return;
     }
 

@@ -160,7 +160,7 @@ find_references(SPObject *elem, refmap_type &refmap)
     if (elem->cloned) return;
     Inkscape::XML::Node *repr_elem = elem->getRepr();
     if (!repr_elem) return;
-    if (repr_elem->type() != Inkscape::XML::ELEMENT_NODE) return;
+    if (repr_elem->type() != Inkscape::XML::NodeType::ELEMENT_NODE) return;
 
     /* check for references in inkscape:clipboard elements */
     if (!std::strcmp(repr_elem->name(), "inkscape:clipboard")) {

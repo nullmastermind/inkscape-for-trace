@@ -901,7 +901,7 @@ void SPObject::set(SPAttr key, gchar const* value) {
         case SPAttr::ID:
 
             //XML Tree being used here.
-            if ( !object->cloned && object->getRepr()->type() == Inkscape::XML::ELEMENT_NODE ) {
+            if ( !object->cloned && object->getRepr()->type() == Inkscape::XML::NodeType::ELEMENT_NODE ) {
                 SPDocument *document=object->document;
                 SPObject *conflict=nullptr;
 
@@ -1605,7 +1605,7 @@ SPObject* SPObject::findFirstChild(gchar const *tagname) const
 {
     for (auto& child: const_cast<SPObject*>(this)->children)
     {
-        if (child.repr->type() == Inkscape::XML::ELEMENT_NODE &&
+        if (child.repr->type() == Inkscape::XML::NodeType::ELEMENT_NODE &&
             !std::strcmp(child.repr->name(), tagname)) {
             return &child;
         }
@@ -1621,10 +1621,10 @@ Glib::ustring SPObject::textualContent() const
     {
         Inkscape::XML::NodeType child_type = child.repr->type();
 
-        if (child_type == Inkscape::XML::ELEMENT_NODE) {
+        if (child_type == Inkscape::XML::NodeType::ELEMENT_NODE) {
             text += child.textualContent();
         }
-        else if (child_type == Inkscape::XML::TEXT_NODE) {
+        else if (child_type == Inkscape::XML::NodeType::TEXT_NODE) {
             text += child.repr->content();
         }
     }

@@ -25,7 +25,7 @@ static bool sp_svg_angle_read_lff(gchar const *str, SVGAngle::Unit &unit, float 
 
 SVGAngle::SVGAngle()
     : _set(false)
-    , unit(NONE)
+    , unit(Unit::NONE)
     , value(0)
     , computed(0)
 {
@@ -81,7 +81,7 @@ static bool sp_svg_angle_read_lff(gchar const *str, SVGAngle::Unit &unit, float 
 
     if (!e[0]) {
         /* Unitless (defaults to degrees)*/
-        unit = SVGAngle::NONE;
+        unit = SVGAngle::Unit::NONE;
         val = v;
         computed = v;
         return true;
@@ -90,26 +90,26 @@ static bool sp_svg_angle_read_lff(gchar const *str, SVGAngle::Unit &unit, float 
             return false; // spaces between value and unit are not allowed
         } else {
             /* Unitless (defaults to degrees)*/
-            unit = SVGAngle::NONE;
+            unit = SVGAngle::Unit::NONE;
             val = v;
             computed = v;
             return true;
         }
     } else {
         if (strncmp(e, "deg", 3) == 0) {
-            unit = SVGAngle::DEG;
+            unit = SVGAngle::Unit::DEG;
             val = v;
             computed = v;
         } else if (strncmp(e, "grad", 4) == 0) {
-            unit = SVGAngle::GRAD;
+            unit = SVGAngle::Unit::GRAD;
             val = v;
             computed = Inkscape::Util::Quantity::convert(v, "grad", "°");
         } else if (strncmp(e, "rad", 3) == 0) {
-            unit = SVGAngle::RAD;
+            unit = SVGAngle::Unit::RAD;
             val = v;
             computed = Inkscape::Util::Quantity::convert(v, "rad", "°");
         } else if (strncmp(e, "turn", 4) == 0) {
-            unit = SVGAngle::TURN;
+            unit = SVGAngle::Unit::TURN;
             val = v;
             computed = Inkscape::Util::Quantity::convert(v, "turn", "°");
         } else {

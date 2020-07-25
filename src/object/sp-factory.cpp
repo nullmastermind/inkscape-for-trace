@@ -333,11 +333,11 @@ std::string NodeTraits::get_type_string(Inkscape::XML::Node const &node)
     std::string name;
 
     switch (node.type()) {
-    case Inkscape::XML::TEXT_NODE:
+    case Inkscape::XML::NodeType::TEXT_NODE:
         name = "string";
         break;
 
-    case Inkscape::XML::ELEMENT_NODE: {
+    case Inkscape::XML::NodeType::ELEMENT_NODE: {
         char const *const sptype = node.attribute("sodipodi:type");
 
         if (sptype) {

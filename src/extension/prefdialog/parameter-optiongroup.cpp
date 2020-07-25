@@ -50,10 +50,10 @@ ParamOptionGroup::ParamOptionGroup(Inkscape::XML::Node *xml, Inkscape::Extension
                 child_repr->setAttribute("gui-text", "option"); // TODO: hack to allow options to be parameters
                 ParamOptionGroupOption *param = new ParamOptionGroupOption(child_repr, ext, this);
                 choices.push_back(param);
-            } else if (child_repr->type() == XML::ELEMENT_NODE) {
+            } else if (child_repr->type() == XML::NodeType::ELEMENT_NODE) {
                 g_warning("Invalid child element ('%s') for parameter '%s' in extension '%s'. Expected 'option'.",
                           chname, _name, _extension->get_id());
-            } else if (child_repr->type() != XML::COMMENT_NODE){
+            } else if (child_repr->type() != XML::NodeType::COMMENT_NODE){
                 g_warning("Invalid child element found in parameter '%s' in extension '%s'. Expected 'option'.",
                           _name, _extension->get_id());
             }

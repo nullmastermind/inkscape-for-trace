@@ -441,16 +441,16 @@ public:
         Glib::ustring result;
         char const *type_name=nullptr;
         switch (node.type()) {
-        case Inkscape::XML::DOCUMENT_NODE:
+        case Inkscape::XML::NodeType::DOCUMENT_NODE:
             type_name = "Document";
             break;
-        case Inkscape::XML::ELEMENT_NODE:
+        case Inkscape::XML::NodeType::ELEMENT_NODE:
             type_name = "Element";
             break;
-        case Inkscape::XML::TEXT_NODE:
+        case Inkscape::XML::NodeType::TEXT_NODE:
             type_name = "Text";
             break;
-        case Inkscape::XML::COMMENT_NODE:
+        case Inkscape::XML::NodeType::COMMENT_NODE:
             type_name = "Comment";
             break;
         default:

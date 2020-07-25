@@ -454,7 +454,7 @@ sp_repr_lookup_property_many( Inkscape::XML::Node *repr, Glib::ustring const& pr
 bool sp_repr_is_meta_element(const Inkscape::XML::Node *node)
 {
     if (node == nullptr) return false;
-    if (node->type() != Inkscape::XML::ELEMENT_NODE) return false;
+    if (node->type() != Inkscape::XML::NodeType::ELEMENT_NODE) return false;
     gchar const *name = node->name();
     if (name == nullptr) return false;
     if (!std::strcmp(name, "svg:title")) return true;

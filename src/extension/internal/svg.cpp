@@ -63,7 +63,7 @@ using Inkscape::XML::Node;
 static void pruneExtendedNamespaces( Inkscape::XML::Node *repr )
 {
     if (repr) {
-        if ( repr->type() == Inkscape::XML::ELEMENT_NODE ) {
+        if ( repr->type() == Inkscape::XML::NodeType::ELEMENT_NODE ) {
             std::vector<gchar const*> attrsRemoved;
             for ( List<AttributeRecord const> it = repr->attributeList(); it; ++it ) {
                 const gchar* attrName = g_quark_to_string(it->key);

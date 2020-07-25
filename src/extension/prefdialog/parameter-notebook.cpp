@@ -50,10 +50,10 @@ ParamNotebook::ParamNotebookPage::ParamNotebookPage(Inkscape::XML::Node *xml, In
                 if (widget) {
                     _children.push_back(widget);
                 }
-            } else if (child_repr->type() == XML::ELEMENT_NODE) {
+            } else if (child_repr->type() == XML::NodeType::ELEMENT_NODE) {
                 g_warning("Invalid child element ('%s') in notebook page in extension '%s'.",
                           chname, _extension->get_id());
-            } else if (child_repr->type() != XML::COMMENT_NODE){
+            } else if (child_repr->type() != XML::NodeType::COMMENT_NODE){
                 g_warning("Invalid child element found in notebook page in extension '%s'.", _extension->get_id());
             }
 
@@ -121,10 +121,10 @@ ParamNotebook::ParamNotebook(Inkscape::XML::Node *xml, Inkscape::Extension::Exte
                 if (page) {
                     _children.push_back(page);
                 }
-            } else if (child_repr->type() == XML::ELEMENT_NODE) {
+            } else if (child_repr->type() == XML::NodeType::ELEMENT_NODE) {
                 g_warning("Invalid child element ('%s') for parameter '%s' in extension '%s'. Expected 'page'.",
                           chname, _name, _extension->get_id());
-            } else if (child_repr->type() != XML::COMMENT_NODE){
+            } else if (child_repr->type() != XML::NodeType::COMMENT_NODE){
                 g_warning("Invalid child element found in parameter '%s' in extension '%s'. Expected 'page'.",
                           _name, _extension->get_id());
             }

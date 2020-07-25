@@ -33,8 +33,8 @@
 static bool is_text_or_comment_node(Inkscape::XML::Node const &node)
 {
     switch (node.type()) {
-        case Inkscape::XML::TEXT_NODE:
-        case Inkscape::XML::COMMENT_NODE:
+      case Inkscape::XML::NodeType::TEXT_NODE:
+      case Inkscape::XML::NodeType::COMMENT_NODE:
             return true;
         default:
             return false;

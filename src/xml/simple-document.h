@@ -31,7 +31,7 @@ public:
     : SimpleNode(g_quark_from_static_string("xml"), this),
       _in_transaction(false), _is_CData(false) {}
 
-    NodeType type() const override { return Inkscape::XML::DOCUMENT_NODE; }
+    NodeType type() const override { return Inkscape::XML::NodeType::DOCUMENT_NODE; }
 
     bool inTransaction() override { return _in_transaction; }
 

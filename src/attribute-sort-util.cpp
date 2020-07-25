@@ -57,7 +57,7 @@ void sp_attribute_sort_tree(Node& repr) {
  */
 static void sp_attribute_sort_recursive(Node& repr) {
 
-  if( repr.type() == Inkscape::XML::ELEMENT_NODE ) {
+  if( repr.type() == Inkscape::XML::NodeType::ELEMENT_NODE ) {
     Glib::ustring element = repr.name();
 
     // Only sort elements in svg namespace
@@ -88,7 +88,7 @@ static bool cmp(std::pair< Glib::ustring, Glib::ustring > const &a,
  */
 static void sp_attribute_sort_element(Node& repr) {
 
-  g_return_if_fail (repr.type() == Inkscape::XML::ELEMENT_NODE);
+  g_return_if_fail (repr.type() == Inkscape::XML::NodeType::ELEMENT_NODE);
 
   sp_attribute_sort_style(repr);
 
@@ -129,7 +129,7 @@ static void sp_attribute_sort_element(Node& repr) {
  */
 static void sp_attribute_sort_style(Node& repr) {
 
-  g_return_if_fail (repr.type() == Inkscape::XML::ELEMENT_NODE);
+  g_return_if_fail (repr.type() == Inkscape::XML::NodeType::ELEMENT_NODE);
 
   // Find element's style
   SPCSSAttr *css = sp_repr_css_attr( &repr, "style" );

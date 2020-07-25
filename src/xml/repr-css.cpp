@@ -55,7 +55,7 @@ public:
     SPCSSAttrImpl(SPCSSAttrImpl const &other, Document *doc)
     : SimpleNode(other, doc) {}
 
-    NodeType type() const override { return Inkscape::XML::ELEMENT_NODE; }
+    NodeType type() const override { return Inkscape::XML::NodeType::ELEMENT_NODE; }
 
 protected:
     SimpleNode *_duplicate(Document* doc) const override { return new SPCSSAttrImpl(*this, doc); }

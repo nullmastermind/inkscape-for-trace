@@ -1126,7 +1126,7 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
             }
 
             // don't lose top-level defs or style elements
-            else if (child.getRepr()->type() == Inkscape::XML::ELEMENT_NODE) {
+            else if (child.getRepr()->type() == Inkscape::XML::NodeType::ELEMENT_NODE) {
                 const gchar *tag = child.getRepr()->name();
                 if (!strcmp(tag, "svg:style")) {
                     in_doc->getRoot()->appendChildRepr(child.getRepr()->duplicate(xml_in_doc));

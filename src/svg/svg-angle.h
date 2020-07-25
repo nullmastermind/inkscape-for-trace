@@ -23,7 +23,7 @@ class SVGAngle
 public:
     SVGAngle();
 
-    enum Unit {
+    enum class Unit {
         NONE,
         DEG,
         GRAD,
@@ -46,14 +46,14 @@ public:
 
     float operator=(float v) {
         _set = true;
-        unit = NONE;
+        unit = Unit::NONE;
         value = computed = v;
         return v;
     }
 
     bool read(gchar const *str);
-    void unset(Unit u = NONE, float v = 0, float c = 0);
-    void readOrUnset(gchar const *str, Unit u = NONE, float v = 0, float c = 0);
+    void unset(Unit u = Unit::NONE, float v = 0, float c = 0);
+    void readOrUnset(gchar const *str, Unit u = Unit::NONE, float v = 0, float c = 0);
 };
 
 #endif // SEEN_SP_SVG_ANGLE_H

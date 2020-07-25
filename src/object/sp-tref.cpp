@@ -422,7 +422,7 @@ build_string_from_root(Inkscape::XML::Node *root, Glib::ustring *retString)
     if (root && retString) {
 
         // Stop and concatenate when a SPString is found
-        if (root->type() == Inkscape::XML::TEXT_NODE) {
+        if (root->type() == Inkscape::XML::NodeType::TEXT_NODE) {
             *retString += (root->content());
 
             debug("%s", retString->c_str());

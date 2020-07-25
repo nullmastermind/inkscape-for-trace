@@ -33,9 +33,9 @@ WidgetLabel::WidgetLabel(Inkscape::XML::Node *xml, Inkscape::Extension::Extensio
     // removing all other nodes (e.g. comment nodes) and replacing <extension:br> elements with "<br/>"
     Inkscape::XML::Node * cur_child = xml->firstChild();
     while (cur_child != nullptr) {
-        if (cur_child->type() == XML::TEXT_NODE && cur_child->content() != nullptr) {
+        if (cur_child->type() == XML::NodeType::TEXT_NODE && cur_child->content() != nullptr) {
             _value += cur_child->content();
-        } else if (cur_child->type() == XML::ELEMENT_NODE && !g_strcmp0(cur_child->name(), "extension:br")) {
+        } else if (cur_child->type() == XML::NodeType::ELEMENT_NODE && !g_strcmp0(cur_child->name(), "extension:br")) {
             _value += "<br/>";
         }
         cur_child = cur_child->next();

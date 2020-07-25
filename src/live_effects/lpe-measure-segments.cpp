@@ -681,7 +681,7 @@ LPEMeasureSegments::doOnApply(SPLPEItem const* lpeitem)
         if (Glib::ustring(root->nthChild(i)->name()) == "svg:style") {
             styleNode = root->nthChild(i);
             for (unsigned j = 0; j < styleNode->childCount(); ++j) {
-                if (styleNode->nthChild(j)->type() == Inkscape::XML::TEXT_NODE) {
+                if (styleNode->nthChild(j)->type() == Inkscape::XML::NodeType::TEXT_NODE) {
                     textNode = styleNode->nthChild(j);
                 }
             }

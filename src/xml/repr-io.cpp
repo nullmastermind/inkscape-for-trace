@@ -446,7 +446,7 @@ Glib::QueryQuark qname_prefix(Glib::QueryQuark qname) {
 namespace {
 
 void promote_to_namespace(Node *repr, const gchar *prefix) {
-    if ( repr->type() == Inkscape::XML::ELEMENT_NODE ) {
+    if ( repr->type() == Inkscape::XML::NodeType::ELEMENT_NODE ) {
         GQuark code = repr->code();
         if (!qname_prefix(code).id()) {
             gchar *svg_name = g_strconcat(prefix, ":", g_quark_to_string(code), NULL);
@@ -642,13 +642,13 @@ static void sp_repr_save_writer(Document *doc, Inkscape::IO::Writer *out,
          repr; repr = repr->next())
     {
         Inkscape::XML::NodeType const node_type = repr->type();
-        if ( node_type == Inkscape::XML::ELEMENT_NODE ) {
+        if ( node_type == Inkscape::XML::NodeType::ELEMENT_NODE ) {
             sp_repr_write_stream_root_element(repr, *out, TRUE, default_ns, inlineattrs, indent,
                                               old_href_abs_base, new_href_abs_base);
         } else {
             sp_repr_write_stream(repr, *out, 0, TRUE, GQuark(0), inlineattrs, indent,
                                  old_href_abs_base, new_href_abs_base);
-            if ( node_type == Inkscape::XML::COMMENT_NODE ) {
+            if ( node_type == Inkscape::XML::NodeType::COMMENT_NODE ) {
                 out->writeChar('\n');
             }
         }
@@ -834,7 +834,7 @@ void add_ns_map_entry(NSMap &ns_map, Glib::QueryQuark prefix) {
 }
 
 void populate_ns_map(NSMap &ns_map, Node &repr) {
-    if ( repr.type() == Inkscape::XML::ELEMENT_NODE ) {
+    if ( repr.type() == Inkscape::XML::NodeType::ELEMENT_NODE ) {
         add_ns_map_entry(ns_map, qname_prefix(repr.code()));
         for ( List<AttributeRecord const> iter=repr.attributeList() ;
               iter ; ++iter )
@@ -918,7 +918,7 @@ void sp_repr_write_stream( Node *repr, Writer &out, gint indent_level,
                            gchar const *const new_href_base)
 {
     switch (repr->type()) {
-        case Inkscape::XML::TEXT_NODE: {
+        case Inkscape::XML::NodeType::TEXT_NODE: {
             if( dynamic_cast<const Inkscape::XML::TextNode *>(repr)->is_CData() ) {
                 // Preserve CDATA sections, not converting '&' to &amp;, etc.
                 out.printf( "<![CDATA[%s]]>", repr->content() );
@@ -927,15 +927,15 @@ void sp_repr_write_stream( Node *repr, Writer &out, gint indent_level,
             }
             break;
         }
-        case Inkscape::XML::COMMENT_NODE: {
+        case Inkscape::XML::NodeType::COMMENT_NODE: {
             repr_write_comment( out, repr->content(), add_whitespace, indent_level, indent );
             break;
         }
-        case Inkscape::XML::PI_NODE: {
+        case Inkscape::XML::NodeType::PI_NODE: {
             out.printf( "<?%s %s?>", repr->name(), repr->content() );
             break;
         }
-        case Inkscape::XML::ELEMENT_NODE: {
+        case Inkscape::XML::NodeType::ELEMENT_NODE: {
             sp_repr_write_stream_element( repr, out, indent_level,
                                           add_whitespace, elide_prefix,
                                           repr->attributeList(),
@@ -943,7 +943,7 @@ void sp_repr_write_stream( Node *repr, Writer &out, gint indent_level,
                                           old_href_base, new_href_base);
             break;
         }
-        case Inkscape::XML::DOCUMENT_NODE: {
+        case Inkscape::XML::NodeType::DOCUMENT_NODE: {
             g_assert_not_reached();
             break;
         }
@@ -1025,7 +1025,7 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
 
     loose = TRUE;
     for (child = repr->firstChild() ; child != nullptr; child = child->next()) {
-        if (child->type() == Inkscape::XML::TEXT_NODE) {
+        if (child->type() == Inkscape::XML::NodeType::TEXT_NODE) {
             loose = FALSE;
             break;
         }

@@ -135,7 +135,7 @@ Extension::Extension(Inkscape::XML::Node *in_repr, Implementation::Implementatio
             _deps.push_back(new Dependency(child_repr, this));
         } else if (!strcmp(chname, "script")) { // TODO: should these be parsed in their respective Implementation?
             for (Inkscape::XML::Node *child = child_repr->firstChild(); child != nullptr; child = child->next()) {
-                if (child->type() == Inkscape::XML::ELEMENT_NODE) { // skip non-element nodes (see LP #1372200)
+                if (child->type() == Inkscape::XML::NodeType::ELEMENT_NODE) { // skip non-element nodes (see LP #1372200)
                     const char *interpreted = child->attribute("interpreter");
                     Dependency::type_t type = interpreted ? Dependency::TYPE_FILE : Dependency::TYPE_EXECUTABLE;
                     _deps.push_back(new Dependency(child, this, type));
@@ -144,7 +144,7 @@ Extension::Extension(Inkscape::XML::Node *in_repr, Implementation::Implementatio
             }
         } else if (!strcmp(chname, "xslt")) { // TODO: should these be parsed in their respective Implementation?
             for (Inkscape::XML::Node *child = child_repr->firstChild(); child != nullptr; child = child->next()) {
-                if (child->type() == Inkscape::XML::ELEMENT_NODE) { // skip non-element nodes (see LP #1372200)
+                if (child->type() == Inkscape::XML::NodeType::ELEMENT_NODE) { // skip non-element nodes (see LP #1372200)
                     _deps.push_back(new Dependency(child, this, Dependency::TYPE_FILE));
                     break;
                 }
