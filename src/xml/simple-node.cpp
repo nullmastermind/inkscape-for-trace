@@ -217,7 +217,17 @@ SimpleNode::SimpleNode(SimpleNode const &node, Document *document)
         child_copy->release(); // release to avoid a leak
     }
 
+    // We need to keep the order of the attributes that we duplicate
+    // and for now, we do that by duplicating the list twice.
+    List<AttributeRecord const> _temp;
     for ( List<AttributeRecord const> iter = node._attributes ;
+          iter ; ++iter )
+    {
+        _temp = cons(*iter, _temp);
+    }
+    // At this point temp is an up-sidedown list of attributes, put them
+    // back in the right way now.
+    for ( List<AttributeRecord const> iter = _temp ;
           iter ; ++iter )
     {
         _attributes = cons(*iter, _attributes);
