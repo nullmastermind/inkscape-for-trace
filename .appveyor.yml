@@ -27,6 +27,8 @@ install:
 build_script:
   - del C:\Windows\System32\libssl-*.dll C:\Windows\system32\libcrypto-*.dll
   - del C:\Windows\SysWOW64\libssl-*.dll C:\Windows\SysWOW64\libcrypto-*.dll
+  - curl -O http://repo.msys2.org/msys/x86_64/msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz
+  - C:\msys64\usr\bin\bash --login -c "pacman -U $(cygpath ${APPVEYOR_BUILD_FOLDER})/msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz %PACMAN_OPTIONS%"
   - C:\msys64\usr\bin\pacman -Sy pacman %PACMAN_OPTIONS%
   - C:\msys64\usr\bin\pacman -Syuu %PACMAN_OPTIONS%
   - C:\msys64\usr\bin\bash --login -c "$(cygpath ${APPVEYOR_BUILD_FOLDER})/buildtools/appveyor.sh"
