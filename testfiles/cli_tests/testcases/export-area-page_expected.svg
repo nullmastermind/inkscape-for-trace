@@ -5,11 +5,11 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   id="svg10"
-   viewBox="0 0 120 105"
-   version="1.1"
+   width="120mm"
    height="105mm"
-   width="120mm">
+   version="1.1"
+   viewBox="0 0 120 105"
+   id="svg10">
   <metadata
      id="metadata16">
     <rdf:RDF>
@@ -24,38 +24,38 @@
   <defs
      id="defs14" />
   <rect
-     id="rect2"
-     fill="royalblue"
-     rx="5"
-     height="30"
-     width="50"
+     x="15"
      y="15"
-     x="15" />
+     width="50"
+     height="30"
+     rx="5"
+     fill="royalblue"
+     id="rect2" />
   <path
-     stroke="purple"
-     stroke-width="1.5"
-     fill="red"
+     id="MyStar"
      d="m100.96 68.703-20.799-1.1756-12.76 16.461-5.3089-20.138-19.604-7.0445 17.518-11.27 0.64404-20.815 16.136 13.172 20.002-5.8198-7.5458 19.411z"
-     id="MyStar" />
+     fill="red"
+     stroke-width="1.5"
+     stroke="purple" />
   <rect
-     id="rect5"
-     fill-opacity="0.7"
-     fill="yellow"
-     height="53"
-     width="53"
+     x="29"
      y="21"
-     x="29" />
+     width="53"
+     height="53"
+     fill="yellow"
+     fill-opacity="0.7"
+     id="rect5" />
   <path
-     id="path7"
-     stroke="black"
-     stroke-width="1"
+     d="M 56,69 A 18,18 0 0 1 38,87 18,18 0 0 1 20,69 18,18 0 0 1 38,51 18,18 0 0 1 56,69 Z"
      fill="green"
-     d="M 56,69 A 18,18 0 0 1 38,87 18,18 0 0 1 20,69 18,18 0 0 1 38,51 18,18 0 0 1 56,69 Z" />
+     stroke-width="1"
+     stroke="black"
+     id="path7" />
   <rect
-     fill="none"
-     height="60"
-     width="70"
-     y="18.5"
+     id="MyRect"
      x="24.5"
-     id="MyRect" />
+     y="18.5"
+     width="70"
+     height="60"
+     fill="none" />
 </svg>

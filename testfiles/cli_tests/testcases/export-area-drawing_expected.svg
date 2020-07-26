@@ -7,12 +7,12 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   sodipodi:docname="areas.svg"
-   id="svg10"
-   viewBox="0 0 87.435127 72.5"
-   version="1.1"
+   width="87.435127mm"
    height="72.5mm"
-   width="87.435127mm">
+   version="1.1"
+   viewBox="0 0 87.435127 72.5"
+   id="svg10"
+   sodipodi:docname="areas.svg">
   <metadata
      id="metadata16">
     <rdf:RDF>
@@ -27,55 +27,53 @@
   <defs
      id="defs14" />
   <sodipodi:namedview
-     id="namedview12"
-     inkscape:window-height="480"
-     inkscape:window-width="640"
-     inkscape:pageshadow="2"
-     inkscape:pageopacity="0"
-     guidetolerance="10"
-     gridtolerance="10"
-     objecttolerance="10"
-     borderopacity="1"
+     pagecolor="#ffffff"
      bordercolor="#666666"
-     pagecolor="#ffffff" />
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="640"
+     inkscape:window-height="480"
+     id="namedview12" />
   <rect
-     id="rect2"
-     fill="#4169e1"
-     rx="5"
-     height="30"
-     width="50"
+     x="-1.7763568e-15"
      y="-1.7763568e-15"
-     x="-1.7763568e-15" />
+     width="50"
+     height="30"
+     rx="5"
+     fill="#4169e1"
+     id="rect2" />
   <path
-     inkscape:connector-curvature="0"
-     stroke="#800080"
-     stroke-width="1.5"
-     fill="#ff0000"
+     id="MyStar"
      d="m 85.96,53.703 -20.799,-1.1756 -12.76,16.461 -5.3089,-20.138 -19.604,-7.0445 17.518,-11.27 0.64404,-20.815 16.136,13.172 20.002,-5.8198 -7.5458,19.411 z"
-     id="MyStar" />
+     fill="#ff0000"
+     stroke-width="1.5"
+     stroke="#800080" />
   <rect
-     id="rect5"
-     fill-opacity="0.7"
-     fill="#ffff00"
-     height="53"
-     width="53"
+     x="14"
      y="6"
-     x="14" />
+     width="53"
+     height="53"
+     fill="#ffff00"
+     fill-opacity="0.7"
+     id="rect5" />
   <path
-     inkscape:connector-curvature="0"
-     id="path7"
-     stroke="#000000"
-     stroke-width="1"
+     d="M 41,54 A 18,18 0 0 1 23,72 18,18 0 0 1 5,54 18,18 0 0 1 23,36 18,18 0 0 1 41,54 Z"
      fill="#008000"
-     d="M 41,54 A 18,18 0 0 1 23,72 18,18 0 0 1 5,54 18,18 0 0 1 23,36 18,18 0 0 1 41,54 Z" />
+     stroke-width="1"
+     stroke="#000000"
+     id="path7" />
   <rect
-     inkscape:export-filename="export-use-hints.png"
-     inkscape:export-xdpi="600"
-     inkscape:export-ydpi="600"
-     fill="none"
-     height="60"
-     width="70"
-     y="3.5"
+     id="MyRect"
      x="9.5"
-     id="MyRect" />
+     y="3.5"
+     width="70"
+     height="60"
+     fill="none"
+     inkscape:export-ydpi="600"
+     inkscape:export-xdpi="600"
+     inkscape:export-filename="export-use-hints.png" />
 </svg>
