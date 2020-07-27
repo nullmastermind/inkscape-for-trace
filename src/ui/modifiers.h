@@ -32,7 +32,7 @@ enum Triggers : Trigger {CLICK, DRAG, SCROLL, HANDLE};
 // TODO: We may want to further define the tool, from ANY, SELECT, NODE etc.
 
 // Generate a label such as Shift+Ctrl from any KeyMask
-char * generate_label(KeyMask mask);
+std::string generate_label(KeyMask mask);
 
 /**
  * This anonymous enum is used to provide a list of the Shifts
@@ -115,7 +115,7 @@ public:
         return _and_mask_default;
     }
     // Generate labels such as "Shift+Ctrl" for the active modifier
-    char * get_label() { return generate_label(get_and_mask()); }
+    std::string get_label() { return generate_label(get_and_mask()); }
 
     /**
      * Inititalizes the Modifier with the parameters.

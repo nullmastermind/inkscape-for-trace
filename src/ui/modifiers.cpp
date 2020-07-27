@@ -85,18 +85,18 @@ bool Modifier::active(int button_state)
  * @param  mask - The Modifier Mask such as {SHIFT & CTRL}
  * @return a string of the keys needed for this mask to be true.
  */
-char * generate_label(KeyMask mask)
+std::string generate_label(KeyMask mask)
 {
     bool ctrl = mask & CTRL;
     bool shift = mask & SHIFT;
     bool alt = mask & ALT;
 
-    gchar *label = g_strdup_printf("%s%s%s%s%s",
-            (ctrl ? "Ctrl" : ""), (ctrl && (shift || alt) ? "+" : ""),
-            (shift ? "Shift" : ""), (shift && alt ? "+ " : ""),
-            (alt ? "Alt" : ""));
-
-    return label;
+    return std::string()
+        .append(ctrl ? "Ctrl" : "")
+        .append(ctrl && (shift || alt) ? "+" : "")
+        .append(shift ? "Shift" : "")
+        .append(shift && alt ? "+ " : "")
+        .append(alt ? "Alt" : "");
 }
 
 } // namespace Modifiers
