@@ -54,7 +54,6 @@
 
 #include "svg/svg-color.h"
 
-#include "ui/modifiers.h"
 #include "ui/interface.h"
 #include "ui/widget/style-swatch.h"
 
@@ -2548,28 +2547,6 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
             _kb_tree.expand_to_path(sel_path);
             _kb_tree.get_selection()->select(sel_path);
         }
-    }
-
-    // Tool mouse keys
-    Gtk::TreeStore::iterator iter_modifiers = _kb_store->append();
-    (*iter_modifiers)[_kb_columns.name] = _("Modifiers");
-    (*iter_modifiers)[_kb_columns.shortcut] = "";
-    (*iter_modifiers)[_kb_columns.id] = "";
-    (*iter_modifiers)[_kb_columns.description] = "";
-    (*iter_modifiers)[_kb_columns.shortcutid] = 0;
-    (*iter_modifiers)[_kb_columns.user_set] = 0;
-
-    for(auto modifier: Inkscape::Modifiers::Modifier::getList()) {
-
-        // TODO: generate shortcut label and shortcut id etc
-        Gtk::TreeStore::iterator iter_modifier = _kb_store->append(iter_modifiers->children());
-        (*iter_modifier)[_kb_columns.name] = modifier->get_name();
-        (*iter_modifier)[_kb_columns.shortcut] = modifier->get_label();
-        (*iter_modifier)[_kb_columns.id] = modifier->get_id();
-        (*iter_modifier)[_kb_columns.description] = modifier->get_description();
-        (*iter_modifier)[_kb_columns.shortcutid] = 0;
-        (*iter_modifier)[_kb_columns.user_set] = modifier->is_set();
-
     }
 
     // re-order once after updating (then disable ordering again to increase performance)
