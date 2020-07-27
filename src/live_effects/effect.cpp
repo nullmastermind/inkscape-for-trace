@@ -1166,6 +1166,20 @@ Effect::setSelectedNodePoints(std::vector<Geom::Point> sNP)
     selectedNodesPoints = sNP;
 }
 
+/**
+ * The lpe is on clipboard
+ */
+bool Effect::isOnClipboard()
+{
+    SPDocument *document = getSPDoc();
+    if (!document) {
+        return false;
+    }
+    Inkscape::XML::Node *root = document->getReprRoot();
+    Inkscape::XML::Node *clipnode = sp_repr_lookup_name(root, "inkscape:clipboard", 1);
+    return clipnode != nullptr;
+}
+
 bool
 Effect::isNodePointSelected(Geom::Point const &nodePoint) const
 {

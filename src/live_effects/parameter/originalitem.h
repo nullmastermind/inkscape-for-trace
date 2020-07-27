@@ -30,9 +30,6 @@ public:
     Gtk::Widget * param_newWidget() override;
 
 protected:
-    void linked_modified_callback(SPObject *linked_obj, guint flags) override;
-    void linked_transformed_callback(Geom::Affine const *rel_transf, SPItem *moved_item) override;
-
     void on_select_original_button_click();
 
 private:

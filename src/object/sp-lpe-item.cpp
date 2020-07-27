@@ -109,7 +109,7 @@ void SPLPEItem::set(SPAttr key, gchar const* value) {
                 this->current_path_effect = nullptr;
 
                 // Disable the path effects while populating the LPE list
-                 sp_lpe_item_enable_path_effects(this, false);
+                sp_lpe_item_enable_path_effects(this, false);
 
                 // disconnect all modified listeners:
                 for (auto & mod_it : *this->lpe_modified_connection_list)
@@ -327,6 +327,9 @@ bool SPLPEItem::optimizeTransforms()
  */
 void SPLPEItem::notifyTransform(Geom::Affine const &postmul)
 {
+    if (!pathEffectsEnabled())
+        return;
+
     PathEffectList path_effect_list(*this->path_effect_list);
     for (auto &lperef : path_effect_list) {
         if (!lperef) {
@@ -767,8 +770,6 @@ bool SPLPEItem::hasBrokenPathEffect() const
 
     return false;
 }
-
-
 
 bool SPLPEItem::hasPathEffectOfType(int const type, bool is_ready) const
 {
@@ -1231,9 +1232,9 @@ bool SPLPEItem::forkPathEffectsIfNecessary(unsigned int nr_of_allowed_users, boo
                 LivePathEffectObject *forked_lpeobj = lpeobj->fork_private_if_necessary(nr_of_allowed_users);
                 if (forked_lpeobj && forked_lpeobj != lpeobj) {
                     forked = true;
+                    forked_lpeobj->get_lpe()->is_load = true;
                     old_lpeobjs.push_back(lpeobj);
                     new_lpeobjs.push_back(forked_lpeobj);
-                    forked_lpeobj->get_lpe()->is_load = true;
                 }
             }
         }

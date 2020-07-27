@@ -372,7 +372,7 @@ bool ClipboardManagerImpl::paste(SPDesktop *desktop, bool in_place)
     if ( Inkscape::have_viable_layer(desktop, desktop->getMessageStack()) == false ) {
         return false;
     }
-
+    
     Glib::ustring target = _getBestTarget();
 
     // Special cases of clipboard content handling go here
@@ -424,7 +424,8 @@ Glib::ustring ClipboardManagerImpl::getFirstObjectID()
            strcmp(ch->name(), "svg:text") &&
            strcmp(ch->name(), "svg:image") &&
            strcmp(ch->name(), "svg:rect") &&
-           strcmp(ch->name(), "svg:ellipse")
+           strcmp(ch->name(), "svg:ellipse") &&
+           strcmp(ch->name(), "svg:circle")
         ) {
         ch = ch->next();
     }

@@ -55,9 +55,11 @@ namespace Dialog {
 void lpeeditor_selection_changed (Inkscape::Selection * selection, gpointer data)
 {
     LivePathEffectEditor *lpeeditor = static_cast<LivePathEffectEditor *>(data);
+    lpeeditor->selection_changed_lock = true;
     lpeeditor->lpe_list_locked = false;
     lpeeditor->onSelectionChanged(selection);
     lpeeditor->_on_button_release(nullptr); //to force update widgets
+    lpeeditor->selection_changed_lock = false;
 }
 
 void lpeeditor_selection_modified (Inkscape::Selection * selection, guint /*flags*/, gpointer data)
@@ -170,7 +172,7 @@ LivePathEffectEditor::LivePathEffectEditor()
     contents->pack_start(effectcontrol_frame, false, false);
 
     effectcontrol_frame.hide();
-
+    selection_changed_lock = false;
     // connect callback functions to buttons
     button_add.signal_clicked().connect(sigc::mem_fun(*this, &LivePathEffectEditor::onAdd));
     button_remove.signal_clicked().connect(sigc::mem_fun(*this, &LivePathEffectEditor::onRemove));
@@ -561,7 +563,7 @@ void LivePathEffectEditor::on_effect_selection_changed()
     LivePathEffect::LPEObjectReference * lperef = (*it)[columns.lperef];
 
     if (lperef && current_lpeitem && current_lperef != lperef) {
-        //The last condition ignore Gtk::TreeModel may occasionally be changed emitted when nothing has happened
+        // The last condition ignore Gtk::TreeModel may occasionally be changed emitted when nothing has happened
         if (lperef->getObject()) {
             lpe_list_locked = true; // prevent reload of the list which would lose selection
             current_lpeitem->setCurrentPathEffect(lperef);
@@ -570,14 +572,14 @@ void LivePathEffectEditor::on_effect_selection_changed()
             if (effect) {
                 effect->refresh_widgets = true;
                 showParams(*effect);
-                //To reload knots and helper paths
+                // To reload knots and helper paths
                 Inkscape::Selection *sel = _getSelection();
-                if ( sel && !sel->isEmpty() ) {
-                    SPItem *item = sel->singleItem();
-                    if (item) {
+                if ( sel && !sel->isEmpty() && !selection_changed_lock) {
+                    SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(sel->singleItem());
+                    if (lpeitem) {
                         sel->clear();
-                        sel->add(item);
-                         Inkscape::UI::Tools::sp_update_helperpath(current_desktop);
+                        sel->add(lpeitem);
+                        Inkscape::UI::Tools::sp_update_helperpath(current_desktop);
                     }
                 }
             }

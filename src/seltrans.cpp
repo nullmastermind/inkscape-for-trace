@@ -572,16 +572,16 @@ void Inkscape::SelTrans::stamp()
                 new_affine = &original_item->transform;
             }
 
-            copy_item->doWriteTransform(*new_affine);
-
-            if ( copy_item->isCenterSet() && _center ) {
-                copy_item->setCenter(*_center * _current_relative_affine);
-            }
             Inkscape::GC::release(copy_repr);
             SPLPEItem * lpeitem = dynamic_cast<SPLPEItem *>(copy_item);
-            if(lpeitem && lpeitem->hasPathEffectRecursive()) {
+            if (lpeitem) {
                 lpeitem->forkPathEffectsIfNecessary(1);
                 sp_lpe_item_update_patheffect(lpeitem, true, true);
+            }
+            copy_item->doWriteTransform(*new_affine);
+
+            if (copy_item->isCenterSet() && _center) {
+                copy_item->setCenter(*_center * _current_relative_affine);
             }
         }
         DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_SELECT,

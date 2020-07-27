@@ -35,7 +35,7 @@
 #include "text-editing.h"
 #include "unclump.h"
 #include "verbs.h"
-
+#include "live_effects/effect-enum.h"
 #include "object/sp-flowtext.h"
 #include "object/sp-item-transform.h"
 #include "object/sp-root.h"
@@ -122,7 +122,14 @@ void ActionAlign::do_action(SPDesktop *desktop, int index)
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool sel_as_group = prefs->getBool("/dialogs/align/sel-as-groups");
-
+    // We force unselect operand in bool LPE
+    auto list = selection->items();
+    for (auto itemlist = list.begin(); itemlist != list.end(); ++itemlist) {
+        SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(*itemlist);
+        if (lpeitem && lpeitem->hasPathEffectOfType(Inkscape::LivePathEffect::EffectType::BOOL_OP)) {
+            sp_lpe_item_update_patheffect(lpeitem, false, false);
+        }
+    }
     std::vector<SPItem*> selected(selection->items().begin(), selection->items().end());
     if (selected.empty()) return;
 

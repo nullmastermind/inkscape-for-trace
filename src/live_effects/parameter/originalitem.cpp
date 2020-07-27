@@ -78,21 +78,6 @@ OriginalItemParam::param_newWidget()
     return dynamic_cast<Gtk::Widget *> (_widget);
 }
 
-void
-OriginalItemParam::linked_modified_callback(SPObject *linked_obj, guint /*flags*/)
-{
-    emit_changed();
-    SP_OBJECT(param_effect->getLPEObj())->requestModified(SP_OBJECT_MODIFIED_FLAG);
-    last_transform = Geom::identity();
-}
-
-void
-OriginalItemParam::linked_transformed_callback(Geom::Affine const * rel_transf, SPItem *moved_item)
-{
-    last_transform = *rel_transf;
-    SP_OBJECT(param_effect->getLPEObj())->requestModified(SP_OBJECT_MODIFIED_FLAG);
-}
-
 
 void
 OriginalItemParam::on_select_original_button_click()

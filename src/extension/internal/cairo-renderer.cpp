@@ -544,7 +544,12 @@ static void sp_item_invoke_render(SPItem *item, CairoRenderContext *ctx)
         return;
     }
 
-    if(ctx->getFilterToBitmap() && (item->style->filter.set != 0)) {
+    if(ctx->getFilterToBitmap() && (!item->style || item->style->filter.set != 0)) {
+        // This is not necesary but for cleanup, the filter hide the item
+        SPFilter *filt = item->style->getFilter();
+        if (filt && g_strcmp0(filt->getId(), "selectable_hidder_filter") == 0) {
+            return;
+        }
         return sp_asbitmap_render(item, ctx);
     }
 

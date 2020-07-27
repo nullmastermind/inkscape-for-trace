@@ -7,12 +7,12 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <glibmm/i18n.h>
+#include "live_effects/lpe-bool.h"
+
+#include <algorithm>
 #include <cmath>
 #include <cstring>
-#include <algorithm>
-
-#include "live_effects/lpe-bool.h"
+#include <glibmm/i18n.h>
 
 #include "2geom/affine.h"
 #include "2geom/bezier-curve.h"
@@ -20,17 +20,24 @@
 #include "2geom/path.h"
 #include "2geom/svg-path-parser.h"
 #include "display/curve.h"
-#include "object/sp-shape.h"
-#include "svg/svg.h"
-
 #include "helper/geom.h"
-
+#include "inkscape.h"
+#include "selection-chemistry.h"
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
 #include "livarot/path-description.h"
-
+#include "live_effects/lpeobject.h"
+#include "object/sp-clippath.h"
+#include "object/sp-defs.h"
+#include "object/sp-shape.h"
+#include "object/sp-text.h"
+#include "object/sp-root.h"
 #include "path/path-boolop.h"
 #include "path/path-util.h"
+#include "snap.h"
+#include "style.h"
+#include "svg/svg.h"
+#include "ui/tools/tool-base.h"
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -38,18 +45,17 @@ namespace LivePathEffect {
 // Define an extended boolean operation type
 
 static const Util::EnumData<LPEBool::bool_op_ex> BoolOpData[LPEBool::bool_op_ex_count] = {
-    { LPEBool::bool_op_ex_union, N_("union"), "union" },
-    { LPEBool::bool_op_ex_inters, N_("intersection"), "inters" },
-    { LPEBool::bool_op_ex_diff, N_("difference"), "diff" },
-    { LPEBool::bool_op_ex_symdiff, N_("symmetric difference"), "symdiff" },
-    { LPEBool::bool_op_ex_cut, N_("division"), "cut" },
+    {LPEBool::bool_op_ex_union, N_("union"), "union"},
+    {LPEBool::bool_op_ex_inters, N_("intersection"), "inters"},
+    {LPEBool::bool_op_ex_diff, N_("difference"), "diff"},
+    {LPEBool::bool_op_ex_symdiff, N_("symmetric difference"), "symdiff"},
+    {LPEBool::bool_op_ex_cut, N_("division"), "cut"},
     // Note on naming of operations:
     // bool_op_cut is called "Division" in the manu, see sp_selected_path_cut
     // bool_op_slice is called "Cut path" in the menu, see sp_selected_path_slice
-    { LPEBool::bool_op_ex_slice, N_("cut"), "slice" },
-    // Comneted in 1.0 don't work properly
-    // { LPEBool::bool_op_ex_slice_inside, N_("cut inside"), "slice-inside" },
-    // { LPEBool::bool_op_ex_slice_outside, N_("cut outside"), "slice-outside" },
+    {LPEBool::bool_op_ex_slice, N_("cut"), "slice"},
+    {LPEBool::bool_op_ex_slice_inside, N_("cut inside"), "slice-inside"},
+    {LPEBool::bool_op_ex_slice_outside, N_("cut outside"), "slice-outside"},
 };
 
 static const Util::EnumDataConverter<LPEBool::bool_op_ex> BoolOpConverter(BoolOpData, sizeof(BoolOpData) / sizeof(*BoolOpData));
@@ -68,7 +74,6 @@ LPEBool::LPEBool(LivePathEffectObject *lpeobject)
     , operand_path(_("Operand path:"), _("Operand for the boolean operation"), "operand-path", &wr, this)
     , bool_operation(_("Operation:"), _("Boolean Operation"), "operation", BoolOpConverter, &wr, this, bool_op_ex_union)
     , swap_operands(_("Swap operands"), _("Swap operands (useful e.g. for difference)"), "swap-operands", &wr, this)
-    , hide_linked(_("Hide Linked"), _("Hide linked path"), "hide-linked", &wr, this, true)
     , rmv_inner(
           _("Remove inner"),
           _("For cut operations: remove inner (non-contour) lines of cutting path to avoid invisible extra points"),
@@ -77,21 +82,24 @@ LPEBool::LPEBool(LivePathEffectObject *lpeobject)
                      FillTypeConverter, &wr, this, fill_justDont)
     , fill_type_operand(_("Fill type operand:"), _("Fill type (winding mode) for operand path"), "filltype-operand",
                         FillTypeConverter, &wr, this, fill_justDont)
+    , filter("Filter", "Previous filter", "filter", &wr, this, "", true)
 {
     registerParameter(&operand_path);
     registerParameter(&bool_operation);
     registerParameter(&swap_operands);
-    registerParameter(&hide_linked);
     registerParameter(&rmv_inner);
     registerParameter(&fill_type_this);
+    registerParameter(&filter);
     registerParameter(&fill_type_operand);
     show_orig_path = true;
+    is_load = true;
+    prev_affine = Geom::identity();
     operand = dynamic_cast<SPItem *>(operand_path.getObject());
 }
 
-LPEBool::~LPEBool()
-= default;
-
+LPEBool::~LPEBool() {
+    doOnRemove(nullptr);
+}
 bool cmp_cut_position(const Path::cut_position &a, const Path::cut_position &b)
 {
     return a.piece == b.piece ? a.t < b.t : a.piece < b.piece;
@@ -352,60 +360,224 @@ static fill_typ GetFillTyp(SPItem *item)
     }
 }
 
+void LPEBool::add_filter()
+{
+    if (operand) {
+        Inkscape::XML::Node *repr = operand->getRepr();
+        if (!repr) {
+            return;
+        }
+        SPFilter *filt = operand->style->getFilter();
+        if (filt && filt->getId() && strcmp(filt->getId(), "selectable_hidder_filter") != 0) {
+            filter.param_setValue(filt->getId(), true);
+        }
+        if (!filt || (filt->getId() && strcmp(filt->getId(), "selectable_hidder_filter") != 0)) {
+            SPCSSAttr *css = sp_repr_css_attr_new();
+            sp_repr_css_set_property(css, "filter", "url(#selectable_hidder_filter)");
+            sp_repr_css_change(repr, css, "style");
+            sp_repr_css_attr_unref(css);
+        }
+    }
+}
+
+void LPEBool::remove_filter()
+{
+    if (operand) {
+        Inkscape::XML::Node *repr = operand->getRepr();
+        if (!repr) {
+            return;
+        }
+        SPFilter *filt = operand->style->getFilter();
+        if (filt && (filt->getId() && strcmp(filt->getId(), "selectable_hidder_filter") == 0)) {
+            SPCSSAttr *css = sp_repr_css_attr_new();
+            Glib::ustring filtstr = filter.param_getSVGValue();
+            if (filtstr != "") {
+                Glib::ustring url = "url(#";
+                url += filtstr;
+                url += ")";
+                sp_repr_css_set_property(css, "filter", url.c_str());
+                // blur is removed when no item using it
+                /*SPDocument *document = getSPDoc();
+                SPObject * filterobj = nullptr;
+                if((filterobj = document->getObjectById(filtstr))) {
+                    for (auto obj:filterobj->childList(false)) {
+                        if (obj) {
+                            obj->deleteObject(false);
+                            break;
+                        }
+                    }
+                } */
+                filter.param_setValue("");
+            } else {
+                sp_repr_css_unset_property(css, "filter");
+            }
+            sp_repr_css_change(repr, css, "style");
+            sp_repr_css_attr_unref(css);
+        }
+    }
+}
+
 void LPEBool::doBeforeEffect(SPLPEItem const *lpeitem)
 {
-    // operand->set_transform(i2anc_affine(sp_lpe_item, sp_lpe_item->parent));
     SPDocument *document = getSPDoc();
     if (!document) {
         return;
     }
+    _hp.clear();
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
+    SPObject *elemref = nullptr;
+    Inkscape::XML::Node *boolfilter = nullptr;
+    if (!(elemref = document->getObjectById("selectable_hidder_filter"))) {
+        boolfilter = xml_doc->createElement("svg:filter");
+        boolfilter->setAttribute("id", "selectable_hidder_filter");
+        boolfilter->setAttribute("width", "1");
+        boolfilter->setAttribute("height", "1");
+        boolfilter->setAttribute("x", "0");
+        boolfilter->setAttribute("y", "0");
+        boolfilter->setAttribute("style", "color-interpolation-filters:sRGB;");
+        boolfilter->setAttribute("inkscape:label", "LPE boolean visibility");
+        /* Create <path> */
+        Inkscape::XML::Node *primitive = xml_doc->createElement("svg:feComposite");
+        primitive->setAttribute("id", "boolops_hidder_primitive");
+        primitive->setAttribute("result", "composite1");
+        primitive->setAttribute("operator", "arithmetic");
+        primitive->setAttribute("in2", "SourceGraphic");
+        primitive->setAttribute("in", "BackgroundImage");
+        Inkscape::XML::Node *defs = document->getDefs()->getRepr();
+        defs->addChild(boolfilter, nullptr);
+        Inkscape::GC::release(boolfilter);
+        boolfilter->addChild(primitive, nullptr);
+        Inkscape::GC::release(primitive);
+    } else {
+        for (auto obj : elemref->childList(false)) {
+            if (obj && strcmp(obj->getId(), "boolops_hidder_primitive") != 0) {
+                obj->deleteObject(true);
+            }
+        }
+    }
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     SPItem *current_operand = dynamic_cast<SPItem *>(operand_path.getObject());
     if (!current_operand) {
+        operand_path.remove_link();
+        operand = nullptr;
+    }
+    if (current_operand && current_operand->getId()) {
+        if (!(document->getObjectById(current_operand->getId()))) {
+            operand_path.remove_link();
+            operand = nullptr;
+            current_operand = nullptr;
+        }
+    }
+    SPLPEItem *operandlpe = dynamic_cast<SPLPEItem *>(operand_path.getObject());
+    if (desktop && 
+        operand && 
+        sp_lpe_item &&
+        desktop->getSelection()->includes(operand) && 
+        desktop->getSelection()->includes(sp_lpe_item)) 
+    {
+        if (operandlpe && operandlpe->hasPathEffectOfType(Inkscape::LivePathEffect::EffectType::BOOL_OP)) {
+            sp_lpe_item_update_patheffect(operandlpe, false, false);
+        }
+        desktop->getSelection()->remove(operand);
+    }
+    if (!current_operand) {
         if (operand) {
-            operand->setHidden(false);
+            remove_filter();
         }
         operand = nullptr;
     }
+    
     if (current_operand && operand != current_operand) {
         if (operand) {
-            operand->setHidden(false);
+            remove_filter();
         }
         operand = current_operand;
-    }
-    
-    if (operand && operand->isHidden() != hide_linked) {
-        operand->setHidden(hide_linked);
-    }
-
-    if (operand && operand->parent && sp_lpe_item && sp_lpe_item->parent != operand->parent) {
-        // TODO: reposition new operand on doOnRemove if keep_paths is false
-        Inkscape::XML::Node *copy = operand->getRepr()->duplicate(xml_doc);
-        SPItem *relocated_operand = dynamic_cast<SPItem *>(sp_lpe_item->parent->appendChildRepr(copy));
-        Inkscape::GC::release(copy);
-        operand->deleteObject();
-        operand = relocated_operand;
-        if (!g_strcmp0(operand->getRepr()->attribute("sodipodi:type"), "inkscape:box3dside")) {
-            operand->getRepr()->removeAttribute("sodipodi:type");
-            if (operand->getRepr()->attribute("inkscape:box3dsidetype")) {
-                operand->getRepr()->removeAttribute("inkscape:box3dsidetype");
-            }
+        remove_filter();
+        if (is_load && sp_lpe_item) {
+            sp_lpe_item_update_patheffect(sp_lpe_item, true, true);
         }
-        Glib::ustring itemid = operand->getId();
-        operand_path.linkitem(itemid);
+    }
+    if (operand) {
+        if (is_visible) {
+            add_filter();
+        } else {
+            remove_filter();
+        }
     }
 }
 
 void LPEBool::transform_multiply(Geom::Affine const &postmul, bool /*set*/)
 {
-    if (operand) {
-        operand->transform *= sp_item_transform_repr(sp_lpe_item).inverse() * postmul;
-        if (is_visible) {
-            operand->setHidden(hide_linked);
-        } else {
-            operand->setHidden(false);
+    if (operand && !isOnClipboard()) {
+        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+        if (desktop && !desktop->getSelection()->includes(operand)) {
+            prev_affine = operand->transform * sp_item_transform_repr(sp_lpe_item).inverse() * postmul;
+            operand->doWriteTransform(prev_affine);
         }
     }
+}
+
+Geom::PathVector LPEBool::get_union(SPObject *object)
+{
+    Geom::PathVector res;
+    Geom::PathVector clippv;
+    SPItem *objitem = dynamic_cast<SPItem *>(object);
+    if (objitem) {
+        SPObject *clip_path = objitem->getClipObject();
+        if (clip_path) {
+            std::vector<SPObject *> clip_path_list = clip_path->childList(true);
+            if (clip_path_list.size()) {
+                for (auto clip : clip_path_list) {
+                    SPShape *clipshape = dynamic_cast<SPShape *>(clip);
+                    if (clipshape) {
+                        clippv = clipshape->curve()->get_pathvector();
+                    }
+                }
+            }
+        }
+    }
+    SPGroup *group = dynamic_cast<SPGroup *>(object);
+    if (group) {
+        std::vector<SPItem *> item_list = sp_item_group_item_list(group);
+        for (auto iter : item_list) {
+            if (res.empty()) {
+                res = get_union(SP_OBJECT(iter));
+            } else {
+                res = sp_pathvector_boolop(res, get_union(SP_OBJECT(iter)), to_bool_op(bool_op_ex_union), fill_oddEven,
+                                           fill_oddEven);
+            }
+        }
+    }
+    SPShape *shape = dynamic_cast<SPShape *>(object);
+    if (shape) {
+        fill_typ originfill = fill_oddEven;
+        SPCurve *curve = shape->curve();
+        if (curve) {
+            if (res.empty()) {
+                res = curve->get_pathvector();
+            } else {
+                res = sp_pathvector_boolop(res, curve->get_pathvector(), to_bool_op(bool_op_ex_union), originfill,
+                                           GetFillTyp(shape));
+            }
+        }
+        originfill = GetFillTyp(shape);
+    }
+    SPText *text = dynamic_cast<SPText *>(object);
+    if (text) {
+        std::unique_ptr<SPCurve> curve = text->getNormalizedBpath();
+        if (curve) {
+            if (res.empty()) {
+                res = curve->get_pathvector();
+            } else {
+                res = sp_pathvector_boolop(res, curve->get_pathvector(), to_bool_op(bool_op_ex_union), fill_oddEven,
+                                           fill_oddEven);
+            }
+        }
+    }
+    if (!clippv.empty()) {
+        res = sp_pathvector_boolop(res, clippv, to_bool_op(bool_op_ex_inters), fill_oddEven, fill_oddEven);
+    }
+    return res;
 }
 
 void LPEBool::doEffect(SPCurve *curve)
@@ -416,15 +588,13 @@ void LPEBool::doEffect(SPCurve *curve)
         operand_path.param_set_default();
         return;
     }
-    if (operand_path.getObject() && operand_path.linksToPath() && operand) {
-
+    if (operand_path.getObject() && operand) {
         bool_op_ex op = bool_operation.get_value();
         bool swap =  swap_operands.get_value();
 
-        Geom::Affine current_affine = sp_item_transform_repr(sp_lpe_item);
-        Geom::Affine operand_affine = sp_item_transform_repr(operand);
-
-        Geom::PathVector operand_pv = operand_path.get_pathvector();
+        Geom::Affine current_affine = sp_lpe_item->transform;
+        Geom::Affine operand_affine = operand->transform;
+        Geom::PathVector operand_pv = get_union(operand);
         if (operand_pv.empty()) {
             return;
         }
@@ -433,7 +603,9 @@ void LPEBool::doEffect(SPCurve *curve)
 
         Geom::PathVector path_a = swap ? path_in : operand_pv;
         Geom::PathVector path_b = swap ? operand_pv : path_in;
-
+        _hp = path_a;
+        _hp.insert(_hp.end(), path_b.begin(), path_b.end());
+        _hp *= current_affine.inverse();
         fill_typ fill_this    = fill_type_this.get_value() != fill_justDont ? fill_type_this.get_value() : GetFillTyp(current_shape);
         fill_typ fill_operand = fill_type_operand.get_value() != fill_justDont ? fill_type_operand.get_value() : GetFillTyp(operand_path.getObject());
 
@@ -447,17 +619,31 @@ void LPEBool::doEffect(SPCurve *curve)
         Geom::PathVector path_out;
         if (op == bool_op_ex_cut) {
             // we do in two pass because wrong sp_pathvector_boolop diference, in commnet they sugest make this to fix
-            path_out = sp_pathvector_boolop(path_a, path_b, to_bool_op(bool_op_ex_inters), fill_a, fill_b);
-            Geom::PathVector path_out_2 = sp_pathvector_boolop(path_b, path_a, to_bool_op(bool_op_ex_diff), fill_b, fill_a);
-            path_out.insert(path_out.end(), path_out_2.begin(), path_out_2.end());
+            Geom::PathVector path_tmp_outside =
+                sp_pathvector_boolop_slice_intersect(path_a, path_b, false, fill_a, fill_b);
+            Geom::PathVector path_tmp = sp_pathvector_boolop(path_a, path_b, to_bool_op(op), fill_a, fill_b);
+            for (auto pathit : path_tmp) {
+                bool outside = false;
+                for (auto pathit_out : path_tmp_outside) {
+                    Geom::OptRect outbbox = pathit_out.boundsFast();
+                    if (outbbox) {
+                        (*outbbox).expandBy(1);
+                        if ((*outbbox).contains(pathit.boundsFast())) {
+                            outside = true;
+                        }
+                    }
+                }
+                if (!outside) {
+                    path_out.push_back(pathit);
+                }
+            }
         } else if (op == bool_op_ex_slice) {
             // For slicing, the bool op is added to the line group which is sliced, not the cut path. This swapped order is correct            
             path_out = sp_pathvector_boolop(path_b, path_a, to_bool_op(op), fill_b, fill_a);
-        /*} else if (op == bool_op_ex_slice_inside) {
+        } else if (op == bool_op_ex_slice_inside) {
             path_out = sp_pathvector_boolop_slice_intersect(path_a, path_b, true, fill_a, fill_b);
         } else if (op == bool_op_ex_slice_outside) {
             path_out = sp_pathvector_boolop_slice_intersect(path_a, path_b, false, fill_a, fill_b);
-        } */ 
         } else {
             path_out = sp_pathvector_boolop(path_a, path_b, to_bool_op(op), fill_a, fill_b);
         }
@@ -473,18 +659,23 @@ void LPEBool::doEffect(SPCurve *curve)
     }
 }
 
+void LPEBool::addCanvasIndicators(SPLPEItem const * /*lpeitem*/, std::vector<Geom::PathVector> &hp_vec)
+{
+    hp_vec.push_back(_hp);
+}
+
 void LPEBool::doOnRemove(SPLPEItem const * /*lpeitem*/)
 {
     // set "keep paths" hook on sp-lpe-item.cpp
     SPItem *operand = dynamic_cast<SPItem *>(operand_path.getObject());
-    if (operand_path.linksToPath() && operand) {
+    if (operand) {
         if (keep_paths) {
-            if (operand->isHidden()) {
+            if (is_visible) {
                 operand->deleteObject(true);
             }
         } else {
-            if (operand->isHidden()) {
-                operand->setHidden(false);
+            if (is_visible) {
+                remove_filter();
             }
         }
     }
@@ -494,9 +685,9 @@ void LPEBool::doOnRemove(SPLPEItem const * /*lpeitem*/)
 void LPEBool::doOnVisibilityToggled(SPLPEItem const * /*lpeitem*/)
 {
     SPItem *operand = dynamic_cast<SPItem *>(operand_path.getObject());
-    if (operand_path.linksToPath() && operand) {
+    if (operand) {
         if (!is_visible) {
-            operand->setHidden(false);
+            remove_filter();
         }
     }
 }

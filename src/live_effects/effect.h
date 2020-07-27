@@ -74,6 +74,7 @@ public:
     void setCurrentZoom(double cZ);
     void setSelectedNodePoints(std::vector<Geom::Point> sNP);
     bool isNodePointSelected(Geom::Point const &nodePoint) const;
+    bool isOnClipboard();
     virtual void doOnApply (SPLPEItem const* lpeitem);
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
     virtual void transform_multiply(Geom::Affine const &postmul, bool set);

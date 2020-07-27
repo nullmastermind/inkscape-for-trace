@@ -19,11 +19,10 @@
 #include <2geom/path-sink.h>
 
 #include "desktop.h"
+#include "display/curve.h"
 #include "document.h"
 #include "inkscape.h"
-#include "preferences.h"
-#include "text-editing.h"
-
+#include "live_effects/effect-enum.h"
 #include "object/sp-clippath.h"
 #include "object/sp-flowtext.h"
 #include "object/sp-image.h"
@@ -35,11 +34,11 @@
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
 #include "object/sp-use.h"
-
-#include "display/curve.h"
-#include "path/path-util.h"  // curve_for_item
-
+#include "path/path-util.h" // curve_for_item
+#include "preferences.h"
+#include "style.h"
 #include "svg/svg.h"
+#include "text-editing.h"
 
 Inkscape::ObjectSnapper::ObjectSnapper(SnapManager *sm, Geom::Coord const d)
     : Snapper(sm, d)
@@ -97,6 +96,43 @@ void Inkscape::ObjectSnapper::_findCandidates(SPObject* parent,
         g_assert(dt != nullptr);
         SPItem *item = dynamic_cast<SPItem *>(&o);
         if (item && !(dt->itemIsHidden(item) && !clip_or_mask)) {
+            // Fix LPE boolops selfsnaping
+            bool stop = false;
+            if (item->style) {
+                SPFilter *filt = item->style->getFilter();
+                if (filt && filt->getId() && strcmp(filt->getId(), "selectable_hidder_filter") == 0) {
+                    stop = true;
+                }
+                SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
+                if (lpeitem && lpeitem->hasPathEffectOfType(Inkscape::LivePathEffect::EffectType::BOOL_OP)) {
+                    stop = true;
+                }
+            }
+            if (stop) {
+                stop = false;
+                for (auto skipitem : *it) {
+                    if (skipitem && skipitem->style) {
+                        SPItem *toskip = const_cast<SPItem *>(skipitem);
+                        if (toskip) {
+                            SPFilter *filt = toskip->style->getFilter();
+                            if (filt && filt->getId() && strcmp(filt->getId(), "selectable_hidder_filter") == 0) {
+                                stop = true;
+                                break;
+                            }
+
+                            SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(toskip);
+                            if (!stop && lpeitem &&
+                                lpeitem->hasPathEffectOfType(Inkscape::LivePathEffect::EffectType::BOOL_OP)) {
+                                stop = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (stop) {
+                    continue;
+                }
+            }
             // Snapping to items in a locked layer is allowed
             // Don't snap to hidden objects, unless they're a clipped path or a mask
             /* See if this item is on the ignore list */
