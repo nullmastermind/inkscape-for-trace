@@ -18,11 +18,8 @@ set(util_SRC
 	fixed_point.h
 	format.h
 	forward-pointer-iterator.h
-	list-copy.h
-	list.h
 	longest-common-suffix.h
 	reference.h
-	reverse-list.h
 	share.h
 	signal-blocker.h
 	ucompose.hpp

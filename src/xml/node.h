@@ -17,7 +17,6 @@
 #include <glibmm/ustring.h>
 #include "gc-anchored.h"
 #include "inkgc/gc-alloc.h"
-#include "util/list.h"
 #include "util/const_char_ptr.h"
 
 namespace Inkscape {
