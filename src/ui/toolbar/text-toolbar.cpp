@@ -1951,7 +1951,10 @@ void TextToolbar::selection_changed(Inkscape::Selection *selection) // don't bot
         if (!size && result_numbers_fallback != QUERY_STYLE_NOTHING) {
             size = sp_style_css_size_px_to_units(query_fallback.font_size.computed, unit);
         }
-        
+        if (!size && _text_style_from_prefs) {
+            size = sp_style_css_size_px_to_units(query.font_size.computed, unit);
+        }
+
         auto unit_str = sp_style_get_css_unit_string(unit);
         Glib::ustring tooltip = Glib::ustring::format(_("Font size"), " (", unit_str, ")");
 
@@ -2036,6 +2039,11 @@ void TextToolbar::selection_changed(Inkscape::Selection *selection) // don't bot
         if (!height && result_numbers_fallback != QUERY_STYLE_NOTHING) {
             height = query_fallback.line_height.value;
             line_height_unit = query_fallback.line_height.unit;
+        }
+
+        if (!height && _text_style_from_prefs) {
+            height = query.line_height.value;
+            line_height_unit = query.line_height.unit;
         }
 
         if (line_height_unit == SP_CSS_UNIT_PERCENT) {
