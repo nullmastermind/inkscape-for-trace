@@ -2202,6 +2202,7 @@ TextToolbar::watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec) {
         c_selection_modified = desktop->getSelection()->connectModifiedFirst(sigc::mem_fun(*this, &TextToolbar::selection_modified));
         c_subselection_changed = desktop->connectToolSubselectionChanged(sigc::mem_fun(*this, &TextToolbar::subselection_changed));
         this->_sub_active_item = nullptr;
+        this->_cusor_numbers = 0;
         selection_changed(desktop->getSelection());
     } else if (is_select_toolbar) {
         c_selection_modified_select_tool = desktop->getSelection()->connectModifiedFirst(
