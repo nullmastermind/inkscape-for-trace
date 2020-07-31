@@ -1008,8 +1008,7 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
     }
 
     const auto rbd = rebase_href_attrs(old_href_base, new_href_base, attributes);
-    for ( const auto iter : *rbd)
-    {
+    for (const auto &iter : rbd) {
         if (!inlineattrs) {
             out.writeChar('\n');
             if (indent) {
@@ -1024,7 +1023,6 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
         repr_quote_write(out, iter.value);
         out.writeChar('"');
     }
-    delete rbd;
 
     loose = TRUE;
     for (child = repr->firstChild() ; child != nullptr; child = child->next()) {

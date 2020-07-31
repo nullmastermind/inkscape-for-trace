@@ -30,89 +30,56 @@ using Inkscape::XML::AttributeVector;
 /**
  * Determine if a href needs rebasing.
  */
-static bool href_needs_rebasing(std::string const &href)
+static bool href_needs_rebasing(char const *href)
 {
-    bool ret = true;
-
-    if ( href.empty() || (href[0] == '#') ) {
-        ret = false;
-        /* False (no change) is the right behaviour even when the base URI differs from the
-         * document URI: RFC 3986 defines empty string relative URL as referring to the containing
-         * document, rather than referring to the base URI. */
-    } else {
-        /* Don't change data or http hrefs. */
-        std::string scheme = Glib::uri_parse_scheme(href);
-        if ( !scheme.empty() ) {
-            /* Assume it shouldn't be changed.  This is probably wrong if the scheme is `file'
-             * (or if the scheme of the new base is non-file, though I believe that never
-             * happens at the time of writing), but that's rare, and we won't try too hard to
-             * handle this now: wait until after the freeze, then add liburiparser (or similar)
-             * as a dependency and do it properly.  For now we'll just try to be simple (while
-             * at least still correctly handling data hrefs). */
-            ret = false;
-        }
+    // RFC 3986 defines empty string relative URL as referring to the
+    // containing document, rather than referring to the base URI.
+    if (!href[0] || href[0] == '#') {
+        return false;
     }
 
-    return ret;
+    // Don't change non-file URIs (like data or http)
+    std::string const scheme = Glib::uri_parse_scheme(href);
+    return scheme.empty() || scheme == "file";
 }
 
-const AttributeVector*
+AttributeVector
 Inkscape::XML::rebase_href_attrs(gchar const *const old_abs_base,
                                  gchar const *const new_abs_base,
-                                 const AttributeVector & attributes1)
+                                 const AttributeVector &attributes)
 {
-    AttributeVector * attributes = new AttributeVector();
-    for(const auto & a : attributes1) attributes->emplace_back(a.key, a.value);
-    
-    using Inkscape::Util::ptr_shared;
     using Inkscape::Util::share_string;
 
+    auto ret = attributes; // copy
 
     if (old_abs_base == new_abs_base) {
-        return attributes;
+        return ret;
     }
 
-    GQuark const href_key = g_quark_from_static_string("xlink:href");
-    GQuark const absref_key = g_quark_from_static_string("sodipodi:absref");
+    static GQuark const href_key = g_quark_from_static_string("xlink:href");
+    static GQuark const absref_key = g_quark_from_static_string("sodipodi:absref");
 
-    /* First search attributes for xlink:href and sodipodi:absref, putting the rest in ret.
-     *
-     * However, if we find that xlink:href doesn't need rebasing, then return immediately
-     * with no change to attributes. */
-    ptr_shared old_href;
-    ptr_shared sp_absref;
-    AttributeVector * ret = new AttributeVector();
-    {
-        for (const auto & ai : *attributes) {
-            if (ai.key == href_key) {
-                old_href = ai.value;
-                if (!href_needs_rebasing(static_cast<char const *>(old_href))) {
-                    delete ret;
-                    return attributes;
-                }
-            } else if (ai.key == absref_key) {
-                sp_absref = ai.value;
-            } else {
-                ret->emplace_back(ai.key, ai.value);
-            }
-        }
+    auto const find_record = [&ret](GQuark const key) {
+        return find_if(ret.begin(), ret.end(), [key](auto const &attr) { return attr.key == key; });
+    };
+
+    auto href_it = find_record(href_key);
+    if (href_it == ret.end() || !href_needs_rebasing(href_it->value.pointer())) {
+        return ret;
     }
 
-    if (!old_href) {
-        return attributes;
-        /* We could instead return ret in this case, i.e. ensure that sodipodi:absref is cleared if
-         * no xlink:href attribute.  However, retaining it might be more cautious.
-         *
-         * (For the usual case of not present, attributes and ret will be the same except
-         * reversed.) */
-    }
-
-    auto uri = URI::from_href_and_basedir(static_cast<char const *>(old_href), old_abs_base);
+    auto uri = URI::from_href_and_basedir(href_it->value.pointer(), old_abs_base);
     auto abs_href = uri.toNativeFilename();
 
-    if (!Inkscape::IO::file_test(abs_href.c_str(), G_FILE_TEST_EXISTS) &&
-        Inkscape::IO::file_test(sp_absref, G_FILE_TEST_EXISTS)) {
-        uri = URI::from_native_filename(sp_absref);
+    auto absref_it = find_record(absref_key);
+    if (absref_it != ret.end()) {
+        if (g_file_test(abs_href.c_str(), G_FILE_TEST_EXISTS)) {
+            if (!streq(abs_href.c_str(), absref_it->value.pointer())) {
+                absref_it->value = share_string(abs_href.c_str());
+            }
+        } else if (g_file_test(absref_it->value.pointer(), G_FILE_TEST_EXISTS)) {
+            uri = URI::from_native_filename(absref_it->value.pointer());
+        }
     }
 
     std::string baseuri;
@@ -121,17 +88,8 @@ Inkscape::XML::rebase_href_attrs(gchar const *const old_abs_base,
     }
 
     auto new_href = uri.str(baseuri.c_str());
+    href_it->value = share_string(new_href.c_str());
 
-    ret->emplace_back(href_key, share_string(new_href.c_str())); // Check if this is safe/copied or if it is only held.
-    if (sp_absref) {
-        /* We assume that if there wasn't previously a sodipodi:absref attribute
-         * then we shouldn't create one. */
-        ret->emplace_back(absref_key, ( streq(abs_href.c_str(), sp_absref)
-                                                 ? sp_absref
-                                                 : share_string(abs_href.c_str())));
-    }
-
-    delete attributes;
     return ret;
 }
 
