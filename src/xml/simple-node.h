@@ -17,6 +17,7 @@
 
 #include <cassert>
 #include <iostream>
+#include <vector>
 
 #include "xml/node.h"
 #include "xml/attribute-record.h"
@@ -90,7 +91,7 @@ public:
     bool equal(Node const *other, bool recursive) override;
     void mergeFrom(Node const *src, char const *key, bool extension = false, bool clean = false) override;
 
-    Inkscape::Util::List<AttributeRecord const> attributeList() const override {
+    const AttributeVector & attributeList() const override {
         return _attributes;
     }
 
@@ -141,7 +142,7 @@ private:
 
     int _name;
 
-    Inkscape::Util::MutableList<AttributeRecord> _attributes;
+    AttributeVector _attributes;
 
     Inkscape::Util::ptr_shared _content;
 

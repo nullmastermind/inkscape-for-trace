@@ -34,6 +34,7 @@
 #include "widgets/widget-sizes.h"
 
 #include "xml/sp-css-attr.h"
+#include "xml/attribute-record.h"
 
 enum {
     SS_FILL,
@@ -93,7 +94,8 @@ void StyleSwatch::ToolObserver::notify(Inkscape::Preferences::Entry const &val)
         // last-set (so long as it's empty). To correctly show this, we get the tool's style
         // if the desktop's style is empty.
         SPCSSAttr *css = prefs->getStyle("/desktop/style");
-        if (!css->attributeList()) {
+        const auto & al = css->attributeList();
+        if (al.empty()) {
             SPCSSAttr *css2 = prefs->getInheritedStyle(_style_swatch._tool_path + "/style");
             _style_swatch.setStyle(css2);
             sp_repr_css_attr_unref(css2);

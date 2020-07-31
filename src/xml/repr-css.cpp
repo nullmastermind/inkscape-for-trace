@@ -41,8 +41,6 @@
 #include "xml/simple-document.h"
 #include "xml/sp-css-attr.h"
 
-using Inkscape::Util::List;
-using Inkscape::XML::AttributeRecord;
 using Inkscape::XML::SimpleNode;
 using Inkscape::XML::Node;
 using Inkscape::XML::NodeType;
@@ -301,20 +299,19 @@ double sp_repr_css_double_property(SPCSSAttr *css, gchar const *name, double def
 void sp_repr_css_write_string(SPCSSAttr *css, Glib::ustring &str)
 {
     str.clear();
-    for ( List<AttributeRecord const> iter = css->attributeList() ;
-          iter ; ++iter )
+    for (const auto & iter : css->attributeList())
     {
-        if (iter->value && !strcmp(iter->value, "inkscape:unset")) {
+        if (iter.value && !strcmp(iter.value, "inkscape:unset")) {
             continue;
         }
 
-        str.append(g_quark_to_string(iter->key));
-        str.push_back(':');
-        str.append(iter->value); // Any necessary quoting to be done by calling routine.
-
-        if (rest(iter)) {
+        if (!str.empty()) {
             str.push_back(';');
         }
+
+        str.append(g_quark_to_string(iter.key));
+        str.push_back(':');
+        str.append(iter.value); // Any necessary quoting to be done by calling routine.
     }
 }
 
@@ -344,11 +341,10 @@ void sp_repr_css_set(Node *repr, SPCSSAttr *css, gchar const *attr)
  */
 void sp_repr_css_print(SPCSSAttr *css)
 {
-    for ( List<AttributeRecord const> iter = css->attributeList() ;
-          iter ; ++iter )
+    for ( const auto & attr: css->attributeList() )
     {
-        gchar const * key = g_quark_to_string(iter->key);
-        gchar const * val = iter->value;
+        gchar const * key = g_quark_to_string(attr.key);
+        gchar const * val = attr.value;
         g_print("%s:\t%s\n",key,val);
     }
 }
@@ -501,8 +497,8 @@ void sp_repr_css_change_recursive(Node *repr, SPCSSAttr *css, gchar const *attr)
 SPCSSAttr* sp_repr_css_attr_unset_all(SPCSSAttr *css)
 {
     SPCSSAttr* css_unset = sp_repr_css_attr_new();
-    for ( List<AttributeRecord const> iter = css->attributeList() ; iter ; ++iter ) {
-        sp_repr_css_set_property (css_unset, g_quark_to_string(iter->key), "inkscape:unset");
+    for ( const auto & iter : css->attributeList() ) {
+        sp_repr_css_set_property (css_unset, g_quark_to_string(iter.key), "inkscape:unset");
     }
     return css_unset;
 }

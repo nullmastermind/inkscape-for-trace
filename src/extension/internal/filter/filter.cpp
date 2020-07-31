@@ -75,9 +75,8 @@ Filter::merge_filters( Inkscape::XML::Node * to, Inkscape::XML::Node * from,
     if (from == nullptr) return;
 
     // copy attributes
-    for ( Inkscape::Util::List<Inkscape::XML::AttributeRecord const> iter = from->attributeList() ;
-          iter ; ++iter ) {
-        gchar const * attr = g_quark_to_string(iter->key);
+    for ( const auto & iter : from->attributeList()) {
+        gchar const * attr = g_quark_to_string(iter.key);
         //printf("Attribute List: %s\n", attr);
         if (!strcmp(attr, "id")) continue; // nope, don't copy that one!
         to->setAttribute(attr, from->attribute(attr));

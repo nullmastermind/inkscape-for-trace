@@ -32,8 +32,6 @@
 #include "attribute-rel-util.h"
 
 using Inkscape::XML::Node;
-using Inkscape::XML::AttributeRecord;
-using Inkscape::Util::List;
 
 /**
  * Get preferences
@@ -114,12 +112,10 @@ void sp_attribute_clean_element(Node *repr, unsigned int flags) {
   sp_attribute_clean_style(repr, flags );
 
   // Clean attributes
-  List<AttributeRecord const> attributes = repr->attributeList();
-
   std::set<Glib::ustring> attributesToDelete;
-  for ( List<AttributeRecord const> iter = attributes ; iter ; ++iter ) {
+  for ( const auto & iter : repr->attributeList()) {
 
-    Glib::ustring attribute = g_quark_to_string(iter->key);
+    Glib::ustring attribute = g_quark_to_string(iter.key);
     //Glib::ustring value = (const char*)iter->value;
 
     bool is_useful = sp_attribute_check_attribute( element, id, attribute, flags & SP_ATTRCLEAN_ATTR_WARN );
@@ -201,10 +197,10 @@ void sp_attribute_clean_style(Node* repr, SPCSSAttr *css, unsigned int flags) {
 
   // Loop over all properties in "style" node, keeping track of which to delete.
   std::set<Glib::ustring> toDelete;
-  for ( List<AttributeRecord const> iter = css->attributeList() ; iter ; ++iter ) {
+  for ( const auto & iter : css->attributeList()) {
 
-    gchar const * property = g_quark_to_string(iter->key);
-    gchar const * value = iter->value;
+    gchar const * property = g_quark_to_string(iter.key);
+    gchar const * value = iter.value;
 
     // Check if a property is applicable to an element (i.e. is font-family useful for a <rect>?).
     if( !SPAttributeRelCSS::findIfValid( property, element ) ) {
@@ -221,12 +217,12 @@ void sp_attribute_clean_style(Node* repr, SPCSSAttr *css, unsigned int flags) {
     // Find parent value for same property (property)
     gchar const * value_p = nullptr;
     if( css_parent != nullptr ) {
-        for ( List<AttributeRecord const> iter_p = css_parent->attributeList() ; iter_p ; ++iter_p ) {
+        for ( const auto & iter_p : css_parent->attributeList()) {
 
-            gchar const * property_p = g_quark_to_string(iter_p->key);
+            gchar const * property_p = g_quark_to_string(iter_p.key);
 
             if( !g_strcmp0( property, property_p ) ) {
-                value_p = iter_p->value;
+                value_p = iter_p.value;
                 break;
             }
         }
@@ -278,10 +274,10 @@ void sp_attribute_purge_default_style(SPCSSAttr *css, unsigned int flags) {
 
   // Loop over all properties in "style" node, keeping track of which to delete.
   std::set<Glib::ustring> toDelete;
-  for ( List<AttributeRecord const> iter = css->attributeList() ; iter ; ++iter ) {
+  for ( const auto & iter : css->attributeList()) {
 
-    gchar const * property = g_quark_to_string(iter->key);
-    gchar const * value = iter->value;
+    gchar const * property = g_quark_to_string(iter.key);
+    gchar const * value = iter.value;
 
     // If property value is same as default mark for deletion.
     if ( SPAttributeRelCSS::findIfDefault( property, value ) ) {

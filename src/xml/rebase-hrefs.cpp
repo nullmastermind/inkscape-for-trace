@@ -25,6 +25,7 @@
 #include "xml/rebase-hrefs.h"
 
 using Inkscape::XML::AttributeRecord;
+using Inkscape::XML::AttributeVector;
 
 /**
  * Determine if a href needs rebasing.
@@ -55,13 +56,14 @@ static bool href_needs_rebasing(std::string const &href)
     return ret;
 }
 
-Inkscape::Util::List<AttributeRecord const>
+const AttributeVector*
 Inkscape::XML::rebase_href_attrs(gchar const *const old_abs_base,
                                  gchar const *const new_abs_base,
-                                 Inkscape::Util::List<AttributeRecord const> attributes)
+                                 const AttributeVector & attributes1)
 {
-    using Inkscape::Util::List;
-    using Inkscape::Util::cons;
+    AttributeVector * attributes = new AttributeVector();
+    for(const auto & a : attributes1) attributes->emplace_back(a.key, a.value);
+    
     using Inkscape::Util::ptr_shared;
     using Inkscape::Util::share_string;
 
@@ -79,18 +81,19 @@ Inkscape::XML::rebase_href_attrs(gchar const *const old_abs_base,
      * with no change to attributes. */
     ptr_shared old_href;
     ptr_shared sp_absref;
-    List<AttributeRecord const> ret;
+    AttributeVector * ret = new AttributeVector();
     {
-        for (List<AttributeRecord const> ai(attributes); ai; ++ai) {
-            if (ai->key == href_key) {
-                old_href = ai->value;
+        for (const auto & ai : *attributes) {
+            if (ai.key == href_key) {
+                old_href = ai.value;
                 if (!href_needs_rebasing(static_cast<char const *>(old_href))) {
+                    delete ret;
                     return attributes;
                 }
-            } else if (ai->key == absref_key) {
-                sp_absref = ai->value;
+            } else if (ai.key == absref_key) {
+                sp_absref = ai.value;
             } else {
-                ret = cons(AttributeRecord(ai->key, ai->value), ret);
+                ret->emplace_back(ai.key, ai.value);
             }
         }
     }
@@ -119,16 +122,16 @@ Inkscape::XML::rebase_href_attrs(gchar const *const old_abs_base,
 
     auto new_href = uri.str(baseuri.c_str());
 
-    ret = cons(AttributeRecord(href_key, share_string(new_href.c_str())), ret); // Check if this is safe/copied or if it is only held.
+    ret->emplace_back(href_key, share_string(new_href.c_str())); // Check if this is safe/copied or if it is only held.
     if (sp_absref) {
         /* We assume that if there wasn't previously a sodipodi:absref attribute
          * then we shouldn't create one. */
-        ret = cons(AttributeRecord(absref_key, ( streq(abs_href.c_str(), sp_absref)
+        ret->emplace_back(absref_key, ( streq(abs_href.c_str(), sp_absref)
                                                  ? sp_absref
-                                                 : share_string(abs_href.c_str()) )),
-                   ret);
+                                                 : share_string(abs_href.c_str())));
     }
 
+    delete attributes;
     return ret;
 }
 

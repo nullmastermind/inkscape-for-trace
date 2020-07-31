@@ -30,7 +30,9 @@ namespace XML {
  * Internally, the attributes of each node in the XML tree are
  * represented by this structure.
  */
-struct AttributeRecord : public Inkscape::GC::Managed<> {
+class AttributeRecord : public Inkscape::GC::Managed<> {
+    public:
+
     AttributeRecord(GQuark k, Inkscape::Util::ptr_shared v)
     : key(k), value(v) {}
 
@@ -38,6 +40,7 @@ struct AttributeRecord : public Inkscape::GC::Managed<> {
     GQuark key;
     /** @brief Shared pointer to the value of the attribute */
     Inkscape::Util::ptr_shared value;
+    const bool operator== (const AttributeRecord &o) const {return key==o.key && value==o.value;}
 
     // accept default copy constructor and assignment operator
 };

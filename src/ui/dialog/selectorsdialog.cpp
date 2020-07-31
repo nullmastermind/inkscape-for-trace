@@ -40,8 +40,6 @@
 // #define G_LOG_DOMAIN "SELECTORSDIALOG"
 
 using Inkscape::DocumentUndo;
-using Inkscape::Util::List;
-using Inkscape::XML::AttributeRecord;
 
 /**
  * This macro is used to remove spaces around selectors or any strings when
@@ -822,8 +820,8 @@ void SelectorsDialog::_addToSelector(Gtk::TreeModel::Row row)
             sp_repr_css_attr_add_from_string(css, obj->getRepr()->attribute("style"));
             Glib::ustring selprops = row[_mColumns._colProperties];
             sp_repr_css_attr_add_from_string(css_selector, selprops.c_str());
-            for (List<AttributeRecord const> iter = css_selector->attributeList(); iter; ++iter) {
-                gchar const *key = g_quark_to_string(iter->key);
+            for (const auto & iter : css_selector->attributeList()) {
+                gchar const *key = g_quark_to_string(iter.key);
                 css->removeAttribute(key);
             }
             sp_repr_css_write_string(css, css_str);

@@ -13,18 +13,23 @@
 #ifndef SEEN_INKSCAPE_XML_NODE_H
 #define SEEN_INKSCAPE_XML_NODE_H
 
+#include <list>
+#include <glibmm/ustring.h>
 #include "gc-anchored.h"
+#include "inkgc/gc-alloc.h"
 #include "util/list.h"
 #include "util/const_char_ptr.h"
 
 namespace Inkscape {
 namespace XML {
 
-struct AttributeRecord;
+class AttributeRecord;
 struct Document;
 class  Event;
 class  NodeObserver;
 struct NodeEventVector;
+
+typedef std::list<AttributeRecord, Inkscape::GC::Alloc< AttributeRecord, Inkscape::GC::MANUAL > > AttributeVector;
 
 /**
  * @brief Enumeration containing all supported node types.
@@ -149,7 +154,7 @@ public:
      * @todo This method should return std::map<Glib::Quark const, gchar const *>
      *       or something similar with a custom allocator
      */
-    virtual Inkscape::Util::List<AttributeRecord const> attributeList() const=0;
+    virtual const AttributeVector & attributeList() const=0;
 
     /**
      * @brief Check whether this node has any attribute that matches a string

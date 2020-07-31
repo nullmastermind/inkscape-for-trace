@@ -23,6 +23,7 @@
 #include "xml/rebase-hrefs.h"
 #include "xml/simple-document.h"
 #include "xml/text-node.h"
+#include "xml/node.h"
 
 #include "io/sys.h"
 #include "io/stream/stringstream.h"
@@ -39,12 +40,11 @@
 #include <glibmm/miscutils.h>
 
 using Inkscape::IO::Writer;
-using Inkscape::Util::List;
-using Inkscape::Util::cons;
 using Inkscape::XML::Document;
 using Inkscape::XML::SimpleDocument;
 using Inkscape::XML::Node;
 using Inkscape::XML::AttributeRecord;
+using Inkscape::XML::AttributeVector;
 using Inkscape::XML::rebase_href_attrs;
 
 Document *sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns);
@@ -59,7 +59,7 @@ static void sp_repr_write_stream_root_element(Node *repr, Writer &out,
 static void sp_repr_write_stream_element(Node *repr, Writer &out,
                                          gint indent_level, bool add_whitespace,
                                          Glib::QueryQuark elide_prefix,
-                                         List<AttributeRecord const> attributes,
+                                         const AttributeVector & attributes,
                                          int inlineattrs, int indent,
                                          gchar const *old_href_abs_base,
                                          gchar const *new_href_abs_base);
@@ -836,10 +836,9 @@ void add_ns_map_entry(NSMap &ns_map, Glib::QueryQuark prefix) {
 void populate_ns_map(NSMap &ns_map, Node &repr) {
     if ( repr.type() == Inkscape::XML::NodeType::ELEMENT_NODE ) {
         add_ns_map_entry(ns_map, qname_prefix(repr.code()));
-        for ( List<AttributeRecord const> iter=repr.attributeList() ;
-              iter ; ++iter )
+        for ( const auto & iter : repr.attributeList() )
         {
-            Glib::QueryQuark prefix=qname_prefix(iter->key);
+            Glib::QueryQuark prefix=qname_prefix(iter.key);
             if (prefix.id()) {
                 add_ns_map_entry(ns_map, prefix);
             }
@@ -883,8 +882,10 @@ static void sp_repr_write_stream_root_element(Node *repr, Writer &out,
         elide_prefix = g_quark_from_string(sp_xml_ns_uri_prefix(default_ns, nullptr));
     }
 
-    List<AttributeRecord const> attributes=repr->attributeList();
-    for (auto & iter : ns_map) 
+    AttributeVector attributes; 
+    for (const auto& a : repr->attributeList()) attributes.emplace_back(a.key, a.value);
+    using Inkscape::Util::share_string;
+    for (auto iter : ns_map) 
     {
         Glib::QueryQuark prefix=iter.first;
         ptr_shared ns_uri=iter.second;
@@ -892,13 +893,15 @@ static void sp_repr_write_stream_root_element(Node *repr, Writer &out,
         if (prefix.id()) {
             if ( prefix != xml_prefix ) {
                 if ( elide_prefix == prefix ) {
-                    attributes = cons(AttributeRecord(g_quark_from_static_string("xmlns"), ns_uri), attributes);
+                    //repr->setAttribute(share_string("xmlns"), share_string(ns_uri));
+                    attributes.emplace_back(g_quark_from_static_string("xmlns"), ns_uri);
                 }
 
                 Glib::ustring attr_name="xmlns:";
                 attr_name.append(g_quark_to_string(prefix));
                 GQuark key = g_quark_from_string(attr_name.c_str());
-                attributes = cons(AttributeRecord(key, ns_uri), attributes);
+                //repr->setAttribute(share_string(attr_name.c_str()), share_string(ns_uri));
+                attributes.emplace_back(key, ns_uri);
             }
         } else {
             // if there are non-namespaced elements, we can't globally
@@ -957,7 +960,7 @@ void sp_repr_write_stream( Node *repr, Writer &out, gint indent_level,
 void sp_repr_write_stream_element( Node * repr, Writer & out,
                                    gint indent_level, bool add_whitespace,
                                    Glib::QueryQuark elide_prefix,
-                                   List<AttributeRecord const> attributes, 
+                                   const AttributeVector & attributes, 
                                    int inlineattrs, int indent,
                                    gchar const *old_href_base,
                                    gchar const *new_href_base )
@@ -1004,9 +1007,8 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
         }
     }
 
-    for ( List<AttributeRecord const> iter = rebase_href_attrs(old_href_base, new_href_base,
-                                                               attributes);
-          iter ; ++iter )
+    const auto rbd = rebase_href_attrs(old_href_base, new_href_base, attributes);
+    for ( const auto iter : *rbd)
     {
         if (!inlineattrs) {
             out.writeChar('\n');
@@ -1018,10 +1020,11 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
                 }
             }
         }
-        out.printf(" %s=\"", g_quark_to_string(iter->key));
-        repr_quote_write(out, iter->value);
+        out.printf(" %s=\"", g_quark_to_string(iter.key));
+        repr_quote_write(out, iter.value);
         out.writeChar('"');
     }
+    delete rbd;
 
     loose = TRUE;
     for (child = repr->firstChild() ; child != nullptr; child = child->next()) {

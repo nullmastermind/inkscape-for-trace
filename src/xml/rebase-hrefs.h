@@ -10,8 +10,10 @@
 #ifndef REBASE_HREFS_H_SEEN
 #define REBASE_HREFS_H_SEEN
 
-#include "util/list.h"
+#include <vector>
 #include "xml/attribute-record.h"
+#include "xml/node.h"
+
 class SPDocument;
 
 namespace Inkscape {
@@ -31,10 +33,10 @@ void rebase_hrefs(SPDocument *doc, char const *new_base, bool spns);
  *
  * Note that old_abs_base and new_abs_base must each be non-NULL, absolute directory paths.
  */
-Inkscape::Util::List<AttributeRecord const> rebase_href_attrs(
+const AttributeVector* rebase_href_attrs(
     char const *old_abs_base,
     char const *new_abs_base,
-    Inkscape::Util::List<AttributeRecord const> attributes);
+    const AttributeVector & attributes);
 
 
 // /**

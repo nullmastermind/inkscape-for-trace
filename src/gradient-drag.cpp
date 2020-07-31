@@ -53,6 +53,7 @@
 #include "ui/widget/canvas.h" // Forced redraws
 
 #include "xml/sp-css-attr.h"
+#include "xml/attribute-record.h"
 
 using Inkscape::ControlManager;
 using Inkscape::CtrlLineType;
@@ -287,7 +288,8 @@ bool GrDrag::styleSet( const SPCSSAttr *css )
         }
     }
 
-    if (!stop->attributeList()) { // nothing for us here, pass it on
+    const auto& al = stop->attributeList();
+    if (al.empty()) { // nothing for us here, pass it on
         sp_repr_css_attr_unref(stop);
         return false;
     }

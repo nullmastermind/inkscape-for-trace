@@ -586,9 +586,8 @@ bool Find::item_attrvalue_match(SPItem *item, const gchar *text, bool exact, boo
         return false;
     }
 
-    Inkscape::Util::List<Inkscape::XML::AttributeRecord const> iter = item->getRepr()->attributeList();
-    for (; iter; ++iter) {
-        const gchar* key = g_quark_to_string(iter->key);
+    for (const auto & iter:item->getRepr()->attributeList()) {
+        const gchar* key = g_quark_to_string(iter.key);
         gchar *attr_value = g_strdup(item->getRepr()->attribute(key));
         bool found = find_strcmp(attr_value, text, exact, casematch);
         if (found) {

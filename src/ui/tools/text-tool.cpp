@@ -1428,7 +1428,7 @@ SPCSSAttr *sp_text_get_style_at_cursor(ToolBase const *ec)
 
 /* static bool css_attrs_are_equal(SPCSSAttr const *first, SPCSSAttr const *second)
 {
-    Inkscape::Util::List<Inkscape::XML::AttributeRecord const> attrs = first->attributeList();
+//    Inkscape::Util::List<Inkscape::XML::AttributeRecord const> attrs = first->attributeList();
     for ( ; attrs ; attrs++) {
         gchar const *other_attr = second->attribute(g_quark_to_string(attrs->key));
         if (other_attr == nullptr || strcmp(attrs->value, other_attr))

@@ -320,10 +320,8 @@ std::vector<Preferences::Entry> Preferences::getAllEntries(Glib::ustring const &
     std::vector<Entry> temp;
     Inkscape::XML::Node *node = _getNode(path, false);
     if (node) {
-        // argh - purge this Util::List nonsense from XML classes fast
-        Inkscape::Util::List<Inkscape::XML::AttributeRecord const> alist = node->attributeList();
-        for (; alist; ++alist) {
-            temp.push_back( Entry(path + '/' + g_quark_to_string(alist->key), static_cast<void const*>(alist->value.pointer())) );
+        for (const auto & iter : node->attributeList()) {
+            temp.push_back( Entry(path + '/' + g_quark_to_string(iter.key), static_cast<void const*>(iter.value.pointer())) );
         }
     }
     return temp;

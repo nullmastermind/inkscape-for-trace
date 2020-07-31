@@ -42,8 +42,6 @@
 // #define G_LOG_DOMAIN "STYLEDIALOG"
 
 using Inkscape::DocumentUndo;
-using Inkscape::Util::List;
-using Inkscape::XML::AttributeRecord;
 
 /**
  * This macro is used to remove spaces around selectors or any strings when
