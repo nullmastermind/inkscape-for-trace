@@ -70,6 +70,7 @@ set(TEST_SOURCES
     curve-test
     2geom-characterization-test
     lpe-bool-test
+    xml-test
     sp-item-group-test)
 
 add_custom_target(tests)
