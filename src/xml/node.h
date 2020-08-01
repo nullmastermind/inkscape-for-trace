@@ -21,6 +21,7 @@
 #include "util/const_char_ptr.h"
 #include "util/list.h"
 #include <glibmm/ustring.h>
+#include <cassert>
 
 namespace Inkscape {
 namespace XML {
@@ -544,9 +545,8 @@ class Node : public Inkscape::GC::Anchored {
         }
         iterator &operator++()
         {
-            if (itnode != nullptr) {
-                itnode = itnode->next();
-            }
+	    assert(itnode != nullptr);
+	    itnode = itnode->next();
             return *this;
         }
         Node *operator*() const { return itnode; }
@@ -565,14 +565,26 @@ class Node : public Inkscape::GC::Anchored {
     /** @brief Helper to use the standard lib container functions */
     iterator end() { return iterator(nullptr); }
 
+    /** @brief Compare a node by looking at its name to a string */
     bool operator==(const std::string &name) const { return this->name() == name; }
 
+    /** @brief depth first search to find a node
+     *
+     * This function takes any list structure you want and uses that
+     * to compare Node's down the child tree. It will do depth first
+     * searching into the tree. The key part is that since it is a template
+     * you have flexibility on the container, and the comparison that is
+     * being used. Typically it will be used with something like a
+     * std::list<std::string> which will compare agains the node's name
+     * but more complex searchs could be imagined.
+     */
     template <typename T>
     Node *findChildPath(T list)
     {
         return findChildPath(list.cbegin(), list.cend());
     }
 
+    /** @brief template reshuffling to make the more useful findChildPath cleaner */
     template <typename iterT>
     Node *findChildPath(iterT itr, iterT end)
     {
@@ -582,7 +594,10 @@ class Node : public Inkscape::GC::Anchored {
 
         for (auto child : *this->firstChild()) {
             if (*child == *itr) {
-                return child->findChildPath(++itr, end);
+                auto found = child->findChildPath(std::next(itr), end);
+		if (found != nullptr) {
+			return found;
+		}
             }
         }
 
