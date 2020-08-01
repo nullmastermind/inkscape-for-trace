@@ -12,8 +12,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "xml/repr.h"
 #include "gtest/gtest.h"
+#include "xml/repr.h"
 
 TEST(XmlTest, nodeiter)
 {
@@ -22,22 +22,24 @@ TEST(XmlTest, nodeiter)
 
     auto count = 0;
     for (auto child : *testdoc->root()->firstChild()) {
-	    ASSERT_STREQ(child->name(), "svg:g");
-	    count++;
+        ASSERT_STREQ(child->name(), "svg:g");
+        count++;
     }
     ASSERT_EQ(count, 1);
 
-    testdoc = std::shared_ptr<Inkscape::XML::Document>(sp_repr_read_buf("<svg><g/><g/><g><g/></g></svg>", SP_SVG_NS_URI));
+    testdoc =
+        std::shared_ptr<Inkscape::XML::Document>(sp_repr_read_buf("<svg><g/><g/><g><g/></g></svg>", SP_SVG_NS_URI));
     ASSERT_TRUE(testdoc);
 
     count = 0;
     for (auto child : *testdoc->root()->firstChild()) {
-	    ASSERT_STREQ(child->name(), "svg:g");
-	    count++;
+        ASSERT_STREQ(child->name(), "svg:g");
+        count++;
     }
     ASSERT_EQ(count, 3);
 
-    testdoc = std::shared_ptr<Inkscape::XML::Document>(sp_repr_read_buf("<svg><g/><g/><g><path/></g></svg>", SP_SVG_NS_URI));
+    testdoc =
+        std::shared_ptr<Inkscape::XML::Document>(sp_repr_read_buf("<svg><g/><g/><g><path/></g></svg>", SP_SVG_NS_URI));
     ASSERT_TRUE(testdoc);
 
     auto path = std::list<std::string>{"svg:g", "svg:path"};
