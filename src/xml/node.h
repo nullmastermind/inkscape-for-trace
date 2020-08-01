@@ -13,15 +13,14 @@
 #ifndef SEEN_INKSCAPE_XML_NODE_H
 #define SEEN_INKSCAPE_XML_NODE_H
 
-#include <list>
+#include <cassert>
 #include <glibmm/ustring.h>
+#include <list>
+
 #include "gc-anchored.h"
 #include "inkgc/gc-alloc.h"
-#include "util/list.h"
 #include "util/const_char_ptr.h"
 #include "util/list.h"
-#include <glibmm/ustring.h>
-#include <cassert>
 
 namespace Inkscape {
 namespace XML {
@@ -37,7 +36,8 @@ typedef std::list<AttributeRecord, Inkscape::GC::Alloc< AttributeRecord, Inkscap
 /**
  * @brief Enumeration containing all supported node types.
  */
-enum class NodeType {
+enum class NodeType
+{
     DOCUMENT_NODE, ///< Top-level document node. Do not confuse with the root node.
     ELEMENT_NODE,  ///< Regular element node, e.g. &lt;group /&gt;.
     TEXT_NODE, ///< Text node, e.g. "Some text" in &lt;group&gt;Some text&lt;/group&gt; is represented by a text node.
@@ -79,7 +79,7 @@ enum class NodeType {
  * @see Inkscape::XML::NodeObserver
  */
 class Node : public Inkscape::GC::Anchored {
-  public:
+public:
     Node() = default;
     ~Node() override = default;
 
@@ -226,7 +226,6 @@ class Node : public Inkscape::GC::Anchored {
                                (value.data() == nullptr || value.data()[0] == '\0') ? nullptr : value.data());
     }
 
-
     /**
      * @brief Remove an attribute of this node
      *
@@ -247,7 +246,6 @@ class Node : public Inkscape::GC::Anchored {
     virtual void setCodeUnsafe(int code) = 0;
 
     /*@}*/
-
 
     /**
      * @name Traverse the XML tree
@@ -425,7 +423,6 @@ class Node : public Inkscape::GC::Anchored {
      */
     virtual void cleanOriginal(Node *src, gchar const *key) = 0;
 
-
     /**
      * @brief Compare 2 nodes equality
      * @param other The other node to compare
@@ -534,19 +531,19 @@ class Node : public Inkscape::GC::Anchored {
      *
      * This cleans up the checks and makes it so there can be fewer errors.
      */
-    class iterator {
-      private:
+    class iterator
+    {
+    private:
         Node *itnode;
 
-      public:
+    public:
         iterator(Node *innode)
             : itnode(innode)
-        {
-        }
+        {}
         iterator &operator++()
         {
-	    assert(itnode != nullptr);
-	    itnode = itnode->next();
+            assert(itnode != nullptr);
+            itnode = itnode->next();
             return *this;
         }
         Node *operator*() const { return itnode; }
@@ -595,25 +592,22 @@ class Node : public Inkscape::GC::Anchored {
         for (auto child : *this->firstChild()) {
             if (*child == *itr) {
                 auto found = child->findChildPath(std::next(itr), end);
-		if (found != nullptr) {
-			return found;
-		}
+                if (found != nullptr) {
+                    return found;
+                }
             }
         }
 
         return nullptr;
     }
 
-  protected:
+protected:
     Node(Node const &)
         : Anchored()
-    {
-    }
+    {}
 
     virtual void setAttributeImpl(char const *key, char const *value) = 0;
 };
-
-
 
 } // namespace XML
 } // namespace Inkscape

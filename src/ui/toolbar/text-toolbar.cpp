@@ -2518,7 +2518,7 @@ void TextToolbar::subselection_changed(gpointer texttool)
                     wrap_end.thisEndOfLine();
                 }
                 selection_changed(nullptr);
-            } 
+            }
         }
     }
 #ifdef DEBUG_TEXT
