@@ -211,8 +211,8 @@ SimpleNode::SimpleNode(SimpleNode const &node, Document *document)
 
         child_copy->release(); // release to avoid a leak
     }
-    for (const auto & attr:node._attributes) _attributes.emplace_back(attr.key, attr.value);
-    //_attributes = node._attributes;
+
+    _attributes = node._attributes;
 
     _observers.add(_subtree_observers);
 }

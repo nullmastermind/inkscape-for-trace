@@ -13,7 +13,7 @@
 #ifndef SEEN_INKSCAPE_XML_NODE_H
 #define SEEN_INKSCAPE_XML_NODE_H
 
-#include <list>
+#include <vector>
 #include <glibmm/ustring.h>
 #include "gc-anchored.h"
 #include "inkgc/gc-alloc.h"
@@ -29,7 +29,7 @@ class  Event;
 class  NodeObserver;
 struct NodeEventVector;
 
-typedef std::list<AttributeRecord, Inkscape::GC::Alloc< AttributeRecord, Inkscape::GC::MANUAL > > AttributeVector;
+typedef std::vector<AttributeRecord, Inkscape::GC::Alloc<AttributeRecord, Inkscape::GC::MANUAL>> AttributeVector;
 
 /**
  * @brief Enumeration containing all supported node types.

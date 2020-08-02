@@ -882,8 +882,8 @@ static void sp_repr_write_stream_root_element(Node *repr, Writer &out,
         elide_prefix = g_quark_from_string(sp_xml_ns_uri_prefix(default_ns, nullptr));
     }
 
-    AttributeVector attributes; 
-    for (const auto& a : repr->attributeList()) attributes.emplace_back(a.key, a.value);
+    auto attributes = repr->attributeList(); // copy
+
     using Inkscape::Util::share_string;
     for (auto iter : ns_map) 
     {
