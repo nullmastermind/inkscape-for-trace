@@ -13,7 +13,6 @@
 #ifndef SEEN_INKSCAPE_GC_ALLOC_H
 #define SEEN_INKSCAPE_GC_ALLOC_H
 
-#include <limits>
 #include <cstddef>
 #include "inkgc/gc-core.h"
 
@@ -26,11 +25,7 @@ class Alloc {
 public:
     typedef T value_type;
     typedef T *pointer;
-    typedef T const *const_pointer;
-    typedef T &reference;
-    typedef T const &const_reference;
     typedef std::size_t size_type;
-    typedef std::ptrdiff_t difference_type;
 
     template <typename U>
     struct rebind { typedef Alloc<U, collect> other; };
@@ -38,21 +33,9 @@ public:
     Alloc() = default;
     template <typename U> Alloc(Alloc<U, collect> const &) {}
 
-    pointer address(reference r) { return &r; }
-    const_pointer address(const_reference r) { return &r; }
-
-    size_type max_size() const {
-        return std::numeric_limits<std::size_t>::max() / sizeof(T);
-    }
-
     pointer allocate(size_type count, void const * =nullptr) {
         return static_cast<pointer>(::operator new(count * sizeof(T), SCANNED, collect));
     }
-
-    void construct(pointer p, const_reference value) {
-        new (static_cast<void *>(p)) T(value);
-    }
-    void destroy(pointer p) { p->~T(); }
 
     void deallocate(pointer p, size_type) { ::operator delete(p, GC); }
 };
