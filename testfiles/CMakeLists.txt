@@ -49,6 +49,7 @@ include_directories("${CMAKE_SOURCE_DIR}/src/3rdparty/adaptagrams") # TODO: remo
 
 set(TEST_SOURCES
     uri-test
+    util-test
     drag-and-drop-svgz
     extract-uri-test
     attributes-test
