@@ -25,7 +25,8 @@
 #include <harfbuzz/hb-ot.h>
 
 // SVG in OpenType
-#include "util/ziptool.h"
+#include "io/stream/gzipstream.h"
+#include "io/stream/bufferstream.h"
 
 
 // Utilities used in this file
@@ -395,12 +396,10 @@ void readOpenTypeSVGTable(const FT_Face ft_face,
                 buffer.push_back(data[offset + c]);
             }
 
-            GzipFile zipped;
-            zipped.readBuffer(buffer);
-
-            std::vector<unsigned char> unzipped_data = zipped.getData();
-            for (auto i : unzipped_data) {
-                svg += (char)i;
+            Inkscape::IO::BufferInputStream zipped(buffer);
+            Inkscape::IO::GzipInputStream gzin(zipped);
+            for (int character = gzin.get(); character != -1; character = gzin.get()) {
+               svg+= (char)character;
             }
 
         } else {

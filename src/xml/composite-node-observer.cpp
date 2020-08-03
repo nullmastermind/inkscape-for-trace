@@ -21,10 +21,10 @@
  *
  */
 
+#include <algorithm>
 #include <cstring>
 #include <glib.h>
 
-#include "util/find-if-before.h"
 #include "xml/composite-node-observer.h"
 #include "xml/node-event-vector.h"
 #include "debug/event-tracker.h"

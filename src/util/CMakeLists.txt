@@ -10,10 +10,8 @@ set(util_SRC
 	# -------
 	# Headers
 	const_char_ptr.h
-	copy.h
 	enums.h
 	expression-evaluator.h
-	find-if-before.h
 	find-last-if.h
 	fixed_point.h
 	format.h
@@ -22,7 +20,6 @@ set(util_SRC
 	reference.h
 	share.h
 	signal-blocker.h
-	ucompose.hpp
 	units.h
 	ziptool.h
 )

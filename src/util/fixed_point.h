@@ -13,7 +13,6 @@
 #ifndef SEEN_INKSCAPE_UTIL_FIXED_POINT_H
 #define SEEN_INKSCAPE_UTIL_FIXED_POINT_H
 
-#include "util/reference.h"
 #include <cmath>
 #include <algorithm>
 #include <limits>

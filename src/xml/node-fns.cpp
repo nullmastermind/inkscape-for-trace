@@ -16,7 +16,6 @@
 #include <glib.h> // g_assert()
 
 #include "xml/node-iterators.h"
-#include "util/find-if-before.h"
 #include "node-fns.h"
 
 namespace Inkscape {
@@ -69,21 +68,6 @@ struct node_matches {
 // documentation moved to header
 Node *previous_node(Node *node) {
     return node->prev();
-    using Inkscape::Algorithms::find_if_before;
-
-    if ( !node || !node->parent() ) {
-        return nullptr;
-    }
-
-    Node *previous=find_if_before<NodeSiblingIterator>(
-        node->parent()->firstChild(), nullptr, node_matches(*node)
-    );
-
-    g_assert(previous == nullptr
-             ? node->parent()->firstChild() == node
-             : previous->next() == node);
-
-    return previous;
 }
 
 }
