@@ -430,7 +430,7 @@ bool ConnectorTool::item_handler(SPItem* item, GdkEvent* event)
         if (cc_item_is_shape(item)) {
             this->_setActiveShape(item);
         }
-        ret = true;
+        ret = false;
         break;
     }
     default:
