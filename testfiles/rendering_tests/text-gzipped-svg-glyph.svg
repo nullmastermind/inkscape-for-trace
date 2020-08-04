@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+  width="100%"
+  height="100%"
+  viewBox="0 0 110 40">
+
+  <style type="text/css">
+
+    @font-face {
+      font-family: "GeomTest";
+      src: url("fonts/GeomTest-gzipped-SVG-glyphs.otf");
+    }
+
+    text {
+      font-family: "GeomTest";
+      font-size: 30px;
+    }
+
+  </style>
+
+  <text x="10" y="30">ABC</text>
+
+</svg>
