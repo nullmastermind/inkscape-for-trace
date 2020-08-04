@@ -60,7 +60,10 @@ GdkPixbuf *grayMapToGdkPixbuf(GrayMap *grayMap)
     guchar *pixdata = (guchar *)
           malloc(sizeof(guchar) * grayMap->width * grayMap->height * 3);
     if (!pixdata)
+        {
+        g_warning("grayMapToGdkPixbuf: can not allocate memory for conversion.");
         return nullptr;
+        }
 
     int n_channels = 3;
     int rowstride  = grayMap->width * 3;
@@ -189,7 +192,10 @@ GdkPixbuf *indexedMapToGdkPixbuf(IndexedMap *iMap)
     guchar *pixdata = (guchar *)
           malloc(sizeof(guchar) * iMap->width * iMap->height * 3);
     if (!pixdata)
+        {
+        g_warning("indexedMapToGdkPixbuf: can not allocate memory for conversion.");
         return nullptr;
+        }
 
     int n_channels = 3;
     int rowstride  = iMap->width * 3;

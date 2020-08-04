@@ -364,6 +364,10 @@ static void do_trace(bitmap_coords_info bci, guchar *trace_px, SPDesktop *deskto
     unsigned char *trace_t;
 
     GrayMap *gray_map = GrayMapCreate((max_x - min_x + 1), (max_y - min_y + 1));
+    if (!gray_map) {
+        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Failed mid-operation, no objects created."));
+        return;
+    }
     unsigned int gray_map_y = 0;
     for (unsigned int y = min_y; y <= max_y; y++) {
         unsigned long *gray_map_t = gray_map->rows[gray_map_y];

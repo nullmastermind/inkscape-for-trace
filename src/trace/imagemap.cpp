@@ -89,6 +89,7 @@ GrayMap *GrayMapCreate(int width, int height)
               malloc(sizeof(unsigned long) * width * height);
     if (!me->pixels)
         {
+        g_warning("GrayMapCreate: can not allocate memory for %d x %d image.", width, height);
         free(me);
         return nullptr;
         }
@@ -96,6 +97,7 @@ GrayMap *GrayMapCreate(int width, int height)
               malloc(sizeof(unsigned long *) *  height);
     if (!me->rows)
         {
+        g_warning("GrayMapCreate: can not allocate memory for index of %d x %d image.", width, height);
         free(me->pixels);
         free(me);
         return nullptr;
@@ -203,11 +205,13 @@ PackedPixelMap *PackedPixelMapCreate(int width, int height)
     me->height = height;
     me->pixels = (unsigned long *) malloc(sizeof(unsigned long) * width * height);
     if (!me->pixels){
+        g_warning("PackedPixelMapCreate: can not allocate memory for %d x %d image.", width, height);
         free(me);
         return nullptr;
     }
     me->rows = (unsigned long **) malloc(sizeof(unsigned long *) * height);
     if (!me->rows){
+        g_warning("PackedPixelMapCreate: can not allocate memory for index of %d x %d image.", width, height);
         free(me->pixels); //allocated as me->pixels is not NULL here: see previous check
         free(me);
         return nullptr;
@@ -313,11 +317,13 @@ RgbMap *RgbMapCreate(int width, int height)
     me->height = height;
     me->pixels = (RGB *) malloc(sizeof(RGB) * width * height);
     if (!me->pixels){
+        g_warning("RgbMapCreate: can not allocate memory for %d x %d image.", width, height);
         free(me);
         return nullptr;
     }
     me->rows = (RGB **) malloc(sizeof(RGB *) * height);
     if (!me->rows){
+        g_warning("RgbMapCreate: can not allocate memory for index of %d x %d image.", width, height);
         free(me->pixels); //allocated as me->pixels is not NULL here: see previous check
         free(me);
         return nullptr;
@@ -422,11 +428,13 @@ IndexedMap *IndexedMapCreate(int width, int height)
     me->height = height;
     me->pixels = (unsigned int *) malloc(sizeof(unsigned int) * width * height);
     if (!me->pixels){
+        g_warning("IndexedMapCreate: can not allocate memory for %d x %d image.", width, height);
         free(me);
         return nullptr;
     }
     me->rows = (unsigned int **) malloc(sizeof(unsigned int *) * height);
     if (!me->rows){
+        g_warning("IndexedMapCreate: can not allocate memory for index of %d x %d image.", width, height);
         free(me->pixels); //allocated as me->pixels is not NULL here: see previous check
         free(me);
         return nullptr;

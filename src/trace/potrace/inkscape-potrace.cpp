@@ -224,6 +224,8 @@ static GrayMap *filter(PotraceTracingEngine &engine, GdkPixbuf * pixbuf)
     if (engine.traceType == TRACE_QUANT)
         {
         RgbMap *rgbmap = gdkPixbufToRgbMap(pixbuf);
+        if (!rgbmap)
+            return nullptr;
         //rgbMap->writePPM(rgbMap, "rgb.ppm");
         newGm = quantizeBand(rgbmap,
                             engine.quantizationNrColors);
@@ -236,8 +238,15 @@ static GrayMap *filter(PotraceTracingEngine &engine, GdkPixbuf * pixbuf)
               engine.traceType == TRACE_BRIGHTNESS_MULTI )
         {
         GrayMap *gm = gdkPixbufToGrayMap(pixbuf);
+        if (!gm)
+            return nullptr;
 
         newGm = GrayMapCreate(gm->width, gm->height);
+        if (!newGm)
+            {
+            gm->destroy(gm);
+            return nullptr;
+            }
         double floor =  3.0 *
                ( engine.brightnessFloor * 256.0 );
         double cutoff =  3.0 *
@@ -263,6 +272,8 @@ static GrayMap *filter(PotraceTracingEngine &engine, GdkPixbuf * pixbuf)
     else if (engine.traceType == TRACE_CANNY)
         {
         GrayMap *gm = gdkPixbufToGrayMap(pixbuf);
+        if (!gm)
+            return nullptr;
         newGm = grayMapCanny(gm, 0.1, engine.cannyHighThreshold);
         gm->destroy(gm);
         //newGm->writePPM(newGm, "canny.ppm");
@@ -295,6 +306,8 @@ static IndexedMap *filterIndexed(PotraceTracingEngine &engine, GdkPixbuf * pixbu
     IndexedMap *newGm = nullptr;
 
     RgbMap *gm = gdkPixbufToRgbMap(pixbuf);
+    if (!gm)
+        return nullptr;
     if (engine.multiScanSmooth)
         {
         RgbMap *gaussMap = rgbMapGaussian(gm);
@@ -307,7 +320,7 @@ static IndexedMap *filterIndexed(PotraceTracingEngine &engine, GdkPixbuf * pixbu
         }
     gm->destroy(gm);
 
-    if (engine.traceType == TRACE_QUANT_MONO)
+    if (newGm && engine.traceType == TRACE_QUANT_MONO)
         {
         //Turn to grays
         for (int i=0 ; i<newGm->nrColors ; i++)
@@ -370,6 +383,10 @@ std::string PotraceTracingEngine::grayMapToPath(GrayMap *grayMap, long *nodeCoun
     }
 
     potrace_bitmap_t *potraceBitmap = bm_new(grayMap->width, grayMap->height);
+    if (!potraceBitmap)
+    {
+        return "";
+    }
     bm_clear(potraceBitmap, 0);
 
     //##Read the data out of the GrayMap

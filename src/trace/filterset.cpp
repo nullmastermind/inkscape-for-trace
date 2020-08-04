@@ -377,13 +377,19 @@ GrayMap *quantizeBand(RgbMap *rgbMap, int nrColors)
 {
 
     RgbMap *gaussMap = rgbMapGaussian(rgbMap);
+    if (!gaussMap)
+        return nullptr;
     //gaussMap->writePPM(gaussMap, "rgbgauss.ppm");
 
     IndexedMap *qMap = rgbMapQuantize(gaussMap, nrColors);
-    //qMap->writePPM(qMap, "rgbquant.ppm");
     gaussMap->destroy(gaussMap);
+    if (!qMap)
+        return nullptr;
+    //qMap->writePPM(qMap, "rgbquant.ppm");
 
     GrayMap *gm = GrayMapCreate(rgbMap->width, rgbMap->height);
+    if (!gm)
+        return nullptr;
 
     // RGB is quantized.  There should now be a small set of (R+G+B)
     for (int y=0 ; y<qMap->height ; y++)

@@ -79,6 +79,7 @@ static inline potrace_bitmap_t *bm_new(int w, int h) {
   bm->dy = dy;
   bm->map = (potrace_word *) malloc(size);
   if (!bm->map) {
+    g_warning("bm_new: can not allocate memory for bitmap (%td).", size);
     free(bm);
     return nullptr;
   }

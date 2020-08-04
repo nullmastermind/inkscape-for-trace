@@ -495,7 +495,7 @@ float SioxImage::getConfidence(unsigned int x, unsigned int y)
 {
     if (x >= width || y >= height)
         {
-        g_warning("getConfidence: out of bounds (%d,%d)/(%d,%d)",
+        error("getConfidence: out of bounds (%d,%d)/(%d,%d)",
                    x, y, width, height);
         return 0.0;
         }
@@ -649,7 +649,10 @@ GdkPixbuf *SioxImage::getGdkPixbuf()
     guchar *pixdata = (guchar *)
           malloc(sizeof(guchar) * width * height * n_channels);
     if (!pixdata)
+        {
+        error("SioxImage::getGdkPixbuf: can not allocate memory for %d x %d x %d image.", width, height, n_channels);
         return nullptr;
+        }
 
     int rowstride  = width * n_channels;
 
