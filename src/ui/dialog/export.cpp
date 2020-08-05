@@ -30,8 +30,6 @@
 #include <glibmm/miscutils.h>
 #include <glibmm/i18n.h>
 
-#include <gdl/gdl-dock-item.h>
-
 #include "document-undo.h"
 #include "document.h"
 #include "file.h"
@@ -1330,13 +1328,14 @@ void Export::onExport ()
 
     if (exportSuccessful && closeWhenDone.get_active()) {
         for ( Gtk::Container *parent = get_parent(); parent; parent = parent->get_parent()) {
-            if ( GDL_IS_DOCK_ITEM(parent->gobj()) ) {
-                GdlDockItem *item = GDL_DOCK_ITEM(parent->gobj());
-                if (item) {
-                    gdl_dock_item_hide_item(item);
-                }
-                break;
-            }
+            // TODO: add the option to close the export dialog
+            // if ( GDL_IS_DOCK_ITEM(parent->gobj()) ) {
+            //     GdlDockItem *item = GDL_DOCK_ITEM(parent->gobj());
+            //     if (item) {
+            //         gdl_dock_item_hide_item(item);
+            //     }
+            //     break;
+            // }
         }
     }
 } // end of sp_export_export_clicked()

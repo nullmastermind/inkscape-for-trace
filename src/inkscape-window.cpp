@@ -240,9 +240,9 @@ void InkscapeWindow::update_dialogs()
 {
     std::vector<Gtk::Window *> windows = _app->get_windows();
     for (auto window : windows) {
-        DialogWindow *dock = dynamic_cast<DialogWindow *>(window);
-        if (dock) {
-            dock->update_dialogs();
+        DialogWindow *dialog_window = dynamic_cast<DialogWindow *>(window);
+        if (dialog_window) {
+            dialog_window->update_dialogs();
         }
 
         _desktop_widget->getContainer()->update_dialogs();

@@ -186,7 +186,7 @@ bool DialogNotebook::on_drag_failed(const Glib::RefPtr<Gdk::DragContext> context
         return false;
     }
 
-    // Move page to notebook in new dock
+    // Move page to notebook in new dialog window
     auto window = new DialogWindow(page);
     window->show_all();
 
@@ -343,7 +343,7 @@ void DialogNotebook::move_tab_callback()
         return;
     }
 
-    // Move page to notebook in new dock
+    // Move page to notebook in new dialog window
     auto window = new DialogWindow(page);
     window->show_all();
 

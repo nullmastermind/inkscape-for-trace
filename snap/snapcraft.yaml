@@ -57,7 +57,6 @@ parts:
       - libcdr-dev
       - libdouble-conversion-dev
       - libgc-dev
-      - libgdl-3-dev
       - libglib2.0-dev
       - libgsl-dev
       - libgspell-1-dev
@@ -90,7 +89,6 @@ parts:
       - libdouble-conversion3
       - libgc1c2
       - libgdk-pixbuf2.0-0
-      - libgdl-3-5
       - libglibmm-2.4-1v5
       - libglib2.0-bin
       - libgsl23

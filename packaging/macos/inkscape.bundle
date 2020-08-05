@@ -104,9 +104,6 @@
   <translations  name="gdk-pixbuf">
     ${prefix}/share/locale
   </translations>
-  <translations  name="gdl-3">
-    ${prefix}/share/locale
-  </translations>
   <translations  name="gtk30">
     ${prefix}/share/locale
   </translations>

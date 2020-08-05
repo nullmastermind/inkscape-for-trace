@@ -24,7 +24,6 @@ jhbuild build \
 jhbuild build \
   boehm_gc \
   double_conversion \
-  gdl \
   ghostscript \
   google_test \
   gsl \

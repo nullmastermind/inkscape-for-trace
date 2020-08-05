@@ -273,7 +273,49 @@ public:
 
     void redrawDesktop();
 
-    Inkscape::UI::Widget::Dock* getDock();
+    void _setDisplayMode(Inkscape::RenderMode mode);
+    bool setDisplayModeNormal()
+    {
+        _setDisplayMode(Inkscape::RENDERMODE_NORMAL);
+        return true;
+    }
+    bool setDisplayModeNoFilters()
+    {
+        _setDisplayMode(Inkscape::RENDERMODE_NO_FILTERS);
+        return true;
+    }
+    bool setDisplayModeOutline()
+    {
+        _setDisplayMode(Inkscape::RENDERMODE_OUTLINE);
+        return true;
+    }
+    bool setDisplayModeVisibleHairlines()
+    {
+        _setDisplayMode(Inkscape::RENDERMODE_VISIBLE_HAIRLINES);
+        return true;
+    }
+    bool displayModeToggle();
+    Inkscape::RenderMode _display_mode;
+    Inkscape::RenderMode getMode() const { return _display_mode; }
+
+    void _setDisplayColorMode(Inkscape::ColorMode mode);
+    bool setDisplayColorModeNormal()
+    {
+        _setDisplayColorMode(Inkscape::COLORMODE_NORMAL);
+        return true;
+    }
+    bool setDisplayColorModeGrayscale()
+    {
+        _setDisplayColorMode(Inkscape::COLORMODE_GRAYSCALE);
+        return true;
+    }
+//    void setDisplayColorModePrintColorsPreview() {
+//        _setDisplayColorMode(Inkscape::COLORMODE_PRINT_COLORS_PREVIEW);
+//    }
+    bool displayColorModeToggle();
+    Inkscape::ColorMode _display_color_mode;
+    Inkscape::ColorMode getColorMode() const { return _display_color_mode; }
+
     Inkscape::UI::Dialog::DialogContainer *getContainer();
 
     void set_active (bool new_active);

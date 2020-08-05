@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 /** @file
- * @brief A window for floating docks.
+ * @brief A window for floating dialogs.
  *
  * Authors: see git history
  *   Tavmjong Bah
@@ -32,7 +32,7 @@ namespace Dialog {
 class DialogNotebook;
 class DialogContainer;
 
-// Create dock and move page from old notebook.
+// Create a dialog window and move page from old notebook.
 DialogWindow::DialogWindow(Gtk::Widget *page)
     : Gtk::ApplicationWindow()
     , _app(&ConcreteInkscapeApplication<Gtk::Application>::get_instance())

@@ -49,7 +49,6 @@ $ARCH-libxslt \
 $ARCH-boost \
 $ARCH-gtk3 \
 $ARCH-gtkmm3 \
-$ARCH-gdl \
 $ARCH-libsoup
 
 # install Inkscape dependencies (optional)

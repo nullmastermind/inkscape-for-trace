@@ -48,7 +48,6 @@ if(WIN32)
     ${MINGW_BIN}/libgdk-3-[0-9]*.dll
     ${MINGW_BIN}/libgdk_pixbuf-2.0-[0-9]*.dll
     ${MINGW_BIN}/libgdkmm-3.0-[0-9]*.dll
-    ${MINGW_BIN}/libgdl-3-[0-9]*.dll
     ${MINGW_BIN}/libgfortran-[0-9]*.dll
     ${MINGW_BIN}/libgio-2.0-[0-9]*.dll
     ${MINGW_BIN}/libgiomm-2.4-[0-9]*.dll

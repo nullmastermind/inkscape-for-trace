@@ -232,14 +232,13 @@ SPDesktopWidget::SPDesktopWidget()
 
     /* Canvas Grid (canvas, rulers, scrollbars, etc.) */
     dtw->_canvas_grid = Gtk::manage(new Inkscape::UI::Widget::CanvasGrid(this));
-    // Added to table wrapper later either directly or via paned window shared with dock.
 
     /* Canvas */
     dtw->_canvas = _canvas_grid->GetCanvas();
 
     dtw->_canvas->set_cms_active(prefs->getBool("/options/displayprofile/enable"));
 
-    /* Dock */
+    /* Dialog Container */
     DialogMultipaned *column = _container->create_column();
 
     _canvas_grid->set_hexpand(true);

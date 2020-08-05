@@ -54,7 +54,6 @@ namespace Widget {
   class SelectedStyle;
   class SpinButton;
   class Ruler;
-  class Dock;
 } // namespace Widget
 } // namespace UI
 } // namespace Inkscape

@@ -586,10 +586,6 @@ SPDesktop::set_coordinate_status (Geom::Point p) {
     _widget->setCoordinateStatus(p);
 }
 
-Inkscape::UI::Widget::Dock* SPDesktop::getDock() {
-	return nullptr;
-}
-
 Inkscape::UI::Dialog::DialogContainer *SPDesktop::getContainer()
 {
     return _widget->getContainer();
