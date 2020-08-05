@@ -49,9 +49,10 @@ public:
     void new_floating_dialog(Glib::ustring name);
     bool has_dialog_of_type(DialogBase *dialog);
     DialogBase *get_dialog(Glib::ustring name);
+    DialogBase *get_dialog(int verb_code);
     void link_dialog(DialogBase *dialog);
     void unlink_dialog(DialogBase *dialog);
-
+    void toggle_dialogs();
     void update_dialogs(); // Update all linked dialogs
 
 private:
@@ -70,6 +71,7 @@ private:
     std::multimap<int, DialogBase *> dialogs;
 
     DialogBase *dialog_factory(Glib::ustring name);
+    Gtk::Widget *create_notebook_tab(Glib::ustring label, Glib::ustring image);
 
     // Signal connections
     std::vector<sigc::connection> connections;

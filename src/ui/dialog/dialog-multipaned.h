@@ -59,6 +59,10 @@ public:
     ~MyHandle() override = default;
 
     bool on_enter_notify_event(GdkEventCrossing *crossing_event) override;
+private:
+    int _size;
+    int _cross_size;
+    void resize_handler(Gtk::Allocation &allocation);
 };
 
 /* ============ MULTIPANE ============ */
@@ -92,7 +96,9 @@ public:
     sigc::signal<void> signal_now_empty();
 
     // UI functions
+
     void set_dropzone_sizes(int start, int end);
+    void toggle_multipaned_children();
 
 protected:
     // Overrides
@@ -145,6 +151,7 @@ private:
     void add_empty_widget();
     void remove_empty_widget();
     std::vector<sigc::connection> _connections;
+    bool hide_multipaned;
 };
 
 } // namespace Dialog

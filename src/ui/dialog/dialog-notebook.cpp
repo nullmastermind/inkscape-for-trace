@@ -13,6 +13,9 @@
 
 #include "dialog-notebook.h"
 
+#ifdef GDK_WINDOWING_WAYLAND
+#include <gdk/gdkwayland.h>
+#endif /* GDK_WINDOWING_WAYLAND */
 #include <glibmm/i18n.h>
 #include <gtkmm/scrollbar.h>
 #include <gtkmm/separatormenuitem.h>
@@ -40,7 +43,7 @@ DialogNotebook::DialogNotebook(DialogContainer *container)
     , _labels_shown(true)
 {
     set_name("DialogNotebook");
-    set_policy(Gtk::POLICY_EXTERNAL, Gtk::POLICY_EXTERNAL);
+    set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     set_shadow_type(Gtk::SHADOW_NONE);
     set_vexpand(true);
     set_hexpand(true);
@@ -111,6 +114,7 @@ DialogNotebook::DialogNotebook(DialogContainer *container)
     style->add_class("button-no-radius");
 
     // =============== Signals ==================
+    signal_size_allocate().connect(sigc::mem_fun(*this, &DialogNotebook::handle_scrolling));
     _notebook.signal_drag_end().connect(sigc::mem_fun(*this, &DialogNotebook::on_drag_end));
     _notebook.signal_drag_failed().connect(sigc::mem_fun(*this, &DialogNotebook::on_drag_failed));
 
@@ -179,9 +183,41 @@ void DialogNotebook::move_page(Gtk::Widget &page)
 
 // Signal handlers - Notebook
 
-// Closes the notebook if empty.
+/**
+ * Due to the bug with on_drag_failed, we use the following logic for X11.
+ */
 void DialogNotebook::on_drag_end(const Glib::RefPtr<Gdk::DragContext> context)
 {
+#ifdef GDK_WINDOWING_WAYLAND
+    if (!GDK_IS_WAYLAND_DISPLAY(gdk_display_get_default())) {
+        bool set_floating = !context->get_dest_window();
+        if (!set_floating && context->get_dest_window()->get_window_type() == Gdk::WINDOW_FOREIGN) {
+            set_floating = true;
+        }
+
+        if (set_floating) {
+            Gtk::Widget *source = Gtk::Widget::drag_get_source_widget(context);
+
+            // Find source notebook and page
+            Gtk::Notebook *old_notebook = dynamic_cast<Gtk::Notebook *>(source);
+            if (!old_notebook) {
+                std::cerr << "DialogNotebook::on_drag_end: notebook not found!" << std::endl;
+            } else {
+                // Find page
+                Gtk::Widget *page = old_notebook->get_nth_page(old_notebook->get_current_page());
+                if (!page) {
+                    std::cerr << "DialogNotebook::on_drag_end: page not found!" << std::endl;
+                } else {
+                    // Move page to notebook in new dialog window
+                    auto window = new DialogWindow(page);
+                    window->show_all();
+                }
+            }
+        }
+    }
+#endif /* GDK_WINDOWING_WAYLAND */
+
+    // Closes the notebook if empty.
     if (_notebook.get_n_pages() == 0) {
         close_notebook_callback();
     }
@@ -191,6 +227,7 @@ void DialogNotebook::on_drag_end(const Glib::RefPtr<Gdk::DragContext> context)
  * A failed drag means that the page was not dropped on an existing notebook.
  * Thus create a new window with notebook to move page to.
  * WARNING: this only triggers in Wayland, not X11.
+ * BUG: it doesn't trigger outside an owned window.
  */
 bool DialogNotebook::on_drag_failed(const Glib::RefPtr<Gdk::DragContext> context, Gtk::DragResult result)
 {
@@ -220,15 +257,25 @@ bool DialogNotebook::on_drag_failed(const Glib::RefPtr<Gdk::DragContext> context
 // Update dialog list on adding a page.
 void DialogNotebook::on_page_added(Gtk::Widget *page, int page_num)
 {
+    DialogBase *dialog = dynamic_cast<DialogBase *>(page);
+
+    // Does current container/window already have such a dialog?
+    if (dialog && _container->has_dialog_of_type(dialog)) {
+        // Highlight first dialog
+        DialogBase *other_dialog = _container->get_dialog(dialog->getVerb());
+        other_dialog->blink();
+        // Remove page from notebook
+        _notebook.detach_tab(*page);
+    } else if (dialog) {
+        // Add to dialog list
+        _container->link_dialog(dialog);
+    } else {
+        return;
+    }
+
     // Expand DialogNotebook if needed
     if (!get_vexpand()) {
         expand_callback();
-    }
-
-    // Add to dialog list
-    DialogBase *dialog = dynamic_cast<DialogBase *>(page);
-    if (dialog) {
-        _container->link_dialog(dialog);
     }
 
     // Add notebook menu item
@@ -406,8 +453,14 @@ void DialogNotebook::stop_scrolling()
 {
     Gtk::Scrollbar *scrollbar = get_vscrollbar();
     scrollbar->set_value(0);
+
+    scrollbar = get_hscrollbar();
+    scrollbar->set_value(0);
 }
 
+/**
+ * A callback to handle expanding and collapsing a DialogNotebook
+ */
 void DialogNotebook::expand_callback()
 {
     int height = _menu_button.get_height() + 4; // the menu button is in a header of 4px padding
@@ -415,19 +468,45 @@ void DialogNotebook::expand_callback()
     if (get_vexpand()) {
         set_min_content_height(height);
         set_max_content_height(height);
-        Gtk::Scrollbar *scrollbar = get_vscrollbar();
-        _scrolling_connection =
-            scrollbar->signal_value_changed().connect(sigc::mem_fun(*this, &DialogNotebook::stop_scrolling));
         set_vexpand(false);
         _expand_button.set_image_from_icon_name("go-down");
+
+        // Scrolling callbacks
+        set_policy(Gtk::POLICY_EXTERNAL, Gtk::POLICY_EXTERNAL);
+        Gtk::Scrollbar *scrollbar = get_vscrollbar();
+        _scrolling_connections.emplace_back(
+            scrollbar->signal_value_changed().connect(sigc::mem_fun(*this, &DialogNotebook::stop_scrolling)));
+
+        scrollbar = get_hscrollbar();
+        _scrolling_connections.emplace_back(
+            scrollbar->signal_value_changed().connect(sigc::mem_fun(*this, &DialogNotebook::stop_scrolling)));
     } else {
         // height + 1 to force DialogMultipaned to resize
         set_max_content_height(height + 1);
         set_min_content_height(height + 1);
-        _scrolling_connection.disconnect();
         set_vexpand(true);
         _expand_button.set_image_from_icon_name("go-up");
+
+        // Scrolling callback
+        set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+        for (auto c : _scrolling_connections) {
+            c.disconnect();
+        }
     }
+}
+
+/**
+ * We need to remove the scrollbar to snap a whole DialogNotebook to width 0.
+ */
+void DialogNotebook::handle_scrolling(Gtk::Allocation &allocation)
+{
+    const int MAGIC_WIDTH = 45;
+    if (allocation.get_width() >= MAGIC_WIDTH) {
+        set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+    } else {
+        set_policy(Gtk::POLICY_EXTERNAL, Gtk::POLICY_EXTERNAL);
+    }
+    set_allocation(allocation);
 }
 
 // Signal handlers - Other
@@ -441,7 +520,7 @@ void DialogNotebook::close_notebook_callback()
     DialogMultipaned *multipaned = dynamic_cast<DialogMultipaned *>(get_parent());
     if (multipaned) {
         multipaned->remove(*this);
-    } else {
+    } else if (get_parent()) {
         std::cerr << "DialogNotebook::close_notebook_callback: Unexpected parent!" << std::endl;
         get_parent()->remove(*this);
     }

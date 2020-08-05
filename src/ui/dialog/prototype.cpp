@@ -58,6 +58,10 @@ void Prototype::update()
  */
 void Prototype::handleDocumentReplaced(SPDocument * document)
 {
+    if (!document || !document->getRoot()) {
+        return;
+    }
+
     const gchar *root_id = document->getRoot()->getId();
     Glib::ustring label_string("Document's SVG id: ");
     label_string += (root_id ? root_id : "null");
@@ -69,6 +73,10 @@ void Prototype::handleDocumentReplaced(SPDocument * document)
  */
 void Prototype::handleSelectionChanged(Inkscape::Selection *selection)
 {
+    if (!selection) {
+        return;
+    }
+
     // Update demonstration widget.
     Glib::ustring label = _label->get_text() + "\nSelection changed to ";
     SPObject* object = selection->single();

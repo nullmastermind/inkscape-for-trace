@@ -157,13 +157,7 @@ public:
     bool _updating;                 // Prevent cyclic actions: read <-> write, select via dialog <-> via desktop
     Inkscape::XML::Node *m_root = nullptr;
     Inkscape::XML::Node *_textNode; // Track so we know when to add a NodeObserver.
-    SPDesktop *_desktop;             // Active desktop;
-    SPDocument *_document;          // Active document
 
-    // Signals and handlers - External
-    sigc::connection _selection_changed_connection;
-
-    void _handleDocumentReplaced(SPDesktop* desktop, SPDocument *document);
     void update() override;
     void _handleSelectionChanged();
     void _rowExpand(const Gtk::TreeModel::iterator &iter, const Gtk::TreeModel::Path &path);

@@ -69,6 +69,7 @@ private:
     void open_dialog_from_notebook(Glib::ustring);
     void toggle_tab_labels_callback();
     void stop_scrolling();
+    void handle_scrolling(Gtk::Allocation &allocation);
 
     DialogContainer *_container;
     Gtk::MenuButton _menu_button;
@@ -78,7 +79,7 @@ private:
     int _dialog_menu_items;
     bool _labels_shown;
     Gtk::Notebook _notebook;
-    sigc::connection _scrolling_connection;
+    std::vector<sigc::connection> _scrolling_connections;
 };
 
 } // namespace Dialog

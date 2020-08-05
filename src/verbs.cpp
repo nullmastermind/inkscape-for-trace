@@ -2004,9 +2004,6 @@ void DialogVerb::perform(SPAction *action, void *data)
         case SP_VERB_DIALOG_ALIGN_DISTRIBUTE:
             container->new_dialog("DialogAlignDistribute");
             break;
-        case SP_VERB_DIALOG_SPRAY_OPTION:
-            container->new_dialog("DialogSprayOption"); // FIXME: this doesn't seem to exist ui/dialog/
-            break;
         case SP_VERB_DIALOG_TEXT:
             container->new_dialog("DialogText");
             break;
@@ -2031,7 +2028,7 @@ void DialogVerb::perform(SPAction *action, void *data)
             container->new_dialog("DialogUndoHistory");
             break;
         case SP_VERB_DIALOG_TOGGLE:
-            // dt->_dlg_mgr->dialogs_toggle(); TODO: I don't know what this is
+            container->toggle_dialogs();
             break;
         case SP_VERB_DIALOG_CLONETILER:
             //clonetiler_dialog();
@@ -2898,8 +2895,6 @@ Verb *Verb::_base_verbs[] = {
                    N_("Precisely control objects' transformations"), INKSCAPE_ICON("dialog-transform")),
     new DialogVerb(SP_VERB_DIALOG_ALIGN_DISTRIBUTE, "DialogAlignDistribute", N_("_Align and Distribute..."),
                    N_("Align and distribute objects"), INKSCAPE_ICON("dialog-align-and-distribute")),
-    new DialogVerb(SP_VERB_DIALOG_SPRAY_OPTION, "DialogSprayOption", N_("_Spray options..."),
-                   N_("Some options for the spray"), INKSCAPE_ICON("dialog-spray-options")),
     new DialogVerb(SP_VERB_DIALOG_UNDO_HISTORY, "DialogUndoHistory", N_("Undo _History..."), N_("Undo History"),
                    INKSCAPE_ICON("edit-undo-history")),
     new DialogVerb(SP_VERB_DIALOG_TEXT, "DialogText", N_("_Text and Font..."),

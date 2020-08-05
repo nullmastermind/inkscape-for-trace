@@ -23,6 +23,7 @@
 
 #define DROPZONE_SIZE 16
 #define HANDLE_SIZE 8
+#define HANDLE_CROSS_SIZE 25
 
 namespace Inkscape {
 namespace UI {
@@ -67,17 +68,21 @@ MyHandle::MyHandle(Gtk::Orientation orientation, int size=HANDLE_SIZE)
     : Glib::ObjectBase("MyHandle")
     , Gtk::Orientable()
     , Gtk::EventBox()
+    , _size(size)
+    , _cross_size(0)
 {
     set_name("MyHandle");
     set_orientation(orientation);
 
     if (get_orientation() == Gtk::ORIENTATION_HORIZONTAL) {
         add_label("|", false, Gtk::ALIGN_FILL);
-        set_size_request(size, -1);
+        set_size_request(_size, -1);
     } else {
         add_label("-", false, Gtk::ALIGN_FILL);
-        set_size_request(-1, size);
+        set_size_request(-1, _size);
     }
+
+    signal_size_allocate().connect(sigc::mem_fun(*this, &MyHandle::resize_handler));
 }
 
 /**
@@ -99,6 +104,23 @@ bool MyHandle::on_enter_notify_event(GdkEventCrossing *crossing_event)
     return false;
 }
 
+void MyHandle::resize_handler(Gtk::Allocation &allocation) {
+    int size = (get_orientation() == Gtk::ORIENTATION_HORIZONTAL) ? allocation.get_height() : allocation.get_width();
+    Gtk::Label *label = dynamic_cast<Gtk::Label *>(get_child());
+
+    if (_cross_size > size && HANDLE_CROSS_SIZE > size && label->get_label().length()) {
+        label->set_label("");
+    } else if (_cross_size < size && HANDLE_CROSS_SIZE < size && !label->get_label().length()) {
+        if (get_orientation() == Gtk::ORIENTATION_HORIZONTAL) {
+            label->set_label("|");
+        } else {
+            label->set_label("-");
+        }
+    }
+
+    _cross_size = size;
+}
+
 /* ============ MULTIPANE ============ */
 
 DialogMultipaned::DialogMultipaned(Gtk::Orientation orientation)
@@ -106,6 +128,7 @@ DialogMultipaned::DialogMultipaned(Gtk::Orientation orientation)
     , Gtk::Orientable()
     , Gtk::Container()
     , _empty_widget(nullptr)
+    , hide_multipaned(false)
 {
     set_name("DialogMultipaned");
     set_orientation(orientation);
@@ -228,6 +251,13 @@ void DialogMultipaned::add_empty_widget()
 
     append(label);
     _empty_widget = label;
+
+    if (get_orientation() == Gtk::ORIENTATION_VERTICAL) {
+        int dropzone_size = (get_height() - 60) / 2;
+        if (dropzone_size > DROPZONE_SIZE) {
+            set_dropzone_sizes(dropzone_size, dropzone_size);
+        }
+    }
 }
 
 void DialogMultipaned::remove_empty_widget()
@@ -239,6 +269,10 @@ void DialogMultipaned::remove_empty_widget()
         }
         _empty_widget->unparent();
         _empty_widget = nullptr;
+    }
+
+    if (get_orientation() == Gtk::ORIENTATION_VERTICAL) {
+        set_dropzone_sizes(DROPZONE_SIZE, DROPZONE_SIZE);
     }
 }
 
@@ -315,6 +349,15 @@ void DialogMultipaned::set_dropzone_sizes(int start, int end)
             dropzone_e->set_size_request(-1, end);
         }
     }
+}
+
+/**
+ * Hide all children of this container that are of type multipaned by setting their allocation on the main axis to 0.
+ */
+void DialogMultipaned::toggle_multipaned_children()
+{
+    hide_multipaned = !hide_multipaned;
+    queue_allocate();
 }
 
 // ****************** OVERRIDES ******************
@@ -437,15 +480,24 @@ void DialogMultipaned::on_size_allocate(Gtk::Allocation &allocation)
         int left = horizontal ? allocation.get_width() : allocation.get_height();
 
         for (auto &child : children) {
-            bool visible = child->get_visible();
-            expandables.push_back(child->compute_expand(get_orientation()));
+            bool visible;
+            DialogMultipaned *paned = dynamic_cast<DialogMultipaned *>(child);
+            if (hide_multipaned && paned) {
+                visible = false;
+                expandables.push_back(false);
+                sizes_minimums.push_back(0);
+                sizes_naturals.push_back(0);
+            } else {
+                visible = child->get_visible();
+                expandables.push_back(child->compute_expand(get_orientation()));
 
-            Gtk::Requisition req_minimum;
-            Gtk::Requisition req_natural;
-            child->get_preferred_size(req_minimum, req_natural);
+                Gtk::Requisition req_minimum;
+                Gtk::Requisition req_natural;
+                child->get_preferred_size(req_minimum, req_natural);
 
-            sizes_minimums.push_back(visible ? horizontal ? req_minimum.width : req_minimum.height : 0);
-            sizes_naturals.push_back(visible ? horizontal ? req_natural.width : req_natural.height : 0);
+                sizes_minimums.push_back(visible ? horizontal ? req_minimum.width : req_minimum.height : 0);
+                sizes_naturals.push_back(visible ? horizontal ? req_natural.width : req_natural.height : 0);
+            }
 
             Gtk::Allocation child_allocation = child->get_allocation();
             sizes_current.push_back(visible ? horizontal ? child_allocation.get_width() : child_allocation.get_height()
@@ -605,7 +657,7 @@ void DialogMultipaned::on_drag_begin(double start_x, double start_y)
     bool found = false;
     int child_number = 0;
     Gtk::Allocation allocation = get_allocation();
-    for (auto child : get_children()) {
+    for (auto child : children) {
         MyHandle *my_handle = dynamic_cast<MyHandle *>(child);
         if (my_handle) {
             Gtk::Allocation child_allocation = my_handle->get_allocation();
@@ -627,7 +679,7 @@ void DialogMultipaned::on_drag_begin(double start_x, double start_y)
         return;
     }
 
-    if (child_number < 1 || child_number > (int)(get_children().size() - 2)) {
+    if (child_number < 1 || child_number > (int)(children.size() - 2)) {
         std::cerr << "DialogMultipaned::on_drag_begin: Invalid child (" << child_number << "!!" << std::endl;
         gesture->set_state(Gtk::EVENT_SEQUENCE_DENIED);
         return;
@@ -680,6 +732,15 @@ void DialogMultipaned::on_drag_update(double offset_x, double offset_y)
         allocationh.set_y(start_allocationh.get_y() + offset_y);
         allocation2.set_y(start_allocation2.get_y() + offset_y);
         allocation2.set_height(start_allocation2.get_height() - offset_y);
+    }
+
+    if (hide_multipaned) {
+        DialogMultipaned *left = dynamic_cast<DialogMultipaned *>(children[handle - 1]);
+        DialogMultipaned *right = dynamic_cast<DialogMultipaned *>(children[handle + 1]);
+
+        if (left || right) {
+            return;
+        }
     }
 
     queue_allocate(); // Relayout DialogMultipaned content.

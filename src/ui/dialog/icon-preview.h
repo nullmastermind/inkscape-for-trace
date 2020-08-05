@@ -83,9 +83,7 @@ private:
     Gtk::Image** images;
     Glib::ustring** labels;
     Gtk::ToggleToolButton** buttons;
-    sigc::connection docReplacedConn;
     sigc::connection docModConn;
-    sigc::connection selChangedConn;
 
 
     void setDocument( SPDocument *document );

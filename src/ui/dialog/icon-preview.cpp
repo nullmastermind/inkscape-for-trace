@@ -99,9 +99,7 @@ IconPreviewPanel::IconPreviewPanel()
     , targetId()
     , hot(1)
     , selectionButton(nullptr)
-    , docReplacedConn()
     , docModConn()
-    , selChangedConn()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     numEntries = 0;
@@ -139,8 +137,6 @@ IconPreviewPanel::IconPreviewPanel()
         sizes[3] = 48;
         sizes[4] = 128;
     }
-
-    std::cout << "1\n";
 
     pixMem = new guchar*[numEntries];
     images = new Gtk::Image*[numEntries];
@@ -250,8 +246,6 @@ IconPreviewPanel::IconPreviewPanel()
 
 IconPreviewPanel::~IconPreviewPanel()
 {
-    docReplacedConn.disconnect();
-    selChangedConn.disconnect();
     if (timer) {
         timer->stop();
         delete timer;
@@ -263,9 +257,7 @@ IconPreviewPanel::~IconPreviewPanel()
         renderTimer = nullptr;
     }
 
-    selChangedConn.disconnect();
     docModConn.disconnect();
-    docReplacedConn.disconnect();
 }
 
 //#########################################################################
@@ -297,24 +289,16 @@ void IconPreviewPanel::update()
 
     SPDesktop *desktop = getDesktop();
 
-    if (!desktop)
-        return;
+    if (desktop) {
+        this->desktop = desktop;
 
-    SPDocument *newDoc = (desktop) ? desktop->doc() : nullptr;
-
-    this->desktop = desktop;
-    if ( desktop != this->desktop ) {
-        docReplacedConn.disconnect();
-        selChangedConn.disconnect();
-
-        if ( this->desktop ) {
-            docReplacedConn = this->desktop->connectDocumentReplaced(sigc::hide<0>(sigc::mem_fun(this, &IconPreviewPanel::setDocument)));
-            if ( this->desktop->selection && Inkscape::Preferences::get()->getBool("/iconpreview/autoRefresh", true) ) {
-                selChangedConn = this->desktop->selection->connectChanged(sigc::hide(sigc::mem_fun(this, &IconPreviewPanel::queueRefresh)));
-            }
+        if (this->desktop->selection && Inkscape::Preferences::get()->getBool("/iconpreview/autoRefresh", true)) {
+            queueRefresh();
         }
     }
-    setDocument(newDoc);
+
+    SPDocument *document = _app->get_active_document();
+    setDocument(document);
 }
 
 void IconPreviewPanel::setDocument( SPDocument *document )

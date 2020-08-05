@@ -76,20 +76,29 @@ DialogWindow::DialogWindow(Gtk::Widget *page)
 
     // ================ Label ===================
     _label = Gtk::manage(new Gtk::Label(_("Dialog Window")));
+    int label_margin = 6;
+    _label->set_margin_top(label_margin);
+    _label->set_margin_left(label_margin);
+    _label->set_margin_right(label_margin);
     box_outer->pack_start(*_label, false, false);
 
     // =============== Container ================
     _container = Gtk::manage(new DialogContainer());
+    DialogMultipaned *columns = _container->get_columns();
+    columns->set_dropzone_sizes(10, 10);
     box_outer->pack_end(*_container);
 
     // ============= Initial Column =============
     DialogMultipaned *column = _container->create_column();
-    _container->get_columns()->append(column);
+    column->set_dropzone_sizes(-1, 10);
+    columns->append(column);
 
     // ============== New Notebook ==============
-    DialogNotebook *ink_notebook = Gtk::manage(new DialogNotebook(_container));
-    column->append(ink_notebook);
-    ink_notebook->move_page(*page);
+    DialogNotebook *dialog_notebook = Gtk::manage(new DialogNotebook(_container));
+    column->append(dialog_notebook);
+    dialog_notebook->move_page(*page);
+
+    update_dialogs();
 }
 
 /**

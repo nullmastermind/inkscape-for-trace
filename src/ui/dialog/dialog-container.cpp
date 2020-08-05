@@ -15,12 +15,11 @@
 
 #include <gtkmm/image.h>
 
-#include "dialog-multipaned.h"
-#include "dialog-notebook.h"
-
-// All active dialogs
 #include "ui/dialog/align-and-distribute.h"
 #include "ui/dialog/clonetiler.h"
+#include "ui/dialog/dialog-multipaned.h"
+#include "ui/dialog/dialog-notebook.h"
+#include "ui/dialog/dialog-window.h"
 #include "ui/dialog/document-properties.h"
 #include "ui/dialog/export.h"
 #include "ui/dialog/extension-editor.h"
@@ -55,8 +54,6 @@
 #include "ui/dialog/transformation.h"
 #include "ui/dialog/undo-history.h"
 #include "ui/dialog/xml-tree.h"
-// All active dialogs end
-
 #include "ui/icon-names.h"
 #include "verbs.h"
 
@@ -114,6 +111,9 @@ constexpr unsigned int str2int(const char *str, int h = 0)
     return !str[h] ? 5381 : (str2int(str, h + 1) * 33) ^ str[h];
 }
 
+/**
+ * Get an instance of a DialogBase dialog using and encoding name.
+ */
 DialogBase *DialogContainer::dialog_factory(Glib::ustring name)
 {
     if (name.empty()) {
@@ -218,6 +218,26 @@ DialogBase *DialogContainer::dialog_factory(Glib::ustring name)
     }
 }
 
+// Create the notebook tab
+Gtk::Widget *DialogContainer::create_notebook_tab(Glib::ustring label_str, Glib::ustring image_str)
+{
+    Gtk::Label *label = Gtk::manage(new Gtk::Label(label_str));
+    label->set_use_underline();
+    Gtk::Image *image = Gtk::manage(new Gtk::Image());
+    if (image_str.size() > 0) {
+        image->set_from_icon_name(image_str, Gtk::ICON_SIZE_MENU);
+    } else {
+        image->set_from_icon_name(INKSCAPE_ICON("inkscape-logo"), Gtk::ICON_SIZE_MENU);
+    }
+    Gtk::Box *tab = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 2));
+    tab->set_name(label->get_label());
+    tab->pack_start(*image);
+    tab->pack_end(*label);
+    tab->show_all();
+
+    return tab;
+}
+
 // Add new dialog (in response to menu)
 void DialogContainer::new_dialog(Glib::ustring name)
 {
@@ -249,19 +269,7 @@ void DialogContainer::new_dialog(Glib::ustring name)
     }
 
     // Create the notebook tab
-    Gtk::Label *label = Gtk::manage(new Gtk::Label(dialog->get_name()));
-    label->set_use_underline();
-    Gtk::Image *image = Gtk::manage(new Gtk::Image());
-    if (verb->get_image()) {
-        image->set_from_icon_name(verb->get_image(), Gtk::ICON_SIZE_MENU);
-    } else {
-        image->set_from_icon_name(INKSCAPE_ICON("inkscape-logo"), Gtk::ICON_SIZE_MENU);
-    }
-    Gtk::Box *tab = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 2));
-    tab->set_name(label->get_label());
-    tab->pack_start(*image);
-    tab->pack_end(*label);
-    tab->show_all();
+    Gtk::Widget *tab = create_notebook_tab(dialog->get_name(), verb->get_image());
 
     // Find or create notebook to insert dialog
     DialogNotebook *notebook = nullptr;
@@ -296,34 +304,44 @@ void DialogContainer::new_dialog(Glib::ustring name)
     }
 
     // Add dialog
-    notebook->add_page(*dialog, *tab, label->get_label());
+    notebook->add_page(*dialog, *tab, dialog->get_name());
 }
 
 void DialogContainer::new_floating_dialog(Glib::ustring name)
 {
-    new_dialog(name);
+    // Get the verb with that id
+    Glib::ustring id = name == "InkscapePreferences" ? "DialogPreferences" : name; // TODO: might be improved
+    Inkscape::Verb *verb = Inkscape::Verb::getbyid(id.c_str());
 
-    // Get notebook
-    DialogNotebook *notebook = nullptr;
-
-    // Look to see if last column contains a multipane. If not, add one.
-    DialogMultipaned *last_column = dynamic_cast<DialogMultipaned *>(columns->get_last_widget());
-    if (!last_column) {
-        std::cerr << "DialogContainer::new_floating_dialog(): missing column" << std::endl;
+    // Can't understand the dialog's settings without an associated verb
+    if (!verb) {
         return;
     }
 
-    // Look to see if first widget in column is notebook, if not add one.
-    notebook = dynamic_cast<DialogNotebook *>(last_column->get_first_widget());
-    if (!notebook) {
-        notebook = Gtk::manage(new DialogNotebook(this));
-        last_column->prepend(notebook);
+    // Create the dialog widget
+    DialogBase *dialog = dialog_factory(name);
+
+    if (!dialog) {
+        std::cerr << "DialogContainer::new_dialog(): couldn't find dialog for: " << name << std::endl;
+        return;
     }
+
+    // Create the notebook tab
+    Gtk::Widget *tab = create_notebook_tab(dialog->get_name(), verb->get_image());
+
+    // New temporary noteboook
+    DialogNotebook *notebook = Gtk::manage(new DialogNotebook(this));
+    notebook->add_page(*dialog, *tab, dialog->get_name());
 
     notebook->move_tab_callback();
 }
 
-// Update dialogs:
+void DialogContainer::toggle_dialogs()
+{
+    columns->toggle_multipaned_children();
+}
+
+// Update dialogs
 void DialogContainer::update_dialogs()
 {
     for_each(dialogs.begin(), dialogs.end(), [&](auto dialog) { dialog.second->update(); });
@@ -344,17 +362,28 @@ DialogBase *DialogContainer::get_dialog(Glib::ustring name)
     Glib::ustring id = name == "InkscapePreferences" ? "DialogPreferences" : name;
     Inkscape::Verb *verb = Inkscape::Verb::getbyid(id.c_str());
 
-    auto found = dialogs.find(verb->get_code());
-    if (found != dialogs.end()) {
-        return found->second;
+    DialogBase *dialog = get_dialog(verb->get_code());
+
+    if (dialog) {
+        return dialog;
     }
 
     new_dialog(name);
 
-    found = dialogs.find(verb->get_code());
+    auto found = dialogs.find(verb->get_code());
     if (found != dialogs.end()) {
         return found->second;
     }
+    return nullptr;
+}
+
+DialogBase *DialogContainer::get_dialog(int verb_code)
+{
+    auto found = dialogs.find(verb_code);
+    if (found != dialogs.end()) {
+        return found->second;
+    }
+
     return nullptr;
 }
 
@@ -481,6 +510,14 @@ void DialogContainer::column_empty(DialogMultipaned *column)
     DialogMultipaned *parent = dynamic_cast<DialogMultipaned *>(column->get_parent());
     if (parent && !parent->is_only_final_multipaned(column)) {
         parent->remove(*column);
+    }
+
+    // Close the DialogWindow if you're in an empty one
+    if (columns->get_first_widget() == columns->get_last_widget()) {
+        DialogWindow *window = dynamic_cast<DialogWindow *>(get_toplevel());
+        if (window) {
+            window->close();
+        }
     }
 }
 

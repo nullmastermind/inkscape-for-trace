@@ -222,8 +222,6 @@ SelectorsDialog::SelectorsDialog()
     , _textNode(nullptr)
     , _scroolpos(0)
     , _scroollock(false)
-    , _desktop(nullptr)
-    , _document(nullptr)
 {
     g_debug("SelectorsDialog::SelectorsDialog");
 
@@ -406,7 +404,6 @@ void SelectorsDialog::_toggleDirection(Gtk::RadioButton *vertical)
 SelectorsDialog::~SelectorsDialog()
 {
     g_debug("SelectorsDialog::~SelectorsDialog");
-    _selection_changed_connection.disconnect();
 }
 
 
@@ -1296,30 +1293,6 @@ private:
 
 // -------------------------------------------------------------------
 
-
-/**
- * Handle document replaced. (Happens when a default document is immediately replaced by another
- * document in a new window.)
- */
-void SelectorsDialog::_handleDocumentReplaced(SPDesktop *desktop, SPDocument * /* document */)
-{
-    g_debug("SelectorsDialog::handleDocumentReplaced()");
-
-    _selection_changed_connection.disconnect();
-
-    _updateWatchers(desktop);
-
-    if (!desktop)
-        return;
-
-    _selection_changed_connection = desktop->getSelection()->connectChanged(
-        sigc::hide(sigc::mem_fun(this, &SelectorsDialog::_handleSelectionChanged)));
-
-    _readStyleElement();
-    _selectRow();
-}
-
-
 /*
  * When a dialog is floating, it is connected to the active desktop.
  */
@@ -1331,15 +1304,14 @@ void SelectorsDialog::update()
     }
 
     SPDesktop *desktop = getDesktop();
-    SPDocument *document = _app->get_active_document();
 
-    if (_desktop != desktop) {
-        _desktop = desktop;
-        _handleDocumentReplaced(desktop, document);
-    } else if (_document != document) {
-        _document = document;
-        _handleDocumentReplaced(desktop, _document);
-    }
+    _updateWatchers(desktop);
+
+    if (!desktop)
+        return;
+
+    _handleSelectionChanged();
+    _selectRow();
 
     _style_dialog->update();
 }
