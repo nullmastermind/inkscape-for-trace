@@ -1092,7 +1092,7 @@ SPDesktopWidget::setWindowTransient (void *p, int transient_policy)
          * manager because the switched-to document will be raised at once
          * (so that its transients also could raise)
          */
-        if (transient_policy == 2)
+        if (transient_policy == PREFS_DIALOGS_WINDOWS_AGGRESSIVE)
             // without this, a transient window not always emerges on top
             gtk_window_present (w);
     }

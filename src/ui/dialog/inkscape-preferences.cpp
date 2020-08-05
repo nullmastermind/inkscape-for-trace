@@ -1818,12 +1818,11 @@ void InkscapePreferences::initPageUI()
     _win_save_geom_prefs.init ( _("Remember and use last window's geometry"), "/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_LAST, false, &_win_save_geom);
     _win_save_geom_off.init ( _("Don't save window geometry"), "/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_NONE, false, &_win_save_geom);
 
-    _win_save_dialog_pos_on.init ( _("Save and restore dialogs status"), "/options/savedialogposition/value", 1, true, nullptr);
-    _win_save_dialog_pos_off.init ( _("Don't save dialogs status"), "/options/savedialogposition/value", 0, false, &_win_save_dialog_pos_on);
+    _win_save_dialog_pos_on.init ( _("Save and restore dialogs status"), "/options/savedialogposition/value", PREFS_DIALOGS_STATE_SAVE, true, nullptr);
+    _win_save_dialog_pos_off.init ( _("Don't save dialogs status"), "/options/savedialogposition/value", PREFS_DIALOGS_STATE_NONE, false, &_win_save_dialog_pos_on);
 
-    _win_dockable.init ( _("Dockable"), "/options/dialogtype/value", 1, true, nullptr);
-    _win_floating.init ( _("Floating"), "/options/dialogtype/value", 0, false, &_win_dockable);
-
+    _win_dockable.init ( _("Dockable"), "/options/dialogtype/value", PREFS_DIALOGS_BEHAVIOR_DOCKABLE, true, nullptr);
+    _win_floating.init ( _("Floating"), "/options/dialogtype/value", PREFS_DIALOGS_BEHAVIOR_FLOATING, false, &_win_dockable);
 
     _win_native.init ( _("Native open/save dialogs"), "/options/desktopintegration/value", 1, true, nullptr);
     _win_gtk.init ( _("GTK open/save dialogs"), "/options/desktopintegration/value", 0, false, &_win_native);
@@ -1831,9 +1830,12 @@ void InkscapePreferences::initPageUI()
     _win_hide_task.init ( _("Dialogs are hidden in taskbar"), "/options/dialogsskiptaskbar/value", true);
     _win_save_viewport.init ( _("Save and restore documents viewport"), "/options/savedocviewport/value", true);
     _win_zoom_resize.init ( _("Zoom when window is resized"), "/options/stickyzoom/value", false);
-    _win_ontop_none.init ( C_("Dialog on top", "None"), "/options/transientpolicy/value", 0, false, nullptr);
-    _win_ontop_normal.init ( _("Normal"), "/options/transientpolicy/value", 1, true, &_win_ontop_none);
-    _win_ontop_agressive.init ( _("Aggressive"), "/options/transientpolicy/value", 2, false, &_win_ontop_none);
+    _win_ontop_none.init ( C_("Dialog on top", "None"), "/options/transientpolicy/value", PREFS_DIALOGS_WINDOWS_NONE, false, nullptr);
+    _win_ontop_normal.init ( _("Normal"), "/options/transientpolicy/value", PREFS_DIALOGS_WINDOWS_NORMAL, true, &_win_ontop_none);
+    _win_ontop_agressive.init ( _("Aggressive"), "/options/transientpolicy/value", PREFS_DIALOGS_WINDOWS_AGGRESSIVE, false, &_win_ontop_none);
+
+    _win_dialogs_labels_auto.init( _("Automatic"), "/options/notebooklabels/value", PREFS_NOTEBOOK_LABELS_AUTO, true, nullptr);
+    _win_dialogs_labels_off.init( _("Off"), "/options/notebooklabels/value", PREFS_NOTBOOK_LABELS_OFF, false, &_win_dialogs_labels_auto);
 
     {
         Glib::ustring defaultSizeLabels[] = {C_("Window size", "Default"),
@@ -1889,6 +1891,10 @@ void InkscapePreferences::initPageUI()
     _page_windows.add_line( true, "", _win_ontop_agressive, "",
                             _("Same as Normal but may work better with some window managers"));
 #endif
+
+    _page_windows.add_group_header( _("Dialog labels behavior (requires restart)"));
+    _page_windows.add_line( true, "", _win_dialogs_labels_auto, "", _("Dialogs' name labels will hide or show according to the space"));
+    _page_windows.add_line( true, "", _win_dialogs_labels_off, "", _("Dialogs' name labels will allways be hidden"));
 
     _page_windows.add_group_header( _("Miscellaneous"));
 #ifndef _WIN32 // FIXME: Temporary Win32 special code to enable transient dialogs

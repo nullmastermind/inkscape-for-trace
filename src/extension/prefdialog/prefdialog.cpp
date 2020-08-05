@@ -111,9 +111,6 @@ PrefDialog::PrefDialog (Glib::ustring name, Gtk::Widget * controls, Effect * eff
         set_modal(false);
     }
 
-    GtkWidget *dlg = GTK_WIDGET(gobj());
-    sp_transientize(dlg);
-
     return;
 }
 

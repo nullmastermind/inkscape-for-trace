@@ -30,6 +30,7 @@
 #include "desktop-events.h"
 #include "enums.h"
 #include "ui/monitor.h"
+#include "ui/dialog/dialog-container.h"
 
 #include "sp-guide.h"
 #include "sp-item-group.h"
@@ -823,7 +824,7 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
     desktop->clear_transform_history();
 
     if (show_dialogs) {
-        // desktop->show_dialogs(); TODO: load dialog state
+        desktop->getContainer()->load_container_state();
     }
 }
 

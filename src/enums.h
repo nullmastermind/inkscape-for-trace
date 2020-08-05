@@ -121,6 +121,35 @@ enum PrefsSaveWindowGeometry {
     PREFS_WINDOW_GEOMETRY_LAST = 2,
 };
 
+/* save container dialogs state preference values (/options/savedialogposition/value) */
+
+enum PrefsSaveDialogsState {
+    PREFS_DIALOGS_STATE_NONE = 0,
+    PREFS_DIALOGS_STATE_SAVE = 1,
+};
+
+/* save dialogs docking behavior preference values (/options/dialogtype/value) */
+
+enum PrefsDialogsBehavior {
+    PREFS_DIALOGS_BEHAVIOR_FLOATING = 0,
+    PREFS_DIALOGS_BEHAVIOR_DOCKABLE = 1,
+};
+
+/* save dialog windows type preference values (/options/transientpolicy/value) */
+
+enum PrefsDialogsWindowsType {
+    PREFS_DIALOGS_WINDOWS_NONE = 0,
+    PREFS_DIALOGS_WINDOWS_NORMAL = 1,
+    PREFS_DIALOGS_WINDOWS_AGGRESSIVE = 2,
+};
+
+/* save notebook labels behavior preference value (/options/notebooklabels/value) */
+
+enum PrefsDialogNotebookLabelsBehavior {
+    PREFS_NOTEBOOK_LABELS_AUTO = 0,
+    PREFS_NOTBOOK_LABELS_OFF = 1,
+};
+
 /* default window size preference values (/options/defaultwindowsize/value) */
 
 enum PrefsDefaultWindowSize {

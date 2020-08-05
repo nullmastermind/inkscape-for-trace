@@ -46,6 +46,7 @@ public:
 
     // Dialog-related functions
     void new_dialog(Glib::ustring name);
+    void new_dialog(Glib::ustring name, DialogNotebook *notebook);
     void new_floating_dialog(Glib::ustring name);
     bool has_dialog_of_type(DialogBase *dialog);
     DialogBase *get_dialog(Glib::ustring name);
@@ -54,6 +55,11 @@ public:
     void unlink_dialog(DialogBase *dialog);
     void toggle_dialogs();
     void update_dialogs(); // Update all linked dialogs
+
+    // State saving functionality
+    void save_container_state();
+    void load_container_state();
+    void load_container_state(Glib::ustring filename);
 
 private:
     DialogMultipaned *columns;                    // The main widget inside which other children are kept.

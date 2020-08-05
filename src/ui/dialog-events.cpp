@@ -147,10 +147,11 @@ void sp_transientize(GtkWidget *dialog)
     }
 #endif
 
-    gint transient_policy = prefs->getIntLimited("/options/transientpolicy/value", 1, 0, 2);
+    gint transient_policy = prefs->getIntLimited("/options/transientpolicy/value", PREFS_DIALOGS_WINDOWS_NORMAL,
+                                                 PREFS_DIALOGS_WINDOWS_NONE, PREFS_DIALOGS_WINDOWS_AGGRESSIVE);
 
 #ifdef _WIN32 // Win32 special code to enable transient dialogs
-    transient_policy = 2;
+    transient_policy = PREFS_DIALOGS_WINDOWS_AGGRESSIVE;
 #endif
 
     if (transient_policy) {
@@ -173,10 +174,11 @@ void
 sp_transientize_callback ( SPDesktop *desktop, win_data *wd )
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    gint transient_policy = prefs->getIntLimited( "/options/transientpolicy/value", 1, 0, 2);
+    gint transient_policy = prefs->getIntLimited("/options/transientpolicy/value", PREFS_DIALOGS_WINDOWS_NORMAL,
+                                                 PREFS_DIALOGS_WINDOWS_NONE, PREFS_DIALOGS_WINDOWS_AGGRESSIVE);
 
 #ifdef _WIN32 // Win32 special code to enable transient dialogs
-    transient_policy = 1;
+    transient_policy = PREFS_DIALOGS_WINDOWS_NORMAL;
 #endif
 
     if (!transient_policy)

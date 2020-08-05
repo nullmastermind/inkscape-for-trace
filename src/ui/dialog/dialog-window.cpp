@@ -22,6 +22,7 @@
 #include "dialog-container.h"
 #include "dialog-multipaned.h"
 #include "dialog-notebook.h"
+#include "enums.h"
 #include "inkscape-application.h"
 #include "preferences.h"
 
@@ -37,7 +38,22 @@ DialogWindow::DialogWindow(Gtk::Widget *page)
     : Gtk::ApplicationWindow()
     , _app(&ConcreteInkscapeApplication<Gtk::Application>::get_instance())
 {
-    set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG); // Make DialogWindow stay above InkscapeWindow
+    // ============ Intialization ===============
+    // Setting the window type
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool window_above = true;
+    if (prefs) {
+        window_above =
+            prefs->getInt("/options/transientpolicy/value", PREFS_DIALOGS_WINDOWS_NORMAL) != PREFS_DIALOGS_WINDOWS_NONE;
+    }
+
+    if (window_above) {
+        set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG); // Make DialogWindow stay above InkscapeWindow
+    } else {
+        set_type_hint(Gdk::WINDOW_TYPE_HINT_NORMAL); // DialogWindow acts like a normal window
+    }
+
+    // Add the window to our app
     if (!_app) {
         std::cerr << "DialogWindow::DialogWindow(): _app is null" << std::endl;
         return;
@@ -45,8 +61,6 @@ DialogWindow::DialogWindow(Gtk::Widget *page)
     _app->add_window(*this);
 
     // ============ Theming: icons ==============
-
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     if (prefs->getBool("/theme/symbolicIcons", false)) {
         get_style_context()->add_class("symbolic");
@@ -67,7 +81,7 @@ DialogWindow::DialogWindow(Gtk::Widget *page)
     static int i = 0;
     set_title(_("Dialog Window ") + Glib::ustring::format(++i));
     set_name(_("Dialog Window ") + Glib::ustring::format(i));
-    set_default_size(300, 400);
+    set_default_size(360, 520);
 
     // =============== Outer Box ================
     Gtk::Box *box_outer = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
@@ -88,17 +102,20 @@ DialogWindow::DialogWindow(Gtk::Widget *page)
     columns->set_dropzone_sizes(10, 10);
     box_outer->pack_end(*_container);
 
-    // ============= Initial Column =============
-    DialogMultipaned *column = _container->create_column();
-    column->set_dropzone_sizes(-1, 10);
-    columns->append(column);
+    // If there is no page, create an empty Dialogwindow to be populated later
+    if (page) {
+        // ============= Initial Column =============
+        DialogMultipaned *column = _container->create_column();
+        column->set_dropzone_sizes(-1, 10);
+        columns->append(column);
 
-    // ============== New Notebook ==============
-    DialogNotebook *dialog_notebook = Gtk::manage(new DialogNotebook(_container));
-    column->append(dialog_notebook);
-    dialog_notebook->move_page(*page);
+        // ============== New Notebook ==============
+        DialogNotebook *dialog_notebook = Gtk::manage(new DialogNotebook(_container));
+        column->append(dialog_notebook);
+        dialog_notebook->move_page(*page);
 
-    update_dialogs();
+        update_dialogs();
+    }
 }
 
 /**
@@ -112,7 +129,10 @@ void DialogWindow::update_dialogs()
         std::cerr << "DialogWindow::update_dialogs(): _app is null" << std::endl;
         return;
     }
-    _label->set_text(_app->get_active_document()->getDocumentName());
+
+    if (_app->get_active_document()) {
+        _label->set_text(_app->get_active_document()->getDocumentName());
+    }
 }
 
 // =====================  Callbacks ======================

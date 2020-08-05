@@ -21,9 +21,10 @@
 #include <gtkmm/separatormenuitem.h>
 #include <iostream>
 
-#include "dialog-base.h"
-#include "dialog-container.h"
-#include "dialog-multipaned.h"
+#include "enums.h"
+#include "ui/dialog/dialog-base.h"
+#include "ui/dialog/dialog-container.h"
+#include "ui/dialog/dialog-multipaned.h"
 #include "ui/dialog/dialog-window.h"
 #include "verbs.h"
 
@@ -47,6 +48,15 @@ DialogNotebook::DialogNotebook(DialogContainer *container)
     set_shadow_type(Gtk::SHADOW_NONE);
     set_vexpand(true);
     set_hexpand(true);
+
+    // =========== Getting preferences ==========
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    if (prefs == nullptr) {
+        return;
+    }
+
+    _labels_auto =
+        prefs->getInt("/options/notebooklabels/value", PREFS_NOTEBOOK_LABELS_AUTO) == PREFS_NOTEBOOK_LABELS_AUTO;
 
     // ============= Notebook menu ==============
     _menu.set_title("NotebookOptions");

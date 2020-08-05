@@ -13,8 +13,12 @@
 
 #include "dialog-container.h"
 
+#include <giomm/file.h>
+#include <glibmm/keyfile.h>
 #include <gtkmm/image.h>
 
+#include "enums.h"
+#include "inkscape-application.h"
 #include "ui/dialog/align-and-distribute.h"
 #include "ui/dialog/clonetiler.h"
 #include "ui/dialog/dialog-multipaned.h"
@@ -55,6 +59,7 @@
 #include "ui/dialog/undo-history.h"
 #include "ui/dialog/xml-tree.h"
 #include "ui/icon-names.h"
+#include "ui/widget/canvas-grid.h"
 #include "verbs.h"
 
 namespace Inkscape {
@@ -241,6 +246,23 @@ Gtk::Widget *DialogContainer::create_notebook_tab(Glib::ustring label_str, Glib:
 // Add new dialog (in response to menu)
 void DialogContainer::new_dialog(Glib::ustring name)
 {
+    // Open all dialogs as floating, if set in preferences
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    if (prefs == nullptr) {
+        return;
+    }
+
+    int dockable = prefs->getInt("/options/dialogtype/value", PREFS_DIALOGS_BEHAVIOR_DOCKABLE);
+    if (dockable == PREFS_DIALOGS_BEHAVIOR_FLOATING) {
+        new_floating_dialog(name);
+    } else {
+        new_dialog(name, nullptr);
+    }
+}
+
+// Overloaded new_dialog
+void DialogContainer::new_dialog(Glib::ustring name, DialogNotebook *notebook)
+{
     // Get the verb with that id
     Glib::ustring id = name == "InkscapePreferences" ? "DialogPreferences" : name; // TODO: might be improved
     Inkscape::Verb *verb = Inkscape::Verb::getbyid(id.c_str());
@@ -270,9 +292,6 @@ void DialogContainer::new_dialog(Glib::ustring name)
 
     // Create the notebook tab
     Gtk::Widget *tab = create_notebook_tab(dialog->get_name(), verb->get_image());
-
-    // Find or create notebook to insert dialog
-    DialogNotebook *notebook = nullptr;
 
     // Check if request came from notebook menu
     Gtk::Window *window = dynamic_cast<Gtk::Window *>(get_toplevel());
@@ -406,6 +425,308 @@ void DialogContainer::unlink_dialog(DialogBase *dialog)
     }
 }
 
+
+/**
+ * Load last open window's dialog configuration state.
+ *
+ * For the keyfile format, check `save_container_state()`.
+ */
+void DialogContainer::load_container_state()
+{
+    load_container_state("dialogs-state.ini");
+}
+
+/**
+ * Load last open window's dialog configuration state.
+ *
+ * For the keyfile format, check `save_container_state()`.
+ */
+void DialogContainer::load_container_state(Glib::ustring filename)
+{
+    // Step 0: check if we want to load the state
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    if (prefs == nullptr) {
+        return;
+    }
+
+    int save_state = prefs->getInt("/options/savedialogposition/value", PREFS_DIALOGS_STATE_SAVE);
+    if (save_state == PREFS_DIALOGS_STATE_NONE) {
+        return; // User has turned off this feature in Preferences
+    }
+
+    // if it isn't dockable, all saved docked dialogs are made floating
+    bool is_dockable =
+        prefs->getInt("/options/dialogtype/value", PREFS_DIALOGS_BEHAVIOR_DOCKABLE) != PREFS_DIALOGS_BEHAVIOR_FLOATING;
+
+    // Step 1: Read from file
+    Glib::ustring file = Glib::build_filename(Glib::get_user_cache_dir(), "inkscape", filename);
+    Glib::KeyFile *keyfile = new Glib::KeyFile();
+
+    try {
+        keyfile->load_from_file(file);
+    } catch (Glib::Error &error) {
+        std::cerr << "DialogContainer::load_container_state: " << error.what() << std::endl;
+        return;
+    }
+
+    // Step 2: get the number of windows
+    int windows_count = 0;
+    try {
+        windows_count = keyfile->get_integer("Windows", "Count");
+    } catch (Glib::Error &error) {
+        std::cerr << "DialogContainer::load_container_state: " << error.what() << std::endl;
+    }
+
+    // Step 3: for each window, load its state. Only the first window is not floating (the others are DialogWindow)
+    for (int window_idx = 0; window_idx < windows_count; ++window_idx) {
+        Glib::ustring group_name = "Window" + std::to_string(window_idx);
+
+        // Step 3.0: read the window parameters
+        int column_count = 0;
+        bool floating = window_idx != 0;
+        try {
+            column_count = keyfile->get_integer(group_name, "ColumnCount");
+            floating = keyfile->get_boolean(group_name, "Floating");
+        } catch (Glib::Error &error) {
+            std::cerr << "DialogContainer::load_container_state: " << error.what() << std::endl;
+        }
+
+        // Step 3.1: get the window's container columns where we want to create the dialogs
+        DialogContainer *active_container = nullptr;
+        DialogMultipaned *active_columns = nullptr;
+        DialogWindow *dialog_window = nullptr;
+
+        if (is_dockable) {
+            if (floating) {
+                dialog_window = new DialogWindow(nullptr);
+                if (dialog_window) {
+                    active_container = dialog_window->get_container();
+                    active_columns = dialog_window->get_container()->get_columns();
+                }
+            } else {
+                active_container = this;
+                active_columns = columns;
+            }
+
+            if (!active_container || !active_columns) {
+                continue;
+            }
+        }
+
+        // Step 3.2: for each column, load its state
+        for (int column_idx = 0; column_idx < column_count; ++column_idx) {
+            Glib::ustring column_group_name = group_name + "Column" + std::to_string(column_idx);
+
+            // Step 3.2.0: read the column parameters
+            int notebook_count = 0;
+            bool before_canvas = false;
+            try {
+                notebook_count = keyfile->get_integer(column_group_name, "NotebookCount");
+                before_canvas = keyfile->get_boolean(column_group_name, "BeforeCanvas");
+            } catch (Glib::Error &error) {
+                std::cerr << "DialogContainer::load_container_state: " << error.what() << std::endl;
+            }
+
+            // Step 3.2.1: create the column
+            DialogMultipaned *column = nullptr;
+            if (is_dockable) {
+                column = active_container->create_column();
+                if (!column) {
+                    continue;
+                }
+
+                before_canvas ?  active_columns->prepend(column) : active_columns->append(column);
+            }
+
+            // Step 3.2.2: for each noteboook, load its dialogs
+            for (int notebook_idx = 0; notebook_idx < notebook_count; ++notebook_idx) {
+                Glib::ustring key = "Notebook" + std::to_string(notebook_idx) + "Dialogs";
+
+                // Step 3.2.2.0 read the list of dialog verbs in the current notebook
+                std::vector<int> dialogs;
+                try {
+                    dialogs = keyfile->get_integer_list(column_group_name, key);
+                } catch (Glib::Error &error) {
+                    std::cerr << "DialogContainer::load_container_state: " << error.what() << std::endl;
+                }
+
+                if (!dialogs.size()) {
+                    continue;
+                }
+
+                DialogNotebook *notebook = nullptr;
+                if (is_dockable) {
+                    notebook = Gtk::manage(new DialogNotebook(active_container));
+                    column->append(notebook);
+                }
+
+                // Step 3.2.2.1 create each dialog in the current notebook
+                for (auto dialog_verb : dialogs) {
+                    Verb *verb = Verb::get(dialog_verb);
+
+                    if (verb) {
+                        // active_container->new_dialog(Glib::ustring(verb->get_id()), notebook);
+                        if (is_dockable) {
+                            active_container->new_dialog(Glib::ustring(verb->get_id()), notebook);
+                        } else {
+                            new_floating_dialog(Glib::ustring(verb->get_id()));
+                        }
+                    }
+                }
+            }
+        }
+
+        // Step 3.3: if it's a DialogWindow, show it
+        if (is_dockable && floating) {
+            dialog_window->show_all();
+        }
+    }
+}
+
+/**
+ * Save container state. The configuration of open dialogs and the relative positions of the notebooks are saved.
+ *
+ * The structure of such a KeyFile is:
+ *
+ * There is a "Windows" group that records the number of the windows:
+ * [Windows]
+ * Count=1
+ *
+ * A "WindowX" group saves the number of columns the window's container has and whether the window is floating:
+ *
+ * [Window0]
+ * ColumnCount=1
+ * Floating=false
+ *
+ * For each column, we have a "WindowWColumnX" group, where X is the index of the column. "BeforeCanvas" checks
+ * if the column is before the canvas or not. "NotebookCount" records how many notebooks are in each column and
+ * "NotebookXDialogs" records a list of the verb numbers for the dialogs in notebook X.
+ *
+ * [Window0Column0]
+ * Notebook0Dialogs=262;263;
+ * NotebookCount=2
+ * BeforeCanvas=false
+ *
+ */
+void DialogContainer::save_container_state()
+{
+    // Step 0: check if we want to save the state
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    if (prefs == nullptr) {
+        return;
+    }
+
+    int save_state = prefs->getInt("/options/savedialogposition/value", PREFS_DIALOGS_STATE_SAVE);
+    if (save_state == PREFS_DIALOGS_STATE_NONE) {
+        return; // User has turned off this feature in Preferences
+    }
+
+    Glib::KeyFile *keyfile = new Glib::KeyFile();
+    auto app = &ConcreteInkscapeApplication<Gtk::Application>::get_instance();
+
+    // Step 1: get all the container columns (in order, from the current container and all DialogWindow containers)
+    std::vector<DialogMultipaned *> windows(1, columns);
+
+    for (auto const &window : app->get_windows()) {
+        DialogWindow *dialog_window = dynamic_cast<DialogWindow *>(window);
+        if (dialog_window) {
+            windows.push_back(dialog_window->get_container()->get_columns());
+        }
+    }
+
+    // Step 2: save the number of windows
+    keyfile->set_integer("Windows", "Count", windows.size());
+
+    // Step 3: for each window, save its data. Only the first window is not floating (the others are DialogWindow)
+    for (int window_idx = 0; window_idx < (int)windows.size(); ++window_idx) {
+        // Step 3.0: get all the multipanes of the window
+        std::vector<DialogMultipaned *> multipanes;
+
+        // used to check if the column is before or after canvas
+        std::vector<DialogMultipaned *>::iterator multipanes_it = multipanes.begin();
+        bool canvas_seen = window_idx != 0; // no floating windows (window_idx > 0) have a canvas
+        int before_canvas_columns_count = 0;
+
+        for (auto const &column : windows[window_idx]->get_children()) {
+            if (!canvas_seen) {
+                UI::Widget::CanvasGrid *canvas = dynamic_cast<UI::Widget::CanvasGrid *>(column);
+                if (canvas) {
+                    canvas_seen = true;
+                } else {
+                    DialogMultipaned *paned = dynamic_cast<DialogMultipaned *>(column);
+                    if (paned) {
+                        multipanes_it = multipanes.insert(multipanes_it, paned);
+                        before_canvas_columns_count++;
+                    }
+                }
+            } else {
+                DialogMultipaned *paned = dynamic_cast<DialogMultipaned *>(column);
+                if (paned) {
+                    multipanes.push_back(paned);
+                }
+            }
+        }
+
+        // Step 3.1: for each non-empty column, save its data.
+        int column_count = 0; // non-empty columns count
+        for (int column_idx = 0; column_idx < (int)multipanes.size(); ++column_idx) {
+            Glib::ustring group_name = "Window" + std::to_string(window_idx) + "Column" + std::to_string(column_idx);
+            int notebook_count = 0; // non-empty notebooks count
+
+            // Step 3.1.0: for each notebook, get its dialogs' verbs
+            for (auto const &columns_widget : multipanes[column_idx]->get_children()) {
+                DialogNotebook *dialog_notebook = dynamic_cast<DialogNotebook *>(columns_widget);
+
+                if (dialog_notebook) {
+                    std::vector<int> dialogs;
+
+                    for (auto const &widget : dialog_notebook->get_notebook()->get_children()) {
+                        DialogBase *dialog = dynamic_cast<DialogBase *>(widget);
+                        if (dialog) {
+                            dialogs.push_back(dialog->getVerb());
+                        }
+                    }
+
+                    // save the dialogs verbs
+                    Glib::ustring key = "Notebook" + std::to_string(notebook_count) + "Dialogs";
+                    keyfile->set_integer_list(group_name, key, dialogs);
+
+                    // increase the notebook count
+                    notebook_count++;
+                }
+            }
+
+            // Step 3.1.1: increase the column count
+            if (notebook_count != 0) {
+                column_count++;
+            }
+
+            // Step 3.1.2: Save the column's data
+            keyfile->set_integer(group_name, "NotebookCount", notebook_count);
+            keyfile->set_boolean(group_name, "BeforeCanvas", (column_idx < before_canvas_columns_count));
+        }
+
+        // Step 3.2: save the window group
+        Glib::ustring group_name = "Window" + std::to_string(window_idx);
+        keyfile->set_integer(group_name, "ColumnCount", column_count);
+        keyfile->set_boolean(group_name, "Floating", window_idx != 0);
+    }
+
+    // Step 4: Write to file
+    Glib::ustring path = Glib::build_filename(Glib::get_user_cache_dir(), "inkscape");
+    Glib::ustring file = Glib::build_filename(path, "dialogs-state.ini");
+
+    if (!Glib::file_test(path, Glib::FILE_TEST_IS_DIR)) {
+        Gio::File::create_for_path(path)->make_directory_with_parents();
+    }
+
+    try {
+        keyfile->save_to_file(file);
+    } catch (Glib::FileError &error) {
+        std::cerr << "DialogContainer::save_container_state(): " << error.what() << std::endl;
+    }
+}
+
 // Signals -----------------------------------------------------
 
 /**
@@ -415,6 +736,12 @@ void DialogContainer::on_unmap()
 {
     // Disconnect all signals
     for_each(connections.begin(), connections.end(), [&](auto c) { c.disconnect(); });
+
+    // Save the state only if you are in an InkscapeWindow
+    DialogWindow *window = dynamic_cast<DialogWindow *>(get_toplevel());
+    if (!window) {
+        save_container_state();
+    }
 
     delete columns;
 }
