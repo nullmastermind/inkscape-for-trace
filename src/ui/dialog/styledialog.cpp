@@ -67,6 +67,10 @@ XML::Node *get_first_style_text_node(XML::Node *root, bool create_if_missing)
     XML::Node *styleNode = nullptr;
     XML::Node *textNode = nullptr;
 
+    if (!root) {
+        return nullptr;
+    }
+
     for (auto *node = root->firstChild(); node; node = node->next()) {
         if (node->code() == CODE_svg_defs) {
             textNode = get_first_style_text_node(node, false);

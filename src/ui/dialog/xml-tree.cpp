@@ -73,7 +73,6 @@ XmlTree::XmlTree()
     , new_window(nullptr)
     , _updating(false)
 {
-    set_orientation(Gtk::ORIENTATION_VERTICAL);
     Gtk::Box *contents = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
     status.set_halign(Gtk::ALIGN_START);
     status.set_valign(Gtk::ALIGN_CENTER);

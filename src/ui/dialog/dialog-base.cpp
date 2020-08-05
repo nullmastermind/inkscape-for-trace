@@ -20,6 +20,7 @@
 #include <iostream>
 
 #include "desktop.h"
+#include "ui/dialog/dialog-notebook.h"
 
 namespace Inkscape {
 namespace UI {
@@ -32,7 +33,7 @@ namespace Dialog {
  * @param verb_num the dialog verb.
  */
 DialogBase::DialogBase(gchar const *prefs_path, int verb_num)
-    : Gtk::Box()
+    : Gtk::Box(Gtk::ORIENTATION_VERTICAL)
     , _name("DialogBase")
     , _prefs_path(prefs_path)
     , _verb_num(verb_num)
@@ -56,6 +57,11 @@ void DialogBase::blink()
     if (notebook && notebook->get_is_drawable()) {
         // Switch notebook to this dialog.
         notebook->set_current_page(notebook->page_num(*this));
+
+        DialogNotebook *dialog_notebook = dynamic_cast<DialogNotebook *>(notebook->get_parent()->get_parent());
+        if (dialog_notebook && !dialog_notebook->get_vexpand()) {
+            dialog_notebook->expand_callback();
+        }
 
         Glib::RefPtr<Gtk::StyleContext> style = notebook->get_style_context();
 

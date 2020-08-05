@@ -106,8 +106,6 @@ SymbolsDialog::SymbolsDialog(gchar const *prefsPath)
     , CURRENTDOC(_("Current document"))
     , ALLDOCS(_("All symbol sets"))
 {
-  set_orientation(Gtk::ORIENTATION_VERTICAL);
-
   /********************    Table    *************************/
   auto table = new Gtk::Grid();
 

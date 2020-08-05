@@ -4,6 +4,7 @@ gtest/
 build
 share/inkscape
 share/*/*.h
+share/fonts/.uuid
 
 inkscape_devel_*.snap
 inkscape_devel_source.tar.bz2

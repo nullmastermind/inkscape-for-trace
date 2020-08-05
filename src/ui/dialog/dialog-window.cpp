@@ -37,6 +37,7 @@ DialogWindow::DialogWindow(Gtk::Widget *page)
     : Gtk::ApplicationWindow()
     , _app(&ConcreteInkscapeApplication<Gtk::Application>::get_instance())
 {
+    set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG); // Make DialogWindow stay above InkscapeWindow
     if (!_app) {
         std::cerr << "DialogWindow::DialogWindow(): _app is null" << std::endl;
         return;

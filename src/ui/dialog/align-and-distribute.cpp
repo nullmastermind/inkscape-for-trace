@@ -1130,7 +1130,6 @@ AlignAndDistribute::AlignAndDistribute()
     _removeOverlapFrame.add(_removeOverlapTableBox);
     _nodesFrame.add(_alignBoxNode);
 
-    set_orientation(Gtk::ORIENTATION_VERTICAL);
     set_spacing(4);
 
     // Notebook for individual transformations

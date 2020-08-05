@@ -41,10 +41,7 @@ public:
 
     static FillAndStroke &getInstance() { return *new FillAndStroke(); }
 
-
     void update() override;
-
-    //void selectionChanged(Inkscape::Selection *selection);
 
     void showPageFill();
     void showPageStrokePaint();

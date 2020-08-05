@@ -89,15 +89,6 @@ DialogContainer::DialogContainer()
     show_all_children();
 }
 
-DialogContainer::~DialogContainer()
-{
-    std::cout << "~DialogContainer" << std::endl;
-    // Disconnect all signals
-    for_each(connections.begin(), connections.end(), [&](auto c) { c.disconnect(); });
-
-    delete columns;
-}
-
 DialogMultipaned *DialogContainer::create_column()
 {
     DialogMultipaned *column = Gtk::manage(new DialogMultipaned(Gtk::ORIENTATION_VERTICAL));
@@ -259,14 +250,15 @@ void DialogContainer::new_dialog(Glib::ustring name)
 
     // Create the notebook tab
     Gtk::Label *label = Gtk::manage(new Gtk::Label(dialog->get_name()));
+    label->set_use_underline();
     Gtk::Image *image = Gtk::manage(new Gtk::Image());
     if (verb->get_image()) {
         image->set_from_icon_name(verb->get_image(), Gtk::ICON_SIZE_MENU);
     } else {
         image->set_from_icon_name(INKSCAPE_ICON("inkscape-logo"), Gtk::ICON_SIZE_MENU);
     }
-    Gtk::Box *tab = Gtk::manage(new Gtk::Box());
-    tab->set_name("DialogTab" + name);
+    Gtk::Box *tab = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 2));
+    tab->set_name(label->get_label());
     tab->pack_start(*image);
     tab->pack_end(*label);
     tab->show_all();
@@ -304,7 +296,7 @@ void DialogContainer::new_dialog(Glib::ustring name)
     }
 
     // Add dialog
-    notebook->add_page(*dialog, *tab, name);
+    notebook->add_page(*dialog, *tab, label->get_label());
 }
 
 void DialogContainer::new_floating_dialog(Glib::ustring name)
@@ -387,18 +379,15 @@ void DialogContainer::unlink_dialog(DialogBase *dialog)
 
 // Signals -----------------------------------------------------
 
-// No zombie windows. Need to work on this as it still leaves Gtk::Window!
-// And segfaults if window closed with dialog still inside.
+/**
+ * No zombie windows. TODO: Need to work on this as it still leaves Gtk::Window! (?)
+ */
 void DialogContainer::on_unmap()
 {
-    std::cout << "DialogContainer::on_unmap(): Entrance" << std::endl;
+    // Disconnect all signals
+    for_each(connections.begin(), connections.end(), [&](auto c) { c.disconnect(); });
 
-    // Clean up signals.
-    for (auto connection : connections) {
-        connection.disconnect();
-    }
-
-    // delete this;
+    delete columns;
 }
 
 // Create a new notebook and move page.

@@ -108,8 +108,6 @@ Find::Find()
       blocked(false)
 
 {
-    set_orientation(Gtk::ORIENTATION_VERTICAL);
-
     _left_size_group = Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL);
     _right_size_group = Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL);
     button_find.set_use_underline();

@@ -53,7 +53,6 @@ FillAndStroke::FillAndStroke()
     , fillWdgt(nullptr)
     , strokeWdgt(nullptr)
 {
-    set_orientation(Gtk::ORIENTATION_VERTICAL);
     set_spacing(2);
     pack_start(_notebook, true, true);
 
@@ -73,6 +72,8 @@ FillAndStroke::FillAndStroke()
     show_all_children();
 
     _composite_settings.setSubject(&_subject);
+
+    update();
 }
 
 FillAndStroke::~FillAndStroke()
@@ -88,10 +89,6 @@ void FillAndStroke::update()
 
     SPDesktop *desktop = getDesktop();
 
-    if (!desktop) {
-        return;
-    }
-
     if (targetDesktop != desktop) {
         targetDesktop = desktop;
         if (fillWdgt) {
@@ -103,7 +100,9 @@ void FillAndStroke::update()
         if (strokeStyleWdgt) {
             strokeStyleWdgt->setDesktop(desktop);
         }
-        _subject.setDesktop(desktop);
+        if (desktop) {
+            _subject.setDesktop(desktop);
+        }
     }
 }
 

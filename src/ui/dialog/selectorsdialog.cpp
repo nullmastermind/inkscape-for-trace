@@ -222,6 +222,8 @@ SelectorsDialog::SelectorsDialog()
     , _textNode(nullptr)
     , _scroolpos(0)
     , _scroollock(false)
+    , _desktop(nullptr)
+    , _document(nullptr)
 {
     g_debug("SelectorsDialog::SelectorsDialog");
 
@@ -404,7 +406,6 @@ void SelectorsDialog::_toggleDirection(Gtk::RadioButton *vertical)
 SelectorsDialog::~SelectorsDialog()
 {
     g_debug("SelectorsDialog::~SelectorsDialog");
-    _document_replaced_connection.disconnect();
     _selection_changed_connection.disconnect();
 }
 
@@ -1330,22 +1331,17 @@ void SelectorsDialog::update()
     }
 
     SPDesktop *desktop = getDesktop();
+    SPDocument *document = _app->get_active_document();
 
-    if (!desktop) {
-        return;
+    if (_desktop != desktop) {
+        _desktop = desktop;
+        _handleDocumentReplaced(desktop, document);
+    } else if (_document != document) {
+        _document = document;
+        _handleDocumentReplaced(desktop, _document);
     }
 
-    _document_replaced_connection.disconnect();
-
-    _handleDocumentReplaced(desktop, nullptr);
-
     _style_dialog->update();
-
-    if (!desktop)
-        return;
-
-    _document_replaced_connection =
-        desktop->connectDocumentReplaced(sigc::mem_fun(this, &SelectorsDialog::_handleDocumentReplaced));
 }
 
 /*

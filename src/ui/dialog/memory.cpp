@@ -208,8 +208,6 @@ Memory::Memory()
     : DialogBase("/dialogs/memory", SP_VERB_HELP_MEMORY)
     , _private(*(new Memory::Private()))
 {
-    set_orientation(Gtk::ORIENTATION_VERTICAL);
-
     // Private conf
     pack_start(_private.view);
 

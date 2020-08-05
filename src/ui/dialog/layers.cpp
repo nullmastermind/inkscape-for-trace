@@ -744,8 +744,6 @@ LayersPanel::LayersPanel()
                          UI::Widget::SimpleFilterModifier::OPACITY |
                          UI::Widget::SimpleFilterModifier::BLUR)
 {
-    set_orientation(Gtk::ORIENTATION_VERTICAL);
-
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     _maxNestDepth = prefs->getIntLimited("/dialogs/layers/maxDepth", 20, 1, 1000);
 

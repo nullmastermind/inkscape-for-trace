@@ -99,7 +99,6 @@ CloneTiler::CloneTiler()
     : DialogBase("/dialogs/clonetiler/", SP_VERB_DIALOG_CLONETILER)
     , table_row_labels(nullptr)
 {
-    set_orientation(Gtk::ORIENTATION_VERTICAL);
     set_spacing(0);
 
     {

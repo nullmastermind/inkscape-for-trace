@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
-#ifndef MY_MULTIPANED_H
-#define MY_MULTIPANED_H
+#ifndef INKSCAPE_UI_DIALOG_MULTIPANED_H
+#define INKSCAPE_UI_DIALOG_MULTIPANED_H
 
 /** @file
  * @brief A widget with multiple panes. Agnotic to type what kind of widgets panes contain.
@@ -43,9 +43,6 @@ class MyDropZone
 public:
     MyDropZone(Gtk::Orientation orientation, int size);
     ~MyDropZone() override = default;
-
-private:
-    DialogMultipaned *_parent = nullptr;
 };
 
 /* ============  HANDLE   ============ */
@@ -154,7 +151,7 @@ private:
 } // namespace UI
 } // namespace Inkscape
 
-#endif // MY_MULTIPANED_H
+#endif // INKSCAPE_UI_DIALOG_MULTIPANED_H
 
 /*
   Local Variables:

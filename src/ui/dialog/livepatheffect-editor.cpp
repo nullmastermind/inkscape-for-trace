@@ -100,7 +100,6 @@ LivePathEffectEditor::LivePathEffectEditor()
     , current_lpeitem(nullptr)
     , current_lperef(nullptr)
 {
-    set_orientation(Gtk::ORIENTATION_VERTICAL);
     set_spacing(4);
 
     //Add the TreeView, inside a ScrolledWindow, with the button underneath:

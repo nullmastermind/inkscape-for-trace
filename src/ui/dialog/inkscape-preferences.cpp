@@ -192,8 +192,6 @@ InkscapePreferences::InkscapePreferences()
       _current_page(nullptr),
       _init(true)
 {
-    set_orientation(Gtk::ORIENTATION_VERTICAL);
-
     //get the width of a spinbutton
     Inkscape::UI::Widget::SpinButton* sb = new Inkscape::UI::Widget::SpinButton;
     sb->set_width_chars(6);

@@ -58,6 +58,7 @@
 #include "ui/icon-names.h"
 #include "ui/dialog/dialog-container.h"
 #include "ui/dialog/dialog-multipaned.h"
+#include "ui/dialog/dialog-window.h"
 #include "ui/tools/box3d-tool.h"
 #include "ui/uxmanager.h"
 #include "ui/widget/button.h"
@@ -86,6 +87,7 @@
 using Inkscape::DocumentUndo;
 using Inkscape::UI::Dialog::DialogContainer;
 using Inkscape::UI::Dialog::DialogMultipaned;
+using Inkscape::UI::Dialog::DialogWindow;
 using Inkscape::UI::Widget::UnitTracker;
 using Inkscape::UI::UXManager;
 using Inkscape::UI::ToolboxFactory;
@@ -212,23 +214,20 @@ SPDesktopWidget::SPDesktopWidget()
     dtw->_hbox->set_name("DesktopHbox");
     dtw->_vbox->pack_end(*dtw->_hbox, true, true);
 
-    _container = Gtk::manage(new DialogContainer());
-    _columns = _container->get_columns();
-    _columns->set_dropzone_sizes(2, -1);
-    dtw->_hbox->pack_start(*_container, false, true);
-
     /* Toolboxes */
     dtw->aux_toolbox = ToolboxFactory::createAuxToolbox();
     dtw->_vbox->pack_end(*Glib::wrap(dtw->aux_toolbox), false, true);
 
     dtw->snap_toolbox = ToolboxFactory::createSnapToolbox();
     ToolboxFactory::setOrientation( dtw->snap_toolbox, GTK_ORIENTATION_VERTICAL );
+    dtw->_hbox->pack_end(*Glib::wrap(dtw->snap_toolbox), false, true);
 
     dtw->commands_toolbox = ToolboxFactory::createCommandsToolbox();
     dtw->_vbox->pack_end(*Glib::wrap(dtw->commands_toolbox), false, true);
 
     dtw->tool_toolbox = ToolboxFactory::createToolToolbox();
     ToolboxFactory::setOrientation( dtw->tool_toolbox, GTK_ORIENTATION_VERTICAL );
+    dtw->_hbox->pack_start(*Glib::wrap(dtw->tool_toolbox), false, true);
 
     /* Canvas Grid (canvas, rulers, scrollbars, etc.) */
     dtw->_canvas_grid = Gtk::manage(new Inkscape::UI::Widget::CanvasGrid(this));
@@ -239,12 +238,15 @@ SPDesktopWidget::SPDesktopWidget()
     dtw->_canvas->set_cms_active(prefs->getBool("/options/displayprofile/enable"));
 
     /* Dialog Container */
+    _container = Gtk::manage(new DialogContainer());
+    _columns = _container->get_columns();
+    _columns->set_dropzone_sizes(2, -1);
+    dtw->_hbox->pack_start(*_container, false, true);
+
     DialogMultipaned *column = _container->create_column();
 
     _canvas_grid->set_hexpand(true);
     _canvas_grid->set_vexpand(true);
-    _columns->append(Glib::wrap(dtw->tool_toolbox));
-    _columns->append(Glib::wrap(dtw->snap_toolbox));
     _columns->append(_canvas_grid);
     _columns->append(column);
 
@@ -917,6 +919,33 @@ SPDesktopWidget::shutdown()
             default: // cancel pressed, or dialog was closed
                 return TRUE;
                 break;
+            }
+        }
+    }
+
+    {
+        // Delete all floating DialogWindows if there is only this desktop's window
+        auto app = &ConcreteInkscapeApplication<Gtk::Application>::get_instance();
+        SPDesktop *curr_desktop = dynamic_cast<SPDesktop *>(app->get_active_view());
+        SPDesktop *next_desktop = nullptr;
+
+        std::list<SPDesktop *> desktop_list;
+        INKSCAPE.get_all_desktops(desktop_list);
+        for (auto d : desktop_list) {
+            if (!next_desktop && d != curr_desktop) {
+                next_desktop = d;
+                break;
+            }
+        }
+
+        if (next_desktop) {
+            next_desktop->presentWindow();
+        }
+
+        for (auto window : app->get_windows()) {
+            DialogWindow *dialog_window = dynamic_cast<DialogWindow *>(window);
+            if (dialog_window && !next_desktop) {
+                dialog_window->close();
             }
         }
     }

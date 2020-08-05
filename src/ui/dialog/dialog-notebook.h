@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
-#ifndef INK_DIALOG_NOTEBOOK_H
-#define INK_DIALOG_NOTEBOOK_H
+#ifndef INKSCAPE_UI_DIALOG_NOTEBOOK_H
+#define INKSCAPE_UI_DIALOG_NOTEBOOK_H
 
 /** @file
  * @brief A wrapper for Gtk::Notebook.
@@ -16,8 +16,7 @@
 
 #include <gdkmm/dragcontext.h>
 #include <glibmm/refptr.h>
-#include <gtkmm/box.h>
-#include <gtkmm/expander.h>
+#include <gtkmm/scrolledwindow.h>
 #include <gtkmm/menubutton.h>
 #include <gtkmm/notebook.h>
 #include <gtkmm/widget.h>
@@ -35,7 +34,7 @@ class DialogContainer;
  *
  * The notebook is inside a Gtk::Expander to be able to be hidden easily.
  */
-class DialogNotebook : public Gtk::Box
+class DialogNotebook : public Gtk::ScrolledWindow
 {
 public:
     DialogNotebook(DialogContainer *container);
@@ -54,6 +53,7 @@ public:
 
     void on_page_added(Gtk::Widget *page, int page_num);
     void on_page_removed(Gtk::Widget *page, int page_num);
+    void on_page_switched(Gtk::Widget *page, int page_num);
 
     // Signal handlers - Notebook menu (action)
     void close_tab_callback();
@@ -62,24 +62,30 @@ public:
     void hide_all_tab_labels_callback();
     void show_all_tab_labels_callback();
     void move_tab_callback();
+    void expand_callback();
     void close_notebook_callback();
 
 private:
-    void on_expandeder_resize();
+    void open_dialog_from_notebook(Glib::ustring);
+    void toggle_tab_labels_callback();
+    void stop_scrolling();
 
     DialogContainer *_container;
-    Gtk::Expander _expander;
-    Gtk::MenuButton _action_button;
-    Gtk::Menu _action_menu;
+    Gtk::MenuButton _menu_button;
+    Gtk::Button _expand_button;
+    Gtk::Menu _menu;
+    Gtk::MenuItem *_toggle_all_labels_menuitem;
     int _dialog_menu_items;
+    bool _labels_shown;
     Gtk::Notebook _notebook;
+    sigc::connection _scrolling_connection;
 };
 
 } // namespace Dialog
 } // namespace UI
 } // namespace Inkscape
 
-#endif // INK_DIALOG_NOTEBOOK_H
+#endif // INKSCAPE_UI_DIALOG_NOTEBOOK_H
 
 /*
   Local Variables:

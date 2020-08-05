@@ -26,7 +26,6 @@
 ../src/extension/dependency.cpp
 ../src/extension/effect.cpp
 ../src/extension/effect.h
-../src/extension/error-file.cpp
 ../src/extension/execution-env.cpp
 ../src/extension/extension.cpp
 ../src/extension/implementation/script.cpp
@@ -272,7 +271,6 @@
 ../src/ui/dialog/objects.cpp
 ../src/ui/dialog/paint-servers.cpp
 ../src/ui/dialog/polar-arrange-tab.cpp
-../src/ui/dialog/print-colors-preview-dialog.cpp
 ../src/ui/dialog/print.cpp
 ../src/ui/dialog/save-template-dialog.cpp
 ../src/ui/dialog/selectorsdialog.cpp

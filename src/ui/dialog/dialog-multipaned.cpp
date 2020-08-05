@@ -19,6 +19,8 @@
 #include <gtkmm/label.h>
 #include <iostream>
 
+#include "ui/dialog/dialog-notebook.h"
+
 #define DROPZONE_SIZE 16
 #define HANDLE_SIZE 8
 
@@ -50,10 +52,7 @@ MyDropZone::MyDropZone(Gtk::Orientation orientation, int size=DROPZONE_SIZE)
     , Gtk::EventBox()
 {
     set_name("MyDropZone");
-    set_has_window(false); // Default?
     set_orientation(orientation);
-    set_above_child(true);
-    set_visible_window(true);
 
     if (get_orientation() == Gtk::ORIENTATION_HORIZONTAL) {
         set_size_request(size, -1);
@@ -148,11 +147,14 @@ DialogMultipaned::~DialogMultipaned()
     // Disconnect all signals
     for_each(_connections.begin(), _connections.end(), [&](auto c) { c.disconnect(); });
 
-    // Delete other Multipaned children TODO: toolbox bug keeps from deleting all non-internal children
+    // Delete other Multipaned children
     for (auto child : children) {
-        if (dynamic_cast<DialogMultipaned *>(child))
-            delete child;
+        if (dynamic_cast<DialogMultipaned *>(child) || dynamic_cast<DialogNotebook *>(child)) {
+            child->unparent();
+        }
     }
+
+    children.clear();
 }
 
 void DialogMultipaned::prepend(Gtk::Widget *child)
@@ -171,9 +173,9 @@ void DialogMultipaned::prepend(Gtk::Widget *child)
     if (child) {
         // Add handle
         if (children.size() > 2) {
-            MyHandle *handle = Gtk::manage(new MyHandle(get_orientation()));
-            handle->set_parent(*this);
-            children.insert(children.begin() + 1, handle); // After start dropzone
+            MyHandle *my_handle = Gtk::manage(new MyHandle(get_orientation()));
+            my_handle->set_parent(*this);
+            children.insert(children.begin() + 1, my_handle); // After start dropzone
         }
 
         // Add child
@@ -201,9 +203,9 @@ void DialogMultipaned::append(Gtk::Widget *child)
     if (child) {
         // Add handle
         if (children.size() > 2) {
-            MyHandle *handle = Gtk::manage(new MyHandle(get_orientation()));
-            handle->set_parent(*this);
-            children.insert(children.end() - 1, handle); // Before end dropzone
+            MyHandle *my_handle = Gtk::manage(new MyHandle(get_orientation()));
+            my_handle->set_parent(*this);
+            children.insert(children.end() - 1, my_handle); // Before end dropzone
         }
 
         // Add child
@@ -496,7 +498,7 @@ void DialogMultipaned::on_size_allocate(Gtk::Allocation &allocation)
         if (left == sum_current) {
             bool valid = true;
             for (int i = 0; i < (int)children.size(); ++i) {
-                valid = valid && sizes_current[i] >= sizes_minimums[i] &&          // is it over the minimums?
+                valid = valid && (sizes_minimums[i] <= sizes_current[i]) &&        // is it over the minimums?
                         (expandables[i] || sizes_current[i] <= sizes_naturals[i]); // but does it want to be expanded?
                 if (!valid)
                     break;
@@ -549,13 +551,17 @@ void DialogMultipaned::on_add(Gtk::Widget *child)
 
 /**
  * Callback when a widget is removed from DialogMultipaned and executes the removal.
- * It does not remove handles.
+ * It does not remove handles or dropzones.
  */
 void DialogMultipaned::on_remove(Gtk::Widget *child)
 {
     if (child) {
-        MyHandle *handle = dynamic_cast<MyHandle *>(child);
-        if (handle) {
+        MyDropZone *dropzone = dynamic_cast<MyDropZone *>(child);
+        if (dropzone) {
+            return;
+        }
+        MyHandle *my_handle = dynamic_cast<MyHandle *>(child);
+        if (my_handle) {
             return;
         }
 
@@ -564,8 +570,8 @@ void DialogMultipaned::on_remove(Gtk::Widget *child)
             auto it = std::find(children.begin(), children.end(), child);
             if (it != children.end()) {         // child found
                 if (it + 2 != children.end()) { // not last widget
-                    handle = dynamic_cast<MyHandle *>(*(it + 1));
-                    handle->unparent();
+                    my_handle = dynamic_cast<MyHandle *>(*(it + 1));
+                    my_handle->unparent();
                     child->unparent();
                     children.erase(it, it + 2);
                 } else {                        // last widget
@@ -573,8 +579,8 @@ void DialogMultipaned::on_remove(Gtk::Widget *child)
                         child->unparent();
                         children.erase(it);
                     } else { // not only widget, delete preceding handle
-                        handle = dynamic_cast<MyHandle *>(*(it - 1));
-                        handle->unparent();
+                        my_handle = dynamic_cast<MyHandle *>(*(it - 1));
+                        my_handle->unparent();
                         child->unparent();
                         children.erase(it - 1, it + 1);
                     }
@@ -600,9 +606,9 @@ void DialogMultipaned::on_drag_begin(double start_x, double start_y)
     int child_number = 0;
     Gtk::Allocation allocation = get_allocation();
     for (auto child : get_children()) {
-        MyHandle *handle = dynamic_cast<MyHandle *>(child);
-        if (handle) {
-            Gtk::Allocation child_allocation = handle->get_allocation();
+        MyHandle *my_handle = dynamic_cast<MyHandle *>(child);
+        if (my_handle) {
+            Gtk::Allocation child_allocation = my_handle->get_allocation();
 
             // Did drag start in handle?
             int x = child_allocation.get_x() - allocation.get_x();

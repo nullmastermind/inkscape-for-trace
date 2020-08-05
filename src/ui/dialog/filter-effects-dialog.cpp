@@ -2637,7 +2637,6 @@ FilterEffectsDialog::FilterEffectsDialog()
     , _filter_modifier(*this)
     , _primitive_list(*this)
 {
-    set_orientation(Gtk::ORIENTATION_VERTICAL);
     _settings = new Settings(*this, _settings_tab1, sigc::mem_fun(*this, &FilterEffectsDialog::set_attr_direct),
                              NR_FILTER_ENDPRIMITIVETYPE);
     _filter_general_settings = new Settings(*this, _settings_tab2, sigc::mem_fun(*this, &FilterEffectsDialog::set_filternode_attr),

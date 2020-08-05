@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
-#ifndef INK_WINDOW_DOCK_H
-#define INK_WINDOW_DOCK_H
+#ifndef INKSCAPE_UI_DIALOG_WINDOW_H
+#define INKSCAPE_UI_DIALOG_WINDOW_H
 
 /** @file
  * @brief A window for floating docks.
@@ -60,7 +60,7 @@ private:
 } // namespace UI
 } // namespace Inkscape
 
-#endif // INK_WINDOW_DOCK_H
+#endif // INKSCAPE_UI_DIALOG_WINDOW_H
 
 /*
   Local Variables:

@@ -97,7 +97,6 @@ ObjectProperties::~ObjectProperties()
 
 void ObjectProperties::_init()
 {
-    set_orientation(Gtk::ORIENTATION_VERTICAL);
     set_spacing(0);
 
     auto grid_top = Gtk::manage(new Gtk::Grid());

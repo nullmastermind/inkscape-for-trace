@@ -996,7 +996,6 @@ SvgFontsDialog::SvgFontsDialog()
  : DialogBase("/dialogs/svgfonts", SP_VERB_DIALOG_SVG_FONTS),
    _add(_("_New"), true)
 {
-    set_orientation(Gtk::ORIENTATION_VERTICAL);
     kerning_slider = Gtk::manage(new Gtk::Scale(Gtk::ORIENTATION_HORIZONTAL));
     _add.signal_clicked().connect(sigc::mem_fun(*this, &SvgFontsDialog::add_font));
 

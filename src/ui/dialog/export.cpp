@@ -55,6 +55,7 @@
 #include "ui/interface.h"
 #include "ui/widget/unit-menu.h"
 #include "ui/widget/scrollprotected.h"
+#include "ui/dialog/dialog-notebook.h"
 
 #include "extension/db.h"
 #include "extension/output.h"
@@ -200,9 +201,6 @@ Export::Export()
     prefs = Inkscape::Preferences::get();
 
     singleexport_box.set_border_width(0);
-
-    // Set orientation
-    set_orientation(Gtk::ORIENTATION_VERTICAL);
 
     /* Export area frame */
     {
@@ -403,8 +401,8 @@ Export::Export()
     pack_start(singleexport_box, Gtk::PACK_SHRINK);
     pack_start(batch_box, Gtk::PACK_SHRINK);
     pack_start(hide_box, Gtk::PACK_SHRINK);
+    pack_start(button_box, Gtk::PACK_SHRINK);
     pack_start(expander, Gtk::PACK_SHRINK);
-    pack_end(button_box, Gtk::PACK_SHRINK);
     pack_end(_prog, Gtk::PACK_SHRINK);
 
     /* Signal handlers */
@@ -1327,18 +1325,15 @@ void Export::onExport ()
     }
 
     if (exportSuccessful && closeWhenDone.get_active()) {
-        for ( Gtk::Container *parent = get_parent(); parent; parent = parent->get_parent()) {
-            // TODO: add the option to close the export dialog
-            // if ( GDL_IS_DOCK_ITEM(parent->gobj()) ) {
-            //     GdlDockItem *item = GDL_DOCK_ITEM(parent->gobj());
-            //     if (item) {
-            //         gdl_dock_item_hide_item(item);
-            //     }
-            //     break;
-            // }
+        for (Gtk::Container *parent = get_parent(); parent; parent = parent->get_parent()) {
+            DialogNotebook *notebook = dynamic_cast<DialogNotebook *>(parent);
+            if (notebook) {
+                notebook->close_tab_callback();
+                break;
+            }
         }
     }
-} // end of sp_export_export_clicked()
+} // end of Export::onExport()
 
 /// Called when Browse button is clicked
 /// @todo refactor this code to use ui/dialog/filedialog.cpp

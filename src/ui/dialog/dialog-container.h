@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
-#ifndef INK_DIALOG_CONTAINER_H
-#define INK_DIALOG_CONTAINER_H
+#ifndef INKSCAPE_UI_DIALOG_CONTAINER_H
+#define INKSCAPE_UI_DIALOG_CONTAINER_H
 
 /** @file
  * @brief A widget that manages InkNotebook's and other widgets inside a horizontal InkMultipane.
@@ -39,7 +39,6 @@ class DialogContainer : public Gtk::Box
 {
 public:
     DialogContainer();
-    ~DialogContainer() override;
 
     // Columns-related functions
     DialogMultipaned *get_columns() { return columns; }
@@ -87,7 +86,7 @@ private:
 } // namespace UI
 } // namespace Inkscape
 
-#endif // INK_DIALOG_CONTAINER_H
+#endif // INKSCAPE_UI_DIALOG_CONTAINER_H
 
 /*
   Local Variables:

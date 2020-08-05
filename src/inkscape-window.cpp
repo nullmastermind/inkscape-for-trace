@@ -122,7 +122,6 @@ InkscapeWindow::change_document(SPDocument* document)
     _app->set_active_document(_document);
 
     setup_view();
-    std::cout << "change_document" << std::endl;
     update_dialogs();
 }
 

@@ -141,7 +141,6 @@ DocumentProperties::DocumentProperties()
     , _grids_button_remove(C_("Grid", "_Remove"), _("Remove selected grid."))
     , _grids_label_def("", Gtk::ALIGN_START)
 {
-    set_orientation(Gtk::ORIENTATION_VERTICAL);
     set_spacing (4);
     pack_start(_notebook, true, true);
 

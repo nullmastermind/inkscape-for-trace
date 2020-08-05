@@ -101,7 +101,6 @@ Transformation::Transformation()
     _check_replace_matrix.set_use_underline();
     _check_replace_matrix.set_tooltip_text(_("Edit the current transform= matrix; otherwise, post-multiply transform= by this matrix"));
 
-    set_orientation(Gtk::ORIENTATION_VERTICAL);
     set_spacing(0);
 
     // Notebook for individual transformations
@@ -145,6 +144,7 @@ Transformation::Transformation()
     ((Gtk::Entry *) (_scalar_skew_vertical.getWidget()))->set_activates_default(true);
 
     resetButton = Gtk::manage(new Gtk::Button(_("_Clear")));
+    resetButton->set_use_underline();
     if (resetButton) {
         resetButton->set_tooltip_text(_("Reset the values on the current tab to defaults"));
         resetButton->set_sensitive(true);
@@ -152,6 +152,7 @@ Transformation::Transformation()
     }
 
     applyButton = Gtk::manage(new Gtk::Button(_("_Apply")));
+    applyButton->set_use_underline();
     if (applyButton) {
         applyButton->set_tooltip_text(_("Apply transformation to selection"));
         applyButton->set_sensitive(false);

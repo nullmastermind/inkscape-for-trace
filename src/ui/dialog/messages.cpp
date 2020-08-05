@@ -45,8 +45,6 @@ Messages::Messages()
     , buttonClear(_("_Clear"), _("Clear log messages"))
     , checkCapture(_("Capture log messages"), _("Capture log messages"))
 {
-    set_orientation(Gtk::ORIENTATION_VERTICAL);
-
     /*
      * Menu replaced with buttons
      *

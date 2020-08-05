@@ -175,7 +175,6 @@ SpellCheck::SpellCheck()
     /*
      * Main dialog
      */
-    set_orientation(Gtk::ORIENTATION_VERTICAL);
     set_spacing(6);
     pack_start (banner_hbox, false, false, 0);
     pack_start (suggestion_hbox, true, true, 0);
