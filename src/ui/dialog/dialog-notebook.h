@@ -62,18 +62,15 @@ public:
     void hide_all_tab_labels_callback();
     void show_all_tab_labels_callback();
     void move_tab_callback();
-    void expand_callback();
     void close_notebook_callback();
 
 private:
     void open_dialog_from_notebook(Glib::ustring);
     void toggle_tab_labels_callback();
-    void stop_scrolling();
     void handle_scrolling(Gtk::Allocation &allocation);
 
     DialogContainer *_container;
     Gtk::MenuButton _menu_button;
-    Gtk::Button _expand_button;
     Gtk::Menu _menu;
     Gtk::MenuItem *_toggle_all_labels_menuitem;
     int _dialog_menu_items;

@@ -60,11 +60,6 @@ void DialogBase::blink()
         // Switch notebook to this dialog.
         notebook->set_current_page(notebook->page_num(*this));
 
-        DialogNotebook *dialog_notebook = dynamic_cast<DialogNotebook *>(notebook->get_parent()->get_parent());
-        if (dialog_notebook && !dialog_notebook->get_vexpand()) {
-            dialog_notebook->expand_callback();
-        }
-
         Glib::RefPtr<Gtk::StyleContext> style = notebook->get_style_context();
 
         Glib::RefPtr<Gtk::CssProvider> provider = Gtk::CssProvider::create();

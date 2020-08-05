@@ -104,22 +104,13 @@ DialogNotebook::DialogNotebook(DialogContainer *container)
     _menu_button.set_image_from_icon_name("open-menu");
     _menu_button.set_popup(_menu);
     _menu_button.show(); // show_all() below doesn't show this.
-    _notebook.set_action_widget(&_menu_button, Gtk::PACK_END);
-
-    _expand_button.set_image_from_icon_name("go-up");
-    _expand_button.show();
-    _notebook.set_action_widget(&_expand_button, Gtk::PACK_START);
-    _expand_button.signal_clicked().connect(sigc::mem_fun(*this, &DialogNotebook::expand_callback));
+    _notebook.set_action_widget(&_menu_button, Gtk::PACK_START);
 
     // Action buttons radius
     Glib::RefPtr<Gtk::CssProvider> provider = Gtk::CssProvider::create();
     provider->load_from_data(" *.button-no-radius {border-radius: 0px;}");
 
     Glib::RefPtr<Gtk::StyleContext> style = _menu_button.get_style_context();
-    style->add_provider(provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    style->add_class("button-no-radius");
-
-    style = _expand_button.get_style_context();
     style->add_provider(provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     style->add_class("button-no-radius");
 
@@ -130,9 +121,12 @@ DialogNotebook::DialogNotebook(DialogContainer *container)
 
     _notebook.signal_page_added().connect(sigc::mem_fun(*this, &DialogNotebook::on_page_added));
     _notebook.signal_page_removed().connect(sigc::mem_fun(*this, &DialogNotebook::on_page_removed));
-    _notebook.signal_switch_page().connect(sigc::mem_fun(*this, &DialogNotebook::on_page_switched));
 
     // ============= Finish setup ===============
+    int min_height, nat_height;
+    _menu_button.get_preferred_height(min_height, nat_height);
+    set_min_content_height(nat_height + 4); // the menu button is in a header of 4px padding
+
     add(_notebook);
     show_all();
 }
@@ -140,10 +134,6 @@ DialogNotebook::DialogNotebook(DialogContainer *container)
 // Adds a widget as a new page with a tab.
 void DialogNotebook::add_page(Gtk::Widget &page, Gtk::Widget &tab, Glib::ustring label)
 {
-    // Expand DialogNotebook if needed
-    if (!get_vexpand()) {
-        expand_callback();
-    }
     page.set_vexpand();
 
     _notebook.append_page(page, tab);
@@ -283,11 +273,6 @@ void DialogNotebook::on_page_added(Gtk::Widget *page, int page_num)
         return;
     }
 
-    // Expand DialogNotebook if needed
-    if (!get_vexpand()) {
-        expand_callback();
-    }
-
     // Add notebook menu item
     Gtk::MenuItem *new_menu_item = nullptr;
     if (_dialog_menu_items == 0) {
@@ -335,13 +320,6 @@ void DialogNotebook::on_page_removed(Gtk::Widget *page, int page_num)
     // Remove extra separator menu item
     if (_dialog_menu_items == 0) {
         _menu.remove(*actions[n_children - 2]);
-    }
-}
-
-void DialogNotebook::on_page_switched(Gtk::Widget *page, int page_num)
-{
-    if (!get_vexpand()) {
-        expand_callback();
     }
 }
 
@@ -459,64 +437,18 @@ void DialogNotebook::move_tab_callback()
     }
 }
 
-void DialogNotebook::stop_scrolling()
-{
-    Gtk::Scrollbar *scrollbar = get_vscrollbar();
-    scrollbar->set_value(0);
-
-    scrollbar = get_hscrollbar();
-    scrollbar->set_value(0);
-}
-
-/**
- * A callback to handle expanding and collapsing a DialogNotebook
- */
-void DialogNotebook::expand_callback()
-{
-    int height = _menu_button.get_height() + 4; // the menu button is in a header of 4px padding
-
-    if (get_vexpand()) {
-        set_min_content_height(height);
-        set_max_content_height(height);
-        set_vexpand(false);
-        _expand_button.set_image_from_icon_name("go-down");
-
-        // Scrolling callbacks
-        set_policy(Gtk::POLICY_EXTERNAL, Gtk::POLICY_EXTERNAL);
-        Gtk::Scrollbar *scrollbar = get_vscrollbar();
-        _scrolling_connections.emplace_back(
-            scrollbar->signal_value_changed().connect(sigc::mem_fun(*this, &DialogNotebook::stop_scrolling)));
-
-        scrollbar = get_hscrollbar();
-        _scrolling_connections.emplace_back(
-            scrollbar->signal_value_changed().connect(sigc::mem_fun(*this, &DialogNotebook::stop_scrolling)));
-    } else {
-        // height + 1 to force DialogMultipaned to resize
-        set_max_content_height(height + 1);
-        set_min_content_height(height + 1);
-        set_vexpand(true);
-        _expand_button.set_image_from_icon_name("go-up");
-
-        // Scrolling callback
-        set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
-        for (auto c : _scrolling_connections) {
-            c.disconnect();
-        }
-    }
-}
-
 /**
  * We need to remove the scrollbar to snap a whole DialogNotebook to width 0.
  */
-void DialogNotebook::handle_scrolling(Gtk::Allocation &allocation)
+void DialogNotebook::handle_scrolling(Gtk::Allocation &a)
 {
-    const int MAGIC_WIDTH = 45;
-    if (allocation.get_width() >= MAGIC_WIDTH) {
-        set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
-    } else {
-        set_policy(Gtk::POLICY_EXTERNAL, Gtk::POLICY_EXTERNAL);
-    }
-    set_allocation(allocation);
+    const int MIN_WIDTH = 50;
+    const int MIN_HEIGHT = 60;
+
+    property_hscrollbar_policy().set_value(a.get_width() >= MIN_WIDTH ? Gtk::POLICY_AUTOMATIC : Gtk::POLICY_EXTERNAL);
+    property_vscrollbar_policy().set_value(a.get_height() >= MIN_HEIGHT ? Gtk::POLICY_AUTOMATIC : Gtk::POLICY_EXTERNAL);
+
+    set_allocation(a);
 }
 
 // Signal handlers - Other
@@ -542,10 +474,6 @@ void DialogNotebook::close_notebook_callback()
  */
 void DialogNotebook::open_dialog_from_notebook(Glib::ustring name)
 {
-    if (!get_vexpand()) {
-        expand_callback();
-    }
-
     _container->new_dialog(name);
 }
 
