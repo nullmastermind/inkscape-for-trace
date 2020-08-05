@@ -170,10 +170,11 @@ DialogMultipaned::~DialogMultipaned()
     // Disconnect all signals
     for_each(_connections.begin(), _connections.end(), [&](auto c) { c.disconnect(); });
 
-    // Delete other Multipaned children
-    for (auto child : children) {
-        if (dynamic_cast<DialogMultipaned *>(child) || dynamic_cast<DialogNotebook *>(child)) {
-            child->unparent();
+    for (std::vector<Gtk::Widget *>::iterator it = children.begin(); it != children.end();) {
+        if (dynamic_cast<DialogMultipaned *>(*it) || dynamic_cast<DialogNotebook *>(*it)) {
+            delete *it;
+        } else {
+            it++;
         }
     }
 
@@ -185,7 +186,7 @@ void DialogMultipaned::prepend(Gtk::Widget *child)
     remove_empty_widget(); // Will remove extra widget if existing
 
     // If there are MyMultipane children that are empty, they will be removed
-    for (auto child1 : children) {
+    for (auto const &child1 : children) {
         DialogMultipaned *paned = dynamic_cast<DialogMultipaned *>(child1);
         if (paned && paned->has_empty_widget()) {
             remove(*child1);
@@ -215,7 +216,7 @@ void DialogMultipaned::append(Gtk::Widget *child)
     remove_empty_widget(); // Will remove extra widget if existing
 
     // If there are MyMultipane children that are empty, they will be removed
-    for (auto child1 : children) {
+    for (auto const &child1 : children) {
         DialogMultipaned *paned = dynamic_cast<DialogMultipaned *>(child1);
         if (paned && paned->has_empty_widget()) {
             remove(*child1);
@@ -242,6 +243,8 @@ void DialogMultipaned::append(Gtk::Widget *child)
 
 void DialogMultipaned::add_empty_widget()
 {
+    const int EMPTY_WIDGET_SIZE = 60; // magic nummber
+
     // The empty widget is a label
     auto label = Gtk::manage(new Gtk::Label(_("You can drop dockable dialogs here.")));
     label->set_line_wrap();
@@ -253,7 +256,7 @@ void DialogMultipaned::add_empty_widget()
     _empty_widget = label;
 
     if (get_orientation() == Gtk::ORIENTATION_VERTICAL) {
-        int dropzone_size = (get_height() - 60) / 2;
+        int dropzone_size = (get_height() - EMPTY_WIDGET_SIZE) / 2;
         if (dropzone_size > DROPZONE_SIZE) {
             set_dropzone_sizes(dropzone_size, dropzone_size);
         }
@@ -377,7 +380,7 @@ void DialogMultipaned::get_preferred_width_vfunc(int &minimum_width, int &natura
 {
     minimum_width = 0;
     natural_width = 0;
-    for (auto child : children) {
+    for (auto const &child : children) {
         if (child && child->is_visible()) {
             int child_minimum_width = 0;
             int child_natural_width = 0;
@@ -397,7 +400,7 @@ void DialogMultipaned::get_preferred_height_vfunc(int &minimum_height, int &natu
 {
     minimum_height = 0;
     natural_height = 0;
-    for (auto child : children) {
+    for (auto const &child : children) {
         if (child && child->is_visible()) {
             int child_minimum_height = 0;
             int child_natural_height = 0;
@@ -417,7 +420,7 @@ void DialogMultipaned::get_preferred_width_for_height_vfunc(int height, int &min
 {
     minimum_width = 0;
     natural_width = 0;
-    for (auto child : children) {
+    for (auto const &child : children) {
         if (child && child->is_visible()) {
             int child_minimum_width = 0;
             int child_natural_width = 0;
@@ -437,7 +440,7 @@ void DialogMultipaned::get_preferred_height_for_width_vfunc(int width, int &mini
 {
     minimum_height = 0;
     natural_height = 0;
-    for (auto child : children) {
+    for (auto const &child : children) {
         if (child && child->is_visible()) {
             int child_minimum_height = 0;
             int child_natural_height = 0;
@@ -589,8 +592,10 @@ void DialogMultipaned::on_size_allocate(Gtk::Allocation &allocation)
 
 void DialogMultipaned::forall_vfunc(gboolean, GtkCallback callback, gpointer callback_data)
 {
-    for (auto child : children) {
-        callback(child->gobj(), callback_data);
+    for (auto const &child : children) {
+        if (child) {
+            callback(child->gobj(), callback_data);
+        }
     }
 }
 
@@ -657,7 +662,7 @@ void DialogMultipaned::on_drag_begin(double start_x, double start_y)
     bool found = false;
     int child_number = 0;
     Gtk::Allocation allocation = get_allocation();
-    for (auto child : children) {
+    for (auto const &child : children) {
         MyHandle *my_handle = dynamic_cast<MyHandle *>(child);
         if (my_handle) {
             Gtk::Allocation child_allocation = my_handle->get_allocation();

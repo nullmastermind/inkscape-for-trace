@@ -15,10 +15,10 @@
  */
 
 #include <gdkmm/dragcontext.h>
-#include <glibmm/refptr.h>
-#include <gtkmm/scrolledwindow.h>
-#include <gtkmm/menubutton.h>
+#include <gtkmm/menu.h>
 #include <gtkmm/notebook.h>
+#include <gtkmm/radiomenuitem.h>
+#include <gtkmm/scrolledwindow.h>
 #include <gtkmm/widget.h>
 
 namespace Inkscape {
@@ -38,7 +38,7 @@ class DialogNotebook : public Gtk::ScrolledWindow
 {
 public:
     DialogNotebook(DialogContainer *container);
-    ~DialogNotebook() override{};
+    ~DialogNotebook() override;
 
     void add_page(Gtk::Widget &page, Gtk::Widget &tab, Glib::ustring label);
     void move_page(Gtk::Widget &page);
@@ -50,33 +50,32 @@ public:
     // Signal handlers - Notebook
     void on_drag_end(const Glib::RefPtr<Gdk::DragContext> context);
     bool on_drag_failed(const Glib::RefPtr<Gdk::DragContext> context, Gtk::DragResult result);
-
     void on_page_added(Gtk::Widget *page, int page_num);
     void on_page_removed(Gtk::Widget *page, int page_num);
-    void on_page_switched(Gtk::Widget *page, int page_num);
 
-    // Signal handlers - Notebook menu (action)
+    // Signal handlers - Notebook menu
     void close_tab_callback();
-    void hide_tab_label_callback();
-    void show_tab_label_callback();
-    void hide_all_tab_labels_callback();
-    void show_all_tab_labels_callback();
-    void move_tab_callback();
     void close_notebook_callback();
+    void move_tab_callback();
+
+    void toggle_tab_labels_callback(bool show);
 
 private:
-    void open_dialog_from_notebook(Glib::ustring);
-    void toggle_tab_labels_callback();
-    void handle_scrolling(Gtk::Allocation &allocation);
-
+    // Widgets
     DialogContainer *_container;
-    Gtk::MenuButton _menu_button;
     Gtk::Menu _menu;
-    Gtk::MenuItem *_toggle_all_labels_menuitem;
-    int _dialog_menu_items;
-    bool _labels_shown;
     Gtk::Notebook _notebook;
-    std::vector<sigc::connection> _scrolling_connections;
+    Gtk::RadioMenuItem _labels_auto_button;
+
+    // State variables
+    int _dialog_menu_items;
+    bool _labels_auto;
+    std::vector<sigc::connection> _conn;
+
+    // Signal handlers - private
+    void on_menu_signal_activate(Glib::ustring);
+    void on_size_allocate_scroll(Gtk::Allocation &allocation);
+    void on_labels_toggled();
 };
 
 } // namespace Dialog

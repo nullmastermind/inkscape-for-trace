@@ -26,7 +26,6 @@
 #include "ui/dialog/dialog-window.h"
 #include "ui/dialog/document-properties.h"
 #include "ui/dialog/export.h"
-#include "ui/dialog/extension-editor.h"
 #include "ui/dialog/fill-and-stroke.h"
 #include "ui/dialog/filter-editor.h"
 #include "ui/dialog/filter-effects-dialog.h"
@@ -138,8 +137,6 @@ DialogBase *DialogContainer::dialog_factory(Glib::ustring name)
             return &Inkscape::UI::Dialog::DocumentProperties::getInstance();
         case str2int("DialogExport"):
             return &Inkscape::UI::Dialog::Export::getInstance();
-        case str2int("DialogExtensionEditor"):
-            return &Inkscape::UI::Dialog::ExtensionEditor::getInstance();
         case str2int("DialogFillStroke"):
             return &Inkscape::UI::Dialog::FillAndStroke::getInstance();
         case str2int("DialogFilterEffects"):
@@ -227,15 +224,10 @@ DialogBase *DialogContainer::dialog_factory(Glib::ustring name)
 Gtk::Widget *DialogContainer::create_notebook_tab(Glib::ustring label_str, Glib::ustring image_str)
 {
     Gtk::Label *label = Gtk::manage(new Gtk::Label(label_str));
-    label->set_use_underline();
     Gtk::Image *image = Gtk::manage(new Gtk::Image());
-    if (image_str.size() > 0) {
-        image->set_from_icon_name(image_str, Gtk::ICON_SIZE_MENU);
-    } else {
-        image->set_from_icon_name(INKSCAPE_ICON("inkscape-logo"), Gtk::ICON_SIZE_MENU);
-    }
+    image->set_from_icon_name(image_str, Gtk::ICON_SIZE_MENU);
     Gtk::Box *tab = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 2));
-    tab->set_name(label->get_label());
+    tab->set_name(label_str);
     tab->pack_start(*image);
     tab->pack_end(*label);
     tab->show_all();
@@ -291,7 +283,9 @@ void DialogContainer::new_dialog(Glib::ustring name, DialogNotebook *notebook)
     }
 
     // Create the notebook tab
-    Gtk::Widget *tab = create_notebook_tab(dialog->get_name(), verb->get_image());
+    auto image = verb->get_image();
+    Gtk::Widget *tab =
+        create_notebook_tab(dialog->get_name(), image ? Glib::ustring(image) : INKSCAPE_ICON("inkscape-logo"));
 
     // Check if request came from notebook menu
     Gtk::Window *window = dynamic_cast<Gtk::Window *>(get_toplevel());

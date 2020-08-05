@@ -108,7 +108,6 @@ set(ui_SRC
 	dialog/dialog-window.cpp
 	dialog/document-properties.cpp
 	dialog/export.cpp
-	dialog/extension-editor.cpp
 	dialog/filedialog.cpp
 	dialog/filedialogimpl-gtkmm.cpp
 	dialog/fill-and-stroke.cpp
@@ -280,7 +279,6 @@ set(ui_SRC
 	dialog/dialog-window.h
 	dialog/document-properties.h
 	dialog/export.h
-	dialog/extension-editor.h
 	dialog/filedialog.h
 	dialog/filedialogimpl-gtkmm.h
 	dialog/filedialogimpl-win32.h

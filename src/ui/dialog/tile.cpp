@@ -50,7 +50,7 @@ ArrangeDialog::ArrangeDialog()
     button_box->set_layout(Gtk::BUTTONBOX_END);
     button_box->set_spacing(6);
     button_box->set_border_width(4);
-    pack_end(*button_box, Gtk::PACK_SHRINK, 0);
+
     button_box->pack_end(*_arrangeButton);
     pack_end(*button_box);
 

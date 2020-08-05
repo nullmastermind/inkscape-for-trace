@@ -166,7 +166,6 @@ Transformation::Transformation()
 
     button_box->pack_end(*resetButton);
     button_box->pack_end(*applyButton);
-    pack_end(*button_box);
 
     // Connect to the global selection changed & modified signals
     _selChangeConn = INKSCAPE.signal_selection_changed.connect(sigc::bind(sigc::ptr_fun(&on_selection_changed), this));

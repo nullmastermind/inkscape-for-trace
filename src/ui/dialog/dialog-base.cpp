@@ -43,9 +43,17 @@ DialogBase::DialogBase(gchar const *prefs_path, int verb_num)
     Verb *verb = Verb::get(verb_num);
     if (verb) {
         _name = verb->get_name();
-        _name.replace(_name.find("...", 0), 3, "");
+        int pos = _name.find("...", 0);
+        if (pos >= 0 && pos < _name.length() - 2) {
+            _name.replace(pos, 3, "");
+        }
+        pos = _name.find("_", 0);
+        if (pos >= 0 && pos < _name.length()) {
+            _name.replace(pos, 1, "");
+        }
     }
-    std::cout << "DialogBase::DialogBase: " << _name << std::endl;
+
+    std::cout << "DialogBase::DialogBase: \"" << _name << "\"" << std::endl;
     set_name(_name); // Essential for dialog functionality
     property_margin().set_value(1); // Essential for dialog UI
 }

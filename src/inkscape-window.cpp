@@ -238,7 +238,7 @@ void InkscapeWindow::on_selection_changed()
 void InkscapeWindow::update_dialogs()
 {
     std::vector<Gtk::Window *> windows = _app->get_windows();
-    for (auto window : windows) {
+    for (auto const &window : windows) {
         DialogWindow *dialog_window = dynamic_cast<DialogWindow *>(window);
         if (dialog_window) {
             dialog_window->update_dialogs();

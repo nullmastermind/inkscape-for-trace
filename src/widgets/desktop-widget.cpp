@@ -931,7 +931,7 @@ SPDesktopWidget::shutdown()
 
         std::list<SPDesktop *> desktop_list;
         INKSCAPE.get_all_desktops(desktop_list);
-        for (auto d : desktop_list) {
+        for (auto const &d : desktop_list) {
             if (!next_desktop && d != curr_desktop) {
                 next_desktop = d;
                 break;
@@ -942,7 +942,7 @@ SPDesktopWidget::shutdown()
             next_desktop->presentWindow();
         }
 
-        for (auto window : app->get_windows()) {
+        for (auto const &window : app->get_windows()) {
             DialogWindow *dialog_window = dynamic_cast<DialogWindow *>(window);
             if (dialog_window && !next_desktop) {
                 dialog_window->close();
