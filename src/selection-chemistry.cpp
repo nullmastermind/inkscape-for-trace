@@ -835,17 +835,14 @@ void ObjectSet::popFromGroup(){
         selection_display_message(desktop(), Inkscape::WARNING_MESSAGE, _("Selection <b>not in a group</b>."));
         return;
     }
-    sp_object_ref(parent_group);
     if (parent_group->firstChild()->getNext() == nullptr) {
         std::vector<SPItem*> children;
         sp_item_group_ungroup(static_cast<SPGroup*>(parent_group), children, false);
     }
     else {
         toNextLayer(true);
+        parent_group->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     }
-
-    parent_group->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-    sp_object_unref(parent_group);
 
     if(document())
         DocumentUndo::done(document(), SP_VERB_SELECTION_UNGROUP_POP_SELECTION,
