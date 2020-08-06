@@ -14,6 +14,7 @@ inkscape_devel_source.tar.bz2
 *~
 *.rej
 .vscode
+.uuid
 .clangd/
 compile_commands.json
 
