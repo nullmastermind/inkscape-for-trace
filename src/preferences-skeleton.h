@@ -229,7 +229,6 @@ R"=====(
     <group id="aboutextensions" />
     <group id="treeeditor" />
     <group id="layers" maxDepth="20" w="200" h="300" />
-    <group id="extensioneditor" />
     <group id="trace" state="1" />
     <group id="script" />
     <group id="input" />

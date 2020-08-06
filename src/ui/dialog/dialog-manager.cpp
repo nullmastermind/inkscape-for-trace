@@ -19,7 +19,6 @@
 #include "style.h"
 #include "ui/dialog/align-and-distribute.h"
 #include "ui/dialog/document-properties.h"
-#include "ui/dialog/extension-editor.h"
 #include "ui/dialog/fill-and-stroke.h"
 #include "ui/dialog/filter-editor.h"
 #include "ui/dialog/filter-effects-dialog.h"
@@ -113,7 +112,6 @@ DialogManager::DialogManager() {
         registerFactory("Prototype",           &create<Prototype,            FloatingBehavior>);
         registerFactory("AlignAndDistribute",  &create<AlignAndDistribute,   FloatingBehavior>);
         registerFactory("DocumentProperties",  &create<DocumentProperties,   FloatingBehavior>);
-        registerFactory("ExtensionEditor",     &create<ExtensionEditor,      FloatingBehavior>);
         registerFactory("FillAndStroke",       &create<FillAndStroke,        FloatingBehavior>);
         registerFactory("FilterEffectsDialog", &create<FilterEffectsDialog,  FloatingBehavior>);
         registerFactory("FilterEditorDialog",  &create<FilterEditorDialog,   FloatingBehavior>);
@@ -157,7 +155,6 @@ DialogManager::DialogManager() {
         registerFactory("Prototype",           &create<Prototype,            DockBehavior>);
         registerFactory("AlignAndDistribute",  &create<AlignAndDistribute,   DockBehavior>);
         registerFactory("DocumentProperties",  &create<DocumentProperties,   DockBehavior>);
-        registerFactory("ExtensionEditor",     &create<ExtensionEditor,      DockBehavior>);
         registerFactory("FillAndStroke",       &create<FillAndStroke,        DockBehavior>);
         registerFactory("FilterEffectsDialog", &create<FilterEffectsDialog,  DockBehavior>);
         registerFactory("FilterEditorDialog",  &create<FilterEditorDialog,   DockBehavior>);

@@ -2226,9 +2226,6 @@ void DialogVerb::perform(SPAction *action, void *data)
         case SP_VERB_DIALOG_EXPORT:
             dt->_dlg_mgr->showDialog("Export");
             break;
-        case SP_VERB_DIALOG_EXTENSIONEDITOR:
-            dt->_dlg_mgr->showDialog("ExtensionEditor");
-            break;
         case SP_VERB_DIALOG_LAYERS:
             dt->_dlg_mgr->showDialog("LayersPanel");
             break;
@@ -3168,8 +3165,6 @@ Verb *Verb::_base_verbs[] = {
     new DialogVerb(SP_VERB_DIALOG_INPUT, "DialogInput", N_("_Input Devices..."),
                    N_("Configure extended input devices, such as a graphics tablet"),
                    INKSCAPE_ICON("dialog-input-devices")),
-    new DialogVerb(SP_VERB_DIALOG_EXTENSIONEDITOR, "org.inkscape.dialogs.extensioneditor", N_("_Extensions..."),
-                   N_("Query information about extensions"), nullptr),
     new DialogVerb(SP_VERB_DIALOG_LAYERS, "DialogLayers", N_("Layer_s..."), N_("View Layers"),
                    INKSCAPE_ICON("dialog-layers")),
     new DialogVerb(SP_VERB_DIALOG_OBJECTS, "DialogObjects", N_("Object_s..."), N_("View Objects"),

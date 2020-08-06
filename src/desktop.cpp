@@ -2137,7 +2137,6 @@ SPDesktop::show_dialogs()
     std::map<Glib::ustring, Glib::ustring> mapVerbPreference;
     mapVerbPreference.insert(std::make_pair ("LayersPanel", "/dialogs/layers") );
     mapVerbPreference.insert(std::make_pair ("FillAndStroke", "/dialogs/fillstroke") );
-    mapVerbPreference.insert(std::make_pair ("ExtensionEditor", "/dialogs/extensioneditor") );
     mapVerbPreference.insert(std::make_pair ("AlignAndDistribute", "/dialogs/align") );
     mapVerbPreference.insert(std::make_pair ("DocumentProperties", "/dialogs/documentoptions") );
     mapVerbPreference.insert(std::make_pair ("FilterEffectsDialog", "/dialogs/filtereffects") );
