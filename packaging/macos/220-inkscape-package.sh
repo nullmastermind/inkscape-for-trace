@@ -11,7 +11,7 @@
 SELF_DIR=$(F=$0; while [ ! -z $(readlink $F) ] && F=$(readlink $F); cd $(dirname $F); F=$(basename $F); [ -L $F ]; do :; done; echo $(pwd -P))
 for script in $SELF_DIR/0??-*.sh; do source $script; done
 
-set -o errtrace
+set -e -o errtrace
 trap 'catch_error "$SELF_NAME" "$LINENO" "$FUNCNAME" "${BASH_COMMAND}" "${?}"' ERR
 
 ### create application bundle ##################################################
@@ -26,23 +26,10 @@ mkdir -p $ARTIFACT_DIR
   cp $SELF_DIR/inkscape.bundle $BUILD_DIR
   cp $SELF_DIR/inkscape.plist $BUILD_DIR
 
-  # Due to an undiagnosed instability that only occurs during CI runs (not when
-  # run interactively from the terminal), the following code will be put into
-  # a separate script and be executed via Terminal.app.
-
-  cat <<EOF >$SRC_DIR/run_gtk-mac-bundler.sh
-#!/usr/bin/env bash
-SCRIPT_DIR=$SELF_DIR
-for script in \$SCRIPT_DIR/0??-*.sh; do source \$script; done
-export ARTIFACT_DIR
-BUILD_DIR=$BUILD_DIR
-cd \$BUILD_DIR
-jhbuild run gtk-mac-bundler inkscape.bundle
-EOF
+  export ARTIFACT_DIR   # referenced in inkscape.bundle
+  cd $BUILD_DIR
+  jhbuild run gtk-mac-bundler inkscape.bundle
 )
-
-chmod 755 $SRC_DIR/run_gtk-mac-bundler.sh
-run_in_terminal $SRC_DIR/run_gtk-mac-bundler.sh
 
 # Rename to get from lowercase to capitalized "i". This works only on
 # case-insensitive filesystems (default on macOS).
@@ -98,17 +85,6 @@ echo "./../../../../../../../Resources/lib/python$PY3_MAJOR.$PY3_MINOR/site-pack
 
 pip_install $PYTHON_LXML
 
-# patch 'etree'
-relocate_dependency @loader_path/../../../libxml2.2.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/lxml/etree.cpython-$PY3_MAJOR${PY3_MINOR}m-darwin.so
-relocate_dependency @loader_path/../../../libz.1.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/lxml/etree.cpython-$PY3_MAJOR${PY3_MINOR}m-darwin.so
-relocate_dependency @loader_path/../../../libxslt.1.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/lxml/etree.cpython-$PY3_MAJOR${PY3_MINOR}m-darwin.so
-relocate_dependency @loader_path/../../../libexslt.0.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/lxml/etree.cpython-$PY3_MAJOR${PY3_MINOR}m-darwin.so
-# patch 'objectify'
-relocate_dependency @loader_path/../../../libxml2.2.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/lxml/objectify.cpython-$PY3_MAJOR${PY3_MINOR}m-darwin.so
-relocate_dependency @loader_path/../../../libz.1.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/lxml/objectify.cpython-$PY3_MAJOR${PY3_MINOR}m-darwin.so
-relocate_dependency @loader_path/../../../libxslt.1.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/lxml/objectify.cpython-$PY3_MAJOR${PY3_MINOR}m-darwin.so
-relocate_dependency @loader_path/../../../libexslt.0.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/lxml/objectify.cpython-$PY3_MAJOR${PY3_MINOR}m-darwin.so
-
 ### install Python package: NumPy ##############################################
 
 pip_install $PYTHON_NUMPY
@@ -118,30 +94,29 @@ pip_install $PYTHON_NUMPY
 pip_install $PYTHON_PYGOBJECT
 
 # patch '_gi'
-relocate_dependency @loader_path/../../../libglib-2.0.0.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/gi/_gi.cpython-$PY3_MAJOR${PY3_MINOR}m-darwin.so
-relocate_dependency @loader_path/../../../libintl.9.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/gi/_gi.cpython-$PY3_MAJOR${PY3_MINOR}m-darwin.so
-relocate_dependency @loader_path/../../../libgio-2.0.0.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/gi/_gi.cpython-$PY3_MAJOR${PY3_MINOR}m-darwin.so
-relocate_dependency @loader_path/../../../libgobject-2.0.0.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/gi/_gi.cpython-$PY3_MAJOR${PY3_MINOR}m-darwin.so
-relocate_dependency @loader_path/../../../libgirepository-1.0.1.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/gi/_gi.cpython-$PY3_MAJOR${PY3_MINOR}m-darwin.so
-relocate_dependency @loader_path/../../../libffi.6.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/gi/_gi.cpython-$PY3_MAJOR${PY3_MINOR}m-darwin.so
+relocate_dependency @loader_path/../../../libglib-2.0.0.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/gi/_gi.cpython-$PY3_MAJOR${PY3_MINOR}-darwin.so
+relocate_dependency @loader_path/../../../libintl.8.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/gi/_gi.cpython-$PY3_MAJOR${PY3_MINOR}-darwin.so
+relocate_dependency @loader_path/../../../libgio-2.0.0.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/gi/_gi.cpython-$PY3_MAJOR${PY3_MINOR}-darwin.so
+relocate_dependency @loader_path/../../../libgobject-2.0.0.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/gi/_gi.cpython-$PY3_MAJOR${PY3_MINOR}-darwin.so
+relocate_dependency @loader_path/../../../libgirepository-1.0.1.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/gi/_gi.cpython-$PY3_MAJOR${PY3_MINOR}-darwin.so
+relocate_dependency @loader_path/../../../libffi.7.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/gi/_gi.cpython-$PY3_MAJOR${PY3_MINOR}-darwin.so
 
 # patch '_gi_cairo'
-relocate_dependency @loader_path/../../../libglib-2.0.0.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/gi/_gi_cairo.cpython-$PY3_MAJOR${PY3_MINOR}m-darwin.so
-relocate_dependency @loader_path/../../../libintl.9.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/gi/_gi_cairo.cpython-$PY3_MAJOR${PY3_MINOR}m-darwin.so
-relocate_dependency @loader_path/../../../libgio-2.0.0.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/gi/_gi_cairo.cpython-$PY3_MAJOR${PY3_MINOR}m-darwin.so
-relocate_dependency @loader_path/../../../libgobject-2.0.0.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/gi/_gi_cairo.cpython-$PY3_MAJOR${PY3_MINOR}m-darwin.so
-relocate_dependency @loader_path/../../../libgirepository-1.0.1.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/gi/_gi_cairo.cpython-$PY3_MAJOR${PY3_MINOR}m-darwin.so
-relocate_dependency @loader_path/../../../libffi.6.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/gi/_gi_cairo.cpython-$PY3_MAJOR${PY3_MINOR}m-darwin.so
-relocate_dependency @loader_path/../../../libcairo.2.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/gi/_gi_cairo.cpython-$PY3_MAJOR${PY3_MINOR}m-darwin.so
-relocate_dependency @loader_path/../../../libcairo-gobject.2.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/gi/_gi_cairo.cpython-$PY3_MAJOR${PY3_MINOR}m-darwin.so
+relocate_dependency @loader_path/../../../libglib-2.0.0.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/gi/_gi_cairo.cpython-$PY3_MAJOR${PY3_MINOR}-darwin.so
+relocate_dependency @loader_path/../../../libintl.8.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/gi/_gi_cairo.cpython-$PY3_MAJOR${PY3_MINOR}-darwin.so
+relocate_dependency @loader_path/../../../libgio-2.0.0.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/gi/_gi_cairo.cpython-$PY3_MAJOR${PY3_MINOR}-darwin.so
+relocate_dependency @loader_path/../../../libgobject-2.0.0.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/gi/_gi_cairo.cpython-$PY3_MAJOR${PY3_MINOR}-darwin.so
+relocate_dependency @loader_path/../../../libgirepository-1.0.1.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/gi/_gi_cairo.cpython-$PY3_MAJOR${PY3_MINOR}-darwin.so
+relocate_dependency @loader_path/../../../libffi.7.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/gi/_gi_cairo.cpython-$PY3_MAJOR${PY3_MINOR}-darwin.so
+relocate_dependency @loader_path/../../../libcairo.2.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/gi/_gi_cairo.cpython-$PY3_MAJOR${PY3_MINOR}-darwin.so
+relocate_dependency @loader_path/../../../libcairo-gobject.2.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/gi/_gi_cairo.cpython-$PY3_MAJOR${PY3_MINOR}-darwin.so
 
 ### install Python package: Pycairo ############################################
 
-# PyGObject pulls in Pycairo, so not going to install again.
-#pip3 install --install-option="--prefix=$APP_RES_DIR" --ignore-installed $PYTHON_PYCAIRO
+# This package got pulled in by PyGObject.
 
 # patch '_cairo'
-relocate_dependency @loader_path/../../../libcairo.2.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/cairo/_cairo.cpython-$PY3_MAJOR${PY3_MINOR}m-darwin.so
+relocate_dependency @loader_path/../../../libcairo.2.dylib $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/cairo/_cairo.cpython-$PY3_MAJOR${PY3_MINOR}-darwin.so
 
 ### install Python package: pySerial ###########################################
 
@@ -171,7 +146,6 @@ cp $SELF_DIR/fonts.conf $APP_ETC_DIR/fonts
 
 ### Ghostscript ################################################################
 
-relocate_dependency @executable_path/../lib/libz.1.dylib $APP_BIN_DIR/gs
 relocate_dependency @executable_path/../lib/libfontconfig.1.dylib $APP_BIN_DIR/gs
 relocate_dependency @executable_path/../lib/libfreetype.6.dylib $APP_BIN_DIR/gs
 

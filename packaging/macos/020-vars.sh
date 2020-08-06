@@ -27,17 +27,17 @@ export MAKEFLAGS="-j $CORES"
 ### target OS version ##########################################################
 
 # The current build setup is
-#   - Xcode 11.3.1
+#   - Xcode 11.6
 #   - OS X El Capitan 10.11 SDK (part of Xcode 7.3.1)
-#   - macOS Mojave 10.14.6
+#   - macOS Catalina 10.15.6
 
 export MACOSX_DEPLOYMENT_TARGET=10.11
-[ -z $SDKROOT_DIR ] && SDKROOT_DIR=/Library/Developer/CommandLineTools/SDKs
+[ -z $SDKROOT_DIR ] && SDKROOT_DIR=/opt/sdks
 export SDKROOT=$SDKROOT_DIR/MacOSX${MACOSX_DEPLOYMENT_TARGET}.sdk
 
 ### build system/toolset version ###############################################
 
-TOOLSET_VERSION=0.35
+TOOLSET_VERSION=0.37
 
 ### ramdisk ####################################################################
 
@@ -135,15 +135,15 @@ APP_PLIST=$APP_CON_DIR/Info.plist
 ### bundled Python version #####################################################
 
 PY3_MAJOR=3
-PY3_MINOR=7
-PY3_PATCH=6
+PY3_MINOR=8
+PY3_PATCH=5
 PY3_BUILD=1  # custom framework build number
 
 ### download URLs for dependencies #############################################
 
 # https://github.com/dehesselle/gtk-osx
 # Forked from https://gitlab.gnome.org/GNOME/gtk-osx
-URL_GTK_OSX=https://raw.githubusercontent.com/dehesselle/gtk-osx/inkscape-1.0.x-5
+URL_GTK_OSX=https://raw.githubusercontent.com/dehesselle/gtk-osx/inkscape-1.0.x-7
 URL_GTK_OSX_SETUP=$URL_GTK_OSX/gtk-osx-setup.sh
 URL_GTK_OSX_MODULESET=$URL_GTK_OSX/modulesets-stable/gtk-osx.modules
 
@@ -166,9 +166,6 @@ URL_PNG2ICNS=https://github.com/bitboss-ca/png2icns/archive/v0.1.tar.gz
 # This is a relocatable Python.framework to be bundled with the app.
 # https://github.com/dehesselle/py3framework
 URL_PYTHON=https://github.com/dehesselle/py3framework/releases/download/py$PY3_MAJOR$PY3_MINOR$PY3_PATCH.$PY3_BUILD/py$PY3_MAJOR$PY3_MINOR${PY3_PATCH}_framework_$PY3_BUILD.tar.xz
-# This Python 3.6 is only to setup JHBuild as it fails to download/install
-# its own Python.
-URL_PYTHON_JHBUILD=https://github.com/dehesselle/py3framework/releases/download/py3610.1/py3610_framework_1.tar.xz
 # A pre-compiled version of the whole toolset.
 # https://github.com/dehesselle/mibap
 URL_TOOLSET=https://github.com/dehesselle/mibap/releases/download/v$TOOLSET_VERSION/mibap_v$TOOLSET_VERSION.dmg
@@ -182,14 +179,11 @@ URL_TOOLSET=https://github.com/dehesselle/mibap/releases/download/v$TOOLSET_VERS
 PYTHON_CAIROCFFI=cairocffi==1.1.0
 # https://lxml.de
 # https://github.com/lxml/lxml
-PYTHON_LXML=lxml==4.4.2
-# https://github.com/lxml/lxml
-PYTHON_NUMPY=numpy==1.18.1
-# https://www.cairographics.org/pycairo/
-# https://github.com/pygobject/pycairo
-PYTHON_PYCAIRO=pycairo==1.19.0
+PYTHON_LXML=lxml==4.5.2
+# https://github.com/numpy/numpy
+PYTHON_NUMPY=numpy==1.19.1
 # https://pygobject.readthedocs.io/en/latest/
-PYTHON_PYGOBJECT=PyGObject==3.34.0
+PYTHON_PYGOBJECT=PyGObject==3.36.1
 # https://github.com/scour-project/scour
 PYTHON_SCOUR=scour==0.37
 # https://pyserial.readthedocs.io/en/latest/

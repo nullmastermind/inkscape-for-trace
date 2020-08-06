@@ -86,9 +86,8 @@
   <binary>
     ${prefix}/lib/gio/modules/*.so
   </binary>
-  <!-- fontconfig binaries TODO are they really required? -->
   <binary>
-    ${prefix}/bin/fc-*
+    ${prefix}/lib/enchant-2/*.so
   </binary>
   <!-- GObject Introspection repository manager -->
   <binary>
@@ -130,6 +129,9 @@
 
   <data>
     ${prefix}/etc/fonts
+  </data>
+  <data>
+    ${prefix}/share/enchant
   </data>
   <data>
     ${prefix}/share/fontconfig

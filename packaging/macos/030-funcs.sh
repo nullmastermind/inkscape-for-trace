@@ -369,12 +369,12 @@ function pip_install
 
   local PATH_ORIGINAL=$PATH
   export PATH=$APP_FRA_DIR/Python.framework/Versions/Current/bin:$PATH
-  
+
   pip$PY3_MAJOR install \
-    --install-option="--prefix=$APP_RES_DIR" \
+    --prefix=$APP_RES_DIR \
     --ignore-installed \
     $package
-  
+
   export PATH=$PATH_ORIGINAL
 }
 

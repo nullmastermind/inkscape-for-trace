@@ -33,7 +33,7 @@ function install
   # mount build system read-only
   local device=$(create_dmg_device $toolset_dmg)
   [ ! -d $WRK_DIR ] && mkdir -p $WRK_DIR
-  mount -o nobrowse,ro -t hfs $device $WRK_DIR
+  mount -o nobrowse,noowners,ro -t hfs $device $WRK_DIR
   echo_ok "toolset mounted as $device"
 
   # Sadly, there are some limitations involved with union-mounting:

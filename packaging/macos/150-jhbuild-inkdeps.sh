@@ -17,21 +17,21 @@ for script in $SELF_DIR/0??-*.sh; do source $script; done
 # Part of gtk-osx module sets.
 
 jhbuild build \
-  gtkspell3 \
   libsoup
 
 # Part of inkscape module set.
 
 jhbuild build \
-  gsl \
   boehm_gc \
-  gdl \
-  openjpeg \
-  libcdr \
-  imagemagick \
-  poppler \
   double_conversion \
-  potrace \
-  openmp \
+  gdl \
   ghostscript \
-  google_test
+  google_test \
+  gsl \
+  gspell \
+  imagemagick \
+  libcdr \
+  openjpeg \
+  openmp \
+  poppler \
+  potrace
