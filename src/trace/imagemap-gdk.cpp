@@ -91,50 +91,6 @@ GdkPixbuf *grayMapToGdkPixbuf(GrayMap *grayMap)
 }
 
 
-
-/*#########################################################################
-## P A C K E D    P I X E L    M A P
-#########################################################################*/
-
-PackedPixelMap *gdkPixbufToPackedPixelMap(GdkPixbuf *buf)
-{
-    if (!buf)
-        return nullptr;
-
-    int width       = gdk_pixbuf_get_width(buf);
-    int height      = gdk_pixbuf_get_height(buf);
-    guchar *pixdata = gdk_pixbuf_get_pixels(buf);
-    int rowstride   = gdk_pixbuf_get_rowstride(buf);
-    int n_channels  = gdk_pixbuf_get_n_channels(buf);
-
-    PackedPixelMap *ppMap = PackedPixelMapCreate(width, height);
-    if (!ppMap)
-        return nullptr;
-
-    //### Fill in the cells with RGB values
-    int x,y;
-    int row  = 0;
-    for (y=0 ; y<height ; y++)
-        {
-        guchar *p = pixdata + row;
-        for (x=0 ; x<width ; x++)
-            {
-            int alpha = (int)p[3];
-            int white = 255 - alpha;
-            int r     = (int)p[0];  r = r * alpha / 256 + white;
-            int g     = (int)p[1];  g = g * alpha / 256 + white;
-            int b     = (int)p[2];  b = b * alpha / 256 + white;
-
-            ppMap->setPixel(ppMap, x, y, r, g, b);
-            p += n_channels;
-            }
-        row += rowstride;
-        }
-
-    return ppMap;
-}
-
-
 /*#########################################################################
 ## R G B   M A P
 #########################################################################*/

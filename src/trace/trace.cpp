@@ -38,7 +38,6 @@
 #include "object/sp-image.h"
 
 #include "siox.h"
-#include "imagemap-gdk.h"
 
 namespace Inkscape {
 namespace Trace {
@@ -208,8 +207,6 @@ Glib::RefPtr<Gdk::Pixbuf> Tracer::sioxProcessImage(SPImage *img, Glib::RefPtr<Gd
 
     //g_message("siox: start");
 
-    //Convert from gdk, so a format we know.  By design, the pixel
-    //format in PackedPixelMap is identical to what is needed by SIOX
     SioxImage simage(origPixbuf->gobj());
 
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
@@ -254,9 +251,6 @@ Glib::RefPtr<Gdk::Pixbuf> Tracer::sioxProcessImage(SPImage *img, Glib::RefPtr<Gd
 
     //g_message("%d arena items\n", arenaItems.size());
 
-    //PackedPixelMap *dumpMap = PackedPixelMapCreate(
-    //                simage.getWidth(), simage.getHeight());
-
     //g_message("siox: start selection");
 
     for (int row=0 ; row<iheight ; row++)
@@ -287,15 +281,12 @@ Glib::RefPtr<Gdk::Pixbuf> Tracer::sioxProcessImage(SPImage *img, Glib::RefPtr<Gd
             if (weHaveAHit)
                 {
                 //g_message("hit!\n");
-                //dumpMap->setPixelLong(dumpMap, col, row, 0L);
                 simage.setConfidence(col, row,
                         Siox::UNKNOWN_REGION_CONFIDENCE);
                 }
             else
                 {
                 //g_message("miss!\n");
-                //dumpMap->setPixelLong(dumpMap, col, row,
-                //        simage.getPixel(col, row));
                 simage.setConfidence(col, row,
                         Siox::CERTAIN_BACKGROUND_CONFIDENCE);
                 }
@@ -303,9 +294,6 @@ Glib::RefPtr<Gdk::Pixbuf> Tracer::sioxProcessImage(SPImage *img, Glib::RefPtr<Gd
         }
 
     //g_message("siox: selection done");
-
-    //dumpMap->writePPM(dumpMap, "siox1.ppm");
-    //dumpMap->destroy(dumpMap);
 
     //## ok we have our pixel buf
     TraceSioxObserver observer(this);

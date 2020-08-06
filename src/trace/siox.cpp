@@ -115,7 +115,7 @@ void CieLab::init()
 
 
 /**
- * Construct this CieLab from a packed-pixel ARGB value
+ * Construct this CieLab from an ARGB value
  */
 CieLab::CieLab(unsigned long rgb)
 {
@@ -185,7 +185,7 @@ CieLab::CieLab(unsigned long rgb)
 
 
 /**
- * Return this CieLab's value converted to a packed-pixel ARGB value
+ * Return this CieLab's value converted to an ARGB value
  */
 unsigned long CieLab::toRGB()
 {
