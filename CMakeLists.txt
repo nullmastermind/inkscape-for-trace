@@ -128,6 +128,7 @@ option(WITH_LIBWPG "Compile with support of libwpg for WordPerfect Graphics" ON)
 option(WITH_NLS "Compile with Native Language Support (using gettext)" ON)
 option(WITH_JEMALLOC "Compile with JEMALLOC support" OFF)
 option(WITH_ASAN "Compile with Clang's AddressSanitizer (for debugging purposes)" OFF)
+option(WITH_INTERNAL_2GEOM "Prefer internal copy of lib2geom" OFF)
 
 option(WITH_FUZZ "Compile for fuzzing purpose (use 'make fuzz' only)" OFF)
 mark_as_advanced(WITH_FUZZ)
@@ -149,7 +150,6 @@ endif()
 # end badness
 # -----------------------------------------------------------------------------
 
-set(2GEOM_BUILD_SHARED ${BUILD_SHARED_LIBS} CACHE BOOL "" FORCE)
 
 
 # -----------------------------------------------------------------------------
@@ -287,6 +287,7 @@ message("WITH_LIBWPG:             ${WITH_LIBWPG}")
 message("WITH_NLS:                ${WITH_NLS}")
 message("WITH_OPENMP:             ${WITH_OPENMP}")
 message("WITH_JEMALLOC:           ${WITH_JEMALLOC}")
+message("WITH_INTERNAL_2GEOM:     ${WITH_INTERNAL_2GEOM}")
 
 message("WITH_PROFILING:          ${WITH_PROFILING}")
 message("BUILD_TESTING:           ${BUILD_TESTING}")
