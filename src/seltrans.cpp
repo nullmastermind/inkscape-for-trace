@@ -49,6 +49,7 @@
 #include "object/sp-namedview.h"
 #include "object/sp-root.h"
 
+#include "ui/modifiers.h"
 #include "ui/tools/select-tool.h"
 
 using Inkscape::DocumentUndo;
@@ -791,7 +792,8 @@ gboolean Inkscape::SelTrans::handleRequest(SPKnot *knot, Geom::Point *position, 
     // When holding shift while rotating or skewing, the transformation will be
     // relative to the point opposite of the handle; otherwise it will be relative
     // to the center as set for the selection
-    if ((!(state & GDK_SHIFT_MASK) == !(_state == STATE_ROTATE)) && (handle.type != HANDLE_CENTER)) {
+    auto off_center = Modifiers::Modifier::get(Modifiers::Type::TRANS_OFF_CENTER)->active(state);
+    if ((!off_center == !(_state == STATE_ROTATE)) && (handle.type != HANDLE_CENTER)) {
         _origin = _opposite;
         _origin_for_bboxpoints = _opposite_for_bboxpoints;
         _origin_for_specpoints = _opposite_for_specpoints;
@@ -898,7 +900,8 @@ gboolean Inkscape::SelTrans::scaleRequest(Geom::Point &pt, guint state)
         // In all other cases we should try to snap now
         Inkscape::PureScale  *bb, *sn;
 
-        if ((state & GDK_CONTROL_MASK) || _desktop->isToolboxButtonActive ("lock")) {
+        auto ratio_confine = Modifiers::Modifier::get(Modifiers::Type::MOVE_RATIO_CONFINE)->active(state);
+        if (ratio_confine || _desktop->isToolboxButtonActive ("lock")) {
             // Scale is locked to a 1:1 aspect ratio, so that s[X] must be made to equal s[Y].
             //
             // The aspect-ratio must be locked before snapping
@@ -1293,7 +1296,7 @@ gboolean Inkscape::SelTrans::centerRequest(Geom::Point &pt, guint state)
     m.setup(_desktop);
     m.setRotationCenterSource(items);
 
-    if (state & GDK_CONTROL_MASK) { // with Ctrl, constrain to axes
+    if (Modifiers::Modifier::get(Modifiers::Type::MOVE_AXIS_CONFINE)->active(state)) {
         std::vector<Inkscape::Snapper::SnapConstraint> constraints;
         constraints.emplace_back(_point, Geom::Point(1, 0));
         constraints.emplace_back(_point, Geom::Point(0, 1));
@@ -1379,10 +1382,10 @@ void Inkscape::SelTrans::moveTo(Geom::Point const &xy, guint state)
     Geom::Point dxy = xy - _point;
 
     bool const alt = (state & GDK_MOD1_MASK);
-    bool const control = (state & GDK_CONTROL_MASK);
     bool const shift = (state & GDK_SHIFT_MASK);
+    auto axis_confine = Modifiers::Modifier::get(Modifiers::Type::MOVE_AXIS_CONFINE)->active(state);
 
-    if (control) { // constrained to the orthogonal axes
+    if (axis_confine) {
         if (fabs(dxy[Geom::X]) > fabs(dxy[Geom::Y])) {
             dxy[Geom::Y] = 0;
         } else {
@@ -1407,7 +1410,7 @@ void Inkscape::SelTrans::moveTo(Geom::Point const &xy, guint state)
 
         Inkscape::PureTranslate *bb, *sn;
 
-        if (control) { // constrained movement with snapping
+        if (axis_confine) { // constrained movement with snapping
 
             /* Snap to things, and also constrain to horizontal or vertical movement */
 
@@ -1419,7 +1422,7 @@ void Inkscape::SelTrans::moveTo(Geom::Point const &xy, guint state)
             // individually for each point to be snapped; this will be handled however by snapTransformed()
             bb = new Inkscape::PureTranslateConstrained(dxy[dim], dim);
             sn = new Inkscape::PureTranslateConstrained(dxy[dim], dim);
-        } else { // !control
+        } else {
             /* Snap to things with no constraint */
             bb = new Inkscape::PureTranslate(dxy);
             sn = new Inkscape::PureTranslate(dxy);
@@ -1461,7 +1464,7 @@ void Inkscape::SelTrans::moveTo(Geom::Point const &xy, guint state)
         } else {
             // We didn't snap, so remove any previous snap indicator
             _desktop->snapindicator->remove_snaptarget();
-            if (control) {
+            if (axis_confine) {
                 // If we didn't snap, then we should still constrain horizontally or vertically
                 // (When we did snap, then this constraint has already been enforced by
                 // calling constrainedSnapTranslate() above)

@@ -40,12 +40,11 @@ decltype(Modifier::_modifiers) Modifier::_modifiers {
     {Type::SELECT_CYCLE, new Modifier("select-cycle", "Cycle through objects", "Scroll through objects under the cursor.", ALT, SCROLL)},
 
     // Transform handle modifiers (applies to multiple tools)
-    {Type::MOVE_AXIS_CONFINE, new Modifier("move-confine", "Move confine", "When dragging items, confine to either x or y axis", CTRL, HANDLE)},
-    {Type::SCALE_RATIO_CONFINE, new Modifier("scale-confine", "Scale confine", "When resizing objects, confine the aspect ratio", CTRL, HANDLE)},
-    {Type::SCALE_FROM_CENTER, new Modifier("scale-from-center", "Scale from center", "When resizing obects, scale from the center", SHIFT, HANDLE)},
-    {Type::SCALE_FIXED_RATIO, new Modifier("scale-fixed-ratio", "Scale fixed amounts", "When resizing objects, scale by fixed amounts", ALT, HANDLE)},
-    {Type::TRANS_FIXED_RATIO, new Modifier("trans-fixed-ratio", "Transform in increments", "Rotate or skew by fixed amounts", CTRL, HANDLE)},
-    {Type::TRANS_OFF_CENTER, new Modifier("trans-off-center", "Transform against center", "When rotating or skewing, use the far point as the anchor", SHIFT, HANDLE)},
+    {Type::MOVE_AXIS_CONFINE, new Modifier("move-confine", "Move confine", "When dragging items, confine to either x or y axis", CTRL, DRAG)},   // MOVE by DRAG
+    {Type::SCALE_RATIO_CONFINE, new Modifier("scale-confine", "Scale confine", "When resizing objects, confine the aspect ratio", CTRL, HANDLE)}, // SCALE
+    {Type::SCALE_FIXED_RATIO, new Modifier("scale-fixed-ratio", "Scale fixed amounts", "When resizing objects, scale by fixed amounts", ALT, HANDLE)}, // seltrans.cpp:916+1027+1424
+    {Type::TRANS_FIXED_RATIO, new Modifier("trans-fixed-ratio", "Transform in increments", "Rotate or skew by fixed amounts", CTRL, HANDLE)}, // seltrans.cpp:1179+1268
+    {Type::TRANS_OFF_CENTER, new Modifier("trans-off-center", "Transform against center", "When resizing, rotating or skewing, change the center point", SHIFT, HANDLE)}, // SCALE/ROTATE/SKEW
 };
 
 /**

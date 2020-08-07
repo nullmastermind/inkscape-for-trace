@@ -60,10 +60,9 @@ enum class Type {
     // Transform handles (applies to multiple tools)
     MOVE_AXIS_CONFINE,    // Limit dragging to X OR Y only {DRAG+CTRL}
     SCALE_RATIO_CONFINE,  // Confine resize aspect ratio {HANDLE+CTRL}
-    SCALE_FROM_CENTER,    // Resize from center {HANDLE+SHIFT}
     SCALE_FIXED_RATIO,    // Resize by fixed ratio sizes {HANDLE+ALT}
     TRANS_FIXED_RATIO,    // Rotate/skew by fixed ratio angles {HANDLE+CTRL}
-    TRANS_OFF_CENTER,     // Rotate/skew from oposite corner {HANDLE+SHIFT}
+    TRANS_OFF_CENTER,     // Scale/Rotate/skew from oposite corner {HANDLE+SHIFT}
     // TODO: Alignment ommitted because it's UX is not completed
 };
 
