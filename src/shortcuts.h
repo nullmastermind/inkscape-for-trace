@@ -71,6 +71,7 @@ void sp_shortcut_file_import_do(char const *importname);
 void sp_shortcut_file_export_do(char const *exportname);
 GtkAccelGroup *sp_shortcut_get_accel_group();
 void sp_shortcut_add_accelerator(GtkWidget *item, unsigned int const shortcut);
+guint parse_modifier_string(gchar const *modifiers_string, gchar const *verb_name);
 
 #endif
 

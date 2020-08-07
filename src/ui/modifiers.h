@@ -26,6 +26,8 @@ enum Key : KeyMask {
     CTRL = GDK_CONTROL_MASK,
     ALT = GDK_MOD1_MASK,
     SUPER = GDK_SUPER_MASK,
+    HYPER = GDK_HYPER_MASK,
+    META = GDK_META_MASK,
 };
 // Triggers used for collision warnings, two tools are using the same trigger
 enum Triggers : Trigger {CLICK, DRAG, SCROLL, HANDLE};
