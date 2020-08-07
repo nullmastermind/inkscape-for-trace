@@ -242,7 +242,6 @@
 ../src/ui/dialog/debug.cpp
 ../src/ui/dialog/document-properties.cpp
 ../src/ui/dialog/export.cpp
-../src/ui/dialog/extension-editor.cpp
 ../src/ui/dialog/filedialogimpl-gtkmm.cpp
 ../src/ui/dialog/filedialogimpl-win32.cpp
 ../src/ui/dialog/fill-and-stroke.cpp
