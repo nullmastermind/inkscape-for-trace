@@ -15,6 +15,7 @@
 
 #include <giomm/file.h>
 #include <glibmm/keyfile.h>
+#include <gtkmm/eventbox.h>
 #include <gtkmm/image.h>
 
 #include "enums.h"
@@ -232,7 +233,11 @@ Gtk::Widget *DialogContainer::create_notebook_tab(Glib::ustring label_str, Glib:
     tab->pack_end(*label);
     tab->show_all();
 
-    return tab;
+    // Workaround to the fact that Gtk::Box doesn't receive on_button_press event
+    Gtk::EventBox *cover = Gtk::manage(new Gtk::EventBox());
+    cover->add(*tab);
+
+    return cover;
 }
 
 // Add new dialog (in response to menu)

@@ -58,8 +58,6 @@ public:
     void close_notebook_callback();
     void move_tab_callback();
 
-    void toggle_tab_labels_callback(bool show);
-
 private:
     // Widgets
     DialogContainer *_container;
@@ -71,11 +69,18 @@ private:
     int _dialog_menu_items;
     bool _labels_auto;
     std::vector<sigc::connection> _conn;
+    std::multimap<Gtk::Widget *, sigc::connection> _tab_connections;
 
     // Signal handlers - private
     void on_menu_signal_activate(Glib::ustring);
     void on_size_allocate_scroll(Gtk::Allocation &allocation);
     void on_labels_toggled();
+    bool on_button_click_event(GdkEventButton *event, Gtk::Widget *page);
+
+    // Helpers
+    void toggle_tab_labels_callback(bool show);
+    void add_close_tab_callback(Gtk::Widget *page);
+    void remove_close_tab_callback(Gtk::Widget *page);
 };
 
 } // namespace Dialog

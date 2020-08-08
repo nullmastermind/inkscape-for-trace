@@ -18,6 +18,7 @@
 #endif /* GDK_WINDOWING_WAYLAND */
 #include <glibmm/i18n.h>
 #include <glibmm/refptr.h>
+#include <gtkmm/eventbox.h>
 #include <gtkmm/menubutton.h>
 #include <gtkmm/scrollbar.h>
 #include <gtkmm/separatormenuitem.h>
@@ -135,6 +136,10 @@ DialogNotebook::DialogNotebook(DialogContainer *container)
 DialogNotebook::~DialogNotebook()
 {
     for_each(_conn.begin(), _conn.end(), [&](auto c) { c.disconnect(); });
+    for_each(_tab_connections.begin(), _tab_connections.end(), [&](auto it) { it.second.disconnect(); });
+
+    _conn.clear();
+    _tab_connections.clear();
 }
 
 /**
@@ -314,6 +319,9 @@ void DialogNotebook::on_page_added(Gtk::Widget *page, int page_num)
     _menu.append(*new_menu_item);
     _menu.show_all_children();
     _dialog_menu_items++; // remember how many dialogs are in the notebook
+
+    // add close tab signal
+    add_close_tab_callback(page);
 }
 
 /**
@@ -344,6 +352,9 @@ void DialogNotebook::on_page_removed(Gtk::Widget *page, int page_num)
     if (_dialog_menu_items == 0) {
         _menu.remove(*actions[n_children - 2]);
     }
+
+    // remove old close tab signal
+    remove_close_tab_callback(page);
 }
 
 // ====== Signal handlers - Notebook menu =======
@@ -397,26 +408,7 @@ void DialogNotebook::move_tab_callback()
     }
 }
 
-// ========== Signal handlers - other ===========
-
-/**
- * Callback to toggle all tab labels to the selected state.
- * @param show: wether you want the labels to show or not
- */
-void DialogNotebook::toggle_tab_labels_callback(bool show)
-{
-    for (auto const &page : _notebook.get_children()) {
-        Gtk::Box *box = dynamic_cast<Gtk::Box *>(_notebook.get_tab_label(*page));
-        if (!box) {
-            continue;
-        }
-
-        Gtk::Label *label = dynamic_cast<Gtk::Label *>(box->get_children()[1]);
-        if (label) {
-            show ? label->show() : label->hide();
-        }
-    }
-}
+// ========== Signal handlers - private ===========
 
 /**
  * Signal handler to open a dialog from the notebook action menu.
@@ -475,6 +467,76 @@ void DialogNotebook::on_labels_toggled() {
         toggle_tab_labels_callback(false);
     } else if (!previous && _labels_auto) {
         toggle_tab_labels_callback(true);
+    }
+}
+
+/**
+ * Signal handler to close a tab when middle-clicking.
+ */
+bool DialogNotebook::on_button_click_event(GdkEventButton *event, Gtk::Widget *page)
+{
+    if ((event->type == GDK_BUTTON_PRESS) && (event->button == 2)) {
+        _notebook.remove_page(_notebook.page_num(*page));
+
+        // Delete the signal connection
+        remove_close_tab_callback(page);
+
+        if (_notebook.get_n_pages() == 0) {
+            close_notebook_callback();
+        }
+    }
+
+    return false;
+}
+
+// ================== Helpers ===================
+
+/**
+ * Callback to toggle all tab labels to the selected state.
+ * @param show: wether you want the labels to show or not
+ */
+void DialogNotebook::toggle_tab_labels_callback(bool show)
+{
+    for (auto const &page : _notebook.get_children()) {
+        Gtk::EventBox *cover = dynamic_cast<Gtk::EventBox *>(_notebook.get_tab_label(*page));
+        if (!cover) {
+            continue;
+        }
+
+        Gtk::Box *box = dynamic_cast<Gtk::Box *>(cover->get_child());
+        if (!box) {
+            continue;
+        }
+
+        Gtk::Label *label = dynamic_cast<Gtk::Label *>(box->get_children()[1]);
+        if (label) {
+            show ? label->show() : label->hide();
+        }
+    }
+}
+
+/**
+ * Helper method that adds the close tab signal connection for the page given.
+ */
+void DialogNotebook::add_close_tab_callback(Gtk::Widget *page)
+{
+    Gtk::Widget *tab = _notebook.get_tab_label(*page);
+    sigc::connection tab_connection = tab->signal_button_press_event().connect(
+        sigc::bind<Gtk::Widget *>(sigc::mem_fun(*this, &DialogNotebook::on_button_click_event), page), true);
+
+    _tab_connections.insert(std::pair<Gtk::Widget *, sigc::connection>(page, tab_connection));
+}
+
+/**
+ * Helper method that removes the close tab signal connection for the page given.
+ */
+void DialogNotebook::remove_close_tab_callback(Gtk::Widget *page)
+{
+    auto tab_connection_it = _tab_connections.find(page);
+
+    if (tab_connection_it != _tab_connections.end()) {
+        (*tab_connection_it).second.disconnect();
+        _tab_connections.erase(tab_connection_it);
     }
 }
 
