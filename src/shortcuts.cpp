@@ -716,7 +716,6 @@ static void _read_shortcuts_file(XML::Node const *root, bool const is_user_set)
             if(sp_mods & SP_SHORTCUT_HYPER_MASK) user_modifier |= HYPER;
             if(sp_mods & SP_SHORTCUT_META_MASK) user_modifier |= META;
 
-            g_warning("Setting '%s' to '%s' (user defined modifier)", mod_name, mod_attr);
             mod->set(user_modifier);
 
         } else if (!strcmp(iter->name(), "keys")) {
