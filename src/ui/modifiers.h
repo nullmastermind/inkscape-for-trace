@@ -58,11 +58,13 @@ enum class Type {
     SELECT_CYCLE,         // Cycle through objects under cursor {ALT+SCROLL}
 
     // Transform handles (applies to multiple tools)
-    MOVE_AXIS_CONFINE,    // Limit dragging to X OR Y only {DRAG+CTRL}
-    SCALE_RATIO_CONFINE,  // Confine resize aspect ratio {HANDLE+CTRL}
+    MOVE_CONFINE,         // Limit dragging to X OR Y only {DRAG+CTRL}
+    MOVE_FIXED_RATIO,     // Move objects by fixed amounts {HANDLE+ALT}
+    SCALE_CONFINE,        // Confine resize aspect ratio {HANDLE+CTRL}
     SCALE_FIXED_RATIO,    // Resize by fixed ratio sizes {HANDLE+ALT}
     TRANS_FIXED_RATIO,    // Rotate/skew by fixed ratio angles {HANDLE+CTRL}
     TRANS_OFF_CENTER,     // Scale/Rotate/skew from oposite corner {HANDLE+SHIFT}
+    TRANS_SNAPPING,       // Disable snapping while transforming {HANDLE+SHIFT}
     // TODO: Alignment ommitted because it's UX is not completed
 };
 

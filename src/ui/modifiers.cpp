@@ -40,11 +40,15 @@ decltype(Modifier::_modifiers) Modifier::_modifiers {
     {Type::SELECT_CYCLE, new Modifier("select-cycle", "Cycle through objects", "Scroll through objects under the cursor.", ALT, SCROLL)},
 
     // Transform handle modifiers (applies to multiple tools)
-    {Type::MOVE_AXIS_CONFINE, new Modifier("move-confine", "Move confine", "When dragging items, confine to either x or y axis", CTRL, DRAG)},   // MOVE by DRAG
-    {Type::SCALE_RATIO_CONFINE, new Modifier("scale-confine", "Scale confine", "When resizing objects, confine the aspect ratio", CTRL, HANDLE)}, // SCALE
-    {Type::SCALE_FIXED_RATIO, new Modifier("scale-fixed-ratio", "Scale fixed amounts", "When resizing objects, scale by fixed amounts", ALT, HANDLE)}, // seltrans.cpp:916+1027+1424
-    {Type::TRANS_FIXED_RATIO, new Modifier("trans-fixed-ratio", "Transform in increments", "Rotate or skew by fixed amounts", CTRL, HANDLE)}, // seltrans.cpp:1179+1268
-    {Type::TRANS_OFF_CENTER, new Modifier("trans-off-center", "Transform against center", "When resizing, rotating or skewing, change the center point", SHIFT, HANDLE)}, // SCALE/ROTATE/SKEW
+    {Type::MOVE_CONFINE, new Modifier("move-confine", "Move one axis only", "When dragging items, confine to either x or y axis.", CTRL, DRAG)},   // MOVE by DRAG
+    {Type::MOVE_FIXED_RATIO, new Modifier("move-fixed-ratio", "Move fixed amounts", "Move the objects by fixed amounts when dragging.", ALT, DRAG)}, // MOVE by DRAG
+    {Type::SCALE_CONFINE, new Modifier("scale-confine", "Keep aspect ratio", "When resizing objects, confine the aspect ratio.", CTRL, HANDLE)}, // SCALE/STRETCH
+    {Type::SCALE_FIXED_RATIO, new Modifier("scale-fixed-ratio", "Scale fixed amounts", "When moving or resizing objects, use fixed amounts.", ALT, HANDLE)}, // SCALE/STRETCH
+    {Type::TRANS_FIXED_RATIO, new Modifier("trans-fixed-ratio", "Transform in increments", "Rotate or skew by fixed amounts", CTRL, HANDLE)}, // ROTATE/SKEW
+    {Type::TRANS_OFF_CENTER, new Modifier("trans-off-center", "Transform against center", "Change the center point when transforming objects.", SHIFT, HANDLE)}, // SCALE/ROTATE/SKEW
+    {Type::TRANS_SNAPPING, new Modifier("trans-snapping", "Disable Snapping", "Disable snapping when transforming objects.", SHIFT, DRAG)},   // MOVE/SCALE/STRETCH/ROTATE/SKEW
+    // Center handle click: seltrans.cpp:734 SHIFT
+    // Align handle click: seltrans.cpp:1365 SHIFT
 };
 
 /**
