@@ -140,6 +140,13 @@ void sp_shortcut_init()
     try_shortcuts_file(get_path(USER, KEYS, "default.xml"), true);
 }
 
+/*
+ * Loads the keys file if required, but not if verbs already exist.
+ */
+void sp_shortcut_ensure_init() {
+    if (!verbs) sp_shortcut_init();
+}
+
 static bool try_shortcuts_file(char const *filename, bool const is_user_set) {
     using Inkscape::IO::file_test;
 
@@ -786,7 +793,7 @@ parse_modifier_string(gchar const *modifiers_string, gchar const *verb_name)
 void
 sp_shortcut_unset(unsigned int const shortcut)
 {
-    if (!verbs) sp_shortcut_init();
+    sp_shortcut_ensure_init();
 
     Inkscape::Verb *verb = (*verbs)[shortcut];
 
@@ -870,7 +877,7 @@ sp_shortcut_get_modifiers(unsigned int const shortcut)
 void
 sp_shortcut_set(unsigned int const shortcut, Inkscape::Verb *const verb, bool const is_primary, bool const is_user_set)
 {
-    if (!verbs) sp_shortcut_init();
+    sp_shortcut_ensure_init();
 
     Inkscape::Verb *old_verb = (*verbs)[shortcut];
     (*verbs)[shortcut] = verb;
@@ -894,7 +901,7 @@ sp_shortcut_set(unsigned int const shortcut, Inkscape::Verb *const verb, bool co
 Inkscape::Verb *
 sp_shortcut_get_verb(unsigned int shortcut)
 {
-    if (!verbs) sp_shortcut_init();
+    sp_shortcut_ensure_init();
     return (*verbs)[shortcut];
 }
 

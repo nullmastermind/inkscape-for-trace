@@ -159,12 +159,19 @@ SelectTool::~SelectTool() {
 void SelectTool::setup() {
     ToolBase::setup();
 
+    auto select_click = Modifier::get(Modifiers::Type::SELECT_ADD_TO)->get_label();
+    auto select_scroll = Modifier::get(Modifiers::Type::SELECT_CYCLE)->get_label();
+
+    auto no_selection_msg = g_strdup_printf(
+        _("<b>No objects selected.</b> Click, <i>%s</i>+click, <i>%s</i>+scroll mouse on top of objects, or drag around objects to select."),
+        select_click.c_str(), select_scroll.c_str());
+
     this->_describer = new Inkscape::SelectionDescriber(
                 desktop->selection, 
                 desktop->messageStack(),
-                _("Click selection to toggle scale/rotation handles (or Shift+s)"),
-                _("No objects selected. Click, Shift+click, Alt+scroll mouse on top of objects, or drag around objects to select.")
-    );
+                _("Click selection again to toggle scale/rotation handles."),
+                no_selection_msg);
+    free(no_selection_msg); // Is this right?
 
     this->_seltrans = new Inkscape::SelTrans(desktop);
 

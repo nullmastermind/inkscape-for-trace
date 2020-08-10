@@ -28,7 +28,7 @@ decltype(Modifier::_modifiers) Modifier::_modifiers {
     {Type::CANVAS_SCROLL_Y, new Modifier("canvas-scroll-y", "Vertical scroll", "Scroll up and down", 0, SCROLL)},
     {Type::CANVAS_SCROLL_X, new Modifier("canvas-scroll-x", "Horizontal scroll", "Scroll left and right", SHIFT, SCROLL)},
     {Type::CANVAS_ZOOM, new Modifier("canvas-zoom", "Canvas zoom", "Zoom in and out with scroll wheel", CTRL, SCROLL)},
-    {Type::CANVAS_ROTATE, new Modifier("canvs-rotate", "Canavas rotate", "Rotate the canvas with scroll wheel", SHIFT & CTRL, SCROLL)},
+    {Type::CANVAS_ROTATE, new Modifier("canvas-rotate", "Canavas rotate", "Rotate the canvas with scroll wheel", SHIFT & CTRL, SCROLL)},
     
     // Select tool modifiers (minus transforms)
     {Type::SELECT_ADD_TO, new Modifier("select-add-to", "Add to selection", "Add items to existing selection", SHIFT, CLICK)},
@@ -90,16 +90,29 @@ bool Modifier::active(int button_state)
  */
 std::string generate_label(KeyMask mask)
 {
-    bool ctrl = mask & CTRL;
-    bool shift = mask & SHIFT;
-    bool alt = mask & ALT;
-
-    return std::string()
-        .append(ctrl ? "Ctrl" : "")
-        .append(ctrl && (shift || alt) ? "+" : "")
-        .append(shift ? "Shift" : "")
-        .append(shift && alt ? "+ " : "")
-        .append(alt ? "Alt" : "");
+    auto ret = std::string();
+    if(mask & CTRL) ret.append("Ctrl");
+    if(mask & SHIFT) {
+        if(!ret.empty()) ret.append("+");
+        ret.append("Shift");
+    }
+    if(mask & ALT) {
+        if(!ret.empty()) ret.append("+");
+        ret.append("Alt");
+    }
+    if(mask & SUPER) {
+        if(!ret.empty()) ret.append("+");
+        ret.append("Super");
+    }
+    if(mask & HYPER) {
+        if(!ret.empty()) ret.append("+");
+        ret.append("Hyper");
+    }
+    if(mask & META) {
+        if(!ret.empty()) ret.append("+");
+        ret.append("Meta");
+    }
+    return ret;
 }
 
 } // namespace Modifiers
