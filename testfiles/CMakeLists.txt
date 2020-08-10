@@ -73,12 +73,15 @@ set(TEST_SOURCES
     lpe-bool-test
     sp-item-group-test)
 
+add_library(cpp_test_static_library SHARED unittest.cpp doc-per-case-test.cpp)
+target_link_libraries(cpp_test_static_library PUBLIC ${GTEST_LIBRARIES} inkscape_base)
+
 add_custom_target(tests)
 foreach(test_source ${TEST_SOURCES})
     string(REPLACE "-test" "" testname "test_${test_source}")
-    add_executable(${testname} src/${test_source}.cpp unittest.cpp doc-per-case-test.cpp)
+    add_executable(${testname} src/${test_source}.cpp)
     target_include_directories(${testname} SYSTEM PRIVATE ${GTEST_INCLUDE_DIRS})
-    target_link_libraries(${testname} ${GTEST_LIBRARIES} inkscape_base)
+    target_link_libraries(${testname} cpp_test_static_library)
     add_test(NAME ${testname} COMMAND ${testname})
     set_tests_properties(${testname} PROPERTIES ENVIRONMENT "${INKSCAPE_TEST_PROFILE_DIR_ENV}/${testname};${CMAKE_CTEST_ENV}")
     add_dependencies(tests ${testname})
