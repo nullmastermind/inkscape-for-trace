@@ -23,8 +23,9 @@
 #include "display/rendermode.h"
 #include "nr-filter-colormatrix.h"
 
-typedef struct _SPCanvasArena SPCanvasArena;
 typedef unsigned int guint32;
+
+struct SPCanvasArena;
 
 namespace Inkscape {
 

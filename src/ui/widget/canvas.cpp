@@ -27,7 +27,7 @@
 
 #include "display/sp-canvas-item.h"  // Canvas group TEMP TEMP TEMP
 #include "display/sp-canvas-group.h" // Canvas group TEMP TEMP TEMP
-#include "display/canvas-arena.h"    // Change rendering mode
+#include "display/canvas-arena.h"    // Change rendering mode (a.k.a. _drawing)
 #include "display/cairo-utils.h"     // Checkerboard background.
 
 #include "ui/tools/tool-base.h"      // Default cursor
@@ -181,6 +181,7 @@ Canvas::redraw_all()
         return;
     }
     _clean_region->intersect(Cairo::Region::create()); // Empty region (i.e. everything is dirty).
+
     add_idle();
 }
 
@@ -258,16 +259,11 @@ Canvas::scroll_to(Geom::Point const &c, bool clear)
     Geom::IntRect new_area = old_area + Geom::IntPoint(dx, dy);
     bool overlap = new_area.intersects(old_area);
 
-    if (!_desktop) {
-        return; // Might be in destruction
-    }
-
-    SPCanvasArena *arena = SP_CANVAS_ARENA(_desktop->drawing);
-    if (arena) {
+    if (_drawing) {
         Geom::IntRect expanded = new_area;
         Geom::IntPoint expansion(new_area.width()/2, new_area.height()/2);
         expanded.expandBy(expansion);
-        arena->drawing.setCacheLimit(expanded, false);
+        _drawing->drawing.setCacheLimit(expanded, false);
     }
 
     if (clear || !overlap) {
@@ -590,7 +586,9 @@ Canvas::on_motion_notify_event(GdkEventMotion *motion_event)
             _split_position = Geom::Point(_allocation.get_width()/2, _allocation.get_height()/2);
             set_cursor();
             queue_draw();
-            _desktop->setSplitMode(_split_mode);
+            if (_desktop) {
+                _desktop->setSplitMode(_split_mode);
+            }
             return true;
         }
     }
@@ -850,12 +848,6 @@ Canvas::remove_idle()
 bool
 Canvas::on_idle()
 {
-    // Desktop is destroyed before canvas.
-    if (!_desktop) {
-        std::cerr << "Canvas::on_idle: Called after desktop destroyed!" << std::endl;
-        return false;
-    }
-
     if (_in_destruction) {
         std::cerr << "Canvas::on_idle: Called after canvas destroyed!" << std::endl;
         return false; // Disconnect
@@ -910,6 +902,10 @@ Canvas::do_update()
     return true; // FIXME
 }
 
+
+/*
+ * Paint the "dirty" areas of the canvas.
+ */
 bool
 Canvas::paint()
 {
@@ -918,7 +914,6 @@ Canvas::paint()
     draw_region->subtract(_clean_region);
 
     int n_rects = draw_region->get_num_rectangles();
-
     for (int i = 0; i < n_rects; ++i) {
         auto rect = draw_region->get_rectangle(i);
         if (!paint_rect(rect)) {
@@ -930,6 +925,10 @@ Canvas::paint()
     return true;
 }
 
+/*
+ * Paint a rectangular area.
+ * rect: The rectangle to paint (in widget coordinates).
+ */
 bool
 Canvas::paint_rect(Cairo::RectangleInt& rect)
 {
@@ -1016,13 +1015,11 @@ Canvas::paint_rect_internal(PaintRectSetup const *setup, Geom::IntRect const &th
     if (bw * bh < setup->max_pixels) {
         // We are small enough!
 
-        SPCanvasArena *arena = SP_CANVAS_ARENA(_desktop->drawing);
-
-        arena->drawing.setRenderMode(_render_mode);
+        _drawing->drawing.setRenderMode(_render_mode);
         paint_single_buffer(this_rect, setup->canvas_rect, _backing_store);
 
         if (_split_mode != Inkscape::SPLITMODE_NORMAL) {
-            arena->drawing.setRenderMode(Inkscape::RENDERMODE_OUTLINE);
+            _drawing->drawing.setRenderMode(Inkscape::RENDERMODE_OUTLINE);
             paint_single_buffer(this_rect, setup->canvas_rect, _outline_store);
         }
 
@@ -1082,6 +1079,12 @@ Canvas::paint_rect_internal(PaintRectSetup const *setup, Geom::IntRect const &th
     }
 }
 
+/*
+ * Paint a single buffer.
+ * paint_rect: buffer rectangle.
+ * canvas_rect: canvas rectangle.
+ * store: Cairo surface to draw on.
+ */
 void
 Canvas::paint_single_buffer(Geom::IntRect const &paint_rect, Geom::IntRect const &canvas_rect,
                             Cairo::RefPtr<Cairo::ImageSurface> &store)
@@ -1274,6 +1277,10 @@ Canvas::add_clippath(const Cairo::RefPtr<Cairo::Context>& cr) {
 void
 Canvas::set_cursor() {
 
+    if (!_desktop) {
+        return;
+    }
+
     auto display = Gdk::Display::get_default();
 
     switch (_hover_direction) {
@@ -1396,14 +1403,13 @@ Canvas::pick_current_item(GdkEvent *event)
             }
 
             // If in split mode, look at where cursor is to see if one should pick with outline mode.
-            SPCanvasArena *arena = SP_CANVAS_ARENA(_desktop->drawing);
-            arena->drawing.setRenderMode(_render_mode);
+            _drawing->drawing.setRenderMode(_render_mode);
             if (_split_mode == Inkscape::SPLITMODE_SPLIT) {
                 if ((_split_direction == Inkscape::SPLITDIRECTION_NORTH && y > _split_position.y()) ||
                     (_split_direction == Inkscape::SPLITDIRECTION_SOUTH && y < _split_position.y()) ||
                     (_split_direction == Inkscape::SPLITDIRECTION_WEST  && x > _split_position.x()) ||
                     (_split_direction == Inkscape::SPLITDIRECTION_EAST  && x < _split_position.x()) ) {
-                    arena->drawing.setRenderMode(Inkscape::RENDERMODE_OUTLINE);
+                    _drawing->drawing.setRenderMode(Inkscape::RENDERMODE_OUTLINE);
                 }
             }
 

@@ -25,6 +25,7 @@
 class SPDesktop;
 class SPCanvasItem;
 class SPCanvasGroup;
+class SPCanvasArena;
 
 struct PaintRectSetup;
 
@@ -43,7 +44,7 @@ public:
     Canvas();
     ~Canvas() override;
 
-    // Structure
+    // Structure TODO: Remove desktop dependency.
     void set_desktop(SPDesktop *desktop) { _desktop = desktop; }
     SPDesktop *get_desktop() { return _desktop; }
 
@@ -54,6 +55,8 @@ public:
     Geom::IntRect get_area_world_int(); // Shouldn't really need this, only used for rulers.
 
     // Drawing
+    void set_drawing(SPCanvasArena *drawing) { _drawing = drawing; }
+
     void redraw_all();                                // Draw entire surface during idle.
     void redraw_area(int x0, int y0, int x1, int y1); // Draw specified area during idle.
     void redraw_now();                                // Draw areas needing update immediately.
@@ -180,6 +183,7 @@ private:
     unsigned int  _grabbed_event_mask = 0;
 
     // Drawing
+    SPCanvasArena *_drawing;
     bool _drawing_disabled = false;  ///< Disable drawing during critical operations
     bool _need_update = false;
     SPCanvasItem *_root = nullptr;

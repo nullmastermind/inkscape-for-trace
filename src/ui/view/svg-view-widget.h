@@ -43,9 +43,9 @@ public:
     ~SVGViewWidget() override;
     void setDocument(  SPDocument* document);
     void setResize( int width, int height);
+    void on_size_allocate(Gtk::Allocation& allocation) override;
 
 private:
-    void size_allocate(Gtk::Allocation& allocation);
 
     Inkscape::UI::Widget::Canvas *_canvas;
 
@@ -56,6 +56,7 @@ public:
     unsigned int    _dkey;
     SPCanvasGroup  *_parent;
     SPCanvasItem   *_drawing;
+    Gtk::Allocation _allocation;
     double          _hscale;     ///< horizontal scale
     double          _vscale;     ///< vertical scale
     bool            _rescale;    ///< whether to rescale automatically

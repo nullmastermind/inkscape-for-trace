@@ -233,6 +233,7 @@ SPDesktop::init (SPNamedView *nv, Inkscape::UI::Widget::Canvas *acanvas, SPDeskt
     page_border = sp_canvas_item_new (main, SP_TYPE_CTRLRECT, nullptr);
 
     drawing = sp_canvas_item_new (main, SP_TYPE_CANVAS_ARENA, nullptr);
+    canvas->set_drawing(SP_CANVAS_ARENA(drawing));
     g_signal_connect (G_OBJECT (drawing), "arena_event", G_CALLBACK (_arena_handler), this);
 
     // pinch zoom
@@ -425,6 +426,8 @@ void SPDesktop::destroy()
 
     delete _dlg_mgr_owned;
     _dlg_mgr_owned = nullptr;
+
+    canvas->set_desktop(nullptr);
 }
 
 SPDesktop::~SPDesktop()

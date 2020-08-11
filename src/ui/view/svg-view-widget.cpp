@@ -122,17 +122,19 @@ SVGViewWidget::SVGViewWidget(SPDocument* document)
     , _height(0.0)
 {
     _canvas = Gtk::manage(new Inkscape::UI::Widget::Canvas());
+    add(*_canvas);
 
     SPCanvasItem* item =
         sp_canvas_item_new(_canvas->get_canvas_item_root(), SP_TYPE_CANVAS_GROUP, nullptr);
     _parent = SP_CANVAS_GROUP(item);
 
     _drawing = sp_canvas_item_new (_parent, SP_TYPE_CANVAS_ARENA, nullptr);
+    _canvas->set_drawing(SP_CANVAS_ARENA(_drawing));
     g_signal_connect (G_OBJECT (_drawing), "arena_event", G_CALLBACK (arena_handler), this);
 
     setDocument(document);
 
-    signal_size_allocate().connect(sigc::mem_fun(*this, &SVGViewWidget::size_allocate));
+    show_all();
 }
 
 SVGViewWidget::~SVGViewWidget()
@@ -176,8 +178,11 @@ SVGViewWidget::setResize(int width, int height)
 }
 
 void
-SVGViewWidget::size_allocate(Gtk::Allocation& allocation)
+SVGViewWidget::on_size_allocate(Gtk::Allocation& allocation)
 {
+    if (!(_allocation == allocation)) {
+        _allocation = allocation;
+
     double width  = allocation.get_width();
     double height = allocation.get_height();
 
@@ -192,6 +197,9 @@ SVGViewWidget::size_allocate(Gtk::Allocation& allocation)
     _height = height;
 
     doRescale ();
+    }
+
+    Gtk::ScrolledWindow::on_size_allocate(allocation);
 }
 
 void
@@ -230,6 +238,7 @@ SVGViewWidget::doRescale()
 
     if (_drawing) {
         sp_canvas_item_affine_absolute (_drawing, Geom::Scale(_hscale, _vscale) * Geom::Translate(x_offset, y_offset));
+        _canvas->redraw_all(); // Redraw entire canvas.
     }
 }
 
