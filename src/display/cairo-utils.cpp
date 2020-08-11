@@ -766,10 +766,12 @@ feed_curve_to_cairo(cairo_t *cr, Geom::Curve const &c, Geom::Affine const & tran
     default:
     {
         if (Geom::EllipticalArc const *a = dynamic_cast<Geom::EllipticalArc const*>(&c)) {
-            //if (!optimize_stroke || a->boundsFast().intersects(view)) {
+            if (a->isChord()) {
+                Geom::Point endPoint(a->finalPoint());
+                cairo_line_to(cr, endPoint[0], endPoint[1]);
+            } else {
                 Geom::Affine xform = a->unitCircleTransform() * trans;
                 Geom::Point ang(a->initialAngle().radians(), a->finalAngle().radians());
-
                 // Apply the transformation to the current context
                 cairo_matrix_t cm;
                 cm.xx = xform[0];
@@ -790,10 +792,7 @@ feed_curve_to_cairo(cairo_t *cr, Geom::Curve const &c, Geom::Affine const & tran
                 }
                 // Revert the current context
                 cairo_restore(cr);
-            //} else {
-            //    Geom::Point f = a->finalPoint() * trans;
-            //    cairo_move_to(cr, f[X], f[Y]);
-            //}
+            }
         } else {
             // handles sbasis as well as all other curve types
             // this is very slow
