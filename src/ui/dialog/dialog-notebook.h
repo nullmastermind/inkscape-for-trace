@@ -47,16 +47,10 @@ public:
     Gtk::Notebook *get_notebook() { return &_notebook; }
     DialogContainer *get_container() { return _container; }
 
-    // Signal handlers - Notebook
-    void on_drag_end(const Glib::RefPtr<Gdk::DragContext> context);
-    bool on_drag_failed(const Glib::RefPtr<Gdk::DragContext> context, Gtk::DragResult result);
-    void on_page_added(Gtk::Widget *page, int page_num);
-    void on_page_removed(Gtk::Widget *page, int page_num);
-
-    // Signal handlers - Notebook menu
+    // Notebook callbacks
     void close_tab_callback();
     void close_notebook_callback();
-    void move_tab_callback();
+    void pop_tab_callback();
 
 private:
     // Widgets
@@ -66,16 +60,19 @@ private:
     Gtk::RadioMenuItem _labels_auto_button;
 
     // State variables
-    int _dialog_menu_items;
     bool _labels_auto;
+    Gtk::Widget *_selected_page;
     std::vector<sigc::connection> _conn;
     std::multimap<Gtk::Widget *, sigc::connection> _tab_connections;
 
-    // Signal handlers - private
-    void on_menu_signal_activate(Glib::ustring);
+    // Signal handlers - notebook
+    void on_drag_end(const Glib::RefPtr<Gdk::DragContext> context);
+    bool on_drag_failed(const Glib::RefPtr<Gdk::DragContext> context, Gtk::DragResult result);
+    void on_page_added(Gtk::Widget *page, int page_num);
+    void on_page_removed(Gtk::Widget *page, int page_num);
     void on_size_allocate_scroll(Gtk::Allocation &allocation);
     void on_labels_toggled();
-    bool on_button_click_event(GdkEventButton *event, Gtk::Widget *page);
+    bool on_tab_click_event(GdkEventButton *event, Gtk::Widget *page);
 
     // Helpers
     void toggle_tab_labels_callback(bool show);

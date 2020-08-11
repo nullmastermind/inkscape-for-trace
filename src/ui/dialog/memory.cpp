@@ -234,6 +234,7 @@ Memory::Memory()
 }
 
 Memory::~Memory() {
+    _private.stop_update_task();
     delete &_private;
 }
 

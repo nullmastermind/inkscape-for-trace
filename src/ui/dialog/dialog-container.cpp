@@ -351,7 +351,7 @@ void DialogContainer::new_floating_dialog(Glib::ustring name)
     DialogNotebook *notebook = Gtk::manage(new DialogNotebook(this));
     notebook->add_page(*dialog, *tab, dialog->get_name());
 
-    notebook->move_tab_callback();
+    notebook->pop_tab_callback();
 }
 
 void DialogContainer::toggle_dialogs()
