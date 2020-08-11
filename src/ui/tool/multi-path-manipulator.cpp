@@ -138,7 +138,7 @@ MultiPathManipulator::~MultiPathManipulator()
 void MultiPathManipulator::cleanup()
 {
     for (MapType::iterator i = _mmap.begin(); i != _mmap.end(); ) {
-        if (i->second->empty()) _mmap.erase(i++);
+        if (i->second->empty()) i = _mmap.erase(i);
         else ++i;
     }
 }
@@ -157,7 +157,7 @@ void MultiPathManipulator::setItems(std::set<ShapeRecord> const &s)
         std::set<ShapeRecord>::iterator si = shapes.find(i->first);
         if (si == shapes.end()) {
             // This item is no longer supposed to be edited - remove its manipulator
-            _mmap.erase(i++);
+            i = _mmap.erase(i);
         } else {
             ShapeRecord const &sr = i->first;
             ShapeRecord const &sr_new = *si;
@@ -171,11 +171,12 @@ void MultiPathManipulator::setItems(std::set<ShapeRecord> const &s)
                 if (sr.role != sr_new.role) {
                     //hold->setOutlineColor(_getOutlineColor(sr_new.role));
                 }
-                _mmap.erase(sr);
+                i = _mmap.erase(i);
                 _mmap.insert(std::make_pair(sr_new, hold));
+            } else {
+                ++i;
             }
             shapes.erase(si); // remove the processed record
-            ++i;
         }
     }
 
