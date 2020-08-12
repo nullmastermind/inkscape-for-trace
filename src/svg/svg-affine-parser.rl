@@ -13,7 +13,7 @@
  *
  * To generate it, run
  *   ragel svg-affine-parser.rl -o svg-affine-parser.cpp
- *   sed -i 's/(1)/(true)/' svg-affine-parser.cpp
+ *   sed -Ei 's/\(1\)/(true)/' svg-affine-parser.cpp
  */
 
 #include <string>

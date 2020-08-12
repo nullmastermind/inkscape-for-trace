@@ -15,7 +15,7 @@
  *
  * To generate it, run
  *   ragel svg-affine-parser.rl -o svg-affine-parser.cpp
- *   sed -i 's/(1)/(true)/' svg-affine-parser.cpp
+ *   sed -Ei 's/\(1\)/(true)/' svg-affine-parser.cpp
  */
 
 #include <string>
@@ -1060,7 +1060,7 @@ _resume:
 		const char *_lower = _keys;
 		const char *_mid;
 		const char *_upper = _keys + _klen - 1;
-		while (1) {
+		while (true) {
 			if ( _upper < _lower )
 				break;
 
@@ -1083,7 +1083,7 @@ _resume:
 		const char *_lower = _keys;
 		const char *_mid;
 		const char *_upper = _keys + (_klen<<1) - 2;
-		while (1) {
+		while (true) {
 			if ( _upper < _lower )
 				break;
 
