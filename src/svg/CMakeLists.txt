@@ -24,7 +24,6 @@ set(svg_SRC
 	svg-icc-color.h
 	svg-angle.h
 	svg-length.h
-	svg-path-geom-test.h
 	svg.h
 
 )

@@ -50,7 +50,7 @@ Geom::PathVector sp_svg_read_pathv(char const * str)
     catch (Geom::SVGPathParseError &e) {
         builder.flush();
         // This warning is extremely annoying when testing
-        //g_warning("Malformed SVG path, truncated path up to where error was found.\n Input path=\"%s\"\n Parsed path=\"%s\"", str, sp_svg_write_path(pathv));
+        g_warning("Malformed SVG path, truncated path up to where error was found.\n Input path=\"%s\"\n Parsed path=\"%s\"", str, sp_svg_write_path(pathv));
     }
 
     return pathv;
