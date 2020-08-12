@@ -189,6 +189,7 @@ DialogBase *DialogContainer::dialog_factory(Glib::ustring name)
         case str2int("HelpAboutMemory"):
             return &Inkscape::UI::Dialog::Memory::getInstance();
         case str2int("InkscapePreferences"):
+        case str2int("DialogPreferences"):
         case str2int("SelectPrefs"):
         case str2int("NodePrefs"):
         case str2int("TweakPrefs"):
@@ -261,7 +262,7 @@ void DialogContainer::new_dialog(Glib::ustring name)
 void DialogContainer::new_dialog(Glib::ustring name, DialogNotebook *notebook)
 {
     // Get the verb with that id
-    Glib::ustring id = name == "InkscapePreferences" ? "DialogPreferences" : name; // TODO: might be improved
+    Glib::ustring id = name == "InkscapePreferences" ? "DialogPreferences" : name;
     Inkscape::Verb *verb = Inkscape::Verb::getbyid(id.c_str());
 
     // Can't understand the dialog's settings without an associated verb
@@ -272,8 +273,7 @@ void DialogContainer::new_dialog(Glib::ustring name, DialogNotebook *notebook)
     // Limit each container to containing one of any type of dialog.
     auto it = dialogs.find(verb->get_code());
     if (it != dialogs.end()) {
-        std::cerr << "DialogContainer::new_dialog: Already has a \"" << name << "\" dialog!" << std::endl;
-
+        // std::cerr << "DialogContainer::new_dialog: Already has a \"" << name << "\" dialog!" << std::endl;
         // Blink notebook with existing dialog to let user know where it is and show page.
         it->second->blink();
         return;
@@ -286,6 +286,9 @@ void DialogContainer::new_dialog(Glib::ustring name, DialogNotebook *notebook)
         std::cerr << "DialogContainer::new_dialog(): couldn't find dialog for: " << name << std::endl;
         return;
     }
+
+    // manage the dialog instance
+    dialog = Gtk::manage(dialog);
 
     // Create the notebook tab
     auto image = verb->get_image();
@@ -328,7 +331,7 @@ void DialogContainer::new_dialog(Glib::ustring name, DialogNotebook *notebook)
 void DialogContainer::new_floating_dialog(Glib::ustring name)
 {
     // Get the verb with that id
-    Glib::ustring id = name == "InkscapePreferences" ? "DialogPreferences" : name; // TODO: might be improved
+    Glib::ustring id = name == "InkscapePreferences" ? "DialogPreferences" : name;
     Inkscape::Verb *verb = Inkscape::Verb::getbyid(id.c_str());
 
     // Can't understand the dialog's settings without an associated verb
@@ -343,6 +346,9 @@ void DialogContainer::new_floating_dialog(Glib::ustring name)
         std::cerr << "DialogContainer::new_dialog(): couldn't find dialog for: " << name << std::endl;
         return;
     }
+
+    // manage the dialog instance
+    dialog = Gtk::manage(dialog);
 
     // Create the notebook tab
     Gtk::Widget *tab = create_notebook_tab(dialog->get_name(), verb->get_image());
@@ -409,18 +415,28 @@ DialogBase *DialogContainer::get_dialog(int verb_code)
 void DialogContainer::link_dialog(DialogBase *dialog)
 {
     dialogs.insert(std::pair<int, DialogBase *>(dialog->getVerb(), dialog));
+
+    DialogWindow *window = dynamic_cast<DialogWindow *>(get_toplevel());
+    if (window) {
+        window->update_dialogs();
+    }
 }
 
 // Remove dialog from list.
 void DialogContainer::unlink_dialog(DialogBase *dialog)
 {
-    // We can't use find here as we want to remove a specific dialog
-    // and find can return any dialog with the same type.
-    for (auto it = dialogs.begin(); it != dialogs.end(); ++it) {
-        if (it->second == dialog) {
-            dialogs.erase(it);
-            break;
-        }
+    if (!dialog) {
+        return;
+    }
+
+    auto found = dialogs.find(dialog->getVerb());
+    if (found != dialogs.end()) {
+        dialogs.erase(found);
+    }
+
+    DialogWindow *window = dynamic_cast<DialogWindow *>(get_toplevel());
+    if (window) {
+        window->update_dialogs();
     }
 }
 
@@ -564,7 +580,6 @@ void DialogContainer::load_container_state(Glib::ustring filename)
                     Verb *verb = Verb::get(dialog_verb);
 
                     if (verb) {
-                        // active_container->new_dialog(Glib::ustring(verb->get_id()), notebook);
                         if (is_dockable) {
                             active_container->new_dialog(Glib::ustring(verb->get_id()), notebook);
                         } else {
@@ -575,9 +590,8 @@ void DialogContainer::load_container_state(Glib::ustring filename)
             }
         }
 
-        // Step 3.3: if it's a DialogWindow, show it
-        if (is_dockable && floating) {
-            dialog_window->show_all();
+        if (dialog_window) {
+            dialog_window->update_window_size_to_fit_children();
         }
     }
 }
@@ -839,9 +853,12 @@ void DialogContainer::column_empty(DialogMultipaned *column)
     }
 
     // Close the DialogWindow if you're in an empty one
-    if (columns->get_first_widget() == columns->get_last_widget()) {
-        DialogWindow *window = dynamic_cast<DialogWindow *>(get_toplevel());
-        if (window) {
+    DialogWindow *window = dynamic_cast<DialogWindow *>(get_toplevel());
+    if (window) {
+        auto children = columns->get_children();
+        DialogMultipaned *column = dynamic_cast<DialogMultipaned *>(children[1]);
+
+        if (column->get_children().size() == 3) {
             window->close();
         }
     }

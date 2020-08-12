@@ -53,6 +53,7 @@ public:
     DialogBase *get_dialog(int verb_code);
     void link_dialog(DialogBase *dialog);
     void unlink_dialog(DialogBase *dialog);
+    const std::multimap<int, DialogBase *> *get_dialogs() { return &dialogs; };
     void toggle_dialogs();
     void update_dialogs(); // Update all linked dialogs
 

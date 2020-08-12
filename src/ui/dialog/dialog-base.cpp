@@ -53,7 +53,6 @@ DialogBase::DialogBase(gchar const *prefs_path, int verb_num)
         }
     }
 
-    std::cout << "DialogBase::DialogBase: \"" << _name << "\"" << std::endl;
     set_name(_name); // Essential for dialog functionality
     property_margin().set_value(1); // Essential for dialog UI
 }

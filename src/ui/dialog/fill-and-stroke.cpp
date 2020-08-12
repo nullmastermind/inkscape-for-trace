@@ -78,6 +78,10 @@ FillAndStroke::FillAndStroke()
 
 FillAndStroke::~FillAndStroke()
 {
+    fillWdgt->setDesktop(nullptr);
+    strokeWdgt->setDesktop(nullptr);
+    strokeStyleWdgt->setDesktop(nullptr);
+    _subject.setDesktop(nullptr);
 }
 
 void FillAndStroke::update()

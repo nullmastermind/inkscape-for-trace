@@ -19,12 +19,22 @@
 #include <gtkmm/label.h>
 #include <iostream>
 
-#include "dialog-container.h"
-#include "dialog-multipaned.h"
-#include "dialog-notebook.h"
 #include "enums.h"
 #include "inkscape-application.h"
 #include "preferences.h"
+#include "ui/dialog/dialog-base.h"
+#include "ui/dialog/dialog-container.h"
+#include "ui/dialog/dialog-multipaned.h"
+#include "ui/dialog/dialog-notebook.h"
+
+// Sizing constants
+#define MINIMUM_WINDOW_WIDTH 210
+#define MINIMUM_WINDOW_HEIGHT 320
+#define INITIAL_WINDOW_WIDTH 360
+#define INITIAL_WINDOW_HEIGHT 520
+#define WINDOW_DROPZONE_SIZE 10
+#define WINDOW_DROPZONE_SIZE_LARGE 16
+#define NOTEBOOK_TAB_HEIGHT 36
 
 namespace Inkscape {
 namespace UI {
@@ -37,6 +47,7 @@ class DialogContainer;
 DialogWindow::DialogWindow(Gtk::Widget *page)
     : Gtk::ApplicationWindow()
     , _app(&ConcreteInkscapeApplication<Gtk::Application>::get_instance())
+    , _title(_("Dialog Window"))
 {
     // ============ Intialization ===============
     // Setting the window type
@@ -70,52 +81,61 @@ DialogWindow::DialogWindow(Gtk::Widget *page)
         get_style_context()->remove_class("symbolic");
     }
 
-    // ========================  Actions ==========================
-
-    add_action_radio_string("new_dialog", sigc::mem_fun(*this, &DialogWindow::on_new_dialog), "Preferences");
-    add_action("close", sigc::mem_fun(*this, &DialogWindow::close));
-
-    // ========================= Widgets ==========================
-
     // ================ Window ==================
-    static int i = 0;
-    set_title(_("Dialog Window ") + Glib::ustring::format(++i));
-    set_name(_("Dialog Window ") + Glib::ustring::format(i));
-    set_default_size(360, 520);
+    set_title(_title);
+    set_name(_title);
+    int window_width = INITIAL_WINDOW_WIDTH;
+    int window_height = INITIAL_WINDOW_HEIGHT;
 
     // =============== Outer Box ================
     Gtk::Box *box_outer = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
-    box_outer->set_name("Outer Box");
     add(*box_outer);
-
-    // ================ Label ===================
-    _label = Gtk::manage(new Gtk::Label(_("Dialog Window")));
-    int label_margin = 6;
-    _label->set_margin_top(label_margin);
-    _label->set_margin_left(label_margin);
-    _label->set_margin_right(label_margin);
-    box_outer->pack_start(*_label, false, false);
 
     // =============== Container ================
     _container = Gtk::manage(new DialogContainer());
     DialogMultipaned *columns = _container->get_columns();
-    columns->set_dropzone_sizes(10, 10);
+    columns->set_dropzone_sizes(WINDOW_DROPZONE_SIZE, WINDOW_DROPZONE_SIZE);
     box_outer->pack_end(*_container);
 
     // If there is no page, create an empty Dialogwindow to be populated later
     if (page) {
         // ============= Initial Column =============
         DialogMultipaned *column = _container->create_column();
-        column->set_dropzone_sizes(-1, 10);
         columns->append(column);
 
         // ============== New Notebook ==============
         DialogNotebook *dialog_notebook = Gtk::manage(new DialogNotebook(_container));
         column->append(dialog_notebook);
+        column->set_dropzone_sizes(WINDOW_DROPZONE_SIZE, WINDOW_DROPZONE_SIZE);
         dialog_notebook->move_page(*page);
 
+        // Set window title
+        DialogBase *dialog = dynamic_cast<DialogBase *>(page);
+        if (dialog) {
+            _title = dialog->get_name();
+            set_title(_title);
+        }
+
+        // Set window size considering what the dialog needs
+        Gtk::Requisition minimum_size, natural_size;
+        dialog->get_preferred_size(minimum_size, natural_size);
+        int overhead = 2 * (WINDOW_DROPZONE_SIZE + dialog->property_margin().get_value());
+        int width = natural_size.width + overhead;
+        int height = natural_size.height + overhead + NOTEBOOK_TAB_HEIGHT;
+        window_width = std::max(width, window_width);
+        window_height = std::max(height, window_height);
+    }
+
+    // Set window sizing
+    set_size_request(MINIMUM_WINDOW_WIDTH, MINIMUM_WINDOW_HEIGHT);
+    set_default_size(window_width, window_height);
+
+    if (page) {
         update_dialogs();
     }
+
+    show();
+    show_all();
 }
 
 /**
@@ -130,27 +150,76 @@ void DialogWindow::update_dialogs()
         return;
     }
 
+    if (_container) {
+        const std::multimap<int, DialogBase *> *dialogs = _container->get_dialogs();
+        if (dialogs->size() > 1) {
+            _title = "Multiple dialogs";
+        } else if (dialogs->size() == 1) {
+            _title = dialogs->begin()->second->get_name();
+        }
+    }
+
     if (_app->get_active_document()) {
-        _label->set_text(_app->get_active_document()->getDocumentName());
+        auto document_name = _app->get_active_document()->getDocumentName();
+        if (document_name) {
+            set_title(_title + " - " + Glib::ustring(document_name));
+        }
     }
 }
 
-// =====================  Callbacks ======================
-
 /**
- * Close callback.
- * Can't override window->close()
+ * Update window width and height in order to fit all dialogs inisde its container.
+ *
+ * The intended use of this function is at initialization.
  */
-void DialogWindow::on_close()
+void DialogWindow::update_window_size_to_fit_children()
 {
-    // Check if saved.
-    delete this;
-}
+    // Declare variables
+    int pos_x = 0, pos_y = 0;
+    int width = 0, height = 0;
+    int overhead = 0, baseline;
+    Gtk::Allocation allocation;
+    Gtk::Requisition minimum_size, natural_size;
 
-/**
- * Callback on adding new dialog. Unused.
- */
-void DialogWindow::on_new_dialog(Glib::ustring value) {}
+    // Read needed data
+    get_position(pos_x, pos_y);
+    get_allocated_size(allocation, baseline);
+    const std::multimap<int, DialogBase *> *dialogs = _container->get_dialogs();
+
+    // Get largest sizes for dialogs
+    for (auto dialog : *dialogs) {
+        dialog.second->get_preferred_size(minimum_size, natural_size);
+        width = std::max(natural_size.width, width);
+        height = std::max(natural_size.height, height);
+        overhead = std::max(overhead, dialog.second->property_margin().get_value());
+    }
+
+    // Compute sizes including overhead
+    overhead = 2 * (WINDOW_DROPZONE_SIZE_LARGE + overhead);
+    width = width + overhead;
+    height = height + overhead + NOTEBOOK_TAB_HEIGHT;
+
+    // If sizes are lower then current, don't change them
+    if (allocation.get_width() >= width && allocation.get_height() >= height) {
+        return;
+    }
+
+    // Compute largest sizes on both axis
+    width = std::max(width, allocation.get_width());
+    height = std::max(height, allocation.get_height());
+
+    // Compute new positions to keep window centered
+    pos_x = pos_x - (width - allocation.get_width()) / 2;
+    pos_y = pos_y - (height - allocation.get_height()) / 2;
+
+    // Keep window inside the screen
+    pos_x = std::max(pos_x, 0);
+    pos_y = std::max(pos_y, 0);
+
+    // Resize window
+    move(pos_x, pos_y);
+    resize(width, height);
+}
 
 } // namespace Dialog
 } // namespace UI

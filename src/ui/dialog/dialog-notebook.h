@@ -61,13 +61,13 @@ private:
 
     // State variables
     bool _labels_auto;
+    bool _detaching_duplicate;
     Gtk::Widget *_selected_page;
     std::vector<sigc::connection> _conn;
     std::multimap<Gtk::Widget *, sigc::connection> _tab_connections;
 
     // Signal handlers - notebook
     void on_drag_end(const Glib::RefPtr<Gdk::DragContext> context);
-    bool on_drag_failed(const Glib::RefPtr<Gdk::DragContext> context, Gtk::DragResult result);
     void on_page_added(Gtk::Widget *page, int page_num);
     void on_page_removed(Gtk::Widget *page, int page_num);
     void on_size_allocate_scroll(Gtk::Allocation &allocation);

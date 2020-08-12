@@ -43,17 +43,15 @@ public:
     ~DialogWindow() override{};
 
     void update_dialogs();
-    void on_close();
-    void on_new_dialog(Glib::ustring value);
+    void update_window_size_to_fit_children();
 
     // Getters
-    Gtk::Label *get_label() { return _label; }
     DialogContainer *get_container() { return _container; }
 
 private:
     ConcreteInkscapeApplication<Gtk::Application> *_app;
-    Gtk::Label *_label;
     DialogContainer *_container;
+    Glib::ustring _title;
 };
 
 } // namespace Dialog

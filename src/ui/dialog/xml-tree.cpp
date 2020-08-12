@@ -269,7 +269,7 @@ void XmlTree::_attrtoggler()
 
 XmlTree::~XmlTree ()
 {
-    assert(!current_desktop);
+    set_tree_desktop(nullptr);
     _message_changed_connection.disconnect();
 }
 
@@ -280,13 +280,7 @@ void XmlTree::update()
         return;
     }
 
-    SPDesktop *desktop = getDesktop();
-
-    if (!desktop) {
-        return;
-    }
-
-    set_tree_desktop(desktop);
+    set_tree_desktop(getDesktop());
 }
 
 /**
@@ -310,7 +304,7 @@ void XmlTree::set_tree_desktop(SPDesktop *desktop)
         deferred_on_tree_select_row_id = 0;
     }
 
-    if (current_desktop) {
+    if (current_desktop && current_desktop->getDocument()) {
         sel_changed_connection.disconnect();
         document_replaced_connection.disconnect();
 
