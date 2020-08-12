@@ -63,6 +63,7 @@ set(TEST_SOURCES
     style-test
     svg-affine-test
     svg-color-test
+    svg-length-test
     svg-stringstream-test
     sp-gradient-test
     object-test

@@ -67,6 +67,8 @@ public:
     void update(double em, double ex, double scale); // Updates computed value
 };
 
+char const *sp_svg_length_get_css_units(SVGLength::Unit unit);
+
 #endif // SEEN_SP_SVG_LENGTH_H
 
 /*

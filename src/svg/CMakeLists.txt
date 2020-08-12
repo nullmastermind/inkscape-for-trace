@@ -12,7 +12,6 @@ set(svg_SRC
 	svg-angle.cpp
 	svg-length.cpp
 	svg-path.cpp
-	# test-stubs.cpp
 
 
 	# -------
@@ -24,11 +23,9 @@ set(svg_SRC
 	svg-color.h
 	svg-icc-color.h
 	svg-angle.h
-	svg-length-test.h
 	svg-length.h
 	svg-path-geom-test.h
 	svg.h
-	# test-stubs.h
 
 )
 
