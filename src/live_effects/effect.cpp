@@ -1104,7 +1104,7 @@ Effect::Effect(LivePathEffectObject *lpeobject)
       _provides_knotholder_entities(false),
       oncanvasedit_it(0),
       is_visible(_("Is visible?"), _("If unchecked, the effect remains applied to the object but is temporarily disabled on canvas"), "is_visible", &wr, this, true),
-      lpeversion("Version", "version of LPE 0 inksape lower 1, 1 and up versioning", "lpeversion", &wr, this, "0", true),
+      lpeversion(_("Version"), _("LPE version"), "lpeversion", &wr, this, "0", true),
       show_orig_path(false),
       keep_paths(false),
       is_load(true),
