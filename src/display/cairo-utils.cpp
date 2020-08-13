@@ -765,13 +765,18 @@ feed_curve_to_cairo(cairo_t *cr, Geom::Curve const &c, Geom::Affine const & tran
     break;
     default:
     {
-        if (Geom::EllipticalArc const *a = dynamic_cast<Geom::EllipticalArc const*>(&c)) {
-            if (a->isChord()) {
-                Geom::Point endPoint(a->finalPoint());
+        if (Geom::EllipticalArc const *arc = dynamic_cast<Geom::EllipticalArc const*>(&c)) {
+            if (arc->isChord()) {
+                Geom::Point endPoint(arc->finalPoint());
                 cairo_line_to(cr, endPoint[0], endPoint[1]);
             } else {
-                Geom::Affine xform = a->unitCircleTransform() * trans;
-                Geom::Point ang(a->initialAngle().radians(), a->finalAngle().radians());
+                Geom::Affine xform = arc->unitCircleTransform() * trans;
+                // Don't draw anything if the angle is borked
+                if(isnan(arc->initialAngle()) || isnan(arc->finalAngle())) {
+                    g_warning("Bad angle while drawing EllipticalArc");
+                    break;
+                }
+
                 // Apply the transformation to the current context
                 cairo_matrix_t cm;
                 cm.xx = xform[0];
@@ -785,10 +790,10 @@ feed_curve_to_cairo(cairo_t *cr, Geom::Curve const &c, Geom::Affine const & tran
                 cairo_transform(cr, &cm);
 
                 // Draw the circle
-                if (a->sweep()) {
-                    cairo_arc(cr, 0, 0, 1, ang[0], ang[1]);
+                if (arc->sweep()) {
+                    cairo_arc(cr, 0, 0, 1, arc->initialAngle(), arc->finalAngle());
                 } else {
-                    cairo_arc_negative(cr, 0, 0, 1, ang[0], ang[1]);
+                    cairo_arc_negative(cr, 0, 0, 1, arc->initialAngle(), arc->finalAngle());
                 }
                 // Revert the current context
                 cairo_restore(cr);
