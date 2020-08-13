@@ -655,10 +655,13 @@ bool SelectTool::root_handler(GdkEvent* event) {
                     if (Inkscape::Rubberband::get(desktop)->is_started()) {
                         Inkscape::Rubberband::get(desktop)->move(p);
 
+                        auto touch_path = Modifier::get(Modifiers::Type::SELECT_TOUCH_PATH)->get_label();
                         if (Inkscape::Rubberband::get(desktop)->getMode() == RUBBERBAND_MODE_TOUCHPATH) {
-                            this->defaultMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Draw over</b> objects to select them; release <b>Alt</b> to switch to rubberband selection"));
+                            this->defaultMessageContext()->setF(Inkscape::NORMAL_MESSAGE,
+                                _("<b>Draw over</b> objects to select them; release <b>%s</b> to switch to rubberband selection"), touch_path.c_str());
                         } else {
-                            this->defaultMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Drag around</b> objects to select them; press <b>Alt</b> to switch to touch selection"));
+                            this->defaultMessageContext()->setF(Inkscape::NORMAL_MESSAGE,
+                                _("<b>Drag around</b> objects to select them; press <b>%s</b> to switch to touch selection"), touch_path.c_str());
                         }
 
                         gobble_motion_events(GDK_BUTTON1_MASK);
@@ -892,11 +895,11 @@ bool SelectTool::root_handler(GdkEvent* event) {
                    break;
                 }
             } else {
-                    sp_event_show_modifier_tip (this->defaultMessageContext(), event,
-                                                _("<b>Ctrl</b>: click to select in groups; drag to move hor/vert"),
-                                                _("<b>Shift</b>: click to toggle select; drag for rubberband selection"),
-                                                _("<b>Alt</b>: click to select under; scroll mouse-wheel to cycle-select; drag to move selected or select by touch"));
-                    
+                    Modifiers::responsive_tooltip(this->defaultMessageContext(), event, 6,
+                        Modifiers::Type::SELECT_IN_GROUPS, Modifiers::Type::MOVE_CONFINE,
+                        Modifiers::Type::SELECT_ADD_TO, Modifiers::Type::SELECT_TOUCH_PATH,
+                        Modifiers::Type::SELECT_CYCLE, Modifiers::Type::SELECT_FORCE_DRAG);
+
                     // if Alt and nonempty selection, show moving cursor ("move selected"):
                     if (alt && !selection->isEmpty() && !desktop->isWaitingCursor()) {
                         GdkWindow* window = gtk_widget_get_window (GTK_WIDGET (desktop->getCanvas()->gobj()));

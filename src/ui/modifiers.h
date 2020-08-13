@@ -8,11 +8,14 @@
  */
 
 #include <cstring>
+#include <cstdarg>
 #include <string>
 #include <vector>
 #include <map>
 
 #include <gdk/gdk.h>
+
+#include "message-context.h"
 
 namespace Inkscape {
 namespace Modifiers {
@@ -32,9 +35,6 @@ enum Key : KeyMask {
 // Triggers used for collision warnings, two tools are using the same trigger
 enum Triggers : Trigger {CLICK, DRAG, SCROLL, HANDLE};
 // TODO: We may want to further define the tool, from ANY, SELECT, NODE etc.
-
-// Generate a label such as Shift+Ctrl from any KeyMask
-std::string generate_label(KeyMask mask);
 
 /**
  * This anonymous enum is used to provide a list of the Shifts
@@ -68,6 +68,11 @@ enum class Type {
     // TODO: Alignment ommitted because it's UX is not completed
 };
 
+
+// Generate a label such as Shift+Ctrl from any KeyMask
+std::string generate_label(KeyMask mask);
+// Generate a responsivle tooltip set
+void responsive_tooltip(Inkscape::MessageContext *message_context, GdkEvent *event, int num_args, ...);
 
 /**
  * A class to represent ways functionality is driven by shift modifiers
