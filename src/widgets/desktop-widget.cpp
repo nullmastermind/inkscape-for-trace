@@ -243,12 +243,9 @@ SPDesktopWidget::SPDesktopWidget()
     _columns->set_dropzone_sizes(2, -1);
     dtw->_hbox->pack_start(*_container, false, true);
 
-    DialogMultipaned *column = _container->create_column();
-
     _canvas_grid->set_hexpand(true);
     _canvas_grid->set_vexpand(true);
     _columns->append(_canvas_grid);
-    _columns->append(column);
 
     // --------------- Status Tool Bar ------------------//
 

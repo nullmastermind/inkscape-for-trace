@@ -837,28 +837,16 @@ void DialogContainer::append_drop(const Glib::RefPtr<Gdk::DragContext> context, 
  */
 void DialogContainer::column_empty(DialogMultipaned *column)
 {
-    // We want to keep the column alive if it is the only DialogMultipaned at the end.
-    // This always gives the user one column to drop dialogs into.
-
-    // If it is not the last column, delete it.
-    if (column != columns->get_last_widget()) {
-        columns->remove(*column);
-        return;
-    }
-
-    // OK, it's the last column
     DialogMultipaned *parent = dynamic_cast<DialogMultipaned *>(column->get_parent());
-    if (parent && !parent->is_only_final_multipaned(column)) {
+    if (parent) {
         parent->remove(*column);
     }
 
-    // Close the DialogWindow if you're in an empty one
     DialogWindow *window = dynamic_cast<DialogWindow *>(get_toplevel());
-    if (window) {
-        auto children = columns->get_children();
-        DialogMultipaned *column = dynamic_cast<DialogMultipaned *>(children[1]);
-
-        if (column->get_children().size() == 3) {
+    if (window && parent) {
+        auto children = parent->get_children();
+        // Close the DialogWindow if you're in an empty one
+        if (children.size() == 3 && parent->has_empty_widget()) {
             window->close();
         }
     }

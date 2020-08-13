@@ -82,13 +82,13 @@ public:
 
     void prepend(Gtk::Widget *new_widget);
     void append(Gtk::Widget *new_widget);
-    bool is_only_final_multipaned(Gtk::Widget *widget);
 
     // Getters and setters
     Gtk::Widget *get_first_widget();
     Gtk::Widget *get_last_widget();
     std::vector<Gtk::Widget *> get_children() { return children; }
     void set_target_entries(const std::vector<Gtk::TargetEntry> &target_entries);
+    bool has_empty_widget() { return (bool)_empty_widget; }
 
     // Signals
     sigc::signal<void, const Glib::RefPtr<Gdk::DragContext>> signal_prepend_drag_data();
@@ -96,7 +96,6 @@ public:
     sigc::signal<void> signal_now_empty();
 
     // UI functions
-
     void set_dropzone_sizes(int start, int end);
     void toggle_multipaned_children();
 
@@ -147,7 +146,6 @@ private:
 
     // Others
     Gtk::Widget *_empty_widget; // placeholder in an empty container
-    bool has_empty_widget() { return (bool)_empty_widget; }
     void add_empty_widget();
     void remove_empty_widget();
     std::vector<sigc::connection> _connections;

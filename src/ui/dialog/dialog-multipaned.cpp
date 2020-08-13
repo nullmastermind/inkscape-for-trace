@@ -298,25 +298,6 @@ Gtk::Widget *DialogMultipaned::get_last_widget()
 }
 
 /**
- * This function checks if widget is not preceded by a DialogMultipaned child in the container.
- */
-bool DialogMultipaned::is_only_final_multipaned(Gtk::Widget *widget)
-{
-    if (widget) {
-        auto it = std::find(children.begin(), children.end(), widget);
-        if (it != children.end()) {
-            if ((int)children.size() > 3) {
-                DialogMultipaned *previous = dynamic_cast<DialogMultipaned *>(*(it - 2));
-                if (previous) {
-                    return false;
-                }
-            }
-        }
-    }
-    return true;
-}
-
-/**
  * Set the sizes of the DialogMultipaned dropzones.
  * @param start, the size you want or -1 for the default `DROPZONE_SIZE`
  * @param end, the size you want or -1 for the default `DROPZONE_SIZE`
