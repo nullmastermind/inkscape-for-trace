@@ -20,6 +20,7 @@
 
 #include "enums.h"
 #include "inkscape-application.h"
+#include "ui/shortcuts.h"
 #include "ui/dialog/align-and-distribute.h"
 #include "ui/dialog/clonetiler.h"
 #include "ui/dialog/dialog-multipaned.h"
@@ -223,7 +224,8 @@ DialogBase *DialogContainer::dialog_factory(Glib::ustring name)
 }
 
 // Create the notebook tab
-Gtk::Widget *DialogContainer::create_notebook_tab(Glib::ustring label_str, Glib::ustring image_str)
+Gtk::Widget *DialogContainer::create_notebook_tab(Glib::ustring label_str, Glib::ustring image_str,
+                                                  Gtk::AccelKey key)
 {
     Gtk::Label *label = Gtk::manage(new Gtk::Label(label_str));
     Gtk::Image *image = Gtk::manage(new Gtk::Image());
@@ -237,6 +239,16 @@ Gtk::Widget *DialogContainer::create_notebook_tab(Glib::ustring label_str, Glib:
     // Workaround to the fact that Gtk::Box doesn't receive on_button_press event
     Gtk::EventBox *cover = Gtk::manage(new Gtk::EventBox());
     cover->add(*tab);
+
+    // Add shortcut tooltip
+    if (!key.is_null()) {
+        auto tlabel = Inkscape::Shortcuts::get_label(key);
+        int pos = tlabel.find("&", 0);
+        if (pos >= 0 && pos < tlabel.length()) {
+            tlabel.replace(pos, 1, "&amp;");
+        }
+        tab->set_tooltip_markup(label_str + " (<b>" + tlabel + "</b>)");
+    }
 
     return cover;
 }
@@ -293,7 +305,8 @@ void DialogContainer::new_dialog(Glib::ustring name, DialogNotebook *notebook)
     // Create the notebook tab
     auto image = verb->get_image();
     Gtk::Widget *tab =
-        create_notebook_tab(dialog->get_name(), image ? Glib::ustring(image) : INKSCAPE_ICON("inkscape-logo"));
+        create_notebook_tab(dialog->get_name(), image ? Glib::ustring(image) : INKSCAPE_ICON("inkscape-logo"),
+                            (Inkscape::Shortcuts::getInstance()).get_shortcut_from_verb(verb));
 
     // Check if request came from notebook menu
     Gtk::Window *window = dynamic_cast<Gtk::Window *>(get_toplevel());
@@ -351,7 +364,10 @@ void DialogContainer::new_floating_dialog(Glib::ustring name)
     dialog = Gtk::manage(dialog);
 
     // Create the notebook tab
-    Gtk::Widget *tab = create_notebook_tab(dialog->get_name(), verb->get_image());
+    auto image = verb->get_image();
+    Gtk::Widget *tab =
+        create_notebook_tab(dialog->get_name(), image ? Glib::ustring(image) : INKSCAPE_ICON("inkscape-logo"),
+                            (Inkscape::Shortcuts::getInstance()).get_shortcut_from_verb(verb));
 
     // New temporary noteboook
     DialogNotebook *notebook = Gtk::manage(new DialogNotebook(this));

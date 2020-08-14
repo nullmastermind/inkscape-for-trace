@@ -17,6 +17,7 @@
 #include <gdkmm/dragcontext.h>
 #include <glibmm/refptr.h>
 #include <glibmm/ustring.h>
+#include <gtkmm/accelkey.h>
 #include <gtkmm/box.h>
 #include <gtkmm/targetentry.h>
 #include <iostream>
@@ -78,7 +79,7 @@ private:
     std::multimap<int, DialogBase *> dialogs;
 
     DialogBase *dialog_factory(Glib::ustring name);
-    Gtk::Widget *create_notebook_tab(Glib::ustring label, Glib::ustring image);
+    Gtk::Widget *create_notebook_tab(Glib::ustring label, Glib::ustring image, Gtk::AccelKey shortcut);
 
     // Signal connections
     std::vector<sigc::connection> connections;
