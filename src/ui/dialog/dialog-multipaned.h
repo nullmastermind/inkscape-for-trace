@@ -60,8 +60,8 @@ public:
 
     bool on_enter_notify_event(GdkEventCrossing *crossing_event) override;
 private:
-    int _size;
     int _cross_size;
+    Gtk::Widget *_child;
     void resize_handler(Gtk::Allocation &allocation);
 };
 

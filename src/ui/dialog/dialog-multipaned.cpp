@@ -16,13 +16,14 @@
 #include <glibmm/i18n.h>
 #include <glibmm/objectbase.h>
 #include <gtkmm/container.h>
+#include <gtkmm/image.h>
 #include <gtkmm/label.h>
 #include <iostream>
 
 #include "ui/dialog/dialog-notebook.h"
 
 #define DROPZONE_SIZE 16
-#define HANDLE_SIZE 8
+#define HANDLE_SIZE 12
 #define HANDLE_CROSS_SIZE 25
 
 namespace Inkscape {
@@ -45,14 +46,14 @@ namespace Dialog {
  * moved).
  */
 
-/* ============ DROPZONE  ============ */
+/* ============ MyDropZone ============ */
 
 MyDropZone::MyDropZone(Gtk::Orientation orientation, int size = DROPZONE_SIZE)
     : Glib::ObjectBase("MultipanedDropZone")
     , Gtk::Orientable()
     , Gtk::EventBox()
 {
-    set_name("MyDropZone");
+    set_name("MultipanedDropZone");
     set_orientation(orientation);
 
     if (get_orientation() == Gtk::ORIENTATION_HORIZONTAL) {
@@ -62,26 +63,30 @@ MyDropZone::MyDropZone(Gtk::Orientation orientation, int size = DROPZONE_SIZE)
     }
 }
 
-/* ============  HANDLE   ============ */
+/* ============  MyHandle  ============ */
 
 MyHandle::MyHandle(Gtk::Orientation orientation, int size = HANDLE_SIZE)
     : Glib::ObjectBase("MultipanedHandle")
     , Gtk::Orientable()
     , Gtk::EventBox()
-    , _size(size)
     , _cross_size(0)
+    , _child(nullptr)
 {
-    set_name("MyHandle");
+    set_name("MultipanedHandle");
     set_orientation(orientation);
 
+    Gtk::Image *image = Gtk::manage(new Gtk::Image());
     if (get_orientation() == Gtk::ORIENTATION_HORIZONTAL) {
-        add_label("|", false, Gtk::ALIGN_FILL);
-        set_size_request(_size, -1);
+        image->set_from_icon_name("view-more-symbolic", Gtk::ICON_SIZE_SMALL_TOOLBAR);
+        set_size_request(size, -1);
     } else {
-        add_label("-", false, Gtk::ALIGN_FILL);
-        set_size_request(-1, _size);
+        image->set_from_icon_name("view-more-horizontal-symbolic", Gtk::ICON_SIZE_SMALL_TOOLBAR);
+        set_size_request(-1, size);
     }
+    image->set_pixel_size(size);
+    add(*image);
 
+    // Signal
     signal_size_allocate().connect(sigc::mem_fun(*this, &MyHandle::resize_handler));
 }
 
@@ -104,24 +109,28 @@ bool MyHandle::on_enter_notify_event(GdkEventCrossing *crossing_event)
     return false;
 }
 
+/**
+ * This allocation handler function is used to add/remove handle icons in order to be able
+ * to hide completely a transversal handle into the sides of a DialogMultipaned.
+ *
+ * The image has a specific size set up in the constructor and will not naturally shrink/hide.
+ * In conclusion, we remove it from the handle and save it into an internal reference.
+ */
 void MyHandle::resize_handler(Gtk::Allocation &allocation) {
     int size = (get_orientation() == Gtk::ORIENTATION_HORIZONTAL) ? allocation.get_height() : allocation.get_width();
-    Gtk::Label *label = dynamic_cast<Gtk::Label *>(get_child());
 
-    if (_cross_size > size && HANDLE_CROSS_SIZE > size && label->get_label().length()) {
-        label->set_label("");
-    } else if (_cross_size < size && HANDLE_CROSS_SIZE < size && !label->get_label().length()) {
-        if (get_orientation() == Gtk::ORIENTATION_HORIZONTAL) {
-            label->set_label("|");
-        } else {
-            label->set_label("-");
-        }
+    if (_cross_size > size && HANDLE_CROSS_SIZE > size && !_child) {
+        _child = get_child();
+        remove();
+    } else if (_cross_size < size && HANDLE_CROSS_SIZE < size && _child) {
+        add(*_child);
+        _child = nullptr;
     }
 
     _cross_size = size;
 }
 
-/* ============ MULTIPANE ============ */
+/* ============ DialogMultipaned ============= */
 
 DialogMultipaned::DialogMultipaned(Gtk::Orientation orientation)
     : Glib::ObjectBase("DialogMultipaned")
