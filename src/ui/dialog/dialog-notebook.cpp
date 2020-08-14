@@ -195,7 +195,7 @@ void DialogNotebook::close_tab_callback()
         return;
     }
 
-    // Update tab labels
+    // Update tab labels by comparing the sum of their widths to the allocation
     Gtk::Allocation allocation = get_allocation();
     on_size_allocate_scroll(allocation);
 }
@@ -243,7 +243,7 @@ void DialogNotebook::pop_tab_callback()
         return;
     }
 
-    // Update tab labels
+    // Update tab labels by comparing the sum of their widths to the allocation
     Gtk::Allocation allocation = get_allocation();
     on_size_allocate_scroll(allocation);
 }
@@ -289,7 +289,7 @@ void DialogNotebook::on_drag_end(const Glib::RefPtr<Gdk::DragContext> context)
         return;
     }
 
-    // Update tab labels
+    // Update tab labels by comparing the sum of their widths to the allocation
     Gtk::Allocation allocation = get_allocation();
     on_size_allocate_scroll(allocation);
 }
@@ -303,18 +303,23 @@ void DialogNotebook::on_page_added(Gtk::Widget *page, int page_num)
 
     // Does current container/window already have such a dialog?
     if (dialog && _container->has_dialog_of_type(dialog)) {
+        // We already have a dialog of the same type
+
         // Highlight first dialog
         DialogBase *other_dialog = _container->get_dialog(dialog->getVerb());
         other_dialog->blink();
 
         // Remove page from notebook
-        _detaching_duplicate = true; // HACK: to keep _container's dialogs in sync
+        _detaching_duplicate = true; // HACK: prevent removing the initial dialog of the same type
         _notebook.detach_tab(*page);
         return;
     } else if (dialog) {
+        // We don't have a dialog of this type
+
         // Add to dialog list
         _container->link_dialog(dialog);
     } else {
+        // This is not a dialog
         return;
     }
 
@@ -326,7 +331,7 @@ void DialogNotebook::on_page_added(Gtk::Widget *page, int page_num)
         toggle_tab_labels_callback(false);
     }
 
-    // Update tab labels
+    // Update tab labels by comparing the sum of their widths to the allocation
     Gtk::Allocation allocation = get_allocation();
     on_size_allocate_scroll(allocation);
 }
@@ -336,7 +341,11 @@ void DialogNotebook::on_page_added(Gtk::Widget *page, int page_num)
  */
 void DialogNotebook::on_page_removed(Gtk::Widget *page, int page_num)
 {
-    // are we removing a shallowly attached dialog?
+    /**
+     * When adding a dialog in a notebooks header zone of the same type as an existing one,
+     * we remove it immediately, which triggers a call to this method. We use `_detaching_duplicate`
+     * to prevent reemoving the initial dialog.
+     */
     if (_detaching_duplicate) {
         _detaching_duplicate = false;
         return;

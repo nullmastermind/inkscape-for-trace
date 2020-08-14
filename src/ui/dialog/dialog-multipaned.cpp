@@ -47,8 +47,8 @@ namespace Dialog {
 
 /* ============ DROPZONE  ============ */
 
-MyDropZone::MyDropZone(Gtk::Orientation orientation, int size=DROPZONE_SIZE)
-    : Glib::ObjectBase("MyDropZone")
+MyDropZone::MyDropZone(Gtk::Orientation orientation, int size = DROPZONE_SIZE)
+    : Glib::ObjectBase("MultipanedDropZone")
     , Gtk::Orientable()
     , Gtk::EventBox()
 {
@@ -64,8 +64,8 @@ MyDropZone::MyDropZone(Gtk::Orientation orientation, int size=DROPZONE_SIZE)
 
 /* ============  HANDLE   ============ */
 
-MyHandle::MyHandle(Gtk::Orientation orientation, int size=HANDLE_SIZE)
-    : Glib::ObjectBase("MyHandle")
+MyHandle::MyHandle(Gtk::Orientation orientation, int size = HANDLE_SIZE)
+    : Glib::ObjectBase("MultipanedHandle")
     , Gtk::Orientable()
     , Gtk::EventBox()
     , _size(size)

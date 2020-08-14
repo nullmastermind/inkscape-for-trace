@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 /** @file
- * @brief A widget that manages InkNotebook's and other widgets inside a horizontal InkMultipane.
+ * @brief A widget that manages DialogNotebook's and other widgets inside a horizontal DialogMultipaned.
  *
  * Authors: see git history
  *   Tavmjong Bah

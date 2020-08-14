@@ -4,7 +4,7 @@
 #define INKSCAPE_UI_DIALOG_CONTAINER_H
 
 /** @file
- * @brief A widget that manages InkNotebook's and other widgets inside a horizontal InkMultipane.
+ * @brief A widget that manages DialogNotebook's and other widgets inside a horizontal DialogMultipaned.
  *
  * Authors: see git history
  *   Tavmjong Bah
