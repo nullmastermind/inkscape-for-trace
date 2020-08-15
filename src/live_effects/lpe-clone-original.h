@@ -28,12 +28,13 @@ public:
     ~LPECloneOriginal() override;
     void doEffect (SPCurve * curve) override;
     void doBeforeEffect (SPLPEItem const* lpeitem) override;
-    void cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar * attributes, const gchar * css_properties);
+    void cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar * attributes, const gchar * css_properties, bool init);
     void modified(SPObject */*obj*/, guint /*flags*/);
     Gtk::Widget *newWidget() override;
     void syncOriginal();
     void start_listening();
     void quit_listening();
+    void lpeitem_deleted(SPObject */*deleted*/);
 
 private:
     OriginalItemParam linkeditem;
@@ -48,6 +49,7 @@ private:
     bool is_updating;
     bool sync;
     sigc::connection modified_connection;
+    sigc::connection deleted_connection;
     LPECloneOriginal(const LPECloneOriginal&) = delete;
     LPECloneOriginal& operator=(const LPECloneOriginal&) = delete;
 };

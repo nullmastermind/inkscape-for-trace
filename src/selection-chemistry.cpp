@@ -2915,7 +2915,7 @@ void ObjectSet::cloneOriginalPathLPE(bool allow_transforms)
     auto items_= items();
     bool multiple = false;
     for (auto i=items_.begin();i!=items_.end();++i){
-        if (SP_IS_SHAPE(*i) || SP_IS_TEXT(*i)) {
+        if (SP_IS_SHAPE(*i) || SP_IS_TEXT(*i) || SP_IS_GROUP(*i)) {
             if (firstItem) {
                 os << "|";
                 multiple = true;
@@ -2945,11 +2945,19 @@ void ObjectSet::cloneOriginalPathLPE(bool allow_transforms)
         document()->getDefs()->getRepr()->addChild(lpe_repr, nullptr); // adds to <defs> and assigns the 'id' attribute
         std::string lpe_id_href = std::string("#") + lpe_repr->attribute("id");
         Inkscape::GC::release(lpe_repr);
-
-        // create the new path
-        Inkscape::XML::Node *clone = xml_doc->createElement("svg:path");
-        {
+        Inkscape::XML::Node* clone = nullptr;
+        SPGroup *firstgroup = dynamic_cast<SPGroup *>(firstItem);
+        if (firstgroup) {
+            if (!multiple) {
+                clone = firstgroup->getRepr()->duplicate(xml_doc);
+            }
+        } else {
+            // create the new path
+            clone = xml_doc->createElement("svg:path");
             clone->setAttribute("d", "M 0 0");
+                
+        }
+        if (clone) {
             // add the new clone to the top of the original's parent
             parent->appendChildRepr(clone);
             // select the new object:
@@ -2960,13 +2968,12 @@ void ObjectSet::cloneOriginalPathLPE(bool allow_transforms)
             if (clone_lpeitem) {
                 clone_lpeitem->addPathEffect(lpe_id_href, false);
             }
+            if (multiple) {
+                DocumentUndo::done(document(), SP_VERB_EDIT_CLONE_ORIGINAL_PATH_LPE, _("Fill between many"));
+            } else {
+                DocumentUndo::done(document(), SP_VERB_EDIT_CLONE_ORIGINAL_PATH_LPE, _("Clone original"));
+            }
         }
-        if (multiple) {
-            DocumentUndo::done(document(), SP_VERB_EDIT_CLONE_ORIGINAL_PATH_LPE, _("Fill between many"));
-        } else {
-            DocumentUndo::done(document(), SP_VERB_EDIT_CLONE_ORIGINAL_PATH_LPE, _("Clone original"));
-        }
-
     } else {
         if(desktop())
             desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select path(s) to fill."));
