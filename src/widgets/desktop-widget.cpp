@@ -1332,18 +1332,23 @@ bool
 SPDesktopWidget::isToolboxButtonActive (const gchar* id)
 {
     bool isActive = false;
-    gpointer thing = sp_search_by_data_recursive(aux_toolbox, (gpointer) id);
+    auto thing = sp_search_by_name_recursive(Glib::wrap(aux_toolbox), id);
+
+    // The toolbutton could be a few different types so try casting to
+    // each of them.
+    // TODO: This will be simpler in Gtk+ 4 when Actions and ToolItems have gone
+    auto toggle_button      = dynamic_cast<Gtk::ToggleButton *>(thing);
+    auto toggle_action      = dynamic_cast<Gtk::ToggleAction *>(thing);
+    auto toggle_tool_button = dynamic_cast<Gtk::ToggleToolButton *>(thing);
+
     if ( !thing ) {
         //g_message( "Unable to locate item for {%s}", id );
-    } else if ( GTK_IS_TOGGLE_BUTTON(thing) ) {
-        GtkToggleButton *b = GTK_TOGGLE_BUTTON(thing);
-        isActive = gtk_toggle_button_get_active( b ) != 0;
-    } else if ( GTK_IS_TOGGLE_ACTION(thing) ) {
-        GtkToggleAction* act = GTK_TOGGLE_ACTION(thing);
-        isActive = gtk_toggle_action_get_active( act ) != 0;
-    } else if ( GTK_IS_TOGGLE_TOOL_BUTTON(thing) ) {
-        GtkToggleToolButton *b = GTK_TOGGLE_TOOL_BUTTON(thing);
-        isActive = gtk_toggle_tool_button_get_active( b ) != 0;
+    } else if (toggle_button) {
+        isActive = toggle_button->get_active();
+    } else if (toggle_action) {
+        isActive = toggle_action->get_active();
+    } else if (toggle_tool_button) {
+        isActive = toggle_tool_button->get_active();
     } else {
         //g_message( "Item for {%s} is of an unsupported type", id );
     }
@@ -1479,13 +1484,10 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
         _canvas_grid->UpdateRulers();
 
         /* This loops through all the grandchildren of aux toolbox,
-         * and for each that it finds, it performs an sp_search_by_data_recursive(),
-         * looking for widgets that hold some "tracker" data (this is used by
+         * and for each that it finds, it performs an sp_search_by_name_recursive(),
+         * looking for widgets named "unit-tracker" (this is used by
          * all toolboxes to refer to the unit selector). The default document units
          * is then selected within these unit selectors.
-         *
-         * Of course it would be nice to be able to refer to the toolbox and the
-         * unit selector directly by name, but I don't yet see a way to do that.
          *
          * This should solve: https://bugs.launchpad.net/inkscape/+bug/362995
          */
