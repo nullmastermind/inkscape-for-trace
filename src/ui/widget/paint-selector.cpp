@@ -477,7 +477,7 @@ void PaintSelector::clear_frame()
         // This is a hack to work around GtkNotebook bug in ColorSelector. Is sends signal switch-page on destroy
         // The widget is hidden first so it can recognize that it should not process signals from notebook child
         _selector->set_visible(false);
-        remove(*_selector);
+        _frame->remove(*_selector);
         // gtk_widget_destroy(_selector);
         //_selector = nullptr;
     }
