@@ -713,13 +713,16 @@ void DialogMultipaned::on_drag_update(double offset_x, double offset_y)
     int minimum_size;
     int natural_size;
 
+    // HACK: The bias prevents erratic resizing when dragging the handle fast, outside the bounds of the app.
+    const int BIAS = 1;
+
     if (get_orientation() == Gtk::ORIENTATION_HORIZONTAL) {
         children[handle - 1]->get_preferred_width(minimum_size, natural_size);
         if (start_allocation1.get_width() + offset_x < minimum_size)
-            offset_x = -(start_allocation1.get_width() - minimum_size);
+            offset_x = -(start_allocation1.get_width() - minimum_size) + BIAS;
         children[handle + 1]->get_preferred_width(minimum_size, natural_size);
         if (start_allocation2.get_width() - offset_x < minimum_size)
-            offset_x = start_allocation2.get_width() - minimum_size;
+            offset_x = start_allocation2.get_width() - minimum_size - BIAS;
 
         allocation1.set_width(start_allocation1.get_width() + offset_x);
         allocationh.set_x(start_allocationh.get_x() + offset_x);
@@ -728,10 +731,10 @@ void DialogMultipaned::on_drag_update(double offset_x, double offset_y)
     } else {
         children[handle - 1]->get_preferred_height(minimum_size, natural_size);
         if (start_allocation1.get_height() + offset_y < minimum_size)
-            offset_y = -(start_allocation1.get_height() - minimum_size);
+            offset_y = -(start_allocation1.get_height() - minimum_size) + BIAS;
         children[handle + 1]->get_preferred_height(minimum_size, natural_size);
         if (start_allocation2.get_height() - offset_y < minimum_size)
-            offset_y = start_allocation2.get_height() - minimum_size;
+            offset_y = start_allocation2.get_height() - minimum_size - BIAS;
 
         allocation1.set_height(start_allocation1.get_height() + offset_y);
         allocationh.set_y(start_allocationh.get_y() + offset_y);
