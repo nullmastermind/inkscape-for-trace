@@ -453,6 +453,8 @@ bool ObjectsPanel::_processQueue() {
 
     // Now we can bring the tree view back to life safely
     _tree.set_model(_store); // Attach the store again to the tree view
+    _tree.set_search_column(_model->_colLabel);
+
     // Expand the tree; this is kept outside of _addObjectToTree() and _processQueue() to allow
     // temporarily detaching the store from the tree, which slightly reduces flickering
     for (auto path: _paths_to_be_expanded) {
