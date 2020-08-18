@@ -387,12 +387,14 @@ sp_lpe_item_update_patheffect (SPLPEItem *lpeitem, bool wholetree, bool write)
  * Gets called when any of the lpestack's lpeobject repr contents change: i.e. parameter change in any of the stacked LPEs
  */
 static void
-lpeobject_ref_modified(SPObject */*href*/, guint /*flags*/, SPLPEItem *lpeitem)
+lpeobject_ref_modified(SPObject */*href*/, guint flags, SPLPEItem *lpeitem)
 {
 #ifdef SHAPE_VERBOSE
     g_message("lpeobject_ref_modified");
 #endif
-    sp_lpe_item_update_patheffect (lpeitem, true, true);
+    if (flags != 29 && flags != 253) {
+        sp_lpe_item_update_patheffect (lpeitem, true, true);
+    }
 }
 
 static void

@@ -238,7 +238,8 @@ void SPPath::set(SPAttr key, const gchar* value) {
                     this->removeAllPathEffects(false);
                 }
             }
-            sp_lpe_item_update_patheffect(this, true, true);
+            //TODO:: Comented see if any regression 2020-8-15
+            //sp_lpe_item_update_patheffect(this, true, true);
             break;
 
        case SPAttr::D:
