@@ -67,7 +67,10 @@ private:
     Geom::PathVector mix_pathv_all;
     Geom::PathVector helper_path;
     Inkscape::UI::Widget::Scalar *offset_widget;
+    FillRuleFlatten fillrule;
     bool liveknot;
+    void modified(SPObject */*obj*/, guint flags);
+    sigc::connection modified_connection;
     LPEOffset(const LPEOffset&);
     LPEOffset& operator=(const LPEOffset&);
 };

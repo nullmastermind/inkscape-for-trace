@@ -97,10 +97,33 @@ LPEOffset::LPEOffset(LivePathEffectObject *lpeobject) :
     apply_to_clippath_and_mask = true;
     prev_unit = unit.get_abbreviation();
     liveknot = false;
+    fillrule = fill_nonZero;
 }
 
 LPEOffset::~LPEOffset()
-= default;
+{
+    modified_connection.disconnect();
+};
+
+void
+LPEOffset::modified(SPObject *obj, guint flags)
+{
+    if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
+        // Get the used fillrule
+        SPCSSAttr *css;
+        const gchar *val;
+        css = sp_repr_css_attr (sp_lpe_item->getRepr() , "style");
+        val = sp_repr_css_property (css, "fill-rule", nullptr);
+        FillRuleFlatten fillrule_chan = fill_nonZero;
+        if (val && strcmp (val, "evenodd") == 0)
+        {
+            fillrule_chan = fill_oddEven;
+        }
+        if (fillrule != fillrule_chan) {
+            sp_lpe_item_update_patheffect (sp_lpe_item, true, true);
+        }
+    }
+}
 
 static void
 sp_flatten(Geom::PathVector &pathvector, FillRuleFlatten fillkind)
@@ -197,6 +220,10 @@ LPEOffset::addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathV
 void
 LPEOffset::doBeforeEffect (SPLPEItem const* lpeitem)
 {
+    SPObject *obj = dynamic_cast<SPObject *>(sp_lpe_item);
+    if (is_load && obj) {
+        modified_connection = obj->connectModified(sigc::mem_fun(*this, &LPEOffset::modified));
+    }
     original_bbox(lpeitem);
     SPGroup *group = dynamic_cast<SPGroup *>(sp_lpe_item);
     if (group) {
@@ -403,7 +430,7 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
     css = sp_repr_css_attr (item->getRepr() , "style");
     val = sp_repr_css_property (css, "fill-rule", nullptr);
 
-    FillRuleFlatten fillrule = fill_nonZero;
+    fillrule = fill_nonZero;
     if (val && strcmp (val, "evenodd") == 0)
     {
         fillrule = fill_oddEven;
