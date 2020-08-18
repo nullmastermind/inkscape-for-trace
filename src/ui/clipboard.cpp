@@ -784,9 +784,8 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
             if( use && use->get_original() && use->get_original()->parent) {
                 if (selection->includes(use->get_original())){ //we are copying something whose parent is also copied (!)
                     obj_copy->setAttribute("transform", sp_svg_transform_write( ((SPItem*)(use->get_original()->parent))->i2doc_affine().inverse() * transform));
-                } else { // original is not copied
-                    obj_copy->setAttribute("transform-with-parent", sp_svg_transform_write(transform));
-                    obj_copy->setAttribute("transform", sp_svg_transform_write( ((SPItem*)(use->get_original()->parent))->i2doc_affine().inverse() * transform));
+                } else { // original is not copied; make transform relative to the document
+                    obj_copy->setAttribute("transform", sp_svg_transform_write(transform));
                 }
             } else
                 obj_copy->setAttribute("transform", sp_svg_transform_write(transform));
