@@ -46,12 +46,11 @@ public:
     DialogMultipaned *create_column();
 
     // Dialog-related functions
-    void new_dialog(Glib::ustring name);
-    void new_dialog(Glib::ustring name, DialogNotebook *notebook);
-    void new_floating_dialog(Glib::ustring name);
+    void new_dialog(unsigned int code);
+    void new_dialog(unsigned int code, DialogNotebook *notebook);
+    void new_floating_dialog(unsigned int code);
     bool has_dialog_of_type(DialogBase *dialog);
-    DialogBase *get_dialog(Glib::ustring name);
-    DialogBase *get_dialog(int verb_code);
+    DialogBase *get_dialog(unsigned int code);
     void link_dialog(DialogBase *dialog);
     void unlink_dialog(DialogBase *dialog);
     const std::multimap<int, DialogBase *> *get_dialogs() { return &dialogs; };
@@ -78,7 +77,7 @@ private:
      */
     std::multimap<int, DialogBase *> dialogs;
 
-    DialogBase *dialog_factory(Glib::ustring name);
+    DialogBase *dialog_factory(unsigned int code);
     Gtk::Widget *create_notebook_tab(Glib::ustring label, Glib::ustring image, Gtk::AccelKey shortcut);
 
     // Signal connections

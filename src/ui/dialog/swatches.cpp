@@ -143,7 +143,7 @@ static void editGradientImpl( SPDesktop* desktop, SPGradient* gr )
                         if ( SP_IS_GRADIENT(server) ) {
                             SPGradient* grad = SP_GRADIENT(server);
                             if ( grad->isSwatch() && grad->getId() == gr->getId()) {
-                                desktop->getContainer()->new_dialog("FillAndStroke");
+                                desktop->getContainer()->new_dialog(SP_VERB_DIALOG_FILL_STROKE);
                                 shown = true;
                             }
                         }

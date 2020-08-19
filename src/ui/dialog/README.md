@@ -41,7 +41,6 @@ toolbars and an empty vertical DialogMultipaned where new dialogs will be added.
 ## Adding a new dialog
 
 In order to add a new dialog to a window, you have to call the method
-`new_dialog(Glib::ustring)` on the container inside the desktop of the window.
-The value is the id of the corresponding `DialogVerb` from `DialogVerb::perform`
-in `verbs.cpp` and similar methods for containers that have a different type of
-verb.
+`new_dialog(unsigned int)` on the container inside the desktop of the window.
+The value is the code of the corresponding `DialogVerb` from in `verbs.cpp` and
+similar methods for containers that have a different type of verb.

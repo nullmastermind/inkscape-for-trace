@@ -1294,7 +1294,7 @@ void SelectionVerb::perform(SPAction *action, void *data)
             SelectionHelper::reverse(dt);
             break;
         case SP_VERB_SELECTION_TRACE:
-            container->new_dialog("SelectionTrace");
+            container->new_dialog(SP_VERB_SELECTION_TRACE);
             break;
         case SP_VERB_SELECTION_CREATE_BITMAP:
             dt->selection->createBitmapCopy();
@@ -1308,7 +1308,7 @@ void SelectionVerb::perform(SPAction *action, void *data)
             selection->breakApart();
             break;
         case SP_VERB_SELECTION_ARRANGE:
-            container->new_dialog("DialogArrange");
+            container->new_dialog(SP_VERB_SELECTION_ARRANGE);
             break;
         default:
             break;
@@ -1767,92 +1767,92 @@ void ContextVerb::perform(SPAction *action, void *data)
 
         case SP_VERB_CONTEXT_SELECT_PREFS:
             prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_SELECTOR);
-            container->new_floating_dialog("InkscapePreferences");
+            container->new_floating_dialog(SP_VERB_CONTEXT_SELECT_PREFS);
             break;
         case SP_VERB_CONTEXT_NODE_PREFS:
             prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_NODE);
-            container->new_floating_dialog("InkscapePreferences");
+            container->new_floating_dialog(SP_VERB_CONTEXT_NODE_PREFS);
             break;
         case SP_VERB_CONTEXT_TWEAK_PREFS:
             prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_TWEAK);
-            container->new_floating_dialog("InkscapePreferences");
+            container->new_floating_dialog(SP_VERB_CONTEXT_TWEAK_PREFS);
             break;
         case SP_VERB_CONTEXT_SPRAY_PREFS:
             prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_SPRAY);
-            container->new_floating_dialog("InkscapePreferences");
+            container->new_floating_dialog(SP_VERB_CONTEXT_SPRAY_PREFS);
             break;
         case SP_VERB_CONTEXT_RECT_PREFS:
             prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_SHAPES_RECT);
-            container->new_floating_dialog("InkscapePreferences");
+            container->new_floating_dialog(SP_VERB_CONTEXT_RECT_PREFS);
             break;
         case SP_VERB_CONTEXT_3DBOX_PREFS:
             prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_SHAPES_3DBOX);
-            container->new_floating_dialog("InkscapePreferences");
+            container->new_floating_dialog(SP_VERB_CONTEXT_3DBOX_PREFS);
             break;
         case SP_VERB_CONTEXT_ARC_PREFS:
             prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_SHAPES_ELLIPSE);
-            container->new_floating_dialog("InkscapePreferences");
+            container->new_floating_dialog(SP_VERB_CONTEXT_ARC_PREFS);
             break;
         case SP_VERB_CONTEXT_STAR_PREFS:
             prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_SHAPES_STAR);
-            container->new_floating_dialog("InkscapePreferences");
+            container->new_floating_dialog(SP_VERB_CONTEXT_STAR_PREFS);
             break;
         case SP_VERB_CONTEXT_SPIRAL_PREFS:
             prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_SHAPES_SPIRAL);
-            container->new_floating_dialog("InkscapePreferences");
+            container->new_floating_dialog(SP_VERB_CONTEXT_SPIRAL_PREFS);
             break;
         case SP_VERB_CONTEXT_PENCIL_PREFS:
             prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_PENCIL);
-            container->new_floating_dialog("InkscapePreferences");
+            container->new_floating_dialog(SP_VERB_CONTEXT_PENCIL_PREFS);
             break;
         case SP_VERB_CONTEXT_PEN_PREFS:
             prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_PEN);
-            container->new_floating_dialog("InkscapePreferences");
+            container->new_floating_dialog(SP_VERB_CONTEXT_PEN_PREFS);
             break;
         case SP_VERB_CONTEXT_CALLIGRAPHIC_PREFS:
             prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_CALLIGRAPHY);
-            container->new_floating_dialog("InkscapePreferences");
+            container->new_floating_dialog(SP_VERB_CONTEXT_CALLIGRAPHIC_PREFS);
             break;
         case SP_VERB_CONTEXT_TEXT_PREFS:
             prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_TEXT);
-            container->new_floating_dialog("InkscapePreferences");
+            container->new_floating_dialog(SP_VERB_CONTEXT_TEXT_PREFS);
             break;
         case SP_VERB_CONTEXT_GRADIENT_PREFS:
             prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_GRADIENT);
-            container->new_floating_dialog("InkscapePreferences");
+            container->new_floating_dialog(SP_VERB_CONTEXT_GRADIENT_PREFS);
             break;
         case SP_VERB_CONTEXT_MESH_PREFS:
             prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_GRADIENT);
-            container->new_floating_dialog("InkscapePreferences");
+            container->new_floating_dialog(SP_VERB_CONTEXT_MESH_PREFS);
             break;
         case SP_VERB_CONTEXT_ZOOM_PREFS:
             prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_ZOOM);
-            container->new_floating_dialog("InkscapePreferences");
+            container->new_floating_dialog(SP_VERB_CONTEXT_ZOOM_PREFS);
             break;
         case SP_VERB_CONTEXT_MEASURE_PREFS:
             prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_MEASURE);
-            container->new_floating_dialog("InkscapePreferences");
+            container->new_floating_dialog(SP_VERB_CONTEXT_MEASURE_PREFS);
             break;
         case SP_VERB_CONTEXT_DROPPER_PREFS:
             prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_DROPPER);
-            container->new_floating_dialog("InkscapePreferences");
+            container->new_floating_dialog(SP_VERB_CONTEXT_DROPPER_PREFS);
             break;
         case SP_VERB_CONTEXT_CONNECTOR_PREFS:
             prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_CONNECTOR);
-            container->new_floating_dialog("InkscapePreferences");
+            container->new_floating_dialog(SP_VERB_CONTEXT_CONNECTOR_PREFS);
             break;
         case SP_VERB_CONTEXT_PAINTBUCKET_PREFS:
             prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_PAINTBUCKET);
-            container->new_floating_dialog("InkscapePreferences");
+            container->new_floating_dialog(SP_VERB_CONTEXT_PAINTBUCKET_PREFS);
             break;
         case SP_VERB_CONTEXT_ERASER_PREFS:
             prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_ERASER);
-            container->new_floating_dialog("InkscapePreferences");
+            container->new_floating_dialog(SP_VERB_CONTEXT_ERASER_PREFS);
             break;
         case SP_VERB_CONTEXT_LPETOOL_PREFS:
             g_print ("TODO: Create preferences page for LPETool\n");
             prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_LPETOOL);
-            container->new_floating_dialog("InkscapePreferences");
+            container->new_floating_dialog(SP_VERB_CONTEXT_LPETOOL_PREFS);
             break;
         case SP_VERB_ALIGN_HORIZONTAL_RIGHT_TO_ANCHOR:
         case SP_VERB_ALIGN_HORIZONTAL_LEFT:
@@ -1951,7 +1951,7 @@ void ZoomVerb::perform(SPAction *action, void *data)
             sp_ui_new_view();
             break;
         case SP_VERB_VIEW_ICON_PREVIEW:
-            container->new_dialog("ViewIconPreview");
+            container->new_dialog(SP_VERB_VIEW_ICON_PREVIEW);
             break;
 
         default:
@@ -1972,102 +1972,42 @@ void DialogVerb::perform(SPAction *action, void *data)
     DialogContainer *container = dt->getContainer();
 
     switch (reinterpret_cast<std::size_t>(data)) {
-        case SP_VERB_DIALOG_PROTOTYPE:
-            container->new_dialog("DialogPrototype");
-            break;
         case SP_VERB_DIALOG_DISPLAY:
-            //sp_display_dialog();
-            container->new_floating_dialog("InkscapePreferences");
+            container->new_floating_dialog(SP_VERB_DIALOG_DISPLAY);
             break;
+        case SP_VERB_DIALOG_PROTOTYPE:
         case SP_VERB_DIALOG_NAMEDVIEW:
-            // sp_desktop_dialog();
-            container->new_dialog("DialogDocumentProperties");
-            break;
         case SP_VERB_DIALOG_FILL_STROKE:
-            container->new_dialog("DialogFillStroke");
-            break;
         case SP_VERB_DIALOG_GLYPHS:
-            container->new_dialog("DialogGlyphs");
-            break;
         case SP_VERB_DIALOG_SWATCHES:
-            container->new_dialog("DialogSwatches");
-            break;
         case SP_VERB_DIALOG_SYMBOLS:
-            container->new_dialog("DialogSymbols");
-            break;
         case SP_VERB_DIALOG_PAINT:
-            container->new_dialog("DialogPaintServers");
-            break;
         case SP_VERB_DIALOG_TRANSFORM:
-            container->new_dialog("DialogTransform");
-            break;
         case SP_VERB_DIALOG_ALIGN_DISTRIBUTE:
-            container->new_dialog("DialogAlignDistribute");
-            break;
         case SP_VERB_DIALOG_TEXT:
-            container->new_dialog("DialogText");
-            break;
         case SP_VERB_DIALOG_XML_EDITOR:
-            container->new_dialog("DialogXMLEditor");
-            break;
         case SP_VERB_DIALOG_SELECTORS:
-            container->new_dialog("DialogSelectors");
-            break;
         case SP_VERB_DIALOG_FIND:
-            container->new_dialog("DialogFind");
-            break;
 #if WITH_GSPELL
         case SP_VERB_DIALOG_SPELLCHECK:
-            container->new_dialog("DialogSpellcheck");
-            break;
 #endif
         case SP_VERB_DIALOG_DEBUG:
-            container->new_dialog("DialogDebug");
-            break;
         case SP_VERB_DIALOG_UNDO_HISTORY:
-            container->new_dialog("DialogUndoHistory");
+        case SP_VERB_DIALOG_CLONETILER:
+        case SP_VERB_DIALOG_ATTR:
+        case SP_VERB_DIALOG_ITEM:
+        case SP_VERB_DIALOG_INPUT:
+        case SP_VERB_DIALOG_EXPORT:
+        case SP_VERB_DIALOG_LAYERS:
+        case SP_VERB_DIALOG_OBJECTS:
+        case SP_VERB_DIALOG_LIVE_PATH_EFFECT:
+        case SP_VERB_DIALOG_FILTER_EFFECTS:
+        case SP_VERB_DIALOG_SVG_FONTS:
+        case SP_VERB_DIALOG_STYLE:
+            container->new_dialog(reinterpret_cast<std::size_t>(data));
             break;
         case SP_VERB_DIALOG_TOGGLE:
             container->toggle_dialogs();
-            break;
-        case SP_VERB_DIALOG_CLONETILER:
-            //clonetiler_dialog();
-            container->new_dialog("DialogClonetiler");
-            break;
-        case SP_VERB_DIALOG_ATTR:
-            //sp_item_dialog();
-            container->new_dialog("DialogObjectAttributes");
-            break;
-        case SP_VERB_DIALOG_ITEM:
-            //sp_item_dialog();
-            container->new_dialog("DialogObjectProperties");
-            break;
-        case SP_VERB_DIALOG_INPUT:
-            container->new_dialog("DialogInput");
-            break;
-        case SP_VERB_DIALOG_EXPORT:
-            container->new_dialog("DialogExport");
-            break;
-        case SP_VERB_DIALOG_LAYERS:
-            container->new_dialog("DialogLayers");
-            break;
-        case SP_VERB_DIALOG_OBJECTS:
-            container->new_dialog("DialogObjects");
-            break;
-        case SP_VERB_DIALOG_LIVE_PATH_EFFECT:
-            container->new_dialog("DialogLivePathEffect");
-            break;
-        case SP_VERB_DIALOG_FILTER_EFFECTS:
-            container->new_dialog("DialogFilterEffects");
-            break;
-        case SP_VERB_DIALOG_SVG_FONTS:
-            container->new_dialog("DialogSVGFonts");
-            break;
-        case SP_VERB_DIALOG_PRINT_COLORS_PREVIEW:
-            container->new_dialog("DialogPrintColorsPreview");
-            break;
-        case SP_VERB_DIALOG_STYLE:
-            container->new_dialog("DialogStyle");
             break;
         default:
             break;
@@ -2093,7 +2033,7 @@ void HelpVerb::perform(SPAction *action, void *data)
             // show_panel( *panel, "dialogs.aboutextensions", SP_VERB_HELP_ABOUT_EXTENSIONS );
             break;
         case SP_VERB_HELP_MEMORY:
-            container->new_dialog("HelpAboutMemory");
+            container->new_dialog(SP_VERB_HELP_MEMORY);
             break;
         default:
             break;
@@ -2937,8 +2877,6 @@ Verb *Verb::_base_verbs[] = {
     new DialogVerb(SP_VERB_DIALOG_FILTER_EFFECTS, "DialogFilterEffects", N_("Filter _Editor..."),
                    N_("Manage, edit, and apply SVG filters"), INKSCAPE_ICON("dialog-filters")),
     new DialogVerb(SP_VERB_DIALOG_SVG_FONTS, "DialogSVGFonts", N_("SVG Font Editor..."), N_("Edit SVG fonts"), nullptr),
-    new DialogVerb(SP_VERB_DIALOG_PRINT_COLORS_PREVIEW, "DialogPrintColorsPreview", N_("Print Colors..."),
-                   N_("Select which color separations to render in Print Colors Preview rendermode"), nullptr),
     new DialogVerb(SP_VERB_DIALOG_EXPORT, "DialogExport", N_("_Export PNG Image..."),
                    N_("Export this document or a selection as a PNG image"), INKSCAPE_ICON("document-export")),
     // Help

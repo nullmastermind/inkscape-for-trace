@@ -29,7 +29,6 @@
 #include "ui/dialog/document-properties.h"
 #include "ui/dialog/export.h"
 #include "ui/dialog/fill-and-stroke.h"
-#include "ui/dialog/filter-editor.h"
 #include "ui/dialog/filter-effects-dialog.h"
 #include "ui/dialog/find.h"
 #include "ui/dialog/glyphs.h"
@@ -110,114 +109,104 @@ DialogMultipaned *DialogContainer::create_column()
     return column;
 }
 
-// Helper used because switch doesn't support strings
-// Source: https://stackoverflow.com/a/16388610/4679160
-constexpr unsigned int str2int(const char *str, int h = 0)
-{
-    return !str[h] ? 5381 : (str2int(str, h + 1) * 33) ^ str[h];
-}
-
 /**
- * Get an instance of a DialogBase dialog using and encoding name.
+ * Get an instance of a DialogBase dialog using the associated verb code.
  */
-DialogBase *DialogContainer::dialog_factory(Glib::ustring name)
+DialogBase *DialogContainer::dialog_factory(unsigned int code)
 {
-    if (name.empty()) {
+    if (code <= 0) {
         return nullptr;
     }
 
-    switch (str2int(name.c_str())) {
-        case str2int("DialogAlignDistribute"):
+    switch (code) {
+        case SP_VERB_DIALOG_ALIGN_DISTRIBUTE:
             return &Inkscape::UI::Dialog::AlignAndDistribute::getInstance();
-        case str2int("DialogArrange"):
+        case SP_VERB_SELECTION_ARRANGE:
             return &Inkscape::UI::Dialog::ArrangeDialog::getInstance();
-        case str2int("DialogClonetiler"):
+        case SP_VERB_DIALOG_CLONETILER:
             return &Inkscape::UI::Dialog::CloneTiler::getInstance();
-        case str2int("DialogDebug"):
+        case SP_VERB_DIALOG_DEBUG:
             return &Inkscape::UI::Dialog::Messages::getInstance();
-        case str2int("DialogDocumentProperties"):
+        case SP_VERB_DIALOG_NAMEDVIEW:
             return &Inkscape::UI::Dialog::DocumentProperties::getInstance();
-        case str2int("DialogExport"):
+        case SP_VERB_DIALOG_EXPORT:
             return &Inkscape::UI::Dialog::Export::getInstance();
-        case str2int("DialogFillStroke"):
+        case SP_VERB_DIALOG_FILL_STROKE:
             return &Inkscape::UI::Dialog::FillAndStroke::getInstance();
-        case str2int("DialogFilterEffects"):
+        case SP_VERB_DIALOG_FILTER_EFFECTS:
             return &Inkscape::UI::Dialog::FilterEffectsDialog::getInstance();
-        case str2int("DialogFind"):
+        case SP_VERB_DIALOG_FIND:
             return &Inkscape::UI::Dialog::Find::getInstance();
-        case str2int("DialogGlyphs"):
+        case SP_VERB_DIALOG_GLYPHS:
             return &Inkscape::UI::Dialog::GlyphsPanel::getInstance();
-        case str2int("DialogInput"):
+        case SP_VERB_DIALOG_INPUT:
             return &Inkscape::UI::Dialog::InputDialog::getInstance();
-        case str2int("DialogLayers"):
+        case SP_VERB_DIALOG_LAYERS:
             return &Inkscape::UI::Dialog::LayersPanel::getInstance();
-        case str2int("DialogLivePathEffect"):
+        case SP_VERB_DIALOG_LIVE_PATH_EFFECT:
             return &Inkscape::UI::Dialog::LivePathEffectEditor::getInstance();
-        case str2int("DialogObjectAttributes"):
+        case SP_VERB_DIALOG_ATTR:
             return &Inkscape::UI::Dialog::ObjectAttributes::getInstance();
-        case str2int("DialogObjectProperties"):
+        case SP_VERB_DIALOG_ITEM:
             return &Inkscape::UI::Dialog::ObjectProperties::getInstance();
-        case str2int("DialogObjects"):
+        case SP_VERB_DIALOG_OBJECTS:
             return &Inkscape::UI::Dialog::ObjectsPanel::getInstance();
-        case str2int("DialogPaintServers"):
+        case SP_VERB_DIALOG_PAINT:
             return &Inkscape::UI::Dialog::PaintServersDialog::getInstance();
-        case str2int("DialogPrototype"):
+        case SP_VERB_DIALOG_PROTOTYPE:
             return &Inkscape::UI::Dialog::Prototype::getInstance();
-        case str2int("DialogSelectors"):
+        case SP_VERB_DIALOG_SELECTORS:
             return &Inkscape::UI::Dialog::SelectorsDialog::getInstance();
 #if WITH_GSPELL
-        case str2int("DialogSpellcheck"):
+        case SP_VERB_DIALOG_SPELLCHECK:
             return &Inkscape::UI::Dialog::SpellCheck::getInstance();
 #endif
-        case str2int("DialogStyle"):
+        case SP_VERB_DIALOG_STYLE:
             return &Inkscape::UI::Dialog::StyleDialog::getInstance();
-        case str2int("DialogSVGFonts"):
+        case SP_VERB_DIALOG_SVG_FONTS:
             return &Inkscape::UI::Dialog::SvgFontsDialog::getInstance();
-        case str2int("DialogSwatches"):
+        case SP_VERB_DIALOG_SWATCHES:
             return &Inkscape::UI::Dialog::SwatchesPanel::getInstance();
-        case str2int("DialogSymbols"):
+        case SP_VERB_DIALOG_SYMBOLS:
             return &Inkscape::UI::Dialog::SymbolsDialog::getInstance();
-        case str2int("DialogText"):
+        case SP_VERB_DIALOG_TEXT:
             return &Inkscape::UI::Dialog::TextEdit::getInstance();
-        case str2int("DialogTransform"):
+        case SP_VERB_DIALOG_TRANSFORM:
             return &Inkscape::UI::Dialog::Transformation::getInstance();
-        case str2int("DialogUndoHistory"):
+        case SP_VERB_DIALOG_UNDO_HISTORY:
             return &Inkscape::UI::Dialog::UndoHistory::getInstance();
-        case str2int("DialogXMLEditor"):
+        case SP_VERB_DIALOG_XML_EDITOR:
             return &Inkscape::UI::Dialog::XmlTree::getInstance();
-        case str2int("FilterEditorDialog"):
-            return &Inkscape::UI::Dialog::FilterEditorDialog::getInstance();
-        case str2int("HelpAboutMemory"):
+        case SP_VERB_HELP_MEMORY:
             return &Inkscape::UI::Dialog::Memory::getInstance();
-        case str2int("InkscapePreferences"):
-        case str2int("DialogPreferences"):
-        case str2int("SelectPrefs"):
-        case str2int("NodePrefs"):
-        case str2int("TweakPrefs"):
-        case str2int("SprayPrefs"):
-        case str2int("RectPrefs"):
-        case str2int("3DBoxPrefs"):
-        case str2int("ArcPrefs"):
-        case str2int("StarPrefs"):
-        case str2int("SpiralPrefs"):
-        case str2int("PencilPrefs"):
-        case str2int("PenPrefs"):
-        case str2int("CalligraphicPrefs"):
-        case str2int("TextPrefs"):
-        case str2int("GradientPrefs"):
-        case str2int("Mesh_Prefs"):
-        case str2int("ZoomPrefs"):
-        case str2int("MeasurePrefs"):
-        case str2int("DropperPrefs"):
-        case str2int("ConnectorPrefs"):
-        case str2int("PaintBucketPrefs"):
-        case str2int("EraserPrefs"):
-        case str2int("LPEToolPrefs"):
-            return &Inkscape::UI::Dialog::InkscapePreferences::getInstance();
-        case str2int("SelectionTrace"):
+        case SP_VERB_SELECTION_TRACE:
             return &Inkscape::UI::Dialog::TraceDialog::getInstance();
-        case str2int("ViewIconPreview"):
+        case SP_VERB_VIEW_ICON_PREVIEW:
             return &Inkscape::UI::Dialog::IconPreviewPanel::getInstance();
+        case SP_VERB_DIALOG_DISPLAY:
+        case SP_VERB_CONTEXT_SELECT_PREFS:
+        case SP_VERB_CONTEXT_NODE_PREFS:
+        case SP_VERB_CONTEXT_TWEAK_PREFS:
+        case SP_VERB_CONTEXT_SPRAY_PREFS:
+        case SP_VERB_CONTEXT_RECT_PREFS:
+        case SP_VERB_CONTEXT_3DBOX_PREFS:
+        case SP_VERB_CONTEXT_ARC_PREFS:
+        case SP_VERB_CONTEXT_STAR_PREFS:
+        case SP_VERB_CONTEXT_SPIRAL_PREFS:
+        case SP_VERB_CONTEXT_PENCIL_PREFS:
+        case SP_VERB_CONTEXT_PEN_PREFS:
+        case SP_VERB_CONTEXT_CALLIGRAPHIC_PREFS:
+        case SP_VERB_CONTEXT_TEXT_PREFS:
+        case SP_VERB_CONTEXT_GRADIENT_PREFS:
+        case SP_VERB_CONTEXT_MESH_PREFS:
+        case SP_VERB_CONTEXT_ZOOM_PREFS:
+        case SP_VERB_CONTEXT_MEASURE_PREFS:
+        case SP_VERB_CONTEXT_DROPPER_PREFS:
+        case SP_VERB_CONTEXT_CONNECTOR_PREFS:
+        case SP_VERB_CONTEXT_PAINTBUCKET_PREFS:
+        case SP_VERB_CONTEXT_ERASER_PREFS:
+        case SP_VERB_CONTEXT_LPETOOL_PREFS:
+            return &Inkscape::UI::Dialog::InkscapePreferences::getInstance();
         default:
             return nullptr;
     }
@@ -253,8 +242,10 @@ Gtk::Widget *DialogContainer::create_notebook_tab(Glib::ustring label_str, Glib:
     return cover;
 }
 
-// Add new dialog (in response to menu)
-void DialogContainer::new_dialog(Glib::ustring name)
+/**
+ * Add new dialog to the current container or in a floating window, based on preferences.
+ */
+void DialogContainer::new_dialog(unsigned int code)
 {
     // Open all dialogs as floating, if set in preferences
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -264,18 +255,19 @@ void DialogContainer::new_dialog(Glib::ustring name)
 
     int dockable = prefs->getInt("/options/dialogtype/value", PREFS_DIALOGS_BEHAVIOR_DOCKABLE);
     if (dockable == PREFS_DIALOGS_BEHAVIOR_FLOATING) {
-        new_floating_dialog(name);
+        new_floating_dialog(code);
     } else {
-        new_dialog(name, nullptr);
+        new_dialog(code, nullptr);
     }
 }
 
-// Overloaded new_dialog
-void DialogContainer::new_dialog(Glib::ustring name, DialogNotebook *notebook)
+/**
+ * Overloaded new_dialog
+ */
+void DialogContainer::new_dialog(unsigned int code, DialogNotebook *notebook)
 {
-    // Get the verb with that id
-    Glib::ustring id = name == "InkscapePreferences" ? "DialogPreferences" : name;
-    Inkscape::Verb *verb = Inkscape::Verb::getbyid(id.c_str());
+    // Get the verb with that code
+    Inkscape::Verb *verb = Inkscape::Verb::get(code);
 
     // Can't understand the dialog's settings without an associated verb
     if (!verb) {
@@ -283,7 +275,7 @@ void DialogContainer::new_dialog(Glib::ustring name, DialogNotebook *notebook)
     }
 
     // Limit each container to containing one of any type of dialog.
-    auto it = dialogs.find(verb->get_code());
+    auto it = dialogs.find(code);
     if (it != dialogs.end()) {
         // std::cerr << "DialogContainer::new_dialog: Already has a \"" << name << "\" dialog!" << std::endl;
         // Blink notebook with existing dialog to let user know where it is and show page.
@@ -292,10 +284,10 @@ void DialogContainer::new_dialog(Glib::ustring name, DialogNotebook *notebook)
     }
 
     // Create the dialog widget
-    DialogBase *dialog = dialog_factory(name);
+    DialogBase *dialog = dialog_factory(code);
 
     if (!dialog) {
-        std::cerr << "DialogContainer::new_dialog(): couldn't find dialog for: " << name << std::endl;
+        std::cerr << "DialogContainer::new_dialog(): couldn't find dialog for: " << verb->get_id() << std::endl;
         return;
     }
 
@@ -341,11 +333,13 @@ void DialogContainer::new_dialog(Glib::ustring name, DialogNotebook *notebook)
     notebook->add_page(*dialog, *tab, dialog->get_name());
 }
 
-void DialogContainer::new_floating_dialog(Glib::ustring name)
+/**
+ * Add a new floating dialog
+ */
+void DialogContainer::new_floating_dialog(unsigned int code)
 {
-    // Get the verb with that id
-    Glib::ustring id = name == "InkscapePreferences" ? "DialogPreferences" : name;
-    Inkscape::Verb *verb = Inkscape::Verb::getbyid(id.c_str());
+    // Get the verb with that code
+    Inkscape::Verb *verb = Inkscape::Verb::get(code);
 
     // Can't understand the dialog's settings without an associated verb
     if (!verb) {
@@ -353,10 +347,10 @@ void DialogContainer::new_floating_dialog(Glib::ustring name)
     }
 
     // Create the dialog widget
-    DialogBase *dialog = dialog_factory(name);
+    DialogBase *dialog = dialog_factory(code);
 
     if (!dialog) {
-        std::cerr << "DialogContainer::new_dialog(): couldn't find dialog for: " << name << std::endl;
+        std::cerr << "DialogContainer::new_dialog(): couldn't find dialog for: " << verb->get_id() << std::endl;
         return;
     }
 
@@ -392,34 +386,9 @@ bool DialogContainer::has_dialog_of_type(DialogBase *dialog)
     return (dialogs.find(dialog->getVerb()) != dialogs.end());
 }
 
-/**
- * Get dialog by name - used by specific functionalities in Inkscape where a specific
- * state of a specific dialog is needed. Create the dialog if it doesn't exist.
- */
-DialogBase *DialogContainer::get_dialog(Glib::ustring name)
+DialogBase *DialogContainer::get_dialog(unsigned int code)
 {
-    // Get the verb with that id
-    Glib::ustring id = name == "InkscapePreferences" ? "DialogPreferences" : name;
-    Inkscape::Verb *verb = Inkscape::Verb::getbyid(id.c_str());
-
-    DialogBase *dialog = get_dialog(verb->get_code());
-
-    if (dialog) {
-        return dialog;
-    }
-
-    new_dialog(name);
-
-    auto found = dialogs.find(verb->get_code());
-    if (found != dialogs.end()) {
-        return found->second;
-    }
-    return nullptr;
-}
-
-DialogBase *DialogContainer::get_dialog(int verb_code)
-{
-    auto found = dialogs.find(verb_code);
+    auto found = dialogs.find(code);
     if (found != dialogs.end()) {
         return found->second;
     }
@@ -592,14 +561,14 @@ void DialogContainer::load_container_state(Glib::ustring filename)
                 }
 
                 // Step 3.2.2.1 create each dialog in the current notebook
-                for (auto dialog_verb : dialogs) {
-                    Verb *verb = Verb::get(dialog_verb);
+                for (auto verb_code : dialogs) {
+                    Verb *verb = Inkscape::Verb::get(verb_code);
 
                     if (verb) {
                         if (is_dockable) {
-                            active_container->new_dialog(Glib::ustring(verb->get_id()), notebook);
+                            active_container->new_dialog(verb_code, notebook);
                         } else {
-                            new_floating_dialog(Glib::ustring(verb->get_id()));
+                            new_floating_dialog(verb_code);
                         }
                     }
                 }

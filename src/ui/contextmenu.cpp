@@ -542,7 +542,7 @@ void ContextMenu::SelectSameObjectType()
 void ContextMenu::ItemProperties()
 {
     _desktop->selection->set(_item);
-    _desktop->getContainer()->new_dialog("ObjectProperties");
+    _desktop->getContainer()->new_dialog(SP_VERB_DIALOG_ITEM);
 }
 
 void ContextMenu::ItemSelectThis()
@@ -577,7 +577,7 @@ void ContextMenu::ItemCreateLink()
     Inkscape::DocumentUndo::done(object->document, SP_VERB_NONE, _("Create link"));
 
     _desktop->selection->set(SP_ITEM(object));
-    _desktop->getContainer()->new_dialog("ObjectAttributes");
+    _desktop->getContainer()->new_dialog(SP_VERB_DIALOG_ATTR);
 }
 
 void ContextMenu::SetMask()
@@ -661,7 +661,7 @@ void ContextMenu::MakeAnchorMenu()
 
 void ContextMenu::AnchorLinkProperties()
 {
-    _desktop->getContainer()->new_dialog("ObjectAttributes");
+    _desktop->getContainer()->new_dialog(SP_VERB_DIALOG_ATTR);
 }
 
 void ContextMenu::AnchorLinkFollow()
@@ -742,7 +742,7 @@ void ContextMenu::MakeImageMenu ()
 
 void ContextMenu::ImageProperties()
 {
-    _desktop->getContainer()->new_dialog("ObjectAttributes");
+    _desktop->getContainer()->new_dialog(SP_VERB_DIALOG_ATTR);
 }
 
 Glib::ustring ContextMenu::getImageEditorName(bool is_svg) {
@@ -846,7 +846,7 @@ void ContextMenu::ImageEdit()
 
 void ContextMenu::ImageTraceBitmap()
 {
-    _desktop->getContainer()->new_dialog("Trace");
+    _desktop->getContainer()->new_dialog(SP_VERB_SELECTION_TRACE);
 }
 
 void ContextMenu::ImageEmbed()
@@ -896,7 +896,7 @@ void ContextMenu::FillSettings()
         _desktop->selection->set(_item);
     }
 
-    _desktop->getContainer()->new_dialog("FillAndStroke");
+    _desktop->getContainer()->new_dialog(SP_VERB_DIALOG_FILL_STROKE);
 }
 
 void ContextMenu::MakeTextMenu ()
@@ -930,7 +930,7 @@ void ContextMenu::TextSettings ()
         _desktop->selection->set(_item);
     }
 
-    _desktop->getContainer()->new_dialog("TextFont");
+    _desktop->getContainer()->new_dialog(SP_VERB_DIALOG_TEXT);
 }
 
 void ContextMenu::SpellcheckSettings ()
@@ -940,7 +940,7 @@ void ContextMenu::SpellcheckSettings ()
         _desktop->selection->set(_item);
     }
 
-    _desktop->getContainer()->new_dialog("SpellCheck");
+    _desktop->getContainer()->new_dialog(SP_VERB_DIALOG_SPELLCHECK);
 #endif
 }
 

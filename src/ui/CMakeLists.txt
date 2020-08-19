@@ -111,7 +111,6 @@ set(ui_SRC
 	dialog/filedialog.cpp
 	dialog/filedialogimpl-gtkmm.cpp
 	dialog/fill-and-stroke.cpp
-        dialog/filter-editor.cpp
 	dialog/filter-effects-dialog.cpp
 	dialog/find.cpp
 	dialog/font-substitution.cpp
@@ -283,7 +282,6 @@ set(ui_SRC
 	dialog/filedialogimpl-gtkmm.h
 	dialog/filedialogimpl-win32.h
 	dialog/fill-and-stroke.h
-    dialog/filter-editor.h
 	dialog/filter-effects-dialog.h
 	dialog/find.h
 	dialog/font-substitution.h

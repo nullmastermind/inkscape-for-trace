@@ -52,7 +52,13 @@
 
 Inkscape::UI::Dialog::CloneTiler *get_clone_tiler_panel(SPDesktop *desktop)
 {
-    return dynamic_cast<Inkscape::UI::Dialog::CloneTiler *>(desktop->getContainer()->get_dialog("DialogClonetiler"));
+    Inkscape::UI::Dialog::DialogBase *dialog = desktop->getContainer()->get_dialog(SP_VERB_DIALOG_CLONETILER);
+    if (!dialog) {
+        desktop->getContainer()->new_dialog(SP_VERB_DIALOG_CLONETILER);
+        return dynamic_cast<Inkscape::UI::Dialog::CloneTiler *>(
+            desktop->getContainer()->get_dialog(SP_VERB_DIALOG_CLONETILER));
+    }
+    return dynamic_cast<Inkscape::UI::Dialog::CloneTiler *>(dialog);
 }
 
 namespace Inkscape {
@@ -503,7 +509,7 @@ SprayToolbar::toggle_picker()
         prefs->setBool("/dialogs/clonetiler/dotrace", false);
         SPDesktop *dt = _desktop;
         if (Inkscape::UI::Dialog::CloneTiler *ct = get_clone_tiler_panel(dt)){
-            dt->getContainer()->new_dialog("CloneTiler");
+            dt->getContainer()->new_dialog(SP_VERB_DIALOG_CLONETILER);
             ct->show_page_trace();
         }
     }
