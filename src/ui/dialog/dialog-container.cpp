@@ -277,7 +277,6 @@ void DialogContainer::new_dialog(unsigned int code, DialogNotebook *notebook)
     // Limit each container to containing one of any type of dialog.
     auto it = dialogs.find(code);
     if (it != dialogs.end()) {
-        // std::cerr << "DialogContainer::new_dialog: Already has a \"" << name << "\" dialog!" << std::endl;
         // Blink notebook with existing dialog to let user know where it is and show page.
         it->second->blink();
         return;
@@ -299,18 +298,6 @@ void DialogContainer::new_dialog(unsigned int code, DialogNotebook *notebook)
     Gtk::Widget *tab =
         create_notebook_tab(dialog->get_name(), image ? Glib::ustring(image) : INKSCAPE_ICON("inkscape-logo"),
                             (Inkscape::Shortcuts::getInstance()).get_shortcut_from_verb(verb));
-
-    // Check if request came from notebook menu
-    Gtk::Window *window = dynamic_cast<Gtk::Window *>(get_toplevel());
-    if (window) {
-        Gtk::Widget *focus = window->get_focus();
-        if (focus) {
-            Gtk::Notebook *gtknotebook = dynamic_cast<Gtk::Notebook *>(focus->get_ancestor(GTK_TYPE_NOTEBOOK));
-            if (gtknotebook) {
-                notebook = dynamic_cast<DialogNotebook *>(gtknotebook->get_parent());
-            }
-        }
-    }
 
     // If not from notebook menu add at top of last column.
     if (!notebook) {
@@ -738,7 +725,15 @@ void DialogContainer::on_unmap()
     // Save the state only if you are in an InkscapeWindow
     DialogWindow *window = dynamic_cast<DialogWindow *>(get_toplevel());
     if (!window) {
-        save_container_state();
+        std::vector<Gtk::Window *> windows =
+            (&ConcreteInkscapeApplication<Gtk::Application>::get_instance())->get_windows();
+        int inkscape_windows_count =
+            std::count_if(windows.begin(), windows.end(), [](auto w) { return !dynamic_cast<DialogWindow *>(w); });
+
+        // First check if this is the last InkscapeWindow, to not save unnecessarily
+        if (inkscape_windows_count == 1) {
+            save_container_state();
+        }
     }
 
     delete columns;
