@@ -2218,15 +2218,16 @@ void ObjectsPanel::_desktopDestroyed(SPDesktop* /*desktop*/) {
  */
 ObjectsPanel::~ObjectsPanel()
 {
-    // Never being called, not even when closing Inkscape?
-
     //Close the highlight selection dialog
     _colorSelectorDialog.hide();
 
-    // Set the desktop to null, which will disconnect all object watchers
+    // Disconnect signals
+    _desktopDestroyedConnection.disconnect();
     _documentChangedConnection.disconnect();
     _documentChangedCurrentLayer.disconnect();
     _selectionChangedConnection.disconnect();
+    setDocument(nullptr, nullptr);
+    _desktopDestroyed(_desktop);
 
     if ( _model )
     {
