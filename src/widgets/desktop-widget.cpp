@@ -923,13 +923,12 @@ SPDesktopWidget::shutdown()
     {
         // Delete all floating DialogWindows if there is only this desktop's window
         auto app = &ConcreteInkscapeApplication<Gtk::Application>::get_instance();
-        SPDesktop *curr_desktop = dynamic_cast<SPDesktop *>(app->get_active_view());
         SPDesktop *next_desktop = nullptr;
 
         std::list<SPDesktop *> desktop_list;
         INKSCAPE.get_all_desktops(desktop_list);
         for (auto const &d : desktop_list) {
-            if (!next_desktop && d != curr_desktop) {
+            if (!next_desktop && d != desktop) {
                 next_desktop = d;
                 break;
             }
