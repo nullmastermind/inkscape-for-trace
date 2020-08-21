@@ -301,7 +301,6 @@ static Glib::ustring prepare_rendervalue(const char *value)
  */
 AttrDialog::~AttrDialog()
 {
-    _desktop = nullptr;
     _message_changed_connection.disconnect();
     _message_context = nullptr;
     _message_stack = nullptr;

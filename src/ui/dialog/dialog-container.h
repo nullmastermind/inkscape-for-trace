@@ -67,7 +67,7 @@ private:
     std::vector<Gtk::TargetEntry> target_entries; // What kind of object can be dropped.
 
     /**
-     * Do to the way Gtk handles dragging between notebooks, one can
+     * Due to the way Gtk handles dragging between notebooks, one can
      * either allow multiple instances of the same dialog in a notebook
      * or restrict dialogs to docks tied to a particular document
      * window. (More explicitly, use one group name for all notebooks or

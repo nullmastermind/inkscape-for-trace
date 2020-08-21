@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 /** @file
- * @brief A widget with multiple panes. Agnotic to type what kind of widgets panes contain.
+ * @brief A widget with multiple panes. Agnostic to type what kind of widgets panes contain.
  *
  * Authors: see git history
  *   Tavmjong Bah

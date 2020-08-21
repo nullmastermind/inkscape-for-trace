@@ -28,13 +28,13 @@
 #include "ui/dialog/dialog-notebook.h"
 
 // Sizing constants
-#define MINIMUM_WINDOW_WIDTH 210
-#define MINIMUM_WINDOW_HEIGHT 320
-#define INITIAL_WINDOW_WIDTH 360
-#define INITIAL_WINDOW_HEIGHT 520
-#define WINDOW_DROPZONE_SIZE 10
-#define WINDOW_DROPZONE_SIZE_LARGE 16
-#define NOTEBOOK_TAB_HEIGHT 36
+const int MINIMUM_WINDOW_WIDTH = 210;
+const int MINIMUM_WINDOW_HEIGHT = 320;
+const int INITIAL_WINDOW_WIDTH = 360;
+const int INITIAL_WINDOW_HEIGHT = 520;
+const int WINDOW_DROPZONE_SIZE = 10;
+const int WINDOW_DROPZONE_SIZE_LARGE = 16;
+const int NOTEBOOK_TAB_HEIGHT = 36;
 
 namespace Inkscape {
 namespace UI {

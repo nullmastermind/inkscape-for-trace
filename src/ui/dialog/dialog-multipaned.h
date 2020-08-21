@@ -4,7 +4,7 @@
 #define INKSCAPE_UI_DIALOG_MULTIPANED_H
 
 /** @file
- * @brief A widget with multiple panes. Agnotic to type what kind of widgets panes contain.
+ * @brief A widget with multiple panes. Agnostic to type what kind of widgets panes contain.
  *
  * Authors: see git history
  *   Tavmjong Bah
@@ -68,7 +68,7 @@ private:
 /* ============ MULTIPANE ============ */
 
 /*
- * A widget with multiple panes. Agnotic to type what kind of widgets panes contain.
+ * A widget with multiple panes. Agnostic to type what kind of widgets panes contain.
  * Handles allow a user to resize children widgets. Drop zones allow adding widgets
  * at either end.
  */

@@ -31,8 +31,6 @@ class DialogContainer;
  * A widget that wraps a Gtk::Notebook with dialogs as pages.
  *
  * A notebook is fixed to a specific DialogContainer which manages the dialogs inside the notebook.
- *
- * The notebook is inside a Gtk::Expander to be able to be hidden easily.
  */
 class DialogNotebook : public Gtk::ScrolledWindow
 {
