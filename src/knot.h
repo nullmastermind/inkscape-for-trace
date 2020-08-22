@@ -17,13 +17,14 @@
 
 #include <2geom/point.h>
 #include <sigc++/sigc++.h>
+#include <glibmm/ustring.h>
 
 #include "knot-enums.h"
+#include "display/control/canvas-item-enums.h"
 #include "enums.h"
 
 class SPDesktop;
 class SPItem;
-struct SPCanvasItem;
 
 typedef struct _GdkCursor GdkCursor;
 typedef union _GdkEvent GdkEvent;
@@ -32,16 +33,22 @@ typedef unsigned int guint32;
 #define SP_KNOT(obj) (dynamic_cast<SPKnot*>(static_cast<SPKnot*>(obj)))
 #define SP_IS_KNOT(obj) (dynamic_cast<const SPKnot*>(static_cast<const SPKnot*>(obj)) != NULL)
 
+namespace Inkscape {
+class CanvasItemCtrl;
+}
 
 /**
  * Desktop-bound visual control object.
  *
  * A knot is a draggable object, with callbacks to change something by
  * dragging it, visuably represented by a canvas item (mostly square).
+ *
+ * See also KnotHolderEntity.
+ * See also ControlPoint (which does the same kind of things).
  */
 class SPKnot {
 public:
-    SPKnot(SPDesktop *desktop, char const *tip);
+    SPKnot(SPDesktop *desktop, char const *tip, Inkscape::CanvasItemCtrlType type, Glib::ustring const & name = Glib::ustring("unknown"));
     virtual ~SPKnot();
 
     SPKnot(SPKnot const&) = delete;
@@ -50,12 +57,12 @@ public:
     int ref_count; // FIXME encapsulation
 
     SPDesktop *desktop  = nullptr;                  /**< Desktop we are on. */
-    SPCanvasItem *item  = nullptr;                  /**< Our CanvasItem. */
+    Inkscape::CanvasItemCtrl *ctrl = nullptr;       /**< Our CanvasItemCtrl. */
     SPItem *owner       = nullptr;                  /**< Optional Owner Item */
     SPItem *sub_owner   = nullptr;                  /**< Optional SubOwner Item */
     unsigned int flags  = SP_KNOT_VISIBLE;
 
-    unsigned int size   = 8;                        /**< Always square. */
+    unsigned int size   = 9;                        /**< Always square. Must be odd. */
     double angle        = 0.0;                      /**< Angle of mesh handle. */
     Geom::Point pos;                                /**< Our desktop coordinates. */
     Geom::Point grabbed_rel_pos;                    /**< Grabbed relative position. */
@@ -70,8 +77,8 @@ public:
     bool within_tolerance = false;
     bool transform_escaped = false; // true iff resize or rotate was cancelled by esc.
 
-    SPKnotShapeType shape = SP_KNOT_SHAPE_SQUARE;   /**< Shape type. */
-    SPKnotModeType mode = SP_KNOT_MODE_XOR;
+    Inkscape::CanvasItemCtrlShape shape = Inkscape::CANVAS_ITEM_CTRL_SHAPE_SQUARE;   /**< Shape type. */
+    Inkscape::CanvasItemCtrlMode mode = Inkscape::CANVAS_ITEM_CTRL_MODE_XOR;
 
     guint32 fill[SP_KNOT_VISIBLE_STATES];
     guint32 stroke[SP_KNOT_VISIBLE_STATES];
@@ -84,7 +91,7 @@ public:
 
     char *tip               = nullptr;
 
-    unsigned long _event_handler_id = 0;
+    sigc::connection _event_connection;
 
     double pressure         = 0.0;    /**< The tablet pen pressure when the knot is being dragged. */
 
@@ -103,9 +110,9 @@ public:
 
     //TODO: all the members above should eventualle become private, accessible via setters/getters
     void setSize(unsigned int i);
-    void setShape(unsigned int i);
+    void setShape(Inkscape::CanvasItemCtrlShape s);
     void setAnchor(unsigned int i);
-    void setMode(unsigned int i);
+    void setMode(Inkscape::CanvasItemCtrlMode m);
     void setPixbuf(void* p);
     void setAngle(double i);
 
@@ -163,6 +170,11 @@ public:
      * Returns position of knot.
      */
     Geom::Point position() const;
+
+    /**
+     * Event handler (from CanvasItem's).
+     */
+    bool eventHandler(GdkEvent *event);
 
 private:
     /**

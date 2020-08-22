@@ -44,6 +44,7 @@ class SPStop;
 
 namespace Inkscape {
 class Selection;
+class CanvasItemCurve;
 } // namespace Inkscape
 
 /**
@@ -126,7 +127,6 @@ struct GrDragger {
 protected:
     void updateControlSizesOverload(SPKnot * knot);
     void updateControlSizes();
-    sigc::connection sizeUpdatedConn;
 
 private:
     sigc::connection _moved_connection;
@@ -136,7 +136,7 @@ private:
     sigc::connection _ungrabbed_connection;
 };
 
-struct SPCtrlLine;
+
 /**
 This is the root class of the gradient dragging machinery. It holds lists of GrDraggers
 and of lines (simple canvas items). It also remembers one of the draggers as selected.
@@ -195,7 +195,7 @@ public: // FIXME: make more of this private!
     std::vector<double> vert_levels;
 
     std::vector<GrDragger *> draggers;
-    std::vector<SPCtrlLine *> lines;
+    std::vector<Inkscape::CanvasItemCurve *> item_curves;
 
     void updateDraggers();
     void refreshDraggers();

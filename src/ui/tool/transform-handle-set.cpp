@@ -23,7 +23,7 @@
 #include "seltrans.h"
 #include "snap.h"
 
-#include "display/sodipodi-ctrlrect.h"
+#include "display/control/canvas-item-rect.h"
 
 #include "object/sp-namedview.h"
 
@@ -90,11 +90,9 @@ ControlPoint::ColorSet TransformHandle::thandle_cset = {
     {0x00ff6600, 0x000000ff}
 };
 
-TransformHandle::TransformHandle(TransformHandleSet &th, SPAnchorType anchor, Glib::RefPtr<Gdk::Pixbuf> pb) :
-    ControlPoint(th._desktop, Geom::Point(), anchor,
-                 pb,
-                 thandle_cset, th._transform_handle_group),
-    _th(th)
+TransformHandle::TransformHandle(TransformHandleSet &th, SPAnchorType anchor, Glib::RefPtr<Gdk::Pixbuf> pb)
+    : ControlPoint(th._desktop, Geom::Point(), anchor, pb, thandle_cset, th._transform_handle_group)
+    , _th(th)
 {
     setVisible(false);
 }
@@ -695,7 +693,7 @@ ControlPoint::ColorSet RotationCenter::_center_cset = {
 };
 
 
-TransformHandleSet::TransformHandleSet(SPDesktop *d, SPCanvasGroup *th_group)
+TransformHandleSet::TransformHandleSet(SPDesktop *d, Inkscape::CanvasItemGroup *th_group)
     : Manipulator(d)
     , _active(nullptr)
     , _transform_handle_group(th_group)
@@ -703,10 +701,10 @@ TransformHandleSet::TransformHandleSet(SPDesktop *d, SPCanvasGroup *th_group)
     , _in_transform(false)
     , _visible(true)
 {
-    _trans_outline = static_cast<CtrlRect*>(sp_canvas_item_new(_desktop->getControls(),
-        SP_TYPE_CTRLRECT, nullptr));
-    sp_canvas_item_hide(_trans_outline);
-    _trans_outline->setDashed(true);
+    _trans_outline = new Inkscape::CanvasItemRect(_desktop->getCanvasControls());
+    _trans_outline->set_name("CanvasItemRect:Transform");
+    _trans_outline->hide();
+    _trans_outline->set_dashed(true);
 
     bool y_inverted = !d->is_yaxisdown();
     for (unsigned i = 0; i < 4; ++i) {
@@ -761,7 +759,7 @@ void TransformHandleSet::setVisible(bool v)
 void TransformHandleSet::setBounds(Geom::Rect const &r, bool preserve_center)
 {
     if (_in_transform) {
-        _trans_outline->setRectangle(r);
+        _trans_outline->set_rect(r);
     } else {
         for (unsigned i = 0; i < 4; ++i) {
             _scale_corners[i]->move(r.corner(i));
@@ -793,13 +791,13 @@ void TransformHandleSet::_setActiveHandle(ControlPoint *th)
     _in_transform = true;
     // hide all handles except the active one
     _updateVisibility(false);
-    sp_canvas_item_show(_trans_outline);
+    _trans_outline->show();
 }
 
 void TransformHandleSet::_clearActiveHandle()
 {
     // This can only be called from handles, so they had to be visible before _setActiveHandle
-    sp_canvas_item_hide(_trans_outline);
+    _trans_outline->hide();
     _active = nullptr;
     _in_transform = false;
     _updateVisibility(_visible);

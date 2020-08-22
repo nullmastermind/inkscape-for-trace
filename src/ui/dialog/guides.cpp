@@ -29,8 +29,6 @@
 #include "object/sp-guide.h"
 #include "object/sp-namedview.h"
 
-#include "display/guideline.h"
-
 #include "ui/dialog-events.h"
 #include "ui/tools/tool-base.h"
 #include "ui/widget/spinbutton.h"

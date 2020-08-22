@@ -34,8 +34,8 @@
 #include "selection.h"
 #include "sp-cursor.h"
 
-#include "display/sp-canvas-group.h"
-#include "display/canvas-rotate.h"
+#include "display/control/canvas-item-catchall.h" // Grab/Ungrab
+#include "display/control/canvas-item-rotate.h"
 
 #include "include/gtkmm_version.h"
 
@@ -337,7 +337,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
     case GDK_2BUTTON_PRESS:
         if (panning) {
             panning = 0;
-            sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
+            ungrabCanvasEvents();
             ret = TRUE;
         } else {
             /* sp_desktop_dialog(); */
@@ -361,11 +361,9 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 }
                 panning = 1;
 
-                sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
-                        GDK_KEY_RELEASE_MASK | GDK_BUTTON_RELEASE_MASK
-                                | GDK_POINTER_MOTION_MASK
-                                | GDK_POINTER_MOTION_HINT_MASK, nullptr,
-                        event->button.time - 1);
+                grabCanvasEvents(Gdk::KEY_RELEASE_MASK    |
+                                 Gdk::BUTTON_RELEASE_MASK |
+                                 Gdk::POINTER_MOTION_MASK );
 
                 ret = TRUE;
             }
@@ -376,16 +374,17 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 // On screen canvas rotation preview
 
                 // Grab background before doing anything else
-                sp_canvas_rotate_start (SP_CANVAS_ROTATE(desktop->canvas_rotate),
-                                        desktop->canvas->get_backing_store()->cobj());
-                sp_canvas_item_ungrab (desktop->acetate);
-                sp_canvas_item_show (desktop->canvas_rotate);
-                sp_canvas_item_grab (desktop->canvas_rotate,
-                                     GDK_KEY_PRESS_MASK    | GDK_KEY_RELEASE_MASK    |
-                                     GDK_BUTTON_RELEASE_MASK |
-                                     GDK_POINTER_MOTION_MASK,
-                                     nullptr, event->button.time );
-                // sp_canvas_item_hide (desktop->drawing);
+                desktop->getCanvasRotate()->start(desktop);
+                desktop->getCanvasRotate()->show();
+
+                // CanvasItemRotate code takes over!
+                ungrabCanvasEvents();
+
+                desktop->getCanvasRotate()->grab(Gdk::KEY_PRESS_MASK      |
+                                                 Gdk::KEY_RELEASE_MASK    |
+                                                 Gdk::BUTTON_RELEASE_MASK |
+                                                 Gdk::POINTER_MOTION_MASK,
+                                                 nullptr);  // Cursor is null.
 
             } else if (event->button.state & GDK_SHIFT_MASK) {
                 zoom_rb = 2;
@@ -396,11 +395,8 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 }
                 panning = 2;
 
-                sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
-                                    GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK |
-                                    GDK_POINTER_MOTION_HINT_MASK,
-                                    nullptr, event->button.time - 1);
-
+                grabCanvasEvents(Gdk::BUTTON_RELEASE_MASK |
+                                 Gdk::POINTER_MOTION_MASK );
             }
 
             ret = TRUE;
@@ -414,11 +410,8 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 }
                 panning = 3;
 
-                sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
-                        GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK
-                                | GDK_POINTER_MOTION_HINT_MASK, nullptr,
-                        event->button.time);
-
+                grabCanvasEvents(Gdk::BUTTON_RELEASE_MASK |
+                                 Gdk::POINTER_MOTION_MASK );
                 ret = TRUE;
             } else {
                 sp_event_root_menu_popup(desktop, nullptr, event);
@@ -438,11 +431,9 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 yp = event->motion.y;
                 button_w = Geom::Point(event->motion.x, event->motion.y);
 
-                sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
-                        GDK_KEY_RELEASE_MASK | GDK_BUTTON_RELEASE_MASK
-                                | GDK_POINTER_MOTION_MASK
-                                | GDK_POINTER_MOTION_HINT_MASK, nullptr,
-                        event->motion.time - 1);
+                grabCanvasEvents(Gdk::KEY_RELEASE_MASK    |
+                                 Gdk::BUTTON_RELEASE_MASK |
+                                 Gdk::POINTER_MOTION_MASK );
             }
 
             if ((panning == 2 && !(event->motion.state & GDK_BUTTON2_MASK))
@@ -450,7 +441,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                     || (panning == 3 && !(event->motion.state & GDK_BUTTON3_MASK))) {
                 /* Gdk seems to lose button release for us sometimes :-( */
                 panning = 0;
-                sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
+                ungrabCanvasEvents();
                 ret = TRUE;
             } else {
                 // To fix https://bugs.launchpad.net/inkscape/+bug/1458200
@@ -524,7 +515,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
             if (panning) {
                 panning = 0;
-                sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
+                ungrabCanvasEvents();
             }
 
             Geom::Point const event_w(event->button.x, event->button.y);
@@ -540,7 +531,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
             ret = TRUE;
         } else if (panning == event->button.button) {
             panning = 0;
-            sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
+            ungrabCanvasEvents();
 
             // in slow complex drawings, some of the motion events are lost;
             // to make up for this, we scroll it once again to the button-up event coordinates
@@ -710,7 +701,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
             panning = 0;
             xp = yp = 0;
 
-            sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
+            ungrabCanvasEvents();
 
             desktop->updateNow();
         }
@@ -1039,6 +1030,24 @@ bool ToolBase::deleteSelectedDrag(bool just_one) {
 
     return FALSE;
 }
+
+/**
+ * Grab events from the Canvas Catchall. (Common configuration.)
+ */
+void ToolBase::grabCanvasEvents(Gdk::EventMask mask)
+{
+    desktop->getCanvasCatchall()->grab(mask, nullptr);  // Cursor is null.
+}
+
+/**
+ * Ungrab events from the Canvas Catchall. (Common configuration.)
+ */
+void ToolBase::ungrabCanvasEvents()
+{
+    desktop->getCanvasCatchall()->ungrab();
+}
+
+
 
 /** Enable (or disable) high precision for motion events
   *
@@ -1546,12 +1555,10 @@ gboolean sp_event_context_snap_watchdog_callback(gpointer data) {
     }
         break;
     case DelayedSnapEvent::GUIDE_HANDLER: {
-        gpointer item = dse->getItem();
-        gpointer item2 = dse->getItem2();
+        auto item  = static_cast<CanvasItemGuideLine *>(dse->getItem());
+        auto item2 = static_cast<SPGuide *>(dse->getItem2());
         if (item && item2) {
-            g_assert(SP_IS_CANVAS_ITEM(item));
-            g_assert(SP_IS_GUIDE(item2));
-            sp_dt_guide_event(SP_CANVAS_ITEM(item), dse->getEvent(), item2);
+            sp_dt_guide_event(dse->getEvent(), item, item2);
         }
     }
         break;

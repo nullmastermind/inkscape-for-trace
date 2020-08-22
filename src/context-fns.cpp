@@ -16,7 +16,7 @@
 #include "message-stack.h"
 #include "snap.h"
 
-#include "display/snap-indicator.h"
+#include "display/control/snap-indicator.h"
 
 #include "object/sp-namedview.h"
 

@@ -23,14 +23,10 @@ PointParam::PointParam( const Glib::ustring& label, const Glib::ustring& tip,
                         const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
                         Effect* effect, const gchar *htip, Geom::Point default_value,
                         bool live_update )
-    :   Parameter(label, tip, key, wr, effect), 
-        defvalue(default_value),
-        liveupdate(live_update),
-        _knot_entity(nullptr)
+    : Parameter(label, tip, key, wr, effect)
+    , defvalue(default_value)
+    , liveupdate(live_update)
 {
-    knot_shape = SP_KNOT_SHAPE_DIAMOND;
-    knot_mode  = SP_KNOT_MODE_XOR;
-    knot_color = 0xffffff00;
     handle_tip = g_strdup(htip);
 }
 
@@ -175,7 +171,9 @@ bool PointParam::on_button_release(GdkEventButton* button_event) {
 }
 
 void
-PointParam::set_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color)
+PointParam::set_oncanvas_looks(Inkscape::CanvasItemCtrlShape shape,
+                               Inkscape::CanvasItemCtrlMode mode,
+                               guint32 color)
 {
     knot_shape = shape;
     knot_mode  = mode;
@@ -247,8 +245,8 @@ PointParam::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
 {
     _knot_entity = new PointParamKnotHolderEntity(this);
     // TODO: can we ditch handleTip() etc. because we have access to handle_tip etc. itself???
-    _knot_entity->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_LPE, handleTip(), knot_shape, knot_mode,
-                         knot_color);
+    _knot_entity->create(nullptr, item, knotholder, Inkscape::CANVAS_ITEM_CTRL_TYPE_LPE, "LPE:Point",
+                         handleTip(), knot_color);
     knotholder->add(_knot_entity);
 }
 

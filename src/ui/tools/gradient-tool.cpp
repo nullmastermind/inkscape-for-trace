@@ -33,7 +33,7 @@
 #include "object/sp-namedview.h"
 #include "object/sp-stop.h"
 
-#include "display/sp-ctrlline.h"
+#include "display/control/canvas-item-curve.h"
 
 #include "ui/pixmaps/cursor-gradient-add.xpm"
 #include "ui/pixmaps/cursor-gradient.xpm"
@@ -193,26 +193,21 @@ sp_gradient_context_select_prev (ToolBase *event_context)
     event_context->getDesktop()->scroll_to_point(d->point, 1.0);
 }
 
-static bool
-sp_gradient_context_is_over_line (GradientTool *rc, SPItem *item, Geom::Point event_p)
+static SPItem*
+sp_gradient_context_is_over_curve (GradientTool *rc, Geom::Point event_p)
 {
     const SPDesktop *desktop = rc->getDesktop();
 
-    //Translate mouse point into proper coord system
+    //Translate mouse point into proper coord system: needed later.
     rc->mousepoint_doc = desktop->w2d(event_p);
 
-    if (SP_IS_CTRLLINE(item)) {
-        SPCtrlLine* line = SP_CTRLLINE(item);
-
-        Geom::LineSegment ls(line->s, line->e);
-        Geom::Point nearest = ls.pointAt(ls.nearestTime(rc->mousepoint_doc));
-        double dist_screen = Geom::L2 (rc->mousepoint_doc - nearest) * desktop->current_zoom();
-
-        bool close = (dist_screen < rc->tolerance);
-
-        return close;
+    GrDrag *drag = rc->_grdrag;
+    for (auto curve : drag->item_curves) {
+        if (curve->contains(event_p, rc->tolerance)) {
+            return curve->get_item();
+        }
     }
-    return false;
+    return nullptr;
 }
 
 static std::vector<Geom::Point>
@@ -460,9 +455,9 @@ bool GradientTool::root_handler(GdkEvent* event) {
     static bool dragging;
 
     Inkscape::Selection *selection = desktop->getSelection();
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
-    this->tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
 
     GrDrag *drag = this->_grdrag;
     g_assert (drag);
@@ -472,20 +467,12 @@ bool GradientTool::root_handler(GdkEvent* event) {
     switch (event->type) {
     case GDK_2BUTTON_PRESS:
         if ( event->button.button == 1 ) {
-            bool over_line = false;
-            SPCtrlLine *line = nullptr;
 
-            if (!drag->lines.empty()) {
-                for (std::vector<SPCtrlLine *>::const_iterator l = drag->lines.begin(); l != drag->lines.end() && (!over_line); ++l) {
-                    line = *l;
-                    over_line |= sp_gradient_context_is_over_line (this, (SPItem*) line, Geom::Point(event->motion.x, event->motion.y));
-                }
-            }
-
-            if (over_line) {
+            SPItem* item = sp_gradient_context_is_over_curve(this, Geom::Point(event->motion.x, event->motion.y));
+            if (item) {
                 // we take the first item in selection, because with doubleclick, the first click
                 // always resets selection to the single object under cursor
-                sp_gradient_context_add_stop_near_point(this, SP_ITEM(selection->items().front()), this->mousepoint_doc, event->button.time);
+                sp_gradient_context_add_stop_near_point(this, SP_ITEM(selection->items().front()), mousepoint_doc, event->button.time);
             } else {
             	auto items= selection->items();
                 for (auto i = items.begin();i!=items.end();++i) {
@@ -579,19 +566,13 @@ bool GradientTool::root_handler(GdkEvent* event) {
                 m.unSetup();
             }
 
-            bool over_line = false;
+            SPItem *item = sp_gradient_context_is_over_curve(this, Geom::Point(event->motion.x, event->motion.y));
 
-            if (!drag->lines.empty()) {
-                for (auto line : drag->lines) {
-                    over_line |= sp_gradient_context_is_over_line (this, (SPItem*) line, Geom::Point(event->motion.x, event->motion.y));
-                }
-            }
-
-            if (this->cursor_addnode && !over_line) {
+            if (this->cursor_addnode && !item) {
                 this->cursor_shape = cursor_gradient_xpm;
                 this->sp_event_context_update_cursor();
                 this->cursor_addnode = false;
-            } else if (!this->cursor_addnode && over_line) {
+            } else if (!this->cursor_addnode && item) {
                 this->cursor_shape = cursor_gradient_add_xpm;
                 this->sp_event_context_update_cursor();
                 this->cursor_addnode = true;
@@ -603,19 +584,12 @@ bool GradientTool::root_handler(GdkEvent* event) {
         this->xp = this->yp = 0;
 
         if ( event->button.button == 1 && !this->space_panning ) {
-            bool over_line = false;
-            SPCtrlLine *line = nullptr;
 
-            if (!drag->lines.empty()) {
-                for (std::vector<SPCtrlLine *>::const_iterator l = drag->lines.begin(); l != drag->lines.end() && (!over_line); ++l) {
-                    line = *l;
-                    over_line = sp_gradient_context_is_over_line (this, (SPItem*) line, Geom::Point(event->motion.x, event->motion.y));
-                }
-            }
+            SPItem *item = sp_gradient_context_is_over_curve(this, Geom::Point(event->motion.x, event->motion.y));
 
             if ( (event->button.state & GDK_CONTROL_MASK) && (event->button.state & GDK_MOD1_MASK ) ) {
-                if (over_line && line) {
-                    sp_gradient_context_add_stop_near_point(this, line->item, this->mousepoint_doc, 0);
+                if (item) {
+                    sp_gradient_context_add_stop_near_point(this, item, this->mousepoint_doc, 0);
                     ret = TRUE;
                 }
             } else {
@@ -640,7 +614,7 @@ bool GradientTool::root_handler(GdkEvent* event) {
                         }
                     }
                 } else if (this->item_to_select) {
-                    if (over_line && line) {
+                    if (item) {
                         // Clicked on an existing gradient line, don't change selection. This stops
                         // possible change in selection during a double click with overlapping objects
                     } else {

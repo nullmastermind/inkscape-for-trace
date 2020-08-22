@@ -1022,6 +1022,24 @@ ink_cairo_surface_copy(cairo_surface_t *s)
 }
 
 /**
+ * Create an exact copy of an image surface.
+ */
+Cairo::RefPtr<Cairo::ImageSurface>
+ink_cairo_surface_copy(Cairo::RefPtr<Cairo::ImageSurface> surface )
+{
+    int width  = surface->get_width();
+    int height = surface->get_height();
+    int stride = surface->get_stride();
+    auto new_surface = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32, width, height); // device scale?
+
+    surface->flush();
+    memcpy(new_surface->get_data(), surface->get_data(), stride * height);
+    new_surface->mark_dirty(); // Clear caches. Mandatory after messing directly with contents.
+
+    return new_surface;
+}
+
+/**
  * Create a surface that differs only in pixel content.
  * Creates a surface that has the same type, content type and dimensions
  * as the specified surface. Pixel contents are not copied.

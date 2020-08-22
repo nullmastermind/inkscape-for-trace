@@ -26,10 +26,11 @@
 
 typedef struct _GtkIMContext GtkIMContext;
 
-struct SPCtrlLine;
-
 namespace Inkscape {
 
+class CanvasItemCurve; // Cursor
+class CanvasItemQuad;  // Highlighted text
+class CanvasItemRect;  // Indicator, Frame
 class Selection;
 
 namespace UI {
@@ -37,17 +38,18 @@ namespace Tools {
 
 class TextTool : public ToolBase {
 public:
-	TextTool();
-	~TextTool() override;
+
+    TextTool();
+    ~TextTool() override;
 
     sigc::connection sel_changed_connection;
     sigc::connection sel_modified_connection;
     sigc::connection style_set_connection;
     sigc::connection style_query_connection;
 
-    GtkIMContext *imc;
+    GtkIMContext *imc = nullptr;
 
-    SPItem *text; // the text we're editing, or NULL if none selected
+    SPItem *text = nullptr; // the text we're editing, or NULL if none selected
 
     /* Text item position in root coordinates */
     Geom::Point pdoc;
@@ -56,36 +58,39 @@ public:
     Inkscape::Text::Layout::iterator text_sel_end;
 
     gchar uni[9];
-    bool unimode;
-    guint unipos;
+    bool unimode = false;
+    guint unipos = 0;
 
-    SPCtrlLine *cursor;
-    SPCanvasItem *indicator;
-    SPCanvasItem *frame; // hiliting the first frame of flowtext; FIXME: make this a list to accommodate arbitrarily many chained shapes
-    std::vector<SPCanvasItem*> text_selection_quads;
-    gint timeout;
-    bool show;
-    bool phase;
-    bool nascent_object; // true if we're clicked on canvas to put cursor, but no text typed yet so ->text is still NULL
+    // ---- On canvas editing ---
+    Inkscape::CanvasItemCurve *cursor = nullptr;
+    Inkscape::CanvasItemRect *indicator = nullptr;
+    Inkscape::CanvasItemRect *frame = nullptr; // Highlighting the first frame of flowtext. FIXME: Make this
+                                               // a list to accommodate arbitrarily many chained shapes
+    std::vector<CanvasItemQuad*> text_selection_quads;
 
-    bool over_text; // true if cursor is over a text object
+    gint timeout = 0;
+    bool show = false;
+    bool phase = false;
+    bool nascent_object = false; // true if we're clicked on canvas to put cursor,
+                                 // but no text typed yet so ->text is still NULL
 
-    guint dragging : 2; // dragging selection over text
-    bool creating; // dragging rubberband to create flowtext
-    SPCanvasItem *grabbed; // we grab while we are creating, to get events even if the mouse goes out of the window
-    Geom::Point p0; // initial point if the flowtext rect
+    bool over_text = false; // true if cursor is over a text object
+
+    guint dragging = 0;     // dragging selection over text
+    bool creating = false;  // dragging rubberband to create flowtext
+    Geom::Point p0;         // initial point if the flowtext rect
 
     /* Preedit String */
-    gchar* preedit_string;
+    gchar* preedit_string = nullptr;
 
-	static const std::string prefsPath;
+    static const std::string prefsPath;
 
-	void setup() override;
-	void finish() override;
-	bool root_handler(GdkEvent* event) override;
-	bool item_handler(SPItem* item, GdkEvent* event) override;
+    void setup() override;
+    void finish() override;
+    bool root_handler(GdkEvent* event) override;
+    bool item_handler(SPItem* item, GdkEvent* event) override;
 
-	const std::string& getPrefsPath() override;
+    const std::string& getPrefsPath() override;
 
 private:
     void _selectionChanged(Inkscape::Selection *selection);
@@ -109,3 +114,14 @@ Inkscape::Text::Layout::iterator *sp_text_context_get_cursor_position(TextTool *
 }
 
 #endif
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :

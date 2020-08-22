@@ -20,11 +20,15 @@
 #include "knot.h"
 #include "selection.h"
 
+#include "display/control/canvas-item-enums.h"
+
 #include "object/persp3d.h"
 
-#include "ui/control-manager.h" // TODO break enums out separately
-
 class SPBox3D;
+
+namespace Inkscape {
+class CanvasItemCurve;
+}
 
 namespace Box3D {
 
@@ -164,7 +168,7 @@ public:
 
     SPDocument *document;
     std::vector<VPDragger *> draggers;
-    std::vector<SPCtrlLine *> lines;
+    std::vector<Inkscape::CanvasItemCurve *> item_curves;
 
     void printDraggers(); // convenience for debugging
     /*
@@ -196,9 +200,9 @@ private:
     //void deselect_all();
 
     /**
-     * Create a line from p1 to p2 and add it to the lines list.
+     * Create a line from p1 to p2 and add it to the item_curves list.
      */
-    void addLine(Geom::Point const &p1, Geom::Point const &p2, Inkscape::CtrlLineType type);
+    void addCurve(Geom::Point const &p1, Geom::Point const &p2, Inkscape::CanvasItemColor color);
 
     Inkscape::Selection *selection;
     sigc::connection sel_changed_connection;

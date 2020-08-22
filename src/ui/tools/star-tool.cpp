@@ -21,6 +21,8 @@
 #include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
 
+#include "star-tool.h"
+
 #include "context-fns.h"
 #include "desktop-style.h"
 #include "desktop.h"
@@ -30,8 +32,6 @@
 #include "selection.h"
 #include "verbs.h"
 
-#include "display/sp-canvas-item.h"
-
 #include "include/macros.h"
 
 #include "object/sp-namedview.h"
@@ -40,7 +40,6 @@
 #include "ui/pixmaps/cursor-star.xpm"
 
 #include "ui/shape-editor.h"
-#include "ui/tools/star-tool.h"
 
 #include "xml/node-event-vector.h"
 
@@ -68,7 +67,7 @@ StarTool::StarTool()
 }
 
 void StarTool::finish() {
-    sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
+    ungrabCanvasEvents();
 
     this->finishItem();
     this->sel_changed_connection.disconnect();
@@ -175,12 +174,7 @@ bool StarTool::root_handler(GdkEvent* event) {
             m.freeSnapReturnByRef(this->center, Inkscape::SNAPSOURCE_NODE_HANDLE);
             m.unSetup();
 
-            sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
-                                GDK_KEY_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-                                GDK_POINTER_MOTION_MASK |
-                                GDK_POINTER_MOTION_HINT_MASK |
-                                GDK_BUTTON_PRESS_MASK,
-                                nullptr, event->button.time);
+            grabCanvasEvents();
             ret = TRUE;
         }
         break;
@@ -241,7 +235,7 @@ bool StarTool::root_handler(GdkEvent* event) {
 
             this->item_to_select = nullptr;
             ret = TRUE;
-            sp_canvas_item_ungrab(SP_CANVAS_ITEM (desktop->acetate));
+            ungrabCanvasEvents();
         }
         break;
 
@@ -280,7 +274,7 @@ bool StarTool::root_handler(GdkEvent* event) {
 
         case GDK_KEY_space:
             if (dragging) {
-                sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
+                ungrabCanvasEvents();
 
                 dragging = false;
 
@@ -427,7 +421,7 @@ void StarTool::finishItem() {
 
 void StarTool::cancel() {
     desktop->getSelection()->clear();
-    sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
+    ungrabCanvasEvents();
 
     if (this->star != nullptr) {
         this->star->deleteObject();

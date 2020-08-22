@@ -44,7 +44,7 @@ public:
 	bool cycling_wrap;
 
 	SPItem *item;
-	SPCanvasItem *grabbed;
+        Inkscape::CanvasItem *grabbed = nullptr;
 	Inkscape::SelTrans *_seltrans;
 	Inkscape::SelectionDescriber *_describer;
 

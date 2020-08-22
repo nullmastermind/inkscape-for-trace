@@ -15,6 +15,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <iomanip>
+
 #include <glibmm/i18n.h>
 #include <gtk/gtk.h>
 
@@ -27,8 +29,8 @@
 #include "selection.h"
 
 #include "display/curve.h"
-#include "display/canvas-bpath.h"
-#include "display/canvas-text.h"
+#include "display/control/canvas-item-rect.h"
+#include "display/control/canvas-item-text.h"
 
 #include "object/sp-path.h"
 
@@ -57,9 +59,7 @@ SubtoolEntry lpesubtools[] = {
     {Inkscape::LivePathEffect::MIRROR_SYMMETRY, "draw-geometry-mirror"}
 };
 
-namespace Inkscape {
-namespace UI {
-namespace Tools {
+namespace Inkscape::UI::Tools {
 
 void sp_lpetool_context_selection_changed(Inkscape::Selection *selection, gpointer data);
 
@@ -71,26 +71,19 @@ const std::string LpeTool::prefsPath = "/tools/lpetool";
 
 LpeTool::LpeTool()
     : PenTool(cursor_crosshairs_xpm)
-    , shape_editor(nullptr)
-    , canvas_bbox(nullptr)
     , mode(Inkscape::LivePathEffect::BEND_PATH)
-// TODO: pointer?
-    , measuring_items(new std::map<SPPath *, SPCanvasItem*>)
 {
 }
 
 LpeTool::~LpeTool() {
     delete this->shape_editor;
-    this->shape_editor = nullptr;
 
-    if (this->canvas_bbox) {
-        sp_canvas_item_destroy(SP_CANVAS_ITEM(this->canvas_bbox));
-        this->canvas_bbox = nullptr;
+    if (canvas_bbox) {
+        delete canvas_bbox;
     }
 
     lpetool_delete_measuring_items(this);
-    delete this->measuring_items;
-    this->measuring_items = nullptr;
+    measuring_items.clear();
 
     this->sel_changed_connection.disconnect();
 }
@@ -346,7 +339,7 @@ void
 lpetool_context_reset_limiting_bbox(LpeTool *lc)
 {
     if (lc->canvas_bbox) {
-        sp_canvas_item_destroy(lc->canvas_bbox);
+        delete lc->canvas_bbox;
         lc->canvas_bbox = nullptr;
     }
 
@@ -363,14 +356,13 @@ lpetool_context_reset_limiting_bbox(LpeTool *lc)
     B *= doc2dt;
 
     Geom::Rect rect(A, B);
-    auto curve = SPCurve::new_from_rect(rect);
-
-    lc->canvas_bbox = sp_canvas_bpath_new(lc->getDesktop()->getControls(), curve.get());
-    sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(lc->canvas_bbox), 0x0000ffff, 0.8, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT, 5, 5);
+    lc->canvas_bbox = new Inkscape::CanvasItemRect(lc->getDesktop()->getCanvasControls(), rect);
+    lc->canvas_bbox->set_stroke(0x0000ffff);
+    lc->canvas_bbox->set_dashed(true);
 }
 
 static void
-set_pos_and_anchor(SPCanvasText *canvas_text, const Geom::Piecewise<Geom::D2<Geom::SBasis> > &pwd2,
+set_pos_and_anchor(Inkscape::CanvasItemText *canvas_text, const Geom::Piecewise<Geom::D2<Geom::SBasis> > &pwd2,
                    const double t, const double length, bool /*use_curvature*/ = false)
 {
     using namespace Geom;
@@ -382,8 +374,8 @@ set_pos_and_anchor(SPCanvasText *canvas_text, const Geom::Piecewise<Geom::D2<Geo
     Point n = -rot90(dir);
     double angle = Geom::angle_between(dir, Point(1,0));
 
-    sp_canvastext_set_coords(canvas_text, pos + n * length);
-    sp_canvastext_set_anchor_manually(canvas_text, std::sin(angle), -std::cos(angle));
+    canvas_text->set_coord(pos + n * length);
+    canvas_text->set_anchor(Geom::Point(std::sin(angle), -std::cos(angle)));
 }
 
 void
@@ -395,35 +387,37 @@ lpetool_create_measuring_items(LpeTool *lc, Inkscape::Selection *selection)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool show = prefs->getBool("/tools/lpetool/show_measuring_info",  true);
 
-    SPPath *path;
-    SPCanvasText *canvas_text;
-    SPCanvasGroup *tmpgrp = lc->getDesktop()->getTempGroup();
-    gchar *arc_length;
-    double lengthval;
+    Inkscape::CanvasItemText *canvas_text;
+    Inkscape::CanvasItemGroup *tmpgrp = lc->getDesktop()->getCanvasTemp();
+
+    Inkscape::Util::Unit const * unit = nullptr;
+    if (prefs->getString("/tools/lpetool/unit").compare("")) {
+        unit = unit_table.getUnit(prefs->getString("/tools/lpetool/unit"));
+    } else {
+        unit = unit_table.getUnit("px");
+    }
+
     auto items= selection->items();
-    for(auto i=items.begin();i!=items.end();++i){
-        if (SP_IS_PATH(*i)) {
-            path = SP_PATH(*i);
+    for (auto i : items) {
+        SPPath *path = dynamic_cast<SPPath *>(i);
+        if (path) {
             SPCurve const *curve = path->curve();
             Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = paths_to_pw(curve->get_pathvector());
-            canvas_text = (SPCanvasText *) sp_canvastext_new(tmpgrp, lc->getDesktop(), Geom::Point(0,0), "");
-            if (!show)
-                sp_canvas_item_hide(SP_CANVAS_ITEM(canvas_text));
 
-            Inkscape::Util::Unit const * unit = nullptr;
-            if (prefs->getString("/tools/lpetool/unit").compare("")) {
-                unit = unit_table.getUnit(prefs->getString("/tools/lpetool/unit"));
-            } else {
-                unit = unit_table.getUnit("px");
+            double lengthval = Geom::length(pwd2);
+            lengthval = Inkscape::Util::Quantity::convert(lengthval, "px", unit);
+
+            Glib::ustring arc_length = Glib::ustring::format(std::setprecision(2), std::fixed, lengthval);
+            arc_length += " ";
+            arc_length += unit->abbr;
+
+            canvas_text = new Inkscape::CanvasItemText(tmpgrp, Geom::Point(0,0), arc_length);
+            set_pos_and_anchor(canvas_text, pwd2, 0.5, 10);
+            if (!show) {
+                canvas_text->hide();
             }
 
-            lengthval = Geom::length(pwd2);
-            lengthval = Inkscape::Util::Quantity::convert(lengthval, "px", unit);
-            arc_length = g_strdup_printf("%.2f %s", lengthval, unit->abbr.c_str());
-            sp_canvastext_set_text (canvas_text, arc_length);
-            set_pos_and_anchor(canvas_text, pwd2, 0.5, 10);
-            // TODO: must we free arc_length?
-            (*lc->measuring_items)[path] = SP_CANVAS_ITEM(canvas_text);
+            (lc->measuring_items)[path] = canvas_text;
         }
     }
 }
@@ -431,55 +425,53 @@ lpetool_create_measuring_items(LpeTool *lc, Inkscape::Selection *selection)
 void
 lpetool_delete_measuring_items(LpeTool *lc)
 {
-    std::map<SPPath *, SPCanvasItem*>::iterator i;
-    for (i = lc->measuring_items->begin(); i != lc->measuring_items->end(); ++i) {
-        sp_canvas_item_destroy(i->second);
+    for (auto& i : lc->measuring_items) {
+        delete i.second;
     }
-    lc->measuring_items->clear();
+    lc->measuring_items.clear();
 }
 
 void
 lpetool_update_measuring_items(LpeTool *lc)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    for ( std::map<SPPath *, SPCanvasItem*>::iterator i = lc->measuring_items->begin();
-          i != lc->measuring_items->end();
-          ++i )
-    {
-        SPPath *path = i->first;
+    Inkscape::Util::Unit const * unit = nullptr;
+    if (prefs->getString("/tools/lpetool/unit").compare("")) {
+        unit = unit_table.getUnit(prefs->getString("/tools/lpetool/unit"));
+    } else {
+        unit = unit_table.getUnit("px");
+    }
+
+    for (auto& i : lc->measuring_items) {
+
+        SPPath *path = i.first;
         SPCurve const *curve = path->curve();
         Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = Geom::paths_to_pw(curve->get_pathvector());
-        Inkscape::Util::Unit const * unit = nullptr;
-        if (prefs->getString("/tools/lpetool/unit").compare("")) {
-            unit = unit_table.getUnit(prefs->getString("/tools/lpetool/unit"));
-        } else {
-            unit = unit_table.getUnit("px");
-        }
         double lengthval = Geom::length(pwd2);
         lengthval = Inkscape::Util::Quantity::convert(lengthval, "px", unit);
-        gchar *arc_length = g_strdup_printf("%.2f %s", lengthval, unit->abbr.c_str());
-        sp_canvastext_set_text (SP_CANVASTEXT(i->second), arc_length);
-        set_pos_and_anchor(SP_CANVASTEXT(i->second), pwd2, 0.5, 10);
-        // TODO: must we free arc_length?
+
+        Glib::ustring arc_length = Glib::ustring::format(std::setprecision(2), std::fixed, lengthval);
+        arc_length += " ";
+        arc_length += unit->abbr;
+
+        i.second->set_text(arc_length);
+        set_pos_and_anchor(i.second, pwd2, 0.5, 10);
     }
 }
 
 void
 lpetool_show_measuring_info(LpeTool *lc, bool show)
 {
-    std::map<SPPath *, SPCanvasItem*>::iterator i;
-    for (i = lc->measuring_items->begin(); i != lc->measuring_items->end(); ++i) {
+    for (auto& i : lc->measuring_items) {
         if (show) {
-            sp_canvas_item_show(i->second);
+            i.second->show();
         } else {
-            sp_canvas_item_hide(i->second);
+            i.second->hide();
         }
     }
 }
 
-}
-}
-}
+} // namespace Inkscape::UI::Tools
 
 /*
   Local Variables:

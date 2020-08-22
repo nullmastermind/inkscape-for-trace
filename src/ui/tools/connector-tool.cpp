@@ -86,7 +86,8 @@
 #include "snap.h"
 #include "verbs.h"
 
-#include "display/canvas-bpath.h"
+#include "display/control/canvas-item-bpath.h"
+#include "display/control/canvas-item-ctrl.h"
 #include "display/curve.h"
 
 #include "3rdparty/adaptagrams/libavoid/router.h"
@@ -179,15 +180,7 @@ ConnectorTool::ConnectorTool()
     , sub_shref(nullptr)
     , ehref(nullptr)
     , sub_ehref(nullptr)
-    , c0(nullptr)
-    , c1(nullptr)
-    , cl0(nullptr)
-    , cl1(nullptr)
 {
-    for (int i = 0; i < 2; ++i) {
-        this->endpt_handle[i] = nullptr;
-        this->endpt_handler_id[i] = 0;
-    }
 }
 
 ConnectorTool::~ConnectorTool()
@@ -227,11 +220,10 @@ void ConnectorTool::setup()
     );
 
     /* Create red bpath */
-    this->red_bpath = sp_canvas_bpath_new(desktop->getSketch(), nullptr);
-    sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(this->red_bpath), this->red_color,
-            1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
-    sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(this->red_bpath), 0x00000000,
-            SP_WIND_RULE_NONZERO);
+    red_bpath = new Inkscape::CanvasItemBpath(desktop->getCanvasSketch());
+    red_bpath->set_stroke(red_color);
+    red_bpath->set_fill(0x0, SP_WIND_RULE_NONZERO);
+
     /* Create red curve */
     this->red_curve = std::make_unique<SPCurve>();
 
@@ -369,8 +361,8 @@ bool ConnectorTool::_ptHandleTest(Geom::Point& p, gchar **href, gchar **subhref)
 
 static void cc_select_handle(SPKnot* knot)
 {
-    knot->setShape(SP_KNOT_SHAPE_SQUARE);
-    knot->setSize(10);
+    knot->setShape(Inkscape::CANVAS_ITEM_CTRL_SHAPE_SQUARE);
+    knot->setSize(11); // Should be odd.
     knot->setAnchor(SP_ANCHOR_CENTER);
     knot->setFill(0x0000ffff, 0x0000ffff, 0x0000ffff, 0x0000ffff);
     knot->updateCtrl();
@@ -378,8 +370,8 @@ static void cc_select_handle(SPKnot* knot)
 
 static void cc_deselect_handle(SPKnot* knot)
 {
-    knot->setShape(SP_KNOT_SHAPE_SQUARE);
-    knot->setSize(8);
+    knot->setShape(Inkscape::CANVAS_ITEM_CTRL_SHAPE_SQUARE);
+    knot->setSize(9); // Should be odd.
     knot->setAnchor(SP_ANCHOR_CENTER);
     knot->setFill(0xffffff00, 0xff0000ff, 0xff0000ff, 0xff0000ff);
     knot->updateCtrl();
@@ -430,7 +422,7 @@ bool ConnectorTool::item_handler(SPItem* item, GdkEvent* event)
         if (cc_item_is_shape(item)) {
             this->_setActiveShape(item);
         }
-        ret = false;
+        ret = true;
         break;
     }
     default:
@@ -498,6 +490,7 @@ bool ConnectorTool::_handleButtonPress(GdkEventButton const &bevent)
 
             switch (this->state) {
             case SP_CONNECTOR_CONTEXT_STOP:
+
                 /* This is allowed, if we just canceled curve */
             case SP_CONNECTOR_CONTEXT_IDLE:
             {
@@ -644,7 +637,8 @@ bool ConnectorTool::_handleMotionNotify(GdkEventMotion const &mevent)
         this->red_curve = SPCurve::copy(path->curveForEdit());
         this->red_curve->transform(i2d);
 
-        sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), this->red_curve.get(), true);
+        red_bpath->set_bpath(red_curve.get());
+
         ret = true;
         break;
     }
@@ -766,7 +760,7 @@ void ConnectorTool::_reroutingFinish(Geom::Point *const p)
 
     // Clear the temporary path:
     this->red_curve->reset();
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), nullptr);
+    red_bpath->set_bpath(nullptr);
 
     if (p != nullptr) {
         // Test whether we clicked on a connection point
@@ -800,7 +794,7 @@ void ConnectorTool::_resetColors()
 {
     /* Red */
     this->red_curve->reset();
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), nullptr);
+    red_bpath->set_bpath(nullptr);
 
     this->green_curve->reset();
     this->npoints = 0;
@@ -813,7 +807,7 @@ void ConnectorTool::_setInitialPoint(Geom::Point const p)
     this->p[0] = p;
     this->p[1] = p;
     this->npoints = 2;
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), nullptr);
+    red_bpath->set_bpath(nullptr);
 }
 
 void ConnectorTool::_setSubsequentPoint(Geom::Point const p)
@@ -842,7 +836,7 @@ void ConnectorTool::_setSubsequentPoint(Geom::Point const p)
     // Recreate curve from libavoid route.
     recreateCurve(red_curve.get(), this->newConnRef, this->curvature);
     this->red_curve->transform(desktop->doc2dt());
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), red_curve.get(), true);
+    red_bpath->set_bpath(red_curve.get(), true);
 }
 
 
@@ -857,7 +851,7 @@ void ConnectorTool::_concatColorsAndFlush()
     std::swap(c, green_curve);
 
     this->red_curve->reset();
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), nullptr);
+    red_bpath->set_bpath(nullptr);
 
     if (c->is_empty()) {
         return;
@@ -972,7 +966,7 @@ void ConnectorTool::_finish()
 }
 
 
-static gboolean cc_generic_knot_handler(SPCanvasItem *, GdkEvent *event, SPKnot *knot)
+static bool cc_generic_knot_handler(GdkEvent *event, SPKnot *knot)
 {
     g_assert (knot != nullptr);
 
@@ -982,7 +976,7 @@ static gboolean cc_generic_knot_handler(SPCanvasItem *, GdkEvent *event, SPKnot 
     ConnectorTool *cc = SP_CONNECTOR_CONTEXT(
             knot->desktop->event_context);
 
-    gboolean consumed = FALSE;
+    bool consumed = false;
 
     gchar const *knot_tip = "Click to join at this point";
     switch (event->type) {
@@ -995,7 +989,7 @@ static gboolean cc_generic_knot_handler(SPCanvasItem *, GdkEvent *event, SPKnot 
                     Inkscape::NORMAL_MESSAGE, knot_tip);
         }
 
-        consumed = TRUE;
+        consumed = true;
         break;
     case GDK_LEAVE_NOTIFY:
         knot->setFlag(SP_KNOT_MOUSEOVER, FALSE);
@@ -1011,7 +1005,7 @@ static gboolean cc_generic_knot_handler(SPCanvasItem *, GdkEvent *event, SPKnot 
             knot->desktop->event_context->defaultMessageContext()->clear();
         }
 
-        consumed = TRUE;
+        consumed = true;
         break;
     default:
         break;
@@ -1024,7 +1018,7 @@ static gboolean cc_generic_knot_handler(SPCanvasItem *, GdkEvent *event, SPKnot 
 }
 
 
-static gboolean endpt_handler(SPKnot */*knot*/, GdkEvent *event, ConnectorTool *cc)
+static bool endpt_handler(GdkEvent *event, ConnectorTool *cc)
 {
     //g_assert( SP_IS_CONNECTOR_CONTEXT(cc) );
 
@@ -1056,7 +1050,7 @@ static gboolean endpt_handler(SPKnot */*knot*/, GdkEvent *event, ConnectorTool *
             cc->red_curve = SPCurve::copy(path->curveForEdit());
             Geom::Affine i2d = (cc->clickeditem)->i2dt_affine();
             cc->red_curve->transform(i2d);
-            sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(cc->red_bpath), cc->red_curve.get(), true);
+            cc->red_bpath->set_bpath(cc->red_curve.get(), true);
 
             cc->clickeditem->setHidden(true);
 
@@ -1074,23 +1068,23 @@ static gboolean endpt_handler(SPKnot */*knot*/, GdkEvent *event, ConnectorTool *
 
 void ConnectorTool::_activeShapeAddKnot(SPItem* item, SPItem* subitem)
 {
-    SPKnot *knot = new SPKnot(desktop, nullptr);
+    SPKnot *knot = new SPKnot(desktop, "", Inkscape::CANVAS_ITEM_CTRL_TYPE_SHAPER, "CanvasItemCtrl:ConnectorTool:Shape");
     knot->owner = item;
 
-    if(subitem) {
+    if (subitem) {
         SPUse *use = dynamic_cast<SPUse *>(item);
         g_assert(use != nullptr);
         knot->sub_owner = subitem;
-        knot->setShape(SP_KNOT_SHAPE_SQUARE);
-        knot->setSize(10);
+        knot->setShape(Inkscape::CANVAS_ITEM_CTRL_SHAPE_SQUARE);
+        knot->setSize(11); // Must be odd
         knot->setAnchor(SP_ANCHOR_CENTER);
         knot->setFill(0xffffff00, 0xff0000ff, 0xff0000ff, 0xff0000ff);
 
         // Set the point to the middle of the sub item
         knot->setPosition(subitem->getAvoidRef().getConnectionPointPos() * desktop->doc2dt(), 0);
     } else {
-        knot->setShape(SP_KNOT_SHAPE_SQUARE);
-        knot->setSize(8);
+        knot->setShape(Inkscape::CANVAS_ITEM_CTRL_SHAPE_SQUARE);
+        knot->setSize(9); // Must be odd
         knot->setAnchor(SP_ANCHOR_CENTER);
         knot->setFill(0xffffff00, 0xff0000ff, 0xff0000ff, 0xff0000ff);
 
@@ -1101,13 +1095,9 @@ void ConnectorTool::_activeShapeAddKnot(SPItem* item, SPItem* subitem)
     knot->updateCtrl();
 
     // We don't want to use the standard knot handler.
-    g_signal_handler_disconnect(G_OBJECT(knot->item),
-            knot->_event_handler_id);
-
-    knot->_event_handler_id = 0;
-
-    g_signal_connect(G_OBJECT(knot->item), "event",
-            G_CALLBACK(cc_generic_knot_handler), knot);
+    knot->_event_connection.disconnect();
+    knot->_event_connection =
+        knot->ctrl->connect_event(sigc::bind(sigc::ptr_fun(cc_generic_knot_handler), knot));
 
     knot->show();
     this->knots[knot] = 1;
@@ -1216,9 +1206,10 @@ void ConnectorTool::cc_set_active_conn(SPItem *item)
         // Create the handle if it doesn't exist
         if ( this->endpt_handle[i] == nullptr ) {
             SPKnot *knot = new SPKnot(desktop,
-                    _("<b>Connector endpoint</b>: drag to reroute or connect to new shapes"));
+                                      _("<b>Connector endpoint</b>: drag to reroute or connect to new shapes"),
+                                      Inkscape::CANVAS_ITEM_CTRL_TYPE_SHAPER, "CanvasItemCtrl:ConnectorTool:Endpoint");
 
-            knot->setShape(SP_KNOT_SHAPE_SQUARE);
+            knot->setShape(Inkscape::CANVAS_ITEM_CTRL_SHAPE_SQUARE);
             knot->setSize(7);
             knot->setAnchor(SP_ANCHOR_CENTER);
             knot->setFill(0xffffff00, 0xff0000ff, 0xff0000ff, 0xff0000ff);
@@ -1227,32 +1218,17 @@ void ConnectorTool::cc_set_active_conn(SPItem *item)
 
             // We don't want to use the standard knot handler,
             // since we don't want this knot to be draggable.
-            g_signal_handler_disconnect(G_OBJECT(knot->item),
-                    knot->_event_handler_id);
-
-            knot->_event_handler_id = 0;
-
-            g_signal_connect(G_OBJECT(knot->item), "event",
-                    G_CALLBACK(cc_generic_knot_handler), knot);
+            knot->_event_connection.disconnect();
+            knot->_event_connection =
+                knot->ctrl->connect_event(sigc::bind(sigc::ptr_fun(cc_generic_knot_handler), knot));
 
             this->endpt_handle[i] = knot;
         }
 
         // Remove any existing handlers
-        if (this->endpt_handler_id[i]) {
-            g_signal_handlers_disconnect_by_func(
-                    G_OBJECT(this->endpt_handle[i]->item),
-                    (void*)G_CALLBACK(endpt_handler), (gpointer) this );
-
-            this->endpt_handler_id[i] = 0;
-        }
-
-        // Setup handlers for connector endpoints, this is
-        // is as 'after' so that cc_generic_knot_handler is
-        // triggered first for any endpoint.
-        this->endpt_handler_id[i] = g_signal_connect_after(
-                G_OBJECT(this->endpt_handle[i]->item), "event",
-                G_CALLBACK(endpt_handler), this);
+        this->endpt_handler_connection[i].disconnect();
+        this->endpt_handler_connection[i] =
+            this->endpt_handle[i]->ctrl->connect_event(sigc::bind(sigc::ptr_fun(endpt_handler), this));
     }
 
     if (curve->is_empty()) {
@@ -1278,13 +1254,11 @@ void cc_create_connection_point(ConnectorTool* cc)
             cc_deselect_handle( cc->selected_handle );
         }
 
-        SPKnot *knot = new SPKnot(cc->getDesktop(), nullptr);
+        SPKnot *knot = new SPKnot(cc->getDesktop(), "", Inkscape::CANVAS_ITEM_CTRL_TYPE_SHAPER,
+            "CanvasItemCtrl::ConnectorTool:ConnectionPoint");
 
         // We do not process events on this knot.
-        g_signal_handler_disconnect(G_OBJECT(knot->item),
-                                    knot->_event_handler_id);
-
-        knot->_event_handler_id = 0;
+        knot->_event_connection.disconnect();
 
         cc_select_handle( knot );
         cc->selected_handle = knot;
@@ -1364,7 +1338,6 @@ void cc_selection_set_avoid(SPDesktop *desktop, bool const set_avoid)
 void ConnectorTool::_selectionChanged(Inkscape::Selection *selection)
 {
     SPItem *item = selection->singleItem();
-
     if (this->active_conn == item) {
         // Nothing to change.
         return;

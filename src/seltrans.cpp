@@ -38,10 +38,10 @@
 #include "seltrans-handles.h"
 #include "verbs.h"
 
-#include "display/snap-indicator.h"
-#include "display/sodipodi-ctrl.h"
-#include "display/sp-ctrlline.h"
-#include "display/guideline.h"
+#include "display/control/snap-indicator.h"
+#include "display/control/canvas-item-ctrl.h"
+#include "display/control/canvas-item-curve.h"
+#include "display/control/canvas-item-group.h"
 
 #include "helper/action.h"
 
@@ -49,10 +49,8 @@
 #include "object/sp-namedview.h"
 #include "object/sp-root.h"
 
-#include "ui/control-manager.h"
 #include "ui/tools/select-tool.h"
 
-using Inkscape::ControlManager;
 using Inkscape::DocumentUndo;
 
 static void sp_sel_trans_handle_grab(SPKnot *knot, guint state, SPSelTransHandle const* data);
@@ -103,17 +101,8 @@ Inkscape::SelTrans::SelTrans(SPDesktop *desktop) :
     _selcue(desktop),
     _state(STATE_SCALE),
     _show(SHOW_CONTENT),
-    _grabbed(false),
-    _show_handles(true),
     _bbox(),
     _visual_bbox(),
-    _absolute_affine(Geom::Scale(1,1)),
-    _opposite(Geom::Point(0,0)),
-    _opposite_for_specpoints(Geom::Point(0,0)),
-    _opposite_for_bboxpoints(Geom::Point(0,0)),
-    _origin_for_specpoints(Geom::Point(0,0)),
-    _origin_for_bboxpoints(Geom::Point(0,0)),
-    _stamp_cache(std::vector<SPItem*>()),
     _message_context(desktop->messageStack()),
     _bounding_box_prefs_observer(*this)
 {
@@ -134,38 +123,21 @@ Inkscape::SelTrans::SelTrans(SPDesktop *desktop) :
 
     _selection = desktop->getSelection();
 
-    _norm = sp_canvas_item_new(desktop->getControls(),
-                               SP_TYPE_CTRL,
-                               "anchor", SP_ANCHOR_CENTER,
-                               "mode", SP_CTRL_MODE_XOR,
-                               "shape", SP_CTRL_SHAPE_BITMAP,
-                               "size", 13,
-                               "filled", TRUE,
-                               "fill_color", 0x00000000,
-                               "stroked", TRUE,
-                               "stroke_color", 0xff0000b0,
-                               "pixbuf", handles[12],
-                               NULL);
+    _norm = new CanvasItemCtrl(desktop->getCanvasControls(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_BITMAP);
+    _norm->set_fill(0x0);
+    _norm->set_stroke(0xff0000b0);
+    _norm->set_pixbuf(handles[12]);
+    _norm->hide();
 
-    _grip = sp_canvas_item_new(desktop->getControls(),
-                               SP_TYPE_CTRL,
-                               "anchor", SP_ANCHOR_CENTER,
-                               "mode", SP_CTRL_MODE_XOR,
-                               "shape", SP_CTRL_SHAPE_CROSS,
-                               "size", 7,
-                               "filled", TRUE,
-                               "fill_color", 0xffffff7f,
-                               "stroked", TRUE,
-                               "stroke_color", 0xff0000b0,
-                               "pixbuf", handles[12],
-                               NULL);
-
-    sp_canvas_item_hide(_grip);
-    sp_canvas_item_hide(_norm);
+    _grip = new CanvasItemCtrl(desktop->getCanvasControls(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_CROSS);
+    _grip->set_fill(0xffffff7f);
+    _grip->set_stroke(0xff0000b0);
+    _grip->set_pixbuf(handles[12]);
+    _grip->hide();
 
     for (auto & i : _l) {
-        i = ControlManager::getManager().createControlLine(desktop->getControls());
-        sp_canvas_item_hide(i);
+        i = new Inkscape::CanvasItemCurve(desktop->getCanvasControls());
+        i->hide();
     }
 
     _sel_changed_connection = _selection->connectChanged(
@@ -192,17 +164,16 @@ Inkscape::SelTrans::~SelTrans()
     }
 
     if (_norm) {
-        sp_canvas_item_destroy(_norm);
-        _norm = nullptr;
+        delete _norm;
     }
+
     if (_grip) {
-        sp_canvas_item_destroy(_grip);
-        _grip = nullptr;
+        delete _grip;
     }
+
     for (auto & i : _l) {
         if (i) {
-            sp_canvas_item_destroy(i);
-            i = nullptr;
+            delete i;
         }
     }
 
@@ -376,13 +347,13 @@ void Inkscape::SelTrans::grab(Geom::Point const &p, gdouble x, gdouble y, bool s
     }
 
     if ((x != -1) && (y != -1)) {
-        sp_canvas_item_show(_norm);
-        sp_canvas_item_show(_grip);
+        _norm->show();
+        _grip->show();
     }
 
     if (_show == SHOW_OUTLINE) {
         for (auto & i : _l)
-            sp_canvas_item_show(i);
+            i->show();
     }
 
     _updateHandles();
@@ -416,7 +387,7 @@ void Inkscape::SelTrans::transform(Geom::Affine const &rel_affine, Geom::Point c
                 p[i] = _bbox->corner(i) * affine;
             }
             for (unsigned i = 0 ; i < 4 ; i++) {
-                _l[i]->setCoords(p[i], p[(i+1)%4]);
+                _l[i]->set_coords(p[i], p[(i+1)%4]);
             }
         }
     }
@@ -441,12 +412,12 @@ void Inkscape::SelTrans::ungrab()
         sp_object_unref(_item, nullptr);
     }
 
-    sp_canvas_item_hide(_norm);
-    sp_canvas_item_hide(_grip);
+    _norm->hide();
+    _grip->hide();
 
     if (_show == SHOW_OUTLINE) {
         for (auto & i : _l)
-            sp_canvas_item_hide(i);
+            i->hide();
     }
     if(!_stamp_cache.empty()){
         _stamp_cache.clear();
@@ -572,16 +543,16 @@ void Inkscape::SelTrans::stamp()
                 new_affine = &original_item->transform;
             }
 
-            Inkscape::GC::release(copy_repr);
-            SPLPEItem * lpeitem = dynamic_cast<SPLPEItem *>(copy_item);
-            if (lpeitem) {
-                lpeitem->forkPathEffectsIfNecessary(1);
-                sp_lpe_item_update_patheffect(lpeitem, true, true);
-            }
             copy_item->doWriteTransform(*new_affine);
 
-            if (copy_item->isCenterSet() && _center) {
+            if ( copy_item->isCenterSet() && _center ) {
                 copy_item->setCenter(*_center * _current_relative_affine);
+            }
+            Inkscape::GC::release(copy_repr);
+            SPLPEItem * lpeitem = dynamic_cast<SPLPEItem *>(copy_item);
+            if(lpeitem && lpeitem->hasPathEffectRecursive()) {
+                lpeitem->forkPathEffectsIfNecessary(1);
+                sp_lpe_item_update_patheffect(lpeitem, true, true);
             }
         }
         DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_SELECT,
@@ -670,12 +641,12 @@ void Inkscape::SelTrans::_makeHandles()
 {
     for (int i = 0; i < NUMHANDS; i++) {
         SPSelTransTypeInfo info = handtypes[hands[i].type];
-        knots[i] = new SPKnot(_desktop, _(info.tip));
+        knots[i] = new SPKnot(_desktop, _(info.tip), CANVAS_ITEM_CTRL_TYPE_ADJ_HANDLE, "SelTrans");
 
-        knots[i]->setShape(SP_CTRL_SHAPE_BITMAP);
+        knots[i]->setShape(CANVAS_ITEM_CTRL_SHAPE_BITMAP);
         knots[i]->setSize(13);
         knots[i]->setAnchor(hands[i].anchor);
-        knots[i]->setMode(SP_CTRL_MODE_XOR);
+        knots[i]->setMode(CANVAS_ITEM_CTRL_MODE_XOR);
         knots[i]->setFill(info.color[0], info.color[1], info.color[1], info.color[1]);
         knots[i]->setStroke(info.color[2], info.color[3], info.color[3], info.color[3]);
 
@@ -759,20 +730,18 @@ void Inkscape::SelTrans::handleGrab(SPKnot *knot, guint /*state*/, SPSelTransHan
     // Forcing handles visibility must be done after grab() to be effective
     switch (handle.type) {
         case HANDLE_CENTER:
-            g_object_set(G_OBJECT(_grip),
-                         "shape", SP_CTRL_SHAPE_BITMAP,
-                         "size", 13,
-                         NULL);
-            sp_canvas_item_hide(_norm);
-            sp_canvas_item_show(_grip);
+            _grip->set_shape(Inkscape::CANVAS_ITEM_CTRL_SHAPE_BITMAP);
+            _grip->set_size(13);
+
+            _norm->hide();
+            _grip->show();
             break;
         default:
-            g_object_set(G_OBJECT(_grip),
-                         "shape", SP_CTRL_SHAPE_CROSS,
-                         "size", 7,
-                         NULL);
-            sp_canvas_item_show(_norm);
-            sp_canvas_item_show(_grip);
+            _grip->set_shape(Inkscape::CANVAS_ITEM_CTRL_SHAPE_CROSS);
+            _grip->set_size(7);
+
+            _norm->show();
+            _grip->show();
             break;
     }
 }
@@ -836,11 +805,11 @@ gboolean Inkscape::SelTrans::handleRequest(SPKnot *knot, Geom::Point *position, 
     }
     if (request(handle, *position, state)) {
         knot->setPosition(*position, state);
-        SP_CTRL(_grip)->moveto(*position);
+        _grip->set_position(*position);
         if (handle.type == HANDLE_CENTER) {
-            SP_CTRL(_norm)->moveto(*position);
+            _norm->set_position(*position);
         } else {
-            SP_CTRL(_norm)->moveto(_origin);
+            _norm->set_position(_origin);
         }
     }
 

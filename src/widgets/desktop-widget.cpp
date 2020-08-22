@@ -39,9 +39,9 @@
 #include "inkscape-version.h"
 #include "verbs.h"
 
-#include "display/canvas-arena.h"
-#include "display/canvas-axonomgrid.h"
-#include "display/guideline.h"
+#include "display/control/canvas-axonomgrid.h"
+#include "display/control/canvas-item-drawing.h"
+#include "display/control/canvas-item-guideline.h"
 
 #include "extension/db.h"
 
@@ -741,9 +741,9 @@ SPDesktopWidget::event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw)
 
     if ((event->type == GDK_BUTTON_PRESS) && (event->button.button == 3)) {
         if (event->button.state & GDK_SHIFT_MASK) {
-            sp_canvas_arena_set_sticky (SP_CANVAS_ARENA (dtw->desktop->drawing), TRUE);
+            dtw->desktop->getCanvasDrawing()->set_sticky(true);
         } else {
-            sp_canvas_arena_set_sticky (SP_CANVAS_ARENA (dtw->desktop->drawing), FALSE);
+            dtw->desktop->getCanvasDrawing()->set_sticky(false);
         }
     }
 
@@ -755,8 +755,8 @@ SPDesktopWidget::event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw)
         // and passed on by the canvas acetate (I think). --bb
 
         if ((event->type == GDK_KEY_PRESS || event->type == GDK_KEY_RELEASE)
-            && !dtw->_canvas->get_current_item()) {
-            return sp_desktop_root_handler (nullptr, event, dtw->desktop);
+            && !dtw->_canvas->get_current_canvas_item()) {
+            return (gint)sp_desktop_root_handler (event, dtw->desktop);
         }
     }
 
@@ -1004,8 +1004,7 @@ void
 SPDesktopWidget::requestCanvasUpdate() {
     // ^^ also this->desktop != 0
     g_return_if_fail(this->desktop != nullptr);
-    g_return_if_fail(this->desktop->main != nullptr);
-    gtk_widget_queue_draw (GTK_WIDGET (SP_CANVAS_ITEM (this->desktop->main)->canvas->gobj()));
+    desktop->getCanvas()->queue_draw();
 }
 
 void
@@ -1957,10 +1956,10 @@ SPDesktopWidget::on_ruler_box_motion_notify_event(GdkEventMotion *event, Gtk::Wi
         }
 
         if (!(event->state & GDK_SHIFT_MASK)) {
-            ruler_snap_new_guide(desktop, _active_guide, event_dt, _normal);
+            ruler_snap_new_guide(desktop, event_dt, _normal);
         }
-        sp_guideline_set_normal(SP_GUIDELINE(_active_guide), _normal);
-        sp_guideline_set_position(SP_GUIDELINE(_active_guide), event_dt);
+        _active_guide->set_normal(_normal);
+        _active_guide->set_origin(event_dt);
 
         desktop->set_coordinate_status(event_dt);
     }
@@ -1993,10 +1992,10 @@ SPDesktopWidget::on_ruler_box_button_release_event(GdkEventButton *event, Gtk::W
         Geom::Point event_dt(desktop->w2d(event_w));
 
         if (!(event->state & GDK_SHIFT_MASK)) {
-            ruler_snap_new_guide(desktop, _active_guide, event_dt, _normal);
+            ruler_snap_new_guide(desktop, event_dt, _normal);
         }
 
-        sp_canvas_item_destroy(_active_guide);
+        delete _active_guide;
         _active_guide = nullptr;
         if ((horiz ? wy : wx) >= 0) {
             Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
@@ -2104,8 +2103,8 @@ SPDesktopWidget::on_ruler_box_button_press_event(GdkEventButton *event, Gtk::Wid
             }
         }
 
-        _active_guide = sp_guideline_new(desktop->guides, nullptr, event_dt, _normal);
-        sp_guideline_set_color(SP_GUIDELINE(_active_guide), desktop->namedview->guidehicolor);
+        _active_guide = new Inkscape::CanvasItemGuideLine(desktop->getCanvasGuides(), Glib::ustring(), event_dt, _normal);
+        _active_guide->set_stroke(desktop->namedview->guidehicolor);
 
         // Ruler grabs all events until button release.
         auto window = widget->get_window()->gobj();
@@ -2124,7 +2123,7 @@ SPDesktopWidget::on_ruler_box_button_press_event(GdkEventButton *event, Gtk::Wid
 }
 
 void
-SPDesktopWidget::ruler_snap_new_guide(SPDesktop *desktop, SPCanvasItem * /*guide*/, Geom::Point &event_dt, Geom::Point &normal)
+SPDesktopWidget::ruler_snap_new_guide(SPDesktop *desktop, Geom::Point &event_dt, Geom::Point &normal)
 {
     SnapManager &m = desktop->namedview->snap_manager;
     m.setup(desktop);

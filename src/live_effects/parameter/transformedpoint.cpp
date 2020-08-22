@@ -28,13 +28,9 @@ TransformedPointParam::TransformedPointParam( const Glib::ustring& label, const 
                         bool dontTransform)
     : Parameter(label, tip, key, wr, effect),
       defvalue(default_vector),
-      origin(0.,0.),
       vector(default_vector),
       noTransform(dontTransform)
 {
-    vec_knot_shape = SP_KNOT_SHAPE_DIAMOND;
-    vec_knot_mode  = SP_KNOT_MODE_XOR;
-    vec_knot_color = 0xffffb500;
 }
 
 TransformedPointParam::~TransformedPointParam()
@@ -146,7 +142,9 @@ TransformedPointParam::param_transform_multiply(Geom::Affine const& postmul, boo
 
 
 void
-TransformedPointParam::set_vector_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color)
+TransformedPointParam::set_vector_oncanvas_looks(Inkscape::CanvasItemCtrlShape shape,
+                                                 Inkscape::CanvasItemCtrlMode mode,
+                                                 guint32 color)
 {
     vec_knot_shape = shape;
     vec_knot_mode  = mode;
@@ -191,7 +189,7 @@ void
 TransformedPointParam::addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item)
 {
     TransformedPointParamKnotHolderEntity_Vector *vector_e = new TransformedPointParamKnotHolderEntity_Vector(this);
-    vector_e->create(desktop, item, knotholder, Inkscape::CTRL_TYPE_LPE, handleTip(), vec_knot_shape, vec_knot_mode,
+    vector_e->create(desktop, item, knotholder, Inkscape::CANVAS_ITEM_CTRL_TYPE_LPE, "LPE:Point", handleTip(),
                      vec_knot_color);
     knotholder->add(vector_e);
 }

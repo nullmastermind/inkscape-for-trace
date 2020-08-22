@@ -10,15 +10,16 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <gdk/gdkkeysyms.h>
+
 #include "control-point.h"
 #include "desktop.h"
 
-#include "display/sodipodi-ctrlrect.h"
+#include "display/control/canvas-item-rect.h"
+
 #include "ui/tools/tool-base.h"
 #include "ui/tool/event-utils.h"
 #include "ui/tool/selector.h"
-
-#include <gdk/gdkkeysyms.h>
 
 namespace Inkscape {
 namespace UI {
@@ -29,23 +30,24 @@ namespace UI {
  * is pressed, it grabs events and handles drags and clicks in the usual way. */
 class SelectorPoint : public ControlPoint {
 public:
-    SelectorPoint(SPDesktop *d, SPCanvasGroup *group, Selector *s) :
+    SelectorPoint(SPDesktop *d, Inkscape::CanvasItemGroup *group, Selector *s) :
         ControlPoint(d, Geom::Point(0,0), SP_ANCHOR_CENTER,
-                     CTRL_TYPE_INVISIPOINT,
+                     Inkscape::CANVAS_ITEM_CTRL_TYPE_INVISIPOINT,
                      invisible_cset, group),
         _selector(s),
         _cancel(false)
     {
+        _canvas_item_ctrl->set_name("CanvasItemCtrl:SelectorPoint");
         setVisible(false);
-        _rubber = static_cast<CtrlRect*>(sp_canvas_item_new(_desktop->getControls(),
-        SP_TYPE_CTRLRECT, nullptr));
-        _rubber->setColor(0x8080ffff, false, 0x0);
-        _rubber->setInvert(true);
-        sp_canvas_item_hide(_rubber);
-    }
+        _rubber = new Inkscape::CanvasItemRect(_desktop->getCanvasControls());
+        _rubber->set_name("CanavasItemRect:SelectorPoint:Rubberband");
+        _rubber->set_stroke(0x8080ffff);
+        _rubber->set_inverted(true);
+        _rubber->hide();
+   }
 
     ~SelectorPoint() override {
-        sp_canvas_item_destroy(_rubber);
+        delete _rubber;
     }
 
     SPDesktop *desktop() { return _desktop; }
@@ -56,11 +58,12 @@ public:
 
 protected:
     bool _eventHandler(Inkscape::UI::Tools::ToolBase *event_context, GdkEvent *event) override {
-        if (event->type == GDK_KEY_PRESS && shortcut_key(event->key) == GDK_KEY_Escape &&
-            sp_canvas_item_is_visible(_rubber))
+        if (event->type == GDK_KEY_PRESS               &&
+            shortcut_key(event->key) == GDK_KEY_Escape &&
+            _rubber->is_visible()                       )
         {
             _cancel = true;
-            sp_canvas_item_hide(_rubber);
+            _rubber->hide();
             return true;
         }
         return ControlPoint::_eventHandler(event_context, event);
@@ -70,19 +73,19 @@ private:
     bool grabbed(GdkEventMotion *) override {
         _cancel = false;
         _start = position();
-        sp_canvas_item_show(_rubber);
+        _rubber->show();
         return false;
     }
 
     void dragged(Geom::Point &new_pos, GdkEventMotion *) override {
         if (_cancel) return;
         Geom::Rect sel(_start, new_pos);
-        _rubber->setRectangle(sel);
+        _rubber->set_rect(sel);
     }
 
     void ungrabbed(GdkEventButton *event) override {
         if (_cancel) return;
-        sp_canvas_item_hide(_rubber);
+        _rubber->hide();
         Geom::Rect sel(_start, position());
         _selector->signal_area.emit(sel, event);
     }
@@ -93,16 +96,16 @@ private:
         return true;
     }
 
-    CtrlRect *_rubber;
+    Inkscape::CanvasItemRect *_rubber;
     Selector *_selector;
     Geom::Point _start;
     bool _cancel;
 };
 
 
-Selector::Selector(SPDesktop *d)
-    : Manipulator(d)
-    , _dragger(new SelectorPoint(d, d->getControls(), this))
+Selector::Selector(SPDesktop *desktop)
+    : Manipulator(desktop)
+    , _dragger(new SelectorPoint(desktop, desktop->getCanvasControls(), this))
 {
     _dragger->setVisible(false);
 }

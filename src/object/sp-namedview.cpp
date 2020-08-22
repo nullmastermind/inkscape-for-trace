@@ -20,7 +20,7 @@
 #include "event-log.h"
 #include <2geom/transforms.h>
 
-#include "display/canvas-grid.h"
+#include "display/control/canvas-grid.h"
 #include "util/units.h"
 #include "svg/svg-color.h"
 #include "xml/repr.h"
@@ -668,7 +668,7 @@ void SPNamedView::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *r
 
             if (this->editable) {
                 for(auto view : this->views) {
-                    g->SPGuide::showSPGuide(view->guides, (GCallback) sp_dt_guide_event);
+                    g->SPGuide::showSPGuide(view->getCanvasGuides());
 
                     if (view->guides_active) {
                         g->sensitize(view->getCanvas(), TRUE);
@@ -719,7 +719,9 @@ Inkscape::XML::Node* SPNamedView::write(Inkscape::XML::Document *xml_doc, Inksca
 void SPNamedView::show(SPDesktop *desktop)
 {
     for(auto guide : this->guides) {
-        guide->showSPGuide( desktop->guides, (GCallback) sp_dt_guide_event);
+
+        guide->showSPGuide( desktop->getCanvasGuides() );
+
         if (desktop->guides_active) {
             guide->sensitize(desktop->getCanvas(), TRUE);
         }

@@ -39,7 +39,8 @@
 #include "sp-cursor.h"
 
 #include "display/drawing-item.h"
-#include "display/sp-canvas-item.h"
+#include "display/control/canvas-item-catchall.h"
+#include "display/control/canvas-item-drawing.h"
 
 #include "object/box3d.h"
 #include "style.h"
@@ -97,7 +98,6 @@ SelectTool::SelectTool()
     , button_press_state(0)
     , cycling_wrap(true)
     , item(nullptr)
-    , grabbed(nullptr)
     , _seltrans(nullptr)
     , _describer(nullptr)
 {
@@ -125,9 +125,9 @@ static bool is_cycling = false;
 SelectTool::~SelectTool() {
     this->enableGrDrag(false);
 
-    if (this->grabbed) {
-        sp_canvas_item_ungrab(this->grabbed);
-        this->grabbed = nullptr;
+    if (grabbed) {
+        grabbed->ungrab();
+        grabbed = nullptr;
     }
 
     delete this->_seltrans;
@@ -320,17 +320,17 @@ bool SelectTool::item_handler(SPItem* item, GdkEvent* event) {
 
                     rb_escaped = drag_escaped = 0;
 
-                    if (this->grabbed) {
-                        sp_canvas_item_ungrab(this->grabbed);
-                        this->grabbed = nullptr;
+                    if (grabbed) {
+                        grabbed->ungrab();
+                        grabbed = nullptr;
                     }
 
-                    sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->drawing),
-                                        GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_BUTTON_RELEASE_MASK | GDK_BUTTON_PRESS_MASK |
-                                        GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK,
-                                        nullptr, event->button.time);
-
-                    this->grabbed = SP_CANVAS_ITEM(desktop->drawing);
+                    grabbed = desktop->getCanvasDrawing();
+                    grabbed->grab(Gdk::KEY_PRESS_MASK      |
+                                  Gdk::KEY_RELEASE_MASK    |
+                                  Gdk::BUTTON_PRESS_MASK   |
+                                  Gdk::BUTTON_RELEASE_MASK |
+                                  Gdk::POINTER_MOTION_MASK );
 
                     ret = TRUE;
                 }
@@ -522,15 +522,16 @@ bool SelectTool::root_handler(GdkEvent* event) {
                 Inkscape::Rubberband::get(desktop)->start(desktop, p);
 
                 if (this->grabbed) {
-                    sp_canvas_item_ungrab(this->grabbed);
+                    grabbed->ungrab();
                     this->grabbed = nullptr;
                 }
 
-                sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
-                                    GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK,
-                                    nullptr, event->button.time);
-
-                this->grabbed = SP_CANVAS_ITEM(desktop->acetate);
+                grabbed = desktop->getCanvasCatchall();
+                grabbed->grab(Gdk::KEY_PRESS_MASK      |
+                              Gdk::KEY_RELEASE_MASK    |
+                              Gdk::BUTTON_PRESS_MASK   |
+                              Gdk::BUTTON_RELEASE_MASK |
+                              Gdk::POINTER_MOTION_MASK );
 
                 // remember what modifiers were on before button press
                 this->button_press_state = event->button.state;
@@ -787,9 +788,9 @@ bool SelectTool::root_handler(GdkEvent* event) {
 
                     ret = TRUE;
                 }
-                if (this->grabbed) {
-                    sp_canvas_item_ungrab(this->grabbed);
-                    this->grabbed = nullptr;
+                if (grabbed) {
+                    grabbed->ungrab();
+                    grabbed = nullptr;
                 }
                 // Think is not necesary now
                 // desktop->updateNow();

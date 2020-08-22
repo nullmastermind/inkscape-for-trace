@@ -28,7 +28,6 @@
 
 class SPItem;
 class Path;
-struct SPCanvasItem;
 
 #define DDC_MIN_PRESSURE      0.0
 #define DDC_MAX_PRESSURE      1.0
@@ -39,6 +38,9 @@ struct SPCanvasItem;
 #define DDC_DEFAULT_TILT      0.0
 
 namespace Inkscape {
+
+class CanvasItemBpath;
+
 namespace UI {
 namespace Tools {
 
@@ -69,7 +71,7 @@ private:
     Geom::Point hatch_last_nearest, hatch_last_pointer;
     std::list<Geom::Point> hatch_vectors;
     bool hatch_escaped;
-    SPCanvasItem *hatch_area;
+    Inkscape::CanvasItemBpath *hatch_area = nullptr;
     bool just_started_drawing;
     bool trace_bg;
 

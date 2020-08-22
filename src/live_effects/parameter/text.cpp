@@ -9,19 +9,24 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "ui/widget/registered-widget.h"
+#include <glibmm/i18n.h>
 #include <gtkmm/alignment.h>
 
-#include "live_effects/parameter/text.h"
-#include "live_effects/effect.h"
-#include "svg/svg.h"
-#include "svg/stringstream.h"
-#include "inkscape.h"
-#include "verbs.h"
-#include "display/canvas-text.h"
 #include <2geom/sbasis-geometric.h>
 
-#include <glibmm/i18n.h>
+#include "inkscape.h"
+#include "verbs.h"
+
+#include "display/control/canvas-item-text.h"
+
+#include "live_effects/effect.h"
+#include "live_effects/parameter/text.h"
+
+#include "svg/stringstream.h"
+#include "svg/svg.h"
+
+#include "ui/widget/registered-widget.h"
+
 
 namespace Inkscape {
 
@@ -30,17 +35,19 @@ namespace LivePathEffect {
 TextParam::TextParam( const Glib::ustring& label, const Glib::ustring& tip,
                       const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
                       Effect* effect, const Glib::ustring default_value )
-    : Parameter(label, tip, key, wr, effect),
-      value(default_value),
-      defvalue(default_value),
-      _hide_canvas_text(false)
+    : Parameter(label, tip, key, wr, effect)
+    , value(default_value)
+    , defvalue(default_value)
 {
     if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) { // FIXME: we shouldn't use this!
-        canvas_text = (SPCanvasText *) sp_canvastext_new(desktop->getTempGroup(), desktop, Geom::Point(0,0), "");
-        sp_canvastext_set_text (canvas_text, default_value.c_str());
-        sp_canvastext_set_coords (canvas_text, 0, 0);
-    } else {
-        _hide_canvas_text = true;
+        canvas_text = new Inkscape::CanvasItemText(desktop->getCanvasTemp(), Geom::Point(0, 0), default_value);
+    }
+}
+
+TextParam::~TextParam()
+{
+    if (canvas_text) {
+        delete canvas_text;
     }
 }
 
@@ -56,20 +63,21 @@ TextParam::param_update_default(const gchar * default_value)
     defvalue = (Glib::ustring)default_value;
 }
 
+// This is a bit silly, we should have an option in the constructor to not create the canvas_text object.
 void
 TextParam::param_hide_canvas_text()
 {
-    if (!_hide_canvas_text) {
-        sp_canvastext_set_text(canvas_text, " ");
-        _hide_canvas_text = true;
+    if (canvas_text) {
+        delete canvas_text;
+        canvas_text = nullptr;
     }
 }
 
 void
 TextParam::setPos(Geom::Point pos)
 {
-    if (!_hide_canvas_text) {
-        sp_canvastext_set_coords (canvas_text, pos);
+    if (canvas_text) {
+        canvas_text->set_coord(pos);
     }
 }
 
@@ -85,9 +93,9 @@ TextParam::setPosAndAnchor(const Geom::Piecewise<Geom::D2<Geom::SBasis> > &pwd2,
     Point dir = unit_vector(derivative(pwd2_reparam).valueAt(t_reparam));
     Point n = -rot90(dir);
     double angle = Geom::angle_between(dir, Point(1,0));
-    if (!_hide_canvas_text) {
-        sp_canvastext_set_coords(canvas_text, pos + n * length);
-        sp_canvastext_set_anchor_manually(canvas_text, std::sin(angle), -std::cos(angle));
+    if (canvas_text) {
+        canvas_text->set_coord(pos + n * length);
+        canvas_text->set_anchor(Geom::Point(std::sin(angle), -std::cos(angle)));
     }
 }
 
@@ -96,8 +104,8 @@ TextParam::setAnchor(double x_value, double y_value)
 {
     anchor_x = x_value;
     anchor_y = y_value;
-    if (!_hide_canvas_text) {
-        sp_canvastext_set_anchor_manually (canvas_text, anchor_x, anchor_y);
+    if (canvas_text) {
+        canvas_text->set_anchor(Geom::Point(anchor_x, anchor_y));
     }
 }
 
@@ -154,8 +162,8 @@ TextParam::param_setValue(const Glib::ustring newvalue)
         param_effect->refresh_widgets = true;
     }
     value = newvalue;
-    if (!_hide_canvas_text) {
-        sp_canvastext_set_text (canvas_text, newvalue.c_str());
+    if (canvas_text) {
+        canvas_text->set_text(newvalue);
     }
 }
 

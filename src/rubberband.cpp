@@ -11,51 +11,52 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "display/sodipodi-ctrlrect.h"
 #include "desktop.h"
 
 #include "rubberband.h"
-#include "display/canvas-bpath.h"
+
 #include "display/curve.h"
+#include "display/control/canvas-item-bpath.h"
+#include "display/control/canvas-item-rect.h"
 
 #include "ui/widget/canvas.h" // Forced redraws
 
 Inkscape::Rubberband *Inkscape::Rubberband::_instance = nullptr;
 
 Inkscape::Rubberband::Rubberband(SPDesktop *dt)
-    : _desktop(dt), _rect(nullptr), _touchpath(nullptr), _started(false)
+    : _desktop(dt)
 {
-    _points.clear();
-    _mode = RUBBERBAND_MODE_RECT;
     _touchpath_curve = new SPCurve();
 }
 
 void Inkscape::Rubberband::delete_canvas_items()
 {
     if (_rect) {
-        SPCanvasItem *temp = _rect;
+        delete _rect;
         _rect = nullptr;
-        sp_canvas_item_destroy(temp);
     }
+
     if (_touchpath) {
-        SPCanvasItem *temp = _touchpath;
+        delete _touchpath;
         _touchpath = nullptr;
-        sp_canvas_item_destroy(temp);
     }
 }
 
 
 void Inkscape::Rubberband::start(SPDesktop *d, Geom::Point const &p)
 {
-    _points.clear();
-    _touchpath_curve->reset();
-    delete_canvas_items();
     _desktop = d;
+
     _start = p;
     _started = true;
-    _points.push_back(_desktop->d2w(p));
+
+    _touchpath_curve->reset();
     _touchpath_curve->moveto(p);
 
+    _points.clear();
+    _points.push_back(_desktop->d2w(p));
+
+    delete_canvas_items();
     _desktop->getCanvas()->forced_redraws_start(5);
 }
 
@@ -98,28 +99,32 @@ void Inkscape::Rubberband::move(Geom::Point const &p)
     }
 
     if (_mode == RUBBERBAND_MODE_RECT) {
-        if (_rect == nullptr) {
-            _rect = static_cast<CtrlRect *>(sp_canvas_item_new(_desktop->getControls(), SP_TYPE_CTRLRECT, nullptr));
-            _rect->setColor(0x808080ff, false, 0x0);
-            _rect->setInvert(true);
-        }
-        _rect->setRectangle(Geom::Rect(_start, _end));
 
-        sp_canvas_item_show(_rect);
-        if (_touchpath)
-            sp_canvas_item_hide(_touchpath);
+        if (_rect == nullptr) {
+            _rect = new Inkscape::CanvasItemRect(_desktop->getCanvasControls());
+            _rect->set_stroke(0x808080ff);
+            _rect->set_inverted(true);
+        }
+        _rect->set_rect(Geom::Rect(_start, _end));
+        _rect->show();
+
+        if (_touchpath) {
+            _touchpath->hide();
+        }
 
     } else if (_mode == RUBBERBAND_MODE_TOUCHPATH) {
-        if (_touchpath == nullptr) {
-            _touchpath = sp_canvas_bpath_new(_desktop->getSketch(), nullptr);
-            sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(_touchpath), 0xff0000ff, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
-            sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(_touchpath), 0, SP_WIND_RULE_NONZERO);
-        }
-        sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(_touchpath), _touchpath_curve);
 
-        sp_canvas_item_show(_touchpath);
-        if (_rect)
-            sp_canvas_item_hide(_rect);
+        if (_touchpath == nullptr) {
+            _touchpath = new Inkscape::CanvasItemBpath(_desktop->getCanvasControls()); // Should be sketch?
+            _touchpath->set_stroke(0xff0000ff);
+            _touchpath->set_fill(0x0, SP_WIND_RULE_NONZERO);
+        }
+        _touchpath->set_bpath(_touchpath_curve);
+        _touchpath->show();
+
+        if (_rect) {
+            _rect->hide();
+        }
     }
 }
 

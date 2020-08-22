@@ -23,9 +23,12 @@
 #include "snap-candidate.h"
 
 class SPDesktop;
-class SPCanvasGroup;
-class CtrlRect;
+
 namespace Inkscape {
+
+class CanvasItemGroup;
+class CanvasItemRect;
+
 namespace UI {
 
 class RotateHandle;
@@ -42,7 +45,7 @@ public:
         MODE_ROTATE_SKEW
     };
 
-    TransformHandleSet(SPDesktop *d, SPCanvasGroup *th_group);
+    TransformHandleSet(SPDesktop *d, Inkscape::CanvasItemGroup *th_group);
     ~TransformHandleSet() override;
     bool event(Inkscape::UI::Tools::ToolBase *, GdkEvent *) override;
 
@@ -89,8 +92,8 @@ private:
     };
 
     ControlPoint *_active;
-    SPCanvasGroup *_transform_handle_group;
-    CtrlRect *_trans_outline;
+    Inkscape::CanvasItemGroup *_transform_handle_group;
+    Inkscape::CanvasItemRect *_trans_outline;
     Mode _mode;
     bool _in_transform;
     bool _visible;

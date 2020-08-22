@@ -18,7 +18,12 @@
 
 class  SPDesktop;
 struct SPDesktopWidget;
-struct SPCanvasItem;
+class  SPGuide;
+
+namespace Inkscape {
+  class CanvasItem;
+  class CanvasItemGuideLine;
+}
 
 typedef union  _GdkEvent         GdkEvent;
 typedef struct _GdkEventCrossing GdkEventCrossing;
@@ -27,7 +32,7 @@ typedef struct _GtkWidget        GtkWidget;
 
 /* Item handlers */
 
-int sp_desktop_root_handler (SPCanvasItem *item, GdkEvent *event, SPDesktop *desktop);
+bool sp_desktop_root_handler (GdkEvent *event, SPDesktop *desktop);
 
 /* Default handlers */
 
@@ -37,7 +42,7 @@ gint sp_canvas_motion_notify (GtkWidget *widget,GdkEventMotion *motion, SPDeskto
 
 /* Guides */
 
-gint sp_dt_guide_event (SPCanvasItem *item, GdkEvent *event, gpointer data);
+bool sp_dt_guide_event(GdkEvent *event, Inkscape::CanvasItemGuideLine *guide_item, SPGuide *guide);
 
 #endif
 

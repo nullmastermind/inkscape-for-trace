@@ -25,43 +25,62 @@
 #include "desktop.h"
 #include "preferences.h"
 
-#include "display/sp-canvas-item.h"  // Canvas group TEMP TEMP TEMP
-#include "display/sp-canvas-group.h" // Canvas group TEMP TEMP TEMP
-#include "display/canvas-arena.h"    // Change rendering mode (a.k.a. _drawing)
 #include "display/cairo-utils.h"     // Checkerboard background.
+#include "display/drawing.h"
+#include "display/control/canvas-item-group.h"
 
 #include "ui/tools/tool-base.h"      // Default cursor
 
-/**
- * Helper function to update item and its children.
+/*
+ *   The canvas is responsible for rendering the SVG drawing with various "control"
+ *   items below and on top of the drawing. Rendering is triggered by a call to one of:
  *
- * NB! affine is parent2canvas.
+ *
+ *   * redraw_all()     Redraws the entire canvas by calling redraw_area() with the canvas area.
+ *
+ *   * redraw_area()    Redraws the indicated area. Use when there is a change that doesn't effect
+ *                      a CanvasItem's geometry or size.
+ *
+ *   * request_update() Redraws after recalculating bounds for changed CanvasItem's. Use if a
+ *                      CanvasItem's geometry or size has changed.
+ *
+ *   * redraw_now()     Redraw immediately, skipping the "idle" stage.
+ *
+ *   The first three functions add a request to the Gtk's "idle" list via
+ *
+ *   * add_idle()       Which causes Gtk to call when resources are available:
+ *
+ *   * on_idle()        Which calls:
+ *
+ *   * do_update()      Which makes a few checks and then calls:
+ *
+ *   * paint()          Which calls for each area of the canvas that has been marked unclean:
+ *
+ *   * paint_rect()     Which determines the maximum area to draw at once and where the cursor is, then calls:
+ *
+ *   * paint_rect_internal()  Which recursively divides the area into smaller pieces until a piece is small
+ *                            enough to render. It renders the pieces closest to the cursor first. The pieces
+ *                            are rendered onto a Cairo surface "backing_store". After a piece is rendered
+ *                            there is a call to:
+ *
+ *   * queue_draw_area() A Gtk function for drawing into a widget which when the time is right calls:
+ *
+ *   * on_draw()        Which blits the Cairo surface to the screen.
+ *
+ *   One thing to note is that on_draw() must be called twice to render anything to the screen, as the
+ *   first time through it sets up the backing store which must then be drawn to. The second call then
+ *   blits the backing store to the screen. It might be better to setup the backing store on a call
+ *   to on_allocate() but it is what works now.
+ *
+ *   The other responsibility of the canvas is to determine where to send GUI events. It does this
+ *   by determining which CanvasItem is "picked" and then forwards the events to that item. Not all
+ *   items can be picked. As a last resort, the "CatchAll" CanvasItem will be picked as it is the
+ *   lowest CanvasItem in the stack (except for the "root" CanvasItem). With a small be of work, it
+ *   should be possible to make the "root" CanvasItem a "CatchAll" eliminating the need for a
+ *   dedicated "CatchAll" CanvasItem. There probably could be efficiency improvements as some
+ *   items that are not pickable probably should be which would save having to effectively pick
+ *   them "externally" (e.g. gradient CanvasItemCurves).
  */
-static void sp_canvas_item_invoke_update2(SPCanvasItem *item, Geom::Affine const &affine, unsigned int flags)
-{
-    // Apply the child item's transform
-    Geom::Affine child_affine = item->xform * affine;
-
-    // apply object flags to child flags
-    int child_flags = flags & ~SP_CANVAS_UPDATE_REQUESTED;
-
-    if (item->need_update) {
-        child_flags |= SP_CANVAS_UPDATE_REQUESTED;
-    }
-
-    if (item->need_affine) {
-        child_flags |= SP_CANVAS_UPDATE_AFFINE;
-    }
-
-    if (child_flags & (SP_CANVAS_UPDATE_REQUESTED | SP_CANVAS_UPDATE_AFFINE)) {
-        if (SP_CANVAS_ITEM_GET_CLASS (item)->update) {
-            SP_CANVAS_ITEM_GET_CLASS (item)->update(item, child_affine, child_flags);
-        }
-    }
-
-    item->need_update = FALSE;
-    item->need_affine = FALSE;
-}
 
 struct PaintRectSetup {
     Geom::IntRect canvas_rect;
@@ -70,19 +89,6 @@ struct PaintRectSetup {
     Geom::Point mouse_loc;
 };
 
-/**
- * Recursively set the SPCanvasItem::canvas pointer to NULL.
- */
-static void clear_canvas_pointer(SPCanvasItem *item)
-{
-    item->canvas = nullptr;
-
-    if (SP_IS_CANVAS_GROUP(item)) {
-        for (SPCanvasItem &child : SP_CANVAS_GROUP(item)->items) {
-            clear_canvas_pointer(&child);
-        }
-    }
-}
 
 namespace Inkscape {
 namespace UI {
@@ -90,6 +96,7 @@ namespace Widget {
 
 
 Canvas::Canvas()
+    : _size_observer(this, "/options/grabsize/value")
 {
     set_name("InkscapeCanvas");
 
@@ -115,8 +122,9 @@ Canvas::Canvas()
 
     _background = Cairo::SolidPattern::create_rgb(1.0, 1.0, 1.0);
 
-    _root = SP_CANVAS_ITEM(g_object_new(SP_TYPE_CANVAS_GROUP, nullptr));
-    SP_CANVAS_ITEM(_root)->canvas = this;
+    _canvas_item_root = new Inkscape::CanvasItemGroup(nullptr);
+    _canvas_item_root->set_name("CanvasItemGroup:Root");
+    _canvas_item_root->set_canvas(this);
 }
 
 Canvas::~Canvas()
@@ -125,7 +133,8 @@ Canvas::~Canvas()
 
     remove_idle();
 
-    clear_canvas_pointer(_root);
+    // Remove entire CanvasItem tree.
+    delete _canvas_item_root;
 }
 
 /**
@@ -170,6 +179,19 @@ Canvas::get_area_world_int()
     return Geom::IntRect::from_xywh(_x0, _y0, allocation.get_width(), allocation.get_height());
 }
 
+
+/**
+ * Set the affine for the canvas and flag need for geometry update.
+ */
+void
+Canvas::set_affine(Geom::Affine const &affine)
+{
+    if (_affine != affine) {
+        _affine = affine;
+        _need_update = true;
+    }
+}
+
 /**
  * Invalidate drawing and redraw during idle.
  */
@@ -177,11 +199,11 @@ void
 Canvas::redraw_all()
 {
     if (_in_destruction) {
-        std::cerr << "Canvas::redraw_all: Called after canvas destroyed!" << std::endl;
+        // CanvasItems redraw their area when being deleted... which happens when the Canvas is destroyed.
+        // We need to ignore their requests!
         return;
     }
     _clean_region->intersect(Cairo::Region::create()); // Empty region (i.e. everything is dirty).
-
     add_idle();
 }
 
@@ -191,8 +213,14 @@ Canvas::redraw_all()
 void
 Canvas::redraw_area(int x0, int y0, int x1, int y1)
 {
+    // std::cout << "Canvas::redraw_area: "
+    //           << " x0: " << x0
+    //           << " y0: " << y0
+    //           << " x1: " << x1
+    //           << " y1: " << y1 << std::endl;
     if (_in_destruction) {
-        std::cerr << "Canvas::redraw_area: Called after canvas destroyed!" << std::endl;
+        // CanvasItems redraw their area when being deleted... which happens when the Canvas is destroyed.
+        // We need to ignore their requests!
         return;
     }
 
@@ -205,29 +233,34 @@ Canvas::redraw_area(int x0, int y0, int x1, int y1)
     add_idle();
 }
 
+void
+Canvas::redraw_area(Geom::Rect& area)
+{
+    // Might need to round outward.
+    redraw_area(area.min().x(), area.min().y(), area.min().x()+area.width(), area.min().y()+area.height());
+}
+
 /**
- * Immediate redraw of areas needing update.
+ * Immediate redraw of areas needing redrawing (don't wait for idle handler).
  */
 void
 Canvas::redraw_now()
 {
-    if (_need_update) {
-        do_update();
-    }
+    do_update();
 }
 
 /**
- * Redraw after updating canvas items.
+ * Redraw after changing canvas item geometry.
  */
 void
 Canvas::request_update()
 {
     _need_update = true;
-    add_idle();
+    add_idle(); // Geometry changed, need to redraw.
 }
 
 /**
- * This is the first function called (after constructor).
+ * This is the first function called (after constructor) for Inkscape (not Inkview).
  * Scroll window so drawing point 'c' is at upper left corner of canvas.
  * Complete redraw if 'clear' is true.
  */
@@ -263,7 +296,7 @@ Canvas::scroll_to(Geom::Point const &c, bool clear)
         Geom::IntRect expanded = new_area;
         Geom::IntPoint expansion(new_area.width()/2, new_area.height()/2);
         expanded.expandBy(expansion);
-        _drawing->drawing.setCacheLimit(expanded, false);
+        _drawing->setCacheLimit(expanded, false);
     }
 
     if (clear || !overlap) {
@@ -291,15 +324,6 @@ Canvas::scroll_to(Geom::Point const &c, bool clear)
     if (grid) {
         grid->UpdateRulers();
     }
-}
-
-/**
- * Return the root canvas group.
- */
-SPCanvasGroup*
-Canvas::get_canvas_item_root()
-{
-    return SP_CANVAS_GROUP(_root);
 }
 
 /**
@@ -376,32 +400,27 @@ Canvas::forced_redraws_start(int count, bool reset)
 }
 
 /**
- * Clear current, grabbed, and focused items.
+ * Clear current and grabbed items.
  */
 void
-Canvas::canvas_item_clear(SPCanvasItem *item)
+Canvas::canvas_item_clear(Inkscape::CanvasItem* item)
 {
-    if (item == _current_item) {
-        _current_item = nullptr;
+    if (item == _current_canvas_item) {
+        _current_canvas_item = nullptr;
         _need_repick = true;
     }
 
-    if (item == _current_item_new) {
-        _current_item_new = nullptr;
+    if (item == _current_canvas_item_new) {
+        _current_canvas_item_new = nullptr;
         _need_repick = true;
     }
 
-    if (item == _grabbed_item) {
-        _grabbed_item = nullptr;
+    if (item == _grabbed_canvas_item) {
+        _grabbed_canvas_item = nullptr;
         auto const display = Gdk::Display::get_default();
         auto const seat    = display->get_default_seat();
         seat->ungrab();
     }
-
-    if (item == _focused_item) {
-        _focused_item = nullptr;
-    }
-
 }
 
 // ============== Protected Functions ==============
@@ -433,7 +452,7 @@ Canvas::on_button_event(GdkEventButton *button_event)
     // Dispatch normally regardless of the event's window if an item
     // has a pointer grab in effect.
     auto window = get_window();
-    if (!_grabbed_item && window->gobj() != button_event->window) {
+    if (!_grabbed_canvas_item && window->gobj() != button_event->window) {
         return false;
     }
 
@@ -539,18 +558,13 @@ bool
 Canvas::on_focus_in_event(GdkEventFocus *focus_event)
 {
     grab_focus();
-    if  (_focused_item) {
-        return emit_event(reinterpret_cast<GdkEvent *>(focus_event));
-    }
     return false;
 }
 
+// TODO See if we still need this (canvas->focused_item removed between 0.48 and 0.91).
 bool
 Canvas::on_focus_out_event(GdkEventFocus *focus_event)
 {
-    if  (_focused_item) {
-        return emit_event(reinterpret_cast<GdkEvent *>(focus_event));
-    }
     return false;
 }
 
@@ -573,6 +587,7 @@ Canvas::on_motion_notify_event(GdkEventMotion *motion_event)
 {
     Geom::IntPoint cursor_position = Geom::IntPoint(motion_event->x, motion_event->y);
 
+    if (_desktop) {
     // Check if we are near the edge. If so, revert to normal mode.
     if ((_split_mode == Inkscape::SPLITMODE_SPLIT && _split_dragging) ||
          _split_mode == Inkscape::SPLITMODE_XRAY                      ) {
@@ -658,6 +673,7 @@ Canvas::on_motion_notify_event(GdkEventMotion *motion_event)
             return true;
         }
     }
+    } // End if(desktop)
 
     _state = motion_event->state;
     pick_current_item(reinterpret_cast<GdkEvent *>(motion_event));
@@ -684,6 +700,9 @@ Canvas::on_motion_notify_event(GdkEventMotion *motion_event)
 bool
 Canvas::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr)
 {
+    // sp_canvas_item_recursive_print_tree(0, _root);
+    // canvas_item_print_tree(_canvas_item_root);
+
     // This function should be the only place _allocation is redefined (except in on_realize())!
     Gtk::Allocation allocation = get_allocation();
     int device_scale = get_scale_factor();
@@ -730,7 +749,6 @@ Canvas::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr)
     // This is the only place the widget content is drawn!
     cr->set_source(_backing_store, 0, 0);
     cr->paint();
-
     if (_split_mode != Inkscape::SPLITMODE_NORMAL) {
         // Add clipping path and blit outline store.
         cr->save();
@@ -822,6 +840,12 @@ Canvas::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr)
 }
 
 void
+Canvas::update_canvas_item_ctrl_sizes(int size_index)
+{
+    _canvas_item_root->update_canvas_item_ctrl_sizes(size_index);
+}
+
+void
 Canvas::add_idle()
 {
     if (_in_destruction) {
@@ -870,11 +894,15 @@ Canvas::on_idle()
     return !done;
 }
 
-// Return true if done.
+/*
+ * Paints if drawable (widget mapped and visible).
+ * Otherwise picks (which makes no sense).
+ * Return true if done.
+ */
 bool
 Canvas::do_update()
 {
-    if (!_root) {
+    if (!_canvas_item_root) {
         // Canvas destroyed?
         return true;
     }
@@ -883,32 +911,36 @@ Canvas::do_update()
         return true;
     }
 
-    if (_need_update) {
-        sp_canvas_item_invoke_update2(_root, Geom::identity(), 0);
-        _need_update = false;
-    }
-
     if (get_is_drawable()) {
         // We're mapped and visible.
+        if (_need_update) {
+            _canvas_item_root->update(_affine);
+            _need_update = false;
+        }
         return paint();
     }
 
+    // TODO: This makes no sense as normally we wouldn't reach here.
     // Pick current item:
     while (_need_repick) {
         _need_repick = false;
         pick_current_item(&_pick_event);
     }
 
-    return true; // FIXME
+    return true; // FIXME??
 }
 
 
 /*
- * Paint the "dirty" areas of the canvas.
+ * Paint the "dirty" areas of the canvas, usually multiple rectangles.
  */
 bool
 Canvas::paint()
 {
+    if (_need_update) {
+        std::cerr << "Canvas::Paint: called while needing update!" << std::endl;
+    }
+
     Cairo::RectangleInt crect = { _x0, _y0, _allocation.get_width(), _allocation.get_height() };
     auto draw_region = Cairo::Region::create(crect);
     draw_region->subtract(_clean_region);
@@ -973,9 +1005,20 @@ Canvas::paint_rect(Cairo::RectangleInt& rect)
     return paint_rect_internal(&setup, paint_rect);
 }
 
+
+/*
+ * Returns true on successful rendering of rectangle (unless error).
+ * Returns false if rectangle has no area or if timed out.
+ * Queues Gtk redraw of widget.
+ */
 bool
 Canvas::paint_rect_internal(PaintRectSetup const *setup, Geom::IntRect const &this_rect)
 {
+    if (!_drawing) {
+        std::cerr << "Canvas::paint_rect_internal: no CanvasItemDrawing!" << std::endl;
+        return false;
+    }
+
     gint64 now = g_get_monotonic_time();
     gint64 elapsed = now - setup->start_time;
 
@@ -1015,11 +1058,11 @@ Canvas::paint_rect_internal(PaintRectSetup const *setup, Geom::IntRect const &th
     if (bw * bh < setup->max_pixels) {
         // We are small enough!
 
-        _drawing->drawing.setRenderMode(_render_mode);
+        _drawing->setRenderMode(_render_mode);
         paint_single_buffer(this_rect, setup->canvas_rect, _backing_store);
 
         if (_split_mode != Inkscape::SPLITMODE_NORMAL) {
-            _drawing->drawing.setRenderMode(Inkscape::RENDERMODE_OUTLINE);
+            _drawing->setRenderMode(Inkscape::RENDERMODE_OUTLINE);
             paint_single_buffer(this_rect, setup->canvas_rect, _outline_store);
         }
 
@@ -1095,13 +1138,7 @@ Canvas::paint_single_buffer(Geom::IntRect const &paint_rect, Geom::IntRect const
         // Maybe store not created!
     }
 
-    SPCanvasBuf buf;
-    buf.buf = nullptr;
-    buf.buf_rowstride = 0;
-    buf.rect = paint_rect;
-    buf.canvas_rect = canvas_rect;
-    buf.device_scale = _device_scale;
-    buf.is_empty = true;
+    Inkscape::CanvasItemBuffer buf(paint_rect, canvas_rect, _device_scale);
 
     // Make sure the following code does not go outside of store's data
     assert(store->get_format() == Cairo::FORMAT_ARGB32);
@@ -1113,10 +1150,13 @@ Canvas::paint_single_buffer(Geom::IntRect const &paint_rect, Geom::IntRect const
     // Create temporary surface that draws directly to store.
     store->flush();
 
+    // std::cout << "  Writing store to png" << std::endl;
     // static int i = 0;
     // ++i;
-    // std::string file = "paint_single_buffer0_" + std::to_string(i) + ".png";
-    // store->write_to_png(file);
+    // if (i < 5) {
+    //     std::string file = "paint_single_buffer0_" + std::to_string(i) + ".png";
+    //     store->write_to_png(file);
+    // }
 
     // Create temporary surface that draws directly to store.
     unsigned char *data = store->get_data();
@@ -1148,11 +1188,12 @@ Canvas::paint_single_buffer(Geom::IntRect const &paint_rect, Geom::IntRect const
     cr->set_source(_background);
     cr->paint();
     cr->restore();
-    buf.ct = cr->cobj();
+
+    buf.cr = cr;
 
     // Render drawing on top of background.
-    if (_root->visible) {
-        SP_CANVAS_ITEM_GET_CLASS(_root)->render(_root, &buf);
+    if (_canvas_item_root->is_visible()) {
+        _canvas_item_root->render(&buf);
     }
 
 #if defined(HAVE_LIBLCMS2)
@@ -1181,6 +1222,12 @@ Canvas::paint_single_buffer(Geom::IntRect const &paint_rect, Geom::IntRect const
 
     store->mark_dirty();
 
+    // if (i < 5) {
+    //     std::cout << "  Writing store to png" << std::endl;
+    //     std::string file = "paint_single_buffer1_" + std::to_string(i) + ".png";
+    //     store->write_to_png(file);
+    // }
+
     // Uncomment to see how Inkscape paints to rectangles on canvas.
     // cr->save();
     // cr->move_to (0.5,                    0.5);
@@ -1192,6 +1239,7 @@ Canvas::paint_single_buffer(Geom::IntRect const &paint_rect, Geom::IntRect const
     // cr->stroke();
     // cr->restore();
 
+    // TODO Check... the rest duplicates a call after this function returns.
     Cairo::RectangleInt crect = { paint_rect.left(), paint_rect.top(), paint_rect.width(), paint_rect.height() };
     _clean_region->do_union( crect );
 
@@ -1327,10 +1375,16 @@ Canvas::set_cursor() {
 //
 // Canvas items register their interest by connecting to the "event" signal.
 // Example in desktop.cpp:
-//   g_signal_connect (G_OBJECT (acetate), "event", G_CALLBACK (sp_desktop_root_handler), this);
+//   canvas_catchall->connect_event(sigc::bind(sigc::ptr_fun(sp_desktop_root_handler), this));
 bool
 Canvas::pick_current_item(GdkEvent *event)
 {
+    // Ensure geometry is correct.
+    if (_need_update) {
+        _canvas_item_root->update(_affine);
+        _need_update = false;
+    }
+
     int button_down = 0;
     if (_all_enter_events == false) {
         // Only set true in connector-tool.cpp.
@@ -1385,52 +1439,58 @@ Canvas::pick_current_item(GdkEvent *event)
     }
 
     // Find new item
-    _current_item_new = nullptr; // Not used in call to sp_canvas_item_invoke_point
-    if (_pick_event.type != GDK_LEAVE_NOTIFY && _root->visible) {
+    _current_canvas_item_new = nullptr;
+
+    if (_pick_event.type != GDK_LEAVE_NOTIFY && _canvas_item_root->is_visible()) {
         // Leave notify means there is no current item.
-
         // Find closest item.
-        if (_root->visible) {
-            double x = 0.0;
-            double y = 0.0;
+        double x = 0.0;
+        double y = 0.0;
 
-            if (_pick_event.type == GDK_ENTER_NOTIFY) {
-                x = _pick_event.crossing.x;
-                y = _pick_event.crossing.y;
-            } else {
-                x = _pick_event.motion.x;
-                y = _pick_event.motion.y;
-            }
-
-            // If in split mode, look at where cursor is to see if one should pick with outline mode.
-            _drawing->drawing.setRenderMode(_render_mode);
-            if (_split_mode == Inkscape::SPLITMODE_SPLIT) {
-                if ((_split_direction == Inkscape::SPLITDIRECTION_NORTH && y > _split_position.y()) ||
-                    (_split_direction == Inkscape::SPLITDIRECTION_SOUTH && y < _split_position.y()) ||
-                    (_split_direction == Inkscape::SPLITDIRECTION_WEST  && x > _split_position.x()) ||
-                    (_split_direction == Inkscape::SPLITDIRECTION_EAST  && x < _split_position.x()) ) {
-                    _drawing->drawing.setRenderMode(Inkscape::RENDERMODE_OUTLINE);
-                }
-            }
-
-            // Convert to world coordinates.
-            x += _x0;
-            y += _y0;
-
-            sp_canvas_item_invoke_point (_root, Geom::Point(x, y), &_current_item_new);
+        if (_pick_event.type == GDK_ENTER_NOTIFY) {
+            x = _pick_event.crossing.x;
+            y = _pick_event.crossing.y;
+        } else {
+            x = _pick_event.motion.x;
+            y = _pick_event.motion.y;
         }
+
+        // If in split mode, look at where cursor is to see if one should pick with outline mode.
+        _drawing->setRenderMode(_render_mode);
+        if (_split_mode == Inkscape::SPLITMODE_SPLIT) {
+            if ((_split_direction == Inkscape::SPLITDIRECTION_NORTH && y > _split_position.y()) ||
+                (_split_direction == Inkscape::SPLITDIRECTION_SOUTH && y < _split_position.y()) ||
+                (_split_direction == Inkscape::SPLITDIRECTION_WEST  && x > _split_position.x()) ||
+                (_split_direction == Inkscape::SPLITDIRECTION_EAST  && x < _split_position.x()) ) {
+                _drawing->setRenderMode(Inkscape::RENDERMODE_OUTLINE);
+            }
+        }
+
+        // Convert to world coordinates.
+        x += _x0;
+        y += _y0;
+        Geom::Point p(x, y);
+
+        _current_canvas_item_new = _canvas_item_root->pick_item(p);
+        // if (_current_canvas_item_new) {
+        //     std::cout << "  PICKING: FOUND ITEM: " << _current_canvas_item_new->get_name() << std::endl;
+        // } else {
+        //     std::cout << "  PICKING: DID NOT FIND ITEM" << std::endl;
+        // }
     }
 
-    if ((_current_item_new == _current_item) && !_left_grabbed_item) {
+    if (_current_canvas_item_new == _current_canvas_item &&
+        !_left_grabbed_item                               ) {
         // Current item did not change!
         return false;
     }
 
     // Synthesize events for old and new current items.
     bool retval = false;
-    if ( (_current_item_new != _current_item) &&
-         _current_item != nullptr             &&
-         !_left_grabbed_item                   ) {
+    if (_current_canvas_item_new != _current_canvas_item &&
+        _current_canvas_item != nullptr                  &&
+        !_left_grabbed_item                               ) {
+
         GdkEvent new_event;
         new_event = _pick_event;
         new_event.type = GDK_LEAVE_NOTIFY;
@@ -1443,7 +1503,8 @@ Canvas::pick_current_item(GdkEvent *event)
 
     if (_all_enter_events == false) {
         // new_current_item may have been set to nullptr during the call to emitEvent() above.
-        if ((_current_item_new != _current_item) && button_down) {
+        if (_current_canvas_item_new != _current_canvas_item &&
+            button_down                                       ) {
             _left_grabbed_item = true;
             return retval;
         }
@@ -1451,9 +1512,9 @@ Canvas::pick_current_item(GdkEvent *event)
 
     // Handle the rest of cases
     _left_grabbed_item = false;
-    _current_item = _current_item_new;
+    _current_canvas_item = _current_canvas_item_new;
 
-    if (_current_item != nullptr) {
+    if (_current_canvas_item != nullptr ) {
         GdkEvent new_event;
         new_event = _pick_event;
         new_event.type = GDK_ENTER_NOTIFY;
@@ -1468,38 +1529,37 @@ Canvas::pick_current_item(GdkEvent *event)
 bool
 Canvas::emit_event(GdkEvent *event)
 {
-    int mask = 0;
-    if (_grabbed_item) {
+    Gdk::EventMask mask = (Gdk::EventMask)0;
+    if (_grabbed_canvas_item) {
         switch (event->type) {
         case GDK_ENTER_NOTIFY:
-            mask = GDK_ENTER_NOTIFY_MASK;
+            mask = Gdk::ENTER_NOTIFY_MASK;
             break;
         case GDK_LEAVE_NOTIFY:
-            mask = GDK_LEAVE_NOTIFY_MASK;
+            mask = Gdk::LEAVE_NOTIFY_MASK;
             break;
         case GDK_MOTION_NOTIFY:
-            mask = GDK_POINTER_MOTION_MASK;
+            mask = Gdk::POINTER_MOTION_MASK;
             break;
         case GDK_BUTTON_PRESS:
         case GDK_2BUTTON_PRESS:
         case GDK_3BUTTON_PRESS:
-            mask = GDK_BUTTON_PRESS_MASK;
+            mask = Gdk::BUTTON_PRESS_MASK;
             break;
         case GDK_BUTTON_RELEASE:
-            mask = GDK_BUTTON_RELEASE_MASK;
+            mask = Gdk::BUTTON_RELEASE_MASK;
             break;
         case GDK_KEY_PRESS:
-            mask = GDK_KEY_PRESS_MASK;
+            mask = Gdk::KEY_PRESS_MASK;
             break;
         case GDK_KEY_RELEASE:
-            mask = GDK_KEY_RELEASE_MASK;
+            mask = Gdk::KEY_RELEASE_MASK;
             break;
         case GDK_SCROLL:
-            mask = GDK_SCROLL_MASK;
-            mask |= GDK_SMOOTH_SCROLL_MASK;
+            mask = Gdk::SCROLL_MASK;
+            mask |= Gdk::SMOOTH_SCROLL_MASK;
             break;
         default:
-            mask = 0;
             break;
         }
 
@@ -1535,28 +1595,21 @@ Canvas::emit_event(GdkEvent *event)
         _is_dragging = false;
     }
 
-    // Choose where to send event.
-    SPCanvasItem *item = _current_item;
-
-    if (_grabbed_item && !is_descendant(_current_item, _grabbed_item)) {
-        item = _grabbed_item;
-    }
-
-    if (_focused_item &&
-        ((event->type == GDK_KEY_PRESS) ||
-         (event->type == GDK_KEY_RELEASE) ||
-         (event->type == GDK_FOCUS_CHANGE))) {
-        item = _focused_item;
-    }
-
-    // Propogate the event up the item hierarchy until handled.
     gint finished = false; // Can't be bool or "stack smashing detected"!
-    while (item && !finished) {
-        g_object_ref (item);
-        g_signal_emit (G_OBJECT (item), item_signals[ITEM_EVENT], 0, event_copy, &finished);
-        SPCanvasItem *parent = item->parent;
-        g_object_unref (item);
-        item = parent;
+    
+    if (_current_canvas_item) {
+        // Choose where to send event;
+        CanvasItem *item = _current_canvas_item;
+
+        if (_grabbed_canvas_item && !_current_canvas_item->is_descendant_of(_grabbed_canvas_item)) {
+            item = _grabbed_canvas_item;
+        }
+
+        // Propogate the event up the canvas item hierarchy until handled.
+        while (item && !finished) {
+            finished = item->handle_event(event_copy);
+            item = item->get_parent();
+        }
     }
 
     gdk_event_free(event_copy);

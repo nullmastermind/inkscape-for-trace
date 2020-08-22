@@ -24,7 +24,8 @@ LPEdoEffectStackTest::LPEdoEffectStackTest(LivePathEffectObject *lpeobject) :
     registerParameter(&point);
     registerParameter(&path);
 
-    point.set_oncanvas_looks(SP_KNOT_SHAPE_SQUARE, SP_KNOT_MODE_XOR, 0x00ff0000);
+    point.set_oncanvas_looks(Inkscape::CANVAS_ITEM_CTRL_SHAPE_SQUARE,
+                             Inkscape::CANVAS_ITEM_CTRL_MODE_XOR, 0x00ff0000);
     point.param_setValue(point);
 }
 

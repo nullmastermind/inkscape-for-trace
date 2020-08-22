@@ -10,17 +10,17 @@
 #ifndef SEEN_PEN_CONTEXT_H
 #define SEEN_PEN_CONTEXT_H
 
-
-
 #include "ui/tools/freehand-base.h"
 #include "live_effects/effect.h"
 
 #define SP_PEN_CONTEXT(obj) (dynamic_cast<Inkscape::UI::Tools::PenTool*>((Inkscape::UI::Tools::ToolBase*)obj))
 #define SP_IS_PEN_CONTEXT(obj) (dynamic_cast<const Inkscape::UI::Tools::PenTool*>((const Inkscape::UI::Tools::ToolBase*)obj) != NULL)
 
-struct SPCtrlLine;
-
 namespace Inkscape {
+
+class CanvasItemCtrl;
+class CanvasItemCurve;
+
 namespace UI {
 namespace Tools {
 
@@ -49,28 +49,27 @@ public:
     Geom::Point previous;
     /** \invar npoints in {0, 2, 5}. */
     // npoints somehow determines the type of the node (what does it mean, exactly? the number of Bezier handles?)
-    gint npoints;
+    gint npoints = 0;
 
-    Mode mode;
-    State state;
-    bool polylines_only;
-    bool polylines_paraxial;
+    Mode mode = MODE_CLICK;
+    State state = POINT;
+    bool polylines_only = false;
+    bool polylines_paraxial = false;
     Geom::Point paraxial_angle;
 
-    // propiety which saves if Spiro mode is active or not
-    bool spiro;
-    bool bspline;
-    int num_clicks;
+    bool spiro = false;  // Spiro mode active?
+    bool bspline = false; // BSpline mode active?
+    int num_clicks = 0;;
 
-    unsigned int expecting_clicks_for_LPE; // if positive, finish the path after this many clicks
-    Inkscape::LivePathEffect::Effect *waiting_LPE; // if NULL, waiting_LPE_type in SPDrawContext is taken into account
-    SPLPEItem *waiting_item;
+    unsigned int expecting_clicks_for_LPE = 0; // if positive, finish the path after this many clicks
+    Inkscape::LivePathEffect::Effect *waiting_LPE = nullptr; // if NULL, waiting_LPE_type in SPDrawContext is taken into account
+    SPLPEItem *waiting_item = nullptr;
 
-    SPCanvasItem *c0;
-    SPCanvasItem *c1;
-
-    SPCtrlLine *cl0;
-    SPCtrlLine *cl1;
+    Inkscape::CanvasItemCtrl *c0 = nullptr; // Start point of path.
+    Inkscape::CanvasItemCtrl *c1 = nullptr; // End point of path.
+    
+    Inkscape::CanvasItemCurve *cl0 = nullptr;
+    Inkscape::CanvasItemCurve *cl1 = nullptr;
     
     bool events_disabled;
 

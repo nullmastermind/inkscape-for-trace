@@ -12,10 +12,12 @@
 
 #include <glib.h>
 #include <2geom/point.h>
-#include "ui/widget/registered-widget.h"
-#include "live_effects/parameter/parameter.h"
 
 #include "knot-holder-entity.h"
+
+#include "display/control/canvas-item-enums.h"
+#include "live_effects/parameter/parameter.h"
+#include "ui/widget/registered-widget.h"
 
 namespace Inkscape {
 
@@ -51,7 +53,9 @@ public:
     void param_update_default(const gchar * default_point) override;
     void param_transform_multiply(Geom::Affine const & /*postmul*/, bool set) override;
 
-    void set_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color);
+    void set_oncanvas_looks(Inkscape::CanvasItemCtrlShape shape,
+                            Inkscape::CanvasItemCtrlMode mode,
+                            guint32 color);
 
     bool providesKnotHolderEntities() const override { return true; }
     void addKnotHolderEntities(KnotHolder *knotholder, SPItem *item) override;
@@ -62,10 +66,10 @@ private:
     bool on_button_release(GdkEventButton* button_event);
     Geom::Point defvalue;
     bool liveupdate;
-    KnotHolderEntity * _knot_entity;
-    SPKnotShapeType knot_shape;
-    SPKnotModeType knot_mode;
-    guint32 knot_color;
+    KnotHolderEntity * _knot_entity = nullptr;
+    Inkscape::CanvasItemCtrlShape knot_shape = Inkscape::CANVAS_ITEM_CTRL_SHAPE_DIAMOND;
+    Inkscape::CanvasItemCtrlMode knot_mode = Inkscape::CANVAS_ITEM_CTRL_MODE_XOR;
+    guint32 knot_color = 0xffffff00;
     gchar *handle_tip;
 };
 

@@ -24,8 +24,7 @@
 #include "snap.h"
 #include "verbs.h"
 
-#include "display/sp-canvas-item.h"
-#include "display/sp-ctrlline.h"
+#include "display/control/canvas-item-curve.h"
 
 #include "object/sp-namedview.h"
 #include "object/box3d.h"
@@ -33,12 +32,6 @@
 #include "ui/shape-editor.h"
 #include "ui/tools/tool-base.h"
 
-using Inkscape::CTLINE_PRIMARY;
-using Inkscape::CTLINE_SECONDARY;
-using Inkscape::CTLINE_TERTIARY;
-using Inkscape::CTRL_TYPE_ANCHOR;
-using Inkscape::ControlManager;
-using Inkscape::CtrlLineType;
 using Inkscape::DocumentUndo;
 
 namespace Box3D {
@@ -53,9 +46,9 @@ namespace Box3D {
 #define MERGE_DIST 0.1
 
 // knot shapes corresponding to GrPointType enum
-SPKnotShapeType vp_knot_shapes[] = {
-    SP_KNOT_SHAPE_SQUARE, // VP_FINITE
-    SP_KNOT_SHAPE_CIRCLE  // VP_INFINITE
+Inkscape::CanvasItemCtrlShape vp_knot_shapes[] = {
+    Inkscape::CANVAS_ITEM_CTRL_SHAPE_SQUARE, // VP_FINITE
+    Inkscape::CANVAS_ITEM_CTRL_SHAPE_CIRCLE  // VP_INFINITE
 };
 
 static void vp_drag_sel_changed(Inkscape::Selection * /*selection*/, gpointer data)
@@ -278,13 +271,10 @@ VPDragger::VPDragger(VPDrag *parent, Geom::Point p, VanishingPoint &vp)
 {
     if (vp.is_finite()) {
         // create the knot
-        this->knot = new SPKnot(SP_ACTIVE_DESKTOP, nullptr);
-        this->knot->setMode(SP_KNOT_MODE_XOR);
+        this->knot = new SPKnot(SP_ACTIVE_DESKTOP, "", Inkscape::CANVAS_ITEM_CTRL_TYPE_ANCHOR, "CanvasItemCtrl:VPDragger");
         this->knot->setFill(VP_KNOT_COLOR_NORMAL, VP_KNOT_COLOR_NORMAL, VP_KNOT_COLOR_NORMAL, VP_KNOT_COLOR_NORMAL);
         this->knot->setStroke(0x000000ff, 0x000000ff, 0x000000ff, 0x000000ff);
         this->knot->updateCtrl();
-        knot->item->ctrlType = CTRL_TYPE_ANCHOR;
-        ControlManager::getManager().track(knot->item);
 
         // move knot to the given point
         this->knot->setPosition(this->point, SP_KNOT_STATE_NORMAL);
@@ -516,10 +506,10 @@ VPDrag::~VPDrag()
     }
     this->draggers.clear();
 
-    for (std::vector<SPCtrlLine *>::const_iterator i = this->lines.begin(); i != this->lines.end(); ++i) {
-        sp_canvas_item_destroy(SP_CANVAS_ITEM(*i));
+    for (auto item_curve : item_curves) {
+        delete item_curve;
     }
-    this->lines.clear();
+    item_curves.clear();
 }
 
 /**
@@ -583,11 +573,11 @@ of a dragger, so that lines are always in sync with the actual perspective
 */
 void VPDrag::updateLines()
 {
-    // delete old lines
-    for (std::vector<SPCtrlLine *>::const_iterator i = this->lines.begin(); i != this->lines.end(); ++i) {
-        sp_canvas_item_destroy(SP_CANVAS_ITEM(*i));
+    // Delete old lines
+    for (auto curve : item_curves) {
+        delete curve;
     }
-    this->lines.clear();
+    item_curves.clear();
 
     // do nothing if perspective lines are currently disabled
     if (this->show_lines == 0)
@@ -653,17 +643,17 @@ void VPDrag::updateBoxDisplays()
 void VPDrag::drawLinesForFace(const SPBox3D *box,
                               Proj::Axis axis) //, guint corner1, guint corner2, guint corner3, guint corner4)
 {
-    CtrlLineType type = CTLINE_PRIMARY;
+    Inkscape::CanvasItemColor type = Inkscape::CANVAS_ITEM_PRIMARY;
     switch (axis) {
         // TODO: Make color selectable by user
         case Proj::X:
-            type = CTLINE_SECONDARY;
+            type = Inkscape::CANVAS_ITEM_SECONDARY;
             break;
         case Proj::Y:
-            type = CTLINE_PRIMARY;
+            type = Inkscape::CANVAS_ITEM_PRIMARY;
             break;
         case Proj::Z:
-            type = CTLINE_TERTIARY;
+            type = Inkscape::CANVAS_ITEM_TERTIARY;;
             break;
         default:
             g_assert_not_reached();
@@ -680,13 +670,13 @@ void VPDrag::drawLinesForFace(const SPBox3D *box,
         Geom::Point pt = vp.affine();
         if (this->front_or_rear_lines & 0x1) {
             // draw 'front' perspective lines
-            this->addLine(corners[0], pt, type);
-            this->addLine(corners[1], pt, type);
+            this->addCurve(corners[0], pt, type);
+            this->addCurve(corners[1], pt, type);
         }
         if (this->front_or_rear_lines & 0x2) {
             // draw 'rear' perspective lines
-            this->addLine(corners[2], pt, type);
-            this->addLine(corners[3], pt, type);
+            this->addCurve(corners[2], pt, type);
+            this->addCurve(corners[3], pt, type);
         }
     }
     else {
@@ -704,13 +694,13 @@ void VPDrag::drawLinesForFace(const SPBox3D *box,
         }
         if (this->front_or_rear_lines & 0x1) {
             // draw 'front' perspective lines
-            this->addLine(corners[0], *pts[0], type);
-            this->addLine(corners[1], *pts[1], type);
+            this->addCurve(corners[0], *pts[0], type);
+            this->addCurve(corners[1], *pts[1], type);
         }
         if (this->front_or_rear_lines & 0x2) {
             // draw 'rear' perspective lines
-            this->addLine(corners[2], *pts[2], type);
-            this->addLine(corners[3], *pts[3], type);
+            this->addCurve(corners[2], *pts[2], type);
+            this->addCurve(corners[3], *pts[3], type);
         }
     }
 }
@@ -753,11 +743,12 @@ void VPDrag::swap_perspectives_of_VPs(Persp3D *persp2, Persp3D *persp1)
     }
 }
 
-void VPDrag::addLine(Geom::Point const &p1, Geom::Point const &p2, Inkscape::CtrlLineType type)
+void VPDrag::addCurve(Geom::Point const &p1, Geom::Point const &p2, Inkscape::CanvasItemColor color)
 {
-    SPCtrlLine *line = ControlManager::getManager().createControlLine(SP_ACTIVE_DESKTOP->getControls(), p1, p2, type);
-    sp_canvas_item_show(line);
-    this->lines.push_back(line);
+    auto item_curve = new Inkscape::CanvasItemCurve(SP_ACTIVE_DESKTOP->getCanvasControls(), p1, p2);
+    item_curve->set_name("3DBoxCurve");
+    item_curve->set_stroke(color);
+    item_curves.push_back(item_curve);
 }
 
 } // namespace Box3D

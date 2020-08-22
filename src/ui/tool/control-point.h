@@ -18,9 +18,11 @@
 #include <sigc++/trackable.h>
 #include <2geom/point.h>
 
-#include "ui/control-types.h"
-#include "display/sodipodi-ctrl.h"
-#include "enums.h"
+// #include "ui/control-types.h"
+#include "display/control/canvas-item-ctrl.h"
+#include "display/control/canvas-item-enums.h"
+
+#include "enums.h" // TEMP TEMP
 
 class SPDesktop;
 
@@ -221,8 +223,9 @@ protected:
      * @param group The canvas group the point's canvas item should be created in
      */
     ControlPoint(SPDesktop *d, Geom::Point const &initial_pos, SPAnchorType anchor,
-                 ControlType type,
-                 ColorSet const &cset = _default_color_set, SPCanvasGroup *group = nullptr);
+                 Inkscape::CanvasItemCtrlType type,
+                 ColorSet const &cset = _default_color_set,
+                 Inkscape::CanvasItemGroup *group = nullptr);
 
     /**
      * Create a control point with a pixbuf-based visual representation.
@@ -236,7 +239,8 @@ protected:
      */
     ControlPoint(SPDesktop *d, Geom::Point const &initial_pos, SPAnchorType anchor,
                  Glib::RefPtr<Gdk::Pixbuf> pixbuf,
-                 ColorSet const &cset = _default_color_set, SPCanvasGroup *group = nullptr);
+                 ColorSet const &cset = _default_color_set,
+                 Inkscape::CanvasItemGroup *group = nullptr);
 
     /// @name Handle control point events in subclasses
     /// @{
@@ -298,17 +302,9 @@ protected:
 
     void _setColors(ColorEntry c);
 
-    unsigned int _size() const;
-
-    SPCtrlShapeType _shape() const;
-
-    SPAnchorType _anchor() const;
-
-    Glib::RefPtr<Gdk::Pixbuf> _pixbuf();
-
     void _setSize(unsigned int size);
 
-    bool _setControlType(Inkscape::ControlType type);
+    void _setControlType(Inkscape::CanvasItemCtrlType type);
 
     void _setAnchor(SPAnchorType anchor);
 
@@ -337,11 +333,11 @@ protected:
     virtual bool _hasDragTips() const { return false; }
 
 
-    SPCanvasItem * _canvas_item; ///< Visual representation of the control point.
+    Inkscape::CanvasItemCtrl * _canvas_item_ctrl = nullptr; ///< Visual representation of the control point.
 
     ColorSet const &_cset; ///< Colors used to represent the point
 
-    State _state;
+    State _state = STATE_NORMAL;
 
     static Geom::Point const &_last_click_event_point() { return _drag_event_origin; }
 
@@ -350,7 +346,7 @@ protected:
     static bool _is_drag_cancelled(GdkEventMotion *event);
 
     /** Events which should be captured when a handle is being dragged. */
-    static int const _grab_event_mask;
+    static Gdk::EventMask const _grab_event_mask;
 
     static bool _drag_initiated;
 
@@ -360,7 +356,7 @@ private:
 
     void operator=(ControlPoint const &other);
 
-    static int _event_handler(SPCanvasItem *item, GdkEvent *event, ControlPoint *point);
+    static bool _event_handler(GdkEvent *event, ControlPoint *point);
 
     static void _setMouseover(ControlPoint *, unsigned state);
 
@@ -376,9 +372,9 @@ private:
 
     Geom::Point _position; ///< Current position in desktop coordinates
 
-    gulong _event_handler_connection;
+    sigc::connection _event_handler_connection;
 
-    bool _lurking;
+    bool _lurking = false;
 
     static ColorSet _default_color_set;
 
@@ -390,7 +386,7 @@ private:
 
     static bool _event_grab;
 
-    bool _double_clicked;
+    bool _double_clicked = false;
 };
 
 

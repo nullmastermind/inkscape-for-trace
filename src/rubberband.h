@@ -18,10 +18,8 @@
 
 /* fixme: do multidocument safe */
 
-class CtrlRect;
 class SPCurve;
 class SPDesktop;
-struct SPCanvasItem;
 
 enum {
     RUBBERBAND_MODE_RECT,
@@ -30,6 +28,9 @@ enum {
 
 namespace Inkscape
 {
+
+class CanvasItemBpath;
+class CanvasItemRect;
 
 /**
  * Rubberbanding selector.
@@ -62,14 +63,14 @@ private:
 
     std::vector<Geom::Point> _points;
 
-    CtrlRect *_rect;
-    SPCanvasItem *_touchpath;
-    SPCurve *_touchpath_curve;
+    Inkscape::CanvasItemRect *_rect = nullptr;
+    Inkscape::CanvasItemBpath *_touchpath = nullptr;
+    SPCurve *_touchpath_curve = nullptr;
 
     void delete_canvas_items();
 
-    bool _started;
-    int _mode;
+    bool _started = false;
+    int _mode = RUBBERBAND_MODE_RECT;
 };
 
 }

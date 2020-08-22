@@ -582,12 +582,11 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
 void LPEOffset::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
 {
     _knot_entity = new OfS::KnotHolderEntityOffsetPoint(this);
-    _knot_entity->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_LPE, _("Offset point"), SP_KNOT_SHAPE_CIRCLE,
-                         SP_KNOT_MODE_COLOR);
+    _knot_entity->create(nullptr, item, knotholder, Inkscape::CANVAS_ITEM_CTRL_TYPE_LPE,
+                         "LPEOffset", _("Offset point"));
+    _knot_entity->knot->setMode(Inkscape::CANVAS_ITEM_CTRL_MODE_COLOR);
     _knot_entity->knot->setFill(0x0088FFFF, 0x4BA1C7FF, 0xCF1410FF, 0x0088FFFF);
     _knot_entity->knot->setStroke(0x000000FF, 0x000000FF, 0x000000FF, 0x000000FF);
-    g_object_set(G_OBJECT(_knot_entity->knot->item), "stroke_color", 0x000000FF, NULL);
-    g_object_set(G_OBJECT(_knot_entity->knot->item), "fill_color", 0x0088FFFF, NULL);
     offset_pt = Geom::Point(Geom::infinity(), Geom::infinity());
     knotholder->add(_knot_entity);
 }

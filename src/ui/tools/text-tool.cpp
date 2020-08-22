@@ -19,9 +19,7 @@
 #include <glibmm/i18n.h>
 #include <glibmm/regex.h>
 
-#include <display/sp-ctrlline.h>
-#include <display/sodipodi-ctrlrect.h>
-#include <display/sp-ctrlquadr.h>
+#include "text-tool.h"
 
 #include "context-fns.h"
 #include "desktop-style.h"
@@ -35,8 +33,13 @@
 #include "rubberband.h"
 #include "selection-chemistry.h"
 #include "selection.h"
+#include "style.h"
 #include "text-editing.h"
 #include "verbs.h"
+
+#include "display/control/canvas-item-curve.h"
+#include "display/control/canvas-item-quad.h"
+#include "display/control/canvas-item-rect.h"
 
 #include "object/sp-flowtext.h"
 #include "object/sp-namedview.h"
@@ -45,21 +48,16 @@
 #include "object/sp-shape.h"
 #include "object/sp-ellipse.h"
 
-#include "style.h"
-
 #include "ui/pixmaps/cursor-text-insert.xpm"
 #include "ui/pixmaps/cursor-text.xpm"
 
-#include "ui/control-manager.h"
 #include "ui/shape-editor.h"
-#include "ui/tools/text-tool.h"
 #include "ui/widget/canvas.h"
 
 #include "xml/attribute-record.h"
 #include "xml/node-event-vector.h"
 #include "xml/sp-css-attr.h"
 
-using Inkscape::ControlManager;
 using Inkscape::DocumentUndo;
 
 namespace Inkscape {
@@ -85,23 +83,6 @@ const std::string TextTool::prefsPath = "/tools/text";
 
 TextTool::TextTool()
     : ToolBase(cursor_text_xpm)
-    , imc(nullptr)
-    , text(nullptr)
-    , pdoc(0, 0)
-    , unimode(false)
-    , unipos(0)
-    , cursor(nullptr)
-    , indicator(nullptr)
-    , frame(nullptr)
-    , timeout(0)
-    , show(false)
-    , phase(false)
-    , nascent_object(false)
-    , over_text(false)
-    , dragging(0)
-    , creating(false)
-    , grabbed(nullptr)
-    , preedit_string(nullptr)
 {
 }
 
@@ -109,10 +90,7 @@ TextTool::~TextTool() {
     delete this->shape_editor;
     this->shape_editor = nullptr;
 
-    if (this->grabbed) {
-        sp_canvas_item_ungrab(this->grabbed);
-        this->grabbed = nullptr;
-    }
+    ungrabCanvasEvents();
 
     Inkscape::Rubberband::get(this->desktop)->stop();
 }
@@ -128,22 +106,20 @@ void TextTool::setup() {
         timeout /= 2;
     }
 
-    this->cursor = ControlManager::getManager().createControlLine(desktop->getControls(), Geom::Point(100, 0), Geom::Point(100, 100));
-    this->cursor->setRgba32(0x000000ff);
-    sp_canvas_item_hide(this->cursor);
+    cursor = new Inkscape::CanvasItemCurve(desktop->getCanvasControls());
+    cursor->set_stroke(0x000000ff);
+    cursor->hide();
 
     // The rectangle box tightly wrapping text object when selected or under cursor.
-    this->indicator = sp_canvas_item_new(desktop->getControls(), SP_TYPE_CTRLRECT, nullptr);
-    SP_CTRLRECT(this->indicator)->setRectangle(Geom::Rect(Geom::Point(0, 0), Geom::Point(100, 100)));
-    SP_CTRLRECT(this->indicator)->setColor(0x0000ff7f, false, 0);
-    SP_CTRLRECT(this->indicator)->setShadow(1, 0xffffff7f);
-    sp_canvas_item_hide(this->indicator);
+    indicator = new Inkscape::CanvasItemRect(desktop->getCanvasControls());
+    indicator->set_stroke(0x0000ff7f);
+    indicator->set_shadow(0xffffff7f, 1);
+    indicator->hide();
 
     // The rectangle box outlining wrapping the shape for text in a shape.
-    this->frame = sp_canvas_item_new(desktop->getControls(), SP_TYPE_CTRLRECT, nullptr);
-    SP_CTRLRECT(this->frame)->setRectangle(Geom::Rect(Geom::Point(0, 0), Geom::Point(100, 100)));
-    SP_CTRLRECT(this->frame)->setColor(0x0000ff7f, false, 0);
-    sp_canvas_item_hide(this->frame);
+    frame = new Inkscape::CanvasItemRect(desktop->getCanvasControls());
+    frame->set_stroke(0x0000ff7f);
+    frame->hide();
 
     this->timeout = g_timeout_add(timeout, (GSourceFunc) sp_text_context_timeout, this);
 
@@ -230,27 +206,26 @@ void TextTool::finish() {
         this->timeout = 0;
     }
 
-    if (this->cursor) {
-        sp_canvas_item_destroy(this->cursor);
-        this->cursor = nullptr;
+    if (cursor) {
+        delete cursor;
+        cursor = nullptr;
     }
 
     if (this->indicator) {
-        sp_canvas_item_destroy(this->indicator);
+        delete indicator;
         this->indicator = nullptr;
     }
 
     if (this->frame) {
-        sp_canvas_item_destroy(this->frame);
+        delete frame;
         this->frame = nullptr;
     }
 
-    for (auto & text_selection_quad : this->text_selection_quads) {
-        sp_canvas_item_hide(text_selection_quad);
-        sp_canvas_item_destroy(text_selection_quad);
+    for (auto & text_selection_quad : text_selection_quads) {
+        text_selection_quad->hide();
+        delete text_selection_quad;
     }
-    
-    this->text_selection_quads.clear();
+    text_selection_quads.clear();
 
     ToolBase::finish();
 }
@@ -453,7 +428,7 @@ static void show_curr_uni_char(TextTool *const tc)
 }
 
 bool TextTool::root_handler(GdkEvent* event) {
-    sp_canvas_item_hide(this->indicator);
+    indicator->hide();
 
     sp_text_context_validate_cursor_iterators(this);
 
@@ -483,10 +458,9 @@ bool TextTool::root_handler(GdkEvent* event) {
 
                 this->p0 = button_dt;
                 Inkscape::Rubberband::get(desktop)->start(desktop, this->p0);
-                sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
-                                    GDK_KEY_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_BUTTON_PRESS_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK,
-                                    nullptr, event->button.time);
-                this->grabbed = SP_CANVAS_ITEM(desktop->acetate);
+
+                grabCanvasEvents();
+
                 this->creating = true;
 
                 /* Processed */
@@ -568,15 +542,15 @@ bool TextTool::root_handler(GdkEvent* event) {
             if (SP_IS_TEXT(item_ungrouped) || SP_IS_FLOWTEXT(item_ungrouped)) {
                 Inkscape::Text::Layout const *layout = te_get_layout(item_ungrouped);
                 if (layout->inputTruncated()) {
-                    SP_CTRLRECT(this->indicator)->setColor(0xff0000ff, false, 0);
+                    indicator->set_stroke(0xff0000ff);
                 } else {
-                    SP_CTRLRECT(this->indicator)->setColor(0x0000ff7f, false, 0);
+                    indicator->set_stroke(0x0000ff7f);
                 }
                 Geom::OptRect ibbox = item_ungrouped->desktopVisualBounds();
                 if (ibbox) {
-                    SP_CTRLRECT(this->indicator)->setRectangle(*ibbox);
+                    indicator->set_rect(*ibbox);
                 }
-                sp_canvas_item_show(this->indicator);
+                indicator->show();
 
                 this->cursor_shape = cursor_text_insert_xpm;
                 this->sp_event_context_update_cursor();
@@ -611,10 +585,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                 m.freeSnapReturnByRef(p1, Inkscape::SNAPSOURCE_NODE_HANDLE);
                 m.unSetup();
 
-                if (this->grabbed) {
-                    sp_canvas_item_ungrab(this->grabbed);
-                    this->grabbed = nullptr;
-                }
+                ungrabCanvasEvents();
 
                 Inkscape::Rubberband::get(desktop)->stop();
 
@@ -627,12 +598,12 @@ bool TextTool::root_handler(GdkEvent* event) {
                     this->nascent_object = true; // new object was just created
 
                     /* Cursor */
-                    sp_canvas_item_show(this->cursor);
+                    cursor->show();
                     // Cursor height is defined by the new text object's font size; it needs to be set
                     // artificially here, for the text object does not exist yet:
                     double cursor_height = sp_desktop_get_font_size_tool(desktop);
                     auto const y_dir = desktop->yaxisdir();
-                    this->cursor->setCoords(p1, p1 - Geom::Point(0, y_dir * cursor_height));
+                    cursor->set_coords(p1, p1 - Geom::Point(0, y_dir * cursor_height));
                     if (this->imc) {
                         GdkRectangle im_cursor;
                         Geom::Point const top_left = desktop->get_display_area().bounds().corner(3);
@@ -1139,10 +1110,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                             case GDK_KEY_Escape:
                                 if (this->creating) {
                                     this->creating = false;
-                                    if (this->grabbed) {
-                                        sp_canvas_item_ungrab(this->grabbed);
-                                        this->grabbed = nullptr;
-                                    }
+                                    ungrabCanvasEvents();
                                     Inkscape::Rubberband::get(desktop)->stop();
                                 } else {
                                     desktop->getSelection()->clear();
@@ -1261,10 +1229,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                 } else if (group0_keyval == GDK_KEY_Escape) { // cancel rubberband
                     if (this->creating) {
                         this->creating = false;
-                        if (this->grabbed) {
-                            sp_canvas_item_ungrab(this->grabbed);
-                            this->grabbed = nullptr;
-                        }
+                        ungrabCanvasEvents();
                         Inkscape::Rubberband::get(desktop)->stop();
                     }
                 } else if ((group0_keyval == GDK_KEY_x || group0_keyval == GDK_KEY_X) && MOD__ALT_ONLY(event)) {
@@ -1676,8 +1641,8 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
             }
         }
 
-        sp_canvas_item_show(tc->cursor);
-        tc->cursor->setCoords(d0, d1);
+        tc->cursor->set_coords(d0, d1);
+        tc->cursor->show();
 
         /* fixme: ... need another transformation to get canvas widget coordinate space? */
         if (tc->imc) {
@@ -1705,21 +1670,20 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
         }
 
         if (truncated) {
-            SP_CTRLRECT(tc->frame)->setColor(0xff0000ff, false, 0);
+            tc->frame->set_stroke(0xff0000ff);
         } else {
-            SP_CTRLRECT(tc->frame)->setColor(0x0000ff7f, false, 0);
+            tc->frame->set_stroke(0x0000ff7f);
         }
 
         // Frame around text
         if (SP_IS_FLOWTEXT(tc->text)) {
             SPItem *frame = SP_FLOWTEXT(tc->text)->get_frame (nullptr); // first frame only
             if (frame) {
-                sp_canvas_item_show(tc->frame);
                 Geom::OptRect frame_bbox = frame->desktopVisualBounds();
                 if (frame_bbox) {
-                    SP_CTRLRECT(tc->frame)->setRectangle(*frame_bbox);
-                    sp_canvas_item_show(tc->frame);
+                    tc->frame->set_rect(*frame_bbox);
                 }
+                tc->frame->show();
             }
 
             tc->message_context->setF(Inkscape::NORMAL_MESSAGE, ngettext("Type or edit flowed text (%d character%s); <b>Enter</b> to start new paragraph.", "Type or edit flowed text (%d characters%s); <b>Enter</b> to start new paragraph.", nChars), nChars, trunc);
@@ -1733,10 +1697,10 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
                 Geom::Rect frame = *opt_frame;
                 frame *= tc->text->i2dt_affine();
 
-                SP_CTRLRECT(tc->frame)->setRectangle(frame);
-                sp_canvas_item_show(tc->frame);
+                tc->frame->set_rect(frame);
+                tc->frame->show();
             } else {
-                sp_canvas_item_hide(tc->frame);
+                tc->frame->hide();
             }
 
         } else {
@@ -1745,8 +1709,8 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
         }
 
     } else {
-        sp_canvas_item_hide(tc->cursor);
-        sp_canvas_item_hide(tc->frame);
+        tc->cursor->hide();
+        tc->frame->hide();
         tc->show = FALSE;
         if (!tc->nascent_object) {
             tc->message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> to select or create text, <b>drag</b> to create flowed text; then type.")); // FIXME: this is a copy of string from tools-switch, do not desync
@@ -1763,8 +1727,8 @@ static void sp_text_context_update_text_selection(TextTool *tc)
     if (!tc->getDesktop()) return;
 
     for (auto & text_selection_quad : tc->text_selection_quads) {
-        sp_canvas_item_hide(text_selection_quad);
-        sp_canvas_item_destroy(text_selection_quad);
+        text_selection_quad->hide();
+        delete text_selection_quad;
     }
     tc->text_selection_quads.clear();
 
@@ -1772,14 +1736,10 @@ static void sp_text_context_update_text_selection(TextTool *tc)
     if (tc->text != nullptr)
         quads = sp_te_create_selection_quads(tc->text, tc->text_sel_start, tc->text_sel_end, (tc->text)->i2dt_affine());
     for (unsigned i = 0 ; i < quads.size() ; i += 4) {
-        SPCanvasItem *quad_canvasitem;
-        quad_canvasitem = sp_canvas_item_new(tc->getDesktop()->getControls(), SP_TYPE_CTRLQUADR, nullptr);
-        // FIXME: make the color settable in prefs
-        // for now, use semitrasparent blue, as cairo cannot do inversion :(
-        sp_ctrlquadr_set_rgba32(SP_CTRLQUADR(quad_canvasitem), 0x00777777);
-        sp_ctrlquadr_set_coords(SP_CTRLQUADR(quad_canvasitem), quads[i], quads[i+1], quads[i+2], quads[i+3]);
-        sp_canvas_item_show(quad_canvasitem);
-        tc->text_selection_quads.push_back(quad_canvasitem);
+        auto quad = new CanvasItemQuad(tc->getDesktop()->getCanvasControls(), quads[i], quads[i+1], quads[i+2], quads[i+3]);
+        quad->set_fill(0x00777777); // Semi-transparent blue as Cairo cannot do inversion.
+        quad->show();
+        tc->text_selection_quads.push_back(quad);
     }
 
     if (tc->shape_editor != nullptr) {
@@ -1792,14 +1752,14 @@ static void sp_text_context_update_text_selection(TextTool *tc)
 static gint sp_text_context_timeout(TextTool *tc)
 {
     if (tc->show) {
-        sp_canvas_item_show(tc->cursor);
         if (tc->phase) {
             tc->phase = false;
-            tc->cursor->setRgba32(0x000000ff);
+            tc->cursor->set_stroke(0x000000ff);
         } else {
             tc->phase = true;
-            tc->cursor->setRgba32(0xffffffff);
+            tc->cursor->set_stroke(0xffffffff);
         }
+        tc->cursor->show();
     }
 
     return TRUE;

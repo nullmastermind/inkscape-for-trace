@@ -51,9 +51,8 @@
 #include "selection.h"
 #include "verbs.h"
 
-#include "display/canvas-arena.h"
-#include "display/canvas-bpath.h"
 #include "display/curve.h"
+#include "display/control/canvas-item-bpath.h"
 
 #include "include/macros.h"
 
@@ -114,13 +113,12 @@ void EraserTool::setup() {
     cal1.reset(new SPCurve());
     cal2.reset(new SPCurve());
 
-    this->currentshape = sp_canvas_item_new(desktop->getSketch(), SP_TYPE_CANVAS_BPATH, nullptr);
-
-    sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(this->currentshape), ERC_RED_RGBA, SP_WIND_RULE_EVENODD);
-    sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(this->currentshape), 0x00000000, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
+    currentshape = new Inkscape::CanvasItemBpath(desktop->getCanvasSketch());
+    currentshape->set_stroke(0x0);
+    currentshape->set_fill(ERC_RED_RGBA, SP_WIND_RULE_EVENODD);
 
     /* fixme: Cannot we cascade it to root more clearly? */
-    g_signal_connect(G_OBJECT(this->currentshape), "event", G_CALLBACK(sp_desktop_root_handler), desktop);
+    currentshape->connect_event(sigc::bind(sigc::ptr_fun(sp_desktop_root_handler), desktop));
 
 /*
 static ProfileFloatElement f_profile[PROFILE_FLOAT_SIZE] = {
@@ -362,17 +360,20 @@ void EraserTool::cancel() {
 
     this->dragging = FALSE;
     this->is_drawing = false;
-    sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
-            /* Remove all temporary line segments */
-    for (auto i : this->segments)
-        sp_canvas_item_destroy(SP_CANVAS_ITEM(i));
+    ungrabCanvasEvents();
+
+    /* Remove all temporary line segments */
+    for (auto segment : this->segments) {
+        delete segment;
+    }
     this->segments.clear();
-            /* reset accumulated curve */
-            this->accumulated->reset();
-            this->clear_current();
-            if (this->repr) {
-                this->repr = nullptr;
-            }
+
+    /* reset accumulated curve */
+    this->accumulated->reset();
+    this->clear_current();
+    if (this->repr) {
+        this->repr = nullptr;
+    }
 }
 
 bool EraserTool::root_handler(GdkEvent* event) {
@@ -405,13 +406,7 @@ bool EraserTool::root_handler(GdkEvent* event) {
                 /* initialize first point */
                 this->npoints = 0;
 
-                sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
-                                    ( GDK_KEY_PRESS_MASK |
-                                      GDK_BUTTON_RELEASE_MASK |
-                                      GDK_POINTER_MOTION_MASK |
-                                      GDK_BUTTON_PRESS_MASK ),
-                                    nullptr,
-                                    event->button.time);
+                grabCanvasEvents();
 
                 ret = TRUE;
 
@@ -457,7 +452,8 @@ bool EraserTool::root_handler(GdkEvent* event) {
         Geom::Point const motion_w(event->button.x, event->button.y);
         Geom::Point const motion_dt(desktop->w2d(motion_w));
 
-        sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
+        ungrabCanvasEvents();
+
         forced_redraws_stop();
         this->is_drawing = false;
 
@@ -467,8 +463,9 @@ bool EraserTool::root_handler(GdkEvent* event) {
             this->apply(motion_dt);
 
             /* Remove all temporary line segments */
-            for (auto i : this->segments)
-                sp_canvas_item_destroy(SP_CANVAS_ITEM(i));
+            for (auto segment : this->segments) {
+                delete segment;
+            }
             this->segments.clear();
 
             /* Create object */
@@ -624,7 +621,7 @@ bool EraserTool::root_handler(GdkEvent* event) {
 
 void EraserTool::clear_current() {
     // reset bpath
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->currentshape), nullptr);
+    this->currentshape->set_bpath(nullptr);
 
     // reset curve
     this->currentcurve->reset();
@@ -1011,7 +1008,7 @@ void EraserTool::fit_and_split(bool release) {
                 }
 
                 this->currentcurve->closepath();
-                sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(currentshape), currentcurve.get(), true);
+                this->currentshape->set_bpath(currentcurve.get(), true);
             }
 
             /* Current eraser */
@@ -1046,27 +1043,25 @@ void EraserTool::fit_and_split(bool release) {
             gint eraser_mode = prefs->getInt("/tools/eraser/mode",2);
             g_assert(!this->currentcurve->is_empty());
 
-            SPCanvasItem *cbp = sp_canvas_item_new(desktop->getSketch(), SP_TYPE_CANVAS_BPATH, nullptr);
-            auto curve = this->currentcurve->copy();
-            sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(cbp), curve.get(), true);
 
             guint32 fillColor = sp_desktop_get_color_tool (desktop, "/tools/eraser", true);
-            //guint32 strokeColor = sp_desktop_get_color_tool (desktop, "/tools/eraser", false);
             double opacity = sp_desktop_get_master_opacity_tool (desktop, "/tools/eraser");
             double fillOpacity = sp_desktop_get_opacity_tool (desktop, "/tools/eraser", true);
-            //double strokeOpacity = sp_desktop_get_opacity_tool (desktop, "/tools/eraser", false);
-            sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(cbp), ((fillColor & 0xffffff00) | SP_COLOR_F_TO_U(opacity*fillOpacity)), SP_WIND_RULE_EVENODD);
-            //on second thougtht don't do stroke yet because we don't have stoke-width yet and because stoke appears between segments while drawing
-            //sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(cbp), ((strokeColor & 0xffffff00) | SP_COLOR_F_TO_U(opacity*strokeOpacity)), 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
-            sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(cbp), 0x00000000, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
+
+            guint fill = (fillColor & 0xffffff00) | SP_COLOR_F_TO_U(opacity*fillOpacity);
+
+            auto cbp = new Inkscape::CanvasItemBpath(desktop->getCanvasSketch(), currentcurve.get(), true);
+            cbp->set_fill(fill, SP_WIND_RULE_EVENODD);
+            cbp->set_stroke(0x0);
+
             /* fixme: Cannot we cascade it to root more clearly? */
-            g_signal_connect(G_OBJECT(cbp), "event", G_CALLBACK(sp_desktop_root_handler), desktop);
+            cbp->connect_event(sigc::bind(sigc::ptr_fun(sp_desktop_root_handler), desktop));
 
             this->segments.push_back(cbp);
 
             if (eraser_mode == ERASER_MODE_DELETE) {
-                sp_canvas_item_hide(cbp);
-                sp_canvas_item_hide(this->currentshape);
+                cbp->hide();
+                this->currentshape->hide();
             }
         }
 
@@ -1098,7 +1093,7 @@ void EraserTool::draw_temporary_box() {
     }
 
     this->currentcurve->closepath();
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(currentshape), currentcurve.get(), true);
+    this->currentshape->set_bpath(currentcurve.get(), true);
 }
 
 }

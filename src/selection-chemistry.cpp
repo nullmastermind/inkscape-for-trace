@@ -24,20 +24,15 @@
 
 #include <boost/range/adaptor/reversed.hpp>
 #include <cstring>
-#include <glibmm/i18n.h>
 #include <map>
 #include <string>
 
+#include <glibmm/i18n.h>
 #include <gtkmm/clipboard.h>
 
 #include "selection-chemistry.h"
 
 #include "file.h"
-#include "display/canvas-bpath.h"
-
-// TODO FIXME: This should be moved into preference repr
-SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
-
 
 #include "context-fns.h"
 #include "desktop-style.h"
@@ -56,6 +51,7 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 
 #include "display/cairo-utils.h"
 #include "display/curve.h"
+#include "display/control/canvas-item-bpath.h"
 
 #include "helper/png-write.h"
 
@@ -114,6 +110,9 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 
 #include "xml/rebase-hrefs.h"
 #include "xml/simple-document.h"
+
+// TODO FIXME: This should be moved into preference repr
+SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 
 using Inkscape::DocumentUndo;
 using Geom::X;
@@ -2889,10 +2888,13 @@ void ObjectSet::cloneOriginal()
                 curve->moveto(a->midpoint());
                 curve->lineto(b->midpoint());
 
-                SPCanvasItem *canvasitem = sp_canvas_bpath_new(desktop()->getTempGroup(), curve.get());
-                sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(canvasitem), 0x0000ddff, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT, 5, 3);
-                sp_canvas_item_show(canvasitem);
-                desktop()->add_temporary_canvasitem(canvasitem, 1000);
+                // We use a bpath as it supports dashes.
+                auto canvas_item_bpath = new Inkscape::CanvasItemBpath(desktop()->getCanvasTemp(), curve.get());
+                canvas_item_bpath->set_stroke(0x0000ddff);
+                static std::vector<double> dashes = { 5, 3 };
+                canvas_item_bpath->set_dashes(dashes);
+                canvas_item_bpath->show();
+                desktop()->add_temporary_canvasitem(canvas_item_bpath, 1000);
             }
         }
 

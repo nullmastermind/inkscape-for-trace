@@ -17,7 +17,7 @@
 #include <utility>
 
 #include "display/curve.h"
-#include "display/canvas-bpath.h"
+#include "display/control/canvas-item-bpath.h"
 
 #include "helper/geom.h"
 
@@ -112,12 +112,6 @@ PathManipulator::PathManipulator(MultiPathManipulator &mpm, SPObject *path,
     , _dragpoint(new CurveDragPoint(*this))
     , /* XML Tree being used here directly while it shouldn't be*/_observer(new PathManipulatorObserver(this, path->getRepr()))
     , _edit_transform(et)
-    , _show_handles(true)
-    , _show_outline(false)
-    , _show_path_direction(false)
-    , _live_outline(true)
-    , _live_objects(true)
-    , _is_bspline(false)
     , _lpe_key(std::move(lpe_key))
 {
     LivePathEffectObject *lpeobj = dynamic_cast<LivePathEffectObject *>(_path);
@@ -132,11 +126,10 @@ PathManipulator::PathManipulator(MultiPathManipulator &mpm, SPObject *path,
 
     _getGeometry();
 
-    _outline = sp_canvas_bpath_new(_multi_path_manipulator._path_data.outline_group, nullptr);
-    sp_canvas_item_hide(_outline);
-    sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(_outline), outline_color, 1.0,
-        SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
-    sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(_outline), 0, SP_WIND_RULE_NONZERO);
+    _outline = new Inkscape::CanvasItemBpath(_multi_path_manipulator._path_data.outline_group);
+    _outline->hide();
+    _outline->set_stroke(outline_color);
+    _outline->set_fill(0x0, SP_WIND_RULE_NONZERO);
 
     _selection.signal_update.connect(
         sigc::bind(sigc::mem_fun(*this, &PathManipulator::update), false));
@@ -154,7 +147,7 @@ PathManipulator::~PathManipulator()
 {
     delete _dragpoint;
     delete _observer;
-    sp_canvas_item_destroy(_outline);
+    delete _outline;
     clear();
 }
 
@@ -1433,7 +1426,7 @@ std::string PathManipulator::_createTypeString()
 void PathManipulator::_updateOutline()
 {
     if (!_show_outline) {
-        sp_canvas_item_hide(_outline);
+        _outline->hide();
         return;
     }
 
@@ -1462,8 +1455,8 @@ void PathManipulator::_updateOutline()
         pv.insert(pv.end(), arrows.begin(), arrows.end());
     }
     _hc->set_pathvector(pv);
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(_outline), _hc.get());
-    sp_canvas_item_show(_outline);
+    _outline->set_bpath(_hc.get());
+    _outline->show();
 }
 
 /** Retrieve the geometry of the edited object from the object tree */

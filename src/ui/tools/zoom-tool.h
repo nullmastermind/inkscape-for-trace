@@ -37,7 +37,6 @@ public:
 	const std::string& getPrefsPath() override;
 
 private:
-	SPCanvasItem *grabbed;
 	bool escaped;
 };
 

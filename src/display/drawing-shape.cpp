@@ -16,16 +16,17 @@
 #include <2geom/path-sink.h>
 #include <2geom/svg-path-parser.h>
 
+#include "drawing-shape.h"
+
 #include "preferences.h"
 #include "style.h"
 
 #include "display/cairo-utils.h"
-#include "display/canvas-arena.h"
 #include "display/curve.h"
 #include "display/drawing.h"
 #include "display/drawing-context.h"
 #include "display/drawing-group.h"
-#include "display/drawing-shape.h"
+#include "display/control/canvas-item-drawing.h"
 
 #include "helper/geom-curves.h"
 #include "helper/geom.h"
@@ -324,17 +325,19 @@ DrawingShape::_pickItem(Geom::Point const &p, double delta, unsigned flags)
     if (_repick_after > 0)
         --_repick_after;
 
-    if (_repick_after > 0) // we are a slow, huge path
-        return _last_pick; // skip this pick, returning what was returned last time
+    if (_repick_after > 0) { // we are a slow, huge path
+        return _last_pick;   // skip this pick, returning what was returned last time
+    }
 
     if (!_curve) return nullptr;
     if (!_style) return nullptr;
     bool outline = _drawing.outline() || _drawing.getOutlineSensitive();
     bool pick_as_clip = flags & PICK_AS_CLIP;
 
-    if (SP_SCALE24_TO_FLOAT(_style->opacity.value) == 0 && !outline && !pick_as_clip) 
+    if (SP_SCALE24_TO_FLOAT(_style->opacity.value) == 0 && !outline && !pick_as_clip) {
         // fully transparent, no pick unless outline mode
         return nullptr;
+    }
 
     gint64 tstart = g_get_monotonic_time();
 
@@ -361,8 +364,8 @@ DrawingShape::_pickItem(Geom::Point const &p, double delta, unsigned flags)
         (_style->fill_rule.computed == SP_WIND_RULE_EVENODD);
 
     // actual shape picking
-    if (_drawing.arena()) {
-        Geom::Rect viewbox = _drawing.arena()->item.canvas->get_area_world();
+    if (_drawing.getCanvasItemDrawing()) {
+        Geom::Rect viewbox = _drawing.getCanvasItemDrawing()->get_canvas()->get_area_world();
         viewbox.expandBy (width);
         pathv_matrix_point_bbox_wind_distance(_curve->get_pathvector(), _ctm, p, nullptr, needfill? &wind : nullptr, &dist, 0.5, &viewbox);
     } else {

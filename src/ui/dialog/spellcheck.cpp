@@ -28,8 +28,7 @@
 #include "text-editing.h"
 #include "verbs.h"
 
-#include "display/curve.h"
-#include "display/canvas-bpath.h"
+#include "display/control/canvas-item-rect.h"
 
 #include "object/sp-defs.h"
 #include "object/sp-flowtext.h"
@@ -230,9 +229,9 @@ void SpellCheck::setDesktop(SPDesktop *desktop)
 
 void SpellCheck::clearRects()
 {
-    for(auto t : _rects) {
-        sp_canvas_item_hide(t);
-        sp_canvas_item_destroy(t);
+    for(auto rect : _rects) {
+        rect->hide();
+        delete rect;
     }
     _rects.clear();
 }
@@ -512,7 +511,8 @@ SpellCheck::nextWord()
         // draw rect
         std::vector<Geom::Point> points =
             _layout->createSelectionShape(_begin_w, _end_w, _text->i2dt_affine());
-        if (points.size() >= 4) { // we may not have a single quad if this is a clipped part of text on path; in that case skip drawing the rect
+        if (points.size() >= 4) { // We may not have a single quad if this is a clipped part of text on path;
+                                  // in that case skip drawing the rect
             Geom::Point tl, br;
             tl = br = points.front();
             for (auto & point : points) {
@@ -533,18 +533,10 @@ SpellCheck::nextWord()
                 mindim = fabs(tl[Geom::X] - br[Geom::X]);
             area.expandBy(MAX(0.05 * mindim, 1));
 
-            // create canvas path rectangle, red stroke
-            SPCanvasItem *rect = sp_canvas_bpath_new(desktop->getSketch(), nullptr);
-            sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(rect), 0xff0000ff, 3.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
-            sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(rect), 0, SP_WIND_RULE_NONZERO);
-            SPCurve *curve = new SPCurve();
-            curve->moveto(area.corner(0));
-            curve->lineto(area.corner(1));
-            curve->lineto(area.corner(2));
-            curve->lineto(area.corner(3));
-            curve->lineto(area.corner(0));
-            sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(rect), curve);
-            sp_canvas_item_show(rect);
+            // Create canvas item rect with red stroke. (TODO: a quad could allow non-axis aligned rects.)
+            auto rect = new Inkscape::CanvasItemRect(desktop->getCanvasSketch(), area);
+            rect->set_stroke(0xff0000ff);
+            rect->show();
             _rects.push_back(rect);
 
             // scroll to make it all visible
@@ -622,9 +614,9 @@ void
 SpellCheck::deleteLastRect ()
 {
     if (!_rects.empty()) {
-        sp_canvas_item_hide(_rects.back());
-        sp_canvas_item_destroy(_rects.back());
-        _rects.pop_back(); // pop latest-prepended rect
+        _rects.back()->hide();
+        delete _rects.back();
+        _rects.pop_back();
     }
 }
 

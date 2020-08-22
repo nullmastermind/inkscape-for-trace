@@ -50,7 +50,7 @@ namespace UI {
  * Fires when a change that needs to be committed to XML happens.
  */
 
-ControlPointSelection::ControlPointSelection(SPDesktop *d, SPCanvasGroup *th_group)
+ControlPointSelection::ControlPointSelection(SPDesktop *d, Inkscape::CanvasItemGroup *th_group)
     : Manipulator(d)
     , _handles(new TransformHandleSet(d, th_group))
     , _dragging(false)

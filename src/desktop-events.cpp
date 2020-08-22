@@ -37,9 +37,9 @@
 #include "sp-cursor.h"
 #include "verbs.h"
 
-#include "display/canvas-grid.h"
-#include "display/guideline.h"
-#include "display/snap-indicator.h"
+#include "display/control/snap-indicator.h"
+#include "display/control/canvas-item.h" // NOT USED!!
+#include "display/control/canvas-item-guideline.h"
 
 #include "helper/action.h"
 
@@ -64,9 +64,9 @@ using Inkscape::DocumentUndo;
 static void snoop_extended(GdkEvent* event, SPDesktop *desktop);
 static void init_extended();
 
-/* Root item handler */
+/* Root canvas item handler */
 
-int sp_desktop_root_handler(SPCanvasItem */*item*/, GdkEvent *event, SPDesktop *desktop)
+bool sp_desktop_root_handler(GdkEvent *event, SPDesktop *desktop)
 {
     static bool watch = false;
     static bool first = true;
@@ -84,7 +84,7 @@ int sp_desktop_root_handler(SPCanvasItem */*item*/, GdkEvent *event, SPDesktop *
         snoop_extended(event, desktop);
     }
 
-    return sp_event_context_root_handler(desktop->event_context, event);
+    return (bool)sp_event_context_root_handler(desktop->event_context, event);
 }
 
 
@@ -97,28 +97,28 @@ static SPGuideDragType drag_type = SP_DRAG_NONE;
 // Min distance from anchor to initiate rotation, measured in screenpixels
 #define tol 40.0
 
-gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
+bool sp_dt_guide_event(GdkEvent *event, Inkscape::CanvasItemGuideLine *guide_item, SPGuide *guide)
 {
     static bool moved = false;
-    gint ret = FALSE;
+    bool ret = false;
 
-    SPGuide *guide = SP_GUIDE(data);
-    SPDesktop *desktop = item->canvas->get_desktop();
+    SPDesktop *desktop = guide_item->get_canvas()->get_desktop();
     if (!desktop) {
         std::cerr << "sp_dt_guide_event: No desktop!" << std::endl;
     }
 
     switch (event->type) {
-    case GDK_2BUTTON_PRESS:
+        case GDK_2BUTTON_PRESS:
             if (event->button.button == 1) {
                 drag_type = SP_DRAG_NONE;
                 sp_event_context_discard_delayed_snap_event(desktop->event_context);
-                sp_canvas_item_ungrab(item);
+                guide_item->ungrab();
                 Inkscape::UI::Dialogs::GuidelinePropertiesDialog::showDialog(guide, desktop);
-                ret = TRUE;
+                ret = true;
             }
             break;
-    case GDK_BUTTON_PRESS:
+
+        case GDK_BUTTON_PRESS:
             if (event->button.button == 1) {
                 Geom::Point const event_w(event->button.x, event->button.y);
                 Geom::Point const event_dt(desktop->w2d(event_w));
@@ -142,23 +142,25 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                 }
 
                 if (drag_type == SP_DRAG_ROTATE || drag_type == SP_DRAG_TRANSLATE) {
-                    sp_canvas_item_grab(item,
-                                        ( GDK_BUTTON_RELEASE_MASK  |
-                                          GDK_BUTTON_PRESS_MASK    |
-                                          GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK ),
-                                        nullptr,
-                                        event->button.time);
+                    guide_item->grab((Gdk::BUTTON_RELEASE_MASK      |
+                                      Gdk::BUTTON_PRESS_MASK        |
+                                      Gdk::POINTER_MOTION_MASK      |
+                                      Gdk::POINTER_MOTION_HINT_MASK ),
+                                     nullptr);
                 }
-                ret = TRUE;
+                ret = true;
             }
             break;
+
         case GDK_MOTION_NOTIFY:
             if (drag_type != SP_DRAG_NONE) {
                 Geom::Point const motion_w(event->motion.x,
                                            event->motion.y);
                 Geom::Point motion_dt(desktop->w2d(motion_w));
 
-                sp_event_context_snap_delay_handler(desktop->event_context, (gpointer) item, data, (GdkEventMotion *)event, Inkscape::UI::Tools::DelayedSnapEvent::GUIDE_HANDLER);
+                sp_event_context_snap_delay_handler(
+                    desktop->event_context, (void *) guide_item, (void *) guide, (GdkEventMotion *)event,
+                    Inkscape::UI::Tools::DelayedSnapEvent::GUIDE_HANDLER);
 
                 // This is for snapping while dragging existing guidelines. New guidelines,
                 // which are dragged off the ruler, are being snapped in sp_dt_ruler_event
@@ -231,10 +233,11 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                 moved = true;
                 desktop->set_coordinate_status(motion_dt);
 
-                ret = TRUE;
+                ret = true;
             }
             break;
-    case GDK_BUTTON_RELEASE:
+
+        case GDK_BUTTON_RELEASE:
             if (drag_type != SP_DRAG_NONE && event->button.button == 1) {
                 sp_event_context_discard_delayed_snap_event(desktop->event_context);
 
@@ -242,7 +245,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                     Geom::Point const event_w(event->button.x,
                                               event->button.y);
                     Geom::Point event_dt(desktop->w2d(event_w));
-
+                    std::cout << "    event_w: " << event_w << ", event_dt: " << event_dt << std::endl;
                     SnapManager &m = desktop->namedview->snap_manager;
                     m.setup(desktop, true, nullptr, nullptr, guide);
                     if (drag_type == SP_DRAG_MOVE_ORIGIN) {
@@ -271,7 +274,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                     }
                     m.unSetup();
 
-                    if (item->canvas->world_point_inside_canvas(event_w)) {
+                    if (guide_item->get_canvas()->world_point_inside_canvas(event_w)) {
                         switch (drag_type) {
                             case SP_DRAG_TRANSLATE:
                             {
@@ -311,7 +314,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                                 break;
                         }
                         DocumentUndo::done(desktop->getDocument(), SP_VERB_NONE,
-                                         _("Move guide"));
+                                           _("Move guide"));
                     } else {
                         /* Undo movement of any attached shapes. */
                         guide->moveto(guide->getPoint(), false);
@@ -320,20 +323,21 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                         desktop->getCanvas()->get_window()->set_cursor(desktop->event_context->cursor);
 
                         DocumentUndo::done(desktop->getDocument(), SP_VERB_NONE,
-                                     _("Delete guide"));
+                                           _("Delete guide"));
                     }
                     moved = false;
                     desktop->set_coordinate_status(event_dt);
                 }
                 drag_type = SP_DRAG_NONE;
-                sp_canvas_item_ungrab(item);
-                ret=TRUE;
+                guide_item->ungrab();
+                ret = true;
             }
             break;
-    case GDK_ENTER_NOTIFY:
-    {
+
+        case GDK_ENTER_NOTIFY:
+        {
             if (!guide->getLocked()) {
-                sp_guideline_set_color(SP_GUIDELINE(item), guide->getHiColor());
+                guide_item->set_stroke(guide->getHiColor());
             }
 
             // set move or rotate cursor
@@ -359,15 +363,18 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
             desktop->guidesMessageContext()->setF(Inkscape::NORMAL_MESSAGE, _("<b>Guideline</b>: %s"), guide_description);
             g_free(guide_description);
             break;
-    }
-    case GDK_LEAVE_NOTIFY:
-            sp_guideline_set_color(SP_GUIDELINE(item), guide->getColor());
+        }
+
+        case GDK_LEAVE_NOTIFY:
+
+            guide_item->set_stroke(guide->getColor());
 
             // restore event context's cursor
             desktop->getCanvas()->get_window()->set_cursor(desktop->event_context->cursor);
 
             desktop->guidesMessageContext()->clear();
             break;
+
         case GDK_KEY_PRESS:
             switch (Inkscape::UI::Tools::get_latin_keyval (&event->key)) {
                 case GDK_KEY_Delete:
@@ -377,7 +384,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                     SPDocument *doc = guide->document;
                     sp_guide_remove(guide);
                     DocumentUndo::done(doc, SP_VERB_NONE, _("Delete guide"));
-                    ret = TRUE;
+                    ret = true;
                     sp_event_context_discard_delayed_snap_event(desktop->event_context);
                     desktop->getCanvas()->get_window()->set_cursor(desktop->event_context->cursor);
                     break;
@@ -388,7 +395,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                         auto display = Gdk::Display::get_default();
                         auto guide_cursor = Gdk::Cursor::create(display, Gdk::EXCHANGE);
                         desktop->getCanvas()->get_window()->set_cursor(guide_cursor);
-                        ret = TRUE;
+                        ret = true;
                         break;
                     }
 
@@ -397,6 +404,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                     break;
             }
             break;
+
         case GDK_KEY_RELEASE:
             switch (Inkscape::UI::Tools::get_latin_keyval (&event->key)) {
                 case GDK_KEY_Shift_L:
@@ -412,8 +420,9 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                     break;
             }
             break;
-    default:
-        break;
+
+        default:
+            break;
     }
 
     return ret;

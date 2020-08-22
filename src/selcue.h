@@ -22,9 +22,10 @@
 #include "preferences.h"
 
 class  SPDesktop;
-struct SPCanvasItem;
 
 namespace Inkscape {
+
+class CanvasItem;
 
 class Selection;
 
@@ -65,8 +66,8 @@ private:
     Selection *_selection;
     sigc::connection _sel_changed_connection;
     sigc::connection _sel_modified_connection;
-    std::vector<SPCanvasItem*> _item_bboxes;
-    std::vector<SPCanvasItem*> _text_baselines;
+    std::vector<Inkscape::CanvasItem*> _item_bboxes;
+    std::vector<Inkscape::CanvasItem*> _text_baselines;
 
     BoundingBoxPrefsObserver _bounding_box_prefs_observer;
 };

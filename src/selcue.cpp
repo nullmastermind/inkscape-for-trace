@@ -18,9 +18,8 @@
 #include "selection.h"
 #include "text-editing.h"
 
-#include "display/sodipodi-ctrl.h"
-#include "display/sodipodi-ctrlrect.h"
-#include "display/sp-canvas-util.h"
+#include "display/control/canvas-item-ctrl.h"
+#include "display/control/canvas-item-rect.h"
 
 #include "libnrtype/Layout-TNG.h"
 
@@ -65,13 +64,13 @@ Inkscape::SelCue::~SelCue()
     _sel_changed_connection.disconnect();
     _sel_modified_connection.disconnect();
 
-    for (auto & _item_bboxe : _item_bboxes) {
-        sp_canvas_item_destroy(_item_bboxe);
+    for (auto & item : _item_bboxes) {
+        delete item;
     }
     _item_bboxes.clear();
 
-    for (auto & _text_baseline : _text_baselines) {
-        sp_canvas_item_destroy(_text_baseline);
+    for (auto & item : _text_baselines) {
+        delete item;
     }
     _text_baselines.clear();
 }
@@ -104,24 +103,26 @@ void Inkscape::SelCue::_updateItemBboxes(gint mode, int prefs_bbox)
     }
 
     int bcount = 0;
-    auto ll= _selection->items();
-    for (auto l = ll.begin(); l != ll.end(); ++l) {
-        SPItem *item = *l;
-        SPCanvasItem* box = _item_bboxes[bcount ++];
+    for (auto item : items) {
 
-        if (box) {
+        auto canvas_item = _item_bboxes[bcount++];
+
+        if (canvas_item) {
             Geom::OptRect const b = (prefs_bbox == 0) ?
                 item->desktopVisualBounds() : item->desktopGeometricBounds();
 
             if (b) {
-                sp_canvas_item_show(box);
-                if (mode == MARK) {
-                    SP_CTRL(box)->moveto(Geom::Point(b->min()[Geom::X], b->max()[Geom::Y]));
-                } else if (mode == BBOX) {
-                    SP_CTRLRECT(box)->setRectangle(*b);
+                auto ctrl = dynamic_cast<CanvasItemCtrl *>(canvas_item);
+                if (ctrl) {
+                    ctrl->set_position(Geom::Point(b->min().x(), b->max().y()));
                 }
+                auto rect = dynamic_cast<CanvasItemRect *>(canvas_item);
+                if (rect) {
+                    rect->set_rect(*b);
+                }
+                canvas_item->show();
             } else { // no bbox
-                sp_canvas_item_hide(box);
+                canvas_item->hide();
             }
         }
     }
@@ -132,8 +133,8 @@ void Inkscape::SelCue::_updateItemBboxes(gint mode, int prefs_bbox)
 
 void Inkscape::SelCue::_newItemBboxes()
 {
-    for (auto & _item_bboxe : _item_bboxes) {
-        sp_canvas_item_destroy(_item_bboxe);
+    for (auto & item : _item_bboxes) {
+        delete item;
     }
     _item_bboxes.clear();
 
@@ -147,49 +148,38 @@ void Inkscape::SelCue::_newItemBboxes()
 
     int prefs_bbox = prefs->getBool("/tools/bounding_box");
     
-    auto ll= _selection->items();
-    for (auto l = ll.begin(); l != ll.end(); ++l) {
-        SPItem *item = *l;
+    auto items = _selection->items();
+    for (auto item : items) {
 
-        Geom::OptRect const b = (prefs_bbox == 0) ?
+        Geom::OptRect const bbox = (prefs_bbox == 0) ?
             item->desktopVisualBounds() : item->desktopGeometricBounds();
 
-        SPCanvasItem* box = nullptr;
+        if (bbox) {
+            Inkscape::CanvasItem *canvas_item = nullptr;
 
-        if (b) {
             if (mode == MARK) {
-                box = sp_canvas_item_new(_desktop->getControls(),
-                                         SP_TYPE_CTRL,
-                                         "mode", SP_CTRL_MODE_XOR,
-                                         "shape", SP_CTRL_SHAPE_DIAMOND,
-                                         "size", 6,
-                                         "filled", TRUE,
-                                         "fill_color", 0x000000ff,
-                                         "stroked", FALSE,
-                                         "stroke_color", 0x000000ff,
-                                         NULL);
-                sp_canvas_item_show(box);
-                SP_CTRL(box)->moveto(Geom::Point(b->min()[Geom::X], b->max()[Geom::Y]));
-
-                sp_canvas_item_move_to_z(box, 0); // just low enough to not get in the way of other draggable knots
+                auto ctrl = new Inkscape::CanvasItemCtrl(_desktop->getCanvasControls(),
+                                                         Inkscape::CANVAS_ITEM_CTRL_TYPE_SHAPER,
+                                                         Geom::Point(bbox->min().x(), bbox->max().y()));
+                ctrl->set_fill(0x000000ff);
+                ctrl->set_stroke(0x0000000ff);
+                canvas_item = ctrl;
 
             } else if (mode == BBOX) {
-                box = sp_canvas_item_new(_desktop->getControls(),
-                                         SP_TYPE_CTRLRECT,
-                                         nullptr);
-
-                SP_CTRLRECT(box)->setRectangle(*b);
-                SP_CTRLRECT(box)->setColor(0xffffffa0, false, 0);
-                SP_CTRLRECT(box)->setDashed(true);
-                SP_CTRLRECT(box)->setInvert(false);
-                SP_CTRLRECT(box)->setShadow(1, 0x0000c0a0);
-
-                sp_canvas_item_move_to_z(box, 0);
+                auto rect = new Inkscape::CanvasItemRect(_desktop->getCanvasControls(), *bbox);
+                rect->set_stroke(0xffffffa0);
+                rect->set_shadow(0x0000c0a0, 1);
+                rect->set_dashed(true);
+                rect->set_inverted(true);
+                canvas_item = rect;
             }
-        }
 
-        if (box) {
-            _item_bboxes.push_back(box);
+            if (canvas_item) {
+                canvas_item->set_pickable(false);
+                canvas_item->set_z_position(0); // Just low enough to not get in the way of other draggable knots.
+                canvas_item->show();
+                _item_bboxes.emplace_back(canvas_item);
+            }
         }
     }
 
@@ -198,38 +188,30 @@ void Inkscape::SelCue::_newItemBboxes()
 
 void Inkscape::SelCue::_newTextBaselines()
 {
-    for (auto & _text_baseline : _text_baselines) {
-        sp_canvas_item_destroy(_text_baseline);
+    for (auto canvas_item : _text_baselines) {
+        delete canvas_item;
     }
     _text_baselines.clear();
 
-    auto ll = _selection->items();
-    for (auto l=ll.begin();l!=ll.end();++l) {
-        SPItem *item = *l;
+    auto items = _selection->items();
+    for (auto item : items) {
 
-        SPCanvasItem* baseline_point = nullptr;
         if (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item)) { // visualize baseline
             Inkscape::Text::Layout const *layout = te_get_layout(item);
             if (layout != nullptr && layout->outputExists()) {
                 boost::optional<Geom::Point> pt = layout->baselineAnchorPoint();
                 if (pt) {
-                    baseline_point = sp_canvas_item_new(_desktop->getControls(), SP_TYPE_CTRL,
-                        "mode", SP_CTRL_MODE_XOR,
-                        "size", 5,
-                        "filled", 0,
-                        "stroked", 1,
-                        "stroke_color", 0x000000ff,
-                        NULL);
-
-                    sp_canvas_item_show(baseline_point);
-                    SP_CTRL(baseline_point)->moveto((*pt) * item->i2dt_affine());
-                    sp_canvas_item_move_to_z(baseline_point, 0);
+                    auto canvas_item = new Inkscape::CanvasItemCtrl(_desktop->getCanvasControls(),
+                                                                    Inkscape::CANVAS_ITEM_CTRL_SHAPE_SQUARE,
+                                                                    (*pt) * item->i2dt_affine());
+                    canvas_item->set_size(5);
+                    canvas_item->set_stroke(0x000000ff);
+                    canvas_item->set_fill(0x00000000);
+                    canvas_item->set_z_position(0);
+                    canvas_item->show();
+                    _text_baselines.emplace_back(canvas_item);
                 }
             }
-        }
-
-        if (baseline_point) {
-               _text_baselines.push_back(baseline_point);
         }
     }
 }

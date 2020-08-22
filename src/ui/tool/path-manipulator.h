@@ -25,6 +25,9 @@ class SPCurve;
 class SPPath;
 
 namespace Inkscape {
+
+class CanvasItemBpath;
+
 namespace XML { class Node; }
 
 namespace UI {
@@ -40,8 +43,8 @@ class Handle;
 
 struct PathSharedData {
     NodeSharedData node_data;
-    SPCanvasGroup *outline_group;
-    SPCanvasGroup *dragpoint_group;
+    Inkscape::CanvasItemGroup *outline_group;
+    Inkscape::CanvasItemGroup *dragpoint_group;
 };
 
 /**
@@ -143,18 +146,18 @@ private:
     MultiPathManipulator &_multi_path_manipulator;
     SPObject *_path; ///< can be an SPPath or an Inkscape::LivePathEffect::Effect  !!!
     std::unique_ptr<SPCurve> _spcurve; // in item coordinates
-    SPCanvasItem *_outline;
+    Inkscape::CanvasItemBpath *_outline = nullptr;
     CurveDragPoint *_dragpoint; // an invisible control point hovering over curve
     PathManipulatorObserver *_observer;
     Geom::Affine _d2i_transform; ///< desktop-to-item transform
     Geom::Affine _i2d_transform; ///< item-to-desktop transform, inverse of _d2i_transform
     Geom::Affine _edit_transform; ///< additional transform to apply to editing controls
-    bool _show_handles;
-    bool _show_outline;
-    bool _show_path_direction;
-    bool _live_outline;
-    bool _live_objects;
-    bool _is_bspline;
+    bool _show_handles = true;
+    bool _show_outline = false;
+    bool _show_path_direction = false;
+    bool _live_outline = true;
+    bool _live_objects = true;
+    bool _is_bspline = false;
     Glib::ustring _lpe_key;
 
     friend class PathManipulatorObserver;

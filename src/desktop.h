@@ -39,22 +39,16 @@
 #include "ui/dialog/print.h"
 #include "ui/view/view.h"
 
+namespace Gtk
+{
+    class Toolbar;
+    class Window;
+}
+
+// ------- Inkscape --------
 class SPCSSAttr;
-struct SPCanvasItem;
-struct SPCanvasGroup;
 class SPDesktopWidget;
 struct DesktopPrefObserver;
-
-namespace Inkscape {
-namespace UI {
-namespace Tools {
-
-class ToolBase;
-
-}
-}
-}
-
 class SPItem;
 class SPNamedView;
 class SPObject;
@@ -62,12 +56,6 @@ class SPStyle;
 typedef struct _DocumentInterface DocumentInterface;//struct DocumentInterface;
 
 class InkscapeWindow;
-
-namespace Gtk
-{
-    class Toolbar;
-    class Window;
-}
 
 typedef int sp_verb_t;
 
@@ -79,26 +67,39 @@ typedef struct _GdkEventWindowState GdkEventWindowState;
 struct InkscapeApplication;
 
 namespace Inkscape {
-  class LayerModel;
-  class MessageContext;
-  class Selection;
-  class LayerManager;
-  class EventLog;
-  namespace UI {
-      namespace Dialog {
-          class DialogManager;
-      }
+    class EventLog;
+    class LayerManager;
+    class LayerModel;
+    class MessageContext;
+    class Selection;
 
-      namespace Widget {
-              class Canvas;
-	      class Dock;
-      }
-  }
-  namespace Display {
-      class TemporaryItemList;
-      class TemporaryItem;
-      class SnapIndicator;
-  }
+    class CanvasItem;
+    class CanvasItemCatchall;
+    class CanvasItemDrawing;
+    class CanvasItemGroup;
+    class CanvasItemRect;
+    class CanvasItemRotate;
+
+    namespace UI {
+        namespace Dialog {
+            class DialogManager;
+        }
+
+        namespace Tools {
+            class ToolBase;
+        }
+
+        namespace Widget {
+            class Canvas;
+            class Dock;
+        }
+    }
+
+    namespace Display {
+        class TemporaryItemList;
+        class TemporaryItem;
+        class SnapIndicator;
+    }
 }
 
 #define SP_DESKTOP_ZOOM_MAX 256.0
@@ -109,7 +110,7 @@ namespace Inkscape {
  * canvas.  It is extensively used by many UI controls that need certain
  * visual representations of their own.
  *
- * SPDesktop provides a certain set of SPCanvasItems, serving as GUI
+ * SPDesktop provides a certain set of CanvasItems, serving as GUI
  * layers of different control objects. The one containing the whole
  * document is the drawing layer. In addition to it, there are grid,
  * guide, sketch and control layers. The sketch layer is used for
@@ -151,34 +152,46 @@ public:
     /// Stored settings for print dialogue
     Inkscape::UI::Dialog::PrinterSettings printer_settings;
 
-    Inkscape::UI::Tools::ToolBase* getEventContext() const;
-    Inkscape::Selection* getSelection() const;
-    SPDocument* getDocument() const;
-    Inkscape::UI::Widget::Canvas* getCanvas() const;
-    SPCanvasItem* getAcetate() const;
-    SPCanvasGroup* getMain() const;
-    SPCanvasGroup* getGridGroup() const;
-    SPCanvasGroup* getGuides() const;
-    SPCanvasItem* getDrawing() const;
-    SPCanvasGroup* getSketch() const;
-    SPCanvasGroup* getControls() const;
-    SPCanvasGroup* getTempGroup() const;
-    Inkscape::MessageStack* getMessageStack() const;
-    SPNamedView* getNamedView() const;
+    Inkscape::UI::Tools::ToolBase* getEventContext() const { return event_context; }
+    Inkscape::Selection* getSelection() const { return selection; }
+    SPDocument* getDocument() const { return doc(); }
+    Inkscape::UI::Widget::Canvas* getCanvas() const { return canvas; }
+    Inkscape::MessageStack* getMessageStack() const { return messageStack().get(); }
+    SPNamedView* getNamedView() const { return namedview; }
 
+    // ------- Canvas Items -------
     Inkscape::UI::Widget::Canvas *canvas;
-    SPCanvasItem  *acetate;
-    SPCanvasGroup *main;
-    SPCanvasGroup *gridgroup;
-    SPCanvasGroup *guides;
-    SPCanvasItem  *drawing;
-    SPCanvasGroup *sketch;
-    SPCanvasGroup *controls;
-    SPCanvasGroup *tempgroup;   ///< contains temporary canvas items
-    SPCanvasItem  *page;        ///< page background
-    SPCanvasItem  *page_border; ///< page border
-    SPCanvasItem  *canvas_rotate; ///< quickly show canvas rotation
-    SPCanvasItem  *canvas_debug;  ///< shows tiling
+
+     // Move these into UI::Widget::Canvas:
+    Inkscape::CanvasItemGroup    *getCanvasControls() const { return canvas_group_controls; }
+    Inkscape::CanvasItemGroup    *getCanvasGrids()    const { return canvas_group_grids; }
+    Inkscape::CanvasItemGroup    *getCanvasGuides()   const { return canvas_group_guides; }
+    Inkscape::CanvasItemGroup    *getCanvasSketch()   const { return canvas_group_sketch; }
+    Inkscape::CanvasItemGroup    *getCanvasTemp()     const { return canvas_group_temp; }
+
+    Inkscape::CanvasItemCatchall *getCanvasCatchall() const { return canvas_catchall; }
+    Inkscape::CanvasItemRect     *getCanvasPage()     const { return canvas_page; }
+    Inkscape::CanvasItemRect     *getCanvasShadow()   const { return canvas_shadow; }
+    Inkscape::CanvasItemDrawing  *getCanvasDrawing()  const { return canvas_drawing; }
+    Inkscape::CanvasItemRotate   *getCanvasRotate()   const { return canvas_rotate; }
+
+private:
+    // Groups
+    Inkscape::CanvasItemGroup    *canvas_group_controls  = nullptr; ///< Handles, knots, nodes, etc.
+    Inkscape::CanvasItemGroup    *canvas_group_drawing   = nullptr; ///< Drawing + border + shadow.
+    Inkscape::CanvasItemGroup    *canvas_group_grids     = nullptr; ///< Grids.
+    Inkscape::CanvasItemGroup    *canvas_group_guides    = nullptr; ///< Guide lines.
+    Inkscape::CanvasItemGroup    *canvas_group_sketch    = nullptr; ///< Temporary items before becoming permanent.
+    Inkscape::CanvasItemGroup    *canvas_group_temp      = nullptr; ///< Temporary items that self-destruct.
+
+    // Individual items
+    Inkscape::CanvasItemCatchall *canvas_catchall        = nullptr; ///< The bottom item for unclaimed events.
+    Inkscape::CanvasItemRect     *canvas_page            = nullptr; ///< Page background
+    Inkscape::CanvasItemRect     *canvas_shadow          = nullptr; ///< Page shadow
+    Inkscape::CanvasItemDrawing  *canvas_drawing         = nullptr; ///< The actual SVG drawing (a.k.a. arena).
+    Inkscape::CanvasItemRotate   *canvas_rotate          = nullptr; ///< Quick preview of canvas rotation.
+
+public:
     SPCSSAttr     *current;     ///< current style
     bool           _focusMode;  ///< Whether we're focused working or general working
 
@@ -257,7 +270,7 @@ public:
         return _guides_message_context.get();
     }
 
-    Inkscape::Display::TemporaryItem * add_temporary_canvasitem (SPCanvasItem *item, guint lifetime, bool move_to_bottom = true);
+    Inkscape::Display::TemporaryItem * add_temporary_canvasitem (Inkscape::CanvasItem *item, guint lifetime, bool move_to_bottom = true);
     void remove_temporary_canvasitem (Inkscape::Display::TemporaryItem * tempitem);
 
     void redrawDesktop();
@@ -588,7 +601,7 @@ private:
             prefs->addObserver(*this);
         }
       private:
-        void notify(Inkscape::Preferences::Entry const &) override {
+        void notify(Inkscape::Preferences::Entry const &entry) override {
             _desktop->redrawDesktop();
         }
         SPDesktop *_desktop;

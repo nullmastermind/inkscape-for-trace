@@ -43,7 +43,7 @@
 #include "style.h"
 #include "verbs.h"
 
-#include "display/canvas-grid.h"
+#include "display/control/canvas-grid.h"
 #include "display/nr-filter-gaussian.h"
 
 #include "extension/internal/gdkpixbuf-input.h"

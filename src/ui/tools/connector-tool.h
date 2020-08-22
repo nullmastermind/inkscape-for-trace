@@ -25,13 +25,13 @@
 class SPItem;
 class SPCurve;
 class SPKnot;
-struct SPCanvasItem;
 
 namespace Avoid {
     class ConnRef;
 }
 
 namespace Inkscape {
+    class CanvasItemBpath;
     class Selection;
 
     namespace XML {
@@ -70,7 +70,7 @@ public:
     unsigned int state : 4;
 
     // Red curve
-    SPCanvasItem *red_bpath;
+    Inkscape::CanvasItemBpath *red_bpath;
     std::unique_ptr<SPCurve> red_curve;
     guint32 red_color;
 
@@ -104,12 +104,11 @@ public:
 
     SPKnotList knots;
     SPKnot *endpt_handle[2];
-    guint  endpt_handler_id[2];
+    sigc::connection endpt_handler_connection[2];
     gchar *shref;
     gchar *sub_shref;
     gchar *ehref;
     gchar *sub_ehref;
-    SPCanvasItem *c0, *c1, *cl0, *cl1;
 
     static std::string const prefsPath;
 

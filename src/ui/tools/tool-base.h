@@ -16,14 +16,16 @@
 #include <cstddef>
 #include <string>
 #include <memory>
-#include "knot.h"
-#include "knotholder.h"
-#include <2geom/point.h>
-#include <gdk/gdk.h>
+
+#include <gdkmm/device.h>  // EventMask
 #include <gdkmm/cursor.h>
 #include <glib-object.h>
 #include <sigc++/trackable.h>
 
+#include <2geom/point.h>
+
+#include "knot.h"
+#include "knotholder.h"
 #include "preferences.h"
 
 class GrDrag;
@@ -164,6 +166,13 @@ public:
     void setDesktop(SPDesktop *desktop_in) { desktop = desktop_in; }
     SPDesktop *getDesktop() { return desktop; }
 
+    // Commonly used CanvasItemCatchall grab/ungrab.
+    void grabCanvasEvents(Gdk::EventMask mask =
+                          Gdk::KEY_PRESS_MASK      |
+                          Gdk::BUTTON_RELEASE_MASK |
+                          Gdk::POINTER_MOTION_MASK |
+                          Gdk::BUTTON_PRESS_MASK);
+    void ungrabCanvasEvents();
 
     /**
      * An observer that relays pref changes to the derived classes.

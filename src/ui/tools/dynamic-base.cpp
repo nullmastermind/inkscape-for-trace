@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
- * TODO: insert short description here
+ * Common drawing mode. Base class of Eraser and Calligraphic tools.
  *//*
  * Authors: see git history
  *
@@ -11,9 +11,10 @@
 #include "ui/tools/dynamic-base.h"
 
 #include "message-context.h"
-#include "display/sp-canvas-item.h"
 #include "desktop.h"
+
 #include "display/curve.h"
+#include "display/control/canvas-item-bpath.h"
 
 #define MIN_PRESSURE      0.0
 #define MAX_PRESSURE      1.0
@@ -65,14 +66,13 @@ DynamicBase::DynamicBase(gchar const *const *cursor_shape)
 }
 
 DynamicBase::~DynamicBase() {
-    for (auto i:segments) {
-        sp_canvas_item_destroy(SP_CANVAS_ITEM(i));
+    for (auto segment : segments) {
+        delete segment;
     }
     segments.clear();
 
     if (this->currentshape) {
-        sp_canvas_item_destroy(this->currentshape);
-        this->currentshape = nullptr;
+        delete currentshape;
     }
 }
 

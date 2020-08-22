@@ -23,6 +23,7 @@
 
 #include <numeric>
 #include <vector>
+#include <tuple>
 
 #include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
@@ -45,11 +46,11 @@
 #include "verbs.h"
 
 #include "display/cairo-utils.h"
-#include "display/canvas-arena.h"
-#include "display/canvas-bpath.h"
 #include "display/curve.h"
 #include "display/drawing-context.h"
 #include "display/drawing.h"
+#include "display/control/canvas-item-bpath.h"
+#include "display/control/canvas-item-drawing.h"
 
 #include "helper/action.h"
 
@@ -184,7 +185,7 @@ SprayTool::~SprayTool() {
     this->style_set_connection.disconnect();
 
     if (this->dilate_area) {
-        sp_canvas_item_destroy(this->dilate_area);
+        delete this->dilate_area;
         this->dilate_area = nullptr;
     }
 }
@@ -222,15 +223,10 @@ void SprayTool::setup() {
     ToolBase::setup();
 
     {
-        /* TODO: have a look at sp_dyna_draw_context_setup where the same is done.. generalize? at least make it an arcto! */
-        Geom::PathVector path = Geom::Path(Geom::Circle(0,0,1));
-
-        auto c = std::make_unique<SPCurve>(path);
-
-        dilate_area = sp_canvas_bpath_new(desktop->getControls(), c.get());
-        sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(this->dilate_area), 0x00000000,(SPWindRule)0);
-        sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(this->dilate_area), 0xff9900ff, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
-        sp_canvas_item_hide(this->dilate_area);
+        dilate_area = new Inkscape::CanvasItemBpath(desktop->getCanvasControls());
+        dilate_area->set_stroke(0xff9900ff);
+        dilate_area->set_fill(0x0, SP_WIND_RULE_EVENODD);
+        dilate_area->hide();
     }
 
     this->is_drawing = false;
@@ -447,17 +443,23 @@ double randomize01(double val, double rand)
 
 static guint32 getPickerData(Geom::IntRect area, SPDesktop *desktop)
 {
-    double R = 0, G = 0, B = 0, A = 0;
-    cairo_surface_t *s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, area.width(), area.height());
-    sp_canvas_arena_render_surface(SP_CANVAS_ARENA(desktop->getDrawing()), s, area);
-    ink_cairo_surface_average_color(s, R, G, B, A);
-    cairo_surface_destroy(s);
+    Inkscape::CanvasItemDrawing *canvas_item_drawing = desktop->getCanvasDrawing();
+    Inkscape::Drawing *drawing = canvas_item_drawing->get_drawing();
+
+    // Ensure drawing up-to-date. (Is this really necessary?)
+    drawing->update(Geom::IntRect::infinite(), canvas_item_drawing->get_context());
+
+    // Get average color.
+    double R, G, B, A;
+    drawing->average_color(area, R, G, B, A);
+
     //this can fix the bug #1511998 if confirmed 
-    if( A == 0 || A < 1e-6){
-        R = 1;
-        G = 1;
-        B = 1;
+    if ( A < 1e-6) {
+        R = 1.0;
+        G = 1.0;
+        B = 1.0;
     }
+
     return SP_RGBA32_F_COMPOSE(R, G, B, A);
 }
 
@@ -1198,9 +1200,14 @@ static bool sp_spray_dilate(SprayTool *tc, Geom::Point /*event_p*/, Geom::Point 
 static void sp_spray_update_area(SprayTool *tc)
 {
     double radius = get_dilate_radius(tc);
-    Geom::Affine const sm ( Geom::Scale(radius/(1-tc->ratio), radius/(1+tc->ratio)) );
-    sp_canvas_item_affine_absolute(tc->dilate_area, (sm* Geom::Rotate(tc->tilt))* Geom::Translate(tc->getDesktop()->point()));
-    sp_canvas_item_show(tc->dilate_area);
+    Geom::Affine const sm ( Geom::Scale(radius/(1-tc->ratio), radius/(1+tc->ratio)) *
+                            Geom::Rotate(tc->tilt) *
+                            Geom::Translate(tc->getDesktop()->point()));
+
+    Geom::PathVector path = Geom::Path(Geom::Circle(0,0,1)); // Unit circle centered at origin.
+    path *= sm;
+    tc->dilate_area->set_bpath(path);
+    tc->dilate_area->show();
 }
 
 static void sp_spray_switch_mode(SprayTool *tc, gint mode, bool with_shift)
@@ -1224,10 +1231,10 @@ bool SprayTool::root_handler(GdkEvent* event) {
 
     switch (event->type) {
         case GDK_ENTER_NOTIFY:
-            sp_canvas_item_show(this->dilate_area);
+            dilate_area->show();
             break;
         case GDK_LEAVE_NOTIFY:
-            sp_canvas_item_hide(this->dilate_area);
+            dilate_area->hide();
             break;
         case GDK_BUTTON_PRESS:
             if (event->button.button == 1 && !this->space_panning) {
@@ -1267,10 +1274,15 @@ bool SprayTool::root_handler(GdkEvent* event) {
 
             // Draw the dilating cursor
             double radius = get_dilate_radius(this);
-            Geom::Affine const sm (Geom::Scale(radius/(1-this->ratio), radius/(1+this->ratio)) );
-            sp_canvas_item_affine_absolute(this->dilate_area, (sm*Geom::Rotate(this->tilt))*Geom::Translate(desktop->w2d(motion_w)));
-            sp_canvas_item_show(this->dilate_area);
+            Geom::Affine const sm (Geom::Scale(radius/(1-this->ratio), radius/(1+this->ratio)) *
+                                   Geom::Rotate(this->tilt) *
+                                   Geom::Translate(desktop->w2d(motion_w)));
 
+            Geom::PathVector path = Geom::Path(Geom::Circle(0, 0, 1)); // Unit circle centered at origin.
+            path *= sm;
+            this->dilate_area->set_bpath(path);
+            this->dilate_area->show();
+            
             guint num = 0;
             if (!desktop->selection->isEmpty()) {
                 num = (guint) boost::distance(desktop->selection->items());

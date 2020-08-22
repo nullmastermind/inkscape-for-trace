@@ -18,9 +18,11 @@
 #include "ui/tool/manipulator.h"
 
 class SPDesktop;
-class CtrlRect;
 
 namespace Inkscape {
+
+class CanvasItemRect;
+
 namespace UI {
 
 class SelectorPoint;
@@ -37,7 +39,7 @@ public:
 private:
     SelectorPoint *_dragger;
     Geom::Point _start;
-    CtrlRect *_rubber;
+    Inkscape::CanvasItemRect *_rubber;
     gulong _connection;
     bool _cancel;
     friend class SelectorPoint;

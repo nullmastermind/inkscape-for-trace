@@ -27,8 +27,8 @@
 #include "inkscape.h"
 #include "pure-transform.h"
 
-#include "display/canvas-grid.h"
-#include "display/snap-indicator.h"
+#include "display/control/canvas-grid.h"
+#include "display/control/snap-indicator.h"
 
 #include "helper/mathfns.h"
 

@@ -16,9 +16,9 @@
 ../src/context-fns.cpp
 ../src/desktop-events.cpp
 ../src/desktop.cpp
-../src/display/canvas-axonomgrid.cpp
-../src/display/canvas-grid.cpp
-../src/display/snap-indicator.cpp
+../src/display/control/canvas-axonomgrid.cpp
+../src/display/control/canvas-grid.cpp
+../src/display/control/snap-indicator.cpp
 ../src/document.cpp
 ../src/event-log.cpp
 ../src/extension/dependency.cpp
