@@ -391,7 +391,7 @@ void CanvasItemCtrl::set_size_via_index(int size_index)
     }
 
     int size = 0;
-    switch (size_index) {
+    switch (_type) {
         case CANVAS_ITEM_CTRL_TYPE_POINT:
         case CANVAS_ITEM_CTRL_TYPE_ROTATE:
         case CANVAS_ITEM_CTRL_TYPE_SIZER:
