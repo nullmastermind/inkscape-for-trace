@@ -159,7 +159,7 @@ void CanvasItemBpath::update(Geom::Affine const &affine)
 
     if (bbox) {
         _bounds = *bbox;
-        _bounds.expandBy(1);
+        _bounds.expandBy(2);
     } else {
         _bounds = Geom::Rect();
     }
