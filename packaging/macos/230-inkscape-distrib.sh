@@ -11,8 +11,8 @@
 SELF_DIR=$(F=$0; while [ ! -z $(readlink $F) ] && F=$(readlink $F); cd $(dirname $F); F=$(basename $F); [ -L $F ]; do :; done; echo $(pwd -P))
 for script in $SELF_DIR/0??-*.sh; do source $script; done
 
-set -o errtrace
-trap 'catch_error "$SELF_NAME" "$LINENO" "$FUNCNAME" "${BASH_COMMAND}" "${?}"' ERR
+include_file error_.sh
+error_trace_enable
 
 ### create disk image for distribution #########################################
 
@@ -30,11 +30,6 @@ convert -size 560x400 xc:transparent \
   $SRC_DIR/inkscape_dmg.png
 
 # create the disk image
-
-# Due to an undiagnosed instability that only occurs during CI runs (not when
-# run interactively from the terminal), the following code will be put into
-# a separate script and be executed via Terminal.app.
-# See: https://github.com/al45tair/dmgbuild/pull/11
 
 cp $SELF_DIR/inkscape_dmg.py $SRC_DIR
 

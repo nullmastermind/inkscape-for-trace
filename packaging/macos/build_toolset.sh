@@ -18,7 +18,6 @@ set -e
 
 function build
 {
-  echo_info building toolset in $WRK_DIR
   for script in $SELF_DIR/1??-*.sh; do
     $script
   done

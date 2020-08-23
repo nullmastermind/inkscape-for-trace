@@ -20,13 +20,13 @@ set -e
 function uninstall
 {
     while : ; do   # unmount everything (in reverse order)
-      local disk=$(mount | grep $WRK_DIR | tail -n1 | awk '{ print $1 }')
+      local disk=$(mount | grep $VER_DIR | tail -n1 | awk '{ print $1 }')
 
       if [ ${#disk} -eq 0 ]; then
         break                              # nothing to do here
       else
         diskutil eject $disk > /dev/null   # unmount
-        echo_ok "ejected $disk"
+        echo_i "ejected $disk"
       fi
     done
 }
