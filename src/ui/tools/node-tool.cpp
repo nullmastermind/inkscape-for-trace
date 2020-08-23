@@ -715,6 +715,12 @@ void NodeTool::select_area(Geom::Rect const &sel, GdkEventButton *event) {
         Inkscape::Selection *selection = this->desktop->selection;
         auto sel_doc = desktop->dt2doc() * sel;
         std::vector<SPItem*> items = this->desktop->getDocument()->getItemsInBox(this->desktop->dkey, sel_doc);
+        if (items.size() == 1) {
+            SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(items[0]);
+            if (lpeitem) {
+                sp_lpe_item_update_patheffect(lpeitem, true, true);
+            }
+        }
         selection->setList(items);
     } else {
         if (!held_shift(*event)) {
@@ -753,6 +759,10 @@ void NodeTool::select_point(Geom::Point const &/*sel*/, GdkEventButton *event) {
             }
         }
     } else {
+        SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item_clicked);
+        if (lpeitem && ( held_shift(*event) || !selection->size()) && !selection->includes(item_clicked)) {
+            sp_lpe_item_update_patheffect(lpeitem, true, true);
+        }
         if (held_shift(*event)) {
             selection->toggle(item_clicked);
         } else {
