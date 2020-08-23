@@ -67,6 +67,7 @@ public:
     static void writeNewGridToRepr(Inkscape::XML::Node * repr, SPDocument * doc, GridType gridtype);
 
     Inkscape::CanvasItemGrid * createCanvasItem(SPDesktop * desktop);
+    void removeCanvasItem(Inkscape::CanvasItemGrid *item);
 
     virtual void Update (Geom::Affine const &affine, unsigned int flags) = 0;
     virtual void Render (Inkscape::CanvasItemBuffer *buf) = 0;

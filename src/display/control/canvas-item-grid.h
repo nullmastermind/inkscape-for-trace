@@ -32,6 +32,7 @@ class CanvasItemGrid : public CanvasItem {
 
 public:
     CanvasItemGrid(CanvasItemGroup *group, CanvasGrid *grid);
+    ~CanvasItemGrid();
 
     // Geometry
     void update(Geom::Affine const &affine) override;
@@ -44,7 +45,7 @@ public:
     void render(Inkscape::CanvasItemBuffer *buf) override;
  
 protected:
-    CanvasGrid *_grid;
+    CanvasGrid *_grid = nullptr;
 };
 
 

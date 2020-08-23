@@ -96,10 +96,9 @@ CanvasGrid::~CanvasGrid()
         repr->removeListenerByData (this);
     }
 
-    // When a canvas is deleted, it deletes the CanvasItem's. Deleting here will result in a segfault.
-    // for (auto grid : canvas_item_grids) {
-    //     delete grid;
-    // }
+    for (auto grid : canvas_item_grids) {
+        delete grid;
+    }
     canvas_item_grids.clear();
 }
 
@@ -225,6 +224,19 @@ CanvasGrid::createCanvasItem(SPDesktop * desktop)
     grid->show();
     canvas_item_grids.push_back(grid);
     return grid;
+}
+
+/**
+ * Remove a CanvasGridItem from vector. Does NOT delete CanvasGridItem.
+ * This is used by the CanvasGridItem destructor to ensure no dangling pointer is left.
+ */
+void
+CanvasGrid::removeCanvasItem(Inkscape::CanvasItemGrid *item)
+{
+    auto it = std::find(canvas_item_grids.begin(), canvas_item_grids.end(), item);
+    if (it != canvas_item_grids.end()) {
+        canvas_item_grids.erase(it);
+    }
 }
 
 Gtk::Widget *

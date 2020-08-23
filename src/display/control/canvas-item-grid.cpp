@@ -39,6 +39,15 @@ CanvasItemGrid::CanvasItemGrid(CanvasItemGroup *group, CanvasGrid *grid)
     request_update(); // Update affine
 }
 
+/**
+ * Destructor: must remove ourself from the CanvasGrid's vector of CanvasItemGrids.
+ */
+CanvasItemGrid::~CanvasItemGrid()
+{
+    if (_grid) {
+        _grid->removeCanvasItem(this);
+    }
+}
 
 /**
  * Returns distance between point in canvas units and nearest point on grid.
