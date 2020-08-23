@@ -440,6 +440,8 @@ void CanvasItemCtrl::set_type(Inkscape::CanvasItemCtrlType type)
         // Use _type to set default values:
         set_shape_default();
         set_size_default();
+        _built = false;
+        request_update(); // Possible Geometry change
     }
 }
 
