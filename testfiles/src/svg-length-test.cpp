@@ -40,7 +40,7 @@ test_t relative_tests[3] = {
     {"123em", SVGLength::EM,      123, 123. *  7.},
     {"123ex", SVGLength::EX,      123, 123. * 13.},
     {"123%",  SVGLength::PERCENT, 1.23, 1.23 * 19.}};
-char* fail_tests[8] = {
+const char* fail_tests[8] = {
     "123 px",
     "123e",
     "123e+m",
