@@ -58,7 +58,7 @@ CanvasGrid::CanvasGrid(SPDesktopWidget *dtw)
 
     // Vertical Scrollbar
     _vadj = Gtk::Adjustment::create(0.0, -4000.0, 4000.0, 10.0, 100.0, 4.0);
-    _hadj->signal_value_changed().connect(sigc::mem_fun(_dtw, &SPDesktopWidget::on_adjustment_value_changed));
+    _vadj->signal_value_changed().connect(sigc::mem_fun(_dtw, &SPDesktopWidget::on_adjustment_value_changed));
     _vscrollbar = Gtk::manage(new Gtk::Scrollbar(_vadj, Gtk::ORIENTATION_VERTICAL));
     _vscrollbar->set_name("CanvasScrollbar");
     _vscrollbar->set_vexpand(true);
