@@ -71,7 +71,7 @@ public:
     Inkscape::CanvasItemCurve *cl0 = nullptr;
     Inkscape::CanvasItemCurve *cl1 = nullptr;
     
-    bool events_disabled;
+    bool events_disabled = false;
 
     static const std::string prefsPath;
 
