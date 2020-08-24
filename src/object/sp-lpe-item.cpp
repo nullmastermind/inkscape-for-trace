@@ -363,6 +363,7 @@ sp_lpe_item_update_patheffect (SPLPEItem *lpeitem, bool wholetree, bool write)
     g_return_if_fail (SP_IS_OBJECT (lpeitem));
     g_return_if_fail (SP_IS_LPE_ITEM (lpeitem));
 
+    // Do not check for LPE item to allow LPE work on clips/mask
     if (!lpeitem->pathEffectsEnabled())
         return;
 

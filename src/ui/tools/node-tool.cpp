@@ -285,12 +285,14 @@ void sp_update_helperpath(SPDesktop *desktop)
         SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
         if (lpeitem && lpeitem->hasPathEffectRecursive()) {
             Inkscape::LivePathEffect::Effect *lpe = SP_LPE_ITEM(lpeitem)->getCurrentLPE();
-            if (lpe && lpe->isVisible() /* && lpe->showOrigPath()*/) {
-                Inkscape::UI::ControlPointSelection *selectionNodes = nt->_selected_nodes;
+            if (lpe && lpe->isVisible()/* && lpe->showOrigPath()*/) {
                 std::vector<Geom::Point> selectedNodesPositions;
-                for (auto selectionNode : *selectionNodes) {
-                    Inkscape::UI::Node *n = dynamic_cast<Inkscape::UI::Node *>(selectionNode);
-                    selectedNodesPositions.push_back(n->position());
+                if (nt->_selected_nodes) {
+                    Inkscape::UI::ControlPointSelection *selectionNodes = nt->_selected_nodes;
+                    for (auto selectionNode : *selectionNodes) {
+                        Inkscape::UI::Node *n = dynamic_cast<Inkscape::UI::Node *>(selectionNode);
+                        selectedNodesPositions.push_back(n->position());
+                    }
                 }
                 lpe->setSelectedNodePoints(selectedNodesPositions);
                 lpe->setCurrentZoom(desktop->current_zoom());
@@ -393,10 +395,13 @@ void NodeTool::selection_changed(Inkscape::Selection *sel) {
 
     auto items= sel->items();
     for(auto i=items.begin();i!=items.end();++i){
-        SPObject *obj = *i;
-
-        if (SP_IS_ITEM(obj)) {
-            gather_items(this, nullptr, static_cast<SPItem*>(obj), SHAPE_ROLE_NORMAL, shapes);
+        SPItem *item = *i;
+        SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
+        if (lpeitem && lpeitem->hasPathEffectRecursive()) {
+            sp_lpe_item_update_patheffect(lpeitem, true, true);
+        }
+        if (item) {
+            gather_items(this, nullptr, item, SHAPE_ROLE_NORMAL, shapes);
         }
     }
 
@@ -715,12 +720,6 @@ void NodeTool::select_area(Geom::Rect const &sel, GdkEventButton *event) {
         Inkscape::Selection *selection = this->desktop->selection;
         auto sel_doc = desktop->dt2doc() * sel;
         std::vector<SPItem*> items = this->desktop->getDocument()->getItemsInBox(this->desktop->dkey, sel_doc);
-        if (items.size() == 1) {
-            SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(items[0]);
-            if (lpeitem) {
-                sp_lpe_item_update_patheffect(lpeitem, true, true);
-            }
-        }
         selection->setList(items);
     } else {
         if (!held_shift(*event)) {
@@ -759,10 +758,6 @@ void NodeTool::select_point(Geom::Point const &/*sel*/, GdkEventButton *event) {
             }
         }
     } else {
-        SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item_clicked);
-        if (lpeitem && ( held_shift(*event) || !selection->size()) && !selection->includes(item_clicked)) {
-            sp_lpe_item_update_patheffect(lpeitem, true, true);
-        }
         if (held_shift(*event)) {
             selection->toggle(item_clicked);
         } else {
