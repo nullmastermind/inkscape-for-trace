@@ -305,7 +305,7 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
         SPGroup  *group_origin = dynamic_cast<SPGroup *>(orig);
         SPItem *dest = dynamic_cast<SPItem *>(sp_lpe_item);
         const gchar * id = orig->getId();
-        bool init = g_strcmp0(id, linked) != 0;
+        bool init = g_strcmp0(id, linked) != 0 && !is_load;
         /* if (sp_lpe_item->getRepr()->attribute("style")) {
             init = false;
         } */
