@@ -32,7 +32,7 @@ class CanvasItemGrid : public CanvasItem {
 
 public:
     CanvasItemGrid(CanvasItemGroup *group, CanvasGrid *grid);
-    ~CanvasItemGrid();
+    ~CanvasItemGrid() override;
 
     // Geometry
     void update(Geom::Affine const &affine) override;
