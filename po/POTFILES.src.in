@@ -288,6 +288,7 @@
 ../src/ui/dialog/xml-tree.cpp
 ../src/ui/drag-and-drop.cpp
 ../src/ui/interface.cpp
+../src/ui/modifiers.cpp
 ../src/ui/shape-editor-knotholders.cpp
 ../src/ui/tool/curve-drag-point.cpp
 ../src/ui/tool/multi-path-manipulator.cpp
