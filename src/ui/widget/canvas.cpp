@@ -166,11 +166,21 @@ Canvas::get_area_world()
     // This is called by desktop.cpp before Canvas::on_draw() is called (and on_realize()) so
     // we don't rely on stored allocation value.
     Gtk::Allocation allocation = get_allocation();
-    return Geom::Rect::from_xywh(_x0, _y0, allocation.get_width(), allocation.get_height());
+
+    // Work around for issue #1813: Sometimes, get_allocation() returns 1x1.
+    // If it does, used saved allocation values.
+    int width  = allocation.get_width();
+    int height = allocation.get_height();
+    if (width < 2 || height < 2) {
+        width  = _allocation.get_width();
+        height = _allocation.get_height();
+    }
+
+    return Geom::Rect::from_xywh(_x0, _y0, width, height);
 }
 
 /**
- * Return the area showin the canvas in world coordinates, rounded to integer values.
+ * Return the area shown the canvas in world coordinates, rounded to integer values.
  */
 Geom::IntRect
 Canvas::get_area_world_int()
