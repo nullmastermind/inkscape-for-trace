@@ -16,6 +16,8 @@
 
 #include "canvas-item-drawing.h"
 
+#include "desktop.h"
+
 #include "preferences.h"
 
 #include "display/cairo-utils.h"
@@ -116,16 +118,21 @@ bool CanvasItemDrawing::contains(Geom::Point const &p, double tolerance)
  */
 void CanvasItemDrawing::update(Geom::Affine const &affine)
 {
-    // if (_affine == affine && !_need_update) {
+    auto new_affine = affine;
+
+    // Correct for y-axis. This should not be here!!!!
+    new_affine = _canvas->get_desktop()->doc2dt() * new_affine;
+
+    // if (_affine == new_affine && !_need_update) {
     //     // Nothing to do.
     //     return;
     // }
 
-    _ctx.ctm = affine;  // TODO Remove _ctx.ctm... it's exactly the same as _affine!
+    _ctx.ctm = new_affine;  // TODO Remove _ctx.ctm... it's exactly the same as _affine!
 
-    unsigned reset = (_affine != affine ? DrawingItem::STATE_ALL : 0);
+    unsigned reset = (_affine != new_affine ? DrawingItem::STATE_ALL : 0);
 
-    _affine = affine;
+    _affine = new_affine;
 
     _drawing->update(Geom::IntRect::infinite(), _ctx, DrawingItem::STATE_ALL, reset);
 
