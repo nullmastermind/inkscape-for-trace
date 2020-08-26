@@ -768,6 +768,7 @@ Node::Node(NodeSharedData const &data, Geom::Point const &initial_pos) :
     _type(NODE_CUSP),
     _handles_shown(false)
 {
+    _canvas_item_ctrl->set_name("CanvasItemCtrl:Node");
     // NOTE we do not set type here, because the handles are still degenerate
 }
 

@@ -94,6 +94,7 @@ TransformHandle::TransformHandle(TransformHandleSet &th, SPAnchorType anchor, Gl
     : ControlPoint(th._desktop, Geom::Point(), anchor, pb, thandle_cset, th._transform_handle_group)
     , _th(th)
 {
+    _canvas_item_ctrl->set_name("CanvasItemCtrl:TransformHandle");
     setVisible(false);
 }
 

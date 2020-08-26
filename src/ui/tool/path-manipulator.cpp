@@ -1696,7 +1696,7 @@ Geom::Coord PathManipulator::_updateDragPoint(Geom::Point const &evp)
     {
         _dragpoint->setVisible(true);
         _dragpoint->setPosition(_desktop->w2d(nearest_pt));
-        _dragpoint->setSize(2 * stroke_tolerance);
+        _dragpoint->setSize(2 * stroke_tolerance - 1);
         _dragpoint->setTimeValue(fracpart);
         _dragpoint->setIterator(first);
     } else {

@@ -31,6 +31,7 @@ CurveDragPoint::CurveDragPoint(PathManipulator &pm) :
                  invisible_cset, pm._multi_path_manipulator._path_data.dragpoint_group),
       _pm(pm)
 {
+    _canvas_item_ctrl->set_name("CanvasItemCtrl:CurveDragPoint");
     setVisible(false);
 }
 

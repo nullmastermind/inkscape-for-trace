@@ -32,6 +32,7 @@ SelectableControlPoint::SelectableControlPoint(SPDesktop *d, Geom::Point const &
     : ControlPoint(d, initial_pos, anchor, type, cset, group)
     , _selection(sel)
 {
+    _canvas_item_ctrl->set_name("CanvasItemCtrl:SelectableControlPoint");
     _selection.allPoints().insert(this);
 }
 
