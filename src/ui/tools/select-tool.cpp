@@ -137,6 +137,7 @@ SelectTool::~SelectTool() {
 
     delete this->_describer;
     this->_describer = nullptr;
+    g_free(no_selection_msg);
 
     if (CursorSelectDragging) {
         g_object_unref(CursorSelectDragging);
@@ -162,7 +163,7 @@ void SelectTool::setup() {
     auto select_click = Modifier::get(Modifiers::Type::SELECT_ADD_TO)->get_label();
     auto select_scroll = Modifier::get(Modifiers::Type::SELECT_CYCLE)->get_label();
 
-    auto no_selection_msg = g_strdup_printf(
+    no_selection_msg = g_strdup_printf(
         _("No objects selected. Click, %s+click, %s+scroll mouse on top of objects, or drag around objects to select."),
         select_click.c_str(), select_scroll.c_str());
 
