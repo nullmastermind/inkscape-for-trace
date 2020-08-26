@@ -409,7 +409,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
             break;
 
         case 3:
-            if (mod_scroll_x || mod_scroll_y) {
+            if (mod_scroll_x) {
                 // When starting panning, make sure there are no snap events pending because these might disable the panning again
                 if (_uses_snap) {
                     sp_event_context_discard_delayed_snap_event(this);

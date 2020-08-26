@@ -81,7 +81,7 @@ bool Modifier::active(int button_state)
     // TODO:
     //  * ALT key is sometimes MOD1, MOD2 etc, if we find other ALT keys, set the ALT bit
     //  * SUPER key could be HYPER or META, these cases need to be considered.
-    return get_and_mask() & button_state;
+    return (Key::ALL_MODS & button_state) == get_and_mask();
 }
 
 /**
