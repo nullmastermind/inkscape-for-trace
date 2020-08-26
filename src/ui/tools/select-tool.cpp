@@ -163,7 +163,7 @@ void SelectTool::setup() {
     auto select_scroll = Modifier::get(Modifiers::Type::SELECT_CYCLE)->get_label();
 
     auto no_selection_msg = g_strdup_printf(
-        _("<b>No objects selected.</b> Click, <i>%s</i>+click, <i>%s</i>+scroll mouse on top of objects, or drag around objects to select."),
+        _("No objects selected. Click, %s+click, %s+scroll mouse on top of objects, or drag around objects to select."),
         select_click.c_str(), select_scroll.c_str());
 
     this->_describer = new Inkscape::SelectionDescriber(
@@ -171,7 +171,6 @@ void SelectTool::setup() {
                 desktop->messageStack(),
                 _("Click selection again to toggle scale/rotation handles."),
                 no_selection_msg);
-    free(no_selection_msg); // Is this right?
 
     this->_seltrans = new Inkscape::SelTrans(desktop);
 
