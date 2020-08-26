@@ -334,11 +334,6 @@ bool ToolBase::root_handler(GdkEvent* event) {
     bool allow_panning = prefs->getBool("/options/spacebarpans/value");
     gint ret = FALSE;
 
-    bool mod_rotate = Modifiers::Modifier::get(Modifiers::Type::CANVAS_ROTATE)->active(event->scroll.state);
-    bool mod_zoom = Modifiers::Modifier::get(Modifiers::Type::CANVAS_ZOOM)->active(event->scroll.state);
-    bool mod_scroll_x = Modifiers::Modifier::get(Modifiers::Type::CANVAS_SCROLL_X)->active(event->scroll.state);
-    bool mod_scroll_y = Modifiers::Modifier::get(Modifiers::Type::CANVAS_SCROLL_Y)->active(event->scroll.state);
-
     switch (event->type) {
     case GDK_2BUTTON_PRESS:
         if (panning) {
@@ -376,7 +371,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
             break;
 
         case 2:
-            if (mod_rotate && !desktop->get_rotation_lock()) {
+            if ((event->button.state & GDK_CONTROL_MASK) && !desktop->get_rotation_lock()) {
                 // On screen canvas rotation preview
 
                 // Grab background before doing anything else
@@ -392,7 +387,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                                                  Gdk::POINTER_MOTION_MASK,
                                                  nullptr);  // Cursor is null.
 
-            } else if (mod_zoom) {
+            } else if (event->button.state & GDK_SHIFT_MASK) {
                 zoom_rb = 2;
             } else {
                 // When starting panning, make sure there are no snap events pending because these might disable the panning again
@@ -409,7 +404,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
             break;
 
         case 3:
-            if (mod_scroll_x) {
+            if (event->button.state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK)) {
                 // When starting panning, make sure there are no snap events pending because these might disable the panning again
                 if (_uses_snap) {
                     sp_event_context_discard_delayed_snap_event(this);
@@ -743,6 +738,13 @@ bool ToolBase::root_handler(GdkEvent* event) {
         break;
 
     case GDK_SCROLL: {
+        using Modifiers::Modifier;
+        using Modifiers::Type;
+
+        bool const mod_rotate = Modifier::get(Type::CANVAS_ROTATE)->active(event->scroll.state);
+        bool const mod_zoom = Modifier::get(Type::CANVAS_ZOOM)->active(event->scroll.state);
+        bool const mod_scroll_x = Modifier::get(Type::CANVAS_SCROLL_X)->active(event->scroll.state);
+        bool const mod_scroll_y = Modifier::get(Type::CANVAS_SCROLL_Y)->active(event->scroll.state);
 
         int constexpr WHEEL_SCROLL_DEFAULT = 40;
         int const wheel_scroll = prefs->getIntLimited(
@@ -788,7 +790,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 desktop->rotate_relative_keep_point(scroll_dt, rotate_inc);
             }
 
-        } else if (mod_scroll_x || mod_scroll_y) {
+        } else if (mod_scroll_x) {
            /* shift + wheel, pan left--right */
 
             switch (event->scroll.direction) {
@@ -858,7 +860,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
             }
 
             /* no modifier, pan up--down (left--right on multiwheel mice?) */
-        } else {
+        } else if (mod_scroll_y) {
             switch (event->scroll.direction) {
             case GDK_SCROLL_UP:
                 desktop->scroll_relative(Geom::Point(0, wheel_scroll));
@@ -886,6 +888,8 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 desktop->scroll_relative(Geom::Point(-wheel_scroll*delta_x, -wheel_scroll*delta_y));
                 break;
             }
+        } else {
+            g_warning("unhandled scroll event with scroll.state=0x%x", event->scroll.state);
         }
         break;
     }
