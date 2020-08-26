@@ -30,7 +30,7 @@ decltype(Modifier::_modifiers) Modifier::_modifiers {
     {Type::CANVAS_SCROLL_Y, new Modifier("canvas-scroll-y", _("Vertical scroll"), _("Scroll up and down"), 0, SCROLL)},
     {Type::CANVAS_SCROLL_X, new Modifier("canvas-scroll-x", _("Horizontal scroll"), _("Scroll left and right"), SHIFT, SCROLL)},
     {Type::CANVAS_ZOOM, new Modifier("canvas-zoom", _("Canvas zoom"), _("Zoom in and out with scroll wheel"), CTRL, SCROLL)},
-    {Type::CANVAS_ROTATE, new Modifier("canvas-rotate", _("Canavas rotate"), _("Rotate the canvas with scroll wheel"), SHIFT & CTRL, SCROLL)},
+    {Type::CANVAS_ROTATE, new Modifier("canvas-rotate", _("Canvas rotate"), _("Rotate the canvas with scroll wheel"), SHIFT | CTRL, SCROLL)},
     
     // Select tool modifiers (minus transforms)
     {Type::SELECT_ADD_TO, new Modifier("select-add-to", _("Add to selection"), _("Add items to existing selection"), SHIFT, CLICK)},
