@@ -2999,12 +2999,9 @@ void ObjectSet::toMarker(bool apply)
 
     doc->ensureUpToDate();
     Geom::OptRect r = visualBounds();
-    boost::optional<Geom::Point> c = center();
-    if ( !r || !c ) {
+    if (!r) {
         return;
     }
-
-    Geom::Point center = (*c) * doc->dt2doc();
 
     std::vector<SPItem*> items_(items().begin(), items().end());
 
@@ -3030,6 +3027,11 @@ void ObjectSet::toMarker(bool apply)
 
     Geom::Rect bbox(r->min() * doc->dt2doc(), r->max() * doc->dt2doc());
 
+    // calculate the transform to be applied to objects to move them to 0,0
+    // (alternative would be to define viewBox or set overflow:visible)
+    Geom::Affine const move = Geom::Translate(-bbox.min());
+    Geom::Point const center = bbox.dimensions() * 0.5;
+
     if (apply) {
         // Delete objects so that their clones don't get alerted;
         // the objects will be restored inside the marker element.
@@ -3045,7 +3047,7 @@ void ObjectSet::toMarker(bool apply)
     int saved_compensation = prefs->getInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
     prefs->setInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
 
-    gchar const *mark_id = generate_marker(repr_copies, bbox, doc, center, parent_transform);
+    gchar const *mark_id = generate_marker(repr_copies, bbox, doc, center, parent_transform * move);
     (void)mark_id;
 
     // restore compensation setting
