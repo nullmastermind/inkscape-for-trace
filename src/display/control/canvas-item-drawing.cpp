@@ -121,7 +121,9 @@ void CanvasItemDrawing::update(Geom::Affine const &affine)
     auto new_affine = affine;
 
     // Correct for y-axis. This should not be here!!!!
-    new_affine = _canvas->get_desktop()->doc2dt() * new_affine;
+    if (auto *desktop = _canvas->get_desktop()) {
+        new_affine = desktop->doc2dt() * new_affine;
+    }
 
     // if (_affine == new_affine && !_need_update) {
     //     // Nothing to do.
