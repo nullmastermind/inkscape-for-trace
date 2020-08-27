@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2020-07-15 15:04+0200\n"
-"PO-Revision-Date: 2020-07-30 17:00+0200\n"
+"PO-Revision-Date: 2020-08-27 23:47+0200\n"
 "Last-Translator: Tomáš Marný\n"
 "Language-Team: Josef Vybíral (josef.vybiral@gmail.com); Ivan Řihošek "
 "(osmdesat@seznam.cz); Tobiczech (tobiczech@gmail.com); Tomáš Marný (tomik."
@@ -9188,12 +9188,11 @@ msgstr "HODNOTA"
 # File: ../src/inkscape-application.cpp, line: 579
 #: ../src/inkscape-application.cpp:629
 msgid "Query object/document geometry"
-msgstr ""
+msgstr "Dotaz na objekt/geometrie dokumentu"
 
 #: ../src/inkscape-application.cpp:630
-#, fuzzy
 msgid "ID(s) of object(s) to be queried"
-msgstr "ID objektu, jehož rozměry jsou hledány"
+msgstr "ID objektů, které mají být dotazovány"
 
 #: ../src/inkscape-application.cpp:630 ../src/inkscape-application.cpp:640
 msgid "OBJECT-ID[,OBJECT-ID]*"
@@ -9226,9 +9225,8 @@ msgid "Advanced file processing"
 msgstr "Pokročilé zpracování souborů"
 
 #: ../src/inkscape-application.cpp:639
-#, fuzzy
 msgid "Remove unused definitions from the <defs> section(s) of document"
-msgstr "Odstranit nepoužívané definice z definiční(ch) sekce(í) dokumentu"
+msgstr "Odstranit nepoužívané definice z <defs> sekce(í) dokumentu"
 
 #
 # File: ../src/inkscape-application.cpp, line: 590
@@ -9947,16 +9945,15 @@ msgstr "Deformace podle mřížky"
 
 #: ../src/live_effects/effect.cpp:814
 msgid "Deform an object using a 4x4 grid"
-msgstr ""
+msgstr "Deformovat objekt pomocí mřížky 4×4"
 
 #: ../src/live_effects/effect.cpp:824
-#, fuzzy
 msgid "Path length"
-msgstr "Síla"
+msgstr "Délka cesty"
 
 #: ../src/live_effects/effect.cpp:828
 msgid "Display the total length of a (curved) path"
-msgstr ""
+msgstr "Zobrazit celkovou délku (zakřivené) cesty"
 
 #: ../src/live_effects/effect.cpp:838
 msgid "Recursive skeleton"
@@ -9972,7 +9969,7 @@ msgstr "Textový štítek"
 
 #: ../src/live_effects/effect.cpp:856
 msgid "Add a label for the object"
-msgstr ""
+msgstr "Přidat textový štítek objektu"
 
 #: ../src/live_effects/effect.cpp:866 ../src/live_effects/effect.cpp:870
 msgid "Embroidery stitch"
@@ -9987,6 +9984,8 @@ msgid ""
 "If unchecked, the effect remains applied to the object but is temporarily "
 "disabled on canvas"
 msgstr ""
+"Pokud není zaškrtnuto, efekt zůstane aplikován na objekt, ale na plátně je "
+"dočasně zakázán"
 
 #: ../src/live_effects/effect.cpp:1136
 msgid "No effect"
@@ -10478,7 +10477,6 @@ msgid "Rotation angle"
 msgstr "Úhel natočení"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:69
-#, fuzzy
 msgid "Angle between two successive copies"
 msgstr "Úhel mezi dvěma po sobě jdoucími kopiemi"
 
@@ -11163,9 +11161,8 @@ msgid "Miter limit:"
 msgstr "Limit úkosu:"
 
 #: ../src/live_effects/lpe-jointype.cpp:67 ../src/live_effects/lpe-offset.cpp:82
-#, fuzzy
 msgid "Maximum length of the miter join (in units of stroke width)"
-msgstr "Maximální délka rohu (v jednotkách šířky čáry)"
+msgstr "Maximální délka spoje úkosu (v jednotkách šířky tahu)"
 
 #: ../src/live_effects/lpe-jointype.cpp:68 ../src/live_effects/lpe-offset.cpp:83
 msgid "Force miter"
@@ -11492,9 +11489,8 @@ msgid "Open both"
 msgstr "Otevřít oboje"
 
 #: ../src/live_effects/lpe-line_segment.cpp:33
-#, fuzzy
 msgid "End type:"
-msgstr "Režim mixování:"
+msgstr "Typ zakončení:"
 
 #
 # File: ../src/live_effects/lpe-line_segment.cpp, line: 33
@@ -11531,9 +11527,8 @@ msgid "Color and opacity"
 msgstr "Barva a průhlednost"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:70
-#, fuzzy
 msgid "Set color and opacity of the dimensions"
-msgstr "Přidá barevně nastavitelné neprůhledné pozadí"
+msgstr "Nastavte barvu a neprůhlednost rozměrů"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:71
 msgid "Font"
@@ -11630,9 +11625,8 @@ msgid "Label text format, available variables: {measure}, {unit}"
 msgstr ""
 
 #: ../src/live_effects/lpe-measure-segments.cpp:83
-#, fuzzy
 msgid "Blacklist segments"
-msgstr "Bloku prvků"
+msgstr "Blacklist částí"
 
 #
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 82
@@ -11643,25 +11637,22 @@ msgid ""
 msgstr ""
 
 #: ../src/live_effects/lpe-measure-segments.cpp:84
-#, fuzzy
 msgid "Invert blacklist"
-msgstr "Inverzní černá listina"
+msgstr "Invertovat blacklist"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:84
-#, fuzzy
 msgid "Use the blacklist as whitelist"
-msgstr "Blacklist jako whitelist"
+msgstr "Použít blacklist jako whitelist"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:85
-#, fuzzy
 msgid "Show segment index"
-msgstr "Ukázat označení výběru"
+msgstr "Zobrazovat index části"
 
 #
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 84
 #: ../src/live_effects/lpe-measure-segments.cpp:85
 msgid "Display the index of the segments in the text label for easier blacklisting"
-msgstr ""
+msgstr "Zobrazit index částí v textovém popisku pro snazší blacklisting"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:86
 msgid "Arrows outside"
@@ -11695,9 +11686,8 @@ msgid ""
 msgstr ""
 
 #: ../src/live_effects/lpe-measure-segments.cpp:89
-#, fuzzy
 msgid "Localize number format"
-msgstr "Číselné formuláře"
+msgstr "Lokalizovat formát čísla"
 
 #
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 88
@@ -11705,6 +11695,8 @@ msgstr "Číselné formuláře"
 msgid ""
 "Use localized number formatting, e.g. '1,0' instead of '1.0' with German locale"
 msgstr ""
+"Použít lokalizované formátování čísla, například „1,0“ namísto „1.0“ s německým "
+"jazykem"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:90
 msgid "Rotate labels"
@@ -11755,7 +11747,7 @@ msgstr "Propojené objekty:"
 #: ../src/live_effects/lpe-measure-segments.cpp:95
 msgid ""
 "Objects whose nodes are projected onto the path and generate new measurements"
-msgstr ""
+msgstr "Objekty, jejichž uzly jsou promítnuty na cestu a generují nová měření"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:96
 msgid "Distance"
@@ -11801,7 +11793,7 @@ msgstr "Měřit ohraničovací rámeček"
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 98
 #: ../src/live_effects/lpe-measure-segments.cpp:100
 msgid "Add measurements for the geometrical bounding box"
-msgstr ""
+msgstr "Přidat měření pro geometrický ohraničovací rámeček"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:101
 msgid "Only bounding box"
@@ -11811,12 +11803,11 @@ msgstr "Pouze ohraničovací rámeček"
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 99
 #: ../src/live_effects/lpe-measure-segments.cpp:101
 msgid "Measure only the geometrical bounding box"
-msgstr ""
+msgstr "Změřit pouze geometrický ohraničovací rámeček"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:102
-#, fuzzy
 msgid "Add object center"
-msgstr "Nastavit střed"
+msgstr "Přidat střed objektu"
 
 #
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 100
@@ -11830,7 +11821,7 @@ msgstr "Pouze max a min"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:103
 msgid "Compute only max/min projection values"
-msgstr ""
+msgstr "Vypočítat pouze max/min hodnoty projekce"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:104
 #: ../src/live_effects/lpe-measure-segments.cpp:300 ../src/verbs.cpp:297
@@ -11878,9 +11869,8 @@ msgid "Help"
 msgstr "Nápověda"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:104
-#, fuzzy
 msgid "Measure segments help"
-msgstr "Měřidlo"
+msgstr "Nápověda pro Měření částí"
 
 #
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 184
@@ -12500,7 +12490,7 @@ msgstr "Nárůst vzdálenosti mezi šrafováním."
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:222
 msgid "Half-turns smoothness: 1st side, in:"
-msgstr ""
+msgstr "Plynulost půlotáček: 1. strana, dovnitř:"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:222
 msgid ""
@@ -12509,9 +12499,8 @@ msgid ""
 msgstr ""
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:223
-#, fuzzy
 msgid "1st side, out:"
-msgstr "Poslední snímek:"
+msgstr "1. strana, ven:"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:223
 msgid ""
@@ -12521,7 +12510,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:224
 msgid "2nd side, in:"
-msgstr ""
+msgstr "2. strana, dovnitř:"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:224
 msgid ""
@@ -12531,7 +12520,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:225
 msgid "2nd side, out:"
-msgstr "Druhá strana, ven:"
+msgstr "2. strana, ven:"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:225
 msgid ""
@@ -12541,11 +12530,11 @@ msgstr ""
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:226
 msgid "Magnitude jitter: 1st side:"
-msgstr ""
+msgstr "Variace velikosti: 1. strana:"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:226
 msgid "Randomly moves 'bottom' half-turns to produce magnitude variations."
-msgstr ""
+msgstr "Náhodně posouvá „spodní“ půlotáčky, aby se vytvořily variace velikosti."
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:227
 #: ../src/live_effects/lpe-rough-hatches.cpp:229
@@ -12555,17 +12544,18 @@ msgstr "2. strana:"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:227
 msgid "Randomly moves 'top' half-turns to produce magnitude variations."
-msgstr ""
+msgstr "Náhodně posouvá „horní“ půlotáčky, aby se vytvořily variace velikosti."
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:228
 msgid "Parallelism jitter: 1st side:"
-msgstr ""
+msgstr "Variace rovnoběžnosti: 1. strana:"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:228
 msgid ""
 "Add direction randomness by moving 'bottom' half-turns tangentially to the "
 "boundary."
 msgstr ""
+"Přidává náhodnost směru tangenciálním posunutím „spodních“ půlotáček na hranici."
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:229
 msgid ""
@@ -12576,24 +12566,23 @@ msgstr ""
 #: ../src/live_effects/lpe-rough-hatches.cpp:230
 #, fuzzy
 msgid "Variance: 1st side:"
-msgstr "Poslední snímek:"
+msgstr "Variace: 1. strana:"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:230
 msgid "Randomness of 'bottom' half-turns smoothness"
-msgstr ""
+msgstr "Náhodnost plynulosti „spodních“ půlotáček"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:231
 msgid "Randomness of 'top' half-turns smoothness"
-msgstr ""
+msgstr "Náhodnost plynulosti „horních“ půlotáček"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:233
 msgid "Generate thick/thin path"
 msgstr "Vytvořit silnou/tenkou cestu"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:233
-#, fuzzy
 msgid "Simulate a stroke of varying width"
-msgstr "Měnit šířku okraje při změně měřítka"
+msgstr "Simulovat tah proměnlivé šířky"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:234
 msgid "Bend hatches"
@@ -12605,7 +12594,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:235
 msgid "Thickness: at 1st side:"
-msgstr ""
+msgstr "Tloušťka: na 1. straně:"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:235
 msgid "Width at 'bottom' half-turns"
@@ -12620,18 +12609,16 @@ msgid "Width at 'top' half-turns"
 msgstr ""
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:238
-#, fuzzy
 msgid "From 2nd to 1st side:"
-msgstr "První snímek:"
+msgstr "Z 2. na 1. stranu:"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:238
 msgid "Width from 'top' to 'bottom'"
 msgstr ""
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:239
-#, fuzzy
 msgid "From 1st to 2nd side:"
-msgstr "První snímek:"
+msgstr "Z 1. na 2. stranu:"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:239
 msgid "Width from 'bottom' to 'top'"
@@ -13060,7 +13047,7 @@ msgstr "Úhel:"
 # File: ../src/live_effects/lpe-tangent_to_curve.cpp, line: 61
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:58
 msgid "Additional angle between tangent and curve"
-msgstr ""
+msgstr "Další úhel mezi tečnou a křivkou"
 
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:59
 msgid "Location along curve:"
@@ -21675,7 +21662,6 @@ msgid "Only try to snap the node that is initially closest to the mouse pointer"
 msgstr "Pokusit se zachytit pouze uzel, který je zpočátku nejblíže ukazateli myši"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1915
-#, fuzzy
 msgid "_Weight factor:"
 msgstr "Faktor váhy:"
 
@@ -31116,9 +31102,8 @@ msgid "Ungroup selected groups"
 msgstr "Zrušit seskupení vybraných skupin"
 
 #: ../src/verbs.cpp:2745
-#, fuzzy
 msgid "_Pop Selected Objects out of Group"
-msgstr "Seskupit vybrané objekty"
+msgstr "Vyjmout vybrané objekty ze sku_piny"
 
 #: ../src/verbs.cpp:2745
 #, fuzzy
@@ -33724,7 +33709,7 @@ msgstr ""
 
 #: ../share/extensions/jessyink_transitions.py:39
 msgid "Please enter a layer name."
-msgstr ""
+msgstr "Zadejte prosím název vrstvy."
 
 #: ../share/extensions/jessyink_transitions.py:44
 #, python-brace-format
@@ -33799,7 +33784,7 @@ msgstr ""
 
 #: ../share/extensions/plotter.py:65
 msgid "No paths where found. Please convert objects to paths."
-msgstr ""
+msgstr "Nebyly nalezeny žádné cesty. Převeďte objekty na cesty."
 
 #: ../share/extensions/print_win32_vector.py:175
 msgid "Failed to open default printer"
@@ -33810,6 +33795,8 @@ msgid ""
 "Couldn't find anything using that font, please ensure the spelling and spacing is "
 "correct."
 msgstr ""
+"Nenašlo se nic, co by používalo toto písmo. Ujistěte se, že pravopis a mezery "
+"jsou správné."
 
 #: ../share/extensions/replace_font.py:127
 msgid "Didn't find any fonts in this document/selection."
@@ -39791,7 +39778,7 @@ msgstr "Křivka (%):"
 
 #: ../share/extensions/scribus_export_pdf.inx:3
 msgid "Export to PDF via Scribus"
-msgstr ""
+msgstr "Export do PDF přes Scribus"
 
 #: ../share/extensions/scribus_export_pdf.inx:10
 msgid "Scribus CMYK PDF (*.PDF)"
@@ -39799,7 +39786,7 @@ msgstr ""
 
 #: ../share/extensions/scribus_export_pdf.inx:11
 msgid "Exports the document to PDF using scribus"
-msgstr ""
+msgstr "Exportovat dokument do PDF pomocí aplikace Scribus"
 
 #: ../share/extensions/setup_typography_canvas.inx:3
 msgid "1 - Setup Typography Canvas"
@@ -41534,9 +41521,6 @@ msgstr ""
 #~ msgid "Unify dashes"
 #~ msgstr "Sjednotit čárky"
 
-#~ msgid "Fuse coincident points"
-#~ msgstr "Sloučit shodné body"
-
 #~ msgid "Methods to calculate the fillet or chamfer"
 #~ msgstr "Metody výpočtu zaoblení nebo zkosení"
 
@@ -41568,9 +41552,6 @@ msgstr ""
 #~ msgid "Slice the arc"
 #~ msgstr "rozdělit oblouk"
 
-#~ msgid "<b>Extra roughen</b> Add a extra layer of rough"
-#~ msgstr "<b>Extra zdrsnění</b> Přidává další vrstvu drsnosti"
-
 #~ msgid "Taper smoothing:"
 #~ msgstr "Vyhlazení zúžení:"
 
@@ -41588,9 +41569,6 @@ msgstr ""
 
 #~ msgid "Inkscape website"
 #~ msgstr "Webová stránka Inkscape"
-
-#~ msgid "© 2019 Inkscape Developers"
-#~ msgstr "© 2019 Inkscape vývojáři"
 
 #, fuzzy
 #~ msgid ""
@@ -41700,7 +41678,7 @@ msgstr ""
 #~ msgstr "Nahradit značky s „auto_start_reverse“."
 
 #~ msgid "Replace markers using 'context_paint' or 'context_fill'."
-#~ msgstr "Nahradit značky používající 'context_paint' nebo 'context_fill'."
+#~ msgstr "Nahradit značky používající „context_paint“ nebo „context_fill“."
 
 #~ msgid "SVG 2 allows markers to automatically be reversed at start of path."
 #~ msgstr "SVG 2 umožňuje automatické obrácení značek na začátku cesty."
@@ -41945,6 +41923,57 @@ msgstr ""
 #~ "  4) Pokud je vaším cílem získat několik uzlů a dobrou přesnost, ruční "
 #~ "trasování je vždy nejlepší.\n"
 
+#~ msgid "Layer '{}' not found."
+#~ msgstr "Vrstva '{}' nebyla nalezena."
+
+#~ msgid "Manually define the group ID. Leave blank to have it auto-generated."
+#~ msgstr "Ručně definujte ID skupiny. Nechte prázdné pro aumotatické generování."
+
+#~ msgid "Group ID:"
+#~ msgstr "ID skupiny:"
+
+#~ msgid "PDF version"
+#~ msgstr "Verze PDF"
+
+#~ msgid "PDF/X-1a"
+#~ msgstr "PDF/X-1a"
+
+#~ msgid "PDF/X-3"
+#~ msgstr "PDF/X-3"
+
+#~ msgid "PDF 1.3"
+#~ msgstr "PDF 1.3"
+
+#~ msgid "PDF title (mandatory for PDF/X-3)"
+#~ msgstr "Název PDF (povinný pro PDF/X-3)"
+
+#~ msgid "bleed added to each side of the document (mm)"
+#~ msgstr "spadávka přidaná na každou stranu dokumentu (mm)"
+
+#~ msgid "show bleed marks"
+#~ msgstr "zobrazit značky spadávky"
+
+#~ msgid "Rendering intent"
+#~ msgstr "Záměr vykreslování"
+
+#~ msgid ""
+#~ "An Open Source vector graphics editor, with capabilities similar to "
+#~ "Illustrator, CorelDraw, or Xara X, using the W3C standard Scalable Vector "
+#~ "Graphics (SVG) file format."
+#~ msgstr ""
+#~ "Open Source vektorový grafický editor s funkcemi podobnými Illustratoru, "
+#~ "CorelDrawu nebo Xara X s použitím formátu souboru SVG (Scalable Vector "
+#~ "Graphics) W3C."
+
+#~ msgid "Fuse coincident points"
+#~ msgstr "Sloučit shodné body"
+
+#~ msgid "<b>Extra roughen</b> Add a extra layer of rough"
+#~ msgstr "<b>Extra zdrsnění</b> Přidává další vrstvu drsnosti"
+
+#~ msgid "© 2019 Inkscape Developers"
+#~ msgstr "© 2019 Inkscape vývojáři"
+
 #~ msgid "JessyInk script version {0} installed."
 #~ msgstr "JessyInk skript verze {0} nainstalována."
 
@@ -41978,15 +42007,6 @@ msgstr ""
 
 #~ msgid "Convert objects to paths"
 #~ msgstr "Převést objekty na cesty"
-
-#~ msgid ""
-#~ "An Open Source vector graphics editor, with capabilities similar to "
-#~ "Illustrator, CorelDraw, or Xara X, using the W3C standard Scalable Vector "
-#~ "Graphics (SVG) file format."
-#~ msgstr ""
-#~ "Open Source vektorový grafický editor s funkcemi podobnými Illustratoru, "
-#~ "CorelDrawu nebo Xara X s použitím formátu souboru SVG (Scalable Vector "
-#~ "Graphics) W3C."
 
 #~ msgid "Print system extension directory"
 #~ msgstr "Vypsat systémový adresář rozšíření"
@@ -42657,7 +42677,7 @@ msgstr ""
 #~ msgstr "Vektorizovat pomocí optimální detekce hran algoritmem J. Cannyho"
 
 #~ msgid "Brightness cutoff for adjacent pixels (determines edge thickness)"
-#~ msgstr "Rozdíl jasu pro detekci hrany"
+#~ msgstr "Mezní hodnota jasu pro sousední pixely (určuje tloušťku okraje)"
 
 #~ msgid "T_hreshold:"
 #~ msgstr "Prá_h:"
