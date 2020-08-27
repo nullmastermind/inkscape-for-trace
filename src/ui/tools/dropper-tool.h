@@ -48,7 +48,7 @@ public:
 
 	const std::string& getPrefsPath() override;
 
-	guint32 get_color(bool invert=false);
+	guint32 get_color(bool invert=false, bool cache=false);
 
 protected:
 	void setup() override;
@@ -60,6 +60,10 @@ private:
     double        G;
     double        B;
     double        alpha;
+    double        R_cache;
+    double        G_cache;
+    double        B_cache;
+    double        alpha_cache;
 
     double radius;
     bool invert;

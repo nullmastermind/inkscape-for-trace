@@ -114,17 +114,22 @@ void DropperTool::finish() {
 /**
  * Returns the current dropper context color.
  */
-guint32 DropperTool::get_color(bool invert) {
+guint32 DropperTool::get_color(bool invert, bool cache) {
     Inkscape::Preferences   *prefs = Inkscape::Preferences::get();
 
     int pick = prefs->getInt("/tools/dropper/pick", SP_DROPPER_PICK_VISIBLE);
     bool setalpha = prefs->getBool("/tools/dropper/setalpha", true);
 
+    double r = cache ? this->R_cache     : this->R;
+    double g = cache ? this->G_cache     : this->G;
+    double b = cache ? this->B_cache     : this->B;
+    double a = cache ? this->alpha_cache : this->alpha;
+
     return SP_RGBA32_F_COMPOSE(
-        fabs(invert - this->R),
-        fabs(invert - this->G),
-        fabs(invert - this->B),
-       (pick == SP_DROPPER_PICK_ACTUAL && setalpha) ? this->alpha : 1.0);
+        fabs(invert - r),
+        fabs(invert - g),
+        fabs(invert - b),
+       (pick == SP_DROPPER_PICK_ACTUAL && setalpha) ? a : 1.0);
 }
 
 bool DropperTool::root_handler(GdkEvent* event) {
@@ -275,12 +280,17 @@ bool DropperTool::root_handler(GdkEvent* event) {
                 }
 
                 // remember color
-                if(!this->dropping && (R != this->R || G != this->G || B != this->B || A != this->alpha)) {
+                this->R_cache = R;
+                this->G_cache = G;
+                this->B_cache = B;
+                this->alpha_cache = A;
+                if(!this->dropping) {
                     this->R = R;
                     this->G = G;
                     this->B = B;
                     this->alpha = A;
                 }
+
                 ret = TRUE;
             }
             break;

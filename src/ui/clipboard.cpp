@@ -247,8 +247,7 @@ void ClipboardManagerImpl::copy(ObjectSet *set)
         // Special case for when the color picker ("dropper") is active - copies color under cursor
         auto dt = dynamic_cast<Inkscape::UI::Tools::DropperTool *>(desktop->event_context);
         if (dt) {
-            //_setClipboardColor(sp_dropper_context_get_color(desktop->event_context));
-            _setClipboardColor(SP_DROPPER_CONTEXT(desktop->event_context)->get_color());
+            _setClipboardColor(SP_DROPPER_CONTEXT(desktop->event_context)->get_color(false, true));
             _discardInternalClipboard();
             return;
         }
