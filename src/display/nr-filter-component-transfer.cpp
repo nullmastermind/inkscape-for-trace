@@ -76,11 +76,20 @@ struct ComponentTransferTable : public ComponentTransfer {
         }
     }
     guint32 operator()(guint32 in) {
+        if (_v.empty()) {
+            return in;
+        }
+
         guint32 component = (in & _mask) >> _shift;
-        guint32 k = (_v.size() - 1) * component;
-        guint32 dx = k % 255;  k /= 255;
-        component = _v[k]*255 + (_v[k+1] - _v[k])*dx;
-        component = (component + 127) / 255;
+        if (_v.size() == 1 || component == 255) {
+            component = _v.back();
+        } else {
+            guint32 k = ((_v.size() - 1) * component);
+            guint32 dx = k % 255;
+            k /= 255;
+            component = _v[k]*255 + (_v[k+1] - _v[k])*dx;
+            component = (component + 127) / 255;
+        }
         return (in & ~_mask) | (component << _shift);
     }
 private:
