@@ -87,7 +87,18 @@ echo "./../../../../../../../Resources/lib/python$PY3_MAJOR.$PY3_MINOR/site-pack
 
 ### install Python package: lxml ###############################################
 
-pip_install $PYTHON_LXML
+# We have to build it ourselves since the wheel has been built with an SDK
+# lower than 10.9, breaking notarization for
+#   - etree.cpython-38-darwin.so
+#   - objectify.cpython-38-darwin.so
+
+pip_install $PYTHON_LXML "--no-binary :all:"
+
+lib_change_paths \
+  @loader_path/../../.. \
+  $APP_LIB_DIR \
+  $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/lxml/etree.cpython-$PY3_MAJOR${PY3_MINOR}-darwin.so \
+  $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/lxml/objectify.cpython-$PY3_MAJOR${PY3_MINOR}-darwin.so
 
 ### install Python package: NumPy ##############################################
 
