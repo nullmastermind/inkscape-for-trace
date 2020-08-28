@@ -262,11 +262,11 @@ void LayerSelector::_selectLayer(SPObject *layer) {
         std::vector<SPObject*> hierarchy; 
         hierarchy.push_back(layer);
         while(hierarchy.back() != root) hierarchy.push_back(hierarchy.back()->parent);
-        
+
         if ( layer == root ) {
-            hierarchy.push_back(root);
             _buildEntries(0, hierarchy);
         } else if (!hierarchy.empty()) {
+            hierarchy.pop_back();
             _buildSiblingEntries(0, *root, hierarchy);
         }
 
@@ -331,7 +331,7 @@ void LayerSelector::_buildEntries(unsigned depth, std::vector<SPObject*> hierarc
     hierarchy.pop_back();
     _buildEntry(depth, *highest);
 
-    if (hierarchy.empty()) {
+    if (!hierarchy.empty()) {
         _buildEntries(depth+1, hierarchy);
     } else {
         _buildSiblingEntries(depth+1, *highest, hierarchy);
