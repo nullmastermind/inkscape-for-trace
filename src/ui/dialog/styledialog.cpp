@@ -550,20 +550,20 @@ void StyleDialog::readStyleElement()
         attr_prop = parseStyle(style);
         for (auto iter : obj->style->properties()) {
             if (attr_prop.count(iter->name())) {
+                auto value = attr_prop[iter->name()];
                 empty = false;
                 Gtk::TreeModel::Row row = *(store->prepend());
                 row[_mColumns._colSelector] = "style_properties";
                 row[_mColumns._colSelectorPos] = 0;
                 row[_mColumns._colActive] = true;
                 row[_mColumns._colName] = iter->name();
-                row[_mColumns._colValue] = iter->get_value();
+                row[_mColumns._colValue] = value;
                 row[_mColumns._colStrike] = false;
                 row[_mColumns._colOwner] = Glib::ustring("Current value");
                 row[_mColumns._colHref] = nullptr;
                 row[_mColumns._colLinked] = false;
-                if (is_url(iter->get_value().c_str())) {
-                    Glib::ustring id = iter->get_value();
-                    id = id.substr(5, id.size() - 6);
+                if (is_url(value.c_str())) {
+                    auto id = value.substr(5, value.size() - 6);
                     SPObject *elemref = nullptr;
                     if ((elemref = document->getObjectById(id.c_str()))) {
                         row[_mColumns._colHref] = elemref;
