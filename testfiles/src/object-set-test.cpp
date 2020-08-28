@@ -655,13 +655,24 @@ TEST_F(ObjectSetTest, toMarker) {
     r2->set_shape();
     r2->updateRepr();
 
+    r3->x = 10;
+    r3->y = 10;
+    r3->width = 10;
+    r3->height = 10;
+    r3->set_shape();
+    r3->updateRepr();
+
+    // add rects to set in different order than they appear in the document,
+    // to verify selection order independence.
     set->set(r1.get());
+    set->add(r3.get());
     set->add(r2.get());
     set->toMarker();
 
     // original items got deleted
     r1.release();
     r2.release();
+    r3.release();
 
     auto markers = _doc->getObjectsByElement("marker");
     ASSERT_EQ(markers.size(), 1);
@@ -675,11 +686,10 @@ TEST_F(ObjectSetTest, toMarker) {
     EXPECT_FLOAT_EQ(marker->markerHeight.computed, 105);
 
     auto markerchildren = marker->childList(false);
-    ASSERT_EQ(markerchildren.size(), 2);
+    ASSERT_EQ(markerchildren.size(), 3);
 
-    // TODO order swapped !!! 1.0.x Regression
-    auto *markerrect1 = dynamic_cast<SPRect *>(markerchildren[1]);
-    auto *markerrect2 = dynamic_cast<SPRect *>(markerchildren[0]);
+    auto *markerrect1 = dynamic_cast<SPRect *>(markerchildren[0]);
+    auto *markerrect2 = dynamic_cast<SPRect *>(markerchildren[1]);
 
     ASSERT_NE(markerrect1, nullptr);
     ASSERT_NE(markerrect2, nullptr);

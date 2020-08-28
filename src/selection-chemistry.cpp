@@ -3010,6 +3010,7 @@ void ObjectSet::toMarker(bool apply)
     }
 
     std::vector<SPItem*> items_(items().begin(), items().end());
+    sort(items_.begin(), items_.end(), sp_item_repr_compare_position_bool);
 
     // bottommost object, after sorting
     SPObject *parent = items_.front()->parent;
@@ -3026,8 +3027,8 @@ void ObjectSet::toMarker(bool apply)
 
     // Create a list of duplicates, to be pasted inside marker element.
     std::vector<Inkscape::XML::Node*> repr_copies;
-    for (std::vector<SPItem*>::const_reverse_iterator i=items_.rbegin();i!=items_.rend();++i){
-        Inkscape::XML::Node *dup = (*i)->getRepr()->duplicate(xml_doc);
+    for (auto *item : items_) {
+        auto *dup = item->getRepr()->duplicate(xml_doc);
         repr_copies.push_back(dup);
     }
 
