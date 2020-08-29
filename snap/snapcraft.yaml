@@ -126,8 +126,10 @@ parts:
     python-packages:
       - lxml
       - numpy
-      - scour
+      - pip
       - pyserial
+      - scour
+      - virtualenv
     stage-packages:
       - pstoedit
   snap-helpers:
