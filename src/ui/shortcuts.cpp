@@ -36,6 +36,7 @@
 #include "io/resource.h"
 #include "io/dir-util.h"
 
+#include "ui/modifiers.h"
 #include "ui/tools/tool-base.h"    // For latin keyval
 #include "ui/dialog/filedialog.h"  // Importing/exporting files.
 
@@ -44,9 +45,11 @@
 #include "xml/node-iterators.h"
 
 using namespace Inkscape::IO::Resource;
+using namespace Inkscape::Modifiers;
 
 namespace Inkscape {
 
+unsigned long long int parse_modifier_string(gchar const *modifiers_string, gchar const *verb_name);
 
 Shortcuts::Shortcuts()
 {
@@ -167,7 +170,26 @@ Shortcuts::read(Glib::RefPtr<Gio::File> file, bool user_set)
     iter = iter->firstChild();
     for ( ; iter ; ++iter ) {
 
-        if (strcmp(iter->name(), "bind") != 0) {
+        if (strcmp(iter->name(), "modifier") == 0) {
+            gchar const *mod_name = iter->attribute("action");
+            if (!mod_name) {
+                 g_warning("Missing modifier name (action= attribute) for shortcut");
+                 continue;
+            }
+            Modifier *mod = Modifier::get(mod_name);
+            if(mod == nullptr) {
+                 g_warning("Can't find modifier '%s'", mod_name);
+                 continue;
+            }
+ 
+            // If mods isn't specified then it should use default, if it's an empty string
+            // then the modifier is None (i.e. happens all the time without a modifier)
+            gchar const *mod_attr = iter->attribute("modifiers");
+            if(!mod_attr) continue; // Default, do nothing and no warning
+            KeyMask user_modifier = parse_modifier_string(mod_attr, mod_name);
+            mod->set(user_modifier);
+            continue;
+        } else if (strcmp(iter->name(), "bind") != 0) {
             // Unknown element, do not complain.
             continue;
         }
@@ -225,59 +247,65 @@ Shortcuts::read(Glib::RefPtr<Gio::File> file, bool user_set)
             continue;
         }
 
-        unsigned long long int modifiers = 0;
-        gchar const *modifiers_string=iter->attribute("modifiers");
-        if (modifiers_string) {
-
-            Glib::ustring str(modifiers_string);
-            std::vector<Glib::ustring> mod_vector = Glib::Regex::split_simple("\\s*,\\s*", modifiers_string);
-
-            for (auto mod : mod_vector) {
-                if (mod == "Control" || mod == "Ctrl") {
-                    modifiers |= GDK_CONTROL_MASK;
-                } else if (mod == "Shift") {
-                    modifiers |= GDK_SHIFT_MASK;
-                } else if (mod == "Alt") {
-                    modifiers |= GDK_MOD1_MASK;
-                } else if (mod == "Super") {
-                    modifiers |= GDK_SUPER_MASK; // Not used
-                } else if (mod == "Hyper") {
-                    modifiers |= GDK_HYPER_MASK; // Not used
-                } else if (mod == "Meta") {
-                    modifiers |= GDK_META_MASK;
-                } else if (mod == "Primary") {
-
-                    // System dependent key to invoke menus. (Needed for OSX in particular.)
-                    // We only read "Primary" and never write it for verbs.
-                    auto display = Gdk::Display::get_default();
-                    if (display) {
-                        GdkKeymap* keymap = display->get_keymap();
-                        GdkModifierType type =
-                            gdk_keymap_get_modifier_mask (keymap, GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR);
-                        gdk_keymap_add_virtual_modifiers(keymap, &type);
-                        if (type & GDK_CONTROL_MASK)
-                            modifiers |= GDK_CONTROL_MASK;
-                        else if (type & GDK_META_MASK)
-                            modifiers |= GDK_META_MASK;
-                        else {
-                            std::cerr << "Shortcut::read: Unknown primary accelerator!" << std::endl;
-                            modifiers |= GDK_CONTROL_MASK;
-                        }
-                    } else {
-                        modifiers |= GDK_CONTROL_MASK;
-                    }
-
-                } else {
-                    std::cerr << "Shortcut::read: Unknown GDK modifier: " << mod << std::endl;
-                }
-            }
-        }
+        unsigned long long int modifiers = parse_modifier_string(iter->attribute("modifiers"), verb_name);
 
         set_verb_shortcut (keyval | modifiers << 32, verb, is_primary, user_set);
     }
 
     return true;
 }
+
+unsigned long long int
+parse_modifier_string(gchar const *modifiers_string, gchar const *verb_name)
+{
+    unsigned long long int modifiers = 0; 
+    if (modifiers_string) {
+  
+        Glib::ustring str(modifiers_string);
+        std::vector<Glib::ustring> mod_vector = Glib::Regex::split_simple("\\s*,\\s*", modifiers_string);
+  
+        for (auto mod : mod_vector) {
+            if (mod == "Control" || mod == "Ctrl") {
+                modifiers |= GDK_CONTROL_MASK;
+            } else if (mod == "Shift") {
+                modifiers |= GDK_SHIFT_MASK;
+            } else if (mod == "Alt") {
+                modifiers |= GDK_MOD1_MASK;
+            } else if (mod == "Super") {
+                modifiers |= GDK_SUPER_MASK; // Not used
+            } else if (mod == "Hyper") {
+                modifiers |= GDK_HYPER_MASK; // Not used
+            } else if (mod == "Meta") {
+                modifiers |= GDK_META_MASK;
+            } else if (mod == "Primary") {
+  
+                // System dependent key to invoke menus. (Needed for OSX in particular.)
+                // We only read "Primary" and never write it for verbs.
+                auto display = Gdk::Display::get_default();
+                if (display) {
+                    GdkKeymap* keymap = display->get_keymap();
+                    GdkModifierType type = 
+                        gdk_keymap_get_modifier_mask (keymap, GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR);
+                    gdk_keymap_add_virtual_modifiers(keymap, &type);
+                    if (type & GDK_CONTROL_MASK)
+                        modifiers |= GDK_CONTROL_MASK;
+                    else if (type & GDK_META_MASK)
+                        modifiers |= GDK_META_MASK;
+                    else {
+                        std::cerr << "Shortcut::read: Unknown primary accelerator!" << std::endl;
+                        modifiers |= GDK_CONTROL_MASK;
+                    }
+                } else {
+                    modifiers |= GDK_CONTROL_MASK;
+                }
+            } else {
+                std::cerr << "Shortcut::read: Unknown GDK modifier: " << mod.c_str() << std::endl;
+            }
+        }
+    }
+    return modifiers;
+}
+
 
 // In principle, we only write User shortcuts. But for debugging, we might want to write something else.
 bool

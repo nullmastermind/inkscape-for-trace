@@ -51,6 +51,7 @@
 #include "object/sp-namedview.h"
 #include "object/sp-root.h"
 
+#include "ui/shortcuts.h"
 #include "ui/dialog/dialog-manager.h"
 #include "ui/dialog/swatches.h"
 #include "ui/icon-loader.h"
