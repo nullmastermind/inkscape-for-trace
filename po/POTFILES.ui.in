@@ -7,5 +7,5 @@
 ../share/ui/inkscape-about.glade
 ../share/ui/inkscape-application.glade
 ../share/ui/snap-toolbar.ui
+../share/ui/view-menu.ui
 ../share/ui/zoom-toolbar.ui
-../share/ui/zoom-menu.ui

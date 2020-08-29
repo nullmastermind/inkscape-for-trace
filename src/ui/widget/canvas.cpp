@@ -771,9 +771,7 @@ Canvas::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr)
 
         // Create new stores and copy/shift contents.
         shift_content(Geom::IntPoint(0, 0), _backing_store);
-        if (_split_mode != Inkscape::SPLITMODE_NORMAL) {
-            shift_content(Geom::IntPoint(0, 0), _outline_store);
-        }
+        shift_content(Geom::IntPoint(0, 0), _outline_store);
 
         // Clip the clean region to the new allocation
         Cairo::RectangleInt clip = { _x0, _y0, _allocation.get_width(), _allocation.get_height() };
