@@ -271,15 +271,8 @@ checkitem_update(Gtk::CheckMenuItem* menuitem, SPAction* action)
         } else if (id == "ToggleRotationLock") {
             active = dt->get_rotation_lock();
 
-        }
-        else if (id == "ViewCmsToggle") {
+        } else if (id == "ViewCmsToggle") {
             active = dt->colorProfAdjustEnabled();
-        }
-        else if (id == "ViewSplitModeToggle") {
-            active = dt->splitMode();
-
-        } else if (id == "ViewXRayToggle") {
-            active = dt->xrayMode();
 
         } else if (id == "ToggleCommandsToolbar") {
             active = getStateFromPref(dt, "commands");
@@ -465,6 +458,7 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
             }
 
             if (name == "submenu") {
+
                 const char *name = menu_ptr->attribute("name");
                 if (!name) {
                     g_warning("menus.xml: skipping submenu without name.");
@@ -475,29 +469,40 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
                 menuitem->set_name(name);
 
                 // TEMP
-                if (strcmp(name, "_Zoom") == 0) {
+                if (strcmp(name, "_View") == 0) {
+                    // Add from view.ui first.
 
                     auto refBuilder = Gtk::Builder::create();
                     try
                     {
                         std::string filename =
-                            Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::UIS, "zoom-menu.ui");
+                            Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::UIS, "view-menu.ui");
                         refBuilder->add_from_file(filename);
                     }
                     catch (const Glib::Error& err)
                     {
-                        std::cerr << "build_menu: failed to load Zoom menu from: " << "zoom-menu.ui" << std::endl;
+                        std::cerr << "build_menu: failed to load View menu from: "
+                                  << "view-menu.ui: "
+                                  << err.what() << std::endl;
                     }
-                    auto object = refBuilder->get_object("zoom-menu");
+
+                    auto object = refBuilder->get_object("view-menu");
                     auto gmenu = Glib::RefPtr<Gio::Menu>::cast_dynamic(object);
                     if (!gmenu) {
-                        std::cerr << "build_menu: failed to build Zoom menu!" << std::endl;
+                        std::cerr << "build_menu: failed to build View menu!" << std::endl;
                     } else {
                         auto submenu = Gtk::manage(new Gtk::Menu(gmenu));
                         menuitem->set_submenu(*submenu);
                         menu->append(*menuitem);
+
+                        // Rest of View menu from menus.xml
+                        build_menu(submenu, menu_ptr->firstChild(), view, show_icons_curr);
                     }
+
+                    continue;
+
                 } else {
+
                     Gtk::Menu* submenu = Gtk::manage(new Gtk::Menu());
                     build_menu(submenu, menu_ptr->firstChild(), view, show_icons_curr);
                     menuitem->set_submenu(*submenu);
@@ -505,8 +510,9 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
 
                     submenu->signal_map().connect(
                         sigc::bind<Gtk::Menu*>(sigc::ptr_fun(&shift_icons), submenu));
+
+                    continue;
                 }
-                continue;
             }
 
             if (name == "contextmenu") {

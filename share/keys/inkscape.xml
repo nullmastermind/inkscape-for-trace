@@ -206,33 +206,7 @@ override) the bindings in the main default.xml.
   <bind action="ViewNew" />
   <bind action="ViewIconPreview" />
 
-  <bind key="5" modifiers="Primary" action="ViewModeToggle" display="true" />
-  <bind key="5" modifiers="Primary" action="ViewModeToggle" />
-  <bind key="KP_5" modifiers="Primary" action="ViewModeToggle" display="true" />
-  <bind key="KP_5" modifiers="Primary" action="ViewModeToggle" />
-
-  <bind action="ViewModeNormal" />
-  <bind action="ViewModeNoFilters" />
-  <bind action="ViewModeOutline" />
-  <bind action="ViewModeVisibleHairlines" />
-
-  <bind key="5" modifiers="Alt" action="ViewColorModeToggle" display="true" />
-  <bind key="5" modifiers="Alt" action="ViewColorModeToggle" />
-  <bind key="KP_5" modifiers="Alt" action="ViewColorModeToggle" display="true" />
-  <bind key="KP_5" modifiers="Alt" action="ViewColorModeToggle" />
-  <bind action="ViewColorModeNormal" />
-  <bind action="ViewColorModeGrayscale" />
-
-  <bind key="6" modifiers="Primary" action="ViewSplitModeToggle" display="true" />
-  <bind key="6" modifiers="Primary" action="ViewSplitModeToggle" />
-  <bind key="KP_6" modifiers="Primary" action="ViewSplitModeToggle" display="true" />
-  <bind key="KP_6" modifiers="Primary" action="ViewSplitModeToggle" />
-
-
-  <bind key="6" modifiers="Alt" action="ViewXRayToggle" display="true" />
-  <bind key="6" modifiers="Alt" action="ViewXRayToggle" />
-  <bind key="KP_6" modifiers="Alt" action="ViewXRayToggle" display="true" />
-  <bind key="KP_6" modifiers="Alt" action="ViewXRayToggle" />
+  <!-- Canvas modes: See actions below -->
 
 <!-- Edit -->
 
@@ -622,7 +596,7 @@ override) the bindings in the main default.xml.
   <!-- Snapping -->
   <bind gaction="doc.snap-global-toggle"    keys="percent"/>
 
-  <!-- View -->
+  <!-- Canvas Transform -->
   <bind gaction="win.canvas-zoom-in"               keys="plus,  equal,       KP_Add" />
   <bind gaction="win.canvas-zoom-out"              keys="minus, underscore,  KP_Subtract" />
   <bind gaction="win.canvas-zoom-1-1"              keys="1,                  KP_1"/>
@@ -634,4 +608,10 @@ override) the bindings in the main default.xml.
   <bind gaction="win.canvas-zoom-center-page"      keys="&lt;primary&gt;4,&lt;primary&gt;KP_4"/>
   <bind gaction="win.canvas-zoom-prev"             keys="grave,              KP_8"/>
   <bind gaction="win.canvas-zoom-next"             keys="asciitilde,         KP_9"/>
+
+  <!-- Canvas Mode -->
+  <bind gaction="win.canvas-display-mode-cycle"    keys="&lt;primary&gt;5,   &lt;primary&gt;KP_5"/>
+  <bind gaction="win.canvas-color-mode"            keys="&lt;alt&gt;5,       &lt;alt&gt;KP_5"/>
+  <bind gaction="win.canvas-split-mode(1)"         keys="&lt;primary&gt;6,   &lt;primary&gt;KP_6"/>
+  <bind gaction="win.canvas-split-mode(2)"         keys="&lt;alt&gt;6,       &lt;alt&gt;KP_6"/>
 </keys>

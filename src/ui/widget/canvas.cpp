@@ -371,6 +371,9 @@ Canvas::set_render_mode(Inkscape::RenderMode mode)
         _render_mode = mode;
         redraw_all();
     }
+    if (_desktop) {
+        _desktop->setWindowTitle(); // Mode is listed in title.
+    }
 }
 
 void
@@ -379,6 +382,9 @@ Canvas::set_color_mode(Inkscape::ColorMode mode)
     if (_color_mode != mode) {
         _color_mode = mode;
         redraw_all();
+    }
+    if (_desktop) {
+        _desktop->setWindowTitle(); // Mode is listed in title.
     }
 }
 
@@ -611,9 +617,28 @@ Canvas::on_motion_notify_event(GdkEventMotion *motion_event)
             _split_position = Geom::Point(_allocation.get_width()/2, _allocation.get_height()/2);
             set_cursor();
             queue_draw();
-            if (_desktop) {
-                _desktop->setSplitMode(_split_mode);
+
+            // Update action (turn into utility function?).
+            auto window = dynamic_cast<Gtk::ApplicationWindow *>(get_toplevel());
+            if (!window) {
+                std::cerr << "Canvas::on_motion_notify_event: window missing!" << std::endl;
+                return true;
             }
+
+            auto action = window->lookup_action("canvas-split-mode");
+            if (!action) {
+                std::cerr << "Canvas::on_motion_notify_event: action 'canvas-split-mode' missing!" << std::endl;
+                return true;
+            }
+
+            auto saction = Glib::RefPtr<Gio::SimpleAction>::cast_dynamic(action);
+            if (!saction) {
+                std::cerr << "Canvas::on_motion_notify_event: action 'canvas-split-mode' not SimpleAction!" << std::endl;
+                return true;
+            }
+
+            saction->change_state((int)Inkscape::SPLITMODE_NORMAL);
+
             return true;
         }
     }
@@ -1069,6 +1094,8 @@ Canvas::paint_rect_internal(PaintRectSetup const *setup, Geom::IntRect const &th
         // We are small enough!
 
         _drawing->setRenderMode(_render_mode);
+        _drawing->setColorMode(_color_mode);
+
         paint_single_buffer(this_rect, setup->canvas_rect, _backing_store);
 
         if (_split_mode != Inkscape::SPLITMODE_NORMAL) {

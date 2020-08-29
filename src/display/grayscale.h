@@ -20,8 +20,6 @@ namespace Grayscale {
     guint32 process(guint32 rgba);
     guint32 process(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
     unsigned char luminance(unsigned char r, unsigned char g, unsigned char b);
-
-    bool activeDesktopIsGrayscale();
 };
 
 #endif // !SEEN_DISPLAY_GRAYSCALE_H

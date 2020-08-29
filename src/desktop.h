@@ -275,49 +275,6 @@ public:
 
     void redrawDesktop();
 
-    void _setDisplayMode(Inkscape::RenderMode mode);
-    bool setDisplayModeNormal()
-    {
-        _setDisplayMode(Inkscape::RENDERMODE_NORMAL);
-        return true;
-    }
-    bool setDisplayModeNoFilters()
-    {
-        _setDisplayMode(Inkscape::RENDERMODE_NO_FILTERS);
-        return true;
-    }
-    bool setDisplayModeOutline()
-    {
-        _setDisplayMode(Inkscape::RENDERMODE_OUTLINE);
-        return true;
-    }
-    bool setDisplayModeVisibleHairlines()
-    {
-        _setDisplayMode(Inkscape::RENDERMODE_VISIBLE_HAIRLINES);
-        return true;
-    }
-    bool displayModeToggle();
-    Inkscape::RenderMode _display_mode;
-    Inkscape::RenderMode getMode() const { return _display_mode; }
-
-    void _setDisplayColorMode(Inkscape::ColorMode mode);
-    bool setDisplayColorModeNormal()
-    {
-        _setDisplayColorMode(Inkscape::COLORMODE_NORMAL);
-        return true;
-    }
-    bool setDisplayColorModeGrayscale()
-    {
-        _setDisplayColorMode(Inkscape::COLORMODE_GRAYSCALE);
-        return true;
-    }
-//    void setDisplayColorModePrintColorsPreview() {
-//        _setDisplayColorMode(Inkscape::COLORMODE_PRINT_COLORS_PREVIEW);
-//    }
-    bool displayColorModeToggle();
-    Inkscape::ColorMode _display_color_mode;
-    Inkscape::ColorMode getColorMode() const { return _display_color_mode; }
-
     Inkscape::UI::Widget::Dock* getDock();
 
     void set_active (bool new_active);
@@ -374,7 +331,7 @@ public:
     /** \brief  Returns whether the desktop is in quick zoom mode or not */
     bool quick_zoomed() { return _quick_zoom_enabled; }
 
-    void toggle_rotation_lock() { rotation_locked = !rotation_locked; }
+    void set_rotation_lock(bool lock) { rotation_locked = lock; }
     bool get_rotation_lock() const { return rotation_locked; }
 
     void zoom_grab_focus();
@@ -402,6 +359,7 @@ public:
     void scroll_relative_in_svg_coords (double dx, double dy, bool is_scrolling = false);
     bool scroll_to_point (Geom::Point const &s_dt, gdouble autoscrollspeed = 0);
 
+    void setWindowTitle();
     void getWindowGeometry (gint &x, gint &y, gint &w, gint &h);
     void setWindowPosition (Geom::Point p);
     void setWindowSize (gint w, gint h);
@@ -436,11 +394,6 @@ public:
     bool colorProfAdjustEnabled();
 
     void toggleGrids();
-    void setSplitMode(Inkscape::SplitMode mode);
-    void toggleSplitMode();
-    void toggleXRay();
-    bool splitMode() const { return _split_canvas; };
-    bool xrayMode() const { return _xray; };
     void toggleSnapGlobal();
     bool gridsEnabled() const { return grids_visible; };
     void showGrids(bool show, bool dirty_document = true);

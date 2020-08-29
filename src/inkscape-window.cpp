@@ -22,6 +22,7 @@
 
 #include "inkscape-application.h"
 
+#include "actions/actions-canvas-mode.h"
 #include "actions/actions-canvas-transform.h"
 
 #include "object/sp-namedview.h"  // TODO Remove need for this!
@@ -54,9 +55,6 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
 
     set_resizable(true);
 
-    // =================== Actions ===================
-    add_actions_canvas_transform(this);    // Actions to transform canvas view.
-
     insert_action_group("doc", document->getActionGroup());
 
     // =============== Build interface ===============
@@ -73,6 +71,12 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     _desktop_widget->show();
     _desktop = _desktop_widget->desktop;
 
+    // =================== Actions ===================
+    // After canvas has been constructed.. move to canvas proper.
+    add_actions_canvas_transform(this);    // Actions to transform canvas view.
+    add_actions_canvas_mode(this);         // Actions to change canvas display mode.
+
+    // ========== Drag and Drop of Documents =========
     ink_drag_setup(_desktop_widget);
 
     // Menu bar (must come after desktop widget creation as we need _desktop)
@@ -166,7 +170,7 @@ InkscapeWindow::on_key_press_event(GdkEventKey* event)
     // and menomics before bubbling up from the "grab" widget (unlike other events which always
     // bubble up). This would means that key combinations used for accelerators won't reach our
     // tool event handlers (and as we use single keys for accelerators, we wouldn't even be able to
-    // type text!). We need to run our tool event handlers firs for key event before giving
+    // type text!). We need to run our tool event handlers first for key event before giving
     // Gtk::Window a crack at them.
     // See https://developer.gnome.org/gtk3/stable/chap-input-handling.html (Event Propogation)
     bool done = sp_desktop_root_handler(reinterpret_cast<GdkEvent *>(event), _desktop);

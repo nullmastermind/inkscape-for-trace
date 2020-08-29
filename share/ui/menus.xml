@@ -84,56 +84,64 @@
        <verb verb-id="DialogInput" />
        <verb verb-id="DialogPreferences" show-icons="true" />
    </submenu>
+
    <submenu name="_View">
-     <submenu name="_Zoom">
-       <verb verb-id="ZoomIn" />
-       <verb verb-id="ZoomOut" />
-       <separator/>
-       <verb verb-id="Zoom1:0" />
-       <verb verb-id="Zoom1:2" />
-       <verb verb-id="Zoom2:1" />
-       <separator/>
-       <verb verb-id="ZoomSelection" />
-       <verb verb-id="ZoomDrawing" />
-       <verb verb-id="ZoomPage" />
-       <verb verb-id="ZoomPageWidth" />
-       <verb verb-id="ZoomCenterPage" />
-       <separator/>
-       <verb verb-id="ZoomPrev" />
-       <verb verb-id="ZoomNext" />
-     </submenu>
-       <submenu name="_Display Mode">
-         <verb verb-id="ViewModeToggle"/>
-         <verb verb-id="ViewModeNormal" radio="yes" default="yes"/>
-         <verb verb-id="ViewModeNoFilters" radio="yes"/>
-         <verb verb-id="ViewModeOutline" radio="yes"/>
-         <verb verb-id="ViewModeVisibleHairlines" radio="yes"/>
+
+       <!-- <submenu name="_Zoom"> -->
+       <!--   <verb verb-id="ZoomIn" /> -->
+       <!--   <verb verb-id="ZoomOut" /> -->
+       <!--   <separator/> -->
+       <!--   <verb verb-id="Zoom1:0" /> -->
+       <!--   <verb verb-id="Zoom1:2" /> -->
+       <!--   <verb verb-id="Zoom2:1" /> -->
+       <!--   <separator/> -->
+       <!--   <verb verb-id="ZoomSelection" /> -->
+       <!--   <verb verb-id="ZoomDrawing" /> -->
+       <!--   <verb verb-id="ZoomPage" /> -->
+       <!--   <verb verb-id="ZoomPageWidth" /> -->
+       <!--   <verb verb-id="ZoomCenterPage" /> -->
+       <!--   <separator/> -->
+       <!--   <verb verb-id="ZoomPrev" /> -->
+       <!--   <verb verb-id="ZoomNext" /> -->
+       <!-- </submenu> -->
+
+       <!-- <submenu name="_Display Mode"> -->
+       <!--     <verb verb-id="ViewModeToggle"/> -->
+       <!--     <verb verb-id="ViewModeNormal" radio="yes" default="yes"/> -->
+       <!--     <verb verb-id="ViewModeNoFilters" radio="yes"/> -->
+       <!--     <verb verb-id="ViewModeOutline" radio="yes"/> -->
+       <!--     <verb verb-id="ViewModeVisibleHairlines" radio="yes"/> -->
          <!--Better location in menu needs to be found-->
          <!--verb verb-id="ViewModePrintColorsPreview" radio="yes"/-->
          <!--verb verb-id="DialogPrintColorsPreview" /-->
-       </submenu>
-       <submenu name="_Color Display Mode">
-         <verb verb-id="ViewColorModeToggle"/>
-         <verb verb-id="ViewColorModeNormal" radio="yes" default="yes"/>
-         <verb verb-id="ViewColorModeGrayscale" radio="yes"/>
-         <!--Better location in menu needs to be found-->
-         <!--verb verb-id="ViewColorModePrintColorsPreview" radio="yes"/-->
-         <!--verb verb-id="DialogPrintColorsPreview" /-->
-       </submenu>
-       <submenu name="_Canvas Orientation">
-         <verb verb-id="FlipHorizontal" check="yes"/>
-         <verb verb-id="FlipVertical" check="yes"/>
-         <separator/>
-         <verb verb-id="ToggleRotationLock" check="yes" />
-         <verb verb-id="RotateZero"/>
-       </submenu>
-       <separator/>
-       <verb verb-id="ViewSplitModeToggle" check="yes" />
-       <verb verb-id="ViewXRayToggle" check="yes" />
-       <verb verb-id="ToggleGrid" check="yes" />
-       <verb verb-id="ToggleGuides" check="yes" />
-       <verb verb-id="ViewCmsToggle" check="yes" />
-       <separator/>
+       <!-- </submenu> -->
+
+       <!-- <submenu name="_Color Display Mode"> -->
+       <!--   <verb verb-id="ViewColorModeToggle"/> -->
+       <!--   <verb verb-id="ViewColorModeNormal" radio="yes" default="yes"/> -->
+       <!--   <verb verb-id="ViewColorModeGrayscale" radio="yes"/> -->
+       <!--   <!-\-Better location in menu needs to be found-\-> -->
+       <!--   <!-\-verb verb-id="ViewColorModePrintColorsPreview" radio="yes"/-\-> -->
+       <!--   <!-\-verb verb-id="DialogPrintColorsPreview" /-\-> -->
+       <!-- </submenu> -->
+       <!-- <verb verb-id="ViewCmsToggle" check="yes" /> -->
+
+       <!-- <submenu name="_Canvas Orientation"> -->
+       <!--   <verb verb-id="FlipHorizontal" check="yes"/> -->
+       <!--   <verb verb-id="FlipVertical" check="yes"/> -->
+       <!--   <separator/> -->
+       <!--   <verb verb-id="ToggleRotationLock" check="yes" /> -->
+       <!--   <verb verb-id="RotateZero"/> -->
+       <!-- </submenu> -->
+
+       <!-- <separator/> -->
+
+       <!-- <verb verb-id="ViewSplitModeToggle" check="yes" /> -->
+       <!-- <verb verb-id="ViewXRayToggle" check="yes" /> -->
+       <!-- <verb verb-id="ToggleGrid" check="yes" /> -->
+       <!-- <verb verb-id="ToggleGuides" check="yes" /> -->
+       <!-- <separator/> -->
+
        <submenu name="Sh_ow/Hide">
          <verb verb-id="ToggleCommandsToolbar" check="yes" />
          <verb verb-id="ToggleSnapToolbar"     check="yes" />

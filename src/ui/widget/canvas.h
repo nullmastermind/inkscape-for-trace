@@ -80,6 +80,9 @@ public:
     void set_color_mode(Inkscape::ColorMode   mode);
     void set_split_mode(Inkscape::SplitMode   mode);
     void set_split_direction(Inkscape::SplitDirection dir);
+    Inkscape::RenderMode get_render_mode() { return _render_mode; }
+    Inkscape::ColorMode  get_color_mode()  { return _color_mode; }
+    Inkscape::SplitMode  get_split_mode()  { return _split_mode; }
 
 #if defined(HAVE_LIBLCMS2)
     void set_cms_key(std::string key) {

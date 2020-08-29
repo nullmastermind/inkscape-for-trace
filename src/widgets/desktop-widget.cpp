@@ -532,22 +532,25 @@ SPDesktopWidget::updateTitle(gchar const* uri)
         }
         Name += " (";
 
-        if (desktop->getMode() == Inkscape::RENDERMODE_OUTLINE) {
+        auto render_mode = desktop->getCanvas()->get_render_mode();
+        auto color_mode  = desktop->getCanvas()->get_color_mode();
+
+        if (render_mode == Inkscape::RENDERMODE_OUTLINE) {
             Name += N_("outline");
-        } else if (desktop->getMode() == Inkscape::RENDERMODE_NO_FILTERS) {
+        } else if (render_mode == Inkscape::RENDERMODE_NO_FILTERS) {
             Name += N_("no filters");
-        } else if (desktop->getMode() == Inkscape::RENDERMODE_VISIBLE_HAIRLINES) {
+        } else if (render_mode == Inkscape::RENDERMODE_VISIBLE_HAIRLINES) {
             Name += N_("visible hairlines");
         }
 
-        if (desktop->getColorMode() != Inkscape::COLORMODE_NORMAL &&
-            desktop->getMode()      != Inkscape::RENDERMODE_NORMAL) {
+        if (color_mode != Inkscape::COLORMODE_NORMAL &&
+            render_mode != Inkscape::RENDERMODE_NORMAL) {
                 Name += ", ";
         }
 
-        if (desktop->getColorMode() == Inkscape::COLORMODE_GRAYSCALE) {
+        if (color_mode == Inkscape::COLORMODE_GRAYSCALE) {
             Name += N_("grayscale");
-        } else if (desktop->getColorMode() == Inkscape::COLORMODE_PRINT_COLORS_PREVIEW) {
+        } else if (color_mode == Inkscape::COLORMODE_PRINT_COLORS_PREVIEW) {
             Name += N_("print colors preview");
         }
 
@@ -838,13 +841,13 @@ SPDesktopWidget::cms_adjust_toggled()
 void
 SPDesktopWidget::cms_adjust_set_sensitive(bool enabled)
 {
-    Inkscape::Verb* verb = Inkscape::Verb::get( SP_VERB_VIEW_CMS_TOGGLE );
-    if ( verb ) {
-        SPAction *act = verb->get_action(Inkscape::ActionContext(getView()));
-        if ( act ) {
-            sp_action_set_sensitive( act, enabled );
-        }
-    }
+    // Inkscape::Verb* verb = Inkscape::Verb::get( SP_VERB_VIEW_CMS_TOGGLE );
+    // if ( verb ) {
+    //     SPAction *act = verb->get_action(Inkscape::ActionContext(getView()));
+    //     if ( act ) {
+    //         sp_action_set_sensitive( act, enabled );
+    //     }
+    // }
     _canvas_grid->GetCmsAdjust()->set_sensitive(enabled);
 }
 

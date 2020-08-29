@@ -24,12 +24,14 @@ enum RenderMode {
     RENDERMODE_OUTLINE,
     RENDERMODE_VISIBLE_HAIRLINES
 };
+const size_t RENDERMODE_SIZE = 4;
 
 enum SplitMode {
     SPLITMODE_NORMAL,
     SPLITMODE_SPLIT,
     SPLITMODE_XRAY
 };
+const size_t SPLITMODE_SIZE = 3;
 
 enum SplitDirection {
     SPLITDIRECTION_NONE,
@@ -46,6 +48,7 @@ enum ColorMode {
     COLORMODE_GRAYSCALE,
     COLORMODE_PRINT_COLORS_PREVIEW
 };
+const size_t COLORMODE_SIZE = 3;
 
 } // Namespace Inkscape
 

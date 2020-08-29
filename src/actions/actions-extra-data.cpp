@@ -4,6 +4,10 @@
  *
  * Copyright (C) 2020 Tavmjong Bah
  *
+ * Extra data is indexed by "detailed action names", that is an action
+ * with prefix and value (if statefull). For example:
+ *   "win.canvas-display-mode(1)"
+ *
  * The contents of this file may be used under the GNU General Public License Version 2 or later.
  *
  */
@@ -12,46 +16,56 @@
 
 #include <iostream>
 
-Glib::ustring
-InkActionExtraData::get_label_for_action(Glib::ustring& action_name)
+std::vector<Glib::ustring>
+InkActionExtraData::get_actions()
 {
-  Glib::ustring value;
-  auto search = data.find(action_name);
-  if (search != data.end()) {
-    value = search->second.get_label();
-  }
-  return value;
+    std::vector<Glib::ustring> action_names;
+    for (auto datum : data) {
+        action_names.emplace_back(datum.first);
+    }
+    return action_names;
 }
 
 Glib::ustring
-InkActionExtraData::get_section_for_action(Glib::ustring& action_name) {
-
-  Glib::ustring value;
-  auto search = data.find(action_name);
-  if (search != data.end()) {
-    value = search->second.get_section();
-  }
-  return value;
+InkActionExtraData::get_label_for_action(Glib::ustring const &action_name)
+{
+    Glib::ustring value;
+    auto search = data.find(action_name);
+    if (search != data.end()) {
+        value = search->second.get_label();
+    }
+    return value;
 }
 
 Glib::ustring
-InkActionExtraData::get_tooltip_for_action(Glib::ustring& action_name) {
+InkActionExtraData::get_section_for_action(Glib::ustring const &action_name) {
 
-  Glib::ustring value;
-  auto search = data.find(action_name);
-  if (search != data.end()) {
-    value = search->second.get_tooltip();
-  }
-  return value;
+    Glib::ustring value;
+    auto search = data.find(action_name);
+    if (search != data.end()) {
+        value = search->second.get_section();
+    }
+    return value;
+}
+
+Glib::ustring
+InkActionExtraData::get_tooltip_for_action(Glib::ustring const &action_name) {
+
+    Glib::ustring value;
+    auto search = data.find(action_name);
+    if (search != data.end()) {
+        value = search->second.get_tooltip();
+    }
+    return value;
 }
 
 void
 InkActionExtraData::add_data(std::vector<std::vector<Glib::ustring>> &raw_data)
 {
-  for (auto raw : raw_data) {
-    InkActionExtraDatum datum(raw[1], raw[2], raw[3]);
-    data.emplace(raw[0], datum);
-  }
+    for (auto raw : raw_data) {
+        InkActionExtraDatum datum(raw[1], raw[2], raw[3]);
+        data.emplace(raw[0], datum);
+    }
 }
 
 

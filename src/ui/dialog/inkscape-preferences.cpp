@@ -24,6 +24,7 @@
 #include <strings.h>
 #include <sstream>
 #include <iomanip>
+#include <algorithm>
 
 #include <gio/gio.h>
 #include <gtk/gtk.h>
@@ -3058,11 +3059,14 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
 
     // Gio::Actions
 
-    // We need to find three lists of actions: application, window, and document.
+
     ConcreteInkscapeApplication<Gtk::Application>* app = &(ConcreteInkscapeApplication<Gtk::Application>::get_instance());
 
-    std::vector<Glib::ustring> actions = shortcuts.list_all_actions(); // All actions (app, win, doc)
+    // std::vector<Glib::ustring> actions = shortcuts.list_all_actions(); // All actions (app, win, doc)
+
+    // Simpler and better to get action list from extra data (contains "detailed action names").
     InkActionExtraData& action_data = app->get_action_extra_data();
+    std::vector<Glib::ustring> actions = action_data.get_actions();
 
     // Sort actions by section
     auto action_sort =
@@ -3074,7 +3078,7 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
     Glib::ustring old_section;
     Gtk::TreeStore::iterator iter_group;
 
-    // Sort actions by sections
+    // Fill sections
     for (auto action : actions) {
 
         Glib::ustring section = action_data.get_section_for_action(action);

@@ -2,6 +2,10 @@
 /*
  * Extra data associated with actions: Label, Section, Tooltip.
  *
+ * Extra data is indexed by "detailed action names", that is an action
+ * with prefix and value (if statefull). For example:
+ *   "win.canvas-display-mode(1)"
+ *
  * Copyright (C) 2020 Tavmjong Bah
  *
  * The contents of this file may be used under the GNU General Public License Version 2 or later.
@@ -17,37 +21,39 @@
 #include <glibmm/ustring.h>
 
 class InkActionExtraDatum {
- public:
-  InkActionExtraDatum(Glib::ustring& label, Glib::ustring& section, Glib::ustring& tooltip)
-    : action_label(label)
-    , action_section(section)
-    , action_tooltip(tooltip)
+public:
+    InkActionExtraDatum(Glib::ustring& label, Glib::ustring& section, Glib::ustring& tooltip)
+        : action_label(label)
+        , action_section(section)
+        , action_tooltip(tooltip)
     {
     }
 
-  Glib::ustring get_label()   { return action_label; }
-  Glib::ustring get_section() { return action_section; }
-  Glib::ustring get_tooltip() { return action_tooltip; }
+    Glib::ustring get_label()   { return action_label; }
+    Glib::ustring get_section() { return action_section; }
+    Glib::ustring get_tooltip() { return action_tooltip; }
 
- private:
-  Glib::ustring action_label;
-  Glib::ustring action_section;
-  Glib::ustring action_tooltip;
+private:
+    Glib::ustring action_label;
+    Glib::ustring action_section;
+    Glib::ustring action_tooltip;
 };
 
 class InkActionExtraData {
 
- public:
-  InkActionExtraData() = default;
+public:
+    InkActionExtraData() = default;
 
-  void add_data(std::vector<std::vector<Glib::ustring>> &raw_data);
+    std::vector<Glib::ustring> get_actions();
 
-  Glib::ustring get_label_for_action(Glib::ustring& action_name);
-  Glib::ustring get_section_for_action(Glib::ustring& action_name);
-  Glib::ustring get_tooltip_for_action(Glib::ustring& action_name);
+    void add_data(std::vector<std::vector<Glib::ustring>> &raw_data);
 
- private:
-  std::map<Glib::ustring, InkActionExtraDatum> data;
+    Glib::ustring get_label_for_action(Glib::ustring const &action_name);
+    Glib::ustring get_section_for_action(Glib::ustring const &action_name);
+    Glib::ustring get_tooltip_for_action(Glib::ustring const &action_name);
+
+private:
+    std::map<Glib::ustring, InkActionExtraDatum> data;
 };
 
 #endif // INK_ACTIONS_EXTRA_DATA_H

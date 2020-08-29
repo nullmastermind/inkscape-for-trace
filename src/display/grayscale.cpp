@@ -15,11 +15,6 @@
 #include "display/grayscale.h"
 #include "color.h"
 
-// for activeDesktopIsGrayscale:
-#include "display/rendermode.h"
-#include "inkscape.h"
-#include "desktop.h"
-
 namespace Grayscale {
 
 /* Original values from Johan:
@@ -73,23 +68,6 @@ unsigned char luminance(unsigned char r, unsigned char g, unsigned char b) {
 
     return luminance & 0xff;
 }
-
-/**
- * Use this method if there is no other way to find out if grayscale view or not.
- *
- *  In some cases, the choice between normal or grayscale is so deep in the code hierarchy,
- *  that it is not possible to determine whether grayscale is desired or not, without using
- *  the global SP_ACTIVE_DESKTOP macro. Then use this method, so we know where the abuse is
- *  happening...
- */
-bool activeDesktopIsGrayscale() {
-    if (SP_ACTIVE_DESKTOP) {
-        return (SP_ACTIVE_DESKTOP->getColorMode() == Inkscape::COLORMODE_GRAYSCALE);
-    }
-    
-    return false;
-}
-
 
 };
 

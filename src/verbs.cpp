@@ -1893,98 +1893,10 @@ void ZoomVerb::perform(SPAction *action, void *data)
 {
     g_return_if_fail(ensure_desktop_valid(action));
     SPDesktop *dt = sp_action_get_desktop(action);
-    Inkscape::UI::Tools::ToolBase *ec = dt->event_context;
 
     SPDocument *doc = dt->getDocument();
 
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    gdouble zoom_inc   =
-        prefs->getDoubleLimited( "/options/zoomincrement/value",  M_SQRT2, 1.01, 10 );
-    gdouble rotate_inc =
-        prefs->getDoubleLimited( "/options/rotateincrement/value", 15, 1, 90, "°" );
-    rotate_inc *= M_PI/180.0;
-
-    double zcorr = prefs->getDouble("/options/zoomcorrection/value", 1.0);
-
-    //Geom::Rect const d = dt->get_display_area();
-
-    Geom::Rect const d_canvas = dt->getCanvas()->get_area_world();
-    Geom::Point midpoint = dt->w2d(d_canvas.midpoint()); // Midpoint of drawing on canvas.
-
     switch (reinterpret_cast<std::size_t>(data)) {
-        case SP_VERB_ROTATE_CW:
-        {
-            gint mul = 1 + Inkscape::UI::Tools::gobble_key_events( GDK_KEY_parenleft, 0);
-            // While drawing with the pen/pencil tool, rotate towards the end of the unfinished path
-            if (dynamic_cast<Inkscape::UI::Tools::PencilTool *>(ec) ||
-                dynamic_cast<Inkscape::UI::Tools::PenTool    *>(ec)  ) {
-                SPCurve const *rc = SP_DRAW_CONTEXT(ec)->red_curve.get();
-                if (!rc->is_empty()) {
-                    Geom::Point const rotate_to (*rc->last_point());
-                    dt->rotate_relative_keep_point(rotate_to, mul * rotate_inc);
-                    break;
-                }
-            }
-
-            dt->rotate_relative_center_point(midpoint, mul * rotate_inc);
-            break;
-        }
-        case SP_VERB_ROTATE_CCW:
-        {
-            gint mul = 1 + Inkscape::UI::Tools::gobble_key_events( GDK_KEY_parenright, 0);
-            // While drawing with the pen/pencil tool, rotate towards the end of the unfinished path
-            if (dynamic_cast<Inkscape::UI::Tools::PencilTool *>(ec) ||
-                dynamic_cast<Inkscape::UI::Tools::PenTool    *>(ec)  ) {
-                SPCurve const *rc = SP_DRAW_CONTEXT(ec)->red_curve.get();
-                if (!rc->is_empty()) {
-                    Geom::Point const rotate_to (*rc->last_point());
-                    dt->rotate_relative_keep_point(rotate_to, -mul * rotate_inc);
-                    break;
-                }
-            }
-
-            dt->rotate_relative_center_point(midpoint, -mul * rotate_inc);
-            break;
-        }
-        case SP_VERB_ROTATE_ZERO:
-            dt->rotate_absolute_center_point(midpoint, 0.0);
-            break;
-        case SP_VERB_FLIP_HORIZONTAL:
-        {
-            // While drawing with the pen/pencil tool, flip towards the end of the unfinished path
-            if (dynamic_cast<Inkscape::UI::Tools::PencilTool *>(ec) ||
-                dynamic_cast<Inkscape::UI::Tools::PenTool    *>(ec)  ) {
-                SPCurve const *rc = SP_DRAW_CONTEXT(ec)->red_curve.get();
-                if (!rc->is_empty()) {
-                    Geom::Point const flip_to (*rc->last_point());
-                    dt->flip_relative_keep_point(flip_to, SPDesktop::FLIP_HORIZONTAL);
-                    break;
-                }
-            }
-
-            dt->flip_relative_center_point( midpoint, SPDesktop::FLIP_HORIZONTAL);
-            break;
-        }
-        case SP_VERB_FLIP_VERTICAL:
-        {
-            /* gint mul = 1 + */ Inkscape::UI::Tools::gobble_key_events( GDK_KEY_parenright, 0);
-            // While drawing with the pen/pencil tool, flip towards the end of the unfinished path
-            if (dynamic_cast<Inkscape::UI::Tools::PencilTool *>(ec) ||
-                dynamic_cast<Inkscape::UI::Tools::PenTool    *>(ec)  ) {
-                SPCurve const *rc = SP_DRAW_CONTEXT(ec)->red_curve.get();
-                if (!rc->is_empty()) {
-                    Geom::Point const flip_to (*rc->last_point());
-                    dt->flip_relative_keep_point(flip_to, SPDesktop::FLIP_VERTICAL);
-                    break;
-                }
-            }
-
-            dt->flip_relative_center_point( midpoint, SPDesktop::FLIP_VERTICAL);
-            break;
-        }
-        case SP_VERB_FLIP_NONE:
-            dt->flip_absolute_center_point( midpoint, SPDesktop::FLIP_NONE);
-            break;
         case SP_VERB_TOGGLE_RULERS:
             dt->toggleRulers();
             break;
@@ -2027,42 +1939,6 @@ void ZoomVerb::perform(SPAction *action, void *data)
             break;
         case SP_VERB_VIEW_NEW:
             sp_ui_new_view();
-            break;
-        case SP_VERB_VIEW_MODE_NORMAL:
-            dt->setDisplayModeNormal();
-            break;
-        case SP_VERB_VIEW_MODE_NO_FILTERS:
-            dt->setDisplayModeNoFilters();
-            break;
-        case SP_VERB_VIEW_MODE_OUTLINE:
-            dt->setDisplayModeOutline();
-            break;
-        case SP_VERB_VIEW_MODE_VISIBLE_HAIRLINES:
-            dt->setDisplayModeVisibleHairlines();
-            break;
-        case SP_VERB_VIEW_MODE_TOGGLE:
-            dt->displayModeToggle();
-            break;
-        case SP_VERB_VIEW_COLOR_MODE_NORMAL:
-            dt->setDisplayColorModeNormal();
-            break;
-        case SP_VERB_VIEW_COLOR_MODE_GRAYSCALE:
-            dt->setDisplayColorModeGrayscale();
-            break;
-//        case SP_VERB_VIEW_COLOR_MODE_PRINT_COLORS_PREVIEW:
-//            dt->setDisplayColorModePrintColorsPreview();
-//            break;
-        case SP_VERB_VIEW_COLOR_MODE_TOGGLE:
-            dt->displayColorModeToggle();
-            break;
-        case SP_VERB_VIEW_TOGGLE_SPLIT:
-            dt->toggleSplitMode();
-            break;
-        case SP_VERB_VIEW_TOGGLE_XRAY:
-            dt->toggleXRay();
-            break;
-        case SP_VERB_VIEW_CMS_TOGGLE:
-            dt->toggleColorProfAdjust();
             break;
         case SP_VERB_VIEW_ICON_PREVIEW:
             dt->_dlg_mgr->showDialog("IconPreviewPanel");
@@ -2945,18 +2821,6 @@ Verb *Verb::_base_verbs[] = {
 
     // Zoom
 
-    new ZoomVerb(SP_VERB_ROTATE_CW, "RotateClockwise", N_("Rotate Clockwise"), N_("Rotate canvas clockwise"), nullptr),
-    new ZoomVerb(SP_VERB_ROTATE_CCW, "RotateCounterClockwise", N_("Rotate Counter-Clockwise"),
-                 N_("Rotate canvas counter-clockwise"), nullptr),
-    new ZoomVerb(SP_VERB_ROTATE_ZERO, "RotateZero", N_("Reset Rotation"), N_("Reset canvas rotation to zero"), nullptr),
-
-    new ZoomVerb(SP_VERB_FLIP_HORIZONTAL, "FlipHorizontal", N_("Flip Horizontally"), N_("Flip canvas horizontally"),
-                 INKSCAPE_ICON("object-flip-horizontal")),
-    new ZoomVerb(SP_VERB_FLIP_VERTICAL, "FlipVertical", N_("Flip Vertically"), N_("Flip canvas vertically"),
-                 INKSCAPE_ICON("object-flip-vertical")),
-    new ZoomVerb(SP_VERB_FLIP_NONE, "FlipNone", N_("Reset Flip"), N_("Undo any flip"), nullptr),
-
-
     // WHY ARE THE FOLLOWING ZoomVerbs???
 
     // View
@@ -2991,33 +2855,23 @@ Verb *Verb::_base_verbs[] = {
     new ZoomVerb(SP_VERB_VIEW_NEW, "ViewNew", N_("Duplic_ate Window"), N_("Open a new window with the same document"),
                  INKSCAPE_ICON("window-new")),
 
-    new ZoomVerb(SP_VERB_VIEW_MODE_NORMAL, "ViewModeNormal", N_("_Normal"), N_("Switch to normal display mode"),
-                 nullptr),
-    new ZoomVerb(SP_VERB_VIEW_MODE_NO_FILTERS, "ViewModeNoFilters", N_("No _Filters"),
-                 N_("Switch to normal display without filters"), nullptr),
-    new ZoomVerb(SP_VERB_VIEW_MODE_OUTLINE, "ViewModeOutline", N_("_Outline"),
-                 N_("Switch to outline (wireframe) display mode"), nullptr),
-    new ZoomVerb(SP_VERB_VIEW_MODE_VISIBLE_HAIRLINES, "ViewModeVisibleHairlines", N_("Visible _Hairlines"),
-                 N_("Make sure hairlines are always drawn thick enough to see"), nullptr),
-    new ZoomVerb(SP_VERB_VIEW_MODE_TOGGLE, "ViewModeToggle", N_("_Toggle"),
-                 N_("Toggle between normal and outline display modes"), nullptr),
-    new ZoomVerb(SP_VERB_VIEW_COLOR_MODE_NORMAL, "ViewColorModeNormal", N_("_Normal"),
-                 N_("Switch to normal color display mode"), nullptr),
-    new ZoomVerb(SP_VERB_VIEW_COLOR_MODE_GRAYSCALE, "ViewColorModeGrayscale", N_("_Grayscale"),
-                 N_("Switch to grayscale display mode"), nullptr),
+    // new ZoomVerb(SP_VERB_VIEW_COLOR_MODE_NORMAL, "ViewColorModeNormal", N_("_Normal"),
+    //              N_("Switch to normal color display mode"), nullptr),
+    // new ZoomVerb(SP_VERB_VIEW_COLOR_MODE_GRAYSCALE, "ViewColorModeGrayscale", N_("_Grayscale"),
+    //              N_("Switch to grayscale display mode"), nullptr),
     //    new ZoomVerb(SP_VERB_VIEW_COLOR_MODE_PRINT_COLORS_PREVIEW, "ViewColorModePrintColorsPreview", N_("_Print
     //    Colors Preview"),
     //                 N_("Switch to print colors preview mode"), NULL),
-    new ZoomVerb(SP_VERB_VIEW_COLOR_MODE_TOGGLE, "ViewColorModeToggle", N_("_Toggle"),
-                 N_("Toggle between normal and grayscale color display modes"), nullptr),
+    // new ZoomVerb(SP_VERB_VIEW_COLOR_MODE_TOGGLE, "ViewColorModeToggle", N_("_Toggle"),
+    //              N_("Toggle between normal and grayscale color display modes"), nullptr),
 
-    new ZoomVerb(SP_VERB_VIEW_TOGGLE_SPLIT, "ViewSplitModeToggle", N_("_Split View Mode"),
-                 N_("Split canvas in 2 to show outline"), nullptr),
+    // new ZoomVerb(SP_VERB_VIEW_TOGGLE_SPLIT, "ViewSplitModeToggle", N_("_Split View Mode"),
+    //              N_("Split canvas in 2 to show outline"), nullptr),
 
-    new ZoomVerb(SP_VERB_VIEW_TOGGLE_XRAY, "ViewXRayToggle", N_("_XRay Mode"), N_("XRay around cursor"), nullptr),
+    // new ZoomVerb(SP_VERB_VIEW_TOGGLE_XRAY, "ViewXRayToggle", N_("_XRay Mode"), N_("XRay around cursor"), nullptr),
 
-    new ZoomVerb(SP_VERB_VIEW_CMS_TOGGLE, "ViewCmsToggle", N_("Color-Managed View"),
-                 N_("Toggle color-managed display for this document window"), INKSCAPE_ICON("color-management")),
+    // new ZoomVerb(SP_VERB_VIEW_CMS_TOGGLE, "ViewCmsToggle", N_("Color-Managed View"),
+    //              N_("Toggle color-managed display for this document window"), INKSCAPE_ICON("color-management")),
 
     new ZoomVerb(SP_VERB_VIEW_ICON_PREVIEW, "ViewIconPreview", N_("Ico_n Preview..."),
                  N_("Open a window to preview objects at different icon resolutions"),

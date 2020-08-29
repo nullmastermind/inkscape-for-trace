@@ -216,6 +216,9 @@ set(inkscape_SRC
   inkscape-application.cpp
   actions/actions-extra-data.h
   actions/actions-extra-data.cpp
+
+  actions/actions-canvas-mode.h
+  actions/actions-canvas-mode.cpp
   actions/actions-canvas-snapping.h
   actions/actions-canvas-snapping.cpp
   actions/actions-canvas-transform.h

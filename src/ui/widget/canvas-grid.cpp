@@ -106,8 +106,8 @@ CanvasGrid::CanvasGrid(SPDesktopWidget *dtw)
     _cms_adjust->set_name("CMS_Adjust");
     _cms_adjust->add(*image2);
 #ifdef HAVE_LIBLCMS2
-    // To be replaced by Gio::Action:
-    _cms_adjust->signal_toggled().connect(sigc::mem_fun(_dtw, &SPDesktopWidget::cms_adjust_toggled));
+    // Can't access via C++ API, fixed in Gtk4.
+    gtk_actionable_set_action_name( GTK_ACTIONABLE(_cms_adjust->gobj()), "win.canvas-color-manage");
     _cms_adjust->set_tooltip_text(_("Toggle color-managed display for this document window"));
 #else
     _cms_adjust->set_sensitive(false);

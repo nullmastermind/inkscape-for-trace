@@ -126,18 +126,13 @@ SPDesktop::SPDesktop()
     , interaction_disabled_counter(0)
     , waiting_cursor(false)
     , showing_dialogs(false)
-    , rotation_locked(false)
     , guides_active(false)
     , gr_item(nullptr)
     , gr_point_type(POINT_LG_BEGIN)
     , gr_point_i(0)
     , gr_fill_or_stroke(Inkscape::FOR_FILL)
     , _reconstruction_old_layer_id()
-    , // an id attribute is not allowed to be the empty string
-    _display_mode(Inkscape::RENDERMODE_NORMAL)
-    , _display_color_mode(Inkscape::COLORMODE_NORMAL)
-    , _split_canvas(false)
-    , _xray(false)
+    // an id attribute is not allowed to be the empty string
     , _widget(nullptr) // DesktopWidget
     , _guides_message_context(nullptr)
     , _active(false)
@@ -297,17 +292,6 @@ SPDesktop::init (SPNamedView *nv, Inkscape::UI::Widget::Canvas *acanvas, SPDeskt
 
     // display rect and zoom are now handled in sp_desktop_widget_realize()
 
-    if (prefs->getBool("/options/startmode/outline")) {
-        // Start in outline mode
-        setDisplayModeOutline();
-    } else {
-        // Start in normal mode, default
-        setDisplayModeNormal();
-    }
-
-    // Get default locked status
-    rotation_locked = prefs->getBool("/options/rotationlock");
-
     // pinch zoom
     zoomgesture = gtk_gesture_zoom_new(GTK_WIDGET(canvas->gobj()));
     gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (zoomgesture), GTK_PHASE_CAPTURE);
@@ -457,117 +441,6 @@ SPDesktop::remove_temporary_canvasitem (Inkscape::Display::TemporaryItem * tempi
 
 void SPDesktop::redrawDesktop() {
     canvas->set_affine(_current_affine.d2w()); // For CanvasItem's.
-}
-
-// THIS SHOULD BE A CANVAS FUNCTION
-void SPDesktop::_setDisplayMode(Inkscape::RenderMode mode) {
-    // Why set three places?
-    canvas->set_render_mode(mode);
-    _display_mode = mode;
-
-    if (_display_mode == Inkscape::RENDERMODE_OUTLINE) {
-        if (_split_canvas) {
-            toggleSplitMode();
-        }
-        if (_xray) {
-            toggleXRay();
-        }
-    }
-    _widget->updateTitle( this->getDocument()->getDocumentName() );
-}
-
-// THIS SHOULD BE A CANVAS FUNCTION
-void SPDesktop::_setDisplayColorMode(Inkscape::ColorMode mode) {
-    // reload grayscale matrix from prefs
-    if (mode == Inkscape::COLORMODE_GRAYSCALE) {
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        gdouble r = prefs->getDoubleLimited("/options/rendering/grayscale/red-factor",0.21,0.,1.);
-        gdouble g = prefs->getDoubleLimited("/options/rendering/grayscale/green-factor",0.72,0.,1.);
-        gdouble b = prefs->getDoubleLimited("/options/rendering/grayscale/blue-factor",0.072,0.,1.);
-        gdouble grayscale_value_matrix[20] = { r, g, b, 0, 0,
-                                               r, g, b, 0, 0,
-                                               r, g, b, 0, 0,
-                                               0, 0, 0, 1, 0 };
-        // g_message("%g",grayscale_value_matrix[0]);
-        canvas_drawing->get_drawing()->setGrayscaleMatrix(grayscale_value_matrix);
-    }
-
-    // Why set three places? FIXME
-    canvas_drawing->get_drawing()->setColorMode(mode);
-    canvas->set_color_mode(mode);
-    _display_color_mode = mode;
-
-    redrawDesktop();
-    _widget->updateTitle( this->getDocument()->getDocumentName() );
-}
-
-bool SPDesktop::displayModeToggle()
-{
-    Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_VIEW_MODE_NORMAL);
-    switch (_display_mode) {
-    case Inkscape::RENDERMODE_NORMAL:
-        _setDisplayMode(Inkscape::RENDERMODE_NO_FILTERS);
-        verb = Inkscape::Verb::get(SP_VERB_VIEW_MODE_NO_FILTERS);
-        if (verb) {
-            _menu_update.emit(verb->get_code(), setDisplayModeNoFilters());
-        }
-        break;
-    case Inkscape::RENDERMODE_NO_FILTERS:
-        _setDisplayMode(Inkscape::RENDERMODE_OUTLINE);
-        verb = Inkscape::Verb::get(SP_VERB_VIEW_MODE_OUTLINE);
-        if (verb) {
-            _menu_update.emit(verb->get_code(), setDisplayModeOutline());
-        }
-
-        break;
-    case Inkscape::RENDERMODE_OUTLINE:
-        _setDisplayMode(Inkscape::RENDERMODE_VISIBLE_HAIRLINES);
-        verb = Inkscape::Verb::get(SP_VERB_VIEW_MODE_VISIBLE_HAIRLINES);
-        if (verb) {
-            _menu_update.emit(verb->get_code(), setDisplayModeVisibleHairlines());
-        }
-        break;
-    case Inkscape::RENDERMODE_VISIBLE_HAIRLINES:
-        _setDisplayMode(Inkscape::RENDERMODE_NORMAL);
-        verb = Inkscape::Verb::get(SP_VERB_VIEW_MODE_NORMAL);
-        if (verb) {
-            _menu_update.emit(verb->get_code(), setDisplayModeNormal());
-        }
-        break;
-    default:
-        _setDisplayMode(Inkscape::RENDERMODE_NORMAL);
-        verb = Inkscape::Verb::get(SP_VERB_VIEW_MODE_NORMAL);
-        if (verb) {
-            _menu_update.emit(verb->get_code(), setDisplayModeNormal());
-        }
-    }
-    return true;
-}
-bool SPDesktop::displayColorModeToggle()
-{
-    Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_VIEW_COLOR_MODE_NORMAL);
-    switch (_display_color_mode) {
-    case Inkscape::COLORMODE_NORMAL:
-        _setDisplayColorMode(Inkscape::COLORMODE_GRAYSCALE);
-        verb = Inkscape::Verb::get(SP_VERB_VIEW_COLOR_MODE_GRAYSCALE);
-        if (verb) {
-            _menu_update.emit(verb->get_code(), setDisplayColorModeGrayscale());
-        }
-        break;
-    case Inkscape::COLORMODE_GRAYSCALE:
-        _setDisplayColorMode(Inkscape::COLORMODE_NORMAL);
-        if (verb) {
-            _menu_update.emit(verb->get_code(), setDisplayColorModeNormal());
-        }
-        break;
-//    case Inkscape::COLORMODE_PRINT_COLORS_PREVIEW:
-    default:
-        _setDisplayColorMode(Inkscape::COLORMODE_NORMAL);
-        if (verb) {
-            _menu_update.emit(verb->get_code(), setDisplayColorModeNormal());
-        }
-    }
-    return true;
 }
 
 // Pass-through LayerModel functions
@@ -1395,6 +1268,12 @@ void SPDesktop::focusMode(bool mode)
 }
 
 void
+SPDesktop::setWindowTitle()
+{
+    _widget->updateTitle(doc()->getDocumentName());
+}
+
+void
 SPDesktop::getWindowGeometry (gint &x, gint &y, gint &w, gint &h)
 {
     _widget->getWindowGeometry (x, y, w, h);
@@ -1624,10 +1503,6 @@ void SPDesktop::clearWaitingCursor() {
 void SPDesktop::toggleColorProfAdjust()
 {
     _widget->toggle_color_prof_adj();
-    Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_VIEW_CMS_TOGGLE);
-    if (verb) {
-        _menu_update.emit(verb->get_code(), colorProfAdjustEnabled());
-    }
 }
 
 void SPDesktop::toggleGuidesLock()
@@ -1657,33 +1532,6 @@ void SPDesktop::toggleGrids()
     if (verb) {
         _menu_update.emit(verb->get_code(), gridsEnabled());
     }
-}
-
-// This will be replaced by an action!
-void SPDesktop::setSplitMode(Inkscape::SplitMode mode) {
-    _split_canvas = (mode == Inkscape::SPLITMODE_SPLIT);
-    _xray         = (mode == Inkscape::SPLITMODE_XRAY);
-    canvas->set_split_mode(mode);
-
-    Inkscape::Verb *verb1 = Inkscape::Verb::get(SP_VERB_VIEW_TOGGLE_SPLIT);
-    if (verb1) {
-        _menu_update.emit(verb1->get_code(), _split_canvas);
-    }
-
-    Inkscape::Verb *verb2 = Inkscape::Verb::get(SP_VERB_VIEW_TOGGLE_XRAY);
-    if (verb2) {
-        _menu_update.emit(verb2->get_code(), _xray);
-    }
-}
-
-void SPDesktop::toggleSplitMode()
-{
-    setSplitMode( _split_canvas ? Inkscape::SPLITMODE_NORMAL : Inkscape::SPLITMODE_SPLIT);
-}
-
-void SPDesktop::toggleXRay()
-{
-    setSplitMode( _xray ? Inkscape::SPLITMODE_NORMAL : Inkscape::SPLITMODE_XRAY);
 }
 
 void SPDesktop::showGrids(bool show, bool dirty_document)
