@@ -1078,13 +1078,15 @@ bool SymbolsDialog::callbackSymbols(){
       if (symbol_title_char) {
         Glib::ustring symbol_title = Glib::ustring(symbol_title_char).lowercase();
         auto pos = symbol_title.rfind(search_str);
-        if (pos != std::string::npos) {
+        auto pos_translated = Glib::ustring(g_dpgettext2(nullptr, "Symbol", symbol_title_char)).lowercase().rfind(search_str);
+        if ((pos != std::string::npos) || (pos_translated != std::string::npos)) {
           found = true;
         }
         if (!found && symbol_desc_char) {
           Glib::ustring symbol_desc = Glib::ustring(symbol_desc_char).lowercase();
           auto pos = symbol_desc.rfind(search_str);
-          if (pos != std::string::npos) {
+          auto pos_translated = Glib::ustring(g_dpgettext2(nullptr, "Symbol", symbol_desc_char)).lowercase().rfind(search_str);
+          if ((pos != std::string::npos) || (pos_translated != std::string::npos)) {
             found = true;
           }
         }
