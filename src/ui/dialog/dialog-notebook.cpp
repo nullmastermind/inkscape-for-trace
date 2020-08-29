@@ -42,7 +42,7 @@ DialogNotebook::DialogNotebook(DialogContainer *container)
     , _selected_page(nullptr)
 {
     set_name("DialogNotebook");
-    set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+    set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
     set_shadow_type(Gtk::SHADOW_NONE);
     set_vexpand(true);
     set_hexpand(true);
@@ -369,12 +369,10 @@ void DialogNotebook::on_page_removed(Gtk::Widget *page, int page_num)
 void DialogNotebook::on_size_allocate_scroll(Gtk::Allocation &a)
 {
     // magic numbers
-    const int MIN_WIDTH = 50;
     const int MIN_HEIGHT = 60;
     const int ICON_SIZE = 50;
 
     // set or unset scrollbars to completely hide a notebook
-    property_hscrollbar_policy().set_value(a.get_width() >= MIN_WIDTH ? Gtk::POLICY_AUTOMATIC : Gtk::POLICY_EXTERNAL);
     property_vscrollbar_policy().set_value(a.get_height() >= MIN_HEIGHT ? Gtk::POLICY_AUTOMATIC : Gtk::POLICY_EXTERNAL);
 
     set_allocation(a);
