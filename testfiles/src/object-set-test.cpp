@@ -659,6 +659,10 @@ TEST_F(ObjectSetTest, toMarker) {
     set->add(r2.get());
     set->toMarker();
 
+    // original items got deleted
+    r1.release();
+    r2.release();
+
     auto markers = _doc->getObjectsByElement("marker");
     ASSERT_EQ(markers.size(), 1);
 
