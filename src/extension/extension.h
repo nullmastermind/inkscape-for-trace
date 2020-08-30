@@ -153,7 +153,7 @@ public:
     void          set_execution_env (ExecutionEnv * env) { execution_env = env; };
     ExecutionEnv *get_execution_env () { return execution_env; };
     std::string   get_base_directory() const { return _base_directory; };
-    void          set_base_directory(std::string base_directory) { _base_directory = base_directory; };
+    void          set_base_directory(std::string const &base_directory) { _base_directory = base_directory; };
     std::string   get_dependency_location(const char *name);
     const char   *get_translation(const char* msgid, const char *msgctxt=nullptr);
     void          set_environment();

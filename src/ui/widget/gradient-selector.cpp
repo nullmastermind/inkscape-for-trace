@@ -463,7 +463,8 @@ void GradientSelector::delete_vector_clicked()
     }
 
     if (obj) {
-        sp_gradient_unset_swatch(SP_ACTIVE_DESKTOP, obj->getId());
+        std::string id = obj->getId();
+        sp_gradient_unset_swatch(SP_ACTIVE_DESKTOP, id);
     }
 }
 

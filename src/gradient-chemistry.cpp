@@ -1592,7 +1592,7 @@ void sp_gradient_reverse_selected_gradients(SPDesktop *desktop)
                        _("Reverse gradient"));
 }
 
-void sp_gradient_unset_swatch(SPDesktop *desktop, std::string id)
+void sp_gradient_unset_swatch(SPDesktop *desktop, std::string const &id)
 {
     SPDocument *doc = desktop ? desktop->doc() : nullptr;
 

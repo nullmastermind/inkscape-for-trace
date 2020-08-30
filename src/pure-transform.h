@@ -69,12 +69,13 @@ protected:
     SnappedPoint snap(::SnapManager *sm, SnapCandidatePoint const &p, Geom::Point pt_orig, Geom::OptRect const &bbox_to_snap) const override;
 
 public:
-    ~PureTranslateConstrained() override = default;;
+    ~PureTranslateConstrained() override = default;
     PureTranslateConstrained(Geom::Coord displacement, Geom::Dim2 direction):
-        PureTranslate() {
+        PureTranslate(),
+        _direction(direction)
+        {
             _vector[direction] = displacement;
             _vector[1-direction] = 0.0;
-            _direction = direction;
         }
     // PureTranslateConstrained * clone () const {return new PureTranslateConstrained(*this);}
 };
@@ -96,7 +97,7 @@ protected:
 public:
 //    PureScale();                    // Default constructor
 //    PureScale(PureScale const &);   // Copy constructor
-    ~PureScale() override = default;;
+    ~PureScale() override = default;
 
     PureScale(Geom::Scale scale, Geom::Point origin, bool uniform) : 
         _scale (scale),
@@ -115,7 +116,7 @@ protected:
     SnappedPoint snap(::SnapManager *sm, SnapCandidatePoint const &p, Geom::Point pt_orig, Geom::OptRect const &bbox_to_snap) const override;
 
 public:
-    ~PureScaleConstrained() override = default;;
+    ~PureScaleConstrained() override = default;
     PureScaleConstrained(Geom::Scale scale, Geom::Point origin):
         PureScale(scale, origin, true) {}; // Non-uniform constrained scaling is not supported
 
