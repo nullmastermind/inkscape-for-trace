@@ -1651,7 +1651,7 @@ void SPObject::recursivePrintTree( unsigned level )
 
 // Function to allow tracing of program flow through SPObject and derived classes.
 // To trace function, add at entrance ('in' = true) and exit of function ('in' = false).
-void SPObject::objectTrace( std::string text, bool in, unsigned flags ) {
+void SPObject::objectTrace( std::string const &text, bool in, unsigned flags ) {
     if( in ) {
         for (unsigned i = 0; i < indent_level; ++i) {
             std::cout << "  ";

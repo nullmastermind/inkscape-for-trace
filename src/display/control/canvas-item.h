@@ -99,7 +99,7 @@ public:
     void set_fill(CanvasItemColor color) { set_fill(CANVAS_ITEM_COLORS[color]); }
     virtual void set_stroke(guint32 rgba);
     void set_stroke(CanvasItemColor color) { set_stroke(CANVAS_ITEM_COLORS[color]); }
-    void set_name(std::string name) { _name = name; }
+    void set_name(std::string const &name) { _name = name; }
     std::string get_name() { return _name; }
 
     // Events

@@ -28,10 +28,10 @@ private:
 
     guint32 get_bgcolor(SPDocument *doc);
     std::string get_filename_out(std::string filename_in="", std::string object_id="");
-    int do_export_svg(   SPDocument* doc, std::string filename_in);
-    int do_export_png(   SPDocument* doc, std::string filename_in);
-    int do_export_ps_pdf(SPDocument* doc, std::string filename_in, std::string mime_type);
-    int do_export_win_metafile(SPDocument* doc, std::string filename_in, std::string mime_type);
+    int do_export_svg(   SPDocument* doc, std::string const &filename_in);
+    int do_export_png(   SPDocument* doc, std::string const &filename_in);
+    int do_export_ps_pdf(SPDocument* doc, std::string const &filename_in, std::string mime_type);
+    int do_export_win_metafile(SPDocument* doc, std::string const &filename_in, std::string mime_type);
 
     Glib::ustring export_type_current;
 
