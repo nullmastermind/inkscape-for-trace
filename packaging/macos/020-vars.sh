@@ -33,7 +33,7 @@ export SDKROOT=$SDKROOT_DIR/MacOSX${MACOSX_DEPLOYMENT_TARGET}.sdk
 
 ### build system/toolset version ###############################################
 
-TOOLSET_VERSION=0.38
+TOOLSET_VERSION=0.39
 
 ### ramdisk ####################################################################
 
@@ -186,7 +186,8 @@ URL_TOOLSET=https://github.com/dehesselle/mibap/releases/download/v$TOOLSET_VERS
 PYTHON_CAIROCFFI=cairocffi==1.1.0
 # https://lxml.de
 # https://github.com/lxml/lxml
-PYTHON_LXML=lxml==4.5.2
+PYTHON_LXML_SRC=https://lxml.de/files/lxml-4.5.2.tgz
+PYTHON_LXML=$PKG_DIR/$(basename -s .tgz $PYTHON_LXML_SRC)-cp$PY3_MAJOR$PY3_MINOR-cp$PY3_MAJOR$PY3_MINOR-macosx_${MACOSX_DEPLOYMENT_TARGET/./_}_x86_64.whl
 # https://github.com/numpy/numpy
 PYTHON_NUMPY=numpy==1.19.1
 # https://pygobject.readthedocs.io/en/latest/
