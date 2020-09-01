@@ -236,17 +236,17 @@ select_list(InkscapeApplication* app)
 std::vector<std::vector<Glib::ustring>> raw_data_selection =
 {
     // clang-format off
-    {"app.select-clear",              "SelectClear",             "Select",     N_("Selection clear")                                    },
-    {"app.select",                    "Select",                  "Select",     N_("Select by ID (Deprecated)")                          },
-    {"app.unselect",                  "UnSelect",                "Select",     N_("Unselect by ID (Deprecated)")                        },
-    {"app.select-by-id",              "SelectById",              "Select",     N_("Select by ID")                                       },
-    {"app.unselect-by-id",            "UnselectById",            "Select",     N_("Unselect by ID")                                     },
-    {"app.select-by-class",           "SelectByClass",           "Select",     N_("Select by class")                                    },
-    {"app.select-by-element",         "SelectByElement",         "Select",     N_("Select by SVG element (e.g. 'rect').")               },
-    {"app.select-by-selector",        "SelectBySelector",        "Select",     N_("Select by CSS selector")                             },
-    {"app.select-all",                "SelectAll",               "Select",     N_("Select all. Options: 'all' (every object including groups), 'layers', 'no-layers' (top level objects in layers), 'groups' (all groups including layers), 'no-groups' (all objects other than groups and layers, default).")},
-    {"app.select-invert",             "SelectInvert",            "Select",     N_("Invert selection. Options: 'all', 'layers', 'no-layers', 'groups', 'no-groups' (default).")},
-    {"app.select-list",               "SelectList",              "Select",     N_("Print a list of objects in current selection.")      }
+    {"app.select-clear",           N_("Clear Selection"),         "Select",   N_("Selection clear")                                    },
+    {"app.select",                 N_("Select"),                  "Select",   N_("Select by ID (Deprecated)")                          },
+    {"app.unselect",               N_("Unselect"),                "Select",   N_("Unselect by ID (Deprecated)")                        },
+    {"app.select-by-id",           N_("Select by Id"),            "Select",   N_("Select by ID")                                       },
+    {"app.unselect-by-id",         N_("Unselect by Id"),          "Select",   N_("Unselect by ID")                                     },
+    {"app.select-by-class",        N_("Select by Class"),         "Select",   N_("Select by class")                                    },
+    {"app.select-by-element",      N_("Select by Element"),       "Select",   N_("Select by SVG element (e.g. 'rect').")               },
+    {"app.select-by-selector",     N_("Select by Selector"),      "Select",   N_("Select by CSS selector")                             },
+    {"app.select-all",             N_("Select All"),              "Select",   N_("Select all. Options: 'all' (every object including groups), 'layers', 'no-layers' (top level objects in layers), 'groups' (all groups including layers), 'no-groups' (all objects other than groups and layers, default).")},
+    {"app.select-invert",          N_("Invert Selection"),        "Select",   N_("Invert selection. Options: 'all', 'layers', 'no-layers', 'groups', 'no-groups' (default).")},
+    {"app.select-list",            N_("List Selection"),          "Select",   N_("Print a list of objects in current selection.")      }
     // clang-format on
 };
 

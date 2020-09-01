@@ -97,9 +97,9 @@ file_close(InkscapeApplication *app)
 std::vector<std::vector<Glib::ustring>> raw_data_file =
 {
     // clang-format off
-    {"app.file-open",                 "FileOpen",                "File",       N_("Open file.")                                         },
-    {"app.file-new",                  "FileNew",                 "File",       N_("Open new document using template.")                  },
-    {"app.file-close",                "FileClose",               "File",       N_("Close active document.")                             }
+    {"app.file-open",              N_("File Open"),                "File",       N_("Open file.")                                         },
+    {"app.file-new",               N_("File New"),                 "File",       N_("Open new document using template.")                  },
+    {"app.file-close",             N_("File Close"),               "File",       N_("Close active document.")                             }
     // clang-format on
 };
 

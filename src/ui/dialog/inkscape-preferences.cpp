@@ -3089,7 +3089,7 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
         if (section.empty()) section = "Misc";
         if (section != old_section) {
             iter_group = _kb_store->append();
-            Glib::ustring name = "Gio::Actions: " + section;
+            Glib::ustring name = "Actions: " + section;
             (*iter_group)[_kb_columns.name] = name;
             (*iter_group)[_kb_columns.shortcut] = "";
             (*iter_group)[_kb_columns.description] = "";

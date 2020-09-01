@@ -141,12 +141,12 @@ object_simplify_path(InkscapeApplication *app)
 std::vector<std::vector<Glib::ustring>> raw_data_object =
 {
     // clang-format off
-    {"app.object-set-attribute",      "ObjectSetAttribute",      "Object",     N_("Set or update an attribute on selected objects. Usage: object-set-attribute:attribute name, attribute value;")},
-    {"app.object-set-property",       "ObjectSetProperty",       "Object",     N_("Set or update a property on selected objects. Usage: object-set-property:property name, property value;")},
-    {"app.object-unlink-clones",      "ObjectUnlinkClones",      "Object",     N_("Unlink clones and symbols.")                          },
-    {"app.object-to-path",            "ObjectToPath",            "Object",     N_("Convert shapes to paths.")                            },
-    {"app.object-stroke-to-path",     "ObjectStrokeToPath",      "Object",     N_("Convert strokes to paths.")                           },
-    {"app.object-simplify-path",      "ObjectSimplifyPath",      "Object",     N_("Simplify paths, reducing node counts.")               }
+    {"app.object-set-attribute",      N_("Set Attribute"),         "Object",     N_("Set or update an attribute on selected objects. Usage: object-set-attribute:attribute name, attribute value;")},
+    {"app.object-set-property",       N_("Set Property"),          "Object",     N_("Set or update a property on selected objects. Usage: object-set-property:property name, property value;")},
+    {"app.object-unlink-clones",      N_("Unlink Clones"),         "Object",     N_("Unlink clones and symbols.")                          },
+    {"app.object-to-path",            N_("Object To Path"),        "Object",     N_("Convert shapes to paths.")                            },
+    {"app.object-stroke-to-path",     N_("Stroke to Path"),        "Object",     N_("Convert strokes to paths.")                           },
+    {"app.object-simplify-path",      N_("Simplify Path"),         "Object",     N_("Simplify paths, reducing node counts.")               }
     // clang-format on
 };
 

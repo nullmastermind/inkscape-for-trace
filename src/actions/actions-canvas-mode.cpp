@@ -250,19 +250,19 @@ canvas_color_manage_toggle(InkscapeWindow *win)
 std::vector<std::vector<Glib::ustring>> raw_data_canvas_mode =
 {
     // clang-format off
-    {"win.canvas-display-mode(0)",         "CanvasDisplayMode",                  "Canvas Mode",       N_("Canvas Display Mode: Normal")                   },
-    {"win.canvas-display-mode(1)",         "CanvasDisplayMode",                  "Canvas Mode",       N_("Canvas Display Mode: Outline")                  },
-    {"win.canvas-display-mode(2)",         "CanvasDisplayMode",                  "Canvas Mode",       N_("Canvas Display Mode: No Filters")               },
-    {"win.canvas-display-mode(3)",         "CanvasDisplayMode",                  "Canvas Mode",       N_("Canvas Display Mode: Hairline")                 },
-    {"win.canvas-display-mode-cycle",      "CanvasDisplayModeCycle",             "Canvas Mode",       N_("Canvas Display Mode - Cycle through Modes")     },
-    {"win.canvas-display-mode-toggle",     "CanvasDisplayModeToggle",            "Canvas Mode",       N_("Canvas Display Mode - Toggle between normal and last non-normal mode")},
+    {"win.canvas-display-mode(0)",      N_("Display Mode: Normal"),       "Canvas Display",   N_("Normal rendering")                                  },
+    {"win.canvas-display-mode(1)",      N_("Display Mode: Outline"),      "Canvas Display",   N_("Show only object outlines")                         },
+    {"win.canvas-display-mode(2)",      N_("Display Mode: No Filters"),   "Canvas Display",   N_("Do not render filters (for speed)")                 },
+    {"win.canvas-display-mode(3)",      N_("Display Mode: Hairlines"),    "Canvas Display",   N_("Render thin lines visibly")                         },
+    {"win.canvas-display-mode-cycle",   N_("Display Mode Cycle"),         "Canvas Display",   N_("Cycle through display modes")                       },
+    {"win.canvas-display-mode-toggle",  N_("Display Mode Toggle"),        "Canvas Display",   N_("Toggle between normal and last non-normal mode")    },
 
-    {"win.canvas-split-mode(0)",           "CanvasSplitMode",                    "Canvas Mode",       N_("Canvas Split Mode: Normal")                     },
-    {"win.canvas-split-mode(1)",           "CanvasSplitMode",                    "Canvas Mode",       N_("Canvas Split Mode: Split")                      },
-    {"win.canvas-split-mode(2)",           "CanvasSplitMode",                    "Canvas Mode",       N_("Canvas Split Mode: X-Ray")                      },
+    {"win.canvas-split-mode(0)",        N_("Split Mode: Normal"),         "Canvas Display",   N_("Normal rendering")                                  },
+    {"win.canvas-split-mode(1)",        N_("Split Mode: Split"),          "Canvas Display",   N_("Render part of the canvas in outline mode")         },
+    {"win.canvas-split-mode(2)",        N_("Split Mode: X-Ray"),          "Canvas Display",   N_("Render a circular area in outline mode")            },
 
-    {"win.canvas-color-mode",              "CanvasDisplayColorMode",             "Canvas Mode",       N_("Canvas Color Mode - Toggle Normal/Gray Scale")  },
-    {"win.canvas-color-manage",            "CanvasDisplayColorManage",           "Canvas Mode",       N_("Canvas Color Managed Mode - Toggle On/Off")     },
+    {"win.canvas-color-mode",           N_("Color Mode"),                 "Canvas Display",   N_("Toggle between normal and grayscale modes")         },
+    {"win.canvas-color-manage",         N_("Color Managed Mode"),         "Canvas Display",   N_("Toggle between normal and color managed modes")     },
     // clang-format on
 };
 

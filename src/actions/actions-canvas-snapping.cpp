@@ -181,32 +181,32 @@ canvas_snapping_toggle(SPDocument* document, const SPAttr option)
 
 std::vector<std::vector<Glib::ustring>> raw_data_canvas_snapping =
 {
-    {"doc.snap-global-toggle",        "Snap",                    "Snap",       N_("Toggle snapping on/off.")                             },
+    {"doc.snap-global-toggle",        N_("Snapping"),                          "Snap",  N_("Toggle snapping on/off.")                             },
 
-    {"doc.snap-bbox",                 "SnapBoundingBox",         "Snap",       N_("Toggle snapping to bounding boxes (global).")         },
-    {"doc.snap-bbox-edge",            "SnapBBoxEdge",            "Snap",       N_("Toggle snapping to bounding box edges.")              },
-    {"doc.snap-bbox-corner",          "SnapBBoxCorner",          "Snap",       N_("Toggle snapping to bounding box corners.")            },
-    {"doc.snap-bbox-edge-midpoint",   "SnapBBoxEdgeMidpoint",    "Snap",       N_("Toggle snapping to bounding box edge mid-points.")    },
-    {"doc.snap-bbox-center",          "SnapBBoxCenter",          "Snap",       N_("Toggle snapping to bounding box center.")             },
+    {"doc.snap-bbox",                 N_("Snap Bounding Boxes"),               "Snap",  N_("Toggle snapping to bounding boxes (global).")         },
+    {"doc.snap-bbox-edge",            N_("Snap Bounding Box Edges"),           "Snap",  N_("Toggle snapping to bounding-box edges.")              },
+    {"doc.snap-bbox-corner",          N_("Snap Bounding Box Corners"),         "Snap",  N_("Toggle snapping to bounding-box corners.")            },
+    {"doc.snap-bbox-edge-midpoint",   N_("Snap Bounding Box Edge Midpoints"),  "Snap",  N_("Toggle snapping to bounding-box edge mid-points.")    },
+    {"doc.snap-bbox-center",          N_("Snap Bounding Box Centers"),         "Snap",  N_("Toggle snapping to bounding-box centers.")            },
 
-    {"doc.snap-node-category",        "SnapNodes",               "Snap",       N_("Toggle snapping to nodes (global).")                  },
-    {"doc.snap-path",                 "SnapPath",                "Snap",       N_("Toggle snapping to paths.")                           },
-    {"doc.snap-path-intersection",    "SnapPathIntersection",    "Snap",       N_("Toggle snapping to path intersections.")              },
-    {"doc.snap-node-cusp",            "SnapNodeCusp",            "Snap",       N_("Toggle snapping to cusp nodes, including rectangle corners.")},
-    {"doc.snap-node-smooth",          "SnapNodeSmooth",          "Snap",       N_("Toggle snapping to smooth nodes, including quadrant points of ellipses.")},
-    {"doc.snap-line-midpoint",        "SnapLineMidpoint",        "Snap",       N_("Toggle snapping to midpoints of lines.")              },
+    {"doc.snap-node-category",        N_("Snap Nodes"),                        "Snap",  N_("Toggle snapping to nodes (global).")                  },
+    {"doc.snap-path",                 N_("Snap Paths"),                        "Snap",  N_("Toggle snapping to paths.")                           },
+    {"doc.snap-path-intersection",    N_("Snap Path Intersections"),           "Snap",  N_("Toggle snapping to path intersections.")              },
+    {"doc.snap-node-cusp",            N_("Snap Cusp Nodes"),                   "Snap",  N_("Toggle snapping to cusp nodes, including rectangle corners.")},
+    {"doc.snap-node-smooth",          N_("Snap Smoth Node"),                   "Snap",  N_("Toggle snapping to smooth nodes, including quadrant points of ellipses.")},
+    {"doc.snap-line-midpoint",        N_("Snap Line Midpoints"),               "Snap",  N_("Toggle snapping to midpoints of lines.")              },
 
-    {"doc.snap-others",               "SnapOthers",              "Snap",       N_("Toggle snapping to misc. points (global).")           },
-    {"doc.snap-object-midpoint",      "SnapObjectMidpoint",      "Snap",       N_("Toggle snapping to object midpoint.")                 },
-    {"doc.snap-rotation-center",      "SnapRoationCenter",       "Snap",       N_("Toggle snapping to object rotation center.")          },
-    {"doc.snap-text-baseline",        "SnapTextBaseline",        "Snap",       N_("Toggle snapping to text baseline and text anchors.")  },
+    {"doc.snap-others",               N_("Snap Others"),                       "Snap",  N_("Toggle snapping to misc. points (global).")           },
+    {"doc.snap-object-midpoint",      N_("Snap Object Midpoint"),              "Snap",  N_("Toggle snapping to object midpoint.")                 },
+    {"doc.snap-rotation-center",      N_("Snap Rotation Center"),              "Snap",  N_("Toggle snapping to object rotation center.")          },
+    {"doc.snap-text-baseline",        N_("Snap Text Baselines"),               "Snap",  N_("Toggle snapping to text baseline and text anchors.")  },
 
-    {"doc.snap-page-border",          "SnapPageBorder",          "Snap",       N_("Toggle snapping to page border.")                     },
-    {"doc.snap-grid",                 "SnapGrid",                "Snap",       N_("Toggle snapping to grids.")                           },
-    {"doc.snap-guide",                "SnapGuide",               "Snap",       N_("Toggle snapping to guides.")                          },
+    {"doc.snap-page-border",          N_("Snap Page Border"),                  "Snap",  N_("Toggle snapping to page border.")                     },
+    {"doc.snap-grid",                 N_("Snap Grids"),                        "Snap",  N_("Toggle snapping to grids.")                           },
+    {"doc.snap-guide",                N_("Snap Guide Lines"),                  "Snap",  N_("Toggle snapping to guides lines.")                    },
 
-    {"doc.snap-path-mask",            "SnapPathMask",            "Snap",       N_("Toggle snapping to mask paths.")                      },
-    {"doc.snap-path-clip",            "SnapPathClip",            "Snap",       N_("Toggle snapping to clip paths.")                      },
+    {"doc.snap-path-mask",            N_("Snap Mask Paths"),                   "Snap",  N_("Toggle snapping to mask paths.")                      },
+    {"doc.snap-path-clip",            N_("Snap Clip Paths"),                   "Snap",  N_("Toggle snapping to clip paths.")                      },
 };
 
 void

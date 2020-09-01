@@ -52,8 +52,8 @@ window_close(InkscapeApplication *app)
 std::vector<std::vector<Glib::ustring>> raw_data_window =
 {
     // clang-format off
-    {"app.window-open",               "WindowOpen",              "Window",     N_("Open a window for the active document. GUI only.")   },
-    {"app.window-close",              "WindowClose",             "Window",     N_("Close the active window.")                           }
+    {"app.window-open",           N_("Window Open"),     "Window",     N_("Open a window for the active document. GUI only.")   },
+    {"app.window-close",          N_("Window Close"),    "Window",     N_("Close the active window.")                           }
     // clang-format on
 };
 

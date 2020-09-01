@@ -305,7 +305,6 @@ Shortcuts::read(Glib::RefPtr<Gio::File> file, bool user_set)
 
         Gdk::ModifierType modifiers = parse_modifier_string(iter->attribute("modifiers"), verb_name);
 
-        //set_verb_shortcut (keyval | modifiers << 32, verb, is_primary, user_set);
         set_verb_shortcut (Gtk::AccelKey(keyval, modifiers), verb, is_primary, user_set);
     }
 

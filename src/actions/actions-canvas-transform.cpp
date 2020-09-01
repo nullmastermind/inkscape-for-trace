@@ -161,35 +161,6 @@ canvas_transform(InkscapeWindow *win, const int& option)
     }
 }
 
-std::vector<std::vector<Glib::ustring>> raw_data_canvas_transform =
-{
-    // clang-format off
-    {"win.canvas-zoom-in",            "ZoomIn",                  "View",       N_("Zoom in")                                            },
-    {"win.canvas-zoom-out",           "ZoomOut",                 "View",       N_("Zoom out")                                           },
-    {"win.canvas-zoom-1-1",           "Zoom1:1",                 "View",       N_("Zoom to 1:1")                                        },
-    {"win.canvas-zoom-1-2",           "Zoom1:2",                 "View",       N_("Zoom to 1:2")                                        },
-    {"win.canvas-zoom-2-1",           "Zoom2:1",                 "View",       N_("Zoom to 2:1")                                        },
-    {"win.canvas-zoom-selection",     "ZoomSelection",           "View",       N_("Zoom to fit selection in window")                    },
-    {"win.canvas-zoom-drawing",       "ZoomDrawing",             "View",       N_("Zoom to fit drawing in window")                      },
-    {"win.canvas-zoom-page",          "ZoomPage",                "View",       N_("Zoom to fit page in window")                         },
-    {"win.canvas-zoom-page-width",    "ZoomPageWidth",           "View",       N_("Zoom to fit page width in window")                   },
-    {"win.canvas-zoom-center-page",   "ZoomCenterPage",          "View",       N_("Center page in window")                              },
-    {"win.canvas-zoom-prev",          "ZoomPrev",                "View",       N_("Previous zoom (from the history of zooms)")          },
-    {"win.canvas-zoom-next",          "ZoomNext",                "View",       N_("Next zoom (from the history of zooms)")              },
-    {"win.canvas-zoom-center-page",   "ZoomCenterPage",          "View",       N_("Center page in window")                              },
-
-    {"win.canvas-rotate-cw",          "RotateCW",                "View",       N_("Rotate canvas clock-wise")                           },
-    {"win.canvas-rotate-ccw",         "RotateCCW",               "View",       N_("Rotate canvas counter-clock-wise")                   },
-    {"win.canvas-rotate-reset",       "RotateReset",             "View",       N_("Rotate canvas reset")                                },
-
-    {"win.canvas-flip-horizontal",    "FlipHorizontal",          "View",       N_("Flip canvas horizontally")                           },
-    {"win.canvas-flip-vertical",      "FlipVertical",            "View",       N_("Flip canvas vertically")                             },
-    {"win.canvas-flip-reset",         "FlipReset",               "View",       N_("Flip canvas reset")                                  },
-
-    {"win.canvas-rotate-lock",        "RotateLock",              "View",       N_("Rotate lock")                                        },
-    // clang-format on
-};
-
 /**
  * Toggle rotate lock.
  */
@@ -222,6 +193,34 @@ canvas_rotate_lock(InkscapeWindow *win)
     dt->set_rotation_lock(state);
 }
 
+
+std::vector<std::vector<Glib::ustring>> raw_data_canvas_transform =
+{
+    // clang-format off
+    {"win.canvas-zoom-in",            N_("Zoom In"),             "Canvas Geometry",  N_("Zoom in")                                    },
+    {"win.canvas-zoom-out",           N_("Zoom Out"),            "Canvas Geometry",  N_("Zoom out")                                   },
+    {"win.canvas-zoom-1-1",           N_("Zoom 1:1"),            "Canvas Geometry",  N_("Zoom to 1:1")                                },
+    {"win.canvas-zoom-1-2",           N_("Zoom 1:2"),            "Canvas Geometry",  N_("Zoom to 1:2")                                },
+    {"win.canvas-zoom-2-1",           N_("Zoom 2:1"),            "Canvas Geometry",  N_("Zoom to 2:1")                                },
+    {"win.canvas-zoom-selection",     N_("Zoom Selection"),      "Canvas Geometry",  N_("Zoom to fit selection in window")            },
+    {"win.canvas-zoom-drawing",       N_("Zoom Drawing"),        "Canvas Geometry",  N_("Zoom to fit drawing in window")              },
+    {"win.canvas-zoom-page",          N_("Zoom Page"),           "Canvas Geometry",  N_("Zoom to fit page in window")                 },
+    {"win.canvas-zoom-page-width",    N_("Zoom Page Width"),     "Canvas Geometry",  N_("Zoom to fit page width in window")           },
+    {"win.canvas-zoom-center-page",   N_("Zoom Center Page"),    "Canvas Geometry",  N_("Center page in window")                      },
+    {"win.canvas-zoom-prev",          N_("Zoom Prev"),           "Canvas Geometry",  N_("Previous zoom (from the history of zooms)")  },
+    {"win.canvas-zoom-next",          N_("Zoom Next"),           "Canvas Geometry",  N_("Next zoom (from the history of zooms)")      },
+
+    {"win.canvas-rotate-cw",          N_("Rotate Clockwise"),    "Canvas Geometry",  N_("Rotate canvas clock-wise")                   },
+    {"win.canvas-rotate-ccw",         N_("Rotate Counter-CW"),   "Canvas Geometry",  N_("Rotate canvas counter-clock-wise")           },
+    {"win.canvas-rotate-reset",       N_("Rotate Reset"),        "Canvas Geometry",  N_("Rotate canvas reset")                        },
+
+    {"win.canvas-flip-horizontal",    N_("Flip Horizontal"),     "Canvas Geometry",  N_("Flip canvas horizontally")                   },
+    {"win.canvas-flip-vertical",      N_("Flip Vertical"),       "Canvas Geometry",  N_("Flip canvas vertically")                     },
+    {"win.canvas-flip-reset",         N_("Flip Reset"),          "Canvas Geometry",  N_("Flip canvas reset")                          },
+
+    {"win.canvas-rotate-lock",        N_("RotateLock"),          "Canvas Geometry",  N_("Rotate lock")                                },
+    // clang-format on
+};
 
 void
 add_actions_canvas_transform(InkscapeWindow* win)
