@@ -17,6 +17,7 @@
 #define INKSCAPE_UI_DIALOG_INKSCAPE_PREFERENCES_H
 
 #include <iostream>
+#include <iterator>
 #include <vector>
 #include "ui/widget/preferences-widget.h"
 #include <cstddef>
@@ -24,13 +25,17 @@
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/treestore.h>
 #include <gtkmm/treeview.h>
+#include <gtkmm/treemodelfilter.h>
+#include <gtkmm/treemodelsort.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/notebook.h>
 #include <gtkmm/textview.h>
+#include <gtkmm/searchentry.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/treemodel.h>
 #include <gtkmm/treemodelfilter.h>
+#include <glibmm/regex.h>
 
 #include "ui/widget/panel.h"
 
@@ -87,7 +92,8 @@ enum {
     PREFS_PAGE_SYSTEM,
     PREFS_PAGE_BITMAPS,
     PREFS_PAGE_RENDERING,
-    PREFS_PAGE_SPELLCHECK
+    PREFS_PAGE_SPELLCHECK,
+    PREFS_PAGE_NOTFOUND
 };
 
 namespace Gtk {
@@ -108,7 +114,14 @@ protected:
     Gtk::Frame _page_frame;
     Gtk::Label _page_title;
     Gtk::TreeView _page_list;
+    Gtk::SearchEntry _search;
     Glib::RefPtr<Gtk::TreeStore> _page_list_model;
+    Gtk::Widget *_highlighted_widget = nullptr;
+    Glib::RefPtr<Gtk::TreeModelFilter> _page_list_model_filter;
+    Glib::RefPtr<Gtk::TreeModelSort> _page_list_model_sort;
+    std::vector<Gtk::Widget *> _search_results;
+    Glib::RefPtr<Glib::Regex> _rx;
+    int _num_results = 0;
 
     //Pagelist model columns:
     class PageListModelColumns : public Gtk::TreeModel::ColumnRecord
@@ -148,6 +161,8 @@ protected:
     UI::Widget::DialogPage _page_eraser;
 
     UI::Widget::DialogPage _page_ui;
+    UI::Widget::DialogPage _page_notfound;
+    UI::Widget::DialogPage _page_trysearch;
     UI::Widget::DialogPage _page_theme;
     UI::Widget::DialogPage _page_windows;
     UI::Widget::DialogPage _page_grids;
@@ -536,6 +551,8 @@ protected:
 
     Gtk::TreeModel::iterator AddPage(UI::Widget::DialogPage& p, Glib::ustring title, int id);
     Gtk::TreeModel::iterator AddPage(UI::Widget::DialogPage& p, Glib::ustring title, Gtk::TreeModel::iterator parent, int id);
+    Gtk::TreePath get_next_result(Gtk::TreeIter& iter, bool check_children = true);
+    Gtk::TreePath get_prev_result(Gtk::TreeIter& iter, bool iterate = true);
     bool PresentPage(const Gtk::TreeModel::iterator& iter);
 
     static void AddSelcueCheckbox(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, bool def_value);
@@ -547,8 +564,22 @@ protected:
     static void AddNewObjectsStyle(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, const gchar* banner = nullptr);
 
     void on_pagelist_selection_changed();
+    void show_not_found();
+    void show_nothing_on_page();
+    void show_try_search();
     void on_reset_open_recent_clicked();
     void on_reset_prefs_clicked();
+    void on_search_changed();
+    void highlight_results(Glib::ustring const &key, Gtk::TreeModel::iterator &iter);
+    void goto_first_result();
+
+    void get_widgets_in_grid(Glib::ustring const &key, Gtk::Widget *widget);
+    int num_widgets_in_grid(Glib::ustring const &key, Gtk::Widget *widget);
+    void remove_highlight(Gtk::Label *label);
+    void add_highlight(Gtk::Label *label, Glib::ustring const &key);
+
+    bool recursive_filter(Glib::ustring &key, Gtk::TreeModel::const_iterator const &row);
+    bool on_navigate_key_press(GdkEventKey *evt);
 
     void initPageTools();
     void initPageUI();
@@ -580,6 +611,7 @@ protected:
     static void onKBShortcutRenderer(Gtk::CellRenderer *rndr, Gtk::TreeIter const &iter);
 
 private:
+  Gtk::TreeModel::iterator searchRows(char const* srch, Gtk::TreeModel::iterator& iter, Gtk::TreeModel::Children list_model_childern);
   void themeChange();
   void preferDarkThemeChange();
   void symbolicThemeCheck();

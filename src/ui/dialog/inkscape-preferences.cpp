@@ -21,6 +21,9 @@
 #include "inkscape-preferences.h"
 
 #include <fstream>
+#include <strings.h>
+#include <sstream>
+#include <iomanip>
 
 #include <gio/gio.h>
 #include <gtk/gtk.h>
@@ -59,6 +62,8 @@
 
 #include "widgets/desktop-widget.h"
 
+#include <gtkmm/accelgroup.h>
+
 #if WITH_GSPELL
 # include "ui/dialog/spellcheck.h" // for get_available_langs
 # ifdef _WIN32
@@ -80,6 +85,101 @@ using Inkscape::CMSSystem;
 #define REMOVE_SPACES(x)                                                                                               \
     x.erase(0, x.find_first_not_of(' '));                                                                              \
     x.erase(x.find_last_not_of(' ') + 1);
+
+/**
+ * Case-insensitive and unicode normalized search of `pattern` in `string`.
+ *
+ * @param pattern Text to find
+ * @param string Text to search in
+ * @param[out] score Match score between 0.0 (not found) and 1.0 (pattern == string)
+ * @return True if `pattern` is a substring of `string`.
+ */
+static bool fuzzy_search(Glib::ustring const &pattern, Glib::ustring const &string, float &score)
+{
+    Glib::ustring norm_patt = pattern.lowercase().normalize();
+    Glib::ustring norm_str = string.lowercase().normalize();
+    bool found = (norm_str.find(norm_patt) != Glib::ustring::npos);
+    score = found ? (float)pattern.size() / (float)string.size() : 0;
+    return score > 0.0 ? true : false;
+}
+
+/**
+ * Case-insensitive and unicode normalized search of `pattern` in `string`.
+ *
+ * @param pattern Text to find
+ * @param string Text to search in
+ * @return True if `pattern` is a substring of `string`.
+ */
+static bool fuzzy_search(Glib::ustring const &pattern, Glib::ustring const &string)
+{
+    float score;
+    return fuzzy_search(pattern, string, score);
+}
+
+/**
+ * Get number of child Labels that match a key in a widget
+ *
+ * @param key Text to find
+ * @param widget Gtk::Widget to search in
+ * @return Number of matches found
+ */
+static int get_num_matches(Glib::ustring const &key, Gtk::Widget *widget)
+{
+    int matches = 0;
+    if (auto label = dynamic_cast<Gtk::Label *>(widget)) {
+        if (fuzzy_search(key, label->get_text().lowercase())) {
+            // set score
+            ++matches;
+        }
+    }
+    std::vector<Gtk::Widget *> children;
+    if (auto container = dynamic_cast<Gtk::Container *>(widget)) {
+        children = container->get_children();
+    } else {
+        children = widget->list_mnemonic_labels();
+    }
+    for (auto *child : children) {
+        if (int child_matches = get_num_matches(key, child)) {
+            matches += child_matches;
+        }
+    }
+    return matches;
+}
+
+/**
+ * Add CSS-based highlight-class and pango highlight to a Gtk::Label
+ *
+ * @param label Label to add highlight to
+ * @param key Text to add pango highlight
+ */
+void InkscapePreferences::add_highlight(Gtk::Label *label, Glib::ustring const &key)
+{
+    Glib::ustring text = label->get_text();
+    Glib::ustring const n_text = text.lowercase().normalize();
+    Glib::ustring const n_key = key.lowercase().normalize();
+    label->get_style_context()->add_class("highlight");
+    auto const pos = n_text.find(key);
+    auto const len = n_key.size();
+    text = Glib::Markup::escape_text(text.substr(0, pos)) + "<span weight=\"bold\" underline=\"single\">" +
+           Glib::Markup::escape_text(text.substr(pos, len)) + "</span>" +
+           Glib::Markup::escape_text(text.substr(pos + len));
+    label->set_markup(text);
+}
+
+/**
+ * Remove CSS-based highlight-class and pango highlight from a Gtk::Label
+ *
+ * @param label Label to remove highlight from
+ * @param key Text to remove pango highlight from
+ */
+void InkscapePreferences::remove_highlight(Gtk::Label *label)
+{
+    if (label->get_use_markup()) {
+        Glib::ustring text = label->get_text();
+        label->set_text(text);
+        label->get_style_context()->remove_class("highlight");
+    }
+}
 
 InkscapePreferences::InkscapePreferences()
     : UI::Widget::Panel ("/dialogs/preferences", SP_VERB_DIALOG_DISPLAY),
@@ -109,22 +209,93 @@ InkscapePreferences::InkscapePreferences()
     _setContents(hbox_list_page);
 
     //Pagelist
-    Gtk::Frame* list_frame = Gtk::manage(new Gtk::Frame());
+    auto list_box = Gtk::manage(new Gtk::Box(Gtk::Orientation::ORIENTATION_VERTICAL, 3));
     Gtk::ScrolledWindow* scrolled_window = Gtk::manage(new Gtk::ScrolledWindow());
-    hbox_list_page->pack_start(*list_frame, false, true, 0);
+    _search.set_valign(Gtk::Align::ALIGN_START);
+    list_box->pack_start(_search, false, true, 0);
+    list_box->pack_start(*scrolled_window, false, true, 0);
+    hbox_list_page->pack_start(*list_box, false, true, 0);
     _page_list.set_headers_visible(false);
     scrolled_window->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
+    scrolled_window->set_valign(Gtk::Align::ALIGN_FILL);
     scrolled_window->set_propagate_natural_width();
     scrolled_window->set_propagate_natural_height();
     scrolled_window->add(_page_list);
-    list_frame->set_shadow_type(Gtk::SHADOW_IN);
-    list_frame->add(*scrolled_window);
+    scrolled_window->set_vexpand_set(true);
+    scrolled_window->set_vexpand(true);
     _page_list_model = Gtk::TreeStore::create(_page_list_columns);
-    _page_list.set_model(_page_list_model);
+    _page_list_model_filter = Gtk::TreeModelFilter::create(_page_list_model);
+    _page_list_model_sort = Gtk::TreeModelSort::create(_page_list_model_filter);
+    _page_list_model_sort->set_sort_column(_page_list_columns._col_name, Gtk::SortType::SORT_ASCENDING);
+    _page_list.set_enable_search(false);
+    _page_list.set_model(_page_list_model_sort);
     _page_list.append_column("name",_page_list_columns._col_name);
     Glib::RefPtr<Gtk::TreeSelection> page_list_selection = _page_list.get_selection();
     page_list_selection->signal_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::on_pagelist_selection_changed));
     page_list_selection->set_mode(Gtk::SELECTION_BROWSE);
+
+    // Search
+    _page_list.set_search_column(-1); // this disables pop-up search!
+    _search.signal_search_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::on_search_changed));
+    _search.set_tooltip_text("Search");
+    _page_list_model_sort->set_sort_func(
+        _page_list_columns._col_name, [=](Gtk::TreeModel::iterator const &a, Gtk::TreeModel::iterator const &b) -> int {
+            float score_a, score_b;
+            Glib::ustring key = _search.get_text().lowercase();
+            if (key == "") {
+                return -1;
+            }
+            Glib::ustring label_a = a->get_value(_page_list_columns._col_name).lowercase();
+            Glib::ustring label_b = b->get_value(_page_list_columns._col_name).lowercase();
+            auto *grid_a = a->get_value(_page_list_columns._col_page);
+            auto *grid_b = b->get_value(_page_list_columns._col_page);
+            int num_res_a = num_widgets_in_grid(key, grid_a);
+            int num_res_b = num_widgets_in_grid(key, grid_b);
+            fuzzy_search(key, label_a, score_a);
+            fuzzy_search(key, label_b, score_b);
+            if (score_a > score_b) {
+                return -1;
+            } else if (score_a < score_b) {
+                return 1;
+            } else if (num_res_a >= num_res_b) {
+                return -1;
+            } else if (num_res_a < num_res_b) {
+                return 1;
+            } else {
+                return a->get_value(_page_list_columns._col_id) > b->get_value(_page_list_columns._col_id) ? -1 : 1;
+            }
+        });
+
+    _search.signal_next_match().connect([=]() {
+        if (_search_results.size() > 0) {
+            Gtk::TreeIter curr = _page_list.get_selection()->get_selected();
+            auto _page_list_selection = _page_list.get_selection();
+            auto next = get_next_result(curr);
+            if (next) {
+                _page_list.scroll_to_cell(next, *_page_list.get_column(0));
+                _page_list.set_cursor(next);
+            }
+        }
+    });
+
+    _search.signal_previous_match().connect([=]() {
+        if (_search_results.size() > 0) {
+            Gtk::TreeIter curr = _page_list.get_selection()->get_selected();
+            auto _page_list_selection = _page_list.get_selection();
+            auto prev = get_prev_result(curr);
+            if (prev) {
+                _page_list.scroll_to_cell(prev, *_page_list.get_column(0));
+                _page_list.set_cursor(prev);
+            }
+        }
+    });
+
+    _search.signal_key_press_event().connect(sigc::mem_fun(*this, &InkscapePreferences::on_navigate_key_press));
+
+    _page_list_model_filter->set_visible_func([=](Gtk::TreeModel::const_iterator const &row) -> bool {
+        auto key_lower = _search.get_text().lowercase();
+        return recursive_filter(key_lower, row);
+    });
 
     //Pages
     auto vbox_page = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
@@ -163,6 +334,317 @@ InkscapePreferences::InkscapePreferences()
 
 InkscapePreferences::~InkscapePreferences()
 = default;
+
+/**
+ * Get child Labels that match a key in a widget grid
+ * and add the results to global _search_results vector
+ *
+ * @param key Text to find
+ * @param widget Gtk::Widget to search in
+ */
+void InkscapePreferences::get_widgets_in_grid(Glib::ustring const &key, Gtk::Widget *widget)
+{
+    if (auto label = dynamic_cast<Gtk::Label *>(widget)) {
+        if (fuzzy_search(key, label->get_text())) {
+            _search_results.push_back(widget);
+        }
+    }
+    std::vector<Gtk::Widget *> children;
+    if (auto container = dynamic_cast<Gtk::Container *>(widget)) {
+        children = container->get_children();
+    } else {
+        children = widget->list_mnemonic_labels();
+    }
+    for (auto *child : children) {
+        get_widgets_in_grid(key, child);
+    }
+}
+
+/**
+ * Get number of child Labels that match a key in a widget grid
+ * and add the results to global _search_results vector
+ *
+ * @param key Text to find
+ * @param widget Gtk::Widget to search in
+ * @return Number of results found
+ */
+int InkscapePreferences::num_widgets_in_grid(Glib::ustring const &key, Gtk::Widget *widget)
+{
+    int results = 0;
+    if (auto label = dynamic_cast<Gtk::Label *>(widget)) {
+        float score;
+        if (fuzzy_search(key, label->get_text(), score)) {
+            ++results;
+        }
+    }
+    std::vector<Gtk::Widget *> children;
+    if (auto container = dynamic_cast<Gtk::Container *>(widget)) {
+        children = container->get_children();
+    } else {
+        children = widget->list_mnemonic_labels();
+    }
+    for (auto *child : children) {
+        int num_child = num_widgets_in_grid(key, child);
+        results += num_child;
+    }
+    return results;
+}
+
+/**
+ * Implementation of the search functionality executes each time
+ * search entry is changed
+ */
+void InkscapePreferences::on_search_changed()
+{
+    _num_results = 0;
+    if (_search_results.size() > 0) {
+        for (auto *result : _search_results) {
+            remove_highlight(static_cast<Gtk::Label *>(result));
+        }
+        _search_results.clear();
+    }
+    auto key = _search.get_text();
+    _page_list_model_filter->refilter();
+    // get first iter
+    Gtk::TreeModel::Children children = _page_list_model_filter->children();
+    Gtk::TreeModel::iterator iter = children.begin();
+
+    highlight_results(key, iter);
+    goto_first_result();
+    if (_num_results == 0) {
+        _page_list.set_has_tooltip(false);
+        // TODO:Show all contents
+        show_not_found();
+    } else {
+        _page_list.expand_all();
+    }
+    if (key == "") {
+        _page_list.collapse_all();
+        show_try_search();
+    }
+}
+
+/**
+ * Select the first row in the tree that has a result
+ */
+void InkscapePreferences::goto_first_result()
+{
+    auto key = _search.get_text();
+    if (_num_results > 0) {
+        Gtk::TreeIter curr = _page_list.get_model()->children().begin();
+        if (fuzzy_search(key, curr->get_value(_page_list_columns._col_name)) ||
+            get_num_matches(key, curr->get_value(_page_list_columns._col_page)) > 0) {
+            _page_list.scroll_to_cell(Gtk::TreePath(curr), *_page_list.get_column(0));
+            _page_list.set_cursor(Gtk::TreePath(curr));
+        } else {
+            auto next = get_next_result(curr);
+            if (next) {
+                _page_list.scroll_to_cell(next, *_page_list.get_column(0));
+                _page_list.set_cursor(next);
+            }
+        }
+    }
+}
+
+/**
+ * Look for the immediate next row in the tree that contains a search result
+ *
+ * @param iter Current iter the that is selected in the tree
+ * @param check_children Bool whether to check if the children of the iter
+ * contain search result
+ * @return Immediate next row than contains a search result
+ */
+Gtk::TreePath InkscapePreferences::get_next_result(Gtk::TreeIter &iter, bool check_children)
+{
+    auto key = _search.get_text();
+    Gtk::TreePath path = Gtk::TreePath(iter);
+    if (iter->children().begin() && check_children) { // check for search results in children
+        auto child = iter->children().begin();
+        _page_list.expand_row(path, false);
+        if (fuzzy_search(key, child->get_value(_page_list_columns._col_name)) ||
+            get_num_matches(key, child->get_value(_page_list_columns._col_page)) > 0) {
+            return Gtk::TreePath(child);
+        } else {
+            return get_next_result(child);
+        }
+    } else {
+        ++iter;     // go to next row
+        if (iter) { // if row exists
+            if (fuzzy_search(key, iter->get_value(_page_list_columns._col_name)) ||
+                get_num_matches(key, iter->get_value(_page_list_columns._col_page))) {
+                path.next();
+                return path;
+            } else {
+                return get_next_result(iter);
+            }
+        } else if (path.up()) {
+            path.next();
+            iter = _page_list.get_model()->get_iter(path);
+            if (iter) {
+                if (fuzzy_search(key, iter->get_value(_page_list_columns._col_name)) ||
+                    get_num_matches(key, iter->get_value(_page_list_columns._col_page))) {
+                    return Gtk::TreePath(iter);
+                } else {
+                    return get_next_result(iter);
+                }
+            } else {
+                path.up();
+                if (path) {
+                    iter = _page_list.get_model()->get_iter(path);
+                    return get_next_result(iter, false); // dont check for children
+                } else {
+                    return Gtk::TreePath(_page_list.get_model()->children().begin());
+                }
+            }
+        }
+    }
+    return Gtk::TreePath(iter);
+}
+
+/**
+ * Look for the immediate previous row in the tree that contains a search result
+ *
+ * @param iter Current iter that is selected in the tree
+ * @param check_children Bool whether to check if the children of the iter
+ * contain search result
+ * @return Immediate previous row than contains a search result
+ */
+Gtk::TreePath InkscapePreferences::get_prev_result(Gtk::TreeIter &iter, bool iterate)
+{
+    auto key = _search.get_text();
+    Gtk::TreePath path = Gtk::TreePath(iter);
+    if (iterate) {
+        --iter;
+    }
+    if (iter) {
+        if (iter->children().begin()) {
+            auto child = iter->children().end();
+            --child;
+            Gtk::TreePath path = Gtk::TreePath(iter);
+            _page_list.expand_row(path, false);
+            return get_prev_result(child, false);
+        } else if (fuzzy_search(key, iter->get_value(_page_list_columns._col_name)) ||
+                   get_num_matches(key, iter->get_value(_page_list_columns._col_page))) {
+            return (Gtk::TreePath(iter));
+        } else {
+            return get_prev_result(iter);
+        }
+    } else if (path.up()) {
+        if (path) {
+            iter = _page_list.get_model()->get_iter(path);
+            if (fuzzy_search(key, iter->get_value(_page_list_columns._col_name)) ||
+                get_num_matches(key, iter->get_value(_page_list_columns._col_page))) {
+                return path;
+            } else {
+                return get_prev_result(iter);
+            }
+        } else {
+            auto lastIter = _page_list.get_model()->children().end();
+            --lastIter;
+            return get_prev_result(lastIter, false);
+        }
+    } else {
+        return Gtk::TreePath(iter);
+    }
+}
+
+/**
+ * Handle key F3 and Shift+F3 key press events to navigate to the next search
+ * result
+ *
+ * @param evt event object
+ * @return Always returns False to label the key press event as un-handled
+ */
+bool InkscapePreferences::on_navigate_key_press(GdkEventKey *evt)
+{
+    if (evt->keyval == GDK_KEY_F3) {
+        if (_search_results.size() > 0) {
+            GdkModifierType modmask = gtk_accelerator_get_default_mod_mask();
+            if ((evt->state & modmask) == Gdk::SHIFT_MASK) {
+                Gtk::TreeIter curr = _page_list.get_selection()->get_selected();
+                auto _page_list_selection = _page_list.get_selection();
+                auto prev = get_prev_result(curr);
+                if (prev) {
+                    _page_list.scroll_to_cell(prev, *_page_list.get_column(0));
+                    _page_list.set_cursor(prev);
+                }
+            } else {
+                Gtk::TreeIter curr = _page_list.get_selection()->get_selected();
+                auto _page_list_selection = _page_list.get_selection();
+                auto next = get_next_result(curr);
+                if (next) {
+                    _page_list.scroll_to_cell(next, *_page_list.get_column(0));
+                    _page_list.set_cursor(next);
+                }
+            }
+        }
+    }
+    return false;
+}
+
+/**
+ * Add highlight to all the search results
+ *
+ * @param key Text to search
+ * @param iter pointing to the first row of the tree
+ */
+void InkscapePreferences::highlight_results(Glib::ustring const &key, Gtk::TreeModel::iterator &iter)
+{
+    Gtk::TreeModel::Path path;
+    Glib::ustring Txt;
+    while (iter) {
+        Gtk::TreeModel::Row row = *iter;
+        auto *grid = row->get_value(_page_list_columns._col_page);
+        get_widgets_in_grid(key, grid);
+        if (_search_results.size() > 0) {
+            for (auto *result : _search_results) {
+                // underline and highlight
+                add_highlight(static_cast<Gtk::Label *>(result), key);
+            }
+        }
+        if (iter->children()) {
+            auto children = iter->children();
+            auto child_iter = children.begin();
+            highlight_results(key, child_iter);
+        }
+        iter++;
+    }
+}
+
+/**
+ * Filter function for the search functionality to show only matching
+ * rows or rows with matching search resuls in the tree view
+ *
+ * @param key Text to search for
+ * @param iter iter pointing to the first row of the tree view
+ * @return True if the row is to be shown else return False
+ */
+bool InkscapePreferences::recursive_filter(Glib::ustring &key, Gtk::TreeModel::const_iterator const &iter)
+{
+    auto row_label = iter->get_value(_page_list_columns._col_name).lowercase();
+    if (key == "") {
+        return true;
+    }
+    if (fuzzy_search(key, row_label)) {
+        ++_num_results;
+        return true;
+    }
+    auto *grid = iter->get_value(_page_list_columns._col_page);
+    int matches = get_num_matches(key, grid);
+    _num_results += matches;
+    if (matches) {
+        return true;
+    }
+    auto child = iter->children().begin();
+    if (child) {
+        for (auto inner = child; inner; ++inner) {
+            if (recursive_filter(key, inner)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
 
 Gtk::TreeModel::iterator InkscapePreferences::AddPage(DialogPage& p, Glib::ustring title, int id)
 {
@@ -1786,6 +2268,12 @@ void InkscapePreferences::initPageIO()
     _save_autosave_interval.signal_changed().connect( sigc::ptr_fun(Inkscape::AutoSave::restart), true);
 
     this->AddPage(_page_autosave, _("Autosave"), iter_io, PREFS_PAGE_IO_AUTOSAVE);
+
+    // No Result
+    _page_notfound.add_group_header("No matches were found, try another search!");
+
+    // Try Search
+    _page_trysearch.add_group_header("Try searching what you are looking for!");
 }
 
 void InkscapePreferences::initPageBehavior()
@@ -2792,6 +3280,42 @@ void InkscapePreferences::on_reset_prefs_clicked()
     Inkscape::Preferences::get()->reset();
 }
 
+void InkscapePreferences::show_not_found()
+{
+    if (_current_page)
+        _page_frame.remove();
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    _current_page = &_page_notfound;
+    _page_title.set_markup("<span size='large'><b>No Results</b></span>");
+    _page_frame.add(*_current_page);
+    _current_page->show();
+    this->show_all_children();
+    if (prefs->getInt("/dialogs/preferences/page", 0) == PREFS_PAGE_UI_THEME) {
+        symbolicThemeCheck();
+    }
+}
+
+void InkscapePreferences::show_try_search()
+{
+    if (_current_page)
+        _page_frame.remove();
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    _current_page = &_page_trysearch;
+    _page_title.set_markup("<span size='large'><b>Try Search</b></span>");
+    _page_frame.add(*_current_page);
+    _current_page->show();
+    this->show_all_children();
+    if (prefs->getInt("/dialogs/preferences/page", 0) == PREFS_PAGE_UI_THEME) {
+        symbolicThemeCheck();
+    }
+}
+
+void InkscapePreferences::show_nothing_on_page()
+{
+    _page_frame.remove();
+    _page_title.set_text("");
+}
+
 void InkscapePreferences::on_pagelist_selection_changed()
 {
     // show new selection
@@ -2820,7 +3344,8 @@ void InkscapePreferences::on_pagelist_selection_changed()
 
 void InkscapePreferences::_presentPages()
 {
-    _page_list_model->foreach_iter(sigc::mem_fun(*this, &InkscapePreferences::PresentPage));
+    _search.set_text("");
+    _page_list.get_model()->foreach_iter(sigc::mem_fun(*this, &InkscapePreferences::PresentPage));
 }
 
 } // namespace Dialog
