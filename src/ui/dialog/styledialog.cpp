@@ -1364,7 +1364,7 @@ void StyleDialog::_nameEdited(const Glib::ustring &path, const Glib::ustring &na
     if (row) {
         _current_css_tree = css_tree;
         Glib::ustring finalname = name;
-        auto i = std::min(finalname.find(";"), finalname.find(":"));
+        auto i = finalname.find_first_of(";:=");
         if (i != std::string::npos) {
             finalname.erase(i, name.size() - i);
         }
