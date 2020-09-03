@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2020-07-15 15:04+0200\n"
-"PO-Revision-Date: 2020-08-27 23:47+0200\n"
+"PO-Revision-Date: 2020-09-03 22:57+0200\n"
 "Last-Translator: Tomáš Marný\n"
 "Language-Team: Josef Vybíral (josef.vybiral@gmail.com); Ivan Řihošek "
 "(osmdesat@seznam.cz); Tobiczech (tobiczech@gmail.com); Tomáš Marný (tomik."
@@ -6871,9 +6871,8 @@ msgid "Modify lights and shadows separately"
 msgstr "Upravit světla a stíny samostatně"
 
 #: ../src/extension/internal/filter/color.h:1238
-#, fuzzy
 msgid "Lightness-Contrast"
-msgstr "Jas"
+msgstr "Jas-kontrast"
 
 #: ../src/extension/internal/filter/color.h:1249
 msgid "Modify lightness and contrast separately"
@@ -6881,7 +6880,7 @@ msgstr "Upravit světlost a kontrast samostatně"
 
 #: ../src/extension/internal/filter/color.h:1321
 msgid "Nudge RGB"
-msgstr ""
+msgstr "Posunout RGB"
 
 #: ../src/extension/internal/filter/color.h:1325
 msgid "Red offset"
@@ -6924,7 +6923,7 @@ msgstr ""
 
 #: ../src/extension/internal/filter/color.h:1437
 msgid "Nudge CMY"
-msgstr ""
+msgstr "Posunout CMY"
 
 #: ../src/extension/internal/filter/color.h:1441
 msgid "Cyan offset"
@@ -6962,9 +6961,8 @@ msgid "Replace hue by two colors"
 msgstr "Nahradit odstín dvěma barvami"
 
 #: ../src/extension/internal/filter/color.h:1634
-#, fuzzy
 msgid "Simple blend"
-msgstr "Vzorek textu"
+msgstr "Jednoduché míchání"
 
 #: ../src/extension/internal/filter/color.h:1637
 #: ../src/extension/internal/filter/paint.h:611
@@ -12732,7 +12730,7 @@ msgstr "<b>Variace uzlů</b> Posouvá uzly/úchyty"
 
 #: ../src/live_effects/lpe-roughen.cpp:187
 msgid "<b>Extra roughen</b> Add an extra layer of rough"
-msgstr ""
+msgstr "<b>Extra zdrsnění</ b> Přidává další vrstvu drsnosti"
 
 #: ../src/live_effects/lpe-roughen.cpp:195
 msgid "<b>Options</b> Modify options to rough"
@@ -14687,7 +14685,7 @@ msgstr "Vyberte <b>objekt(y)</b>, z nichž vytvořit bitmapovou kopii."
 
 #: ../src/selection-chemistry.cpp:3611
 msgid "Rendering bitmap..."
-msgstr "Vykresluji bitmapu…"
+msgstr "Vykreslování bitmapy…"
 
 #: ../src/selection-chemistry.cpp:3792
 msgid "Create bitmap"
@@ -17067,7 +17065,7 @@ msgstr "Exportování %1 souborů"
 #: ../src/ui/dialog/export.cpp:1063 ../src/ui/dialog/export.cpp:1065
 #, c-format
 msgid "Exporting file <b>%s</b>..."
-msgstr "Exportuji soubor <b>%s</b>…"
+msgstr "Exportování souboru <b>%s</b>…"
 
 #: ../src/ui/dialog/export.cpp:1076 ../src/ui/dialog/export.cpp:1173
 #, c-format
@@ -17108,7 +17106,7 @@ msgstr "Adresář %s neexistuje nebo není adresářem.\n"
 #. TRANSLATORS: %1 will be the filename, %2 the width, and %3 the height of the image
 #: ../src/ui/dialog/export.cpp:1151 ../src/ui/dialog/export.cpp:1153
 msgid "Exporting %1 (%2 x %3)"
-msgstr "Exportuji %1 (%2 × %3)"
+msgstr "Exportování %1 (%2 × %3)"
 
 #: ../src/ui/dialog/export.cpp:1184
 #, c-format
@@ -21443,7 +21441,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1826
 msgid "Wrap when cycling objects in z-order"
-msgstr ""
+msgstr "Procházet objekty cyklicky"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1828
 msgid "Alt+Scroll Wheel"
@@ -21452,6 +21450,7 @@ msgstr "Alt+kolečko myši"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1830
 msgid "Wrap around at start and end when cycling objects in z-order"
 msgstr ""
+"Při cyklickém procházení mezi objekty procházet přímo mezi posledním a prvním"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1832
 msgid "Selecting"
@@ -21677,13 +21676,15 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1918
 msgid "Snap the mouse pointer when dragging a constrained knot"
-msgstr ""
+msgstr "Přichytávat kurzor myši při tažení ohraničeného uzlu"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1920
 msgid ""
 "When dragging a knot along a constraint line, then snap the position of the mouse "
 "pointer instead of snapping the projection of the knot onto the constraint line"
 msgstr ""
+"Při tažení uzlu po ohraničené čáře přichytit polohu kurzoru myši namísto "
+"přichytávání projekce uzlu na ohraničenou čáru."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1922
 msgid "Delayed snap"
@@ -22698,7 +22699,6 @@ msgid "Position Y:"
 msgstr "Pozice Y:"
 
 #: ../src/ui/dialog/knot-properties.cpp:114
-#, fuzzy
 msgid "Modify Knot Position"
 msgstr "Změnit pozici uzlu"
 
@@ -24460,6 +24460,8 @@ msgid ""
 "Resize box in X/Y direction; with <b>Shift</b> along the Z axis; with <b>Ctrl</b> "
 "to constrain to the directions of edges or diagonals"
 msgstr ""
+"Změní velikost rámečku ve směru X/Y; s klávesou <b>Shift</b> podél osy Z; s "
+"<b>Ctrl</b> omezí na směry hran nebo úhlopříček"
 
 #: ../src/ui/shape-editor-knotholders.cpp:853
 #: ../src/ui/shape-editor-knotholders.cpp:857
@@ -24469,6 +24471,8 @@ msgid ""
 "Resize box along the Z axis; with <b>Shift</b> in X/Y direction; with <b>Ctrl</b> "
 "to constrain to the directions of edges or diagonals"
 msgstr ""
+"Změní velikost rámečku podél osy Z; s klávesou <b>Shift</b> ve směru X/Y; s "
+"<b>Ctrl</b> omezí na směry hran nebo úhlopříček"
 
 #: ../src/ui/shape-editor-knotholders.cpp:869
 msgid "Move the box in perspective"
@@ -24529,17 +24533,16 @@ msgid ""
 "Roll/unroll the spiral from <b>inside</b>; with <b>Ctrl</b> to snap angle; with "
 "<b>Alt</b> to converge/diverge"
 msgstr ""
-"Zavinout/Rozvinout spirálu <b>zevnitř</b>; <b>Ctrl</b> přichytává na úhel;<b>Alt</"
-"b> ovládá sbíhavost/rozbíhavost"
+"Zavine/rozvine spirálu <b>zevnitř</b>; <b>Ctrl</b> přichytává na úhel; <b>Alt</b> "
+"ovládá sbíhavost/rozbíhavost"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1628
-#, fuzzy
 msgid ""
 "Roll/unroll the spiral from <b>outside</b>; with <b>Ctrl</b> to snap angle; with "
 "<b>Shift</b> to scale/rotate; with <b>Alt</b> to lock radius"
 msgstr ""
-"Zavinout/Rozvinout spirálu <b>zevnitř</b>; <b>Ctrl</b> přichytává na úhel;<b>Alt</"
-"b> ovládá sbíhavost/rozbíhavost"
+"Zavine/rozvine spirálu <b>zvenku</b>; <b>Ctrl</b> přichytává na úhel; s klávesou "
+"<b>Shift</b> změna měřítka/otáčení; s <b>Alt</b> zamknutí poloměru"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1680
 msgid "Adjust the <b>offset distance</b>"
@@ -24547,7 +24550,7 @@ msgstr "Upravit <b>vzdálenost posunu</b>"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1918
 msgid "Adjust the <b>rectangular</b> region of the text."
-msgstr ""
+msgstr "Upravit <b>obdélníkovou</b> oblast textu."
 
 #: ../src/ui/shape-editor-knotholders.cpp:1928
 msgid "Adjust the <b>inline size</b> (line length) of the text."
@@ -24573,10 +24576,9 @@ msgid "<b>Shift</b>: click to toggle segment selection"
 msgstr "<b>Shift</b>: kliknutím přepnete výběr uzlu"
 
 #: ../src/ui/tool/curve-drag-point.cpp:201
-#, fuzzy
 msgctxt "Path segment tip"
 msgid "<b>Ctrl+Alt</b>: click to insert a node"
-msgstr "<b>Ctrl+Alt</b>: přesun podél osy táhla, kliknutí smaže uzel"
+msgstr "<b>Ctrl+Alt</b>: kliknutím vložíte uzel"
 
 #: ../src/ui/tool/curve-drag-point.cpp:205
 #, fuzzy
@@ -24790,10 +24792,9 @@ msgid "<b>Shift</b>: move handle"
 msgstr "Posunout táhla uzlu"
 
 #: ../src/ui/tool/node.cpp:679
-#, fuzzy
 msgctxt "Path handle tip"
 msgid "Shift, Ctrl, Alt"
-msgstr "více: Shift, Ctrl, Alt"
+msgstr "Shift, Ctrl, Alt"
 
 #
 # File: ../src/ui/tool/node.cpp, line: 611
@@ -24803,10 +24804,9 @@ msgid "Ctrl"
 msgstr ""
 
 #: ../src/ui/tool/node.cpp:687
-#, fuzzy
 msgctxt "Path handle tip"
 msgid "Ctrl, Alt"
-msgstr "více: Ctrl, Alt"
+msgstr "Ctrl, Alt"
 
 #: ../src/ui/tool/node.cpp:692
 #, c-format
@@ -24849,10 +24849,9 @@ msgid ""
 msgstr ""
 
 #: ../src/ui/tool/node.cpp:736
-#, fuzzy
 msgctxt "Path handle tip"
 msgid "<b>unknown node handle</b>"
-msgstr "Vrcholový uzel"
+msgstr "<b>neznámý úchyt uzlu</b>"
 
 #: ../src/ui/tool/node.cpp:759
 #, c-format
@@ -24861,10 +24860,9 @@ msgid "Move handle by %s, %s; angle %.2f°, length %s"
 msgstr "Přesun táhla o %s, %s; úhel %.2f °, délka %s"
 
 #: ../src/ui/tool/node.cpp:1590
-#, fuzzy
 msgctxt "Path node tip"
 msgid "node handle"
-msgstr "Přesunout úchyt"
+msgstr "úchyt uzlu"
 
 #: ../src/ui/tool/node.cpp:1603
 msgctxt "Path node tip"
@@ -27648,9 +27646,8 @@ msgstr ""
 "objektů."
 
 #: ../src/ui/tools-switch.cpp:91
-#, fuzzy
 msgid "Modify selected path points (nodes) directly."
-msgstr "Zjednoduší vybrané křivky (odstraní nadbytečné uzly)"
+msgstr "Upraví vybrané body cesty (uzly) přímo."
 
 #: ../src/ui/tools-switch.cpp:92
 msgid "To tweak a path by pushing, select it and drag over it."
@@ -28128,9 +28125,9 @@ msgstr "<b>Shift</b>: kreslit barevný přechod kolem počátečního bodu"
 #, c-format
 msgid "<b>Gradient</b> for %d object; with <b>Ctrl</b> to snap angle"
 msgid_plural "<b>Gradient</b> for %d objects; with <b>Ctrl</b> to snap angle"
-msgstr[0] "<b>Barevný přechod</b>pro %d objekt; s <b>Ctrl</b> přichytává na úhel"
-msgstr[1] "<b>Barevný přechod</b>pro %d objekty; s <b>Ctrl</b> přichytává na úhel"
-msgstr[2] "<b>Barevný přechod</b>pro %d objektů; s <b>Ctrl</b> přichytává na úhel"
+msgstr[0] "<b>Barevný přechod</b> pro %d objekt; s <b>Ctrl</b> přichytává na úhel"
+msgstr[1] "<b>Barevný přechod</b> pro %d objekty; s <b>Ctrl</b> přichytává na úhel"
+msgstr[2] "<b>Barevný přechod</b> pro %d objektů; s <b>Ctrl</b> přichytává na úhel"
 
 #: ../src/ui/tools/gradient-tool.cpp:845 ../src/ui/tools/mesh-tool.cpp:1025
 msgid "Select <b>objects</b> on which to create gradient."
@@ -28359,6 +28356,8 @@ msgid ""
 "<b>Curve segment</b>: angle %3.2f&#176;; with <b>Shift+Click</b> cusp node,"
 "<b>ALT</b> move previous, <b>Enter</b> or <b>Shift+Enter</b> to finish"
 msgstr ""
+"<b>Úsek křivky</b>: úhel %3.2f&#176;; s <b>Shift+kliknutí</b> vrcholový uzel, s "
+"<b>ALT</b> přesunout předchozí, <b>Enter</b> nebo <b>Shift+Enter</b> dokončení"
 
 #: ../src/ui/tools/pen-tool.cpp:1794
 #, c-format
@@ -28366,24 +28365,26 @@ msgid ""
 "<b>Line segment</b>: angle %3.2f&#176;; with <b>Shift+Click</b> cusp node,<b>ALT</"
 "b> move previous, <b>Enter</b> or <b>Shift+Enter</b> to finish"
 msgstr ""
+"<b>Úsečka</b>: %3.2f&#176;; s <b>Shift+kliknutí</b> vrcholový uzel, s <b>ALT</b> "
+"přesunout předchozí, <b>Enter</b> nebo <b>Shift+Enter</b> dokončení"
 
 #: ../src/ui/tools/pen-tool.cpp:1798
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Curve segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to snap "
 "angle, <b>Enter</b> or <b>Shift+Enter</b> to finish the path"
 msgstr ""
-"<b>Ovládací prvek křivky</b>: ůhel %3.2f&#176;, délka %s; <b>Ctrl</b> přichytává "
-"k úhlům"
+"<b>Úsek křivky</b>: ůhel %3.2f&#176;, délka %s; <b>Ctrl</b> přichytává k úhlům, "
+"<b>Enter</b> nebo <b>Shift+Enter</b> dokončí cestu"
 
 #: ../src/ui/tools/pen-tool.cpp:1799
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Line segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to snap "
 "angle, <b>Enter</b> or <b>Shift+Enter</b> to finish the path"
 msgstr ""
-"<b>Ovládací prvek křivky</b>: ůhel %3.2f&#176;, délka %s; <b>Ctrl</b> přichytává "
-"k úhlům"
+"<b>Úsečka</b>: ůhel %3.2f&#176;, délka %s; <b>Ctrl</b> přichytává k úhlům, "
+"<b>Enter</b> nebo <b>Shift+Enter</b> dokončí cestu"
 
 #: ../src/ui/tools/pen-tool.cpp:1817
 #, c-format
@@ -28394,22 +28395,22 @@ msgstr ""
 "k úhlům"
 
 #: ../src/ui/tools/pen-tool.cpp:1841
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Curve handle, symmetric</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to "
 "snap angle, with <b>Shift</b> to move this handle only"
 msgstr ""
-"<b>Ovládací prvek křivky</b>: ůhel %3.2f&#176;, délka %s; <b>Ctrl</b> přichytává "
-"k úhlům"
+"<b>Ovládací prvek křivky, symetrický</b>: ůhel %3.2f&#176;, délka %s; <b>Ctrl</b> "
+"přichytává k úhlům, s <b>Shift</b> přesunout pouze tento úchyt"
 
 #: ../src/ui/tools/pen-tool.cpp:1842
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
 "angle, with <b>Shift</b> to move this handle only"
 msgstr ""
 "<b>Ovládací prvek křivky</b>: ůhel %3.2f&#176;, délka %s; <b>Ctrl</b> přichytává "
-"k úhlům"
+"k úhlům, s <b>Shift</b> přesunout pouze tento úchyt"
 
 #: ../src/ui/tools/pen-tool.cpp:1994
 msgid "Drawing finished"
@@ -28429,7 +28430,7 @@ msgstr "<b>Tažením</b> pokračujte v cestě z tohoto bodu."
 
 #: ../src/ui/tools/pencil-tool.cpp:484
 msgid "Finishing freehand"
-msgstr "Dokončuji kreslení od ruky"
+msgstr "Dokončování kreslení od ruky"
 
 #: ../src/ui/tools/pencil-tool.cpp:600
 msgid ""
@@ -28441,7 +28442,7 @@ msgstr ""
 
 #: ../src/ui/tools/pencil-tool.cpp:627
 msgid "Finishing freehand sketch"
-msgstr "Dokončuji kreslení od ruky"
+msgstr "Dokončování kreslení od ruky"
 
 #: ../src/ui/tools/rect-tool.cpp:276
 msgid ""
@@ -30119,7 +30120,7 @@ msgid ""
 "to adjust lightness, with <b>Shift</b> to adjust saturation, without modifiers to "
 "adjust hue"
 msgstr ""
-"Nastavuji <b>průhlednost</b>: předtím %.3g, nyní <b>%.3g</b> (rozdíl %.3g); s "
+"Nastavení <b>průhlednosti</b>: předtím %.3g, nyní <b>%.3g</b> (rozdíl %.3g); s "
 "<b>Ctrl</b> nastavíte jas, s <b>Shiftem</b> nastavíte sytost, bez přeřaďovačů "
 "nastavíte odstín"
 
@@ -30134,9 +30135,9 @@ msgid ""
 "b> to adjust lightness, with <b>Alt</b> to adjust alpha, without modifiers to "
 "adjust hue"
 msgstr ""
-"Nastavuji <b>sytost</b>: předtím %.3g, nyní <b>%.3g</b> (rozdíl %.3g); s <b>Ctrl</"
-"b> nastavíte jas, s <b>Altem</b> nastavíte průhlednost, bez přeřaďovačů nastavíte "
-"odstín"
+"Nastavení <b>sytosti</b>: předtím %.3g, nyní <b>%.3g</b> (rozdíl %.3g); s "
+"<b>Ctrl</b> nastavíte jas, s <b>Altem</b> nastavíte průhlednost, bez přeřaďovačů "
+"nastavíte odstín"
 
 #: ../src/ui/widget/selected-style.cpp:1309
 msgid "Adjust lightness"
@@ -30149,7 +30150,7 @@ msgid ""
 "b> to adjust saturation, with <b>Alt</b> to adjust alpha, without modifiers to "
 "adjust hue"
 msgstr ""
-"Nastavuji <b>jas</b>: předtím %.3g, nyní <b>%.3g</b> (rozdíl %.3g); se "
+"Nastavení <b>jasu</b>: předtím %.3g, nyní <b>%.3g</b> (rozdíl %.3g); se "
 "<b>Shiftem</b> nastavíte sytost, s <b>Altem</b> nastavíte průhlednost, bez "
 "přeřaďovačů nastavíte odstín"
 
@@ -30164,7 +30165,7 @@ msgid ""
 "adjust saturation, with <b>Alt</b> to adjust alpha, with <b>Ctrl</b> to adjust "
 "lightness"
 msgstr ""
-"Nastavuji <b>odstín</b>: předtím %.3g, nyní <b>%.3g</b> (rozdíl %.3g); se "
+"Nastavení <b>odstínu</b>: předtím %.3g, nyní <b>%.3g</b> (rozdíl %.3g); se "
 "<b>Shiftem</b> nastavíte sytost, s <b>Altem</b> nastavíte průhlednost, <b>s Ctrl</"
 "b> nastavíte jas"
 
@@ -30525,7 +30526,7 @@ msgstr "Obrátit svisle"
 #: ../src/verbs.cpp:1619 ../src/verbs.cpp:1635 ../src/verbs.cpp:2901
 #: ../src/verbs.cpp:2909
 msgid "_Set Inverse (LPE)"
-msgstr ""
+msgstr "_Nastavit inverzní (LPE)"
 
 #: ../src/verbs.cpp:2553 ../src/verbs.cpp:3255
 msgid "Unlock all objects in the current layer"
@@ -33739,11 +33740,11 @@ msgstr "Nelze najít soubor: %s"
 
 #: ../share/extensions/path_envelope.py:28
 msgid "You must select two objects only."
-msgstr ""
+msgstr "Musíte vybrat pouze dva objekty."
 
 #: ../share/extensions/path_envelope.py:40
 msgid "Selected path is too short. Must be four or more nodes."
-msgstr ""
+msgstr "Vybraná cesta je příliš krátká. Musí to být čtyři nebo více uzlů."
 
 #: ../share/extensions/path_envelope.py:53 ../share/extensions/perspective.py:73
 msgid ""
@@ -34561,9 +34562,8 @@ msgid "Character Encoding:"
 msgstr "Kódování znaků:"
 
 #: ../share/extensions/dxf_outlines.inx:27
-#, fuzzy
 msgid "Layer export selection:"
-msgstr "Převést výběr:"
+msgstr "Výběr exportu vrstvy:"
 
 #: ../share/extensions/dxf_outlines.inx:28
 msgid "All (default)"
@@ -34575,12 +34575,11 @@ msgstr "Pouze vyditelné"
 
 #: ../share/extensions/dxf_outlines.inx:30
 msgid "By name match"
-msgstr ""
+msgstr "Podle shody názvu"
 
 #: ../share/extensions/dxf_outlines.inx:32
-#, fuzzy
 msgid "Layer match name:"
-msgstr "Jméno vrstvy:"
+msgstr "Název vrstvy:"
 
 #
 # File: ../share/extensions/dxf_outlines.inx, line: 35
@@ -37559,7 +37558,7 @@ msgstr ""
 
 #: ../share/extensions/layer2png.inx:7
 msgid "Icon mode"
-msgstr ""
+msgstr "Režim ikon"
 
 #: ../share/extensions/layer2png.inx:8
 msgid "Sizes"
@@ -41329,7 +41328,7 @@ msgstr "PostScriptové body (72/palec)"
 # File: ../share/ui/units.xml, line: 25
 #: ../share/ui/units.xml:25
 msgid "pica"
-msgstr ""
+msgstr "pica"
 
 #
 # File: ../share/ui/units.xml, line: 26
@@ -41355,7 +41354,7 @@ msgstr "palce"
 
 #: ../share/ui/units.xml:36
 msgid "Inches (96 px/in)"
-msgstr ""
+msgstr "Palce (96 px/palec)"
 
 #: ../share/ui/units.xml:39
 msgid "millimeter"
@@ -41388,14 +41387,12 @@ msgid "degree"
 msgstr "stupeň"
 
 #: ../share/ui/units.xml:60
-#, fuzzy
 msgid "radian"
-msgstr "Barevný přechod"
+msgstr "radián"
 
 #: ../share/ui/units.xml:61
-#, fuzzy
 msgid "radians"
-msgstr "Barevný přechod"
+msgstr "radiány"
 
 #
 # File: ../share/ui/units.xml, line: 64
@@ -41404,14 +41401,12 @@ msgid "Radians (180/pi deg/rad)"
 msgstr ""
 
 #: ../share/ui/units.xml:67
-#, fuzzy
 msgid "gradian"
-msgstr "Žádné přechody"
+msgstr "grad"
 
 #: ../share/ui/units.xml:68
-#, fuzzy
 msgid "gradians"
-msgstr "Lineární přechod"
+msgstr "grady"
 
 #
 # File: ../share/ui/units.xml, line: 71
@@ -41481,7 +41476,7 @@ msgstr ""
 # File: ../share/ui/units.xml, line: 99
 #: ../share/ui/units.xml:99
 msgid "Half of font height"
-msgstr ""
+msgstr "Polovina výšky písma"
 
 #
 # File: ../src/inkscape-application.cpp, line: 549
@@ -41570,11 +41565,15 @@ msgstr ""
 #~ msgid "Inkscape website"
 #~ msgstr "Webová stránka Inkscape"
 
-#, fuzzy
+#~ msgid "© 2020 Inkscape Developers"
+#~ msgstr "© 2020 Vývojáři Inkscape"
+
 #~ msgid ""
 #~ "Open Source Scalable Vector Graphics Editor\n"
 #~ "Draw Freely."
-#~ msgstr "Vytvářejte a upravujte obrázky Scalable Vector Graphics"
+#~ msgstr ""
+#~ "Editor škálovatelné vektorové grafiky s otevřeným zdrojovým kódem\n"
+#~ "Kreslete svobodně."
 
 #~ msgid "about.svg"
 #~ msgstr "about.svg"
@@ -41819,6 +41818,9 @@ msgstr ""
 
 #~ msgid "Flat color stroke"
 #~ msgstr "Tah jednolitou barvou"
+
+#~ msgid "Set %d"
+#~ msgstr "Nastavit %d"
 
 #~ msgid "Create new selection set"
 #~ msgstr "Vytvořit novou sadu výběru"
