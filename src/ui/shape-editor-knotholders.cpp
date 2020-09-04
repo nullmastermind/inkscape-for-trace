@@ -556,29 +556,24 @@ RectKnotHolder::RectKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderRel
     RectKnotHolderEntityXY *entity_xy = new RectKnotHolderEntityXY();
     RectKnotHolderEntityCenter *entity_center = new RectKnotHolderEntityCenter();
 
-    entity_rx->create(desktop, item, this, Inkscape::CTRL_TYPE_ROTATE,
+    entity_rx->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_ROTATE, "Rect:rx",
                       _("Adjust the <b>horizontal rounding</b> radius; with <b>Ctrl</b> "
-                        "to make the vertical radius the same"),
-                      SP_KNOT_SHAPE_CIRCLE, SP_KNOT_MODE_XOR);
+                        "to make the vertical radius the same"));
 
-    entity_ry->create(desktop, item, this, Inkscape::CTRL_TYPE_ROTATE,
+    entity_ry->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_ROTATE, "Rect:ry",
                       _("Adjust the <b>vertical rounding</b> radius; with <b>Ctrl</b> "
-                        "to make the horizontal radius the same"),
-                      SP_KNOT_SHAPE_CIRCLE, SP_KNOT_MODE_XOR);
+                        "to make the horizontal radius the same"));
 
-    entity_wh->create(desktop, item, this, Inkscape::CTRL_TYPE_SIZER,
+    entity_wh->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_SIZER, "Rect:wh",
                       _("Adjust the <b>width and height</b> of the rectangle; with <b>Ctrl</b> "
-                        "to lock ratio or stretch in one dimension only"),
-                      SP_KNOT_SHAPE_SQUARE, SP_KNOT_MODE_XOR);
+                        "to lock ratio or stretch in one dimension only"));
 
-    entity_xy->create(desktop, item, this, Inkscape::CTRL_TYPE_SIZER,
+    entity_xy->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_SIZER, "Rect:xy",
                       _("Adjust the <b>width and height</b> of the rectangle; with <b>Ctrl</b> "
-                        "to lock ratio or stretch in one dimension only"),
-                      SP_KNOT_SHAPE_SQUARE, SP_KNOT_MODE_XOR);
+                        "to lock ratio or stretch in one dimension only"));
 
-    entity_center->create(desktop, item, this, Inkscape::CTRL_TYPE_POINT,
-                          _("Drag to move the rectangle"),
-                          SP_KNOT_SHAPE_CROSS);
+    entity_center->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_POINT, "Rect:center",
+                          _("Drag to move the rectangle"));
 
     entity.push_back(entity_rx);
     entity.push_back(entity_ry);
@@ -833,41 +828,40 @@ Box3DKnotHolder::Box3DKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderR
     Box3DKnotHolderEntity7 *entity_corner7 = new Box3DKnotHolderEntity7();
     Box3DKnotHolderEntityCenter *entity_center = new Box3DKnotHolderEntityCenter();
 
-    entity_corner0->create(desktop, item, this, Inkscape::CTRL_TYPE_SHAPER,
+    entity_corner0->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_SHAPER, "Box3D:corner0",
                            _("Resize box in X/Y direction; with <b>Shift</b> along the Z axis; "
                              "with <b>Ctrl</b> to constrain to the directions of edges or diagonals"));
 
-    entity_corner1->create(desktop, item, this, Inkscape::CTRL_TYPE_SHAPER,
+    entity_corner1->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_SHAPER, "Box3D:corner1",
                            _("Resize box in X/Y direction; with <b>Shift</b> along the Z axis; "
                              "with <b>Ctrl</b> to constrain to the directions of edges or diagonals"));
 
-    entity_corner2->create(desktop, item, this, Inkscape::CTRL_TYPE_SHAPER,
+    entity_corner2->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_SHAPER, "Box3D:corner2",
                            _("Resize box in X/Y direction; with <b>Shift</b> along the Z axis; "
                              "with <b>Ctrl</b> to constrain to the directions of edges or diagonals"));
 
-    entity_corner3->create(desktop, item, this, Inkscape::CTRL_TYPE_SHAPER,
+    entity_corner3->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_SHAPER, "Box3D:corner3",
                            _("Resize box in X/Y direction; with <b>Shift</b> along the Z axis; "
                              "with <b>Ctrl</b> to constrain to the directions of edges or diagonals"));
 
-    entity_corner4->create(desktop, item, this, Inkscape::CTRL_TYPE_SHAPER,
+    entity_corner4->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_SHAPER, "Box3D:corner4",
                      _("Resize box along the Z axis; with <b>Shift</b> in X/Y direction; "
                        "with <b>Ctrl</b> to constrain to the directions of edges or diagonals"));
 
-    entity_corner5->create(desktop, item, this, Inkscape::CTRL_TYPE_SHAPER,
+    entity_corner5->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_SHAPER, "Box3D:corner5",
                      _("Resize box along the Z axis; with <b>Shift</b> in X/Y direction; "
                        "with <b>Ctrl</b> to constrain to the directions of edges or diagonals"));
 
-    entity_corner6->create(desktop, item, this, Inkscape::CTRL_TYPE_SHAPER,
+    entity_corner6->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_SHAPER, "Box3D:corner6",
                      _("Resize box along the Z axis; with <b>Shift</b> in X/Y direction; "
                        "with <b>Ctrl</b> to constrain to the directions of edges or diagonals"));
 
-    entity_corner7->create(desktop, item, this, Inkscape::CTRL_TYPE_SHAPER,
+    entity_corner7->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_SHAPER, "Box3D:corner7",
                      _("Resize box along the Z axis; with <b>Shift</b> in X/Y direction; "
                        "with <b>Ctrl</b> to constrain to the directions of edges or diagonals"));
 
-    entity_center->create(desktop, item, this, Inkscape::CTRL_TYPE_POINT,
-                          _("Move the box in perspective"),
-                          SP_KNOT_SHAPE_CROSS);
+    entity_center->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_POINT, "Box3D:center",
+                          _("Move the box in perspective"));
 
     entity.push_back(entity_corner0);
     entity.push_back(entity_corner1);
@@ -1160,29 +1154,24 @@ ArcKnotHolder::ArcKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderRelea
     ArcKnotHolderEntityEnd *entity_end = new ArcKnotHolderEntityEnd();
     ArcKnotHolderEntityCenter *entity_center = new ArcKnotHolderEntityCenter();
 
-    entity_rx->create(desktop, item, this, Inkscape::CTRL_TYPE_SIZER,
-                      _("Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"),
-                      SP_KNOT_SHAPE_SQUARE, SP_KNOT_MODE_XOR);
+    entity_rx->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_SIZER, "Arc:rx",
+                      _("Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"));
 
-    entity_ry->create(desktop, item, this, Inkscape::CTRL_TYPE_SIZER,
-                      _("Adjust ellipse <b>height</b>, with <b>Ctrl</b> to make circle"),
-                      SP_KNOT_SHAPE_SQUARE, SP_KNOT_MODE_XOR);
+    entity_ry->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_SIZER, "Arc:ry",
+                      _("Adjust ellipse <b>height</b>, with <b>Ctrl</b> to make circle"));
 
-    entity_start->create(desktop, item, this, Inkscape::CTRL_TYPE_ROTATE,
+    entity_start->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_ROTATE, "Arc:start",
                          _("Position the <b>start point</b> of the arc or segment; with <b>Shift</b> to move "
                            "with <b>end point</b>; with <b>Ctrl</b> to snap angle; drag <b>inside</b> the "
-                           "ellipse for arc, <b>outside</b> for segment"),
-                         SP_KNOT_SHAPE_CIRCLE, SP_KNOT_MODE_XOR);
+                           "ellipse for arc, <b>outside</b> for segment"));
 
-    entity_end->create(desktop, item, this, Inkscape::CTRL_TYPE_ROTATE,
+    entity_end->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_ROTATE, "Arc:end",
                        _("Position the <b>end point</b> of the arc or segment; with <b>Shift</b> to move "
                          "with <b>start point</b>; with <b>Ctrl</b> to snap angle; drag <b>inside</b> the "
-                         "ellipse for arc, <b>outside</b> for segment"),
-                       SP_KNOT_SHAPE_CIRCLE, SP_KNOT_MODE_XOR);
+                         "ellipse for arc, <b>outside</b> for segment"));
 
-    entity_center->create(desktop, item, this, Inkscape::CTRL_TYPE_POINT,
-                          _("Drag to move the ellipse"),
-                          SP_KNOT_SHAPE_CROSS);
+    entity_center->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_POINT, "Arc:center",
+                          _("Drag to move the ellipse"));
 
     entity.push_back(entity_rx);
     entity.push_back(entity_ry);
@@ -1358,7 +1347,7 @@ StarKnotHolder::StarKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderRel
     g_assert(item != nullptr);
 
     StarKnotHolderEntity1 *entity1 = new StarKnotHolderEntity1();
-    entity1->create(desktop, item, this, Inkscape::CTRL_TYPE_SHAPER,
+    entity1->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_SHAPER, "Star:entity1",
                     _("Adjust the <b>tip radius</b> of the star or polygon; "
                       "with <b>Shift</b> to round; with <b>Alt</b> to randomize"));
 
@@ -1366,16 +1355,15 @@ StarKnotHolder::StarKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderRel
 
     if (star->flatsided == false) {
         StarKnotHolderEntity2 *entity2 = new StarKnotHolderEntity2();
-        entity2->create(desktop, item, this, Inkscape::CTRL_TYPE_SHAPER,
+        entity2->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_SHAPER, "Star:entity2",
                         _("Adjust the <b>base radius</b> of the star; with <b>Ctrl</b> to keep star rays "
                           "radial (no skew); with <b>Shift</b> to round; with <b>Alt</b> to randomize"));
         entity.push_back(entity2);
     }
 
     StarKnotHolderEntityCenter *entity_center = new StarKnotHolderEntityCenter();
-    entity_center->create(desktop, item, this, Inkscape::CTRL_TYPE_POINT,
-                          _("Drag to move the star"),
-                          SP_KNOT_SHAPE_CROSS);
+    entity_center->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_POINT, "Star:center",
+                          _("Drag to move the star"));
     entity.push_back(entity_center);
 
     add_pattern_knotholder();
@@ -1616,15 +1604,14 @@ SpiralKnotHolder::SpiralKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolde
     //
     // So, create entity_inner AFTER entity_center; this ensures that
     // entity_inner gets rendered ON TOP.
-    entity_center->create(desktop, item, this, Inkscape::CTRL_TYPE_POINT,
-                          _("Drag to move the spiral"),
-                          SP_KNOT_SHAPE_CROSS);
+    entity_center->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_POINT, "Spiral:center",
+                          _("Drag to move the spiral"));
 
-    entity_inner->create(desktop, item, this, Inkscape::CTRL_TYPE_SHAPER,
+    entity_inner->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_SHAPER, "Spiral:inner",
                          _("Roll/unroll the spiral from <b>inside</b>; with <b>Ctrl</b> to snap angle; "
                            "with <b>Alt</b> to converge/diverge"));
 
-    entity_outer->create(desktop, item, this, Inkscape::CTRL_TYPE_SHAPER,
+    entity_outer->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_SHAPER, "Spiral:outer",
                          _("Roll/unroll the spiral from <b>outside</b>; with <b>Ctrl</b> to snap angle; "
                            "with <b>Shift</b> to scale/rotate; with <b>Alt</b> to lock radius"));
 
@@ -1676,7 +1663,7 @@ OffsetKnotHolder::OffsetKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolde
     KnotHolder(desktop, item, relhandler)
 {
     OffsetKnotHolderEntity *entity_offset = new OffsetKnotHolderEntity();
-    entity_offset->create(desktop, item, this, Inkscape::CTRL_TYPE_SHAPER,
+    entity_offset->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_SHAPER, "Offset:entity",
                           _("Adjust the <b>offset distance</b>"));
     entity.push_back(entity_offset);
 
@@ -1914,20 +1901,16 @@ TextKnotHolder::TextKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderRel
         // 'shape-inside'
         TextKnotHolderEntityShapeInside *entity_shapeinside = new TextKnotHolderEntityShapeInside();
 
-        entity_shapeinside->create(desktop, item, this, Inkscape::CTRL_TYPE_SHAPER,
-                                  _("Adjust the <b>rectangular</b> region of the text."),
-                                  SP_KNOT_SHAPE_DIAMOND, SP_KNOT_MODE_XOR);
-
+        entity_shapeinside->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_SHAPER, "Text:shapeinside",
+                                   _("Adjust the <b>rectangular</b> region of the text."));
         entity.push_back(entity_shapeinside);
 
     } else {
         // 'inline-size' or normal text
         TextKnotHolderEntityInlineSize *entity_inlinesize = new TextKnotHolderEntityInlineSize();
 
-        entity_inlinesize->create(desktop, item, this, Inkscape::CTRL_TYPE_SHAPER,
-                                  _("Adjust the <b>inline size</b> (line length) of the text."),
-                                  SP_KNOT_SHAPE_DIAMOND, SP_KNOT_MODE_XOR);
-
+        entity_inlinesize->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_SHAPER, "Text:inlinesize",
+                                  _("Adjust the <b>inline size</b> (line length) of the text."));
         entity.push_back(entity_inlinesize);
     }
 }
@@ -1963,7 +1946,7 @@ FlowtextKnotHolder::FlowtextKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotH
     g_assert(item != nullptr);
 
     FlowtextKnotHolderEntity *entity_flowtext = new FlowtextKnotHolderEntity();
-    entity_flowtext->create(desktop, item, this, Inkscape::CTRL_TYPE_SHAPER,
+    entity_flowtext->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_SHAPER, "FlowText:entity",
                             _("Drag to resize the <b>flowed text frame</b>"));
     entity.push_back(entity_flowtext);
 }

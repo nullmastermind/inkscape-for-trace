@@ -20,6 +20,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <glibmm/i18n.h>
+
 #include "desktop.h"
 #include "document.h"
 #include "enums.h"
@@ -28,11 +30,6 @@
 #include "inkscape-window.h"
 #include "preferences.h"
 #include "shortcuts.h"
-
-#include "extension/db.h"
-#include "extension/effect.h"
-#include "extension/find_extension_by_mime.h"
-#include "extension/input.h"
 
 #include "helper/action.h"
 

@@ -21,8 +21,8 @@
 #include "message-stack.h"
 #include "selection-chemistry.h"
 
-#include "display/canvas-bpath.h"
 #include "display/curve.h"
+#include "display/control/canvas-item-bpath.h"
 
 #include "include/macros.h"
 
@@ -42,7 +42,6 @@
 #include "style.h"
 
 #include "ui/clipboard.h"
-#include "ui/control-manager.h"
 #include "ui/draw-anchor.h"
 #include "ui/tools/lpe-tool.h"
 #include "ui/tools/pen-tool.h"
@@ -77,7 +76,6 @@ static void spdc_free_colors(FreehandBase *dc);
 FreehandBase::FreehandBase(gchar const *const *cursor_shape)
     : ToolBase(cursor_shape)
     , selection(nullptr)
-    , grab(nullptr)
     , attach(false)
     , red_color(0xff00007f)
     , blue_color(0x0000ff7f)
@@ -104,10 +102,7 @@ FreehandBase::FreehandBase(gchar const *const *cursor_shape)
 }
 
 FreehandBase::~FreehandBase() {
-    if (this->grab) {
-        sp_canvas_item_ungrab(this->grab);
-        this->grab = nullptr;
-    }
+    ungrabCanvasEvents();
 
     if (this->selection) {
         this->selection = nullptr;
@@ -130,15 +125,17 @@ void FreehandBase::setup() {
     );
 
     // Create red bpath
-    this->red_bpath = sp_canvas_bpath_new(this->desktop->getSketch(), nullptr);
-    sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(this->red_bpath), this->red_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
+    this->red_bpath = new Inkscape::CanvasItemBpath(desktop->getCanvasSketch());
+    this->red_bpath->set_stroke(this->red_color);
+    this->red_bpath->set_fill(0x0, SP_WIND_RULE_NONZERO);
 
     // Create red curve
     this->red_curve.reset(new SPCurve());
 
     // Create blue bpath
-    this->blue_bpath = sp_canvas_bpath_new(this->desktop->getSketch(), nullptr);
-    sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(this->blue_bpath), this->blue_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
+    this->blue_bpath = new Inkscape::CanvasItemBpath(desktop->getCanvasSketch());
+    this->blue_bpath->set_stroke(this->blue_color);
+    this->blue_bpath->set_fill(0x0, SP_WIND_RULE_NONZERO);
 
     // Create blue curve
     this->blue_curve.reset(new SPCurve());
@@ -161,9 +158,7 @@ void FreehandBase::finish() {
     this->sel_changed_connection.disconnect();
     this->sel_modified_connection.disconnect();
 
-    if (this->grab) {
-        sp_canvas_item_ungrab(this->grab);
-    }
+    ungrabCanvasEvents();
 
     if (this->selection) {
         this->selection = nullptr;
@@ -763,24 +758,26 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
 {
     // Concat RBG
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+
     // Green
     auto c = std::make_unique<SPCurve>();
     std::swap(c, dc->green_curve);
-    for (auto i : dc->green_bpaths)
-        sp_canvas_item_destroy(i);
+    for (auto path : dc->green_bpaths) {
+        delete path;
+    }
     dc->green_bpaths.clear();
 
     // Blue
     c->append_continuous(*dc->blue_curve);
     dc->blue_curve->reset();
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->blue_bpath), nullptr);
+    dc->blue_bpath->set_bpath(nullptr);
 
     // Red
     if (dc->red_curve_is_valid) {
         c->append_continuous(*(dc->red_curve));
     }
     dc->red_curve->reset();
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->red_bpath), nullptr);
+    dc->red_bpath->set_bpath(nullptr);
 
     if (c->is_empty()) {
         return;
@@ -986,14 +983,14 @@ static void spdc_free_colors(FreehandBase *dc)
 {
     // Red
     if (dc->red_bpath) {
-        sp_canvas_item_destroy(SP_CANVAS_ITEM(dc->red_bpath));
+        delete dc->red_bpath;
         dc->red_bpath = nullptr;
     }
     dc->red_curve.reset();
 
     // Blue
     if (dc->blue_bpath) {
-        sp_canvas_item_destroy(SP_CANVAS_ITEM(dc->blue_bpath));
+        delete dc->blue_bpath;
         dc->blue_bpath = nullptr;
     }
     dc->blue_curve.reset();
@@ -1001,8 +998,9 @@ static void spdc_free_colors(FreehandBase *dc)
     // Overwrite start anchor curve
     dc->sa_overwrited.reset();
     // Green
-    for (auto i : dc->green_bpaths)
-        sp_canvas_item_destroy(i);
+    for (auto path : dc->green_bpaths) {
+        delete path;
+    }
     dc->green_bpaths.clear();
     dc->green_curve.reset();
     if (dc->green_anchor) {
@@ -1015,7 +1013,7 @@ static void spdc_free_colors(FreehandBase *dc)
         dc->white_item = nullptr;
     }
     dc->white_curves.clear();
-    for (auto i:dc->white_anchors)
+    for (auto i : dc->white_anchors)
         sp_draw_anchor_destroy(i);
     dc->white_anchors.clear();
 }

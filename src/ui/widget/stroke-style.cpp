@@ -460,11 +460,6 @@ void StrokeStyle::markerSelectCB(MarkerComboBox *marker_combo, StrokeStyle *spw,
     gchar const *combo_id = marker_combo->get_id();
     sp_repr_css_set_property(css, combo_id, marker);
 
-    // Also update the marker combobox, so the document's markers
-    // show up at the top of the combobox
-//    sp_stroke_style_line_update( SP_WIDGET(spw), desktop ? desktop->getSelection() : NULL);
-    //spw->updateMarkerHist(which);
-
     Inkscape::Selection *selection = spw->desktop->getSelection();
     auto itemlist= selection->items();
     for(auto i=itemlist.begin();i!=itemlist.end();++i){
@@ -488,31 +483,6 @@ void StrokeStyle::markerSelectCB(MarkerComboBox *marker_combo, StrokeStyle *spw,
 
     spw->update = false;
 };
-
-void StrokeStyle::updateMarkerHist(SPMarkerLoc const which)
-{
-    switch (which) {
-        case SP_MARKER_LOC_START:
-            startMarkerConn.block();
-            startMarkerCombo->set_active_history();
-            startMarkerConn.unblock();
-            break;
-
-        case SP_MARKER_LOC_MID:
-            midMarkerConn.block();
-            midMarkerCombo->set_active_history();
-            midMarkerConn.unblock();
-            break;
-
-        case SP_MARKER_LOC_END:
-            endMarkerConn.block();
-            endMarkerCombo->set_active_history();
-            endMarkerConn.unblock();
-            break;
-        default:
-            g_assert_not_reached();
-    }
-}
 
 /**
  * Callback for when UnitMenu widget is modified.
@@ -552,167 +522,6 @@ StrokeStyle::selectionChangedCB()
     updateLine();
 }
 
-/*
- * Fork marker if necessary and set the referencing items url to the new marker
- * Return the new marker
- */
-SPObject *
-StrokeStyle::forkMarker(SPObject *marker, int loc, SPItem *item)
-{
-    if (!item || !marker) {
-        return nullptr;
-    }
-
-    gchar const *marker_id = SPMarkerNames[loc].key;
-
-    /*
-     * Optimization when all the references to this marker are from this item
-     * then we can reuse it and don't need to fork
-     */
-    Glib::ustring urlId = Glib::ustring::format("url(#", marker->getRepr()->attribute("id"), ")");
-    unsigned int refs = 0;
-    for (int i = SP_MARKER_LOC_START; i < SP_MARKER_LOC_QTY; i++) {
-        if (item->style->marker_ptrs[i]->set &&
-            !strcmp(urlId.c_str(), item->style->marker_ptrs[i]->value())) {
-            refs++;
-        }
-    }
-    if (marker->hrefcount <= refs) {
-        return marker;
-    }
-
-    marker = sp_marker_fork_if_necessary(marker);
-
-    // Update the items url to new marker
-    Inkscape::XML::Node *mark_repr = marker->getRepr();
-    SPCSSAttr *css_item = sp_repr_css_attr_new();
-    sp_repr_css_set_property(css_item, marker_id, g_strconcat("url(#", mark_repr->attribute("id"), ")", NULL));
-    sp_repr_css_change_recursive(item->getRepr(), css_item, "style");
-
-    sp_repr_css_attr_unref(css_item);
-    css_item = nullptr;
-
-    return marker;
-}
-
-/**
- * Change the color of the marker to match the color of the item.
- * Marker stroke color is set to item stroke color.
- * Fill color :
- * 1. If the item has fill, use that for the marker fill,
- * 2. If the marker has same fill and stroke assume its solid, use item stroke for both fill and stroke the line stroke
- * 3. If the marker has fill color, use the marker fill color
- *
- */
-void
-StrokeStyle::setMarkerColor(SPObject *marker, int loc, SPItem *item)
-{
-
-    if (!item || !marker) {
-        return;
-    }
-
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    gboolean colorStock = prefs->getBool("/options/markers/colorStockMarkers", true);
-    gboolean colorCustom = prefs->getBool("/options/markers/colorCustomMarkers", false);
-    const gchar *stock = marker->getRepr()->attribute("inkscape:isstock");
-    gboolean isStock = (stock && !strcmp(stock,"true"));
-
-    if (isStock ? !colorStock : !colorCustom) {
-        return;
-    }
-
-    // Check if we need to fork this marker
-    marker = forkMarker(marker, loc, item);
-
-    Inkscape::XML::Node *repr = marker->getRepr()->firstChild();
-    if (!repr) {
-        return;
-    };
-
-    // Current line style
-    SPCSSAttr *css_item = sp_css_attr_from_object(item, SP_STYLE_FLAG_ALWAYS);
-    const char *lstroke = getItemColorForMarker(item, FOR_STROKE, loc);
-    const char *lstroke_opacity = sp_repr_css_property(css_item, "stroke-opacity", "1");
-    const char *lfill = getItemColorForMarker(item, FOR_FILL, loc);
-    const char *lfill_opacity = sp_repr_css_property(css_item, "fill-opacity", "1");
-
-    // Current marker style
-    SPCSSAttr *css_marker = sp_css_attr_from_object(marker->firstChild(), SP_STYLE_FLAG_ALWAYS);
-    const char *mfill = sp_repr_css_property(css_marker, "fill", "none");
-    const char *mstroke = sp_repr_css_property(css_marker, "fill", "none");
-
-    // Create new marker style with the lines stroke
-    SPCSSAttr *css = sp_repr_css_attr_new();
-
-    sp_repr_css_set_property(css, "stroke", lstroke);
-    sp_repr_css_set_property(css, "stroke-opacity", lstroke_opacity);
-
-    if (strcmp(lfill, "none") ) {
-        // 1. If the line has fill, use that for the marker fill
-        sp_repr_css_set_property(css, "fill", lfill);
-        sp_repr_css_set_property(css, "fill-opacity", lfill_opacity);
-    }
-    else if (mfill && mstroke && !strcmp(mfill, mstroke) && mfill[0] == '#' && strcmp(mfill, "#ffffff")) {
-        // 2. If the marker has same fill and stroke assume its solid. use line stroke for both fill and stroke the line stroke
-        sp_repr_css_set_property(css, "fill", lstroke);
-        sp_repr_css_set_property(css, "fill-opacity", lstroke_opacity);
-    }
-    else if (mfill && mfill[0] == '#' && strcmp(mfill, "#000000")) {
-        // 3. If the marker has fill color, use the marker fill color
-        sp_repr_css_set_property(css, "fill", mfill);
-        //sp_repr_css_set_property(css, "fill-opacity", mfill_opacity);
-    }
-
-    sp_repr_css_change_recursive(marker->firstChild()->getRepr(), css, "style");
-
-    // Tell the combos to update its image cache of this marker
-    gchar const *mid = marker->getRepr()->attribute("id");
-    startMarkerCombo->update_marker_image(mid);
-    midMarkerCombo->update_marker_image(mid);
-    endMarkerCombo->update_marker_image(mid);
-
-    sp_repr_css_attr_unref(css);
-    css = nullptr;
-
-
-}
-
-/*
- * Get the fill or stroke color of the item
- * If its a gradient, then return first or last stop color
- */
-const char *
-StrokeStyle::getItemColorForMarker(SPItem *item, Inkscape::PaintTarget fill_or_stroke, int loc)
-{
-    SPCSSAttr *css_item = sp_css_attr_from_object(item, SP_STYLE_FLAG_ALWAYS);
-    const char *color;
-    if (fill_or_stroke == FOR_FILL)
-        color = sp_repr_css_property(css_item, "fill", "none");
-    else
-        color = sp_repr_css_property(css_item, "stroke", "none");
-
-    if (!strncmp (color, "url(", 4)) {
-        // If the item has a gradient use the first stop color for the marker
-
-        SPGradient *grad = getGradient(item, fill_or_stroke);
-        if (grad) {
-            SPGradient *vector = grad->getVector(FALSE);
-            SPStop *stop = vector->getFirstStop();
-            if (loc == SP_MARKER_LOC_END) {
-                stop = sp_last_stop(vector);
-            }
-            if (stop) {
-                guint32 const c1 = stop->get_rgba32();
-                gchar c[64];
-                sp_svg_write_color(c, sizeof(c), c1);
-                color = g_strdup(c);
-                //lstroke_opacity = Glib::ustring::format(stop->opacity).c_str();
-            }
-        }
-    }
-    return color;
-}
 /**
  * Sets selector widgets' dash style from an SPStyle object.
  */
@@ -1239,9 +1048,6 @@ StrokeStyle::updateAllMarkers(std::vector<SPItem*> const &objects, bool skip_und
     // We show markers of the last object in the list only
     // FIXME: use the first in the list that has the marker of each type, if any
 
-    // -1 means prefs haven't been queried yet
-    int update = -1;
-
     for (auto const &markertype : keyloc) {
         // For all three marker types,
 
@@ -1268,23 +1074,6 @@ StrokeStyle::updateAllMarkers(std::vector<SPItem*> const &objects, bool skip_und
 
                 // Extract the name of the marker that the object uses
                 marker = getMarkerObj(value, object->document);
-
-                // Set the marker color
-                if (update < 0) {
-                    // query prefs (only once)
-                    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-                    update = prefs->getBool("/options/markers/colorUpdateMarkers", true) ? 1 : 0;
-                }
-
-                if (update > 0) {
-                    setMarkerColor(marker, markertype.loc, SP_ITEM(object));
-
-                    if (!skip_undo) {
-                        SPDocument *document = desktop->getDocument();
-                        DocumentUndo::maybeDone(document, "UaM", SP_VERB_DIALOG_FILL_STROKE,
-                                       _("Set marker color"));
-                    }
-                }
             }
         }
 

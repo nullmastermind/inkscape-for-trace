@@ -33,6 +33,9 @@ enum {
 };
 
 namespace Inkscape {
+
+class CanvasItemBpath;
+
 namespace UI {
 namespace Tools {
 
@@ -64,8 +67,7 @@ private:
     bool dropping;
     bool dragging;
 
-    SPCanvasItem* grabbed;
-    SPCanvasItem* area;
+    Inkscape::CanvasItemBpath* area;
     Geom::Point centre;
 };
 

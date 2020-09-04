@@ -12,6 +12,7 @@
 #include <gtest/gtest.h>
 #include <doc-per-case-test.h>
 #include <src/object/sp-factory.h>
+#include <src/object/sp-marker.h>
 #include <src/object/sp-rect.h>
 #include <src/object/sp-path.h>
 #include <src/object/sp-use.h>
@@ -637,4 +638,59 @@ TEST_F(ObjectSetTest, Moves) {
     set->rotate90(true);
     EXPECT_EQ(20,(*(x->documentVisualBounds()))[0].extent());
     set->deleteItems();
+}
+
+TEST_F(ObjectSetTest, toMarker) {
+    r1->x = 12;
+    r1->y = 34;
+    r1->width = 56;
+    r1->height = 78;
+    r1->set_shape();
+    r1->updateRepr();
+
+    r2->x = 6;
+    r2->y = 7;
+    r2->width = 8;
+    r2->height = 9;
+    r2->set_shape();
+    r2->updateRepr();
+
+    set->set(r1.get());
+    set->add(r2.get());
+    set->toMarker();
+
+    // original items got deleted
+    r1.release();
+    r2.release();
+
+    auto markers = _doc->getObjectsByElement("marker");
+    ASSERT_EQ(markers.size(), 1);
+
+    auto marker = dynamic_cast<SPMarker *>(markers[0]);
+    ASSERT_NE(marker, nullptr);
+
+    EXPECT_FLOAT_EQ(marker->refX.computed, 31);
+    EXPECT_FLOAT_EQ(marker->refY.computed, 52.5);
+    EXPECT_FLOAT_EQ(marker->markerWidth.computed, 62);
+    EXPECT_FLOAT_EQ(marker->markerHeight.computed, 105);
+
+    auto markerchildren = marker->childList(false);
+    ASSERT_EQ(markerchildren.size(), 2);
+
+    // TODO order swapped !!! 1.0.x Regression
+    auto *markerrect1 = dynamic_cast<SPRect *>(markerchildren[1]);
+    auto *markerrect2 = dynamic_cast<SPRect *>(markerchildren[0]);
+
+    ASSERT_NE(markerrect1, nullptr);
+    ASSERT_NE(markerrect2, nullptr);
+
+    EXPECT_FLOAT_EQ(markerrect1->x.value, 6);
+    EXPECT_FLOAT_EQ(markerrect1->y.value, 27);
+    EXPECT_FLOAT_EQ(markerrect1->width.value, 56);
+    EXPECT_FLOAT_EQ(markerrect1->height.value, 78);
+
+    EXPECT_FLOAT_EQ(markerrect2->x.value, 0);
+    EXPECT_FLOAT_EQ(markerrect2->y.value, 0);
+    EXPECT_FLOAT_EQ(markerrect2->width.value, 8);
+    EXPECT_FLOAT_EQ(markerrect2->height.value, 9);
 }

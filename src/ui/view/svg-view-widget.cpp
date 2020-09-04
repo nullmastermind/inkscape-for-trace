@@ -27,9 +27,10 @@
 
 #include "2geom/transforms.h"
 
-#include "display/sp-canvas-group.h"
-#include "display/sp-canvas-item.h"
-#include "display/canvas-arena.h"
+#include "display/drawing.h"
+#include "display/control/canvas-item.h"
+#include "display/control/canvas-item-drawing.h"
+#include "display/control/canvas-item-group.h"
 
 #include "object/sp-item.h"
 #include "object/sp-root.h"
@@ -43,18 +44,17 @@ namespace UI {
 namespace View {
 
 /**
- * Callback connected with arena_event.
+ * Callback connected with drawing_event.
  */
 // This hasn't worked since at least 0.48. It should result in a cursor change over <a></a> links.
 // There should be a better way of doing this. See note in canvas-arena.cpp.
-static gint arena_handler(SPCanvasArena */*arena*/, Inkscape::DrawingItem *ai,
-                          GdkEvent *event, SVGViewWidget *svgview)
+static bool _drawing_handler(GdkEvent *event, Inkscape::DrawingItem *drawing_item, SVGViewWidget *svgview)
 {
     static gdouble x, y;
     static gboolean active = FALSE;
     SPEvent spev;
 
-    SPItem *spitem = (ai) ? ai->getItem() : nullptr;
+    SPItem *spitem = (drawing_item) ? drawing_item->getItem() : nullptr;
 
     switch (event->type) {
         case GDK_BUTTON_PRESS:
@@ -100,7 +100,7 @@ static gint arena_handler(SPCanvasArena */*arena*/, Inkscape::DrawingItem *ai,
             break;
     }
 
-    return TRUE;
+    return true;
 }
 
 
@@ -110,29 +110,18 @@ static gint arena_handler(SPCanvasArena */*arena*/, Inkscape::DrawingItem *ai,
  * too useful.
  */
 SVGViewWidget::SVGViewWidget(SPDocument* document)
-    : _document(nullptr)
-    , _dkey(0)
-    , _parent(nullptr)
-    , _drawing(nullptr)
-    , _hscale(1.0)
-    , _vscale(1.0)
-    , _rescale(false)
-    , _keepaspect(false)
-    , _width(0.0)
-    , _height(0.0)
 {
     _canvas = Gtk::manage(new Inkscape::UI::Widget::Canvas());
+    add(*_canvas);
 
-    SPCanvasItem* item =
-        sp_canvas_item_new(_canvas->get_canvas_item_root(), SP_TYPE_CANVAS_GROUP, nullptr);
-    _parent = SP_CANVAS_GROUP(item);
-
-    _drawing = sp_canvas_item_new (_parent, SP_TYPE_CANVAS_ARENA, nullptr);
-    g_signal_connect (G_OBJECT (_drawing), "arena_event", G_CALLBACK (arena_handler), this);
+    _parent = new Inkscape::CanvasItemGroup(_canvas->get_canvas_item_root());
+    _drawing = new Inkscape::CanvasItemDrawing(_parent);
+    _canvas->set_drawing(_drawing->get_drawing());
+    _drawing->connect_drawing_event(sigc::bind(sigc::ptr_fun(_drawing_handler), this));
 
     setDocument(document);
 
-    signal_size_allocate().connect(sigc::mem_fun(*this, &SVGViewWidget::size_allocate));
+    show_all();
 }
 
 SVGViewWidget::~SVGViewWidget()
@@ -154,13 +143,13 @@ SVGViewWidget::setDocument(SPDocument* document)
     if (document) {
         _document = document;
 
-        Inkscape::DrawingItem *ai = document->getRoot()->invoke_show(
-                SP_CANVAS_ARENA (_drawing)->drawing,
-                _dkey,
-                SP_ITEM_SHOW_DISPLAY);
+        Inkscape::DrawingItem *drawing_item = document->getRoot()->invoke_show(
+            *(_drawing->get_drawing()),
+            _dkey,
+            SP_ITEM_SHOW_DISPLAY);
 
-        if (ai) {
-            SP_CANVAS_ARENA (_drawing)->drawing.root()->prependChild(ai);
+        if (drawing_item) {
+            _drawing->get_drawing()->root()->prependChild(drawing_item);
         }
 
         doRescale ();
@@ -176,22 +165,30 @@ SVGViewWidget::setResize(int width, int height)
 }
 
 void
-SVGViewWidget::size_allocate(Gtk::Allocation& allocation)
+SVGViewWidget::on_size_allocate(Gtk::Allocation& allocation)
 {
-    double width  = allocation.get_width();
-    double height = allocation.get_height();
+    if (!(_allocation == allocation)) {
+        _allocation = allocation;
 
-    if (width < 0.0 || height < 0.0) {
-        std::cerr << "SVGViewWidget::size_allocate: negative dimensions!" << std::endl;
-        return;
+        double width  = allocation.get_width();
+        double height = allocation.get_height();
+
+        if (width < 0.0 || height < 0.0) {
+            std::cerr << "SVGViewWidget::size_allocate: negative dimensions!" << std::endl;
+            Gtk::ScrolledWindow::on_size_allocate(allocation);
+            return;
+        }
+
+        _rescale = true;
+        _keepaspect = true;
+        _width = width;
+        _height = height;
+
+        _canvas->redraw_all(); // Must redraw everything!
+        doRescale ();
     }
 
-    _rescale = true;
-    _keepaspect = true;
-    _width = width;
-    _height = height;
-
-    doRescale ();
+    Gtk::ScrolledWindow::on_size_allocate(allocation);
 }
 
 void
@@ -229,7 +226,8 @@ SVGViewWidget::doRescale()
     }
 
     if (_drawing) {
-        sp_canvas_item_affine_absolute (_drawing, Geom::Scale(_hscale, _vscale) * Geom::Translate(x_offset, y_offset));
+        _canvas->set_affine(Geom::Scale(_hscale, _vscale) * Geom::Translate(x_offset, y_offset));
+        _canvas->request_update();
     }
 }
 

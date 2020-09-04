@@ -31,8 +31,6 @@
 #include "selection.h"
 #include "verbs.h"
 
-#include "display/sp-canvas-item.h"
-
 #include "include/macros.h"
 
 #include "object/box3d-side.h"
@@ -70,7 +68,7 @@ Box3dTool::Box3dTool()
 }
 
 void Box3dTool::finish() {
-    sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
+    ungrabCanvasEvents();
     this->finishItem();
     this->sel_changed_connection.disconnect();
 
@@ -233,12 +231,7 @@ bool Box3dTool::root_handler(GdkEvent* event) {
             this->drag_ptC_proj.normalize();
             this->drag_ptC_proj[Proj::Z] = 0.25;
 
-            sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
-                                ( GDK_KEY_PRESS_MASK |
-                                  GDK_BUTTON_RELEASE_MASK       |
-                                  GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK       |
-                                  GDK_BUTTON_PRESS_MASK ),
-                                nullptr, event->button.time);
+            grabCanvasEvents();
             ret = TRUE;
         }
         break;
@@ -337,7 +330,7 @@ bool Box3dTool::root_handler(GdkEvent* event) {
 
             this->item_to_select = nullptr;
             ret = TRUE;
-            sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
+            ungrabCanvasEvents();
         }
         break;
 
@@ -450,7 +443,7 @@ bool Box3dTool::root_handler(GdkEvent* event) {
 
         case GDK_KEY_space:
             if (dragging) {
-                sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
+                ungrabCanvasEvents();
                 dragging = false;
                 sp_event_context_discard_delayed_snap_event(this);
                 if (!this->within_tolerance) {

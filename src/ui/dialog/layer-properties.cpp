@@ -229,6 +229,8 @@ LayerPropertiesDialog::_setup_layers_controls() {
     _scroller.set_valign(Gtk::ALIGN_FILL);
     _scroller.set_hexpand();
     _scroller.set_vexpand();
+    _scroller.set_propagate_natural_width(true);
+    _scroller.set_propagate_natural_height(true);
     _layout_table.attach(_scroller, 0, 1, 2, 1);
 
     show_all_children();

@@ -41,8 +41,8 @@ enum {
 
 class SPNamedView : public SPObjectGroup {
 public:
-	SPNamedView();
-	~SPNamedView() override;
+    SPNamedView();
+    ~SPNamedView() override;
 
     unsigned int editable : 1;
     unsigned int showguides : 1;

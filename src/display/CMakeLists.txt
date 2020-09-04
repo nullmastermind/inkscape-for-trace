@@ -2,15 +2,6 @@
 
 set(display_SRC
 	cairo-utils.cpp
-	canvas-arena.cpp
-	canvas-axonomgrid.cpp
-	canvas-bpath.cpp
-	canvas-debug.cpp
-	canvas-grid.cpp
-	canvas-rotate.cpp
-	canvas-temporary-item-list.cpp
-	canvas-temporary-item.cpp
-	canvas-text.cpp
 	curve.cpp
 	drawing-context.cpp
 	drawing-group.cpp
@@ -21,9 +12,7 @@ set(display_SRC
 	drawing-surface.cpp
 	drawing-text.cpp
 	drawing.cpp
-	gnome-canvas-acetate.cpp
 	grayscale.cpp
-	guideline.cpp
 	nr-3dutils.cpp
 	nr-filter-blend.cpp
 	nr-filter-colormatrix.cpp
@@ -49,30 +38,31 @@ set(display_SRC
 	nr-light.cpp
 	nr-style.cpp
 	nr-svgfonts.cpp
-	snap-indicator.cpp
-	sodipodi-ctrl.cpp
-	sodipodi-ctrlrect.cpp
-	sp-canvas-util.cpp
-        sp-canvas-group.cpp
-        sp-canvas-item.cpp
-	sp-ctrlcurve.cpp
-	sp-ctrlline.cpp
-	sp-ctrlquadr.cpp
 
+	control/canvas-axonomgrid.cpp
+	control/canvas-grid.cpp
+	control/canvas-temporary-item-list.cpp
+	control/canvas-temporary-item.cpp
+	control/snap-indicator.cpp
+
+        control/canvas-item.cpp
+        control/canvas-item-bpath.cpp
+        control/canvas-item-catchall.cpp
+        control/canvas-item-ctrl.cpp
+        control/canvas-item-curve.cpp
+        control/canvas-item-drawing.cpp
+        control/canvas-item-grid.cpp
+        control/canvas-item-group.cpp
+        control/canvas-item-guideline.cpp
+        control/canvas-item-quad.cpp
+        control/canvas-item-rect.cpp
+        control/canvas-item-rotate.cpp
+        control/canvas-item-text.cpp
 
 	# -------
 	# Headers
 	cairo-templates.h
 	cairo-utils.h
-	canvas-arena.h
-	canvas-axonomgrid.h
-	canvas-bpath.h
-	canvas-debug.h
-	canvas-grid.h
-	canvas-rotate.h
-	canvas-temporary-item-list.h
-	canvas-temporary-item.h
-	canvas-text.h
 	curve.h
 	drawing-context.h
 	drawing-group.h
@@ -83,9 +73,7 @@ set(display_SRC
 	drawing-surface.h
 	drawing-text.h
 	drawing.h
-	gnome-canvas-acetate.h
 	grayscale.h
-	guideline.h
 	nr-3dutils.h
 	nr-filter-blend.h
 	nr-filter-colormatrix.h
@@ -115,15 +103,28 @@ set(display_SRC
 	nr-style.h
 	nr-svgfonts.h
 	rendermode.h
-	snap-indicator.h
-	sodipodi-ctrl.h
-	sodipodi-ctrlrect.h
-	sp-canvas-group.h
-	sp-canvas-item.h
-	sp-canvas-util.h
-	sp-ctrlcurve.h
-	sp-ctrlline.h
-	sp-ctrlquadr.h
+
+	control/canvas-axonomgrid.h
+	control/canvas-grid.h
+	control/canvas-temporary-item-list.h
+	control/canvas-temporary-item.h
+	control/snap-indicator.h
+
+        control/canvas-item.h
+        control/canvas-item-bpath.h
+        control/canvas-item-buffer.h
+        control/canvas-item-catchall.h
+        control/canvas-item-ctrl.h
+        control/canvas-item-curve.h
+        control/canvas-item-drawing.h
+        control/canvas-item-enums.h
+        control/canvas-item-grid.h
+        control/canvas-item-group.h
+        control/canvas-item-guideline.h
+        control/canvas-item-quad.h
+        control/canvas-item-rect.h
+        control/canvas-item-rotate.h
+        control/canvas-item-text.h
 )
 
 # add_inkscape_lib(display_LIB "${display_SRC}")

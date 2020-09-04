@@ -22,11 +22,13 @@
 
 #include <memory>
 
-struct SPCanvasItem;
 class SPCurve;
+class SPCanvasItem;
+
 struct SPDrawAnchor;
 
 namespace Inkscape {
+    class CanvasItemBpath;
     class Selection;
 }
 
@@ -51,7 +53,6 @@ public:
     ~FreehandBase() override;
 
     Inkscape::Selection *selection;
-    SPCanvasItem *grab;
 
     bool attach;
 
@@ -61,16 +62,16 @@ public:
     guint32 highlight_color;
 
     // Red - Last segement as it's drawn.
-    SPCanvasItem *red_bpath;
+    Inkscape::CanvasItemBpath *red_bpath;
     std::unique_ptr<SPCurve> red_curve;
     boost::optional<Geom::Point> red_curve_get_last_point();
 
     // Blue - New path after LPE as it's drawn.
-    SPCanvasItem *blue_bpath;
+    Inkscape::CanvasItemBpath *blue_bpath;
     std::unique_ptr<SPCurve> blue_curve;
 
     // Green - New path as it's drawn.
-    std::vector<SPCanvasItem*> green_bpaths;
+    std::vector<Inkscape::CanvasItemBpath *> green_bpaths;
     std::unique_ptr<SPCurve> green_curve;
     SPDrawAnchor *green_anchor;
     gboolean green_closed; // a flag meaning we hit the green anchor, so close the path on itself

@@ -160,7 +160,7 @@ public:
     // a slave button is only sensitive when the master button is active
     // i.e. a slave button is greyed-out when the master button is not checked
 
-    void setSlaveWidgets(std::list<Gtk::Widget*> btns) {
+    void setSlaveWidgets(std::list<Gtk::Widget*> const &btns) {
         _slavewidgets = btns;
     }
 
@@ -185,7 +185,7 @@ public:
     // a slave button is only sensitive when the master button is active
     // i.e. a slave button is greyed-out when the master button is not checked
 
-    void setSlaveWidgets(std::list<Gtk::Widget*> btns) {
+    void setSlaveWidgets(std::list<Gtk::Widget*> const &btns) {
         _slavewidgets = btns;
     }
 

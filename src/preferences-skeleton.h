@@ -229,7 +229,6 @@ R"=====(
     <group id="aboutextensions" />
     <group id="treeeditor" />
     <group id="layers" maxDepth="20" w="200" h="300" />
-    <group id="extensioneditor" />
     <group id="trace" state="1" />
     <group id="script" />
     <group id="input" />
@@ -279,7 +278,6 @@ R"=====(
     <group id="keyscroll" value="15"/>
     <group id="wheelscroll" value="40"/>
     <group id="spacebarpans" value="1"/>
-    <group id="wheelzooms" value="0"/>
     <group id="transientpolicy" value="1"/>
     <group id="scrollingacceleration" value="0.4"/>
     <group id="snapdelay" value="0"/>

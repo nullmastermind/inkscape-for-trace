@@ -437,7 +437,7 @@ std::string Extension::get_dependency_location(const char *name)
 }
 
 /** recursively searches directory for a file named filename; returns true if found */
-static bool _find_filename_recursive(std::string directory, std::string filename) {
+static bool _find_filename_recursive(std::string directory, std::string const &filename) {
     Glib::Dir dir(directory);
 
     std::string name = dir.read_name();

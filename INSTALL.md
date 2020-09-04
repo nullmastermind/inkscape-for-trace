@@ -1,6 +1,22 @@
 Installation
 ============
 
+Required Dependencies
+---------------------
+
+The Inkscape core depends on several other libraries that you will need
+install, if they are not already present on your system. The most
+typical libraries you may need to install are: 
+[Boehm-GC](http://www.hboehm.info/gc/), 
+[libsigc++](https://github.com/libsigcplusplus/libsigcplusplus), 
+[gtkmm](https://www.gtkmm.org/).
+
+Please see [the wiki page on compiling Inkscape](http://wiki.inkscape.org/wiki/index.php/CompilingInkscape) for the
+most current dependencies, including links to the source tarballs. 
+For common linux-distributions (Ubuntu, Debian, Fedora) you can use 
+[a bash-script](https://gitlab.com/inkscape/inkscape-ci-docker/-/raw/master/install_dependencies.sh?inline=false) 
+for getting required libaries.
+
 Basic Installation
 ------------------
 
@@ -33,23 +49,6 @@ Running Without Installing
 
 For developers and others who want to run Inkscape without installing it please
 see the ***Building*** section in the `CONTRIBUTING.md` file.
-
-Required Dependencies
----------------------
-
-The Inkscape core depends on several other libraries that you will need
-install, if they are not already present on your system. The most
-typical libraries you may need to install are: 
-[Boehm-GC](http://www.hboehm.info/gc/), 
-[libsigc++](https://github.com/libsigcplusplus/libsigcplusplus), 
-[gtkmm](https://www.gtkmm.org/).
-
-Please see [the wiki page on compiling Inkscape](http://wiki.inkscape.org/wiki/index.php/CompilingInkscape) for the
-most current dependencies, including links to the source tarballs. 
-For common linux-distributions (Ubuntu, Debian, Fedora) you can use 
-[a bash-script](https://gitlab.com/inkscape/inkscape-ci-docker/-/raw/master/install_dependencies.sh?inline=false) 
-for getting required libaries.
-
 
 Extensions
 ----------

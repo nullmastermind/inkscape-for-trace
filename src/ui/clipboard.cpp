@@ -523,8 +523,9 @@ bool ClipboardManagerImpl::pasteSize(ObjectSet *set, bool separately, bool apply
     bool pasted = false;
     if (clipnode) {
         Geom::Point min, max;
-        sp_repr_get_point(clipnode, "min", &min);
-        sp_repr_get_point(clipnode, "max", &max);
+        bool visual_bbox = !Inkscape::Preferences::get()->getInt("/tools/bounding_box");
+        sp_repr_get_point(clipnode, (visual_bbox ? "min" : "geom-min"), &min);
+        sp_repr_get_point(clipnode, (visual_bbox ? "max" : "geom-max"), &max);
 
         // resize each object in the selection
         if (separately) {
@@ -532,7 +533,7 @@ bool ClipboardManagerImpl::pasteSize(ObjectSet *set, bool separately, bool apply
             for(auto i=itemlist.begin();i!=itemlist.end();++i){
                 SPItem *item = *i;
                 if (item) {
-                    Geom::OptRect obj_size = item->desktopVisualBounds();
+                    Geom::OptRect obj_size = item->desktopPreferredBounds();
                     if ( obj_size ) {
                         item->scale_rel(_getScale(set->desktop(), min, max, *obj_size, apply_x, apply_y));
                     }
@@ -543,7 +544,7 @@ bool ClipboardManagerImpl::pasteSize(ObjectSet *set, bool separately, bool apply
         }
         // resize the selection as a whole
         else {
-            Geom::OptRect sel_size = set->visualBounds();
+            Geom::OptRect sel_size = set->preferredBounds();
             if ( sel_size ) {
                 set->setScaleRelative(sel_size->midpoint(),
                                              _getScale(set->desktop(), min, max, *sel_size, apply_x, apply_y));
@@ -784,9 +785,8 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
             if( use && use->get_original() && use->get_original()->parent) {
                 if (selection->includes(use->get_original())){ //we are copying something whose parent is also copied (!)
                     obj_copy->setAttribute("transform", sp_svg_transform_write( ((SPItem*)(use->get_original()->parent))->i2doc_affine().inverse() * transform));
-                } else { // original is not copied
-                    obj_copy->setAttribute("transform-with-parent", sp_svg_transform_write(transform));
-                    obj_copy->setAttribute("transform", sp_svg_transform_write( ((SPItem*)(use->get_original()->parent))->i2doc_affine().inverse() * transform));
+                } else { // original is not copied; make transform relative to the document
+                    obj_copy->setAttribute("transform", sp_svg_transform_write(transform));
                 }
             } else
                 obj_copy->setAttribute("transform", sp_svg_transform_write(transform));
@@ -811,12 +811,14 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
         }
     }
 
-    Geom::OptRect size = selection->visualBounds();
-    if (size) {
+    if (Geom::OptRect size = selection->visualBounds()) {
         sp_repr_set_point(_clipnode, "min", size->min());
         sp_repr_set_point(_clipnode, "max", size->max());
     }
-
+    if (Geom::OptRect geom_size = selection->geometricBounds()) {
+        sp_repr_set_point(_clipnode, "geom-min", geom_size->min());
+        sp_repr_set_point(_clipnode, "geom-max", geom_size->max());
+    }
 }
 
 

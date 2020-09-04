@@ -44,7 +44,7 @@ SPGenericEllipse::SPGenericEllipse()
     , start(0)
     , end(SP_2PI)
     , type(SP_GENERIC_ELLIPSE_UNDEFINED)
-    , arc_type(SP_GENERIC_ELLIPSE_ARC_TYPE_ARC)
+    , arc_type(SP_GENERIC_ELLIPSE_ARC_TYPE_SLICE)
 {
 }
 
@@ -455,7 +455,7 @@ void SPGenericEllipse::set_shape()
         pb.lineTo(Geom::Point(0, 0));
     }
 
-    if ( !(this->arc_type == SP_GENERIC_ELLIPSE_ARC_TYPE_ARC) ) {
+    if ((this->arc_type != SP_GENERIC_ELLIPSE_ARC_TYPE_ARC) || (this->type != SP_GENERIC_ELLIPSE_ARC)) {
         pb.closePath();
     } else {
         pb.flush();

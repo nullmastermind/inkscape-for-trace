@@ -31,12 +31,12 @@
 #include "object/sp-namedview.h"
 #include "object/sp-pattern.h"
 
+#include "display/control/canvas-item-ctrl.h"
 
-int KnotHolderEntity::counter = 0;
-
-void KnotHolderEntity::create(SPDesktop *desktop, SPItem *item, KnotHolder *parent, Inkscape::ControlType type,
-                              const gchar *tip,
-                              SPKnotShapeType shape, SPKnotModeType mode, guint32 color)
+void KnotHolderEntity::create(SPDesktop *desktop, SPItem *item, KnotHolder *parent,
+                              Inkscape::CanvasItemCtrlType type,
+                              Glib::ustring const & name,
+                              const gchar *tip, guint32 color)
 {
     if (!desktop) {
         desktop = parent->getDesktop();
@@ -44,25 +44,17 @@ void KnotHolderEntity::create(SPDesktop *desktop, SPItem *item, KnotHolder *pare
 
     g_assert(item == parent->getItem());
     g_assert(desktop && desktop == parent->getDesktop());
-
     g_assert(knot == nullptr);
-    knot = new SPKnot(desktop, tip);
 
-    this->parent_holder = parent;
+    parent_holder = parent;
     this->item = item; // TODO: remove the item either from here or from knotholder.cpp
     this->desktop = desktop;
 
     my_counter = KnotHolderEntity::counter++;
 
-    g_object_set(G_OBJECT(knot->item), "shape", shape, NULL);
-    g_object_set(G_OBJECT(knot->item), "mode", mode, NULL);
-
-    // TODO base more appearance from this type instead of passing in arbitrary values.
-    knot->item->ctrlType = type;
-
+    knot = new SPKnot(desktop, tip, type, name);
     knot->fill [SP_KNOT_STATE_NORMAL] = color;
-    g_object_set (G_OBJECT(knot->item), "fill_color", color, NULL);
-
+    knot->ctrl->set_fill(color);
     update_knot();
     knot->show();
 
@@ -71,8 +63,7 @@ void KnotHolderEntity::create(SPDesktop *desktop, SPItem *item, KnotHolder *pare
     _click_connection = knot->click_signal.connect(sigc::mem_fun(*parent_holder, &KnotHolder::knot_clicked_handler));
     _ungrabbed_connection = knot->ungrabbed_signal.connect(sigc::mem_fun(*parent_holder, &KnotHolder::knot_ungrabbed_handler));
 }
-
-
+                              
 KnotHolderEntity::~KnotHolderEntity()
 {
     _mousedown_connection.disconnect();
@@ -117,6 +108,8 @@ KnotHolderEntity::snap_knot_position(Geom::Point const &p, guint state)
     Geom::Affine const i2dt (parent_holder->getEditTransform() * item->i2dt_affine());
     Geom::Point s = p * i2dt;
 
+    if (!desktop) std::cout << "No desktop" << std::endl;
+    if (!desktop->namedview) std::cout << "No named view" << std::endl;
     SnapManager &m = desktop->namedview->snap_manager;
     m.setup(desktop, true, item);
     m.freeSnapReturnByRef(s, Inkscape::SNAPSOURCE_NODE_HANDLE);

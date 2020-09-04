@@ -36,7 +36,7 @@
 #include "snap.h"
 #include "verbs.h"
 
-#include "display/sp-ctrlcurve.h"
+#include "display/control/canvas-item-curve.h"
 #include "display/curve.h"
 
 #include "object/sp-defs.h"
@@ -48,7 +48,7 @@
 #include "ui/pixmaps/cursor-gradient.xpm"
 #include "ui/pixmaps/cursor-gradient-add.xpm"
 
-#include "ui/control-manager.h"
+
 #include "ui/tools/mesh-tool.h"
 
 
@@ -235,31 +235,23 @@ sp_mesh_context_select_prev (ToolBase *event_context)
 }
 
 /**
-Returns vector of control lines mouse is over. Returns only first if 'first' is true.
-*/
-static std::vector<SPCtrlCurve *>
-sp_mesh_context_over_line (MeshTool *rc, Geom::Point event_p, bool first = true)
+ * Returns vector of control curves mouse is over. Returns only first if 'first' is true.
+ * event_p is in canvas (world) units.
+ */
+static std::vector<CanvasItemCurve *>
+sp_mesh_context_over_curve (MeshTool *rc, Geom::Point event_p, bool first = true)
 {
     const SPDesktop *desktop = rc->getDesktop();
 
-    //Translate mouse point into proper coord system
+    //Translate mouse point into proper coord system: needed later.
     rc->mousepoint_doc = desktop->w2d(event_p);
 
+    std::vector<CanvasItemCurve *> selected;
+
     GrDrag *drag = rc->_grdrag;
-
-    std::vector<SPCtrlCurve *> selected;
-
-    for (std::vector<SPCtrlLine *>::const_iterator l = drag->lines.begin(); l != drag->lines.end(); ++l) {
-        if (!SP_IS_CTRLCURVE(*l)) continue;
-
-        SPCtrlCurve *curve = SP_CTRLCURVE(*l);
-        Geom::BezierCurveN<3> b( curve->p0, curve->p1, curve->p2, curve->p3 );
-        Geom::Coord coord = b.nearestTime( rc->mousepoint_doc ); // Coord == double
-        Geom::Point nearest = b( coord );
-
-        double dist_screen = Geom::L2 (rc->mousepoint_doc - nearest) * desktop->current_zoom();
-        if (dist_screen < rc->tolerance) {
-            selected.push_back(curve);
+    for (auto curve : drag->item_curves) {
+        if (curve->contains(event_p, rc->tolerance)) {
+            selected.push_back(&*curve);
             if (first) {
                 break;
             }
@@ -274,7 +266,6 @@ Split row/column near the mouse point.
 */
 static void sp_mesh_context_split_near_point(MeshTool *rc, SPItem *item,  Geom::Point mouse_p, guint32 /*etime*/)
 {
-
 #ifdef DEBUG_MESH
     std::cout << "sp_mesh_context_split_near_point: entrance: " << mouse_p << std::endl;
 #endif
@@ -513,11 +504,11 @@ bool MeshTool::root_handler(GdkEvent* event) {
 
         if ( event->button.button == 1 ) {
 
-            // Are we over a mesh line?
-            std::vector<SPCtrlCurve *> over_line =
-                sp_mesh_context_over_line(this, Geom::Point(event->motion.x, event->motion.y));
+            // Are we over a mesh line? (Should replace by CanvasItem event.)
+            std::vector<CanvasItemCurve *> over_curve =
+                sp_mesh_context_over_curve(this, Geom::Point(event->motion.x, event->motion.y));
 
-            if (!over_line.empty()) {
+            if (!over_curve.empty()) {
                 // We take the first item in selection, because with doubleclick, the first click
                 // always resets selection to the single object under cursor
                 sp_mesh_context_split_near_point(this, selection->items().front(), this->mousepoint_doc, event->button.time);
@@ -559,17 +550,17 @@ bool MeshTool::root_handler(GdkEvent* event) {
         //  Else set origin for drag which will create a new gradient.
          if ( event->button.button == 1 && !this->space_panning ) {
 
-            // Are we over a mesh line?
-            std::vector<SPCtrlCurve *> over_line =
-                sp_mesh_context_over_line(this, Geom::Point(event->motion.x, event->motion.y), false);
+            // Are we over a mesh curve?
+            std::vector<CanvasItemCurve *> over_curve =
+                sp_mesh_context_over_curve(this, Geom::Point(event->motion.x, event->motion.y), false);
 
-            if (!over_line.empty()) {
-                for (auto it : over_line) {
-                    SPItem *item = it->item;
+            if (!over_curve.empty()) {
+                for (auto it : over_curve) {
+                    SPItem *item = it->get_item();
                     Inkscape::PaintTarget fill_or_stroke =
-                        it->is_fill ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE;
-                    GrDragger* dragger0 = drag->getDraggerFor(item, POINT_MG_CORNER, it->corner0, fill_or_stroke);
-                    GrDragger* dragger1 = drag->getDraggerFor(item, POINT_MG_CORNER, it->corner1, fill_or_stroke);
+                        it->get_is_fill() ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE;
+                    GrDragger* dragger0 = drag->getDraggerFor(item, POINT_MG_CORNER, it->get_corner0(), fill_or_stroke);
+                    GrDragger* dragger1 = drag->getDraggerFor(item, POINT_MG_CORNER, it->get_corner1(), fill_or_stroke);
                     bool add    = (event->button.state & GDK_SHIFT_MASK);
                     bool toggle = (event->button.state & GDK_CONTROL_MASK);
                     if ( !add && !toggle ) {
@@ -686,14 +677,14 @@ bool MeshTool::root_handler(GdkEvent* event) {
             }
 
             // Change cursor shape if over line
-            std::vector<SPCtrlCurve *> over_line =
-                sp_mesh_context_over_line(this, Geom::Point(event->motion.x, event->motion.y));
+            std::vector<CanvasItemCurve *> over_curve =
+                sp_mesh_context_over_curve(this, Geom::Point(event->motion.x, event->motion.y));
 
-            if (this->cursor_addnode && over_line.empty()) {
+            if (this->cursor_addnode && over_curve.empty()) {
                 this->cursor_shape = cursor_gradient_xpm;
                 this->sp_event_context_update_cursor();
                 this->cursor_addnode = false;
-            } else if (!this->cursor_addnode && !over_line.empty()) {
+            } else if (!this->cursor_addnode && !over_curve.empty()) {
                 this->cursor_shape = cursor_gradient_add_xpm;
                 this->sp_event_context_update_cursor();
                 this->cursor_addnode = true;
@@ -712,12 +703,12 @@ bool MeshTool::root_handler(GdkEvent* event) {
         if ( event->button.button == 1 && !this->space_panning ) {
 
             // Check if over line
-            std::vector<SPCtrlCurve *> over_line =
-                sp_mesh_context_over_line(this, Geom::Point(event->motion.x, event->motion.y));
+            std::vector<CanvasItemCurve *> over_curve =
+                sp_mesh_context_over_curve(this, Geom::Point(event->motion.x, event->motion.y));
 
             if ( (event->button.state & GDK_CONTROL_MASK) && (event->button.state & GDK_MOD1_MASK ) ) {
-                if (!over_line.empty()) {
-                    sp_mesh_context_split_near_point(this, over_line[0]->item,
+                if (!over_curve.empty()) {
+                    sp_mesh_context_split_near_point(this, over_curve[0]->get_item(),
                                                      this->mousepoint_doc, 0);
                     ret = TRUE;
                 }
@@ -768,7 +759,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
                     }
 
                 } else if (this->item_to_select) {
-                    if (!over_line.empty()) {
+                    if (!over_curve.empty()) {
                         // Clicked on an existing mesh line, don't change selection. This stops
                         // possible change in selection during a double click with overlapping objects
                     } else {
@@ -781,7 +772,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
                         }
                     }
                 } else {
-                    if (!over_line.empty()) {
+                    if (!over_curve.empty()) {
                         // Clicked on an existing mesh line, don't change selection. This stops
                         // possible change in selection during a double click with overlapping objects
                     } else {

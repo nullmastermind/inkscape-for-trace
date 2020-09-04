@@ -30,8 +30,6 @@
 #include "snap.h"
 #include "verbs.h"
 
-#include "display/sp-canvas-item.h"
-
 #include "include/macros.h"
 
 #include "object/sp-ellipse.h"
@@ -66,7 +64,7 @@ ArcTool::ArcTool()
 }
 
 void ArcTool::finish() {
-    sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
+    ungrabCanvasEvents();
     this->finishItem();
     this->sel_changed_connection.disconnect();
 
@@ -160,10 +158,8 @@ bool ArcTool::root_handler(GdkEvent* event) {
                 m.setup(desktop);
                 m.freeSnapReturnByRef(this->center, Inkscape::SNAPSOURCE_NODE_HANDLE);
 
-                sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
-                                    GDK_KEY_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-                                    GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK,
-                                    nullptr, event->button.time);
+                grabCanvasEvents();
+
                 handled = true;
                 m.unSetup();
             }
@@ -224,7 +220,7 @@ bool ArcTool::root_handler(GdkEvent* event) {
                 this->item_to_select = nullptr;
                 handled = true;
             }
-            sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
+            ungrabCanvasEvents();
             break;
 
         case GDK_KEY_PRESS:
@@ -265,7 +261,7 @@ bool ArcTool::root_handler(GdkEvent* event) {
 
                 case GDK_KEY_space:
                     if (dragging) {
-                        sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
+                        ungrabCanvasEvents();
                         dragging = false;
                         sp_event_context_discard_delayed_snap_event(this);
 
@@ -453,7 +449,7 @@ void ArcTool::finishItem() {
 
 void ArcTool::cancel() {
     desktop->getSelection()->clear();
-    sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
+    ungrabCanvasEvents();
 
     if (this->arc != nullptr) {
         this->arc->deleteObject();

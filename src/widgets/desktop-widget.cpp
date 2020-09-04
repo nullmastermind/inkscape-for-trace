@@ -38,10 +38,11 @@
 #include "file.h"
 #include "inkscape-version.h"
 #include "verbs.h"
+#include "shortcuts.h"
 
-#include "display/canvas-arena.h"
-#include "display/canvas-axonomgrid.h"
-#include "display/guideline.h"
+#include "display/control/canvas-axonomgrid.h"
+#include "display/control/canvas-item-drawing.h"
+#include "display/control/canvas-item-guideline.h"
 
 #include "extension/db.h"
 
@@ -741,9 +742,9 @@ SPDesktopWidget::event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw)
 
     if ((event->type == GDK_BUTTON_PRESS) && (event->button.button == 3)) {
         if (event->button.state & GDK_SHIFT_MASK) {
-            sp_canvas_arena_set_sticky (SP_CANVAS_ARENA (dtw->desktop->drawing), TRUE);
+            dtw->desktop->getCanvasDrawing()->set_sticky(true);
         } else {
-            sp_canvas_arena_set_sticky (SP_CANVAS_ARENA (dtw->desktop->drawing), FALSE);
+            dtw->desktop->getCanvasDrawing()->set_sticky(false);
         }
     }
 
@@ -755,8 +756,8 @@ SPDesktopWidget::event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw)
         // and passed on by the canvas acetate (I think). --bb
 
         if ((event->type == GDK_KEY_PRESS || event->type == GDK_KEY_RELEASE)
-            && !dtw->_canvas->get_current_item()) {
-            return sp_desktop_root_handler (nullptr, event, dtw->desktop);
+            && !dtw->_canvas->get_current_canvas_item()) {
+            return (gint)sp_desktop_root_handler (event, dtw->desktop);
         }
     }
 
@@ -1004,8 +1005,7 @@ void
 SPDesktopWidget::requestCanvasUpdate() {
     // ^^ also this->desktop != 0
     g_return_if_fail(this->desktop != nullptr);
-    g_return_if_fail(this->desktop->main != nullptr);
-    gtk_widget_queue_draw (GTK_WIDGET (SP_CANVAS_ITEM (this->desktop->main)->canvas->gobj()));
+    desktop->getCanvas()->queue_draw();
 }
 
 void
@@ -1332,18 +1332,23 @@ bool
 SPDesktopWidget::isToolboxButtonActive (const gchar* id)
 {
     bool isActive = false;
-    gpointer thing = sp_search_by_data_recursive(aux_toolbox, (gpointer) id);
+    auto thing = sp_search_by_name_recursive(Glib::wrap(aux_toolbox), id);
+
+    // The toolbutton could be a few different types so try casting to
+    // each of them.
+    // TODO: This will be simpler in Gtk+ 4 when Actions and ToolItems have gone
+    auto toggle_button      = dynamic_cast<Gtk::ToggleButton *>(thing);
+    auto toggle_action      = dynamic_cast<Gtk::ToggleAction *>(thing);
+    auto toggle_tool_button = dynamic_cast<Gtk::ToggleToolButton *>(thing);
+
     if ( !thing ) {
         //g_message( "Unable to locate item for {%s}", id );
-    } else if ( GTK_IS_TOGGLE_BUTTON(thing) ) {
-        GtkToggleButton *b = GTK_TOGGLE_BUTTON(thing);
-        isActive = gtk_toggle_button_get_active( b ) != 0;
-    } else if ( GTK_IS_TOGGLE_ACTION(thing) ) {
-        GtkToggleAction* act = GTK_TOGGLE_ACTION(thing);
-        isActive = gtk_toggle_action_get_active( act ) != 0;
-    } else if ( GTK_IS_TOGGLE_TOOL_BUTTON(thing) ) {
-        GtkToggleToolButton *b = GTK_TOGGLE_TOOL_BUTTON(thing);
-        isActive = gtk_toggle_tool_button_get_active( b ) != 0;
+    } else if (toggle_button) {
+        isActive = toggle_button->get_active();
+    } else if (toggle_action) {
+        isActive = toggle_action->get_active();
+    } else if (toggle_tool_button) {
+        isActive = toggle_tool_button->get_active();
     } else {
         //g_message( "Item for {%s} is of an unsupported type", id );
     }
@@ -1414,6 +1419,9 @@ SPDesktopWidget::SPDesktopWidget(SPDocument *document)
 
     dtw->_ruler_origin = Geom::Point(0,0); //namedview->gridorigin;   Why was the grid origin used here?
 
+    // Loading the shortcuts first will allow initial strings to be correct.
+    sp_shortcut_ensure_init();
+
     // This section seems backwards!
     dtw->desktop = new SPDesktop();
     dtw->desktop->init (namedview, dtw->_canvas, this);
@@ -1479,13 +1487,10 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
         _canvas_grid->UpdateRulers();
 
         /* This loops through all the grandchildren of aux toolbox,
-         * and for each that it finds, it performs an sp_search_by_data_recursive(),
-         * looking for widgets that hold some "tracker" data (this is used by
+         * and for each that it finds, it performs an sp_search_by_name_recursive(),
+         * looking for widgets named "unit-tracker" (this is used by
          * all toolboxes to refer to the unit selector). The default document units
          * is then selected within these unit selectors.
-         *
-         * Of course it would be nice to be able to refer to the toolbox and the
-         * unit selector directly by name, but I don't yet see a way to do that.
          *
          * This should solve: https://bugs.launchpad.net/inkscape/+bug/362995
          */
@@ -1955,10 +1960,10 @@ SPDesktopWidget::on_ruler_box_motion_notify_event(GdkEventMotion *event, Gtk::Wi
         }
 
         if (!(event->state & GDK_SHIFT_MASK)) {
-            ruler_snap_new_guide(desktop, _active_guide, event_dt, _normal);
+            ruler_snap_new_guide(desktop, event_dt, _normal);
         }
-        sp_guideline_set_normal(SP_GUIDELINE(_active_guide), _normal);
-        sp_guideline_set_position(SP_GUIDELINE(_active_guide), event_dt);
+        _active_guide->set_normal(_normal);
+        _active_guide->set_origin(event_dt);
 
         desktop->set_coordinate_status(event_dt);
     }
@@ -1991,10 +1996,10 @@ SPDesktopWidget::on_ruler_box_button_release_event(GdkEventButton *event, Gtk::W
         Geom::Point event_dt(desktop->w2d(event_w));
 
         if (!(event->state & GDK_SHIFT_MASK)) {
-            ruler_snap_new_guide(desktop, _active_guide, event_dt, _normal);
+            ruler_snap_new_guide(desktop, event_dt, _normal);
         }
 
-        sp_canvas_item_destroy(_active_guide);
+        delete _active_guide;
         _active_guide = nullptr;
         if ((horiz ? wy : wx) >= 0) {
             Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
@@ -2102,8 +2107,8 @@ SPDesktopWidget::on_ruler_box_button_press_event(GdkEventButton *event, Gtk::Wid
             }
         }
 
-        _active_guide = sp_guideline_new(desktop->guides, nullptr, event_dt, _normal);
-        sp_guideline_set_color(SP_GUIDELINE(_active_guide), desktop->namedview->guidehicolor);
+        _active_guide = new Inkscape::CanvasItemGuideLine(desktop->getCanvasGuides(), Glib::ustring(), event_dt, _normal);
+        _active_guide->set_stroke(desktop->namedview->guidehicolor);
 
         // Ruler grabs all events until button release.
         auto window = widget->get_window()->gobj();
@@ -2122,7 +2127,7 @@ SPDesktopWidget::on_ruler_box_button_press_event(GdkEventButton *event, Gtk::Wid
 }
 
 void
-SPDesktopWidget::ruler_snap_new_guide(SPDesktop *desktop, SPCanvasItem * /*guide*/, Geom::Point &event_dt, Geom::Point &normal)
+SPDesktopWidget::ruler_snap_new_guide(SPDesktop *desktop, Geom::Point &event_dt, Geom::Point &normal)
 {
     SnapManager &m = desktop->namedview->snap_manager;
     m.setup(desktop);

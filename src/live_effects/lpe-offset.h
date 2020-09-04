@@ -22,6 +22,9 @@
 #include "live_effects/parameter/enum.h"
 #include "live_effects/parameter/parameter.h"
 #include "live_effects/parameter/unit.h"
+// this is only to flatten nonzero fillrule
+#include "livarot/Path.h"
+#include "livarot/Shape.h"
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -31,18 +34,21 @@ namespace OfS {
 class KnotHolderEntityOffsetPoint;
 }
 
+typedef FillRule FillRuleFlatten;
+
 class LPEOffset : public Effect, GroupBBoxEffect {
 public:
     LPEOffset(LivePathEffectObject *lpeobject);
     ~LPEOffset() override;
     void doBeforeEffect (SPLPEItem const* lpeitem) override;
+    void doAfterEffect(SPLPEItem const * /*lpeitem*/) override;
     Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
     void transform_multiply(Geom::Affine const &postmul, bool set) override;
     void addKnotHolderEntities(KnotHolder * knotholder, SPItem * item) override;
     void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec) override;
     void calculateOffset (Geom::PathVector const & path_in);
-    Geom::Point get_default_point(Geom::PathVector pathv) const;
-    Geom::Point get_nearest_point(Geom::PathVector pathv, Geom::Point point)  const;
+    Geom::Path cleanupPathSelfIntersects(Geom::Path path, size_t originpos, double tolerance);
+    Geom::Point get_default_point(Geom::PathVector pathv);
     double sp_get_offset(Geom::Point origin);
     friend class OfS::KnotHolderEntityOffsetPoint;
 
@@ -52,15 +58,19 @@ private:
     EnumParam<unsigned> linejoin_type;
     ScalarParam miter_limit;
     BoolParam attempt_force_join;
+
     BoolParam update_on_knot_move;
     Geom::Point offset_pt;
     Glib::ustring prev_unit;
     double scale = 1; //take document scale and additional parent transformations into account
     KnotHolderEntity * _knot_entity;
-    Geom::PathVector filled_rule_pathv;
+    Geom::PathVector mix_pathv_all;
     Geom::PathVector helper_path;
     Inkscape::UI::Widget::Scalar *offset_widget;
-
+    FillRuleFlatten fillrule;
+    bool liveknot;
+    void modified(SPObject */*obj*/, guint flags);
+    sigc::connection modified_connection;
     LPEOffset(const LPEOffset&);
     LPEOffset& operator=(const LPEOffset&);
 };

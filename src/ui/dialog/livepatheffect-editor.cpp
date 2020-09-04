@@ -317,6 +317,7 @@ LivePathEffectEditor::onSelectionChanged(Inkscape::Selection *sel)
                     // test whether linked object is supported by the CLONE_ORIGINAL LPE
                     SPItem *orig = use->get_original();
                     if ( dynamic_cast<SPShape *>(orig) ||
+                         dynamic_cast<SPGroup *>(orig) ||
                          dynamic_cast<SPText *>(orig) )
                     {
                         // Note that an SP_USE cannot have an LPE applied, so we only need to worry about the "add effect" case.
@@ -449,6 +450,7 @@ LivePathEffectEditor::onAdd()
                     // test whether linked object is supported by the CLONE_ORIGINAL LPE
                     SPItem *orig = use->get_original();
                     if ( dynamic_cast<SPShape *>(orig) ||
+                         dynamic_cast<SPGroup *>(orig) ||
                          dynamic_cast<SPText *>(orig) )
                     {
                         // select original

@@ -3,7 +3,7 @@
 #define COMMON_CONTEXT_H_SEEN
 
 /*
- * Common drawing mode
+ * Common drawing mode. Base class of Eraser and Calligraphic tools.
  *
  * Authors:
  *   Mitsuru Oka <oka326@parkcity.ne.jp>
@@ -21,11 +21,9 @@
  */
 
 #include "ui/tools/tool-base.h"
-#include "display/sp-canvas-item.h"
 
 #include <memory>
 
-struct SPCanvasItem;
 class SPCurve;
 
 namespace Inkscape {
@@ -37,6 +35,9 @@ namespace Inkscape {
 #define SAMPLING_SIZE 8        /* fixme: ?? */
 
 namespace Inkscape {
+
+class CanvasItemBpath;
+
 namespace UI {
 namespace Tools {
 
@@ -52,10 +53,11 @@ protected:
     std::unique_ptr<SPCurve> accumulated;
 
     /** canvas items for "committed" segments */
-    std::vector<SPCanvasItem*> segments;
+    std::vector<Inkscape::CanvasItemBpath *> segments;
 
     /** canvas item for red "leading" segment */
-    SPCanvasItem *currentshape;
+    Inkscape::CanvasItemBpath *currentshape;
+
     /** shape of red "leading" segment */
     std::unique_ptr<SPCurve> currentcurve;
 

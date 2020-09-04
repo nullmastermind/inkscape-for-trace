@@ -16,21 +16,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-enum SPKnotShapeType {
-    SP_KNOT_SHAPE_SQUARE,
-    SP_KNOT_SHAPE_DIAMOND,
-    SP_KNOT_SHAPE_CIRCLE,
-    SP_KNOT_SHAPE_TRIANGLE,
-    SP_KNOT_SHAPE_CROSS,
-    SP_KNOT_SHAPE_BITMAP,
-    SP_KNOT_SHAPE_IMAGE
-};
-
-enum SPKnotModeType {
-    SP_KNOT_MODE_COLOR,
-    SP_KNOT_MODE_XOR
-};
-
 enum SPKnotStateType {
     SP_KNOT_STATE_NORMAL,
     SP_KNOT_STATE_MOUSEOVER,

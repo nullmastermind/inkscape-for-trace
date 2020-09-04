@@ -16,7 +16,6 @@
 
 #include "desktop.h"
 #include "inkscape.h"
-#include "util/ucompose.hpp"
 #include "document.h"
 
 namespace
@@ -373,9 +372,9 @@ EventLog::updateUndoVerbs()
         if(_getUndoEvent()) { 
             Inkscape::Verb::get(SP_VERB_EDIT_UNDO)->sensitive(_document, true);
 
-            Inkscape::Verb::get(SP_VERB_EDIT_UNDO)->name(_document, String::ucompose("%1: %2", 
-                      Glib::ustring(_("_Undo")),
-                      Glib::ustring((*_getUndoEvent())[_columns.description])));
+            Inkscape::Verb::get(SP_VERB_EDIT_UNDO)->name(_document,
+                      Glib::ustring(_("_Undo")) + ": " +
+                      Glib::ustring((*_getUndoEvent())[_columns.description]));
         } else {
             Inkscape::Verb::get(SP_VERB_EDIT_UNDO)->name(_document, _("_Undo"));
             Inkscape::Verb::get(SP_VERB_EDIT_UNDO)->sensitive(_document, false);
@@ -383,9 +382,9 @@ EventLog::updateUndoVerbs()
 
         if(_getRedoEvent()) {
             Inkscape::Verb::get(SP_VERB_EDIT_REDO)->sensitive(_document, true);
-            Inkscape::Verb::get(SP_VERB_EDIT_REDO)->name(_document, String::ucompose("%1: %2", 
-                      Glib::ustring(_("_Redo")),
-                      Glib::ustring((*_getRedoEvent())[_columns.description])));
+            Inkscape::Verb::get(SP_VERB_EDIT_REDO)->name(_document,
+                      Glib::ustring(_("_Redo")) + ": " +
+                      Glib::ustring((*_getRedoEvent())[_columns.description]));
 
         } else {
             Inkscape::Verb::get(SP_VERB_EDIT_REDO)->name(_document, _("_Redo"));

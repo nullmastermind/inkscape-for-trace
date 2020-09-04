@@ -15,10 +15,6 @@
 
 SELF_NAME=$(basename $0)
 
-### nesting level when trapping errors #########################################
-
-ERRTRACE_COUNT=0
-
 ### multithreading #############################################################
 
 CORES=$(sysctl -n hw.ncpu)   # use all available cores
@@ -27,79 +23,84 @@ export MAKEFLAGS="-j $CORES"
 ### target OS version ##########################################################
 
 # The current build setup is
-#   - Xcode 11.3.1
+#   - Xcode 11.6
 #   - OS X El Capitan 10.11 SDK (part of Xcode 7.3.1)
-#   - macOS Mojave 10.14.6
+#   - macOS Catalina 10.15.6
 
 export MACOSX_DEPLOYMENT_TARGET=10.11
-[ -z $SDKROOT_DIR ] && SDKROOT_DIR=/Library/Developer/CommandLineTools/SDKs
+[ -z $SDKROOT_DIR ] && SDKROOT_DIR=/opt/sdks
 export SDKROOT=$SDKROOT_DIR/MacOSX${MACOSX_DEPLOYMENT_TARGET}.sdk
 
 ### build system/toolset version ###############################################
 
-TOOLSET_VERSION=0.35
+TOOLSET_VERSION=0.39
 
 ### ramdisk ####################################################################
 
 # Using the toolset dmg, a small writable overlay is required.
-OVERLAY_RAMDISK_SIZE=2   # unit is GiB
+OVERLAY_RAMDISK_SIZE=3   # unit is GiB
 
-### toolset root directory #####################################################
+### main work directory ########################################################
 
-# This is the main directory where all the action takes place below. It is
-# one level above WRK_DIR (which in previous releases has been called the
-# main directory) so we can manage and switch between multiple different WRK_DIR
-# versions as required.
+# This is the main directory where all the action takes place below.
 
 # Allow this to be overridable or use the default.
-[ -z $TOOLSET_ROOT_DIR ] && TOOLSET_ROOT_DIR=/Users/Shared/work || true
+[ -z $WRK_DIR ] && WRK_DIR=/Users/Shared/work || true
 
-if  [ $(mkdir -p $TOOLSET_ROOT_DIR 2>/dev/null; echo $?) -eq 0 ] &&
-    [ -w $TOOLSET_ROOT_DIR ] ; then
+if  [ $(mkdir -p $WRK_DIR 2>/dev/null; echo $?) -eq 0 ] &&
+    [ -w $WRK_DIR ] ; then
   :   # nothing to do, everything ok
 else
-  echo "❌ directory not usable (TOOLSET_ROOT_DIR): $TOOLSET_ROOT_DIR"
+  echo "***ERROR*** WRK_DIR not usable: $WRK_DIR"
   exit 1
 fi
 
 ### toolset directories ########################################################
 
 # This is where .dmg files with pre-compiled toolsets are downloaded to.
-TOOLSET_REPO_DIR=$TOOLSET_ROOT_DIR/repo
+REPO_DIR=$WRK_DIR/repo
 # Persistent location for ccache.
-export CCACHE_DIR=$TOOLSET_ROOT_DIR/ccache
+export CCACHE_DIR=$WRK_DIR/ccache
+# Directory with ccache binaries.
+export CCACHE_BIN_DIR=/opt/ccache/bin
 
 ### work directory and subdirectories ##########################################
 
 # Allow this to be overrideable or use version number as default.
-[ -z $WRK_DIR ] && WRK_DIR=$TOOLSET_ROOT_DIR/$TOOLSET_VERSION || true
+[ -z $VER_DIR ] && VER_DIR=$WRK_DIR/$TOOLSET_VERSION || true
 
-OPT_DIR=$WRK_DIR/opt
-BIN_DIR=$OPT_DIR/bin
-LIB_DIR=$OPT_DIR/lib
-SRC_DIR=$OPT_DIR/src
-TMP_DIR=$OPT_DIR/tmp
+BIN_DIR=$VER_DIR/bin
+ETC_DIR=$VER_DIR/etc
+LIB_DIR=$VER_DIR/lib
+VAR_DIR=$VER_DIR/var
+PKG_DIR=$VAR_DIR/cache/pkgs
+SRC_DIR=$VER_DIR/usr/src
+TMP_DIR=$VER_DIR/tmp
 
 ### use TMP_DIR for everything temporary #######################################
 
 export TMP=$TMP_DIR
 export TEMP=$TMP_DIR
-export TMPDIR=$TMP_DIR
-export XDG_CACHE_HOME=$TMP_DIR      # instead ~/.cache
-export XDG_CONFIG_HOME=$TMP_DIR     # instead ~/.config
-export PIP_CACHE_DIR=$TMP_DIR       # instead ~/Library/Caches/pip
-export PIPENV_CACHE_DIR=$TMP_DIR    # instead ~/Library/Caches/pipenv
+export TMPDIR=$TMP_DIR                # TMPDIR is the common macOS default
+
+### XDG ########################################################################
+
+export XDG_CACHE_HOME=$VER_DIR/var/cache  # instead ~/.cache
+export XDG_CONFIG_HOME=$ETC_DIR           # instead ~/.config
+
+### pip ########################################################################
+
+export PIP_CACHE_DIR=$XDG_CACHE_HOME/pip         # instead ~/Library/Caches/pip
+export PIPENV_CACHE_DIR=$XDG_CACHE_HOME/pipenv   # instead ~/Library/Caches/pipenv
 
 # TODO: ~/Library/Caches/pip-tools ?
 
-### JHBuild subdirectories and configuration ###################################
+### JHBuild configuration ######################################################
 
-export DEVROOT=$WRK_DIR/gtk-osx
-export DEVPREFIX=$DEVROOT/local
-export DEV_SRC_ROOT=$DEVROOT/source
-
-export JHBUILDRC=$DEVROOT/jhbuildrc   # requires modified gtk-osx-setup.sh
+export JHBUILDRC=$ETC_DIR/jhbuildrc
 export JHBUILDRC_CUSTOM=$JHBUILDRC-custom
+
+JHBUILD_BUILDROOT=$VAR_DIR/build
 
 ### Inkscape Git repository directory ##########################################
 
@@ -117,7 +118,7 @@ fi
 # This is the location where the final product - like application bundle or
 # diskimage (no intermediate programs/libraries/...) - is created in.
 
-ARTIFACT_DIR=$WRK_DIR/artifacts
+ARTIFACT_DIR=$VER_DIR/artifacts
 
 ### application bundle paths ###################################################
 
@@ -135,17 +136,16 @@ APP_PLIST=$APP_CON_DIR/Info.plist
 ### bundled Python version #####################################################
 
 PY3_MAJOR=3
-PY3_MINOR=7
-PY3_PATCH=6
+PY3_MINOR=8
+PY3_PATCH=5
 PY3_BUILD=1  # custom framework build number
 
 ### download URLs for dependencies #############################################
 
 # https://github.com/dehesselle/gtk-osx
 # Forked from https://gitlab.gnome.org/GNOME/gtk-osx
-URL_GTK_OSX=https://raw.githubusercontent.com/dehesselle/gtk-osx/inkscape-1.0.x-5
-URL_GTK_OSX_SETUP=$URL_GTK_OSX/gtk-osx-setup.sh
-URL_GTK_OSX_MODULESET=$URL_GTK_OSX/modulesets-stable/gtk-osx.modules
+URL_GTK_OSX=https://raw.githubusercontent.com/dehesselle/gtk-osx/inkscape-1.1.x-2
+URL_GTK_OSX_MODULESET=$URL_GTK_OSX/modulesets-stable/inkscape.modules
 
 ### download URLs for auxiliary software #######################################
 
@@ -160,15 +160,19 @@ URL_GTK_MAC_BUNDLER=https://github.com/dehesselle/gtk-mac-bundler/archive/f96a9d
 URL_INKSCAPE=https://gitlab.com/inkscape/inkscape
 # disk image icon
 URL_INKSCAPE_DMG_ICNS=https://github.com/dehesselle/mibap/raw/master/inkscape_dmg.icns
+# JHBuild build system
+# https://gitlab.gnome.org/GNOME/jhbuild
+# https://wiki.gnome.org/Projects/Jhbuild/Introduction
+URL_JHBUILD=https://gitlab.gnome.org/GNOME/jhbuild/-/archive/3.36.0/jhbuild-3.36.0.tar.gz
+# Ninja build system
+# https://github.com/ninja-build/ninja
+URL_NINJA=https://github.com/ninja-build/ninja/releases/download/v1.8.2/ninja-mac.zip
 # convert PNG image to iconset in ICNS format
 # https://github.com/bitboss-ca/png2icns
 URL_PNG2ICNS=https://github.com/bitboss-ca/png2icns/archive/v0.1.tar.gz
 # This is a relocatable Python.framework to be bundled with the app.
 # https://github.com/dehesselle/py3framework
 URL_PYTHON=https://github.com/dehesselle/py3framework/releases/download/py$PY3_MAJOR$PY3_MINOR$PY3_PATCH.$PY3_BUILD/py$PY3_MAJOR$PY3_MINOR${PY3_PATCH}_framework_$PY3_BUILD.tar.xz
-# This Python 3.6 is only to setup JHBuild as it fails to download/install
-# its own Python.
-URL_PYTHON_JHBUILD=https://github.com/dehesselle/py3framework/releases/download/py3610.1/py3610_framework_1.tar.xz
 # A pre-compiled version of the whole toolset.
 # https://github.com/dehesselle/mibap
 URL_TOOLSET=https://github.com/dehesselle/mibap/releases/download/v$TOOLSET_VERSION/mibap_v$TOOLSET_VERSION.dmg
@@ -182,14 +186,12 @@ URL_TOOLSET=https://github.com/dehesselle/mibap/releases/download/v$TOOLSET_VERS
 PYTHON_CAIROCFFI=cairocffi==1.1.0
 # https://lxml.de
 # https://github.com/lxml/lxml
-PYTHON_LXML=lxml==4.4.2
-# https://github.com/lxml/lxml
-PYTHON_NUMPY=numpy==1.18.1
-# https://www.cairographics.org/pycairo/
-# https://github.com/pygobject/pycairo
-PYTHON_PYCAIRO=pycairo==1.19.0
+PYTHON_LXML_SRC=https://lxml.de/files/lxml-4.5.2.tgz
+PYTHON_LXML=$PKG_DIR/$(basename -s .tgz $PYTHON_LXML_SRC)-cp$PY3_MAJOR$PY3_MINOR-cp$PY3_MAJOR$PY3_MINOR-macosx_${MACOSX_DEPLOYMENT_TARGET/./_}_x86_64.whl
+# https://github.com/numpy/numpy
+PYTHON_NUMPY=numpy==1.19.1
 # https://pygobject.readthedocs.io/en/latest/
-PYTHON_PYGOBJECT=PyGObject==3.34.0
+PYTHON_PYGOBJECT=PyGObject==3.36.1
 # https://github.com/scour-project/scour
 PYTHON_SCOUR=scour==0.37
 # https://pyserial.readthedocs.io/en/latest/
@@ -205,7 +207,10 @@ PYTHON_CAIROSVG=cairosvg==2.4.2
 # https://dmgbuild.readthedocs.io/en/latest/
 # https://github.com/al45tair/dmgbuild
 PYTHON_DMGBUILD=dmgbuild==1.3.3
+# Meson build system
+# https://mesonbuild.com
+PYTHON_MESON=meson==0.55.1
 
 ### path #######################################################################
 
-export PATH=$DEVPREFIX/bin:$BIN_DIR:/usr/bin:/bin:/usr/sbin:/sbin
+export PATH=$BIN_DIR:/usr/bin:/bin:/usr/sbin:/sbin

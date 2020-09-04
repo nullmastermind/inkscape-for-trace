@@ -29,6 +29,7 @@
 #define SP_IS_SPRAY_CONTEXT(obj) (dynamic_cast<const Inkscape::UI::Tools::SprayTool*>((const Inkscape::UI::Tools::ToolBase*)obj) != NULL)
 
 namespace Inkscape {
+  class CanvasItemBpath;
   namespace UI {
       namespace Dialog {
           class Dialog;
@@ -92,7 +93,7 @@ public:
     bool is_dilating;
     bool has_dilated;
     Geom::Point last_push;
-    SPCanvasItem *dilate_area;
+    Inkscape::CanvasItemBpath *dilate_area;
     bool no_overlap;
     bool picker;
     bool pick_center;

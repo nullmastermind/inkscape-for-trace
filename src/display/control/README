@@ -1,0 +1,113 @@
+
+This directory contains code for handling on-canvas editing objects as
+well as document display.
+
+Historically, the code originates from GnomeCanvas but at this point it
+has been completely rewritten for Inkscape's needs.
+
+One can think of a CanvasItem as a light-weight widget. There is a
+selection mechanism based on an item's position and a method to handle
+events. The selection mechanism is currently very simplistic,
+selecting the top-most item whose bounding box contains the
+cursor. Probably as a result, many items do not use these capabilities
+with external code replacing this functionality (e.g CanvasItemQuad,
+CanvasItemCurve).
+
+Points are stored as document coordinates. They are converted to
+screen coordinates by multiplying by the document to window affine.
+When an object's geometry changes, it must call request_update() to
+flag that its bounds need to be recalculated (_need_update =
+true). This will also cause all ancestors to also be marked and
+finally the Canvas. Before picking or drawing, all bounds must be
+up-to-date. (Changing the Canvas affine will also require bounds to be
+recalculated.) This mechanism ensures that bounds are correct in the
+most efficient manner. If only the style is changed (without geometric
+ramifications) then call canvas->redraw_area() to trigger a redraw.
+
+CanvasItemGroup keeps a list of child items using a Boost intrusive
+list. The pointers between nodes are kept inside the items. This
+allows for quick deletion by avoiding the need to search through the
+list to find the item to delete. This is important when a path
+contains hundress of nodes. However, a Boost intrusive list cannot be
+used with C++ smart pointers. Deleting an item can be done by either
+calling CanvasItemGroup::remove(CanvasItem*) or by directly deleting
+the item. Deleting a CanvasItemGroup will delete it and all of its
+children.
+
+
+Contents (x == pickable):
+
+* CanvasItem:             Abstract base class.
+* CanvasItemBPath:     x  An item representing a Bezier path.
+* CanvasItemCatchall:  x  An infinite item, for capturing left-over events.
+* CanvasItemCtrl:      x  An item representing a control point (knot, node, etc.).
+* CanvasItemCurve:        A single Bezier curve item (line or cubic). Not pickable!
+* CanvasItemDrawing:   x  The SVG drawing.
+* CanvasItemGrid:         Base class for snapping grids.
+* CanvasItemGroup:     x  An item that contains other items.
+* CanvasItemGuideline: x  A guideline for snapping.
+* CanvasItemQuad:         An object defined by four points (only used by Text tool).
+* CanvasItemRect:         An axis aligned rectangle item.
+* CanvasItemRotate:    x  For previewing the rotation of the canvas.
+* CanvasItemText:         A text item.
+
+* CanvasItemEnum:         All the enums you'll want to use!
+* CanvasItemBuffer:       A class that wraps a Cairo buffer for drawing.
+
+Classes here that use CanvasItem's:
+
+* CanvasGridXY:           A Cartesian grid for snapping.
+* CanvasGridAxonom        An Axonometric grid for snapping.
+* SnapIndicator:          A class for showing a snap possibility on canvas.
+* TemporaryItem:          A class to manage the lifetime of a temporary CanvasItem.
+* TemporaryItemList:      A class to track TemporaryItem's.
+
+
+Notes:
+
+CanvasItemCtrl (a.k.a. "Node", "Knot", "Handle", "Dragger", "Ctrl", "Mouse Grab", "Control Point")
+
+  Used by several groups of classes:
+
+  * Knot
+  ** KnotHolderEntity
+  *** live_effects/...
+  *** KnotHolder: Contains one or more KnotHolderEntity's.
+      Example: an object's fill and stroke gradients could have
+      overlapping knot-entities and are moved together via the knot holder.
+  **** shape-editor-knotholders.cpp
+       Classes derived from KnotHolder which contain classes derived from KnotHolderEntity for
+       editting shapes.
+  **** ShapeEditor contains two KnotHolders, one for shapes, one for LPE's.
+
+  ** ui/tools/tool-base.h
+  ** seltrnas.h,.cpp
+  ** display/snap-indicator.h
+  ** gradient-drag.cpp
+  ** vanishing-point.h
+
+
+  * ControlPoint, SelectorPoint, SelectableControlPoint, Handle, Node, CurveDragPoint, TransformHandle, plus
+    auxillary classes (manipulator...).
+  * drag-anchor
+  * pen-tool
+  * measure-tool
+  * guide-line
+  * snap-indicator
+
+
+TODO:
+
+Move files that use CanvasItem's to more appropriate places.
+
+All files that use CanvasItem's in src directory:
+* Move rubberband.h/.cpp to src/ui
+* Move knot* to src/ui/knots
+* Move gradient-drag to src/ui
+* Move selcue* to src/ui
+* Move seltrans* to src/ui
+* Move vanishing-point to src/ui
+* Move snap code to src/ui/snap display/snap-indicator.h/.cpp snap.h etc.
+
+See also src/ui/tool
+

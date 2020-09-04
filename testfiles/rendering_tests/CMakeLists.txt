@@ -1,5 +1,13 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
+if(${CMAKE_SIZEOF_VOID_P} EQUAL 8)
+    set(RENDERING_TESTS_64bit
+        # .otf font with compressed SVG glyphs
+        # (test not stable on 32bit Windows)
+        text-gzipped-svg-glyph
+    )
+endif()
+
 #add your test here (do not put the .svg extension)
 set(RENDERING_TESTS
     # -- Generic tests --
@@ -40,6 +48,8 @@ set(RENDERING_TESTS
     
     # -- LPE tests --
     test-powerstroke-join
+
+    ${RENDERING_TESTS_64bit}
 )
 
 

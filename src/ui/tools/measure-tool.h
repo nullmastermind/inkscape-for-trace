@@ -14,17 +14,23 @@
  */
 
 #include <cstddef>
-#include <sigc++/sigc++.h>
-#include "ui/tools/tool-base.h"
-#include <2geom/point.h>
-#include "display/canvas-text.h"
-#include "display/canvas-temporary-item.h"
-#include "ui/control-manager.h"
 #include <boost/optional.hpp>
+
+#include <sigc++/sigc++.h>
+
+#include <2geom/point.h>
+
+#include "ui/tools/tool-base.h"
+
+#include "display/control/canvas-temporary-item.h"
+#include "display/control/canvas-item-enums.h"
 
 class SPKnot;
 
 namespace Inkscape {
+
+class CanvasItemCurve;
+
 namespace UI {
 namespace Tools {
 
@@ -48,33 +54,46 @@ public:
     virtual void setMarker(bool isStart);
     const std::string& getPrefsPath() override;
     Geom::Point readMeasurePoint(bool is_start);
+
     void showInfoBox(Geom::Point cursor, bool into_groups);
-    void showItemInfoText(Geom::Point pos, gchar *measure_str, double fontsize);
+    void showItemInfoText(Geom::Point pos, Glib::ustring const &measure_str, double fontsize);
     void writeMeasurePoint(Geom::Point point, bool is_start);
     void setGuide(Geom::Point origin, double angle, const char *label);
     void setPoint(Geom::Point origin, Inkscape::XML::Node *measure_repr);
-    void setLine(Geom::Point start_point,Geom::Point end_point, bool markers, guint32 color, Inkscape::XML::Node *measure_repr = nullptr);
-    void setMeasureCanvasText(bool is_angle, double precision, double amount, double fontsize, Glib::ustring unit_name, Geom::Point position, guint32 background, CanvasTextAnchorPositionEnum text_anchor, bool to_item, bool to_phantom, Inkscape::XML::Node *measure_repr);
-    void setMeasureCanvasItem(Geom::Point position, bool to_item, bool to_phantom, Inkscape::XML::Node *measure_repr);
-    void setMeasureCanvasControlLine(Geom::Point start, Geom::Point end, bool to_item, bool to_phantom, Inkscape::CtrlLineType ctrl_line_type, Inkscape::XML::Node *measure_repr);
-    void setLabelText(const char *value, Geom::Point pos, double fontsize, Geom::Coord angle, guint32 background , Inkscape::XML::Node *measure_repr = nullptr, CanvasTextAnchorPositionEnum text_anchor = TEXT_ANCHOR_CENTER );
+    void setLine(Geom::Point start_point,Geom::Point end_point, bool markers, guint32 color,
+                 Inkscape::XML::Node *measure_repr = nullptr);
+    void setMeasureCanvasText(bool is_angle, double precision, double amount, double fontsize,
+                              Glib::ustring unit_name, Geom::Point position, guint32 background,
+                              Inkscape::CanvasItemTextAnchor text_anchor, bool to_item, bool to_phantom,
+                              Inkscape::XML::Node *measure_repr);
+    void setMeasureCanvasItem(Geom::Point position, bool to_item, bool to_phantom,
+                              Inkscape::XML::Node *measure_repr);
+    void setMeasureCanvasControlLine(Geom::Point start, Geom::Point end, bool to_item, bool to_phantom,
+                                     Inkscape::CanvasItemColor color, Inkscape::XML::Node *measure_repr);
+    void setLabelText(Glib::ustring const &value, Geom::Point pos, double fontsize, Geom::Coord angle,
+                      guint32 background,
+                      Inkscape::XML::Node *measure_repr = nullptr,
+                      Inkscape::CanvasItemTextAnchor text_anchor = Inkscape::CANVAS_ITEM_TEXT_ANCHOR_CENTER);
+
     void knotStartMovedHandler(SPKnot */*knot*/, Geom::Point const &ppointer, guint state);
     void knotEndMovedHandler(SPKnot */*knot*/, Geom::Point const &ppointer, guint state);
     void knotClickHandler(SPKnot *knot, guint state);
     void knotUngrabbedHandler(SPKnot */*knot*/,  unsigned int /*state*/);
+
 private:
-    SPCanvasItem* grabbed;
     boost::optional<Geom::Point> explicit_base;
     boost::optional<Geom::Point> last_end;
-    SPKnot *knot_start;
-    SPKnot *knot_end;
-    gint dimension_offset;
+    SPKnot *knot_start = nullptr;
+    SPKnot *knot_end   = nullptr;
+    gint dimension_offset = 20;
     Geom::Point start_p;
     Geom::Point end_p;
     Geom::Point last_pos;
-    std::vector<SPCanvasItem *> measure_tmp_items;
-    std::vector<SPCanvasItem *> measure_phantom_items;
-    std::vector<SPCanvasItem *> measure_item;
+
+    std::vector<Inkscape::CanvasItem *> measure_tmp_items;
+    std::vector<Inkscape::CanvasItem *> measure_phantom_items;
+    std::vector<Inkscape::CanvasItem *> measure_item;
+
     double item_width;
     double item_height;
     double item_x;

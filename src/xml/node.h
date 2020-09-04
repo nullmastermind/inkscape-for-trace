@@ -14,13 +14,13 @@
 #define SEEN_INKSCAPE_XML_NODE_H
 
 #include <cassert>
+#include <vector>
 #include <glibmm/ustring.h>
 #include <list>
 
 #include "gc-anchored.h"
 #include "inkgc/gc-alloc.h"
 #include "util/const_char_ptr.h"
-#include "util/list.h"
 
 namespace Inkscape {
 namespace XML {
@@ -31,7 +31,7 @@ class Event;
 class NodeObserver;
 struct NodeEventVector;
 
-typedef std::list<AttributeRecord, Inkscape::GC::Alloc< AttributeRecord, Inkscape::GC::MANUAL > > AttributeVector;
+typedef std::vector<AttributeRecord, Inkscape::GC::Alloc<AttributeRecord, Inkscape::GC::MANUAL>> AttributeVector;
 
 /**
  * @brief Enumeration containing all supported node types.

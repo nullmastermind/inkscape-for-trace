@@ -35,16 +35,15 @@
 #include "shortcuts.h"
 #include "verbs.h"
 
-#include "display/canvas-bpath.h"
 #include "display/curve.h"
-#include "display/sodipodi-ctrl.h"
-#include "display/sp-ctrlline.h"
+#include "display/control/canvas-item-bpath.h"
+#include "display/control/canvas-item-ctrl.h"
+#include "display/control/canvas-item-curve.h"
 
 #include "object/sp-path.h"
 
 #include "ui/pixmaps/cursor-pen.xpm"
 
-#include "ui/control-manager.h"
 #include "ui/draw-anchor.h"
 #include "ui/tools-switch.h"
 #include "ui/tools/pen-tool.h"
@@ -68,8 +67,6 @@
 #include "live_effects/lpe-bspline.h"
 
 
-using Inkscape::ControlManager;
-
 namespace Inkscape {
 namespace UI {
 namespace Tools {
@@ -86,64 +83,28 @@ const std::string PenTool::prefsPath = "/tools/freehand/pen";
 
 PenTool::PenTool()
     : FreehandBase(cursor_pen_xpm)
-    , p()
-    , previous(Geom::Point(0,0))
-    , npoints(0)
-    , mode(MODE_CLICK)
-    , state(POINT)
-    , polylines_only(false)
-    , polylines_paraxial(false)
-    , paraxial_angle(Geom::Point(0,0))
-    , num_clicks(0)
-    , expecting_clicks_for_LPE(0)
-    , waiting_LPE(nullptr)
-    , waiting_item(nullptr)
-    , c0(nullptr)
-    , c1(nullptr)
-    , cl0(nullptr)
-    , cl1(nullptr)
-    , events_disabled(false)
 {
     tablet_enabled = false;
 }
 
 PenTool::PenTool(gchar const *const *cursor_shape)
     : FreehandBase(cursor_shape)
-    , p()
-    , previous(Geom::Point(0,0))
-    , npoints(0)
-    , mode(MODE_CLICK)
-    , state(POINT)
-    , polylines_only(false)
-    , polylines_paraxial(false)
-    , num_clicks(0)
-    , expecting_clicks_for_LPE(0)
-    , waiting_LPE(nullptr)
-    , waiting_item(nullptr)
-    , c0(nullptr)
-    , c1(nullptr)
-    , cl0(nullptr)
-    , cl1(nullptr)
-    , events_disabled(false)
 {
 }
 
 PenTool::~PenTool() {
     if (this->c0) {
-        sp_canvas_item_destroy(this->c0);
-        this->c0 = nullptr;
+        delete c0;
     }
     if (this->c1) {
-        sp_canvas_item_destroy(this->c1);
-        this->c1 = nullptr;
+        delete c1;
     }
+
     if (this->cl0) {
-        sp_canvas_item_destroy(this->cl0);
-        this->cl0 = nullptr;
+        delete cl0;
     }
     if (this->cl1) {
-        sp_canvas_item_destroy(this->cl1);
-        this->cl1 = nullptr;
+        delete cl1;
     }
 
     if (this->waiting_item && this->expecting_clicks_for_LPE > 0) {
@@ -161,31 +122,28 @@ void PenTool::setPolylineMode() {
     this->spiro = (mode == 1);
     this->bspline = (mode == 2);
     this->_bsplineSpiroColor();
-    if (!this->green_bpaths.empty())
+    if (!this->green_bpaths.empty()) {
         this->_redrawAll();
+    }
 }
 
 /**
  * Callback to initialize PenTool object.
  */
 void PenTool::setup() {
+
     FreehandBase::setup();
-    ControlManager &mgr = ControlManager::getManager();
 
-    // Pen indicators
-    this->c0 = mgr.createControl(this->desktop->getControls(), Inkscape::CTRL_TYPE_ADJ_HANDLE);
-    mgr.track(this->c0);
+    // Pen indicators (temporary handles shown when adding a new node).
+    c0 = new Inkscape::CanvasItemCtrl(desktop->getCanvasControls(), Inkscape::CANVAS_ITEM_CTRL_TYPE_ADJ_HANDLE);
+    c1 = new Inkscape::CanvasItemCtrl(desktop->getCanvasControls(), Inkscape::CANVAS_ITEM_CTRL_TYPE_ADJ_HANDLE);
+    c0->hide();
+    c1->hide();
 
-    this->c1 = mgr.createControl(this->desktop->getControls(), Inkscape::CTRL_TYPE_ADJ_HANDLE);
-    mgr.track(this->c1);
-
-    this->cl0 = mgr.createControlLine(this->desktop->getControls());
-    this->cl1 = mgr.createControlLine(this->desktop->getControls());
-
-    sp_canvas_item_hide(this->c0);
-    sp_canvas_item_hide(this->c1);
-    sp_canvas_item_hide(this->cl0);
-    sp_canvas_item_hide(this->cl1);
+    cl0 = new Inkscape::CanvasItemCurve(desktop->getCanvasControls());
+    cl1 = new Inkscape::CanvasItemCurve(desktop->getCanvasControls());
+    cl0->hide();
+    cl1->hide();
 
     sp_event_context_read(this, "mode");
 
@@ -203,10 +161,10 @@ void PenTool::_cancel() {
     this->num_clicks = 0;
     this->state = PenTool::STOP;
     this->_resetColors();
-    sp_canvas_item_hide(this->c0);
-    sp_canvas_item_hide(this->c1);
-    sp_canvas_item_hide(this->cl0);
-    sp_canvas_item_hide(this->cl1);
+    c0->hide();
+    c1->hide();
+    cl0->hide();
+    cl1->hide();
     this->message_context->clear();
     this->message_context->flash(Inkscape::NORMAL_MESSAGE, _("Drawing cancelled"));
 
@@ -388,14 +346,7 @@ bool PenTool::_handleButtonPress(GdkEventButton const &bevent) {
             return true;
         }
 
-        if (!this->grab ) {
-            // Grab mouse, so release will not pass unnoticed
-            this->grab = SP_CANVAS_ITEM(desktop->acetate);
-            sp_canvas_item_grab(this->grab, ( GDK_KEY_PRESS_MASK | GDK_BUTTON_PRESS_MASK   |
-                                            GDK_BUTTON_RELEASE_MASK |
-                                            GDK_POINTER_MOTION_MASK  ),
-                                nullptr, bevent.time);
-        }
+        grabCanvasEvents();
 
         pen_drag_origin_w = event_w;
         pen_within_tolerance = true;
@@ -759,7 +710,7 @@ bool PenTool::_handleButtonRelease(GdkEventButton const &revent) {
                         this->_finishSegment(p, revent.state);
                         // hude the guide of the penultimate node when closing the curve
                         if(this->spiro){
-                            sp_canvas_item_hide(this->c1);
+                            c1->hide();
                         }
                         this->_finish(true);
                         this->state = PenTool::POINT;
@@ -784,7 +735,7 @@ bool PenTool::_handleButtonRelease(GdkEventButton const &revent) {
                         this->_finishSegment(p, revent.state);
                         // hide the penultimate node guide when closing the curve
                         if(this->spiro){
-                            sp_canvas_item_hide(this->c1);
+                            c1->hide();
                         }
                         if (this->green_closed) {
                             // finishing at the start anchor, close curve
@@ -805,11 +756,8 @@ bool PenTool::_handleButtonRelease(GdkEventButton const &revent) {
             default:
                 break;
         }
-        if (this->grab) {
-            // Release grab now
-            sp_canvas_item_ungrab(this->grab);
-            this->grab = nullptr;
-        }
+
+        ungrabCanvasEvents();
 
         ret = true;
 
@@ -851,36 +799,36 @@ void PenTool::_redrawAll() {
     // green
     if (! this->green_bpaths.empty()) {
         // remove old piecewise green canvasitems
-        for (auto i : this->green_bpaths){
-            sp_canvas_item_destroy(i);
+        for (auto path : this->green_bpaths) {
+            delete path;
         }
         this->green_bpaths.clear();
-        // one canvas bpath for all of green_curve
-        SPCanvasItem *canvas_shape = sp_canvas_bpath_new(this->desktop->getSketch(), this->green_curve.get(), true);
-        sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(canvas_shape), this->green_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
-        sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(canvas_shape), 0, SP_WIND_RULE_NONZERO);
 
+        // one canvas bpath for all of green_curve
+        auto canvas_shape = new Inkscape::CanvasItemBpath(desktop->getCanvasSketch(), green_curve.get(), true);
+        canvas_shape->set_stroke(green_color);
+        canvas_shape->set_fill(0x0, SP_WIND_RULE_NONZERO);
         this->green_bpaths.push_back(canvas_shape);
     }
     if (this->green_anchor) {
-        SP_CTRL(this->green_anchor->ctrl)->moveto(this->green_anchor->dp);
+        this->green_anchor->ctrl->set_position(this->green_anchor->dp);
     }
     
     this->red_curve->reset();
     this->red_curve->moveto(this->p[0]);
     this->red_curve->curveto(this->p[1], this->p[2], this->p[3]);
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(red_bpath), red_curve.get(), true);
+    red_bpath->set_bpath(red_curve.get(), true);
 
     // handles
     // hide the handlers in bspline and spiro modes
     if (this->p[0] != this->p[1] && !this->spiro && !this->bspline) {
-        SP_CTRL(this->c1)->moveto(this->p[1]);
-        this->cl1->setCoords(this->p[0], this->p[1]);
-        sp_canvas_item_show(this->c1);
-        sp_canvas_item_show(this->cl1);
+        c1->set_position(p[1]);
+        c1->show();
+        cl1->set_coords(p[0], p[1]);
+        cl1->show();
     } else {
-        sp_canvas_item_hide(this->c1);
-        sp_canvas_item_hide(this->cl1);
+        c1->hide();
+        cl1->hide();
     }
 
     Geom::Curve const * last_seg = this->green_curve->last_segment();
@@ -891,13 +839,13 @@ void PenTool::_redrawAll() {
              (*cubic)[2] != this->p[0] && !this->spiro && !this->bspline )
         {
             Geom::Point p2 = (*cubic)[2];
-            SP_CTRL(this->c0)->moveto(p2);
-            this->cl0->setCoords(p2, this->p[0]);
-            sp_canvas_item_show(this->c0);
-            sp_canvas_item_show(this->cl0);
+            c0->set_position(p2);
+            c0->show();
+            cl0->set_coords(p2, p[0]);
+            cl0->show();
         } else {
-            sp_canvas_item_hide(this->c0);
-            sp_canvas_item_hide(this->cl0);
+            c0->hide();
+            cl0->hide();
         }
     }
 
@@ -1239,13 +1187,15 @@ bool PenTool::_handleKeyPress(GdkEvent *event) {
 void PenTool::_resetColors() {
     // Red
     this->red_curve->reset();
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), nullptr, true);
+    this->red_bpath->set_bpath(nullptr);
+
     // Blue
     this->blue_curve->reset();
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->blue_bpath), nullptr, true);
+    this->blue_bpath->set_bpath(nullptr);
+
     // Green
-    for (auto i:this->green_bpaths) {
-        sp_canvas_item_destroy(i);
+    for (auto path : this->green_bpaths) {
+        delete path;
     }
     this->green_bpaths.clear();
     this->green_curve->reset();
@@ -1267,7 +1217,7 @@ void PenTool::_setInitialPoint(Geom::Point const p) {
     this->p[0] = p;
     this->p[1] = p;
     this->npoints = 2;
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), nullptr, true);
+    this->red_bpath->set_bpath(nullptr);
 
     forced_redraws_start(5);
 }
@@ -1305,10 +1255,10 @@ void PenTool::_setAngleDistanceStatusMessage(Geom::Point const p, int pc_point_t
 void PenTool::_bsplineSpiroColor()
 {
     static Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if(this->spiro){
+    if (this->spiro){
         this->red_color = 0xff000000;
         this->green_color = 0x00ff0000;
-    }else if(this->bspline){
+    } else if(this->bspline) {
         this->highlight_color = SP_ITEM(this->desktop->currentLayer())->highlight_color();
         if((unsigned int)prefs->getInt("/tools/nodes/highlight_color", 0xff0000ff) == this->highlight_color){
             this->green_color = 0xff00007f;
@@ -1317,7 +1267,7 @@ void PenTool::_bsplineSpiroColor()
             this->green_color = this->highlight_color;
             this->red_color = this->highlight_color;
         }
-    }else{
+    } else {
         this->highlight_color = SP_ITEM(this->desktop->currentLayer())->highlight_color();
         this->red_color = 0xff00007f;
         if((unsigned int)prefs->getInt("/tools/nodes/highlight_color", 0xff0000ff) == this->highlight_color){
@@ -1325,23 +1275,26 @@ void PenTool::_bsplineSpiroColor()
         } else {
             this->green_color = this->highlight_color;
         }
-        sp_canvas_item_hide(this->blue_bpath);
+        blue_bpath->hide();
     }
+
     //We erase all the "green_bpaths" to recreate them after with the colour
     //transparency recently modified
     if (!this->green_bpaths.empty()) {
         // remove old piecewise green canvasitems
-        for (auto i:this->green_bpaths) {
-            sp_canvas_item_destroy(i);
+        for (auto path : this->green_bpaths) {
+            delete path;
         }
         this->green_bpaths.clear();
+
         // one canvas bpath for all of green_curve
-        SPCanvasItem *canvas_shape = sp_canvas_bpath_new(this->desktop->getSketch(), this->green_curve.get(), true);
-        sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(canvas_shape), this->green_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
-        sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(canvas_shape), 0, SP_WIND_RULE_NONZERO);
+        auto canvas_shape = new Inkscape::CanvasItemBpath(desktop->getCanvasSketch(), green_curve.get(), true);
+        canvas_shape->set_stroke(green_color);
+        canvas_shape->set_fill(0x0, SP_WIND_RULE_NONZERO);
         this->green_bpaths.push_back(canvas_shape);
     }
-    sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(this->red_bpath), this->red_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
+
+    this->red_bpath->set_stroke(red_color);
 }
 
 
@@ -1558,7 +1511,7 @@ void PenTool::_bsplineSpiroMotion(guint const state){
         auto red = std::make_unique<SPCurve>();
         red->moveto(this->p[0]);
         red->curveto(this->p[1],this->p[2],this->p[3]);
-        sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), red.get(), true);
+        this->red_bpath->set_bpath(red.get(), true);
     }
     
     if(this->anchor_statusbar && !this->red_curve->is_unset()){
@@ -1568,18 +1521,19 @@ void PenTool::_bsplineSpiroMotion(guint const state){
             this->_bsplineSpiroEndAnchorOn();
         }
     }
-    if (!this->green_bpaths.empty()) {
-        // remove old piecewise green canvasitems
-        for (auto i: this->green_bpaths) {
-            sp_canvas_item_destroy(i);
-        }
-        this->green_bpaths.clear();
+
+    // remove old piecewise green canvasitems
+    for (auto path: this->green_bpaths) {
+        delete path;
     }
+    this->green_bpaths.clear();
+
     // one canvas bpath for all of green_curve
-    SPCanvasItem *canvas_shape = sp_canvas_bpath_new(this->desktop->getSketch(), this->green_curve.get(), true);
-    sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(canvas_shape), this->green_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
-    sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(canvas_shape), 0, SP_WIND_RULE_NONZERO);
+    auto canvas_shape = new Inkscape::CanvasItemBpath(desktop->getCanvasSketch(), green_curve.get(), true);
+    canvas_shape->set_stroke(green_color);
+    canvas_shape->set_fill(0x0, SP_WIND_RULE_NONZERO);
     this->green_bpaths.push_back(canvas_shape);
+
     this->_bsplineSpiroBuild();
 }
 
@@ -1707,7 +1661,7 @@ void PenTool::_bsplineSpiroBuild()
         }else{
             this->red_curve->curveto(this->p[1],this->p[2],this->p[3]);
         }
-        sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(red_bpath), red_curve.get(), true);
+        red_bpath->set_bpath(red_curve.get(), true);
         curve->append_continuous(*red_curve);
     }
     previous = *this->red_curve->last_point();
@@ -1729,23 +1683,24 @@ void PenTool::_bsplineSpiroBuild()
             LivePathEffect::sp_spiro_do_effect(curve.get());
         }
 
-        sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->blue_bpath), curve.get(), true);
-        sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(this->blue_bpath), this->blue_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
-        sp_canvas_item_show(this->blue_bpath);
+        blue_bpath->set_bpath(curve.get(), true);
+        blue_bpath->set_stroke(blue_color);
+        blue_bpath->show();
+
         this->blue_curve->reset();
         //We hide the holders that doesn't contribute anything
-        if(this->spiro){
-            sp_canvas_item_show(this->c1);
-            SP_CTRL(this->c1)->moveto(this->p[0]);
-        }else
-            sp_canvas_item_hide(this->c1);
-        sp_canvas_item_hide(this->cl1);
-        sp_canvas_item_hide(this->c0);
-        sp_canvas_item_hide(this->cl0);
-    }else{
+        if (this->spiro){
+            c1->set_position(p[0]);
+            c1->show();
+        } else {
+            c1->hide();
+        }
+        c0->hide();
+        cl0->hide();
+        cl1->hide();
+    } else {
         //if the curve is empty
-        sp_canvas_item_hide(this->blue_bpath);
-
+        blue_bpath->hide();
     }
 }
 
@@ -1784,7 +1739,7 @@ void PenTool::_setSubsequentPoint(Geom::Point const p, bool statusbar, guint sta
         }
     }
 
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(red_bpath), red_curve.get(), true);
+    red_bpath->set_bpath(red_curve.get(), true);
 
     if (statusbar) {
         gchar *message;
@@ -1804,51 +1759,51 @@ void PenTool::_setSubsequentPoint(Geom::Point const p, bool statusbar, guint sta
 }
 
 
-void PenTool::_setCtrl(Geom::Point const p, guint const state) {
-    sp_canvas_item_show(this->c1);
-    sp_canvas_item_show(this->cl1);
+void PenTool::_setCtrl(Geom::Point const q, guint const state) { // use 'q' as 'p' shadows member variable.
+    c1->show();
+    cl1->show();
 
     if ( this->npoints == 2 ) {
-        this->p[1] = p;
-        sp_canvas_item_hide(this->c0);
-        sp_canvas_item_hide(this->cl0);
-        SP_CTRL(this->c1)->moveto(this->p[1]);
-        this->cl1->setCoords(this->p[0], this->p[1]);
-        this->_setAngleDistanceStatusMessage(p, 0, _("<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap angle"));
+        this->p[1] = q;
+        c0->hide();
+        cl0->hide();
+        c1->set_position(p[1]);
+        cl1->set_coords(p[0], p[1]);
+        this->_setAngleDistanceStatusMessage(q, 0, _("<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap angle"));
     } else if ( this->npoints == 5 ) {
-        this->p[4] = p;
-        sp_canvas_item_show(this->c0);
-        sp_canvas_item_show(this->cl0);
+        this->p[4] = q;
+        c0->show();
+        cl0->show();
         bool is_symm = false;
         if ( ( ( this->mode == PenTool::MODE_CLICK ) && ( state & GDK_CONTROL_MASK ) ) ||
              ( ( this->mode == PenTool::MODE_DRAG ) &&  !( state & GDK_SHIFT_MASK  ) ) ) {
-            Geom::Point delta = p - this->p[3];
+            Geom::Point delta = q - this->p[3];
             this->p[2] = this->p[3] - delta;
             is_symm = true;
             this->red_curve->reset();
             this->red_curve->moveto(this->p[0]);
             this->red_curve->curveto(this->p[1], this->p[2], this->p[3]);
-            sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(red_bpath), red_curve.get(), true);
+            red_bpath->set_bpath(red_curve.get(), true);
         }
-        SP_CTRL(this->c0)->moveto(this->p[2]);
-        this->cl0 ->setCoords(this->p[3], this->p[2]);
-        SP_CTRL(this->c1)->moveto(this->p[4]);
-        this->cl1->setCoords(this->p[3], this->p[4]);
+        c0->set_position(this->p[2]);
+        cl0->set_coords(this->p[3], this->p[2]);
+        c1->set_position(this->p[4]);
+        cl1->set_coords(this->p[3], this->p[4]);
 
 
 
         gchar *message = is_symm ?
             _("<b>Curve handle, symmetric</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap angle, with <b>Shift</b> to move this handle only") :
             _("<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap angle, with <b>Shift</b> to move this handle only");
-        this->_setAngleDistanceStatusMessage(p, 3, message);
+        this->_setAngleDistanceStatusMessage(q, 3, message);
     } else {
         g_warning("Something bad happened - npoints is %d", this->npoints);
     }
 }
 
-void PenTool::_finishSegment(Geom::Point const p, guint const state) {
+void PenTool::_finishSegment(Geom::Point const q, guint const state) { // use 'q' as 'p' shadows member variable.
     if (this->polylines_paraxial) {
-        this->nextParaxialDirection(p, this->p[0], state);
+        this->nextParaxialDirection(q, this->p[0], state);
     }
 
     ++num_clicks;
@@ -1872,9 +1827,9 @@ void PenTool::_finishSegment(Geom::Point const p, guint const state) {
         auto curve = this->red_curve->copy();
 
         /// \todo fixme:
-        SPCanvasItem *canvas_shape = sp_canvas_bpath_new(this->desktop->getSketch(), curve.get(), true);
-        sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(canvas_shape), this->green_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
-
+        auto canvas_shape = new Inkscape::CanvasItemBpath(desktop->getCanvasSketch(), curve.get(), true);
+        canvas_shape->set_stroke(green_color);
+        canvas_shape->set_fill(0x0, SP_WIND_RULE_NONZERO);
         this->green_bpaths.push_back(canvas_shape);
 
         this->p[0] = this->p[3];
@@ -1927,17 +1882,17 @@ bool PenTool::_undoLastPoint() {
         if (this->green_curve->get_segment_count() == 1) {
             this->npoints = 5;
             if (!this->green_bpaths.empty()) {
-                sp_canvas_item_destroy(this->green_bpaths.back());
+                delete this->green_bpaths.back();
                 this->green_bpaths.pop_back();
             }
             this->green_curve->reset();
         } else {
             this->green_curve->backspace();
             if (this->green_bpaths.size() > 1) {
-                sp_canvas_item_destroy(this->green_bpaths.back());
+                delete this->green_bpaths.back();
                 this->green_bpaths.pop_back();
             } else if (this->green_bpaths.size() == 1) {
-                sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(green_bpaths.back()), this->green_curve.get(), true);
+                green_bpaths.back()->set_bpath(green_curve.get(), true);
             }
         }
 
@@ -1946,16 +1901,16 @@ bool PenTool::_undoLastPoint() {
             Geom::CubicBezier const *cubic = dynamic_cast<Geom::CubicBezier const *>(this->green_curve->last_segment());
             if ( cubic ) {
                 this->p[1] = (*cubic)[3] + (*cubic)[3] - (*cubic)[2];
-                SP_CTRL(this->c1)->moveto(this->p[0]);
+                c1->set_position(this->p[0]);
             } else {
                 this->p[1] = this->p[0];
             }
         }
 
-        sp_canvas_item_hide(this->c0);
-        sp_canvas_item_hide(this->c1);
-        sp_canvas_item_hide(this->cl0);
-        sp_canvas_item_hide(this->cl1);
+        c0->hide();
+        c1->hide();
+        cl0->hide();
+        cl1->hide();
         this->state = PenTool::POINT;
 
         if(this->polylines_paraxial) {
@@ -2002,10 +1957,10 @@ void PenTool::_finish(gboolean const closed) {
     this->npoints = 0;
     this->state = PenTool::POINT;
 
-    sp_canvas_item_hide(this->c0);
-    sp_canvas_item_hide(this->c1);
-    sp_canvas_item_hide(this->cl0);
-    sp_canvas_item_hide(this->cl1);
+    c0->hide();
+    c1->hide();
+    cl0->hide();
+    cl1->hide();
 
     if (this->green_anchor) {
         this->green_anchor = sp_draw_anchor_destroy(this->green_anchor);

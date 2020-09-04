@@ -765,10 +765,17 @@ feed_curve_to_cairo(cairo_t *cr, Geom::Curve const &c, Geom::Affine const & tran
     break;
     default:
     {
-        if (Geom::EllipticalArc const *a = dynamic_cast<Geom::EllipticalArc const*>(&c)) {
-            //if (!optimize_stroke || a->boundsFast().intersects(view)) {
-                Geom::Affine xform = a->unitCircleTransform() * trans;
-                Geom::Point ang(a->initialAngle().radians(), a->finalAngle().radians());
+        if (Geom::EllipticalArc const *arc = dynamic_cast<Geom::EllipticalArc const*>(&c)) {
+            if (arc->isChord()) {
+                Geom::Point endPoint(arc->finalPoint());
+                cairo_line_to(cr, endPoint[0], endPoint[1]);
+            } else {
+                Geom::Affine xform = arc->unitCircleTransform() * trans;
+                // Don't draw anything if the angle is borked
+                if(isnan(arc->initialAngle()) || isnan(arc->finalAngle())) {
+                    g_warning("Bad angle while drawing EllipticalArc");
+                    break;
+                }
 
                 // Apply the transformation to the current context
                 cairo_matrix_t cm;
@@ -783,17 +790,14 @@ feed_curve_to_cairo(cairo_t *cr, Geom::Curve const &c, Geom::Affine const & tran
                 cairo_transform(cr, &cm);
 
                 // Draw the circle
-                if (a->sweep()) {
-                    cairo_arc(cr, 0, 0, 1, ang[0], ang[1]);
+                if (arc->sweep()) {
+                    cairo_arc(cr, 0, 0, 1, arc->initialAngle(), arc->finalAngle());
                 } else {
-                    cairo_arc_negative(cr, 0, 0, 1, ang[0], ang[1]);
+                    cairo_arc_negative(cr, 0, 0, 1, arc->initialAngle(), arc->finalAngle());
                 }
                 // Revert the current context
                 cairo_restore(cr);
-            //} else {
-            //    Geom::Point f = a->finalPoint() * trans;
-            //    cairo_move_to(cr, f[X], f[Y]);
-            //}
+            }
         } else {
             // handles sbasis as well as all other curve types
             // this is very slow
@@ -1015,6 +1019,24 @@ ink_cairo_surface_copy(cairo_surface_t *s)
     }
 
     return ns;
+}
+
+/**
+ * Create an exact copy of an image surface.
+ */
+Cairo::RefPtr<Cairo::ImageSurface>
+ink_cairo_surface_copy(Cairo::RefPtr<Cairo::ImageSurface> surface )
+{
+    int width  = surface->get_width();
+    int height = surface->get_height();
+    int stride = surface->get_stride();
+    auto new_surface = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32, width, height); // device scale?
+
+    surface->flush();
+    memcpy(new_surface->get_data(), surface->get_data(), stride * height);
+    new_surface->mark_dirty(); // Clear caches. Mandatory after messing directly with contents.
+
+    return new_surface;
 }
 
 /**
@@ -1584,9 +1606,13 @@ guint32 pixbuf_from_argb32(guint32 c)
 void
 convert_pixels_pixbuf_to_argb32(guchar *data, int w, int h, int stride)
 {
+    if (!data || w < 1 || h < 1 || stride < 1) {
+        return;
+    }
+
     for (size_t i = 0; i < h; ++i) {
         guint32 *px = reinterpret_cast<guint32*>(data + i*stride);
-        for (int j = 0; j < w; ++j) {
+        for (size_t j = 0; j < w; ++j) {
             *px = argb32_from_pixbuf(*px);
             ++px;
         }
@@ -1601,9 +1627,12 @@ convert_pixels_pixbuf_to_argb32(guchar *data, int w, int h, int stride)
 void
 convert_pixels_argb32_to_pixbuf(guchar *data, int w, int h, int stride)
 {
+    if (!data || w < 1 || h < 1 || stride < 1) {
+        return;
+    }
     for (size_t i = 0; i < h; ++i) {
         guint32 *px = reinterpret_cast<guint32*>(data + i*stride);
-        for (int j = 0; j < w; ++j) {
+        for (size_t j = 0; j < w; ++j) {
             *px = pixbuf_from_argb32(*px);
             ++px;
         }

@@ -259,7 +259,7 @@ std::string get_filename(std::string const& path, std::string const& filename)
  *  extensions - A list of extensions to return, e.g. xml, svg
  *  exclusions - A list of names to exclude e.g. default.xml
  */
-std::vector<Glib::ustring> get_filenames(Type type, std::vector<const char *> extensions, std::vector<const char *> exclusions)
+std::vector<Glib::ustring> get_filenames(Type type, std::vector<const char *> const &extensions, std::vector<const char *> const &exclusions)
 {
     std::vector<Glib::ustring> ret;
     get_filenames_from_path(ret, get_path_string(USER, type), extensions, exclusions);
@@ -268,13 +268,13 @@ std::vector<Glib::ustring> get_filenames(Type type, std::vector<const char *> ex
     return ret;
 }
 
-std::vector<Glib::ustring> get_filenames(Domain domain, Type type, std::vector<const char *> extensions, std::vector<const char *> exclusions)
+std::vector<Glib::ustring> get_filenames(Domain domain, Type type, std::vector<const char *> const &extensions, std::vector<const char *> const &exclusions)
 {
     std::vector<Glib::ustring> ret;
     get_filenames_from_path(ret, get_path_string(domain, type), extensions, exclusions);
     return ret;
 }
-std::vector<Glib::ustring> get_filenames(Glib::ustring path, std::vector<const char *> extensions, std::vector<const char *> exclusions)
+std::vector<Glib::ustring> get_filenames(Glib::ustring path, std::vector<const char *> const &extensions, std::vector<const char *> const &exclusions)
 {
     std::vector<Glib::ustring> ret;
     get_filenames_from_path(ret, Glib::filename_from_utf8(path), extensions, exclusions);
@@ -289,7 +289,7 @@ std::vector<Glib::ustring> get_filenames(Glib::ustring path, std::vector<const c
  *  extensions - A list of extensions to return, e.g. xml, svg
  *  exclusions - A list of names to exclude e.g. default.xml
  */
-std::vector<Glib::ustring> get_foldernames(Type type, std::vector<const char *> exclusions)
+std::vector<Glib::ustring> get_foldernames(Type type, std::vector<const char *> const &exclusions)
 {
     std::vector<Glib::ustring> ret;
     get_foldernames_from_path(ret, get_path_ustring(USER, type), exclusions);
@@ -298,13 +298,13 @@ std::vector<Glib::ustring> get_foldernames(Type type, std::vector<const char *> 
     return ret;
 }
 
-std::vector<Glib::ustring> get_foldernames(Domain domain, Type type, std::vector<const char *> exclusions)
+std::vector<Glib::ustring> get_foldernames(Domain domain, Type type, std::vector<const char *> const &exclusions)
 {
     std::vector<Glib::ustring> ret;
     get_foldernames_from_path(ret, get_path_ustring(domain, type), exclusions);
     return ret;
 }
-std::vector<Glib::ustring> get_foldernames(Glib::ustring path, std::vector<const char *> exclusions)
+std::vector<Glib::ustring> get_foldernames(Glib::ustring path, std::vector<const char *> const &exclusions)
 {
     std::vector<Glib::ustring> ret;
     get_foldernames_from_path(ret, path, exclusions);

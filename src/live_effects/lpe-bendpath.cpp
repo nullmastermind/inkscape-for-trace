@@ -180,8 +180,8 @@ void
 LPEBendPath::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
 {
     _knot_entity = new BeP::KnotHolderEntityWidthBendPath(this);
-    _knot_entity->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_LPE, _("Change the width"),
-                         SP_KNOT_SHAPE_CIRCLE);
+    _knot_entity->create(nullptr, item, knotholder, Inkscape::CANVAS_ITEM_CTRL_TYPE_LPE, "LPE:WidthBend",
+                         _("Change the width"));
     knotholder->add(_knot_entity);
     if (hide_knot) {
         _knot_entity->knot->hide();

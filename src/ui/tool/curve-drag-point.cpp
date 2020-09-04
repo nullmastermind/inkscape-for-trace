@@ -27,10 +27,11 @@ bool CurveDragPoint::_segment_was_degenerate = false;
 
 CurveDragPoint::CurveDragPoint(PathManipulator &pm) :
     ControlPoint(pm._multi_path_manipulator._path_data.node_data.desktop, Geom::Point(), SP_ANCHOR_CENTER,
-                 CTRL_TYPE_INVISIPOINT,
+                 Inkscape::CANVAS_ITEM_CTRL_TYPE_INVISIPOINT,
                  invisible_cset, pm._multi_path_manipulator._path_data.dragpoint_group),
       _pm(pm)
 {
+    _canvas_item_ctrl->set_name("CanvasItemCtrl:CurveDragPoint");
     setVisible(false);
 }
 

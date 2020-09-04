@@ -34,9 +34,9 @@
 #include "snap.h"
 #include "verbs.h"
 
-#include "display/sp-canvas-util.h"
-#include "display/sp-ctrlcurve.h"
-#include "display/sp-ctrlline.h"
+#include "display/control/canvas-item-group.h"
+#include "display/control/canvas-item-ctrl.h"
+#include "display/control/canvas-item-curve.h"
 
 #include "object/sp-linear-gradient.h"
 #include "object/sp-mesh-gradient.h"
@@ -48,19 +48,14 @@
 #include "svg/css-ostringstream.h"
 #include "svg/svg.h"
 
-#include "ui/control-manager.h"
 #include "ui/tools/tool-base.h"
 #include "ui/widget/canvas.h" // Forced redraws
 
 #include "xml/sp-css-attr.h"
 #include "xml/attribute-record.h"
 
-using Inkscape::ControlManager;
-using Inkscape::CtrlLineType;
 using Inkscape::DocumentUndo;
 using Inkscape::allPaintTargets;
-using Inkscape::CTLINE_PRIMARY;
-using Inkscape::CTLINE_SECONDARY;
 
 guint32 const GR_KNOT_COLOR_NORMAL     = 0xffffff00;
 guint32 const GR_KNOT_COLOR_MOUSEOVER  = 0xff000000;
@@ -72,19 +67,19 @@ guint32 const GR_KNOT_COLOR_MESHCORNER = 0xbfbfbf00;
 #define MERGE_DIST 0.1
 
 // knot shapes corresponding to GrPointType enum (in sp-gradient.h)
-SPKnotShapeType gr_knot_shapes [] = {
-        SP_KNOT_SHAPE_SQUARE,  // POINT_LG_BEGIN
-        SP_KNOT_SHAPE_CIRCLE,  // POINT_LG_END
-        SP_KNOT_SHAPE_DIAMOND, // POINT_LG_MID
-        SP_KNOT_SHAPE_SQUARE,  // POINT_RG_CENTER
-        SP_KNOT_SHAPE_CIRCLE,  // POINT_RG_R1
-        SP_KNOT_SHAPE_CIRCLE,  // POINT_RG_R2
-        SP_KNOT_SHAPE_CROSS,   // POINT_RG_FOCUS
-        SP_KNOT_SHAPE_DIAMOND, // POINT_RG_MID1
-        SP_KNOT_SHAPE_DIAMOND, // POINT_RG_MID2
-        SP_KNOT_SHAPE_DIAMOND, // POINT_MG_CORNER
-        SP_KNOT_SHAPE_CIRCLE,  // POINT_MG_HANDLE
-        SP_KNOT_SHAPE_SQUARE   // POINT_MG_TENSOR
+Inkscape::CanvasItemCtrlShape gr_knot_shapes [] = {
+        Inkscape::CANVAS_ITEM_CTRL_SHAPE_SQUARE,  // POINT_LG_BEGIN
+        Inkscape::CANVAS_ITEM_CTRL_SHAPE_CIRCLE,  // POINT_LG_END
+        Inkscape::CANVAS_ITEM_CTRL_SHAPE_DIAMOND, // POINT_LG_MID
+        Inkscape::CANVAS_ITEM_CTRL_SHAPE_SQUARE,  // POINT_RG_CENTER
+        Inkscape::CANVAS_ITEM_CTRL_SHAPE_CIRCLE,  // POINT_RG_R1
+        Inkscape::CANVAS_ITEM_CTRL_SHAPE_CIRCLE,  // POINT_RG_R2
+        Inkscape::CANVAS_ITEM_CTRL_SHAPE_CROSS,   // POINT_RG_FOCUS
+        Inkscape::CANVAS_ITEM_CTRL_SHAPE_DIAMOND, // POINT_RG_MID1
+        Inkscape::CANVAS_ITEM_CTRL_SHAPE_DIAMOND, // POINT_RG_MID2
+        Inkscape::CANVAS_ITEM_CTRL_SHAPE_DIAMOND, // POINT_MG_CORNER
+        Inkscape::CANVAS_ITEM_CTRL_SHAPE_CIRCLE,  // POINT_MG_HANDLE
+        Inkscape::CANVAS_ITEM_CTRL_SHAPE_SQUARE   // POINT_MG_TENSOR
 };
 
 const gchar *gr_knot_descr [] = {
@@ -576,22 +571,15 @@ bool GrDrag::dropColor(SPItem */*item*/, gchar const *c, Geom::Point p)
     }
 
     // now see if we're over line and create a new stop
-    bool over_line = false;
-    if (!lines.empty()) {
-        for (std::vector<SPCtrlLine *>::const_iterator l = lines.begin(); l != lines.end() && (!over_line); ++l) {
-            SPCtrlLine *line = *l;
-            Geom::LineSegment ls(line->s, line->e);
-            Geom::Point nearest = ls.pointAt(ls.nearestTime(p));
-            double dist_screen = Geom::L2(p - nearest) * desktop->current_zoom();
-            if (line->item && dist_screen < 5) {
-                SPStop *stop = addStopNearPoint(line->item, p, 5/desktop->current_zoom());
-                if (stop) {
-                    SPCSSAttr *css = sp_repr_css_attr_new();
-                    sp_repr_css_set_property( css, "stop-color", stopIsNull ? nullptr : toUse.c_str() );
-                    sp_repr_css_set_property( css, "stop-opacity", "1" );
-                    sp_repr_css_change(stop->getRepr(), css, "style");
-                    return true;
-                }
+    for (auto curve : item_curves) {
+        if (curve->is_line() && curve->get_item() && curve->contains(p, 5)) {
+            SPStop *stop = addStopNearPoint(curve->get_item(), p, 5/desktop->current_zoom());
+            if (stop) {
+                SPCSSAttr *css = sp_repr_css_attr_new();
+                sp_repr_css_set_property( css, "stop-color", stopIsNull ? nullptr : toUse.c_str() );
+                sp_repr_css_set_property( css, "stop-opacity", "1" );
+                sp_repr_css_change(stop->getRepr(), css, "style");
+                return true;
             }
         }
     }
@@ -607,7 +595,6 @@ GrDrag::GrDrag(SPDesktop *desktop) :
     hor_levels(),
     vert_levels(),
     draggers(0),
-    lines(0),
     selection(desktop->getSelection()),
     sel_changed_connection(),
     sel_modified_connection(),
@@ -673,10 +660,10 @@ GrDrag::~GrDrag()
     this->draggers.clear();
     this->selected.clear();
 
-    for (std::vector<SPCtrlLine *>::const_iterator it = this->lines.begin(); it != this->lines.end(); ++it) {
-        sp_canvas_item_destroy(SP_CANVAS_ITEM(*it));
+    for (auto curve : item_curves) {
+        delete curve;
     }
-    this->lines.clear();
+    item_curves.clear();
 }
 
 GrDraggable::GrDraggable(SPItem *item, GrPointType point_type, guint point_i, Inkscape::PaintTarget fill_or_stroke) :
@@ -1205,14 +1192,15 @@ void GrDragger::fireDraggables(bool write_repr, bool scale_radial, bool merging_
     }
 }
 
+// TODO: REMOVE THIS
 void GrDragger::updateControlSizesOverload(SPKnot * knot)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    int sizes[] = {4, 6, 8, 10, 12, 14, 16};
+    int sizes[] = {3, 5, 7, 9, 11, 13, 15}; // Must be odd!
     std::vector<int> sizeTable = std::vector<int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
     int size = prefs->getIntLimited("/options/grabsize/value", 3, 1, 7);
     int knot_size = sizeTable[size - 1];
-    if(knot->shape == SP_KNOT_SHAPE_TRIANGLE){
+    if(knot->shape == Inkscape::CANVAS_ITEM_CTRL_SHAPE_TRIANGLE) {
         knot_size *= 2.2;
         knot_size = floor(knot_size);
         if ( knot_size % 2 == 0 ){
@@ -1478,13 +1466,13 @@ void GrDragger::updateKnotShape()
         return;
     GrDraggable *last = draggables.back();
 
-    g_object_set (G_OBJECT (this->knot->item), "shape", gr_knot_shapes[last->point_type], NULL);
+    this->knot->ctrl->set_shape(gr_knot_shapes[last->point_type]);
 
     // For highlighting mesh handles corresponding to selected corner
-    if (this->knot->shape == SP_KNOT_SHAPE_TRIANGLE) {
+    if (this->knot->shape == Inkscape::CANVAS_ITEM_CTRL_SHAPE_TRIANGLE) {
         this->knot->setFill(GR_KNOT_COLOR_HIGHLIGHT, GR_KNOT_COLOR_MOUSEOVER, GR_KNOT_COLOR_MOUSEOVER, GR_KNOT_COLOR_MOUSEOVER);
-        if (gr_knot_shapes[last->point_type] == SP_KNOT_SHAPE_CIRCLE) {
-            g_object_set (G_OBJECT (this->knot->item), "shape", SP_KNOT_SHAPE_TRIANGLE, NULL);
+        if (gr_knot_shapes[last->point_type] == Inkscape::CANVAS_ITEM_CTRL_SHAPE_CIRCLE) {
+            this->knot->ctrl->set_shape(Inkscape::CANVAS_ITEM_CTRL_SHAPE_TRIANGLE);
         }
     }
 }
@@ -1620,13 +1608,13 @@ GrDragger::GrDragger(GrDrag *parent, Geom::Point p, GrDraggable *draggable)
 
     this->parent = parent;
 
-    // create the knot
-    this->knot = new SPKnot(parent->desktop, nullptr);
-    this->knot->setMode(SP_KNOT_MODE_XOR);
     guint32 fill_color = GR_KNOT_COLOR_NORMAL;
     if (draggable && draggable->point_type == POINT_MG_CORNER) {
         fill_color = GR_KNOT_COLOR_MESHCORNER;
     }
+
+    // create the knot
+    this->knot = new SPKnot(parent->desktop, "", Inkscape::CANVAS_ITEM_CTRL_TYPE_SHAPER, "CanvasItemCtrl::GrDragger");
     this->knot->setFill(fill_color, GR_KNOT_COLOR_MOUSEOVER, GR_KNOT_COLOR_MOUSEOVER, GR_KNOT_COLOR_MOUSEOVER);
     this->knot->setStroke(0x0000007f, 0x0000007f, 0x0000007f, 0x0000007f);
     this->updateControlSizesOverload(this->knot);
@@ -1648,11 +1636,17 @@ GrDragger::GrDragger(GrDrag *parent, Geom::Point p, GrDraggable *draggable)
         this->_moved_connection = this->knot->moved_signal.connect(sigc::bind(sigc::ptr_fun(gr_knot_moved_handler), this));
     }
 
-    this->sizeUpdatedConn = ControlManager::getManager().connectCtrlSizeChanged(sigc::mem_fun(*this, &GrDragger::updateControlSizes));
-    this->_clicked_connection = this->knot->click_signal.connect(sigc::bind(sigc::ptr_fun(gr_knot_clicked_handler), this));
-    this->_doubleclicked_connection = this->knot->doubleclicked_signal.connect(sigc::bind(sigc::ptr_fun(gr_knot_doubleclicked_handler), this));
-    this->_mousedown_connection = this->knot->mousedown_signal.connect(sigc::bind(sigc::ptr_fun(gr_knot_mousedown_handler), this));
-    this->_ungrabbed_connection = this->knot->ungrabbed_signal.connect(sigc::bind(sigc::ptr_fun(gr_knot_ungrabbed_handler), this));
+    this->_clicked_connection =
+        this->knot->click_signal.connect(sigc::bind(sigc::ptr_fun(gr_knot_clicked_handler), this));
+
+    this->_doubleclicked_connection =
+        this->knot->doubleclicked_signal.connect(sigc::bind(sigc::ptr_fun(gr_knot_doubleclicked_handler), this));
+
+    this->_mousedown_connection =
+        this->knot->mousedown_signal.connect(sigc::bind(sigc::ptr_fun(gr_knot_mousedown_handler), this));
+
+    this->_ungrabbed_connection =
+        this->knot->ungrabbed_signal.connect(sigc::bind(sigc::ptr_fun(gr_knot_ungrabbed_handler), this));
 
     // add the initial draggable
     if (draggable) {
@@ -1671,7 +1665,6 @@ GrDragger::~GrDragger()
     //this->parent->setDeselected(this);
 
     // disconnect signals
-    this->sizeUpdatedConn.disconnect();
     this->_moved_connection.disconnect();
     this->_clicked_connection.disconnect();
     this->_doubleclicked_connection.disconnect();
@@ -1811,9 +1804,9 @@ void GrDragger::highlightNode(SPMeshNode *node, bool highlight, Geom::Point corn
 
         if (type == POINT_MG_HANDLE) {
             if (highlight) {
-                knot->setShape(SP_KNOT_SHAPE_TRIANGLE);
+                knot->setShape(Inkscape::CANVAS_ITEM_CTRL_SHAPE_TRIANGLE);
             } else {
-                knot->setShape(SP_KNOT_SHAPE_CIRCLE);
+                knot->setShape(Inkscape::CANVAS_ITEM_CTRL_SHAPE_CIRCLE);
             }
         } else {
             //Code for tensors
@@ -1889,7 +1882,7 @@ void  GrDragger::highlightCorner(bool highlight)
 void GrDragger::select()
 {
     this->knot->fill [SP_KNOT_STATE_NORMAL] = GR_KNOT_COLOR_SELECTED;
-    g_object_set (G_OBJECT (this->knot->item), "fill_color", GR_KNOT_COLOR_SELECTED, NULL);
+    this->knot->ctrl->set_fill(GR_KNOT_COLOR_SELECTED);
     highlightCorner(true);
 }
 
@@ -1900,7 +1893,7 @@ void GrDragger::deselect()
 {
     guint32 fill_color = isA(POINT_MG_CORNER) ? GR_KNOT_COLOR_MESHCORNER : GR_KNOT_COLOR_NORMAL;
     this->knot->fill [SP_KNOT_STATE_NORMAL] = fill_color;
-    g_object_set (G_OBJECT (this->knot->item), "fill_color", fill_color, NULL);
+    this->knot->ctrl->set_fill(fill_color);
     highlightCorner(false);
 }
 
@@ -2047,24 +2040,23 @@ void GrDrag::setDeselected(GrDragger *dragger)
 
 
 /**
- * Create a line from p1 to p2 and add it to the lines list.
+ * Create a line from p1 to p2 and add it to the curves list. Used for linear and radial gradients.
  */
 void GrDrag::addLine(SPItem *item, Geom::Point p1, Geom::Point p2, Inkscape::PaintTarget fill_or_stroke)
 {
-    CtrlLineType type = (fill_or_stroke == Inkscape::FOR_FILL) ? CTLINE_PRIMARY : CTLINE_SECONDARY;
-    SPCtrlLine *line = ControlManager::getManager().createControlLine(this->desktop->getControls(), p1, p2, type);
-
-    sp_canvas_item_move_to_z(line, 0);
-    line->item = item;
-    line->is_fill = (fill_or_stroke == Inkscape::FOR_FILL);
-    sp_canvas_item_show(line);
-    this->lines.push_back(line);
+    auto canvas_item_color = (fill_or_stroke == Inkscape::FOR_FILL) ? Inkscape::CANVAS_ITEM_PRIMARY : Inkscape::CANVAS_ITEM_SECONDARY;
+    auto item_curve = new Inkscape::CanvasItemCurve(desktop->getCanvasControls(), p1, p2);
+    item_curve->set_name("GradientLine");
+    item_curve->set_stroke(canvas_item_color);
+    item_curve->set_is_fill(fill_or_stroke == Inkscape::FOR_FILL);
+    item_curve->set_item(item);
+    item_curves.push_back(item_curve);
 }
 
 
 
 /**
- * Create a curve from p0 to p3 and add it to the lines list. Used for mesh sides.
+ * Create a curve from p0 to p3 and add it to the curves list. Used for mesh sides.
  */
 void GrDrag::addCurve(SPItem *item, Geom::Point p0, Geom::Point p1, Geom::Point p2, Geom::Point p3,
                       int corner0, int corner1, int handle0, int handle1, Inkscape::PaintTarget fill_or_stroke)
@@ -2083,20 +2075,21 @@ void GrDrag::addCurve(SPItem *item, Geom::Point p0, Geom::Point p1, Geom::Point 
         highlight = true;
     }
 
-    // CtrlLineType only sets color
-    CtrlLineType type = (fill_or_stroke == Inkscape::FOR_FILL) ? CTLINE_PRIMARY : CTLINE_SECONDARY;
+    auto canvas_item_color =
+        (fill_or_stroke == Inkscape::FOR_FILL) ? Inkscape::CANVAS_ITEM_PRIMARY : Inkscape::CANVAS_ITEM_SECONDARY;
     if (highlight) {
-        type = (fill_or_stroke == Inkscape::FOR_FILL) ?  CTLINE_SECONDARY : CTLINE_PRIMARY;
+        canvas_item_color =
+            (fill_or_stroke == Inkscape::FOR_FILL) ? Inkscape::CANVAS_ITEM_SECONDARY : Inkscape::CANVAS_ITEM_PRIMARY;
     }
-    SPCtrlCurve *line = ControlManager::getManager().createControlCurve(this->desktop->getControls(), p0, p1, p2, p3, type); 
-    line->corner0 = corner0;
-    line->corner1 = corner1;
 
-    sp_canvas_item_move_to_z(line, 0);
-    line->item = item;
-    line->is_fill = (fill_or_stroke == Inkscape::FOR_FILL);
-    sp_canvas_item_show (line);
-    this->lines.push_back(line);
+    auto item_curve = new Inkscape::CanvasItemCurve(desktop->getCanvasControls(), p0, p1, p2, p3);
+    item_curve->set_name("GradientCurve");
+    item_curve->set_stroke(canvas_item_color);
+    item_curve->set_is_fill(fill_or_stroke == Inkscape::FOR_FILL);
+    item_curve->set_item(item);
+    item_curve->set_corner0(corner0);
+    item_curve->set_corner1(corner1);
+    item_curves.push_back(item_curve);
 }
 
 
@@ -2467,11 +2460,10 @@ bool GrDrag::mouseOver()
  */
 void GrDrag::updateLines()
 {
-    // delete old lines
-    for (std::vector<SPCtrlLine *>::const_iterator i = this->lines.begin(); i != this->lines.end(); ++i) {
-        sp_canvas_item_destroy(SP_CANVAS_ITEM(*i));
+    for (auto curve : item_curves) {
+        delete curve;
     }
-    this->lines.clear();
+    item_curves.clear();
 
     g_return_if_fail(this->selection != nullptr);
 

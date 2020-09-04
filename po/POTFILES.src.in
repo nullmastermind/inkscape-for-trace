@@ -16,9 +16,9 @@
 ../src/context-fns.cpp
 ../src/desktop-events.cpp
 ../src/desktop.cpp
-../src/display/canvas-axonomgrid.cpp
-../src/display/canvas-grid.cpp
-../src/display/snap-indicator.cpp
+../src/display/control/canvas-axonomgrid.cpp
+../src/display/control/canvas-grid.cpp
+../src/display/control/snap-indicator.cpp
 ../src/document.cpp
 ../src/event-log.cpp
 ../src/extension/dependency.cpp
@@ -242,7 +242,6 @@
 ../src/ui/dialog/debug.cpp
 ../src/ui/dialog/document-properties.cpp
 ../src/ui/dialog/export.cpp
-../src/ui/dialog/extension-editor.cpp
 ../src/ui/dialog/filedialogimpl-gtkmm.cpp
 ../src/ui/dialog/filedialogimpl-win32.cpp
 ../src/ui/dialog/fill-and-stroke.cpp
@@ -289,6 +288,7 @@
 ../src/ui/dialog/xml-tree.cpp
 ../src/ui/drag-and-drop.cpp
 ../src/ui/interface.cpp
+../src/ui/modifiers.cpp
 ../src/ui/shape-editor-knotholders.cpp
 ../src/ui/tool/curve-drag-point.cpp
 ../src/ui/tool/multi-path-manipulator.cpp

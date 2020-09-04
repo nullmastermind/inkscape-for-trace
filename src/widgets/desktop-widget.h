@@ -38,6 +38,7 @@ struct SPDesktopWidget;
 class SPObject;
 
 namespace Inkscape {
+  class CanvasItemGuideLine;
 namespace UI {
 namespace Dialog {
 class SwatchesPanel;
@@ -75,7 +76,7 @@ class SPDesktopWidget : public SPViewWidget {
 
     SPDesktopWidget();
 
-  public:
+public:
     SPDesktopWidget(SPDocument *document);
     ~SPDesktopWidget() override;
 
@@ -99,7 +100,7 @@ private:
 
     bool update = false;
 
-    SPCanvasItem *_active_guide = nullptr; ///< The guide currently being handled during a ruler event
+    Inkscape::CanvasItemGuideLine *_active_guide = nullptr; ///< The guide being handled during a ruler event
     Geom::Point _normal; ///< Normal to the guide currently being handled during ruler event
     int _xp = 0; ///< x coordinate for start of drag
     int _yp = 0; ///< y coordinate for start of drag
@@ -235,7 +236,7 @@ public:
 private:
     static void color_profile_event(EgeColorProfTracker *tracker, SPDesktopWidget *dtw);
 #endif
-    static void ruler_snap_new_guide(SPDesktop *desktop, SPCanvasItem *guide, Geom::Point &event_dt, Geom::Point &normal);
+    static void ruler_snap_new_guide(SPDesktop *desktop, Geom::Point &event_dt, Geom::Point &normal);
     static gint event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw);
 
 public: // Move to CanvasGrid

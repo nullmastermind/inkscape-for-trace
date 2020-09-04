@@ -21,10 +21,12 @@
 #include <gtkmm.h>
 
 class SPDocument;
-class SPCanvasGroup;
-class SPCanvasItem;
 
 namespace Inkscape {
+
+class CanvasItemDrawing;
+class CanvasItemGroup;
+
 namespace UI {
 
 namespace Widget {
@@ -43,25 +45,26 @@ public:
     ~SVGViewWidget() override;
     void setDocument(  SPDocument* document);
     void setResize( int width, int height);
+    void on_size_allocate(Gtk::Allocation& allocation) override;
 
 private:
-    void size_allocate(Gtk::Allocation& allocation);
 
     Inkscape::UI::Widget::Canvas *_canvas;
 
 // From SVGView ---------------------------------
 
 public:
-    SPDocument*     _document;
-    unsigned int    _dkey;
-    SPCanvasGroup  *_parent;
-    SPCanvasItem   *_drawing;
-    double          _hscale;     ///< horizontal scale
-    double          _vscale;     ///< vertical scale
-    bool            _rescale;    ///< whether to rescale automatically
-    bool            _keepaspect;
-    double          _width;
-    double          _height;
+    SPDocument*     _document = nullptr;
+    unsigned int    _dkey     = 0;
+    Inkscape::CanvasItemGroup    *_parent   = nullptr;
+    Inkscape::CanvasItemDrawing  *_drawing  = nullptr;
+    Gtk::Allocation _allocation;
+    double          _hscale   = 1.0;     ///< horizontal scale
+    double          _vscale   = 1.0;     ///< vertical scale
+    bool            _rescale  = false;   ///< whether to rescale automatically
+    bool            _keepaspect = false;
+    double          _width    = 0.0;
+    double          _height   = 0.0;
 
     /**
      * Helper function that sets rescale ratio.

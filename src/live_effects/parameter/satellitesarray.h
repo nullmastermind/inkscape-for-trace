@@ -58,7 +58,11 @@ public:
     void reloadKnots();
     void updateAmmount(double amount); 
     void setPathVectorSatellites(PathVectorSatellites *pathVectorSatellites, bool write = true);
-    void set_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color);
+
+    void set_oncanvas_looks(Inkscape::CanvasItemCtrlShape shape,
+                            Inkscape::CanvasItemCtrlMode mode,
+                            guint32 color);
+
 
     friend class FilletChamferKnotHolderEntity;
     friend class LPEFilletChamfer;
@@ -70,15 +74,15 @@ private:
     SatellitesArrayParam(const SatellitesArrayParam &) = delete;
     SatellitesArrayParam &operator=(const SatellitesArrayParam &) = delete;
 
-    SPKnotShapeType _knot_shape;
-    SPKnotModeType _knot_mode;
-    guint32 _knot_color;
+    Inkscape::CanvasItemCtrlShape _knot_shape = Inkscape::CANVAS_ITEM_CTRL_SHAPE_DIAMOND;
+    Inkscape::CanvasItemCtrlMode  _knot_mode = Inkscape::CANVAS_ITEM_CTRL_MODE_XOR;
+    guint32 _knot_color = 0xaaff8800;
     Geom::PathVector _hp;
-    bool _use_distance;
-    bool _global_knot_hide;
-    double _current_zoom;
-    EffectType _effectType;
-    PathVectorSatellites *_last_pathvector_satellites;
+    bool _use_distance = false;
+    bool _global_knot_hide = false;
+    double _current_zoom = 0;
+    EffectType _effectType = FILLET_CHAMFER;
+    PathVectorSatellites *_last_pathvector_satellites = nullptr;
 
 };
 

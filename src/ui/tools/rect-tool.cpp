@@ -32,7 +32,6 @@
 #include "selection.h"
 #include "verbs.h"
 
-#include "display/sp-canvas-item.h"
 
 #include "object/sp-rect.h"
 #include "object/sp-namedview.h"
@@ -65,7 +64,7 @@ RectTool::RectTool()
 }
 
 void RectTool::finish() {
-    sp_canvas_item_ungrab(SP_CANVAS_ITEM(this->desktop->acetate));
+    ungrabCanvasEvents();
     
     this->finishItem();
     this->sel_changed_connection.disconnect();
@@ -193,14 +192,7 @@ bool RectTool::root_handler(GdkEvent* event) {
             m.unSetup();
             this->center = button_dt;
 
-            sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
-                                ( GDK_KEY_PRESS_MASK |
-                                  GDK_BUTTON_RELEASE_MASK       |
-                                  GDK_POINTER_MOTION_MASK       |
-                                  GDK_POINTER_MOTION_HINT_MASK       |
-                                  GDK_BUTTON_PRESS_MASK ),
-                                nullptr, event->button.time);
-
+            grabCanvasEvents();
             ret = TRUE;
         }
         break;
@@ -258,7 +250,7 @@ bool RectTool::root_handler(GdkEvent* event) {
 
             this->item_to_select = nullptr;
             ret = TRUE;
-            sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
+            ungrabCanvasEvents();
         }
         break;
     case GDK_KEY_PRESS:
@@ -306,7 +298,7 @@ bool RectTool::root_handler(GdkEvent* event) {
 
         case GDK_KEY_space:
             if (dragging) {
-                sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
+                ungrabCanvasEvents();
                 dragging = false;
                 sp_event_context_discard_delayed_snap_event(this);
                 
@@ -469,7 +461,7 @@ void RectTool::finishItem() {
 
 void RectTool::cancel(){
     this->desktop->getSelection()->clear();
-    sp_canvas_item_ungrab(SP_CANVAS_ITEM(this->desktop->acetate));
+    ungrabCanvasEvents();
 
     if (this->rect != nullptr) {
         this->rect->deleteObject();

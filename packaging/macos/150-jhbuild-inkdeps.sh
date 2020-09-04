@@ -17,21 +17,36 @@ for script in $SELF_DIR/0??-*.sh; do source $script; done
 # Part of gtk-osx module sets.
 
 jhbuild build \
-  gtkspell3 \
   libsoup
 
 # Part of inkscape module set.
 
 jhbuild build \
-  gsl \
   boehm_gc \
-  gdl \
-  openjpeg \
-  libcdr \
-  imagemagick \
-  poppler \
   double_conversion \
-  potrace \
-  openmp \
+  gdl \
   ghostscript \
-  google_test
+  google_test \
+  gsl \
+  gspell \
+  imagemagick \
+  libcdr \
+  openjpeg \
+  openmp \
+  poppler \
+  potrace
+
+### build Python wheels ########################################################
+
+jhbuild run pip3 install wheel
+
+# We create our own wheel as the one from PyPi has been built with an SDK
+# lower than 10.9, breaking notarization for
+#   - etree.cpython-38-darwin.so
+#   - objectify.cpython-38-darwin.so
+
+install_source $PYTHON_LXML_SRC
+jhbuild run python3 setup.py bdist_wheel \
+  --plat-name macosx_${MACOSX_DEPLOYMENT_TARGET/./_}_x86_64 \
+  --bdist-dir $TMP_DIR/lxml \
+  --dist-dir $PKG_DIR

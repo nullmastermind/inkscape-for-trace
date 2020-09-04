@@ -43,32 +43,36 @@ class Selection;
 class ShapeEditor;
 
 namespace Inkscape {
+
+class CanvasItemText;
+class CanvasItemRect;
+
 namespace UI {
 namespace Tools {
 
 class LpeTool : public PenTool {
 public:
-	LpeTool();
-	~LpeTool() override;
+    LpeTool();
+    ~LpeTool() override;
 
-    ShapeEditor* shape_editor;
-    SPCanvasItem *canvas_bbox;
+    ShapeEditor* shape_editor = nullptr;
+    Inkscape::CanvasItemRect *canvas_bbox = nullptr;
     Inkscape::LivePathEffect::EffectType mode;
 
-    std::map<SPPath *, SPCanvasItem*> *measuring_items;
+    std::map<SPPath *, Inkscape::CanvasItemText*> measuring_items;
 
     sigc::connection sel_changed_connection;
     sigc::connection sel_modified_connection;
 
-	static const std::string prefsPath;
+    static const std::string prefsPath;
 
-	const std::string& getPrefsPath() override;
+    const std::string& getPrefsPath() override;
 
 protected:
-	void setup() override;
-	void set(const Inkscape::Preferences::Entry& val) override;
-	bool root_handler(GdkEvent* event) override;
-	bool item_handler(SPItem* item, GdkEvent* event) override;
+    void setup() override;
+    void set(const Inkscape::Preferences::Entry& val) override;
+    bool root_handler(GdkEvent* event) override;
+    bool item_handler(SPItem* item, GdkEvent* event) override;
 };
 
 int lpetool_mode_to_index(Inkscape::LivePathEffect::EffectType const type);

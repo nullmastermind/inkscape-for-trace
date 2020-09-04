@@ -12,6 +12,7 @@
  */
 
 #include <algorithm>
+
 #include "display/drawing.h"
 #include "nr-filter-gaussian.h"
 #include "nr-filter-types.h"
@@ -31,22 +32,11 @@ static const gdouble grayscale_value_matrix[20] = {
     0   , 0   , 0    , 1, 0
 };
 
-Drawing::Drawing(SPCanvasArena *arena)
-    : _root(nullptr)
-    , outlinecolor(0x000000ff)
-    , delta(0)
-    , _exact(false)
-    , _outline_sensitive(false)
-    , _rendermode(RENDERMODE_NORMAL)
-    , _colormode(COLORMODE_NORMAL)
-    , _blur_quality(BLUR_QUALITY_BEST)
-    , _filter_quality(Filters::FILTER_QUALITY_BEST)
-    , _cache_score_threshold(50000.0)
-    , _cache_budget(0)
+Drawing::Drawing(Inkscape::CanvasItemDrawing *canvas_item_drawing)
+    : _canvas_item_drawing(canvas_item_drawing)
     , _grayscale_colormatrix(std::vector<gdouble>(grayscale_value_matrix, grayscale_value_matrix + 20))
-    , _canvasarena(arena)
 {
-
+    // _canvas_item_drawing can be null. Used this way by Eraser tool.
 }
 
 Drawing::~Drawing()
@@ -209,6 +199,8 @@ Drawing::pick(Geom::Point const &p, double delta, unsigned flags)
 {
     if (_root) {
         return _root->pick(p, delta, flags);
+    } else {
+        std::cerr << "Drawing::pick: _root is null!" << std::endl;
     }
     return nullptr;
 }
@@ -241,6 +233,20 @@ Drawing::_pickItemsForCaching()
         j->setCached(false);
     }
 }
+
+/*
+ * Return average color over area. Used by Calligraphic, Dropper, and Spray tools.
+ */
+void
+Drawing::average_color(Geom::IntRect const &area, double &R, double &G, double &B, double &A)
+{
+    auto surface = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32, area.width(), area.height());
+    Inkscape::DrawingContext dc(surface->cobj(), area.min());
+    render(dc, area);
+
+    ink_cairo_surface_average_color_premul(surface->cobj(), R, G, B, A);
+}
+
 
 } // end namespace Inkscape
 

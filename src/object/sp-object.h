@@ -847,7 +847,7 @@ public:
 
     void recursivePrintTree(unsigned level = 0);  // For debugging
     static unsigned indent_level;
-    void objectTrace( std::string, bool in=true, unsigned flags=0 );
+    void objectTrace( std::string const &, bool in=true, unsigned flags=0 );
 };
 
 std::ostream &operator<<(std::ostream &out, const SPObject &o);

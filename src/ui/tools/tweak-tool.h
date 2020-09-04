@@ -23,6 +23,9 @@
 #define TC_DEFAULT_PRESSURE  0.35
 
 namespace Inkscape {
+
+class CanvasItemBpath;
+
 namespace UI {
 namespace Tools {
 
@@ -66,7 +69,7 @@ public:
     bool is_dilating;
     bool has_dilated;
     Geom::Point last_push;
-    SPCanvasItem *dilate_area;
+    Inkscape::CanvasItemBpath *dilate_area;
 
     bool do_h;
     bool do_s;

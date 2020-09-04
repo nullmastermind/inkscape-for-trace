@@ -65,6 +65,8 @@
     * by this way you can always know if the UI is in dark mode or using symbolic icons
     * Also added some helper clases:
     * ".inverted" invert colors fon widhet and childs
+    * ".highlight-dark" highlights with red tint
+    * ".highlight-light" highlights with yellow tint
     * ".symbolic" Force icon symbolic
     * ".regular" Force colorful icons
     * " .forcebright Force darlk even if the towp wingow has clas dark (happends when theme is dark)
@@ -98,6 +100,16 @@
     caret-color: @theme_bg_color;
     -gtk-secondary-caret-color: @theme_fg_color;
 }
+
+.highlight{
+    color: @theme_fg_color;
+    background-color: alpha(@theme_selected_bg_color,0.5);
+    background-image: image(alpha(@theme_selected_bg_color,0.5));
+    caret-color: @theme_bg_color;
+    border-radius:4px;
+    -gtk-secondary-caret-color: @theme_fg_color;
+}
+
 
 .inverted :not(menuitem):not(.rawstyle):not(overshoot):not(undershoot):not(selection),
 .bright .forcedark :not(menuitem):not(.rawstyle):not(overshoot):not(undershoot):not(selection),

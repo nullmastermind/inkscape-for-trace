@@ -461,11 +461,13 @@ Piecewise<D2<SBasis> > stretch_along(Piecewise<D2<SBasis> > pwd2_in, Geom::Path 
 void LPETaperStroke::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
 {
     KnotHolderEntity *e = new TpS::KnotHolderEntityAttachBegin(this);
-    e->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_LPE, _("<b>Start point of the taper</b>: drag to alter the taper, <b>Shift+click</b> changes the taper direction"), SP_KNOT_SHAPE_CIRCLE);
+    e->create(nullptr, item, knotholder, Inkscape::CANVAS_ITEM_CTRL_TYPE_LPE, "LPE:TaperStrokeBegin",
+              _("<b>Start point of the taper</b>: drag to alter the taper, <b>Shift+click</b> changes the taper direction"));
     knotholder->add(e);
 
     KnotHolderEntity *f = new TpS::KnotHolderEntityAttachEnd(this);
-    f->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_LPE, _("<b>End point of the taper</b>: drag to alter the taper, <b>Shift+click</b> changes the taper direction"), SP_KNOT_SHAPE_CIRCLE);
+    f->create(nullptr, item, knotholder, Inkscape::CANVAS_ITEM_CTRL_TYPE_LPE, "LPE:TaperStrokeEnd",
+              _("<b>End point of the taper</b>: drag to alter the taper, <b>Shift+click</b> changes the taper direction"));
     knotholder->add(f);
 }
 

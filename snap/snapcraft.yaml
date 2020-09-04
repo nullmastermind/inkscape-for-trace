@@ -17,12 +17,20 @@ description: >
  open, community-oriented development.
 confinement: strict
 grade: stable
-base: core18
+base: core20
 
 plugs:
   dot-config-inkscape:
     interface: personal-files
     write: [ $HOME/.config/inkscape ]
+  gtk-3-themes:
+    interface: content
+    target: $SNAP/data-dir/themes
+    default-provider: gtk-common-themes
+  icon-themes:
+    interface: content
+    target: $SNAP/data-dir/icons
+    default-provider: gtk-common-themes
 
 slots:
   inkscape-dbus:
@@ -30,31 +38,32 @@ slots:
     bus: session
     name: org.inkscape.Inkscape
 
+assumes: [ command-chain ]
+
 parts:
   inkscape:
     plugin: cmake
     source: .
-    configflags:
-      - '-DWITH_DBUS=ON'
-      - '-DWITH_JEMALLOC=ON'
+    cmake-parameters:
+      - '-DCMAKE_INSTALL_PREFIX='
+      - '-DCMAKE_BUILD_TYPE=Debug'
     build-packages:
+      - build-essential
       - cmake
+      - g++
       - intltool
       - libart-2.0-dev
       - libboost-dev
       - libcdr-dev
-      - libdbus-glib-1-dev
       - libdouble-conversion-dev
       - libgc-dev
       - libgdl-3-dev
       - libglib2.0-dev
-      - libgnomevfs2-dev
       - libgsl-dev
       - libgspell-1-dev
       - libgtk-3-dev
       - libgtkmm-3.0-dev
       - libharfbuzz-dev
-      - libjemalloc-dev
       - liblcms2-dev
       - libmagick++-dev
       - libpango1.0-dev
@@ -76,20 +85,18 @@ parts:
       - libatkmm-1.6-1v5
       - libcairomm-1.0-1v5
       - libcdr-0.1-1
-      - libdouble-conversion1
+      - libdouble-conversion3
       - libgc1c2
       - libgdk-pixbuf2.0-0
       - libgdl-3-5
       - libglibmm-2.4-1v5
       - libglib2.0-bin
-      - libgnomevfs2-0
       - libgsl23
       - libgslcblas0
-      - libgspell-1-1
+      - libgspell-1-2
       - libgtkmm-3.0-1v5
       - liblcms2-2
-      - libjemalloc1
-      - libmagick++-6.q16-7
+      - libmagick++-6.q16-8
       - libpangomm-1.4-1v5
       - libpoppler-glib8
       - libpotrace0
@@ -104,7 +111,6 @@ parts:
       - transfig
       - libsvg-perl
       - libxml-xql-perl
-      - ruby
       - python3-gi
       - python3-gi-cairo
     prime:
@@ -117,52 +123,81 @@ parts:
       snapcraftctl set-version "${INKSCAPE_VERSION}"
   python-deps:
     plugin: python
-    python-version: python3
     python-packages:
       - lxml
       - numpy
+      - pip
+      - pyserial
       - scour
+      - virtualenv
     stage-packages:
       - pstoedit
   snap-helpers:
     plugin: dump
     source: snap/local/scripts
+  desktop-helpers:
+    source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
+    source-subdir: gtk
+    plugin: make
+    make-parameters: ["FLAVOR=gtk3"]
+    build-packages:
+      - libgtk-3-dev
+    stage-packages:
+      - libxkbcommon0  # XKB_CONFIG_ROOT
+      - ttf-ubuntu-font-family
+      - dmz-cursor-theme
+      - light-themes
+      - adwaita-icon-theme
+      - gnome-themes-standard
+      - shared-mime-info
+      - libgtk-3-0
+      - libgtk2.0-0
+      - libgdk-pixbuf2.0-0
+      - libglib2.0-bin
+      - libgtk-3-bin
+      - unity-gtk3-module
+      - libappindicator3-1
+      - locales-all
+      - xdg-user-dirs
+      - ibus-gtk3
+      - libibus-1.0-5
+      - fcitx-frontend-gtk3
 
 apps:
   inkscape:
     command: bin/inkscape
-    command-chain: [ private-fontcache ]
+    command-chain: [ bin/desktop-launch, inkscape-variables, private-fontcache ]
     plugs:
-      - home
+      - desktop
+      - desktop-legacy
       - gsettings
+      - wayland
+      - x11
       - unity7
+      - dot-config-inkscape
+# TODO: Remove with portals
+      - home
       - cups-control
       - removable-media
-      - dot-config-inkscape
+      - raw-usb # plotter support
     slots:
       - inkscape-dbus
     desktop: share/applications/org.inkscape.Inkscape.desktop
-    environment:
-      AAREALHOME: ${SNAP_USER_DATA}/../../..
-      INKSCAPE_PROFILE_DIR: ${AAREALHOME}/.config/inkscape
-      INKSCAPE_LOCALEDIR: ${SNAP}/share/locale
-      INKSCAPE_DATADIR: ${SNAP}/share
-    extensions: [ gnome-3-28 ]
   viewer:
     command: bin/inkview
-    command-chain: [ private-fontcache ]
+    command-chain: [ bin/desktop-launch, inkscape-variables, private-fontcache ]
     plugs:
-      - home
+      - desktop
+      - desktop-legacy
       - gsettings
+      - wayland
+      - x11
       - unity7
-      - removable-media
       - dot-config-inkscape
-    environment:
-      AAREALHOME: ${SNAP_USER_DATA}/../../..
-      INKSCAPE_PROFILE_DIR: ${AAREALHOME}/.config/inkscape
-      INKSCAPE_LOCALEDIR: ${SNAP}/share/locale
-      INKSCAPE_DATADIR: ${SNAP}/share
-    extensions: [ gnome-3-28 ]
+# TODO: Remove with portals
+      - home
+      - cups-control
+      - removable-media
 
 hooks:
   configure:

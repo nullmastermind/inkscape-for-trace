@@ -35,7 +35,7 @@ public:
      *
      * @param dir is the path where the plugin should be loaded from.
      */
-    void set_base_directory(std::string dir) {
+    void set_base_directory(std::string const &dir) {
         _baseDirectory = dir;
     }
 

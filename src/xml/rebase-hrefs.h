@@ -33,7 +33,7 @@ void rebase_hrefs(SPDocument *doc, char const *new_base, bool spns);
  *
  * Note that old_abs_base and new_abs_base must each be non-NULL, absolute directory paths.
  */
-const AttributeVector* rebase_href_attrs(
+AttributeVector rebase_href_attrs(
     char const *old_abs_base,
     char const *new_abs_base,
     const AttributeVector & attributes);

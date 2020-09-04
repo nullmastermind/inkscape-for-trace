@@ -73,22 +73,22 @@ inline std::string get_filename(const char *path, const char *filename)
 }
 
 std::vector<Glib::ustring> get_filenames(Type type,
-                                std::vector<const char *> extensions={},
-                                std::vector<const char *> exclusions={});
+                                std::vector<const char *> const &extensions={},
+                                std::vector<const char *> const &exclusions={});
 
 std::vector<Glib::ustring> get_filenames(Domain domain, Type type,
-                                std::vector<const char *> extensions={},
-                                std::vector<const char *> exclusions={});
+                                std::vector<const char *> const &extensions={},
+                                std::vector<const char *> const &exclusions={});
 
 std::vector<Glib::ustring> get_filenames(Glib::ustring path,
-                                std::vector<const char *> extensions={},
-                                std::vector<const char *> exclusions={});
+                                std::vector<const char *> const &extensions={},
+                                std::vector<const char *> const &exclusions={});
 
-std::vector<Glib::ustring> get_foldernames(Type type, std::vector<const char *> exclusions = {});
+std::vector<Glib::ustring> get_foldernames(Type type, std::vector<const char *> const &exclusions = {});
 
-std::vector<Glib::ustring> get_foldernames(Domain domain, Type type, std::vector<const char *> exclusions = {});
+std::vector<Glib::ustring> get_foldernames(Domain domain, Type type, std::vector<const char *> const &exclusions = {});
 
-std::vector<Glib::ustring> get_foldernames(Glib::ustring path, std::vector<const char *> exclusions = {});
+std::vector<Glib::ustring> get_foldernames(Glib::ustring path, std::vector<const char *> const &exclusions = {});
 
 void get_foldernames_from_path(std::vector<Glib::ustring> &files, Glib::ustring path,
                                std::vector<const char *> exclusions = {});

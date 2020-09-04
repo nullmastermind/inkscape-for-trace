@@ -80,14 +80,10 @@ public:
 
 protected:
 
-    void updateControlSizes();
-
     SPDesktop *desktop;
     SPItem *item; // TODO: Remove this and keep the actual item (e.g., SPRect etc.) in the item-specific knotholders
     Inkscape::XML::Node *repr; ///< repr of the item, for setting and releasing listeners.
     std::list<KnotHolderEntity *> entity;
-
-    sigc::connection sizeUpdatedConn;
 
     SPKnotHolderReleasedFunc released;
 

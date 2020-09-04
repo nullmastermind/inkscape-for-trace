@@ -452,7 +452,9 @@ bool ObjectsPanel::_processQueue() {
     _removeWatchers(true); // ... but only remove those that are no longer in use
 
     // Now we can bring the tree view back to life safely
-    _tree.set_model(_store); // Attach the store again to the tree view
+    _tree.set_model(_store); // Attach the store again to the tree view this sets search columns as -1
+    _tree.set_search_column(_model->_colLabel);//set search column again 
+
     // Expand the tree; this is kept outside of _addObjectToTree() and _processQueue() to allow
     // temporarily detaching the store from the tree, which slightly reduces flickering
     for (auto path: _paths_to_be_expanded) {

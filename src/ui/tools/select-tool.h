@@ -44,9 +44,10 @@ public:
 	bool cycling_wrap;
 
 	SPItem *item;
-	SPCanvasItem *grabbed;
+        Inkscape::CanvasItem *grabbed = nullptr;
 	Inkscape::SelTrans *_seltrans;
 	Inkscape::SelectionDescriber *_describer;
+	gchar *no_selection_msg = nullptr;
 
 	static const std::string prefsPath;
 
@@ -59,7 +60,7 @@ public:
 
 private:
 	bool sp_select_context_abort();
-	void sp_select_context_cycle_through_items(Inkscape::Selection *selection, GdkEventScroll *scroll_event, bool shift_pressed);
+	void sp_select_context_cycle_through_items(Inkscape::Selection *selection, GdkEventScroll *scroll_event);
 	void sp_select_context_reset_opacities();
 };
 

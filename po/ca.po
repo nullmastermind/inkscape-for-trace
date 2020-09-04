@@ -570,7 +570,7 @@ msgstr "Paret de pedra"
 
 #: ../share/filters/filters.svg.h:196
 msgid "Stone wall texture to use with not too saturated colors"
-msgstr "Textura de paret de pedra per utilitzar amb colors no gaire saturats"
+msgstr "Textura de paret de pedra per a utilitzar amb colors no gaire saturats"
 
 #: ../share/filters/filters.svg.h:198
 msgid "Silk Carpet"
@@ -659,7 +659,7 @@ msgstr "Cubs"
 
 #: ../share/filters/filters.svg.h:236
 msgid "Scattered cubes; adjust the Morphology primitive to vary size"
-msgstr "Dibuixa cubs; ajustant la morfologia per variar-ne la mida"
+msgstr "Dibuixa cubs; ajustant la morfologia per a variar-ne la mida"
 
 #: ../share/filters/filters.svg.h:238
 msgid "Peel Off"
@@ -1441,7 +1441,7 @@ msgstr "Il·luminació combinada"
 
 #: ../share/filters/filters.svg.h:568 ../src/extension/internal/filter/bevels.h:232
 msgid "Basic specular bevel to use for building textures"
-msgstr "Bisell especular bàsic per utilitzar-ho amb textures d'edificis"
+msgstr "Bisell especular bàsic per a utilitzar-ho amb textures d'edificis"
 
 #: ../share/filters/filters.svg.h:570
 msgid "Tinfoil"
@@ -1730,7 +1730,7 @@ msgstr "Contorn de la llum"
 
 #: ../share/filters/filters.svg.h:720
 msgid "Uses vertical specular light to draw lines"
-msgstr "Empra una llum especular vertical per dibuixar ratlles"
+msgstr "Empra una llum especular vertical per a dibuixar ratlles"
 
 #: ../share/filters/filters.svg.h:722
 msgid "Liquid"
@@ -3232,7 +3232,7 @@ msgstr "Guarderia"
 #: ../share/symbols/symbols.h:43 ../share/symbols/symbols.h:44
 msgctxt "Symbol"
 msgid "Drinking Fountain"
-msgstr "Font per beure"
+msgstr "Font per a beure"
 
 #: ../share/symbols/symbols.h:45 ../share/symbols/symbols.h:46
 msgctxt "Symbol"
@@ -3794,7 +3794,7 @@ msgstr "Esquí alpí"
 #: ../share/symbols/symbols.h:211 ../share/symbols/symbols.h:212
 msgctxt "Symbol"
 msgid "Drinking Water"
-msgstr "Aigua per beure"
+msgstr "Aigua per a beure"
 
 #: ../share/symbols/symbols.h:215 ../share/symbols/symbols.h:216
 msgctxt "Symbol"
@@ -4043,11 +4043,11 @@ msgstr "sense capes buides"
 
 #: ../src/context-fns.cpp:45 ../src/context-fns.cpp:74
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to draw on it."
-msgstr "<b>La capa actual està amagada</b>. Mostreu-la per dibuixar-hi."
+msgstr "<b>La capa actual està amagada</b>. Mostreu-la per a dibuixar-hi."
 
 #: ../src/context-fns.cpp:51 ../src/context-fns.cpp:80
 msgid "<b>Current layer is locked</b>. Unlock it to be able to draw on it."
-msgstr "<b>La capa actual està blocada</b>. Desbloqueu-la per dibuixar-hi."
+msgstr "<b>La capa actual està blocada</b>. Desbloqueu-la per a dibuixar-hi."
 
 #: ../src/desktop-events.cpp:311
 msgid "Move guide"
@@ -4510,7 +4510,7 @@ msgstr ""
 "\n"
 "S'han ignorat les extensions que han fallat. L'Inkscape continuarà executant-se "
 "normalment, però les extensions no estaran disponibles. Si voleu obtenir detalls "
-"per resoldre aquest problema, llegiu el registre d'errors a:"
+"per a resoldre aquest problema, llegiu el registre d'errors a:"
 
 #: ../src/extension/error-file.cpp:60
 msgid "Show dialog on startup"
@@ -5066,7 +5066,7 @@ msgstr "Opacitat:"
 
 #: ../src/extension/internal/bitmap/opacity.cpp:47
 msgid "Modify opacity channel(s) of selected bitmap(s)"
-msgstr "Modifica els canals d’opacitat dels mapes de bits seleccionats"
+msgstr "Modifica els canals d'opacitat dels mapes de bits seleccionats"
 
 #: ../src/extension/internal/bitmap/raise.cpp:41
 msgid "Raise"
@@ -5080,7 +5080,7 @@ msgstr "Pujat"
 msgid ""
 "Alter lightness the edges of selected bitmap(s) to create a raised appearance"
 msgstr ""
-"Altera la lluminositat de les vores dels mapes seleccionats per crear un efecte "
+"Altera la lluminositat de les vores dels mapes seleccionats per a crear un efecte "
 "de relleu"
 
 #: ../src/extension/internal/bitmap/reduceNoise.cpp:41
@@ -5624,7 +5624,7 @@ msgstr "Filtres"
 
 #: ../src/extension/internal/filter/bevels.h:67
 msgid "Basic diffuse bevel to use for building textures"
-msgstr "Bisellat difús bàsic que s'utilitza per fer textures"
+msgstr "Bisellat difús bàsic que s'utilitza per a fer textures"
 
 #: ../src/extension/internal/filter/bevels.h:134
 msgid "Matte Jelly"
@@ -6037,7 +6037,7 @@ msgstr "Filtre de relleu general"
 
 #: ../src/extension/internal/filter/bumps.h:310
 msgid "Wax Bump"
-msgstr "Relleu cera"
+msgstr "Relleu de cera"
 
 #: ../src/extension/internal/filter/bumps.h:321
 msgid "Background:"
@@ -7362,7 +7362,7 @@ msgstr "Reemplaça l'RGB per la transparència"
 
 #: ../src/extension/internal/filter/transparency.h:206
 msgid "Light Eraser"
-msgstr "Goma d’esborrar clara"
+msgstr "Goma d'esborrar clara"
 
 #: ../src/extension/internal/filter/transparency.h:210
 #: ../src/extension/internal/filter/transparency.h:284
@@ -7973,7 +7973,7 @@ msgstr ""
 msgid ""
 "This file contains digital artwork for screen display. <b>(Choose if unsure.)</b>"
 msgstr ""
-"Aquest fitxer conté obres digitals per mostrar a la pantalla. <b>(Trieu-la si no "
+"Aquest fitxer conté obres digitals per a mostrar a la pantalla. <b>(Trieu-la si no "
 "n'esteu segur.) </b>"
 
 #: ../src/file-update.cpp:397
@@ -8030,9 +8030,9 @@ msgid ""
 "More information about this change are available in the <a href='https://"
 "inkscape.org/en/learn/faq#dpi_change'>Inkscape FAQ</a></small>"
 msgstr ""
-"<small>Hem actualitzat Inkscape per seguir l'estàndard CSS de 96 DPI per a una "
+"<small>Hem actualitzat Inkscape per a seguir l'estàndard CSS de 96 DPI per a una "
 "millor compatibilitat amb els navegadors; acostumàvem a utilitzar 90 DPI. Les "
-"il·lustracions digitals per visualitzar en pantalla es convertiran a 96 DPI "
+"il·lustracions digitals per a visualitzar en pantalla es convertiran a 96 DPI "
 "sense escalar i no es veuran afectades. Les dibuixades a 90 DPI per a una mida "
 "física específica seran massa petites si es converteixen a 96 DPI sense cap "
 "escalat. Hi ha dos mètodes d'escalat:\n"
@@ -8075,7 +8075,7 @@ msgstr "No s'ha recuperat el document anterior."
 
 #: ../src/file.cpp:353
 msgid "Select file to open"
-msgstr "Seleccioneu el fitxer per obrir"
+msgstr "Seleccioneu el fitxer per a obrir"
 
 #: ../src/file.cpp:442
 msgid "Clean up document"
@@ -8098,7 +8098,7 @@ msgid ""
 "No Inkscape extension found to save document (%s).  This may have been caused by "
 "an unknown filename extension."
 msgstr ""
-"No s'ha trobat cap extensió de l'Inkscape per desar el document (%s). És "
+"No s'ha trobat cap extensió de l'Inkscape per a desar el document (%s). És "
 "possible que es desconegui l'extensió del fitxer."
 
 #: ../src/file.cpp:489 ../src/file.cpp:499 ../src/file.cpp:508 ../src/file.cpp:515
@@ -8154,15 +8154,15 @@ msgstr "dibuix-%1"
 
 #: ../src/file.cpp:646
 msgid "Select file to save a copy to"
-msgstr "Seleccioneu el fitxer per desar-ne una còpia"
+msgstr "Seleccioneu el fitxer per a desar-ne una còpia"
 
 #: ../src/file.cpp:648
 msgid "Select file to save to"
-msgstr "Seleccioneu el fitxer per desar"
+msgstr "Seleccioneu el fitxer per a desar"
 
 #: ../src/file.cpp:758 ../src/file.cpp:760
 msgid "No changes need to be saved."
-msgstr "No hi ha cap canvi per desar."
+msgstr "No hi ha cap canvi per a desar."
 
 #: ../src/file.cpp:779
 msgid "Saving document..."
@@ -8185,7 +8185,7 @@ msgstr "No s'ha pogut carregar el fitxer demanat %s"
 
 #: ../src/file.cpp:1213
 msgid "Select file to import"
-msgstr "Seleccioneu el fitxer per importar"
+msgstr "Seleccioneu el fitxer per a importar"
 
 #: ../src/filter-enums.cpp:23
 msgid "Color Matrix"
@@ -8433,8 +8433,8 @@ msgid ""
 "%s %d for: %s%s; drag with <b>Ctrl</b> to snap offset; click with <b>Ctrl+Alt</"
 "b> to delete stop"
 msgstr ""
-"%s %d per a:%s%s; arrossegueu amb <b>Ctrl</b> per ajustar el desplaçament; feu "
-"clic amb <b>Ctrl+Alt</b> per suprimir la fase"
+"%s %d per a:%s%s; arrossegueu amb <b>Ctrl</b> per a ajustar el desplaçament; feu "
+"clic amb <b>Ctrl+Alt</b> per a suprimir la fase"
 
 #: ../src/gradient-drag.cpp:1465 ../src/gradient-drag.cpp:1474
 #: ../src/gradient-drag.cpp:1481
@@ -8452,8 +8452,8 @@ msgid ""
 "%s for: %s%s; drag with <b>Ctrl</b> to snap angle, with <b>Ctrl+Alt</b> to "
 "preserve angle, with <b>Ctrl+Shift</b> to scale around center"
 msgstr ""
-"%s per a: %s%s; arrossegueu amb <b>Ctrl</b> per ajustar l'angle, amb <b>Ctrl"
-"+Alt</b> per conservar l'angle, amb <b>Ctrl+Maj</b> per escalar al voltant del "
+"%s per a: %s%s; arrossegueu amb <b>Ctrl</b> per a ajustar l'angle, amb <b>Ctrl"
+"+Alt</b> per a conservar l'angle, amb <b>Ctrl+Maj</b> per a escalar al voltant del "
 "centre"
 
 #: ../src/gradient-drag.cpp:1486
@@ -8472,10 +8472,10 @@ msgid_plural ""
 "Gradient point shared by <b>%d</b> gradients; drag with <b>Shift</b> to separate"
 msgstr[0] ""
 "Punt de degradat compartit per <b>%d</b> degradat; arrossegueu amb <b>Maj</b> "
-"per separar"
+"per a separar"
 msgstr[1] ""
 "Punt de degradat compartit per <b>%d</b> degradats; arrossegueu amb <b>Maj</b> "
-"per separar"
+"per a separar"
 
 #: ../src/gradient-drag.cpp:2773
 msgid "Move gradient handle(s)"
@@ -8581,7 +8581,7 @@ msgid ""
 "Method used to convert pre-0.92 document dpi, if needed: [none|scale-viewbox|"
 "scale-document]"
 msgstr ""
-"Mètode utilitzat per convertir documents pre-0.92 dpi, si és necessari: [none|"
+"Mètode utilitzat per a convertir documents pre-0.92 dpi, si és necessari: [none|"
 "scale-viewbox|scale-document]"
 
 #: ../src/inkscape-application.cpp:545
@@ -8878,7 +8878,7 @@ msgstr "Desat automàtic de documents..."
 #: ../src/inkscape.cpp:320
 msgid "Autosave failed! Could not find inkscape extension to save document."
 msgstr ""
-"Ha fallat el desat automàtic. No s'ha trobat l'extensió de l'Inkscape per desar-"
+"Ha fallat el desat automàtic. No s'ha trobat l'extensió de l'Inkscape per a desar-"
 "lo."
 
 #: ../src/inkscape.cpp:323 ../src/inkscape.cpp:330
@@ -9215,7 +9215,7 @@ msgid ""
 "Transform the object to fit into a shape with four corners, either by stretching "
 "it or creating the illusion of a 3D-perspective"
 msgstr ""
-"Transforma l'objecte per encaixar-lo dins d'una forma amb quatre cantonades, ja "
+"Transforma l'objecte per a encaixar-lo dins d'una forma amb quatre cantonades, ja "
 "sigui estirant-lo o creant la il·lusió d'una perspectiva 3D"
 
 #: ../src/live_effects/effect.cpp:359
@@ -9690,7 +9690,7 @@ msgstr "Camí d'inici:"
 
 #: ../src/live_effects/lpe-attach-path.cpp:20
 msgid "Path to attach to the start of this path"
-msgstr "Camí per unir el començament del camí"
+msgstr "Camí per a unir el començament del camí"
 
 #: ../src/live_effects/lpe-attach-path.cpp:21
 msgid "Start path position:"
@@ -9698,7 +9698,7 @@ msgstr "Posició d'inici del camí:"
 
 #: ../src/live_effects/lpe-attach-path.cpp:21
 msgid "Position to attach path start to"
-msgstr "Posició per unir l'inici del camí"
+msgstr "Posició per a unir l'inici del camí"
 
 #: ../src/live_effects/lpe-attach-path.cpp:22
 msgid "Start path curve start:"
@@ -9724,7 +9724,7 @@ msgstr "Camí del final:"
 
 #: ../src/live_effects/lpe-attach-path.cpp:24
 msgid "Path to attach to the end of this path"
-msgstr "Camí per unir el final del camí"
+msgstr "Camí per a unir el final del camí"
 
 #: ../src/live_effects/lpe-attach-path.cpp:25
 msgid "End path position:"
@@ -9732,7 +9732,7 @@ msgstr "Posició del camí del final:"
 
 #: ../src/live_effects/lpe-attach-path.cpp:25
 msgid "Position to attach path end to"
-msgstr "Posició per unir el final del camí"
+msgstr "Posició per a unir el final del camí"
 
 #: ../src/live_effects/lpe-attach-path.cpp:26
 msgid "End path curve start:"
@@ -10071,11 +10071,11 @@ msgstr "Punt inicial"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:66
 msgid "Starting point to define start angle"
-msgstr "Punt inicial per definir l'angle d'inici"
+msgstr "Punt inicial per a definir l'angle d'inici"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:66
 msgid "Adjust starting point to define start angle"
-msgstr "Ajusta el punt inicial per definir l'angle d'inici"
+msgstr "Ajusta el punt inicial per a definir l'angle d'inici"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:67
 msgid "Starting angle"
@@ -10110,7 +10110,7 @@ msgstr "Buit"
 #: ../src/live_effects/lpe-copy_rotate.cpp:70
 msgid "Gap space between copies, use small negative gaps to fix some joins"
 msgstr ""
-"Espai buit entre les còpies, utilitzeu petites salts negatius per arranjar "
+"Espai buit entre les còpies, utilitzeu petits salts negatius per a arranjar "
 "algunes unions"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:71
@@ -10265,11 +10265,11 @@ msgstr "Missatges importants"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:25
 msgid "Add <b>\"Fill Between Many LPE\"</b> to add fill."
-msgstr "Afegeix <b>«Emplenar entre molts LPE»</b> per afegir l'emplenat."
+msgstr "Afegeix <b>«Emplenar entre molts LPE»</b> per a afegir l'emplenat."
 
 #: ../src/live_effects/lpe-ellipse_5pts.cpp:75
 msgid "Five points required for constructing an ellipse"
-msgstr "Calen cinc punts per construir una el·lipse"
+msgstr "Calen cinc punts per a construir una el·lipse"
 
 #: ../src/live_effects/lpe-ellipse_5pts.cpp:160
 msgid "No ellipse found for specified points"
@@ -10341,7 +10341,7 @@ msgstr "Mètode de connexió"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:57
 msgid "Method to connect end points of sub paths"
-msgstr "Mètode per connectar els punts d'acabament amb els subcamins"
+msgstr "Mètode per a connectar els punts d'acabament amb els subcamins"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:58
 msgid "Stitch length"
@@ -10527,7 +10527,7 @@ msgstr "Unitat"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:43
 msgid "Methods to calculate the fillet or chamfer"
-msgstr "Mètodes per calcular un arrodoniment o cantonada"
+msgstr "Mètodes per a calcular un arrodoniment o cantonada"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:45
 msgid "Mode, fillet or chamfer"
@@ -10678,7 +10678,7 @@ msgid ""
 "Determines which kind of interpolator will be used to interpolate between stroke "
 "width along the path"
 msgstr ""
-"Determina quin tipus d'interpolador serà utilitzat per interpolar el gruix del "
+"Determina quin tipus d'interpolador serà utilitzat per a interpolar el gruix del "
 "traç del camí"
 
 #: ../src/live_effects/lpe-jointype.cpp:36 ../src/live_effects/lpe-offset.cpp:61
@@ -10835,8 +10835,8 @@ msgid ""
 "Drag to select a crossing, click to flip it, Shift + click to change all "
 "crossings, Ctrl + click to reset and change all crossings"
 msgstr ""
-"Arrossegueu per seleccionar un encreuament, feu clic per capgirar-lo, Maj +  "
-"clic per canviar tots els encreuaments, Ctrl + clic per reiniciar i canviar tots "
+"Arrossegueu per a seleccionar un encreuament, feu clic per a capgirar-lo, Maj +  "
+"clic per a canviar tots els encreuaments, Ctrl + clic per a reiniciar i canviar tots "
 "els encreuaments"
 
 #: ../src/live_effects/lpe-knot.cpp:709
@@ -11195,7 +11195,7 @@ msgid ""
 "to disable merging"
 msgstr ""
 "Angle mínim al qual es fusionen les línies de dimensió en una, utilitzeu 180 ° "
-"per inhabilitar la fusió"
+"per a inhabilitar la fusió"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:74 ../share/extensions/frame.inx:13
 msgid "Position"
@@ -11277,7 +11277,7 @@ msgid ""
 "use another LPE with different parameters to measure these."
 msgstr ""
 "Llista separada per comes d'índexs de segments que no s'han de mesurar. Podeu "
-"utilitzar un altre LPE amb diferents paràmetres per mesurar-les."
+"utilitzar un altre LPE amb diferents paràmetres per a mesurar-les."
 
 #: ../src/live_effects/lpe-measure-segments.cpp:84
 msgid "Invert blacklist"
@@ -11545,7 +11545,7 @@ msgstr ""
 "<b><i>Quadre de diàleg d'estil</i></b> Disseny mitjançant l'editor XML per "
 "trobar les classes o identificadors adequats\n"
 "<b><i>Llistes negres </i></b> Això permet ocultar alguns segments o passos de "
-"projecció per mesurar\n"
+"projecció per a mesurar\n"
 "<b><i>Mides múltiples</i></b> Al mateix objecte, juntament amb les llistes "
 "negres, permet mesures amb diferents orientacions o una projecció addicional\n"
 "<b><i>Estableix valors predeterminats</i></b> Per a cada LPE els valors per "
@@ -12200,7 +12200,7 @@ msgstr "Magnitud del dispersador: 1r costat:"
 #: ../src/live_effects/lpe-rough-hatches.cpp:226
 msgid "Randomly moves 'bottom' half-turns to produce magnitude variations."
 msgstr ""
-"Mou aleatòriament les mitges voltes «inferiors» per produir variacions "
+"Mou aleatòriament les mitges voltes «inferiors» per a produir variacions "
 "d'amplitud."
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:227
@@ -12212,7 +12212,7 @@ msgstr "2n costat:"
 #: ../src/live_effects/lpe-rough-hatches.cpp:227
 msgid "Randomly moves 'top' half-turns to produce magnitude variations."
 msgstr ""
-"Mou aleatòriament les mitges voltes «superiors» per produir variacions "
+"Mou aleatòriament les mitges voltes «superiors» per a produir variacions "
 "d'amplitud."
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:228
@@ -12556,7 +12556,7 @@ msgstr "Suavitza els angles:"
 
 #: ../src/live_effects/lpe-simplify.cpp:25
 msgid "Max degree difference on handles to perform a smooth"
-msgstr "Màxim grau de diferència en les nanses per fer-ho suau"
+msgstr "Màxim grau de diferència en les nanses per a fer-ho suau"
 
 #: ../src/live_effects/lpe-simplify.cpp:28
 msgid "Paths separately"
@@ -12797,7 +12797,7 @@ msgstr "Suavitzat del fus:"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:76
 msgid "Amount of smoothing to apply to the tapers"
-msgstr "Quantitat de suavitzat per aplicar als fusos"
+msgstr "Quantitat de suavitzat per a aplicar als fusos"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:77
 msgid "Join type:"
@@ -12915,7 +12915,7 @@ msgid ""
 "2 consecutive segments are used to reverse/preserve orientation only (otherwise, "
 "they define a general transform)."
 msgstr ""
-"Només s'utilitzaren dos segments consecutius per preservar o canviar "
+"Només s'utilitzaren dos segments consecutius per a preservar o canviar "
 "l'orientació (d'altra banda, defineixen una transformació general)."
 
 #: ../src/live_effects/lpe-vonkoch.cpp:48
@@ -13290,8 +13290,8 @@ msgid ""
 "<b>Shift+drag</b> to rotate, <b>Ctrl+drag</b> to move origin, <b>Del</b> to "
 "delete"
 msgstr ""
-"<b>Arrossegueu+Maj</b> per girar; <b>arrossegueu+Ctrl</b> per moure l'origen; "
-"<b>Supr</b> per suprimir"
+"<b>Arrossegueu+Maj</b> per a girar; <b>arrossegueu+Ctrl</b> per a moure l'origen; "
+"<b>Supr</b> per a suprimir"
 
 #: ../src/object/sp-guide.cpp:529
 #, c-format
@@ -13537,7 +13537,7 @@ msgstr "de: %s"
 
 #: ../src/path-chemistry.cpp:68
 msgid "Select <b>object(s)</b> to combine."
-msgstr "Seleccioneu els <b>objectes</b> per combinar-los."
+msgstr "Seleccioneu els <b>objectes</b> per a combinar-los."
 
 #: ../src/path-chemistry.cpp:73
 msgid "Combining paths..."
@@ -13549,11 +13549,11 @@ msgstr "Combina"
 
 #: ../src/path-chemistry.cpp:187
 msgid "<b>No path(s)</b> to combine in the selection."
-msgstr "<b>No hi ha camins</b> per combinar a la selecció."
+msgstr "<b>No hi ha camins</b> per a combinar a la selecció."
 
 #: ../src/path-chemistry.cpp:199
 msgid "Select <b>path(s)</b> to break apart."
-msgstr "Seleccioneu els <b>camins</b> per separar."
+msgstr "Seleccioneu els <b>camins</b> per a separar."
 
 #: ../src/path-chemistry.cpp:203
 msgid "Breaking apart paths..."
@@ -13565,11 +13565,11 @@ msgstr "Separa"
 
 #: ../src/path-chemistry.cpp:292
 msgid "<b>No path(s)</b> to break apart in the selection."
-msgstr "<b>No hi ha camins</b> per separar en la selecció."
+msgstr "<b>No hi ha camins</b> per a separar en la selecció."
 
 #: ../src/path-chemistry.cpp:300
 msgid "Select <b>object(s)</b> to convert to path."
-msgstr "Seleccioneu els <b>objecte(s)</b> per convertir en camí."
+msgstr "Seleccioneu els <b>objecte(s)</b> per a convertir en camí."
 
 #: ../src/path-chemistry.cpp:306
 msgid "Converting objects to paths..."
@@ -13581,7 +13581,7 @@ msgstr "Objecte al camí"
 
 #: ../src/path-chemistry.cpp:332
 msgid "<b>No objects</b> to convert to path in the selection."
-msgstr "<b>No hi ha cap objecte</b> per convertir en camí a la selecció."
+msgstr "<b>No hi ha cap objecte</b> per a convertir en camí a la selecció."
 
 #: ../src/path-chemistry.cpp:588
 msgid "Select <b>path(s)</b> to reverse."
@@ -13899,15 +13899,15 @@ msgstr "Treu la selecció del grup"
 
 #: ../src/selection-chemistry.cpp:885
 msgid "Select a <b>group</b> to ungroup."
-msgstr "Seleccioneu un <b>grup</b> per desagrupar-lo."
+msgstr "Seleccioneu un <b>grup</b> per a desagrupar-lo."
 
 #: ../src/selection-chemistry.cpp:891
 msgid "<b>No groups</b> to ungroup in the selection."
-msgstr "<b>No hi ha cap grup</b> a la selecció per desagrupar."
+msgstr "<b>No hi ha cap grup</b> a la selecció per a desagrupar."
 
 #: ../src/selection-chemistry.cpp:985 ../src/selection-chemistry.cpp:1037
 msgid "Select <b>object(s)</b> to raise."
-msgstr "Seleccioneu els <b>objectes</b> per pujar-los."
+msgstr "Seleccioneu els <b>objectes</b> per a pujar-los."
 
 #: ../src/selection-chemistry.cpp:992 ../src/selection-chemistry.cpp:1043
 #: ../src/selection-chemistry.cpp:1069 ../src/selection-chemistry.cpp:1126
@@ -13927,7 +13927,7 @@ msgstr "Puja al capdamunt"
 
 #: ../src/selection-chemistry.cpp:1063
 msgid "Select <b>object(s)</b> to lower."
-msgstr "Seleccioneu els <b>objectes</b> per baixar-los."
+msgstr "Seleccioneu els <b>objectes</b> per a baixar-los."
 
 #. TRANSLATORS: "Lower" means "to lower an object" in the undo history
 #: ../src/selection-chemistry.cpp:1112
@@ -13937,7 +13937,7 @@ msgstr "Més baixa"
 
 #: ../src/selection-chemistry.cpp:1120
 msgid "Select <b>object(s)</b> to lower to bottom."
-msgstr "Seleccioneu els <b>objectes</b> per baixar-los al capdavall."
+msgstr "Seleccioneu els <b>objectes</b> per a baixar-los al capdavall."
 
 #: ../src/selection-chemistry.cpp:1150
 msgid "Lower to bottom"
@@ -13945,7 +13945,7 @@ msgstr "Baixa al capdavall"
 
 #: ../src/selection-chemistry.cpp:1156
 msgid "Select <b>object(s)</b> to stack up."
-msgstr "Seleccioneu els <b>objectes</b> per apilar-los cap amunt."
+msgstr "Seleccioneu els <b>objectes</b> per a apilar-los cap amunt."
 
 #: ../src/selection-chemistry.cpp:1167
 msgid "We hit top."
@@ -13959,7 +13959,7 @@ msgstr "apila cap amunt"
 
 #: ../src/selection-chemistry.cpp:1180
 msgid "Select <b>object(s)</b> to stack down."
-msgstr "Seleccioneu els <b>objectes</b> per apilar-los cap abaix."
+msgstr "Seleccioneu els <b>objectes</b> per a apilar-los cap abaix."
 
 #: ../src/selection-chemistry.cpp:1191
 msgid "We hit bottom."
@@ -14019,7 +14019,7 @@ msgstr "Enganxa la mida per separat"
 
 #: ../src/selection-chemistry.cpp:1408
 msgid "Select <b>object(s)</b> to move to the layer above."
-msgstr "Seleccioneu els <b>objectes</b> per moure a la capa de sobre."
+msgstr "Seleccioneu els <b>objectes</b> per a moure a la capa de sobre."
 
 #: ../src/selection-chemistry.cpp:1434
 msgid "Raise to next layer"
@@ -14031,7 +14031,7 @@ msgstr "Cap capa per sobre."
 
 #: ../src/selection-chemistry.cpp:1454
 msgid "Select <b>object(s)</b> to move to the layer below."
-msgstr "Seleccioneu els <b>objectes</b> per moure a la capa de sota."
+msgstr "Seleccioneu els <b>objectes</b> per a moure a la capa de sota."
 
 #: ../src/selection-chemistry.cpp:1480
 msgid "Lower to previous layer"
@@ -14043,7 +14043,7 @@ msgstr "Cap capa per sota."
 
 #: ../src/selection-chemistry.cpp:1500
 msgid "Select <b>object(s)</b> to move."
-msgstr "Seleccioneu els <b>objectes</b> per moure'ls."
+msgstr "Seleccioneu els <b>objectes</b> per a moure'ls."
 
 #: ../src/selection-chemistry.cpp:1518 ../src/verbs.cpp:2771
 msgid "Move selection to layer"
@@ -14105,7 +14105,7 @@ msgstr "La selecció no ha aplicat l'efecte del camí."
 
 #: ../src/selection-chemistry.cpp:2602 ../src/ui/dialog/clonetiler.cpp:2086
 msgid "Select an <b>object</b> to clone."
-msgstr "Seleccioneu <b>un objecte</b> per clonar-lo."
+msgstr "Seleccioneu <b>un objecte</b> per a clonar-lo."
 
 #: ../src/selection-chemistry.cpp:2637
 msgctxt "Action"
@@ -14114,16 +14114,16 @@ msgstr "Clona"
 
 #: ../src/selection-chemistry.cpp:2646
 msgid "Select <b>clones</b> to relink."
-msgstr "Seleccioneu els <b>clons</b> per tornar a enllaçar."
+msgstr "Seleccioneu els <b>clons</b> per a tornar a enllaçar."
 
 #: ../src/selection-chemistry.cpp:2654
 msgid "Copy an <b>object</b> to clipboard to relink clones to."
 msgstr ""
-"Copia un <b>objecte</b> per al porta-retalls per tornar-lo a enllaçar amb clons."
+"Copia un <b>objecte</b> per al porta-retalls per a tornar-lo a enllaçar amb clons."
 
 #: ../src/selection-chemistry.cpp:2676
 msgid "<b>No clones to relink</b> in the selection."
-msgstr "<b>No hi ha clons per tornar a enllaçar</b> a la selecció."
+msgstr "<b>No hi ha clons per a tornar a enllaçar</b> a la selecció."
 
 #: ../src/selection-chemistry.cpp:2679
 msgid "Relink clone"
@@ -14151,16 +14151,16 @@ msgid ""
 "to its source. Select a <b>text on path</b> to go to the path. Select a "
 "<b>flowed text</b> to go to its frame."
 msgstr ""
-"Seleccioneu <b>un clon</b> per anar a l'original. Seleccioneu un <b>desplaçament "
-"enllaçat</b> per anar a l'origen. Seleccioneu un <b>text en el camí</b> per anar "
-"al camí. Seleccioneu un <b>text flotant</b> per anar al marc."
+"Seleccioneu <b>un clon</b> per a anar a l'original. Seleccioneu un <b>desplaçament "
+"enllaçat</b> per a anar a l'origen. Seleccioneu un <b>text en el camí</b> per a anar "
+"al camí. Seleccioneu un <b>text flotant</b> per a anar al marc."
 
 #: ../src/selection-chemistry.cpp:2853
 msgid ""
 "<b>Cannot find</b> the object to select (orphaned clone, offset, textpath, "
 "flowed text?)"
 msgstr ""
-"<b>No es pot trobar</b> l'objecte per seleccionar (clon orfe, desplaçament, camí "
+"<b>No es pot trobar</b> l'objecte per a seleccionar (clon orfe, desplaçament, camí "
 "de text o text flotant)"
 
 #: ../src/selection-chemistry.cpp:2860
@@ -14176,7 +14176,7 @@ msgstr "Seleccioneu camins per omplir-los."
 
 #: ../src/selection-chemistry.cpp:2973
 msgid "Select <b>object(s)</b> to convert to marker."
-msgstr "Seleccioneu <b>objectes</b> per convertir en marcador."
+msgstr "Seleccioneu <b>objectes</b> per a convertir en marcador."
 
 #: ../src/selection-chemistry.cpp:3035
 msgid "Objects to marker"
@@ -14184,7 +14184,7 @@ msgstr "Objectes per retolar"
 
 #: ../src/selection-chemistry.cpp:3058
 msgid "Select <b>object(s)</b> to convert to guides."
-msgstr "Seleccioneu <b>objectes</b> per convertir en guies."
+msgstr "Seleccioneu <b>objectes</b> per a convertir en guies."
 
 #: ../src/selection-chemistry.cpp:3079
 msgid "Objects to guides"
@@ -14192,7 +14192,7 @@ msgstr "Objectes a guies"
 
 #: ../src/selection-chemistry.cpp:3110
 msgid "Select <b>objects</b> to convert to symbol."
-msgstr "Seleccioneu <b>objectes</b> per convertir en símbol."
+msgstr "Seleccioneu <b>objectes</b> per a convertir en símbol."
 
 #: ../src/selection-chemistry.cpp:3249
 msgid "Group to symbol"
@@ -14205,7 +14205,7 @@ msgstr "Seleccioneu un <b>símbol</b> per extreure'n objectes."
 #: ../src/selection-chemistry.cpp:3272
 msgid "Select only one <b>symbol</b> in Symbol dialog to convert to group."
 msgstr ""
-"Selecciona només un <b>símbol</b> en el diàleg del símbol per convertir-lo en "
+"Selecciona només un <b>símbol</b> en el diàleg del símbol per a convertir-lo en "
 "grup."
 
 #: ../src/selection-chemistry.cpp:3333
@@ -14214,7 +14214,7 @@ msgstr "Grup des del símbol"
 
 #: ../src/selection-chemistry.cpp:3347
 msgid "Select <b>object(s)</b> to convert to pattern."
-msgstr "Seleccioneu <b>objectes</b> per convertir en patró."
+msgstr "Seleccioneu <b>objectes</b> per a convertir en patró."
 
 #: ../src/selection-chemistry.cpp:3437
 msgid "Objects to pattern"
@@ -14235,7 +14235,7 @@ msgstr "Patró a objectes"
 
 #: ../src/selection-chemistry.cpp:3594
 msgid "Select <b>object(s)</b> to make a bitmap copy."
-msgstr "Seleccioneu els <b>objectes</b> per fer-ne una còpia del mapa de bits."
+msgstr "Seleccioneu els <b>objectes</b> per a fer-ne una còpia del mapa de bits."
 
 #: ../src/selection-chemistry.cpp:3598
 msgid "Rendering bitmap..."
@@ -14247,7 +14247,7 @@ msgstr "Crea un mapa de bits"
 
 #: ../src/selection-chemistry.cpp:3801 ../src/selection-chemistry.cpp:3909
 msgid "Select <b>object(s)</b> to create clippath or mask from."
-msgstr "Seleccioneu <b>objectes</b> per fer-ne un camí de retall o una màscara."
+msgstr "Seleccioneu <b>objectes</b> per a fer-ne un camí de retall o una màscara."
 
 #: ../src/selection-chemistry.cpp:3885
 msgid "Create Clip Group"
@@ -14256,7 +14256,7 @@ msgstr "Crea un grup del clip"
 #: ../src/selection-chemistry.cpp:3913
 msgid "Select mask object and <b>object(s)</b> to apply clippath or mask to."
 msgstr ""
-"Seleccioneu un objecte de màscara i altres <b>objectes</b> per aplicar-hi un "
+"Seleccioneu un objecte de màscara i altres <b>objectes</b> per a aplicar-hi un "
 "camí de retall o una màscara."
 
 #: ../src/selection-chemistry.cpp:4079
@@ -14269,7 +14269,7 @@ msgstr "Estableix la màscara"
 
 #: ../src/selection-chemistry.cpp:4093
 msgid "Select <b>object(s)</b> to remove clippath or mask from."
-msgstr "Seleccioneu <b>objectes</b> per suprimir un camí de retall o una màscara."
+msgstr "Seleccioneu <b>objectes</b> per a suprimir un camí de retall o una màscara."
 
 #: ../src/selection-chemistry.cpp:4212
 msgid "Release clipping path"
@@ -14281,7 +14281,7 @@ msgstr "Treu la màscara"
 
 #: ../src/selection-chemistry.cpp:4230
 msgid "Select <b>object(s)</b> to fit canvas to."
-msgstr "Seleccioneu <b>objectes</b> per ajustar-hi el llenç."
+msgstr "Seleccioneu <b>objectes</b> per a ajustar-hi el llenç."
 
 #: ../src/selection-chemistry.cpp:4238 ../src/verbs.cpp:3150
 msgid "Fit Page to Selection"
@@ -14358,23 +14358,23 @@ msgstr[1] " en <b>%i</b> capes"
 
 #: ../src/selection-describer.cpp:182
 msgid "Convert symbol to group to edit"
-msgstr "Converteix un símbol a grup per editar-lo"
+msgstr "Converteix un símbol a grup per a editar-lo"
 
 #: ../src/selection-describer.cpp:186
 msgid "Remove from symbols tray to edit symbol"
-msgstr "Elimina el símbol de la safata de símbols per editar-lo"
+msgstr "Elimina el símbol de la safata de símbols per a editar-lo"
 
 #: ../src/selection-describer.cpp:192
 msgid "Use <b>Shift+D</b> to look up original"
-msgstr "Feu servir <b>Maj+D</b> per cercar l'original"
+msgstr "Feu servir <b>Maj+D</b> per a cercar l'original"
 
 #: ../src/selection-describer.cpp:198
 msgid "Use <b>Shift+D</b> to look up path"
-msgstr "Feu servir <b>Maj+D</b> per cercar el camí"
+msgstr "Feu servir <b>Maj+D</b> per a cercar el camí"
 
 #: ../src/selection-describer.cpp:204
 msgid "Use <b>Shift+D</b> to look up frame"
-msgstr "Feu servir <b>Maj+D</b> per cercar el marc"
+msgstr "Feu servir <b>Maj+D</b> per a cercar el marc"
 
 #: ../src/selection-describer.cpp:220
 #, c-format
@@ -14395,39 +14395,39 @@ msgid ""
 "<b>Squeeze or stretch</b> selection; with <b>Ctrl</b> to scale uniformly; with "
 "<b>Shift</b> to scale around rotation center"
 msgstr ""
-"<b>Estireu o estrenyeu</b> la selecció; amb <b>Ctrl</b> per escalar "
-"uniformement; amb <b>Maj</b> per escalar al voltant del centre de rotació"
+"<b>Estireu o estrenyeu</b> la selecció; amb <b>Ctrl</b> per a escalar "
+"uniformement; amb <b>Maj</b> per a escalar al voltant del centre de rotació"
 
 #: ../src/seltrans-handles.cpp:19
 msgid ""
 "<b>Scale</b> selection; with <b>Ctrl</b> to scale uniformly; with <b>Shift</b> "
 "to scale around rotation center"
 msgstr ""
-"<b>Escaleu</b> la selecció; amb <b>Ctrl</b> per escalar uniformement; amb "
-"<b>Maj</b> per escalar al voltant del centre de rotació"
+"<b>Escaleu</b> la selecció; amb <b>Ctrl</b> per a escalar uniformement; amb "
+"<b>Maj</b> per a escalar al voltant del centre de rotació"
 
 #: ../src/seltrans-handles.cpp:20
 msgid ""
 "<b>Skew</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> to skew "
 "around the opposite side"
 msgstr ""
-"<b>Inclina</b> la selecció; amb <b>Ctrl</b> per ajustar l'angle; amb <b>Maj</b> "
-"per girar al voltant de la cantonada contrària"
+"<b>Inclina</b> la selecció; amb <b>Ctrl</b> per a ajustar l'angle; amb <b>Maj</b> "
+"per a girar al voltant de la cantonada contrària"
 
 #: ../src/seltrans-handles.cpp:21
 msgid ""
 "<b>Rotate</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> to "
 "rotate around the opposite corner"
 msgstr ""
-"<b>Gireu</b> la selecció; amb <b>Ctrl</b> per ajustar l'angle; amb <b>Maj</b> "
-"per girar al voltant de la cantonada contrària"
+"<b>Gireu</b> la selecció; amb <b>Ctrl</b> per a ajustar l'angle; amb <b>Maj</b> "
+"per a girar al voltant de la cantonada contrària"
 
 #: ../src/seltrans-handles.cpp:22
 msgid ""
 "<b>Center</b> of rotation and skewing: drag to reposition; scaling with Shift "
 "also uses this center"
 msgstr ""
-"<b>Centre</b> de rotació i inclinació; arrossegueu per moure; escalar amb Maj "
+"<b>Centre</b> de rotació i inclinació; arrossegueu per a moure; escalar amb Maj "
 "també utilitza aquest centre"
 
 #: ../src/seltrans-handles.cpp:23
@@ -14443,7 +14443,7 @@ msgid ""
 "<b>Align</b> objects to center; <b>Shift</b> click to center vertically instead "
 "of horizontally."
 msgstr ""
-"<b>Alinea</b> els objectes amb el centre; <b>Maj</b> clic al centre per fer-ho "
+"<b>Alinea</b> els objectes amb el centre; <b>Maj</b> clic al centre per a fer-ho "
 "verticalment, en lloc de horitzontalment."
 
 #: ../src/seltrans.cpp:496 ../src/ui/dialog/transformation.cpp:907
@@ -14472,14 +14472,14 @@ msgstr "<b>Escala</b>: %0.2f%% x %0.2f%%; amb <b>Ctrl</b> per blocar el radi"
 #: ../src/seltrans.cpp:1231
 #, c-format
 msgid "<b>Skew</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"
-msgstr "<b>Inclina</b>: %0.2f&#176;; amb <b>Ctrl</b> per ajustar l'angle"
+msgstr "<b>Inclina</b>: %0.2f&#176;; amb <b>Ctrl</b> per a ajustar l'angle"
 
 #. TRANSLATORS: don't modify the first ";"
 #. (it will NOT be displayed as ";" - only the second one will be)
 #: ../src/seltrans.cpp:1307
 #, c-format
 msgid "<b>Rotate</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"
-msgstr "<b>Gira</b>: %0.2f&#176;; amb <b>Ctrl</b> per ajustar l'angle"
+msgstr "<b>Gira</b>: %0.2f&#176;; amb <b>Ctrl</b> per a ajustar l'angle"
 
 #: ../src/seltrans.cpp:1344
 #, c-format
@@ -14506,7 +14506,7 @@ msgstr "Dreceres de l'Inkscape (*.xml)"
 
 #: ../src/shortcuts.cpp:459
 msgid "Select a file to import"
-msgstr "Seleccioneu un fitxer per importar"
+msgstr "Seleccioneu un fitxer per a importar"
 
 #: ../src/splivarot.cpp:71
 msgid "Union"
@@ -14543,11 +14543,11 @@ msgid ""
 "XOR, division, or path cut."
 msgstr ""
 "No s'ha pogut determinar <b>l'ordre de profunditat</b> dels objectes "
-"seleccionats per fer la resta, XOR, divisió o tallar el camí."
+"seleccionats per a fer la resta, XOR, divisió o tallar el camí."
 
 #: ../src/splivarot.cpp:1584
 msgid "Select <b>stroked path(s)</b> to convert stroke to path."
-msgstr "Seleccioneu <b>camins de traç</b> per convertir un traç en camí."
+msgstr "Seleccioneu <b>camins de traç</b> per a convertir un traç en camí."
 
 #: ../src/splivarot.cpp:1600
 msgid "Convert stroke to path"
@@ -14622,7 +14622,7 @@ msgid ""
 "Use <b>Shift+D</b> to look up its path."
 msgstr ""
 "Aquest objecte de text <b>ja és en un camí</b>. Suprimiu-lo primer del camí. "
-"Utilitzeu <b>Maj+D</b> per cercar-ne el camí."
+"Utilitzeu <b>Maj+D</b> per a cercar-ne el camí."
 
 #: ../src/text-chemistry.cpp:100
 msgid ""
@@ -14634,7 +14634,7 @@ msgstr ""
 
 #: ../src/text-chemistry.cpp:110
 msgid "The flowed text(s) must be <b>visible</b> in order to be put on a path."
-msgstr "El text flotant ha de ser <b>visible</b> per poder-lo posar en un camí."
+msgstr "El text flotant ha de ser <b>visible</b> per a poder-lo posar en un camí."
 
 #: ../src/text-chemistry.cpp:180 ../src/verbs.cpp:2675
 msgid "Put text on path"
@@ -14642,7 +14642,7 @@ msgstr "Posa el text en el camí"
 
 #: ../src/text-chemistry.cpp:191
 msgid "Select <b>a text on path</b> to remove it from path."
-msgstr "Seleccioneu <b>un text en el camí</b> per suprimir-lo del camí."
+msgstr "Seleccioneu <b>un text en el camí</b> per a suprimir-lo del camí."
 
 #: ../src/text-chemistry.cpp:210
 msgid "<b>No texts-on-paths</b> in the selection."
@@ -14654,7 +14654,7 @@ msgstr "Suprimeix el text del camí"
 
 #: ../src/text-chemistry.cpp:255 ../src/text-chemistry.cpp:275
 msgid "Select <b>text(s)</b> to remove kerns from."
-msgstr "Seleccioneu els <b>textos</b> per suprimir-ne l'Interlletratge."
+msgstr "Seleccioneu els <b>textos</b> per a suprimir-ne l'Interlletratge."
 
 #: ../src/text-chemistry.cpp:278
 msgid "Remove manual kerns"
@@ -14682,7 +14682,7 @@ msgstr "Desfés un text flotant"
 
 #: ../src/text-chemistry.cpp:511
 msgid "Select <b>flowed text(s)</b> to convert."
-msgstr "Seleccioneu <b>texts flotants</b> per convertir."
+msgstr "Seleccioneu <b>texts flotants</b> per a convertir."
 
 #: ../src/text-chemistry.cpp:554
 msgid "Convert flowed text to text"
@@ -14694,7 +14694,7 @@ msgstr "El text flotant ha de ser <b>visible</b> per a poder-lo transformar."
 
 #: ../src/text-chemistry.cpp:565
 msgid "<b>No flowed text(s)</b> to convert in the selection."
-msgstr "<b>No hi ha textos flotants</b> per convertir en la selecció."
+msgstr "<b>No hi ha textos flotants</b> per a convertir en la selecció."
 
 #: ../src/text-editing.cpp:43
 msgid "You cannot edit <b>cloned character data</b>."
@@ -14770,7 +14770,7 @@ msgstr "No hi ha res al porta-retalls."
 
 #: ../src/ui/clipboard.cpp:442
 msgid "Select <b>object(s)</b> to paste style to."
-msgstr "Seleccioneu <b>objectes</b> per enganxar-hi l'estil."
+msgstr "Seleccioneu <b>objectes</b> per a enganxar-hi l'estil."
 
 #: ../src/ui/clipboard.cpp:453 ../src/ui/clipboard.cpp:470
 msgid "No style on the clipboard."
@@ -14778,7 +14778,7 @@ msgstr "No hi ha cap estil al porta-retalls."
 
 #: ../src/ui/clipboard.cpp:496
 msgid "Select <b>object(s)</b> to paste size to."
-msgstr "Seleccioneu <b>objectes</b> per enganxar-hi la mida."
+msgstr "Seleccioneu <b>objectes</b> per a enganxar-hi la mida."
 
 #: ../src/ui/clipboard.cpp:504
 msgid "No size on the clipboard."
@@ -14786,7 +14786,7 @@ msgstr "No hi ha cap mida al porta-retalls."
 
 #: ../src/ui/clipboard.cpp:561
 msgid "Select <b>object(s)</b> to paste live path effect to."
-msgstr "Seleccioneu <b>objectes</b> per enganxar-hi l'efecte del camí dinàmic."
+msgstr "Seleccioneu <b>objectes</b> per a enganxar-hi l'efecte del camí dinàmic."
 
 #: ../src/ui/clipboard.cpp:587
 msgid "No effect on the clipboard."
@@ -15319,7 +15319,7 @@ msgstr "Maj+Retorn Línia nova"
 
 #: ../src/ui/dialog/attrdialog.cpp:358
 msgid "<b>Click</b> attribute to edit."
-msgstr "<b>Cliqueu</b> l'atribut per editar."
+msgstr "<b>Cliqueu</b> l'atribut per a editar."
 
 #: ../src/ui/dialog/attrdialog.cpp:363
 #, c-format
@@ -15742,11 +15742,11 @@ msgstr "<b>H:</b>"
 
 #: ../src/ui/dialog/clonetiler.cpp:682
 msgid "Change the tile hue by this percentage for each row"
-msgstr "Canvia el to del mosaic per a aquest percentatge per a cada fila"
+msgstr "Canvia el to del mosaic per aquest percentatge per a cada fila"
 
 #: ../src/ui/dialog/clonetiler.cpp:688
 msgid "Change the tile hue by this percentage for each column"
-msgstr "Canvia el to del mosaic per a aquest percentatge per a cada columna"
+msgstr "Canvia el to del mosaic per aquest percentatge per a cada columna"
 
 #: ../src/ui/dialog/clonetiler.cpp:694
 msgid "Randomize the tile hue by this percentage"
@@ -15774,12 +15774,12 @@ msgstr "<b>L:</b>"
 
 #: ../src/ui/dialog/clonetiler.cpp:737
 msgid "Change the color lightness by this percentage for each row"
-msgstr "Canvia la lluminositat del color per a aquest percentatge per a cada fila"
+msgstr "Canvia la lluminositat del color per aquest percentatge per a cada fila"
 
 #: ../src/ui/dialog/clonetiler.cpp:743
 msgid "Change the color lightness by this percentage for each column"
 msgstr ""
-"Canvia la lluminositat del color per a aquest percentatge per a cada columna"
+"Canvia la lluminositat del color per aquest percentatge per a cada columna"
 
 #: ../src/ui/dialog/clonetiler.cpp:749
 msgid "Randomize the color lightness by this percentage"
@@ -16047,7 +16047,7 @@ msgstr "<small>L'objecte no té cap clon en mosaic.</small>"
 
 #: ../src/ui/dialog/clonetiler.cpp:1967
 msgid "Select <b>one object</b> whose tiled clones to unclump."
-msgstr "Seleccioneu <b>un objecte</b> per desagrupar els seus clons del mosaic."
+msgstr "Seleccioneu <b>un objecte</b> per a desagrupar els seus clons del mosaic."
 
 #: ../src/ui/dialog/clonetiler.cpp:1987
 msgid "Unclump tiled clones"
@@ -16092,7 +16092,7 @@ msgstr "<small>Aleatoritza:</small>"
 msgid ""
 "Color: <b>%s</b>; <b>Click</b> to set fill, <b>Shift+click</b> to set stroke"
 msgstr ""
-"Color: <b>%s</b>; <b>Clic</b> per definir l'emplenat, <b>Maj+clic</b> per "
+"Color: <b>%s</b>; <b>Clic</b> per a definir l'emplenat, <b>Maj+clic</b> per "
 "definir el traç"
 
 #: ../src/ui/dialog/color-item.cpp:473
@@ -16290,7 +16290,7 @@ msgstr "Ajusta sempre"
 
 #: ../src/ui/dialog/document-properties.cpp:122
 msgid "Snapping distance, in screen pixels, for snapping to objects"
-msgstr "Distància d'ajustament, en píxels de pantalla, per ajustar-se als objectes"
+msgstr "Distància d'ajustament, en píxels de pantalla, per a ajustar-se als objectes"
 
 #: ../src/ui/dialog/document-properties.cpp:122
 msgid "Always snap to objects, regardless of their distance"
@@ -16314,7 +16314,7 @@ msgstr "A_justa només quan sigui a menys de:"
 
 #: ../src/ui/dialog/document-properties.cpp:127
 msgid "Snapping distance, in screen pixels, for snapping to grid"
-msgstr "Distància d'ajustament, en píxels de pantalla, per ajustar-se a la graella"
+msgstr "Distància d'ajustament, en píxels de pantalla, per a ajustar-se a la graella"
 
 #: ../src/ui/dialog/document-properties.cpp:127
 msgid "Always snap to grids, regardless of the distance"
@@ -16338,7 +16338,7 @@ msgstr "Ajusta _només quan sigui a menys de:"
 
 #: ../src/ui/dialog/document-properties.cpp:132
 msgid "Snapping distance, in screen pixels, for snapping to guides"
-msgstr "Distància d'ajustament, en píxels de pantalla, per ajustar-se a les guies"
+msgstr "Distància d'ajustament, en píxels de pantalla, per a ajustar-se a les guies"
 
 #: ../src/ui/dialog/document-properties.cpp:132
 msgid "Always snap to guides, regardless of the distance"
@@ -16556,7 +16556,7 @@ msgstr "Afegeix un script extern..."
 
 #: ../src/ui/dialog/document-properties.cpp:1080
 msgid "Select a script to load"
-msgstr "Selecciona un script per carregar"
+msgstr "Selecciona un script per a carregar"
 
 #: ../src/ui/dialog/document-properties.cpp:1108
 msgid "Add embedded script..."
@@ -16922,7 +16922,7 @@ msgstr ""
 "Aquesta matriu determina una transformació lineal en l'espai de color. Cada fila "
 "afecta un component de color. Cada columna determina la quantitat de cada "
 "component de color que passarà de l'entrada a la sortida. L'última columna no "
-"depèn dels colors de l'entrada i, per tant, es pot utilitzar per arranjar un "
+"depèn dels colors de l'entrada i, per tant, es pot utilitzar per a arranjar un "
 "valor constant a totes les components."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:516
@@ -16941,7 +16941,7 @@ msgstr "Element SVG seleccionat"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:696
 msgid "Select an image to be used as feImage input"
-msgstr "Seleccioneu una imatge per utilitzar com a entrada"
+msgstr "Seleccioneu una imatge per a utilitzar com a entrada"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:789
 msgid "This SVG filter effect does not require any parameters."
@@ -17272,7 +17272,7 @@ msgid ""
 "divisor that is the sum of all the matrix values tends to have an evening effect "
 "on the overall color intensity of the result."
 msgstr ""
-"Després d'aplicar la matriu nucli a la imatge d'entrada per produir un nombre, "
+"Després d'aplicar la matriu nucli a la imatge d'entrada per a produir un nombre, "
 "aquest nombre es divideix pel divisor per tal d'obtenir el valor final de color "
 "de destinació. Un divisor que és la suma de tots els valors de la matriu tendeix "
 "a tenir un efecte de tarda en la intensitat de tot el color del resultat."
@@ -17286,7 +17286,7 @@ msgid ""
 "This value is added to each component. This is useful to define a constant value "
 "as the zero response of the filter."
 msgstr ""
-"Aquest valor s'afegeix a cada component. S'utilitza per definir un valor "
+"Aquest valor s'afegeix a cada component. S'utilitza per a definir un valor "
 "constant com a resposta zero del filtre."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2779
@@ -17394,8 +17394,8 @@ msgid ""
 "Erode: performs \"thinning\" of input image.\n"
 "Dilate: performs \"fattenning\" of input image."
 msgstr ""
-"Erosiona: du a terme «aprima» de la imatge d’entrada.\n"
-"Dilata: du a terme «engrandeix» de la imatge d’entrada."
+"Erosiona: du a terme «aprima» de la imatge d'entrada.\n"
+"Dilata: du a terme «engrandeix» de la imatge d'entrada."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2809
 msgid "Source of Image:"
@@ -17507,11 +17507,11 @@ msgid ""
 "this filter primitive, the special gaussian blur primitive is faster and "
 "resolution-independent."
 msgstr ""
-"La <b>feConvolveMatrix</b> us permet especificar una convolució per aplicar-la a "
+"La <b>feConvolveMatrix</b> us permet especificar una convolució per a aplicar-la a "
 "la imatge. Els efectes més coneguts que es poden realitzar amb una matriu de "
 "convolució són la difuminació, el ressaltament de vores, el relleu i la detecció "
 "de vores. Atenció tot i que es pot crear un efecte de difuminació gaussiana "
-"utilitzant aquesta primitiva del filtre, ja hi ha una primitiva millor per fer-"
+"utilitzant aquesta primitiva del filtre, ja hi ha una primitiva millor per a fer-"
 "la, que és més ràpida i independent de la resolució."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2884
@@ -17543,7 +17543,7 @@ msgid ""
 "graphic."
 msgstr ""
 "La primitiva del filtre <b>feFlood</b> omple la regió amb un color i opacitat "
-"determinades. Normalment s'utilitza com a entrada a altres filtres per donar "
+"determinades. Normalment s'utilitza com a entrada a altres filtres per a donar "
 "color a la imatge."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2896
@@ -17552,7 +17552,7 @@ msgid ""
 "commonly used together with feOffset to create a drop shadow effect."
 msgstr ""
 "La primitiva del filtre <b>feGaussianBlur</b> difumina uniformement la imatge. "
-"S'utilitza normalment juntament amb la feOffset per crear un efecte de "
+"S'utilitza normalment juntament amb la feOffset per a crear un efecte de "
 "realçament amb ombra."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2900
@@ -17591,7 +17591,7 @@ msgid ""
 "slightly different position than the actual object."
 msgstr ""
 "La primitiva del filtre <b>feOffset</b> desplaça la imatge de la forma "
-"determinada. Per exemple, això es pot fer servir per crear un efecte de "
+"determinada. Per exemple, això es pot fer servir per a crear un efecte de "
 "realçament amb ombra, on l'ombra es presenta una mica moguda respecte a la de "
 "l'objecte."
 
@@ -17624,7 +17624,7 @@ msgid ""
 msgstr ""
 "La primitiva del filtre <b>feTurbulence</b> crea soroll Perlin. Aquest tipus de "
 "soroll s'utilitza per simular fenòmens naturals com els núvols, el foc i el fum "
-"i per generar textures complexes com el marbre i el granit."
+"i per a generar textures complexes com el marbre i el granit."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2944
 msgid "Duplicate filter primitive"
@@ -19175,7 +19175,7 @@ msgid ""
 "Each tool may store its own style to apply to the newly created objects. Use the "
 "button below to set it."
 msgstr ""
-"Cada eina pot emmagatzemar el seu propi estil per aplicar-lo als nous objectes "
+"Cada eina pot emmagatzemar el seu propi estil per a aplicar-lo als nous objectes "
 "creats. Feu servir el botó que apareix a sota per establir-lo."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:302
@@ -19329,7 +19329,7 @@ msgstr "Color del contorn del camí"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:377
 msgid "Selects the color used for showing the path outline"
-msgstr "Selecciona el color utilitzat per mostrar el contorn del camí"
+msgstr "Selecciona el color utilitzat per a mostrar el contorn del camí"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:378
 msgid "Always show outline"
@@ -19391,7 +19391,7 @@ msgstr "Mostra breument el contorn dels camins seleccionats"
 #: ../src/ui/dialog/inkscape-preferences.cpp:389
 msgid "Show temporary outline even when a path is selected for editing"
 msgstr ""
-"Mostra breument el contorn fins i tot quan un camí està seleccionat per editar-lo"
+"Mostra breument el contorn fins i tot quan un camí està seleccionat per a editar-lo"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:391
 msgid "_Flash time:"
@@ -19461,7 +19461,7 @@ msgid ""
 "displayed."
 msgstr ""
 "L'inici i final de la línia de control de les eines de mesura no es considera "
-"per calcular les longituds. Només es mostraran les longituds entre les "
+"per a calcular les longituds. Només es mostraran les longituds entre les "
 "interseccions de les corbes."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:416
@@ -20676,7 +20676,7 @@ msgid ""
 "How close on the screen you need to be to an object to be able to grab it with "
 "mouse (in screen pixels)"
 msgstr ""
-"Quant s'ha d'apropar a un objecte per seleccionar-lo amb el ratolí (en píxels de "
+"Quant s'ha d'apropar a un objecte per a seleccionar-lo amb el ratolí (en píxels de "
 "pantalla)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1448
@@ -20909,7 +20909,7 @@ msgstr "Comprova els atributs i les propietats d'estil actives"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1524
 msgid "Reading"
-msgstr "S'està llegint"
+msgstr "Lectura"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1525
 msgid ""
@@ -20921,7 +20921,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1526
 msgid "Editing"
-msgstr "S'està editant"
+msgstr "Edició"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1527
 msgid ""
@@ -20933,7 +20933,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1528
 msgid "Writing"
-msgstr "S'està escrivint"
+msgstr "Escriptura"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1529
 msgid "Check attributes and style properties on writing out SVG files"
@@ -21031,7 +21031,7 @@ msgid ""
 "The ICC profile to use to calibrate display output.\n"
 "Searched directories:%s"
 msgstr ""
-"El perfil ICC que s'ha d'usar per calibrar la sortida de la pantalla.\n"
+"El perfil ICC que s'ha d'usar per a calibrar la sortida de la pantalla.\n"
 "Directoris on s'ha cercat:%s"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1579
@@ -21057,7 +21057,7 @@ msgstr "Representació del color de la pantalla:"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1595
 msgid "The rendering intent to use to calibrate display output"
 msgstr ""
-"La representació del color que s'ha d'utilitzar per calibrar la sortida a la "
+"La representació del color que s'ha d'utilitzar per a calibrar la sortida a la "
 "pantalla"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1597
@@ -21105,7 +21105,7 @@ msgstr "Representació del color del dispositiu:"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1620
 msgid "The rendering intent to use to calibrate device output"
 msgstr ""
-"La representació del color que s'ha d'utilitzar per calibrar la sortida del "
+"La representació del color que s'ha d'utilitzar per a calibrar la sortida del "
 "dispositiu"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1622
@@ -21246,7 +21246,7 @@ msgid ""
 "Uncheck this to be able to keep the current objects selected when the current "
 "layer changes"
 msgstr ""
-"Desmarqueu-lo per poder mantenir seleccionats els objectes actuals quan la capa "
+"Desmarqueu-lo per a poder mantenir seleccionats els objectes actuals quan la capa "
 "actual canvia"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1750
@@ -21276,16 +21276,16 @@ msgid ""
 "Uncheck this to be able to select objects that are hidden (either by themselves "
 "or by being in a hidden layer)"
 msgstr ""
-"Desmarqueu-lo per poder seleccionar objectes amagats (ja sigui per ells mateixos "
-"o per estar en una capa amagada)"
+"Desmarqueu-lo per a poder seleccionar objectes amagats (ja sigui per ells mateixos "
+"o per a estar en una capa amagada)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1760
 msgid ""
 "Uncheck this to be able to select objects that are locked (either by themselves "
 "or by being in a locked layer)"
 msgstr ""
-"Desmarqueu-lo per poder seleccionar objectes blocats (ja sigui per ells mateixos "
-"o per estar en una capa blocada)"
+"Desmarqueu-lo per a poder seleccionar objectes blocats (ja sigui per ells mateixos "
+"o per a estar en una capa blocada)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1762
 msgid "Wrap when cycling objects in z-order"
@@ -21910,7 +21910,7 @@ msgstr ""
 "En el maquinari modern, augmentar aquest valor (predeterminat a 16) pot ajudar a "
 "obtenir un millor rendiment al dibuix quan hi ha grans àrees amb objectes "
 "filtrats (això inclou els modes de desenfocament i combinació). Disminuir el "
-"valor en maquinari de gamma baixa amb dibuixos amb pocs o cap filtre per fer "
+"valor en maquinari de gamma baixa amb dibuixos amb pocs o cap filtre per a fer "
 "acostaments i desplaçaments en àrees rellevants més ràpidament."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2007
@@ -22716,11 +22716,11 @@ msgstr "S'ha aplicat un efecte desconegut"
 
 #: ../src/ui/dialog/livepatheffect-editor.cpp:311
 msgid "Click button to add an effect"
-msgstr "Fes clic al botó per afegir un efecte"
+msgstr "Fes clic al botó per a afegir un efecte"
 
 #: ../src/ui/dialog/livepatheffect-editor.cpp:326
 msgid "Click add button to convert clone"
-msgstr "Fes clic al botó per convertir el clon"
+msgstr "Fes clic al botó per a convertir el clon"
 
 #: ../src/ui/dialog/livepatheffect-editor.cpp:331
 #: ../src/ui/dialog/livepatheffect-editor.cpp:335
@@ -22960,16 +22960,16 @@ msgstr ""
 
 #: ../src/ui/dialog/object-properties.cpp:254
 msgid "Check to make the object invisible"
-msgstr "Habiliteu-lo per fer invisible l'objecte"
+msgstr "Habiliteu-lo per a fer invisible l'objecte"
 
 #. TRANSLATORS: "Lock" is a verb here
 #: ../src/ui/dialog/object-properties.cpp:263
 msgid "Check to make the object insensitive (not selectable by mouse)"
-msgstr "Habiliteu-lo per fer que l'objecte no es pugui seleccionar amb el ratolí"
+msgstr "Habiliteu-lo per a fer que l'objecte no es pugui seleccionar amb el ratolí"
 
 #: ../src/ui/dialog/object-properties.cpp:271
 msgid "Check to preserve aspect ratio on images"
-msgstr "Feu clic per preservar la relació d'aspecte a les imatges"
+msgstr "Feu clic per a preservar la relació d'aspecte a les imatges"
 
 #: ../src/ui/dialog/object-properties.cpp:280 ../src/verbs.cpp:2824
 #: ../src/verbs.cpp:2832
@@ -23139,7 +23139,7 @@ msgid ""
 "Highlight color of outline in Node tool. Click to set. If alpha is zero, use "
 "inherited color."
 msgstr ""
-"Ressalta el color del contorn en l'eina node. Feu clic per definir. Si l'alfa és "
+"Ressalta el color del contorn en l'eina node. Feu clic per a definir. Si l'alfa és "
 "igual a zero, utilitza el color heretat."
 
 #: ../src/ui/dialog/objects.cpp:1934
@@ -23303,7 +23303,7 @@ msgstr "Imprimeix"
 #: ../src/ui/dialog/print.cpp:176
 msgid "Could not open temporary PNG for bitmap printing"
 msgstr ""
-"No s'ha pogut obrir temporalment el fitxer PNG per imprimir-lo com a mapa de bits"
+"No s'ha pogut obrir temporalment el fitxer PNG per a imprimir-lo com a mapa de bits"
 
 #: ../src/ui/dialog/print.cpp:203
 msgid "Could not set up Document"
@@ -23578,7 +23578,7 @@ msgstr "Afegeix un glif"
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:605
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:647
 msgid "Select a <b>path</b> to define the curves of a glyph"
-msgstr "Seleccioneu un <b>camí</b> per definir les corbes del glif"
+msgstr "Seleccioneu un <b>camí</b> per a definir les corbes del glif"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:613
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:655
@@ -24188,7 +24188,7 @@ msgstr "Angle de gir (positiu = sentit horari)"
 
 #: ../src/ui/dialog/xml-tree.cpp:90
 msgid "Drag to reorder nodes"
-msgstr "Arrossegueu per reordenar els nodes"
+msgstr "Arrossegueu per a reordenar els nodes"
 
 #: ../src/ui/dialog/xml-tree.cpp:97 ../src/ui/dialog/xml-tree.cpp:98
 msgid "New element node"
@@ -24230,7 +24230,7 @@ msgstr "Mostra els atributs"
 #: ../src/ui/dialog/xml-tree.cpp:334
 msgid "<b>Click</b> to select nodes, <b>drag</b> to rearrange."
 msgstr ""
-"<b>Cliqueu</b> per seleccionar nodes, i <b>arrossegueu</b> per organitzar-los."
+"<b>Cliqueu</b> per a seleccionar nodes, i <b>arrossegueu</b> per organitzar-los."
 
 #: ../src/ui/dialog/xml-tree.cpp:551
 msgctxt "Undo History / XML dialog"
@@ -24326,7 +24326,7 @@ msgid ""
 "Adjust the <b>horizontal rounding</b> radius; with <b>Ctrl</b> to make the "
 "vertical radius the same"
 msgstr ""
-"Ajusteu el radi de <b>l'arrodoniment horitzontal</b>; amb <b>Ctrl</b> per fer "
+"Ajusteu el radi de <b>l'arrodoniment horitzontal</b>; amb <b>Ctrl</b> per a fer "
 "igual el radi vertical"
 
 #: ../src/ui/shape-editor-knotholders.cpp:553
@@ -24334,7 +24334,7 @@ msgid ""
 "Adjust the <b>vertical rounding</b> radius; with <b>Ctrl</b> to make the "
 "horizontal radius the same"
 msgstr ""
-"Ajusteu el radi de <b>l'arrodoniment vertical</b>; amb <b>Ctrl</b> per fer igual "
+"Ajusteu el radi de <b>l'arrodoniment vertical</b>; amb <b>Ctrl</b> per a fer igual "
 "el radi vertical"
 
 #: ../src/ui/shape-editor-knotholders.cpp:558
@@ -24348,7 +24348,7 @@ msgstr ""
 
 #: ../src/ui/shape-editor-knotholders.cpp:568
 msgid "Drag to move the rectangle"
-msgstr "Arrossegueu per moure el rectangle"
+msgstr "Arrossegueu per a moure el rectangle"
 
 #: ../src/ui/shape-editor-knotholders.cpp:825
 #: ../src/ui/shape-editor-knotholders.cpp:829
@@ -24390,9 +24390,9 @@ msgid ""
 "with <b>end point</b>; with <b>Ctrl</b> to snap angle; drag <b>inside</b> the "
 "ellipse for arc, <b>outside</b> for segment"
 msgstr ""
-"Col·loqueu el <b>punt inicial</b> de l'arc o segment; amb <b>Maj</b> per moure "
-"amb el <b>punt final</b>; amb <b>Ctrl</b> per ajustar l'angle; arrossegueu <b>a "
-"dins</b> de l'el·lipse per fer un arc, <b>a fora</b> per fer un segment"
+"Col·loqueu el <b>punt inicial</b> de l'arc o segment; amb <b>Maj</b> per a moure "
+"amb el <b>punt final</b>; amb <b>Ctrl</b> per a ajustar l'angle; arrossegueu <b>a "
+"dins</b> de l'el·lipse per a fer un arc, <b>a fora</b> per a fer un segment"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1166
 msgid ""
@@ -24400,13 +24400,13 @@ msgid ""
 "with <b>start point</b>; with <b>Ctrl</b> to snap angle; drag <b>inside</b> the "
 "ellipse for arc, <b>outside</b> for segment"
 msgstr ""
-"Col·loqueu el <b>punt final</b> de l'arc o segment;<b>Maj</b> per moure amb el "
+"Col·loqueu el <b>punt final</b> de l'arc o segment;<b>Maj</b> per a moure amb el "
 "<b>punt inicial</b>; amb <b>Ctrl</b> s'ajusta l'angle; arrossegueu <b>a dins</b> "
-"l'el·lipse per fer un arc, <b>a fora</b> per fer un segment"
+"l'el·lipse per a fer un arc, <b>a fora</b> per a fer un segment"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1172
 msgid "Drag to move the ellipse"
-msgstr "Arrossegueu per moure l'el·lipse"
+msgstr "Arrossegueu per a moure l'el·lipse"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1350
 msgid ""
@@ -24421,24 +24421,24 @@ msgid ""
 "Adjust the <b>base radius</b> of the star; with <b>Ctrl</b> to keep star rays "
 "radial (no skew); with <b>Shift</b> to round; with <b>Alt</b> to randomize"
 msgstr ""
-"Ajusteu el <b>radi base</b> de l'estel; amb <b>Ctrl</b> per mantenir els raigs "
+"Ajusteu el <b>radi base</b> de l'estel; amb <b>Ctrl</b> per a mantenir els raigs "
 "de l'estel radial (sense tòrcer); amb <b>Maj</b> per arrodonir; amb <b>Alt</b> "
 "per aleatoritzar"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1365
 msgid "Drag to move the star"
-msgstr "Arrossegueu per moure l'estrella"
+msgstr "Arrossegueu per a moure l'estrella"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1608
 msgid "Drag to move the spiral"
-msgstr "Arrossegueu per moure l'espiral"
+msgstr "Arrossegueu per a moure l'espiral"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1612
 msgid ""
 "Roll/unroll the spiral from <b>inside</b>; with <b>Ctrl</b> to snap angle; with "
 "<b>Alt</b> to converge/diverge"
 msgstr ""
-"Enrotlleu/desenrotlleu l'espiral des de <b>dins</b>; amb <b>Ctrl</b> per ajustar "
+"Enrotlleu/desenrotlleu l'espiral des de <b>dins</b>; amb <b>Ctrl</b> per a ajustar "
 "l'angle; amb <b>Alt</b> per convergir/divergir"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1616
@@ -24446,8 +24446,8 @@ msgid ""
 "Roll/unroll the spiral from <b>outside</b>; with <b>Ctrl</b> to snap angle; with "
 "<b>Shift</b> to scale/rotate; with <b>Alt</b> to lock radius"
 msgstr ""
-"Enrotlleu/desenrotlleu l'espiral des de <b>fora</b>; amb <b>Ctrl</b> per ajustar "
-"l'angle; amb <b>Maj</b> per escalar/girar; amb <b>Alt</b> per blocar el radi"
+"Enrotlleu/desenrotlleu l'espiral des de <b>fora</b>; amb <b>Ctrl</b> per a ajustar "
+"l'angle; amb <b>Maj</b> per a escalar/girar; amb <b>Alt</b> per blocar el radi"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1668
 msgid "Adjust the <b>offset distance</b>"
@@ -24464,7 +24464,7 @@ msgstr ""
 
 #: ../src/ui/shape-editor-knotholders.cpp:1942
 msgid "Drag to resize the <b>flowed text frame</b>"
-msgstr "Arrossegueu per canviar la mida del <b>marc de text flotant</b>"
+msgstr "Arrossegueu per a canviar la mida del <b>marc de text flotant</b>"
 
 #: ../src/ui/tool/curve-drag-point.cpp:132
 msgid "Drag curve"
@@ -24473,17 +24473,17 @@ msgstr "Arrossega la corba"
 #: ../src/ui/tool/curve-drag-point.cpp:193
 msgctxt "Path segment tip"
 msgid "<b>Shift</b>: drag to open or move BSpline handles"
-msgstr "<b>Maj</b>: arrossegueu per obrir o moure les nanses BSpline"
+msgstr "<b>Maj</b>: arrossegueu per a obrir o moure les nanses BSpline"
 
 #: ../src/ui/tool/curve-drag-point.cpp:197
 msgctxt "Path segment tip"
 msgid "<b>Shift</b>: click to toggle segment selection"
-msgstr "<b>Majúscules</b>: cliqueu per commutar la selecció de segments"
+msgstr "<b>Majúscules</b>: cliqueu per a commutar la selecció de segments"
 
 #: ../src/ui/tool/curve-drag-point.cpp:201
 msgctxt "Path segment tip"
 msgid "<b>Ctrl+Alt</b>: click to insert a node"
-msgstr "<b>Ctrl+Alt</b>: feu clic per inserir un node"
+msgstr "<b>Ctrl+Alt</b>: feu clic per a inserir un node"
 
 #: ../src/ui/tool/curve-drag-point.cpp:205
 msgctxt "Path segment tip"
@@ -24491,8 +24491,8 @@ msgid ""
 "<b>BSpline segment</b>: drag to shape the segment, doubleclick to insert node, "
 "click to select (more: Shift, Ctrl+Alt)"
 msgstr ""
-"<b>Segment BSpline</b>: arrossegueu per donar forma al segment, feu doble clic "
-"per inserir un node, feu clic per seleccionar-lo (més: Maj, Ctrl+Alt)"
+"<b>Segment BSpline</b>: arrossegueu per a donar forma al segment, feu doble clic "
+"per a inserir un node, feu clic per a seleccionar-lo (més: Maj, Ctrl+Alt)"
 
 #: ../src/ui/tool/curve-drag-point.cpp:210
 msgctxt "Path segment tip"
@@ -24500,8 +24500,8 @@ msgid ""
 "<b>Linear segment</b>: drag to convert to a Bezier segment, doubleclick to "
 "insert node, click to select (more: Shift, Ctrl+Alt)"
 msgstr ""
-"<b>Segment lineal</b>: arrossegueu per convertir-lo en un segment Bezier, feu "
-"doble clic per inserir un node, cliqueu per seleccionar-lo (més: Maj, Ctrl+Alt)"
+"<b>Segment lineal</b>: arrossegueu per a convertir-lo en un segment Bezier, feu "
+"doble clic per a inserir un node, cliqueu per a seleccionar-lo (més: Maj, Ctrl+Alt)"
 
 #: ../src/ui/tool/curve-drag-point.cpp:214
 msgctxt "Path segment tip"
@@ -24509,8 +24509,8 @@ msgid ""
 "<b>Bezier segment</b>: drag to shape the segment, doubleclick to insert node, "
 "click to select (more: Shift, Ctrl+Alt)"
 msgstr ""
-"<b>Segment Bezier</b>: arrossegueu per donar forma al segment, feu doble clic "
-"per inserir un node, cliqueu per seleccionar-lo (més: Maj, Ctrl+Alt)"
+"<b>Segment Bezier</b>: arrossegueu per a donar forma al segment, feu doble clic "
+"per a inserir un node, cliqueu per a seleccionar-lo (més: Maj, Ctrl+Alt)"
 
 #: ../src/ui/tool/multi-path-manipulator.cpp:317
 msgid "Retract handles"
@@ -24713,8 +24713,8 @@ msgid ""
 "<b>%s</b>: drag to shape the path, hover to lock, Shift+S to make smooth, Shift"
 "+Y to make symmetric. (more: %s)"
 msgstr ""
-"<b> %s</b>: arrossegueu per donar forma al camí, passeu el cursor per a blocar, "
-"Maj+S per fer-lo suau, Maj+Y per a fer-lo simètric. (més: %s)"
+"<b> %s</b>: arrossegueu per a donar forma al camí, passeu el cursor per a blocar, "
+"Maj+S per a fer-lo suau, Maj+Y per a fer-lo simètric. (més: %s)"
 
 #: ../src/ui/tool/node.cpp:621
 #, c-format
@@ -24723,7 +24723,7 @@ msgid ""
 "<b>%s</b>: drag to shape the path, hover to lock, Shift+Y to make symmetric. "
 "(more: %s)"
 msgstr ""
-"<b> %s</b>: arrossegueu per donar forma al camí, passeu el cursor per a blocar, "
+"<b> %s</b>: arrossegueu per a donar forma al camí, passeu el cursor per a blocar, "
 "Maj+Y per a fer-lo simètric. (més: %s)"
 
 #: ../src/ui/tool/node.cpp:630
@@ -24740,7 +24740,7 @@ msgstr ""
 #, c-format
 msgctxt "Path handle tip"
 msgid "<b>%s</b>: drag to shape the path. (more: %s)"
-msgstr "<b> %s</b>: arrossegueu per donar forma al camí. (més: %s)"
+msgstr "<b> %s</b>: arrossegueu per a donar forma al camí. (més: %s)"
 
 #: ../src/ui/tool/node.cpp:647
 #, c-format
@@ -24749,8 +24749,8 @@ msgid ""
 "<b>BSpline node handle</b> (%.3g power): Shift-drag to move, double-click to "
 "reset. (more: %s)"
 msgstr ""
-"<b>Nansa de node Bspline</b> (%.3g potència): Maj-arrossegar per moure, doble "
-"clic per restablir. (més: %s)"
+"<b>Nansa de node Bspline</b> (%.3g potència): Maj-arrossegar per a moure, doble "
+"clic per a restablir. (més: %s)"
 
 #: ../src/ui/tool/node.cpp:655
 msgctxt "Path handle tip"
@@ -24771,25 +24771,25 @@ msgstr "nansa del node"
 #: ../src/ui/tool/node.cpp:1530
 msgctxt "Path node tip"
 msgid "<b>Shift</b>: drag out a handle, click to toggle selection"
-msgstr "<b>Majúscules</b>: arrossegueu la nansa, cliqueu per commutar la selecció"
+msgstr "<b>Majúscules</b>: arrossegueu la nansa, cliqueu per a commutar la selecció"
 
 #: ../src/ui/tool/node.cpp:1534
 msgctxt "Path node tip"
 msgid "<b>Shift</b>: click to toggle selection"
-msgstr "<b>Majúscules</b>: cliqueu per commutar la selecció"
+msgstr "<b>Majúscules</b>: cliqueu per a commutar la selecció"
 
 #: ../src/ui/tool/node.cpp:1541
 msgctxt "Path node tip"
 msgid "<b>Ctrl+Alt</b>: move along handle lines, click to delete node"
 msgstr ""
-"<b>Ctrl+Alt</b>: mou a través de les nanses linealment, cliqueu per suprimir el "
+"<b>Ctrl+Alt</b>: mou a través de les nanses linealment, cliqueu per a suprimir el "
 "node"
 
 #: ../src/ui/tool/node.cpp:1545
 msgctxt "Path node tip"
 msgid "<b>Ctrl</b>: move along axes, click to change node type"
 msgstr ""
-"<b>Ctrl+Alt</b>: mou a través de les nanses, cliqueu per canviar el tipus de node"
+"<b>Ctrl+Alt</b>: mou a través de les nanses, cliqueu per a canviar el tipus de node"
 
 #: ../src/ui/tool/node.cpp:1551
 msgctxt "Path node tip"
@@ -24800,7 +24800,7 @@ msgstr "<b>Alt</b>: esculpeix els nodes"
 #, c-format
 msgctxt "Path node tip"
 msgid "<b>%s</b>: drag to shape the path. (more: Shift, Ctrl, Alt)"
-msgstr "<b> %s</b>: arrossegueu per donar forma al camí. (més: Maj, Ctrl, Alt)"
+msgstr "<b> %s</b>: arrossegueu per a donar forma al camí. (més: Maj, Ctrl, Alt)"
 
 #: ../src/ui/tool/node.cpp:1569
 #, c-format
@@ -24809,7 +24809,7 @@ msgid ""
 "<b>BSpline node</b> (%.3g power): drag to shape the path. (more: Shift, Ctrl, "
 "Alt)"
 msgstr ""
-"<b>Node Bspline</b> (%.3g potència): arrossegar per donar forma al camí. (més: "
+"<b>Node Bspline</b> (%.3g potència): arrossegar per a donar forma al camí. (més: "
 "Maj, Ctrl, Alt)"
 
 #: ../src/ui/tool/node.cpp:1577
@@ -24819,7 +24819,7 @@ msgid ""
 "<b>%s</b>: drag to shape the path, click to toggle scale/rotation handles. "
 "(more: Shift, Ctrl, Alt)"
 msgstr ""
-"<b>%s</b>: arrossegueu per ajustar al camí, feu clic per commutar les nanses "
+"<b>%s</b>: arrossegueu per a ajustar al camí, feu clic per a commutar les nanses "
 "d'escala/rotació. (més: Maj, Ctrl, Alt)"
 
 #: ../src/ui/tool/node.cpp:1586
@@ -24829,7 +24829,7 @@ msgid ""
 "<b>%s</b>: drag to shape the path, click to select only this node. (more: Shift, "
 "Ctrl, Alt)"
 msgstr ""
-"<b>%s</b>: arrossegueu per seguir el camí, feu cli per seleccionar només aquest "
+"<b>%s</b>: arrossegueu per a seguir el camí, feu cli per a seleccionar només aquest "
 "node (més: Maj, Ctrl, Alt)"
 
 #: ../src/ui/tool/node.cpp:1594
@@ -24839,8 +24839,8 @@ msgid ""
 "<b>BSpline node</b> (%.3g power): drag to shape the path, click to select only "
 "this node. (more: Shift, Ctrl, Alt)"
 msgstr ""
-"<b>Node BSpline</b> (%.3g potència): arrossegueu per ajustar al camí, feu clic "
-"per seleccionar només aquest node. (més: Maj, Ctrl, Alt)"
+"<b>Node BSpline</b> (%.3g potència): arrossegueu per a ajustar al camí, feu clic "
+"per a seleccionar només aquest node. (més: Maj, Ctrl, Alt)"
 
 #: ../src/ui/tool/node.cpp:1613
 #, c-format
@@ -24914,7 +24914,7 @@ msgstr "<b>Alt</b>: escala utilitzant un percentatge"
 #: ../src/ui/tool/transform-handle-set.cpp:226
 msgctxt "Transform handle tip"
 msgid "<b>Scale handle</b>: drag to scale the selection"
-msgstr "<b>Nansa d'escalat</b>: arrossegueu per escalar la selecció"
+msgstr "<b>Nansa d'escalat</b>: arrossegueu per a escalar la selecció"
 
 #: ../src/ui/tool/transform-handle-set.cpp:231
 #, c-format
@@ -24948,7 +24948,7 @@ msgctxt "Transform handle tip"
 msgid ""
 "<b>Rotation handle</b>: drag to rotate the selection around the rotation center"
 msgstr ""
-"<b>Nansa de rotació</b>: arrossegueu per girar la selecció al voltant del centre "
+"<b>Nansa de rotació</b>: arrossegueu per a girar la selecció al voltant del centre "
 "de rotació"
 
 #: ../src/ui/tool/transform-handle-set.cpp:470
@@ -25000,7 +25000,7 @@ msgstr "Inclina verticalment %.2f°"
 msgctxt "Transform handle tip"
 msgid "<b>Rotation center</b>: drag to change the origin of transforms"
 msgstr ""
-"<b>Centre de rotació</b>: arrossegueu per canviar l'origen de les transformacions"
+"<b>Centre de rotació</b>: arrossegueu per a canviar l'origen de les transformacions"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:86 ../src/ui/toolbar/arc-toolbar.cpp:469
 #: ../src/ui/toolbar/rect-toolbar.cpp:80 ../src/ui/toolbar/rect-toolbar.cpp:326
@@ -25627,7 +25627,7 @@ msgstr "Enllaça degradats"
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:430
 msgid "Link gradients to change all related gradients"
-msgstr "Enllaça degradats per canviar tots els degradats esmentats"
+msgstr "Enllaça degradats per a canviar tots els degradats esmentats"
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:441
 msgid "Reverse the direction of the gradient"
@@ -26793,7 +26793,7 @@ msgid ""
 "Variation of the rotation of the sprayed objects; 0% for the same rotation than "
 "the original object"
 msgstr ""
-"Variació de la rotació dels objectes amb l'esprai. 0% per utilitzar la mateixa "
+"Variació de la rotació dels objectes amb l'esprai. 0% per a utilitzar la mateixa "
 "rotació que l'objecte original"
 
 #: ../src/ui/toolbar/spray-toolbar.cpp:185
@@ -26811,8 +26811,8 @@ msgid ""
 "Variation in the scale of the sprayed objects; 0% for the same scale than the "
 "original object"
 msgstr ""
-"Variació de l'escala dels objectes amb l'esprai. 0% per utilitzar la mateixa "
-"mida de l'objecte original."
+"Variació de l'escala dels objectes amb l'esprai. 0% per a utilitzar la mateixa "
+"mida de l'objecte original"
 
 #: ../src/ui/toolbar/spray-toolbar.cpp:203
 msgid "Use the pressure of the input device to alter the scale of new items"
@@ -26847,7 +26847,7 @@ msgstr "Focus:"
 
 #: ../src/ui/toolbar/spray-toolbar.cpp:234
 msgid "0 to spray a spot; increase to enlarge the ring radius"
-msgstr "0 per fer esprai a un punt. Incrementeu-lo per fer més gran el radi"
+msgstr "0 per a fer esprai a un punt. Incrementeu-lo per a fer més gran el radi"
 
 #: ../src/ui/toolbar/spray-toolbar.cpp:247 ../src/ui/toolbar/spray-toolbar.cpp:248
 msgid "Apply over no transparent areas"
@@ -27550,7 +27550,7 @@ msgstr "En el mode de color, actua en l'opacitat de l'objecte"
 msgid ""
 "<b>Click</b> to Select and Transform objects, <b>Drag</b> to select many objects."
 msgstr ""
-"<b>Feu clic</b> per seleccionar i transformar objectes, <b>arrossegueu</b> per "
+"<b>Feu clic</b> per a seleccionar i transformar objectes, <b>arrossegueu</b> per "
 "seleccionar molts objectes."
 
 #: ../src/ui/tools-switch.cpp:90
@@ -27566,7 +27566,7 @@ msgid ""
 "<b>Drag</b>, <b>click</b> or <b>click and scroll</b> to spray the selected "
 "objects."
 msgstr ""
-"<b>Arrossegueu</b>, <b>feu clic</b> o <b>feu clic i desplaceu</b> per pintar els "
+"<b>Arrossegueu</b>, <b>feu clic</b> o <b>feu clic i desplaceu</b> per a pintar els "
 "objectes seleccionats."
 
 #: ../src/ui/tools-switch.cpp:93
@@ -27574,16 +27574,16 @@ msgid ""
 "<b>Drag</b> to create a rectangle. <b>Drag controls</b> to round corners and "
 "resize. <b>Click</b> to select."
 msgstr ""
-"<b>Arrossegueu</b> per crear un rectangle. <b>Arrossegueu els controls</b> per "
-"arrodonir les cantonades. <b>Cliqueu</b> per seleccionar."
+"<b>Arrossegueu</b> per a crear un rectangle. <b>Arrossegueu els controls</b> per "
+"arrodonir les cantonades. <b>Cliqueu</b> per a seleccionar."
 
 #: ../src/ui/tools-switch.cpp:94
 msgid ""
 "<b>Drag</b> to create a 3D box. <b>Drag controls</b> to resize in perspective. "
 "<b>Click</b> to select (with <b>Ctrl+Alt</b> for single faces)."
 msgstr ""
-"<b>Arrossegueu</b> per crear una capsa 3D. <b>Arrossegueu</b> els controls per "
-"canviar la mida en perspectiva. <b>Cliqueu</b> per seleccionar (<b>Ctrl+Alt</b> "
+"<b>Arrossegueu</b> per a crear una capsa 3D. <b>Arrossegueu</b> els controls per "
+"canviar la mida en perspectiva. <b>Cliqueu</b> per a seleccionar (<b>Ctrl+Alt</b> "
 "per a cares simples)."
 
 #: ../src/ui/tools-switch.cpp:95
@@ -27591,31 +27591,31 @@ msgid ""
 "<b>Drag</b> to create an ellipse. <b>Drag controls</b> to make an arc or "
 "segment. <b>Click</b> to select."
 msgstr ""
-"<b>Arrossegueu</b> per crear una el·lipse. <b>Arrossegueu els controls</b> per "
-"fer un arc o un segment. <b>Cliqueu</b> per seleccionar."
+"<b>Arrossegueu</b> per a crear una el·lipse. <b>Arrossegueu els controls</b> per "
+"fer un arc o un segment. <b>Cliqueu</b> per a seleccionar."
 
 #: ../src/ui/tools-switch.cpp:96
 msgid ""
 "<b>Drag</b> to create a star. <b>Drag controls</b> to edit the star shape. "
 "<b>Click</b> to select."
 msgstr ""
-"<b>Arrossegueu</b> per crear un estel. <b>Arrossegueu els controls</b> per "
-"editar la forma de l'estel. <b>Cliqueu</b> per seleccionar."
+"<b>Arrossegueu</b> per a crear un estel. <b>Arrossegueu els controls</b> per "
+"editar la forma de l'estel. <b>Cliqueu</b> per a seleccionar."
 
 #: ../src/ui/tools-switch.cpp:97
 msgid ""
 "<b>Drag</b> to create a spiral. <b>Drag controls</b> to edit the spiral shape. "
 "<b>Click</b> to select."
 msgstr ""
-"<b>Arrossegueu</b> per crear una espiral. <b>Arrossegueu els controls</b> per "
-"editar l'espiral. <b>Cliqueu</b> per seleccionar."
+"<b>Arrossegueu</b> per a crear una espiral. <b>Arrossegueu els controls</b> per "
+"editar l'espiral. <b>Cliqueu</b> per a seleccionar."
 
 #: ../src/ui/tools-switch.cpp:98
 msgid ""
 "<b>Drag</b> to create a freehand line. <b>Shift</b> appends to selected path, "
 "<b>Alt</b> activates sketch mode."
 msgstr ""
-"<b>Arrossegueu</b> per crear una línia a mà alçada. <b>Maj</b> per afegir-ho al "
+"<b>Arrossegueu</b> per a crear una línia a mà alçada. <b>Maj</b> per a afegir-ho al "
 "camí seleccionat. <b>Alt</b> per activar el mode esbós."
 
 #: ../src/ui/tools-switch.cpp:99
@@ -27624,8 +27624,8 @@ msgid ""
 "append to selected path. <b>Ctrl+click</b> to create single dots (straight line "
 "modes only)."
 msgstr ""
-"<b>Cliqueu</b> o <b>cliqueu i arrossegueu</b> per començar un camí; amb <b>Maj</"
-"b> ho afegiu al camí seleccionat. <b>Ctrl+clic</b> per crear punts dispersos "
+"<b>Cliqueu</b> o <b>cliqueu i arrossegueu</b> per a començar un camí; amb <b>Maj</"
+"b> ho afegiu al camí seleccionat. <b>Ctrl+clic</b> per a crear punts dispersos "
 "(per al mode de línies rectes només)."
 
 #: ../src/ui/tools-switch.cpp:100
@@ -27633,7 +27633,7 @@ msgid ""
 "<b>Drag</b> to draw a calligraphic stroke; with <b>Ctrl</b> to track a guide "
 "path. <b>Arrow keys</b> adjust width (left/right) and angle (up/down)."
 msgstr ""
-"<b>Arrossegueu</b> per dibuixar un traç cal·ligràfic; amb <b>Ctrl</b> seguiu un "
+"<b>Arrossegueu</b> per a dibuixar un traç cal·ligràfic; amb <b>Ctrl</b> seguiu un "
 "camí guia. Amb les <b>Fletxes</b> ajusteu l'amplada (esquerra/dreta) i l'angle "
 "(amunt/avall)."
 
@@ -27642,7 +27642,7 @@ msgid ""
 "<b>Click</b> to select or create text, <b>drag</b> to create flowed text; then "
 "type."
 msgstr ""
-"<b>Cliqueu</b> per seleccionar o crear text, <b>arrossegueu</b> per crear un "
+"<b>Cliqueu</b> per a seleccionar o crear text, <b>arrossegueu</b> per a crear un "
 "text flotat i escriviu-hi."
 
 #: ../src/ui/tools-switch.cpp:102
@@ -27650,16 +27650,16 @@ msgid ""
 "<b>Drag</b> or <b>double click</b> to create a gradient on selected objects, "
 "<b>drag handles</b> to adjust gradients."
 msgstr ""
-"<b>Arrossegueu</b> o feu <b>doble clic</b> per crear un degradat en els objectes "
-"seleccionats, <b>arrossegueu els punts de control</b> per ajustar els degradats."
+"<b>Arrossegueu</b> o feu <b>doble clic</b> per a crear un degradat en els objectes "
+"seleccionats, <b>arrossegueu els punts de control</b> per a ajustar els degradats."
 
 #: ../src/ui/tools-switch.cpp:103
 msgid ""
 "<b>Drag</b> or <b>double click</b> to create a mesh on selected objects, <b>drag "
 "handles</b> to adjust meshes."
 msgstr ""
-"<b>Arrossegueu</b> o feu <b>doble clic</b> per crear una malla en els objectes "
-"seleccionats, <b>arrossegueu les nanses</b> per ajustar les malles."
+"<b>Arrossegueu</b> o feu <b>doble clic</b> per a crear una malla en els objectes "
+"seleccionats, <b>arrossegueu les nanses</b> per a ajustar les malles."
 
 #: ../src/ui/tools-switch.cpp:104
 msgid ""
@@ -27671,7 +27671,7 @@ msgstr ""
 
 #: ../src/ui/tools-switch.cpp:105
 msgid "<b>Drag</b> to measure the dimensions of objects."
-msgstr "<b>Arrossegueu</b> per mesurar les dimensions dels objectes."
+msgstr "<b>Arrossegueu</b> per a mesurar les dimensions dels objectes."
 
 #: ../src/ui/tools-switch.cpp:106 ../src/ui/tools/dropper-tool.cpp:375
 msgid ""
@@ -27680,13 +27680,13 @@ msgid ""
 "copy the color under mouse to clipboard"
 msgstr ""
 "<b>Cliqueu</b> per establir l'emplenat; premeu <b>Maj+clic</b> per establir el "
-"contorn; <b>arrossegueu</b> per seleccionar el color mitjà d'una àrea; premeu "
-"<b>Alt</b> per seleccionar el color invers; o premeu <b>Ctrl+C</b> per copiar al "
+"contorn; <b>arrossegueu</b> per a seleccionar el color mitjà d'una àrea; premeu "
+"<b>Alt</b> per a seleccionar el color invers; o premeu <b>Ctrl+C</b> per copiar al "
 "porta-retalls el color que hi ha a sota del ratolí"
 
 #: ../src/ui/tools-switch.cpp:107
 msgid "<b>Click and drag</b> between shapes to create a connector."
-msgstr "<b>Cliqueu i arrossegueu</b> entre formes per crear un connector."
+msgstr "<b>Cliqueu i arrossegueu</b> entre formes per a crear un connector."
 
 #: ../src/ui/tools-switch.cpp:108
 msgid ""
@@ -27694,8 +27694,8 @@ msgid ""
 "with the current selection, <b>Ctrl+click</b> to change the clicked object's "
 "fill and stroke to the current setting."
 msgstr ""
-"<b>Cliqueu</b> per pintar una àrea vorejada, <b>Maj+clic</b> per unir el nou "
-"emplenat amb la selecció actual o <b>Ctrl+clic</b> per canviar l'emplenat i el "
+"<b>Cliqueu</b> per a pintar una àrea vorejada, <b>Maj+clic</b> per a unir el nou "
+"emplenat amb la selecció actual o <b>Ctrl+clic</b> per a canviar l'emplenat i el "
 "traç de l'objecte clicat amb els valors actuals."
 
 #: ../src/ui/tools-switch.cpp:109
@@ -27723,7 +27723,7 @@ msgid ""
 "draw around the starting point"
 msgstr ""
 "<b>El·lipse</b>: %s &#215; %s (restringit a la relació %d:%d); amb "
-"<b>Majúscules</b> per dibuixar al voltant del punt d'inici"
+"<b>Majúscules</b> per a dibuixar al voltant del punt d'inici"
 
 #: ../src/ui/tools/arc-tool.cpp:420
 #, c-format
@@ -27732,7 +27732,7 @@ msgid ""
 "<b>Shift</b> to draw around the starting point"
 msgstr ""
 "<b>El·lipse</b>: %s &#215; %s (constreta a la raó àuria 1,618 : 1); amb <b>Maj</"
-"b> per dibuixar al voltant del punt inicial"
+"b> per a dibuixar al voltant del punt inicial"
 
 #: ../src/ui/tools/arc-tool.cpp:424
 #, c-format
@@ -27741,7 +27741,7 @@ msgid ""
 "<b>Shift</b> to draw around the starting point"
 msgstr ""
 "<b>El·lipse</b>: %s &#215; %s (constreta a la raó àuria 1 : 1,618); amb <b>Maj</"
-"b> per dibuixar al voltant del punt inicial"
+"b> per a dibuixar al voltant del punt inicial"
 
 #: ../src/ui/tools/arc-tool.cpp:429
 #, c-format
@@ -27749,7 +27749,7 @@ msgid ""
 "<b>Ellipse</b>: %s &#215; %s; with <b>Ctrl</b> to make circle, integer-ratio, or "
 "golden-ratio ellipse; with <b>Shift</b> to draw around the starting point"
 msgstr ""
-"<b>El·lipse</b>: %s &#215; %s; amb <b>Ctrl</b> per fer un cercle de radi enter o "
+"<b>El·lipse</b>: %s &#215; %s; amb <b>Ctrl</b> per a fer un cercle de radi enter o "
 "una el·lipse amb raó àuria; amb <b>Maj</b> per a dibuixar al voltant del punt "
 "d'inici"
 
@@ -27765,7 +27765,7 @@ msgstr "Canvia la perspectiva (angle dels LP)"
 
 #: ../src/ui/tools/box3d-tool.cpp:568
 msgid "<b>3D Box</b>; with <b>Shift</b> to extrude along the Z axis"
-msgstr "<b>Capsa 3D</b>; amb <b>Maj</b> per generar-la al llarg de l'eix Z"
+msgstr "<b>Capsa 3D</b>; amb <b>Maj</b> per a generar-la al llarg de l'eix Z"
 
 #: ../src/ui/tools/box3d-tool.cpp:594
 msgid "Create 3D box"
@@ -27820,7 +27820,7 @@ msgstr "Fi del connector"
 #: ../src/ui/tools/connector-tool.cpp:1180
 msgid "<b>Connector endpoint</b>: drag to reroute or connect to new shapes"
 msgstr ""
-"<b>Punt final de connexió</b>: arrossegueu per tornar a encaminar o connectar a "
+"<b>Punt final de connexió</b>: arrossegueu per a tornar a encaminar o connectar a "
 "noves formes"
 
 #: ../src/ui/tools/connector-tool.cpp:1316
@@ -27847,7 +27847,7 @@ msgstr " sota el cursor"
 
 #: ../src/ui/tools/dropper-tool.cpp:375
 msgid "<b>Release mouse</b> to set color."
-msgstr "<b>Allibereu el ratolí</b> per definir el color."
+msgstr "<b>Allibereu el ratolí</b> per a definir el color."
 
 #: ../src/ui/tools/eraser-tool.cpp:436
 msgid "<b>Drawing</b> an eraser stroke"
@@ -27982,10 +27982,10 @@ msgid_plural ""
 "One handle merging %d stops (drag with <b>Shift</b> to separate) selected"
 msgstr[0] ""
 "S'ha seleccionat una nansa que ajunta %d punt final (arrossegueu amb <b>Maj</b> "
-"per separar-lo)"
+"per a separar-lo)"
 msgstr[1] ""
 "S'ha seleccionat una nansa que ajunta %d punts finals (arrossegueu amb <b>Maj</"
-"b> per separar-los)"
+"b> per a separar-los)"
 
 #. TRANSLATORS: The plural refers to number of selected gradient handles. This is part of a compound message (part two indicates selected object count)
 #: ../src/ui/tools/gradient-tool.cpp:137
@@ -28017,7 +28017,7 @@ msgstr "Crea un degradat per defecte"
 
 #: ../src/ui/tools/gradient-tool.cpp:574 ../src/ui/tools/mesh-tool.cpp:663
 msgid "<b>Draw around</b> handles to select them"
-msgstr "<b>Dibuixeu al voltant</b> dels punts de control per seleccionar-los"
+msgstr "<b>Dibuixeu al voltant</b> dels punts de control per a seleccionar-los"
 
 #: ../src/ui/tools/gradient-tool.cpp:695
 msgid "<b>Ctrl</b>: snap gradient angle"
@@ -28031,12 +28031,12 @@ msgstr "<b>Majúscules</b>: dibuixa el degradat al voltant del punt d'inici"
 #, c-format
 msgid "<b>Gradient</b> for %d object; with <b>Ctrl</b> to snap angle"
 msgid_plural "<b>Gradient</b> for %d objects; with <b>Ctrl</b> to snap angle"
-msgstr[0] "<b>Degradat</b>: per a %d objecte; amb <b>Ctrl</b> per ajustar l'angle"
-msgstr[1] "<b>Degradat</b>: per a %d objectes; amb <b>Ctrl</b> per ajustar l'angle"
+msgstr[0] "<b>Degradat</b>: per a %d objecte; amb <b>Ctrl</b> per a ajustar l'angle"
+msgstr[1] "<b>Degradat</b>: per a %d objectes; amb <b>Ctrl</b> per a ajustar l'angle"
 
 #: ../src/ui/tools/gradient-tool.cpp:904 ../src/ui/tools/mesh-tool.cpp:1127
 msgid "Select <b>objects</b> on which to create gradient."
-msgstr "Seleccioneu <b>alguns objectes</b> per crear-hi degradats."
+msgstr "Seleccioneu <b>alguns objectes</b> per a crear-hi degradats."
 
 #: ../src/ui/tools/lpe-tool.cpp:194
 msgid "Choose a construction tool from the toolbar."
@@ -28084,7 +28084,7 @@ msgstr "No s'ha seleccionat"
 
 #: ../src/ui/tools/measure-tool.cpp:1213
 msgid "Press 'CTRL' to measure into group"
-msgstr "Premeu «Ctrl» per mesurar dins del grup"
+msgstr "Premeu «Ctrl» per a mesurar dins del grup"
 
 #: ../src/ui/tools/measure-tool.cpp:1408 ../src/ui/tools/measure-tool.cpp:1410
 #, c-format
@@ -28160,13 +28160,13 @@ msgid ""
 "<b>Shift</b>: drag to add nodes to the selection, click to toggle object "
 "selection"
 msgstr ""
-"<b>Majúscules</b>: arrossegueu per afegir nodes a la selecció, cliqueu per "
+"<b>Majúscules</b>: arrossegueu per a afegir nodes a la selecció, cliqueu per "
 "commutar la selecció de l'objecte"
 
 #: ../src/ui/tools/node-tool.cpp:677
 msgctxt "Node tool tip"
 msgid "<b>Shift</b>: drag to add nodes to the selection"
-msgstr "<b>Majúscules</b>: arrossegueu per afegir nodes a la selecció"
+msgstr "<b>Majúscules</b>: arrossegueu per a afegir nodes a la selecció"
 
 #: ../src/ui/tools/node-tool.cpp:690
 #, c-format
@@ -28184,7 +28184,7 @@ msgstr "Angle: %1°."
 msgctxt "Node tool tip"
 msgid "%s Drag to select nodes, click to edit only this object (more: Shift)"
 msgstr ""
-"%s Arrossegueu per seleccionar nodes, feu clic per editar només aquest objecte "
+"%s Arrossegueu per a seleccionar nodes, feu clic per a editar només aquest objecte "
 "(més: Majúscules)"
 
 #: ../src/ui/tools/node-tool.cpp:722
@@ -28192,29 +28192,29 @@ msgstr ""
 msgctxt "Node tool tip"
 msgid "%s Drag to select nodes, click clear the selection"
 msgstr ""
-"%s Arrossegueu per seleccionar nodes, feu cliqueu per cancel·lar la selecció"
+"%s Arrossegueu per a seleccionar nodes, feu cliqueu per cancel·lar la selecció"
 
 #: ../src/ui/tools/node-tool.cpp:730
 msgctxt "Node tool tip"
 msgid "Drag to select nodes, click to edit only this object"
-msgstr "Arrossegueu per seleccionar nodes, cliqueu per editar-lo"
+msgstr "Arrossegueu per a seleccionar nodes, cliqueu per a editar-lo"
 
 #: ../src/ui/tools/node-tool.cpp:733
 msgctxt "Node tool tip"
 msgid "Drag to select nodes, click to clear the selection"
-msgstr "Arrossegueu per seleccionar nodes, cliqueu per cancel·lar la selecció"
+msgstr "Arrossegueu per a seleccionar nodes, cliqueu per cancel·lar la selecció"
 
 #: ../src/ui/tools/node-tool.cpp:738
 msgctxt "Node tool tip"
 msgid "Drag to select objects to edit, click to edit this object (more: Shift)"
 msgstr ""
-"Arrossegueu per seleccionar els objectes per editar, cliqueu per editar "
+"Arrossegueu per a seleccionar els objectes per a editar, cliqueu per a editar "
 "l'objecte (més: Majúscules)"
 
 #: ../src/ui/tools/node-tool.cpp:741
 msgctxt "Node tool tip"
 msgid "Drag to select objects to edit"
-msgstr "Arrossegueu per seleccionar els objectes per editar"
+msgstr "Arrossegueu per a seleccionar els objectes per a editar"
 
 #: ../src/ui/tools/pen-tool.cpp:212 ../src/ui/tools/pencil-tool.cpp:548
 msgid "Drawing cancelled"
@@ -28235,15 +28235,15 @@ msgstr "S'està afegint al camí seleccionat"
 
 #: ../src/ui/tools/pen-tool.cpp:637
 msgid "<b>Click</b> or <b>click and drag</b> to close and finish the path."
-msgstr "<b>Cliqueu</b> o <b>cliqueu i arrossegueu</b> per tancar i acabar el camí."
+msgstr "<b>Cliqueu</b> o <b>cliqueu i arrossegueu</b> per a tancar i acabar el camí."
 
 #: ../src/ui/tools/pen-tool.cpp:639
 msgid ""
 "<b>Click</b> or <b>click and drag</b> to close and finish the path. Shift+Click "
 "make a cusp node"
 msgstr ""
-"<b>Cliqueu</b> o <b>cliqueu i arrossegueu</b> per tancar i acabar el camí. "
-"Majúscules+clic per fer un node vèrtex"
+"<b>Cliqueu</b> o <b>cliqueu i arrossegueu</b> per a tancar i acabar el camí. "
+"Majúscules+clic per a fer un node vèrtex"
 
 #: ../src/ui/tools/pen-tool.cpp:651
 msgid "<b>Click</b> or <b>click and drag</b> to continue the path from this point."
@@ -28257,7 +28257,7 @@ msgid ""
 "+Click make a cusp node"
 msgstr ""
 "<b>Cliqueu</b> o <b>cliqueu i arrossegueu</b> per continuar el camí des d'aquest "
-"punt. Majúscules+clic per fer un node vèrtex"
+"punt. Majúscules+clic per a fer un node vèrtex"
 
 #: ../src/ui/tools/pen-tool.cpp:1799
 #, c-format
@@ -28300,7 +28300,7 @@ msgstr ""
 msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap angle"
 msgstr ""
-"<b>Nansa de corba</b>: %3.2f&#176;, longitud %s; amb <b>Ctrl</b> per ajustar "
+"<b>Nansa de corba</b>: %3.2f&#176;, longitud %s; amb <b>Ctrl</b> per a ajustar "
 "l'angle"
 
 #: ../src/ui/tools/pen-tool.cpp:1847
@@ -28327,7 +28327,7 @@ msgstr "S'ha finalitzat el dibuix"
 
 #: ../src/ui/tools/pencil-tool.cpp:364
 msgid "<b>Release</b> here to close and finish the path."
-msgstr "<b>Allibereu</b> aquí per tancar i acabar el camí."
+msgstr "<b>Allibereu</b> aquí per a tancar i acabar el camí."
 
 #: ../src/ui/tools/pencil-tool.cpp:372
 msgid "Drawing a freehand path"
@@ -28346,7 +28346,7 @@ msgid ""
 "<b>Sketch mode</b>: holding <b>Alt</b> interpolates between sketched paths. "
 "Release <b>Alt</b> to finalize."
 msgstr ""
-"<b>Mode esbós</b>: premeu <b>Alt</b> per interpolar entre els camins de l'esbós. "
+"<b>Mode esbós</b>: premeu <b>Alt</b> per a interpolar entre els camins de l'esbós. "
 "Deixeu de prémer <b>Alt</b> per acabar."
 
 #: ../src/ui/tools/pencil-tool.cpp:624
@@ -28367,7 +28367,7 @@ msgid ""
 "to draw around the starting point"
 msgstr ""
 "<b>Rectangle</b>: %s &#215; %s (restringit a la relació %d:%d); amb <b>Maj</b> "
-"per dibuixar al voltant del punt d'inici"
+"per a dibuixar al voltant del punt d'inici"
 
 #: ../src/ui/tools/rect-tool.cpp:434
 #, c-format
@@ -28376,7 +28376,7 @@ msgid ""
 "<b>Shift</b> to draw around the starting point"
 msgstr ""
 "<b>Rectangle</b>: %s &#215; %s (restringit a la relació àuria 1.618:1); amb "
-"<b>Majúscules</b> per dibuixar al voltant del punt d'inici"
+"<b>Majúscules</b> per a dibuixar al voltant del punt d'inici"
 
 #: ../src/ui/tools/rect-tool.cpp:438
 #, c-format
@@ -28385,7 +28385,7 @@ msgid ""
 "<b>Shift</b> to draw around the starting point"
 msgstr ""
 "<b>Rectangle</b>: %s &#215; %s (restringit a la relació àuria 1 : 1.618); amb "
-"<b>Majúscules</b> per dibuixar al voltant del punt d'inici"
+"<b>Majúscules</b> per a dibuixar al voltant del punt d'inici"
 
 #: ../src/ui/tools/rect-tool.cpp:444
 #, c-format
@@ -28393,8 +28393,8 @@ msgid ""
 "<b>Rectangle</b>: %s &#215; %s; with <b>Ctrl</b> to make square, integer-ratio, "
 "or golden-ratio rectangle; with <b>Shift</b> to draw around the starting point"
 msgstr ""
-"<b>Rectangle</b>: %s &#215; %s; amb <b>Ctrl</b> per fer un quadrat o un "
-"rectangle de radi d'enter; amb <b>Majúscules</b> per dibuixar al voltant del "
+"<b>Rectangle</b>: %s &#215; %s; amb <b>Ctrl</b> per a fer un quadrat o un "
+"rectangle de radi d'enter; amb <b>Majúscules</b> per a dibuixar al voltant del "
 "punt d'inici"
 
 #: ../src/ui/tools/rect-tool.cpp:465
@@ -28404,7 +28404,7 @@ msgstr "Crea un rectangle"
 #: ../src/ui/tools/select-tool.cpp:158
 msgid "Click selection to toggle scale/rotation handles (or Shift+s)"
 msgstr ""
-"Cliqueu la selecció per commutar entre punts de control per girar/escalar (or Maj"
+"Cliqueu la selecció per a commutar entre punts de control per a girar/escalar (or Maj"
 "+s)"
 
 #: ../src/ui/tools/select-tool.cpp:159
@@ -28413,7 +28413,7 @@ msgid ""
 "drag around objects to select."
 msgstr ""
 "No s'ha seleccionat cap objecte. Cliqueu, Maj+clic, o arrossegueu al voltant "
-"dels objectes per seleccionar."
+"dels objectes per a seleccionar."
 
 #: ../src/ui/tools/select-tool.cpp:212
 msgid "Move canceled."
@@ -28429,25 +28429,25 @@ msgid ""
 "rubberband selection"
 msgstr ""
 "<b>Passeu per sobre</b> dels objectes que voleu seleccionar; deixeu anar la "
-"tecla <b>Alt</b> per seleccionar els objectes encerclant-los"
+"tecla <b>Alt</b> per a seleccionar els objectes encerclant-los"
 
 #: ../src/ui/tools/select-tool.cpp:652
 msgid ""
 "<b>Drag around</b> objects to select them; press <b>Alt</b> to switch to touch "
 "selection"
 msgstr ""
-"<b>Encercleu</b> els objectes per seleccionar-los; premeu <b>Alt</b> per "
+"<b>Encercleu</b> els objectes per a seleccionar-los; premeu <b>Alt</b> per "
 "seleccionar-los per contacte"
 
 #: ../src/ui/tools/select-tool.cpp:891
 msgid "<b>Ctrl</b>: click to select in groups; drag to move hor/vert"
 msgstr ""
-"<b>Ctrl</b>: cliqueu per seleccionar en grups; arrossegueu per moure en hor/ver"
+"<b>Ctrl</b>: cliqueu per a seleccionar en grups; arrossegueu per a moure en hor/ver"
 
 #: ../src/ui/tools/select-tool.cpp:892
 msgid "<b>Shift</b>: click to toggle select; drag for rubberband selection"
 msgstr ""
-"<b>Majúscules</b>: cliqueu per commutar la selecció; moveu el punter per "
+"<b>Majúscules</b>: cliqueu per a commutar la selecció; moveu el punter per "
 "seleccionar els objectes encerclant-los"
 
 #: ../src/ui/tools/select-tool.cpp:893
@@ -28455,8 +28455,8 @@ msgid ""
 "<b>Alt</b>: click to select under; scroll mouse-wheel to cycle-select; drag to "
 "move selected or select by touch"
 msgstr ""
-"<b>Alt</b>: cliqueu per seleccionar allò de sota; desplaceu la roda del ratolí "
-"per seleccionar cíclicament; arrossegueu per moure allò seleccionat o per "
+"<b>Alt</b>: cliqueu per a seleccionar allò de sota; desplaceu la roda del ratolí "
+"per a seleccionar cíclicament; arrossegueu per a moure allò seleccionat o per "
 "seleccionar en prémer"
 
 #: ../src/ui/tools/select-tool.cpp:1074
@@ -28475,7 +28475,7 @@ msgstr "<b>Alt</b>: bloca el radi de l'espiral"
 #, c-format
 msgid "<b>Spiral</b>: radius %s, angle %.2f&#176;; with <b>Ctrl</b> to snap angle"
 msgstr ""
-"<b>Espiral</b>: radi %s, angle  %.2f&#176;; amb <b>Ctrl</b> per ajustar l'angle"
+"<b>Espiral</b>: radi %s, angle  %.2f&#176;; amb <b>Ctrl</b> per a ajustar l'angle"
 
 #: ../src/ui/tools/spiral-tool.cpp:406
 msgid "Create spiral"
@@ -28498,7 +28498,7 @@ msgid ""
 "%s. Drag, click or click and scroll to spray <b>copies</b> of the initial "
 "selection."
 msgstr ""
-"%s. Arrossegueu, feu clic o desplaceu per utilitzar l'esprai de <b>còpies</b> de "
+"%s. Arrossegueu, feu clic o desplaceu per a utilitzar l'esprai de <b>còpies</b> de "
 "la selecció inicial."
 
 #: ../src/ui/tools/spray-tool.cpp:209
@@ -28507,7 +28507,7 @@ msgid ""
 "%s. Drag, click or click and scroll to spray <b>clones</b> of the initial "
 "selection."
 msgstr ""
-"%s. Arrossegueu, feu clic o desplaceu per utilitzar l'esprai de <b>clons</b> de "
+"%s. Arrossegueu, feu clic o desplaceu per a utilitzar l'esprai de <b>clons</b> de "
 "la selecció inicial."
 
 #: ../src/ui/tools/spray-tool.cpp:212
@@ -28516,13 +28516,13 @@ msgid ""
 "%s. Drag, click or click and scroll to spray in a <b>single path</b> of the "
 "initial selection."
 msgstr ""
-"%s. Arrossegueu, feu clic o desplaceu per utilitzar l'esprai en <b>un únic camí</"
+"%s. Arrossegueu, feu clic o desplaceu per a utilitzar l'esprai en <b>un únic camí</"
 "b> de la selecció inicial."
 
 #: ../src/ui/tools/spray-tool.cpp:1282
 msgid "<b>Nothing selected!</b> Select objects to spray."
 msgstr ""
-"<b>No hi ha res seleccionat</b>, cal que seleccioneu objectes per utilitzar "
+"<b>No hi ha res seleccionat</b>, cal que seleccioneu objectes per a utilitzar "
 "l'esprai."
 
 #: ../src/ui/tools/spray-tool.cpp:1369
@@ -28537,13 +28537,13 @@ msgstr "<b>Control</b>: ajusta l'angle, conserva els rajos radials"
 #, c-format
 msgid "<b>Polygon</b>: radius %s, angle %.2f&#176;; with <b>Ctrl</b> to snap angle"
 msgstr ""
-"<b>Polígon</b>: radi %s, angle %.2f&#176;; amb <b>control</b> per ajustar l'angle"
+"<b>Polígon</b>: radi %s, angle %.2f&#176;; amb <b>control</b> per a ajustar l'angle"
 
 #: ../src/ui/tools/star-tool.cpp:398
 #, c-format
 msgid "<b>Star</b>: radius %s, angle %.2f&#176;; with <b>Ctrl</b> to snap angle"
 msgstr ""
-"<b>Estel</b>: radi %s, angle %.2f&#176;; amb <b>control</b> per ajustar l'angle"
+"<b>Estel</b>: radi %s, angle %.2f&#176;; amb <b>control</b> per a ajustar l'angle"
 
 #: ../src/ui/tools/star-tool.cpp:423
 msgid "Create star"
@@ -28578,14 +28578,14 @@ msgstr "<b>Marc del text flotat</b>: %s &#215; %s"
 #: ../src/ui/tools/text-tool.cpp:586
 msgid "<b>Click</b> to edit the text, <b>drag</b> to select part of the text."
 msgstr ""
-"<b>Cliqueu</b> per editar el text, <b>arrossegueu</b> per seleccionar part del "
+"<b>Cliqueu</b> per a editar el text, <b>arrossegueu</b> per a seleccionar part del "
 "text."
 
 #: ../src/ui/tools/text-tool.cpp:590
 msgid ""
 "<b>Click</b> to edit the flowed text, <b>drag</b> to select part of the text."
 msgstr ""
-"<b>Cliqueu</b> per editar el text flotant, <b>arrossegueu</b> per seleccionar "
+"<b>Cliqueu</b> per a editar el text flotant, <b>arrossegueu</b> per a seleccionar "
 "part del text."
 
 #: ../src/ui/tools/text-tool.cpp:646
@@ -28693,10 +28693,10 @@ msgstr[1] ""
 msgid "Type or edit text (%d character%s); <b>Enter</b> to start new line."
 msgid_plural "Type or edit text (%d characters%s); <b>Enter</b> to start new line."
 msgstr[0] ""
-"Escriviu o editeu el text (%d caràcter%s); tecla <b>Retorn</b> per començar una "
+"Escriviu o editeu el text (%d caràcter%s); tecla <b>Retorn</b> per a començar una "
 "línia nova."
 msgstr[1] ""
-"Escriviu o editeu el text (%d caràcters%s); tecla <b>Retorn</b> per començar una "
+"Escriviu o editeu el text (%d caràcters%s); tecla <b>Retorn</b> per a començar una "
 "línia nova."
 
 #: ../src/ui/tools/text-tool.cpp:1843
@@ -28917,7 +28917,7 @@ msgstr "Fixa"
 
 #: ../src/ui/widget/color-icc-selector.cpp:366
 msgid "Fix RGB fallback to match icc-color() value."
-msgstr "Arregla l'RGB alternatiu per ajustar-lo al valor del color icc."
+msgstr "Arregla l'RGB alternatiu per a ajustar-lo al valor del color icc."
 
 #: ../src/ui/widget/color-icc-selector.cpp:478
 #: ../src/ui/widget/color-scales.cpp:374 ../src/ui/widget/color-scales.cpp:405
@@ -29529,7 +29529,7 @@ msgid ""
 "Resize the page to fit the current selection, or the entire drawing if there is "
 "no selection"
 msgstr ""
-"Canvia la mida de la pàgina per ajustar la selecció actual, o el dibuix sencer "
+"Canvia la mida de la pàgina per a ajustar la selecció actual, o el dibuix sencer "
 "si no hi ha res seleccionat"
 
 #: ../src/ui/widget/page-sizer.cpp:256
@@ -29643,7 +29643,7 @@ msgstr "Sense emplenar, fer clic al botó del mig per emplenar de negre"
 #: ../src/ui/widget/selected-style.cpp:186
 msgctxt "Fill and stroke"
 msgid "No stroke, middle-click for black stroke"
-msgstr "Sense traç, fer clic al botó del mig per fer el traç negre"
+msgstr "Sense traç, fer clic al botó del mig per a fer el traç negre"
 
 #: ../src/ui/widget/selected-style.cpp:188 ../src/ui/widget/style-swatch.cpp:288
 #: ../src/widgets/paint-selector.cpp:224
@@ -29870,7 +29870,7 @@ msgstr "Canvia l'amplada del traç"
 
 #: ../src/ui/widget/selected-style.cpp:1020
 msgid ", drag to adjust, middle-click to remove"
-msgstr ", arrossegar per ajustar, fer clic al botó del mig per eliminar"
+msgstr ", arrossegar per a ajustar, fer clic al botó del mig per eliminar"
 
 #: ../src/ui/widget/selected-style.cpp:1104
 #, c-format
@@ -29901,8 +29901,8 @@ msgid ""
 "to adjust hue"
 msgstr ""
 "Ajusta l'<b>alfa</b>: era %.3g, ara <b>%.3g</b> (diferència %.3g); amb <b>Ctrl</"
-"b> per ajustar la lluminositat, amb <b>Maj</b> per ajustar la saturació, sense "
-"modificadors per ajustar el to"
+"b> per a ajustar la lluminositat, amb <b>Maj</b> per a ajustar la saturació, sense "
+"modificadors per a ajustar el to"
 
 #: ../src/ui/widget/selected-style.cpp:1328
 msgid "Adjust saturation"
@@ -29931,8 +29931,8 @@ msgid ""
 "modifiers to adjust hue"
 msgstr ""
 "Ajust de la <b>lluminositat</b>: era %.3g, ara <b>%.3g</b> (diferència %.3g); "
-"amb <b>Maj</b> per ajustar la saturació, amb <b>Alt</b> s'ajusta l'alfa, sense "
-"modificadors per ajustar el to"
+"amb <b>Maj</b> per a ajustar la saturació, amb <b>Alt</b> s'ajusta l'alfa, sense "
+"modificadors per a ajustar el to"
 
 #: ../src/ui/widget/selected-style.cpp:1340
 msgid "Adjust hue"
@@ -29946,7 +29946,7 @@ msgid ""
 "adjust lightness"
 msgstr ""
 "Ajusta el <b>to</b>: era %.3g, ara <b>%.3g</b> (diferència %.3g); amb <b>Maj</b> "
-"per ajustar la saturació, amb <b>Alt</b> per ajustar l'alfa, amb <b>Ctrl</b> per "
+"per a ajustar la saturació, amb <b>Alt</b> per a ajustar l'alfa, amb <b>Ctrl</b> per "
 "ajustar la lluminositat"
 
 #: ../src/ui/widget/selected-style.cpp:1451
@@ -30036,7 +30036,7 @@ msgid_plural ""
 msgstr[0] "El punt volàtil <b>finit</b> el comparteix <b>%d</b> capsa"
 msgstr[1] ""
 "El punt volàtil <b>finit</b> el comparteixen <b>%d</b> capses; arrossegueu-lo "
-"amb <b>Maj</b> per separar les capses seleccionades"
+"amb <b>Maj</b> per a separar les capses seleccionades"
 
 #: ../src/vanishing-point.cpp:338
 #, c-format
@@ -30047,7 +30047,7 @@ msgid_plural ""
 msgstr[0] "El punt volàtil <b>infinit</b> el comparteix <b>%d</b> capsa"
 msgstr[1] ""
 "El punt volàtil <b>infinit</b> el comparteixen <b>%d</b> capses; arrossegueu-lo "
-"amb <b>Maj</b> per separar les capses seleccionades"
+"amb <b>Maj</b> per a separar les capses seleccionades"
 
 #: ../src/vanishing-point.cpp:349
 #, c-format
@@ -30056,10 +30056,10 @@ msgid ""
 msgid_plural ""
 "shared by <b>%d</b> boxes; drag with <b>Shift</b> to separate selected box(es)"
 msgstr[0] ""
-"compartit per <b>%d</b> capsa; arrossegueu amb <b>Maj</b> per separar la capsa "
+"compartit per <b>%d</b> capsa; arrossegueu amb <b>Maj</b> per a separar la capsa "
 "seleccionada"
 msgstr[1] ""
-"compartit per <b>%d</b> capses; arrossegueu amb <b>Maj</b> per separar les "
+"compartit per <b>%d</b> capses; arrossegueu amb <b>Maj</b> per a separar les "
 "capses seleccionades"
 
 #: ../src/verbs.cpp:140
@@ -30369,7 +30369,7 @@ msgstr "Enganxa la m_ida"
 
 #: ../src/verbs.cpp:2557
 msgid "Scale selection to match the size of the copied object"
-msgstr "Escala la selecció per ajustar-se a la mida de l'objecte"
+msgstr "Escala la selecció per a ajustar-se a la mida de l'objecte"
 
 #: ../src/verbs.cpp:2558
 msgid "Paste _Width"
@@ -30378,7 +30378,7 @@ msgstr "En_ganxa l'amplada"
 #: ../src/verbs.cpp:2559
 msgid "Scale selection horizontally to match the width of the copied object"
 msgstr ""
-"Escala la selecció horitzontalment per ajustar-se a l'amplada de l'objecte copiat"
+"Escala la selecció horitzontalment per a ajustar-se a l'amplada de l'objecte copiat"
 
 #: ../src/verbs.cpp:2560
 msgid "Paste _Height"
@@ -30387,7 +30387,7 @@ msgstr "Enganxa l'a_lçada"
 #: ../src/verbs.cpp:2561
 msgid "Scale selection vertically to match the height of the copied object"
 msgstr ""
-"Escala la selecció verticalment per ajustar-se a l'alçada de l'objecte copiat"
+"Escala la selecció verticalment per a ajustar-se a l'alçada de l'objecte copiat"
 
 #: ../src/verbs.cpp:2562
 msgid "Paste Size Separately"
@@ -30395,7 +30395,7 @@ msgstr "Enganxa la mida per separat"
 
 #: ../src/verbs.cpp:2563
 msgid "Scale each selected object to match the size of the copied object"
-msgstr "Escala cada objecte seleccionat per ajustar la mida de l'objecte copiat"
+msgstr "Escala cada objecte seleccionat per a ajustar la mida de l'objecte copiat"
 
 #: ../src/verbs.cpp:2564
 msgid "Paste Width Separately"
@@ -30405,7 +30405,7 @@ msgstr "Enganxa l'amplada per separat"
 msgid ""
 "Scale each selected object horizontally to match the width of the copied object"
 msgstr ""
-"Escala cada objecte horitzontalment per ajustar la mida de l'objecte copiat"
+"Escala cada objecte horitzontalment per a ajustar la mida de l'objecte copiat"
 
 #: ../src/verbs.cpp:2566
 msgid "Paste Height Separately"
@@ -30415,7 +30415,7 @@ msgstr "Enganxa l'alçada per separat"
 msgid ""
 "Scale each selected object vertically to match the height of the copied object"
 msgstr ""
-"Escala cada objecte seleccionat verticalment per ajustar l'alçada de l'objecte "
+"Escala cada objecte seleccionat verticalment per a ajustar l'alçada de l'objecte "
 "copiat"
 
 #: ../src/verbs.cpp:2568
@@ -31763,7 +31763,7 @@ msgstr "Ampliació a 2:1"
 
 #: ../src/verbs.cpp:2945
 msgid "Zoom to fit page in window"
-msgstr "Amplia per ajustar la pàgina a la finestra"
+msgstr "Amplia per a ajustar la pàgina a la finestra"
 
 #: ../src/verbs.cpp:2947
 msgid "Page _Width"
@@ -31771,15 +31771,15 @@ msgstr "Amplada de pà_gina"
 
 #: ../src/verbs.cpp:2947
 msgid "Zoom to fit page width in window"
-msgstr "Amplia per ajustar l'amplada de pàgina a la finestra"
+msgstr "Amplia per a ajustar l'amplada de pàgina a la finestra"
 
 #: ../src/verbs.cpp:2949
 msgid "Zoom to fit drawing in window"
-msgstr "Amplia per ajustar el dibuix a la finestra"
+msgstr "Amplia per a ajustar el dibuix a la finestra"
 
 #: ../src/verbs.cpp:2951
 msgid "Zoom to fit selection in window"
-msgstr "Amplia per ajustar la selecció a la finestra"
+msgstr "Amplia per a ajustar la selecció a la finestra"
 
 #: ../src/verbs.cpp:2953
 msgid "_Center Page"
@@ -31867,7 +31867,7 @@ msgstr "G_uies"
 
 #: ../src/verbs.cpp:2977
 msgid "Show or hide guides (drag from a ruler to create a guide)"
-msgstr "Mostra o amaga les guies (arrossegueu des d'un regle per crear una guia)"
+msgstr "Mostra o amaga les guies (arrossegueu des d'un regle per a crear una guia)"
 
 #: ../src/verbs.cpp:2978
 msgid "Enable snapping"
@@ -32013,7 +32013,7 @@ msgstr "_Mode vista dividida"
 
 #: ../src/verbs.cpp:3022
 msgid "Split canvas in 2 to show outline"
-msgstr "Divideix el llenç per mostrar dues àrees"
+msgstr "Divideix el llenç per a mostrar dues àrees"
 
 #: ../src/verbs.cpp:3024
 msgid "_XRay Mode"
@@ -32291,7 +32291,7 @@ msgstr "Colors d'impressió..."
 #: ../src/verbs.cpp:3109
 msgid "Select which color separations to render in Print Colors Preview rendermode"
 msgstr ""
-"Seleccioneu com voleu separar els colors per generar la previsualització dels "
+"Seleccioneu com voleu separar els colors per a generar la previsualització dels "
 "colors d'impressió"
 
 #: ../src/verbs.cpp:3110
@@ -32340,7 +32340,7 @@ msgstr "Inkscape: forme_s"
 
 #: ../src/verbs.cpp:3126
 msgid "Using shape tools to create and edit shapes"
-msgstr "Fer servir les eines de formes per crear i editar formes"
+msgstr "Fer servir les eines de formes per a crear i editar formes"
 
 #: ../src/verbs.cpp:3127
 msgid "Inkscape: _Advanced"
@@ -32535,7 +32535,7 @@ msgid ""
 "selector (arrow) to move or transform them."
 msgstr ""
 "<b>Us donem la benvinguda a l'Inkscape!</b> Feu servir l'eina de formes o la mà alçada per "
-"crear objectes; useu el selector (fletxa) per moure'ls o transformar-los."
+"crear objectes; useu el selector (fletxa) per a moure'ls o transformar-los."
 
 #: ../src/widgets/desktop-widget.cpp:612
 msgid "Rotation. (Also Ctrl+Shift+Scroll)"
@@ -32809,9 +32809,9 @@ msgid ""
 "on canvas. Use <b>Object &gt; Pattern &gt; Objects to Pattern</b> to create a "
 "new pattern from selection."
 msgstr ""
-"Feu servir l'<b>Eina de nodes</b> per ajustar la posició, escala i rotació del "
+"Feu servir l'<b>Eina de nodes</b> per a ajustar la posició, escala i rotació del "
 "patró en el llenç. Feu servir <b>Objecte &gt; Patró &gt; Objectes a patró</b> "
-"per crear un nou patró des de la selecció."
+"per a crear un nou patró des de la selecció."
 
 #: ../src/widgets/paint-selector.cpp:1388
 msgid "<b>Pattern fill</b>"
@@ -33059,7 +33059,7 @@ msgstr ""
 " * \"Tall de brillantor\" detecta àrees que són més fosques que el valor llindar "
 "i crea un camí que els tanca (utilitzant potrace).\n"
 " * \"Detecció de vores\" detecta els canvis més grans que el valor llindar donat "
-"en la brillantor dels pegats de color i crea camins per separar-los (utilitzant "
+"en la brillantor dels pegats de color i crea camins per a separar-los (utilitzant "
 "potrace).\n"
 " * \"Quantització del color\" separa la imatge en el nombre de colors donat, i "
 "els separa amb un camí (usant potrace).\n"
@@ -33069,8 +33069,8 @@ msgstr ""
 " * \"Exploracions múltiples\" separa la imatge en un nombre d'escaneigs, "
 "depenent de la brillantor, la separació de color, o els nivells grisos, i en "
 "crea uns quants camins. També pot fer servir autotraçat.\n"
-" * La pestanya \"Pixel art\" permet utilitzar l'algoritme despixelitzar per "
-"vectoralitzar imatges artístiques de mapa de bits.\n"
+" * La pestanya \"Pixel art\" permet utilitzar l'algoritme despixelitzar per a "
+"vectoritzar imatges artístiques de mapa de bits.\n"
 "\n"
 "NOTA:\n"
 "  1) Deseu el vostre treball abans de traçar\n"
@@ -33446,7 +33446,7 @@ msgid ""
 "add(Guide().move_to(x, y, a))` instead"
 msgstr ""
 "{} és ara un mètode de l'objecte de l'element namedview. En el seu lloc feu "
-"servir `self.svg.namedview.add(Guide().move_to(x, y, a))` "
+"servir `self.svg.namedview.add(Guide().move_to(x, y, a))`"
 
 #: ../share/extensions/inkex/deprecated.py:179
 msgid "{} is now `Effect.run()`. The `output` argument has changed."
@@ -33517,11 +33517,11 @@ msgstr "Valors defectuosos per a un camp numèric: {}, {}."
 
 #: ../share/extensions/interp_att_g.py:113
 msgid "You selected 'Other'. Please enter an attribute to interpolate."
-msgstr "Heu seleccionat «Altre». Introduïu un atribut per interpolar."
+msgstr "Heu seleccionat «Altre». Introduïu un atribut per a interpolar."
 
 #: ../share/extensions/interp_att_g.py:134
 msgid "There is no selection to interpolate"
-msgstr "No hi ha cap selecció per interpolar"
+msgstr "No hi ha cap selecció per a interpolar"
 
 #: ../share/extensions/jessyInk_autoTexts.py:34
 #: ../share/extensions/jessyInk_effects.py:39
@@ -33824,7 +33824,7 @@ msgid ""
 "imported as \"Face-Specified\" under the \"Model File\" tab.\n"
 msgstr ""
 "No s'han trobat dades de cares. Assegureu-vos que el fitxer conté dades de "
-"cares, i marqueu l'opció que el fitxer per importar és «Específic per a cares» a "
+"cares, i marqueu l'opció que el fitxer per a importar és «Específic per a cares» a "
 "la pestanya «Fitxer model».\n"
 
 #: ../share/extensions/polyhedron_3d.py:560
@@ -33879,7 +33879,7 @@ msgstr "Introduïu una tipografia substituta a totes les caixes."
 
 #: ../share/extensions/restack.py:64
 msgid "There is no selection to restack."
-msgstr "No hi ha selecció per tornar a apilar."
+msgstr "No hi ha selecció per a tornar a apilar."
 
 #: ../share/extensions/voronoi2svg.py:154
 msgid "Please select objects!"
@@ -34277,7 +34277,7 @@ msgid ""
 "node of the path.\n"
 "    * Step: numbering step between two nodes."
 msgstr ""
-"Aquesta extensió reemplaça els nodes de la selecció amb punts numerats d'acord a "
+"Aquesta extensió reemplaça els nodes de la selecció amb punts numerats d'acord amb "
 "les següents opcions:\n"
 "     * Mida de la tipografia: mida de les etiquetes de nombre de node (20px, "
 "12pt...) \n"
@@ -34711,7 +34711,7 @@ msgstr ""
 "- L'opció de sortida spline ROBO-Master només es pot llegir correctament amb els "
 "visualitzadors ROBO-Master i AutoDesk però no a l'Inkscape.\n"
 "- La sortida LWPOLYLINE és una polilínia amb múltiples connexions, inhabiliteu-"
-"la per utilitzar la versió antiga de sortida LINE.\n"
+"la per a utilitzar la versió antiga de sortida LINE.\n"
 "- Podeu triar exportar totes les capes, només les visibles o per coincidència de "
 "nom (no distingeix entre majúscules i minúscules, s'utilitza una coma «,» com a "
 "separador)"
@@ -35021,12 +35021,12 @@ msgid ""
 "\n"
 "To get more info visit developers page at http://www.cnc-club.ru/gcodetools"
 msgstr ""
-"Gcodetools es va desenvolupar per fer un Gcode senzill des de les rutes "
+"Gcodetools es va desenvolupar per a fer un Gcode senzill des de les rutes "
 "d'Inkscape. Gcode és un format especial que s'utilitza en la majoria de les "
 "màquines CNC. Així que Gcodetools us permet utilitzar Inkscape com a programa "
 "CAM.\n"
 "\n"
-"Es pot utilitzar a molts tipus de màquines:\n"
+"Es pot utilitzar amb molts tipus de màquines:\n"
 "    Fresadores\n"
 "    Torns\n"
 "    Talladores làser i de plasma, i gravadores\n"
@@ -35348,7 +35348,7 @@ msgstr "Afegeix un sufix numèric al nom del fitxer"
 #: ../share/extensions/gcodetools_lathe.inx:61
 #: ../share/extensions/gcodetools_path_to_gcode.inx:41
 msgid "Directory:"
-msgstr "Directori"
+msgstr "Directori:"
 
 #: ../share/extensions/gcodetools_area.inx:83
 #: ../share/extensions/gcodetools_dxf_points.inx:29
@@ -35405,7 +35405,7 @@ msgstr "Parametritza Gcode"
 #: ../share/extensions/gcodetools_lathe.inx:71
 #: ../share/extensions/gcodetools_path_to_gcode.inx:51
 msgid "Flip y axis and parameterize Gcode"
-msgstr "Capgira l'eix «Y» i parametritza Gcode "
+msgstr "Capgira l'eix «Y» i parametritza Gcode"
 
 #: ../share/extensions/gcodetools_area.inx:92
 #: ../share/extensions/gcodetools_dxf_points.inx:38
@@ -35630,7 +35630,7 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"Els punts d'orientació s'utilitzen per calcular la transformació (desplaçament, "
+"Els punts d'orientació s'utilitzen per a calcular la transformació (desplaçament, "
 "escala, mirall, rotació en el pla XY) del camí.\n"
 "Mode 3 punts només: no poseu els tres punts en una sola línia (utilitzeu el mode "
 "2 punts en el seu lloc).\n"
@@ -35719,7 +35719,7 @@ msgid ""
 "      "
 msgstr ""
 "\n"
-"Els punts d'orientació s'utilitzen per calcular la transformació (desplaçament, "
+"Els punts d'orientació s'utilitzen per a calcular la transformació (desplaçament, "
 "escala, mirall, rotació en el pla XY) del camí.\n"
 "Mode 3 punts només: no poseu els tres punts en una sola línia (utilitzeu el mode "
 "2 punts en el seu lloc).\n"
@@ -35888,7 +35888,7 @@ msgstr ""
 "S'usa l'eina superior (ordre z) en la capa activa. Si no hi ha una eina dins de "
 "la capa actual es pren de la capa superior.\n"
 "\n"
-"Feu clic a «Aplica» per crear una nova eina.\n"
+"Feu clic a «Aplica» per a crear una nova eina.\n"
 "            "
 
 #: ../share/extensions/gcodetools_tools_library.inx:34
@@ -35955,7 +35955,7 @@ msgstr ""
 "quadre de diàleg «Emplenat i traç». Heu de seleccionar un objecte o un grup. \n"
 "\n"
 "Si la vora és zero, el patró serà discontinu als cantons. Utilitzeu una vora "
-"positiva, preferiblement més gran que la mida de cel·la, per produir una unió "
+"positiva, preferiblement més gran que la mida de cel·la, per a produir una unió "
 "suau del patró als cantons. Utilitzeu una vora negativa per reduir la mida del "
 "patró i obtenir una vora buida."
 
@@ -36293,11 +36293,11 @@ msgstr "Marges predefinits:"
 
 #: ../share/extensions/guides_creator.inx:25
 msgid "Left book page"
-msgstr "Pàgina esquerra"
+msgstr "Pàgina de llibre esquerra"
 
 #: ../share/extensions/guides_creator.inx:26
 msgid "Right book page"
-msgstr "Pàgina dreta"
+msgstr "Pàgina de llibre dreta"
 
 #: ../share/extensions/guides_creator.inx:28
 msgid "Header margin:"
@@ -36573,7 +36573,7 @@ msgstr ""
 "les fonts de gravat es componen només de línies individuals\n"
 "o traços; similarment a l'escriptura a mà humana.\n"
 "\n"
-"Les fonts de gravat s'utilitzen per crear camins de text que\n"
+"Les fonts de gravat s'utilitzen per a crear camins de text que\n"
 "el dibuix controlat per ordinador i les màquines de tall (des\n"
 "dels traçadors de plomes fins als encaminadors CNC) poden seguir de manera "
 "eficient.\n"
@@ -36666,7 +36666,7 @@ msgstr "Mostra els moviments entre camins"
 
 #: ../share/extensions/hpgl_input.inx:10
 msgid "Check this to show movements between paths (Default: Unchecked)"
-msgstr "Activa per mostrar els moviments entre camins (Per defecte: desactivat)"
+msgstr "Activa per a mostrar els moviments entre camins (Per defecte: desactivat)"
 
 #: ../share/extensions/hpgl_input.inx:14 ../share/extensions/hpgl_output.inx:40
 msgid "HP Graphics Language file (*.hpgl)"
@@ -36711,7 +36711,7 @@ msgid ""
 "The amount of force pushing down the pen in grams, set to 0 to omit command; "
 "most plotters ignore this command (Default: 0)"
 msgstr ""
-"Quantitat de pressió de la ploma en grams. Establiu a 0 per ometre l'ordre. La "
+"Quantitat de pressió de la ploma en grams. Establiu a 0 per a ometre l'ordre. La "
 "majoria dels traçadors ignoren aquesta ordre (Per defecte: 0)"
 
 #: ../share/extensions/hpgl_output.inx:14 ../share/extensions/plotter.inx:72
@@ -36725,7 +36725,7 @@ msgid ""
 "ignore this command (Default: 0)"
 msgstr ""
 "La ploma es mourà a una velocitat en cm/s o mm/s depenent del vostre model de "
-"traçador. Establiu a 0 per ometre l'ordre. La majoria dels traçadors ignoren "
+"traçador. Establiu a 0 per a ometre l'ordre. La majoria dels traçadors ignoren "
 "aquesta ordre (Per defecte: 0)"
 
 #: ../share/extensions/hpgl_output.inx:15
@@ -36785,7 +36785,7 @@ msgid ""
 "prevent open paths, set to 0.0 to omit command (Default: 1.00)"
 msgstr ""
 "La distància en mm que cal tallar des del punt d'inici del camí camins oberts. "
-"Establiu a 0 per ometre l'ordre (Per defecte: 1.00)"
+"Establiu a 0 per a ometre l'ordre (Per defecte: 1.00)"
 
 #: ../share/extensions/hpgl_output.inx:29 ../share/extensions/plotter.inx:87
 msgid "Tool (Knife) offset correction (mm):"
@@ -36797,7 +36797,7 @@ msgid ""
 "(Default: 0.25)"
 msgstr ""
 "El desplaçament des de la punta de l'eina a l'eix de l'eina en mm, definiu-lo a "
-"0,0 per ometre l'ordre (per defecte: 0.25)"
+"0,0 per a ometre l'ordre (per defecte: 0.25)"
 
 #: ../share/extensions/hpgl_output.inx:30 ../share/extensions/plotter.inx:88
 msgid "Precut"
@@ -37045,11 +37045,11 @@ msgstr "Atribut a interpolar:"
 
 #: ../share/extensions/interp_att_g.inx:11
 msgid "Translate X"
-msgstr "Tradueix X"
+msgstr "Trasllada X"
 
 #: ../share/extensions/interp_att_g.inx:12
 msgid "Translate Y"
-msgstr "Tradueix Y"
+msgstr "Trasllada Y"
 
 #: ../share/extensions/interp_att_g.inx:15
 msgid "Other"
@@ -37471,7 +37471,7 @@ msgid ""
 "This extension allows you customize the key bindings JessyInk uses. Please see "
 "code.google.com/p/jessyink for more details."
 msgstr ""
-"Aquesta extensió us permet personalitzar l'assignació de tecles per utilitzar el "
+"Aquesta extensió us permet personalitzar l'assignació de tecles per a utilitzar el "
 "JessyInk. Per a més informació, consulteu code.google.com/p/jessyink."
 
 #: ../share/extensions/jessyInk_masterSlide.inx:3
@@ -37518,7 +37518,7 @@ msgid ""
 "This extension allows you customize the mouse handler JessyInk uses. Please see "
 "code.google.com/p/jessyink for more details."
 msgstr ""
-"Aquesta extensió us permet personalitzar el control del ratolí per fer-lo servir "
+"Aquesta extensió us permet personalitzar el control del ratolí per a fer-lo servir "
 "amb JessyInk. Per a més informació, consulteu code.google.com/p/jessyink."
 
 #: ../share/extensions/jessyInk_summary.inx:3
@@ -38125,7 +38125,7 @@ msgstr ""
 "un angle especificat.\n"
 "* El nombre de dígits significatius pot ser controlat pel camp de precisió.\n"
 "* El camp de desplaçament controla la distància del text al camí.\n"
-"* El factor d'escala es pot utilitzar per fer mesuraments en dibuixos escalats. "
+"* El factor d'escala es pot utilitzar per a fer mesuraments en dibuixos escalats. "
 "Per exemple, si 1 cm en el dibuix equival a 2,5 m al món real, s'ha d'establir "
 "l'escala a 250.\n"
 "* En calcular l'àrea, el resultat ha de ser precís per als polígons i les corbes "
@@ -38634,7 +38634,7 @@ msgstr "Prefixar identificadors escurçats amb el prefix específic."
 
 #: ../share/extensions/output_scour.inx:87
 msgid "Preserve manually created IDs not ending with digits"
-msgstr "Preserva els Identificadors creats manualment que no acaben amb els dígits"
+msgstr "Preserva els identificadors creats manualment que no acaben amb els dígits"
 
 #: ../share/extensions/output_scour.inx:87
 msgid ""
@@ -38643,7 +38643,7 @@ msgid ""
 "preserved while numbered IDs (as they are generated by most SVG editors "
 "including Inkscape) will be removed/shortened."
 msgstr ""
-"Identificadors descriptius que van ser creats manualment per fer referència o "
+"Identificadors descriptius que van ser creats manualment per a fer referència o "
 "etiquetar elements o grups (per exemple #arrowStart, #arrowEnd o #textLabels) es "
 "mantindran mentre els identificadors numerats (ja que es generen per la majoria "
 "dels editors SVG incloent l'Inkscape) seran retirats/escurçats."
@@ -38658,7 +38658,7 @@ msgstr "Una llista d'identificadors separada per comes, que s'han de preservar."
 
 #: ../share/extensions/output_scour.inx:93
 msgid "Preserve IDs starting with:"
-msgstr "Preserva els Identificadors que comencen amb:"
+msgstr "Preserva els identificadors que comencen amb:"
 
 #: ../share/extensions/output_scour.inx:93
 msgid ""
@@ -38666,7 +38666,7 @@ msgid ""
 "preserve \"flag-mx\", \"flag-pt\", etc.)."
 msgstr ""
 "Conserva tots els identificadors que comencen amb el prefix especificat (per "
-"exemple, especifiqueu «flag» per preservar «flag-mx», «flag-pt», etc.)."
+"exemple, especifiqueu «flag» per a preservar «flag-mx», «flag-pt», etc.)."
 
 #: ../share/extensions/output_scour.inx:101
 msgid "Optimized SVG Output is provided by"
@@ -38862,7 +38862,7 @@ msgstr "Segueix l'orientació del camí"
 
 #: ../share/extensions/pathscatter.inx:9
 msgid "Stretch spaces to fit skeleton length"
-msgstr "Estira els espais per ajustar la longitud de l'esquelet"
+msgstr "Estira els espais per a ajustar la longitud de l'esquelet"
 
 #: ../share/extensions/pathscatter.inx:14
 msgid "Original pattern will be:"
@@ -39202,7 +39202,7 @@ msgid ""
 "ignore this command. (Default: 0)"
 msgstr ""
 "La ploma es mourà a una velocitat en cm/s o mm/s depenent del vostre model de "
-"traçador. Establiu a 0 per ometre l'ordre. La majoria dels traçadors ignoren "
+"traçador. Establiu a 0 per a ometre l'ordre. La majoria dels traçadors ignoren "
 "aquesta ordre (Per defecte: 0)"
 
 #: ../share/extensions/plotter.inx:73
@@ -39287,7 +39287,7 @@ msgstr "Dodecaedre gran estrellat"
 
 #: ../share/extensions/polyhedron_3d.inx:24
 msgid "Load from file"
-msgstr "Carrega d'un fitxer"
+msgstr "Carrega des d'un fitxer"
 
 #: ../share/extensions/polyhedron_3d.inx:26
 msgid "Filename:"
@@ -40394,7 +40394,7 @@ msgstr "Icona..."
 # File: ../share/extensions/empty_icon.inx, line: 16
 #: ../share/extensions/template_icon.inx:16
 msgid "Empty icon of chosen size."
-msgstr "Icona buida de la mida seleccionda."
+msgstr "Icona buida de la mida seleccionada."
 
 #: ../share/extensions/template_icon.inx:18
 msgid "empty icon"
@@ -40656,7 +40656,7 @@ msgstr "Profunditat de parada (des de dalt)"
 
 #: ../share/extensions/ungroup_deep.inx:8
 msgid "Depth to Keep (from bottom)"
-msgstr "Profunditat per mantenir (des de sota)"
+msgstr "Profunditat per a mantenir (des de sota)"
 
 #: ../share/extensions/voronoi2svg.inx:3 ../share/extensions/voronoi2svg.inx:9
 msgid "Voronoi Diagram"
@@ -40801,7 +40801,7 @@ msgstr "Crea un efecte d'enllaç canviant a viewbox d'una posició a una altra."
 
 #: ../share/extensions/web_interactive_mockup.inx:23
 msgid "When selecting object the last one is the one we jump to."
-msgstr "Quan es selecciona un objecte, el darrer és cap el que es salta."
+msgstr "Quan es selecciona un objecte, el darrer és cap al que es salta."
 
 #: ../share/extensions/web_interactive_mockup.inx:29
 #: ../share/extensions/web_set_att.inx:42
@@ -40976,7 +40976,7 @@ msgid ""
 "Layout Group is only about to help a better code generation (if you need it). To "
 "use this, you must to select some \"Slicer rectangles\" first."
 msgstr ""
-"La disposició en grups només serveix per generar un codi millor (si el "
+"La disposició en grups només serveix per a generar un codi millor (si el "
 "necessiteu). Per utilitzar-ho, primer heu de seleccionar uns «rectangles de "
 "tall»."
 

@@ -19,14 +19,10 @@
 
 #include "event.h"
 #include "event-fns.h"
-#include "util/reverse-list.h"
 #include "xml/document.h"
 #include "xml/node-observer.h"
 #include "debug/event-tracker.h"
 #include "debug/simple-event.h"
-
-using Inkscape::Util::List;
-using Inkscape::Util::reverse_list;
 
 int Inkscape::XML::Event::_next_serial=0;
 
@@ -195,10 +191,13 @@ void Inkscape::XML::replay_log_to_observer(
     Inkscape::XML::Event const *log,
     Inkscape::XML::NodeObserver &observer
 ) {
-    List<Inkscape::XML::Event const &> reversed =
-      reverse_list<Inkscape::XML::Event::ConstIterator>(log, nullptr);
-    for ( ; reversed ; ++reversed ) {
-        reversed->replayOne(observer);
+    std::vector<Inkscape::XML::Event const *> r;
+    while (log) {
+        r.push_back(log);
+        log = log->next;
+    }
+    for ( auto reversed = r.rbegin(); reversed != r.rend(); ++reversed ) {
+        (*reversed)->replayOne(observer);
     }
 }
 

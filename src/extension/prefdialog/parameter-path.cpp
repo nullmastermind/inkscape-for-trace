@@ -86,7 +86,7 @@ ParamPath::ParamPath(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *e
  *
  * @param  in   The value to set to.
  */
-const std::string& ParamPath::set(const std::string in)
+const std::string& ParamPath::set(const std::string &in)
 {
     _value = in;
 

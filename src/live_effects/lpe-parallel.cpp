@@ -102,12 +102,14 @@ LPEParallel::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd
 void LPEParallel::addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item) {
     {
         KnotHolderEntity *e = new Pl::KnotHolderEntityLeftEnd(this);
-e->create(desktop, item, knotholder, Inkscape::CTRL_TYPE_LPE, _("Adjust the \"left\" end of the parallel"));
-knotholder->add(e);
+        e->create(desktop, item, knotholder, Inkscape::CANVAS_ITEM_CTRL_TYPE_LPE, "LPE:ParallelLeftEnd",
+                  _("Adjust the \"left\" end of the parallel"));
+        knotholder->add(e);
     }
     {
         KnotHolderEntity *e = new Pl::KnotHolderEntityRightEnd(this);
-        e->create(desktop, item, knotholder, Inkscape::CTRL_TYPE_LPE, _("Adjust the \"right\" end of the parallel"));
+        e->create(desktop, item, knotholder, Inkscape::CANVAS_ITEM_CTRL_TYPE_LPE, "LPE:ParallelRightEnd",
+                  _("Adjust the \"right\" end of the parallel"));
         knotholder->add(e);
     }
 };

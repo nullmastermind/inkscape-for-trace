@@ -16,12 +16,11 @@
 
 #include <glib.h>
 
-#include "display/canvas-bpath.h"
 #include "live_effects/parameter/parameter.h"
 
-struct SPCanvasText;
-
 namespace Inkscape {
+
+class CanvasItemText;
 
 namespace LivePathEffect {
 
@@ -33,7 +32,7 @@ public:
                Inkscape::UI::Widget::Registry* wr,
                Effect* effect,
                const Glib::ustring default_value = "");
-    ~TextParam() override = default;
+    ~TextParam() override;
 
     Gtk::Widget * param_newWidget() override;
 
@@ -58,11 +57,9 @@ private:
     TextParam& operator=(const TextParam&) = delete;
     double anchor_x;
     double anchor_y;
-    bool _hide_canvas_text;
     Glib::ustring value;
     Glib::ustring defvalue;
-
-    SPCanvasText *canvas_text;
+    Inkscape::CanvasItemText *canvas_text = nullptr;
 };
 
 /*

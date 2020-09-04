@@ -23,9 +23,10 @@
 #include "snapped-point.h"
 #include "ui/tool/node-types.h"
 
-struct SPCtrlLine;
-
 namespace Inkscape {
+class CanvasItemGroup;
+class CanvasItemCurve;
+
 namespace UI {
 template <typename> class NodeIterator;
 }
@@ -68,9 +69,9 @@ struct ListNode {
 struct NodeSharedData {
     SPDesktop *desktop;
     ControlPointSelection *selection;
-    SPCanvasGroup *node_group;
-    SPCanvasGroup *handle_group;
-    SPCanvasGroup *handle_line_group;
+    Inkscape::CanvasItemGroup *node_group;
+    Inkscape::CanvasItemGroup *handle_group;
+    Inkscape::CanvasItemGroup *handle_line_group;
 };
 
 class Handle : public ControlPoint {
@@ -116,7 +117,7 @@ private:
     inline PathManipulator &_pm() const;
     Node *_parent; // the handle's lifetime does not extend beyond that of the parent node,
     // so a naked pointer is OK and allows setting it during Node's construction
-    SPCtrlLine *_handle_line;
+    CanvasItemCurve *_handle_line;
     bool _degenerate; // True if the handle is retracted, i.e. has zero length. This is used often internally so it makes sense to cache this
 
     /**

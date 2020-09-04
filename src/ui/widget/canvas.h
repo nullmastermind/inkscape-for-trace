@@ -20,16 +20,21 @@
 #include <2geom/rect.h>
 #include <2geom/int-rect.h>
 
+#include "preferences.h" // Update canvas_item_ctrl sizes.
+
 #include "display/rendermode.h"
 
 class SPDesktop;
-class SPCanvasItem;
-class SPCanvasGroup;
 
 struct PaintRectSetup;
 
 
 namespace Inkscape {
+
+class CanvasItem;
+class CanvasItemGroup;
+class Drawing;
+
 namespace UI {
 namespace Widget {
 
@@ -43,7 +48,7 @@ public:
     Canvas();
     ~Canvas() override;
 
-    // Structure
+    // Structure TODO: Remove desktop dependency.
     void set_desktop(SPDesktop *desktop) { _desktop = desktop; }
     SPDesktop *get_desktop() { return _desktop; }
 
@@ -52,10 +57,14 @@ public:
     Geom::Point canvas_to_world(Geom::Point const &window);
     Geom::Rect get_area_world();
     Geom::IntRect get_area_world_int(); // Shouldn't really need this, only used for rulers.
+    void set_affine(Geom::Affine const &affine);
+    Geom::Affine get_affine() { return _affine; }
 
     // Drawing
+    void set_drawing(Inkscape::Drawing *drawing) { _drawing = drawing; }
     void redraw_all();                                // Draw entire surface during idle.
     void redraw_area(int x0, int y0, int x1, int y1); // Draw specified area during idle.
+    void redraw_area(Geom::Rect& area);
     void redraw_now();                                // Draw areas needing update immediately.
     void request_update();                            // Draw after updating canvas items.
     void scroll_to(Geom::Point const &c, bool clear);
@@ -89,16 +98,19 @@ public:
     void forced_redraws_stop() { _forced_redraw_limit = -1; }
 
     // Canvas Items
-    SPCanvasGroup *get_canvas_item_root();
-    SPCanvasItem  *get_current_item() { return _current_item; }
-    void           set_current_item(SPCanvasItem *item) { _current_item = item; }
-    SPCanvasItem  *get_grabbed_item() { return _grabbed_item; }
-    void           set_grabbed_item(SPCanvasItem *item, unsigned int mask) {
-        _grabbed_item = item;
+    CanvasItemGroup *get_canvas_item_root() { return _canvas_item_root; }
+
+    Inkscape::CanvasItem *get_current_canvas_item() { return _current_canvas_item; }
+    void                  set_current_canvas_item(Inkscape::CanvasItem *item) {
+        _current_canvas_item = item; }
+    Inkscape::CanvasItem *get_grabbed_canvas_item() { return _grabbed_canvas_item; }
+    void                  set_grabbed_canvas_item(Inkscape::CanvasItem *item, Gdk::EventMask mask) {
+        _grabbed_canvas_item = item;
         _grabbed_event_mask = mask;
     }
+    
     void           set_need_repick(bool repick = true) { _need_repick = repick; }
-    void           canvas_item_clear(SPCanvasItem *item);
+    void           canvas_item_clear(Inkscape::CanvasItem *item);
 
     // Events
     void           set_all_enter_events(bool on) { _all_enter_events = on; }
@@ -123,6 +135,8 @@ protected:
 
     // Painting
     bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr) override;
+
+    void update_canvas_item_ctrl_sizes(int size_index);
 
 private:
 
@@ -161,6 +175,7 @@ private:
     int _x0 = 0;                     ///< World coordinate of the leftmost pixels of window.
     int _y0 = 0;                     ///< World coordinate of the topmost pixels of window.
     Geom::Point _window_origin;      ///< World coordinate of the upper-leftmost pixel of window.
+    Geom::Affine _affine;            // Only used for canvas items at moment.
 
     int _device_scale = 1;           ///< Scale for high DPI montiors. Probably should be double.
     Gtk::Allocation _allocation;     ///< Canvas allocation, save so we know when it changes.
@@ -173,16 +188,19 @@ private:
     bool     _all_enter_events      = false;    ///< Keep all enter events. Only set true in connector-tool.cpp.
     bool     _is_dragging           = false;    ///< Used in selection-chemistry to block undo/redo.
     int      _state                 = 0;        ///< Last know modifier state (SHIFT, CTRL, etc.).
-    SPCanvasItem *_current_item     = nullptr;  ///< Item containing cursor, nullptr if none.
-    SPCanvasItem *_current_item_new = nullptr;  ///< Item about to become _current_item, nullptr if none.
-    SPCanvasItem *_grabbed_item     = nullptr;  ///< Item that holds a pointer grab; nullptr if none.
-    SPCanvasItem *_focused_item     = nullptr;  ///< Item that is currently focused; nullptr if none.
-    unsigned int  _grabbed_event_mask = 0;
+
+    Inkscape::CanvasItem *_current_canvas_item     = nullptr;  ///< Item containing cursor, nullptr if none.
+    Inkscape::CanvasItem *_current_canvas_item_new = nullptr;  ///< Item to become _current_item, nullptr if none.
+    Inkscape::CanvasItem *_grabbed_canvas_item     = nullptr;  ///< Item that holds a pointer grab; nullptr if none.
+
+    Gdk::EventMask _grabbed_event_mask = (Gdk::EventMask)0;
 
     // Drawing
     bool _drawing_disabled = false;  ///< Disable drawing during critical operations
-    bool _need_update = false;
-    SPCanvasItem *_root = nullptr;
+    bool _need_update = true; // Set true so setting CanvasItem bounds are calculated at least once.
+    CanvasItemGroup *_canvas_item_root = nullptr;
+    Inkscape::Drawing *_drawing = nullptr;
+
     Inkscape::RenderMode _render_mode = Inkscape::RENDERMODE_NORMAL;
     Inkscape::SplitMode  _split_mode  = Inkscape::SPLITMODE_NORMAL;
     Geom::Point _split_position;
@@ -216,6 +234,31 @@ private:
     bool _background_is_checkerboard = false;
     
     Cairo::RefPtr<Cairo::Region> _clean_region;        ///< Area of widget that has up-to-date content.
+
+
+    // Used to update CanvasItemCtrl's when size changed.
+    class CanvasPrefObserver : public Inkscape::Preferences::Observer {
+    public:
+        CanvasPrefObserver(Inkscape::UI::Widget::Canvas *canvas, Glib::ustring const &path)
+            : Inkscape::Preferences::Observer(path)
+            , _canvas(canvas)
+        {
+            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+            prefs->addObserver(*this);
+        }
+        ~CanvasPrefObserver() override = default;
+    private:
+        void notify(Inkscape::Preferences::Entry const &entry) override
+        {
+            if (entry.getEntryName() == "value") {
+                int size = entry.getIntLimited(3, 1, 7);
+            _canvas->update_canvas_item_ctrl_sizes(size);
+            }
+        }
+        Inkscape::UI::Widget::Canvas *_canvas = nullptr;
+    };
+
+    CanvasPrefObserver _size_observer;
 };
 
 } // namespace Widget

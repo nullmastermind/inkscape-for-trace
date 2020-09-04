@@ -8,7 +8,9 @@ if(WIN32)
   
   set(INKSCAPE_DATADIR "") # can be set via the environment variable INKSCAPE_DATADIR at runtime
 else()
-  set(INKSCAPE_DATADIR "${CMAKE_INSTALL_PREFIX}/share")
+  if(NOT INKSCAPE_DATADIR)
+    set(INKSCAPE_DATADIR "${CMAKE_INSTALL_PREFIX}/share")
+  endif(NOT INKSCAPE_DATADIR)
 endif()
 
 if(NOT PACKAGE_LOCALE_DIR)

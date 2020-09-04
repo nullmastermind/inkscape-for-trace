@@ -66,6 +66,7 @@
 #include "object/sp-defs.h"
 #include "object/sp-namedview.h"
 #include "object/sp-root.h"
+#include "object/sp-use.h"
 #include "style.h"
 
 #include "ui/dialog/font-substitution.h"
@@ -74,6 +75,7 @@
 #include "ui/tools/tool-base.h"
 #include "widgets/desktop-widget.h"
 
+#include "svg/svg.h" // for sp_svg_transform_write, used in sp_import_document
 #include "xml/rebase-hrefs.h"
 #include "xml/sp-css-attr.h"
 
@@ -960,12 +962,15 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
         pasted_objects.push_back(obj_copy);
 
         // if we are pasting a clone to an already existing object, its
-        // transform is wrong (see ui/clipboard.cpp)
-        if(obj_copy->attribute("transform-with-parent") && target_document->getObjectById(obj->attribute("xlink:href")+1) ){
-            obj_copy->setAttribute("transform",obj_copy->attribute("transform-with-parent"));
+        // transform is relative to the document, not to its original (see ui/clipboard.cpp)
+        SPUse *use = dynamic_cast<SPUse *>(obj_copy);
+        if (use) {
+            SPItem *original = use->get_original();
+            if (original) {
+                Geom::Affine relative_use_transform = original->transform.inverse() * use->transform;
+                obj_copy->setAttribute("transform", sp_svg_transform_write(relative_use_transform));
+            }
         }
-        if(obj_copy->attribute("transform-with-parent"))
-            obj_copy->removeAttribute("transform-with-parent");
     }
 
     std::vector<Inkscape::XML::Node*> pasted_objects_not;

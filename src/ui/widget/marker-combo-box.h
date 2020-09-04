@@ -48,7 +48,6 @@ public:
     sigc::signal<void> changed_signal;
 
     void set_current(SPObject *marker);
-    void set_active_history();
     void set_selected(const gchar *name, gboolean retry=true);
     const gchar *get_active_marker_uri();
     bool update() { return updating; };

@@ -402,13 +402,13 @@ SPGradient *sp_gradient_reset_to_userspace(SPGradient *gr, SPItem *item)
             Geom::LineSegment bbl4(bbox->corner(3), bbox->corner(0));
 
             // Find where our gradient line intersects the bounding box.
-            if (intersection(bbl1, grl)) {
+            if (!bbl1.isDegenerate() && intersection(bbl1, grl)) {
                 pStart = bbl1.pointAt((*intersection(bbl1, grl)).ta);
                 pEnd = bbl3.pointAt((*intersection(bbl3, grl)).ta);
                 if (intersection(bbl1, grl.ray(grl.angle()))) {
                     std::swap(pStart, pEnd);
                 }
-            } else if (intersection(bbl2, grl)) {
+            } else if (!bbl2.isDegenerate() && intersection(bbl2, grl)) {
                 pStart = bbl2.pointAt((*intersection(bbl2, grl)).ta);
                 pEnd = bbl4.pointAt((*intersection(bbl4, grl)).ta);
                 if (intersection(bbl2, grl.ray(grl.angle()))) {
@@ -1592,7 +1592,7 @@ void sp_gradient_reverse_selected_gradients(SPDesktop *desktop)
                        _("Reverse gradient"));
 }
 
-void sp_gradient_unset_swatch(SPDesktop *desktop, std::string id)
+void sp_gradient_unset_swatch(SPDesktop *desktop, std::string const &id)
 {
     SPDocument *doc = desktop ? desktop->doc() : nullptr;
 

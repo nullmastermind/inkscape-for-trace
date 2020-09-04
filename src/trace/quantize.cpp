@@ -14,6 +14,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <new>
+#include <glib.h>
 
 #include "pool.h"
 #include "imagemap.h"
@@ -560,9 +561,10 @@ IndexedMap *rgbMapQuantize(RgbMap *rgbmap, int ncolor)
     }
     catch (std::bad_alloc &ex) {
         //should do smthg else?
+        g_warning("rgbMapQuantize: Failed to allocate enough memory to during octreeBuild");
     }
 
-    if ( tree ) {
+    if (tree) {
         RGB *rgbpal = new RGB[ncolor];
         int indexes = 0;
         octreeIndex(tree, rgbpal, &indexes);

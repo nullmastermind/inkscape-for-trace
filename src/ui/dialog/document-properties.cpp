@@ -28,7 +28,7 @@
 #include "rdf.h"
 #include "verbs.h"
 
-#include "display/canvas-grid.h"
+#include "display/control/canvas-grid.h"
 #include "document-properties.h"
 #include "helper/action.h"
 #include "include/gtkmm_version.h"

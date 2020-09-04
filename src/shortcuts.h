@@ -51,6 +51,7 @@ namespace Inkscape {
 bool sp_shortcut_invoke (unsigned int shortcut, Inkscape::UI::View::View *view);
 
 void sp_shortcut_init();
+void sp_shortcut_ensure_init();
 Inkscape::Verb * sp_shortcut_get_verb (unsigned int shortcut);
 unsigned int sp_shortcut_get_primary (Inkscape::Verb * verb); // Returns GDK_VoidSymbol if no shortcut is found.
 char* sp_shortcut_get_label (unsigned int shortcut); // Returns the human readable form of the shortcut (or NULL), for example Shift+Ctrl+F. Free the returned string with g_free.
@@ -71,6 +72,7 @@ void sp_shortcut_file_import_do(char const *importname);
 void sp_shortcut_file_export_do(char const *exportname);
 GtkAccelGroup *sp_shortcut_get_accel_group();
 void sp_shortcut_add_accelerator(GtkWidget *item, unsigned int const shortcut);
+guint parse_modifier_string(gchar const *modifiers_string, gchar const *verb_name);
 
 #endif
 

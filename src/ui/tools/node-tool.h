@@ -48,12 +48,12 @@ public:
     NodeTool();
     ~NodeTool() override;
 
-    Inkscape::UI::ControlPointSelection* _selected_nodes;
-    Inkscape::UI::MultiPathManipulator* _multipath;
+    Inkscape::UI::ControlPointSelection* _selected_nodes = nullptr;
+    Inkscape::UI::MultiPathManipulator* _multipath = nullptr;
     std::vector<Inkscape::Display::TemporaryItem *> _helperpath_tmpitem;
 
-    bool edit_clipping_paths;
-    bool edit_masks;
+    bool edit_clipping_paths = false;
+    bool edit_masks = false;
 
     static const std::string prefsPath;
 
@@ -68,24 +68,23 @@ public:
 private:
     sigc::connection _selection_changed_connection;
     sigc::connection _mouseover_changed_connection;
-    sigc::connection _sizeUpdatedConn;
 
-    SPItem *flashed_item;
+    SPItem *flashed_item = nullptr;
 
-    Inkscape::Display::TemporaryItem *flash_tempitem;
-    Inkscape::UI::Selector* _selector;
-    Inkscape::UI::PathSharedData* _path_data;
-    SPCanvasGroup *_transform_handle_group;
-    SPItem *_last_over;
+    Inkscape::Display::TemporaryItem *flash_tempitem = nullptr;
+    Inkscape::UI::Selector* _selector = nullptr;
+    Inkscape::UI::PathSharedData* _path_data = nullptr;
+    Inkscape::CanvasItemGroup *_transform_handle_group = nullptr;
+    SPItem *_last_over = nullptr;
 
-    bool cursor_drag;
-    bool show_handles;
-    bool show_outline;
-    bool live_outline;
-    bool live_objects;
-    bool show_path_direction;
-    bool show_transform_handles;
-    bool single_node_transform_handles;
+    bool cursor_drag = false;
+    bool show_handles = false;
+    bool show_outline =false;
+    bool live_outline = false;
+    bool live_objects = false;
+    bool show_path_direction = false;
+    bool show_transform_handles = false;
+    bool single_node_transform_handles = false;
 
     std::vector<SPItem*> _current_selection;
     std::vector<SPItem*> _previous_selection;

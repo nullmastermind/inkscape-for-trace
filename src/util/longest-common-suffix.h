@@ -15,7 +15,6 @@
 
 #include <iterator>
 #include <functional>
-#include "util/list.h"
 
 namespace Inkscape {
 
@@ -64,10 +63,8 @@ ForwardIterator longest_common_suffix(ForwardIterator a, ForwardIterator b,
 
     /* Build parallel lists of suffixes, ordered by increasing length. */
 
-    using Inkscape::Util::List;
-    using Inkscape::Util::cons;
     ForwardIterator lists[2] = { a, b };
-    List<ForwardIterator> suffixes[2];
+    std::vector<ForwardIterator> suffixes[2];
 
     for ( int i=0 ; i < 2 ; i++ ) {
         for ( ForwardIterator iter(lists[i]) ; iter != end ; ++iter ) {
@@ -75,8 +72,7 @@ ForwardIterator longest_common_suffix(ForwardIterator a, ForwardIterator b,
                 // the other list is a suffix of this one
                 return lists[1-i];
             }
-
-            suffixes[i] = cons(iter, suffixes[i]);
+            suffixes[i].push_back(iter);
         }
     }
 
@@ -86,12 +82,12 @@ ForwardIterator longest_common_suffix(ForwardIterator a, ForwardIterator b,
 
     ForwardIterator longest_common(end);
 
-    while ( suffixes[0] && suffixes[1] &&
-            pred(**suffixes[0], **suffixes[1]) )
+    while ( !suffixes[0].empty() && !suffixes[1].empty() &&
+            pred(*(suffixes[0].back()), *(suffixes[1].back())) )
     {
-        longest_common = *suffixes[0];
-        ++suffixes[0];
-        ++suffixes[1];
+        longest_common = suffixes[0].back();
+        suffixes[0].pop_back();
+        suffixes[1].pop_back();
     }
 
     return longest_common;

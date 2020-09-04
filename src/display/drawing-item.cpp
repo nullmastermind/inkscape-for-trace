@@ -19,12 +19,17 @@
 #include "display/drawing-surface.h"
 #include "display/drawing-text.h"
 #include "display/drawing.h"
+
+#include "display/cairo-utils.h"
+#include "display/cairo-templates.h"
+
+#include "display/control/canvas-item-drawing.h"
+#include "ui/widget/canvas.h" // Mark area for redrawing.
+
 #include "nr-filter.h"
 #include "preferences.h"
 #include "style.h"
 
-#include "display/cairo-utils.h"
-#include "display/cairo-templates.h"
 
 #include "object/sp-item.h"
 
@@ -85,7 +90,16 @@ DrawingItem::DrawingItem(Drawing &drawing)
 
 DrawingItem::~DrawingItem()
 {
-    _drawing.signal_item_deleted.emit(this);
+    // Unactivate if active.
+    if (drawing().getCanvasItemDrawing()) {
+        if (drawing().getCanvasItemDrawing()->get_active() == this) {
+            drawing().getCanvasItemDrawing()->set_active(nullptr);
+        }
+    } else {
+        // Can happen, e.g. in Eraser tool.
+        // std::cerr << "DrawingItem::~DrawingItem: Missing CanvasItemDrawing!" << std::endl;
+    }
+
     //if (!_children.empty()) {
     //    g_warning("Removing item with children");
     //}
@@ -1091,7 +1105,16 @@ DrawingItem::_markForRendering()
     if (bkg_root && bkg_root->_parent && bkg_root->_parent->_parent) {
         bkg_root->_invalidateFilterBackground(*dirty);
     }
-    _drawing.signal_request_render.emit(*dirty);
+
+    //_drawing.signal_request_render.emit(*dirty);
+    if (drawing().getCanvasItemDrawing()) {
+        Geom::Rect area = *dirty;
+        drawing().getCanvasItemDrawing()->get_canvas()->redraw_area(area);
+    } else {
+        // Can happen, e.g. Icon Preview dialog.
+        // std::cerr << "DrawingItem::_markForRendering: Missing CanvasItemDrawing!" << std::endl;
+    }
+
 }
 
 void
@@ -1141,7 +1164,12 @@ DrawingItem::_markForUpdate(unsigned flags, bool propagate)
             // up to the root. Do not bother recursing, because it won't change anything.
             // Also do this if we are the root item, because we have no more ancestors
             // to invalidate.
-            _drawing.signal_request_update.emit(this);
+            if (drawing().getCanvasItemDrawing()) {
+                drawing().getCanvasItemDrawing()->request_update();
+            } else {
+                // Can happen, e.g. Eraser tool.
+                // std::cerr << "DrawingItem::_markForUpdate: Missing CanvasItemDrawing!" << std::endl;
+            }
         }
     }
 }

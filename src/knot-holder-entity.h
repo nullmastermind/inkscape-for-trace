@@ -17,9 +17,10 @@
 
 #include <2geom/forward.h>
 
-#include "display/sp-canvas-item.h"
 #include "knot.h"
 #include "snapper.h"
+
+#include "display/control/canvas-item-enums.h"
 
 class SPHatch;
 class SPItem;
@@ -42,24 +43,14 @@ typedef Geom::Point (* SPKnotHolderGetFunc) (SPItem *item);
  */
 class KnotHolderEntity {
 public:
-    KnotHolderEntity():
-        knot(nullptr),
-        item(nullptr),
-        desktop(nullptr),
-        parent_holder(nullptr),
-        my_counter(0),
-        handler_id(0),
-        _click_handler_id(0),
-        _ungrab_handler_id(0)
-        {}
+    KnotHolderEntity() {}
     virtual ~KnotHolderEntity();
 
-    virtual void create(SPDesktop *desktop, SPItem *item, KnotHolder *parent,
-                        Inkscape::ControlType type = Inkscape::CTRL_TYPE_UNKNOWN,
-                        char const*tip = "",
-                        SPKnotShapeType shape = SP_KNOT_SHAPE_DIAMOND,
-                        SPKnotModeType mode = SP_KNOT_MODE_XOR,
-                        guint32 color = 0xffffff00);
+    void create(SPDesktop *desktop, SPItem *item, KnotHolder *parent,
+                Inkscape::CanvasItemCtrlType type = Inkscape::CANVAS_ITEM_CTRL_TYPE_DEFAULT,
+                Glib::ustring const & name = Glib::ustring("unknown"),
+                char const *tip = "",
+                guint32 color = 0xffffff00);
 
     /* the get/set/click handlers are virtual functions; each handler class for a knot
        should be derived from KnotHolderEntity and override these functions */
@@ -75,21 +66,20 @@ public:
     Geom::Point snap_knot_position(Geom::Point const &p, unsigned int state);
     Geom::Point snap_knot_position_constrained(Geom::Point const &p, Inkscape::Snapper::SnapConstraint const &constraint, unsigned int state);
 
-    SPKnot *knot;
-    SPItem *item;
-    SPDesktop *desktop;
+    SPKnot *knot = nullptr;
+    SPItem *item = nullptr;
+    SPDesktop *desktop = nullptr;
+    KnotHolder *parent_holder = nullptr;
 
-    KnotHolder *parent_holder;
-
-    int my_counter;
-    static int counter;
+    int my_counter = 0;
+    inline static int counter = 0;
 
     /** Connection to \a knot's "moved" signal. */
-    unsigned int   handler_id;
+    unsigned int   handler_id = 0;
     /** Connection to \a knot's "clicked" signal. */
-    unsigned int   _click_handler_id;
+    unsigned int   _click_handler_id = 0;
     /** Connection to \a knot's "ungrabbed" signal. */
-    unsigned int   _ungrab_handler_id;
+    unsigned int   _ungrab_handler_id = 0;
 
 private:
     sigc::connection _mousedown_connection;

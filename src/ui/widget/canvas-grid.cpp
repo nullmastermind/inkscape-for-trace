@@ -20,15 +20,18 @@
 #include <glibmm/i18n.h>
 
 #include "canvas-grid.h"
-#include "ui/widget/canvas.h"
 
-#include "ui/widget/ink-ruler.h"
-#include "ui/icon-loader.h"
-
-#include "widgets/desktop-widget.h"  // Hopefully temp.
-#include "display/canvas-arena.h"    // Hopefully temp.
 #include "desktop.h"                 // Hopefully temp.
 #include "desktop-events.h"          // Hopefully temp.
+
+#include "display/control/canvas-item-drawing.h" // sticky
+
+#include "ui/icon-loader.h"
+#include "ui/widget/canvas.h"
+#include "ui/widget/ink-ruler.h"
+
+#include "widgets/desktop-widget.h"  // Hopefully temp.
+
 
 namespace Inkscape {
 namespace UI {
@@ -55,7 +58,7 @@ CanvasGrid::CanvasGrid(SPDesktopWidget *dtw)
 
     // Vertical Scrollbar
     _vadj = Gtk::Adjustment::create(0.0, -4000.0, 4000.0, 10.0, 100.0, 4.0);
-    _hadj->signal_value_changed().connect(sigc::mem_fun(_dtw, &SPDesktopWidget::on_adjustment_value_changed));
+    _vadj->signal_value_changed().connect(sigc::mem_fun(_dtw, &SPDesktopWidget::on_adjustment_value_changed));
     _vscrollbar = Gtk::manage(new Gtk::Scrollbar(_vadj, Gtk::ORIENTATION_VERTICAL));
     _vscrollbar->set_name("CanvasScrollbar");
     _vscrollbar->set_vexpand(true);
@@ -147,7 +150,7 @@ CanvasGrid::UpdateRulers()
     Geom::Rect viewbox = _dtw->desktop->get_display_area(true).bounds();
     // "true" means: Use integer values of the canvas for calculating the display area, similar
     // to the integer values used for positioning the grid lines. (see SPCanvas::scrollTo(), 
-    // where ix and iy are rounded integer values; these values are stored in SPCanvasBuf->rect,
+    // where ix and iy are rounded integer values; these values are stored in CanvasItemBuffer->rect,
     // and used for drawing the grid). By using the integer values here too, the ruler ticks 
     // will be perfectly aligned to the grid
     double _dt2r = _dtw->_dt2r;
@@ -253,9 +256,9 @@ CanvasGrid::SignalEvent(GdkEvent *event)
 
     if (event->type == GDK_BUTTON_PRESS && event->button.button == 3) {
         if (event->button.state & GDK_SHIFT_MASK) {
-            sp_canvas_arena_set_sticky (SP_CANVAS_ARENA (_dtw->desktop->drawing), true);
+            _dtw->desktop->getCanvasDrawing()->set_sticky(true);
         } else {
-            sp_canvas_arena_set_sticky (SP_CANVAS_ARENA (_dtw->desktop->drawing), false);
+            _dtw->desktop->getCanvasDrawing()->set_sticky(false);
         }
     }
 
@@ -267,8 +270,8 @@ CanvasGrid::SignalEvent(GdkEvent *event)
         // and passed on by the canvas acetate (I think). --bb
 
         if ((event->type == GDK_KEY_PRESS || event->type == GDK_KEY_RELEASE)
-            && !_canvas->get_current_item()) {
-            return sp_desktop_root_handler (nullptr, event, _dtw->desktop);
+            && !_canvas->get_current_canvas_item()) {
+            return sp_desktop_root_handler (event, _dtw->desktop);
         }
     }
     return false;

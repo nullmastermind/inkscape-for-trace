@@ -109,6 +109,8 @@ void graphlayout(std::vector<SPItem*> const & items) {
 
     std::list<SPItem*> selected;
     filterConnectors(items, selected);
+    std::vector<SPItem*> connectors;
+    std::copy_if(items.begin(), items.end(), std::back_inserter(connectors), [](SPItem* item){return isConnector(item); });
 
     if (selected.size() < 2) return;
 
@@ -146,48 +148,28 @@ void graphlayout(std::vector<SPItem*> const & items) {
     bool directed       = prefs->getBool("/tools/connector/directedlayout");
     bool avoid_overlaps = prefs->getBool("/tools/connector/avoidoverlaplayout");
 
-    for (SPItem * item: selected) {
-        std::map<std::string, unsigned>::iterator i_iter=nodelookup.find(item->getId());
+    for (SPItem* conn: connectors) {
+        SPPath* path = SP_PATH(conn);
+        std::array<SPItem*, 2> attachedItems;
+        path->connEndPair.getAttachedItems(attachedItems.data());
+        if (attachedItems[0] == nullptr) continue;
+        if (attachedItems[1] == nullptr) continue;
+        std::map<std::string, unsigned>::iterator i_iter=nodelookup.find(attachedItems[0]->getId());
         if (i_iter == nodelookup.end()) continue;
-        unsigned u = i_iter->second;
-        std::vector<SPItem*> nlist = item->getAvoidRef().getAttachedConnectors(Avoid::runningFrom);
-        std::list<SPItem*> connectors;
+        unsigned rect_index_first = i_iter->second;
+        i_iter = nodelookup.find(attachedItems[1]->getId());
+        if (i_iter == nodelookup.end()) continue;
+        unsigned rect_index_second = i_iter->second;
+        es.emplace_back(rect_index_first, rect_index_second);
 
-        connectors.insert(connectors.end(), nlist.begin(), nlist.end());
-
-        for (SPItem * conn: connectors) {
-            SPItem * iv;
-            SPItem * items[2];
-            assert(isConnector(conn));
-            SP_PATH(conn)->connEndPair.getAttachedItems(items);
-            if (items[0] == item) {
-                iv = items[1];
-            } else {
-                iv = items[0];
-            }
-
-            if (iv == nullptr) {
-                // The connector is not attached to anything at the
-                // other end so we should just ignore it.
-                continue;
-            }
-
-            // If iv not in nodelookup we again treat the connector
-            // as disconnected and continue
-            std::map<std::string, unsigned>::iterator v_pair = nodelookup.find(iv->getId());
-            if (v_pair != nodelookup.end()) {
-                unsigned v = v_pair->second;
-                //cout << "Edge: (" << u <<","<<v<<")"<<endl;
-                es.emplace_back(u, v);
-                if (conn->style->marker_end.set) {
-                    if (directed && strcmp(conn->style->marker_end.value(), "none")) {
-                        constraints.push_back(new SeparationConstraint(YDIM, v, u,
-                                ideal_connector_length * directed_edge_height_modifier));
-                    }
-                }
+        if (conn->style->marker_end.set) {
+            if (directed && strcmp(conn->style->marker_end.value(), "none")) {
+                constraints.push_back(new SeparationConstraint(YDIM, rect_index_first, rect_index_second,
+                                                               ideal_connector_length * directed_edge_height_modifier));
             }
         }
     }
+
     EdgeLengths elengths(es.size(), 1);
     std::vector<Component*> cs;
     connectedComponents(rs, es, cs);

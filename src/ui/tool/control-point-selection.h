@@ -28,9 +28,9 @@
 #include "snap-candidate.h"
 
 class SPDesktop;
-struct SPCanvasGroup;
 
 namespace Inkscape {
+class CanvasItemGroup;
 namespace UI {
 class TransformHandleSet;
 class SelectableControlPoint;
@@ -42,7 +42,7 @@ namespace UI {
 
 class ControlPointSelection : public Manipulator, public sigc::trackable {
 public:
-    ControlPointSelection(SPDesktop *d, SPCanvasGroup *th_group);
+    ControlPointSelection(SPDesktop *d, Inkscape::CanvasItemGroup *th_group);
     ~ControlPointSelection() override;
     typedef std::unordered_set<SelectableControlPoint *> set_type;
     typedef set_type Set; // convenience alias

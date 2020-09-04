@@ -1,0 +1,13 @@
+#!/bin/bash
+# Set all the Inkscape specific environment variables
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+REALHOME=`getent passwd $UID | cut -d ':' -f 6`
+
+export INKSCAPE_PROFILE_DIR=${REALHOME}/.config/inkscape
+export INKSCAPE_LOCALEDIR=${SNAP}/share/locale
+export INKSCAPE_DATADIR=${SNAP}/share
+
+export GTK_USE_PORTAL=1
+
+exec "$@"

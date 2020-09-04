@@ -31,9 +31,16 @@ struct SPGuideLine;
 #define SP_GUIDE(obj) (dynamic_cast<SPGuide*>((SPObject*)obj))
 #define SP_IS_GUIDE(obj) (dynamic_cast<const SPGuide*>((SPObject*)obj) != NULL)
 
-namespace Inkscape::UI::Widget {
+namespace Inkscape {
+  class CanvasItemGroup;
+  class CanvasItemGuideLine;
+
+namespace UI::Widget {
   class Canvas;
+
 }
+} // namespace Inkscape
+
 
 /* Represents the constraint on p that dot(g.direction, p) == g.position. */
 class SPGuide : public SPObject {
@@ -62,7 +69,7 @@ public:
     static SPGuide *createSPGuide(SPDocument *doc, Geom::Point const &pt1, Geom::Point const &pt2);
     SPGuide *duplicate();
 
-    void showSPGuide(SPCanvasGroup *group, GCallback handler);
+    void showSPGuide(Inkscape::CanvasItemGroup *group);
     void hideSPGuide(Inkscape::UI::Widget::Canvas *canvas);
     void showSPGuide(); // argument-free versions
     void hideSPGuide();
@@ -84,7 +91,7 @@ protected:
     void set(SPAttr key, const char* value) override;
 
     char* label;
-    std::vector<SPGuideLine *> views; // contains an object of type SPGuideline (see display/guideline.cpp for definition)
+    std::vector<Inkscape::CanvasItemGuideLine *> views; // See display/control/guideline.h.
     bool locked;
     Geom::Point normal_to_line;
     Geom::Point point_on_line;

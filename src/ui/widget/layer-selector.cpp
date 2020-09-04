@@ -31,8 +31,6 @@
 #include "ui/util.h"
 #include "ui/widget/canvas.h" // Focus widget
 
-#include "util/reverse-list.h"
-
 #include "xml/node-event-vector.h"
 
 namespace Inkscape {
@@ -241,9 +239,6 @@ void LayerSelector::_layersChanged()
 /** Selects the given layer in the dropdown selector.
  */
 void LayerSelector::_selectLayer(SPObject *layer) {
-    using Inkscape::Util::List;
-    using Inkscape::Util::cons;
-    using Inkscape::Util::reverse_list;
 
     _selection_changed_connection.block();
     _visibility_toggled_connection.block();
@@ -263,10 +258,15 @@ void LayerSelector::_selectLayer(SPObject *layer) {
     }
 
     if (layer) {
-        List<SPObject &> hierarchy=reverse_list<SPObject::ParentIterator>(layer, root);
+        
+        std::vector<SPObject*> hierarchy; 
+        hierarchy.push_back(layer);
+        while(hierarchy.back() != root) hierarchy.push_back(hierarchy.back()->parent);
+
         if ( layer == root ) {
-            _buildEntries(0, cons(*root, hierarchy));
-        } else if (hierarchy) {
+            _buildEntries(0, hierarchy);
+        } else if (!hierarchy.empty()) {
+            hierarchy.pop_back();
             _buildSiblingEntries(0, *root, hierarchy);
         }
 
@@ -305,7 +305,6 @@ void LayerSelector::_selectLayer(SPObject *layer) {
 /** Sets the current desktop layer to the actively selected layer.
  */
 void LayerSelector::_setDesktopLayer() {
-    Gtk::ListStore::iterator selected(_selector.get_active());
     SPObject *layer=_selector.get_active()->get_value(_model_columns.object);
     if ( _desktop && layer ) {
         _current_layer_changed_connection.block();
@@ -326,19 +325,16 @@ void LayerSelector::_setDesktopLayer() {
 /** Creates rows in the _layer_model data structure for each item
  *  in \a hierarchy, to a given \a depth.
  */
-void LayerSelector::_buildEntries(unsigned depth,
-                                  Inkscape::Util::List<SPObject &> hierarchy)
+void LayerSelector::_buildEntries(unsigned depth, std::vector<SPObject*> hierarchy)
 {
-    using Inkscape::Util::List;
-    using Inkscape::Util::rest;
+    auto highest = hierarchy.back();
+    hierarchy.pop_back();
+    _buildEntry(depth, *highest);
 
-    _buildEntry(depth, *hierarchy);
-
-    List<SPObject &> remainder=rest(hierarchy);
-    if (remainder) {
-        _buildEntries(depth+1, remainder);
+    if (!hierarchy.empty()) {
+        _buildEntries(depth+1, hierarchy);
     } else {
-        _buildSiblingEntries(depth+1, *hierarchy, remainder);
+        _buildSiblingEntries(depth+1, *highest, hierarchy);
     }
 }
 
@@ -347,18 +343,17 @@ void LayerSelector::_buildEntries(unsigned depth,
  */
 void LayerSelector::_buildSiblingEntries(
     unsigned depth, SPObject &parent,
-    Inkscape::Util::List<SPObject &> hierarchy
+    std::vector<SPObject*> hierarchy
 ) {
-    using Inkscape::Util::rest;
-
     auto siblings = parent.children | boost::adaptors::filtered(is_layer(_desktop)) | boost::adaptors::reversed;
 
-    SPObject *layer( hierarchy ? &*hierarchy : nullptr );
+    SPObject *layer = ( hierarchy.empty() ? nullptr : hierarchy.back() );
 
     for (auto& sib: siblings) {
         _buildEntry(depth, sib);
         if ( &sib == layer ) {
-            _buildSiblingEntries(depth+1, *layer, rest(hierarchy));
+            hierarchy.pop_back();
+            _buildSiblingEntries(depth+1, *layer, hierarchy);
         }
     }
 }

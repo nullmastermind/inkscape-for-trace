@@ -36,9 +36,8 @@
 #include "style.h"
 #include "verbs.h"
 
-#include "display/canvas-arena.h"
 #include "display/curve.h"
-#include "display/canvas-bpath.h"
+#include "display/control/canvas-item-bpath.h"
 
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
@@ -123,7 +122,7 @@ TweakTool::~TweakTool() {
     this->style_set_connection.disconnect();
 
     if (this->dilate_area) {
-        sp_canvas_item_destroy(this->dilate_area);
+        delete this->dilate_area;
         this->dilate_area = nullptr;
     }
 }
@@ -252,17 +251,10 @@ bool TweakTool::set_style(const SPCSSAttr* css) {
 void TweakTool::setup() {
     ToolBase::setup();
 
-    {
-        /* TODO: have a look at sp_dyna_draw_context_setup where the same is done.. generalize? at least make it an arcto! */
-        Geom::PathVector path = Geom::Path(Geom::Circle(0,0,1));
-
-        auto c = std::make_unique<SPCurve>(path);
-
-        dilate_area = sp_canvas_bpath_new(desktop->getControls(), c.get());
-        sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(this->dilate_area), 0x00000000,(SPWindRule)0);
-        sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(this->dilate_area), 0xff9900ff, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
-        sp_canvas_item_hide(this->dilate_area);
-    }
+    dilate_area = new Inkscape::CanvasItemBpath(desktop->getCanvasSketch());
+    dilate_area->set_stroke(0xff9900ff);
+    dilate_area->set_fill(0x0, SP_WIND_RULE_EVENODD);
+    dilate_area->hide();
 
     this->is_drawing = false;
 
@@ -1116,8 +1108,11 @@ sp_tweak_update_area (TweakTool *tc)
 {
     double radius = get_dilate_radius(tc);
     Geom::Affine const sm (Geom::Scale(radius, radius) * Geom::Translate(tc->getDesktop()->point()));
-    sp_canvas_item_affine_absolute(tc->dilate_area, sm);
-    sp_canvas_item_show(tc->dilate_area);
+    
+    Geom::PathVector path = Geom::Path(Geom::Circle(0,0,1)); // Unit circle centered at origin.
+    path *= sm;
+    tc->dilate_area->set_bpath(path);
+    tc->dilate_area->show();
 }
 
     static void
@@ -1163,10 +1158,10 @@ bool TweakTool::root_handler(GdkEvent* event) {
 
     switch (event->type) {
         case GDK_ENTER_NOTIFY:
-            sp_canvas_item_show(this->dilate_area);
+            dilate_area->show();
             break;
         case GDK_LEAVE_NOTIFY:
-            sp_canvas_item_hide(this->dilate_area);
+            dilate_area->hide();
             break;
         case GDK_BUTTON_PRESS:
             if (event->button.button == 1 && !this->space_panning) {
@@ -1199,18 +1194,20 @@ bool TweakTool::root_handler(GdkEvent* event) {
             sp_tweak_extinput(this, event);
 
             // draw the dilating cursor
-                double radius = get_dilate_radius(this);
-                Geom::Affine const sm (Geom::Scale(radius, radius) * Geom::Translate(desktop->w2d(motion_w)));
-                sp_canvas_item_affine_absolute(this->dilate_area, sm);
-                sp_canvas_item_show(this->dilate_area);
+            double radius = get_dilate_radius(this);
+            Geom::Affine const sm (Geom::Scale(radius, radius) * Geom::Translate(desktop->w2d(motion_w)));
+            Geom::PathVector path = Geom::Path(Geom::Circle(0,0,1)); // Unit circle centered at origin.
+            path *= sm;
+            dilate_area->set_bpath(path);
+            dilate_area->show();
 
-                guint num = 0;
-                if (!desktop->selection->isEmpty()) {
-                    num = (guint) boost::distance(desktop->selection->items());
-                }
-                if (num == 0) {
-                    this->message_context->flash(Inkscape::ERROR_MESSAGE, _("<b>Nothing selected!</b> Select objects to tweak."));
-                }
+            guint num = 0;
+            if (!desktop->selection->isEmpty()) {
+                num = (guint) boost::distance(desktop->selection->items());
+            }
+            if (num == 0) {
+                this->message_context->flash(Inkscape::ERROR_MESSAGE, _("<b>Nothing selected!</b> Select objects to tweak."));
+            }
 
             // dilating:
             if (this->is_drawing && ( event->motion.state & GDK_BUTTON1_MASK )) {

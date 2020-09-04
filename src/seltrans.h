@@ -29,15 +29,16 @@
 #include "selcue.h"
 
 #include "object/sp-item.h"
-#include "display/guideline.h"
 
 class  SPKnot;
 class  SPDesktop;
 struct SPCanvasItem;
-struct SPCtrlLine;
 struct SPSelTransHandle;
 
 namespace Inkscape {
+
+class CanvasItemCtrl;
+class CanvasItemCurve;
 
 Geom::Scale calcScaleFactors(Geom::Point const &initial_point, Geom::Point const &new_point, Geom::Point const &origin, bool const skew = false);
 
@@ -146,8 +147,8 @@ private:
     State _state;
     Show _show;
 
-    bool _grabbed;
-    bool _show_handles;
+    bool _grabbed = false;
+    bool _show_handles = true;
     bool _empty;
     bool _changed;
 
@@ -181,9 +182,9 @@ private:
     int  _center_handle;
 
     SPKnot *knots[NUMHANDS];
-    SPCanvasItem *_norm;
-    SPCanvasItem *_grip;
-    SPCtrlLine *_l[4];
+    Inkscape::CanvasItemCtrl *_norm;
+    Inkscape::CanvasItemCtrl *_grip;
+    Inkscape::CanvasItemCurve *_l[4];
     unsigned int _sel_changed_id;
     unsigned int _sel_modified_id;
     std::vector<SPItem*> _stamp_cache;

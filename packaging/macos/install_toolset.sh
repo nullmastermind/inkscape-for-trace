@@ -13,28 +13,30 @@ SELF_DIR=$(F=$0; while [ ! -z $(readlink $F) ] && F=$(readlink $F); \
   cd $(dirname $F); F=$(basename $F); [ -L $F ]; do :; done; echo $(pwd -P))
 for script in $SELF_DIR/0??-*.sh; do source $script; done
 
-set -e
+include_file error_.sh
+error_trace_enable
 
 ### install toolset ############################################################
 
 function install
 {
-  local toolset_dmg=$TOOLSET_REPO_DIR/$(basename $URL_TOOLSET)
+  local toolset_dmg=$REPO_DIR/$(basename $URL_TOOLSET)
 
   if [ -f $toolset_dmg ]; then
-    echo_info "no download required"
+    echo_i "no download required"
   else
     # File not present on disk, we need to download.
-    echo_act "download required"
-    save_file $URL_TOOLSET $TOOLSET_REPO_DIR
-    echo_ok "download successful"
+    echo_i "download required"
+    download_url $URL_TOOLSET $REPO_DIR
   fi
 
-  # mount build system read-only
+  # mount build system
   local device=$(create_dmg_device $toolset_dmg)
-  [ ! -d $WRK_DIR ] && mkdir -p $WRK_DIR
-  mount -o nobrowse,ro -t hfs $device $WRK_DIR
-  echo_ok "toolset mounted as $device"
+  if [ ! -d $VER_DIR ]; then
+    mkdir -p $VER_DIR
+  fi
+  mount -o nobrowse,noowners,ro -t hfs $device $VER_DIR
+  echo_i "toolset mounted as $device"
 
   # Sadly, there are some limitations involved with union-mounting:
   #   - Files are not visible to 'ls'.
@@ -46,21 +48,21 @@ function install
   # bad write-performance.
 
   # prepare a script for mass-creating directories
-  find $OPT_DIR -type d ! -path "$TMP_DIR/*" ! -path "$SRC_DIR/*" \
-      -exec echo "mkdir {}" > $TOOLSET_ROOT_DIR/create_dirs.sh \;
-  chmod 755 $TOOLSET_ROOT_DIR/create_dirs.sh
+  find $VER_DIR -type d ! -path "$VAR_DIR/*" ! -path "$SRC_DIR/*" \
+      -exec echo "mkdir {}" > $WRK_DIR/create_dirs.sh \;
+  sed -i "" "1d" $WRK_DIR/create_dirs.sh   # remove first line ("file exists")
+  chmod 755 $WRK_DIR/create_dirs.sh
 
   # create writable (ramdisk-) overlay
   device=$(create_ram_device $OVERLAY_RAMDISK_SIZE build)
-  mount -o nobrowse,rw,union -t hfs $device $WRK_DIR
-  echo_ok "writable ramdisk overlay mounted as $device"
+  mount -o nobrowse,rw,union -t hfs $device $VER_DIR
+  echo_i "writable ramdisk overlay mounted as $device"
 
   # create all directories inside overlay
-  $TOOLSET_ROOT_DIR/create_dirs.sh
-  rm $TOOLSET_ROOT_DIR/create_dirs.sh
+  $WRK_DIR/create_dirs.sh
+  rm $WRK_DIR/create_dirs.sh
 }
 
 ### main #######################################################################
 
-$SELF_DIR/110-sysprep.sh
 install

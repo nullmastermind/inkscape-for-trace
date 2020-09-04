@@ -2,7 +2,6 @@
 set(ui_SRC
 	clipboard.cpp
 	contextmenu.cpp
-	control-manager.cpp
 	dialog-events.cpp
 	draw-anchor.cpp
         drag-and-drop.cpp
@@ -19,6 +18,7 @@ set(ui_SRC
 	tools-switch.cpp
         util.cpp
 	uxmanager.cpp
+        modifiers.cpp
 
 	cache/svg_preview_cache.cpp
 
@@ -99,7 +99,6 @@ set(ui_SRC
 	dialog/dock-behavior.cpp
 	dialog/document-properties.cpp
 	dialog/export.cpp
-	dialog/extension-editor.cpp
 	dialog/extensions.cpp
 	dialog/filedialog.cpp
 	dialog/filedialogimpl-gtkmm.cpp
@@ -233,7 +232,6 @@ set(ui_SRC
 	# Headers
 	clipboard.h
 	contextmenu.h
-	control-manager.h
 	control-types.h
 	dialog-events.h
         drag-and-drop.h
@@ -253,6 +251,7 @@ set(ui_SRC
 	tools-switch.h
         util.h
 	uxmanager.h
+        modifiers.h
 
 	cache/svg_preview_cache.h
 
@@ -272,7 +271,6 @@ set(ui_SRC
 	dialog/dock-behavior.h
 	dialog/document-properties.h
 	dialog/export.h
-	dialog/extension-editor.h
 	dialog/extensions.h
 	dialog/filedialog.h
 	dialog/filedialogimpl-gtkmm.h

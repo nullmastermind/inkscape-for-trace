@@ -20,10 +20,9 @@
 #include "multi-path-manipulator.h"
 #include "snap.h"
 
-#include "display/sp-ctrlline.h"
-#include "display/sp-canvas-util.h"
+#include "display/control/canvas-item-group.h"
+#include "display/control/canvas-item-curve.h"
 
-#include "ui/control-manager.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/event-utils.h"
 #include "ui/tool/path-manipulator.h"
@@ -33,22 +32,22 @@
 
 namespace {
 
-Inkscape::ControlType nodeTypeToCtrlType(Inkscape::UI::NodeType type)
+Inkscape::CanvasItemCtrlType nodeTypeToCtrlType(Inkscape::UI::NodeType type)
 {
-    Inkscape::ControlType result = Inkscape::CTRL_TYPE_NODE_CUSP;
+    Inkscape::CanvasItemCtrlType result = Inkscape::CANVAS_ITEM_CTRL_TYPE_NODE_CUSP;
     switch(type) {
         case Inkscape::UI::NODE_SMOOTH:
-            result = Inkscape::CTRL_TYPE_NODE_SMOOTH;
+            result = Inkscape::CANVAS_ITEM_CTRL_TYPE_NODE_SMOOTH;
             break;
         case Inkscape::UI::NODE_AUTO:
-            result = Inkscape::CTRL_TYPE_NODE_AUTO;
+            result = Inkscape::CANVAS_ITEM_CTRL_TYPE_NODE_AUTO;
             break;
         case Inkscape::UI::NODE_SYMMETRIC:
-            result = Inkscape::CTRL_TYPE_NODE_SYMETRICAL;
+            result = Inkscape::CANVAS_ITEM_CTRL_TYPE_NODE_SYMETRICAL;
             break;
         case Inkscape::UI::NODE_CUSP:
         default:
-            result = Inkscape::CTRL_TYPE_NODE_CUSP;
+            result = Inkscape::CANVAS_ITEM_CTRL_TYPE_NODE_CUSP;
             break;
     }
     return result;
@@ -180,30 +179,29 @@ double Handle::_saved_length = 0.0;
 
 bool Handle::_drag_out = false;
 
-Handle::Handle(NodeSharedData const &data, Geom::Point const &initial_pos, Node *parent) :
-    ControlPoint(data.desktop, initial_pos, SP_ANCHOR_CENTER,
-                 CTRL_TYPE_ADJ_HANDLE,
-                 _handle_colors, data.handle_group),
-    _parent(parent),
-    _handle_line(ControlManager::getManager().createControlLine(data.handle_line_group)),
-    _degenerate(true)
+Handle::Handle(NodeSharedData const &data, Geom::Point const &initial_pos, Node *parent)
+    : ControlPoint(data.desktop, initial_pos, SP_ANCHOR_CENTER,
+                   Inkscape::CANVAS_ITEM_CTRL_TYPE_ADJ_HANDLE,
+                   _handle_colors, data.handle_group)
+    , _handle_line(new Inkscape::CanvasItemCurve(data.handle_line_group))
+    , _parent(parent)
+    , _degenerate(true)
 {
     setVisible(false);
 }
 
 Handle::~Handle()
 {
-    //sp_canvas_item_hide(_handle_line);
-    sp_canvas_item_destroy(_handle_line);
+    delete _handle_line;
 }
 
 void Handle::setVisible(bool v)
 {
     ControlPoint::setVisible(v);
     if (v) {
-        sp_canvas_item_show(_handle_line);
+        _handle_line->show();
     } else {
-        sp_canvas_item_hide(_handle_line);
+        _handle_line->hide();
     }
 }
 
@@ -309,7 +307,7 @@ void Handle::move(Geom::Point const &new_pos)
 void Handle::setPosition(Geom::Point const &p)
 {
     ControlPoint::setPosition(p);
-    _handle_line->setCoords(_parent->position(), position());
+    _handle_line->set_coords(_parent->position(), position());
 
     // update degeneration info and visibility
     if (Geom::are_near(position(), _parent->position()))
@@ -762,7 +760,7 @@ Glib::ustring Handle::_getDragTip(GdkEventMotion */*event*/) const
 
 Node::Node(NodeSharedData const &data, Geom::Point const &initial_pos) :
     SelectableControlPoint(data.desktop, initial_pos, SP_ANCHOR_CENTER,
-                           CTRL_TYPE_NODE_CUSP,
+                           Inkscape::CANVAS_ITEM_CTRL_TYPE_NODE_CUSP,
                            *data.selection,
                            node_colors, data.node_group),
     _front(data, initial_pos, this),
@@ -770,6 +768,7 @@ Node::Node(NodeSharedData const &data, Geom::Point const &initial_pos) :
     _type(NODE_CUSP),
     _handles_shown(false)
 {
+    _canvas_item_ctrl->set_name("CanvasItemCtrl:Node");
     // NOTE we do not set type here, because the handles are still degenerate
 }
 
@@ -1136,7 +1135,7 @@ bool Node::isEndNode() const
 
 void Node::sink()
 {
-    sp_canvas_item_move_to_z(_canvas_item, 0);
+    _canvas_item_ctrl->set_z_position(0);
 }
 
 NodeType Node::parse_nodetype(char x)
@@ -1311,20 +1310,13 @@ void Node::_linearGrow(int dir)
 void Node::_setState(State state)
 {
     // change node size to match type and selection state
-    ControlManager &mgr = ControlManager::getManager();
-    mgr.setSelected(_canvas_item, selected());
+    _canvas_item_ctrl->set_size_extra(selected() ? 2 : 0);
     switch (state) {
+        // These were used to set "active" and "prelight" flags but the flags weren't being used.
         case STATE_NORMAL:
-            mgr.setActive(_canvas_item, false);
-            mgr.setPrelight(_canvas_item, false);
-            break;
         case STATE_MOUSEOVER:
-            mgr.setActive(_canvas_item, false);
-            mgr.setPrelight(_canvas_item, true);
             break;
         case STATE_CLICKED:
-            mgr.setActive(_canvas_item, true);
-            mgr.setPrelight(_canvas_item, false);
             // show the handles when selecting the nodes
             if(_pm()._isBSpline()){
                 this->front()->setPosition(_pm()._bsplineHandleReposition(this->front()));

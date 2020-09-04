@@ -37,7 +37,7 @@
 #include "text-editing.h"
 #include "verbs.h"
 
-#include "display/canvas-grid.h"
+#include "display/control/canvas-grid.h"
 
 #include "extension/effect.h"
 #include "extension/db.h"

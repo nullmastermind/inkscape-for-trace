@@ -20,7 +20,6 @@
 #include <gtkmm/treemodel.h>
 #include <gtkmm/liststore.h>
 #include <sigc++/slot.h>
-#include "util/list.h"
 
 class SPDesktop;
 class SPDocument;
@@ -85,10 +84,10 @@ private:
 
     void _buildEntry(unsigned depth, SPObject &object);
     void _buildEntries(unsigned depth,
-                       Inkscape::Util::List<SPObject &> hierarchy);
+                       std::vector<SPObject *> hierarchy);
     void _buildSiblingEntries(unsigned depth,
                               SPObject &parent,
-                              Inkscape::Util::List<SPObject &> hierarchy);
+                              std::vector<SPObject *> hierarchy);
     void _protectUpdate(sigc::slot<void> slot);
     void _destroyEntry(Gtk::ListStore::iterator const &row);
     void _hideLayer(bool hide);

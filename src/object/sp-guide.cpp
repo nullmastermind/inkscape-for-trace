@@ -23,6 +23,7 @@
 
 #include "attributes.h"
 #include "desktop.h"
+#include "desktop-events.h"
 #include "document-undo.h"
 #include "helper-fns.h"
 #include "inkscape.h"
@@ -34,13 +35,13 @@
 #include "sp-namedview.h"
 #include "sp-root.h"
 
-#include "display/guideline.h"
+#include "display/control/canvas-item-guideline.h"
 
 #include "svg/stringstream.h"
 #include "svg/svg-color.h"
 #include "svg/svg.h"
 
-#include "ui/widget/canvas.h"
+#include "ui/widget/canvas.h" // Should really be here
 
 #include "xml/repr.h"
 
@@ -57,12 +58,10 @@ SPGuide::SPGuide()
     , hicolor(0xff00007f)
 {}
 
-void SPGuide::setColor(guint32 c)
+void SPGuide::setColor(guint32 color)
 {
-    color = c;
-
-    for(auto view : this->views) {
-        sp_guideline_set_color(view, this->color);
+    for (auto view : views) {
+        view->set_stroke(color);
     }
 }
 
@@ -82,8 +81,8 @@ void SPGuide::build(SPDocument *document, Inkscape::XML::Node *repr)
 
 void SPGuide::release()
 {
-    for(auto view : this->views) {
-        sp_guideline_delete(view);
+    for(auto view : views) {
+        delete view;
     }
     this->views.clear();
 
@@ -297,36 +296,33 @@ void sp_guide_delete_all_guides(SPDesktop *dt)
     DocumentUndo::done(doc, SP_VERB_NONE, _("Delete All Guides"));
 }
 
-void SPGuide::showSPGuide(SPCanvasGroup *group, GCallback handler)
+// Actually, create a new guide.
+void SPGuide::showSPGuide(Inkscape::CanvasItemGroup *group)
 {
-    SPCanvasItem *item = sp_guideline_new(group, label, point_on_line, normal_to_line);
-    sp_guideline_set_color(SP_GUIDELINE(item), color);
-    sp_guideline_set_locked(SP_GUIDELINE(item), locked);
-    
-    g_signal_connect(G_OBJECT(item), "event", G_CALLBACK(handler), this);
+    Glib::ustring ulabel = (label?label:"");
+    auto item = new Inkscape::CanvasItemGuideLine(group, ulabel, point_on_line, normal_to_line);
+    item->set_stroke(color);
+    item->set_locked(locked);
 
-    views.push_back(SP_GUIDELINE(item));
+    item->connect_event(sigc::bind(sigc::ptr_fun(&sp_dt_guide_event), item, this));
+
+    views.push_back(item);
 }
 
 void SPGuide::showSPGuide()
 {
-    for(std::vector<SPGuideLine *>::const_iterator it = this->views.begin(); it != this->views.end(); ++it) {
-        sp_canvas_item_show(SP_CANVAS_ITEM(*it));
-        if((*it)->origin) {
-          sp_canvas_item_show(SP_CANVAS_ITEM((*it)->origin));
-        }  else {
-            //reposition to same place to show knots
-            sp_guideline_set_position(*it, point_on_line);
-        }
+    for (auto view : views) {
+        view->show();
     }
 }
 
+// Actually deleted guide from a particular canvas.
 void SPGuide::hideSPGuide(Inkscape::UI::Widget::Canvas *canvas)
 {
     g_assert(canvas != nullptr);
-    for(std::vector<SPGuideLine *>::iterator it = this->views.begin(); it != this->views.end(); ++it) {
-        if (canvas == SP_CANVAS_ITEM(*it)->canvas) {
-            sp_guideline_delete(*it);
+    for (auto it = views.begin(); it != views.end(); ++it) {
+        if (canvas == (*it)->get_canvas()) { // A guide can be displayed on more than one desktop with the same document.
+            delete (*it);
             views.erase(it);
             return;
         }
@@ -337,11 +333,8 @@ void SPGuide::hideSPGuide(Inkscape::UI::Widget::Canvas *canvas)
 
 void SPGuide::hideSPGuide()
 {
-    for(std::vector<SPGuideLine *>::const_iterator it = this->views.begin(); it != this->views.end(); ++it) {
-        sp_canvas_item_hide(SP_CANVAS_ITEM(*it));
-        if ((*it)->origin) {
-            sp_canvas_item_hide(SP_CANVAS_ITEM((*it)->origin));
-        }
+    for(auto view : views) {
+        view->hide();
     }
 }
 
@@ -349,9 +342,9 @@ void SPGuide::sensitize(Inkscape::UI::Widget::Canvas *canvas, bool sensitive)
 {
     g_assert(canvas != nullptr);
 
-    for(std::vector<SPGuideLine *>::const_iterator it = this->views.begin(); it != this->views.end(); ++it) {
-        if (canvas == SP_CANVAS_ITEM(*it)->canvas) {
-            sp_guideline_set_sensitive(*it, sensitive);
+    for (auto view : views) {
+        if (canvas == view->get_canvas()) {
+            view->set_sensitive(sensitive);
             return;
         }
     }
@@ -379,8 +372,9 @@ void SPGuide::moveto(Geom::Point const point_on_line, bool const commit)
     if(this->locked) {
         return;
     }
+
     for(auto view : this->views) {
-        sp_guideline_set_position(view, point_on_line);
+        view->set_origin(point_on_line);
     }
 
     /* Calling sp_repr_set_point must precede calling sp_item_notify_moveto in the commit
@@ -434,7 +428,7 @@ void SPGuide::set_normal(Geom::Point const normal_to_line, bool const commit)
         return;
     }
     for(auto view : this->views) {
-        sp_guideline_set_normal(view, normal_to_line);
+        view->set_normal(normal_to_line);
     }
 
     /* Calling sp_repr_set_svg_point must precede calling sp_item_notify_moveto in the commit
@@ -467,7 +461,7 @@ void SPGuide::set_color(const unsigned r, const unsigned g, const unsigned b, bo
     this->color = (r << 24) | (g << 16) | (b << 8) | 0x7f;
 
     if (! views.empty()) {
-        sp_guideline_set_color(views[0], this->color);
+        views[0]->set_stroke(color);
     }
 
     if (commit) {
@@ -482,7 +476,7 @@ void SPGuide::set_locked(const bool locked, bool const commit)
 {
     this->locked = locked;
     if ( !views.empty() ) {
-        sp_guideline_set_locked(views[0], locked);
+        views[0]->set_locked(locked);
     }
 
     if (commit) {
@@ -493,7 +487,7 @@ void SPGuide::set_locked(const bool locked, bool const commit)
 void SPGuide::set_label(const char* label, bool const commit)
 {
     if (!views.empty()) {
-        sp_guideline_set_label(views[0], label);
+        views[0]->set_label(label);
     }
 
     if (commit) {

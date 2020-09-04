@@ -41,17 +41,16 @@
 #include "message-context.h"
 #include "message-stack.h"
 
-#include "display/canvas-arena.h"
-#include "display/canvas-debug.h"
-#include "display/canvas-grid.h"
-#include "display/canvas-rotate.h"
-#include "display/canvas-temporary-item-list.h"
-#include "display/drawing-group.h"
-#include "display/gnome-canvas-acetate.h"
-#include "display/snap-indicator.h"
-#include "display/sodipodi-ctrlrect.h"
-#include "display/sp-canvas-group.h"
-#include "display/sp-canvas-util.h"
+#include "display/drawing.h"
+#include "display/control/canvas-temporary-item-list.h"
+#include "display/control/canvas-grid.h" // Grid types
+#include "display/control/snap-indicator.h"
+
+#include "display/control/canvas-item-catchall.h"
+#include "display/control/canvas-item-drawing.h"
+#include "display/control/canvas-item-group.h"
+#include "display/control/canvas-item-rect.h"
+#include "display/control/canvas-item-rotate.h"
 
 #include "helper/action-context.h"
 #include "helper/action.h" //sp_action_perform
@@ -81,7 +80,7 @@ namespace Inkscape { namespace XML { class Node; }}
 
 // Callback declarations
 static void _onSelectionChanged (Inkscape::Selection *selection, SPDesktop *desktop);
-static gint _arena_handler (SPCanvasArena *arena, Inkscape::DrawingItem *ai, GdkEvent *event, SPDesktop *desktop);
+static bool _drawing_handler (GdkEvent *event, Inkscape::DrawingItem *item, SPDesktop *desktop);
 static void _layer_activated(SPObject *layer, SPDesktop *desktop);
 static void _layer_deactivated(SPObject *layer, SPDesktop *desktop);
 static void _layer_hierarchy_changed(SPObject *top, SPObject *bottom, SPDesktop *desktop);
@@ -119,17 +118,7 @@ SPDesktop::SPDesktop()
     , event_log(nullptr)
     , temporary_item_list(nullptr)
     , snapindicator(nullptr)
-    , acetate(nullptr)
-    , main(nullptr)
-    , gridgroup(nullptr)
-    , guides(nullptr)
-    , drawing(nullptr)
-    , sketch(nullptr)
-    , controls(nullptr)
-    , tempgroup(nullptr)
-    , page(nullptr)
-    , page_border(nullptr)
-    , current(nullptr)
+    , current(nullptr)  // current style
     , _focusMode(false)
     , dkey(0)
     , number(0)
@@ -149,7 +138,7 @@ SPDesktop::SPDesktop()
     , _display_color_mode(Inkscape::COLORMODE_NORMAL)
     , _split_canvas(false)
     , _xray(false)
-    , _widget(nullptr)
+    , _widget(nullptr) // DesktopWidget
     , _guides_message_context(nullptr)
     , _active(false)
     , _image_render_observer(this, "/options/rendering/imageinoutlinemode")
@@ -214,34 +203,99 @@ SPDesktop::init (SPNamedView *nv, Inkscape::UI::Widget::Canvas *acanvas, SPDeskt
 
     number = namedview->getViewCount();
 
-
     /* Setup Canvas */
-    SPCanvasGroup *root = canvas->get_canvas_item_root();
+    canvas->set_background_color(0xffffff00); // Background page sits on.
 
-    /* Setup administrative layers */
-    acetate = sp_canvas_item_new (root, GNOME_TYPE_CANVAS_ACETATE, nullptr);
-    g_signal_connect (G_OBJECT (acetate), "event", G_CALLBACK (sp_desktop_root_handler), this);
-    main = (SPCanvasGroup *) sp_canvas_item_new (root, SP_TYPE_CANVAS_GROUP, nullptr);
-    SP_CANVAS_ITEM(main)->name = "CanvasGroup:main";
-    g_signal_connect (G_OBJECT (main), "event", G_CALLBACK (sp_desktop_root_handler), this);
+    /* ----------- Canvas Items ------------ */
 
-    /* This is the background the page sits on. */
-    canvas->set_background_color(0xffffff00);
+    /* CanvasItem's: Controls/Grids/etc. Canvas items are owned by the canvas through
+     * canvas_item_root. Canvas items are automatically added and removed from the tree when
+     * created and deleted (as long as a canvas item group is passed in the constructor).
+     * It would probably make sense to move most of this code to the Canvas.
+     */
 
-    page = sp_canvas_item_new (main, SP_TYPE_CTRLRECT, nullptr);
-    ((CtrlRect *) page)->setColor(0x00000000, FALSE, 0x00000000);
-    page_border = sp_canvas_item_new (main, SP_TYPE_CTRLRECT, nullptr);
+    Inkscape::CanvasItemGroup *canvas_item_root = canvas->get_canvas_item_root();
 
-    drawing = sp_canvas_item_new (main, SP_TYPE_CANVAS_ARENA, nullptr);
-    g_signal_connect (G_OBJECT (drawing), "arena_event", G_CALLBACK (_arena_handler), this);
+    // The order in which these canvas items are added determines the z-order. It's therefore
+    // important to add the tempgroup (which will contain the snapindicator) before adding the
+    // controls. Only this way one will be able to quickly (before the snap indicator has
+    // disappeared) reselect a node after snapping it. If the z-order is wrong however, this
+    // will not work (the snap indicator is on top of the node handler; is the snapindicator
+    // being selected? or does it intercept some of the events that should have gone to the
+    // node handler? see bug https://bugs.launchpad.net/inkscape/+bug/414142)
 
-    // pinch zoom
-    zoomgesture = gtk_gesture_zoom_new(GTK_WIDGET(canvas->gobj()));
-    gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (zoomgesture), GTK_PHASE_CAPTURE);
-    g_signal_connect(zoomgesture, "begin", G_CALLBACK(_pinch_begin_handler), this);
-    g_signal_connect(zoomgesture, "scale-changed", G_CALLBACK(_pinch_scale_changed_handler), this);
+    canvas_catchall       = new Inkscape::CanvasItemCatchall(canvas_item_root); // Lowest item!
+    canvas_group_drawing  = new Inkscape::CanvasItemGroup(canvas_item_root);
+    canvas_group_grids    = new Inkscape::CanvasItemGroup(canvas_item_root);
+    canvas_group_guides   = new Inkscape::CanvasItemGroup(canvas_item_root);
+    canvas_group_sketch   = new Inkscape::CanvasItemGroup(canvas_item_root);
+    canvas_group_temp     = new Inkscape::CanvasItemGroup(canvas_item_root);
+    canvas_group_controls = new Inkscape::CanvasItemGroup(canvas_item_root);
 
-    SP_CANVAS_ARENA (drawing)->drawing.delta = prefs->getDouble("/options/cursortolerance/value", 1.0); // default is 1 px
+    canvas_group_drawing->set_name( "CanvasItemGroup:Drawing" ); // The actual SVG drawing.
+    canvas_group_grids->set_name(   "CanvasItemGroup:Grids"   ); // Grids.
+    canvas_group_guides->set_name(  "CanvasItemGroup:Guides"  ); // Guides.
+    canvas_group_sketch->set_name(  "CanvasItemGroup:Sketch"  ); // Temporary items before becoming permanent.
+    canvas_group_temp->set_name(    "CanvasItemGroup:Temp"    ); // Temporary items that disappear by themselves.
+    canvas_group_controls->set_name("CanvasItemGroup:Controls"); // Controls (handles, knots, rectangles, etc.).
+
+    canvas_group_sketch->set_pickable(false);  // Temporary items are not pickable!
+    canvas_group_temp->set_pickable(false);    // Temporary items are not pickable!
+
+    // The root should never emit events. The "catchall" should get it! (CHECK)
+    canvas_item_root->connect_event(sigc::bind(sigc::ptr_fun(sp_desktop_root_handler), this));
+    canvas_catchall->connect_event(sigc::bind(sigc::ptr_fun(sp_desktop_root_handler), this));
+
+    // Drawing
+    Geom::Rect const d(Geom::Point(0.0, 0.0),
+                       Geom::Point(document->getWidth().value("px"), document->getHeight().value("px")));
+
+    canvas_page = new Inkscape::CanvasItemRect(canvas_group_drawing, d);
+    canvas_page->set_name( "CanvasItemRect:Page" );
+    canvas_page->set_stroke(0x00000000);
+
+    canvas_shadow = new Inkscape::CanvasItemRect(canvas_group_drawing, d);
+    canvas_shadow->set_name( "CanvasItemRect:Shadow" );
+    if ( namedview->pageshadow != 0 && namedview->showpageshadow ) {
+        canvas_shadow->set_shadow(0x3f3f3fff, namedview->pageshadow);
+    }
+
+    canvas_drawing = new Inkscape::CanvasItemDrawing(canvas_group_drawing);
+    canvas_drawing->get_drawing()->delta = prefs->getDouble("/options/cursortolerance/value", 1.0);
+    canvas_drawing->connect_drawing_event(sigc::bind(sigc::ptr_fun(_drawing_handler), this));
+    canvas->set_drawing(canvas_drawing->get_drawing()); // Canvas needs access.
+
+    Inkscape::DrawingItem *drawing_item = document->getRoot()->invoke_show(
+        *(canvas_drawing->get_drawing()),
+        dkey,
+        SP_ITEM_SHOW_DISPLAY);
+    if (drawing_item) {
+        canvas_drawing->get_drawing()->root()->prependChild(drawing_item);
+    }
+
+    // Must be the top most item.
+    canvas_rotate = new Inkscape::CanvasItemRotate(canvas_item_root);
+    canvas_rotate->hide();
+
+    temporary_item_list = new Inkscape::Display::TemporaryItemList( this );
+    snapindicator = new Inkscape::Display::SnapIndicator ( this );
+
+    /* --------- End Canvas Items ----------- */
+
+    /* Connect event for page resize */
+    _modified_connection =
+        namedview->connectModified(sigc::bind<2>(sigc::ptr_fun(&_namedview_modified), this));
+
+    namedview->show(this);
+    /* Ugly hack */
+    activate_guides (true);
+    /* Ugly hack */
+    _namedview_modified (namedview, SP_OBJECT_MODIFIED_FLAG, this);
+
+    // Set the select tool as the active tool.
+    setEventContext("/tools/select");
+
+    // display rect and zoom are now handled in sp_desktop_widget_realize()
 
     if (prefs->getBool("/options/startmode/outline")) {
         // Start in outline mode
@@ -254,68 +308,11 @@ SPDesktop::init (SPNamedView *nv, Inkscape::UI::Widget::Canvas *acanvas, SPDeskt
     // Get default locked status
     rotation_locked = prefs->getBool("/options/rotationlock");
 
-    // The order in which these canvas items are added determines the z-order. It's therefore
-    // important to add the tempgroup (which will contain the snapindicator) before adding the
-    // controls. Only this way one will be able to quickly (before the snap indicator has
-    // disappeared) reselect a node after snapping it. If the z-order is wrong however, this
-    // will not work (the snap indicator is on top of the node handler; is the snapindicator
-    // being selected? or does it intercept some of the events that should have gone to the
-    // node handler? see bug https://bugs.launchpad.net/inkscape/+bug/414142)
-    gridgroup = (SPCanvasGroup *) sp_canvas_item_new (main, SP_TYPE_CANVAS_GROUP, nullptr);
-    guides    = (SPCanvasGroup *) sp_canvas_item_new (main, SP_TYPE_CANVAS_GROUP, nullptr);
-    sketch    = (SPCanvasGroup *) sp_canvas_item_new (main, SP_TYPE_CANVAS_GROUP, nullptr);
-    tempgroup = (SPCanvasGroup *) sp_canvas_item_new (main, SP_TYPE_CANVAS_GROUP, nullptr);
-    controls  = (SPCanvasGroup *) sp_canvas_item_new (main, SP_TYPE_CANVAS_GROUP, nullptr);
-
-    SP_CANVAS_ITEM(gridgroup)->name = "CanvasGroup:Grid";
-    SP_CANVAS_ITEM(guides)->name    = "CanvasGroup:Guides";
-    SP_CANVAS_ITEM(sketch)->name    = "CanvasGroup:Sketch";
-    SP_CANVAS_ITEM(tempgroup)->name = "CanvasGroup:Temp";
-    SP_CANVAS_ITEM(controls)->name  = "CanvasGroup:Controls";
-
-    // Set the select tool as the active tool.
-    setEventContext("/tools/select");
-
-    // display rect and zoom are now handled in sp_desktop_widget_realize()
-
-    Geom::Rect const d(Geom::Point(0.0, 0.0),
-                       Geom::Point(document->getWidth().value("px"), document->getHeight().value("px")));
-
-    SP_CTRLRECT(page)->setRectangle(d);
-    SP_CTRLRECT(page)->name = "CtrlRect:Page";
-    SP_CTRLRECT(page_border)->setRectangle(d);
-    SP_CTRLRECT(page_border)->name = "CtrlRect:Border";
-
-    /* the following sets the page shadow on the canvas
-       It was originally set to 5, which is really cheesy!
-       It now is an attribute in the document's namedview. If a value of
-       0 is used, then the constructor for a shadow is not initialized.
-    */
-
-    if ( namedview->pageshadow != 0 && namedview->showpageshadow ) {
-        SP_CTRLRECT(page_border)->setShadow(namedview->pageshadow, 0x3f3f3fff);
-    }
-
-
-    /* Connect event for page resize */
-    sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (drawing), doc2dt());
-
-    _modified_connection =
-        namedview->connectModified(sigc::bind<2>(sigc::ptr_fun(&_namedview_modified), this));
-
-    Inkscape::DrawingItem *ai = document->getRoot()->invoke_show(
-            SP_CANVAS_ARENA (drawing)->drawing,
-            dkey,
-            SP_ITEM_SHOW_DISPLAY);
-    if (ai) {
-        SP_CANVAS_ARENA (drawing)->drawing.root()->prependChild(ai);
-    }
-
-    namedview->show(this);
-    /* Ugly hack */
-    activate_guides (true);
-    /* Ugly hack */
-    _namedview_modified (namedview, SP_OBJECT_MODIFIED_FLAG, this);
+    // pinch zoom
+    zoomgesture = gtk_gesture_zoom_new(GTK_WIDGET(canvas->gobj()));
+    gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (zoomgesture), GTK_PHASE_CAPTURE);
+    g_signal_connect(zoomgesture, "begin", G_CALLBACK(_pinch_begin_handler), this);
+    g_signal_connect(zoomgesture, "scale-changed", G_CALLBACK(_pinch_scale_changed_handler), this);
 
 /* Set up notification of rebuilding the document, this allows
        for saving object related settings in the document. */
@@ -360,13 +357,6 @@ SPDesktop::init (SPNamedView *nv, Inkscape::UI::Widget::Canvas *acanvas, SPDeskt
     layer_manager = new Inkscape::LayerManager( this );
 
     showGrids(namedview->grids_visible, false);
-
-    temporary_item_list = new Inkscape::Display::TemporaryItemList( this );
-    snapindicator = new Inkscape::Display::SnapIndicator ( this );
-
-    canvas_rotate = sp_canvas_item_new (root, SP_TYPE_CANVAS_ROTATE, nullptr);
-    sp_canvas_item_hide( canvas_rotate );
-    // canvas_debug = sp_canvas_item_new (main, SP_TYPE_CANVAS_DEBUG, NULL);
 }
 
 void SPDesktop::destroy()
@@ -399,10 +389,6 @@ void SPDesktop::destroy()
     _reconstruction_start_connection.disconnect();
     _reconstruction_finish_connection.disconnect();
 
-    g_signal_handlers_disconnect_by_func(G_OBJECT (acetate), (gpointer) G_CALLBACK(sp_desktop_root_handler), this);
-    g_signal_handlers_disconnect_by_func(G_OBJECT (main), (gpointer) G_CALLBACK(sp_desktop_root_handler), this);
-    g_signal_handlers_disconnect_by_func(G_OBJECT (drawing), (gpointer) G_CALLBACK(_arena_handler), this);
-
     if (zoomgesture) {
         g_signal_handlers_disconnect_by_data(zoomgesture, this);
         g_clear_object(&zoomgesture);
@@ -415,10 +401,10 @@ void SPDesktop::destroy()
         layer_manager = nullptr;
     }
 
-    if (drawing) {
+    if (canvas_drawing) {
         doc()->getRoot()->invoke_hide(dkey);
-        g_object_unref(drawing);
-        drawing = nullptr;
+        delete canvas_drawing; // Why is canvas_drawing special?
+        canvas_drawing = nullptr;
     }
 
     _guides_message_context = nullptr;
@@ -429,64 +415,6 @@ void SPDesktop::destroy()
 
 SPDesktop::~SPDesktop()
 = default;
-
-
-Inkscape::UI::Tools::ToolBase* SPDesktop::getEventContext() const {
-	return event_context;
-}
-
-Inkscape::Selection* SPDesktop::getSelection() const {
-	return selection;
-}
-
-SPDocument* SPDesktop::getDocument() const {
-	return doc();
-}
-
-Inkscape::UI::Widget::Canvas* SPDesktop::getCanvas() const {
-        return canvas;
-}
-
-SPCanvasItem* SPDesktop::getAcetate() const {
-	return acetate;
-}
-
-SPCanvasGroup* SPDesktop::getMain() const {
-	return main;
-}
-
-SPCanvasGroup* SPDesktop::getGridGroup() const {
-	return gridgroup;
-}
-
-SPCanvasGroup* SPDesktop::getGuides() const {
-	return guides;
-}
-
-SPCanvasItem* SPDesktop::getDrawing() const {
-	return drawing;
-}
-
-SPCanvasGroup* SPDesktop::getSketch() const {
-	return sketch;
-}
-
-SPCanvasGroup* SPDesktop::getControls() const {
-	return controls;
-}
-
-SPCanvasGroup* SPDesktop::getTempGroup() const {
-	return tempgroup;
-}
-
-Inkscape::MessageStack* SPDesktop::getMessageStack() const {
-	return messageStack().get();
-}
-
-SPNamedView* SPDesktop::getNamedView() const {
-	return namedview;
-}
-
 
 
 //--------------------------------------------------------------------
@@ -507,10 +435,10 @@ SPNamedView* SPDesktop::getNamedView() const {
  * move_to_bottom = true by default so the item does not interfere with handling of other items on the canvas like nodes.
  */
 Inkscape::Display::TemporaryItem *
-SPDesktop::add_temporary_canvasitem (SPCanvasItem *item, guint lifetime, bool move_to_bottom)
+SPDesktop::add_temporary_canvasitem (Inkscape::CanvasItem *item, guint lifetime, bool move_to_bottom)
 {
     if (move_to_bottom) {
-        sp_canvas_item_move_to_z(item, 0);
+        item->lower_to_bottom();
     }
 
     return temporary_item_list->add_item(item, lifetime);
@@ -528,7 +456,7 @@ SPDesktop::remove_temporary_canvasitem (Inkscape::Display::TemporaryItem * tempi
 }
 
 void SPDesktop::redrawDesktop() {
-    sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (main), _current_affine.d2w()); // redraw
+    canvas->set_affine(_current_affine.d2w()); // For CanvasItem's.
 }
 
 // THIS SHOULD BE A CANVAS FUNCTION
@@ -561,11 +489,11 @@ void SPDesktop::_setDisplayColorMode(Inkscape::ColorMode mode) {
                                                r, g, b, 0, 0,
                                                0, 0, 0, 1, 0 };
         // g_message("%g",grayscale_value_matrix[0]);
-        SP_CANVAS_ARENA (drawing)->drawing.setGrayscaleMatrix(grayscale_value_matrix);
+        canvas_drawing->get_drawing()->setGrayscaleMatrix(grayscale_value_matrix);
     }
 
     // Why set three places? FIXME
-    SP_CANVAS_ARENA (drawing)->drawing.setColorMode(mode);
+    canvas_drawing->get_drawing()->setColorMode(mode);
     canvas->set_color_mode(mode);
     _display_color_mode = mode;
 
@@ -929,6 +857,7 @@ SPDesktop::set_display_area (bool log)
     // Scroll
     Geom::Point offset = _current_affine.getOffset();
     canvas->scroll_to(offset, true);
+    canvas->set_affine(_current_affine.d2w()); // For CanvasItem's.
     // To do: if transform unchanged call with 'false' (redraw only newly exposed areas).
 
     /* Update perspective lines if we are in the 3D box tool (so that infinite ones are shown
@@ -1717,9 +1646,7 @@ bool SPDesktop::colorProfAdjustEnabled()
 void SPDesktop::toggleGrids()
 {
     if (! namedview->grids.empty()) {
-        if(gridgroup) {
             showGrids(!grids_visible);
-        }
     } else {
         //there is no grid present at the moment. add a rectangular grid and make it visible
         namedview->writeNewGrid(this->getDocument(), Inkscape::GRID_RECTANGULAR);
@@ -1763,9 +1690,9 @@ void SPDesktop::showGrids(bool show, bool dirty_document)
     grids_visible = show;
     sp_namedview_show_grids(namedview, grids_visible, dirty_document);
     if (show) {
-        sp_canvas_item_show(SP_CANVAS_ITEM(gridgroup));
+        canvas_group_grids->show();
     } else {
-        sp_canvas_item_hide(SP_CANVAS_ITEM(gridgroup));
+        canvas_group_grids->hide();
     }
 }
 
@@ -1789,7 +1716,7 @@ SPDesktop::onResized (double /*x*/, double /*y*/)
  */
 void SPDesktop::storeDesktopPosition()
 {
-    if (main) {
+    if (_widget) {
         _widget->storeDesktopPosition();
     }
 }
@@ -1800,7 +1727,7 @@ void SPDesktop::storeDesktopPosition()
 void
 SPDesktop::onRedrawRequested ()
 {
-    if (main) {
+    if (_widget) {
         _widget->requestCanvasUpdate();
     }
 }
@@ -1849,26 +1776,27 @@ SPDesktop::setDocument (SPDocument *doc)
     /// inside is NOT called on initialization, only on replacement. But there
     /// are surely more safe methods to accomplish this.
     // TODO since the comment had reversed logic, check the intent of this block of code:
-    if (drawing) {
-        Inkscape::DrawingItem *ai = nullptr;
+    if (canvas_drawing) {
 
         namedview = sp_document_namedview (doc, nullptr);
         _modified_connection = namedview->connectModified(sigc::bind<2>(sigc::ptr_fun(&_namedview_modified), this));
         number = namedview->getViewCount();
 
-        ai = doc->getRoot()->invoke_show(
-                SP_CANVAS_ARENA (drawing)->drawing,
-                dkey,
-                SP_ITEM_SHOW_DISPLAY);
-        if (ai) {
-            SP_CANVAS_ARENA (drawing)->drawing.root()->prependChild(ai);
+        Inkscape::DrawingItem *drawing_item = doc->getRoot()->invoke_show(
+            *(canvas_drawing->get_drawing()),
+            dkey,
+            SP_ITEM_SHOW_DISPLAY);
+        if (drawing_item) {
+            canvas_drawing->get_drawing()->root()->prependChild(drawing_item);
         }
+
         namedview->show(this);
         /* Ugly hack */
         activate_guides (true);
         /* Ugly hack */
         _namedview_modified (namedview, SP_OBJECT_MODIFIED_FLAG, this);
     }
+
 
     _document_replaced_signal.emit (this, doc);
 
@@ -1896,10 +1824,11 @@ SPDesktop::onDocumentURISet (gchar const* uri)
 void
 SPDesktop::onDocumentResized (gdouble width, gdouble height)
 {
-    sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (drawing), doc2dt());
+    canvas->set_affine(doc2dt());
+
     Geom::Rect const a(Geom::Point(0, 0), Geom::Point(width, height));
-    SP_CTRLRECT(page)->setRectangle(a);
-    SP_CTRLRECT(page_border)->setRectangle(a);
+    canvas_page->set_rect(a);
+    canvas_shadow->set_rect(a);
 }
 
 
@@ -1945,11 +1874,9 @@ _onSelectionChanged
 
 /**
  * Calls event handler of current event context.
- * \param arena Unused
- * \todo fixme
  */
-static gint
-_arena_handler (SPCanvasArena */*arena*/, Inkscape::DrawingItem *ai, GdkEvent *event, SPDesktop *desktop)
+static bool
+_drawing_handler (GdkEvent *event, Inkscape::DrawingItem *drawing_item, SPDesktop *desktop)
 {
     if (event->type == GDK_KEY_PRESS && 
         Inkscape::UI::Tools::get_latin_keyval(&event->key) == GDK_KEY_space &&
@@ -1957,8 +1884,9 @@ _arena_handler (SPCanvasArena */*arena*/, Inkscape::DrawingItem *ai, GdkEvent *e
     {
         return true;
     }
-    if (ai) {
-        SPItem *spi = ai->getItem();
+
+    if (drawing_item) {
+        SPItem *spi = drawing_item->getItem();
         return sp_event_context_item_handler (desktop->event_context, spi, event);
     } else {
         return sp_event_context_root_handler (desktop->event_context, event);
@@ -2026,34 +1954,28 @@ static void _namedview_modified (SPObject *obj, guint flags, SPDesktop *desktop)
 
         /* Show/hide page border */
         if (nv->showborder) {
-            // show
-            sp_canvas_item_show (desktop->page_border);
-            // set color and shadow
-            ((CtrlRect *) desktop->page_border)->setColor(nv->bordercolor, false, 0x00000000);
-            if (nv->pageshadow) {
-                ((CtrlRect *) desktop->page_border)->setShadow(nv->pageshadow, nv->bordercolor);
-            }
+            desktop->getCanvasPage()->set_stroke(nv->bordercolor);
+            desktop->getCanvasPage()->show();
+
             // place in the z-order stack
             if (nv->borderlayer == SP_BORDER_LAYER_BOTTOM) {
-                 sp_canvas_item_move_to_z (desktop->page_border, 1);
+                desktop->getCanvasPage()->set_z_position(1); // In display group, on top of shadow.
             } else {
-                int order = sp_canvas_item_order (desktop->page_border);
-                int morder = sp_canvas_item_order (desktop->drawing);
-                if (morder > order) sp_canvas_item_raise (desktop->page_border,
-                    morder - order);
+                desktop->getCanvasPage()->raise_to_top(); // In display group.
             }
         } else {
-                sp_canvas_item_hide (desktop->page_border);
-                if (nv->pageshadow) {
-                    ((CtrlRect *) desktop->page)->setShadow(0, 0x00000000);
-                }
+            desktop->getCanvasPage()->hide();
+            if (nv->pageshadow) {
+                desktop->getCanvasPage()->set_shadow(0x0, 0);
+            }
         }
 
         /* Show/hide page shadow */
         if (nv->showpageshadow && nv->pageshadow) {
-            ((CtrlRect *) desktop->page_border)->setShadow(nv->pageshadow, nv->bordercolor);
+            desktop->getCanvasShadow()->set_shadow(nv->bordercolor, nv->pageshadow);
+            desktop->getCanvasShadow()->show();
         } else {
-            ((CtrlRect *) desktop->page_border)->setShadow(0, 0x00000000);
+            desktop->getCanvasShadow()->hide();
         }
 
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -2061,9 +1983,11 @@ static void _namedview_modified (SPObject *obj, guint flags, SPDesktop *desktop)
             SP_RGBA32_G_U(nv->pagecolor) +
             SP_RGBA32_B_U(nv->pagecolor) >= 384) {
             // the background color is light, use black outline
-            SP_CANVAS_ARENA (desktop->drawing)->drawing.outlinecolor = prefs->getInt("/options/wireframecolors/onlight", 0xff);
+            desktop->getCanvasDrawing()->get_drawing()->outlinecolor =
+                prefs->getInt("/options/wireframecolors/onlight", 0xff);
         } else { // use white outline
-            SP_CANVAS_ARENA (desktop->drawing)->drawing.outlinecolor = prefs->getInt("/options/wireframecolors/ondark", 0xffffffff);
+            desktop->getCanvasDrawing()->get_drawing()->outlinecolor =
+                prefs->getInt("/options/wireframecolors/ondark", 0xffffffff);
         }
     }
 }
@@ -2134,7 +2058,6 @@ SPDesktop::show_dialogs()
     std::map<Glib::ustring, Glib::ustring> mapVerbPreference;
     mapVerbPreference.insert(std::make_pair ("LayersPanel", "/dialogs/layers") );
     mapVerbPreference.insert(std::make_pair ("FillAndStroke", "/dialogs/fillstroke") );
-    mapVerbPreference.insert(std::make_pair ("ExtensionEditor", "/dialogs/extensioneditor") );
     mapVerbPreference.insert(std::make_pair ("AlignAndDistribute", "/dialogs/align") );
     mapVerbPreference.insert(std::make_pair ("DocumentProperties", "/dialogs/documentoptions") );
     mapVerbPreference.insert(std::make_pair ("FilterEffectsDialog", "/dialogs/filtereffects") );

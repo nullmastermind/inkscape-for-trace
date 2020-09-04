@@ -13,7 +13,7 @@
  *
  * To generate it, run
  *   ragel svg-affine-parser.rl -o svg-affine-parser.cpp
- *   sed -i 's/(1)/(true)/' svg-affine-parser.cpp
+ *   sed -Ei 's/\(1\)/(true)/' svg-affine-parser.cpp
  */
 
 #include <string>
@@ -35,6 +35,7 @@ bool sp_svg_transform_read(gchar const *str, Geom::Affine *transform)
 
     std::vector<double> params;
     Geom::Affine final_transform (Geom::identity());
+    *transform = final_transform;
     Geom::Affine tmp_transform (Geom::identity());
     int cs;
     const char *p = str;
@@ -44,6 +45,7 @@ bool sp_svg_transform_read(gchar const *str, Geom::Affine *transform)
     char const *ts = p;
     char const *te = pe;
     int act = 0;
+    if (pe == p+1) return true; // ""
 
 %%{
     write init;
@@ -68,7 +70,8 @@ bool sp_svg_transform_read(gchar const *str, Geom::Affine *transform)
     action skewY { tmp_transform = Geom::Affine(1, tan(params[0] * M_PI / 180.0), 0, 1, 0, 0); }
     action matrix { tmp_transform = Geom::Affine(params[0], params[1], params[2], params[3], params[4], params[5]);}
     action transform {params.clear(); final_transform = tmp_transform * final_transform ;}
-    action transformlist { *transform = final_transform; return true;}
+    action transformlist { *transform = final_transform; /*printf("%p %p %p %p
+%d\n",p, pe, ts, te, cs);*/ return (te+1 == pe);}
 
     comma = ',';
     wsp = ( 10 | 13 | 9 | ' ');
@@ -105,8 +108,8 @@ bool sp_svg_transform_read(gchar const *str, Geom::Affine *transform)
       %matrix;
     transform = (matrix | translate | scale | rotate | skewX | skewY)
       %transform;
-    transforms = transform ( commawsp transform )**;
-    transformlist = wsp* transforms wsp* | wsp*;
+    transforms = transform ( commawsp? transform )**;
+    transformlist = wsp* transforms? wsp*;
     main := |* 
       transformlist => transformlist;
     *|;

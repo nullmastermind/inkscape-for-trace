@@ -18,14 +18,12 @@
 #include "desktop.h"
 #include "ui/tools/tool-base.h"
 #include "ui/tools/lpe-tool.h"
-#include "display/sodipodi-ctrl.h"
+
+#include "display/control/canvas-item-ctrl.h"
 #include "display/curve.h"
-#include "ui/control-manager.h"
 
-using Inkscape::ControlManager;
-
-#define FILL_COLOR_NORMAL 0xffffff7f
-#define FILL_COLOR_MOUSEOVER 0xff0000ff
+const guint32 FILL_COLOR_NORMAL    = 0xffffff7f;
+const guint32 FILL_COLOR_MOUSEOVER = 0xff0000ff;
 
 /**
  * Creates an anchor object and initializes it.
@@ -44,11 +42,11 @@ SPDrawAnchor *sp_draw_anchor_new(Inkscape::UI::Tools::FreehandBase *dc, SPCurve 
     a->start = start;
     a->active = FALSE;
     a->dp = delta;
-    a->ctrl = ControlManager::getManager().createControl(dc->getDesktop()->getControls(), Inkscape::CTRL_TYPE_ANCHOR);
-
-    SP_CTRL(a->ctrl)->moveto(delta);
-
-    ControlManager::getManager().track(a->ctrl);
+    a->ctrl = new Inkscape::CanvasItemCtrl(dc->getDesktop()->getCanvasControls(), Inkscape::CANVAS_ITEM_CTRL_TYPE_ANCHOR);
+    a->ctrl->set_name("CanvasItemCtrl:DrawAnchor");
+    a->ctrl->set_fill(FILL_COLOR_NORMAL);
+    a->ctrl->set_position(delta);
+    a->ctrl->set_pickable(false); // We do our own checking. (TODO: Should be fixed!)
 
     return a;
 }
@@ -56,7 +54,7 @@ SPDrawAnchor *sp_draw_anchor_new(Inkscape::UI::Tools::FreehandBase *dc, SPCurve 
 SPDrawAnchor::~SPDrawAnchor()
 {
     if (ctrl) {
-        sp_canvas_item_destroy(ctrl);
+        delete (ctrl);
     }
 }
 
@@ -75,20 +73,19 @@ SPDrawAnchor *sp_draw_anchor_destroy(SPDrawAnchor *anchor)
  */
 SPDrawAnchor *sp_draw_anchor_test(SPDrawAnchor *anchor, Geom::Point w, bool activate)
 {
-    SPCtrl *ctrl = SP_CTRL(anchor->ctrl);
-
-    if ( activate && ( Geom::LInfty( w - anchor->dc->getDesktop()->d2w(anchor->dp) ) <= (ctrl->box.width() / 2.0) ) ) {
+    if ( activate && anchor->ctrl->contains(w)) {
+        
         if (!anchor->active) {
-            ControlManager::getManager().setControlResize(anchor->ctrl, 4);
-            g_object_set(anchor->ctrl, "fill_color", FILL_COLOR_MOUSEOVER, NULL);
+            anchor->ctrl->set_size_extra(4);
+            anchor->ctrl->set_fill(FILL_COLOR_MOUSEOVER);
             anchor->active = TRUE;
         }
         return anchor;
     }
 
     if (anchor->active) {
-        ControlManager::getManager().setControlResize(anchor->ctrl, 0);
-        g_object_set(anchor->ctrl, "fill_color", FILL_COLOR_NORMAL, NULL);
+        anchor->ctrl->set_size_extra(0);
+        anchor->ctrl->set_fill(FILL_COLOR_NORMAL);
         anchor->active = FALSE;
     }
 

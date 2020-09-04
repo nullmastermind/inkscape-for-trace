@@ -49,6 +49,7 @@ include_directories("${CMAKE_SOURCE_DIR}/src/3rdparty/adaptagrams") # TODO: remo
 
 set(TEST_SOURCES
     uri-test
+    util-test
     drag-and-drop-svgz
     extract-uri-test
     attributes-test
@@ -60,9 +61,12 @@ set(TEST_SOURCES
     style-elem-test
     style-internal-test
     style-test
+    svg-affine-test
     svg-color-test
+    svg-length-test
     svg-stringstream-test
     sp-gradient-test
+    svg-path-geom-test
     object-test
     sp-glyph-kerning-test
     cairo-utils-test
@@ -73,12 +77,15 @@ set(TEST_SOURCES
     xml-test
     sp-item-group-test)
 
+add_library(cpp_test_static_library SHARED unittest.cpp doc-per-case-test.cpp)
+target_link_libraries(cpp_test_static_library PUBLIC ${GTEST_LIBRARIES} inkscape_base)
+
 add_custom_target(tests)
 foreach(test_source ${TEST_SOURCES})
     string(REPLACE "-test" "" testname "test_${test_source}")
-    add_executable(${testname} src/${test_source}.cpp unittest.cpp doc-per-case-test.cpp)
+    add_executable(${testname} src/${test_source}.cpp)
     target_include_directories(${testname} SYSTEM PRIVATE ${GTEST_INCLUDE_DIRS})
-    target_link_libraries(${testname} ${GTEST_LIBRARIES} inkscape_base)
+    target_link_libraries(${testname} cpp_test_static_library)
     add_test(NAME ${testname} COMMAND ${testname})
     set_tests_properties(${testname} PROPERTIES ENVIRONMENT "${INKSCAPE_TEST_PROFILE_DIR_ENV}/${testname};${CMAKE_CTEST_ENV}")
     add_dependencies(tests ${testname})

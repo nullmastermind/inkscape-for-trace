@@ -216,7 +216,7 @@ InkFileExportCmd::get_filename_out(std::string filename_in, std::string object_i
  *  \param doc Document to export.
  */
 int
-InkFileExportCmd::do_export_svg(SPDocument* doc, std::string filename_in)
+InkFileExportCmd::do_export_svg(SPDocument* doc, std::string const &filename_in)
 {
     // Start with options that are once per document.
     if (export_text_to_path) {
@@ -362,7 +362,7 @@ guint32 InkFileExportCmd::get_bgcolor(SPDocument *doc) {
  *  \param doc Document to export.
  */
 int
-InkFileExportCmd::do_export_png(SPDocument *doc, std::string filename_in)
+InkFileExportCmd::do_export_png(SPDocument *doc, std::string const &filename_in)
 {
     bool filename_from_hint = false;
     gdouble dpi = 0.0;
@@ -598,7 +598,7 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string filename_in)
  *  \param mime MIME type to export as.
  */
 int
-InkFileExportCmd::do_export_ps_pdf(SPDocument* doc, std::string filename_in, std::string mime_type)
+InkFileExportCmd::do_export_ps_pdf(SPDocument* doc, std::string const &filename_in, std::string mime_type)
 {
     // Check if we support mime type.
     Inkscape::Extension::DB::OutputList o;
@@ -755,7 +755,7 @@ InkFileExportCmd::do_export_ps_pdf(SPDocument* doc, std::string filename_in, std
  *  \param mime MIME type to export as (should be "image/x-emf" or "image/x-wmf")
  */
 int
-InkFileExportCmd::do_export_win_metafile(SPDocument* doc, std::string filename_in, std::string mime_type)
+InkFileExportCmd::do_export_win_metafile(SPDocument* doc, std::string const &filename_in, std::string mime_type)
 {
     std::string filename_out = get_filename_out(filename_in);
 

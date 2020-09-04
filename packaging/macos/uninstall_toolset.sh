@@ -13,20 +13,21 @@ SELF_DIR=$(F=$0; while [ ! -z $(readlink $F) ] && F=$(readlink $F); \
   cd $(dirname $F); F=$(basename $F); [ -L $F ]; do :; done; echo $(pwd -P))
 for script in $SELF_DIR/0??-*.sh; do source $script; done
 
-set -e
+include_file error_.sh
+error_trace_enable
 
 ### uninstall toolset ##########################################################
 
 function uninstall
 {
     while : ; do   # unmount everything (in reverse order)
-      local disk=$(mount | grep $WRK_DIR | tail -n1 | awk '{ print $1 }')
+      local disk=$(mount | grep $VER_DIR | tail -n1 | awk '{ print $1 }')
 
       if [ ${#disk} -eq 0 ]; then
         break                              # nothing to do here
       else
         diskutil eject $disk > /dev/null   # unmount
-        echo_ok "ejected $disk"
+        echo_i "ejected $disk"
       fi
     done
 }

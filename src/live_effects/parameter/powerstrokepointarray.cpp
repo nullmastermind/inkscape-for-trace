@@ -31,8 +31,8 @@ PowerStrokePointArrayParam::PowerStrokePointArrayParam( const Glib::ustring& lab
                         Effect* effect)
     : ArrayParam<Geom::Point>(label, tip, key, wr, effect, 0)
 {
-    knot_shape = SP_KNOT_SHAPE_DIAMOND;
-    knot_mode  = SP_KNOT_MODE_XOR;
+    knot_shape = Inkscape::CANVAS_ITEM_CTRL_SHAPE_DIAMOND;
+    knot_mode  = Inkscape::CANVAS_ITEM_CTRL_MODE_XOR;
     knot_color = 0xff88ff00;
 }
 
@@ -139,7 +139,9 @@ PowerStrokePointArrayParam::set_pwd2(Geom::Piecewise<Geom::D2<Geom::SBasis> > co
 
 
 void
-PowerStrokePointArrayParam::set_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color)
+PowerStrokePointArrayParam::set_oncanvas_looks(Inkscape::CanvasItemCtrlShape shape,
+                                               Inkscape::CanvasItemCtrlMode mode,
+                                               guint32 color)
 {
     knot_shape = shape;
     knot_mode  = mode;
@@ -297,10 +299,10 @@ PowerStrokePointArrayParamKnotHolderEntity::knot_click(guint state)
             };
             // add knot to knotholder
             PowerStrokePointArrayParamKnotHolderEntity *e = new PowerStrokePointArrayParamKnotHolderEntity(_pparam, _index+1);
-            e->create(this->desktop, this->item, parent_holder, Inkscape::CTRL_TYPE_LPE,
+            e->create(this->desktop, this->item, parent_holder, Inkscape::CANVAS_ITEM_CTRL_TYPE_LPE, "LPE:PowerStroke",
                       _("<b>Stroke width control point</b>: drag to alter the stroke width. <b>Ctrl+click</b> adds a "
                         "control point, <b>Ctrl+Alt+click</b> deletes it, <b>Shift+click</b> launches width dialog."),
-                      _pparam->knot_shape, _pparam->knot_mode, _pparam->knot_color);
+                      _pparam->knot_color);
             parent_holder->add(e);
         }
     }
@@ -315,10 +317,10 @@ void PowerStrokePointArrayParam::addKnotHolderEntities(KnotHolder *knotholder, S
 {
     for (unsigned int i = 0; i < _vector.size(); ++i) {
         PowerStrokePointArrayParamKnotHolderEntity *e = new PowerStrokePointArrayParamKnotHolderEntity(this, i);
-        e->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_LPE,
+        e->create(nullptr, item, knotholder, Inkscape::CANVAS_ITEM_CTRL_TYPE_LPE, "LPE:PowerStroke",
                   _("<b>Stroke width control point</b>: drag to alter the stroke width. <b>Ctrl+click</b> adds a "
                     "control point, <b>Ctrl+Alt+click</b> deletes it, <b>Shift+click</b> launches width dialog."),
-                  knot_shape, knot_mode, knot_color);
+                  knot_color);
         knotholder->add(e);
     }
 }

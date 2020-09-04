@@ -15,16 +15,17 @@
 
 #include <gdk/gdkkeysyms.h>
 
-#include "include/macros.h"
-#include "rubberband.h"
-#include "display/sp-canvas-item.h"
-#include "display/sp-canvas-util.h"
+#include "zoom-tool.h"
+
 #include "desktop.h"
-#include "ui/pixmaps/cursor-zoom.xpm"
-#include "ui/pixmaps/cursor-zoom-out.xpm"
+#include "rubberband.h"
 #include "selection-chemistry.h"
 
-#include "ui/tools/zoom-tool.h"
+#include "include/macros.h"
+
+#include "ui/pixmaps/cursor-zoom.xpm"
+#include "ui/pixmaps/cursor-zoom-out.xpm"
+
 
 namespace Inkscape {
 namespace UI {
@@ -38,7 +39,6 @@ const std::string ZoomTool::prefsPath = "/tools/zoom";
 
 ZoomTool::ZoomTool()
     : ToolBase(cursor_zoom_xpm)
-    , grabbed(nullptr)
     , escaped(false)
 {
 }
@@ -46,12 +46,9 @@ ZoomTool::ZoomTool()
 ZoomTool::~ZoomTool() = default;
 
 void ZoomTool::finish() {
-	this->enableGrDrag(false);
-	
-    if (this->grabbed) {
-        sp_canvas_item_ungrab(this->grabbed);
-        this->grabbed = nullptr;
-    }
+    this->enableGrDrag(false);
+
+    ungrabCanvasEvents();
 
     ToolBase::finish();
 }
@@ -104,13 +101,11 @@ bool ZoomTool::root_handler(GdkEvent* event) {
                 ret = true;
             }
 
-            sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
-                                GDK_KEY_PRESS_MASK      | GDK_KEY_RELEASE_MASK |
-                                GDK_BUTTON_PRESS_MASK   | GDK_BUTTON_RELEASE_MASK |
-                                GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK,
-                                nullptr, event->button.time);
-
-            this->grabbed = SP_CANVAS_ITEM(desktop->acetate);
+            grabCanvasEvents(Gdk::KEY_PRESS_MASK      |
+                             Gdk::KEY_RELEASE_MASK    |
+                             Gdk::BUTTON_PRESS_MASK   |
+                             Gdk::BUTTON_RELEASE_MASK |
+                             Gdk::POINTER_MOTION_MASK );
             break;
         }
 
@@ -157,11 +152,8 @@ bool ZoomTool::root_handler(GdkEvent* event) {
             }
 
             Inkscape::Rubberband::get(desktop)->stop();
-			
-            if (this->grabbed) {
-                sp_canvas_item_ungrab(this->grabbed);
-                this->grabbed = nullptr;
-            }
+
+            ungrabCanvasEvents();
 			
             xp = yp = 0;
             escaped = false;

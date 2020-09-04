@@ -44,8 +44,6 @@
 #include "helper/action-context.h"
 #include "helper/action.h" //sp_action_perform
 
-#include "display/canvas-text.h" //text
-
 #include "extension/output.h" //IO
 #include "extension/system.h" //IO
 

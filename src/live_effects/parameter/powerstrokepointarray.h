@@ -37,9 +37,10 @@ public:
 
     void param_transform_multiply(Geom::Affine const& postmul, bool /*set*/) override;
 
-    void set_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color);
+    void set_oncanvas_looks(Inkscape::CanvasItemCtrlShape shape,
+                            Inkscape::CanvasItemCtrlMode mode,
+                            guint32 color);
 
-    
     float median_width();
 
     bool providesKnotHolderEntities() const override { return true; }
@@ -57,8 +58,8 @@ public:
     friend class PowerStrokePointArrayParamKnotHolderEntity;
 
 private:
-    SPKnotShapeType knot_shape;
-    SPKnotModeType knot_mode;
+    Inkscape::CanvasItemCtrlShape knot_shape = Inkscape::CANVAS_ITEM_CTRL_SHAPE_DIAMOND;
+    Inkscape::CanvasItemCtrlMode knot_mode = Inkscape::CANVAS_ITEM_CTRL_MODE_XOR;
     guint32 knot_color;
 
     Geom::Piecewise<Geom::D2<Geom::SBasis> > last_pwd2;

@@ -882,8 +882,8 @@ static void sp_repr_write_stream_root_element(Node *repr, Writer &out,
         elide_prefix = g_quark_from_string(sp_xml_ns_uri_prefix(default_ns, nullptr));
     }
 
-    AttributeVector attributes; 
-    for (const auto& a : repr->attributeList()) attributes.emplace_back(a.key, a.value);
+    auto attributes = repr->attributeList(); // copy
+
     using Inkscape::Util::share_string;
     for (auto iter : ns_map) 
     {
@@ -1008,8 +1008,7 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
     }
 
     const auto rbd = rebase_href_attrs(old_href_base, new_href_base, attributes);
-    for ( const auto iter : *rbd)
-    {
+    for (const auto &iter : rbd) {
         if (!inlineattrs) {
             out.writeChar('\n');
             if (indent) {
@@ -1024,7 +1023,6 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
         repr_quote_write(out, iter.value);
         out.writeChar('"');
     }
-    delete rbd;
 
     loose = TRUE;
     for (child = repr->firstChild() ; child != nullptr; child = child->next()) {
