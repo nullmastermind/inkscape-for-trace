@@ -82,6 +82,7 @@ parts:
       - pkg-config
       - zlib1g-dev
     stage-packages:
+      - git # For master extension manager, remove before releasing
       - libatkmm-1.6-1v5
       - libcairomm-1.0-1v5
       - libcdr-0.1-1
@@ -180,6 +181,7 @@ apps:
       - cups-control
       - removable-media
       - raw-usb # plotter support
+      - network # extension maanager
     slots:
       - inkscape-dbus
     desktop: share/applications/org.inkscape.Inkscape.desktop
