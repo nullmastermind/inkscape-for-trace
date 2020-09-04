@@ -2500,7 +2500,8 @@ void TextToolbar::subselection_changed(gpointer texttool)
                     ++counter;
                 }
                 selection_changed(nullptr);
-            } else if ((start_selection == start && end_selection == end)) {
+            } else if ((start_selection == start && end_selection == end) ||
+                       (start_selection == end && end_selection == start)) {
                 // full subselection
                 _cusor_numbers = 0;
                 this->_outer = true;

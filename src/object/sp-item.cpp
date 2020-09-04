@@ -574,6 +574,7 @@ void SPItem::clip_ref_changed(SPObject *old_clip, SPObject *clip, SPItem *item)
 
 void SPItem::mask_ref_changed(SPObject *old_mask, SPObject *mask, SPItem *item)
 {
+    item->bbox_valid = FALSE; // force a re-evaluation
     if (old_mask) {
         /* Hide mask */
         for (SPItemView *v = item->display; v != nullptr; v = v->next) {
