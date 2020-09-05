@@ -272,6 +272,7 @@ InkscapePreferences::InkscapePreferences()
             auto _page_list_selection = _page_list.get_selection();
             auto next = get_next_result(curr);
             if (next) {
+                _page_list.get_model()->get_iter(next);
                 _page_list.scroll_to_cell(next, *_page_list.get_column(0));
                 _page_list.set_cursor(next);
             }
@@ -284,6 +285,7 @@ InkscapePreferences::InkscapePreferences()
             auto _page_list_selection = _page_list.get_selection();
             auto prev = get_prev_result(curr);
             if (prev) {
+                _page_list.get_model()->get_iter(prev);
                 _page_list.scroll_to_cell(prev, *_page_list.get_column(0));
                 _page_list.set_cursor(prev);
             }
@@ -325,7 +327,7 @@ InkscapePreferences::InkscapePreferences()
     initPageSpellcheck();
 
     signal_map().connect(sigc::mem_fun(*this, &InkscapePreferences::_presentPages));
-
+    
     //calculate the size request for this dialog
     _page_list.expand_all();
     _page_list_model->foreach_iter(sigc::mem_fun(*this, &InkscapePreferences::GetSizeRequest));
@@ -406,21 +408,22 @@ void InkscapePreferences::on_search_changed()
     auto key = _search.get_text();
     _page_list_model_filter->refilter();
     // get first iter
-    Gtk::TreeModel::Children children = _page_list_model_filter->children();
+    Gtk::TreeModel::Children children = _page_list.get_model()->children();
     Gtk::TreeModel::iterator iter = children.begin();
 
     highlight_results(key, iter);
     goto_first_result();
-    if (_num_results == 0) {
+    if (key == "") {
+        Gtk::TreeModel::Children children = _page_list.get_model()->children();
+        Gtk::TreeModel::iterator iter = children.begin();
+        _page_list.scroll_to_cell(Gtk::TreePath(iter), *_page_list.get_column(0));
+        _page_list.set_cursor(Gtk::TreePath(iter));
+    } else if (_num_results == 0 && key != "") {
         _page_list.set_has_tooltip(false);
         // TODO:Show all contents
         show_not_found();
     } else {
         _page_list.expand_all();
-    }
-    if (key == "") {
-        _page_list.collapse_all();
-        show_try_search();
     }
 }
 
@@ -553,7 +556,7 @@ Gtk::TreePath InkscapePreferences::get_prev_result(Gtk::TreeIter &iter, bool ite
  * result
  *
  * @param evt event object
- * @return Always returns False to label the key press event as un-handled
+ * @return Always returns True to label the key press event as handled
  */
 bool InkscapePreferences::on_navigate_key_press(GdkEventKey *evt)
 {
@@ -579,7 +582,7 @@ bool InkscapePreferences::on_navigate_key_press(GdkEventKey *evt)
             }
         }
     }
-    return false;
+    return true;
 }
 
 /**

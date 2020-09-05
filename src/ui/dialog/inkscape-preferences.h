@@ -16,6 +16,7 @@
 #ifndef INKSCAPE_UI_DIALOG_INKSCAPE_PREFERENCES_H
 #define INKSCAPE_UI_DIALOG_INKSCAPE_PREFERENCES_H
 
+#include <gtkmm/treerowreference.h>
 #include <iostream>
 #include <iterator>
 #include <vector>
