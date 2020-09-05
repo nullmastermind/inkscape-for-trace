@@ -753,7 +753,7 @@ LayersPanel::LayersPanel() :
     _store = Gtk::TreeStore::create( *zoop );
 
     _tree.set_model( _store );
-    _tree.set_headers_visible(true);
+    _tree.set_headers_visible(false);
     _tree.set_reorderable(true);
     _tree.enable_model_drag_dest (Gdk::ACTION_MOVE);
 
