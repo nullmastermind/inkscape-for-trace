@@ -163,7 +163,6 @@ protected:
 
     UI::Widget::DialogPage _page_ui;
     UI::Widget::DialogPage _page_notfound;
-    UI::Widget::DialogPage _page_trysearch;
     UI::Widget::DialogPage _page_theme;
     UI::Widget::DialogPage _page_windows;
     UI::Widget::DialogPage _page_grids;

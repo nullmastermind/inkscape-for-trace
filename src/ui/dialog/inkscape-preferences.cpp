@@ -2274,9 +2274,6 @@ void InkscapePreferences::initPageIO()
 
     // No Result
     _page_notfound.add_group_header("No matches were found, try another search!");
-
-    // Try Search
-    _page_trysearch.add_group_header("Try searching what you are looking for!");
 }
 
 void InkscapePreferences::initPageBehavior()
@@ -3290,21 +3287,6 @@ void InkscapePreferences::show_not_found()
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     _current_page = &_page_notfound;
     _page_title.set_markup("<span size='large'><b>No Results</b></span>");
-    _page_frame.add(*_current_page);
-    _current_page->show();
-    this->show_all_children();
-    if (prefs->getInt("/dialogs/preferences/page", 0) == PREFS_PAGE_UI_THEME) {
-        symbolicThemeCheck();
-    }
-}
-
-void InkscapePreferences::show_try_search()
-{
-    if (_current_page)
-        _page_frame.remove();
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    _current_page = &_page_trysearch;
-    _page_title.set_markup("<span size='large'><b>Try Search</b></span>");
     _page_frame.add(*_current_page);
     _current_page->show();
     this->show_all_children();
