@@ -602,6 +602,7 @@ ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
     this->add_main_option_entry(T::OPTION_TYPE_FILENAME, "export-filename",        'o', N_("Output file name (defaults to input filename; file type is guessed from extension if present; use '-' to write to stdout)"), N_("FILENAME"));
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-overwrite",      '\0', N_("Overwrite input file (otherwise add '_out' suffix if type doesn't change"), "");
     this->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-type",           '\0', N_("File type(s) to export: [svg,png,ps,eps,pdf,emf,wmf,xaml]"), N_("TYPE[,TYPE]*"));
+    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-extension",      '\0', N_("Extension ID to use for exporting"),                         N_("EXTENSION-ID"));
 
     // Export - Geometry
     _start_main_option_section(_("Export geometry"));                                                                                                                        // B = PNG, S = SVG, P = PS/EPS/PDF
@@ -1471,6 +1472,10 @@ ConcreteInkscapeApplication<T>::on_handle_local_options(const Glib::RefPtr<Glib:
 
     if (options->contains("export-type")) {
         options->lookup_value("export-type",      _file_export.export_type);
+    }
+    if (options->contains("export-extension")) {
+        options->lookup_value("export-extension", _file_export.export_extension);
+        _file_export.export_extension = _file_export.export_extension.lowercase();
     }
 
     if (options->contains("export-overwrite"))    _file_export.export_overwrite    = true;

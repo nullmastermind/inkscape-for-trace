@@ -16,6 +16,11 @@
 #include <glibmm.h>
 
 class SPDocument;
+namespace Inkscape {
+namespace Extension {
+class Output;
+}
+} // namespace Inkscape
 
 class InkFileExportCmd {
 
@@ -25,14 +30,15 @@ public:
     void do_export(SPDocument* doc, std::string filename_in="");
 
 private:
-
     guint32 get_bgcolor(SPDocument *doc);
-    std::string get_filename_out(std::string filename_in="", std::string object_id="");
-    int do_export_svg(   SPDocument* doc, std::string const &filename_in);
-    int do_export_png(   SPDocument* doc, std::string const &filename_in);
-    int do_export_ps_pdf(SPDocument* doc, std::string const &filename_in, std::string mime_type);
-    int do_export_win_metafile(SPDocument* doc, std::string const &filename_in, std::string mime_type);
-
+    std::string get_filename_out(std::string filename_in = "", std::string object_id = "");
+    int do_export_svg(SPDocument *doc, std::string const &filename_in);
+    int do_export_svg(SPDocument *doc, std::string const &filename_in, Inkscape::Extension::Output &extension);
+    int do_export_png(SPDocument *doc, std::string const &filename_in);
+    int do_export_ps_pdf(SPDocument *doc, std::string const &filename_in, std::string mime_type);
+    int do_export_ps_pdf(SPDocument *doc, std::string const &filename_in, std::string mime_type,
+                         Inkscape::Extension::Output &extension);
+    int do_export_extension(SPDocument *doc, std::string const &filename_in, Inkscape::Extension::Output *extension);
     Glib::ustring export_type_current;
 
 public:
@@ -42,6 +48,7 @@ public:
     std::string   export_filename; // Only if one file is processed!
 
     Glib::ustring export_type;
+    Glib::ustring export_extension;
     bool          export_overwrite;
 
     Glib::ustring export_area;
