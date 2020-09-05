@@ -213,7 +213,7 @@ bool CanvasItemDrawing::handle_event(GdkEvent *event)
                 _c = Geom::Point(event->crossing.x, event->crossing.y);
 
                 /* fixme: Not sure abut this, but seems the right thing (Lauris) */
-                _drawing->update(Geom::IntRect::infinite(), _ctx, DrawingItem::STATE_PICK | DrawingItem::STATE_BBOX, 0);
+                //_drawing->update(Geom::IntRect::infinite(), _ctx, DrawingItem::STATE_PICK | DrawingItem::STATE_BBOX, 0);
                 _active_item = _drawing->pick(_c, _drawing->delta, _sticky);
                 retval = _drawing_event_signal.emit(event, _active_item);
             }
@@ -233,7 +233,7 @@ bool CanvasItemDrawing::handle_event(GdkEvent *event)
             _c = Geom::Point(event->motion.x, event->motion.y);
 
             /* fixme: Not sure abut this, but seems the right thing (Lauris) */
-            _drawing->update(Geom::IntRect::infinite(), _ctx, DrawingItem::STATE_PICK | DrawingItem::STATE_BBOX);
+            //_drawing->update(Geom::IntRect::infinite(), _ctx, DrawingItem::STATE_PICK | DrawingItem::STATE_BBOX);
 
             auto new_drawing_item = _drawing->pick(_c, _drawing->delta, _sticky);
             if (_active_item != new_drawing_item) {
@@ -249,14 +249,14 @@ bool CanvasItemDrawing::handle_event(GdkEvent *event)
                 /* fixme: What is wrong? */
                 if (_active_item) {
                     ec.type = GDK_LEAVE_NOTIFY;
-                    retval = _drawing_event_signal.emit(event, _active_item);
+                    retval = _drawing_event_signal.emit((GdkEvent *) &ec, _active_item);
                 }
 
                 _active_item = new_drawing_item;
 
                 if (_active_item) {
                     ec.type = GDK_ENTER_NOTIFY;
-                    retval = _drawing_event_signal.emit(event, _active_item);
+                    retval = _drawing_event_signal.emit((GdkEvent *) &ec, _active_item);
                 }
             }
             retval = retval || _drawing_event_signal.emit(event, _active_item);
