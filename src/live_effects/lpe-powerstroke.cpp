@@ -291,9 +291,10 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
     build_from_sbasis(pb, B[0], tol, false);
     unsigned prev_i = 0;
     for (unsigned i=1; i < B.size(); i++) {
-        // if segment is degenerate, skip it
-        // the degeneracy/constancy test had to be loosened (eps > 1e-5) 
-        if (B[i].isConstant(1e-4)) {
+        // Skip degenerate segments. The number below was determined, after examining
+        // very many paths with powerstrokes of all shapes and sizes, to allow filtering out most
+        // degenerate segments without losing significant quality; it is close to 1/256.
+        if (B[i].isConstant(4e-3)) {
             continue;
         }
         if (!are_near(B[prev_i].at1(), B[i].at0(), tol) )
@@ -559,7 +560,6 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
                 }
             }
         } else {
-            pb.lineTo(B[i].at0());
             build_from_sbasis(pb, B[i], tol, false);
         }
 
