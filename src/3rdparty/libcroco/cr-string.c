@@ -158,7 +158,9 @@ cr_string_peek_raw_str_len (CRString const *a_this)
 void
 cr_string_destroy (CRString *a_this)
 {
-	g_return_if_fail (a_this) ;
+	if (!a_this) {
+		return;
+	}
 
 	if (a_this->stryng) {
 		g_string_free (a_this->stryng, TRUE) ;

@@ -1528,10 +1528,15 @@ cr_sel_eng_get_matched_rulesets_real (CRSelEng * a_this,
                         break;
 
                 case AT_IMPORT_RULE_STMT:
-                        /*
-                         *some recursivity may be needed here.
-                         *I don't like this :(
-                         */
+                        if (cur_stmt->kind.import_rule) {
+                                // (this logic is mutually exclusive with chaining imports)
+                                g_assert(!cur_stmt->kind.import_rule->sheet ||
+                                         !cur_stmt->kind.import_rule->sheet->next);
+                                cr_sel_eng_get_matched_rulesets_real (
+                                        a_this, cur_stmt->kind.import_rule->sheet,
+                                        a_node, a_rulesets,
+                                        a_len, a_capacity);
+                        }
                         break;
                 default:
                         break;

@@ -503,6 +503,13 @@ cr_statement_clear (CRStatement * a_this)
                                 (a_this->kind.import_rule->url) ;
                         a_this->kind.import_rule->url = NULL;
                 }
+                if (a_this->kind.import_rule->media_list) {
+                        g_list_free_full (a_this->kind.import_rule->media_list,
+                                        (GDestroyNotify) cr_string_destroy);
+                }
+                if (a_this->kind.import_rule->sheet) {
+                        cr_stylesheet_unref (a_this->kind.import_rule->sheet);
+                }
                 g_free (a_this->kind.import_rule);
                 a_this->kind.import_rule = NULL;
                 break;

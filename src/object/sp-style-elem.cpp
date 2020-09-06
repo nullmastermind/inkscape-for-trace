@@ -233,7 +233,10 @@ import_style_cb (CRDocHandler *a_handler,
         g_assert(parse_tmp.stylesheet);
         g_assert(parse_tmp.stylesheet != stylesheet);
         stylesheet->origin = ORIGIN_AUTHOR;
-        cr_stylesheet_append_import(parse_tmp.stylesheet, stylesheet);
+        // Append import statement
+        CRStatement *ruleset =
+            cr_statement_new_at_import_rule(parse_tmp.stylesheet, cr_string_dup(a_uri), nullptr, stylesheet);
+        parse_tmp.stylesheet->statements = cr_statement_append(parse_tmp.stylesheet->statements, ruleset);
     } else {
         std::cerr << "import_style_cb: Could not parse: " << import_file << std::endl;
         cr_stylesheet_destroy (stylesheet);
@@ -246,20 +249,6 @@ import_style_cb (CRDocHandler *a_handler,
     cr_parser_destroy(parser);
     delete parse_new;
 };
-
-#if 0
-/* FIXME: NOT USED, incomplete libcroco implementation */
-static void
-import_style_result_cb (CRDocHandler *a_this,
-                        GList *a_media_list,
-                        CRString *a_uri,
-                        CRString *a_uri_default_ns,
-                        CRStyleSheet *a_sheet)
-{
-    /* a_uri_default_ns and a_sheet are set to NULL and are unused by libcroco */
-    std::cerr << "import_style_result_cb: unimplemented" << std::endl;
-};
-#endif
 
 static void
 start_selector_cb(CRDocHandler *a_handler,
