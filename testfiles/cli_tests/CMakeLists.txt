@@ -133,6 +133,10 @@ add_cli_test(export-type-dot-separated PARAMETERS --export-type=svg,png
 add_cli_test(export-type PARAMETERS --export-type=svg,png,ps,eps,pdf,emf,wmf,xaml
                          INPUT_FILENAME empty.svg OUTPUT_FILENAME empty
                          EXPECTED_FILES empty.svg empty.png empty.ps empty.eps empty.pdf empty.emf empty.wmf empty.xaml)
+##  test whether this also works if the export types are not lowercase
+add_cli_test(export-type-caseinsensitive PARAMETERS --export-type=sVg,Png,PS,eps,Pdf,emf,wmf,xaml
+                         INPUT_FILENAME empty.svg OUTPUT_FILENAME empty
+                         EXPECTED_FILES empty.svg empty.png empty.ps empty.eps empty.pdf empty.emf empty.wmf empty.xaml)
 
 ## test whether we produce sane output for the default types
 add_cli_test(export-type_svg  PARAMETERS --export-type=svg INPUT_FILENAME shapes.svg OUTPUT_FILENAME shapes.svg REFERENCE_FILENAME shapes.svg)
@@ -468,6 +472,29 @@ add_cli_test(export-background-opacity_png  PARAMETERS --export-background=yello
  add_cli_test(export-png-color-mode-gray-8_png  PARAMETERS --export-png-color-mode=Gray_8 --export-type=png INPUT_FILENAME areas.svg OUTPUT_FILENAME export-png-color-mode-gray-8.png REFERENCE_FILENAME export-png-color-mode-gray-8_expected.png)
  add_cli_test(export-png-color-mode-rgb-8_png  PARAMETERS --export-png-color-mode=RGB_8 --export-type=png INPUT_FILENAME areas.svg OUTPUT_FILENAME export-png-color-mode-rgb-8.png REFERENCE_FILENAME export-png-color-mode-rgb-8_expected.png)
  add_cli_test(export-png-color-mode-rgba-8_png  PARAMETERS --export-png-color-mode=RGBA_8 --export-type=png INPUT_FILENAME areas.svg OUTPUT_FILENAME export-png-color-mode-rgba-8.png REFERENCE_FILENAME export-png-color-mode-rgba-8_expected.png)
+
+## test whether we produce correct output for default export extensions
+add_cli_test(export-extension_svg  PARAMETERS --export-type=svg --export-extension=org.inkscape.output.svg.inkscape INPUT_FILENAME shapes.svg OUTPUT_FILENAME shapes.svg REFERENCE_FILENAME shapes.svg)
+add_cli_test(export-extension_ps   PARAMETERS --export-type=ps --export-extension=org.inkscape.print.ps.cairo INPUT_FILENAME shapes.svg OUTPUT_FILENAME shapes.ps  REFERENCE_FILENAME shapes_expected.ps)
+add_cli_test(export-extension_eps  PARAMETERS --export-type=eps --export-extension=org.inkscape.print.eps.cairo  INPUT_FILENAME shapes.svg OUTPUT_FILENAME shapes.eps REFERENCE_FILENAME shapes_expected.eps)
+add_cli_test(export-extension_pdf  PARAMETERS --export-type=pdf --export-extension=org.inkscape.output.pdf.cairorenderer INPUT_FILENAME shapes.svg OUTPUT_FILENAME shapes.pdf REFERENCE_FILENAME shapes_expected.pdf)
+add_cli_test(export-extension_emf  PARAMETERS --export-type=emf --export-extension=org.inkscape.output.emf  INPUT_FILENAME shapes.svg OUTPUT_FILENAME shapes.emf REFERENCE_FILENAME shapes_expected.emf)
+add_cli_test(export-extension_wmf  PARAMETERS --export-type=wmf --export-extension=org.inkscape.output.wmf INPUT_FILENAME shapes.svg OUTPUT_FILENAME shapes.wmf REFERENCE_FILENAME shapes_expected.wmf)
+add_cli_test(export-plain-extension-svg PARAMETERS --export-type=svg --export-extension=org.inkscape.output.svg.plain
+                              INPUT_FILENAME shapes.svg OUTPUT_FILENAME shapes.svg REFERENCE_FILENAME shapes.svg
+                              TEST_SCRIPT match_regex_fail.sh "shapes.svg" "inkscape:|sodipodi:")
+## guess file type from --export-extension
+add_cli_test(export-type-extension_svg_guess_file_type  PARAMETERS --export-extension=org.inkscape.output.svg.inkscape INPUT_FILENAME shapes.svg OUTPUT_FILENAME shapes)
+
+## check error messages for --export-extension
+add_cli_test(export-type-extension_png_error  PARAMETERS --export-extension=org.inkscape.output.svg.inkscape INPUT_FILENAME shapes.svg OUTPUT_FILENAME shapes.png 
+                            PASS_FOR_OUTPUT "InkFileExportCmd::do_export: The parameter --export-extension is invalid for PNG export")
+add_cli_test(export-type-extension_type_error  PARAMETERS --export-extension=org.inkscape.output.svg.inkscape INPUT_FILENAME shapes.svg OUTPUT_FILENAME shapes.pdf
+                            PASS_FOR_OUTPUT "InkFileExportCmd::do_export: The supplied extension ID \\(org\\.inkscape\\.output\\.svg\\.inkscape\\) does not match any of the extensions available for this file type.*")
+add_cli_test(export-type-extension_id_error  PARAMETERS --export-extension=whatever INPUT_FILENAME shapes.svg OUTPUT_FILENAME shapes
+                            PASS_FOR_OUTPUT "InkFileExportCmd::do_export: The supplied --export-extension was not found. Specify a file extension to get a list of available extensions for this file type.")
+add_cli_test(export-type_filetype_error INPUT_FILENAME shapes.svg OUTPUT_FILENAME shapes.xxx
+                            PASS_FOR_OUTPUT "InkFileExportCmd::do_export: Unknown export type: xxx. Allowed values: \\[.*]")
 
 # --query-id=OBJECT-ID[,OBJECT-ID]*
 
