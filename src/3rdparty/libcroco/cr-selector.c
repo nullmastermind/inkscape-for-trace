@@ -68,6 +68,8 @@ CRSelector *
 cr_selector_parse_from_buf (const guchar * a_char_buf, enum CREncoding a_enc)
 {
         CRParser *parser = NULL;
+        CRSelector *selector = NULL;
+        enum CRStatus status;
 
         g_return_val_if_fail (a_char_buf, NULL);
 
@@ -75,8 +77,6 @@ cr_selector_parse_from_buf (const guchar * a_char_buf, enum CREncoding a_enc)
                                          a_enc, FALSE);
         g_return_val_if_fail (parser, NULL);
 
-        CRSelector *selector = NULL;
-        enum CRStatus status = CR_OK;
         status = cr_parser_parse_selector (parser, &selector);
 
         if (status != CR_OK) {
@@ -85,6 +85,7 @@ cr_selector_parse_from_buf (const guchar * a_char_buf, enum CREncoding a_enc)
                         selector = NULL;
                 }
         }
+
         return selector;
 }
 

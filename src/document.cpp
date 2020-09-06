@@ -1084,8 +1084,7 @@ std::vector<SPObject *> SPDocument::getObjectsBySelector(Glib::ustring const &se
 
     static CRSelEng *sel_eng = nullptr;
     if (!sel_eng) {
-        sel_eng = cr_sel_eng_new();
-        cr_sel_eng_set_node_iface(sel_eng, &Inkscape::XML::croco_node_iface);
+        sel_eng = cr_sel_eng_new(&Inkscape::XML::croco_node_iface);
     }
 
     Glib::ustring my_selector = selector + " {";  // Parsing fails sometimes without '{'. Fix me

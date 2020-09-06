@@ -371,7 +371,7 @@ cr_rgb_set (CRRgb * a_this, gulong a_red,
  *Look at the css spec from chapter 6.1 to 6.2 to understand
  *the meaning of "inherit".
  *
- * Returns CR_OK upon succesful completion, an error code otherwise.
+ * Returns CR_OK upon successful completion, an error code otherwise.
  */
 enum CRStatus 
 cr_rgb_set_to_inherit (CRRgb *a_this, gboolean a_inherit)
@@ -423,7 +423,7 @@ cr_rgb_is_set_to_transparent (CRRgb const *a_this)
  *@a_is_transparent: set to transparent or not.
  *
  *Sets the rgb to the "transparent" value (or not)
- *Returns CR_OK upon successfull completion, an error code otherwise.
+ *Returns CR_OK upon successful completion, an error code otherwise.
  */
 enum CRStatus 
 cr_rgb_set_to_transparent (CRRgb *a_this, 

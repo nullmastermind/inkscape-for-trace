@@ -31,8 +31,6 @@
 #include "cr-prop-list.h"
 #include "cr-node-iface.h"
 
-#include <libxml/tree.h>
-
 /**
  *@file:
  *The declaration of the  #CRSelEng class.
@@ -70,7 +68,7 @@ void cr_sel_eng_set_node_iface(CRSelEng *a_this, CRNodeIface const *);
 typedef gboolean (*CRPseudoClassSelectorHandler) (CRSelEng* a_this,
                                                   CRAdditionalSel *a_add_sel,
                                                   CRXMLNodePtr a_node) ;
-CRSelEng * cr_sel_eng_new (void) ;
+CRSelEng * cr_sel_eng_new (CRNodeIface const *);
 
 enum CRStatus cr_sel_eng_register_pseudo_class_sel_handler (CRSelEng *a_this,
                                                             guchar *a_pseudo_class_sel_name,

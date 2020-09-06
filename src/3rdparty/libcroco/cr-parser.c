@@ -45,7 +45,7 @@
  *that css UA must comply with two syntaxes.
  *
  *1/the specific syntax that defines the css language
- *for a given level of specificatin (e.g css2 syntax
+ *for a given level of specification (e.g css2 syntax
  *defined in appendix D.1 of the css2 spec)
  *
  *2/the core (general) syntax that is there to allow
@@ -207,7 +207,7 @@ CHECK_PARSING_STATUS (status, TRUE) \
  *Reads the next char from the input stream of the current parser.
  *In case of error, jumps to the "error:" label located in the
  *function where this macro is called.
- *@param a_this the curent instance of #CRParser
+ *@param a_this the current instance of #CRParser
  *@param to_char a pointer to the guint32 char where to store
  *the character read.
  */
@@ -1690,7 +1690,6 @@ cr_parser_parse_simple_selector (CRParser * a_this, CRSimpleSel ** a_sel)
         CRSimpleSel *sel = NULL;
         CRAdditionalSel *add_sel_list = NULL;
         gboolean found_sel = FALSE;
-        guint32 cur_char = 0;
 
         g_return_val_if_fail (a_this && a_sel, CR_BAD_PARAM_ERROR);
 
@@ -1714,9 +1713,9 @@ cr_parser_parse_simple_selector (CRParser * a_this, CRSimpleSel ** a_sel)
                 sel->name = cr_string_new_from_string ("*");
                 found_sel = TRUE;
         } else if (token && token->type == IDENT_TK) {
-                sel->name = token->u.str;
                 int comb = (int)sel->type_mask | (int) TYPE_SELECTOR;
                 sel->type_mask = (enum SimpleSelectorType)comb;
+                sel->name = token->u.str;
                 token->u.str = NULL;
                 found_sel = TRUE;
         } else {
@@ -1972,7 +1971,7 @@ cr_parser_parse_simple_sels (CRParser * a_this,
 
         for (;;) {
                 guint32 next_char = 0;
-                int comb = 0;
+                enum Combinator comb = NO_COMBINATOR;
 
                 sel = NULL;
 
@@ -1998,9 +1997,9 @@ cr_parser_parse_simple_sels (CRParser * a_this,
                 if (status != CR_OK)
                         break;
 
-                if (comb && sel) {
-                        sel->combinator = (enum Combinator)comb;
-                        comb = 0;
+                if (comb != NO_COMBINATOR && sel) {
+                        sel->combinator = comb;
+                        comb = NO_COMBINATOR;
                 }
                 if (sel) {
                         *a_sel = cr_simple_sel_append_simple_sel (*a_sel, 
@@ -2804,7 +2803,7 @@ cr_parser_new (CRTknzr * a_tknzr)
  *of #CRParser. If set to FALSE, it is up to the caller to
  *eventually free it.
  *
- *Instanciates a new parser from a memory buffer.
+ *Instantiates a new parser from a memory buffer.
  * 
  *Returns the newly built parser, or NULL if an error arises.
  */
@@ -3685,7 +3684,7 @@ cr_parser_parse_import (CRParser * a_this,
                  *will corrupt the memory and lead to hard to debug
                  *random crashes.
                  *This is where C++ and its compile time
-                 *type checking mecanism (through STL containers) would
+                 *type checking mechanism (through STL containers) would
                  *have prevented us to go through this hassle.
                  */
                 for (cur = *a_media_list; cur; cur = cur->next) {
@@ -4143,7 +4142,7 @@ cr_parser_parse_page (CRParser * a_this)
  *set to NULL.
  *@a_charset_sym_location: the parsing location of the charset rule
  *
- *Parses a charset declaration as defined implictly by the css2 spec in
+ *Parses a charset declaration as defined implicitly by the css2 spec in
  *appendix D.1:
  *charset ::= CHARSET_SYM S* STRING S* ';'
  *

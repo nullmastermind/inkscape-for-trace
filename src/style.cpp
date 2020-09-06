@@ -1209,8 +1209,7 @@ sp_style_unref(SPStyle *style)
 static CRSelEng *
 sp_repr_sel_eng()
 {
-    CRSelEng *const ret = cr_sel_eng_new();
-    cr_sel_eng_set_node_iface(ret, &Inkscape::XML::croco_node_iface);
+    CRSelEng *const ret = cr_sel_eng_new(&Inkscape::XML::croco_node_iface);
 
     /** \todo
      * Check whether we need to register any pseudo-class handlers.

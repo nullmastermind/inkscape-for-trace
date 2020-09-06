@@ -32,6 +32,10 @@
 #include "cr-num.h"
 #include "string.h"
 
+#include <float.h>
+#include <math.h>
+#include <stdio.h>
+
 /**
  * cr_num_new:
  *
@@ -82,6 +86,33 @@ cr_num_new_with_val (gdouble a_val, enum CRNumType a_type)
         return result;
 }
 
+
+/**
+ * Like g_ascii_dtostr() but uses not more than DBL_DIG significant digits
+ * to avoid results like "1.0000000000000001".
+ */
+static void
+pretty_ascii_dtostr (gchar *buffer, gint buf_len, gdouble d)
+{
+        gint digits = DBL_DIG - ceil (log10 (fabs (d)));
+        gchar format[8] = "%.";
+        sprintf (format + 2, "%df", CLAMP (digits, 0, 9999));
+
+        g_ascii_formatd (buffer, buf_len, format, d);
+
+        // strip trailing zeros and trailing dot
+        if (strchr (buffer, '.') != NULL) {
+                gsize pos = strlen (buffer) - 1;
+                while (buffer[pos] == '0') {
+                        --pos;
+                }
+                if (buffer[pos] == '.') {
+                        --pos;
+                }
+                buffer[pos + 1] = '\0';
+        }
+}
+
 /**
  * cr_num_to_string:
  *@a_this: the current instance of #CRNum.
@@ -107,11 +138,9 @@ cr_num_to_string (CRNum const * a_this)
         if (!test_val) {
                 tmp_char1 = (guchar *) g_strdup_printf ("%ld", (glong) a_this->val);
         } else {
-                /* We can't use g_ascii_dtostr, because that sometimes uses
-                   e notation (which wouldn't be a valid number in CSS). */
-                size_t const buflen = 35;  /* fairly arbitrary. */
-                tmp_char1 = (guchar *)g_malloc (buflen);
-                g_ascii_formatd ((gchar *)tmp_char1, buflen, "%.17f", a_this->val);
+                tmp_char1 = (guchar *) g_new0 (char, G_ASCII_DTOSTR_BUF_SIZE + 1);
+                if (tmp_char1 != NULL)
+                        pretty_ascii_dtostr ((gchar *) tmp_char1, G_ASCII_DTOSTR_BUF_SIZE, a_this->val);
         }
 
         g_return_val_if_fail (tmp_char1, NULL);
@@ -260,7 +289,7 @@ cr_num_dup (CRNum const * a_this)
  *instance of #CRNum
  *@a_type: the new type of #CRNum.
  *
- * Returns CR_OK upon succesful completion, an error code otherwise.
+ * Returns CR_OK upon successful completion, an error code otherwise.
  */
 enum CRStatus
 cr_num_set (CRNum * a_this, gdouble a_val, enum CRNumType a_type)

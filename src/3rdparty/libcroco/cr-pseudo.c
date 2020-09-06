@@ -86,6 +86,12 @@ cr_pseudo_to_string (CRPseudo const * a_this)
                 name = (guchar *) g_strndup (a_this->name->stryng->str, 
                                   a_this->name->stryng->len);
 
+                if (a_this->term && a_this->term->type == TERM_IDENT) {
+                        arg = (guchar *) g_strndup (
+                            a_this->term->content.str->stryng->str,
+                            a_this->term->content.str->stryng->len);
+                }
+
                 if (name) {
                         g_string_append_printf (str_buf, "%s(", name);
                         g_free (name);

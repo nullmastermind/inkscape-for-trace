@@ -64,7 +64,6 @@ cr_stylesheet_to_string (CRStyleSheet const *a_this)
 	gchar *str = NULL;
 	GString *stringue = NULL;
 	CRStatement const *cur_stmt = NULL;
-        CRStyleSheet *cur = NULL;
 
         g_return_val_if_fail (a_this, NULL);
 
@@ -239,9 +238,7 @@ cr_stylesheet_unref (CRStyleSheet * a_this)
 {
         g_return_val_if_fail (a_this, FALSE);
 
-        a_this->ref_count--;
-
-        if (!a_this->ref_count) {
+        if (!--a_this->ref_count) {
                 cr_stylesheet_destroy (a_this);
                 return TRUE;
         }

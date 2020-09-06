@@ -159,7 +159,7 @@ cr_om_parser_init_default_sac_handler (CROMParser * a_this)
         }
 
         /*
-         *initialyze here the sac handler.
+         *initialize here the sac handler.
          */
         sac_handler->start_document = start_document;
         sac_handler->end_document = end_document;
@@ -676,7 +676,7 @@ property (CRDocHandler * a_this,
                 g_return_if_fail (str);
         }
 
-        /*instanciates a new declaration */
+        /*instantiates a new declaration */
         decl = cr_declaration_new (ctxt->cur_stmt, str, a_expression);
         g_return_if_fail (decl);
         str = NULL;
@@ -827,7 +827,7 @@ cr_om_parser_new (CRInput * a_input)
         PRIVATE (result)->parser = cr_parser_new_from_input (a_input);
 
         if (!PRIVATE (result)->parser) {
-                cr_utils_trace_info ("parsing instanciation failed");
+                cr_utils_trace_info ("parsing instantiation failed");
                 goto error;
         }
 
@@ -858,7 +858,7 @@ cr_om_parser_new (CRInput * a_input)
  *
  *Parses the content of an in memory  buffer.
  *
- *Returns CR_OK upon successfull completion, an error code otherwise.
+ *Returns CR_OK upon successful completion, an error code otherwise.
  */
 enum CRStatus
 cr_om_parser_parse_buf (CROMParser * a_this,
@@ -907,7 +907,7 @@ cr_om_parser_parse_buf (CROMParser * a_this,
  *
  *The simpler way to parse an in memory css2 buffer.
  *
- *Returns CR_OK upon successfull completion, an error code otherwise.
+ *Returns CR_OK upon successful completion, an error code otherwise.
  */
 enum CRStatus
 cr_om_parser_simply_parse_buf (const guchar * a_buf,
@@ -940,7 +940,7 @@ cr_om_parser_simply_parse_buf (const guchar * a_buf,
  * cr_om_parser_parse_file:
  *@a_this: the current instance of the cssom parser.
  *@a_file_uri: the uri of the file. 
- *(only local file paths are suppported so far)
+ *(only local file paths are supported so far)
  *@a_enc: the encoding of the file.
  *@a_result: out parameter. A pointer 
  *the build css object model.
@@ -948,7 +948,7 @@ cr_om_parser_simply_parse_buf (const guchar * a_buf,
  *Parses a css2 stylesheet contained
  *in a file.
  *
- * Returns CR_OK upon succesful completion, an error code otherwise.
+ * Returns CR_OK upon successful completion, an error code otherwise.
  */
 enum CRStatus
 cr_om_parser_parse_file (CROMParser * a_this,
@@ -996,7 +996,7 @@ cr_om_parser_parse_file (CROMParser * a_this,
  *
  *The simpler method to parse a css2 file.
  *
- *Returns CR_OK upon successfull completion, an error code otherwise.
+ *Returns CR_OK upon successful completion, an error code otherwise.
  *Note that this method uses cr_om_parser_parse_file() so both methods
  *have the same return values.
  */

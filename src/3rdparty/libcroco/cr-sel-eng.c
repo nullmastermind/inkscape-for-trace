@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  *
- * See  COPYRIGHTS file for copyright informations.
+ * See  COPYRIGHTS file for copyright information.
  */
 
 #include <string.h>
@@ -246,8 +246,8 @@ lang_pseudo_class_handler (CRSelEng *const a_this,
             || a_sel->content.pseudo->term->content.str->stryng->len < 2)
                 return FALSE;
         for (; node; node = get_next_parent_element_node (node_iface, node)) {
-                char *val = node_iface->getProp (node, (const xmlChar *) "lang");
-                if (!val) val = node_iface->getProp (node, (const xmlChar *) "xml:lang");
+                char *val = node_iface->getProp (node, "lang");
+                if (!val) val = node_iface->getProp (node, "xml:lang");
                 if (val) {
                         if (!strcasecmp(val, a_sel->content.pseudo->term->content.str->stryng->str)) {
                                 result = TRUE;
@@ -793,7 +793,7 @@ class_add_sel_matches_node (CRAdditionalSel * a_add_sel,
                               && a_add_sel->content.class_name->stryng->str
                               && a_node, FALSE);
 
-        klass = a_node_iface->getProp (a_node, (const xmlChar *) "class");
+        klass = a_node_iface->getProp (a_node, "class");
         if (klass) {
                 char const *cur;
                 for (cur = klass; cur && *cur; cur++) {
@@ -847,7 +847,7 @@ id_add_sel_matches_node (CRAdditionalSel * a_add_sel,
                               && a_add_sel->type == ID_ADD_SELECTOR
                               && a_node, FALSE);
 
-        id = a_node_iface->getProp (a_node, (const xmlChar *) "id");
+        id = a_node_iface->getProp (a_node, "id");
         if (id) {
                 if (!strqcmp ((const char *) id, a_add_sel->content.id_name->stryng->str,
                               a_add_sel->content.id_name->stryng->len)) {
@@ -863,7 +863,7 @@ id_add_sel_matches_node (CRAdditionalSel * a_add_sel,
  *Returns TRUE if the instance of #CRAdditional selector matches
  *the node given in parameter, FALSE otherwise.
  *@param a_add_sel the additional selector to evaluate.
- *@param a_node the xml node against whitch the selector is to
+ *@param a_node the xml node against which the selector is to
  *be evaluated
  *return TRUE if the additional selector matches the current xml node
  *FALSE otherwise.
@@ -1059,7 +1059,7 @@ additional_selector_matches_node (CRSelEng * a_this,
                            && cur_add_sel->content.attr_sel) {
                         /*
                          *here, call a function that does the match
-                         *against an attribute additionnal selector
+                         *against an attribute additional selector
                          *and an xml node.
                          */
                         if (!attr_add_sel_matches_node (cur_add_sel,
@@ -1462,7 +1462,6 @@ cr_sel_eng_get_matched_rulesets_real (CRSelEng * a_this,
                 *cur_sel = NULL;
         gboolean matches = FALSE;
         enum CRStatus status = CR_OK;
-        CRStyleSheet *cur = NULL;
 
         g_return_val_if_fail (a_this
                               && a_stylesheet
@@ -1491,7 +1490,7 @@ cr_sel_eng_get_matched_rulesets_real (CRSelEng * a_this,
              (PRIVATE (a_this)->cur_stmt = cur_stmt);
              cur_stmt = cur_stmt->next) {
                 /*
-                 *initialyze the selector list in which we will
+                 *initialize the selector list in which we will
                  *really perform the search.
                  */
                 sel_list = NULL;
@@ -1673,7 +1672,7 @@ put_css_properties_in_props_list (CRPropList ** a_props, CRStatement * a_stmt)
                         /*
                          *if the already selected declaration
                          *is marked as being !important the current
-                         *declaration must not overide it 
+                         *declaration must not override it 
                          *(unless the already selected declaration 
                          *has an UA origin)
                          */
@@ -1755,11 +1754,13 @@ set_style_from_props (CRStyle * a_style, CRPropList * a_props)
  * cr_sel_eng_new:
  *Creates a new instance of #CRSelEng.
  *
+ *@a_node_iface: Node interface
+ *
  *Returns the newly built instance of #CRSelEng of
  *NULL if an error occurs.
  */
 CRSelEng *
-cr_sel_eng_new (void)
+cr_sel_eng_new (CRNodeIface const * a_node_iface)
 {
         CRSelEng *result = NULL;
 
@@ -1829,6 +1830,8 @@ cr_sel_eng_new (void)
                 (result, (guchar *) "nth-last-of-type",
                  FUNCTION_PSEUDO, /*(CRPseudoClassSelectorHandler)*/
                  nth_last_of_type_pseudo_class_handler);
+
+        cr_sel_eng_set_node_iface (result, a_node_iface);
 
         return result;
 }
@@ -1919,7 +1922,7 @@ cr_sel_eng_unregister_pseudo_class_sel_handler (CRSelEng * a_this,
  *Unregisters all the pseudo class sel handlers
  *and frees all the associated allocated datastructures.
  *
- *Returns CR_OK upon succesful completion, an error code
+ *Returns CR_OK upon successful completion, an error code
  *otherwise.
  */
 enum CRStatus
@@ -1990,7 +1993,7 @@ cr_sel_eng_get_pseudo_class_selector_handler (CRSelEng * a_this,
  *is considered if and only if this functions returns CR_OK.
  *
  *Evaluates a chained list of simple selectors (known as a css2 selector).
- *Says wheter if this selector matches the xml node given in parameter or
+ *Says whether if this selector matches the xml node given in parameter or
  *not.
  *
  *Returns the CR_OK if the selection ran correctly, an error code otherwise.
@@ -2017,7 +2020,7 @@ cr_sel_eng_matches_node (CRSelEng * a_this, CRSimpleSel * a_sel,
  * cr_sel_eng_get_matched_rulesets:
  *@a_this: the current instance of the selection engine.
  *@a_sheet: the stylesheet that holds the selectors.
- *@a_node: the xml node to consider during the walk thru
+ *@a_node: the xml node to consider during the walk through
  *the stylesheet.
  *@a_rulesets: out parameter. A pointer to an array of
  *rulesets statement pointers. *a_rulesets is allocated by
@@ -2029,7 +2032,7 @@ cr_sel_eng_matches_node (CRSelEng * a_this, CRSimpleSel * a_sel,
  *Returns an array of pointers to selectors that matches
  *the xml node given in parameter.
  *
- *Returns CR_OK upon sucessfull completion, an error code otherwise.
+ *Returns CR_OK upon successful completion, an error code otherwise.
  */
 enum CRStatus
 cr_sel_eng_get_matched_rulesets (CRSelEng * a_this,
@@ -2074,6 +2077,7 @@ cr_sel_eng_get_matched_rulesets (CRSelEng * a_this,
  * Like cr_sel_eng_get_matched_rulesets_real, but process an entire (linked)
  * list of stylesheets, not only a single one.
  */
+static
 enum CRStatus
 cr_sel_eng_process_stylesheet ( CRSelEng * a_eng,
                                 CRXMLNodePtr a_node,
@@ -2107,7 +2111,6 @@ cr_sel_eng_get_matched_properties_from_cascade (CRSelEng * a_this,
                 i = 0,
                 index = 0;
         enum CRStyleOrigin origin;
-        gushort stmts_chunck_size = 8;
         CRStyleSheet *sheet = NULL;
 
         g_return_val_if_fail (a_this
@@ -2150,7 +2153,6 @@ cr_sel_eng_get_matched_properties_from_cascade (CRSelEng * a_this,
 
         }
         status = CR_OK ;
- cleanup:
         if (stmts_tab) {
                 g_free (stmts_tab);
                 stmts_tab = NULL;
