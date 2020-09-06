@@ -289,6 +289,8 @@
        <verb verb-id="EffectLastPref" />
        <separator/>
        <effects-list/>
+       <separator/>
+       <verb verb-id="org.inkscape.extensions.manager" />
    </submenu>
    <submenu name="_Help">
        <verb verb-id="HelpUrlManual" />

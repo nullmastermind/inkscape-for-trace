@@ -194,12 +194,12 @@ void
 PrefDialog::on_response (int signal) {
     if (signal == Gtk::RESPONSE_OK) {
         if (_exEnv == nullptr) {
-			if (_effect != nullptr) {
-				_effect->effect(SP_ACTIVE_DESKTOP);
-			} else {
-				// Shutdown run()
-				return;
-			}
+            if (_effect != nullptr) {
+                _effect->effect(SP_ACTIVE_DESKTOP);
+            } else {
+                // Shutdown run()
+                return;
+            }
         } else {
             if (_exEnv->wait()) {
                 _exEnv->commit();

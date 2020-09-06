@@ -60,7 +60,12 @@ apt_bundle \
     python3-lxml \
     python3-numpy \
     python3-scour \
-    python3-gi
+    python3-distutils \
+    python3-gi \
+    gir1.2-glib-2.0 \
+    gir1.2-gtk-3.0 \
+    gir1.2-gdkpixbuf-2.0 \
+    gir1.2-pango-1.0
 (
     cd usr/bin
     ln -s python${PY_VER} python3

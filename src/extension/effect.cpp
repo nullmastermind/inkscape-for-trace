@@ -217,8 +217,12 @@ Effect::~Effect ()
 {
     if (get_last_effect() == this)
         set_last_effect(nullptr);
-    if (_menu_node)
+    if (_menu_node) {
+        if (_menu_node->parent()) {
+            _menu_node->parent()->removeChild(_menu_node);
+        }
         Inkscape::GC::release(_menu_node);
+    }
     return;
 }
 

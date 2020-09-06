@@ -71,6 +71,23 @@ namespace Gtk {
 #define INKSCAPE_EXTENSION_NS_NC "extension"
 #define INKSCAPE_EXTENSION_NS    "extension:"
 
+enum ModuleImpType
+{
+    MODULE_EXTENSION,   // implementation/script.h python extensions
+    MODULE_XSLT,        // implementation/xslt.h xml transform extensions
+    MODULE_PLUGIN,      // plugins/*/*.h C++ extensions
+    MODULE_UNKNOWN_IMP  // No implementation, so nothing created.
+};
+enum ModuleFuncType
+{
+    MODULE_INPUT,
+    MODULE_OUTPUT,
+    MODULE_FILTER,
+    MODULE_PRINT,
+    MODULE_PATH_EFFECT,
+    MODULE_UNKNOWN_FUNC
+};
+
 class SPDocument;
 
 namespace Inkscape {
@@ -157,6 +174,7 @@ public:
     std::string   get_dependency_location(const char *name);
     const char   *get_translation(const char* msgid, const char *msgctxt=nullptr);
     void          set_environment();
+    ModuleImpType get_implementation_type();
 
 /* Parameter Stuff */
 private:

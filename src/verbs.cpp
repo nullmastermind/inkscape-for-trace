@@ -396,6 +396,10 @@ Verb::Verb(gchar const *id, gchar const *name, gchar const *tip, gchar const *im
  */
 Verb::~Verb()
 {
+    // Remove verbs from lists
+    _verbs.erase(_code);
+    _verb_ids.erase(_id);
+
     /// \todo all the actions need to be cleaned up first.
     delete _actions;
 

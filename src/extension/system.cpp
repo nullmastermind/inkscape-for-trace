@@ -427,20 +427,8 @@ get_print(gchar const *key)
 bool
 build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation *in_imp, std::string* baseDir)
 {
-    enum {
-        MODULE_EXTENSION,
-        MODULE_XSLT,
-        MODULE_PLUGIN,
-        MODULE_UNKNOWN_IMP
-    } module_implementation_type = MODULE_UNKNOWN_IMP;
-    enum {
-        MODULE_INPUT,
-        MODULE_OUTPUT,
-        MODULE_FILTER,
-        MODULE_PRINT,
-        MODULE_PATH_EFFECT,
-        MODULE_UNKNOWN_FUNC
-    } module_functional_type = MODULE_UNKNOWN_FUNC;
+    ModuleImpType module_implementation_type = MODULE_UNKNOWN_IMP;
+    ModuleFuncType module_functional_type = MODULE_UNKNOWN_FUNC;
 
     g_return_val_if_fail(doc != nullptr, false);
 

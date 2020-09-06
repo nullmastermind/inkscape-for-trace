@@ -18,6 +18,8 @@
 
 #include "extension.h"
 #include "implementation/implementation.h"
+#include "implementation/script.h"
+#include "implementation/xslt.h"
 
 #include <glibmm/fileutils.h>
 #include <glibmm/miscutils.h>
@@ -567,6 +569,22 @@ void Extension::set_environment() {
     if (!_gettext_catalog_dir.empty()) {
         Glib::setenv("INKEX_GETTEXT_DIRECTORY", _gettext_catalog_dir);
     }
+}
+
+/** Uses the object's type to figure out what the type is.
+  *
+  * @return  Returns the type of extension that this object is.
+  */
+ModuleImpType Extension::get_implementation_type()
+{
+    if (dynamic_cast<Implementation::Script *>(imp)) {
+        return MODULE_EXTENSION;
+    } else if (dynamic_cast<Implementation::XSLT *>(imp)) {
+        return MODULE_XSLT;
+    }
+    // MODULE_UNKNOWN_IMP is not required because it never results in an
+    // object being created. Thus this function wouldn't be available.
+    return MODULE_PLUGIN;
 }
 
 /**
