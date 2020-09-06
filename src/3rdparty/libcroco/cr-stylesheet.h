@@ -82,12 +82,6 @@ struct _CRStyleSheet
 	gulong ref_count ;
 
         /**
-         * A link to an imported stylesheet
-         * (can have more than one).
-         */
-        CRStyleSheet *import;
-
-        /**
          * A link to the next stylesheet.
          */
         CRStyleSheet *next;
@@ -107,8 +101,6 @@ void cr_stylesheet_dump (CRStyleSheet const *a_this, FILE *a_fp) ;
 gint cr_stylesheet_nr_rules (CRStyleSheet const *a_this) ;
 
 CRStatement * cr_stylesheet_statement_get_from_list (CRStyleSheet *a_this, int itemnr) ;
-
-CRStyleSheet * cr_stylesheet_append_import (CRStyleSheet *a_this, CRStyleSheet *a_new_import) ;
 
 CRStyleSheet * cr_stylesheet_append_stylesheet (CRStyleSheet *a_this, CRStyleSheet *a_new_stylesheet) ;
 

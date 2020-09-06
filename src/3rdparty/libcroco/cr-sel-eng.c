@@ -1468,12 +1468,6 @@ cr_sel_eng_get_matched_rulesets_real (CRSelEng * a_this,
                               && a_stylesheet
                               && a_node && a_rulesets, CR_BAD_PARAM_ERROR);
 
-        // Process imported stylesheets first
-        // (this logic is mutually exclusive with processing AT_IMPORT_RULE_STMT statements)
-        for (cur = a_stylesheet->import; cur; cur = cur->next) {
-                cr_sel_eng_get_matched_rulesets_real (a_this, cur, a_node, a_rulesets, a_len, a_capacity);
-        }
-
         if (!a_stylesheet->statements) {
                 return CR_OK;
         }
@@ -1529,7 +1523,6 @@ cr_sel_eng_get_matched_rulesets_real (CRSelEng * a_this,
 
                 case AT_IMPORT_RULE_STMT:
                         if (cur_stmt->kind.import_rule) {
-                                // (this logic is mutually exclusive with chaining imports)
                                 g_assert(!cur_stmt->kind.import_rule->sheet ||
                                          !cur_stmt->kind.import_rule->sheet->next);
                                 cr_sel_eng_get_matched_rulesets_real (
