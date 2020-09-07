@@ -33,7 +33,7 @@ export SDKROOT=$SDKROOT_DIR/MacOSX${MACOSX_DEPLOYMENT_TARGET}.sdk
 
 ### build system/toolset version ###############################################
 
-TOOLSET_VERSION=0.39
+TOOLSET_VERSION=0.40
 
 ### ramdisk ####################################################################
 
@@ -138,7 +138,7 @@ APP_PLIST=$APP_CON_DIR/Info.plist
 PY3_MAJOR=3
 PY3_MINOR=8
 PY3_PATCH=5
-PY3_BUILD=1  # custom framework build number
+PY3_BUILD=ink1   # custom build
 
 ### download URLs for dependencies #############################################
 

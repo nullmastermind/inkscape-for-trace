@@ -98,6 +98,7 @@ lib_change_paths \
 ### install Python package: NumPy ##############################################
 
 pip_install $PYTHON_NUMPY
+rm $APP_BIN_DIR/f2p*
 
 ### install Python package: PyGObject ##########################################
 
@@ -122,14 +123,17 @@ lib_change_paths \
 ### install Python package: pySerial ###########################################
 
 pip_install $PYTHON_PYSERIAL
+find $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/serial -type f -name "*.pyc" -exec rm {} \;
+rm $APP_BIN_DIR/miniterm.*
 
 ### install Python package: Scour ##############################################
 
 pip_install $PYTHON_SCOUR
+rm $APP_BIN_DIR/scour
 
-### precompile all Python packages #############################################
+### remove Python cache files ##################################################
 
-$APP_FRA_DIR/Python.framework/Versions/Current/bin/python$PY3_MAJOR -m compileall -f $APP_DIR || true
+rm -rf $APP_RES_DIR/share/glib-2.0/codegen/__pycache__
 
 ### fontconfig #################################################################
 
