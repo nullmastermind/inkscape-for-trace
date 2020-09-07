@@ -36,7 +36,6 @@
 #include "helper/action.h"
 
 #include "ui/icon-names.h"
-#include "ui/tools-switch.h"
 #include "ui/tools/lpe-tool.h"
 #include "ui/widget/combo-tool-item.h"
 #include "ui/widget/unit-tracker.h"
@@ -242,8 +241,8 @@ LPEToolbar::toggle_show_bbox() {
     bool show = _show_bbox_item->get_active();
     prefs->setBool("/tools/lpetool/show_bbox",  show);
 
-    if (tools_isactive(_desktop, TOOLS_LPETOOL)) {
-        LpeTool *lc = SP_LPETOOL_CONTEXT(_desktop->event_context);
+    LpeTool *lc = dynamic_cast<LpeTool *>(_desktop->event_context);
+    if (lc) {
         lpetool_context_reset_limiting_bbox(lc);
     }
 }
@@ -300,7 +299,8 @@ LPEToolbar::change_line_segment_type(int mode)
 void
 LPEToolbar::toggle_show_measuring_info()
 {
-    if (!tools_isactive(_desktop, TOOLS_LPETOOL)) {
+    LpeTool *lc = dynamic_cast<LpeTool *>(_desktop->event_context);
+    if (!lc) {
         return;
     }
 
@@ -309,7 +309,6 @@ LPEToolbar::toggle_show_measuring_info()
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setBool("/tools/lpetool/show_measuring_info",  show);
 
-    LpeTool *lc = SP_LPETOOL_CONTEXT(_desktop->event_context);
     lpetool_show_measuring_info(lc, show);
 
     _units_item->set_sensitive( show );
@@ -333,8 +332,10 @@ LPEToolbar::unit_changed(int /* NotUsed */)
 void
 LPEToolbar::open_lpe_dialog()
 {
-    if (tools_isactive(_desktop, TOOLS_LPETOOL)) {
+    if (dynamic_cast<LpeTool *>(_desktop->event_context)) {
         sp_action_perform(Inkscape::Verb::get(SP_VERB_DIALOG_LIVE_PATH_EFFECT)->get_action(Inkscape::ActionContext(_desktop)), nullptr);
+    } else {
+        std::cerr << "LPEToolbar::open_lpe_dialog: LPEToolbar active but current tool is not LPE tool!" << std::endl;
     }
     _open_lpe_dialog_item->set_active(false);
 }

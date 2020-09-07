@@ -41,19 +41,22 @@
 
 #include "object/sp-guide.h"
 
-#include "ui/modifiers.h"
 #include "ui/contextmenu.h"
-#include "ui/interface.h"
 #include "ui/event-debug.h"
-#include "ui/tool/control-point.h"
+#include "ui/interface.h"
+#include "ui/modifiers.h"
 #include "ui/shape-editor.h"
-#include "ui/tools/tool-base.h"
 #include "ui/tools-switch.h"
-#include "ui/tools/lpe-tool.h"
 #include "ui/tool/commit-events.h"
+#include "ui/tool/control-point.h"
 #include "ui/tool/event-utils.h"
-#include "ui/tools/node-tool.h"
 #include "ui/tool/shape-record.h"
+#include "ui/tools/calligraphic-tool.h"
+#include "ui/tools/dropper-tool.h"
+#include "ui/tools/lpe-tool.h"
+#include "ui/tools/node-tool.h"
+#include "ui/tools/select-tool.h"
+#include "ui/tools/tool-base.h"
 #include "ui/widget/canvas.h"
 
 #include "widgets/desktop-widget.h"
@@ -76,7 +79,6 @@ static guint scroll_keyval = 0;
 // globals for key processing
 static bool latin_keys_group_valid = FALSE;
 static gint latin_keys_group;
-
 
 namespace Inkscape {
 namespace UI {
@@ -221,10 +223,12 @@ gint gobble_motion_events(gint mask) {
  * Subroutine of sp_event_context_private_root_handler().
  */
 static void sp_toggle_selector(SPDesktop *dt) {
-    if (!dt->event_context)
-        return;
 
-    if (tools_isactive(dt, TOOLS_SELECT)) {
+    if (!dt->event_context) {
+        return;
+    }
+
+    if (dynamic_cast<Inkscape::UI::Tools::SelectTool *>(dt->event_context)) {
         if (selector_toggled) {
             if (switch_selector_to)
                 tools_switch(dt, switch_selector_to);
@@ -243,10 +247,12 @@ static void sp_toggle_selector(SPDesktop *dt) {
  * Subroutine of sp_event_context_private_root_handler().
  */
 void sp_toggle_dropper(SPDesktop *dt) {
-    if (!dt->event_context)
-        return;
 
-    if (tools_isactive(dt, TOOLS_DROPPER)) {
+    if (!dt->event_context) {
+        return;
+    }
+
+    if (dynamic_cast<Inkscape::UI::Tools::DropperTool *>(dt->event_context)) {
         if (dropper_toggled) {
             if (switch_dropper_to)
                 tools_switch(dt, switch_dropper_to);
@@ -288,7 +294,11 @@ bool ToolBase::_keyboardMove(GdkEventKey const &event, Geom::Point const &dir)
     if (held_control(event)) return false;
     unsigned num = 1 + combine_key_events(shortcut_key(event), 0);
     Geom::Point delta = dir * num;
-    if (held_shift(event)) delta *= 10;
+
+    if (held_shift(event)) {
+        delta *= 10;
+    }
+
     if (held_alt(event)) {
         delta /= desktop->current_zoom();
     } else {
@@ -296,15 +306,16 @@ bool ToolBase::_keyboardMove(GdkEventKey const &event, Geom::Point const &dir)
         double nudge = prefs->getDoubleLimited("/options/nudgedistance/value", 2, 0, 1000, "px");
         delta *= nudge;
     }
+
     if (shape_editor && shape_editor->has_knotholder()) {
         KnotHolder * knotholder = shape_editor->knotholder;
         if (knotholder) {
             knotholder->transform_selected(Geom::Translate(delta));
         }
-    } else if (tools_isactive(desktop, TOOLS_NODES)) {
-        Inkscape::UI::Tools::NodeTool *nt = static_cast<Inkscape::UI::Tools::NodeTool*>(desktop->event_context);
+    } else {
+        auto nt = dynamic_cast<Inkscape::UI::Tools::NodeTool *>(desktop->event_context);
         if (nt) {
-            for(auto i=nt->_shape_editors.begin();i!=nt->_shape_editors.end();++i){
+            for (auto i = nt->_shape_editors.begin(); i != nt->_shape_editors.end(); ++i) {
                 ShapeEditor * shape_editor = i->second;
                 if (shape_editor && shape_editor->has_knotholder()) {
                     KnotHolder * knotholder = shape_editor->knotholder;
@@ -315,6 +326,7 @@ bool ToolBase::_keyboardMove(GdkEventKey const &event, Geom::Point const &dir)
             }
         }
     }
+
     return true;
 }
 
@@ -1425,7 +1437,7 @@ void sp_event_context_snap_delay_handler(ToolBase *ec,
     bool const c1 = event->state & GDK_BUTTON2_MASK; // We shouldn't hold back any events when other mouse buttons have been
     bool const c2 = event->state & GDK_BUTTON3_MASK; // pressed, e.g. when scrolling with the middle mouse button; if we do then
     // Inkscape will get stuck in an unresponsive state
-    bool const c3 = tools_isactive(ec->getDesktop(), TOOLS_CALLIGRAPHIC);
+    bool const c3 = dynamic_cast<Inkscape::UI::Tools::CalligraphicTool *>(ec);
     // The snap delay will repeat the last motion event, which will lead to
     // erroneous points in the calligraphy context. And because we don't snap
     // in this context, we might just as well disable the snap delay all together

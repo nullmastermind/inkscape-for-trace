@@ -125,17 +125,6 @@ tools_prefpath2num(char const *id)
 }
 
 int
-tools_isactive(SPDesktop *dt, unsigned num)
-{
-    g_assert( num < G_N_ELEMENTS(tool_names) );
-    if (dynamic_cast<ToolBase *>(dt->event_context)) {
-        return dt->event_context->pref_observer->observed_path == tool_names[num];
-    } else {
-        return FALSE;
-    }
-}
-
-int
 tools_active(SPDesktop *dt)
 {
     return tools_prefpath2num(dt->event_context->pref_observer->observed_path.data());

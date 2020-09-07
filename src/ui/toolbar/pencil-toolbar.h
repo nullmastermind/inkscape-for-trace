@@ -4,7 +4,7 @@
 
 /**
  * @file
- * Pencil aux toolbar
+ * Pencil and pen toolbars
  */
 /* Authors:
  *   MenTaLguY <mental@rydia.net>

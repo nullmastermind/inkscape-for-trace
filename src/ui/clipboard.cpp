@@ -14,48 +14,49 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "clipboard.h"
+
 #include <giomm/application.h>
+#include <glib/gstdio.h> // for g_file_set_contents etc., used in _onGet and paste
+#include <glibmm/i18n.h>
 #include <gtkmm/clipboard.h>
-#include "ui/clipboard.h"
+
+#include <2geom/transforms.h>
 
 // TODO: reduce header bloat if possible
 
-#include "file.h" // for file_import, used in _pasteImage
-#include <glibmm/i18n.h>
-#include <glib/gstdio.h> // for g_file_set_contents etc., used in _onGet and paste
-#include "inkgc/gc-core.h"
-#include "xml/repr.h"
-#include "xml/sp-css-attr.h"
-#include "inkscape.h"
-#include "desktop.h"
-
-#include "desktop-style.h" // for sp_desktop_set_style, used in _pasteStyle
-#include "document.h"
-#include "message-stack.h"
 #include "context-fns.h"
-#include "ui/tools/dropper-tool.h" // used in copy()
+#include "desktop-style.h" // for sp_desktop_set_style, used in _pasteStyle
+#include "desktop.h"
+#include "document.h"
+#include "file.h"          // for file_import, used in _pasteImage
+#include "gradient-drag.h"
+#include "inkscape.h"
+#include "message-stack.h"
+#include "path-chemistry.h"
+#include "selection-chemistry.h"
+#include "style.h"
+#include "text-chemistry.h"
+#include "text-editing.h"
+
 #include "extension/db.h" // extension database
+#include "extension/find_extension_by_mime.h"
 #include "extension/input.h"
 #include "extension/output.h"
-#include "selection-chemistry.h"
-#include <2geom/transforms.h>
-#include "gradient-drag.h"
-#include "live_effects/lpeobject.h"
-#include "live_effects/lpeobject-reference.h"
-#include "live_effects/parameter/path.h"
-#include "ui/tools/text-tool.h"
-#include "text-editing.h"
-#include "text-chemistry.h"
-#include "ui/tools-switch.h"
-#include "path-chemistry.h"
-#include "util/units.h"
+
 #include "helper/png-write.h"
-#include "extension/find_extension_by_mime.h"
+
+#include "inkgc/gc-core.h"
+
+#include "live_effects/lpeobject-reference.h"
+#include "live_effects/lpeobject.h"
+#include "live_effects/parameter/path.h"
 
 #include "object/box3d.h"
 #include "object/persp3d.h"
 #include "object/sp-clippath.h"
 #include "object/sp-defs.h"
+#include "object/sp-flowtext.h"
 #include "object/sp-gradient-reference.h"
 #include "object/sp-hatch.h"
 #include "object/sp-item-transform.h"
@@ -67,14 +68,21 @@
 #include "object/sp-rect.h"
 #include "object/sp-root.h"
 #include "object/sp-shape.h"
-#include "object/sp-flowtext.h"
 #include "object/sp-textpath.h"
 #include "object/sp-use.h"
-#include "style.h"
 
-#include "svg/svg.h" // for sp_svg_transform_write, used in _copySelection
 #include "svg/css-ostringstream.h" // used in copy
 #include "svg/svg-color.h"
+#include "svg/svg.h"               // for sp_svg_transform_write, used in _copySelection
+
+#include "ui/tools/dropper-tool.h" // used in copy()
+#include "ui/tools/text-tool.h"
+
+#include "util/units.h"
+
+#include "xml/repr.h"
+#include "xml/sp-css-attr.h"
+
 
 /// Made up mimetype to represent Gdk::Pixbuf clipboard contents.
 #define CLIPBOARD_GDK_PIXBUF_TARGET "image/x-gdk-pixbuf"
@@ -87,7 +95,6 @@
 
 namespace Inkscape {
 namespace UI {
-
 
 /**
  * Default implementation of the clipboard manager.
@@ -238,7 +245,8 @@ void ClipboardManagerImpl::copy(ObjectSet *set)
         }
 
         // Special case for when the color picker ("dropper") is active - copies color under cursor
-        if (tools_isactive(desktop, TOOLS_DROPPER)) {
+        auto dt = dynamic_cast<Inkscape::UI::Tools::DropperTool *>(desktop->event_context);
+        if (dt) {
             //_setClipboardColor(sp_dropper_context_get_color(desktop->event_context));
             _setClipboardColor(SP_DROPPER_CONTEXT(desktop->event_context)->get_color());
             _discardInternalClipboard();
@@ -247,7 +255,8 @@ void ClipboardManagerImpl::copy(ObjectSet *set)
 
         // Special case for when the text tool is active - if some text is selected, copy plain text,
         // not the object that holds it; also copy the style at cursor into
-        if (tools_isactive(desktop, TOOLS_TEXT)) {
+        auto tt = dynamic_cast<Inkscape::UI::Tools::TextTool *>(desktop->event_context);
+        if (tt) {
             _discardInternalClipboard();
             Glib::ustring selected_text = Inkscape::UI::Tools::sp_text_get_selected_text(desktop->event_context);
             _clipboard->set_text(selected_text);
@@ -1110,7 +1119,7 @@ bool ClipboardManagerImpl::_pasteText(SPDesktop *desktop)
     }
 
     // if the text editing tool is active, paste the text into the active text object
-    if (tools_isactive(desktop, TOOLS_TEXT)) {
+    if (dynamic_cast<Inkscape::UI::Tools::TextTool *>(desktop->event_context)) {
         return Inkscape::UI::Tools::sp_text_paste_inline(desktop->event_context);
     }
     return false;

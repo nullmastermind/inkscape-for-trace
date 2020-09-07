@@ -91,6 +91,8 @@
 #include "ui/tools-switch.h"
 #include "ui/tools/freehand-base.h"
 #include "ui/tools/node-tool.h"
+#include "ui/tools/pen-tool.h"
+#include "ui/tools/pencil-tool.h"
 #include "ui/tools/select-tool.h"
 #include "ui/widget/canvas.h"  // Canvas area
 
@@ -1578,13 +1580,18 @@ void ObjectVerb::perform( SPAction *action, void *data)
     if (!bbox) {
         return;
     }
+
     // If the rotation center of the selection is visible, choose it as reference point
     // for horizontal and vertical flips. Otherwise, take the center of the bounding box.
     Geom::Point center;
-    if (tools_isactive(dt, TOOLS_SELECT) && sel->center() && SP_SELECT_CONTEXT(ec)->_seltrans->centerIsVisible())
+    if (dynamic_cast<Inkscape::UI::Tools::SelectTool *>(ec) &&
+        sel->center()                                                      &&
+        SP_SELECT_CONTEXT(ec)->_seltrans->centerIsVisible()                ) {
         center = *sel->center();
-    else
+    } else {
         center = bbox->midpoint();
+    }
+
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_OBJECT_ROTATE_90_CW:
             sel->rotate90(false);
@@ -1913,7 +1920,8 @@ void ZoomVerb::perform(SPAction *action, void *data)
                  GDK_KEY_KP_Add, 0); // with any mask
             // FIXME what if zoom out is bound to something other than subtract?
             // While drawing with the pen/pencil tool, zoom towards the end of the unfinished path
-            if (tools_isactive(dt, TOOLS_FREEHAND_PENCIL) || tools_isactive(dt, TOOLS_FREEHAND_PEN)) {
+            if (dynamic_cast<Inkscape::UI::Tools::PencilTool *>(ec) ||
+                dynamic_cast<Inkscape::UI::Tools::PenTool    *>(ec)  ) {
                 SPCurve const *rc = SP_DRAW_CONTEXT(ec)->red_curve.get();
                 if (!rc->is_empty()) {
                     Geom::Point const zoom_to (*rc->last_point());
@@ -1930,8 +1938,9 @@ void ZoomVerb::perform(SPAction *action, void *data)
             gint mul = 1 + Inkscape::UI::Tools::gobble_key_events(
                  GDK_KEY_KP_Subtract, 0); // with any mask
             // While drawing with the pen/pencil tool, zoom away from the end of the unfinished path
-            if (tools_isactive(dt, TOOLS_FREEHAND_PENCIL) || tools_isactive(dt, TOOLS_FREEHAND_PEN)) {
-                SPCurve const *rc = SP_DRAW_CONTEXT(ec)->red_curve.get();
+            if (dynamic_cast<Inkscape::UI::Tools::PencilTool *>(ec) ||
+                dynamic_cast<Inkscape::UI::Tools::PenTool    *>(ec)  ) {
+                 SPCurve const *rc = SP_DRAW_CONTEXT(ec)->red_curve.get();
                 if (!rc->is_empty()) {
                     Geom::Point const zoom_to (*rc->last_point());
                     dt->zoom_relative_keep_point(zoom_to, 1 / (mul*zoom_inc));
@@ -1979,7 +1988,8 @@ void ZoomVerb::perform(SPAction *action, void *data)
         {
             gint mul = 1 + Inkscape::UI::Tools::gobble_key_events( GDK_KEY_parenleft, 0);
             // While drawing with the pen/pencil tool, rotate towards the end of the unfinished path
-            if (tools_isactive(dt, TOOLS_FREEHAND_PENCIL) || tools_isactive(dt, TOOLS_FREEHAND_PEN)) {
+            if (dynamic_cast<Inkscape::UI::Tools::PencilTool *>(ec) ||
+                dynamic_cast<Inkscape::UI::Tools::PenTool    *>(ec)  ) {
                 SPCurve const *rc = SP_DRAW_CONTEXT(ec)->red_curve.get();
                 if (!rc->is_empty()) {
                     Geom::Point const rotate_to (*rc->last_point());
@@ -1995,7 +2005,8 @@ void ZoomVerb::perform(SPAction *action, void *data)
         {
             gint mul = 1 + Inkscape::UI::Tools::gobble_key_events( GDK_KEY_parenright, 0);
             // While drawing with the pen/pencil tool, rotate towards the end of the unfinished path
-            if (tools_isactive(dt, TOOLS_FREEHAND_PENCIL) || tools_isactive(dt, TOOLS_FREEHAND_PEN)) {
+            if (dynamic_cast<Inkscape::UI::Tools::PencilTool *>(ec) ||
+                dynamic_cast<Inkscape::UI::Tools::PenTool    *>(ec)  ) {
                 SPCurve const *rc = SP_DRAW_CONTEXT(ec)->red_curve.get();
                 if (!rc->is_empty()) {
                     Geom::Point const rotate_to (*rc->last_point());
@@ -2013,7 +2024,8 @@ void ZoomVerb::perform(SPAction *action, void *data)
         case SP_VERB_FLIP_HORIZONTAL:
         {
             // While drawing with the pen/pencil tool, flip towards the end of the unfinished path
-            if (tools_isactive(dt, TOOLS_FREEHAND_PENCIL) || tools_isactive(dt, TOOLS_FREEHAND_PEN)) {
+            if (dynamic_cast<Inkscape::UI::Tools::PencilTool *>(ec) ||
+                dynamic_cast<Inkscape::UI::Tools::PenTool    *>(ec)  ) {
                 SPCurve const *rc = SP_DRAW_CONTEXT(ec)->red_curve.get();
                 if (!rc->is_empty()) {
                     Geom::Point const flip_to (*rc->last_point());
@@ -2029,7 +2041,8 @@ void ZoomVerb::perform(SPAction *action, void *data)
         {
             /* gint mul = 1 + */ Inkscape::UI::Tools::gobble_key_events( GDK_KEY_parenright, 0);
             // While drawing with the pen/pencil tool, flip towards the end of the unfinished path
-            if (tools_isactive(dt, TOOLS_FREEHAND_PENCIL) || tools_isactive(dt, TOOLS_FREEHAND_PEN)) {
+            if (dynamic_cast<Inkscape::UI::Tools::PencilTool *>(ec) ||
+                dynamic_cast<Inkscape::UI::Tools::PenTool    *>(ec)  ) {
                 SPCurve const *rc = SP_DRAW_CONTEXT(ec)->red_curve.get();
                 if (!rc->is_empty()) {
                     Geom::Point const flip_to (*rc->last_point());

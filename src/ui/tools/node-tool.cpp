@@ -270,10 +270,16 @@ void NodeTool::finish()
 // show helper paths of the applied LPE, if any
 void sp_update_helperpath(SPDesktop *desktop)
 {
-    if (!desktop || !tools_isactive(desktop, TOOLS_NODES)) {
+    if (!desktop) {
         return;
     }
-    Inkscape::UI::Tools::NodeTool *nt = static_cast<Inkscape::UI::Tools::NodeTool*>(desktop->event_context);
+
+    Inkscape::UI::Tools::NodeTool *nt = dynamic_cast<Inkscape::UI::Tools::NodeTool*>(desktop->event_context);
+    if (!nt) {
+        std::cerr << "sp_update_helperpath called when Node Tool not active!" << std::endl;
+        return;
+    }
+
     Inkscape::Selection *selection = desktop->getSelection();
     for (auto hp : nt->_helperpath_tmpitem) {
         desktop->remove_temporary_canvasitem(hp);

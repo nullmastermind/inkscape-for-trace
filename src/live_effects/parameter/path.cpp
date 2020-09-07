@@ -90,10 +90,10 @@ PathParam::~PathParam()
 //    using namespace Inkscape::UI;
 //    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 //    if (desktop) {
-//        if (tools_isactive(desktop, TOOLS_NODES)) {
+//        Inkscape::UI::Tools::NodeTool *nt = dynamic_cast<Inkscape::UI::Tools::NodeTool*>(desktop->event_context);
+//        if (nt) {
 //            SPItem * item = SP_ACTIVE_DESKTOP->getSelection()->singleItem();
 //            if (item) {
-//                Inkscape::UI::Tools::NodeTool *nt = static_cast<Inkscape::UI::Tools::NodeTool*>(desktop->event_context);
 //                std::set<ShapeRecord> shapes;
 //                ShapeRecord r;
 //                r.item = item;
@@ -104,8 +104,8 @@ PathParam::~PathParam()
 //    }
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (desktop) {
-        // TODO remove the tools_switch atrocity.
-        if (tools_isactive(desktop, TOOLS_NODES)) {
+        if (dynamic_cast<Inkscape::UI::Tools::NodeTool* >(desktop->event_context)) {
+            // Why is this switching tools twice? Probably to reinitialize Node Tool.
             tools_switch(desktop, TOOLS_SELECT);
             tools_switch(desktop, TOOLS_NODES);
         }
@@ -271,12 +271,12 @@ PathParam::param_editOncanvas(SPItem *item, SPDesktop * dt)
     DocumentUndo::setUndoSensitive(document, false);
     using namespace Inkscape::UI;
 
-    // TODO remove the tools_switch atrocity.
-    if (!tools_isactive(dt, TOOLS_NODES)) {
+    Inkscape::UI::Tools::NodeTool *nt = dynamic_cast<Inkscape::UI::Tools::NodeTool*>(dt->event_context);
+    if (!nt) {
         tools_switch(dt, TOOLS_NODES);
+        nt = dynamic_cast<Inkscape::UI::Tools::NodeTool*>(dt->event_context);
     }
 
-    Inkscape::UI::Tools::NodeTool *nt = static_cast<Inkscape::UI::Tools::NodeTool*>(dt->event_context);
     std::set<ShapeRecord> shapes;
     ShapeRecord r;
 

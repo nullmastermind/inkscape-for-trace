@@ -699,6 +699,7 @@ void SPDesktop::setEventContext(const std::string& toolName)
     }
 
     if (toolName.empty()) {
+        std::cerr << "SPDesktop::setEventContext: No toolname!" << std::endl;
         event_context = nullptr;
     } else {
         event_context = ToolFactory::createObject(toolName);

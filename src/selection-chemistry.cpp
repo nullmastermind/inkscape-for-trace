@@ -117,7 +117,9 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 using Inkscape::DocumentUndo;
 using Geom::X;
 using Geom::Y;
+using Inkscape::UI::Tools::GradientTool;
 using Inkscape::UI::Tools::NodeTool;
+using Inkscape::UI::Tools::TextTool;
 using namespace Inkscape;
 
 /* The clipboard handling is in ui/clipboard.cpp now. There are some legacy functions left here,
@@ -145,8 +147,8 @@ namespace Inkscape {
 
 void SelectionHelper::selectAll(SPDesktop *dt)
 {
-    if (tools_isactive(dt, TOOLS_NODES)) {
-        NodeTool *nt = static_cast<NodeTool*>(dt->event_context);
+    NodeTool *nt = dynamic_cast<NodeTool*>(dt->event_context);
+    if (nt) {
         if (!nt->_multipath->empty()) {
             nt->_multipath->selectSubpaths();
             return;
@@ -157,8 +159,8 @@ void SelectionHelper::selectAll(SPDesktop *dt)
 
 void SelectionHelper::selectAllInAll(SPDesktop *dt)
 {
-    if (tools_isactive(dt, TOOLS_NODES)) {
-        NodeTool *nt = static_cast<NodeTool*>(dt->event_context);
+    NodeTool *nt = dynamic_cast<NodeTool*>(dt->event_context);
+    if (nt) {
         nt->_selected_nodes->selectAll();
     } else {
         sp_edit_select_all_in_all_layers(dt);
@@ -167,11 +169,7 @@ void SelectionHelper::selectAllInAll(SPDesktop *dt)
 
 void SelectionHelper::selectNone(SPDesktop *dt)
 {
-    NodeTool *nt = nullptr;
-    if (tools_isactive(dt, TOOLS_NODES)) {
-        nt = static_cast<NodeTool*>(dt->event_context);
-    }
-
+    NodeTool *nt = dynamic_cast<NodeTool*>(dt->event_context);
     if (nt && !nt->_selected_nodes->empty()) {
         nt->_selected_nodes->clear();
     } else if (!dt->getSelection()->isEmpty()) {
@@ -209,8 +207,8 @@ void SelectionHelper::selectSameObjectType(SPDesktop *dt)
 
 void SelectionHelper::invert(SPDesktop *dt)
 {
-    if (tools_isactive(dt, TOOLS_NODES)) {
-        NodeTool *nt = static_cast<NodeTool*>(dt->event_context);
+    NodeTool *nt = dynamic_cast<NodeTool*>(dt->event_context);
+    if (nt) {
         nt->_multipath->invertSelectionInSubpaths();
     } else {
         sp_edit_invert(dt);
@@ -219,8 +217,8 @@ void SelectionHelper::invert(SPDesktop *dt)
 
 void SelectionHelper::invertAllInAll(SPDesktop *dt)
 {
-    if (tools_isactive(dt, TOOLS_NODES)) {
-        NodeTool *nt = static_cast<NodeTool*>(dt->event_context);
+    NodeTool *nt = dynamic_cast<NodeTool*>(dt->event_context);
+    if (nt) {
         nt->_selected_nodes->invertSelection();
     } else {
         sp_edit_invert_in_all_layers(dt);
@@ -230,8 +228,8 @@ void SelectionHelper::invertAllInAll(SPDesktop *dt)
 void SelectionHelper::reverse(SPDesktop *dt)
 {
     // TODO make this a virtual method of event context!
-    if (tools_isactive(dt, TOOLS_NODES)) {
-        NodeTool *nt = static_cast<NodeTool*>(dt->event_context);
+    NodeTool *nt = dynamic_cast<NodeTool*>(dt->event_context);
+    if (nt) {
         nt->_multipath->reverseSubpaths();
     } else {
         dt->getSelection()->pathReverse();
@@ -240,12 +238,15 @@ void SelectionHelper::reverse(SPDesktop *dt)
 
 void SelectionHelper::selectNext(SPDesktop *dt)
 {
-    Inkscape::UI::Tools::ToolBase *ec = dt->event_context;
-    if (tools_isactive(dt, TOOLS_NODES)) {
-        NodeTool *nt = static_cast<NodeTool*>(dt->event_context);
+    NodeTool *nt = dynamic_cast<NodeTool*>(dt->event_context);
+    if (nt) {
         nt->_multipath->shiftSelection(1);
-    } else if (tools_isactive(dt, TOOLS_GRADIENT)
-               && ec->_grdrag->isNonEmpty()) {
+        return;
+    }
+
+    Inkscape::UI::Tools::ToolBase *ec = dt->event_context;
+    GradientTool *gt = dynamic_cast<GradientTool*>(ec);
+    if (gt && ec->_grdrag->isNonEmpty()) {
         Inkscape::UI::Tools::sp_gradient_context_select_next(ec);
     } else {
         sp_selection_item_next(dt);
@@ -254,12 +255,15 @@ void SelectionHelper::selectNext(SPDesktop *dt)
 
 void SelectionHelper::selectPrev(SPDesktop *dt)
 {
-    Inkscape::UI::Tools::ToolBase *ec = dt->event_context;
-    if (tools_isactive(dt, TOOLS_NODES)) {
-        NodeTool *nt = static_cast<NodeTool*>(dt->event_context);
+    NodeTool *nt = dynamic_cast<NodeTool*>(dt->event_context);
+    if (nt) {
         nt->_multipath->shiftSelection(-1);
-    } else if (tools_isactive(dt, TOOLS_GRADIENT)
-               && ec->_grdrag->isNonEmpty()) {
+        return;
+    }
+
+    Inkscape::UI::Tools::ToolBase *ec = dt->event_context;
+    GradientTool *gt = dynamic_cast<GradientTool*>(ec);
+    if (gt && ec->_grdrag->isNonEmpty()) {
         Inkscape::UI::Tools::sp_gradient_context_select_prev(ec);
     } else {
         sp_selection_item_prev(dt);
@@ -271,12 +275,13 @@ void SelectionHelper::selectPrev(SPDesktop *dt)
  */
 void SelectionHelper::fixSelection(SPDesktop *dt)
 {
-    if(!dt)
+    if (!dt) {
         return;
+    }
 
     Inkscape::Selection *selection = dt->getSelection();
 
-    std::vector<SPItem*> items ;
+    std::vector<SPItem*> items;
 
     auto selList = selection->items();
 
@@ -384,7 +389,7 @@ static void sp_selection_delete_impl(std::vector<SPItem*> const &items, bool pro
 
 void ObjectSet::deleteItems()
 {
-    if(desktop() && tools_isactive(desktop(), TOOLS_TEXT)){
+    if (desktop() && dynamic_cast<TextTool*>(desktop()->event_context)) {
          if (Inkscape::UI::Tools::sp_text_delete_selection(desktop()->event_context)) {
             DocumentUndo::done(desktop()->getDocument(), SP_VERB_CONTEXT_TEXT,
                                _("Delete text"));
@@ -392,14 +397,15 @@ void ObjectSet::deleteItems()
          }
     }
 
-        if (isEmpty()) {
-            selection_display_message(desktop(),Inkscape::WARNING_MESSAGE, _("<b>Nothing</b> was deleted."));
+    if (isEmpty()) {
+        selection_display_message(desktop(),Inkscape::WARNING_MESSAGE, _("<b>Nothing</b> was deleted."));
         return;
     }
+
     std::vector<SPItem*> selected(items().begin(), items().end());
     clear();
     sp_selection_delete_impl(selected);
-    if(SPDesktop *d = desktop()){
+    if (SPDesktop *d = desktop()) {
         d->currentLayer()->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 
         /* a tool may have set up private information in it's selection context
@@ -410,10 +416,10 @@ void ObjectSet::deleteItems()
          */
         tools_switch( d, tools_active( d ) );
     }
-    if(document())
-            DocumentUndo::done(document(), SP_VERB_EDIT_DELETE,
-                           _("Delete"));
 
+    if(document()) {
+        DocumentUndo::done(document(), SP_VERB_EDIT_DELETE, _("Delete"));
+    }
 }
 
 

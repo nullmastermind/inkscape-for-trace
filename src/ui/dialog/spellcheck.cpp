@@ -555,9 +555,11 @@ SpellCheck::nextWord()
 
         // select text; if in Text tool, position cursor to the beginning of word
         // unless it is already in the word
-        if (desktop->selection->singleItem() != _text)
+        if (desktop->selection->singleItem() != _text) {
             desktop->selection->set (_text);
-        if (tools_isactive(desktop, TOOLS_TEXT)) {
+        }
+
+        if (dynamic_cast<Inkscape::UI::Tools::TextTool *>(desktop->event_context)) {
             Inkscape::Text::Layout::iterator *cursor =
                 sp_text_context_get_cursor_position(SP_TEXT_CONTEXT(desktop->event_context), _text);
             if (!cursor) // some other text is selected there

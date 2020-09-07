@@ -204,18 +204,16 @@ KnotHolder::transform_selected(Geom::Affine transform){
 
 void
 KnotHolder::unselect_knots(){
-    if (tools_isactive(desktop, TOOLS_NODES)) {
-        Inkscape::UI::Tools::NodeTool *nt = static_cast<Inkscape::UI::Tools::NodeTool*>(desktop->event_context);
-        if (nt) {
-            for(auto i=nt->_shape_editors.begin();i!=nt->_shape_editors.end();++i){
-                Inkscape::UI::ShapeEditor * shape_editor = i->second;
-                if (shape_editor && shape_editor->has_knotholder()) {
-                    KnotHolder * knotholder = shape_editor->knotholder;
-                    if (knotholder) {
-                        for(auto e : knotholder->entity) {
-                            if (e->knot->flags & SP_KNOT_SELECTED) {
-                                e->knot->selectKnot(false);
-                            }
+    Inkscape::UI::Tools::NodeTool *nt = dynamic_cast<Inkscape::UI::Tools::NodeTool*>(desktop->event_context);
+    if (nt) {
+        for (auto i = nt->_shape_editors.begin(); i != nt->_shape_editors.end(); ++i) {
+            Inkscape::UI::ShapeEditor * shape_editor = i->second;
+            if (shape_editor && shape_editor->has_knotholder()) {
+                KnotHolder * knotholder = shape_editor->knotholder;
+                if (knotholder) {
+                    for (auto e : knotholder->entity) {
+                        if (e->knot->flags & SP_KNOT_SELECTED) {
+                            e->knot->selectKnot(false);
                         }
                     }
                 }

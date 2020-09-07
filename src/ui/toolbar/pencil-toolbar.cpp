@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
- * Pencil aux toolbar
+ * Pencil and pen toolbars
  */
 /* Authors:
  *   MenTaLguY <mental@rydia.net>
@@ -45,8 +45,8 @@
 #include "object/sp-shape.h"
 
 #include "ui/icon-names.h"
-#include "ui/tools-switch.h"
 #include "ui/tools/pen-tool.h"
+#include "ui/tools/pencil-tool.h"
 
 #include "ui/widget/canvas.h"
 #include "ui/widget/label-tool-item.h"
@@ -203,8 +203,11 @@ PencilToolbar::mode_changed(int mode)
             _flatten_simplify->set_visible(visible && _simplify->get_active());
         }
     }
-    if (tools_isactive(_desktop, TOOLS_FREEHAND_PEN)) {
-        SP_PEN_CONTEXT(_desktop->event_context)->setPolylineMode();
+
+    // Recall, the PencilToolbar is also used as the PenToolbar with minor changes.
+    auto *pt = dynamic_cast<Inkscape::UI::Tools::PenTool *>(_desktop->event_context);
+    if (pt) {
+        pt->setPolylineMode();
     }
 }
 
@@ -212,9 +215,8 @@ PencilToolbar::mode_changed(int mode)
 Glib::ustring const
 PencilToolbar::freehand_tool_name()
 {
-    return ( tools_isactive(_desktop, TOOLS_FREEHAND_PEN)
-             ? "/tools/freehand/pen"
-             : "/tools/freehand/pencil" );
+    auto *pt = dynamic_cast<Inkscape::UI::Tools::PencilTool *>(_desktop->event_context);
+    return ( pt ? "/tools/freehand/pencil" : "/tools/freehand/pen");
 }
 
 void

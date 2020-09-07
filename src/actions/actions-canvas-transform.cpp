@@ -18,8 +18,10 @@
 #include "inkscape-window.h"
 #include "desktop.h"
 
-#include "ui/tools-switch.h"  // TOOLS_FREEHAND_PEN, etc.
 #include "ui/tools/freehand-base.h" // SP_DRAW_CONTEXT
+#include "ui/tools/pen-tool.h"
+#include "ui/tools/pencil-tool.h"
+
 #include "ui/widget/canvas.h" // Canvas area
 
 enum {
@@ -39,8 +41,8 @@ enum {
 static void
 canvas_zoom_helper(SPDesktop* dt, const Geom::Point& midpoint, double zoom_factor)
 {
-    if (tools_isactive(dt, TOOLS_FREEHAND_PENCIL) ||
-        tools_isactive(dt, TOOLS_FREEHAND_PEN   ) ) {
+    if (dynamic_cast<Inkscape::UI::Tools::PencilTool *>(dt->event_context) ||
+        dynamic_cast<Inkscape::UI::Tools::PenTool    *>(dt->event_context)  ) {
 
         // Zoom around end of unfinished path.
         boost::optional<Geom::Point> zoom_to =

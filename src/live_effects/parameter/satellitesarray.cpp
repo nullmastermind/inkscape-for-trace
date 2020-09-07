@@ -60,7 +60,7 @@ void SatellitesArrayParam::setPathVectorSatellites(PathVectorSatellites *pathVec
 void SatellitesArrayParam::reloadKnots()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (desktop && tools_isactive(desktop, TOOLS_NODES)) {
+    if (desktop) {
         Inkscape::UI::Tools::NodeTool *nt = static_cast<Inkscape::UI::Tools::NodeTool *>(desktop->event_context);
         if (nt) {
             for (auto i = nt->_shape_editors.begin(); i != nt->_shape_editors.end(); ++i) {

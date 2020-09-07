@@ -15,6 +15,7 @@
 #include "svg/svg.h"
 
 #include "ui/tools-switch.h"
+#include "ui/tools/node-tool.h"
 #include "object/sp-clippath.h"
 #include "object/sp-mask.h"
 #include "object/sp-path.h"
@@ -81,7 +82,7 @@ LPECloneOriginal::syncOriginal()
         refresh_widgets = true;
         SPDesktop *desktop = SP_ACTIVE_DESKTOP;
         sp_lpe_item_update_patheffect (sp_lpe_item, false, true);
-        if (desktop && tools_isactive(desktop, TOOLS_NODES)) {
+        if (desktop && dynamic_cast<Inkscape::UI::Tools::NodeTool *>(desktop->event_context)) {
             tools_switch(desktop, TOOLS_SELECT);
             tools_switch(desktop, TOOLS_NODES);
         }
