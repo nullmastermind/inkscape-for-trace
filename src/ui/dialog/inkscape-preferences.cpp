@@ -480,7 +480,7 @@ Gtk::TreePath InkscapePreferences::get_next_result(Gtk::TreeIter &iter, bool che
             } else {
                 return get_next_result(iter);
             }
-        } else if (path.up()) {
+        } else if (path.up() && path) {
             path.next();
             iter = _page_list.get_model()->get_iter(path);
             if (iter) {
@@ -501,6 +501,7 @@ Gtk::TreePath InkscapePreferences::get_next_result(Gtk::TreeIter &iter, bool che
             }
         }
     }
+    assert(!iter);
     return Gtk::TreePath(iter);
 }
 
