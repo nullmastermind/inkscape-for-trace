@@ -63,17 +63,6 @@ const std::string DropperTool::prefsPath = "/tools/dropper";
 
 DropperTool::DropperTool()
     : ToolBase(cursor_dropper_f_xpm)
-	, R(0)
-	, G(0)
-	, B(0)
-	, alpha(0)
-	, radius(0)
-	, invert(false)
-	, stroke(false)
-	, dropping(false)
-	, dragging(false)
-	, area(nullptr)
-	, centre(0, 0)
 {
 }
 
@@ -113,17 +102,28 @@ void DropperTool::finish() {
 
 /**
  * Returns the current dropper context color.
+ *
+ * - If in dropping mode, returns color from selected objects.
+ * Ignored if non_dropping set to true.
+ * - If in dragging mode, returns average color on canvas, depending on radius
+ * - If in pick mode, alpha is not premultiplied. Alpha is only set if in pick mode
+ * and setalpha is true. Both values are taken from preferences.
+ *
+ * @param invert If true, invert the rgb value
+ * @param non_dropping If true, use color from canvas, even in dropping mode.
  */
-guint32 DropperTool::get_color(bool invert, bool cache) {
+guint32 DropperTool::get_color(bool invert, bool non_dropping) {
     Inkscape::Preferences   *prefs = Inkscape::Preferences::get();
 
     int pick = prefs->getInt("/tools/dropper/pick", SP_DROPPER_PICK_VISIBLE);
     bool setalpha = prefs->getBool("/tools/dropper/setalpha", true);
 
-    double r = cache ? this->R_cache     : this->R;
-    double g = cache ? this->G_cache     : this->G;
-    double b = cache ? this->B_cache     : this->B;
-    double a = cache ? this->alpha_cache : this->alpha;
+    // non_dropping ignores dropping mode and always uses color from canvas.
+    // Used by the clipboard
+    double r = non_dropping ? this->non_dropping_R : this->R;
+    double g = non_dropping ? this->non_dropping_G : this->G;
+    double b = non_dropping ? this->non_dropping_B : this->B;
+    double a = non_dropping ? this->non_dropping_A : this->alpha;
 
     return SP_RGBA32_F_COMPOSE(
         fabs(invert - r),
@@ -156,7 +156,9 @@ bool DropperTool::root_handler(GdkEvent* event) {
         }
     }
 
-    // Get color from selected object instead.
+    // Get color from selected object
+    // Only if dropping mode enabled and object's color is set.
+    // Otherwise dropping mode disabled.
     if(this->dropping) {
 	Inkscape::Selection *selection = desktop->getSelection();
 	g_assert(selection);
@@ -213,7 +215,7 @@ bool DropperTool::root_handler(GdkEvent* event) {
                 ret = FALSE;
                 break;
             } else if (!this->space_panning) {
-                // otherwise, constantly calculate color no matter is any button pressed or not
+                // otherwise, constantly calculate color no matter if any button pressed or not
 
                 Geom::IntRect pick_area;
                 if (this->dragging) {
@@ -280,16 +282,18 @@ bool DropperTool::root_handler(GdkEvent* event) {
                 }
 
                 // remember color
-                this->R_cache = R;
-                this->G_cache = G;
-                this->B_cache = B;
-                this->alpha_cache = A;
-                if(!this->dropping) {
+                if (!this->dropping) {
                     this->R = R;
                     this->G = G;
                     this->B = B;
                     this->alpha = A;
                 }
+                // remember color from canvas, even in dropping mode
+                // These values are used by the clipboard
+                this->non_dropping_R = R;
+                this->non_dropping_G = G;
+                this->non_dropping_B = B;
+                this->non_dropping_A = A;
 
                 ret = TRUE;
             }

@@ -48,7 +48,7 @@ public:
 
 	const std::string& getPrefsPath() override;
 
-	guint32 get_color(bool invert=false, bool cache=false);
+	guint32 get_color(bool invert=false, bool non_dropping=false);
 
 protected:
 	void setup() override;
@@ -56,23 +56,26 @@ protected:
 	bool root_handler(GdkEvent* event) override;
 
 private:
-    double        R;
-    double        G;
-    double        B;
-    double        alpha;
-    double        R_cache;
-    double        G_cache;
-    double        B_cache;
-    double        alpha_cache;
+    // Stored color.
+    double R = 0.0;
+    double G = 0.0;
+    double B = 0.0;
+    double alpha = 0.0;
+    // Stored color taken from canvas. Used by clipboard.
+    // Identical to R, G, B, alpha if dropping disabled.
+    double non_dropping_R = 0.0;
+    double non_dropping_G = 0.0;
+    double non_dropping_B = 0.0;
+    double non_dropping_A = 0.0;
 
-    double radius;
-    bool invert;
-    bool stroke;
-    bool dropping;
-    bool dragging;
+    bool invert = false;   ///< Set color to inverse rgb value
+    bool stroke = false;   ///< Set to stroke color. In dropping mode, set from stroke color
+    bool dropping = false; ///< When true, get color from selected objects instead of canvas
+    bool dragging = false; ///< When true, get average color for region on canvas, instead of a single point
 
-    Inkscape::CanvasItemBpath* area;
-    Geom::Point centre;
+    double radius = 0.0;                       ///< Size of region under dragging mode
+    Inkscape::CanvasItemBpath* area = nullptr; ///< Circle depicting region's borders in dragging mode
+    Geom::Point centre {0, 0};                 ///< Center of region in dragging mode
 };
 
 }
