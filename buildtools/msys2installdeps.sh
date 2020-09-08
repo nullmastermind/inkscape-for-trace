@@ -86,16 +86,20 @@ $ARCH-python-lxml \
 $ARCH-python-numpy \
 $ARCH-python-pillow \
 $ARCH-python-six \
-$ARCH-python-gobject
+$ARCH-python-gobject \
+$ARCH-python-pyserial \
+$ARCH-python-coverage \
+$ARCH-scour
 
-PACKAGES="coverage pyserial scour"
+# install Python modules not provided as MSYS2/MinGW packages
+PACKAGES=""
 for arch in $(eval echo $ARCH); do
   case ${arch} in
     mingw-w64-i686)
-      /mingw32/bin/pip3 install --upgrade ${PACKAGES}
+      #/mingw32/bin/pip3 install --upgrade ${PACKAGES}
       ;;
     mingw-w64-x86_64)
-      /mingw64/bin/pip3 install --upgrade ${PACKAGES}
+      #/mingw64/bin/pip3 install --upgrade ${PACKAGES}
       ;;
   esac
 done
