@@ -502,7 +502,7 @@ Gtk::TreePath InkscapePreferences::get_next_result(Gtk::TreeIter &iter, bool che
         }
     }
     assert(!iter);
-    return Gtk::TreePath(iter);
+    return Gtk::TreePath();
 }
 
 /**
