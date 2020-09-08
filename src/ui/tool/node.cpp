@@ -7,6 +7,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <atomic>
 #include <iostream>
 #include <stdexcept>
 #include <boost/utility.hpp>
