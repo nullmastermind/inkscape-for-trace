@@ -728,7 +728,9 @@ Shortcuts::accelerator_to_shortcut(const Glib::ustring& accelerator)
 Gtk::AccelKey
 Shortcuts::get_from_event(GdkEventKey const *event, bool fix)
 {
-    Gdk::ModifierType initial_modifiers  = Gdk::ModifierType(event->state);
+    // MOD2 corresponds to the NumLock key. Masking it out allows
+    // shortcuts to work regardless of its state.
+    Gdk::ModifierType initial_modifiers  = Gdk::ModifierType(event->state & ~Gdk::MOD2_MASK);
     unsigned int consumed_modifiers = 0;
     //Gdk::ModifierType consumed_modifiers = Gdk::ModifierType(0);
 

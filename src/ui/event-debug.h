@@ -36,7 +36,10 @@ inline void ui_dump_event (GdkEvent *event, Glib::ustring const &prefix, bool me
     switch (event->type) {
 
         case GDK_KEY_PRESS:
-            std::cout << "GDK_KEY_PRESS: "   << event->key.hardware_keycode << std::endl;
+            std::cout << "GDK_KEY_PRESS: " << std::hex
+                      << " hardware: " << event->key.hardware_keycode
+                      << " state: "    << event->key.state
+                      << " keyval: "   << event->key.keyval << std::endl;
             break;
         case GDK_KEY_RELEASE:
             std::cout << "GDK_KEY_RELEASE: " << event->key.hardware_keycode << std::endl;
