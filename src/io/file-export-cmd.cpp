@@ -15,6 +15,7 @@
 
 #include "file-export-cmd.h"
 
+#include <filesystem>
 #include <png.h> // PNG export
 
 #include "document.h"
@@ -67,8 +68,8 @@ InkFileExportCmd::do_export(SPDocument* doc, std::string filename_in)
 
     // Get export type from filename supplied with --export-filename
     if (!export_filename.empty() && export_filename != "-") {
-        auto extension_pos = export_filename.find_last_of('.');
-        if (extension_pos == std::string::npos) {
+        auto fn = std::filesystem::path(export_filename);
+        if (!fn.has_extension()) {
             if (export_type.empty()) {
                 std::cerr << "InkFileExportCmd::do_export: No export type specified. "
                           << "Append a supported file extension to filename provided with --export-filename or "
@@ -78,8 +79,8 @@ InkFileExportCmd::do_export(SPDocument* doc, std::string filename_in)
                 // no extension is fine if --export-type is given
             }
         } else {
-            export_type_filename = export_filename.substr(extension_pos+1);
-            export_filename.erase(extension_pos);
+            export_type_filename = fn.extension().string().substr(1);
+            export_filename = fn.stem().string();
         }
     }
 

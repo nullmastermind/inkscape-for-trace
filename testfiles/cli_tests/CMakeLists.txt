@@ -119,6 +119,11 @@ add_cli_test(pdf-internal-mesh-import
 # --no-convert-text-baseline-spacing
 
 # --export-filename=FILENAME
+## check for https://gitlab.com/inkscape/inkscape/-/issues/1712
+install(DIRECTORY DESTINATION ${test.dir})
+add_cli_test(export-type-dot-separated PARAMETERS --export-type=svg,png
+                         INPUT_FILENAME empty.svg OUTPUT_FILENAME test.dir/empty
+                         EXPECTED_FILES test.dir/empty.svg test.dir/empty.png)
 
 # --export-overwrite
 
