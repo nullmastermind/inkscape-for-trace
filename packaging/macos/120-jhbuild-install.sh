@@ -64,32 +64,56 @@ download_url $URL_GTK_OSX/jhbuildrc-gtk-osx-custom-example \
   $(dirname $JHBUILDRC_CUSTOM) \
   $(basename $JHBUILDRC_CUSTOM)
 
-# JHBuild: paths
+# basic directory layout
 echo "buildroot = '$JHBUILD_BUILDROOT'" >> $JHBUILDRC_CUSTOM
 echo "checkoutroot = '$SRC_DIR'"        >> $JHBUILDRC_CUSTOM
 echo "prefix = '$VER_DIR'"              >> $JHBUILDRC_CUSTOM
 echo "tarballdir = '$PKG_DIR'"          >> $JHBUILDRC_CUSTOM
 
-# JHBuild: console output
+# run quietly with minimal output
 echo "quiet_mode = True"   >> $JHBUILDRC_CUSTOM
 echo "progress_bar = True" >> $JHBUILDRC_CUSTOM
 
-# JHBuild: moduleset
+# use custom moduleset
 echo "moduleset = '$URL_GTK_OSX_MODULESET'" >> $JHBUILDRC_CUSTOM
 
-# JHBuild: macOS SDK
-sed -i "" "s/^setup_sdk/#setup_sdk/"                      $JHBUILDRC_CUSTOM
-echo "setup_sdk(target=\"$MACOSX_DEPLOYMENT_TARGET\")" >> $JHBUILDRC_CUSTOM
-echo "os.environ[\"SDKROOT\"]=\"$SDKROOT\""            >> $JHBUILDRC_CUSTOM
+# set macOS SDK
+sed -i "" "s/^setup_sdk/#setup_sdk/"           $JHBUILDRC_CUSTOM
+echo "setup_sdk(target=\"$SDK_VERSION\")"   >> $JHBUILDRC_CUSTOM
+echo "os.environ[\"SDKROOT\"]=\"$SDKROOT\"" >> $JHBUILDRC_CUSTOM
 
-# JHBuild: TODO: I have forgotten why this is here
+# TODO: I have forgotten why this is here
 echo "if \"openssl\" in skip:"    >> $JHBUILDRC_CUSTOM
 echo "  skip.remove(\"openssl\")" >> $JHBUILDRC_CUSTOM
+
+# Remove harmful settings in regards to the target platform:
+#   - MACOSX_DEPLOYMENT_TARGET
+#   - -mmacosx-version-min
+#
+#   otool -l <library> | grep -A 3 -B 1 LC_VERSION_MIN_MACOSX
+#
+#           cmd LC_VERSION_MIN_MACOSX
+#       cmdsize 16
+#       version 10.11
+#           sdk n/a          < - - - notarized app won't load this library
+echo "os.environ.pop(\"MACOSX_DEPLOYMENT_TARGET\")" \
+    >> $JHBUILDRC_CUSTOM
+echo "os.environ[\"CFLAGS\"] = \"-I$SDKROOT/usr/include -isysroot $SDKROOT\"" \
+    >> $JHBUILDRC_CUSTOM
+echo "os.environ[\"CPPFLAGS\"] = \"-I$INC_DIR -I$SDKROOT/usr/include -isysroot $SDKROOT\"" \
+    >> $JHBUILDRC_CUSTOM
+echo "os.environ[\"CXXFLAGS\"] = \"-I$SDKROOT/usr/include -isysroot $SDKROOT\"" \
+    >> $JHBUILDRC_CUSTOM
+echo "os.environ[\"LDFLAGS\"] = \"-L$LIB_DIR -L$SDKROOT/usr/lib -isysroot $SDKROOT -Wl,-headerpad_max_install_names\"" \
+    >> $JHBUILDRC_CUSTOM
+echo "os.environ[\"OBJCFLAGS\"] = \"-I$SDKROOT/usr/include -isysroot $SDKROOT\"" \
+    >> $JHBUILDRC_CUSTOM
 
 # optional: use ccache if available
 # (But it's not as effective here as it is for building Inkscape.)
 if [ -d $CCACHE_BIN_DIR ]; then
   echo_i "JHBuild will use ccache"
-  echo "os.environ[\"CC\"] = \"$CCACHE_BIN_DIR/gcc\""  >> $JHBUILDRC_CUSTOM
-  echo "os.environ[\"CXX\"] = \"$CCACHE_BIN_DIR/g++\"" >> $JHBUILDRC_CUSTOM
+  echo "os.environ[\"CC\"] = \"$CCACHE_BIN_DIR/gcc\""   >> $JHBUILDRC_CUSTOM
+  echo "os.environ[\"OBJC\"] = \"$CCACHE_BIN_DIR/gcc\"" >> $JHBUILDRC_CUSTOM
+  echo "os.environ[\"CXX\"] = \"$CCACHE_BIN_DIR/g++\""  >> $JHBUILDRC_CUSTOM
 fi

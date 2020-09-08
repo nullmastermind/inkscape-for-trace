@@ -35,18 +35,3 @@ jhbuild build \
   openmp \
   poppler \
   potrace
-
-### build Python wheels ########################################################
-
-jhbuild run pip3 install wheel
-
-# We create our own wheel as the one from PyPi has been built with an SDK
-# lower than 10.9, breaking notarization for
-#   - etree.cpython-38-darwin.so
-#   - objectify.cpython-38-darwin.so
-
-install_source $PYTHON_LXML_SRC
-jhbuild run python3 setup.py bdist_wheel \
-  --plat-name macosx_${MACOSX_DEPLOYMENT_TARGET/./_}_x86_64 \
-  --bdist-dir $TMP_DIR/lxml \
-  --dist-dir $PKG_DIR
