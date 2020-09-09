@@ -3154,7 +3154,9 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
     }
 
     // Update all GUI text that includes shortcuts.
-    shortcuts.update_gui_text_recursive(iapp->get_active_window());
+    for (auto win : gapp->get_windows()) {
+        shortcuts.update_gui_text_recursive(win);
+    }
 }
 
 void InkscapePreferences::initPageSpellcheck()
