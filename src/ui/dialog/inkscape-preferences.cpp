@@ -1581,8 +1581,7 @@ void InkscapePreferences::initPageUI()
     _page_ui.add_line(false, "", _ui_rotationlock, "",
                        _("When enabled, common actions which normally rotate the canvas no longer do so by default"), true);
 
-    
-    _mouse_grabsize.init("/options/grabsize/value", 1, 7, 1, 2, 3, 0);
+        _mouse_grabsize.init("/options/grabsize/value", 1, 15, 1, 2, 3, 0);
     _page_ui.add_line(false, _("_Handle size:"), _mouse_grabsize, "",
                          _("Set the relative size of node handles"), true);
                          

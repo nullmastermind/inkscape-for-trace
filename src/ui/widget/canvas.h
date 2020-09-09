@@ -257,8 +257,8 @@ private:
         void notify(Inkscape::Preferences::Entry const &entry) override
         {
             if (entry.getEntryName() == "value") {
-                int size = entry.getIntLimited(3, 1, 7);
-            _canvas->update_canvas_item_ctrl_sizes(size);
+                int size = entry.getIntLimited(3, 1, 15);
+                _canvas->update_canvas_item_ctrl_sizes(size);
             }
         }
         Inkscape::UI::Widget::Canvas *_canvas = nullptr;

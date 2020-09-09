@@ -385,7 +385,7 @@ void CanvasItemCtrl::set_size_via_index(int size_index)
 {
     // Size must always be an odd number to center on pixel.
 
-    if (size_index < 1 || size_index > 7) {
+    if (size_index < 1 || size_index > 15) {
         std::cerr << "CanvasItemCtrl::set_size_via_index: size_index out of range!" << std::endl;
         size_index = 3;
     }
@@ -417,7 +417,7 @@ void CanvasItemCtrl::set_size_via_index(int size_index)
 void CanvasItemCtrl::set_size_default()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    int size = prefs->getIntLimited("/options/grabsize/value", 3, 1, 7);
+    int size = prefs->getIntLimited("/options/grabsize/value", 3, 1, 15);
     set_size_via_index(size);
 }
 
