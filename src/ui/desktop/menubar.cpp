@@ -35,7 +35,6 @@
 
 #include "object/sp-namedview.h"
 
-#include "ui/contextmenu.h" // Shift to make room for icons
 #include "ui/icon-loader.h"
 #include "ui/shortcuts.h"
 #include "ui/view/view.h"
@@ -161,21 +160,6 @@ set_name(Glib::ustring const &name, Gtk::MenuItem* menuitem)
             std::cerr << "set_name: could not find label!" << std::endl;
         }
     }
-}
-
-/* Install CSS to shift icons into the space reserved for toggles (i.e. check and radio items).
- *
- * TODO: This code already exists as a C++ version in the class ContextMenu so we can simply wrap
- *       it here. In future ContextMenu and the (to be created) class for the menu bar should then
- *       be derived from one common base class.
- *
- * TODO: This code is called everytime a menu is opened. We can certainly find a way to call it once.
- */
-static void
-shift_icons(Gtk::Menu* menu)
-{
-    ContextMenu *contextmenu = static_cast<ContextMenu*>(menu);
-    contextmenu->ShiftIcons();
 }
 
 // ================= MenuItem ====================
@@ -508,9 +492,6 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
                     menuitem->set_submenu(*submenu);
                     menu->append(*menuitem);
 
-                    submenu->signal_map().connect(
-                        sigc::bind<Gtk::Menu*>(sigc::ptr_fun(&shift_icons), submenu));
-
                     continue;
                 }
             }
@@ -648,12 +629,101 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
     }
 }
 
+/*
+ *  Install CSS to shift icons into the space reserved for toggles (i.e. check and radio items).
+ */
+static void
+shift_icons(Gtk::Menu* menu)
+{
+    static Glib::RefPtr<Gtk::CssProvider> provider;
+    if (!provider) {
+        provider = Gtk::CssProvider::create();
+        auto const screen = Gdk::Screen::get_default();
+        Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    }
+
+    // Calculate required shift. We need an example!
+    // Search for Gtk::MenuItem -> Gtk::Box -> Gtk::Image
+    for (auto child : menu->get_children()) {
+
+        auto menuitem = dynamic_cast<Gtk::MenuItem *>(child);
+        if (menuitem) {
+
+            auto box = dynamic_cast<Gtk::Box *>(menuitem->get_child());
+            if (box) {
+
+                auto children = box->get_children();
+                if (children.size() == 2) { // Image + Label
+
+                    auto image = dynamic_cast<Gtk::Image *>(box->get_children()[0]);
+                    if (image) {
+
+                        // OK, we have an example, do calculation.
+                        auto allocation_menuitem = menuitem->get_allocation();
+                        auto allocation_image = image->get_allocation();
+
+                        int shift = -allocation_image.get_x();
+                        if (menuitem->get_direction() == Gtk::TEXT_DIR_RTL) {
+                            shift += (allocation_menuitem.get_width() - allocation_image.get_width());
+                        }
+
+                        std::string css_str;
+                        if (menuitem->get_direction() == Gtk::TEXT_DIR_RTL) {
+                            css_str = "menuitem box image {margin-right:" + std::to_string(shift) + "px;}";
+                        } else {
+                            css_str = "menuitem box image {margin-left:" + std::to_string(shift) + "px;}";
+                        }
+                        provider->load_from_data(css_str);
+
+                        return; // We only need to do this once for a given submenu.
+                    }
+                }
+            }
+        }
+    }
+    // If we get here, it means there were no examples... but we don't care as there are no icons to shift anyway.
+}
+
+/*
+ * Find all submenus to add "shift_icons" callback. We need to do this for
+ * all submenus as some submenus are children of other submenus without icons.
+ */
+void
+indent_icons_recursive(Gtk::Widget *widget)
+{
+    auto menubar = dynamic_cast<Gtk::MenuBar *>(widget);
+    if (menubar) {
+        auto children = menubar->get_children(); // Should be Gtk::MenuItem
+        for (auto child : children) {
+            indent_icons_recursive(child);
+        }
+    }
+
+    auto menuitem = dynamic_cast<Gtk::MenuItem *>(widget);
+    if (menuitem) {
+
+        auto submenu = menuitem->get_submenu();
+        if (submenu) {
+            submenu->signal_map().connect(
+                sigc::bind<Gtk::Menu*>(sigc::ptr_fun(&shift_icons), submenu));
+
+            auto children = submenu->get_children();
+            for (auto child : children) {
+                indent_icons_recursive(child);
+            }
+        }
+    }
+}
+
 Gtk::MenuBar*
 build_menubar(Inkscape::UI::View::View* view)
 {
     Gtk::MenuBar* menubar = Gtk::manage(new Gtk::MenuBar());
     build_menu(menubar, INKSCAPE.get_menus()->parent(), view);
     SP_ACTIVE_DESKTOP->_menu_update.connect(sigc::ptr_fun(&set_menuitems));
+
+    indent_icons_recursive(menubar); // Find all submenus and add callback to each one.
+
     return menubar;
 }
 
