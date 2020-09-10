@@ -6,6 +6,6 @@
 ../share/ui/dialog-trace.glade
 ../share/ui/inkscape-about.glade
 ../share/ui/inkscape-application.glade
-../share/ui/snap-toolbar.ui
-../share/ui/view-menu.ui
-../share/ui/zoom-toolbar.ui
+../share/ui/menu-view.ui
+../share/ui/toolbar-snap.ui
+../share/ui/toolbar-zoom.ui

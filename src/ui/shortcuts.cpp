@@ -73,11 +73,8 @@ Shortcuts::init() {
     // Try filename from preferences first.
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
-    Glib::ustring reason;
     path = prefs->getString("/options/kbshortcuts/shortcutfile");
-    if (path.empty()) {
-        reason = "No shortcut file set in preferences";
-    } else {
+    if (!path.empty()) {
         bool absolute = true;
         if (!Glib::path_is_absolute(path)) {
             path = get_path_string(SYSTEM, KEYS, path.c_str());
@@ -86,6 +83,9 @@ Shortcuts::init() {
 
         Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(path);
         success = read(file);
+        if (!success) {
+            std::cerr << "Shortcut::Shortcut: Unable to read shortcut file listed in preferences: " + path << std::endl;;
+        }
 
         // Save relative path to "share/keys" if possible to handle parallel installations of
         // Inskcape gracefully.
@@ -93,12 +93,10 @@ Shortcuts::init() {
             std::string relative_path = sp_relative_path_from_path(path, std::string(get_path(SYSTEM, KEYS)));
             prefs->setString("/options/kbshortcuts/shortcutfile", relative_path.c_str());
         }
-
-        reason = "Unable to read shortcut file listed in preferences: " + path;
     }
 
     if (!success) {
-        std::cerr << "Shortcut::Shortcut: " << reason << ", trying default.xml" << std::endl;
+        // std::cerr << "Shortcut::Shortcut: " << reason << ", trying default.xml" << std::endl;
 
         Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(get_path_string(SYSTEM, KEYS, "default.xml"));
         success = read(file);
@@ -118,7 +116,10 @@ Shortcuts::init() {
  
     // ------------ Open User shortcut file -------------
     Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(get_path_string(USER, KEYS, "default.xml"));
-    read(file, true); 
+    // Test if file exists before attempting to read to avoid generating warning message.
+    if (file->query_exists()) {
+        read(file, true);
+    }
 
     // dump();
 }
@@ -928,8 +929,15 @@ Shortcuts::import_shortcuts() {
     Glib::ustring path = importFileDialog->getFilename(); // It's a full path, not just a filename!
     delete importFileDialog;
 
-    Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(path);
-    return read(file, true);
+    Glib::RefPtr<Gio::File> file_read = Gio::File::create_for_path(path);
+    if (!read(file_read, true)) {
+        std::cerr << "Shortcuts::import_shortcuts: Failed to read file!" << std::endl;
+        return false;
+    }
+
+    // Save
+    Glib::RefPtr<Gio::File> file_save = Gio::File::create_for_path(get_path_string(USER, KEYS, "default.xml"));
+    return write(file_save, User);
 };
 
 bool

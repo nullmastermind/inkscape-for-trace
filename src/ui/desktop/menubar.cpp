@@ -470,19 +470,19 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
 
                 // TEMP
                 if (strcmp(name, "_View") == 0) {
-                    // Add from view.ui first.
+                    // Add from menu-view.ui first.
 
                     auto refBuilder = Gtk::Builder::create();
                     try
                     {
                         std::string filename =
-                            Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::UIS, "view-menu.ui");
+                            Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::UIS, "menu-view.ui");
                         refBuilder->add_from_file(filename);
                     }
                     catch (const Glib::Error& err)
                     {
                         std::cerr << "build_menu: failed to load View menu from: "
-                                  << "view-menu.ui: "
+                                  << "menu-view.ui: "
                                   << err.what() << std::endl;
                     }
 

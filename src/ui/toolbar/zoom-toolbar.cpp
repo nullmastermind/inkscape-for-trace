@@ -27,7 +27,7 @@ namespace Toolbar {
 GtkWidget *
 ZoomToolbar::create(SPDesktop *desktop)
 {
-    Glib::ustring zoom_toolbar_builder_file = get_filename(UIS, "zoom-toolbar.ui");
+    Glib::ustring zoom_toolbar_builder_file = get_filename(UIS, "toolbar-zoom.ui");
     auto builder = Gtk::Builder::create();
     try
     {

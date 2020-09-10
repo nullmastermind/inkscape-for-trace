@@ -20,7 +20,7 @@ inline void ui_dump_event (GdkEvent *event, Glib::ustring const &prefix, bool me
     static GdkEventType old_type = GDK_NOTHING;
     static unsigned count = 0;
 
-    // Doesn't usually help to dump a zillion events of the same type (e.g. GDK_MOTION_NOTIFY).
+    // Doesn't usually help to dump a zillion motion notify events.
     ++count;
     if (merge && event->type == old_type && event->type == GDK_MOTION_NOTIFY) {
         if ( count == 1 ) {

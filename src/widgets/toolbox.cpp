@@ -424,7 +424,7 @@ GtkWidget *ToolboxFactory::createSnapToolbox()
     gtk_widget_set_name(tb, "SnapToolbox");
     gtk_box_set_homogeneous(GTK_BOX(tb), FALSE);
 
-    Glib::ustring snap_toolbar_builder_file = get_filename(UIS, "snap-toolbar.ui");
+    Glib::ustring snap_toolbar_builder_file = get_filename(UIS, "toolbar-snap.ui");
     auto builder = Gtk::Builder::create();
     try
     {
