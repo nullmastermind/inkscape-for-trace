@@ -652,6 +652,8 @@ shift_icons(Gtk::Menu* menu)
             auto box = dynamic_cast<Gtk::Box *>(menuitem->get_child());
             if (box) {
 
+                box->set_spacing(0); // Match ImageMenuItem
+
                 auto children = box->get_children();
                 if (children.size() == 2) { // Image + Label
 
@@ -667,15 +669,18 @@ shift_icons(Gtk::Menu* menu)
                             shift += (allocation_menuitem.get_width() - allocation_image.get_width());
                         }
 
-                        std::string css_str;
-                        if (menuitem->get_direction() == Gtk::TEXT_DIR_RTL) {
-                            css_str = "menuitem box image {margin-right:" + std::to_string(shift) + "px;}";
-                        } else {
-                            css_str = "menuitem box image {margin-left:" + std::to_string(shift) + "px;}";
+                        static int current_shift = 0;
+                        if (std::abs(current_shift - shift) > 2) {
+                            // Only do this once per menu, and only if there is a large change.
+                            current_shift = shift;
+                            std::string css_str;
+                            if (menuitem->get_direction() == Gtk::TEXT_DIR_RTL) {
+                                css_str = "menuitem box image {margin-right:" + std::to_string(shift) + "px;}";
+                            } else {
+                                css_str = "menuitem box image {margin-left:" + std::to_string(shift) + "px;}";
+                            }
+                            provider->load_from_data(css_str);
                         }
-                        provider->load_from_data(css_str);
-
-                        return; // We only need to do this once for a given submenu.
                     }
                 }
             }
