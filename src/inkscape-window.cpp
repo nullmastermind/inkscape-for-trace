@@ -137,7 +137,10 @@ InkscapeWindow::setup_view()
     //       This can result in off-screen windows! We previously worked around this by hiding and re-showing
     //       the window, but a call to hide() causes Inkscape to just exit since the migration to Gtk::Application
     show();
-
+    
+    // Show dialogs after the main window, otherwise dialogs may be associated as the main window of the program.
+    _desktop->show_dialogs();
+    
     sp_namedview_zoom_and_view_from_document(_desktop);
     sp_namedview_update_layers_from_document(_desktop);
 

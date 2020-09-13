@@ -753,7 +753,6 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
     int window_geometry = prefs->getInt("/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_NONE);
     int default_size = prefs->getInt("/options/defaultwindowsize/value", PREFS_WINDOW_SIZE_NATURAL);
     bool new_document = (nv->window_width <= 0) || (nv->window_height <= 0);
-    bool show_dialogs = true;
 
     // restore window size and position stored with the document
     Gtk::Window *win = desktop->getToplevel();
@@ -822,10 +821,6 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
 
     // Cancel any history of transforms up to this point (must be before call to zoom).
     desktop->clear_transform_history();
-
-    if (show_dialogs) {
-        desktop->show_dialogs();
-    }
 }
 
 /*
