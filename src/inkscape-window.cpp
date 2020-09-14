@@ -166,16 +166,24 @@ InkscapeWindow::on_key_press_event(GdkEventKey* event)
     ui_dump_event(reinterpret_cast<GdkEvent *>(event), "\nInkscapeWindow::on_key_press_event");
 #endif
 
-    // Key press and release events are sent first to Gtk::Window for processing as accelerators
-    // and menomics before bubbling up from the "grab" widget (unlike other events which always
-    // bubble up). This would means that key combinations used for accelerators won't reach our
-    // tool event handlers (and as we use single keys for accelerators, we wouldn't even be able to
-    // type text!). We need to run our tool event handlers first for key event before giving
-    // Gtk::Window a crack at them.
+    // Key press and release events are normally sent first to Gtk::Window for processing as
+    // accelerators and menomics before bubbling up from the "grab" or "focus" widget (unlike other
+    // events which always bubble up). This would means that key combinations used for accelerators
+    // won't reach the focus widget (and our tool event handlers). As we use single keys for
+    // accelerators, we wouldn't even be able to type text! We can get around this by sending key
+    // events first to the focus widget.
+    //
     // See https://developer.gnome.org/gtk3/stable/chap-input-handling.html (Event Propogation)
-    bool done = sp_desktop_root_handler(reinterpret_cast<GdkEvent *>(event), _desktop);
-    if (done) {
-        return true;
+
+    bool done = false;
+
+    auto focus = get_focus();
+    if (focus) {
+        done = focus->event(reinterpret_cast<GdkEvent *>(event));
+        // done = gtk_window_propagate_key_event(dynamic_cast<Gtk::Window*>(this)->gobj(), event);
+        if (done) {
+            return true;
+        }
     }
 
     // Intercept Cmd-Q on macOS to not bypass confirmation dialog
