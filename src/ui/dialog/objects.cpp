@@ -42,11 +42,11 @@
 #include "object/sp-shape.h"
 #include "style.h"
 
-#include "ui/contextmenu.h"
 #include "ui/dialog-events.h"
 #include "ui/icon-names.h"
 #include "ui/selected-color.h"
 #include "ui/shortcuts.h"
+#include "ui/desktop/menu-icon-shift.h"
 #include "ui/tools-switch.h"
 #include "ui/tools/node-tool.h"
 
@@ -2163,8 +2163,9 @@ ObjectsPanel::ObjectsPanel() :
         _popupMenu.show_all_children();
 
         // Install CSS to shift icons into the space reserved for toggles (i.e. check and radio items).
-        _popupMenu.signal_map().connect(sigc::mem_fun(static_cast<ContextMenu*>(&_popupMenu), &ContextMenu::ShiftIcons));
+        _popupMenu.signal_map().connect(sigc::bind<Gtk::MenuShell *>(sigc::ptr_fun(shift_icons), &_popupMenu));
     }
+
     // -------------------------------------------------------
 
     //Set initial sensitivity of buttons

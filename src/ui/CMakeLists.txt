@@ -24,6 +24,7 @@ set(ui_SRC
 	cache/svg_preview_cache.cpp
 
         desktop/menubar.cpp
+        desktop/menu-icon-shift.cpp
 
 	tool/control-point-selection.cpp
 	tool/control-point.cpp
@@ -92,7 +93,7 @@ set(ui_SRC
 	dialog/calligraphic-profile-rename.cpp
 	dialog/clonetiler.cpp
 	dialog/color-item.cpp
-    dialog/attrdialog.cpp
+        dialog/attrdialog.cpp
 	dialog/debug.cpp
 	dialog/dialog-manager.cpp
 	dialog/dialog.cpp
@@ -132,7 +133,7 @@ set(ui_SRC
 	dialog/print.cpp
 	dialog/prototype.cpp
 	dialog/selectorsdialog.cpp
-    dialog/styledialog.cpp
+        dialog/styledialog.cpp
 	dialog/svg-fonts-dialog.cpp
         dialog/svg-preview.cpp
 	dialog/swatches.cpp
@@ -256,7 +257,8 @@ set(ui_SRC
 
 	cache/svg_preview_cache.h
 
-        desktop/menubar.cpp
+        desktop/menubar.h
+        desktop/menu-icon-shift.h
 
 	dialog/about.h
 	dialog/align-and-distribute.h
