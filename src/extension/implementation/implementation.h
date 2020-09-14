@@ -151,7 +151,6 @@ public:
                           Geom::Affine const & /*transform*/,
                           float /*opacity*/) { return 0; }
     virtual unsigned release(Inkscape::Extension::Print * /*module*/) { return 0; }
-    virtual unsigned comment(Inkscape::Extension::Print * /*module*/, char const * /*comment*/) { return 0; }
     virtual unsigned fill(Inkscape::Extension::Print * /*module*/,
                           Geom::PathVector const & /*pathv*/,
                           Geom::Affine const & /*ctm*/,

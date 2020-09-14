@@ -42,7 +42,6 @@ struct SPPrintContext {
 
     unsigned int bind(Geom::Affine const &transform, float opacity);
     unsigned int release();
-    unsigned int comment(char const *comment);
     unsigned int fill(Geom::PathVector const &pathv, Geom::Affine const &ctm, SPStyle const *style,
                       Geom::OptRect const &pbox, Geom::OptRect const &dbox, Geom::OptRect const &bbox);
     unsigned int stroke(Geom::PathVector const &pathv, Geom::Affine const &ctm, SPStyle const *style,

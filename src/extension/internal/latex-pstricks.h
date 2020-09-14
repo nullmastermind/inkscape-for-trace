@@ -57,7 +57,6 @@ public:
                                      Geom::Affine const &ctm, SPStyle const *style,
                                      Geom::OptRect const &pbox, Geom::OptRect const &dbox,
                                      Geom::OptRect const &bbox) override;
-        unsigned int comment(Inkscape::Extension::Print *module, const char * comment) override;
         bool textToPath (Inkscape::Extension::Print * ext) override;
 
         static void init ();

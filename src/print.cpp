@@ -51,12 +51,6 @@ SPPrintContext::release()
 }
 
 unsigned int
-SPPrintContext::comment(char const *comment)
-{
-    return module->comment(comment);
-}
-
-unsigned int
 SPPrintContext::fill(Geom::PathVector const &pathv, Geom::Affine const &ctm, SPStyle const *style,
                      Geom::OptRect const &pbox, Geom::OptRect const &dbox, Geom::OptRect const &bbox)
 {

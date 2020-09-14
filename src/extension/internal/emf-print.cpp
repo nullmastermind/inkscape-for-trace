@@ -320,21 +320,6 @@ unsigned int PrintEmf::finish(Inkscape::Extension::Print * /*mod*/)
     return 0;
 }
 
-
-unsigned int PrintEmf::comment(
-    Inkscape::Extension::Print * /*module*/,
-    const char * /*comment*/)
-{
-    if (!et) {
-        return 0;
-    }
-
-    // earlier versions had flush of fill here, but it never executed and was removed
-
-    return 0;
-}
-
-
 // fcolor is defined when gradients are being expanded, it is the color of one stripe or ring.
 int PrintEmf::create_brush(SPStyle const *style, PU_COLORREF fcolor)
 {

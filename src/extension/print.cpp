@@ -71,12 +71,6 @@ Print::release ()
 }
 
 unsigned int
-Print::comment (char const *comment)
-{
-    return imp->comment(this, comment);
-}
-
-unsigned int
 Print::fill (Geom::PathVector const &pathv, Geom::Affine const &ctm, SPStyle const *style,
              Geom::OptRect const &pbox, Geom::OptRect const &dbox, Geom::OptRect const &bbox)
 {

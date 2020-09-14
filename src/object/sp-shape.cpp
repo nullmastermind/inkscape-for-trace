@@ -720,15 +720,6 @@ void SPShape::print(SPPrintContext* ctx) {
     	return;
     }
 
-	Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-	gint add_comments = prefs->getBool("/printing/debug/add-label-comments");
-	
-	if (add_comments) {
-		gchar * comment = g_strdup_printf("begin '%s'", this->defaultLabel());
-		ctx->comment(comment);
-		g_free(comment);
-	}
-
     /* fixme: Think (Lauris) */
 	Geom::OptRect pbox, dbox, bbox;
     pbox = this->geometricBounds();
@@ -817,13 +808,6 @@ void SPShape::print(SPPrintContext* ctx) {
             }
         }
     }
-
-	if (add_comments) {
-		gchar * comment = g_strdup_printf("end '%s'",
-		this->defaultLabel());
-		ctx->comment(comment);
-		g_free(comment);
-	}
 }
 
 void SPShape::update_patheffect(bool write)
