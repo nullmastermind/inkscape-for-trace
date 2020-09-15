@@ -238,16 +238,42 @@ Canvas::redraw_area(int x0, int y0, int x1, int y1)
         return;
     }
 
+    // Clamp area to Cairo's technically supported max size (-2^30..+2^30-1).
+    // This ensures that the rectangle dimensions don't overflow and wrap around.
+
+    constexpr int min_coord = std::numeric_limits<int>::min() / 2;
+    constexpr int max_coord = std::numeric_limits<int>::max() / 2;
+
+    x0 = std::clamp(x0, min_coord, max_coord);
+    y0 = std::clamp(y0, min_coord, max_coord);
+    x1 = std::clamp(x1, min_coord, max_coord);
+    y1 = std::clamp(y1, min_coord, max_coord);
+
     Cairo::RectangleInt crect = { x0, y0, x1-x0, y1-y0 };
     _clean_region->subtract(crect);
     add_idle();
 }
 
 void
+Canvas::redraw_area(Geom::Coord x0, Geom::Coord y0, Geom::Coord x1, Geom::Coord y1)
+{
+    // Handle overflow during conversion gracefully.
+    // Round outward to make sure integral coordinates cover the entire area.
+
+    constexpr Geom::Coord min_int = static_cast<Geom::Coord>(std::numeric_limits<int>::min());
+    constexpr Geom::Coord max_int = static_cast<Geom::Coord>(std::numeric_limits<int>::max());
+
+    redraw_area(
+        static_cast<int>(std::floor(std::clamp(x0, min_int, max_int))),
+        static_cast<int>(std::floor(std::clamp(y0, min_int, max_int))),
+        static_cast<int>(std::ceil(std::clamp(x1, min_int, max_int))),
+        static_cast<int>(std::ceil(std::clamp(y1, min_int, max_int))));
+}
+
+void
 Canvas::redraw_area(Geom::Rect& area)
 {
-    // Might need to round outward.
-    redraw_area(area.min().x(), area.min().y(), area.min().x()+area.width(), area.min().y()+area.height());
+    redraw_area(area.left(), area.top(), area.right(), area.bottom());
 }
 
 /**

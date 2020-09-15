@@ -34,7 +34,7 @@ CanvasItemGrid::CanvasItemGrid(CanvasItemGroup *group, CanvasGrid *grid)
     _name = "CanvasItemGrid:";
     _name += grid->getName(grid->getGridType());
     _pickable = false; // For now, nobody gets events from this class!
-    _bounds = Geom::Rect(-100000, -100000, 100000, 100000);
+    _bounds = Geom::Rect(-Geom::infinity(), -Geom::infinity(), Geom::infinity(), Geom::infinity());
 
     request_update(); // Update affine
 }

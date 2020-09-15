@@ -36,7 +36,7 @@ CanvasItemRotate::CanvasItemRotate(CanvasItemGroup *group)
 {
     _name = "CanvasItemRotate";
     _pickable = true; // We need the events!
-    _bounds = Geom::Rect(-100000, -100000, 100000, 100000);
+    _bounds = Geom::Rect(-Geom::infinity(), -Geom::infinity(), Geom::infinity(), Geom::infinity());
 }
 
 

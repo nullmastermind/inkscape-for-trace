@@ -30,7 +30,7 @@ CanvasItemCatchall::CanvasItemCatchall(CanvasItemGroup *group)
 {
     _name = "CanvasItemCatchall";
     _pickable = true; // Duh! That's the purpose of this class!
-    _bounds = Geom::Rect(-100000, -100000, 100000, 100000);
+    _bounds = Geom::Rect(-Geom::infinity(), -Geom::infinity(), Geom::infinity(), Geom::infinity());
 }
 
 /**

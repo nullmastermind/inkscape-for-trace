@@ -880,8 +880,8 @@ CanvasXYGrid::Render (Inkscape::CanvasItemBuffer *buf)
         // std::cout << "  dash period: " << dash << std::endl;
 
         // Find the minimum and maximum distances of the buffer corners from axis.
-        double min =  1000000;
-        double max = -1000000;
+        double min =  Geom::infinity();
+        double max = -Geom::infinity();
         for (unsigned c = 0; c < 4; ++c) {
 
             // We need signed distance... lib2geom offers only positive distance.

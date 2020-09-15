@@ -63,8 +63,7 @@ public:
     // Drawing
     void set_drawing(Inkscape::Drawing *drawing) { _drawing = drawing; }
     void redraw_all();                                // Draw entire surface during idle.
-    void redraw_area(int x0, int y0, int x1, int y1); // Draw specified area during idle.
-    void redraw_area(Geom::Rect& area);
+    void redraw_area(Geom::Rect& area);               // Draw specified area during idle.
     void redraw_now();                                // Draw areas needing update immediately.
     void request_update();                            // Draw after updating canvas items.
     void scroll_to(Geom::Point const &c, bool clear);
@@ -147,6 +146,10 @@ private:
     void add_idle();
     void remove_idle(); // Not needed?
     bool on_idle();
+
+    // Drawing (internal overloads)
+    void redraw_area(int x0, int y0, int x1, int y1);
+    void redraw_area(Geom::Coord x0, Geom::Coord y0, Geom::Coord x1, Geom::Coord y1);
 
     // Painting
 

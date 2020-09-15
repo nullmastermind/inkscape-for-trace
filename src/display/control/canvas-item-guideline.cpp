@@ -42,7 +42,7 @@ CanvasItemGuideLine::CanvasItemGuideLine(CanvasItemGroup *group, Glib::ustring l
 {
     _name = "CanvasItemGuideLine:" + _label;
     _pickable = true; // For now, everybody gets events from this class!
-    _bounds = Geom::Rect(-100000, -100000, 100000, 100000); // Required when rotating canvas.
+    _bounds = Geom::Rect(-Geom::infinity(), -Geom::infinity(), Geom::infinity(), Geom::infinity()); // Required when rotating canvas.
 
     // Control to move guide line.
     _origin_ctrl = new CanvasItemCtrl(group, CANVAS_ITEM_CTRL_SHAPE_CIRCLE, _origin);
