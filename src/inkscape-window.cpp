@@ -175,20 +175,15 @@ InkscapeWindow::on_key_press_event(GdkEventKey* event)
     //
     // See https://developer.gnome.org/gtk3/stable/chap-input-handling.html (Event Propogation)
 
-    bool done = false;
-
     auto focus = get_focus();
     if (focus) {
-        done = focus->event(reinterpret_cast<GdkEvent *>(event));
-        // done = gtk_window_propagate_key_event(dynamic_cast<Gtk::Window*>(this)->gobj(), event);
-        if (done) {
+        if (focus->event(reinterpret_cast<GdkEvent *>(event))) {
             return true;
         }
     }
 
     // Intercept Cmd-Q on macOS to not bypass confirmation dialog
-    done = !is_Cmd_Q(event) && Gtk::Window::on_key_press_event(event);
-    if (done) {
+    if (!is_Cmd_Q(event) && Gtk::Window::on_key_press_event(event)) {
         return true;
     }
 
