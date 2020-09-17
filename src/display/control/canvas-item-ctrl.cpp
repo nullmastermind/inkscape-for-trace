@@ -237,7 +237,9 @@ void CanvasItemCtrl::render(Inkscape::CanvasItemBuffer *buf)
         // 1. Copy the affected part of output to a temporary surface
 
         // Size in device pixels. Does not set device scale.
-        auto work = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32, _width, _height);
+        int width  = _width  * buf->device_scale;
+        int height = _height * buf->device_scale;
+        auto work = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32, width, height);
         cairo_surface_set_device_scale(work->cobj(), buf->device_scale, buf->device_scale); // No C++ API!
 
         auto cr = Cairo::Context::create(work);
@@ -252,11 +254,10 @@ void CanvasItemCtrl::render(Inkscape::CanvasItemBuffer *buf)
         work->flush();
         int strideb = work->get_stride();
         unsigned char *pxb = work->get_data();
-
         guint32 *p = _cache;
-        for (int i = 0; i < _height; ++i) {
+        for (int i = 0; i < height; ++i) {
             guint32 *pb = reinterpret_cast<guint32*>(pxb + i*strideb);
-            for (int j = 0; j < _width; ++j) {
+            for (int j = 0; j < width; ++j) {
                 guint32 cc = *p++;
                 guint32 ac = cc & 0xff;
                 if (ac == 0 && cc != 0) {
