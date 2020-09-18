@@ -379,6 +379,10 @@ if(WITH_DBUS)
     add_dependencies(inkscape_base inkscape_dbus)
 endif()
 
+if(APPLE)
+    target_link_libraries(inkscape_base PUBLIC Boost::filesystem)
+endif()
+
 # Link the inkscape_base library against all external dependencies
 target_link_libraries(inkscape_base
     PRIVATE

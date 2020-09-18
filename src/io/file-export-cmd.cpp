@@ -15,7 +15,14 @@
 
 #include "file-export-cmd.h"
 
+#ifdef __APPLE__  // cannot use c++17 library features with target OS <10.15
+#include <boost/filesystem.hpp>
+using namespace boost;
+#else
 #include <filesystem>
+using namespace std;
+#endif
+
 #include <png.h> // PNG export
 
 #include "document.h"
@@ -68,7 +75,7 @@ InkFileExportCmd::do_export(SPDocument* doc, std::string filename_in)
 
     // Get export type from filename supplied with --export-filename
     if (!export_filename.empty() && export_filename != "-") {
-        auto fn = std::filesystem::path(export_filename);
+        auto fn = filesystem::path(export_filename);
         if (!fn.has_extension()) {
             if (export_type.empty()) {
                 std::cerr << "InkFileExportCmd::do_export: No export type specified. "

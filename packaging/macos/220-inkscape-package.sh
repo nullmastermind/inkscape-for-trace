@@ -43,6 +43,12 @@ lib_change_path \
   $APP_LIB_DIR/inkscape/libinkscape_base.dylib \
   $APP_EXE_DIR/inkscape
 
+# patch library link path for libboost_filesystem
+lib_change_path \
+  @executable_path/../Resources/lib/libboost_filesystem.dylib \
+  $APP_LIB_DIR/inkscape/libinkscape_base.dylib \
+  $APP_EXE_DIR/inkscape
+
 # patch library link path for libinkscape_base
 lib_change_path \
   @executable_path/../Resources/lib/inkscape/libinkscape_base.dylib \

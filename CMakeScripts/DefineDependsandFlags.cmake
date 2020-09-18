@@ -320,7 +320,12 @@ if(WITH_GSPELL)
     endif()
 endif()
 
-find_package(Boost 1.19.0 REQUIRED)
+if(APPLE)
+    find_package(Boost 1.19.0 REQUIRED COMPONENTS filesystem)
+else()
+    find_package(Boost 1.19.0 REQUIRED)
+endif()
+
 list(APPEND INKSCAPE_INCS_SYS ${Boost_INCLUDE_DIRS})
 # list(APPEND INKSCAPE_LIBS ${Boost_LIBRARIES})
 
