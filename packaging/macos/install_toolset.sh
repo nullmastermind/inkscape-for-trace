@@ -30,6 +30,8 @@ function install
     download_url $URL_TOOLSET $REPO_DIR
   fi
 
+  echo_i "Mounting compressed disk image, this may take some time..."
+
   # mount build system
   local device=$(create_dmg_device $toolset_dmg)
   if [ ! -d $VER_DIR ]; then

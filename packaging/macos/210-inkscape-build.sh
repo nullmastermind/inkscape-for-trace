@@ -20,10 +20,12 @@ if [ -z $CI_JOB_ID ]; then   # running standalone
   git clone --recurse-submodules --depth 10 $URL_INKSCAPE $INK_DIR
 fi
 
-[ -d $INK_DIR.build ] && rm -rf $INK_DIR.build || true  # cleanup previous run
+if [ -d $INK_BUILD_DIR ]; then   # cleanup previous run
+  rm -rf $INK_BUILD_DIR
+fi
 
-mkdir -p $INK_DIR.build
-cd $INK_DIR.build
+mkdir -p $INK_BUILD_DIR
+cd $INK_BUILD_DIR
 
 cmake \
   -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
@@ -36,8 +38,6 @@ make install
 make tests
 
 ### patch Poppler library locations ############################################
-
-# TODO: is this still necessary?
 
 lib_change_path \
   $LIB_DIR/libpoppler.94.dylib \

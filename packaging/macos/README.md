@@ -15,7 +15,7 @@ This folder contains the scripts that make up the build pipeline for Inkscape on
 
 - There are __version recommendations__.
   - macOS Catalina 10.15.6
-  - Xcode 11.6
+  - Xcode 12
   - OS X El Capitan 10.11 SDK from Xcode 7.3.1 (expected in `/opt/sdks/MacOSX10.11.sdk`, see `SDKROOT_DIR` in `020-vars.sh`)
 
 - A somewhat decent __internet connection__ for all the downloads.

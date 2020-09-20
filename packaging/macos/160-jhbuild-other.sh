@@ -52,10 +52,6 @@ ln -s $(pwd)/png2icns.sh $BIN_DIR
 
 download_url $URL_PYTHON $PKG_DIR
 
-### install compiler cache #####################################################
-
-jhbuild build ccache
-
 ################################################################################
 
 # vim: expandtab:shiftwidth=2:tabstop=2:softtabstop=2 :

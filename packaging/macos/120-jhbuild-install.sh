@@ -14,25 +14,39 @@ for script in $SELF_DIR/0??-*.sh; do source $script; done
 include_file error_.sh
 error_trace_enable
 
+### install ccache #############################################################
+
+install_source $URL_CCACHE
+configure_make_makeinstall
+
+cd $BIN_DIR
+ln -s ccache clang
+ln -s ccache clang++
+ln -s ccache gcc
+ln -s ccache g++
+
+### install Python certifi package #############################################
+
+# Without this, JHBuild won't be able to access https links later because
+# Apple's Python won't be able to validate certificates.
+
+pip3 install --ignore-installed --target=$LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages certifi
+
 ### install JHBuild ############################################################
 
 install_source $URL_JHBUILD
 JHBUILD_DIR=$(pwd)
 
-mkdir $BIN_DIR
-
 # Create 'jhbuild' executable. This code has been adapted from
 # https://gitlab.gnome.org/GNOME/gtk-osx/-/blob/master/gtk-osx-setup.sh
 
 cat <<EOF > "$BIN_DIR/jhbuild"
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 import sys
 import os
-# Python 3
-#import builtins
-import __builtin__
+import builtins
 
 sys.path.insert(0, '$JHBUILD_DIR')
 pkgdatadir = None
@@ -40,13 +54,9 @@ datadir = None
 import jhbuild
 srcdir = os.path.abspath(os.path.join(os.path.dirname(jhbuild.__file__), '..'))
 
-# Python 3
-#builtins.__dict__['PKGDATADIR'] = pkgdatadir
-#builtins.__dict__['DATADIR'] = datadir
-#builtins.__dict__['SRCDIR'] = srcdir
-__builtin__.__dict__['PKGDATADIR'] = pkgdatadir
-__builtin__.__dict__['DATADIR'] = datadir
-__builtin__.__dict__['SRCDIR'] = srcdir
+builtins.__dict__['PKGDATADIR'] = pkgdatadir
+builtins.__dict__['DATADIR'] = datadir
+builtins.__dict__['SRCDIR'] = srcdir
 
 import jhbuild.main
 jhbuild.main.main(sys.argv[1:])
@@ -56,35 +66,22 @@ chmod 755 $BIN_DIR/jhbuild
 
 ### configure JHBuild ##########################################################
 
-download_url $URL_GTK_OSX/jhbuildrc-gtk-osx \
-  $(dirname $JHBUILDRC) \
-  $(basename $JHBUILDRC)
+mkdir -p $(dirname $JHBUILDRC)
+cp $SELF_DIR/jhbuild/$(basename $JHBUILDRC)        $JHBUILDRC
+cp $SELF_DIR/jhbuild/$(basename $JHBUILDRC_CUSTOM) $JHBUILDRC_CUSTOM
 
-download_url $URL_GTK_OSX/jhbuildrc-gtk-osx-custom-example \
-  $(dirname $JHBUILDRC_CUSTOM) \
-  $(basename $JHBUILDRC_CUSTOM)
+# set moduleset directory
+echo "modulesets_dir = '$SELF_DIR/jhbuild'" >> $JHBUILDRC_CUSTOM
 
 # basic directory layout
-echo "buildroot = '$JHBUILD_BUILDROOT'" >> $JHBUILDRC_CUSTOM
-echo "checkoutroot = '$SRC_DIR'"        >> $JHBUILDRC_CUSTOM
-echo "prefix = '$VER_DIR'"              >> $JHBUILDRC_CUSTOM
-echo "tarballdir = '$PKG_DIR'"          >> $JHBUILDRC_CUSTOM
-
-# run quietly with minimal output
-echo "quiet_mode = True"   >> $JHBUILDRC_CUSTOM
-echo "progress_bar = True" >> $JHBUILDRC_CUSTOM
-
-# use custom moduleset
-echo "moduleset = '$URL_GTK_OSX_MODULESET'" >> $JHBUILDRC_CUSTOM
+echo "buildroot = '$BLD_DIR'"    >> $JHBUILDRC_CUSTOM
+echo "checkoutroot = '$SRC_DIR'" >> $JHBUILDRC_CUSTOM
+echo "prefix = '$VER_DIR'"       >> $JHBUILDRC_CUSTOM
+echo "tarballdir = '$PKG_DIR'"   >> $JHBUILDRC_CUSTOM
 
 # set macOS SDK
-sed -i "" "s/^setup_sdk/#setup_sdk/"           $JHBUILDRC_CUSTOM
 echo "setup_sdk(target=\"$SDK_VERSION\")"   >> $JHBUILDRC_CUSTOM
 echo "os.environ[\"SDKROOT\"]=\"$SDKROOT\"" >> $JHBUILDRC_CUSTOM
-
-# TODO: I have forgotten why this is here
-echo "if \"openssl\" in skip:"    >> $JHBUILDRC_CUSTOM
-echo "  skip.remove(\"openssl\")" >> $JHBUILDRC_CUSTOM
 
 # Remove harmful settings in regards to the target platform:
 #   - MACOSX_DEPLOYMENT_TARGET
@@ -109,11 +106,13 @@ echo "os.environ[\"LDFLAGS\"] = \"-L$LIB_DIR -L$SDKROOT/usr/lib -isysroot $SDKRO
 echo "os.environ[\"OBJCFLAGS\"] = \"-I$SDKROOT/usr/include -isysroot $SDKROOT\"" \
     >> $JHBUILDRC_CUSTOM
 
-# optional: use ccache if available
-# (But it's not as effective here as it is for building Inkscape.)
-if [ -d $CCACHE_BIN_DIR ]; then
-  echo_i "JHBuild will use ccache"
-  echo "os.environ[\"CC\"] = \"$CCACHE_BIN_DIR/gcc\""   >> $JHBUILDRC_CUSTOM
-  echo "os.environ[\"OBJC\"] = \"$CCACHE_BIN_DIR/gcc\"" >> $JHBUILDRC_CUSTOM
-  echo "os.environ[\"CXX\"] = \"$CCACHE_BIN_DIR/g++\""  >> $JHBUILDRC_CUSTOM
-fi
+# enable ccache
+echo "os.environ[\"CC\"] = \"$BIN_DIR/gcc\""   >> $JHBUILDRC_CUSTOM
+echo "os.environ[\"OBJC\"] = \"$BIN_DIR/gcc\"" >> $JHBUILDRC_CUSTOM
+echo "os.environ[\"CXX\"] = \"$BIN_DIR/g++\""  >> $JHBUILDRC_CUSTOM
+
+# certificates for https
+echo "os.environ[\"SSL_CERT_FILE\"] = \"$LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/certifi/cacert.pem\"" \
+    >> $JHBUILDRC_CUSTOM
+echo "os.environ[\"REQUESTS_CA_BUNDLE\"] = \"$LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/certifi/cacert.pem\"" \
+    >> $JHBUILDRC_CUSTOM
