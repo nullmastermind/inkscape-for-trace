@@ -39,6 +39,10 @@ using Inkscape::Extension::Internal::SvgBuilder;
 #include "glib/poppler-features.h"
 #include "Object.h"
 
+#include <map>
+#include <memory>
+#include <string>
+
 class GooString;
 class XRef;
 class Array;
@@ -191,6 +195,11 @@ private:
 
   ClipHistoryEntry *clipHistory;    // clip path stack
   OpHistoryEntry *operatorHistory;  // list containing the last N operators
+
+  //! Caches color spaces by name
+  std::map<std::string, std::unique_ptr<GfxColorSpace>> colorSpacesCache;
+
+  GfxColorSpace *lookupColorSpaceCopy(Object &);
 
   void setDefaultApproximationPrecision();  // init color deltas
   void pushOperator(const char *name);
