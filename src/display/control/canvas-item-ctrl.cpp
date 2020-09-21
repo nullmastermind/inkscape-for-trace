@@ -145,42 +145,64 @@ void CanvasItemCtrl::update(Geom::Affine const &affine)
     int dx = 0;
     int dy = 0;
 
-    switch (_anchor) {
-        case SP_ANCHOR_N:
-        case SP_ANCHOR_CENTER:
-        case SP_ANCHOR_S:
-            break;
+    if (_shape == CANVAS_ITEM_CTRL_SHAPE_DARROW ||
+        _shape == CANVAS_ITEM_CTRL_SHAPE_SARROW ||
+        _shape == CANVAS_ITEM_CTRL_SHAPE_CARROW  ) {
 
-        case SP_ANCHOR_NW:
-        case SP_ANCHOR_W:
-        case SP_ANCHOR_SW:
-            dx = w_half;
-            break;
+        _angle = _anchor * M_PI/4.0 + std::atan2(_affine[1], _affine[0]);
 
-        case SP_ANCHOR_NE:
-        case SP_ANCHOR_E:
-        case SP_ANCHOR_SE:
-            dx = -w_half;
-            break;
-    }
+        dx = - (h_half + 2) * cos(_angle); // Add a bit to prevent tip from overlapping due to rounding errors.
+        dy = - (w_half + 2) * sin(_angle);
 
-    switch (_anchor) {
-        case SP_ANCHOR_W:
-        case SP_ANCHOR_CENTER:
-        case SP_ANCHOR_E:
-            break;
+        if (_shape == CANVAS_ITEM_CTRL_SHAPE_CARROW) {
+            _angle += 5 * M_PI/4.0;
+        }
 
-        case SP_ANCHOR_NW:
-        case SP_ANCHOR_N:
-        case SP_ANCHOR_NE:
-            dy = h_half;
-            break;
+        if (_shape == CANVAS_ITEM_CTRL_SHAPE_SARROW) {
+            _angle += M_PI/2.0;
+        }
 
-        case SP_ANCHOR_SW:
-        case SP_ANCHOR_S:
-        case SP_ANCHOR_SE:
-            dy = -h_half;
-            break;
+        _built = false; // Angle may have change, must rebuild!
+
+    } else {
+
+        switch (_anchor) {
+            case SP_ANCHOR_N:
+            case SP_ANCHOR_CENTER:
+            case SP_ANCHOR_S:
+                break;
+
+            case SP_ANCHOR_NW:
+            case SP_ANCHOR_W:
+            case SP_ANCHOR_SW:
+                dx = w_half;
+                break;
+
+            case SP_ANCHOR_NE:
+            case SP_ANCHOR_E:
+            case SP_ANCHOR_SE:
+                dx = -w_half;
+                break;
+        }
+
+        switch (_anchor) {
+            case SP_ANCHOR_W:
+            case SP_ANCHOR_CENTER:
+            case SP_ANCHOR_E:
+                break;
+
+            case SP_ANCHOR_NW:
+            case SP_ANCHOR_N:
+            case SP_ANCHOR_NE:
+                dy = h_half;
+                break;
+
+            case SP_ANCHOR_SW:
+            case SP_ANCHOR_S:
+            case SP_ANCHOR_SE:
+                dy = -h_half;
+                break;
+        }
     }
     _bounds *= Geom::Translate(Geom::IntPoint(dx, dy));
 
@@ -327,6 +349,17 @@ void CanvasItemCtrl::set_shape_default()
 {
     switch (_type) {
         case CANVAS_ITEM_CTRL_TYPE_ADJ_HANDLE:
+            _shape = CANVAS_ITEM_CTRL_SHAPE_DARROW;
+            break;
+
+        case CANVAS_ITEM_CTRL_TYPE_ADJ_SKEW:
+            _shape = CANVAS_ITEM_CTRL_SHAPE_SARROW;
+            break;
+
+        case CANVAS_ITEM_CTRL_TYPE_ADJ_ROTATE:
+            _shape = CANVAS_ITEM_CTRL_SHAPE_CARROW;
+            break;
+
         case CANVAS_ITEM_CTRL_TYPE_NODE_AUTO:
         case CANVAS_ITEM_CTRL_TYPE_ROTATE:
             _shape = CANVAS_ITEM_CTRL_SHAPE_CIRCLE;
@@ -393,6 +426,15 @@ void CanvasItemCtrl::set_size_via_index(int size_index)
 
     int size = 0;
     switch (_type) {
+        case CANVAS_ITEM_CTRL_TYPE_ADJ_HANDLE:
+        case CANVAS_ITEM_CTRL_TYPE_ADJ_SKEW:
+            size = size_index * 2 + 7;
+            break;
+
+        case CANVAS_ITEM_CTRL_TYPE_ADJ_ROTATE:
+            size = size_index * 2 + 9; // 2 larger than HANDLE/SKEW
+            break;
+
         case CANVAS_ITEM_CTRL_TYPE_POINT:
         case CANVAS_ITEM_CTRL_TYPE_ROTATE:
         case CANVAS_ITEM_CTRL_TYPE_SIZER:
@@ -644,6 +686,209 @@ void CanvasItemCtrl::build_cache(int device_scale)
             _built = true;
             break;
 
+
+        case CANVAS_ITEM_CTRL_SHAPE_DARROW:
+        case CANVAS_ITEM_CTRL_SHAPE_SARROW: // Same shape but rendered rotated 90 degrees.
+        {
+            // Find points, starting from tip of one arrowhead, working clockwise.
+            /*  1        4
+               ╱│        │╲
+              ╱ └────────┘ ╲
+            0╱  2        3  ╲5
+             ╲  8        7  ╱
+              ╲ ┌────────┐ ╱
+               ╲│9      6│╱
+            */
+
+            double size = _width; // Use unscaled width.
+
+            // Length of arrowhead (not including stroke).
+            double delta = (size-1)/4.0; // Use unscaled width.
+
+            // Tip of arrow (0)
+            double tip_x = 0.5;          // At edge, allow room for stroke.
+            double tip_y = size/2.0;     // Center, assuming width == height.
+
+            // Outer corner (1)
+            double out_x = tip_x + delta;
+            double out_y = tip_y - delta;
+
+            // Inner corner (2)
+            double in_x = out_x;
+            double in_y = out_y + (delta/2.0);
+
+            double x0 = tip_x;                double y0 = tip_y;
+            double x1 = out_x;                double y1 = out_y;
+            double x2 = in_x;                 double y2 = in_y;
+            double x3 = size - in_x;          double y3 = in_y;
+            double x4 = size - out_x;         double y4 = out_y;
+            double x5 = size - tip_x;         double y5 = tip_y;
+            double x6 = size - out_x;         double y6 = size - out_y;
+            double x7 = size - in_x;          double y7 = size - in_y;
+            double x8 = in_x;                 double y8 = size - in_y;
+            double x9 = out_x;                double y9 = size - out_y;
+
+            // Seems silly to create a Cairo surface to create a buffer, only to later create a Cairo surface from the buffer!
+            // TODO: allow one to use a Cairo surface directly.
+            auto work = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32, device_scale * size, device_scale * size);
+            cairo_surface_set_device_scale(work->cobj(), device_scale, device_scale); // No C++ API!
+            auto cr = Cairo::Context::create(work);
+
+            // Rotate around center
+            cr->translate( size/2.0,  size/2.0);
+            cr->rotate(_angle);
+            cr->translate(-size/2.0, -size/2.0);
+
+            // Draw arrow
+            cr->move_to(x0, y0);
+            cr->line_to(x1, y1);
+            cr->line_to(x2, y2);
+            cr->line_to(x3, y3);
+            cr->line_to(x4, y4);
+            cr->line_to(x5, y5);
+            cr->line_to(x6, y6);
+            cr->line_to(x7, y7);
+            cr->line_to(x8, y8);
+            cr->line_to(x9, y9);
+            cr->close_path();
+
+            // Fill and stroke.
+            cr->set_source_rgba(SP_RGBA32_R_F(_fill),
+                                SP_RGBA32_G_F(_fill),
+                                SP_RGBA32_B_F(_fill),
+                                SP_RGBA32_A_F(_fill));
+            cr->fill_preserve();
+            cr->set_source_rgba(SP_RGBA32_R_F(_stroke),
+                                SP_RGBA32_G_F(_stroke),
+                                SP_RGBA32_B_F(_stroke),
+                                SP_RGBA32_A_F(_stroke));
+            cr->set_line_width(1);
+            cr->stroke();
+
+            // Copy to buffer.
+            work->flush();
+            int strideb = work->get_stride();
+            unsigned char* pxb = work->get_data();
+            guint32 *p = _cache;
+            for (int i = 0; i < device_scale * size; ++i) {
+                guint32 *pb = reinterpret_cast<guint32*>(pxb + i*strideb);
+                for (int j = 0; j < width; ++j) {
+
+                    guint32 color = 0x0;
+
+                    // Need un-premultiply alpha and change order argb -> rgba.
+                    guint32 alpha = (*pb & 0xff000000) >> 24;
+                    if (alpha == 0x0) {
+                        color = 0x0;
+                    } else {
+                        guint32 rgb = unpremul_alpha(*pb & 0xffffff, alpha);
+                        color = (rgb << 8) + alpha;
+                    }
+
+                    *p++ = color;
+                    pb++;
+                }
+            }
+            _built = true;
+            break;
+        }
+
+        case CANVAS_ITEM_CTRL_SHAPE_CARROW:
+        {
+            // Curved arrow, one head pointing left and and one pointing down.
+            // Find points, starting from tip of one arrowhead, working clockwise, see above.
+
+            double size = _width; // Use unscaled width. Should be 2 pixels larger than double arrow case.
+
+            // Length of arrowhead (not including stroke).
+            double delta = (size-3)/4.0; // Use unscaled width.
+
+            // Tip of arrow
+            double tip_x =         1.5;  // Edge, allow room for stroke when rotated.
+            double tip_y = delta + 1.5;
+
+            // Outer corner (1)
+            double out_x = tip_x + delta;
+            double out_y = tip_y - delta;
+
+            // Inner corner (2)
+            double in_x = out_x;
+            double in_y = out_y + (delta/2.0);
+
+            double x0 = tip_x;                double y0 = tip_y;
+            double x1 = out_x;                double y1 = out_y;
+            double x2 = in_x;                 double y2 = in_y;
+            double x3 = size - in_y;        //double y3 = size - in_x;
+            double x4 = size - out_y;         double y4 = size - out_x;
+            double x5 = size - tip_y;         double y5 = size - tip_x;
+            double x6 = x5 - delta;           double y6 = y4;
+            double x7 = x5 - delta/2.0;       double y7 = y4;
+            double x8 = x1;                 //double y8 = y0 + delta/2.0;
+            double x9 = x1;                   double y9 = y0 + delta;
+
+            auto work = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32, device_scale * size, device_scale * size);
+            cairo_surface_set_device_scale(work->cobj(), device_scale, device_scale); // No C++ API!
+            auto cr = Cairo::Context::create(work);
+
+            // Rotate around center
+            cr->translate( size/2.0,  size/2.0);
+            cr->rotate(_angle);
+            cr->translate(-size/2.0, -size/2.0);
+
+            // Draw arrow
+            cr->move_to(x0, y0);
+            cr->line_to(x1, y1);
+            cr->line_to(x2, y2);
+            cr->arc(x1, y4, x3-x2, 3.0*M_PI/2.0, 0);
+            cr->line_to(x4, y4);
+            cr->line_to(x5, y5);
+            cr->line_to(x6, y6);
+            cr->line_to(x7, y7);
+            cr->arc_negative(x1, y4, x7-x8, 0, 3.0*M_PI/2.0);
+            cr->line_to(x9, y9);
+            cr->close_path();
+
+            // Fill and stroke.
+            cr->set_source_rgba(SP_RGBA32_R_F(_fill),
+                                SP_RGBA32_G_F(_fill),
+                                SP_RGBA32_B_F(_fill),
+                                SP_RGBA32_A_F(_fill));
+            cr->fill_preserve();
+            cr->set_source_rgba(SP_RGBA32_R_F(_stroke),
+                                SP_RGBA32_G_F(_stroke),
+                                SP_RGBA32_B_F(_stroke),
+                                SP_RGBA32_A_F(_stroke));
+            cr->set_line_width(1);
+            cr->stroke();
+
+            // Copy to buffer.
+            work->flush();
+            int strideb = work->get_stride();
+            unsigned char* pxb = work->get_data();
+            guint32 *p = _cache;
+            for (int i = 0; i < device_scale * size; ++i) {
+                guint32 *pb = reinterpret_cast<guint32*>(pxb + i*strideb);
+                for (int j = 0; j < width; ++j) {
+
+                    guint32 color = 0x0;
+
+                    // Need to un-premultiply alpha and change order argb -> rgba.
+                    guint32 alpha = (*pb & 0xff000000) >> 24;
+                    if (alpha == 0x0) {
+                        color = 0x0;
+                    } else {
+                        guint32 rgb = unpremul_alpha(*pb & 0xffffff, alpha);
+                        color = (rgb << 8) + alpha;
+                    }
+
+                    *p++ = color;
+                    pb++;
+                }
+            }
+            _built = true;
+            break;
+        }
+
         case CANVAS_ITEM_CTRL_SHAPE_BITMAP:
         {
             if (_pixbuf) {
@@ -688,10 +933,11 @@ void CanvasItemCtrl::build_cache(int device_scale)
             _built = true;
             break;
         }
-            break;
+
         case CANVAS_ITEM_CTRL_SHAPE_IMAGE:
-            std::cout << "CTRL  Building image: UNIMPLEMENTED" << std::endl;
+            std::cerr << "CanvasItemCtrl::build_cache: image: UNIMPLEMENTED" << std::endl;
             break;
+
         default:
             std::cerr << "CanvasItemCtrl::build_cache: unhandled shape!" << std::endl;
     }

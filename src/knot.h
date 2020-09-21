@@ -63,6 +63,7 @@ public:
     unsigned int flags  = SP_KNOT_VISIBLE;
 
     unsigned int size   = 9;                        /**< Always square. Must be odd. */
+    bool size_set       = false;                    /**< Use default size unless explicitly set. */
     double angle        = 0.0;                      /**< Angle of mesh handle. */
     Geom::Point pos;                                /**< Our desktop coordinates. */
     Geom::Point grabbed_rel_pos;                    /**< Grabbed relative position. */

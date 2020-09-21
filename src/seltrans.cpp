@@ -644,14 +644,26 @@ void Inkscape::SelTrans::_makeHandles()
         SPSelTransTypeInfo info = handtypes[hands[i].type];
         knots[i] = new SPKnot(_desktop, _(info.tip), CANVAS_ITEM_CTRL_TYPE_ADJ_HANDLE, "SelTrans");
 
-        knots[i]->setShape(CANVAS_ITEM_CTRL_SHAPE_BITMAP);
-        knots[i]->setSize(13);
+        switch (hands[i].type) {
+            case HANDLE_STRETCH:
+            case HANDLE_SCALE:
+                knots[i]->setShape(CANVAS_ITEM_CTRL_SHAPE_DARROW);
+                break;
+            case HANDLE_SKEW:
+                knots[i]->setShape(CANVAS_ITEM_CTRL_SHAPE_SARROW);
+                break;
+            case HANDLE_ROTATE:
+                knots[i]->setShape(CANVAS_ITEM_CTRL_SHAPE_CARROW);
+                break;
+            default:
+                knots[i]->setShape(CANVAS_ITEM_CTRL_SHAPE_BITMAP);
+                knots[i]->setPixbuf(handles[hands[i].control]);
+        }
         knots[i]->setAnchor(hands[i].anchor);
         knots[i]->setMode(CANVAS_ITEM_CTRL_MODE_XOR);
         knots[i]->setFill(info.color[0], info.color[1], info.color[1], info.color[1]);
         knots[i]->setStroke(info.color[2], info.color[3], info.color[3], info.color[3]);
 
-        knots[i]->setPixbuf(handles[hands[i].control]);
         knots[i]->updateCtrl();
 
         knots[i]->request_signal.connect(sigc::bind(sigc::ptr_fun(sp_sel_trans_handle_request), &hands[i]));

@@ -433,12 +433,15 @@ void SPKnot::setFlag(guint flag, bool set) {
     }
 }
 
+// TODO: Look at removing this and setting ctrl parameters directly.
 void SPKnot::updateCtrl() {
 
     if (ctrl) {
         ctrl->set_shape(shape);
         ctrl->set_mode(mode);
-        ctrl->set_size(size);
+        if (size_set) {
+            ctrl->set_size(size);
+        }
         ctrl->set_angle(angle);
         ctrl->set_anchor(anchor);
         ctrl->set_pixbuf(static_cast<GdkPixbuf *>(pixbuf));
@@ -466,6 +469,7 @@ void SPKnot::_setCtrlState() {
 
 void SPKnot::setSize(guint i) {
     size = i;
+    size_set = true;
 }
 
 void SPKnot::setShape(Inkscape::CanvasItemCtrlShape s) {

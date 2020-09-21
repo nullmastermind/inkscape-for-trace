@@ -26,8 +26,8 @@ namespace Inkscape {
 }
 
 // Colours are RRGGBBAA:      FILL,       OVER&DRAG,  STROKE,     OVER&DRAG
-guint32 const DEF_COLOR[] = { 0x000000ff, 0x00ff6600, 0x000000ff, 0x000000ff };
-guint32 const CEN_COLOR[] = { 0x00000000, 0x00000000, 0x000000ff, 0xff0000b0 };
+guint32 const DEF_COLOR[] = { 0x000000ff, 0x00ff66ff, 0x000000ff, 0x000000ff };
+guint32 const CEN_COLOR[] = { 0x000000ff, 0x000000ff, 0x000000ff, 0xff0000b0 };
 
 enum SPSelTransType {
     HANDLE_STRETCH,
