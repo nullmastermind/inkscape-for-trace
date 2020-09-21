@@ -76,12 +76,8 @@ typedef bool GBool;
 #define _POPPLER_CALL_ARGS_DEREF(...) (*_POPPLER_CALL_ARGS(__VA_ARGS__))
 #endif
 
-#if POPPLER_CHECK_VERSION(0, 29, 0)
-#define POPPLER_EVEN_NEWER_NEW_COLOR_SPACE_API
-#endif
-
-#if POPPLER_CHECK_VERSION(0, 25, 0)
-#define POPPLER_EVEN_NEWER_COLOR_SPACE_API
+#if !POPPLER_CHECK_VERSION(0, 29, 0)
+#error "Requires poppler >= 0.29"
 #endif
 
 #endif
