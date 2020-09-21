@@ -198,7 +198,7 @@ void OrderingClosest(std::vector<OrderingInfo> &infos, bool revfirst)
         // find closest point to p
         unsigned iBest = 0;
         bool revBest = false;
-        Coord distBest = infinity();
+        Coord distBest = Geom::infinity();
 
         for (std::vector<OrderingInfo>::iterator it = infos.begin(); it != infos.end(); ++it) {
             it->index = it - infos.begin();
@@ -255,8 +255,8 @@ void OrderingPoint::FindNearest2(const std::vector<OrderingInfoEx *> &infos)
     // This implementation is not terribly elegant (unSTLish).
     // But for the first 2 elements using e.g. partial_sort is not simpler.
 
-    Coord dist0 = infinity();
-    Coord dist1 = infinity();
+    Coord dist0 = Geom::infinity();
+    Coord dist1 = Geom::infinity();
     nearest[0] = nullptr;
     nearest[1] = nullptr;
 
