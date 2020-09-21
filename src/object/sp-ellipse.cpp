@@ -672,6 +672,9 @@ void SPGenericEllipse::position_set(gdouble x, gdouble y, gdouble rx, gdouble ry
     }
 
     this->arc_type = (GenericEllipseArcType)prefs->getInt("/tools/shapes/arc/arc_type", 0);
+    if (_isSlice()) {
+        this->type = SP_GENERIC_ELLIPSE_ARC;
+    }
 
     this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
