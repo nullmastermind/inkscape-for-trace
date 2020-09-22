@@ -219,6 +219,7 @@ if(WIN32)
     ${MINGW_LIB}/girepository-1.0/GModule-2.0.typelib
     ${MINGW_LIB}/girepository-1.0/GObject-2.0.typelib
     ${MINGW_LIB}/girepository-1.0/Gtk-3.0.typelib
+    ${MINGW_LIB}/girepository-1.0/HarfBuzz-0.0.typelib
     ${MINGW_LIB}/girepository-1.0/Pango-1.0.typelib
     ${MINGW_LIB}/girepository-1.0/PangoCairo-1.0.typelib
     DESTINATION lib/girepository-1.0)
