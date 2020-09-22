@@ -1770,23 +1770,23 @@ void InkscapePreferences::initPageUI()
         // "Larger" is 3 to not break existing preference files. Should fix in GTK3
 
         _misc_small_tools.init("/toolbox/tools/small", sizeLabels, sizeValues, G_N_ELEMENTS(sizeLabels), 0);
-        _page_theme.add_line(false, _("Toolbox icon size:"), _misc_small_tools, "",
-                             _("Set the size for the tool icons (requires restart)"), false);
+        _page_theme.add_line(false, _("Toolbox icon size:"), _misc_small_tools, _("(requires restart)"),
+                             _("Set the size for the tool icons."), false);
 
         _misc_small_toolbar.init("/toolbox/small", sizeLabels, sizeValues, G_N_ELEMENTS(sizeLabels), 0);
-        _page_theme.add_line(false, _("Control bar icon size:"), _misc_small_toolbar, "",
-                             _("Set the size for the icons in tools' control bars (requires restart)"), false);
+        _page_theme.add_line(false, _("Control bar icon size:"), _misc_small_toolbar, _("(requires restart)"),
+                             _("Set the size for the icons in tools' control bars."), false);
 
         _misc_small_secondary.init("/toolbox/secondary", sizeLabels, sizeValues, G_N_ELEMENTS(sizeLabels), 1);
-        _page_theme.add_line(false, _("Secondary toolbar icon size:"), _misc_small_secondary, "",
-                             _("Set the size for the icons in secondary toolbars (requires restart)"), false);
+        _page_theme.add_line(false, _("Secondary toolbar icon size:"), _misc_small_secondary, _("(requires restart)"),
+                             _("Set the size for the icons in secondary toolbars."), false);
     }
     {
         Glib::ustring menu_icons_labels[] = {_("Yes"), _("No"), _("Theme decides")};
         int menu_icons_values[] = {1, -1, 0};
         _menu_icons.init("/theme/menuIcons", menu_icons_labels, menu_icons_values, G_N_ELEMENTS(menu_icons_labels), 0);
-        _page_theme.add_line(false, _("Show icons in menus:"), _menu_icons, "",
-                             _("You can either enable or disable all icons in menus. By default, the setting for the 'show-icons' attribute in the 'menus.xml' file determines whether to display icons in menus. (requires restart)"), false);
+        _page_theme.add_line(false, _("Show icons in menus:"), _menu_icons, _("(requires restart)"),
+                             _("You can either enable or disable all icons in menus. By default, the setting for the 'show-icons' attribute in the 'menus.xml' file determines whether to display icons in menus."), false);
     }
 
     this->AddPage(_page_theme, _("Themeing"), iter_ui, PREFS_PAGE_UI_THEME);
