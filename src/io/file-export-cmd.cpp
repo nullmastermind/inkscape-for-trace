@@ -15,14 +15,6 @@
 
 #include "file-export-cmd.h"
 
-#ifdef __APPLE__  // cannot use c++17 library features with target OS <10.15
-#include <boost/filesystem.hpp>
-using namespace boost;
-#else
-#include <filesystem>
-using namespace std;
-#endif
-
 #include <png.h> // PNG export
 
 #include "document.h"
@@ -45,6 +37,14 @@ using namespace std;
 #include "extension/db.h"
 #include "extension/output.h"
 #include "extension/init.h"
+
+#ifdef __APPLE__  // cannot use c++17 library features with target OS <10.15
+#include <boost/filesystem.hpp>
+namespace filesystem = boost::filesystem;
+#else
+#include <filesystem>
+namespace filesystem = std::filesystem;
+#endif
 
 InkFileExportCmd::InkFileExportCmd()
     : export_overwrite(false)
