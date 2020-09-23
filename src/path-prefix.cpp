@@ -118,7 +118,7 @@ char const *get_program_name()
         } else {
             g_warning("get_program_name() - _NSGetExecutablePath failed");
         }
-#elif defined(__linux__)
+#elif defined(__linux__) || defined(__CYGWIN__)
         program_name = g_file_read_link("/proc/self/exe", NULL);
         if (!program_name) {
             g_warning("get_program_name() - g_file_read_link failed");
