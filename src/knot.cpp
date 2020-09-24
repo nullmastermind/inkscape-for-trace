@@ -437,7 +437,9 @@ void SPKnot::setFlag(guint flag, bool set) {
 void SPKnot::updateCtrl() {
 
     if (ctrl) {
-        ctrl->set_shape(shape);
+        if (shape_set) {
+            ctrl->set_shape(shape);
+        }
         ctrl->set_mode(mode);
         if (size_set) {
             ctrl->set_size(size);
@@ -474,6 +476,7 @@ void SPKnot::setSize(guint i) {
 
 void SPKnot::setShape(Inkscape::CanvasItemCtrlShape s) {
     shape = s;
+    shape_set = true;
 }
 
 void SPKnot::setAnchor(guint i) {

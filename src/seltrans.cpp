@@ -583,7 +583,8 @@ void Inkscape::SelTrans::_updateHandles()
         _showHandles(HANDLE_STRETCH);
         _showHandles(HANDLE_SCALE);
     } else if(_state == STATE_ALIGN) {
-       _showHandles(HANDLE_ALIGN);
+       _showHandles(HANDLE_SIDE_ALIGN);
+       _showHandles(HANDLE_CORNER_ALIGN);
        _showHandles(HANDLE_CENTER_ALIGN);
     } else {
         _showHandles(HANDLE_SKEW);
@@ -642,20 +643,26 @@ void Inkscape::SelTrans::_makeHandles()
 {
     for (int i = 0; i < NUMHANDS; i++) {
         SPSelTransTypeInfo info = handtypes[hands[i].type];
-        knots[i] = new SPKnot(_desktop, _(info.tip), CANVAS_ITEM_CTRL_TYPE_ADJ_HANDLE, "SelTrans");
 
         switch (hands[i].type) {
             case HANDLE_STRETCH:
             case HANDLE_SCALE:
-                knots[i]->setShape(CANVAS_ITEM_CTRL_SHAPE_DARROW);
+                knots[i] = new SPKnot(_desktop, _(info.tip), CANVAS_ITEM_CTRL_TYPE_ADJ_HANDLE, "SelTrans");
                 break;
             case HANDLE_SKEW:
-                knots[i]->setShape(CANVAS_ITEM_CTRL_SHAPE_SARROW);
+                knots[i] = new SPKnot(_desktop, _(info.tip), CANVAS_ITEM_CTRL_TYPE_ADJ_SKEW, "SelTrans");
                 break;
             case HANDLE_ROTATE:
-                knots[i]->setShape(CANVAS_ITEM_CTRL_SHAPE_CARROW);
+                knots[i] = new SPKnot(_desktop, _(info.tip), CANVAS_ITEM_CTRL_TYPE_ADJ_ROTATE, "SelTrans");
+                break;
+            case HANDLE_SIDE_ALIGN:
+                knots[i] = new SPKnot(_desktop, _(info.tip), CANVAS_ITEM_CTRL_TYPE_ADJ_SALIGN, "SelTrans");
+                break;
+            case HANDLE_CORNER_ALIGN:
+                knots[i] = new SPKnot(_desktop, _(info.tip), CANVAS_ITEM_CTRL_TYPE_ADJ_CALIGN, "SelTrans");
                 break;
             default:
+                knots[i] = new SPKnot(_desktop, _(info.tip), CANVAS_ITEM_CTRL_TYPE_ADJ_HANDLE, "SelTrans");
                 knots[i]->setShape(CANVAS_ITEM_CTRL_SHAPE_BITMAP);
                 knots[i]->setPixbuf(handles[hands[i].control]);
         }
@@ -728,7 +735,8 @@ void Inkscape::SelTrans::handleClick(SPKnot */*knot*/, guint state, SPSelTransHa
                                    _("Reset center"));
             }
             break;
-        case HANDLE_ALIGN:
+        case HANDLE_SIDE_ALIGN:
+        case HANDLE_CORNER_ALIGN:
         case HANDLE_CENTER_ALIGN:
             align(state, handle);
         default:
@@ -789,7 +797,8 @@ void Inkscape::SelTrans::handleNewEvent(SPKnot *knot, Geom::Point *position, gui
         case HANDLE_CENTER:
             setCenter(*position);
             break;
-        case HANDLE_ALIGN:
+        case HANDLE_SIDE_ALIGN:
+        case HANDLE_CORNER_ALIGN:
         case HANDLE_CENTER_ALIGN:
             break;
     }
@@ -1096,7 +1105,8 @@ gboolean Inkscape::SelTrans::request(SPSelTransHandle const &handle, Geom::Point
             return rotateRequest(pt, state);
         case HANDLE_CENTER:
             return centerRequest(pt, state);
-        case HANDLE_ALIGN:
+        case HANDLE_SIDE_ALIGN:
+        case HANDLE_CORNER_ALIGN:
         case HANDLE_CENTER_ALIGN:
             break; // Do nothing, no dragging
     }

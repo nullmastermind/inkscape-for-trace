@@ -14,6 +14,7 @@
 #define N_(x) x
 #endif
 
+// Must match SPSelTransType enum
 SPSelTransTypeInfo const handtypes[] = {
     { DEF_COLOR, N_("<b>Squeeze or stretch</b> selection; with <b>Ctrl</b> to scale uniformly; with <b>Shift</b> to scale around rotation center") },
     { DEF_COLOR, N_("<b>Scale</b> selection; with <b>Ctrl</b> to scale uniformly; with <b>Shift</b> to scale around rotation center") },
@@ -21,6 +22,7 @@ SPSelTransTypeInfo const handtypes[] = {
     { DEF_COLOR, N_("<b>Rotate</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> to rotate around the opposite corner") },
     { CEN_COLOR, N_("<b>Center</b> of rotation and skewing: drag to reposition; scaling with Shift also uses this center") },
     { DEF_COLOR, N_("<b>Align</b> objects to the side clicked; <b>Shift</b> click to invert side; <b>Ctrl</b> to group whole selection.") },
+    { DEF_COLOR, N_("<b>Align</b> objects to the corner clicked; <b>Shift</b> click to invert side; <b>Ctrl</b> to group whole selection.") },
     { DEF_COLOR, N_("<b>Align</b> objects to center; <b>Shift</b> click to center vertically instead of horizontally.") }
 };
 
@@ -45,15 +47,16 @@ SPSelTransHandle const hands[] = {
     { HANDLE_SKEW,          SP_ANCHOR_N,       GDK_SB_H_DOUBLE_ARROW,    10,    0.5,  0   },
     { HANDLE_ROTATE,        SP_ANCHOR_NE,      GDK_EXCHANGE,             7,     0,    0   },
     { HANDLE_SKEW,          SP_ANCHOR_E,       GDK_SB_V_DOUBLE_ARROW,    11,    0,    0.5 },
-    { HANDLE_ALIGN,         SP_ANCHOR_S,       GDK_TOP_SIDE,             13,    0.5,  1   },
-    { HANDLE_ALIGN,         SP_ANCHOR_W,       GDK_RIGHT_SIDE,           14,    1,    0.5 },
-    { HANDLE_ALIGN,         SP_ANCHOR_N,       GDK_BOTTOM_SIDE,          15,    0.5,  0   },
-    { HANDLE_ALIGN,         SP_ANCHOR_E,       GDK_LEFT_SIDE,            16,    0,    0.5 },
+
+    { HANDLE_SIDE_ALIGN,    SP_ANCHOR_S,       GDK_TOP_SIDE,             13,    0.5,  1   },
+    { HANDLE_SIDE_ALIGN,    SP_ANCHOR_W,       GDK_RIGHT_SIDE,           14,    1,    0.5 },
+    { HANDLE_SIDE_ALIGN,    SP_ANCHOR_N,       GDK_BOTTOM_SIDE,          15,    0.5,  0   },
+    { HANDLE_SIDE_ALIGN,    SP_ANCHOR_E,       GDK_LEFT_SIDE,            16,    0,    0.5 },
     { HANDLE_CENTER_ALIGN,  SP_ANCHOR_CENTER,  GDK_CROSSHAIR,            17,    0.5,  0.5 },
-    { HANDLE_ALIGN,         SP_ANCHOR_SE,      GDK_TOP_LEFT_CORNER,      18,    0,    1   },
-    { HANDLE_ALIGN,         SP_ANCHOR_SW,      GDK_TOP_RIGHT_CORNER,     19,    1,    1   },
-    { HANDLE_ALIGN,         SP_ANCHOR_NW,      GDK_BOTTOM_RIGHT_CORNER,  20,    1,    0   },
-    { HANDLE_ALIGN,         SP_ANCHOR_NE,      GDK_BOTTOM_LEFT_CORNER,   21,    0,    0   },
+    { HANDLE_CORNER_ALIGN,  SP_ANCHOR_SE,      GDK_TOP_LEFT_CORNER,      18,    0,    1   },
+    { HANDLE_CORNER_ALIGN,  SP_ANCHOR_SW,      GDK_TOP_RIGHT_CORNER,     19,    1,    1   },
+    { HANDLE_CORNER_ALIGN,  SP_ANCHOR_NW,      GDK_BOTTOM_RIGHT_CORNER,  20,    1,    0   },
+    { HANDLE_CORNER_ALIGN,  SP_ANCHOR_NE,      GDK_BOTTOM_LEFT_CORNER,   21,    0,    0   },
     // clang-format on
 };
 

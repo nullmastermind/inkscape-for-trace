@@ -79,6 +79,7 @@ public:
     bool transform_escaped = false; // true iff resize or rotate was cancelled by esc.
 
     Inkscape::CanvasItemCtrlShape shape = Inkscape::CANVAS_ITEM_CTRL_SHAPE_SQUARE;   /**< Shape type. */
+    bool shape_set      = false;                    /**< Use default shape unless explicitly set. */
     Inkscape::CanvasItemCtrlMode mode = Inkscape::CANVAS_ITEM_CTRL_MODE_XOR;
 
     guint32 fill[SP_KNOT_VISIBLE_STATES];

@@ -147,12 +147,16 @@ void CanvasItemCtrl::update(Geom::Affine const &affine)
 
     if (_shape == CANVAS_ITEM_CTRL_SHAPE_DARROW ||
         _shape == CANVAS_ITEM_CTRL_SHAPE_SARROW ||
-        _shape == CANVAS_ITEM_CTRL_SHAPE_CARROW  ) {
+        _shape == CANVAS_ITEM_CTRL_SHAPE_CARROW ||
+        _shape == CANVAS_ITEM_CTRL_SHAPE_SALIGN ||
+        _shape == CANVAS_ITEM_CTRL_SHAPE_CALIGN  ) {
 
         _angle = _anchor * M_PI/4.0 + std::atan2(_affine[1], _affine[0]);
 
-        dx = - (h_half + 2) * cos(_angle); // Add a bit to prevent tip from overlapping due to rounding errors.
-        dy = - (w_half + 2) * sin(_angle);
+        double half = _width/2.0;
+
+        dx = - (half + 2) * cos(_angle); // Add a bit to prevent tip from overlapping due to rounding errors.
+        dy = - (half + 2) * sin(_angle);
 
         if (_shape == CANVAS_ITEM_CTRL_SHAPE_CARROW) {
             _angle += 5 * M_PI/4.0;
@@ -160,6 +164,18 @@ void CanvasItemCtrl::update(Geom::Affine const &affine)
 
         if (_shape == CANVAS_ITEM_CTRL_SHAPE_SARROW) {
             _angle += M_PI/2.0;
+        }
+
+        if (_shape == CANVAS_ITEM_CTRL_SHAPE_SALIGN) {
+            dx = - (half/2 + 2) * cos(_angle);
+            dy = - (half/2 + 2) * sin(_angle);
+            _angle -= M_PI/2.0;
+        }
+
+        if (_shape == CANVAS_ITEM_CTRL_SHAPE_CALIGN) {
+            _angle -= M_PI/4.0;
+            dx = (half/2 + 2) * ( sin(_angle) - cos(_angle));
+            dy = (half/2 + 2) * (-sin(_angle) - cos(_angle));
         }
 
         _built = false; // Angle may have change, must rebuild!
@@ -360,6 +376,14 @@ void CanvasItemCtrl::set_shape_default()
             _shape = CANVAS_ITEM_CTRL_SHAPE_CARROW;
             break;
 
+        case CANVAS_ITEM_CTRL_TYPE_ADJ_SALIGN:
+            _shape = CANVAS_ITEM_CTRL_SHAPE_SALIGN;
+            break;
+
+        case CANVAS_ITEM_CTRL_TYPE_ADJ_CALIGN:
+            _shape = CANVAS_ITEM_CTRL_SHAPE_CALIGN;
+            break;
+
         case CANVAS_ITEM_CTRL_TYPE_NODE_AUTO:
         case CANVAS_ITEM_CTRL_TYPE_ROTATE:
             _shape = CANVAS_ITEM_CTRL_SHAPE_CIRCLE;
@@ -433,6 +457,11 @@ void CanvasItemCtrl::set_size_via_index(int size_index)
 
         case CANVAS_ITEM_CTRL_TYPE_ADJ_ROTATE:
             size = size_index * 2 + 9; // 2 larger than HANDLE/SKEW
+            break;
+
+        case CANVAS_ITEM_CTRL_TYPE_ADJ_SALIGN:
+        case CANVAS_ITEM_CTRL_TYPE_ADJ_CALIGN:
+            size = size_index * 4 + 5; // Needs to be larger to allow for rotating.
             break;
 
         case CANVAS_ITEM_CTRL_TYPE_POINT:
@@ -518,6 +547,181 @@ bool point_inside_triangle(Geom::Point p1,Geom::Point p2,Geom::Point p3, Geom::P
 }
 
 
+void draw_darrow(Cairo::RefPtr<Cairo::Context>cr, double size) {
+
+    // Find points, starting from tip of one arrowhead, working clockwise.
+    /*   1        4
+        ╱│        │╲
+       ╱ └────────┘ ╲
+     0╱  2        3  ╲5
+      ╲  8        7  ╱
+       ╲ ┌────────┐ ╱
+        ╲│9      6│╱
+    */
+
+    // Length of arrowhead (not including stroke).
+    double delta = (size-1)/4.0; // Use unscaled width.
+
+    // Tip of arrow (0)
+    double tip_x = 0.5;          // At edge, allow room for stroke.
+    double tip_y = size/2.0;     // Center, assuming width == height.
+
+    // Outer corner (1)
+    double out_x = tip_x + delta;
+    double out_y = tip_y - delta;
+
+    // Inner corner (2)
+    double in_x = out_x;
+    double in_y = out_y + (delta/2.0);
+
+    double x0 = tip_x;                double y0 = tip_y;
+    double x1 = out_x;                double y1 = out_y;
+    double x2 = in_x;                 double y2 = in_y;
+    double x3 = size - in_x;          double y3 = in_y;
+    double x4 = size - out_x;         double y4 = out_y;
+    double x5 = size - tip_x;         double y5 = tip_y;
+    double x6 = size - out_x;         double y6 = size - out_y;
+    double x7 = size - in_x;          double y7 = size - in_y;
+    double x8 = in_x;                 double y8 = size - in_y;
+    double x9 = out_x;                double y9 = size - out_y;
+
+    // Draw arrow
+    cr->move_to(x0, y0);
+    cr->line_to(x1, y1);
+    cr->line_to(x2, y2);
+    cr->line_to(x3, y3);
+    cr->line_to(x4, y4);
+    cr->line_to(x5, y5);
+    cr->line_to(x6, y6);
+    cr->line_to(x7, y7);
+    cr->line_to(x8, y8);
+    cr->line_to(x9, y9);
+    cr->close_path();
+}
+
+void draw_carrow(Cairo::RefPtr<Cairo::Context>cr, double size) {
+
+    // Length of arrowhead (not including stroke).
+    double delta = (size-3)/4.0; // Use unscaled width.
+
+    // Tip of arrow
+    double tip_x =         1.5;  // Edge, allow room for stroke when rotated.
+    double tip_y = delta + 1.5;
+
+    // Outer corner (1)
+    double out_x = tip_x + delta;
+    double out_y = tip_y - delta;
+
+    // Inner corner (2)
+    double in_x = out_x;
+    double in_y = out_y + (delta/2.0);
+
+    double x0 = tip_x;                double y0 = tip_y;
+    double x1 = out_x;                double y1 = out_y;
+    double x2 = in_x;                 double y2 = in_y;
+    double x3 = size - in_y;        //double y3 = size - in_x;
+    double x4 = size - out_y;         double y4 = size - out_x;
+    double x5 = size - tip_y;         double y5 = size - tip_x;
+    double x6 = x5 - delta;           double y6 = y4;
+    double x7 = x5 - delta/2.0;       double y7 = y4;
+    double x8 = x1;                 //double y8 = y0 + delta/2.0;
+    double x9 = x1;                   double y9 = y0 + delta;
+
+    // Draw arrow
+    cr->move_to(x0, y0);
+    cr->line_to(x1, y1);
+    cr->line_to(x2, y2);
+    cr->arc(x1, y4, x3-x2, 3.0*M_PI/2.0, 0);
+    cr->line_to(x4, y4);
+    cr->line_to(x5, y5);
+    cr->line_to(x6, y6);
+    cr->line_to(x7, y7);
+    cr->arc_negative(x1, y4, x7-x8, 0, 3.0*M_PI/2.0);
+    cr->line_to(x9, y9);
+    cr->close_path();
+}
+
+void draw_salign(Cairo::RefPtr<Cairo::Context>cr, double size) {
+
+    // Triangle pointing at line.
+
+    // Basic units.
+    double delta4 = (size-1)/4.0; // Use unscaled width.
+    double delta8 = delta4/2;
+    if (delta8 < 2) {
+        // Keep a minimum gap of at least one pixel (after stroking).
+        delta8 = 2;
+    }
+
+    // Tip of triangle
+    double tip_x = size/2.0; // Center (also rotation point).
+    double tip_y = size/2.0;
+
+    // Corner triangle position.
+    double outer = size/2.0 - delta4;
+
+    // Outer line position
+    double oline = size/2.0 + (int)delta4;
+
+    // Inner line position
+    double iline = size/2.0 + (int)delta8;
+
+    // Draw triangle
+    cr->move_to(tip_x,           tip_y);
+    cr->line_to(outer,           outer);
+    cr->line_to(size - outer,    outer);
+    cr->close_path();
+
+    // Draw line
+    cr->move_to(outer,           iline);
+    cr->line_to(size - outer,    iline);
+    cr->line_to(size - outer,    oline);
+    cr->line_to(outer,           oline);
+    cr->close_path();
+}
+
+void draw_calign(Cairo::RefPtr<Cairo::Context>cr, double size) {
+
+    // Basic units.
+    double delta4 = (size-1)/4.0; // Use unscaled width.
+    double delta8 = delta4/2;
+    if (delta8 < 2) {
+        // Keep a minimum gap of at least one pixel (after stroking).
+        delta8 = 2;
+    }
+
+    // Tip of triangle
+    double tip_x = size/2.0; // Center (also rotation point).
+    double tip_y = size/2.0;
+
+    // Corner triangle position.
+    double outer = size/2.0 - delta8 - delta4;
+
+    // End of line positin
+    double eline = size/2.0 - delta8;
+
+    // Outer line position
+    double oline = size/2.0 + (int)delta4;
+
+    // Inner line position
+    double iline = size/2.0 + (int)delta8;
+
+    // Draw triangle
+    cr->move_to(tip_x,           tip_y);
+    cr->line_to(outer,           tip_y);
+    cr->line_to(tip_x,           outer);
+    cr->close_path();
+
+    // Draw line
+    cr->move_to(iline,           iline);
+    cr->line_to(iline,           eline);
+    cr->line_to(oline,           eline);
+    cr->line_to(oline,           oline);
+    cr->line_to(eline,           oline);
+    cr->line_to(eline,           iline);
+    cr->close_path();
+}
+
 void CanvasItemCtrl::build_cache(int device_scale)
 {
     if (_width < 2 || _height < 2) {
@@ -531,7 +735,6 @@ void CanvasItemCtrl::build_cache(int device_scale)
         fill   = _fill;
         stroke = _stroke;
     } else {
-        std::cout << "CanvasItemCtrl::build_cache: Somebody really does use CTRL_MODE_COLOR!" << std::endl;
         fill   = argb32_from_rgba(_fill);
         stroke = argb32_from_rgba(_stroke);
     }
@@ -686,50 +889,14 @@ void CanvasItemCtrl::build_cache(int device_scale)
             _built = true;
             break;
 
-
         case CANVAS_ITEM_CTRL_SHAPE_DARROW:
-        case CANVAS_ITEM_CTRL_SHAPE_SARROW: // Same shape but rendered rotated 90 degrees.
+        case CANVAS_ITEM_CTRL_SHAPE_SARROW: // Same shape as darrow but rendered rotated 90 degrees.
+        case CANVAS_ITEM_CTRL_SHAPE_CARROW:
+        case CANVAS_ITEM_CTRL_SHAPE_SALIGN:
+        case CANVAS_ITEM_CTRL_SHAPE_CALIGN:
         {
-            // Find points, starting from tip of one arrowhead, working clockwise.
-            /*  1        4
-               ╱│        │╲
-              ╱ └────────┘ ╲
-            0╱  2        3  ╲5
-             ╲  8        7  ╱
-              ╲ ┌────────┐ ╱
-               ╲│9      6│╱
-            */
-
             double size = _width; // Use unscaled width.
 
-            // Length of arrowhead (not including stroke).
-            double delta = (size-1)/4.0; // Use unscaled width.
-
-            // Tip of arrow (0)
-            double tip_x = 0.5;          // At edge, allow room for stroke.
-            double tip_y = size/2.0;     // Center, assuming width == height.
-
-            // Outer corner (1)
-            double out_x = tip_x + delta;
-            double out_y = tip_y - delta;
-
-            // Inner corner (2)
-            double in_x = out_x;
-            double in_y = out_y + (delta/2.0);
-
-            double x0 = tip_x;                double y0 = tip_y;
-            double x1 = out_x;                double y1 = out_y;
-            double x2 = in_x;                 double y2 = in_y;
-            double x3 = size - in_x;          double y3 = in_y;
-            double x4 = size - out_x;         double y4 = out_y;
-            double x5 = size - tip_x;         double y5 = tip_y;
-            double x6 = size - out_x;         double y6 = size - out_y;
-            double x7 = size - in_x;          double y7 = size - in_y;
-            double x8 = in_x;                 double y8 = size - in_y;
-            double x9 = out_x;                double y9 = size - out_y;
-
-            // Seems silly to create a Cairo surface to create a buffer, only to later create a Cairo surface from the buffer!
-            // TODO: allow one to use a Cairo surface directly.
             auto work = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32, device_scale * size, device_scale * size);
             cairo_surface_set_device_scale(work->cobj(), device_scale, device_scale); // No C++ API!
             auto cr = Cairo::Context::create(work);
@@ -739,114 +906,29 @@ void CanvasItemCtrl::build_cache(int device_scale)
             cr->rotate(_angle);
             cr->translate(-size/2.0, -size/2.0);
 
-            // Draw arrow
-            cr->move_to(x0, y0);
-            cr->line_to(x1, y1);
-            cr->line_to(x2, y2);
-            cr->line_to(x3, y3);
-            cr->line_to(x4, y4);
-            cr->line_to(x5, y5);
-            cr->line_to(x6, y6);
-            cr->line_to(x7, y7);
-            cr->line_to(x8, y8);
-            cr->line_to(x9, y9);
-            cr->close_path();
+            // Construct path
+            switch (_shape) {
+                case CANVAS_ITEM_CTRL_SHAPE_DARROW:
+                case CANVAS_ITEM_CTRL_SHAPE_SARROW:
+                    draw_darrow(cr, size);
+                    break;
 
-            // Fill and stroke.
-            cr->set_source_rgba(SP_RGBA32_R_F(_fill),
-                                SP_RGBA32_G_F(_fill),
-                                SP_RGBA32_B_F(_fill),
-                                SP_RGBA32_A_F(_fill));
-            cr->fill_preserve();
-            cr->set_source_rgba(SP_RGBA32_R_F(_stroke),
-                                SP_RGBA32_G_F(_stroke),
-                                SP_RGBA32_B_F(_stroke),
-                                SP_RGBA32_A_F(_stroke));
-            cr->set_line_width(1);
-            cr->stroke();
+                case CANVAS_ITEM_CTRL_SHAPE_CARROW:
+                    draw_carrow(cr, size);
+                    break;
 
-            // Copy to buffer.
-            work->flush();
-            int strideb = work->get_stride();
-            unsigned char* pxb = work->get_data();
-            guint32 *p = _cache;
-            for (int i = 0; i < device_scale * size; ++i) {
-                guint32 *pb = reinterpret_cast<guint32*>(pxb + i*strideb);
-                for (int j = 0; j < width; ++j) {
+                case CANVAS_ITEM_CTRL_SHAPE_SALIGN:
+                    draw_salign(cr, size);
+                    break;
 
-                    guint32 color = 0x0;
+                case CANVAS_ITEM_CTRL_SHAPE_CALIGN:
+                    draw_calign(cr, size);
+                    break;
 
-                    // Need un-premultiply alpha and change order argb -> rgba.
-                    guint32 alpha = (*pb & 0xff000000) >> 24;
-                    if (alpha == 0x0) {
-                        color = 0x0;
-                    } else {
-                        guint32 rgb = unpremul_alpha(*pb & 0xffffff, alpha);
-                        color = (rgb << 8) + alpha;
-                    }
-
-                    *p++ = color;
-                    pb++;
-                }
+                default:
+                    // Shouldn't happen
+                    break;
             }
-            _built = true;
-            break;
-        }
-
-        case CANVAS_ITEM_CTRL_SHAPE_CARROW:
-        {
-            // Curved arrow, one head pointing left and and one pointing down.
-            // Find points, starting from tip of one arrowhead, working clockwise, see above.
-
-            double size = _width; // Use unscaled width. Should be 2 pixels larger than double arrow case.
-
-            // Length of arrowhead (not including stroke).
-            double delta = (size-3)/4.0; // Use unscaled width.
-
-            // Tip of arrow
-            double tip_x =         1.5;  // Edge, allow room for stroke when rotated.
-            double tip_y = delta + 1.5;
-
-            // Outer corner (1)
-            double out_x = tip_x + delta;
-            double out_y = tip_y - delta;
-
-            // Inner corner (2)
-            double in_x = out_x;
-            double in_y = out_y + (delta/2.0);
-
-            double x0 = tip_x;                double y0 = tip_y;
-            double x1 = out_x;                double y1 = out_y;
-            double x2 = in_x;                 double y2 = in_y;
-            double x3 = size - in_y;        //double y3 = size - in_x;
-            double x4 = size - out_y;         double y4 = size - out_x;
-            double x5 = size - tip_y;         double y5 = size - tip_x;
-            double x6 = x5 - delta;           double y6 = y4;
-            double x7 = x5 - delta/2.0;       double y7 = y4;
-            double x8 = x1;                 //double y8 = y0 + delta/2.0;
-            double x9 = x1;                   double y9 = y0 + delta;
-
-            auto work = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32, device_scale * size, device_scale * size);
-            cairo_surface_set_device_scale(work->cobj(), device_scale, device_scale); // No C++ API!
-            auto cr = Cairo::Context::create(work);
-
-            // Rotate around center
-            cr->translate( size/2.0,  size/2.0);
-            cr->rotate(_angle);
-            cr->translate(-size/2.0, -size/2.0);
-
-            // Draw arrow
-            cr->move_to(x0, y0);
-            cr->line_to(x1, y1);
-            cr->line_to(x2, y2);
-            cr->arc(x1, y4, x3-x2, 3.0*M_PI/2.0, 0);
-            cr->line_to(x4, y4);
-            cr->line_to(x5, y5);
-            cr->line_to(x6, y6);
-            cr->line_to(x7, y7);
-            cr->arc_negative(x1, y4, x7-x8, 0, 3.0*M_PI/2.0);
-            cr->line_to(x9, y9);
-            cr->close_path();
 
             // Fill and stroke.
             cr->set_source_rgba(SP_RGBA32_R_F(_fill),
