@@ -145,81 +145,103 @@ void CanvasItemCtrl::update(Geom::Affine const &affine)
     int dx = 0;
     int dy = 0;
 
-    if (_shape == CANVAS_ITEM_CTRL_SHAPE_DARROW ||
-        _shape == CANVAS_ITEM_CTRL_SHAPE_SARROW ||
-        _shape == CANVAS_ITEM_CTRL_SHAPE_CARROW ||
-        _shape == CANVAS_ITEM_CTRL_SHAPE_SALIGN ||
-        _shape == CANVAS_ITEM_CTRL_SHAPE_CALIGN  ) {
+    switch (_shape) {
+        case CANVAS_ITEM_CTRL_SHAPE_DARROW:
+        case CANVAS_ITEM_CTRL_SHAPE_SARROW:
+        case CANVAS_ITEM_CTRL_SHAPE_CARROW:
+        case CANVAS_ITEM_CTRL_SHAPE_SALIGN:
+        case CANVAS_ITEM_CTRL_SHAPE_CALIGN:
+        {
 
-        _angle = _anchor * M_PI/4.0 + std::atan2(_affine[1], _affine[0]);
+            _angle = _anchor * M_PI/4.0 + std::atan2(_affine[1], _affine[0]);
 
-        double half = _width/2.0;
+            double half = _width/2.0;
 
-        dx = - (half + 2) * cos(_angle); // Add a bit to prevent tip from overlapping due to rounding errors.
-        dy = - (half + 2) * sin(_angle);
+            dx = - (half + 2) * cos(_angle); // Add a bit to prevent tip from overlapping due to rounding errors.
+            dy = - (half + 2) * sin(_angle);
 
-        if (_shape == CANVAS_ITEM_CTRL_SHAPE_CARROW) {
-            _angle += 5 * M_PI/4.0;
+            switch (_shape) {
+
+                case CANVAS_ITEM_CTRL_SHAPE_CARROW:
+                    _angle += 5 * M_PI/4.0;
+                    break;
+
+                case CANVAS_ITEM_CTRL_SHAPE_SARROW:
+                    _angle += M_PI/2.0;
+                    break;
+
+                case CANVAS_ITEM_CTRL_SHAPE_SALIGN:
+                    dx = - (half/2 + 2) * cos(_angle);
+                    dy = - (half/2 + 2) * sin(_angle);
+                    _angle -= M_PI/2.0;
+                    break;
+
+                case CANVAS_ITEM_CTRL_SHAPE_CALIGN:
+                    _angle -= M_PI/4.0;
+                    dx = (half/2 + 2) * ( sin(_angle) - cos(_angle));
+                    dy = (half/2 + 2) * (-sin(_angle) - cos(_angle));
+                    break;
+
+                default:
+                    break;
+            }
+
+            _built = false; // Angle may have change, must rebuild!
+
+            break;
         }
 
-        if (_shape == CANVAS_ITEM_CTRL_SHAPE_SARROW) {
-            _angle += M_PI/2.0;
-        }
+        case CANVAS_ITEM_CTRL_SHAPE_PIVOT:
+        case CANVAS_ITEM_CTRL_SHAPE_MALIGN:
 
-        if (_shape == CANVAS_ITEM_CTRL_SHAPE_SALIGN) {
-            dx = - (half/2 + 2) * cos(_angle);
-            dy = - (half/2 + 2) * sin(_angle);
-            _angle -= M_PI/2.0;
-        }
+            _angle = std::atan2(_affine[1], _affine[0]);
 
-        if (_shape == CANVAS_ITEM_CTRL_SHAPE_CALIGN) {
-            _angle -= M_PI/4.0;
-            dx = (half/2 + 2) * ( sin(_angle) - cos(_angle));
-            dy = (half/2 + 2) * (-sin(_angle) - cos(_angle));
-        }
+            _built = false; // Angle may have change, must rebuild!
 
-        _built = false; // Angle may have change, must rebuild!
+            break;
 
-    } else {
+        default:
 
-        switch (_anchor) {
-            case SP_ANCHOR_N:
-            case SP_ANCHOR_CENTER:
-            case SP_ANCHOR_S:
-                break;
+            switch (_anchor) {
+                case SP_ANCHOR_N:
+                case SP_ANCHOR_CENTER:
+                case SP_ANCHOR_S:
+                    break;
 
-            case SP_ANCHOR_NW:
-            case SP_ANCHOR_W:
-            case SP_ANCHOR_SW:
-                dx = w_half;
-                break;
+                case SP_ANCHOR_NW:
+                case SP_ANCHOR_W:
+                case SP_ANCHOR_SW:
+                    dx = w_half;
+                    break;
 
-            case SP_ANCHOR_NE:
-            case SP_ANCHOR_E:
-            case SP_ANCHOR_SE:
-                dx = -w_half;
-                break;
-        }
+                case SP_ANCHOR_NE:
+                case SP_ANCHOR_E:
+                case SP_ANCHOR_SE:
+                    dx = -w_half;
+                    break;
+            }
 
-        switch (_anchor) {
-            case SP_ANCHOR_W:
-            case SP_ANCHOR_CENTER:
-            case SP_ANCHOR_E:
-                break;
+            switch (_anchor) {
+                case SP_ANCHOR_W:
+                case SP_ANCHOR_CENTER:
+                case SP_ANCHOR_E:
+                    break;
 
-            case SP_ANCHOR_NW:
-            case SP_ANCHOR_N:
-            case SP_ANCHOR_NE:
-                dy = h_half;
-                break;
+                case SP_ANCHOR_NW:
+                case SP_ANCHOR_N:
+                case SP_ANCHOR_NE:
+                    dy = h_half;
+                    break;
 
-            case SP_ANCHOR_SW:
-            case SP_ANCHOR_S:
-            case SP_ANCHOR_SE:
-                dy = -h_half;
-                break;
-        }
+                case SP_ANCHOR_SW:
+                case SP_ANCHOR_S:
+                case SP_ANCHOR_SE:
+                    dy = -h_half;
+                    break;
+            }
+            break;
     }
+
     _bounds *= Geom::Translate(Geom::IntPoint(dx, dy));
 
     // Position must also be integer.
@@ -376,12 +398,20 @@ void CanvasItemCtrl::set_shape_default()
             _shape = CANVAS_ITEM_CTRL_SHAPE_CARROW;
             break;
 
+        case CANVAS_ITEM_CTRL_TYPE_ADJ_CENTER:
+            _shape = CANVAS_ITEM_CTRL_SHAPE_PIVOT;
+            break;
+
         case CANVAS_ITEM_CTRL_TYPE_ADJ_SALIGN:
             _shape = CANVAS_ITEM_CTRL_SHAPE_SALIGN;
             break;
 
         case CANVAS_ITEM_CTRL_TYPE_ADJ_CALIGN:
             _shape = CANVAS_ITEM_CTRL_SHAPE_CALIGN;
+            break;
+
+        case CANVAS_ITEM_CTRL_TYPE_ADJ_MALIGN:
+            _shape = CANVAS_ITEM_CTRL_SHAPE_MALIGN;
             break;
 
         case CANVAS_ITEM_CTRL_TYPE_NODE_AUTO:
@@ -456,11 +486,13 @@ void CanvasItemCtrl::set_size_via_index(int size_index)
             break;
 
         case CANVAS_ITEM_CTRL_TYPE_ADJ_ROTATE:
+        case CANVAS_ITEM_CTRL_TYPE_ADJ_CENTER:
             size = size_index * 2 + 9; // 2 larger than HANDLE/SKEW
             break;
 
         case CANVAS_ITEM_CTRL_TYPE_ADJ_SALIGN:
         case CANVAS_ITEM_CTRL_TYPE_ADJ_CALIGN:
+        case CANVAS_ITEM_CTRL_TYPE_ADJ_MALIGN:
             size = size_index * 4 + 5; // Needs to be larger to allow for rotating.
             break;
 
@@ -641,6 +673,43 @@ void draw_carrow(Cairo::RefPtr<Cairo::Context>cr, double size) {
     cr->close_path();
 }
 
+void draw_pivot(Cairo::RefPtr<Cairo::Context>cr, double size) {
+
+    double delta4 = (size-5)/4.0; // Keep away from edge or will clip when rotating.
+    double delta8 = delta4/2;
+
+    // Line start
+    double center = size/2.0;
+
+    cr->move_to (center - delta8, center - 2*delta4 - delta8);
+    cr->rel_line_to ( delta4,  0     );
+    cr->rel_line_to ( 0,       delta4);
+
+    cr->rel_line_to ( delta4,  delta4);
+
+    cr->rel_line_to ( delta4,  0     );
+    cr->rel_line_to ( 0,       delta4);
+    cr->rel_line_to (-delta4,  0     );
+
+    cr->rel_line_to (-delta4,  delta4);
+
+    cr->rel_line_to ( 0,       delta4);
+    cr->rel_line_to (-delta4,  0     );
+    cr->rel_line_to ( 0,      -delta4);
+
+    cr->rel_line_to (-delta4, -delta4);
+
+    cr->rel_line_to (-delta4,  0     );
+    cr->rel_line_to ( 0,      -delta4);
+    cr->rel_line_to ( delta4,  0     );
+
+    cr->rel_line_to ( delta4, -delta4);
+    cr->close_path();
+
+    cr->begin_new_sub_path();
+    cr->arc_negative(center, center, delta4, 0, -2 * M_PI);
+}
+
 void draw_salign(Cairo::RefPtr<Cairo::Context>cr, double size) {
 
     // Triangle pointing at line.
@@ -720,6 +789,43 @@ void draw_calign(Cairo::RefPtr<Cairo::Context>cr, double size) {
     cr->line_to(eline,           oline);
     cr->line_to(eline,           iline);
     cr->close_path();
+}
+
+void draw_malign(Cairo::RefPtr<Cairo::Context>cr, double size) {
+
+    // Basic units.
+    double delta4 = (size-1)/4.0; // Use unscaled width.
+    double delta8 = delta4/2;
+    if (delta8 < 2) {
+        // Keep a minimum gap of at least one pixel (after stroking).
+        delta8 = 2;
+    }
+
+    // Tip of triangle
+    double tip_0 = size/2.0;
+    double tip_1 = size/2.0 - delta8;
+
+    // Draw triangles
+    cr->move_to(tip_0,           tip_1);
+    cr->line_to(tip_0 - delta4,  tip_1 - delta4);
+    cr->line_to(tip_0 + delta4,  tip_1 - delta4);
+    cr->close_path();
+
+    cr->move_to(size - tip_1,           tip_0);
+    cr->line_to(size - tip_1 + delta4,  tip_0 - delta4);
+    cr->line_to(size - tip_1 + delta4,  tip_0 + delta4);
+    cr->close_path();
+
+    cr->move_to(size - tip_0,           size - tip_1);
+    cr->line_to(size - tip_0 + delta4,  size - tip_1 + delta4);
+    cr->line_to(size - tip_0 - delta4,  size - tip_1 + delta4);
+    cr->close_path();
+
+    cr->move_to(tip_1,           tip_0);
+    cr->line_to(tip_1 - delta4,  tip_0 + delta4);
+    cr->line_to(tip_1 - delta4,  tip_0 - delta4);
+    cr->close_path();
+
 }
 
 void CanvasItemCtrl::build_cache(int device_scale)
@@ -892,8 +998,10 @@ void CanvasItemCtrl::build_cache(int device_scale)
         case CANVAS_ITEM_CTRL_SHAPE_DARROW:
         case CANVAS_ITEM_CTRL_SHAPE_SARROW: // Same shape as darrow but rendered rotated 90 degrees.
         case CANVAS_ITEM_CTRL_SHAPE_CARROW:
+        case CANVAS_ITEM_CTRL_SHAPE_PIVOT:
         case CANVAS_ITEM_CTRL_SHAPE_SALIGN:
         case CANVAS_ITEM_CTRL_SHAPE_CALIGN:
+        case CANVAS_ITEM_CTRL_SHAPE_MALIGN:
         {
             double size = _width; // Use unscaled width.
 
@@ -917,12 +1025,20 @@ void CanvasItemCtrl::build_cache(int device_scale)
                     draw_carrow(cr, size);
                     break;
 
+                case CANVAS_ITEM_CTRL_SHAPE_PIVOT:
+                    draw_pivot(cr, size);
+                    break;
+
                 case CANVAS_ITEM_CTRL_SHAPE_SALIGN:
                     draw_salign(cr, size);
                     break;
 
                 case CANVAS_ITEM_CTRL_SHAPE_CALIGN:
                     draw_calign(cr, size);
+                    break;
+
+                case CANVAS_ITEM_CTRL_SHAPE_MALIGN:
+                    draw_malign(cr, size);
                     break;
 
                 default:

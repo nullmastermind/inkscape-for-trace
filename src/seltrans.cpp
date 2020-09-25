@@ -655,17 +655,24 @@ void Inkscape::SelTrans::_makeHandles()
             case HANDLE_ROTATE:
                 knots[i] = new SPKnot(_desktop, _(info.tip), CANVAS_ITEM_CTRL_TYPE_ADJ_ROTATE, "SelTrans");
                 break;
+            case HANDLE_CENTER:
+                knots[i] = new SPKnot(_desktop, _(info.tip), CANVAS_ITEM_CTRL_TYPE_ADJ_CENTER, "SelTrans");
+                break;
             case HANDLE_SIDE_ALIGN:
                 knots[i] = new SPKnot(_desktop, _(info.tip), CANVAS_ITEM_CTRL_TYPE_ADJ_SALIGN, "SelTrans");
                 break;
             case HANDLE_CORNER_ALIGN:
                 knots[i] = new SPKnot(_desktop, _(info.tip), CANVAS_ITEM_CTRL_TYPE_ADJ_CALIGN, "SelTrans");
                 break;
+            case HANDLE_CENTER_ALIGN:
+                knots[i] = new SPKnot(_desktop, _(info.tip), CANVAS_ITEM_CTRL_TYPE_ADJ_MALIGN, "SelTrans");
+                break;
             default:
                 knots[i] = new SPKnot(_desktop, _(info.tip), CANVAS_ITEM_CTRL_TYPE_ADJ_HANDLE, "SelTrans");
                 knots[i]->setShape(CANVAS_ITEM_CTRL_SHAPE_BITMAP);
                 knots[i]->setPixbuf(handles[hands[i].control]);
         }
+
         knots[i]->setAnchor(hands[i].anchor);
         knots[i]->setMode(CANVAS_ITEM_CTRL_MODE_XOR);
         knots[i]->setFill(info.color[0], info.color[1], info.color[1], info.color[1]);
