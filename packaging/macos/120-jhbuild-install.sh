@@ -95,15 +95,15 @@ echo "os.environ[\"SDKROOT\"]=\"$SDKROOT\"" >> $JHBUILDRC_CUSTOM
 #           sdk n/a          < - - - notarized app won't load this library
 echo "os.environ.pop(\"MACOSX_DEPLOYMENT_TARGET\")" \
     >> $JHBUILDRC_CUSTOM
-echo "os.environ[\"CFLAGS\"] = \"-I$SDKROOT/usr/include -isysroot $SDKROOT\"" \
+echo "os.environ[\"CFLAGS\"] = \"-O2 -I$SDKROOT/usr/include -isysroot $SDKROOT\"" \
     >> $JHBUILDRC_CUSTOM
 echo "os.environ[\"CPPFLAGS\"] = \"-I$INC_DIR -I$SDKROOT/usr/include -isysroot $SDKROOT\"" \
     >> $JHBUILDRC_CUSTOM
-echo "os.environ[\"CXXFLAGS\"] = \"-I$SDKROOT/usr/include -isysroot $SDKROOT\"" \
+echo "os.environ[\"CXXFLAGS\"] = \"-O2 -I$SDKROOT/usr/include -isysroot $SDKROOT\"" \
     >> $JHBUILDRC_CUSTOM
 echo "os.environ[\"LDFLAGS\"] = \"-L$LIB_DIR -L$SDKROOT/usr/lib -isysroot $SDKROOT -Wl,-headerpad_max_install_names\"" \
     >> $JHBUILDRC_CUSTOM
-echo "os.environ[\"OBJCFLAGS\"] = \"-I$SDKROOT/usr/include -isysroot $SDKROOT\"" \
+echo "os.environ[\"OBJCFLAGS\"] = \"-O2 -I$SDKROOT/usr/include -isysroot $SDKROOT\"" \
     >> $JHBUILDRC_CUSTOM
 
 # enable ccache
