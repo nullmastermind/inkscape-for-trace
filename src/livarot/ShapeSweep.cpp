@@ -1509,10 +1509,8 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
   {
     for (int i = 0; i < numberOfEdges(); i++)
     {
-      swdData[i].leW = swdData[i].leW % 2;
       if (swdData[i].leW < 0)
         swdData[i].leW = -swdData[i].leW;
-      swdData[i].riW = swdData[i].riW;
       if (swdData[i].riW < 0)
         swdData[i].riW = -swdData[i].riW;
       
