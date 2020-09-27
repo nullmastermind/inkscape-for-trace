@@ -182,7 +182,7 @@ private:
     int _y0 = 0;                     ///< World coordinate of the topmost pixels of window.
     Geom::Point _window_origin;      ///< World coordinate of the upper-leftmost pixel of window.
     Geom::Affine _affine;            // Only used for canvas items at moment.
-
+    bool _in_full_redraw;
     int _device_scale = 1;           ///< Scale for high DPI montiors. Probably should be double.
     Gtk::Allocation _allocation;     ///< Canvas allocation, save so we know when it changes.
 

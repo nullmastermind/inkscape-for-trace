@@ -116,7 +116,7 @@ Canvas::Canvas()
     _pick_event.type = GDK_LEAVE_NOTIFY;
     _pick_event.crossing.x = 0;
     _pick_event.crossing.y = 0;
-
+    _in_full_redraw = false;
     // Drawing
     _clean_region = Cairo::Region::create();
 
@@ -213,6 +213,7 @@ Canvas::redraw_all()
         // We need to ignore their requests!
         return;
     }
+    _in_full_redraw = true;
     _clean_region->intersect(Cairo::Region::create()); // Empty region (i.e. everything is dirty).
     add_idle();
 }
@@ -915,6 +916,10 @@ Canvas::add_idle()
     if (get_realized() && !_idle_connection.connected()) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         guint redrawPriority = prefs->getIntLimited("/options/redrawpriority/value", G_PRIORITY_HIGH_IDLE, G_PRIORITY_HIGH_IDLE, G_PRIORITY_DEFAULT_IDLE);
+        if (_in_full_redraw) {
+            _in_full_redraw = false;
+            redrawPriority = G_PRIORITY_DEFAULT_IDLE;
+        }
         // G_PRIORITY_HIGH_IDLE = 100, G_PRIORITY_DEFAULT_IDLE = 200: Higher number => lower priority.
 
         _idle_connection = Glib::signal_idle().connect(sigc::mem_fun(*this, &Canvas::on_idle), redrawPriority);
