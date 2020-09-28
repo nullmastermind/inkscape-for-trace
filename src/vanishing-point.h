@@ -17,7 +17,6 @@
 #include <list>
 #include <set>
 
-#include "knot.h"
 #include "selection.h"
 
 #include "display/control/canvas-item-enums.h"
@@ -25,6 +24,7 @@
 #include "object/persp3d.h"
 
 class SPBox3D;
+class SPKnot;
 
 namespace Inkscape {
 class CanvasItemCurve;

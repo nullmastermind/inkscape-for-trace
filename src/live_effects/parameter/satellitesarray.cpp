@@ -7,18 +7,22 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "live_effects/parameter/satellitesarray.h"
+#include "satellitesarray.h"
+
+#include "inkscape.h"
+#include "preferences.h"
+
 #include "helper/geom.h"
-#include "knotholder.h"
+
 #include "live_effects/effect.h"
 #include "live_effects/lpe-fillet-chamfer.h"
+
 #include "ui/dialog/lpe-fillet-chamfer-properties.h"
+#include "ui/knot/knot-holder.h"
 #include "ui/shape-editor.h"
 #include "ui/tools-switch.h"
 #include "ui/tools/node-tool.h"
 
-#include "inkscape.h"
-#include <preferences.h>
 // TODO due to internal breakage in glibmm headers,
 // this has to be included last.
 #include <glibmm/i18n.h>

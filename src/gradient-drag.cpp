@@ -28,7 +28,6 @@
 #include "gradient-drag.h"
 #include "include/macros.h"
 #include "inkscape.h"
-#include "knot.h"
 #include "selection-chemistry.h"
 #include "selection.h"
 #include "snap.h"
@@ -48,6 +47,7 @@
 #include "svg/css-ostringstream.h"
 #include "svg/svg.h"
 
+#include "ui/knot/knot.h"
 #include "ui/tools/tool-base.h"
 #include "ui/widget/canvas.h" // Forced redraws
 

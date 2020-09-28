@@ -178,6 +178,12 @@ public:
      */
     bool eventHandler(GdkEvent *event);
 
+    bool is_visible()   { return (flags & SP_KNOT_VISIBLE)   != 0; }
+    bool is_selected()  { return (flags & SP_KNOT_SELECTED)  != 0; }
+    bool is_mouseover() { return (flags & SP_KNOT_MOUSEOVER) != 0; }
+    bool is_dragging()  { return (flags & SP_KNOT_DRAGGING)  != 0; }
+    bool is_grabbed()   { return (flags & SP_KNOT_GRABBED)   != 0; }
+
 private:
     /**
      * Set knot control state (dragging/mouseover/normal).
@@ -187,12 +193,6 @@ private:
 
 void knot_ref(SPKnot* knot);
 void knot_unref(SPKnot* knot);
-
-#define SP_KNOT_IS_VISIBLE(k) ((k->flags & SP_KNOT_VISIBLE) != 0)
-#define SP_KNOT_IS_SELECTED(k) ((k->flags & SP_KNOT_SELECTED) != 0)
-#define SP_KNOT_IS_MOUSEOVER(k) ((k->flags & SP_KNOT_MOUSEOVER) != 0)
-#define SP_KNOT_IS_DRAGGING(k) ((k->flags & SP_KNOT_DRAGGING) != 0)
-#define SP_KNOT_IS_GRABBED(k) ((k->flags & SP_KNOT_GRABBED) != 0)
 
 void sp_knot_handler_request_position(GdkEvent *event, SPKnot *knot);
 

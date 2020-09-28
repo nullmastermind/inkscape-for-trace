@@ -12,15 +12,14 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "shape-editor.h"
+
 #include "desktop.h"
 #include "document.h"
-#include "knotholder.h"
 #include "live_effects/effect.h"
 #include "object/sp-lpe-item.h"
-
-#include "ui/shape-editor.h"
+#include "ui/knot/knot-holder.h"
 #include "xml/node-event-vector.h"
-
 
 namespace Inkscape {
 namespace UI {

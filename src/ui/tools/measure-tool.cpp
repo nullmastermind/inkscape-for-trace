@@ -53,6 +53,7 @@
 #include "svg/svg.h"
 
 #include "ui/dialog/knot-properties.h"
+#include "ui/knot/knot.h"
 #include "ui/tools/freehand-base.h"
 #include "ui/widget/canvas.h" // Canvas area
 

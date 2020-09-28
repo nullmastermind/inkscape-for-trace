@@ -14,8 +14,7 @@
 #include <2geom/point.h>
 
 #include "live_effects/parameter/parameter.h"
-
-#include "knot-holder-entity.h"
+#include "display/control/canvas-item-enums.h"
 
 namespace Inkscape {
 

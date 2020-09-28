@@ -24,7 +24,6 @@
 #include "desktop.h"
 #include "file.h"
 #include "gradient-drag.h"
-#include "knot-ptr.h"
 #include "message-context.h"
 #include "rubberband.h"
 #include "selcue.h"
@@ -42,7 +41,9 @@
 #include "ui/contextmenu.h"
 #include "ui/event-debug.h"
 #include "ui/interface.h"
-
+#include "ui/knot/knot.h"
+#include "ui/knot/knot-holder.h"
+#include "ui/knot/knot-ptr.h"
 #include "ui/modifiers.h"
 #include "ui/shape-editor.h"
 #include "ui/shortcuts.h"

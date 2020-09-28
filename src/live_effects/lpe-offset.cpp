@@ -14,24 +14,25 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "live_effects/lpe-offset.h"
+#include "lpe-offset.h"
 
 #include <2geom/path-intersection.h>
 #include <2geom/piecewise.h>
 
+#include "inkscape.h"
+#include "style.h"
+
 #include "display/curve.h"
 #include "helper/geom-pathstroke.h"
 #include "helper/geom.h"
-#include "inkscape.h"
-#include "knot-holder-entity.h"
-#include "knot.h"
-#include "knotholder.h"
 #include "live_effects/parameter/enum.h"
 #include "object/sp-shape.h"
 #include "path/path-boolop.h"
-#include "style.h"
 #include "svg/svg.h"
+#include "ui/knot/knot-holder.h"
+#include "ui/knot/knot-holder-entity.h"
 #include "util/units.h"
+
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 

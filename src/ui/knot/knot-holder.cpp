@@ -14,7 +14,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "knotholder.h"
+#include "knot-holder.h"
 
 #include "desktop.h"
 #include "document-undo.h"

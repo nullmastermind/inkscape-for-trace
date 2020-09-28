@@ -5,18 +5,20 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "ui/dialog/lpe-powerstroke-properties.h"
-#include "live_effects/parameter/powerstrokepointarray.h"
+#include "powerstrokepointarray.h"
 
-#include "knotholder.h"
-#include "live_effects/effect.h"
-#include "live_effects/lpe-powerstroke.h"
 #include <2geom/sbasis-2d.h>
 #include <2geom/bezier-to-sbasis.h>
-
-
 #include <2geom/piecewise.h>
 #include <2geom/sbasis-geometric.h>
+
+#include "ui/dialog/lpe-powerstroke-properties.h"
+
+#include "ui/knot/knot-holder.h"
+
+#include "live_effects/effect.h"
+#include "live_effects/lpe-powerstroke.h"
+
 
 #include "preferences.h" // for proportional stroke/path scaling behavior
 

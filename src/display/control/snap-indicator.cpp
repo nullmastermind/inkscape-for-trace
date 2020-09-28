@@ -18,7 +18,6 @@
 
 #include "desktop.h"
 #include "enums.h"
-#include "knot.h"
 #include "preferences.h"
 
 

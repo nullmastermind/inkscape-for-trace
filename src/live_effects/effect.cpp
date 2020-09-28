@@ -75,7 +75,6 @@
 #include "xml/sp-css-attr.h"
 
 #include "display/curve.h"
-#include "knotholder.h"
 #include "message-stack.h"
 #include "path-chemistry.h"
 #include "ui/icon-loader.h"

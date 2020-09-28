@@ -12,12 +12,12 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+// Declared in shape-editor.cpp.
+
 #include <glibmm/i18n.h>
 
 #include "preferences.h"
 #include "desktop.h"
-#include "knotholder.h"
-#include "knot-holder-entity.h"
 #include "style.h"
 
 #include "live_effects/effect.h"
@@ -35,6 +35,9 @@
 #include "object/sp-text.h"
 #include "object/sp-textpath.h"
 #include "object/sp-tspan.h"
+
+#include "ui/knot/knot-holder.h"
+#include "ui/knot/knot-holder-entity.h"
 
 class RectKnotHolder : public KnotHolder {
 public:

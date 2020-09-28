@@ -7,10 +7,12 @@
  */
 
 #include <vector>
-#include "live_effects/lpe-bendpath.h"
-#include "knot-holder-entity.h"
-#include "knotholder.h"
+
 #include "display/curve.h"
+#include "live_effects/lpe-bendpath.h"
+#include "ui/knot/knot-holder.h"
+#include "ui/knot/knot-holder-entity.h"
+
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 

@@ -19,11 +19,12 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <glib.h>
+
 #include "live_effects/parameter/array.h"
 #include "live_effects/effect-enum.h"
 #include "helper/geom-pathvectorsatellites.h"
-#include "knot-holder-entity.h"
-#include <glib.h>
+#include "ui/knot/knot-holder-entity.h"
 
 namespace Inkscape {
 

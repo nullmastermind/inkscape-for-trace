@@ -100,6 +100,7 @@
 #include "object/sp-use.h"
 #include "object/sp-symbol.h"
 
+#include "ui/knot/knot.h"
 #include "ui/pixmaps/cursor-connector.xpm"
 #include "ui/widget/canvas.h"  // Enter events
 

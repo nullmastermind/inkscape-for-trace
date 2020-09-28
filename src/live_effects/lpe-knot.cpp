@@ -13,26 +13,31 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "display/curve.h"
-#include "live_effects/lpe-knot.h"
-#include "knot-holder-entity.h"
-#include "knotholder.h"
-
 #include <gdk/gdk.h>
 
 #include <2geom/sbasis-to-bezier.h>
 #include <2geom/bezier-to-sbasis.h>
 #include <2geom/basic-intersection.h>
-#include "helper/geom.h"
 
-#include "object/sp-shape.h"
-#include "object/sp-path.h"
-#include "style.h"
+#include "lpe-knot.h"
 
 // for change crossing undo
 #include "verbs.h"
 #include "document.h"
 #include "document-undo.h"
+
+#include "style.h"
+
+#include "display/curve.h"
+
+#include "helper/geom.h"
+
+#include "object/sp-path.h"
+#include "object/sp-shape.h"
+
+#include "ui/knot/knot-holder.h"
+#include "ui/knot/knot-holder-entity.h"
+
 
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>

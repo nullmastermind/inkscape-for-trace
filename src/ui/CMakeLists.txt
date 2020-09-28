@@ -26,6 +26,11 @@ set(ui_SRC
         desktop/menubar.cpp
         desktop/menu-icon-shift.cpp
 
+        knot/knot.cpp
+        knot/knot-holder.cpp
+        knot/knot-holder-entity.cpp
+        knot/knot-ptr.cpp
+
 	tool/control-point-selection.cpp
 	tool/control-point.cpp
 	tool/curve-drag-point.cpp
@@ -324,6 +329,12 @@ set(ui_SRC
 	dialog/undo-history.h
 	dialog/xml-tree.h
 	dialog/save-template-dialog.h
+
+        knot/knot.h
+        knot/knot-enums.h
+        knot/knot-holder.h
+        knot/knot-holder-entity.h
+        knot/knot-ptr.h
 
 	tool/commit-events.h
 	tool/control-point-selection.h

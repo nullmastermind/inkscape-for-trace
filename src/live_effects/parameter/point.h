@@ -11,13 +11,15 @@
  */
 
 #include <glib.h>
-#include <2geom/point.h>
 
-#include "knot-holder-entity.h"
+#include <2geom/point.h>
 
 #include "display/control/canvas-item-enums.h"
 #include "live_effects/parameter/parameter.h"
 #include "ui/widget/registered-widget.h"
+
+class KnotHolder;
+class KnotHolderEntity;
 
 namespace Inkscape {
 

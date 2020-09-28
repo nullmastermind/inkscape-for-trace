@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
- * Dialog for renaming layers.
+ * Dialog for moving knots.
  */
+
 /* Author:
  *   Bryce W. Harrington <bryce@bryceharrington.com>
  *   Andrius R. <knutux@gmail.com>
@@ -14,21 +15,16 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "ui/dialog/knot-properties.h"
+#include "knot-properties.h"
 
 #include <boost/lexical_cast.hpp>
+
 #include <glibmm/i18n.h>
 #include <glibmm/main.h>
-#include "inkscape.h"
-#include "util/units.h"
+
 #include "desktop.h"
-#include "document.h"
-#include "document-undo.h"
-#include "layer-manager.h"
-
-#include "selection-chemistry.h"
-
-//#include "event-context.h"
+#include "ui/knot/knot.h"
+#include "util/units.h"
 
 namespace Inkscape {
 namespace UI {
@@ -45,6 +41,7 @@ KnotPropertiesDialog::KnotPropertiesDialog()
     _layout_table.set_row_spacing(4);
     _layout_table.set_column_spacing(4);
     _unit_name = "";
+
     // Layer name widgets
     _knot_x_entry.set_activates_default(true);
     _knot_x_entry.set_digits(4);

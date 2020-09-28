@@ -1,0 +1,29 @@
+
+
+This directory contains code related to on-screen editing (nodes, handles, etc.).
+
+Note that there are classes with similar functionality based on the SPKnot class in src/ui/knot.
+
+Classes here:
+
+  * ControlPoint
+  ** CurveDragPoint
+  ** Handle
+  ** RotationHandle
+  ** SelectableContrlPoint
+  *** Node
+  ** SelectorPoint,
+  ** TransformHandle
+  *** RotateHandle
+  *** ScaleHandle
+  **** ScaleCornerHandle
+  **** ScaleSideHandle
+  *** SkewHandle
+
+  * Manipulator
+  ** PointManipulator
+  *** MultiManipulator
+  *** PathManipulator
+  *** MultiPathManipulator
+  ** Selector
+  ** TransformHandleSet

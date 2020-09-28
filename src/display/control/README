@@ -81,7 +81,7 @@ CanvasItemCtrl (a.k.a. "Node", "Knot", "Handle", "Dragger", "Ctrl", "Mouse Grab"
   **** ShapeEditor contains two KnotHolders, one for shapes, one for LPE's.
 
   ** ui/tools/tool-base.h
-  ** seltrnas.h,.cpp
+  ** seltrans.h,.cpp
   ** display/snap-indicator.h
   ** gradient-drag.cpp
   ** vanishing-point.h
@@ -102,12 +102,11 @@ Move files that use CanvasItem's to more appropriate places.
 
 All files that use CanvasItem's in src directory:
 * Move rubberband.h/.cpp to src/ui
-* Move knot* to src/ui/knots
 * Move gradient-drag to src/ui
 * Move selcue* to src/ui
 * Move seltrans* to src/ui
 * Move vanishing-point to src/ui
 * Move snap code to src/ui/snap display/snap-indicator.h/.cpp snap.h etc.
 
-See also src/ui/tool
+See also src/ui/tool and src/ui/knot.
 

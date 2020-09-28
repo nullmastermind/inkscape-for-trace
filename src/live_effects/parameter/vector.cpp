@@ -5,17 +5,19 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "ui/widget/registered-widget.h"
+#include "vector.h"
+
 #include <glibmm/i18n.h>
 
-#include "live_effects/parameter/vector.h"
-
-#include "knotholder.h"
-#include "svg/svg.h"
-#include "svg/stringstream.h"
+#include "verbs.h"
 
 #include "live_effects/effect.h"
-#include "verbs.h"
+#include "svg/svg.h"
+#include "svg/stringstream.h"
+#include "ui/knot/knot-holder.h"
+#include "ui/knot/knot-holder-entity.h"
+#include "ui/widget/registered-widget.h"
+
 
 namespace Inkscape {
 

@@ -9,19 +9,21 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "live_effects/lpe-fillet-chamfer.h"
-
-#include "helper/geom.h"
-#include "helper/geom-curves.h"
-#include "helper/geom-satellite.h"
-
-#include "display/curve.h"
-#include "knotholder.h"
-#include "ui/tools/tool-base.h"
 #include <2geom/elliptical-arc.h>
 #include <boost/optional.hpp>
 
+#include "lpe-fillet-chamfer.h"
+
+#include "display/curve.h"
+
+#include "helper/geom-curves.h"
+#include "helper/geom-satellite.h"
+#include "helper/geom.h"
+
 #include "object/sp-shape.h"
+
+#include "ui/knot/knot-holder.h"
+#include "ui/tools/tool-base.h"
 
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>

@@ -11,25 +11,26 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <2geom/elliptical-arc.h>
+#include <2geom/path-sink.h>
+#include <2geom/path-intersection.h>
+#include <2geom/circle.h>
+
 #include "live_effects/lpe-powerstroke.h"
 #include "live_effects/lpe-powerstroke-interpolators.h"
 #include "live_effects/lpe-simplify.h"
 #include "live_effects/lpeobject.h"
 #include "live_effects/fill-conversion.h"
 
-#include "svg/svg-color.h"
 #include "desktop-style.h"
-#include "svg/css-ostringstream.h"
-#include "display/curve.h"
-
-#include <2geom/elliptical-arc.h>
-#include <2geom/path-sink.h>
-#include <2geom/path-intersection.h>
-#include <2geom/circle.h>
-#include "helper/geom.h"
-
-#include "object/sp-shape.h"
 #include "style.h"
+
+#include "display/curve.h"
+#include "display/control/canvas-item-enums.h"
+#include "helper/geom.h"
+#include "object/sp-shape.h"
+#include "svg/css-ostringstream.h"
+#include "svg/svg-color.h"
 
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>

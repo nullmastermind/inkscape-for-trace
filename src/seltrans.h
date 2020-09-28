@@ -23,14 +23,13 @@
 #include <sigc++/sigc++.h>
 #include <vector>
 
-#include "knot.h"
 #include "message-context.h"
 #include "seltrans-handles.h"
 #include "selcue.h"
 
 #include "object/sp-item.h"
+#include "ui/knot/knot.h"
 
-class  SPKnot;
 class  SPDesktop;
 struct SPCanvasItem;
 struct SPSelTransHandle;
@@ -93,7 +92,7 @@ public:
         return _grabbed;
     }
     bool centerIsVisible() {
-        return ( SP_KNOT_IS_VISIBLE (knots[0]) );
+        return ( knots[0]->is_visible());
     }
 
     void getNextClosestPoint(bool reverse);

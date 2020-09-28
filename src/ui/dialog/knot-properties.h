@@ -18,7 +18,7 @@
 #include <gtkmm/label.h>
 #include <gtkmm/spinbutton.h>
 #include <2geom/point.h>
-#include "knot.h"
+
 #include "ui/tools/measure-tool.h"
 
 class SPDesktop;
@@ -27,6 +27,7 @@ namespace Inkscape {
 namespace UI {
 namespace Dialogs {
 
+// Used in Measure tool to set ends of "ruler" (via Shift-click)."
 
 class KnotPropertiesDialog : public Gtk::Dialog {
  public:

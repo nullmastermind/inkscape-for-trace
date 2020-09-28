@@ -40,10 +40,6 @@ set(inkscape_SRC
   help.cpp
   id-clash.cpp
   inkscape.cpp
-  knot-holder-entity.cpp
-  knot-ptr.cpp
-  knot.cpp
-  knotholder.cpp
   layer-fns.cpp
   layer-manager.cpp
   layer-model.cpp
@@ -140,11 +136,6 @@ set(inkscape_SRC
   id-clash.h
   inkscape-version.h
   inkscape.h
-  knot-enums.h
-  knot-holder-entity.h
-  knot-ptr.h
-  knot.h
-  knotholder.h
   layer-fns.h
   layer-manager.h
   layer-model.h

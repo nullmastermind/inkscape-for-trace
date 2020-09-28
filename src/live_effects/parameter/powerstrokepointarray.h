@@ -15,7 +15,7 @@
 
 #include "live_effects/parameter/array.h"
 
-#include "knot-holder-entity.h"
+#include "ui/knot/knot-holder-entity.h"
 
 namespace Inkscape {
 

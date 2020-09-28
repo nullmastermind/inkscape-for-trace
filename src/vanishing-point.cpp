@@ -29,6 +29,7 @@
 #include "object/sp-namedview.h"
 #include "object/box3d.h"
 
+#include "ui/knot/knot.h"
 #include "ui/shape-editor.h"
 #include "ui/tools/tool-base.h"
 

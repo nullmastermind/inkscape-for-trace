@@ -29,7 +29,6 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
-#include "knot.h"
 #include "message-stack.h"
 #include "mod360.h"
 #include "pure-transform.h"
@@ -50,6 +49,7 @@
 #include "object/sp-root.h"
 
 #include "ui/modifiers.h"
+#include "ui/knot/knot.h"
 #include "ui/tools/select-tool.h"
 
 using Inkscape::DocumentUndo;
@@ -70,7 +70,7 @@ static gboolean sp_sel_trans_handle_event(SPKnot *knot, GdkEvent *event, SPSelTr
         case GDK_KEY_PRESS:
             if (Inkscape::UI::Tools::get_latin_keyval (&event->key) == GDK_KEY_space) {
                 /* stamping mode: both mode(show content and outline) operation with knot */
-                if (!SP_KNOT_IS_GRABBED(knot)) {
+                if (!knot->is_grabbed()) {
                     return FALSE;
                 }
                 SPDesktop *desktop = knot->desktop;
@@ -777,7 +777,7 @@ void Inkscape::SelTrans::handleGrab(SPKnot *knot, guint /*state*/, SPSelTransHan
 
 void Inkscape::SelTrans::handleNewEvent(SPKnot *knot, Geom::Point *position, guint state, SPSelTransHandle const &handle)
 {
-    if (!SP_KNOT_IS_GRABBED(knot)) {
+    if (!knot->is_grabbed()) {
         return;
     }
 
@@ -814,8 +814,9 @@ void Inkscape::SelTrans::handleNewEvent(SPKnot *knot, Geom::Point *position, gui
 
 gboolean Inkscape::SelTrans::handleRequest(SPKnot *knot, Geom::Point *position, guint state, SPSelTransHandle const &handle)
 {
-    if (!SP_KNOT_IS_GRABBED(knot))
+    if (!knot->is_grabbed()) {
         return TRUE;
+    }
 
     // When holding shift while rotating or skewing, the transformation will be
     // relative to the point opposite of the handle; otherwise it will be relative

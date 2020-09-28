@@ -24,8 +24,6 @@
 
 #include <2geom/point.h>
 
-#include "knot.h"
-#include "knotholder.h"
 #include "preferences.h"
 
 class GrDrag;

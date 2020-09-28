@@ -14,12 +14,14 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "live_effects/lpe-tangent_to_curve.h"
+#include "lpe-tangent_to_curve.h"
+
 #include "display/curve.h"
-#include "knotholder.h"
 
 #include "object/sp-shape.h"
 #include "object/sp-object-group.h"
+#include "ui/knot/knot-holder.h"
+#include "ui/knot/knot-holder-entity.h"
 
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>

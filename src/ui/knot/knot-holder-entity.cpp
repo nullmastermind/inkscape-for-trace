@@ -18,9 +18,10 @@
 
 #include "knot-holder-entity.h"
 
+#include "knot-holder.h"
+
 #include "desktop.h"
 #include "inkscape.h"
-#include "knotholder.h"
 #include "preferences.h"
 #include "snap.h"
 #include "style.h"

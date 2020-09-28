@@ -48,13 +48,13 @@
 #include "object/sp-shape.h"
 #include "object/sp-ellipse.h"
 
+#include "ui/knot/knot-holder.h"
 #include "ui/pixmaps/cursor-text-insert.xpm"
 #include "ui/pixmaps/cursor-text.xpm"
-
 #include "ui/shape-editor.h"
 #include "ui/widget/canvas.h"
-
 #include "ui/event-debug.h"
+
 #include "xml/attribute-record.h"
 #include "xml/node-event-vector.h"
 #include "xml/sp-css-attr.h"

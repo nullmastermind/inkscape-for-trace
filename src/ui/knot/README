@@ -1,0 +1,62 @@
+
+
+This directory contains code related to on-screen editing knots.
+
+Note that there are classes with similar functionality based on the ControlPoint class in src/ui/tool.
+
+Classes here:
+
+  * SPKnot              A class that describes a knot (size, type, position, state, etc.) with some signals.
+
+  * KnotHolderEntity    A class that has an SPKnot with some signals connections.
+
+      Derived classes:
+
+         LPEKnotHolderEntity
+         PatternKnotHolderEntity
+         HatchKnotHolderEntity
+         FilterKnotHolderEntity
+         RectKnotHolderEntityRX
+         RectKnotHolderEntityRY
+         RectKnotHolderEntityWH
+         RectKnotHolderEntityXY
+         RectKnotHolderEntityCenter
+         Box3DKnotHolderEntity
+         Box3DKnotHolderEntityCenter
+         ArcKnotHolderEntityStart
+         ArcKnotHolderEntityEnd
+         ArcKnotHolderEntityRX
+         ArcKnotHolderEntityRY
+         ArcKnotHolderEntityCenter
+         StarKnotHolderEntity1
+         StarKnotHolderEntity2
+         StarKnotHolderEntityCenter
+         SpiralKnotHolderEntityInner
+         SpiralKnotHolderEntityOuter
+         SpiralKnotHolderEntityCenter
+         OffsetKnotHolderEntity
+         TextKnotHolderEntityInlineSize
+         TextKnotHolderEntityShapeInside
+         FilletChamferKnotHolderEntity
+         TransformedPointParamKnotHolderEntity_Vector
+         PowerStrokePointArrayParamKnotHolderEntity
+         PowerStrokePointArrayParamKnotHolderEntity
+         PointParamKnotHolderEntity
+         VectorParamKnotHolderEntity_Origin
+         VectorParamKnotHolderEntity_Vector
+
+         And many classes derived from above!
+
+  * KnotHolder         A class that has one or more overlapping knots via KnotHolderEntity's.
+
+      Derived classes:
+
+         ArcKnotHolder
+         Box3DKnotHolder
+         FlowtextKnotHolder
+         MiscKnotHolder
+         OffsetKnotHolder
+         RectKnotHolder
+         SpiralKnotHolder
+         StarKnotHolder
+         TextKnotHolder

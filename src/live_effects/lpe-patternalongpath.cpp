@@ -13,11 +13,14 @@
 
 #include "live_effects/lpe-patternalongpath.h"
 #include "live_effects/lpeobject.h"
+
 #include "display/curve.h"
 
 #include "object/sp-shape.h"
 
-#include "knotholder.h"
+#include "ui/knot/knot-holder.h"
+#include "ui/knot/knot-holder-entity.h"
+
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 
