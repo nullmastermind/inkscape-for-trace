@@ -18,17 +18,6 @@ namespace Inkscape {
 namespace UI {
 namespace Widget {
 
-
-void
-SpinButton::connect_signals() {
-    signal_input().connect(sigc::mem_fun(this, &SpinButton::on_input));
-    signal_focus_in_event().connect(sigc::mem_fun(this, &SpinButton::on_my_focus_in_event));
-    signal_key_press_event().connect(sigc::mem_fun(this, &SpinButton::on_my_key_press_event));
-    gtk_widget_add_events(GTK_WIDGET(gobj()), GDK_SCROLL_MASK | GDK_SMOOTH_SCROLL_MASK);
-    signal_scroll_event().connect(sigc::mem_fun(this, &SpinButton::on_scroll_event));
-    set_focus_on_click(true);
-};
-
 int SpinButton::on_input(double* newvalue)
 {
     if (_dont_evaluate) return false;
@@ -63,10 +52,10 @@ int SpinButton::on_input(double* newvalue)
     return true;
 }
 
-bool SpinButton::on_my_focus_in_event(GdkEventFocus* /*event*/)
+bool SpinButton::on_focus_in_event(GdkEventFocus *event)
 {
     _on_focus_in_value = get_value();
-    return false; // do not consume the event
+    return parent_type::on_focus_in_event(event);
 }
 
 
@@ -76,27 +65,10 @@ bool SpinButton::on_scroll_event(GdkEventScroll *event)
     if (!is_focus()) {
         return false;
     }
-    double step, page;
-    get_increments(step, page);
-    if (event->state & GDK_CONTROL_MASK) {
-        step = page;
-    }
-    double change = 0.0;
-    if (event->direction == GDK_SCROLL_UP) {
-        change = step;
-    } else if (event->direction == GDK_SCROLL_DOWN) {
-        change = -step;
-    } else if (event->direction == GDK_SCROLL_SMOOTH) {
-        double delta_y_clamped = CLAMP(event->delta_y, -1, 1); // values > 1 result in excessive changes
-        change = step * -delta_y_clamped;
-    } else {
-        return false;
-    }
-    set_value(get_value() + change);
-    return true;
+    return parent_type::on_scroll_event(event);
 }
 
-bool SpinButton::on_my_key_press_event(GdkEventKey* event)
+bool SpinButton::on_key_press_event(GdkEventKey* event)
 {
     switch (Inkscape::UI::Tools::get_latin_keyval (event)) {
     case GDK_KEY_Escape: // defocus
@@ -113,7 +85,6 @@ bool SpinButton::on_my_key_press_event(GdkEventKey* event)
     case GDK_KEY_ISO_Left_Tab:
         // set the flag meaning "do not leave toolbar when changing value"
         _stay = true;
-        return false;
         break;
     case GDK_KEY_z:
     case GDK_KEY_Z:
@@ -127,7 +98,7 @@ bool SpinButton::on_my_key_press_event(GdkEventKey* event)
         break;
     }
 
-    return false; // do not consume the event
+    return parent_type::on_key_press_event(event);
 }
 
 void SpinButton::undo()

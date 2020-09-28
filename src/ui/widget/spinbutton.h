@@ -28,24 +28,10 @@ class UnitTracker;
  */
 class SpinButton : public Gtk::SpinButton
 {
+    using parent_type = Gtk::SpinButton;
+
 public:
-  SpinButton(double climb_rate = 0.0, guint digits = 0)
-    : Gtk::SpinButton(climb_rate, digits)
-  {
-      connect_signals();
-  };
-
-  explicit SpinButton(Glib::RefPtr<Gtk::Adjustment>& adjustment, double climb_rate = 0.0, guint digits = 0)
-    : Gtk::SpinButton(adjustment, climb_rate, digits)
-  {
-      connect_signals();
-  };
-
-  ~SpinButton() override = default;
-
-  // noncopyable
-  SpinButton(const SpinButton&) = delete;
-  SpinButton& operator=(const SpinButton&) = delete;
+    using parent_type::parent_type;
 
   void setUnitMenu(UnitMenu* unit_menu) { _unit_menu = unit_menu; };
   
@@ -72,8 +58,6 @@ protected:
   bool _stay = false; ///< Whether to ignore defocusing
   bool _dont_evaluate = false; ///< Don't attempt to evaluate expressions
 
-  void connect_signals();
-
     /**
      * This callback function should try to convert the entered text to a number and write it to newvalue.
      * It calls a method to evaluate the (potential) mathematical expression.
@@ -88,7 +72,7 @@ protected:
      * @retval false continue with default handler.
      * @retval true  don't call default handler. 
      */
-    bool on_my_focus_in_event(GdkEventFocus* event);
+    bool on_focus_in_event(GdkEventFocus *) override;
 
     /**
      * When scroll is done.
@@ -103,7 +87,7 @@ protected:
      * @retval false continue with default handler.
      * @retval true  don't call default handler. 
      */
-    bool on_my_key_press_event(GdkEventKey* event);
+    bool on_key_press_event(GdkEventKey *) override;
 
     /**
      * Undo the editing, by resetting the value upon when the spinbutton got focus.
