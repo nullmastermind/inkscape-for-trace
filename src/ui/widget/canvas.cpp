@@ -116,7 +116,7 @@ Canvas::Canvas()
     _pick_event.type = GDK_LEAVE_NOTIFY;
     _pick_event.crossing.x = 0;
     _pick_event.crossing.y = 0;
-    _in_full_redraw = false;
+
     // Drawing
     _clean_region = Cairo::Region::create();
 
@@ -632,8 +632,7 @@ Canvas::on_motion_notify_event(GdkEventMotion *motion_event)
 
     if (_desktop) {
     // Check if we are near the edge. If so, revert to normal mode.
-    if ((_split_mode == Inkscape::SPLITMODE_SPLIT && _split_dragging) ||
-         _split_mode == Inkscape::SPLITMODE_XRAY                      ) {
+    if (_split_mode == Inkscape::SPLITMODE_SPLIT && _split_dragging) {
         if (cursor_position.x() < 5                             ||
             cursor_position.y() < 5                             ||
             cursor_position.x() - _allocation.get_width()  > -5 ||
