@@ -192,7 +192,7 @@ Input::get_filetypename(bool translated)
     else
         name = get_name();
 
-    if (name && translated) {
+    if (name && translated && filetypename) {
         return get_translation(name);
     } else {
         return name;
@@ -236,7 +236,7 @@ Input::prefs (const gchar *uri)
         return true;
     }
 
-    Glib::ustring name = get_translation(this->get_name());
+    Glib::ustring name = this->get_name();
     PrefDialog *dialog = new PrefDialog(name, controls);
     int response = dialog->run();
     dialog->hide();

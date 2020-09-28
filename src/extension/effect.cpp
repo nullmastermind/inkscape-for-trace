@@ -37,7 +37,7 @@ Inkscape::XML::Node * Effect::_filters_list = nullptr;
 Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in_imp, std::string *base_directory)
     : Extension(in_repr, in_imp, base_directory)
     , _id_noprefs(Glib::ustring(get_id()) + ".noprefs")
-    , _name_noprefs(Glib::ustring(_(get_name())) + _(" (No preferences)"))
+    , _name_noprefs(Glib::ustring(get_name()) + _(" (No preferences)"))
     , _verb(get_id(), get_name(), nullptr, nullptr, this, true)
     , _verb_nopref(_id_noprefs.c_str(), _name_noprefs.c_str(), nullptr, nullptr, this, false)
     , _menu_node(nullptr), _workingDialog(true)
@@ -133,7 +133,7 @@ Effect::merge_menu (Inkscape::XML::Node * base,
     if (pattern == nullptr) {
         // Merge the verb name
         tomerge = merge;
-        mergename = get_translation(get_name());
+        mergename = get_name();
     } else {
         gchar const *menuname = pattern->attribute("name");
         if (menuname == nullptr) menuname = pattern->attribute("_name");
@@ -254,7 +254,7 @@ Effect::prefs (Inkscape::UI::View::View * doc)
         set_state(Extension::STATE_LOADED);
     if (!loaded()) return false;
 
-    Glib::ustring name = get_translation(this->get_name());
+    Glib::ustring name = this->get_name();
     _prefDialog = new PrefDialog(name, nullptr, this);
     _prefDialog->show();
 

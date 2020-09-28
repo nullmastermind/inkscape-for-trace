@@ -164,7 +164,7 @@ Output::get_filetypename(bool translated)
     else
         name = get_name();
 
-    if (name && translated) {
+    if (name && translated && filetypename) {
         return get_translation(name);
     } else {
         return name;
@@ -205,7 +205,7 @@ Output::prefs ()
         return true;
     }
 
-    Glib::ustring title = get_translation(this->get_name());
+    Glib::ustring title = this->get_name();
     PrefDialog *dialog = new PrefDialog(title, controls);
     int response = dialog->run();
     dialog->hide();

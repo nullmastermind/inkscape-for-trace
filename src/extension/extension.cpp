@@ -370,10 +370,10 @@ Extension::get_id () const
     \return  The textual name of this extension
     \brief   Get the name of this extension - not a copy don't delete!
 */
-gchar *
+const gchar *
 Extension::get_name () const
 {
-    return _name;
+    return get_translation(_name, nullptr);
 }
 
 /**
@@ -537,7 +537,7 @@ void Extension::lookup_translation_catalog() {
   *
   * @return  Translated string (or original string if extension is not supposed to be translated)
   */
-const char *Extension::get_translation(const char *msgid, const char *msgctxt) {
+const char *Extension::get_translation(const char *msgid, const char *msgctxt) const {
     if (!_translation_enabled) {
         return msgid;
     }

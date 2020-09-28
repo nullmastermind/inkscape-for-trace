@@ -161,7 +161,7 @@ public:
     virtual bool  check        ();
     Inkscape::XML::Node *      get_repr     ();
     gchar *       get_id       () const;
-    gchar *       get_name     () const;
+    const gchar * get_name     () const;
     void          deactivate   ();
     bool          deactivated  ();
     void          printFailure (Glib::ustring reason);
@@ -172,7 +172,7 @@ public:
     std::string   get_base_directory() const { return _base_directory; };
     void          set_base_directory(std::string const &base_directory) { _base_directory = base_directory; };
     std::string   get_dependency_location(const char *name);
-    const char   *get_translation(const char* msgid, const char *msgctxt=nullptr);
+    const char   *get_translation(const char* msgid, const char *msgctxt=nullptr) const;
     void          set_environment();
     ModuleImpType get_implementation_type();
 

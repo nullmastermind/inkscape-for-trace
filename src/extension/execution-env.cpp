@@ -118,7 +118,7 @@ ExecutionEnv::createWorkingDialog () {
         return;
     }
 
-    gchar * dlgmessage = g_strdup_printf(_("'%s' working, please wait..."), _(_effect->get_name()));
+    gchar * dlgmessage = g_strdup_printf(_("'%s' working, please wait..."), _effect->get_name());
     _visibleDialog = new Gtk::MessageDialog(*window,
                                dlgmessage,
                                false, // use markup
@@ -164,7 +164,7 @@ ExecutionEnv::undo () {
 
 void
 ExecutionEnv::commit () {
-    DocumentUndo::done(_doc->doc(), SP_VERB_NONE, _(_effect->get_name()));
+    DocumentUndo::done(_doc->doc(), SP_VERB_NONE, _effect->get_name());
     Effect::set_last_effect(_effect);
     _effect->get_imp()->commitDocument();
     killDocCache();
