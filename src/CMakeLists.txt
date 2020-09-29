@@ -366,6 +366,11 @@ set(INKSCAPE_TARGET_LIBS
 # Build everything except main and inkview.c in a shared library.
 add_library(inkscape_base ${inkscape_SRC} ${sp_SRC})
 
+# added so that locally installed inkscape can find lib2geom if it's not installed systemwide
+if(NOT APPLE)
+    set_target_properties(inkscape_base PROPERTIES INSTALL_RPATH "$ORIGIN/..")
+endif()
+
 if(WITH_DBUS)
     add_dependencies(inkscape_base inkscape_dbus)
 endif()
@@ -399,5 +404,5 @@ if(WIN32)
     install(TARGETS inkscape_com inkview_com)
 endif()
 if(BUILD_SHARED_LIBS)
-    install(TARGETS inkscape_base LIBRARY DESTINATION ${INKSCAPE_INSTALL_LIBDIR})
+    install(TARGETS inkscape_base LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}/inkscape")
 endif()
