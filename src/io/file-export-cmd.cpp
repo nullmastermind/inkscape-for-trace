@@ -38,13 +38,13 @@
 #include "extension/output.h"
 #include "extension/init.h"
 
-#ifdef __APPLE__  // cannot use c++17 library features with target OS <10.15
+
+// Temporary dependency : once all compilers we want to support have support for
+// C++17 std::filesystem (with #include <filesystem> ) then we drop this dep
+// (Dev meeting, 2020-09-25)
+
 #include <boost/filesystem.hpp>
 namespace filesystem = boost::filesystem;
-#else
-#include <filesystem>
-namespace filesystem = std::filesystem;
-#endif
 
 InkFileExportCmd::InkFileExportCmd()
     : export_overwrite(false)

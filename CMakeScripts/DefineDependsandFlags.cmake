@@ -320,11 +320,7 @@ if(WITH_GSPELL)
     endif()
 endif()
 
-if(APPLE)
-    find_package(Boost 1.19.0 REQUIRED COMPONENTS filesystem)
-else()
-    find_package(Boost 1.19.0 REQUIRED)
-endif()
+find_package(Boost 1.19.0 REQUIRED COMPONENTS filesystem)
 
 if (CMAKE_COMPILER_IS_GNUCC AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 7 AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9)
     list(APPEND INKSCAPE_LIBS "-lstdc++fs")
