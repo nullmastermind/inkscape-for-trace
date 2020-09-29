@@ -81,17 +81,17 @@ double snap_increment_degrees() {
 } // anonymous namespace
 
 ControlPoint::ColorSet TransformHandle::thandle_cset = {
-    {0x000000ff, 0x000000ff},
-    {0x00ff6600, 0x000000ff},
-    {0x00ff6600, 0x000000ff},
+    {0x000000ff, 0x000000ff},  // normal fill, stroke
+    {0x00ff66ff, 0x000000ff},  // mouseover fill, stroke
+    {0x00ff66ff, 0x000000ff},  // clicked fill, stroke
     //
-    {0x000000ff, 0x000000ff},
-    {0x00ff6600, 0x000000ff},
-    {0x00ff6600, 0x000000ff}
+    {0x000000ff, 0x000000ff},  // normal fill, stroke when selected
+    {0x00ff66ff, 0x000000ff},  // mouseover fill, stroke when selected
+    {0x00ff66ff, 0x000000ff}   // clicked fill, stroke when selected
 };
 
-TransformHandle::TransformHandle(TransformHandleSet &th, SPAnchorType anchor, Glib::RefPtr<Gdk::Pixbuf> pb)
-    : ControlPoint(th._desktop, Geom::Point(), anchor, pb, thandle_cset, th._transform_handle_group)
+TransformHandle::TransformHandle(TransformHandleSet &th, SPAnchorType anchor, Inkscape::CanvasItemCtrlType type)
+    : ControlPoint(th._desktop, Geom::Point(), anchor, type, thandle_cset, th._transform_handle_group)
     , _th(th)
 {
     _canvas_item_ctrl->set_name("CanvasItemCtrl:TransformHandle");
@@ -200,8 +200,8 @@ void TransformHandle::ungrabbed(GdkEventButton *)
 
 class ScaleHandle : public TransformHandle {
 public:
-    ScaleHandle(TransformHandleSet &th, SPAnchorType anchor, Glib::RefPtr<Gdk::Pixbuf> pb)
-        : TransformHandle(th, anchor, pb)
+    ScaleHandle(TransformHandleSet &th, SPAnchorType anchor, Inkscape::CanvasItemCtrlType type)
+        : TransformHandle(th, anchor, type)
     {}
 protected:
     Glib::ustring _getTip(unsigned state) const override {
@@ -244,7 +244,7 @@ class ScaleCornerHandle : public ScaleHandle {
 public:
 
     ScaleCornerHandle(TransformHandleSet &th, unsigned corner, unsigned d_corner) :
-        ScaleHandle(th, corner_to_anchor(d_corner), _corner_to_pixbuf(d_corner)),
+        ScaleHandle(th, corner_to_anchor(d_corner), Inkscape::CANVAS_ITEM_CTRL_TYPE_ADJ_HANDLE),
         _corner(corner)
     {}
 
@@ -331,7 +331,7 @@ private:
 class ScaleSideHandle : public ScaleHandle {
 public:
     ScaleSideHandle(TransformHandleSet &th, unsigned side, unsigned d_side)
-        : ScaleHandle(th, side_to_anchor(d_side), _side_to_pixbuf(side))
+        : ScaleHandle(th, side_to_anchor(d_side), Inkscape::CANVAS_ITEM_CTRL_TYPE_ADJ_HANDLE)
         , _side(side)
     {}
 protected:
@@ -410,7 +410,7 @@ private:
 class RotateHandle : public TransformHandle {
 public:
     RotateHandle(TransformHandleSet &th, unsigned corner, unsigned d_corner)
-        : TransformHandle(th, corner_to_anchor(d_corner), _corner_to_pixbuf(d_corner))
+        : TransformHandle(th, corner_to_anchor(d_corner), Inkscape::CANVAS_ITEM_CTRL_TYPE_ADJ_ROTATE)
         , _corner(corner)
     {}
 protected:
@@ -492,7 +492,7 @@ double RotateHandle::_last_angle = 0;
 class SkewHandle : public TransformHandle {
 public:
     SkewHandle(TransformHandleSet &th, unsigned side, unsigned d_side)
-        : TransformHandle(th, side_to_anchor(d_side), _side_to_pixbuf(side))
+        : TransformHandle(th, side_to_anchor(d_side), Inkscape::CANVAS_ITEM_CTRL_TYPE_ADJ_SKEW)
         , _side(side)
     {}
 
@@ -642,7 +642,7 @@ class RotationCenter : public ControlPoint {
 public:
     RotationCenter(TransformHandleSet &th) :
         ControlPoint(th._desktop, Geom::Point(), SP_ANCHOR_CENTER,
-                     _get_pixbuf(),
+                     Inkscape::CANVAS_ITEM_CTRL_TYPE_ADJ_CENTER,
                      _center_cset, th._transform_handle_group),
         _th(th)
     {
@@ -684,13 +684,13 @@ private:
 };
 
 ControlPoint::ColorSet RotationCenter::_center_cset = {
-    {0x00000000, 0x000000ff},
-    {0x00000000, 0xff0000b0},
-    {0x00000000, 0xff0000b0},
+    {0x000000ff, 0x000000ff},  // normal fill, stroke
+    {0x00ff66ff, 0x000000ff},  // mouseover fill, stroke
+    {0x00ff66ff, 0x000000ff},  // clicked fill, stroke
     //
-    {0x00000000, 0x000000ff},
-    {0x00000000, 0xff0000b0},
-    {0x00000000, 0xff0000b0}    
+    {0x000000ff, 0x000000ff},  // normal fill, stroke when selected
+    {0x00ff66ff, 0x000000ff},  // mouseover fill, stroke when selected
+    {0x00ff66ff, 0x000000ff}   // clicked fill, stroke when selected
 };
 
 

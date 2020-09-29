@@ -106,7 +106,7 @@ private:
 class TransformHandle : public ControlPoint
 {
 public:
-    TransformHandle(TransformHandleSet &th, SPAnchorType anchor, Glib::RefPtr<Gdk::Pixbuf> pb);
+    TransformHandle(TransformHandleSet &th, SPAnchorType anchor, Inkscape::CanvasItemCtrlType type);
     void getNextClosestPoint(bool reverse);
 
 protected:
