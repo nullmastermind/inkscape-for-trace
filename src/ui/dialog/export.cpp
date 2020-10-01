@@ -664,6 +664,8 @@ void Export::onSelectionChanged()
         current_key = SELECTION_SELECTION;
         refreshArea();
     }
+
+    updateCheckbuttons();
 }
 
 void Export::onSelectionModified ( guint /*flags*/ )
