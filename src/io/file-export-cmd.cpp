@@ -575,6 +575,36 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string const &filename_in)
             continue;
         }
 
+        // -------------------------- Bit Depth and Color Type --------------------
+
+        int bit_depth = 8; // default of sp_export_png_file function
+        int color_type = PNG_COLOR_TYPE_RGB_ALPHA; // default of sp_export_png_file function
+
+        if (!export_png_color_mode.empty()) {
+            // data as in ui/dialog/export.cpp:
+            const std::map<std::string, std::pair<int, int>> color_modes = {
+                {"Gray_1", {PNG_COLOR_TYPE_GRAY, 1}},
+                {"Gray_2", {PNG_COLOR_TYPE_GRAY, 2}},
+                {"Gray_4", {PNG_COLOR_TYPE_GRAY, 4}},
+                {"Gray_8", {PNG_COLOR_TYPE_GRAY, 8}},
+                {"Gray_16", {PNG_COLOR_TYPE_GRAY, 16}},
+                {"RGB_8", {PNG_COLOR_TYPE_RGB, 8}},
+                {"RGB_16", {PNG_COLOR_TYPE_RGB, 16}},
+                {"GrayAlpha_8", {PNG_COLOR_TYPE_GRAY_ALPHA, 8}},
+                {"GrayAlpha_16", {PNG_COLOR_TYPE_GRAY_ALPHA, 16}},
+                {"RGBA_8", {PNG_COLOR_TYPE_RGB_ALPHA, 8}},
+                {"RGBA_16", {PNG_COLOR_TYPE_RGB_ALPHA, 16}},
+            };
+            auto it = color_modes.find(export_png_color_mode);
+            if (it == color_modes.end()) {
+                std::cerr << "InkFileExport::do_export_png: "
+                          << "Color mode " << export_png_color_mode << " is invalid. It must be one of Gray_1/Gray_2/Gray_4/Gray_8/Gray_16/RGB_8/RGB_16/GrayAlpha_8/GrayAlpha_16/RGBA_8/RGBA_16." << std::endl;
+                continue;
+            } else {
+                std::tie(color_type, bit_depth) = it->second;
+            }
+        }
+
         // ----------------------  Generate the PNG -------------------------------
 
         // Do we really need to print this?
@@ -587,7 +617,8 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string const &filename_in)
         reverse(items.begin(),items.end()); // But there was only one item!
 
         if( sp_export_png_file(doc, filename_out.c_str(), area, width, height, xdpi, ydpi,
-                               bgcolor, nullptr, nullptr, true, export_id_only ? items : std::vector<SPItem*>()) == 1 ) {
+                               bgcolor, nullptr, nullptr, true, export_id_only ? items : std::vector<SPItem*>(),
+                               false, color_type, bit_depth) == 1 ) {
         } else {
             std::cerr << "InkFileExport::do_export_png: Failed to export to " << filename_out << std::endl;
             continue;

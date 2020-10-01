@@ -463,6 +463,12 @@ add_cli_test(export-background-opacity_png  PARAMETERS --export-background=yello
 # add_cli_test(export-background-opacity_ps   PARAMETERS --export-background=yellow --export-background-opacity=0.5 --export-type=ps  INPUT_FILENAME lambda.svg OUTPUT_FILENAME export-background-opacity.ps  REFERENCE_FILENAME export-background-opacity_expected.ps )
 # add_cli_test(export-background-opacity_eps  PARAMETERS --export-background=yellow --export-background-opacity=0.5 --export-type=eps INPUT_FILENAME lambda.svg OUTPUT_FILENAME export-background-opacity.eps REFERENCE_FILENAME export-background-opacity_expected.eps)
 
+# --export-png-color-mode=COLOR-MODE
+# SVG, PDF, PS, EPS, EMF, WMF: Vector formats - bitmap bit-depth and color-type not relevant there.
+ add_cli_test(export-png-color-mode-gray-8_png  PARAMETERS --export-png-color-mode=Gray_8 --export-type=png INPUT_FILENAME areas.svg OUTPUT_FILENAME export-png-color-mode-gray-8.png REFERENCE_FILENAME export-png-color-mode-gray-8_expected.png)
+ add_cli_test(export-png-color-mode-rgb-8_png  PARAMETERS --export-png-color-mode=RGB_8 --export-type=png INPUT_FILENAME areas.svg OUTPUT_FILENAME export-png-color-mode-rgb-8.png REFERENCE_FILENAME export-png-color-mode-rgb-8_expected.png)
+ add_cli_test(export-png-color-mode-rgba-8_png  PARAMETERS --export-png-color-mode=RGBA_8 --export-type=png INPUT_FILENAME areas.svg OUTPUT_FILENAME export-png-color-mode-rgba-8.png REFERENCE_FILENAME export-png-color-mode-rgba-8_expected.png)
+
 # --query-id=OBJECT-ID[,OBJECT-ID]*
 
 # --query-all / --query-x / --query-y / --query-width / --query-height

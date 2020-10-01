@@ -626,6 +626,7 @@ ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-use-hints",       't', N_("Use stored filename and DPI hints when exporting object selected by --export-id"), ""); // Bxx
     this->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-background",      'b', N_("Background color for exported bitmaps (any SVG color string)"),         N_("COLOR")); // Bxx
     this->add_main_option_entry(T::OPTION_TYPE_DOUBLE,   "export-background-opacity", 'y', N_("Background opacity for exported bitmaps (0.0 to 1.0, or 1 to 255)"), N_("VALUE")); // Bxx
+    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-png-color-mode", '\0', N_("Color mode (bit depth and color type) for exported bitmaps (Gray_1/Gray_2/Gray_4/Gray_8/Gray_16/RGB_8/RGB_16/GrayAlpha_8/GrayAlpha_16/RGBA_8/RGBA_16)"), N_("COLOR-MODE")); // Bxx
 
     // Query - Geometry
     _start_main_option_section(_("Query object/document geometry"));
@@ -1507,6 +1508,9 @@ ConcreteInkscapeApplication<T>::on_handle_local_options(const Glib::RefPtr<Glib:
 
     if (options->contains("export-background-opacity")) {
         options->lookup_value("export-background-opacity", _file_export.export_background_opacity);
+    }
+    if (options->contains("export-png-color-mode")) {
+        options->lookup_value("export-png-color-mode", _file_export.export_png_color_mode);
     }
 
 

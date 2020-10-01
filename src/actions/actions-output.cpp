@@ -201,6 +201,14 @@ export_background_opacity(const Glib::VariantBase&  value, InkscapeApplication *
 }
 
 void
+export_png_color_mode(const Glib::VariantBase&  value, InkscapeApplication *app)
+{
+    Glib::Variant<std::string> s = Glib::VariantBase::cast_dynamic<Glib::Variant<std::string> >(value);
+    app->file_export()->export_png_color_mode = s.get();
+    // std::cout << s.get() << std::endl;
+}
+
+void
 export_do(InkscapeApplication *app)
 {
     SPDocument* document = app->get_active_document();
@@ -239,6 +247,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_output =
     {"app.export-use-hints",          N_("Export Use Hints"),          "Export",     N_("Export using saved hints.")             },
     {"app.export-background",         N_("Export Background"),         "Export",     N_("Export background color.")              },
     {"app.export-background-opacity", N_("Export Background Opacity"), "Export",     N_("Export background opacity.")            },
+    {"app.export-png-color-mode",     N_("Export PNG Color Mode"),     "Export",     N_("Export png color mode.")                },
 
     {"app.export-do",                 N_("Do Export"),                 "Export",     N_("Do export.")                            }
     // clang-format on
@@ -284,6 +293,7 @@ add_actions_output(ConcreteInkscapeApplication<T>* app)
     app->add_action_with_parameter( "export-use-hints",         Bool,   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_use_hints),    app));
     app->add_action_with_parameter( "export-background",        String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_background),   app));
     app->add_action_with_parameter( "export-background-opacity",Double, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_background_opacity), app));
+    app->add_action_with_parameter( "export-png-color-mode",    String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_png_color_mode), app));
 
     // Extra
     app->add_action(                "export-do",                        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_do),           app));

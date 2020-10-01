@@ -63,6 +63,7 @@ public:
     bool          export_use_hints;
     Glib::ustring export_background;
     double        export_background_opacity;
+    Glib::ustring export_png_color_mode;
     bool          export_plain_svg;
 };
 
