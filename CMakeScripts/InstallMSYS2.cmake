@@ -23,6 +23,7 @@ if(WIN32)
     ${MINGW_BIN}/libaspell-[0-9]*.dll
     ${MINGW_BIN}/libatk-1.0-[0-9]*.dll
     ${MINGW_BIN}/libatkmm-1.6-[0-9]*.dll
+    ${MINGW_BIN}/libboost_filesystem-mt.dll
     ${MINGW_BIN}/libbrotlicommon.dll
     ${MINGW_BIN}/libbrotlidec.dll
     ${MINGW_BIN}/libbz2-[0-9]*.dll
