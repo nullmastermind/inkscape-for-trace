@@ -230,7 +230,7 @@ static void spdc_paste_curve_as_freehand_shape(Geom::PathVector const &newpath, 
     Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
     static_cast<LPEPatternAlongPath*>(lpe)->pattern.set_new_value(newpath,true);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    double scale = prefs->getDouble("/live_effects/pap/width", 1);
+    double scale = prefs->getDouble("/live_effects/pap/width", 0.265);
     if (!scale) {
         scale = 1 / document->getDocumentScale()[0];
     }
