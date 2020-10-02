@@ -798,22 +798,19 @@ ConcreteInkscapeApplication<Gtk::Application>::create_window(SPDocument *documen
 */
 template<class T>
 void
-ConcreteInkscapeApplication<T>::create_window(const Glib::RefPtr<Gio::File>& file,
-                                              bool add_to_recent,
-                                              bool replace_empty)
+ConcreteInkscapeApplication<T>::create_window(const Glib::RefPtr<Gio::File>& file)
 {
     std::cerr << "ConcreteInkscapeApplication<T>::create_window: Should not be called!" << std::endl;
 }
 
 
 /** Create a window given a Gio::File. This is what most external functions should call.
-    The booleans are only false when opening a help file.
+  *
+  * @param file - The filename to open as a Gio::File object
 */
 template<>
 void
-ConcreteInkscapeApplication<Gtk::Application>::create_window(const Glib::RefPtr<Gio::File>& file,
-                                                             bool add_to_recent,
-                                                             bool replace_empty)
+ConcreteInkscapeApplication<Gtk::Application>::create_window(const Glib::RefPtr<Gio::File>& file)
 {
     SPDocument* document = nullptr;
     InkscapeWindow* window = nullptr;
@@ -822,15 +819,12 @@ ConcreteInkscapeApplication<Gtk::Application>::create_window(const Glib::RefPtr<
     if (file) {
         document = document_open(file, &cancelled);
         if (document) {
-
-            if (add_to_recent) {
-                auto recentmanager = Gtk::RecentManager::get_default();
-                recentmanager->add_item (file->get_uri());
-            }
+            // Remember document so much that we'll add it to recent documents
+            auto recentmanager = Gtk::RecentManager::get_default();
+            recentmanager->add_item (file->get_uri());
 
             SPDocument* old_document = _active_document;
-            bool replace = replace_empty && old_document && old_document->getVirgin();
-            // virgin == true => an empty document (template).
+            bool replace = old_document && old_document->getVirgin();
 
             window = create_window (document, replace);
 

@@ -54,9 +54,9 @@ void sp_help_open_tutorial(Glib::ustring name)
 
     filename = Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::TUTORIALS, filename.c_str(), true);
     if (!filename.empty()) {
-        Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(filename);
         ConcreteInkscapeApplication<Gtk::Application>* app = &(ConcreteInkscapeApplication<Gtk::Application>::get_instance());
-        app->create_window(file, false, false);
+        SPDocument* doc = app->document_new(filename);
+        app->window_open(doc);
     } else {
         // TRANSLATORS: Please don't translate link unless the page exists in your language. Add your language code to
         // the link this way: https://inkscape.org/[lang]/learn/tutorials/

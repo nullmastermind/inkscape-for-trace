@@ -148,8 +148,7 @@ private:
 public:
     InkFileExportCmd* file_export() override { return &_file_export; }
     InkscapeWindow*   create_window(SPDocument *document, bool replace);
-    void              create_window(const Glib::RefPtr<Gio::File>& file = Glib::RefPtr<Gio::File>(),
-                                    bool add_to_recent = true, bool replace_empty = true);
+    void              create_window(const Glib::RefPtr<Gio::File>& file = Glib::RefPtr<Gio::File>());
     bool              destroy_window(InkscapeWindow* window);
     void              destroy_all();
     void              print_action_list();
