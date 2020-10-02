@@ -597,12 +597,12 @@ void SPDesktopWidget::on_size_allocate(Gtk::Allocation &allocation)
     }
 
     if (this->get_realized()) {
+        parent_type::on_size_allocate(allocation);
+
         SPDesktopWidget *dtw = this;
         Geom::Rect const d_canvas = _canvas->get_area_world();
         Geom::Point midpoint = dtw->desktop->w2d(d_canvas.midpoint());
-
         double zoom = dtw->desktop->current_zoom();
-        parent_type::on_size_allocate(allocation);
 
         if (dtw->get_sticky_zoom_active()) {
             /* Calculate adjusted zoom */

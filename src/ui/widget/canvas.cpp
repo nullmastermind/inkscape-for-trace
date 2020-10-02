@@ -172,6 +172,8 @@ Canvas::get_area_world()
     int width  = allocation.get_width();
     int height = allocation.get_height();
     if (width < 2 || height < 2) {
+        // Make sure _allocation is always set before using it.
+        g_assert(!_allocation.has_zero_area());
         width  = _allocation.get_width();
         height = _allocation.get_height();
     }
