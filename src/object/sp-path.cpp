@@ -337,7 +337,15 @@ Geom::Affine SPPath::set_transform(Geom::Affine const &transform) {
         return transform;
     }
     if (hasPathEffectRecursive() && pathEffectsEnabled()) {
-        _curve_before_lpe->transform(transform);
+        if (!_curve_before_lpe) {
+            // we are inside a LPE group creating a new element 
+            // and the original-d curve is not defined, 
+            // so we apply the item default transform on first time. 
+            // This fix a issue with calligrapic tool that make a transform just when draw
+            _curve->transform(transform);
+        } else {
+            _curve_before_lpe->transform(transform);
+        }
     } else {
         _curve->transform(transform);
     }
