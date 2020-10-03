@@ -32,9 +32,14 @@
 #include "object/sp-text.h"
 
 #include "xml/sp-css-attr.h"
+// this is only to flatten nonzero fillrule
+#include "livarot/Path.h"
+#include "livarot/Shape.h"
 
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
+
+typedef FillRule FillRuleFlatten;
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -57,6 +62,7 @@ LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     fuse_paths(_("Fuse paths"), _("Fuse original path and mirror image into a single path"), "fuse_paths", &wr, this, false),
     oposite_fuse(_("Fuse opposite sides"), _("Picks the part on the other side of the mirror line as the original."), "oposite_fuse", &wr, this, false),
     split_items(_("Split elements"), _("Split original and mirror image into separate paths, so each can have its own style."), "split_items", &wr, this, false),
+    split_open(_("Keep open paths on split"), _("Allow keep paths open over the split line."), "split_open", &wr, this, false),
     start_point(_("Mirror line start"), _("Start point of mirror line"), "start_point", &wr, this, _("Adjust start point of mirror line")),
     end_point(_("Mirror line end"), _("End point of mirror line"), "end_point", &wr, this, _("Adjust end point of mirror line")),
     center_point(_("Mirror line mid"), _("Center point of mirror line"), "center_point", &wr, this, _("Adjust center point of mirror line"))
@@ -67,6 +73,7 @@ LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     registerParameter(&fuse_paths);
     registerParameter(&oposite_fuse);
     registerParameter(&split_items);
+    registerParameter(&split_open);
     registerParameter(&start_point);
     registerParameter(&end_point);
     registerParameter(&center_point);
@@ -94,8 +101,7 @@ LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem)
         Geom::Line ls((Geom::Point)start_point, (Geom::Point)end_point);
         Geom::Affine m = Geom::reflection (ls.vector(), (Geom::Point)start_point);
         m *= sp_lpe_item->transform;
-        toMirror(m, reset);
-        reset = false;
+        toMirror(m);
     } else {
         processObjects(LPE_ERASE);
         items.clear();
@@ -277,7 +283,7 @@ void LPEMirrorSymmetry::cloneStyle(SPObject *orig, SPObject *dest)
 }
 
 void
-LPEMirrorSymmetry::cloneD(SPObject *orig, SPObject *dest, bool reset)
+LPEMirrorSymmetry::cloneD(SPObject *orig, SPObject *dest)
 {
     SPDocument *document = getSPDoc();
     if (!document) {
@@ -292,7 +298,7 @@ LPEMirrorSymmetry::cloneD(SPObject *orig, SPObject *dest, bool reset)
         size_t index = 0;
         for (auto & child : childs) {
             SPObject *dest_child = dest->nthChild(index);
-            cloneD(child, dest_child, reset);
+            cloneD(child, dest_child);
             index++;
         }
         return;
@@ -305,7 +311,7 @@ LPEMirrorSymmetry::cloneD(SPObject *orig, SPObject *dest, bool reset)
         size_t index = 0;
         for (auto &child : SP_TEXT(orig)->children) {
             SPObject *dest_child = dest->nthChild(index);
-            cloneD(&child, dest_child, reset);
+            cloneD(&child, dest_child);
             index++;
         }
     }
@@ -354,7 +360,7 @@ LPEMirrorSymmetry::createPathBase(SPObject *elemref) {
 }
 
 void
-LPEMirrorSymmetry::toMirror(Geom::Affine transform, bool reset)
+LPEMirrorSymmetry::toMirror(Geom::Affine transform)
 {
     SPDocument *document = getSPDoc();
     if (!document) {
@@ -376,7 +382,8 @@ LPEMirrorSymmetry::toMirror(Geom::Affine transform, bool reset)
         elemref = container->appendChildRepr(phantom);
         Inkscape::GC::release(phantom);
     }
-    cloneD(SP_OBJECT(sp_lpe_item), elemref, reset);
+    cloneD(SP_OBJECT(sp_lpe_item), elemref);
+    reset = false;
     gchar *str = sp_svg_transform_write(transform);
     elemref->getRepr()->setAttribute("transform" , str);
     g_free(str);
@@ -393,7 +400,8 @@ LPEMirrorSymmetry::toMirror(Geom::Affine transform, bool reset)
 void
 LPEMirrorSymmetry::resetStyles(){
     reset = true;
-    doAfterEffect_impl(sp_lpe_item);
+    sp_lpe_item_update_patheffect(sp_lpe_item, false, false);
+    reset = false;
 }
 
 
@@ -432,8 +440,31 @@ LPEMirrorSymmetry::doOnApply (SPLPEItem const* lpeitem)
     end_point.param_update_default(point_b);
     center_point.param_setValue(point_c, true);
     previous_center = center_point;
+    lpeversion.param_setValue("1.1", true);
 }
 
+static void
+sp_flatten(Geom::PathVector &pathvector, FillRuleFlatten fillkind)
+{
+    Path *orig = new Path;
+    orig->LoadPathVector(pathvector);
+    Shape *theShape = new Shape;
+    Shape *theRes = new Shape;
+    orig->ConvertWithBackData (1.0);
+    orig->Fill (theShape, 0);
+    theRes->ConvertToShape (theShape, FillRule(fillkind));
+    Path *originaux[1];
+    originaux[0] = orig;
+    Path *res = new Path;
+    theRes->ConvertToForme (res, 1, originaux, true);
+
+    delete theShape;
+    delete theRes;
+    char *res_d = res->svg_dump_path ();
+    delete res;
+    delete orig;
+    pathvector  = sp_svg_read_pathv(res_d);
+}
 
 Geom::PathVector
 LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
@@ -488,10 +519,6 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                 crossed.push_back(c.ta);
             }
             std::sort(crossed.begin(), crossed.end());
-            bool swamped = false;
-            if (crossed.size()) {
-                swamped = crossed[0] > crossed[crossed.size() - 1];
-            }
             for (unsigned int i = 0; i < crossed.size(); i++) {
                 double time_end = crossed[i];
                 if (time_start != time_end && time_end - time_start > Geom::EPSILON) {
@@ -511,8 +538,6 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                                     portion.setFinal(portion.initialPoint());
                                     portion.close();
                                 }
-                            } else if (path_it.closed() && swamped) {
-                                portion.close();
                             }
                             tmp_pathvector.push_back(portion);
                         }
@@ -540,7 +565,7 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                             tmp_pathvector.push_back(portion);
                         } else {
                             if (cs.size() > 1 && tmp_pathvector.size() > 0 && tmp_pathvector[0].size() > 0 ) {
-                                if (swamped || !split_items) {
+                                if (!split_items) {
                                     portion.setFinal(tmp_pathvector[0].initialPoint());
                                     portion.setInitial(tmp_pathvector[0].finalPoint());
                                 } else {
@@ -552,15 +577,27 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                             } else {
                                 tmp_pathvector.push_back(portion);
                             }
-                            tmp_pathvector[0].close();
+                            if (lpeversion.param_getSVGValue() <= "1.0.1") {
+                                tmp_pathvector[0].close();
+                            }
                         }
                         portion.clear();
                     }
                 }
             }
+            if (!split_open && lpeversion.param_getSVGValue() > "1.0.1" && original.closed()) {
+                for (auto &path : tmp_pathvector) {
+                    if (!path.closed()) {
+                        path.close();
+                    }
+                }
+                sp_flatten(tmp_pathvector, fill_oddEven);
+            }
             if (cs.size() == 0 && position == 1) {
                 tmp_pathvector.push_back(original);
-                tmp_pathvector.push_back(original * m);
+                if (!split_items) {
+                    tmp_pathvector.push_back(original * m);
+                }
             }
             path_out.insert(path_out.end(), tmp_pathvector.begin(), tmp_pathvector.end());
             tmp_pathvector.clear();

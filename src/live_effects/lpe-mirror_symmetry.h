@@ -50,8 +50,8 @@ public:
     void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/) override;
     Gtk::Widget * newWidget() override;
     void cloneStyle(SPObject *orig, SPObject *dest);
-    void toMirror(Geom::Affine transform, bool reset);
-    void cloneD(SPObject *orig, SPObject *dest, bool reset);
+    void toMirror(Geom::Affine transform);
+    void cloneD(SPObject *orig, SPObject *dest);
     Inkscape::XML::Node * createPathBase(SPObject *elemref);
     void resetStyles();
     void centerVert();
@@ -66,6 +66,7 @@ private:
     BoolParam fuse_paths;
     BoolParam oposite_fuse;
     BoolParam split_items;
+    BoolParam split_open;
     PointParam start_point;
     PointParam end_point;
     PointParam center_point;

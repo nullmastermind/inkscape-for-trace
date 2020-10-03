@@ -1297,11 +1297,17 @@ void Effect::doOnApply_impl(SPLPEItem const* lpeitem)
 {
     sp_lpe_item = const_cast<SPLPEItem *>(lpeitem);
     is_applied = true;
+    // we can override "lpeversion" value in each LPE using doOnApply
+    // this allow to handle legacy LPE and some times update to newest definitions
+    // In BBB Martin, Mc and Jabiertxof make decission 
+    // of only update this value per each LPE when changes.
+    // and use the Inkscape release version that has this new LPE change
+    // LPE without lpeversion are created in a inkscape lower than 1.0
+    lpeversion.param_setValue("1", true); 
     doOnApply(lpeitem);
     setReady();
     has_exception = false;
-    lpeversion.param_setValue("1", true); // we can override this value in each LPE to major versions I dont want to
-                                          // repeat inkscape versioning
+    
 }
 
 void Effect::doBeforeEffect_impl(SPLPEItem const* lpeitem)
