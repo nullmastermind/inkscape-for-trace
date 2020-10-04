@@ -32,6 +32,7 @@
 
 #include "ui/widget/panel.h"
 #include "ui/widget/frame.h"
+#include "ui/widget/scrollprotected.h"
 
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/entry.h>
@@ -84,7 +85,7 @@ private:
     Gtk::Entry _entry_title; //the entry for the object title
 
     Gtk::Label _label_image_rendering; // the label for 'image-rendering'
-    Gtk::ComboBoxText _combo_image_rendering; // the combo box text for 'image-rendering'
+    Inkscape::UI::Widget::ScrollProtected<Gtk::ComboBoxText> _combo_image_rendering; // the combo box text for 'image-rendering'
     
     Gtk::Frame  _ft_description; //the frame for the text of the object description
     Gtk::TextView _tv_description; //the text view object showing the object description

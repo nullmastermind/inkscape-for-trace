@@ -30,6 +30,7 @@
 #include <gtkmm/treeview.h>
 
 #include "ui/widget/panel.h"
+#include "ui/widget/scrollprotected.h"
 
 #include "text-editing.h"
 
@@ -250,7 +251,7 @@ private:
     Gtk::Button     add_button;
     Gtk::Button     pref_button;
     Gtk::Label      dictionary_label;
-    Gtk::ComboBoxText dictionary_combo;
+    Inkscape::UI::Widget::ScrollProtected<Gtk::ComboBoxText> dictionary_combo;
     Gtk::HBox       dictionary_hbox;
     Gtk::Separator  action_sep;
     Gtk::Button     stop_button;

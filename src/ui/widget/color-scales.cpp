@@ -11,11 +11,13 @@
  */
 
 #include <gtkmm/adjustment.h>
+#include <gtkmm/spinbutton.h>
 #include <glibmm/i18n.h>
 
 #include "ui/dialog-events.h"
 #include "ui/widget/color-scales.h"
 #include "ui/widget/color-slider.h"
+#include "ui/widget/scrollprotected.h"
 
 #define CSC_CHANNEL_R (1 << 0)
 #define CSC_CHANNEL_G (1 << 1)
@@ -112,7 +114,8 @@ void ColorScales::_initUI(SPColorScalesMode mode)
         gtk_grid_attach(GTK_GRID(t), _s[i]->gobj(), 1, i, 1, 1);
 
         /* Spinbutton */
-        _b[i] = gtk_spin_button_new(GTK_ADJUSTMENT(_a[i]->gobj()), 1.0, 0);
+        auto spinbutton = Gtk::manage(new ScrollProtected<Gtk::SpinButton>(_a[i], 1.0));
+        _b[i] = GTK_WIDGET(spinbutton->gobj());
         sp_dialog_defocus_on_enter(_b[i]);
         gtk_label_set_mnemonic_widget(GTK_LABEL(_l[i]), _b[i]);
         gtk_widget_show(_b[i]);

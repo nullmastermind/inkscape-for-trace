@@ -56,6 +56,7 @@
 #include "ui/dialog-events.h"
 #include "ui/interface.h"
 #include "ui/widget/unit-menu.h"
+#include "ui/widget/scrollprotected.h"
 
 #include "extension/db.h"
 #include "extension/output.h"
@@ -535,7 +536,7 @@ Glib::RefPtr<Gtk::Adjustment> Export::createSpinbutton( gchar const * /*key*/, f
         pos++;
     }
 
-    auto sb = new Gtk::SpinButton(adj, 1.0, digits);
+    auto sb = new Inkscape::UI::Widget::ScrollProtected<Gtk::SpinButton>(adj, 1.0, digits);
     sb->set_hexpand();
     t->attach(*sb, x + pos, y, 1, 1);
 

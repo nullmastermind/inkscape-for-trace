@@ -15,6 +15,7 @@
 #include <utility>
 
 #include <gtkmm/adjustment.h>
+#include <gtkmm/spinbutton.h>
 #include <glibmm/i18n.h>
 
 #include "colorspace.h"
@@ -29,6 +30,7 @@
 #include "ui/widget/color-icc-selector.h"
 #include "ui/widget/color-scales.h"
 #include "ui/widget/color-slider.h"
+#include "ui/widget/scrollprotected.h"
 
 #define noDEBUG_LCMS
 
@@ -443,7 +445,8 @@ void ColorICCSelector::init()
 
         attachToGridOrTable(t, _impl->_compUI[i]._slider->gobj(), 1, row, 1, 1, true);
 
-        _impl->_compUI[i]._btn = gtk_spin_button_new(_impl->_compUI[i]._adj->gobj(), step, digits);
+        auto spinbutton = Gtk::manage(new ScrollProtected<Gtk::SpinButton>(_impl->_compUI[i]._adj, step, digits));
+        _impl->_compUI[i]._btn = GTK_WIDGET(spinbutton->gobj());
 #if defined(HAVE_LIBLCMS2)
         gtk_widget_set_tooltip_text(_impl->_compUI[i]._btn, (i < things.size()) ? things[i].tip.c_str() : "");
 #else
@@ -495,7 +498,8 @@ void ColorICCSelector::init()
 
 
     // Spinbutton
-    _impl->_sbtn = gtk_spin_button_new(_impl->_adj->gobj(), 1.0, 0);
+    auto spinbuttonalpha = Gtk::manage(new ScrollProtected<Gtk::SpinButton>(_impl->_adj, 1.0));
+    _impl->_sbtn = GTK_WIDGET(spinbuttonalpha->gobj());
     gtk_widget_set_tooltip_text(_impl->_sbtn, _("Alpha (opacity)"));
     sp_dialog_defocus_on_enter(_impl->_sbtn);
     gtk_label_set_mnemonic_widget(GTK_LABEL(_impl->_label), _impl->_sbtn);

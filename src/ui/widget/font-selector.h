@@ -37,6 +37,7 @@
 #include <gtkmm/comboboxtext.h>
 
 #include "ui/widget/font-variations.h"
+#include "ui/widget/scrollprotected.h"
 
 namespace Inkscape {
 namespace UI {
@@ -85,7 +86,7 @@ protected:
 
     // Font size
     Gtk::Label          size_label;
-    Gtk::ComboBoxText   size_combobox;
+    ScrollProtected<Gtk::ComboBoxText> size_combobox;
 
     // Font variations
     Gtk::ScrolledWindow font_variations_scroll;

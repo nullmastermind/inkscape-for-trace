@@ -19,6 +19,7 @@
 #include <list>
 #include "ui/widget/panel.h"
 #include "ui/widget/frame.h"
+#include "ui/widget/scrollprotected.h"
 
 #include <gtkmm/frame.h>
 #include <gtkmm/comboboxtext.h>
@@ -108,9 +109,9 @@ protected:
     Gtk::Label _anchorLabelNode;
     Gtk::ToggleButton _selgrp;
     Gtk::ToggleButton _oncanvas;
-    Gtk::ComboBoxText _combo;
+    Inkscape::UI::Widget::ScrollProtected<Gtk::ComboBoxText> _combo;
     Gtk::HBox _anchorBoxNode;
-    Gtk::ComboBoxText _comboNode;
+    Inkscape::UI::Widget::ScrollProtected<Gtk::ComboBoxText> _comboNode;
 
     SPDesktop *_desktop;
     sigc::connection _toolChangeConn;

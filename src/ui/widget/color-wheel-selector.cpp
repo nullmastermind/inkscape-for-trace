@@ -18,6 +18,7 @@
 #include "ui/widget/color-scales.h"
 #include "ui/widget/color-slider.h"
 #include "ui/widget/ink-color-wheel.h"
+#include "ui/widget/scrollprotected.h"
 
 namespace Inkscape {
 namespace UI {
@@ -97,7 +98,7 @@ void ColorWheelSelector::_initUI()
                        SP_RGBA32_F_COMPOSE(1.0, 1.0, 1.0, 1.0));
 
     /* Spinbutton */
-    auto spin_button = Gtk::manage(new Gtk::SpinButton(_alpha_adjustment, 1.0, 0));
+    auto spin_button = Gtk::manage(new ScrollProtected<Gtk::SpinButton>(_alpha_adjustment, 1.0, 0));
     spin_button->set_tooltip_text(_("Alpha (opacity)"));
     sp_dialog_defocus_on_enter(GTK_WIDGET(spin_button->gobj()));
     label->set_mnemonic_widget(*spin_button);
