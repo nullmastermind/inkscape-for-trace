@@ -1525,7 +1525,7 @@ void InkscapePreferences::initPageUI()
 
     _ui_languages.init( "/ui/language", languages, langValues, G_N_ELEMENTS(languages), languages[0]);
     _page_ui.add_line( false, _("Language (requires restart):"), _ui_languages, "",
-                              _("Set the language for menus and number formats"), false);
+                              _("Set the language for menus and number formats"), true);
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
@@ -1542,9 +1542,13 @@ void InkscapePreferences::initPageUI()
     _page_ui.add_line( false, _("Maximum documents in Open _Recent:"), _misc_recent, "",
                               _("Set the maximum length of the Open Recent list in the File menu, or clear the list"), false, reset_recent);
 
+    _page_ui.add_group_header(_("_Zoom correction factor (in %)"));
+    _page_ui.add_group_note(_("Adjust the slider until the length of the ruler on your screen matches its real length. This information is used when zooming to 1:1, 1:2, etc., to display objects in their true sizes"));
     _ui_zoom_correction.init(300, 30, 0.01, 500.0, 1.0, 10.0, 1.0);
-    _page_ui.add_line( false, _("_Zoom correction factor (in %):"), _ui_zoom_correction, "",
-                              _("Adjust the slider until the length of the ruler on your screen matches its real length. This information is used when zooming to 1:1, 1:2, etc., to display objects in their true sizes"), true);
+    _page_ui.add_line( false, "", _ui_zoom_correction, "", "", true);
+
+    _ui_realworldzoom.init( _("Show zoom percentage corrected by factor"), "/options/zoomcorrection/shown", true);
+    _page_ui.add_line( false, "", _ui_realworldzoom, "", _("Zoom percentage can be either by the physical units or by pixels."));
 
     _ui_partialdynamic.init( _("Enable dynamic relayout for incomplete sections"), "/options/workarounds/dynamicnotdone", false);
     _page_ui.add_line( false, "", _ui_partialdynamic, "",
@@ -1581,9 +1585,9 @@ void InkscapePreferences::initPageUI()
     _page_ui.add_line(false, "", _ui_rotationlock, "",
                        _("When enabled, common actions which normally rotate the canvas no longer do so by default"), true);
 
+    _page_ui.add_group_header(_("Handle size"));
         _mouse_grabsize.init("/options/grabsize/value", 1, 15, 1, 2, 3, 0);
-    _page_ui.add_line(false, _("_Handle size:"), _mouse_grabsize, "",
-                         _("Set the relative size of node handles"), true);
+    _page_ui.add_line(false, "", _mouse_grabsize, "", _("Set the relative size of node handles"), true);
                          
     // Theme
     _page_theme.add_group_header(_("Theme"));

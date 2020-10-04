@@ -145,6 +145,25 @@ void DialogPage::add_group_header(Glib::ustring name)
     }
 }
 
+void DialogPage::add_group_note(Glib::ustring name)
+{
+    if (name != "")
+    {
+        Gtk::Label* label_widget = Gtk::manage(new Gtk::Label(Glib::ustring("<i>") + name +
+                                               Glib::ustring("</i>") , Gtk::ALIGN_START , Gtk::ALIGN_CENTER, true));
+        label_widget->set_use_markup(true);
+        label_widget->set_valign(Gtk::ALIGN_CENTER);
+        label_widget->set_line_wrap(true);
+        label_widget->set_line_wrap_mode(Pango::WRAP_WORD);
+
+        add(*label_widget);
+        GValue width = G_VALUE_INIT;
+        g_value_init(&width, G_TYPE_INT);
+        g_value_set_int(&width, 2);
+        gtk_container_child_set_property(GTK_CONTAINER(gobj()), GTK_WIDGET(label_widget->gobj()), "width", &width);
+    }
+}
+
 void DialogPage::set_tip(Gtk::Widget& widget, Glib::ustring const &tip)
 {
     widget.set_tooltip_text (tip);
@@ -512,6 +531,8 @@ ZoomCorrRulerSlider::init(int ruler_width, int ruler_height, double lower, doubl
     _unit.set_halign(Gtk::ALIGN_CENTER);
     _unit.set_valign(Gtk::ALIGN_END);
 
+    _slider->set_hexpand(true);
+    _ruler.set_hexpand(true);
     auto table = Gtk::manage(new Gtk::Grid());
     table->attach(*_slider, 0, 0, 1, 1);
     table->attach(_sb,      1, 0, 1, 1);

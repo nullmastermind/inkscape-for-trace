@@ -300,6 +300,7 @@ public:
     DialogPage();
     void add_line(bool indent, Glib::ustring const &label, Gtk::Widget& widget, Glib::ustring const &suffix, Glib::ustring const &tip, bool expand = true, Gtk::Widget *other_widget = nullptr);
     void add_group_header(Glib::ustring name);
+    void add_group_note(Glib::ustring name);
     void set_tip(Gtk::Widget &widget, Glib::ustring const &tip);
 };
 
