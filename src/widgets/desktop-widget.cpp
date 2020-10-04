@@ -610,7 +610,7 @@ void SPDesktopWidget::on_size_allocate(Gtk::Allocation &allocation)
             double newshortside = _canvas->get_area_world().minExtent();
             zoom *= newshortside / oldshortside;
         }
-        dtw->desktop->zoom_absolute_center_point (midpoint, zoom);
+        dtw->desktop->zoom_absolute(midpoint, zoom, false);
     } else {
         parent_type::on_size_allocate(allocation);
     }
@@ -1605,13 +1605,19 @@ SPDesktopWidget::zoom_output()
 void
 SPDesktopWidget::zoom_value_changed()
 {
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     double const zoom_factor = pow (2, _zoom_status->get_value());
 
     // Zoom around center of window
     Geom::Rect const d_canvas = _canvas->get_area_world();
     Geom::Point midpoint = desktop->w2d(d_canvas.midpoint());
+
     _zoom_status_value_changed_connection.block();
-    desktop->zoom_absolute_center_point (midpoint, zoom_factor);
+    if(prefs->getDouble("/options/zoomcorrection/shown", true)) {
+        desktop->zoom_realworld(midpoint, zoom_factor);
+    } else {
+        desktop->zoom_absolute(midpoint, zoom_factor);
+    }
     _zoom_status_value_changed_connection.unblock();
     _zoom_status->defocus();
 }
@@ -1619,8 +1625,15 @@ SPDesktopWidget::zoom_value_changed()
 void
 SPDesktopWidget::zoom_menu_handler(double factor)
 {
-    desktop->zoom_absolute_center_point(desktop->current_center(), factor);
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    if(prefs->getDouble("/options/zoomcorrection/shown", true)) {
+        desktop->zoom_realworld(desktop->current_center(), factor);
+    } else {
+        desktop->zoom_absolute(desktop->current_center(), factor, false);
+    }
 }
+
+
 
 void
 SPDesktopWidget::zoom_populate_popup(Gtk::Menu *menu)
@@ -1687,8 +1700,15 @@ SPDesktopWidget::sticky_zoom_toggled()
 void
 SPDesktopWidget::update_zoom()
 {
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    // It's very important that the value used in set_value is the same as the one
+    // set as it otherwise creates an infinate loop between the spin button and update_zoom
+    double correction = 1.0;
+    if(prefs->getDouble("/options/zoomcorrection/shown", true)) {
+        correction = prefs->getDouble("/options/zoomcorrection/value", 1.0);
+    }
     _zoom_status_value_changed_connection.block();
-    _zoom_status->set_value(log(desktop->current_zoom()) / log(2));
+    _zoom_status->set_value(log(desktop->current_zoom() / correction) / log(2));
     _zoom_status->queue_draw();
     _zoom_status_value_changed_connection.unblock();
 }

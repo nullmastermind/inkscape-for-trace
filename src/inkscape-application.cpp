@@ -250,7 +250,7 @@ InkscapeApplication::document_revert(SPDocument* document)
             bool reverted = document_swap (it2, new_document);
 
             if (reverted) {
-                desktop->zoom_absolute_center_point (c, zoom);
+                desktop->zoom_absolute(c, zoom, false);
             } else {
                 std::cerr << "InkscapeApplication::revert_document: Revert failed!" << std::endl;
             }

@@ -97,7 +97,7 @@ bool ZoomTool::root_handler(GdkEvent* event) {
                                        ? zoom_inc
                                        : 1 / zoom_inc );
 
-                desktop->zoom_relative_keep_point(button_dt, zoom_rel);
+                desktop->zoom_relative(button_dt, zoom_rel);
                 ret = true;
             }
 
@@ -145,7 +145,7 @@ bool ZoomTool::root_handler(GdkEvent* event) {
                                            ? 1 / zoom_inc
                                            : zoom_inc );
 
-                    desktop->zoom_relative_keep_point(button_dt, zoom_rel);
+                    desktop->zoom_relative(button_dt, zoom_rel);
                 }
 
                 ret = true;

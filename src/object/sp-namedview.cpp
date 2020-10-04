@@ -837,7 +837,7 @@ void sp_namedview_zoom_and_view_from_document(SPDesktop *desktop)
     if (nv->zoom != 0 && nv->zoom != HUGE_VAL && !std::isnan(nv->zoom)
         && nv->cx != HUGE_VAL && !std::isnan(nv->cx)
         && nv->cy != HUGE_VAL && !std::isnan(nv->cy)) {
-        desktop->zoom_absolute_center_point( Geom::Point(nv->cx, nv->cy), nv->zoom );
+        desktop->zoom_absolute( Geom::Point(nv->cx, nv->cy), nv->zoom, false );
     } else if (desktop->getDocument()) { // document without saved zoom, zoom to its page
         desktop->zoom_page();
     }

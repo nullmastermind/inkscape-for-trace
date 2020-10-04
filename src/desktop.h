@@ -313,10 +313,9 @@ public:
     void set_display_area (Geom::Rect const &a, Geom::Coord border, bool log = true);
     Geom::Parallelogram get_display_area(bool use_integer_viewbox = false) const;
 
-    void zoom_absolute_keep_point   (Geom::Point const &c, double const zoom);
-    void zoom_relative_keep_point   (Geom::Point const &c, double const zoom);
-    void zoom_absolute_center_point (Geom::Point const &c, double const zoom);
-    void zoom_relative_center_point (Geom::Point const &c, double const zoom);
+    void zoom_absolute (Geom::Point const &c, double const zoom, bool keep_point = true);
+    void zoom_relative (Geom::Point const &c, double const zoom, bool keep_point = true);
+    void zoom_realworld (Geom::Point const &c, double const ratio);
 
     void zoom_page();
     void zoom_page_width();

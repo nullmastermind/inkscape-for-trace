@@ -56,12 +56,12 @@ canvas_zoom_helper(SPDesktop* dt, const Geom::Point& midpoint, double zoom_facto
         boost::optional<Geom::Point> zoom_to =
             SP_DRAW_CONTEXT(dt->event_context)->red_curve_get_last_point();
         if (zoom_to) {
-            dt->zoom_relative_keep_point(*zoom_to, zoom_factor);
+            dt->zoom_relative(*zoom_to, zoom_factor);
             return;
         }
     }
 
-    dt->zoom_relative_center_point(midpoint, zoom_factor);
+    dt->zoom_relative(midpoint, zoom_factor, false);
 }
 
 void
@@ -93,15 +93,15 @@ canvas_transform(InkscapeWindow *win, const int& option)
             break;
 
         case INK_CANVAS_ZOOM_1_1:
-            dt->zoom_absolute_center_point( midpoint, 1.0 );
+            dt->zoom_realworld( midpoint, 1.0 );
             break;
 
         case INK_CANVAS_ZOOM_1_2:
-            dt->zoom_absolute_center_point( midpoint, 0.5 );
+            dt->zoom_realworld( midpoint, 0.5 );
             break;
 
         case INK_CANVAS_ZOOM_2_1:
-            dt->zoom_absolute_center_point( midpoint, 2.0 );
+            dt->zoom_realworld( midpoint, 2.0 );
             break;
 
         case INK_CANVAS_ZOOM_SELECTION:

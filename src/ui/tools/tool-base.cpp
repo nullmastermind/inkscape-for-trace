@@ -546,7 +546,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
             double const zoom_inc = prefs->getDoubleLimited(
                     "/options/zoomincrement/value", M_SQRT2, 1.01, 10);
 
-            desktop->zoom_relative_keep_point(event_dt, zoom_inc);
+            desktop->zoom_relative(event_dt, zoom_inc);
 
             desktop->updateNow();
             ret = TRUE;
@@ -875,7 +875,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
             if (rel_zoom != 0.0) {
                 Geom::Point const scroll_dt = desktop->point();
-                desktop->zoom_relative_keep_point(scroll_dt, rel_zoom);
+                desktop->zoom_relative(scroll_dt, rel_zoom);
             }
 
             /* no modifier, pan up--down (left--right on multiwheel mice?) */

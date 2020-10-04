@@ -104,7 +104,7 @@ static void _pinch_scale_changed_handler(GtkGesture *gesture, gdouble delta, SPD
     Geom::Point button_world = desktop->getCanvas()->canvas_to_world(button_window);
     Geom::Point button_dt(desktop->w2d(button_world));
 
-    desktop->zoom_absolute_keep_point(button_dt, _pinch_begin_zoom * delta);
+    desktop->zoom_absolute(button_dt, _pinch_begin_zoom * delta);
 }
 
 SPDesktop::SPDesktop()
@@ -810,44 +810,50 @@ Geom::Parallelogram SPDesktop::get_display_area(bool use_integer_viewbox) const
 }
 
 /**
- * Zoom keeping the point 'c' fixed in the desktop window.
+ * Zoom to the given absolute zoom level
+ *
+ * @param center - Point we want to zoom in on
+ * @param zoom - Absolute amount of zoom (1.0 is 100%)
+ * @param keep_point - Keep center fixed in the desktop window.
  */
 void
-SPDesktop::zoom_absolute_keep_point (Geom::Point const &c, double zoom)
+SPDesktop::zoom_absolute(Geom::Point const &center, double zoom, bool keep_point)
 {
+    Geom::Point w = d2w(center); // Must be before zoom changed.
+    if(!keep_point) {
+        w = canvas->get_area_world().midpoint();
+    }
     zoom = CLAMP (zoom, SP_DESKTOP_ZOOM_MIN, SP_DESKTOP_ZOOM_MAX);
-    Geom::Point w = d2w( c ); // Must be before zoom changed.
     _current_affine.setScale( Geom::Scale(zoom, yaxisdir() * zoom) );
-    set_display_area( c, w );
+    set_display_area( center, w );
 }
-
-
-void
-SPDesktop::zoom_relative_keep_point (Geom::Point const &c, double zoom)
-{
-    double new_zoom = _current_affine.getZoom() * zoom;
-    zoom_absolute_keep_point( c, new_zoom );
-}
-
 
 /**
- * Zoom aligning the point 'c' to the center of desktop window.
+ * Zoom in or out relatively to the current zoom
+ *
+ * @param center - Point we want to zoom in on
+ * @param zoom - Relative amount of zoom. at 50% + 50% -> 25% zoom
+ * @param keep_point - Keep center fixed in the desktop window.
  */
 void
-SPDesktop::zoom_absolute_center_point (Geom::Point const &c, double zoom)
-{
-    zoom = CLAMP (zoom, SP_DESKTOP_ZOOM_MIN, SP_DESKTOP_ZOOM_MAX);
-    _current_affine.setScale( Geom::Scale(zoom, yaxisdir() * zoom) );
-    Geom::Rect viewbox = canvas->get_area_world();
-    set_display_area( c, viewbox.midpoint() );
-}
-
-
-void
-SPDesktop::zoom_relative_center_point (Geom::Point const &c, double zoom)
+SPDesktop::zoom_relative(Geom::Point const &center, double zoom, bool keep_point)
 {
     double new_zoom = _current_affine.getZoom() * zoom;
-    zoom_absolute_center_point( c, new_zoom );
+    this->zoom_absolute(center, new_zoom, keep_point);
+}
+
+/**
+ * Zoom in to an absolute realworld ratio, e.g. 1:1 physical screen units
+ *
+ * @param center - Point we want to zoom in on.
+ * @param ratio - Absolute physical zoom ratio.
+ */
+void
+SPDesktop::zoom_realworld(Geom::Point const &center, double ratio)
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    double correction = prefs->getDouble("/options/zoomcorrection/value", 1.0);
+    this->zoom_absolute(center, ratio * correction, false);
 }
 
 
@@ -930,7 +936,7 @@ SPDesktop::zoom_selection()
  */
 void SPDesktop::zoom_center_page()
 {
-    zoom_absolute_center_point(Geom::Point(doc()->getWidth().value("px")/2, doc()->getHeight().value("px")/2), this->current_zoom());
+    zoom_absolute(Geom::Point(doc()->getWidth().value("px")/2, doc()->getHeight().value("px")/2), this->current_zoom(), false);
 }
 
 Geom::Point SPDesktop::current_center() const {
@@ -979,7 +985,7 @@ void SPDesktop::zoom_quick(bool enable)
         if (!zoomed) {
             Geom::Rect const d_canvas = canvas->get_area_world();
             Geom::Point midpoint = w2d(d_canvas.midpoint()); // Midpoint of drawing on canvas.
-            zoom_relative_center_point(midpoint, 2.0);
+            zoom_relative(midpoint, 2.0, false);
         }
     } else {
         _current_affine = _quick_zoom_affine;
