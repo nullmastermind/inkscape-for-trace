@@ -47,7 +47,6 @@ namespace UI {
 namespace Widget {
 
 MarkerComboBox::MarkerComboBox(gchar const *id, int l) :
-            Gtk::ComboBox(),
             combo_id(id),
             loc(l),
             updating(false),

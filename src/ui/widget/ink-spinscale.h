@@ -24,12 +24,16 @@
 #include <gtkmm/box.h>
 #include <gtkmm/scale.h>
 
+#include "scrollprotected.h"
+
 namespace Gtk {
   class SpinButton;
 }
 
-class InkScale : public Gtk::Scale
+class InkScale : public Inkscape::UI::Widget::ScrollProtected<Gtk::Scale>
 {
+    using parent_type = ScrollProtected<Gtk::Scale>;
+
  public:
   InkScale(Glib::RefPtr<Gtk::Adjustment>, Gtk::SpinButton* spinbutton);
   ~InkScale() override = default;;

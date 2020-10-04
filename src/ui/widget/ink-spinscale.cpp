@@ -30,7 +30,7 @@
 
 InkScale::InkScale(Glib::RefPtr<Gtk::Adjustment> adjustment, Gtk::SpinButton* spinbutton)
   : Glib::ObjectBase("InkScale")
-  , Gtk::Scale(adjustment)
+  , parent_type(adjustment)
   , _spinbutton(spinbutton)
   , _dragging(false)
   , _drag_start(0)
@@ -216,7 +216,7 @@ InkSpinScale::InkSpinScale(double value, double lower,
                                         page_increment,
                                         page_size);
 
-  _spinbutton  = Gtk::manage(new Gtk::SpinButton(_adjustment));
+  _spinbutton = Gtk::manage(new Inkscape::UI::Widget::ScrollProtected<Gtk::SpinButton>(_adjustment));
   _spinbutton->set_numeric();
   _spinbutton->signal_key_release_event().connect(sigc::mem_fun(*this,&InkSpinScale::on_key_release_event),false);
 
@@ -234,7 +234,7 @@ InkSpinScale::InkSpinScale(Glib::RefPtr<Gtk::Adjustment> adjustment)
 
   g_assert (_adjustment->get_upper() - _adjustment->get_lower() > 0);
 
-  _spinbutton  = Gtk::manage(new Gtk::SpinButton(_adjustment));
+  _spinbutton = Gtk::manage(new Inkscape::UI::Widget::ScrollProtected<Gtk::SpinButton>(_adjustment));
   _spinbutton->set_numeric();
 
   _scale       = Gtk::manage(new InkScale(_adjustment, _spinbutton));

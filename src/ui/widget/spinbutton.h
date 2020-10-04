@@ -13,6 +13,8 @@
 
 #include <gtkmm/spinbutton.h>
 
+#include "scrollprotected.h"
+
 namespace Inkscape {
 namespace UI {
 namespace Widget {
@@ -26,9 +28,9 @@ class UnitTracker;
  *
  * Calling "set_numeric()" effectively disables the expression parsing. If no unit menu is linked, all unitlike characters are ignored.
  */
-class SpinButton : public Gtk::SpinButton
+class SpinButton : public ScrollProtected<Gtk::SpinButton>
 {
-    using parent_type = Gtk::SpinButton;
+    using parent_type = ScrollProtected<Gtk::SpinButton>;
 
 public:
     using parent_type::parent_type;
@@ -73,13 +75,6 @@ protected:
      * @retval true  don't call default handler. 
      */
     bool on_focus_in_event(GdkEventFocus *) override;
-
-    /**
-     * When scroll is done.
-     * @retval false continue with default handler.
-     * @retval true  don't call default handler.
-     */
-    bool on_scroll_event(GdkEventScroll *event) override;
 
     /**
      * Handle specific keypress events, like Ctrl+Z.

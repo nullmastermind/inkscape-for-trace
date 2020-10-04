@@ -17,6 +17,8 @@
 
 #include <sigc++/signal.h>
 
+#include "scrollprotected.h"
+
 namespace Inkscape {
 namespace UI {
 namespace Widget {
@@ -83,7 +85,7 @@ private:
     };
     DashColumns dash_columns;
     Glib::RefPtr<Gtk::ListStore> dash_store;
-    Gtk::ComboBox dash_combo;
+    ScrollProtected<Gtk::ComboBox> dash_combo;
     Gtk::CellRendererPixbuf image_renderer;
     Glib::RefPtr<Gtk::Adjustment> offset;
 

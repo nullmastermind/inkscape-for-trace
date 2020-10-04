@@ -22,6 +22,7 @@
 #include "inkscape.h"
 
 #include "display/drawing.h"
+#include "scrollprotected.h"
 
 class SPMarker;
 
@@ -38,7 +39,9 @@ namespace Widget {
 /**
  * ComboBox derived class for selecting stroke markers.
  */
-class MarkerComboBox : public Gtk::ComboBox {
+class MarkerComboBox : public ScrollProtected<Gtk::ComboBox> {
+    using parent_type = ScrollProtected<Gtk::ComboBox>;
+
 public:
     MarkerComboBox(gchar const *id, int loc);
     ~MarkerComboBox() override;

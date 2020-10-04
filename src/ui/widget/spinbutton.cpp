@@ -9,6 +9,8 @@
  */
 
 #include "spinbutton.h"
+
+#include "scroll-utils.h"
 #include "unit-menu.h"
 #include "unit-tracker.h"
 #include "util/expression-evaluator.h"
@@ -58,16 +60,6 @@ bool SpinButton::on_focus_in_event(GdkEventFocus *event)
     return parent_type::on_focus_in_event(event);
 }
 
-
-
-bool SpinButton::on_scroll_event(GdkEventScroll *event)
-{
-    if (!is_focus()) {
-        return false;
-    }
-    return parent_type::on_scroll_event(event);
-}
-
 bool SpinButton::on_key_press_event(GdkEventKey* event)
 {
     switch (Inkscape::UI::Tools::get_latin_keyval (event)) {
@@ -112,8 +104,9 @@ void SpinButton::defocus()
     if (_stay) {
         _stay = false;
     } else {
-        if (_defocus_widget) {
-            _defocus_widget->grab_focus();
+        Gtk::Widget *widget = _defocus_widget ? _defocus_widget : get_scrollable_ancestor(this);
+        if (widget) {
+            widget->grab_focus();
         }
     }
 }
