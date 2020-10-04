@@ -22,6 +22,7 @@
 #include <gtkmm/clipboard.h>
 
 #include <2geom/transforms.h>
+#include <2geom/path-sink.h>
 
 // TODO: reduce header bloat if possible
 
@@ -71,6 +72,7 @@
 #include "object/sp-shape.h"
 #include "object/sp-textpath.h"
 #include "object/sp-use.h"
+#include "object/sp-path.h"
 
 #include "svg/css-ostringstream.h" // used in copy
 #include "svg/svg-color.h"
@@ -78,12 +80,14 @@
 
 #include "ui/tools/dropper-tool.h" // used in copy()
 #include "ui/tools/text-tool.h"
+#include "ui/tools/node-tool.h"
+#include "ui/tool/multi-path-manipulator.h"
 
 #include "util/units.h"
+#include "display/curve.h"
 
 #include "xml/repr.h"
 #include "xml/sp-css-attr.h"
-
 
 /// Made up mimetype to represent Gdk::Pixbuf clipboard contents.
 #define CLIPBOARD_GDK_PIXBUF_TARGET "image/x-gdk-pixbuf"
@@ -267,6 +271,43 @@ void ClipboardManagerImpl::copy(ObjectSet *set)
             _text_style = Inkscape::UI::Tools::sp_text_get_style_at_cursor(desktop->event_context);
             return;
         }
+
+        // Special case for copying part of a path instead of the whole selected object.
+        auto node_tool = dynamic_cast<Inkscape::UI::Tools::NodeTool *>(desktop->event_context);
+        if (node_tool && node_tool->_selected_nodes) {
+            _discardInternalClipboard();
+            _createInternalClipboard();
+
+            SPObject *first_path = nullptr;
+            for (auto obj : set->items()) {
+                if(SP_IS_PATH(obj)) {
+                    first_path = obj;
+                    break;
+                }
+            }
+
+            auto builder = new Geom::PathBuilder();
+            node_tool->_multipath->copySelectedPath(builder);
+            Geom::PathVector pathv = builder->peek();
+            // Were any nodes actually copied?
+            if (!pathv.empty()) {
+                Inkscape::XML::Node *pathRepr = _doc->createElement("svg:path");
+
+                gchar *str = sp_svg_write_path(pathv);
+                pathRepr->setAttribute("d", str);
+                g_free(str);
+
+                if(first_path) {
+                    pathRepr->setAttribute("style", first_path->style->write(SP_STYLE_FLAG_IFSET) );
+                }
+
+                _root->appendChild(pathRepr);
+                Inkscape::GC::release(pathRepr);
+                fit_canvas_to_drawing(_clipboardSPDoc.get());
+                _setClipboardTargets();
+                return;
+            }
+        }
     }
     if (set->isEmpty()) {  // check whether something is selected
         _userWarn(set->desktop(), _("Nothing was copied."));
@@ -402,6 +443,48 @@ bool ClipboardManagerImpl::paste(SPDesktop *desktop, bool in_place)
     if ( tempdoc == nullptr ) {
         _userWarn(desktop, _("Nothing on the clipboard."));
         return false;
+    }
+
+    /* Special paste nodes handle; only if:
+     *   node tool selected
+     *   one path selected in target
+     *   one path in source
+     */
+    auto node_tool = dynamic_cast<Inkscape::UI::Tools::NodeTool *>(desktop->event_context);
+    if (node_tool && desktop->selection->objects().size() == 1) { 
+        SPObject *obj = desktop->selection->objects().back();
+        auto target_path = SP_PATH(obj);
+        if (target_path) {
+            auto clipdoc = tempdoc.get();
+            auto source_scale = clipdoc->getDocumentScale();
+            auto target_trans = target_path->i2doc_affine();
+            for (auto node = clipdoc->getReprRoot()->firstChild(); node ;node = node->next()) {
+                auto source_path = SP_PATH(clipdoc->getObjectByRepr(node));
+                if (source_path) {
+                    auto source_curve = SPCurve::copy(source_path->curveForEdit());
+                    auto target_curve = SPCurve::copy(target_path->curveForEdit());
+
+                    // Convert curve from source units (usually px so 1:1)
+                    source_curve->transform(source_scale);
+
+                    // Move the source curve to the mouse pointer, units are px so do before target_trans
+                    auto to_mouse = Geom::Translate(desktop->point() - source_path->geometricBounds()->midpoint());
+                    source_curve->transform(to_mouse);
+
+                    // Finally convert the curve into path's item tcoordinate system
+                    source_curve->transform(target_trans.inverse());
+
+                    // Add the source curve to the target copy
+                    target_curve->append(*source_curve);
+
+                    // Set the attribute to keep the document up to date (fixes undo)
+                    gchar *str = sp_svg_write_path(target_curve->get_pathvector());
+                    target_path->setAttribute("d", str);
+                    g_free(str);
+                }
+            }
+            return true;
+        }
     }
 
     sp_import_document(desktop, tempdoc.get(), in_place);

@@ -14,6 +14,7 @@
 
 #include <cstddef>
 #include <sigc++/connection.h>
+#include <2geom/path-sink.h>
 #include "node.h"
 #include "commit-events.h"
 #include "manipulator.h"
@@ -57,6 +58,7 @@ public:
     void insertNode(Geom::Point pt);
     void alertLPE();
     void duplicateNodes();
+    void copySelectedPath(Geom::PathBuilder *builder);
     void joinNodes();
     void breakNodes();
     void deleteNodes(bool keep_shape = true);
@@ -74,6 +76,7 @@ public:
     void setLiveObjects(bool set);
     void updateOutlineColors();
     void updateHandles();
+    void updatePaths();
     
     sigc::signal<void> signal_coords_changed; /// Emitted whenever the coordinates
         /// shown in the status bar need updating

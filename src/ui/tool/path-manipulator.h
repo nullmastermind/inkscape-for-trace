@@ -15,6 +15,7 @@
 #include <string>
 #include <memory>
 #include <2geom/pathvector.h>
+#include <2geom/path-sink.h>
 #include <2geom/affine.h>
 #include "ui/tool/node.h"
 #include "ui/tool/manipulator.h"
@@ -75,6 +76,7 @@ public:
     void insertNode(Geom::Point);
     void insertNode(NodeList::iterator first, double t, bool take_selection);
     void duplicateNodes();
+    void copySelectedPath(Geom::PathBuilder *builder);
     void weldNodes(NodeList::iterator preserve_pos = NodeList::iterator());
     void weldSegments();
     void breakNodes();
@@ -92,6 +94,7 @@ public:
     void setLiveOutline(bool set);
     void setLiveObjects(bool set);
     void updateHandles();
+    void updatePath();
     void setControlsTransform(Geom::Affine const &);
     void hideDragPoint();
     MultiPathManipulator &mpm() { return _multi_path_manipulator; }

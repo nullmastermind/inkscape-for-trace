@@ -387,6 +387,49 @@ void PathManipulator::duplicateNodes()
     }
 }
 
+/**
+  * Copy the selected nodes using the PathBuilder
+  *
+  * @param builder[out] Selected nodes will be appended to this Path builder
+  *                     in pixel coordinates with all transforms applied.
+  */
+void PathManipulator::copySelectedPath(Geom::PathBuilder *builder)
+{
+    // Ignore LivePathEffect paths
+    SPPath *path = dynamic_cast<SPPath *>(_path);
+    if (!path)
+        return;
+    // Rebuild the selected parts of each subpath
+    for (auto &subpath : _subpaths) {
+        Node *prev = nullptr;
+        bool is_last_node = false;
+        for (auto &node : *subpath) {
+            if (node.selected()) {
+                // The node positions are already transformed
+                if (!builder->inPath()) {
+                    builder->moveTo(node.position());
+                } else {
+                    build_segment(*builder, prev, &node);
+                }
+                prev = &node;
+                is_last_node = true;
+            } else {
+                is_last_node = false;
+            }
+        }
+
+        // Complete the path, especially for closed sub paths where the last node is selected
+        if (subpath->closed() && is_last_node) {
+            if (!prev->front()->isDegenerate() || !subpath->begin()->back()->isDegenerate())   {
+                build_segment(*builder, prev, subpath->begin().ptr());
+            }
+            // if that segment is linear, we just call closePath().
+            builder->closePath();
+        }
+    }
+    builder->flush();
+}
+
 /** Replace contiguous selections of nodes in each subpath with one node. */
 void PathManipulator::weldNodes(NodeList::iterator preserve_pos)
 {
@@ -1077,6 +1120,12 @@ NodeList::iterator PathManipulator::extremeNode(NodeList::iterator origin, bool 
         }
     }
     return match;
+}
+
+/* Called when a process updates the path in-situe */
+void PathManipulator::updatePath()
+{
+    _externalChange(PATH_CHANGE_D);
 }
 
 /** Called by the XML observer when something else than us modifies the path. */

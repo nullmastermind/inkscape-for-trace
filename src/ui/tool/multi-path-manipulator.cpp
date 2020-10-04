@@ -357,6 +357,14 @@ void MultiPathManipulator::duplicateNodes()
     _done(_("Duplicate nodes"));
 }
 
+void MultiPathManipulator::copySelectedPath(Geom::PathBuilder *builder)
+{
+    if (_selection.empty())
+        return;
+    invokeForAll(&PathManipulator::copySelectedPath, builder);
+    _done(_("Copy nodes"));
+}
+
 void MultiPathManipulator::joinNodes()
 {
     if (_selection.empty()) return;
@@ -563,6 +571,11 @@ void MultiPathManipulator::updateOutlineColors()
 void MultiPathManipulator::updateHandles()
 {
     invokeForAll(&PathManipulator::updateHandles);
+}
+
+void MultiPathManipulator::updatePaths()
+{
+    invokeForAll(&PathManipulator::updatePath);
 }
 
 bool MultiPathManipulator::event(Inkscape::UI::Tools::ToolBase *event_context, GdkEvent *event)

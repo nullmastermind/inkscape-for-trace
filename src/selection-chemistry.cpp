@@ -389,14 +389,24 @@ static void sp_selection_delete_impl(std::vector<SPItem*> const &items, bool pro
 
 void ObjectSet::deleteItems()
 {
-    if (desktop() && dynamic_cast<TextTool*>(desktop()->event_context)) {
-         if (Inkscape::UI::Tools::sp_text_delete_selection(desktop()->event_context)) {
-            DocumentUndo::done(desktop()->getDocument(), SP_VERB_CONTEXT_TEXT,
-                               _("Delete text"));
+    if (desktop()) {
+        if(dynamic_cast<TextTool*>(desktop()->event_context)) {
+            if (Inkscape::UI::Tools::sp_text_delete_selection(desktop()->event_context)) {
+                DocumentUndo::done(desktop()->getDocument(), SP_VERB_CONTEXT_TEXT,
+                                   _("Delete text"));
+                return;
+            }
+        }
+        // This mirrors the copy() code in clipboard.cpp and allows ::cut() to
+        // do the right thing for selected nodes.
+        auto node_tool = dynamic_cast<Inkscape::UI::Tools::NodeTool *>(desktop()->event_context);
+        if (node_tool && node_tool->_selected_nodes) {
+            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+            // This takes care of undo internally
+            node_tool->_multipath->deleteNodes(prefs->getBool("/tools/nodes/delete_preserves_shape", true));
             return;
-         }
+        }
     }
-
     if (isEmpty()) {
         selection_display_message(desktop(),Inkscape::WARNING_MESSAGE, _("<b>Nothing</b> was deleted."));
         return;
