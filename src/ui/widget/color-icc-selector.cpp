@@ -71,6 +71,13 @@ extern guint update_in_progress;
 
 namespace {
 
+GtkWidget *_scrollprotected_combo_box_new_with_model(GtkTreeModel *model)
+{
+    auto combobox = Gtk::manage(new Inkscape::UI::Widget::ScrollProtected<Gtk::ComboBox>());
+    gtk_combo_box_set_model(combobox->gobj(), model);
+    return GTK_WIDGET(combobox->gobj());
+}
+
 size_t maxColorspaceComponentCount = 0;
 
 #if defined(HAVE_LIBLCMS2)
@@ -371,7 +378,7 @@ void ColorICCSelector::init()
 
     // Combobox and store with 2 columns : label (0) and full name (1)
     GtkListStore *store = gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_STRING);
-    _impl->_profileSel = gtk_combo_box_new_with_model(GTK_TREE_MODEL(store));
+    _impl->_profileSel = _scrollprotected_combo_box_new_with_model(GTK_TREE_MODEL(store));
 
     GtkCellRenderer *renderer = gtk_cell_renderer_text_new();
     gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(_impl->_profileSel), renderer, TRUE);

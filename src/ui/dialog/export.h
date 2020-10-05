@@ -22,6 +22,7 @@
 #include <gtkmm/spinbutton.h>
 
 #include "ui/widget/panel.h"
+#include "ui/widget/scrollprotected.h"
 
 namespace Inkscape {
 namespace UI {
@@ -319,14 +320,14 @@ private:
     Gtk::Expander expander;
     Gtk::CheckButton interlacing;
     Gtk::Label                        bitdepth_label;
-    Gtk::ComboBoxText                 bitdepth_cb;
+    Inkscape::UI::Widget::ScrollProtected<Gtk::ComboBoxText> bitdepth_cb;
     Gtk::Label                        zlib_label;
-    Gtk::ComboBoxText                 zlib_compression;
+    Inkscape::UI::Widget::ScrollProtected<Gtk::ComboBoxText> zlib_compression;
     Gtk::Label                        pHYs_label;
     Glib::RefPtr<Gtk::Adjustment>     pHYs_adj;
-    Gtk::SpinButton                   pHYs_sb;
+    Inkscape::UI::Widget::ScrollProtected<Gtk::SpinButton> pHYs_sb;
     Gtk::Label                        antialiasing_label;
-    Gtk::ComboBoxText                 antialiasing_cb;
+    Inkscape::UI::Widget::ScrollProtected<Gtk::ComboBoxText> antialiasing_cb;
 
     /* Export Button widgets */
     Gtk::HBox button_box;

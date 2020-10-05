@@ -49,6 +49,7 @@
 #include "ui/widget/color-notebook.h"
 #include "ui/widget/gradient-selector.h"
 #include "ui/widget/swatch-selector.h"
+#include "ui/widget/scrollprotected.h"
 
 #include "widgets/widget-sizes.h"
 
@@ -59,6 +60,7 @@
 #endif // SP_PS_VERBOSE
 
 #include <gtkmm/label.h>
+#include <gtkmm/combobox.h>
 
 using Inkscape::UI::SelectedColor;
 
@@ -80,6 +82,15 @@ static gchar const *modeStrings[] = {
     ".",
 };
 #endif
+
+namespace {
+GtkWidget *_scrollprotected_combo_box_new_with_model(GtkTreeModel *model)
+{
+    auto combobox = Gtk::manage(new Inkscape::UI::Widget::ScrollProtected<Gtk::ComboBox>());
+    gtk_combo_box_set_model(combobox->gobj(), model);
+    return GTK_WIDGET(combobox->gobj());
+}
+} // namespace
 
 namespace Inkscape {
 namespace UI {
@@ -864,7 +875,7 @@ void PaintSelector::set_mode_mesh(PaintSelector::Mode mode)
              */
             GtkListStore *store =
                 gtk_list_store_new(COMBO_N_COLS, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_STRING, G_TYPE_BOOLEAN);
-            GtkWidget *combo = gtk_combo_box_new_with_model(GTK_TREE_MODEL(store));
+            GtkWidget *combo = _scrollprotected_combo_box_new_with_model(GTK_TREE_MODEL(store));
             gtk_combo_box_set_row_separator_func(GTK_COMBO_BOX(combo), PaintSelector::isSeparator, nullptr, nullptr);
 
             GtkCellRenderer *renderer = gtk_cell_renderer_text_new();
@@ -1188,7 +1199,7 @@ void PaintSelector::set_mode_pattern(PaintSelector::Mode mode)
              */
             GtkListStore *store =
                 gtk_list_store_new(COMBO_N_COLS, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_STRING, G_TYPE_BOOLEAN);
-            _patternmenu = gtk_combo_box_new_with_model(GTK_TREE_MODEL(store));
+            _patternmenu = _scrollprotected_combo_box_new_with_model(GTK_TREE_MODEL(store));
             gtk_combo_box_set_row_separator_func(GTK_COMBO_BOX(_patternmenu), PaintSelector::isSeparator, nullptr,
                                                  nullptr);
 

@@ -34,6 +34,7 @@
 #include "object/sp-text.h"
 
 #include "ui/widget/font-selector.h"
+#include "ui/widget/scrollprotected.h"
 
 namespace Inkscape {
 namespace UI {
@@ -452,7 +453,7 @@ GlyphsPanel::GlyphsPanel() :
 
         table->attach( *Gtk::manage(label), 0, row, 1, 1);
 
-        scriptCombo = Gtk::manage(new Gtk::ComboBoxText());
+        scriptCombo = Gtk::manage(new Inkscape::UI::Widget::ScrollProtected<Gtk::ComboBoxText>());
         for (auto & it : getScriptToName())
         {
             scriptCombo->append(it.second);
@@ -476,7 +477,7 @@ GlyphsPanel::GlyphsPanel() :
         auto label = new Gtk::Label(_("Range: "));
         table->attach( *Gtk::manage(label), 0, row, 1, 1);
 
-        rangeCombo = Gtk::manage(new Gtk::ComboBoxText());
+        rangeCombo = Gtk::manage(new Inkscape::UI::Widget::ScrollProtected<Gtk::ComboBoxText>());
         for (auto & it : getRanges()) {
             rangeCombo->append(it.second);
         }

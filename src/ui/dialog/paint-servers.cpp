@@ -37,6 +37,7 @@
 #include "object/sp-root.h"
 #include "object/sp-shape.h"
 #include "ui/cache/svg_preview_cache.h"
+#include "ui/widget/scrollprotected.h"
 
 namespace Inkscape {
 namespace UI {
@@ -92,7 +93,7 @@ PaintServersDialog::PaintServersDialog(gchar const *prefsPath)
     Gtk::Label *file_label = Gtk::manage(new Gtk::Label(Glib::ustring(_("Server")) + ": "));
     grid->attach(*file_label, 0, 0, 1, 1);
 
-    dropdown = Gtk::manage(new Gtk::ComboBoxText());
+    dropdown = Gtk::manage(new Inkscape::UI::Widget::ScrollProtected<Gtk::ComboBoxText>());
     dropdown->append(ALLDOCS);
     dropdown->append(CURRENTDOC);
     document_map[CURRENTDOC] = desktop->getDocument();
@@ -104,7 +105,7 @@ PaintServersDialog::PaintServersDialog(gchar const *prefsPath)
     Gtk::Label *fill_label = Gtk::manage(new Gtk::Label(Glib::ustring(_("Change")) + ": "));
     grid->attach(*fill_label, 0, 1, 1, 1);
 
-    target_dropdown = Gtk::manage(new Gtk::ComboBoxText());
+    target_dropdown = Gtk::manage(new Inkscape::UI::Widget::ScrollProtected<Gtk::ComboBoxText>());
     target_dropdown->append(_("Fill"));
     target_dropdown->append(_("Stroke"));
     target_dropdown->set_active_text(_("Fill"));

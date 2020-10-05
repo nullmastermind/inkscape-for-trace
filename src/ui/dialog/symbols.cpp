@@ -46,6 +46,7 @@
 #include "ui/clipboard.h"
 #include "ui/icon-loader.h"
 #include "ui/icon-names.h"
+#include "ui/widget/scrollprotected.h"
 
 #ifdef WITH_LIBVISIO
   #include <libvisio/libvisio.h>
@@ -127,7 +128,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   /******************** Symbol Sets *************************/
   Gtk::Label* label_set = new Gtk::Label(Glib::ustring(_("Symbol set")) + ": ");
   table->attach(*Gtk::manage(label_set),0,row,1,1);
-  symbol_set = new Gtk::ComboBoxText();  // Fill in later
+  symbol_set = new Inkscape::UI::Widget::ScrollProtected<Gtk::ComboBoxText>();  // Fill in later
   symbol_set->append(CURRENTDOC);
   symbol_set->append(ALLDOCS);
   symbol_set->set_active_text(CURRENTDOC);

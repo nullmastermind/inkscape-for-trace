@@ -15,6 +15,7 @@
 #include <list>
 #include "ui/widget/panel.h"
 #include "ui/widget/frame.h"
+#include "ui/widget/scrollprotected.h"
 
 #include <glibmm/i18n.h>
 
@@ -427,7 +428,7 @@ private:
         Inkscape::UI::Widget::Frame axisFrame;
         Inkscape::UI::Widget::Frame keysFrame;
         Gtk::VBox axisVBox;
-        Gtk::ComboBoxText modeCombo;
+        Inkscape::UI::Widget::ScrollProtected<Gtk::ComboBoxText> modeCombo;
         Gtk::Label modeLabel;
         Gtk::HBox modeBox;
 
