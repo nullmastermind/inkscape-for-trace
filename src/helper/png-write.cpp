@@ -494,7 +494,7 @@ ExportResult sp_export_png_file(SPDocument *doc, gchar const *filename,
 
     if(write_status == EXPORT_OK) {
         auto recentmanager = Gtk::RecentManager::get_default();
-        if(recentmanager) {
+        if(recentmanager && Glib::path_is_absolute(filename)) {
             Glib::ustring uri = Glib::filename_to_uri(filename);
             recentmanager->add_item(uri);
         }
