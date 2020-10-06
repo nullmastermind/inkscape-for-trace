@@ -391,11 +391,13 @@ bool sp_dt_guide_event(GdkEvent *event, Inkscape::CanvasItemGuideLine *guide_ite
                 case GDK_KEY_BackSpace:
                 {
                     SPDocument *doc = guide->document;
-                    sp_guide_remove(guide);
-                    DocumentUndo::done(doc, SP_VERB_NONE, _("Delete guide"));
-                    ret = true;
-                    sp_event_context_discard_delayed_snap_event(desktop->event_context);
-                    desktop->getCanvas()->get_window()->set_cursor(desktop->event_context->cursor);
+                    if (!guide->getLocked()) {
+                        sp_guide_remove(guide);
+                        DocumentUndo::done(doc, SP_VERB_NONE, _("Delete guide"));
+                        ret = true;
+                        sp_event_context_discard_delayed_snap_event(desktop->event_context);
+                        desktop->getCanvas()->get_window()->set_cursor(desktop->event_context->cursor);
+                    }
                     break;
                 }
                 case GDK_KEY_Shift_L:
