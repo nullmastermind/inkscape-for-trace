@@ -2441,6 +2441,9 @@ void InkscapePreferences::initPageBehavior()
     _steps_zoom.init ( "/options/zoomincrement/value", 101.0, 500.0, 1.0, 1.0, M_SQRT2, true, true);
     _page_steps.add_line( false, _("_Zoom in/out by:"), _steps_zoom, _("%"),
                           _("Zoom tool click, +/- keys, and middle click zoom in and out by this multiplier"), false);
+    _middle_mouse_zoom.init ( _("Zoom with middle mouse click"), "/options/middlemousezoom/value", true);
+    _page_steps.add_line( true, "", _middle_mouse_zoom, "",
+                            _("When on, clicking the middle mouse button (usually the mouse wheel) makes zoom."));
     _steps_rotate.init ( "/options/rotateincrement/value", 1, 90, 1.0, 5.0, 15, false, false);
     _page_steps.add_line( false, _("_Rotate canvas by:"), _steps_rotate, _("degrees"),
                           _("Rotate canvas clockwise and counter-clockwise by this amount."), false);
