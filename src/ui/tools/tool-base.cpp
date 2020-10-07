@@ -546,7 +546,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
             double const zoom_inc = prefs->getDoubleLimited(
                     "/options/zoomincrement/value", M_SQRT2, 1.01, 10);
 
-            desktop->zoom_relative(event_dt, zoom_inc);
+            desktop->zoom_relative(event_dt, (event->button.state & GDK_SHIFT_MASK) ? 1 / zoom_inc : zoom_inc);
 
             desktop->updateNow();
             ret = TRUE;
