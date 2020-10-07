@@ -189,8 +189,7 @@ ConnectorTool::~ConnectorTool()
     this->sel_changed_connection.disconnect();
 
     for (auto & i : this->endpt_handle) {
-        if (this->endpt_handle[1]) {
-            //g_object_unref(this->endpt_handle[i]);
+        if (i) {
             knot_unref(i);
             i = nullptr;
         }
@@ -1012,7 +1011,6 @@ static bool cc_generic_knot_handler(GdkEvent *event, SPKnot *knot)
         break;
     }
 
-    //g_object_unref(knot);
     knot_unref(knot);
 
     return consumed;

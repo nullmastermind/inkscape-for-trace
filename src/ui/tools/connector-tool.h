@@ -103,7 +103,7 @@ public:
     SPKnot *clickedhandle;
 
     SPKnotList knots;
-    SPKnot *endpt_handle[2];
+    SPKnot *endpt_handle[2]{};
     sigc::connection endpt_handler_connection[2];
     gchar *shref;
     gchar *sub_shref;
