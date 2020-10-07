@@ -43,6 +43,8 @@ namespace Widget {
  */ 
 class Canvas : public Gtk::DrawingArea
 {
+    using parent_type = Gtk::DrawingArea;
+
 public:
 
     Canvas();
@@ -134,6 +136,7 @@ protected:
     bool on_key_press_event(     GdkEventKey      *key_event   )   override;
     bool on_key_release_event(   GdkEventKey      *key_event   )   override;
     bool on_motion_notify_event( GdkEventMotion   *motion_event)   override;
+    void on_size_allocate(Gtk::Allocation &) override;
 
     // Painting
     bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr) override;
@@ -185,6 +188,9 @@ private:
     bool _in_full_redraw = false;
     int _device_scale = 1;           ///< Scale for high DPI montiors. Probably should be double.
     Gtk::Allocation _allocation;     ///< Canvas allocation, save so we know when it changes.
+
+    int _width = 0;  ///< Canvas width, tracked by on_size_allocate
+    int _height = 0; ///< Canvas height, tracked by on_size_allocate
 
     // Event handling/item picking
     GdkEvent _pick_event;                       ///< Event used to find currently selected item.

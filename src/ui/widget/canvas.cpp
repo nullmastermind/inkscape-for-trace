@@ -163,22 +163,7 @@ Canvas::canvas_to_world(Geom::Point const &point)
 Geom::Rect
 Canvas::get_area_world()
 {
-    // This is called by desktop.cpp before Canvas::on_draw() is called (and on_realize()) so
-    // we don't rely on stored allocation value.
-    Gtk::Allocation allocation = get_allocation();
-
-    // Work around for issue #1813: Sometimes, get_allocation() returns 1x1.
-    // If it does, used saved allocation values.
-    int width  = allocation.get_width();
-    int height = allocation.get_height();
-    if (width < 2 || height < 2) {
-        // Make sure _allocation is always set before using it.
-        g_assert(!_allocation.has_zero_area());
-        width  = _allocation.get_width();
-        height = _allocation.get_height();
-    }
-
-    return Geom::Rect::from_xywh(_x0, _y0, width, height);
+    return Geom::Rect::from_xywh(_x0, _y0, _width, _height);
 }
 
 /**
@@ -742,6 +727,37 @@ Canvas::on_motion_notify_event(GdkEventMotion *motion_event)
     pick_current_item(reinterpret_cast<GdkEvent *>(motion_event));
     bool status = emit_event(reinterpret_cast<GdkEvent *>(motion_event));
     return status;
+}
+
+/**
+ * Resize handler, keeps the desktop centered.
+ */
+void Canvas::on_size_allocate(Gtk::Allocation &allocation)
+{
+    Geom::Rect const area_w = get_area_world();
+
+    parent_type::on_size_allocate(allocation);
+
+    assert(allocation == get_allocation());
+    _width = allocation.get_width();
+    _height = allocation.get_height();
+
+    if (area_w.hasZeroArea()) {
+        return;
+    }
+
+    Geom::Point const midpoint_dt = _desktop->w2d(area_w.midpoint());
+    double zoom = _desktop->current_zoom();
+
+    auto grid = dynamic_cast<Inkscape::UI::Widget::CanvasGrid *>(get_parent());
+    if (grid && grid->GetStickyZoom()->get_active()) {
+        /* Calculate adjusted zoom */
+        double oldshortside = area_w.minExtent();
+        double newshortside = get_area_world().minExtent();
+        zoom *= newshortside / oldshortside;
+    }
+
+    _desktop->zoom_absolute(midpoint_dt, zoom, false);
 }
 
 /*

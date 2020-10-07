@@ -83,7 +83,6 @@ public:
     Inkscape::UI::Widget::CanvasGrid *get_canvas_grid() { return _canvas_grid; }  // Temp, I hope!
     Inkscape::UI::Widget::Canvas     *get_canvas()      { return _canvas; }
 
-    void on_size_allocate(Gtk::Allocation &) override;
     void on_realize() override;
     void on_unrealize() override;
 
@@ -196,7 +195,6 @@ public:
     void cms_adjust_set_sensitive(bool enabled);
     bool get_color_prof_adj_enabled() const;
     void toggle_color_prof_adj();
-    bool get_sticky_zoom_active() const;
     void update_zoom();
     void update_rotation();
     void update_rulers();

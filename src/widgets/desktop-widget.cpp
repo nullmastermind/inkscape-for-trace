@@ -584,38 +584,6 @@ SPDesktopWidget::getDock()
     return _dock;
 }
 
-/**
- * Callback to allocate space for desktop widget.
- */
-void SPDesktopWidget::on_size_allocate(Gtk::Allocation &allocation)
-{
-    Gtk::Allocation widg_allocation = this->get_allocation();
-
-    if (allocation == widg_allocation) {
-        parent_type::on_size_allocate(allocation);
-        return;
-    }
-
-    if (this->get_realized()) {
-        parent_type::on_size_allocate(allocation);
-
-        SPDesktopWidget *dtw = this;
-        Geom::Rect const d_canvas = _canvas->get_area_world();
-        Geom::Point midpoint = dtw->desktop->w2d(d_canvas.midpoint());
-        double zoom = dtw->desktop->current_zoom();
-
-        if (dtw->get_sticky_zoom_active()) {
-            /* Calculate adjusted zoom */
-            double oldshortside = d_canvas.minExtent();
-            double newshortside = _canvas->get_area_world().minExtent();
-            zoom *= newshortside / oldshortside;
-        }
-        dtw->desktop->zoom_absolute(midpoint, zoom, false);
-    } else {
-        parent_type::on_size_allocate(allocation);
-    }
-}
-
 #ifdef GDK_WINDOWING_QUARTZ
 static GtkMenuItem *_get_help_menu(GtkMenuShell *menu)
 {
@@ -1909,13 +1877,6 @@ SPDesktopWidget::update_scrollbars(double scale)
     _vadj->set_value(viewbox.min()[Geom::Y]);
 
     update = false;
-}
-
-// TODO: Remove this.
-bool
-SPDesktopWidget::get_sticky_zoom_active() const
-{
-    return _canvas_grid->GetStickyZoom()->get_active();
 }
 
 gint
