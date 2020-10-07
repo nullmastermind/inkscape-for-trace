@@ -215,7 +215,7 @@ private:
 
     Inkscape::RenderMode _render_mode = Inkscape::RENDERMODE_NORMAL;
     Inkscape::SplitMode  _split_mode  = Inkscape::SPLITMODE_NORMAL;
-    Geom::Point _split_position;
+    Geom::Point _split_position{-1, -1}; // initialize with off-canvas coordinates
     Inkscape::SplitDirection _split_direction   = Inkscape::SPLITDIRECTION_EAST;
     Inkscape::SplitDirection _hover_direction   = Inkscape::SPLITDIRECTION_NONE;
     bool _split_dragging = false;

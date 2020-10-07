@@ -627,7 +627,7 @@ Canvas::on_motion_notify_event(GdkEventMotion *motion_event)
 
             // Reset everything.
             _split_mode = Inkscape::SPLITMODE_NORMAL;
-            _split_position = Geom::Point(_allocation.get_width()/2, _allocation.get_height()/2);
+            _split_position = Geom::Point(-1, -1);
             set_cursor();
             queue_draw();
 
@@ -787,28 +787,6 @@ Canvas::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr)
     int device_scale = get_scale_factor();
 
     // This is the only place we should initialize _backing_store! (Elsewhere, it's recreated.)
-    if (!_backing_store || !_outline_store) {
-        _allocation = allocation;
-        _device_scale = device_scale;
-
-        // Gdk::Window::create_similar_image_surface() creates a Cairo::Surface of type SURFACE_IMAGE_TYPE.
-        // This is not the same as a Cairo::ImageSurface.. at least it can't be cast to it. So we can't use
-        // that handy function (it sets device_scale automatically).
-        _backing_store =
-            Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32,
-                                        _allocation.get_width()  * _device_scale,
-                                        _allocation.get_height() * _device_scale);
-        cairo_surface_set_device_scale(_backing_store->cobj(), _device_scale, _device_scale); // No C++ API!
-
-        _outline_store =
-            Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32,
-                                        _allocation.get_width()  * _device_scale,
-                                        _allocation.get_height() * _device_scale);
-        cairo_surface_set_device_scale(_outline_store->cobj(), _device_scale, _device_scale); // No C++ API!
-
-        _split_position = Geom::Point(_allocation.get_width()/2, _allocation.get_height()/2);
-    }
-
     if (!(_allocation == allocation) || _device_scale != device_scale) { // "!=" for allocation not defined!
         _allocation = allocation;
         _device_scale = device_scale;
@@ -822,11 +800,18 @@ Canvas::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr)
         _clean_region->intersect(clip);
     }
 
+    assert(_backing_store && _outline_store);
+
     // Blit from the backing store, without regard for the clean region.
     // This is the only place the widget content is drawn!
     cr->set_source(_backing_store, 0, 0);
     cr->paint();
     if (_split_mode != Inkscape::SPLITMODE_NORMAL) {
+        auto const rect = Geom::Rect(0, 0, _width, _height);
+        if (!rect.contains(_split_position)) {
+            _split_position = rect.midpoint();
+        }
+
         // Add clipping path and blit outline store.
         cr->save();
         cr->set_source(_outline_store, 0, 0);
@@ -1349,16 +1334,18 @@ Canvas::shift_content(Geom::IntPoint shift, Cairo::RefPtr<Cairo::ImageSurface> &
     cr->set_source(_background);
     cr->paint();
 
-    // Copy old background unshifted (reduces sensation of flicker while waiting for rendering newly exposed area).
-    cr->set_source(store, 0, 0);
-    cr->paint();
+    if (store) {
+        // Copy old background unshifted (reduces sensation of flicker while waiting for rendering newly exposed area).
+        cr->set_source(store, 0, 0);
+        cr->paint();
 
-    // Copy old background
-    cr->rectangle(-shift.x(), -shift.y(), _allocation.get_width(), _allocation.get_height());
-    cr->clip();
-    cr->translate(-shift.x(), -shift.y());
-    cr->set_source(store, 0, 0);
-    cr->paint();
+        // Copy old background
+        cr->rectangle(-shift.x(), -shift.y(), _allocation.get_width(), _allocation.get_height());
+        cr->clip();
+        cr->translate(-shift.x(), -shift.y());
+        cr->set_source(store, 0, 0);
+        cr->paint();
+    }
 
     store = new_store;
 
