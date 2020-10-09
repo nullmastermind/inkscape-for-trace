@@ -205,7 +205,7 @@ bool CanvasItemDrawing::handle_event(GdkEvent *event)
         case GDK_ENTER_NOTIFY:
             if (!_cursor) {
                 if (_active_item) {
-                    std::cerr << "CanvasItemDrawing::event_handler: curser entered drawing with an active item!" << std::endl;
+                    std::cerr << "CanvasItemDrawing::event_handler: cursor entered drawing with an active item!" << std::endl;
                 }
                 _cursor = true;
 
