@@ -135,8 +135,8 @@ void PenTool::setup() {
     FreehandBase::setup();
 
     // Pen indicators (temporary handles shown when adding a new node).
-    c0 = new Inkscape::CanvasItemCtrl(desktop->getCanvasControls(), Inkscape::CANVAS_ITEM_CTRL_TYPE_ADJ_HANDLE);
-    c1 = new Inkscape::CanvasItemCtrl(desktop->getCanvasControls(), Inkscape::CANVAS_ITEM_CTRL_TYPE_ADJ_HANDLE);
+    c0 = new Inkscape::CanvasItemCtrl(desktop->getCanvasControls(), Inkscape::CANVAS_ITEM_CTRL_TYPE_ROTATE);
+    c1 = new Inkscape::CanvasItemCtrl(desktop->getCanvasControls(), Inkscape::CANVAS_ITEM_CTRL_TYPE_ROTATE);
     c0->hide();
     c1->hide();
 
