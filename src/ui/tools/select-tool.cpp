@@ -48,7 +48,6 @@
 #include "ui/modifiers.h"
 #include "ui/pixmaps/cursor-select-d.xpm"
 #include "ui/pixmaps/cursor-select-m.xpm"
-#include "ui/pixmaps/handles.xpm"
 
 #include "ui/tools-switch.h"
 #include "ui/tools/select-tool.h"
@@ -62,8 +61,6 @@
 
 using Inkscape::DocumentUndo;
 using Inkscape::Modifiers::Modifier;
-
-GdkPixbuf *handles[23];
 
 namespace Inkscape {
 namespace UI {
@@ -81,17 +78,6 @@ const std::string& SelectTool::getPrefsPath() {
 
 const std::string SelectTool::prefsPath = "/tools/select";
 
-
-//Creates rotated variations for handles
-static void
-sp_load_handles(int start, int count, char const **xpm) {
-    handles[start] = gdk_pixbuf_new_from_xpm_data((gchar const **)xpm);
-    for(int i = start + 1; i < start + count; i++) {
-        // We use either the original at *start or previous loop item to rotate
-        handles[i] = gdk_pixbuf_rotate_simple(handles[i-1], GDK_PIXBUF_ROTATE_CLOCKWISE);
-    }
-}
-
 SelectTool::SelectTool()
     // Don't load a default cursor
     : ToolBase(nullptr)
@@ -106,16 +92,6 @@ SelectTool::SelectTool()
     // cursors in select context
     CursorSelectMouseover = sp_cursor_from_xpm(cursor_select_m_xpm);
     CursorSelectDragging = sp_cursor_from_xpm(cursor_select_d_xpm);
-    
-    // selection handles
-    sp_load_handles(0, 2, handle_scale_xpm);
-    sp_load_handles(2, 2, handle_stretch_xpm);
-    sp_load_handles(4, 4, handle_rotate_xpm);
-    sp_load_handles(8, 4, handle_skew_xpm);
-    sp_load_handles(12, 1, handle_center_xpm);
-    sp_load_handles(13, 4, handle_align_xpm);
-    sp_load_handles(17, 1, handle_align_center_xpm);
-    sp_load_handles(18, 4, handle_align_corner_xpm);
 }
 
 //static gint xp = 0, yp = 0; // where drag started

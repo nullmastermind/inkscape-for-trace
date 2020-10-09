@@ -60,8 +60,6 @@ static void sp_sel_trans_handle_click(SPKnot *knot, guint state, SPSelTransHandl
 static void sp_sel_trans_handle_new_event(SPKnot *knot, Geom::Point const &position, guint32 state, SPSelTransHandle const* data);
 static gboolean sp_sel_trans_handle_request(SPKnot *knot, Geom::Point *p, guint state, SPSelTransHandle const *data);
 
-extern GdkPixbuf *handles[];
-
 static gboolean sp_sel_trans_handle_event(SPKnot *knot, GdkEvent *event, SPSelTransHandle const*)
 {
     switch (event->type) {
@@ -124,16 +122,14 @@ Inkscape::SelTrans::SelTrans(SPDesktop *desktop) :
 
     _selection = desktop->getSelection();
 
-    _norm = new CanvasItemCtrl(desktop->getCanvasControls(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_BITMAP);
+    _norm = new CanvasItemCtrl(desktop->getCanvasControls(), Inkscape::CANVAS_ITEM_CTRL_TYPE_CENTER);
     _norm->set_fill(0x0);
     _norm->set_stroke(0xff0000b0);
-    _norm->set_pixbuf(handles[12]);
     _norm->hide();
 
-    _grip = new CanvasItemCtrl(desktop->getCanvasControls(), Inkscape::CANVAS_ITEM_CTRL_SHAPE_CROSS);
+    _grip = new CanvasItemCtrl(desktop->getCanvasControls(), Inkscape::CANVAS_ITEM_CTRL_TYPE_POINT);
     _grip->set_fill(0xffffff7f);
     _grip->set_stroke(0xff0000b0);
-    _grip->set_pixbuf(handles[12]);
     _grip->hide();
 
     for (auto & i : _l) {
@@ -669,8 +665,6 @@ void Inkscape::SelTrans::_makeHandles()
                 break;
             default:
                 knots[i] = new SPKnot(_desktop, _(info.tip), CANVAS_ITEM_CTRL_TYPE_ADJ_HANDLE, "SelTrans");
-                knots[i]->setShape(CANVAS_ITEM_CTRL_SHAPE_BITMAP);
-                knots[i]->setPixbuf(handles[hands[i].control]);
         }
 
         knots[i]->setAnchor(hands[i].anchor);
@@ -758,15 +752,13 @@ void Inkscape::SelTrans::handleGrab(SPKnot *knot, guint /*state*/, SPSelTransHan
     // Forcing handles visibility must be done after grab() to be effective
     switch (handle.type) {
         case HANDLE_CENTER:
-            _grip->set_shape(Inkscape::CANVAS_ITEM_CTRL_SHAPE_BITMAP);
-            _grip->set_size(13);
+            _grip->set_shape(Inkscape::CANVAS_ITEM_CTRL_SHAPE_PLUS);
 
             _norm->hide();
             _grip->show();
             break;
         default:
             _grip->set_shape(Inkscape::CANVAS_ITEM_CTRL_SHAPE_CROSS);
-            _grip->set_size(7);
 
             _norm->show();
             _grip->show();

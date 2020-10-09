@@ -418,7 +418,11 @@ void CanvasItemCtrl::set_shape_default()
         case CANVAS_ITEM_CTRL_TYPE_ROTATE:
             _shape = CANVAS_ITEM_CTRL_SHAPE_CIRCLE;
             break;
-            
+
+        case CANVAS_ITEM_CTRL_TYPE_CENTER:
+            _shape = CANVAS_ITEM_CTRL_SHAPE_PLUS;
+            break;
+
         case CANVAS_ITEM_CTRL_TYPE_SHAPER:
         case CANVAS_ITEM_CTRL_TYPE_LPE:
         case CANVAS_ITEM_CTRL_TYPE_NODE_CUSP:
@@ -498,6 +502,7 @@ void CanvasItemCtrl::set_size_via_index(int size_index)
 
         case CANVAS_ITEM_CTRL_TYPE_POINT:
         case CANVAS_ITEM_CTRL_TYPE_ROTATE:
+        case CANVAS_ITEM_CTRL_TYPE_CENTER:
         case CANVAS_ITEM_CTRL_TYPE_SIZER:
         case CANVAS_ITEM_CTRL_TYPE_SHAPER:
         case CANVAS_ITEM_CTRL_TYPE_LPE:
@@ -995,13 +1000,28 @@ void CanvasItemCtrl::build_cache(int device_scale)
             _built = true;
             break;
 
-        case CANVAS_ITEM_CTRL_SHAPE_DARROW:
+        case CANVAS_ITEM_CTRL_SHAPE_PLUS:
+            // Actually an '+'.
+            for(int y = 0; y < height; y++) {
+                for(int x = 0; x < width; x++) {
+                    if ( std::abs(x-width/2)   < device_scale ||
+                         std::abs(y-height/2)  < device_scale  ) {
+                        *p++ = stroke;
+                    } else {
+                        *p++ = 0;
+                    }
+                }
+            }
+            _built = true;
+            break;
+
+        case CANVAS_ITEM_CTRL_SHAPE_DARROW: // Double arrow
         case CANVAS_ITEM_CTRL_SHAPE_SARROW: // Same shape as darrow but rendered rotated 90 degrees.
-        case CANVAS_ITEM_CTRL_SHAPE_CARROW:
-        case CANVAS_ITEM_CTRL_SHAPE_PIVOT:
-        case CANVAS_ITEM_CTRL_SHAPE_SALIGN:
-        case CANVAS_ITEM_CTRL_SHAPE_CALIGN:
-        case CANVAS_ITEM_CTRL_SHAPE_MALIGN:
+        case CANVAS_ITEM_CTRL_SHAPE_CARROW: // Double corner arrow
+        case CANVAS_ITEM_CTRL_SHAPE_PIVOT:  // Fancy "plus"
+        case CANVAS_ITEM_CTRL_SHAPE_SALIGN: // Side align (triangle pointing toward line)
+        case CANVAS_ITEM_CTRL_SHAPE_CALIGN: // Corner align (triangle pointing into "L")
+        case CANVAS_ITEM_CTRL_SHAPE_MALIGN: // Middle align (four triangles poining inward)
         {
             double size = _width; // Use unscaled width.
 

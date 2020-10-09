@@ -36,9 +36,6 @@
 #include "ui/tools/node-tool.h"
 
 
-// FIXME BRAIN DAMAGE WARNING: this is a global variable in select-context.cpp
-// It should be moved to a header
-extern GdkPixbuf *handles[];
 GType sp_select_context_get_type();
 
 namespace Inkscape {
@@ -308,18 +305,6 @@ protected:
 
 private:
 
-    static Glib::RefPtr<Gdk::Pixbuf> _corner_to_pixbuf(unsigned c) {
-        //sp_select_context_get_type();
-        switch (c % 2) {
-            case 0:
-                return Glib::wrap(handles[1], true);
-                break;
-            default:
-                return Glib::wrap(handles[0], true);
-                break;
-        }
-    }
-
     Geom::Point _sc_center;
     Geom::Point _sc_opposite;
     unsigned _corner;
@@ -391,14 +376,9 @@ protected:
             ? COMMIT_MOUSE_SCALE_UNIFORM
             : COMMIT_MOUSE_SCALE;
     }
+
 private:
-    static Glib::RefPtr<Gdk::Pixbuf> _side_to_pixbuf(unsigned c) {
-        //sp_select_context_get_type();
-        switch (c % 2) {
-        case 0: return Glib::wrap(handles[3], true);
-        default: return Glib::wrap(handles[2], true);
-        }
-    }
+
     Geom::Point _sc_center;
     Geom::Point _sc_opposite;
     unsigned _side;
@@ -473,15 +453,6 @@ protected:
     bool _hasDragTips() const override { return true; }
 
 private:
-    static Glib::RefPtr<Gdk::Pixbuf> _corner_to_pixbuf(unsigned c) {
-        //sp_select_context_get_type();
-        switch (c % 4) {
-        case 0: return Glib::wrap(handles[7], true);
-        case 1: return Glib::wrap(handles[6], true);
-        case 2: return Glib::wrap(handles[5], true);
-        default: return Glib::wrap(handles[4], true);
-        }
-    }
     Geom::Point _rot_center;
     Geom::Point _rot_opposite;
     unsigned _corner;
@@ -619,15 +590,6 @@ protected:
 
 private:
 
-    static Glib::RefPtr<Gdk::Pixbuf> _side_to_pixbuf(unsigned s) {
-        //sp_select_context_get_type();
-        switch (s % 4) {
-        case 0: return Glib::wrap(handles[10], true);
-        case 1: return Glib::wrap(handles[9], true);
-        case 2: return Glib::wrap(handles[8], true);
-        default: return Glib::wrap(handles[11], true);
-        }
-    }
     Geom::Point _skew_center;
     Geom::Point _skew_opposite;
     unsigned _side;
@@ -673,11 +635,6 @@ protected:
     }
 
 private:
-
-    static Glib::RefPtr<Gdk::Pixbuf> _get_pixbuf() {
-        //sp_select_context_get_type();
-        return Glib::wrap(handles[12], true);
-    }
 
     static ColorSet _center_cset;
     TransformHandleSet &_th;
@@ -808,9 +765,12 @@ void TransformHandleSet::_updateVisibility(bool v)
 {
     if (v) {
         Geom::Rect b = bounds();
-        Geom::Point handle_size(
-            gdk_pixbuf_get_width(handles[0]) / _desktop->current_zoom(),
-            gdk_pixbuf_get_height(handles[0]) / _desktop->current_zoom());
+
+        // Roughly estimate handle size.
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        int handle_index = prefs->getIntLimited("/options/grabsize/value", 3, 1, 15);
+        int handle_size = handle_index * 2 + 1; // Handle pixmaps are actually larger but that's to allow space when handle is rotated.
+
         Geom::Point bp = b.dimensions();
 
         // do not scale when the bounding rectangle has zero width or height
@@ -828,20 +788,21 @@ void TransformHandleSet::_updateVisibility(bool v)
             Geom::Dim2 d = static_cast<Geom::Dim2>(i);
             Geom::Dim2 otherd = static_cast<Geom::Dim2>((i+1)%2);
             show_scale_side[i] = (_mode == MODE_SCALE);
-            show_scale_side[i] &= (show_scale ? bp[d] >= handle_size[d]
+            show_scale_side[i] &= (show_scale ? bp[d] >= handle_size
                 : !Geom::are_near(bp[otherd], 0));
-            show_skew[i] = (show_rotate && bp[d] >= handle_size[d]
+            show_skew[i] = (show_rotate && bp[d] >= handle_size
                 && !Geom::are_near(bp[otherd], 0));
         }
+
         for (unsigned i = 0; i < 4; ++i) {
             _scale_corners[i]->setVisible(show_scale);
             _rot_corners[i]->setVisible(show_rotate);
             _scale_sides[i]->setVisible(show_scale_side[i%2]);
             _skew_sides[i]->setVisible(show_skew[i%2]);
         }
-        // show rotation center if there is enough space (?)
-        _center->setVisible(show_rotate /*&& bp[Geom::X] > handle_size[Geom::X]
-            && bp[Geom::Y] > handle_size[Geom::Y]*/);
+
+        // show rotation center
+        _center->setVisible(show_rotate);
     } else {
         for (auto & _handle : _handles) {
             if (_handle != _active)
