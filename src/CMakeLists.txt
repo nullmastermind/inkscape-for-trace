@@ -369,6 +369,8 @@ add_library(inkscape_base ${inkscape_SRC} ${sp_SRC})
 # added so that locally installed inkscape can find lib2geom if it's not installed systemwide
 if(NOT APPLE)
     set_target_properties(inkscape_base PROPERTIES INSTALL_RPATH "$ORIGIN/..")
+else()
+    set_target_properties(inkscape_base PROPERTIES INSTALL_RPATH "@loader_path/..")
 endif()
 
 if(WITH_DBUS)
@@ -381,10 +383,11 @@ target_link_libraries(inkscape_base PUBLIC Boost::filesystem)
 target_link_libraries(inkscape_base
     PRIVATE
         ${INKSCAPE_TARGET_LIBS}
-    PUBLIC
         2Geom::2geom
+    PUBLIC
         ${INKSCAPE_LIBS}
   )
+target_include_directories(inkscape_base INTERFACE ${2Geom_INCLUDE_DIRS})
 
 # Link inkscape and inkview against inkscape_base
 target_link_libraries(inkscape inkscape_base)
