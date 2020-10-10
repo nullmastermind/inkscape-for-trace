@@ -3,7 +3,7 @@
 #
 # This file is part of the build pipeline for Inkscape on macOS.
 #
-# ### jshell.sh ###
+# ### jhbshell.sh ###
 # Start a JHBuild shell.
 # Since we have a customized JHBuild environment with lots of settings, this
 # takes care of that.
