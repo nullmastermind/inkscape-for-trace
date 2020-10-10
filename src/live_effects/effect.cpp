@@ -1473,7 +1473,10 @@ Effect::getCanvasIndicators(SPLPEItem const* lpeitem)
     for (auto & p : param_vector) {
         p->addCanvasIndicators(lpeitem, hp_vec);
     }
-
+    Geom::Affine scale = lpeitem->i2doc_affine();
+    for (auto &path : hp_vec) {
+        path *= scale;
+    }
     return hp_vec;
 }
 
