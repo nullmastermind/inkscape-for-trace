@@ -46,9 +46,7 @@ private:
     BoolParam allow_transforms;
     const gchar * linked;
     bool listening;
-    bool is_updating;
     bool sync;
-    sigc::connection modified_connection;
     sigc::connection deleted_connection;
     LPECloneOriginal(const LPECloneOriginal&) = delete;
     LPECloneOriginal& operator=(const LPECloneOriginal&) = delete;

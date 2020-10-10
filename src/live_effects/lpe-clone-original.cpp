@@ -58,7 +58,6 @@ LPECloneOriginal::LPECloneOriginal(LivePathEffectObject *lpeobject)
         this->getRepr()->setAttribute("method", "bsplinespiro");
         this->getRepr()->setAttribute("allow_transforms", "false");
     };
-    is_updating = false;
     listening = false;
     sync = false;
     linked = this->getRepr()->attribute("linkeditem");
@@ -356,14 +355,12 @@ LPECloneOriginal::start_listening()
     }
     quit_listening();
     deleted_connection = sp_lpe_item->connectDelete(sigc::mem_fun(*this, &LPECloneOriginal::lpeitem_deleted));
-    modified_connection = SP_OBJECT(this->getLPEObj())->connectModified(sigc::mem_fun(*this, &LPECloneOriginal::modified));
     listening = true;
 }
 
 void
 LPECloneOriginal::quit_listening()
 {
-    modified_connection.disconnect();
     listening = false;
 }
 
@@ -372,18 +369,6 @@ LPECloneOriginal::lpeitem_deleted(SPObject */*deleted*/)
 {
     quit_listening();
     deleted_connection.disconnect();
-}
-
-void
-LPECloneOriginal::modified(SPObject */*obj*/, guint /*flags*/)
-{
-    if ( !sp_lpe_item || is_updating) {
-        is_updating = false;
-        return;
-    }
-    SP_OBJECT(sp_lpe_item)->requestModified(SP_OBJECT_MODIFIED_FLAG);
-    sp_lpe_item->doWriteTransform(sp_lpe_item->transform);
-    is_updating = true;
 }
 
 LPECloneOriginal::~LPECloneOriginal()
