@@ -159,7 +159,7 @@ void InkscapePreferences::add_highlight(Gtk::Label *label, Glib::ustring const &
     Glib::ustring const n_text = text.lowercase().normalize();
     Glib::ustring const n_key = key.lowercase().normalize();
     label->get_style_context()->add_class("highlight");
-    auto const pos = n_text.find(key);
+    auto const pos = n_text.find(n_key);
     auto const len = n_key.size();
     text = Glib::Markup::escape_text(text.substr(0, pos)) + "<span weight=\"bold\" underline=\"single\">" +
            Glib::Markup::escape_text(text.substr(pos, len)) + "</span>" +
