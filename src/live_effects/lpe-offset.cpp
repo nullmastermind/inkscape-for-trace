@@ -249,7 +249,7 @@ int offset_winding(Geom::PathVector pathvector, Geom::Path path)
     return wind;
 }
 
-void LPEOffset::doAfterEffect(SPLPEItem const * /*lpeitem*/)
+void LPEOffset::doAfterEffect(SPLPEItem const * /*lpeitem*/, SPCurve *curve)
 {
     if (offset_pt == Geom::Point(Geom::infinity(), Geom::infinity())) {
         if (_knot_entity) {

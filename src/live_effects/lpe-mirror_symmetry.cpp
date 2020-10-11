@@ -89,7 +89,7 @@ LPEMirrorSymmetry::~LPEMirrorSymmetry()
 = default;
 
 void
-LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem)
+LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
 {
     SPDocument *document = getSPDoc();
     if (!document) {

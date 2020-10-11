@@ -162,6 +162,7 @@
 ../src/live_effects/lpe-show_handles.cpp
 ../src/live_effects/lpe-simplify.cpp
 ../src/live_effects/lpe-sketch.cpp
+../src/live_effects/lpe-slice.cpp
 ../src/live_effects/lpe-tangent_to_curve.cpp
 ../src/live_effects/lpe-taperstroke.cpp
 ../src/live_effects/lpe-transform_2pts.cpp

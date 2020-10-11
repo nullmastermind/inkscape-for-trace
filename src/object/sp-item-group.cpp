@@ -903,10 +903,10 @@ void SPGroup::update_patheffect(bool write) {
             LivePathEffectObject *lpeobj = lperef->lpeobject;
             if (lpeobj) {
                 Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
-                if (lpe) {
+                if (lpe && lpe->isVisible()) {
                     lpeobj->get_lpe()->doBeforeEffect_impl(this);
                     sp_group_perform_patheffect(this, this, lpe, write);
-                    lpeobj->get_lpe()->doAfterEffect_impl(this);
+                    lpeobj->get_lpe()->doAfterEffect_impl(this, nullptr);
                 }
             }
         }

@@ -80,6 +80,9 @@ public:
     bool hasPathEffectRecursive() const;
     bool hasPathEffectOnClipOrMask(SPLPEItem * shape) const;
     bool hasPathEffectOnClipOrMaskRecursive(SPLPEItem * shape) const;
+    size_t getLPEIndex(Inkscape::LivePathEffect::Effect* lpe) const;
+    size_t countLPEOfType(int const type, bool inc_hidden = true, bool is_ready = true) const;
+    size_t getLPEReferenceIndex(Inkscape::LivePathEffect::LPEObjectReference* lperef) const;
     Inkscape::LivePathEffect::Effect* getPathEffectOfType(int type);
     Inkscape::LivePathEffect::Effect const* getPathEffectOfType(int type) const;
     bool hasBrokenPathEffect() const;
@@ -90,6 +93,10 @@ public:
     void upCurrentPathEffect();
     Inkscape::LivePathEffect::LPEObjectReference* getCurrentLPEReference();
     Inkscape::LivePathEffect::Effect* getCurrentLPE();
+    Inkscape::LivePathEffect::LPEObjectReference* getPrevLPEReference(Inkscape::LivePathEffect::LPEObjectReference* lperef);
+    Inkscape::LivePathEffect::Effect* getPrevLPE(Inkscape::LivePathEffect::Effect* lpe);
+    Inkscape::LivePathEffect::LPEObjectReference* getNextLPEReference(Inkscape::LivePathEffect::LPEObjectReference*);
+    Inkscape::LivePathEffect::Effect* getNextLPE(Inkscape::LivePathEffect::Effect* lpe);
     bool setCurrentPathEffect(Inkscape::LivePathEffect::LPEObjectReference* lperef);
     void removeCurrentPathEffect(bool keep_paths);
     void removeAllPathEffects(bool keep_paths);

@@ -43,7 +43,7 @@ public:
     void doBeforeEffect(SPLPEItem const *lpeItem) override;
     void doOnApply(SPLPEItem const* lpeitem) override;
     void doOnRemove(SPLPEItem const* lpeitem) override;
-    void doAfterEffect(SPLPEItem const *lpeitem) override;
+    void doAfterEffect(SPLPEItem const *lpeitem, SPCurve *curve) override;
     void transform_multiply(Geom::Affine const &postmul, bool set) override;
     void applyStyle(SPLPEItem *lpeitem);
     // methods called by path-manipulator upon edits

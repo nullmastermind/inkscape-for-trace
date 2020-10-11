@@ -61,6 +61,7 @@
 #include "live_effects/lpe-show_handles.h"
 #include "live_effects/lpe-simplify.h"
 #include "live_effects/lpe-sketch.h"
+#include "live_effects/lpe-slice.h"
 #include "live_effects/lpe-spiro.h"
 #include "live_effects/lpe-tangent_to_curve.h"
 #include "live_effects/lpe-taperstroke.h"
@@ -775,6 +776,21 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         false ,//on_text
         true ,//experimental
     },
+    /* 1.1 */
+    {
+        SLICE,
+        N_("Slice") ,//label
+        "slice" ,//key
+        "slice" ,//icon
+        "Slice" ,//untranslated name
+        N_("Slices the item into parts. It can also be applied multiple times.") ,//description
+        true  ,//on_path
+        true  ,//on_shape
+        true ,//on_group
+        false ,//on_image
+        false ,//on_text
+        false ,//experimental
+    },
 #ifdef LPE_ENABLE_TEST_EFFECTS
     {
         DOEFFECTSTACK_TEST,
@@ -1063,6 +1079,9 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
         case DASHED_STROKE:
             neweffect = static_cast<Effect *>(new LPEDashedStroke(lpeobj));
             break;
+        case SLICE:
+            neweffect = static_cast<Effect *>(new LPESlice(lpeobj));
+            break;
         default:
             g_warning("LivePathEffect::Effect::New called with invalid patheffect type (%d)", lpenr);
             neweffect = nullptr;
@@ -1267,8 +1286,16 @@ Effect::doBeforeEffect (SPLPEItem const*/*lpeitem*/)
 {
     //Do nothing for simple effects
 }
-
-void Effect::doAfterEffect (SPLPEItem const* /*lpeitem*/)
+/**
+ * Is performed at the end of the LPE only one time per "lpeitem"
+ * in paths/shapes is called in middle of the effect so we add the
+ * "curve" param to allow updates in the LPE results at this stage
+ * for groups dont need to send "curve" parameter because is applied 
+ * when the LPE process finish, we can update LPE results without "curve" parameter
+ * @param lpeitem the element that has this LPE
+ * @param curve the curve to pass when in mode path or shape
+ */
+void Effect::doAfterEffect (SPLPEItem const* /*lpeitem*/, SPCurve *curve)
 {
     is_load = false;
 }
@@ -1287,9 +1314,9 @@ void Effect::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
 {
 }
 //secret impl methods (shhhh!)
-void Effect::doAfterEffect_impl(SPLPEItem const *lpeitem)
+void Effect::doAfterEffect_impl(SPLPEItem const *lpeitem, SPCurve *curve)
 {
-    doAfterEffect(lpeitem);
+    doAfterEffect(lpeitem, curve);
     is_load = false;
     is_applied = false;
 }
@@ -1307,7 +1334,6 @@ void Effect::doOnApply_impl(SPLPEItem const* lpeitem)
     doOnApply(lpeitem);
     setReady();
     has_exception = false;
-    
 }
 
 void Effect::doBeforeEffect_impl(SPLPEItem const* lpeitem)

@@ -68,7 +68,7 @@ public:
 
     //basically, to get this method called before the derived classes, a bit
     //of indirection is needed. We first call these methods, then the below.
-    void doAfterEffect_impl(SPLPEItem const *lpeitem);
+    void doAfterEffect_impl(SPLPEItem const *lpeitem, SPCurve *curve);
     void doOnApply_impl(SPLPEItem const* lpeitem);
     void doBeforeEffect_impl(SPLPEItem const* lpeitem);
     void setCurrentZoom(double cZ);
@@ -78,7 +78,7 @@ public:
     virtual void doOnApply (SPLPEItem const* lpeitem);
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
     virtual void transform_multiply(Geom::Affine const &postmul, bool set);
-    virtual void doAfterEffect (SPLPEItem const* lpeitem);
+    virtual void doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve);
     virtual void doOnException(SPLPEItem const *lpeitem);
     virtual void doOnRemove (SPLPEItem const* lpeitem);
     virtual void doOnVisibilityToggled(SPLPEItem const* lpeitem);

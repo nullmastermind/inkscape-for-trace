@@ -111,7 +111,7 @@ LPECopyRotate::~LPECopyRotate()
 = default;
 
 void
-LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
+LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
 {
     if (split_items) {
         SPDocument *document = getSPDoc();
@@ -332,7 +332,7 @@ LPECopyRotate::toItem(Geom::Affine transform, size_t i, bool reset)
 void
 LPECopyRotate::resetStyles(){
     reset = true;
-    doAfterEffect(sp_lpe_item);
+    doAfterEffect(sp_lpe_item, nullptr);
 }
 
 Gtk::Widget * LPECopyRotate::newWidget()

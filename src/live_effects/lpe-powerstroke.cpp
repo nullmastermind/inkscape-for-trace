@@ -779,7 +779,7 @@ void LPEPowerStroke::transform_multiply(Geom::Affine const &postmul, bool /*set*
     offset_points.param_transform_multiply(postmul, false);
 }
 
-void LPEPowerStroke::doAfterEffect(SPLPEItem const *lpeitem)
+void LPEPowerStroke::doAfterEffect(SPLPEItem const *lpeitem, SPCurve *curve)
 {
     if (pathvector_before_effect[0].size() == pathvector_after_effect[0].size()) {
         if (recusion_limit < 6) {

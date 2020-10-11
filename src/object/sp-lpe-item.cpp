@@ -30,6 +30,7 @@
 #include "live_effects/lpe-copy_rotate.h"
 #include "live_effects/lpe-lattice2.h"
 #include "live_effects/lpe-measure-segments.h"
+#include "live_effects/lpe-slice.h"
 #include "live_effects/lpe-mirror_symmetry.h"
 #include "message-stack.h"
 #include "path-chemistry.h"
@@ -280,7 +281,7 @@ bool SPLPEItem::performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape:
                 if (curve) {
                     lpe->pathvector_after_effect = curve->get_pathvector();
                 }
-                lpe->doAfterEffect_impl(this);
+                lpe->doAfterEffect_impl(this, curve);
             }
         }
     }
@@ -311,15 +312,25 @@ bool SPLPEItem::optimizeTransforms()
                 if (dynamic_cast<Inkscape::LivePathEffect::LPEMeasureSegments *>(lpe) ||
                     dynamic_cast<Inkscape::LivePathEffect::LPECloneOriginal *>(lpe) ||
                     dynamic_cast<Inkscape::LivePathEffect::LPEMirrorSymmetry *>(lpe) ||
+                    dynamic_cast<Inkscape::LivePathEffect::LPESlice *>(lpe) ||
                     dynamic_cast<Inkscape::LivePathEffect::LPELattice2 *>(lpe) ||
                     dynamic_cast<Inkscape::LivePathEffect::LPEBool *>(lpe) ||
                     dynamic_cast<Inkscape::LivePathEffect::LPECopyRotate *>(lpe)) {
-                    ret = false;
+                    return false;
                 }
             }
         }
     }
-    return ret;
+    gchar *classes = g_strdup(getRepr()->attribute("class"));
+    if (classes) {
+        Glib::ustring classdata = classes;
+        size_t pos = classdata.find("UnoptimicedTransforms");
+        if ( pos != std::string::npos ) {
+            return false;
+        }
+    }
+    g_free(classes);
+    return true;
 }
 
 /**
@@ -1138,6 +1149,47 @@ PathEffectList const SPLPEItem::getEffectList() const
     return *path_effect_list;
 }
 
+Inkscape::LivePathEffect::LPEObjectReference* 
+SPLPEItem::getPrevLPEReference(Inkscape::LivePathEffect::LPEObjectReference* lperef)
+{
+    Inkscape::LivePathEffect::LPEObjectReference* prev= nullptr;
+    for (auto & it : *path_effect_list) {
+        if (it->lpeobject_repr == lperef->lpeobject_repr) {
+            break;
+        }
+        prev = it;
+    }
+    return prev;
+}
+
+Inkscape::LivePathEffect::LPEObjectReference* 
+SPLPEItem::getNextLPEReference(Inkscape::LivePathEffect::LPEObjectReference* lperef)
+{
+    bool match = false;
+    for (auto & it : *path_effect_list) {
+        if (match) {
+            return it;
+        }
+        if (it->lpeobject_repr == lperef->lpeobject_repr) {
+            match = true;
+        }
+    }
+    return nullptr;
+}
+
+size_t 
+SPLPEItem::getLPEReferenceIndex(Inkscape::LivePathEffect::LPEObjectReference* lperef) const
+{
+    size_t counter = 0;
+    for (auto & it : *path_effect_list) {
+        if (it->lpeobject_repr == lperef->lpeobject_repr) {
+            return counter;
+        }
+        counter++;
+    }
+    return Glib::ustring::npos;
+}
+
 Inkscape::LivePathEffect::LPEObjectReference* SPLPEItem::getCurrentLPEReference()
 {
     if (!this->current_path_effect && !this->path_effect_list->empty()) {
@@ -1155,6 +1207,68 @@ Inkscape::LivePathEffect::Effect* SPLPEItem::getCurrentLPE()
         return lperef->lpeobject->get_lpe();
     else
         return nullptr;
+}
+
+Inkscape::LivePathEffect::Effect* SPLPEItem::getPrevLPE(Inkscape::LivePathEffect::Effect* lpe)
+{
+    Inkscape::LivePathEffect::Effect* prev = nullptr;
+    for (auto & it : *path_effect_list) {
+        if (it->lpeobject == lpe->getLPEObj()) {
+            break;
+        }
+        prev = it->lpeobject->get_lpe();
+    }
+    return prev;
+}
+
+Inkscape::LivePathEffect::Effect* SPLPEItem::getNextLPE(Inkscape::LivePathEffect::Effect* lpe)
+{
+    bool match = false;
+    for (auto & it : *path_effect_list) {
+        if (match) {
+            return it->lpeobject->get_lpe();
+        }
+        if (it->lpeobject == lpe->getLPEObj()) {
+            match = true;
+        }
+    }
+    return nullptr;
+}
+
+size_t SPLPEItem::countLPEOfType(int const type, bool inc_hidden, bool is_ready) const
+{
+    size_t counter = 0;
+    if (path_effect_list->empty()) {
+        return counter;
+    }
+
+    for (PathEffectList::const_iterator it = path_effect_list->begin(); it != path_effect_list->end(); ++it)
+    {
+        LivePathEffectObject const *lpeobj = (*it)->lpeobject;
+        if (lpeobj) {
+            Inkscape::LivePathEffect::Effect const* lpe = lpeobj->get_lpe();
+            if (lpe && (lpe->effectType() == type) && lpe->is_visible || inc_hidden) {
+                if (is_ready || lpe->isReady()) {
+                    counter++;
+                }
+            }
+        }
+    }
+
+    return counter;
+}
+
+size_t 
+SPLPEItem::getLPEIndex(Inkscape::LivePathEffect::Effect* lpe) const
+{
+    size_t counter = 0;
+    for (auto & it : *path_effect_list) {
+        if (it->lpeobject == lpe->getLPEObj()) {
+            return counter;
+        }
+        counter++;
+    }
+    return Glib::ustring::npos;
 }
 
 bool SPLPEItem::setCurrentPathEffect(Inkscape::LivePathEffect::LPEObjectReference* lperef)
