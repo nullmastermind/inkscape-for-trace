@@ -137,6 +137,8 @@ void PenTool::setup() {
     // Pen indicators (temporary handles shown when adding a new node).
     c0 = new Inkscape::CanvasItemCtrl(desktop->getCanvasControls(), Inkscape::CANVAS_ITEM_CTRL_TYPE_ROTATE);
     c1 = new Inkscape::CanvasItemCtrl(desktop->getCanvasControls(), Inkscape::CANVAS_ITEM_CTRL_TYPE_ROTATE);
+    c0->set_fill(0x0);
+    c1->set_fill(0x0);
     c0->hide();
     c1->hide();
 
