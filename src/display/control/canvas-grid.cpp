@@ -581,7 +581,7 @@ CanvasXYGrid::readRepr()
     }
 
     for (auto grid : canvas_item_grids) {
-        grid->get_canvas()->request_update();
+        grid->request_update();
     }
 
     return;
