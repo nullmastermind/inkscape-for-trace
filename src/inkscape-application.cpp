@@ -1194,10 +1194,16 @@ ConcreteInkscapeApplication<T>::shell()
     }
 
 #ifdef WITH_GNU_READLINE
-    // This should not be a ustring!
-    Glib::ustring history_file =
-        Inkscape::IO::Resource::get_path_ustring(Inkscape::IO::Resource::USER,
-                                                 Inkscape::IO::Resource::NONE, "shell.history");
+    auto history_file = Glib::build_filename(Inkscape::IO::Resource::profile_path(), "shell.history");
+
+#ifdef _WIN32
+    gchar *locale_filename = g_win32_locale_filename_from_utf8(history_file.c_str());
+    if (locale_filename) {
+        history_file = locale_filename;
+        g_free(locale_filename);
+    }
+#endif
+
     static bool init = false;
     if (!init) {
         readline_init();
