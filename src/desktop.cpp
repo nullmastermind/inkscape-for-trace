@@ -1679,7 +1679,7 @@ SPDesktop::onDocumentURISet (gchar const* uri)
 void
 SPDesktop::onDocumentResized (gdouble width, gdouble height)
 {
-    canvas->set_affine(doc2dt());
+    assert(canvas->get_affine() == _current_affine.d2w());
 
     Geom::Rect const a(Geom::Point(0, 0), Geom::Point(width, height));
     canvas_page->set_rect(a);
