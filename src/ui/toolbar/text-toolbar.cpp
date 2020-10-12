@@ -1480,7 +1480,7 @@ TextToolbar::lineheight_unit_changed(int /* Not Used */)
         _line_height_adj->set_page_increment(1.0);
     }
     // Internal function to set line-height which is spacing mode dependent.
-    SPItem *parent = dynamic_cast<SPItem *>(*itemlist.begin());
+    SPItem *parent = itemlist.empty() ? nullptr : dynamic_cast<SPItem *>(*itemlist.begin());
     SPStyle *parent_style = nullptr;
     if (parent) {
         parent_style = parent->style;
