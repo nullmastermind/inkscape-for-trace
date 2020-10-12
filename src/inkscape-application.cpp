@@ -11,7 +11,6 @@
 #include <iostream>
 #include <iomanip>
 #include <cerrno>  // History file
-#include <fstream> // History file
 #include <regex>
 
 #include <glibmm/i18n.h>  // Internationalization
@@ -1210,12 +1209,8 @@ ConcreteInkscapeApplication<T>::shell()
         using_history();
         init = true;
 
-        // Create history file if does not exist (or read_history() produces error).
-        std::fstream test(history_file, std::ios::out | std::ios::app);
-        test.close();
-
         int error = read_history(history_file.c_str());
-        if (error) {
+        if (error && error != ENOENT) {
             std::cerr << "read_history error: " << std::strerror(error) << " " << history_file << std::endl;
         }
     }
@@ -1261,11 +1256,11 @@ ConcreteInkscapeApplication<T>::shell()
     }
 
 #ifdef WITH_GNU_READLINE
-    int error = append_history(200, history_file.c_str()); // ToDo: Make number a preference.
+    stifle_history(200); // ToDo: Make number a preference.
+    int error = write_history(history_file.c_str());
     if (error) {
-        std::cerr << "append_history error: " << std::strerror(error) << " " << history_file << std::endl;
+        std::cerr << "write_history error: " << std::strerror(error) << " " << history_file << std::endl;
     }
-    history_truncate_file(history_file.c_str(), 200);
 #endif
 
     if (_with_gui) {
