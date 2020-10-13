@@ -618,7 +618,10 @@ Glib::ustring text_relink_shapes_str(gchar const *prop, std::map<Glib::ustring, 
         }
     }
     // remove trailing space
-    res.resize(res.size() - 1);
+    if (!res.empty()) {
+        assert(res.raw().back() == ' ');
+        res.resize(res.size() - 1);
+    }
     return res;
 }
 
