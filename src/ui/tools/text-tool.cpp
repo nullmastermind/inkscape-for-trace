@@ -609,16 +609,18 @@ bool TextTool::root_handler(GdkEvent* event) {
                     // artificially here, for the text object does not exist yet:
                     double cursor_height = sp_desktop_get_font_size_tool(desktop);
                     auto const y_dir = desktop->yaxisdir();
-                    cursor->set_coords(p1, p1 - Geom::Point(0, y_dir * cursor_height));
+                    Geom::Point const cursor_size(0, y_dir * cursor_height);
+                    cursor->set_coords(p1, p1 - cursor_size);
                     if (this->imc) {
                         GdkRectangle im_cursor;
-                        Geom::Point const top_left = desktop->get_display_area().bounds().corner(3);
-                        Geom::Point const cursor_size(0, cursor_height);
-                        Geom::Point const im_position = desktop->d2w(p1 + cursor_size - top_left);
-                        im_cursor.x = (int) floor(im_position[Geom::X]);
-                        im_cursor.y = (int) floor(im_position[Geom::Y]);
-                        im_cursor.width = 0;
-                        im_cursor.height = (int) -floor(desktop->d2w(cursor_size)[Geom::Y]);
+                        Geom::Point const top_left = desktop->get_display_area().corner(0);
+                        Geom::Point const im_d0 = desktop->d2w(p1 - top_left);
+                        Geom::Point const im_d1 = desktop->d2w(p1 - cursor_size - top_left);
+                        Geom::Rect const im_rect(im_d0, im_d1);
+                        im_cursor.x = (int) floor(im_rect.left());
+                        im_cursor.y = (int) floor(im_rect.top());
+                        im_cursor.width = (int) floor(im_rect.width());
+                        im_cursor.height = (int) floor(im_rect.height());
                         gtk_im_context_set_cursor_location(this->imc, &im_cursor);
                     }
                     this->message_context->set(Inkscape::NORMAL_MESSAGE, _("Type text; <b>Enter</b> to start new line.")); // FIXME:: this is a copy of a string from _update_cursor below, do not desync
@@ -1653,13 +1655,14 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
         /* fixme: ... need another transformation to get canvas widget coordinate space? */
         if (tc->imc) {
             GdkRectangle im_cursor = { 0, 0, 1, 1 };
-            Geom::Point const top_left = desktop->get_display_area().corner(3);
+            Geom::Point const top_left = desktop->get_display_area().corner(0);
             Geom::Point const im_d0 =    desktop->d2w(d0 - top_left);
             Geom::Point const im_d1 =    desktop->d2w(d1 - top_left);
-            im_cursor.x = (int) floor(im_d0[Geom::X]);
-            im_cursor.y = (int) floor(im_d1[Geom::Y]);
-            im_cursor.width = (int) floor(im_d1[Geom::X]) - im_cursor.x;
-            im_cursor.height = (int) floor(im_d0[Geom::Y]) - im_cursor.y;
+            Geom::Rect const im_rect(im_d0, im_d1);
+            im_cursor.x = (int) floor(im_rect.left());
+            im_cursor.y = (int) floor(im_rect.top());
+            im_cursor.width = (int) floor(im_rect.width());
+            im_cursor.height = (int) floor(im_rect.height());
             gtk_im_context_set_cursor_location(tc->imc, &im_cursor);
         }
 
