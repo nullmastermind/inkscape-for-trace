@@ -31,7 +31,10 @@
 #include "rotateable.h"
 
 constexpr int SELECTED_STYLE_SB_WIDTH = 48;
-constexpr int SELECTED_STYLE_WIDTH = 190;
+constexpr int SELECTED_STYLE_PLACE_WIDTH = 50;
+constexpr int SELECTED_STYLE_STROKE_WIDTH = 40;
+constexpr int SELECTED_STYLE_FLAG_WIDTH = 12;
+constexpr int SELECTED_STYLE_WIDTH = 250;
 
 class SPDesktop;
 

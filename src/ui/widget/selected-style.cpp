@@ -135,7 +135,7 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
     , _opacity_place()
     , _opacity_adjustment(Gtk::Adjustment::create(100, 0.0, 100, 1.0, 10.0))
     , _opacity_sb(0.02, 0)
-    , _fill()
+    , _fill(false, 1)
     , _stroke()
     , _stroke_width_place(this)
     , _stroke_width("")
@@ -146,11 +146,11 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
     _drop[0] = _drop[1] = nullptr;
     _dropEnabled[0] = _dropEnabled[1] = false;
 
-    _fill_label.set_halign(Gtk::ALIGN_START);
+    _fill_label.set_halign(Gtk::ALIGN_END);
     _fill_label.set_valign(Gtk::ALIGN_CENTER);
     _fill_label.set_margin_top(0);
     _fill_label.set_margin_bottom(0);
-    _stroke_label.set_halign(Gtk::ALIGN_START);
+    _stroke_label.set_halign(Gtk::ALIGN_END);
     _stroke_label.set_valign(Gtk::ALIGN_CENTER);
     _stroke_label.set_margin_top(0);
     _stroke_label.set_margin_bottom(0);
@@ -222,7 +222,7 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
         _gradient_box_m[i].show_all();
 #endif
 
-        _many[i].set_markup (_("Different"));
+        _many[i].set_markup (_("≠"));
         _many[i].show_all();
         __many[i] = (i == SS_FILL)? (_("Different fills")) : (_("Different strokes"));
 
@@ -352,23 +352,35 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
 
         _popup_sw.show_all();
     }
+    // fill row
+    _fill_flag_place.set_size_request(SELECTED_STYLE_FLAG_WIDTH , -1);
 
     _fill_place.add(_na[SS_FILL]);
     _fill_place.set_tooltip_text(__na[SS_FILL]);
-    _fill.pack_start(_fill_place, Gtk::PACK_SHRINK);
-    _fill.pack_start(_fill_empty_space, Gtk::PACK_SHRINK);
+    _fill.set_size_request(SELECTED_STYLE_PLACE_WIDTH, -1);
+    _fill.pack_start(_fill_place, Gtk::PACK_EXPAND_WIDGET);
+
+    _fill_empty_space.set_size_request(SELECTED_STYLE_STROKE_WIDTH);
+
+    // stroke row
+    _stroke_flag_place.set_size_request(SELECTED_STYLE_FLAG_WIDTH, -1);
 
     _stroke_place.add(_na[SS_STROKE]);
     _stroke_place.set_tooltip_text(__na[SS_STROKE]);
+    _stroke.set_size_request(SELECTED_STYLE_PLACE_WIDTH, -1);
+    _stroke.pack_start(_stroke_place, Gtk::PACK_EXPAND_WIDGET);
 
-    _stroke.pack_start(_stroke_place);
     _stroke_width_place.add(_stroke_width);
-    _stroke.pack_start(_stroke_width_place, Gtk::PACK_SHRINK);
+    _stroke_width_place.set_size_request(SELECTED_STYLE_STROKE_WIDTH);
+
+    // opacity selector
+    _opacity_place.add(_opacity_label);
 
     _opacity_sb.set_adjustment(_opacity_adjustment);
     _opacity_sb.set_size_request (SELECTED_STYLE_SB_WIDTH, -1);
     _opacity_sb.set_sensitive (false);
 
+    // arrange in table
     _table.attach(_fill_label, 0, 0, 1, 1);
     _table.attach(_stroke_label, 0, 1, 1, 1);
 
@@ -378,7 +390,8 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
     _table.attach(_fill, 2, 0, 1, 1);
     _table.attach(_stroke, 2, 1, 1, 1);
 
-    _opacity_place.add(_opacity_label);
+    _table.attach(_fill_empty_space, 3, 0, 1, 1);
+    _table.attach(_stroke_width_place, 3, 1, 1, 1);
 
     _table.attach(_opacity_place, 4, 0, 1, 2);
     _table.attach(_opacity_sb, 5, 0, 1, 2);
