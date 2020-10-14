@@ -71,7 +71,6 @@ bool SpinButton::on_key_press_event(GdkEventKey* event)
     case GDK_KEY_Return: // defocus
     case GDK_KEY_KP_Enter:
         defocus();
-        return true;
         break;
     case GDK_KEY_Tab:
     case GDK_KEY_ISO_Left_Tab:
