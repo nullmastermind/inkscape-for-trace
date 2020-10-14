@@ -437,6 +437,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 ret = TRUE;
             } else {
                 sp_event_root_menu_popup(desktop, nullptr, event);
+                ret = TRUE;
             }
             break;
 
