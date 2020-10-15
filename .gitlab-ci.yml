@@ -3,9 +3,55 @@
 # the new ones here in these builds.
 image: registry.gitlab.com/inkscape/inkscape-ci-docker/master
 
+
+# This file is structured in four parts: 
+# I) definitions
+# II) build jobs
+# III) checks that are run on merge requests
+# IV) building inkscape.gitlab.io/inkscape (doc and scan)
+#
+
+
+#######################
+#                     #
+#     Definitions     #
+#                     #
+#######################
+
+# all jobs are safe to interrupt
+default:
+  interruptible: true
+  artifacts:
+    name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
+  timeout: 3h
+
+
+#speedup git on runners
 variables:
   GIT_DEPTH: "10"
   GIT_SUBMODULE_STRATEGY: recursive
+
+#reusable templates
+.ccache_init: &ccache_init
+  before_script:
+    - mkdir -p ccache
+    - export CCACHE_BASEDIR=${PWD}
+    - export CCACHE_DIR=${PWD}/ccache
+
+.cmake: &cmake
+- mkdir -p build/conf
+- cd build
+- cmake .. -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX:PATH=$PWD/install_dir/ -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+
+.MR: &run_for_MR
+  rules:
+  - if: $CI_MERGE_REQUEST_ID
+
+.master: &run_for_master
+  rules:
+  - if: $CI_COMMIT_BRANCH == "master"
+
+
 
 #######################
 #                     #
@@ -14,25 +60,17 @@ variables:
 #######################
 # Linux, Appimage, mac. Windows is handled in .appveyor.yml
 
-    ### On linux...
 
 inkscape:linux:
   stage: build
-  except:
-    - schedules
+  rules:
   cache:
     key: "cache-linux"
     paths:
       - ccache/
-  before_script:
-    # CCache Config
-    - mkdir -p ccache
-    - export CCACHE_BASEDIR=${PWD}
-    - export CCACHE_DIR=${PWD}/ccache
+  <<: *ccache_init
   script:
-    - mkdir -p build/conf
-    - cd build
-    - cmake .. -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX:PATH=$PWD/install_dir/ -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+    - *cmake
     - make -j3 install
     - make -j3 tests
     - cpack -G DEB
@@ -43,21 +81,17 @@ inkscape:linux:
     paths:
       - build/
 
-    ### + Appimage (custom script, cf generate.sh)
 
 appimage:linux:
   stage: build
-  except:
-    - schedules
+  <<: *run_for_MR
+  <<: *run_for_master
+  rules:
   cache:
     key: "cache-appimage"
     paths:
       - ccache/
-  before_script:
-    # CCache Config
-    - mkdir -p ccache
-    - export CCACHE_BASEDIR=${PWD}
-    - export CCACHE_DIR=${PWD}/ccache
+  <<: *ccache_init
   script:
     - bash -ex packaging/appimage/generate.sh
   artifacts:
@@ -65,19 +99,14 @@ appimage:linux:
     paths:
       - Inkscape*.AppImage*
 
-    ### On macOS... (this needs a custom mac runner)
 
 inkscape:mac:
   stage: build
   tags:
     - mac
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      when: never
     - if: '$CI_PROJECT_NAMESPACE == "inkscape"'
-      when: always
     - if: '$CI_PROJECT_NAMESPACE == "dehesselle"'
-      when: always
   before_script:
     - packaging/macos/install_toolset.sh
   script:
@@ -90,19 +119,38 @@ inkscape:mac:
       - artifacts/
 
 
+#tests, always run after building
+test:linux:
+  stage: test
+  rules:
+  dependencies:
+    - inkscape:linux
+  needs: ["inkscape:linux"]
+  script:
+    - sed -i '/<policy domain="coder" rights="none"/d' /etc/ImageMagick-6/policy.xml
+    - cd build
+    - ctest -V
+  artifacts:
+    paths:
+      - build/testfiles
+    when: on_failure
+
+
+
 ###########################
 #                         #
-#  Various code checkers  #
+#    MR code checkers     #
 #                         #
 ###########################
 
-  ### This script checks for *merge requests* that they conform to the code style. It allows failures.
+
+
+### This script checks for *merge requests* that they conform to the code style. It allows failures.
   # cf ./_clang-format and https://inkscape.org/develop/coding-style/
 
 codequality:
   stage: test
-  except:
-    - schedules
+  <<: *run_for_MR
   needs: []
   script:
     - git fetch https://gitlab.com/inkscape/inkscape.git
@@ -114,76 +162,70 @@ codequality:
   artifacts:
     paths:
       - clang_format.diff
-    when: always
 
-    ### We embed script from third party libraries, that we sometimes update from their source. Hence we should NEVER modify them here before submitting the patch upstream!
-    # Ideally, we should remove all this code and use them as packaged libraries. Unfortunately this check only works for merge requests.
 
+### We embed script from third party libraries, that we sometimes update from their source. Hence we should NEVER modify them here before submitting the patch upstream!
+# Ideally, we should remove all this code and use them as packaged libraries. Unfortunately this check only works for merge requests.
 codeprotect:
   stage: test
-  except:
-    - schedules
+  <<: *run_for_MR
   needs: []
   script:
     - git fetch https://gitlab.com/inkscape/inkscape.git
     - git diff FETCH_HEAD -U0 --no-color src/3rdparty | tee forbidden
     - if [[ -s forbidden ]]; then echo "This commit modifies files that are in an dependency library. Make sure you update upstream first, *then* force the merge in Inkscape."; false; fi
 
-  #### All files should have a licence
+#### All files should have a licence
 
 check-license-headers:
   stage: test
   needs: []
-  except:
-    - schedules
+  <<: *run_for_MR
   script:
     - python3 buildtools/check_license_headers.py
 
-    ### Several translation tests:
-    #   - verify that the list of translatable files (POTFILES.*.in) are up to date
-    #   - check if we can successfully re-generate inkscape.pot
-    #   - sync all .po files with the updated inkscape.pot and run some automated checks on them
-    #  (artifacts from this job are also used to generate translations statistics for the website)
+
+### Several translation tests:
+#   - verify that the list of translatable files (POTFILES.*.in) are up to date
+#   - check if we can successfully re-generate inkscape.pot
+#   - sync all .po files with the updated inkscape.pot and run some automated checks on them
+#  (artifacts from this job are also used to generate translations statistics for the website)
 
 translations:
   stage: test
-  except:
-    - schedules
   needs: []
   script:
     # make sure dependencies for inkscape.pot are up-to-date
-    - mkdir build && cd build && cmake .. && make inkscape_pot && cd .. || exit 1
-    - cd po/
-
-    # update POTFILES.*.in
-    - ./generate_POTFILES.sh
-
-    # update inkscape.pot and sync all .po files
-    - rm -f inkscape.pot
-    - cd ../build && make inkscape_pot && cd ../po || exit 1
-    - ./update_po_files.sh
-
-    # check if POTFILES.*.in should be updated in the repo (shall we automate this?)
-    - 'if [ -n "$(git diff POTFILES.*.in)" ]; then
-        git diff POTFILES.*.in;
-        echo "New translatable strings in source files found.";
-        echo "Please add the paths to POTFILES.*.in so they can be translated";
-        echo "(or add them to POTFILES.skip to exclude them from translations).";
-        exit 1;
-      fi'
+  - mkdir build && cd build && cmake .. && make inkscape_pot && cd .. || exit 1
+  - cd po/
+  
+  # update POTFILES.*.in
+  - ./generate_POTFILES.sh
+  
+  # update inkscape.pot and sync all .po files
+  - rm -f inkscape.pot
+  - cd ../build && make inkscape_pot && cd ../po || exit 1
+  - ./update_po_files.sh
+  
+  # check if POTFILES.*.in should be updated in the repo (shall we automate this?)
+  - 'if [ -n "$(git diff POTFILES.*.in)" ]; then
+      git diff POTFILES.*.in;
+      echo "New translatable strings in source files found.";
+      echo "Please add the paths to POTFILES.*.in so they can be translated";
+      echo "(or add them to POTFILES.skip to exclude them from translations).";
+      exit 1;
+    fi'
   artifacts:
     name: "translations"
     paths:
       - po/
-    when: always
 
-  ### clang-tidy is an utility to check that some c++ code good practices and patterns are respected. We use it at 1% of its possibilities (only when it suggests fixes).
+### clang-tidy is an utility to check that some c++ code good practices and patterns are respected. We use it at 1% of its possibilities (only when it suggests fixes).
 
+# ... here only on modified files
 clangtidy:linux:
   stage: test
-  except:
-    - schedules
-    - master@inkscape/inkscape
+  <<: *run_for_MR
   needs: []
   script:
     - git fetch https://gitlab.com/inkscape/inkscape.git
@@ -192,32 +234,37 @@ clangtidy:linux:
     - git diff FETCH_HEAD --name-only -- '**.cpp' | tee clang_tidy_files
     - bash buildtools/clangtidy-helper.sh $(cat clang_tidy_files)
 
+
+# ... here on master commits
 clangtidyfull:linux:
   stage: test
   cache:
     key: "cache-clang"
     paths:
       - ccache/
-  before_script:
-    # CCache Config
-    - mkdir -p ccache
-    - export CCACHE_BASEDIR=${PWD}
-    - export CCACHE_DIR=${PWD}/ccache
-  except:
-    - schedules
-  only:
-    - master@inkscape/inkscape
+  <<: *ccache_init
+  rules:
+  - if: $CI_COMMIT_BRANCH == "master"
+    changes: 
+    - src/*
   needs: []
   script:
     - bash buildtools/clangtidy-helper.sh
 
-    ### scan-build is a static analysis tool. This job is *slow*.
 
-clang:
+##################################################
+#                                                #
+#  Building https://inkscape.gitlab.io/inkscape  #
+#                                                #
+##################################################
+
+
+### scan-build is a static analysis tool. This job is *slow*.
+
+scan-build:
   stage: test
-  only:
-    variables:
-      - $SCHEDULED_JOB_NAME == "clang"
+  rules:
+  - if: $SCHEDULED_JOB_NAME == "clang"
   needs: []
   script:
     - apt-get update -yqq && apt-get install -y clang
@@ -229,13 +276,11 @@ clang:
     paths:
       - scan/
 
-    ### doxygen
-
+### doxygen
 source-doc:
   stage: build
-  only:
-    variables:
-      - $SCHEDULED_JOB_NAME == "source-doc"
+  rules:
+  - if: $SCHEDULED_JOB_NAME == "source-doc"
   script:
     - cd buildtools
     - doxygen Doxyfile
@@ -246,40 +291,20 @@ source-doc:
       - doc/doxygen
       - doc/doxygen-extensions
 
-################
-#              #
-#  Unit tests  #
-#              #
-################
-test:linux:
-  stage: test
-  except:
-    - schedules
-  dependencies:
-    - inkscape:linux
-  needs: ["inkscape:linux"]
-  script:
-    - sed -i '/<policy domain="coder" rights="none"/d' /etc/ImageMagick-6/policy.xml
-    - cd build
-    - ctest -V
-  artifacts:
-    paths:
-      - build/testfiles
-    when: always
 
-
-# uploads the clang scan and documentation to user.gitlab.io/inkscape/
+# uploads the clang scan to user.gitlab.io/inkscape/
 pages:
   stage: deploy
+  rules:
+  - if: $SCHEDULED_JOB_NAME == "clang"
+  - if: $SCHEDULED_JOB_NAME == "source-doc"
   cache:
     key: "cache-pages"
     paths:
       - public
-  only:
-    - schedules
   dependencies:
     - source-doc
-    - clang
+    - scan-build
   script:
     - mkdir -p public/
     - sed "s/%DATE%/$(date '+%B %d, %Y')/" buildtools/ci-index.html > public/index.html
