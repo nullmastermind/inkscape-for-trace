@@ -829,7 +829,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     ict.paint();
     if (_clip) {
         ict.pushGroup();
-        _clip->clip(ict, *carea); // fixme: carea or area?
+        _clip->clip(ict, *carea);
         ict.popGroupToSource();
         ict.setOperator(CAIRO_OPERATOR_IN);
         ict.paint();
