@@ -66,7 +66,7 @@ canvas_display_mode(int value, InkscapeWindow *win)
 
     if (value < 0 || value >= Inkscape::RENDERMODE_SIZE) {
         std::cerr << "canvas_display_mode: value out of bound! : " << value << std::endl;
-        value = 0;
+        value = Inkscape::RENDERMODE_NORMAL;
     }
 
     canvas_set_display_mode(value, win, saction);
@@ -117,15 +117,15 @@ canvas_display_mode_toggle(InkscapeWindow *win)
         return;
     }
 
-    static int old_value = 1;
+    static int old_value = Inkscape::RENDERMODE_OUTLINE;
 
     int value = -1;
     saction->get_state(value);
-    if (value == 0) {
+    if (value == Inkscape::RENDERMODE_NORMAL) {
         value = old_value;
     } else {
         old_value = value;
-        value = 0;
+        value = Inkscape::RENDERMODE_NORMAL;
     }
 
     canvas_set_display_mode(value, win, saction);
@@ -152,7 +152,7 @@ canvas_split_mode(int value, InkscapeWindow *win)
 
     if (value < 0 || value >= Inkscape::SPLITMODE_SIZE) {
         std::cerr << "canvas_split_mode: value out of bound! : " << value << std::endl;
-        value = 0;
+        value = Inkscape::SPLITMODE_NORMAL;
     }
 
     saction->change_state(value);

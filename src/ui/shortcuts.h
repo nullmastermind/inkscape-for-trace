@@ -88,6 +88,7 @@ public:
     static Glib::ustring get_label(const Gtk::AccelKey& shortcut);
     static Glib::ustring get_modifiers_verb(unsigned int mod_val);
     static Gtk::AccelKey get_from_event(GdkEventKey const *event, bool fix = false);
+    std::vector<Glib::ustring> list_all_detailed_action_names();
     std::vector<Glib::ustring> list_all_actions();
 
     // Will disappear after verbs are gone. (Use Gtk::AccelGroup functions instead for actions.)

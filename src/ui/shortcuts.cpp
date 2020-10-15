@@ -27,6 +27,7 @@
 #include <gtkmm.h>
 
 #include "preferences.h"
+#include "inkscape-application.h"
 #include "inkscape-window.h"
 
 #include "verbs.h"
@@ -487,6 +488,15 @@ Shortcuts::invoke_verb(GdkEventKey const *event, UI::View::View *view)
     return false;
 }
 
+// Get a list of detailed action names (as defined in action extra data).
+// This is more useful for shortcuts than a list of all actions.
+std::vector<Glib::ustring>
+Shortcuts::list_all_detailed_action_names()
+{
+    auto iapp = dynamic_cast<InkscapeApplication*>(app.get());
+    InkActionExtraData& action_data = iapp->get_action_extra_data();
+    return action_data.get_actions();
+}
 
 // Get a list of all actions (application, window, and document), properly prefixed.
 // We need to do this ourselves as Gtk::Application does not have a function for this.
@@ -559,7 +569,8 @@ Shortcuts::add_user_shortcut(Glib::ustring name, const Gtk::AccelKey& shortcut) 
         // If not verb, it must be an action!
         bool found = false;
 
-        for (auto action : list_all_actions()) {
+        list_all_detailed_action_names();
+        for (auto action : list_all_detailed_action_names()) {
             if (action == name) {
                 // Action exists
                 app->set_accel_for_action(action, accel);
@@ -598,7 +609,7 @@ Shortcuts::remove_user_shortcut(Glib::ustring name, const Gtk::AccelKey& shortcu
         removed = true;
     } else {
         // If not verb, it must be an action!
-        for (auto action : list_all_actions()) {
+        for (auto action : list_all_detailed_action_names()) {
             if (action == name) {
                 // Action exists
                 app->unset_accels_for_action(action);
