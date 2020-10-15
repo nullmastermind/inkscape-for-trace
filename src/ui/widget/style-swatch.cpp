@@ -31,7 +31,6 @@
 #include "util/units.h"
 
 #include "widgets/spw-utilities.h"
-#include "widgets/widget-sizes.h"
 
 #include "xml/sp-css-attr.h"
 #include "xml/attribute-record.h"

@@ -30,6 +30,9 @@
 
 #include "rotateable.h"
 
+constexpr int SELECTED_STYLE_SB_WIDTH = 48;
+constexpr int SELECTED_STYLE_WIDTH = 190;
+
 class SPDesktop;
 
 namespace Inkscape {

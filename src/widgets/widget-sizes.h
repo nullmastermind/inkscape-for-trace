@@ -26,10 +26,6 @@
 #define STATUS_ZOOM_WIDTH 57
 #define STATUS_ROTATION_WIDTH 57
 
-#define SELECTED_STYLE_SB_WIDTH 48
-#define SELECTED_STYLE_WIDTH 190
-#define STYLE_SWATCH_WIDTH 135
-
 /*
   Local Variables:
   mode:c++

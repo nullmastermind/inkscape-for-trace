@@ -22,6 +22,8 @@
 #include "desktop.h"
 #include "preferences.h"
 
+constexpr int STYLE_SWATCH_WIDTH = 135;
+
 class SPStyle;
 class SPCSSAttr;
 

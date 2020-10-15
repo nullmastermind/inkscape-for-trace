@@ -52,7 +52,6 @@
 
 #include "widgets/ege-paint-def.h"
 #include "widgets/spw-utilities.h"
-#include "widgets/widget-sizes.h"
 
 using Inkscape::Util::unit_table;
 
