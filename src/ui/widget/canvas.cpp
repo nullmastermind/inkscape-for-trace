@@ -330,7 +330,7 @@ Canvas::scroll_to(Geom::Point const &c, bool clear)
 
     // Copy backing store
     shift_content(Geom::IntPoint(dx, dy), _backing_store);
-    if (_split_mode != Inkscape::SPLITMODE_NORMAL || _drawing->outlineOverlay()) {
+    if (_split_mode != Inkscape::SplitMode::NORMAL || _drawing->outlineOverlay()) {
         shift_content(Geom::IntPoint(dx, dy), _outline_store);
     }
 
@@ -501,7 +501,7 @@ Canvas::on_button_event(GdkEventButton *button_event)
     switch (button_event->type) {
         case GDK_BUTTON_PRESS:
 
-            if (_hover_direction != Inkscape::SPLITDIRECTION_NONE) {
+            if (_hover_direction != Inkscape::SplitDirection::NONE) {
                 // We're hovering over Split controller.
                 _split_dragging = true;
                 _split_drag_start = Geom::Point(button_event->x, button_event->y);
@@ -511,7 +511,7 @@ Canvas::on_button_event(GdkEventButton *button_event)
 
         case GDK_2BUTTON_PRESS:
 
-            if (_hover_direction != Inkscape::SPLITDIRECTION_NONE) {
+            if (_hover_direction != Inkscape::SplitDirection::NONE) {
                 _split_direction = _hover_direction;
                 _split_dragging = false;
                 queue_draw();
@@ -619,14 +619,14 @@ Canvas::on_motion_notify_event(GdkEventMotion *motion_event)
 
     if (_desktop) {
     // Check if we are near the edge. If so, revert to normal mode.
-    if (_split_mode == Inkscape::SPLITMODE_SPLIT && _split_dragging) {
+    if (_split_mode == Inkscape::SplitMode::SPLIT && _split_dragging) {
         if (cursor_position.x() < 5                             ||
             cursor_position.y() < 5                             ||
             cursor_position.x() - _allocation.get_width()  > -5 ||
             cursor_position.y() - _allocation.get_height() > -5 ) {
 
             // Reset everything.
-            _split_mode = Inkscape::SPLITMODE_NORMAL;
+            _split_mode = Inkscape::SplitMode::NORMAL;
             _split_position = Geom::Point(-1, -1);
             set_cursor();
             queue_draw();
@@ -650,28 +650,28 @@ Canvas::on_motion_notify_event(GdkEventMotion *motion_event)
                 return true;
             }
 
-            saction->change_state((int)Inkscape::SPLITMODE_NORMAL);
+            saction->change_state((int)Inkscape::SplitMode::NORMAL);
 
             return true;
         }
     }
 
-    if (_split_mode == Inkscape::SPLITMODE_XRAY) {
+    if (_split_mode == Inkscape::SplitMode::XRAY) {
         _split_position = cursor_position;
         queue_draw(); // Re-blit
     }
 
-    if (_split_mode == Inkscape::SPLITMODE_SPLIT) {
+    if (_split_mode == Inkscape::SplitMode::SPLIT) {
 
-        Inkscape::SplitDirection hover_direction = Inkscape::SPLITDIRECTION_NONE;
+        Inkscape::SplitDirection hover_direction = Inkscape::SplitDirection::NONE;
         Geom::Point difference(cursor_position - _split_position);
 
         // Move controller
         if (_split_dragging) {
             Geom::Point delta = cursor_position - _split_drag_start; // We don't use _split_position
-            if (_hover_direction == Inkscape::SPLITDIRECTION_HORIZONTAL) {
+            if (_hover_direction == Inkscape::SplitDirection::HORIZONTAL) {
                 _split_position += Geom::Point(0, delta.y());
-            } else if (_hover_direction == Inkscape::SPLITDIRECTION_VERTICAL) {
+            } else if (_hover_direction == Inkscape::SplitDirection::VERTICAL) {
                 _split_position += Geom::Point(delta.x(), 0);
             } else {
                 _split_position += delta;
@@ -686,27 +686,27 @@ Canvas::on_motion_notify_event(GdkEventMotion *motion_event)
             // We're hovering over circle, figure out which direction we are in.
             if (difference.y() - difference.x() > 0) {
                 if (difference.y() + difference.x() > 0) {
-                    hover_direction = Inkscape::SPLITDIRECTION_SOUTH;
+                    hover_direction = Inkscape::SplitDirection::SOUTH;
                 } else {
-                    hover_direction = Inkscape::SPLITDIRECTION_WEST;
+                    hover_direction = Inkscape::SplitDirection::WEST;
                 }
             } else {
                 if (difference.y() + difference.x() > 0) {
-                    hover_direction = Inkscape::SPLITDIRECTION_EAST;
+                    hover_direction = Inkscape::SplitDirection::EAST;
                 } else {
-                    hover_direction = Inkscape::SPLITDIRECTION_NORTH;
+                    hover_direction = Inkscape::SplitDirection::NORTH;
                 }
             }
-        } else if (_split_direction == Inkscape::SPLITDIRECTION_NORTH ||
-                   _split_direction == Inkscape::SPLITDIRECTION_SOUTH) {
+        } else if (_split_direction == Inkscape::SplitDirection::NORTH ||
+                   _split_direction == Inkscape::SplitDirection::SOUTH) {
             if (std::abs(difference.y()) < 3 * _device_scale) {
                 // We're hovering over horizontal line
-                hover_direction = Inkscape::SPLITDIRECTION_HORIZONTAL;
+                hover_direction = Inkscape::SplitDirection::HORIZONTAL;
             }
         } else {
             if (std::abs(difference.x()) < 3 * _device_scale) {
                // We're hovering over vertical line
-                hover_direction = Inkscape::SPLITDIRECTION_VERTICAL;
+                hover_direction = Inkscape::SplitDirection::VERTICAL;
             }
         }
 
@@ -716,7 +716,7 @@ Canvas::on_motion_notify_event(GdkEventMotion *motion_event)
             queue_draw();
         }
 
-        if (_hover_direction != Inkscape::SPLITDIRECTION_NONE) {
+        if (_hover_direction != Inkscape::SplitDirection::NONE) {
             // We're hovering, don't pick or emit event.
             return true;
         }
@@ -800,7 +800,7 @@ Canvas::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr)
         cr->set_source(_backing_store, 0, 0);
         cr->paint();
     }
-    if (_split_mode != Inkscape::SPLITMODE_NORMAL) {
+    if (_split_mode != Inkscape::SplitMode::NORMAL) {
         auto const rect = Geom::Rect(0, 0, _width, _height);
         if (!rect.contains(_split_position)) {
             _split_position = rect.midpoint();
@@ -814,14 +814,14 @@ Canvas::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr)
         cr->restore();
     }
 
-    if (_split_mode == Inkscape::SPLITMODE_SPLIT) {
+    if (_split_mode == Inkscape::SplitMode::SPLIT) {
 
         // Add dividing line.
         cr->save();
         cr->set_source_rgb(0, 0, 0);
         cr->set_line_width(1);
-        if (_split_direction == Inkscape::SPLITDIRECTION_EAST ||
-            _split_direction == Inkscape::SPLITDIRECTION_WEST) {
+        if (_split_direction == Inkscape::SplitDirection::EAST ||
+            _split_direction == Inkscape::SplitDirection::WEST) {
             cr->move_to((int)_split_position.x() + 0.5,                        0);
             cr->line_to((int)_split_position.x() + 0.5, _allocation.get_height());
             cr->stroke();
@@ -833,7 +833,7 @@ Canvas::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr)
         cr->restore();
 
         // Add controller image.
-        double a = _hover_direction == Inkscape::SPLITDIRECTION_NONE ? 0.5 : 1.0;
+        double a = _hover_direction == Inkscape::SplitDirection::NONE ? 0.5 : 1.0;
         cr->save();
         cr->set_source_rgba(0.2, 0.2, 0.2, a);
         cr->arc(_split_position.x(), _split_position.y(), 20 * _device_scale, 0, 2 * M_PI);
@@ -855,7 +855,7 @@ Canvas::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr)
             cr->line_to( 5 * _device_scale,  8 * _device_scale);
             cr->close_path();
 
-            double b = _hover_direction == (i+1) ? 0.9 : 0.7;
+            double b = (int)_hover_direction == (i+1) ? 0.9 : 0.7;
             cr->set_source_rgba(b, b, b, a);
             cr->fill();
 
@@ -1054,7 +1054,7 @@ Canvas::paint_rect(Cairo::RectangleInt& rect)
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     unsigned tile_multiplier = prefs->getIntLimited("/options/rendering/tile-multiplier", 16, 1, 512);
-    if (_render_mode != Inkscape::RENDERMODE_OUTLINE) {
+    if (_render_mode != Inkscape::RenderMode::OUTLINE) {
         // Can't be too small or large gradient will be rerendered too many times!
         setup.max_pixels = 65536 * tile_multiplier;
     } else {
@@ -1123,11 +1123,11 @@ Canvas::paint_rect_internal(PaintRectSetup const *setup, Geom::IntRect const &th
 
         paint_single_buffer(this_rect, setup->canvas_rect, _backing_store);
         bool outline_overlay = _drawing->outlineOverlay();
-        if (_split_mode != Inkscape::SPLITMODE_NORMAL || outline_overlay) {
-            _drawing->setRenderMode(Inkscape::RENDERMODE_OUTLINE);
+        if (_split_mode != Inkscape::SplitMode::NORMAL || outline_overlay) {
+            _drawing->setRenderMode(Inkscape::RenderMode::OUTLINE);
             paint_single_buffer(this_rect, setup->canvas_rect, _outline_store);
             if (outline_overlay) {
-                _drawing->setRenderMode(Inkscape::RENDERMODE_OUTLINE_OVERLAY);
+                _drawing->setRenderMode(Inkscape::RenderMode::OUTLINE_OVERLAY);
             }
         }
 
@@ -1365,20 +1365,23 @@ Canvas::add_clippath(const Cairo::RefPtr<Cairo::Context>& cr) {
     double sx     = _split_position.x();
     double sy     = _split_position.y();
 
-    if (_split_mode == Inkscape::SPLITMODE_SPLIT) {
+    if (_split_mode == Inkscape::SplitMode::SPLIT) {
         // We're clipping the outline region... so it's backwards.
         switch (_split_direction) {
-            case Inkscape::SPLITDIRECTION_SOUTH:
+            case Inkscape::SplitDirection::SOUTH:
                 cr->rectangle(0,   0, width,               sy);
                 break;
-            case Inkscape::SPLITDIRECTION_NORTH:
+            case Inkscape::SplitDirection::NORTH:
                 cr->rectangle(0,  sy, width,      height - sy);
                 break;
-            case Inkscape::SPLITDIRECTION_EAST:
+            case Inkscape::SplitDirection::EAST:
                 cr->rectangle(0,   0,         sx, height     );
                 break;
-            case Inkscape::SPLITDIRECTION_WEST:
+            case Inkscape::SplitDirection::WEST:
                 cr->rectangle(sx,  0, width - sx, height     );
+                break;
+            default:
+                // no clipping (for NONE, HORIZONTAL, VERTICAL)
                 break;
         }
     } else {
@@ -1400,28 +1403,28 @@ Canvas::set_cursor() {
 
     switch (_hover_direction) {
 
-        case Inkscape::SPLITDIRECTION_NONE:
+        case Inkscape::SplitDirection::NONE:
             get_window()->set_cursor(_desktop->event_context->cursor);
             break;
 
-        case Inkscape::SPLITDIRECTION_NORTH:
-        case Inkscape::SPLITDIRECTION_EAST:
-        case Inkscape::SPLITDIRECTION_SOUTH:
-        case Inkscape::SPLITDIRECTION_WEST:
+        case Inkscape::SplitDirection::NORTH:
+        case Inkscape::SplitDirection::EAST:
+        case Inkscape::SplitDirection::SOUTH:
+        case Inkscape::SplitDirection::WEST:
         {
             auto cursor = Gdk::Cursor::create(display, "pointer");
             get_window()->set_cursor(cursor);
             break;
         }
 
-        case Inkscape::SPLITDIRECTION_HORIZONTAL:
+        case Inkscape::SplitDirection::HORIZONTAL:
         {
             auto cursor = Gdk::Cursor::create(display, "ns-resize");
             get_window()->set_cursor(cursor);
             break;
         }
 
-        case Inkscape::SPLITDIRECTION_VERTICAL:
+        case Inkscape::SplitDirection::VERTICAL:
         {
             auto cursor = Gdk::Cursor::create(display, "ew-resize");
             get_window()->set_cursor(cursor);
@@ -1524,12 +1527,12 @@ Canvas::pick_current_item(GdkEvent *event)
 
         // If in split mode, look at where cursor is to see if one should pick with outline mode.
         _drawing->setRenderMode(_render_mode);
-        if (_split_mode == Inkscape::SPLITMODE_SPLIT && !_drawing->outlineOverlay()) {
-            if ((_split_direction == Inkscape::SPLITDIRECTION_NORTH && y > _split_position.y()) ||
-                (_split_direction == Inkscape::SPLITDIRECTION_SOUTH && y < _split_position.y()) ||
-                (_split_direction == Inkscape::SPLITDIRECTION_WEST  && x > _split_position.x()) ||
-                (_split_direction == Inkscape::SPLITDIRECTION_EAST  && x < _split_position.x()) ) {
-                _drawing->setRenderMode(Inkscape::RENDERMODE_OUTLINE);
+        if (_split_mode == Inkscape::SplitMode::SPLIT && !_drawing->outlineOverlay()) {
+            if ((_split_direction == Inkscape::SplitDirection::NORTH && y > _split_position.y()) ||
+                (_split_direction == Inkscape::SplitDirection::SOUTH && y < _split_position.y()) ||
+                (_split_direction == Inkscape::SplitDirection::WEST  && x > _split_position.x()) ||
+                (_split_direction == Inkscape::SplitDirection::EAST  && x < _split_position.x()) ) {
+                _drawing->setRenderMode(Inkscape::RenderMode::OUTLINE);
             }
         }
 

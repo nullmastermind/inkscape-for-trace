@@ -100,8 +100,8 @@ public:
 
 private:
     bool _exact = false;  // if true then rendering must be exact
-    RenderMode _rendermode = RENDERMODE_NORMAL;
-    ColorMode _colormode = COLORMODE_NORMAL;
+    RenderMode _rendermode = RenderMode::NORMAL;
+    ColorMode _colormode = ColorMode::NORMAL;
     int _blur_quality = BLUR_QUALITY_BEST;
     int _filter_quality = Filters::FILTER_QUALITY_BEST;
     Geom::OptIntRect _cache_limit;

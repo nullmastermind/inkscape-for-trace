@@ -18,38 +18,37 @@
 
 namespace Inkscape {
 
-enum RenderMode {
-    RENDERMODE_NORMAL,
-    RENDERMODE_OUTLINE,
-    RENDERMODE_NO_FILTERS,
-    RENDERMODE_VISIBLE_HAIRLINES,
-    RENDERMODE_OUTLINE_OVERLAY
-};
-const size_t RENDERMODE_SIZE = 5;
-
-enum SplitMode {
-    SPLITMODE_NORMAL,
-    SPLITMODE_SPLIT,
-    SPLITMODE_XRAY
-};
-const size_t SPLITMODE_SIZE = 3;
-
-enum SplitDirection {
-    SPLITDIRECTION_NONE,
-    SPLITDIRECTION_NORTH,
-    SPLITDIRECTION_EAST,
-    SPLITDIRECTION_SOUTH,
-    SPLITDIRECTION_WEST,
-    SPLITDIRECTION_HORIZONTAL, // Only used when hovering
-    SPLITDIRECTION_VERTICAL    // Only used when hovering
+enum class RenderMode {
+    NORMAL,
+    OUTLINE,
+    NO_FILTERS,
+    VISIBLE_HAIRLINES,
+    OUTLINE_OVERLAY,
+    size
 };
 
-enum ColorMode {
-    COLORMODE_NORMAL,
-    COLORMODE_GRAYSCALE,
-    COLORMODE_PRINT_COLORS_PREVIEW
+enum class SplitMode {
+    NORMAL,
+    SPLIT,
+    XRAY,
+    size
 };
-const size_t COLORMODE_SIZE = 3;
+
+enum class SplitDirection {
+    NONE,
+    NORTH,
+    EAST,
+    SOUTH,
+    WEST,
+    HORIZONTAL, // Only used when hovering
+    VERTICAL    // Only used when hovering
+};
+
+enum class ColorMode {
+    NORMAL,
+    GRAYSCALE,
+    PRINT_COLORS_PREVIEW
+};
 
 } // Namespace Inkscape
 

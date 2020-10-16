@@ -213,14 +213,14 @@ private:
     CanvasItemGroup *_canvas_item_root = nullptr;
     Inkscape::Drawing *_drawing = nullptr;
 
-    Inkscape::RenderMode _render_mode = Inkscape::RENDERMODE_NORMAL;
-    Inkscape::SplitMode  _split_mode  = Inkscape::SPLITMODE_NORMAL;
+    Inkscape::RenderMode _render_mode = Inkscape::RenderMode::NORMAL;
+    Inkscape::SplitMode  _split_mode  = Inkscape::SplitMode::NORMAL;
     Geom::Point _split_position{-1, -1}; // initialize with off-canvas coordinates
-    Inkscape::SplitDirection _split_direction   = Inkscape::SPLITDIRECTION_EAST;
-    Inkscape::SplitDirection _hover_direction   = Inkscape::SPLITDIRECTION_NONE;
+    Inkscape::SplitDirection _split_direction   = Inkscape::SplitDirection::EAST;
+    Inkscape::SplitDirection _hover_direction   = Inkscape::SplitDirection::NONE;
     bool _split_dragging = false;
     Geom::Point _split_drag_start;
-    Inkscape::ColorMode  _color_mode  = Inkscape::COLORMODE_NORMAL;
+    Inkscape::ColorMode  _color_mode  = Inkscape::ColorMode::NORMAL;
 
 #if defined(HAVE_LIBLCMS2)
     std::string _cms_key;

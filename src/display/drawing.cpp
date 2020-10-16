@@ -58,37 +58,37 @@ Drawing::setRoot(DrawingItem *item)
 RenderMode
 Drawing::renderMode() const
 {
-    return _exact ? RENDERMODE_NORMAL : _rendermode;
+    return _exact ? RenderMode::NORMAL : _rendermode;
 }
 ColorMode
 Drawing::colorMode() const
 {
-    return (outline() || _exact) ? COLORMODE_NORMAL : _colormode;
+    return (outline() || _exact) ? ColorMode::NORMAL : _colormode;
 }
 bool
 Drawing::outline() const
 {
-    return renderMode() == RENDERMODE_OUTLINE;
+    return renderMode() == RenderMode::OUTLINE;
 }
 bool
 Drawing::visibleHairlines() const
 {
-    return renderMode() == RENDERMODE_VISIBLE_HAIRLINES;
+    return renderMode() == RenderMode::VISIBLE_HAIRLINES;
 }
 bool
 Drawing::outlineOverlay() const
 {
-    return renderMode() == RENDERMODE_OUTLINE_OVERLAY;
+    return renderMode() == RenderMode::OUTLINE_OVERLAY;
 }
 bool
 Drawing::renderFilters() const
 {
-    return renderMode() == RENDERMODE_NORMAL || renderMode() == RENDERMODE_VISIBLE_HAIRLINES || renderMode() == RENDERMODE_OUTLINE_OVERLAY;
+    return renderMode() == RenderMode::NORMAL || renderMode() == RenderMode::VISIBLE_HAIRLINES || renderMode() == RenderMode::OUTLINE_OVERLAY;
 }
 int
 Drawing::blurQuality() const
 {
-    if (renderMode() == RENDERMODE_NORMAL) {
+    if (renderMode() == RenderMode::NORMAL) {
         return _exact ? BLUR_QUALITY_BEST : _blur_quality;
     } else {
         return BLUR_QUALITY_WORST;
@@ -97,7 +97,7 @@ Drawing::blurQuality() const
 int
 Drawing::filterQuality() const
 {
-    if (renderMode() == RENDERMODE_NORMAL) {
+    if (renderMode() == RenderMode::NORMAL) {
         return _exact ? Filters::FILTER_QUALITY_BEST : _filter_quality;
     } else {
         return Filters::FILTER_QUALITY_WORST;
@@ -184,7 +184,7 @@ Drawing::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flags, i
         _root->setAntialiasing(prev_a);
     }
 
-    if (colorMode() == COLORMODE_GRAYSCALE) {
+    if (colorMode() == ColorMode::GRAYSCALE) {
         // apply grayscale filter on top of everything
         cairo_surface_t *input = dc.rawTarget();
         cairo_surface_t *out = ink_cairo_surface_create_identical(input);

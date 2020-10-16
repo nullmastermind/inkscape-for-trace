@@ -536,25 +536,24 @@ SPDesktopWidget::updateTitle(gchar const* uri)
         auto render_mode = desktop->getCanvas()->get_render_mode();
         auto color_mode  = desktop->getCanvas()->get_color_mode();
 
-        if (render_mode == Inkscape::RENDERMODE_OUTLINE) {
+        if (render_mode == Inkscape::RenderMode::OUTLINE) {
             Name += N_("outline");
-        } else if (render_mode == Inkscape::RENDERMODE_NO_FILTERS) {
+        } else if (render_mode == Inkscape::RenderMode::NO_FILTERS) {
             Name += N_("no filters");
-        } else if (render_mode == Inkscape::RENDERMODE_VISIBLE_HAIRLINES) {
+        } else if (render_mode == Inkscape::RenderMode::VISIBLE_HAIRLINES) {
             Name += N_("visible hairlines");
-        } else if (render_mode == Inkscape::RENDERMODE_OUTLINE_OVERLAY) {
+        } else if (render_mode == Inkscape::RenderMode::OUTLINE_OVERLAY) {
             Name += N_("outline overlay");
         }
 
-
-        if (color_mode != Inkscape::COLORMODE_NORMAL &&
-            render_mode != Inkscape::RENDERMODE_NORMAL) {
+        if (color_mode != Inkscape::ColorMode::NORMAL &&
+            render_mode != Inkscape::RenderMode::NORMAL) {
                 Name += ", ";
         }
 
-        if (color_mode == Inkscape::COLORMODE_GRAYSCALE) {
+        if (color_mode == Inkscape::ColorMode::GRAYSCALE) {
             Name += N_("grayscale");
-        } else if (color_mode == Inkscape::COLORMODE_PRINT_COLORS_PREVIEW) {
+        } else if (color_mode == Inkscape::ColorMode::PRINT_COLORS_PREVIEW) {
             Name += N_("print colors preview");
         }
 
