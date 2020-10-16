@@ -42,7 +42,7 @@ FilterColorMatrix::ColorMatrixMatrix::ColorMatrixMatrix(std::vector<double> cons
         }
     }
     for (unsigned i = limit; i < 20; ++i) {
-        _v[i] = 0;
+        _v[i] = (i % 6 == 0) ? 255 : 0;
     }
 }
 
