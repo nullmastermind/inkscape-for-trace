@@ -497,6 +497,32 @@ void Script::save(Inkscape::Extension::Output *module,
 }
 
 
+void Script::export_raster(Inkscape::Extension::Output *module,
+             const std::string png_file,
+             const gchar *filenameArg)
+{
+    if(!module->is_raster()) {
+        g_error("Can not export raster to non-raster extension.");
+        return;
+    }
+
+    std::list<std::string> params;
+    module->paramListString(params);
+    module->set_environment();
+
+    file_listener fileout;
+    int data_read = execute(command, params, png_file, fileout);
+
+    bool success = false;
+    if (data_read > 0) {
+        std::string lfilename = Glib::filename_from_utf8(filenameArg);
+        success = fileout.toFile(lfilename);
+    }
+    if (success == false) {
+        throw Inkscape::Extension::Output::save_failed();
+    }
+    return;
+}
 
 /**
     \return    none

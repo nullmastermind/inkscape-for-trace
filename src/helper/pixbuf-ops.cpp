@@ -55,27 +55,6 @@ static void hide_other_items_recursively(SPObject *o, SPItem *i, unsigned dkey)
 }
 
 
-// The following is a mutation of the flood fill code, the marker preview, and random other samplings.
-// The dpi settings don't do anything yet, but I want them to, and was wanting to keep reasonably close
-// to the call for the interface to the png writing.
-
-bool sp_export_jpg_file(SPDocument *doc, gchar const *filename,
-                        double x0, double y0, double x1, double y1,
-                        unsigned width, unsigned height, double xdpi, double ydpi,
-                        unsigned long bgcolor, double quality, SPItem* item)
-{
-    std::unique_ptr<Inkscape::Pixbuf> pixbuf(
-        sp_generate_internal_bitmap(doc, filename, x0, y0, x1, y1,
-            width, height, xdpi, ydpi, bgcolor, item));
-
-    gchar c[32];
-    g_snprintf(c, 32, "%f", quality);
-    gboolean saved = gdk_pixbuf_save(pixbuf->getPixbufRaw(), filename, "jpeg", nullptr, "quality", c, NULL);
- 
-    return saved;
-}
-
-
 /**
     generates a bitmap from given items
     the bitmap is stored in RAM and not written to file
@@ -147,8 +126,6 @@ Inkscape::Pixbuf *sp_generate_internal_bitmap(SPDocument *doc, gchar const */*fi
         cairo_surface_destroy(surface);
     }
     doc->getRoot()->invoke_hide(dkey);
-
-//    gdk_pixbuf_save (pixbuf, "C:\\temp\\internal.jpg", "jpeg", NULL, "quality","100", NULL);
 
     return inkpb;
 }

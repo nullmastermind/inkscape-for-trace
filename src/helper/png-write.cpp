@@ -492,14 +492,6 @@ ExportResult sp_export_png_file(SPDocument *doc, gchar const *filename,
     // Hide items, this releases arenaitem
     doc->getRoot()->invoke_hide(dkey);
 
-    if(write_status == EXPORT_OK) {
-        auto recentmanager = Gtk::RecentManager::get_default();
-        if(recentmanager && Glib::path_is_absolute(filename)) {
-            Glib::ustring uri = Glib::filename_to_uri(filename);
-            recentmanager->add_item(uri);
-        }
-    }
-
     return write_status ? EXPORT_OK : EXPORT_ERROR;
 }
 

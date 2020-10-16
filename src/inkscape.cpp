@@ -43,7 +43,6 @@
 
 #include "extension/db.h"
 #include "extension/init.h"
-#include "extension/output.h"
 #include "extension/system.h"
 
 #include "helper/action-context.h"

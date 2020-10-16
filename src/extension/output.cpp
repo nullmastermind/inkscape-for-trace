@@ -48,7 +48,8 @@ Output::Output (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
     extension = nullptr;
     filetypename = nullptr;
     filetypetooltip = nullptr;
-	dataloss = TRUE;
+    dataloss = true;
+    raster = false;
 
     if (repr != nullptr) {
         Inkscape::XML::Node * child_repr;
@@ -57,6 +58,11 @@ Output::Output (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
 
         while (child_repr != nullptr) {
             if (!strcmp(child_repr->name(), INKSCAPE_EXTENSION_NS "output")) {
+
+                if (child_repr->attribute("raster") && !strcmp(child_repr->attribute("raster"), "true")) {
+                     raster = true;
+                }
+
                 child_repr = child_repr->firstChild();
                 while (child_repr != nullptr) {
                     char const * chname = child_repr->name();
@@ -238,6 +244,22 @@ Output::save(SPDocument *doc, gchar const *filename, bool detachbase)
 
 	return;
 }
+
+/**
+    \return  None
+    \brief   Save a rendered png as a raster output
+    \param   png_filename source png file.
+    \param   filename  File to save the raster as
+
+*/
+void
+Output::export_raster(std::string png_filename, gchar const *filename, bool detachbase)
+{
+    imp->setDetachBase(detachbase);
+    imp->export_raster(this, png_filename, filename);
+    return;
+}
+
 
 } }  /* namespace Inkscape, Extension */
 

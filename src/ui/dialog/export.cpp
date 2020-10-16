@@ -946,17 +946,6 @@ Export::create_progress_dialog(Glib::ustring progress_text)
     return dlg;
 }
 
-// FIXME: Some lib function should be available to do this ...
-static Glib::ustring filename_add_extension(Glib::ustring filename, Glib::ustring extension)
-{
-    auto pos = int(filename.size()) - int(extension.size());
-    if (pos > 0 && filename[pos - 1] == '.' && filename.substr(pos).lowercase() == extension.lowercase()) {
-        return filename;
-    }
-
-    return filename + "." + extension;
-}
-
 static std::string absolutize_path_from_document_location(SPDocument *doc, const std::string &filename)
 {
     std::string path;
@@ -1126,11 +1115,7 @@ void Export::onExport ()
             return;
         }
 
-        // make sure that .png is the extension of the file:
-        Glib::ustring const filename_ext = filename_add_extension(filename, "png");
-        filename_entry.set_text(filename_ext);
-        filename_entry.set_position(filename_ext.length());
-        std::string path = absolutize_path_from_document_location(doc, Glib::filename_from_utf8(filename_ext));
+        std::string path = absolutize_path_from_document_location(doc, Glib::filename_from_utf8(filename));
 
         Glib::ustring dirname = Glib::path_get_dirname(path);
         if ( dirname.empty()
@@ -1159,15 +1144,37 @@ void Export::onExport ()
         prog_dlg->set_total(0);
 
         auto area = Geom::Rect(Geom::Point(x0, y0), Geom::Point(x1, y1)) * desktop->dt2doc();
+        bool overwrite = false;
+
+        // Select a raster output extension if not a png file, this can be unpicked
+        // At some future point so png is just another type of internal output extension
+        Inkscape::Extension::Output *extension = nullptr;
+        auto png_filename = std::string(path.c_str());
+        if (!Glib::str_has_suffix(filename, ".png")) {
+            Inkscape::Extension::DB::OutputList extension_list;
+            Inkscape::Extension::db.get_output_list(extension_list);
+            for (auto output_ext : extension_list) {
+                if (output_ext->deactivated() || !output_ext->is_raster())
+                    continue;
+                if(Glib::str_has_suffix(path.c_str(), output_ext->get_extension())) {
+                    // Select the extension and set the filename to a temporary file
+                    int tempfd_out = Glib::file_open_tmp(png_filename, "ink_ext_");
+                    overwrite = true;
+                    close(tempfd_out);
+                    extension = output_ext;
+                    break;
+                }
+            }
+        }
 
         /* Do export */
         std::vector<SPItem*> x;
         std::vector<SPItem*> selected(desktop->getSelection()->items().begin(), desktop->getSelection()->items().end());
-        ExportResult status = sp_export_png_file(desktop->getDocument(), path.c_str(),
+        ExportResult status = sp_export_png_file(desktop->getDocument(), png_filename.c_str(),
                               area, width, height, pHYs, pHYs, //previously xdpi, ydpi.
                               nv->pagecolor,
                               onProgressCallback, (void*)prog_dlg,
-                              FALSE,
+                              overwrite,
                               hide ? selected : x, 
                               do_interlace, color_type, bit_depth, zlib, antialiasing
                               );
@@ -1181,24 +1188,50 @@ void Export::onExport ()
             g_free(safeFile);
             g_free(error);
         } else if (status == EXPORT_OK) {
+
             exportSuccessful = true;
-            gchar *safeFile = Inkscape::IO::sanitizeString(path.c_str());
+            if(extension != nullptr) {
+                // Remove progress dialog before showing prefs dialog.
+                delete prog_dlg;
+                prog_dlg = nullptr;
+                if(extension->prefs()) {
+                    try {
+                        extension->export_raster(png_filename, path.c_str(), false);
+                    } catch (Inkscape::Extension::Output::save_failed &e) {
+                        exportSuccessful = false;
+                    }
+                }
+            }
 
-            desktop->messageStack()->flashF(Inkscape::INFORMATION_MESSAGE, _("Drawing exported to <b>%s</b>."), safeFile);
+            if (exportSuccessful) {
+                auto recentmanager = Gtk::RecentManager::get_default();
+                if(recentmanager && Glib::path_is_absolute(path)) {
+                    Glib::ustring uri = Glib::filename_to_uri(path);
+                    recentmanager->add_item(uri);
+                }
 
-            g_free(safeFile);
+                gchar *safeFile = Inkscape::IO::sanitizeString(path.c_str());
+                desktop->messageStack()->flashF(Inkscape::INFORMATION_MESSAGE, _("Drawing exported to <b>%s</b>."), safeFile);
+                g_free(safeFile);
+            }
         } else {
+            // Extensions have their own error popup, so this only tracks failures in the png step
             desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Export aborted."));
+        }
+        if (extension != nullptr) {
+            unlink(png_filename.c_str());
         }
 
         /* Reset the filename so that it can be changed again by changing
            selections and all that */
-        original_name = filename_ext;
+        original_name = filename;
         filename_modified = false;
 
         setExporting(false);
-        delete prog_dlg;
-        prog_dlg = nullptr;
+        if(prog_dlg) {
+            delete prog_dlg;
+            prog_dlg = nullptr;
+        }
         interrupted = false;
 
         /* Setup the values in the document */
@@ -1213,8 +1246,8 @@ void Export::onExport ()
             DocumentUndo::setUndoSensitive(doc, false);
 
             gchar const *temp_string = repr->attribute("inkscape:export-filename");
-            if (temp_string == nullptr || (filename_ext != temp_string)) {
-                repr->setAttribute("inkscape:export-filename", filename_ext);
+            if (temp_string == nullptr || (filename != temp_string)) {
+                repr->setAttribute("inkscape:export-filename", filename);
                 modified = true;
             }
             temp_string = repr->attribute("inkscape:export-xdpi");
@@ -1253,12 +1286,12 @@ void Export::onExport ()
                     docdir = Glib::path_get_dirname(docURI);
                 }
                 if (repr->attribute("id") == nullptr ||
-                        !(filename_ext.find_last_of(repr->attribute("id")) &&
+                        !(filename.find_last_of(repr->attribute("id")) &&
                           ( !docURI ||
                             (dir == docdir)))) {
                     temp_string = repr->attribute("inkscape:export-filename");
-                    if (temp_string == nullptr || (filename_ext != temp_string)) {
-                        repr->setAttribute("inkscape:export-filename", filename_ext);
+                    if (temp_string == nullptr || (filename != temp_string)) {
+                        repr->setAttribute("inkscape:export-filename", filename);
                         modified = true;
                     }
                 }

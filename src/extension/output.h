@@ -26,6 +26,7 @@ class Output : public Extension {
     gchar *filetypename;         /**< A userfriendly name for the file type */
     gchar *filetypetooltip;      /**< A more detailed description of the filetype */
     bool   dataloss;             /**< The extension causes data loss on save */
+    bool   raster;               /**< Is the extension expecting a png file */
 
 public:
     class save_failed {};        /**< Generic failure for an undescribed reason */
@@ -46,12 +47,16 @@ public:
     void         save (SPDocument *doc,
                        gchar const *filename,
                        bool detachbase = false);
+    void         export_raster (std::string png_filename,
+                                gchar const *filename,
+                                bool detachbase);
     bool         prefs ();
     gchar *      get_mimetype();
     gchar *      get_extension();
     const char * get_filetypename(bool translated=false);
     const char * get_filetypetooltip(bool translated=false);
     bool         causes_dataloss() { return dataloss; };
+    bool         is_raster() { return raster; };
 };
 
 } }  /* namespace Inkscape, Extension */

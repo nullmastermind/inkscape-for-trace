@@ -671,7 +671,7 @@ void FileSaveDialogImplGtk::createFileTypeMenu()
 
     for (auto omod : extension_list) {
         // FIXME: would be nice to grey them out instead of not listing them
-        if (omod->deactivated())
+        if (omod->deactivated() || omod->is_raster())
             continue;
 
         FileType type;

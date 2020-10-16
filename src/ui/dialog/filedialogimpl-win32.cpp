@@ -1620,11 +1620,9 @@ void FileSaveDialogImplWin32::createFilterMenu()
     int filter_count = 0;
     int filter_length = 1;
 
-    for (Inkscape::Extension::DB::OutputList::iterator current_item = extension_list.begin();
-         current_item != extension_list.end(); ++current_item)
-    {
-        Inkscape::Extension::Output *omod = *current_item;
-        if (omod->deactivated()) continue;
+    for (auto omod : extension_list) {
+
+        if (omod->deactivated() || omod->is_raster()) continue;
 
         filter_count++;
 
