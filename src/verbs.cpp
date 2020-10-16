@@ -1283,7 +1283,6 @@ void SelectionVerb::perform(SPAction *action, void *data)
             tools_switch(dt, TOOLS_NODES);
             break;
         case SP_VERB_SELECTION_OUTLINE:
-            selection->toCurves(true);
             selection->strokesToPaths();
             break;
         case SP_VERB_SELECTION_OUTLINE_LEGACY:

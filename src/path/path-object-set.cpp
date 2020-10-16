@@ -33,8 +33,12 @@ ObjectSet::strokesToPaths(bool legacy, bool skip_undo)
     return false;
   }
 
-  // Need to turn on stroke scaling to ensure stroke is scaled when transformed!
   Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+  if (prefs->getBool("/options/pathoperationsunlink/value", true)) {
+      unlinkRecursive(true);
+  }
+
+  // Need to turn on stroke scaling to ensure stroke is scaled when transformed!
   bool scale_stroke = prefs->getBool("/options/transform/stroke", true);
   prefs->setBool("/options/transform/stroke", true);
 
@@ -43,9 +47,10 @@ ObjectSet::strokesToPaths(bool legacy, bool skip_undo)
   std::vector<SPItem *> my_items(items().begin(), items().end());
 
   for (auto item : my_items) {
+    // Do not remove the object from the selection here 
+    // as we want to keep it selected if the whole operation fails
     Inkscape::XML::Node *new_node = item_to_paths(item, legacy);
     if (new_node) {
-      remove (item); // Remove from selection.
       SPObject* new_item = document()->getObjectByRepr(new_node);
 
       // Markers don't inherit properties from outside the

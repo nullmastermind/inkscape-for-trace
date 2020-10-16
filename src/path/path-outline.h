@@ -37,7 +37,7 @@ Geom::PathVector* item_to_outline (SPItem const *item, bool exclude_markers = fa
 /**
  * Replace item by path objects (a.k.a. stroke to path).
  */
-Inkscape::XML::Node* item_to_paths(SPItem *item, bool legacy = false);
+Inkscape::XML::Node* item_to_paths(SPItem *item, bool legacy = false, SPItem *context = nullptr);
 
 /**
  * Replace selected items by path objects (a.k.a. stroke to >path).

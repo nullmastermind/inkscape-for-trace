@@ -244,7 +244,7 @@ void sp_attribute_clean_style(Node* repr, SPCSSAttr *css, unsigned int flags) {
     // If property value is same as default and the parent value not set or property is not inherited,
     // mark for deletion.
     if ( SPAttributeRelCSS::findIfDefault( property, value ) &&
-         ( (css_parent != nullptr && value_p == nullptr) || !SPAttributeRelCSS::findIfInherit( property ) ) ) {
+         ((value_p == nullptr) || !SPAttributeRelCSS::findIfInherit( property ) ) ) {
 
         if ( flags & SP_ATTRCLEAN_DEFAULT_WARN ) {
             g_warning( "<%s id=\"%s\">: CSS Style property: \"%s\" with default value (%s) not needed.",
