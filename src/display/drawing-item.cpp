@@ -722,22 +722,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     // Device scale for HiDPI screens (typically 1 or 2)
     int device_scale = dc.surface()->device_scale();
 
-    switch(_antialias){
-        case 0:
-            cairo_set_antialias(dc.raw(), CAIRO_ANTIALIAS_NONE);
-            break;
-        case 1:
-            cairo_set_antialias(dc.raw(), CAIRO_ANTIALIAS_FAST);
-            break;
-        case 2:
-            cairo_set_antialias(dc.raw(), CAIRO_ANTIALIAS_GOOD);
-            break;
-        case 3:
-            cairo_set_antialias(dc.raw(), CAIRO_ANTIALIAS_BEST);
-            break;
-        default: // should not happen
-            g_assert_not_reached();
-    }
+    _applyAntialias(dc, _antialias);
 
     // Render from cache if possible
     // Bypass in case of pattern, see below.
@@ -829,6 +814,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     ict.paint();
     if (_clip) {
         ict.pushGroup();
+        _clip->setAntialiasing(_antialias); // propagate antialias setting
         _clip->clip(ict, *carea);
         ict.popGroupToSource();
         ict.setOperator(CAIRO_OPERATOR_IN);
@@ -839,6 +825,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     // 2. Render the mask if present and compose it with the clipping path + opacity.
     if (_mask) {
         ict.pushGroup();
+        _mask->setAntialiasing(_antialias); // propagate antialias setting
         _mask->render(ict, *carea, flags);
 
         cairo_surface_t *mask_s = ict.rawTarget();
@@ -955,6 +942,8 @@ DrawingItem::clip(Inkscape::DrawingContext &dc, Geom::IntRect const &area)
     if (!_canClip()) return;
     if (!_visible) return;
     if (!area.intersects(_bbox)) return;
+
+    _applyAntialias(dc, _antialias);
 
     dc.setSource(0,0,0,1);
     dc.pushGroup();
@@ -1238,6 +1227,27 @@ Geom::OptIntRect DrawingItem::_cacheRect()
         return _drawbox & r;
     }
     return r;
+}
+
+// apply antialias setting to cairo
+void DrawingItem::_applyAntialias(DrawingContext &dc, unsigned _antialias)
+{
+    switch(_antialias) {
+        case 0:
+            cairo_set_antialias(dc.raw(), CAIRO_ANTIALIAS_NONE);
+            break;
+        case 1:
+            cairo_set_antialias(dc.raw(), CAIRO_ANTIALIAS_FAST);
+            break;
+        case 2:
+            cairo_set_antialias(dc.raw(), CAIRO_ANTIALIAS_GOOD);
+            break;
+        case 3:
+            cairo_set_antialias(dc.raw(), CAIRO_ANTIALIAS_BEST);
+            break;
+        default: // should not happen
+            g_assert_not_reached();
+    }
 }
 
 } // end namespace Inkscape

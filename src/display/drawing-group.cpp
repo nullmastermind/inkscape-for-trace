@@ -123,6 +123,7 @@ void
 DrawingGroup::_clipItem(DrawingContext &dc, Geom::IntRect const &area)
 {
     for (auto & i : _children) {
+        i.setAntialiasing(_antialias);
         i.clip(dc, area);
     }
 }
