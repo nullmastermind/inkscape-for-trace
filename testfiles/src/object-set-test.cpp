@@ -498,7 +498,7 @@ TEST_F(ObjectSetTest, unlinkRecursiveBasic) {
     EXPECT_EQ(3, set->size());
     EXPECT_NE(nullptr, dynamic_cast<SPUse*>(*(set->items().begin())));
     EXPECT_EQ(nullptr, dynamic_cast<SPRect*>(*(set->items().begin())));
-    set->unlinkRecursive();
+    set->unlinkRecursive(false, true);
     EXPECT_FALSE(containsClone(set));
     EXPECT_EQ(N + 6, _doc->getRoot()->children.size());
     EXPECT_EQ(3, set->size());
@@ -511,7 +511,7 @@ TEST_F(ObjectSetTest, unlinkRecursiveBasic) {
     EXPECT_EQ(N + 12, _doc->getRoot()->children.size());
     EXPECT_EQ(3, set->size());
     EXPECT_NE(nullptr, dynamic_cast<SPUse*>( ((SPUse*)(*(set->items().begin())))->get_original()));//"original is a Use"
-    set->unlinkRecursive(); //clone of clone of rect -> rect
+    set->unlinkRecursive(false, true); //clone of clone of rect -> rect
     EXPECT_FALSE(containsClone(set));
     EXPECT_EQ(nullptr, dynamic_cast<SPUse*>(*(set->items().begin())));
     EXPECT_NE(nullptr, dynamic_cast<SPRect*>(*(set->items().begin())));
@@ -563,7 +563,7 @@ TEST_F(ObjectSetTest, unlinkRecursiveAdvanced) {
     set->add(original);
     EXPECT_TRUE(containsClone(set));
     EXPECT_EQ(2, set->size());
-    set->unlinkRecursive();
+    set->unlinkRecursive(false, true);
     EXPECT_FALSE(containsClone(set));
     EXPECT_EQ(2, set->size());
 

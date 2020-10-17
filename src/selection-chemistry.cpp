@@ -2804,10 +2804,18 @@ bool ObjectSet::unlink(const bool skip_undo)
     return unlinked;
 }
 
-bool ObjectSet::unlinkRecursive(const bool skip_undo) {
+bool ObjectSet::unlinkRecursive(const bool skip_undo, const bool force) {
     if (isEmpty()){
         if (desktop())
             desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>clones</b> to unlink."));
+        return false;
+    }
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool pathoperationsunlink = prefs->getBool("/options/pathoperationsunlink/value", true);
+    if (!force && !pathoperationsunlink) {
+        if (desktop() && !pathoperationsunlink) {
+            desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Coulden't unlink see preference path operation unlink value."));
+        }
         return false;
     }
     bool unlinked = false;
@@ -2820,7 +2828,7 @@ bool ObjectSet::unlinkRecursive(const bool skip_undo) {
         if (SP_IS_GROUP(it)) {
             std::vector<SPObject*> c = it->childList(false);
             tmp_set.setList(c);
-            unlinked = tmp_set.unlinkRecursive(true) || unlinked;
+            unlinked = tmp_set.unlinkRecursive(skip_undo, force) || unlinked;
         }
     }
     if (!unlinked) {
@@ -2833,6 +2841,27 @@ bool ObjectSet::unlinkRecursive(const bool skip_undo) {
     }
     setList(items_);
     return unlinked;
+}
+
+void ObjectSet::removeLPESRecursive(bool keep_paths) {
+    if (isEmpty()){
+        return;
+    }
+
+    ObjectSet tmp_set(document());
+    std::vector<SPItem*> items_(items().begin(), items().end());
+    for (auto& it:items_) {
+        SPLPEItem *splpeitem = dynamic_cast<SPLPEItem *>(it);
+        SPGroup *spgroup = dynamic_cast<SPGroup *>(it);
+        if (spgroup) {
+            std::vector<SPObject*> c = spgroup->childList(false);
+            tmp_set.setList(c);
+            tmp_set.removeLPESRecursive(keep_paths);
+        } else if (splpeitem) {
+            splpeitem->removeAllPathEffects(keep_paths);
+        }
+    }
+    setList(items_);
 }
 
 void ObjectSet::cloneOriginal()

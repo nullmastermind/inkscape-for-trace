@@ -364,7 +364,8 @@ public:
      * including clones which are used to clip other objects, groups of clones etc.
      * @return true if anything was unlinked, otherwise false.
      */
-    bool unlinkRecursive(const bool skip_undo = false);
+    bool unlinkRecursive(const bool skip_undo = false, const bool force = false);
+    void removeLPESRecursive(bool keep_paths);
     void relink();
     void cloneOriginal();
     void cloneOriginalPathLPE(bool allow_transforms = false);

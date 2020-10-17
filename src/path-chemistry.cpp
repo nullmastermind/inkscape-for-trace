@@ -302,10 +302,7 @@ void ObjectSet::toCurves(bool skip_undo)
         // set "busy" cursor
         desktop()->setWaitingCursor();
     }
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (prefs->getBool("/options/pathoperationsunlink/value", true)) {
-        unlinkRecursive(true);
-    }
+    unlinkRecursive(true);
     std::vector<SPItem*> selected(items().begin(), items().end());
     std::vector<Inkscape::XML::Node*> to_select;
     std::vector<SPItem*> items(selected);
@@ -337,10 +334,7 @@ void ObjectSet::toLPEItems()
     if (isEmpty()) {
         return;
     }
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (prefs->getBool("/options/pathoperationsunlink/value", true)) {
-        unlinkRecursive(true);
-    }
+    unlinkRecursive(true);
     std::vector<SPItem*> selected(items().begin(), items().end());
     std::vector<Inkscape::XML::Node*> to_select;
     clear();

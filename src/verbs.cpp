@@ -1016,7 +1016,7 @@ void EditVerb::perform(SPAction *action, void *data)
             dt->selection->unlink();
             break;
         case SP_VERB_EDIT_UNLINK_CLONE_RECURSIVE:
-            dt->selection->unlinkRecursive();
+            dt->selection->unlinkRecursive(false, true);
             break;
         case SP_VERB_EDIT_RELINK_CLONE:
             dt->selection->relink();
@@ -1235,36 +1235,44 @@ void SelectionVerb::perform(SPAction *action, void *data)
             break;
 
         case SP_VERB_SELECTION_OFFSET:
-            selection->toCurves(true);
+            selection->removeLPESRecursive(true);
+            selection->unlinkRecursive(true);
             sp_selected_path_offset(dt);
             break;
         case SP_VERB_SELECTION_OFFSET_SCREEN:
-            selection->toCurves(true);
+            selection->removeLPESRecursive(true);
+            selection->unlinkRecursive(true);
             sp_selected_path_offset_screen(dt, 1);
             break;
         case SP_VERB_SELECTION_OFFSET_SCREEN_10:
-            selection->toCurves(true);
+            selection->removeLPESRecursive(true);
+            selection->unlinkRecursive(true);
             sp_selected_path_offset_screen(dt, 10);
             break;
         case SP_VERB_SELECTION_INSET:
-            selection->toCurves(true);
+            selection->removeLPESRecursive(true);
+            selection->unlinkRecursive(true);
             sp_selected_path_inset(dt);
             break;
         case SP_VERB_SELECTION_INSET_SCREEN:
-            selection->toCurves(true);
+            selection->removeLPESRecursive(true);
+            selection->unlinkRecursive(true);
             sp_selected_path_inset_screen(dt, 1);
             break;
         case SP_VERB_SELECTION_INSET_SCREEN_10:
-            selection->toCurves(true);
+            selection->removeLPESRecursive(true);
+            selection->unlinkRecursive(true);
             sp_selected_path_inset_screen(dt, 10);
             break;
         case SP_VERB_SELECTION_DYNAMIC_OFFSET:
-            selection->toCurves(true);
+            selection->removeLPESRecursive(true);
+            selection->unlinkRecursive(true);
             sp_selected_path_create_offset_object_zero(dt);
             tools_switch(dt, TOOLS_NODES);
             break;
         case SP_VERB_SELECTION_LINKED_OFFSET:
-            selection->toCurves(true);
+            selection->removeLPESRecursive(true);
+            selection->unlinkRecursive(true);
             sp_selected_path_create_updating_offset_object_zero(dt);
             tools_switch(dt, TOOLS_NODES);
             break;
