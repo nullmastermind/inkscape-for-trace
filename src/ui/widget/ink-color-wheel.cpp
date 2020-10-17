@@ -198,8 +198,8 @@ ColorWheel::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr) {
     guint32* buffer_ring = g_new (guint32, height * stride / 4);
     double r_max = std::min( width, height)/2.0 - 2 * (focus_line_width + focus_padding);
     double r_min = r_max * (1.0 - _ring_width);
-    double r2_max = (r_max+1) * (r_max+1); // Must expand a bit to avoid edge effects.
-    double r2_min = (r_min-1) * (r_min-1); // Must shrink a bit to avoid edge effects.
+    double r2_max = (r_max+2) * (r_max+2); // Must expand a bit to avoid edge effects.
+    double r2_min = (r_min-2) * (r_min-2); // Must shrink a bit to avoid edge effects.
 
     for (int i = 0; i < height; ++i) {
         guint32* p = buffer_ring + i * width;
