@@ -87,7 +87,7 @@ InkFileExportCmd::do_export(SPDocument* doc, std::string filename_in)
             }
         } else {
             export_type_filename = fn.extension().string().substr(1);
-            export_filename = fn.stem().string();
+            export_filename = (fn.parent_path() / fn.stem()).string();
         }
     }
 
