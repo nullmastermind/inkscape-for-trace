@@ -742,7 +742,7 @@ void Canvas::on_size_allocate(Gtk::Allocation &allocation)
     _width = allocation.get_width();
     _height = allocation.get_height();
 
-    if (area_w.hasZeroArea()) {
+    if (area_w.hasZeroArea() || !_desktop) {
         return;
     }
 
