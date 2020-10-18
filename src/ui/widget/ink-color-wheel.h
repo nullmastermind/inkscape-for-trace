@@ -40,6 +40,9 @@ private:
     bool is_in_ring(    const double& x, const double& y);
     bool is_in_triangle(const double& x, const double& y);
 
+    void update_triangle_color(const double x, const double y);
+    void update_ring_color(const double x, const double y);
+
     enum DragMode {
         DRAG_NONE,
         DRAG_H,
