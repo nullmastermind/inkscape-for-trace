@@ -29,14 +29,14 @@ function include_file
     source $INCLUDE_DIR/$file
     if [ $? -ne 0 ]; then
       echo_e "failed to include $file" 2>/dev/null
-      if [ $? -ne 0 ]; then   # fallback for unforseen cases
+      if [ $? -ne 0 ]; then   # fallback if echo_e not available
         echo "[error] failed to include $file"
       fi
       exit 1
     fi
   else
     echo_e "$FUNCNAME $INCLUDE_DIR/$file not found"
-    if [ $? -ne 0 ]; then     # fallback for unforseen cases
+    if [ $? -ne 0 ]; then     # fallback if echo_e not available
       echo "[error] $FUNCNAME $INCLUDE_DIR/$file not found"
     fi
     exit 1

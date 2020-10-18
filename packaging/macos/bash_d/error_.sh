@@ -5,7 +5,7 @@ include_guard
 
 ### includes ###################################################################
 
-include_file ANSI_.sh
+include_file ansi_.sh
 include_file echo_.sh
 
 ### variables ##################################################################
@@ -23,7 +23,11 @@ function error_catch
 
   while output=$(caller $index); do
     if [ $index -eq 0 ]; then
-      echo_e "rc=$rc $ANSI_FG_YELLOW_BRIGHT$BASH_COMMAND$ANSI_FG_RESET"
+      if ansi_is_usable; then
+        echo_e "rc=$rc $ANSI_FG_YELLOW_BRIGHT$BASH_COMMAND$ANSI_FG_RESET"
+      else
+        echo "rc=$rc $BASH_COMMAND"
+      fi
     fi
 
     echo_e $output

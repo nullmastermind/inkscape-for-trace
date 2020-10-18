@@ -5,7 +5,7 @@ include_guard
 
 ### includes ###################################################################
 
-# Nothing here.
+include_file echo_.sh
 
 ### variables ##################################################################
 
@@ -27,11 +27,18 @@ function lib_change_path
   local source_lib=${target##*/}   # get library filename from target location
 
   for binary in $binaries; do   # won't work with spaces in paths
-    if [[ $binary == *.so ]] || [[ $binary == *.dylib ]]; then
+    if [[ $binary == *.so ]] ||
+       [[ $binary == *.dylib ]] ||
+       [ $(file $binary | grep "shared library" | wc -l) -eq 1 ]; then
       lib_reset_id $binary
     fi
-    local source=$(otool -L $binary | grep $source_lib | awk '{ print $1 }')
-    install_name_tool -change $source $target $binary
+
+    local source=$(otool -L $binary | grep "$source_lib " | awk '{ print $1 }')
+    if [ -z $source ]; then
+      echo_w "no $source_lib in $binary"
+    else
+      install_name_tool -change $source $target $binary
+    fi
   done
 }
 
@@ -46,9 +53,6 @@ function lib_change_paths
   local binaries=${*:3}
 
   for binary in $binaries; do
-    if [[ $binary == *.so ]] || [[ $binary == *.dylib ]]; then
-      lib_reset_id $binary
-    fi
     for linked_lib in $(otool -L $binary | tail -n +2 | awk '{ print $1 }'); do
       if [ "$(basename $binary)" != "$(basename $linked_lib)" ] &&
          [ -f $lib_dir/$(basename $linked_lib) ]; then

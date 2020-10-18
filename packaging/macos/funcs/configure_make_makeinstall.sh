@@ -7,7 +7,12 @@
 function configure_make_makeinstall
 {
   local flags="$*"
+  local jhbuild_run
 
-  jhbuild run ./configure --prefix=$VER_DIR $flags
+  if [ -f $BIN_DIR/jhbuild ]; then
+    jhbuild_run="jhbuild run"
+  fi
+
+  $jhbuild_run ./configure --prefix=$VER_DIR $flags
   make_makeinstall
 }

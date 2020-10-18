@@ -13,8 +13,12 @@ SELF_DIR=$(F=$0; while [ ! -z $(readlink $F) ] && F=$(readlink $F); \
   cd $(dirname $F); F=$(basename $F); [ -L $F ]; do :; done; echo $(pwd -P))
 for script in $SELF_DIR/0??-*.sh; do source $script; done
 
+include_file ansi_.sh
+include_file echo_.sh
 include_file error_.sh
 error_trace_enable
+
+ANSI_TERM_ONLY=false   # use ANSI control characters even if not in terminal
 
 ### install toolset ############################################################
 
@@ -59,7 +63,7 @@ function install
   # create writable (ramdisk-) overlay
   device=$(create_ram_device $OVERLAY_RAMDISK_SIZE build)
   mount -o nobrowse,rw,union -t hfs $device $VER_DIR
-  echo_i "writable ramdisk overlay mounted as $device"
+  echo_i "writable overlay mounted as $device"
 
   # create all directories inside overlay
   $WRK_DIR/create_dirs.sh

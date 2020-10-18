@@ -11,8 +11,11 @@
 SELF_DIR=$(F=$0; while [ ! -z $(readlink $F) ] && F=$(readlink $F); cd $(dirname $F); F=$(basename $F); [ -L $F ]; do :; done; echo $(pwd -P))
 for script in $SELF_DIR/0??-*.sh; do source $script; done
 
+include_file ansi_.sh
 include_file error_.sh
 error_trace_enable
+
+ANSI_TERM_ONLY=false   # use ANSI control characters even if not in terminal
 
 ### create application bundle ##################################################
 
@@ -40,7 +43,7 @@ mv $APP_DIR.tmp $APP_DIR
 # patch library link paths for lib2geom
 lib_change_path \
   @executable_path/../Resources/lib/lib2geom.1.0.0.dylib \
-  $APP_LIB_DIR/inkscape/libinkscape_base.dylib \
+  $APP_LIB_DIR/inkscape/libinkscape_base.dylib
 
 # patch library link path for libboost_filesystem
 lib_change_path \

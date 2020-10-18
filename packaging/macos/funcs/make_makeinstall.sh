@@ -6,6 +6,12 @@
 
 function make_makeinstall
 {
-  jhbuild run make
-  jhbuild run make install
+  local jhbuild_run
+
+  if [ -f $BIN_DIR/jhbuild ]; then
+    jhbuild_run="jhbuild run"
+  fi
+
+  $jhbuild_run make
+  $jhbuild_run make install
 }

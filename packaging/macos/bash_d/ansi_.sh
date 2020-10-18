@@ -13,6 +13,9 @@ include_guard
 
 ### variables ##################################################################
 
+ANSI_ENABLED=true       # allow ANSI escape sequences for e.g. colors...
+ANSI_TERM_ONLY=true     # ...but only when running in a terminal
+
 ANSI_CURSOR_LEFT="\033[1D"
 
 #            0: normal
@@ -55,7 +58,10 @@ ANSI_FG_YELLOW_BRIGHT="\033[0;93m"
 
 ### aliases ####################################################################
 
-# Nothing here.
+# This performs the following check:
+#   - usage of ANSI is generally enabled AND
+#   - we are either running in a terminal OR we don't care at all
+alias ansi_is_usable='$ANSI_ENABLED && ([ -t 1 ] || ! $ANSI_TERM_ONLY)'
 
 ### main #######################################################################
 
