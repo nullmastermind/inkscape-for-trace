@@ -39,6 +39,7 @@
 #include "ui/uxmanager.h"
 #include "ui/widget/canvas.h"
 #include "ui/widget/combo-tool-item.h"
+#include "ui/widget/spinbutton.h"
 #include "ui/widget/spin-button-tool-item.h"
 #include "ui/widget/unit-tracker.h"
 
@@ -105,6 +106,7 @@ PaintbucketToolbar::PaintbucketToolbar(SPDesktop *desktop)
         auto offset_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("inkscape:paintbucket-offset", _("Grow/shrink by:"), _offset_adj, 1, 2));
         offset_item->set_tooltip_text(_("The amount to grow (positive) or shrink (negative) the created fill path"));
         _tracker->addAdjustment(_offset_adj->gobj());
+        offset_item->get_spin_button()->addUnitTracker(_tracker);
         offset_item->set_focus_widget(desktop->canvas);
         _offset_adj->signal_value_changed().connect(sigc::mem_fun(*this, &PaintbucketToolbar::offset_changed));
         add(*offset_item);

@@ -110,6 +110,8 @@ public:
 
     // sorting order
     void sort_decreasing(bool decreasing = true);
+
+    SpinButton *get_spin_button() { return _btn; };
 };
 } // namespace Widget
 } // namespace UI

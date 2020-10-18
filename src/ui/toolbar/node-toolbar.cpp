@@ -51,6 +51,7 @@
 #include "ui/tools/node-tool.h"
 #include "ui/widget/canvas.h"
 #include "ui/widget/combo-tool-item.h"
+#include "ui/widget/spinbutton.h"
 #include "ui/widget/spin-button-tool-item.h"
 #include "ui/widget/unit-tracker.h"
 
@@ -264,6 +265,7 @@ NodeToolbar::NodeToolbar(SPDesktop *desktop)
         _nodes_x_item->set_tooltip_text(_("X coordinate of selected node(s)"));
         _nodes_x_item->set_custom_numeric_menu_data(values);
         _tracker->addAdjustment(_nodes_x_adj->gobj());
+        _nodes_x_item->get_spin_button()->addUnitTracker(_tracker.get());
         _nodes_x_item->set_focus_widget(desktop->canvas);
         _nodes_x_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this, &NodeToolbar::value_changed), Geom::X));
         _nodes_x_item->set_sensitive(false);
@@ -279,6 +281,7 @@ NodeToolbar::NodeToolbar(SPDesktop *desktop)
         _nodes_y_item->set_tooltip_text(_("Y coordinate of selected node(s)"));
         _nodes_y_item->set_custom_numeric_menu_data(values);
         _tracker->addAdjustment(_nodes_y_adj->gobj());
+        _nodes_y_item->get_spin_button()->addUnitTracker(_tracker.get());
         _nodes_y_item->set_focus_widget(desktop->canvas);
         _nodes_y_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this, &NodeToolbar::value_changed), Geom::Y));
         _nodes_y_item->set_sensitive(false);

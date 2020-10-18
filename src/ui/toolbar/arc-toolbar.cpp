@@ -48,6 +48,7 @@
 #include "ui/widget/canvas.h"
 #include "ui/widget/combo-tool-item.h"
 #include "ui/widget/label-tool-item.h"
+#include "ui/widget/spinbutton.h"
 #include "ui/widget/spin-button-tool-item.h"
 #include "ui/widget/unit-tracker.h"
 
@@ -97,6 +98,7 @@ ArcToolbar::ArcToolbar(SPDesktop *desktop) :
         _rx_item->set_tooltip_text(_("Horizontal radius of the circle, ellipse, or arc"));
         _rx_item->set_custom_numeric_menu_data(values);
         _tracker->addAdjustment(_rx_adj->gobj());
+        _rx_item->get_spin_button()->addUnitTracker(_tracker);
         _rx_item->set_focus_widget(desktop->canvas);
         _rx_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this, &ArcToolbar::value_changed),
                                                            _rx_adj, "rx"));
@@ -113,6 +115,7 @@ ArcToolbar::ArcToolbar(SPDesktop *desktop) :
         _ry_item->set_tooltip_text(_("Vertical radius of the circle, ellipse, or arc"));
         _ry_item->set_custom_numeric_menu_data(values);
         _tracker->addAdjustment(_ry_adj->gobj());
+        _ry_item->get_spin_button()->addUnitTracker(_tracker);
         _ry_item->set_focus_widget(desktop->canvas);
         _ry_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this, &ArcToolbar::value_changed),
                                                            _ry_adj, "ry"));
