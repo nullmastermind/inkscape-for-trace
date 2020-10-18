@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2020-07-15 15:04+0200\n"
-"PO-Revision-Date: 2020-09-03 22:57+0200\n"
+"PO-Revision-Date: 2020-10-18 17:00+0200\n"
 "Last-Translator: Tomáš Marný\n"
 "Language-Team: Josef Vybíral (josef.vybiral@gmail.com); Ivan Řihošek "
 "(osmdesat@seznam.cz); Tobiczech (tobiczech@gmail.com); Tomáš Marný (tomik."
@@ -4985,7 +4985,7 @@ msgstr "Deaktivováno"
 
 #: ../src/extension/implementation/script.cpp:600
 msgid "The output from the extension could not be parsed."
-msgstr ""
+msgstr "Nelze analyzovat výstup z rozšíření."
 
 #: ../src/extension/implementation/script.cpp:909
 msgid ""
@@ -8409,27 +8409,35 @@ msgid ""
 "was created in an older version of Inkscape (90 DPI) and we need to make it "
 "compatible with newer versions (96 DPI). Tell us about this file:\n"
 msgstr ""
+"byl vytvořen ve starší verzi Inkscape (90 DPI) a musíme pro něj zajistit "
+"kompatibilitu s novějšími verzemi (96 DPI). Řekněte nám o tomto souboru:\n"
 
 #: ../src/file-update.cpp:408
 msgid ""
 "This file contains digital artwork for screen display. <b>(Choose if unsure.)</b>"
 msgstr ""
+"Tento soubor obsahuje digitální kresbu pro zobrazení na obrazovce. <b>(Vyberte, "
+"pokud si nejste jisti.)</b>"
 
 #: ../src/file-update.cpp:411
 msgid "This file is intended for physical output, such as paper or 3D prints."
-msgstr ""
+msgstr "Tento soubor je určen pro fyzický výstup, například papír nebo 3D tisky."
 
 #: ../src/file-update.cpp:413
 msgid ""
 "The appearance of elements such as clips, masks, filters, and clones\n"
 "is most important. <b>(Choose if unsure.)</b>"
 msgstr ""
+"Vzhled prvků, jako jsou ořezy, masky, filtry a klony\n"
+"je nejdůležitější. <b>(Vyberte, pokud si nejste jisti.)</b>"
 
 #: ../src/file-update.cpp:417
 msgid ""
 "The accuracy of the physical unit size and position values of objects\n"
 "in the file is most important. (Experimental.)"
 msgstr ""
+"Přesnost velikosti fyzické jednotky a hodnoty polohy objektů\n"
+"v souboru jsou nejdůležitější. (Experimentální.)"
 
 #: ../src/file-update.cpp:419
 msgid "Create a backup file in same directory."
@@ -8462,6 +8470,26 @@ msgid ""
 "More information about this change are available in the <a href='https://inkscape."
 "org/en/learn/faq#dpi_change'>Inkscape FAQ</a></small>"
 msgstr ""
+"<small>Aktualizovali jsme Inkscape tak, aby dodržoval využití 96 DPI jako CSS "
+"standardu zajišťujícího lepší kompatibilitu prohlížeče; dříve jsme používali 90 "
+"DPI.\n"
+"Digitální kresby pro zobrazení na obrazovce budou převedeny na 96 DPI bez změny "
+"měřítka a neměly by být ovlivněny.\n"
+"Kresba nakreslená při 90 DPI pro konkrétní fyzickou velikost bude příliš malá, "
+"pokud bude převedena na 96 DPI bez změny měřítka. Existují dvě metody změny "
+"měřítka:\n"
+"\n"
+"<b>Změna měřítka celého dokumentu:</b> Metoda s nejmenší náchylností k chybám, "
+"která zachovává vzhled kresby, včetně filtrů a polohy masek atd. \n"
+"Měřítko kresby vzhledem k velikosti dokumentu nemusí být přesné.\n"
+"\n"
+"<b>Změna měřítka jednotlivých prvků v kresbě:</b> Tato metoda je méně spolehlivá "
+"a může vést ke změně vzhledu, \n"
+"ale je lepší pro fyzický výstup, který závisí na přesných velikostech a pozicích "
+"(například pro 3D tisk.)\n"
+"\n"
+"Další informace o této změně jsou k dispozici na stránce <a href='https://"
+"inkscape.org/en/learn/faq#dpi_change'>Inkscape FAQ</a></small>"
 
 #: ../src/file-update.cpp:460
 msgid "OK"
@@ -8539,6 +8567,8 @@ msgid ""
 "File could not be saved:\n"
 "No object with ID '%s' found."
 msgstr ""
+"Soubor nelze uložit:\n"
+"Nebyl nalezen žádný objekt s ID „%s“."
 
 #: ../src/file.cpp:528
 #, c-format
@@ -8548,6 +8578,10 @@ msgid ""
 "The following additional information was returned by the output extension:\n"
 "'%s'"
 msgstr ""
+"Soubor %s nelze uložit.\n"
+"\n"
+"Výstupní rozšíření vrátilo následující dodatečné informace:\n"
+"„%s“"
 
 #: ../src/file.cpp:563 ../src/file.cpp:565
 msgid "Document saved."
@@ -14863,8 +14897,8 @@ msgid ""
 "<b>Scale</b> selection; with <b>Ctrl</b> to scale uniformly; with <b>Shift</b> to "
 "scale around rotation center"
 msgstr ""
-"<b>Změna velikosti</b> výběru; <b>Ctrl</b> uzamkne poměr stran;s <b>Shift</b> se "
-"mění velikost kolem středu otáčení"
+"<b>Změna velikosti</b> výběru; <b>Ctrl</b> uzamkne poměr stran; pomocí <b>Shift</"
+"b> se mění velikost kolem středu otáčení"
 
 #: ../src/seltrans-handles.cpp:20
 msgid ""
@@ -14887,7 +14921,7 @@ msgid ""
 "<b>Center</b> of rotation and skewing: drag to reposition; scaling with Shift "
 "also uses this center"
 msgstr ""
-"<b>Střed</b> otáčení a naklánění; tažením změníte jeho pozici; Změna velikosti za "
+"<b>Střed</b> otáčení a naklánění; tažením změníte jeho pozici; změna velikosti za "
 "stisknutého Shift též využívá tento střed"
 
 #
@@ -19318,7 +19352,7 @@ msgstr "Vodítka"
 #: ../src/ui/dialog/guides.cpp:315
 #, c-format
 msgid "Guideline ID: %s"
-msgstr "ID vodítka:: %s"
+msgstr "ID vodítka: %s"
 
 #: ../src/ui/dialog/guides.cpp:321
 #, c-format
@@ -22313,18 +22347,20 @@ msgid ""
 "Keyboard shortcut \"%1\"\n"
 "is already assigned to \"%2\""
 msgstr ""
+"Klávesová zkratka \"%1\"\n"
+"je již přiřazena pro \"%2\""
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 2152
 #: ../src/ui/dialog/inkscape-preferences.cpp:2393
 msgid "Reassign shortcut?"
-msgstr ""
+msgstr "Znovu přiřadit zkratku?"
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 2153
 #: ../src/ui/dialog/inkscape-preferences.cpp:2394
 msgid "Are you sure you want to reassign this shortcut?"
-msgstr ""
+msgstr "Opravdu chcete tuto zkratku znovu přiřadit?"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2490
 msgid "Misc"
@@ -24476,15 +24512,15 @@ msgstr ""
 
 #: ../src/ui/shape-editor-knotholders.cpp:869
 msgid "Move the box in perspective"
-msgstr ""
+msgstr "Přesunutí rámečku v perspektivě"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1164
 msgid "Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"
-msgstr "Upravit <b>šířku</b> elipsy, s <b>Ctrl</b> vytvoří kružnici"
+msgstr "Upraví <b>šířku</b> elipsy, s <b>Ctrl</b> vytvoří kružnici"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1168
 msgid "Adjust ellipse <b>height</b>, with <b>Ctrl</b> to make circle"
-msgstr "Upravit <b>výšku</b> elipsy, with <b>Ctrl</b> to make circle"
+msgstr "Upraví <b>výšku</b> elipsy, with <b>Ctrl</b> to make circle"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1172
 msgid ""
@@ -24546,11 +24582,11 @@ msgstr ""
 
 #: ../src/ui/shape-editor-knotholders.cpp:1680
 msgid "Adjust the <b>offset distance</b>"
-msgstr "Upravit <b>vzdálenost posunu</b>"
+msgstr "Upraví <b>vzdálenost posunu</b>"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1918
 msgid "Adjust the <b>rectangular</b> region of the text."
-msgstr "Upravit <b>obdélníkovou</b> oblast textu."
+msgstr "Upraví <b>obdélníkovou</b> oblast textu."
 
 #: ../src/ui/shape-editor-knotholders.cpp:1928
 msgid "Adjust the <b>inline size</b> (line length) of the text."
@@ -28620,6 +28656,8 @@ msgstr "<b>Ctrl</b>: přichytává k úhlům; udržuje paprsky radiální"
 #, c-format
 msgid "<b>Polygon</b>: radius %s, angle %.2f&#176;; with <b>Ctrl</b> to snap angle"
 msgstr ""
+"<b>Mnohoúhelník</b>: poloměr %s, úhel %.2f&#176;; s <b>Ctrl</b> přichytávání k "
+"úhlu"
 
 #: ../src/ui/tools/star-tool.cpp:397
 #, c-format
@@ -32270,13 +32308,13 @@ msgid "Switch to outline (wireframe) display mode"
 msgstr "Přepnout do režimu konturového (drátového) zobrazení"
 
 #: ../src/verbs.cpp:3084
-#, fuzzy
 msgid "Visible _Hairlines"
-msgstr "Viditelné barvy"
+msgstr "Viditelné _vlasové čáry"
 
 #: ../src/verbs.cpp:3085
 msgid "Make sure hairlines are always drawn thick enough to see"
 msgstr ""
+"Ujistěte se, že vlasové čáry jsou vždy nakresleny dostatečně silné, aby byly vidět"
 
 #: ../src/verbs.cpp:3086 ../src/verbs.cpp:3095
 msgid "_Toggle"
@@ -32881,16 +32919,15 @@ msgstr "žádné filtry"
 
 #: ../src/widgets/desktop-widget.cpp:537
 msgid "visible hairlines"
-msgstr ""
+msgstr "viditelné vlasové čáry"
 
 #: ../src/widgets/desktop-widget.cpp:546
 msgid "grayscale"
 msgstr "stupně šedi"
 
 #: ../src/widgets/desktop-widget.cpp:548
-#, fuzzy
 msgid "print colors preview"
-msgstr "příliš velký pro náhled"
+msgstr "Náhled barev tisku"
 
 #: ../src/widgets/desktop-widget.cpp:807
 msgid "Locked all guides"
@@ -32933,6 +32970,10 @@ msgid ""
 "\n"
 "Do you want to save this file as Inkscape SVG?"
 msgstr ""
+"<span weight=\"bold\" size=\"larger\">Soubor „%s“ byl uložen ve formátu, který "
+"může způsobit ztrátu dat!</span>\n"
+"\n"
+"Chcete tento soubor uložit jako Inkscape SVG?"
 
 #: ../src/widgets/desktop-widget.cpp:937
 msgid "_Save as Inkscape SVG"
@@ -33251,7 +33292,6 @@ msgid "The heuristic computed vote will be multiplied by this value"
 msgstr "Heuristický vypočítaný hlas bude vynásoben touto hodnotou"
 
 #: ../share/ui/dialog-trace.glade:785
-#, fuzzy
 msgid "A constant vote value"
 msgstr "Konstantní hodnota hlasu"
 
@@ -33285,11 +33325,11 @@ msgstr "Zachovat schodovité artefakty"
 
 #: ../share/ui/dialog-trace.glade:893
 msgid "Pixel art"
-msgstr ""
+msgstr "Pixel art"
 
 #: ../share/ui/dialog-trace.glade:1007
 msgid "SIOX"
-msgstr ""
+msgstr "SIOX"
 
 #: ../share/ui/dialog-trace.glade:1011
 msgid "Cover the area you want to select as the foreground"
@@ -33310,7 +33350,7 @@ msgstr ""
 #: ../share/extensions/output_scour.inx:95 ../share/extensions/path_mesh_m2p.inx:17
 #: ../share/extensions/path_mesh_p2m.inx:12
 msgid "About"
-msgstr "O"
+msgstr "O rozšíření"
 
 #: ../share/ui/inkscape-about.glade:72
 msgid ""
@@ -33409,7 +33449,7 @@ msgstr ""
 
 #: ../share/extensions/hpgl_input.py:47
 msgid "No HPGL data found."
-msgstr ""
+msgstr "Nebyla nalezena žádná data HPGL."
 
 #: ../share/extensions/hpgl_input.py:55
 msgid ""
@@ -33419,7 +33459,7 @@ msgstr ""
 
 #: ../share/extensions/hpgl_output.py:56
 msgid "No paths were found. Please convert objects you want into paths."
-msgstr ""
+msgstr "Nebyly nalezeny žádné cesty. Převeďte požadované objekty na cesty."
 
 #: ../share/extensions/inkex/bezier.py:405
 msgid "Area is zero, cannot calculate Center of Mass"
@@ -33565,7 +33605,7 @@ msgstr ""
 # File: ../share/extensions/interp_att_g.py, line: 92
 #: ../share/extensions/interp_att_g.py:87
 msgid "Bad values for a number field: {}, {}."
-msgstr ""
+msgstr "Chybné hodnoty číselného pole: {}, {}."
 
 #: ../share/extensions/interp_att_g.py:113
 msgid "You selected 'Other'. Please enter an attribute to interpolate."
@@ -33991,11 +34031,11 @@ msgstr ""
 
 #: ../share/extensions/color_custom.inx:11
 msgid "0 - 1"
-msgstr ""
+msgstr "0 - 1"
 
 #: ../share/extensions/color_custom.inx:12
 msgid "0 - 255"
-msgstr ""
+msgstr "0 - 255"
 
 #
 # File: ../share/extensions/color_custom.inx, line: 18
@@ -34040,7 +34080,7 @@ msgstr "Méně sytosti"
 
 #: ../share/extensions/color_list.inx:3
 msgid "List All"
-msgstr ""
+msgstr "Vypsat všechny"
 
 #: ../share/extensions/color_morehue.inx:3
 msgid "More Hue"
@@ -34104,13 +34144,12 @@ msgid "Replace color"
 msgstr "Nahradit barvu"
 
 #: ../share/extensions/color_replace.inx:6
-#, fuzzy
 msgid "Color to replace"
-msgstr "Nic k nahrazení"
+msgstr "Barva k nahrazení"
 
 #: ../share/extensions/color_replace.inx:7
 msgid "From color"
-msgstr ""
+msgstr "Z barvy"
 
 #: ../share/extensions/color_replace.inx:9
 msgid "New color"
@@ -34118,7 +34157,7 @@ msgstr "Nová barva"
 
 #: ../share/extensions/color_replace.inx:10
 msgid "To color"
-msgstr ""
+msgstr "Na barvu"
 
 #: ../share/extensions/color_rgbbarrel.inx:3
 msgid "RGB Barrel"
@@ -34171,7 +34210,7 @@ msgstr "Vizualizace cesty"
 
 #: ../share/extensions/docinfo.inx:3
 msgid "DOC Info"
-msgstr ""
+msgstr "Informace o dokumentu"
 
 #: ../share/extensions/docinfo.inx:8 ../share/extensions/dpi90to96.inx:11
 #: ../share/extensions/dpi96to90.inx:11
@@ -34419,27 +34458,23 @@ msgstr "DXF vstup"
 # File: ../share/extensions/dxf_input.inx, line: 8
 #: ../share/extensions/dxf_input.inx:7
 msgid "Method of Scaling:"
-msgstr ""
+msgstr "Způsob změny měřítka:"
 
 #: ../share/extensions/dxf_input.inx:8
-#, fuzzy
 msgid "Manual scale"
-msgstr "Ruční měřítko:"
+msgstr "Ruční měřítko"
 
 #: ../share/extensions/dxf_input.inx:9
-#, fuzzy
 msgid "Automatic scaling to size A4"
-msgstr "Samočinně nastavit velikost a polohu"
+msgstr "Automatické přizpůsobení velikosti A4"
 
 #: ../share/extensions/dxf_input.inx:10
-#, fuzzy
 msgid "Read from file"
-msgstr "Načíst ze souboru"
+msgstr "Číst ze souboru"
 
 #: ../share/extensions/dxf_input.inx:12
-#, fuzzy
 msgid "Manual scale factor:"
-msgstr "Ruční měřítko:"
+msgstr "Faktor ručního měřítka:"
 
 #
 # File: ../share/extensions/dxf_input.inx, line: 14
@@ -36846,7 +36881,7 @@ msgstr "Převede na CANVAS HTML 5"
 
 #: ../share/extensions/ink2canvas.inx:8
 msgid "HTML 5 canvas (*.html)"
-msgstr "canvas HTML 5 (*.html)"
+msgstr "HTML 5 canvas (*.html)"
 
 #: ../share/extensions/ink2canvas.inx:9
 msgid "HTML 5 canvas code"
@@ -37054,6 +37089,9 @@ msgid ""
 "This extension allows you to install, update and remove auto-texts for a JessyInk "
 "presentation. Please see code.google.com/p/jessyink for more details."
 msgstr ""
+"Toto rozšíření vám umožňuje instalovat, aktualizovat a odstraňovat automatické "
+"texty pro prezentaci JessyInk. Další podrobnosti naleznete na stránce code.google."
+"com/p/jessyink"
 
 #
 # File: ../share/extensions/jessyInk_autoTexts.inx, line: 22
@@ -37079,14 +37117,13 @@ msgstr ""
 #: ../share/extensions/jessyink_video.inx:13
 #: ../share/extensions/jessyink_view.inx:19
 msgid "JessyInk"
-msgstr ""
+msgstr "JessyInk"
 
 #: ../share/extensions/jessyink_effects.inx:3
 msgid "Effects"
 msgstr "Efekty"
 
 #: ../share/extensions/jessyink_effects.inx:7
-#, fuzzy
 msgid "Built-in effect"
 msgstr "Vestavěný efekt"
 
@@ -37478,6 +37515,8 @@ msgid ""
 "This extension allows you to uninstall the JessyInk script. Please see code."
 "google.com/p/jessyink for more details."
 msgstr ""
+"Toto rozšíření umožňuje odinstalovat skript JessyInk. Další podrobnosti naleznete "
+"na stránce code.google.com/p/jessyink."
 
 #: ../share/extensions/jessyink_video.inx:3
 msgid "Video"
@@ -37496,7 +37535,7 @@ msgstr "Odebrat zobrazení"
 
 #: ../share/extensions/jessyink_view.inx:10
 msgid "Choose order number 0 to set the initial view of a slide."
-msgstr ""
+msgstr "Vybráním pořadového čísla 0 nastavíte úvodní zobrazení snímku."
 
 #: ../share/extensions/jessyink_view.inx:13
 msgid ""
@@ -37570,11 +37609,11 @@ msgstr ""
 
 #: ../share/extensions/layer2png.inx:10
 msgid "Overwrite existing exports"
-msgstr ""
+msgstr "Přepsat existující exporty"
 
 #: ../share/extensions/layer2png.inx:11
 msgid "Directory"
-msgstr ""
+msgstr "Adresář"
 
 #: ../share/extensions/layer2png.inx:15
 msgid "Layer Slicer"
@@ -37925,9 +37964,8 @@ msgid "Offset (%)"
 msgstr "Posun (%)"
 
 #: ../share/extensions/measure.inx:25
-#, fuzzy
 msgid "Text anchor:"
-msgstr "Textová kotva"
+msgstr "Ukotvení textu:"
 
 #: ../share/extensions/measure.inx:26
 msgid "Left (Start)"
@@ -39323,9 +39361,8 @@ msgid "Vertices"
 msgstr "Vrcholy"
 
 #: ../share/extensions/polyhedron_3d.inx:81
-#, fuzzy
 msgid "Draw back-facing polygons"
-msgstr "Tvorba hvězd a mnohoúhelníků"
+msgstr "Vykreslit mnohoúhelníky obrácené dozadu"
 
 #
 # File: ../share/extensions/polyhedron_3d.inx, line: 83
@@ -40613,7 +40650,7 @@ msgstr "Odstranit křivky pro ořez z výběru"
 # File: ../share/extensions/ungroup_deep.inx, line: 9
 #: ../share/extensions/ungroup_deep.inx:8
 msgid "Depth to Keep (from bottom)"
-msgstr ""
+msgstr "Jakou hloubku zachovat (zdola)"
 
 #: ../share/extensions/voronoi2svg.inx:3 ../share/extensions/voronoi2svg.inx:9
 msgid "Voronoi Diagram"
@@ -40674,6 +40711,8 @@ msgid ""
 "Select a set of objects. Their centroids will be used as the sites of the Voronoi "
 "diagram. Text objects are not handled."
 msgstr ""
+"Vyberte sadu objektů. Jejich centroidy budou použity jako místa Voroného "
+"diagramu. Textové objekty nejsou zpracovány."
 
 #: ../share/extensions/web_interactive_mockup.inx:3
 #, fuzzy
@@ -40682,9 +40721,8 @@ msgstr "_Interaktivita"
 
 #: ../share/extensions/web_interactive_mockup.inx:7
 #: ../share/extensions/web_transmit_att.inx:8
-#, fuzzy
 msgid "When to transmit:"
-msgstr "Atribut k intepolaci:"
+msgstr "Kdy přenést:"
 
 #: ../share/extensions/web_interactive_mockup.inx:8
 #: ../share/extensions/web_set_att.inx:9 ../share/extensions/web_transmit_att.inx:9
@@ -40831,7 +40869,7 @@ msgstr ""
 # File: ../share/extensions/web_set_att.inx, line: 29
 #: ../share/extensions/web_set_att.inx:28
 msgid "Source and destination of setting:"
-msgstr ""
+msgstr "Zdroj a cíl nastavení:"
 
 #: ../share/extensions/web_set_att.inx:29
 #, fuzzy
@@ -40871,15 +40909,14 @@ msgid "Transmit Attributes"
 msgstr "Přenášet atributy"
 
 #: ../share/extensions/web_transmit_att.inx:7
-#, fuzzy
 msgid "Attribute to transmit:"
-msgstr "Atribut k intepolaci:"
+msgstr "Atribut k přenosu:"
 
 #
 # File: ../share/extensions/web_transmit_att.inx, line: 27
 #: ../share/extensions/web_transmit_att.inx:26
 msgid "Source and destination of transmitting:"
-msgstr ""
+msgstr "Zdroj a cíl přenosu:"
 
 #: ../share/extensions/web_transmit_att.inx:27
 #, fuzzy
@@ -40928,7 +40965,7 @@ msgstr "Pixely (pevné)"
 #: ../share/extensions/webslicer_create_group.inx:12
 #: ../share/extensions/webslicer_create_group.inx:17
 msgid "Percent (relative to parent size)"
-msgstr ""
+msgstr "Procent (relativně k velikosti nadřazeného prvku)"
 
 #: ../share/extensions/webslicer_create_group.inx:13
 #: ../share/extensions/webslicer_create_group.inx:18
@@ -40953,14 +40990,12 @@ msgstr ""
 #: ../share/extensions/webslicer_create_group.inx:30
 #: ../share/extensions/webslicer_create_rect.inx:64
 #: ../share/extensions/webslicer_export.inx:20
-#, fuzzy
 msgid "Slicer"
-msgstr "rozdělit oblouk"
+msgstr "Výřezy"
 
 #: ../share/extensions/webslicer_create_rect.inx:3
-#, fuzzy
 msgid "Create a slicer rectangle"
-msgstr "Vytvořit čtyřúhelník"
+msgstr "Vytvořit obdélníkový výřez"
 
 #: ../share/extensions/webslicer_create_rect.inx:12
 msgid "DPI:"
@@ -40973,7 +41008,7 @@ msgstr "Vynutit rozměr:"
 #. i18n. Description duplicated in a fake value attribute in order to make it translatable
 #: ../share/extensions/webslicer_create_rect.inx:15
 msgid "Force Dimension must be set as <width>x<height>"
-msgstr ""
+msgstr "Vynucení rozměru musí být nastaveno jako <šířka> × <výška>"
 
 #: ../share/extensions/webslicer_create_rect.inx:16
 msgid "If set, this will replace DPI."
@@ -40996,12 +41031,14 @@ msgid ""
 "0 is the lowest image quality and highest compression, and 100 is the best "
 "quality but least effective compression"
 msgstr ""
+"0 je nejnižší kvalita obrazu a nejvyšší komprese a 100 je nejlepší kvalita, ale "
+"nejméně účinná komprese"
 
 #
 # File: ../share/extensions/webslicer_create_rect.inx, line: 11
 #: ../share/extensions/webslicer_create_rect.inx:24
 msgid "GIF"
-msgstr ""
+msgstr "GIF"
 
 #: ../share/extensions/webslicer_create_rect.inx:25
 msgid "GIF specific options"
@@ -41026,18 +41063,16 @@ msgid "Options for HTML export"
 msgstr "Možnosti pro export HTML"
 
 #: ../share/extensions/webslicer_create_rect.inx:36
-#, fuzzy
 msgid "Layout disposition:"
-msgstr "Pozice X"
+msgstr "Dispozice rozvržení:"
 
 #: ../share/extensions/webslicer_create_rect.inx:37
 msgid "Positioned html block element with the image as Background"
 msgstr "Umístěný prvek bloku html s obrázkem jako pozadí"
 
 #: ../share/extensions/webslicer_create_rect.inx:38
-#, fuzzy
 msgid "Tiled Background (on parent group)"
-msgstr "Pozadí - bez opakování (v nadřazené skupině)"
+msgstr "Dlaždicové pozadí (v nadřazené skupině)"
 
 #: ../share/extensions/webslicer_create_rect.inx:39
 msgid "Background — repeat horizontally (on parent group)"
@@ -41418,12 +41453,11 @@ msgstr ""
 # File: ../share/ui/units.xml, line: 74
 #: ../share/ui/units.xml:74
 msgid "turn"
-msgstr ""
+msgstr "otočka"
 
 #: ../share/ui/units.xml:75
-#, fuzzy
 msgid "turns"
-msgstr "Otočky:"
+msgstr "otočky"
 
 #
 # File: ../share/ui/units.xml, line: 78
@@ -41928,6 +41962,9 @@ msgstr "Polovina výšky písma"
 #~ msgid "Layer '{}' not found."
 #~ msgstr "Vrstva '{}' nebyla nalezena."
 
+#~ msgid "Width (px)"
+#~ msgstr "Šířka (px)"
+
 #~ msgid "Manually define the group ID. Leave blank to have it auto-generated."
 #~ msgstr "Ručně definujte ID skupiny. Nechte prázdné pro aumotatické generování."
 
@@ -41982,9 +42019,8 @@ msgstr "Polovina výšky písma"
 #~ msgid "{0}Layer name: {1}"
 #~ msgstr "{0}Název vrstvy: {1}"
 
-#, fuzzy
 #~ msgid "{0}Transition out: {1}"
-#~ msgstr "Efekt přechodu"
+#~ msgstr "{0}Přechod z: {1}"
 
 #~ msgid "{0}\tObject \"{1}\""
 #~ msgstr "{0}\tObjekt \"{1}\""
@@ -43723,9 +43759,8 @@ msgstr "Polovina výšky písma"
 #~ msgid "Please enter an input text"
 #~ msgstr "Zadejte prosím vstupní text"
 
-#, fuzzy
 #~ msgid "You must select a correct system encoding."
-#~ msgstr "Musíte vybrat alespoň dva prvky."
+#~ msgstr "Musíte vybrat správné systémové kódování."
 
 #~ msgid "Can't create \"%s\"."
 #~ msgstr "Nelze vytvořit \"%s\"."
