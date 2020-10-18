@@ -22,7 +22,7 @@
 
 static const gint SLIDER_WIDTH = 96;
 static const gint SLIDER_HEIGHT = 8;
-static const gint ARROW_SIZE = 7;
+static const gint ARROW_SIZE = 11;
 
 static const guchar *sp_color_slider_render_gradient(gint x0, gint y0, gint width, gint height, gint c[], gint dc[],
                                                      guint b0, guint b1, guint mask);
