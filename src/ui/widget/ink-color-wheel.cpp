@@ -107,7 +107,7 @@ ColorWheel::ColorWheel()
     , _saturation(1.0)
     , _value(1.0)
     , _ring_width(0.2)
-    , _mode(DRAG_NONE)
+    , _mode(DragMode::NONE)
     , _focus_on_ring(true)
 {
     set_name("ColorWheel");
@@ -606,7 +606,7 @@ ColorWheel::on_button_press_event(GdkEventButton* event)
     double y = event->y;
 
     if (is_in_ring(x, y) ) {
-        _mode = DRAG_H;
+        _mode = DragMode::HUE;
         grab_focus();
         _focus_on_ring = true;
         update_ring_color(x, y);
@@ -614,7 +614,7 @@ ColorWheel::on_button_press_event(GdkEventButton* event)
     }
 
     if (is_in_triangle(x, y)) {
-        _mode = DRAG_SV;
+        _mode = DragMode::SATURATION_VALUE;
         grab_focus();
         _focus_on_ring = false;
         update_triangle_color(x, y);
@@ -627,7 +627,7 @@ ColorWheel::on_button_press_event(GdkEventButton* event)
 bool
 ColorWheel::on_button_release_event(GdkEventButton* event)
 {
-    _mode = DRAG_NONE;
+    _mode = DragMode::NONE;
     return true;
 }
 
@@ -638,12 +638,12 @@ ColorWheel::on_motion_notify_event(GdkEventMotion* event)
     double x = event->x;
     double y = event->y;
 
-    if (_mode == DRAG_H) {
+    if (_mode == DragMode::HUE) {
         update_ring_color(x, y);
         return true;
     }
 
-    if (_mode == DRAG_SV) {
+    if (_mode == DragMode::SATURATION_VALUE) {
         update_triangle_color(x, y);
         return true;
     }
