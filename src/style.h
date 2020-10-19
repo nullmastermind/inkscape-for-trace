@@ -23,7 +23,9 @@
 
 #include <sigc++/connection.h>
 #include <iostream>
+#include <map>
 #include <vector>
+
 #include "3rdparty/libcroco/cr-declaration.h"
 #include "3rdparty/libcroco/cr-prop-list.h"
 
@@ -341,6 +343,9 @@ public:
      */
     SPIPaint       *getFillOrStroke(bool fill_)       { return fill_ ? fill.upcast() : stroke.upcast(); }
     SPIPaint const *getFillOrStroke(bool fill_) const { return fill_ ? fill.upcast() : stroke.upcast(); }
+
+    /* ----------------------- EXTENDED PROPERTIES ------------------------- */
+    std::map<std::string, std::string> extended_properties;
 };
 
 SPStyle *sp_style_ref(SPStyle *style); // SPStyle::ref();

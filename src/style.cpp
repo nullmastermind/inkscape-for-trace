@@ -771,6 +771,12 @@ SPStyle::write( guint const flags, SPStyleSrc const &style_src_req, SPStyle cons
         }
     }
 
+    // Extended properties. Cascading not supported.
+    for (auto const &pair : extended_properties) {
+        // std::cout << "extended property: " << pair.first << " = " << pair.second << std::endl;
+        style_string += pair.first + ":" + pair.second + ";";
+    }
+
     // Remove trailing ';'
     if( style_string.size() > 0 ) {
         style_string.erase( style_string.size() - 1 );
@@ -917,6 +923,19 @@ SPStyle::_mergeDecl(  CRDeclaration const *const decl, SPStyleSrc const &source 
             readIfUnset(prop_idx, os.str().c_str(), source);
             g_free(str_value);
         }
+    } else {
+        gchar const *key = decl->property->stryng->str;
+        auto value = reinterpret_cast<gchar *>(cr_term_to_string(decl->value));
+
+        if (g_str_has_prefix(key, "--")) {
+            g_warning("Ignoring CSS variable: %s", key);
+        } else if (g_str_has_prefix(key, "-")) {
+            extended_properties[key] = value;
+        } else {
+            g_warning("Ignoring unrecognized CSS property: %s", key);
+        }
+
+        g_free(value);
     }
 }
 
