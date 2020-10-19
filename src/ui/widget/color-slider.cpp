@@ -22,7 +22,7 @@
 
 static const gint SLIDER_WIDTH = 96;
 static const gint SLIDER_HEIGHT = 8;
-static const gint ARROW_SIZE = 11;
+static const gint ARROW_SIZE = 10;
 
 static const guchar *sp_color_slider_render_gradient(gint x0, gint y0, gint width, gint height, gint c[], gint dc[],
                                                      guint b0, guint b1, guint mask);
@@ -396,7 +396,7 @@ bool ColorSlider::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
     gint x = (int)(_value * (carea.get_width() - 1) - ARROW_SIZE / 2 + carea.get_x());
     gint y1 = carea.get_y();
     gint y2 = carea.get_y() + carea.get_height() - 1;
-    cr->set_line_width(1.0);
+    cr->set_line_width(2.0);
 
     // Define top arrow
     cr->move_to(x - 0.5, y1 + 0.5);
@@ -411,9 +411,9 @@ bool ColorSlider::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
     cr->line_to(x - 0.5, y2 + 0.5);
 
     // Render both arrows
-    cr->set_source_rgb(1.0, 1.0, 1.0);
-    cr->stroke_preserve();
     cr->set_source_rgb(0.0, 0.0, 0.0);
+    cr->stroke_preserve();
+    cr->set_source_rgb(1.0, 1.0, 1.0);
     cr->fill();
 
     return false;
