@@ -905,8 +905,8 @@ gboolean Inkscape::SelTrans::scaleRequest(Geom::Point &pt, guint state)
 
     _absolute_affine = Geom::identity(); //Initialize the scaler
 
-    auto fixed_ratio = Modifiers::Modifier::get(Modifiers::Type::SCALE_FIXED_RATIO)->active(state);
-    if (fixed_ratio) { // scale by an integer multiplier/divider
+    auto increments = Modifiers::Modifier::get(Modifiers::Type::TRANS_INCREMENT)->active(state);
+    if (increments) { // scale by an integer multiplier/divider
         // We're scaling either the visual or the geometric bbox here (see the comment above)
         for ( unsigned int i = 0 ; i < 2 ; i++ ) {
             if (fabs(default_scale[i]) > 1) {
@@ -922,7 +922,7 @@ gboolean Inkscape::SelTrans::scaleRequest(Geom::Point &pt, guint state)
         // In all other cases we should try to snap now
         Inkscape::PureScale  *bb, *sn;
 
-        auto confine = Modifiers::Modifier::get(Modifiers::Type::SCALE_CONFINE)->active(state);
+        auto confine = Modifiers::Modifier::get(Modifiers::Type::TRANS_CONFINE)->active(state);
         if (confine || _desktop->isToolboxButtonActive ("lock")) {
             // Scale is locked to a 1:1 aspect ratio, so that s[X] must be made to equal s[Y].
             //
@@ -1018,8 +1018,8 @@ gboolean Inkscape::SelTrans::stretchRequest(SPSelTransHandle const &handle, Geom
 
     _absolute_affine = Geom::identity(); //Initialize the scaler
 
-    auto fixed_ratio = Modifiers::Modifier::get(Modifiers::Type::SCALE_FIXED_RATIO)->active(state);
-    if (fixed_ratio) { // stretch by an integer multiplier/divider
+    auto increments = Modifiers::Modifier::get(Modifiers::Type::TRANS_INCREMENT)->active(state);
+    if (increments) { // stretch by an integer multiplier/divider
         if (fabs(default_scale[axis]) > 1) {
             default_scale[axis] = round(default_scale[axis]);
         } else if (default_scale[axis] != 0) {
@@ -1034,7 +1034,7 @@ gboolean Inkscape::SelTrans::stretchRequest(SPSelTransHandle const &handle, Geom
         SnapManager &m = _desktop->namedview->snap_manager;
         m.setup(_desktop, false, _items_const);
 
-        auto confine = Modifiers::Modifier::get(Modifiers::Type::SCALE_CONFINE)->active(state);
+        auto confine = Modifiers::Modifier::get(Modifiers::Type::TRANS_CONFINE)->active(state);
         Inkscape::PureStretchConstrained bb = Inkscape::PureStretchConstrained(Geom::Coord(default_scale[axis]), _origin_for_bboxpoints, Geom::Dim2(axis), confine);
         Inkscape::PureStretchConstrained sn = Inkscape::PureStretchConstrained(Geom::Coord(geom_scale[axis]), _origin_for_specpoints, Geom::Dim2(axis), confine);
 
@@ -1171,8 +1171,8 @@ gboolean Inkscape::SelTrans::skewRequest(SPSelTransHandle const &handle, Geom::P
 
     double radians = atan(skew[dim_a] / scale[dim_a]);
 
-    auto fixed_ratio = Modifiers::Modifier::get(Modifiers::Type::TRANS_FIXED_RATIO)->active(state);
-    if (fixed_ratio) {
+    auto increments = Modifiers::Modifier::get(Modifiers::Type::TRANS_INCREMENT)->active(state);
+    if (increments) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         // Snap to defined angle increments
         int snaps = prefs->getInt("/options/rotationsnapsperpi/value", 12);
@@ -1261,8 +1261,8 @@ gboolean Inkscape::SelTrans::rotateRequest(Geom::Point &pt, guint state)
     Geom::Rotate r2(q2);
 
     double radians = atan2(Geom::dot(Geom::rot90(d1), d2), Geom::dot(d1, d2));;
-    auto fixed_ratio = Modifiers::Modifier::get(Modifiers::Type::TRANS_FIXED_RATIO)->active(state);
-    if (fixed_ratio) {
+    auto increments = Modifiers::Modifier::get(Modifiers::Type::TRANS_INCREMENT)->active(state);
+    if (increments) {
         // Snap to defined angle increments
         double cos_t = Geom::dot(q1, q2);
         double sin_t = Geom::dot(Geom::rot90(q1), q2);
@@ -1321,7 +1321,7 @@ gboolean Inkscape::SelTrans::centerRequest(Geom::Point &pt, guint state)
     m.setup(_desktop);
     m.setRotationCenterSource(items);
 
-    auto no_snap = Modifiers::Modifier::get(Modifiers::Type::TRANS_SNAPPING)->active(state);
+    auto no_snap = Modifiers::Modifier::get(Modifiers::Type::MOVE_SNAPPING)->active(state);
     auto confine = Modifiers::Modifier::get(Modifiers::Type::MOVE_CONFINE)->active(state);
     if (confine) {
         std::vector<Inkscape::Snapper::SnapConstraint> constraints;
@@ -1406,8 +1406,8 @@ void Inkscape::SelTrans::moveTo(Geom::Point const &xy, guint state)
     /* The amount that we've moved by during this drag */
     Geom::Point dxy = xy - _point;
 
-    auto fixed_ratio = Modifiers::Modifier::get(Modifiers::Type::MOVE_FIXED_RATIO)->active(state);
-    auto no_snap = Modifiers::Modifier::get(Modifiers::Type::TRANS_SNAPPING)->active(state);
+    auto increments = Modifiers::Modifier::get(Modifiers::Type::MOVE_INCREMENT)->active(state);
+    auto no_snap = Modifiers::Modifier::get(Modifiers::Type::MOVE_SNAPPING)->active(state);
     auto confine = Modifiers::Modifier::get(Modifiers::Type::MOVE_CONFINE)->active(state);
 
     if (confine) {
@@ -1418,7 +1418,7 @@ void Inkscape::SelTrans::moveTo(Geom::Point const &xy, guint state)
         }
     }
 
-    if (fixed_ratio) {// Alt pressed means: move only by integer multiples of the grid spacing
+    if (increments) {// Alt pressed means: move only by integer multiples of the grid spacing
         m.setup(_desktop, true, _items_const);
         dxy = m.multipleOfGridPitch(dxy, _point);
         m.unSetup();

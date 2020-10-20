@@ -246,8 +246,20 @@ Shortcuts::read(Glib::RefPtr<Gio::File> file, bool user_set)
                 continue; // Default, do nothing and no warning.
             }
 
-            KeyMask user_modifier = (KeyMask) parse_modifier_string(mod_attr, mod_name);
-            mod->set(user_modifier);
+            KeyMask and_modifier = (KeyMask) parse_modifier_string(mod_attr, mod_name);
+
+            // Parse not (cold key) modifier
+            KeyMask not_modifier = NOT_SET;
+            gchar const *not_attr = iter->attribute("not_modifiers");
+            if (not_attr) {
+                not_modifier = (KeyMask) parse_modifier_string(not_attr, mod_name);
+            }
+
+            if(user_set) {
+                mod->set_user(and_modifier, not_modifier);
+            } else {
+                mod->set_keys(and_modifier, not_modifier);
+            }
             continue;
 
         } else if (strcmp(iter->name(), "bind") != 0) {

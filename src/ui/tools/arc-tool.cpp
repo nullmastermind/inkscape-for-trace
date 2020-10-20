@@ -35,6 +35,7 @@
 #include "object/sp-ellipse.h"
 #include "object/sp-namedview.h"
 
+#include "ui/modifiers.h"
 #include "ui/tools/arc-tool.h"
 #include "ui/shape-editor.h"
 #include "ui/tools/tool-base.h"
@@ -333,28 +334,20 @@ void ArcTool::drag(Geom::Point pt, guint state) {
         forced_redraws_start(5);
     }
 
-    bool ctrl_save = false;
-
-    if ((state & GDK_MOD1_MASK) && (state & GDK_CONTROL_MASK) && !(state & GDK_SHIFT_MASK)) {
-        // if Alt is pressed without Shift in addition to Control, temporarily drop the CONTROL mask
-        // so that the ellipse is not constrained to integer ratios
-        ctrl_save = true;
-        state = state ^ GDK_CONTROL_MASK;
-    }
+    auto confine = Modifiers::Modifier::get(Modifiers::Type::TRANS_CONFINE)->active(state);
+    // Third is weirdly wrong, surely incrememnts should do something else.
+    auto circle_edge = Modifiers::Modifier::get(Modifiers::Type::TRANS_INCREMENT)->active(state);
 
     Geom::Rect r = Inkscape::snap_rectangular_box(desktop, this->arc, pt, this->center, state);
 
-    if (ctrl_save) {
-        state = state ^ GDK_CONTROL_MASK;
-    }
-
     Geom::Point dir = r.dimensions() / 2;
 
-    if (state & GDK_MOD1_MASK) {
+
+    if (circle_edge) {
         /* With Alt let the ellipse pass through the mouse pointer */
         Geom::Point c = r.midpoint();
 
-        if (!ctrl_save) {
+        if (!confine) {
             if (fabs(dir[Geom::X]) > 1E-6 && fabs(dir[Geom::Y]) > 1E-6) {
                 Geom::Affine const i2d ( (this->arc)->i2dt_affine() );
                 Geom::Point new_dir = pt * i2d - c;

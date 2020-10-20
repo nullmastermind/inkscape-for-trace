@@ -24,7 +24,9 @@ using KeyMask = int;
 using Trigger = int;
 
 enum Key : KeyMask {
-    NON_USER = -1,
+    NEVER = -2, // Never happen, switch off
+    NOT_SET = -1, // Not set (user or keys)
+    ALWAYS = 0, // Always happens, no modifier needed
     SHIFT = GDK_SHIFT_MASK,
     CTRL = GDK_CONTROL_MASK,
     ALT = GDK_MOD1_MASK,
@@ -33,9 +35,16 @@ enum Key : KeyMask {
     META = GDK_META_MASK,
     ALL_MODS = SHIFT | CTRL | ALT | SUPER | HYPER | META,
 };
+
 // Triggers used for collision warnings, two tools are using the same trigger
-enum Triggers : Trigger {CLICK, DRAG, SCROLL, HANDLE};
-// TODO: We may want to further define the tool, from ANY, SELECT, NODE etc.
+enum Triggers : Trigger {
+    NO_CATEGORY, CANVAS, SELECT, MOVE, TRANSFORM,
+    // Action taken to trigger this modifier, starts at
+    // bit 6 so categories and triggers can be combined.
+    CLICK = 32,
+    DRAG = 64,
+    SCROLL = 128,
+};
 
 /**
  * This anonymous enum is used to provide a list of the Shifts
@@ -44,8 +53,8 @@ enum class Type {
     // {TOOL_NAME}_{ACTION_NAME}
 
     // Canvas tools (applies to any tool selection)
-    CANVAS_SCROLL_Y,      // Scroll up and down {NOTHING+SCROLL}
-    CANVAS_SCROLL_X,      // Scroll left and right {SHIFT+SCROLL}
+    CANVAS_PAN_Y,         // Pan up and down {NOTHING+SCROLL}
+    CANVAS_PAN_X,         // Pan left and right {SHIFT+SCROLL}
     CANVAS_ZOOM,          // Zoom in and out {CTRL+SCROLL}
     CANVAS_ROTATE,        // Rotate CW and CCW {CTRL+SHIFT+SCROLL}
 
@@ -60,10 +69,10 @@ enum class Type {
 
     // Transform handles (applies to multiple tools)
     MOVE_CONFINE,         // Limit dragging to X OR Y only {DRAG+CTRL}
-    MOVE_FIXED_RATIO,     // Move objects by fixed amounts {HANDLE+ALT}
-    SCALE_CONFINE,        // Confine resize aspect ratio {HANDLE+CTRL}
-    SCALE_FIXED_RATIO,    // Resize by fixed ratio sizes {HANDLE+ALT}
-    TRANS_FIXED_RATIO,    // Rotate/skew by fixed ratio angles {HANDLE+CTRL}
+    MOVE_INCREMENT,       // Move objects by fixed amounts {DRAG+ALT}
+    MOVE_SNAPPING,        // Disable snapping while moving {DRAG+SHIFT}
+    TRANS_CONFINE,        // Confine resize aspect ratio {HANDLE+CTRL}
+    TRANS_INCREMENT,      // Scale/Rotate/skew by fixed ratio angles {HANDLE+ALT}
     TRANS_OFF_CENTER,     // Scale/Rotate/skew from oposite corner {HANDLE+SHIFT}
     TRANS_SNAPPING,       // Disable snapping while transforming {HANDLE+SHIFT}
     // TODO: Alignment ommitted because it's UX is not completed
@@ -71,7 +80,9 @@ enum class Type {
 
 
 // Generate a label such as Shift+Ctrl from any KeyMask
-std::string generate_label(KeyMask mask);
+std::string   generate_label(KeyMask mask);
+unsigned long calculate_weight(KeyMask mask);
+
 // Generate a responsivle tooltip set
 void responsive_tooltip(Inkscape::MessageContext *message_context, GdkEvent *event, int num_args, ...);
 
@@ -83,22 +94,31 @@ private:
     /** An easy to use definition of the table of modifiers by Type and ID. */
     typedef std::map<Type, Modifier *> Container;
     typedef std::map<std::string, Modifier *> Lookup;
+    typedef std::map<Trigger, std::string> CategoryNames;
 
     /** A table of all the created modifers and their ID lookups. */
     static Container _modifiers;
     static Lookup _modifier_lookup;
+    static CategoryNames _category_names;
 
     char const * _id;    // A unique id used by keys.xml to identify it
     char const * _name;  // A descriptive name used in preferences UI
     char const * _desc;  // A more verbose description used in preferences UI
 
-    Trigger _trigger; // The type of trigger used for collisions
+    Trigger _category; // The category of tool, what it might conflict with
+    Trigger _trigger; // The type of trigger/action
 
     // Default values if nothing is set in keys.xml
     KeyMask _and_mask_default; // The pressed keys must have these bits set
+    unsigned long _weight_default = 0;
 
     // User set data, set by keys.xml (or other included file)
-    KeyMask _and_mask_user = NON_USER;
+    KeyMask _and_mask_keys = NOT_SET;
+    KeyMask _not_mask_keys = NOT_SET;
+    unsigned long _weight_keys = 0;
+    KeyMask _and_mask_user = NOT_SET;
+    KeyMask _not_mask_user = NOT_SET;
+    unsigned long _weight_user = 0;
 
 protected:
 
@@ -107,24 +127,44 @@ public:
     char const * get_id() const { return _id; }
     char const * get_name() const { return _name; }
     char const * get_description() const { return _desc; }
-    const Trigger get_trigger() const { return _trigger; }
+    const Trigger get_trigger() const { return _category | _trigger; }
 
     // Set user value
-    bool is_set() const { return _and_mask_user != NON_USER; }
-    void set(KeyMask and_mask) {
-        _and_mask_user = and_mask;
+    void set_keys(KeyMask and_mask, KeyMask not_mask) {
+        _and_mask_keys = and_mask;
+        _not_mask_keys = not_mask;
+        _weight_keys = calculate_weight(and_mask) + calculate_weight(not_mask);
     }
-    void unset() { set(NON_USER); }
+    void set_user(KeyMask and_mask, KeyMask not_mask) {
+        _and_mask_user = and_mask;
+        _not_mask_user = not_mask;
+        _weight_user = calculate_weight(and_mask) + calculate_weight(not_mask);
+    }
+    void unset_keys() { set_keys(NOT_SET, NOT_SET); }
+    void unset_user() { set_user(NOT_SET, NOT_SET); }
+    bool is_set_user() const { return _and_mask_user != NOT_SET; }
 
     // Get value, either user defined value or default
     const KeyMask get_and_mask() {
-        if(_and_mask_user != NON_USER) {
-            return _and_mask_user;
-        }
+        if(_and_mask_user != NOT_SET) return _and_mask_user;
+        if(_and_mask_keys != NOT_SET) return _and_mask_keys;
         return _and_mask_default;
     }
+    const KeyMask get_not_mask() {
+        if(_not_mask_user != NOT_SET) return _not_mask_user;
+        if(_not_mask_keys != NOT_SET) return _not_mask_keys;
+        return NOT_SET;
+    }
+    // Return number of bits set for the keys
+    unsigned long get_weight() {
+        if(_and_mask_user != NOT_SET) return _weight_user;
+        if(_and_mask_keys != NOT_SET) return _weight_keys;
+        return _weight_default;
+    }
+
     // Generate labels such as "Shift+Ctrl" for the active modifier
     std::string get_label() { return generate_label(get_and_mask()); }
+    std::string get_category() { return _category_names[_category]; }
 
     /**
      * Inititalizes the Modifier with the parameters.
@@ -138,18 +178,22 @@ public:
              char const * name,
              char const * desc,
              const KeyMask and_mask,
+             const Trigger category,
              const Trigger trigger) :
         _id(id),
         _name(name),
         _desc(desc),
         _and_mask_default(and_mask),
+        _category(category),
         _trigger(trigger)
     {
         _modifier_lookup.emplace(_id, this);
+        _weight_default = calculate_weight(and_mask);
     }
     // Delete the destructor, because we are eternal
     ~Modifier() = delete;
 
+    static Type which(Trigger trigger, int button_state);
     static std::vector<Modifier *>getList ();
     bool active(int button_state);
 

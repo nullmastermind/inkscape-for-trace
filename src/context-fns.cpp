@@ -20,6 +20,7 @@
 
 #include "object/sp-namedview.h"
 
+#include "ui/modifiers.h"
 #include "ui/tools/tool-base.h"
 
 static const double midpt_1_goldenratio = (1 + goldenratio) / 2;
@@ -90,16 +91,15 @@ Geom::Rect Inkscape::snap_rectangular_box(SPDesktop const *desktop, SPItem *item
 {
     Geom::Point p[2];
 
-    bool const shift = state & GDK_SHIFT_MASK;
-    bool const control = state & GDK_CONTROL_MASK;
+    auto confine = Modifiers::Modifier::get(Modifiers::Type::TRANS_CONFINE)->active(state);
+    auto off_center = Modifiers::Modifier::get(Modifiers::Type::TRANS_OFF_CENTER)->active(state);
 
     SnapManager &m = desktop->namedview->snap_manager;
     m.setup(desktop, false, item);
     Inkscape::SnappedPoint snappoint;
 
-    if (control) {
-
-        /* Control is down: we are constrained to producing integer-ratio rectangles */
+    if (confine) {
+        /* We are constrained to producing integer-ratio rectangles */
 
         /* Vector from the centre of the box to the point we are dragging to */
         Geom::Point delta = pt - center;
@@ -128,11 +128,10 @@ Geom::Rect Inkscape::snap_rectangular_box(SPDesktop const *desktop, SPItem *item
         /* p[1] is the dragged point with the integer-ratio constraint */
         p[1] = center + delta;
 
-        if (shift) {
+        if (off_center) {
 
-            /* Shift is down, so our origin is the centre point rather than the corner
-            ** point; this means that corner-point movements are bound to each other.
-            */
+            // Our origin is the centre point rather than the corner point;
+            // this means that corner-point movements are bound to each other.
 
             /* p[0] is the opposite corner of our box */
             p[0] = center - delta;
@@ -172,11 +171,9 @@ Geom::Rect Inkscape::snap_rectangular_box(SPDesktop const *desktop, SPItem *item
             }
         }
 
-    } else if (shift) {
-
-        /* Shift is down, so our origin is the centre point rather than the corner point;
-        ** this means that corner-point movements are bound to each other.
-        */
+    } else if (off_center) {
+        // Our origin is the centre point rather than the corner point;
+        // this means that corner-point movements are bound to each other.
 
         p[1] = pt;
         p[0] = 2 * center - p[1];

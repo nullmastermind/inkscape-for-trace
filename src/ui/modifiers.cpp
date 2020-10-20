@@ -15,7 +15,9 @@
 
 #include <cstring>
 #include <string>
+#include <bitset>
 #include <glibmm/i18n.h>
+
 #include "modifiers.h"
 #include "ui/tools/tool-base.h"
 
@@ -27,31 +29,70 @@ Modifier::Lookup Modifier::_modifier_lookup;
 // these must be in the same order as the * enum in "modifers.h"
 decltype(Modifier::_modifiers) Modifier::_modifiers {
     // Canvas modifiers
-    {Type::CANVAS_SCROLL_Y, new Modifier("canvas-scroll-y", _("Vertical scroll"), _("Scroll up and down"), 0, SCROLL)},
-    {Type::CANVAS_SCROLL_X, new Modifier("canvas-scroll-x", _("Horizontal scroll"), _("Scroll left and right"), SHIFT, SCROLL)},
-    {Type::CANVAS_ZOOM, new Modifier("canvas-zoom", _("Canvas zoom"), _("Zoom in and out with scroll wheel"), CTRL, SCROLL)},
-    {Type::CANVAS_ROTATE, new Modifier("canvas-rotate", _("Canvas rotate"), _("Rotate the canvas with scroll wheel"), SHIFT | CTRL, SCROLL)},
+    {Type::CANVAS_PAN_Y, new Modifier("canvas-pan-y", _("Vertical pan"), _("Pan/Scroll up and down"), ALWAYS, CANVAS, SCROLL)},
+    {Type::CANVAS_PAN_X, new Modifier("canvas-pan-x", _("Horizontal pan"), _("Pan/Scroll left and right"), SHIFT, CANVAS, SCROLL)},
+    {Type::CANVAS_ZOOM, new Modifier("canvas-zoom", _("Canvas zoom"), _("Zoom in and out with scroll wheel"), CTRL, CANVAS, SCROLL)},
+    {Type::CANVAS_ROTATE, new Modifier("canvas-rotate", _("Canvas rotate"), _("Rotate the canvas with scroll wheel"), SHIFT | CTRL, CANVAS, SCROLL)},
     
     // Select tool modifiers (minus transforms)
-    {Type::SELECT_ADD_TO, new Modifier("select-add-to", _("Add to selection"), _("Add items to existing selection"), SHIFT, CLICK)},
-    {Type::SELECT_IN_GROUPS, new Modifier("select-in-groups", _("Select inside groups"), _("Ignore groups when selecting items"), CTRL, CLICK)},
-    {Type::SELECT_TOUCH_PATH, new Modifier("select-touch-path", _("Select with touch-path"), _("Draw a band around items to select them"), ALT, DRAG)},
-    {Type::SELECT_ALWAYS_BOX, new Modifier("select-always-box", _("Select with box"), _("Don't drag items, select more with a box"), SHIFT, DRAG)},
-    {Type::SELECT_FIRST_HIT, new Modifier("select-first-hit", _("Select the first"), _("Drag the first item the mouse hits"), CTRL, DRAG)},
-    {Type::SELECT_FORCE_DRAG, new Modifier("select-force-drag", _("Forced Drag"), _("Drag objects even if the mouse isn't over them."), ALT, DRAG)},
-    {Type::SELECT_CYCLE, new Modifier("select-cycle", _("Cycle through objects"), _("Scroll through objects under the cursor."), ALT, SCROLL)},
+    {Type::SELECT_ADD_TO, new Modifier("select-add-to", _("Add to selection"), _("Add items to existing selection"), SHIFT, SELECT, CLICK)},
+    {Type::SELECT_IN_GROUPS, new Modifier("select-in-groups", _("Select inside groups"), _("Ignore groups when selecting items"), CTRL, SELECT, CLICK)},
+    {Type::SELECT_TOUCH_PATH, new Modifier("select-touch-path", _("Select with touch-path"), _("Draw a band around items to select them"), ALT, SELECT, DRAG)},
+    {Type::SELECT_ALWAYS_BOX, new Modifier("select-always-box", _("Select with box"), _("Don't drag items, select more with a box"), SHIFT, SELECT, DRAG)},
+    {Type::SELECT_FIRST_HIT, new Modifier("select-first-hit", _("Select the first"), _("Drag the first item the mouse hits"), CTRL, SELECT, DRAG)},
+    {Type::SELECT_FORCE_DRAG, new Modifier("select-force-drag", _("Forced Drag"), _("Drag objects even if the mouse isn't over them."), ALT, SELECT, DRAG)},
+    {Type::SELECT_CYCLE, new Modifier("select-cycle", _("Cycle through objects"), _("Scroll through objects under the cursor."), ALT, SELECT, SCROLL)},
 
     // Transform handle modifiers (applies to multiple tools)
-    {Type::MOVE_CONFINE, new Modifier("move-confine", _("Move one axis only"), _("When dragging items, confine to either x or y axis."), CTRL, DRAG)},   // MOVE by DRAG
-    {Type::MOVE_FIXED_RATIO, new Modifier("move-fixed-ratio", _("Move fixed amounts"), _("Move the objects by fixed amounts when dragging."), ALT, DRAG)}, // MOVE by DRAG
-    {Type::SCALE_CONFINE, new Modifier("scale-confine", _("Keep aspect ratio"), _("When resizing objects, confine the aspect ratio."), CTRL, HANDLE)}, // SCALE/STRETCH
-    {Type::SCALE_FIXED_RATIO, new Modifier("scale-fixed-ratio", _("Scale fixed amounts"), _("When moving or resizing objects, use fixed amounts."), ALT, HANDLE)}, // SCALE/STRETCH
-    {Type::TRANS_FIXED_RATIO, new Modifier("trans-fixed-ratio", _("Transform in increments"), _("Rotate or skew by fixed amounts"), CTRL, HANDLE)}, // ROTATE/SKEW
-    {Type::TRANS_OFF_CENTER, new Modifier("trans-off-center", _("Transform against center"), _("Change the center point when transforming objects."), SHIFT, HANDLE)}, // SCALE/ROTATE/SKEW
-    {Type::TRANS_SNAPPING, new Modifier("trans-snapping", _("Disable Snapping"), _("Disable snapping when transforming objects."), SHIFT, DRAG)},   // MOVE/SCALE/STRETCH/ROTATE/SKEW
+    {Type::MOVE_CONFINE, new Modifier("move-confine", _("Move one axis only"), _("When dragging items, confine to either x or y axis."), CTRL, MOVE, DRAG)},
+    {Type::MOVE_INCREMENT, new Modifier("move-increment", _("Move in increments"), _("Move the objects by set invrements when dragging."), ALT, MOVE, DRAG)},
+    {Type::MOVE_SNAPPING, new Modifier("move-snapping", _("No Move Snapping"), _("Disable snapping when moving objects."), SHIFT, MOVE, DRAG)},
+    {Type::TRANS_CONFINE, new Modifier("trans-confine", _("Keep aspect ratio"), _("When resizing objects, confine the aspect ratio."), CTRL, TRANSFORM, DRAG)},
+    {Type::TRANS_INCREMENT, new Modifier("trans-increment", _("Transform in increments"), _("Scale, rotate or skew by set increments."), ALT, TRANSFORM, DRAG)},
+    {Type::TRANS_OFF_CENTER, new Modifier("trans-off-center", _("Transform off center"), _("Change the center point when transforming."), SHIFT, TRANSFORM, DRAG)},
+    {Type::TRANS_SNAPPING, new Modifier("trans-snapping", _("No Transform Snapping"), _("Disable snapping when transforming objects."), SHIFT, TRANSFORM, DRAG)},
     // Center handle click: seltrans.cpp:734 SHIFT
     // Align handle click: seltrans.cpp:1365 SHIFT
 };
+
+decltype(Modifier::_category_names) Modifier::_category_names {
+    {NO_CATEGORY, _("No Category")},
+    {CANVAS, _("Canvas")},
+    {SELECT, _("Selection")},
+    {MOVE, _("Movement")},
+    {TRANSFORM, _("Transformations")},
+};
+
+
+/**
+ * Given a Trigger, find which modifier is active (category lookup)
+ * 
+ * @param  trigger - The Modifier::Trigger category in the form "CANVAS | DRAG".
+ * @param  button_state - The Gdk button state from an event.
+ * @return - Returns the best matching modifier id by the most number of keys.
+ */
+Type Modifier::which(Trigger trigger, int button_state)
+{
+    // Record each active modifier with it's weight
+    std::map<Type, unsigned long> scales;
+    for (auto const& [key, val] : _modifiers) {
+        if (val->get_trigger() == trigger) {
+            if(val->active(button_state)) {
+                scales[key] = val->get_weight();
+            }
+        }
+    }
+    // Sort the weightings
+    using pair_type = decltype(scales)::value_type;
+    auto sorted = std::max_element
+    (
+        std::begin(scales), std::end(scales),
+        [] (const pair_type & p1, const pair_type & p2) {
+            return p1.second < p2.second;
+        }
+    );
+    return sorted->first;
+}
 
 /**
   * List all the modifiers available. Used in UI listing.
@@ -81,9 +122,11 @@ bool Modifier::active(int button_state)
     // TODO:
     //  * ALT key is sometimes MOD1, MOD2 etc, if we find other ALT keys, set the ALT bit
     //  * SUPER key could be HYPER or META, these cases need to be considered.
-    auto mask = get_and_mask();
-    // This is an AND mask only. It does't exclude (so you can't say "!Shift")
-    return (Key::ALL_MODS & button_state & mask) == mask;
+    auto and_mask = get_and_mask();
+    auto not_mask = get_not_mask();
+    auto active = Key::ALL_MODS & button_state;
+    // Check that all keys in AND mask are pressed, and NONE of the NOT mask are.
+    return and_mask != NEVER && ((active & and_mask) == and_mask) && (not_mask == NOT_SET || (active & not_mask) == 0);
 }
 
 /**
@@ -95,6 +138,10 @@ bool Modifier::active(int button_state)
 std::string generate_label(KeyMask mask)
 {
     auto ret = std::string();
+    if(mask == NEVER) {
+        ret.append("[NEVER]");
+        return ret;
+    }
     if(mask & CTRL) ret.append("Ctrl");
     if(mask & SHIFT) {
         if(!ret.empty()) ret.append("+");
@@ -117,6 +164,21 @@ std::string generate_label(KeyMask mask)
         ret.append("Meta");
     }
     return ret;
+}
+
+/**
+ * Calculate the weight of this mask based on how many bits are set.
+ *
+ * @param  mask - The Modifier Mask such as {SHIFT & CTRL}
+ * @return count of all modifiers being pressed (or excluded)
+ */
+unsigned long calculate_weight(KeyMask mask)
+{
+
+    if (mask < 0)
+        return 0;
+    std::bitset<sizeof(mask)> bit_mask(mask);
+    return bit_mask.count();
 }
 
 /**

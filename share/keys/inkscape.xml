@@ -565,8 +565,8 @@ override) the bindings in the main default.xml.
   <bind key="j" modifiers="Primary,Alt" action="org.inkscape.typography.next_glyph_layer" display="true"/>
  -->
 
-  <modifier action="canvas-scroll-y" modifiers=""/>
-  <modifier action="canvas-scroll-x" modifiers="Shift"/>
+  <modifier action="canvas-pan-y" modifiers=""/>
+  <modifier action="canvas-pan-x" modifiers="Shift"/>
   <modifier action="canvas-zoom" modifiers="Ctrl"/>
   <modifier action="canvas-rotate" modifiers="Shift,Ctrl"/>
 
@@ -579,10 +579,9 @@ override) the bindings in the main default.xml.
   <modifier action="select-cycle" modifiers="Alt"/>
 
   <modifier action="move-confine" modifiers="Ctrl"/>
-  <modifier action="move-fixed-ratio" modifiers="Alt"/>
-  <modifier action="scale-confine" modifiers="Ctrl"/>
-  <modifier action="scale-fixed-ratio" modifiers="Alt"/>
-  <modifier action="trans-fixed-ratio" modifiers="Ctrl"/>
+  <modifier action="move-increment" modifiers="Alt"/>
+  <modifier action="trans-confine" modifiers="Ctrl"/>
+  <modifier action="trans-increment" modifiers="Alt"/>
   <modifier action="trans-off-center" modifiers="Shift"/>
   <modifier action="trans-snapping" modifiers="Shift"/>
 <!-- Actions -->

@@ -742,14 +742,6 @@ bool ToolBase::root_handler(GdkEvent* event) {
         break;
 
     case GDK_SCROLL: {
-        using Modifiers::Modifier;
-        using Modifiers::Type;
-
-        bool const mod_rotate = Modifier::get(Type::CANVAS_ROTATE)->active(event->scroll.state);
-        bool const mod_zoom = Modifier::get(Type::CANVAS_ZOOM)->active(event->scroll.state);
-        bool const mod_scroll_x = Modifier::get(Type::CANVAS_SCROLL_X)->active(event->scroll.state);
-        bool const mod_scroll_y = Modifier::get(Type::CANVAS_SCROLL_Y)->active(event->scroll.state);
-
         int constexpr WHEEL_SCROLL_DEFAULT = 40;
         int const wheel_scroll = prefs->getIntLimited(
                 "/options/wheelscroll/value", WHEEL_SCROLL_DEFAULT, 0, 1000);
@@ -758,7 +750,11 @@ bool ToolBase::root_handler(GdkEvent* event) {
         gdouble delta_x = 0;
         gdouble delta_y = 0;
 
-        if (mod_rotate && !desktop->get_rotation_lock()) {
+        using Modifiers::Type;
+        using Modifiers::Triggers;
+        Type action = Modifiers::Modifier::which(Triggers::CANVAS | Triggers::SCROLL, event->scroll.state);
+
+        if (action == Type::CANVAS_ROTATE && !desktop->get_rotation_lock()) {
 
             double rotate_inc = prefs->getDoubleLimited(
                     "/options/rotateincrement/value", 15, 1, 90, "°" );
@@ -794,7 +790,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 desktop->rotate_relative_keep_point(scroll_dt, rotate_inc);
             }
 
-        } else if (mod_scroll_x) {
+        } else if (action == Type::CANVAS_PAN_X) {
            /* shift + wheel, pan left--right */
 
             switch (event->scroll.direction) {
@@ -822,7 +818,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 break;
             }
 
-        } else if (mod_zoom) {
+        } else if (action == Type::CANVAS_ZOOM) {
             /* ctrl + wheel, zoom in--out */
             double rel_zoom;
             double const zoom_inc = prefs->getDoubleLimited(
@@ -864,7 +860,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
             }
 
             /* no modifier, pan up--down (left--right on multiwheel mice?) */
-        } else if (mod_scroll_y) {
+        } else if (action == Type::CANVAS_PAN_Y) {
             switch (event->scroll.direction) {
             case GDK_SCROLL_UP:
                 desktop->scroll_relative(Geom::Point(0, wheel_scroll));

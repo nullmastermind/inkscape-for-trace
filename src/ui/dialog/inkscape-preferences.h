@@ -261,8 +261,6 @@ protected:
     UI::Widget::PrefCombo _misc_small_tools;
     UI::Widget::PrefCombo _menu_icons;
 
-    Gtk::Button _apply_theme;
-
     UI::Widget::PrefRadioButton _win_dockable;
     UI::Widget::PrefRadioButton _win_floating;
     UI::Widget::PrefRadioButton _win_native;
@@ -366,7 +364,6 @@ protected:
     UI::Widget::PrefCheckButton _misc_namedicon_delay;
 
     // System page
-    // Gtk::Button         *_apply_theme;
     UI::Widget::PrefSpinButton  _misc_latency_skew;
     UI::Widget::PrefSpinButton  _misc_simpl;
     Gtk::Entry                  _sys_user_prefs;
@@ -497,6 +494,10 @@ protected:
     UI::Widget::PrefCheckButton   _svgexport_remove_marker_context_paint;
 
 
+    Gtk::Notebook _kb_notebook;
+    UI::Widget::DialogPage _kb_page_shortcuts;
+    UI::Widget::DialogPage _kb_page_modifiers;
+    gboolean _kb_shortcuts_loaded;
     /*
      * Keyboard shortcut members
      */
@@ -525,7 +526,37 @@ protected:
     Gtk::TreeView _kb_tree;
     Gtk::CellRendererAccel _kb_shortcut_renderer;
     Glib::RefPtr<Gtk::TreeModelFilter> _kb_filter;
-    gboolean _kb_shortcuts_loaded;
+
+    /*
+     * Keyboard modifiers interface
+     */
+    class ModifierColumns: public Gtk::TreeModel::ColumnRecord {
+    public:
+        ModifierColumns() {
+            add(name);
+            add(id);
+            add(description);
+            add(and_modifiers);
+            add(user_set);
+        }
+        ~ModifierColumns() override = default;
+
+        Gtk::TreeModelColumn<Glib::ustring> name;
+        Gtk::TreeModelColumn<Glib::ustring> id;
+        Gtk::TreeModelColumn<Glib::ustring> description;
+        Gtk::TreeModelColumn<Glib::ustring> and_modifiers;
+        Gtk::TreeModelColumn<unsigned int> user_set;
+        Gtk::TreeModelColumn<unsigned int> is_enabled;
+    };
+    ModifierColumns _mod_columns;
+    Glib::RefPtr<Gtk::TreeStore> _mod_store;
+    Gtk::TreeView _mod_tree;
+    Gtk::ToggleButton _kb_mod_ctrl;
+    Gtk::ToggleButton _kb_mod_shift;
+    Gtk::ToggleButton _kb_mod_alt;
+    Gtk::ToggleButton _kb_mod_meta;
+    Gtk::CheckButton _kb_mod_enabled;
+    bool _kb_is_updated;
 
     int _minimum_width;
     int _minimum_height;
@@ -611,6 +642,9 @@ protected:
     bool onKBSearchKeyEvent(GdkEventKey *event);
     bool onKBSearchFilter(const Gtk::TreeModel::const_iterator& iter);
     static void onKBShortcutRenderer(Gtk::CellRenderer *rndr, Gtk::TreeIter const &iter);
+    void on_modifier_selection_changed();
+    void on_modifier_enabled();
+    void on_modifier_edited();
 
 private:
   Gtk::TreeModel::iterator searchRows(char const* srch, Gtk::TreeModel::iterator& iter, Gtk::TreeModel::Children list_model_childern);

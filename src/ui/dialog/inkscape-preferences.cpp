@@ -59,6 +59,7 @@
 
 #include "ui/interface.h"
 #include "ui/shortcuts.h"
+#include "ui/modifiers.h"
 #include "ui/widget/style-swatch.h"
 
 #include "widgets/desktop-widget.h"
@@ -2707,14 +2708,11 @@ void InkscapePreferences::initKeyboardShortcuts(Gtk::TreeModel::iterator iter_ui
     auto labels_and_names = Inkscape::Shortcuts::get_file_names();
     _kb_filelist.init( "/options/kbshortcuts/shortcutfile", labels_and_names, labels_and_names[0].second);
 
-    Glib::ustring tooltip(_("Select a file of predefined shortcuts to use. Any customized shortcuts you create will be added separately to "));
+    Glib::ustring tooltip(_("Select a file of predefined shortcuts and modifiers to use. Any customizations you create will be added separately to "));
     tooltip += Glib::ustring(IO::Resource::get_path(IO::Resource::USER, IO::Resource::KEYS, "default.xml"));
 
-    _page_keyshortcuts.add_line( false, _("Shortcut file:"), _kb_filelist, "", tooltip.c_str(), false);
+    _page_keyshortcuts.add_line( false, _("Keyboard file:"), _kb_filelist, "", tooltip.c_str(), false);
 
-    // -------- Search --------
-    _kb_search.init("/options/kbshortcuts/value", true);
-    _page_keyshortcuts.add_line( false, _("Search:"), _kb_search, "", "", true);
 
     // ---------- Tree --------
     _kb_store = Gtk::TreeStore::create( _kb_columns );
@@ -2760,14 +2758,61 @@ void InkscapePreferences::initKeyboardShortcuts(Gtk::TreeModel::iterator iter_ui
     _kb_shortcut_renderer.signal_accel_edited().connect( sigc::mem_fun(*this, &InkscapePreferences::onKBTreeEdited) );
     _kb_shortcut_renderer.signal_accel_cleared().connect( sigc::mem_fun(*this, &InkscapePreferences::onKBTreeCleared) );
 
-    Gtk::ScrolledWindow* scroller = new Gtk::ScrolledWindow();
-    scroller->add(_kb_tree);
+    _kb_notebook.append_page(_kb_page_shortcuts, _("Shortcuts"));
+    Gtk::ScrolledWindow* shortcut_scroller = new Gtk::ScrolledWindow();
+    shortcut_scroller->add(_kb_tree);
+    shortcut_scroller->set_hexpand();
+    shortcut_scroller->set_vexpand();
+    // -------- Search --------
+    _kb_search.init("/options/kbshortcuts/value", true);
+    _kb_page_shortcuts.add_line( false, _("Search:"), _kb_search, "", "", true);
+    _kb_page_shortcuts.attach(*shortcut_scroller, 0, 3, 2, 1);
 
-    int row = 3;
+    _mod_store = Gtk::TreeStore::create( _mod_columns );
+    _mod_tree.set_model(_mod_store);
+    _mod_tree.append_column(_("Name"), _mod_columns.name);
+    _mod_tree.append_column("hot", _mod_columns.and_modifiers);
+    _mod_tree.append_column(_("ID"), _mod_columns.id);
+    _mod_tree.set_tooltip_column(2);
 
-    scroller->set_hexpand();
-    scroller->set_vexpand();
-    _page_keyshortcuts.attach(*scroller, 0, row, 2, 1);
+    // In order to get tooltips on header, we must create our own label.
+    auto and_keys_header = Gtk::manage(new Gtk::Label(_("Modifier")));
+    and_keys_header->set_tooltip_text(_("All keys specified must be held down to activate this functionality."));
+    and_keys_header->show();
+    auto and_keys_column = _mod_tree.get_column(1);
+    and_keys_column->set_widget(*and_keys_header);
+
+    auto edit_bar = Gtk::manage(new Gtk::Box());
+    _kb_mod_ctrl.set_label("Ctrl");
+    _kb_mod_shift.set_label("Shift");
+    _kb_mod_alt.set_label("Alt");
+    _kb_mod_meta.set_label("Meta");
+    _kb_mod_enabled.set_label(_("Enabled"));
+    edit_bar->add(_kb_mod_ctrl);
+    edit_bar->add(_kb_mod_shift);
+    edit_bar->add(_kb_mod_alt);
+    edit_bar->add(_kb_mod_meta);
+    edit_bar->add(_kb_mod_enabled);
+    _kb_mod_ctrl.signal_toggled().connect(sigc::mem_fun(*this, &InkscapePreferences::on_modifier_edited));
+    _kb_mod_shift.signal_toggled().connect(sigc::mem_fun(*this, &InkscapePreferences::on_modifier_edited));
+    _kb_mod_alt.signal_toggled().connect(sigc::mem_fun(*this, &InkscapePreferences::on_modifier_edited));
+    _kb_mod_meta.signal_toggled().connect(sigc::mem_fun(*this, &InkscapePreferences::on_modifier_edited));
+    _kb_mod_enabled.signal_toggled().connect(sigc::mem_fun(*this, &InkscapePreferences::on_modifier_enabled));
+    _kb_page_modifiers.add_line(false, _("Change:"), *edit_bar, "", "", true);
+
+    _mod_tree.get_selection()->signal_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::on_modifier_selection_changed));
+    on_modifier_selection_changed();
+
+    _kb_notebook.append_page(_kb_page_modifiers, _("Modifiers"));
+    Gtk::ScrolledWindow* mod_scroller = new Gtk::ScrolledWindow();
+    mod_scroller->add(_mod_tree);
+    mod_scroller->set_hexpand();
+    mod_scroller->set_vexpand();
+    //_kb_page_modifiers.add(*mod_scroller);
+    _kb_page_modifiers.attach(*mod_scroller, 0, 1, 2, 1);
+
+    int row = 2;
+    _page_keyshortcuts.attach(_kb_notebook, 0, row, 2, 1);
 
     row++;
 
@@ -2803,17 +2848,22 @@ void InkscapePreferences::initKeyboardShortcuts(Gtk::TreeModel::iterator iter_ui
     _kb_filelist.signal_changed().connect( sigc::mem_fun(*this, &InkscapePreferences::onKBList) );
     _page_keyshortcuts.signal_realize().connect( sigc::mem_fun(*this, &InkscapePreferences::onKBRealize) );
 
-    this->AddPage(_page_keyshortcuts, _("Keyboard Shortcuts"), iter_ui, PREFS_PAGE_UI_KEYBOARD_SHORTCUTS);
+    this->AddPage(_page_keyshortcuts, _("Keyboard"), iter_ui, PREFS_PAGE_UI_KEYBOARD_SHORTCUTS);
 
     _kb_shortcuts_loaded = false;
     Gtk::TreeStore::iterator iter_group = _kb_store->append();
-    (*iter_group)[_kb_columns.name] = "Loading ...";
+    (*iter_group)[_kb_columns.name] = _("Loading ...");
     (*iter_group)[_kb_columns.shortcut] = "";
     (*iter_group)[_kb_columns.id] = "";
     (*iter_group)[_kb_columns.description] = "";
     (*iter_group)[_kb_columns.shortcutid] = Gtk::AccelKey();
     (*iter_group)[_kb_columns.user_set] = 0;
 
+    Gtk::TreeStore::iterator iter_mods = _mod_store->append();
+    (*iter_mods)[_mod_columns.name] = _("Loading ...");
+    (*iter_group)[_mod_columns.id] = "";
+    (*iter_group)[_mod_columns.description] = _("It should have loaded by now. Hmmm.");
+    (*iter_group)[_mod_columns.and_modifiers] = "";
 }
 
 void InkscapePreferences::onKBList()
@@ -2851,9 +2901,9 @@ void InkscapePreferences::onKBTreeCleared(const Glib::ustring& path)
 {
     Gtk::TreeModel::iterator iter = _kb_filter->get_iter(path);
     Glib::ustring id = (*iter)[_kb_columns.id];
-    Gtk::AccelKey current_shortcut_id = (*iter)[_kb_columns.shortcutid];
 
     // Remove current shortcut from file
+    Gtk::AccelKey current_shortcut_id = (*iter)[_kb_columns.shortcutid];
     Inkscape::Shortcuts::getInstance().remove_user_shortcut(id, current_shortcut_id);
 
     onKBListKeyboardShortcuts();
@@ -2972,6 +3022,78 @@ void InkscapePreferences::onKBShortcutRenderer(Gtk::CellRenderer *renderer, Gtk:
     }
 }
 
+void InkscapePreferences::on_modifier_selection_changed()
+{
+    _kb_is_updated = true;
+    Gtk::TreeStore::iterator iter = _mod_tree.get_selection()->get_selected();
+    bool selected = (iter);
+    _kb_mod_ctrl.set_sensitive(selected);
+    _kb_mod_shift.set_sensitive(selected);
+    _kb_mod_alt.set_sensitive(selected);
+    _kb_mod_meta.set_sensitive(selected);
+    _kb_mod_enabled.set_sensitive(selected);
+
+    _kb_mod_ctrl.set_active(false);
+    _kb_mod_shift.set_active(false);
+    _kb_mod_alt.set_active(false);
+    _kb_mod_meta.set_active(false);
+    _kb_mod_enabled.set_active(false);
+
+    if (selected) {
+        Glib::ustring modifier_id = (*iter)[_mod_columns.id];
+        auto modifier = Modifiers::Modifier::get(modifier_id.c_str());
+        Inkscape::Modifiers::KeyMask mask = Inkscape::Modifiers::NEVER;
+        if(modifier != nullptr) {
+            mask = modifier->get_and_mask();
+        } else {
+            _kb_mod_enabled.set_sensitive(false);
+        }
+        if(mask != Inkscape::Modifiers::NEVER) {
+            _kb_mod_enabled.set_active(true);
+            _kb_mod_ctrl.set_active(mask & Inkscape::Modifiers::CTRL);
+            _kb_mod_shift.set_active(mask & Inkscape::Modifiers::SHIFT);
+            _kb_mod_alt.set_active(mask & Inkscape::Modifiers::ALT);
+            _kb_mod_meta.set_active(mask & Inkscape::Modifiers::META);
+        } else {
+            _kb_mod_ctrl.set_sensitive(false);
+            _kb_mod_shift.set_sensitive(false);
+            _kb_mod_alt.set_sensitive(false);
+            _kb_mod_meta.set_sensitive(false);
+        }
+    }
+    _kb_is_updated = false;
+}
+
+void InkscapePreferences::on_modifier_enabled()
+{
+    auto active = _kb_mod_enabled.get_active();
+    _kb_mod_ctrl.set_sensitive(active);
+    _kb_mod_shift.set_sensitive(active);
+    _kb_mod_alt.set_sensitive(active);
+    _kb_mod_meta.set_sensitive(active);
+    on_modifier_edited();
+}
+
+void InkscapePreferences::on_modifier_edited()
+{
+    Gtk::TreeStore::iterator iter = _mod_tree.get_selection()->get_selected();
+    if (!iter || _kb_is_updated) return;
+
+    Glib::ustring modifier_id = (*iter)[_mod_columns.id];
+    auto modifier = Modifiers::Modifier::get(modifier_id.c_str());
+    if(!_kb_mod_enabled.get_active()) {
+        modifier->set_user(Inkscape::Modifiers::NEVER, Inkscape::Modifiers::NOT_SET);
+    } else {
+        Inkscape::Modifiers::KeyMask mask = 0;
+        if(_kb_mod_ctrl.get_active()) mask |= Inkscape::Modifiers::CTRL;
+        if(_kb_mod_shift.get_active()) mask |= Inkscape::Modifiers::SHIFT;
+        if(_kb_mod_alt.get_active()) mask |= Inkscape::Modifiers::ALT;
+        if(_kb_mod_meta.get_active()) mask |= Inkscape::Modifiers::META;
+        modifier->set_user(mask, Inkscape::Modifiers::NOT_SET);
+    }
+    (*iter)[_mod_columns.and_modifiers] = modifier->get_label();
+}
+
 void InkscapePreferences::onKBListKeyboardShortcuts()
 {
     Inkscape::Shortcuts& shortcuts = Inkscape::Shortcuts::getInstance();
@@ -2984,6 +3106,7 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
     }
 
     _kb_store->clear();
+    _mod_store->clear();
 
     std::vector<Verb *>verbs = Inkscape::Verb::getList();
 
@@ -3146,6 +3269,30 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
         }
     }
 
+    std::string old_mod_group;
+    Gtk::TreeStore::iterator iter_mod_group;
+
+    // Modifiers (mouse specific keys)
+    for(auto modifier: Inkscape::Modifiers::Modifier::getList()) {
+        auto cat_name = modifier->get_category();
+        if (cat_name != old_mod_group) {
+            iter_mod_group = _mod_store->append();
+            (*iter_mod_group)[_mod_columns.name] = cat_name.c_str();
+            (*iter_mod_group)[_mod_columns.id] = "";
+            (*iter_mod_group)[_mod_columns.description] = "";
+            (*iter_mod_group)[_mod_columns.and_modifiers] = "";
+            (*iter_mod_group)[_mod_columns.user_set] = 0;
+            old_mod_group = cat_name;
+        }
+
+        // Find accelerators
+        Gtk::TreeStore::iterator iter_modifier = _mod_store->append(iter_mod_group->children());
+        (*iter_modifier)[_mod_columns.name] = modifier->get_name();
+        (*iter_modifier)[_mod_columns.id] = modifier->get_id();
+        (*iter_modifier)[_mod_columns.description] = modifier->get_description();
+        (*iter_modifier)[_mod_columns.and_modifiers] = modifier->get_label();
+        (*iter_modifier)[_mod_columns.user_set] = modifier->is_set_user();
+    }
 
     // re-order once after updating (then disable ordering again to increase performance)
     _kb_store->set_sort_column (_kb_columns.id, Gtk::SORT_ASCENDING );
