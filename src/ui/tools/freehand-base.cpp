@@ -380,7 +380,6 @@ static void spdc_apply_simplify(std::string threshold, FreehandBase *dc, SPItem 
     DocumentUndo::setUndoSensitive(document, saved);
 }
 
-enum shapeType { NONE, TRIANGLE_IN, TRIANGLE_OUT, ELLIPSE, CLIPBOARD, BEND_CLIPBOARD, LAST_APPLIED };
 static shapeType previous_shape_type = NONE;
 
 static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item, SPCurve *curve, bool is_bend)

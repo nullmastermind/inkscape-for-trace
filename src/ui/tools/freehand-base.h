@@ -47,6 +47,8 @@ namespace Inkscape {
 namespace UI {
 namespace Tools {
 
+enum shapeType { NONE, TRIANGLE_IN, TRIANGLE_OUT, ELLIPSE, CLIPBOARD, BEND_CLIPBOARD, LAST_APPLIED };
+
 class FreehandBase : public ToolBase {
 public:
     FreehandBase(const std::string& cursor_filename);

@@ -45,8 +45,10 @@
 #include "object/sp-shape.h"
 
 #include "ui/icon-names.h"
+#include "ui/tools-switch.h"
 #include "ui/tools/pen-tool.h"
 #include "ui/tools/pencil-tool.h"
+#include "ui/tools/freehand-base.h"
 
 #include "ui/widget/canvas.h"
 #include "ui/widget/label-tool-item.h"
@@ -305,6 +307,35 @@ PencilToolbar::maxpressure_value_changed()
 }
 
 void
+PencilToolbar::shapewidth_value_changed()
+{
+    // quit if run by the attr_changed listener
+    if (_freeze) {
+        return;
+    }
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    switch (_shape_item->get_active()) {
+        case Inkscape::UI::Tools::TRIANGLE_IN:
+        case Inkscape::UI::Tools::TRIANGLE_OUT:
+            prefs->setDouble("/live_effects/powerstroke/width", _shapewidth_adj->get_value() / 2);
+            break;
+        case Inkscape::UI::Tools::ELLIPSE:
+            prefs->setDouble("/live_effects/pap/width", _shapewidth_adj->get_value() / 10);
+            break;
+        case Inkscape::UI::Tools::CLIPBOARD:
+            // The scale of the clipboard isn't known, so getting it to the right size isn't possible.
+            prefs->setDouble("/live_effects/pap/width", _shapewidth_adj->get_value());
+            break;
+        case Inkscape::UI::Tools::BEND_CLIPBOARD:
+        case Inkscape::UI::Tools::NONE:
+        case Inkscape::UI::Tools::LAST_APPLIED:
+        default:
+            break;
+    }
+}
+
+void
 PencilToolbar::use_pencil_pressure() {
     // assumes called by pencil toolbar (and all these widgets exist)
     bool pressure = _pressure_item->get_active();
@@ -315,6 +346,7 @@ PencilToolbar::use_pencil_pressure() {
         _maxpressure->set_visible(true);
         _cap_item->set_visible(true);
         _shape_item->set_visible(false);
+        _shapewidth->set_visible(false);
         _simplify->set_visible(false);
         _flatten_spiro_bspline->set_visible(false);
         _flatten_simplify->set_visible(false);
@@ -328,6 +360,7 @@ PencilToolbar::use_pencil_pressure() {
         _maxpressure->set_visible(false);
         _cap_item->set_visible(false);
         _shape_item->set_visible(true);
+        _shapewidth->set_visible(true);
         bool simplify_visible = freehandMode != 2;
         _simplify->set_visible(simplify_visible);
         _flatten_simplify->set_visible(simplify_visible && _simplify->get_active());
@@ -375,12 +408,73 @@ PencilToolbar::add_advanced_shape_options(bool tool_is_pencil)
 
     _shape_item->signal_changed().connect(sigc::mem_fun(*this, &PencilToolbar::change_shape));
     add(*_shape_item);
+
+    /* power width setting */
+    {
+        _shapewidth_adj = Gtk::Adjustment::create(2.0, 0.0, 100.0, 0.5, 1.0);
+        _shapewidth =
+            Gtk::manage(new UI::Widget::SpinButtonToolItem("pencil-maxpressure", _("Scale:"), _shapewidth_adj, 1, 2));
+        _shapewidth->set_tooltip_text(_("Scale of the width of the power stroke shape."));
+        _shapewidth->set_focus_widget(_desktop->canvas);
+        _shapewidth_adj->signal_value_changed().connect(
+            sigc::mem_fun(*this, &PencilToolbar::shapewidth_value_changed));
+        update_width_value(shape);
+        add(*_shapewidth);
+
+        _desktop->_tool_changed.connect(sigc::mem_fun(*this, &PencilToolbar::desktop_tool_changed));
+    }
+}
+
+void
+PencilToolbar::desktop_tool_changed(int tool) {
+    int shape = 0;
+    auto prefs = Inkscape::Preferences::get();
+    switch (tool) {
+        case TOOLS_FREEHAND_PENCIL:
+            shape = prefs->getInt("/tools/freehand/pencil/shape", 0);
+            break;
+        case TOOLS_FREEHAND_PEN:
+            shape = prefs->getInt("/tools/freehand/pen/shape", 0);
+            break;
+        default:
+            return; // Bail out!
+    }
+    update_width_value(shape);
 }
 
 void
 PencilToolbar::change_shape(int shape) {
     auto prefs = Inkscape::Preferences::get();
     prefs->setInt(freehand_tool_name() + "/shape", shape);
+    update_width_value(shape);
+}
+
+void
+PencilToolbar::update_width_value(int shape) {
+    /* Update shape width with correct width */
+    auto prefs = Inkscape::Preferences::get();
+    double width = 1.0;
+    _shapewidth->set_sensitive(true);
+    switch (shape) {
+        case Inkscape::UI::Tools::TRIANGLE_IN:
+        case Inkscape::UI::Tools::TRIANGLE_OUT:
+            width = prefs->getDouble("/live_effects/powerstroke/width", 2.0) * 2;
+            break;
+        case Inkscape::UI::Tools::ELLIPSE:
+            width = prefs->getDouble("/live_effects/pap/width", 0.2) * 10;
+            break;
+        case Inkscape::UI::Tools::CLIPBOARD:
+            // XXX The scale of the clipboard object is not known here.
+            width = prefs->getDouble("/live_effects/pap/width", 0.2);
+            break;
+        case Inkscape::UI::Tools::NONE: // Apply width from style?
+        case Inkscape::UI::Tools::BEND_CLIPBOARD:
+        case Inkscape::UI::Tools::LAST_APPLIED:
+        default:
+            _shapewidth->set_sensitive(false);
+            break;
+    }
+    _shapewidth_adj->set_value(width);
 }
 
 void PencilToolbar::add_powerstroke_cap(bool tool_is_pencil)
