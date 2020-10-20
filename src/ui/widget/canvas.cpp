@@ -730,34 +730,15 @@ Canvas::on_motion_notify_event(GdkEventMotion *motion_event)
 }
 
 /**
- * Resize handler, keeps the desktop centered.
+ * Resize handler
  */
 void Canvas::on_size_allocate(Gtk::Allocation &allocation)
 {
-    Geom::Rect const area_w = get_area_world();
-
     parent_type::on_size_allocate(allocation);
 
     assert(allocation == get_allocation());
     _width = allocation.get_width();
     _height = allocation.get_height();
-
-    if (area_w.hasZeroArea() || !_desktop) {
-        return;
-    }
-
-    Geom::Point const midpoint_dt = _desktop->w2d(area_w.midpoint());
-    double zoom = _desktop->current_zoom();
-
-    auto grid = dynamic_cast<Inkscape::UI::Widget::CanvasGrid *>(get_parent());
-    if (grid && grid->GetStickyZoom()->get_active()) {
-        /* Calculate adjusted zoom */
-        double oldshortside = area_w.minExtent();
-        double newshortside = get_area_world().minExtent();
-        zoom *= newshortside / oldshortside;
-    }
-
-    _desktop->zoom_absolute(midpoint_dt, zoom, false);
 }
 
 /*

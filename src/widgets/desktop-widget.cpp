@@ -584,6 +584,40 @@ SPDesktopWidget::getDock()
     return _dock;
 }
 
+/**
+ * Resize handler, keeps the desktop centered.
+ */
+void SPDesktopWidget::on_size_allocate(Gtk::Allocation &allocation)
+{
+    // This function is called a lot during mouse move events without
+    // resizing the widget. Desktop position/zoom must not be updated
+    // for these trivial invocations.
+    if (allocation == get_allocation()) {
+        parent_type::on_size_allocate(allocation);
+        return;
+    }
+
+    Geom::Rect const d_canvas = _canvas->get_area_world();
+
+    parent_type::on_size_allocate(allocation);
+
+    if (d_canvas.hasZeroArea()) {
+        return;
+    }
+
+    Geom::Point const midpoint_dt = desktop->w2d(d_canvas.midpoint());
+    double zoom = desktop->current_zoom();
+
+    if (_canvas_grid->GetStickyZoom()->get_active()) {
+        /* Calculate adjusted zoom */
+        double oldshortside = d_canvas.minExtent();
+        double newshortside = _canvas->get_area_world().minExtent();
+        zoom *= newshortside / oldshortside;
+    }
+
+    desktop->zoom_absolute(midpoint_dt, zoom, false);
+}
+
 #ifdef GDK_WINDOWING_QUARTZ
 static GtkMenuItem *_get_help_menu(GtkMenuShell *menu)
 {
