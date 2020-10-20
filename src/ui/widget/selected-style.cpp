@@ -22,7 +22,6 @@
 #include "gradient-chemistry.h"
 #include "message-context.h"
 #include "selection.h"
-#include "sp-cursor.h"
 
 #include "include/gtkmm_version.h"
 
@@ -34,14 +33,10 @@
 #include "object/sp-radial-gradient.h"
 #include "style.h"
 
-#include "ui/pixmaps/cursor-adj-a.xpm"
-#include "ui/pixmaps/cursor-adj-h.xpm"
-#include "ui/pixmaps/cursor-adj-l.xpm"
-#include "ui/pixmaps/cursor-adj-s.xpm"
-
 #include "svg/css-ostringstream.h"
 #include "svg/svg-color.h"
 
+#include "ui/cursor-utils.h"
 #include "ui/dialog/dialog-manager.h"
 #include "ui/dialog/fill-and-stroke.h"
 #include "ui/dialog/panel-dialog.h"
@@ -1180,15 +1175,9 @@ void SelectedStyle::on_opacity_changed ()
 
 /* =============================================  RotateableSwatch  */
 
-RotateableSwatch::RotateableSwatch(SelectedStyle *parent, guint mode) :
-    fillstroke(mode),
-    parent(parent),
-    startcolor(0),
-    startcolor_set(false),
-    undokey("ssrot1"),
-    cr(nullptr),
-    cr_set(false)
-
+RotateableSwatch::RotateableSwatch(SelectedStyle *parent, guint mode)
+    : fillstroke(mode)
+    , parent(parent)
 {
 }
 
@@ -1268,27 +1257,17 @@ RotateableSwatch::do_motion(double by, guint modifier) {
         return;
 
     if (!scrolling && !cr_set) {
-        GtkWidget *w = GTK_WIDGET(gobj());
-        GdkPixbuf *pixbuf = nullptr;
 
-        if (modifier == 2) { // saturation
-            pixbuf = gdk_pixbuf_new_from_xpm_data((const gchar **)cursor_adj_s_xpm);
-        } else if (modifier == 1) { // lightness
-            pixbuf = gdk_pixbuf_new_from_xpm_data((const gchar **)cursor_adj_l_xpm);
-        } else if (modifier == 3) { // alpha
-            pixbuf = gdk_pixbuf_new_from_xpm_data((const gchar **)cursor_adj_a_xpm);
-        } else { // hue
-            pixbuf = gdk_pixbuf_new_from_xpm_data((const gchar **)cursor_adj_h_xpm);
+        std::string cursor_filename = "adjust_hue.svg";
+        if (modifier == 2) {
+            cursor_filename = "adjust_saturation.svg";
+        } else if (modifier == 1) {
+            cursor_filename = "adjust_lightness.svg";
+        } else if (modifier == 3) {
+            cursor_filename = "adjust_alpha.svg";
         }
 
-        if (pixbuf != nullptr) {
-            cr = gdk_cursor_new_from_pixbuf(gdk_display_get_default(), pixbuf, 16, 16);
-            g_object_unref(pixbuf);
-            gdk_window_set_cursor(gtk_widget_get_window(w), cr);
-            g_object_unref(cr);
-            cr = nullptr;
-            cr_set = true;
-        }
+        load_svg_cursor(get_display(), get_window(), cursor_filename);
     }
 
     guint32 cc;
@@ -1346,12 +1325,7 @@ RotateableSwatch::do_release(double by, guint modifier) {
     color_adjust(hsla, by, startcolor, modifier);
 
     if (cr_set) {
-        GtkWidget *w = GTK_WIDGET(gobj());
-        gdk_window_set_cursor(gtk_widget_get_window(w), nullptr);
-        if (cr) {
-           g_object_unref(cr);
-           cr = nullptr;
-        }
+        get_window()->set_cursor(); // Use parent window cursor.
         cr_set = false;
     }
 

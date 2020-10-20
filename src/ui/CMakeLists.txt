@@ -2,6 +2,7 @@
 set(ui_SRC
 	clipboard.cpp
 	contextmenu.cpp
+        cursor-utils.cpp
 	dialog-events.cpp
 	draw-anchor.cpp
         drag-and-drop.cpp
@@ -239,6 +240,7 @@ set(ui_SRC
 	# Headers
 	clipboard.h
 	contextmenu.h
+        cursor-utils.h
 	control-types.h
 	dialog-events.h
         drag-and-drop.h

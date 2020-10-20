@@ -36,7 +36,6 @@
 #include "selection-describer.h"
 #include "selection.h"
 #include "seltrans.h"
-#include "sp-cursor.h"
 
 #include "display/drawing-item.h"
 #include "display/control/canvas-item-catchall.h"
@@ -45,9 +44,8 @@
 #include "object/box3d.h"
 #include "style.h"
 
+#include "ui/cursor-utils.h"
 #include "ui/modifiers.h"
-#include "ui/pixmaps/cursor-select-d.xpm"
-#include "ui/pixmaps/cursor-select-m.xpm"
 
 #include "ui/tools-switch.h"
 #include "ui/tools/select-tool.h"
@@ -66,9 +64,6 @@ namespace Inkscape {
 namespace UI {
 namespace Tools {
 
-static GdkCursor *CursorSelectMouseover = nullptr;
-static GdkCursor *CursorSelectDragging = nullptr;
-
 static gint rb_escaped = 0; // if non-zero, rubberband was canceled by esc, so the next button release should not deselect
 static gint drag_escaped = 0; // if non-zero, drag was canceled by esc
 
@@ -79,8 +74,7 @@ const std::string& SelectTool::getPrefsPath() {
 const std::string SelectTool::prefsPath = "/tools/select";
 
 SelectTool::SelectTool()
-    // Don't load a default cursor
-    : ToolBase(nullptr)
+    : ToolBase("select.svg")
     , dragging(false)
     , moved(false)
     , button_press_state(0)
@@ -89,9 +83,6 @@ SelectTool::SelectTool()
     , _seltrans(nullptr)
     , _describer(nullptr)
 {
-    // cursors in select context
-    CursorSelectMouseover = sp_cursor_from_xpm(cursor_select_m_xpm);
-    CursorSelectDragging = sp_cursor_from_xpm(cursor_select_d_xpm);
 }
 
 //static gint xp = 0, yp = 0; // where drag started
@@ -115,16 +106,6 @@ SelectTool::~SelectTool() {
     this->_describer = nullptr;
     g_free(no_selection_msg);
 
-    if (CursorSelectDragging) {
-        g_object_unref(CursorSelectDragging);
-        CursorSelectDragging = nullptr;
-    }
-    
-    if (CursorSelectMouseover) {
-        g_object_unref(CursorSelectMouseover);
-        CursorSelectMouseover = nullptr;
-    }
-
     if (item) {
         sp_object_unref(item);
         item = nullptr;
@@ -139,6 +120,16 @@ void SelectTool::setup() {
     auto select_click = Modifier::get(Modifiers::Type::SELECT_ADD_TO)->get_label();
     auto select_scroll = Modifier::get(Modifiers::Type::SELECT_CYCLE)->get_label();
 
+    // cursors in select context
+    Gtk::Widget *w = desktop->getCanvas();
+    if (w->get_window()) {
+        // Window may not be open when tool is setup for the first time!
+        _cursor_mouseover = load_svg_cursor(w->get_display(), w->get_window(), "select-mouseover.svg");
+        _cursor_dragging  = load_svg_cursor(w->get_display(), w->get_window(), "select-dragging.svg");
+        // Need to reload select.svg.
+        load_svg_cursor(w->get_display(), w->get_window(), "select.svg");
+    }
+    
     no_selection_msg = g_strdup_printf(
         _("No objects selected. Click, %s+click, %s+scroll mouse on top of objects, or drag around objects to select."),
         select_click.c_str(), select_scroll.c_str());
@@ -283,12 +274,11 @@ bool SelectTool::item_handler(SPItem* item, GdkEvent* event) {
                 // pass the event to root handler which will perform rubberband, shift-click, ctrl-click, ctrl-drag
                 if (!(always_box || first_hit)) {
 
-                    GdkWindow* window = gtk_widget_get_window (GTK_WIDGET (desktop->getCanvas()->gobj()));
-
                     this->dragging = TRUE;
                     this->moved = FALSE;
 
-                    gdk_window_set_cursor(window, CursorSelectDragging);
+                    auto window = desktop->getCanvas()->get_window();
+                    window->set_cursor(_cursor_dragging);
 
                     // remember the clicked item in this->item:
                     if (this->item) {
@@ -324,15 +314,14 @@ bool SelectTool::item_handler(SPItem* item, GdkEvent* event) {
 
         case GDK_ENTER_NOTIFY: {
             if (!desktop->isWaitingCursor() && !this->dragging) {
-                GdkWindow* window = gtk_widget_get_window (GTK_WIDGET (desktop->getCanvas()->gobj()));
-
-                gdk_window_set_cursor(window, CursorSelectMouseover);
+                auto window = desktop->getCanvas()->get_window();
+                window->set_cursor(_cursor_mouseover);
             }
             break;
         }
         case GDK_LEAVE_NOTIFY:
             if (!desktop->isWaitingCursor() && !this->dragging) {
-                Glib::RefPtr<Gdk::Window> window = desktop->getCanvas()->get_window();
+                auto window = desktop->getCanvas()->get_window();
                 window->set_cursor(this->cursor);
             }
             break;
@@ -554,9 +543,8 @@ bool SelectTool::root_handler(GdkEvent* event) {
                     // but not with shift) we want to drag rather than rubberband
                     this->dragging = TRUE;
 
-                    GdkWindow* window = gtk_widget_get_window (GTK_WIDGET (desktop->getCanvas()->gobj()));
-
-                    gdk_window_set_cursor(window, CursorSelectDragging);
+                    auto window = desktop->getCanvas()->get_window();
+                    window->set_cursor(_cursor_dragging);
                 }
 
                 if (this->dragging) {
@@ -651,7 +639,6 @@ bool SelectTool::root_handler(GdkEvent* event) {
 
             if ((event->button.button == 1) && (this->grabbed) && !this->space_panning) {
                 if (this->dragging) {
-                    GdkWindow* window;
 
                     if (this->moved) {
                         // item has been moved
@@ -687,9 +674,10 @@ bool SelectTool::root_handler(GdkEvent* event) {
                     }
 
                     this->dragging = FALSE;
-                    window = gtk_widget_get_window (GTK_WIDGET (desktop->getCanvas()->gobj()));
 
-                    gdk_window_set_cursor(window, CursorSelectMouseover);
+                    auto window = desktop->getCanvas()->get_window();
+                    window->set_cursor(_cursor_mouseover);
+
                     sp_event_context_discard_delayed_snap_event(this);
 
                     if (this->item) {
@@ -878,9 +866,8 @@ bool SelectTool::root_handler(GdkEvent* event) {
 
                     // if Alt and nonempty selection, show moving cursor ("move selected"):
                     if (alt && !selection->isEmpty() && !desktop->isWaitingCursor()) {
-                        GdkWindow* window = gtk_widget_get_window (GTK_WIDGET (desktop->getCanvas()->gobj()));
-
-                        gdk_window_set_cursor(window, CursorSelectDragging);
+                        auto window = desktop->getCanvas()->get_window();
+                        window->set_cursor(_cursor_dragging);
                     }
                     //*/
                     break;

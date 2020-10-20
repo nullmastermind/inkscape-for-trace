@@ -26,7 +26,6 @@
 #include "message-context.h"
 #include "preferences.h"
 #include "selection.h"
-#include "sp-cursor.h"
 #include "style.h"
 #include "verbs.h"
 
@@ -39,13 +38,9 @@
 
 #include "object/sp-namedview.h"
 
-#include "ui/pixmaps/cursor-dropper-f.xpm"
-#include "ui/pixmaps/cursor-dropper-s.xpm"
-#include "ui/pixmaps/cursor-dropping-f.xpm"
-#include "ui/pixmaps/cursor-dropping-s.xpm"
-
 #include "svg/svg-color.h"
 
+#include "ui/cursor-utils.h"
 #include "ui/tools/dropper-tool.h"
 #include "ui/widget/canvas.h"
 
@@ -62,7 +57,7 @@ const std::string& DropperTool::getPrefsPath() {
 const std::string DropperTool::prefsPath = "/tools/dropper";
 
 DropperTool::DropperTool()
-    : ToolBase(cursor_dropper_f_xpm)
+    : ToolBase("dropper-pick-fill.svg")
 {
 }
 
@@ -390,12 +385,13 @@ bool DropperTool::root_handler(GdkEvent* event) {
     g_free(alpha);
 
     // Set the right cursor for the mode and apply the special Fill color
-    auto xpm = (this->dropping ? (this->stroke ? cursor_dropping_s_xpm : cursor_dropping_f_xpm) :
-                                 (this->stroke ? cursor_dropper_s_xpm : cursor_dropper_f_xpm));
-    GdkCursor *cursor = sp_cursor_from_xpm(xpm, this->get_color(this->invert));
+    cursor_filename = (this->dropping ? (this->stroke ? "dropper-drop-stroke.svg" : "dropper-drop-fill.svg") :
+                                        (this->stroke ? "dropper-pick-stroke.svg" : "dropper-pick-fill.svg") );
+
+    // We do this ourselves to get color correct.
+    auto display = desktop->getCanvas()->get_display();
     auto window = desktop->getCanvas()->get_window();
-    gdk_window_set_cursor(window->gobj(), cursor);
-    g_object_unref(cursor);
+    load_svg_cursor(display, window, cursor_filename, get_color(invert));
 
     if (!ret) {
     	ret = ToolBase::root_handler(event);

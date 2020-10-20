@@ -28,7 +28,7 @@
 #include "rubberband.h"
 #include "selcue.h"
 #include "selection.h"
-#include "sp-cursor.h"
+#include "ui/cursor-utils.h"
 
 #include "display/control/canvas-item-catchall.h" // Grab/Ungrab
 #include "display/control/canvas-item-rotate.h"
@@ -93,9 +93,9 @@ namespace Tools {
 static void set_event_location(SPDesktop * desktop, GdkEvent * event);
 
 
-ToolBase::ToolBase(gchar const *const *cursor_shape, bool uses_snap)
-    : _uses_snap(uses_snap)
-    , cursor_shape(cursor_shape)
+ToolBase::ToolBase(std::string cursor_filename, bool uses_snap)
+    : cursor_filename(std::move(cursor_filename))
+    , _uses_snap(uses_snap)
 {
 }
 
@@ -134,42 +134,21 @@ void ToolBase::set(const Inkscape::Preferences::Entry& /*val*/) {
 
 
 /**
- * Set the cursor to a standard GDK cursor
- */
-void ToolBase::sp_event_context_set_cursor(GdkCursorType cursor_type) {
-
-    GtkWidget *w = GTK_WIDGET(this->desktop->getCanvas()->gobj());
-    GdkDisplay *display = gdk_display_get_default();
-    GdkCursor *cursor = gdk_cursor_new_for_display(display, cursor_type);
-
-    if (cursor) {
-          gdk_window_set_cursor (gtk_widget_get_window (w), cursor);
-          g_object_unref (cursor);
-    }
-}
-
-/**
  * Recreates and draws cursor on desktop related to ToolBase.
  */
 void ToolBase::sp_event_context_update_cursor() {
     Gtk::Widget *w = desktop->getCanvas();
     if (w->get_window()) {
-        if (cursor_shape) {
-	    bool fillHasColor   = false;
-            bool strokeHasColor = false;
-	    guint32 fillColor   = sp_desktop_get_color_tool(desktop, getPrefsPath(), true,  &fillHasColor);
-	    guint32 strokeColor = sp_desktop_get_color_tool(desktop, getPrefsPath(), false, &strokeHasColor);
-	    double fillOpacity   = fillHasColor   ? sp_desktop_get_opacity_tool(desktop, getPrefsPath(), true) :1.0;
-	    double strokeOpacity = strokeHasColor ? sp_desktop_get_opacity_tool(desktop, getPrefsPath(), false):1.0;
 
-            cursor = Glib::wrap(sp_cursor_from_xpm(
-		cursor_shape,
-                SP_RGBA32_C_COMPOSE(fillColor, fillOpacity),
-                SP_RGBA32_C_COMPOSE(strokeColor, strokeOpacity)
-            ));
-        }
-        w->get_window()->set_cursor(cursor);
-        w->get_display()->flush();
+        bool fillHasColor   = false;
+        bool strokeHasColor = false;
+        guint32 fillColor   = sp_desktop_get_color_tool(desktop, getPrefsPath(), true,  &fillHasColor);
+        guint32 strokeColor = sp_desktop_get_color_tool(desktop, getPrefsPath(), false, &strokeHasColor);
+        double fillOpacity  = fillHasColor   ? sp_desktop_get_opacity_tool(desktop, getPrefsPath(), true)  : 1.0;
+        double strokeOpacity= strokeHasColor ? sp_desktop_get_opacity_tool(desktop, getPrefsPath(), false) : 1.0;
+
+        cursor = load_svg_cursor(w->get_display(), w->get_window(), cursor_filename,
+                                 fillColor, strokeColor, fillOpacity, strokeOpacity);
     }
     this->desktop->waiting_cursor = false;
 }
@@ -489,7 +468,10 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
                 if (panning_cursor == 0) {
                     panning_cursor = 1;
-                    this->sp_event_context_set_cursor(GDK_FLEUR);
+                    auto display = desktop->getCanvas()->get_display();
+                    auto window  = desktop->getCanvas()->get_window();
+                    auto cursor = Gdk::Cursor::create(display, "move");
+                    window->set_cursor(cursor);
                 }
 
                 Geom::Point const motion_w(event->motion.x, event->motion.y);

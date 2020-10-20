@@ -135,7 +135,7 @@ void sp_event_context_snap_delay_handler(ToolBase *ec, gpointer const dse_item, 
 class ToolBase : public sigc::trackable
 {
 public:
-    ToolBase(gchar const *const *cursor_shape, bool uses_snap=true);
+    ToolBase(std::string cursor_filename, bool uses_snap=true);
 
     virtual ~ToolBase();
 
@@ -194,6 +194,7 @@ public:
 // private:
     Inkscape::Preferences::Observer *pref_observer = nullptr;
     Glib::RefPtr<Gdk::Cursor> cursor;
+    std::string cursor_filename = "select.svg";
 
     gint xp = 0;           ///< where drag started
     gint yp = 0;           ///< where drag started
@@ -231,16 +232,11 @@ protected:
     void forced_redraws_start(int count, bool reset = false);
     void forced_redraws_stop();
 
-    /// An xpm containing the shape of the tool's cursor.
-    gchar const *const *cursor_shape;
-
     SPDesktop *desktop = nullptr;
 
 private:
 
     bool _keyboardMove(GdkEventKey const &event, Geom::Point const &dir);
-    void sp_event_context_set_cursor(GdkCursorType cursor_type);
-
 };
 
 void sp_event_context_read(ToolBase *ec, gchar const *key);

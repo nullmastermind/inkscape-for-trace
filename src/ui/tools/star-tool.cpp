@@ -37,8 +37,6 @@
 #include "object/sp-namedview.h"
 #include "object/sp-star.h"
 
-#include "ui/pixmaps/cursor-star.xpm"
-
 #include "ui/shape-editor.h"
 
 #include "xml/node-event-vector.h"
@@ -56,7 +54,7 @@ const std::string& StarTool::getPrefsPath() {
 const std::string StarTool::prefsPath = "/tools/shapes/star";
 
 StarTool::StarTool()
-    : ToolBase(cursor_star_xpm)
+    : ToolBase("star.svg")
     , star(nullptr)
     , magnitude(5)
     , proportion(0.5)

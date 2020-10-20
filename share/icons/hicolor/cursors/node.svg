@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+     width="32" height="32"
+     inkscape:hotspot_x="3"
+     inkscape:hotspot_y="3"
+     style="fill:gray;stroke:black">
+
+  <defs>
+    <!-- Shadow -->
+    <filter id="shadow" x="-0.5" y="-0.5" width="2" height="2">
+      <feOffset result="offOut" in="SourceAlpha" dx="1" dy="1" />
+      <feGaussianBlur result="blurOut" stdDeviation="1" />
+      <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+    </filter>
+  </defs>
+
+  <!-- Triangle -->
+  <g id="cursor" style="filter:url(#shadow);stroke-linejoin:miter;stroke-miterlimit:10">
+    <path d="m 4.5,4.5 l 18,10 l -8,8 z" style="stroke:white;stroke-width:3px"/>
+    <path d="m 4.5,4.5 l 18,10 l -8,8 z" style="stroke-width:1px"/>
+  </g>
+</svg>

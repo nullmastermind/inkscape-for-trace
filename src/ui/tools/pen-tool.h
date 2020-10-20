@@ -29,7 +29,7 @@ namespace Tools {
  */
 class PenTool : public FreehandBase {
 public:
-    PenTool();
+    PenTool(const std::string& cursor_filename = "pen.svg");
     PenTool(gchar const *const *cursor_shape);
     ~PenTool() override;
 

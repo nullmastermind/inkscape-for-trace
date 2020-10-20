@@ -35,9 +35,6 @@
 
 #include "display/control/canvas-item-curve.h"
 
-#include "ui/pixmaps/cursor-gradient-add.xpm"
-#include "ui/pixmaps/cursor-gradient.xpm"
-
 #include "svg/css-ostringstream.h"
 
 #include "ui/tools/gradient-tool.h"
@@ -58,14 +55,14 @@ const std::string GradientTool::prefsPath = "/tools/gradient";
 
 
 GradientTool::GradientTool()
-    : ToolBase(cursor_gradient_xpm)
+    : ToolBase("gradient.svg")
     , cursor_addnode(false)
     , node_added(false)
 // TODO: Why are these connections stored as pointers?
     , selcon(nullptr)
     , subselcon(nullptr)
 {
-	// TODO: This value is overwritten in the root handler
+    // TODO: This value is overwritten in the root handler
     this->tolerance = 6;
 }
 
@@ -569,11 +566,11 @@ bool GradientTool::root_handler(GdkEvent* event) {
             SPItem *item = sp_gradient_context_is_over_curve(this, Geom::Point(event->motion.x, event->motion.y));
 
             if (this->cursor_addnode && !item) {
-                this->cursor_shape = cursor_gradient_xpm;
+                cursor_filename = "gradient.svg";
                 this->sp_event_context_update_cursor();
                 this->cursor_addnode = false;
             } else if (!this->cursor_addnode && item) {
-                this->cursor_shape = cursor_gradient_add_xpm;
+                cursor_filename = "gradient-add.svg";
                 this->sp_event_context_update_cursor();
                 this->cursor_addnode = true;
             }

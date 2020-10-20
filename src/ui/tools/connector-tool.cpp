@@ -101,7 +101,6 @@
 #include "object/sp-symbol.h"
 
 #include "ui/knot/knot.h"
-#include "ui/pixmaps/cursor-connector.xpm"
 #include "ui/widget/canvas.h"  // Enter events
 
 #include "svg/svg.h"
@@ -156,7 +155,7 @@ std::string const& ConnectorTool::getPrefsPath()
 std::string const ConnectorTool::prefsPath = "/tools/connector";
 
 ConnectorTool::ConnectorTool()
-    : ToolBase(cursor_connector_xpm)
+    : ToolBase("connector.svg")
     , selection(nullptr)
     , npoints(0)
     , state(SP_CONNECTOR_CONTEXT_IDLE)

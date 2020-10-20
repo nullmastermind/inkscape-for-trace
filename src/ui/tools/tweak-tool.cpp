@@ -55,24 +55,6 @@
 
 #include "path/path-util.h"
 
-#include "ui/pixmaps/cursor-tweak-attract.xpm"
-#include "ui/pixmaps/cursor-tweak-color.xpm"
-#include "ui/pixmaps/cursor-tweak-less.xpm"
-#include "ui/pixmaps/cursor-tweak-more.xpm"
-#include "ui/pixmaps/cursor-tweak-move-in.xpm"
-#include "ui/pixmaps/cursor-tweak-move-jitter.xpm"
-#include "ui/pixmaps/cursor-tweak-move-out.xpm"
-#include "ui/pixmaps/cursor-tweak-move.xpm"
-#include "ui/pixmaps/cursor-tweak-push.xpm"
-#include "ui/pixmaps/cursor-tweak-repel.xpm"
-#include "ui/pixmaps/cursor-tweak-rotate-clockwise.xpm"
-#include "ui/pixmaps/cursor-tweak-rotate-counterclockwise.xpm"
-#include "ui/pixmaps/cursor-tweak-roughen.xpm"
-#include "ui/pixmaps/cursor-tweak-scale-down.xpm"
-#include "ui/pixmaps/cursor-tweak-scale-up.xpm"
-#include "ui/pixmaps/cursor-tweak-thicken.xpm"
-#include "ui/pixmaps/cursor-tweak-thin.xpm"
-
 #include "svg/svg.h"
 
 #include "ui/toolbar/tweak-toolbar.h"
@@ -96,7 +78,7 @@ const std::string& TweakTool::getPrefsPath() {
 const std::string TweakTool::prefsPath = "/tools/tweak";
 
 TweakTool::TweakTool()
-    : ToolBase(cursor_push_xpm)
+    : ToolBase("tweak-push.svg")
     , pressure(TC_DEFAULT_PRESSURE)
     , dragging(false)
     , usepressure(false)
@@ -156,79 +138,79 @@ void TweakTool::update_cursor (bool with_shift) {
    switch (this->mode) {
        case TWEAK_MODE_MOVE:
            this->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag to <b>move</b>."), sel_message);
-           this->cursor_shape = cursor_tweak_move_xpm;
+           cursor_filename = "tweak-move.svg";
            break;
        case TWEAK_MODE_MOVE_IN_OUT:
            this->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>move in</b>; with Shift to <b>move out</b>."), sel_message);
            if (with_shift) {
-               this->cursor_shape = cursor_tweak_move_out_xpm;
+               cursor_filename = "tweak-move-out.svg";
            } else {
-               this->cursor_shape = cursor_tweak_move_in_xpm;
+               cursor_filename = "tweak-move-in.svg";
            }
            break;
        case TWEAK_MODE_MOVE_JITTER:
            this->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>move randomly</b>."), sel_message);
-           this->cursor_shape = cursor_tweak_move_jitter_xpm;
+            cursor_filename = "tweak-move-jitter.svg";
            break;
        case TWEAK_MODE_SCALE:
            this->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>scale down</b>; with Shift to <b>scale up</b>."), sel_message);
            if (with_shift) {
-               this->cursor_shape = cursor_tweak_scale_up_xpm;
+               cursor_filename = "tweak-scale-up.svg";
            } else {
-               this->cursor_shape = cursor_tweak_scale_down_xpm;
+               cursor_filename = "tweak-scale-down.svg";
            }
            break;
        case TWEAK_MODE_ROTATE:
            this->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>rotate clockwise</b>; with Shift, <b>counterclockwise</b>."), sel_message);
            if (with_shift) {
-               this->cursor_shape = cursor_tweak_rotate_counterclockwise_xpm;
+               cursor_filename = "tweak-rotate-counterclockwise.svg";
            } else {
-               this->cursor_shape = cursor_tweak_rotate_clockwise_xpm;
+               cursor_filename = "tweak-rotate-clockwise.svg";
            }
            break;
        case TWEAK_MODE_MORELESS:
            this->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>duplicate</b>; with Shift, <b>delete</b>."), sel_message);
            if (with_shift) {
-               this->cursor_shape = cursor_tweak_less_xpm;
+               cursor_filename = "tweak-less.svg";
            } else {
-               this->cursor_shape = cursor_tweak_more_xpm;
+               cursor_filename = "tweak-more.svg";
            }
            break;
        case TWEAK_MODE_PUSH:
            this->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag to <b>push paths</b>."), sel_message);
-           this->cursor_shape = cursor_push_xpm;
+           cursor_filename = "tweak-push.svg";
            break;
        case TWEAK_MODE_SHRINK_GROW:
            this->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>inset paths</b>; with Shift to <b>outset</b>."), sel_message);
            if (with_shift) {
-               this->cursor_shape = cursor_thicken_xpm;
+               cursor_filename = "tweak-outset.svg";
            } else {
-               this->cursor_shape = cursor_thin_xpm;
+               cursor_filename = "tweak-inset.svg";
            }
            break;
        case TWEAK_MODE_ATTRACT_REPEL:
            this->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>attract paths</b>; with Shift to <b>repel</b>."), sel_message);
            if (with_shift) {
-               this->cursor_shape = cursor_repel_xpm;
+               cursor_filename = "tweak-repel.svg";
            } else {
-               this->cursor_shape = cursor_attract_xpm;
+               cursor_filename = "tweak-attract.svg";
            }
            break;
        case TWEAK_MODE_ROUGHEN:
            this->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>roughen paths</b>."), sel_message);
-           this->cursor_shape = cursor_roughen_xpm;
+           cursor_filename = "tweak-roughen.svg";
            break;
        case TWEAK_MODE_COLORPAINT:
            this->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>paint objects</b> with color."), sel_message);
-           this->cursor_shape = cursor_color_xpm;
+           cursor_filename = "tweak-color.svg";
            break;
        case TWEAK_MODE_COLORJITTER:
            this->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>randomize colors</b>."), sel_message);
-           this->cursor_shape = cursor_color_xpm;
+           cursor_filename = "tweak-color.svg";
            break;
        case TWEAK_MODE_BLUR:
            this->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>increase blur</b>; with Shift to <b>decrease</b>."), sel_message);
-           this->cursor_shape = cursor_color_xpm;
+           cursor_filename = "tweak-color.svg";
            break;
    }
 

@@ -86,13 +86,12 @@ private:
 
     SelectedStyle *parent;
 
-    guint32 startcolor;
-    bool startcolor_set;
+    guint32 startcolor = 0;
+    bool startcolor_set = false;
 
-    gchar const *undokey;
+    gchar const *undokey = "ssrot1";
 
-    GdkCursor *cr;
-    bool cr_set;
+    bool cr_set = false;
 };
 
 class RotateableStrokeWidth : public Rotateable {

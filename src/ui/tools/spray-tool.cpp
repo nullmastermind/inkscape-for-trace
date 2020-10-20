@@ -57,8 +57,6 @@
 #include "object/box3d.h"
 #include "object/sp-item-transform.h"
 
-#include "ui/pixmaps/cursor-spray.xpm"
-
 #include "svg/svg.h"
 #include "svg/svg-color.h"
 
@@ -134,7 +132,7 @@ static void sp_spray_scale_rel(Geom::Point c, SPDesktop */*desktop*/, SPItem *it
 }
 
 SprayTool::SprayTool()
-    : ToolBase(cursor_spray_xpm, false)
+    : ToolBase("spray.svg", false)
     , pressure(TC_DEFAULT_PRESSURE)
     , dragging(false)
     , usepressurewidth(false)

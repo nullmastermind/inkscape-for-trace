@@ -38,8 +38,6 @@
 #include "object/sp-defs.h"
 #include "object/sp-namedview.h"
 
-#include "ui/pixmaps/cursor-3dbox.xpm"
-
 #include "ui/shape-editor.h"
 #include "ui/tools/box3d-tool.h"
 #include "ui/widget/canvas.h"  // Forced redraw
@@ -59,7 +57,7 @@ const std::string& Box3dTool::getPrefsPath() {
 const std::string Box3dTool::prefsPath = "/tools/shapes/3dbox";
 
 Box3dTool::Box3dTool()
-    : ToolBase(cursor_3dbox_xpm)
+    : ToolBase("box.svg")
     , _vpdrag(nullptr)
     , box3d(nullptr)
     , ctrl_dragged(false)

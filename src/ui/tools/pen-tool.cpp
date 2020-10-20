@@ -41,8 +41,6 @@
 
 #include "object/sp-path.h"
 
-#include "ui/pixmaps/cursor-pen.xpm"
-
 #include "ui/draw-anchor.h"
 #include "ui/shortcuts.h"
 #include "ui/tools-switch.h"
@@ -81,15 +79,10 @@ const std::string& PenTool::getPrefsPath() {
 
 const std::string PenTool::prefsPath = "/tools/freehand/pen";
 
-PenTool::PenTool()
-    : FreehandBase(cursor_pen_xpm)
+PenTool::PenTool(const std::string& cursor_filename)
+    : FreehandBase(cursor_filename)
 {
     tablet_enabled = false;
-}
-
-PenTool::PenTool(gchar const *const *cursor_shape)
-    : FreehandBase(cursor_shape)
-{
 }
 
 PenTool::~PenTool() {

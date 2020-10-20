@@ -45,10 +45,6 @@
 #include "object/sp-text.h"
 #include "style.h"
 
-#include "ui/pixmaps/cursor-gradient.xpm"
-#include "ui/pixmaps/cursor-gradient-add.xpm"
-
-
 #include "ui/tools/mesh-tool.h"
 
 
@@ -69,7 +65,7 @@ const std::string MeshTool::prefsPath = "/tools/mesh";
 // TODO: The gradient tool class looks like a 1:1 copy.
 
 MeshTool::MeshTool()
-    : ToolBase(cursor_gradient_xpm)
+    : ToolBase("mesh.svg")
 // TODO: Why are these connections stored as pointers?
     , selcon(nullptr)
     , subselcon(nullptr)
@@ -681,11 +677,11 @@ bool MeshTool::root_handler(GdkEvent* event) {
                 sp_mesh_context_over_curve(this, Geom::Point(event->motion.x, event->motion.y));
 
             if (this->cursor_addnode && over_curve.empty()) {
-                this->cursor_shape = cursor_gradient_xpm;
+                cursor_filename = "mesh.svg";
                 this->sp_event_context_update_cursor();
                 this->cursor_addnode = false;
             } else if (!this->cursor_addnode && !over_curve.empty()) {
-                this->cursor_shape = cursor_gradient_add_xpm;
+                cursor_filename = "mesh-add.svg";
                 this->sp_event_context_update_cursor();
                 this->cursor_addnode = true;
             }

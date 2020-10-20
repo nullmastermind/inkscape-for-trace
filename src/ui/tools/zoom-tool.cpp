@@ -23,10 +23,6 @@
 
 #include "include/macros.h"
 
-#include "ui/pixmaps/cursor-zoom.xpm"
-#include "ui/pixmaps/cursor-zoom-out.xpm"
-
-
 namespace Inkscape {
 namespace UI {
 namespace Tools {
@@ -38,7 +34,7 @@ const std::string& ZoomTool::getPrefsPath() {
 const std::string ZoomTool::prefsPath = "/tools/zoom";
 
 ZoomTool::ZoomTool()
-    : ToolBase(cursor_zoom_xpm)
+    : ToolBase("zoom-in.svg")
     , escaped(false)
 {
 }
@@ -183,7 +179,7 @@ bool ZoomTool::root_handler(GdkEvent* event) {
 
                 case GDK_KEY_Shift_L:
                 case GDK_KEY_Shift_R:
-                    this->cursor_shape = cursor_zoom_out_xpm;
+                    cursor_filename = "zoom-out.svg";
                     this->sp_event_context_update_cursor();
                     break;
 
@@ -201,7 +197,7 @@ bool ZoomTool::root_handler(GdkEvent* event) {
             switch (get_latin_keyval (&event->key)) {
             	case GDK_KEY_Shift_L:
             	case GDK_KEY_Shift_R:
-                    this->cursor_shape = cursor_zoom_xpm;
+                    cursor_filename = "zoom-in.svg";
                     this->sp_event_context_update_cursor();
                     break;
             	default:

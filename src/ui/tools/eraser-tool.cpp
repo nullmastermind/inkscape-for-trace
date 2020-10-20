@@ -66,8 +66,6 @@
 #include "object/sp-use.h"
 #include "style.h"
 
-#include "ui/pixmaps/cursor-eraser.xpm"
-
 #include "svg/svg.h"
 
 #include "ui/tools/eraser-tool.h"
@@ -97,7 +95,7 @@ const std::string& EraserTool::getPrefsPath() {
 const std::string EraserTool::prefsPath = "/tools/eraser";
 
 EraserTool::EraserTool()
-    : DynamicBase(cursor_eraser_xpm)
+    : DynamicBase("eraser.svg")
     , nowidth(false)
 {
 }

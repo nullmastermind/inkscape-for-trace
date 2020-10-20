@@ -35,8 +35,6 @@
 #include "object/sp-ellipse.h"
 #include "object/sp-namedview.h"
 
-#include "ui/pixmaps/cursor-ellipse.xpm"
-
 #include "ui/tools/arc-tool.h"
 #include "ui/shape-editor.h"
 #include "ui/tools/tool-base.h"
@@ -58,7 +56,7 @@ const std::string ArcTool::prefsPath = "/tools/shapes/arc";
 
 
 ArcTool::ArcTool()
-    : ToolBase(cursor_ellipse_xpm)
+    : ToolBase("arc.svg")
     , arc(nullptr)
 {
 }

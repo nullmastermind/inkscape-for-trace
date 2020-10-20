@@ -49,8 +49,6 @@
 #include "object/sp-ellipse.h"
 
 #include "ui/knot/knot-holder.h"
-#include "ui/pixmaps/cursor-text-insert.xpm"
-#include "ui/pixmaps/cursor-text.xpm"
 #include "ui/shape-editor.h"
 #include "ui/widget/canvas.h"
 #include "ui/event-debug.h"
@@ -83,7 +81,7 @@ const std::string TextTool::prefsPath = "/tools/text";
 
 
 TextTool::TextTool()
-    : ToolBase(cursor_text_xpm)
+    : ToolBase("text.svg")
 {
 }
 
@@ -558,7 +556,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                 }
                 indicator->show();
 
-                this->cursor_shape = cursor_text_insert_xpm;
+                cursor_filename = "text-insert.svg";
                 this->sp_event_context_update_cursor();
                 sp_text_context_update_text_selection(this);
                 if (SP_IS_TEXT(item_ungrouped)) {
@@ -574,7 +572,7 @@ bool TextTool::root_handler(GdkEvent* event) {
             } else {
                 this->over_text = false;
                 // update cursor and statusbar: we are not over a text object now
-                this->cursor_shape = cursor_text_xpm;
+                cursor_filename = "text.svg";
                 this->sp_event_context_update_cursor();
                 desktop->event_context->defaultMessageContext()->clear();
             }

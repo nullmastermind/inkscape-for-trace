@@ -61,8 +61,6 @@
 
 #include "path/path-util.h"
 
-#include "ui/pixmaps/cursor-calligraphy.xpm"
-
 #include "svg/svg.h"
 
 
@@ -93,7 +91,7 @@ const std::string& CalligraphicTool::getPrefsPath() {
 const std::string CalligraphicTool::prefsPath = "/tools/calligraphic";
 
 CalligraphicTool::CalligraphicTool()
-    : DynamicBase(cursor_calligraphy_xpm)
+    : DynamicBase("calligraphy.svg")
     , keep_selected(true)
     , hatch_spacing(0)
     , hatch_spacing_step(0)

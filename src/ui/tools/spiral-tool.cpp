@@ -37,7 +37,6 @@
 #include "object/sp-namedview.h"
 #include "object/sp-spiral.h"
 
-#include "ui/pixmaps/cursor-spiral.xpm"
 #include "ui/shape-editor.h"
 
 #include "xml/node-event-vector.h"
@@ -55,7 +54,7 @@ const std::string& SpiralTool::getPrefsPath() {
 const std::string SpiralTool::prefsPath = "/tools/shapes/spiral";
 
 SpiralTool::SpiralTool()
-    : ToolBase(cursor_spiral_xpm)
+    : ToolBase("spiral.svg")
     , spiral(nullptr)
     , revo(3)
     , exp(1)

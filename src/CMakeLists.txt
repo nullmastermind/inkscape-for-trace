@@ -75,7 +75,6 @@ set(inkscape_SRC
   snapped-line.cpp
   snapped-point.cpp
   snapper.cpp
-  sp-cursor.cpp
   sp-item-notify-moveto.cpp 
   style-internal.cpp
   style.cpp
@@ -178,7 +177,6 @@ set(inkscape_SRC
   snapped-line.h
   snapped-point.h
   snapper.h
-  sp-cursor.h
   sp-guide-attachment.h
   sp-guide-constraint.h
   sp-item-notify-moveto.h

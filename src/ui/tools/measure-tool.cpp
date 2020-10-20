@@ -46,8 +46,6 @@
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
 
-#include "ui/pixmaps/cursor-measure.xpm"
-
 #include "svg/stringstream.h"
 #include "svg/svg-color.h"
 #include "svg/svg.h"
@@ -332,7 +330,7 @@ void createAngleDisplayCurve(SPDesktop *desktop,
 boost::optional<Geom::Point> explicit_base_tmp = boost::none;
 
 MeasureTool::MeasureTool()
-    : ToolBase(cursor_measure_xpm)
+    : ToolBase("measure.svg")
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     start_p = readMeasurePoint(true);

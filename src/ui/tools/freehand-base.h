@@ -49,7 +49,7 @@ namespace Tools {
 
 class FreehandBase : public ToolBase {
 public:
-    FreehandBase(gchar const *const *cursor_shape);
+    FreehandBase(const std::string& cursor_filename);
     ~FreehandBase() override;
 
     Inkscape::Selection *selection;

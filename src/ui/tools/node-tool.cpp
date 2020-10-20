@@ -43,9 +43,6 @@
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
 
-#include "ui/pixmaps/cursor-node-d.xpm"
-#include "ui/pixmaps/cursor-node.xpm"
-
 #include "ui/shape-editor.h" // temporary!
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/curve-drag-point.h"
@@ -126,7 +123,7 @@ const std::string& NodeTool::getPrefsPath() {
 const std::string NodeTool::prefsPath = "/tools/nodes";
 
 NodeTool::NodeTool()
-    : ToolBase(cursor_node_xpm)
+    : ToolBase("node.svg")
 {
 }
 
@@ -780,11 +777,11 @@ void NodeTool::mouseover_changed(Inkscape::UI::ControlPoint *p) {
     CurveDragPoint *cdp = dynamic_cast<CurveDragPoint*>(p);
 
     if (cdp && !this->cursor_drag) {
-        this->cursor_shape = cursor_node_d_xpm;
+        cursor_filename = "node-mouseover.svg";
         this->sp_event_context_update_cursor();
         this->cursor_drag = true;
     } else if (!cdp && this->cursor_drag) {
-        this->cursor_shape = cursor_node_xpm;
+        cursor_filename = "node.svg";
         this->sp_event_context_update_cursor();
         this->cursor_drag = false;
     }

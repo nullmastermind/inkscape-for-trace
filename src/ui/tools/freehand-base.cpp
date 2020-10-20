@@ -73,8 +73,8 @@ static void spdc_flush_white(FreehandBase *dc, SPCurve *gc);
 static void spdc_reset_white(FreehandBase *dc);
 static void spdc_free_colors(FreehandBase *dc);
 
-FreehandBase::FreehandBase(gchar const *const *cursor_shape)
-    : ToolBase(cursor_shape)
+FreehandBase::FreehandBase(const std::string& cursor_filename)
+    : ToolBase(cursor_filename)
     , selection(nullptr)
     , attach(false)
     , red_color(0xff00007f)

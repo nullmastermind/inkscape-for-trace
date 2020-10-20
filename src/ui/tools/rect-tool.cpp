@@ -36,8 +36,6 @@
 #include "object/sp-rect.h"
 #include "object/sp-namedview.h"
 
-#include "ui/pixmaps/cursor-rect.xpm"
-
 #include "ui/shape-editor.h"
 #include "ui/tools/rect-tool.h"
 
@@ -56,7 +54,7 @@ const std::string& RectTool::getPrefsPath() {
 const std::string RectTool::prefsPath = "/tools/shapes/rect";
 
 RectTool::RectTool()
-    : ToolBase(cursor_rect_xpm)
+    : ToolBase("rect.svg")
     , rect(nullptr)
     , rx(0)
     , ry(0)

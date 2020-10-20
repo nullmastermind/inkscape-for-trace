@@ -34,7 +34,6 @@
 #include "message-context.h"
 #include "preferences.h"
 #include "snap.h"
-#include "sp-cursor.h"
 #include "verbs.h"
 
 #include "display/control/snap-indicator.h"
@@ -43,12 +42,11 @@
 
 #include "helper/action.h"
 
-#include "ui/pixmaps/cursor-select.xpm"
-
 #include "object/sp-guide.h"
 #include "object/sp-namedview.h"
 #include "object/sp-root.h"
 
+#include "ui/cursor-utils.h"
 #include "ui/dialog-events.h"
 #include "ui/tools-switch.h"
 #include "ui/dialog/guides.h"
@@ -352,21 +350,17 @@ bool sp_dt_guide_event(GdkEvent *event, Inkscape::CanvasItemGuideLine *guide_ite
             // set move or rotate cursor
             Geom::Point const event_w(event->crossing.x, event->crossing.y);
 
-            GdkDisplay *display = gdk_display_get_default();
-            GdkCursorType cursor_type;
+            auto display = desktop->getCanvas()->get_display();
+            auto window  = desktop->getCanvas()->get_window();
 
-            if ((event->crossing.state & GDK_SHIFT_MASK) && (drag_type != SP_DRAG_MOVE_ORIGIN)) {
-                cursor_type = GDK_EXCHANGE;
+            if (guide->getLocked()) {
+                Inkscape::load_svg_cursor(display, window, "select.svg");
+            } else if ((event->crossing.state & GDK_SHIFT_MASK) && (drag_type != SP_DRAG_MOVE_ORIGIN)) {
+                Inkscape::load_svg_cursor(display, window, "rotate.svg");
             } else {
-                cursor_type = GDK_HAND1;
+                auto guide_cursor = Gdk::Cursor::create(display, "grab");
+                window->set_cursor(guide_cursor);
             }
-
-            GdkCursor *guide_cursor = gdk_cursor_new_for_display(display, cursor_type);
-            if(guide->getLocked()){
-                guide_cursor = sp_cursor_from_xpm(cursor_select_xpm);
-            }
-            gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(desktop->getCanvas()->gobj())), guide_cursor);
-            g_object_unref(guide_cursor);
 
             char *guide_description = guide->description();
             desktop->guidesMessageContext()->setF(Inkscape::NORMAL_MESSAGE, _("<b>Guideline</b>: %s"), guide_description);
@@ -403,9 +397,11 @@ bool sp_dt_guide_event(GdkEvent *event, Inkscape::CanvasItemGuideLine *guide_ite
                 case GDK_KEY_Shift_L:
                 case GDK_KEY_Shift_R:
                     if (drag_type != SP_DRAG_MOVE_ORIGIN) {
-                        auto display = Gdk::Display::get_default();
-                        auto guide_cursor = Gdk::Cursor::create(display, Gdk::EXCHANGE);
-                        desktop->getCanvas()->get_window()->set_cursor(guide_cursor);
+
+                        auto display = desktop->getCanvas()->get_display();
+                        auto window  = desktop->getCanvas()->get_window();
+
+                        Inkscape::load_svg_cursor(display, window, "rotate.svg");
                         ret = true;
                         break;
                     }
@@ -422,7 +418,7 @@ bool sp_dt_guide_event(GdkEvent *event, Inkscape::CanvasItemGuideLine *guide_ite
                 case GDK_KEY_Shift_R:
                 {
                     auto display = Gdk::Display::get_default();
-                    auto guide_cursor = Gdk::Cursor::create(display, Gdk::HAND1);
+                    auto guide_cursor = Gdk::Cursor::create(display, "grab");
                     desktop->getCanvas()->get_window()->set_cursor(guide_cursor);
                     break;
                 }

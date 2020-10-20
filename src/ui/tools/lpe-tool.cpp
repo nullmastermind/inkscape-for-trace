@@ -34,8 +34,6 @@
 
 #include "object/sp-path.h"
 
-#include "ui/pixmaps/cursor-crosshairs.xpm"
-
 #include "util/units.h"
 
 #include "ui/toolbar/lpe-toolbar.h"
@@ -70,7 +68,7 @@ const std::string& LpeTool::getPrefsPath() {
 const std::string LpeTool::prefsPath = "/tools/lpetool";
 
 LpeTool::LpeTool()
-    : PenTool(cursor_crosshairs_xpm)
+    : PenTool("geometric.svg")
     , mode(Inkscape::LivePathEffect::BEND_PATH)
 {
 }

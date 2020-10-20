@@ -18,8 +18,6 @@
 #define SP_SELECT_CONTEXT(obj) (dynamic_cast<Inkscape::UI::Tools::SelectTool*>((Inkscape::UI::Tools::ToolBase*)obj))
 #define SP_IS_SELECT_CONTEXT(obj) (dynamic_cast<const Inkscape::UI::Tools::SelectTool*>((const Inkscape::UI::Tools::ToolBase*)obj) != NULL)
 
-struct SPCanvasItem;
-
 namespace Inkscape {
   class SelTrans;
   class SelectionDescriber;
@@ -62,6 +60,9 @@ private:
 	bool sp_select_context_abort();
 	void sp_select_context_cycle_through_items(Inkscape::Selection *selection, GdkEventScroll *scroll_event);
 	void sp_select_context_reset_opacities();
+
+    Glib::RefPtr<Gdk::Cursor> _cursor_mouseover;
+    Glib::RefPtr<Gdk::Cursor> _cursor_dragging;
 };
 
 }
@@ -69,3 +70,14 @@ private:
 }
 
 #endif
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

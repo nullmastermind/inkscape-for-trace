@@ -50,8 +50,6 @@
 #include "path/path-boolop.h"
 #include "style.h"
 
-#include "ui/pixmaps/cursor-pencil.xpm"
-
 #include "svg/svg.h"
 
 #include "ui/draw-anchor.h"
@@ -78,7 +76,7 @@ const std::string& PencilTool::getPrefsPath() {
 const std::string PencilTool::prefsPath = "/tools/freehand/pencil";
 
 PencilTool::PencilTool()
-    : FreehandBase(cursor_pencil_xpm)
+    : FreehandBase("pencil.svg")
     , p()
     , _npoints(0)
     , _state(SP_PENCIL_CONTEXT_IDLE)

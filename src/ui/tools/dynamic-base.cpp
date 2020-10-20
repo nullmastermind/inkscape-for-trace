@@ -28,8 +28,8 @@ namespace Inkscape {
 namespace UI {
 namespace Tools {
 
-DynamicBase::DynamicBase(gchar const *const *cursor_shape)
-    : ToolBase(cursor_shape)
+DynamicBase::DynamicBase(const std::string& cursor_filename)
+    : ToolBase(cursor_filename)
     , accumulated(nullptr)
     , currentshape(nullptr)
     , currentcurve(nullptr)
