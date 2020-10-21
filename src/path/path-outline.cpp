@@ -449,12 +449,20 @@ item_to_paths(SPItem *item, bool legacy, SPItem *context)
         // also dont know if opacity is or want to be included in context
         gchar const *s_val   = sp_repr_css_property(ctxt_style, "stroke", nullptr);
         gchar const *f_val   = sp_repr_css_property(ctxt_style, "fill", nullptr);
-        gchar const *fill_value = (style->fill.paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_STROKE) ? s_val : f_val;
-        gchar const *stroke_value = (style->stroke.paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_FILL) ? f_val : s_val;
-        sp_repr_css_set_property(ncss, "fill", fill_value);
-        sp_repr_css_set_property(ncsf, "fill", fill_value);
-        sp_repr_css_set_property(ncss, "stroke", stroke_value);
-        sp_repr_css_set_property(ncsf, "stroke", stroke_value);
+        if (style->fill.paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_STROKE ||
+            style->fill.paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_FILL) 
+        {
+            gchar const *fill_value = (style->fill.paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_STROKE) ? s_val : f_val;
+            sp_repr_css_set_property(ncss, "fill", fill_value);
+            sp_repr_css_set_property(ncsf, "fill", fill_value);
+        }
+        if (style->stroke.paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_STROKE ||
+            style->stroke.paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_FILL) 
+        {
+            gchar const *stroke_value = (style->stroke.paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_FILL) ? f_val : s_val;
+            sp_repr_css_set_property(ncss, "stroke", stroke_value);
+            sp_repr_css_set_property(ncsf, "stroke", stroke_value);
+        }
     }
     // Stroke
     
