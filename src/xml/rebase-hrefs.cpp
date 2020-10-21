@@ -38,6 +38,11 @@ static bool href_needs_rebasing(char const *href)
         return false;
     }
 
+    // skip absolute-path and network-path references
+    if (href[0] == '/') {
+        return false;
+    }
+
     // Don't change non-file URIs (like data or http)
     std::string const scheme = Glib::uri_parse_scheme(href);
     return scheme.empty() || scheme == "file";
@@ -135,6 +140,11 @@ void Inkscape::XML::rebase_hrefs(SPDocument *const doc, gchar const *const new_b
 
         // skip fragment URLs
         if (href_cstr[0] == '#') {
+            continue;
+        }
+
+        // skip absolute-path and network-path references
+        if (href_cstr[0] == '/') {
             continue;
         }
 
