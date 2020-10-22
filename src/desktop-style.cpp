@@ -184,7 +184,9 @@ sp_desktop_apply_css_recursive(SPObject *o, SPCSSAttr *css, bool skip_lines)
 /**
  * Apply style on selection on desktop.
  */
- void sp_desktop_set_style(SPDesktop *desktop, SPCSSAttr *css, bool change, bool write_current){
+
+void sp_desktop_set_style(SPDesktop *desktop, SPCSSAttr *css, bool change, bool write_current)
+{
     return sp_desktop_set_style(desktop->getSelection(), desktop, css, change, write_current);
 }
 

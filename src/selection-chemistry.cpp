@@ -4372,7 +4372,10 @@ void ObjectSet::swapFillStroke()
             }
         }
 
-        sp_desktop_apply_css_recursive(item, css, true);
+        Inkscape::ObjectSet set{};
+        set.add(item);
+        sp_desktop_set_style(&set, desktop(), css);
+
         sp_repr_css_attr_unref (css);
     }
 
