@@ -33,6 +33,7 @@ class CanvasItemGroup; // A canvas control that contains other canvas controls.
 class CanvasItemCtrl : public CanvasItem {
 
 public:
+    ~CanvasItemCtrl() override;
     CanvasItemCtrl(CanvasItemGroup *group);
     CanvasItemCtrl(CanvasItemGroup *group, CanvasItemCtrlType type);
     CanvasItemCtrl(CanvasItemGroup *group, CanvasItemCtrlType type, Geom::Point const &p);

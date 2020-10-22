@@ -25,6 +25,11 @@
 
 namespace Inkscape {
 
+CanvasItemCtrl::~CanvasItemCtrl()
+{
+    delete[] _cache;
+}
+
 /**
  * Create an null control node.
  */
