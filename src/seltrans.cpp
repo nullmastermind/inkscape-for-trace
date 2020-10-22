@@ -1262,7 +1262,9 @@ gboolean Inkscape::SelTrans::rotateRequest(Geom::Point &pt, guint state)
 
     double radians = atan2(Geom::dot(Geom::rot90(d1), d2), Geom::dot(d1, d2));;
     auto increments = Modifiers::Modifier::get(Modifiers::Type::TRANS_INCREMENT)->active(state);
-    if (increments) {
+    auto confine = Modifiers::Modifier::get(Modifiers::Type::TRANS_CONFINE)->active(state);
+    // Either key will now snap the rotation to specific points
+    if (increments || confine) {
         // Snap to defined angle increments
         double cos_t = Geom::dot(q1, q2);
         double sin_t = Geom::dot(Geom::rot90(q1), q2);
