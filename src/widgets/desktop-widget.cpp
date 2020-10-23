@@ -35,6 +35,7 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "ege-color-prof-tracker.h"
+#include "enums.h"
 #include "file.h"
 #include "inkscape-application.h"
 #include "inkscape-version.h"

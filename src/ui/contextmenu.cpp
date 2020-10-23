@@ -57,7 +57,7 @@
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
 
-//#include "ui/desktop/menu-icon-shift.h"
+#include "ui/desktop/menu-icon-shift.h"
 //#include "ui/dialog/dialog-manager.h"
 #include "ui/dialog/dialog-container.h"
 #include "ui/dialog/layer-properties.h"

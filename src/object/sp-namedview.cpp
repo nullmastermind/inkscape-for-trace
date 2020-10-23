@@ -823,9 +823,9 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
     // Cancel any history of transforms up to this point (must be before call to zoom).
     desktop->clear_transform_history();
 
-    if (show_dialogs) {
+    /*if (show_dialogs) {
         desktop->getContainer()->load_container_state();
-    }
+    }*/
 }
 
 /*

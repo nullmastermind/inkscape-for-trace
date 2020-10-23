@@ -17,6 +17,7 @@
 
 #include "desktop.h"
 #include "inkscape.h"
+#include "enums.h"
 #include "include/macros.h"
 #include "ui/dialog-events.h"
 #include "ui/tools/tool-base.h"
