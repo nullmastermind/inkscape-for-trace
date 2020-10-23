@@ -1520,7 +1520,13 @@ Effect::addCanvasIndicators(SPLPEItem const*/*lpeitem*/, std::vector<Geom::PathV
  */
 void
 Effect::update_helperpath() {
-    Inkscape::UI::Tools::sp_update_helperpath(SP_ACTIVE_DESKTOP);
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (desktop) {
+        Inkscape::UI::Tools::NodeTool *nt = dynamic_cast<Inkscape::UI::Tools::NodeTool*>(desktop->event_context);
+        if (nt) {
+            Inkscape::UI::Tools::sp_update_helperpath(desktop);
+        }
+    }
 }
 
 /**
