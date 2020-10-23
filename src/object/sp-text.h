@@ -70,7 +70,7 @@ public:
     /** discards the drawing objects representing this text. */
     void _clearFlow(Inkscape::DrawingGroup *in_arena);
 
-    bool _optimizeTextpathText;
+    bool _optimizeTextpathText = false;
 
 private:
 
