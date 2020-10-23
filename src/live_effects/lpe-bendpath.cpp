@@ -216,8 +216,11 @@ KnotHolderEntityWidthBendPath::knot_set(Geom::Point const &p, Geom::Point const&
     } else {
         lpe->prop_scale.param_set_value(Geom::distance(s , ptA)/(lpe->original_height/2.0));
     }
+    if (!lpe->original_height) {
+        lpe->prop_scale.param_set_value(0);
+    }
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setDouble("/live_effects/bend/width", lpe->prop_scale);
+    prefs->setDouble("/live_effects/bend_path/width", lpe->prop_scale);
 
     sp_lpe_item_update_patheffect (SP_LPE_ITEM(item), false, true);
 }

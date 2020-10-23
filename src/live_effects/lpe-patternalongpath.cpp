@@ -306,7 +306,7 @@ KnotHolderEntityWidthPatternAlongPath::knot_set(Geom::Point const &p, Geom::Poin
 
     Geom::Point const s = snap_knot_position(p, state);
     SPShape const *sp_shape = dynamic_cast<SPShape const *>(SP_LPE_ITEM(item));
-    if (sp_shape) {
+    if (sp_shape && lpe->original_height) {
         auto curve_before = SPCurve::copy(sp_shape->curveForEdit());
         if (curve_before) {
             Geom::Path const *path_in = curve_before->first_path();
@@ -326,9 +326,12 @@ KnotHolderEntityWidthPatternAlongPath::knot_set(Geom::Point const &p, Geom::Poin
             } else {
                 lpe->prop_scale.param_set_value(Geom::distance(s , ptA)/(lpe->original_height/2.0));
             }
-            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-            prefs->setDouble("/live_effects/pap/width", lpe->prop_scale);
         }
+        if (!lpe->original_height) {
+            lpe->prop_scale.param_set_value(0);
+        }
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        prefs->setDouble("/live_effects/skeletal/width", lpe->prop_scale);
     }
     sp_lpe_item_update_patheffect (SP_LPE_ITEM(item), false, true);
 }

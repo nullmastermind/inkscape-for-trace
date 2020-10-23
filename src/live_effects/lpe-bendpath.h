@@ -26,6 +26,11 @@
 #include "live_effects/lpegroupbbox.h"
 
 namespace Inkscape {
+namespace UI {
+namespace Toolbar {
+class PencilToolbar;
+}
+} // namespace UI
 namespace LivePathEffect {
 
 namespace BeP {
@@ -53,6 +58,8 @@ public:
     PathParam bend_path;
 
     friend class BeP::KnotHolderEntityWidthBendPath;
+    friend class Inkscape::UI::Toolbar::PencilToolbar;
+
 protected:
     double original_height;
     ScalarParam prop_scale;

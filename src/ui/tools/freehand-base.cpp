@@ -230,9 +230,9 @@ static void spdc_paste_curve_as_freehand_shape(Geom::PathVector const &newpath, 
     Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
     static_cast<LPEPatternAlongPath*>(lpe)->pattern.set_new_value(newpath,true);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    double scale = prefs->getDouble("/live_effects/pap/width", 0.265);
+    double scale = prefs->getDouble("/live_effects/skeletal/width", 1);
     if (!scale) {
-        scale = 1 / document->getDocumentScale()[0];
+        scale = 1;
     }
     Inkscape::SVGOStringStream os;
     os << scale;
@@ -344,7 +344,7 @@ static void spdc_apply_bend_shape(gchar const *svgd, FreehandBase *dc, SPItem *i
 
     // write bend parameters:
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    double scale = prefs->getDouble("/live_effects/bend/width", 1);
+    double scale = prefs->getDouble("/live_effects/bend_path/width", 1);
     if (!scale) {
         scale = 1;
     }
@@ -390,6 +390,9 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
     auto *desktop = dc->getDesktop();
 
     if (item && SP_IS_LPE_ITEM(item)) {
+        double defsize = 10 / (0.265 * dc->getDesktop()->getDocument()->getDocumentScale()[0]);
+#define SHAPE_LENGTH defsize
+#define SHAPE_HEIGHT defsize
         //Store the clipboard path to apply in the future without the use of clipboard
         static Geom::PathVector previous_shape_pathv;
         static SPItem *bend_item;
@@ -449,7 +452,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
         const char *stroke_width = sp_repr_css_property(css_item, "stroke-width", "0");
         double swidth;
         sp_svg_number_read_d(stroke_width, &swidth);
-        swidth = prefs->getDouble("/live_effects/powerstroke/width", swidth/2);
+        swidth = prefs->getDouble("/live_effects/powerstroke/width", SHAPE_HEIGHT / 2);
         if (!swidth) {
             swidth = swidth/2;
         }
@@ -463,9 +466,6 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
                 previous_shape_type = NONE;
             }
         }
-
-#define SHAPE_LENGTH 10
-#define SHAPE_HEIGHT 10
 
         switch (shape) {
             case NONE:
@@ -928,9 +928,10 @@ static void spdc_flush_white(FreehandBase *dc, SPCurve *gc)
             item->updateRepr();
             item->doWriteTransform(item->transform, nullptr, true);
             spdc_check_for_and_apply_waiting_LPE(dc, item, c.get(), false);
-            dc->selection->set(repr);
             if(previous_shape_type == BEND_CLIPBOARD){
                 repr->parent()->removeChild(repr);
+            } else {
+                dc->selection->set(repr);
             }
         }
         DocumentUndo::done(doc, SP_IS_PEN_CONTEXT(dc)? SP_VERB_CONTEXT_PEN : SP_VERB_CONTEXT_PENCIL,

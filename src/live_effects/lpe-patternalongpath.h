@@ -17,6 +17,11 @@
 #include "live_effects/parameter/point.h"
 
 namespace Inkscape {
+namespace UI {
+namespace Toolbar {
+class PencilToolbar;
+}
+} // namespace UI
 namespace LivePathEffect {
 
 namespace WPAP {
@@ -47,12 +52,12 @@ public:
     void addKnotHolderEntities(KnotHolder * knotholder, SPItem * item) override;
 
     PathParam  pattern;
-
     friend class WPAP::KnotHolderEntityWidthPatternAlongPath;
+    friend class Inkscape::UI::Toolbar::PencilToolbar;
+
 protected:
     double original_height;
     ScalarParam prop_scale;
-
 private:
     EnumParam<PAPCopyType> copytype;
     BoolParam scale_y_rel;
