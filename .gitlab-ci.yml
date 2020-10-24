@@ -108,6 +108,9 @@ inkscape:mac:
     - if: '$CI_PROJECT_NAMESPACE == "inkscape"'
     - if: '$CI_PROJECT_NAMESPACE == "dehesselle"'
   before_script:
+    # workaround: after_script doesn't run for cancelled/timed out jobs
+    #             https://gitlab.com/gitlab-org/gitlab/-/issues/15603
+    - packaging/macos/uninstall_toolset.sh
     - packaging/macos/install_toolset.sh
   script:
     - packaging/macos/build_inkscape.sh
