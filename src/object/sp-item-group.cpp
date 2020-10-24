@@ -382,89 +382,6 @@ void sp_item_group_ungroup_handle_clones(SPItem *parent, Geom::Affine const g)
 }
 
 void
-sp_recursive_scale_text_size(Inkscape::XML::Node *repr, double scale){
-    for (Inkscape::XML::Node *child = repr->firstChild() ; child; child = child->next() ){
-        if ( child) {
-            sp_recursive_scale_text_size(child, scale);
-        }
-    }
-    SPCSSAttr * css = sp_repr_css_attr(repr,"style");
-    Glib::ustring element = g_quark_to_string(repr->code());
-    if ((css && element == "svg:text") || element == "svg:tspan") {
-        gchar const *w = sp_repr_css_property(css, "font-size", nullptr);
-        if (w) {
-            gchar *units = nullptr;
-            double wd = g_ascii_strtod(w, &units);
-            wd *= scale;
-            if (w != units) {
-                Inkscape::CSSOStringStream os;
-                os << wd << units; // reattach units
-                sp_repr_css_set_property(css, "font-size", os.str().c_str());
-                Glib::ustring css_str;
-                sp_repr_css_write_string(css,css_str);
-                repr->setAttributeOrRemoveIfEmpty("style", css_str);
-            }
-        }
-        w = nullptr;
-        w = sp_repr_css_property(css, "letter-spacing", nullptr);
-        if (w) {
-            gchar *units = nullptr;
-            double wd = g_ascii_strtod(w, &units);
-            wd *= scale;
-            if (w != units) {
-                Inkscape::CSSOStringStream os;
-                os << wd << units; // reattach units
-                sp_repr_css_set_property(css, "letter-spacing", os.str().c_str());
-                Glib::ustring css_str;
-                sp_repr_css_write_string(css,css_str);
-                repr->setAttributeOrRemoveIfEmpty("style", css_str);
-            }
-        }
-        w = nullptr;
-        w = sp_repr_css_property(css, "word-spacing", nullptr);
-        if (w) {
-            gchar *units = nullptr;
-            double wd = g_ascii_strtod(w, &units);
-            wd *= scale;
-            if (w != units) {
-                Inkscape::CSSOStringStream os;
-                os << wd << units; // reattach units
-                sp_repr_css_set_property(css, "word-spacing", os.str().c_str());
-                Glib::ustring css_str;
-                sp_repr_css_write_string(css,css_str);
-                repr->setAttributeOrRemoveIfEmpty("style", css_str);
-            }
-        }
-        gchar const *dx = repr->attribute("dx");
-        if (dx) {
-            gchar ** dxarray = g_strsplit(dx, " ", 0);
-            Inkscape::SVGOStringStream dx_data;
-            while (*dxarray != nullptr) {
-                double pos;
-                sp_svg_number_read_d(*dxarray, &pos);
-                pos *= scale;
-                dx_data << pos << " ";
-                dxarray++;
-            }
-            repr->setAttribute("dx", dx_data.str());
-        }
-        gchar const *dy = repr->attribute("dy");
-        if (dy) {
-            gchar ** dyarray = g_strsplit(dy, " ", 0);
-            Inkscape::SVGOStringStream dy_data;
-            while (*dyarray != nullptr) {
-                double pos;
-                sp_svg_number_read_d(*dyarray, &pos);
-                pos *= scale;
-                dy_data << pos << " ";
-                dyarray++;
-            }
-            repr->setAttribute("dy", dy_data.str());
-        }
-    }
-}
-
-void
 sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_done)
 {
     g_return_if_fail (group != nullptr);
@@ -537,26 +454,25 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
              * extra complication & maintenance burden and this case is rare.
              */
 
-            child.updateRepr();
-
-            Inkscape::XML::Node *nrepr = child.getRepr()->duplicate(prepr->document());
-
             // Merging transform
             Geom::Affine ctrans = citem->transform * g;
-                // We should not apply the group's transformation to both a linked offset AND to its source
-                if (dynamic_cast<SPOffset *>(citem)) { // Do we have an offset at hand (whether it's dynamic or linked)?
-                    SPItem *source = sp_offset_get_source(dynamic_cast<SPOffset *>(citem));
-                    // When dealing with a chain of linked offsets, the transformation of an offset will be
-                    // tied to the transformation of the top-most source, not to any of the intermediate
-                    // offsets. So let's find the top-most source
-                    while (source != nullptr && dynamic_cast<SPOffset *>(source)) {
-                        source = sp_offset_get_source(dynamic_cast<SPOffset *>(source));
-                    }
-                    if (source != nullptr && // If true then we must be dealing with a linked offset ...
-                        group->isAncestorOf(source) ) { // ... of which the source is in the same group
-                        ctrans = citem->transform; // then we should apply the transformation of the group to the offset
-                    }
-                }
+
+            SPItem *source = nullptr;
+            SPText *citem_text = nullptr;
+            SPOffset *citem_offset = nullptr;
+
+            // We should not apply the group's transformation to both a linked offset AND to its source
+            if ((citem_offset = dynamic_cast<SPOffset *>(citem))) {
+                // When dealing with a chain of linked offsets, the transformation of an offset will be
+                // tied to the transformation of the top-most source, not to any of the intermediate
+                // offsets. So let's find the top-most source
+                auto offset = citem_offset;
+                do {
+                    source = sp_offset_get_source(offset);
+                } while ((offset = dynamic_cast<SPOffset *>(source)));
+            } else if ((citem_text = dynamic_cast<SPText *>(citem))) {
+                source = citem_text->get_first_shape_dependency();
+            }
 
             // FIXME: constructing a transform that would fully preserve the appearance of a
             // textpath if it is ungrouped with its path seems to be impossible in general
@@ -568,27 +484,22 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
             // This is just a way to temporarily remember the transform in repr. When repr is
             // reattached outside of the group, the transform will be written more properly
             // (i.e. optimized into the object if the corresponding preference is set)
-            gchar *affinestr=sp_svg_transform_write(ctrans);
-            SPText * text = dynamic_cast<SPText *>(citem);
-            if (text) {
-                //this causes a change in text-on-path appearance when there is a non-conformal transform, see bug #1594565
-                SPTextPath * text_path = dynamic_cast<SPTextPath *>(text->firstChild());
-                if (!text_path) {
-                    nrepr->setAttribute("transform", affinestr);
-                } else {
-                    // The following breaks roundtripping  group -> ungroup
-                    // double scale = (ctrans.expansionX() + ctrans.expansionY()) / 2.0;
-                    // sp_recursive_scale_text_size(nrepr, scale);
-                    Geom::Affine ttrans = ctrans.inverse() * SP_ITEM(text)->transform * ctrans;
-                    gchar *affinestr = sp_svg_transform_write(ttrans);
-                    nrepr->setAttribute("transform", affinestr);
-                    g_free(affinestr);
+            if (source && group->isAncestorOf(source)) {
+                double const scale = g.descrim();
+                if (citem_text) {
+                    citem_text->_adjustFontsizeRecursive(citem_text, scale);
+                } else if (citem_offset) {
+                    citem_offset->rad *= scale;
                 }
+                citem->adjust_stroke_width_recursive(scale);
+                citem->transform = g.inverse() * ctrans;
             } else {
-                nrepr->setAttribute("transform", affinestr);
+                citem->transform = ctrans;
             }
-            g_free(affinestr);
 
+            child.updateRepr();
+
+            Inkscape::XML::Node *nrepr = child.getRepr()->duplicate(prepr->document());
             items.push_back(nrepr);
 
         } else {

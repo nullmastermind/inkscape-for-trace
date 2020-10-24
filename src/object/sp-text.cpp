@@ -1159,6 +1159,24 @@ Inkscape::XML::Node* SPText::get_first_rectangle()
     return nullptr;
 }
 
+/**
+ * Get the first shape reference which affects the position and layout of
+ * this text item. This can be either a shape-inside or a textPath referenced
+ * shape. If this text does not depend on any other shape, then return NULL.
+ */
+SPItem *SPText::get_first_shape_dependency()
+{
+    if (style->shape_inside.set) {
+        for (auto *href : style->shape_inside.hrefs) {
+            return href->getObject();
+        }
+    } else if (auto textpath = dynamic_cast<SPTextPath *>(firstChild())) {
+        return sp_textpath_get_path_item(textpath);
+    }
+
+    return nullptr;
+}
+
 SPItem *create_text_with_inline_size (SPDesktop *desktop, Geom::Point p0, Geom::Point p1)
 {
     SPDocument *doc = desktop->getDocument();

@@ -125,6 +125,7 @@ private:
     bool has_shape_inside() const;
     Geom::OptRect get_frame();                        // Gets inline-size or shape-inside frame.
     Inkscape::XML::Node* get_first_rectangle();       // Gets first shape-inside rectangle (if it exists).
+    SPItem *get_first_shape_dependency();
     void remove_newlines();                           // Removes newlines in text.
 };
 
