@@ -165,7 +165,7 @@ void FilterColorMatrix::render_cairo(FilterSlot &slot)
     if (type == COLORMATRIX_LUMINANCETOALPHA) {
         out = ink_cairo_surface_create_same_size(input, CAIRO_CONTENT_ALPHA);
     } else {
-        out = ink_cairo_surface_create_identical(input);
+        out = ink_cairo_surface_create_same_size(input, CAIRO_CONTENT_COLOR_ALPHA);
         // Set ci to that used for computation
         set_cairo_surface_ci(out, ci_fp);
     }

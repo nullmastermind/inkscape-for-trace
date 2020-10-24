@@ -186,7 +186,6 @@ void ink_cairo_surface_filter(cairo_surface_t *in, cairo_surface_t *out, Filter 
     // 1. Cairo ARGB32 surface strides are always divisible by 4
     // 2. We can only receive CAIRO_FORMAT_ARGB32 or CAIRO_FORMAT_A8 surfaces
     // 3. Surfaces have the same dimensions
-    // 4. Output surface is A8 if input is A8
 
     int w = cairo_image_surface_get_width(in);
     int h = cairo_image_surface_get_height(in);
@@ -273,9 +272,8 @@ void ink_cairo_surface_filter(cairo_surface_t *in, cairo_surface_t *out, Filter 
                 }
             }
         }
-    } else {
+    } else if (bppout == 1) {
         // bppin == 1, bppout == 1
-        // Note: there is no path for bppin == 1, bppout == 4 because it is useless
         if (fast_path) {
             #if HAVE_OPENMP
             #pragma omp parallel for if(limit > OPENMP_THRESHOLD) num_threads(numOfThreads)
@@ -299,6 +297,29 @@ void ink_cairo_surface_filter(cairo_surface_t *in, cairo_surface_t *out, Filter 
                     guint32 out_px = filter(in_px);
                     *out_p = out_px >> 24;
                     ++in_p; ++out_p;
+                }
+            }
+        }
+    } else {
+        // bppin == 1, bppout == 4
+        // used in COLORMATRIX_MATRIX when in is NR_FILTER_SOURCEALPHA
+        if (fast_path) {
+            #if HAVE_OPENMP
+            #pragma omp parallel for if(limit > OPENMP_THRESHOLD) num_threads(numOfThreads)
+            #endif
+            for (int i = 0; i < limit; ++i) {
+                guint8 in_p = reinterpret_cast<guint8*>(in_data)[i];
+                out_data[i] = filter(guint32(in_p) << 24);
+            }
+        } else {
+            #if HAVE_OPENMP
+            #pragma omp parallel for if(limit > OPENMP_THRESHOLD) num_threads(numOfThreads)
+            #endif
+            for (int i = 0; i < h; ++i) {
+                guint8 *in_p = reinterpret_cast<guint8*>(in_data) + i * stridein;
+                guint32 *out_p = out_data + i * strideout/4;
+                for (int j = 0; j < w; ++j) {
+                    out_p[j] = filter(guint32(in_p[j]) << 24);
                 }
             }
         }
