@@ -397,6 +397,7 @@ protected:
     UI::Widget::ZoomCorrRulerSlider _ui_zoom_correction;
     UI::Widget::PrefCheckButton _ui_yaxisdown;
     UI::Widget::PrefCheckButton _ui_rotationlock;
+    UI::Widget::PrefCheckButton _ui_cursorscaling;
 
     //Spellcheck
     UI::Widget::PrefCombo       _spell_language;

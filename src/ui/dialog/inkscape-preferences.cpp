@@ -1590,6 +1590,10 @@ void InkscapePreferences::initPageUI()
         _mouse_grabsize.init("/options/grabsize/value", 1, 15, 1, 2, 3, 0);
     _page_ui.add_line(false, "", _mouse_grabsize, "", _("Set the relative size of node handles"), true);
                          
+    _page_ui.add_group_header(_("Cursor size"));
+    _ui_cursorscaling.init(_("Enable cursor scaling"), "/options/cursorscaling", true);
+    _page_ui.add_line(false, "", _ui_cursorscaling, "", _("When off, cursor scaling is disabled. Cursor scaling may be broken when fractional scaling is enabled."), true);
+
     // Theme
     _page_theme.add_group_header(_("Theme"));
     _dark_theme.init(_("Use dark theme"), "/theme/preferDarkTheme", false);

@@ -22,8 +22,7 @@ Glib::RefPtr<Gdk::Cursor> load_svg_cursor(Glib::RefPtr<Gdk::Display> display,
                                           guint32 fill = 0xffffffff,
                                           guint32 stroke = 0x000000ff,
                                           double fill_opacity = 1.0,
-                                          double stroke_opacity = 1.0,
-                                          int scale = 1);
+                                          double stroke_opacity = 1.0);
 
 } // Namespace Inkscape
 

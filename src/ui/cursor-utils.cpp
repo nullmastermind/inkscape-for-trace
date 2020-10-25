@@ -44,8 +44,7 @@ load_svg_cursor(Glib::RefPtr<Gdk::Display> display,
                 guint32 fill,
                 guint32 stroke,
                 double fill_opacity,
-                double stroke_opacity,
-                int scale)
+                double stroke_opacity)
 {
     // GTK puts cursors in a "cursors" subdirectory of icon themes. We'll do the same... but
     // note that we cannot use the normal GTK method for loading cursors as GTK knows nothing
@@ -134,10 +133,14 @@ load_svg_cursor(Glib::RefPtr<Gdk::Display> display,
     sp_repr_css_attr_unref(css);
 
     // Find the rendered size of the icon.
-#ifdef GDK_WINDOWING_QUARTZ
-    int wscale = scale; // Default cursor size (get_default_cursor_size()) fixed to 32 on Quartz. Cursor scaling handled elsewhere.
-#else
-    int wscale = scale * window->get_scale_factor(); // Adjust for HiDPI screens.
+    int scale = 1;
+#ifndef GDK_WINDOWING_QUARTZ
+    // Default cursor size (get_default_cursor_size()) fixed to 32 on Quartz. Cursor scaling handled elsewhere.
+
+    bool cursor_scaling = prefs->getBool("/options/cursorscaling"); // Fractional scaling is broken but we can't detect it.
+    if (cursor_scaling) {
+        scale = window->get_scale_factor(); // Adjust for HiDPI screens.
+    }
 #endif
 
     // Check for maximum size
@@ -148,14 +151,14 @@ load_svg_cursor(Glib::RefPtr<Gdk::Display> display,
 
     auto w = document->getWidth().value("px");
     auto h = document->getHeight().value("px");
-    int sw = w * wscale;
-    int sh = h * wscale;
-    int dpix = 96 * wscale; // DPI
-    int dpiy = 96 * wscale;
+    int sw = w * scale;
+    int sh = h * scale;
+    int dpix = 96 * scale; // DPI
+    int dpiy = 96 * scale;
 
     // Calculate the hotspot.
-    int hotspot_x = root->getIntAttribute("inkscape:hotspot_x", 0) * scale; // Do not include window scale factor!
-    int hotspot_y = root->getIntAttribute("inkscape:hotspot_y", 0) * scale;
+    int hotspot_x = root->getIntAttribute("inkscape:hotspot_x", 0); // Do not include window scale factor!
+    int hotspot_y = root->getIntAttribute("inkscape:hotspot_y", 0);
 
     auto ink_pixbuf = sp_generate_internal_bitmap(document.get(), nullptr, 0, 0, w, h, sw, sh, dpix, dpiy, 0, nullptr);
     auto pixbuf = Glib::wrap(ink_pixbuf->getPixbufRaw());
