@@ -510,7 +510,7 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
 
     /* Step 2 - clear group */
     // remember the position of the group
-    gint pos = group->getRepr()->position();
+    auto insert_after = group->getRepr()->prev();
 
     // the group is leaving forever, no heir, clones should take note; its children however are going to reemerge
     group->deleteObject(true, false);
@@ -530,7 +530,8 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
     /* Step 4 - add items */
     for (auto *repr : items) {
         // add item
-        prepr->addChildAtPos(repr, pos++);
+        prepr->addChild(repr, insert_after);
+        insert_after = repr;
 
         // fill in the children list if non-null
         SPItem *item = static_cast<SPItem *>(doc->getObjectByRepr(repr));
