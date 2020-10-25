@@ -369,10 +369,12 @@ void sp_item_group_ungroup_handle_clones(SPItem *parent, Geom::Affine const g)
         if (citem && !citem->cloned) {
             SPUse *useitem = dynamic_cast<SPUse *>(citem);
             if (useitem && useitem->get_original() == parent) {
-                Geom::Affine ctrans;
-                ctrans = g.inverse() * citem->transform;
+                Geom::Affine ctrans =
+                    g.inverse() * Geom::Translate(useitem->x.computed, useitem->y.computed) * citem->transform;
                 gchar *affinestr = sp_svg_transform_write(ctrans);
                 citem->setAttribute("transform", affinestr);
+                citem->removeAttribute("x");
+                citem->removeAttribute("y");
                 g_free(affinestr);
             }
         }
