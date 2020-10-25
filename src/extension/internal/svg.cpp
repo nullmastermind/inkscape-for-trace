@@ -484,6 +484,15 @@ static void insert_text_fallback( Inkscape::XML::Node *repr, SPDocument *origina
                         span_tspan->setAttributeOrRemoveIfEmpty("style", style_text);
                     }
 
+                    // If this tspan has no attributes, discard it and add content directly to parent element.
+                    if (span_tspan->attributeList().empty()) {
+                        Inkscape::GC::release(span_tspan);
+                        span_tspan = line_tspan;
+                    } else {
+                        line_tspan->appendChild(span_tspan);
+                        Inkscape::GC::release(span_tspan);
+                    }
+
                     // Add text node
                     SPString *str = dynamic_cast<SPString *>(source_obj);
                     if (str) {
@@ -519,10 +528,6 @@ static void insert_text_fallback( Inkscape::XML::Node *repr, SPDocument *origina
                         }
                     }
                     it = it_span_end;
-
-                    // Add tspan to document
-                    line_tspan->appendChild(span_tspan);
-                    Inkscape::GC::release(span_tspan);
                 }
 
                 // Add line tspan to document
