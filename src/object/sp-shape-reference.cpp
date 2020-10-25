@@ -11,11 +11,23 @@
 SPShapeReference::SPShapeReference(SPObject *obj)
     : URIReference(obj)
 {
+    // The text object can be detached from the document but still be
+    // referenced, and its style (who's the owner of the SPShapeReference)
+    // can also still be referenced even after the object got destroyed.
+    _owner_release_connection = obj->connectRelease([this](SPObject *text_object) {
+        assert(text_object == this->getOwner());
+
+        // Fully detach to prevent reconnecting with a shape's modified signal
+        this->detach();
+
+        this->_owner_release_connection.disconnect();
+    });
+
     // https://www.w3.org/TR/SVG/text.html#TextShapeInside
     // Applies to: 'text' elements
     // Inherited: no
     if (!dynamic_cast<SPText *>(obj)) {
-        g_warning("shape reference on non-text object");
+        g_warning("shape reference on non-text object: %s", typeid(*obj).name());
         return;
     }
 
@@ -27,18 +39,6 @@ SPShapeReference::SPShapeReference(SPObject *obj)
             this->_shape_modified_connection =
                 shape_object->connectModified(sigc::mem_fun(*this, &SPShapeReference::on_shape_modified));
         }
-    });
-
-    // The text object can be detached from the document but still be
-    // referenced, and its style (who's the owner of the SPShapeReference)
-    // can also still be referenced even after the object got destroyed.
-    _owner_release_connection = obj->connectRelease([this](SPObject *text_object) {
-        assert(text_object == this->getOwner());
-
-        // Fully detach to prevent reconnecting with a shape's modified signal
-        this->detach();
-
-        this->_owner_release_connection.disconnect();
     });
 }
 
