@@ -76,9 +76,14 @@ Drawing::visibleHairlines() const
     return renderMode() == RENDERMODE_VISIBLE_HAIRLINES;
 }
 bool
+Drawing::outlineOverlay() const
+{
+    return renderMode() == RENDERMODE_OUTLINE_OVERLAY;
+}
+bool
 Drawing::renderFilters() const
 {
-    return renderMode() == RENDERMODE_NORMAL || renderMode() == RENDERMODE_VISIBLE_HAIRLINES;
+    return renderMode() == RENDERMODE_NORMAL || renderMode() == RENDERMODE_VISIBLE_HAIRLINES || renderMode() == RENDERMODE_OUTLINE_OVERLAY;
 }
 int
 Drawing::blurQuality() const

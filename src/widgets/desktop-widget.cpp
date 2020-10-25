@@ -542,7 +542,10 @@ SPDesktopWidget::updateTitle(gchar const* uri)
             Name += N_("no filters");
         } else if (render_mode == Inkscape::RENDERMODE_VISIBLE_HAIRLINES) {
             Name += N_("visible hairlines");
+        } else if (render_mode == Inkscape::RENDERMODE_OUTLINE_OVERLAY) {
+            Name += N_("outline overlay");
         }
+
 
         if (color_mode != Inkscape::COLORMODE_NORMAL &&
             render_mode != Inkscape::RENDERMODE_NORMAL) {

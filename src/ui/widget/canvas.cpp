@@ -330,7 +330,7 @@ Canvas::scroll_to(Geom::Point const &c, bool clear)
 
     // Copy backing store
     shift_content(Geom::IntPoint(dx, dy), _backing_store);
-    if (_split_mode != Inkscape::SPLITMODE_NORMAL) {
+    if (_split_mode != Inkscape::SPLITMODE_NORMAL || _drawing->outlineOverlay()) {
         shift_content(Geom::IntPoint(dx, dy), _outline_store);
     }
 
@@ -785,8 +785,21 @@ Canvas::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr)
 
     // Blit from the backing store, without regard for the clean region.
     // This is the only place the widget content is drawn!
-    cr->set_source(_backing_store, 0, 0);
-    cr->paint();
+    if (_drawing->outlineOverlay()) {
+        // Copy old background unshifted (reduces sensation of flicker while waiting for rendering newly exposed area).
+        //cr->set_operator(Cairo::Operator::OPERATOR_OVER);
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        double outline_overlay_opacity = prefs->getIntLimited("/options/rendering/outline-overlay-opacity", 50, 1, 100) / 100.0;
+        cr->set_source(_backing_store, 0, 0);
+        cr->paint();
+        cr->save();
+        cr->set_source(_outline_store, 0, 0);
+        cr->paint_with_alpha(outline_overlay_opacity);
+        cr->restore();
+    } else {
+        cr->set_source(_backing_store, 0, 0);
+        cr->paint();
+    }
     if (_split_mode != Inkscape::SPLITMODE_NORMAL) {
         auto const rect = Geom::Rect(0, 0, _width, _height);
         if (!rect.contains(_split_position)) {
@@ -1109,10 +1122,13 @@ Canvas::paint_rect_internal(PaintRectSetup const *setup, Geom::IntRect const &th
         _drawing->setColorMode(_color_mode);
 
         paint_single_buffer(this_rect, setup->canvas_rect, _backing_store);
-
-        if (_split_mode != Inkscape::SPLITMODE_NORMAL) {
+        bool outline_overlay = _drawing->outlineOverlay();
+        if (_split_mode != Inkscape::SPLITMODE_NORMAL || outline_overlay) {
             _drawing->setRenderMode(Inkscape::RENDERMODE_OUTLINE);
             paint_single_buffer(this_rect, setup->canvas_rect, _outline_store);
+            if (outline_overlay) {
+                _drawing->setRenderMode(Inkscape::RENDERMODE_OUTLINE_OVERLAY);
+            }
         }
 
         Cairo::RectangleInt crect = { this_rect.left(), this_rect.top(), this_rect.width(), this_rect.height() };
@@ -1508,7 +1524,7 @@ Canvas::pick_current_item(GdkEvent *event)
 
         // If in split mode, look at where cursor is to see if one should pick with outline mode.
         _drawing->setRenderMode(_render_mode);
-        if (_split_mode == Inkscape::SPLITMODE_SPLIT) {
+        if (_split_mode == Inkscape::SPLITMODE_SPLIT && !_drawing->outlineOverlay()) {
             if ((_split_direction == Inkscape::SPLITDIRECTION_NORTH && y > _split_position.y()) ||
                 (_split_direction == Inkscape::SPLITDIRECTION_SOUTH && y < _split_position.y()) ||
                 (_split_direction == Inkscape::SPLITDIRECTION_WEST  && x > _split_position.x()) ||

@@ -317,6 +317,7 @@ protected:
     UI::Widget::PrefSpinButton  _rendering_cache_size;
     UI::Widget::PrefSpinButton  _rendering_tile_multiplier;
     UI::Widget::PrefSpinButton  _rendering_xray_radius;
+    UI::Widget::PrefSpinButton  _rendering_outline_overlay_opacity;
     UI::Widget::PrefCombo       _rendering_redraw_priority;
     UI::Widget::PrefSpinButton  _filter_multi_threaded;
 

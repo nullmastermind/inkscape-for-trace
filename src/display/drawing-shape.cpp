@@ -331,7 +331,7 @@ DrawingShape::_pickItem(Geom::Point const &p, double delta, unsigned flags)
 
     if (!_curve) return nullptr;
     if (!_style) return nullptr;
-    bool outline = _drawing.outline() || _drawing.getOutlineSensitive();
+    bool outline = _drawing.outline() || _drawing.outlineOverlay() || _drawing.getOutlineSensitive();
     bool pick_as_clip = flags & PICK_AS_CLIP;
 
     if (SP_SCALE24_TO_FLOAT(_style->opacity.value) == 0 && !outline && !pick_as_clip) {

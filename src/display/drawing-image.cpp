@@ -187,7 +187,7 @@ DrawingImage::_pickItem(Geom::Point const &p, double delta, unsigned /*sticky*/)
 {
     if (!_pixbuf) return nullptr;
 
-    bool outline = _drawing.outline() || _drawing.getOutlineSensitive();
+    bool outline = _drawing.outline() || _drawing.outlineOverlay() || _drawing.getOutlineSensitive();
 
     if (outline) {
         Geom::Rect r = bounds();

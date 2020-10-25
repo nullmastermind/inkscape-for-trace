@@ -274,7 +274,7 @@ add_actions_canvas_mode(InkscapeWindow* win)
     // Sync action with desktop variables. TODO: Remove!
     auto prefs = Inkscape::Preferences::get();
 
-    int  display_mode = prefs->getIntLimited("/options/displaymode", 0, 0, 3);  // Default, minimum, maximum
+    int  display_mode = prefs->getIntLimited("/options/displaymode", 0, 0, 4);  // Default, minimum, maximum
     bool color_manage = prefs->getBool("/options/displayprofile/enable");
 
     SPDesktop* dt = win->get_desktop();

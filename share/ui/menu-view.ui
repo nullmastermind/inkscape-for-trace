@@ -146,6 +146,11 @@
           <attribute name='target' type='i'>3</attribute>
         </item>
         <item>
+          <attribute name='label' translatable="yes">Outline Overlay</attribute>
+          <attribute name='action'>win.canvas-display-mode</attribute>
+          <attribute name='target' type='i'>4</attribute>
+        </item>
+        <item>
           <attribute name='label' translatable="yes">Cycle</attribute>
           <attribute name='action'>win.canvas-display-mode-cycle</attribute>
         </item>

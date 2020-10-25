@@ -2559,11 +2559,15 @@ void InkscapePreferences::initPageRendering()
     _rendering_tile_multiplier.init("/options/rendering/tile-multiplier", 1.0, 512.0, 1.0, 16.0, 16.0, true, false);
     _page_rendering.add_line( false, _("Rendering tile multiplier:"), _rendering_tile_multiplier, "",
                               _("On modern hardware, increasing this value (default is 16) can help to get a better performance when there are large areas with filtered objects (this includes blur and blend modes) in your drawing. Decrease the value to make zooming and panning in relevant areas faster on low-end hardware in drawings with few or no filters."), false);
-
     // rendering xray radius
     _rendering_xray_radius.init("/options/rendering/xray-radius", 1.0, 1500.0, 1.0, 100.0, 100.0, true, false);
-    _page_rendering.add_line(false, _("X-ray radius:"), _rendering_xray_radius, "",
+    _page_rendering.add_line( false, _("X-ray radius:"), _rendering_xray_radius, "",
                              _("Radius of the circular area around the mouse cursor in X-ray mode"), false);
+
+    // rendering outline overlay opcaity
+    _rendering_outline_overlay_opacity.init("/options/rendering/outline-overlay-opacity", 1.0, 100.0, 1.0, 5.0, 50.0, true, false);
+    _page_rendering.add_line( false, _("Outline overlay opacity:"), _rendering_outline_overlay_opacity, _("%"),
+                             _("Opacity of the color on outline overlay render mode"), false);
 
     {
         // if these GTK constants ever change, consider adding a compatibility shim to SPCanvas::addIdle()

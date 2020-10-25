@@ -991,9 +991,9 @@ DrawingItem::pick(Geom::Point const &p, double delta, unsigned flags)
         return nullptr;
     }
 
-    bool outline = _drawing.outline() || _drawing.getOutlineSensitive();
+    bool outline = _drawing.outline() || _drawing.outlineOverlay() || _drawing.getOutlineSensitive();
 
-    if (!_drawing.outline() && !_drawing.getOutlineSensitive()) {
+    if (!_drawing.outline() && !_drawing.outlineOverlay() && !_drawing.getOutlineSensitive()) {
         // pick inside clipping path; if NULL, it means the object is clipped away there
         if (_clip) {
             DrawingItem *cpick = _clip->pick(p, delta, flags | PICK_AS_CLIP);

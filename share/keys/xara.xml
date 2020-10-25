@@ -255,6 +255,7 @@ Hom/end keys-select minimum or maximum feather values
 
   <bind action="ViewModeNormal"/>
   <bind action="ViewModeOutline"/>
+  <bind action="ViewModeOutlineOverlay" />
 
 <!-- Edit -->
 

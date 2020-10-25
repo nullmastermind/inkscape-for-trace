@@ -171,6 +171,7 @@ File, Edit, View, Modify, Text, Xtras, Window, Help.
   <bind action="ViewModeNormal"/>
   <!-- Wireframe View (Inkscape).  Keyline View Ctrl+K  (Freehand).  -->
   <bind key="K" modifiers="Ctrl" action="ViewModeOutline"/>
+  <bind action="ViewModeOutlineOverlay" />
 
   <!-- Freehand also has a Fast Mode  Ctrl+Shift+K  
   which can be used in combination with Keyline.  --> 

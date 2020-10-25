@@ -260,6 +260,7 @@ and tooltips. Only one binding for each action may have this attribute.
   <bind action="ViewModeNormal" />
   <bind action="ViewModeNoFilters" />
   <bind action="ViewModeOutline" />
+  <bind action="ViewModeOutlineOverlay" />
 
   <bind key="KP_5" modifiers="Alt" action="ViewColorModeToggle" display="true" />
 
