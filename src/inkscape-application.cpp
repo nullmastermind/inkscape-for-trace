@@ -717,8 +717,10 @@ ConcreteInkscapeApplication<Gtk::Application>::on_startup2()
     Gtk::Window::set_default_icon_name("org.inkscape.Inkscape");
 
     // Shortcuts
-    // Need to be setup before GUI elements are created! (Note, shortcuts appearing in GUI elements
-    // such as dialog title bars are not updated when change in the Inkscape Preferences dialog.)
+    // For verbs, shortcuts need to be setup before GUI elements are created! After verbs are gone,
+    // this can be removed. Initialization will then happen on first call to Shortcuts::getInstance()
+    // in Inkscape::Window constructor which will allow verification that actions exist
+    // before shortcuts are added.
     // Shortcuts for actions can be set before the actions are created.
     Inkscape::Shortcuts::getInstance().init();
 

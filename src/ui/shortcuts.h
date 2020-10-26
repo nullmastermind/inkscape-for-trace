@@ -53,6 +53,12 @@ public:
     static Shortcuts& getInstance()
     {
         static Shortcuts instance;
+
+        // Uncomment after verbs are gone. Until then, initialization explicitly called in InkscapeApplication::on_startup2().
+        // if (!instance.initialized) {
+        //     instance.init();
+        // }
+
         return instance;
     }
   
@@ -70,8 +76,7 @@ public:
     bool read( Glib::RefPtr<Gio::File> file, bool user_set = false);
     bool write(Glib::RefPtr<Gio::File> file, What what = User);
 
-    // Will disappear after verbs are gone.
-    void set_verb_shortcut(const Gtk::AccelKey& shortcut, Inkscape::Verb *const verb, bool is_primary, bool is_user_set);
+    // Verb stuff, to be removed.
     Gtk::AccelKey get_shortcut_from_verb(Verb* verb);
     Verb* get_verb_from_shortcut(const Gtk::AccelKey& shortcut);
     bool invoke_verb(GdkEventKey const *event, UI::View::View *view);
@@ -79,9 +84,14 @@ public:
     bool is_user_set(Verb* verb);
     bool is_user_set(Glib::ustring& action);
 
+    // Add/remove shortcuts
+    bool add_shortcut(Glib::ustring name, const Gtk::AccelKey& shortcut, bool user, bool is_primary = false);
+    bool remove_shortcut(Glib::ustring name);
+    Glib::ustring remove_shortcut(const Gtk::AccelKey& shortcut);
+
     // User shortcuts
     bool add_user_shortcut(Glib::ustring name, const Gtk::AccelKey& shortcut);
-    bool remove_user_shortcut(Glib::ustring name, const Gtk::AccelKey& shortcut);
+    bool remove_user_shortcut(Glib::ustring name);
     bool clear_user_shortcuts();
 
     // Utility
@@ -121,6 +131,8 @@ private:
     std::map<Gtk::AccelKey, Inkscape::Verb*, accel_key_less> shortcut_to_verb_map;
     std::map<Inkscape::Verb *, Gtk::AccelKey> primary;  // Shown in menus, etc.
     std::map<Inkscape::Verb *, bool> user_set;
+
+    bool initialized = false;
 };
 
 } // Namespace Inkscape

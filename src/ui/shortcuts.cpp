@@ -63,6 +63,8 @@ Shortcuts::Shortcuts()
 void
 Shortcuts::init() {
 
+    initialized = true;
+
     // Clear arrays (we may be re-reading).
     clear();
 
@@ -229,13 +231,13 @@ Shortcuts::read(Glib::RefPtr<Gio::File> file, bool user_set)
 
             gchar const *mod_name = iter->attribute("action");
             if (!mod_name) {
-                std::cout << "Shortcuts::read: Missing modifier for action!" << std::endl;;
+                std::cerr << "Shortcuts::read: Missing modifier for action!" << std::endl;;
                 continue;
             }
 
             Modifier *mod = Modifier::get(mod_name);
             if (mod == nullptr) {
-                std::cout << "Shortcuts::read: Can't find modifer: " << mod_name << std::endl; 
+                std::cerr << "Shortcuts::read: Can't find modifer: " << mod_name << std::endl; 
                 continue;
             }
  
@@ -273,9 +275,10 @@ Shortcuts::read(Glib::RefPtr<Gio::File> file, bool user_set)
         if (gaction && keys) {
 
             std::vector<Glib::ustring> key_vector = Glib::Regex::split_simple("\\s*,\\s*", keys);
-            app->set_accels_for_action(gaction, key_vector);
-
-            action_user_set[gaction] = user_set;
+            // Set one shortcut at a time so we can check if it has been previously used.
+            for (auto key : key_vector) {
+                add_shortcut(gaction, key, user_set);
+            }
 
             // Uncomment to see what the cat dragged in.
             // if (!key_vector.empty()) {
@@ -322,7 +325,7 @@ Shortcuts::read(Glib::RefPtr<Gio::File> file, bool user_set)
 
         Gdk::ModifierType modifiers = parse_modifier_string(iter->attribute("modifiers"), verb_name);
 
-        set_verb_shortcut (Gtk::AccelKey(keyval, modifiers), verb, is_primary, user_set);
+        add_shortcut (verb_name, Gtk::AccelKey(keyval, modifiers), user_set, is_primary);
     }
 
     return true;
@@ -403,31 +406,6 @@ Shortcuts::write(Glib::RefPtr<Gio::File> file, What what) {
 
     return true;
 };
-
-// Set a verb shortcut.
-void
-Shortcuts::set_verb_shortcut(const Gtk::AccelKey& val, Inkscape::Verb *verb, bool is_primary, bool is_user_set)
-{
-    // val is key value in lower 32 bits and modifier in upper 32 bits.
-    Inkscape::Verb *old_verb = shortcut_to_verb_map[val];
-    shortcut_to_verb_map[val] = verb;
-
-    // Clear old verb data (if key reassigned to different verb).
-    if (old_verb && old_verb != verb) {
-        Gtk::AccelKey old_primary = primary[old_verb];
-
-        if (old_primary.get_key() == val.get_key() && old_primary.get_mod() == val.get_mod()) {
-            primary[old_verb] = Gtk::AccelKey();
-            user_set[old_verb] = false;
-        }
-    }
-
-    if (is_primary) {
-        primary[verb] = val;
-        user_set[verb] = is_user_set;
-    }
-}
-
 
 // Return the primary shortcut for a verb or GDK_KEY_VoidSymbol if not found.
 Gtk::AccelKey
@@ -550,98 +528,172 @@ Shortcuts::list_all_actions()
 }
 
 
-// Adds to user's default.xml file.
+// Add a shortcut, removing any previous use of shortcut.
+// is_primary is for use with verbs and can be removed after verbs are gone.
 bool
-Shortcuts::add_user_shortcut(Glib::ustring name, const Gtk::AccelKey& shortcut) {
-
-    // We must first remove any existing shortcuts that use the same shortcut value.
-    Verb* old_verb = shortcut_to_verb_map[shortcut];
-    if (old_verb) {
-        primary[old_verb] = Gtk::AccelKey();
-        user_set[old_verb] = false;
-        shortcut_to_verb_map.erase(shortcut);
+Shortcuts::add_shortcut(Glib::ustring name, const Gtk::AccelKey& shortcut, bool user, bool is_primary)
+{
+    // Remove previous use of shortcut (already removed if new user shortcut).
+    if (Glib::ustring old_name = remove_shortcut(shortcut); old_name != "") {
+        std::cerr << "Shortcut::add_shortcut: duplicate shortcut found for: " << shortcut.get_abbrev()
+                  << "  Old: " << old_name << "  New: " << name << " !" << std::endl;
     }
 
-    Glib::ustring accel = shortcut_to_accelerator(shortcut);
-    std::vector<Glib::ustring> actions = app->get_actions_for_accel(accel);
-    for (auto action : actions) {
-        app->unset_accels_for_action(action);
-        action_user_set.erase(action);
-    }
+    // Add shortcut
 
-    // Now we add new verb/action
-    
     // Try verb first
     Verb* verb = Verb::getbyid(name.c_str(), false); // false => no error message
     if (verb) {
         shortcut_to_verb_map[shortcut] = verb;
-        primary[verb] = shortcut;
-        user_set[verb] = true;
-    } else {
-        // If not verb, it must be an action!
-        bool found = false;
-
-        list_all_detailed_action_names();
-        for (auto action : list_all_detailed_action_names()) {
-            if (action == name) {
-                // Action exists
-                app->set_accel_for_action(action, accel);
-                action_user_set[action] = true;
-                found = true;
-                break;
-            }
+        if (is_primary) {
+            primary[verb] = shortcut;
+            user_set[verb] = user;
         }
-
-        if (!found) {
-            // Oops, not an action either!
-            std::cerr << "Shortcuts::add_user_shortcut: No Verb or Action for " << name << std::endl;
-            return false;
-        }
+        return true;
     }
 
-    // Save
-    Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(get_path_string(USER, KEYS, "default.xml"));
-    write(file, User);
-
+    // To be removed after verbs are gone and initialization happens in InkscapeWindow constructor.
+    // We can then check if action exists before assigning shortcut to it.
+    // If not verb, must be action!
+    std::vector<Glib::ustring> accels = app->get_accels_for_action(name);
+    accels.push_back(shortcut.get_abbrev());
+    app->set_accels_for_action(name, accels);
+    action_user_set[name] = user;
     return true;
+
+    // To be uncommented after verbs are gone.
+    // for (auto action : list_all_detailed_action_names()) {
+    //     if (action == name) {
+    //         // Action exists
+    //         app->set_accel_for_action(action, shortcut.get_abbrev());
+    //         action_user_set[action] = user;
+    //         return true;
+    //     }
+    // }
+
+    // // Oops, not an action either!
+    // std::cerr << "Shortcuts::add_shortcut: No Verb or Action for " << name << std::endl;
+    // return false;
+}
+
+
+// Add a user shortcut, updating user's shortcut file if successful.
+bool
+Shortcuts::add_user_shortcut(Glib::ustring name, const Gtk::AccelKey& shortcut)
+{
+    // Remove previous shortcut(s) for verb/action.
+    remove_shortcut(name);
+
+    // Remove previous use of shortcut from other verbs/actions.
+    remove_shortcut(shortcut);
+
+    // Add shortcut, if successful, save to file.
+    if (add_shortcut(name, shortcut, true, true)) {  // Always user, always primary (verbs only).
+        // Save
+        Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(get_path_string(USER, KEYS, "default.xml"));
+        write(file, User);
+        return true;
+    }
+
+    std::cerr << "Shortcut::add_user_shortcut: Failed to add: " << name << " with shortcut " << shortcut.get_abbrev() << std::endl;
+    return false;
 };
 
-// Remove from user's default.xml file.
-bool
-Shortcuts::remove_user_shortcut(Glib::ustring name, const Gtk::AccelKey& shortcut)
-{
-    bool removed = false;
 
+// Remove a shortcut via key. Return name of removed verb or action.
+Glib::ustring
+Shortcuts::remove_shortcut(const Gtk::AccelKey& shortcut)
+{
     // Try verb first
-    Verb* verb = Verb::getbyid(name.c_str(), false); // Not verbose!
+    Verb *verb = shortcut_to_verb_map[shortcut];
     if (verb) {
         shortcut_to_verb_map.erase(shortcut);
         primary[verb] = Gtk::AccelKey();
         user_set[verb] = false;
-        removed = true;
-    } else {
-        // If not verb, it must be an action!
-        for (auto action : list_all_detailed_action_names()) {
-            if (action == name) {
-                // Action exists
-                app->unset_accels_for_action(action);
-                action_user_set.erase(action);
-                removed = true;
-                break;
-            }
+        return verb->get_id();
+    }
+
+    // Try action second
+    std::vector<Glib::ustring> actions = app->get_actions_for_accel(shortcut.get_abbrev());
+    if (actions.empty()) {
+        return Glib::ustring(); // No verb, no action, no pie.
+    }
+
+    Glib::ustring action_name;
+    for (auto action : actions) {
+        // Remove just the one shortcut, leaving the others intact.
+        std::vector<Glib::ustring> accels = app->get_accels_for_action(action);
+        auto it = std::find(accels.begin(), accels.end(), shortcut.get_abbrev());
+        if (it != accels.end()) {
+            action_name = action;
+            accels.erase(it);
+        }
+        app->set_accels_for_action(action, accels);
+    }
+
+    return action_name;
+}
+
+
+// Remove a shortcut via verb/action name.
+bool
+Shortcuts::remove_shortcut(Glib::ustring name)
+{
+    // Try verb first
+    Verb* verb = Verb::getbyid(name.c_str(), false); // Not verbose!
+    if (verb) {
+        Gtk::AccelKey shortcut = get_shortcut_from_verb(verb);
+        shortcut_to_verb_map.erase(shortcut);
+        primary[verb] = Gtk::AccelKey();
+        user_set[verb] = false;
+        return true;
+    }
+
+    // Try action second
+    for (auto action : list_all_detailed_action_names()) {
+        if (action == name) {
+            // Action exists
+            app->unset_accels_for_action(action);
+            action_user_set.erase(action);
+            return true;
         }
     }
 
-    if (removed) {
+    return false;
+}
+
+// Remove a user shortcut, updating user's shortcut file.
+bool
+Shortcuts::remove_user_shortcut(Glib::ustring name)
+{
+    // Check if really user shortcut.
+    bool user_shortcut = false;
+    Verb *verb = Verb::getbyid(name.c_str(), false); // Not verbose
+    if (verb) {
+        user_shortcut = is_user_set(verb);
+    } else {
+        user_shortcut = is_user_set(name);
+    }
+
+    if (!user_shortcut) {
+        // We don't allow removing non-user shortcuts.
+        return false;
+    }
+
+    if (remove_shortcut(name)) {
         // Save
         Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(get_path_string(USER, KEYS, "default.xml"));
         write(file, User);
-    } else {
-        std::cerr << "Shortcuts::remove_user_shortcut: Failed to remove: " << name << std::endl;
+
+        // Reread to get original shortcut (if any).
+        init();
+        return true;
     }
-        
-    return removed;
-};
+
+    std::cerr << "Shortcuts::remove_user_shortcut: Failed to remove shortcut for: " << name << std::endl;
+    return false;
+}
+
 
 // Remove all user's shortcuts (simply overwrites existing file).
 bool
