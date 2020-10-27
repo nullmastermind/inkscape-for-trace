@@ -762,6 +762,14 @@ SPStyle::write( guint const flags, SPStyleSrc const &style_src_req, SPStyle cons
 
     // std::cout << "SPStyle::write: flags: " << flags << std::endl;
 
+    // If not excluding this case, we'd end up writing all non-inheritable properties.
+    // Can happen when adding fallback <tspan>s to text like this:
+    // <text style="shape-inside:url(#x)">Hello</text>
+    if (base == this) {
+        assert((flags & SP_STYLE_FLAG_IFDIFF) && !(flags & SP_STYLE_FLAG_ALWAYS));
+        return {};
+    }
+
     Glib::ustring style_string;
     for(std::vector<SPIBase*>::size_type i = 0; i != _properties.size(); ++i) {
         if( base != nullptr ) {
