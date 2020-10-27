@@ -416,7 +416,7 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
     /* Step 1 - generate lists of children objects */
     std::vector<Inkscape::XML::Node *> items;
     std::vector<Inkscape::XML::Node *> objects;
-    Geom::Affine const g(group->transform);
+    Geom::Affine const g = i2anc_affine(group, group->parent);
 
     for (auto& child: group->children) {
         if (SPItem *citem = dynamic_cast<SPItem *>(&child)) {
