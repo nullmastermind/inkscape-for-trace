@@ -1818,19 +1818,18 @@ static void _namedview_modified (SPObject *obj, guint flags, SPDesktop *desktop)
             } else {
                 desktop->getCanvasPage()->raise_to_top(); // In display group.
             }
+
+            /* Show/hide page shadow */
+            if (nv->showpageshadow && nv->pageshadow) {
+                desktop->getCanvasShadow()->set_shadow(nv->bordercolor, nv->pageshadow);
+                desktop->getCanvasShadow()->show();
+            } else {
+                desktop->getCanvasShadow()->hide();
+            }
+
         } else {
             desktop->getCanvasPage()->hide();
-            if (nv->pageshadow) {
-                desktop->getCanvasPage()->set_shadow(0x0, 0);
-            }
-        }
-
-        /* Show/hide page shadow */
-        if (nv->showpageshadow && nv->pageshadow) {
-            desktop->getCanvasShadow()->set_shadow(nv->bordercolor, nv->pageshadow);
-            desktop->getCanvasShadow()->show();
-        } else {
-            desktop->getCanvasShadow()->hide();
+            desktop->getCanvasShadow()->hide(); // No page border, no shadow!
         }
 
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
