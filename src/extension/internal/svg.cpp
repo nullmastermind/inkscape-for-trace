@@ -479,7 +479,8 @@ static void insert_text_fallback( Inkscape::XML::Node *repr, SPDocument *origina
                     text->layout.getSourceOfCharacter(it, &source_obj, &span_text_start_iter);
 
                     // Set tspan style
-                    Glib::ustring style_text = (dynamic_cast<SPString *>(source_obj) ? source_obj->parent : source_obj)->style->write( SP_STYLE_FLAG_IFDIFF, SP_STYLE_SRC_UNSET, text->style);
+                    Glib::ustring style_text = (dynamic_cast<SPString *>(source_obj) ? source_obj->parent : source_obj)
+                                                   ->style->writeIfDiff(text->style);
                     if (!style_text.empty()) {
                         span_tspan->setAttributeOrRemoveIfEmpty("style", style_text);
                     }

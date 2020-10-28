@@ -131,7 +131,7 @@ void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
     if (style->d.set &&
 
-        (d_source == SP_STYLE_SRC_STYLE_PROP || d_source == SP_STYLE_SRC_STYLE_SHEET) ) {
+        (d_source == SPStyleSrc::STYLE_PROP || d_source == SPStyleSrc::STYLE_SHEET) ) {
 
         if (char const *d_val = style->d.value()) {
             // Chrome shipped with a different syntax for property vs attribute.
@@ -164,7 +164,7 @@ void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
                     sp_repr_css_set ( getRepr(), css, "style" );
                     sp_repr_css_attr_unref ( css );
 
-                    style->d.style_src = SP_STYLE_SRC_ATTRIBUTE;
+                    style->d.style_src = SPStyleSrc::ATTRIBUTE;
                 } else {
                     std::cerr << "SPPath::build: Failed to create curve: " << input << std::endl;
                 }

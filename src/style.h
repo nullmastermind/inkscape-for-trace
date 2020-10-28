@@ -55,10 +55,16 @@ public:
     void readFromObject(SPObject *object);
     void readFromPrefs(Glib::ustring const &path);
     bool isSet(SPAttr id);
-    void readIfUnset(SPAttr id, char const *val, SPStyleSrc const &source = SP_STYLE_SRC_STYLE_PROP );
-    Glib::ustring write( unsigned int const flags = SP_STYLE_FLAG_IFSET,
-                         SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                         SPStyle const *const base = nullptr ) const;
+    void readIfUnset(SPAttr id, char const *val, SPStyleSrc const &source = SPStyleSrc::STYLE_PROP );
+
+private:
+    Glib::ustring write(unsigned int flags, SPStyleSrc style_src_req, SPStyle const *base = nullptr) const;
+
+public:
+    Glib::ustring write(unsigned int flags = SP_STYLE_FLAG_IFSET) const;
+    Glib::ustring write(SPStyleSrc style_src_req) const;
+    Glib::ustring writeIfDiff(SPStyle const *base) const;
+
     void cascade( SPStyle const *const parent );
     void merge(   SPStyle const *const parent );
     void mergeString( char const *const p );

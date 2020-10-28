@@ -1103,13 +1103,13 @@ Inkscape::XML::Node* SPObject::write(Inkscape::XML::Document *doc, Inkscape::XML
         if (style) {
             // Write if property set by style attribute in this object
             Glib::ustring s =
-                style->write(SP_STYLE_FLAG_IFSET | SP_STYLE_FLAG_IFSRC, SP_STYLE_SRC_STYLE_PROP);
+                style->write(SPStyleSrc::STYLE_PROP);
 
-            // Write style attributes (SP_STYLE_SRC_ATTRIBUTE) back to xml object
+            // Write style attributes (SPStyleSrc::ATTRIBUTE) back to xml object
             bool any_written = false;
             auto properties = style->properties();
             for (auto * prop : properties) {
-                if(prop->shall_write(SP_STYLE_FLAG_IFSET | SP_STYLE_FLAG_IFSRC, SP_STYLE_SRC_ATTRIBUTE)) {
+                if(prop->shall_write(SP_STYLE_FLAG_IFSET | SP_STYLE_FLAG_IFSRC, SPStyleSrc::ATTRIBUTE)) {
                     // WARNING: We don't know for sure if the css names are the same as the attribute names
                     repr->setAttributeOrRemoveIfEmpty(prop->name(), prop->get_value());
                     any_written = true;

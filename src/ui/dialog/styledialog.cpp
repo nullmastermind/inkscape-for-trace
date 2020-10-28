@@ -755,7 +755,7 @@ void StyleDialog::readStyleElement()
                 if (iter.second.second) {
                     Glib::ustring val = "";
                     for (auto iterprop : obj->style->properties()) {
-                        if (iterprop->style_src != SP_STYLE_SRC_UNSET && iterprop->name() == iter.first) {
+                        if (iterprop->style_src != SPStyleSrc::UNSET && iterprop->name() == iter.first) {
                             val = iterprop->get_value();
                             break;
                         }
@@ -819,7 +819,7 @@ void StyleDialog::readStyleElement()
     empty = true;
     if (obj) {
         for (auto iter : obj->style->properties()) {
-            if (iter->style_src != SP_STYLE_SRC_UNSET) {
+            if (iter->style_src != SPStyleSrc::UNSET) {
                 auto key = iter->id();
                 if (key != SPAttr::FONT && key != SPAttr::D && key != SPAttr::MARKER) {
                     const gchar *attr = obj->getRepr()->attribute(iter->name().c_str());

@@ -481,7 +481,7 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
 
         /* Whole text's style */
         Glib::ustring style_str =
-            item->style->write( SP_STYLE_FLAG_IFDIFF, SP_STYLE_SRC_UNSET, item->parent ? item->parent->style : nullptr); // TODO investigate possibility
+            item->style->writeIfDiff(item->parent ? item->parent->style : nullptr); // TODO investigate possibility
         g_repr->setAttributeOrRemoveIfEmpty("style", style_str);
 
         Inkscape::Text::Layout::iterator iter = te_get_layout(item)->begin();
@@ -499,8 +499,8 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
             while (dynamic_cast<SPString const *>(pos_obj) && pos_obj->parent) {
                pos_obj = pos_obj->parent;   // SPStrings don't have style
             }
-            Glib::ustring style_str =
-                pos_obj->style->write( SP_STYLE_FLAG_IFDIFF, SP_STYLE_SRC_UNSET, pos_obj->parent ? pos_obj->parent->style : nullptr); // TODO investigate possibility
+            Glib::ustring style_str = pos_obj->style->writeIfDiff(
+                pos_obj->parent ? pos_obj->parent->style : nullptr); // TODO investigate possibility
 
             // get path from iter to iter_next:
             auto curve = te_get_layout(item)->convertToCurves(iter, iter_next);
@@ -560,7 +560,7 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
 
     /* Style */
     Glib::ustring style_str =
-        item->style->write( SP_STYLE_FLAG_IFDIFF, SP_STYLE_SRC_UNSET, item->parent ? item->parent->style : nullptr); // TODO investigate possibility
+        item->style->writeIfDiff(item->parent ? item->parent->style : nullptr); // TODO investigate possibility
     repr->setAttributeOrRemoveIfEmpty("style", style_str);
 
     /* Definition */

@@ -45,11 +45,13 @@ static const unsigned SP_STYLE_FLAG_IFSET  (1 << 0);
 static const unsigned SP_STYLE_FLAG_IFDIFF (1 << 1);
 static const unsigned SP_STYLE_FLAG_IFSRC  (1 << 3); // If source matches
 
-enum SPStyleSrc {
-    SP_STYLE_SRC_UNSET,
-    SP_STYLE_SRC_ATTRIBUTE,   // fill="red"
-    SP_STYLE_SRC_STYLE_PROP,  // style="fill:red"
-    SP_STYLE_SRC_STYLE_SHEET, // .red { fill:red; }
+// for the bitfield in SPStyle::style_src this must be an unsigned type
+enum class SPStyleSrc : unsigned
+{
+    UNSET,
+    ATTRIBUTE,   // fill="red"
+    STYLE_PROP,  // style="fill:red"
+    STYLE_SHEET, // .red { fill:red; }
 };
 
 /* General comments:
@@ -133,7 +135,7 @@ public:
           set(false),
           inherit(false),
           important(false),
-          style_src(SP_STYLE_SRC_STYLE_PROP), // Default to property, see bug 1662285.
+          style_src(SPStyleSrc::STYLE_PROP), // Default to property, see bug 1662285.
           style(nullptr)
     {}
 
@@ -141,7 +143,7 @@ public:
     = default;
 
     virtual void read( gchar const *str ) = 0;
-    void readIfUnset(gchar const *str, SPStyleSrc source = SP_STYLE_SRC_STYLE_PROP);
+    void readIfUnset(gchar const *str, SPStyleSrc source = SPStyleSrc::STYLE_PROP);
 
 protected:
     char const *important_str() const { return important ? " !important" : ""; }
@@ -149,15 +151,15 @@ protected:
 public:
     void readAttribute(Inkscape::XML::Node *repr)
     {
-        readIfUnset(repr->attribute(name().c_str()), SP_STYLE_SRC_ATTRIBUTE);
+        readIfUnset(repr->attribute(name().c_str()), SPStyleSrc::ATTRIBUTE);
     }
 
     virtual const Glib::ustring get_value() const = 0;
     bool shall_write( guint const flags = SP_STYLE_FLAG_IFSET,
-                      SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
+                      SPStyleSrc const &style_src_req = SPStyleSrc::STYLE_PROP,
                       SPIBase const *const base = nullptr ) const;
     virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
-                                       SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
+                                       SPStyleSrc const &style_src_req = SPStyleSrc::STYLE_PROP,
                                        SPIBase const *const base = nullptr ) const;
     virtual void clear() {
         set = false, inherit = false, important = false;
@@ -1142,7 +1144,7 @@ public:
     void read( gchar const *str ) override;
     const Glib::ustring get_value() const override;
     const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
-                                       SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
+                                       SPStyleSrc const &style_src_req = SPStyleSrc::STYLE_PROP,
                                        SPIBase const *const base = nullptr ) const override;
     void clear() override {
         SPIBase::clear();

@@ -547,7 +547,8 @@ Inkscape::XML::Node *SPFlowtext::getAsText()
             Glib::ustring::iterator span_text_start_iter;
             this->layout.getSourceOfCharacter(it, &source_obj, &span_text_start_iter);
 
-            Glib::ustring style_text = (dynamic_cast<SPString *>(source_obj) ? source_obj->parent : source_obj)->style->write( SP_STYLE_FLAG_IFDIFF, SP_STYLE_SRC_UNSET, this->style);
+            Glib::ustring style_text = (dynamic_cast<SPString *>(source_obj) ? source_obj->parent : source_obj)
+                                           ->style->writeIfDiff(this->style);
             span_tspan->setAttributeOrRemoveIfEmpty("style", style_text);
 
             SPString *str = dynamic_cast<SPString *>(source_obj);

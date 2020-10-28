@@ -860,7 +860,7 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
             // copy complete inherited style
             SPCSSAttr *css = sp_repr_css_attr_inherited(obj, "style");
             for (auto iter : item->style->properties()) {
-                if (iter->style_src == SP_STYLE_SRC_STYLE_SHEET) {
+                if (iter->style_src == SPStyleSrc::STYLE_SHEET) {
                     css->setAttributeOrRemoveIfEmpty(iter->name(), iter->get_value());
                 }
             }

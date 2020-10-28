@@ -112,34 +112,34 @@ TEST_F(ObjectTest, StyleSource) {
     SPRect *one = dynamic_cast<SPRect *>(doc->getObjectById("one"));
     ASSERT_TRUE(one != nullptr);
 
-    EXPECT_EQ(one->style->fill.style_src, SP_STYLE_SRC_STYLE_PROP);
-    EXPECT_EQ(one->style->stroke.style_src, SP_STYLE_SRC_STYLE_PROP);
-    EXPECT_EQ(one->style->opacity.style_src, SP_STYLE_SRC_STYLE_SHEET);
-    EXPECT_EQ(one->style->stroke_width.style_src, SP_STYLE_SRC_STYLE_PROP);
+    EXPECT_EQ(one->style->fill.style_src, SPStyleSrc::STYLE_PROP);
+    EXPECT_EQ(one->style->stroke.style_src, SPStyleSrc::STYLE_PROP);
+    EXPECT_EQ(one->style->opacity.style_src, SPStyleSrc::STYLE_SHEET);
+    EXPECT_EQ(one->style->stroke_width.style_src, SPStyleSrc::STYLE_PROP);
 
     SPRect *two = dynamic_cast<SPRect *>(doc->getObjectById("two"));
     ASSERT_TRUE(two != nullptr);
 
-    EXPECT_EQ(two->style->fill.style_src, SP_STYLE_SRC_STYLE_SHEET);
-    EXPECT_EQ(two->style->stroke.style_src, SP_STYLE_SRC_STYLE_PROP);
-    EXPECT_EQ(two->style->opacity.style_src, SP_STYLE_SRC_STYLE_SHEET);
-    EXPECT_EQ(two->style->stroke_width.style_src, SP_STYLE_SRC_STYLE_PROP);
+    EXPECT_EQ(two->style->fill.style_src, SPStyleSrc::STYLE_SHEET);
+    EXPECT_EQ(two->style->stroke.style_src, SPStyleSrc::STYLE_PROP);
+    EXPECT_EQ(two->style->opacity.style_src, SPStyleSrc::STYLE_SHEET);
+    EXPECT_EQ(two->style->stroke_width.style_src, SPStyleSrc::STYLE_PROP);
 
     SPRect *three = dynamic_cast<SPRect *>(doc->getObjectById("three"));
     ASSERT_TRUE(three != nullptr);
 
-    EXPECT_EQ(three->style->fill.style_src, SP_STYLE_SRC_STYLE_PROP);
-    EXPECT_EQ(three->style->stroke.style_src, SP_STYLE_SRC_STYLE_PROP);
-    EXPECT_EQ(three->style->opacity.style_src, SP_STYLE_SRC_STYLE_SHEET);
-    EXPECT_EQ(three->style->stroke_width.style_src, SP_STYLE_SRC_STYLE_PROP);
+    EXPECT_EQ(three->style->fill.style_src, SPStyleSrc::STYLE_PROP);
+    EXPECT_EQ(three->style->stroke.style_src, SPStyleSrc::STYLE_PROP);
+    EXPECT_EQ(three->style->opacity.style_src, SPStyleSrc::STYLE_SHEET);
+    EXPECT_EQ(three->style->stroke_width.style_src, SPStyleSrc::STYLE_PROP);
 
     SPRect *four = dynamic_cast<SPRect *>(doc->getObjectById("four"));
     ASSERT_TRUE(four != nullptr);
 
-    EXPECT_EQ(four->style->fill.style_src, SP_STYLE_SRC_STYLE_SHEET);
-    EXPECT_EQ(four->style->stroke.style_src, SP_STYLE_SRC_STYLE_PROP);
-    EXPECT_EQ(four->style->opacity.style_src, SP_STYLE_SRC_STYLE_SHEET);
-    EXPECT_EQ(four->style->stroke_width.style_src, SP_STYLE_SRC_STYLE_PROP);
+    EXPECT_EQ(four->style->fill.style_src, SPStyleSrc::STYLE_SHEET);
+    EXPECT_EQ(four->style->stroke.style_src, SPStyleSrc::STYLE_PROP);
+    EXPECT_EQ(four->style->opacity.style_src, SPStyleSrc::STYLE_SHEET);
+    EXPECT_EQ(four->style->stroke_width.style_src, SPStyleSrc::STYLE_PROP);
 }
 
 /*

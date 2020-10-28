@@ -758,7 +758,7 @@ bool SPStyle::isSet(SPAttr id)
  * \post ret != NULL.
  */
 Glib::ustring
-SPStyle::write( guint const flags, SPStyleSrc const &style_src_req, SPStyle const *const base ) const {
+SPStyle::write( guint const flags, SPStyleSrc const style_src_req, SPStyle const *const base ) const {
 
     // std::cout << "SPStyle::write: flags: " << flags << std::endl;
 
@@ -790,6 +790,30 @@ SPStyle::write( guint const flags, SPStyleSrc const &style_src_req, SPStyle cons
         style_string.erase( style_string.size() - 1 );
     }
     return style_string;
+}
+/**
+ * Get CSS string for set properties, or with SP_STYLE_FLAG_ALWAYS, for all properties.
+ */
+Glib::ustring SPStyle::write(unsigned int flags) const
+{
+    assert(flags & (SP_STYLE_FLAG_IFSET | SP_STYLE_FLAG_ALWAYS));
+    return write(flags, SPStyleSrc::UNSET);
+}
+/**
+ * Get CSS string for set properties from the requested source
+ */
+Glib::ustring SPStyle::write(SPStyleSrc style_src_req) const
+{
+    assert(style_src_req != SPStyleSrc::UNSET);
+    return write(SP_STYLE_FLAG_IFSRC | SP_STYLE_FLAG_IFSET, style_src_req);
+}
+/**
+ * Get CSS string for set properties which are different from the given
+ * base style. If base is NULL, all set flags are considered different.
+ */
+Glib::ustring SPStyle::writeIfDiff(SPStyle const *base) const
+{
+    return write(SP_STYLE_FLAG_IFDIFF, SPStyleSrc::UNSET, base);
 }
 
 // Corresponds to sp_style_merge_from_parent()
@@ -858,7 +882,7 @@ SPStyle::mergeStatement( CRStatement *statement ) {
     CRDeclaration *decl_list = nullptr;
     cr_statement_ruleset_get_declarations (statement, &decl_list);
     if (decl_list) {
-        _mergeDeclList(decl_list, SP_STYLE_SRC_STYLE_SHEET);
+        _mergeDeclList(decl_list, SPStyleSrc::STYLE_SHEET);
     }
 }
 
@@ -888,7 +912,7 @@ SPStyle::_mergeString( gchar const *const p ) {
     CRDeclaration *const decl_list
         = cr_declaration_parse_list_from_buf(reinterpret_cast<guchar const *>(p), CR_UTF_8);
     if (decl_list) {
-        _mergeDeclList( decl_list, SP_STYLE_SRC_STYLE_PROP );
+        _mergeDeclList( decl_list, SPStyleSrc::STYLE_PROP );
         cr_declaration_destroy(decl_list);
     }
 }
@@ -957,7 +981,7 @@ SPStyle::_mergeProps( CRPropList *const props ) {
         _mergeProps( cr_prop_list_get_next( props ) );
         CRDeclaration *decl = nullptr;
         cr_prop_list_get_decl(props, &decl);
-        _mergeDecl( decl, SP_STYLE_SRC_STYLE_SHEET );
+        _mergeDecl( decl, SPStyleSrc::STYLE_SHEET );
     }
 }
 

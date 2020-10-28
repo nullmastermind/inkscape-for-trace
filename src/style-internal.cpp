@@ -154,7 +154,7 @@ void SPIBase::readIfUnset(gchar const *str, SPStyleSrc source)
     std::string stripped;
 
     // '!important' is invalid on attributes
-    if (source != SP_STYLE_SRC_ATTRIBUTE) {
+    if (source != SPStyleSrc::ATTRIBUTE) {
         has_important = strip_important(str, stripped);
         if (has_important) {
             str = stripped.c_str();
@@ -1169,7 +1169,7 @@ SPIString::read( gchar const *str ) {
 
     clear();
 
-    if (style_src == SP_STYLE_SRC_ATTRIBUTE && id() == SPAttr::D) {
+    if (style_src == SPStyleSrc::ATTRIBUTE && id() == SPAttr::D) {
         return;
     }
 
