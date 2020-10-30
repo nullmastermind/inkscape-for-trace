@@ -16,6 +16,12 @@
 #include "display/curve.h"
 #include "display/control/canvas-item-bpath.h"
 
+#include "util/units.h"
+
+using Inkscape::Util::Unit;
+using Inkscape::Util::Quantity;
+using Inkscape::Util::unit_table;
+
 #define MIN_PRESSURE      0.0
 #define MAX_PRESSURE      1.0
 #define DEFAULT_PRESSURE  1.0
@@ -83,6 +89,9 @@ void DynamicBase::set(const Inkscape::Preferences::Entry& value) {
     static Glib::ustring const presets_path = this->pref_observer->observed_path + "/preset";
     Glib::ustring const &full_path = value.getPath();
 
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    Unit const *unit = unit_table.getUnit(prefs->getString("/tools/calligraphic/unit"));
+
     if (full_path.compare(0, presets_path.size(), presets_path) == 0) {
     	return;
     }
@@ -94,7 +103,7 @@ void DynamicBase::set(const Inkscape::Preferences::Entry& value) {
     } else if (path == "angle") {
         this->angle = CLAMP(value.getDouble(), -90, 90);
     } else if (path == "width") {
-        this->width = 0.01 * CLAMP(value.getInt(10), 1, 100);
+        this->width = 0.01 * CLAMP(value.getDouble(), Quantity::convert(0.001, unit, "px"), Quantity::convert(100, unit, "px"));
     } else if (path == "thinning") {
         this->vel_thin = 0.01 * CLAMP(value.getInt(10), -100, 100);
     } else if (path == "tremor") {

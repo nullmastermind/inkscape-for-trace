@@ -23,7 +23,7 @@
  * and special handling has to be added to the preferences class to update
  * obsolete versions the user might have. */
 static char const preferences_skeleton[] =
-R"=====(
+    R"=====(
 <inkscape version="1"
   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
@@ -103,8 +103,8 @@ R"=====(
     </group>
 
     <eventcontext id="calligraphic" style="fill:black;fill-opacity:1;fill-rule:nonzero;stroke:none;"
-                       mass="2" angle="30" width="15" thinning="10" flatness="90" cap_rounding="0.0" usecurrent="1"
-                       tracebackground="0" usepressure="1" usetilt="0" keep_selected="1">
+                       mass="2" angle="30" width="15.118" thinning="10" flatness="90" cap_rounding="0.0" usecurrent="1"
+                       tracebackground="0" usepressure="1" usetilt="0" keep_selected="1" abs_width="1" unit="mm">
 
       <group id="preset">
         <group id="cp0" name="Dip pen" mass="2" wiggle="0.0" angle="30.0" thinning="10" tremor="0.0" flatness="90" cap_rounding="0.0" tracebackground="0" usepressure="1" usetilt="1" />

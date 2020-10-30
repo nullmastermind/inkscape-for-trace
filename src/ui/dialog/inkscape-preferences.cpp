@@ -850,7 +850,6 @@ void InkscapePreferences::initPageTools()
                             _("Treat groups as a single object during conversion to guides rather than converting each child separately"));
 
     _pencil_average_all_sketches.init ( _("Average all sketches"), "/tools/freehand/pencil/average_all_sketches", false);
-    _calligrapy_use_abs_size.init ( _("Width is in absolute units"), "/tools/calligraphic/abs_width", false);
     _calligrapy_keep_selected.init ( _("Select new path"), "/tools/calligraphic/keep_selected", true);
     _connector_ignore_text.init( _("Don't attach connectors to text objects"), "/tools/connector/ignoretext", true);
 
@@ -955,8 +954,6 @@ void InkscapePreferences::initPageTools()
     //Calligraphy
     this->AddSelcueCheckbox(_page_calligraphy, "/tools/calligraphic", false);
     this->AddNewObjectsStyle(_page_calligraphy, "/tools/calligraphic");
-    _page_calligraphy.add_line( false, "", _calligrapy_use_abs_size, "",
-                            _("If on, pen width is in absolute units (px) independent of zoom; otherwise pen width depends on zoom so that it looks the same at any zoom"));
     _page_calligraphy.add_line( false, "", _calligrapy_keep_selected, "",
                             _("If on, each newly created object will be selected (deselecting previous selection)"));
 

@@ -43,12 +43,13 @@ class SimplePrefPusher;
 
 namespace Widget {
 class SpinButtonToolItem;
+class UnitTracker;
 }
 
 namespace Toolbar {
-
 class CalligraphyToolbar : public Toolbar {
 private:
+    UI::Widget::UnitTracker *_tracker;
     bool _presets_blocked;
 
     UI::Widget::SpinButtonToolItem *_angle_item;
@@ -86,6 +87,7 @@ private:
     void edit_profile();
     void update_presets_list();
     void tilt_state_changed();
+    void unit_changed(int not_used);
     void on_pref_toggled(Gtk::ToggleToolButton *item,
                          const Glib::ustring&   path);
     

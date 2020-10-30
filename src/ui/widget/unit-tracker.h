@@ -44,12 +44,14 @@ public:
 
     void setActiveUnit(Inkscape::Util::Unit const *unit);
     void setActiveUnitByAbbr(gchar const *abbr);
+    void setActiveUnitByLabel(Glib::ustring label);
     Inkscape::Util::Unit const * getActiveUnit() const;
 
     void addUnit(Inkscape::Util::Unit const *u);
     void addAdjustment(GtkAdjustment *adj);
     void prependUnit(Inkscape::Util::Unit const *u);
     void setFullVal(GtkAdjustment *adj, gdouble val);
+    Glib::ustring getCurrentLabel();
     void changeLabel(Glib::ustring new_label, gint pos, bool onlylabel = false);
 
     ComboToolItem *create_tool_item(Glib::ustring const &label,

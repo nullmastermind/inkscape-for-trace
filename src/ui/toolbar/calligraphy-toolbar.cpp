@@ -28,21 +28,25 @@
 #include "calligraphy-toolbar.h"
 
 #include <glibmm/i18n.h>
-
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/separatortoolitem.h>
 
 #include "desktop.h"
 #include "document-undo.h"
-
+#include "ui/dialog/calligraphic-profile-rename.h"
 #include "ui/icon-names.h"
 #include "ui/simple-pref-pusher.h"
 #include "ui/uxmanager.h"
-#include "ui/dialog/calligraphic-profile-rename.h"
 #include "ui/widget/canvas.h"
+#include "ui/widget/combo-tool-item.h"
 #include "ui/widget/spin-button-tool-item.h"
+#include "ui/widget/unit-tracker.h"
 
 using Inkscape::DocumentUndo;
+using Inkscape::UI::Widget::UnitTracker;
+using Inkscape::Util::Quantity;
+using Inkscape::Util::Unit;
+using Inkscape::Util::unit_table;
 
 std::vector<Glib::ustring> get_presets_list() {
 
@@ -58,10 +62,16 @@ namespace UI {
 namespace Toolbar {
 
 CalligraphyToolbar::CalligraphyToolbar(SPDesktop *desktop)
-    : Toolbar(desktop),
-      _presets_blocked(false)
+    : Toolbar(desktop)
+    , _tracker(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR))
+    , _presets_blocked(false)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    _tracker->prependUnit(unit_table.getUnit("px"));
+    _tracker->changeLabel("%", 0, true);
+    prefs->getBool("/tools/calligraphic/abs_width")
+        ? _tracker->setActiveUnitByLabel(prefs->getString("/tools/calligraphic/unit"))
+        : _tracker->setActiveUnitByLabel("%");
 
     /*calligraphic profile */
     {
@@ -92,9 +102,11 @@ CalligraphyToolbar::CalligraphyToolbar(SPDesktop *desktop)
         /* Width */
         std::vector<Glib::ustring> labels = {_("(hairline)"), "", "", "", _("(default)"), "", "", "", "", _("(broad stroke)")};
         std::vector<double>        values = {              1,  3,  5, 10,             15, 20, 30, 50, 75,                 100};
-        auto width_val = prefs->getDouble("/tools/calligraphic/width", 15);
-        _width_adj = Gtk::Adjustment::create(width_val, 1, 100, 1.0, 10.0);
-        auto width_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("calligraphy-width", _("Width:"), _width_adj, 1, 0));
+        auto width_val = prefs->getDouble("/tools/calligraphic/width", 15.118);
+        Unit const *unit = unit_table.getUnit(prefs->getString("/tools/calligraphic/unit"));
+        _width_adj = Gtk::Adjustment::create(Quantity::convert(width_val, "px", unit), 0.001, 100, 1.0, 10.0);
+        auto width_item =
+            Gtk::manage(new UI::Widget::SpinButtonToolItem("calligraphy-width", _("Width:"), _width_adj, 0.001, 3));
         width_item->set_tooltip_text(_("The width of the calligraphic pen (relative to the visible canvas area)"));
         width_item->set_custom_numeric_menu_data(values, labels);
         width_item->set_focus_widget(desktop->canvas);
@@ -102,7 +114,15 @@ CalligraphyToolbar::CalligraphyToolbar(SPDesktop *desktop)
         _widget_map["width"] = G_OBJECT(_width_adj->gobj());
         // ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
         add(*width_item);
+        _tracker->addAdjustment(_width_adj->gobj());
         width_item->set_sensitive(true);
+    }
+
+    /* Unit Menu */
+    {
+        auto unit_menu_ti = _tracker->create_tool_item(_("Units"), _(""));
+        add(*unit_menu_ti);
+        unit_menu_ti->signal_changed_after().connect(sigc::mem_fun(*this, &CalligraphyToolbar::unit_changed));
     }
 
     /* Use Pressure button */
@@ -277,8 +297,12 @@ CalligraphyToolbar::create(SPDesktop *desktop)
 void
 CalligraphyToolbar::width_value_changed()
 {
+    Unit const *unit = _tracker->getActiveUnit();
+    g_return_if_fail(unit != nullptr);
     auto prefs = Inkscape::Preferences::get();
-    prefs->setDouble( "/tools/calligraphic/width", _width_adj->get_value() );
+    _tracker->getCurrentLabel() == "%" ? prefs->setBool("/tools/calligraphic/abs_width", false)
+                                         : prefs->setBool("/tools/calligraphic/abs_width", true);
+    prefs->setDouble("/tools/calligraphic/width", Quantity::convert(_width_adj->get_value(), unit, "px"));
     update_presets_list();
 }
 
@@ -491,8 +515,20 @@ CalligraphyToolbar::edit_profile()
     save_profile(nullptr);
 }
 
-void
-CalligraphyToolbar::save_profile(GtkWidget * /*widget*/)
+void CalligraphyToolbar::unit_changed(int /* NotUsed */)
+{
+    Unit const *unit = _tracker->getActiveUnit();
+    g_return_if_fail(unit != nullptr);
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    _tracker->getCurrentLabel() == "%" ? prefs->setBool("/tools/calligraphic/abs_width", false)
+                                        : prefs->setBool("/tools/calligraphic/abs_width", true);
+    prefs->setDouble("/tools/calligraphic/width",
+                     CLAMP(prefs->getDouble("/tools/calligraphic/width"), Quantity::convert(0.001, unit, "px"),
+                           Quantity::convert(100, unit, "px")));
+    prefs->setString("/tools/calligraphic/unit", unit->abbr);
+}
+
+void CalligraphyToolbar::save_profile(GtkWidget * /*widget*/)
 {
     using Inkscape::UI::Dialog::CalligraphicProfileRename;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
