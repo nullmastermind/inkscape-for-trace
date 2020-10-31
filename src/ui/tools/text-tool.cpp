@@ -40,10 +40,13 @@
 #include "display/control/canvas-item-curve.h"
 #include "display/control/canvas-item-quad.h"
 #include "display/control/canvas-item-rect.h"
+#include "display/control/canvas-item-bpath.h"
+#include "display/curve.h"
 
 #include "object/sp-flowtext.h"
 #include "object/sp-namedview.h"
 #include "object/sp-text.h"
+#include "object/sp-textpath.h"
 #include "object/sp-rect.h"
 #include "object/sp-shape.h"
 #include "object/sp-ellipse.h"
@@ -116,7 +119,8 @@ void TextTool::setup() {
     indicator->hide();
 
     // The rectangle box outlining wrapping the shape for text in a shape.
-    frame = new Inkscape::CanvasItemRect(desktop->getCanvasControls());
+    frame = new Inkscape::CanvasItemBpath(desktop->getCanvasControls());
+    frame->set_fill(0x00 /* zero alpha */, SP_WIND_RULE_NONZERO);
     frame->set_stroke(0x0000ff7f);
     frame->hide();
 
@@ -1682,37 +1686,50 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
             tc->frame->set_stroke(0x0000ff7f);
         }
 
+        std::vector<SPItem const *> shapes;
+
         // Frame around text
         if (SP_IS_FLOWTEXT(tc->text)) {
             SPItem *frame = SP_FLOWTEXT(tc->text)->get_frame (nullptr); // first frame only
-            if (frame) {
-                Geom::OptRect frame_bbox = frame->desktopVisualBounds();
-                if (frame_bbox) {
-                    tc->frame->set_rect(*frame_bbox);
-                }
-                tc->frame->show();
-            }
+            shapes.push_back(frame);
 
             tc->message_context->setF(Inkscape::NORMAL_MESSAGE, ngettext("Type or edit flowed text (%d character%s); <b>Enter</b> to start new paragraph.", "Type or edit flowed text (%d characters%s); <b>Enter</b> to start new paragraph.", nChars), nChars, trunc);
 
         } else if (SP_IS_TEXT(tc->text)) {
-
-            Geom::OptRect opt_frame = SP_TEXT(tc->text)->get_frame();
-
-            if (opt_frame) {
-                // User units to screen pixels
-                Geom::Rect frame = *opt_frame;
-                frame *= tc->text->i2dt_affine();
-
-                tc->frame->set_rect(frame);
-                tc->frame->show();
+            if (tc->text->style->shape_inside.set) {
+                for (auto const *href : tc->text->style->shape_inside.hrefs) {
+                    shapes.push_back(href->getObject());
+                }
             } else {
-                tc->frame->hide();
+                for (SPObject &child : tc->text->children) {
+                    if (auto textpath = dynamic_cast<SPTextPath *>(&child)) {
+                        shapes.push_back(sp_textpath_get_path_item(textpath));
+                    }
+                }
             }
 
         } else {
 
             tc->message_context->setF(Inkscape::NORMAL_MESSAGE, ngettext("Type or edit text (%d character%s); <b>Enter</b> to start new line.", "Type or edit text (%d characters%s); <b>Enter</b> to start new line.", nChars), nChars, trunc);
+        }
+
+        SPCurve curve;
+        for (auto const *shape_item : shapes) {
+            if (auto shape = dynamic_cast<SPShape const *>(shape_item)) {
+                auto c = SPCurve::copy(shape->curve());
+                if (c) {
+                    c->transform(shape->transform);
+                    curve.append(*c);
+                }
+            }
+        }
+
+        if (!curve.is_empty()) {
+            curve.transform(tc->text->i2dt_affine());
+            tc->frame->set_bpath(&curve);
+            tc->frame->show();
+        } else {
+            tc->frame->hide();
         }
 
     } else {

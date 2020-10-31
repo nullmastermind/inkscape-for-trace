@@ -31,6 +31,7 @@ namespace Inkscape {
 class CanvasItemCurve; // Cursor
 class CanvasItemQuad;  // Highlighted text
 class CanvasItemRect;  // Indicator, Frame
+class CanvasItemBpath;
 class Selection;
 
 namespace UI {
@@ -64,8 +65,7 @@ public:
     // ---- On canvas editing ---
     Inkscape::CanvasItemCurve *cursor = nullptr;
     Inkscape::CanvasItemRect *indicator = nullptr;
-    Inkscape::CanvasItemRect *frame = nullptr; // Highlighting the first frame of flowtext. FIXME: Make this
-                                               // a list to accommodate arbitrarily many chained shapes
+    Inkscape::CanvasItemBpath *frame = nullptr; // Highlighting flowtext shapes or textpath path
     std::vector<CanvasItemQuad*> text_selection_quads;
 
     gint timeout = 0;
