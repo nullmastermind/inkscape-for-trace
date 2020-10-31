@@ -77,7 +77,12 @@ public:
     bool isOnClipboard();
     virtual void doOnApply (SPLPEItem const* lpeitem);
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
+
+private:
     virtual void transform_multiply(Geom::Affine const &postmul, bool set);
+
+public:
+    void transform_multiply(Geom::Affine const &postmul, SPLPEItem *);
     virtual void doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve);
     virtual void doOnException(SPLPEItem const *lpeitem);
     virtual void doOnRemove (SPLPEItem const* lpeitem);

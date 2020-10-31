@@ -565,12 +565,6 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
         SPItem *item = static_cast<SPItem *>(doc->getObjectByRepr(repr));
 
         if (item) {
-            // Fix bug #1969 we need to update LPE on reconstruction to define default
-            // LPE values for doWriteTransform
-            SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
-            if (lpeitem) {
-                sp_lpe_item_update_patheffect(lpeitem, false, false);
-            }
             item->doWriteTransform(item->transform, nullptr, false);
             children.insert(children.begin(),item);
             item->requestModified(SP_OBJECT_MODIFIED_FLAG);

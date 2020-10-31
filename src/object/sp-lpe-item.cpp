@@ -350,7 +350,7 @@ void SPLPEItem::notifyTransform(Geom::Affine const &postmul)
         if (lpeobj) {
             Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
             if (lpe && !lpe->is_load) {
-                lpe->transform_multiply(postmul, false);
+                lpe->transform_multiply(postmul, this);
             }
         }
     }

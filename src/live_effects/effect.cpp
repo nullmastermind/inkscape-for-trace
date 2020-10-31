@@ -1178,6 +1178,26 @@ Effect::setCurrentZoom(double cZ)
  */
 void Effect::transform_multiply(Geom::Affine const &postmul, bool /*set*/) {}
 
+/**
+ * @param lpeitem The item being transformed
+ *
+ * @pre effect is referenced by lpeitem
+ *
+ * FIXME Probably only makes sense if this effect is referenced by exactly one
+ * item (`this->lpeobj->hrefList` contains exactly one element)?
+ */
+void Effect::transform_multiply(Geom::Affine const &postmul, SPLPEItem *lpeitem)
+{
+    assert("pre: effect is referenced by lpeitem" &&
+           std::any_of(lpeobj->hrefList.begin(), lpeobj->hrefList.end(),
+                       [lpeitem](SPObject *obj) { return lpeitem == dynamic_cast<SPLPEItem *>(obj); }));
+
+    // FIXME Is there a way to eliminate the raw Effect::sp_lpe_item pointer?
+    sp_lpe_item = lpeitem;
+
+    transform_multiply(postmul, false);
+}
+
 void
 Effect::setSelectedNodePoints(std::vector<Geom::Point> sNP)
 {
