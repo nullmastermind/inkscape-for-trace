@@ -362,22 +362,88 @@ void SPGroup::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape:
     }
 }
 
+/**
+ * Helper function for ungrouping. Compensates the transform of linked items
+ * (clones, linked offset, text-on-path, text with shape-inside) who's source is a
+ * direct child of the group being ungrouped (or will be moved to a different
+ * group or layer).
+ *
+ * @param item An object which may be linked to `expected_source`
+ * @param expected_source An object who's transform attribute (but not its
+ * i2doc transform) will change (later) due to moving to a different group
+ * @param source_transform A transform which will be applied to
+ * `expected_source` (later) and needs to be compensated in its linked items
+ *
+ * @post item and its representation are updated
+ */
+static void _ungroup_compensate_source_transform(SPItem *item, SPItem const *const expected_source,
+                                                 Geom::Affine const &source_transform)
+{
+    if (!item || item->cloned) {
+        return;
+    }
+
+    SPItem *source = nullptr;
+    SPText *item_text = nullptr;
+    SPOffset *item_offset = nullptr;
+    SPUse *item_use = nullptr;
+
+    if ((item_offset = dynamic_cast<SPOffset *>(item))) {
+        source = sp_offset_get_source(item_offset);
+    } else if ((item_text = dynamic_cast<SPText *>(item))) {
+        source = item_text->get_first_shape_dependency();
+    } else if (auto textpath = dynamic_cast<SPTextPath *>(item)) {
+        item_text = dynamic_cast<SPText*>(textpath->parent);
+        if (!item_text)
+            return;
+        item = item_text;
+        source = sp_textpath_get_path_item(textpath);
+    } else if ((item_use = dynamic_cast<SPUse *>(item))) {
+        source = item_use->get_original();
+    }
+
+    if (source != expected_source) {
+        return;
+    }
+
+    // FIXME: constructing a transform that would fully preserve the appearance of a
+    // textpath if it is ungrouped with its path seems to be impossible in general
+    // case. E.g. if the group was squeezed, to keep the ungrouped textpath squeezed
+    // as well, we'll need to relink it to some "virtual" path which is inversely
+    // stretched relative to the actual path, and then squeeze the textpath back so it
+    // would both fit the actual path _and_ be squeezed as before. It's a bummer.
+
+    auto const adv = item->transform.inverse() * source_transform * item->transform;
+    double const scale = source_transform.descrim();
+
+    if (item_text) {
+        item_text->_adjustFontsizeRecursive(item_text, scale);
+    } else if (item_offset) {
+        item_offset->rad *= scale;
+    } else if (item_use) {
+        item->transform = Geom::Translate(item_use->x.computed, item_use->y.computed) * item->transform;
+        item_use->x = 0;
+        item_use->y = 0;
+    }
+
+    if (!item_use) {
+        item->adjust_stroke_width_recursive(scale);
+        item->adjust_paint_recursive(adv, Geom::identity(), SPItem::PATTERN);
+        item->adjust_paint_recursive(adv, Geom::identity(), SPItem::HATCH);
+        item->adjust_paint_recursive(adv, Geom::identity(), SPItem::GRADIENT);
+    }
+
+    item->transform = source_transform.inverse() * item->transform;
+    item->updateRepr();
+}
+
 void sp_item_group_ungroup_handle_clones(SPItem *parent, Geom::Affine const g)
 {
-    for(std::list<SPObject*>::const_iterator refd=parent->hrefList.begin();refd!=parent->hrefList.end();++refd){
-        SPItem *citem = dynamic_cast<SPItem *>(*refd);
-        if (citem && !citem->cloned) {
-            SPUse *useitem = dynamic_cast<SPUse *>(citem);
-            if (useitem && useitem->get_original() == parent) {
-                Geom::Affine ctrans =
-                    g.inverse() * Geom::Translate(useitem->x.computed, useitem->y.computed) * citem->transform;
-                gchar *affinestr = sp_svg_transform_write(ctrans);
-                citem->setAttribute("transform", affinestr);
-                citem->removeAttribute("x");
-                citem->removeAttribute("y");
-                g_free(affinestr);
-            }
-        }
+    // copy the list because the original may get invalidated
+    auto hrefListCopy = parent->hrefList;
+
+    for (auto *cobj : hrefListCopy) {
+        _ungroup_compensate_source_transform(dynamic_cast<SPItem *>(cobj), parent, g);
     }
 }
 
@@ -418,9 +484,11 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
     std::vector<Inkscape::XML::Node *> objects;
     Geom::Affine const g = i2anc_affine(group, group->parent);
 
-    for (auto& child: group->children) {
-        if (SPItem *citem = dynamic_cast<SPItem *>(&child)) {
-            sp_item_group_ungroup_handle_clones(citem, g);
+    if (!g.isIdentity()) {
+        for (auto &child : group->children) {
+            if (SPItem *citem = dynamic_cast<SPItem *>(&child)) {
+                sp_item_group_ungroup_handle_clones(citem, g);
+            }
         }
     }
 
@@ -455,47 +523,7 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
              */
 
             // Merging transform
-            Geom::Affine ctrans = citem->transform * g;
-
-            SPItem *source = nullptr;
-            SPText *citem_text = nullptr;
-            SPOffset *citem_offset = nullptr;
-
-            // We should not apply the group's transformation to both a linked offset AND to its source
-            if ((citem_offset = dynamic_cast<SPOffset *>(citem))) {
-                // When dealing with a chain of linked offsets, the transformation of an offset will be
-                // tied to the transformation of the top-most source, not to any of the intermediate
-                // offsets. So let's find the top-most source
-                auto offset = citem_offset;
-                do {
-                    source = sp_offset_get_source(offset);
-                } while ((offset = dynamic_cast<SPOffset *>(source)));
-            } else if ((citem_text = dynamic_cast<SPText *>(citem))) {
-                source = citem_text->get_first_shape_dependency();
-            }
-
-            // FIXME: constructing a transform that would fully preserve the appearance of a
-            // textpath if it is ungrouped with its path seems to be impossible in general
-            // case. E.g. if the group was squeezed, to keep the ungrouped textpath squeezed
-            // as well, we'll need to relink it to some "virtual" path which is inversely
-            // stretched relative to the actual path, and then squeeze the textpath back so it
-            // would both fit the actual path _and_ be squeezed as before. It's a bummer.
-
-            // This is just a way to temporarily remember the transform in repr. When repr is
-            // reattached outside of the group, the transform will be written more properly
-            // (i.e. optimized into the object if the corresponding preference is set)
-            if (source && group->isAncestorOf(source)) {
-                double const scale = g.descrim();
-                if (citem_text) {
-                    citem_text->_adjustFontsizeRecursive(citem_text, scale);
-                } else if (citem_offset) {
-                    citem_offset->rad *= scale;
-                }
-                citem->adjust_stroke_width_recursive(scale);
-                citem->transform = g.inverse() * ctrans;
-            } else {
-                citem->transform = ctrans;
-            }
+            citem->transform *= g;
 
             child.updateRepr();
 
