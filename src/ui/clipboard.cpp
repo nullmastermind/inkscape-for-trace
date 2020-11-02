@@ -489,6 +489,10 @@ bool ClipboardManagerImpl::paste(SPDesktop *desktop, bool in_place)
 
     sp_import_document(desktop, tempdoc.get(), in_place);
 
+    // _copySelection() has put all items in groups, now ungroup them (preserves transform
+    // relationships of clones, text-on-path, etc.)
+    desktop->selection->ungroup();
+
     return true;
 }
 
@@ -846,14 +850,32 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
         cloned_elements.erase(it);
     }
 
+    // One group per shared parent
+    std::map<SPObject const *, Inkscape::XML::Node *> groups;
+
     sorted_items.insert(sorted_items.end(),cloned_elements.begin(),cloned_elements.end());
     for(auto sorted_item : sorted_items){
         SPItem *item = dynamic_cast<SPItem*>(sorted_item);
         if (item) {
+            // Create a group with the parent transform. This group will be ungrouped when pasting
+            // und takes care of transform relationships of clones, text-on-path, etc.
+            auto &group = groups[item->parent];
+            if (!group) {
+                group = _doc->createElement("svg:g");
+                _root->appendChild(group);
+                Inkscape::GC::release(group);
+
+                if (auto parent = dynamic_cast<SPItem *>(item->parent)) {
+                    auto transform_str = sp_svg_transform_write(parent->i2doc_affine());
+                    group->setAttributeOrRemoveIfEmpty("transform", transform_str);
+                    g_free(transform_str);
+                }
+            }
+
             Inkscape::XML::Node *obj = item->getRepr();
             Inkscape::XML::Node *obj_copy;
             if(cloned_elements.find(item)==cloned_elements.end())
-                obj_copy = _copyNode(obj, _doc, _root);
+                obj_copy = _copyNode(obj, _doc, group);
             else
                 obj_copy = _copyNode(obj, _doc, _clipnode);
 
@@ -866,22 +888,6 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
             }
             sp_repr_css_set(obj_copy, css, "style");
             sp_repr_css_attr_unref(css);
-
-            Geom::Affine transform=item->i2doc_affine();
-
-            // write the complete accumulated transform passed to us
-            // (we're dealing with unattached representations, so we write to their attributes
-            // instead of using sp_item_set_transform)
-
-            SPUse *use=dynamic_cast<SPUse *>(item);
-            if( use && use->get_original() && use->get_original()->parent) {
-                if (selection->includes(use->get_original())){ //we are copying something whose parent is also copied (!)
-                    obj_copy->setAttribute("transform", sp_svg_transform_write( ((SPItem*)(use->get_original()->parent))->i2doc_affine().inverse() * transform));
-                } else { // original is not copied; make transform relative to the document
-                    obj_copy->setAttribute("transform", sp_svg_transform_write(transform));
-                }
-            } else
-                obj_copy->setAttribute("transform", sp_svg_transform_write(transform));
         }
     }
 
