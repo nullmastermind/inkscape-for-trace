@@ -165,14 +165,14 @@ std::vector<StyleRead> getStyleData()
         //          overline;text-decoration-color:currentColor"),
 
         StyleRead("text-decoration: underline wavy #0000ff",
-                  "text-decoration: underline;text-decoration-line: "
+                  "text-decoration:underline;text-decoration-line:"
                   "underline;text-decoration-style:wavy;text-decoration-color:#0000ff"),
         StyleRead("text-decoration: double overline underline #ff0000",
-                  "text-decoration: underline overline;text-decoration-line: underline "
+                  "text-decoration:underline overline;text-decoration-line:underline "
                   "overline;text-decoration-style:double;text-decoration-color:#ff0000"),
 
         // SPITextDecorationLine
-        StyleRead("text-decoration-line: underline", "text-decoration: underline;text-decoration-line: underline"),
+        StyleRead("text-decoration-line: underline", "text-decoration:underline;text-decoration-line:underline"),
 
         // SPITextDecorationStyle
         StyleRead("text-decoration-style:solid"), StyleRead("text-decoration-style:dotted"),

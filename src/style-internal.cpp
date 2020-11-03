@@ -2742,11 +2742,16 @@ const Glib::ustring SPITextDecorationLine::get_value() const
 {
     if (this->inherit) return Glib::ustring("inherit");
     auto ret = Glib::ustring("");
-    if (this->underline) ret += " underline";
-    if (this->overline) ret += " overline";
-    if (this->line_through) ret += " line-through";
-    if (this->blink) ret += " blink"; // Deprecated
-    if (ret.empty()) ret += "none";
+    if (underline) ret += "underline ";
+    if (overline) ret += "overline ";
+    if (line_through) ret += "line-through ";
+    if (blink) ret += "blink "; // Deprecated
+    if (ret.empty()) {
+        ret = "none";
+    } else {
+        assert(ret.raw().back() == ' ');
+        ret.resize(ret.size() - 1);
+    }
     return ret;
 }
 
