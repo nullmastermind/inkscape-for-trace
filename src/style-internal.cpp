@@ -2939,7 +2939,9 @@ SPITextDecoration::read( gchar const *str ) {
     decltype(style->text_decoration_line) test_line;
     test_line.read( str );
     if( test_line.set ) {
-        style->text_decoration_line = test_line;
+        if (!style->text_decoration_line.set) {
+            style->text_decoration_line = test_line;
+        }
     }
 
     decltype(style->text_decoration_style) test_style;

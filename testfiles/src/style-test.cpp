@@ -173,6 +173,11 @@ std::vector<StyleRead> getStyleData()
 
         // SPITextDecorationLine
         StyleRead("text-decoration-line: underline", "text-decoration:underline;text-decoration-line:underline"),
+        // "text-decoration" overwrites "text-decoration-line" and vice versa, last one counts
+        StyleRead("text-decoration-line:overline;text-decoration:underline",
+                  "text-decoration:underline;text-decoration-line:underline"),
+        StyleRead("text-decoration:underline;text-decoration-line:overline",
+                  "text-decoration:overline;text-decoration-line:overline"),
 
         // SPITextDecorationStyle
         StyleRead("text-decoration-style:solid"), StyleRead("text-decoration-style:dotted"),
