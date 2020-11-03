@@ -9,6 +9,7 @@
 ../src/actions/actions-canvas-transform.cpp
 ../src/actions/actions-file.cpp
 ../src/actions/actions-object.cpp
+../src/actions/actions-object-align.cpp
 ../src/actions/actions-output.cpp
 ../src/actions/actions-selection.cpp
 ../src/actions/actions-transform.cpp

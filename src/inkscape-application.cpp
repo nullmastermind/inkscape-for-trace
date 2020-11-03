@@ -46,13 +46,14 @@
 
 #include "util/units.h"           // Redimension window
 
-#include "actions/actions-base.h"      // Actions
-#include "actions/actions-file.h"      // Actions
-#include "actions/actions-object.h"    // Actions
-#include "actions/actions-output.h"    // Actions
-#include "actions/actions-selection.h" // Actions
-#include "actions/actions-transform.h" // Actions
-#include "actions/actions-window.h"    // Actions
+#include "actions/actions-base.h"         // Actions
+#include "actions/actions-file.h"         // Actions
+#include "actions/actions-object.h"       // Actions
+#include "actions/actions-object-align.h" // Actions
+#include "actions/actions-output.h"       // Actions
+#include "actions/actions-selection.h"    // Actions
+#include "actions/actions-transform.h"    // Actions
+#include "actions/actions-window.h"       // Actions
 
 #ifdef GDK_WINDOWING_QUARTZ
 #include <gtkosxapplication.h>
@@ -556,13 +557,14 @@ ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
     // Glib::set_application_name(N_("Inkscape - A Vector Drawing Program"));  // After gettext() init.
 
     // ======================== Actions =========================
-    add_actions_base(this);      // actions that are GUI independent
-    add_actions_file(this);      // actions for file handling
-    add_actions_object(this);    // actions for object manipulation
-    add_actions_output(this);    // actions for file export
-    add_actions_selection(this); // actions for object selection
-    add_actions_transform(this); // actions for transforming selected objects
-    add_actions_window(this);    // actions for windows
+    add_actions_base(this);         // actions that are GUI independent
+    add_actions_file(this);         // actions for file handling
+    add_actions_object(this);       // actions for object manipulation
+    add_actions_object_align(this); // actions for object alignment
+    add_actions_output(this);       // actions for file export
+    add_actions_selection(this);    // actions for object selection
+    add_actions_transform(this);    // actions for transforming selected objects
+    add_actions_window(this);       // actions for windows
 
 
     // ====================== Command Line ======================
