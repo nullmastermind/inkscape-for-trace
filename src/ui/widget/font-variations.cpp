@@ -110,7 +110,7 @@ FontVariations::get_css_string() {
         // Translate the "named" axes. (Additional names in 'stat' table, may need to handle them.)
         if (name == "Width")  name = "wdth";       // 'font-stretch'
         if (name == "Weight") name = "wght";       // 'font-weight'
-        if (name == "Optical size") name = "opsz"; // 'font-optical-sizing' Can trigger glyph substitution.
+        if (name == "OpticalSize") name = "opsz";  // 'font-optical-sizing' Can trigger glyph substitution.
         if (name == "Slant")  name = "slnt";       // 'font-style'
         if (name == "Italic") name = "ital";       // 'font-style' Toggles from Roman to Italic.
 
@@ -138,7 +138,7 @@ FontVariations::get_pango_string() {
             // Translate the "named" axes. (Additional names in 'stat' table, may need to handle them.)
             if (name == "Width")  name = "wdth";       // 'font-stretch'
             if (name == "Weight") name = "wght";       // 'font-weight'
-            if (name == "Optical size") name = "opsz"; // 'font-optical-sizing' Can trigger glyph substitution.
+            if (name == "OpticalSize") name = "opsz";  // 'font-optical-sizing' Can trigger glyph substitution.
             if (name == "Slant")  name = "slnt";       // 'font-style'
             if (name == "Italic") name = "ital";       // 'font-style' Toggles from Roman to Italic.
 

@@ -262,7 +262,7 @@ void font_instance::InitTheFace(bool loadgsub)
                         Glib::ustring name = matchInfo.fetch(1);
                         if (name == "wdth") name = "Width"       ; // 'font-stretch'
                         if (name == "wght") name = "Weight"      ; // 'font-weight'
-                        if (name == "opsz") name = "Optical size"; // 'font-optical-sizing'
+                        if (name == "opsz") name = "OpticalSize" ; // 'font-optical-sizing' (indirectly)
                         if (name == "slnt") name = "Slant"       ; // 'font-style'
                         if (name == "ital") name = "Italic"      ; // 'font-style'
 
