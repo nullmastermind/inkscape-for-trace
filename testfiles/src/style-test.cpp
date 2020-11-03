@@ -172,7 +172,8 @@ std::vector<StyleRead> getStyleData()
                   "overline;text-decoration-style:double;text-decoration-color:#ff0000"),
 
         // SPITextDecorationLine
-        StyleRead("text-decoration-line: underline", "text-decoration:underline;text-decoration-line:underline"),
+        // If only "text-decoration-line" is set but not "text-decoration", don't write "text-decoration" (changed in 1.1)
+        StyleRead("text-decoration-line:underline", "text-decoration-line:underline"),
         // "text-decoration" overwrites "text-decoration-line" and vice versa, last one counts
         StyleRead("text-decoration-line:overline;text-decoration:underline",
                   "text-decoration:underline;text-decoration-line:underline"),
@@ -432,14 +433,16 @@ TEST(StyleTest, Match) {
 class StyleCascade {
 
 public:
-  StyleCascade(std::string parent, std::string child, std::string result) :
+  StyleCascade(std::string parent, std::string child, std::string result, char const *d = nullptr) :
     parent(std::move(parent)), child(std::move(child)), result(std::move(result))
   {
+      diff = d ? d : (this->result == this->parent ? "" : this->result);
   }
 
   std::string parent;
   std::string child;
   std::string result;
+  std::string diff;
   
 };
 
@@ -454,13 +457,13 @@ std::vector<StyleCascade> getStyleCascadeData()
     StyleCascade("",                      "stroke-miterlimit:2",   "stroke-miterlimit:2"    ),
 
     // SPIScale24
-    StyleCascade("opacity:0.3",           "opacity:0.3",            "opacity:0.3"           ),
+    StyleCascade("opacity:0.3",           "opacity:0.3",            "opacity:0.3", "opacity:0.3" ),
     StyleCascade("opacity:0.3",           "opacity:0.6",            "opacity:0.6"           ),
     // 'opacity' does not inherit
-    StyleCascade("opacity:0.3",           "",                       "opacity:1.0"           ),
+    StyleCascade("opacity:0.3",           "",                       "opacity:1"             ),
     StyleCascade("",                      "opacity:0.3",            "opacity:0.3"           ),
-    StyleCascade("opacity:0.5",           "opacity:inherit",        "opacity:0.5"           ),
-    StyleCascade("",                      "",                       "opacity:1.0"           ),
+    StyleCascade("opacity:0.5",           "opacity:inherit",        "opacity:0.5", "opacity:0.5" ),
+    StyleCascade("",                      "",                       "opacity:1"             ),
 
     // SPILength
     StyleCascade("text-indent:3",         "text-indent:3",          "text-indent:3"         ),
@@ -521,6 +524,20 @@ std::vector<StyleCascade> getStyleCascadeData()
     // SPITextDecorationLine
     StyleCascade("text-decoration-line:overline", "text-decoration-line:underline",
     	         "text-decoration-line:underline"          ),
+    StyleCascade("text-decoration:overline",
+                 "text-decoration:underline",
+                 "text-decoration:underline;text-decoration-line:underline"),
+    StyleCascade("text-decoration:underline",
+                 "text-decoration:underline",
+                 "text-decoration:underline;text-decoration-line:underline",
+                 ""),
+    StyleCascade("text-decoration:overline;text-decoration-line:underline",
+                 "text-decoration:overline",
+                 "text-decoration:overline;text-decoration-line:overline"),
+    StyleCascade("text-decoration:overline;text-decoration-line:underline",
+                 "text-decoration:underline",
+                 "text-decoration:underline;text-decoration-line:underline",
+                 ""),
 
     // SPITextDecorationStyle
 
@@ -559,6 +576,10 @@ TEST(StyleTest, Cascade) {
     style_child.cascade( &style_parent );
 
     EXPECT_TRUE(style_child == style_result );
+
+    // if diff
+    EXPECT_STREQ(style_result.writeIfDiff(nullptr).c_str(), i.result.c_str());
+    EXPECT_STREQ(style_result.writeIfDiff(&style_parent).c_str(), i.diff.c_str());
   }
 }
 

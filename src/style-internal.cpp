@@ -65,19 +65,6 @@ Glib::ustring const &SPIBase::name() const
     return name;
 }
 
-// Standard criteria for writing a property
-// dfp == different from parent
-inline bool should_write( guint const flags, bool set, bool dfp, bool src) {
-
-    bool should_write = false;
-    if ( ((flags & SP_STYLE_FLAG_ALWAYS)        && src)    ||
-         ((flags & SP_STYLE_FLAG_IFSET)  && set && src)    ||
-         ((flags & SP_STYLE_FLAG_IFDIFF) && set && src && dfp)) {
-        should_write = true;
-    }
-    return should_write;
-}
-
 /**
  * Check if this property should be written. This function won't do any writing so can
  * be used as a quick way to check if specific kinds of style attrs have been changed.
@@ -90,11 +77,35 @@ inline bool should_write( guint const flags, bool set, bool dfp, bool src) {
  */
 bool SPIBase::shall_write(guint const flags, SPStyleSrc const &style_src_req, SPIBase const *const base) const
 {
-    // Is this class different from the SPIBase given, this is used in Object-to-Path
-    SPIBase const *const my_base = dynamic_cast<const SPIBase*>(base);
-    bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
-    bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
-    return should_write(flags, set, dfp, src);
+    // flags SP_STYLE_FLAG_IFSET and SP_STYLE_FLAG_IFDIFF are ignored, their
+    // information is redundant FIXME remove those flags
+
+    // pointer equality handled in SPStyle::write, not expected here
+    assert(base != this);
+
+    // SP_STYLE_FLAG_IFSRC and SPStyleSrc::UNSET are mutually exclusive
+    assert(bool(flags & SP_STYLE_FLAG_IFSRC) ^ //
+           bool(style_src_req == SPStyleSrc::UNSET));
+
+    if ((flags & SP_STYLE_FLAG_ALWAYS)) {
+        assert(!(flags & SP_STYLE_FLAG_IFSRC));
+        assert(!base);
+        return true;
+    }
+
+    if (!set) {
+        return false;
+    }
+
+    if ((flags & SP_STYLE_FLAG_IFSRC) && style_src_req != style_src) {
+        return false;
+    }
+
+    if (base && inherits && *base == *this) {
+        return false;
+    }
+
+    return true;
 }
 
 /**
@@ -2942,6 +2953,7 @@ SPITextDecoration::read( gchar const *str ) {
         if (!style->text_decoration_line.set) {
             style->text_decoration_line = test_line;
         }
+        set = true;
     }
 
     decltype(style->text_decoration_style) test_style;
@@ -2989,6 +3001,7 @@ SPITextDecoration::read( gchar const *str ) {
         style->text_decoration_line.set = true;
         style->text_decoration_style.set = true;
         style->text_decoration_color.set = true;
+        set = true;
     }
 
     // If we set text_decoration_line, then update style_td (for CSS2 text-decoration)
@@ -3007,12 +3020,11 @@ const Glib::ustring SPITextDecoration::get_value() const
 const Glib::ustring
 SPITextDecoration::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase const *const base) const {
     SPITextDecoration const *const my_base = dynamic_cast<const SPITextDecoration*>(base);
-    if ( (flags & SP_STYLE_FLAG_ALWAYS) ||
-         ((flags & SP_STYLE_FLAG_IFSET) && style->text_decoration_line.set) ||
-         ((flags & SP_STYLE_FLAG_IFDIFF) && style->text_decoration_line.set
-          && (!my_base->style->text_decoration_line.set ||
-              style->text_decoration_line != my_base->style->text_decoration_line )))
-    {
+    assert(!base || my_base);
+    // proxy for text-decoration-line, but only if set
+    if (set && style &&
+        style->text_decoration_line.shall_write(flags, style_src_req,
+                                                my_base ? &my_base->style->text_decoration_line : nullptr)) {
         return (name() + ":" + this->get_value() + important_str() + ";");
     }
     return Glib::ustring("");
