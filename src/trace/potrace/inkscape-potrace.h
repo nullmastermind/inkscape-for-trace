@@ -37,7 +37,11 @@ enum TraceType
     TRACE_CANNY,
     TRACE_QUANT,
     TRACE_QUANT_COLOR,
-    TRACE_QUANT_MONO
+    TRACE_QUANT_MONO,
+    // Used in tradedialog.cpp
+    AUTOTRACE_SINGLE,
+    AUTOTRACE_MULTI,
+    AUTOTRACE_CENTERLINE
     };
 
 

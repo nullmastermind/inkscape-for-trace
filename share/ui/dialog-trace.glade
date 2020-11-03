@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.22.2 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkAdjustment" id="MS_scans">
@@ -179,7 +179,6 @@
                             <property name="homogeneous">True</property>
                             <child>
                               <object class="GtkStack" id="Stack_SS">
-                                <property name="visible-child-name" bind-source="CBT_SS" bind-property="active-id"></property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="margin_top">5</property>
@@ -307,19 +306,6 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkSpinButton">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="adjustment">SS_AT_FI_T</property>
-                                        <property name="digits">0</property>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                    <child>
                                       <object class="GtkLabel">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
@@ -337,6 +323,18 @@
                                         <property name="can_focus">True</property>
                                         <property name="adjustment">SS_AT_ET_T</property>
                                         <property name="digits">1</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkSpinButton">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="adjustment">SS_AT_FI_T</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -368,19 +366,6 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkSpinButton">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="adjustment">SS_AT_FI_T</property>
-                                        <property name="digits">0</property>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                    <child>
                                       <object class="GtkLabel">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
@@ -398,6 +383,18 @@
                                         <property name="can_focus">True</property>
                                         <property name="adjustment">SS_AT_ET_T</property>
                                         <property name="digits">1</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkSpinButton">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="adjustment">SS_AT_FI_T</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -459,10 +456,10 @@
                             <property name="can_focus">False</property>
                             <property name="active">0</property>
                             <items>
-                              <item translatable="yes">Brightness steps</item>
-                              <item translatable="yes">Colors</item>
-                              <item translatable="yes">Grays</item>
-                              <item translatable="yes">Autotrace (slower)</item>
+                              <item id="MS_BS" translatable="yes">Brightness steps</item>
+                              <item id="MS_C" translatable="yes">Colors</item>
+                              <item id="MS_BW" translatable="yes">Grays</item>
+                              <item id="MS_AT" translatable="yes">Autotrace (slower)</item>
                             </items>
                           </object>
                           <packing>
@@ -898,25 +895,21 @@ Output
               </packing>
             </child>
             <child>
-
-<object class="GtkScrolledWindow">
+              <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
-<property name="can_focus">True</property>
-<property name="hscrollbar_policy">never</property>
-<property name="shadow_type">in</property>
-  <child>
-  <object class="GtkTextView">
-    <property name="visible">True</property>
-    <property name="can_focus">True</property>
-    <property name="editable">False</property>
-    <property name="wrap_mode">word</property>
-    <property name="buffer">helptext</property>
-  </object>
-</child>
-</object>
-
-
-
+                <property name="can_focus">True</property>
+                <property name="hscrollbar_policy">never</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkTextView">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="editable">False</property>
+                    <property name="wrap_mode">word</property>
+                    <property name="buffer">helptext</property>
+                  </object>
+                </child>
+              </object>
               <packing>
                 <property name="position">2</property>
               </packing>
@@ -963,32 +956,7 @@ Output
             <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
-		<property name="can_focus">False</property>
-
-
-
-<!--
-                <child>
-                  <object class="GtkCheckButton" id="CB_live">
-                    <property name="label" translatable="yes">Live</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
--->
-
-
-
-
-
-
+                <property name="can_focus">False</property>
                 <child>
                   <object class="GtkButton" id="B_Update">
                     <property name="label" translatable="yes">Update</property>

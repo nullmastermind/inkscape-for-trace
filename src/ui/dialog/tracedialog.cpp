@@ -33,7 +33,18 @@
 #include "trace/potrace/inkscape-potrace.h"
 #include "trace/depixelize/inkscape-depixelize.h"
 
-
+// This maps the column ids in the glade file to useful enums
+static const std::map<std::string, Inkscape::Trace::Potrace::TraceType> trace_types = {
+    {"SS_BC", Inkscape::Trace::Potrace::TRACE_BRIGHTNESS},
+    {"SS_ED", Inkscape::Trace::Potrace::TRACE_CANNY},
+    {"SS_CQ", Inkscape::Trace::Potrace::TRACE_QUANT},
+    {"SS_AT", Inkscape::Trace::Potrace::AUTOTRACE_SINGLE},
+    {"SS_CT", Inkscape::Trace::Potrace::AUTOTRACE_CENTERLINE},
+    {"MS_BS", Inkscape::Trace::Potrace::TRACE_BRIGHTNESS_MULTI},
+    {"MS_C", Inkscape::Trace::Potrace::TRACE_QUANT_COLOR},
+    {"MS_BW", Inkscape::Trace::Potrace::TRACE_QUANT_MONO},
+    {"MS_AT", Inkscape::Trace::Potrace::AUTOTRACE_MULTI},
+};
 
 namespace Inkscape {
 namespace UI {
@@ -104,55 +115,37 @@ void TraceDialogImpl2::traceProcess(bool do_i_trace)
         tracer.enableSiox(false);
 
     Glib::ustring type =
-        choice_scan->get_visible_child_name() == "SingleScan" ? CBT_SS->get_active_text() : CBT_MS->get_active_text();
-
-    Inkscape::Trace::Potrace::TraceType potraceType;
-    // Inkscape::Trace::Autotrace::TraceType autotraceType;
+        choice_scan->get_visible_child_name() == "SingleScan" ? CBT_SS->get_active_id() : CBT_MS->get_active_id();
 
     bool use_autotrace = false;
     Inkscape::Trace::Autotrace::AutotraceTracingEngine ate; // TODO
 
-    if (type == _("Brightness cutoff"))
-      potraceType = Inkscape::Trace::Potrace::TRACE_BRIGHTNESS;
-    else if (type == _("Edge detection"))
-      potraceType = Inkscape::Trace::Potrace::TRACE_CANNY;
-    else if (type == _("Color quantization"))
-      potraceType = Inkscape::Trace::Potrace::TRACE_QUANT;
-    else if (type == _("Autotrace"))
-    {
-      // autotraceType = Inkscape::Trace::Autotrace::TRACE_CENTERLINE
-      use_autotrace = true;
-      ate.opts->color_count = 2;
+    auto potraceType = trace_types.find(type);
+    assert(potraceType != trace_types.end());
+    switch (potraceType->second) {
+        case Inkscape::Trace::Potrace::AUTOTRACE_SINGLE:
+            use_autotrace = true;
+            ate.opts->color_count = 2;
+            break;
+        case Inkscape::Trace::Potrace::AUTOTRACE_CENTERLINE:
+            use_autotrace = true;
+            ate.opts->color_count = 2;
+            ate.opts->centerline = true;
+            ate.opts->preserve_width = true;
+            break;
+        case Inkscape::Trace::Potrace::AUTOTRACE_MULTI:
+            use_autotrace = true;
+            ate.opts->color_count = (int)MS_scans->get_value() + 1;
+            break;
+        default:
+            break;
     }
-    else if (type == _("Centerline tracing (autotrace)"))
-    {
-      // autotraceType = Inkscape::Trace::Autotrace::TRACE_CENTERLINE
-      use_autotrace = true;
-      ate.opts->color_count = 2;
-      ate.opts->centerline = true;
-      ate.opts->preserve_width = true;
-    }
-    else if (type == _("Brightness steps"))
-      potraceType = Inkscape::Trace::Potrace::TRACE_BRIGHTNESS_MULTI;
-    else if (type == _("Colors"))
-      potraceType = Inkscape::Trace::Potrace::TRACE_QUANT_COLOR;
-    else if (type == _("Grays"))
-      potraceType = Inkscape::Trace::Potrace::TRACE_QUANT_MONO;
-    else if (type == _("Autotrace (slower)"))
-    {
-      // autotraceType = Inkscape::Trace::Autotrace::TRACE_CENTERLINE
-      use_autotrace = true;
-      ate.opts->color_count = (int)MS_scans->get_value() + 1;
-    }
-    else 
-    {
-      g_warning("Should not happen!");
-    }
+
     ate.opts->filter_iterations = (int) SS_AT_FI_T->get_value();
     ate.opts->error_threshold = SS_AT_ET_T->get_value();
 
     Inkscape::Trace::Potrace::PotraceTracingEngine pte(
-        potraceType, CB_invert->get_active(), (int)SS_CQ_T->get_value(), SS_BC_T->get_value(),
+        potraceType->second, CB_invert->get_active(), (int)SS_CQ_T->get_value(), SS_BC_T->get_value(),
         0., // Brightness floor
         SS_ED_T->get_value(), (int)MS_scans->get_value(), CB_MS_stack->get_active(), CB_MS_smooth->get_active(),
         CB_MS_rb->get_active());

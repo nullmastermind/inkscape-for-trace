@@ -283,7 +283,6 @@
 ../src/ui/dialog/template-widget.cpp
 ../src/ui/dialog/text-edit.cpp
 ../src/ui/dialog/tile.cpp
-../src/ui/dialog/tracedialog.cpp
 ../src/ui/dialog/transformation.cpp
 ../src/ui/dialog/xml-tree.cpp
 ../src/ui/drag-and-drop.cpp
