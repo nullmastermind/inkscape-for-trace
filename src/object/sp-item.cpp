@@ -748,9 +748,7 @@ Inkscape::XML::Node* SPItem::write(Inkscape::XML::Document *xml_doc, Inkscape::X
         }
     }
 
-    gchar *c = sp_svg_transform_write(item->transform);
-    repr->setAttribute("transform", c);
-    g_free(c);
+    repr->setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(item->transform));
 
     if (flags & SP_OBJECT_WRITE_EXT) {
         repr->setAttribute("sodipodi:insensitive", ( item->sensitive ? nullptr : "true" ));

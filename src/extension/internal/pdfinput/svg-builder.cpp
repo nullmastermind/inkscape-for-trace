@@ -254,9 +254,7 @@ static gchar *svgConvertGfxRGB(GfxRGB *color) {
 static void svgSetTransform(Inkscape::XML::Node *node, double c0, double c1,
                             double c2, double c3, double c4, double c5) {
     Geom::Affine matrix(c0, c1, c2, c3, c4, c5);
-    gchar *transform_text = sp_svg_transform_write(matrix);
-    node->setAttribute("transform", transform_text);
-    g_free(transform_text);
+    node->setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(matrix));
 }
 
 /**
@@ -706,9 +704,7 @@ gchar *SvgBuilder::_createTilingPattern(GfxTilingPattern *tiling_pattern,
         m[5] = p2u[4] * ittm[1] + p2u[5] * ittm[3] + ittm[5];
     }
     Geom::Affine pat_matrix(m[0], m[1], m[2], m[3], m[4], m[5]);
-    gchar *transform_text = sp_svg_transform_write(pat_matrix);
-    pattern_node->setAttribute("patternTransform", transform_text);
-    g_free(transform_text);
+    pattern_node->setAttributeOrRemoveIfEmpty("patternTransform", sp_svg_transform_write(pat_matrix));
     pattern_node->setAttribute("patternUnits", "userSpaceOnUse");
     // Set pattern tiling
     // FIXME: don't ignore XStep and YStep
@@ -809,9 +805,7 @@ gchar *SvgBuilder::_createGradient(GfxShading *shading, double *matrix, bool for
             Geom::Affine flip(1.0, 0.0, 0.0, -1.0, 0.0, Inkscape::Util::Quantity::convert(_height, "px", "pt"));
             pat_matrix *= flip;
         }
-        gchar *transform_text = sp_svg_transform_write(pat_matrix);
-        gradient->setAttribute("gradientTransform", transform_text);
-        g_free(transform_text);
+        gradient->setAttributeOrRemoveIfEmpty("gradientTransform", sp_svg_transform_write(pat_matrix));
     }
 
     if ( extend0 && extend1 ) {
@@ -1255,9 +1249,7 @@ void SvgBuilder::_flushText() {
     Geom::Affine text_transform(_text_matrix);
     text_transform[4] = first_glyph.position[0];
     text_transform[5] = first_glyph.position[1];
-    gchar *transform = sp_svg_transform_write(text_transform);
-    text_node->setAttribute("transform", transform);
-    g_free(transform);
+    text_node->setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(text_transform));
 
     bool new_tspan = true;
     bool same_coords[2] = {true, true};
@@ -1811,9 +1803,7 @@ void SvgBuilder::addMaskedImage(GfxState *state, Stream *str, int width, int hei
         mask_node->appendChild(mask_image_node);
         // Scale the mask to the size of the image
         Geom::Affine mask_transform((double)width, 0.0, 0.0, (double)height, 0.0, 0.0);
-        gchar *transform_text = sp_svg_transform_write(mask_transform);
-        mask_node->setAttribute("maskTransform", transform_text);
-        g_free(transform_text);
+        mask_node->setAttributeOrRemoveIfEmpty("maskTransform", sp_svg_transform_write(mask_transform));
         // Set mask and add image
         gchar *mask_url = g_strdup_printf("url(#%s)", mask_node->attribute("id"));
         image_node->setAttribute("mask", mask_url);

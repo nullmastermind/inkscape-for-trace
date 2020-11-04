@@ -2467,9 +2467,7 @@ void CloneTiler::apply()
                 center_set = true;
             }
 
-            gchar *affinestr=sp_svg_transform_write(t);
-            clone->setAttribute("transform", affinestr);
-            g_free(affinestr);
+            clone->setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(t));
 
             if (opacity < 1.0) {
                 sp_repr_set_css_double(clone, "opacity", opacity);

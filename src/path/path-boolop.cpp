@@ -717,7 +717,7 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
     // premultiply by the inverse of parent's repr
     SPItem *parent_item = SP_ITEM(doc->getObjectByRepr(parent));
     Geom::Affine local (parent_item->i2doc_affine());
-    gchar *transform = sp_svg_transform_write(local.inverse());
+    auto transform = sp_svg_transform_write(local.inverse());
 
     // now that we have the result, add it on the canvas
     if ( bop == bool_op_cut || bop == bool_op_slice ) {
@@ -772,7 +772,7 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
                 sp_repr_css_attr_unref(css);
             }
 
-            repr->setAttribute("transform", transform);
+            repr->setAttributeOrRemoveIfEmpty("transform", transform);
 
             // add the new repr to the parent
             // move to the saved position
@@ -800,15 +800,13 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
         repr->setAttribute("d", d);
         g_free(d);
 
-        repr->setAttribute("transform", transform);
+        repr->setAttributeOrRemoveIfEmpty("transform", transform);
 
         parent->addChildAtPos(repr, pos);
 
         set(repr);
         Inkscape::GC::release(repr);
     }
-
-    g_free(transform);
 
     delete res;
 

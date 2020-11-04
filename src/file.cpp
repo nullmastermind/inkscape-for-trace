@@ -968,7 +968,7 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
             SPItem *original = use->get_original();
             if (original) {
                 Geom::Affine relative_use_transform = original->transform.inverse() * use->transform;
-                obj_copy->setAttribute("transform", sp_svg_transform_write(relative_use_transform));
+                obj_copy->setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(relative_use_transform));
             }
         }
     }

@@ -378,11 +378,7 @@ SPGradient *sp_gradient_reset_to_userspace(SPGradient *gr, SPItem *item)
             Geom::Translate (center);
 
         gr->gradientTransform = squeeze;
-        {
-            gchar *c=sp_svg_transform_write(gr->gradientTransform);
-            gr->setAttribute("gradientTransform", c);
-            g_free(c);
-        }
+        gr->setAttributeOrRemoveIfEmpty("gradientTransform", sp_svg_transform_write(gr->gradientTransform));
     } else if (SP_IS_LINEARGRADIENT(gr)) {
 
         // Assume horizontal gradient by default (as per SVG 1.1)
@@ -507,11 +503,7 @@ SPGradient *sp_gradient_convert_to_userspace(SPGradient *gr, SPItem *item, gchar
 
         // apply skew to the gradient
         gr->gradientTransform = skew;
-        {
-            gchar *c=sp_svg_transform_write(gr->gradientTransform);
-            gr->setAttribute("gradientTransform", c);
-            g_free(c);
-        }
+        gr->setAttributeOrRemoveIfEmpty("gradientTransform", sp_svg_transform_write(gr->gradientTransform));
 
         // Matrix to convert points to userspace coords; postmultiply by inverse of skew so
         // as to cancel it out when it's applied to the gradient during rendering
@@ -587,9 +579,8 @@ void sp_gradient_transform_multiply(SPGradient *gradient, Geom::Affine postmul, 
     }
     gradient->gradientTransform_set = TRUE;
 
-    gchar *c=sp_svg_transform_write(gradient->gradientTransform);
-    gradient->setAttribute("gradientTransform", c);
-    g_free(c);
+    auto c = sp_svg_transform_write(gradient->gradientTransform);
+    gradient->setAttributeOrRemoveIfEmpty("gradientTransform", c);
 }
 
 SPGradient *getGradient(SPItem *item, Inkscape::PaintTarget fill_or_stroke)
@@ -1187,9 +1178,8 @@ void sp_item_gradient_set_coords(SPItem *item, GrPointType point_type, guint poi
             gradient->gradientTransform = new_transform;
             gradient->gradientTransform_set = TRUE;
             if (write_repr) {
-                gchar *s=sp_svg_transform_write(gradient->gradientTransform);
-                gradient->setAttribute("gradientTransform", s);
-                g_free(s);
+                auto s = sp_svg_transform_write(gradient->gradientTransform);
+                gradient->setAttributeOrRemoveIfEmpty("gradientTransform", s);
             } else {
                 gradient->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }

@@ -317,9 +317,7 @@ static void sp_selection_copy_one(Inkscape::XML::Node *repr, Geom::Affine full_t
     // write the complete accumulated transform passed to us
     // (we're dealing with unattached repr, so we write to its attr
     // instead of using sp_item_set_transform)
-    gchar *affinestr=sp_svg_transform_write(full_t);
-    copy->setAttribute("transform", affinestr);
-    g_free(affinestr);
+    copy->setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(full_t));
 
     clip.insert(clip.begin(),copy);
 }
@@ -363,9 +361,7 @@ static std::vector<Inkscape::XML::Node*> sp_selection_paste_impl(SPDocument *doc
                 sp_svg_transform_read(t_str, &item_t);
             item_t *= local.inverse();
             // (we're dealing with unattached repr, so we write to its attr instead of using sp_item_set_transform)
-            gchar *affinestr=sp_svg_transform_write(item_t);
-            copy->setAttribute("transform", affinestr);
-            g_free(affinestr);
+            copy->setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(item_t));
         }
 
         parent->appendChildRepr(copy);
@@ -3303,11 +3299,7 @@ void ObjectSet::toSymbol()
     the_parent_repr->appendChild(clone);
 
     if( single_group && transform.isTranslation() ) {
-        if( !transform.isIdentity() ) {
-            gchar *c = sp_svg_transform_write( transform );
-            clone->setAttribute("transform", c);
-            g_free(c);
-        }
+        clone->setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(transform));
     }
 
     // Change selection to new <use> element.
@@ -3482,9 +3474,7 @@ void ObjectSet::tile(bool apply)
         rect->setAttribute("style", style_str);
         g_free(style_str);
 
-        gchar *c = sp_svg_transform_write(parent_transform.inverse());
-        rect->setAttribute("transform", c);
-        g_free(c);
+        rect->setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(parent_transform.inverse()));
 
         sp_repr_set_svg_double(rect, "width", bbox.width());
         sp_repr_set_svg_double(rect, "height", bbox.height());
@@ -3828,9 +3818,7 @@ void ObjectSet::createBitmapCopy()
         }
 
         // Write transform
-        gchar *c=sp_svg_transform_write(t);
-        repr->setAttribute("transform", c);
-        g_free(c);
+        repr->setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(t));
 
         // add the new repr to the parent
         parent->addChildAtPos(repr, pos + 1);

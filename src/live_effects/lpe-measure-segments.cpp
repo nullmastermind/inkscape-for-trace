@@ -526,7 +526,7 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
         rtspan->removeAttribute("style");
     }
 
-    gchar * transform;
+    std::string transform;
     if (rotate_anotation) {
         Geom::Affine affine = Geom::Affine(Geom::Translate(pos).inverse());
         angle = std::fmod(angle, 2*M_PI);
@@ -538,11 +538,8 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
         affine *= Geom::Rotate(angle);
         affine *= Geom::Translate(pos);
         transform = sp_svg_transform_write(affine);
-    } else {
-        transform = nullptr;
     }
-    rtext->setAttribute("transform", transform);
-    g_free(transform);
+    rtext->setAttributeOrRemoveIfEmpty("transform", transform);
 }
 
 void

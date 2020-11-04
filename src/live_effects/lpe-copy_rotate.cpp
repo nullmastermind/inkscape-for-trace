@@ -316,9 +316,7 @@ LPECopyRotate::toItem(Geom::Affine transform, size_t i, bool reset)
         Inkscape::GC::release(phantom);
     }
     cloneD(SP_OBJECT(sp_lpe_item), elemref, transform, reset);
-    gchar *str = sp_svg_transform_write(transform);
-    elemref->getRepr()->setAttribute("transform" , str);
-    g_free(str);
+    elemref->getRepr()->setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(transform));
     SP_ITEM(elemref)->setHidden(false);
     if (elemref->parent != container) {
         Inkscape::XML::Node *copy = phantom->duplicate(xml_doc);

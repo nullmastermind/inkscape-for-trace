@@ -646,9 +646,8 @@ Inkscape::XML::Node *SPGradient::write(Inkscape::XML::Document *xml_doc, Inkscap
     }
 
     if ((flags & SP_OBJECT_WRITE_ALL) || this->gradientTransform_set) {
-        gchar *c=sp_svg_transform_write(this->gradientTransform);
-        repr->setAttribute("gradientTransform", c);
-        g_free(c);
+        auto c = sp_svg_transform_write(this->gradientTransform);
+        repr->setAttributeOrRemoveIfEmpty("gradientTransform", c);
     }
 
     if ((flags & SP_OBJECT_WRITE_ALL) || this->spread_set) {

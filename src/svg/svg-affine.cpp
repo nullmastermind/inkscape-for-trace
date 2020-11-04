@@ -21,7 +21,7 @@
 #include "svg.h"
 #include "preferences.h"
 
-gchar *
+std::string
 sp_svg_transform_write(Geom::Affine const &transform)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -36,7 +36,7 @@ sp_svg_transform_write(Geom::Affine const &transform)
     if (transform[0] == 0 && transform[1] == 0 && transform[2] == 0 &&
         transform[3] == 0 && transform[4] == 0 && transform[5] == 0)
     {
-        return g_strdup("scale(0)");
+        return "scale(0)";
     }
 
     // FIXME legacy C code!
@@ -47,7 +47,7 @@ sp_svg_transform_write(Geom::Affine const &transform)
 
     if (transform.isIdentity()) {
         // We are more or less identity, so no transform attribute needed:
-        return nullptr;
+        return {};
     } else if (transform.isScale()) {
         // We are more or less a uniform scale
         strcpy (c + p, "scale(");
@@ -148,14 +148,7 @@ sp_svg_transform_write(Geom::Affine const &transform)
     }
 
     assert(p <= sizeof(c));
-    return g_strdup(c);
-}
-
-
-gchar *
-sp_svg_transform_write(Geom::Affine const *transform)
-{
-    return sp_svg_transform_write(*transform);
+    return c;
 }
 
 /*

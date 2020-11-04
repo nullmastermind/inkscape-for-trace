@@ -313,9 +313,8 @@ LPESlice::cloneD(SPObject *orig, SPObject *dest, bool is_original)
             cloneStyle(orig, dest);
         }
         if (!allow_transforms) {
-            gchar *str = sp_svg_transform_write(originalitem->transform);
-            dest->getRepr()->setAttribute("transform" , str);
-            g_free(str);
+            auto str = sp_svg_transform_write(originalitem->transform);
+            dest->getRepr()->setAttributeOrRemoveIfEmpty("transform", str);
         }
         std::vector< SPObject * > childs = orig->childList(true);
         size_t index = 0;
@@ -343,9 +342,8 @@ LPESlice::cloneD(SPObject *orig, SPObject *dest, bool is_original)
                 }
                 g_free(str);
                 if (!allow_transforms) {
-                    gchar *str = sp_svg_transform_write(originalitem->transform);
-                    dest->getRepr()->setAttribute("transform" , str);
-                    g_free(str);
+                    auto str = sp_svg_transform_write(originalitem->transform);
+                    dest->getRepr()->setAttributeOrRemoveIfEmpty("transform", str);
                 }
                 if (reset) {
                     cloneStyle(orig, dest);

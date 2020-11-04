@@ -463,9 +463,7 @@ static void do_trace(bitmap_coords_info bci, guchar *trace_px, SPDesktop *deskto
                     sp_svg_transform_read(t_str, &item_t);
                 item_t *= local.inverse();
                 // (we're dealing with unattached repr, so we write to its attr instead of using sp_item_set_transform)
-                gchar *affinestr=sp_svg_transform_write(item_t);
-                pathRepr->setAttribute("transform", affinestr);
-                g_free(affinestr);
+                pathRepr->setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(item_t));
             }
 
             Inkscape::Selection *selection = desktop->getSelection();

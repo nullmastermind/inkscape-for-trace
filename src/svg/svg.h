@@ -56,8 +56,7 @@ std::string sp_svg_length_write_with_units(SVGLength const &length);
 
 bool sp_svg_transform_read(char const *str, Geom::Affine *transform);
 
-char *sp_svg_transform_write(Geom::Affine const &transform);
-char *sp_svg_transform_write(Geom::Affine const *transform);
+std::string sp_svg_transform_write(Geom::Affine const &transform);
 
 double sp_svg_read_percentage( const char * str, double def );
 

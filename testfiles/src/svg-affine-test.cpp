@@ -116,9 +116,8 @@ TEST(SvgAffineTest, testReadIdentity)
 
 TEST(SvgAffineTest, testWriteIdentity)
 {
-    gchar *str = sp_svg_transform_write(Geom::identity());
-    ASSERT_TRUE(str == NULL);
-    g_free(str);
+    auto str = sp_svg_transform_write(Geom::identity());
+    ASSERT_TRUE(str == "");
 }
 
 TEST(SvgAffineTest, testReadMatrix)
@@ -169,45 +168,40 @@ TEST(SvgAffineTest, testReadSkew)
 TEST(SvgAffineTest, testWriteMatrix)
 {
     for (size_t i = 0; i < G_N_ELEMENTS(write_matrix_tests); i++) {
-        char *str = sp_svg_transform_write(write_matrix_tests[i].matrix);
-        ASSERT_TRUE(!strcmp( str, write_matrix_tests[i].str));
-        g_free(str);
+        auto str = sp_svg_transform_write(write_matrix_tests[i].matrix);
+        ASSERT_TRUE(!strcmp(str.c_str(), write_matrix_tests[i].str));
     }
 }
 
 TEST(SvgAffineTest, testWriteTranslate)
 {
     for (size_t i = 0; i < G_N_ELEMENTS(write_translate_tests); i++) {
-        char *str = sp_svg_transform_write(write_translate_tests[i].matrix);
-        ASSERT_TRUE(!strcmp(str, write_translate_tests[i].str));
-        g_free(str);
+        auto str = sp_svg_transform_write(write_translate_tests[i].matrix);
+        ASSERT_TRUE(!strcmp(str.c_str(), write_translate_tests[i].str));
     }
 }
 
 TEST(SvgAffineTest, testWriteScale)
 {
     for (size_t i = 0; i < G_N_ELEMENTS(write_scale_tests); i++) {
-        char *str = sp_svg_transform_write(write_scale_tests[i].matrix);
-        ASSERT_TRUE(!strcmp(str, write_scale_tests[i].str));
-        g_free(str);
+        auto str = sp_svg_transform_write(write_scale_tests[i].matrix);
+        ASSERT_TRUE(!strcmp(str.c_str(), write_scale_tests[i].str));
     }
 }
 
 TEST(SvgAffineTest, testWriteRotate)
 {
     for (size_t i = 0; i < G_N_ELEMENTS(write_rotate_tests); i++) {
-        char *str = sp_svg_transform_write(write_rotate_tests[i].matrix);
-        ASSERT_TRUE(!strcmp(str, write_rotate_tests[i].str));
-        g_free(str);
+        auto str = sp_svg_transform_write(write_rotate_tests[i].matrix);
+        ASSERT_TRUE(!strcmp(str.c_str(), write_rotate_tests[i].str));
     }
 }
 
 TEST(SvgAffineTest, testWriteSkew)
 {
     for (size_t i = 0; i < G_N_ELEMENTS(write_skew_tests); i++) {
-        char *str = sp_svg_transform_write(write_skew_tests[i].matrix);
-        ASSERT_TRUE(!strcmp(str, write_skew_tests[i].str));
-        g_free(str);
+        auto str = sp_svg_transform_write(write_skew_tests[i].matrix);
+        ASSERT_TRUE(!strcmp(str.c_str(), write_skew_tests[i].str));
     }
 }
 

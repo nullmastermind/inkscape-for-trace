@@ -543,9 +543,7 @@ void SPHatch::transform_multiply(Geom::Affine postmul, bool set)
 
     _hatchTransform_set = true;
 
-    gchar *c = sp_svg_transform_write(_hatchTransform);
-    setAttribute("transform", c);
-    g_free(c);
+    setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(_hatchTransform));
 }
 
 bool SPHatch::isValid() const

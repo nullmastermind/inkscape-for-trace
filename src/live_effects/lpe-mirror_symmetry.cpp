@@ -384,9 +384,7 @@ LPEMirrorSymmetry::toMirror(Geom::Affine transform)
     }
     cloneD(SP_OBJECT(sp_lpe_item), elemref);
     reset = false;
-    gchar *str = sp_svg_transform_write(transform);
-    elemref->getRepr()->setAttribute("transform" , str);
-    g_free(str);
+    elemref->getRepr()->setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(transform));
     if (elemref->parent != container) {
         Inkscape::XML::Node *copy = phantom->duplicate(xml_doc);
         copy->setAttribute("id", elemref_id);
