@@ -883,10 +883,7 @@ void ConnectorTool::_flushWhite(SPCurve *c)
         /* Set style */
         sp_desktop_apply_style_tool(desktop, repr, "/tools/connector", false);
 
-        gchar *str = sp_svg_write_path( c->get_pathvector() );
-        g_assert( str != nullptr );
-        repr->setAttribute("d", str);
-        g_free(str);
+        repr->setAttribute("d", sp_svg_write_path(c->get_pathvector()));
 
         /* Attach repr */
         this->newconn = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));

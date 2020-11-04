@@ -292,18 +292,14 @@ g_message("sp_path_write writes 'd' attribute");
 #endif
 
     if (this->_curve) {
-        gchar *str = sp_svg_write_path(this->_curve->get_pathvector());
-        repr->setAttribute("d", str);
-        g_free(str);
+        repr->setAttribute("d", sp_svg_write_path(this->_curve->get_pathvector()));
     } else {
         repr->removeAttribute("d");
     }
 
     if (flags & SP_OBJECT_WRITE_EXT) {
         if ( this->_curve_before_lpe != nullptr ) {
-            gchar *str = sp_svg_write_path(this->_curve_before_lpe->get_pathvector());
-            repr->setAttribute("inkscape:original-d", str);
-            g_free(str);
+            repr->setAttribute("inkscape:original-d", sp_svg_write_path(this->_curve_before_lpe->get_pathvector()));
         } else {
             repr->removeAttribute("inkscape:original-d");
         }

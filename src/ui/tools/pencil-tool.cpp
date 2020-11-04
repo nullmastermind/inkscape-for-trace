@@ -720,11 +720,7 @@ void PencilTool::addPowerStrokePencil()
             Inkscape::XML::Document *xml_doc = document->getReprDoc();
             Inkscape::XML::Node *pp = nullptr;
             pp = xml_doc->createElement("svg:path");
-            gchar *pvector_str = sp_svg_write_path(path);
-            if (pvector_str) {
-                pp->setAttribute("d", pvector_str);
-                g_free(pvector_str);
-            }
+            pp->setAttribute("d", sp_svg_write_path(path));
             pp->setAttribute("id", "power_stroke_preview");
             Inkscape::GC::release(pp);
 

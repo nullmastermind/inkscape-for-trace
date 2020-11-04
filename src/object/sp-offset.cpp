@@ -182,9 +182,7 @@ Inkscape::XML::Node* SPOffset::write(Inkscape::XML::Document *xml_doc, Inkscape:
     }
 
     // write that curve to "d"
-    char *d = sp_svg_write_path (this->_curve->get_pathvector());
-    repr->setAttribute("d", d);
-    g_free (d);
+    repr->setAttribute("d", sp_svg_write_path(this->_curve->get_pathvector()));
 
     SPShape::write(xml_doc, repr, flags | SP_SHAPE_WRITE_PATH);
 

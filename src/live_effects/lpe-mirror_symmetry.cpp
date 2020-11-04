@@ -321,9 +321,7 @@ LPEMirrorSymmetry::cloneD(SPObject *orig, SPObject *dest)
     if (path && shape) {
         SPCurve const *c = shape->curve();
         if (c) {
-            gchar *str = sp_svg_write_path(c->get_pathvector());
-            dest->getRepr()->setAttribute("d", str);
-            g_free(str);
+            dest->getRepr()->setAttribute("d", sp_svg_write_path(c->get_pathvector()));
         } else {
             dest->getRepr()->removeAttribute("d");
         }

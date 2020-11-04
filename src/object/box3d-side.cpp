@@ -64,9 +64,7 @@ Inkscape::XML::Node* Box3DSide::write(Inkscape::XML::Document *xml_doc, Inkscape
         return nullptr;
     }
 
-    char *d = sp_svg_write_path ( curve->get_pathvector() );
-    repr->setAttribute("d", d);
-    g_free (d);
+    repr->setAttribute("d", sp_svg_write_path(curve->get_pathvector()));
 
     SPPolygon::write(xml_doc, repr, flags);
 

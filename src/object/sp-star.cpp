@@ -79,9 +79,7 @@ Inkscape::XML::Node* SPStar::write(Inkscape::XML::Document *xml_doc, Inkscape::X
 
     this->set_shape();
     if (this->_curve) {
-        char *d = sp_svg_write_path (this->_curve->get_pathvector());
-        repr->setAttribute("d", d);
-        g_free(d);
+        repr->setAttribute("d", sp_svg_write_path(this->_curve->get_pathvector()));
     } else {
         repr->removeAttribute("d");
     }

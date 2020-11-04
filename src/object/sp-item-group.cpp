@@ -887,12 +887,10 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, Inkscape::LivePa
                         sub_shape->setCurveInsync(c.get());
                         lpe->pathvector_after_effect = c->get_pathvector();
                         if (write) {
-                            gchar *str = sp_svg_write_path(lpe->pathvector_after_effect);
-                            repr->setAttribute("d", str);
+                            repr->setAttribute("d", sp_svg_write_path(lpe->pathvector_after_effect));
 #ifdef GROUP_VERBOSE
                             g_message("sp_group_perform_patheffect writes 'd' attribute");
 #endif
-                            g_free(str);
                         }
                     } else {
                         // LPE was unsuccessful or doeffect stack return null. Read the old 'd'-attribute.

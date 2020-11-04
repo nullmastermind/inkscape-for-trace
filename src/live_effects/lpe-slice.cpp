@@ -331,7 +331,7 @@ LPESlice::cloneD(SPObject *orig, SPObject *dest, bool is_original)
     if (path && shape) {
         SPCurve const *c = shape->curve();
         if (c) {
-            gchar *str = sp_svg_write_path(c->get_pathvector());
+            auto str = sp_svg_write_path(c->get_pathvector());
             if (str == "") {
                 dest->deleteObject(true);
             } else {
@@ -340,7 +340,6 @@ LPESlice::cloneD(SPObject *orig, SPObject *dest, bool is_original)
                 } else {
                     dest->getRepr()->setAttribute("d", str);
                 }
-                g_free(str);
                 if (!allow_transforms) {
                     auto str = sp_svg_transform_write(originalitem->transform);
                     dest->getRepr()->setAttributeOrRemoveIfEmpty("transform", str);
@@ -521,14 +520,13 @@ LPESlice::splititem(SPItem* item, SPCurve * curve, std::pair<Geom::Line, size_t>
                     cpro->set_pathvector(path_out);
                     shape->setCurveInsync(std::move(cpro));
                 }
-                gchar *str = sp_svg_write_path(path_out);
+                auto str = sp_svg_write_path(path_out);
                 if (!is_original && shape->hasPathEffectRecursive()) { 
                     shape->getRepr()->setAttribute("inkscape:original-d", str);
                     sp_lpe_item_update_patheffect(shape, false, false);
                 } else {
                     shape->getRepr()->setAttribute("d", str);
                 }
-                g_free(str);
             }
         }
     }

@@ -194,7 +194,7 @@ void setMeasureItem(Geom::PathVector pathv, bool is_curve, bool markers, guint32
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
     Inkscape::XML::Node *repr;
     repr = xml_doc->createElement("svg:path");
-    gchar *str = sp_svg_write_path(pathv);
+    auto str = sp_svg_write_path(pathv);
     SPCSSAttr *css = sp_repr_css_attr_new();
     Geom::Coord strokewidth = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse().expansionX();
     std::stringstream stroke_width;
@@ -231,9 +231,7 @@ void setMeasureItem(Geom::PathVector pathv, bool is_curve, bool markers, guint32
     sp_repr_css_write_string(css,css_str);
     repr->setAttribute("style", css_str);
     sp_repr_css_attr_unref (css);
-    g_assert( str != nullptr );
     repr->setAttribute("d", str);
-    g_free(str);
     if(measure_repr) {
         measure_repr->addChild(repr, nullptr);
         Inkscape::GC::release(repr);

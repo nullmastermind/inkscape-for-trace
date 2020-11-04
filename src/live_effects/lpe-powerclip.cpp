@@ -177,9 +177,7 @@ void LPEPowerClip::add()
             }        
             elemref->setAttribute("class", "powerclip");
             elemref->setAttribute("id", getId());
-            gchar *str = sp_svg_write_path(getClipPathvector());
-            elemref->setAttribute("d", str);
-            g_free(str);
+            elemref->setAttribute("d", sp_svg_write_path(getClipPathvector()));
         } else {
             sp_lpe_item->removeCurrentPathEffect(false);
         }
@@ -198,9 +196,7 @@ void LPEPowerClip::upd()
     }
     SPObject *elemref = document->getObjectById(getId().c_str());
     if (elemref && sp_lpe_item) {
-        gchar *str = sp_svg_write_path(getClipPathvector());
-        elemref->setAttribute("d", str);
-        g_free(str);
+        elemref->setAttribute("d", sp_svg_write_path(getClipPathvector()));
         elemref->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
     } else {
         add();

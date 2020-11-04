@@ -833,9 +833,7 @@ void SPShape::update_patheffect(bool write)
         if (write && success) {
             Inkscape::XML::Node *repr = this->getRepr();
             if (c_lpe != nullptr) {
-                gchar *str = sp_svg_write_path(c_lpe->get_pathvector());
-                repr->setAttribute("d", str);
-                g_free(str);
+                repr->setAttribute("d", sp_svg_write_path(c_lpe->get_pathvector()));
             } else {
                 repr->removeAttribute("d");
             }

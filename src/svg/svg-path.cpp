@@ -50,7 +50,9 @@ Geom::PathVector sp_svg_read_pathv(char const * str)
     catch (Geom::SVGPathParseError &e) {
         builder.flush();
         // This warning is extremely annoying when testing
-        g_warning("Malformed SVG path, truncated path up to where error was found.\n Input path=\"%s\"\n Parsed path=\"%s\"", str, sp_svg_write_path(pathv));
+        g_warning(
+            "Malformed SVG path, truncated path up to where error was found.\n Input path=\"%s\"\n Parsed path=\"%s\"",
+            str, sp_svg_write_path(pathv).c_str());
     }
 
     return pathv;
@@ -107,22 +109,22 @@ static void sp_svg_write_path(Inkscape::SVG::PathString & str, Geom::Path const 
     }
 }
 
-gchar * sp_svg_write_path(Geom::PathVector const &p) {
+std::string sp_svg_write_path(Geom::PathVector const &p) {
     Inkscape::SVG::PathString str;
 
     for(const auto & pit : p) {
         sp_svg_write_path(str, pit);
     }
 
-    return g_strdup(str.c_str());
+    return str;
 }
 
-gchar * sp_svg_write_path(Geom::Path const &p) {
+std::string sp_svg_write_path(Geom::Path const &p) {
     Inkscape::SVG::PathString str;
 
     sp_svg_write_path(str, p);
 
-    return g_strdup(str.c_str());
+    return str;
 }
 
 /*

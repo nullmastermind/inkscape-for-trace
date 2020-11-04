@@ -426,7 +426,7 @@ LPEKnot::doEffect_path (Geom::PathVector const &path_in)
         gint precision = prefs->getInt("/options/svgoutput/numericprecision");
         prefs->setInt("/options/svgoutput/numericprecision", 4); // I think this is enough for minor differences
         for (i0=0; i0<gpaths.size(); i0++){
-            if (!strcmp(sp_svg_write_path(comp), sp_svg_write_path(gpaths[i0])))
+            if (sp_svg_write_path(comp) == sp_svg_write_path(gpaths[i0]))
                 break;
         }
         prefs->setInt("/options/svgoutput/numericprecision", precision);

@@ -161,13 +161,12 @@ ObjectSet::combine(bool skip_undo)
         repr->setAttribute("inkscape:path-effect", path_effect);
 
         // set path data corresponding to new curve
-        gchar *dstring = sp_svg_write_path(curve->get_pathvector());
+        auto dstring = sp_svg_write_path(curve->get_pathvector());
         if (path_effect) {
             repr->setAttribute("inkscape:original-d", dstring);
         } else {
             repr->setAttribute("d", dstring);
         }
-        g_free(dstring);
 
         // add the new group to the parent of the topmost
         // move to the position of the topmost, reduced by the number of deleted items
@@ -245,13 +244,12 @@ ObjectSet::breakApart(bool skip_undo)
 
             repr->setAttribute("inkscape:path-effect", path_effect);
 
-            gchar *str = sp_svg_write_path(curve->get_pathvector());
+            auto str = sp_svg_write_path(curve->get_pathvector());
             if (path_effect)
                 repr->setAttribute("inkscape:original-d", str);
             else
                 repr->setAttribute("d", str);
             repr->setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(transform));
-            g_free(str);
             
             // add the new repr to the parent
             // move to the saved position
@@ -513,9 +511,7 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
 
             Inkscape::XML::Node *p_repr = xml_doc->createElement("svg:path");
 
-            gchar *def_str = sp_svg_write_path(curve->get_pathvector());
-            p_repr->setAttribute("d", def_str);
-            g_free(def_str);
+            p_repr->setAttribute("d", sp_svg_write_path(curve->get_pathvector()));
 
             p_repr->setAttributeOrRemoveIfEmpty("style", style_str);
 
@@ -563,9 +559,7 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
     repr->setAttributeOrRemoveIfEmpty("style", style_str);
 
     /* Definition */
-    gchar *def_str = sp_svg_write_path(curve->get_pathvector());
-    repr->setAttribute("d", def_str);
-    g_free(def_str);
+    repr->setAttribute("d", sp_svg_write_path(curve->get_pathvector()));
     return repr;
 }
 
@@ -599,13 +593,12 @@ ObjectSet::pathReverse()
 
         auto rcurve = path->curveForEdit()->create_reverse();
 
-        gchar *str = sp_svg_write_path(rcurve->get_pathvector());
+        auto str = sp_svg_write_path(rcurve->get_pathvector());
         if ( path->hasPathEffectRecursive() ) {
             path->setAttribute("inkscape:original-d", str);
         } else {
             path->setAttribute("d", str);
         }
-        g_free(str);
 
         // reverse nodetypes order (Bug #179866)
         gchar *nodetypes = g_strdup(path->getRepr()->attribute("sodipodi:nodetypes"));

@@ -293,9 +293,7 @@ void ClipboardManagerImpl::copy(ObjectSet *set)
             if (!pathv.empty()) {
                 Inkscape::XML::Node *pathRepr = _doc->createElement("svg:path");
 
-                gchar *str = sp_svg_write_path(pathv);
-                pathRepr->setAttribute("d", str);
-                g_free(str);
+                pathRepr->setAttribute("d", sp_svg_write_path(pathv));
 
                 if(first_path) {
                     pathRepr->setAttribute("style", first_path->style->write(SP_STYLE_FLAG_IFSET) );
@@ -332,8 +330,8 @@ void ClipboardManagerImpl::copyPathParameter(Inkscape::LivePathEffect::PathParam
     if ( pp == nullptr ) {
         return;
     }
-    gchar *svgd = sp_svg_write_path( pp->get_pathvector() );
-    if ( svgd == nullptr || *svgd == '\0' ) {
+    auto svgd = sp_svg_write_path(pp->get_pathvector());
+    if (svgd.empty()) {
         return;
     }
 
@@ -342,7 +340,6 @@ void ClipboardManagerImpl::copyPathParameter(Inkscape::LivePathEffect::PathParam
 
     Inkscape::XML::Node *pathnode = _doc->createElement("svg:path");
     pathnode->setAttribute("d", svgd);
-    g_free(svgd);
     _root->appendChild(pathnode);
     Inkscape::GC::release(pathnode);
 
@@ -478,9 +475,8 @@ bool ClipboardManagerImpl::paste(SPDesktop *desktop, bool in_place)
                     target_curve->append(*source_curve);
 
                     // Set the attribute to keep the document up to date (fixes undo)
-                    gchar *str = sp_svg_write_path(target_curve->get_pathvector());
+                    auto str = sp_svg_write_path(target_curve->get_pathvector());
                     target_path->setAttribute("d", str);
-                    g_free(str);
                 }
             }
             return true;

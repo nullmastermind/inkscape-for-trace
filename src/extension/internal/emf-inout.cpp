@@ -749,7 +749,7 @@ int Emf::in_clips(PEMF_CALLBACK_DATA d, const char *test){
 void Emf::add_clips(PEMF_CALLBACK_DATA d, const char *clippath, unsigned int logic){
     int op = combine_ops_to_livarot(logic);
     Geom::PathVector combined_vect;
-    char *combined = nullptr;
+    std::string combined;
     if (op >= 0 && d->dc[d->level].clip_id) {
         unsigned int real_idx = d->dc[d->level].clip_id - 1;
         Geom::PathVector old_vect = sp_svg_read_pathv(d->clips.strings[real_idx]);
@@ -758,13 +758,13 @@ void Emf::add_clips(PEMF_CALLBACK_DATA d, const char *clippath, unsigned int log
         combined = sp_svg_write_path(combined_vect);
     }
     else {
-        combined = strdup(clippath);  // COPY operation, erases everything and starts a new one
+        combined = clippath;  // COPY operation, erases everything and starts a new one
     }
 
-    uint32_t  idx = in_clips(d, combined);
+    uint32_t idx = in_clips(d, combined.c_str());
     if(!idx){  // add clip if not already present
         if(d->clips.count == d->clips.size){  enlarge_clips(d); }
-        d->clips.strings[d->clips.count++]=strdup(combined);
+        d->clips.strings[d->clips.count++] = strdup(combined.c_str());
         d->dc[d->level].clip_id = d->clips.count;  // one more than the slot where it is actually stored
         SVGOStringStream tmp_clippath;
         tmp_clippath << "\n<clipPath";
@@ -781,7 +781,6 @@ void Emf::add_clips(PEMF_CALLBACK_DATA d, const char *clippath, unsigned int log
     else {
         d->dc[d->level].clip_id = idx;
     }
-    free(combined);
 }
 
 
@@ -2269,9 +2268,7 @@ std::cout << "BEFORE DRAW"
                 double oy = pix_to_y_point(d, off.x, off.y) - pix_to_y_point(d, 0, 0);
                 Geom::Affine tf = Geom::Translate(ox,oy);
                 tmp_vect *= tf;
-                char *tmp_path = sp_svg_write_path(tmp_vect);
-                add_clips(d, tmp_path, U_RGN_COPY);
-                free(tmp_path);
+                add_clips(d, sp_svg_write_path(tmp_vect).c_str(), U_RGN_COPY);
             }
             break;
         }

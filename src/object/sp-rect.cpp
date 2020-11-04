@@ -314,11 +314,7 @@ bool SPRect::set_rect_path_attribute(Inkscape::XML::Node *repr)
     this->set_shape();
 
     if (_curve) {
-        gchar *d = sp_svg_write_path(_curve->get_pathvector());
-
-        repr->setAttribute("d", d);
-
-        g_free(d);
+        repr->setAttribute("d", sp_svg_write_path(_curve->get_pathvector()));
     } else {
         repr->removeAttribute("d");
     }

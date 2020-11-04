@@ -81,9 +81,7 @@ Inkscape::XML::Node* SPSpiral::write(Inkscape::XML::Document *xml_doc, Inkscape:
             return nullptr;
     }
 
-    char *d = sp_svg_write_path(this->_curve->get_pathvector());
-    repr->setAttribute("d", d);
-    g_free(d);
+    repr->setAttribute("d", sp_svg_write_path(this->_curve->get_pathvector()));
 
     SPShape::write(xml_doc, repr, flags | SP_SHAPE_WRITE_PATH);
 

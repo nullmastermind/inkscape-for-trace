@@ -257,9 +257,7 @@ LPEPowerMask::setMask(){
         Glib::ustring css_str;
         sp_repr_css_write_string(css, css_str);
         box->setAttributeOrRemoveIfEmpty("style", css_str);
-        gchar * box_str = sp_svg_write_path( mask_box );
-        box->setAttribute("d" , box_str);
-        g_free(box_str);
+        box->setAttribute("d", sp_svg_write_path(mask_box));
         if (!exist) {
             elemref = mask->appendChildRepr(box);
             Inkscape::GC::release(box);

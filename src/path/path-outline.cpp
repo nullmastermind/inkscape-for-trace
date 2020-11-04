@@ -526,9 +526,7 @@ item_to_paths(SPItem *item, bool legacy, SPItem *context)
         stroke = xml_doc->createElement("svg:path");
         sp_repr_css_change(stroke, ncss, "style");
 
-        gchar *str = sp_svg_write_path(stroke_path);
-        stroke->setAttribute("d", str);
-        g_free(str);
+        stroke->setAttribute("d", sp_svg_write_path(stroke_path));
     }
     sp_repr_css_attr_unref(ncss);
 
@@ -538,9 +536,7 @@ item_to_paths(SPItem *item, bool legacy, SPItem *context)
         fill = xml_doc->createElement("svg:path");
         sp_repr_css_change(fill, ncsf, "style");
 
-        gchar *str = sp_svg_write_path( fill_path );
-        fill->setAttribute("d", str);
-        g_free(str);
+        fill->setAttribute("d", sp_svg_write_path(fill_path));
     }
     sp_repr_css_attr_unref(ncsf);
 

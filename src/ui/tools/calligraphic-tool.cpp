@@ -934,10 +934,7 @@ void CalligraphicTool::set_to_accumulated(bool unionize, bool subtract) {
         }
 
         Geom::PathVector pathv = this->accumulated->get_pathvector() * desktop->dt2doc();
-        gchar *str = sp_svg_write_path(pathv);
-        g_assert( str != nullptr );
-        this->repr->setAttribute("d", str);
-        g_free(str);
+        this->repr->setAttribute("d", sp_svg_write_path(pathv));
 
         if (unionize) {
             desktop->getSelection()->add(this->repr);

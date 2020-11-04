@@ -650,10 +650,7 @@ void EraserTool::set_to_accumulated() {
         item_repr->updateRepr();
         Geom::PathVector pathv = this->accumulated->get_pathvector() * this->desktop->dt2doc();
         pathv *= item_repr->i2doc_affine().inverse();
-        gchar *str = sp_svg_write_path(pathv);
-        g_assert( str != nullptr );
-        this->repr->setAttribute("d", str);
-        g_free(str);
+        this->repr->setAttribute("d", sp_svg_write_path(pathv));
         Geom::OptRect eraserBbox;
         if ( this->repr ) {
             bool wasSelection = false;

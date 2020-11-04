@@ -233,13 +233,12 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
                 if (c && method != CLM_NONE) {
                     Geom::PathVector c_pv = c->get_pathvector();
                     c->set_pathvector(c_pv);
-                    gchar *str = sp_svg_write_path(c_pv);
+                    auto str = sp_svg_write_path(c_pv);
                     if (sync){
                         dest->getRepr()->setAttribute("inkscape:original-d", str);
                     }
                     shape_dest->setCurveInsync(std::move(c));
                     dest->getRepr()->setAttribute("d", str);
-                    g_free(str);
                 } else if (method != CLM_NONE) {
                     dest->getRepr()->removeAttribute(attribute);
                 }
@@ -312,9 +311,7 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
         Glib::ustring attr = "d,";
         if (text_origin) {
             std::unique_ptr<SPCurve> curve = text_origin->getNormalizedBpath();
-            gchar *str = sp_svg_write_path(curve->get_pathvector());
-            dest->getRepr()->setAttribute("inkscape:original-d", str);
-            g_free(str);
+            dest->getRepr()->setAttribute("inkscape:original-d", sp_svg_write_path(curve->get_pathvector()));
             attr = "";
         }
         if (!allow_transforms) {

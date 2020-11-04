@@ -240,7 +240,7 @@ LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bo
     if (shape) {
         SPCurve const *c = shape->curve();
         if (c) {
-            gchar *str = sp_svg_write_path(c->get_pathvector());
+            auto str = sp_svg_write_path(c->get_pathvector());
             if (shape && !path) {   
                 const char * id = dest->getRepr()->attribute("id");
                 const char * style = dest->getRepr()->attribute("style");
@@ -253,7 +253,6 @@ LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bo
                 path =  SP_PATH(dest);
             }
             path->getRepr()->setAttribute("d", str);
-            g_free(str);
         } else {
             path->getRepr()->removeAttribute("d");
         }

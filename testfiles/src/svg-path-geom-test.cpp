@@ -441,44 +441,39 @@ TEST_F(SvgPathGeomTest, testRoundTrip)
     Geom::PathVector pv;
     Geom::PathVector new_pv;
     std::string org_path_str;
-    char *path_str;
+    std::string path_str;
     // Rectangle (closed)
     org_path_str = rectanglesAbsoluteClosed[0];
     pv = sp_svg_read_pathv(org_path_str.c_str());
     path_str = sp_svg_write_path(pv);
-    new_pv = sp_svg_read_pathv(path_str);
+    new_pv = sp_svg_read_pathv(path_str.c_str());
     ASSERT_TRUE(bpathEqual(pv, new_pv)) << org_path_str.c_str();
-    g_free(path_str);
     // Rectangle (open)
     org_path_str = rectanglesAbsoluteOpen[0];
     pv = sp_svg_read_pathv(org_path_str.c_str());
     path_str = sp_svg_write_path(pv);
-    new_pv = sp_svg_read_pathv(path_str);
+    new_pv = sp_svg_read_pathv(path_str.c_str());
     ASSERT_TRUE(bpathEqual(pv, new_pv)) << org_path_str.c_str();
-    g_free(path_str);
     // Concatenated rectangles
     org_path_str = rectanglesAbsoluteClosed[0] + rectanglesRelativeOpen[0] + rectanglesRelativeClosed[0] +
                    rectanglesAbsoluteOpen[0];
     pv = sp_svg_read_pathv(org_path_str.c_str());
     path_str = sp_svg_write_path(pv);
-    new_pv = sp_svg_read_pathv(path_str);
+    new_pv = sp_svg_read_pathv(path_str.c_str());
     ASSERT_TRUE(bpathEqual(pv, new_pv)) << org_path_str.c_str();
-    g_free(path_str);
     // Zero-length subpaths
     org_path_str = "M 0,0 M 1,1 L 2,2 M 3,3 z M 4,4 L 5,5 z M 6,6";
     pv = sp_svg_read_pathv(org_path_str.c_str());
     path_str = sp_svg_write_path(pv);
-    new_pv = sp_svg_read_pathv(path_str);
+    new_pv = sp_svg_read_pathv(path_str.c_str());
     ASSERT_TRUE(bpathEqual(pv, new_pv)) << org_path_str.c_str();
-    g_free(path_str);
     // Floating-point
     org_path_str = "M .01,.02 L 0.04,0.02 L.04,.08L0.01,0.08 z"
                    "M 1e-2,.2e-1 L 0.004e1,0.0002e+2 L04E-2,.08e0L1.0e-2,80e-3 z";
     pv = sp_svg_read_pathv(org_path_str.c_str());
     path_str = sp_svg_write_path(pv);
-    new_pv = sp_svg_read_pathv(path_str);
+    new_pv = sp_svg_read_pathv(path_str.c_str());
     ASSERT_TRUE(bpathEqual(pv, new_pv, 1e-17)) << org_path_str.c_str();
-    g_free(path_str);
 }
 
 /*

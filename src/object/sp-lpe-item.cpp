@@ -519,8 +519,8 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem, bool keep_paths,
         Inkscape::XML::Node *repr = lpeitem->getRepr();
         SPCurve const *c_lpe = shape->curve();
         if (c_lpe) {
-            gchar *d_str = sp_svg_write_path(c_lpe->get_pathvector());
-            if (d_str) {
+            auto d_str = sp_svg_write_path(c_lpe->get_pathvector());
+            {
                 if (!lpeitem->hasPathEffectRecursive() &&
                     (!is_clip_mask ||
                     ( is_clip_mask && force)))
@@ -1019,10 +1019,9 @@ SPLPEItem::applyToClipPathOrMask(SPItem *clip_mask, SPItem* to, Inkscape::LivePa
                     success = false;
                 }
                 if (success && c) {
-                    gchar *str = sp_svg_write_path(c->get_pathvector());
+                    auto str = sp_svg_write_path(c->get_pathvector());
                     shape->setCurveInsync(std::move(c));
                     shape->setAttribute("d", str);
-                    g_free(str);
                 } else {
                      // LPE was unsuccessful or doeffect stack return null.. Read the old 'd'-attribute.
                     if (gchar const * value = shape->getAttribute("d")) {

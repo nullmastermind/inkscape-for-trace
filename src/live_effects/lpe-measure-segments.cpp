@@ -589,10 +589,8 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, Glib::ustring 
     }
     if (elemref) {
         line = elemref->getRepr();
-        gchar * line_str = sp_svg_write_path( line_pathv );
-        line->setAttribute("d" , line_str);
+        line->setAttribute("d", sp_svg_write_path(line_pathv));
         line->removeAttribute("transform");
-        g_free(line_str);
     } else {
         line = xml_doc->createElement("svg:path");
         line->setAttributeOrRemoveIfEmpty("id", id);
@@ -609,9 +607,7 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, Glib::ustring 
             classlinehelper += " measure-helper-line measure-line";
             line->setAttribute("class", classlinehelper);
         }
-        gchar * line_str = sp_svg_write_path( line_pathv );
-        line->setAttribute("d" , line_str);
-        g_free(line_str);
+        line->setAttribute("d", sp_svg_write_path(line_pathv));
     }
 
     line->setAttribute("sodipodi:insensitive", "true");

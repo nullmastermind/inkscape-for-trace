@@ -903,13 +903,11 @@ static void spdc_flush_white(FreehandBase *dc, SPCurve *gc)
             sp_desktop_apply_style_tool(desktop, repr, tool_name(dc).data(), false);
         }
 
-        gchar *str = sp_svg_write_path( c->get_pathvector() );
-        g_assert( str != nullptr );
+        auto str = sp_svg_write_path(c->get_pathvector());
         if (has_lpe)
             repr->setAttribute("inkscape:original-d", str);
         else
             repr->setAttribute("d", str);
-        g_free(str);
 
         if (SP_IS_PENCIL_CONTEXT(dc) && dc->tablet_enabled) {
             if (!dc->white_item) {
