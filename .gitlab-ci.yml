@@ -196,6 +196,7 @@ check-license-headers:
 
 translations:
   stage: test
+  <<: *run_for_MR
   needs: []
   script:
     # make sure dependencies for inkscape.pot are up-to-date
