@@ -69,7 +69,6 @@ public:
     static std::set<FilePlusHome> getBaseProfileDirs();
     static std::set<FilePlusHome> getProfileFiles();
     static std::set<FilePlusHomeAndName> getProfileFilesWithNames();
-#if defined(HAVE_LIBLCMS2)
     //icColorSpaceSignature getColorSpace() const;
     ColorSpaceSig getColorSpace() const;
     //icProfileClassSignature getProfileClass() const;
@@ -78,8 +77,6 @@ public:
     cmsHTRANSFORM getTransfFromSRGB8();
     cmsHTRANSFORM getTransfGamutCheck();
     bool GamutCheck(SPColor color);
-
-#endif // defined(HAVE_LIBLCMS2)
 
     char* href;
     char* local;

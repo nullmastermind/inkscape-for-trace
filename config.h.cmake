@@ -23,9 +23,6 @@
 /* Use AutoPackage? */
 #cmakedefine ENABLE_BINRELOC 1
 
-/* define to 1 if you have lcms version 2.x */
-#cmakedefine HAVE_LIBLCMS2 1
-
 /* always defined to indicate that i18n is enabled */
 #cmakedefine ENABLE_NLS 1
 
@@ -86,23 +83,14 @@
 /* Build in libcdr */
 #cmakedefine WITH_LIBCDR 1
 
-/* Build using libcdr 0.1.x */
-#cmakedefine WITH_LIBCDR01 1
-
 /* Build in libvisio */
 #cmakedefine WITH_LIBVISIO 1
-
-/* Build using libvisio 0.1.x */
-#cmakedefine WITH_LIBVISIO01 1
 
 /* Build in libwpg */
 #cmakedefine WITH_LIBWPG 1
 
-/* Build in libwpg-0.2 */
-#cmakedefine WITH_LIBWPG02 1
-
-/* Build in libwpg-0.3 */
-#cmakedefine WITH_LIBWPG03 1
+/* Build in libreadline */
+#cmakedefine WITH_GNU_READLINE 1
 
 /* Define to 1 if your processor stores words with the most significant byte
    first (like Motorola and SPARC, unlike Intel and VAX). */

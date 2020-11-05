@@ -85,7 +85,6 @@ public:
     Inkscape::ColorMode  get_color_mode()  { return _color_mode; }
     Inkscape::SplitMode  get_split_mode()  { return _split_mode; }
 
-#if defined(HAVE_LIBLCMS2)
     void set_cms_key(std::string key) {
         _cms_key = key;
         _cms_active = !key.empty();
@@ -93,7 +92,6 @@ public:
     std::string get_cms_key() { return _cms_key; }
     void set_cms_active(bool active) { _cms_active = active; }
     bool get_cms_active() { return _cms_active; }
-#endif
 
     Cairo::RefPtr<Cairo::ImageSurface> get_backing_store() { return _backing_store; } // Background rotation preview
 
@@ -222,10 +220,8 @@ private:
     Geom::Point _split_drag_start;
     Inkscape::ColorMode  _color_mode  = Inkscape::ColorMode::NORMAL;
 
-#if defined(HAVE_LIBLCMS2)
     std::string _cms_key;
     bool _cms_active = false;
-#endif
 
     // For a GTK bug (see SelectedStyle::on_opacity_changed()).
     int _forced_redraw_limit = -1;

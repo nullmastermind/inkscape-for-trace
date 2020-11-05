@@ -29,20 +29,11 @@
 
 #include <libcdr/libcdr.h>
 
-// TODO: Drop this check when librevenge is widespread.
-#if WITH_LIBCDR01
-  #include <librevenge-stream/librevenge-stream.h>
+#include <librevenge-stream/librevenge-stream.h>
 
-  using librevenge::RVNGString;
-  using librevenge::RVNGFileStream;
-  using librevenge::RVNGStringVector;
-#else
-  #include <libwpd-stream/libwpd-stream.h>
-
-  typedef WPXString               RVNGString;
-  typedef WPXFileStream           RVNGFileStream;
-  typedef libcdr::CDRStringVector RVNGStringVector;
-#endif
+using librevenge::RVNGString;
+using librevenge::RVNGFileStream;
+using librevenge::RVNGStringVector;
 
 #include <gtkmm/grid.h>
 #include <gtkmm/spinbutton.h>
@@ -263,13 +254,9 @@ SPDocument *CdrInput::open(Inkscape::Extension::Input * /*mod*/, const gchar * u
      }
 
      RVNGStringVector output;
-#if WITH_LIBCDR01
      librevenge::RVNGSVGDrawingGenerator generator(output, "svg");
 
      if (!libcdr::CDRDocument::parse(&input, &generator)) {
-#else
-     if (!libcdr::CDRDocument::generateSVG(&input, output)) {
-#endif
           return nullptr;
      }
 

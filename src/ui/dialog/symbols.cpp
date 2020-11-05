@@ -51,21 +51,13 @@
 #ifdef WITH_LIBVISIO
   #include <libvisio/libvisio.h>
 
-  // TODO: Drop this check when librevenge is widespread.
-  #if WITH_LIBVISIO01
-    #include <librevenge-stream/librevenge-stream.h>
+  #include <librevenge-stream/librevenge-stream.h>
 
-    using librevenge::RVNGFileStream;
-    using librevenge::RVNGString;
-    using librevenge::RVNGStringVector;
-    using librevenge::RVNGPropertyList;
-    using librevenge::RVNGSVGDrawingGenerator;
-  #else
-    #include <libwpd-stream/libwpd-stream.h>
-
-    typedef WPXFileStream             RVNGFileStream;
-    typedef libvisio::VSDStringVector RVNGStringVector;
-  #endif
+  using librevenge::RVNGFileStream;
+  using librevenge::RVNGString;
+  using librevenge::RVNGStringVector;
+  using librevenge::RVNGPropertyList;
+  using librevenge::RVNGSVGDrawingGenerator;
 #endif
 
 
@@ -680,7 +672,6 @@ void SymbolsDialog::iconChanged() {
 
 #ifdef WITH_LIBVISIO
 
-#if WITH_LIBVISIO01
 // Extend libvisio's native RVNGSVGDrawingGenerator with support for extracting stencil names (to be used as ID/title)
 class REVENGE_API RVNGSVGDrawingGenerator_WithTitle : public RVNGSVGDrawingGenerator {
   public:
@@ -702,7 +693,6 @@ class REVENGE_API RVNGSVGDrawingGenerator_WithTitle : public RVNGSVGDrawingGener
   private:
     RVNGStringVector &_titles;
 };
-#endif
 
 // Read Visio stencil files
 SPDocument* read_vss(Glib::ustring filename, Glib::ustring name ) {
@@ -724,13 +714,9 @@ SPDocument* read_vss(Glib::ustring filename, Glib::ustring name ) {
   }
   RVNGStringVector output;
   RVNGStringVector titles;
-#if WITH_LIBVISIO01
   RVNGSVGDrawingGenerator_WithTitle generator(output, titles, "svg");
 
   if (!libvisio::VisioDocument::parseStencils(&input, &generator)) {
-#else
-  if (!libvisio::VisioDocument::generateSVGStencils(&input, output)) {
-#endif
     return nullptr;
   }
   if (output.empty()) {
@@ -769,11 +755,9 @@ SPDocument* read_vss(Glib::ustring filename, Glib::ustring name ) {
 
     tmpSVGOutput += "    <symbol id=\"" + ss.str() + "\">\n";
 
-#if WITH_LIBVISIO01
     if (titles.size() == output.size() && titles[i] != "") {
       tmpSVGOutput += "      <title>" + Glib::ustring(RVNGString::escapeXML(titles[i].cstr()).cstr()) + "</title>\n";
     }
-#endif
 
     std::istringstream iss( output[i].cstr() );
     std::string line;

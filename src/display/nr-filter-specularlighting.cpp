@@ -150,8 +150,6 @@ void FilterSpecularLighting::render_cairo(FilterSlot &slot)
     double g = SP_RGBA32_G_F(lighting_color);
     double b = SP_RGBA32_B_F(lighting_color);
 
-#if defined(HAVE_LIBLCMS2)
-
     if (icc) {
         guchar ru, gu, bu;
         icc_color_to_sRGB(icc, &ru, &gu, &bu);
@@ -159,7 +157,6 @@ void FilterSpecularLighting::render_cairo(FilterSlot &slot)
         g = SP_COLOR_U_TO_F(gu);
         b = SP_COLOR_U_TO_F(bu);
     }
-#endif
 
     // Only alpha channel of input is used, no need to check input color_interpolation_filter value.
     SPColorInterpolation ci_fp  = SP_CSS_COLOR_INTERPOLATION_AUTO;

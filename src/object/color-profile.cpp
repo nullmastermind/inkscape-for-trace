@@ -33,9 +33,7 @@
 #include <windows.h>
 #endif
 
-#if HAVE_LIBLCMS2
-#  include <lcms2.h>
-#endif // HAVE_LIBLCMS2
+#include <lcms2.h>
 
 #include "xml/repr.h"
 #include "color.h"
@@ -59,12 +57,10 @@ using Inkscape::ColorProfileImpl;
 
 namespace
 {
-#if defined(HAVE_LIBLCMS2)
 cmsHPROFILE getSystemProfileHandle();
 cmsHPROFILE getProofProfileHandle();
 void loadProfiles();
 Glib::ustring getNameFromProfile(cmsHPROFILE profile);
-#endif // defined(HAVE_LIBLCMS2)
 }
 
 #ifdef DEBUG_LCMS
@@ -111,14 +107,11 @@ namespace Inkscape {
 
 class ColorProfileImpl {
 public:
-#if defined(HAVE_LIBLCMS2)
     static cmsHPROFILE _sRGBProf;
     static cmsHPROFILE _NullProf;
-#endif // defined(HAVE_LIBLCMS2)
 
     ColorProfileImpl();
 
-#if defined(HAVE_LIBLCMS2)
     static cmsUInt32Number _getInputFormat( cmsColorSpaceSignature space );
 
     static cmsHPROFILE getNULLProfile();
@@ -132,10 +125,8 @@ public:
     cmsHTRANSFORM _transf;
     cmsHTRANSFORM _revTransf;
     cmsHTRANSFORM _gamutTransf;
-#endif // defined(HAVE_LIBLCMS2)
 };
 
-#if defined(HAVE_LIBLCMS2)
 cmsColorSpaceSignature asICColorSpaceSig(ColorSpaceSig const & sig)
 {
     return ColorSpaceSigWrapper(sig);
@@ -145,12 +136,10 @@ cmsProfileClassSignature asICColorProfileClassSig(ColorProfileClassSig const & s
 {
     return ColorProfileClassSigWrapper(sig);
 }
-#endif //  defined(HAVE_LIBLCMS2)
 
 } // namespace Inkscape
 
 ColorProfileImpl::ColorProfileImpl()
-#if defined(HAVE_LIBLCMS2)
 	:
     _profHandle(nullptr),
     _profileClass(cmsSigInputClass),
@@ -158,11 +147,9 @@ ColorProfileImpl::ColorProfileImpl()
     _transf(nullptr),
     _revTransf(nullptr),
     _gamutTransf(nullptr)
-#endif // defined(HAVE_LIBLCMS2)
 {
 }
 
-#if defined(HAVE_LIBLCMS2)
 
 cmsHPROFILE ColorProfileImpl::_sRGBProf = nullptr;
 
@@ -181,8 +168,6 @@ cmsHPROFILE ColorProfileImpl::getNULLProfile() {
     }
     return _NullProf;
 }
-
-#endif // defined(HAVE_LIBLCMS2)
 
 ColorProfile::FilePlusHome::FilePlusHome(Glib::ustring filename, bool isInHome) : filename(std::move(filename)), isInHome(isInHome) {
 }
@@ -260,15 +245,12 @@ void ColorProfile::release() {
         this->intentStr = nullptr;
     }
 
-#if defined(HAVE_LIBLCMS2)
     this->impl->_clearProfile();
-#endif // defined(HAVE_LIBLCMS2)
 
     delete this->impl;
     this->impl = nullptr;
 }
 
-#if defined(HAVE_LIBLCMS2)
 void ColorProfileImpl::_clearProfile()
 {
     _profileSpace = cmsSigRgbData;
@@ -290,7 +272,6 @@ void ColorProfileImpl::_clearProfile()
         _profHandle = nullptr;
     }
 }
-#endif // defined(HAVE_LIBLCMS2)
 
 /**
  * Callback: set attributes from associated repr.
@@ -329,7 +310,6 @@ void ColorProfile::set(SPAttr key, gchar const *value) {
             if ( value ) {
                 this->href = g_strdup( value );
                 if ( *this->href ) {
-#if defined(HAVE_LIBLCMS2)
 
                     // TODO open filename and URIs properly
                     //FILE* fp = fopen_utf8name( filename, "r" );
@@ -364,7 +344,6 @@ void ColorProfile::set(SPAttr key, gchar const *value) {
                         this->impl->_profileClass = cmsGetDeviceClass( this->impl->_profHandle );
                     }
                     DEBUG_MESSAGE( lcmsOne, "cmsOpenProfileFromFile( '%s'...) = %p", fullname, (void*)this->impl->_profHandle );
-#endif // defined(HAVE_LIBLCMS2)
                 }
             }
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -452,8 +431,6 @@ Inkscape::XML::Node* ColorProfile::write(Inkscape::XML::Document *xml_doc, Inksc
     return repr;
 }
 
-
-#if defined(HAVE_LIBLCMS2)
 
 struct MapMap {
     cmsColorSpaceSignature space;
@@ -591,13 +568,11 @@ bool ColorProfile::GamutCheck(SPColor color)
 {
     guint32 val = color.toRGBA32(0);
 
-#if HAVE_LIBLCMS2
     cmsUInt16Number oldAlarmCodes[cmsMAXCHANNELS] = {0};
     cmsGetAlarmCodes(oldAlarmCodes);
     cmsUInt16Number newAlarmCodes[cmsMAXCHANNELS] = {0};
     newAlarmCodes[0] = ~0;
     cmsSetAlarmCodes(newAlarmCodes);
-#endif
 
     cmsUInt8Number outofgamut = 0;
     guchar check_color[4] = {
@@ -611,9 +586,7 @@ bool ColorProfile::GamutCheck(SPColor color)
         cmsDoTransform(gamutCheck, &check_color, &outofgamut, 1);
     }
 
-#if HAVE_LIBLCMS2
     cmsSetAlarmCodes(oldAlarmCodes);
-#endif
 
     return (outofgamut != 0);
 }
@@ -711,24 +684,19 @@ gint Inkscape::CMSSystem::getChannelCount(ColorProfile const *profile)
 {
     gint count = 0;
     if ( profile ) {
-#if HAVE_LIBLCMS2
         count = cmsChannelsOf( asICColorSpaceSig(profile->getColorSpace()) );
-#endif
     }
     return count;
 }
 
-#endif // defined(HAVE_LIBLCMS2)
 
 // the bool return value tells if it's a user's directory or a system location
 // note that this will treat places under $HOME as system directories when they are found via $XDG_DATA_DIRS
 std::set<ColorProfile::FilePlusHome> ColorProfile::getBaseProfileDirs() {
-#if defined(HAVE_LIBLCMS2)
     static bool warnSet = false;
     if (!warnSet) {
         warnSet = true;
     }
-#endif // defined(HAVE_LIBLCMS2)
     std::set<ColorProfile::FilePlusHome> sources;
 
     // first try user's local dir
@@ -810,7 +778,6 @@ static bool isIccFile( gchar const *filepath )
             }
 
             close(fd);
-#if defined(HAVE_LIBLCMS2)
             if (isIccFile) {
                 cmsHPROFILE prof = cmsOpenProfileFromFile( filepath, "r" );
                 if ( prof ) {
@@ -821,7 +788,6 @@ static bool isIccFile( gchar const *filepath )
                     cmsCloseProfile( prof );
                 }
             }
-#endif // defined(HAVE_LIBLCMS2)
         }
     }
     return isIccFile;
@@ -847,7 +813,6 @@ std::set<ColorProfile::FilePlusHomeAndName> ColorProfile::getProfileFilesWithNam
 {
     std::set<FilePlusHomeAndName> result;
 
-#if defined(HAVE_LIBLCMS2)
     for (auto &profile: getProfileFiles()) {
         cmsHPROFILE hProfile = cmsOpenProfileFromFile(profile.filename.c_str(), "r");
         if ( hProfile ) {
@@ -856,20 +821,16 @@ std::set<ColorProfile::FilePlusHomeAndName> ColorProfile::getProfileFilesWithNam
             cmsCloseProfile(hProfile);
         }
     }
-#endif // defined(HAVE_LIBLCMS2)
 
     return result;
 }
 
-#if defined(HAVE_LIBLCMS2)
-#if HAVE_LIBLCMS2
 void errorHandlerCB(cmsContext /*contextID*/, cmsUInt32Number errorCode, char const *errorText)
 {
     g_message("lcms: Error %d", errorCode);
     g_message("                 %p", errorText);
     //g_message("lcms: Error %d; %s", errorCode, errorText);
 }
-#endif
 
 namespace
 {
@@ -878,7 +839,6 @@ Glib::ustring getNameFromProfile(cmsHPROFILE profile)
 {
     Glib::ustring nameStr;
     if ( profile ) {
-#if HAVE_LIBLCMS2
     cmsUInt32Number byteLen = cmsGetProfileInfo(profile, cmsInfoDescription, "en", "US", nullptr, 0);
     if (byteLen > 0) {
         // TODO investigate wchar_t and cmsGetProfileInfo()
@@ -894,7 +854,6 @@ Glib::ustring getNameFromProfile(cmsHPROFILE profile)
     if (nameStr.empty() || !g_utf8_validate(nameStr.c_str(), -1, nullptr)) {
         nameStr = _("(invalid UTF-8 string)");
     }
-#endif
     }
     return nameStr;
 }
@@ -907,10 +866,8 @@ void loadProfiles()
 {
     static bool error_handler_set = false;
     if (!error_handler_set) {
-#if HAVE_LIBLCMS2
         //cmsSetLogErrorHandler(errorHandlerCB);
         //g_message("LCMS error handler set");
-#endif
         error_handler_set = true;
     }
 
@@ -1127,14 +1084,12 @@ cmsHTRANSFORM Inkscape::CMSSystem::getDisplayTransform()
                 auto gamutColor_g = gamutColor.get_green_u();
                 auto gamutColor_b = gamutColor.get_blue_u();
 
-#if HAVE_LIBLCMS2
                 cmsUInt16Number newAlarmCodes[cmsMAXCHANNELS] = {0};
                 newAlarmCodes[0] = gamutColor_r;
                 newAlarmCodes[1] = gamutColor_g;
                 newAlarmCodes[2] = gamutColor_b;
                 newAlarmCodes[3] = ~0;
                 cmsSetAlarmCodes(newAlarmCodes);
-#endif
             }
             if ( bpc ) {
                 dwFlags |= cmsFLAGS_BLACKPOINTCOMPENSATION;
@@ -1287,14 +1242,12 @@ cmsHTRANSFORM Inkscape::CMSSystem::getDisplayPer(std::string const &id)
                         auto gamutColor_g = gamutColor.get_green_u();
                         auto gamutColor_b = gamutColor.get_blue_u();
 
-#if HAVE_LIBLCMS2
                         cmsUInt16Number newAlarmCodes[cmsMAXCHANNELS] = {0};
                         newAlarmCodes[0] = gamutColor_r;
                         newAlarmCodes[1] = gamutColor_g;
                         newAlarmCodes[2] = gamutColor_b;
                         newAlarmCodes[3] = ~0;
                         cmsSetAlarmCodes(newAlarmCodes);
-#endif
                     }
                     if ( bpc ) {
                         dwFlags |= cmsFLAGS_BLACKPOINTCOMPENSATION;
@@ -1320,7 +1273,6 @@ cmsHTRANSFORM Inkscape::CMSSystem::getDisplayPer(std::string const &id)
 
 
 
-#endif // defined(HAVE_LIBLCMS2)
 
 /*
   Local Variables:

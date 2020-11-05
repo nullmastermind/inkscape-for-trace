@@ -115,15 +115,19 @@ pkg_check_modules(INKSCAPE_DEP REQUIRED
                   fontconfig
                   gsl
                   gmodule-2.0
-                  libsoup-2.4>=2.42)
+                  libsoup-2.4>=2.42
+                  #double-conversion
+                  bdw-gc #boehm-demers-weiser gc
+                  lcms2)
+
+# remove this line and uncomment the doiuble-conversion above when double-conversion.pc file gets shipped on all platforms we support
+find_package(DoubleConversion REQUIRED)  # lib2geom dependency
 
 sanitize_ldflags_for_libs(INKSCAPE_DEP_LDFLAGS)
 list(APPEND INKSCAPE_LIBS ${INKSCAPE_DEP_LDFLAGS})
 list(APPEND INKSCAPE_INCS_SYS ${INKSCAPE_DEP_INCLUDE_DIRS})
 
 add_definitions(${INKSCAPE_DEP_CFLAGS_OTHER})
-
-find_package(DoubleConversion REQUIRED)  # lib2geom dependency
 
 if(WITH_JEMALLOC)
     find_package(JeMalloc)
@@ -134,33 +138,14 @@ if(WITH_JEMALLOC)
     endif()
 endif()
 
-if(ENABLE_LCMS)
-    unset(HAVE_LIBLCMS2)
-    find_package(LCMS2)
-    if(LCMS2_FOUND)
-        list(APPEND INKSCAPE_INCS_SYS ${LCMS2_INCLUDE_DIRS})
-        list(APPEND INKSCAPE_LIBS ${LCMS2_LIBRARIES})
-        add_definitions(${LCMS2_DEFINITIONS})
-        set (HAVE_LIBLCMS2 ON)
-    else()
-      set(ENABLE_LCMS OFF)
-    endif()
-endif()
-
 find_package(Iconv REQUIRED)
-list(APPEND INKSCAPE_INCS_SYS ${ICONV_INCLUDE_DIRS})
-list(APPEND INKSCAPE_LIBS ${ICONV_LIBRARIES})
-add_definitions(${ICONV_DEFINITIONS})
+list(APPEND INKSCAPE_INCS_SYS ${Iconv_INCLUDE_DIRS})
+list(APPEND INKSCAPE_LIBS ${Iconv_LIBRARIES})
 
 find_package(Intl REQUIRED)
 list(APPEND INKSCAPE_INCS_SYS ${Intl_INCLUDE_DIRS})
 list(APPEND INKSCAPE_LIBS ${Intl_LIBRARIES})
 add_definitions(${Intl_DEFINITIONS})
-
-find_package(BoehmGC REQUIRED)
-list(APPEND INKSCAPE_INCS_SYS ${BOEHMGC_INCLUDE_DIRS})
-list(APPEND INKSCAPE_LIBS ${BOEHMGC_LIBRARIES})
-add_definitions(${BOEHMGC_DEFINITIONS})
 
 # Check for system-wide version of 2geom and fallback to internal copy if not found
 if(NOT WITH_INTERNAL_2GEOM)
@@ -199,12 +184,11 @@ list(APPEND INKSCAPE_LIBS     ${POPPLER_LIBRARIES})
 add_definitions(${POPPLER_DEFINITIONS})
 
 if(WITH_LIBWPG)
-    find_package(LibWPG)
+    pkg_check_modules(LIBWPG libwpg-0.3 librevenge-0.0 librevenge-stream-0.0)
     if(LIBWPG_FOUND)
-        set(WITH_LIBWPG02 ${LIBWPG-0.2_FOUND})
-        set(WITH_LIBWPG03 ${LIBWPG-0.3_FOUND})
+        sanitize_ldflags_for_libs(LIBWPG_LDFLAGS)
         list(APPEND INKSCAPE_INCS_SYS ${LIBWPG_INCLUDE_DIRS})
-        list(APPEND INKSCAPE_LIBS     ${LIBWPG_LIBRARIES})
+        list(APPEND INKSCAPE_LIBS     ${LIBWPG_LDFLAGS})
         add_definitions(${LIBWPG_DEFINITIONS})
     else()
         set(WITH_LIBWPG OFF)
@@ -212,11 +196,11 @@ if(WITH_LIBWPG)
 endif()
 
 if(WITH_LIBVISIO)
-    find_package(LibVisio)
+    pkg_check_modules(LIBVISIO libvisio-0.1 librevenge-0.0 librevenge-stream-0.0)
     if(LIBVISIO_FOUND)
-        set(WITH_LIBVISIO01 ${LIBVISIO-0.1_FOUND})
+        sanitize_ldflags_for_libs(LIBVISIO_LDFLAGS)
         list(APPEND INKSCAPE_INCS_SYS ${LIBVISIO_INCLUDE_DIRS})
-        list(APPEND INKSCAPE_LIBS     ${LIBVISIO_LIBRARIES})
+        list(APPEND INKSCAPE_LIBS     ${LIBVISIO_LDFLAGS})
         add_definitions(${LIBVISIO_DEFINITIONS})
     else()
         set(WITH_LIBVISIO OFF)
@@ -224,11 +208,11 @@ if(WITH_LIBVISIO)
 endif()
 
 if(WITH_LIBCDR)
-    find_package(LibCDR)
+    pkg_check_modules(LIBCDR libcdr-0.1 librevenge-0.0 librevenge-stream-0.0)
     if(LIBCDR_FOUND)
-        set(WITH_LIBCDR01 ${LIBCDR-0.1_FOUND})
+        sanitize_ldflags_for_libs(LIBCDR_LDFLAGS)
         list(APPEND INKSCAPE_INCS_SYS ${LIBCDR_INCLUDE_DIRS})
-        list(APPEND INKSCAPE_LIBS     ${LIBCDR_LIBRARIES})
+        list(APPEND INKSCAPE_LIBS     ${LIBCDR_LDFLAGS})
         add_definitions(${LIBCDR_DEFINITIONS})
     else()
         set(WITH_LIBCDR OFF)
@@ -368,12 +352,11 @@ list(APPEND INKSCAPE_INCS_SYS ${ZLIB_INCLUDE_DIRS})
 list(APPEND INKSCAPE_LIBS ${ZLIB_LIBRARIES})
 
 if(WITH_GNU_READLINE)
-  find_package(Readline)
+  pkg_check_modules(Readline readline)
   if(Readline_FOUND)
     message(STATUS "Found GNU Readline: ${Readline_LIBRARY}")
-    add_definitions(-DWITH_GNU_READLINE)
-    list(APPEND INKSCAPE_INCS_SYS ${Readline_INCLUDE_DIR})
-    list(APPEND INKSCAPE_LIBS ${Readline_LIBRARY})
+    list(APPEND INKSCAPE_INCS_SYS ${Readline_INCLUDE_DIRS})
+    list(APPEND INKSCAPE_LIBS ${Readline_LDFLAGS})
   else()
     message(STATUS "Did not find GNU Readline")
     set(WITH_GNU_READLINE OFF)

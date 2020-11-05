@@ -1261,7 +1261,6 @@ Canvas::paint_single_buffer(Geom::IntRect const &paint_rect, Geom::IntRect const
         _canvas_item_root->render(&buf);
     }
 
-#if defined(HAVE_LIBLCMS2)
     if (_cms_active) {
         cmsHTRANSFORM transf = nullptr;
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -1283,7 +1282,6 @@ Canvas::paint_single_buffer(Geom::IntRect const &paint_rect, Geom::IntRect const
             imgs->mark_dirty();
         }
     }
-#endif // defined(HAVE_LIBLCMS2)
 
     store->mark_dirty();
 

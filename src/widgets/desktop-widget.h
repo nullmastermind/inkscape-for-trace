@@ -229,12 +229,10 @@ private:
     void rotation_populate_popup(Gtk::Menu *menu);
   //void canvas_tbl_size_allocate(Gtk::Allocation &allocation);
 
-#if defined(HAVE_LIBLCMS2)
 public:
     void cms_adjust_toggled();
 private:
     static void color_profile_event(EgeColorProfTracker *tracker, SPDesktopWidget *dtw);
-#endif
     static void ruler_snap_new_guide(SPDesktop *desktop, Geom::Point &event_dt, Geom::Point &normal);
     static gint event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw);
 

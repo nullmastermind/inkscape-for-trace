@@ -44,8 +44,6 @@ void FilterFlood::render_cairo(FilterSlot &slot)
     double b = SP_RGBA32_B_F(color);
     double a = opacity;
 
-#if defined(HAVE_LIBLCMS2)
-
     if (icc) {
         guchar ru, gu, bu;
         icc_color_to_sRGB(icc, &ru, &gu, &bu);
@@ -53,7 +51,6 @@ void FilterFlood::render_cairo(FilterSlot &slot)
         g = SP_COLOR_U_TO_F(gu);
         b = SP_COLOR_U_TO_F(bu);
     }
-#endif
 
     cairo_surface_t *out = ink_cairo_surface_create_same_size(input, CAIRO_CONTENT_COLOR_ALPHA);
 

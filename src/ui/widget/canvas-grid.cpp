@@ -105,13 +105,9 @@ CanvasGrid::CanvasGrid(SPDesktopWidget *dtw)
     _cms_adjust = Gtk::manage(new Gtk::ToggleButton());
     _cms_adjust->set_name("CMS_Adjust");
     _cms_adjust->add(*image2);
-#ifdef HAVE_LIBLCMS2
     // Can't access via C++ API, fixed in Gtk4.
     gtk_actionable_set_action_name( GTK_ACTIONABLE(_cms_adjust->gobj()), "win.canvas-color-manage");
     _cms_adjust->set_tooltip_text(_("Toggle color-managed display for this document window"));
-#else
-    _cms_adjust->set_sensitive(false);
-#endif
 
     // Sticky Zoom
     auto image3 = Gtk::manage(sp_get_icon_image("zoom-original", Gtk::ICON_SIZE_MENU));

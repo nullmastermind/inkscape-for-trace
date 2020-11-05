@@ -49,9 +49,7 @@ public:
     std::unique_ptr<SPCurve> curve; // This curve is at the image's boundary for snapping
 
     char *href;
-#if defined(HAVE_LIBLCMS2)
     char *color_profile;
-#endif // defined(HAVE_LIBLCMS2)
 
     Inkscape::Pixbuf *pixbuf;
 
@@ -70,9 +68,7 @@ public:
     void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const override;
     Geom::Affine set_transform(Geom::Affine const &transform) override;
 
-#if defined(HAVE_LIBLCMS2)
     void apply_profile(Inkscape::Pixbuf *pixbuf);
-#endif // defined(HAVE_LIBLCMS2)
 
     std::unique_ptr<SPCurve> get_curve() const;
     void refresh_if_outdated();

@@ -60,9 +60,7 @@ protected:
     GtkWidget *_buttonbox;
     GtkWidget **_buttons;
     GtkWidget *_rgbal; /* RGBA entry */
-#if defined(HAVE_LIBLCMS2)
     GtkWidget *_box_outofgamut, *_box_colormanaged, *_box_toomuchink;
-#endif // defined(HAVE_LIBLCMS2)
     GtkWidget *_btn_picker;
     GtkWidget *_p; /* Color preview */
     boost::ptr_vector<Page> _available_pages;

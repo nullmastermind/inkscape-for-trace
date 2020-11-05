@@ -29,20 +29,11 @@
 
 #include <libvisio/libvisio.h>
 
-// TODO: Drop this check when librevenge is widespread.
-#if WITH_LIBVISIO01
-  #include <librevenge-stream/librevenge-stream.h>
+#include <librevenge-stream/librevenge-stream.h>
 
-  using librevenge::RVNGString;
-  using librevenge::RVNGFileStream;
-  using librevenge::RVNGStringVector;
-#else
-  #include <libwpd-stream/libwpd-stream.h>
-
-  typedef WPXString                 RVNGString;
-  typedef WPXFileStream             RVNGFileStream;
-  typedef libvisio::VSDStringVector RVNGStringVector;
-#endif
+using librevenge::RVNGString;
+using librevenge::RVNGFileStream;
+using librevenge::RVNGStringVector;
 
 #include <gtkmm/spinbutton.h>
 
@@ -263,13 +254,9 @@ SPDocument *VsdInput::open(Inkscape::Extension::Input * /*mod*/, const gchar * u
      }
 
      RVNGStringVector output;
-#if WITH_LIBVISIO01
      librevenge::RVNGSVGDrawingGenerator generator(output, "svg");
 
      if (!libvisio::VisioDocument::parse(&input, &generator)) {
-#else
-     if (!libvisio::VisioDocument::generateSVG(&input, output)) {
-#endif
           return nullptr;
      }
 

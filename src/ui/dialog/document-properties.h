@@ -68,15 +68,12 @@ protected:
 
     void  create_guides_around_page();
     void  delete_all_guides();
-#if defined(HAVE_LIBLCMS2)
     void  build_cms();
-#endif // defined(HAVE_LIBLCMS2)
     void  build_scripting();
     void  build_metadata();
     void  init();
 
     virtual void  on_response (int);
-#if defined(HAVE_LIBLCMS2)
     void  populate_available_profiles();
     void  populate_linked_profiles_box();
     void  linkSelectedProfile();
@@ -84,7 +81,6 @@ protected:
     void  onColorProfileSelectRow();
     void  linked_profiles_list_button_release(GdkEventButton* event);
     void  cms_create_popup_menu(Gtk::Widget& parent, sigc::slot<void> rem);
-#endif // defined(HAVE_LIBLCMS2)
 
     void  external_scripts_list_button_release(GdkEventButton* event);
     void  embedded_scripts_list_button_release(GdkEventButton* event);
