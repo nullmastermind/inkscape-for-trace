@@ -299,6 +299,7 @@ text_flow_into_shape()
         // SVG 2 Text
 
         if (SP_IS_TEXT(text)) {
+            unsigned shape_count = 0;
 
             // Make list of all shapes.
             Glib::ustring shape_inside;
@@ -308,6 +309,16 @@ text_flow_into_shape()
                     shape_inside += "url(#";
                     shape_inside += item->getId();
                     shape_inside += ") ";
+
+                    // can only take one shape into account for transform compensation
+                    if (++shape_count > 1)
+                        continue;
+
+                    // compensate transform
+                    auto const new_transform = i2i_affine(item->parent, text->parent);
+                    auto const ex = text->transform.descrim() / new_transform.descrim();
+                    static_cast<SPText *>(text)->_adjustFontsizeRecursive(text, ex);
+                    text->transform = new_transform;
                 }
             }
 
@@ -317,10 +328,10 @@ text_flow_into_shape()
             }
 
             // Set 'shape-inside' property.
-            SPCSSAttr* css = sp_repr_css_attr (text->getRepr(), "style");
-            sp_repr_css_set_property (css, "shape-inside", shape_inside.c_str());
-            sp_repr_css_set_property (css, "white-space", "pre"); // Respect new lines.
-            sp_repr_css_set (text->getRepr(), css, "style");
+            text->style->shape_inside.read(shape_inside.c_str());
+            text->style->white_space.read("pre"); // Respect new lines.
+
+            text->updateRepr();
         }
 
         DocumentUndo::done(doc, SP_VERB_CONTEXT_TEXT,

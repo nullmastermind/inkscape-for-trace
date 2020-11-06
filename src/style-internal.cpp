@@ -1324,6 +1324,7 @@ SPIShapes::read( gchar const *str) {
     if( !str ) return;
 
     SPIString::read(str);
+    assert(set);
 
     // The object/repr this property is connected to..
     SPObject* object = style->object;
