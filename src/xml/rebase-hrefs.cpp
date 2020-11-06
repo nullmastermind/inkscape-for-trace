@@ -11,6 +11,7 @@
 #include <glibmm/convert.h>
 #include <glibmm/miscutils.h>
 #include <glibmm/uriutils.h>
+#include <glibmm/utility.h>
 
 #include "../document.h"  /* Unfortunately there's a separate xml/document.h. */
 #include "streq.h"
@@ -38,14 +39,19 @@ static bool href_needs_rebasing(char const *href)
         return false;
     }
 
+    // skip document-local queries
+    if (href[0] == '?') {
+        return false;
+    }
+
     // skip absolute-path and network-path references
     if (href[0] == '/') {
         return false;
     }
 
     // Don't change non-file URIs (like data or http)
-    std::string const scheme = Glib::uri_parse_scheme(href);
-    return scheme.empty() || scheme == "file";
+    auto scheme = Glib::make_unique_ptr_gfree(g_uri_parse_scheme(href));
+    return !scheme || g_str_equal(scheme.get(), "file");
 }
 
 AttributeVector
@@ -138,13 +144,7 @@ void Inkscape::XML::rebase_hrefs(SPDocument *const doc, gchar const *const new_b
             continue;
         }
 
-        // skip fragment URLs
-        if (href_cstr[0] == '#') {
-            continue;
-        }
-
-        // skip absolute-path and network-path references
-        if (href_cstr[0] == '/') {
+        if (!href_needs_rebasing(href_cstr)) {
             continue;
         }
 
