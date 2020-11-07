@@ -934,6 +934,15 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
     Inkscape::XML::Node *root = clipdoc->getReprRoot();
     Inkscape::XML::Node *target_parent = desktop->currentLayer()->getRepr();
 
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+
+    auto *node_after = desktop->getSelection()->topRepr();
+    if (node_after && prefs->getBool("/options/pasteaboveselected")) {
+        target_parent = node_after->parent();
+    } else {
+        node_after = target_parent->lastChild();
+    }
+
     // copy definitions
     desktop->doc()->importDefs(clipdoc);
 
@@ -956,7 +965,8 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
             continue;
         }
         Inkscape::XML::Node *obj_copy = obj->duplicate(target_document->getReprDoc());
-        target_parent->appendChild(obj_copy);
+        target_parent->addChild(obj_copy, node_after);
+        node_after = obj_copy;
         Inkscape::GC::release(obj_copy);
 
         pasted_objects.push_back(obj_copy);

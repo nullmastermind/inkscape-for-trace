@@ -268,6 +268,11 @@ public:
     XML::Node *singleRepr();
 
     /**
+     * The top-most item, or NULL if the selection is empty.
+     */
+    XML::Node *topRepr() const;
+
+    /**
      * Selects exactly the specified objects.
      *
      * @param objs the objects to select

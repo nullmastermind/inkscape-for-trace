@@ -247,6 +247,25 @@ Inkscape::XML::Node *ObjectSet::singleRepr() {
     return obj ? obj->getRepr() : nullptr;
 }
 
+Inkscape::XML::Node *ObjectSet::topRepr() const
+{
+    auto const &nodes = const_cast<ObjectSet *>(this)->xmlNodes();
+
+    if (nodes.empty()) {
+        return nullptr;
+    }
+
+#ifdef __APPLE__
+    // workaround for
+    // static_assert(__is_cpp17_forward_iterator<_ForwardIterator>::value
+    auto const n = std::vector<Inkscape::XML::Node *>(nodes.begin(), nodes.end());
+#else
+    auto const& n = nodes;
+#endif
+
+    return *std::max_element(n.begin(), n.end(), sp_repr_compare_position_bool);
+}
+
 void ObjectSet::set(SPObject *object, bool persist_selection_context) {
     _clear();
     _add(object);
