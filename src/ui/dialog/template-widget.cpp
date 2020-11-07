@@ -29,7 +29,8 @@ namespace UI {
 
 
 TemplateWidget::TemplateWidget()
-    : _more_info_button(_("More info"))
+    : Gtk::Box(Gtk::ORIENTATION_VERTICAL)
+    , _more_info_button(_("More info"))
     , _short_description_label(" ")
     , _template_name_label(_("no template selected"))
     , _effect_prefs(nullptr)

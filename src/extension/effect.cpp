@@ -337,7 +337,7 @@ Effect::find_menu (Inkscape::XML::Node * menustruct, const gchar *name)
 }
 
 
-Gtk::VBox *
+Gtk::Box *
 Effect::get_info_widget()
 {
     return Extension::get_info_widget();

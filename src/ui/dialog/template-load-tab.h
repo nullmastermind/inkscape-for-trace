@@ -83,7 +83,7 @@ protected:
     void _loadTemplates();
     void _initLists();
 
-    Gtk::VBox _tlist_box;
+    Gtk::Box _tlist_box;
     Gtk::HBox _search_box;
     TemplateWidget *_info_widget;
 

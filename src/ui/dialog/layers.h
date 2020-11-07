@@ -123,7 +123,7 @@ private:
     Gtk::ScrolledWindow _scroller;
     Gtk::Menu _popupMenu;
     Inkscape::UI::Widget::SpinButton _spinBtn;
-    Gtk::VBox _layersPage;
+    Gtk::Box _layersPage;
 
     UI::Widget::StyleSubject::CurrentLayer _subject;
     UI::Widget::ObjectCompositeSettings _compositeSettings;

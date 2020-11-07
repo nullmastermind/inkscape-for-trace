@@ -117,7 +117,7 @@ protected:
     UI::Widget::NotebookPage  *_page_metadata1;
     UI::Widget::NotebookPage  *_page_metadata2;
 
-    Gtk::VBox      _grids_vbox;
+    Gtk::Box      _grids_vbox;
 
     UI::Widget::Registry _wr;
     //---------------------------------------------------------------

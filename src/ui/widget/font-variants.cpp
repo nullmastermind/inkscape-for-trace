@@ -148,7 +148,7 @@ namespace Widget {
   };
 
   FontVariants::FontVariants () :
-    Gtk::VBox (),
+    Gtk::Box (Gtk::ORIENTATION_VERTICAL),
     _ligatures_frame          ( Glib::ustring(C_("Font feature", "Ligatures"    )) ),
     _ligatures_common         ( Glib::ustring(C_("Font feature", "Common"       )) ),
     _ligatures_discretionary  ( Glib::ustring(C_("Font feature", "Discretionary")) ),
@@ -202,7 +202,8 @@ namespace Widget {
     _position_changed( false ),
     _caps_changed( false ),
     _numeric_changed( false ),
-    _asian_changed( false )
+    _asian_changed( false ),
+    _feature_vbox(Gtk::ORIENTATION_VERTICAL)
 
   {
 

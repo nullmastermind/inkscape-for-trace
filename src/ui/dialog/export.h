@@ -279,8 +279,8 @@ private:
     Gtk::HBox togglebox;
     Gtk::RadioButton *selectiontype_buttons[SELECTION_NUMBER_OF];
 
-    Gtk::VBox area_box;
-    Gtk::VBox singleexport_box;
+    Gtk::Box area_box;
+    Gtk::Box singleexport_box;
 
     /* Custom size widgets */
     Glib::RefPtr<Gtk::Adjustment> x0_adj;
@@ -296,10 +296,10 @@ private:
     Glib::RefPtr<Gtk::Adjustment> xdpi_adj;
     Glib::RefPtr<Gtk::Adjustment> ydpi_adj;
 
-    Gtk::VBox size_box;
+    Gtk::Box size_box;
     Gtk::Label* bm_label;
 
-    Gtk::VBox file_box;
+    Gtk::Box file_box;
     Gtk::Label *flabel;
     Gtk::Entry filename_entry;
 

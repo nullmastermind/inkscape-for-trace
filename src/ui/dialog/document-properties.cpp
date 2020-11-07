@@ -140,6 +140,7 @@ DocumentProperties::DocumentProperties()
     , _grids_button_new(C_("Grid", "_New"), _("Create new grid."))
     , _grids_button_remove(C_("Grid", "_Remove"), _("Remove selected grid."))
     , _grids_label_def("", Gtk::ALIGN_START)
+    , _grids_vbox(Gtk::ORIENTATION_VERTICAL)
 {
     set_spacing (4);
     pack_start(_notebook, true, true);

@@ -452,7 +452,7 @@ SPGlyph* SvgFontsDialog::get_selected_glyph()
     return nullptr;
 }
 
-Gtk::VBox* SvgFontsDialog::global_settings_tab(){
+Gtk::Box* SvgFontsDialog::global_settings_tab(){
     _font_label          = new Gtk::Label(Glib::ustring("<b>") + _("Font Attributes") + "</b>", Gtk::ALIGN_START, Gtk::ALIGN_CENTER);
     _horiz_adv_x_spin    = new AttrSpin( this, (gchar*) _("Horiz. Advance X:"), _("Default glyph width for horizontal text"), SPAttr::HORIZ_ADV_X);
     _horiz_origin_x_spin = new AttrSpin( this, (gchar*) _("Horiz. Origin X:"), _("Default X-coordinate of the origin of a glyph (for horizontal text)"), SPAttr::HORIZ_ORIGIN_X);
@@ -782,7 +782,7 @@ void SvgFontsDialog::remove_selected_kerning_pair(){
     update_glyphs();
 }
 
-Gtk::VBox* SvgFontsDialog::glyphs_tab(){
+Gtk::Box* SvgFontsDialog::glyphs_tab(){
     _GlyphsList.signal_button_release_event().connect_notify(sigc::mem_fun(*this, &SvgFontsDialog::glyphs_list_button_release));
     create_glyphs_popup_menu(_GlyphsList, sigc::mem_fun(*this, &SvgFontsDialog::remove_selected_glyph));
 
@@ -874,7 +874,7 @@ void SvgFontsDialog::add_kerning_pair(){
     DocumentUndo::done(document, SP_VERB_DIALOG_SVG_FONTS, _("Add kerning pair"));
 }
 
-Gtk::VBox* SvgFontsDialog::kerning_tab(){
+Gtk::Box* SvgFontsDialog::kerning_tab(){
     _KerningPairsList.signal_button_release_event().connect_notify(sigc::mem_fun(*this, &SvgFontsDialog::kerning_pairs_list_button_release));
     create_kerning_pairs_popup_menu(_KerningPairsList, sigc::mem_fun(*this, &SvgFontsDialog::remove_selected_kerning_pair));
 
@@ -993,14 +993,18 @@ void SvgFontsDialog::add_font(){
 }
 
 SvgFontsDialog::SvgFontsDialog()
- : DialogBase("/dialogs/svgfonts", SP_VERB_DIALOG_SVG_FONTS),
-   _add(_("_New"), true)
+ : DialogBase("/dialogs/svgfonts", SP_VERB_DIALOG_SVG_FONTS)
+ , _add(_("_New"), true)
+ , _font_settings(Gtk::ORIENTATION_VERTICAL)
+ , global_vbox(Gtk::ORIENTATION_VERTICAL)
+ , glyphs_vbox(Gtk::ORIENTATION_VERTICAL)
+ , kerning_vbox(Gtk::ORIENTATION_VERTICAL)
 {
     kerning_slider = Gtk::manage(new Gtk::Scale(Gtk::ORIENTATION_HORIZONTAL));
     _add.signal_clicked().connect(sigc::mem_fun(*this, &SvgFontsDialog::add_font));
 
     Gtk::HBox* hbox = Gtk::manage(new Gtk::HBox());
-    Gtk::VBox* vbox = Gtk::manage(new Gtk::VBox());
+    Gtk::Box* vbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
 
     vbox->pack_start(_FontsList);
     vbox->pack_start(_add, false, false);

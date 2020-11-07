@@ -27,7 +27,7 @@ class Registry;
  * Widget for specifying a document's license; part of document
  * preferences dialog.
  */
-class Licensor : public Gtk::VBox {
+class Licensor : public Gtk::Box {
 public:
     Licensor();
     ~Licensor() override;

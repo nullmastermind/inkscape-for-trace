@@ -43,7 +43,8 @@ namespace UI {
 namespace Widget {
 
 SimpleFilterModifier::SimpleFilterModifier(int flags)
-    : _flags(flags)
+    : Gtk::Box(Gtk::ORIENTATION_VERTICAL)
+    , _flags(flags)
     , _lb_blend(_("Blend mode:"))
     , _lb_isolation("Isolate") // Translate for 1.1
     , _blend(SPBlendModeConverter, SPAttr::INVALID, false)

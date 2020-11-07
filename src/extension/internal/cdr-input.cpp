@@ -75,7 +75,7 @@ private:
      void _onSpinButtonPress(GdkEventButton* button_event);
      void _onSpinButtonRelease(GdkEventButton* button_event);
 
-     class Gtk::VBox * vbox1;
+     class Gtk::Box * vbox1;
      class Inkscape::UI::View::SVGViewWidget * _previewArea;
      class Gtk::Button * cancelbutton;
      class Gtk::Button * okbutton;
@@ -109,7 +109,7 @@ CdrImportDialog::CdrImportDialog(const std::vector<RVNGString> &vec)
      this->property_destroy_with_parent().set_value(false);
 
      // Preview area
-     vbox1 = Gtk::manage(new class Gtk::VBox());
+     vbox1 = Gtk::manage(new class Gtk::Box(Gtk::ORIENTATION_VERTICAL));
      this->get_content_area()->pack_start(*vbox1);
 
      // CONTROLS

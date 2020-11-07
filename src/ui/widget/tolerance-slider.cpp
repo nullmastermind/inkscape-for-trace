@@ -66,7 +66,7 @@ void ToleranceSlider::init (const Glib::ustring& label1, const Glib::ustring& la
     //             +
     //           hbox
     
-    _vbox = new Gtk::VBox;
+    _vbox = new Gtk::Box(Gtk::ORIENTATION_VERTICAL);
     _hbox = Gtk::manage(new Gtk::HBox);
     
     Gtk::Label *theLabel1 = Gtk::manage(new Gtk::Label(label1));

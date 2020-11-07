@@ -76,7 +76,7 @@ void LicenseItem::on_toggled()
 //---------------------------------------------------
 
 Licensor::Licensor()
-: Gtk::VBox(false,4),
+: Gtk::Box(Gtk::ORIENTATION_VERTICAL, 4),
   _eentry (nullptr)
 {
 }

@@ -99,9 +99,9 @@ private:
     Gtk::Label status_label;
     UI::Widget::Frame effectcontrol_frame;
     Gtk::HBox effectapplication_hbox;
-    Gtk::VBox effectcontrol_vbox;
+    Gtk::Box effectcontrol_vbox;
     Gtk::EventBox effectcontrol_eventbox;
-    Gtk::VBox effectlist_vbox;
+    Gtk::Box effectlist_vbox;
     ModelColumns columns;
     Gtk::ScrolledWindow scrolled_window;
     Gtk::TreeView effectlist_view;

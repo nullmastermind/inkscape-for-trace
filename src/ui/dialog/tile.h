@@ -40,7 +40,7 @@ class PolarArrangeTab;
 class ArrangeDialog : public DialogBase
 {
 private:
-	Gtk::VBox       *_arrangeBox;
+	Gtk::Box        *_arrangeBox;
 	Gtk::Notebook   *_notebook;
 
 	GridArrangeTab  *_gridArrangeTab;

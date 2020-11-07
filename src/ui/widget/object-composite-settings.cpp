@@ -35,7 +35,8 @@ namespace UI {
 namespace Widget {
 
 ObjectCompositeSettings::ObjectCompositeSettings(unsigned int verb_code, char const *history_prefix, int flags)
-: _verb_code(verb_code),
+: Gtk::Box(Gtk::ORIENTATION_VERTICAL),
+  _verb_code(verb_code),
   _blend_tag(Glib::ustring(history_prefix) + ":blend"),
   _blur_tag(Glib::ustring(history_prefix) + ":blur"),
   _opacity_tag(Glib::ustring(history_prefix) + ":opacity"),

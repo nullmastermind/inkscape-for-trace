@@ -21,6 +21,7 @@ namespace UI {
 namespace Widget {
 
 InkFlowBox::InkFlowBox(const gchar *name)
+: Gtk::Box(Gtk::ORIENTATION_VERTICAL)
 {
     set_name(name);
     this->pack_start(_controller, false, false, 0);

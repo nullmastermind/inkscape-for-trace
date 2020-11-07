@@ -24,7 +24,7 @@ namespace Widget {
 /**
  * A container for selecting rendering options.
  */
-class RenderingOptions : public Gtk::VBox
+class RenderingOptions : public Gtk::Box
 {
 public:
 

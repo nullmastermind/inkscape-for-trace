@@ -884,10 +884,10 @@ Extension::error_file_write (Glib::ustring text)
 };
 
 /** \brief  A widget to represent the inside of an AutoGUI widget */
-class AutoGUI : public Gtk::VBox {
+class AutoGUI : public Gtk::Box {
 public:
     /** \brief  Create an AutoGUI object */
-    AutoGUI () : Gtk::VBox() {};
+    AutoGUI () : Gtk::Box(Gtk::ORIENTATION_VERTICAL) {};
 
     /**
      * Adds a widget with a tool tip into the autogui.
@@ -952,10 +952,10 @@ Extension::autogui (SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<voi
 
 /* Extension editor dialog stuff */
 
-Gtk::VBox *
+Gtk::Box *
 Extension::get_info_widget()
 {
-    Gtk::VBox * retval = Gtk::manage(new Gtk::VBox());
+    Gtk::Box * retval = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
     retval->set_border_width(4);
 
     Gtk::Frame * info = Gtk::manage(new Gtk::Frame("General Extension Information"));
@@ -994,10 +994,10 @@ void Extension::add_val(Glib::ustring labelstr, Glib::ustring valuestr, Gtk::Gri
     return;
 }
 
-Gtk::VBox *
+Gtk::Box *
 Extension::get_params_widget()
 {
-    Gtk::VBox * retval = Gtk::manage(new Gtk::VBox());
+    Gtk::Box * retval = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
     Gtk::Widget * content = Gtk::manage(new Gtk::Label("Params"));
     retval->pack_start(*content, true, true, 4);
     content->show();

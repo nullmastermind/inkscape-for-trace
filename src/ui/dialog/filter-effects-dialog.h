@@ -56,7 +56,7 @@ protected:
     void show_all_vfunc() override;
 private:
 
-    class FilterModifier : public Gtk::VBox
+    class FilterModifier : public Gtk::Box
     {
     public:
         FilterModifier(FilterEffectsDialog&);
@@ -279,8 +279,8 @@ private:
 
     // Bottom pane (filter effect primitive settings)
     Gtk::Notebook _settings_tabs;
-    Gtk::VBox _settings_tab2;
-    Gtk::VBox _settings_tab1;
+    Gtk::Box _settings_tab2;
+    Gtk::Box _settings_tab1;
     Gtk::Label _empty_settings;
     Gtk::Label _no_filter_selected;
     bool _settings_initialized;

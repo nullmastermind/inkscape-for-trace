@@ -33,7 +33,7 @@ class StyleSubject;
 /*
  * A widget for controlling object compositing (filter, opacity, etc.)
  */
-class ObjectCompositeSettings : public Gtk::VBox {
+class ObjectCompositeSettings : public Gtk::Box {
 public:
     ObjectCompositeSettings(unsigned int verb_code, char const *history_prefix, int flags);
     ~ObjectCompositeSettings() override;

@@ -42,7 +42,7 @@ namespace Gtk {
   class HBox;
   class Scale;
   class RadioButton;
-  class VBox;
+  class Box;
   class Label;
 }
 
@@ -93,7 +93,7 @@ private:
     class Gtk::CheckButton * _cropCheck;
     class Gtk::ComboBoxText * _cropTypeCombo;
     class Gtk::HBox * hbox3;
-    class Gtk::VBox * vbox2;
+    class Gtk::Box * vbox2;
     class Inkscape::UI::Widget::Frame * _pageSettingsFrame;
     class Gtk::Label * _labelPrecision;
     class Gtk::Label * _labelPrecisionWarning;
@@ -114,9 +114,9 @@ private:
 #endif
     class Gtk::CheckButton * _localFontsCheck;
     class Gtk::CheckButton * _embedImagesCheck;
-    class Gtk::VBox * vbox3;
+    class Gtk::Box * vbox3;
     class Inkscape::UI::Widget::Frame * _importSettingsFrame;
-    class Gtk::VBox * vbox1;
+    class Gtk::Box * vbox1;
     class Gtk::DrawingArea * _previewArea;
     class Gtk::HBox * hbox1;
 

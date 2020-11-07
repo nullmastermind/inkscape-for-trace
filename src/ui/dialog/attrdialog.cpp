@@ -87,6 +87,7 @@ AttrDialog::AttrDialog()
     : DialogBase("/dialogs/attr", SP_VERB_DIALOG_ATTR_XML)
     , _desktop(nullptr)
     , _repr(nullptr)
+    , _mainBox(Gtk::ORIENTATION_VERTICAL)
 {
     set_size_request(20, 15);
     _mainBox.pack_start(_scrolledWindow, Gtk::PACK_EXPAND_WIDGET);

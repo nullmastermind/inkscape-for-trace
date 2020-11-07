@@ -939,6 +939,8 @@ AlignAndDistribute::AlignAndDistribute()
     , _nodesTable()
     , _anchorLabel(_("Relative to: "))
     , _anchorLabelNode(_("Relative to: "))
+    , _alignBox(Gtk::ORIENTATION_VERTICAL)
+    , _alignBoxNode(Gtk::ORIENTATION_VERTICAL)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 

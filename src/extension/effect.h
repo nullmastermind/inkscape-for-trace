@@ -17,7 +17,7 @@
 #include "extension.h"
 
 namespace Gtk {
-	class VBox;
+	class Box;
 }
 
 class SPDocument;
@@ -121,7 +121,7 @@ public:
     static void      place_menus ();
     void             place_menu (Inkscape::XML::Node * menus);
 
-    Gtk::VBox *    get_info_widget();
+    Gtk::Box *    get_info_widget();
 
     bool no_doc; // if true, the effect does not process SVG document at all, so no need to save, read, and watch for errors
     bool no_live_preview; // if true, the effect does not need "live preview" checkbox in its dialog

@@ -213,24 +213,24 @@ Gtk::Widget *
 LPEMeasureSegments::newWidget()
 {
     // use manage here, because after deletion of Effect object, others might still be pointing to this widget.
-    Gtk::VBox * vbox = Gtk::manage( new Gtk::VBox() );
+    Gtk::Box * vbox = Gtk::manage( new Gtk::Box(Gtk::ORIENTATION_VERTICAL) );
     vbox->set_border_width(0);
     vbox->set_homogeneous(false);
     vbox->set_spacing(0);
-    Gtk::VBox *vbox0 = Gtk::manage(new Gtk::VBox());
+    Gtk::Box *vbox0 = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
     vbox0->set_border_width(5);
     vbox0->set_homogeneous(false);
     vbox0->set_spacing(2);
-    Gtk::VBox *vbox1 = Gtk::manage(new Gtk::VBox());
+    Gtk::Box *vbox1 = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
     vbox1->set_border_width(5);
     vbox1->set_homogeneous(false);
     vbox1->set_spacing(2);
-    Gtk::VBox *vbox2 = Gtk::manage(new Gtk::VBox());
+    Gtk::Box *vbox2 = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
     vbox2->set_border_width(5);
     vbox2->set_homogeneous(false);
     vbox2->set_spacing(2);
     //Help page
-    Gtk::VBox *vbox3 = Gtk::manage(new Gtk::VBox());
+    Gtk::Box *vbox3 = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
     vbox3->set_border_width(5);
     vbox3->set_homogeneous(false);
     vbox3->set_spacing(2);
@@ -307,7 +307,7 @@ LPEMeasureSegments::newWidget()
     notebook->signal_switch_page().connect(sigc::mem_fun(*this, &LPEMeasureSegments::on_my_switch_page));
     if(Gtk::Widget* widg = defaultParamSet()) {
         //Wrap to make it more omogenious
-        Gtk::VBox *vbox4 = Gtk::manage(new Gtk::VBox());
+        Gtk::Box *vbox4 = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
         vbox4->set_border_width(5);
         vbox4->set_homogeneous(false);
         vbox4->set_spacing(2);

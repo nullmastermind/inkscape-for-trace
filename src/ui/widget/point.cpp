@@ -22,13 +22,13 @@ Point::Point(Glib::ustring const &label, Glib::ustring const &tooltip,
                Glib::ustring const &suffix,
                Glib::ustring const &icon,
                bool mnemonic)
-    : Labelled(label, tooltip, new Gtk::VBox(), suffix, icon, mnemonic),
+    : Labelled(label, tooltip, new Gtk::Box(Gtk::ORIENTATION_VERTICAL), suffix, icon, mnemonic),
       xwidget("X:",""),
       ywidget("Y:","")
 {
-    static_cast<Gtk::VBox*>(_widget)->pack_start(xwidget, true, true);
-    static_cast<Gtk::VBox*>(_widget)->pack_start(ywidget, true, true);
-    static_cast<Gtk::VBox*>(_widget)->show_all_children();
+    static_cast<Gtk::Box*>(_widget)->pack_start(xwidget, true, true);
+    static_cast<Gtk::Box*>(_widget)->pack_start(ywidget, true, true);
+    static_cast<Gtk::Box*>(_widget)->show_all_children();
 }
 
 Point::Point(Glib::ustring const &label, Glib::ustring const &tooltip,
@@ -36,13 +36,13 @@ Point::Point(Glib::ustring const &label, Glib::ustring const &tooltip,
                Glib::ustring const &suffix,
                Glib::ustring const &icon,
                bool mnemonic)
-    : Labelled(label, tooltip, new Gtk::VBox(), suffix, icon, mnemonic),
+    : Labelled(label, tooltip, new Gtk::Box(Gtk::ORIENTATION_VERTICAL), suffix, icon, mnemonic),
       xwidget("X:","", digits),
       ywidget("Y:","", digits)
 {
-    static_cast<Gtk::VBox*>(_widget)->pack_start(xwidget, true, true);
-    static_cast<Gtk::VBox*>(_widget)->pack_start(ywidget, true, true);
-    static_cast<Gtk::VBox*>(_widget)->show_all_children();
+    static_cast<Gtk::Box*>(_widget)->pack_start(xwidget, true, true);
+    static_cast<Gtk::Box*>(_widget)->pack_start(ywidget, true, true);
+    static_cast<Gtk::Box*>(_widget)->show_all_children();
 }
 
 Point::Point(Glib::ustring const &label, Glib::ustring const &tooltip,
@@ -51,13 +51,13 @@ Point::Point(Glib::ustring const &label, Glib::ustring const &tooltip,
                Glib::ustring const &suffix,
                Glib::ustring const &icon,
                bool mnemonic)
-    : Labelled(label, tooltip, new Gtk::VBox(), suffix, icon, mnemonic),
+    : Labelled(label, tooltip, new Gtk::Box(Gtk::ORIENTATION_VERTICAL), suffix, icon, mnemonic),
       xwidget("X:","", adjust, digits),
       ywidget("Y:","", adjust, digits)
 {
-    static_cast<Gtk::VBox*>(_widget)->pack_start(xwidget, true, true);
-    static_cast<Gtk::VBox*>(_widget)->pack_start(ywidget, true, true);
-    static_cast<Gtk::VBox*>(_widget)->show_all_children();
+    static_cast<Gtk::Box*>(_widget)->pack_start(xwidget, true, true);
+    static_cast<Gtk::Box*>(_widget)->pack_start(ywidget, true, true);
+    static_cast<Gtk::Box*>(_widget)->show_all_children();
 }
 
 unsigned Point::getDigits() const

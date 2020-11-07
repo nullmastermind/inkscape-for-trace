@@ -30,7 +30,7 @@ namespace Dialog {
 ArrangeDialog::ArrangeDialog()
     : DialogBase("/dialogs/gridtiler", SP_VERB_SELECTION_ARRANGE)
 {
-    _arrangeBox = Gtk::manage(new Gtk::VBox());
+    _arrangeBox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
     _notebook = Gtk::manage(new Gtk::Notebook());
     _gridArrangeTab = Gtk::manage(new GridArrangeTab(this));
     _polarArrangeTab = Gtk::manage(new PolarArrangeTab(this));

@@ -34,7 +34,7 @@ namespace Widget {
 /* Allows basic control over feBlend and feGaussianBlur effects as well as opacity.
  *  Common for Object, Layers, and Fill and Stroke dialogs.
 */
-class SimpleFilterModifier : public Gtk::VBox
+class SimpleFilterModifier : public Gtk::Box
 {
 public:
   enum Flags { NONE = 0, BLUR = 1, OPACITY = 2, BLEND = 4, ISOLATION = 16 };

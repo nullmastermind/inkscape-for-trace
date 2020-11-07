@@ -741,7 +741,7 @@ public:
         _size_group = Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL);
 
         for(int i = 0; i < _max_types; ++i) {
-            _groups[i] = new Gtk::VBox(false, 3);
+            _groups[i] = new Gtk::Box(Gtk::ORIENTATION_VERTICAL, 3);
             b.set_spacing(4);
             b.pack_start(*_groups[i], Gtk::PACK_SHRINK);
         }
@@ -995,7 +995,7 @@ private:
         hb->show_all();
     }
 
-    std::vector<Gtk::VBox*> _groups;
+    std::vector<Gtk::Box*> _groups;
     FilterEffectsDialog& _dialog;
     SetAttrSlot _set_attr_slot;
     std::vector<std::vector< AttrWidget*> > _attrwidgets;
@@ -1012,7 +1012,8 @@ public:
           _settings(d, _box, sigc::mem_fun(*this, &ComponentTransferValues::set_func_attr), COMPONENTTRANSFER_TYPE_ERROR),
           _type(ComponentTransferTypeConverter, SPAttr::TYPE, false),
           _channel(channel),
-          _funcNode(nullptr)
+          _funcNode(nullptr),
+          _box(Gtk::ORIENTATION_VERTICAL)
     {
         set_shadow_type(Gtk::SHADOW_IN);
         add(_box);
@@ -1142,7 +1143,7 @@ public:
     }
 
     FilterEffectsDialog& _dialog;
-    Gtk::VBox _box;
+    Gtk::Box _box;
     Settings _settings;
     ComboBoxEnum<FilterComponentTransferType> _type;
     SPFeFuncNode::Channel _channel; // RGBA
@@ -1159,7 +1160,8 @@ public:
           _settings(d, _box, sigc::mem_fun(_dialog, &FilterEffectsDialog::set_child_attr_direct), LIGHT_ENDSOURCE),
           _light_label(_("Light Source:")),
           _light_source(LightSourceConverter),
-          _locked(false)
+          _locked(false),
+          _box(Gtk::ORIENTATION_VERTICAL)
     {
         _light_label.set_xalign(0.0);
         _settings._size_group->add_widget(_light_label);
@@ -1194,7 +1196,7 @@ public:
 
     }
 
-    Gtk::VBox& get_box()
+    Gtk::Box& get_box()
     {
         return _box;
     }
@@ -1274,7 +1276,7 @@ private:
     }
 
     FilterEffectsDialog& _dialog;
-    Gtk::VBox _box;
+    Gtk::Box _box;
     Settings _settings;
     Gtk::HBox _light_box;
     Gtk::Label _light_label;
@@ -1322,7 +1324,8 @@ static Gtk::Menu * create_popup_menu(Gtk::Widget& parent,
 
 /*** FilterModifier ***/
 FilterEffectsDialog::FilterModifier::FilterModifier(FilterEffectsDialog& d)
-    :    _desktop(nullptr),
+    :    Gtk::Box(Gtk::ORIENTATION_VERTICAL),
+         _desktop(nullptr),
          _dialog(d),
          _add(_("_New"), true),
          _observer(new Inkscape::XML::SignalObserver)
@@ -2636,6 +2639,8 @@ FilterEffectsDialog::FilterEffectsDialog()
     , _attr_lock(false)
     , _filter_modifier(*this)
     , _primitive_list(*this)
+    , _settings_tab1(Gtk::ORIENTATION_VERTICAL)
+    , _settings_tab2(Gtk::ORIENTATION_VERTICAL)
 {
     _settings = new Settings(*this, _settings_tab1, sigc::mem_fun(*this, &FilterEffectsDialog::set_attr_direct),
                              NR_FILTER_ENDPRIMITIVETYPE);
@@ -2650,11 +2655,11 @@ FilterEffectsDialog::FilterEffectsDialog()
     Gtk::ScrolledWindow* sw_prims = Gtk::manage(new Gtk::ScrolledWindow);
     Gtk::HBox* infobox = Gtk::manage(new Gtk::HBox(/*homogeneous:*/false, /*spacing:*/4));
     Gtk::HBox* hb_prims = Gtk::manage(new Gtk::HBox);
-    Gtk::VBox* vb_prims = Gtk::manage(new Gtk::VBox);
-    Gtk::VBox* vb_desc = Gtk::manage(new Gtk::VBox);
+    Gtk::Box* vb_prims = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
+    Gtk::Box* vb_desc = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
 
-    Gtk::VBox* prim_vbox_p = Gtk::manage(new Gtk::VBox);
-    Gtk::VBox* prim_vbox_i = Gtk::manage(new Gtk::VBox);
+    Gtk::Box* prim_vbox_p = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
+    Gtk::Box* prim_vbox_i = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
 
     sw_prims->add(_primitive_list);
 

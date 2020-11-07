@@ -444,7 +444,8 @@ bool SVGPreview::set(Glib::ustring &fileName, int dialogType)
 
 
 SVGPreview::SVGPreview()
-    : document(nullptr)
+    : Gtk::Box(Gtk::ORIENTATION_VERTICAL)
+    , document(nullptr)
     , viewer(nullptr)
     , showingNoPreview(false)
 {

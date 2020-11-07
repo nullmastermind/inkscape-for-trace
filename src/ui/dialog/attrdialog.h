@@ -83,7 +83,7 @@ public:
     std::unique_ptr<Inkscape::MessageContext> _message_context;
 
     // Widgets
-    Gtk::VBox _mainBox;
+    Gtk::Box _mainBox;
     Gtk::ScrolledWindow _scrolledWindow;
     Gtk::ScrolledWindow _scrolled_text_view;
     Gtk::HBox _buttonBox;

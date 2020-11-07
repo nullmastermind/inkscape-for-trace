@@ -127,7 +127,7 @@ void OriginalItemArrayParam::param_set_default()
 
 Gtk::Widget* OriginalItemArrayParam::param_newWidget()
 {
-    Gtk::VBox* vbox = Gtk::manage(new Gtk::VBox());
+    Gtk::Box* vbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
     Gtk::HBox* hbox = Gtk::manage(new Gtk::HBox());
 
     vbox->pack_start(_scroller, Gtk::PACK_EXPAND_WIDGET);

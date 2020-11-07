@@ -53,7 +53,7 @@ namespace Dialog {
  * Currently, this is just a wrapper of the sp_svg_view Gtk widget.
  * Hopefully we will eventually replace with a pure Gtkmm widget.
  */
-class SVGPreview : public Gtk::VBox
+class SVGPreview : public Gtk::Box
 {
 public:
 

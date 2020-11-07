@@ -149,7 +149,7 @@ private:
 
     Gtk::HBox* AttrCombo(gchar* lbl, const SPAttr attr);
 //    Gtk::HBox* AttrSpin(gchar* lbl, const SPAttr attr);
-    Gtk::VBox* global_settings_tab();
+    Gtk::Box* global_settings_tab();
 
     // <font>
     Gtk::Label* _font_label;
@@ -166,8 +166,8 @@ private:
     AttrSpin*  _cap_height_spin;
     AttrSpin*  _x_height_spin;
 
-    Gtk::VBox* kerning_tab();
-    Gtk::VBox* glyphs_tab();
+    Gtk::Box* kerning_tab();
+    Gtk::Box* glyphs_tab();
     Gtk::Button _add;
     Gtk::Button add_glyph_button;
     Gtk::Button glyph_from_path_button;
@@ -235,10 +235,10 @@ private:
     Gtk::ScrolledWindow _KerningPairsListScroller;
     Gtk::Button add_kernpair_button;
 
-    Gtk::VBox _font_settings;
-    Gtk::VBox global_vbox;
-    Gtk::VBox glyphs_vbox;
-    Gtk::VBox kerning_vbox;
+    Gtk::Box _font_settings;
+    Gtk::Box global_vbox;
+    Gtk::Box glyphs_vbox;
+    Gtk::Box kerning_vbox;
     Gtk::Entry _preview_entry;
 
     Gtk::Menu _FontsContextMenu;

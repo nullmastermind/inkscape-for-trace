@@ -74,7 +74,7 @@ Gtk::Widget *ParamNotebook::ParamNotebookPage::get_widget(sigc::signal<void> *ch
         return nullptr;
     }
 
-    Gtk::VBox * vbox = Gtk::manage(new Gtk::VBox);
+    Gtk::Box * vbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
     vbox->set_border_width(GUI_BOX_MARGIN);
     vbox->set_spacing(GUI_BOX_SPACING);
 

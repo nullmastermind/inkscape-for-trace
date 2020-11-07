@@ -127,9 +127,11 @@ private:
     int _drawing_width;
 };
 
-class ZoomCorrRulerSlider : public Gtk::VBox
+class ZoomCorrRulerSlider : public Gtk::Box
 {
 public:
+    ZoomCorrRulerSlider() : Gtk::Box(Gtk::ORIENTATION_VERTICAL) {}
+
     void init(int ruler_width, int ruler_height, double lower, double upper,
               double step_increment, double page_increment, double default_value);
 

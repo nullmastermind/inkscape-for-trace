@@ -35,6 +35,7 @@ TemplateLoadTab::TemplateLoadTab(NewFromTemplate* parent)
     , _keywords_combo(true)
     , _current_search_type(ALL)
     , _parent_widget(parent)
+    , _tlist_box(Gtk::ORIENTATION_VERTICAL)
 {
     set_border_width(10);
 

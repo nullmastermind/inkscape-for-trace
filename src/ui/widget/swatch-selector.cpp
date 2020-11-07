@@ -32,7 +32,7 @@ namespace UI {
 namespace Widget {
 
 SwatchSelector::SwatchSelector() :
-    Gtk::VBox(),
+    Gtk::Box(Gtk::ORIENTATION_VERTICAL),
     _gsel(nullptr),
     _updating_color(false)
 {

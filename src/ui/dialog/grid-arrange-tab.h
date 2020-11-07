@@ -114,7 +114,7 @@ private:
     Gtk::Grid                          *PaddingTable;
 
     // BBox or manual spacing
-    Gtk::VBox             SpacingVBox;
+    Gtk::Box              SpacingVBox;
     Gtk::RadioButtonGroup SpacingGroup;
     Gtk::RadioButton      SpaceByBBoxRadioButton;
     Gtk::RadioButton      SpaceManualRadioButton;

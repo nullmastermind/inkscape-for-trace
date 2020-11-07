@@ -23,7 +23,7 @@ namespace Inkscape {
 namespace UI {
     
     
-class TemplateWidget : public Gtk::VBox
+class TemplateWidget : public Gtk::Box
 {
 public:
     TemplateWidget ();

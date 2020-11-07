@@ -99,6 +99,8 @@ LivePathEffectEditor::LivePathEffectEditor()
     , current_desktop(nullptr)
     , current_lpeitem(nullptr)
     , current_lperef(nullptr)
+    , effectcontrol_vbox(Gtk::ORIENTATION_VERTICAL)
+    , effectlist_vbox(Gtk::ORIENTATION_VERTICAL)
 {
     set_spacing(4);
 

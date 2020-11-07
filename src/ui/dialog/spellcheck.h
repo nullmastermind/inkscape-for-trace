@@ -242,7 +242,7 @@ private:
     Glib::RefPtr<Gtk::ListStore> model;
 
     Gtk::HBox       suggestion_hbox;
-    Gtk::VBox       changebutton_vbox;
+    Gtk::Box        changebutton_vbox;
     Gtk::Button     accept_button;
     Gtk::Button     ignoreonce_button;
     Gtk::Button     ignore_button;

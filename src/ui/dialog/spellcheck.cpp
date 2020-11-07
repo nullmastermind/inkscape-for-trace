@@ -100,6 +100,7 @@ SpellCheck::SpellCheck()
     , stop_button(_("_Stop"), true)
     , start_button(_("_Start"), true)
     , desktop(nullptr)
+    , changebutton_vbox(Gtk::ORIENTATION_VERTICAL)
 {
     _prefs = Inkscape::Preferences::get();
 

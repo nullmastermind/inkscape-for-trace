@@ -160,7 +160,7 @@ private:
     Gtk::ScrolledWindow _scroller;
     Gtk::Menu _popupMenu;
     Inkscape::UI::Widget::SpinButton _spinBtn;
-    Gtk::VBox _page;
+    Gtk::Box _page;
 
     Gtk::Label _visibleHeader;
     Gtk::Label _lockHeader;

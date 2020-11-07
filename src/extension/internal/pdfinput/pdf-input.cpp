@@ -130,7 +130,7 @@ PdfImportDialog::PdfImportDialog(std::shared_ptr<PDFDoc> doc, const gchar */*uri
     _cropTypeCombo->set_sensitive(false);
 
     hbox3 = Gtk::manage(new class Gtk::HBox(false, 4));
-    vbox2 = Gtk::manage(new class Gtk::VBox(false, 4));
+    vbox2 = Gtk::manage(new class Gtk::Box(Gtk::ORIENTATION_VERTICAL, 4));
     _pageSettingsFrame = Gtk::manage(new class Inkscape::UI::Widget::Frame(_("Page settings")));
     _labelPrecision = Gtk::manage(new class Gtk::Label(_("Precision of approximating gradient meshes:")));
     _labelPrecisionWarning = Gtk::manage(new class Gtk::Label(_("<b>Note</b>: setting the precision too high may result in a large SVG file and slow performance.")));
@@ -163,9 +163,9 @@ PdfImportDialog::PdfImportDialog(std::shared_ptr<PDFDoc> doc, const gchar */*uri
     _localFontsCheck = Gtk::manage(new class Gtk::CheckButton(_("Replace PDF fonts by closest-named installed fonts")));
 
     _embedImagesCheck = Gtk::manage(new class Gtk::CheckButton(_("Embed images")));
-    vbox3 = Gtk::manage(new class Gtk::VBox(false, 4));
+    vbox3 = Gtk::manage(new class Gtk::Box(Gtk::ORIENTATION_VERTICAL, 4));
     _importSettingsFrame = Gtk::manage(new class Inkscape::UI::Widget::Frame(_("Import settings")));
-    vbox1 = Gtk::manage(new class Gtk::VBox(false, 4));
+    vbox1 = Gtk::manage(new class Gtk::Box(Gtk::ORIENTATION_VERTICAL, 4));
     _previewArea = Gtk::manage(new class Gtk::DrawingArea());
     hbox1 = Gtk::manage(new class Gtk::HBox(false, 4));
     cancelbutton->set_can_focus();

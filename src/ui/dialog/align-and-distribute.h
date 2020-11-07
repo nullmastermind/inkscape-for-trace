@@ -103,8 +103,8 @@ protected:
     Gtk::Grid _alignTable, _distributeTable, _rearrangeTable, _removeOverlapTable, _nodesTable;
     Gtk::HBox _anchorBox;
     Gtk::HBox _selgrpBox;
-    Gtk::VBox _alignBox;
-    Gtk::VBox _alignBoxNode;
+    Gtk::Box _alignBox;
+    Gtk::Box _alignBoxNode;
     Gtk::HBox _alignTableBox;
     Gtk::HBox _distributeTableBox;
     Gtk::HBox _rearrangeTableBox;

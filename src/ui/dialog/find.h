@@ -223,8 +223,8 @@ private:
     Gtk::RadioButton    check_searchin_text;
     Gtk::RadioButton    check_searchin_property;
     Gtk::HBox hbox_searchin;
-    Gtk::VBox vbox_scope;
-    Gtk::VBox vbox_searchin;
+    Gtk::Box vbox_scope;
+    Gtk::Box vbox_searchin;
     UI::Widget::Frame frame_searchin;
     UI::Widget::Frame frame_scope;
 
@@ -235,10 +235,10 @@ private:
     Gtk::CheckButton    check_exact_match;
     Gtk::CheckButton    check_include_hidden;
     Gtk::CheckButton    check_include_locked;
-    Gtk::VBox vbox_options1;
-    Gtk::VBox vbox_options2;
+    Gtk::Box vbox_options1;
+    Gtk::Box vbox_options2;
     Gtk::HBox hbox_options;
-    Gtk::VBox vbox_expander;
+    Gtk::Box vbox_expander;
     Gtk::Expander  expander_options;
     UI::Widget::Frame frame_options;
 
@@ -253,8 +253,8 @@ private:
     Gtk::CheckButton    check_desc;
     Gtk::CheckButton    check_title;
     Gtk::HBox hbox_properties;
-    Gtk::VBox vbox_properties1;
-    Gtk::VBox vbox_properties2;
+    Gtk::Box vbox_properties1;
+    Gtk::Box vbox_properties2;
     UI::Widget::Frame frame_properties;
 
     /**
@@ -276,8 +276,8 @@ private:
     Gtk::CheckButton    check_clones;
     Gtk::CheckButton    check_images;
     Gtk::CheckButton    check_offsets;
-    Gtk::VBox vbox_types1;
-    Gtk::VBox vbox_types2;
+    Gtk::Box vbox_types1;
+    Gtk::Box vbox_types2;
     Gtk::HBox hbox_types;
     UI::Widget::Frame frame_types;
 

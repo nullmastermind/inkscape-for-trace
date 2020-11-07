@@ -29,7 +29,7 @@ namespace Widget {
  * A flowbox widget with filter controller for dialogs.
  */
 
-class InkFlowBox : public Gtk::VBox {
+class InkFlowBox : public Gtk::Box {
   public:
     InkFlowBox(const gchar *name);
     ~InkFlowBox() override;

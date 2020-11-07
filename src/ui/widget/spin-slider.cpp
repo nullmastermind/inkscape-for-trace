@@ -122,7 +122,7 @@ DualSpinSlider::DualSpinSlider(double value, double lower, double upper, double 
     _s1.get_adjustment()->signal_value_changed().connect(sigc::mem_fun(*this, &DualSpinSlider::update_linked));
     _link.signal_toggled().connect(sigc::mem_fun(*this, &DualSpinSlider::link_toggled));
 
-    Gtk::VBox* vb = Gtk::manage(new Gtk::VBox);
+    Gtk::Box* vb = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
     vb->add(_s1);
     vb->add(_s2);
     pack_start(*vb);

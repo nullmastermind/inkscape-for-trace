@@ -133,7 +133,7 @@ void LPERoughen::doBeforeEffect(SPLPEItem const *lpeitem)
 
 Gtk::Widget *LPERoughen::newWidget()
 {
-    Gtk::VBox *vbox = Gtk::manage(new Gtk::VBox(Effect::newWidget()));
+    Gtk::Box *vbox = Gtk::manage(dynamic_cast<Gtk::Box*>(Effect::newWidget()));
     vbox->set_border_width(5);
     vbox->set_homogeneous(false);
     vbox->set_spacing(2);

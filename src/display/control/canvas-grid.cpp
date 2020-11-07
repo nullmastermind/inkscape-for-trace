@@ -242,7 +242,7 @@ CanvasGrid::removeCanvasItem(Inkscape::CanvasItemGrid *item)
 Gtk::Widget *
 CanvasGrid::newWidget()
 {
-    Gtk::VBox * vbox = Gtk::manage( new Gtk::VBox() );
+    Gtk::Box * vbox = Gtk::manage( new Gtk::Box(Gtk::ORIENTATION_VERTICAL) );
     Gtk::Label * namelabel = Gtk::manage(new Gtk::Label("", Gtk::ALIGN_CENTER) );
 
     Glib::ustring str("<b>");

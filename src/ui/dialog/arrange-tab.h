@@ -23,11 +23,11 @@ namespace Dialog {
  * The class is a Gtk::VBox and will be displayed as a tab in
  * the dialog
  */
-class ArrangeTab : public Gtk::VBox
+class ArrangeTab : public Gtk::Box
 {
 public:
-	ArrangeTab() = default;;
-	~ArrangeTab() override = default;;
+	ArrangeTab() : Gtk::Box(Gtk::ORIENTATION_VERTICAL) {}
+	~ArrangeTab() override = default;
 
 	/**
 	 * Do the actual work! This method is invoked to actually arrange the

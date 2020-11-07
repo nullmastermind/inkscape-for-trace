@@ -128,7 +128,7 @@ private:
  * A compound widget that allows the user to select the desired
  * page size.  This widget is used in DocumentPreferences 
  */ 
-class PageSizer : public Gtk::VBox
+class PageSizer : public Gtk::Box
 {
 public:
 

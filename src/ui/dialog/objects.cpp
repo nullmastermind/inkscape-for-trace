@@ -1900,7 +1900,8 @@ ObjectsPanel::ObjectsPanel() :
                       UI::Widget::SimpleFilterModifier::BLEND   |
                       UI::Widget::SimpleFilterModifier::BLUR    |
                       UI::Widget::SimpleFilterModifier::OPACITY ),
-    _colorSelectorDialog("dialogs.colorpickerwindow")
+    _colorSelectorDialog("dialogs.colorpickerwindow"),
+    _page(Gtk::ORIENTATION_VERTICAL)
 {
     //Create the tree model and store
     ModelColumns *zoop = new ModelColumns();

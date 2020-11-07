@@ -16,7 +16,7 @@
 namespace Gtk {
 class RadioButton;
 class Scale;
-class VBox;
+class Box;
 class HBox;
 }
 
@@ -43,7 +43,7 @@ public:
     ~ToleranceSlider();
     void setValue (double);
     void setLimits (double, double);
-    Gtk::VBox* _vbox;
+    Gtk::Box* _vbox;
 private:
     void init (const Glib::ustring& label1, 
             const Glib::ustring& label2, 

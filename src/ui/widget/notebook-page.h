@@ -24,11 +24,9 @@ namespace Widget {
 /**
  * A tabbed notebook page for dialogs.
  */
-class NotebookPage : public Gtk::VBox
+class NotebookPage : public Gtk::Box
 {
 public:
-
-    NotebookPage();
 
     /**
      * Construct a NotebookPage.

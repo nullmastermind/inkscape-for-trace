@@ -100,6 +100,7 @@ IconPreviewPanel::IconPreviewPanel()
     , hot(1)
     , selectionButton(nullptr)
     , docModConn()
+    , iconBox(Gtk::ORIENTATION_VERTICAL)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     numEntries = 0;
@@ -155,7 +156,7 @@ IconPreviewPanel::IconPreviewPanel()
 
     magLabel.set_label( *labels[hot] );
 
-    Gtk::VBox* magBox = new Gtk::VBox();
+    Gtk::Box* magBox = new Gtk::Box(Gtk::ORIENTATION_VERTICAL);
 
     UI::Widget::Frame *magFrame = Gtk::manage(new UI::Widget::Frame(_("Magnified:")));
     magFrame->add( magnified );
@@ -164,7 +165,7 @@ IconPreviewPanel::IconPreviewPanel()
     magBox->pack_start( magLabel, Gtk::PACK_SHRINK );
 
 
-    Gtk::VBox *verts = new Gtk::VBox();
+    Gtk::Box *verts = new Gtk::Box(Gtk::ORIENTATION_VERTICAL);
     Gtk::HBox *horiz = nullptr;
     int previous = 0;
     int avail = 0;

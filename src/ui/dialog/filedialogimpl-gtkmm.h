@@ -266,7 +266,7 @@ private:
 
     //# Child widgets
     Gtk::HBox childBox;
-    Gtk::VBox checksBox;
+    Gtk::Box checksBox;
 
     Gtk::CheckButton fileTypeCheckbox;
 

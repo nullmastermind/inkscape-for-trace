@@ -28,7 +28,7 @@ namespace Glib {
 
 namespace Gtk {
 	class Grid;
-	class VBox;
+	class Box;
 	class Widget;
 }
 
@@ -254,8 +254,8 @@ public:
 
     /* Extension editor dialog stuff */
 public:
-    Gtk::VBox *get_info_widget();
-    Gtk::VBox *get_params_widget();
+    Gtk::Box *get_info_widget();
+    Gtk::Box *get_params_widget();
 protected:
     inline static void add_val(Glib::ustring labelstr, Glib::ustring valuestr, Gtk::Grid * table, int * row);
 };

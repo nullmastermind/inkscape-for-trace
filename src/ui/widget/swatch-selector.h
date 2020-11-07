@@ -22,7 +22,7 @@ namespace UI {
 namespace Widget {
 class GradientSelector;
 
-class SwatchSelector : public Gtk::VBox
+class SwatchSelector : public Gtk::Box
 {
 public:
     SwatchSelector();

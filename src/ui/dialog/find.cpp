@@ -65,7 +65,6 @@ Find::Find()
       check_scope_selection(_("Sele_ction")),
       check_searchin_text(_("_Text")),
       check_searchin_property(_("_Properties")),
-      vbox_searchin(false, false),
       frame_searchin(_("Search in")),
       frame_scope(_("Scope")),
 
@@ -105,7 +104,17 @@ Find::Find()
       button_find(_("_Find")),
       button_replace(_("_Replace All")),
       _action_replace(false),
-      blocked(false)
+      blocked(false),
+
+      vbox_scope(Gtk::ORIENTATION_VERTICAL),
+      vbox_searchin(Gtk::ORIENTATION_VERTICAL),
+      vbox_options1(Gtk::ORIENTATION_VERTICAL),
+      vbox_options2(Gtk::ORIENTATION_VERTICAL),
+      vbox_expander(Gtk::ORIENTATION_VERTICAL),
+      vbox_properties1(Gtk::ORIENTATION_VERTICAL),
+      vbox_properties2(Gtk::ORIENTATION_VERTICAL),
+      vbox_types1(Gtk::ORIENTATION_VERTICAL),
+      vbox_types2(Gtk::ORIENTATION_VERTICAL)
 
 {
     _left_size_group = Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL);

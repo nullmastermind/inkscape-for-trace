@@ -40,7 +40,7 @@ namespace Widget {
  * Constructor
  */
 PageSizer::PageSizer(Registry & _wr)
-    : Gtk::VBox(false,4),
+    : Gtk::Box(Gtk::ORIENTATION_VERTICAL, 4),
       _dimensionUnits( _("U_nits:"), "units", _wr ),
       _dimensionWidth( _("_Width:"), _("Width of paper"), "width", _dimensionUnits, _wr ),
       _dimensionHeight( _("_Height:"), _("Height of paper"), "height", _dimensionUnits, _wr ),

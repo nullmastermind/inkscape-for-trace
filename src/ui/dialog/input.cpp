@@ -383,7 +383,7 @@ public:
     ~InputDialogImpl() override = default;
 
 private:
-    class ConfPanel : public Gtk::VBox
+    class ConfPanel : public Gtk::Box
     {
     public:
         ConfPanel();
@@ -421,12 +421,12 @@ private:
         Gtk::CheckButton useExt;
         Gtk::Button save;
         Gtk::Paned pane;
-        Gtk::VBox detailsBox;
+        Gtk::Box detailsBox;
         Gtk::HBox titleFrame;
         Gtk::Label titleLabel;
         Inkscape::UI::Widget::Frame axisFrame;
         Inkscape::UI::Widget::Frame keysFrame;
-        Gtk::VBox axisVBox;
+        Gtk::Box axisVBox;
         Inkscape::UI::Widget::ScrollProtected<Gtk::ComboBoxText> modeCombo;
         Gtk::Label modeLabel;
         Gtk::HBox modeBox;
@@ -894,7 +894,7 @@ void InputDialogImpl::setupTree( Glib::RefPtr<Gtk::TreeStore> store, Gtk::TreeIt
 
 
 InputDialogImpl::ConfPanel::ConfPanel() :
-    Gtk::VBox(),
+    Gtk::Box(Gtk::ORIENTATION_VERTICAL),
     confDeviceStore(Gtk::TreeStore::create(getCols())),
     confDeviceIter(),
     confDeviceTree(confDeviceStore),
@@ -902,13 +902,14 @@ InputDialogImpl::ConfPanel::ConfPanel() :
     watcher(*this),
     useExt(_("_Use pressure-sensitive tablet (requires restart)"), true),
     save(_("_Save"), true),
-    detailsBox(false, 4),
+    detailsBox(Gtk::ORIENTATION_VERTICAL, 4),
     titleFrame(false, 4),
     titleLabel(""),
     axisFrame(_("Axes")),
     keysFrame(_("Keys")),
     modeLabel(_("Mode:")),
-    modeBox(false, 4)
+    modeBox(false, 4),
+    axisVBox(Gtk::ORIENTATION_VERTICAL)
 
 {
 

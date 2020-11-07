@@ -221,7 +221,7 @@ private:
     Gtk::Button *create_button;
     Gtk::Paned _paned;
 
-    Gtk::VBox node_box;
+    Gtk::Box node_box;
     Gtk::HBox status_box;
     Gtk::Switch _attrswitch;
     Gtk::Label status;

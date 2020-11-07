@@ -67,7 +67,7 @@ private:
     bool pending;
     gdouble minDelay;
 
-    Gtk::VBox       iconBox;
+    Gtk::Box        iconBox;
     Gtk::Paned      splitter;
     Glib::ustring targetId;
     int hot;
