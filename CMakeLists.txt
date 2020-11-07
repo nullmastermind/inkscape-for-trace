@@ -30,11 +30,11 @@ set(CMAKE_BUILD_TYPE_INIT "Release")
 
 include(CMakeScripts/HelperFunctions.cmake)
 include(CMakeScripts/ConfigEnv.cmake)
-include(GNUInstallDirs) # for the CMAKE_INSTALL_LIBDIR variable
 
 project(inkscape)
 set(CMAKE_INSTALL_DEFAULT_COMPONENT_NAME inkscape) # needs to be before any install() commands
 
+include(GNUInstallDirs) # for the CMAKE_INSTALL_LIBDIR variable
 include(CMakeScripts/ConfigPaths.cmake)
 
 set(PROJECT_NAME inkscape)
