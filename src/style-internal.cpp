@@ -629,7 +629,9 @@ SPIFontVariationSettings::read( gchar const *str ) {
     // Matching must use a Glib::ustring or matching may produce
     // subtle errors which may be shown by an "Invalid byte sequence
     // in conversion input" error.
-    Glib::RefPtr<Glib::Regex> regex = Glib::Regex::create("\"(\\w{4})\"\\s+([-+]?\\d*\\.?\\d+([eE][-+]?\\d+)?)");
+    Glib::RefPtr<Glib::Regex> regex = Glib::Regex::create(
+            "[\"'](\\w{4})[\"']"
+            "\\s+([-+]?\\d*\\.?\\d+([eE][-+]?\\d+)?)");
     Glib::MatchInfo matchInfo;
 
     for (auto token: tokens) {
