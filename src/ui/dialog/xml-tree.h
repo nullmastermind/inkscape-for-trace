@@ -222,7 +222,7 @@ private:
     Gtk::Paned _paned;
 
     Gtk::Box node_box;
-    Gtk::HBox status_box;
+    Gtk::Box status_box;
     Gtk::Switch _attrswitch;
     Gtk::Label status;
     Gtk::Toolbar tree_toolbar;

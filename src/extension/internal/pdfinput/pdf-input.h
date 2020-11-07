@@ -39,7 +39,6 @@ namespace Gtk {
   class ComboBoxText;
   class DrawingArea;
   class Frame;
-  class HBox;
   class Scale;
   class RadioButton;
   class Box;
@@ -89,10 +88,10 @@ private:
     class Gtk::Label * _labelSelect;
     class Inkscape::UI::Widget::SpinButton * _pageNumberSpin;
     class Gtk::Label * _labelTotalPages;
-    class Gtk::HBox * hbox2;
+    class Gtk::Box * hbox2;
     class Gtk::CheckButton * _cropCheck;
     class Gtk::ComboBoxText * _cropTypeCombo;
-    class Gtk::HBox * hbox3;
+    class Gtk::Box * hbox3;
     class Gtk::Box * vbox2;
     class Inkscape::UI::Widget::Frame * _pageSettingsFrame;
     class Gtk::Label * _labelPrecision;
@@ -106,11 +105,11 @@ private:
     Gtk::Scale * _fallbackPrecisionSlider;
     Glib::RefPtr<Gtk::Adjustment> _fallbackPrecisionSlider_adj;
     class Gtk::Label * _labelPrecisionComment;
-    class Gtk::HBox * hbox6;
+    class Gtk::Box * hbox6;
 #if 0
     class Gtk::Label * _labelText;
     class Gtk::ComboBoxText * _textHandlingCombo;
-    class Gtk::HBox * hbox5;
+    class Gtk::Box * hbox5;
 #endif
     class Gtk::CheckButton * _localFontsCheck;
     class Gtk::CheckButton * _embedImagesCheck;
@@ -118,7 +117,7 @@ private:
     class Inkscape::UI::Widget::Frame * _importSettingsFrame;
     class Gtk::Box * vbox1;
     class Gtk::DrawingArea * _previewArea;
-    class Gtk::HBox * hbox1;
+    class Gtk::Box * hbox1;
 
     std::shared_ptr<PDFDoc> _pdf_doc;   // Document to be imported
     int _current_page;  // Current selected page

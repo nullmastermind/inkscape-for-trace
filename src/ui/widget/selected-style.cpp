@@ -116,7 +116,8 @@ static guint nui_drop_target_entries = G_N_ELEMENTS(ui_drop_target_entries);
 static Dialog::FillAndStroke *get_fill_and_stroke_panel(SPDesktop *desktop);
 
 SelectedStyle::SelectedStyle(bool /*layout*/)
-    : current_stroke_width(0)
+    : Gtk::Box(Gtk::ORIENTATION_HORIZONTAL)
+    , current_stroke_width(0)
     , _sw_unit(nullptr)
     , _desktop(nullptr)
     , _table()
@@ -130,8 +131,8 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
     , _opacity_place()
     , _opacity_adjustment(Gtk::Adjustment::create(100, 0.0, 100, 1.0, 10.0))
     , _opacity_sb(0.02, 0)
-    , _fill(false, 1)
-    , _stroke()
+    , _fill(Gtk::ORIENTATION_HORIZONTAL, 1)
+    , _stroke(Gtk::ORIENTATION_HORIZONTAL)
     , _stroke_width_place(this)
     , _stroke_width("")
     , _fill_empty_space("")
@@ -193,6 +194,7 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
         __lgradient[i] = (i == SS_FILL)? (_("Linear gradient (fill)")) : (_("Linear gradient (stroke)"));
 
         _gradient_preview_l[i] = Gtk::manage(new GradientImage(nullptr));
+        _gradient_box_l[i].set_orientation(Gtk::ORIENTATION_HORIZONTAL);
         _gradient_box_l[i].pack_start(_lgradient[i]);
         _gradient_box_l[i].pack_start(*_gradient_preview_l[i]);
         _gradient_box_l[i].show_all();
@@ -202,6 +204,7 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
         __rgradient[i] = (i == SS_FILL)? (_("Radial gradient (fill)")) : (_("Radial gradient (stroke)"));
 
         _gradient_preview_r[i] = Gtk::manage(new GradientImage(nullptr));
+        _gradient_box_r[i].set_orientation(Gtk::ORIENTATION_HORIZONTAL);
         _gradient_box_r[i].pack_start(_rgradient[i]);
         _gradient_box_r[i].pack_start(*_gradient_preview_r[i]);
         _gradient_box_r[i].show_all();
@@ -212,6 +215,7 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
         __mgradient[i] = (i == SS_FILL)? (_("Mesh gradient (fill)")) : (_("Mesh gradient (stroke)"));
 
         _gradient_preview_m[i] = Gtk::manage(new GradientImage(nullptr));
+        _gradient_box_m[i].set_orientation(Gtk::ORIENTATION_HORIZONTAL);
         _gradient_box_m[i].pack_start(_mgradient[i]);
         _gradient_box_m[i].pack_start(*_gradient_preview_m[i]);
         _gradient_box_m[i].show_all();

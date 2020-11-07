@@ -112,7 +112,7 @@ void Licensor::init (Registry& wr)
     pd->set_active();
     wr.setUpdating (false);
 
-    Gtk::HBox *box = Gtk::manage (new Gtk::HBox);
+    Gtk::Box *box = Gtk::manage (new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
     pack_start (*box, true, true, 0);
 
     box->pack_start (_eentry->_label, false, false, 5);

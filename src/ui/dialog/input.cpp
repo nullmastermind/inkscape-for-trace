@@ -422,14 +422,14 @@ private:
         Gtk::Button save;
         Gtk::Paned pane;
         Gtk::Box detailsBox;
-        Gtk::HBox titleFrame;
+        Gtk::Box titleFrame;
         Gtk::Label titleLabel;
         Inkscape::UI::Widget::Frame axisFrame;
         Inkscape::UI::Widget::Frame keysFrame;
         Gtk::Box axisVBox;
         Inkscape::UI::Widget::ScrollProtected<Gtk::ComboBoxText> modeCombo;
         Gtk::Label modeLabel;
-        Gtk::HBox modeBox;
+        Gtk::Box modeBox;
 
         class KeysColumns : public Gtk::TreeModel::ColumnRecord
         {
@@ -903,12 +903,12 @@ InputDialogImpl::ConfPanel::ConfPanel() :
     useExt(_("_Use pressure-sensitive tablet (requires restart)"), true),
     save(_("_Save"), true),
     detailsBox(Gtk::ORIENTATION_VERTICAL, 4),
-    titleFrame(false, 4),
+    titleFrame(Gtk::ORIENTATION_HORIZONTAL, 4),
     titleLabel(""),
     axisFrame(_("Axes")),
     keysFrame(_("Keys")),
     modeLabel(_("Mode:")),
-    modeBox(false, 4),
+    modeBox(Gtk::ORIENTATION_HORIZONTAL, 4),
     axisVBox(Gtk::ORIENTATION_VERTICAL)
 
 {

@@ -107,7 +107,7 @@ PdfImportDialog::PdfImportDialog(std::shared_ptr<PDFDoc> doc, const gchar */*uri
     auto _pageNumberSpin_adj = Gtk::Adjustment::create(1, 1, _pdf_doc->getNumPages(), 1, 10, 0);
     _pageNumberSpin = Gtk::manage(new Inkscape::UI::Widget::SpinButton(_pageNumberSpin_adj, 1, 1));
     _labelTotalPages = Gtk::manage(new class Gtk::Label());
-    hbox2 = Gtk::manage(new class Gtk::HBox(false, 0));
+    hbox2 = Gtk::manage(new class Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 0));
     // Disable the page selector when there's only one page
     int num_pages = _pdf_doc->getCatalog()->getNumPages();
     if ( num_pages == 1 ) {
@@ -129,7 +129,7 @@ PdfImportDialog::PdfImportDialog(std::shared_ptr<PDFDoc> doc, const gchar */*uri
     _cropTypeCombo->set_active_text(_(crop_setting_choices[0]));
     _cropTypeCombo->set_sensitive(false);
 
-    hbox3 = Gtk::manage(new class Gtk::HBox(false, 4));
+    hbox3 = Gtk::manage(new class Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 4));
     vbox2 = Gtk::manage(new class Gtk::Box(Gtk::ORIENTATION_VERTICAL, 4));
     _pageSettingsFrame = Gtk::manage(new class Inkscape::UI::Widget::Frame(_("Page settings")));
     _labelPrecision = Gtk::manage(new class Gtk::Label(_("Precision of approximating gradient meshes:")));
@@ -150,14 +150,14 @@ PdfImportDialog::PdfImportDialog(std::shared_ptr<PDFDoc> doc, const gchar */*uri
     _fallbackPrecisionSlider = Gtk::manage(new class Gtk::Scale(_fallbackPrecisionSlider_adj));
     _fallbackPrecisionSlider->set_value(2.0);
     _labelPrecisionComment = Gtk::manage(new class Gtk::Label(_("rough")));
-    hbox6 = Gtk::manage(new class Gtk::HBox(false, 4));
+    hbox6 = Gtk::manage(new class Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 4));
 
     // Text options
     // _labelText = Gtk::manage(new class Gtk::Label(_("Text handling:")));
     // _textHandlingCombo = Gtk::manage(new class Gtk::ComboBoxText());
     // _textHandlingCombo->append(_("Import text as text"));
     // _textHandlingCombo->set_active_text(_("Import text as text"));
-    // hbox5 = Gtk::manage(new class Gtk::HBox(false, 4));
+    // hbox5 = Gtk::manage(new class Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 4));
 
     // Font option
     _localFontsCheck = Gtk::manage(new class Gtk::CheckButton(_("Replace PDF fonts by closest-named installed fonts")));
@@ -167,7 +167,7 @@ PdfImportDialog::PdfImportDialog(std::shared_ptr<PDFDoc> doc, const gchar */*uri
     _importSettingsFrame = Gtk::manage(new class Inkscape::UI::Widget::Frame(_("Import settings")));
     vbox1 = Gtk::manage(new class Gtk::Box(Gtk::ORIENTATION_VERTICAL, 4));
     _previewArea = Gtk::manage(new class Gtk::DrawingArea());
-    hbox1 = Gtk::manage(new class Gtk::HBox(false, 4));
+    hbox1 = Gtk::manage(new class Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 4));
     cancelbutton->set_can_focus();
     cancelbutton->set_can_default();
     cancelbutton->set_relief(Gtk::RELIEF_NORMAL);

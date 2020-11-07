@@ -526,7 +526,7 @@ GlyphsPanel::GlyphsPanel()
 
 // -------------------------------
 
-    Gtk::HBox *box = new Gtk::HBox();
+    Gtk::Box *box = new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL);
 
     entry = new Gtk::Entry();
     conn = entry->signal_changed().connect(sigc::mem_fun(*this, &GlyphsPanel::calcCanInsert));

@@ -1639,8 +1639,8 @@ Effect::defaultParamSet()
                 ove = "";
                 // ove = Glib::ustring(_("<b>Default value overridden:</b> None\n"));
             }
-            Gtk::HBox * vbox_param = Gtk::manage( new Gtk::HBox(true) );
-            Gtk::HBox *namedicon = Gtk::manage(new Gtk::HBox(true));
+            Gtk::Box * vbox_param = Gtk::manage( new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL) );
+            Gtk::Box *namedicon = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
             Gtk::Label *parameter_label = Gtk::manage(new Gtk::Label(label, Gtk::ALIGN_START));
             parameter_label->set_use_markup(true);
             parameter_label->set_use_underline(true);

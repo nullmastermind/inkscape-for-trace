@@ -214,19 +214,19 @@ protected:
     //---------------------------------------------------------------
 
     Gtk::Notebook   _grids_notebook;
-    Gtk::HBox       _grids_hbox_crea;
+    Gtk::Box        _grids_hbox_crea;
     Gtk::Label      _grids_label_crea;
     Gtk::Button     _grids_button_new;
     Gtk::Button     _grids_button_remove;
     Gtk::ComboBoxText _grids_combo_gridtype;
     Gtk::Label      _grids_label_def;
-    Gtk::HBox       _grids_space;
+    Gtk::Box        _grids_space;
     //---------------------------------------------------------------
 
     RDElist _rdflist;
     UI::Widget::Licensor _licensor;
 
-    Gtk::HBox& _createPageTabLabel(const Glib::ustring& label, const char *label_image);
+    Gtk::Box& _createPageTabLabel(const Glib::ustring& label, const char *label_image);
 
 private:
     DocumentProperties();

@@ -88,7 +88,7 @@ public:
     bool updating;
 
     // Used for font-family
-    class AttrEntry : public Gtk::HBox
+    class AttrEntry : public Gtk::Box
     {
     public:
         AttrEntry(SvgFontsDialog* d, gchar* lbl, Glib::ustring tooltip, const SPAttr attr);
@@ -100,7 +100,7 @@ public:
         SPAttr attr;
     };
 
-    class AttrSpin : public Gtk::HBox
+    class AttrSpin : public Gtk::Box
     {
     public:
         AttrSpin(SvgFontsDialog* d, gchar* lbl, Glib::ustring tooltip, const SPAttr attr);
@@ -147,8 +147,8 @@ private:
 
     sigc::connection _defs_observer_connection;
 
-    Gtk::HBox* AttrCombo(gchar* lbl, const SPAttr attr);
-//    Gtk::HBox* AttrSpin(gchar* lbl, const SPAttr attr);
+    Gtk::Box* AttrCombo(gchar* lbl, const SPAttr attr);
+//    Gtk::Box* AttrSpin(gchar* lbl, const SPAttr attr);
     Gtk::Box* global_settings_tab();
 
     // <font>
@@ -251,10 +251,11 @@ private:
     Inkscape::UI::Widget::SpinButton setwidth_spin;
     Gtk::Scale* kerning_slider;
 
-    class EntryWidget : public Gtk::HBox
+    class EntryWidget : public Gtk::Box
     {
     public:
         EntryWidget()
+        : Gtk::Box(Gtk::ORIENTATION_HORIZONTAL)
 	{
             this->add(this->_label);
             this->add(this->_entry);

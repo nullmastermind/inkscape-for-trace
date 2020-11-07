@@ -483,7 +483,7 @@ RegisteredRadioButtonPair::RegisteredRadioButtonPair (const Glib::ustring& label
         const Glib::ustring& label1, const Glib::ustring& label2,
         const Glib::ustring& tip1, const Glib::ustring& tip2,
         const Glib::ustring& key, Registry& wr, Inkscape::XML::Node* repr_in, SPDocument *doc_in)
-    : RegisteredWidget<Gtk::HBox>(),
+    : RegisteredWidget<Gtk::Box>(),
       _rb1(nullptr),
       _rb2(nullptr)
 {
@@ -491,6 +491,7 @@ RegisteredRadioButtonPair::RegisteredRadioButtonPair (const Glib::ustring& label
 
     setProgrammatically = false;
 
+    set_orientation(Gtk::ORIENTATION_HORIZONTAL);
     add(*Gtk::manage(new Gtk::Label(label)));
     _rb1 = Gtk::manage(new Gtk::RadioButton(label1, true));
     add (*_rb1);

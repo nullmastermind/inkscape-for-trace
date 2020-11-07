@@ -35,7 +35,7 @@ private:
     TemplateLoadTab::TemplateData _current_template;
     
     Gtk::Button _more_info_button;
-    Gtk::HBox _preview_box;
+    Gtk::Box _preview_box;
     Gtk::Image _preview_image;
     Dialog::SVGPreview _preview_render;
     Gtk::Label _short_description_label;

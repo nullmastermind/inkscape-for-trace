@@ -196,11 +196,12 @@ private:
 };
 
 // Contains an arbitrary number of spin buttons that use separate attributes
-class MultiSpinButton : public Gtk::HBox
+class MultiSpinButton : public Gtk::Box
 {
 public:
     MultiSpinButton(double lower, double upper, double step_inc,
                     double climb_rate, int digits, std::vector<SPAttr> attrs, std::vector<double> default_values, std::vector<char*> tip_text)
+    : Gtk::Box(Gtk::ORIENTATION_HORIZONTAL)
     {
         g_assert(attrs.size()==default_values.size());
         g_assert(attrs.size()==tip_text.size());
@@ -227,12 +228,13 @@ private:
 };
 
 // Contains two spinbuttons that describe a NumberOptNumber
-class DualSpinButton : public Gtk::HBox, public AttrWidget
+class DualSpinButton : public Gtk::Box, public AttrWidget
 {
 public:
     DualSpinButton(char* def, double lower, double upper, double step_inc,
                    double climb_rate, int digits, const SPAttr a, char* tt1, char* tt2)
         : AttrWidget(a, def), //TO-DO: receive default num-opt-num as parameter in the constructor
+          Gtk::Box(Gtk::ORIENTATION_HORIZONTAL),
           _s1(climb_rate, digits), _s2(climb_rate, digits)
     {
         if (tt1) {
@@ -610,11 +612,12 @@ static Inkscape::UI::Dialog::FileOpenDialog * selectFeImageFileInstance = nullpt
 //Displays a chooser for feImage input
 //It may be a filename or the id for an SVG Element
 //described in xlink:href syntax
-class FileOrElementChooser : public Gtk::HBox, public AttrWidget
+class FileOrElementChooser : public Gtk::Box, public AttrWidget
 {
 public:
     FileOrElementChooser(const SPAttr a)
         : AttrWidget(a)
+        , Gtk::Box(Gtk::ORIENTATION_HORIZONTAL)
     {
         pack_start(_entry, false, false);
         pack_start(_fromFile, false, false);
@@ -980,7 +983,7 @@ private:
        and all widgets within the setting group are aligned automatically. */
     void add_widget(Gtk::Widget* w, const Glib::ustring& label)
     {
-        Gtk::HBox *hb = Gtk::manage(new Gtk::HBox);
+        Gtk::Box *hb = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
         hb->set_spacing(12);
 
         if (label != "") {
@@ -1161,7 +1164,8 @@ public:
           _light_label(_("Light Source:")),
           _light_source(LightSourceConverter),
           _locked(false),
-          _box(Gtk::ORIENTATION_VERTICAL)
+          _box(Gtk::ORIENTATION_VERTICAL),
+          _light_box(Gtk::ORIENTATION_HORIZONTAL)
     {
         _light_label.set_xalign(0.0);
         _settings._size_group->add_widget(_light_label);
@@ -1278,7 +1282,7 @@ private:
     FilterEffectsDialog& _dialog;
     Gtk::Box _box;
     Settings _settings;
-    Gtk::HBox _light_box;
+    Gtk::Box _light_box;
     Gtk::Label _light_label;
     ComboBoxEnum<LightSource> _light_source;
     bool _locked;
@@ -2653,8 +2657,8 @@ FilterEffectsDialog::FilterEffectsDialog()
 
     _sw_infobox = Gtk::manage(new Gtk::ScrolledWindow);
     Gtk::ScrolledWindow* sw_prims = Gtk::manage(new Gtk::ScrolledWindow);
-    Gtk::HBox* infobox = Gtk::manage(new Gtk::HBox(/*homogeneous:*/false, /*spacing:*/4));
-    Gtk::HBox* hb_prims = Gtk::manage(new Gtk::HBox);
+    Gtk::Box* infobox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, /*spacing:*/4));
+    Gtk::Box* hb_prims = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
     Gtk::Box* vb_prims = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
     Gtk::Box* vb_desc = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
 

@@ -138,7 +138,7 @@ ParamInt::get_widget(sigc::signal<void> *changeSignal)
         return nullptr;
     }
 
-    Gtk::HBox *hbox = Gtk::manage(new Gtk::HBox(false, GUI_PARAM_WIDGETS_SPACING));
+    Gtk::Box *hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, GUI_PARAM_WIDGETS_SPACING));
 
     auto pia = new ParamIntAdjustment(this, changeSignal);
     Glib::RefPtr<Gtk::Adjustment> fadjust(pia);

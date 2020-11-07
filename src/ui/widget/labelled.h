@@ -26,7 +26,7 @@ namespace Widget {
 /**
  * Adds a label with optional icon or suffix to another widget.
  */
-class Labelled : public Gtk::HBox
+class Labelled : public Gtk::Box
 {
 protected:
     Gtk::Widget  *_widget;

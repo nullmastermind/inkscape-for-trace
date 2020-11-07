@@ -79,7 +79,7 @@ RenderingOptions::RenderingOptions () :
     box_vector->add (_radio_bitmap);
     _frame_backends.add (*box_vector);
 
-    Gtk::HBox *box_bitmap = Gtk::manage( new Gtk::HBox () );
+    Gtk::Box *box_bitmap = Gtk::manage( new Gtk::Box (Gtk::ORIENTATION_HORIZONTAL) );
     box_bitmap->set_border_width (2);
     box_bitmap->add (_dpi);
     _frame_bitmap.add (*box_bitmap);

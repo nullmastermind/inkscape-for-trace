@@ -276,7 +276,7 @@ private:
     bool update_flag;
 
     /* Area selection radio buttons */
-    Gtk::HBox togglebox;
+    Gtk::Box togglebox;
     Gtk::RadioButton *selectiontype_buttons[SELECTION_NUMBER_OF];
 
     Gtk::Box area_box;
@@ -304,20 +304,20 @@ private:
     Gtk::Entry filename_entry;
 
     /* Unit selector widgets */
-    Gtk::HBox unitbox;
+    Gtk::Box unitbox;
     Inkscape::UI::Widget::UnitMenu unit_selector;
     Gtk::Label units_label;
 
     /* Filename widgets  */
-    Gtk::HBox filename_box;
+    Gtk::Box filename_box;
     Gtk::Button browse_button;
     Gtk::Label browse_label;
     Gtk::Image browse_image;
 
-    Gtk::HBox batch_box;
+    Gtk::Box batch_box;
     Gtk::CheckButton    batch_export;
 
-    Gtk::HBox hide_box;
+    Gtk::Box hide_box;
     Gtk::CheckButton    hide_export;
 
     Gtk::CheckButton closeWhenDone;
@@ -336,7 +336,7 @@ private:
     Inkscape::UI::Widget::ScrollProtected<Gtk::ComboBoxText> antialiasing_cb;
 
     /* Export Button widgets */
-    Gtk::HBox button_box;
+    Gtk::Box button_box;
     Gtk::Button export_button;
 
     Gtk::ProgressBar _prog;

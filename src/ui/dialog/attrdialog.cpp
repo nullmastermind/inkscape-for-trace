@@ -88,6 +88,7 @@ AttrDialog::AttrDialog()
     , _desktop(nullptr)
     , _repr(nullptr)
     , _mainBox(Gtk::ORIENTATION_VERTICAL)
+    , status_box(Gtk::ORIENTATION_HORIZONTAL)
 {
     set_size_request(20, 15);
     _mainBox.pack_start(_scrolledWindow, Gtk::PACK_EXPAND_WIDGET);

@@ -186,8 +186,6 @@ protected:
     void fire_fit_canvas_to_selection_or_drawing();
     
     //### The Paper Size selection list
-    Gtk::HBox _paperSizeListBox;
-    Gtk::Label _paperSizeListLabel;
     class PaperSizeColumns : public Gtk::TreeModel::ColumnRecord
         {
         public:
@@ -207,7 +205,7 @@ protected:
     sigc::connection    _paper_size_list_connection;
     
     //### Portrait or landscape orientation
-    Gtk::HBox           _orientationBox;
+    Gtk::Box            _orientationBox;
     Gtk::Label          _orientationLabel;
     Gtk::RadioButton    _portraitButton;
     Gtk::RadioButton    _landscapeButton;

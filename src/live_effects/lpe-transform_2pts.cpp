@@ -292,10 +292,10 @@ Gtk::Widget *LPETransform2Pts::newWidget()
     vbox->set_spacing(6);
 
     std::vector<Parameter *>::iterator it = param_vector.begin();
-    Gtk::HBox * button1 = Gtk::manage(new Gtk::HBox(true,0));
-    Gtk::HBox * button2 = Gtk::manage(new Gtk::HBox(true,0));
-    Gtk::HBox * button3 = Gtk::manage(new Gtk::HBox(true,0));
-    Gtk::HBox * button4 = Gtk::manage(new Gtk::HBox(true,0));
+    Gtk::Box * button1 = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL,0));
+    Gtk::Box * button2 = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL,0));
+    Gtk::Box * button3 = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL,0));
+    Gtk::Box * button4 = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL,0));
     while (it != param_vector.end()) {
         if ((*it)->widget_is_visible) {
             Parameter *param = *it;
@@ -306,7 +306,7 @@ Gtk::Widget *LPETransform2Pts::newWidget()
                 registered_widget->signal_value_changed().connect(sigc::mem_fun(*this, &LPETransform2Pts::updateIndex));
                 widg = registered_widget;
                 if (widg) {
-                    Gtk::HBox *hbox_scalar = dynamic_cast<Gtk::HBox *>(widg);
+                    Gtk::Box *hbox_scalar = dynamic_cast<Gtk::Box *>(widg);
                     std::vector<Gtk::Widget *> child_list = hbox_scalar->get_children();
                     Gtk::Entry *entry_widget = dynamic_cast<Gtk::Entry *>(child_list[1]);
                     entry_widget->set_width_chars(3);

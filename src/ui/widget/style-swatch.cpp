@@ -107,14 +107,15 @@ void StyleSwatch::ToolObserver::notify(Inkscape::Preferences::Entry const &val)
 }
 
 StyleSwatch::StyleSwatch(SPCSSAttr *css, gchar const *main_tip)
-    :
+    : Gtk::Box(Gtk::ORIENTATION_HORIZONTAL),
       _desktop(nullptr),
       _verb_t(0),
       _css(nullptr),
       _tool_obs(nullptr),
       _style_obs(nullptr),
       _table(Gtk::manage(new Gtk::Grid())),
-      _sw_unit(nullptr)
+      _sw_unit(nullptr),
+      _stroke(Gtk::ORIENTATION_HORIZONTAL)
 {
     set_name("StyleSwatch");
     

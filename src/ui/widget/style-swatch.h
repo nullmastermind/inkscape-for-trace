@@ -40,7 +40,7 @@ namespace Util {
 namespace UI {
 namespace Widget {
 
-class StyleSwatch : public Gtk::HBox
+class StyleSwatch : public Gtk::Box
 {
 public:
     StyleSwatch (SPCSSAttr *attr, gchar const *main_tip);
@@ -79,7 +79,7 @@ private:
     Gtk::Label _opacity_value;
     Gtk::Widget *_color_preview[2];
     Glib::ustring __color[2];
-    Gtk::HBox _stroke;
+    Gtk::Box _stroke;
     Gtk::EventBox _stroke_width_place;
     Gtk::Label _stroke_width;
 

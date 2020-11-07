@@ -119,9 +119,9 @@ TransformedPointParam::param_newWidget()
     pointwdg->clearProgrammatically();
     pointwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change vector parameter"));
     
-    Gtk::HBox * hbox = Gtk::manage( new Gtk::HBox() );
-    static_cast<Gtk::HBox*>(hbox)->pack_start(*pointwdg, true, true);
-    static_cast<Gtk::HBox*>(hbox)->show_all_children();
+    Gtk::Box * hbox = Gtk::manage( new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL) );
+    hbox->pack_start(*pointwdg, true, true);
+    hbox->show_all_children();
 
     return dynamic_cast<Gtk::Widget *> (hbox);
 }

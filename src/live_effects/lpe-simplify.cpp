@@ -83,7 +83,7 @@ LPESimplify::newWidget()
     vbox->set_homogeneous(false);
     vbox->set_spacing(2);
     std::vector<Parameter *>::iterator it = param_vector.begin();
-    Gtk::HBox * buttons = Gtk::manage(new Gtk::HBox(true,0));
+    Gtk::Box * buttons = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL,0));
     while (it != param_vector.end()) {
         if ((*it)->widget_is_visible) {
             Parameter * param = *it;
@@ -103,7 +103,7 @@ LPESimplify::newWidget()
             } else {
                 Glib::ustring * tip = param->param_getTooltip();
                 if (widg) {
-                    Gtk::HBox * horizontal_box = dynamic_cast<Gtk::HBox *>(widg);
+                    Gtk::Box * horizontal_box = dynamic_cast<Gtk::Box *>(widg);
                     std::vector< Gtk::Widget* > child_list = horizontal_box->get_children();
                     Gtk::Entry* entry_widg = dynamic_cast<Gtk::Entry *>(child_list[1]);
                     entry_widg->set_width_chars(8);

@@ -79,7 +79,7 @@ private:
      class Gtk::Button * cancelbutton;
      class Gtk::Button * okbutton;
 
-     class Gtk::HBox  * _page_selector_box;
+     class Gtk::Box  * _page_selector_box;
      class Gtk::Label * _labelSelect;
      class Gtk::Label * _labelTotalPages;
      class Gtk::SpinButton * _pageNumberSpin;
@@ -113,7 +113,7 @@ VsdImportDialog::VsdImportDialog(const std::vector<RVNGString> &vec)
      this->get_content_area()->pack_start(*vbox1);
 
      // CONTROLS
-     _page_selector_box = Gtk::manage(new Gtk::HBox());
+     _page_selector_box = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
 
      // Labels
      _labelSelect = Gtk::manage(new class Gtk::Label(_("Select page:")));

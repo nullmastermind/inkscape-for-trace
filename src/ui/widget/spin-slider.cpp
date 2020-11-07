@@ -21,6 +21,7 @@ namespace Widget {
 SpinSlider::SpinSlider(double value, double lower, double upper, double step_inc,
                        double climb_rate, int digits, const SPAttr a, const char* tip_text)
     : AttrWidget(a, value), 
+      Gtk::Box(Gtk::ORIENTATION_HORIZONTAL),
       _adjustment(Gtk::Adjustment::create(value, lower, upper, step_inc)),
       _scale(_adjustment), _spin(_adjustment, climb_rate, digits)
 {
@@ -110,6 +111,7 @@ void SpinSlider::remove_scale()
 DualSpinSlider::DualSpinSlider(double value, double lower, double upper, double step_inc,
                                double climb_rate, int digits, const SPAttr a, char* tip_text1, char* tip_text2)
     : AttrWidget(a),
+      Gtk::Box(Gtk::ORIENTATION_HORIZONTAL),
       _s1(value, lower, upper, step_inc, climb_rate, digits, SPAttr::INVALID, tip_text1),
       _s2(value, lower, upper, step_inc, climb_rate, digits, SPAttr::INVALID, tip_text2),
       //TRANSLATORS: "Link" means to _link_ two sliders together

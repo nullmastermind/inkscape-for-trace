@@ -312,7 +312,7 @@ protected:
     void on_value_changed();
 };
 
-class RegisteredRadioButtonPair : public RegisteredWidget<Gtk::HBox> {
+class RegisteredRadioButtonPair : public RegisteredWidget<Gtk::Box> {
 public:
     ~RegisteredRadioButtonPair() override;
     RegisteredRadioButtonPair ( const Glib::ustring& label,

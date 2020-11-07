@@ -241,7 +241,7 @@ private:
     Gtk::TreeView       tree_view;
     Glib::RefPtr<Gtk::ListStore> model;
 
-    Gtk::HBox       suggestion_hbox;
+    Gtk::Box        suggestion_hbox;
     Gtk::Box        changebutton_vbox;
     Gtk::Button     accept_button;
     Gtk::Button     ignoreonce_button;
@@ -251,7 +251,7 @@ private:
     Gtk::Button     pref_button;
     Gtk::Label      dictionary_label;
     Inkscape::UI::Widget::ScrollProtected<Gtk::ComboBoxText> dictionary_combo;
-    Gtk::HBox       dictionary_hbox;
+    Gtk::Box        dictionary_hbox;
     Gtk::Separator  action_sep;
     Gtk::Button     stop_button;
     Gtk::Button     start_button;

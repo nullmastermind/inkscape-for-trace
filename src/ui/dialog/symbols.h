@@ -131,7 +131,7 @@ private:
     Glib::ustring search_str;
     Gtk::ComboBoxText* symbol_set;
     Gtk::ProgressBar* progress_bar;
-    Gtk::HBox* progress;
+    Gtk::Box* progress;
     Gtk::SearchEntry* search;
     Gtk::IconView* icon_view;
     Gtk::Button* add_symbol;
@@ -140,7 +140,7 @@ private:
     Gtk::Button* zoom_out;
     Gtk::Button* more;
     Gtk::Button* fewer;
-    Gtk::HBox* tools;
+    Gtk::Box* tools;
     Gtk::Overlay* overlay;
     Gtk::Image* overlay_icon;
     Gtk::Image* overlay_opacity;

@@ -101,6 +101,7 @@ LivePathEffectEditor::LivePathEffectEditor()
     , current_lperef(nullptr)
     , effectcontrol_vbox(Gtk::ORIENTATION_VERTICAL)
     , effectlist_vbox(Gtk::ORIENTATION_VERTICAL)
+    , effectapplication_hbox(Gtk::ORIENTATION_HORIZONTAL, 4)
 {
     set_spacing(4);
 
@@ -110,7 +111,6 @@ LivePathEffectEditor::LivePathEffectEditor()
     scrolled_window.set_shadow_type(Gtk::SHADOW_IN);
     scrolled_window.set_size_request(210, 70);
 
-    effectapplication_hbox.set_spacing(4);
     effectcontrol_vbox.set_spacing(4);
 
     effectlist_vbox.pack_start(scrolled_window, Gtk::PACK_EXPAND_WIDGET);

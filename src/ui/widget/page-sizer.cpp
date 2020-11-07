@@ -59,7 +59,8 @@ PageSizer::PageSizer(Registry & _wr)
       _viewboxW(_("Width:"),  _("Width"),  "viewbox-width", _wr),
       _viewboxH(_("Height:"), _("Height"), "viewbox-height", _wr),
       _lockViewboxUpdate(false),
-      _widgetRegistry(&_wr)
+      _widgetRegistry(&_wr),
+      _orientationBox(Gtk::ORIENTATION_HORIZONTAL)
 {
     // set precision of scalar entry boxes
     _wr.setUpdating (true);

@@ -43,11 +43,11 @@ OriginalPathParam::~OriginalPathParam()
 Gtk::Widget *
 OriginalPathParam::param_newWidget()
 {
-    Gtk::HBox *_widget = Gtk::manage(new Gtk::HBox());
+    Gtk::Box *_widget = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
 
     { // Label
         Gtk::Label *pLabel = Gtk::manage(new Gtk::Label(param_label));
-        static_cast<Gtk::HBox*>(_widget)->pack_start(*pLabel, true, true);
+        _widget->pack_start(*pLabel, true, true);
         pLabel->set_tooltip_text(param_tooltip);
     }
 
@@ -60,7 +60,7 @@ OriginalPathParam::param_newWidget()
         pButton->add(*pIcon);
         pButton->show();
         pButton->signal_clicked().connect(sigc::mem_fun(*this, &OriginalPathParam::on_link_button_click));
-        static_cast<Gtk::HBox*>(_widget)->pack_start(*pButton, true, true);
+        _widget->pack_start(*pButton, true, true);
         pButton->set_tooltip_text(_("Link to path in clipboard"));
     }
 
@@ -73,11 +73,11 @@ OriginalPathParam::param_newWidget()
         pButton->add(*pIcon);
         pButton->show();
         pButton->signal_clicked().connect(sigc::mem_fun(*this, &OriginalPathParam::on_select_original_button_click));
-        static_cast<Gtk::HBox*>(_widget)->pack_start(*pButton, true, true);
+        _widget->pack_start(*pButton, true, true);
         pButton->set_tooltip_text(_("Select original"));
     }
 
-    static_cast<Gtk::HBox*>(_widget)->show_all_children();
+    _widget->show_all_children();
 
     return dynamic_cast<Gtk::Widget *> (_widget);
 }

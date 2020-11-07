@@ -98,7 +98,7 @@ private:
     Gtk::Widget * effectwidget;
     Gtk::Label status_label;
     UI::Widget::Frame effectcontrol_frame;
-    Gtk::HBox effectapplication_hbox;
+    Gtk::Box effectapplication_hbox;
     Gtk::Box effectcontrol_vbox;
     Gtk::EventBox effectcontrol_eventbox;
     Gtk::Box effectlist_vbox;

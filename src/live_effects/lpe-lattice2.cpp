@@ -226,7 +226,7 @@ LPELattice2::newWidget()
     vbox->set_border_width(5);
     vbox->set_homogeneous(false);
     vbox->set_spacing(6);
-    Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false,0));
+    Gtk::Box * hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL,0));
     Gtk::Box *vbox_expander = Gtk::manage(dynamic_cast<Gtk::Box*>(Effect::newWidget()));
     vbox_expander->set_border_width(0);
     vbox_expander->set_spacing(2);

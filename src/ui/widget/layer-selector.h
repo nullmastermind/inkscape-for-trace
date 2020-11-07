@@ -37,7 +37,7 @@ namespace Widget {
 
 class DocumentTreeModel;
 
-class LayerSelector : public Gtk::HBox {
+class LayerSelector : public Gtk::Box {
 public:
     LayerSelector(SPDesktop *desktop = nullptr);
     ~LayerSelector() override;

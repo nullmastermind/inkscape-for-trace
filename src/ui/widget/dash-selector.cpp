@@ -49,12 +49,11 @@ static double *builtin_dashes[] = {dash_0, dash_1_1, dash_2_1, dash_4_1, dash_1_
 static double **dashes = nullptr;
 
 DashSelector::DashSelector()
-    : preview_width(80),
+    : Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 4),
+      preview_width(80),
       preview_height(16),
       preview_lineheight(2)
 {
-    set_spacing(4);
-
     // TODO: find something more sensible here!!
     init_dashes();
 

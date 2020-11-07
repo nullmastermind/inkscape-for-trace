@@ -141,6 +141,8 @@ DocumentProperties::DocumentProperties()
     , _grids_button_remove(C_("Grid", "_Remove"), _("Remove selected grid."))
     , _grids_label_def("", Gtk::ALIGN_START)
     , _grids_vbox(Gtk::ORIENTATION_VERTICAL)
+    , _grids_hbox_crea(Gtk::ORIENTATION_HORIZONTAL)
+    , _grids_space(Gtk::ORIENTATION_HORIZONTAL)
 {
     set_spacing (4);
     pack_start(_notebook, true, true);
@@ -675,7 +677,7 @@ void DocumentProperties::build_cms()
 
     row++;
 
-    Gtk::HBox* spacer = Gtk::manage(new Gtk::HBox());
+    Gtk::Box* spacer = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
     spacer->set_size_request(SPACE_SIZE_X, SPACE_SIZE_Y);
 
     spacer->set_hexpand();
@@ -779,7 +781,7 @@ void DocumentProperties::build_scripting()
 
     row++;
 
-    Gtk::HBox* spacer_external = Gtk::manage(new Gtk::HBox());
+    Gtk::Box* spacer_external = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
     spacer_external->set_size_request(SPACE_SIZE_X, SPACE_SIZE_Y);
 
     spacer_external->set_hexpand();
@@ -847,7 +849,7 @@ void DocumentProperties::build_scripting()
 
     row++;
 
-    Gtk::HBox* spacer_embedded = Gtk::manage(new Gtk::HBox());
+    Gtk::Box* spacer_embedded = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
     spacer_embedded->set_size_request(SPACE_SIZE_X, SPACE_SIZE_Y);
     spacer_embedded->set_hexpand();
     spacer_embedded->set_valign(Gtk::ALIGN_CENTER);
@@ -1431,10 +1433,10 @@ void DocumentProperties::update_widgets()
 }
 
 // TODO: copied from fill-and-stroke.cpp factor out into new ui/widget file?
-Gtk::HBox&
+Gtk::Box&
 DocumentProperties::_createPageTabLabel(const Glib::ustring& label, const char *label_image)
 {
-    Gtk::HBox *_tab_label_box = Gtk::manage(new Gtk::HBox(false, 0));
+    Gtk::Box *_tab_label_box = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 0));
     _tab_label_box->set_spacing(4);
 
     auto img = Gtk::manage(sp_get_icon_image(label_image, Gtk::ICON_SIZE_MENU));

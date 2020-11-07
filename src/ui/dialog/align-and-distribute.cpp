@@ -939,8 +939,16 @@ AlignAndDistribute::AlignAndDistribute()
     , _nodesTable()
     , _anchorLabel(_("Relative to: "))
     , _anchorLabelNode(_("Relative to: "))
+    , _anchorBox(Gtk::ORIENTATION_HORIZONTAL)
+    , _selgrpBox(Gtk::ORIENTATION_HORIZONTAL)
     , _alignBox(Gtk::ORIENTATION_VERTICAL)
     , _alignBoxNode(Gtk::ORIENTATION_VERTICAL)
+    , _alignTableBox(Gtk::ORIENTATION_HORIZONTAL)
+    , _distributeTableBox(Gtk::ORIENTATION_HORIZONTAL)
+    , _rearrangeTableBox(Gtk::ORIENTATION_HORIZONTAL)
+    , _removeOverlapTableBox(Gtk::ORIENTATION_HORIZONTAL)
+    , _nodesTableBox(Gtk::ORIENTATION_HORIZONTAL)
+    , _anchorBoxNode(Gtk::ORIENTATION_HORIZONTAL)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 

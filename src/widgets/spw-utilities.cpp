@@ -52,10 +52,10 @@ Gtk::Label * spw_label(Gtk::Grid *table, const gchar *label_text, int col, int r
  * Creates a horizontal layout manager with 4-pixel spacing between children
  * and space for 'width' columns.
  */
-Gtk::HBox * spw_hbox(Gtk::Grid * table, int width, int col, int row)
+Gtk::Box * spw_hbox(Gtk::Grid * table, int width, int col, int row)
 {
   /* Create a new hbox with a 4-pixel spacing between children */
-  Gtk::HBox *hb = new Gtk::HBox(false, 4);
+  Gtk::Box *hb = new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 4);
   g_assert(hb != nullptr);
   hb->show();
   hb->set_hexpand();

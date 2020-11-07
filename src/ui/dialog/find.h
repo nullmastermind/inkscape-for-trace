@@ -222,7 +222,7 @@ private:
     Gtk::RadioButton    check_scope_selection;
     Gtk::RadioButton    check_searchin_text;
     Gtk::RadioButton    check_searchin_property;
-    Gtk::HBox hbox_searchin;
+    Gtk::Box hbox_searchin;
     Gtk::Box vbox_scope;
     Gtk::Box vbox_searchin;
     UI::Widget::Frame frame_searchin;
@@ -237,7 +237,7 @@ private:
     Gtk::CheckButton    check_include_locked;
     Gtk::Box vbox_options1;
     Gtk::Box vbox_options2;
-    Gtk::HBox hbox_options;
+    Gtk::Box hbox_options;
     Gtk::Box vbox_expander;
     Gtk::Expander  expander_options;
     UI::Widget::Frame frame_options;
@@ -252,7 +252,7 @@ private:
     Gtk::CheckButton    check_font;
     Gtk::CheckButton    check_desc;
     Gtk::CheckButton    check_title;
-    Gtk::HBox hbox_properties;
+    Gtk::Box hbox_properties;
     Gtk::Box vbox_properties1;
     Gtk::Box vbox_properties2;
     UI::Widget::Frame frame_properties;
@@ -278,7 +278,7 @@ private:
     Gtk::CheckButton    check_offsets;
     Gtk::Box vbox_types1;
     Gtk::Box vbox_types2;
-    Gtk::HBox hbox_types;
+    Gtk::Box hbox_types;
     UI::Widget::Frame frame_types;
 
     Glib::RefPtr<Gtk::SizeGroup> _left_size_group;
@@ -289,7 +289,7 @@ private:
      */
     std::vector<Gtk::CheckButton *> checkTypes;
 
-    //Gtk::HBox hbox_text;
+    //Gtk::Box hbox_text;
 
     /**
      * Action Buttons and status
@@ -298,7 +298,7 @@ private:
     Gtk::Button button_find;
     Gtk::Button button_replace;
     Gtk::ButtonBox box_buttons;
-    Gtk::HBox hboxbutton_row;
+    Gtk::Box hboxbutton_row;
 
     /**
      *  Finding or replacing

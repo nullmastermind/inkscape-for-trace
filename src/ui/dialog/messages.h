@@ -67,7 +67,7 @@ protected:
     //Gtk::Menu           fileMenu;
     Gtk::ScrolledWindow textScroll;
     Gtk::TextView       messageText;
-    Gtk::HBox           buttonBox;
+    Gtk::Box            buttonBox;
     Gtk::Button         buttonClear;
     Gtk::CheckButton    checkCapture;
 

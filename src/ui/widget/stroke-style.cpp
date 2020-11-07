@@ -134,7 +134,7 @@ StrokeStyle::StrokeStyle() :
     table->show();
     add(*table);
 
-    Gtk::HBox *hb;
+    Gtk::Box *hb;
     gint i = 0;
 
     //spw_label(t, C_("Stroke width", "_Width:"), 0, i);
@@ -413,7 +413,7 @@ void StrokeStyle::_handleDocumentReplaced(SPDesktop *, SPDocument *document)
 StrokeStyle::StrokeStyleButton *
 StrokeStyle::makeRadioButton(Gtk::RadioButtonGroup &grp,
                              char const            *icon,
-                             Gtk::HBox             *hb,
+                             Gtk::Box              *hb,
                              StrokeStyleButtonType  button_type,
                              gchar const           *stroke_style)
 {

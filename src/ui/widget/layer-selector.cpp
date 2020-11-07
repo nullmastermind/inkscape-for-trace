@@ -39,10 +39,12 @@ namespace Widget {
 
 namespace {
 
-class AlternateIcons : public Gtk::HBox {
+class AlternateIcons : public Gtk::Box {
 public:
     AlternateIcons(Gtk::BuiltinIconSize size, Glib::ustring const &a, Glib::ustring const &b)
-    : _a(nullptr), _b(nullptr)
+    : Gtk::Box(Gtk::ORIENTATION_HORIZONTAL)
+    , _a(nullptr)
+    , _b(nullptr)
     {
         set_name("AlternateIcons");
         if (!a.empty()) {
@@ -92,7 +94,9 @@ private:
  *  selector is changed.
  */
 LayerSelector::LayerSelector(SPDesktop *desktop)
-: _desktop(nullptr), _layer(nullptr)
+: Gtk::Box(Gtk::ORIENTATION_HORIZONTAL)
+, _desktop(nullptr)
+, _layer(nullptr)
 {
     set_name("LayerSelector");
     AlternateIcons *label;

@@ -85,7 +85,7 @@ Gtk::Widget *ParamColor::get_widget(sigc::signal<void> *changeSignal)
         _changeSignal = new sigc::signal<void>(*changeSignal);
     }
 
-    Gtk::HBox *hbox = Gtk::manage(new Gtk::HBox(false, GUI_PARAM_WIDGETS_SPACING));
+    Gtk::Box *hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, GUI_PARAM_WIDGETS_SPACING));
     if (_mode == COLOR_BUTTON) {
         Gtk::Label *label = Gtk::manage(new Gtk::Label(_text, Gtk::ALIGN_START));
         label->show();

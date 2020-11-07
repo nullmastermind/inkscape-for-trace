@@ -148,9 +148,11 @@ private:
     bool freeze; // used to block recursive updates of slider and spinbutton
 };
 
-class PrefSlider : public Gtk::HBox
+class PrefSlider : public Gtk::Box
 {
 public:
+    PrefSlider() : Gtk::Box(Gtk::ORIENTATION_HORIZONTAL) {}
+
     void init(Glib::ustring const &prefs_path,
     		  double lower, double upper, double step_increment, double page_increment, double default_value, int digits);
 
@@ -223,9 +225,11 @@ protected:
     void on_changed();
 };
 
-class PrefEntryButtonHBox : public Gtk::HBox
+class PrefEntryButtonHBox : public Gtk::Box
 {
 public:
+    PrefEntryButtonHBox() : Gtk::Box(Gtk::ORIENTATION_HORIZONTAL) {}
+
     void init(Glib::ustring const &prefs_path,
             bool mask, Glib::ustring const &default_string);
 
@@ -239,9 +243,11 @@ protected:
     bool on_mnemonic_activate( bool group_cycling ) override;
 };
 
-class PrefEntryFileButtonHBox : public Gtk::HBox
+class PrefEntryFileButtonHBox : public Gtk::Box
 {
 public:
+    PrefEntryFileButtonHBox() : Gtk::Box(Gtk::ORIENTATION_HORIZONTAL) {}
+
     void init(Glib::ustring const &prefs_path,
             bool mask);
 protected:
@@ -253,8 +259,10 @@ protected:
     bool on_mnemonic_activate( bool group_cycling ) override;
 };
 
-class PrefOpenFolder : public Gtk::HBox {
+class PrefOpenFolder : public Gtk::Box {
   public:
+    PrefOpenFolder() : Gtk::Box(Gtk::ORIENTATION_HORIZONTAL) {}
+
     void init(Glib::ustring const &entry_string, Glib::ustring const &tooltip);
 
   protected:

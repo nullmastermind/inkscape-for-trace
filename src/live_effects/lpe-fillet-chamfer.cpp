@@ -198,7 +198,7 @@ Gtk::Widget *LPEFilletChamfer::newWidget()
                     sigc::mem_fun(*this, &LPEFilletChamfer::updateAmount));
                 widg = widg_registered;
                 if (widg) {
-                    Gtk::HBox *scalar_parameter = dynamic_cast<Gtk::HBox *>(widg);
+                    Gtk::Box *scalar_parameter = dynamic_cast<Gtk::Box *>(widg);
                     std::vector<Gtk::Widget *> childList = scalar_parameter->get_children();
                     Gtk::Entry *entry_widget = dynamic_cast<Gtk::Entry *>(childList[1]);
                     entry_widget->set_width_chars(6);
@@ -210,7 +210,7 @@ Gtk::Widget *LPEFilletChamfer::newWidget()
                     sigc::mem_fun(*this, &LPEFilletChamfer::updateChamferSteps));
                 widg = widg_registered;
                 if (widg) {
-                    Gtk::HBox *scalar_parameter = dynamic_cast<Gtk::HBox *>(widg);
+                    Gtk::Box *scalar_parameter = dynamic_cast<Gtk::Box *>(widg);
                     std::vector<Gtk::Widget *> childList = scalar_parameter->get_children();
                     Gtk::Entry *entry_widget = dynamic_cast<Gtk::Entry *>(childList[1]);
                     entry_widget->set_width_chars(3);
@@ -232,7 +232,7 @@ Gtk::Widget *LPEFilletChamfer::newWidget()
         ++it;
     }
 
-    Gtk::HBox *fillet_container = Gtk::manage(new Gtk::HBox(true, 0));
+    Gtk::Box *fillet_container = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 0));
     Gtk::Button *fillet =  Gtk::manage(new Gtk::Button(Glib::ustring(_("Fillet"))));
     fillet->signal_clicked()
     .connect(sigc::bind<SatelliteType>(sigc::mem_fun(*this, &LPEFilletChamfer::updateSatelliteType),FILLET));
@@ -243,7 +243,7 @@ Gtk::Widget *LPEFilletChamfer::newWidget()
     .connect(sigc::bind<SatelliteType>(sigc::mem_fun(*this, &LPEFilletChamfer::updateSatelliteType),INVERSE_FILLET));
     fillet_container->pack_start(*inverse_fillet, true, true, 2);
 
-    Gtk::HBox *chamfer_container = Gtk::manage(new Gtk::HBox(true, 0));
+    Gtk::Box *chamfer_container = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 0));
     Gtk::Button *chamfer = Gtk::manage(new Gtk::Button(Glib::ustring(_("Chamfer"))));
     chamfer->signal_clicked()
     .connect(sigc::bind<SatelliteType>(sigc::mem_fun(*this, &LPEFilletChamfer::updateSatelliteType),CHAMFER));

@@ -23,7 +23,8 @@ Labelled::Labelled(Glib::ustring const &label, Glib::ustring const &tooltip,
                    Glib::ustring const &suffix,
                    Glib::ustring const &icon,
                    bool mnemonic)
-    : _widget(widget),
+    : Gtk::Box(Gtk::ORIENTATION_HORIZONTAL),
+      _widget(widget),
       _label(new Gtk::Label(label, Gtk::ALIGN_START, Gtk::ALIGN_CENTER, mnemonic)),
       _suffix(nullptr)
 {
@@ -85,7 +86,7 @@ Labelled::set_hexpand(bool expand)
     child_property_pack_type(*get_children().back()) = expand ? Gtk::PACK_END
                                                               : Gtk::PACK_START;
     
-    Gtk::HBox::set_hexpand(expand);
+    Gtk::Box::set_hexpand(expand);
 }
 
 } // namespace Widget

@@ -101,7 +101,7 @@ ColorPickerParam::param_getDefaultSVGValue() const
 Gtk::Widget *
 ColorPickerParam::param_newWidget()
 {
-    Gtk::HBox *hbox = Gtk::manage(new Gtk::HBox());
+    Gtk::Box *hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
 
     hbox->set_border_width(5);
     hbox->set_homogeneous(false);

@@ -222,7 +222,7 @@ SymbolsDialog::SymbolsDialog(gchar const *prefsPath)
   ++row;
 
   /******************** Progress *******************************/
-  progress = new Gtk::HBox();
+  progress = new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL);
   progress_bar = Gtk::manage(new Gtk::ProgressBar());
   table->attach(*Gtk::manage(progress),0,row, 2, 1);
   progress->pack_start(* progress_bar, Gtk::PACK_EXPAND_WIDGET);
@@ -234,7 +234,7 @@ SymbolsDialog::SymbolsDialog(gchar const *prefsPath)
   ++row;
 
   /******************** Tools *******************************/
-  tools = new Gtk::HBox();
+  tools = new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL);
 
   //tools->set_layout( Gtk::BUTTONBOX_END );
   scroller->set_hexpand();

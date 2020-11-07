@@ -166,7 +166,7 @@ IconPreviewPanel::IconPreviewPanel()
 
 
     Gtk::Box *verts = new Gtk::Box(Gtk::ORIENTATION_VERTICAL);
-    Gtk::HBox *horiz = nullptr;
+    Gtk::Box *horiz = nullptr;
     int previous = 0;
     int avail = 0;
     for ( int i = numEntries - 1; i >= 0; --i ) {
@@ -209,7 +209,7 @@ IconPreviewPanel::IconPreviewPanel()
             }
             if (sizes[i] <= avail) {
                 if (!horiz) {
-                    horiz = Gtk::manage(new Gtk::HBox());
+                    horiz = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
                     avail = previous;
                     verts->pack_end(*horiz, Gtk::PACK_SHRINK);
                 }

@@ -116,7 +116,7 @@ private:
 /**
  * Selected style indicator (fill, stroke, opacity).
  */
-class SelectedStyle : public Gtk::HBox
+class SelectedStyle : public Gtk::Box
 {
 public:
     SelectedStyle(bool layout = true);
@@ -170,20 +170,20 @@ protected:
     Glib::ustring __lgradient[2];
 
     GradientImage *_gradient_preview_l[2];
-    Gtk::HBox _gradient_box_l[2];
+    Gtk::Box _gradient_box_l[2];
 
     Gtk::Label _rgradient[2];
     Glib::ustring __rgradient[2];
 
     GradientImage *_gradient_preview_r[2];
-    Gtk::HBox _gradient_box_r[2];
+    Gtk::Box _gradient_box_r[2];
 
 #ifdef WITH_MESH
     Gtk::Label _mgradient[2];
     Glib::ustring __mgradient[2];
 
     GradientImage *_gradient_preview_m[2];
-    Gtk::HBox _gradient_box_m[2];
+    Gtk::Box _gradient_box_m[2];
 #endif
 
     Gtk::Label _many[2];
@@ -200,8 +200,8 @@ protected:
     Gtk::Label _multiple[2];
     Glib::ustring __multiple[2];
 
-    Gtk::HBox _fill;
-    Gtk::HBox _stroke;
+    Gtk::Box _fill;
+    Gtk::Box _stroke;
     RotateableStrokeWidth _stroke_width_place;
     Gtk::Label _stroke_width;
     Gtk::Label _fill_empty_space;

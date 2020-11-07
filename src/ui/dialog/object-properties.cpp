@@ -231,7 +231,7 @@ void ObjectProperties::_init()
 
 
     /* Check boxes */
-    Gtk::HBox *hb_checkboxes = Gtk::manage(new Gtk::HBox());
+    Gtk::Box *hb_checkboxes = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
     pack_start(*hb_checkboxes, Gtk::PACK_SHRINK, 0);
 
     auto grid_cb = Gtk::manage(new Gtk::Grid());

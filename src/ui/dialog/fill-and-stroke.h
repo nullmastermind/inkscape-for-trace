@@ -57,8 +57,8 @@ protected:
     UI::Widget::StyleSubject::Selection _subject;
     UI::Widget::ObjectCompositeSettings _composite_settings;
 
-    Gtk::HBox &_createPageTabLabel(const Glib::ustring &label,
-                                   const char *label_image);
+    Gtk::Box &_createPageTabLabel(const Glib::ustring &label,
+                                  const char *label_image);
 
     void _layoutPageFill();
     void _layoutPageStrokePaint();

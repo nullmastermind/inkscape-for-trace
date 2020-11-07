@@ -794,7 +794,7 @@ void PrefEntryFileButtonHBox::init(Glib::ustring const &prefs_path,
     relatedEntry->set_text(prefs->getString(_prefs_path));
     
     relatedButton = new Gtk::Button();
-    Gtk::HBox* pixlabel = new Gtk::HBox(false, 3);
+    Gtk::Box* pixlabel = new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 3);
     Gtk::Image *im = sp_get_icon_image("applications-graphics", Gtk::ICON_SIZE_BUTTON);
     pixlabel->pack_start(*im);
     Gtk::Label *l = new Gtk::Label();
@@ -922,7 +922,7 @@ void PrefOpenFolder::init(Glib::ustring const &entry_string, Glib::ustring const
 {
     relatedEntry = new Gtk::Entry();
     relatedButton = new Gtk::Button();
-    Gtk::HBox *pixlabel = new Gtk::HBox(false, 3);
+    Gtk::Box *pixlabel = new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 3);
     Gtk::Image *im = sp_get_icon_image("document-open", Gtk::ICON_SIZE_BUTTON);
     pixlabel->pack_start(*im);
     Gtk::Label *l = new Gtk::Label();

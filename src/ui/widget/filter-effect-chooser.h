@@ -62,7 +62,7 @@ private:
     int _flags;
     bool _notify;
 
-    Gtk::HBox _hb_blend;
+    Gtk::Box _hb_blend;
     Gtk::Label _lb_blend;
     Gtk::Label _lb_isolation;
     ComboBoxEnum<SPBlendMode> _blend;

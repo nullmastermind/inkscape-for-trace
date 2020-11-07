@@ -138,7 +138,7 @@ private:
 
     StrokeStyleButton * makeRadioButton(Gtk::RadioButtonGroup &grp,
                                         char const            *icon,
-                                        Gtk::HBox             *hb,
+                                        Gtk::Box              *hb,
                                         StrokeStyleButtonType  button_type,
                                         gchar const           *stroke_style);
 

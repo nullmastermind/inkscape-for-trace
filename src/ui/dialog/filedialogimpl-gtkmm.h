@@ -265,7 +265,7 @@ private:
     std::vector<FileType> fileTypes;
 
     //# Child widgets
-    Gtk::HBox childBox;
+    Gtk::Box childBox;
     Gtk::Box checksBox;
 
     Gtk::CheckButton fileTypeCheckbox;

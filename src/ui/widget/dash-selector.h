@@ -26,7 +26,7 @@ namespace Widget {
 /**
  * Class that wraps a combobox and spinbutton for selecting dash patterns.
  */
-class DashSelector : public Gtk::HBox {
+class DashSelector : public Gtk::Box {
 public:
     DashSelector();
     ~DashSelector() override;

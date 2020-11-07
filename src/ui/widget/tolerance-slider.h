@@ -17,7 +17,6 @@ namespace Gtk {
 class RadioButton;
 class Scale;
 class Box;
-class HBox;
 }
 
 namespace Inkscape {
@@ -58,7 +57,7 @@ protected:
     void on_scale_changed();
     void on_toggled();
     void update (double val);
-    Gtk::HBox         *_hbox;
+    Gtk::Box          *_hbox;
     Gtk::Scale        *_hscale;
     Gtk::RadioButtonGroup _radio_button_group;
     Gtk::RadioButton  *_button1;

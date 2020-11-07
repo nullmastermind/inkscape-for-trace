@@ -106,15 +106,20 @@ Find::Find()
       _action_replace(false),
       blocked(false),
 
+      hbox_searchin(Gtk::ORIENTATION_HORIZONTAL),
       vbox_scope(Gtk::ORIENTATION_VERTICAL),
       vbox_searchin(Gtk::ORIENTATION_VERTICAL),
       vbox_options1(Gtk::ORIENTATION_VERTICAL),
       vbox_options2(Gtk::ORIENTATION_VERTICAL),
+      hbox_options(Gtk::ORIENTATION_HORIZONTAL),
       vbox_expander(Gtk::ORIENTATION_VERTICAL),
+      hbox_properties(Gtk::ORIENTATION_HORIZONTAL),
       vbox_properties1(Gtk::ORIENTATION_VERTICAL),
       vbox_properties2(Gtk::ORIENTATION_VERTICAL),
       vbox_types1(Gtk::ORIENTATION_VERTICAL),
-      vbox_types2(Gtk::ORIENTATION_VERTICAL)
+      vbox_types2(Gtk::ORIENTATION_VERTICAL),
+      hbox_types(Gtk::ORIENTATION_HORIZONTAL),
+      hboxbutton_row(Gtk::ORIENTATION_HORIZONTAL)
 
 {
     _left_size_group = Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL);

@@ -472,6 +472,7 @@ FileSaveDialogImplGtk::FileSaveDialogImplGtk(Gtk::Window &parentWindow, const Gl
     , save_method(save_method)
     , fromCB(false)
     , checksBox(Gtk::ORIENTATION_VERTICAL)
+    , childBox(Gtk::ORIENTATION_HORIZONTAL)
 {
     FileSaveDialog::myDocTitle = docTitle;
 

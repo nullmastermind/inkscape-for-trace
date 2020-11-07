@@ -34,6 +34,7 @@ TemplateWidget::TemplateWidget()
     , _short_description_label(" ")
     , _template_name_label(_("no template selected"))
     , _effect_prefs(nullptr)
+    , _preview_box(Gtk::ORIENTATION_HORIZONTAL)
 {
     pack_start(_template_name_label, Gtk::PACK_SHRINK, 10);
     pack_start(_preview_box, Gtk::PACK_SHRINK, 0);

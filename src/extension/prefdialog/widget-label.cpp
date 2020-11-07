@@ -110,7 +110,7 @@ Gtk::Widget *WidgetLabel::get_widget(sigc::signal<void> * /*changeSignal*/)
 
     label->show();
 
-    Gtk::HBox *hbox = Gtk::manage(new Gtk::HBox());
+    Gtk::Box *hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
     hbox->pack_start(*label, true, true);
     hbox->show();
 

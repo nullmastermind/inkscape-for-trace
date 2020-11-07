@@ -44,6 +44,7 @@ Messages::Messages()
     : DialogBase("/dialogs/messages", SP_VERB_DIALOG_DEBUG)
     , buttonClear(_("_Clear"), _("Clear log messages"))
     , checkCapture(_("Capture log messages"), _("Capture log messages"))
+    , buttonBox(Gtk::ORIENTATION_HORIZONTAL)
 {
     /*
      * Menu replaced with buttons

@@ -96,10 +96,11 @@ SpellCheck::SpellCheck()
     , ignore_button(_("_Ignore"), true)
     , add_button(_("A_dd"), true)
     , dictionary_label(_("Language"))
-    , dictionary_hbox(false, 0)
+    , dictionary_hbox(Gtk::ORIENTATION_HORIZONTAL, 0)
     , stop_button(_("_Stop"), true)
     , start_button(_("_Start"), true)
     , desktop(nullptr)
+    , suggestion_hbox(Gtk::ORIENTATION_HORIZONTAL)
     , changebutton_vbox(Gtk::ORIENTATION_VERTICAL)
 {
     _prefs = Inkscape::Preferences::get();

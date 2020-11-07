@@ -89,8 +89,8 @@ namespace UI {
 namespace Dialog {
 
 /*
-Gtk::HBox* SvgFontsDialog::AttrEntry(gchar* lbl, const SPAttr attr){
-    Gtk::HBox* hbox = Gtk::manage(new Gtk::HBox());
+Gtk::Box* SvgFontsDialog::AttrEntry(gchar* lbl, const SPAttr attr){
+    Gtk::Box* hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
     hbox->add(* Gtk::manage(new Gtk::Label(lbl)) );
     Gtk::Entry* entry = Gtk::manage(new Gtk::Entry());
     hbox->add(* entry );
@@ -101,7 +101,9 @@ Gtk::HBox* SvgFontsDialog::AttrEntry(gchar* lbl, const SPAttr attr){
 }
 */
 
-SvgFontsDialog::AttrEntry::AttrEntry(SvgFontsDialog* d, gchar* lbl, Glib::ustring tooltip, const SPAttr attr){
+SvgFontsDialog::AttrEntry::AttrEntry(SvgFontsDialog* d, gchar* lbl, Glib::ustring tooltip, const SPAttr attr)
+: Gtk::Box(Gtk::ORIENTATION_HORIZONTAL)
+{
     this->dialog = d;
     this->attr = attr;
     entry.set_tooltip_text(tooltip);
@@ -148,8 +150,9 @@ void SvgFontsDialog::AttrEntry::on_attr_changed(){
 
 }
 
-SvgFontsDialog::AttrSpin::AttrSpin(SvgFontsDialog* d, gchar* lbl, Glib::ustring tooltip, const SPAttr attr) {
-
+SvgFontsDialog::AttrSpin::AttrSpin(SvgFontsDialog* d, gchar* lbl, Glib::ustring tooltip, const SPAttr attr)
+: Gtk::Box(Gtk::ORIENTATION_HORIZONTAL)
+{
     this->dialog = d;
     this->attr = attr;
     spin.set_tooltip_text(tooltip);
@@ -220,8 +223,8 @@ void SvgFontsDialog::AttrSpin::on_attr_changed(){
 
 }
 
-Gtk::HBox* SvgFontsDialog::AttrCombo(gchar* lbl, const SPAttr /*attr*/){
-    Gtk::HBox* hbox = Gtk::manage(new Gtk::HBox());
+Gtk::Box* SvgFontsDialog::AttrCombo(gchar* lbl, const SPAttr /*attr*/){
+    Gtk::Box* hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
     hbox->add(* Gtk::manage(new Gtk::Label(lbl)) );
     hbox->add(* Gtk::manage(new Gtk::ComboBox()) );
     hbox->show_all();
@@ -229,8 +232,8 @@ Gtk::HBox* SvgFontsDialog::AttrCombo(gchar* lbl, const SPAttr /*attr*/){
 }
 
 /*
-Gtk::HBox* SvgFontsDialog::AttrSpin(gchar* lbl){
-    Gtk::HBox* hbox = Gtk::manage(new Gtk::HBox());
+Gtk::Box* SvgFontsDialog::AttrSpin(gchar* lbl){
+    Gtk::Box* hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
     hbox->add(* Gtk::manage(new Gtk::Label(lbl)) );
     hbox->add(* Gtk::manage(new Inkscape::UI::Widget::SpinBox()) );
     hbox->show_all();
@@ -786,7 +789,7 @@ Gtk::Box* SvgFontsDialog::glyphs_tab(){
     _GlyphsList.signal_button_release_event().connect_notify(sigc::mem_fun(*this, &SvgFontsDialog::glyphs_list_button_release));
     create_glyphs_popup_menu(_GlyphsList, sigc::mem_fun(*this, &SvgFontsDialog::remove_selected_glyph));
 
-    Gtk::HBox* missing_glyph_hbox = Gtk::manage(new Gtk::HBox(false, 4));
+    Gtk::Box* missing_glyph_hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 4));
     Gtk::Label* missing_glyph_label = Gtk::manage(new Gtk::Label(_("Missing Glyph:")));
     missing_glyph_hbox->set_hexpand(false);
     missing_glyph_hbox->pack_start(*missing_glyph_label, false,false);
@@ -811,7 +814,7 @@ Gtk::Box* SvgFontsDialog::glyphs_tab(){
     _GlyphsList.append_column_editable(_("Glyph name"),      _GlyphsListColumns.glyph_name);
     _GlyphsList.append_column_editable(_("Matching string"), _GlyphsListColumns.unicode);
     _GlyphsList.append_column_numeric_editable(_("Advance"), _GlyphsListColumns.advance, "%.2f");
-    Gtk::HBox* hb = Gtk::manage(new Gtk::HBox(false, 4));
+    Gtk::Box* hb = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 4));
     add_glyph_button.set_label(_("Add Glyph"));
     add_glyph_button.signal_clicked().connect(sigc::mem_fun(*this, &SvgFontsDialog::add_glyph));
 
@@ -882,7 +885,7 @@ Gtk::Box* SvgFontsDialog::kerning_tab(){
     kerning_vbox.set_border_width(4);
     kerning_vbox.set_spacing(4);
     // kerning_vbox.add(*Gtk::manage(new Gtk::Label(_("Kerning Setup"))));
-    Gtk::HBox* kerning_selector = Gtk::manage(new Gtk::HBox());
+    Gtk::Box* kerning_selector = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
     kerning_selector->pack_start(*Gtk::manage(new Gtk::Label(_("1st Glyph:"))), false, false);
     kerning_selector->pack_start(first_glyph, true, true, 4);
     kerning_selector->pack_start(*Gtk::manage(new Gtk::Label(_("2nd Glyph:"))), false, false);
@@ -907,7 +910,7 @@ Gtk::Box* SvgFontsDialog::kerning_tab(){
     kerning_vbox.pack_start((Gtk::Widget&) kerning_preview, false,false);
 
     // kerning_slider has a big handle. Extra padding added
-    Gtk::HBox* kerning_amount_hbox = Gtk::manage(new Gtk::HBox(false, 8));
+    Gtk::Box* kerning_amount_hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 8));
     kerning_vbox.pack_start(*kerning_amount_hbox, false,false);
     kerning_amount_hbox->pack_start(*Gtk::manage(new Gtk::Label(_("Kerning Value:"))), false,false);
     kerning_amount_hbox->pack_start(*kerning_slider, true,true);
@@ -1003,7 +1006,7 @@ SvgFontsDialog::SvgFontsDialog()
     kerning_slider = Gtk::manage(new Gtk::Scale(Gtk::ORIENTATION_HORIZONTAL));
     _add.signal_clicked().connect(sigc::mem_fun(*this, &SvgFontsDialog::add_font));
 
-    Gtk::HBox* hbox = Gtk::manage(new Gtk::HBox());
+    Gtk::Box* hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
     Gtk::Box* vbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
 
     vbox->pack_start(_FontsList);
@@ -1033,7 +1036,7 @@ SvgFontsDialog::SvgFontsDialog()
     _preview_entry.set_text(_("Sample Text"));
     _font_da.set_text(_("Sample Text"));
 
-    Gtk::HBox* preview_entry_hbox = Gtk::manage(new Gtk::HBox(false, 4));
+    Gtk::Box* preview_entry_hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 4));
     pack_start(*preview_entry_hbox, false, false); // Non-latin characters may need more height.
     preview_entry_hbox->pack_start(*Gtk::manage(new Gtk::Label(_("Preview Text:"))), false, false);
     preview_entry_hbox->pack_start(_preview_entry, true, true);

@@ -170,10 +170,10 @@ FillAndStroke::showPageStrokeStyle()
 
 }
 
-Gtk::HBox&
+Gtk::Box&
 FillAndStroke::_createPageTabLabel(const Glib::ustring& label, const char *label_image)
 {
-    Gtk::HBox *_tab_label_box = Gtk::manage(new Gtk::HBox(false, 4));
+    Gtk::Box *_tab_label_box = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 4));
 
     auto img = Gtk::manage(sp_get_icon_image(label_image, Gtk::ICON_SIZE_MENU));
     _tab_label_box->pack_start(*img);

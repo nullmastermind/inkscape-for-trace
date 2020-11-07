@@ -25,7 +25,7 @@ namespace Widget {
 /**
  * Groups an HScale and a SpinButton together using the same Adjustment.
  */
-class SpinSlider : public Gtk::HBox, public AttrWidget
+class SpinSlider : public Gtk::Box, public AttrWidget
 {
 public:
     SpinSlider(double value, double lower, double upper, double step_inc,
@@ -62,7 +62,7 @@ public:
  *
  * @see SpinSlider
  */
-class DualSpinSlider : public Gtk::HBox, public AttrWidget
+class DualSpinSlider : public Gtk::Box, public AttrWidget
 {
 public:
     DualSpinSlider(double value, double lower, double upper, double step_inc,
