@@ -16,6 +16,8 @@
 #include "inkscape-version.h"
 
 #include "io/resource.h"
+
+#include "ui/util.h"
 #include "ui/view/svg-view-widget.h"
 
 #include "util/units.h"
@@ -33,9 +35,20 @@ static Gtk::Notebook *tabs = nullptr;
 void close_about_screen() {
     window->hide();
 }
-void copy_version() {
+bool show_copy_button(Gtk::Button *button, Gtk::Label *label) {
+    reveal_widget(button, true);
+    reveal_widget(label, false);
+    return false;
+}
+void copy_version(Gtk::Button *button, Gtk::Label *label) {
     auto clipboard = Gtk::Clipboard::get();
     clipboard->set_text(Inkscape::version_string);
+    if (label) {
+        reveal_widget(button, false);
+        reveal_widget(label, true);
+        Glib::signal_timeout().connect_seconds(
+            sigc::bind(sigc::ptr_fun(&show_copy_button), button, label), 2);
+    }
 }
 
 void AboutDialog::show_about() {
@@ -61,10 +74,13 @@ void AboutDialog::show_about() {
 
         // When automatic handling fails
         Gtk::Button *version;
+        Gtk::Label *label;
         builder->get_widget("version", version);
+        builder->get_widget("version-copied", label);
         if(version) {
             version->set_label(Inkscape::version_string);
-            version->signal_clicked().connect( sigc::ptr_fun(&copy_version) );
+            version->signal_clicked().connect(
+                    sigc::bind(sigc::ptr_fun(&copy_version), version, label));
         }
 
         // Render the about screen image via inkscape SPDocument
@@ -110,13 +126,13 @@ void AboutDialog::show_about() {
             translators->get_buffer()->set_text(str.c_str());
         }
 
-        Gtk::TextView *license;
+        Gtk::Label *license;
         builder->get_widget("license-text", license);
         if(license) {
             std::ifstream fn(Resource::get_filename(Resource::DOCS, "LICENSE"));
             std::string str((std::istreambuf_iterator<char>(fn)),
                              std::istreambuf_iterator<char>());
-            license->get_buffer()->set_text(str.c_str());
+            license->set_markup(str.c_str());
         }
     }
     if(window) {

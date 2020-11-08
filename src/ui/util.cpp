@@ -26,6 +26,24 @@ Glib::ustring ink_ellipsize_text(Glib::ustring const &src, size_t maxlen)
     return src;
 }
 
+/**
+ * Show widget, if the widget has a Gtk::Reveal parent, reveal instead.
+ *
+ * @param widget - The child widget to show.
+ */
+void reveal_widget(Gtk::Widget *widget, bool show)
+{
+    auto revealer = dynamic_cast<Gtk::Revealer *>(widget->get_parent());
+    if (revealer) {
+        revealer->set_reveal_child(show);
+    }
+    if (show) {
+        widget->show();
+    } else if (!revealer) {
+        widget->hide();
+    }
+}
+
 /*
   Local Variables:
   mode:c++

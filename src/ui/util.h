@@ -14,8 +14,10 @@
 #define UI_UTIL_SEEN
 
 #include <glibmm/ustring.h>
+#include <gtkmm.h>
 
 Glib::ustring ink_ellipsize_text (Glib::ustring const &src, size_t maxlen);
+void reveal_widget(Gtk::Widget *widget, bool show);
 
 #endif
 
