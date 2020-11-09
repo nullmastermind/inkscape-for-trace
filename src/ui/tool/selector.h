@@ -39,9 +39,6 @@ public:
 private:
     SelectorPoint *_dragger;
     Geom::Point _start;
-    Inkscape::CanvasItemRect *_rubber;
-    gulong _connection;
-    bool _cancel;
     friend class SelectorPoint;
 };
 

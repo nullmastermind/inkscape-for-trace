@@ -59,10 +59,9 @@ Action::Action(Glib::ustring id,
        const Glib::ustring &tiptext,
        guint row, guint column,
        Gtk::Grid &parent,
-       AlignAndDistribute &dialog):
-    _dialog(dialog),
-    _id(std::move(id)),
-    _parent(parent)
+               AlignAndDistribute &dialog)
+    : _dialog(dialog)
+    , _id(std::move(id))
 {
     Gtk::Image*  pIcon = Gtk::manage(new Gtk::Image());
     pIcon = sp_get_icon_image(_id, Gtk::ICON_SIZE_LARGE_TOOLBAR);
@@ -403,7 +402,6 @@ private :
                                 _("Distribute"));
         }
     }
-    guint _index;
     AlignAndDistribute &_dialog;
     bool _onInterSpace;
     Geom::Dim2 _orientation;

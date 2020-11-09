@@ -448,7 +448,7 @@ static void init_extended()
     auto const devices = seat->get_slaves(Gdk::SEAT_CAPABILITY_ALL);
     
     if ( !devices.empty() ) {
-        for (auto const dev : devices) {
+        for (auto const &dev : devices) {
             auto const devName = dev->get_name();
             auto devSrc = dev->get_source();
             

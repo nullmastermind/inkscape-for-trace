@@ -109,8 +109,8 @@ private:
      *
      * No unit_selector is stored in the created spinbutton, relies on external unit management
      */
-    Glib::RefPtr<Gtk::Adjustment> createSpinbutton( gchar const *key, float val, float min, float max,
-                                                    float step, float page,
+    Glib::RefPtr<Gtk::Adjustment> createSpinbutton( gchar const *key,
+            double val, double min, double max, double step, double page,
                                                     Gtk::Grid *t, int x, int y,
                                                     const Glib::ustring& ll, const Glib::ustring& lr,
                                                     int digits, unsigned int sensitive,

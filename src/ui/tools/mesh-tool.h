@@ -55,7 +55,6 @@ private:
     void selection_changed(Inkscape::Selection* sel);
 
     bool cursor_addnode;
-    bool node_added;
     bool show_handles;
     bool edit_fill;
     bool edit_stroke;

@@ -206,7 +206,7 @@ void lpe_shape_revert_stroke_and_fill(SPShape *shape, double width)
         sp_repr_css_set_property(css, "fill", "none");
     }
 
-    Inkscape:CSSOStringStream os;
+    Inkscape::CSSOStringStream os;
     os << fabs(width);
     sp_repr_css_set_property(css, "stroke-width", os.str().c_str());
 

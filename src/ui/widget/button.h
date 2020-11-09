@@ -34,7 +34,6 @@ class Button : public Gtk::ToggleButton{
 private:
     ButtonType _type;
     GtkIconSize _lsize;
-    unsigned int _psize;
     SPAction *_action;
     SPAction *_doubleclick_action;
 

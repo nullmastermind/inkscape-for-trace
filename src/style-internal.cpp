@@ -2306,6 +2306,7 @@ SPIFontSize::relative_fraction() const {
         }
     }
     g_assert_not_reached();
+    return 1; // Make -Wreturn-type happy
 }
 
 void

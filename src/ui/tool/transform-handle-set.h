@@ -97,7 +97,6 @@ private:
     Mode _mode;
     bool _in_transform;
     bool _visible;
-    bool _rot_center_visible;
     friend class TransformHandle;
     friend class RotationCenter;
 };

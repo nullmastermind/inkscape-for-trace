@@ -81,8 +81,8 @@ char *inkscape_rel2abs(const char *path, const char *base, char *result, const s
     {
       if (strlen (path) >= size)
 	goto erange;
-	strcpy (result, path);
-	goto finish;
+      strcpy (result, path);
+      goto finish;
     }
   else if (*base != G_DIR_SEPARATOR || !size)
     {

@@ -45,7 +45,6 @@ private:
     GtkEntryCompletion *_entry_completion;
     GtkWidget          *_focusWidget; ///< The widget to return focus to
 
-    GtkWidget          *_indicator;
     gint                _active;     // Index of active menu item (-1 if not in list).
     gchar              *_text;       // Text of active menu item or entry box.
     gchar              *_info;       // Text for tooltip info about entry.
@@ -59,9 +58,6 @@ private:
 
     // Signals
     sigc::signal<void> _signal_changed;
-
-    void (*changed)   (ComboBoxEntryToolItem* action);
-    void (*activated) (ComboBoxEntryToolItem* action);
 
     static gint get_active_row_from_text(ComboBoxEntryToolItem *action,
                                          const gchar         *target_text,

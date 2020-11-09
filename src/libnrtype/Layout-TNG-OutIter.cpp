@@ -695,7 +695,7 @@ void Layout::simulateLayoutUsingKerning(iterator const &from, iterator const &to
                     dx -= style->word_spacing.computed * getTextLengthMultiplierDue();
                 if (_characters[char_index].char_attributes.is_cursor_position)
                     dx -= style->letter_spacing.computed * getTextLengthMultiplierDue();
-                    dx -= getTextLengthIncrementDue();
+                dx -= getTextLengthIncrementDue();
             }
 
             if (fabs(dx) > 0.0001) {

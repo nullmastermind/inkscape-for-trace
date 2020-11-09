@@ -178,14 +178,11 @@ private:
 
     boost::optional<Geom::Point> _center;
     bool _center_is_set; ///< we've already set _center, no need to reread it from items
-    int  _center_handle;
 
     SPKnot *knots[NUMHANDS];
     Inkscape::CanvasItemCtrl *_norm;
     Inkscape::CanvasItemCtrl *_grip;
     Inkscape::CanvasItemCurve *_l[4];
-    unsigned int _sel_changed_id;
-    unsigned int _sel_modified_id;
     std::vector<SPItem*> _stamp_cache;
 
     Geom::Point _origin; ///< position of origin for transforms

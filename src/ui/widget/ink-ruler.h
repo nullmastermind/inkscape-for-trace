@@ -55,7 +55,6 @@ private:
     double _upper;
     double _position;
     double _max_size;
-    double _font_scale;
 
     bool   _backing_store_valid;
 

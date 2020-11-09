@@ -55,7 +55,6 @@ private:
     int targetX, targetY;
     int orderX, orderY;
     double divisor, bias;
-    int dx, dy, kernelUnitLength;
     FilterConvolveMatrixEdgeMode edgeMode;
     bool preserveAlpha;
 };

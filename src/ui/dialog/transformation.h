@@ -227,7 +227,6 @@ private:
 
     Gtk::Button *applyButton;
     Gtk::Button *resetButton;
-    Gtk::Button *cancelButton;
 
     sigc::connection _selChangeConn;
     sigc::connection _selModifyConn;

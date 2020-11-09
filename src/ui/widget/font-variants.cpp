@@ -31,7 +31,6 @@ namespace Widget {
   public:
       Feature( const Glib::ustring& name, OTSubstitution& glyphs, int options, Glib::ustring family, Gtk::Grid& grid, int &row, FontVariants* parent)
           : _name (name)
-          , _options (options)
       {
           Gtk::Label* table_name = Gtk::manage (new Gtk::Label());
           table_name->set_markup ("\"" + name + "\" ");
@@ -145,7 +144,6 @@ namespace Widget {
 
   private:
       Glib::ustring _name;
-      int _options;
       std::vector <Gtk::RadioButton*> buttons;
   };
 

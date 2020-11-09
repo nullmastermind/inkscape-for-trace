@@ -47,7 +47,6 @@ private:
     SPDocument *document;
     char *feImageHref;
     Inkscape::Pixbuf *image;
-    float feImageX, feImageY, feImageWidth, feImageHeight;
     unsigned int aspect_align, aspect_clip;
     bool broken_ref;
 };

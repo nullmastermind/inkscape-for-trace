@@ -39,14 +39,11 @@ namespace IO
 GzipInputStream::GzipInputStream(InputStream &sourceStream)
                     : BasicInputStream(sourceStream),
                       loaded(false),
-                      totalIn(0),
-                      totalOut(0),
                       outputBuf(nullptr),
                       srcBuf(nullptr),
                       crc(0),
                       srcCrc(0),
                       srcSiz(0),
-                      srcConsumed(0),
                       srcLen(0),
                       outputBufPos(0),
                       outputBufLen(0)

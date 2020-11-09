@@ -246,7 +246,6 @@ ArcToolbar::value_changed(Glib::RefPtr<Gtk::Adjustment>&  adj,
     g_return_if_fail(unit != nullptr);
 
     SPDocument* document = _desktop->getDocument();
-    Geom::Scale scale = document->getDocumentScale();
 
     if (DocumentUndo::getUndoSensitive(document)) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();

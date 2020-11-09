@@ -61,8 +61,6 @@ private:
 
     /** \brief  Show the working dialog when the effect is executing. */
     bool _show_working;
-    /** \brief  Display errors if they occur. */
-    bool _show_errors;
 public:
 
     /** \brief  Create a new context for execution of an effect

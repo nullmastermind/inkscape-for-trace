@@ -299,7 +299,6 @@ static inline bool is_pixel_paintable(unsigned char *t) { return (*t & PIXEL_PAI
 static inline bool is_pixel_colored(unsigned char *t) { return (*t & PIXEL_COLORED) == PIXEL_COLORED; }
 
 static inline void mark_pixel_checked(unsigned char *t) { *t |= PIXEL_CHECKED; }
-static inline void mark_pixel_unchecked(unsigned char *t) { *t ^= PIXEL_CHECKED; }
 static inline void mark_pixel_queued(unsigned char *t) { *t |= PIXEL_QUEUED; }
 static inline void mark_pixel_paintable(unsigned char *t) { *t |= PIXEL_PAINTABLE; *t ^= PIXEL_NOT_PAINTABLE; }
 static inline void mark_pixel_not_paintable(unsigned char *t) { *t |= PIXEL_NOT_PAINTABLE; *t ^= PIXEL_PAINTABLE; }

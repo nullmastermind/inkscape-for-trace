@@ -152,7 +152,6 @@ private :
     virtual void on_button_click(){}
 
     Glib::ustring _id;
-    Gtk::Grid &_parent;
 };
 
 

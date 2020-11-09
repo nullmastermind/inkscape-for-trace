@@ -50,7 +50,7 @@ text_refs_t text_categorize_refs(SPDocument *doc, InIter begin, InIter end, text
     for (auto it = begin; it != end; ++it) {
         sp_repr_visit_descendants(
                 text_obj_or_node_to_node(*it),
-                [doc, &int_ext, &idVisitor](Inkscape::XML::Node *crnt) {
+                [doc, &idVisitor](Inkscape::XML::Node *crnt) {
             if (!(crnt->name() && strcmp("svg:text", crnt->name()) == 0)) {
                 return true;
             }

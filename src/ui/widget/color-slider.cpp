@@ -37,7 +37,6 @@ ColorSlider::ColorSlider(Glib::RefPtr<Gtk::Adjustment> adjustment)
     : _dragging(false)
     , _value(0.0)
     , _oldvalue(0.0)
-    , _mapsize(0)
     , _map(nullptr)
 {
     _c0[0] = 0x00;

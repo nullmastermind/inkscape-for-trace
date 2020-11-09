@@ -54,10 +54,6 @@ private:
     Gtk::Align _valign;
     double _marginstart;
     double _marginend;
-    double _marginleft;
-    double _marginright;
-
-    
 };
 
 } //namespace LivePathEffect

@@ -32,7 +32,6 @@ namespace Widget {
 
 class GradientVectorSelector : public Gtk::Box {
   private:
-    bool _idlabel  = true;
     bool _swatched = false;
 
     SPDocument *_doc = nullptr;

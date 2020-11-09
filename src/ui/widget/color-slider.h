@@ -70,7 +70,6 @@ private:
     guchar _b0, _b1;
     guchar _bmask;
 
-    gint _mapsize;
     guchar *_map;
 
     Glib::RefPtr<Gdk::Window> _gdk_window;

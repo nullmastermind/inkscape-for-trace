@@ -98,10 +98,6 @@ class GradientSelector : public Gtk::Box {
     Gtk::Button *_edit;
     Gtk::Button *_add;
     Gtk::Button *_del;
-    GtkWidget *merge;
-
-    /* Position widget */
-    GtkWidget *position;
 
     bool _blocked;
 

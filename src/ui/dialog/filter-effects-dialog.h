@@ -184,7 +184,6 @@ private:
     private:
         // void* should be SPFilterPrimitive*, some weirdness with properties prevents this
         Glib::Property<void*> _primitive;
-        int _text_width;
     };
 
     class PrimitiveList : public Gtk::TreeView

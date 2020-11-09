@@ -1736,9 +1736,8 @@ void FilterEffectsDialog::FilterModifier::select_filter_elements()
 }
 
 FilterEffectsDialog::CellRendererConnection::CellRendererConnection()
-    : Glib::ObjectBase(typeid(CellRendererConnection)),
-      _primitive(*this, "primitive", nullptr),
-      _text_width(0)
+    : Glib::ObjectBase(typeid(CellRendererConnection))
+    , _primitive(*this, "primitive", nullptr)
 {}
 
 Glib::PropertyProxy<void*> FilterEffectsDialog::CellRendererConnection::property_primitive()

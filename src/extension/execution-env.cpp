@@ -48,8 +48,7 @@ ExecutionEnv::ExecutionEnv (Effect * effect, Inkscape::UI::View::View * doc, Imp
     _doc(doc),
     _docCache(docCache),
     _effect(effect),
-    _show_working(show_working),
-    _show_errors(show_errors)
+    _show_working(show_working)
 {
     genDocCache();
 
