@@ -370,62 +370,8 @@ void sp_repr_css_merge(SPCSSAttr *dst, SPCSSAttr *src)
 static void sp_repr_css_merge_from_decl(SPCSSAttr *css, CRDeclaration const *const decl)
 {
     guchar *const str_value_unsigned = cr_term_to_string(decl->value);
-
-    Glib::ustring value( reinterpret_cast<gchar *>(str_value_unsigned ) );
+    css->setAttribute(decl->property->stryng->str, reinterpret_cast<char const *>(str_value_unsigned));
     g_free(str_value_unsigned);
-
-    Glib::ustring::size_type pos = 0;
-    while( (pos=value.find("\"",pos)) != Glib::ustring::npos) {
-        value.replace(pos,1,"'");
-        ++pos;
-    }
-
-    Glib::ustring units;
-
-    /*
-    * Problem with parsing of units em and ex, like font-size "1.2em" and "3.4ex"
-    * stringstream thinks they are in scientific "e" notation and fails
-    * Must be a better way using std::fixed, precision etc
-    *
-    * HACK for now is to strip off em and ex units and add them back at the end
-    */
-    int le = value.length();
-    if (le > 2) {
-        units = value.substr(le-2, 2);
-        if ((units == "em") || (units == "ex")) {
-            value = value.substr(0, le-2);
-        }
-        else {
-            units.clear();
-        }
-    }
-
-    // libcroco uses %.17f for formatting... leading to trailing zeros or small rounding errors.
-    // CSSOStringStream is used here to write valid CSS (as in sp_style_write_string). This has
-    // the additional benefit of respecting the numerical precision set in the SVG Output
-    // preferences. We assume any numerical part comes first (if not, the whole string is copied).
-    std::stringstream ss( value );
-    double number = 0;
-    std::string characters;
-    std::string temp;
-    bool number_valid = !(ss >> number).fail();
-    if (!number_valid) {
-        ss.clear();
-        ss.seekg(0); // work-around for a bug in libc++ (see lp:1300271)
-    }
-    while( !(ss >> temp).eof() ) {
-        characters += temp;
-        characters += " ";
-    }
-    characters += temp;
-    Inkscape::CSSOStringStream os;
-    if( number_valid ) os << number;
-    os << characters;
-    if (!units.empty()) {
-        os << units;
-        //g_message("sp_repr_css_merge_from_decl looks like em or ex units %s --> %s", str_value, os.str().c_str());
-    }
-    ((Node *) css)->setAttribute(decl->property->stryng->str, os.str());
 }
 
 /**
