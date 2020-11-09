@@ -112,8 +112,7 @@ cr_simple_sel_to_string (CRSimpleSel const * a_this)
         str_buf = g_string_new (NULL);
         for (cur = a_this; cur; cur = cur->next) {
                 if (cur->name) {
-                        guchar *str = (guchar *) g_strndup (cur->name->stryng->str,
-                                                 cur->name->stryng->len);
+                        gchar const *str = cur->name->stryng->str;
 
                         if (str) {
                                 switch (cur->combinator) {
@@ -138,8 +137,6 @@ cr_simple_sel_to_string (CRSimpleSel const * a_this)
                                 }
 
                                 g_string_append (str_buf, (const gchar *) str);
-                                g_free (str);
-                                str = NULL;
                         }
                 }
 
@@ -175,13 +172,10 @@ cr_simple_sel_one_to_string (CRSimpleSel const * a_this)
 
         str_buf = g_string_new (NULL);
         if (a_this->name) {
-                guchar *str = (guchar *) g_strndup (a_this->name->stryng->str,
-                                         a_this->name->stryng->len);
+                gchar const *str = a_this->name->stryng->str;
 
                 if (str) {
                         g_string_append_printf (str_buf, "%s", str);
-                        g_free (str);
-                        str = NULL;
                 }
         }
 

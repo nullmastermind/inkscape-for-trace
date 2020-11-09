@@ -28,6 +28,39 @@
 #include "cr-parser.h"
 
 /**
+ * Adds a quoted string onto the end of a GString, expanding it if necessary.
+ * Uses either single or double quotes.
+ *
+ * @pre val is not NULL and is null-terminated. Note that this is true for all
+ * GString::str values.
+ */
+static void
+_string_append_quoted (GString *string, const gchar *val)
+{
+        gchar quote = '\'';
+
+        if (!val) {
+                g_assert_not_reached ();
+                val = "";
+        }
+
+        if (strchr (val, '\'') && !strchr (val, '"')) {
+                quote = '"';
+        }
+
+        g_string_append_c (string, quote);
+
+        for (; *val; ++val) {
+                if (*val == quote || *val == '\\') {
+                        g_string_append_c (string, '\\');
+                }
+                g_string_append_c (string, *val);
+        }
+
+        g_string_append_c (string, quote);
+}
+
+/**
  *@file
  *Definition of the #CRTem class.
  */
@@ -50,6 +83,7 @@ cr_term_clear (CRTerm * a_this)
                         cr_term_destroy (a_this->ext_content.func_param);
                         a_this->ext_content.func_param = NULL;
                 }
+                // fall through
         case TERM_STRING:
         case TERM_IDENT:
         case TERM_URI:
@@ -344,14 +378,8 @@ cr_term_to_string (CRTerm const * a_this)
 
                 case TERM_FUNCTION:
                         if (cur->content.str) {
-                                content = (guchar *) g_strndup
-                                        (cur->content.str->stryng->str,
-                                         cur->content.str->stryng->len);
-                        }
-
-                        if (content) {
                                 g_string_append_printf (str_buf, "%s(",
-                                                        content);
+                                                        cur->content.str->stryng->str);
 
                                 if (cur->ext_content.func_param) {
                                         guchar *tmp_str = NULL;
@@ -368,53 +396,27 @@ cr_term_to_string (CRTerm const * a_this)
                                         }
                                 }
                                 g_string_append (str_buf, ")");
-                                g_free (content);
-                                content = NULL;
                         }
 
                         break;
 
                 case TERM_STRING:
                         if (cur->content.str) {
-                                content = (guchar *) g_strndup
-                                        (cur->content.str->stryng->str,
-                                         cur->content.str->stryng->len);
-                        }
-
-                        if (content) {
-                                g_string_append_printf (str_buf,
-                                                        "\"%s\"", content);
-                                g_free (content);
-                                content = NULL;
+                                _string_append_quoted (str_buf,
+                                         cur->content.str->stryng->str);
                         }
                         break;
 
                 case TERM_IDENT:
-                        if (cur->content.str) {
-                                content = (guchar *) g_strndup
-                                        (cur->content.str->stryng->str,
-                                         cur->content.str->stryng->len);
-                        }
-
-                        if (content) {
-                                g_string_append (str_buf, (const gchar *) content);
-                                g_free (content);
-                                content = NULL;
+                        if (cur->content.str && cur->content.str->stryng->str) {
+                                g_string_append (str_buf, cur->content.str->stryng->str);
                         }
                         break;
 
                 case TERM_URI:
                         if (cur->content.str) {
-                                content = (guchar *) g_strndup
-                                        (cur->content.str->stryng->str,
-                                         cur->content.str->stryng->len);
-                        }
-
-                        if (content) {
                                 g_string_append_printf
-                                        (str_buf, "url(%s)", content);
-                                g_free (content);
-                                content = NULL;
+                                        (str_buf, "url(%s)", cur->content.str->stryng->str);
                         }
                         break;
 
@@ -443,16 +445,8 @@ cr_term_to_string (CRTerm const * a_this)
 
                 case TERM_HASH:
                         if (cur->content.str) {
-                                content = (guchar *) g_strndup
-                                        (cur->content.str->stryng->str,
-                                         cur->content.str->stryng->len);
-                        }
-
-                        if (content) {
                                 g_string_append_printf (str_buf,
-                                                        "#%s", content);
-                                g_free (content);
-                                content = NULL;
+                                                        "#%s", cur->content.str->stryng->str);
                         }
                         break;
 
@@ -538,14 +532,8 @@ cr_term_one_to_string (CRTerm const * a_this)
 
         case TERM_FUNCTION:
                 if (a_this->content.str) {
-                        content = (guchar *) g_strndup
-                                (a_this->content.str->stryng->str,
-                                 a_this->content.str->stryng->len);
-                }
-
-                if (content) {
                         g_string_append_printf (str_buf, "%s(",
-                                                content);
+                                                a_this->content.str->stryng->str);
 
                         if (a_this->ext_content.func_param) {
                                 guchar *tmp_str = NULL;
@@ -563,8 +551,6 @@ cr_term_one_to_string (CRTerm const * a_this)
                                 }
 
                                 g_string_append_printf (str_buf, ")");
-                                g_free (content);
-                                content = NULL;
                         }
                 }
 
@@ -572,45 +558,21 @@ cr_term_one_to_string (CRTerm const * a_this)
 
         case TERM_STRING:
                 if (a_this->content.str) {
-                        content = (guchar *) g_strndup
-                                (a_this->content.str->stryng->str,
-                                 a_this->content.str->stryng->len);
-                }
-
-                if (content) {
-                        g_string_append_printf (str_buf,
-                                                "\"%s\"", content);
-                        g_free (content);
-                        content = NULL;
+                        _string_append_quoted (str_buf,
+                                 a_this->content.str->stryng->str);
                 }
                 break;
 
         case TERM_IDENT:
-                if (a_this->content.str) {
-                        content = (guchar *) g_strndup
-                                (a_this->content.str->stryng->str,
-                                 a_this->content.str->stryng->len);
-                }
-
-                if (content) {
-                        g_string_append (str_buf, (const gchar *) content);
-                        g_free (content);
-                        content = NULL;
+                if (a_this->content.str && a_this->content.str->stryng->str) {
+                        g_string_append (str_buf, a_this->content.str->stryng->str);
                 }
                 break;
 
         case TERM_URI:
                 if (a_this->content.str) {
-                        content = (guchar *) g_strndup
-                                (a_this->content.str->stryng->str,
-                                 a_this->content.str->stryng->len);
-                }
-
-                if (content) {
                         g_string_append_printf
-                                (str_buf, "url(%s)", content);
-                        g_free (content);
-                        content = NULL;
+                                (str_buf, "url(%s)", a_this->content.str->stryng->str);
                 }
                 break;
 
@@ -639,16 +601,8 @@ cr_term_one_to_string (CRTerm const * a_this)
 
         case TERM_HASH:
                 if (a_this->content.str) {
-                        content = (guchar *) g_strndup
-                                (a_this->content.str->stryng->str,
-                                 a_this->content.str->stryng->len);
-                }
-
-                if (content) {
                         g_string_append_printf (str_buf,
-                                                "#%s", content);
-                        g_free (content);
-                        content = NULL;
+                                                "#%s", a_this->content.str->stryng->str);
                 }
                 break;
 
@@ -786,3 +740,5 @@ cr_term_destroy (CRTerm * const a_this)
 
         g_free (a_this);
 }
+
+// vi:sw=8:ts=8

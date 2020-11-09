@@ -322,8 +322,8 @@ charset (CRDocHandler * a_this, CRString * a_charset,
 
         charset = cr_string_dup (a_charset) ;
         stmt = cr_statement_new_at_charset_rule (ctxt->stylesheet, charset);
-        g_return_if_fail (stmt);
-        stmt2 = cr_statement_append (ctxt->stylesheet->statements, stmt);
+        if (stmt)
+                stmt2 = cr_statement_append (ctxt->stylesheet->statements, stmt);
         if (!stmt2) {
                 if (stmt) {
                         cr_statement_destroy (stmt);
@@ -678,6 +678,8 @@ property (CRDocHandler * a_this,
 
         /*instantiates a new declaration */
         decl = cr_declaration_new (ctxt->cur_stmt, str, a_expression);
+        if (decl == NULL)
+                g_clear_pointer (&str, cr_string_destroy);
         g_return_if_fail (decl);
         str = NULL;
         decl->important = a_important;
@@ -690,8 +692,6 @@ property (CRDocHandler * a_this,
                 decl2 = cr_declaration_append
                         (ctxt->cur_stmt->kind.ruleset->decl_list, decl);
                 if (!decl2) {
-                        cr_declaration_destroy (decl);
-                        decl = NULL;
                         cr_utils_trace_info
                                 ("Could not append decl to ruleset");
                         goto error;
@@ -706,8 +706,6 @@ property (CRDocHandler * a_this,
                         (ctxt->cur_stmt->kind.font_face_rule->decl_list,
                          decl);
                 if (!decl2) {
-                        cr_declaration_destroy (decl);
-                        decl = NULL;
                         cr_utils_trace_info
                                 ("Could not append decl to ruleset");
                         goto error;
@@ -720,8 +718,6 @@ property (CRDocHandler * a_this,
                 decl2 = cr_declaration_append
                         (ctxt->cur_stmt->kind.page_rule->decl_list, decl);
                 if (!decl2) {
-                        cr_declaration_destroy (decl);
-                        decl = NULL;
                         cr_utils_trace_info
                                 ("Could not append decl to ruleset");
                         goto error;

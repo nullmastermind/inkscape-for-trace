@@ -276,7 +276,8 @@ cr_num_dup (CRNum const * a_this)
         g_return_val_if_fail (result, NULL);
 
         status = cr_num_copy (result, a_this);
-        g_return_val_if_fail (status == CR_OK, NULL);
+        if (status != CR_OK)
+                g_clear_pointer (&result, cr_num_destroy);
 
         return result;
 }

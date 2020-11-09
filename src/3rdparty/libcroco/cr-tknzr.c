@@ -707,7 +707,7 @@ cr_tknzr_parse_string (CRTknzr * a_this, CRString ** a_str)
 
                         PEEK_BYTE (a_this, 2, &next_chars[1]);
 
-                        if (next_chars[1] == '\'' || next_chars[1] == '"') {
+                        if (next_chars[1] == '\'' || next_chars[1] == '"' || next_chars[1] == '\\') {
                                 g_string_append_unichar (str->stryng, 
                                                          next_chars[1]);
                                 SKIP_BYTES (a_this, 2);
@@ -736,8 +736,11 @@ cr_tknzr_parse_string (CRTknzr * a_this, CRString ** a_str)
                         }
 
                         CHECK_PARSING_STATUS (status, FALSE);
-                } else if (strchr ("\t !#$%&", next_chars[0])
-                           || (next_chars[0] >= '(' && next_chars[0] <= '~')) {
+                } else if (next_chars[0] == delim) {
+                        READ_NEXT_CHAR (a_this, &cur_char);
+                        break;
+                } else if (next_chars[0] == '\t'
+                           || (next_chars[0] >= ' ' && next_chars[0] <= '~')) {
                         READ_NEXT_CHAR (a_this, &cur_char);
                         g_string_append_unichar (str->stryng, 
                                                  cur_char);
@@ -747,9 +750,6 @@ cr_tknzr_parse_string (CRTknzr * a_this, CRString ** a_str)
                 else if (cr_utils_is_nonascii (next_chars[0])) {
                         READ_NEXT_CHAR (a_this, &cur_char);
                         g_string_append_unichar (str->stryng, cur_char);
-                } else if (next_chars[0] == delim) {
-                        READ_NEXT_CHAR (a_this, &cur_char);
-                        break;
                 } else {
                         status = CR_PARSING_ERROR;
                         goto error;

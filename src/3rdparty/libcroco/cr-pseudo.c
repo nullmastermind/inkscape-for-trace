@@ -62,44 +62,37 @@ cr_pseudo_to_string (CRPseudo const * a_this)
         str_buf = g_string_new (NULL);
 
         if (a_this->type == IDENT_PSEUDO) {
-                guchar *name = NULL;
+                gchar const *name = NULL;
 
                 if (a_this->name == NULL) {
                         goto error;
                 }
 
-                name = (guchar *) g_strndup (a_this->name->stryng->str, 
-                                  a_this->name->stryng->len);
+                name = a_this->name->stryng->str;
 
                 if (name) {
                         g_string_append (str_buf, (const gchar *) name);
-                        g_free (name);
                         name = NULL;
                 }
         } else if (a_this->type == FUNCTION_PSEUDO) {
-                guchar *name = NULL,
+                gchar const *name = NULL,
                         *arg = NULL;
 
                 if (a_this->name == NULL)
                         goto error;
 
-                name = (guchar *) g_strndup (a_this->name->stryng->str, 
-                                  a_this->name->stryng->len);
+                name = a_this->name->stryng->str;
 
                 if (a_this->term && a_this->term->type == TERM_IDENT) {
-                        arg = (guchar *) g_strndup (
-                            a_this->term->content.str->stryng->str,
-                            a_this->term->content.str->stryng->len);
+                        arg = a_this->term->content.str->stryng->str;
                 }
 
                 if (name) {
                         g_string_append_printf (str_buf, "%s(", name);
-                        g_free (name);
                         name = NULL;
 
                         if (arg) {
                                 g_string_append (str_buf, (const gchar *) arg);
-                                g_free (arg);
                                 arg = NULL;
                         }
 

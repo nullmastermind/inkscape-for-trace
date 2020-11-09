@@ -207,6 +207,8 @@ parse_page_property_cb (CRDocHandler * a_this,
         g_return_if_fail (name);
 
         decl = cr_declaration_new (stmt, name, a_expression);
+        if (!decl)
+                cr_string_destroy(name);
         g_return_if_fail (decl);
         decl->important = a_important;
         stmt->kind.page_rule->decl_list =
@@ -328,16 +330,18 @@ parse_at_media_property_cb (CRDocHandler * a_this,
 
         g_return_if_fail (a_this && a_name);
 
-        name = cr_string_dup (a_name) ;
-        g_return_if_fail (name);
-
 	stmtptr = &stmt;
         status = cr_doc_handler_get_ctxt (a_this, 
                                           (gpointer *) stmtptr);
         g_return_if_fail (status == CR_OK && stmt);
         g_return_if_fail (stmt->type == RULESET_STMT);
 
+        name = cr_string_dup (a_name) ;
+        g_return_if_fail (name);
+
         decl = cr_declaration_new (stmt, name, a_value);
+        if (!decl)
+                cr_string_destroy(name);
         g_return_if_fail (decl);
         decl->important = a_important;
         status = cr_statement_ruleset_append_decl (stmt, decl);
@@ -437,16 +441,18 @@ parse_ruleset_property_cb (CRDocHandler * a_this,
 
         g_return_if_fail (a_this && a_this->priv && a_name);
 
-        stringue = cr_string_dup (a_name);
-        g_return_if_fail (stringue);
-
 	rulesetptr = &ruleset;
         status = cr_doc_handler_get_result (a_this, (gpointer *) rulesetptr);
         g_return_if_fail (status == CR_OK
                           && ruleset 
                           && ruleset->type == RULESET_STMT);
 
+        stringue = cr_string_dup (a_name);
+        g_return_if_fail (stringue);
+
         decl = cr_declaration_new (ruleset, stringue, a_value);
+        if (!decl)
+                cr_string_destroy (stringue);
         g_return_if_fail (decl);
         decl->important = a_important;
         status = cr_statement_ruleset_append_decl (ruleset, decl);
@@ -734,18 +740,12 @@ cr_statement_charset_to_string (CRStatement const *a_this,
             && a_this->kind.charset_rule->charset
             && a_this->kind.charset_rule->charset->stryng
             && a_this->kind.charset_rule->charset->stryng->str) {
-                str = g_strndup (a_this->kind.charset_rule->charset->stryng->str,
-                                 a_this->kind.charset_rule->charset->stryng->len);
-                g_return_val_if_fail (str, NULL);
                 stringue = g_string_new (NULL) ;
                 g_return_val_if_fail (stringue, NULL) ;
                 cr_utils_dump_n_chars2 (' ', stringue, a_indent);
                 g_string_append_printf (stringue, 
-                                        "@charset \"%s\" ;", str);
-                if (str) {
-                        g_free (str);
-                        str = NULL;
-                }
+                                        "@charset \"%s\" ;",
+                                        a_this->kind.charset_rule->charset->stryng->str);
         }
         if (stringue) {
                 str = stringue->str ;
@@ -834,10 +834,9 @@ cr_statement_media_rule_to_string (CRStatement const *a_this,
 
                 for (cur = a_this->kind.media_rule->media_list; cur;
                      cur = cur->next) {
-                        if (cur->data) {
-                                gchar *str2 = cr_string_dup2
-                                        ((CRString const *) cur->data);
-
+                        CRString const *crstr = cur->data;
+                        if (crstr && crstr->stryng) {
+                                gchar const *str2 = crstr->stryng->str;
                                 if (str2) {
                                         if (cur->prev) {
                                                 g_string_append
@@ -847,8 +846,6 @@ cr_statement_media_rule_to_string (CRStatement const *a_this,
                                         g_string_append_printf 
                                                 (stringue, 
                                                  " %s", str2);
-                                        g_free (str2);
-                                        str2 = NULL;
                                 }
                         }
                 }
@@ -887,15 +884,11 @@ cr_statement_import_rule_to_string (CRStatement const *a_this,
             && a_this->kind.import_rule->url->stryng) { 
                 stringue = (GString *) g_string_new (NULL) ;
                 g_return_val_if_fail (stringue, NULL) ;
-                str = g_strndup (a_this->kind.import_rule->url->stryng->str,
-                                 a_this->kind.import_rule->url->stryng->len);
                 cr_utils_dump_n_chars2 (' ', stringue, a_indent);
-                if (str) {
+                if (a_this->kind.import_rule->url->stryng->str) {
                         g_string_append_printf (stringue,
                                                 "@import url(\"%s\")", 
-                                                str);
-                        g_free (str);
-                        str = NULL ;
+                                                a_this->kind.import_rule->url->stryng->str);
                 } else          /*there is no url, so no import rule, get out! */
                         return NULL;
 
@@ -1326,6 +1319,7 @@ cr_statement_new_at_media_rule (CRStyleSheet * a_sheet,
         return result;
 
       error:
+        g_clear_pointer (&result, cr_statement_destroy);
         return NULL;
 }
 

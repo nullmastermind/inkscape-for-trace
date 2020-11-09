@@ -528,11 +528,11 @@ cr_parser_push_error (CRParser * a_this,
         g_return_val_if_fail (a_this && PRIVATE (a_this)
                               && a_msg, CR_BAD_PARAM_ERROR);
 
+        RECORD_INITIAL_POS (a_this, &pos);
+
         error = cr_parser_error_new (a_msg, a_status);
 
         g_return_val_if_fail (error, CR_ERROR);
-
-        RECORD_INITIAL_POS (a_this, &pos);
 
         cr_parser_error_set_pos
                 (error, pos.line, pos.col, pos.next_byte_index - 1);
@@ -1688,6 +1688,7 @@ cr_parser_parse_simple_selector (CRParser * a_this, CRSimpleSel ** a_sel)
         CRInputPos init_pos;
         CRToken *token = NULL;
         CRSimpleSel *sel = NULL;
+        CRPseudo *pseudo = NULL;
         CRAdditionalSel *add_sel_list = NULL;
         gboolean found_sel = FALSE;
 
@@ -1822,7 +1823,6 @@ cr_parser_parse_simple_selector (CRParser * a_this, CRSimpleSel ** a_sel)
                                  &attr_sel->location) ;
                 } else if (token && (token->type == DELIM_TK)
                            && (token->u.unichar == ':')) {
-                        CRPseudo *pseudo = NULL;
 
                         /*try to parse a pseudo */
 
@@ -1912,6 +1912,8 @@ cr_parser_parse_simple_selector (CRParser * a_this, CRSimpleSel ** a_sel)
         }
 
  error:
+
+        g_clear_pointer (&pseudo, cr_pseudo_destroy);
 
         if (token) {
                 cr_token_destroy (token);
@@ -2786,6 +2788,8 @@ cr_parser_new (CRTknzr * a_tknzr)
 
         if (a_tknzr) {
                 status = cr_parser_set_tknzr (result, a_tknzr);
+                if (status != CR_OK)
+                        cr_parser_destroy (result);
         }
 
         g_return_val_if_fail (status == CR_OK, NULL);
@@ -2848,6 +2852,8 @@ cr_parser_new_from_input (CRInput * a_input)
         }
 
         result = cr_parser_new (tokenizer);
+        if (!result)
+                g_clear_pointer (&tokenizer, cr_tknzr_unref);
         g_return_val_if_fail (result, NULL);
 
         return result;
@@ -2873,6 +2879,8 @@ cr_parser_new_from_file (const guchar * a_file_uri, enum CREncoding a_enc)
         }
 
         result = cr_parser_new (tokenizer);
+        if (!result)
+                g_clear_pointer (&tokenizer, cr_tknzr_unref);
         g_return_val_if_fail (result, NULL);
         return result;
 }
@@ -3015,6 +3023,8 @@ cr_parser_parse_file (CRParser * a_this,
         g_return_val_if_fail (tknzr != NULL, CR_ERROR);
 
         status = cr_parser_set_tknzr (a_this, tknzr);
+        if (status != CR_OK)
+                g_clear_pointer (&tknzr, cr_tknzr_unref);
         g_return_val_if_fail (status == CR_OK, CR_ERROR);
 
         status = cr_parser_parse (a_this);
@@ -4506,6 +4516,8 @@ cr_parser_parse_buf (CRParser * a_this,
         g_return_val_if_fail (tknzr != NULL, CR_ERROR);
 
         status = cr_parser_set_tknzr (a_this, tknzr);
+        if (status != CR_OK)
+                g_clear_pointer (&tknzr, cr_tknzr_unref);
         g_return_val_if_fail (status == CR_OK, CR_ERROR);
 
         status = cr_parser_parse (a_this);

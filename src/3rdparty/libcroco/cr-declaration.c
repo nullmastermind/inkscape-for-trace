@@ -501,8 +501,7 @@ cr_declaration_to_string (CRDeclaration const * a_this, gulong a_indent)
 {
         GString *stringue = NULL;
 
-        gchar *str = NULL,
-                *result = NULL;
+        gchar *result = NULL;
 
         g_return_val_if_fail (a_this, NULL);
 
@@ -511,14 +510,11 @@ cr_declaration_to_string (CRDeclaration const * a_this, gulong a_indent)
 	if (a_this->property 
 	    && a_this->property->stryng
 	    && a_this->property->stryng->str) {
-		str = g_strndup (a_this->property->stryng->str,
-				 a_this->property->stryng->len);
+                gchar const *str = a_this->property->stryng->str;
 		if (str) {
 			cr_utils_dump_n_chars2 (' ', stringue, 
 						a_indent);
 			g_string_append (stringue, str);
-			g_free (str);
-			str = NULL;
 		} else
                         goto error;
 
@@ -548,10 +544,6 @@ cr_declaration_to_string (CRDeclaration const * a_this, gulong a_indent)
         if (stringue) {
                 g_string_free (stringue, TRUE);
                 stringue = NULL;
-        }
-        if (str) {
-                g_free (str);
-                str = NULL;
         }
 
         return result;

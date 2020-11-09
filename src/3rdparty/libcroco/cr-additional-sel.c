@@ -244,40 +244,20 @@ cr_additional_sel_to_string (CRAdditionalSel const * a_this)
                 switch (cur->type) {
                 case CLASS_ADD_SELECTOR:
                         {
-                                guchar *name = NULL;
-
                                 if (cur->content.class_name) {
-                                        name = (guchar *) g_strndup
-                                                (cur->content.class_name->stryng->str,
-                                                 cur->content.class_name->stryng->len);
-
-                                        if (name) {
-                                                g_string_append_printf
-                                                        (str_buf, ".%s",
-                                                         name);
-                                                g_free (name);
-                                                name = NULL;
-                                        }
+                                        g_string_append_printf
+                                                (str_buf, ".%s",
+                                                 cur->content.class_name->stryng->str);
                                 }
                         }
                         break;
 
                 case ID_ADD_SELECTOR:
                         {
-                                guchar *name = NULL;
-
                                 if (cur->content.id_name) {
-                                        name = (guchar *) g_strndup
-                                                (cur->content.id_name->stryng->str,
-                                                 cur->content.id_name->stryng->len);
-
-                                        if (name) {
-                                                g_string_append_printf
-                                                        (str_buf, "#%s",
-                                                         name);
-                                                g_free (name);
-                                                name = NULL;
-                                        }
+                                        g_string_append_printf
+                                                (str_buf, "#%s",
+                                                 cur->content.id_name->stryng->str);
                                 }
                         }
 
@@ -343,43 +323,19 @@ cr_additional_sel_one_to_string (CRAdditionalSel const *a_this)
 
         switch (a_this->type) {
         case CLASS_ADD_SELECTOR:
-        {
-                guchar *name = NULL;
-
                 if (a_this->content.class_name) {
-                        name = (guchar *) g_strndup
-                                (a_this->content.class_name->stryng->str,
-                                 a_this->content.class_name->stryng->len);
-
-                        if (name) {
-                                g_string_append_printf
-                                        (str_buf, ".%s",
-                                         name);
-                                g_free (name);
-                                name = NULL;
-                        }
+                        g_string_append_printf
+                                (str_buf, ".%s",
+                                 a_this->content.class_name->stryng->str);
                 }
-        }
         break;
 
         case ID_ADD_SELECTOR:
-        {
-                guchar *name = NULL;
-
                 if (a_this->content.id_name) {
-                        name = (guchar *) g_strndup
-                                (a_this->content.id_name->stryng->str,
-                                 a_this->content.id_name->stryng->len);
-
-                        if (name) {
-                                g_string_append_printf
-                                        (str_buf, "#%s",
-                                         name);
-                                g_free (name);
-                                name = NULL;
-                        }
+                        g_string_append_printf
+                                (str_buf, "#%s",
+                                 a_this->content.id_name->stryng->str);
                 }
-        }
 
         break;
 

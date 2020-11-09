@@ -121,22 +121,14 @@ cr_attr_sel_to_string (CRAttrSel const * a_this)
                 }
 
                 if (cur->name) {
-                        guchar *name = NULL;
-
-                        name = (guchar *) g_strndup (cur->name->stryng->str, 
-                                          cur->name->stryng->len);
+                        gchar const *name = cur->name->stryng->str;
                         if (name) {
                                 g_string_append (str_buf, (const gchar *) name);
-                                g_free (name);
-                                name = NULL;
                         }
                 }
 
                 if (cur->value) {
-                        guchar *value = NULL;
-
-                        value = (guchar *) g_strndup (cur->value->stryng->str, 
-                                           cur->value->stryng->len);
+                        gchar const *value = cur->value->stryng->str;
                         if (value) {
                                 switch (cur->match_way) {
                                 case SET:
@@ -160,9 +152,6 @@ cr_attr_sel_to_string (CRAttrSel const * a_this)
 
                                 g_string_append_printf
                                         (str_buf, "\"%s\"", value);
-
-                                g_free (value);
-                                value = NULL;
                         }
                 }
         }
