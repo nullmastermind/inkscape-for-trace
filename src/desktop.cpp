@@ -1387,9 +1387,7 @@ SPDesktop::destroyWidget()
 bool
 SPDesktop::shutdown()
 {
-    std::list<SPDesktop *> desktops;
-    INKSCAPE.get_all_desktops(desktops);
-    return desktops.size() > 1 ? false : _widget->shutdown();
+    return _widget->shutdown();
 }
 
 bool SPDesktop::onDeleteUI (GdkEventAny*)

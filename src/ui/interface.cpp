@@ -73,10 +73,6 @@ sp_ui_close_view(GtkWidget */*widget*/)
         return;
     }
 
-    if (dt->shutdown()) {
-        return; // Shutdown operation has been canceled, so do nothing
-    }
-
     ConcreteInkscapeApplication<Gtk::Application>* app = &(ConcreteInkscapeApplication<Gtk::Application>::get_instance());
 
     InkscapeWindow* window = SP_ACTIVE_DESKTOP->getInkscapeWindow();
@@ -85,6 +81,9 @@ sp_ui_close_view(GtkWidget */*widget*/)
     std::list<SPDesktop *> desktops;
     INKSCAPE.get_all_desktops(desktops);
     if (desktops.size() == 1) {
+        if (dt->shutdown()) {
+            return; // Shutdown operation has been canceled, so do nothing
+        }
 
         SPDocument* old_document = window->get_document();
 
