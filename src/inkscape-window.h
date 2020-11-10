@@ -46,7 +46,7 @@ public:
     void change_document(SPDocument* document);
 
 private:
-    ConcreteInkscapeApplication<Gtk::Application>* _app;
+    InkscapeApplication *_app = nullptr;
 
     SPDocument*          _document;
     SPDesktop*           _desktop;

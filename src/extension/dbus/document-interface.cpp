@@ -940,7 +940,7 @@ gboolean document_interface_load(DocumentInterface *doc_interface,
 
     Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(filename);
 
-    ConcreteInkscapeApplication<Gtk::Application>* app = &(ConcreteInkscapeApplication<Gtk::Application>::get_instance());
+    auto *app = InkscapeApplication::instance();
 
     app->create_window(file);
 

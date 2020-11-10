@@ -242,38 +242,36 @@ std::vector<std::vector<Glib::ustring>> raw_data_base =
     // clang-format on
 };
 
-template<class T>
 void
-add_actions_base(ConcreteInkscapeApplication<T>* app)
+add_actions_base(InkscapeApplication* app)
 {
+    auto *gapp = app->gio_app();
+
     // Note: "radio" actions are just an easy way to set type without using templating.
     // clang-format off
-    app->add_action(               "inkscape-version",                                    sigc::ptr_fun(&print_inkscape_version)                 );
-    app->add_action(               "system-data-directory",                               sigc::ptr_fun(&print_system_data_directory)            );
-    app->add_action(               "user-data-directory",                                 sigc::ptr_fun(&print_user_data_directory)              );
-    app->add_action(               "action-list",       sigc::mem_fun(app, &ConcreteInkscapeApplication<T>::print_action_list)                    );
-    app->add_action(               "verb-list",                                           sigc::ptr_fun(&print_verb_list)                        );
-    app->add_action_radio_string(  "verb",               sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&verbs),                     app), "null");
-    app->add_action(               "vacuum-defs",        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&vacuum_defs),               app)        );
-    app->add_action(               "quit-inkscape",      sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&quit_inkscape),             app)        );
+    gapp->add_action(               "inkscape-version",                                    sigc::ptr_fun(&print_inkscape_version)                 );
+    gapp->add_action(               "system-data-directory",                               sigc::ptr_fun(&print_system_data_directory)            );
+    gapp->add_action(               "user-data-directory",                                 sigc::ptr_fun(&print_user_data_directory)              );
+    gapp->add_action(               "action-list",       sigc::mem_fun(app, &InkscapeApplication::print_action_list)                    );
+    gapp->add_action(               "verb-list",                                           sigc::ptr_fun(&print_verb_list)                        );
+    gapp->add_action_radio_string(  "verb",               sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&verbs),                     app), "null");
+    gapp->add_action(               "vacuum-defs",        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&vacuum_defs),               app)        );
+    gapp->add_action(               "quit-inkscape",      sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&quit_inkscape),             app)        );
 
-    app->add_action_radio_integer( "open-page",                                           sigc::ptr_fun(&pdf_page),                             0);
-    app->add_action_radio_string(  "convert-dpi-method",                                  sigc::ptr_fun(&convert_dpi_method),              "none");
-    app->add_action(               "no-convert-baseline",                                 sigc::ptr_fun(&no_convert_baseline)                    );
+    gapp->add_action_radio_integer( "open-page",                                           sigc::ptr_fun(&pdf_page),                             0);
+    gapp->add_action_radio_string(  "convert-dpi-method",                                  sigc::ptr_fun(&convert_dpi_method),              "none");
+    gapp->add_action(               "no-convert-baseline",                                 sigc::ptr_fun(&no_convert_baseline)                    );
 
 
-    app->add_action(               "query-x",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&query_x),                   app)        );
-    app->add_action(               "query-y",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&query_y),                   app)        );
-    app->add_action(               "query-width",        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&query_width),               app)        );
-    app->add_action(               "query-height",       sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&query_height),              app)        );
-    app->add_action(               "query-all",          sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&query_all),                 app)        );
+    gapp->add_action(               "query-x",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&query_x),                   app)        );
+    gapp->add_action(               "query-y",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&query_y),                   app)        );
+    gapp->add_action(               "query-width",        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&query_width),               app)        );
+    gapp->add_action(               "query-height",       sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&query_height),              app)        );
+    gapp->add_action(               "query-all",          sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&query_all),                 app)        );
     // clang-format on
 
     app->get_action_extra_data().add_data(raw_data_base);
 }
-
-template void add_actions_base(ConcreteInkscapeApplication<Gio::Application>* app);
-template void add_actions_base(ConcreteInkscapeApplication<Gtk::Application>* app);
 
 /*
   Local Variables:

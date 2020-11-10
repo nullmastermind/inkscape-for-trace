@@ -12,10 +12,8 @@
 #define INK_ACTIONS_FILE_H
 
 class InkscapeApplication;
-template<class T> class ConcreteInkscapeApplication;
 
-template<class T>
-void add_actions_file(ConcreteInkscapeApplication<T>* app);
+void add_actions_file(InkscapeApplication* app);
 
 #endif // INK_ACTIONS_FILE_H
 

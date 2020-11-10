@@ -2915,8 +2915,7 @@ void InkscapePreferences::onKBTreeEdited (const Glib::ustring& path, guint accel
             }
         } else {
             Glib::ustring accel = Gtk::AccelGroup::name(accel_key, accel_mods);
-            ConcreteInkscapeApplication<Gtk::Application>* app =
-                &(ConcreteInkscapeApplication<Gtk::Application>::get_instance());
+            auto *app = InkscapeApplication::instance()->gtk_app();
             std::vector<Glib::ustring> actions = app->get_actions_for_accel(accel);
             if (!actions.empty()) {
                 action_name = actions[0];
@@ -3158,9 +3157,8 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
 
     // Gio::Actions
 
-    auto app = Gio::Application::get_default();
-    auto iapp = dynamic_cast<InkscapeApplication*>(app.get());
-    auto gapp = dynamic_cast<Gtk::Application*>(app.get());
+    auto iapp = InkscapeApplication::instance();
+    auto gapp = iapp->gtk_app();
 
     // std::vector<Glib::ustring> actions = shortcuts.list_all_actions(); // All actions (app, win, doc)
 

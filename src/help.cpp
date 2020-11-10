@@ -54,7 +54,7 @@ void sp_help_open_tutorial(Glib::ustring name)
 
     filename = Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::TUTORIALS, filename.c_str(), true);
     if (!filename.empty()) {
-        ConcreteInkscapeApplication<Gtk::Application>* app = &(ConcreteInkscapeApplication<Gtk::Application>::get_instance());
+        auto *app = InkscapeApplication::instance();
         SPDocument* doc = app->document_new(filename);
         app->window_open(doc);
     } else {

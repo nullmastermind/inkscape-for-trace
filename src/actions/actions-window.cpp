@@ -57,9 +57,8 @@ std::vector<std::vector<Glib::ustring>> raw_data_window =
     // clang-format on
 };
 
-template <class T>
 void
-add_actions_window(ConcreteInkscapeApplication<T>* app)
+add_actions_window(InkscapeApplication* app)
 {
     Glib::VariantType Bool(  Glib::VARIANT_TYPE_BOOL);
     Glib::VariantType Int(   Glib::VARIANT_TYPE_INT32);
@@ -67,12 +66,14 @@ add_actions_window(ConcreteInkscapeApplication<T>* app)
     Glib::VariantType String(Glib::VARIANT_TYPE_STRING);
     Glib::VariantType BString(Glib::VARIANT_TYPE_BYTESTRING);
 
+    auto *gapp = app->gio_app();
+
     // Debian 9 has 2.50.0
 #if GLIB_CHECK_VERSION(2, 52, 0)
 
     // clang-format off
-    app->add_action(                "window-open",  sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&window_open),         app));
-    app->add_action(                "window-close", sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&window_close),        app));
+    gapp->add_action(                "window-open",  sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&window_open),         app));
+    gapp->add_action(                "window-close", sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&window_close),        app));
     // clang-format on
 #else
     std::cerr << "add_actions: Some actions require Glibmm 2.52, compiled with: " << glib_major_version << "." << glib_minor_version << std::endl;
@@ -80,11 +81,6 @@ add_actions_window(ConcreteInkscapeApplication<T>* app)
 
     app->get_action_extra_data().add_data(raw_data_window);
 }
-
-
-template void add_actions_window(ConcreteInkscapeApplication<Gio::Application>* app);
-template void add_actions_window(ConcreteInkscapeApplication<Gtk::Application>* app);
-
 
 
 /*

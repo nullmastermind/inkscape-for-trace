@@ -50,8 +50,8 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
         return;
     }
 
-    _app = &(ConcreteInkscapeApplication<Gtk::Application>::get_instance());
-    _app->add_window(*this);
+    _app = InkscapeApplication::instance();
+    _app->gtk_app()->add_window(*this);
 
     set_resizable(true);
 

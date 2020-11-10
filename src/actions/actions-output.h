@@ -12,10 +12,8 @@
 #define INK_ACTIONS_OUTPUT_H
 
 class InkscapeApplication;
-template<class T> class ConcreteInkscapeApplication;
 
-template<class T>
-void add_actions_output(ConcreteInkscapeApplication<T>* app);
+void add_actions_output(InkscapeApplication* app);
 
 #endif // INK_ACTIONS_OUTPUT_H
 

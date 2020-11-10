@@ -11,9 +11,8 @@
 #ifndef INK_ACTIONS_BASE_H
 #define INK_ACTIONS_BASE_H
 
-template<class T> class ConcreteInkscapeApplication;
+class InkscapeApplication;
 
-template<class T>
-void add_actions_base(ConcreteInkscapeApplication<T>* app);
+void add_actions_base(InkscapeApplication* app);
 
 #endif // INK_ACTIONS_BASE_H

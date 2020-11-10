@@ -358,29 +358,25 @@ std::vector<std::vector<Glib::ustring>> raw_data_object_align =
     // clang-format on
 };
 
-template<class T>
 void
-add_actions_object_align(ConcreteInkscapeApplication<T>* app)
+add_actions_object_align(InkscapeApplication* app)
 {
     Glib::VariantType String(Glib::VARIANT_TYPE_STRING);
+
+    auto *gapp = app->gio_app();
 
     // Debian 9 has 2.50.0
 #if GLIB_CHECK_VERSION(2, 52, 0)
 
     // clang-format off
-    app->add_action_with_parameter( "object-align",      String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_align),      app));
-    app->add_action_with_parameter( "object-distribute", String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_distribute), app));
+    gapp->add_action_with_parameter( "object-align",      String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_align),      app));
+    gapp->add_action_with_parameter( "object-distribute", String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_distribute), app));
     // clang-format on
 
 #endif
 
     app->get_action_extra_data().add_data(raw_data_object_align);
 }
-
-
-template void add_actions_object_align(ConcreteInkscapeApplication<Gio::Application>* app);
-template void add_actions_object_align(ConcreteInkscapeApplication<Gtk::Application>* app);
-
 
 
 /*

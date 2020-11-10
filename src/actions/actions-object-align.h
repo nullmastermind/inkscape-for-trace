@@ -11,10 +11,9 @@
 #ifndef INK_ACTIONS_OBJECT_ALIGN_H
 #define INK_ACTIONS_OBJECT_ALIGN_H
 
-template<class T> class ConcreteInkscapeApplication;
+class InkscapeApplication;
 
-template<class T>
-void add_actions_object_align(ConcreteInkscapeApplication<T>* app);
+void add_actions_object_align(InkscapeApplication* app);
 
 #endif // INK_ACTIONS_OBJECT_ALIGN_H
 

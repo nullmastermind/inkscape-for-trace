@@ -261,7 +261,7 @@ add_actions_canvas_transform(InkscapeWindow* win)
     win->add_action_bool( "canvas-rotate-lock",sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&canvas_rotate_lock),    win), rotate_lock);
     // clang-format on
 
-    auto app = dynamic_cast<InkscapeApplication *>(Gio::Application::get_default().get());
+    auto app = InkscapeApplication::instance();
     if (!app) {
         std::cerr << "add_actions_canvas_transform: no app!" << std::endl;
         return;

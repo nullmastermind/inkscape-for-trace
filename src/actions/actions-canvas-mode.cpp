@@ -297,7 +297,7 @@ add_actions_canvas_mode(InkscapeWindow* win)
     win->add_action_bool(          "canvas-color-manage",        sigc::bind<InkscapeWindow*>(sigc::ptr_fun(&canvas_color_manage_toggle),    win), color_manage);
     // clang-format on
 
-    auto app = dynamic_cast<InkscapeApplication *>(Gio::Application::get_default().get());
+    auto app = InkscapeApplication::instance();
     if (!app) {
         std::cerr << "add_actions_canvas_mode: no app!" << std::endl;
         return;

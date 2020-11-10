@@ -59,7 +59,7 @@ sp_ui_new_view()
     document = SP_ACTIVE_DOCUMENT;
     if (!document) return;
 
-    ConcreteInkscapeApplication<Gtk::Application>* app = &(ConcreteInkscapeApplication<Gtk::Application>::get_instance());
+    auto *app = InkscapeApplication::instance();
 
     app->window_open(document);
 }
@@ -73,7 +73,7 @@ sp_ui_close_view(GtkWidget */*widget*/)
         return;
     }
 
-    ConcreteInkscapeApplication<Gtk::Application>* app = &(ConcreteInkscapeApplication<Gtk::Application>::get_instance());
+    auto *app = InkscapeApplication::instance();
 
     InkscapeWindow* window = SP_ACTIVE_DESKTOP->getInkscapeWindow();
 
@@ -110,8 +110,7 @@ sp_ui_close_view(GtkWidget */*widget*/)
 unsigned int
 sp_ui_close_all()
 {
-
-    ConcreteInkscapeApplication<Gtk::Application>* app = &(ConcreteInkscapeApplication<Gtk::Application>::get_instance());
+    auto *app = InkscapeApplication::instance();
 
     app->destroy_all();
 

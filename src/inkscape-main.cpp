@@ -226,13 +226,7 @@ int main(int argc, char *argv[])
 
     set_extensions_env();
 
-    int ret;
-    if (gtk_init_check(NULL, NULL)) {
-        g_set_prgname("org.inkscape.Inkscape");
-        ret = (ConcreteInkscapeApplication<Gtk::Application>::get_instance()).run(argc, argv);
-    } else {
-        ret = (ConcreteInkscapeApplication<Gio::Application>::get_instance()).run(argc, argv);
-    }
+    auto ret = InkscapeApplication::instance()->gio_app()->run(argc, argv);
 
 #ifdef _WIN32
     // switch back to initial console encoding

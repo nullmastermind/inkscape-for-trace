@@ -12,10 +12,8 @@
 #define INK_ACTIONS_WINDOW_H
 
 class InkscapeApplication;
-template<class T> class ConcreteInkscapeApplication;
 
-template<class T>
-void add_actions_window(ConcreteInkscapeApplication<T>* app);
+void add_actions_window(InkscapeApplication* app);
 
 #endif // INK_ACTIONS_WINDOW_H
 

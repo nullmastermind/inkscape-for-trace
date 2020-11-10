@@ -11,10 +11,9 @@
 #ifndef INK_ACTIONS_OBJECT_H
 #define INK_ACTIONS_OBJECT_H
 
-template<class T> class ConcreteInkscapeApplication;
+class InkscapeApplication;
 
-template<class T>
-void add_actions_object(ConcreteInkscapeApplication<T>* app);
+void add_actions_object(InkscapeApplication* app);
 
 #endif // INK_ACTIONS_OBJECT_H
 

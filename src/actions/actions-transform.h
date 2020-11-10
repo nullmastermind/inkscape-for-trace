@@ -11,10 +11,9 @@
 #ifndef INK_ACTIONS_TRANSFORM_H
 #define INK_ACTIONS_TRANSFORM_H
 
-template<class T> class ConcreteInkscapeApplication;
+class InkscapeApplication;
 
-template<class T>
-void add_actions_transform(ConcreteInkscapeApplication<T>* app);
+void add_actions_transform(InkscapeApplication* app);
 
 #endif // INK_ACTIONS_TRANSFORM_H
 

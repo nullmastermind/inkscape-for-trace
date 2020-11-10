@@ -385,7 +385,7 @@ sp_recent_open(Gtk::RecentChooser* recentchooser)
 
     Glib::RefPtr<Gio::File> file = Gio::File::create_for_uri(uri.raw());
 
-    ConcreteInkscapeApplication<Gtk::Application>* app = &(ConcreteInkscapeApplication<Gtk::Application>::get_instance());
+    auto *app = InkscapeApplication::instance();
 
     app->create_window(file);
 }

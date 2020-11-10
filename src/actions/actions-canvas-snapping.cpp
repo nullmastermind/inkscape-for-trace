@@ -243,7 +243,7 @@ add_actions_canvas_snapping(SPDocument* document)
     map->add_action_bool( "snap-path-clip",          sigc::bind<SPDocument*, SPAttr>(sigc::ptr_fun(&canvas_snapping_toggle),  document, SPAttr::INKSCAPE_SNAP_PATH_CLIP));
 
     // Check if there is already an application instance (GUI or non-GUI).
-    auto app = dynamic_cast<InkscapeApplication *>(Gio::Application::get_default().get());
+    auto app = InkscapeApplication::instance();
     if (!app) {
         std::cerr << "add_actions_canvas_snapping: no app!" << std::endl;
         return;

@@ -250,32 +250,27 @@ std::vector<std::vector<Glib::ustring>> raw_data_selection =
     // clang-format on
 };
 
-template<class T>
 void
-add_actions_selection(ConcreteInkscapeApplication<T>* app)
+add_actions_selection(InkscapeApplication* app)
 {
+    auto *gapp = app->gio_app();
+
     // clang-format off
-    app->add_action(               "select-clear",       sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_clear),              app)        );
-    app->add_action_radio_string(  "select",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_by_id),              app), "null"); // Backwards compatible.
-    app->add_action_radio_string(  "unselect",           sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&unselect_by_id),            app), "null"); // Match select.
-    app->add_action_radio_string(  "select-by-id",      sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_by_id),               app), "null");
-    app->add_action_radio_string(  "unselect-by-id",    sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&unselect_by_id),             app), "null");
-    app->add_action_radio_string(  "select-by-class",   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_by_class),            app), "null");
-    app->add_action_radio_string(  "select-by-element", sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_by_element),          app), "null");
-    app->add_action_radio_string(  "select-by-selector",sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_by_selector),         app), "null");
-    app->add_action_radio_string(  "select-all",         sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_all),                app), "null");
-    app->add_action_radio_string(  "select-invert",      sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_invert),             app), "null");
-    app->add_action(               "select-list",        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_list),               app)        );
+    gapp->add_action(               "select-clear",       sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_clear),              app)        );
+    gapp->add_action_radio_string(  "select",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_by_id),              app), "null"); // Backwards compatible.
+    gapp->add_action_radio_string(  "unselect",           sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&unselect_by_id),            app), "null"); // Match select.
+    gapp->add_action_radio_string(  "select-by-id",       sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_by_id),              app), "null");
+    gapp->add_action_radio_string(  "unselect-by-id",     sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&unselect_by_id),            app), "null");
+    gapp->add_action_radio_string(  "select-by-class",    sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_by_class),           app), "null");
+    gapp->add_action_radio_string(  "select-by-element",  sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_by_element),         app), "null");
+    gapp->add_action_radio_string(  "select-by-selector", sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_by_selector),        app), "null");
+    gapp->add_action_radio_string(  "select-all",         sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_all),                app), "null");
+    gapp->add_action_radio_string(  "select-invert",      sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_invert),             app), "null");
+    gapp->add_action(               "select-list",        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_list),               app)        );
     // clang-format on
 
     app->get_action_extra_data().add_data(raw_data_selection);
 }
-
-template void add_actions_selection(ConcreteInkscapeApplication<Gio::Application>* app);
-template void add_actions_selection(ConcreteInkscapeApplication<Gtk::Application>* app);
-
-
-
 
 
 /*
