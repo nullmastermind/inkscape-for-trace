@@ -7,19 +7,20 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <string>
-#include <fstream>
-#include <streambuf>
-
 #include "about.h"
+
+#include <algorithm>
+#include <fstream>
+#include <random>
+#include <regex>
+#include <streambuf>
+#include <string>
+
 #include "document.h"
 #include "inkscape-version.h"
-
 #include "io/resource.h"
-
 #include "ui/util.h"
 #include "ui/view/svg-view-widget.h"
-
 #include "util/units.h"
 
 using namespace Inkscape::IO;
@@ -110,10 +111,21 @@ void AboutDialog::show_about() {
 
         Gtk::TextView *authors;
         builder->get_widget("credits-authors", authors);
+        std::random_device rd;
+        std::mt19937 g(rd());
+
         if(authors) {
             std::ifstream fn(Resource::get_filename(Resource::DOCS, "AUTHORS"));
-            std::string str((std::istreambuf_iterator<char>(fn)),
-                             std::istreambuf_iterator<char>());
+            std::vector<std::string> authors_data;
+            std::string line;
+            while (getline(fn, line)) {
+                authors_data.push_back(line);
+            }
+            std::shuffle(std::begin(authors_data), std::end(authors_data), g);
+            std::string str = "";
+            for (auto author : authors_data) {
+                str += author + "\n";
+            }
             authors->get_buffer()->set_text(str.c_str());
         }
 
@@ -121,8 +133,17 @@ void AboutDialog::show_about() {
         builder->get_widget("credits-translators", translators);
         if(translators) {
             std::ifstream fn(Resource::get_filename(Resource::DOCS, "TRANSLATORS"));
-            std::string str((std::istreambuf_iterator<char>(fn)),
-                             std::istreambuf_iterator<char>());
+            std::vector<std::string> translators_data;
+            std::string line;
+            while (getline(fn, line)) {
+                translators_data.push_back(line);
+            }
+            std::string str = "";
+            std::regex e("(.*?)(<.*|)");
+            std::shuffle(std::begin(translators_data), std::end(translators_data), g);
+            for (auto translator : translators_data) {
+                str += std::regex_replace(translator, e, "$1") + "\n";
+            }
             translators->get_buffer()->set_text(str.c_str());
         }
 
