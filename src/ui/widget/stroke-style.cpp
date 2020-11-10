@@ -272,7 +272,7 @@ StrokeStyle::StrokeStyle() :
     //  miter limit is to cut off such spikes (i.e. convert them into bevels)
     //  when they become too long.
     //spw_label(t, _("Miter _limit:"), 0, i);
-    miterLimitAdj = new Glib::RefPtr<Gtk::Adjustment>(Gtk::Adjustment::create(4.0, 0.0, 100.0, 0.1, 10.0, 0.0));
+    miterLimitAdj = new Glib::RefPtr<Gtk::Adjustment>(Gtk::Adjustment::create(4.0, 0.0, 100000.0, 0.1, 10.0, 0.0));
     miterLimitSpin = new Inkscape::UI::Widget::SpinButton(*miterLimitAdj, 0.1, 2);
     miterLimitSpin->set_tooltip_text(_("Maximum length of the miter (in units of stroke width)"));
     miterLimitSpin->show();
