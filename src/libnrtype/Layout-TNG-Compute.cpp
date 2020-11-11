@@ -172,6 +172,7 @@ class Layout::Calculator
     there's only one instantiation of this struct, on the stack of
     calculate(). */
     struct ParagraphInfo {
+        Glib::ustring text;
         unsigned first_input_index;      ///< Index into Layout::_input_stream.
         Direction direction;
         Alignment alignment;
@@ -190,6 +191,7 @@ class Layout::Calculator
 
         void free()
         {
+            text = "";
             free_sequence(input_items);
             free_sequence(pango_items);
             free_sequence(unbroken_spans);
@@ -1244,17 +1246,10 @@ void  Layout::Calculator::_buildPangoItemizationForPara(ParagraphInfo *para) con
     TRACE((" ... compiled for font features\n"));
 #endif
 
-    Glib::ustring para_text;
-    PangoAttrList *attributes_list;
-    unsigned input_index;
-
-    para->free_sequence(para->pango_items);
-    para->char_attributes.clear();
-
     TRACE(("itemizing para, first input %d\n", para->first_input_index));
 
-    attributes_list = pango_attr_list_new();
-    for(input_index = para->first_input_index ; input_index < _flow._input_stream.size() ; input_index++) {
+    PangoAttrList *attributes_list = pango_attr_list_new();
+    for (unsigned input_index = para->first_input_index ; input_index < _flow._input_stream.size() ; input_index++) {
         if (_flow._input_stream[input_index]->Type() == CONTROL_CODE) {
             Layout::InputStreamControlCode const *control_code = static_cast<Layout::InputStreamControlCode const *>(_flow._input_stream[input_index]);
             if (   control_code->code == SHAPE_BREAK
@@ -1271,19 +1266,20 @@ void  Layout::Calculator::_buildPangoItemizationForPara(ParagraphInfo *para) con
                 continue;  // bad news: we'll have to ignore all this text because we know of no font to render it
 
             PangoAttribute *attribute_font_description = pango_attr_font_desc_new(font->descr);
-            attribute_font_description->start_index = para_text.bytes();
+            attribute_font_description->start_index = para->text.bytes();
 
 #if PANGO_VERSION_CHECK(1,37,1)
             PangoAttribute *attribute_font_features =
                 pango_attr_font_features_new( text_source->style->getFontFeatureString().c_str());
-            attribute_font_features->start_index = para_text.bytes();
+            attribute_font_features->start_index = para->text.bytes();
 #endif
-            para_text.append(&*text_source->text_begin.base(), text_source->text_length);     // build the combined text
-            attribute_font_description->end_index = para_text.bytes();
+            para->text.append(&*text_source->text_begin.base(), text_source->text_length);     // build the combined text
+
+            attribute_font_description->end_index = para->text.bytes();
             pango_attr_list_insert(attributes_list, attribute_font_description);
 
 #if PANGO_VERSION_CHECK(1,37,1)
-            attribute_font_features->end_index = para_text.bytes();
+            attribute_font_features->end_index = para->text.bytes();
             pango_attr_list_insert(attributes_list, attribute_font_features);
 #endif
 
@@ -1300,9 +1296,10 @@ void  Layout::Calculator::_buildPangoItemizationForPara(ParagraphInfo *para) con
         }
     }
 
-    TRACE(("whole para: \"%s\"\n", para_text.data()));
+    TRACE(("whole para: \"%s\"\n", para->text.data()));
     TRACE(("%d input sources used\n", input_index - para->first_input_index));
-    // do the pango_itemize()
+
+    // Pango Itemize
     GList *pango_items_glist = nullptr;
     para->direction = LEFT_TO_RIGHT; // CSS default
     if (_flow._input_stream[para->first_input_index]->Type() == TEXT_SOURCE) {
@@ -1310,12 +1307,12 @@ void  Layout::Calculator::_buildPangoItemizationForPara(ParagraphInfo *para) con
 
         para->direction =                (text_source->style->direction.computed == SP_CSS_DIRECTION_LTR) ? LEFT_TO_RIGHT : RIGHT_TO_LEFT;
         PangoDirection pango_direction = (text_source->style->direction.computed == SP_CSS_DIRECTION_LTR) ? PANGO_DIRECTION_LTR : PANGO_DIRECTION_RTL;
-        pango_items_glist = pango_itemize_with_base_dir(_pango_context, pango_direction, para_text.data(), 0, para_text.bytes(), attributes_list, nullptr);
+        pango_items_glist = pango_itemize_with_base_dir(_pango_context, pango_direction, para->text.data(), 0, para->text.bytes(), attributes_list, nullptr);
     }
 
     if( pango_items_glist == nullptr ) {
         // Type wasn't TEXT_SOURCE or direction was not set.
-        pango_items_glist = pango_itemize(_pango_context, para_text.data(), 0, para_text.bytes(), attributes_list, nullptr);
+        pango_items_glist = pango_itemize(_pango_context, para->text.data(), 0, para->text.bytes(), attributes_list, nullptr);
     }
 
     pango_attr_list_unref(attributes_list);
@@ -1334,8 +1331,8 @@ void  Layout::Calculator::_buildPangoItemizationForPara(ParagraphInfo *para) con
     g_list_free(pango_items_glist);
 
     // and get the character attributes on everything
-    para->char_attributes.resize(para_text.length() + 1);
-    pango_get_log_attrs(para_text.data(), para_text.bytes(), -1, nullptr, &*para->char_attributes.begin(), para->char_attributes.size());
+    para->char_attributes.resize(para->text.length() + 1);
+    pango_get_log_attrs(para->text.data(), para->text.bytes(), -1, nullptr, &*para->char_attributes.begin(), para->char_attributes.size());
 
     TRACE(("end para itemize, direction = %d\n", para->direction));
 }
@@ -1384,6 +1381,7 @@ unsigned Layout::Calculator::_buildSpansForPara(ParagraphInfo *para) const
     unsigned char_index_in_para = 0;
     unsigned byte_index_in_para = 0;
     unsigned input_index;
+    unsigned para_text_index = 0;
 
     TRACE(("build spans\n"));
     para->free_sequence(para->unbroken_spans);
@@ -1519,12 +1517,19 @@ unsigned Layout::Calculator::_buildSpansForPara(ParagraphInfo *para) const
                     characters and glyphs.  A big chunk of the conditional code which immediately follows this call
                     is there to clean up the resulting mess.
                     */
-                    
+
+                    // Assumption: old and new arguments are the same.
+                    auto gold = std::string_view(text_source->text->data() + span_start_byte_in_source, new_span.text_bytes);
+                    auto gnew = std::string_view(para->text.data()         + para_text_index,           new_span.text_bytes);
+                    assert (gold == gnew);
+
                     // Convert characters to glyphs
-                    pango_shape(text_source->text->data() + span_start_byte_in_source,
-                                new_span.text_bytes,
-                                &para->pango_items[pango_item_index].item->analysis,
-                                new_span.glyph_string);
+                    pango_shape_full(para->text.data() + para_text_index,
+                                     new_span.text_bytes,
+                                     para->text.data(),
+                                     -1,
+                                     &para->pango_items[pango_item_index].item->analysis,
+                                     new_span.glyph_string);
 
                     if (para->pango_items[pango_item_index].item->analysis.level & 1) {
                         // Right to left text (Arabic, Hebrew, etc.)
@@ -1658,6 +1663,7 @@ unsigned Layout::Calculator::_buildSpansForPara(ParagraphInfo *para) const
 
                 // calculations for moving to the next UnbrokenSpan
                 byte_index_in_para += new_span.text_bytes;
+                para_text_index += new_span.text_bytes;
                 char_index_in_source += g_utf8_strlen(&*new_span.input_stream_first_character.base(), new_span.text_bytes);
 
                 if (new_span.text_bytes >= pango_item_bytes) {   // end of pango item
@@ -1669,7 +1675,7 @@ unsigned Layout::Calculator::_buildSpansForPara(ParagraphInfo *para) const
                 // else <tspan> attribute changed
                 span_start_byte_in_source += new_span.text_bytes;
             }
-            char_index_in_para += char_index_in_source;
+            char_index_in_para += char_index_in_source; // This seems wrong. Probably should be inside loop.
         }
     }
     TRACE(("end build spans\n"));
@@ -2209,6 +2215,8 @@ bool Layout::Calculator::calculate()
                 _flow._characters.push_back(new_character);
             }
         }
+        // dumpPangoItemsOut(&para);
+        // dumpUnbrokenSpans(&para);
 
         para.free();
         para.first_input_index = para_end_input_index + 1;
