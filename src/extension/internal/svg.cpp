@@ -832,6 +832,10 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
         // SPDocument * ret = SPDocument::createNewDoc(file->get_uri().c_str(), true);
         SPDocument * ret = SPDocument::createNewDoc(uri, true);
 
+        if (!ret) {
+            return nullptr;
+        }
+
         // What is display unit doing here?
         Glib::ustring display_unit = doc->getDisplayUnit()->abbr;
         double width = ret->getWidth().value(display_unit);
