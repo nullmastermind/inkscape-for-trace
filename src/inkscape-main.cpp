@@ -226,7 +226,7 @@ int main(int argc, char *argv[])
 
     set_extensions_env();
 
-    auto ret = InkscapeApplication::instance()->gio_app()->run(argc, argv);
+    auto ret = InkscapeApplication::singleton().gio_app()->run(argc, argv);
 
 #ifdef _WIN32
     // switch back to initial console encoding

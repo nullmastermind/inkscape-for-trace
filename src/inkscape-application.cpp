@@ -486,10 +486,19 @@ InkscapeApplication::dump()
     }
 }
 
+static InkscapeApplication *_instance = nullptr;
+
+InkscapeApplication &InkscapeApplication::singleton()
+{
+    if (!_instance) {
+        _instance = new InkscapeApplication();
+    }
+    return *_instance;
+}
+
 InkscapeApplication *InkscapeApplication::instance()
 {
-    static InkscapeApplication _instance;
-    return &_instance;
+    return _instance;
 }
 
 void

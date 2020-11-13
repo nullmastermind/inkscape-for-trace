@@ -41,6 +41,8 @@ class InkscapeApplication
 
 public:
     /// Singleton instance
+    static InkscapeApplication &singleton();
+    /// Singleton instance, if it exists (will not create it)
     static InkscapeApplication *instance();
 
     /// The Gtk application instance, or NULL if running headless without display
