@@ -39,29 +39,20 @@
 #include "ui/simple-pref-pusher.h"
 
 #include "ui/dialog/clonetiler.h"
-#include "ui/dialog/dialog-manager.h"
-#include "ui/dialog/panel-dialog.h"
+#include "ui/dialog/dialog-container.h"
+#include "ui/dialog/dialog-base.h"
 
 #include "ui/widget/canvas.h"
 #include "ui/widget/spin-button-tool-item.h"
 
-// Disabled in 0.91 because of Bug #1274831 (crash, spraying an object 
+// Disabled in 0.91 because of Bug #1274831 (crash, spraying an object
 // with the mode: spray object in single path)
 // Please enable again when working on 1.0
 #define ENABLE_SPRAY_MODE_SINGLE_PATH
 
 Inkscape::UI::Dialog::CloneTiler *get_clone_tiler_panel(SPDesktop *desktop)
 {
-    if (Inkscape::UI::Dialog::PanelDialogBase *panel_dialog =
-        dynamic_cast<Inkscape::UI::Dialog::PanelDialogBase *>(desktop->_dlg_mgr->getDialog("CloneTiler"))) {
-        try {
-            Inkscape::UI::Dialog::CloneTiler &clone_tiler =
-                dynamic_cast<Inkscape::UI::Dialog::CloneTiler &>(panel_dialog->getPanel());
-            return &clone_tiler;
-        } catch (std::exception &e) { }
-    }
-
-    return nullptr;
+    return dynamic_cast<Inkscape::UI::Dialog::CloneTiler *>(desktop->getContainer()->get_dialog("DialogClonetiler"));
 }
 
 namespace Inkscape {
@@ -125,7 +116,7 @@ SprayToolbar::SprayToolbar(SPDesktop *desktop) :
         add(*width_item);
         width_item->set_sensitive(true);
     }
-    
+
     /* Use Pressure Width button */
     {
         auto pressure_item = add_toggle_button(_("Pressure"),
@@ -308,7 +299,7 @@ SprayToolbar::SprayToolbar(SPDesktop *desktop) :
         _picker->set_active(prefs->getBool("/tools/spray/picker", false));
         _picker->signal_toggled().connect(sigc::mem_fun(*this, &SprayToolbar::toggle_picker));
     }
-    
+
     /* Pick Fill */
     {
         _pick_fill = add_toggle_button(_("Apply picked color to fill"),
@@ -352,7 +343,7 @@ SprayToolbar::SprayToolbar(SPDesktop *desktop) :
                                                           _pick_center,
                                                           "/tools/spray/pick_center"));
     }
-    
+
     gint mode = prefs->getInt("/tools/spray/mode", 1);
     _mode_buttons[mode]->set_active();
     show_all();
@@ -512,7 +503,7 @@ SprayToolbar::toggle_picker()
         prefs->setBool("/dialogs/clonetiler/dotrace", false);
         SPDesktop *dt = _desktop;
         if (Inkscape::UI::Dialog::CloneTiler *ct = get_clone_tiler_panel(dt)){
-            dt->_dlg_mgr->showDialog("CloneTiler");
+            dt->getContainer()->new_dialog("CloneTiler");
             ct->show_page_trace();
         }
     }

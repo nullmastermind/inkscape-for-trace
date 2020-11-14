@@ -38,7 +38,7 @@
 #include "object/sp-text.h"
 #include "object/sp-tref.h"
 
-#include "ui/dialog/dialog-manager.h"
+#include "ui/dialog/dialog-container.h"
 #include "ui/dialog/inkscape-preferences.h" // for PREFS_PAGE_SPELLCHECK
 #include "ui/tools-switch.h"
 #include "ui/tools/text-tool.h"
@@ -79,27 +79,27 @@ std::vector<LanguagePair> SpellCheck::get_available_langs()
 static void show_spellcheck_preferences_dialog()
 {
     Inkscape::Preferences::get()->setInt("/dialogs/preferences/page", PREFS_PAGE_SPELLCHECK);
-    SP_ACTIVE_DESKTOP->_dlg_mgr->showDialog("InkscapePreferences");
+    SP_ACTIVE_DESKTOP->getContainer()->new_dialog("InkscapePreferences");
 }
 
-SpellCheck::SpellCheck () :
-    UI::Widget::Panel("/dialogs/spellcheck/", SP_VERB_DIALOG_SPELLCHECK),
-    _text(nullptr),
-    _layout(nullptr),
-    _stops(0),
-    _adds(0),
-    _working(false),
-    _local_change(false),
-    _prefs(nullptr),
-    accept_button(_("_Accept"), true),
-    ignoreonce_button(_("_Ignore once"), true),
-    ignore_button(_("_Ignore"), true),
-    add_button(_("A_dd"), true),
-    dictionary_label(_("Language")),
-    dictionary_hbox(false, 0),
-    stop_button(_("_Stop"), true),
-    start_button(_("_Start"), true),
-    desktop(nullptr)
+SpellCheck::SpellCheck()
+    : DialogBase("/dialogs/spellcheck/", SP_VERB_DIALOG_SPELLCHECK)
+    , _text(nullptr)
+    , _layout(nullptr)
+    , _stops(0)
+    , _adds(0)
+    , _working(false)
+    , _local_change(false)
+    , _prefs(nullptr)
+    , accept_button(_("_Accept"), true)
+    , ignoreonce_button(_("_Ignore once"), true)
+    , ignore_button(_("_Ignore"), true)
+    , add_button(_("A_dd"), true)
+    , dictionary_label(_("Language"))
+    , dictionary_hbox(false, 0)
+    , stop_button(_("_Stop"), true)
+    , start_button(_("_Start"), true)
+    , desktop(nullptr)
 {
     _prefs = Inkscape::Preferences::get();
 
@@ -175,13 +175,13 @@ SpellCheck::SpellCheck () :
     /*
      * Main dialog
      */
-    Gtk::Box *contents = _getContents();
-    contents->set_spacing(6);
-    contents->pack_start (banner_hbox, false, false, 0);
-    contents->pack_start (suggestion_hbox, true, true, 0);
-    contents->pack_start (dictionary_hbox, false, false, 0);
-    contents->pack_start (action_sep, false, false, 6);
-    contents->pack_start (actionbutton_hbox, false, false, 0);
+    set_orientation(Gtk::ORIENTATION_VERTICAL);
+    set_spacing(6);
+    pack_start (banner_hbox, false, false, 0);
+    pack_start (suggestion_hbox, true, true, 0);
+    pack_start (dictionary_hbox, false, false, 0);
+    pack_start (action_sep, false, false, 6);
+    pack_start (actionbutton_hbox, false, false, 0);
 
     /*
      * Signal handlers
@@ -212,9 +212,18 @@ SpellCheck::~SpellCheck()
     disconnect();
 }
 
-void SpellCheck::setDesktop(SPDesktop *desktop)
+void SpellCheck::update()
 {
-    Panel::setDesktop(desktop);
+    if (!_app) {
+        std::cerr << "SpellCheck::update(): _app is null" << std::endl;
+        return;
+    }
+
+    SPDesktop *desktop = getDesktop();
+
+    if (!desktop) {
+        return;
+    }
 
     this->desktop = desktop;
 
@@ -469,7 +478,7 @@ SpellCheck::nextWord()
         }
     }
 
-    // skip ALL-CAPS words 
+    // skip ALL-CAPS words
     if (_prefs->getInt(_prefs_path + "ignoreallcaps") != 0) {
         bool allcaps = true;
         for (unsigned int i : _word) {
@@ -566,7 +575,7 @@ SpellCheck::nextWord()
                 desktop->selection->set (_text);
             else if (*cursor <= _begin_w || *cursor >= _end_w)
                 sp_text_context_place_cursor (SP_TEXT_CONTEXT(desktop->event_context), _text, _begin_w);
-        } 
+        }
 
 #if WITH_GSPELL
 

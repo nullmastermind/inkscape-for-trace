@@ -924,24 +924,21 @@ static void on_selection_changed(AlignAndDistribute *daad)
 
 /////////////////////////////////////////////////////////
 
-
-
-
 AlignAndDistribute::AlignAndDistribute()
-    : UI::Widget::Panel("/dialogs/align", SP_VERB_DIALOG_ALIGN_DISTRIBUTE),
-      randomize_bbox(),
-      _alignFrame(_("Align")),
-      _distributeFrame(_("Distribute")),
-      _rearrangeFrame(_("Rearrange")),
-      _removeOverlapFrame(_("Remove overlaps")),
-      _nodesFrame(_("Nodes")),
-      _alignTable(),
-      _distributeTable(),
-      _rearrangeTable(),
-      _removeOverlapTable(),
-      _nodesTable(),
-      _anchorLabel(_("Relative to: ")),
-      _anchorLabelNode(_("Relative to: "))
+    : DialogBase("/dialogs/align", SP_VERB_DIALOG_ALIGN_DISTRIBUTE)
+    , randomize_bbox()
+    , _alignFrame(_("Align"))
+    , _distributeFrame(_("Distribute"))
+    , _rearrangeFrame(_("Rearrange"))
+    , _removeOverlapFrame(_("Remove overlaps"))
+    , _nodesFrame(_("Nodes"))
+    , _alignTable()
+    , _distributeTable()
+    , _rearrangeTable()
+    , _removeOverlapTable()
+    , _nodesTable()
+    , _anchorLabel(_("Relative to: "))
+    , _anchorLabelNode(_("Relative to: "))
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
@@ -1133,16 +1130,16 @@ AlignAndDistribute::AlignAndDistribute()
     _removeOverlapFrame.add(_removeOverlapTableBox);
     _nodesFrame.add(_alignBoxNode);
 
-    Gtk::Box *contents = _getContents();
-    contents->set_spacing(4);
+    set_orientation(Gtk::ORIENTATION_VERTICAL);
+    set_spacing(4);
 
     // Notebook for individual transformations
 
-    contents->pack_start(_alignFrame, Gtk::PACK_SHRINK);
-    contents->pack_start(_distributeFrame, Gtk::PACK_SHRINK);
-    contents->pack_start(_rearrangeFrame, Gtk::PACK_SHRINK);
-    contents->pack_start(_removeOverlapFrame, Gtk::PACK_SHRINK);
-    contents->pack_start(_nodesFrame, Gtk::PACK_SHRINK);
+    pack_start(_alignFrame, Gtk::PACK_SHRINK);
+    pack_start(_distributeFrame, Gtk::PACK_SHRINK);
+    pack_start(_rearrangeFrame, Gtk::PACK_SHRINK);
+    pack_start(_removeOverlapFrame, Gtk::PACK_SHRINK);
+    pack_start(_nodesFrame, Gtk::PACK_SHRINK);
 
     //Connect to the global tool change signal
     _toolChangeConn = INKSCAPE.signal_eventcontext_set.connect(sigc::hide<0>(sigc::bind(sigc::ptr_fun(&on_tool_changed), this)));
@@ -1210,7 +1207,7 @@ void AlignAndDistribute::setMode(bool nodeEdit)
     ((_rearrangeFrame).*(mSel))();
     ((_removeOverlapFrame).*(mSel))();
     ((_nodesFrame).*(mNode))();
-    _getContents()->queue_resize();
+    queue_resize();
 
 }
 void AlignAndDistribute::addAlignButton(const Glib::ustring &id, const Glib::ustring tiptext,

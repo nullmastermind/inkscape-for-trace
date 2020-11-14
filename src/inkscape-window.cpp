@@ -27,6 +27,8 @@
 
 #include "object/sp-namedview.h"  // TODO Remove need for this!
 
+#include "ui/dialog/dialog-container.h"
+#include "ui/dialog/dialog-window.h"
 #include "ui/drag-and-drop.h"  // Move to canvas?
 #include "ui/interface.h" // main menu, sp_ui_close_view()
 
@@ -40,6 +42,9 @@
 #include "ui/shortcuts.h"
 
 #include "widgets/desktop-widget.h"
+
+using Inkscape::UI::Dialog::DialogContainer;
+using Inkscape::UI::Dialog::DialogWindow;
 
 InkscapeWindow::InkscapeWindow(SPDocument* document)
     : _document(document)
@@ -117,6 +122,8 @@ InkscapeWindow::change_document(SPDocument* document)
     _app->set_active_document(_document);
 
     setup_view();
+    std::cout << "change_document" << std::endl;
+    update_dialogs();
 }
 
 // Sets up the window and view according to user preferences and <namedview> of the just loaded document
@@ -203,6 +210,7 @@ InkscapeWindow::on_focus_in_event(GdkEventFocus* event)
         _app->set_active_view(_desktop);
         _app->set_active_selection(_desktop->selection);
         _app->windows_update(_document);
+        update_dialogs();
     } else {
         std::cerr << "Inkscapewindow::on_focus_in_event: app is nullptr!" << std::endl;
     }
@@ -219,6 +227,27 @@ InkscapeWindow::on_delete_event(GdkEventAny* event)
     }
     return true;
 };
+
+void InkscapeWindow::on_selection_changed()
+{
+    if (_app) {
+        _app->set_active_selection(_desktop->selection);
+        update_dialogs();
+    }
+}
+
+void InkscapeWindow::update_dialogs()
+{
+    std::vector<Gtk::Window *> windows = _app->get_windows();
+    for (auto window : windows) {
+        DialogWindow *dock = dynamic_cast<DialogWindow *>(window);
+        if (dock) {
+            dock->update_dialogs();
+        }
+
+        _desktop_widget->getContainer()->update_dialogs();
+    }
+}
 
 /*
   Local Variables:

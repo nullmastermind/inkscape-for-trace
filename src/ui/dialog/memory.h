@@ -12,13 +12,14 @@
 #ifndef SEEN_INKSCAPE_UI_DIALOG_MEMORY_H
 #define SEEN_INKSCAPE_UI_DIALOG_MEMORY_H
 
-#include "ui/widget/panel.h"
+#include "ui/dialog/dialog-base.h"
 
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
-class Memory : public UI::Widget::Panel {
+class Memory : public DialogBase
+{
 public:
     Memory();
     ~Memory() override;
@@ -26,7 +27,7 @@ public:
     static Memory &getInstance() { return *new Memory(); }
 
 protected:
-    void _apply() override;
+    bool _apply(GdkEventButton *);
 
 private:
     Memory(Memory const &d) = delete; // no copy

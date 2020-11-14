@@ -409,7 +409,7 @@ void SvgFontsDialog::on_font_selection_changed(){
     kerning_preview.set_svgfont(svgfont);
     _font_da.set_svgfont(svgfont);
     _font_da.redraw();
-    
+
     kerning_slider->set_range(0, spfont->horiz_adv_x);
     kerning_slider->set_draw_value(false);
     kerning_slider->set_value(0);
@@ -993,9 +993,10 @@ void SvgFontsDialog::add_font(){
 }
 
 SvgFontsDialog::SvgFontsDialog()
- : UI::Widget::Panel("/dialogs/svgfonts", SP_VERB_DIALOG_SVG_FONTS),
+ : DialogBase("/dialogs/svgfonts", SP_VERB_DIALOG_SVG_FONTS),
    _add(_("_New"), true)
 {
+    set_orientation(Gtk::ORIENTATION_VERTICAL);
     kerning_slider = Gtk::manage(new Gtk::Scale(Gtk::ORIENTATION_HORIZONTAL));
     _add.signal_clicked().connect(sigc::mem_fun(*this, &SvgFontsDialog::add_font));
 
@@ -1006,9 +1007,9 @@ SvgFontsDialog::SvgFontsDialog()
     vbox->pack_start(_add, false, false);
     hbox->add(*vbox);
     hbox->add(_font_settings);
-    _getContents()->add(*hbox);
+    add(*hbox);
 
-//List of SVGFonts declared in a document:
+    // List of SVGFonts declared in a document:
     _model = Gtk::ListStore::create(_columns);
     _FontsList.set_model(_model);
     _FontsList.append_column_editable(_("_Fonts"), _columns.label);
@@ -1023,35 +1024,39 @@ SvgFontsDialog::SvgFontsDialog()
 
     _font_settings.add(*tabs);
 
-//Text Preview:
+    // Text Preview:
     _preview_entry.signal_changed().connect(sigc::mem_fun(*this, &SvgFontsDialog::on_preview_text_changed));
-    _getContents()->pack_start((Gtk::Widget&) _font_da, false, false);
+    pack_start((Gtk::Widget&) _font_da, false, false);
     _preview_entry.set_text(_("Sample Text"));
     _font_da.set_text(_("Sample Text"));
 
     Gtk::HBox* preview_entry_hbox = Gtk::manage(new Gtk::HBox(false, 4));
-    _getContents()->pack_start(*preview_entry_hbox, false, false); // Non-latin characters may need more height.
+    pack_start(*preview_entry_hbox, false, false); // Non-latin characters may need more height.
     preview_entry_hbox->pack_start(*Gtk::manage(new Gtk::Label(_("Preview Text:"))), false, false);
     preview_entry_hbox->pack_start(_preview_entry, true, true);
 
     _FontsList.signal_button_release_event().connect_notify(sigc::mem_fun(*this, &SvgFontsDialog::fonts_list_button_release));
     create_fonts_popup_menu(_FontsList, sigc::mem_fun(*this, &SvgFontsDialog::remove_selected_font));
 
-    _getContents()->show_all();
+    show_all();
 }
 
 SvgFontsDialog::~SvgFontsDialog()= default;
 
-void SvgFontsDialog::setDesktop(SPDesktop *desktop)
+void SvgFontsDialog::update()
 {
-    if (getDesktop()) {
-        _defs_observer_connection.disconnect();
+    if (!_app) {
+        std::cerr << "SvgFontsDialog::update(): _app is null" << std::endl;
+        return;
     }
 
-    Panel::setDesktop(desktop);
+    SPDesktop *desktop = getDesktop();
 
-    if (!desktop)
+    if (!desktop) {
         return;
+    }
+
+    _defs_observer_connection.disconnect();
 
     _defs_observer.set(desktop->getDocument()->getDefs());
     _defs_observer_connection =

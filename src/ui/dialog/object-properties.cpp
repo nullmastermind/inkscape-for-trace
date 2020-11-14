@@ -50,7 +50,7 @@ namespace UI {
 namespace Dialog {
 
 ObjectProperties::ObjectProperties()
-    : UI::Widget::Panel("/dialogs/object/", SP_VERB_DIALOG_ITEM)
+    : DialogBase("/dialogs/object/", SP_VERB_DIALOG_ITEM)
     , _blocked(false)
     , _current_item(nullptr)
     , _label_id(_("_ID:"), true)
@@ -97,15 +97,15 @@ ObjectProperties::~ObjectProperties()
 
 void ObjectProperties::_init()
 {
-    Gtk::Box *contents = _getContents();
-    contents->set_spacing(0);
+    set_orientation(Gtk::ORIENTATION_VERTICAL);
+    set_spacing(0);
 
     auto grid_top = Gtk::manage(new Gtk::Grid());
     grid_top->set_row_spacing(4);
     grid_top->set_column_spacing(0);
     grid_top->set_border_width(4);
 
-    contents->pack_start(*grid_top, false, false, 0);
+    pack_start(*grid_top, false, false, 0);
 
 
     /* Create the label for the object id */
@@ -172,7 +172,7 @@ void ObjectProperties::_init()
     UI::Widget::Frame *frame_desc = Gtk::manage(new UI::Widget::Frame("", FALSE));
     frame_desc->set_label_widget(*label_desc);
     frame_desc->set_padding (0,0,0,0);
-    contents->pack_start(*frame_desc, true, true, 0);
+    pack_start(*frame_desc, true, true, 0);
 
     /* Create the text view box for the object description */
     _ft_description.set_border_width(4);
@@ -233,7 +233,7 @@ void ObjectProperties::_init()
 
     /* Check boxes */
     Gtk::HBox *hb_checkboxes = Gtk::manage(new Gtk::HBox());
-    contents->pack_start(*hb_checkboxes, Gtk::PACK_SHRINK, 0);
+    pack_start(*hb_checkboxes, Gtk::PACK_SHRINK, 0);
 
     auto grid_cb = Gtk::manage(new Gtk::Grid());
     grid_cb->set_row_homogeneous();
@@ -278,13 +278,13 @@ void ObjectProperties::_init()
 
     /* Interactivity options */
     _exp_interactivity.set_vexpand(false);
-    contents->pack_start(_exp_interactivity, Gtk::PACK_SHRINK);
+    pack_start(_exp_interactivity, Gtk::PACK_SHRINK);
 
     show_all();
-    update();
+    update_entries();
 }
 
-void ObjectProperties::update()
+void ObjectProperties::update_entries()
 {
     if (_blocked || !_desktop) {
         return;
@@ -294,19 +294,18 @@ void ObjectProperties::update()
     }
 
     Inkscape::Selection *selection = SP_ACTIVE_DESKTOP->getSelection();
-    Gtk::Box *contents = _getContents();
 
     if (!selection->singleItem()) {
-        contents->set_sensitive (false);
+        set_sensitive (false);
         _current_item = nullptr;
         //no selection anymore or multiple objects selected, means that we need
         //to close the connections to the previously selected object
         _attr_table->clear();
         return;
     } else {
-        contents->set_sensitive (true);
+        set_sensitive (true);
     }
-    
+
     SPItem *item = selection->singleItem();
     if (_current_item == item)
     {
@@ -318,7 +317,7 @@ void ObjectProperties::update()
     _cb_aspect_ratio.set_active(g_strcmp0(item->getAttribute("preserveAspectRatio"), "none") != 0);
     _cb_lock.set_active(item->isLocked());           /* Sensitive */
     _cb_hide.set_active(item->isExplicitlyHidden()); /* Hidden */
-    
+
     if (item->cloned) {
         /* ID */
         _entry_id.set_text("");
@@ -390,7 +389,7 @@ void ObjectProperties::update()
             _tv_description.get_buffer()->set_text("");
         }
         _ft_description.set_sensitive(TRUE);
-        
+
         if (_current_item == nullptr) {
             _attr_table->set_object(obj, _int_labels, _int_attrs, (GtkWidget*) _exp_interactivity.gobj());
         } else {
@@ -407,7 +406,7 @@ void ObjectProperties::_labelChanged()
     if (_blocked) {
         return;
     }
-    
+
     SPItem *item = SP_ACTIVE_DESKTOP->getSelection()->singleItem();
     g_return_if_fail (item != nullptr);
 
@@ -466,7 +465,7 @@ void ObjectProperties::_labelChanged()
         DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_DIALOG_ITEM,
                 _("Set object description"));
     }
-    
+
     _blocked = false;
 }
 
@@ -475,7 +474,7 @@ void ObjectProperties::_imageRenderingChanged()
     if (_blocked) {
         return;
     }
-    
+
     SPItem *item = SP_ACTIVE_DESKTOP->getSelection()->singleItem();
     g_return_if_fail (item != nullptr);
 
@@ -493,7 +492,7 @@ void ObjectProperties::_imageRenderingChanged()
                 _("Set image rendering option"));
     }
     sp_repr_css_attr_unref(css);
-        
+
     _blocked = false;
 }
 
@@ -556,9 +555,18 @@ void ObjectProperties::_hiddenToggled()
     _blocked = false;
 }
 
-void ObjectProperties::setDesktop(SPDesktop *desktop)
+void ObjectProperties::update()
 {
-    Panel::setDesktop(desktop);
+    if (!_app) {
+        std::cerr << "ObjectProperties::update(): _app is null" << std::endl;
+        return;
+    }
+
+    SPDesktop *desktop = getDesktop();
+
+    if (!desktop) {
+        return;
+    }
 
     if (this->_desktop != desktop) {
         if (this->_desktop) {
@@ -568,13 +576,13 @@ void ObjectProperties::setDesktop(SPDesktop *desktop)
         this->_desktop = desktop;
         if (desktop && desktop->selection) {
             _selection_changed_connection = desktop->selection->connectChanged(
-                sigc::hide(sigc::mem_fun(*this, &ObjectProperties::update))
+                sigc::hide(sigc::mem_fun(*this, &ObjectProperties::update_entries))
             );
             _subselection_changed_connection = desktop->connectToolSubselectionChanged(
-                sigc::hide(sigc::mem_fun(*this, &ObjectProperties::update))
+                sigc::hide(sigc::mem_fun(*this, &ObjectProperties::update_entries))
             );
         }
-        update();
+        update_entries();
     }
 }
 

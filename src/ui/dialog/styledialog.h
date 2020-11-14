@@ -15,7 +15,6 @@
 #ifndef STYLEDIALOG_H
 #define STYLEDIALOG_H
 
-#include "style-enums.h"
 #include <glibmm/regex.h>
 #include <gtkmm/adjustment.h>
 #include <gtkmm/builder.h>
@@ -35,13 +34,12 @@
 #include <gtkmm/treestore.h>
 #include <gtkmm/treeview.h>
 #include <gtkmm/viewport.h>
-#include <ui/widget/panel.h>
-
-
-#include "xml/helper-observer.h"
-
 #include <memory>
 #include <vector>
+
+#include "style-enums.h"
+#include "ui/dialog/dialog-base.h"
+#include "xml/helper-observer.h"
 
 namespace Inkscape {
 
@@ -61,16 +59,16 @@ namespace Dialog {
  *   1. The text node of the style element.
  *   2. The Gtk::TreeModel.
  */
-class StyleDialog : public Widget::Panel {
-
-  public:
+class StyleDialog : public DialogBase
+{
+public:
     ~StyleDialog() override;
     // No default constructor, noncopyable, nonassignable
     StyleDialog();
     StyleDialog(StyleDialog const &d) = delete;
     StyleDialog operator=(StyleDialog const &d) = delete;
 
-    void setDesktop(SPDesktop *desktop) override;
+    void update() override;
 
     static StyleDialog &getInstance() { return *new StyleDialog(); }
     void setCurrentSelector(Glib::ustring current_selector);

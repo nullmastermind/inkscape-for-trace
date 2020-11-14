@@ -82,7 +82,7 @@ namespace Inkscape {
 
     namespace UI {
         namespace Dialog {
-            class DialogManager;
+            class DialogContainer;
         }
 
         namespace Tools {
@@ -137,8 +137,6 @@ namespace Inkscape {
 class SPDesktop : public Inkscape::UI::View::View
 {
 public:
-    Inkscape::UI::Dialog::DialogManager *_dlg_mgr;
-    Inkscape::UI::Dialog::DialogManager *_dlg_mgr_owned = nullptr;
     SPNamedView               *namedview;
     Inkscape::LayerModel      *layers;
     /// current selection; will never generally be NULL
@@ -219,7 +217,7 @@ public:
     sigc::signal<void, SPObject *>     _layer_changed_signal;
     sigc::signal<bool, const SPCSSAttr *>::accumulated<StopOnTrue> _set_style_signal;
     sigc::signal<int, SPStyle *, int>::accumulated<StopOnNonZero> _query_style_signal;
-    
+
     /// Emitted when the zoom factor changes (not emitted when scrolling).
     /// The parameter is the new zoom factor
     sigc::signal<void, double> signal_zoom_changed;
@@ -276,6 +274,7 @@ public:
     void redrawDesktop();
 
     Inkscape::UI::Widget::Dock* getDock();
+    Inkscape::UI::Dialog::DialogContainer *getContainer();
 
     void set_active (bool new_active);
 
@@ -307,7 +306,7 @@ public:
     void prev_transform();
     void next_transform();
     void clear_transform_history();
-    
+
     void set_display_area (bool log = true);
     void set_display_area (Geom::Point const &c, Geom::Point const &w, bool log = true);
     void set_display_area (Geom::Rect const &a, Geom::Coord border, bool log = true);
@@ -373,7 +372,7 @@ public:
     void layoutWidget();
     void destroyWidget();
     void setToolboxFocusTo (gchar const* label);
-    Gtk::Toolbar* get_toolbar_by_name(const Glib::ustring& name); 
+    Gtk::Toolbar *get_toolbar_by_name(const Glib::ustring& name);
     void setToolboxAdjustmentValue (gchar const* id, double val);
     bool isToolboxButtonActive (gchar const *id);
     void updateNow();
@@ -408,10 +407,6 @@ public:
     void maximize();
     void fullscreen();
     void focusMode(bool mode = true);
-    /**
-     * Reopen any dialogs that were open when inkscape last shutdown
-     */
-    void show_dialogs();
 
     // TODO return const ref instead of copy
     Geom::Affine w2d() const; //transformation from window to desktop coordinates (zoom/rotate).
@@ -524,7 +519,7 @@ private:
         void _update() {
             _d2w = _scale * _rotate * _flip;
             _w2d = _d2w.inverse();
-        }            
+        }
         Geom::Affine  _w2d;      // Window to desktop
         Geom::Affine  _d2w;      // Desktop to window
         Geom::Rotate  _rotate;   // Rotate part of _w2d

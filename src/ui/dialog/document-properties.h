@@ -20,20 +20,19 @@
 #endif
 
 #include <cstddef>
-#include <sigc++/sigc++.h>
+#include <gtkmm/buttonbox.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/notebook.h>
-#include <gtkmm/buttonbox.h>
 #include <gtkmm/textview.h>
+#include <sigc++/sigc++.h>
 
+#include "ui/dialog/dialog-base.h"
+#include "ui/widget/licensor.h"
 #include "ui/widget/page-sizer.h"
 #include "ui/widget/registered-widget.h"
 #include "ui/widget/registry.h"
 #include "ui/widget/tolerance-slider.h"
-#include "ui/widget/panel.h"
-#include "ui/widget/licensor.h"
-
 #include "xml/helper-observer.h"
 
 namespace Inkscape {
@@ -49,13 +48,14 @@ namespace Inkscape {
 
 typedef std::list<UI::Widget::EntityEntry*> RDElist;
 
-class DocumentProperties : public UI::Widget::Panel {
+class DocumentProperties : public DialogBase
+{
 public:
-    void  update();
+    void  update_widgets();
     static DocumentProperties &getInstance();
     static void destroy();
 
-    void setDesktop(SPDesktop *desktop) override;
+    void update() override;
 
     void  update_gridspage();
 

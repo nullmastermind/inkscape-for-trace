@@ -13,15 +13,16 @@
 #ifndef SEEN_UI_DIALOGS_ATTRDIALOG_H
 #define SEEN_UI_DIALOGS_ATTRDIALOG_H
 
-#include "desktop.h"
-#include "message.h"
 #include <gtkmm/dialog.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/popover.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/textview.h>
 #include <gtkmm/treeview.h>
-#include <ui/widget/panel.h>
+
+#include "desktop.h"
+#include "message.h"
+#include "ui/dialog/dialog-base.h"
 
 #define ATTR_DIALOG(obj) (dynamic_cast<Inkscape::UI::Dialog::AttrDialog*>((Inkscape::UI::Dialog::AttrDialog*)obj))
 
@@ -36,7 +37,7 @@ namespace Dialog {
  * This dialog allows to add, delete and modify XML attributes created in the
  * xml editor.
  */
-class AttrDialog : public UI::Widget::Panel
+class AttrDialog : public DialogBase
 {
 public:
     AttrDialog();
@@ -95,7 +96,7 @@ public:
     bool _updating;
 
     // Helper functions
-    void setDesktop(SPDesktop* desktop) override;
+    void update() override;
     void setRepr(Inkscape::XML::Node * repr);
     void setUndo(Glib::ustring const &event_description);
     /**

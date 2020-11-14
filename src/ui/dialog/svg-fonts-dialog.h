@@ -12,10 +12,7 @@
 #ifndef INKSCAPE_UI_DIALOG_SVG_FONTS_H
 #define INKSCAPE_UI_DIALOG_SVG_FONTS_H
 
-#include "ui/widget/panel.h"
 #include <2geom/pathvector.h>
-#include "ui/widget/spinbutton.h"
-
 #include <gtkmm/box.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/drawingarea.h>
@@ -25,6 +22,8 @@
 #include <gtkmm/treeview.h>
 
 #include "attributes.h"
+#include "ui/dialog/dialog-base.h"
+#include "ui/widget/spinbutton.h"
 #include "xml/helper-observer.h"
 
 namespace Gtk {
@@ -61,14 +60,15 @@ public:
     void update(SPFont*);
 };
 
-class SvgFontsDialog : public UI::Widget::Panel {
+class SvgFontsDialog : public DialogBase
+{
 public:
     SvgFontsDialog();
     ~SvgFontsDialog() override;
 
     static SvgFontsDialog &getInstance() { return *new SvgFontsDialog(); }
 
-    void setDesktop(SPDesktop *) override;
+    void update() override;
 
     void update_fonts();
     SvgFont* get_selected_svgfont();

@@ -70,7 +70,7 @@ namespace UI {
 namespace Dialog {
 
 TextEdit::TextEdit()
-    : UI::Widget::Panel("/dialogs/textandfont", SP_VERB_DIALOG_TEXT),
+    : DialogBase("/dialogs/textandfont", SP_VERB_DIALOG_TEXT),
       selectChangedConn(),
       subselChangedConn(),
       selectModifiedConn(),
@@ -126,13 +126,13 @@ TextEdit::TextEdit()
     gspell_text_view_basic_setup(gspell_view);
 #endif
 
-    _setContents(contents);
+    add(*contents);
 
     /* Signal handlers */
     text_buffer->signal_changed().connect(sigc::mem_fun(*this, &TextEdit::onChange));
     setasdefault_button->signal_clicked().connect(sigc::mem_fun(*this, &TextEdit::onSetDefault));
     apply_button->signal_clicked().connect(sigc::mem_fun(*this, &TextEdit::onApply));
-    close_button->signal_clicked().connect(sigc::bind(_signal_response.make_slot(), GTK_RESPONSE_CLOSE));
+    // close_button->signal_clicked().connect(sigc::bind(_signal_response.make_slot(), GTK_RESPONSE_CLOSE));
     fontChangedConn = font_selector.connectChanged(sigc::mem_fun(*this, &TextEdit::onFontChange));
     fontFeaturesChangedConn = font_features.connectChanged(sigc::mem_fun(*this, &TextEdit::onChange));
     notebook->signal_switch_page().connect(sigc::mem_fun(*this, &TextEdit::onFontFeatures));
@@ -230,7 +230,7 @@ void TextEdit::onReadSelection ( gboolean dostyle, gboolean /*docontent*/ )
         // Update Size.
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         int unit = prefs->getInt("/options/font/unitType", SP_CSS_UNIT_PT);
-        double size = sp_style_css_size_px_to_units(query.font_size.computed, unit); 
+        double size = sp_style_css_size_px_to_units(query.font_size.computed, unit);
         font_selector.update_size (size);
         selected_fontsize = size;
         // Update font features (variant) widget
@@ -498,13 +498,18 @@ void TextEdit::onFontChange(Glib::ustring fontspec)
     onChange();
 }
 
-void TextEdit::setDesktop(SPDesktop *desktop)
+void TextEdit::update()
 {
+    if (!_app) {
+        std::cerr << "TextEdit::update(): _app is null" << std::endl;
+        return;
+    }
+
+    SPDesktop *desktop = getDesktop();
+
     selectModifiedConn.disconnect();
     subselChangedConn.disconnect();
     selectChangedConn.disconnect();
-
-    Panel::setDesktop(desktop);
 
     {
         if (desktop && desktop->selection) {

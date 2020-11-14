@@ -4,7 +4,6 @@ set(extension_SRC
 	db.cpp
 	dependency.cpp
 	effect.cpp
-	error-file.cpp
 	execution-env.cpp
 	extension.cpp
 	init.cpp
@@ -74,7 +73,6 @@ set(extension_SRC
 	db.h
 	dependency.h
 	effect.h
-	error-file.h
 	execution-env.h
 	extension.h
 	init.h

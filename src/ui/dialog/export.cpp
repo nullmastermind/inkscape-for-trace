@@ -149,47 +149,47 @@ static const char * selection_labels[SELECTION_NUMBER_OF] = {
     N_("_Page"), N_("_Drawing"), N_("_Selection"), N_("_Custom")
 };
 
-Export::Export () :
-    UI::Widget::Panel("/dialogs/export/", SP_VERB_DIALOG_EXPORT),
-    current_key(SELECTION_PAGE),
-    manual_key(SELECTION_PAGE),
-    original_name(),
-    doc_export_name(),
-    filename_modified(false),
-    update(false),
-    togglebox(true, 0),
-    area_box(false, 3),
-    singleexport_box(false, 0),
-    size_box(false, 3),
-    file_box(false, 3),
-    unitbox(false, 0),
-    unit_selector(),
-    units_label(_("Units:")),
-    filename_box(false, 5),
-    browse_label(_("_Export As..."), true),
-    browse_image(),
-    batch_box(false, 5),
-    batch_export(_("B_atch export all selected objects")),
-    interlacing(_("Use interlacing")),
-    bitdepth_label(_("Bit depth")),
-    bitdepth_cb(),
-    zlib_label(_("Compression")),
-    zlib_compression(),
-    pHYs_label(_("pHYs dpi")),
-    pHYs_sb(pHYs_adj, 1.0, 2),
-    antialiasing_label(_("Antialiasing")),
-    antialiasing_cb(),
-    hide_box(false, 3),
-    hide_export(_("Hide all except selected")),
-    closeWhenDone(_("Close when complete")),
-    button_box(false, 3),
-    _prog(),
-    prog_dlg(nullptr),
-    interrupted(false),
-    prefs(nullptr),
-    selectChangedConn(),
-    subselChangedConn(),
-    selectModifiedConn()
+Export::Export()
+    : DialogBase("/dialogs/export/", SP_VERB_DIALOG_EXPORT)
+    , current_key(SELECTION_PAGE)
+    , manual_key(SELECTION_PAGE)
+    , original_name()
+    , doc_export_name()
+    , filename_modified(false)
+    , update_flag(false)
+    , togglebox(true, 0)
+    , area_box(false, 3)
+    , singleexport_box(false, 0)
+    , size_box(false, 3)
+    , file_box(false, 3)
+    , unitbox(false, 0)
+    , unit_selector()
+    , units_label(_("Units:"))
+    , filename_box(false, 5)
+    , browse_label(_("_Export As..."), true)
+    , browse_image()
+    , batch_box(false, 5)
+    , batch_export(_("B_atch export all selected objects"))
+    , interlacing(_("Use interlacing"))
+    , bitdepth_label(_("Bit depth"))
+    , bitdepth_cb()
+    , zlib_label(_("Compression"))
+    , zlib_compression()
+    , pHYs_label(_("pHYs dpi"))
+    , pHYs_sb(pHYs_adj, 1.0, 2)
+    , antialiasing_label(_("Antialiasing"))
+    , antialiasing_cb()
+    , hide_box(false, 3)
+    , hide_export(_("Hide all except selected"))
+    , closeWhenDone(_("Close when complete"))
+    , button_box(false, 3)
+    , _prog()
+    , prog_dlg(nullptr)
+    , interrupted(false)
+    , prefs(nullptr)
+    , selectChangedConn()
+    , subselChangedConn()
+    , selectModifiedConn()
 {
     batch_export.set_use_underline();
     batch_export.set_tooltip_text(_("Export each selected object into its own PNG file, using export hints if any (caution, overwrites without asking!)"));
@@ -202,6 +202,9 @@ Export::Export () :
     prefs = Inkscape::Preferences::get();
 
     singleexport_box.set_border_width(0);
+
+    // Set orientation
+    set_orientation(Gtk::ORIENTATION_VERTICAL);
 
     /* Export area frame */
     {
@@ -398,14 +401,13 @@ Export::Export () :
     table->show();
 
     /* Main dialog */
-    Gtk::Box *contents = _getContents();
-    contents->set_spacing(0);
-    contents->pack_start(singleexport_box, Gtk::PACK_SHRINK);
-    contents->pack_start(batch_box, Gtk::PACK_SHRINK);
-    contents->pack_start(hide_box, Gtk::PACK_SHRINK);
-    contents->pack_start(expander, Gtk::PACK_SHRINK);
-    contents->pack_end(button_box, Gtk::PACK_SHRINK);
-    contents->pack_end(_prog, Gtk::PACK_SHRINK);
+    set_spacing(0);
+    pack_start(singleexport_box, Gtk::PACK_SHRINK);
+    pack_start(batch_box, Gtk::PACK_SHRINK);
+    pack_start(hide_box, Gtk::PACK_SHRINK);
+    pack_start(expander, Gtk::PACK_SHRINK);
+    pack_end(button_box, Gtk::PACK_SHRINK);
+    pack_end(_prog, Gtk::PACK_SHRINK);
 
     /* Signal handlers */
     filename_entry.signal_changed().connect( sigc::mem_fun(*this, &Export::onFilenameModified) );
@@ -432,8 +434,6 @@ Export::~Export ()
 
 void Export::setDesktop(SPDesktop *desktop)
 {
-    Panel::setDesktop(desktop);
-
     {
         {
             selectModifiedConn.disconnect();
@@ -449,6 +449,16 @@ void Export::setDesktop(SPDesktop *desktop)
             selectModifiedConn = desktop->selection->connectModified(sigc::hide<0>(sigc::mem_fun(*this, &Export::onSelectionModified)));
         }
     }
+}
+
+void Export::update()
+{
+    if (!_app) {
+        std::cerr << "Export::update(): _app is null" << std::endl;
+        return;
+    }
+
+    setDesktop(getDesktop());
 }
 
 /*
@@ -709,10 +719,10 @@ void Export::onSelectionModified ( guint /*flags*/ )
 
 /// Called when one of the selection buttons was toggled.
 void Export::onAreaTypeToggled() {
-    if (update) {
+    if (update_flag) {
         return;
     }
-    
+
     /* Find which button is active */
     selection_type key = current_key;
     for (int i = 0; i < SELECTION_NUMBER_OF; i++) {
@@ -881,7 +891,7 @@ unsigned int Export::onProgressCallback(float value, void *dlg)
     auto self = dlg2->get_export_panel();
     if (self->interrupted)
         return FALSE;
-    
+
     auto current = dlg2->get_current();
     auto total = dlg2->get_total();
     if (total > 0) {
@@ -1062,7 +1072,7 @@ void Export::onExport ()
                                              nv->pagecolor,
                                              onProgressCallback, (void*)prog_dlg,
                                              TRUE,  // overwrite without asking
-                                             hide ? selected : x, 
+                                             hide ? selected : x,
                                              do_interlace, color_type, bit_depth, zlib, antialiasing
                                             )) {
                         gchar * error = g_strdup_printf(_("Could not export to filename %s.\n"), safeFile);
@@ -1544,11 +1554,11 @@ void Export::areaXChange(Glib::RefPtr<Gtk::Adjustment>& adj)
 {
     float x0, x1, xdpi, width;
 
-    if (update) {
+    if (update_flag) {
         return;
     }
 
-    update = true;
+    update_flag = true;
 
     x0 = getValuePx(x0_adj);
     x1 = getValuePx(x1_adj);
@@ -1573,7 +1583,7 @@ void Export::areaXChange(Glib::RefPtr<Gtk::Adjustment>& adj)
 
     detectSize();
 
-    update = false;
+    update_flag = false;
 
     return;
 } // end of sp_export_area_x_value_changed()
@@ -1583,11 +1593,11 @@ void Export::areaYChange(Glib::RefPtr<Gtk::Adjustment>& adj)
 {
     float y0, y1, ydpi, height;
 
-    if (update) {
+    if (update_flag) {
         return;
     }
 
-    update = true;
+    update_flag = true;
 
     y0 = getValuePx(y0_adj);
     y1 = getValuePx(y1_adj);
@@ -1612,7 +1622,7 @@ void Export::areaYChange(Glib::RefPtr<Gtk::Adjustment>& adj)
 
     detectSize();
 
-    update = false;
+    update_flag = false;
 
     return;
 } // end of sp_export_area_y_value_changed()
@@ -1620,11 +1630,11 @@ void Export::areaYChange(Glib::RefPtr<Gtk::Adjustment>& adj)
 /// Called when x1-x0 or area width is changed
 void Export::onAreaWidthChange()
 {
-    if (update) {
+    if (update_flag) {
         return;
     }
 
-    update = true;
+    update_flag = true;
 
     float x0 = getValuePx(x0_adj);
     float xdpi = getValue(xdpi_adj);
@@ -1641,7 +1651,7 @@ void Export::onAreaWidthChange()
     setValuePx(x1_adj, x0 + width);
     setValue(bmwidth_adj, bmwidth);
 
-    update = false;
+    update_flag = false;
 
     return;
 } // end of sp_export_area_width_value_changed()
@@ -1649,11 +1659,11 @@ void Export::onAreaWidthChange()
 /// Called when y1-y0 or area height is changed.
 void Export::onAreaHeightChange()
 {
-    if (update) {
+    if (update_flag) {
         return;
     }
 
-    update = true;
+    update_flag = true;
 
     float y0 = getValuePx(y0_adj);
     //float y1 = sp_export_value_get_px(y1_adj);
@@ -1670,7 +1680,7 @@ void Export::onAreaHeightChange()
     setValuePx(y1_adj, y0 + height);
     setValue(bmheight_adj, bmheight);
 
-    update = false;
+    update_flag = false;
 
     return;
 } // end of sp_export_area_height_value_changed()
@@ -1724,11 +1734,11 @@ void Export::onBitmapWidthChange ()
 {
     float x0, x1, bmwidth, xdpi;
 
-    if (update) {
+    if (update_flag) {
         return;
     }
 
-    update = true;
+    update_flag = true;
 
     x0 = getValuePx(x0_adj);
     x1 = getValuePx(x1_adj);
@@ -1744,7 +1754,7 @@ void Export::onBitmapWidthChange ()
 
     setImageY ();
 
-    update = false;
+    update_flag = false;
 
     return;
 } // end of sp_export_bitmap_width_value_changed()
@@ -1754,11 +1764,11 @@ void Export::onBitmapHeightChange ()
 {
     float y0, y1, bmheight, xdpi;
 
-    if (update) {
+    if (update_flag) {
         return;
     }
 
-    update = true;
+    update_flag = true;
 
     y0 = getValuePx(y0_adj);
     y1 = getValuePx(y1_adj);
@@ -1774,7 +1784,7 @@ void Export::onBitmapHeightChange ()
 
     setImageX ();
 
-    update = false;
+    update_flag = false;
 
     return;
 } // end of sp_export_bitmap_width_value_changed()
@@ -1810,11 +1820,11 @@ void Export::onExportXdpiChange()
 {
     float x0, x1, xdpi, bmwidth;
 
-    if (update) {
+    if (update_flag) {
         return;
     }
 
-    update = true;
+    update_flag = true;
 
     x0 = getValuePx(x0_adj);
     x1 = getValuePx(x1_adj);
@@ -1838,7 +1848,7 @@ void Export::onExportXdpiChange()
 
     setImageY ();
 
-    update = false;
+    update_flag = false;
 
     return;
 } // end of sp_export_xdpi_value_changed()
@@ -1865,12 +1875,12 @@ void Export::onExportXdpiChange()
  */
 void Export::setArea( double x0, double y0, double x1, double y1 )
 {
-    update = true;
+    update_flag = true;
     setValuePx(x1_adj, x1);
     setValuePx(y1_adj, y1);
     setValuePx(x0_adj, x0);
     setValuePx(y0_adj, y0);
-    update = false;
+    update_flag = false;
 
     areaXChange (x1_adj);
     areaYChange (y1_adj);

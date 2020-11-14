@@ -11,7 +11,7 @@
 #ifndef SEEN_DIALOGS_SWATCHES_H
 #define SEEN_DIALOGS_SWATCHES_H
 
-#include "ui/widget/panel.h"
+#include "ui/dialog/dialog-base.h"
 
 namespace Gtk {
     class Menu;
@@ -38,7 +38,7 @@ class DocTrack;
  * the "/embedded/swatches/" is the horizontal color swatches at the bottom
  * of window.
  */
-class SwatchesPanel : public Inkscape::UI::Widget::Panel
+class SwatchesPanel : public DialogBase
 {
 public:
     SwatchesPanel(gchar const* prefsPath = "/dialogs/swatches");
@@ -46,7 +46,7 @@ public:
 
     static SwatchesPanel& getInstance();
 
-    void setDesktop( SPDesktop* desktop ) override;
+    void update() override;
     virtual SPDesktop* getDesktop() {return _currentDesktop;}
 
     virtual int getSelectedIndex() {return _currentIndex;} // temporary

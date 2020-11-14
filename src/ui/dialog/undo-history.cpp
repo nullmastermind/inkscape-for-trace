@@ -90,7 +90,7 @@ UndoHistory& UndoHistory::getInstance()
 }
 
 UndoHistory::UndoHistory()
-    : UI::Widget::Panel("/dialogs/undo-history", SP_VERB_DIALOG_UNDO_HISTORY),
+    : DialogBase("/dialogs/undo-history", SP_VERB_DIALOG_UNDO_HISTORY),
       _document_replaced_connection(),
       _desktop(nullptr),
       _document(nullptr),
@@ -104,7 +104,7 @@ UndoHistory::UndoHistory()
 
     set_size_request(-1, 95);
 
-    _getContents()->pack_start(_scrolled_window);
+    pack_start(_scrolled_window);
     _scrolled_window.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
 
     _event_list_view.set_enable_search(false);
@@ -152,10 +152,8 @@ UndoHistory::UndoHistory()
     _callback_connections[EventLog::CALLB_COLLAPSE] =
         _event_list_view.signal_row_collapsed().connect(sigc::mem_fun(*this, &Inkscape::UI::Dialog::UndoHistory::_onCollapseEvent));
 
-    // connect to be informed of document changes
-    signalDocumentReplaced().connect(sigc::mem_fun(*this, &UndoHistory::_handleDocumentReplaced));
-
     show_all_children();
+    update();
 }
 
 UndoHistory::~UndoHistory()
@@ -163,9 +161,18 @@ UndoHistory::~UndoHistory()
 }
 
 
-void UndoHistory::setDesktop(SPDesktop* desktop)
+void UndoHistory::update()
 {
-    Panel::setDesktop(desktop);
+    if (!_app) {
+        std::cerr << "UndoHistory::update(): _app is null" << std::endl;
+        return;
+    }
+
+    SPDesktop *desktop = getDesktop();
+
+    if (!desktop) {
+        return;
+    }
 
     EventLog *newEventLog = desktop ? desktop->event_log : nullptr;
     if ((_desktop == desktop) && (_event_log == newEventLog)) {
@@ -173,7 +180,11 @@ void UndoHistory::setDesktop(SPDesktop* desktop)
     }
     else
     {
-        _connectDocument(desktop, desktop ? desktop->doc() : nullptr);
+        _connectDocument(desktop, _app->get_active_document());
+    }
+
+    if (_app->get_active_document()) {
+        _handleDocumentReplaced(desktop, _app->get_active_document());
     }
 }
 
@@ -204,7 +215,7 @@ void UndoHistory::_connectEventLog()
         _event_list_view.set_model(_event_list_store);
 
         _event_log->addDialogConnection(&_event_list_view, &_callback_connections);
-        _event_list_view.scroll_to_row(_event_list_store->get_path(_event_list_selection->get_selected()));        
+        _event_list_view.scroll_to_row(_event_list_store->get_path(_event_list_selection->get_selected()));
     }
 }
 

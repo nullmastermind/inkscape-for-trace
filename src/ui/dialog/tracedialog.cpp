@@ -54,8 +54,9 @@ class TraceDialogImpl2 : public TraceDialog {
   public:
     TraceDialogImpl2();
     ~TraceDialogImpl2() override;
+    void update() override;
 
-  private:
+private:
     Inkscape::Trace::Tracer tracer;
     void traceProcess(bool do_i_trace);
     void abort();
@@ -65,8 +66,6 @@ class TraceDialogImpl2 : public TraceDialog {
     void traceCallback();
     void onSelectionModified(guint flags);
     void onSetDefaults();
-
-    void setDesktop(SPDesktop *desktop) override;
 
     sigc::connection selectChangedConn;
     sigc::connection selectModifiedConn;
@@ -87,9 +86,18 @@ class TraceDialogImpl2 : public TraceDialog {
     Gtk::DrawingArea *previewArea;
 };
 
-void TraceDialogImpl2::setDesktop(SPDesktop *desktop)
+void TraceDialogImpl2::update()
 {
-    Panel::setDesktop(desktop);
+    if (!_app) {
+        std::cerr << "TraceDialogImpl2::update(): _app is null" << std::endl;
+        return;
+    }
+
+    SPDesktop *desktop = getDesktop();
+
+    if (!desktop) {
+        return;
+    }
 
     {
         {
@@ -120,25 +128,41 @@ void TraceDialogImpl2::traceProcess(bool do_i_trace)
     bool use_autotrace = false;
     Inkscape::Trace::Autotrace::AutotraceTracingEngine ate; // TODO
 
-    auto potraceType = trace_types.find(type);
-    assert(potraceType != trace_types.end());
-    switch (potraceType->second) {
-        case Inkscape::Trace::Potrace::AUTOTRACE_SINGLE:
-            use_autotrace = true;
-            ate.opts->color_count = 2;
-            break;
-        case Inkscape::Trace::Potrace::AUTOTRACE_CENTERLINE:
-            use_autotrace = true;
-            ate.opts->color_count = 2;
-            ate.opts->centerline = true;
-            ate.opts->preserve_width = true;
-            break;
-        case Inkscape::Trace::Potrace::AUTOTRACE_MULTI:
-            use_autotrace = true;
-            ate.opts->color_count = (int)MS_scans->get_value() + 1;
-            break;
-        default:
-            break;
+    if (type == _("Brightness cutoff"))
+      potraceType = Inkscape::Trace::Potrace::TRACE_BRIGHTNESS;
+    else if (type == _("Edge detection"))
+      potraceType = Inkscape::Trace::Potrace::TRACE_CANNY;
+    else if (type == _("Color quantization"))
+      potraceType = Inkscape::Trace::Potrace::TRACE_QUANT;
+    else if (type == _("Autotrace"))
+    {
+      // autotraceType = Inkscape::Trace::Autotrace::TRACE_CENTERLINE
+      use_autotrace = true;
+      ate.opts->color_count = 2;
+    }
+    else if (type == _("Centerline tracing (autotrace)"))
+    {
+      // autotraceType = Inkscape::Trace::Autotrace::TRACE_CENTERLINE
+      use_autotrace = true;
+      ate.opts->color_count = 2;
+      ate.opts->centerline = true;
+      ate.opts->preserve_width = true;
+    }
+    else if (type == _("Brightness steps"))
+      potraceType = Inkscape::Trace::Potrace::TRACE_BRIGHTNESS_MULTI;
+    else if (type == _("Colors"))
+      potraceType = Inkscape::Trace::Potrace::TRACE_QUANT_COLOR;
+    else if (type == _("Grays"))
+      potraceType = Inkscape::Trace::Potrace::TRACE_QUANT_MONO;
+    else if (type == _("Autotrace (slower)"))
+    {
+      // autotraceType = Inkscape::Trace::Autotrace::TRACE_CENTERLINE
+      use_autotrace = true;
+      ate.opts->color_count = (int)MS_scans->get_value() + 1;
+    }
+    else
+    {
+      g_warning("Should not happen!");
     }
 
     ate.opts->filter_iterations = (int) SS_AT_FI_T->get_value();
@@ -214,7 +238,7 @@ bool TraceDialogImpl2::previewResize(const Cairo::RefPtr<Cairo::Context>& cr)
 }
 
 void TraceDialogImpl2::abort()
-{ 
+{
      SPDesktop *desktop = SP_ACTIVE_DESKTOP;
      if (desktop)
          desktop->clearWaitingCursor();
@@ -328,7 +352,7 @@ TraceDialogImpl2::TraceDialogImpl2()
     GET_W(previewArea)
 #undef GET_W
 #undef GET_O
-    _getContents()->add(*mainBox);
+    add(*mainBox);
     // show_all_children();
 
     B_Update->signal_clicked().connect(sigc::mem_fun(*this, &TraceDialogImpl2::previewCallback));
@@ -336,6 +360,8 @@ TraceDialogImpl2::TraceDialogImpl2()
     B_STOP->signal_clicked().connect(sigc::mem_fun(*this, &TraceDialogImpl2::abort));
     B_RESET->signal_clicked().connect(sigc::mem_fun(*this, &TraceDialogImpl2::onSetDefaults));
     previewArea->signal_draw().connect(sigc::mem_fun(*this, &TraceDialogImpl2::previewResize));
+
+    update();
 }
 
 

@@ -15,13 +15,12 @@
 #ifndef INKSCAPE_UI_DIALOG_SYMBOLS_H
 #define INKSCAPE_UI_DIALOG_SYMBOLS_H
 
-#include <vector>
-
 #include <gtkmm.h>
+#include <vector>
 
 #include "display/drawing.h"
 #include "include/gtkmm_version.h"
-#include "ui/widget/panel.h"
+#include "ui/dialog/dialog-base.h"
 
 class SPObject;
 class SPSymbol;
@@ -55,13 +54,13 @@ class SymbolColumns; // For Gtk::ListStore
 
 const int SYMBOL_ICON_SIZES[] = {16, 24, 32, 48, 64};
 
-class SymbolsDialog : public UI::Widget::Panel {
-
+class SymbolsDialog : public DialogBase
+{
 public:
     SymbolsDialog( gchar const* prefsPath = "/dialogs/symbols" );
     ~SymbolsDialog() override;
 
-    void setDesktop(SPDesktop *) override;
+    void update() override;
 
     static SymbolsDialog& getInstance();
 
@@ -153,9 +152,9 @@ private:
     SPDesktop*  current_desktop;
     SPDocument* current_document;
     SPDocument* preview_document; /* Document to render single symbol */
-    
+
     sigc::connection idleconn;
-    
+
     /* For rendering the template drawing */
     unsigned key;
     Inkscape::Drawing renderDrawing;

@@ -14,7 +14,9 @@
 #define SEEN_PROTOTYPE_PANEL_H
 
 #include <iostream>
-#include "ui/widget/panel.h"
+
+#include "selection.h"
+#include "ui/dialog/dialog-base.h"
 
 // Only to display status.
 #include <gtkmm/label.h>
@@ -26,38 +28,33 @@ namespace Dialog {
 /**
  * A panel that does almost nothing!
  */
-class Prototype : public UI::Widget::Panel
+class Prototype : public DialogBase
 {
 public:
-    ~Prototype() override;
+    ~Prototype() override { std::cout << "Prototype::~Prototype()" << std::endl; }
+    static Prototype &getInstance() { return *new Prototype(); }
 
-    static Prototype& getInstance() { return *new Prototype(); };
-
-    void present() override;
+    void update() override;
 
 private:
-
     // No default constructor, noncopyable, nonassignable
     Prototype();
     Prototype(Prototype const &d) = delete;
     Prototype operator=(Prototype const &d) = delete;
 
-    // Signals and handlers
-    sigc::connection connectionDocumentReplaced;
-    sigc::connection connectionSelectionChanged;
-
-    void handleDocumentReplaced(SPDesktop* desktop, SPDocument *document);
-    void setDesktop(SPDesktop *) override;
-    void handleSelectionChanged();
+    // Handlers
+    void handleDocumentReplaced(SPDocument *document);
+    void handleSelectionChanged(Inkscape::Selection *selection);
 
     // Just for example
-    Gtk::Label label;
-    void updateLabel();
+    Gtk::Label *_label;
+    Gtk::Button _debug_button; // For printing to console.
+    virtual void on_click();
 };
 
-} //namespace Dialogs
-} //namespace UI
-} //namespace Inkscape
+} // namespace Dialog
+} // namespace UI
+} // namespace Inkscape
 
 #endif // SEEN_PROTOTYPE_PANEL_H
 

@@ -420,16 +420,17 @@ GlyphColumns *GlyphsPanel::getColumns()
 /**
  * Constructor
  */
-GlyphsPanel::GlyphsPanel() :
-    Inkscape::UI::Widget::Panel("/dialogs/glyphs", SP_VERB_DIALOG_GLYPHS),
-    store(Gtk::ListStore::create(*getColumns())),
-    instanceConns(),
-    desktopConns()
+GlyphsPanel::GlyphsPanel()
+    : DialogBase("/dialogs/glyphs", SP_VERB_DIALOG_GLYPHS)
+    , store(Gtk::ListStore::create(*getColumns()))
+    , instanceConns()
+    , desktopConns()
 {
+    set_orientation(Gtk::ORIENTATION_VERTICAL);
     auto table = new Gtk::Grid();
     table->set_row_spacing(4);
     table->set_column_spacing(4);
-    _getContents()->pack_start(*Gtk::manage(table), Gtk::PACK_EXPAND_WIDGET);
+    pack_start(*Gtk::manage(table), Gtk::PACK_EXPAND_WIDGET);
     guint row = 0;
 
 // -------------------------------
@@ -573,9 +574,18 @@ GlyphsPanel::~GlyphsPanel()
 }
 
 
-void GlyphsPanel::setDesktop(SPDesktop *desktop)
+void GlyphsPanel::update()
 {
-    Panel::setDesktop(desktop);
+    if (!_app) {
+        std::cerr << "GlyphsPanel::update(): _app is null" << std::endl;
+        return;
+    }
+
+    SPDesktop *desktop = getDesktop();
+
+    if (!desktop) {
+        return;
+    }
 
     {
         {

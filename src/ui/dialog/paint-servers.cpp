@@ -69,8 +69,8 @@ class PaintServersColumns : public Gtk::TreeModel::ColumnRecord {
 PaintServersColumns *PaintServersDialog::getColumns() { return new PaintServersColumns(); }
 
 // Constructor
-PaintServersDialog::PaintServersDialog(gchar const *prefsPath)
-    : Inkscape::UI::Widget::Panel(prefsPath, SP_VERB_DIALOG_PAINT)
+PaintServersDialog::PaintServersDialog()
+    : DialogBase("/dialogs/paint", SP_VERB_DIALOG_PAINT)
     , desktop(SP_ACTIVE_DESKTOP)
     , target_selected(true)
     , ALLDOCS(_("All paint servers"))
@@ -87,7 +87,7 @@ PaintServersDialog::PaintServersDialog(gchar const *prefsPath)
     grid->set_margin_end(3);
     grid->set_margin_top(3);
     grid->set_row_spacing(3);
-    _getContents()->pack_start(*grid, Gtk::PACK_EXPAND_WIDGET);
+    pack_start(*grid, Gtk::PACK_EXPAND_WIDGET);
 
     // Grid row 0
     Gtk::Label *file_label = Gtk::manage(new Gtk::Label(Glib::ustring(_("Server")) + ": "));
@@ -143,10 +143,6 @@ PaintServersDialog::PaintServersDialog(gchar const *prefsPath)
         sigc::mem_fun(*this, &PaintServersDialog::on_item_activated)
     );
 
-    desktop->getDocument()->getDefs()->connectModified(
-        sigc::mem_fun(*this, &PaintServersDialog::load_current_document)
-    );
-
     // Get wrapper document (rectangle to fill with paint server).
     preview_document = SPDocument::createNewDocFromMem(wrapper.c_str(), wrapper.length(), true);
 
@@ -164,6 +160,17 @@ PaintServersDialog::PaintServersDialog(gchar const *prefsPath)
 
     // Load paint servers from resource files
     load_sources();
+}
+
+void PaintServersDialog::update()
+{
+    if (!_app) {
+        std::cerr << "PaintServersDialog::update(): _app is null" << std::endl;
+        return;
+    }
+
+    desktop = getDesktop();
+    load_current_document(desktop->getDocument()->getDefs(), 0);
 }
 
 PaintServersDialog::~PaintServersDialog() = default;

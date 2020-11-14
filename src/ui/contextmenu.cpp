@@ -57,8 +57,9 @@
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
 
-#include "ui/desktop/menu-icon-shift.h"
-#include "ui/dialog/dialog-manager.h"
+//#include "ui/desktop/menu-icon-shift.h"
+//#include "ui/dialog/dialog-manager.h"
+#include "ui/dialog/dialog-container.h"
 #include "ui/dialog/layer-properties.h"
 #include "ui/icon-loader.h"
 #include "ui/shortcuts.h"
@@ -541,7 +542,7 @@ void ContextMenu::SelectSameObjectType()
 void ContextMenu::ItemProperties()
 {
     _desktop->selection->set(_item);
-    _desktop->_dlg_mgr->showDialog("ObjectProperties");
+    _desktop->getContainer()->new_dialog("ObjectProperties");
 }
 
 void ContextMenu::ItemSelectThis()
@@ -576,7 +577,7 @@ void ContextMenu::ItemCreateLink()
     Inkscape::DocumentUndo::done(object->document, SP_VERB_NONE, _("Create link"));
 
     _desktop->selection->set(SP_ITEM(object));
-    _desktop->_dlg_mgr->showDialog("ObjectAttributes");
+    _desktop->getContainer()->new_dialog("ObjectAttributes");
 }
 
 void ContextMenu::SetMask()
@@ -660,7 +661,7 @@ void ContextMenu::MakeAnchorMenu()
 
 void ContextMenu::AnchorLinkProperties()
 {
-    _desktop->_dlg_mgr->showDialog("ObjectAttributes");
+    _desktop->getContainer()->new_dialog("ObjectAttributes");
 }
 
 void ContextMenu::AnchorLinkFollow()
@@ -741,7 +742,7 @@ void ContextMenu::MakeImageMenu ()
 
 void ContextMenu::ImageProperties()
 {
-    _desktop->_dlg_mgr->showDialog("ObjectAttributes");
+    _desktop->getContainer()->new_dialog("ObjectAttributes");
 }
 
 Glib::ustring ContextMenu::getImageEditorName(bool is_svg) {
@@ -845,7 +846,7 @@ void ContextMenu::ImageEdit()
 
 void ContextMenu::ImageTraceBitmap()
 {
-    _desktop->_dlg_mgr->showDialog("Trace");
+    _desktop->getContainer()->new_dialog("Trace");
 }
 
 void ContextMenu::ImageEmbed()
@@ -895,7 +896,7 @@ void ContextMenu::FillSettings()
         _desktop->selection->set(_item);
     }
 
-    _desktop->_dlg_mgr->showDialog("FillAndStroke");
+    _desktop->getContainer()->new_dialog("FillAndStroke");
 }
 
 void ContextMenu::MakeTextMenu ()
@@ -929,7 +930,7 @@ void ContextMenu::TextSettings ()
         _desktop->selection->set(_item);
     }
 
-    _desktop->_dlg_mgr->showDialog("TextFont");
+    _desktop->getContainer()->new_dialog("TextFont");
 }
 
 void ContextMenu::SpellcheckSettings ()
@@ -939,7 +940,7 @@ void ContextMenu::SpellcheckSettings ()
         _desktop->selection->set(_item);
     }
 
-    _desktop->_dlg_mgr->showDialog("SpellCheck");
+    _desktop->getContainer()->new_dialog("SpellCheck");
 #endif
 }
 

@@ -36,6 +36,7 @@
 #include "document-undo.h"
 #include "ege-color-prof-tracker.h"
 #include "file.h"
+#include "inkscape-application.h"
 #include "inkscape-version.h"
 #include "verbs.h"
 
@@ -52,16 +53,16 @@
 #include "object/sp-root.h"
 
 #include "ui/shortcuts.h"
-#include "ui/dialog/dialog-manager.h"
 #include "ui/dialog/swatches.h"
 #include "ui/icon-loader.h"
 #include "ui/icon-names.h"
+#include "ui/dialog/dialog-container.h"
+#include "ui/dialog/dialog-multipaned.h"
 #include "ui/tools/box3d-tool.h"
 #include "ui/uxmanager.h"
 #include "ui/widget/button.h"
 #include "ui/widget/canvas.h"
 #include "ui/widget/canvas-grid.h"
-#include "ui/widget/dock.h"
 #include "ui/widget/ink-ruler.h"
 #include "ui/widget/layer-selector.h"
 #include "ui/widget/selected-style.h"
@@ -83,6 +84,8 @@
 #endif
 
 using Inkscape::DocumentUndo;
+using Inkscape::UI::Dialog::DialogContainer;
+using Inkscape::UI::Dialog::DialogMultipaned;
 using Inkscape::UI::Widget::UnitTracker;
 using Inkscape::UI::UXManager;
 using Inkscape::UI::ToolboxFactory;
@@ -209,20 +212,23 @@ SPDesktopWidget::SPDesktopWidget()
     dtw->_hbox->set_name("DesktopHbox");
     dtw->_vbox->pack_end(*dtw->_hbox, true, true);
 
+    _container = Gtk::manage(new DialogContainer());
+    _columns = _container->get_columns();
+    _columns->set_dropzone_sizes(2, -1);
+    dtw->_hbox->pack_start(*_container, false, true);
+
     /* Toolboxes */
     dtw->aux_toolbox = ToolboxFactory::createAuxToolbox();
     dtw->_vbox->pack_end(*Glib::wrap(dtw->aux_toolbox), false, true);
 
     dtw->snap_toolbox = ToolboxFactory::createSnapToolbox();
     ToolboxFactory::setOrientation( dtw->snap_toolbox, GTK_ORIENTATION_VERTICAL );
-    dtw->_hbox->pack_end(*Glib::wrap(dtw->snap_toolbox), false, true);
 
     dtw->commands_toolbox = ToolboxFactory::createCommandsToolbox();
     dtw->_vbox->pack_end(*Glib::wrap(dtw->commands_toolbox), false, true);
 
     dtw->tool_toolbox = ToolboxFactory::createToolToolbox();
     ToolboxFactory::setOrientation( dtw->tool_toolbox, GTK_ORIENTATION_VERTICAL );
-    dtw->_hbox->pack_start(*Glib::wrap(dtw->tool_toolbox), false, true);
 
     /* Canvas Grid (canvas, rulers, scrollbars, etc.) */
     dtw->_canvas_grid = Gtk::manage(new Inkscape::UI::Widget::CanvasGrid(this));
@@ -234,33 +240,14 @@ SPDesktopWidget::SPDesktopWidget()
     dtw->_canvas->set_cms_active(prefs->getBool("/options/displayprofile/enable"));
 
     /* Dock */
-    bool create_dock =
-        prefs->getIntLimited("/options/dialogtype/value", Inkscape::UI::Dialog::FLOATING, 0, 1) ==
-        Inkscape::UI::Dialog::DOCK;
+    DialogMultipaned *column = _container->create_column();
 
-    if (create_dock) {
-        dtw->_dock = new Inkscape::UI::Widget::Dock();
-        auto paned = Gtk::manage(new Gtk::Paned());
-        paned->set_name("Canvas_and_Dock");
-
-        paned->pack1(*_canvas_grid);
-        paned->pack2(dtw->_dock->getWidget(), Gtk::FILL);
-
-        /* Prevent the paned from catching F6 and F8 by unsetting the default callbacks */
-        if (GtkPanedClass *paned_class = GTK_PANED_CLASS (G_OBJECT_GET_CLASS (paned->gobj()))) {
-            paned_class->cycle_child_focus = nullptr;
-            paned_class->cycle_handle_focus = nullptr;
-        }
-
-        paned->set_hexpand(true);
-        paned->set_vexpand(true);
-        _hbox->pack_start(*paned);
-    } else {
-        dtw->_dock = nullptr;
-        _canvas_grid->set_hexpand(true);
-        _canvas_grid->set_vexpand(true);
-        _hbox->pack_start(*_canvas_grid);
-    }
+    _canvas_grid->set_hexpand(true);
+    _canvas_grid->set_vexpand(true);
+    _columns->append(Glib::wrap(dtw->tool_toolbox));
+    _columns->append(Glib::wrap(dtw->snap_toolbox));
+    _columns->append(_canvas_grid);
+    _columns->append(column);
 
     // --------------- Status Tool Bar ------------------//
 
@@ -468,10 +455,7 @@ SPDesktopWidget::on_unrealize()
         dtw->_rotation_status_value_changed_connection.disconnect();
         dtw->_rotation_status_populate_popup_connection.disconnect();
 
-        if (dtw->_dock) {
-            // dock and desktop both have references to dock items
-            dtw->_dock->releaseAllReferences();
-        }
+        delete _container;
 
         dtw->layer_selector->setDesktop(nullptr);
         INKSCAPE.remove_desktop(dtw->desktop); // clears selection and event_context
@@ -484,10 +468,7 @@ SPDesktopWidget::on_unrealize()
     parent_type::on_unrealize();
 }
 
-SPDesktopWidget::~SPDesktopWidget()
-{
-    delete _dock;
-}
+SPDesktopWidget::~SPDesktopWidget() {}
 
 /**
  * Set the title in the desktop-window (if desktop has an own window).
@@ -551,21 +532,13 @@ SPDesktopWidget::updateTitle(gchar const* uri)
         // Name += Inkscape::version_string;
         // Name += ")";
 
-        // use same title for document-specific dialogs
-        if (_dock) {
-            GdlDockMaster *master = GDL_DOCK_MASTER(gdl_dock_object_get_master(GDL_DOCK_OBJECT(_dock->getGdlWidget())));
-            g_object_set(master, "default-title", Name.c_str(), nullptr);
-            gdl_dock_master_foreach_toplevel(master, FALSE, (GFunc)gdl_dock_object_set_long_name, (void *)Name.c_str());
-        }
-
         window->set_title (Name);
     }
 }
 
-Inkscape::UI::Widget::Dock*
-SPDesktopWidget::getDock()
+DialogContainer *SPDesktopWidget::getContainer()
 {
-    return _dock;
+    return _container;
 }
 
 /**
@@ -1438,7 +1411,7 @@ SPDesktopWidget::SPDesktopWidget(SPDocument *document)
     toolboxes.push_back(dtw->commands_toolbox);
     toolboxes.push_back(dtw->snap_toolbox);
 
-    dtw->_panels->setDesktop( dtw->desktop );
+    dtw->_panels->update();
 
     UXManager::getInstance()->addTrack(dtw);
     UXManager::getInstance()->connectToDesktop( toolboxes, dtw->desktop );

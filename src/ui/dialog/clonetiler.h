@@ -11,8 +11,7 @@
 #ifndef __SP_CLONE_TILER_H__
 #define __SP_CLONE_TILER_H__
 
-#include "ui/widget/panel.h"
-
+#include "ui/dialog/dialog-base.h"
 #include "ui/widget/color-picker.h"
 
 namespace Gtk {
@@ -42,7 +41,8 @@ namespace Widget {
 
 namespace Dialog {
 
-class CloneTiler : public Widget::Panel {
+class CloneTiler : public DialogBase
+{
 public:
     CloneTiler();
     ~CloneTiler() override;
@@ -166,20 +166,13 @@ private:
     sigc::connection color_changed_connection;
     sigc::connection unitChangedConn;
 
-    /**
-     * Can be invoked for setting the desktop. Currently not used.
-     */
-    void setDesktop(SPDesktop *desktop) override;
-
     // Variables that used to be set using GObject
     Gtk::Box *_buttons_on_tiles;
     Gtk::Box *_dotrace;
     Gtk::Label *_status;
     Gtk::Box *_rowscols;
     Gtk::Box *_widthheight;
-    
 };
-
 
 enum {
     TILE_P1,

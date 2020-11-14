@@ -17,17 +17,22 @@
 #define INKSCAPE_UI_DIALOG_ALIGN_AND_DISTRIBUTE_H
 
 #include <list>
-#include "ui/widget/panel.h"
-#include "ui/widget/frame.h"
-#include "ui/widget/scrollprotected.h"
 
 #include <gtkmm/frame.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/label.h>
+
 #include <gtkmm/checkbutton.h>
+#include <gtkmm/comboboxtext.h>
+#include <gtkmm/frame.h>
 #include <gtkmm/grid.h>
+#include <gtkmm/label.h>
+#include <list>
 
 #include "2geom/rect.h"
+#include "ui/dialog/dialog-base.h"
+#include "ui/widget/frame.h"
+#include "ui/widget/scrollprotected.h"
 
 class SPItem;
 
@@ -40,8 +45,8 @@ namespace Dialog {
 
 class Action;
 
-
-class AlignAndDistribute : public Widget::Panel {
+class AlignAndDistribute : public DialogBase
+{
 public:
     AlignAndDistribute();
     ~AlignAndDistribute() override;
@@ -64,12 +69,12 @@ protected:
     void on_node_ref_change();
     void on_selgrp_toggled();
     void on_oncanvas_toggled();
-    void addDistributeButton(const Glib::ustring &id, const Glib::ustring tiptext, 
-                                      guint row, guint col, bool onInterSpace, 
+    void addDistributeButton(const Glib::ustring &id, const Glib::ustring tiptext,
+                                      guint row, guint col, bool onInterSpace,
                                       Geom::Dim2 orientation, float kBegin, float kEnd);
-    void addAlignButton(const Glib::ustring &id, const Glib::ustring tiptext, 
+    void addAlignButton(const Glib::ustring &id, const Glib::ustring tiptext,
                         guint row, guint col);
-    void addNodeButton(const Glib::ustring &id, const Glib::ustring tiptext, 
+    void addNodeButton(const Glib::ustring &id, const Glib::ustring tiptext,
                         guint col, Geom::Dim2 orientation, bool distribute);
     void addRemoveOverlapsButton(const Glib::ustring &id,
                         const Glib::ustring tiptext,
@@ -86,9 +91,9 @@ protected:
     void addExchangePositionsClockwiseButton(const Glib::ustring &id,
                         const Glib::ustring tiptext,
                         guint row, guint col);
-    void addUnclumpButton(const Glib::ustring &id, const Glib::ustring tiptext, 
+    void addUnclumpButton(const Glib::ustring &id, const Glib::ustring tiptext,
                         guint row, guint col);
-    void addRandomizeButton(const Glib::ustring &id, const Glib::ustring tiptext, 
+    void addRandomizeButton(const Glib::ustring &id, const Glib::ustring tiptext,
                         guint row, guint col);
     void addBaselineButton(const Glib::ustring &id, const Glib::ustring tiptext,
                            guint row, guint col, Gtk::Grid &table, Geom::Dim2 orientation, bool distribute);
@@ -113,14 +118,12 @@ protected:
     Gtk::HBox _anchorBoxNode;
     Inkscape::UI::Widget::ScrollProtected<Gtk::ComboBoxText> _comboNode;
 
-    SPDesktop *_desktop;
     sigc::connection _toolChangeConn;
     sigc::connection _selChangeConn;
 private:
     AlignAndDistribute(AlignAndDistribute const &d) = delete;
     AlignAndDistribute& operator=(AlignAndDistribute const &d) = delete;
 };
-
 
 struct BBoxSort
 {

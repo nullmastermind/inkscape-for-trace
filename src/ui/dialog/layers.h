@@ -14,12 +14,13 @@
 #define SEEN_LAYERS_PANEL_H
 
 #include <gtkmm/box.h>
-#include <gtkmm/treeview.h>
-#include <gtkmm/treestore.h>
 #include <gtkmm/scrolledwindow.h>
-#include "ui/widget/spinbutton.h"
-#include "ui/widget/panel.h"
+#include <gtkmm/treestore.h>
+#include <gtkmm/treeview.h>
+
+#include "ui/dialog/dialog-base.h"
 #include "ui/widget/object-composite-settings.h"
+#include "ui/widget/spinbutton.h"
 #include "ui/widget/style-subject.h"
 
 class SPObject;
@@ -35,7 +36,7 @@ namespace Dialog {
 /**
  * A panel that displays layers.
  */
-class LayersPanel : public UI::Widget::Panel
+class LayersPanel : public DialogBase
 {
 public:
     LayersPanel();
@@ -43,7 +44,8 @@ public:
 
     static LayersPanel& getInstance();
 
-    void setDesktop( SPDesktop* desktop ) override;
+    void setDesktop( SPDesktop* desktop );
+    void update() override;
 
 private:
     class ModelColumns;

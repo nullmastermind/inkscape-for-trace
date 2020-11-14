@@ -189,17 +189,17 @@ public:
      * Objects panel to which this watcher belongs
      */
     ObjectsPanel* _pnl;
-    
+
     /**
      * The object that is being observed
      */
     SPObject* _obj;
-    
+
     /**
      * The xml representation of the object that is being observed
      */
     Inkscape::XML::Node* _repr;
-    
+
     /* These are quarks which define the attributes that we are observing */
     GQuark _highlightAttr;
     GQuark _lockedAttr;
@@ -990,7 +990,7 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
     if ( event->type == GDK_BUTTON_RELEASE) {
         _tree.get_selection()->set_select_function(sigc::mem_fun(*this, &ObjectsPanel::_rowSelectFunction));
     }
-    
+
     //CellRenderers do not have good support for dealing with multiple items, so
     //we handle all events on them here
     if ( (event->type == GDK_BUTTON_RELEASE) && (event->button == 1)) {
@@ -1152,7 +1152,7 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
             grab_focus();
         }
     }
-   
+
     return false;
 }
 
@@ -1398,7 +1398,7 @@ void ObjectsPanel::_takeAction( int val )
 bool ObjectsPanel::_executeAction()
 {
     // Make sure selected layer hasn't changed since the action was triggered
-    if ( _document && _pending) 
+    if ( _document && _pending)
     {
         int val = _pending->_actionCode;
 //        SPObject* target = _pending->_target;
@@ -1806,11 +1806,11 @@ void ObjectsPanel::_blendChangedIter(const Gtk::TreeIter &iter)
         }
         item->style->mix_blend_mode.set = TRUE;
         if (_filter_modifier.get_blend_mode() &&
-            item->style->isolation.value == SP_CSS_ISOLATION_ISOLATE) 
+            item->style->isolation.value == SP_CSS_ISOLATION_ISOLATE)
         {
             item->style->mix_blend_mode.value = SP_CSS_BLEND_NORMAL;
             _filter_modifier.set_blend_mode(SP_CSS_BLEND_NORMAL, false);
-        } else { 
+        } else {
             item->style->mix_blend_mode.value = _filter_modifier.get_blend_mode();
         }
         item->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
@@ -1824,7 +1824,7 @@ void ObjectsPanel::_blurValueChanged()
 {
     _blockCompositeUpdate = true;
     _tree.get_selection()->selected_foreach_iter(sigc::bind<double>(sigc::mem_fun(*this, &ObjectsPanel::_blurChangedIter), _filter_modifier.get_blur_value()));
-    DocumentUndo::maybeDone(_document, "blur", SP_VERB_DIALOG_OBJECTS, _("Set object blur"));    
+    DocumentUndo::maybeDone(_document, "blur", SP_VERB_DIALOG_OBJECTS, _("Set object blur"));
     _blockCompositeUpdate = false;
 }
 
@@ -1881,7 +1881,7 @@ void ObjectsPanel::_blurChangedIter(const Gtk::TreeIter& iter, double blur)
  * Constructor
  */
 ObjectsPanel::ObjectsPanel() :
-    UI::Widget::Panel("/dialogs/objects", SP_VERB_DIALOG_OBJECTS),
+    DialogBase("/dialogs/objects", SP_VERB_DIALOG_OBJECTS),
     _rootWatcher(nullptr),
     _desktop(nullptr),
     _document(nullptr),
@@ -1941,7 +1941,7 @@ ObjectsPanel::ObjectsPanel() :
         _lockHeader.show();
         col->set_widget( _lockHeader );
     }
-    
+
     //Type
     Inkscape::UI::Widget::LayerTypeIcon * typeRenderer = Gtk::manage( new Inkscape::UI::Widget::LayerTypeIcon());
     int typeColNum = _tree.append_column("type", *typeRenderer) - 1;
@@ -1961,7 +1961,7 @@ ObjectsPanel::ObjectsPanel() :
     if ( col ) {
         col->add_attribute( insertRenderer->property_active(), _model->_colInsertOrder );
     }*/
-    
+
     //Clip/mask
     Inkscape::UI::Widget::ClipMaskIcon * clipRenderer = Gtk::manage( new Inkscape::UI::Widget::ClipMaskIcon());
     int clipColNum = _tree.append_column("clipmask", *clipRenderer) - 1;
@@ -1972,7 +1972,7 @@ ObjectsPanel::ObjectsPanel() :
         _clipmaskHeader.show();
         col->set_widget( _clipmaskHeader );
     }
-    
+
     //Highlight
     Inkscape::UI::Widget::HighlightPicker * highlightRenderer = Gtk::manage( new Inkscape::UI::Widget::HighlightPicker());
     int highlightColNum = _tree.append_column("highlight", *highlightRenderer) - 1;
@@ -2044,7 +2044,7 @@ ObjectsPanel::ObjectsPanel() :
     _page.pack_end(_buttonsRow, Gtk::PACK_SHRINK);
 
     //Pack into the panel contents
-    _getContents()->pack_start(_page, Gtk::PACK_EXPAND_WIDGET);
+    pack_start(_page, Gtk::PACK_EXPAND_WIDGET);
 
     SPDesktop* targetDesktop = getDesktop();
 
@@ -2073,15 +2073,15 @@ ObjectsPanel::ObjectsPanel() :
     btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &ObjectsPanel::_takeAction), (int)BUTTON_BOTTOM) );
     _watchingNonBottom.push_back( btn );
     _buttonsPrimary.pack_end(*btn, Gtk::PACK_SHRINK);
-    
-    //Move down    
+
+    //Move down
     btn = Gtk::manage( new Gtk::Button() );
     _styleButton(*btn, INKSCAPE_ICON("go-down"), _("Move Down"));
     btn->set_relief(Gtk::RELIEF_NONE);
     btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &ObjectsPanel::_takeAction), (int)BUTTON_DOWN) );
     _watchingNonBottom.push_back( btn );
     _buttonsPrimary.pack_end(*btn, Gtk::PACK_SHRINK);
-    
+
     //Move up
     btn = Gtk::manage( new Gtk::Button() );
     _styleButton(*btn, INKSCAPE_ICON("go-up"), _("Move Up"));
@@ -2089,7 +2089,7 @@ ObjectsPanel::ObjectsPanel() :
     btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &ObjectsPanel::_takeAction), (int)BUTTON_UP) );
     _watchingNonTop.push_back( btn );
     _buttonsPrimary.pack_end(*btn, Gtk::PACK_SHRINK);
-    
+
     //Move to top
     btn = Gtk::manage( new Gtk::Button() );
     _styleButton(*btn, INKSCAPE_ICON("go-top"), _("Move To Top"));
@@ -2097,7 +2097,7 @@ ObjectsPanel::ObjectsPanel() :
     btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &ObjectsPanel::_takeAction), (int)BUTTON_TOP) );
     _watchingNonTop.push_back( btn );
     _buttonsPrimary.pack_end(*btn, Gtk::PACK_SHRINK);
-    
+
     //Collapse all
     btn = Gtk::manage( new Gtk::Button() );
     _styleButton(*btn, INKSCAPE_ICON("format-indent-less"), _("Collapse All"));
@@ -2105,12 +2105,12 @@ ObjectsPanel::ObjectsPanel() :
     btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &ObjectsPanel::_takeAction), (int)BUTTON_COLLAPSE_ALL) );
     _watchingNonBottom.push_back( btn );
     _buttonsPrimary.pack_end(*btn, Gtk::PACK_SHRINK);
-    
+
     _buttonsRow.pack_start(_buttonsSecondary, Gtk::PACK_EXPAND_WIDGET);
     _buttonsRow.pack_end(_buttonsPrimary, Gtk::PACK_EXPAND_WIDGET);
 
     _watching.push_back(&_filter_modifier);
-    
+
     //Set up the pop-up menu
     // -------------------------------------------------------
     {
@@ -2138,14 +2138,14 @@ ObjectsPanel::ObjectsPanel() :
         _watchingNonBottom.push_back( &_addPopupItem(targetDesktop, SP_VERB_SELECTION_STACK_DOWN, (int)BUTTON_DOWN) );
 
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
-        
+
         _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_SELECTION_GROUP, (int)BUTTON_GROUP ) );
         _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_SELECTION_UNGROUP, (int)BUTTON_UNGROUP ) );
-        
+
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
-        
+
         _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_CLIPPATH, (int)BUTTON_SETCLIP ) );
-        
+
         _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_CREATE_CLIP_GROUP, (int)BUTTON_CLIPGROUP ) );
 
         //will never be implemented
@@ -2153,7 +2153,7 @@ ObjectsPanel::ObjectsPanel() :
         _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_UNSET_CLIPPATH, (int)BUTTON_UNSETCLIP ) );
 
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
-        
+
         _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_MASK, (int)BUTTON_SETMASK ) );
         _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_UNSET_MASK, (int)BUTTON_UNSETMASK ) );
 
@@ -2194,8 +2194,8 @@ ObjectsPanel::ObjectsPanel() :
     _selectedColor->signal_changed.connect(sigc::mem_fun(*this, &ObjectsPanel::_highlightPickerColorMod));
 
     color_selector->show();
-    
-    setDesktop( targetDesktop );
+
+    update();
 
     show_all_children();
 }
@@ -2223,8 +2223,10 @@ ObjectsPanel::~ObjectsPanel()
     //Close the highlight selection dialog
     _colorSelectorDialog.hide();
 
-    //Set the desktop to null, which will disconnect all object watchers
-    setDesktop(nullptr);
+    // Set the desktop to null, which will disconnect all object watchers
+    _documentChangedConnection.disconnect();
+    _documentChangedCurrentLayer.disconnect();
+    _selectionChangedConnection.disconnect();
 
     if ( _model )
     {
@@ -2274,9 +2276,14 @@ void ObjectsPanel::setDocument(SPDesktop* /*desktop*/, SPDocument* document)
 /**
  * Set the current panel desktop
  */
-void ObjectsPanel::setDesktop( SPDesktop* desktop )
+void ObjectsPanel::update()
 {
-    Panel::setDesktop(desktop);
+    if (!_app) {
+        std::cerr << "ObjectsPanel::update(): _app is null" << std::endl;
+        return;
+    }
+
+    SPDesktop *desktop = getDesktop();
 
     if ( desktop != _desktop ) {
         _documentChangedConnection.disconnect();
@@ -2286,7 +2293,7 @@ void ObjectsPanel::setDesktop( SPDesktop* desktop )
             _desktop = nullptr;
         }
 
-        _desktop = Panel::getDesktop();
+        _desktop = getDesktop();
         if ( _desktop ) {
             //Connect desktop signals
             _documentChangedConnection = _desktop->connectDocumentReplaced( sigc::mem_fun(*this, &ObjectsPanel::setDocument));
@@ -2321,7 +2328,7 @@ void SPItem::setHighlightColor(guint32 const color)
     {
         _highlightColor = nullptr;
     }
-    
+
     NodeTool *tool = nullptr;
     if (SP_ACTIVE_DESKTOP ) {
         Inkscape::UI::Tools::ToolBase *ec = SP_ACTIVE_DESKTOP->event_context;

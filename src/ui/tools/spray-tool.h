@@ -62,7 +62,6 @@ public:
     ~SprayTool() override;
 
     //ToolBase event_context;
-    //Inkscape::UI::Dialog::Dialog *dialog_option;//Attribut de type SprayOptionClass, localisé dans scr/ui/dialog    
     /* extended input data */
     gdouble pressure;
 
@@ -83,7 +82,7 @@ public:
     double scale;
     double mean;
     double standard_deviation;
-   
+
     gint distrib;
 
     gint mode;

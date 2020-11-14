@@ -75,7 +75,7 @@ public:
   Gtk::TreeModelColumn<Glib::ustring>                symbol_title;
   Gtk::TreeModelColumn<Glib::ustring>                symbol_doc_title;
   Gtk::TreeModelColumn< Glib::RefPtr<Gdk::Pixbuf> >  symbol_image;
-  
+
 
   SymbolColumns() {
     add(symbol_id);
@@ -94,27 +94,28 @@ SymbolColumns* SymbolsDialog::getColumns()
 /**
  * Constructor
  */
-SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
-  UI::Widget::Panel(prefsPath, SP_VERB_DIALOG_SYMBOLS),
-  store(Gtk::ListStore::create(*getColumns())),
-  all_docs_processed(false),
-  icon_view(nullptr),
-  current_desktop(nullptr),
-  current_document(nullptr),
-  preview_document(nullptr),
-  instanceConns(),
-  CURRENTDOC(_("Current document")),
-  ALLDOCS(_("All symbol sets"))
+SymbolsDialog::SymbolsDialog(gchar const *prefsPath)
+    : DialogBase(prefsPath, SP_VERB_DIALOG_SYMBOLS)
+    , store(Gtk::ListStore::create(*getColumns()))
+    , all_docs_processed(false)
+    , icon_view(nullptr)
+    , current_desktop(nullptr)
+    , current_document(nullptr)
+    , preview_document(nullptr)
+    , instanceConns()
+    , CURRENTDOC(_("Current document"))
+    , ALLDOCS(_("All symbol sets"))
 {
+  set_orientation(Gtk::ORIENTATION_VERTICAL);
 
-    /********************    Table    *************************/
+  /********************    Table    *************************/
   auto table = new Gtk::Grid();
 
   table->set_margin_start(3);
   table->set_margin_end(3);
   table->set_margin_top(4);
   // panel is a locked Gtk::VBox
-  _getContents()->pack_start(*Gtk::manage(table), Gtk::PACK_EXPAND_WIDGET);
+  pack_start(*Gtk::manage(table), Gtk::PACK_EXPAND_WIDGET);
   guint row = 0;
 
   /******************** Symbol Sets *************************/
@@ -125,13 +126,13 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   symbol_set->append(ALLDOCS);
   symbol_set->set_active_text(CURRENTDOC);
   symbol_set->set_hexpand();
-  
+
   table->attach(*Gtk::manage(symbol_set),1,row,1,1);
 
   ++row;
-  
+
   /********************    Separator    *************************/
-  
+
 
   Gtk::Separator* separator = Gtk::manage(new Gtk::Separator());  // Search
   separator->set_margin_top(10);
@@ -141,7 +142,6 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   ++row;
 
   /********************    Search    *************************/
-  
 
   search = Gtk::manage(new Gtk::SearchEntry());  // Search
   search->set_tooltip_text(_("Press 'Return' to start search."));
@@ -225,7 +225,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
 
   /******************** Progress *******************************/
   progress = new Gtk::HBox();
-  progress_bar = Gtk::manage(new Gtk::ProgressBar()); 
+  progress_bar = Gtk::manage(new Gtk::ProgressBar());
   table->attach(*Gtk::manage(progress),0,row, 2, 1);
   progress->pack_start(* progress_bar, Gtk::PACK_EXPAND_WIDGET);
   progress->set_margin_top(15);
@@ -411,7 +411,7 @@ void SymbolsDialog::rebuild() {
 }
 void SymbolsDialog::showOverlay() {
   Glib::ustring current = Glib::Markup::escape_text(symbol_set->get_active_text());
-  if (current == ALLDOCS && !l.size()) 
+  if (current == ALLDOCS && !l.size())
   {
     overlay_icon->hide();
     if (!all_docs_processed ) {
@@ -783,7 +783,7 @@ void SymbolsDialog::getSymbolsTitle() {
     using namespace Inkscape::IO::Resource;
     Glib::ustring title;
     number_docs = 0;
-    std::regex matchtitle (".*?<title.*?>(.*?)<(/| /)"); 
+    std::regex matchtitle (".*?<title.*?>(.*?)<(/| /)");
     for(auto &filename: get_filenames(SYMBOLS, {".svg", ".vss"})) {
         if(Glib::str_has_suffix(filename, ".vss")) {
           std::size_t found = filename.find_last_of("/\\");
@@ -817,7 +817,7 @@ void SymbolsDialog::getSymbolsTitle() {
                   ++number_docs;
                   break;
               }
-          } 
+          }
         }
     }
     for(auto const &symbol_document_map : symbol_sets) {
@@ -827,7 +827,7 @@ void SymbolsDialog::getSymbolsTitle() {
 
 /* Hunts preference directories for symbol files */
 std::pair<Glib::ustring, SPDocument*>
-SymbolsDialog::getSymbolsSet(Glib::ustring title) 
+SymbolsDialog::getSymbolsSet(Glib::ustring title)
 {
     SPDocument* symbol_doc = nullptr;
     Glib::ustring current = symbol_set->get_active_text();
@@ -851,7 +851,7 @@ SymbolsDialog::getSymbolsSet(Glib::ustring title)
     using namespace Inkscape::IO::Resource;
     Glib::ustring new_title;
 
-    std::regex matchtitle (".*?<title.*?>(.*?)<(/| /)"); 
+    std::regex matchtitle (".*?<title.*?>(.*?)<(/| /)");
     for(auto &filename: get_filenames(SYMBOLS, {".svg", ".vss"})) {
         if(Glib::str_has_suffix(filename, ".vss")) {
 #ifdef WITH_LIBVISIO
@@ -940,7 +940,7 @@ void SymbolsDialog::symbolsInDocRecursive (SPObject *r, std::map<Glib::ustring, 
   }
 }
 
-std::map<Glib::ustring, std::pair<Glib::ustring, SPSymbol*> > 
+std::map<Glib::ustring, std::pair<Glib::ustring, SPSymbol*> >
 SymbolsDialog::symbolsInDoc( SPDocument* symbol_document, Glib::ustring doc_title)
 {
 
@@ -992,7 +992,7 @@ gchar const* SymbolsDialog::styleFromUse( gchar const* id, SPDocument* document)
   return style;
 }
 
-void SymbolsDialog::clearSearch() 
+void SymbolsDialog::clearSearch()
 {
   if(search->get_text().empty() && sensitive) {
     enableWidgets(false);
@@ -1010,14 +1010,14 @@ void SymbolsDialog::clearSearch()
   }
 }
 
-void SymbolsDialog::enableWidgets(bool enable) 
+void SymbolsDialog::enableWidgets(bool enable)
 {
   symbol_set->set_sensitive(enable);
   search->set_sensitive(enable);
   tools ->set_sensitive(enable);
 }
 
-void SymbolsDialog::beforeSearch(GdkEventKey* evt) 
+void SymbolsDialog::beforeSearch(GdkEventKey* evt)
 {
   sensitive = false;
   search_str = search->get_text().lowercase();
@@ -1045,7 +1045,7 @@ void SymbolsDialog::searchsymbols()
     }
 }
 
-void SymbolsDialog::unsensitive(GdkEventKey* evt) 
+void SymbolsDialog::unsensitive(GdkEventKey* evt)
 {
   sensitive = true;
 }
@@ -1087,7 +1087,7 @@ bool SymbolsDialog::callbackSymbols(){
       int modulus = number_symbols > 200 ? 50 : (number_symbols/4);
       g_free(symbol_title_char);
       g_free(symbol_desc_char);
-      if (modulus && counter_symbols % modulus == 0 && !l.empty()) { 
+      if (modulus && counter_symbols % modulus == 0 && !l.empty()) {
         return true;
       }
     }
@@ -1145,7 +1145,7 @@ Glib::ustring SymbolsDialog::ellipsize(Glib::ustring data, size_t limit) {
 }
 
 void SymbolsDialog::addSymbolsInDoc(SPDocument* symbol_document) {
-  
+
   if (!symbol_document) {
     return; //Search all
   }
@@ -1201,13 +1201,13 @@ void SymbolsDialog::addSymbols() {
 void SymbolsDialog::addSymbol( SPObject* symbol, Glib::ustring doc_title)
 {
   gchar const *id = symbol->getRepr()->attribute("id");
-  
+
   if (doc_title.empty()) {
     doc_title = CURRENTDOC;
   } else {
       doc_title = g_dpgettext2(nullptr, "Symbol", doc_title.c_str());
   }
-  
+
   Glib::ustring symbol_title;
   gchar *title = symbol->title(); // From title element
   if (title) {
@@ -1216,7 +1216,7 @@ void SymbolsDialog::addSymbol( SPObject* symbol, Glib::ustring doc_title)
     symbol_title = Glib::ustring::compose("%1 %2 (%3)", _("Symbol without title"), Glib::ustring(id), doc_title);
   }
   g_free(title);
-  
+
   Glib::RefPtr<Gdk::Pixbuf> pixbuf = drawSymbol( symbol );
   if( pixbuf ) {
     Gtk::ListStore::iterator row = store->append();
@@ -1313,7 +1313,7 @@ SymbolsDialog::drawSymbol(SPObject *symbol)
     if( height == 0.0 ) height = 1.0;
 
     if( fit_symbol->get_active() )
-      scale = psize / ceil(std::max(width, height)); 
+      scale = psize / ceil(std::max(width, height));
     else
       scale = pow( 2.0, scale_factor/2.0 ) * psize / 32.0;
 
@@ -1347,7 +1347,7 @@ SPDocument* SymbolsDialog::symbolsPreviewDoc()
 /*
  * Update image widgets
  */
-Glib::RefPtr<Gdk::Pixbuf> 
+Glib::RefPtr<Gdk::Pixbuf>
 SymbolsDialog::getOverlay(gint width, gint height)
 {
   cairo_surface_t *surface;
@@ -1362,11 +1362,16 @@ SymbolsDialog::getOverlay(gint width, gint height)
   return Glib::wrap(pixbuf);
 }
 
-void SymbolsDialog::setDesktop(SPDesktop *desktop)
+void SymbolsDialog::update()
 {
-    Panel::setDesktop(desktop);
+    if (!_app) {
+        std::cerr << "Find::update(): _app is null" << std::endl;
+        return;
+    }
 
-    documentReplaced(desktop, desktop ? desktop->getDocument() : nullptr);
+    SPDesktop *desktop = getDesktop();
+    SPDocument *document = _app->get_active_document();
+    documentReplaced(desktop, document);
 }
 
 } //namespace Dialogs

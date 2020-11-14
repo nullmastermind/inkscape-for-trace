@@ -21,7 +21,7 @@
 
 #include <glibmm/refptr.h>
 
-#include "ui/widget/panel.h"
+#include "ui/dialog/dialog-base.h"
 #include "ui/widget/frame.h"
 
 #include "ui/widget/font-selector.h"
@@ -48,12 +48,13 @@ namespace Dialog {
 #define VB_MARGIN 4
 /**
  * The TextEdit class defines the Text and font dialog.
- * 
+ *
  * The Text and font dialog allows you to set the font family, style and size
  * and shows a preview of the result. The dialogs layout settings include
  * horizontal and vertical alignment and inter line distance.
  */
-class TextEdit : public UI::Widget::Panel {
+class TextEdit : public DialogBase
+{
 public:
     TextEdit();
     ~TextEdit() override;
@@ -77,17 +78,17 @@ protected:
     void onApply ();
     void onSelectionChange ();
     void onSelectionModified (guint flags);
-    
+
     /**
      * Called whenever something 'changes' on canvas.
-     * 
+     *
      * onReadSelection gets the currently selected item from the canvas and sets all the controls in this dialog to the correct state.
-     * 
+     *
      * @param dostyle Indicates whether the modification of the user includes a style change.
      * @param content Indicates whether the modification of the user includes a style change. Actually refers to the question if we do want to show the content? (Parameter currently not used)
      */
     void onReadSelection (gboolean style, gboolean content);
-    
+
     /**
      * Callback invoked when the user modifies the text of the selected text object.
      *
@@ -99,7 +100,7 @@ protected:
      */
     void onChange ();
     void onFontFeatures (Gtk::Widget * widgt, int pos);
-    
+
     /**
      * Callback invoked when the user modifies the font through the dialog or the tools control bar.
      *
@@ -123,7 +124,7 @@ protected:
 
     /**
      * Helper function to create markup from a fontspec and display in the preview label.
-     * 
+     *
      * @param fontspec for the text to be previewed.
      * @param font_features for text to be previewed (in CSS format).
      * @param phrase text to be shown.
@@ -136,7 +137,7 @@ protected:
     /**
      * Can be invoked for setting the desktop. Currently not used.
      */
-    void setDesktop(SPDesktop *desktop) override;
+    void update() override;
 
 private:
 
@@ -178,7 +179,6 @@ private:
     TextEdit(TextEdit const &d) = delete;
     TextEdit operator=(TextEdit const &d) = delete;
 };
-
 
 } //namespace Dialog
 } //namespace UI

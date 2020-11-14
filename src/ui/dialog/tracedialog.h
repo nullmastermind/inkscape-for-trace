@@ -13,7 +13,7 @@
 #ifndef __TRACEDIALOG_H__
 #define __TRACEDIALOG_H__
 
-#include "ui/widget/panel.h"
+#include "ui/dialog/dialog-base.h"
 #include "verbs.h"
 
 namespace Inkscape {
@@ -24,7 +24,7 @@ namespace Dialog {
 /**
  * A dialog that displays log messages
  */
-class TraceDialog : public UI::Widget::Panel
+class TraceDialog : public DialogBase
 {
 
 public:
@@ -32,9 +32,7 @@ public:
     /**
      * Constructor
      */
-    TraceDialog() : 
-     UI::Widget::Panel("/dialogs/trace", SP_VERB_SELECTION_TRACE)
-     {}
+    TraceDialog() : DialogBase("/dialogs/trace", SP_VERB_SELECTION_TRACE) {}
 
 
     /**

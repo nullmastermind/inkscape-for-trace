@@ -15,9 +15,6 @@
 #ifndef SELECTORSDIALOG_H
 #define SELECTORSDIALOG_H
 
-#include "ui/dialog/dialog-manager.h"
-#include "ui/dialog/styledialog.h"
-#include "ui/widget/panel.h"
 #include <gtkmm/dialog.h>
 #include <gtkmm/paned.h>
 #include <gtkmm/radiobutton.h>
@@ -27,12 +24,12 @@
 #include <gtkmm/treeselection.h>
 #include <gtkmm/treestore.h>
 #include <gtkmm/treeview.h>
-#include <ui/widget/panel.h>
-
-#include "xml/helper-observer.h"
-
 #include <memory>
 #include <vector>
+
+#include "ui/dialog/dialog-base.h"
+#include "ui/dialog/styledialog.h"
+#include "xml/helper-observer.h"
 
 namespace Inkscape {
 namespace UI {
@@ -49,9 +46,9 @@ namespace Dialog {
  *   1. The text node of the style element.
  *   2. The Gtk::TreeModel.
  */
-class SelectorsDialog : public Widget::Panel {
-
-  public:
+class SelectorsDialog : public DialogBase
+{
+public:
     ~SelectorsDialog() override;
     // No default constructor, noncopyable, nonassignable
     SelectorsDialog();
@@ -137,7 +134,7 @@ class SelectorsDialog : public Widget::Panel {
     std::unique_ptr<Inkscape::XML::NodeObserver> m_nodewatcher;
     std::unique_ptr<Inkscape::XML::NodeObserver> m_styletextwatcher;
     void _updateWatchers(SPDesktop *);
-    
+
     // Manipulate Tree
     void _addToSelector(Gtk::TreeModel::Row row);
     void _removeFromSelector(Gtk::TreeModel::Row row);
@@ -166,7 +163,7 @@ class SelectorsDialog : public Widget::Panel {
     sigc::connection _selection_changed_connection;
 
     void _handleDocumentReplaced(SPDesktop* desktop, SPDocument *document);
-    void setDesktop(SPDesktop *desktop) override;
+    void update() override;
     void _handleSelectionChanged();
     void _rowExpand(const Gtk::TreeModel::iterator &iter, const Gtk::TreeModel::Path &path);
     void _rowCollapse(const Gtk::TreeModel::iterator &iter, const Gtk::TreeModel::Path &path);

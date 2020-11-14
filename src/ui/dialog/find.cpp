@@ -55,7 +55,7 @@ namespace UI {
 namespace Dialog {
 
 Find::Find()
-    : UI::Widget::Panel("/dialogs/find", SP_VERB_DIALOG_FIND),
+    : DialogBase("/dialogs/find", SP_VERB_DIALOG_FIND),
 
       entry_find(_("F_ind:"), _("Find objects by their content or properties (exact or partial match)")),
       entry_replace(_("R_eplace:"), _("Replace match with this value")),
@@ -108,6 +108,8 @@ Find::Find()
       blocked(false)
 
 {
+    set_orientation(Gtk::ORIENTATION_VERTICAL);
+
     _left_size_group = Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL);
     _right_size_group = Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL);
     button_find.set_use_underline();
@@ -292,13 +294,12 @@ Find::Find()
     hboxbutton_row.pack_start(status, true, true);
     hboxbutton_row.pack_end(box_buttons, true, true);
 
-    Gtk::Box *contents = _getContents();
-    contents->set_spacing(6);
-    contents->pack_start(entry_find, false, false);
-    contents->pack_start(entry_replace, false, false);
-    contents->pack_start(hbox_searchin, false, false);
-    contents->pack_start(expander_options, false, false);
-    contents->pack_end(hboxbutton_row, false, false);
+    set_spacing(6);
+    pack_start(entry_find, false, false);
+    pack_start(entry_replace, false, false);
+    pack_start(hbox_searchin, false, false);
+    pack_start(expander_options, false, false);
+    pack_end(hboxbutton_row, false, false);
 
     checkProperties.push_back(&check_ids);
     checkProperties.push_back(&check_style);
@@ -350,11 +351,15 @@ Find::~Find()
     selectChangedConn.disconnect();
 }
 
-void Find::setDesktop(SPDesktop *desktop)
+void Find::update()
 {
-    selectChangedConn.disconnect();
+    if (!_app) {
+        std::cerr << "Find::update(): _app is null" << std::endl;
+        return;
+    }
 
-    Panel::setDesktop(desktop);
+    SPDesktop *desktop = getDesktop();
+    selectChangedConn.disconnect();
 
     if (!desktop)
         return;
@@ -846,7 +851,8 @@ bool Find::item_type_match (SPItem *item)
 			   dynamic_cast<SPFlowtspan *>(item) || dynamic_cast<SPFlowpara *>(item)) {
         return (all || check_texts.get_active());
 
-    } else if (dynamic_cast<SPGroup *>(item) && !getDesktop()->isLayer(item) ) { // never select layers!
+    } else if (dynamic_cast<SPGroup *>(item) &&
+               !dynamic_cast<SPDesktop *>(_app->get_active_view())->isLayer(item)) { // never select layers!
         return (all || check_groups.get_active());
 
     } else if (dynamic_cast<SPUse *>(item)) {
@@ -894,7 +900,7 @@ std::vector<SPItem*> &Find::all_items (SPObject *r, std::vector<SPItem*> &l, boo
         return l; // we're not interested in metadata
     }
 
-    auto desktop = getDesktop();
+    auto desktop = dynamic_cast<SPDesktop *>(_app->get_active_view());
 
     for (auto& child: r->children) {
         SPItem *item = dynamic_cast<SPItem *>(&child);
@@ -910,9 +916,9 @@ std::vector<SPItem*> &Find::all_items (SPObject *r, std::vector<SPItem*> &l, boo
 
 std::vector<SPItem*> &Find::all_selection_items (Inkscape::Selection *s, std::vector<SPItem*> &l, SPObject *ancestor, bool hidden, bool locked)
 {
-    auto desktop = getDesktop();
+    auto desktop = dynamic_cast<SPDesktop *>(_app->get_active_view());
 
-	auto itemlist= s->items();
+    auto itemlist= s->items();
     for (auto i=boost::rbegin(itemlist); boost::rend(itemlist) != i; ++i) {
         SPObject *obj = *i;
         SPItem *item = dynamic_cast<SPItem *>(obj);
@@ -961,7 +967,7 @@ void Find::onReplace()
 
 void Find::onAction()
 {
-    auto desktop = getDesktop();
+    auto desktop = dynamic_cast<SPDesktop *>(_app->get_active_view());
 
     bool hidden = check_include_hidden.get_active();
     bool locked = check_include_locked.get_active();

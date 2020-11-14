@@ -61,14 +61,13 @@
 #include "object/sp-root.h"
 
 #include "ui/desktop/menubar.h"
-#include "ui/dialog/dialog-manager.h"
+#include "ui/dialog/dialog-container.h"
 #include "ui/interface.h" // Only for getLayoutPrefPath
 #include "ui/tool-factory.h"
 #include "ui/tools/tool-base.h"
 #include "ui/tools/box3d-tool.h"
 #include "ui/tools/select-tool.h"
 #include "ui/widget/canvas.h"
-#include "ui/widget/dock.h"
 
 #include "widgets/desktop-widget.h"
 
@@ -108,8 +107,7 @@ static void _pinch_scale_changed_handler(GtkGesture *gesture, gdouble delta, SPD
 }
 
 SPDesktop::SPDesktop()
-    : _dlg_mgr(nullptr)
-    , namedview(nullptr)
+    : namedview(nullptr)
     , canvas(nullptr)
     , layers(nullptr)
     , selection(nullptr)
@@ -180,13 +178,6 @@ SPDesktop::init (SPNamedView *nv, Inkscape::UI::Widget::Canvas *acanvas, SPDeskt
     Inkscape::DocumentUndo::setUndoSensitive(document, false);
     document->ensureUpToDate();
     Inkscape::DocumentUndo::setUndoSensitive(document, true);
-
-    /* Setup Dialog Manager */
-    _dlg_mgr = Inkscape::UI::Dialog::DialogManager::getInstance();
-    if (!_dlg_mgr) {
-        _dlg_mgr_owned = new Inkscape::UI::Dialog::DialogManager();
-        _dlg_mgr = _dlg_mgr_owned;
-    }
 
     dkey = SPItem::display_key_new(1);
 
@@ -392,9 +383,7 @@ void SPDesktop::destroy()
     }
 
     _guides_message_context = nullptr;
-
-    delete _dlg_mgr_owned;
-    _dlg_mgr_owned = nullptr;
+    canvas->set_desktop(nullptr);
 }
 
 SPDesktop::~SPDesktop()
@@ -598,7 +587,12 @@ SPDesktop::set_coordinate_status (Geom::Point p) {
 }
 
 Inkscape::UI::Widget::Dock* SPDesktop::getDock() {
-	return _widget->getDock();
+	return nullptr;
+}
+
+Inkscape::UI::Dialog::DialogContainer *SPDesktop::getContainer()
+{
+    return _widget->getContainer();
 }
 
 /**
@@ -1703,10 +1697,13 @@ SPDesktop::_onDeactivate (SPDesktop* dt)
 
 void
 SPDesktop::_onSelectionModified
-(Inkscape::Selection */*selection*/, guint /*flags*/, SPDesktop *dt)
+(Inkscape::Selection *selection, guint /*flags*/, SPDesktop *dt)
 {
     if (!dt->_widget) return;
     dt->_widget->update_scrollbars (dt->_current_affine.getZoom());
+    if (selection->desktop()->getInkscapeWindow()) {
+        selection->desktop()->getInkscapeWindow()->on_selection_changed();
+    }
 }
 
 static void
@@ -1725,6 +1722,9 @@ _onSelectionChanged
             desktop->layers->setCurrentLayer(layer);
         }
     }
+    if (selection->desktop()->getInkscapeWindow()) {
+        selection->desktop()->getInkscapeWindow()->on_selection_changed();
+    }
 }
 
 /**
@@ -1733,9 +1733,8 @@ _onSelectionChanged
 static bool
 _drawing_handler (GdkEvent *event, Inkscape::DrawingItem *drawing_item, SPDesktop *desktop)
 {
-    if (event->type == GDK_KEY_PRESS && 
-        Inkscape::UI::Tools::get_latin_keyval(&event->key) == GDK_KEY_space &&
-        desktop->event_context->space_panning) 
+    if (event->type == GDK_KEY_PRESS && Inkscape::UI::Tools::get_latin_keyval(&event->key) == GDK_KEY_space &&
+        desktop->event_context->space_panning)
     {
         return true;
     }
@@ -1883,82 +1882,6 @@ Geom::Point SPDesktop::dt2doc(Geom::Point const &p) const
     return p * dt2doc();
 }
 
-void
-SPDesktop::show_dialogs()
-{
-
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (prefs == nullptr) {
-        return;
-    }
-
-    int active = prefs->getInt("/options/savedialogposition/value", 1);
-    if (active == 0) {
-        // User has turned off this feature in preferences
-        return;
-    }
-
-    if (showing_dialogs) {
-        return;
-    }
-
-    showing_dialogs = TRUE;
-
-
-    /*
-     * Get each dialogs previous state from preferences and reopen on startup if needed, without grabbing focus (canvas retains focus).
-     * Map dialog manager's dialog IDs to dialog last visible state preference. FIXME: store this correspondence in dialogs themselves!
-     */
-    std::map<Glib::ustring, Glib::ustring> mapVerbPreference;
-    mapVerbPreference.insert(std::make_pair ("LayersPanel", "/dialogs/layers") );
-    mapVerbPreference.insert(std::make_pair ("FillAndStroke", "/dialogs/fillstroke") );
-    mapVerbPreference.insert(std::make_pair ("AlignAndDistribute", "/dialogs/align") );
-    mapVerbPreference.insert(std::make_pair ("DocumentProperties", "/dialogs/documentoptions") );
-    mapVerbPreference.insert(std::make_pair ("FilterEffectsDialog", "/dialogs/filtereffects") );
-    mapVerbPreference.insert(std::make_pair ("Find", "/dialogs/find") );
-    mapVerbPreference.insert(std::make_pair ("Glyphs", "/dialogs/glyphs") );
-    mapVerbPreference.insert(std::make_pair ("Messages", "/dialogs/messages") );
-    mapVerbPreference.insert(std::make_pair ("Memory", "/dialogs/memory") );
-    mapVerbPreference.insert(std::make_pair ("LivePathEffect", "/dialogs/livepatheffect") );
-    mapVerbPreference.insert(std::make_pair ("UndoHistory", "/dialogs/undo-history") );
-    mapVerbPreference.insert(std::make_pair ("Transformation", "/dialogs/transformation") );
-    mapVerbPreference.insert(std::make_pair ("Swatches", "/dialogs/swatches") );
-    mapVerbPreference.insert(std::make_pair ("IconPreviewPanel", "/dialogs/iconpreview") );
-    mapVerbPreference.insert(std::make_pair ("SvgFontsDialog", "/dialogs/svgfonts") );
-    mapVerbPreference.insert(std::make_pair ("InputDevices", "/dialogs/inputdevices") );
-    mapVerbPreference.insert(std::make_pair ("InkscapePreferences", "/dialogs/preferences") );
-    mapVerbPreference.insert(std::make_pair ("TileDialog", "/dialogs/gridtiler") );
-    mapVerbPreference.insert(std::make_pair ("Trace", "/dialogs/trace") );
-    mapVerbPreference.insert(std::make_pair ("TextFont", "/dialogs/textandfont") );
-    mapVerbPreference.insert(std::make_pair ("Export", "/dialogs/export") );
-    mapVerbPreference.insert(std::make_pair ("XmlTree", "/dialogs/xml") );
-    mapVerbPreference.insert(std::make_pair ("Selectors", "/dialogs/selectors") );
-    mapVerbPreference.insert(std::make_pair ("CloneTiler", "/dialogs/clonetiler") );
-    mapVerbPreference.insert(std::make_pair ("ObjectProperties", "/dialogs/object") );
-    mapVerbPreference.insert(std::make_pair ("SpellCheck", "/dialogs/spellcheck") );
-    mapVerbPreference.insert(std::make_pair ("Symbols", "/dialogs/symbols") );
-    mapVerbPreference.insert(std::make_pair ("PaintServers", "/dialogs/paint") );
-    mapVerbPreference.insert(std::make_pair ("ObjectsPanel", "/dialogs/objects") );
-    mapVerbPreference.insert(std::make_pair ("Prototype", "/dialogs/prototype") );
-
-
-    for (std::map<Glib::ustring, Glib::ustring>::const_iterator iter = mapVerbPreference.begin(); iter != mapVerbPreference.end(); ++iter) {
-        Glib::ustring pref = iter->second;
-
-        int visible = prefs->getInt(pref + "/visible", 0);
-        if (visible) {
-            // Try to ensure that the panel is created attached to the correct desktop (bug 1720096).
-            // There must be a better way of handling this problem!
-            INKSCAPE.activate_desktop(this);
-
-            _dlg_mgr->showDialog(iter->first.c_str(), false); // without grabbing focus, we need focus to remain on the canvas
-        }
-    }
-
-    if (auto *dock = getDock()) {
-        dock->restoreLayout();
-    }
-}
 /*
  * Pop event context from desktop's context stack. Never used.
  */

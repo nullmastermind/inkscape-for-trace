@@ -41,6 +41,8 @@ namespace Inkscape {
   class CanvasItemGuideLine;
 namespace UI {
 namespace Dialog {
+class DialogContainer;
+class DialogMultipaned;
 class SwatchesPanel;
 } // namespace Dialog
 
@@ -109,6 +111,8 @@ private:
     Gtk::Box *_vbox;
 
     Gtk::Box *_hbox;
+    Inkscape::UI::Dialog::DialogContainer *_container = nullptr;
+    Inkscape::UI::Dialog::DialogMultipaned *_columns;
 
     Gtk::MenuBar *_menubar;  // TEMP
     Gtk::Box     *_statusbar;
@@ -134,8 +138,6 @@ private:
     sigc::connection _rotation_status_output_connection;
     sigc::connection _rotation_status_value_changed_connection;
     sigc::connection _rotation_status_populate_popup_connection;
-
-    Inkscape::UI::Widget::Dock *_dock = nullptr;
 
 
     Inkscape::UI::Widget::SelectedStyle *_selected_style;
@@ -183,11 +185,11 @@ public:
     void enableInteraction();
     void disableInteraction();
     void updateTitle(gchar const *uri);
-    bool onFocusInEvent(GdkEventFocus*);
+    bool onFocusInEvent(GdkEventFocus *);
+    Inkscape::UI::Dialog::DialogContainer *getContainer();
 
     Gtk::MenuBar *menubar() { return _menubar; }
 
-    Inkscape::UI::Widget::Dock* getDock();
 
     void updateNamedview();
     void update_guides_lock();

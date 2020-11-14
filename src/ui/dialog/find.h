@@ -13,10 +13,6 @@
 #ifndef INKSCAPE_UI_DIALOG_FIND_H
 #define INKSCAPE_UI_DIALOG_FIND_H
 
-#include "ui/widget/panel.h"
-#include "ui/widget/entry.h"
-#include "ui/widget/frame.h"
-
 #include <gtkmm/box.h>
 #include <gtkmm/buttonbox.h>
 #include <gtkmm/expander.h>
@@ -24,6 +20,9 @@
 #include <gtkmm/radiobutton.h>
 #include <gtkmm/sizegroup.h>
 
+#include "ui/dialog/dialog-base.h"
+#include "ui/widget/entry.h"
+#include "ui/widget/frame.h"
 
 class SPItem;
 class SPObject;
@@ -44,7 +43,8 @@ namespace Dialog {
  * Other options allow searching on specific object types and properties.
  */
 
-class Find : public UI::Widget::Panel {
+class Find : public DialogBase
+{
 public:
     Find();
     ~Find() override;
@@ -195,9 +195,9 @@ protected:
      */
     void        squeeze_window();
     /**
-     * Can be invoked for setting the desktop. Currently not used.
+     * Update the state of the dialog
      */
-    void        setDesktop(SPDesktop *desktop) override;
+    void        update() override;
 
     /**
      * Called when desktop selection changes

@@ -731,19 +731,21 @@ bool LayersPanel::_rowSelectFunction( Glib::RefPtr<Gtk::TreeModel> const & /*mod
 /**
  * Constructor
  */
-LayersPanel::LayersPanel() :
-    UI::Widget::Panel("/dialogs/layers", SP_VERB_DIALOG_LAYERS),
-    _maxNestDepth(20),
-    _desktop(nullptr),
-    _model(nullptr),
-    _pending(nullptr),
-    _toggleEvent(nullptr),
-    _compositeSettings(SP_VERB_DIALOG_LAYERS, "layers",
-                       UI::Widget::SimpleFilterModifier::ISOLATION |
-                       UI::Widget::SimpleFilterModifier::BLEND |
-                       UI::Widget::SimpleFilterModifier::OPACITY |
-                       UI::Widget::SimpleFilterModifier::BLUR)
+LayersPanel::LayersPanel()
+    : DialogBase("/dialogs/layers", SP_VERB_DIALOG_LAYERS)
+    , _maxNestDepth(20)
+    , _desktop(nullptr)
+    , _model(nullptr)
+    , _pending(nullptr)
+    , _toggleEvent(nullptr)
+    , _compositeSettings(SP_VERB_DIALOG_LAYERS, "layers",
+                         UI::Widget::SimpleFilterModifier::ISOLATION |
+                         UI::Widget::SimpleFilterModifier::BLEND |
+                         UI::Widget::SimpleFilterModifier::OPACITY |
+                         UI::Widget::SimpleFilterModifier::BLUR)
 {
+    set_orientation(Gtk::ORIENTATION_VERTICAL);
+
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     _maxNestDepth = prefs->getIntLimited("/dialogs/layers/maxDepth", 20, 1, 1000);
 
@@ -787,7 +789,7 @@ LayersPanel::LayersPanel() :
 
     _tree.set_expander_column( *_tree.get_column(nameColNum) );
     _tree.set_search_column(nameColNum + 1);
-	
+
     _compositeSettings.setSubject(&_subject);
 
     _selectedConnection = _tree.get_selection()->signal_changed().connect( sigc::mem_fun(*this, &LayersPanel::_pushTreeSelectionToCurrent) );
@@ -819,9 +821,9 @@ LayersPanel::LayersPanel() :
     _layersPage.pack_end(_compositeSettings, Gtk::PACK_SHRINK);
     _layersPage.pack_end(_buttonsRow, Gtk::PACK_SHRINK);
 
-    _getContents()->pack_start(_layersPage, Gtk::PACK_EXPAND_WIDGET);
+    pack_start(_layersPage, Gtk::PACK_EXPAND_WIDGET);
 
-    SPDesktop* targetDesktop = getDesktop();
+    SPDesktop *targetDesktop = dynamic_cast<SPDesktop *>(_app->get_active_view());
 
     Gtk::Button* btn = Gtk::manage( new Gtk::Button() );
     _styleButton( *btn, targetDesktop, SP_VERB_LAYER_NEW, INKSCAPE_ICON("list-add"), C_("Layers", "New") );
@@ -833,19 +835,19 @@ LayersPanel::LayersPanel() :
     btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &LayersPanel::_takeAction), (int)BUTTON_BOTTOM) );
     _watchingNonBottom.push_back( btn );
     _buttonsPrimary.pack_end(*btn, Gtk::PACK_SHRINK);
-    
+
     btn = Gtk::manage( new Gtk::Button() );
     _styleButton( *btn, targetDesktop, SP_VERB_LAYER_LOWER, INKSCAPE_ICON("go-down"), C_("Layers", "Dn") );
     btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &LayersPanel::_takeAction), (int)BUTTON_DOWN) );
     _watchingNonBottom.push_back( btn );
     _buttonsPrimary.pack_end(*btn, Gtk::PACK_SHRINK);
-    
+
     btn = Gtk::manage( new Gtk::Button() );
     _styleButton( *btn, targetDesktop, SP_VERB_LAYER_RAISE, INKSCAPE_ICON("go-up"), C_("Layers", "Up") );
     btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &LayersPanel::_takeAction), (int)BUTTON_UP) );
     _watchingNonTop.push_back( btn );
     _buttonsPrimary.pack_end(*btn, Gtk::PACK_SHRINK);
-    
+
     btn = Gtk::manage( new Gtk::Button() );
     _styleButton( *btn, targetDesktop, SP_VERB_LAYER_TO_TOP, INKSCAPE_ICON("go-top"), C_("Layers", "Top") );
     btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &LayersPanel::_takeAction), (int)BUTTON_TOP) );
@@ -861,7 +863,7 @@ LayersPanel::LayersPanel() :
     btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &LayersPanel::_takeAction), (int)BUTTON_DELETE) );
     _watching.push_back( btn );
     _buttonsSecondary.pack_start(*btn, Gtk::PACK_SHRINK);
-    
+
     _buttonsRow.pack_start(_buttonsSecondary, Gtk::PACK_EXPAND_WIDGET);
     _buttonsRow.pack_end(_buttonsPrimary, Gtk::PACK_EXPAND_WIDGET);
 
@@ -949,8 +951,6 @@ LayersPanel::~LayersPanel()
 
 void LayersPanel::setDesktop( SPDesktop* desktop )
 {
-    Panel::setDesktop(desktop);
-
     if ( desktop != _desktop ) {
         _layerChangedConnection.disconnect();
         _layerUpdatedConnection.disconnect();
@@ -974,7 +974,15 @@ void LayersPanel::setDesktop( SPDesktop* desktop )
     }
 }
 
+void LayersPanel::update()
+{
+    if (!_app) {
+        std::cerr << "LayersPanel::update(): _app is null" << std::endl;
+        return;
+    }
 
+    setDesktop(getDesktop());
+}
 
 } //namespace Dialogs
 } //namespace UI

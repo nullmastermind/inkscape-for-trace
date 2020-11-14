@@ -51,7 +51,7 @@
 #include "object/sp-defs.h"
 #include "object/sp-gradient-reference.h"
 
-#include "dialog-manager.h"
+#include "ui/dialog/dialog-container.h"
 #include "verbs.h"
 #include "gradient-chemistry.h"
 #include "helper/action.h"
@@ -143,7 +143,7 @@ static void editGradientImpl( SPDesktop* desktop, SPGradient* gr )
                         if ( SP_IS_GRADIENT(server) ) {
                             SPGradient* grad = SP_GRADIENT(server);
                             if ( grad->isSwatch() && grad->getId() == gr->getId()) {
-                                desktop->_dlg_mgr->showDialog("FillAndStroke");
+                                desktop->getContainer()->new_dialog("FillAndStroke");
                                 shown = true;
                             }
                         }
@@ -452,7 +452,7 @@ void _loadPaletteFile(Glib::ustring path, gboolean user/*=FALSE*/)
                                                        Glib::ustring::format(std::hex, std::setw(2), std::setfill(L'0'), g),
                                                        Glib::ustring::format(std::hex, std::setw(2), std::setfill(L'0'), b)
                                                    ).uppercase();
-                                        } 
+                                        }
                                     }
                                     if ( !hasErr ) {
                                         // Add the entry now
@@ -552,15 +552,15 @@ SwatchesPanel& SwatchesPanel::getInstance()
 /**
  * Constructor
  */
-SwatchesPanel::SwatchesPanel(gchar const* prefsPath) :
-    Inkscape::UI::Widget::Panel(prefsPath, SP_VERB_DIALOG_SWATCHES),
-    _menu(nullptr),
-    _holder(nullptr),
-    _clear(nullptr),
-    _remove(nullptr),
-    _currentIndex(0),
-    _currentDesktop(nullptr),
-    _currentDocument(nullptr)
+SwatchesPanel::SwatchesPanel(gchar const *prefsPath)
+    : DialogBase(prefsPath, SP_VERB_DIALOG_SWATCHES)
+    , _menu(nullptr)
+    , _holder(nullptr)
+    , _clear(nullptr)
+    , _remove(nullptr)
+    , _currentIndex(0)
+    , _currentDesktop(nullptr)
+    , _currentDocument(nullptr)
 {
     _holder = new PreviewHolder();
 
@@ -585,7 +585,7 @@ SwatchesPanel::SwatchesPanel(gchar const* prefsPath) :
     }
 
     box->pack_start(*_holder, Gtk::PACK_EXPAND_WIDGET);
-    _getContents()->pack_start(*box);
+    pack_start(*box);
 
     load_palettes();
 
@@ -832,8 +832,15 @@ void SwatchesPanel::_build_menu()
     _updateSettings(SWATCHES_SETTINGS_BORDER, panel_border);
 }
 
-void SwatchesPanel::setDesktop( SPDesktop* desktop )
+void SwatchesPanel::update()
 {
+    if (!_app) {
+        std::cerr << "SwatchesPanel::update(): _app is null" << std::endl;
+        return;
+    }
+
+    SPDesktop *desktop = getDesktop();
+
     if ( desktop != _currentDesktop ) {
         if ( _currentDesktop ) {
             for (auto &conn : _desktopConnections) {

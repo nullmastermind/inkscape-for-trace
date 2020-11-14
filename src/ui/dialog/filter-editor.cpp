@@ -25,7 +25,6 @@
 #include <glibmm/stringutils.h>
 
 #include "desktop.h"
-#include "dialog-manager.h"
 #include "document-undo.h"
 #include "document.h"
 #include "filter-chemistry.h"
@@ -61,9 +60,10 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
-FilterEditorDialog::FilterEditorDialog() : UI::Widget::Panel("/dialogs/filtereffects", SP_VERB_DIALOG_FILTER_EFFECTS)
+FilterEditorDialog::FilterEditorDialog()
+    : DialogBase("/dialogs/filtereffects", SP_VERB_DIALOG_FILTER_EFFECTS)
 {
-     
+
     const std::string req_widgets[] = {"FilterEditor", "FilterList", "FilterFERX", "FilterFERY", "FilterFERH", "FilterFERW", "FilterPreview", "FilterPrimitiveDescImage", "FilterPrimitiveList", "FilterPrimitiveDescText", "FilterPrimitiveAdd"};
     auto gladefile = get_filename_string(UIS, "dialog-filter-editor.glade");
     try {
@@ -83,13 +83,13 @@ FilterEditorDialog::FilterEditorDialog() : UI::Widget::Panel("/dialogs/filtereff
     }
 
     builder->get_widget("FilterEditor", FilterEditor);
-    _getContents()->add(*FilterEditor);
+    add(*FilterEditor);
 
 //test
     Gtk::ComboBox *OptionList;
     builder->get_widget("OptionList",OptionList);
     FilterStore = builder->get_object("FilterStore");
-    Glib::RefPtr<Gtk::ListStore> fs = Glib::RefPtr<Gtk::ListStore>::cast_static(FilterStore); 
+    Glib::RefPtr<Gtk::ListStore> fs = Glib::RefPtr<Gtk::ListStore>::cast_static(FilterStore);
     Gtk::TreeModel::Row row = *(fs->append());
 
 

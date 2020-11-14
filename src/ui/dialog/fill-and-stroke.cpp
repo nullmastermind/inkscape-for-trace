@@ -40,7 +40,7 @@ namespace UI {
 namespace Dialog {
 
 FillAndStroke::FillAndStroke()
-    : UI::Widget::Panel("/dialogs/fillstroke", SP_VERB_DIALOG_FILL_STROKE)
+    : DialogBase("/dialogs/fillstroke", SP_VERB_DIALOG_FILL_STROKE)
     , _page_fill(Gtk::manage(new UI::Widget::NotebookPage(1, 1, true, true)))
     , _page_stroke_paint(Gtk::manage(new UI::Widget::NotebookPage(1, 1, true, true)))
     , _page_stroke_style(Gtk::manage(new UI::Widget::NotebookPage(1, 1, true, true)))
@@ -53,9 +53,9 @@ FillAndStroke::FillAndStroke()
     , fillWdgt(nullptr)
     , strokeWdgt(nullptr)
 {
-    Gtk::Box *contents = _getContents();
-    contents->set_spacing(2);
-    contents->pack_start(_notebook, true, true);
+    set_orientation(Gtk::ORIENTATION_VERTICAL);
+    set_spacing(2);
+    pack_start(_notebook, true, true);
 
     _notebook.append_page(*_page_fill, _createPageTabLabel(_("_Fill"), INKSCAPE_ICON("object-fill")));
     _notebook.append_page(*_page_stroke_paint, _createPageTabLabel(_("Stroke _paint"), INKSCAPE_ICON("object-stroke")));
@@ -68,7 +68,7 @@ FillAndStroke::FillAndStroke()
     _layoutPageStrokePaint();
     _layoutPageStrokeStyle();
 
-    contents->pack_end(_composite_settings, Gtk::PACK_SHRINK);
+    pack_end(_composite_settings, Gtk::PACK_SHRINK);
 
     show_all_children();
 
@@ -79,9 +79,18 @@ FillAndStroke::~FillAndStroke()
 {
 }
 
-void FillAndStroke::setDesktop(SPDesktop *desktop)
+void FillAndStroke::update()
 {
-    Panel::setDesktop(desktop);
+    if (!_app) {
+        std::cerr << "FillAndStroke::update(): _app is null" << std::endl;
+        return;
+    }
+
+    SPDesktop *desktop = getDesktop();
+
+    if (!desktop) {
+        return;
+    }
 
     if (targetDesktop != desktop) {
         targetDesktop = desktop;
@@ -138,7 +147,6 @@ FillAndStroke::_layoutPageStrokeStyle()
 void
 FillAndStroke::showPageFill()
 {
-    present();
     _notebook.set_current_page(0);
     _savePagePref(0);
 
@@ -147,7 +155,6 @@ FillAndStroke::showPageFill()
 void
 FillAndStroke::showPageStrokePaint()
 {
-    present();
     _notebook.set_current_page(1);
     _savePagePref(1);
 }
@@ -155,7 +162,6 @@ FillAndStroke::showPageStrokePaint()
 void
 FillAndStroke::showPageStrokeStyle()
 {
-    present();
     _notebook.set_current_page(2);
     _savePagePref(2);
 

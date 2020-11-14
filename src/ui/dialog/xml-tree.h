@@ -13,9 +13,6 @@
 #ifndef SEEN_UI_DIALOGS_XML_TREE_H
 #define SEEN_UI_DIALOGS_XML_TREE_H
 
-#include <memory>
-
-#include "ui/widget/panel.h"
 #include <gtkmm/button.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/paned.h>
@@ -25,11 +22,11 @@
 #include <gtkmm/switch.h>
 #include <gtkmm/textview.h>
 #include <gtkmm/toolbar.h>
+#include <memory>
 
 #include "message.h"
-
 #include "ui/dialog/attrdialog.h"
-
+#include "ui/dialog/dialog-base.h"
 
 class SPDesktop;
 class SPObject;
@@ -53,7 +50,8 @@ namespace Dialog {
  *
  */
 
-class XmlTree : public Widget::Panel {
+class XmlTree : public DialogBase
+{
 public:
     XmlTree ();
     ~XmlTree () override;
@@ -173,7 +171,6 @@ private:
     void cmd_indent_node();
     void cmd_unindent_node();
 
-    void present() override;
     void _attrtoggler();
     void _toggleDirection(Gtk::RadioButton *vertical);
     void _resized();
@@ -182,7 +179,7 @@ private:
     /**
      * Can be invoked for setting the desktop. Currently not used.
      */
-    void setDesktop(SPDesktop *desktop) override;
+    void update() override;
 
     /**
      * Flag to ensure only one operation is performed at once

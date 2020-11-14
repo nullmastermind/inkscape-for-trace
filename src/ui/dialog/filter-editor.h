@@ -25,14 +25,15 @@
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/treeview.h>
 
-#include "ui/widget/panel.h"
+#include "ui/dialog/dialog-base.h"
 
 
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
-class FilterEditorDialog : public UI::Widget::Panel {
+class FilterEditorDialog : public DialogBase
+{
 public:
 
     FilterEditorDialog();

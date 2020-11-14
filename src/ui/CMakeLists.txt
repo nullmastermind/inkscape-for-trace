@@ -101,19 +101,20 @@ set(ui_SRC
 	dialog/color-item.cpp
         dialog/attrdialog.cpp
 	dialog/debug.cpp
-	dialog/dialog-manager.cpp
-	dialog/dialog.cpp
-	dialog/dock-behavior.cpp
+	dialog/dialog-base.cpp
+	dialog/dialog-container.cpp
+	dialog/dialog-multipaned.cpp
+	dialog/dialog-notebook.cpp
+	dialog/dialog-window.cpp
 	dialog/document-properties.cpp
 	dialog/export.cpp
-	dialog/extensions.cpp
+	dialog/extension-editor.cpp
 	dialog/filedialog.cpp
 	dialog/filedialogimpl-gtkmm.cpp
 	dialog/fill-and-stroke.cpp
         dialog/filter-editor.cpp
 	dialog/filter-effects-dialog.cpp
 	dialog/find.cpp
-	dialog/floating-behavior.cpp
 	dialog/font-substitution.cpp
 	dialog/glyphs.cpp
 	dialog/grid-arrange-tab.cpp
@@ -135,7 +136,6 @@ set(ui_SRC
 	dialog/object-properties.cpp
 	dialog/objects.cpp
 	dialog/polar-arrange-tab.cpp
-	dialog/print-colors-preview-dialog.cpp
 	dialog/print.cpp
 	dialog/prototype.cpp
 	dialog/selectorsdialog.cpp
@@ -173,8 +173,6 @@ set(ui_SRC
 	widget/combo-box-entry-tool-item.cpp
         widget/combo-tool-item.cpp
     widget/dash-selector.cpp
-	widget/dock-item.cpp
-	widget/dock.cpp
 	widget/entity-entry.cpp
 	widget/entry.cpp
 	widget/filter-effect-chooser.cpp
@@ -205,7 +203,6 @@ set(ui_SRC
 	widget/object-composite-settings.cpp
 	widget/page-sizer.cpp
 	widget/paint-selector.cpp
-	widget/panel.cpp
 	widget/point.cpp
 	widget/preferences-widget.cpp
         widget/preview.cpp
@@ -271,18 +268,19 @@ set(ui_SRC
 	dialog/about.h
 	dialog/align-and-distribute.h
 	dialog/arrange-tab.h
-	dialog/behavior.h
 	dialog/calligraphic-profile-rename.h
 	dialog/clonetiler.h
 	dialog/color-item.h
     dialog/attrdialog.h
 	dialog/debug.h
-	dialog/dialog-manager.h
-	dialog/dialog.h
-	dialog/dock-behavior.h
+	dialog/dialog-base.h
+	dialog/dialog-container.h
+	dialog/dialog-multipaned.h
+	dialog/dialog-notebook.h
+	dialog/dialog-window.h
 	dialog/document-properties.h
 	dialog/export.h
-	dialog/extensions.h
+	dialog/extension-editor.h
 	dialog/filedialog.h
 	dialog/filedialogimpl-gtkmm.h
 	dialog/filedialogimpl-win32.h
@@ -290,7 +288,6 @@ set(ui_SRC
     dialog/filter-editor.h
 	dialog/filter-effects-dialog.h
 	dialog/find.h
-	dialog/floating-behavior.h
 	dialog/font-substitution.h
 	dialog/glyphs.h
 	dialog/grid-arrange-tab.h
@@ -311,9 +308,7 @@ set(ui_SRC
 	dialog/object-attributes.h
 	dialog/object-properties.h
 	dialog/objects.h
-	dialog/panel-dialog.h
 	dialog/polar-arrange-tab.h
-	dialog/print-colors-preview-dialog.h
 	dialog/print.h
 	dialog/prototype.h
 	dialog/selectorsdialog.h
@@ -424,8 +419,6 @@ set(ui_SRC
 	widget/combo-box-entry-tool-item.h
         widget/combo-tool-item.h
     widget/dash-selector.h
-	widget/dock-item.h
-	widget/dock.h
 	widget/entity-entry.h
 	widget/entry.h
 	widget/fill-style.h
@@ -457,7 +450,6 @@ set(ui_SRC
 	widget/page-sizer.h
 	widget/pages-skeleton.h
 	widget/paint-selector.h
-	widget/panel.h
 	widget/point.h
 	widget/preferences-widget.h
         widget/preview.h

@@ -18,13 +18,13 @@
 
 #include <gtkmm/box.h>
 #include <gtkmm/button.h>
+#include <gtkmm/image.h>
 #include <gtkmm/label.h>
 #include <gtkmm/paned.h>
-#include <gtkmm/image.h>
 #include <gtkmm/togglebutton.h>
 #include <gtkmm/toggletoolbutton.h>
 
-#include "ui/widget/panel.h"
+#include "ui/dialog/dialog-base.h"
 
 class SPObject;
 namespace Glib {
@@ -40,7 +40,7 @@ namespace Dialog {
 /**
  * A panel that displays an icon preview
  */
-class IconPreviewPanel : public UI::Widget::Panel
+class IconPreviewPanel : public DialogBase
 {
 public:
     IconPreviewPanel();
@@ -49,7 +49,7 @@ public:
 
     static IconPreviewPanel& getInstance();
 
-    void setDesktop( SPDesktop* desktop ) override;
+    void update() override;
     void refreshPreview();
     void modeToggled();
 

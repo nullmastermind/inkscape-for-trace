@@ -204,31 +204,49 @@ void Memory::Private::stop_update_task() {
     update_task.disconnect();
 }
 
-Memory::Memory() 
-    : UI::Widget::Panel("/dialogs/memory", SP_VERB_HELP_MEMORY),
-      _private(*(new Memory::Private())) 
+Memory::Memory()
+    : DialogBase("/dialogs/memory", SP_VERB_HELP_MEMORY)
+    , _private(*(new Memory::Private()))
 {
-    _getContents()->pack_start(_private.view);
+    set_orientation(Gtk::ORIENTATION_VERTICAL);
+
+    // Private conf
+    pack_start(_private.view);
 
     _private.update();
-
-    addResponseButton(_("Recalculate"), Gtk::RESPONSE_APPLY);
-
-    show_all_children();
 
     signal_show().connect(sigc::mem_fun(_private, &Private::start_update_task));
     signal_hide().connect(sigc::mem_fun(_private, &Private::stop_update_task));
 
+    // Add button
+    Gtk::Button *button = Gtk::manage(new Gtk::Button(_("Recalculate")));
+    button->signal_button_press_event().connect(sigc::mem_fun(*this, &Memory::_apply));
+
+    Gtk::ButtonBox *button_box = Gtk::manage(new Gtk::ButtonBox());
+    button_box->set_layout(Gtk::BUTTONBOX_END);
+    button_box->set_spacing(6);
+    button_box->set_border_width(4);
+    pack_end(*button_box, Gtk::PACK_SHRINK, 0);
+
+    button_box->pack_end(*button);
+    pack_end(*button_box);
+
+    // Start
     _private.start_update_task();
+
+    show_all_children();
 }
 
 Memory::~Memory() {
     delete &_private;
 }
 
-void Memory::_apply() {
+bool Memory::_apply(GdkEventButton * /* button */)
+{
     GC::Core::gcollect();
     _private.update();
+
+    return false;
 }
 
 } // namespace Dialog

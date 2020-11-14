@@ -62,7 +62,6 @@
 
 #include "ui/toolbar/spray-toolbar.h"
 #include "ui/tools/spray-tool.h"
-#include "ui/dialog/dialog-manager.h"
 
 
 using Inkscape::DocumentUndo;
@@ -70,7 +69,7 @@ using Inkscape::DocumentUndo;
 #define DDC_RED_RGBA 0xff0000ff
 #define DYNA_MIN_WIDTH 1.0e-6
 
-// Disabled in 0.91 because of Bug #1274831 (crash, spraying an object 
+// Disabled in 0.91 because of Bug #1274831 (crash, spraying an object
 // with the mode: spray object in single path)
 // Please enable again when working on 1.0
 #define ENABLE_SPRAY_MODE_SINGLE_PATH
@@ -389,7 +388,7 @@ static double get_move_standard_deviation(SprayTool *tc)
  * @param[out]  angle : angle of the position of the sprayed object
  * @param[in]   a : mean
  * @param[in]   s : standard deviation
- * @param[in]   choice : 
+ * @param[in]   choice :
 
  */
 static void random_position(double &radius, double &angle, double &a, double &s, int /*choice*/)
@@ -404,7 +403,7 @@ static void random_position(double &radius, double &angle, double &a, double &s,
         radius_temp = NormalDistribution(a, s);
     }
     // Because we are in polar coordinates, a special treatment has to be done to the radius.
-    // Otherwise, positions taken from an uniform repartition on radius and angle will not seam to 
+    // Otherwise, positions taken from an uniform repartition on radius and angle will not seam to
     // be uniformily distributed on the disk (more at the center and less at the boundary).
     // We counter this effect with a 0.5 exponent. This is empiric.
     radius = pow(radius_temp, 0.5);
@@ -451,7 +450,7 @@ static guint32 getPickerData(Geom::IntRect area, SPDesktop *desktop)
     double R, G, B, A;
     drawing->average_color(area, R, G, B, A);
 
-    //this can fix the bug #1511998 if confirmed 
+    //this can fix the bug #1511998 if confirmed
     if ( A < 1e-6) {
         R = 1.0;
         G = 1.0;
@@ -588,7 +587,7 @@ static bool fit_item(SPDesktop *desktop,
                 spray_origin = item_selected->getAttribute("inkscape:spray-origin");
             }
             if(strcmp(item_down_sharp, spray_origin) == 0 ||
-                (item_down->getAttribute("inkscape:spray-origin") && 
+                (item_down->getAttribute("inkscape:spray-origin") &&
                 strcmp(item_down->getAttribute("inkscape:spray-origin"),spray_origin) == 0 ))
             {
                 if(mode == SPRAY_MODE_ERASER) {
@@ -598,7 +597,7 @@ static bool fit_item(SPDesktop *desktop,
                         break;
                     }
                 } else if(no_overlap) {
-                    if(!(offset_width < 0 && offset_height < 0 && std::abs(bbox_left - bbox_left_main) > std::abs(offset_width) && 
+                    if(!(offset_width < 0 && offset_height < 0 && std::abs(bbox_left - bbox_left_main) > std::abs(offset_width) &&
                 std::abs(bbox_top - bbox_top_main) > std::abs(offset_height))){
                         if(!no_overlap && (picker || over_transparent || over_no_transparent)){
                             showHidden(items_down);
@@ -1003,7 +1002,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                     item_copied = dynamic_cast<SPItem *>(new_obj);
 
                     // Move around the cursor
-                    Geom::Point move = (Geom::Point(cos(tilt)*cos(dp)*dr/(1-ratio)+sin(tilt)*sin(dp)*dr/(1+ratio), -sin(tilt)*cos(dp)*dr/(1-ratio)+cos(tilt)*sin(dp)*dr/(1+ratio)))+(p-a->midpoint()); 
+                    Geom::Point move = (Geom::Point(cos(tilt)*cos(dp)*dr/(1-ratio)+sin(tilt)*sin(dp)*dr/(1+ratio), -sin(tilt)*cos(dp)*dr/(1-ratio)+cos(tilt)*sin(dp)*dr/(1+ratio)))+(p-a->midpoint());
 
                     Geom::Point center = parent_item->getCenter();
                     sp_spray_scale_rel(center, desktop, item_copied, Geom::Scale(_scale, _scale));
@@ -1280,7 +1279,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
             path *= sm;
             this->dilate_area->set_bpath(path);
             this->dilate_area->show();
-            
+
             guint num = 0;
             if (!desktop->selection->isEmpty()) {
                 num = (guint) boost::distance(desktop->selection->items());
@@ -1310,7 +1309,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
                 desktop->setToolboxAdjustmentValue("population", this->population * 100);
                 Geom::Point const scroll_w(event->button.x, event->button.y);
                 Geom::Point const scroll_dt = desktop->point();;
-                
+
                 switch (event->scroll.direction) {
                     case GDK_SCROLL_DOWN:
                     case GDK_SCROLL_UP:
@@ -1328,7 +1327,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
                             sp_spray_dilate(this, scroll_w, desktop->dt2doc(scroll_dt), Geom::Point(0,0), false);
                         }
                         this->has_dilated = true;
-                        
+
                         this->population = temp;
                         desktop->setToolboxAdjustmentValue("population", this->population * 100);
 
@@ -1343,7 +1342,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
             }
             break;
         }
-        
+
         case GDK_BUTTON_RELEASE: {
             Geom::Point const motion_w(event->button.x, event->button.y);
             Geom::Point const motion_dt(desktop->w2d(motion_w));

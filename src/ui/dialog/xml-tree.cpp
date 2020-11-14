@@ -60,7 +60,7 @@ namespace UI {
 namespace Dialog {
 
 XmlTree::XmlTree()
-    : UI::Widget::Panel("/dialogs/xml/", SP_VERB_DIALOG_XML_EDITOR)
+    : DialogBase("/dialogs/xml/", SP_VERB_DIALOG_XML_EDITOR)
     , blocked(0)
     , _message_stack(nullptr)
     , _message_context(nullptr)
@@ -73,7 +73,7 @@ XmlTree::XmlTree()
     , new_window(nullptr)
     , _updating(false)
 {
-    Gtk::Box *root = _getContents();
+    set_orientation(Gtk::ORIENTATION_VERTICAL);
     Gtk::Box *contents = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
     status.set_halign(Gtk::ALIGN_START);
     status.set_valign(Gtk::ALIGN_CENTER);
@@ -235,7 +235,8 @@ XmlTree::XmlTree()
     _paned.property_position().signal_changed().connect(sigc::mem_fun(*this, &XmlTree::_resized));
 
     tree_reset_context();
-    root->pack_start(*Gtk::manage(contents), true, true);
+    pack_start(*Gtk::manage(contents), true, true);
+    update();
 
 }
 
@@ -267,26 +268,24 @@ void XmlTree::_attrtoggler()
     }
 }
 
-void XmlTree::present()
-{
-    set_tree_select(get_dt_select());
-
-    UI::Widget::Panel::present();
-
-    if (!_attrswitch.property_active()) {
-        attributes->hide();
-    }
-}
-
 XmlTree::~XmlTree ()
 {
     assert(!current_desktop);
     _message_changed_connection.disconnect();
 }
 
-void XmlTree::setDesktop(SPDesktop *desktop)
+void XmlTree::update()
 {
-    Panel::setDesktop(desktop);
+    if (!_app) {
+        std::cerr << "XmlTree::update(): _app is null" << std::endl;
+        return;
+    }
+
+    SPDesktop *desktop = getDesktop();
+
+    if (!desktop) {
+        return;
+    }
 
     set_tree_desktop(desktop);
 }

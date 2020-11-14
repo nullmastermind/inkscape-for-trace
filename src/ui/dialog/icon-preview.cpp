@@ -73,7 +73,7 @@ void IconPreviewPanel::on_button_clicked(int which)
 
         hot = which;
         updateMagnify();
-        _getContents()->queue_draw();
+        queue_draw();
     }
 }
 
@@ -86,22 +86,22 @@ void IconPreviewPanel::on_button_clicked(int which)
 /**
  * Constructor
  */
-IconPreviewPanel::IconPreviewPanel() :
-    UI::Widget::Panel("/dialogs/iconpreview", SP_VERB_VIEW_ICON_PREVIEW),
-    desktop(nullptr),
-    document(nullptr),
-    drawing(nullptr),
-    visionkey(0),
-    timer(nullptr),
-    renderTimer(nullptr),
-    pending(false),
-    minDelay(0.1),
-    targetId(),
-    hot(1),
-    selectionButton(nullptr),
-    docReplacedConn(),
-    docModConn(),
-    selChangedConn()
+IconPreviewPanel::IconPreviewPanel()
+    : DialogBase("/dialogs/iconpreview", SP_VERB_VIEW_ICON_PREVIEW)
+    , desktop(nullptr)
+    , document(nullptr)
+    , drawing(nullptr)
+    , visionkey(0)
+    , timer(nullptr)
+    , renderTimer(nullptr)
+    , pending(false)
+    , minDelay(0.1)
+    , targetId()
+    , hot(1)
+    , selectionButton(nullptr)
+    , docReplacedConn()
+    , docModConn()
+    , selChangedConn()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     numEntries = 0;
@@ -139,6 +139,8 @@ IconPreviewPanel::IconPreviewPanel() :
         sizes[3] = 48;
         sizes[4] = 128;
     }
+
+    std::cout << "1\n";
 
     pixMem = new guchar*[numEntries];
     images = new Gtk::Image*[numEntries];
@@ -240,16 +242,16 @@ IconPreviewPanel::IconPreviewPanel() :
     gint val = prefs->getBool("/iconpreview/selectionOnly");
     selectionButton->set_active( val != 0 );
 
+    pack_start(iconBox, Gtk::PACK_SHRINK);
 
-    _getContents()->pack_start(iconBox, Gtk::PACK_SHRINK);
-
+    update();
     show_all_children();
-
 }
 
 IconPreviewPanel::~IconPreviewPanel()
 {
-    setDesktop(nullptr);
+    docReplacedConn.disconnect();
+    selChangedConn.disconnect();
     if (timer) {
         timer->stop();
         delete timer;
@@ -286,17 +288,25 @@ static Glib::ustring getTimestr()
 }
 #endif // ICON_VERBOSE
 
-void IconPreviewPanel::setDesktop( SPDesktop* desktop )
+void IconPreviewPanel::update()
 {
-    Panel::setDesktop(desktop);
+    if (!_app) {
+        std::cerr << "IconPreviewPanel::update(): _app is null" << std::endl;
+        return;
+    }
+
+    SPDesktop *desktop = getDesktop();
+
+    if (!desktop)
+        return;
 
     SPDocument *newDoc = (desktop) ? desktop->doc() : nullptr;
 
+    this->desktop = desktop;
     if ( desktop != this->desktop ) {
         docReplacedConn.disconnect();
         selChangedConn.disconnect();
 
-        this->desktop = Panel::getDesktop();
         if ( this->desktop ) {
             docReplacedConn = this->desktop->connectDocumentReplaced(sigc::hide<0>(sigc::mem_fun(this, &IconPreviewPanel::setDocument)));
             if ( this->desktop->selection && Inkscape::Preferences::get()->getBool("/iconpreview/autoRefresh", true) ) {

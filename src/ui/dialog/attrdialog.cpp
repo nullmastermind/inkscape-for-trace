@@ -84,7 +84,7 @@ static gboolean key_callback(GtkWidget *widget, GdkEventKey *event, AttrDialog *
  * New attribute can be added by clicking '+' at bottom of the attr pane. '-'
  */
 AttrDialog::AttrDialog()
-    : UI::Widget::Panel("/dialogs/attr", SP_VERB_DIALOG_ATTR)
+    : DialogBase("/dialogs/attr", SP_VERB_DIALOG_ATTR_XML)
     , _desktop(nullptr)
     , _repr(nullptr)
 {
@@ -156,7 +156,7 @@ AttrDialog::AttrDialog()
     status.set_line_wrap(true);
     status.get_style_context()->add_class("inksmall");
     status_box.pack_start(status, TRUE, TRUE, 0);
-    _getContents()->pack_end(status_box, false, false, 2);
+    pack_end(status_box, false, false, 2);
 
     _message_stack = std::make_shared<Inkscape::MessageStack>();
     _message_context = std::unique_ptr<Inkscape::MessageContext>(new Inkscape::MessageContext(_message_stack));
@@ -216,8 +216,8 @@ AttrDialog::AttrDialog()
     _popover->signal_closed().connect(sigc::mem_fun(*this, &AttrDialog::popClosed));
     _popover->get_style_context()->add_class("attrpop");
     attr_reset_context(0);
-    _getContents()->pack_start(_mainBox, Gtk::PACK_EXPAND_WIDGET);
-    setDesktop(getDesktop());
+    pack_start(_mainBox, Gtk::PACK_EXPAND_WIDGET);
+    update();
     // I couldent get the signal go well not using C way signals
     g_signal_connect(GTK_WIDGET(_popover->gobj()), "key-press-event", G_CALLBACK(key_callback), this);
     _popover->hide();
@@ -301,7 +301,7 @@ static Glib::ustring prepare_rendervalue(const char *value)
  */
 AttrDialog::~AttrDialog()
 {
-    setDesktop(nullptr);
+    _desktop = nullptr;
     _message_changed_connection.disconnect();
     _message_context = nullptr;
     _message_stack = nullptr;
@@ -375,12 +375,19 @@ void AttrDialog::popClosed()
 }
 
 /**
- * @brief AttrDialog::setDesktop
+ * @brief AttrDialog::update
  * @param desktop
  * This function sets the 'desktop' for the CSS pane.
  */
-void AttrDialog::setDesktop(SPDesktop* desktop)
+void AttrDialog::update()
 {
+    if (!_app) {
+        std::cerr << "AttrDialog::update(): _app is null" << std::endl;
+        return;
+    }
+
+    SPDesktop *desktop = getDesktop();
+
     setRepr(nullptr);
     _desktop = desktop;
 }
@@ -400,7 +407,7 @@ void AttrDialog::setRepr(Inkscape::XML::Node * repr)
     }
     _repr = repr;
     if (repr) {
-        Inkscape::GC::anchor(_repr); 
+        Inkscape::GC::anchor(_repr);
         _repr->addListener(&_repr_events, this);
         _repr->synthesizeEvents(&_repr_events, this);
 

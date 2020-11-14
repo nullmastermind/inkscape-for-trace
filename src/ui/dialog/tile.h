@@ -18,11 +18,11 @@
 #define SEEN_UI_DIALOG_TILE_H
 
 #include <gtkmm/box.h>
-#include <gtkmm/notebook.h>
 #include <gtkmm/checkbutton.h>
+#include <gtkmm/notebook.h>
 #include <gtkmm/radiobutton.h>
 
-#include "ui/widget/panel.h"
+#include "ui/dialog/dialog-base.h"
 
 namespace Gtk {
 class Button;
@@ -37,10 +37,11 @@ class ArrangeTab;
 class GridArrangeTab;
 class PolarArrangeTab;
 
-class ArrangeDialog : public UI::Widget::Panel {
+class ArrangeDialog : public DialogBase
+{
 private:
-	Gtk::VBox       _arrangeBox;
-	Gtk::Notebook   _notebook;
+	Gtk::VBox       *_arrangeBox;
+	Gtk::Notebook   *_notebook;
 
 	GridArrangeTab  *_gridArrangeTab;
 	PolarArrangeTab *_polarArrangeTab;
@@ -51,14 +52,12 @@ public:
 	ArrangeDialog();
 	~ArrangeDialog() override = default;;
 
-    void setDesktop(SPDesktop *) override;
+    void update() override;
 
     /**
      * Callback from Apply
      */
-    void _apply() override;
-
-    void on_show() override;
+    void _apply();
 
 	static ArrangeDialog& getInstance() { return *new ArrangeDialog(); }
 };

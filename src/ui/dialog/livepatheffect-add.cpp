@@ -10,8 +10,11 @@
  */
 
 #include "livepatheffect-add.h"
+
+#include <cmath>
+#include <glibmm/i18n.h>
+
 #include "desktop.h"
-#include "dialog.h"
 #include "io/resource.h"
 #include "live_effects/effect.h"
 #include "object/sp-clippath.h"
@@ -20,8 +23,7 @@
 #include "object/sp-path.h"
 #include "object/sp-shape.h"
 #include "preferences.h"
-#include <cmath>
-#include <glibmm/i18n.h>
+#include "ui/widget/canvas.h"
 
 namespace Inkscape {
 namespace UI {
@@ -58,6 +60,49 @@ void sp_remove_fav(Glib::ustring effect)
             favlist.erase(pos, effect.length());
             prefs->setString("/dialogs/livepatheffect/favs", favlist);
         }
+    }
+}
+
+void sp_add_top_window_classes_callback(Gtk::Widget *widg)
+{
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (desktop) {
+        Gtk::Widget *canvas = desktop->canvas;
+        Gtk::Window *toplevel_window = dynamic_cast<Gtk::Window *>(canvas->get_toplevel());
+        if (toplevel_window) {
+            Gtk::Window *current_window = dynamic_cast<Gtk::Window *>(widg);
+            if (!current_window) {
+                current_window = dynamic_cast<Gtk::Window *>(widg->get_toplevel());
+            }
+            if (current_window) {
+                if (toplevel_window->get_style_context()->has_class("dark")) {
+                    current_window->get_style_context()->add_class("dark");
+                    current_window->get_style_context()->remove_class("bright");
+                } else {
+                    current_window->get_style_context()->add_class("bright");
+                    current_window->get_style_context()->remove_class("dark");
+                }
+                if (toplevel_window->get_style_context()->has_class("symbolic")) {
+                    current_window->get_style_context()->add_class("symbolic");
+                    current_window->get_style_context()->remove_class("regular");
+                } else {
+                    current_window->get_style_context()->remove_class("symbolic");
+                    current_window->get_style_context()->add_class("regular");
+                }
+            }
+        }
+    }
+}
+
+void sp_add_top_window_classes(Gtk::Widget *widg)
+{
+    if (!widg) {
+        return;
+    }
+    if (!widg->get_realized()) {
+        widg->signal_realize().connect(sigc::bind(sigc::ptr_fun(&sp_add_top_window_classes_callback), widg));
+    } else {
+        sp_add_top_window_classes_callback(widg);
     }
 }
 
@@ -108,7 +153,7 @@ LivePathEffectAdd::LivePathEffectAdd()
     _LPEDialogSelector->add_events(Gdk::POINTER_MOTION_MASK | Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK |
                                    Gdk::ENTER_NOTIFY_MASK | Gdk::LEAVE_NOTIFY_MASK | Gdk::KEY_PRESS_MASK);
     _LPESelectorFlowBox->signal_set_focus_child().connect(sigc::mem_fun(*this, &LivePathEffectAdd::on_focus));
-    
+
     gladefile = get_filename_string(Inkscape::IO::Resource::UIS, "dialog-livepatheffect-effect.glade");
     for (int i = 0; i < static_cast<int>(converter._length); ++i) {
         Glib::RefPtr<Gtk::Builder> builder_effect;
@@ -502,7 +547,7 @@ bool LivePathEffectAdd::on_filter(Gtk::FlowBoxChild *child)
     } else if (_item_type == "path" && !converter.get_on_path(data->id)) {
         disable = true;
     }
-    
+
     if (!_has_clip && data->id == Inkscape::LivePathEffect::POWERCLIP) {
         disable = true;
     }

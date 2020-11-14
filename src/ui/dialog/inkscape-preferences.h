@@ -38,7 +38,7 @@
 #include <gtkmm/treemodelfilter.h>
 #include <glibmm/regex.h>
 
-#include "ui/widget/panel.h"
+#include "ui/dialog/dialog-base.h"
 
 // UPDATE THIS IF YOU'RE ADDING PREFS PAGES.
 // Otherwise the commands that open the dialog with the new page will fail.
@@ -105,7 +105,8 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
-class InkscapePreferences : public UI::Widget::Panel {
+class InkscapePreferences : public DialogBase
+{
 public:
     ~InkscapePreferences() override;
 

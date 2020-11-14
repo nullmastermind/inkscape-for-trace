@@ -8,9 +8,9 @@
 #ifndef SEEN_DIALOGS_GLYPHS_H
 #define SEEN_DIALOGS_GLYPHS_H
 
-#include "ui/widget/panel.h"
 #include <gtkmm/treemodel.h>
 
+#include "ui/dialog/dialog-base.h"
 
 namespace Gtk {
 class ComboBoxText;
@@ -34,7 +34,7 @@ class GlyphColumns;
 /**
  * A panel that displays character glyphs.
  */
-class GlyphsPanel : public Inkscape::UI::Widget::Panel
+class GlyphsPanel : public DialogBase
 {
 public:
     GlyphsPanel();
@@ -42,7 +42,7 @@ public:
 
     static GlyphsPanel& getInstance();
 
-    void setDesktop(SPDesktop *desktop) override;
+    void update() override;
 
 protected:
 

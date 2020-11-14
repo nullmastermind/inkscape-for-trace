@@ -87,7 +87,7 @@ DocumentProperties& DocumentProperties::getInstance()
 }
 
 DocumentProperties::DocumentProperties()
-    : UI::Widget::Panel("/dialogs/documentoptions", SP_VERB_DIALOG_NAMEDVIEW)
+    : DialogBase("/dialogs/documentoptions", SP_VERB_DIALOG_NAMEDVIEW)
     , _page_page(Gtk::manage(new UI::Widget::NotebookPage(1, 1, true, true)))
     , _page_guides(Gtk::manage(new UI::Widget::NotebookPage(1, 1)))
     , _page_snap(Gtk::manage(new UI::Widget::NotebookPage(1, 1)))
@@ -141,8 +141,9 @@ DocumentProperties::DocumentProperties()
     , _grids_button_remove(C_("Grid", "_Remove"), _("Remove selected grid."))
     , _grids_label_def("", Gtk::ALIGN_START)
 {
-    _getContents()->set_spacing (4);
-    _getContents()->pack_start(_notebook, true, true);
+    set_orientation(Gtk::ORIENTATION_VERTICAL);
+    set_spacing (4);
+    pack_start(_notebook, true, true);
 
     _notebook.append_page(*_page_page,      _("Page"));
     _notebook.append_page(*_page_guides,    _("Guides"));
@@ -746,7 +747,7 @@ void DocumentProperties::build_cms()
 void DocumentProperties::build_scripting()
 {
     _page_scripting->show();
-    
+
     _page_scripting->table().attach(_scripting_notebook, 0, 0, 1, 1);
 
     _scripting_notebook.append_page(*_page_external_scripts, _("External scripts"));
@@ -1346,7 +1347,7 @@ void DocumentProperties::build_gridspage()
 /**
  * Update dialog widgets from desktop. Also call updateWidget routines of the grids.
  */
-void DocumentProperties::update()
+void DocumentProperties::update_widgets()
 {
     if (_wr.isUpdating()) return;
 
@@ -1486,11 +1487,22 @@ void DocumentProperties::_handleDocumentReplaced(SPDesktop* desktop, SPDocument 
     _repr_namedview = document->getRoot()->getRepr();
     _repr_namedview->addListener(&_repr_events, this);
 
-    update();
+    update_widgets();
 }
 
-void DocumentProperties::setDesktop(SPDesktop *desktop)
+void DocumentProperties::update()
 {
+    if (!_app) {
+        std::cerr << "UndoHistory::update(): _app is null" << std::endl;
+        return;
+    }
+
+    SPDesktop *desktop = getDesktop();
+
+    if (!desktop) {
+        return;
+    }
+
     if (_repr_root) {
         _document_replaced_connection.disconnect();
         _repr_root->removeListenerByData(this);
@@ -1499,16 +1511,9 @@ void DocumentProperties::setDesktop(SPDesktop *desktop)
         _repr_namedview = nullptr;
     }
 
-    Panel::setDesktop(desktop);
-
     _wr.setDesktop(desktop);
 
-    if (desktop) {
-        _handleDocumentReplaced(desktop, desktop->getDocument());
-
-        _document_replaced_connection =
-            signalDocumentReplaced().connect(sigc::mem_fun(*this, &DocumentProperties::_handleDocumentReplaced));
-    }
+    _handleDocumentReplaced(desktop, desktop->getDocument());
 }
 
 static void on_child_added(Inkscape::XML::Node */*repr*/, Inkscape::XML::Node */*child*/, Inkscape::XML::Node */*ref*/, void *data)
@@ -1531,7 +1536,7 @@ static void on_child_removed(Inkscape::XML::Node */*repr*/, Inkscape::XML::Node 
 static void on_repr_attr_changed(Inkscape::XML::Node *, gchar const *, gchar const *, gchar const *, bool, gpointer data)
 {
     if (DocumentProperties *dialog = static_cast<DocumentProperties *>(data))
-        dialog->update();
+        dialog->update_widgets();
 }
 
 

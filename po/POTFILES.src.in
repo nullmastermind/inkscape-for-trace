@@ -240,6 +240,9 @@
 ../src/ui/dialog/clonetiler.cpp
 ../src/ui/dialog/color-item.cpp
 ../src/ui/dialog/debug.cpp
+../src/ui/dialog/dialog-multipaned.cpp
+../src/ui/dialog/dialog-notebook.cpp
+../src/ui/dialog/dialog-window.cpp
 ../src/ui/dialog/document-properties.cpp
 ../src/ui/dialog/export.cpp
 ../src/ui/dialog/filedialogimpl-gtkmm.cpp

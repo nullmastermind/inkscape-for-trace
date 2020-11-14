@@ -17,23 +17,23 @@
 #ifndef INKSCAPE_UI_DIALOG_MESSAGES_H
 #define INKSCAPE_UI_DIALOG_MESSAGES_H
 
+#include <glibmm/i18n.h>
 #include <gtkmm/box.h>
-#include <gtkmm/textview.h>
 #include <gtkmm/button.h>
 #include <gtkmm/checkbutton.h>
-#include <gtkmm/menubar.h>
 #include <gtkmm/menu.h>
+#include <gtkmm/menubar.h>
 #include <gtkmm/scrolledwindow.h>
+#include <gtkmm/textview.h>
 
-#include <glibmm/i18n.h>
-
-#include "ui/widget/panel.h"
+#include "ui/dialog/dialog-base.h"
 
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
-class Messages : public UI::Widget::Panel {
+class Messages : public DialogBase
+{
 public:
     Messages();
     ~Messages() override;
@@ -83,7 +83,6 @@ private:
     Messages(Messages const &d) = delete;
     Messages operator=(Messages const &d) = delete;
 };
-
 
 } //namespace Dialog
 } //namespace UI

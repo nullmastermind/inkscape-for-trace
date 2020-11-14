@@ -12,9 +12,8 @@
 
 #include "prototype.h"
 
-#include "desktop.h"
 #include "document.h"
-#include "selection.h"
+#include "inkscape-application.h"
 #include "verbs.h"
 
 // Only for use in demonstration widget.
@@ -24,39 +23,32 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
-// Note that in order for a dialog to be restored, it must be listed in SPDesktop::show_dialogs().
-
 Prototype::Prototype()
-    : UI::Widget::Panel("/dialogs/prototype", SP_VERB_DIALOG_PROTOTYPE)
-
+    : DialogBase("/dialogs/prototype", SP_VERB_DIALOG_PROTOTYPE)
 {
-    std::cout << "Prototype::Prototype()" << std::endl;
-
     // A widget for demonstration that displays the current SVG's id.
-    _getContents()->pack_start(label);  // Panel::_getContents()
+    _label = Gtk::manage(new Gtk::Label(_name));
+    _label->set_line_wrap();
+
+    _debug_button.set_name("PrototypeDebugButton");
+    _debug_button.set_hexpand();
+    _debug_button.signal_clicked().connect(sigc::mem_fun(*this, &Prototype::on_click));
+
+    _debug_button.add(*_label);
+    add(_debug_button);
+
+    update();
 }
 
-Prototype::~Prototype()
+void Prototype::update()
 {
-    // Never actually called.
-    std::cout << "Prototype::~Prototype()" << std::endl;
+    if (!_app) {
+        std::cerr << "Prototype::update(): _app is null" << std::endl;
+        return;
+    }
 
-    // might not be necessary because we expect Panel::on_unmap being
-    // called first and triggering setDesktop(nullptr)
-    connectionDocumentReplaced.disconnect();
-    connectionSelectionChanged.disconnect();
-}
-
-/*
- * Called when a dialog is displayed, including when a dialog is reopened.
- * (When a dialog is closed, it is not destroyed so the constructor is not called.
- * This function can handle any reinitialization needed.)
- */
-void
-Prototype::present()
-{
-    std::cout << "Prototype::present()" << std::endl;
-    UI::Widget::Panel::present();
+    handleDocumentReplaced(_app->get_active_document());
+    handleSelectionChanged(_app->get_active_selection());
 }
 
 /*
@@ -64,67 +56,45 @@ Prototype::present()
  * opened, it will replace the default document in the same desktop. This function handles the
  * change. Bug: This is called twice for some reason.
  */
-void
-Prototype::handleDocumentReplaced(SPDesktop *desktop, SPDocument * /* document */)
+void Prototype::handleDocumentReplaced(SPDocument * document)
 {
-    std::cout << "Prototype::handleDocumentReplaced()" << std::endl;
-    if (getDesktop() != desktop) {
-        std::cerr << "Prototype::handleDocumentReplaced(): Error: panel desktop not equal to existing desktop!" << std::endl;
-    }
-
-    connectionSelectionChanged.disconnect();
-
-    if (!desktop)
-        return;
-
-    connectionSelectionChanged = desktop->getSelection()->connectChanged(
-        sigc::hide(sigc::mem_fun(this, &Prototype::handleSelectionChanged)));
-
-    // Update demonstration widget.
-    updateLabel();
-}
-
-/*
- * When a dialog is floating, it is connected to the active desktop.
- */
-void
-Prototype::setDesktop(SPDesktop* desktop) {
-    std::cout << "Prototype::handleDesktopChanged(): " << desktop << std::endl;
-
-    // Connections are disconnect safe.
-    connectionDocumentReplaced.disconnect();
-
-    Panel::setDesktop(desktop);
-
-    if (desktop) {
-        connectionDocumentReplaced = desktop->connectDocumentReplaced(
-        sigc::mem_fun(this, &Prototype::handleDocumentReplaced));
-    }
-
-    handleDocumentReplaced(desktop, nullptr);
+    const gchar *root_id = document->getRoot()->getId();
+    Glib::ustring label_string("Document's SVG id: ");
+    label_string += (root_id ? root_id : "null");
+    _label->set_label(label_string);
 }
 
 /*
  * Handle a change in which objects are selected in a document.
  */
-void
-Prototype::handleSelectionChanged() {
-    std::cout << "Prototype::handleSelectionChanged()" << std::endl;
-
+void Prototype::handleSelectionChanged(Inkscape::Selection *selection)
+{
     // Update demonstration widget.
-    label.set_label("Selection Changed!");
+    Glib::ustring label = _label->get_text() + "\nSelection changed to ";
+    SPObject* object = selection->single();
+    if (object) {
+        label = label + object->getId();
+    } else {
+        object = selection->activeContext();
+
+        if (object) {
+            label = label + object->getId();
+        } else {
+            label = label + "unknown";
+        }
+    }
+
+    _label->set_label(label);
 }
 
-/*
- * Update label... just a utility function for this example.
- */
-void
-Prototype::updateLabel() {
-
-    const gchar* root_id = getDesktop()->getDocument()->getRoot()->getId();
-    Glib::ustring label_string("Document's SVG id: ");
-    label_string += (root_id?root_id:"null");
-    label.set_label(label_string);
+void Prototype::on_click()
+{
+    Gtk::Window *window = dynamic_cast<Gtk::Window *>(get_toplevel());
+    if (window) {
+        std::cout << "Dialog is part of: " << window->get_name() << "  (" << window->get_title() << ")" << std::endl;
+    } else {
+        std::cerr << "Prototype::on_click(): Dialog not attached to window!" << std::endl;
+    }
 }
 
 } // namespace Dialog

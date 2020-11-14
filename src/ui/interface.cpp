@@ -39,7 +39,6 @@
 #include "object/sp-root.h"
 
 #include "ui/dialog-events.h"
-#include "ui/dialog/dialog-manager.h"
 #include "ui/dialog/inkscape-preferences.h"
 #include "ui/dialog/layer-properties.h"
 #include "ui/interface.h"

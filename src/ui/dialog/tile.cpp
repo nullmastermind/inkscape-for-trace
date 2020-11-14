@@ -28,36 +28,42 @@ namespace UI {
 namespace Dialog {
 
 ArrangeDialog::ArrangeDialog()
-	: UI::Widget::Panel("/dialogs/gridtiler", SP_VERB_SELECTION_ARRANGE),
-	  _gridArrangeTab(new GridArrangeTab(this)),
-      _polarArrangeTab(new PolarArrangeTab(this))
+    : DialogBase("/dialogs/gridtiler", SP_VERB_SELECTION_ARRANGE)
 {
-    Gtk::Box *contents = this->_getContents();
+    set_orientation(Gtk::ORIENTATION_VERTICAL);
 
-    _gridArrangeTab = Gtk::manage(_gridArrangeTab);
-    _polarArrangeTab = Gtk::manage(_polarArrangeTab);
+    _arrangeBox = Gtk::manage(new Gtk::VBox());
+    _notebook = Gtk::manage(new Gtk::Notebook());
+    _gridArrangeTab = Gtk::manage(new GridArrangeTab(this));
+    _polarArrangeTab = Gtk::manage(new PolarArrangeTab(this));
 
-    _notebook.append_page(*_gridArrangeTab, C_("Arrange dialog", "Rectangular grid"));
-    _notebook.append_page(*_polarArrangeTab, C_("Arrange dialog", "Polar Coordinates"));
-    _arrangeBox.pack_start(_notebook);
+    _notebook->append_page(*_gridArrangeTab, C_("Arrange dialog", "Rectangular grid"));
+    _notebook->append_page(*_polarArrangeTab, C_("Arrange dialog", "Polar Coordinates"));
+    _arrangeBox->pack_start(*_notebook);
+    pack_start(*_arrangeBox);
 
-    _arrangeButton = this->addResponseButton(C_("Arrange dialog","_Arrange"), GTK_RESPONSE_APPLY);
+    // Add button
+    _arrangeButton = Gtk::manage(new Gtk::Button(C_("Arrange dialog", "_Arrange")));
+    _arrangeButton->signal_clicked().connect(sigc::mem_fun(*this, &ArrangeDialog::_apply));
     _arrangeButton->set_use_underline(true);
     _arrangeButton->set_tooltip_text(_("Arrange selected objects"));
-    contents->pack_start(_arrangeBox);
-    //show_all_children();
-}
 
+    Gtk::ButtonBox *button_box = Gtk::manage(new Gtk::ButtonBox());
+    button_box->set_layout(Gtk::BUTTONBOX_END);
+    button_box->set_spacing(6);
+    button_box->set_border_width(4);
+    pack_end(*button_box, Gtk::PACK_SHRINK, 0);
+    button_box->pack_end(*_arrangeButton);
+    pack_end(*button_box);
 
-void ArrangeDialog::on_show()
-{
-	UI::Widget::Panel::on_show();
-	_polarArrangeTab->on_arrange_radio_changed();
+    show();
+    show_all_children();
+    update();
 }
 
 void ArrangeDialog::_apply()
 {
-	switch(_notebook.get_current_page())
+	switch(_notebook->get_current_page())
 	{
 	case 0:
 		_gridArrangeTab->arrange();
@@ -68,9 +74,15 @@ void ArrangeDialog::_apply()
 	}
 }
 
-void ArrangeDialog::setDesktop(SPDesktop *desktop)
+void ArrangeDialog::update()
 {
-    Panel::setDesktop(desktop);
+    if (!_app) {
+        std::cerr << "ArrangeDialog::update(): _app is null" << std::endl;
+        return;
+    }
+
+    SPDesktop *desktop = getDesktop();
+
     _gridArrangeTab->setDesktop(desktop);
 }
 

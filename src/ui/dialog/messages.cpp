@@ -41,11 +41,11 @@ void Messages::clear()
  * Constructor
  */
 Messages::Messages()
-    : UI::Widget::Panel("/dialogs/messages", SP_VERB_DIALOG_DEBUG),
-      buttonClear(_("_Clear"), _("Clear log messages")),
-      checkCapture(_("Capture log messages"), _("Capture log messages"))
+    : DialogBase("/dialogs/messages", SP_VERB_DIALOG_DEBUG)
+    , buttonClear(_("_Clear"), _("Clear log messages"))
+    , checkCapture(_("Capture log messages"), _("Capture log messages"))
 {
-    Gtk::Box *contents = _getContents();
+    set_orientation(Gtk::ORIENTATION_VERTICAL);
 
     /*
      * Menu replaced with buttons
@@ -64,16 +64,16 @@ Messages::Messages()
     messageText.set_editable(false);
     textScroll.add(messageText);
     textScroll.set_policy(Gtk::POLICY_ALWAYS, Gtk::POLICY_ALWAYS);
-    contents->pack_start(textScroll);
+    pack_start(textScroll);
 
     buttonBox.set_spacing(6);
     buttonBox.pack_start(checkCapture, true, true, 6);
     buttonBox.pack_end(buttonClear, false, false, 10);
-    contents->pack_start(buttonBox, Gtk::PACK_SHRINK);
+    pack_start(buttonBox, Gtk::PACK_SHRINK);
 
     // sick of this thing shrinking too much
     set_size_request(400, 300);
-    
+
     show_all_children();
 
     message(_("Ready."));

@@ -95,13 +95,13 @@ static unsigned trace_visionkey;
 static gdouble trace_zoom;
 static SPDocument *trace_doc = nullptr;
 
-CloneTiler::CloneTiler () :
-    UI::Widget::Panel("/dialogs/clonetiler/", SP_VERB_DIALOG_CLONETILER),
-    table_row_labels(nullptr)
+CloneTiler::CloneTiler()
+    : DialogBase("/dialogs/clonetiler/", SP_VERB_DIALOG_CLONETILER)
+    , table_row_labels(nullptr)
 {
-    Gtk::Box *contents = _getContents();
-    contents->set_spacing(0);
-    
+    set_orientation(Gtk::ORIENTATION_VERTICAL);
+    set_spacing(0);
+
     {
         auto prefs = Inkscape::Preferences::get();
 
@@ -109,7 +109,7 @@ CloneTiler::CloneTiler () :
         mainbox->set_homogeneous(false);
         mainbox->set_border_width(6);
 
-        contents->pack_start(*mainbox, true, true, 0);
+        pack_start(*mainbox, true, true, 0);
 
         nb = Gtk::manage(new Gtk::Notebook());
         mainbox->pack_start(*nb, false, false, 0);
@@ -1106,7 +1106,7 @@ CloneTiler::CloneTiler () :
                 radio->set_tooltip_text(_("Fill the specified width and height with the tiling"));
                 table_attach(table, radio, 0.0, 2, 1);
                 radio->signal_toggled().connect(sigc::mem_fun(*this, &CloneTiler::switch_to_fill));
-            
+
                 if (prefs->getBool(prefs_path + "fillrect")) {
                     radio->set_active(true);
                 }
@@ -1210,11 +1210,6 @@ CloneTiler::~CloneTiler ()
     selectChangedConn.disconnect();
     externChangedConn.disconnect();
     color_changed_connection.disconnect();
-}
-
-void CloneTiler::setDesktop(SPDesktop *desktop)
-{
-    Panel::setDesktop(desktop);
 }
 
 void CloneTiler::on_picker_color_changed(guint rgba)
@@ -2433,8 +2428,8 @@ void CloneTiler::apply()
                     }
                 }
                 if (pick_to_size) {
-                    t = parent_transform * Geom::Translate(-center[Geom::X], -center[Geom::Y]) 
-                    * Geom::Scale (val, val) * Geom::Translate(center[Geom::X], center[Geom::Y]) 
+                    t = parent_transform * Geom::Translate(-center[Geom::X], -center[Geom::Y])
+                    * Geom::Scale (val, val) * Geom::Translate(center[Geom::X], center[Geom::Y])
                     * parent_transform.inverse() * t;
                 }
                 if (pick_to_opacity) {
@@ -2793,9 +2788,9 @@ void CloneTiler::unit_changed()
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     gdouble width_pixels = prefs->getDouble(prefs_path + "fillwidth");
     gdouble height_pixels = prefs->getDouble(prefs_path + "fillheight");
-    
+
     Inkscape::Util::Unit const *unit = unit_menu->getUnit();
-    
+
     gdouble width_value = Inkscape::Util::Quantity::convert(width_pixels, "px", unit);
     gdouble height_value = Inkscape::Util::Quantity::convert(height_pixels, "px", unit);
     fill_width->set_value(width_value);

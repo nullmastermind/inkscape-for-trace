@@ -199,7 +199,7 @@ void StyleDialog::_nodeRemoved(Inkscape::XML::Node &repr)
 
 void StyleDialog::_nodeChanged(Inkscape::XML::Node &object)
 {
-    g_debug("StyleDialog::_nodeChanged"); 
+    g_debug("StyleDialog::_nodeChanged");
     readStyleElement();
 }
 
@@ -216,7 +216,7 @@ StyleDialog::_stylesheetChanged( Inkscape::XML::Node &repr ) {
  * Any addition/deletion of the selectors updates XML style element accordingly.
  */
 StyleDialog::StyleDialog()
-    : UI::Widget::Panel("/dialogs/style", SP_VERB_DIALOG_STYLE)
+    : DialogBase("/dialogs/style", SP_VERB_DIALOG_STYLE)
     , _updating(false)
     , _textNode(nullptr)
     , _scroolpos(0)
@@ -238,7 +238,7 @@ StyleDialog::StyleDialog()
     _vadj->signal_value_changed().connect(sigc::mem_fun(*this, &StyleDialog::_vscrool));
     _mainBox.set_orientation(Gtk::ORIENTATION_VERTICAL);
 
-    _getContents()->pack_start(_mainBox, Gtk::PACK_EXPAND_WIDGET);
+    pack_start(_mainBox, Gtk::PACK_EXPAND_WIDGET);
 }
 
 void StyleDialog::_vscrool()
@@ -1616,9 +1616,18 @@ void StyleDialog::_handleDocumentReplaced(SPDesktop *desktop, SPDocument * /* do
 /*
  * When a dialog is floating, it is connected to the active desktop.
  */
-void StyleDialog::setDesktop(SPDesktop *desktop)
+void StyleDialog::update()
 {
-    g_debug("StyleDialog::handleDesktopReplaced()");
+    if (!_app) {
+        std::cerr << "UndoHistory::update(): _app is null" << std::endl;
+        return;
+    }
+
+    SPDesktop *desktop = getDesktop();
+
+    if (!desktop) {
+        return;
+    }
 
     if (getDesktop() == desktop) {
         // This will happen after construction of dialog. We've already
@@ -1628,8 +1637,6 @@ void StyleDialog::setDesktop(SPDesktop *desktop)
 
     _document_replaced_connection.disconnect();
 
-    Panel::setDesktop(desktop);
-
     if (desktop) {
         _document_replaced_connection =
         desktop->connectDocumentReplaced(sigc::mem_fun(this, &StyleDialog::_handleDocumentReplaced));
@@ -1637,7 +1644,6 @@ void StyleDialog::setDesktop(SPDesktop *desktop)
 
     _handleDocumentReplaced(desktop, nullptr);
 }
-
 
 /*
  * Handle a change in which objects are selected in a document.

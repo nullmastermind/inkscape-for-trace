@@ -12,20 +12,19 @@
 #ifndef INKSCAPE_UI_DIALOG_INPUT_H
 #define INKSCAPE_UI_DIALOG_INPUT_H
 
-
+#include "ui/dialog/dialog-base.h"
 #include "verbs.h"
-#include "ui/widget/panel.h"
 
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
-class InputDialog : public UI::Widget::Panel
+class InputDialog : public DialogBase
 {
 public:
     static InputDialog &getInstance();
 
-    InputDialog() : UI::Widget::Panel("/dialogs/inputdevices", SP_VERB_DIALOG_INPUT) {}
+    InputDialog() : DialogBase("/dialogs/inputdevices", SP_VERB_DIALOG_INPUT) {}
     ~InputDialog() override = default;
 };
 

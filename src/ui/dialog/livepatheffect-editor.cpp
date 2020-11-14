@@ -64,7 +64,7 @@ void lpeeditor_selection_changed (Inkscape::Selection * selection, gpointer data
 
 void lpeeditor_selection_modified (Inkscape::Selection * selection, guint /*flags*/, gpointer data)
 {
-    
+
     LivePathEffectEditor *lpeeditor = static_cast<LivePathEffectEditor *>(data);
     lpeeditor->lpe_list_locked = false;
     lpeeditor->onSelectionChanged(selection);
@@ -87,21 +87,21 @@ static void lpe_style_button(Gtk::Button& btn, char const* iconName)
  */
 
 LivePathEffectEditor::LivePathEffectEditor()
-    : UI::Widget::Panel("/dialogs/livepatheffect", SP_VERB_DIALOG_LIVE_PATH_EFFECT),
-      lpe_list_locked(false),
-      effectwidget(nullptr),
-      status_label("", Gtk::ALIGN_CENTER),
-      effectcontrol_frame(""),
-      button_add(),
-      button_remove(),
-      button_up(),
-      button_down(),
-      current_desktop(nullptr),
-      current_lpeitem(nullptr),
-      current_lperef(nullptr)
+    : DialogBase("/dialogs/livepatheffect", SP_VERB_DIALOG_LIVE_PATH_EFFECT)
+    , lpe_list_locked(false)
+    , effectwidget(nullptr)
+    , status_label("", Gtk::ALIGN_CENTER)
+    , effectcontrol_frame("")
+    , button_add()
+    , button_remove()
+    , button_up()
+    , button_down()
+    , current_desktop(nullptr)
+    , current_lpeitem(nullptr)
+    , current_lperef(nullptr)
 {
-    Gtk::Box *contents = _getContents();
-    contents->set_spacing(4);
+    set_orientation(Gtk::ORIENTATION_VERTICAL);
+    set_spacing(4);
 
     //Add the TreeView, inside a ScrolledWindow, with the button underneath:
     scrolled_window.add(effectlist_view);
@@ -167,9 +167,9 @@ LivePathEffectEditor::LivePathEffectEditor()
     //Add the effect name column:
     effectlist_view.append_column("Effect", columns.col_name);
 
-    contents->pack_start(effectlist_vbox, true, true);
-    contents->pack_start(status_label, false, false);
-    contents->pack_start(effectcontrol_frame, false, false);
+    pack_start(effectlist_vbox, true, true);
+    pack_start(status_label, false, false);
+    pack_start(effectcontrol_frame, false, false);
 
     effectcontrol_frame.hide();
     selection_changed_lock = false;
@@ -179,6 +179,7 @@ LivePathEffectEditor::LivePathEffectEditor()
     button_up.signal_clicked().connect(sigc::mem_fun(*this, &LivePathEffectEditor::onUp));
     button_down.signal_clicked().connect(sigc::mem_fun(*this, &LivePathEffectEditor::onDown));
 
+    update();
     show_all_children();
 }
 
@@ -229,7 +230,7 @@ LivePathEffectEditor::showParams(LivePathEffect::Effect& effect)
     effectwidget = effect.newWidget();
     effectcontrol_frame.set_label(effect.getName());
     effectcontrol_vbox.pack_start(*effectwidget, true, true);
- 
+
     button_remove.show();
     status_label.hide();
     effectcontrol_frame.show();
@@ -379,8 +380,6 @@ LivePathEffectEditor::effect_list_reload(SPLPEItem *lpeitem)
 void
 LivePathEffectEditor::setDesktop(SPDesktop *desktop)
 {
-    Panel::setDesktop(desktop);
-
     if ( desktop == current_desktop ) {
         return;
     }
@@ -403,6 +402,16 @@ LivePathEffectEditor::setDesktop(SPDesktop *desktop)
     } else {
         onSelectionChanged(nullptr);
     }
+}
+
+void LivePathEffectEditor::update()
+{
+    if (!_app) {
+        std::cerr << "LivePathEffectEditor::update(): _app is null" << std::endl;
+        return;
+    }
+
+    setDesktop(getDesktop());
 }
 
 /*########################################################################
@@ -462,7 +471,7 @@ LivePathEffectEditor::onAdd()
                         item->deleteObject(false);
                         item = nullptr;
 
-                        // run sp_selection_clone_original_path_lpe 
+                        // run sp_selection_clone_original_path_lpe
                         sel->cloneOriginalPathLPE(true);
 
                         SPItem *new_item = sel->singleItem();
@@ -520,7 +529,7 @@ void LivePathEffectEditor::onUp()
             lpeitem->upCurrentPathEffect();
             DocumentUndo::done( current_desktop->getDocument(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                                 _("Move path effect up") );
-            
+
             effect_list_reload(lpeitem);
             if (lpe) {
                 showParams(*lpe);

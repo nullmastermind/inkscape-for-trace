@@ -15,21 +15,18 @@
 #ifndef INKSCAPE_UI_DIALOG_FILTER_EFFECTS_H
 #define INKSCAPE_UI_DIALOG_FILTER_EFFECTS_H
 
-#include <memory>
-
 #include <glibmm/property.h>
 #include <glibmm/propertyproxy.h>
 #include <gtkmm/notebook.h>
-
 #include <gtkmm/paned.h>
 #include <gtkmm/scrolledwindow.h>
+#include <memory>
 
 #include "attributes.h"
 #include "display/nr-filter-types.h"
+#include "ui/dialog/dialog-base.h"
 #include "ui/widget/combo-enums.h"
-#include "ui/widget/panel.h"
 #include "ui/widget/spin-scale.h"
-
 #include "xml/helper-observer.h"
 
 class SPFilter;
@@ -43,16 +40,16 @@ class EntryAttr;
 //class SpinButtonAttr;
 class DualSpinButton;
 class MultiSpinButton;
-class FilterEffectsDialog : public UI::Widget::Panel {
+class FilterEffectsDialog : public DialogBase
+{
 public:
 
     FilterEffectsDialog();
     ~FilterEffectsDialog() override;
 
-    void setDesktop(SPDesktop *) override;
+    void update() override;
 
-    static FilterEffectsDialog &getInstance()
-    { return *new FilterEffectsDialog(); }
+    static FilterEffectsDialog &getInstance() { return *new FilterEffectsDialog(); }
 
     void set_attrs_locked(const bool);
 protected:
@@ -92,12 +89,12 @@ private:
 
       public:
         void setTargetDesktop(SPDesktop *desktop);
-       
+
       private:
         void on_document_replaced(SPDesktop *desktop, SPDocument *document);
         void on_change_selection();
         void on_modified_selection( guint flags );
-        
+
         void update_selection(Selection *);
         void on_filter_selection_changed();
 
@@ -162,12 +159,12 @@ private:
         Glib::PropertyProxy<void*> property_primitive();
 
         static const int size = 24;
-        
+
     protected:
         void get_preferred_width_vfunc(Gtk::Widget& widget,
                                                int& minimum_width,
                                                int& natural_width) const override;
-        
+
         void get_preferred_width_for_height_vfunc(Gtk::Widget& widget,
                                                           int height,
                                                           int& minimum_width,
@@ -176,7 +173,7 @@ private:
         void get_preferred_height_vfunc(Gtk::Widget& widget,
                                                 int& minimum_height,
                                                 int& natural_height) const override;
-        
+
         void get_preferred_height_for_width_vfunc(Gtk::Widget& widget,
                                                           int width,
                                                           int& minimum_height,
@@ -269,14 +266,14 @@ private:
     void update_color_matrix();
     void update_primitive_infobox();
 
-    // Primitives Info Box  
+    // Primitives Info Box
     Gtk::Label _infobox_desc;
     Gtk::Image _infobox_icon;
     Gtk::ScrolledWindow* _sw_infobox;
 
     // View/add primitives
     Gtk::Paned* _primitive_box;
-    
+
     UI::Widget::ComboBoxEnum<Inkscape::Filters::FilterPrimitiveType> _add_primitive_type;
     Gtk::Button _add_primitive;
 
@@ -310,7 +307,7 @@ private:
     // Image
     EntryAttr* _image_x;
     EntryAttr* _image_y;
-    
+
     // For controlling setting sensitivity
     Gtk::Widget* _k1, *_k2, *_k3, *_k4;
 

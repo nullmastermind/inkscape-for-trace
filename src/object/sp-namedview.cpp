@@ -693,9 +693,9 @@ void SPNamedView::remove_child(Inkscape::XML::Node *child) {
     } else {
         for(std::vector<SPGuide *>::iterator it=this->guides.begin();it!=this->guides.end();++it ) {
             if ( (*it)->getRepr() == child ) {
-                this->guides.erase(it); 
+                this->guides.erase(it);
                 break;
-            }   
+            }
         }
     }
 
@@ -766,7 +766,7 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
         gint full = prefs->getBool("/desktop/geometry/fullscreen");
         gint maxed = prefs->getBool("/desktop/geometry/maximized");
         if (pw>0 && ph>0) {
-            
+
             Gdk::Rectangle monitor_geometry = Inkscape::UI::get_monitor_geometry_at_point(px, py);
             pw = std::min(pw, monitor_geometry.get_width());
             ph = std::min(ph, monitor_geometry.get_height());
@@ -790,7 +790,7 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
         if (window_geometry == PREFS_WINDOW_GEOMETRY_FILE && !new_document) {
             Gdk::Rectangle monitor_geometry = Inkscape::UI::get_monitor_geometry_at_point(nv->window_x, nv->window_y);
             w = MIN(monitor_geometry.get_width(), nv->window_width);
-            h = MIN(monitor_geometry.get_height(), nv->window_height);      
+            h = MIN(monitor_geometry.get_height(), nv->window_height);
             move_to_screen = true;
         } else if (default_size == PREFS_WINDOW_SIZE_LARGE) {
             Gdk::Rectangle monitor_geometry = Inkscape::UI::get_monitor_geometry_at_window(win->get_window());
@@ -821,6 +821,10 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
 
     // Cancel any history of transforms up to this point (must be before call to zoom).
     desktop->clear_transform_history();
+
+    if (show_dialogs) {
+        // desktop->show_dialogs(); TODO: load dialog state
+    }
 }
 
 /*
@@ -1165,7 +1169,7 @@ double SPNamedView::getMarginLength(gchar const * const key,
         return 0.0;
     }
     if (*margin_units == *percent) {
-        return (use_width)? width * value : height * value; 
+        return (use_width)? width * value : height * value;
     }
     if (!margin_units->compatibleWith(return_units)) {
         return 0.0;

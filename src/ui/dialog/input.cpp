@@ -13,7 +13,6 @@
 #include <map>
 #include <set>
 #include <list>
-#include "ui/widget/panel.h"
 #include "ui/widget/frame.h"
 #include "ui/widget/scrollprotected.h"
 
@@ -592,7 +591,7 @@ InputDialogImpl::InputDialogImpl() :
     testDetector(),
     cfgPanel()
 {
-    Gtk::Box *contents = _getContents();
+    set_orientation(Gtk::ORIENTATION_VERTICAL);
 
     treeScroller.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     treeScroller.set_shadow_type(Gtk::SHADOW_IN);
@@ -649,9 +648,9 @@ InputDialogImpl::InputDialogImpl() :
         topHolder.append_page(splitter, _("Hardware"));
         topHolder.show_all();
         topHolder.set_current_page(0);
-        contents->pack_start(topHolder);
+        pack_start(topHolder);
     } else {
-        contents->pack_start(cfgPanel);
+        pack_start(cfgPanel);
     }
 
 
@@ -677,7 +676,7 @@ InputDialogImpl::InputDialogImpl() :
         lbl = Gtk::manage(new Gtk::Label(_("axis:")));
         lbl->set_hexpand();
         axisTable.attach(*lbl, 0, rowNum, 1, 1);
-        
+
         axesValue.set_hexpand();
         axisTable.attach(axesValue, 1, rowNum, 1, 1);
         axesValue.set_sensitive(false);
@@ -844,7 +843,7 @@ void InputDialogImpl::setupTree( Glib::RefPtr<Gtk::TreeStore> store, Gtk::TreeIt
                 if ( dev->getSource() == Gdk::SOURCE_PEN ) {
                     for (auto dev2 : it.devices) {
                         if ( dev2->getSource() == Gdk::SOURCE_ERASER ) {
-                            DeviceManager::getManager().setLinkedTo(dev->getId(), dev2->getId());                            
+                            DeviceManager::getManager().setLinkedTo(dev->getId(), dev2->getId());
                             break; // only check the first eraser... for now
                         }
                         break; // only check the first pen... for now
@@ -1528,12 +1527,12 @@ void InputDialogImpl::updateTestAxes( Glib::ustring const& key, GdkDevice* dev )
                        // FIXME: Device axis ranges are inaccessible in GTK+ 3 and
                // are deprecated in GTK+ 2. Progress-bar ranges are disabled
                // until we find an alternative solution
-             
+
                        //   if ( (dev->axes[i].max - dev->axes[i].min) > epsilon ) {
                             axesValues[i].set_sensitive(true);
                        //       axesValues[i].set_fraction( (axesMap[key][i].second- dev->axes[i].min) / (dev->axes[i].max - dev->axes[i].min) );
                        //   }
-                        
+
                         gchar* str = g_strdup_printf("%f", axesMap[key][i].second);
                         axesValues[i].set_text(str);
                         g_free(str);
@@ -1543,11 +1542,11 @@ void InputDialogImpl::updateTestAxes( Glib::ustring const& key, GdkDevice* dev )
                     testAxes[i].set(getPix(PIX_AXIS_ON));
                     axesValues[i].set_sensitive(true);
                     if ( dev && (i < static_cast<gint>(G_N_ELEMENTS(axesValues)) ) ) {
-                       
+
                        // FIXME: Device axis ranges are inaccessible in GTK+ 3 and
                // are deprecated in GTK+ 2. Progress-bar ranges are disabled
                // until we find an alternative solution
-                       
+
                // if ( (dev->axes[i].max - dev->axes[i].min) > epsilon ) {
                             axesValues[i].set_sensitive(true);
                        //     axesValues[i].set_fraction( (axesMap[key][i].second- dev->axes[i].min) / (dev->axes[i].max - dev->axes[i].min) );

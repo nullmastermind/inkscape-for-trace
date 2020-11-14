@@ -184,7 +184,7 @@ void InkscapePreferences::remove_highlight(Gtk::Label *label)
 }
 
 InkscapePreferences::InkscapePreferences()
-    : UI::Widget::Panel ("/dialogs/preferences", SP_VERB_DIALOG_DISPLAY),
+    : DialogBase("/dialogs/preferences", SP_VERB_DIALOG_DISPLAY),
       _minimum_width(0),
       _minimum_height(0),
       _natural_width(0),
@@ -192,23 +192,25 @@ InkscapePreferences::InkscapePreferences()
       _current_page(nullptr),
       _init(true)
 {
+    set_orientation(Gtk::ORIENTATION_VERTICAL);
+
     //get the width of a spinbutton
     Inkscape::UI::Widget::SpinButton* sb = new Inkscape::UI::Widget::SpinButton;
     sb->set_width_chars(6);
-    _getContents()->add(*sb);
+    add(*sb);
     show_all_children();
     Gtk::Requisition sreq;
     Gtk::Requisition sreq_natural;
     sb->get_preferred_size(sreq_natural, sreq);
     _sb_width = sreq.width;
-    _getContents()->remove(*sb);
+    remove(*sb);
     delete sb;
 
     //Main HBox
     auto hbox_list_page = Gtk::manage(new Gtk::Box());
     hbox_list_page->set_border_width(12);
     hbox_list_page->set_spacing(12);
-    _setContents(hbox_list_page);
+    add(*hbox_list_page);
 
     //Pagelist
     auto list_box = Gtk::manage(new Gtk::Box(Gtk::Orientation::ORIENTATION_VERTICAL, 3));
@@ -805,7 +807,7 @@ void InkscapePreferences::initPageTools()
     Gtk::TreeModel::iterator iter_tools = this->AddPage(_page_tools, _("Tools"), PREFS_PAGE_TOOLS);
     this->AddPage(_page_selector, _("Selector"), iter_tools, PREFS_PAGE_TOOLS_SELECTOR);
     this->AddPage(_page_node, _("Node"), iter_tools, PREFS_PAGE_TOOLS_NODE);
-    
+
     // shapes
     Gtk::TreeModel::iterator iter_shapes = this->AddPage(_page_shapes, _("Shapes"), iter_tools, PREFS_PAGE_TOOLS_SHAPES);
     this->AddPage(_page_rectangle, _("Rectangle"), iter_shapes, PREFS_PAGE_TOOLS_SHAPES_RECT);
@@ -813,7 +815,7 @@ void InkscapePreferences::initPageTools()
     this->AddPage(_page_star, _("Star"), iter_shapes, PREFS_PAGE_TOOLS_SHAPES_STAR);
     this->AddPage(_page_3dbox, _("3D Box"), iter_shapes, PREFS_PAGE_TOOLS_SHAPES_3DBOX);
     this->AddPage(_page_spiral, _("Spiral"), iter_shapes, PREFS_PAGE_TOOLS_SHAPES_SPIRAL);
-    
+
     this->AddPage(_page_pen, _("Pen"), iter_tools, PREFS_PAGE_TOOLS_PEN);
     this->AddPage(_page_pencil, _("Pencil"), iter_tools, PREFS_PAGE_TOOLS_PENCIL);
     this->AddPage(_page_calligraphy, _("Calligraphy"), iter_tools, PREFS_PAGE_TOOLS_CALLIGRAPHY);
@@ -822,7 +824,7 @@ void InkscapePreferences::initPageTools()
     this->AddPage(_page_gradient, _("Gradient"), iter_tools, PREFS_PAGE_TOOLS_GRADIENT);
     this->AddPage(_page_dropper, _("Dropper"), iter_tools, PREFS_PAGE_TOOLS_DROPPER);
     this->AddPage(_page_paintbucket, _("Paint Bucket"), iter_tools, PREFS_PAGE_TOOLS_PAINTBUCKET);
-    
+
     this->AddPage(_page_tweak, _("Tweak"), iter_tools, PREFS_PAGE_TOOLS_TWEAK);
     this->AddPage(_page_spray, _("Spray"), iter_tools, PREFS_PAGE_TOOLS_SPRAY);
     this->AddPage(_page_eraser, _("Eraser"), iter_tools, PREFS_PAGE_TOOLS_ERASER);
@@ -832,7 +834,7 @@ void InkscapePreferences::initPageTools()
 #endif // WITH_LPETOOL
     this->AddPage(_page_zoom, _("Zoom"), iter_tools, PREFS_PAGE_TOOLS_ZOOM);
     this->AddPage(_page_measure, C_("ContextVerb", "Measure"), iter_tools, PREFS_PAGE_TOOLS_MEASURE);
-    
+
     _page_tools.add_group_header( _("Bounding box to use"));
     _t_bbox_visual.init ( _("Visual bounding box"), "/tools/bounding_box", 0, false, nullptr); // 0 means visual
     _page_tools.add_line( true, "", _t_bbox_visual, "",
@@ -3477,7 +3479,7 @@ bool InkscapePreferences::GetSizeRequest(const Gtk::TreeModel::iterator& iter)
     this->show_all_children();
     Gtk::Requisition sreq_minimum;
     Gtk::Requisition sreq_natural;
-    _getContents()->get_preferred_size(sreq_minimum, sreq_natural);
+    get_preferred_size(sreq_minimum, sreq_natural);
     _minimum_width  = std::max(_minimum_width,  sreq_minimum.width);
     _minimum_height = std::max(_minimum_height, sreq_minimum.height);
     _natural_width  = std::max(_natural_width,  sreq_natural.width);

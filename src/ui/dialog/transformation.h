@@ -12,13 +12,12 @@
 #ifndef INKSCAPE_UI_DIALOG_TRANSFORMATION_H
 #define INKSCAPE_UI_DIALOG_TRANSFORMATION_H
 
-
+#include <glibmm/i18n.h>
+#include <gtkmm/checkbutton.h>
 #include <gtkmm/notebook.h>
 #include <gtkmm/radiobutton.h>
-#include <gtkmm/checkbutton.h>
-#include <glibmm/i18n.h>
 
-#include "ui/widget/panel.h"
+#include "ui/dialog/dialog-base.h"
 #include "ui/widget/notebook-page.h"
 #include "ui/widget/scalar-unit.h"
 
@@ -33,19 +32,19 @@ namespace Dialog {
 
 /**
  * Transformation dialog.
- * 
+ *
  * The transformation dialog allows to modify Inkscape objects.
  * 5 transformation operations are currently possible: move, scale,
- * rotate, skew and matrix. 
+ * rotate, skew and matrix.
  */
-class Transformation : public UI::Widget::Panel
+class Transformation : public DialogBase
 {
 
 public:
 
     /**
      * Constructor for Transformation.
-     * 
+     *
      * This does the initialization
      * and layout of the dialog used for transforming SVG objects.  It
      * consists of 5 pages for the 5 operations it handles:
@@ -118,7 +117,7 @@ public:
 
     void updateSelection(PageType page, Inkscape::Selection *selection);
 
-    void setDesktop(SPDesktop *) override;
+    void update() override;
 
 protected:
 
@@ -168,7 +167,7 @@ protected:
     void layoutPageSkew();
     void layoutPageTransform();
 
-    void _apply() override;
+    void _apply();
     void presentPage(PageType page);
 
     void onSwitchPage(Gtk::Widget *page, guint pagenum);

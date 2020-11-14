@@ -16,16 +16,17 @@
 #define SEEN_OBJECTS_PANEL_H
 
 #include <gtkmm/box.h>
-#include <gtkmm/treeview.h>
-#include <gtkmm/treestore.h>
-#include <gtkmm/scrolledwindow.h>
-#include <gtkmm/scale.h>
 #include <gtkmm/dialog.h>
-#include "ui/widget/spinbutton.h"
-#include "ui/widget/panel.h"
-#include "ui/widget/style-subject.h"
+#include <gtkmm/scale.h>
+#include <gtkmm/scrolledwindow.h>
+#include <gtkmm/treestore.h>
+#include <gtkmm/treeview.h>
+
 #include "selection.h"
+#include "ui/dialog/dialog-base.h"
 #include "ui/widget/filter-effect-chooser.h"
+#include "ui/widget/spinbutton.h"
+#include "ui/widget/style-subject.h"
 
 class SPObject;
 class SPGroup;
@@ -43,7 +44,7 @@ namespace Dialog {
 /**
  * A panel that displays objects.
  */
-class ObjectsPanel : public UI::Widget::Panel
+class ObjectsPanel : public DialogBase
 {
 public:
     ObjectsPanel();
@@ -51,7 +52,7 @@ public:
 
     static ObjectsPanel& getInstance();
 
-    void setDesktop( SPDesktop* desktop ) override;
+    void update() override;
     void setDocument( SPDesktop* desktop, SPDocument* document);
 
 private:
@@ -61,19 +62,19 @@ private:
     class ObjectWatcher;
 
     //Connections, Watchers, Trackers:
-    
+
     //Document root watcher
     ObjectsPanel::ObjectWatcher* _rootWatcher;
-    
+
     //All object watchers
     std::map<SPItem*, std::pair<ObjectsPanel::ObjectWatcher*, bool> > _objectWatchers;
-    
+
     //Connection for when the desktop is destroyed (I.e. its deconstructor is called)
     sigc::connection _desktopDestroyedConnection;
 
     //Connection for when the document changes
     sigc::connection _documentChangedConnection;
-    
+
     //Connection for when the active layer changes
     sigc::connection _documentChangedCurrentLayer;
 
@@ -82,43 +83,43 @@ private:
 
     //Connection for when the selection in the dialog changes
     sigc::connection _selectedConnection;
-    
+
     //Connections for when the opacity/blend/blur of the active selection in the document changes
     sigc::connection _isolationConnection;
     sigc::connection _opacityConnection;
     sigc::connection _blendConnection;
     sigc::connection _blurConnection;
-    
+
     sigc::connection _processQueue_sig;
     sigc::connection _executeUpdate_sig;
 
     //Members:
-    
+
     //The current desktop
     SPDesktop* _desktop;
-    
+
     //The current document
     SPDocument* _document;
-    
+
     //Tree data model
     ModelColumns* _model;
-    
+
     //Prevents the composite controls from updating
     bool _blockCompositeUpdate;
-    
+
     //
     InternalUIBounce* _pending;
     bool _pending_update;
-    
+
     //Whether the drag & drop was dragged into an item
     gboolean _dnd_into;
-    
+
     //List of drag & drop source items
     std::vector<SPItem*> _dnd_source;
-    
+
     //Drag & drop target item
     SPItem* _dnd_target;
-    
+
     // Whether the drag sources include a layer
     bool _dnd_source_includes_layer;
 
@@ -129,9 +130,9 @@ private:
     bool _show_contextmenu_icons;
 
     //GUI Members:
-    
+
     GdkEvent* _toggleEvent;
-    
+
     Gtk::TreeModel::Path _defer_target;
 
     Glib::RefPtr<Gtk::TreeStore> _store;
@@ -173,23 +174,23 @@ private:
 
     Gtk::Dialog _colorSelectorDialog;
     std::unique_ptr<Inkscape::UI::SelectedColor> _selectedColor;
-    
+
     //Methods:
-    
+
     ObjectsPanel(ObjectsPanel const &) = delete; // no copy
     ObjectsPanel &operator=(ObjectsPanel const &) = delete; // no assign
 
     void _styleButton( Gtk::Button& btn, char const* iconName, char const* tooltip );
     void _fireAction( unsigned int code );
-    
+
     Gtk::MenuItem& _addPopupItem( SPDesktop *desktop, unsigned int code, int id );
-    
+
     void _setVisibleIter( const Gtk::TreeModel::iterator& iter, const bool visible );
     void _setLockedIter( const Gtk::TreeModel::iterator& iter, const bool locked );
-    
+
     bool _handleButtonEvent(GdkEventButton *event);
     bool _handleKeyEvent(GdkEventKey *event);
-    
+
     void _storeHighlightTarget(const Gtk::TreeModel::iterator& iter);
     void _storeDragSource(const Gtk::TreeModel::iterator& iter);
     bool _handleDragDrop(const Glib::RefPtr<Gdk::DragContext>& context, int x, int y, guint time);
@@ -203,7 +204,7 @@ private:
     bool _selectItemCallback(const Gtk::TreeModel::iterator& iter, bool *setOpacity, bool *first_pass);
     bool _clearPrevSelectionState(const Gtk::TreeModel::iterator& iter);
     void _desktopDestroyed(SPDesktop* desktop);
-    
+
     void _checkTreeSelection();
 
     void _blockAllSignals(bool should_block);
@@ -213,14 +214,14 @@ private:
 
     void _setExpanded( const Gtk::TreeModel::iterator& iter, const Gtk::TreeModel::Path& path, bool isexpanded );
     void _setCollapsed(SPGroup * group);
-    
+
     bool _noSelection( Glib::RefPtr<Gtk::TreeModel> const & model, Gtk::TreeModel::Path const & path, bool b );
     bool _rowSelectFunction( Glib::RefPtr<Gtk::TreeModel> const & model, Gtk::TreeModel::Path const & path, bool b );
 
     void _compositingChanged( const Gtk::TreeModel::iterator& iter, bool *setValues );
     void _updateComposite();
     void _setCompositingValues(SPItem *item);
-    
+
     bool _findInTreeCache(SPItem* item, Gtk::TreeModel::iterator &tree_iter);
     void _updateObject(SPObject *obj, bool recurse);
 

@@ -217,7 +217,7 @@ Glib::RefPtr<SelectorsDialog::TreeStore> SelectorsDialog::TreeStore::create(Sele
  * Any addition/deletion of the selectors updates XML style element accordingly.
  */
 SelectorsDialog::SelectorsDialog()
-    : UI::Widget::Panel("/dialogs/selectors", SP_VERB_DIALOG_SELECTORS)
+    : DialogBase("/dialogs/selectors", SP_VERB_DIALOG_SELECTORS)
     , _updating(false)
     , _textNode(nullptr)
     , _scroolpos(0)
@@ -338,7 +338,7 @@ void SelectorsDialog::_showWidgets()
     dialog_scroller->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     dialog_scroller->set_shadow_type(Gtk::SHADOW_IN);
     dialog_scroller->add(*Gtk::manage(contents));
-    _getContents()->pack_start(*dialog_scroller, Gtk::PACK_EXPAND_WIDGET);
+    pack_start(*dialog_scroller, Gtk::PACK_EXPAND_WIDGET);
     show_all();
     int widthpos = _paned.property_max_position() - _paned.property_min_position();
     int panedpos = prefs->getInt("/dialogs/selectors/panedpos", widthpos / 2);
@@ -1322,17 +1322,24 @@ void SelectorsDialog::_handleDocumentReplaced(SPDesktop *desktop, SPDocument * /
 /*
  * When a dialog is floating, it is connected to the active desktop.
  */
-void SelectorsDialog::setDesktop(SPDesktop *desktop)
+void SelectorsDialog::update()
 {
-    g_assert(getDesktop() != desktop);
+    if (!_app) {
+        std::cerr << "SelectorsDialog::update(): _app is null" << std::endl;
+        return;
+    }
+
+    SPDesktop *desktop = getDesktop();
+
+    if (!desktop) {
+        return;
+    }
 
     _document_replaced_connection.disconnect();
 
-    Panel::setDesktop( desktop );
-
     _handleDocumentReplaced(desktop, nullptr);
 
-    _style_dialog->setDesktop(desktop);
+    _style_dialog->update();
 
     if (!desktop)
         return;
@@ -1340,7 +1347,6 @@ void SelectorsDialog::setDesktop(SPDesktop *desktop)
     _document_replaced_connection =
         desktop->connectDocumentReplaced(sigc::mem_fun(this, &SelectorsDialog::_handleDocumentReplaced));
 }
-
 
 /*
  * Handle a change in which objects are selected in a document.

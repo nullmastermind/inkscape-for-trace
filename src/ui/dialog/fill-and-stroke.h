@@ -16,10 +16,10 @@
 #ifndef INKSCAPE_UI_DIALOG_FILL_AND_STROKE_H
 #define INKSCAPE_UI_DIALOG_FILL_AND_STROKE_H
 
-#include "ui/widget/panel.h"
-#include "ui/widget/object-composite-settings.h"
-
 #include <gtkmm/notebook.h>
+
+#include "ui/dialog/dialog-base.h"
+#include "ui/widget/object-composite-settings.h"
 #include "ui/widget/style-subject.h"
 
 namespace Inkscape {
@@ -33,7 +33,8 @@ class StrokeStyle;
 
 namespace Dialog {
 
-class FillAndStroke : public UI::Widget::Panel {
+class FillAndStroke : public DialogBase
+{
 public:
     FillAndStroke();
     ~FillAndStroke() override;
@@ -41,7 +42,7 @@ public:
     static FillAndStroke &getInstance() { return *new FillAndStroke(); }
 
 
-    void setDesktop(SPDesktop *desktop) override;
+    void update() override;
 
     //void selectionChanged(Inkscape::Selection *selection);
 

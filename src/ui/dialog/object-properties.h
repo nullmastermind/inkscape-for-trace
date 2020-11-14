@@ -30,18 +30,19 @@
 #ifndef SEEN_DIALOGS_ITEM_PROPERTIES_H
 #define SEEN_DIALOGS_ITEM_PROPERTIES_H
 
-#include "ui/widget/panel.h"
-#include "ui/widget/frame.h"
-#include "ui/widget/scrollprotected.h"
 
 #include <gtkmm/checkbutton.h>
+#include <gtkmm/comboboxtext.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/expander.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/textview.h>
-#include <gtkmm/comboboxtext.h>
 
+//#include "ui/widget/panel.h"
+#include "ui/widget/scrollprotected.h"
+#include "ui/dialog/dialog-base.h"
+#include "ui/widget/frame.h"
 
 class SPAttributeTable;
 class SPDesktop;
@@ -61,15 +62,17 @@ namespace Dialog {
  * A widget to enter an ID, label, title and description for an object.
  * In addition it allows to edit the properties of an object.
  */
-class ObjectProperties : public Widget::Panel {
+class ObjectProperties : public DialogBase
+{
 public:
     ObjectProperties();
     ~ObjectProperties() override;
-    
+
     static ObjectProperties &getInstance() { return *new ObjectProperties(); }
-    
+
     /// Updates entries and other child widgets on selection change, object modification, etc.
-    void update();
+    void update_entries();
+    void update() override;
 
 private:
     bool _blocked;
@@ -98,11 +101,11 @@ private:
     Gtk::SpinButton _spin_dpi; //the expander for interactivity
     Gtk::Expander _exp_interactivity; //the expander for interactivity
     SPAttributeTable *_attr_table; //the widget for showing the on... names at the bottom
-    
+
     SPDesktop *_desktop;
     sigc::connection _selection_changed_connection;
     sigc::connection _subselection_changed_connection;
-    
+
     /// Constructor auxiliary function creating the child widgets.
     void _init();
 
@@ -120,11 +123,7 @@ private:
 
     /// Callback for checkbox Preserve Aspect Ratio.
     void _aspectRatioToggled();
-
-  public:
-    void setDesktop(SPDesktop *desktop) override;
 };
-
 }
 }
 }

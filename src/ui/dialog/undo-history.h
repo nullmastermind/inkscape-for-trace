@@ -13,18 +13,16 @@
 #ifndef INKSCAPE_UI_DIALOG_UNDO_HISTORY_H
 #define INKSCAPE_UI_DIALOG_UNDO_HISTORY_H
 
-#include "ui/widget/panel.h"
+#include <functional>
+#include <glibmm/property.h>
 #include <gtkmm/cellrendererpixbuf.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/treemodel.h>
 #include <gtkmm/treeselection.h>
-#include <glibmm/property.h>
-
-#include <functional>
 #include <sstream>
 
 #include "event-log.h"
-
+#include "ui/dialog/dialog-base.h"
 
 class SPDesktop;
 
@@ -44,8 +42,8 @@ public:
         _property_icon(*this, "icon", Glib::RefPtr<Gdk::Pixbuf>(nullptr)),
         _property_event_type(*this, "event_type", 0)
     { }
-    
-    Glib::PropertyProxy<unsigned int> 
+
+    Glib::PropertyProxy<unsigned int>
     property_event_type() { return _property_event_type.get_proxy(); }
 
 protected:
@@ -79,7 +77,7 @@ public:
     { }
 
 
-    Glib::PropertyProxy<int> 
+    Glib::PropertyProxy<int>
     property_number() { return _property_number.get_proxy(); }
 
     static const Filter& no_filter;
@@ -105,12 +103,13 @@ private:
  * This dialog allows the user to undo and redo multiple events in a more convenient way
  * than repateaded ctrl-z, ctrl-shift-z.
  */
-class UndoHistory : public Widget::Panel {
+class UndoHistory : public DialogBase
+{
 public:
     ~UndoHistory() override;
 
     static UndoHistory &getInstance();
-    void setDesktop(SPDesktop* desktop) override;
+    void update() override;
 
     sigc::connection _document_replaced_connection;
 
@@ -120,7 +119,7 @@ protected:
     SPDocument *_document;
     EventLog *_event_log;
 
-    Gtk::ScrolledWindow _scrolled_window;    
+    Gtk::ScrolledWindow _scrolled_window;
 
     Glib::RefPtr<Gtk::TreeModel> _event_list_store;
     Gtk::TreeView _event_list_view;
@@ -140,7 +139,7 @@ protected:
 
 private:
     UndoHistory();
-  
+
     // no default constructor, noncopyable, nonassignable
     UndoHistory(UndoHistory const &d) = delete;
     UndoHistory operator=(UndoHistory const &d) = delete;

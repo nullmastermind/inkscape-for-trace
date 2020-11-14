@@ -21,7 +21,6 @@
 #include "object/sp-image.h"
 
 #include "ui/dialog/object-attributes.h"
-#include "ui/dialog/dialog-manager.h"
 
 #include "widgets/sp-attribute-widget.h"
 
@@ -69,14 +68,14 @@ static const SPAttrDesc image_nohref_desc[] = {
     { nullptr, nullptr}
 };
 
-ObjectAttributes::ObjectAttributes () :
-    UI::Widget::Panel("/dialogs/objectattr/", SP_VERB_DIALOG_ATTR),
-    blocked (false),
-    CurrentItem(nullptr),
-    attrTable(Gtk::manage(new SPAttributeTable())),
-    selectChangedConn(),
-    subselChangedConn(),
-    selectModifiedConn()
+ObjectAttributes::ObjectAttributes()
+    : DialogBase("/dialogs/objectattr/", SP_VERB_DIALOG_ATTR)
+    , blocked(false)
+    , CurrentItem(nullptr)
+    , attrTable(Gtk::manage(new SPAttributeTable()))
+    , selectChangedConn()
+    , subselChangedConn()
+    , selectModifiedConn()
 {
     attrTable->show();
 }
@@ -93,7 +92,7 @@ void ObjectAttributes::widget_setup ()
     if (blocked || !getDesktop()) {
         return;
     }
-    
+
     Inkscape::Selection *selection = getDesktop()->getSelection();
     SPItem *item = selection->singleItem();
     if (!item)
@@ -104,7 +103,7 @@ void ObjectAttributes::widget_setup ()
         //to close the connections to the previously selected object
         return;
     }
-    
+
     blocked = true;
 
     // CPPIFY
@@ -112,7 +111,7 @@ void ObjectAttributes::widget_setup ()
 //    GObjectClass *klass = G_OBJECT_GET_CLASS(obj); //to deduce the object's type
 //    GType type = G_TYPE_FROM_CLASS(klass);
     const SPAttrDesc *desc;
-    
+
 //    if (type == SP_TYPE_ANCHOR)
     if (SP_IS_ANCHOR(item))
     {
@@ -138,7 +137,7 @@ void ObjectAttributes::widget_setup ()
         set_sensitive (false);
         return;
     }
-    
+
     std::vector<Glib::ustring> labels;
     std::vector<Glib::ustring> attrs;
     if (CurrentItem != item)
@@ -157,22 +156,31 @@ void ObjectAttributes::widget_setup ()
     {
         attrTable->change_object(obj);
     }
-    
+
     set_sensitive (true);
     show_all();
     blocked = false;
 }
 
-void ObjectAttributes::setDesktop(SPDesktop *desktop)
+void ObjectAttributes::update()
 {
+    if (!_app) {
+        std::cerr << "ObjectAttributes::update(): _app is null" << std::endl;
+        return;
+    }
+
+    SPDesktop *desktop = getDesktop();
+
+    if (!desktop) {
+        return;
+    }
+
     {
         {
             selectModifiedConn.disconnect();
             subselChangedConn.disconnect();
             selectChangedConn.disconnect();
         }
-
-        Panel::setDesktop(desktop);
 
         if (desktop && desktop->selection) {
             selectChangedConn = desktop->selection->connectChanged(sigc::hide(sigc::mem_fun(*this, &ObjectAttributes::widget_setup)));

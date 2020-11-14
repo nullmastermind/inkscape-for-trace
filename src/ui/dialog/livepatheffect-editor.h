@@ -12,20 +12,21 @@
 #ifndef INKSCAPE_UI_DIALOG_LIVE_PATH_EFFECT_H
 #define INKSCAPE_UI_DIALOG_LIVE_PATH_EFFECT_H
 
-#include "ui/widget/panel.h"
-
-#include <gtkmm/label.h>
-#include <gtkmm/frame.h>
-#include "ui/widget/combo-enums.h"
-#include "ui/widget/frame.h"
-#include "object/sp-item.h"
-#include "live_effects/effect-enum.h"
-#include <gtkmm/liststore.h>
+#include <gtkmm/buttonbox.h>
 #include <gtkmm/eventbox.h>
-#include <gtkmm/treeview.h>
+#include <gtkmm/frame.h>
+#include <gtkmm/label.h>
+#include <gtkmm/liststore.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/toolbar.h>
-#include <gtkmm/buttonbox.h>
+#include <gtkmm/treeview.h>
+
+#include "live_effects/effect-enum.h"
+#include "object/sp-item.h"
+#include "selection.h"
+#include "ui/dialog/dialog-base.h"
+#include "ui/widget/combo-enums.h"
+#include "ui/widget/frame.h"
 
 class SPDesktop;
 class SPLPEItem;
@@ -40,7 +41,8 @@ namespace LivePathEffect {
 namespace UI {
 namespace Dialog {
 
-class LivePathEffectEditor : public UI::Widget::Panel {
+class LivePathEffectEditor : public DialogBase
+{
 public:
     LivePathEffectEditor();
     ~LivePathEffectEditor() override;
@@ -50,7 +52,9 @@ public:
     void onSelectionChanged(Inkscape::Selection *sel);
     void onSelectionModified(Inkscape::Selection *sel);
     virtual void on_effect_selection_changed();
-    void setDesktop(SPDesktop *desktop) override;
+    void setDesktop(SPDesktop *desktop);
+
+    void update() override;
 
 private:
 
@@ -90,7 +94,7 @@ private:
     bool lpe_list_locked;
     bool selection_changed_lock;
     //Inkscape::UI::Widget::ComboBoxEnum<LivePathEffect::EffectType> combo_effecttype;
-    
+
     Gtk::Widget * effectwidget;
     Gtk::Label status_label;
     UI::Widget::Frame effectcontrol_frame;
@@ -113,7 +117,8 @@ private:
     Gtk::Button button_down;
 
     SPDesktop * current_desktop;
-    
+    Inkscape::Selection *_getSelection() { return current_desktop ? current_desktop->getSelection() : nullptr; }
+
     SPLPEItem * current_lpeitem;
 
     LivePathEffect::LPEObjectReference * current_lperef;

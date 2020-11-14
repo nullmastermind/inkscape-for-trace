@@ -35,7 +35,6 @@
 #include <utility>
 
 #include "desktop.h"
-#include "dialog-manager.h"
 #include "document-undo.h"
 #include "document.h"
 #include "filter-chemistry.h"
@@ -1107,7 +1106,7 @@ public:
                     }
                 }
             }
- 
+
             update();
         }
     }
@@ -1311,7 +1310,7 @@ static Gtk::Menu * create_popup_menu(Gtk::Widget& parent,
     mi->signal_activate().connect(dup);
     mi->show();
     menu->append(*mi);
-    
+
     mi = Gtk::manage(new Gtk::MenuItem(_("_Remove"), true));
     menu->append(*mi);
     mi->signal_activate().connect(rem);
@@ -1353,7 +1352,7 @@ FilterEffectsDialog::FilterModifier::FilterModifier(FilterEffectsDialog& d)
     _list.get_column(1)->set_resizable(true);
     _list.get_column(1)->set_sizing(Gtk::TREE_VIEW_COLUMN_AUTOSIZE);
     _list.get_column(1)->set_expand(true);
-    
+
     _list.set_reorderable(true);
     _list.enable_model_drag_dest (Gdk::ACTION_MOVE);
 
@@ -1564,7 +1563,7 @@ void FilterEffectsDialog::FilterModifier::on_selection_toggled(const Glib::ustri
 
 
 void FilterEffectsDialog::FilterModifier::update_counts()
-{    
+{
     for(const auto & i : _model->children()) {
         SPFilter* f = SP_FILTER(i[_columns.filter]);
         i[_columns.count] = f->getRefCount();
@@ -1954,12 +1953,12 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
 {
     cr->set_line_width(1.0);
     // In GTK+ 3, the draw function receives the widget window, not the
-    // bin_window (i.e., just the area under the column headers).  We 
+    // bin_window (i.e., just the area under the column headers).  We
     // therefore translate the origin of our coordinate system to account for this
     int x_origin, y_origin;
     convert_bin_window_to_widget_coords(0,0,x_origin,y_origin);
     cr->translate(x_origin, y_origin);
-    
+
     auto sc = get_style_context();
     Gdk::RGBA bg_color("#f0f0f0"); // Fix bg as a light gray
 
@@ -1972,7 +1971,7 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
                        (bg_color.get_green() + fg_color.get_green())/2.0,
                        (bg_color.get_blue()  + fg_color.get_blue()) /2.0,
                        (bg_color.get_alpha() + fg_color.get_alpha())/2.0);
-    
+
     SPFilterPrimitive* prim = get_selected();
     int row_count = get_model()->children().size();
 
@@ -1984,7 +1983,7 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
         get_cell_area(get_model()->get_path(row), *get_column(1), rct);
         get_visible_rect(vis);
         text_start_x = rct.get_x() + rct.get_width() - get_input_type_width() * FPInputConverter._length + 1;
-        
+
 	for(unsigned int i = 0; i < FPInputConverter._length; ++i) {
             _vertical_layout->set_text(_(FPInputConverter.get_label((FilterPrimitiveInput)i).c_str()));
             const int x = text_start_x + get_input_type_width() * i;
@@ -1997,7 +1996,7 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
 	    cr->move_to(x + get_input_type_width(), 5);
 	    cr->rotate_degrees(90);
 	    _vertical_layout->show_in_cairo_context(cr);
-            
+
             Gdk::Cairo::set_source_rgba(cr, mid_color);
 	    cr->move_to(x, 0);
 	    cr->line_to(x, vis.get_height());
@@ -2057,7 +2056,7 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
 
                 if(_in_drag == (i + 1)) {
                     con_drag_y = con_poly[2].get_y();
-                    con_drag_x = con_poly[2].get_x(); 
+                    con_drag_x = con_poly[2].get_x();
                 }
 
                 if(_in_drag != (i + 1) || row_prim != prim) {
@@ -2069,10 +2068,10 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
             // Draw "in" shape
             inside = do_connection_node(row, 0, con_poly, mx, my);
             con_drag_y = con_poly[2].get_y();
-            con_drag_x = con_poly[2].get_x(); 
-            
+            con_drag_x = con_poly[2].get_x();
+
 	    cr->save();
-		
+
             Gdk::Cairo::set_source_rgba(cr, mid_color);
             draw_connection_node(cr, con_poly, inside);
 
@@ -2088,14 +2087,14 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
                 inside = do_connection_node(row, 1, con_poly, mx, my);
                 if(_in_drag == 2) {
                     con_drag_y = con_poly[2].get_y();
-                    con_drag_x = con_poly[2].get_x(); 
+                    con_drag_x = con_poly[2].get_x();
                 }
-		
+
 		cr->save();
 
                 Gdk::Cairo::set_source_rgba(cr, mid_color);
                 draw_connection_node(cr, con_poly, inside);
-  
+
                 cr->restore();
 
                 // Draw "in2" connection
@@ -2110,7 +2109,7 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
 		cr->save();
                 cr->set_source_rgb(0.0, 0.0, 0.0);
 		cr->move_to(con_drag_x, con_drag_y);
-		cr->line_to(mx, con_drag_y);  
+		cr->line_to(mx, con_drag_y);
 		cr->line_to(mx, my);
 		cr->stroke();
 		cr->restore();
@@ -2128,7 +2127,7 @@ void FilterEffectsDialog::PrimitiveList::draw_connection(const Cairo::RefPtr<Cai
     cr->save();
 
     auto sc = get_style_context();
-    
+
     Gdk::RGBA bg_color("f0f0f0"); // Fix bg as a light gray
 
     // TODO: In Gtk+ 4, the state is not used in get_color
@@ -2159,7 +2158,7 @@ void FilterEffectsDialog::PrimitiveList::draw_connection(const Cairo::RefPtr<Cai
         } else {
             cr->set_source_rgb(0.0, 0.0, 0.0);
         }
-	
+
 	cr->rectangle(end_x-2, y1-2, 5, 5);
 	cr->fill_preserve();
 	cr->move_to(x1, y1);
@@ -2330,8 +2329,8 @@ bool FilterEffectsDialog::PrimitiveList::on_button_press_event(GdkEventButton* e
 
     if(_in_drag) {
         _scroll_connection = Glib::signal_timeout().connect(sigc::mem_fun(*this, &PrimitiveList::on_scroll_timeout), 150);
-        _autoscroll_x = 0;  
-        _autoscroll_y = 0; 
+        _autoscroll_x = 0;
+        _autoscroll_y = 0;
         get_selection()->select(path);
         return true;
     }
@@ -2347,10 +2346,10 @@ bool FilterEffectsDialog::PrimitiveList::on_motion_notify_event(GdkEventMotion* 
     Gdk::Rectangle vis;
     get_visible_rect(vis);
     int vis_x, vis_y;
-    
+
     int vis_x2, vis_y2;
     convert_widget_to_tree_coords(vis.get_x(), vis.get_y(), vis_x2, vis_y2);
-    
+
     convert_tree_to_widget_coords(vis.get_x(), vis.get_y(), vis_x, vis_y);
     const int top = vis_y + vis.get_height();
     const int right_edge = vis_x + vis.get_width();
@@ -2369,7 +2368,7 @@ bool FilterEffectsDialog::PrimitiveList::on_motion_notify_event(GdkEventMotion* 
         _autoscroll_y = 0;
 
     double e2 = ( e->x - vis_x2/2);
-    // horizontal scrolling 
+    // horizontal scrolling
     if(e2 < vis_x)
         _autoscroll_x = -(int)(speed + (vis_x - e2) / 5);
     else if(e2 < vis_x + limit)
@@ -2380,9 +2379,9 @@ bool FilterEffectsDialog::PrimitiveList::on_motion_notify_event(GdkEventMotion* 
         _autoscroll_x = speed;
     else
         _autoscroll_x = 0;
-    
-	  
- 
+
+
+
     queue_draw();
 
     return Gtk::TreeView::on_motion_notify_event(e);
@@ -2583,7 +2582,7 @@ bool FilterEffectsDialog::PrimitiveList::on_scroll_timeout()
     if(_autoscroll_y) {
         auto a = dynamic_cast<Gtk::ScrolledWindow*>(get_parent())->get_vadjustment();
         double v = a->get_value() + _autoscroll_y;
-        
+
 	if(v < 0)
             v = 0;
         if(v > a->get_upper() - a->get_page_size())
@@ -2594,11 +2593,11 @@ bool FilterEffectsDialog::PrimitiveList::on_scroll_timeout()
         queue_draw();
     }
 
-	   
+
     if(_autoscroll_x) {
         auto a_h = dynamic_cast<Gtk::ScrolledWindow*>(get_parent())->get_hadjustment();
         double h = a_h->get_value() + _autoscroll_x;
-        
+
 	if(h < 0)
             h = 0;
         if(h > a_h->get_upper() - a_h->get_page_size())
@@ -2608,7 +2607,7 @@ bool FilterEffectsDialog::PrimitiveList::on_scroll_timeout()
 
         queue_draw();
     }
-	   
+
     return true;
 }
 
@@ -2627,17 +2626,18 @@ int FilterEffectsDialog::PrimitiveList::get_input_type_width() const
 /*** FilterEffectsDialog ***/
 
 FilterEffectsDialog::FilterEffectsDialog()
-    : UI::Widget::Panel("/dialogs/filtereffects", SP_VERB_DIALOG_FILTER_EFFECTS),
-      _add_primitive_type(FPConverter),
-      _add_primitive(_("Add Effect:")),
-      _empty_settings(_("No effect selected"), Gtk::ALIGN_START),
-      _no_filter_selected(_("No filter selected"), Gtk::ALIGN_START),
-      _settings_initialized(false),
-      _locked(false),
-      _attr_lock(false),
-      _filter_modifier(*this),
-      _primitive_list(*this)
+    : DialogBase("/dialogs/filtereffects", SP_VERB_DIALOG_FILTER_EFFECTS)
+    , _add_primitive_type(FPConverter)
+    , _add_primitive(_("Add Effect:"))
+    , _empty_settings(_("No effect selected"), Gtk::ALIGN_START)
+    , _no_filter_selected(_("No filter selected"), Gtk::ALIGN_START)
+    , _settings_initialized(false)
+    , _locked(false)
+    , _attr_lock(false)
+    , _filter_modifier(*this)
+    , _primitive_list(*this)
 {
+    set_orientation(Gtk::ORIENTATION_VERTICAL);
     _settings = new Settings(*this, _settings_tab1, sigc::mem_fun(*this, &FilterEffectsDialog::set_attr_direct),
                              NR_FILTER_ENDPRIMITIVETYPE);
     _filter_general_settings = new Settings(*this, _settings_tab2, sigc::mem_fun(*this, &FilterEffectsDialog::set_filternode_attr),
@@ -2653,49 +2653,45 @@ FilterEffectsDialog::FilterEffectsDialog()
     Gtk::HBox* hb_prims = Gtk::manage(new Gtk::HBox);
     Gtk::VBox* vb_prims = Gtk::manage(new Gtk::VBox);
     Gtk::VBox* vb_desc = Gtk::manage(new Gtk::VBox);
-    
+
     Gtk::VBox* prim_vbox_p = Gtk::manage(new Gtk::VBox);
     Gtk::VBox* prim_vbox_i = Gtk::manage(new Gtk::VBox);
 
     sw_prims->add(_primitive_list);
-    
+
     prim_vbox_p->pack_start(*sw_prims, true, true);
     prim_vbox_i->pack_start(*vb_prims, true, true);
-    
+
     _primitive_box->pack1(*prim_vbox_p);
     _primitive_box->pack2(*prim_vbox_i, false, false);
-    
+
     hpaned->pack1(_filter_modifier);
     hpaned->pack2(*_primitive_box);
-    _getContents()->pack_start(*hpaned, true, true);
-    
+    pack_start(*hpaned, true, true);
+
     _infobox_icon.set_halign(Gtk::ALIGN_START);
     _infobox_icon.set_valign(Gtk::ALIGN_START);
     _infobox_desc.set_halign(Gtk::ALIGN_START);
     _infobox_desc.set_valign(Gtk::ALIGN_START);
     _infobox_desc.set_justify(Gtk::JUSTIFY_LEFT);
     _infobox_desc.set_line_wrap(true);
-    _infobox_desc.set_size_request(300, -1);
-    
+
     vb_desc->pack_start(_infobox_desc, true, true);
-    
+
     infobox->pack_start(_infobox_icon, false, false);
     infobox->pack_start(*vb_desc, true, true);
-    
-    //_sw_infobox->set_size_request(-1, -1);
-    _sw_infobox->set_size_request(300, -1);
+
     _sw_infobox->add(*infobox);
-    
-    //vb_prims->set_size_request(-1, 50);
+
     vb_prims->pack_start(*hb_prims, false, false);
     vb_prims->pack_start(*_sw_infobox, true, true);
-    
-    hb_prims->pack_start(_add_primitive, false, false);    
+
+    hb_prims->pack_start(_add_primitive, false, false);
     hb_prims->pack_start(_add_primitive_type, true, true);
-    _getContents()->pack_start(_settings_tabs, false, false);
+    pack_start(_settings_tabs, false, false);
     _settings_tabs.append_page(_settings_tab1, _("Effect parameters"));
     _settings_tabs.append_page(_settings_tab2, _("Filter General Settings"));
-    
+
     _primitive_list.signal_primitive_changed().connect(
         sigc::mem_fun(*this, &FilterEffectsDialog::update_settings_view));
     _filter_modifier.signal_filter_changed().connect(
@@ -2707,7 +2703,7 @@ FilterEffectsDialog::FilterEffectsDialog()
     sw_prims->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     sw_prims->set_shadow_type(Gtk::SHADOW_IN);
     _sw_infobox->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
-    
+
 //    al_settings->set_padding(0, 0, 12, 0);
 //    fr_settings->set_shadow_type(Gtk::SHADOW_NONE);
 //    ((Gtk::Label*)fr_settings->get_label_widget())->set_use_markup();
@@ -2715,10 +2711,13 @@ FilterEffectsDialog::FilterEffectsDialog()
     _primitive_list.set_menu(*this, sigc::mem_fun(*this, &FilterEffectsDialog::duplicate_primitive),
                                     sigc::mem_fun(_primitive_list, &PrimitiveList::remove_selected));
 
-    show_all_children();
     init_settings_widgets();
     _primitive_list.update();
     update_primitive_infobox();
+
+    show();
+    show_all_children();
+    update();
 }
 
 FilterEffectsDialog::~FilterEffectsDialog()
@@ -2727,9 +2726,15 @@ FilterEffectsDialog::~FilterEffectsDialog()
     delete _filter_general_settings;
 }
 
-void FilterEffectsDialog::setDesktop(SPDesktop *desktop)
-{ //
-    Panel::setDesktop(desktop);
+void FilterEffectsDialog::update()
+{
+    if (!_app) {
+        std::cerr << "FilterEffectsDialog::update(): _app is null" << std::endl;
+        return;
+    }
+
+    SPDesktop *desktop = getDesktop();
+
     _filter_modifier.setTargetDesktop(desktop);
 }
 
@@ -2740,8 +2745,6 @@ void FilterEffectsDialog::set_attrs_locked(const bool l)
 
 void FilterEffectsDialog::show_all_vfunc()
 {
-    UI::Widget::Panel::show_all_vfunc();
-
     update_settings_view();
 }
 
@@ -2971,16 +2974,16 @@ void FilterEffectsDialog::convolve_order_changed()
     _convolve_target->get_spinbuttons()[1]->get_adjustment()->set_upper(_convolve_order->get_spinbutton2().get_value() - 1);
 }
 
-bool number_or_empy(const Glib::ustring& text) { 
+bool number_or_empy(const Glib::ustring& text) {
     if (text.empty()) {
         return true;
     }
     double n = atof( text.c_str() );
     if (n == 0.0 && strcmp(text.c_str(), "0") != 0 && strcmp(text.c_str(), "0.0") != 0) {
-        return false; 
+        return false;
     }
     else {
-        return true; 
+        return true;
     }
 }
 
@@ -3078,7 +3081,7 @@ void FilterEffectsDialog::update_settings_view()
 //First Tab
 
     std::vector<Gtk::Widget*> vect1 = _settings_tab1.get_children();
-    for(auto & i : vect1) 
+    for(auto & i : vect1)
 	    i->hide();
     _empty_settings.show();
 
