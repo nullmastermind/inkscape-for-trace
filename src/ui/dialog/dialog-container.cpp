@@ -127,7 +127,7 @@ DialogBase *DialogContainer::dialog_factory(unsigned int code)
             return &Inkscape::UI::Dialog::CloneTiler::getInstance();
         case SP_VERB_DIALOG_DEBUG:
             return &Inkscape::UI::Dialog::Messages::getInstance();
-        case SP_VERB_DIALOG_NAMEDVIEW:
+        case SP_VERB_DIALOG_DOCPROPERTIES:
             return &Inkscape::UI::Dialog::DocumentProperties::getInstance();
         case SP_VERB_DIALOG_EXPORT:
             return &Inkscape::UI::Dialog::Export::getInstance();
@@ -183,7 +183,7 @@ DialogBase *DialogContainer::dialog_factory(unsigned int code)
             return &Inkscape::UI::Dialog::TraceDialog::getInstance();
         case SP_VERB_VIEW_ICON_PREVIEW:
             return &Inkscape::UI::Dialog::IconPreviewPanel::getInstance();
-        case SP_VERB_DIALOG_DISPLAY:
+        case SP_VERB_DIALOG_PREFERENCES:
         case SP_VERB_CONTEXT_SELECT_PREFS:
         case SP_VERB_CONTEXT_NODE_PREFS:
         case SP_VERB_CONTEXT_TWEAK_PREFS:
@@ -607,12 +607,12 @@ void DialogContainer::save_container_state()
     }
 
     Glib::KeyFile *keyfile = new Glib::KeyFile();
-    auto app = &ConcreteInkscapeApplication<Gtk::Application>::get_instance();
+    auto app = InkscapeApplication::instance();
 
     // Step 1: get all the container columns (in order, from the current container and all DialogWindow containers)
     std::vector<DialogMultipaned *> windows(1, columns);
 
-    for (auto const &window : app->get_windows()) {
+    for (auto const &window : app->gtk_app()->get_windows()) {
         DialogWindow *dialog_window = dynamic_cast<DialogWindow *>(window);
         if (dialog_window) {
             windows.push_back(dialog_window->get_container()->get_columns());
@@ -726,7 +726,7 @@ void DialogContainer::on_unmap()
     DialogWindow *window = dynamic_cast<DialogWindow *>(get_toplevel());
     if (!window) {
         std::vector<Gtk::Window *> windows =
-            (&ConcreteInkscapeApplication<Gtk::Application>::get_instance())->get_windows();
+            (InkscapeApplication::instance()->gtk_app())->get_windows();
         int inkscape_windows_count =
             std::count_if(windows.begin(), windows.end(), [](auto w) { return !dynamic_cast<DialogWindow *>(w); });
 

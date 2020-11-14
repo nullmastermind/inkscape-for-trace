@@ -856,7 +856,6 @@ Application::remove_desktop (SPDesktop * desktop)
         g_error("Attempted to remove desktop not in list.");
     }
 
-    desktop->setEventContext("");
 
     if (DESKTOP_IS_ACTIVE (desktop)) {
         signal_deactivate_desktop.emit(desktop);
@@ -875,6 +874,7 @@ Application::remove_desktop (SPDesktop * desktop)
                 desktop->getSelection()->clear();
         }
     }
+    desktop->setEventContext("");
 
     _desktops->erase(std::find(_desktops->begin(), _desktops->end(), desktop));
 

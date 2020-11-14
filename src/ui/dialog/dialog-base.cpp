@@ -37,7 +37,7 @@ DialogBase::DialogBase(gchar const *prefs_path, int verb_num)
     , _name("DialogBase")
     , _prefs_path(prefs_path)
     , _verb_num(verb_num)
-    , _app(&ConcreteInkscapeApplication<Gtk::Application>::get_instance())
+    , _app(InkscapeApplication::instance())
 {
     // Get translatable name for the dialog based on the verb
     Verb *verb = Verb::get(verb_num);

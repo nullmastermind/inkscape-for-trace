@@ -128,41 +128,26 @@ void TraceDialogImpl2::traceProcess(bool do_i_trace)
     bool use_autotrace = false;
     Inkscape::Trace::Autotrace::AutotraceTracingEngine ate; // TODO
 
-    if (type == _("Brightness cutoff"))
-      potraceType = Inkscape::Trace::Potrace::TRACE_BRIGHTNESS;
-    else if (type == _("Edge detection"))
-      potraceType = Inkscape::Trace::Potrace::TRACE_CANNY;
-    else if (type == _("Color quantization"))
-      potraceType = Inkscape::Trace::Potrace::TRACE_QUANT;
-    else if (type == _("Autotrace"))
-    {
-      // autotraceType = Inkscape::Trace::Autotrace::TRACE_CENTERLINE
-      use_autotrace = true;
-      ate.opts->color_count = 2;
-    }
-    else if (type == _("Centerline tracing (autotrace)"))
-    {
-      // autotraceType = Inkscape::Trace::Autotrace::TRACE_CENTERLINE
-      use_autotrace = true;
-      ate.opts->color_count = 2;
-      ate.opts->centerline = true;
-      ate.opts->preserve_width = true;
-    }
-    else if (type == _("Brightness steps"))
-      potraceType = Inkscape::Trace::Potrace::TRACE_BRIGHTNESS_MULTI;
-    else if (type == _("Colors"))
-      potraceType = Inkscape::Trace::Potrace::TRACE_QUANT_COLOR;
-    else if (type == _("Grays"))
-      potraceType = Inkscape::Trace::Potrace::TRACE_QUANT_MONO;
-    else if (type == _("Autotrace (slower)"))
-    {
-      // autotraceType = Inkscape::Trace::Autotrace::TRACE_CENTERLINE
-      use_autotrace = true;
-      ate.opts->color_count = (int)MS_scans->get_value() + 1;
-    }
-    else
-    {
-      g_warning("Should not happen!");
+
+    auto potraceType = trace_types.find(type);
+    assert(potraceType != trace_types.end());
+    switch (potraceType->second) {
+        case Inkscape::Trace::Potrace::AUTOTRACE_SINGLE:
+            use_autotrace = true;
+            ate.opts->color_count = 2;
+            break;
+        case Inkscape::Trace::Potrace::AUTOTRACE_CENTERLINE:
+            use_autotrace = true;
+            ate.opts->color_count = 2;
+            ate.opts->centerline = true;
+            ate.opts->preserve_width = true;
+            break;
+        case Inkscape::Trace::Potrace::AUTOTRACE_MULTI:
+            use_autotrace = true;
+            ate.opts->color_count = (int)MS_scans->get_value() + 1;
+            break;
+        default:
+            break;
     }
 
     ate.opts->filter_iterations = (int) SS_AT_FI_T->get_value();

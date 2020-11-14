@@ -185,7 +185,7 @@ static void sp_namedview_generate_old_grid(SPNamedView * /*nv*/, SPDocument *doc
         repr->removeAttribute("gridempopacity");
         repr->removeAttribute("gridempspacing");
 
-//        SPDocumentUndo::done(doc, SP_VERB_DIALOG_NAMEDVIEW, _("Create new grid from pre0.46 grid settings"));
+//        SPDocumentUndo::done(doc, SP_VERB_DIALOG_DOCPROPERTIES, _("Create new grid from pre0.46 grid settings"));
     }
 }
 

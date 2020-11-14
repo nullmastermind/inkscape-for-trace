@@ -656,7 +656,7 @@ void SPDesktopWidget::on_realize()
         unsigned app_menu_verbs[] = {
             SP_VERB_NONE,
             SP_VERB_DIALOG_INPUT,
-            SP_VERB_DIALOG_DISPLAY,
+            SP_VERB_DIALOG_PREFERENCES,
             SP_VERB_NONE,
             SP_VERB_HELP_ABOUT,
         };
@@ -923,7 +923,7 @@ SPDesktopWidget::shutdown()
 
     {
         // Delete all floating DialogWindows if there is only this desktop's window
-        auto app = &ConcreteInkscapeApplication<Gtk::Application>::get_instance();
+        auto app = InkscapeApplication::instance()->gtk_app();
         SPDesktop *next_desktop = nullptr;
 
         std::list<SPDesktop *> desktop_list;

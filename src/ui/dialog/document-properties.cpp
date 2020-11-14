@@ -87,7 +87,7 @@ DocumentProperties& DocumentProperties::getInstance()
 }
 
 DocumentProperties::DocumentProperties()
-    : DialogBase("/dialogs/documentoptions", SP_VERB_DIALOG_NAMEDVIEW)
+    : DialogBase("/dialogs/documentoptions", SP_VERB_DIALOG_DOCPROPERTIES)
     , _page_page(Gtk::manage(new UI::Widget::NotebookPage(1, 1, true, true)))
     , _page_guides(Gtk::manage(new UI::Widget::NotebookPage(1, 1)))
     , _page_snap(Gtk::manage(new UI::Widget::NotebookPage(1, 1)))
@@ -1573,7 +1573,7 @@ void DocumentProperties::onRemoveGrid()
         // delete the grid that corresponds with the selected tab
         // when the grid is deleted from SVG, the SPNamedview handler automatically deletes the object, so found_grid becomes an invalid pointer!
         found_grid->repr->parent()->removeChild(found_grid->repr);
-        DocumentUndo::done(dt->getDocument(), SP_VERB_DIALOG_NAMEDVIEW, _("Remove grid"));
+        DocumentUndo::done(dt->getDocument(), SP_VERB_DIALOG_DOCPROPERTIES, _("Remove grid"));
     }
 }
 

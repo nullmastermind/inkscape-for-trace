@@ -59,7 +59,7 @@ protected:
     std::string _name;               // Gtk widget name (must be set!)
     Glib::ustring const _prefs_path; // Stores characteristic path for loading/saving the dialog position.
     int _verb_num;                   // Dialog associated verb value
-    ConcreteInkscapeApplication<Gtk::Application> *_app; // Used for state management
+    InkscapeApplication *_app; // Used for state management
 
 private:
     bool blink_off(); // timer callback

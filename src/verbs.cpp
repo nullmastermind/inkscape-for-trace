@@ -1972,11 +1972,11 @@ void DialogVerb::perform(SPAction *action, void *data)
     DialogContainer *container = dt->getContainer();
 
     switch (reinterpret_cast<std::size_t>(data)) {
-        case SP_VERB_DIALOG_DISPLAY:
-            container->new_floating_dialog(SP_VERB_DIALOG_DISPLAY);
+        case SP_VERB_DIALOG_PREFERENCES:
+            container->new_floating_dialog(SP_VERB_DIALOG_PREFERENCES);
             break;
         case SP_VERB_DIALOG_PROTOTYPE:
-        case SP_VERB_DIALOG_NAMEDVIEW:
+        case SP_VERB_DIALOG_DOCPROPERTIES:
         case SP_VERB_DIALOG_FILL_STROKE:
         case SP_VERB_DIALOG_GLYPHS:
         case SP_VERB_DIALOG_SWATCHES:
@@ -2811,8 +2811,15 @@ Verb *Verb::_base_verbs[] = {
     // new ZoomVerb(SP_VERB_VIEW_COLOR_MODE_NORMAL, "ViewColorModeNormal", N_("_Normal"),
     //              N_("Switch to normal color display mode"), nullptr),
     // new ZoomVerb(SP_VERB_VIEW_COLOR_MODE_GRAYSCALE, "ViewColorModeGrayscale", N_("_Grayscale"),
+    new ZoomVerb(SP_VERB_VIEW_ICON_PREVIEW, "ViewIconPreview", N_("Icon Preview"), N_("Preview Icon"),
+                 INKSCAPE_ICON("icon-preview")),
 
     new DialogVerb(SP_VERB_DIALOG_PROTOTYPE, "DialogPrototype", N_("Prototype..."), N_("Prototype Dialog"),
+                   INKSCAPE_ICON("document-properties")),
+    new DialogVerb(SP_VERB_DIALOG_PREFERENCES, "DialogPreferences", N_("P_references"), N_("Edit global Inkscape preferences"),
+                   INKSCAPE_ICON("preferences-system")),
+    new DialogVerb(SP_VERB_DIALOG_DOCPROPERTIES, "DialogDocumentProperties", N_("_Document Properties..."), 
+                   N_("Edit properties of this document (to be saved with the document)"), 
                    INKSCAPE_ICON("document-properties")),
     new DialogVerb(SP_VERB_DIALOG_FILL_STROKE, "DialogFillStroke", N_("_Fill and Stroke..."),
                    N_("Edit objects' colors, gradients, arrowheads, and other fill and stroke properties..."),

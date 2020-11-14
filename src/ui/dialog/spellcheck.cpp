@@ -79,7 +79,7 @@ std::vector<LanguagePair> SpellCheck::get_available_langs()
 static void show_spellcheck_preferences_dialog()
 {
     Inkscape::Preferences::get()->setInt("/dialogs/preferences/page", PREFS_PAGE_SPELLCHECK);
-    SP_ACTIVE_DESKTOP->getContainer()->new_dialog(SP_VERB_DIALOG_DISPLAY);
+    SP_ACTIVE_DESKTOP->getContainer()->new_dialog(SP_VERB_DIALOG_PREFERENCES);
 }
 
 SpellCheck::SpellCheck()

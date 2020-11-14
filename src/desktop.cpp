@@ -561,7 +561,6 @@ void SPDesktop::setEventContext(const std::string& toolName)
     }
 
     if (toolName.empty()) {
-        std::cerr << "SPDesktop::setEventContext: No toolname!" << std::endl;
         event_context = nullptr;
     } else {
         event_context = ToolFactory::createObject(toolName);
@@ -1302,11 +1301,7 @@ SPDesktop::getToplevel( )
 InkscapeWindow*
 SPDesktop::getInkscapeWindow( )
 {
-    InkscapeWindow* window = dynamic_cast<InkscapeWindow*>(_widget->window);
-    if (!window) {
-        std::cerr << "SPDesktop::getInkscapeWindow: Failed to get window." << std::endl;
-    }
-    return window;
+    return dynamic_cast<InkscapeWindow*>(_widget->window);
 }
 
 void

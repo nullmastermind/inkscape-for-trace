@@ -59,6 +59,7 @@ DialogNotebook::DialogNotebook(DialogContainer *container)
     // ============= Notebook menu ==============
     _menu.set_title("NotebookOptions");
     _notebook.set_group_name("InkscapeDialogGroup");
+    _notebook.set_scrollable(true);
 
     Gtk::MenuItem *new_menu_item = nullptr;
 

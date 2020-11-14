@@ -184,7 +184,7 @@ void InkscapePreferences::remove_highlight(Gtk::Label *label)
 }
 
 InkscapePreferences::InkscapePreferences()
-    : DialogBase("/dialogs/preferences", SP_VERB_DIALOG_DISPLAY),
+    : DialogBase("/dialogs/preferences", SP_VERB_DIALOG_PREFERENCES),
       _minimum_width(0),
       _minimum_height(0),
       _natural_width(0),

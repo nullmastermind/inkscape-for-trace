@@ -46,7 +46,7 @@ class DialogContainer;
 // Create a dialog window and move page from old notebook.
 DialogWindow::DialogWindow(Gtk::Widget *page)
     : Gtk::ApplicationWindow()
-    , _app(&ConcreteInkscapeApplication<Gtk::Application>::get_instance())
+    , _app(InkscapeApplication::instance())
     , _title(_("Dialog Window"))
 {
     // ============ Intialization ===============
@@ -69,7 +69,7 @@ DialogWindow::DialogWindow(Gtk::Widget *page)
         std::cerr << "DialogWindow::DialogWindow(): _app is null" << std::endl;
         return;
     }
-    _app->add_window(*this);
+    _app->gtk_app()->add_window(*this);
 
     // ============ Theming: icons ==============
 

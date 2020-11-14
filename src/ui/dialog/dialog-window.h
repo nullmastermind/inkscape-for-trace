@@ -49,7 +49,7 @@ public:
     DialogContainer *get_container() { return _container; }
 
 private:
-    ConcreteInkscapeApplication<Gtk::Application> *_app;
+    InkscapeApplication *_app;
     DialogContainer *_container;
     Glib::ustring _title;
 };

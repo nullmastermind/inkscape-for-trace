@@ -276,22 +276,22 @@ public:
     void _setDisplayMode(Inkscape::RenderMode mode);
     bool setDisplayModeNormal()
     {
-        _setDisplayMode(Inkscape::RENDERMODE_NORMAL);
+        _setDisplayMode(Inkscape::RenderMode::NORMAL);
         return true;
     }
     bool setDisplayModeNoFilters()
     {
-        _setDisplayMode(Inkscape::RENDERMODE_NO_FILTERS);
+        _setDisplayMode(Inkscape::RenderMode::NO_FILTERS);
         return true;
     }
     bool setDisplayModeOutline()
     {
-        _setDisplayMode(Inkscape::RENDERMODE_OUTLINE);
+        _setDisplayMode(Inkscape::RenderMode::OUTLINE);
         return true;
     }
     bool setDisplayModeVisibleHairlines()
     {
-        _setDisplayMode(Inkscape::RENDERMODE_VISIBLE_HAIRLINES);
+        _setDisplayMode(Inkscape::RenderMode::VISIBLE_HAIRLINES);
         return true;
     }
     bool displayModeToggle();
@@ -301,12 +301,12 @@ public:
     void _setDisplayColorMode(Inkscape::ColorMode mode);
     bool setDisplayColorModeNormal()
     {
-        _setDisplayColorMode(Inkscape::COLORMODE_NORMAL);
+        _setDisplayColorMode(Inkscape::ColorMode::NORMAL);
         return true;
     }
     bool setDisplayColorModeGrayscale()
     {
-        _setDisplayColorMode(Inkscape::COLORMODE_GRAYSCALE);
+        _setDisplayColorMode(Inkscape::ColorMode::GRAYSCALE);
         return true;
     }
 //    void setDisplayColorModePrintColorsPreview() {

@@ -558,7 +558,7 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
 #ifdef GDK_WINDOWING_QUARTZ
                             // for moving menu items to "Inkscape" menu
                             switch (verb->get_code()) {
-                                case SP_VERB_DIALOG_DISPLAY:
+                                case SP_VERB_DIALOG_PREFERENCES:
                                 case SP_VERB_DIALOG_INPUT:
                                 case SP_VERB_HELP_ABOUT:
                                     menuitems.emplace_back(std::make_pair(verb->get_code(), menuitem), view);
