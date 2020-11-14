@@ -1252,11 +1252,21 @@ void InkscapePreferences::toggleSymbolic()
     INKSCAPE.signal_change_theme.emit();
 }
 
+bool InkscapePreferences::contrastChange(GdkEventButton *button_event)
+{
+    themeChange();
+    return true;
+}
+
 void InkscapePreferences::themeChange()
 {
     Gtk::Window *window = SP_ACTIVE_DESKTOP->getToplevel();
     if (window) {
 
+        auto const screen = Gdk::Screen::get_default();
+        if (INKSCAPE.themeprovider) {
+            Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.contrastthemeprovider);
+        }
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         Glib::ustring current_theme = prefs->getString("/theme/gtkTheme");
         auto settings = Gtk::Settings::get_default();
@@ -1322,6 +1332,7 @@ void InkscapePreferences::preferDarkThemeChange()
             window->get_style_context()->remove_class("dark");
         }
         INKSCAPE.signal_change_theme.emit();
+        INKSCAPE.add_gtk_css(true);
         resetIconsColors(toggled);
     }
 }
@@ -1667,6 +1678,12 @@ void InkscapePreferences::initPageUI()
     }
     _sys_user_themes_dir_copy.init(g_build_filename(g_get_user_data_dir(), "themes", NULL), _("Open themes folder"));
     _page_theme.add_line(true, _("User themes:"), _sys_user_themes_dir_copy, "", _("Location of the user’s themes"), true, Gtk::manage(new Gtk::Box()));
+    _contrast_theme.init("/theme/contrast", 1, 10, 1, 2, 10, 1);
+    Gtk::Widget *space = new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL);
+    space->set_size_request(_sb_width / 3, -1);
+    _page_theme.add_line(false, _("_Contrast:"), _contrast_theme, "",
+                         _("Make background brighter or darker to reduce contrast"), true, space);
+    _contrast_theme.signal_button_release_event().connect(sigc::mem_fun(*this, &InkscapePreferences::contrastChange));
     _page_theme.add_line(true, "", _dark_theme, "", _("Use dark theme"), true);
 
     if (dark_themes[current_theme]) {

@@ -249,6 +249,7 @@ protected:
     UI::Widget::PrefOpenFolder _sys_user_icons_dir_copy;
     UI::Widget::PrefCombo _icon_theme;
     UI::Widget::PrefCheckButton _dark_theme;
+    UI::Widget::PrefSlider _contrast_theme;
     UI::Widget::PrefCheckButton _symbolic_icons;
     UI::Widget::PrefCheckButton _symbolic_base_colors;
     UI::Widget::PrefColorPicker _symbolic_base_color;
@@ -651,6 +652,7 @@ private:
   Gtk::TreeModel::iterator searchRows(char const* srch, Gtk::TreeModel::iterator& iter, Gtk::TreeModel::Children list_model_childern);
   void themeChange();
   void preferDarkThemeChange();
+  bool contrastChange(GdkEventButton* button_event);
   void symbolicThemeCheck();
   void toggleSymbolic();
   void changeIconsColors();

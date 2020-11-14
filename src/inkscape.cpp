@@ -30,6 +30,7 @@
 #include <glibmm/i18n.h>
 #include <glibmm/miscutils.h>
 #include <glibmm/convert.h>
+#include <regex>
 
 #include "desktop.h"
 #include "device-manager.h"
@@ -360,6 +361,56 @@ Glib::ustring Application::get_symbolic_colors()
     return css_str;
 }
 
+std::string sp_get_contrasted_color(std::string cssstring, std::string define, std::string define_b,
+                                    double contrast)
+{
+    std::smatch m;
+    std::regex e("@define-color " + define + " ([^;]*)");
+    std::regex_search(cssstring, m, e);
+    std::smatch n;
+    std::regex f("@define-color " + define_b + " ([^;]*)");
+    std::regex_search(cssstring, n, f);
+    std::string out = "";
+    if (m.size() >= 1 && n.size() >= 1) {
+        out = "@define-color " + define + " mix(" + m[1].str() + ", " + n[1].str() + ", " + Glib::ustring::format(contrast) + ");\n";
+    }
+    return out;
+}
+
+std::string sp_tweak_background_colors(std::string cssstring, double crossfade)
+{
+    std::regex r("(\n[^\n]*(engine|image/|-gtk-icon-source|resource)[^\n]*)");
+    std::string sub = "";
+    cssstring = std::regex_replace(cssstring, r, sub);
+    std::regex f("background-color *?:(?!( *?|)(inherit|unset|initial|none))(.*?);");
+    sub = "background-color:shade($3," + Glib::ustring::format(crossfade) + ");";
+    cssstring = std::regex_replace(cssstring, f, sub);
+    std::regex g("background-image *?:(?!( *?|)(inherit|unset|initial|none))(.*?\\)) *?;");
+    if (crossfade > 1) {
+        crossfade = std::clamp((int)((2 - crossfade) * 80), 0, 100);
+        sub = "background-image:cross-fade(" + Glib::ustring::format(crossfade) + "% image($3), image(@theme_bg_color));";
+    } else {
+        crossfade = std::clamp((int)((1 - crossfade) * 80), 0 , 100);
+        sub = "background-image:cross-fade(" + Glib::ustring::format(crossfade) + "% image(@theme_bg_color), image($3));";
+    }  
+    
+    return  std::regex_replace(cssstring, g, sub);
+}
+
+/* static void
+show_parsing_error (GtkCssProvider        *provider,
+                    GtkCssSection         *section,
+                    GError                *error,
+                    void *)
+{
+
+  if (g_error_matches (error, GTK_CSS_PROVIDER_ERROR, GTK_CSS_PROVIDER_ERROR_DEPRECATED)) {
+      std::cout << "Gtk WARNING :: There is a warning parsing theme CSS:: " << error->message << std::endl;
+  } else {
+      std::cout << "Gtk ERROR :: There is a error parsing theme CSS:: " << error->message << std::endl;
+  }
+} */
+
 /**
  * \brief Add our CSS style sheets
  * @param only_providers: Apply only the providers part, from inkscape preferences::theme change, no need to reaply
@@ -401,6 +452,43 @@ void Application::add_gtk_css(bool only_providers)
     g_free(gtkThemeName);
     g_free(gtkIconThemeName);
 
+    int themecontrast = prefs->getInt("/theme/contrast", 10);
+    if (!contrastthemeprovider) {
+        contrastthemeprovider = Gtk::CssProvider::create();
+        // We can uncoment this line to remove warnings and errors on the theme
+        //g_signal_connect (G_OBJECT(themeprovider->gobj()), "parsing-error", G_CALLBACK (show_parsing_error), nullptr);
+    }
+    // we use contast only if is setup (!= 10)
+    if (themecontrast < 10) {
+        Glib::ustring css_contrast = "";
+        double contrast = (10 - themecontrast) / 40.0;
+        double shade = 1 - contrast;
+        const gchar *variant = nullptr;
+        if (prefs->getBool("/theme/darkTheme", false)) {
+            variant = "dark";
+            contrast *= 2.5;
+            shade = 1 + contrast;
+        }
+        GtkCssProvider *currentthemeprovider =
+            gtk_css_provider_get_named(prefs->getString("/theme/gtkTheme").c_str(), variant);
+        std::string cssstring = gtk_css_provider_to_string(currentthemeprovider);
+        std::string appenddefined = ""; 
+        if (contrast) {
+            appenddefined  = sp_get_contrasted_color(cssstring, "theme_bg_color", "theme_fg_color", contrast);
+            appenddefined += sp_get_contrasted_color(cssstring, "theme_base_color", "theme_text_color", contrast);
+            appenddefined += sp_get_contrasted_color(cssstring, "theme_selected_bg_color", "theme_selected_fg_color", contrast);
+            cssstring = sp_tweak_background_colors(cssstring, shade);
+            cssstring = cssstring + appenddefined;
+        }
+        if (!cssstring.empty()) {
+            // std::cout << cssstring << std::endl;
+            // Use c format allow parse with errors or warnings
+            gtk_css_provider_load_from_data (contrastthemeprovider->gobj(), cssstring.c_str(), -1, nullptr);
+            Gtk::StyleContext::add_provider_for_screen(screen, contrastthemeprovider, GTK_STYLE_PROVIDER_PRIORITY_SETTINGS);
+        }
+    } else if (contrastthemeprovider) {
+        Gtk::StyleContext::remove_provider_for_screen(screen, contrastthemeprovider);
+    }
     Glib::ustring style = get_filename(UIS, "style.css");
     if (!style.empty()) {
         if (styleprovider) {

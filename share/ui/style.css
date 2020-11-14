@@ -194,11 +194,15 @@ iconview *:hover {
     color: @theme_fg_color;
 }
 
+#LPESelectorFlowBox flowboxchild image,
+#LPESelectorFlowBox flowboxchild label {
+    background-color: transparent;
+    background-image: image(transparent);
+}
+
 #LPESelectorFlowBox flowboxchild:selected image,
 #LPESelectorFlowBox flowboxchild:selected label {
     color: @theme_selected_fg_color;
-    background-color: @theme_selected_bg_color;
-    background-image: image(@theme_selected_bg_color);
 }
 
 #LPESelectorFlowBox *:selected #LPESelectorEffectFavTop,
