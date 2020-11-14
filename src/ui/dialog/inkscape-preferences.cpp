@@ -1264,8 +1264,11 @@ void InkscapePreferences::themeChange()
     if (window) {
 
         auto const screen = Gdk::Screen::get_default();
-        if (INKSCAPE.themeprovider) {
+        if (INKSCAPE.contrastthemeprovider) {
             Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.contrastthemeprovider);
+        }
+        if (INKSCAPE.themeprovider) {
+            Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.themeprovider);
         }
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         Glib::ustring current_theme = prefs->getString("/theme/gtkTheme");
