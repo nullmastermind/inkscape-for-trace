@@ -121,6 +121,9 @@ void ScalarParam::param_transform_multiply(Geom::Affine const &postmul, bool set
 
 void ScalarParam::param_set_value(gdouble val)
 {
+    if (value != val) {
+        param_effect->refresh_widgets = true;
+    }
     value = val;
     if (integer)
         value = round(value);
