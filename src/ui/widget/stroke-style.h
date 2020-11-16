@@ -134,6 +134,7 @@ private:
     void setPaintOrderButtons(Gtk::ToggleButton *active);
     void scaleLine();
     void setScaledDash(SPCSSAttr *css, int ndash, double *dash, double offset, double scale);
+    bool isHairlineSelected() const;
 
     StrokeStyleButton * makeRadioButton(Gtk::RadioButtonGroup &grp,
                                         char const            *icon,
@@ -162,6 +163,7 @@ private:
     Inkscape::UI::Widget::SpinButton *miterLimitSpin;
     Inkscape::UI::Widget::SpinButton *widthSpin;
     Inkscape::UI::Widget::UnitMenu *unitSelector;
+    //Gtk::ToggleButton *hairline;
     StrokeStyleButton *joinMiter;
     StrokeStyleButton *joinRound;
     StrokeStyleButton *joinBevel;

@@ -773,6 +773,8 @@ objects_query_strokewidth (const std::vector<SPItem*> &objects, SPStyle *style_r
     bool same_sw = true;
     bool noneSet = true; // is stroke set to none?
 
+    int n_hairline = 0;
+
     int n_stroked = 0;
 
     for (auto obj : objects) {
@@ -789,6 +791,10 @@ objects_query_strokewidth (const std::vector<SPItem*> &objects, SPStyle *style_r
         }
 
         noneSet &= style->stroke.isNone();
+
+        if (style->stroke_extensions.hairline) {
+            n_hairline++;
+        }
 
         Geom::Affine i2d = item->i2dt_affine();
         double sw = style->stroke_width.computed * i2d.descrim();
@@ -808,6 +814,7 @@ objects_query_strokewidth (const std::vector<SPItem*> &objects, SPStyle *style_r
 
     style_res->stroke_width.computed = avgwidth;
     style_res->stroke_width.set = true;
+    style_res->stroke_extensions.hairline = (n_hairline > n_stroked / 2); // More than half are hairlines.
     style_res->stroke.noneSet = noneSet; // Will only be true if none of the selected objects has it's stroke set.
 
     if (n_stroked == 0) {

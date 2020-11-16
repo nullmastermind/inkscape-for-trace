@@ -162,6 +162,7 @@ StrokeStyle::StrokeStyle() :
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
     unitSelector->addUnit(*unit_table.getUnit("%"));
+    unitSelector->append("hairline");
     _old_unit = unitSelector->getUnit();
     if (desktop) {
         unitSelector->setUnit(desktop->getNamedView()->display_units->abbr);
@@ -174,6 +175,7 @@ StrokeStyle::StrokeStyle() :
 
     hb->pack_start(*us, FALSE, FALSE, 0);
     (*widthAdj)->signal_value_changed().connect(sigc::mem_fun(*this, &StrokeStyle::widthChangedCB));
+
     i++;
 
     /* Dash */
@@ -490,6 +492,20 @@ void StrokeStyle::markerSelectCB(MarkerComboBox *marker_combo, StrokeStyle *spw,
  */
 void StrokeStyle::unitChangedCB()
 {
+    // If the unit selector is set to hairline, don't do the normal conversion.
+    if (isHairlineSelected()) {
+        scaleLine();
+        return;
+    }
+
+    // Remove the non-scaling-stroke effect and the hairline extensions
+    SPCSSAttr *css = sp_repr_css_attr_new();
+    sp_repr_css_unset_property(css, "vector-effect");
+    sp_repr_css_unset_property(css, "-inkscape-stroke");
+    sp_desktop_set_style(desktop, css);
+    sp_repr_css_attr_unref(css);
+    css = nullptr;
+
     Inkscape::Util::Unit const *new_unit = unitSelector->getUnit();
     if (new_unit->type == Inkscape::Util::UNIT_TYPE_DIMENSIONLESS) {
         widthSpin->set_value(100);
@@ -684,6 +700,8 @@ StrokeStyle::updateLine()
 
         if (result_sw == QUERY_STYLE_MULTIPLE_AVERAGED) {
             unitSelector->setUnit("%");
+        } else if (query.stroke_extensions.hairline) {
+            unitSelector->setUnit("hairline");
         } else {
             // same width, or only one object; no sense to keep percent, switch to absolute
             Inkscape::Util::Unit const *tempunit = unitSelector->getUnit();
@@ -694,7 +712,9 @@ StrokeStyle::updateLine()
 
         Inkscape::Util::Unit const *unit = unitSelector->getUnit();
 
-        if (unit->type == Inkscape::Util::UNIT_TYPE_LINEAR) {
+        if (query.stroke_extensions.hairline) {
+            (*widthAdj)->set_value(0);
+        } else if (unit->type == Inkscape::Util::UNIT_TYPE_LINEAR) {
             double avgwidth = Inkscape::Util::Quantity::convert(query.stroke_width.computed, "px", unit);
             (*widthAdj)->set_value(avgwidth);
         } else {
@@ -702,20 +722,26 @@ StrokeStyle::updateLine()
         }
 
         // if none of the selected objects has a stroke, than quite some controls should be disabled
+        // These options should also be disabled for hairlines, since they don't make sense for
+        // 0-width lines.
         // The markers might still be shown though, so these will not be disabled
         bool enabled = (result_sw != QUERY_STYLE_NOTHING) && !targPaint.isNoneSet();
+
         /* No objects stroked, set insensitive */
-        joinMiter->set_sensitive(enabled);
-        joinRound->set_sensitive(enabled);
-        joinBevel->set_sensitive(enabled);
+        widthSpin->set_sensitive(enabled && !query.stroke_extensions.hairline);
+        unitSelector->set_sensitive(enabled);
 
-        miterLimitSpin->set_sensitive(enabled);
+        joinMiter->set_sensitive(enabled && !query.stroke_extensions.hairline);
+        joinRound->set_sensitive(enabled && !query.stroke_extensions.hairline);
+        joinBevel->set_sensitive(enabled && !query.stroke_extensions.hairline);
 
-        capButt->set_sensitive(enabled);
-        capRound->set_sensitive(enabled);
-        capSquare->set_sensitive(enabled);
+        miterLimitSpin->set_sensitive(enabled && !query.stroke_extensions.hairline);
 
-        dashSelector->set_sensitive(enabled);
+        capButt->set_sensitive(enabled && !query.stroke_extensions.hairline);
+        capRound->set_sensitive(enabled && !query.stroke_extensions.hairline);
+        capSquare->set_sensitive(enabled && !query.stroke_extensions.hairline);
+
+        dashSelector->set_sensitive(enabled && !query.stroke_extensions.hairline);
     }
 
     if (result_ml != QUERY_STYLE_NOTHING)
@@ -829,10 +855,20 @@ StrokeStyle::scaleLine()
             /* Set stroke width */
             const double width = calcScaleLineWidth(width_typed, (*i), unit);
 
-            {
+            /* For renderers that don't understand -inkscape-stroke:hairline, fall back to 1px non-scaling */
+            if (isHairlineSelected()) {
+                const double width1px = calcScaleLineWidth(1, (*i), unit);
+                Inkscape::CSSOStringStream os_width;
+                os_width << width1px;
+                sp_repr_css_set_property(css, "stroke-width", os_width.str().c_str());
+                sp_repr_css_set_property(css, "vector-effect", "non-scaling-stroke");
+                sp_repr_css_set_property(css, "-inkscape-stroke", "hairline");
+            } else {
                 Inkscape::CSSOStringStream os_width;
                 os_width << width;
                 sp_repr_css_set_property(css, "stroke-width", os_width.str().c_str());
+                sp_repr_css_unset_property(css, "vector-effect");
+                sp_repr_css_unset_property(css, "-inkscape-stroke");
             }
 
             {
@@ -873,6 +909,16 @@ StrokeStyle::scaleLine()
                        _("Set stroke style"));
 
     update = false;
+}
+
+/**
+ * Returns whether the currently selected stroke width is "hairline"
+ *
+ */
+bool
+StrokeStyle::isHairlineSelected() const
+{
+    return unitSelector->get_active_text() == "hairline";
 }
 
 /**
@@ -970,7 +1016,7 @@ void
 StrokeStyle::setJoinButtons(Gtk::ToggleButton *active)
 {
     joinMiter->set_active(active == joinMiter);
-    miterLimitSpin->set_sensitive(active == joinMiter);
+    miterLimitSpin->set_sensitive(active == joinMiter && !isHairlineSelected());
     joinRound->set_active(active == joinRound);
     joinBevel->set_active(active == joinBevel);
 }
@@ -1060,11 +1106,13 @@ StrokeStyle::updateAllMarkers(std::vector<SPItem*> const &objects, bool skip_und
         }
 
         // Per SVG spec, text objects cannot have markers; disable combobox if only texts are selected
-        combo->set_sensitive(!all_texts);
+        // They should also be disabled for hairlines, since scaling against a 0-width line doesn't
+        // make sense.
+        combo->set_sensitive(!all_texts && !isHairlineSelected());
 
         SPObject *marker = nullptr;
 
-        if (!all_texts) {
+        if (!all_texts && isHairlineSelected()) {
             for (SPObject *object : simplified_list) {
                 char const *value = object->style->marker_ptrs[markertype.loc]->value();
 

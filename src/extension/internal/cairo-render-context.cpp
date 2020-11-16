@@ -1457,7 +1457,14 @@ CairoRenderContext::_setStrokeStyle(SPStyle const *style, Geom::OptRect const &p
         cairo_set_dash(_cr, nullptr, 0, 0.0);  // disable dashing
     }
 
-    cairo_set_line_width(_cr, style->stroke_width.computed);
+    // This allows hairlines to be drawn properly in PDF, PS, Win32-Print, etc.
+    // It requires the following pull request in Cairo:
+    // https://gitlab.freedesktop.org/cairo/cairo/merge_requests/21
+    if (style->stroke_extensions.hairline) {
+        ink_cairo_set_hairline(_cr, true);
+    } else {
+        cairo_set_line_width(_cr, style->stroke_width.computed);
+    }
 
     // set line join type
     cairo_line_join_t join = CAIRO_LINE_JOIN_MITER;
@@ -1576,8 +1583,8 @@ CairoRenderContext::renderPathVector(Geom::PathVector const & pathv, SPStyle con
 
     bool no_fill = style->fill.isNone() || style->fill_opacity.value == 0 ||
         order == STROKE_ONLY;
-    bool no_stroke = style->stroke.isNone() || style->stroke_width.computed < 1e-9 ||
-                    style->stroke_opacity.value == 0 || order == FILL_ONLY;
+    bool no_stroke = style->stroke.isNone() || (!style->stroke_extensions.hairline && style->stroke_width.computed < 1e-9) ||
+                     style->stroke_opacity.value == 0 || order == FILL_ONLY;
 
     if (no_fill && no_stroke)
         return true;

@@ -441,6 +441,7 @@ static SPStyleProp const props[] = {
     {SPAttr::STROKE_MITERLIMIT, "stroke-miterlimit"},
     {SPAttr::STROKE_DASHARRAY, "stroke-dasharray"},
     {SPAttr::STROKE_DASHOFFSET, "stroke-dashoffset"},
+    {SPAttr::STROKE_EXTENSIONS, "-inkscape-stroke"},
     {SPAttr::MARKER, "marker"},
     {SPAttr::MARKER_END, "marker-end"},
     {SPAttr::MARKER_MID, "marker-mid"},

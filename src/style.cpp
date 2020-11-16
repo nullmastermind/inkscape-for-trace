@@ -168,6 +168,7 @@ class SPStylePropHelper {
         REGISTER_PROPERTY(SPAttr::STROKE_DASHARRAY, stroke_dasharray, "stroke-dasharray");
         REGISTER_PROPERTY(SPAttr::STROKE_DASHOFFSET, stroke_dashoffset, "stroke-dashoffset");
         REGISTER_PROPERTY(SPAttr::STROKE_OPACITY, stroke_opacity, "stroke-opacity");
+        REGISTER_PROPERTY(SPAttr::STROKE_EXTENSIONS, stroke_extensions, "-inkscape-stroke");
 
         REGISTER_PROPERTY(SPAttr::MARKER, marker, "marker");
         REGISTER_PROPERTY(SPAttr::MARKER_START, marker_start, "marker-start");
@@ -365,6 +366,8 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     stroke_dashoffset(      ),  // SPILength for now
 
     stroke_opacity(         ),
+
+    stroke_extensions(      ),
 
     marker(                 ),  // SPIString
     marker_start(           ),  // SPIString

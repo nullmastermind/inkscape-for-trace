@@ -169,7 +169,9 @@ DrawingShape::_renderStroke(DrawingContext &dc)
     dc.transform(_ctm);
 
     bool has_stroke = _nrstyle.prepareStroke(dc, _item_bbox, _stroke_pattern);
-    has_stroke &= (_nrstyle.stroke_width != 0);
+    if (!_style->stroke_extensions.hairline) {
+        has_stroke &= (_nrstyle.stroke_width != 0);
+    }
 
     if( has_stroke ) {
         // TODO: remove segments outside of bbox when no dashes present
@@ -180,14 +182,12 @@ DrawingShape::_renderStroke(DrawingContext &dc)
         }
         _nrstyle.applyStroke(dc);
 
-        // If the draw mode is set to visible hairlines, don't let them get smaller than half a
-        // pixel.
-        if (_drawing.visibleHairlines()) {
-            double half_pixel_size = 0.5, trash = 0.5;
-            dc.device_to_user_distance(half_pixel_size, trash);
-            if (_nrstyle.stroke_width < half_pixel_size) {
-                dc.setLineWidth(half_pixel_size);
-            }
+        // If the stroke is a hairline, set it to exactly 1px on screen.
+        // If visible hairline mode is on, make sure the line is at least 1px.
+        if (_drawing.visibleHairlines() || _style->stroke_extensions.hairline) {
+            double pixel_size_x = 1.0, pixel_size_y = 1.0;
+            dc.device_to_user_distance(pixel_size_x, pixel_size_y);
+            dc.setHairline(_style->stroke_extensions.hairline || _nrstyle.stroke_width < std::min(pixel_size_x, pixel_size_y));
         }
 
         dc.strokePreserve();
@@ -246,7 +246,7 @@ DrawingShape::_renderItem(DrawingContext &dc, Geom::IntRect const &area, unsigne
             // to render svg:pattern
             bool has_fill   = _nrstyle.prepareFill(dc, _item_bbox, _fill_pattern);
             bool has_stroke = _nrstyle.prepareStroke(dc, _item_bbox, _stroke_pattern);
-            has_stroke &= (_nrstyle.stroke_width != 0);
+            has_stroke &= (_nrstyle.stroke_width != 0 || _nrstyle.hairline == true);
             if (has_fill || has_stroke) {
                 dc.path(_curve->get_pathvector());
                 // TODO: remove segments outside of bbox when no dashes present

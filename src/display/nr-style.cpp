@@ -73,6 +73,7 @@ NRStyle::NRStyle()
     : fill()
     , stroke()
     , stroke_width(0.0)
+    , hairline(false)
     , miter_limit(0.0)
     , n_dash(0)
     , dash(nullptr)
@@ -170,6 +171,7 @@ void NRStyle::set(SPStyle *style, SPStyle *context_style)
     stroke.set(style_stroke);
     stroke.opacity = SP_SCALE24_TO_FLOAT(style->stroke_opacity.value);
     stroke_width = style->stroke_width.computed;
+    hairline = style->stroke_extensions.hairline;
     switch (style->stroke_linecap.computed) {
         case SP_STROKE_LINECAP_ROUND:
             line_cap = CAIRO_LINE_CAP_ROUND;
@@ -391,6 +393,7 @@ void NRStyle::applyStroke(Inkscape::DrawingContext &dc)
 {
     dc.setSource(stroke_pattern);
     dc.setLineWidth(stroke_width);
+    dc.setHairline(hairline);
     dc.setLineCap(line_cap);
     dc.setLineJoin(line_join);
     dc.setMiterLimit(miter_limit);
@@ -401,6 +404,7 @@ void NRStyle::applyTextDecorationStroke(Inkscape::DrawingContext &dc)
 {
     dc.setSource(text_decoration_stroke_pattern);
     dc.setLineWidth(text_decoration_stroke_width);
+    dc.setHairline(hairline);
     dc.setLineCap(CAIRO_LINE_CAP_BUTT);
     dc.setLineJoin(CAIRO_LINE_JOIN_MITER);
     dc.setMiterLimit(miter_limit);

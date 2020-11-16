@@ -268,6 +268,8 @@ public:
     T<SPAttr::STROKE_DASHOFFSET, SPILength> stroke_dashoffset;
     /** stroke-opacity */
     T<SPAttr::STROKE_OPACITY, SPIScale24> stroke_opacity;
+    /** -inkscape-stroke */
+    T<SPAttr::STROKE_EXTENSIONS, SPIStrokeExtensions> stroke_extensions;
 
     /** Marker list */
     T<SPAttr::MARKER, SPIString> marker;

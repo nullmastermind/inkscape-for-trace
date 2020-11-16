@@ -3171,6 +3171,49 @@ SPIVectorEffect::operator==(const SPIBase& rhs) const {
     }
 }
 
+// SPIStrokeExtensions ------------------------------------------------
+
+void
+SPIStrokeExtensions::read( gchar const *str ) {
+
+    if( !str ) return;
+
+    set = false;
+    hairline = false;
+    if (!strcmp(str, "none")) {
+        set = true;
+    } else if (!strcmp(str, "hairline")) {
+        set = true;
+        hairline = true;
+    }
+}
+
+const Glib::ustring SPIStrokeExtensions::get_value() const
+{
+    if (this->inherit) return Glib::ustring("inherit");
+    if (this->hairline) return Glib::ustring("hairline");
+    return Glib::ustring("none");
+}
+
+// Does not inherit!
+// void
+// SPIStrokeExtensions::cascade( const SPIBase* const parent ) {
+// }
+
+// void
+// SPIStrokeExtensions::merge( const SPIBase* const parent ) {
+// }
+
+bool
+SPIStrokeExtensions::operator==(const SPIBase& rhs) const {
+    if( const SPIStrokeExtensions* r = dynamic_cast<const SPIStrokeExtensions*>(&rhs) ) {
+        return
+            (hairline == r->hairline  ) &&
+            SPIBase::operator==(rhs);
+    } else {
+        return false;
+    }
+}
 
 // template instantiation
 template class SPIEnum<SPBlendMode>;

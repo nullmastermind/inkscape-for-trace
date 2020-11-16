@@ -68,6 +68,7 @@ struct NRStyle {
     Paint fill;
     Paint stroke;
     float stroke_width;
+    bool hairline;
     float miter_limit;
     unsigned int n_dash;
     double *dash;

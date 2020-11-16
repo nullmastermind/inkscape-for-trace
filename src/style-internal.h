@@ -1221,6 +1221,36 @@ public:
     bool fixed  : 1;
 };
 
+/// Custom stroke properties. Only used for -inkscape-stroke: hairline.
+class SPIStrokeExtensions : public SPIBase
+{
+
+public:
+    SPIStrokeExtensions()
+        : hairline(false)
+    {}
+
+    ~SPIStrokeExtensions() override = default;
+    void read( gchar const *str ) override;
+    const Glib::ustring get_value() const override;
+    void clear() override {
+        SPIBase::clear();
+        hairline = false;
+    }
+
+    // Does not inherit
+    void cascade( const SPIBase* const parent ) override {};
+    void merge(   const SPIBase* const parent ) override {};
+
+    SPIStrokeExtensions& operator=(const SPIStrokeExtensions& rhs) = default;
+
+    bool operator==(const SPIBase& rhs) const override;
+
+  // To do: make private
+public:
+    bool hairline : 1;
+};
+
 #endif // SEEN_SP_STYLE_INTERNAL_H
 
 

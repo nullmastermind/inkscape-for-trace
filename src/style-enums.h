@@ -344,6 +344,11 @@ enum SPVectorEffect : std::uint_least8_t {
     SP_VECTOR_EFFECT_FIXED_POSITION       = 8
 };
 
+enum SPStrokeExtensions : std::uint_least8_t {
+    SP_STROKE_EXTENSIONS_NONE,
+    SP_STROKE_EXTENSIONS_HAIRLINE
+};
+
 struct SPStyleEnum {
     char const *key;
     int value;
@@ -708,6 +713,12 @@ static SPStyleEnum const enum_vector_effect[] = {
     {"non-scaling-size",   SP_VECTOR_EFFECT_NON_SCALING_SIZE},
     {"non-rotation",       SP_VECTOR_EFFECT_NON_ROTATION},
     {"fixed-position",     SP_VECTOR_EFFECT_FIXED_POSITION},
+    {nullptr, -1}
+};
+
+static SPStyleEnum const enum_stroke_extensions[] = {
+    {"none",     SP_STROKE_EXTENSIONS_NONE},
+    {"hairline", SP_STROKE_EXTENSIONS_HAIRLINE},
     {nullptr, -1}
 };
 

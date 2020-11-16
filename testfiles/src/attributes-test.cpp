@@ -380,6 +380,7 @@ std::vector<AttributeInfo> getKnownAttrs()
         AttributeInfo("zoomAndPan", false),
 
         // Extra attributes.
+        AttributeInfo("-inkscape-stroke", true),
         AttributeInfo("id", true),
         AttributeInfo("inkscape:bbox-nodes", true),
         AttributeInfo("inkscape:bbox-paths", true),
