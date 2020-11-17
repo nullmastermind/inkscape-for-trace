@@ -594,6 +594,32 @@ SPObject *SPObject::get_child_by_repr(Inkscape::XML::Node *repr)
     return result;
 }
 
+/**
+ * Get closest child to a reference representation. May traverse backwards
+ * until it finds a child SPObject node.
+ *
+ * @param obj Parent object
+ * @param ref Refernece node, may be NULL
+ * @return Child, or NULL if not found
+ */
+static SPObject *get_closest_child_by_repr(SPObject &obj, Inkscape::XML::Node *ref)
+{
+    for (; ref; ref = ref->prev()) {
+        // The most likely situation is that `ref` is indeed a child of `obj`,
+        // so try that first, before checking getObjectByRepr.
+        if (auto result = obj.get_child_by_repr(ref)) {
+            return result;
+        }
+
+        // Only continue if `ref` is not an SPObject, but e.g. an XML comment
+        if (obj.document->getObjectByRepr(ref)) {
+            break;
+        }
+    }
+
+    return nullptr;
+}
+
 void SPObject::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
     SPObject* object = this;
 
@@ -608,7 +634,7 @@ void SPObject::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
         return;
     }
 
-    SPObject *prev = ref ? object->get_child_by_repr(ref) : nullptr;
+    SPObject *prev = get_closest_child_by_repr(*object, ref);
     object->attach(ochild, prev);
     sp_object_unref(ochild, nullptr);
 
@@ -642,7 +668,7 @@ void SPObject::order_changed(Inkscape::XML::Node *child, Inkscape::XML::Node * /
 
     SPObject *ochild = object->get_child_by_repr(child);
     g_return_if_fail(ochild != nullptr);
-    SPObject *prev = new_ref ? object->get_child_by_repr(new_ref) : nullptr;
+    SPObject *prev = get_closest_child_by_repr(*object, new_ref);
     object->reorder(ochild, prev);
     ochild->_position_changed_signal.emit(ochild);
 }
