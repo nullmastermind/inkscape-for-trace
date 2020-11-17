@@ -162,7 +162,7 @@ StrokeStyle::StrokeStyle() :
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
     unitSelector->addUnit(*unit_table.getUnit("%"));
-    unitSelector->append("hairline");
+    unitSelector->append("hairline", _("Hairline"));
     _old_unit = unitSelector->getUnit();
     if (desktop) {
         unitSelector->setUnit(desktop->getNamedView()->display_units->abbr);
@@ -701,7 +701,7 @@ StrokeStyle::updateLine()
         if (result_sw == QUERY_STYLE_MULTIPLE_AVERAGED) {
             unitSelector->setUnit("%");
         } else if (query.stroke_extensions.hairline) {
-            unitSelector->setUnit("hairline");
+            unitSelector->set_active_id("hairline");
         } else {
             // same width, or only one object; no sense to keep percent, switch to absolute
             Inkscape::Util::Unit const *tempunit = unitSelector->getUnit();
@@ -918,7 +918,7 @@ StrokeStyle::scaleLine()
 bool
 StrokeStyle::isHairlineSelected() const
 {
-    return unitSelector->get_active_text() == "hairline";
+    return unitSelector->get_active_id() == "hairline";
 }
 
 /**
