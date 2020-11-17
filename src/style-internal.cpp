@@ -83,10 +83,6 @@ bool SPIBase::shall_write(guint const flags, SPStyleSrc const &style_src_req, SP
     // pointer equality handled in SPStyle::write, not expected here
     assert(base != this);
 
-    // SP_STYLE_FLAG_IFSRC and SPStyleSrc::UNSET are mutually exclusive
-    assert(bool(flags & SP_STYLE_FLAG_IFSRC) ^ //
-           bool(style_src_req == SPStyleSrc::UNSET));
-
     if ((flags & SP_STYLE_FLAG_ALWAYS)) {
         assert(!(flags & SP_STYLE_FLAG_IFSRC));
         assert(!base);
