@@ -19,6 +19,7 @@
 #include <gtkmm/image.h>
 #include <gtkmm/label.h>
 #include <iostream>
+#include <numeric>
 
 #include "ui/dialog/dialog-notebook.h"
 
@@ -498,15 +499,9 @@ void DialogMultipaned::on_size_allocate(Gtk::Allocation &allocation)
         }
 
         // Precalculate the minimum, natural and current totals
-        int sum_minimums = 0;
-        int sum_naturals = 0;
-        int sum_current = 0;
-        for (auto &n : sizes_minimums)
-            sum_minimums += n;
-        for (auto &n : sizes_naturals)
-            sum_naturals += n;
-        for (auto &n : sizes_current)
-            sum_current += n;
+        int sum_minimums = std::accumulate(sizes_minimums.begin(), sizes_minimums.end(), 0);
+        int sum_naturals = std::accumulate(sizes_naturals.begin(), sizes_naturals.end(), 0);
+        int sum_current = std::accumulate(sizes_current.begin(), sizes_current.end(), 0);
 
         if (sum_naturals <= left) {
             sizes = sizes_naturals;
@@ -516,27 +511,34 @@ void DialogMultipaned::on_size_allocate(Gtk::Allocation &allocation)
             left -= sum_minimums;
         }
 
-        int left_old = 0;
-        while (left > 0) {
-            if (left_old == left)
+        // give remaining space to first element
+        for (int i = 0; i < (int)children.size(); ++i) {
+            if (expandables[i]) {
+                sizes[i] += left;
                 break;
-            left_old = left;
+            }
+        }
+        left = 0;
 
-            bool do_break = false;
+        /* we don't want to give as much space to canvas and widgets, but if we did, we would enable this
+        int d = 0;
+        for (int i = 0; i < (int)children.size(); ++i) {
+            if (expandables[i]) {
+                d++;
+            }
+        }
+        if(d>0) {
+            int idx = 0;
             for (int i = 0; i < (int)children.size(); ++i) {
                 if (expandables[i]) {
-                    sizes[i]++;
-                    left--;
-                }
-
-                if (left == 0) {
-                    do_break = true;
-                    break;
+                    sizes[i] += (left/d);
+                    if (idx < (left % d))
+                        sizes[i]++;
+                    idx++;
                 }
             }
-            if (do_break)
-                break;
-        }
+            left = 0;
+        }*/
 
         // Check if we actually need to change the sizes on the main axis
         left = horizontal ? allocation.get_width() : allocation.get_height();
