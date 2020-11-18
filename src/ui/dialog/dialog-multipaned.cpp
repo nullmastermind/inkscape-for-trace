@@ -22,6 +22,7 @@
 #include <numeric>
 
 #include "ui/dialog/dialog-notebook.h"
+#include "ui/widget/canvas-grid.h"
 
 #define DROPZONE_SIZE 16
 #define HANDLE_SIZE 12
@@ -473,9 +474,16 @@ void DialogMultipaned::on_size_allocate(Gtk::Allocation &allocation)
         std::vector<int> sizes_current;             // The current sizes along main axis
         int left = horizontal ? allocation.get_width() : allocation.get_height();
 
+        int index = 0;
+
+        int canvas_index = -1;
         for (auto &child : children) {
             bool visible;
             DialogMultipaned *paned = dynamic_cast<DialogMultipaned *>(child);
+            Inkscape::UI::Widget::CanvasGrid *canvas = dynamic_cast<Inkscape::UI::Widget::CanvasGrid *>(child);
+            if (canvas) {
+                canvas_index = index;
+            }
             if (hide_multipaned && paned) {
                 visible = false;
                 expandables.push_back(false);
@@ -496,6 +504,7 @@ void DialogMultipaned::on_size_allocate(Gtk::Allocation &allocation)
             Gtk::Allocation child_allocation = child->get_allocation();
             sizes_current.push_back(visible ? horizontal ? child_allocation.get_width() : child_allocation.get_height()
                                             : 0);
+            index++;
         }
 
         // Precalculate the minimum, natural and current totals
@@ -511,34 +520,30 @@ void DialogMultipaned::on_size_allocate(Gtk::Allocation &allocation)
             left -= sum_minimums;
         }
 
-        // give remaining space to first element
-        for (int i = 0; i < (int)children.size(); ++i) {
-            if (expandables[i]) {
-                sizes[i] += left;
-                break;
+        if (canvas_index >= 0) { // give remaining space to canvas element
+            sizes[canvas_index] += left;
+        } else { //or, if in a sub-dialogmultipaned, give it evenly to widgets
+            
+            int d = 0;
+            for (int i = 0; i < (int)children.size(); ++i) {
+                if (expandables[i]) {
+                    d++;
+                }
+            }
+
+            if(d>0) {
+                int idx = 0;
+                for (int i = 0; i < (int)children.size(); ++i) {
+                    if (expandables[i]) {
+                        sizes[i] += (left/d);
+                        if (idx < (left % d))
+                            sizes[i]++;
+                        idx++;
+                    }
+                }
             }
         }
         left = 0;
-
-        /* we don't want to give as much space to canvas and widgets, but if we did, we would enable this
-        int d = 0;
-        for (int i = 0; i < (int)children.size(); ++i) {
-            if (expandables[i]) {
-                d++;
-            }
-        }
-        if(d>0) {
-            int idx = 0;
-            for (int i = 0; i < (int)children.size(); ++i) {
-                if (expandables[i]) {
-                    sizes[i] += (left/d);
-                    if (idx < (left % d))
-                        sizes[i]++;
-                    idx++;
-                }
-            }
-            left = 0;
-        }*/
 
         // Check if we actually need to change the sizes on the main axis
         left = horizontal ? allocation.get_width() : allocation.get_height();
