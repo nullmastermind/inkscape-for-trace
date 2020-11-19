@@ -158,9 +158,6 @@ protected:
     void shell();
 
     void _start_main_option_section(const Glib::ustring& section_name = "");
-
-    Glib::RefPtr<Gtk::Builder> _builder;
-
 };
 
 #endif // INKSCAPE_APPLICATION_H

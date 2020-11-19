@@ -729,30 +729,6 @@ InkscapeApplication::on_startup2()
     // Shortcuts for actions can be set before the actions are created.
     Inkscape::Shortcuts::getInstance().init();
 
-    // ========================= Builder ==========================
-    // App menus deprecated in 3.32. This whole block of code should be
-    // removed after confirming this code isn't required.
-    _builder = Gtk::Builder::create();
-
-    Glib::ustring app_builder_file = get_filename(UIS, "inkscape-application.glade");
-
-    try
-    {
-        _builder->add_from_file(app_builder_file);
-    }
-    catch (const Glib::Error& ex)
-    {
-        std::cerr << "InkscapeApplication: " << app_builder_file << " file not read! " << ex.what() << std::endl;
-    }
-
-    auto object = _builder->get_object("menu-application");
-    auto menu = Glib::RefPtr<Gio::Menu>::cast_dynamic(object);
-    if (!menu) {
-        std::cerr << "InkscapeApplication: failed to load application menu!" << std::endl;
-    } else {
-        // set_app_menu(menu);
-    }
-
 #ifdef GDK_WINDOWING_QUARTZ
     GtkosxApplication *osxapp = gtkosx_application_get();
     g_signal_connect(G_OBJECT(osxapp), "NSApplicationOpenFile", G_CALLBACK(osx_openfile_callback), this);
