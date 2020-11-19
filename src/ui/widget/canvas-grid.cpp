@@ -55,6 +55,7 @@ CanvasGrid::CanvasGrid(SPDesktopWidget *dtw)
     _hscrollbar = Gtk::manage(new Gtk::Scrollbar(_hadj, Gtk::ORIENTATION_HORIZONTAL));
     _hscrollbar->set_name("CanvasScrollbar");
     _hscrollbar->set_hexpand(true);
+    _hscrollbar->set_no_show_all();
 
     // Vertical Scrollbar
     _vadj = Gtk::Adjustment::create(0.0, -4000.0, 4000.0, 10.0, 100.0, 4.0);
@@ -62,6 +63,7 @@ CanvasGrid::CanvasGrid(SPDesktopWidget *dtw)
     _vscrollbar = Gtk::manage(new Gtk::Scrollbar(_vadj, Gtk::ORIENTATION_VERTICAL));
     _vscrollbar->set_name("CanvasScrollbar");
     _vscrollbar->set_vexpand(true);
+    _vscrollbar->set_no_show_all();
 
     // Horizontal Ruler
     _hruler = Gtk::manage(new Inkscape::UI::Widget::Ruler(Gtk::ORIENTATION_HORIZONTAL));
@@ -96,6 +98,7 @@ CanvasGrid::CanvasGrid(SPDesktopWidget *dtw)
     _guide_lock = Gtk::manage(new Gtk::ToggleButton());
     _guide_lock->set_name("LockGuides");
     _guide_lock->add(*image1);
+    _guide_lock->set_no_show_all();
     // To be replaced by Gio::Action:
     _guide_lock->signal_toggled().connect(sigc::mem_fun(_dtw, &SPDesktopWidget::update_guides_lock));
     _guide_lock->set_tooltip_text(_("Toggle lock of all guides in the document"));
@@ -108,6 +111,7 @@ CanvasGrid::CanvasGrid(SPDesktopWidget *dtw)
     // Can't access via C++ API, fixed in Gtk4.
     gtk_actionable_set_action_name( GTK_ACTIONABLE(_cms_adjust->gobj()), "win.canvas-color-manage");
     _cms_adjust->set_tooltip_text(_("Toggle color-managed display for this document window"));
+    _cms_adjust->set_no_show_all();
 
     // Sticky Zoom
     auto image3 = Gtk::manage(sp_get_icon_image("zoom-original", Gtk::ICON_SIZE_MENU));
@@ -117,6 +121,7 @@ CanvasGrid::CanvasGrid(SPDesktopWidget *dtw)
     // To be replaced by Gio::Action:
     _sticky_zoom->signal_toggled().connect(sigc::mem_fun(_dtw, &SPDesktopWidget::sticky_zoom_toggled));
     _sticky_zoom->set_tooltip_text(_("Zoom drawing if window size changes"));
+    _sticky_zoom->set_no_show_all();
 
     // Top row
     attach(*_guide_lock,  0, 0, 1, 1);
@@ -174,7 +179,9 @@ CanvasGrid::ShowScrollbars(bool state)
         _hscrollbar->show();
         _vscrollbar->show();
         _cms_adjust->show();
+        _cms_adjust->show_all_children();
         _sticky_zoom->show();
+        _sticky_zoom->show_all_children();
     } else {
         // Hide scrollbars
         _hscrollbar->hide();
@@ -208,6 +215,7 @@ CanvasGrid::ShowRulers(bool state)
         _hruler->show();
         _vruler->show();
         _guide_lock->show();
+        _guide_lock->show_all_children();
         remove(*_canvas);
         attach(*_canvas, 1, 1, 1, 1);
     } else {
