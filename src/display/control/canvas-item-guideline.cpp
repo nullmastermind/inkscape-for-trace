@@ -47,6 +47,7 @@ CanvasItemGuideLine::CanvasItemGuideLine(CanvasItemGroup *group, Glib::ustring l
     // Control to move guide line.
     _origin_ctrl = new CanvasItemCtrl(group, CANVAS_ITEM_CTRL_SHAPE_CIRCLE, _origin);
     _origin_ctrl->set_name("CanvasItemGuideLine:Ctrl:" + _label);
+    _origin_ctrl->set_pickable(false); // Line beneath is pickable. Handle is display only!
     set_locked(false); // Init _origin_ctrl shape and stroke.
 }
 
