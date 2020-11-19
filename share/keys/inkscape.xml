@@ -432,7 +432,7 @@ override) the bindings in the main default.xml.
 
 <!-- Layers -->
 
-  <bind key="n" modifiers="Primary,Shift" action="LayerNew" />
+  <bind key="n" modifiers="Primary,Shift" action="LayerNew" display="true" />
 
   <bind action="LayerRename" />
   <bind key="Page_Up" modifiers="Primary" action="LayerNext" display="true" />
