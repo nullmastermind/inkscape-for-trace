@@ -276,6 +276,7 @@ void readOpenTypeFvarAxes(const FT_Face ft_face,
         for (size_t i = 0; i < mmvar->num_axis; ++i) {
             FT_Var_Axis* axis = &mmvar->axis[i];
             axes[axis->name] =  OTVarAxis(FTFixedToDouble(axis->minimum),
+                                          FTFixedToDouble(axis->def),
                                           FTFixedToDouble(axis->maximum),
                                           FTFixedToDouble(coords[i]),
                                           i);

@@ -42,17 +42,20 @@ class OTVarAxis {
 public:
     OTVarAxis()
         : minimum(0)
+        , def(500) // Default
         , maximum(1000)
         , set_val(500)
         , index(-1) {};
 
-    OTVarAxis(double _minimum, double _maximum, double _set_val, int _index)
+    OTVarAxis(double _minimum, double _def, double _maximum, double _set_val, int _index)
         : minimum(_minimum)
+        , def(_def) // Default
         , maximum(_maximum)
         , set_val(_set_val)
         , index  (_index) {};
 
     double minimum;
+    double def;
     double maximum;
     double set_val;
     int    index;  // Index in OpenType file (since we use a map).

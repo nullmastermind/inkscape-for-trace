@@ -38,6 +38,7 @@ public:
     double get_value() { return scale->get_value(); }
     int get_precision() { return precision; }
     Gtk::Scale* get_scale() { return scale; }
+    double get_def() { return def; }
 
 private:
 
@@ -47,6 +48,7 @@ private:
     Gtk::Scale* scale;
 
     int precision;
+    double def = 0.0; // Default value
 
     // Signals
     sigc::signal<void> signal_changed;
