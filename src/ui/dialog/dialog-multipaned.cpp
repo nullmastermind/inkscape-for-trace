@@ -90,6 +90,8 @@ MyHandle::MyHandle(Gtk::Orientation orientation, int size = HANDLE_SIZE)
 
     // Signal
     signal_size_allocate().connect(sigc::mem_fun(*this, &MyHandle::resize_handler));
+
+    show_all();
 }
 
 /**
@@ -174,6 +176,8 @@ DialogMultipaned::DialogMultipaned(Gtk::Orientation orientation)
 
     // add empty widget to initiate the container
     add_empty_widget();
+
+    show_all();
 }
 
 DialogMultipaned::~DialogMultipaned()
@@ -217,9 +221,11 @@ void DialogMultipaned::prepend(Gtk::Widget *child)
         children.insert(children.begin() + 1, child);
         if (!child->get_parent())
             child->set_parent(*this);
-    }
 
-    show_all_children();
+        // Ideally, we would only call child->show() here and assume that the
+        // child has already configured visibility of all its own children.
+        child->show_all();
+    }
 }
 
 void DialogMultipaned::append(Gtk::Widget *child)
@@ -247,9 +253,10 @@ void DialogMultipaned::append(Gtk::Widget *child)
         children.insert(children.end() - 1, child);
         if (!child->get_parent())
             child->set_parent(*this);
-    }
 
-    show_all_children();
+        // See comment in DialogMultipaned::prepend
+        child->show_all();
+    }
 }
 
 void DialogMultipaned::add_empty_widget()
