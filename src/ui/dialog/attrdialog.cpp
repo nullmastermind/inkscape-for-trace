@@ -95,6 +95,7 @@ AttrDialog::AttrDialog()
 
     // For text and comment nodes
     _content_tv = Gtk::manage(new Gtk::TextView());
+    _content_tv->show();
     _content_tv->set_wrap_mode(Gtk::WrapMode::WRAP_CHAR);
     _content_tv->set_monospace(true);
     _content_tv->set_border_width(4);
@@ -106,6 +107,8 @@ AttrDialog::AttrDialog()
         }
     });
     _content_sw = Gtk::manage(new Gtk::ScrolledWindow());
+    _content_sw->hide();
+    _content_sw->set_no_show_all();
     _content_sw->add(*_content_tv);
     _mainBox.pack_start(*_content_sw);
 
