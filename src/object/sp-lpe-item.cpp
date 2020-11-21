@@ -614,8 +614,10 @@ void SPLPEItem::addPathEffect(std::string value, bool reset)
     if (!value.empty()) {
         // Apply the path effects here because in the casse of a group, lpe->resetDefaults
         // needs that all the subitems have their effects applied
-        sp_lpe_item_update_patheffect(this, false, true);
-
+        SPGroup *group = dynamic_cast<SPGroup *>(this); 
+        if (group) {
+            sp_lpe_item_update_patheffect(this, false, true);
+        }
         // Disable the path effects while preparing the new lpe
         sp_lpe_item_enable_path_effects(this, false);
 
@@ -1246,7 +1248,7 @@ size_t SPLPEItem::countLPEOfType(int const type, bool inc_hidden, bool is_ready)
         LivePathEffectObject const *lpeobj = (*it)->lpeobject;
         if (lpeobj) {
             Inkscape::LivePathEffect::Effect const* lpe = lpeobj->get_lpe();
-            if (lpe && (lpe->effectType() == type) && lpe->is_visible || inc_hidden) {
+            if (lpe && (lpe->effectType() == type) && (lpe->is_visible || inc_hidden)) {
                 if (is_ready || lpe->isReady()) {
                     counter++;
                 }

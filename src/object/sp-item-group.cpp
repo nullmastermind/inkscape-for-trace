@@ -876,15 +876,15 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, Inkscape::LivePa
                     lpe->pathvector_before_effect = c->get_pathvector();
                     c->transform(i2anc_affine(sub_shape, top_group));
                     sub_shape->setCurveInsync(c.get());
-                    if (lpe->lpeversion.param_getSVGValue() != "0") { // we are on 1 or up
-                        sub_shape->bbox_vis_cache_is_valid = false;
-                        sub_shape->bbox_geom_cache_is_valid = false;
-                    }
                     success = top_group->performOnePathEffect(c.get(), sub_shape, lpe);
                     c->transform(i2anc_affine(sub_shape, top_group).inverse());
                     Inkscape::XML::Node *repr = sub_item->getRepr();
                     if (c && success) {
                         sub_shape->setCurveInsync(c.get());
+                        if (lpe->lpeversion.param_getSVGValue() != "0") { // we are on 1 or up
+                            sub_shape->bbox_vis_cache_is_valid = false;
+                            sub_shape->bbox_geom_cache_is_valid = false;
+                        }
                         lpe->pathvector_after_effect = c->get_pathvector();
                         if (write) {
                             repr->setAttribute("d", sp_svg_write_path(lpe->pathvector_after_effect));
