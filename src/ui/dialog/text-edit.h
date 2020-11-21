@@ -160,7 +160,6 @@ private:
 
     // Shared ------- ------------------ //
     Gtk::Button *setasdefault_button;
-    Gtk::Button *close_button;
     Gtk::Button *apply_button;
 
     // Signals

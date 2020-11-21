@@ -105,7 +105,6 @@ TextEdit::TextEdit()
     builder->get_widget("preview_label2", preview_label2);
     builder->get_widget("text_view", text_view);
     builder->get_widget("setasdefault_button", setasdefault_button);
-    builder->get_widget("close_button", close_button);
     builder->get_widget("apply_button", apply_button);
 
     text_buffer = Glib::RefPtr<Gtk::TextBuffer>::cast_static(builder->get_object("text_buffer"));
@@ -132,7 +131,6 @@ TextEdit::TextEdit()
     text_buffer->signal_changed().connect(sigc::mem_fun(*this, &TextEdit::onChange));
     setasdefault_button->signal_clicked().connect(sigc::mem_fun(*this, &TextEdit::onSetDefault));
     apply_button->signal_clicked().connect(sigc::mem_fun(*this, &TextEdit::onApply));
-    // close_button->signal_clicked().connect(sigc::bind(_signal_response.make_slot(), GTK_RESPONSE_CLOSE));
     fontChangedConn = font_selector.connectChanged(sigc::mem_fun(*this, &TextEdit::onFontChange));
     fontFeaturesChangedConn = font_features.connectChanged(sigc::mem_fun(*this, &TextEdit::onChange));
     notebook->signal_switch_page().connect(sigc::mem_fun(*this, &TextEdit::onFontFeatures));
