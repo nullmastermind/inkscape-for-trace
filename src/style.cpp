@@ -1014,21 +1014,21 @@ SPStyle::_mergeObjectStylesheet( SPObject const *const object ) {
     }
 }
 
+// Used for input into Pango. Must be computed value!
 std::string
 SPStyle::getFontFeatureString() {
 
     std::string feature_string;
-
-    if ( !(font_variant_ligatures.value & SP_CSS_FONT_VARIANT_LIGATURES_COMMON) )
+    if ( !(font_variant_ligatures.computed & SP_CSS_FONT_VARIANT_LIGATURES_COMMON) )
         feature_string += "liga 0, clig 0, ";
-    if (   font_variant_ligatures.value & SP_CSS_FONT_VARIANT_LIGATURES_DISCRETIONARY )
+    if (   font_variant_ligatures.computed & SP_CSS_FONT_VARIANT_LIGATURES_DISCRETIONARY )
         feature_string += "dlig, ";
-    if (   font_variant_ligatures.value & SP_CSS_FONT_VARIANT_LIGATURES_HISTORICAL )
+    if (   font_variant_ligatures.computed & SP_CSS_FONT_VARIANT_LIGATURES_HISTORICAL )
         feature_string += "hlig, ";
-    if ( !(font_variant_ligatures.value & SP_CSS_FONT_VARIANT_LIGATURES_CONTEXTUAL) )
+    if ( !(font_variant_ligatures.computed & SP_CSS_FONT_VARIANT_LIGATURES_CONTEXTUAL) )
         feature_string += "calt 0, ";
 
-    switch (font_variant_position.value) {
+    switch (font_variant_position.computed) {
         case SP_CSS_FONT_VARIANT_POSITION_SUB:
             feature_string += "subs, ";
             break;
@@ -1036,7 +1036,7 @@ SPStyle::getFontFeatureString() {
             feature_string += "sups, ";
     }
 
-    switch (font_variant_caps.value) {
+    switch (font_variant_caps.computed) {
         case SP_CSS_FONT_VARIANT_CAPS_SMALL:
             feature_string += "smcp, ";
             break;
@@ -1056,40 +1056,40 @@ SPStyle::getFontFeatureString() {
             feature_string += "titl, ";
     }
 
-    if ( font_variant_numeric.value & SP_CSS_FONT_VARIANT_NUMERIC_LINING_NUMS )
+    if ( font_variant_numeric.computed & SP_CSS_FONT_VARIANT_NUMERIC_LINING_NUMS )
         feature_string += "lnum, ";
-    if ( font_variant_numeric.value & SP_CSS_FONT_VARIANT_NUMERIC_OLDSTYLE_NUMS )
+    if ( font_variant_numeric.computed & SP_CSS_FONT_VARIANT_NUMERIC_OLDSTYLE_NUMS )
         feature_string += "onum, ";
-    if ( font_variant_numeric.value & SP_CSS_FONT_VARIANT_NUMERIC_PROPORTIONAL_NUMS )
+    if ( font_variant_numeric.computed & SP_CSS_FONT_VARIANT_NUMERIC_PROPORTIONAL_NUMS )
         feature_string += "pnum, ";
-    if ( font_variant_numeric.value & SP_CSS_FONT_VARIANT_NUMERIC_TABULAR_NUMS )
+    if ( font_variant_numeric.computed & SP_CSS_FONT_VARIANT_NUMERIC_TABULAR_NUMS )
         feature_string += "tnum, ";
-    if ( font_variant_numeric.value & SP_CSS_FONT_VARIANT_NUMERIC_DIAGONAL_FRACTIONS )
+    if ( font_variant_numeric.computed & SP_CSS_FONT_VARIANT_NUMERIC_DIAGONAL_FRACTIONS )
         feature_string += "frac, ";
-    if ( font_variant_numeric.value & SP_CSS_FONT_VARIANT_NUMERIC_STACKED_FRACTIONS )
+    if ( font_variant_numeric.computed & SP_CSS_FONT_VARIANT_NUMERIC_STACKED_FRACTIONS )
         feature_string += "afrc, ";
-    if ( font_variant_numeric.value & SP_CSS_FONT_VARIANT_NUMERIC_ORDINAL )
+    if ( font_variant_numeric.computed & SP_CSS_FONT_VARIANT_NUMERIC_ORDINAL )
         feature_string += "ordn, ";
-    if ( font_variant_numeric.value & SP_CSS_FONT_VARIANT_NUMERIC_SLASHED_ZERO )
+    if ( font_variant_numeric.computed & SP_CSS_FONT_VARIANT_NUMERIC_SLASHED_ZERO )
         feature_string += "zero, ";
 
-    if( font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS78 )
+    if( font_variant_east_asian.computed & SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS78 )
         feature_string += "jp78, ";
-    if( font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS83 )
+    if( font_variant_east_asian.computed & SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS83 )
         feature_string += "jp83, ";
-    if( font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS90 )
+    if( font_variant_east_asian.computed & SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS90 )
         feature_string += "jp90, ";
-    if( font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS04 )
+    if( font_variant_east_asian.computed & SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS04 )
         feature_string += "jp04, ";
-    if( font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_SIMPLIFIED )
+    if( font_variant_east_asian.computed & SP_CSS_FONT_VARIANT_EAST_ASIAN_SIMPLIFIED )
         feature_string += "smpl, ";
-    if( font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_TRADITIONAL )
+    if( font_variant_east_asian.computed & SP_CSS_FONT_VARIANT_EAST_ASIAN_TRADITIONAL )
         feature_string += "trad, ";
-    if( font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_FULL_WIDTH )
+    if( font_variant_east_asian.computed & SP_CSS_FONT_VARIANT_EAST_ASIAN_FULL_WIDTH )
         feature_string += "fwid, ";
-    if( font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_PROPORTIONAL_WIDTH )
+    if( font_variant_east_asian.computed & SP_CSS_FONT_VARIANT_EAST_ASIAN_PROPORTIONAL_WIDTH )
         feature_string += "pwid, ";
-    if( font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_RUBY )
+    if( font_variant_east_asian.computed & SP_CSS_FONT_VARIANT_EAST_ASIAN_RUBY )
         feature_string += "ruby, ";
 
     char const *val = font_feature_settings.value();

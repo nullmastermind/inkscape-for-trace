@@ -509,6 +509,11 @@ std::vector<StyleCascade> getStyleCascadeData()
                  "font-variation-settings:'wght' 400",
                  "font-variation-settings:'wght' 400"),
 
+    StyleCascade("font-variant-ligatures:no-common-ligatures", "",                               "font-variant-ligatures:no-common-ligatures"),
+    StyleCascade("font-variant-ligatures:no-common-ligatures", "inherit",                        "font-variant-ligatures:no-common-ligatures"),
+    StyleCascade("font-variant-ligatures:normal", "font-variant-ligatures:no-common-ligatures",  "font-variant-ligatures:no-common-ligatures"),
+    StyleCascade("",                              "font-variant-ligatures:no-common-ligatures",  "font-variant-ligatures:no-common-ligatures"),
+
     // SPIPaint
 
     // SPIPaintOrder
