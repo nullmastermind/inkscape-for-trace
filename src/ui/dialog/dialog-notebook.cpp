@@ -279,6 +279,14 @@ void DialogNotebook::on_drag_end(const Glib::RefPtr<Gdk::DragContext> context)
             if (page) {
                 // Move page to notebook in new dialog window
                 auto window = new DialogWindow(page);
+
+                // Move window to mouse pointer
+                if (auto device = context->get_device()) {
+                    int x = 0, y = 0;
+                    device->get_position(x, y);
+                    window->move(std::max(0, x - 50), std::max(0, y - 50));
+                }
+
                 window->show_all();
             }
         }
