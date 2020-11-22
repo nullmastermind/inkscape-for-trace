@@ -26,6 +26,7 @@
 
 #include "combo-box-entry-tool-item.h"
 
+#include <cassert>
 #include <iostream>
 #include <cstring>
 #include <glibmm/ustring.h>
@@ -160,11 +161,11 @@ ComboBoxEntryToolItem::ComboBoxEntryToolItem(Glib::ustring name,
 
 // Setters/Getters ---------------------------------------------------
 
-gchar*
+Glib::ustring
 ComboBoxEntryToolItem::get_active_text()
 {
-  gchar* text = g_strdup( _text );
-  return text;
+    assert(_text);
+    return _text;
 }
 
 /*

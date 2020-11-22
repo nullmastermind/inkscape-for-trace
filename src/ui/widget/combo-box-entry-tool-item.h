@@ -89,7 +89,7 @@ public:
                           gpointer      separator_func = nullptr,
                           GtkWidget*    focusWidget    = nullptr);
 
-    gchar*   get_active_text();
+    Glib::ustring get_active_text();
     gboolean set_active_text(const gchar* text, int row=-1);
 
     void     set_entry_width(gint entry_width);

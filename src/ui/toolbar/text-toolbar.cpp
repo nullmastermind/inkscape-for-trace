@@ -688,9 +688,7 @@ TextToolbar::fontfamily_value_changed()
     }
     _freeze = true;
 
-    gchar *temp_family = _font_family_item->get_active_text();
-    Glib::ustring new_family(temp_family);
-    g_free(temp_family);
+    Glib::ustring new_family = _font_family_item->get_active_text();
     css_font_family_unquote( new_family ); // Remove quotes around font family names.
 
     // TODO: Think about how to handle handle multiple selections. While
@@ -761,16 +759,15 @@ TextToolbar::fontsize_value_changed()
     }
     _freeze = true;
 
-    gchar *text = _font_size_item->get_active_text();
+    auto active_text = _font_size_item->get_active_text();
+    char const *text = active_text.c_str();
     gchar *endptr;
     gdouble size = g_strtod( text, &endptr );
     if (endptr == text) {  // Conversion failed, non-numeric input.
         g_warning( "Conversion of size text to double failed, input: %s\n", text );
-        g_free( text );
         _freeze = false;
         return;
     }
-    g_free( text );
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int max_size = prefs->getInt("/dialogs/textandfont/maxFontSize", 10000); // somewhat arbitrary, but text&font preview freezes with too huge fontsizes
