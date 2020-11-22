@@ -3309,30 +3309,6 @@ void InkscapePreferences::initPageSpellcheck()
 {
 #if WITH_GSPELL
 
-    std::vector<Glib::ustring> languages;
-    std::vector<Glib::ustring> langValues;
-
-    languages.emplace_back(C_("Spellchecker language", "None"));
-    langValues.emplace_back("");
-
-    // TODO: revisit that now that Gspell supports language name.
-    for (const LanguagePair &pair : SpellCheck::get_available_langs()) {
-        languages.emplace_back(pair.first);
-        langValues.emplace_back(pair.second);
-    }
-
-    _spell_language.init( "/dialogs/spellcheck/lang", &languages[0], &langValues[0], languages.size(), languages[0]);
-    _page_spellcheck.add_line( false, _("Language:"), _spell_language, "",
-                              _("Set the main spell check language"), false);
-
-    _spell_language2.init( "/dialogs/spellcheck/lang2", &languages[0], &langValues[0], languages.size(), languages[0]);
-    _page_spellcheck.add_line( false, _("Second language:"), _spell_language2, "",
-                              _("Set the second spell check language; checking will only stop on words unknown in ALL chosen languages"), false);
-
-    _spell_language3.init( "/dialogs/spellcheck/lang3", &languages[0], &langValues[0], languages.size(), languages[0]);
-    _page_spellcheck.add_line( false, _("Third language:"), _spell_language3, "",
-                              _("Set the third spell check language; checking will only stop on words unknown in ALL chosen languages"), false);
-
     _spell_ignorenumbers.init( _("Ignore words with digits"), "/dialogs/spellcheck/ignorenumbers", true);
     _page_spellcheck.add_line( false, "", _spell_ignorenumbers, "",
                            _("Ignore words containing digits, such as \"R2D2\""), true);

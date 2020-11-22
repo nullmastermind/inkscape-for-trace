@@ -105,20 +105,6 @@ SpellCheck::SpellCheck()
 {
     _prefs = Inkscape::Preferences::get();
 
-    // take languages from prefs
-    for (const char *langkey : { "lang", "lang2", "lang3" }) {
-        auto lang = _prefs->getString(_prefs_path + langkey);
-        if (!lang.empty()) {
-#if WITH_GSPELL
-            const GspellLanguage *language = gspell_language_lookup(lang.c_str());
-            const gchar *name = gspell_language_get_name(language);
-            _langs.emplace_back(name, lang);
-#else
-            _langs.emplace_back(lang, lang);
-#endif
-        }
-    }
-
     banner_hbox.set_layout(Gtk::BUTTONBOX_START);
     banner_hbox.add(banner_label);
 
