@@ -129,6 +129,9 @@ Canvas::Canvas()
 
 Canvas::~Canvas()
 {
+    assert(!_desktop);
+
+    _drawing = nullptr;
     _in_destruction = true;
 
     remove_idle();
@@ -270,6 +273,11 @@ Canvas::redraw_area(Geom::Rect& area)
 void
 Canvas::redraw_now()
 {
+    if (!_drawing) {
+        g_warning("Canvas::%s _drawing is NULL", __func__);
+        return;
+    }
+
     do_update();
 }
 
@@ -782,6 +790,7 @@ Canvas::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr)
     }
 
     assert(_backing_store && _outline_store);
+    assert(_drawing);
 
     // Blit from the backing store, without regard for the clean region.
     // This is the only place the widget content is drawn!
@@ -934,6 +943,9 @@ Canvas::on_idle()
 {
     if (_in_destruction) {
         std::cerr << "Canvas::on_idle: Called after canvas destroyed!" << std::endl;
+    }
+
+    if (!_drawing) {
         return false; // Disconnect
     }
 
@@ -943,8 +955,6 @@ Canvas::on_idle()
     // If we've drawn everything then we should have just one clean rectangle, covering the entire canvas.
     if (n_rects == 0) {
         std::cerr << "Canvas::on_idle: clean region is empty!" << std::endl;
-    } else {
-        auto clean_rect = _clean_region->get_extents();
     }
 
     if (n_rects > 1) {
@@ -962,10 +972,8 @@ Canvas::on_idle()
 bool
 Canvas::do_update()
 {
-    if (!_canvas_item_root) {
-        // Canvas destroyed?
-        return true;
-    }
+    assert(_canvas_item_root);
+    assert(_drawing);
 
     if (_drawing_disabled) {
         return true;

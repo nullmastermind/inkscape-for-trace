@@ -338,6 +338,9 @@ void SPDesktop::destroy()
 {
     _destroy_signal.emit(this);
 
+    canvas->set_desktop(nullptr);
+    canvas->set_drawing(nullptr);
+
     if (snapindicator) {
         delete snapindicator;
         snapindicator = nullptr;
@@ -383,7 +386,6 @@ void SPDesktop::destroy()
     }
 
     _guides_message_context = nullptr;
-    canvas->set_desktop(nullptr);
 }
 
 SPDesktop::~SPDesktop()
