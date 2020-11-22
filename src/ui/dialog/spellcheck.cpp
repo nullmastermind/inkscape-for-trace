@@ -129,7 +129,10 @@ SpellCheck::SpellCheck()
         for (const LanguagePair &pair : _langs) {
             dictionary_combo.append(pair.second, pair.first);
         }
-        dictionary_combo.set_active(0);
+        // Set previously set language (or the first item)
+        if(!dictionary_combo.set_active_id(_prefs->getString("/dialogs/spellcheck/lang"))) {
+            dictionary_combo.set_active(0);
+        }
     }
 
     accept_button.set_tooltip_text(_("Accept the chosen suggestion"));
@@ -744,6 +747,10 @@ SpellCheck::onStop ()
 
 void SpellCheck::onLanguageChanged()
 {
+    // First, save language for next load
+    auto lang = dictionary_combo.get_active_id();
+    _prefs->setString("/dialogs/spellcheck/lang", lang);
+
     if (!_working) {
         onStart();
         return;
