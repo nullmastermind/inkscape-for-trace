@@ -205,6 +205,8 @@ SpellCheck::SpellCheck()
     ignoreonce_button.set_sensitive(false);
     add_button.set_sensitive(false);
     stop_button.set_sensitive(false);
+
+    update();
 }
 
 SpellCheck::~SpellCheck()
@@ -222,13 +224,13 @@ void SpellCheck::update()
 
     SPDesktop *desktop = getDesktop();
 
-    if (!desktop) {
+    if (this->desktop == desktop) {
         return;
     }
 
     this->desktop = desktop;
 
-    {
+    if (desktop) {
         if (_working) {
             // Stop and start on the new desktop
             finished();
