@@ -498,17 +498,18 @@ void StrokeStyle::unitChangedCB()
         return;
     }
 
-    // Remove the non-scaling-stroke effect and the hairline extensions
-    SPCSSAttr *css = sp_repr_css_attr_new();
-    sp_repr_css_unset_property(css, "vector-effect");
-    sp_repr_css_unset_property(css, "-inkscape-stroke");
-    sp_desktop_set_style(desktop, css);
-    sp_repr_css_attr_unref(css);
-    css = nullptr;
 
     Inkscape::Util::Unit const *new_unit = unitSelector->getUnit();
     if (new_unit->type == Inkscape::Util::UNIT_TYPE_DIMENSIONLESS) {
         widthSpin->set_value(100);
+    } else {
+        // Remove the non-scaling-stroke effect and the hairline extensions
+        SPCSSAttr *css = sp_repr_css_attr_new();
+        sp_repr_css_unset_property(css, "vector-effect");
+        sp_repr_css_unset_property(css, "-inkscape-stroke");
+        sp_desktop_set_style(desktop, css);
+        sp_repr_css_attr_unref(css);
+        css = nullptr;
     }
     widthSpin->set_value(Inkscape::Util::Quantity::convert(widthSpin->get_value(), _old_unit, new_unit));
     _old_unit = new_unit;
@@ -728,7 +729,8 @@ StrokeStyle::updateLine()
         bool enabled = (result_sw != QUERY_STYLE_NOTHING) && !targPaint.isNoneSet();
 
         /* No objects stroked, set insensitive */
-        widthSpin->set_sensitive(enabled && !query.stroke_extensions.hairline);
+        widthSpin->set_sensitive(enabled && 
+                (!query.stroke_extensions.hairline || result_sw == QUERY_STYLE_MULTIPLE_AVERAGED));
         unitSelector->set_sensitive(enabled);
 
         joinMiter->set_sensitive(enabled && !query.stroke_extensions.hairline);

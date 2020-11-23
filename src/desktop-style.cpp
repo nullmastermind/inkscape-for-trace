@@ -772,8 +772,7 @@ objects_query_strokewidth (const std::vector<SPItem*> &objects, SPStyle *style_r
     gdouble prev_sw = -1;
     bool same_sw = true;
     bool noneSet = true; // is stroke set to none?
-
-    int n_hairline = 0;
+    bool prev_hairline;
 
     int n_stroked = 0;
 
@@ -793,8 +792,14 @@ objects_query_strokewidth (const std::vector<SPItem*> &objects, SPStyle *style_r
         noneSet &= style->stroke.isNone();
 
         if (style->stroke_extensions.hairline) {
-            n_hairline++;
+            // Can't average a bool. It's true if there's any hairlines in the selection.
+            style_res->stroke_extensions.hairline = true;
         }
+
+        if (n_stroked > 0 && prev_hairline != style->stroke_extensions.hairline) {
+            same_sw = false;
+        }
+        prev_hairline = style->stroke_extensions.hairline;
 
         Geom::Affine i2d = item->i2dt_affine();
         double sw = style->stroke_width.computed * i2d.descrim();
@@ -806,6 +811,8 @@ objects_query_strokewidth (const std::vector<SPItem*> &objects, SPStyle *style_r
 
             avgwidth += sw;
             n_stroked ++;
+        } else if (style->stroke_extensions.hairline) {
+            n_stroked ++;
         }
     }
 
@@ -814,7 +821,6 @@ objects_query_strokewidth (const std::vector<SPItem*> &objects, SPStyle *style_r
 
     style_res->stroke_width.computed = avgwidth;
     style_res->stroke_width.set = true;
-    style_res->stroke_extensions.hairline = (n_hairline > n_stroked / 2); // More than half are hairlines.
     style_res->stroke.noneSet = noneSet; // Will only be true if none of the selected objects has it's stroke set.
 
     if (n_stroked == 0) {
