@@ -312,24 +312,30 @@ void StyleSwatch::setStyle(SPStyle *query)
 
 // Now query stroke_width
     if (has_stroke) {
-        double w;
-        if (_sw_unit) {
-            w = Inkscape::Util::Quantity::convert(query->stroke_width.computed, "px", _sw_unit);
-        } else {
-            w = query->stroke_width.computed;
-        }
-
-        {
-            gchar *str = g_strdup_printf(" %.3g", w);
-            _stroke_width.set_markup(str);
-            g_free (str);
-        }
-        {
-            gchar *str = g_strdup_printf(_("Stroke width: %.5g%s"),
-                                         w,
-                                         _sw_unit? _sw_unit->abbr.c_str() : "px");
+        if (query->stroke_extensions.hairline) {
+            _stroke_width.set_markup(_("Hairline"));
+            auto str = Glib::ustring::compose(_("Stroke width: %1"), _("Hairline"));
             _stroke_width_place.set_tooltip_text(str);
-            g_free (str);
+        } else {
+            double w;
+            if (_sw_unit) {
+                w = Inkscape::Util::Quantity::convert(query->stroke_width.computed, "px", _sw_unit);
+            } else {
+                w = query->stroke_width.computed;
+            }
+
+            {
+                gchar *str = g_strdup_printf(" %.3g", w);
+                _stroke_width.set_markup(str);
+                g_free (str);
+            }
+            {
+                gchar *str = g_strdup_printf(_("Stroke width: %.5g%s"),
+                                             w,
+                                             _sw_unit? _sw_unit->abbr.c_str() : "px");
+                _stroke_width_place.set_tooltip_text(str);
+                g_free (str);
+            }
         }
     } else {
         _stroke_width_place.set_tooltip_text("");

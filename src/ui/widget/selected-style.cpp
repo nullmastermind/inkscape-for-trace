@@ -1070,30 +1070,36 @@ SelectedStyle::update()
     case QUERY_STYLE_MULTIPLE_AVERAGED:
     case QUERY_STYLE_MULTIPLE_SAME:
     {
-        double w;
-        if (_sw_unit) {
-            w = Inkscape::Util::Quantity::convert(query.stroke_width.computed, "px", _sw_unit);
-        } else {
-            w = query.stroke_width.computed;
-        }
-        current_stroke_width = w;
-
-        {
-            gchar *str = g_strdup_printf(" %#.3g", w);
-            if (str[strlen(str) - 1] == ',' || str[strlen(str) - 1] == '.') {
-                str[strlen(str)-1] = '\0';
-            }
-            _stroke_width.set_markup(str);
-            g_free (str);
-        }
-        {
-            gchar *str = g_strdup_printf(_("Stroke width: %.5g%s%s"),
-                                         w,
-                                         _sw_unit? _sw_unit->abbr.c_str() : "px",
-                                         (result_sw == QUERY_STYLE_MULTIPLE_AVERAGED)?
-                                         _(" (averaged)") : "");
+        if (query.stroke_extensions.hairline) {
+            _stroke_width.set_markup(_("Hairline"));
+            auto str = Glib::ustring::compose(_("Stroke width: %1"), _("Hairline"));
             _stroke_width_place.set_tooltip_text(str);
-            g_free (str);
+        } else {
+            double w;
+            if (_sw_unit) {
+                w = Inkscape::Util::Quantity::convert(query.stroke_width.computed, "px", _sw_unit);
+            } else {
+                w = query.stroke_width.computed;
+            }
+            current_stroke_width = w;
+
+            {
+                gchar *str = g_strdup_printf(" %#.3g", w);
+                if (str[strlen(str) - 1] == ',' || str[strlen(str) - 1] == '.') {
+                    str[strlen(str)-1] = '\0';
+                }
+                _stroke_width.set_markup(str);
+                g_free (str);
+            }
+            {
+                gchar *str = g_strdup_printf(_("Stroke width: %.5g%s%s"),
+                                             w,
+                                             _sw_unit? _sw_unit->abbr.c_str() : "px",
+                                             (result_sw == QUERY_STYLE_MULTIPLE_AVERAGED)?
+                                             _(" (averaged)") : "");
+                _stroke_width_place.set_tooltip_text(str);
+                g_free (str);
+            }
         }
         break;
     }
