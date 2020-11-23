@@ -995,34 +995,47 @@ sp_te_set_repr_text_multiline(SPItem *text, gchar const *str)
         }
     }
 
-    gchar *p = content;
-    while (p) {
-        gchar *e = strchr (p, '\n');
-        if (is_textpath) {
-            if (e) *e = ' '; // no lines for textpath, replace newlines with spaces
-        } else {
-            if (e) *e = '\0';
-            Inkscape::XML::Node *rtspan;
-            if (SP_IS_TEXT(text)) { // create a tspan for each line
-                rtspan = xml_doc->createElement("svg:tspan");
-                rtspan->setAttribute("sodipodi:role", "line");
-            } else { // create a flowPara for each line
-                rtspan = xml_doc->createElement("svg:flowPara");
-            }
-            Inkscape::XML::Node *rstr = xml_doc->createTextNode(p);
-            rtspan->addChild(rstr, nullptr);
-            Inkscape::GC::release(rstr);
-            repr->appendChild(rtspan);
-            Inkscape::GC::release(rtspan);
-        }
-        p = (e) ? e + 1 : nullptr;
-    }
     if (is_textpath) {
+        gchar *p = content;
+        while (*p != '\0') {
+            if (*p == '\n') {
+                *p = ' '; // No lines for textpath, replace newlines with spaces.
+            }
+            ++p;
+        }
         Inkscape::XML::Node *rstr = xml_doc->createTextNode(content);
         repr->addChild(rstr, nullptr);
         Inkscape::GC::release(rstr);
-    }
+    } else {
+        SPText* sptext = dynamic_cast<SPText *>(text);
+        if (sptext && (sptext->has_inline_size() || sptext->has_shape_inside())) {
+            // Do nothing... we respect newlines (and assume CSS already set to do so).
+            Inkscape::XML::Node *rstr = xml_doc->createTextNode(content);
+            repr->addChild(rstr, nullptr);
+            Inkscape::GC::release(rstr);
+        } else {
+            // Break into tspans with sodipodi:role="line".
+            gchar *p = content;
+            while (p) {
+                gchar *e = strchr (p, '\n');
+                if (e) *e = '\0';
+                Inkscape::XML::Node *rtspan;
+                if (SP_IS_TEXT(text)) { // create a tspan for each line
+                    rtspan = xml_doc->createElement("svg:tspan");
+                    rtspan->setAttribute("sodipodi:role", "line");
+                } else { // create a flowPara for each line
+                    rtspan = xml_doc->createElement("svg:flowPara");
+                }
+                Inkscape::XML::Node *rstr = xml_doc->createTextNode(p);
+                rtspan->addChild(rstr, nullptr);
+                Inkscape::GC::release(rstr);
+                repr->appendChild(rtspan);
+                Inkscape::GC::release(rtspan);
 
+                p = (e) ? e + 1 : nullptr;
+            }
+        }
+    }
     g_free (content);
 }
 
