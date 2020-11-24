@@ -96,7 +96,7 @@ public:
     void clip() { cairo_clip(_ct); }
 
     void setLineWidth(double w) { cairo_set_line_width(_ct, w); }
-    void setHairline(bool hairline);
+    void setHairline();
     void setLineCap(cairo_line_cap_t cap) { cairo_set_line_cap(_ct, cap); }
     void setLineJoin(cairo_line_join_t join) { cairo_set_line_join(_ct, join); }
     void setMiterLimit(double miter) { cairo_set_miter_limit(_ct, miter); }

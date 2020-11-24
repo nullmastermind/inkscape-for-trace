@@ -655,7 +655,9 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, Geom::IntRect const &/*are
                 if (_drawing.visibleHairlines() || _style->stroke_extensions.hairline) {
                     double pixel_size_x = 1.0, pixel_size_y = 1.0;
                     dc.device_to_user_distance(pixel_size_x, pixel_size_y);
-                    dc.setHairline(_style->stroke_extensions.hairline || _nrstyle.stroke_width < std::min(pixel_size_x, pixel_size_y));
+                    if (_style->stroke_extensions.hairline || _nrstyle.stroke_width < std::min(pixel_size_x, pixel_size_y)) {
+                       dc.setHairline();
+                    }
                 }
 
                 dc.strokePreserve();

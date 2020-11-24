@@ -126,8 +126,8 @@ void DrawingContext::paint(double alpha) {
     else cairo_paint_with_alpha(_ct, alpha);
 }
 
-void DrawingContext::setHairline(bool hairline) {
-    ink_cairo_set_hairline(_ct, hairline);
+void DrawingContext::setHairline() {
+    ink_cairo_set_hairline(_ct);
 }
 
 void DrawingContext::setSource(guint32 rgba) {

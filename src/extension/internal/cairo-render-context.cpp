@@ -1461,7 +1461,7 @@ CairoRenderContext::_setStrokeStyle(SPStyle const *style, Geom::OptRect const &p
     // It requires the following pull request in Cairo:
     // https://gitlab.freedesktop.org/cairo/cairo/merge_requests/21
     if (style->stroke_extensions.hairline) {
-        ink_cairo_set_hairline(_cr, true);
+        ink_cairo_set_hairline(_cr);
     } else {
         cairo_set_line_width(_cr, style->stroke_width.computed);
     }

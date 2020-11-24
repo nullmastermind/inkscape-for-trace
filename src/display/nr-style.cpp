@@ -392,8 +392,11 @@ void NRStyle::applyTextDecorationFill(Inkscape::DrawingContext &dc)
 void NRStyle::applyStroke(Inkscape::DrawingContext &dc)
 {
     dc.setSource(stroke_pattern);
-    dc.setLineWidth(stroke_width);
-    dc.setHairline(hairline);
+    if (hairline) {
+        dc.setHairline();
+    } else {
+        dc.setLineWidth(stroke_width);
+    }
     dc.setLineCap(line_cap);
     dc.setLineJoin(line_join);
     dc.setMiterLimit(miter_limit);
@@ -403,8 +406,11 @@ void NRStyle::applyStroke(Inkscape::DrawingContext &dc)
 void NRStyle::applyTextDecorationStroke(Inkscape::DrawingContext &dc)
 {
     dc.setSource(text_decoration_stroke_pattern);
-    dc.setLineWidth(text_decoration_stroke_width);
-    dc.setHairline(hairline);
+    if (hairline) {
+        dc.setHairline();
+    } else {
+        dc.setLineWidth(text_decoration_stroke_width);
+    }
     dc.setLineCap(CAIRO_LINE_CAP_BUTT);
     dc.setLineJoin(CAIRO_LINE_JOIN_MITER);
     dc.setMiterLimit(miter_limit);

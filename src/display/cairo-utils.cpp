@@ -993,17 +993,15 @@ ink_cairo_pattern_set_matrix(cairo_pattern_t *cp, Geom::Affine const &m)
 }
 
 void
-ink_cairo_set_hairline(cairo_t *ct, bool hairline)
+ink_cairo_set_hairline(cairo_t *ct)
 {
 #ifdef CAIRO_HAS_HAIRLINE
-    cairo_set_hairline(ct, hairline);
+    cairo_set_hairline(ct);
 #else
-    if (hairline) {
-        // As a backup, use a device unit of 1
-        double x = 1, y = 1;
-        cairo_device_to_user_distance(ct, &x, &y);
-        cairo_set_line_width(ct, std::min(x, y));
-    }
+    // As a backup, use a device unit of 1
+    double x = 1, y = 1;
+    cairo_device_to_user_distance(ct, &x, &y);
+    cairo_set_line_width(ct, std::min(x, y));
 #endif
 }
 

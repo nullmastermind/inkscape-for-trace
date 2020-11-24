@@ -153,7 +153,7 @@ void ink_cairo_set_source_color(cairo_t *ct, SPColor const &color, double opacit
 void ink_cairo_set_source_rgba32(cairo_t *ct, guint32 rgba);
 void ink_cairo_transform(cairo_t *ct, Geom::Affine const &m);
 void ink_cairo_pattern_set_matrix(cairo_pattern_t *cp, Geom::Affine const &m);
-void ink_cairo_set_hairline(cairo_t *ct, bool hairline);
+void ink_cairo_set_hairline(cairo_t *ct);
 
 void ink_matrix_to_2geom(Geom::Affine &, cairo_matrix_t const &);
 void ink_matrix_to_cairo(cairo_matrix_t &, Geom::Affine const &);
