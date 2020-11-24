@@ -353,6 +353,7 @@ protected:
     UI::Widget::PrefSlider      _snap_delay;
     UI::Widget::PrefSlider      _snap_weight;
     UI::Widget::PrefSlider      _snap_persistence;
+    UI::Widget::PrefEntry       _font_sample;
     UI::Widget::PrefCheckButton _font_dialog;
     UI::Widget::PrefCombo       _font_unit_type;
     UI::Widget::PrefCheckButton _font_output_px;

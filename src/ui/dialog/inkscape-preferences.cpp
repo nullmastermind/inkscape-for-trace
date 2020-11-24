@@ -967,7 +967,9 @@ void InkscapePreferences::initPageTools()
 
         _font_dialog.init(_("Show font substitution warning dialog"), "/options/font/substitutedlg", false);
         _page_text.add_line( false, "", _font_dialog, "", _("Show font substitution warning dialog when requested fonts are not available on the system"));
-
+        _font_sample.init("/tools/text/font_sample", true);
+        _page_text.add_line( false, _("Font sample"), _font_sample, "", _("Edit font sample for the family in text tool controls"), true);
+        
         cb = Gtk::manage(new PrefCheckButton);
         cb->init ( _("Use SVG2 auto-flowed text"),  "/tools/text/use_svg2", true);
         _page_text.add_line( false, "", *cb, "", _("Use SVG2 auto-flowed text instead of SVG1.2 auto-flowed text. (Recommended)"));
