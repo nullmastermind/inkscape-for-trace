@@ -2889,7 +2889,7 @@ void FilterEffectsDialog::update_primitive_infobox()
     switch(_add_primitive_type.get_active_data()->id){
         case(NR_FILTER_BLEND):
             _infobox_icon.set_from_icon_name("feBlend-icon", Gtk::ICON_SIZE_DIALOG);
-            _infobox_desc.set_markup(_("The <b>feBlend</b> filter primitive provides 4 image blending modes: screen, multiply, darken and lighten."));
+            _infobox_desc.set_markup(_("The <b>feBlend</b> filter primitive provides different image blending modes, such as screen, multiply, darken and lighten."));
             break;
         case(NR_FILTER_COLORMATRIX):
             _infobox_icon.set_from_icon_name("feColorMatrix-icon", Gtk::ICON_SIZE_DIALOG);
