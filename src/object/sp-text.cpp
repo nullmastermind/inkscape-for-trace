@@ -1041,7 +1041,6 @@ void SPText::sodipodi_to_newline() {
 
     // tspans with sodipodi:role="line" are only direct children of a <text> element.
     for (auto child : childList(false)) {
-
         auto tspan = dynamic_cast<SPTSpan *>(child);  // Could have <desc> or <title>.
         if (tspan && tspan->role == SP_TSPAN_ROLE_LINE) {
 
@@ -1050,12 +1049,13 @@ void SPText::sodipodi_to_newline() {
             tspan->updateRepr();
 
             // Insert '/n' if not last line.
-            // This may screw up dx, dy, rotate but... SVG 2 text cannot have these values.
+            // This may screw up dx, dy, rotate attribute counting but... SVG 2 text cannot have these values.
             if (tspan != lastChild()) {
+                tspan->style->white_space.computed = SP_CSS_WHITE_SPACE_PRE; // Set so '\n' is not immediately stripped out before CSS recascaded!
                 auto last_child = tspan->lastChild();
                 auto last_string = dynamic_cast<SPString *>(last_child);
                 if (last_string) {
-                    // Add '/n' to string.
+                    // Add '\n' to string.
                     last_string->string += "\n";
                     last_string->updateRepr();
                 } else {
