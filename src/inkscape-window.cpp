@@ -145,7 +145,7 @@ InkscapeWindow::setup_view()
     show();
     
     // Show dialogs after the main window, otherwise dialogs may be associated as the main window of the program.
-    //_desktop->show_dialogs();
+    _desktop->getContainer()->load_container_state();
     
     sp_namedview_zoom_and_view_from_document(_desktop);
     sp_namedview_update_layers_from_document(_desktop);
