@@ -330,5 +330,6 @@ if(WIN32)
     PATTERN "*.pyc" EXCLUDE)
   install(FILES
     packaging/win32/gdb_create_backtrace.bat
+    packaging/win32/inkscape-gtk-inspector.bat
     DESTINATION bin)
 endif()
