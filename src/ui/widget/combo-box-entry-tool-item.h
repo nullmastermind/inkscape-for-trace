@@ -44,6 +44,7 @@ private:
     gboolean            _popup;      // Do we pop-up an entry-completion dialog?
     GtkEntryCompletion *_entry_completion;
     GtkWidget          *_focusWidget; ///< The widget to return focus to
+    GtkCellRenderer    *_cell;
 
     gint                _active;     // Index of active menu item (-1 if not in list).
     gchar              *_text;       // Text of active menu item or entry box.
@@ -66,6 +67,7 @@ private:
     void defocus();
 
     static void combo_box_changed_cb( GtkComboBox* widget, gpointer data );
+    static gboolean combo_box_popup_cb( ComboBoxEntryToolItem* widget, gpointer data );
     static void entry_activate_cb( GtkEntry *widget,
                                    gpointer  data );
     static gboolean match_selected_cb( GtkEntryCompletion *widget,

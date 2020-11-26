@@ -41,6 +41,7 @@ namespace Inkscape {
 namespace UI {
 namespace Widget {
 
+
 ComboBoxEntryToolItem::ComboBoxEntryToolItem(Glib::ustring name,
                                      Glib::ustring label,
                                      Glib::ustring tooltip,
@@ -106,18 +107,16 @@ ComboBoxEntryToolItem::ComboBoxEntryToolItem(Glib::ustring name,
                 nullptr, nullptr );
     }
 
-    // FIXME: once gtk3 migration is done this can be removed
-    // https://bugzilla.gnome.org/show_bug.cgi?id=734915
-    gtk_widget_show_all (comboBoxEntry);
-
     // Optionally add formatting...
     if( _cell_data_func != nullptr ) {
-        GtkCellRenderer *cell = gtk_cell_renderer_text_new();
+        gtk_combo_box_set_popup_fixed_width (GTK_COMBO_BOX(comboBoxEntry), false);
+        this->_cell = gtk_cell_renderer_text_new();
+        gtk_cell_renderer_set_fixed_size(_cell, -1, 30);
+        g_signal_connect(G_OBJECT(comboBoxEntry), "popup", G_CALLBACK(combo_box_popup_cb), this);
         gtk_cell_layout_clear( GTK_CELL_LAYOUT( comboBoxEntry ) );
-        gtk_cell_layout_pack_start( GTK_CELL_LAYOUT( comboBoxEntry ), cell, true );
-        gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT( comboBoxEntry ), cell,
-                GtkCellLayoutDataFunc (_cell_data_func),
-                nullptr, nullptr );
+        gtk_cell_layout_pack_start( GTK_CELL_LAYOUT( comboBoxEntry ), _cell, true );
+        gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT( comboBoxEntry ), _cell,
+                GtkCellLayoutDataFunc (_cell_data_func), 0, nullptr );
     }
 
     // Optionally widen the combobox width... which widens the drop-down list in list mode.
@@ -555,6 +554,19 @@ ComboBoxEntryToolItem::combo_box_changed_cb( GtkComboBox* widget, gpointer data 
     // Now let the world know
     action->_signal_changed.emit();
   }
+}
+
+gboolean
+ComboBoxEntryToolItem::combo_box_popup_cb(ComboBoxEntryToolItem* widget, gpointer data){
+    auto w = reinterpret_cast<ComboBoxEntryToolItem *>( data );
+    GtkComboBox *comboBoxEntry = GTK_COMBO_BOX(w->_combobox);
+    static int already_clicked = 0;
+    if ((already_clicked==1) && w->_cell_data_func) { //first click is always displaying somehting wrong. Second loading of the screen should have preallocated space, and only has to render the text now
+    gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT( comboBoxEntry ), w->_cell,
+        GtkCellLayoutDataFunc (w->_cell_data_func), widget, nullptr );
+    }
+    already_clicked++;
+    return true;
 }
 
 void
