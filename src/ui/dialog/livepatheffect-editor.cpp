@@ -180,7 +180,6 @@ LivePathEffectEditor::LivePathEffectEditor()
     button_up.signal_clicked().connect(sigc::mem_fun(*this, &LivePathEffectEditor::onUp));
     button_down.signal_clicked().connect(sigc::mem_fun(*this, &LivePathEffectEditor::onDown));
 
-    update();
     show_all_children();
 }
 

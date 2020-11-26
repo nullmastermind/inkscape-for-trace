@@ -172,7 +172,6 @@ Transformation::Transformation()
     _selModifyConn = INKSCAPE.signal_selection_modified.connect(sigc::hide<1>(sigc::bind(sigc::ptr_fun(&on_selection_modified), this)));
 
     show_all_children();
-    update();
 }
 
 Transformation::~Transformation()

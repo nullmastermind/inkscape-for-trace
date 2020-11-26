@@ -56,7 +56,6 @@ ArrangeDialog::ArrangeDialog()
 
     show();
     show_all_children();
-    update();
 }
 
 void ArrangeDialog::_apply()

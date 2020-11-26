@@ -72,8 +72,6 @@ FillAndStroke::FillAndStroke()
     show_all_children();
 
     _composite_settings.setSubject(&_subject);
-
-    update();
 }
 
 FillAndStroke::~FillAndStroke()

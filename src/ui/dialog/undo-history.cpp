@@ -153,7 +153,6 @@ UndoHistory::UndoHistory()
         _event_list_view.signal_row_collapsed().connect(sigc::mem_fun(*this, &Inkscape::UI::Dialog::UndoHistory::_onCollapseEvent));
 
     show_all_children();
-    update();
 }
 
 UndoHistory::~UndoHistory()

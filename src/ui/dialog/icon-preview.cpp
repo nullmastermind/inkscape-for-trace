@@ -241,7 +241,6 @@ IconPreviewPanel::IconPreviewPanel()
 
     pack_start(iconBox, Gtk::PACK_SHRINK);
 
-    update();
     show_all_children();
 }
 

@@ -222,7 +222,6 @@ AttrDialog::AttrDialog()
     _popover->get_style_context()->add_class("attrpop");
     attr_reset_context(0);
     pack_start(_mainBox, Gtk::PACK_EXPAND_WIDGET);
-    update();
     // I couldent get the signal go well not using C way signals
     g_signal_connect(GTK_WIDGET(_popover->gobj()), "key-press-event", G_CALLBACK(key_callback), this);
     _popover->hide();

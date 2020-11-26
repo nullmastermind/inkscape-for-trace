@@ -37,6 +37,8 @@ namespace Dialog {
  */
 class DialogBase : public Gtk::Box
 {
+    using parent_type = Gtk::Box;
+
 public:
     DialogBase(gchar const *prefs_path = nullptr, int verb_num = 0);
     ~DialogBase() override{};
@@ -46,6 +48,12 @@ public:
      * a new focus event happens if they are in a DialogWindow or if they are in the currently focused window.
      */
     virtual void update() {}
+
+    void on_map() override
+    {
+        update();
+        parent_type::on_map();
+    }
 
     // Getters and setters
     std::string get_name() { return _name; };

@@ -194,8 +194,6 @@ SpellCheck::SpellCheck()
     ignoreonce_button.set_sensitive(false);
     add_button.set_sensitive(false);
     stop_button.set_sensitive(false);
-
-    update();
 }
 
 SpellCheck::~SpellCheck()

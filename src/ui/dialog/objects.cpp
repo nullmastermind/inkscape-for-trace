@@ -2196,8 +2196,6 @@ ObjectsPanel::ObjectsPanel() :
 
     color_selector->show();
 
-    update();
-
     show_all_children();
 }
 

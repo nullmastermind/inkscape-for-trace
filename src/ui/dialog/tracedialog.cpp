@@ -345,8 +345,6 @@ TraceDialogImpl2::TraceDialogImpl2()
     B_STOP->signal_clicked().connect(sigc::mem_fun(*this, &TraceDialogImpl2::abort));
     B_RESET->signal_clicked().connect(sigc::mem_fun(*this, &TraceDialogImpl2::onSetDefaults));
     previewArea->signal_draw().connect(sigc::mem_fun(*this, &TraceDialogImpl2::previewResize));
-
-    update();
 }
 
 

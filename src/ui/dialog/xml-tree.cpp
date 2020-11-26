@@ -237,8 +237,6 @@ XmlTree::XmlTree()
 
     tree_reset_context();
     pack_start(*Gtk::manage(contents), true, true);
-    update();
-
 }
 
 void XmlTree::_resized()

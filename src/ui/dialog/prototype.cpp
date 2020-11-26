@@ -36,8 +36,6 @@ Prototype::Prototype()
 
     _debug_button.add(*_label);
     add(_debug_button);
-
-    update();
 }
 
 void Prototype::update()
