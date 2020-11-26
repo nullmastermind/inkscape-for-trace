@@ -58,10 +58,12 @@ DialogWindow::DialogWindow(Gtk::Widget *page)
             prefs->getInt("/options/transientpolicy/value", PREFS_DIALOGS_WINDOWS_NORMAL) != PREFS_DIALOGS_WINDOWS_NONE;
     }
 
-    if (window_above) {
-        set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG); // Make DialogWindow stay above InkscapeWindow
-    } else {
-        set_type_hint(Gdk::WINDOW_TYPE_HINT_NORMAL); // DialogWindow acts like a normal window
+    set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
+
+    if (page && window_above) {
+        if (auto top_win = dynamic_cast<Gtk::Window*>(page->get_toplevel())) {
+            set_transient_for(*top_win);
+        }
     }
 
     // Add the window to our app

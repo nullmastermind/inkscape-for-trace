@@ -200,6 +200,29 @@ InkscapeWindow::on_key_press_event(GdkEventKey* event)
     return Inkscape::Shortcuts::getInstance().invoke_verb(event, _desktop);
 }
 
+/**
+ * If "dialogs on top" is activated in the preferences, set `parent` as the
+ * new transient parent for all DialogWindow windows of the application.
+ */
+static void retransientize_dialogs(Gtk::Window &parent)
+{
+    assert(!dynamic_cast<DialogWindow *>(&parent));
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool window_above =
+        prefs->getInt("/options/transientpolicy/value", PREFS_DIALOGS_WINDOWS_NORMAL) != PREFS_DIALOGS_WINDOWS_NONE;
+
+    for (auto const &window : parent.get_application()->get_windows()) {
+        if (auto dialog_window = dynamic_cast<DialogWindow *>(window)) {
+            if (window_above) {
+                dialog_window->set_transient_for(parent);
+            } else {
+                dialog_window->unset_transient_for();
+            }
+        }
+    }
+}
+
 bool
 InkscapeWindow::on_focus_in_event(GdkEventFocus* event)
 {
@@ -210,6 +233,7 @@ InkscapeWindow::on_focus_in_event(GdkEventFocus* event)
         _app->set_active_selection(_desktop->selection);
         _app->windows_update(_document);
         update_dialogs();
+        retransientize_dialogs(*this);
     } else {
         std::cerr << "Inkscapewindow::on_focus_in_event: app is nullptr!" << std::endl;
     }
