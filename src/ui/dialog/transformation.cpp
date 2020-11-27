@@ -135,13 +135,13 @@ Transformation::Transformation()
     _check_apply_separately.signal_toggled().connect(sigc::mem_fun(*this, &Transformation::onApplySeparatelyToggled));
 
     // make sure all spinbuttons activate Apply on pressing Enter
-    ((Gtk::Entry *) (_scalar_move_horizontal.getWidget()))->set_activates_default(true);
-    ((Gtk::Entry *) (_scalar_move_vertical.getWidget()))->set_activates_default(true);
-    ((Gtk::Entry *) (_scalar_scale_horizontal.getWidget()))->set_activates_default(true);
-    ((Gtk::Entry *) (_scalar_scale_vertical.getWidget()))->set_activates_default(true);
-    ((Gtk::Entry *) (_scalar_rotate.getWidget()))->set_activates_default(true);
-    ((Gtk::Entry *) (_scalar_skew_horizontal.getWidget()))->set_activates_default(true);
-    ((Gtk::Entry *) (_scalar_skew_vertical.getWidget()))->set_activates_default(true);
+    ((Gtk::Entry *) (_scalar_move_horizontal.getWidget()))->signal_activate().connect(sigc::mem_fun(*this, &Transformation::_apply));
+    ((Gtk::Entry *) (_scalar_move_vertical.getWidget()))->signal_activate().connect(sigc::mem_fun(*this, &Transformation::_apply));
+    ((Gtk::Entry *) (_scalar_scale_horizontal.getWidget()))->signal_activate().connect(sigc::mem_fun(*this, &Transformation::_apply));
+    ((Gtk::Entry *) (_scalar_scale_vertical.getWidget()))->signal_activate().connect(sigc::mem_fun(*this, &Transformation::_apply));
+    ((Gtk::Entry *) (_scalar_rotate.getWidget()))->signal_activate().connect(sigc::mem_fun(*this, &Transformation::_apply));
+    ((Gtk::Entry *) (_scalar_skew_horizontal.getWidget()))->signal_activate().connect(sigc::mem_fun(*this, &Transformation::_apply));
+    ((Gtk::Entry *) (_scalar_skew_vertical.getWidget()))->signal_activate().connect(sigc::mem_fun(*this, &Transformation::_apply));
 
     resetButton = Gtk::manage(new Gtk::Button(_("_Clear")));
     resetButton->set_use_underline();
@@ -156,6 +156,7 @@ Transformation::Transformation()
     if (applyButton) {
         applyButton->set_tooltip_text(_("Apply transformation to selection"));
         applyButton->set_sensitive(false);
+        applyButton->signal_clicked().connect(sigc::mem_fun(*this, &Transformation::_apply));
     }
 
     Gtk::ButtonBox *button_box = Gtk::manage(new Gtk::ButtonBox());
