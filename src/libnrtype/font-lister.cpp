@@ -1213,9 +1213,11 @@ void font_lister_cell_data_func2(GtkCellLayout * /*cell_layout*/,
         gchar* sample_escaped = g_markup_escape_text(sample.data(), -1);
 
         markup += "  <span foreground='gray";
-        if(data) {
+        if (data) {
             markup += "' font_family='";
             markup += family_escaped;
+        } else {
+            markup += "' alpha='1";
         }
         markup += "'>";
         markup += sample_escaped;
