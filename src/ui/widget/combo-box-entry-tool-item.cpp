@@ -111,7 +111,13 @@ ComboBoxEntryToolItem::ComboBoxEntryToolItem(Glib::ustring name,
     if( _cell_data_func != nullptr ) {
         gtk_combo_box_set_popup_fixed_width (GTK_COMBO_BOX(comboBoxEntry), false);
         this->_cell = gtk_cell_renderer_text_new();
-        gtk_cell_renderer_set_fixed_size(_cell, -1, 30);
+        int total = gtk_tree_model_iter_n_children (model, nullptr);
+        int height = 30;
+        if (total > 1000) {
+            height = 30000/total;
+            g_warning("You have a huge number of fonts, and X11 is limiting the size of widgets you can draw.");
+        }
+        gtk_cell_renderer_set_fixed_size(_cell, -1, height);
         g_signal_connect(G_OBJECT(comboBoxEntry), "popup", G_CALLBACK(combo_box_popup_cb), this);
         gtk_cell_layout_clear( GTK_CELL_LAYOUT( comboBoxEntry ) );
         gtk_cell_layout_pack_start( GTK_CELL_LAYOUT( comboBoxEntry ), _cell, true );
