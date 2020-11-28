@@ -5,14 +5,15 @@
 # Przemysław Loesch <p_loesch@poczta.onet.pl>, 2006.
 # Polish Inkscape Translation Team <inkscapeplteam@gmail.com>, 2008 - 2010.
 # Artur Krzysztof Wróblewski <krypalkora1984@gmail.com>, 2010-2019.
+# Grzegorz Szymaszek <gszymaszek@short.pl>, 2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 1.0\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2020-04-20 22:20+0200\n"
-"PO-Revision-Date: 2020-04-23 22:51+0200\n"
-"Last-Translator: Marcin Floryan\n"
+"PO-Revision-Date: 2020-11-28 12:25+0100\n"
+"Last-Translator: Grzegorz Szymaszek\n"
 "Language-Team: Freelancer\n"
 "Language: pl_PL\n"
 "MIME-Version: 1.0\n"
@@ -7600,7 +7601,7 @@ msgstr ""
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:144
 msgid "Poppler/Cairo import"
-msgstr "Poppler/import z Kairu"
+msgstr "Import używając bibliotek Poppler/Cairo"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:145
 msgid ""
