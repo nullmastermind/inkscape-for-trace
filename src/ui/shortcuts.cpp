@@ -483,7 +483,7 @@ Shortcuts::invoke_verb(GdkEventKey const *event, UI::View::View *view)
 std::vector<Glib::ustring>
 Shortcuts::list_all_detailed_action_names()
 {
-    auto iapp = dynamic_cast<InkscapeApplication*>(app.get());
+    auto *iapp = InkscapeApplication::instance();
     InkActionExtraData& action_data = iapp->get_action_extra_data();
     return action_data.get_actions();
 }
@@ -944,7 +944,7 @@ Shortcuts::update_gui_text_recursive(Gtk::Widget* widget)
             std::vector<Glib::ustring> accels = app->get_accels_for_action(action);
 
             Glib::ustring tooltip;
-            InkscapeApplication* iapp = dynamic_cast<InkscapeApplication *>(app.get());
+            auto *iapp = InkscapeApplication::instance();
             if (iapp) {
                 tooltip = iapp->get_action_extra_data().get_tooltip_for_action(action);
             }
