@@ -632,10 +632,9 @@ cairo_pattern_t *SPPattern::pattern_new(cairo_t *base_ct, Geom::OptRect const &b
     }
 
     // TODO: make sure there are no leaks.
-    Inkscape::UpdateContext ctx; // UpdateContext is structure with only ctm!
-    ctx.ctm = content2ps * pattern_surface.drawingTransform();
     dc.transform(pattern_surface.drawingTransform().inverse());
-    drawing.update(Geom::IntRect::infinite(), ctx);
+    root->setTransform(content2ps * pattern_surface.drawingTransform());
+    drawing.update();
 
     // Render drawing to pattern_surface via drawing context, this calls root->render
     // which is really DrawingItem->render().

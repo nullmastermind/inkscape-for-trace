@@ -14,6 +14,7 @@
 #include <algorithm>
 
 #include "display/drawing.h"
+#include "display/control/canvas-item-drawing.h"
 #include "nr-filter-gaussian.h"
 #include "nr-filter-types.h"
 
@@ -162,9 +163,10 @@ Drawing::setGrayscaleMatrix(gdouble value_matrix[20]) {
 }
 
 void
-Drawing::update(Geom::IntRect const &area, UpdateContext const &ctx, unsigned flags, unsigned reset)
+Drawing::update(Geom::IntRect const &area, unsigned flags, unsigned reset)
 {
     if (_root) {
+        auto ctx = _canvas_item_drawing ? _canvas_item_drawing->get_context() : UpdateContext();
         _root->update(area, ctx, flags, reset);
     }
     if ((flags & DrawingItem::STATE_CACHE) || (flags & DrawingItem::STATE_ALL)) {

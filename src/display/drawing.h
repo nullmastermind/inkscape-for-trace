@@ -74,7 +74,9 @@ public:
 
     void setGrayscaleMatrix(double value_matrix[20]);
 
-    void update(Geom::IntRect const &area = Geom::IntRect::infinite(), UpdateContext const &ctx = UpdateContext(), unsigned flags = DrawingItem::STATE_ALL, unsigned reset = 0);
+    void update(Geom::IntRect const &area = Geom::IntRect::infinite(), unsigned flags = DrawingItem::STATE_ALL,
+                unsigned reset = 0);
+
     void render(DrawingContext &dc, Geom::IntRect const &area, unsigned flags = 0, int antialiasing = -1);
     DrawingItem *pick(Geom::Point const &p, double delta, unsigned flags);
 
