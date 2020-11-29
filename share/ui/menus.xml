@@ -186,9 +186,9 @@
        <verb verb-id="LayerMoveToPrev" show-icons="true"/>
        <verb verb-id="LayerMoveTo"     show-icons="true"/>
        <separator/>
+       <verb verb-id="LayerToTop"      show-icons="true"/>
        <verb verb-id="LayerRaise"      show-icons="true"/>
        <verb verb-id="LayerLower"      show-icons="true"/>
-       <verb verb-id="LayerToTop"      show-icons="true"/>
        <verb verb-id="LayerToBottom"   show-icons="true" />
        <separator/>
        <verb verb-id="LayerDuplicate" />
@@ -224,9 +224,9 @@
        <verb verb-id="ObjectsToMarker" />
        <verb verb-id="ObjectsToGuides" />
        <separator/>
+       <verb verb-id="SelectionToFront"       show-icons="true" />
        <verb verb-id="SelectionRaise"         show-icons="true"/>
        <verb verb-id="SelectionLower"         show-icons="true" />
-       <verb verb-id="SelectionToFront"       show-icons="true" />
        <verb verb-id="SelectionToBack"        show-icons="true"/>
        <separator/>
        <verb verb-id="ObjectRotate90"         show-icons="true" />

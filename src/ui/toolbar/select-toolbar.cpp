@@ -95,17 +95,17 @@ SelectToolbar::SelectToolbar(SPDesktop *desktop) :
 
     add(* Gtk::manage(new Gtk::SeparatorToolItem()));
 
-    auto selection_to_back_button        = add_toolbutton_for_verb(SP_VERB_SELECTION_TO_BACK);
-    _context_items.push_back(selection_to_back_button);
-
-    auto selection_lower_button          = add_toolbutton_for_verb(SP_VERB_SELECTION_LOWER);
-    _context_items.push_back(selection_lower_button);
+    auto selection_to_front_button       = add_toolbutton_for_verb(SP_VERB_SELECTION_TO_FRONT);
+    _context_items.push_back(selection_to_front_button);
 
     auto selection_raise_button          = add_toolbutton_for_verb(SP_VERB_SELECTION_RAISE);
     _context_items.push_back(selection_raise_button);
 
-    auto selection_to_front_button       = add_toolbutton_for_verb(SP_VERB_SELECTION_TO_FRONT);
-    _context_items.push_back(selection_to_front_button);
+    auto selection_lower_button          = add_toolbutton_for_verb(SP_VERB_SELECTION_LOWER);
+    _context_items.push_back(selection_lower_button);
+
+    auto selection_to_back_button        = add_toolbutton_for_verb(SP_VERB_SELECTION_TO_BACK);
+    _context_items.push_back(selection_to_back_button);
 
     add(* Gtk::manage(new Gtk::SeparatorToolItem()));
 
