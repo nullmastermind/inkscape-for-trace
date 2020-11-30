@@ -105,6 +105,9 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     // ================ Window Options ===============
     setup_view();
 
+    // Show dialogs after the main window, otherwise dialogs may be associated as the main window of the program.
+    _desktop->getContainer()->load_container_state();
+
     // ========= Update text for Accellerators =======
     Inkscape::Shortcuts::getInstance().update_gui_text_recursive(this);
 }
@@ -143,9 +146,6 @@ InkscapeWindow::setup_view()
     //       This can result in off-screen windows! We previously worked around this by hiding and re-showing
     //       the window, but a call to hide() causes Inkscape to just exit since the migration to Gtk::Application
     show();
-    
-    // Show dialogs after the main window, otherwise dialogs may be associated as the main window of the program.
-    _desktop->getContainer()->load_container_state();
     
     sp_namedview_zoom_and_view_from_document(_desktop);
     sp_namedview_update_layers_from_document(_desktop);
