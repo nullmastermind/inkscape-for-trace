@@ -1114,7 +1114,7 @@ StrokeStyle::updateAllMarkers(std::vector<SPItem*> const &objects, bool skip_und
 
         SPObject *marker = nullptr;
 
-        if (!all_texts && isHairlineSelected()) {
+        if (!all_texts && !isHairlineSelected()) {
             for (SPObject *object : simplified_list) {
                 char const *value = object->style->marker_ptrs[markertype.loc]->value();
 
