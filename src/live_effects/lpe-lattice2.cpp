@@ -221,13 +221,13 @@ Gtk::Widget *
 LPELattice2::newWidget()
 {
     // use manage here, because after deletion of Effect object, others might still be pointing to this widget.
-    Gtk::Box *vbox = Gtk::manage(dynamic_cast<Gtk::Box*>(Effect::newWidget()));
+    Gtk::Box *vbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
 
     vbox->set_border_width(5);
     vbox->set_homogeneous(false);
     vbox->set_spacing(6);
     Gtk::Box * hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL,0));
-    Gtk::Box *vbox_expander = Gtk::manage(dynamic_cast<Gtk::Box*>(Effect::newWidget()));
+    Gtk::Box *vbox_expander = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
     vbox_expander->set_border_width(0);
     vbox_expander->set_spacing(2);
     Gtk::Button * reset_button = Gtk::manage(new Gtk::Button(Glib::ustring(_("Reset grid"))));
