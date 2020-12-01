@@ -24,6 +24,7 @@
 #include "live_effects/lpeobject.h"
 #include "live_effects/lpeobject-reference.h"
 #include "live_effects/lpe-powerstroke.h"
+#include "live_effects/lpe-slice.h"
 #include "live_effects/lpe-bspline.h"
 #include "live_effects/parameter/path.h"
 
@@ -1555,7 +1556,12 @@ void PathManipulator::_setGeometry()
         if (path->curveBeforeLPE()) {
             if (!_spcurve->is_equal(path->curveBeforeLPE())) {
                 path->setCurveBeforeLPE(_spcurve.get());
-                sp_lpe_item_update_patheffect(path, true, false);
+                // this fix the issue inkscape#1990
+                if (!path->hasPathEffectOfType(Inkscape::LivePathEffect::SLICE)) {
+                    sp_lpe_item_update_patheffect(path, true, false);
+                } else {
+                    path->setCurve(_spcurve.get());
+                }
             }
         } else if (!_spcurve->is_equal(path->curve())) {
             path->setCurve(_spcurve.get());

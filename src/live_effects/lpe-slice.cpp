@@ -192,10 +192,15 @@ LPESlice::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
         items.clear();
         std::vector<std::pair<Geom::Line, size_t> > slicer = getSplitLines();
         split(sp_lpe_item, curve, slicer, 0);
-        for (auto item: items) {
+        std::vector<Glib::ustring> newitemstmp;
+        newitemstmp.assign(items.begin(), items.end());
+        items.clear();
+        for (auto item: newitemstmp) {
             SPItem *spitem = dynamic_cast<SPItem *>(getSPDoc()->getObjectById(item.c_str()));
             if (spitem && !sp_has_path_data(spitem)) {
                 spitem->deleteObject(true);
+            } else {
+                items.push_back(item);
             }
         }
         reset = false;
