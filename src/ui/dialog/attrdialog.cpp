@@ -391,7 +391,6 @@ void AttrDialog::update()
 
     SPDesktop *desktop = getDesktop();
 
-    setRepr(nullptr);
     _desktop = desktop;
 }
 
