@@ -436,7 +436,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         std::vector<Glib::ustring> labels = {_("Negative spacing"),   "",   "",   "", C_("Text tool", "Normal"),  "",  "",  "",  "",  "",  "",  "", _("Positive spacing")};
         std::vector<double>        values = {                 -2.0, -1.5, -1.0, -0.5,                         0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 4.0,                   5.0};
         auto letter_spacing_val = prefs->getDouble("/tools/text/letterspacing", 0.0);
-        _letter_spacing_adj = Gtk::Adjustment::create(letter_spacing_val, -100.0, 100.0, 0.01, 0.10);
+        _letter_spacing_adj = Gtk::Adjustment::create(letter_spacing_val, -100.0, 1000.0, 0.01, 0.10);
         _letter_spacing_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("text-letter-spacing", _("Letter:"), _letter_spacing_adj, 0.1, 2));
         _letter_spacing_item->set_tooltip_text(_("Spacing between letters (px)"));
         _letter_spacing_item->set_custom_numeric_menu_data(values, labels);
@@ -454,7 +454,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         std::vector<Glib::ustring> labels = {_("Negative spacing"),   "",   "",   "", C_("Text tool", "Normal"),  "",  "",  "",  "",  "",  "",  "", _("Positive spacing")};
         std::vector<double>        values = {                 -2.0, -1.5, -1.0, -0.5,                         0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 4.0,                   5.0};
         auto word_spacing_val = prefs->getDouble("/tools/text/wordspacing", 0.0);
-        _word_spacing_adj = Gtk::Adjustment::create(word_spacing_val, -100.0, 100.0, 0.01, 0.10);
+        _word_spacing_adj = Gtk::Adjustment::create(word_spacing_val, -100.0, 1000.0, 0.01, 0.10);
         _word_spacing_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("text-word-spacing", _("Word:"), _word_spacing_adj, 0.1, 2));
         _word_spacing_item->set_tooltip_text(_("Spacing between words (px)"));
         _word_spacing_item->set_custom_numeric_menu_data(values, labels);
@@ -471,7 +471,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         // Drop down menu
         std::vector<double> values = { -2.0, -1.5, -1.0, -0.5,   0,  0.5,  1.0,  1.5,  2.0, 2.5 };
         auto dx_val = prefs->getDouble("/tools/text/dx", 0.0);
-        _dx_adj = Gtk::Adjustment::create(dx_val, -100.0, 100.0, 0.01, 0.1);
+        _dx_adj = Gtk::Adjustment::create(dx_val, -100.0, 1000.0, 0.01, 0.1);
         _dx_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("text-dx", _("Kern:"), _dx_adj, 0.1, 2));
         _dx_item->set_custom_numeric_menu_data(values);
         _dx_item->set_tooltip_text(_("Horizontal kerning (px)"));
@@ -487,7 +487,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         // Drop down menu
         std::vector<double> values = { -2.0, -1.5, -1.0, -0.5,   0,  0.5,  1.0,  1.5,  2.0, 2.5 };
         auto dy_val = prefs->getDouble("/tools/text/dy", 0.0);
-        _dy_adj = Gtk::Adjustment::create(dy_val, -100.0, 100.0, 0.01, 0.1);
+        _dy_adj = Gtk::Adjustment::create(dy_val, -100.0, 1000.0, 0.01, 0.1);
         _dy_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("text-dy", _("Vert:"), _dy_adj, 0.1, 2));
         _dy_item->set_tooltip_text(_("Vertical kerning (px)"));
         _dy_item->set_custom_numeric_menu_data(values);
