@@ -704,12 +704,12 @@ void EraserTool::set_to_accumulated() {
                                 Inkscape::XML::Node* dup = this->repr->duplicate(xml_doc);
                                 this->repr->parent()->appendChild(dup);
                                 Inkscape::GC::release(dup); // parent takes over
-                                auto w_selection = new Inkscape::ObjectSet(this->desktop);
-                                w_selection->set(dup);
+                                Inkscape::ObjectSet w_selection(this->desktop);
+                                w_selection.set(dup);
                                 if (!this->nowidth) {
-                                    w_selection->pathUnion(true);
+                                    w_selection.pathUnion(true);
                                 }
-                                w_selection->add(item);
+                                w_selection.add(item);
                                 if(item->style->fill_rule.value == SP_WIND_RULE_EVENODD){
                                     SPCSSAttr *css = sp_repr_css_attr_new();
                                     sp_repr_css_set_property(css, "fill-rule", "evenodd");
@@ -718,22 +718,22 @@ void EraserTool::set_to_accumulated() {
                                     css = nullptr;
                                 }
                                 if (this->nowidth) {
-                                    w_selection->pathCut(true);
+                                    w_selection.pathCut(true);
                                 } else {
-                                    w_selection->pathDiff(true);
+                                    w_selection.pathDiff(true);
                                 }
                                 workDone = true; // TODO set this only if something was cut.
                                 bool break_apart = prefs->getBool("/tools/eraser/break_apart", false);
                                 if(!break_apart){
-                                    w_selection->combine(true);
+                                    w_selection.combine(true);
                                 } else {
                                     if(!this->nowidth){
-                                        w_selection->breakApart(true);
+                                        w_selection.breakApart(true);
                                     }
                                 }
-                                if ( !w_selection->isEmpty() ) {
+                                if ( !w_selection.isEmpty() ) {
                                     // If the item was not completely erased, track the new remainder.
-                                    std::vector<SPItem*> nowSel(w_selection->items().begin(), w_selection->items().end());
+                                    std::vector<SPItem*> nowSel(w_selection.items().begin(), w_selection.items().end());
                                     for (auto i2 : nowSel) {
                                         remainingItems.push_back(i2);
                                     }
@@ -747,14 +747,14 @@ void EraserTool::set_to_accumulated() {
                     if (!this->nowidth) {
                         remainingItems.clear();
                         for (auto item : toWorkOn){
-                            auto w_selection = new Inkscape::ObjectSet(this->desktop);
+                            Inkscape::ObjectSet w_selection(this->desktop);
                             Geom::OptRect bbox = item->documentVisualBounds();
                             Inkscape::XML::Document *xml_doc = this->desktop->doc()->getReprDoc();
                             Inkscape::XML::Node* dup = this->repr->duplicate(xml_doc);
                             this->repr->parent()->appendChild(dup);
                             Inkscape::GC::release(dup); // parent takes over
-                            w_selection->set(dup);
-                            w_selection->pathUnion(true);
+                            w_selection.set(dup);
+                            w_selection.pathUnion(true);
                             if (bbox && bbox->intersects(*eraserBbox)) {
                                 SPClipPath *clip_path = item->getClipObject();
                                 if (clip_path) {
@@ -777,10 +777,10 @@ void EraserTool::set_to_accumulated() {
                                                     item->getRelativeTransform(SP_ITEM(item_repr->parent));
                                                 dup_clip_obj->updateRepr();
                                                 clip_path->deleteObject(true);
-                                                w_selection->raiseToTop(true);
-                                                w_selection->add(dup_clip);
-                                                w_selection->pathDiff(true);
-                                                //SPItem * clip = SP_ITEM(*(w_selection->items().begin()));
+                                                w_selection.raiseToTop(true);
+                                                w_selection.add(dup_clip);
+                                                w_selection.pathDiff(true);
+                                                //SPItem * clip = SP_ITEM(*(w_selection.items().begin()));
                                             }
                                         }
                                     }
@@ -794,15 +794,15 @@ void EraserTool::set_to_accumulated() {
 
                                     rect->updateRepr();
                                     rect->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-                                    w_selection->raiseToTop(true);
-                                    w_selection->add(rect);
-                                    w_selection->pathDiff(true);
+                                    w_selection.raiseToTop(true);
+                                    w_selection.add(rect);
+                                    w_selection.pathDiff(true);
                                 }
-                                w_selection->raiseToTop(true);
-                                w_selection->add(item);
-                                w_selection->setMask(true, false, true);
+                                w_selection.raiseToTop(true);
+                                w_selection.add(item);
+                                w_selection.setMask(true, false, true);
                             } else {
-                                SPItem *erase_clip = w_selection->singleItem();
+                                SPItem *erase_clip = w_selection.singleItem();
                                 if (erase_clip) {
                                     erase_clip->deleteObject(true);
                                 }
