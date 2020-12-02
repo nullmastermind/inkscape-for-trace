@@ -23,7 +23,8 @@ class SPDesktop;
 
 enum {
     RUBBERBAND_MODE_RECT,
-    RUBBERBAND_MODE_TOUCHPATH
+    RUBBERBAND_MODE_TOUCHPATH,
+    RUBBERBAND_MODE_TOUCHRECT
 };
 
 namespace Inkscape
@@ -49,6 +50,7 @@ public:
     inline std::vector<Geom::Point> getPoints() {return _points;}
 
     void setMode(int mode);
+    void defaultMode();
 
     static Rubberband* get(SPDesktop *desktop);
 

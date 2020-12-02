@@ -269,10 +269,11 @@ bool SelectTool::item_handler(SPItem* item, GdkEvent* event) {
                 bool first_hit = Modifier::get(Modifiers::Type::SELECT_FIRST_HIT)->active(this->button_press_state);
                 bool force_drag = Modifier::get(Modifiers::Type::SELECT_FORCE_DRAG)->active(this->button_press_state);
                 bool always_box = Modifier::get(Modifiers::Type::SELECT_ALWAYS_BOX)->active(this->button_press_state);
+                bool touch_path = Modifier::get(Modifiers::Type::SELECT_TOUCH_PATH)->active(this->button_press_state);
 
                 // if shift or ctrl was pressed, do not move objects;
                 // pass the event to root handler which will perform rubberband, shift-click, ctrl-click, ctrl-drag
-                if (!(always_box || first_hit)) {
+                if (!(always_box || first_hit || touch_path)) {
 
                     this->dragging = TRUE;
                     this->moved = FALSE;
@@ -487,6 +488,8 @@ bool SelectTool::root_handler(GdkEvent* event) {
 
                 if(Modifier::get(Modifiers::Type::SELECT_TOUCH_PATH)->active(event->button.state)) {
                     Inkscape::Rubberband::get(desktop)->setMode(RUBBERBAND_MODE_TOUCHPATH);
+                } else {
+                    Inkscape::Rubberband::get(desktop)->defaultMode();
                 }
 
                 Inkscape::Rubberband::get(desktop)->start(desktop, p);
@@ -620,9 +623,13 @@ bool SelectTool::root_handler(GdkEvent* event) {
                         Inkscape::Rubberband::get(desktop)->move(p);
 
                         auto touch_path = Modifier::get(Modifiers::Type::SELECT_TOUCH_PATH)->get_label();
-                        if (Inkscape::Rubberband::get(desktop)->getMode() == RUBBERBAND_MODE_TOUCHPATH) {
+                        auto mode = Inkscape::Rubberband::get(desktop)->getMode();
+                        if (mode == RUBBERBAND_MODE_TOUCHPATH) {
                             this->defaultMessageContext()->setF(Inkscape::NORMAL_MESSAGE,
                                 _("<b>Draw over</b> objects to select them; release <b>%s</b> to switch to rubberband selection"), touch_path.c_str());
+                        } else if (mode == RUBBERBAND_MODE_TOUCHRECT) {
+                            this->defaultMessageContext()->setF(Inkscape::NORMAL_MESSAGE,
+                                _("<b>Drag near</b> objects to select them; press <b>%s</b> to switch to touch selection"), touch_path.c_str());
                         } else {
                             this->defaultMessageContext()->setF(Inkscape::NORMAL_MESSAGE,
                                 _("<b>Drag around</b> objects to select them; press <b>%s</b> to switch to touch selection"), touch_path.c_str());
@@ -695,6 +702,9 @@ bool SelectTool::root_handler(GdkEvent* event) {
                         if (r->getMode() == RUBBERBAND_MODE_RECT) {
                             Geom::OptRect const b = r->getRectangle();
                             items = desktop->getDocument()->getItemsInBox(desktop->dkey, (*b) * desktop->dt2doc());
+                        } else if (r->getMode() == RUBBERBAND_MODE_TOUCHRECT) {
+                            Geom::OptRect const b = r->getRectangle();
+                            items = desktop->getDocument()->getItemsPartiallyInBox(desktop->dkey, (*b) * desktop->dt2doc());
                         } else if (r->getMode() == RUBBERBAND_MODE_TOUCHPATH) {
                             items = desktop->getDocument()->getItemsAtPoints(desktop->dkey, r->getPoints());
                         }
@@ -846,11 +856,12 @@ bool SelectTool::root_handler(GdkEvent* event) {
                                     || (keyval == GDK_KEY_Meta_R));
 
             if (!key_is_a_modifier (keyval)) {
-                    this->defaultMessageContext()->clear();
+                this->defaultMessageContext()->clear();
             } else if (this->grabbed || _seltrans->isGrabbed()) {
+
                 if (Inkscape::Rubberband::get(desktop)->is_started()) {
                     // if Alt then change cursor to moving cursor:
-                    if (alt) {
+                    if (Modifier::get(Modifiers::Type::SELECT_TOUCH_PATH)->active(event->key.state | keyval)) {
                         Inkscape::Rubberband::get(desktop)->setMode(RUBBERBAND_MODE_TOUCHPATH);
                     }
                 } else {
@@ -1095,7 +1106,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
             if (Inkscape::Rubberband::get(desktop)->is_started()) {
                 // if Alt then change cursor to moving cursor:
                 if (alt) {
-                    Inkscape::Rubberband::get(desktop)->setMode(RUBBERBAND_MODE_RECT);
+                    Inkscape::Rubberband::get(desktop)->defaultMode();
                 }
             } else {
                 if (alt) {

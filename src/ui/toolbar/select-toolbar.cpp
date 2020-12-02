@@ -58,6 +58,7 @@ SelectToolbar::SelectToolbar(SPDesktop *desktop) :
     _tracker(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR)),
     _update(false),
     _lock_btn(Gtk::manage(new Gtk::ToggleToolButton())),
+    _select_touch_btn(Gtk::manage(new Gtk::ToggleToolButton())),
     _transform_stroke_btn(Gtk::manage(new Gtk::ToggleToolButton())),
     _transform_corners_btn(Gtk::manage(new Gtk::ToggleToolButton())),
     _transform_gradient_btn(Gtk::manage(new Gtk::ToggleToolButton())),
@@ -69,6 +70,14 @@ SelectToolbar::SelectToolbar(SPDesktop *desktop) :
     add_toolbutton_for_verb(SP_VERB_EDIT_SELECT_ALL_IN_ALL_LAYERS);
     auto deselect_button                 = add_toolbutton_for_verb(SP_VERB_EDIT_DESELECT);
     _context_items.push_back(deselect_button);
+
+    _select_touch_btn->set_label(_("Select by touch"));
+    _select_touch_btn->set_tooltip_text(_("Toggle selection box to select all touched objects."));
+    _select_touch_btn->set_icon_name(INKSCAPE_ICON("selection-touch"));
+    _select_touch_btn->set_active(prefs->getBool("/tools/select/touch_box", false));
+    _select_touch_btn->signal_toggled().connect(sigc::mem_fun(*this, &SelectToolbar::toggle_touch));
+
+    add(*_select_touch_btn);
 
     add(* Gtk::manage(new Gtk::SeparatorToolItem()));
 
@@ -458,6 +467,13 @@ SelectToolbar::toggle_lock() {
     } else {
         _lock_btn->set_icon_name(INKSCAPE_ICON("object-unlocked"));
     }
+}
+
+void
+SelectToolbar::toggle_touch()
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setBool("/tools/select/touch_box", _select_touch_btn->get_active());
 }
 
 void

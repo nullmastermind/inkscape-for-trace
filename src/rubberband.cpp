@@ -63,7 +63,7 @@ void Inkscape::Rubberband::start(SPDesktop *d, Geom::Point const &p)
 void Inkscape::Rubberband::stop()
 {
     _started = false;
-    _mode = RUBBERBAND_MODE_RECT; // restore the default
+    defaultMode(); // restore the default
 
     _points.clear();
     _touchpath_curve->reset();
@@ -98,39 +98,57 @@ void Inkscape::Rubberband::move(Geom::Point const &p)
         _points.push_back(next);
     }
 
-    if (_mode == RUBBERBAND_MODE_RECT) {
+    if (_touchpath) _touchpath->hide();
+    if (_rect) _rect->hide();
 
-        if (_rect == nullptr) {
-            _rect = new Inkscape::CanvasItemRect(_desktop->getCanvasControls());
-            _rect->set_stroke(0x808080ff);
-            _rect->set_inverted(true);
-        }
-        _rect->set_rect(Geom::Rect(_start, _end));
-        _rect->show();
-
-        if (_touchpath) {
-            _touchpath->hide();
-        }
-
-    } else if (_mode == RUBBERBAND_MODE_TOUCHPATH) {
-
-        if (_touchpath == nullptr) {
-            _touchpath = new Inkscape::CanvasItemBpath(_desktop->getCanvasControls()); // Should be sketch?
-            _touchpath->set_stroke(0xff0000ff);
-            _touchpath->set_fill(0x0, SP_WIND_RULE_NONZERO);
-        }
-        _touchpath->set_bpath(_touchpath_curve);
-        _touchpath->show();
-
-        if (_rect) {
-            _rect->hide();
-        }
+    switch (_mode) {
+        case RUBBERBAND_MODE_RECT:
+            if (_rect == nullptr) {
+                _rect = new Inkscape::CanvasItemRect(_desktop->getCanvasControls());
+                _rect->set_stroke(0x808080ff);
+                _rect->set_inverted(true);
+            }
+            _rect->set_rect(Geom::Rect(_start, _end));
+            _rect->show();
+            break;
+        case RUBBERBAND_MODE_TOUCHRECT:
+            if (_rect == nullptr) {
+                _rect = new Inkscape::CanvasItemRect(_desktop->getCanvasControls());
+                _rect->set_stroke(0xff0000ff);
+                _rect->set_inverted(false);
+            }
+            _rect->set_rect(Geom::Rect(_start, _end));
+            _rect->show();
+            break;
+        case RUBBERBAND_MODE_TOUCHPATH:
+            if (_touchpath == nullptr) {
+                _touchpath = new Inkscape::CanvasItemBpath(_desktop->getCanvasControls()); // Should be sketch?
+                _touchpath->set_stroke(0xff0000ff);
+                _touchpath->set_fill(0x0, SP_WIND_RULE_NONZERO);
+            }
+            _touchpath->set_bpath(_touchpath_curve);
+            _touchpath->show();
+            break;
+        default:
+            break;
     }
 }
 
 void Inkscape::Rubberband::setMode(int mode) 
 {
     _mode = mode;
+}
+/**
+ * Set the default mode (usually rect or touchrect)
+ */
+void Inkscape::Rubberband::defaultMode()
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    if (prefs->getBool("/tools/select/touch_box", false)) {
+        _mode = RUBBERBAND_MODE_TOUCHRECT;
+    } else {
+        _mode = RUBBERBAND_MODE_RECT;
+    }
 }
 
 /**
