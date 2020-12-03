@@ -278,13 +278,11 @@ void PolarArrangeTab::arrange()
 	{
 		if(arrangeOnEllipse)
 		{
-				if(arrangeOnFirstEllipse)
+				if(!arrangeOnFirstEllipse)
 			{
-				// The first selected ellipse is actually the last one in the list
 				if(SP_IS_GENERICELLIPSE(item))
 					referenceEllipse = SP_GENERICELLIPSE(item);
 			} else {
-				// The last selected ellipse is actually the first in list
 				if(SP_IS_GENERICELLIPSE(item) && referenceEllipse == nullptr)
 					referenceEllipse = SP_GENERICELLIPSE(item);
 			}
