@@ -347,25 +347,13 @@ g_print("\n row = %f     col = %f selection x= %f selection y = %f", total_row_h
  */
 void GridArrangeTab::on_row_spinbutton_changed()
 {
-    // quit if run by the attr_changed listener
-    if (updating) {
-            return;
-        }
-
-    // in turn, prevent listener from responding
-    updating = true;
     SPDesktop *desktop = Parent->getDesktop();
-
     Inkscape::Selection *selection = desktop ? desktop->selection : nullptr;
-    g_return_if_fail( selection );
-
+    g_return_if_fail(selection);
     int selcount = (int) boost::distance(selection->items());
 
-    double PerCol = ceil(selcount / NoOfColsSpinner.get_value());
-    NoOfRowsSpinner.set_value(PerCol);
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setDouble("/dialogs/gridtiler/NoOfCols", NoOfColsSpinner.get_value());
-    updating=false;
+    double NoOfRows = ceil(selcount / NoOfColsSpinner.get_value());
+    NoOfRowsSpinner.set_value(NoOfRows);
 }
 
 /**
@@ -373,25 +361,13 @@ void GridArrangeTab::on_row_spinbutton_changed()
  */
 void GridArrangeTab::on_col_spinbutton_changed()
 {
-    // quit if run by the attr_changed listener
-    if (updating) {
-            return;
-        }
-
-    // in turn, prevent listener from responding
-    updating = true;
     SPDesktop *desktop = Parent->getDesktop();
     Inkscape::Selection *selection = desktop ? desktop->selection : nullptr;
     g_return_if_fail(selection);
-
     int selcount = (int) boost::distance(selection->items());
 
-    double PerRow = ceil(selcount / NoOfRowsSpinner.get_value());
-    NoOfColsSpinner.set_value(PerRow);
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setDouble("/dialogs/gridtiler/NoOfCols", PerRow);
-
-    updating=false;
+    double NoOfCols = ceil(selcount / NoOfRowsSpinner.get_value());
+    NoOfColsSpinner.set_value(NoOfCols);
 }
 
 /**
@@ -516,7 +492,6 @@ void GridArrangeTab::updateSelection()
         return;
     }
 
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     // in turn, prevent listener from responding
     updating = true;
     SPDesktop *desktop = Parent->getDesktop();
@@ -538,14 +513,12 @@ void GridArrangeTab::updateSelection()
             if (selcount < NoOfColsSpinner.get_value()) {
                 double NoOfCols = ceil(selcount / NoOfRowsSpinner.get_value());
                 NoOfColsSpinner.set_value(NoOfCols);
-                prefs->setInt("/dialogs/gridtiler/NoOfCols", NoOfCols);
             }
         } else {
             double PerRow = ceil(sqrt(selcount));
             double PerCol = ceil(sqrt(selcount));
             NoOfRowsSpinner.set_value(PerRow);
             NoOfColsSpinner.set_value(PerCol);
-            prefs->setInt("/dialogs/gridtiler/NoOfCols", static_cast<int>(PerCol));
         }
     }
 
