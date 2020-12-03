@@ -349,7 +349,8 @@ void GridArrangeTab::on_row_spinbutton_changed()
 {
     SPDesktop *desktop = Parent->getDesktop();
     Inkscape::Selection *selection = desktop ? desktop->selection : nullptr;
-    g_return_if_fail(selection);
+    if (!selection) return;
+
     int selcount = (int) boost::distance(selection->items());
 
     double NoOfRows = ceil(selcount / NoOfColsSpinner.get_value());
@@ -363,7 +364,8 @@ void GridArrangeTab::on_col_spinbutton_changed()
 {
     SPDesktop *desktop = Parent->getDesktop();
     Inkscape::Selection *selection = desktop ? desktop->selection : nullptr;
-    g_return_if_fail(selection);
+    if (!selection) return;
+
     int selcount = (int) boost::distance(selection->items());
 
     double NoOfCols = ceil(selcount / NoOfRowsSpinner.get_value());
