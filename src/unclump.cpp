@@ -21,19 +21,32 @@
 
 #include "object/sp-item.h"
 
+class Unclump {
+public:
+    double dist(SPItem *item1, SPItem *item2);
+    double average(SPItem *item, std::list<SPItem*> &others);
+    SPItem *closest(SPItem *item, std::list<SPItem*> &others);
+    SPItem *farest(SPItem *item, std::list<SPItem*> &others);
+    std::vector<SPItem*> unclump_remove_behind(SPItem *item, SPItem *closest, std::list<SPItem*> &rest);
+    void push(SPItem *from, SPItem *what, double dist);
+    void pull(SPItem *to, SPItem *what, double dist);
 
-// Taking bbox of an item is an expensive operation, and we need to do it many times, so here we
-// cache the centers, widths, and heights of items
+private:
+    Geom::Point unclump_center(SPItem *item);
+    Geom::Point unclump_wh(SPItem *item);
 
-//FIXME: make a class with these cashes as members instead of globals
-std::map<const gchar *, Geom::Point> c_cache;
-std::map<const gchar *, Geom::Point> wh_cache;
+    // Taking bbox of an item is an expensive operation, and we need to do it many times, so here we
+    // cache the centers, widths, and heights of items
+
+    std::map<const gchar *, Geom::Point> c_cache;
+    std::map<const gchar *, Geom::Point> wh_cache;
+};
 
 /**
 Center of bbox of item
 */
-static Geom::Point
-unclump_center (SPItem *item)
+Geom::Point
+Unclump::unclump_center(SPItem *item)
 {
     std::map<const gchar *, Geom::Point>::iterator i = c_cache.find(item->getId());
     if ( i != c_cache.end() ) {
@@ -51,8 +64,8 @@ unclump_center (SPItem *item)
     }
 }
 
-static Geom::Point
-unclump_wh (SPItem *item)
+Geom::Point
+Unclump::unclump_wh(SPItem *item)
 {
     Geom::Point wh;
     std::map<const gchar *, Geom::Point>::iterator i = wh_cache.find(item->getId());
@@ -76,8 +89,8 @@ Distance between "edges" of item1 and item2. An item is considered to be an elli
 so its radius (distance from center to edge) depends on the w/h and the angle towards the other item.
 May be negative if the edge of item1 is between the center and the edge of item2.
 */
-static double
-unclump_dist (SPItem *item1, SPItem *item2)
+double
+Unclump::dist(SPItem *item1, SPItem *item2)
 {
 	Geom::Point c1 = unclump_center (item1);
 	Geom::Point c2 = unclump_center (item2);
@@ -169,9 +182,9 @@ unclump_dist (SPItem *item1, SPItem *item2)
 }
 
 /**
-Average unclump_dist from item to others
+Average dist from item to others
 */
-static double unclump_average (SPItem *item, std::list<SPItem*> &others)
+double Unclump::average(SPItem *item, std::list<SPItem*> &others)
 {
     int n = 0;
     double sum = 0;
@@ -182,7 +195,7 @@ static double unclump_average (SPItem *item, std::list<SPItem*> &others)
             continue;
 
         n++;
-        sum += unclump_dist (item, other);
+        sum += dist(item, other);
     }
 
     if (n != 0)
@@ -194,7 +207,7 @@ static double unclump_average (SPItem *item, std::list<SPItem*> &others)
 /**
 Closest to item among others
  */
-static SPItem *unclump_closest (SPItem *item, std::list<SPItem*> &others)
+SPItem *Unclump::closest(SPItem *item, std::list<SPItem*> &others)
 {
     double min = HUGE_VAL;
     SPItem *closest = nullptr;
@@ -205,7 +218,7 @@ static SPItem *unclump_closest (SPItem *item, std::list<SPItem*> &others)
         if (other == item)
             continue;
 
-        double dist = unclump_dist (item, other);
+        double dist = this->dist(item, other);
         if (dist < min && fabs (dist) < 1e6) {
             min = dist;
             closest = other;
@@ -218,7 +231,7 @@ static SPItem *unclump_closest (SPItem *item, std::list<SPItem*> &others)
 /**
 Most distant from item among others
  */
-static SPItem *unclump_farest (SPItem *item, std::list<SPItem*> &others)
+SPItem *Unclump::farest(SPItem *item, std::list<SPItem*> &others)
 {
     double max = -HUGE_VAL;
     SPItem *farest = nullptr;
@@ -228,7 +241,7 @@ static SPItem *unclump_farest (SPItem *item, std::list<SPItem*> &others)
         if (other == item)
             continue;
 
-        double dist = unclump_dist (item, other);
+        double dist = this->dist(item, other);
         if (dist > max && fabs (dist) < 1e6) {
             max = dist;
             farest = other;
@@ -243,8 +256,8 @@ Removes from the \a rest list those items that are "behind" \a closest as seen f
 i.e. those on the other side of the line through \a closest perpendicular to the direction from \a
 item to \a closest. Returns a newly created list which must be freed.
  */
-static std::vector<SPItem*>
-unclump_remove_behind (SPItem *item, SPItem *closest, std::list<SPItem*> &rest)
+std::vector<SPItem*>
+Unclump::unclump_remove_behind(SPItem *item, SPItem *closest, std::list<SPItem*> &rest)
 {
     Geom::Point it = unclump_center (item);
     Geom::Point p1 = unclump_center (closest);
@@ -284,8 +297,8 @@ unclump_remove_behind (SPItem *item, SPItem *closest, std::list<SPItem*> &rest)
 /**
 Moves \a what away from \a from by \a dist
  */
-static void
-unclump_push (SPItem *from, SPItem *what, double dist)
+void
+Unclump::push(SPItem *from, SPItem *what, double dist)
 {
     Geom::Point it = unclump_center (what);
     Geom::Point p = unclump_center (from);
@@ -307,8 +320,8 @@ unclump_push (SPItem *from, SPItem *what, double dist)
 /**
 Moves \a what towards \a to by \a dist
  */
-static void
-unclump_pull (SPItem *to, SPItem *what, double dist)
+void
+Unclump::pull(SPItem *to, SPItem *what, double dist)
 {
     Geom::Point it = unclump_center (what);
     Geom::Point p = unclump_center (to);
@@ -336,8 +349,7 @@ grid. May be called repeatedly for stronger effect.
 void
 unclump (std::vector<SPItem*> &items)
 {
-    c_cache.clear();
-    wh_cache.clear();
+    Unclump unclump;
 
     for (std::vector<SPItem*>::const_iterator i = items.begin(); i != items.end();++i) { //  for each original/clone x:
         SPItem *item = *i;
@@ -351,11 +363,11 @@ unclump (std::vector<SPItem*> &items)
         rest.remove(item);
 
         while (!rest.empty()) {
-            SPItem *closest = unclump_closest (item, rest);
+            SPItem *closest = unclump.closest(item, rest);
             if (closest) {
                 nei.push_front(closest);
                 rest.remove(closest);
-                std::vector<SPItem*> new_rest = unclump_remove_behind (item, closest, rest);
+                std::vector<SPItem*> new_rest = unclump.unclump_remove_behind(item, closest, rest);
                 rest.clear();
                 for (int i=0; i < static_cast<int>(new_rest.size()); i++) {
                     rest.push_front(new_rest[new_rest.size() - i - 1]);
@@ -366,21 +378,21 @@ unclump (std::vector<SPItem*> &items)
         }
 
         if ( (nei.size()) >= 2) {
-            double ave = unclump_average (item, nei);
+            double ave = unclump.average(item, nei);
 
-            SPItem *closest = unclump_closest (item, nei);
-            SPItem *farest = unclump_farest (item, nei);
+            SPItem *closest = unclump.closest(item, nei);
+            SPItem *farest = unclump.farest(item, nei);
 
-            double dist_closest = unclump_dist (closest, item);
-            double dist_farest = unclump_dist (farest, item);
+            double dist_closest = unclump.dist(closest, item);
+            double dist_farest = unclump.dist(farest, item);
 
             //g_print ("NEI %d for item %s    closest %s at %g  farest %s at %g  ave %g\n", g_slist_length(nei), item->getId(), closest->getId(), dist_closest, farest->getId(), dist_farest, ave);
 
             if (fabs (ave) < 1e6 && fabs (dist_closest) < 1e6 && fabs (dist_farest) < 1e6) { // otherwise the items are bogus
                 // increase these coefficients to make unclumping more aggressive and less stable
                 // the pull coefficient is a bit bigger to counteract the long-term expansion trend
-                unclump_push (closest, item, 0.3 * (ave - dist_closest));
-                unclump_pull (farest, item, 0.35 * (dist_farest - ave));
+                unclump.push(closest, item, 0.3 * (ave - dist_closest));
+                unclump.pull(farest, item, 0.35 * (dist_farest - ave));
             }
         }
     }
