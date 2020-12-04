@@ -161,6 +161,7 @@ public:
     bool _scroollock;
     double _scroolpos;
     Glib::ustring _current_selector;
+    SPDesktop *_desktop;
 
     // Update watchers
     std::unique_ptr<Inkscape::XML::NodeObserver> m_nodewatcher;

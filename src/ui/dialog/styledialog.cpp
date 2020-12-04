@@ -464,13 +464,13 @@ void StyleDialog::readStyleElement()
         _styleBox.remove(*child);
         delete child;
     }
-    Inkscape::Selection *selection = getDesktop()->getSelection();
+    Inkscape::Selection *selection = _desktop->getSelection();
     SPObject *obj = nullptr;
     if (selection->objects().size() == 1) {
         obj = selection->objects().back();
     }
     if (!obj) {
-        obj = getDesktop()->getDocument()->getXMLDialogSelectedObject();
+        obj = _desktop->getDocument()->getXMLDialogSelectedObject();
         if (obj && !obj->getRepr()) {
             obj = nullptr; // treat detached object as no selection
         }
@@ -983,8 +983,8 @@ void StyleDialog::_onLinkObj(Glib::ustring path, Glib::RefPtr<Gtk::TreeStore> st
     if (row && row[_mColumns._colLinked]) {
         SPObject *linked = row[_mColumns._colHref];
         if (linked) {
-            Inkscape::Selection *selection = getDesktop()->getSelection();
-            getDesktop()->getDocument()->setXMLDialogSelectedObject(linked);
+            Inkscape::Selection *selection = _desktop->getSelection();
+            _desktop->getDocument()->setXMLDialogSelectedObject(linked);
             selection->clear();
             selection->set(linked);
         }
@@ -1062,13 +1062,13 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
         return;
     }
     _scroollock = true;
-    Inkscape::Selection *selection = getDesktop()->getSelection();
+    Inkscape::Selection *selection = _desktop->getSelection();
     SPObject *obj = nullptr;
     if (selection->objects().size() == 1) {
         obj = selection->objects().back();
     }
     if (!obj) {
-        obj = getDesktop()->getDocument()->getXMLDialogSelectedObject();
+        obj = _desktop->getDocument()->getXMLDialogSelectedObject();
     }
     if (selection->objects().size() < 2 && !obj) {
         readStyleElement();
@@ -1589,7 +1589,7 @@ std::vector<SPObject *> StyleDialog::_getObjVec(Glib::ustring selector)
 
     g_assert(selector.find(";") == Glib::ustring::npos);
 
-    return getDesktop()->getDocument()->getObjectsBySelector(selector);
+    return _desktop->getDocument()->getObjectsBySelector(selector);
 }
 
 void StyleDialog::_closeDialog(Gtk::Dialog *textDialogPtr) { textDialogPtr->response(Gtk::RESPONSE_OK); }
@@ -1604,7 +1604,6 @@ void StyleDialog::_handleDocumentReplaced(SPDesktop *desktop, SPDocument * /* do
     g_debug("StyleDialog::handleDocumentReplaced()");
 
     _selection_changed_connection.disconnect();
-
     _updateWatchers(desktop);
 
     if (!desktop)
@@ -1628,17 +1627,11 @@ void StyleDialog::update()
     }
 
     SPDesktop *desktop = getDesktop();
-
-    if (!desktop) {
+    if (!desktop || _desktop == desktop) {
         return;
     }
 
-    if (getDesktop() == desktop) {
-        // This will happen after construction of dialog. We've already
-        // set up signals so just return.
-        return;
-    }
-
+    _desktop = desktop;
     _document_replaced_connection.disconnect();
 
     if (desktop) {
@@ -1657,7 +1650,10 @@ void StyleDialog::_handleSelectionChanged()
     g_debug("StyleDialog::_handleSelectionChanged()");
     _scroolpos = 0;
     _vadj->set_value(0);
-    readStyleElement();
+    // Sometimes the selection changes because inkscape is closing.
+    if (getDesktop()) {
+        readStyleElement();
+    }
 }
 
 } // namespace Dialog

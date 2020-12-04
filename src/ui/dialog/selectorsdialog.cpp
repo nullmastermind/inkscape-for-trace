@@ -1307,10 +1307,10 @@ void SelectorsDialog::update()
     if (!desktop)
         return;
 
+    _style_dialog->update();
+
     _handleSelectionChanged();
     _selectRow();
-
-    _style_dialog->update();
 }
 
 /*
