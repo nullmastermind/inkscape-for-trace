@@ -188,9 +188,7 @@ double Unclump::average(SPItem *item, std::list<SPItem*> &others)
 {
     int n = 0;
     double sum = 0;
-    for (std::list<SPItem*>::const_iterator i = others.begin(); i != others.end();++i) {
-        SPItem *other = *i;
-
+    for (SPItem *other : others) {
         if (other == item)
             continue;
 
@@ -212,9 +210,7 @@ SPItem *Unclump::closest(SPItem *item, std::list<SPItem*> &others)
     double min = HUGE_VAL;
     SPItem *closest = nullptr;
 
-    for (std::list<SPItem*>::const_iterator i = others.begin(); i != others.end();++i) {
-    	SPItem *other = *i;
-
+    for (SPItem *other : others) {
         if (other == item)
             continue;
 
@@ -235,9 +231,8 @@ SPItem *Unclump::farest(SPItem *item, std::list<SPItem*> &others)
 {
     double max = -HUGE_VAL;
     SPItem *farest = nullptr;
-    for (std::list<SPItem*>::const_iterator i = others.begin(); i != others.end();++i) {
-        SPItem *other = *i;
 
+    for (SPItem *other : others) {
         if (other == item)
             continue;
 
@@ -275,9 +270,7 @@ Unclump::unclump_remove_behind(SPItem *item, SPItem *closest, std::list<SPItem*>
     double val_item = A * it[Geom::X] + B * it[Geom::Y] + C;
 
     std::vector<SPItem*> out;
-    for (std::list<SPItem*>::const_reverse_iterator i = rest.rbegin(); i != rest.rend();++i) {
-        SPItem *other = *i;
-
+    for (SPItem *other : rest) {
         if (other == item)
             continue;
 
@@ -351,13 +344,11 @@ unclump (std::vector<SPItem*> &items)
 {
     Unclump unclump;
 
-    for (std::vector<SPItem*>::const_iterator i = items.begin(); i != items.end();++i) { //  for each original/clone x:
-        SPItem *item = *i;
-
+    for (SPItem *item : items) { //  for each original/clone x:
         std::list<SPItem*> nei;
 
         std::list<SPItem*> rest;
-        for (int i=0; i < static_cast<int>(items.size()); i++) {
+        for (size_t i=0; i < items.size(); i++) {
             rest.push_front(items[items.size() - i - 1]);
         }
         rest.remove(item);
@@ -369,7 +360,7 @@ unclump (std::vector<SPItem*> &items)
                 rest.remove(closest);
                 std::vector<SPItem*> new_rest = unclump.unclump_remove_behind(item, closest, rest);
                 rest.clear();
-                for (int i=0; i < static_cast<int>(new_rest.size()); i++) {
+                for (size_t i=0; i < new_rest.size(); i++) {
                     rest.push_front(new_rest[new_rest.size() - i - 1]);
                 }
             } else {
