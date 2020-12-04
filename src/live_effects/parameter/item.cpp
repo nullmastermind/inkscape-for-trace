@@ -18,6 +18,7 @@
 
 #include "live_effects/effect.h"
 #include "live_effects/lpeobject.h"
+#include "live_effects/lpe-clone-original.h"
 #include "svg/svg.h"
 
 #include "desktop.h"
@@ -240,10 +241,26 @@ ItemParam::linked_modified_callback(SPObject *linked_obj, guint /*flags*/)
 }
 
 void
-ItemParam::linked_transformed_callback(Geom::Affine const *rel_transf, SPItem */*moved_item*/)
+ItemParam::linked_transformed_callback(Geom::Affine const *rel_transf, SPItem *moved_item)
 {
     last_transform = *rel_transf;
-    SP_OBJECT(param_effect->getLPEObj())->requestModified(SP_OBJECT_MODIFIED_FLAG);
+    param_effect->getLPEObj()->requestModified(SP_OBJECT_MODIFIED_FLAG);
+    if (dynamic_cast<Inkscape::LivePathEffect::LPECloneOriginal *>(param_effect->getLPEObj()->get_lpe())) {
+        auto hreflist = param_effect->getLPEObj()->hrefList;
+        SPDesktop * desktop = SP_ACTIVE_DESKTOP;
+        if (desktop && hreflist.size()) {
+            Inkscape::Selection *selection = desktop->getSelection();
+            SPLPEItem *sp_lpe_item = dynamic_cast<SPLPEItem *>(*hreflist.begin());
+            SPLPEItem *moved_lpeitem = dynamic_cast<SPLPEItem *>(moved_item);
+            // here use moved item because sp_lpe_item never has optimized transforms because clone LPE
+            if (sp_lpe_item && !selection->includes(sp_lpe_item) && moved_lpeitem && !last_transform.isTranslation()) {
+                if (!moved_lpeitem->optimizeTransforms()) {
+                    sp_lpe_item->transform *= last_transform.withoutTranslation();
+                }
+                sp_lpe_item->doWriteTransform(sp_lpe_item->transform);
+            }
+        }
+    }
 }
 
 

@@ -40,11 +40,11 @@ private:
     OriginalItemParam linkeditem;
     EnumParam<Clonelpemethod> method;
     TextParam attributes;
-    Glib::ustring old_attributes;
     TextParam css_properties;
-    Glib::ustring old_css_properties;
     BoolParam allow_transforms;
-    const gchar * linked;
+    Glib::ustring old_attributes;
+    Glib::ustring old_css_properties;
+    Glib::ustring linked;
     bool listening;
     bool sync;
     sigc::connection deleted_connection;
