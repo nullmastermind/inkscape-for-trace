@@ -82,7 +82,7 @@ public:
         Gtk::TreeModelColumn<Glib::ustring> _colSelector;       // Selector or matching object id.
         Gtk::TreeModelColumn<bool> _colExpand;                  // Open/Close store row.
         Gtk::TreeModelColumn<gint> _colType;                    // Selector row or child object row.
-        Gtk::TreeModelColumn<std::vector<SPObject *> > _colObj; // List of matching objects.
+        Gtk::TreeModelColumn<SPObject *> _colObj;               // Matching object (if any).
         Gtk::TreeModelColumn<Glib::ustring> _colProperties;     // List of properties.
         Gtk::TreeModelColumn<bool> _colVisible;                 // Make visible or not.
         Gtk::TreeModelColumn<gint> _colSelected;                // Make selected.
