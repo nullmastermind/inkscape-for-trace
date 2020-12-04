@@ -259,6 +259,15 @@ void SPFilterPrimitive::renderer_common(Inkscape::Filters::FilterPrimitive *nr_p
     nr_prim->setStyle( this->style );
 }
 
+/* Calculate the region taken up by this filter, given the previous region.
+ *
+ * @param current_region The original shape's region or previous primitive's
+ *                       calcualte_region output.
+ */
+Geom::Rect SPFilterPrimitive::calculate_region(Geom::Rect region)
+{
+    return region; // No change.
+}
 
 
 /*

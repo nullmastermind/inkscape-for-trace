@@ -15,6 +15,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "2geom/rect.h"
 #include "../sp-object.h"
 #include "../sp-dimensions.h"
 
@@ -46,6 +47,9 @@ protected:
 
 public:
 	virtual void build_renderer(Inkscape::Filters::Filter* filter) = 0;
+
+        /* Calculate the filter's effect on the region */
+        virtual Geom::Rect calculate_region(Geom::Rect region);
 
 	/* Common initialization for filter primitives */
 	void renderer_common(Inkscape::Filters::FilterPrimitive *nr_prim);

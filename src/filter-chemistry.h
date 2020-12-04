@@ -26,7 +26,7 @@ class SPObject;
 
 SPFilterPrimitive *filter_add_primitive(SPFilter *filter, Inkscape::Filters::FilterPrimitiveType);
 SPFilter *new_filter (SPDocument *document);
-SPFilter *new_filter_gaussian_blur (SPDocument *document, double stdDeviation, double expansion, double expansionX, double expansionY, double width, double height);
+SPFilter *new_filter_gaussian_blur (SPDocument *document, double stdDeviation, double expansion);
 SPFilter *new_filter_simple_from_item (SPDocument *document, SPItem *item, const char *mode, double stdDeviation);
 SPFilter *modify_filter_gaussian_blur_from_item (SPDocument *document, SPItem *item, double stdDeviation);
 void remove_filter (SPObject *item, bool recursive);

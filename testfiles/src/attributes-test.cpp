@@ -194,6 +194,7 @@ std::vector<AttributeInfo> getKnownAttrs()
         AttributeInfo("lengthAdjust", true),
         AttributeInfo("letter-spacing", true),
         AttributeInfo("lighting-color", true),
+        AttributeInfo("inkscape:auto-region", true),
         AttributeInfo("limitingConeAngle", true),
         AttributeInfo("local", true),
         AttributeInfo("marker-end", true),

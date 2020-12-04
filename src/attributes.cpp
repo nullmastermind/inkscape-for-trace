@@ -532,6 +532,7 @@ static SPStyleProp const props[] = {
     {SPAttr::FLOOD_COLOR, "flood-color"},
     {SPAttr::FLOOD_OPACITY, "flood-opacity"},
     {SPAttr::LIGHTING_COLOR, "lighting-color"},
+    {SPAttr::AUTO_REGION, "inkscape:auto-region"},
 
     /* Gradient */
     {SPAttr::STOP_COLOR, "stop-color"},

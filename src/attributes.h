@@ -534,6 +534,7 @@ enum class SPAttr {
     FLOOD_COLOR,
     FLOOD_OPACITY,
     LIGHTING_COLOR,
+    AUTO_REGION,
 
     /* Gradient */
     STOP_COLOR,

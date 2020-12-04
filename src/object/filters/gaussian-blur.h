@@ -24,8 +24,10 @@ public:
 	SPGaussianBlur();
 	~SPGaussianBlur() override;
 
-    /** stdDeviation attribute */
-    NumberOptNumber stdDeviation;
+        /** stdDeviation attribute */
+        NumberOptNumber stdDeviation;
+
+        Geom::Rect calculate_region(Geom::Rect region) override;
 
 protected:
 	void build(SPDocument* doc, Inkscape::XML::Node* repr) override;

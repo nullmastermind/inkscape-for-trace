@@ -129,6 +129,7 @@ ObjectCompositeSettings::_blendBlurValueChanged()
             remove_filter(item, false);
         } else if (radius != 0) {
             SPFilter *filter = modify_filter_gaussian_blur_from_item(document, item, radius);
+            filter->update_filter_region(item);
             sp_style_set_property_url(item, "filter", filter, false);
         } 
         if (change_blend) { //we do blend so we need update display style

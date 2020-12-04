@@ -120,6 +120,24 @@ void SPGaussianBlur::build_renderer(Inkscape::Filters::Filter* filter) {
     }
 }
 
+/* Calculate the region taken up by gaussian blur
+ *
+ * @param region The original shape's region or previous primitive's region output.
+ */
+Geom::Rect SPGaussianBlur::calculate_region(Geom::Rect region)
+{
+    double x = this->stdDeviation.getNumber();
+    double y = this->stdDeviation.getOptNumber();
+    if (y == -1.0)
+        y = x;
+    // If not within the default 10% margin (see
+    // http://www.w3.org/TR/SVG11/filters.html#FilterEffectsRegion), specify margins
+    // The 2.4 is an empirical coefficient: at that distance the cutoff is practically invisible
+    // (the opacity at 2.4 * radius is about 3e-3)
+    region.expandBy(2.4 * x, 2.4 * y);
+    return region;
+}
+
 /*
   Local Variables:
   mode:c++

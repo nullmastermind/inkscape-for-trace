@@ -14,6 +14,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <2geom/transforms.h>
+
 #include "offset.h"
 
 #include "attributes.h"
@@ -122,6 +124,17 @@ void SPFeOffset::build_renderer(Inkscape::Filters::Filter* filter) {
 
     nr_offset->set_dx(this->dx);
     nr_offset->set_dy(this->dy);
+}
+
+/**
+ * Calculate the region taken up by an offset
+ *
+ * @param region The original shape's region or previous primitive's region output.
+ */
+Geom::Rect SPFeOffset::calculate_region(Geom::Rect region)
+{
+    region *= Geom::Translate(this->dx, this->dy);
+    return region;
 }
 
 

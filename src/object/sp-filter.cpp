@@ -22,6 +22,7 @@
 #include <vector>
 
 #include <glibmm.h>
+#include <2geom/transforms.h>
 
 #include "bad-uri-exception.h"
 #include "attributes.h"
@@ -49,6 +50,7 @@ SPFilter::SPFilter()
     this->y = 0;
     this->width = 0;
     this->height = 0;
+    this->auto_region = true;
 
     this->_image_name->clear();
 }
@@ -70,6 +72,7 @@ void SPFilter::build(SPDocument *document, Inkscape::XML::Node *repr) {
     this->readAttr(SPAttr::Y);
     this->readAttr(SPAttr::WIDTH);
     this->readAttr(SPAttr::HEIGHT);
+    this->readAttr(SPAttr::AUTO_REGION);
     this->readAttr(SPAttr::FILTERRES);
     this->readAttr(SPAttr::XLINK_HREF);
     this->_refcount = 0;
@@ -161,6 +164,10 @@ void SPFilter::set(SPAttr key, gchar const *value) {
             this->height.readOrUnset(value);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
+        case SPAttr::AUTO_REGION:
+            this->auto_region = (!value || strcmp(value, "false"));
+            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            break;
         case SPAttr::FILTERRES:
             this->filterRes.set(value);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -191,6 +198,10 @@ void SPFilter::set(SPAttr key, gchar const *value) {
 guint SPFilter::getRefCount() {
 	// NOTE: this is currently updated by sp_style_filter_ref_changed() in style.cpp
 	return _refcount;
+}
+
+void SPFilter::modified(guint flags) {
+    update_filter_all_regions();
 }
 
 /**
@@ -324,6 +335,66 @@ Inkscape::XML::Node* SPFilter::write(Inkscape::XML::Document *doc, Inkscape::XML
     return repr;
 }
 
+/**
+ * Update the filter's region based on it's detectable href links
+ */
+void SPFilter::update_filter_all_regions()
+{
+    for (auto & obj : this->hrefList) {
+        SPItem *item = dynamic_cast<SPItem *>(obj);
+        update_filter_region(item);
+    }
+}
+
+/**
+ * Update the filter region based on the object's bounding box
+ *
+ * @param item - The item who's coords are used as the basis for the area.
+ */
+void SPFilter::update_filter_region(SPItem *item)
+{
+    Geom::OptRect bbox = item->desktopGeometricBounds();
+    if (!bbox || !this->auto_region)
+        return; // No adjustment for dead box
+
+    // Turn bbox into real box and shrink it to units used in filters.
+    Geom::Rect inbox = *bbox;
+    inbox *= item->i2dt_affine().inverse();
+
+    Geom::Rect outbox = inbox;
+    for(auto& primitive_obj: this->children) {
+        auto primitive = dynamic_cast<SPFilterPrimitive *>(&primitive_obj);
+        if (primitive) {
+            // Update the region with the primitive's options
+            outbox = primitive->calculate_region(outbox);
+        }
+    }
+
+    // Include the original bounding-box in the result
+    outbox.unionWith(inbox);
+    // Scale outbox to width/height scale of input.
+    outbox *= Geom::Translate(-inbox.left(), -inbox.top());
+    outbox *= Geom::Scale(1/inbox.width(), 1/inbox.height());
+
+    // Set the filter region into this filter object
+    this->set_filter_region(outbox.left(), outbox.top(), outbox.width(), outbox.height());
+}
+
+/**
+ * Set the filter region attributes from a bounding box
+ */
+void SPFilter::set_filter_region(double x, double y, double width, double height)
+{
+    if (width != 0 && height != 0)
+    {
+        // TODO: set it in UserSpaceOnUse instead?
+        auto repr = this->getRepr();
+        sp_repr_set_svg_double(repr, "x", x);
+        sp_repr_set_svg_double(repr, "y", y);
+        sp_repr_set_svg_double(repr, "width", width);
+        sp_repr_set_svg_double(repr, "height", height);
+    }
+}
 
 /**
  * Gets called when the filter is (re)attached to another filter.

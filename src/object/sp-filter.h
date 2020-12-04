@@ -19,6 +19,7 @@
 #include "number-opt-number.h"
 #include "sp-dimensions.h"
 #include "sp-object.h"
+#include "sp-item.h"
 #include "sp-filter-units.h"
 #include "svg/svg-length.h"
 
@@ -58,6 +59,10 @@ public:
     /// Returns slot number for given image name, even if it's unknown.
     int set_image_name(char const *name);
 
+    void update_filter_all_regions();
+    void update_filter_region(SPItem *object);
+    void set_filter_region(double x, double y, double width, double height);
+
     /** Finds image name based on it's slot number. Returns 0 for unknown slot
      * numbers. */
     char const *name_for_image(int const image) const;
@@ -71,6 +76,8 @@ public:
     unsigned int primitiveUnits_set : 1;
     NumberOptNumber filterRes;
     SPFilterReference *href;
+    bool auto_region;
+
     sigc::connection modified_connection;
 
     guint getRefCount();
@@ -90,6 +97,7 @@ protected:
 
     void set(SPAttr key, const char* value) override;
 
+    void modified(unsigned int flags) override;
     void update(SPCtx* ctx, unsigned int flags) override;
 
     Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;

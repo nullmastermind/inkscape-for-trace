@@ -2477,15 +2477,13 @@ void CloneTiler::apply()
 
             if (blur > 0.0) {
                 SPObject *clone_object = desktop->getDocument()->getObjectByRepr(clone);
-                double perimeter = perimeter_original * t.descrim();
-                double radius = blur * perimeter;
+                SPItem *item = dynamic_cast<SPItem *>(clone_object);
+                double radius = blur * perimeter_original * t.descrim();
                 // this is necessary for all newly added clones to have correct bboxes,
                 // otherwise filters won't work:
                 desktop->getDocument()->ensureUpToDate();
-                // it's hard to figure out exact width/height of the tile without having an object
-                // that we can take bbox of; however here we only need a lower bound so that blur
-                // margins are not too small, and the perimeter should work
-                SPFilter *constructed = new_filter_gaussian_blur(desktop->getDocument(), radius, t.descrim(), t.expansionX(), t.expansionY(), perimeter, perimeter);
+                SPFilter *constructed = new_filter_gaussian_blur(desktop->getDocument(), radius, t.descrim());
+                constructed->update_filter_region(item);
                 sp_style_set_property_url (clone_object, "filter", constructed, false);
             }
 
