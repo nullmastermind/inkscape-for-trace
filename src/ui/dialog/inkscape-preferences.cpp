@@ -187,8 +187,8 @@ InkscapePreferences::InkscapePreferences()
     : DialogBase("/dialogs/preferences", SP_VERB_DIALOG_PREFERENCES),
       _minimum_width(0),
       _minimum_height(0),
-      _natural_width(0),
-      _natural_height(0),
+      _natural_width(900),
+      _natural_height(700),
       _current_page(nullptr),
       _init(true)
 {
@@ -1560,7 +1560,7 @@ void InkscapePreferences::initPageUI()
     _page_ui.add_group_header(_("_Zoom correction factor (in %)"));
     _page_ui.add_group_note(_("Adjust the slider until the length of the ruler on your screen matches its real length. This information is used when zooming to 1:1, 1:2, etc., to display objects in their true sizes"));
     _ui_zoom_correction.init(300, 30, 0.01, 500.0, 1.0, 10.0, 1.0);
-    _page_ui.add_line( false, "", _ui_zoom_correction, "", "", true);
+    _page_ui.add_line( true, "", _ui_zoom_correction, "", "", true);
 
     _ui_realworldzoom.init( _("Show zoom percentage corrected by factor"), "/options/zoomcorrection/shown", true);
     _page_ui.add_line( false, "", _ui_realworldzoom, "", _("Zoom percentage can be either by the physical units or by pixels."));
