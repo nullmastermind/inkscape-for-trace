@@ -412,12 +412,14 @@ bool PencilTool::_handleButtonRelease(GdkEventButton const &revent) {
                     using namespace Inkscape::LivePathEffect;
                     SPItem * item = sp_event_context_find_item (desktop, Geom::Point(revent.x, revent.y), FALSE, FALSE);
                     if (item && (!this->white_item || item != white_item)) {
-                        Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
-                        if (lpe) {
-                            LPEPowerStroke* ps = static_cast<LPEPowerStroke*>(lpe);
-                            if (ps) {
-                                desktop->selection->clear();
-                                desktop->selection->add(item);
+                        if (SP_IS_LPE_ITEM(item)) {
+                            Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
+                            if (lpe) {
+                                LPEPowerStroke* ps = static_cast<LPEPowerStroke*>(lpe);
+                                if (ps) {
+                                    desktop->selection->clear();
+                                    desktop->selection->add(item);
+                                }
                             }
                         }
                     }
