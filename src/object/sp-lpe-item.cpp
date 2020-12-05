@@ -297,6 +297,14 @@ bool SPLPEItem::optimizeTransforms()
     if (dynamic_cast<SPGroup *>(this)) {
         return false;
     }
+    auto* mask_path = this->getMaskObject();
+    if(mask_path) {
+        return false;
+    }
+    auto* clip_path = this->getClipObject();
+    if(clip_path) {
+        return false;
+    }
     PathEffectList path_effect_list(*this->path_effect_list);
     for (auto &lperef : path_effect_list) {
         if (!lperef) {
