@@ -793,6 +793,11 @@ Canvas::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr)
     assert(_backing_store && _outline_store);
     assert(_drawing);
 
+    cr->save();
+    cr->set_operator(Cairo::OPERATOR_SOURCE);
+    cr->set_source(_background);
+    cr->paint();
+    cr->restore();
     // Blit from the backing store, without regard for the clean region.
     // This is the only place the widget content is drawn!
     if (_drawing->outlineOverlay()) {
@@ -803,8 +808,12 @@ Canvas::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr)
         cr->set_source(_backing_store, 0, 0);
         cr->paint();
         cr->save();
-        cr->set_source(_outline_store, 0, 0);
+        cr->set_source_rgb(255,255,255);
         cr->paint_with_alpha(outline_overlay_opacity);
+        cr->restore();
+        cr->save();
+        cr->set_source(_outline_store, 0, 0);
+        cr->paint();
         cr->restore();
     } else {
         cr->set_source(_backing_store, 0, 0);
@@ -1255,11 +1264,10 @@ Canvas::paint_single_buffer(Geom::IntRect const &paint_rect, Geom::IntRect const
 
     auto cr = Cairo::Context::create(imgs);
 
-    // Paint background
+    // Clear background
     cr->save();
-    cr->translate(-paint_rect.left(), -paint_rect.top());
     cr->set_operator(Cairo::OPERATOR_SOURCE);
-    cr->set_source(_background);
+    cr->set_source_rgba(0,0,0,0);
     cr->paint();
     cr->restore();
 
