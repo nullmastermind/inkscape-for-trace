@@ -71,7 +71,7 @@ LPESlice::LPESlice(LivePathEffectObject *lpeobject) :
     registerParameter(&end_point);
     registerParameter(&center_point);
     registerParameter(&allow_transforms);
-    apply_to_clippath_and_mask = true;
+    apply_to_clippath_and_mask = false;
     previous_center = Geom::Point(0,0);
     center_point.param_widget_is_visible(false);
     reset = false;
@@ -288,6 +288,8 @@ LPESlice::createPathBase(SPObject *elemref) {
     if (group) {
         Inkscape::XML::Node *container = xml_doc->createElement("svg:g");
         container->setAttribute("transform", prev->attribute("transform"));
+        container->setAttribute("mask", prev->attribute("mask"));
+        container->setAttribute("clip-path", prev->attribute("clip-path"));
         std::vector<SPItem*> const item_list = sp_item_group_item_list(group);
         Inkscape::XML::Node *previous = nullptr;
         for (auto sub_item : item_list) {
@@ -299,6 +301,8 @@ LPESlice::createPathBase(SPObject *elemref) {
     }
     Inkscape::XML::Node *resultnode = xml_doc->createElement("svg:path");
     resultnode->setAttribute("transform", prev->attribute("transform"));
+    resultnode->setAttribute("mask", prev->attribute("mask"));
+    resultnode->setAttribute("clip-path", prev->attribute("clip-path"));
     return resultnode;
 }
 
