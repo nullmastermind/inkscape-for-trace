@@ -1221,7 +1221,7 @@ void font_lister_cell_data_func2(GtkCellLayout * /*cell_layout*/,
         Glib::ustring sample = prefs->getString("/tools/text/font_sample");
         gchar* sample_escaped = g_markup_escape_text(sample.data(), -1);
         if (data) {
-            markup += " <span alpha='70%";
+            markup += " <span alpha='55%";
             markup += "' font_family='";
             markup += family_escaped;
         } else {
