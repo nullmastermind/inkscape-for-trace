@@ -636,6 +636,7 @@ Canvas::on_motion_notify_event(GdkEventMotion *motion_event)
             // Reset everything.
             _split_mode = Inkscape::SplitMode::NORMAL;
             _split_position = Geom::Point(-1, -1);
+            _hover_direction = Inkscape::SplitDirection::NONE;
             set_cursor();
             queue_draw();
 
