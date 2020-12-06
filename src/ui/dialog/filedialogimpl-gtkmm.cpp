@@ -159,7 +159,7 @@ void FileDialogBaseGtk::_previewEnabledCB()
     set_preview_widget_active(enabled);
     if (enabled) {
         _updatePreviewCallback();
-    } else {
+    } else if (svgPreview.is_visible()) {
         // Clears out any current preview image.
         svgPreview.showNoPreview();
     }
