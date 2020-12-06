@@ -6,10 +6,9 @@
 # ### 130-jhbuild-bootstrap.sh ###
 # Bootstrap the JHBuild environment.
 
-### load global settings and functions #########################################
+### settings and functions #####################################################
 
-SELF_DIR=$(F=$0; while [ ! -z $(readlink $F) ] && F=$(readlink $F); cd $(dirname $F); F=$(basename $F); [ -L $F ]; do :; done; echo $(pwd -P))
-for script in $SELF_DIR/0??-*.sh; do source $script; done
+for script in $(dirname ${BASH_SOURCE[0]})/0??-*.sh; do source $script; done
 
 ### bootstrap JHBuild ##########################################################
 
@@ -23,5 +22,5 @@ jhbuild build python3
 jhbuild run pip3 install $PYTHON_MESON
 
 # Install Ninja build systems.
-download_url $URL_NINJA $PKG_DIR
-unzip -d $BIN_DIR $PKG_DIR/$(basename $URL_NINJA)
+download_url $NINJA_URL $PKG_DIR
+unzip -d $BIN_DIR $PKG_DIR/$(basename $NINJA_URL)

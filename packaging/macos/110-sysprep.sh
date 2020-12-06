@@ -6,10 +6,9 @@
 # ### 110-sysprep.sh ###
 # System preparation tasks.
 
-### load settings and functions ################################################
+### settings and functions #####################################################
 
-SELF_DIR=$(F=$0; while [ ! -z $(readlink $F) ] && F=$(readlink $F); cd $(dirname $F); F=$(basename $F); [ -L $F ]; do :; done; echo $(pwd -P))
-for script in $SELF_DIR/0??-*.sh; do source $script; done
+for script in $(dirname ${BASH_SOURCE[0]})/0??-*.sh; do source $script; done
 
 ### initial information ########################################################
 
@@ -23,14 +22,21 @@ if [ ! -d $SDKROOT ]; then
   exit 1
 fi
 
-### create version directory ###################################################
+### create directories #########################################################
 
-if [ ! -d $VER_DIR ]; then
-  mkdir -p $VER_DIR
-fi
+for dir in $VER_DIR $TMP_DIR $HOME; do
+  mkdir -p $dir
+done
 
-### create temporary directory #################################################
+### install ccache #############################################################
 
-if [ ! -d $TMP_DIR ]; then
-  mkdir -p $TMP_DIR
-fi
+install_source $CCACHE_URL
+configure_make_makeinstall
+
+cd $BIN_DIR
+ln -s ccache clang
+ln -s ccache clang++
+ln -s ccache gcc
+ln -s ccache g++
+
+configure_ccache $CCACHE_SIZE  # create directory and config file

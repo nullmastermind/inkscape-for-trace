@@ -15,7 +15,7 @@ This folder contains the scripts that make up the build pipeline for Inkscape on
 
 - There are __version recommendations__.
   - macOS Catalina 10.15.7
-  - Xcode 12.0.1
+  - Xcode 12.2
   - OS X El Capitan 10.11 SDK from Xcode 7.3.1 (expected in `/opt/sdks/MacOSX10.11.sdk`, see `SDKROOT_DIR` in `020-vars.sh`)
 
 - A somewhat decent __internet connection__ for all the downloads.
@@ -67,8 +67,8 @@ This folder contains the scripts that make up the build pipeline for Inkscape on
    This will
 
    - download a disk image (about 1.6 GiB) to `/Users/Shared/work/repo`
-   - mount the (read only) disk image to `/Users/Shared/work/$TOOLSET_VERSION`
-   - union-mount a ramdisk (3 GiB) to `/Users/Shared/work/$TOOLSET_VERSION`
+   - mount the (read only) disk image to `/Users/Shared/work/$TOOLSET_VER`
+   - union-mount a ramdisk (3 GiB) to `/Users/Shared/work/$TOOLSET_VER`
 
    The mounted volumes won't show up in the Finder but you can see them using `diskutil`. Use `uninstall_toolset.sh` to eject them (`repo` will not be deleted though).
 
@@ -80,7 +80,7 @@ This folder contains the scripts that make up the build pipeline for Inkscape on
    ./build_inkscape.sh
    ```
 
-   Ultimately this will produce `/Users/Shared/work/$TOOLSET_VERSION/artifacts/Inkscape.dmg`.
+   Ultimately this will produce `/Users/Shared/work/$TOOLSET_VER/artifacts/Inkscape.dmg`.
 
 ## GitLab CI
 

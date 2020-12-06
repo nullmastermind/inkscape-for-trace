@@ -7,11 +7,9 @@
 # Install a pre-compiled version of the JHBuild toolset and required
 # dependencies for Inkscape.
 
-### load settings and functions ################################################
+### settings and functions #####################################################
 
-SELF_DIR=$(F=$0; while [ ! -z $(readlink $F) ] && F=$(readlink $F); \
-  cd $(dirname $F); F=$(basename $F); [ -L $F ]; do :; done; echo $(pwd -P))
-for script in $SELF_DIR/0??-*.sh; do source $script; done
+for script in $(dirname ${BASH_SOURCE[0]})/0??-*.sh; do source $script; done
 
 include_file ansi_.sh
 include_file echo_.sh
@@ -20,18 +18,20 @@ error_trace_enable
 
 ANSI_TERM_ONLY=false   # use ANSI control characters even if not in terminal
 
+TOOLSET_REPO_DIR=$WRK_DIR/repo  # where toolset dmg are downloaded and kept
+
 ### install toolset ############################################################
 
 function install
 {
-  local toolset_dmg=$REPO_DIR/$(basename $URL_TOOLSET)
+  local toolset_dmg=$TOOLSET_REPO_DIR/$(basename $TOOLSET_URL)
 
   if [ -f $toolset_dmg ]; then
     echo_i "no download required"
   else
     # File not present on disk, we need to download.
     echo_i "download required"
-    download_url $URL_TOOLSET $REPO_DIR
+    download_url $TOOLSET_URL $TOOLSET_REPO_DIR
   fi
 
   echo_i "Mounting compressed disk image, this may take some time..."
@@ -61,7 +61,7 @@ function install
   chmod 755 $WRK_DIR/create_dirs.sh
 
   # create writable (ramdisk-) overlay
-  device=$(create_ram_device $OVERLAY_RAMDISK_SIZE build)
+  device=$(create_ram_device $TOOLSET_OVERLAY_SIZE build)
   mount -o nobrowse,rw,union -t hfs $device $VER_DIR
   echo_i "writable overlay mounted as $device"
 

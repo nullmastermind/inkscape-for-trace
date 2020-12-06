@@ -55,65 +55,6 @@
 			<dict>
 				<key>CFBundleTypeExtensions</key>
 				<array>
-					<string>eps</string>
-					<string>epsi</string>
-					<string>EPS</string>
-					<string>EPSI</string>
-				</array>
-				<key>CFBundleTypeIconFile</key>
-				<string>image-x-eps.icns</string>
-				<key>CFBundleTypeMIMETypes</key>
-				<array>
-					<string>application/postscript</string>
-					<string>image/x-eps</string>
-				</array>
-				<key>CFBundleTypeName</key>
-				<string>PostScript Document</string>
-				<key>CFBundleTypeOSTypes</key>
-				<array>
-					<string>EPS </string>
-					<string>EPSI</string>
-				</array>
-				<key>CFBundleTypeRole</key>
-				<string>Editor</string>
-				<key>LSHandlerRank</key>
-				<string>Alternate</string>
-				<key>LSItemContentTypes</key>
-				<array>
-					<string>com.adobe.encapsulated-postscript</string>
-				</array>
-			</dict>
-			<dict>
-				<key>CFBundleTypeExtensions</key>
-				<array>
-					<string>ps</string>
-					<string>PS</string>
-				</array>
-				<key>CFBundleTypeIconFile</key>
-				<string>image-x-ps.icns</string>
-				<key>CFBundleTypeMIMETypes</key>
-				<array>
-					<string>application/postscript</string>
-					<string>image/x-ps</string>
-				</array>
-				<key>CFBundleTypeName</key>
-				<string>PostScript Document</string>
-				<key>CFBundleTypeOSTypes</key>
-				<array>
-					<string>PS  </string>
-				</array>
-				<key>CFBundleTypeRole</key>
-				<string>Editor</string>
-				<key>LSHandlerRank</key>
-				<string>Alternate</string>
-				<key>LSItemContentTypes</key>
-				<array>
-					<string>com.adobe.postscript</string>
-				</array>
-			</dict>
-			<dict>
-				<key>CFBundleTypeExtensions</key>
-				<array>
 					<string>ai</string>
 					<string>AI</string>
 				</array>

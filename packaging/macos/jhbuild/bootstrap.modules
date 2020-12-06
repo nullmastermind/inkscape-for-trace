@@ -1,8 +1,6 @@
 <?xml version="1.0" standalone="no"?> <!--*- mode: nxml -*-->
 <?xml-stylesheet type="text/xsl" href="moduleset.xsl"?>
 <moduleset>
-  <repository type="tarball" name="ftp.gnome.org" default="yes"
-              href="ftp://ftp.gnome.org/pub/gnome/sources/"/>
   <repository type="tarball" name="ftp.gnu.org"
               href="https://ftp.gnu.org/gnu/"/>
   <repository type="tarball" name="pkgconfig"
@@ -20,9 +18,9 @@
               href="http://launchpad.net/intltool/trunk/"/>
 
   <autotools id='readline' autogen-sh="configure">
-    <branch repo="ftp.gnu.org" module="readline/readline-8.0.tar.gz"
-            hash="sha256:e339f51971478d369f8a053a330a190781acb9864cf4c541060f12078948e461"
-            version="8.0">
+    <branch repo="ftp.gnu.org" module="readline/readline-8.1.tar.gz"
+            hash="sha256:f8ceb4ee131e3232226a17f51b164afc46cd0b9e6cef344be87c65962cb82b02"
+            version="8.1">
     </branch>
   </autotools>
 
@@ -40,11 +38,9 @@
   </autotools>
   <autotools id="gettext" autogen-sh="configure"
              autogenargs="--without-emacs --disable-java --disable-native-java --disable-libasprintf --disable-csharp --with-included-glib --with-included-libcroco">
-    <!--
-    <branch repo="ftp.gnu.org"
-            module="gettext/gettext-0.20.2.tar.xz" version="0.20.2">
+    <!-- GNU gettext
 
-    - updated to latest version to not conflict with what bundled Python.framework (3.8.5.1) needs
+         Version is in-line with what bundled Python.framework (3.8.5.1) needs.
     -->
     <branch repo="ftp.gnu.org"
             module="gettext/gettext-0.21.tar.xz"

@@ -4,7 +4,7 @@
 <moduleset>
 
   <repository type="tarball" name="ftp.gnome.org" default="yes"
-              href="ftp://ftp.gnome.org/pub/gnome/sources/"/>
+              href="https://ftp.fau.de/gnome/sources/"/>
   <repository type="tarball" name="ftp.gnu.org" href="https://ftp.gnu.org/gnu/"/>
   <repository type="tarball" name="sourceforge"
               href="http://downloads.sourceforge.net/sourceforge/"/>
@@ -12,20 +12,14 @@
               href="http://www.ijg.org/files/"/>
   <repository type="tarball" name="libtiff"
 	      href="http://download.osgeo.org/"/>
-  <repository type="tarball" name="fontconfig"
-	      href="http://www.freedesktop.org/software/fontconfig/release/"/>
   <repository type="tarball" name="icon-theme"
 	      href="http://icon-theme.freedesktop.org/releases/"/>
   <repository type="tarball" name="xmlsoft.org"
 	      href="ftp://xmlsoft.org/libxml2/"/>
   <repository type="git" name="git.gnome.org"
               href="https://gitlab.gnome.org/GNOME"/>
-  <repository type="tarball" name="harfbuzz"
-              href="http://www.freedesktop.org/software/harfbuzz/release/"/>
   <repository type="tarball" name="itstool" href="http://files.itstool.org/"/>
   <repository type="tarball" name="github-tarball" href="https://github.com/"/>
-  <repository type="tarball" name="ragel"
-              href="http://www.colm.net/files/ragel/"/>
 
   <autotools id='readline' autogen-sh="configure">
     <branch repo="ftp.gnu.org" module="readline/readline-8.0.tar.gz"
@@ -53,7 +47,7 @@
     <branch version="4.1.0" module="libtiff/tiff-4.1.0.tar.gz"
 	    hash="sha156:5d29f32517dadb6dbcd1255ea5bbc93a2b54b94fbf83653b4d65c7d6775b8634"
 	    repo="libtiff">
-	<patch file="https://raw.githubusercontent.com/dehesselle/mibap/v0.42/patches/tiff-nohtml.patch" strip="1" />
+	<patch file="tiff-nohtml.patch" strip="1" />
     </branch>
     <dependencies>
       <dep package="libjpeg"/>
@@ -72,7 +66,6 @@
             hash="sha256:94fb70890143e3c6549f265cee93ec064c80a84c42ad0f23e85ee1fd6540a871"
 	    repo="xmlsoft.org"/>
     <after>
-      <dep package="python"/>
       <dep package="python3"/>
     </after>
   </autotools>
@@ -89,7 +82,7 @@
   <autotools id="itstool" autogen-sh="configure">
     <branch module="itstool/itstool-2.0.6.tar.bz2" version="2.0.6n"
             repo="itstool">
-      <patch file="https://raw.githubusercontent.com/dehesselle/mibap/v0.42/patches/itstool-config-python.patch" strip="1"/>
+      <patch file="itstool-config-python.patch" strip="1"/>
     </branch>
     <dependencies>
       <dep package="libxml2"/>
@@ -132,51 +125,9 @@
 
   <autotools id="icu" autogen-sh="source/configure" autogenargs="--enable-rpath"
              makeargs='CFLAGS="$CFLAGS -DU_CHARSET_IS_UTF8=1 -DU_USING_ICU_NAMESPACE=0"'>
-    <branch repo="github-tarball" version="66.1" checkoutdir="icu"
+    <branch repo="github-tarball" version="66.1" checkoutdir="icu-66.1"
             module="unicode-org/icu/releases/download/release-66-1/icu4c-66_1-src.tgz"
             hash="sha256:52a3f2209ab95559c1cf0a14f24338001f389615bf00e2585ef3dbc43ecf0a2e"/>
-  </autotools>
-
-
-  <autotools id="ragel" autogen-sh='autoreconf'>
-    <branch repo="ragel" module="ragel-6.10.tar.gz" version="6.10">
-      <patch file="https://raw.githubusercontent.com/dehesselle/mibap/v0.42/patches/ragel-6.9-setiosflags.patch" strip="1"/>
-    </branch>
-  </autotools>
-
-  <autotools id="harfbuzz" autogen-sh="configure"
-             autogenargs="--with-coretext --with-icu">
-    <branch repo="harfbuzz" module="harfbuzz-2.6.4.tar.xz" version="2.6.4"
-            hash="sha256:9413b8d96132d699687ef914ebb8c50440efc87b3f775d25856d7ec347c03c12">
-    </branch>
-    <dependencies>
-      <dep package="ragel"/>
-      <dep package="glib"/>
-      <dep package="icu"/>
-    </dependencies>
-    <after>
-      <dep package="icu55"/>
-    </after>
-  </autotools>
-
-  <autotools id="freetype" autogen-sh="configure"
-             skip-autogen="never"
-             autogenargs="--without-bzip2 --without-harfbuzz">
-    <branch module="freetype/freetype-2.10.2.tar.gz" version="2.10.2"
-            repo="sourceforge">
-    </branch>
-    <dependencies>
-      <dep package="zlib"/>
-    </dependencies>
-  </autotools>
-
-  <autotools id="fontconfig" autogen-sh="autoreconf"
-             autogenargs="--disable-docs '--with-add-fonts=/System/Library/Fonts,/Library/Fonts,~/Library/Fonts'">
-    <branch repo="fontconfig" version="2.13.1" module="fontconfig-2.13.1.tar.bz2">
-    </branch>
-    <dependencies>
-      <dep package="freetype"/>
-    </dependencies>
   </autotools>
 
   <autotools id="hicolor-icon-theme" autogen-sh="configure"
@@ -192,14 +143,6 @@
       <dep package="libtiff"/>
       <dep package="hicolor-icon-theme"/>
       <dep package="gtk-doc"/>
-    </dependencies>
-  </metamodule>
-
-  <metamodule id="meta-gtk-osx-freetype">
-    <dependencies>
-      <dep package="freetype"/>
-      <dep package="fontconfig"/>
-      <dep package="harfbuzz"/>
     </dependencies>
   </metamodule>
 

@@ -1,0 +1,18 @@
+Recently a new issue manifested out of thin air: linking to pango fails with
+missing symbols like '_g_object_unref'. Pango requires '-lgobject-2.0',
+but this does not appear in the linker flags (check invocation with
+'make V=1'). Easiest way for a quick & dirty fix is to configure with
+PANGO_LIBS set accordingly, but the configure scripts deletes the setting
+although claiming to respect it. Therefore we patch the configure
+script first.
+--- a/configure
++++ b/configure
+@@ -31889,7 +31889,7 @@
+   ac_status=$?
+   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+   test $ac_status = 0; }; then
+-  pkg_cv_PANGO_LIBS=`$PKG_CONFIG --libs "pangocairo >= 1.28.1" 2>/dev/null`
++  pkg_cv_PANGO_LIBS="$($PKG_CONFIG --libs pangocairo) -lgobject-2.0"
+ 		      test "x$?" != "x0" && pkg_failed=yes
+ else
+   pkg_failed=yes

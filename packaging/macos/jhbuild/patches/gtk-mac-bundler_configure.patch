@@ -1,0 +1,24 @@
+--- a/configure	2020-11-29 14:24:17.000000000 +0100
++++ b/configure	2020-11-29 14:21:40.000000000 +0100
+@@ -0,0 +1,21 @@
++#!/usr/bin/env bash
++
++# This mocks a configure script to provide an interface for JHBuild.
++# We're only interested in the prefix so we can patch the Makefile.
++
++while [ "$#" -gt 0 ]; do
++  case $1 in
++    --prefix=*) PREFIX=${1:9}; break ;;
++    *) echo "ignoring parameter: $1" ;;
++  esac
++  shift
++done
++
++if [ -z $PREFIX ]; then
++  echo "--prefix=* argument not found"
++  exit 1
++else
++  sed -i "" "/bindir=/a\\
++    bindir=$PREFIX\/bin\\
++    " Makefile
++fi

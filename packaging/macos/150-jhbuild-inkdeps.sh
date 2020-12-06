@@ -7,29 +7,22 @@
 # Install additional dependencies into our jhbuild environment required for
 # building Inkscape.
 
-### load settings and functions ################################################
+### settings and functions #####################################################
 
-SELF_DIR=$(F=$0; while [ ! -z $(readlink $F) ] && F=$(readlink $F); cd $(dirname $F); F=$(basename $F); [ -L $F ]; do :; done; echo $(pwd -P))
-for script in $SELF_DIR/0??-*.sh; do source $script; done
+for script in $(dirname ${BASH_SOURCE[0]})/0??-*.sh; do source $script; done
 
 ### install Inkscape dependencies ##############################################
 
-# Part of gtk-osx module sets.
-
 jhbuild build \
-  libsoup
-
-# Part of inkscape module set.
-
-jhbuild build \
-  boehm_gc \
-  double_conversion \
-  ghostscript \
-  google_test \
+  bdw-gc \
+  doubleconversion \
+  googletest \
   gsl \
   gspell \
   imagemagick \
   libcdr \
+  libsoup \
+  libvisio \
   openjpeg \
   openmp \
   poppler \

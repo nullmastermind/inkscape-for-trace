@@ -3,7 +3,7 @@
 <?xml-stylesheet type="text/xsl" href="moduleset.xsl"?>
 <moduleset>
   <repository type="tarball" name="ftp.gnome.org" default="yes"
-              href="http://ftp.gnome.org/pub/GNOME/sources/"/>
+              href="https://ftp.fau.de/gnome/sources/"/>
   <repository type="tarball" name="doxygen"
               href="http://ftp.stack.nl/pub/users/dimitri/"/>
   <repository type="tarball" name="cairographics"
@@ -34,7 +34,7 @@
     <branch module="cairomm-1.13.1.tar.gz" version="1.13.1"
 	    hash="sha1:63cd9eab40686f368a8edd3e6912ac18b3048ecf"
             repo="cairographics">
-      <patch file="https://raw.githubusercontent.com/dehesselle/mibap/v0.42/patches/cairomm-Bug-100894-Cairomm-compile-failure-if-no-cairo-ft.patch" strip="1"/>
+      <patch file="cairomm-Bug-100894-Cairomm-compile-failure-if-no-cairo-ft.patch" strip="1"/>
     </branch>
     <dependencies>
       <dep package="cairo"/>
@@ -94,18 +94,6 @@
       <dep package="pangomm"/>
       <dep package="atkmm"/>
       <dep package="gtk+-3.0"/>
-    </dependencies>
-  </autotools>
-
-  <autotools id="gtkmm" autogen-sh="configure">
-    <branch module="gtkmm/2.24/gtkmm-2.24.5.tar.xz" version="2.24.5"
-            hash="sha256:0680a53b7bf90b4e4bf444d1d89e6df41c777e0bacc96e9c09fc4dd2f5fe6b72"/>
-    <dependencies>
-      <dep package="glibmm"/>
-      <dep package="cairomm"/>
-      <dep package="pangomm"/>
-      <dep package="atkmm"/>
-      <dep package="gtk+"/>
     </dependencies>
   </autotools>
 

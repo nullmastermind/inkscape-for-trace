@@ -3,7 +3,7 @@
 <?xml-stylesheet type="text/xsl" href="moduleset.xsl"?>
 <moduleset>
   <repository type="tarball" name="ftp.gnome.org" default="yes"
-              href="http://ftp.gnome.org/pub/GNOME/sources/"/>
+              href="https://ftp.fau.de/gnome/sources/"/>
 
   <repository type="tarball" name="ftp.gtk.org"
               href="https://ftp.gtk.org/pub/"/>
@@ -36,23 +36,9 @@
       <dep package="shared-mime-info"/>
       <dep package="gossip"/>
       <dep package="vala"/>
-      <dep package="glade3"/>
       <dep package="librsvg"/>
     </dependencies>
   </metamodule>
-
-<!-- Libglade's functions are now part of Gtk+ with different names and
-Libglade itself is deprecated. This is the last release. -->
-  <autotools id="libglade" autogen-sh='autoreconf'>
-    <branch module="libglade/2.6/libglade-2.6.4.tar.bz2" version="2.6.4"
-            md5sum="d1776b40f4e166b5e9c107f1c8fe4139" >
-      <patch file="https://raw.githubusercontent.com/dehesselle/mibap/v0.42/patches/libglade-gmodule.patch" strip="1"/>
-    </branch>
-    <after>
-      <dep package="meta-gtk-osx-bootstrap"/>
-      <dep package="meta-gtk-osx-core"/>
-    </after>
-  </autotools>
 
   <autotools id="vala" autogen-sh="configure"
              autogenargs="--disable-valadoc">
@@ -62,66 +48,6 @@ Libglade itself is deprecated. This is the last release. -->
             hash="sha256:c83a9b7292627bc259dae7cd414c813a48f285b4b2f4b574fa28e6af9a582ab4"/>
     <after>
       <dep package="meta-gtk-osx-bootstrap"/>
-      <dep package="meta-gtk-osx-core"/>
-    </after>
-  </autotools>
-
-  <autotools id="libunique" autogen-sh="configure"
-             autogenargs="--without-x --disable-dbus">
-    <branch module="libunique/3.0/libunique-3.0.2.tar.bz2" version="3.0.2"
-            hash="sha256:a8f02ce073e2b920cca8ac45d418e7cb64438ad0814780c5912c6d63f8a4e038">
-      <patch file="https://raw.githubusercontent.com/dehesselle/mibap/v0.42/patches/libunique-663913-sockaddr-un.patch" strip="1"/>
-    </branch>
-    <dependencies>
-      <dep package="gtk+"/>
-    </dependencies>
-  </autotools>
-
-<!-- This is, I think, the last Gtk+2 version -->
-  <autotools id="devhelp" autogen-sh="autogen.sh">
-    <branch module="devhelp/2.32/devhelp-2.32.0.tar.bz2" version="2.32.0"
-            hash="sha256:61b342cbaf27379be9baa5df1f34c9464916601ec4378fa7e1c76fcc686553e4">
-      <patch file="https://raw.githubusercontent.com/dehesselle/mibap/v0.42/patches/devhelp-663789-gtkosxapplication.patch" strip="1"/>
-      <patch file="https://raw.githubusercontent.com/dehesselle/mibap/v0.42/patches/devhelp-646962-variable-name.patch" strip="1"/>
-    </branch>
-    <after>
-      <dep package="meta-gtk-osx-bootstrap"/>
-      <dep package="meta-gtk-osx-themes"/>
-      <dep package="meta-gtk-osx-core"/>
-    </after>
-    <dependencies>
-      <dep package="WebKit"/>
-      <dep package="libunique"/>
-    </dependencies>
-  </autotools>
-
-  <autotools id="devhelp-gtk3" autogen-sh="configure">
-    <branch module="devhelp/3.24/devhelp-3.24.0.tar.xz" version="3.24.0"
-            hash="sha256:4858de1c815532ad160d1bf9facd28859972e3a052908a8edf73f866c8cce430"/>
-    <after>
-      <dep package="meta-gtk-osx-bootstrap"/>
-      <dep package="meta-gtk-osx-themes"/>
-      <dep package="meta-gtk-osx-gtk3"/>
-    </after>
-    <dependencies>
-      <dep package="webkit2gtk3"/>
-      <dep package="gsettings-desktop-schemas"/>
-      <!-- Without shared-mime-info, HTML documents display as plain text -->
-      <dep package="shared-mime-info"/>
-    </dependencies>
-  </autotools>
-
-<!-- Glade 3.8 is the last stable series for Gtk+-2 -->
-  <autotools id="glade3" autogen-sh="configure"
-	     autogenargs="--disable-scrollkeeper">
-    <branch module="glade3/3.8/glade3-3.8.5.tar.xz" version="3.8.5"
-            hash="sha256:58a5f6e4df4028230ddecc74c564808b7ec4471b1925058e29304f778b6b2735">
-      <patch file="https://raw.githubusercontent.com/dehesselle/mibap/v0.42/patches/Glade-3-8-Mac-Integration-Fix-up-menu-accelerators-for-Mac.patch" strip="1"/>
-    </branch>
-    <after>
-      <dep package="meta-gtk-osx-bootstrap"/>
-      <dep package="meta-gtk-osx-themes"/>
-      <dep package="meta-gtk-osx-core"/>
     </after>
   </autotools>
 
@@ -131,7 +57,7 @@ Libglade itself is deprecated. This is the last release. -->
 	     autogenargs='--disable-scrollkeeper --disable-introspection CPPFLAGS="$CPPFLAGS -xobjective-c"'>
     <branch module="glade/3.22/glade-3.22.1.tar.xz" version="3.22.1"
             hash="sha256:dff89a2ef2eaf000ff2a46979978d03cb9202cb04668e01d0ea5c5bb5547e39a">
-      <patch file="https://raw.githubusercontent.com/dehesselle/mibap/v0.42/patches/glade-3.22.1-xslproc.patch" strip="1"/>
+      <patch file="glade-3.22.1-xslproc.patch" strip="1"/>
     </branch>
     <dependencies>
       <dep package="itstool"/>
@@ -140,18 +66,6 @@ Libglade itself is deprecated. This is the last release. -->
       <dep package="meta-gtk-osx-bootstrap"/>
       <dep package="meta-gtk-osx-themes"/>
       <dep package="meta-gtk-osx-gtk3"/>
-    </after>
-  </autotools>
-
-<!-- gtksourceview-2.10.5 is the last version that supports Gtk+-2 -->
-  <autotools id="gtksourceview" autogen-sh="configure">
-    <branch module="gtksourceview/2.10/gtksourceview-2.10.5.tar.bz2"
-            version="2.10.5" hash="sha256:c585773743b1df8a04b1be7f7d90eecdf22681490d6810be54c81a7ae152191e">
-      <patch file="https://raw.githubusercontent.com/dehesselle/mibap/v0.42/patches/gtksourceview-664511-gtkosxapplication.patch" strip="1"/>
-    </branch>
-    <after>
-      <dep package="meta-gtk-osx-bootstrap"/>
-      <dep package="meta-gtk-osx-core"/>
     </after>
   </autotools>
 
@@ -197,15 +111,6 @@ Libglade itself is deprecated. This is the last release. -->
 	    repo="sqlite"/>
   </autotools>
 
-<!-- Goocanvas-1 is for gtk+-2. -->
-  <autotools id="goocanvas" autogen-sh="configure">
-    <branch module="goocanvas/1.0/goocanvas-1.0.0.tar.bz2" version="1.0.0"
-	    hash="sha256:1c072ef88567cad241fb4addee26e9bd96741b1503ff736d1c152fa6d865711e"/>
-    <dependencies>
-      <dep package="gtk+"/>
-    </dependencies>
-  </autotools>
-
 <!-- Goocanvas2 is for gtk+-3. -->
 
   <autotools id="goocanvas2" supports-non-srcdir-builds="no">
@@ -214,56 +119,12 @@ Libglade itself is deprecated. This is the last release. -->
     <branch repo="git.gnome.org" module="goocanvas" checkoutdir="goocanvas2"/>
     <after>
       <dep package="gtk+-3.0"/>
-      <dep package="gtk+-3.14"/>
-    </after>
-  </autotools>
-
-<!-- Libart_lgpl is deprecated by gnome. This is probably the last release. -->
-  <autotools id="libart_lgpl">
-    <branch   module="libart_lgpl/2.3/libart_lgpl-2.3.21.tar.bz2"
-	      version="2.3.21" hash="sha256:fdc11e74c10fc9ffe4188537e2b370c0abacca7d89021d4d303afdf7fd7476fa"/>
-    <after>
-      <dep package="meta-gtk-osx-bootstrap"/>
-      <dep package="meta-gtk-osx-core"/>
     </after>
   </autotools>
 
   <autotools id="hunspell" autogen-sh="autoreconf">
     <branch module="hunspell/hunspell/archive/v1.6.1.tar.gz" version="1.6.1"
 	    repo="github-tarball" checkoutdir="hunspell-1.6.1"/>
-  </autotools>
-
-  <autotools id="enchant" autogen-sh="configure"
-             autogenargs="--with-myspell-dir=/Library/Dictionaries">
-    <branch module="1.6.0/enchant-1.6.0.tar.gz" version="1.6.0"
-            repo="abisource/enchant">
-      <patch file="https://raw.githubusercontent.com/dehesselle/mibap/v0.42/patches/enchant-gsize.patch"
-             strip="1"/>
-      <patch file="https://raw.githubusercontent.com/dehesselle/mibap/v0.42/patches/enchant-env.patch"
-             strip="1"/>
-    </branch>
-    <dependencies>
-      <dep package="glib"/>
-    </dependencies>
-  </autotools>
-
-  <autotools id="gtkspell" autogen-sh="configure">
-    <branch module="gtkspell/gtkspell-2.0.16.tar.gz" repo="sourceforge"
-	    version="2.0.16"/>
-    <dependencies>
-      <dep package="enchant"/>
-    </dependencies>
-  </autotools>
-
-  <autotools id="gtkspell3" autogen-sh="configure">
-    <branch module="gtkspell/gtkspell3-3.0.9.tar.xz" repo="sourceforge"
-            version="3.0.9">
-      <patch file="https://raw.githubusercontent.com/dehesselle/mibap/v0.42/patches/0001-Enable-use-of-XDG_DATA_DIRS-for-locating-iso-code-fi.patch" strip="1"/>
-    </branch>
-    <dependencies>
-      <dep package="enchant"/>
-      <dep package="iso-codes"/>
-    </dependencies>
   </autotools>
 
   <autotools id="libgsf" autogenargs="--without-python">
@@ -283,17 +144,10 @@ Libglade itself is deprecated. This is the last release. -->
     </branch>
   </autotools>
 
-  <autotools id="libatomic-ops"
-             autogen-template="pushd %(srcdir)s &amp;&amp; ./%(autogen-sh)s &amp;&amp; popd &amp;&amp; %(srcdir)s/configure --prefix=%(prefix)s %(autogenargs)s">
-    <branch repo="github.com" module="ivmai/libatomic_ops"
-	    revision="libatomic_ops-7_4_4"/>
-  </autotools>
-
-  <autotools id="bdw-gc" autogen-template="pushd %(srcdir)s &amp;&amp; ./autogen.sh &amp;&amp; automake -ac &amp;&amp; popd &amp;&amp; %(srcdir)s/configure --prefix %(prefix)s  %(autogenargs)s">
-    <branch repo="github.com" module="ivmai/bdwgc"  revision="gc7_6_0" />
-    <dependencies>
-      <dep package="libatomic-ops"/>
-    </dependencies>
+  <!-- Boehm-Demers-Weiser Garbage Collector https://github.com/ivmai/bdwgc -->
+  <autotools id="bdw-gc" autogen-sh="configure">
+    <branch repo="github-tarball" module="ivmai/bdwgc/releases/download/v8.0.4/gc-8.0.4.tar.gz" version="8.0.4"
+            hash="sha256:436a0ddc67b1ac0b0405b61a9675bca9e075c8156f4debd1d06f3a56c7cd289d"/>
   </autotools>
 
   <autotools id="guile" autogen-sh="configure"
@@ -309,8 +163,8 @@ Libglade itself is deprecated. This is the last release. -->
   <autotools id="guile2" autogen-sh="configure">
     <branch repo="ftp.gnu.org" module="guile/guile-2.0.11.tar.gz"
 	    version="2.0.11">
-      <!--patch file="https://raw.githubusercontent.com/dehesselle/mibap/v0.42/patches/guild-shell.patch" strip="1"/>
-      <patch file="https://raw.githubusercontent.com/dehesselle/mibap/v0.42/patches/guile-clocktime.patch" strip="1"/-->
+      <!--patch file="guild-shell.patch" strip="1"/>
+      <patch file="guile-clocktime.patch" strip="1"/-->
     </branch>
     <dependencies>
       <dep package="libunistring"/>

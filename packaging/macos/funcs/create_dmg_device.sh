@@ -9,7 +9,7 @@ function create_dmg_device
   local dmg=$1
   local options=$2   # optional arguments for hdiutil
 
-  local device=$(hdiutil attach -nomount $dmg $options | grep "^/dev/disk" | \
+  local device=$(hdiutil attach -nomount $dmg $options | grep "^/dev/disk" |
       grep "Apple_HFS" | awk '{ print $1 }')
 
   echo $device

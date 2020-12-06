@@ -5,10 +5,11 @@
   <repository name="bintray"      type="tarball" href="https://dl.bintray.com/"/>
   <repository name="freedesktop"  type="tarball" href="https://gitlab.freedesktop.org/"/>
   <repository name="github"       type="tarball" href="https://github.com/"/>
-  <repository name="gnome_ftp"    type="tarball" href="http://ftp.gnome.org/pub/GNOME/sources/"/>
+  <repository name="gnome_ftp"    type="tarball" href="https://ftp.fau.de/gnome/sources/"/>
   <repository name="gnome_gitlab" type="tarball" href="https://gitlab.gnome.org/GNOME/"/>
   <repository name="gnu"          type="tarball" href="http://ftp.halifax.rwth-aachen.de/gnu/"/>
   <repository name="libreoffice"  type="tarball" href="https://dev-www.libreoffice.org/src/"/>
+  <repository name="poppler"      type="tarball" href="https://poppler.freedesktop.org/"/>
   <repository name="sourceforge"  type="tarball" href="https://netcologne.dl.sourceforge.net/project/"/>
 
   <include href="gtk-osx.modules"/>
@@ -16,70 +17,52 @@
   <!--
           - Dependencies marked with TODO have not been investigated yet.
             Maybe there are no dependencies or maybe they need to be added.
-
-          - enchant v2.x collides with the enchant package from gtk-osx
-            module set. Breaks gtkspell3. Once migration to gspell happens,
-            this will turn into a non-issue.
   -->
 
-  <!-- https://github.com/ivmai/bdwgc -->
-  <autotools  id="boehm_gc"
-              autogen-sh="configure">
-    <branch module="ivmai/bdwgc/releases/download/v8.0.4/gc-8.0.4.tar.gz"
-            version="8.0.4"
-            hash="sha256:436a0ddc67b1ac0b0405b61a9675bca9e075c8156f4debd1d06f3a56c7cd289d"
-            repo="github">
+  <!-- boost C++ libraries https://www.boost.org
+
+       This is a hackish way of installing boost with JHBuild. Skipping
+       installation means that JHBuild will (re-)install this everytime
+       it gets pulled in.
+  -->
+  <autotools
+    id="boost"
+    autogen-sh="bootstrap.sh"
+    autogenargs="--without-libraries=python"
+    autogen-template="%(srcdir)s/%(autogen-sh)s --prefix=%(prefix)s %(autogenargs)s"
+    makeargs="|| ./b2 -d0 install"
+    skip-install="yes"
+    supports-non-srcdir-builds="no">
+    <branch
+      module="boostorg/release/1.74.0/source/boost_1_74_0.tar.bz2"
+      version="1.74.0"
+      hash="sha256:83bfc1507731a0906e387fc28b7ef5417d591429e51e788417fe9ff025e116b1"
+      repo="bintray">
     </branch>
   </autotools>
 
-  <!-- https://www.boost.org -->
-  <!--   This is a clever but hackish way to build boost with JHBuild. It gets
-         the job done but the (necessary) workaround to skip the installation
-         step prevents JHBuild from ever thinking that boost has been
-         successfully installed. So whenever boost gets pulled in, it will
-         (unnecessarily) be rebuilt and reinstalled every single time.
-  -->
-  <autotools  id="boost"
-              autogen-sh="bootstrap.sh"
-              autogenargs="--without-libraries=python"
-              autogen-template="%(srcdir)s/%(autogen-sh)s --prefix=%(prefix)s %(autogenargs)s"
-              makeargs="|| ./b2 -d0 install"
-              skip-install="yes"
-              supports-non-srcdir-builds="no">
-    <branch module="boostorg/release/1.72.0/source/boost_1_72_0.tar.bz2"
-            version="1.72.0"
-            hash="sha256:59c9b274bc451cf91a9ba1dd2c7fdcaf5d60b1b3aa83f2c9fa143417cc660722"
-            repo="bintray">
-    </branch>
-  </autotools>
-
-  <!-- https://github.com/google/double-conversion -->
-  <cmake id="double_conversion">
-    <branch module="google/double-conversion/archive/v3.1.5.tar.gz"
-            version="3.1.5"
-            hash="sha256:a63ecb93182134ba4293fd5f22d6e08ca417caafa244afaa751cbfddf6415b13"
-            repo="github"
-            checkoutdir="double_conversion">
+  <!-- binary<->decimal routines for IEEE doubles https://github.com/google/double-conversion -->
+  <cmake
+    id="doubleconversion">
+    <branch
+      module="google/double-conversion/archive/v3.1.5.tar.gz"
+      version="3.1.5"
+      hash="sha256:a63ecb93182134ba4293fd5f22d6e08ca417caafa244afaa751cbfddf6415b13"
+      repo="github"
+      checkoutdir="doubleconversion-3.1.5"
+      rename-tarball="doubleconversion-3.1.5.tar.gz">
     </branch>
   </cmake>
 
-  <!-- C/C++ compiler cache https://ccache.dev -->
-  <autotools  id="ccache"
-              autogen-sh="configure">
-    <branch module="ccache/ccache/releases/download/v3.7.9/ccache-3.7.9.tar.xz"
-            version="3.7.9"
-            hash="sha256:f893da7543bfb9172bd55e603fcbdfcd83e6def176a28689c13235695b4cf44b"
-            repo="github">
-    </branch>
-  </autotools>
-
   <!-- cppunit test framework https://www.freedesktop.org/wiki/Software/cppunit/ -->
-  <autotools  id="cppunit"
-              autogen-sh="configure">
-    <branch module="cppunit-1.14.0.tar.gz"
-            version="1.14.0"
-            hash="sha256:3d569869d27b48860210c758c4f313082103a5e58219a7669b52bfd29d674780"
-            repo="libreoffice">
+  <autotools
+    id="cppunit"
+    autogen-sh="configure">
+    <branch
+      module="cppunit-1.15.1.tar.gz"
+      version="1.15.1"
+      hash="sha256:89c5c6665337f56fd2db36bc3805a5619709d51fb136e51937072f63fcc717a7"
+      repo="libreoffice">
     </branch>
     <dependencies>
       <!-- TODO
@@ -89,76 +72,31 @@
   </autotools>
 
   <!-- Enchant https://abiword.github.io/enchant/ -->
-  <autotools  id="enchant2"
-              autogen-sh="configure"
-              autogenargs="--with-applespell --enable-relocatable">
-    <branch module="AbiWord/enchant/releases/download/v2.2.8/enchant-2.2.8.tar.gz"
-            version="2.2.8"
-            hash="sha256:c7b5e2853f0dd0b1aafea2f9e071941affeec3a76df8e3f6d67a718c89293555"
-            repo="github">
+  <autotools
+    id="enchant2"
+    autogen-sh="configure"
+    autogenargs="--with-applespell --enable-relocatable">
+    <branch
+      module="AbiWord/enchant/releases/download/v2.2.13/enchant-2.2.13.tar.gz"
+      version="2.2.13"
+      hash="sha256:eab9f90d79039133660029616e2a684644bd524be5dc43340d4cfc3fb3c68a20"
+      repo="github">
     </branch>
     <dependencies>
       <dep package="glib"/>
     </dependencies>
   </autotools>
 
-  <!-- Gnome Docking Library https://gitlab.gnome.org/GNOME/gdl -->
-  <!--   Xcode 12 errors out on implicit function declarations, so we need to
-         ignore them.
-   -->
-  <autotools  id="gdl"
-              autogen-sh='autogen.sh CFLAGS="$CFLAGS -Wno-error=implicit-function-declaration"'>
-    <branch module="gdl/-/archive/20935bab3a4cec350ad7b938a6a1ca566810e67c/gdl-20935bab3a4cec350ad7b938a6a1ca566810e67c.tar.gz"
-            version="20935bab3a4cec350ad7b938a6a1ca566810e67c"
-            hash="sha256:37707c7e9beda15e344f323a6b6dc97e371ce9a987f2165844694f5541045e7d"
-            repo="gnome_gitlab">
-      <patch  file="https://raw.githubusercontent.com/dehesselle/mibap/v0.42/patches/gdl_disable_preview_window.patch"
-              strip="1"/>
-    </branch>
-    <dependencies>
-      <dep package="gnome-common"/>
-    </dependencies>
-  </autotools>
-
-  <!-- https://www.ghostscript.com -->
-  <autotools  id="ghostscript"
-              autogen-sh="configure">
-    <branch module="ArtifexSoftware/ghostpdl-downloads/releases/download/gs952/ghostscript-9.52.tar.xz"
-            version="9.52"
-            hash="sha256:57442acf8b46453a9b5fc6fec738fbbb7e13a3d3e00f1aaaa0975529bc203c7c"
-            repo="github">
-      <patch  file="https://raw.githubusercontent.com/dehesselle/mibap/v0.42/patches/ghostscript_configure_libtiff.patch"
-              strip="1"/>
-      <patch  file="https://raw.githubusercontent.com/dehesselle/mibap/v0.42/patches/ghostscript_configure_fontconfig.patch"
-              strip="1"/>
-      <!--  required on Catalina 10.15.4, XCode 11.4.1
-            not required on Mojave 10.14.6, XCode 11.3.1
-      -->
-      <patch  file="https://raw.githubusercontent.com/dehesselle/mibap/v0.42/patches/ghostscript_link_cupsimage.patch"
-              strip="1"/>
-    </branch>
-    <dependencies>
-      <!-- TODO
-      <dep package="package-name"/>
-      -->
-    </dependencies>
-  </autotools>
-
-  <!-- Gnome common stuff -->
-  <autotools id="gnome-common">
-    <branch module="gnome-common/3.18/gnome-common-3.18.0.tar.xz"
-            version="3.18.0"
-            hash="sha256:22569e370ae755e04527b76328befc4c73b62bfd4a572499fde116b8318af8cf"
-            repo="gnome_ftp"/>
-  </autotools>
-
   <!-- Google Testing and Mocking Framework https://github.com/google/googletest -->
-  <cmake id="google_test">
-    <branch module="google/googletest/archive/release-1.10.0.tar.gz"
-            version="1.10.0"
-            hash="sha256:9dc9157a9a1551ec7a7e43daea9a694a0bb5fb8bec81235d8a1e6ef64c716dcb"
-            repo="github"
-            checkoutdir="google_test">
+  <cmake
+    id="googletest">
+    <branch
+      module="google/googletest/archive/release-1.10.0.tar.gz"
+      version="1.10.0"
+      hash="sha256:9dc9157a9a1551ec7a7e43daea9a694a0bb5fb8bec81235d8a1e6ef64c716dcb"
+      repo="github"
+      checkoutdir="googletest-1.10.0"
+      rename-tarball="googletest-1.10.0.tar.gz">
     </branch>
     <dependencies>
       <!-- TODO
@@ -167,30 +105,33 @@
     </dependencies>
   </cmake>
 
-  <!-- GNU Scientific Library https://www.gnu.org/software/gsl -->
-  <autotools  id="gsl"
-              autogen-sh="configure">
-    <branch module="gsl/gsl-2.6.tar.gz"
-            version="2.6"
-            hash="sha256:b782339fc7a38fe17689cb39966c4d821236c28018b6593ddb6fd59ee40786a8"
-            repo="gnu">
+  <!-- GNU Scientific Library https://www.gnu.org/software/gsl
+
+       We stick to version 1.9 as this is the last one licensed under GPLv2.
+  -->
+  <autotools
+    id="gsl"
+    autogen-sh='configure CFLAGS="$CFLAGS -Wno-error=implicit-function-declaration"'>
+    <branch
+      module="gsl/gsl-1.9.tar.gz"
+      version="1.9"
+      hash="sha256:fcd1c6784997c2312d922d107fcb30462f5be4335ebdfa8e1e0e07568c962250"
+      repo="gnu">
     </branch>
-    <dependencies>
-      <!-- TODO
-      <dep package="package-name"/>
-      -->
-    </dependencies>
   </autotools>
 
-  <!-- https://wiki.gnome.org/Projects/gspell -->
-  <autotools  id="gspell"
-              autogen-sh="autoreconf">
-    <branch module="gspell/1.8/gspell-1.8.3.tar.xz"
-            version="1.8.3"
-            hash="sha256:5ae514dd0216be069176accf6d0049d6a01cfa6a50df4bc06be85f7080b62de8"
-            repo="gnome_ftp">
-      <patch  file="https://raw.githubusercontent.com/dehesselle/mibap/v0.42/patches/gspell_makefile_objc.patch"
-              strip="1"/>
+  <!-- Spell checking for GTK https://wiki.gnome.org/Projects/gspell -->
+  <autotools
+    id="gspell"
+    autogen-sh="autoreconf">
+    <branch
+      module="gspell/1.9/gspell-1.9.1.tar.xz"
+      version="1.9.1"
+      hash="sha256:dcbb769dfdde8e3c0a8ed3102ce7e661abbf7ddf85df08b29915e92cd723abdd"
+      repo="gnome_ftp">
+      <patch
+        file="gspell_makefile_objc.patch"
+        strip="1"/>
     </branch>
     <dependencies>
       <dep package="enchant2"/>
@@ -201,31 +142,63 @@
     </dependencies>
   </autotools>
 
+  <!-- GTK Mac Bundler https://gitlab.gnome.org/GNOME/gtk-mac-bundler
+
+       This is a hackish way of installing GTK Mac Bundler with JHBuild.
+       The patch supplies a mocked configure script that's only interested in
+       taking the prefix and patching the Makefile accordingly. Skipping
+       installation means that JHBuild will (re-)install this everytime
+       it gets pulled in.
+   -->
+  <autotools
+    id="gtkmacbundler"
+    autogen-sh="configure"
+    supports-non-srcdir-builds="no"
+    makeargs="&amp;&amp; make install"
+    skip-install="yes">
+    <branch
+      module="gtk-mac-bundler/-/archive/3770bb6c27a913dc39dbcc98fe175a53df92700c/gtk-mac-bundler-3770bb6c27a913dc39dbcc98fe175a53df92700c.tar.bz2"
+      version="3770bb6c"
+      hash="sha256:79703fbcb7ffcad3617316d41fa6169e9f3bced040b2a231fd0d158e9f7edfde"
+      repo="gnome_gitlab"
+      checkoutdir="gtk-mac-bundler_3770bb6c"
+      rename-tarball="gtk-mac-bundler_3770bb6c.tar.bz2">
+      <patch
+        file="gtk-mac-bundler_configure.patch"
+        strip="1"/>
+    </branch>
+  </autotools>
+
   <!-- ImageMagick 6 https://legacy.imagemagick.org -->
-  <autotools  id="imagemagick"
-              autogen-sh="configure">
-    <branch module="ImageMagick/ImageMagick6/archive/6.9.10-89.tar.gz"
-            version="6.9.10-89"
-            hash="sha256:f5ba5d21d14850cb6cd800213f3357f852a6ca2920fb394aa23ace528b93d74f"
-            repo="github"
-            checkoutdir="imagemagick">
-      <patch  file="https://raw.githubusercontent.com/dehesselle/mibap/v0.42/patches/imagemagick_configure_pango.patch"
-              strip="1"/>
+  <autotools
+    id="imagemagick"
+    autogen-sh="configure">
+    <branch
+      module="ImageMagick/ImageMagick6/archive/6.9.11-22.tar.gz"
+      version="6.9.11-22"
+      hash="sha256:1dd6efedc624738bc38a27611b509c299fc958dc6138370abd34864c0af8cfa0"
+      repo="github"
+      checkoutdir="imagemagick-6.9.11-22"
+      rename-tarball="imagemagick-6.9.11-22.tar.gz">
+      <patch
+        file="imagemagick_configure_pango.patch"
+        strip="1"/>
     </branch>
     <dependencies>
-      <!-- TODO -->
       <dep package="pango"/>
     </dependencies>
   </autotools>
 
-  <!-- https://github.com/LibreOffice/libcdr -->
-  <autotools  id="libcdr"
-              autogen-sh="autoreconf">
-    <branch module="LibreOffice/libcdr/archive/libcdr-0.1.5.tar.gz"
-            version="0.1.5"
-            hash="sha256:55589010d2f063b95eec53c802127fa25c516210a7086d57baa5ae9156986bc0"
-            repo="github"
-            checkoutdir="libcdr">
+  <!-- Reading/Writing CorelDRAW files https://github.com/LibreOffice/libcdr -->
+  <autotools
+    id="libcdr"
+    autogen-sh="autoreconf">
+    <branch
+      module="LibreOffice/libcdr/archive/libcdr-0.1.6.tar.gz"
+      version="0.1.6"
+      hash="sha256:1a3bbed08cea213eadddf5b54333cc1defcf1acc81b8c9efa431f6491ed646f4"
+      repo="github"
+      checkoutdir="libcdr-0.1.6">
     </branch>
     <dependencies>
       <dep package="boost"/>
@@ -236,26 +209,51 @@
     </dependencies>
   </autotools>
 
-  <!-- https://sourceforge.net/p/libwpd/wiki/librevenge/ -->
-  <autotools  id="librevenge"
-              autogen-sh="configure">
-    <branch module="libwpd/librevenge/librevenge-0.0.4/librevenge-0.0.4.tar.gz"
-            version="0.0.4"
-            hash="sha256:a2718efd86000fe769cb6178478af0fd424a9128807361241facd2491bcb772f"
-            repo="sourceforge">
+  <!-- base library for document import filters https://sourceforge.net/p/libwpd/wiki/librevenge/ -->
+  <autotools
+    id="librevenge"
+    autogen-sh="configure">
+    <branch
+      module="libwpd/librevenge/librevenge-0.0.4/librevenge-0.0.4.tar.gz"
+      version="0.0.4"
+      hash="sha256:a2718efd86000fe769cb6178478af0fd424a9128807361241facd2491bcb772f"
+      repo="sourceforge">
     </branch>
     <dependencies>
       <dep package="cppunit"/>
     </dependencies>
   </autotools>
 
+  <!-- Reading/Converting Visio files https://github.com/LibreOffice/libvisio -->
+  <autotools
+    id="libvisio"
+    autogen-sh="autoreconf">
+    <branch
+      module="LibreOffice/libvisio/archive/libvisio-0.1.7.tar.gz"
+      version="0.1.7"
+      hash="sha256:68b8a0b45e39b6ba154fe79169f2887cc19f6ee2b82f287b4b625c70294aff27"
+      repo="github"
+      checkoutdir="libvisio-0.1.7">
+    </branch>
+    <dependencies>
+      <dep package="boost"/>
+      <dep package="icu"/>
+      <dep package="librevenge"/>
+      <dep package="libxml2"/>
+      <dep package="zlib"/>
+    </dependencies>
+  </autotools>
+
   <!-- OpenJPEG https://github.com/uclouvain/openjpeg -->
-  <cmake id="openjpeg">
-    <branch module="uclouvain/openjpeg/archive/v2.3.1.tar.gz"
-            version="2.3.1"
-            hash="sha256:63f5a4713ecafc86de51bfad89cc07bb788e9bba24ebbf0c4ca637621aadb6a9"
-            repo="github"
-            checkoutdir="openjpeg">
+  <cmake
+    id="openjpeg">
+    <branch
+      module="uclouvain/openjpeg/archive/v2.3.1.tar.gz"
+      version="2.3.1"
+      hash="sha256:63f5a4713ecafc86de51bfad89cc07bb788e9bba24ebbf0c4ca637621aadb6a9"
+      repo="github"
+      checkoutdir="openjpeg-2.3.1"
+      rename-tarball="openjpeg-2.3.1.tar.gz">
     </branch>
     <dependencies>
       <!-- TODO
@@ -265,12 +263,14 @@
   </cmake>
 
   <!-- OpenMP https://github.com/llvm/llvm-project -->
-  <cmake id="openmp">
-    <branch module="llvm/llvm-project/releases/download/llvmorg-9.0.1/openmp-9.0.1.src.tar.xz"
-            version="9.0.1"
-            hash="sha256:5c94060f846f965698574d9ce22975c0e9f04c9b14088c3af5f03870af75cace"
-            repo="github"
-            checkoutdir="openmp">
+  <cmake
+    id="openmp">
+    <branch
+      module="llvm/llvm-project/releases/download/llvmorg-11.0.0/openmp-11.0.0.src.tar.xz"
+      version="11.0.0"
+      hash="sha256:2d704df8ca67b77d6d94ebf79621b0f773d5648963dd19e0f78efef4404b684c"
+      repo="github"
+      checkoutdir="openmp-11.0.0">
     </branch>
     <dependencies>
       <!-- TODO
@@ -280,12 +280,14 @@
   </cmake>
 
   <!-- Poppler https://poppler.freedesktop.org -->
-  <cmake  id="poppler"
-          cmakeargs="-DENABLE_UNSTABLE_API_ABI_HEADERS=ON">
-    <branch module="poppler/poppler/-/archive/poppler-0.84.0/poppler-poppler-0.84.0.tar.gz"
-            version="0.84.0"
-            hash="sha256:b74cdc5354f74bbf581eb0c3bbbdffa1c12159c17da4bb02f0fc90349112ac68"
-            repo="freedesktop">
+  <cmake
+    id="poppler"
+    cmakeargs="-DENABLE_UNSTABLE_API_ABI_HEADERS=ON">
+    <branch
+      module="poppler-20.12.1.tar.xz"
+      version="20.12.1"
+      hash="sha256:d0aa2586c0a4296c775f0d2045f28bb95a694113fc995f95350faa12930f7b35"
+      repo="poppler">
     </branch>
     <dependencies>
       <!-- TODO
@@ -295,13 +297,15 @@
   </cmake>
 
   <!-- Potrace http://potrace.sourceforge.net -->
-  <autotools  id="potrace"
-              autogen-sh="configure"
-              autogenargs="--with-libpotrace">
-    <branch module="potrace/1.16/potrace-1.16.tar.gz"
-            version="1.16"
-            hash="sha256:be8248a17dedd6ccbaab2fcc45835bb0502d062e40fbded3bc56028ce5eb7acc"
-            repo="sourceforge">
+  <autotools
+    id="potrace"
+    autogen-sh="configure"
+    autogenargs="--with-libpotrace">
+    <branch
+      module="potrace/1.16/potrace-1.16.tar.gz"
+      version="1.16"
+      hash="sha256:be8248a17dedd6ccbaab2fcc45835bb0502d062e40fbded3bc56028ce5eb7acc"
+      repo="sourceforge">
     </branch>
     <dependencies>
       <!-- TODO
