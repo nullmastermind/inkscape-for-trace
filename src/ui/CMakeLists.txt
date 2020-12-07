@@ -137,6 +137,7 @@ set(ui_SRC
 	dialog/print.cpp
 	dialog/prototype.cpp
 	dialog/selectorsdialog.cpp
+	dialog/startup.cpp
         dialog/styledialog.cpp
 	dialog/svg-fonts-dialog.cpp
         dialog/svg-preview.cpp
@@ -308,6 +309,7 @@ set(ui_SRC
 	dialog/print.h
 	dialog/prototype.h
 	dialog/selectorsdialog.h
+	dialog/startup.h
         dialog/styledialog.h
 	dialog/svg-fonts-dialog.h
         dialog/svg-preview.h

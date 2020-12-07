@@ -39,6 +39,7 @@
 #include "object/sp-root.h"       // Inkscape version.
 
 #include "ui/interface.h"         // sp_ui_error_dialog
+#include "ui/dialog/startup.h"
 #include "ui/dialog/font-substitution.h"  // Warn user about font substitution.
 #include "ui/shortcuts.h"         // Shortcuts... init
 #include "widgets/desktop-widget.h" // Close without saving dialog
@@ -950,6 +951,7 @@ InkscapeApplication::on_activate()
 
     // Create new document, either from pipe or from template.
     SPDocument *document = nullptr;
+    auto prefs = Inkscape::Preferences::get();
 
     if (_use_pipe) {
 
@@ -958,6 +960,14 @@ InkscapeApplication::on_activate()
         std::string s(begin, end);
         document = document_open (s);
         output = "-";
+
+    } else if(prefs->getBool("/options/boot/enabled", true)) {
+
+        Inkscape::UI::Dialog::StartScreen start_screen;
+
+        // int status =
+        start_screen.run();
+        document = start_screen.get_document();
 
     } else {
 

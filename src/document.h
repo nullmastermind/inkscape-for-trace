@@ -40,6 +40,7 @@
 #include "event.h"
 #include "gc-anchored.h"
 #include "gc-finalized.h"
+#include "object/sp-namedview.h"
 
 #include "inkgc/gc-managed.h"
 
@@ -180,6 +181,7 @@ public:
 
     Inkscape::XML::Node *getReprRoot() { return rroot; }
     Inkscape::XML::Node *getReprNamedView();
+    SPNamedView *getNamedView();
 
     /** Our Inkscape::XML::Document. */
     Inkscape::XML::Document *getReprDoc() { return rdoc; }

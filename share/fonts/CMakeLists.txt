@@ -1,2 +1,3 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
-install(FILES "README" DESTINATION ${INKSCAPE_SHARE_INSTALL}/fonts)
+file(GLOB _FILES "*.ttf" "README")
+install(FILES ${_FILES} DESTINATION ${INKSCAPE_SHARE_INSTALL}/fonts)

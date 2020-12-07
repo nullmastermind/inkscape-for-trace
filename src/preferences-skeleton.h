@@ -68,15 +68,14 @@ static char const preferences_skeleton[] =
     <sodipodi:namedview
        id="base"
        pagecolor="#ffffff"
+       pageopacity="0.0"
+       pagecheckerboard="false"
        bordercolor="#666666"
        borderopacity="1.0"
        objecttolerance="10.0"
        gridtolerance="10.0"
        guidetolerance="10.0"
-       inkscape:pageopacity="0.0"
-       inkscape:pageshadow="2"
-       inkscape:window-width="640"
-       inkscape:window-height="480" />
+       pageshadow="2" />
   </group>
 
   <group id="tools" bounding_box="0">
@@ -296,6 +295,7 @@ static char const preferences_skeleton[] =
            dockbarstyle="2"
            switcherstyle="2"/>
     <group id="dialogsskiptaskbar" value="1"/>
+    <group id="defaultwindowsize" value="2" />
     <group id="arenatilescachesize" value="8192"/>
     <group id="preservetransform" value="0"/>
     <group id="clonecompensation" value="1"/>
@@ -382,6 +382,7 @@ static char const preferences_skeleton[] =
        height="480"
        x="0"
        y="0"
+       maximized="1"
        fullscreen="0"
        id="geometry" />
     <group

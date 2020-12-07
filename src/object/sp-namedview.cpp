@@ -785,8 +785,9 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
         win->maximize();
     } else {
         const int MIN_WINDOW_SIZE = 600;
-        int w = 0;
-        int h = 0;
+
+        int w = prefs->getInt("/template/base/inkscape:window-width", 0);
+        int h = prefs->getInt("/template/base/inkscape:window-height", 0);
         bool move_to_screen = false;
         if (window_geometry == PREFS_WINDOW_GEOMETRY_FILE && !new_document) {
             Gdk::Rectangle monitor_geometry = Inkscape::UI::get_monitor_geometry_at_point(nv->window_x, nv->window_y);
@@ -938,6 +939,30 @@ void SPNamedView::hide(SPDesktop const *desktop)
         guide->hideSPGuide(desktop->getCanvas());
     }
     views.erase(std::remove(views.begin(),views.end(),desktop),views.end());
+}
+
+/**
+ * Set an attribute in the named view to the value in this preference, or use the fallback.
+ *
+ * @param attribute - The svg namedview attribute to set.
+ * @param preference - The preference to find the value from (optional)
+ * @param fallback - The fallback to use if preference not set or not found. (optional)
+ */
+void SPNamedView::setDefaultAttribute(std::string attribute, std::string preference, std::string fallback)
+{
+    if (!getAttribute(attribute.c_str())) {
+        std::string value = "";
+        if (!preference.empty()) {
+            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+            value = prefs->getString(preference);
+        }
+        if (value.empty() && !fallback.empty()) {
+            value = fallback;
+        }
+        if (!value.empty()) {
+            setAttribute(attribute, value);
+        }
+    }
 }
 
 void SPNamedView::activateGuides(void* desktop, bool active)

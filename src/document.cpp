@@ -68,7 +68,6 @@
 #include "object/persp3d.h"
 #include "object/sp-defs.h"
 #include "object/sp-factory.h"
-#include "object/sp-namedview.h"
 #include "object/sp-root.h"
 #include "object/sp-symbol.h"
 
@@ -224,6 +223,21 @@ Inkscape::XML::Node *SPDocument::getReprNamedView()
     return sp_repr_lookup_name (rroot, "sodipodi:namedview");
 }
 
+/**
+ * Get the namedview for this document, creates it if it's not found.
+ *
+ * @returns SPNamedView object, existing or created.
+ */
+SPNamedView *SPDocument::getNamedView()
+{
+    auto xml = getReprNamedView();
+    if (!xml) {
+        xml = rdoc->createElement("sodipodi:namedview");
+        rroot->addChildAtPos(xml, 0);
+    }
+    return dynamic_cast<SPNamedView *> (getObjectByRepr(xml));
+}
+
 SPDefs *SPDocument::getDefs()
 {
     if (!root) {
@@ -299,7 +313,6 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
 {
     SPDocument *document = new SPDocument();
 
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Inkscape::XML::Node *rroot = rdoc->root();
 
     document->keepalive = keepalive;
@@ -362,46 +375,19 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
     /* Eliminate any claim to adhere to a profile, as we don't try to */
     rroot->removeAttribute("baseProfile");
 
-    // creating namedview
-    if (!sp_item_group_get_child_by_name(document->root, nullptr, "sodipodi:namedview")) {
-        // if there's none in the document already,
-        Inkscape::XML::Node *rnew = nullptr;
+    // loading or creating namedview.
+    auto nv = document->getNamedView();
 
-        rnew = rdoc->createElement("sodipodi:namedview");
-        //rnew->setAttribute("id", "base");
-
-        // Add namedview data from the preferences
-        // we can't use getAllEntries because this could produce non-SVG doubles
-        Glib::ustring pagecolor = prefs->getString("/template/base/pagecolor");
-
-        rnew->setAttributeOrRemoveIfEmpty("pagecolor", pagecolor.data());
-
-        Glib::ustring bordercolor = prefs->getString("/template/base/bordercolor");
-
-        rnew->setAttributeOrRemoveIfEmpty("bordercolor", bordercolor.data());
-
-        sp_repr_set_svg_double(rnew, "borderopacity",
-            prefs->getDouble("/template/base/borderopacity", 1.0));
-        sp_repr_set_svg_double(rnew, "objecttolerance",
-            prefs->getDouble("/template/base/objecttolerance", 10.0));
-        sp_repr_set_svg_double(rnew, "gridtolerance",
-            prefs->getDouble("/template/base/gridtolerance", 10.0));
-        sp_repr_set_svg_double(rnew, "guidetolerance",
-            prefs->getDouble("/template/base/guidetolerance", 10.0));
-        sp_repr_set_svg_double(rnew, "inkscape:pageopacity",
-            prefs->getDouble("/template/base/inkscape:pageopacity", 0.0));
-        sp_repr_set_int(rnew, "inkscape:pageshadow",
-            prefs->getInt("/template/base/inkscape:pageshadow", 2));
-        sp_repr_set_int(rnew, "inkscape:window-width",
-            prefs->getInt("/template/base/inkscape:window-width", 640));
-        sp_repr_set_int(rnew, "inkscape:window-height",
-            prefs->getInt("/template/base/inkscape:window-height", 480));
-
-        // insert into the document
-        rroot->addChild(rnew, nullptr);
-        // clean up
-        Inkscape::GC::release(rnew);
-    }
+    // Set each of the defaults in new or existing namedview (allows for per-attr overriding)
+    nv->setDefaultAttribute("pagecolor",                 "/template/base/pagecolor", "");
+    nv->setDefaultAttribute("bordercolor",               "/template/base/bordercolor", "");
+    nv->setDefaultAttribute("borderopacity",             "/template/base/borderopacity", "");
+    nv->setDefaultAttribute("objecttolerance",           "/template/base/objecttolerance", "10.0");
+    nv->setDefaultAttribute("gridtolerance",             "/template/base/gridtolerance", "10.0");
+    nv->setDefaultAttribute("guidetolerance",            "/template/base/guidetolerance", "10.0");
+    nv->setDefaultAttribute("inkscape:pageshadow",       "/template/base/pageshadow", "2");
+    nv->setDefaultAttribute("inkscape:pageopacity",      "/template/base/pageopacity", "0.0");
+    nv->setDefaultAttribute("inkscape:pagecheckerboard", "/template/base/pagecheckerboard", "0");
 
     // Defs
     if (!document->root->defs) {

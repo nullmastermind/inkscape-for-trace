@@ -86,6 +86,7 @@ public:
 
     void show(SPDesktop *desktop);
     void hide(SPDesktop const *desktop);
+    void setDefaultAttribute(std::string attribute, std::string preference, std::string fallback);
     void activateGuides(void* desktop, bool active);
     char const *getName() const;
     unsigned int getViewCount();

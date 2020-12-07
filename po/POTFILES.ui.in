@@ -5,6 +5,7 @@
 ../share/ui/dialog-text-edit.glade
 ../share/ui/dialog-trace.glade
 ../share/ui/inkscape-about.glade
+../share/ui/inkscape-start.glade
 ../share/ui/menu-view.ui
 ../share/ui/toolbar-snap.ui
 ../share/ui/toolbar-zoom.ui

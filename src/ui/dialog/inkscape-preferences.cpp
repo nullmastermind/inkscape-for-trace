@@ -1830,6 +1830,7 @@ void InkscapePreferences::initPageUI()
     _win_native.init ( _("Native open/save dialogs"), "/options/desktopintegration/value", 1, true, nullptr);
     _win_gtk.init ( _("GTK open/save dialogs"), "/options/desktopintegration/value", 0, false, &_win_native);
 
+    _win_show_boot.init ( _("Start screen shows when loaded"), "/options/boot/enabled", true);
     _win_hide_task.init ( _("Dialogs are hidden in taskbar"), "/options/dialogsskiptaskbar/value", true);
     _win_save_viewport.init ( _("Save and restore documents viewport"), "/options/savedocviewport/value", true);
     _win_zoom_resize.init ( _("Zoom when window is resized"), "/options/stickyzoom/value", false);
@@ -1900,6 +1901,9 @@ void InkscapePreferences::initPageUI()
     _page_windows.add_line( true, "", _win_dialogs_labels_off, "", _("Dialogs' name labels will allways be hidden"));
 
     _page_windows.add_group_header( _("Miscellaneous"));
+
+    _page_windows.add_line( true, "", _win_show_boot, "",
+                            _("Whether the boot/startup screen will be shown."));
 #ifndef _WIN32 // FIXME: Temporary Win32 special code to enable transient dialogs
     _page_windows.add_line( true, "", _win_hide_task, "",
                             _("Whether dialog windows are to be hidden in the window manager taskbar"));

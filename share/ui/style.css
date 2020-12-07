@@ -461,3 +461,25 @@ treeview.view:drop(active).before {
     border-width: 4px;
     border-radius: 10px;
 }
+
+/*
+ * Inkscape start dialog styles
+ */
+button.primary {
+    background-image: linear-gradient(to bottom, rgba(22, 169, 249, 1), rgba(2, 135, 204, 1));
+    box-shadow: 0 1px rgba(255, 255, 255, 0.3) inset;
+    text-shadow: none;
+}
+button.primary:hover {
+    background-image: linear-gradient(to bottom, rgba(32, 179, 255, 1), rgba(12, 145, 214, 1));
+}
+button.primary:active {
+    background-image: linear-gradient(to top, rgba(12, 149, 219, 1), rgba(0, 115, 184, 1));
+}
+button.primary label {
+    color: white;
+}
+button.link:hover image {
+    -gtk-icon-effect: dim;
+}
+
