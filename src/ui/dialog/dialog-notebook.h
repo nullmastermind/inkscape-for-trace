@@ -69,6 +69,7 @@ private:
     void on_page_added(Gtk::Widget *page, int page_num);
     void on_page_removed(Gtk::Widget *page, int page_num);
     void on_size_allocate_scroll(Gtk::Allocation &allocation);
+    void on_size_allocate_notebook(Gtk::Allocation &allocation);
     void on_labels_toggled();
     bool on_tab_click_event(GdkEventButton *event, Gtk::Widget *page);
 

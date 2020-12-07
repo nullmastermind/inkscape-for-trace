@@ -101,6 +101,7 @@ DialogNotebook::DialogNotebook(DialogContainer *container)
 
     // =============== Signals ==================
     _conn.emplace_back(signal_size_allocate().connect(sigc::mem_fun(*this, &DialogNotebook::on_size_allocate_scroll)));
+    _conn.emplace_back(_notebook.signal_size_allocate().connect(sigc::mem_fun(*this, &DialogNotebook::on_size_allocate_notebook)));
     _conn.emplace_back(_notebook.signal_drag_end().connect(sigc::mem_fun(*this, &DialogNotebook::on_drag_end)));
     _conn.emplace_back(_notebook.signal_page_added().connect(sigc::mem_fun(*this, &DialogNotebook::on_page_added)));
     _conn.emplace_back(_notebook.signal_page_removed().connect(sigc::mem_fun(*this, &DialogNotebook::on_page_removed)));
@@ -373,18 +374,25 @@ void DialogNotebook::on_page_removed(Gtk::Widget *page, int page_num)
 /**
  * We need to remove the scrollbar to snap a whole DialogNotebook to width 0.
  *
- * This function also hides the tab labels if necessary (and _labels_auto == true)
  */
 void DialogNotebook::on_size_allocate_scroll(Gtk::Allocation &a)
 {
-    // magic numbers
+    // magic number
     const int MIN_HEIGHT = 60;
-    const int ICON_SIZE = 50;
 
     // set or unset scrollbars to completely hide a notebook
     property_vscrollbar_policy().set_value(a.get_height() >= MIN_HEIGHT ? Gtk::POLICY_AUTOMATIC : Gtk::POLICY_EXTERNAL);
 
     set_allocation(a);
+}
+
+/**
+ * This function hides the tab labels if necessary (and _labels_auto == true)
+ */
+void DialogNotebook::on_size_allocate_notebook(Gtk::Allocation &a)
+{
+    // magic number
+    const int ICON_SIZE = 56; //50 size + margin
 
     if (!_labels_auto) {
         return;
@@ -410,7 +418,7 @@ void DialogNotebook::on_size_allocate_scroll(Gtk::Allocation &a)
         if (label) {
             label->show();
             label->get_preferred_width(min_width, nat_width);
-            size += (ICON_SIZE + min_width);
+            size += (ICON_SIZE + min_width + (label->get_margin_start() * 2));
         }
     }
 
