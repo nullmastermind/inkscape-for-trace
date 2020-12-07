@@ -49,7 +49,7 @@
 #include "document.h"
 #include "inkscape-version.h"
 #include "rdf.h"
-
+#include "style-internal.h"
 #include "display/cairo-utils.h"
 #include "display/curve.h"
 
@@ -66,6 +66,7 @@
 
 #include "object/sp-anchor.h"
 #include "object/sp-clippath.h"
+#include "object/sp-defs.h"
 #include "object/sp-flowtext.h"
 #include "object/sp-hatch-path.h"
 #include "object/sp-image.h"
@@ -177,8 +178,51 @@ static void sp_shape_render(SPShape *shape, CairoRenderContext *ctx)
     }
 
     Geom::OptRect pbox = shape->geometricBounds();
-
+    
     SPStyle* style = shape->style;
+
+    SPObject *defs = dynamic_cast<SPObject *>(shape->document->getDefs());
+    if (defs && defs->isAncestorOf(shape)) {
+        SPObject *parentobj = dynamic_cast<SPObject *>(shape->parent);
+        SPMarker *marker = dynamic_cast<SPMarker *>(parentobj);
+        while (!marker && parentobj != defs) {
+            parentobj = dynamic_cast<SPObject *>(parentobj->parent);
+            marker = dynamic_cast<SPMarker *>(parentobj);
+        }
+        SPObject *origin = nullptr;
+        if (marker) {
+            origin = (*marker->hrefList.begin());
+            if (origin) {
+                SPStyle* styleorig = origin->style;
+                bool iscolorfill   = styleorig->fill.isColor() || (styleorig->fill.isPaintserver() && !styleorig->getFillPaintServer()->isValid());
+                bool iscolorstroke = styleorig->stroke.isColor() || (styleorig->stroke.isPaintserver() && !styleorig->getStrokePaintServer()->isValid());
+                bool fillctxfill     = style->fill.paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_FILL;
+                bool fillctxstroke   = style->fill.paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_STROKE;
+                bool strokectxfill   = style->stroke.paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_FILL;
+                bool strokectxstroke = style->stroke.paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_STROKE;
+                if (fillctxfill || fillctxstroke) {
+                    if (fillctxfill ? iscolorfill : iscolorstroke) {
+                        style->fill.setColor(fillctxfill ? styleorig->fill.value.color : styleorig->stroke.value.color);
+                    } else if (fillctxfill ? styleorig->fill.isPaintserver() : styleorig->stroke.isPaintserver()) {
+                        style->fill.value.href = fillctxfill ? styleorig->fill.value.href : styleorig->stroke.value.href;
+                    } else {
+                        style->fill.setNone();
+                    }              
+                }
+                if (strokectxfill || strokectxstroke) {
+                    if (strokectxfill ? iscolorfill : iscolorstroke) {
+                        style->stroke.setColor(strokectxfill ? styleorig->fill.value.color : styleorig->stroke.value.color);
+                    } else if (strokectxfill ? styleorig->fill.isPaintserver() : styleorig->stroke.isPaintserver()) {
+                        style->stroke.value.href = strokectxfill ? styleorig->fill.value.href : styleorig->stroke.value.href;
+                    } else {
+                        style->stroke.setNone();
+                    }
+                }
+                style->fill.paintOrigin = SP_CSS_PAINT_ORIGIN_NORMAL;
+                style->stroke.paintOrigin = SP_CSS_PAINT_ORIGIN_NORMAL;   
+            }
+        }
+    }
 
     Geom::PathVector const &pathv = shape->curve()->get_pathvector();
     if (pathv.empty()) {
