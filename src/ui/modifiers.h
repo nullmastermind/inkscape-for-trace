@@ -80,7 +80,7 @@ enum class Type {
 
 
 // Generate a label such as Shift+Ctrl from any KeyMask
-std::string   generate_label(KeyMask mask);
+std::string   generate_label(KeyMask mask, std::string sep = "+");
 unsigned long calculate_weight(KeyMask mask);
 
 // Generate a responsivle tooltip set
@@ -151,8 +151,9 @@ public:
         return _and_mask_default;
     }
     const KeyMask get_not_mask() {
-        if(_not_mask_user != NOT_SET) return _not_mask_user;
-        if(_not_mask_keys != NOT_SET) return _not_mask_keys;
+        // The not mask is enabled by the AND mask being set first.
+        if(_and_mask_user != NOT_SET) return _not_mask_user;
+        if(_and_mask_keys != NOT_SET) return _not_mask_keys;
         return NOT_SET;
     }
     // Return number of bits set for the keys
@@ -165,6 +166,11 @@ public:
     // Generate labels such as "Shift+Ctrl" for the active modifier
     std::string get_label() { return generate_label(get_and_mask()); }
     std::string get_category() { return _category_names[_category]; }
+
+    // Configurations for saving the xml file
+    bool get_config_user_disabled() { return (_and_mask_user == NEVER); }
+    std::string get_config_user_and() { return generate_label(_and_mask_user, ","); }
+    std::string get_config_user_not() { return generate_label(_not_mask_keys, ","); }
 
     /**
      * Inititalizes the Modifier with the parameters.

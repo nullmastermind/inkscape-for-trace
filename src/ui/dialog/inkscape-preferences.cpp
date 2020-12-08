@@ -3094,6 +3094,8 @@ void InkscapePreferences::on_modifier_edited()
         if(_kb_mod_meta.get_active()) mask |= Inkscape::Modifiers::META;
         modifier->set_user(mask, Inkscape::Modifiers::NOT_SET);
     }
+    Inkscape::Shortcuts& shortcuts = Inkscape::Shortcuts::getInstance();
+    shortcuts.write_user();
     (*iter)[_mod_columns.and_modifiers] = modifier->get_label();
 }
 

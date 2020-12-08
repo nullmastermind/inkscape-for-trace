@@ -135,32 +135,35 @@ bool Modifier::active(int button_state)
  * @param  mask - The Modifier Mask such as {SHIFT & CTRL}
  * @return a string of the keys needed for this mask to be true.
  */
-std::string generate_label(KeyMask mask)
+std::string generate_label(KeyMask mask, std::string sep)
 {
     auto ret = std::string();
+    if(mask == NOT_SET) {
+        return "-";
+    }
     if(mask == NEVER) {
         ret.append("[NEVER]");
         return ret;
     }
     if(mask & CTRL) ret.append("Ctrl");
     if(mask & SHIFT) {
-        if(!ret.empty()) ret.append("+");
+        if(!ret.empty()) ret.append(sep);
         ret.append("Shift");
     }
     if(mask & ALT) {
-        if(!ret.empty()) ret.append("+");
+        if(!ret.empty()) ret.append(sep);
         ret.append("Alt");
     }
     if(mask & SUPER) {
-        if(!ret.empty()) ret.append("+");
+        if(!ret.empty()) ret.append(sep);
         ret.append("Super");
     }
     if(mask & HYPER) {
-        if(!ret.empty()) ret.append("+");
+        if(!ret.empty()) ret.append(sep);
         ret.append("Hyper");
     }
     if(mask & META) {
-        if(!ret.empty()) ret.append("+");
+        if(!ret.empty()) ret.append(sep);
         ret.append("Meta");
     }
     return ret;

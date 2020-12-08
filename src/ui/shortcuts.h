@@ -75,6 +75,7 @@ public:
 
     bool read( Glib::RefPtr<Gio::File> file, bool user_set = false);
     bool write(Glib::RefPtr<Gio::File> file, What what = User);
+    bool write_user();
 
     // Verb stuff, to be removed.
     Gtk::AccelKey get_shortcut_from_verb(Verb* verb);

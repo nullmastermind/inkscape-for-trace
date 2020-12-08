@@ -243,12 +243,11 @@ Shortcuts::read(Glib::RefPtr<Gio::File> file, bool user_set)
  
             // If mods isn't specified then it should use default, if it's an empty string
             // then the modifier is None (i.e. happens all the time without a modifier)
+            KeyMask and_modifier = NOT_SET;
             gchar const *mod_attr = iter->attribute("modifiers");
-            if (!mod_attr) {
-                continue; // Default, do nothing and no warning.
+            if (mod_attr) {
+                and_modifier = (KeyMask) parse_modifier_string(mod_attr, mod_name);
             }
-
-            KeyMask and_modifier = (KeyMask) parse_modifier_string(mod_attr, mod_name);
 
             // Parse not (cold key) modifier
             KeyMask not_modifier = NOT_SET;
@@ -257,10 +256,17 @@ Shortcuts::read(Glib::RefPtr<Gio::File> file, bool user_set)
                 not_modifier = (KeyMask) parse_modifier_string(not_attr, mod_name);
             }
 
-            if(user_set) {
-                mod->set_user(and_modifier, not_modifier);
-            } else {
-                mod->set_keys(and_modifier, not_modifier);
+            gchar const *disabled_attr = iter->attribute("disabled");
+            if (disabled_attr && strcmp(disabled_attr, "true") == 0) {
+                and_modifier = NEVER;
+            }
+
+            if (and_modifier != NOT_SET) {
+                if(user_set) {
+                    mod->set_user(and_modifier, not_modifier);
+                } else {
+                    mod->set_keys(and_modifier, not_modifier);
+                }
             }
             continue;
 
@@ -331,6 +337,12 @@ Shortcuts::read(Glib::RefPtr<Gio::File> file, bool user_set)
     return true;
 }
 
+bool
+Shortcuts::write_user() {
+    Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(get_path_string(USER, KEYS, "default.xml"));
+    return write(file, User);
+}
+
 // In principle, we only write User shortcuts. But for debugging, we might want to write something else.
 bool
 Shortcuts::write(Glib::RefPtr<Gio::File> file, What what) {
@@ -398,6 +410,25 @@ Shortcuts::write(Glib::RefPtr<Gio::File> file, What what) {
 
                 document->root()->appendChild(node);
             }
+        }
+    }
+
+    for(auto modifier: Inkscape::Modifiers::Modifier::getList()) {
+        if (what == User && modifier->is_set_user()) {
+            XML::Node * node = document->createElement("modifier");
+            node->setAttribute("action", modifier->get_id());
+
+            if (modifier->get_config_user_disabled()) {
+                node->setAttribute("disabled", "true");
+            } else {
+                node->setAttribute("modifiers", modifier->get_config_user_and());
+                auto not_mask = modifier->get_config_user_not();
+                if (!not_mask.empty() and not_mask != "-") {
+                    node->setAttribute("not_modifiers", not_mask);
+                }
+            }
+
+            document->root()->appendChild(node);
         }
     }
 
@@ -590,9 +621,7 @@ Shortcuts::add_user_shortcut(Glib::ustring name, const Gtk::AccelKey& shortcut)
     // Add shortcut, if successful, save to file.
     if (add_shortcut(name, shortcut, true, true)) {  // Always user, always primary (verbs only).
         // Save
-        Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(get_path_string(USER, KEYS, "default.xml"));
-        write(file, User);
-        return true;
+        return write_user();
     }
 
     std::cerr << "Shortcut::add_user_shortcut: Failed to add: " << name << " with shortcut " << shortcut.get_abbrev() << std::endl;
@@ -682,8 +711,7 @@ Shortcuts::remove_user_shortcut(Glib::ustring name)
 
     if (remove_shortcut(name)) {
         // Save
-        Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(get_path_string(USER, KEYS, "default.xml"));
-        write(file, User);
+        write_user();
 
         // Reread to get original shortcut (if any).
         init();
@@ -1011,8 +1039,7 @@ Shortcuts::import_shortcuts() {
     }
 
     // Save
-    Glib::RefPtr<Gio::File> file_save = Gio::File::create_for_path(get_path_string(USER, KEYS, "default.xml"));
-    return write(file_save, User);
+    return write_user();
 };
 
 bool
