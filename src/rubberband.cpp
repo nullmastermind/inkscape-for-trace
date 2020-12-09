@@ -106,6 +106,8 @@ void Inkscape::Rubberband::move(Geom::Point const &p)
             if (_rect == nullptr) {
                 _rect = new Inkscape::CanvasItemRect(_desktop->getCanvasControls());
                 _rect->set_stroke(0x808080ff);
+                _rect->set_shadow(0xffffffff, 1); // Not a shadow
+                _rect->set_dashed(true);
                 _rect->set_inverted(true);
             }
             _rect->set_rect(Geom::Rect(_start, _end));
@@ -115,6 +117,8 @@ void Inkscape::Rubberband::move(Geom::Point const &p)
             if (_rect == nullptr) {
                 _rect = new Inkscape::CanvasItemRect(_desktop->getCanvasControls());
                 _rect->set_stroke(0xff0000ff);
+                _rect->set_shadow(0xffffffff, 1); // Not a shadow
+                _rect->set_dashed(true);
                 _rect->set_inverted(false);
             }
             _rect->set_rect(Geom::Rect(_start, _end));
