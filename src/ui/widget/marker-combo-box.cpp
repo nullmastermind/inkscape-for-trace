@@ -56,9 +56,9 @@ MarkerComboBox::MarkerComboBox(gchar const *id, int l) :
     marker_store = Gtk::ListStore::create(marker_columns);
     set_model(marker_store);
     pack_start(image_renderer, false);
-    set_cell_data_func(image_renderer, sigc::mem_fun(*this, &MarkerComboBox::prepareImageRenderer));
+    add_attribute (image_renderer, "pixbuf", marker_columns.pixbuf);
+
     gtk_combo_box_set_row_separator_func(GTK_COMBO_BOX(gobj()), MarkerComboBox::separator_cb, nullptr, nullptr);
-    empty_image = sp_get_icon_image("no-marker", Gtk::ICON_SIZE_SMALL_TOOLBAR);
 
     sandbox = ink_markers_preview_doc ();
 
@@ -71,7 +71,6 @@ MarkerComboBox::MarkerComboBox(gchar const *id, int l) :
 MarkerComboBox::~MarkerComboBox() {
     delete combo_id;
     delete sandbox;
-    delete empty_image;
 
     if (doc) {
         modified_connection.disconnect();
@@ -143,7 +142,6 @@ MarkerComboBox::init_combo()
     Gtk::TreeModel::Row row_sep = *(marker_store->append());
     row_sep[marker_columns.label] = "Separator";
     row_sep[marker_columns.marker] = g_strdup("None");
-    row_sep[marker_columns.image] = NULL;
     row_sep[marker_columns.stock] = false;
     row_sep[marker_columns.history] = false;
     row_sep[marker_columns.separator] = true;
@@ -328,7 +326,7 @@ void MarkerComboBox::add_markers (std::vector<SPMarker *> const& marker_list, SP
         row[marker_columns.label] = C_("Marker", "None");
         row[marker_columns.stock] = false;
         row[marker_columns.marker] = g_strdup("None");
-        row[marker_columns.image] = NULL;
+        row[marker_columns.pixbuf] = sp_get_icon_pixbuf("no-marker", Gtk::ICON_SIZE_SMALL_TOOLBAR);
         row[marker_columns.history] = true;
         row[marker_columns.separator] = false;
     }
@@ -339,8 +337,7 @@ void MarkerComboBox::add_markers (std::vector<SPMarker *> const& marker_list, SP
         gchar const *markid = repr->attribute("inkscape:stockid") ? repr->attribute("inkscape:stockid") : repr->attribute("id");
 
         // generate preview
-        Gtk::Image *prv = create_marker_image (24, repr->attribute("id"), source, drawing, visionkey);
-        prv->show();
+        auto pixbuf = create_marker_image (24, repr->attribute("id"), source, drawing, visionkey);
 
         // Add history before separator, others after
         Gtk::TreeModel::Row row;
@@ -354,7 +351,7 @@ void MarkerComboBox::add_markers (std::vector<SPMarker *> const& marker_list, SP
         // So use !is_history instead to determine is it is "stock" (ie in the markers.svg file)
         row[marker_columns.stock] = !history;
         row[marker_columns.marker] = repr->attribute("id");
-        row[marker_columns.image] = prv;
+        row[marker_columns.pixbuf] = pixbuf;
         row[marker_columns.history] = history;
         row[marker_columns.separator] = false;
 
@@ -377,17 +374,14 @@ MarkerComboBox::update_marker_image(gchar const *mname)
     Inkscape::Drawing drawing;
     unsigned const visionkey = SPItem::display_key_new(1);
     drawing.setRoot(sandbox->getRoot()->invoke_show(drawing, visionkey, SP_ITEM_SHOW_DISPLAY));
-    Gtk::Image *prv = create_marker_image(24, mname, doc, drawing, visionkey);
-    if (prv) {
-        prv->show();
-    }
+    auto pixbuf = create_marker_image(24, mname, doc, drawing, visionkey);
     sandbox->getRoot()->invoke_hide(visionkey);
 
     for(const auto & iter : marker_store->children()) {
             Gtk::TreeModel::Row row = iter;
             if (row[marker_columns.marker] && row[marker_columns.history] &&
                     !strcmp(row[marker_columns.marker], mname)) {
-                row[marker_columns.image] = prv;
+                row[marker_columns.pixbuf] = pixbuf;
                 return;
             }
     }
@@ -398,14 +392,14 @@ MarkerComboBox::update_marker_image(gchar const *mname)
  * area in the bounding box, and then renders it.  This allows us to fill in
  * preview images of each marker in the marker combobox.
  */
-Gtk::Image *
+Glib::RefPtr<Gdk::Pixbuf>
 MarkerComboBox::create_marker_image(unsigned psize, gchar const *mname,
                    SPDocument *source,  Inkscape::Drawing &drawing, unsigned /*visionkey*/)
 {
     // Retrieve the marker named 'mname' from the source SVG document
     SPObject const *marker = source->getObjectById(mname);
     if (marker == nullptr) {
-        return nullptr;
+        return sp_get_icon_pixbuf("bad-marker", Gtk::ICON_SIZE_SMALL_TOOLBAR);
     }
 
     /* Get from cache right away */
@@ -414,8 +408,7 @@ MarkerComboBox::create_marker_image(unsigned psize, gchar const *mname,
     g_free (cache_name);
     GdkPixbuf *pixbuf = svg_preview_cache.get_preview_from_cache(key); // no ref created
     if(pixbuf) {
-        Gtk::Image *pb = Glib::wrap(GTK_IMAGE(gtk_image_new_from_pixbuf(pixbuf)));
-        return pb;
+        return Glib::wrap(pixbuf, true);
     }
 
     // Create a copy repr of the marker with id="sample"
@@ -478,7 +471,7 @@ MarkerComboBox::create_marker_image(unsigned psize, gchar const *mname,
     sandbox->ensureUpToDate();
 
     if (object == nullptr || !SP_IS_ITEM(object)) {
-        return nullptr; // sandbox broken?
+        return sp_get_icon_pixbuf("bad-marker", Gtk::ICON_SIZE_SMALL_TOOLBAR); // sandbox broken?
     }
 
     SPItem *item = SP_ITEM(object);
@@ -486,26 +479,13 @@ MarkerComboBox::create_marker_image(unsigned psize, gchar const *mname,
     Geom::OptRect dbox = item->documentVisualBounds();
 
     if (!dbox) {
-        return nullptr;
+        return sp_get_icon_pixbuf("bad-marker", Gtk::ICON_SIZE_SMALL_TOOLBAR);
     }
 
     /* Update to renderable state */
     pixbuf = render_pixbuf(drawing, 0.8, *dbox, psize);
     svg_preview_cache.set_preview_in_cache(key, pixbuf);
-    g_object_unref(pixbuf); // reference is held by svg_preview_cache
-
-    // Create widget
-    Gtk::Image *pb = Glib::wrap(GTK_IMAGE(gtk_image_new_from_pixbuf(pixbuf)));
-    return pb;
-}
-
-void MarkerComboBox::prepareImageRenderer( Gtk::TreeModel::const_iterator const &row ) {
-
-    Gtk::Image *image = (*row)[marker_columns.image];
-    if (image)
-        image_renderer.property_pixbuf() = image->get_pixbuf();
-    else
-        image_renderer.property_pixbuf() = empty_image->get_pixbuf();
+    return Glib::wrap(pixbuf);
 }
 
 gboolean MarkerComboBox::separator_cb (GtkTreeModel *model, GtkTreeIter *iter, gpointer /*data*/) {

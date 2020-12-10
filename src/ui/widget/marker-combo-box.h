@@ -68,7 +68,6 @@ private:
     guint markerCount;
     SPDocument *doc = nullptr;
     SPDocument *sandbox;
-    Gtk::Image  *empty_image;
     Gtk::CellRendererPixbuf image_renderer;
 
     class MarkerColumns : public Gtk::TreeModel::ColumnRecord {
@@ -76,12 +75,12 @@ private:
         Gtk::TreeModelColumn<Glib::ustring> label;
         Gtk::TreeModelColumn<const gchar *> marker;   // ustring doesn't work here on windows due to unicode
         Gtk::TreeModelColumn<gboolean> stock;
-        Gtk::TreeModelColumn<Gtk::Image *> image;
+        Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf>> pixbuf;
         Gtk::TreeModelColumn<gboolean> history;
         Gtk::TreeModelColumn<gboolean> separator;
 
         MarkerColumns() {
-            add(label); add(stock);  add(marker);  add(history); add(separator); add(image);
+            add(label); add(stock);  add(marker);  add(history); add(separator); add(pixbuf);
         }
     };
     MarkerColumns marker_columns;
@@ -93,13 +92,12 @@ private:
     void add_markers (std::vector<SPMarker *> const& marker_list, SPDocument *source,  gboolean history);
     void remove_markers (gboolean history);
     SPDocument *ink_markers_preview_doc ();
-    Gtk::Image * create_marker_image(unsigned psize, gchar const *mname,
+    Glib::RefPtr<Gdk::Pixbuf> create_marker_image(unsigned psize, gchar const *mname,
                        SPDocument *source, Inkscape::Drawing &drawing, unsigned /*visionkey*/);
 
     /*
      * Callbacks for drawing the combo box
      */
-    void prepareImageRenderer( Gtk::TreeModel::const_iterator const &row );
     static gboolean separator_cb (GtkTreeModel *model, GtkTreeIter *iter, gpointer data);
 
     static void handleDefsModified(MarkerComboBox *self);
