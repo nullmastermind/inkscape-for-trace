@@ -1,20 +1,7 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 name: inkscape
 adopt-info: inkscape
-summary: Vector Graphics Editor
 license: GPL-3.0
-description: >
- An Open Source vector graphics editor, with capabilities similar to
- Illustrator, CorelDraw, or Xara X, using the W3C standard Scalable Vector
- Graphics (SVG) file format.
-
- Inkscape supports many advanced SVG features (markers, clones, alpha blending,
- etc.) and great care is taken in designing a streamlined interface.
- It is very easy to edit nodes, perform complex path operations, trace
- bitmaps and much more.
-
- We also aim to maintain a thriving user and developer community by using
- open, community-oriented development.
 confinement: strict
 grade: stable
 base: core20
@@ -121,6 +108,7 @@ parts:
       INKSCAPE_VERSION=`g++ -I${SNAPCRAFT_PART_SRC}/src ${SNAPCRAFT_PART_BUILD}/src/inkscape-version.cpp ${SNAPCRAFT_PROJECT_DIR}/snap/local/print-inkscape-version.cpp -o print-inkscape-version && ./print-inkscape-version`
       echo "Inkscape Version: ${INKSCAPE_VERSION}"
       snapcraftctl set-version "${INKSCAPE_VERSION}"
+    parse-info: [ share/metainfo/org.inkscape.Inkscape.appdata.xml ]
   python-deps:
     plugin: python
     python-packages:
@@ -184,6 +172,7 @@ apps:
     slots:
       - inkscape-dbus
     desktop: share/applications/org.inkscape.Inkscape.desktop
+    common-id: org.inkscape.Inkscape
   viewer:
     command: bin/inkview
     command-chain: [ bin/desktop-launch, inkscape-variables, private-fontcache ]
