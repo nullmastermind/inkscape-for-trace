@@ -352,8 +352,13 @@ StartScreen::load_now()
                 Gtk::TreeModel::Row row = *iter;
                 if (row) {
                     NameIdCols cols;
-                    filename = row[cols.col_id];
-                    file = Gio::File::create_for_uri(filename);
+                    Glib::ustring _file = row[cols.col_id];
+                    file = Gio::File::create_for_uri(_file);
+                    if (!file) {
+                        // Failure to open, so open up a new document instead.
+                        file = Gio::File::create_for_path(filename);
+                        is_template = true;
+                    }
                     is_template = false;
                 }
             }
@@ -373,17 +378,13 @@ StartScreen::load_now()
                         filename = Resource::get_filename_string(
                             Resource::TEMPLATES, template_filename.c_str(), true);
                     }
+                    // This isn't used on opening, just for checking it's existance.
                     file = Gio::File::create_for_path(filename);
                     width = row[cols.width];
                     height = row[cols.height];
                 }
             }
         }
-    }
-
-    if (!file) {
-        file = Gio::File::create_for_path(filename); // Use default file!
-        is_template = false; // Don't mess with perfection!
     }
 
     if (!file) {
@@ -395,10 +396,12 @@ StartScreen::load_now()
 
     // Now we have filename, open document.
     auto app = InkscapeApplication::instance();
-    _document = app->document_open (file);
 
     // If it was a template file, modify the document according to user's input.
-    if (is_template) {
+    if (!is_template) {
+        _document = app->document_open (file);
+    } else {
+        _document = app->document_new (filename);
         auto nv = sp_document_namedview (_document, nullptr);
 
         if (!width.empty()) {
