@@ -354,11 +354,6 @@ StartScreen::load_now()
                     NameIdCols cols;
                     Glib::ustring _file = row[cols.col_id];
                     file = Gio::File::create_for_uri(_file);
-                    if (!file) {
-                        // Failure to open, so open up a new document instead.
-                        file = Gio::File::create_for_path(filename);
-                        is_template = true;
-                    }
                     is_template = false;
                 }
             }
@@ -385,6 +380,12 @@ StartScreen::load_now()
                 }
             }
         }
+    }
+
+    if (!file) {
+        // Failure to open, so open up a new document instead.
+        file = Gio::File::create_for_path(filename);
+        is_template = true;
     }
 
     if (!file) {
