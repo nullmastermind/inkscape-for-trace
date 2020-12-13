@@ -58,7 +58,7 @@ DepixelizeTracingEngine::DepixelizeTracingEngine()
 
 
 DepixelizeTracingEngine::DepixelizeTracingEngine(TraceType traceType, double curves, int islands, int sparsePixels,
-                                                 double sparseMultiplier)
+                                                 double sparseMultiplier, bool optimize)
     : keepGoing(1)
     , traceType(traceType)
 {
@@ -67,6 +67,7 @@ DepixelizeTracingEngine::DepixelizeTracingEngine(TraceType traceType, double cur
     params->islandsWeight = islands;
     params->sparsePixelsRadius = sparsePixels;
     params->sparsePixelsMultiplier = sparseMultiplier;
+    params->optimize = optimize;
     params->nthreads = Inkscape::Preferences::get()->getIntLimited("/options/threading/numthreads",
 #ifdef HAVE_OPENMP
                                                                    omp_get_num_procs(),

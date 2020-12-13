@@ -75,7 +75,7 @@ private:
     Glib::RefPtr<Gtk::Adjustment> MS_scans, PA_curves, PA_islands, PA_sparse1, PA_sparse2, SS_AT_ET_T, SS_AT_FI_T, SS_BC_T, SS_CQ_T,
         SS_ED_T, optimize, smooth, speckles;
     Gtk::ComboBoxText *CBT_SS, *CBT_MS;
-    Gtk::CheckButton *CB_invert, *CB_MS_smooth, *CB_MS_stack, *CB_MS_rb, *CB_speckles, *CB_smooth, *CB_optimize,
+    Gtk::CheckButton *CB_invert, *CB_MS_smooth, *CB_MS_stack, *CB_MS_rb, *CB_speckles, *CB_smooth, *CB_optimize, *CB_PA_optimize,
         /* *CB_live,*/ *CB_SIOX;
     Gtk::RadioButton *RB_PA_voronoi;
     Gtk::Button *B_RESET, *B_STOP, *B_OK, *B_Update;
@@ -166,7 +166,11 @@ void TraceDialogImpl2::traceProcess(bool do_i_trace)
 
 
     //Inkscape::Trace::Autotrace::AutotraceTracingEngine ate; // TODO
-    Inkscape::Trace::Depixelize::DepixelizeTracingEngine dte(RB_PA_voronoi->get_active() ? Inkscape::Trace::Depixelize::TraceType::TRACE_VORONOI : Inkscape::Trace::Depixelize::TraceType::TRACE_BSPLINES, PA_curves->get_value(), (int) PA_islands->get_value(), (int) PA_sparse1->get_value(), PA_sparse2->get_value() );
+    Inkscape::Trace::Depixelize::DepixelizeTracingEngine dte(
+        RB_PA_voronoi->get_active() ? Inkscape::Trace::Depixelize::TraceType::TRACE_VORONOI : Inkscape::Trace::Depixelize::TraceType::TRACE_BSPLINES,
+        PA_curves->get_value(), (int) PA_islands->get_value(),
+        (int) PA_sparse1->get_value(), PA_sparse2->get_value(),
+        CB_PA_optimize->get_active());
 
 
     Glib::RefPtr<Gdk::Pixbuf> pixbuf = tracer.getSelectedImage();
@@ -259,6 +263,7 @@ void TraceDialogImpl2::onSetDefaults()
     CB_speckles->set_active(true);
     CB_smooth->set_active(true);
     CB_optimize->set_active(true);
+    CB_PA_optimize->set_active(false);
     //CB_live->set_active(false);
     CB_SIOX->set_active(false);
 }
@@ -274,9 +279,9 @@ TraceDialogImpl2::TraceDialogImpl2()
                                         "SS_AT_FI_T", "SS_AT_ET_T",     "SS_BC_T",   "SS_CQ_T",     "SS_ED_T",
                                         "optimize",    "smooth",    "speckles",    "CB_invert",  "CB_MS_smooth",
                                         "CB_MS_stack", "CB_MS_rb",  "CB_speckles", "CB_smooth",  "CB_optimize",
-                                        /*"CB_live",*/ "CB_SIOX",   "CBT_SS",      "CBT_MS",     "B_RESET",
-                                        "B_STOP",      "B_OK",      "mainBox",     "choice_tab", "choice_scan",
-                                        "previewArea" };
+                                        "CB_PA_optimize", /*"CB_live",*/ "CB_SIOX", "CBT_SS",    "CBT_MS",
+                                        "B_RESET",     "B_STOP",    "B_OK",         "mainBox",   "choice_tab",
+                                        "choice_scan", "previewArea" };
     auto gladefile = get_filename_string(Inkscape::IO::Resource::UIS, "dialog-trace.glade");
     try {
         builder = Gtk::Builder::create_from_file(gladefile);
@@ -322,6 +327,7 @@ TraceDialogImpl2::TraceDialogImpl2()
     GET_W(CB_speckles)
     GET_W(CB_smooth)
     GET_W(CB_optimize)
+    GET_W(CB_PA_optimize)
     //GET_W(CB_live)
     GET_W(CB_SIOX)
     GET_W(RB_PA_voronoi)

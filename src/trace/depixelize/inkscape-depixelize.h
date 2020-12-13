@@ -42,7 +42,7 @@ class DepixelizeTracingEngine : public TracingEngine
      *
      */
     DepixelizeTracingEngine();
-    DepixelizeTracingEngine(TraceType traceType, double curves, int islands, int sparsePixels, double sparseMultiplier);
+    DepixelizeTracingEngine(TraceType traceType, double curves, int islands, int sparsePixels, double sparseMultiplier, bool optimize);
 
     /**
      *
