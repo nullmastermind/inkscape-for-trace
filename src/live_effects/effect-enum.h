@@ -65,6 +65,8 @@ enum EffectType {
     PARALLEL,
     PERP_BISECTOR,
     TANGENT_TO_CURVE,
+    SLICE,
+    // PUT NEW LPE BEFORE EXPERIMENTAL IN THE SAME ORDER AS IN effect.cpp
     DOEFFECTSTACK_TEST,
     DYNASTROKE,
     LATTICE,
@@ -72,7 +74,6 @@ enum EffectType {
     RECURSIVE_SKELETON,
     TEXT_LABEL,
     EMBRODERY_STITCH,
-    SLICE,
     INVALID_LPE // This must be last (I made it such that it is not needed anymore I think..., Don't trust on it being
                 // last. - johan)
 };

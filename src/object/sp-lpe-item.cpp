@@ -250,10 +250,6 @@ bool SPLPEItem::performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape:
             }
             // To Calculate BBox on shapes and nested LPE
             current->setCurveInsync(curve);
-            if (lpe->lpeversion.param_getSVGValue() != "0") { // we are on 1 or up
-                current->bbox_vis_cache_is_valid = false;
-                current->bbox_geom_cache_is_valid = false;
-            }
             // Groups have their doBeforeEffect called elsewhere
             if (!SP_IS_GROUP(this) && !is_clip_or_mask) {
                 lpe->doBeforeEffect_impl(this);
@@ -282,6 +278,10 @@ bool SPLPEItem::performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape:
                     lpe->pathvector_after_effect = curve->get_pathvector();
                 }
                 lpe->doAfterEffect_impl(this, curve);
+            }
+            if (lpe->lpeversion.param_getSVGValue() != "0") { // we are on 1 or up
+                current->bbox_vis_cache_is_valid = false;
+                current->bbox_geom_cache_is_valid = false;
             }
         }
     }
@@ -338,7 +338,8 @@ bool SPLPEItem::optimizeTransforms()
         }
     }
     g_free(classes);
-    return true;
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    return !prefs->getBool("/options/preservetransform/value", false);
 }
 
 /**

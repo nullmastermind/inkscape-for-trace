@@ -1129,7 +1129,7 @@ Effect::Effect(LivePathEffectObject *lpeobject)
       lpeobj(lpeobject),
       concatenate_before_pwd2(false),
       sp_lpe_item(nullptr),
-      current_zoom(1),
+      current_zoom(0),
       refresh_widgets(false),
       current_shape(nullptr),
       provides_own_flash_paths(true), // is automatically set to false if providesOwnFlashPaths() is not overridden
@@ -1140,7 +1140,6 @@ Effect::Effect(LivePathEffectObject *lpeobject)
     registerParameter( dynamic_cast<Parameter *>(&is_visible) );
     registerParameter( dynamic_cast<Parameter *>(&lpeversion) );
     is_visible.widget_is_visible = false;
-    current_zoom = 0.0;
 }
 
 Effect::~Effect() = default;
@@ -1243,6 +1242,11 @@ Effect::processObjects(LPEAction lpe_action)
     if (!document) {
         return;
     }
+    sp_lpe_item = dynamic_cast<SPLPEItem *>(*getLPEObj()->hrefList.begin());
+    if (!document || !sp_lpe_item) {
+        return;
+    }
+    sp_lpe_item_enable_path_effects(sp_lpe_item, false);
     for (auto id : items) {
         if (id.empty()) {
             return;
@@ -1262,9 +1266,6 @@ Effect::processObjects(LPEAction lpe_action)
                 if (item->isHidden()) {
                     item->deleteObject(true);
                 } else {
-                    if (elemnode->attribute("inkscape:path-effect")) {
-                        sp_item_list_to_curves(item_list, item_selected, item_to_select);
-                    }
                     elemnode->removeAttribute("sodipodi:insensitive");
                     if (!SP_IS_DEFS(SP_ITEM(elemref)->parent)) {
                         SP_ITEM(elemref)->moveTo(SP_ITEM(sp_lpe_item), false);
@@ -1296,6 +1297,7 @@ Effect::processObjects(LPEAction lpe_action)
     if (lpe_action == LPE_ERASE || lpe_action == LPE_TO_OBJECTS) {
         items.clear();
     }
+    sp_lpe_item_enable_path_effects(sp_lpe_item, true);
 }
 
 /**
@@ -1350,7 +1352,7 @@ void Effect::doOnApply_impl(SPLPEItem const* lpeitem)
     // of only update this value per each LPE when changes.
     // and use the Inkscape release version that has this new LPE change
     // LPE without lpeversion are created in a inkscape lower than 1.0
-    lpeversion.param_setValue("1", true); 
+    lpeversion.param_setValue("1", true);
     doOnApply(lpeitem);
     setReady();
     has_exception = false;

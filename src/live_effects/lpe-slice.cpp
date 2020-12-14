@@ -240,9 +240,9 @@ LPESlice::split(SPItem* item, SPCurve *curve, std::vector<std::pair<Geom::Line, 
         Glib::ustring classes = sp_lpe_item->getId();
         classes += "-slice UnoptimicedTransforms";
         phantom->setAttribute("class", classes.c_str());
-        sp_lpe_item->parent->addChild(phantom, sp_lpe_item->getRepr()->prev());
         Inkscape::GC::release(phantom);
-        elemref = sp_lpe_item->getPrev();
+        elemref = sp_lpe_item->parent->appendChildRepr(phantom);
+        elemref->parent->reorder(elemref, sp_lpe_item);
     }
     SPItem *other = dynamic_cast<SPItem *>(elemref);
     other->setHidden(false);
@@ -523,7 +523,6 @@ LPESlice::splititem(SPItem* item, SPCurve * curve, std::pair<Geom::Line, size_t>
             auto cpro = SPCurve::copy(shape->curve());
             if (cpro) {
                 if (!path && is_original) {
-                    //shape->setCurveInsync(std::move(cpro));
                     shape->bbox_vis_cache_is_valid = false;
                     shape->bbox_geom_cache_is_valid = false;
                     cpro->set_pathvector(path_out);
@@ -534,6 +533,10 @@ LPESlice::splititem(SPItem* item, SPCurve * curve, std::pair<Geom::Line, size_t>
                     shape->getRepr()->setAttribute("inkscape:original-d", str);
                     sp_lpe_item_update_patheffect(shape, false, false);
                 } else {
+                    if (path || !is_original) {
+                        cpro->set_pathvector(path_out);
+                        shape->setCurveInsync(std::move(cpro));
+                    }
                     shape->getRepr()->setAttribute("d", str);
                 }
             }

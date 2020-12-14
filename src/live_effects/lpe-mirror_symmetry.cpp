@@ -378,6 +378,7 @@ LPEMirrorSymmetry::toMirror(Geom::Affine transform)
         phantom->setAttribute("id", elemref_id);
         reset = true;
         elemref = container->appendChildRepr(phantom);
+        elemref->parent->reorder(elemref, sp_lpe_item);
         Inkscape::GC::release(phantom);
     }
     cloneD(SP_OBJECT(sp_lpe_item), elemref);
