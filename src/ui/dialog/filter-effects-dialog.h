@@ -224,7 +224,8 @@ private:
         int find_index(const Gtk::TreeIter& target);
         void draw_connection(const Cairo::RefPtr<Cairo::Context>& cr,
                              const Gtk::TreeIter&, const SPAttr attr, const int text_start_x,
-                             const int x1, const int y1, const int row_count, const int pos);
+                             const int x1, const int y1, const int row_count, const int pos,
+                             const Gdk::RGBA fg_color, const Gdk::RGBA mid_color);
         void sanitize_connections(const Gtk::TreeIter& prim_iter);
         void on_primitive_selection_changed();
         bool on_scroll_timeout();
