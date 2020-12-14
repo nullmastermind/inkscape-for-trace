@@ -77,7 +77,7 @@ PencilToolbar::PencilToolbar(SPDesktop *desktop,
         {
             _pressure_item = add_toggle_button(_("Use pressure input"), _("Use pressure input"));
             _pressure_item->set_icon_name(INKSCAPE_ICON("draw-use-pressure"));
-            bool pressure = prefs->getBool(freehand_tool_name() + "/pressure", false);
+            bool pressure = prefs->getBool("/tools/freehand/pencil/pressure", false);
             _pressure_item->set_active(pressure);
             _pressure_item->signal_toggled().connect(sigc::mem_fun(*this, &PencilToolbar::use_pencil_pressure));
         }
@@ -369,7 +369,7 @@ PencilToolbar::use_pencil_pressure() {
     // assumes called by pencil toolbar (and all these widgets exist)
     bool pressure = _pressure_item->get_active();
     auto prefs = Inkscape::Preferences::get();
-    prefs->setBool(freehand_tool_name() + "/pressure", pressure);
+    prefs->setBool("/tools/freehand/pencil/pressure", pressure);
     if (pressure) {
         _minpressure->set_visible(true);
         _maxpressure->set_visible(true);
