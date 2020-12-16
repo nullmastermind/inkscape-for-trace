@@ -183,6 +183,13 @@ DocumentProperties::~DocumentProperties()
 {
     for (auto & it : _rdflist)
         delete it;
+    if (_repr_root) {
+        _document_replaced_connection.disconnect();
+        _repr_root->removeListenerByData(this);
+        _repr_root = nullptr;
+        _repr_namedview->removeListenerByData(this);
+        _repr_namedview = nullptr;
+    }
 }
 
 //========================================================================
