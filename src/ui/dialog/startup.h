@@ -22,7 +22,7 @@ class StartScreen : public Gtk::Dialog {
 
 public:
     StartScreen();
-    ~StartScreen();
+    ~StartScreen() override;
 
     SPDocument* get_document() { return _document; }
 
