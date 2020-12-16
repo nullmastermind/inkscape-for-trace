@@ -389,6 +389,15 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
     nv->setDefaultAttribute("inkscape:pageopacity",      "/template/base/pageopacity", "0.0");
     nv->setDefaultAttribute("inkscape:pagecheckerboard", "/template/base/pagecheckerboard", "0");
 
+    // If no units are set in the document, try and guess them from the width/height
+    std::string guess_unit = "px";
+    if (document->root->width.unit) {
+        guess_unit = sp_svg_length_get_css_units(document->root->width.unit);
+    } else if (document->root->height.unit) {
+        guess_unit = sp_svg_length_get_css_units(document->root->height.unit);
+    }
+    nv->setDefaultAttribute("inkscape:document-units", "/template/base/unit_override", guess_unit);
+
     // Defs
     if (!document->root->defs) {
         Inkscape::XML::Node *r = rdoc->createElement("svg:defs");
