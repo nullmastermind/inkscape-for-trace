@@ -674,19 +674,24 @@ void Inkscape::ObjectSnapper::_snapPathsConstrained(IntermSnapResults &isr,
     for (const auto & k : *_paths_to_snap_to) {
         if (k.path_vector && _allowSourceToSnapToTarget(p.getSourceType(), k.target_type, strict_snapping)) {
             // Do the intersection math
-            std::vector<Geom::PVIntersection> inters = constraint_path.intersect(*(k.path_vector));
+            try {
+                std::vector<Geom::PVIntersection> inters = constraint_path.intersect(*(k.path_vector));
 
-            // Convert the collected intersections to snapped points
-            for (const auto & inter : inters) {
-                // Convert to desktop coordinates
-                Geom::Point p_inters = dt->doc2dt(inter.point());
-                // Construct a snapped point
-                Geom::Coord dist = Geom::L2(p.getPoint() - p_inters);
-                SnappedPoint s = SnappedPoint(p_inters, p.getSourceType(), p.getSourceNum(), k.target_type, dist, getSnapperTolerance(), getSnapperAlwaysSnap(), true, false, k.target_bbox);
-                // Store the snapped point
-                if (dist <= tolerance) { // If the intersection is within snapping range, then we might snap to it
-                    isr.points.push_back(s);
+                // Convert the collected intersections to snapped points
+                for (const auto & inter : inters) {
+                    // Convert to desktop coordinates
+                    Geom::Point p_inters = dt->doc2dt(inter.point());
+                    // Construct a snapped point
+                    Geom::Coord dist = Geom::L2(p.getPoint() - p_inters);
+                    SnappedPoint s = SnappedPoint(p_inters, p.getSourceType(), p.getSourceNum(), k.target_type, dist, getSnapperTolerance(), getSnapperAlwaysSnap(), true, false, k.target_bbox);
+                    // Store the snapped point
+                    if (dist <= tolerance) { // If the intersection is within snapping range, then we might snap to it
+                        isr.points.push_back(s);
+                    }
                 }
+            } catch(int e) {
+                // Caused by a POINT_NOT_NEAR error.
+                continue;
             }
         }
     }
