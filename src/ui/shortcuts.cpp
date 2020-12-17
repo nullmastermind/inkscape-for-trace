@@ -223,8 +223,22 @@ Shortcuts::read(Glib::RefPtr<Gio::File> file, bool user_set)
         return false;
     }
 
-    // Loop through children of <keys>
-    iter = iter->firstChild();
+    // Loop through the children in <keys> (may have nested keys)
+    _read(*iter, user_set);
+
+    return true;
+}
+
+/**
+ * Recursively reads shortcuts from shortcut file. Does not check for conflicts between verbs and actions.
+ *
+ * @param keysnode The <keys> element. Its child nodes will be processed.
+ * @param user_set true if reading from user shortcut file
+ */
+void
+Shortcuts::_read(XML::Node const &keysnode, bool user_set)
+{
+    XML::NodeConstSiblingIterator iter {keysnode.firstChild()};
     for ( ; iter ; ++iter ) {
 
         if (strcmp(iter->name(), "modifier") == 0) {
@@ -269,7 +283,9 @@ Shortcuts::read(Glib::RefPtr<Gio::File> file, bool user_set)
                 }
             }
             continue;
-
+        } else if (strcmp(iter->name(), "keys") == 0) {
+            _read(*iter, user_set);
+            continue;
         } else if (strcmp(iter->name(), "bind") != 0) {
             // Unknown element, do not complain.
             continue;
@@ -333,8 +349,6 @@ Shortcuts::read(Glib::RefPtr<Gio::File> file, bool user_set)
 
         add_shortcut (verb_name, Gtk::AccelKey(keyval, modifiers), user_set, is_primary);
     }
-
-    return true;
 }
 
 bool

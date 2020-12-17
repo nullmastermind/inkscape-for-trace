@@ -133,6 +133,8 @@ private:
     std::map<Inkscape::Verb *, Gtk::AccelKey> primary;  // Shown in menus, etc.
     std::map<Inkscape::Verb *, bool> user_set;
 
+    void _read(XML::Node const &keysnode, bool user_set);
+
     bool initialized = false;
 };
 
