@@ -65,7 +65,7 @@ void SatellitesArrayParam::reloadKnots()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (desktop) {
-        Inkscape::UI::Tools::NodeTool *nt = static_cast<Inkscape::UI::Tools::NodeTool *>(desktop->event_context);
+        Inkscape::UI::Tools::NodeTool *nt = dynamic_cast<Inkscape::UI::Tools::NodeTool *>(desktop->event_context);
         if (nt) {
             for (auto i = nt->_shape_editors.begin(); i != nt->_shape_editors.end(); ++i) {
                 Inkscape::UI::ShapeEditor *shape_editor = i->second;
