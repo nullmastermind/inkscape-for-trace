@@ -1538,12 +1538,6 @@ void SPDesktop::showGrids(bool show, bool dirty_document)
     }
 }
 
-void SPDesktop::toggleSnapGlobal()
-{
-    bool v = namedview->getSnapGlobal();
-    namedview->setSnapGlobal(!v);
-}
-
 //----------------------------------------------------------------------
 // Callback implementations. The virtual ones are connected by the view.
 

@@ -855,17 +855,6 @@ void SPNamedView::writeNewGrid(SPDocument *document,int gridtype)
     Inkscape::CanvasGrid::writeNewGridToRepr(this->getRepr(),document,static_cast<Inkscape::GridType>(gridtype));
 }
 
-bool SPNamedView::getSnapGlobal() const
-{
-    return this->snap_manager.snapprefs.getSnapEnabledGlobally();
-}
-
-void SPNamedView::setSnapGlobal(bool v)
-{
-    g_assert(this->getRepr() != nullptr);
-    sp_repr_set_boolean(this->getRepr(), "inkscape:snap-global", v);
-}
-
 void sp_namedview_update_layers_from_document (SPDesktop *desktop)
 {
     SPObject *layer = nullptr;

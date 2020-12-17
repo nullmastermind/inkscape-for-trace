@@ -123,6 +123,8 @@ InkscapeWindow::change_document(SPDocument* document)
 
     _document = document;
     _app->set_active_document(_document);
+    remove_action_group("doc");
+    insert_action_group("doc", document->getActionGroup());
 
     setup_view();
     update_dialogs();

@@ -434,7 +434,6 @@ public:
     bool colorProfAdjustEnabled();
 
     void toggleGrids();
-    void toggleSnapGlobal();
     bool gridsEnabled() const { return grids_visible; };
     void showGrids(bool show, bool dirty_document = true);
     void toggleToolbar(gchar const *toolbar_name, unsigned int verbenum);

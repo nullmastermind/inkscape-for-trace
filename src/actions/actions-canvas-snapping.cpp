@@ -58,8 +58,8 @@ canvas_snapping_toggle(SPDocument* document, const SPAttr option)
 
     switch (option) {
         case SPAttr::INKSCAPE_SNAP_GLOBAL:
-            v = nv->getSnapGlobal();
-            nv->setSnapGlobal(!v); // Calls sp_repr_set_boolean
+            v = nv->snap_manager.snapprefs.getSnapEnabledGlobally();
+            sp_repr_set_boolean(repr, "inkscape:snap-global", !v);
             break;
 
         // BBox
