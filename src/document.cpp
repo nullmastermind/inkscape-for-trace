@@ -390,13 +390,11 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
     nv->setDefaultAttribute("inkscape:pagecheckerboard", "/template/base/pagecheckerboard", "0");
 
     // If no units are set in the document, try and guess them from the width/height
-    std::string guess_unit = "px";
-    if (document->root->width.unit) {
-        guess_unit = sp_svg_length_get_css_units(document->root->width.unit);
-    } else if (document->root->height.unit) {
-        guess_unit = sp_svg_length_get_css_units(document->root->height.unit);
+    if (document->root->width.isAbsolute()) {
+        nv->setDefaultAttribute("inkscape:document-units", "", document->root->width.getUnit());
+    } else if (document->root->height.isAbsolute()) {
+        nv->setDefaultAttribute("inkscape:document-units", "", document->root->height.getUnit());
     }
-    nv->setDefaultAttribute("inkscape:document-units", "/template/base/unit_override", guess_unit);
 
     // Defs
     if (!document->root->defs) {

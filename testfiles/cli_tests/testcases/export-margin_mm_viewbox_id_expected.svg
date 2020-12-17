@@ -1,64 +1,50 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   sodipodi:docname="square_mm_viewbox.svg"
-   id="svg4"
-   version="1.1"
-   viewBox="0 0 150 200"
+   width="150mm"
    height="200mm"
-   width="150mm">
-  <metadata
-     id="metadata10">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
+   viewBox="0 0 150 200"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="square_mm_viewbox.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
   <defs
      id="defs8" />
   <sodipodi:namedview
-     fit-margin-bottom="50"
-     fit-margin-right="50"
-     fit-margin-left="50"
-     fit-margin-top="50"
      id="namedview6"
-     inkscape:window-height="480"
-     inkscape:window-width="640"
-     inkscape:pageshadow="2"
-     inkscape:pageopacity="0"
-     guidetolerance="10"
-     gridtolerance="10"
-     objecttolerance="10"
-     borderopacity="1"
+     pagecolor="#ffffff"
      bordercolor="#666666"
-     pagecolor="#ffffff" />
+     borderopacity="1.0"
+     objecttolerance="10.0"
+     gridtolerance="10.0"
+     guidetolerance="10.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="false"
+     inkscape:document-units="mm"
+     fit-margin-top="50"
+     fit-margin-left="50"
+     fit-margin-right="50"
+     fit-margin-bottom="50" />
   <!-- Consider that usually 1 user unit = 1 px = 1/96 inch, but viewBox scale the the drawing here, 
   so that 1 (unitless) user unit is equivalent to 1 mm after scaling. 
   The first square (square-mm) doesn't actually have a size of 100 mm.
   The second and third square together has the size of 100 mm × 100 mm.
   <rect x="0" y="0" width="100mm" height="100mm" fill="yellow" id="square-mm" />-->
   <rect
-     id="square-blue"
+     x="0"
+     y="50"
+     width="50"
+     height="100"
      fill="#0000ff"
-     height="100"
-     width="50"
-     y="50"
-     x="-3.814697e-07" />
+     id="square-blue" />
   <rect
-     id="square-red"
-     fill="#ff0000"
-     height="100"
-     width="50"
+     x="50"
      y="50"
-     x="50" />
+     width="50"
+     height="100"
+     fill="#ff0000"
+     id="square-red" />
 </svg>
