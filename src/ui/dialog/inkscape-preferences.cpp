@@ -559,7 +559,8 @@ Gtk::TreePath InkscapePreferences::get_prev_result(Gtk::TreeIter &iter, bool ite
  * result
  *
  * @param evt event object
- * @return Always returns True to label the key press event as handled
+ * @return Always returns False to label the key press event as handled, this
+ * prevents the search bar from retaining focus for other keyboard event.
  */
 bool InkscapePreferences::on_navigate_key_press(GdkEventKey *evt)
 {
@@ -585,7 +586,7 @@ bool InkscapePreferences::on_navigate_key_press(GdkEventKey *evt)
             }
         }
     }
-    return true;
+    return false;
 }
 
 /**
