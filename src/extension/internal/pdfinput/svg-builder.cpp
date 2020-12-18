@@ -1263,7 +1263,7 @@ void SvgBuilder::_flushText() {
     // Output all buffered glyphs
     while (true) {
         const SvgGlyph& glyph = (*i);
-        std::vector<SvgGlyph>::iterator prev_iterator = i - 1;
+        auto prev_iterator = (i == _glyphs.begin()) ? _glyphs.end() : (i-1);
         // Check if we need to make a new tspan
         if (glyph.style_changed) {
             new_tspan = true;
@@ -1329,7 +1329,7 @@ void SvgBuilder::_flushText() {
             }
             new_tspan = false;
         }
-        if ( glyphs_in_a_row > 0 ) {
+        if ( glyphs_in_a_row > 0 && i != _glyphs.begin() ) {
             x_coords.append(" ");
             y_coords.append(" ");
             // Check if we have the same coordinates
