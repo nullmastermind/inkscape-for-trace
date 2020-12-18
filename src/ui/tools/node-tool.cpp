@@ -424,8 +424,7 @@ void NodeTool::selection_changed(Inkscape::Selection *sel) {
     }
 
     for (const auto & r : shapes) {
-        if ((SP_IS_SHAPE(r.object) || SP_IS_TEXT(r.object) || SP_IS_GROUP(r.object) || SP_IS_OBJECTGROUP(r.object)) &&
-            this->_shape_editors.find(SP_ITEM(r.object)) == this->_shape_editors.end()) {
+        if (this->_shape_editors.find(SP_ITEM(r.object)) == this->_shape_editors.end()) {
             ShapeEditor *si = new ShapeEditor(this->desktop, r.edit_transform);
             SPItem *item = SP_ITEM(r.object);
             si->set_item(item);
