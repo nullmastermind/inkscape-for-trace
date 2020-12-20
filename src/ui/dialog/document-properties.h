@@ -99,8 +99,6 @@ protected:
     void  load_default_metadata();
     void  save_default_metadata();
 
-    void _handleDocumentReplaced(SPDesktop* desktop, SPDocument *document);
-
     Inkscape::XML::SignalObserver _emb_profiles_observer, _scripts_observer;
     Gtk::Notebook  _notebook;
 

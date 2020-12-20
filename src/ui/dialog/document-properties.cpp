@@ -1481,17 +1481,6 @@ void DocumentProperties::save_default_metadata()
    }
 }
 
-
-void DocumentProperties::_handleDocumentReplaced(SPDesktop* desktop, SPDocument *document)
-{
-    _repr_root = desktop->getNamedView()->getRepr();
-    _repr_root->addListener(&_repr_events, this);
-    _repr_namedview = document->getRoot()->getRepr();
-    _repr_namedview->addListener(&_repr_events, this);
-
-    update_widgets();
-}
-
 void DocumentProperties::update()
 {
     if (!_app) {
@@ -1501,21 +1490,25 @@ void DocumentProperties::update()
 
     SPDesktop *desktop = getDesktop();
 
-    if (!desktop) {
-        return;
-    }
-
     if (_repr_root) {
         _document_replaced_connection.disconnect();
         _repr_root->removeListenerByData(this);
-        _repr_root = nullptr;
         _repr_namedview->removeListenerByData(this);
         _repr_namedview = nullptr;
     }
 
+    if (!desktop) {
+        return;
+    }
+
     _wr.setDesktop(desktop);
 
-    _handleDocumentReplaced(desktop, desktop->getDocument());
+    _repr_root = desktop->getNamedView()->getRepr();
+    _repr_root->addListener(&_repr_events, this);
+    _repr_namedview = desktop->getDocument()->getRoot()->getRepr();
+    _repr_namedview->addListener(&_repr_events, this);
+
+    update_widgets();
 }
 
 static void on_child_added(Inkscape::XML::Node */*repr*/, Inkscape::XML::Node */*child*/, Inkscape::XML::Node */*ref*/, void *data)
