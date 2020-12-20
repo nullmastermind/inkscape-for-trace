@@ -70,7 +70,7 @@ void Inkscape::Rubberband::stop()
 
     delete_canvas_items();
 
-    if (_desktop) {
+    if (_desktop && _desktop->getCanvas()) {
         _desktop->getCanvas()->forced_redraws_stop();
     }
 }
