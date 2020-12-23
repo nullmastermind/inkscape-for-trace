@@ -16,7 +16,7 @@
 
 class SPItem;
 
-void unclump(std::vector<SPItem*> &items);
+void unclump(std::vector<SPItem *> &items);
 
 #endif /* !UNCLUMP_H_SEEN */
 
