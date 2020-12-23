@@ -26,7 +26,7 @@ public:
     double dist(SPItem *item1, SPItem *item2);
     double average(SPItem *item, std::list<SPItem*> &others);
     SPItem *closest(SPItem *item, std::list<SPItem*> &others);
-    SPItem *farest(SPItem *item, std::list<SPItem*> &others);
+    SPItem *farthest(SPItem *item, std::list<SPItem*> &others);
     std::vector<SPItem*> unclump_remove_behind(SPItem *item, SPItem *closest, std::list<SPItem*> &rest);
     void push(SPItem *from, SPItem *what, double dist);
     void pull(SPItem *to, SPItem *what, double dist);
@@ -227,10 +227,10 @@ SPItem *Unclump::closest(SPItem *item, std::list<SPItem*> &others)
 /**
 Most distant from item among others
  */
-SPItem *Unclump::farest(SPItem *item, std::list<SPItem*> &others)
+SPItem *Unclump::farthest(SPItem *item, std::list<SPItem*> &others)
 {
     double max = -HUGE_VAL;
-    SPItem *farest = nullptr;
+    SPItem *farthest = nullptr;
 
     for (SPItem *other : others) {
         if (other == item)
@@ -239,11 +239,11 @@ SPItem *Unclump::farest(SPItem *item, std::list<SPItem*> &others)
         double dist = this->dist(item, other);
         if (dist > max && fabs (dist) < 1e6) {
             max = dist;
-            farest = other;
+            farthest = other;
         }
     }
 
-    return farest;
+    return farthest;
 }
 
 /**
@@ -372,18 +372,18 @@ unclump (std::vector<SPItem*> &items)
             double ave = unclump.average(item, nei);
 
             SPItem *closest = unclump.closest(item, nei);
-            SPItem *farest = unclump.farest(item, nei);
+            SPItem *farthest = unclump.farthest(item, nei);
 
             double dist_closest = unclump.dist(closest, item);
-            double dist_farest = unclump.dist(farest, item);
+            double dist_farthest = unclump.dist(farthest, item);
 
-            //g_print ("NEI %d for item %s    closest %s at %g  farest %s at %g  ave %g\n", g_slist_length(nei), item->getId(), closest->getId(), dist_closest, farest->getId(), dist_farest, ave);
+            //g_print ("NEI %d for item %s    closest %s at %g  farthest %s at %g  ave %g\n", g_slist_length(nei), item->getId(), closest->getId(), dist_closest, farthest->getId(), dist_farthest, ave);
 
-            if (fabs (ave) < 1e6 && fabs (dist_closest) < 1e6 && fabs (dist_farest) < 1e6) { // otherwise the items are bogus
+            if (fabs (ave) < 1e6 && fabs (dist_closest) < 1e6 && fabs (dist_farthest) < 1e6) { // otherwise the items are bogus
                 // increase these coefficients to make unclumping more aggressive and less stable
                 // the pull coefficient is a bit bigger to counteract the long-term expansion trend
                 unclump.push(closest, item, 0.3 * (ave - dist_closest));
-                unclump.pull(farest, item, 0.35 * (dist_farest - ave));
+                unclump.pull(farthest, item, 0.35 * (dist_farthest - ave));
             }
         }
     }
