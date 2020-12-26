@@ -1977,6 +1977,19 @@ void InkscapePreferences::initPageUI()
 
     this->AddPage(_page_grids, _("Grids"), iter_ui, PREFS_PAGE_UI_GRIDS);
 
+    // Command Palette
+    _page_command_palette.add_group_header(_("Display Data"));
+
+    _cp_show_full_action_name.init(_("Show full action name"), "/options/commandpalette/showfullactionname/value", false);
+    _page_command_palette.add_line(true, "", _cp_show_full_action_name, "", _("Show the full action name in command palette suggestions, useful for CLI users"));
+
+    _cp_show_untranstlated_name.init(_("Show untranslated(English) name"),  "/options/commandpalette/showuntranslatedname/value", true);
+    _page_command_palette.add_line(true, "", _cp_show_untranstlated_name, "", _("Show also the English action name"));
+
+    this->AddPage(_page_command_palette, _("Command Palette"), iter_ui, PREFS_PAGE_COMMAND_PALETTE);
+    // /Command Palette
+
+
     initKeyboardShortcuts(iter_ui);
 }
 

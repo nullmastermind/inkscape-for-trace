@@ -16,6 +16,7 @@
 #include "actions-base.h"
 #include "actions-helper.h"
 
+#include "actions/actions-extra-data.h"
 #include "inkscape-application.h"
 
 #include "inkscape.h"             // Inkscape::Application

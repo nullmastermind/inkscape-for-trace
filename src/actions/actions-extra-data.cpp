@@ -60,14 +60,12 @@ InkActionExtraData::get_tooltip_for_action(Glib::ustring const &action_name) {
 }
 
 void
-InkActionExtraData::add_data(std::vector<std::vector<Glib::ustring>> &raw_data)
-{
+InkActionExtraData::add_data(std::vector<std::vector<Glib::ustring>> &raw_data) {
     for (auto raw : raw_data) {
         InkActionExtraDatum datum(raw[1], raw[2], raw[3]);
         data.emplace(raw[0], datum);
     }
 }
-
 
 /*
   Local Variables:

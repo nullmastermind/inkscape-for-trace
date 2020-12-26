@@ -1907,6 +1907,9 @@ void ZoomVerb::perform(SPAction *action, void *data)
     SPDocument *doc = dt->getDocument();
 
     switch (reinterpret_cast<std::size_t>(data)) {
+        case SP_VERB_TOGGLE_COMMAND_PALETTE:
+            dt->toggleCommandPalette();
+            break;
         case SP_VERB_TOGGLE_RULERS:
             dt->toggleRulers();
             break;
@@ -2777,6 +2780,7 @@ Verb *Verb::_base_verbs[] = {
     // WHY ARE THE FOLLOWING ZoomVerbs???
 
     // View
+    new ZoomVerb(SP_VERB_TOGGLE_COMMAND_PALETTE, "ToggleCommandPalette", N_("Command Palette_"), N_("Show or hide the on canvas command palette"), nullptr),
     new ZoomVerb(SP_VERB_TOGGLE_RULERS, "ToggleRulers", N_("_Rulers"), N_("Show or hide the canvas rulers"), nullptr),
     new ZoomVerb(SP_VERB_TOGGLE_SCROLLBARS, "ToggleScrollbars", N_("Scroll_bars"),
                  N_("Show or hide the canvas scrollbars"), nullptr),

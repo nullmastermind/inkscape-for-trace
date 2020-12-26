@@ -18,6 +18,8 @@
 // buttons they want in their place).
 
 #include <glibmm/i18n.h>
+#include <gtkmm/enums.h>
+#include <gtkmm/label.h>
 
 #include "canvas-grid.h"
 
@@ -48,6 +50,9 @@ CanvasGrid::CanvasGrid(SPDesktopWidget *dtw)
     _canvas->set_vexpand(true);
     _canvas->set_can_focus(true);
     _canvas->signal_event().connect(sigc::mem_fun(*this, &CanvasGrid::SignalEvent)); // TEMP
+
+    _canvas_overlay.add(*_canvas);
+    _canvas_overlay.add_overlay(*_command_palette.get_base_widget());
 
     // Horizontal Scrollbar
     _hadj = Gtk::Adjustment::create(0.0, -4000.0, 4000.0, 10.0, 100.0, 4.0);
@@ -124,18 +129,18 @@ CanvasGrid::CanvasGrid(SPDesktopWidget *dtw)
     _sticky_zoom->set_no_show_all();
 
     // Top row
-    attach(*_guide_lock,  0, 0, 1, 1);
-    attach(*_hruler,      1, 0, 1, 1);
-    attach(*_sticky_zoom, 2, 0, 1, 1);
+    attach(*_guide_lock,    0, 0, 1, 1);
+    attach(*_hruler,        1, 0, 1, 1);
+    attach(*_sticky_zoom,   2, 0, 1, 1);
 
     // Middle row
-    attach(*_vruler,      0, 1, 1, 1);
-    attach(*_canvas,      1, 1, 1, 1);
-    attach(*_vscrollbar,  2, 1, 1, 1);
+    attach(*_vruler,        0, 1, 1, 1);
+    attach(_canvas_overlay, 1, 1, 1, 1);
+    attach(*_vscrollbar,    2, 1, 1, 1);
 
     // Bottom row
-    attach(*_hscrollbar,  1, 2, 1, 1);
-    attach(*_cms_adjust,  2, 2, 1, 1);
+    attach(*_hscrollbar,    1, 2, 1, 1);
+    attach(*_cms_adjust,    2, 2, 1, 1);
 
     // Update rulers on size change.
     signal_size_allocate().connect(sigc::mem_fun(*this, &CanvasGrid::OnSizeAllocate));
@@ -216,15 +221,15 @@ CanvasGrid::ShowRulers(bool state)
         _vruler->show();
         _guide_lock->show();
         _guide_lock->show_all_children();
-        remove(*_canvas);
-        attach(*_canvas, 1, 1, 1, 1);
+        remove(_canvas_overlay);
+        attach(_canvas_overlay, 1, 1, 1, 1);
     } else {
         // Hide rulers
         _hruler->hide();
         _vruler->hide();
         _guide_lock->hide();
-        remove(*_canvas);
-        attach(*_canvas, 1, 0, 1, 2);
+        remove(_canvas_overlay);
+        attach(_canvas_overlay, 1, 0, 1, 2);
     }
 }
 
@@ -238,6 +243,20 @@ CanvasGrid::ToggleRulers()
     auto prefs = Inkscape::Preferences::get();
     prefs->setBool("/fullscreen/rulers/state", _show_rulers);
     prefs->setBool("/window/rulers/state", _show_rulers);
+}
+
+void
+CanvasGrid::ToggleCommandPalette() {
+    _command_palette.toggle();
+}
+
+void
+CanvasGrid::ShowCommandPalette(bool state)
+{
+    if (state) {
+        _command_palette.open();
+    }
+    _command_palette.close();
 }
 
 // Update rulers on change of widget size, but only if allocation really changed.
@@ -256,6 +275,7 @@ CanvasGrid::SignalEvent(GdkEvent *event)
 {
     if (event->type == GDK_BUTTON_PRESS) {
         _canvas->grab_focus();
+        _command_palette.close();
     }
 
     if (event->type == GDK_BUTTON_PRESS && event->button.button == 3) {

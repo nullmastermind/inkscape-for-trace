@@ -195,6 +195,8 @@ override) the bindings in the main default.xml.
   <bind action="ToggleToolToolbar" />
   <bind action="ToggleToolbox" />
 
+  <bind key="question" action="ToggleCommandPalette"/>
+
   <bind key="r" modifiers="Primary" action="ToggleRulers" display="true" />
 
   <bind key="b" modifiers="Primary" action="ToggleScrollbars" display="true" />

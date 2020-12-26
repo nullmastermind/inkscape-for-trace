@@ -209,6 +209,7 @@ public:
     void layoutWidgets();
     void toggle_scrollbars();
     void update_scrollbars(double scale);
+    void toggle_command_palette();
     void toggle_rulers();
     void sticky_zoom_toggled();
 

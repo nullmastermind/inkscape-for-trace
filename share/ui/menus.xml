@@ -154,6 +154,7 @@
          <verb verb-id="ToggleStatusbar"       check="yes" />
        </submenu>
        <verb verb-id="DialogsToggle" />
+       <verb verb-id="ToggleCommandPalette"/>
        <separator/>
        <verb verb-id="DialogSwatches" />
        <verb verb-id="DialogDebug" />

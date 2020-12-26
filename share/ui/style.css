@@ -177,6 +177,15 @@ iconview *:hover {
     font-size: 11px;
 }
 
+#CommandPaletteBase {
+    border: 5px solid @theme_bg_color;
+    border-radius: 5px;
+}
+
+#CommandPaletteBase list row:not(:last-child) {
+    border-bottom: 1px solid @bg_color5;
+    background-color: @theme_bg_color;
+}
 
 /* LPE Dialog add */
 #LPESelectorFlowBox GtkFlowBoxChild,

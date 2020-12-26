@@ -15,10 +15,18 @@
 #ifndef INK_ACTIONS_EXTRA_DATA_H
 #define INK_ACTIONS_EXTRA_DATA_H
 
+#include <glibmm/ustring.h>
+#include <glibmm/varianttype.h>
 #include <map>
+#include <utility>
 #include <vector>
 
-#include <glibmm/ustring.h>
+enum class ParamType
+{
+    INTEGER,
+    DOUBLE,
+    STRING,
+};
 
 class InkActionExtraDatum {
 public:
@@ -39,8 +47,8 @@ private:
     Glib::ustring action_tooltip;
 };
 
-class InkActionExtraData {
-
+class InkActionExtraData
+{
 public:
     InkActionExtraData() = default;
 

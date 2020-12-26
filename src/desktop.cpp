@@ -1324,6 +1324,10 @@ SPDesktop::warnDialog (Glib::ustring const &text)
 }
 
 void
+SPDesktop::toggleCommandPalette() {
+    _widget->toggle_command_palette();
+}
+void
 SPDesktop::toggleRulers()
 {
     _widget->toggle_rulers();

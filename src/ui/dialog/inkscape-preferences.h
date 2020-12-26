@@ -71,6 +71,7 @@ enum {
     PREFS_PAGE_UI_THEME,
     PREFS_PAGE_UI_WINDOWS,
     PREFS_PAGE_UI_GRIDS,
+    PREFS_PAGE_COMMAND_PALETTE,
     PREFS_PAGE_UI_KEYBOARD_SHORTCUTS,
     PREFS_PAGE_BEHAVIOR,
     PREFS_PAGE_BEHAVIOR_SELECTING,
@@ -167,6 +168,7 @@ protected:
     UI::Widget::DialogPage _page_theme;
     UI::Widget::DialogPage _page_windows;
     UI::Widget::DialogPage _page_grids;
+    UI::Widget::DialogPage _page_command_palette;
 
     UI::Widget::DialogPage _page_behavior;
     UI::Widget::DialogPage _page_select;
@@ -244,6 +246,10 @@ protected:
     UI::Widget::PrefCheckButton _t_node_single_node_transform_handles;
     UI::Widget::PrefCheckButton _t_node_delete_preserves_shape;
     UI::Widget::PrefColorPicker _t_node_pathoutline_color;
+
+    // Command Palette
+    UI::Widget::PrefCheckButton _cp_show_full_action_name;
+    UI::Widget::PrefCheckButton _cp_show_untranstlated_name;
 
     UI::Widget::PrefCombo _gtk_theme;
     UI::Widget::PrefOpenFolder _sys_user_themes_dir_copy;

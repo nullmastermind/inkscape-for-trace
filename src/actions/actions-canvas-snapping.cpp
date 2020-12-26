@@ -14,6 +14,7 @@
 #include <glibmm/i18n.h>
 
 #include "actions-canvas-snapping.h"
+#include "actions/actions-extra-data.h"
 #include "inkscape-application.h"
 
 #include "document.h"

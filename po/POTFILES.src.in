@@ -238,6 +238,7 @@
 ../src/ui/dialog/calligraphic-profile-rename.cpp
 ../src/ui/dialog/clonetiler.cpp
 ../src/ui/dialog/color-item.cpp
+../src/ui/dialog/command-palette.cpp
 ../src/ui/dialog/debug.cpp
 ../src/ui/dialog/dialog-multipaned.cpp
 ../src/ui/dialog/dialog-notebook.cpp

@@ -2,35 +2,35 @@
 set(ui_SRC
 	clipboard.cpp
 	contextmenu.cpp
-        cursor-utils.cpp
+	cursor-utils.cpp
 	dialog-events.cpp
 	draw-anchor.cpp
-        drag-and-drop.cpp
+	drag-and-drop.cpp
 	icon-loader.cpp
 	interface.cpp
-        monitor.cpp
-        pref-pusher.cpp
+	monitor.cpp
+	pref-pusher.cpp
 	previewholder.cpp
 	selected-color.cpp
 	shape-editor.cpp
 	shape-editor-knotholders.cpp
-        simple-pref-pusher.cpp
-        shortcuts.cpp
+	simple-pref-pusher.cpp
+	shortcuts.cpp
 	tool-factory.cpp
 	tools-switch.cpp
-        util.cpp
+	util.cpp
 	uxmanager.cpp
-        modifiers.cpp
+	modifiers.cpp
 
 	cache/svg_preview_cache.cpp
 
-        desktop/menubar.cpp
-        desktop/menu-icon-shift.cpp
+	desktop/menubar.cpp
+	desktop/menu-icon-shift.cpp
 
-        knot/knot.cpp
-        knot/knot-holder.cpp
-        knot/knot-holder-entity.cpp
-        knot/knot-ptr.cpp
+	knot/knot.cpp
+	knot/knot-holder.cpp
+	knot/knot-holder-entity.cpp
+	knot/knot-ptr.cpp
 
 	tool/control-point-selection.cpp
 	tool/control-point.cpp
@@ -99,7 +99,8 @@ set(ui_SRC
 	dialog/calligraphic-profile-rename.cpp
 	dialog/clonetiler.cpp
 	dialog/color-item.cpp
-        dialog/attrdialog.cpp
+	dialog/command-palette.cpp
+	dialog/attrdialog.cpp
 	dialog/debug.cpp
 	dialog/dialog-base.cpp
 	dialog/dialog-container.cpp
@@ -138,9 +139,9 @@ set(ui_SRC
 	dialog/prototype.cpp
 	dialog/selectorsdialog.cpp
 	dialog/startup.cpp
-        dialog/styledialog.cpp
+	dialog/styledialog.cpp
 	dialog/svg-fonts-dialog.cpp
-        dialog/svg-preview.cpp
+	dialog/svg-preview.cpp
 	dialog/swatches.cpp
 	dialog/symbols.cpp
 	dialog/paint-servers.cpp
@@ -152,14 +153,14 @@ set(ui_SRC
 	dialog/transformation.cpp
 	dialog/undo-history.cpp
 	dialog/xml-tree.cpp
-    dialog/save-template-dialog.cpp
+	dialog/save-template-dialog.cpp
 
 	widget/iconrenderer.cpp
 	widget/alignment-selector.cpp
 	widget/anchor-selector.cpp
-        widget/button.cpp
-        widget/canvas.cpp
-        widget/canvas-grid.cpp
+	widget/button.cpp
+	widget/canvas.cpp
+	widget/canvas-grid.cpp
 	widget/clipmaskicon.cpp
 	widget/color-entry.cpp
 	widget/color-icc-selector.cpp
@@ -170,15 +171,15 @@ set(ui_SRC
 	widget/color-slider.cpp
 	widget/color-wheel-selector.cpp
 	widget/combo-box-entry-tool-item.cpp
-        widget/combo-tool-item.cpp
-    widget/dash-selector.cpp
+	widget/combo-tool-item.cpp
+	widget/dash-selector.cpp
 	widget/entity-entry.cpp
 	widget/entry.cpp
 	widget/filter-effect-chooser.cpp
 	widget/fill-style.cpp
 	widget/font-button.cpp
-    widget/font-selector.cpp
-    widget/font-selector-toolbar.cpp
+	widget/font-selector.cpp
+	widget/font-selector-toolbar.cpp
 	widget/font-variants.cpp
 	widget/font-variations.cpp
 	widget/frame.cpp
@@ -187,12 +188,12 @@ set(ui_SRC
 	widget/gradient-vector-selector.cpp
 	widget/highlight-picker.cpp
 	widget/imagetoggler.cpp
-    widget/ink-color-wheel.cpp
+	widget/ink-color-wheel.cpp
 	widget/ink-flow-box.cpp
-        widget/ink-ruler.cpp
+	widget/ink-ruler.cpp
 	widget/ink-spinscale.cpp
 	widget/insertordericon.cpp
-        widget/label-tool-item.cpp
+	widget/label-tool-item.cpp
 	widget/labelled.cpp
 	widget/layer-selector.cpp
 	widget/layertypeicon.cpp
@@ -204,7 +205,7 @@ set(ui_SRC
 	widget/paint-selector.cpp
 	widget/point.cpp
 	widget/preferences-widget.cpp
-        widget/preview.cpp
+	widget/preview.cpp
 	widget/random.cpp
 	widget/registered-widget.cpp
 	widget/registry.cpp
@@ -214,7 +215,7 @@ set(ui_SRC
 	widget/scalar.cpp
 	widget/scroll-utils.cpp
 	widget/selected-style.cpp
-        widget/spin-button-tool-item.cpp
+	widget/spin-button-tool-item.cpp
 	widget/spin-scale.cpp
 	widget/spin-slider.cpp
 	widget/spinbutton.cpp
@@ -236,33 +237,33 @@ set(ui_SRC
 	# Headers
 	clipboard.h
 	contextmenu.h
-        cursor-utils.h
+	cursor-utils.h
 	control-types.h
 	dialog-events.h
-        drag-and-drop.h
+	drag-and-drop.h
 	draw-anchor.h
 	event-debug.h
 	icon-names.h
 	icon-loader.h
 	interface.h
-        monitor.h
-        pref-pusher.h
+	monitor.h
+	pref-pusher.h
 	previewable.h
 	previewholder.h
 	selected-color.h
 	shape-editor.h
-        simple-pref-pusher.h
-        shortcuts.h
+	simple-pref-pusher.h
+	shortcuts.h
 	tool-factory.h
 	tools-switch.h
-        util.h
+	util.h
 	uxmanager.h
-        modifiers.h
+	modifiers.h
 
 	cache/svg_preview_cache.h
 
-        desktop/menubar.h
-        desktop/menu-icon-shift.h
+	desktop/menubar.h
+	desktop/menu-icon-shift.h
 
 	dialog/about.h
 	dialog/align-and-distribute.h
@@ -270,7 +271,8 @@ set(ui_SRC
 	dialog/calligraphic-profile-rename.h
 	dialog/clonetiler.h
 	dialog/color-item.h
-    dialog/attrdialog.h
+	dialog/command-palette.h
+	dialog/attrdialog.h
 	dialog/debug.h
 	dialog/dialog-base.h
 	dialog/dialog-container.h
@@ -310,9 +312,9 @@ set(ui_SRC
 	dialog/prototype.h
 	dialog/selectorsdialog.h
 	dialog/startup.h
-        dialog/styledialog.h
+	dialog/styledialog.h
 	dialog/svg-fonts-dialog.h
-        dialog/svg-preview.h
+	dialog/svg-preview.h
 	dialog/swatches.h
 	dialog/symbols.h
 	dialog/paint-servers.h
@@ -326,11 +328,11 @@ set(ui_SRC
 	dialog/xml-tree.h
 	dialog/save-template-dialog.h
 
-        knot/knot.h
-        knot/knot-enums.h
-        knot/knot-holder.h
-        knot/knot-holder-entity.h
-        knot/knot-ptr.h
+	knot/knot.h
+	knot/knot-enums.h
+	knot/knot-holder.h
+	knot/knot-holder-entity.h
+	knot/knot-ptr.h
 
 	tool/commit-events.h
 	tool/control-point-selection.h
@@ -401,9 +403,9 @@ set(ui_SRC
 	widget/alignment-selector.h
 	widget/anchor-selector.h
 	widget/attr-widget.h
-        widget/button.h
-        widget/canvas.h
-        widget/canvas-grid.h
+	widget/button.h
+	widget/canvas.h
+	widget/canvas-grid.h
 	widget/clipmaskicon.h
 	widget/color-entry.h
 	widget/color-icc-selector.h
@@ -415,17 +417,17 @@ set(ui_SRC
 	widget/color-wheel-selector.h
 	widget/combo-enums.h
 	widget/combo-box-entry-tool-item.h
-        widget/combo-tool-item.h
-    widget/dash-selector.h
+	widget/combo-tool-item.h
+	widget/dash-selector.h
 	widget/entity-entry.h
 	widget/entry.h
 	widget/fill-style.h
 	widget/filter-effect-chooser.h
 	widget/font-button.h
-    widget/font-selector.h
-    widget/font-selector-toolbar.h
+	widget/font-selector.h
+	widget/font-selector-toolbar.h
 	widget/font-variants.h
-    widget/font-variations.h
+	widget/font-variations.h
 	widget/frame.h
 	widget/gradient-image.h
 	widget/gradient-selector.h
@@ -433,11 +435,11 @@ set(ui_SRC
 	widget/highlight-picker.h
 	widget/insertordericon.h
 	widget/imagetoggler.h
-    widget/ink-color-wheel.h
-    widget/ink-flow-box.h
-        widget/ink-ruler.h
+	widget/ink-color-wheel.h
+	widget/ink-flow-box.h
+	widget/ink-ruler.h
 	widget/ink-spinscale.h
-        widget/label-tool-item.h
+	widget/label-tool-item.h
 	widget/labelled.h
 	widget/layer-selector.h
 	widget/layertypeicon.h
@@ -450,7 +452,7 @@ set(ui_SRC
 	widget/paint-selector.h
 	widget/point.h
 	widget/preferences-widget.h
-        widget/preview.h
+	widget/preview.h
 	widget/random.h
 	widget/registered-enums.h
 	widget/registered-widget.h
@@ -462,7 +464,7 @@ set(ui_SRC
 	widget/scroll-utils.h
 	widget/scrollprotected.h
 	widget/selected-style.h
-        widget/spin-button-tool-item.h
+	widget/spin-button-tool-item.h
 	widget/spin-scale.h
 	widget/spin-slider.h
 	widget/spinbutton.h

@@ -12,6 +12,9 @@
  */
 
 #include <gtkmm.h>
+#include <gtkmm/label.h>
+#include <gtkmm/overlay.h>
+#include "ui/dialog/command-palette.h"
 
 class SPCanvas;
 class SPDesktopWidget;
@@ -25,6 +28,7 @@ class Ruler;
 
 /**
  * A Gtk::Grid widget that contains rulers, scrollbars, buttons, and, of course, the canvas.
+ * Canvas has an overlay to let us put stuff on the canvas.
  */ 
 class CanvasGrid : public Gtk::Grid
 {
@@ -38,6 +42,9 @@ public:
     void ShowRulers(bool state = true);
     void ToggleRulers();
     void UpdateRulers();
+
+    void ShowCommandPalette(bool state = true);
+    void ToggleCommandPalette();
 
     Inkscape::UI::Widget::Canvas *GetCanvas() { return _canvas; };
 
@@ -58,6 +65,10 @@ private:
 
     // The Widgets
     Inkscape::UI::Widget::Canvas *_canvas;
+
+    Gtk::Overlay      _canvas_overlay;
+
+    Dialog::CommandPalette _command_palette;
 
     Glib::RefPtr<Gtk::Adjustment> _hadj;
     Glib::RefPtr<Gtk::Adjustment> _vadj;

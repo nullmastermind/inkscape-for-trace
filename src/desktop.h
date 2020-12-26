@@ -409,6 +409,7 @@ public:
     void presentWindow();
     bool showInfoDialog( Glib::ustring const &message );
     bool warnDialog (Glib::ustring const &text);
+    void toggleCommandPalette();
     void toggleRulers();
     void toggleScrollbars();
     void layoutWidget();
