@@ -424,11 +424,9 @@ void FilterKnotHolderEntity::knot_set(Geom::Point const &p, Geom::Point const &o
             filter->height.scale(new_bbox->height()/orig_bbox->height());
             filter->width.scale(new_bbox->width()/orig_bbox->width());
         }
+        filter->auto_region = false;
         filter->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 
-        //filter->
-
-        //item-> //adjust FER
     }
 
     item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
