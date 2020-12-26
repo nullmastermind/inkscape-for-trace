@@ -12,7 +12,6 @@
 #ifndef SEEN_UI_TOOL_NODE_TOOL_H
 #define SEEN_UI_TOOL_NODE_TOOL_H
 
-#include <boost/ptr_container/ptr_map.hpp>
 #include <glib.h>
 #include "ui/tools/tool-base.h"
 
@@ -63,7 +62,7 @@ public:
     bool root_handler(GdkEvent* event) override;
 
     const std::string& getPrefsPath() override;
-    boost::ptr_map<SPItem*, ShapeEditor> _shape_editors;
+    std::map<SPItem *, std::unique_ptr<ShapeEditor>> _shape_editors;
 
 private:
     sigc::connection _selection_changed_connection;

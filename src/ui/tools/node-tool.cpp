@@ -410,9 +410,7 @@ void NodeTool::selection_changed(Inkscape::Selection *sel) {
 
     // use multiple ShapeEditors for now, to allow editing many shapes at once
     // needs to be rethought
-    for (boost::ptr_map<SPItem*, ShapeEditor>::iterator i = this->_shape_editors.begin();
-         i != this->_shape_editors.end(); )
-    {
+    for (auto i = this->_shape_editors.begin(); i != this->_shape_editors.end();) {
         ShapeRecord s;
         s.object = dynamic_cast<SPObject *>(i->first);
 
@@ -425,10 +423,10 @@ void NodeTool::selection_changed(Inkscape::Selection *sel) {
 
     for (const auto & r : shapes) {
         if (this->_shape_editors.find(SP_ITEM(r.object)) == this->_shape_editors.end()) {
-            ShapeEditor *si = new ShapeEditor(this->desktop, r.edit_transform);
+            auto si = std::make_unique<ShapeEditor>(this->desktop, r.edit_transform);
             SPItem *item = SP_ITEM(r.object);
             si->set_item(item);
-            this->_shape_editors.insert(item, si);
+            this->_shape_editors.insert({item, std::move(si)});
         }
     }
 

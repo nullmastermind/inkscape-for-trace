@@ -62,7 +62,6 @@
 
 #include "ui/tools-switch.h"
 #include "ui/tools/lpe-tool.h"
-#include "ui/tools/node-tool.h"
 #include "ui/tools/tool-base.h"
 
 #include "widgets/desktop-widget.h"
@@ -300,8 +299,8 @@ bool ToolBase::_keyboardMove(GdkEventKey const &event, Geom::Point const &dir)
     } else {
         auto nt = dynamic_cast<Inkscape::UI::Tools::NodeTool *>(desktop->event_context);
         if (nt) {
-            for (auto i = nt->_shape_editors.begin(); i != nt->_shape_editors.end(); ++i) {
-                ShapeEditor * shape_editor = i->second;
+            for (auto &_shape_editor : nt->_shape_editors) {
+                ShapeEditor *shape_editor = _shape_editor.second.get();
                 if (shape_editor && shape_editor->has_knotholder()) {
                     KnotHolder * knotholder = shape_editor->knotholder;
                     if (knotholder) {
