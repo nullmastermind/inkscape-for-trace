@@ -41,14 +41,14 @@ public:
         optNumber_set = FALSE;
     }
 
-    float getNumber()
+    float getNumber() const
     {
         if(_set)
             return number;
         return -1;
     }
 
-    float getOptNumber()
+    float getOptNumber() const
     {
         if(optNumber_set)
             return optNumber;
@@ -67,15 +67,15 @@ public:
         number = num;
     }
 
-    bool optNumIsSet(){
+    bool optNumIsSet() const {
         return optNumber_set;
     }
 
-    bool numIsSet(){
+    bool numIsSet() const {
         return _set;
     }
     
-    char *getValueString()
+    std::string getValueString() const
     {
         Inkscape::SVGOStringStream os;
 
@@ -90,7 +90,7 @@ public:
                 os << number;
             }
         }
-        return g_strdup(os.str().c_str());
+        return os.str();
     }
 
     void set(char const *str)

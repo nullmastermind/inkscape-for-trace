@@ -318,9 +318,8 @@ Inkscape::XML::Node* SPFilter::write(Inkscape::XML::Document *doc, Inkscape::XML
     }
 
     if (this->filterRes.getNumber()>=0) {
-        gchar *tmp = this->filterRes.getValueString();
+        auto tmp = this->filterRes.getValueString();
         repr->setAttribute("filterRes", tmp);
-        g_free(tmp);
     } else {
         repr->removeAttribute("filterRes");
     }
