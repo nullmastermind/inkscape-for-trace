@@ -533,12 +533,14 @@ SPDocument *SPDocument::createNewDoc(gchar const *document_uri, bool keepalive, 
         /* fixme: destroy document */
         if (strcmp(rroot->name(), "svg:svg") != 0) return nullptr;
 
+        // Opening a template that points to a sister file should still work
+        // this also includes tutorials which point to png files.
+        document_base = g_path_get_dirname(document_uri);
+
         if (make_new) {
-            document_base = nullptr;
             document_uri = nullptr;
             document_name = g_strdup_printf(_("New document %d"), ++doc_count);
         } else {
-            document_base = g_path_get_dirname(document_uri);
             document_name = g_path_get_basename(document_uri);
             if (strcmp(document_base, ".") == 0) {
                 g_free(document_base);
