@@ -125,6 +125,10 @@
 ../share/extensions/print_win32_vector.inx
 ../share/extensions/printing_marks.inx
 ../share/extensions/ps_input.inx
+../share/extensions/raster_output_jpeg.inx
+../share/extensions/raster_output_png.inx
+../share/extensions/raster_output_tiff.inx
+../share/extensions/raster_output_webp.inx
 ../share/extensions/render_alphabetsoup.inx
 ../share/extensions/render_barcode.inx
 ../share/extensions/render_barcode_datamatrix.inx
