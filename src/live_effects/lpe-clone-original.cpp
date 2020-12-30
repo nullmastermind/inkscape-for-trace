@@ -308,7 +308,6 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
             return;
         }
         SPText  *text_origin = dynamic_cast<SPText *>(orig);
-        SPGroup  *group_origin = dynamic_cast<SPGroup *>(orig);
         SPItem *dest = dynamic_cast<SPItem *>(sp_lpe_item);
         const gchar * id = orig->getId();
         bool init = !is_load && g_strcmp0(id, linked.c_str()) != 0;
@@ -337,11 +336,6 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
         }
         style_attr += css_properties_str + ",";
         cloneAttrbutes(orig, dest, attr.c_str(), style_attr.c_str(), init);
-        if (!group_origin && linkeditem.last_transform.isTranslation()) {
-            Geom::Affine orig = sp_lpe_item->transform;
-            sp_lpe_item->transform *= orig.inverse() * linkeditem.last_transform.inverse() * orig;  
-            linkeditem.last_transform = Geom::identity();      
-        }
         old_css_properties = css_properties.param_getSVGValue();
         old_attributes = attributes.param_getSVGValue();
         sync = false;

@@ -1319,7 +1319,7 @@ Effect::doBeforeEffect (SPLPEItem const*/*lpeitem*/)
  */
 void Effect::doAfterEffect (SPLPEItem const* /*lpeitem*/, SPCurve *curve)
 {
-    is_load = false;
+    //Do nothing for simple effects
 }
 
 void Effect::doOnException(SPLPEItem const * /*lpeitem*/)

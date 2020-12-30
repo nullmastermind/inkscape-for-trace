@@ -36,6 +36,8 @@
 #include "path-chemistry.h"
 #include "sp-clippath.h"
 #include "sp-ellipse.h"
+#include "sp-spiral.h"
+#include "sp-star.h"
 #include "sp-item-group.h"
 #include "sp-mask.h"
 #include "sp-path.h"
@@ -293,8 +295,15 @@ bool SPLPEItem::performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape:
  */
 bool SPLPEItem::optimizeTransforms()
 {
-    bool ret = true;
     if (dynamic_cast<SPGroup *>(this)) {
+        return false;
+    }
+    // this next towo check could be brong on stars or spirals without transforms
+    // while finish transform change from optimiced to unoptimized
+    if (dynamic_cast<SPSpiral *>(this) && this->getAttribute("transform")) {
+        return false;
+    }
+    if (dynamic_cast<SPStar *>(this) && this->getAttribute("transform")) {
         return false;
     }
     auto* mask_path = this->getMaskObject();
@@ -309,9 +318,6 @@ bool SPLPEItem::optimizeTransforms()
     for (auto &lperef : path_effect_list) {
         if (!lperef) {
             continue;
-        }
-        if (!ret) {
-            break;
         }
         LivePathEffectObject *lpeobj = lperef->lpeobject;
         if (lpeobj) {
