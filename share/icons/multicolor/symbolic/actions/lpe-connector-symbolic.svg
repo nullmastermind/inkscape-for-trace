@@ -137,7 +137,7 @@
          sodipodi:nodetypes="cccc"
          inkscape:path-effect="#path-effect874"
          inkscape:original-d="M 12.951667,11.494923 11.535579,11.5 C 8,11.5 8,3.5 4.4633565,3.5 L 3,3.4949237"
-         class="error" />
+         class="warning" />
     </g>
     <g
        id="g896"
@@ -149,7 +149,7 @@
          sodipodi:nodetypes="cccc"
          inkscape:path-effect="#path-effect874"
          inkscape:original-d="m 10.949874,10.515408 -0.416088,0.0051 c -3.535579,0 -1.583912,-5.9999995 -5.1205555,-5.9999995 l -0.4633565,-0.0051"
-         class="error" />
+         class="warning" />
     </g>
     <circle
        style="fill:#000000;stroke-width:3.19471"
@@ -172,7 +172,7 @@
          sodipodi:nodetypes="cccc"
          inkscape:path-effect="#path-effect874"
          inkscape:original-d="M 13.763328,11.494923 12.34724,11.5 C 6,11.5 10.463356,3.5 4.4633565,3.5 L 3,3.4949237"
-         class="error" />
+         class="warning" />
       <path
          style="fill-rule:nonzero;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          d="m 11.993687,9.8484771 2,1.9999999 0,-0.707106 -2,2 0.707106,0.707106 2.353554,-2.353553 -2.353554,-2.3535537 z"
@@ -180,7 +180,7 @@
          sodipodi:nodetypes="ccc"
          inkscape:path-effect="#path-effect876"
          inkscape:original-d="m 12.34724,9.4949237 2,2.0000003 -2,2"
-         class="error" />
+         class="warning" />
     </g>
     <circle
        style="fill:#000000;stroke-width:3.19471"
