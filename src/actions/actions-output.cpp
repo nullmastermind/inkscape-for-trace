@@ -222,34 +222,34 @@ export_do(InkscapeApplication *app)
 std::vector<std::vector<Glib::ustring>> raw_data_output =
 {
     // clang-format off
-    {"app.export-type",               N_("Export Type"),               "Export",     N_("Export file type.")                     },
-    {"app.export-filename",           N_("Export File Name"),          "Export",     N_("Export file name.")                     },
-    {"app.export-overwrite",          N_("Export Overwrite"),          "Export",     N_("Export over-write file.")               },
+    {"app.export-type",               N_("Export Type"),               "Export",     N_("Set export file type")                               },
+    {"app.export-filename",           N_("Export File Name"),          "Export",     N_("Set export file name")                               },
+    {"app.export-overwrite",          N_("Export Overwrite"),          "Export",     N_("Allow to overwrite existing files during export")    },
 
-    {"app.export-area",               N_("Export Area"),               "Export",     N_("Export area.")                          },
-    {"app.export-area-drawing",       N_("Export Area Drawing"),       "Export",     N_("Export drawing area.")                  },
-    {"app.export-area-page",          N_("Export Area Page"),          "Export",     N_("Export page area.")                     },
-    {"app.export-margin",             N_("Export Margin"),             "Export",     N_("Export margin.")                        },
-    {"app.export-area-snap",          N_("Export Area Snap"),          "Export",     N_("Export snap area to integer values.")   },
-    {"app.export-width",              N_("Export Width"),              "Export",     N_("Export width.")                         },
-    {"app.export-height",             N_("Export Height"),             "Export",     N_("Export height.")                        },
+    {"app.export-area",               N_("Export Area"),               "Export",     N_("Set export area")                                    },
+    {"app.export-area-drawing",       N_("Export Area Drawing"),       "Export",     N_("Export drawing area")                                },
+    {"app.export-area-page",          N_("Export Area Page"),          "Export",     N_("Export page area")                                   },
+    {"app.export-margin",             N_("Export Margin"),             "Export",     N_("Set additional export margin")                       },
+    {"app.export-area-snap",          N_("Export Area Snap"),          "Export",     N_("Snap export area to integer values")                 },
+    {"app.export-width",              N_("Export Width"),              "Export",     N_("Set export width")                                   },
+    {"app.export-height",             N_("Export Height"),             "Export",     N_("Set export height")                                  },
 
-    {"app.export-id",                 N_("Export ID"),                 "Export",     N_("Export id(s).")                         },
-    {"app.export-id-only",            N_("Export ID Only"),            "Export",     N_("Export id(s) only.")                    },
+    {"app.export-id",                 N_("Export ID"),                 "Export",     N_("Export selected id(s)")                              },
+    {"app.export-id-only",            N_("Export ID Only"),            "Export",     N_("Hide any objects not given in export-id option")     },
 
-    {"app.export-plain-svg",          N_("Export Plain SVG"),          "Export",     N_("Export as plain SVG.")                  },
-    {"app.export-dpi",                N_("Export DPI"),                "Export",     N_("Export DPI.")                           },
-    {"app.export-ignore-filters",     N_("Export Ignore Filters"),     "Export",     N_("Export ignore filters.")                },
-    {"app.export-text-to-path",       N_("Export Text to Path"),       "Export",     N_("Export convert text to paths.")         },
-    {"app.export-ps-level",           N_("Export PS Level"),           "Export",     N_("Export PostScript level.")              },
-    {"app.export-pdf-version",        N_("Export PDF Version"),        "Export",     N_("Export PDF version.")                   },
-    {"app.export-latex",              N_("Export LaTeX"),              "Export",     N_("Export LaTeX.")                         },
-    {"app.export-use-hints",          N_("Export Use Hints"),          "Export",     N_("Export using saved hints.")             },
-    {"app.export-background",         N_("Export Background"),         "Export",     N_("Export background color.")              },
-    {"app.export-background-opacity", N_("Export Background Opacity"), "Export",     N_("Export background opacity.")            },
-    {"app.export-png-color-mode",     N_("Export PNG Color Mode"),     "Export",     N_("Export png color mode.")                },
+    {"app.export-plain-svg",          N_("Export Plain SVG"),          "Export",     N_("Export as plain SVG")                                },
+    {"app.export-dpi",                N_("Export DPI"),                "Export",     N_("Set export DPI")                                     },
+    {"app.export-ignore-filters",     N_("Export Ignore Filters"),     "Export",     N_("Export without filters to avoid rasterization for PDF, PS, EPS")},
+    {"app.export-text-to-path",       N_("Export Text to Path"),       "Export",     N_("Convert texts to paths in the exported file")        },
+    {"app.export-ps-level",           N_("Export PS Level"),           "Export",     N_("Set PostScript level")                               },
+    {"app.export-pdf-version",        N_("Export PDF Version"),        "Export",     N_("Set PDF version")                                    },
+    {"app.export-latex",              N_("Export LaTeX"),              "Export",     N_("Export LaTeX")                                       },
+    {"app.export-use-hints",          N_("Export Use Hints"),          "Export",     N_("Export using saved hints")                           },
+    {"app.export-background",         N_("Export Background"),         "Export",     N_("Include background color in exported file")          },
+    {"app.export-background-opacity", N_("Export Background Opacity"), "Export",     N_("Include background opacity in exported file")        },
+    {"app.export-png-color-mode",     N_("Export PNG Color Mode"),     "Export",     N_("Set color mode for PNG export")                      },
 
-    {"app.export-do",                 N_("Do Export"),                 "Export",     N_("Do export.")                            }
+    {"app.export-do",                 N_("Do Export"),                 "Export",     N_("Do export")                                          }
     // clang-format on
 };
 

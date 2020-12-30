@@ -249,14 +249,14 @@ canvas_color_manage_toggle(InkscapeWindow *win)
 std::vector<std::vector<Glib::ustring>> raw_data_canvas_mode =
 {
     // clang-format off
-    {"win.canvas-display-mode(0)",      N_("Display Mode: Normal"),       "Canvas Display",   N_("Normal rendering")                                  },
+    {"win.canvas-display-mode(0)",      N_("Display Mode: Normal"),       "Canvas Display",   N_("Use normal rendering mode")                         },
     {"win.canvas-display-mode(1)",      N_("Display Mode: Outline"),      "Canvas Display",   N_("Show only object outlines")                         },
     {"win.canvas-display-mode(2)",      N_("Display Mode: No Filters"),   "Canvas Display",   N_("Do not render filters (for speed)")                 },
     {"win.canvas-display-mode(3)",      N_("Display Mode: Hairlines"),    "Canvas Display",   N_("Render thin lines visibly")                         },
     {"win.canvas-display-mode-cycle",   N_("Display Mode Cycle"),         "Canvas Display",   N_("Cycle through display modes")                       },
     {"win.canvas-display-mode-toggle",  N_("Display Mode Toggle"),        "Canvas Display",   N_("Toggle between normal and last non-normal mode")    },
 
-    {"win.canvas-split-mode(0)",        N_("Split Mode: Normal"),         "Canvas Display",   N_("Normal rendering")                                  },
+    {"win.canvas-split-mode(0)",        N_("Split Mode: Normal"),         "Canvas Display",   N_("Do not split canvas")                               },
     {"win.canvas-split-mode(1)",        N_("Split Mode: Split"),          "Canvas Display",   N_("Render part of the canvas in outline mode")         },
     {"win.canvas-split-mode(2)",        N_("Split Mode: X-Ray"),          "Canvas Display",   N_("Render a circular area in outline mode")            },
 

@@ -96,11 +96,11 @@
           <attribute name='action'>win.canvas-rotate-ccw</attribute>
         </item>
         <item>
-          <attribute name='label'  translatable="yes">Rotate Reset</attribute>
+          <attribute name='label'  translatable="yes">Reset Rotation</attribute>
           <attribute name='action'>win.canvas-rotate-reset</attribute>
         </item>
         <item>
-          <attribute name='label'  translatable="yes">Rotate Lock</attribute>
+          <attribute name='label'  translatable="yes">Lock Rotation</attribute>
           <attribute name='action'>win.canvas-rotate-lock</attribute>
         </item>
       </section>
@@ -115,7 +115,7 @@
           <attribute name='action'>win.canvas-flip-vertical</attribute>
         </item>
         <item>
-          <attribute name='label'  translatable="yes">Flip Reset</attribute>
+          <attribute name='label'  translatable="yes">Reset Flipping</attribute>
           <attribute name='action'>win.canvas-flip-reset</attribute>
         </item>
       </section>
@@ -191,7 +191,7 @@
       <attribute name='label' translatable="yes">Color Management</attribute>
       <attribute name='action'>win.canvas-color-manage</attribute>
     </item>
-      
+
   </menu>
 
 </interface>

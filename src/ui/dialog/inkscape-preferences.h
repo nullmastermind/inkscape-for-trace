@@ -249,7 +249,7 @@ protected:
 
     // Command Palette
     UI::Widget::PrefCheckButton _cp_show_full_action_name;
-    UI::Widget::PrefCheckButton _cp_show_untranstlated_name;
+    UI::Widget::PrefCheckButton _cp_show_untranslated_name;
 
     UI::Widget::PrefCombo _gtk_theme;
     UI::Widget::PrefOpenFolder _sys_user_themes_dir_copy;

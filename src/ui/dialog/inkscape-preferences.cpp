@@ -329,7 +329,7 @@ InkscapePreferences::InkscapePreferences()
     initPageSpellcheck();
 
     signal_map().connect(sigc::mem_fun(*this, &InkscapePreferences::_presentPages));
-    
+
     //calculate the size request for this dialog
     _page_list.expand_all();
     _page_list_model->foreach_iter(sigc::mem_fun(*this, &InkscapePreferences::GetSizeRequest));
@@ -971,7 +971,7 @@ void InkscapePreferences::initPageTools()
         _page_text.add_line( false, "", _font_dialog, "", _("Show font substitution warning dialog when requested fonts are not available on the system"));
         _font_sample.init("/tools/text/font_sample", true);
         _page_text.add_line( false, _("Font sample"), _font_sample, "", _("Edit font sample for the family in text tool controls"), true);
-        
+
         cb = Gtk::manage(new PrefCheckButton);
         cb->init ( _("Use SVG2 auto-flowed text"),  "/tools/text/use_svg2", true);
         _page_text.add_line( false, "", *cb, "", _("Use SVG2 auto-flowed text instead of SVG1.2 auto-flowed text. (Recommended)"));
@@ -1604,7 +1604,7 @@ void InkscapePreferences::initPageUI()
     _page_ui.add_group_header(_("Handle size"));
         _mouse_grabsize.init("/options/grabsize/value", 1, 15, 1, 2, 3, 0);
     _page_ui.add_line(false, "", _mouse_grabsize, "", _("Set the relative size of node handles"), true);
-                         
+
     _page_ui.add_group_header(_("Cursor size"));
     _ui_cursorscaling.init(_("Enable cursor scaling"), "/options/cursorscaling", true);
     _page_ui.add_line(false, "", _ui_cursorscaling, "", _("When off, cursor scaling is disabled. Cursor scaling may be broken when fractional scaling is enabled."), true);
@@ -1978,13 +1978,13 @@ void InkscapePreferences::initPageUI()
     this->AddPage(_page_grids, _("Grids"), iter_ui, PREFS_PAGE_UI_GRIDS);
 
     // Command Palette
-    _page_command_palette.add_group_header(_("Display Data"));
+    _page_command_palette.add_group_header(_("Display Options"));
 
-    _cp_show_full_action_name.init(_("Show full action name"), "/options/commandpalette/showfullactionname/value", false);
-    _page_command_palette.add_line(true, "", _cp_show_full_action_name, "", _("Show the full action name in command palette suggestions, useful for CLI users"));
+    _cp_show_full_action_name.init(_("Show command line argument names"), "/options/commandpalette/showfullactionname/value", false);
+    _page_command_palette.add_line(true, "", _cp_show_full_action_name, "", _("Show action argument names in the command palette suggestions, most useful for using them on the command line"));
 
-    _cp_show_untranstlated_name.init(_("Show untranslated(English) name"),  "/options/commandpalette/showuntranslatedname/value", true);
-    _page_command_palette.add_line(true, "", _cp_show_untranstlated_name, "", _("Show also the English action name"));
+    _cp_show_untranslated_name.init(_("Show untranslated (English) names"),  "/options/commandpalette/showuntranslatedname/value", true);
+    _page_command_palette.add_line(true, "", _cp_show_untranslated_name, "", _("Also show the English names of the command"));
 
     this->AddPage(_page_command_palette, _("Command Palette"), iter_ui, PREFS_PAGE_COMMAND_PALETTE);
     // /Command Palette

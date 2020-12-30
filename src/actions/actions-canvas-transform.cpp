@@ -207,18 +207,18 @@ std::vector<std::vector<Glib::ustring>> raw_data_canvas_transform =
     {"win.canvas-zoom-page",          N_("Zoom Page"),           "Canvas Geometry",  N_("Zoom to fit page in window")                 },
     {"win.canvas-zoom-page-width",    N_("Zoom Page Width"),     "Canvas Geometry",  N_("Zoom to fit page width in window")           },
     {"win.canvas-zoom-center-page",   N_("Zoom Center Page"),    "Canvas Geometry",  N_("Center page in window")                      },
-    {"win.canvas-zoom-prev",          N_("Zoom Prev"),           "Canvas Geometry",  N_("Previous zoom (from the history of zooms)")  },
-    {"win.canvas-zoom-next",          N_("Zoom Next"),           "Canvas Geometry",  N_("Next zoom (from the history of zooms)")      },
+    {"win.canvas-zoom-prev",          N_("Zoom Prev"),           "Canvas Geometry",  N_("Go back to previous zoom (from the history of zooms)")},
+    {"win.canvas-zoom-next",          N_("Zoom Next"),           "Canvas Geometry",  N_("Go to next zoom (from the history of zooms)")},
 
-    {"win.canvas-rotate-cw",          N_("Rotate Clockwise"),    "Canvas Geometry",  N_("Rotate canvas clock-wise")                   },
-    {"win.canvas-rotate-ccw",         N_("Rotate Counter-CW"),   "Canvas Geometry",  N_("Rotate canvas counter-clock-wise")           },
-    {"win.canvas-rotate-reset",       N_("Rotate Reset"),        "Canvas Geometry",  N_("Rotate canvas reset")                        },
+    {"win.canvas-rotate-cw",          N_("Rotate Clockwise"),    "Canvas Geometry",  N_("Rotate canvas clockwise")                    },
+    {"win.canvas-rotate-ccw",         N_("Rotate Counter-CW"),   "Canvas Geometry",  N_("Rotate canvas counter-clockwise")            },
+    {"win.canvas-rotate-reset",       N_("Reset Rotation"),      "Canvas Geometry",  N_("Reset canvas rotation")                      },
 
     {"win.canvas-flip-horizontal",    N_("Flip Horizontal"),     "Canvas Geometry",  N_("Flip canvas horizontally")                   },
     {"win.canvas-flip-vertical",      N_("Flip Vertical"),       "Canvas Geometry",  N_("Flip canvas vertically")                     },
-    {"win.canvas-flip-reset",         N_("Flip Reset"),          "Canvas Geometry",  N_("Flip canvas reset")                          },
+    {"win.canvas-flip-reset",         N_("Reset Flipping"),      "Canvas Geometry",  N_("Reset canvas flipping")                      },
 
-    {"win.canvas-rotate-lock",        N_("RotateLock"),          "Canvas Geometry",  N_("Rotate lock")                                },
+    {"win.canvas-rotate-lock",        N_("Lock Rotation"),       "Canvas Geometry",  N_("Lock canvas rotation")                       },
     // clang-format on
 };
 

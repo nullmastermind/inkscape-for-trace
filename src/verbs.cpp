@@ -2780,7 +2780,7 @@ Verb *Verb::_base_verbs[] = {
     // WHY ARE THE FOLLOWING ZoomVerbs???
 
     // View
-    new ZoomVerb(SP_VERB_TOGGLE_COMMAND_PALETTE, "ToggleCommandPalette", N_("Command Palette_"), N_("Show or hide the on canvas command palette"), nullptr),
+    new ZoomVerb(SP_VERB_TOGGLE_COMMAND_PALETTE, "ToggleCommandPalette", N_("Command Palette_"), N_("Show or hide the on-canvas command palette"), nullptr),
     new ZoomVerb(SP_VERB_TOGGLE_RULERS, "ToggleRulers", N_("_Rulers"), N_("Show or hide the canvas rulers"), nullptr),
     new ZoomVerb(SP_VERB_TOGGLE_SCROLLBARS, "ToggleScrollbars", N_("Scroll_bars"),
                  N_("Show or hide the canvas scrollbars"), nullptr),
@@ -2822,8 +2822,8 @@ Verb *Verb::_base_verbs[] = {
                    INKSCAPE_ICON("document-properties")),
     new DialogVerb(SP_VERB_DIALOG_PREFERENCES, "DialogPreferences", N_("P_references"), N_("Edit global Inkscape preferences"),
                    INKSCAPE_ICON("preferences-system")),
-    new DialogVerb(SP_VERB_DIALOG_DOCPROPERTIES, "DialogDocumentProperties", N_("_Document Properties..."), 
-                   N_("Edit properties of this document (to be saved with the document)"), 
+    new DialogVerb(SP_VERB_DIALOG_DOCPROPERTIES, "DialogDocumentProperties", N_("_Document Properties..."),
+                   N_("Edit properties of this document (to be saved with the document)"),
                    INKSCAPE_ICON("document-properties")),
     new DialogVerb(SP_VERB_DIALOG_FILL_STROKE, "DialogFillStroke", N_("_Fill and Stroke..."),
                    N_("Edit objects' colors, gradients, arrowheads, and other fill and stroke properties..."),

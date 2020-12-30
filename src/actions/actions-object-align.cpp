@@ -353,8 +353,8 @@ object_distribute(const Glib::VariantBase& value, InkscapeApplication *app)
 std::vector<std::vector<Glib::ustring>> raw_data_object_align =
 {
     // clang-format off
-    {"app.object-align",      N_("Align objects"),      "Object", N_("Align selected objects: Usage: [[left|hcenter|right] || [top|vcenter|bottom]] [last|first|biggest|smallest|page|drawing|selection]? group? anchor?")},
-    {"app.object-distribute", N_("Distribute objects"), "Object", N_("Distribute selected objects: Usage: [hgap | left | hcenter | right | vgap | top | vcenter | bottom]"                                               )}
+    {"app.object-align",      N_("Align objects"),      "Object", N_("Align selected objects; usage: [[left|hcenter|right] || [top|vcenter|bottom]] [last|first|biggest|smallest|page|drawing|selection]? group? anchor?")},
+    {"app.object-distribute", N_("Distribute objects"), "Object", N_("Distribute selected objects; usage: [hgap | left | hcenter | right | vgap | top | vcenter | bottom]"                                               )}
     // clang-format on
 };
 
