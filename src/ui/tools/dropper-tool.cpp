@@ -19,7 +19,6 @@
 #include <2geom/transforms.h>
 #include <2geom/circle.h>
 
-#include "color-rgba.h"
 #include "desktop-style.h"
 #include "desktop.h"
 #include "document-undo.h"
@@ -314,15 +313,22 @@ bool DropperTool::root_handler(GdkEvent* event) {
                         std::vector<SPItem *> vec(selection->items().begin(), selection->items().end());
                         selection->set(this->item_to_select);
                     }
-                } else {
-                    if (prefs->getBool("/tools/dropper/onetimepick", false)) {
-                        // "One time" pick from Fill/Stroke dialog stroke page, always apply fill or stroke (ignore <Shift> key)
-                        stroke = (prefs->getInt("/dialogs/fillstroke/page", 0) == 0) ? false : true;
-                    }
+                }
+
+                auto picked_color = ColorRGBA(this->get_color(this->invert));
+
+                // One time pick has active signal, call them all and clear.
+                if (!onetimepick_signal.empty())
+                {
+                    onetimepick_signal.emit(&picked_color);
+                    onetimepick_signal.clear();
+                    // Do this last as it destroys the picker tool.
+                    sp_toggle_dropper(desktop);
+                    return true;
                 }
 
                 // do the actual color setting
-                sp_desktop_set_color(desktop, ColorRGBA(this->get_color(this->invert)), false, !this->stroke);
+                sp_desktop_set_color(desktop, picked_color, false, !this->stroke);
 
                 // REJON: set aux. toolbar input to hex color!
                 if (!(desktop->getSelection()->isEmpty())) {
@@ -333,14 +339,6 @@ bool DropperTool::root_handler(GdkEvent* event) {
                     selection->setList(old_selection);
                 }
 
-                if (prefs->getBool("/tools/dropper/onetimepick", false)) {
-                    prefs->setBool("/tools/dropper/onetimepick", false);
-                    sp_toggle_dropper(desktop);
-
-                    // sp_toggle_dropper will delete ourselves.
-                    // Thus, make sure we return immediately.
-                    return true;
-                }
 
                 ret = TRUE;
             }

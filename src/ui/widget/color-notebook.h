@@ -22,6 +22,7 @@
 #include <glib.h>
 
 #include "color.h"
+#include "color-rgba.h"
 #include "ui/selected-color.h"
 
 namespace Inkscape {
@@ -46,6 +47,7 @@ protected:
     virtual void _initUI();
     void _addPage(Page &page);
 
+    void _pickColor(ColorRGBA *color);
     static void _onButtonClicked(GtkWidget *widget, ColorNotebook *colorbook);
     static void _onPickerClicked(GtkWidget *widget, ColorNotebook *colorbook);
     static void _onPageSwitched(GtkNotebook *notebook, GtkWidget *page, guint page_num, ColorNotebook *colorbook);
@@ -64,6 +66,7 @@ protected:
     GtkWidget *_btn_picker;
     GtkWidget *_p; /* Color preview */
     boost::ptr_vector<Page> _available_pages;
+    sigc::connection _onetimepick;
 
 private:
     // By default, disallow copy constructor and assignment operator

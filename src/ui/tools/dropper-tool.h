@@ -15,6 +15,7 @@
 
 #include <2geom/point.h>
 
+#include "color-rgba.h"
 #include "ui/tools/tool-base.h"
 
 struct SPCanvasItem;
@@ -50,6 +51,8 @@ public:
 
 	guint32 get_color(bool invert=false, bool non_dropping=false);
 
+        sigc::signal<void, ColorRGBA *> onetimepick_signal;
+
 protected:
 	void setup() override;
 	void finish() override;
@@ -76,6 +79,7 @@ private:
     double radius = 0.0;                       ///< Size of region under dragging mode
     Inkscape::CanvasItemBpath* area = nullptr; ///< Circle depicting region's borders in dragging mode
     Geom::Point centre {0, 0};                 ///< Center of region in dragging mode
+
 };
 
 }

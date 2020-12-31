@@ -37,6 +37,7 @@
 #include "ui/dialog-events.h"
 #include "ui/tools-switch.h"
 #include "ui/tools/tool-base.h"
+#include "ui/tools/dropper-tool.h"
 #include "ui/widget/color-entry.h"
 #include "ui/widget/color-icc-selector.h"
 #include "ui/widget/color-notebook.h"
@@ -88,6 +89,8 @@ ColorNotebook::~ColorNotebook()
         delete[] _buttons;
         _buttons = nullptr;
     }
+    if (_onetimepick)
+        _onetimepick.disconnect();
 }
 
 ColorNotebook::Page::Page(Inkscape::UI::ColorSelectorFactory *selector_factory, bool enabled_full)
@@ -204,12 +207,25 @@ void ColorNotebook::_initUI()
     g_signal_connect(G_OBJECT(_book), "switch-page", G_CALLBACK(ColorNotebook::_onPageSwitched), this);
 }
 
-void ColorNotebook::_onPickerClicked(GtkWidget * /*widget*/, ColorNotebook * /*colorbook*/)
+void ColorNotebook::_onPickerClicked(GtkWidget * /*widget*/, ColorNotebook *colorbook)
 {
     // Set the dropper into a "one click" mode, so it reverts to the previous tool after a click
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setBool("/tools/dropper/onetimepick", true);
-    Inkscape::UI::Tools::sp_toggle_dropper(SP_ACTIVE_DESKTOP);
+    if (colorbook->_onetimepick) {
+        colorbook->_onetimepick.disconnect();
+    }
+    else {
+        Inkscape::UI::Tools::sp_toggle_dropper(SP_ACTIVE_DESKTOP);
+        auto tool = dynamic_cast<Inkscape::UI::Tools::DropperTool *>(SP_ACTIVE_DESKTOP->event_context);
+        if (tool) {
+            colorbook->_onetimepick = tool->onetimepick_signal.connect(sigc::mem_fun(*colorbook, &ColorNotebook::_pickColor));
+        }
+    }
+}
+
+void ColorNotebook::_pickColor(ColorRGBA *color) {
+    // Set color to color notebook here.
+    _selected_color.setValue(color->getIntValue());
+    _onSelectedColorChanged();
 }
 
 void ColorNotebook::_onButtonClicked(GtkWidget *widget, ColorNotebook *nb)
