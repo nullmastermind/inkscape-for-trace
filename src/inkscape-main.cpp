@@ -15,6 +15,8 @@
 #include <fcntl.h> // _O_BINARY
 #endif
 
+#include <sys/wait.h>
+
 #include "inkscape-application.h"
 #include "path-prefix.h"
 
@@ -57,6 +59,60 @@ static void set_extensions_env()
     SetDllDirectoryW(installation_dir_w);
     g_free(installation_dir_w);
 #endif
+}
+
+/**
+ * Adds the local inkscape directory to the XDG_DATA_DIRS so themes and other Gtk
+ * resources which are specific to inkscape installations can be used.
+ */
+static void set_themes_env()
+{
+    std::string xdg_data_dirs = Glib::getenv("XDG_DATA_DIRS");
+    std::string xdg_inkscape_dir = Glib::build_filename(get_inkscape_datadir(), "inkscape");
+    
+    if (xdg_data_dirs.empty()) {
+        /*
+         * We don't know what the data dirs are yet, and GLib populates the data dirs with
+         * internal magic. But when it does this, it populates an internal cache too, which
+         * means GLib prevents us from appending to this magic list of items.
+         *
+         * To get around this, we fork out to a seperate process to ask GLib for the magic data.
+         */
+        pid_t child_pid;
+        int reader[2];
+        if (pipe(reader) == -1) {
+            g_warning("Can't create pipe, some themes not available!");
+            return;
+        }
+        if ((child_pid = fork()) == 0) {
+            close(reader[0]);
+            for (auto dirs = g_get_system_data_dirs(); *dirs; ++dirs) {
+                xdg_data_dirs += G_SEARCHPATH_SEPARATOR + *dirs;
+            }
+            if (write(reader[1], xdg_data_dirs.c_str(), xdg_data_dirs.length()+1) == 0) {
+                g_warning("Error writing to pipe, or no data to write.");
+            }
+            close(reader[1]);
+            exit(0);
+        }
+
+        int returnStatus;
+        waitpid(child_pid, &returnStatus, 0);
+
+        char c[10000];
+        if (read(reader[0], c, 10000) != 0) {
+            xdg_data_dirs += c;
+        }
+        close(reader[1]);
+        close(reader[0]);
+    } else {
+        xdg_data_dirs = G_SEARCHPATH_SEPARATOR + xdg_data_dirs;
+    }
+
+    // It's still possible to be empty if the above failed for some reason.
+    if (!xdg_data_dirs.empty()) {
+        Glib::setenv("XDG_DATA_DIRS", xdg_inkscape_dir + xdg_data_dirs);
+    }
 }
 
 #ifdef __APPLE__
@@ -224,6 +280,7 @@ int main(int argc, char *argv[])
     _setmode(_fileno(stdout), _O_BINARY); // binary mode seems required for this to work properly
 #endif
 
+    set_themes_env();
     set_extensions_env();
 
     auto ret = InkscapeApplication::singleton().gio_app()->run(argc, argv);

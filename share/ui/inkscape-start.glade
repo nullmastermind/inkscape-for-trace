@@ -888,9 +888,9 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
     <data>
       <row>
         <col id="0">classic</col>
-        <col id="1" translatable="yes">Classic</col>
+        <col id="1" translatable="yes">Classic Adwaita</col>
         <col id="2">Adwaita</col>
-        <col id="3">Adwaita</col>
+        <col id="3">hicolor</col>
         <col id="4">0</col>
         <col id="5">0</col>
         <col id="6">0</col>
@@ -900,8 +900,21 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
         <col id="10">False</col>
       </row>
       <row>
+        <col id="0">symbolic</col>
+        <col id="1" translatable="yes">Symbolic Adwaita</col>
+        <col id="2">Adwaita</col>
+        <col id="3">hicolor</col>
+        <col id="4">0</col>
+        <col id="5">0</col>
+        <col id="6">0</col>
+        <col id="7">0</col>
+        <col id="8">False</col>
+        <col id="9">True</col>
+        <col id="10">True</col>
+      </row>
+      <row>
         <col id="0">dark-color</col>
-        <col id="1" translatable="yes">Rainbow Dark</col>
+        <col id="1" translatable="yes">Colorful Darkness</col>
         <col id="2">Adwaita</col>
         <col id="3">multicolor</col>
         <col id="4">#ebebeb</col>
@@ -914,7 +927,7 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
       </row>
       <row>
         <col id="0">light-color</col>
-        <col id="1" translatable="yes">Rainbow Light</col>
+        <col id="1" translatable="yes">Colorful Lightness</col>
         <col id="2">Adwaita</col>
         <col id="3">multicolor</col>
         <col id="4">#000000</col>
@@ -927,7 +940,7 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
       </row>
       <row>
         <col id="0">dark-grey</col>
-        <col id="1" translatable="yes">Careful Dark</col>
+        <col id="1" translatable="yes">Careful Darkness</col>
         <col id="2">Adwaita</col>
         <col id="3">multicolor</col>
         <col id="4">#e5e5e5</col>
@@ -939,30 +952,17 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
         <col id="10">True</col>
       </row>
       <row>
-        <col id="0">light-grey</col>
-        <col id="1" translatable="yes">Careful Light</col>
-        <col id="2">Adwaita</col>
+        <col id="0">light-min</col>
+        <col id="1" translatable="yes">Compacted (Small Screens)</col>
+        <col id="2">Minwaita</col>
         <col id="3">multicolor</col>
         <col id="4">#000000</col>
-        <col id="5">#666666</col>
-        <col id="6">#808080</col>
-        <col id="7">#808080</col>
+        <col id="5">#00990a</col>
+        <col id="6">#ff1990</col>
+        <col id="7">#0099e6</col>
         <col id="8">False</col>
         <col id="9">True</col>
         <col id="10">True</col>
-      </row>
-      <row>
-        <col id="0">symbolic</col>
-        <col id="1" translatable="yes">Respect</col>
-        <col id="2">Adwaita</col>
-        <col id="3">Adwaita</col>
-        <col id="4">0</col>
-        <col id="5">0</col>
-        <col id="6">0</col>
-        <col id="7">0</col>
-        <col id="8">False</col>
-        <col id="9">True</col>
-        <col id="10">False</col>
       </row>
     </data>
   </object>

@@ -489,13 +489,11 @@ StartScreen::refresh_theme(Glib::ustring theme_name)
     settings->property_gtk_application_prefer_dark_theme() = prefs->getBool("/theme/darkTheme", true);
     settings->property_gtk_icon_theme_name() = prefs->getString("/theme/iconTheme");
 
-    if (prefs->getBool("/theme/symbolicIcons", false)) {
-        if (window) {
+    if (window) {
+        if (prefs->getBool("/theme/symbolicIcons", false)) {
             window->get_style_context()->add_class("symbolic");
             window->get_style_context()->remove_class("regular");
-        }
-    } else {
-        if (window) {
+        } else {
             window->get_style_context()->add_class("regular");
             window->get_style_context()->remove_class("symbolic");
         }
@@ -534,9 +532,8 @@ StartScreen::theme_changed()
 
         // Update theme from combo.
         Glib::ustring icons = row[cols.icons];
-        prefs->setString("/toolbox/iconTheme", icons);
-        prefs->setString("/toolbox/gtkTheme", row[cols.theme]);
         prefs->setBool("/toolbox/tools/small", row[cols.smallicons]);
+        prefs->setString("/theme/gtkTheme", row[cols.theme]);
         prefs->setString("/theme/iconTheme", icons);
         prefs->setBool("/theme/preferDarkTheme", row[cols.dark]);
         prefs->setBool("/theme/darkTheme", row[cols.dark]);
