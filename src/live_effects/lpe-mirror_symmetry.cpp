@@ -198,10 +198,12 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
         if (mode == MT_Y) {
             point_a = Geom::Point(boundingbox_X.min(),center_point[Y]);
             point_b = Geom::Point(boundingbox_X.max(),center_point[Y]);
+            center_point.param_setValue(Geom::middle_point((Geom::Point)point_a, (Geom::Point)point_b));
         }
         if (mode == MT_X) {
             point_a = Geom::Point(center_point[X],boundingbox_Y.min());
             point_b = Geom::Point(center_point[X],boundingbox_Y.max());
+            center_point.param_setValue(Geom::middle_point((Geom::Point)point_a, (Geom::Point)point_b));
         }
         if ((Geom::Point)start_point == (Geom::Point)end_point) {
             start_point.param_setValue(point_a);
