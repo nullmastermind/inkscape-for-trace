@@ -63,18 +63,13 @@ See default.xml for more information.
 <!-- Zoom -->
 
   <!-- Zoom in and Out -->
-  <bind key="plus" modifiers="Primary" action="ZoomIn" display="true" />
-  <bind key="equal" modifiers="Primary" action="ZoomIn" />
-  <bind key="KP_Add" modifiers="Primary" action="ZoomIn" />
-  <bind key="minus" modifiers="Primary" action="ZoomOut" display="true" />
-  <bind key="underscore" modifiers="Primary" action="ZoomOut" />
-  <bind key="KP_Subtract" modifiers="Primary" action="ZoomOut" />
-  
-  
+  <bind gaction="win.canvas-zoom-in"   keys="&lt;primary&gt;plus,  &lt;primary&gt;equal,      &lt;primary&gt;KP_Add"/>
+  <bind gaction="win.canvas-zoom-out"  keys="&lt;primary&gt;minus, &lt;primary&gt;underscore, &lt;primary&gt;KP_Subtract"/>
+
   <!-- Show Artboard -->
-  <bind key="0" modifiers="Primary" action="ZoomPage" display="true" />
+  <bind gaction="win.canvas-zoom-page" keys="&lt;primary&gt;0,     &lt;primary&gt;KP_0"/>
   <!-- Actual Size -->
-  <bind key="1" modifiers="Primary" action="Zoom1:0" display="true" />
+  <bind gaction="win.canvas-zoom-1-1"  keys="&lt;primary&gt;1,     &lt;primary&gt;KP_1"/>
   
 <!-- View -->
 
@@ -85,12 +80,10 @@ See default.xml for more information.
   <bind key="semicolon" modifiers="Primary" action="ToggleGuides" display="true" />
   
   <!-- Toggle Snap -->
-  <bind key="quotedbl" modifiers="Primary,Shift" action="ToggleSnapGlobal" display="true" />
-  <bind key="quotedbl" modifiers="Primary,Alt" action="ToggleSnapGlobal" display="true" />
-  
+  <bind gaction="doc.snap-global-toggle" keys="&lt;primary&gt;&lt;shift&gt;quotedbl, &lt;primary&gt;&lt;alt&gt;apostrophe"/>
+
   <!-- Toggle View -->
-  <bind key="y" modifiers="Primary" action="ViewModeToggle" display="true" />
-  
+  <bind gaction="win.canvas-display-mode-cycle" keys="&lt;primary&gt;y"/>
 
 <!-- Edit -->
 
