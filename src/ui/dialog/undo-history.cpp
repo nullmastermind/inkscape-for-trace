@@ -157,6 +157,7 @@ UndoHistory::UndoHistory()
 
 UndoHistory::~UndoHistory()
 {
+    _connectDocument(nullptr, nullptr);
 }
 
 
