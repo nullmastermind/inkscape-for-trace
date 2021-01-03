@@ -60,8 +60,9 @@ public:
     int set_image_name(char const *name);
 
     void update_filter_all_regions();
-    void update_filter_region(SPItem *object);
+    void update_filter_region(SPItem *item);
     void set_filter_region(double x, double y, double width, double height);
+    Geom::Rect get_automatic_filter_region(SPItem *item);
 
     /** Finds image name based on it's slot number. Returns 0 for unknown slot
      * numbers. */

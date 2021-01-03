@@ -201,7 +201,10 @@ guint SPFilter::getRefCount() {
 }
 
 void SPFilter::modified(guint flags) {
-    update_filter_all_regions();
+    // We are not an LPE, do not update filter regions on load.
+    if (flags & SP_OBJECT_MODIFIED_FLAG) {
+        update_filter_all_regions();
+    }
 }
 
 /**
@@ -339,9 +342,18 @@ Inkscape::XML::Node* SPFilter::write(Inkscape::XML::Document *doc, Inkscape::XML
  */
 void SPFilter::update_filter_all_regions()
 {
+    if (!this->auto_region)
+        return;
+
+    // Combine all items into one region for updating.
+    Geom::OptRect opt_r;
     for (auto & obj : this->hrefList) {
         SPItem *item = dynamic_cast<SPItem *>(obj);
-        update_filter_region(item);
+        opt_r.unionWith(this->get_automatic_filter_region(item));
+    }
+    if (opt_r) {
+        Geom::Rect region = *opt_r;
+        this->set_filter_region(region.left(), region.top(), region.width(), region.height());
     }
 }
 
@@ -352,9 +364,25 @@ void SPFilter::update_filter_all_regions()
  */
 void SPFilter::update_filter_region(SPItem *item)
 {
-    Geom::OptRect bbox = item->desktopGeometricBounds();
-    if (!bbox || !this->auto_region)
+    if (!this->auto_region)
         return; // No adjustment for dead box
+
+    auto region = this->get_automatic_filter_region(item);
+
+    // Set the filter region into this filter object
+    this->set_filter_region(region.left(), region.top(), region.width(), region.height());
+}
+
+/**
+ * Generate a filter region based on the item and return it.
+ *
+ * @param item - The item who's coords are used as the basis for the area.
+ */
+Geom::Rect SPFilter::get_automatic_filter_region(SPItem *item)
+{
+    Geom::OptRect bbox = item->desktopGeometricBounds();
+    if (!bbox)
+        return Geom::Rect(); // No adjustment for dead box
 
     // Turn bbox into real box and shrink it to units used in filters.
     Geom::Rect inbox = *bbox;
@@ -374,9 +402,7 @@ void SPFilter::update_filter_region(SPItem *item)
     // Scale outbox to width/height scale of input.
     outbox *= Geom::Translate(-inbox.left(), -inbox.top());
     outbox *= Geom::Scale(1/inbox.width(), 1/inbox.height());
-
-    // Set the filter region into this filter object
-    this->set_filter_region(outbox.left(), outbox.top(), outbox.width(), outbox.height());
+    return outbox;
 }
 
 /**
