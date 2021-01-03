@@ -1201,6 +1201,30 @@ guint32 ink_cairo_surface_average_color(cairo_surface_t *surface)
     ASSEMBLE_ARGB32(px, a,r,g,b);
     return px;
 }
+// We extract colors from pattern background, if we need to extract sometimes from a gradient we can add
+// a extra parameter with the spot number and use cairo_pattern_get_color_stop_rgba
+// also if the pattern is a image we can pass a boolean like solid = false to get the color by image average ink_cairo_surface_average_color
+guint32 ink_cairo_pattern_get_argb32(cairo_pattern_t *pattern)
+{
+    double red = 0;
+    double green = 0;
+    double blue = 0;
+    double alpha = 0;
+    auto status = cairo_pattern_get_rgba(pattern, &red, &green, &blue, &alpha);
+    if (status != CAIRO_STATUS_PATTERN_TYPE_MISMATCH) {
+        // in ARGB32 format
+        return SP_RGBA32_F_COMPOSE(alpha, red, green, blue);
+    }
+        
+    cairo_surface_t *surface;
+    status = cairo_pattern_get_surface (pattern, &surface);
+    if (status != CAIRO_STATUS_PATTERN_TYPE_MISMATCH) {
+        // first pixel only
+        auto *pxbsurface =  cairo_image_surface_get_data(surface);
+        return *reinterpret_cast<guint32 const *>(pxbsurface);
+    }
+    return 0;
+}
 
 void ink_cairo_surface_average_color(cairo_surface_t *surface, double &r, double &g, double &b, double &a)
 {

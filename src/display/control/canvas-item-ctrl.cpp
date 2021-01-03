@@ -319,16 +319,24 @@ void CanvasItemCtrl::render(Inkscape::CanvasItemBuffer *buf)
         work->flush();
         int strideb = work->get_stride();
         unsigned char *pxb = work->get_data();
+
+        // this code allow background become isolated from rendering so we can do things like outline overlay
+        cairo_pattern_t *pattern = _canvas->get_background_store()->cobj();
+        guint32 backcolor = ink_cairo_pattern_get_argb32(pattern);
         guint32 *p = _cache;
         for (int i = 0; i < height; ++i) {
             guint32 *pb = reinterpret_cast<guint32*>(pxb + i*strideb);
             for (int j = 0; j < width; ++j) {
+                guint32 base = *pb;
                 guint32 cc = *p++;
                 guint32 ac = cc & 0xff;
+                if (*pb == 0 && cc != 0) {
+                    base = backcolor;
+                }
                 if (ac == 0 && cc != 0) {
                     *pb++ = argb32_from_rgba(cc | 0x000000ff);
                 } else {
-                    EXTRACT_ARGB32(*pb, ab,rb,gb,bb)
+                    EXTRACT_ARGB32(base, ab,rb,gb,bb)
                     guint32 ro = compose_xor(rb, (cc & 0xff000000) >> 24, ac);
                     guint32 go = compose_xor(gb, (cc & 0x00ff0000) >> 16, ac);
                     guint32 bo = compose_xor(bb, (cc & 0x0000ff00) >>  8, ac);

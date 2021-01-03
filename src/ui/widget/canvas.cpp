@@ -1267,7 +1267,7 @@ Canvas::paint_single_buffer(Geom::IntRect const &paint_rect, Geom::IntRect const
     // Clear background
     cr->save();
     cr->set_operator(Cairo::OPERATOR_SOURCE);
-    cr->set_source(_background);
+    cr->set_source_rgba(0,0,0,0);
     cr->paint();
     cr->restore();
 

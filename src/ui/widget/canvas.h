@@ -94,6 +94,7 @@ public:
     bool get_cms_active() { return _cms_active; }
 
     Cairo::RefPtr<Cairo::ImageSurface> get_backing_store() { return _backing_store; } // Background rotation preview
+    Cairo::RefPtr<Cairo::Pattern> get_background_store() { return _background; }
 
     // For a GTK bug (see SelectedStyle::on_opacity_changed()).
     void forced_redraws_start(int count, bool reset = true);
