@@ -28,7 +28,6 @@
 #include <glibmm/i18n.h>
 #include <glibmm/markup.h>
 #include <glibmm/ustring.h>
-#include <goo/gmem.h>
 #include <gtkmm/application.h>
 #include <gtkmm/box.h>
 #include <gtkmm/enums.h>
