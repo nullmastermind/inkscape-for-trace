@@ -206,7 +206,23 @@ public:
     SPItem *item_to_select = nullptr; ///< the item where mouse_press occurred, to
                                       ///< be selected if this is a click not drag
 
-    bool space_panning = false;
+private:
+    enum
+    {
+        PANNING_NONE = 0,          //
+        PANNING_SPACE_BUTTON1 = 1, // TODO is this mode relevant?
+        PANNING_BUTTON2 = 2,       //
+        PANNING_BUTTON3 = 3,       //
+        PANNING_SPACE = 4,
+    } panning = PANNING_NONE;
+
+public:
+    /// True if we're panning with any method (space bar, middle-mouse, right-mouse+Ctrl)
+    bool is_panning() const { return panning != 0; }
+
+    /// True if we're panning with the space bar
+    bool is_space_panning() const { return panning == PANNING_SPACE || panning == PANNING_SPACE_BUTTON1; }
+
     bool rotating_mode = false;;
 
     std::unique_ptr<Inkscape::MessageContext> message_context;

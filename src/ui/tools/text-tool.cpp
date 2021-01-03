@@ -242,7 +242,7 @@ bool TextTool::item_handler(SPItem* item, GdkEvent* event) {
 
     switch (event->type) {
         case GDK_BUTTON_PRESS:
-            if (event->button.button == 1 && !this->space_panning) {
+            if (event->button.button == 1) {
                 // this var allow too much lees subbselection queries
                 // reducing it to cursor iteracion, mouseup and down
                 // find out clicked item, disregarding groups
@@ -294,7 +294,7 @@ bool TextTool::item_handler(SPItem* item, GdkEvent* event) {
             }
             break;
         case GDK_BUTTON_RELEASE:
-            if (event->button.button == 1 && this->dragging && !this->space_panning) {
+            if (event->button.button == 1 && this->dragging) {
                 this->dragging = 0;
                 sp_event_context_discard_delayed_snap_event(this);
                 ret = TRUE;
@@ -445,7 +445,7 @@ bool TextTool::root_handler(GdkEvent* event) {
 
     switch (event->type) {
         case GDK_BUTTON_PRESS:
-            if (event->button.button == 1 && !this->space_panning) {
+            if (event->button.button == 1) {
 
                 if (Inkscape::have_viable_layer(desktop, desktop->getMessageStack()) == false) {
                     return TRUE;
@@ -476,7 +476,7 @@ bool TextTool::root_handler(GdkEvent* event) {
             }
             break;
         case GDK_MOTION_NOTIFY: {
-            if (this->creating && (event->motion.state & GDK_BUTTON1_MASK) && !this->space_panning) {
+            if (this->creating && (event->motion.state & GDK_BUTTON1_MASK)) {
                 if ( this->within_tolerance
                      && ( abs( (gint) event->motion.x - this->xp ) < this->tolerance )
                      && ( abs( (gint) event->motion.y - this->yp ) < this->tolerance ) ) {
@@ -513,7 +513,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                 m.preSnap(Inkscape::SnapCandidatePoint(motion_dt, Inkscape::SNAPSOURCE_OTHER_HANDLE));
                 m.unSetup();
             }
-            if ((event->motion.state & GDK_BUTTON1_MASK) && this->dragging && !this->space_panning) {
+            if ((event->motion.state & GDK_BUTTON1_MASK) && this->dragging) {
                 Inkscape::Text::Layout const *layout = te_get_layout(this->text);
                 if (!layout)
                     break;
@@ -583,7 +583,7 @@ bool TextTool::root_handler(GdkEvent* event) {
         } break;
 
         case GDK_BUTTON_RELEASE:
-            if (event->button.button == 1 && !this->space_panning) {
+            if (event->button.button == 1) {
                 sp_event_context_discard_delayed_snap_event(this);
 
                 Geom::Point p1 = desktop->w2d(Geom::Point(event->button.x, event->button.y));

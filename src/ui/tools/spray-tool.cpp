@@ -1234,7 +1234,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
             dilate_area->hide();
             break;
         case GDK_BUTTON_PRESS:
-            if (event->button.button == 1 && !this->space_panning) {
+            if (event->button.button == 1) {
                 if (Inkscape::have_viable_layer(desktop, defaultMessageContext()) == false) {
                     return TRUE;
                 }
@@ -1323,7 +1323,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
                         this->is_drawing = true;
                         this->is_dilating = true;
                         this->has_dilated = false;
-                        if(this->is_dilating && !this->space_panning) {
+                        if(this->is_dilating) {
                             sp_spray_dilate(this, scroll_w, desktop->dt2doc(scroll_dt), Geom::Point(0,0), false);
                         }
                         this->has_dilated = true;
@@ -1351,7 +1351,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
             set_high_motion_precision(false);
             this->is_drawing = false;
 
-            if (this->is_dilating && event->button.button == 1 && !this->space_panning) {
+            if (this->is_dilating && event->button.button == 1) {
                 if (!this->has_dilated) {
                     // If we did not rub, do a light tap
                     this->pressure = 0.03;

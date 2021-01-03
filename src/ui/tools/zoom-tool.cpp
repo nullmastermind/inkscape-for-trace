@@ -77,7 +77,7 @@ bool ZoomTool::root_handler(GdkEvent* event) {
             Geom::Point const button_w(event->button.x, event->button.y);
             Geom::Point const button_dt(desktop->w2d(button_w));
 
-            if (event->button.button == 1 && !this->space_panning) {
+            if (event->button.button == 1) {
                 // save drag origin
                 xp = (gint) event->button.x;
                 yp = (gint) event->button.y;
@@ -106,7 +106,7 @@ bool ZoomTool::root_handler(GdkEvent* event) {
         }
 
 	case GDK_MOTION_NOTIFY:
-            if ((event->motion.state & GDK_BUTTON1_MASK) && !this->space_panning) {
+            if ((event->motion.state & GDK_BUTTON1_MASK)) {
                 ret = true;
 
                 if ( within_tolerance
@@ -131,7 +131,7 @@ bool ZoomTool::root_handler(GdkEvent* event) {
             Geom::Point const button_w(event->button.x, event->button.y);
             Geom::Point const button_dt(desktop->w2d(button_w));
 
-            if ( event->button.button == 1  && !this->space_panning) {
+            if ( event->button.button == 1) {
                 Geom::OptRect const b = Inkscape::Rubberband::get(desktop)->getRectangle();
 
                 if (b && !within_tolerance && !(GDK_SHIFT_MASK & event->button.state) ) {

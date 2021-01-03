@@ -380,7 +380,7 @@ bool EraserTool::root_handler(GdkEvent* event) {
     gint eraser_mode = prefs->getInt("/tools/eraser/mode", 2);
     switch (event->type) {
         case GDK_BUTTON_PRESS:
-            if (event->button.button == 1 && !this->space_panning) {
+            if (event->button.button == 1) {
                 if (Inkscape::have_viable_layer(desktop, defaultMessageContext()) == false) {
                     return TRUE;
                 }
@@ -421,7 +421,7 @@ bool EraserTool::root_handler(GdkEvent* event) {
 
             this->message_context->clear();
 
-            if ( this->is_drawing && (event->motion.state & GDK_BUTTON1_MASK) && !this->space_panning) {
+            if ( this->is_drawing && (event->motion.state & GDK_BUTTON1_MASK)) {
                 this->dragging = TRUE;
 
                 this->message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Drawing</b> an eraser stroke"));
@@ -455,7 +455,7 @@ bool EraserTool::root_handler(GdkEvent* event) {
         forced_redraws_stop();
         this->is_drawing = false;
 
-        if (this->dragging && event->button.button == 1 && !this->space_panning) {
+        if (this->dragging && event->button.button == 1) {
             this->dragging = FALSE;
 
             this->apply(motion_dt);

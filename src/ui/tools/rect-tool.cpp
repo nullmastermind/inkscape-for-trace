@@ -138,7 +138,7 @@ bool RectTool::item_handler(SPItem* item, GdkEvent* event) {
 
     switch (event->type) {
     case GDK_BUTTON_PRESS:
-        if ( event->button.button == 1 && !this->space_panning) {
+        if ( event->button.button == 1) {
             Inkscape::setup_for_drag_start(desktop, this, event);
         }
         break;
@@ -166,7 +166,7 @@ bool RectTool::root_handler(GdkEvent* event) {
     
     switch (event->type) {
     case GDK_BUTTON_PRESS:
-        if (event->button.button == 1 && !this->space_panning) {
+        if (event->button.button == 1) {
             Geom::Point const button_w(event->button.x, event->button.y);
 
             // save drag origin
@@ -196,7 +196,7 @@ bool RectTool::root_handler(GdkEvent* event) {
         break;
     case GDK_MOTION_NOTIFY:
         if ( dragging
-             && (event->motion.state & GDK_BUTTON1_MASK) && !this->space_panning)
+             && (event->motion.state & GDK_BUTTON1_MASK))
         {
             if ( this->within_tolerance
                  && ( abs( (gint) event->motion.x - this->xp ) < this->tolerance )
@@ -227,7 +227,7 @@ bool RectTool::root_handler(GdkEvent* event) {
         break;
     case GDK_BUTTON_RELEASE:
         this->xp = this->yp = 0;
-        if (event->button.button == 1 && !this->space_panning) {
+        if (event->button.button == 1) {
             dragging = false;
             sp_event_context_discard_delayed_snap_event(this);
 

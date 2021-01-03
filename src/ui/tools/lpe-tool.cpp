@@ -177,7 +177,7 @@ bool LpeTool::root_handler(GdkEvent* event) {
 
     switch (event->type) {
         case GDK_BUTTON_PRESS:
-            if (event->button.button == 1 && !this->space_panning) {
+            if (event->button.button == 1) {
                 if (this->mode == Inkscape::LivePathEffect::INVALID_LPE) {
                     // don't do anything for now if we are inactive (except clearing the selection
                     // since this was a click into empty space)

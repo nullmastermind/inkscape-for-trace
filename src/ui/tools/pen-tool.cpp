@@ -333,7 +333,7 @@ bool PenTool::_handleButtonPress(GdkEventButton const &bevent) {
     } 
     
     bool ret = false;
-    if (bevent.button == 1 && !this->space_panning
+    if (bevent.button == 1
         // make sure this is not the last click for a waiting LPE (otherwise we want to finish the path)
         && this->expecting_clicks_for_LPE != 1) {
 
@@ -497,7 +497,7 @@ bool PenTool::_handleButtonPress(GdkEventButton const &bevent) {
 bool PenTool::_handleMotionNotify(GdkEventMotion const &mevent) {
     bool ret = false;
 
-    if (this->space_panning || mevent.state & GDK_BUTTON2_MASK || mevent.state & GDK_BUTTON3_MASK) {
+    if (mevent.state & GDK_BUTTON2_MASK || mevent.state & GDK_BUTTON3_MASK) {
         // allow scrolling
         return false;
     }
@@ -667,7 +667,7 @@ bool PenTool::_handleButtonRelease(GdkEventButton const &revent) {
 
     bool ret = false;
 
-    if (revent.button == 1 && !this->space_panning) {
+    if (revent.button == 1) {
         Geom::Point const event_w(revent.x, revent.y);
 
         // Find desktop coordinates

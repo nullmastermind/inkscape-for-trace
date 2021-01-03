@@ -1081,7 +1081,7 @@ bool FloodTool::item_handler(SPItem* item, GdkEvent* event) {
 
     switch (event->type) {
     case GDK_BUTTON_PRESS:
-        if ((event->button.state & GDK_CONTROL_MASK) && event->button.button == 1 && !this->space_panning) {
+        if ((event->button.state & GDK_CONTROL_MASK) && event->button.button == 1) {
             Geom::Point const button_w(event->button.x, event->button.y);
             
             SPItem *item = sp_event_context_find_item (desktop, button_w, TRUE, TRUE);
@@ -1115,7 +1115,7 @@ bool FloodTool::root_handler(GdkEvent* event) {
 
     switch (event->type) {
     case GDK_BUTTON_PRESS:
-        if (event->button.button == 1 && !this->space_panning) {
+        if (event->button.button == 1) {
             if (!(event->button.state & GDK_CONTROL_MASK)) {
                 Geom::Point const button_w(event->button.x, event->button.y);
     
@@ -1135,7 +1135,7 @@ bool FloodTool::root_handler(GdkEvent* event) {
         }
 
     case GDK_MOTION_NOTIFY:
-        if ( dragging && ( event->motion.state & GDK_BUTTON1_MASK ) && !this->space_panning) {
+        if ( dragging && ( event->motion.state & GDK_BUTTON1_MASK )) {
             if ( this->within_tolerance
                  && ( abs( (gint) event->motion.x - this->xp ) < this->tolerance )
                  && ( abs( (gint) event->motion.y - this->yp ) < this->tolerance ) ) {
@@ -1156,7 +1156,7 @@ bool FloodTool::root_handler(GdkEvent* event) {
         break;
 
     case GDK_BUTTON_RELEASE:
-        if (event->button.button == 1 && !this->space_panning) {
+        if (event->button.button == 1) {
             Inkscape::Rubberband *r = Inkscape::Rubberband::get(desktop);
 
             if (r->is_started()) {

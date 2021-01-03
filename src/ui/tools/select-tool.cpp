@@ -256,7 +256,7 @@ bool SelectTool::item_handler(SPItem* item, GdkEvent* event) {
 
     switch (event->type) {
         case GDK_BUTTON_PRESS:
-            if (event->button.button == 1 && !this->space_panning) {
+            if (event->button.button == 1) {
                 /* Left mousebutton */
 
                 // save drag origin
@@ -477,7 +477,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
             break;
 
         case GDK_BUTTON_PRESS:
-            if (event->button.button == 1 && !this->space_panning) {
+            if (event->button.button == 1) {
                 // save drag origin
                 xp = (gint) event->button.x;
                 yp = (gint) event->button.y;
@@ -528,7 +528,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
             bool force_drag = Modifier::get(Modifiers::Type::SELECT_FORCE_DRAG)->active(this->button_press_state);
             bool always_box = Modifier::get(Modifiers::Type::SELECT_ALWAYS_BOX)->active(this->button_press_state);
 
-            if ((event->motion.state & GDK_BUTTON1_MASK) && !this->space_panning) {
+            if ((event->motion.state & GDK_BUTTON1_MASK)) {
                 Geom::Point const motion_pt(event->motion.x, event->motion.y);
                 Geom::Point const p(desktop->w2d(motion_pt));
                 if ( within_tolerance
@@ -644,7 +644,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
         case GDK_BUTTON_RELEASE:
             xp = yp = 0;
 
-            if ((event->button.button == 1) && (this->grabbed) && !this->space_panning) {
+            if ((event->button.button == 1) && (this->grabbed)) {
                 if (this->dragging) {
 
                     if (this->moved) {

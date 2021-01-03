@@ -170,7 +170,7 @@ bool PencilTool::root_handler(GdkEvent* event) {
 
 bool PencilTool::_handleButtonPress(GdkEventButton const &bevent) {
     bool ret = false;
-    if ( bevent.button == 1  && !this->space_panning) {
+    if ( bevent.button == 1) {
         Inkscape::Selection *selection = desktop->getSelection();
 
         if (Inkscape::have_viable_layer(desktop, defaultMessageContext()) == false) {
@@ -265,7 +265,7 @@ bool PencilTool::_handleMotionNotify(GdkEventMotion const &mevent) {
     }
     bool ret = false;
 
-    if (this->space_panning || (mevent.state & GDK_BUTTON2_MASK) || (mevent.state & GDK_BUTTON3_MASK)) {
+    if ((mevent.state & GDK_BUTTON2_MASK) || (mevent.state & GDK_BUTTON3_MASK)) {
         // allow scrolling
         return ret;
     }
@@ -390,7 +390,7 @@ bool PencilTool::_handleButtonRelease(GdkEventButton const &revent) {
 
     set_high_motion_precision(false);
 
-    if ( revent.button == 1 && this->_is_drawing && !this->space_panning) {
+    if ( revent.button == 1 && this->_is_drawing) {
         this->_is_drawing = false;
 
         /* Find desktop coordinates */

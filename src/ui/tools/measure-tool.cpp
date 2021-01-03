@@ -540,7 +540,7 @@ bool MeasureTool::root_handler(GdkEvent* event)
         explicit_base_tmp = boost::none;
         last_end = boost::none;
 
-        if (event->button.button == 1 && !this->space_panning) {
+        if (event->button.button == 1) {
             // save drag origin
             start_p = desktop->w2d(Geom::Point(event->button.x, event->button.y));
             within_tolerance = true;

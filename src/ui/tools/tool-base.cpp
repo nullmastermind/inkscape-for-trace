@@ -322,7 +322,6 @@ bool ToolBase::root_handler(GdkEvent* event) {
 #endif
 
     static Geom::Point button_w;
-    static unsigned int panning = 0;
     static unsigned int panning_cursor = 0;
     static unsigned int zoom_rb = 0;
 
@@ -336,7 +335,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
     switch (event->type) {
     case GDK_2BUTTON_PRESS:
         if (panning) {
-            panning = 0;
+            panning = PANNING_NONE;
             ungrabCanvasEvents();
             ret = TRUE;
         } else {
@@ -354,12 +353,14 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
         switch (event->button.button) {
         case 1:
-            if (this->space_panning) {
+            // TODO Does this make sense? Panning starts on passive mouse motion while space
+            // bar is pressed, it's not necessary to press the mouse button.
+            if (this->is_space_panning()) {
                 // When starting panning, make sure there are no snap events pending because these might disable the panning again
                 if (_uses_snap) {
                     sp_event_context_discard_delayed_snap_event(this);
                 }
-                panning = 1;
+                panning = PANNING_SPACE_BUTTON1;
 
                 grabCanvasEvents(Gdk::KEY_RELEASE_MASK    |
                                  Gdk::BUTTON_RELEASE_MASK |
@@ -393,7 +394,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 if (_uses_snap) {
                     sp_event_context_discard_delayed_snap_event(this);
                 }
-                panning = 2;
+                panning = PANNING_BUTTON2;
 
                 grabCanvasEvents(Gdk::BUTTON_RELEASE_MASK |
                                  Gdk::POINTER_MOTION_MASK );
@@ -408,7 +409,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 if (_uses_snap) {
                     sp_event_context_discard_delayed_snap_event(this);
                 }
-                panning = 3;
+                panning = PANNING_BUTTON3;
 
                 grabCanvasEvents(Gdk::BUTTON_RELEASE_MASK |
                                  Gdk::POINTER_MOTION_MASK );
@@ -441,7 +442,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                     || (panning == 1 && !(event->motion.state & GDK_BUTTON1_MASK))
                     || (panning == 3 && !(event->motion.state & GDK_BUTTON3_MASK))) {
                 /* Gdk seems to lose button release for us sometimes :-( */
-                panning = 0;
+                panning = PANNING_NONE;
                 ungrabCanvasEvents();
                 ret = TRUE;
             } else {
@@ -519,7 +520,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
             zoom_rb = 0;
 
             if (panning) {
-                panning = 0;
+                panning = PANNING_NONE;
                 ungrabCanvasEvents();
             }
 
@@ -534,7 +535,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
             desktop->updateNow();
             ret = TRUE;
         } else if (panning == event->button.button) {
-            panning = 0;
+            panning = PANNING_NONE;
             ungrabCanvasEvents();
 
             // in slow complex drawings, some of the motion events are lost;
@@ -671,8 +672,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
             within_tolerance = true;
             xp = yp = 0;
             if (!allow_panning) break;
-            panning = 4;
-            this->space_panning = true;
+            panning = PANNING_SPACE;
             this->message_context->set(Inkscape::INFORMATION_MESSAGE,
                     _("<b>Space+mouse move</b> to pan canvas"));
 
@@ -695,13 +695,12 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
     case GDK_KEY_RELEASE:
         // Stop panning on any key release
-        if (this->space_panning) {
-            this->space_panning = false;
+        if (this->is_space_panning()) {
             this->message_context->clear();
         }
 
         if (panning) {
-            panning = 0;
+            panning = PANNING_NONE;
             xp = yp = 0;
 
             ungrabCanvasEvents();
@@ -1157,7 +1156,13 @@ gint sp_event_context_virtual_root_handler(ToolBase * event_context, GdkEvent * 
             return false;
         }
         SPDesktop* desktop = event_context->getDesktop();
-        ret = event_context->root_handler(event);
+
+        // Panning has priority over tool-specific event handling
+        if (event_context->is_panning()) {
+            ret = event_context->ToolBase::root_handler(event);
+        } else {
+            ret = event_context->root_handler(event);
+        }
 
         set_event_location(desktop, event);
     }
@@ -1206,8 +1211,13 @@ gint sp_event_context_virtual_item_handler(ToolBase * event_context, SPItem * it
         if (event_context->block_button(event)) {
             return false;
         }
-        // et = (SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(event_context)))->item_handler(event_context, item, event);
-        ret = event_context->item_handler(item, event);
+
+        // Panning has priority over tool-specific event handling
+        if (event_context->is_panning()) {
+            ret = event_context->ToolBase::item_handler(item, event);
+        } else {
+            ret = event_context->item_handler(item, event);
+        }
 
         if (!ret) {
             ret = sp_event_context_virtual_root_handler(event_context, event);
@@ -1434,7 +1444,7 @@ void sp_event_context_snap_delay_handler(ToolBase *ec,
     // The snap delay will repeat the last motion event, which will lead to
     // erroneous points in the calligraphy context. And because we don't snap
     // in this context, we might just as well disable the snap delay all together
-    bool const c4 = ec->space_panning; // Don't snap while panning with the spacebar
+    bool const c4 = ec->is_panning(); // Don't snap while panning
 
     if (c1 || c2 || c3 || c4) {
         // Make sure that we don't send any pending snap events to a context if we know in advance

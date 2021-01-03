@@ -1146,7 +1146,7 @@ bool TweakTool::root_handler(GdkEvent* event) {
             dilate_area->hide();
             break;
         case GDK_BUTTON_PRESS:
-            if (event->button.button == 1 && !this->space_panning) {
+            if (event->button.button == 1) {
 
                 if (Inkscape::have_viable_layer(desktop, defaultMessageContext()) == false) {
                     return TRUE;
@@ -1211,7 +1211,7 @@ bool TweakTool::root_handler(GdkEvent* event) {
             forced_redraws_stop();
             this->is_drawing = false;
 
-            if (this->is_dilating && event->button.button == 1 && !this->space_panning) {
+            if (this->is_dilating && event->button.button == 1) {
                 if (!this->has_dilated) {
                     // if we did not rub, do a light tap
                     this->pressure = 0.03;

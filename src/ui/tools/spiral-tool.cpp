@@ -149,7 +149,7 @@ bool SpiralTool::root_handler(GdkEvent* event) {
 
     switch (event->type) {
         case GDK_BUTTON_PRESS:
-            if (event->button.button == 1 && !this->space_panning) {
+            if (event->button.button == 1) {
                 dragging = TRUE;
 
                 this->center = Inkscape::setup_for_drag_start(desktop, this, event);
@@ -165,7 +165,7 @@ bool SpiralTool::root_handler(GdkEvent* event) {
             break;
 
         case GDK_MOTION_NOTIFY:
-            if (dragging && (event->motion.state & GDK_BUTTON1_MASK) && !this->space_panning) {
+            if (dragging && (event->motion.state & GDK_BUTTON1_MASK)) {
                 if ( this->within_tolerance
                      && ( abs( (gint) event->motion.x - this->xp ) < this->tolerance )
                      && ( abs( (gint) event->motion.y - this->yp ) < this->tolerance ) ) {
@@ -201,7 +201,7 @@ bool SpiralTool::root_handler(GdkEvent* event) {
 
         case GDK_BUTTON_RELEASE:
             this->xp = this->yp = 0;
-            if (event->button.button == 1 && !this->space_panning) {
+            if (event->button.button == 1) {
                 dragging = FALSE;
                 sp_event_context_discard_delayed_snap_event(this);
 

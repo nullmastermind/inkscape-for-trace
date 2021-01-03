@@ -491,7 +491,7 @@ bool GradientTool::root_handler(GdkEvent* event) {
         break;
 
     case GDK_BUTTON_PRESS:
-        if ( event->button.button == 1 && !this->space_panning ) {
+        if ( event->button.button == 1 ) {
             Geom::Point button_w(event->button.x, event->button.y);
 
             // save drag origin
@@ -526,7 +526,7 @@ bool GradientTool::root_handler(GdkEvent* event) {
         break;
 
     case GDK_MOTION_NOTIFY:
-        if (dragging && ( event->motion.state & GDK_BUTTON1_MASK ) && !this->space_panning) {
+        if (dragging && ( event->motion.state & GDK_BUTTON1_MASK )) {
             if ( this->within_tolerance
                  && ( abs( (gint) event->motion.x - this->xp ) < this->tolerance )
                  && ( abs( (gint) event->motion.y - this->yp ) < this->tolerance ) ) {
@@ -580,7 +580,7 @@ bool GradientTool::root_handler(GdkEvent* event) {
     case GDK_BUTTON_RELEASE:
         this->xp = this->yp = 0;
 
-        if ( event->button.button == 1 && !this->space_panning ) {
+        if ( event->button.button == 1 ) {
 
             SPItem *item = sp_gradient_context_is_over_curve(this, Geom::Point(event->motion.x, event->motion.y));
 

@@ -239,7 +239,7 @@ bool ControlPoint::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, G
     {   
     case GDK_BUTTON_PRESS:
         next_release_doubleclick = 0;
-        if (event->button.button == 1 && !event_context->space_panning) {
+        if (event->button.button == 1 && !event_context->is_space_panning()) {
             // 1st mouse button click. internally, start dragging, but do not emit signals
             // or change position until drag tolerance is exceeded.
             _drag_event_origin[Geom::X] = event->button.x;
@@ -260,7 +260,7 @@ bool ControlPoint::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, G
         return true;
         
     case GDK_MOTION_NOTIFY:
-        if (_event_grab && ! event_context->space_panning) {
+        if (_event_grab && ! event_context->is_space_panning()) {
             _desktop->snapindicator->remove_snaptarget(); 
             bool transferred = false;
             if (!_drag_initiated) {

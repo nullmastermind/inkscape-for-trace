@@ -384,7 +384,7 @@ bool ConnectorTool::item_handler(SPItem* item, GdkEvent* event)
 
     switch (event->type) {
     case GDK_BUTTON_RELEASE:
-        if (event->button.button == 1 && !this->space_panning) {
+        if (event->button.button == 1) {
             if ((this->state == SP_CONNECTOR_CONTEXT_DRAGGING) && this->within_tolerance) {
                 this->_resetColors();
                 this->state = SP_CONNECTOR_CONTEXT_IDLE;
@@ -472,7 +472,7 @@ bool ConnectorTool::_handleButtonPress(GdkEventButton const &bevent)
 
     bool ret = false;
 
-        if ( bevent.button == 1 && !this->space_panning ) {
+        if ( bevent.button == 1 ) {
             if (Inkscape::have_viable_layer(desktop, defaultMessageContext()) == false) {
                 return true;
             }
@@ -570,7 +570,7 @@ bool ConnectorTool::_handleMotionNotify(GdkEventMotion const &mevent)
     bool ret = false;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
-    if (this->space_panning || mevent.state & GDK_BUTTON2_MASK || mevent.state & GDK_BUTTON3_MASK) {
+    if (mevent.state & GDK_BUTTON2_MASK || mevent.state & GDK_BUTTON3_MASK) {
         // allow middle-button scrolling
         return false;
     }
@@ -659,7 +659,7 @@ bool ConnectorTool::_handleButtonRelease(GdkEventButton const &revent)
 {
     bool ret = false;
 
-    if ( revent.button == 1 && !this->space_panning ) {
+    if ( revent.button == 1 ) {
         SPDocument *doc = desktop->getDocument();
         SnapManager &m = desktop->namedview->snap_manager;
 

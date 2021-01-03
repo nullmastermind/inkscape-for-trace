@@ -172,7 +172,7 @@ bool SPKnot::eventHandler(GdkEvent *event)
         }
         break;
     case GDK_BUTTON_PRESS:
-        if ((event->button.button == 1) && desktop && desktop->event_context && !desktop->event_context->space_panning) {
+        if ((event->button.button == 1) && desktop && desktop->event_context && !desktop->event_context->is_space_panning()) {
             Geom::Point const p = desktop->w2d(Geom::Point(event->button.x, event->button.y));
             startDragging(p, (gint) event->button.x, (gint) event->button.y, event->button.time);
             mousedown_signal.emit(this, event->button.state);
@@ -183,7 +183,7 @@ bool SPKnot::eventHandler(GdkEvent *event)
         if (event->button.button == 1    &&
             desktop                &&
             desktop->event_context &&
-            !desktop->event_context->space_panning) {
+            !desktop->event_context->is_space_panning()) {
 
             // If we have any pending snap event, then invoke it now
             if (desktop->event_context->_delayed_snap_event) {
@@ -250,7 +250,7 @@ bool SPKnot::eventHandler(GdkEvent *event)
                 Inkscape::UI::Tools::sp_update_helperpath(desktop);
             }
         } else if (grabbed && desktop && desktop->event_context &&
-                   !desktop->event_context->space_panning) {
+                   !desktop->event_context->is_space_panning()) {
             consumed = true;
 
             if ( within_tolerance

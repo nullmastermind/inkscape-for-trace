@@ -124,7 +124,7 @@ bool Selector::event(Inkscape::UI::Tools::ToolBase *event_context, GdkEvent *eve
     case GDK_BUTTON_PRESS:
         // Do not pass button presses other than left button to the control point.
         // This way middle click and right click can be handled in ToolBase.
-        if (event->button.button == 1 && !event_context->space_panning) {
+        if (event->button.button == 1 && !event_context->is_space_panning()) {
             _dragger->setPosition(_desktop->w2d(event_point(event->motion)));
             return _dragger->event(event_context, event);
         }

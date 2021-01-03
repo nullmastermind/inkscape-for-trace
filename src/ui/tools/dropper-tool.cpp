@@ -190,7 +190,7 @@ bool DropperTool::root_handler(GdkEvent* event) {
 
     switch (event->type) {
 	case GDK_BUTTON_PRESS:
-            if (event->button.button == 1 && !this->space_panning) {
+            if (event->button.button == 1) {
                 this->centre = Geom::Point(event->button.x, event->button.y);
                 this->dragging = true;
                 ret = TRUE;
@@ -208,7 +208,7 @@ bool DropperTool::root_handler(GdkEvent* event) {
                 // pass on middle and right drag
                 ret = FALSE;
                 break;
-            } else if (!this->space_panning) {
+            } else {
                 // otherwise, constantly calculate color no matter if any button pressed or not
 
                 Geom::IntRect pick_area;
@@ -294,7 +294,7 @@ bool DropperTool::root_handler(GdkEvent* event) {
             break;
 
 	case GDK_BUTTON_RELEASE:
-            if (event->button.button == 1 && !this->space_panning) {
+            if (event->button.button == 1) {
                 this->area->hide();
 		this->dragging = false;
 

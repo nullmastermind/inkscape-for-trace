@@ -1725,7 +1725,7 @@ static bool
 _drawing_handler (GdkEvent *event, Inkscape::DrawingItem *drawing_item, SPDesktop *desktop)
 {
     if (event->type == GDK_KEY_PRESS && Inkscape::UI::Tools::get_latin_keyval(&event->key) == GDK_KEY_space &&
-        desktop->event_context->space_panning)
+        desktop->event_context->is_space_panning())
     {
         return true;
     }

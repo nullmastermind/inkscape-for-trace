@@ -543,7 +543,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
         // Button down
         //  If mesh already exists, do rubber band selection.
         //  Else set origin for drag which will create a new gradient.
-         if ( event->button.button == 1 && !this->space_panning ) {
+         if ( event->button.button == 1 ) {
 
             // Are we over a mesh curve?
             std::vector<CanvasItemCurve *> over_curve =
@@ -618,7 +618,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
 
     case GDK_MOTION_NOTIFY:
         // Mouse move
-        if ( dragging && ( event->motion.state & GDK_BUTTON1_MASK ) && !this->space_panning ) {
+        if ( dragging && ( event->motion.state & GDK_BUTTON1_MASK ) ) {
  
 #ifdef DEBUG_MESH
             std::cout << "sp_mesh_context_root_handler: GDK_MOTION_NOTIFY: Dragging" << std::endl;
@@ -695,7 +695,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
 
         this->xp = this->yp = 0;
 
-        if ( event->button.button == 1 && !this->space_panning ) {
+        if ( event->button.button == 1 ) {
 
             // Check if over line
             std::vector<CanvasItemCurve *> over_curve =

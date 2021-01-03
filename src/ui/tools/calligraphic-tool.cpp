@@ -442,7 +442,7 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
 
     switch (event->type) {
         case GDK_BUTTON_PRESS:
-            if (event->button.button == 1 && !this->space_panning) {
+            if (event->button.button == 1) {
                 if (Inkscape::have_viable_layer(desktop, defaultMessageContext()) == false) {
                     return TRUE;
                 }
@@ -517,7 +517,7 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
                 }
             }
 
-            if ( this->is_drawing && (event->motion.state & GDK_BUTTON1_MASK) && !this->space_panning) {
+            if ( this->is_drawing && (event->motion.state & GDK_BUTTON1_MASK)) {
                 this->dragging = TRUE;
 
                 if (event->motion.state & GDK_CONTROL_MASK && this->hatch_item) { // hatching
@@ -740,7 +740,7 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
         set_high_motion_precision(false);
         this->is_drawing = false;
 
-        if (this->dragging && event->button.button == 1 && !this->space_panning) {
+        if (this->dragging && event->button.button == 1) {
             this->dragging = FALSE;
 
             this->apply(motion_dt);
@@ -787,7 +787,7 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
 
             this->message_context->clear();
             ret = TRUE;
-        } else if (!this->dragging && event->button.button == 1 && !this->space_panning){
+        } else if (!this->dragging && event->button.button == 1){
             spdc_create_single_dot(this, desktop->w2d(motion_w), "/tools/calligraphic", event->button.state);
         }
         break;
