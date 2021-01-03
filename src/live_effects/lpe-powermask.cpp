@@ -135,6 +135,11 @@ LPEPowerMask::doBeforeEffect (SPLPEItem const* lpeitem){
             bboxrect.expandBy(1);
             mask_box.clear();
             mask_box = Geom::Path(bboxrect);
+            SPDocument *document = getSPDoc();
+            if (!document || !mask) {
+                return;
+            }
+            DocumentUndo::ScopedInsensitive tmp(document);
             setMask();
         }
     } else if(!hide_mask) {
