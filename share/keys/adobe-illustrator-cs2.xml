@@ -15,6 +15,8 @@ See default.xml for more information.
 
 <!-- File -->
 
+  <bind key="n" modifiers="Primary,Shift" action="FileTemplates" display="true" />
+
   <!-- Revert -->
   <bind key="z" modifiers="Primary,Alt" action="FileRevert" display="true" />
 
@@ -86,6 +88,9 @@ See default.xml for more information.
   <bind gaction="win.canvas-display-mode-cycle" keys="&lt;primary&gt;y"/>
 
 <!-- Edit -->
+
+  <bind key="b" modifiers="Primary,Shift" action="EditPasteInPlace" display="true" />
+  <bind key="a" modifiers="Primary,Shift" action="EditDeselect" display="true"/>
 
   <!-- Swap fill and stroke -->
   <bind key="x" modifiers="Shift" action="EditSwapFillStroke" display="true" />
