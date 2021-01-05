@@ -480,7 +480,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
                 //points[0] *= i2anc_affine(static_cast<SPItem *>(item->parent), NULL).inverse();
                 spdc_apply_powerstroke_shape(points, dc, item);
 
-                shape_applied = true;
+                shape_applied = false;
                 break;
             }
             case TRIANGLE_OUT:
@@ -493,7 +493,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
                 points[0][Geom::X] = (double)curve_length;
                 spdc_apply_powerstroke_shape(points, dc, item);
 
-                shape_applied = true;
+                shape_applied = false;
                 break;
             }
             case ELLIPSE:

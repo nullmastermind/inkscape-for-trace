@@ -38,9 +38,10 @@ static SPObject *generate_linked_fill(SPShape *source)
 
     effectTarget = g_strdup_printf("#%s,0,1", source->getId());
     effectRepr->setAttribute("effect", "fill_between_many");
-    effectRepr->setAttribute("method", "originald");
+    effectRepr->setAttribute("method", "bsplinespiro");
     effectRepr->setAttribute("linkedpaths", effectTarget);
     defs->appendChild(effectRepr);
+    Inkscape::GC::release(effectRepr);
 
     effectObj = doc->getObjectByRepr(effectRepr);
 
@@ -48,10 +49,10 @@ static SPObject *generate_linked_fill(SPShape *source)
     pathRepr->setAttribute("inkscape:original-d", "M 0,0");
     pathRepr->setAttribute("inkscape:path-effect", pathTarget);
     pathRepr->setAttribute("d", "M 0,0");
-
+    
     SPObject *prev = source->getPrev();
     source->parent->addChild(pathRepr, prev ? prev->getRepr() : nullptr);
-
+    Inkscape::GC::release(pathRepr);
     pathObj = doc->getObjectByRepr(pathRepr);
     source->setAttribute("inkscape:linked-fill", pathObj->getId());
 

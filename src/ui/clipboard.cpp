@@ -51,6 +51,8 @@
 
 #include "live_effects/lpeobject-reference.h"
 #include "live_effects/lpeobject.h"
+#include "live_effects/lpe-spiro.h"
+#include "live_effects/lpe-bspline.h"
 #include "live_effects/parameter/path.h"
 
 #include "object/box3d.h"
@@ -684,6 +686,7 @@ bool ClipboardManagerImpl::pastePathEffect(ObjectSet *set)
                 for(auto i=itemlist.begin();i!=itemlist.end();++i){
                     SPItem *item = *i;
                     _applyPathEffect(item, effectstack);
+                    item->doWriteTransform(item->transform);
                 }
 
                 return true;
@@ -1301,7 +1304,13 @@ void ClipboardManagerImpl::_applyPathEffect(SPItem *item, gchar const *effectsta
             }
             LivePathEffectObject *lpeobj = dynamic_cast<LivePathEffectObject *>(obj);
             if (lpeobj) {
-                lpeitem->addPathEffect(lpeobj);
+                Inkscape::LivePathEffect::LPESpiro *spiroto = dynamic_cast<Inkscape::LivePathEffect::LPESpiro *>(lpeobj->get_lpe());
+                bool has_spiro = lpeitem->hasPathEffectOfType(Inkscape::LivePathEffect::SPIRO);
+                Inkscape::LivePathEffect::LPEBSpline *bsplineto = dynamic_cast<Inkscape::LivePathEffect::LPEBSpline *>(lpeobj->get_lpe());
+                bool has_bspline = lpeitem->hasPathEffectOfType(Inkscape::LivePathEffect::BSPLINE);
+                if ((!spiroto || !has_spiro) && (!bsplineto || !has_bspline)) {
+                    lpeitem->addPathEffect(lpeobj);
+                }
             }
         }
         // for each effect in the stack, check if we need to fork it before adding it to the item
