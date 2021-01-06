@@ -827,6 +827,12 @@ Canvas::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr)
 
         // Add clipping path and blit outline store.
         cr->save();
+        cr->set_operator(Cairo::OPERATOR_SOURCE);
+        cr->set_source(_background);
+        add_clippath(cr);
+        cr->paint();
+        cr->restore();
+        cr->save();
         cr->set_source(_outline_store, 0, 0);
         add_clippath(cr);
         cr->paint();
