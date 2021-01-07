@@ -88,7 +88,6 @@ public:
     Gtk::ScrolledWindow _scrolled_text_view;
     Gtk::Button _buttonAddAttribute;
     // Variables - Inkscape
-    SPDesktop* _desktop;
     Inkscape::XML::Node* _repr;
     Gtk::Box status_box;
     Gtk::Label status;

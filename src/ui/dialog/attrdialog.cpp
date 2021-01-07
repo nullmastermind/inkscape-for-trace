@@ -85,7 +85,6 @@ static gboolean key_callback(GtkWidget *widget, GdkEventKey *event, AttrDialog *
  */
 AttrDialog::AttrDialog()
     : DialogBase("/dialogs/attr", SP_VERB_DIALOG_ATTR_XML)
-    , _desktop(nullptr)
     , _repr(nullptr)
     , _mainBox(Gtk::ORIENTATION_VERTICAL)
     , status_box(Gtk::ORIENTATION_HORIZONTAL)
@@ -388,10 +387,6 @@ void AttrDialog::update()
         std::cerr << "AttrDialog::update(): _app is null" << std::endl;
         return;
     }
-
-    SPDesktop *desktop = getDesktop();
-
-    _desktop = desktop;
 }
 
 /**
@@ -422,7 +417,7 @@ void AttrDialog::setRepr(Inkscape::XML::Node * repr)
 
 void AttrDialog::setUndo(Glib::ustring const &event_description)
 {
-    SPDocument *document = this->_desktop->doc();
+    SPDocument *document = getDesktop()->doc();
     DocumentUndo::done(document, SP_VERB_DIALOG_XML_EDITOR, event_description);
 }
 
@@ -709,7 +704,7 @@ void AttrDialog::valueEdited (const Glib::ustring& path, const Glib::ustring& va
             Glib::ustring renderval = prepare_rendervalue(value.c_str());
             row[_attrColumns._attributeValueRender] = renderval;
         }
-        Inkscape::Selection *selection = _desktop->getSelection();
+        Inkscape::Selection *selection = getDesktop()->getSelection();
         SPObject *obj = nullptr;
         if (selection->objects().size() == 1) {
             obj = selection->objects().back();
