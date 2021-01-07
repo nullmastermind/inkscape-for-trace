@@ -1314,8 +1314,10 @@ void SPObject::updateDisplay(SPCtx *ctx, unsigned int flags)
      * flag. We are currently assuming that style parsing is
      * done immediately. I think this is correct (Lauris).
      */
-    if ((flags & SP_OBJECT_STYLE_MODIFIED_FLAG) && (flags & SP_OBJECT_PARENT_MODIFIED_FLAG)) {
-        if (this->style && this->parent) {
+    if (style) {
+        if ((flags & SP_OBJECT_STYLESHEET_MODIFIED_FLAG)) {
+            style->readFromObject(this);
+        } else if (parent && (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) && (flags & SP_OBJECT_PARENT_MODIFIED_FLAG)) {
             style->cascade( this->parent->style );
         }
     }

@@ -33,7 +33,7 @@ class SPObject;
 #define SP_OBJECT_VIEWPORT_MODIFIED_FLAG (1 << 4)
 #define SP_OBJECT_USER_MODIFIED_FLAG_A (1 << 5)
 #define SP_OBJECT_USER_MODIFIED_FLAG_B (1 << 6)
-#define SP_OBJECT_USER_MODIFIED_FLAG_C (1 << 7)
+#define SP_OBJECT_STYLESHEET_MODIFIED_FLAG (1 << 7)
 
 /* Convenience */
 #define SP_OBJECT_FLAGS_ALL 0xff

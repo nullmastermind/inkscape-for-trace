@@ -437,19 +437,6 @@ ParseTmp::ParseTmp(CRStyleSheet *const stylesheet, SPDocument *const document)
     cr_doc_handler_unref(sac_handler);
 }
 
-void update_style_recursively( SPObject *object ) {
-    if (object) {
-        // std::cout << "update_style_recursively: "
-        //           << (object->getId()?object->getId():"null") << std::endl;
-        if (object->style) {
-            object->style->readFromObject( object );
-        }
-        for (auto& child : object->children) {
-            update_style_recursively( &child );
-        }
-    }
-}
-
 /**
  * Get the list of styles.
  * Currently only used for testing.
@@ -539,8 +526,8 @@ void SPStyleElem::read_content() {
 
     // If style sheet has changed, we need to cascade the entire object tree, top down
     // Get root, read style, loop through children
-    update_style_recursively( (SPObject *)document->getRoot() );
-    // cr_stylesheet_dump (document->getStyleSheet(), stdout);
+    document->getRoot()->requestDisplayUpdate(SP_OBJECT_STYLESHEET_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
+                                              SP_OBJECT_MODIFIED_FLAG);
 }
 
 static Inkscape::XML::NodeEventVector const nodeEventVector = {
