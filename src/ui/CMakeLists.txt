@@ -36,7 +36,6 @@ set(ui_SRC
 	tool/control-point.cpp
 	tool/curve-drag-point.cpp
 	tool/event-utils.cpp
-	tool/manipulator.cpp
 	tool/modifier-tracker.cpp
 	tool/multi-path-manipulator.cpp
 	tool/node.cpp
