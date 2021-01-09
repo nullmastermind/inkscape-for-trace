@@ -961,7 +961,7 @@ InkscapeApplication::on_activate()
         document = document_open (s);
         output = "-";
 
-    } else if(prefs->getBool("/options/boot/enabled", true)) {
+    } else if(prefs->getBool("/options/boot/enabled", true) && !_use_shell) {
 
         Inkscape::UI::Dialog::StartScreen start_screen;
 
