@@ -508,19 +508,19 @@ gchar const *buffer = R"A(
     <defs id="defs"/>
 
     <g id="marker-start">
-      <path style="fill:white;stroke:darkgray;stroke-width:1.7;marker-start:url(#sample)"
+      <path style="fill:white;stroke:black;stroke-width:1.7;marker-start:url(#sample)"
        d="M 12.5,13 L 25,13"/>
       <rect x="0" y="0" width="25" height="25" style="fill:none;stroke:none"/>
     </g>
 
     <g id="marker-mid">
-      <path style="fill:white;stroke:darkgray;stroke-width:1.7;marker-mid:url(#sample)"
+      <path style="fill:white;stroke:black;stroke-width:1.7;marker-mid:url(#sample)"
        d="M 0,113 L 12.5,113 L 25,113"/>
       <rect x="0" y="100" width="25" height="25" style="fill:none;stroke:none"/>
     </g>
 
     <g id="marker-end">
-      <path style="fill:white;stroke:darkgray;stroke-width:1.7;marker-end:url(#sample)"
+      <path style="fill:white;stroke:black;stroke-width:1.7;marker-end:url(#sample)"
        d="M 0,213 L 12.5,213"/>
       <rect x="0" y="200" width="25" height="25" style="fill:none;stroke:none"/>
     </g>
