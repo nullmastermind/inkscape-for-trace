@@ -61,6 +61,7 @@
 #include "ui/shortcuts.h"
 #include "ui/modifiers.h"
 #include "ui/widget/style-swatch.h"
+#include "ui/widget/canvas.h"
 
 #include "widgets/desktop-widget.h"
 
@@ -392,6 +393,16 @@ int InkscapePreferences::num_widgets_in_grid(Glib::ustring const &key, Gtk::Widg
         results += num_child;
     }
     return results;
+}
+
+
+bool InkscapePreferences::on_outline_overlay_changed(GdkEventFocus * /* focus_event */)
+{
+    if (auto *desktop = SP_ACTIVE_DESKTOP) {
+        desktop->getCanvas()->redraw_all();
+    }
+    return false;
+
 }
 
 /**
@@ -2579,6 +2590,7 @@ void InkscapePreferences::initPageRendering()
 
     // rendering outline overlay opcaity
     _rendering_outline_overlay_opacity.init("/options/rendering/outline-overlay-opacity", 1.0, 100.0, 1.0, 5.0, 50.0, true, false);
+    _rendering_outline_overlay_opacity.signal_focus_out_event().connect(sigc::mem_fun(*this, &InkscapePreferences::on_outline_overlay_changed));
     _page_rendering.add_line( false, _("Outline overlay opacity:"), _rendering_outline_overlay_opacity, _("%"),
                              _("Opacity of the color on outline overlay render mode"), false);
 
