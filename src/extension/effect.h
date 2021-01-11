@@ -67,7 +67,7 @@ class Effect : public Extension {
                        gchar const * image,
                        Effect *      effect,
                        bool          showPrefs) :
-                    Verb(id, _(name), _(tip), image, _("Extensions")),
+                    Verb(id, _(name), tip ? _(tip) : nullptr, image, _("Extensions")),
                     _effect(effect),
                     _showPrefs(showPrefs),
                     _elip_name(nullptr) {

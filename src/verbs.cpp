@@ -598,10 +598,9 @@ SPAction *TextVerb::make_action(Inkscape::ActionContext const & context)
 SPAction *Verb::make_action_helper(Inkscape::ActionContext const & context, void (*perform_fun)(SPAction *, void *), void *in_pntr)
 {
     SPAction *action;
-
     //std::cout << "Adding action: " << _code << std::endl;
     action = sp_action_new(context, _id, _(_name),
-                           _(_tip), _image, this);
+                           _tip ? _(_tip) : nullptr, _image, this);
 
     if (action == nullptr) return nullptr;
 
