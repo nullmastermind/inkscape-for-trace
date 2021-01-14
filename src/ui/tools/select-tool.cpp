@@ -137,7 +137,7 @@ void SelectTool::setup() {
     this->_describer = new Inkscape::SelectionDescriber(
                 desktop->selection, 
                 desktop->messageStack(),
-                _("Click selection again to toggle scale/rotation handles."),
+                _("Click selection again to toggle scale/rotation handles"),
                 no_selection_msg);
 
     this->_seltrans = new Inkscape::SelTrans(desktop);
