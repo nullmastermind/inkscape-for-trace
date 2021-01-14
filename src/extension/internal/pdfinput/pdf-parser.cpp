@@ -871,7 +871,7 @@ void PdfParser::opSetExtGState(Object args[], int /*numArgs*/)
 	  GBool isolated = gFalse;
 	  GBool knockout = gFalse;
 	  if (!_POPPLER_CALL_ARGS_DEREF(obj5, obj4.dictLookup, "CS").isNull()) {
-	    blendingColorSpace = GfxColorSpace::parse(nullptr, &obj5, nullptr, nullptr);
+	    blendingColorSpace = GfxColorSpace::parse(nullptr, &obj5, nullptr, state);
 	  }
           _POPPLER_FREE(obj5);
 	  if (_POPPLER_CALL_ARGS_DEREF(obj5, obj4.dictLookup, "I").isBool()) {
@@ -1201,7 +1201,7 @@ void PdfParser::opSetFillColorN(Object args[], int numArgs) {
     }
     GfxPattern *pattern;
     if (args[numArgs-1].isName() &&
-	(pattern = res->lookupPattern(args[numArgs-1].getName(), nullptr, nullptr))) {
+	(pattern = res->lookupPattern(args[numArgs-1].getName(), nullptr, state))) {
       state->setFillPattern(pattern);
       builder->updateStyle(state);
     }
@@ -1245,7 +1245,7 @@ void PdfParser::opSetStrokeColorN(Object args[], int numArgs) {
     }
     GfxPattern *pattern;
     if (args[numArgs-1].isName() &&
-	(pattern = res->lookupPattern(args[numArgs-1].getName(), nullptr, nullptr))) {
+	(pattern = res->lookupPattern(args[numArgs-1].getName(), nullptr, state))) {
       state->setStrokePattern(pattern);
       builder->updateStyle(state);
     }
@@ -1659,7 +1659,7 @@ void PdfParser::opShFill(Object args[], int /*numArgs*/)
   double *matrix = nullptr;
   GBool savedState = gFalse;
 
-  if (!(shading = res->lookupShading(args[0].getName(), nullptr, nullptr))) {
+  if (!(shading = res->lookupShading(args[0].getName(), nullptr, state))) {
     return;
   }
 
@@ -2958,7 +2958,7 @@ void PdfParser::doForm(Object *str) {
     if (_POPPLER_CALL_ARGS_DEREF(obj2, obj1.dictLookup, "S").isName("Transparency")) {
       transpGroup = gTrue;
       if (!_POPPLER_CALL_ARGS_DEREF(obj3, obj1.dictLookup, "CS").isNull()) {
-	blendingColorSpace = GfxColorSpace::parse(nullptr, &obj3, nullptr, nullptr);
+	blendingColorSpace = GfxColorSpace::parse(nullptr, &obj3, nullptr, state);
       }
       _POPPLER_FREE(obj3);
       if (_POPPLER_CALL_ARGS_DEREF(obj3, obj1.dictLookup, "I").isBool()) {
