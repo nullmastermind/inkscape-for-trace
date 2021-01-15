@@ -64,7 +64,7 @@ lib_change_siblings $APP_LIB_DIR
   RV=$(get_repo_version $INK_DIR)
 
   # update Inkscape version information
-  /usr/libexec/PlistBuddy -c "Set CFBundleShortVersionString '$IV ($RV))'" $PLIST
+  /usr/libexec/PlistBuddy -c "Set CFBundleShortVersionString '$IV ($RV)'" $PLIST
   /usr/libexec/PlistBuddy -c "Set CFBundleVersion '$IV ($RV)'" $PLIST
 
   # update minimum system version according to deployment target
