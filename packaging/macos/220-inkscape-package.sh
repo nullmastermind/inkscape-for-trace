@@ -41,7 +41,7 @@ mv $APP_DIR.tmp $APP_DIR
 
 # patch library link paths for lib2geom
 lib_change_path \
-  @executable_path/../Resources/lib/lib2geom.1.0.0.dylib \
+  @executable_path/../Resources/lib/lib2geom.1.1.0.dylib \
   $APP_LIB_DIR/inkscape/libinkscape_base.dylib
 
 # patch library link path for libboost_filesystem
