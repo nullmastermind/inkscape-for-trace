@@ -339,11 +339,9 @@ LPESlice::cloneD(SPObject *orig, SPObject *dest, bool is_original)
     SPPath * path =  SP_PATH(dest);
     if (path && shape) {
         SPCurve const *c = shape->curve();
-        if (c) {
+        if (c && !c->is_empty()) {
             auto str = sp_svg_write_path(c->get_pathvector());
-            if (str == "") {
-                dest->deleteObject(true);
-            } else {
+            if (str != "") {
                 if (!is_original && shape->hasPathEffectRecursive()) {
                     dest->getRepr()->setAttribute("inkscape:original-d", str);
                 } else {
@@ -357,12 +355,8 @@ LPESlice::cloneD(SPObject *orig, SPObject *dest, bool is_original)
                     cloneStyle(orig, dest);
                 }
             }
-        } else {
-            dest->deleteObject(true);
         }
     }
-
-    
 }
 
 static void
@@ -395,6 +389,22 @@ LPESlice::splititem(SPItem* item, SPCurve * curve, std::pair<Geom::Line, size_t>
         is_original = true;
     }
     Geom::Line line_separation = slicer.first;
+    // check top level split/sp_lpe_item item
+    SPObject *top = sp_lpe_item->parent;
+    SPObject *other = item;
+    while (other && other->parent) {
+        if (other->parent != top) {
+            other = other->parent;
+        } else {
+            break;
+        }
+    }
+    SPItem *topitem = dynamic_cast<SPItem *>(other);
+    if (topitem && topitem != item) {
+        Geom::Affine ptransform = item->getRelativeTransform(topitem);
+        ptransform *= item->document->doc2dt();
+        line_separation *= ptransform.inverse();
+    }
     Geom::Point s = line_separation.initialPoint();
     Geom::Point e = line_separation.finalPoint();
     Geom::Point center = Geom::middle_point(s, e);
