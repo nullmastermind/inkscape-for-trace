@@ -24,9 +24,15 @@ install(DIRECTORY extensions DESTINATION ${INKSCAPE_SHARE_INSTALL}
     PATTERN ".git*" EXCLUDE
     PATTERN "tests" EXCLUDE
     PATTERN "*.pyc" EXCLUDE
+    PATTERN "print_win32_vector.*" EXCLUDE
 )
 
 if(WIN32)
+    install(
+        FILES extensions/print_win32_vector.py extensions/print_win32_vector.inx
+        DESTINATION ${INKSCAPE_SHARE_INSTALL}/extensions
+        COMPONENT extensions
+    )
   install(CODE
     "MESSAGE(\"Pre-compiling Python extensions to byte-code (.pyc files)\")
      execute_process(COMMAND \${CMAKE_INSTALL_PREFIX}/bin/python -m compileall -qq \${CMAKE_INSTALL_PREFIX}/${INKSCAPE_SHARE_INSTALL})"
