@@ -40,6 +40,15 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="1.1-alpha" date="2021-01-17">
+      <description>
+        <p>Inkscape 1.1-alpha</p>
+        <ul>
+          <li>Alpha release</li>
+        </ul>
+      </description>
+      <url>http://wiki.inkscape.org/wiki/index.php/Release_notes/1.1</url>
+    </release>
     <release version="1.0" date="2020-05-01">
       <description>
         <p>Inkscape 1.0</p>
