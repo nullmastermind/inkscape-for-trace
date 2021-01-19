@@ -86,7 +86,9 @@ bool Inkscape::DocumentUndo::getUndoSensitive(SPDocument const *document) {
 
 void Inkscape::DocumentUndo::done(SPDocument *doc, const unsigned int event_type, Glib::ustring const &event_description)
 {
-    maybeDone(doc, nullptr, event_type, event_description);
+    if (doc->sensitive) {
+        maybeDone(doc, nullptr, event_type, event_description);
+    }
 }
 
 void Inkscape::DocumentUndo::resetKey( SPDocument *doc )
