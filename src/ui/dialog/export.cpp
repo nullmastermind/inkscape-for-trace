@@ -336,8 +336,6 @@ Export::Export()
 
         // mnemonic in frame label moves focus to filename:
         flabel->set_mnemonic_widget(filename_entry);
-
-        singleexport_box.pack_start(file_box, Gtk::PACK_SHRINK);
     }
 
     batch_export.set_sensitive(true);
@@ -399,6 +397,7 @@ Export::Export()
     /* Main dialog */
     set_spacing(0);
     pack_start(singleexport_box, Gtk::PACK_SHRINK);
+    pack_start(file_box, Gtk::PACK_SHRINK);
     pack_start(batch_box, Gtk::PACK_SHRINK);
     pack_start(hide_box, Gtk::PACK_SHRINK);
     pack_start(button_box, Gtk::PACK_SHRINK);
@@ -430,6 +429,7 @@ Export::~Export ()
 
 void Export::setDesktop(SPDesktop *desktop)
 {
+#if 0
     {
         {
             selectModifiedConn.disconnect();
@@ -445,6 +445,7 @@ void Export::setDesktop(SPDesktop *desktop)
             selectModifiedConn = desktop->selection->connectModified(sigc::hide<0>(sigc::mem_fun(*this, &Export::onSelectionModified)));
         }
     }
+#endif
 }
 
 void Export::update()
@@ -454,7 +455,11 @@ void Export::update()
         return;
     }
 
+    onSelectionChanged();
+    onSelectionModified(0);
+#if 0
     setDesktop(getDesktop());
+#endif
 }
 
 /*
@@ -1032,8 +1037,12 @@ void Export::onExport ()
             const gchar *filename = item->getRepr()->attribute("inkscape:export-filename");
             std::string path;
             if (!filename) {
-                Glib::ustring tmp;
-                path = create_filepath_from_id(item->getId(), tmp);
+                auto id = item->getId();
+                if (!id) {
+                    g_warning("object has no id");
+                    continue;
+                }
+                path = create_filepath_from_id(id, filename_entry.get_text());
             } else {
                 path = absolutize_path_from_document_location(doc, filename);
             }
