@@ -125,6 +125,14 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
     </columns>
     <data>
       <row>
+        <col id="0" translatable="yes">About Screen</col>
+        <col id="1">resources/template_about.svg</col>
+        <col id="2">about_screen.svg</col>
+        <col id="3">750px</col>
+        <col id="4">625px</col>
+        <col id="5">750px x 625px</col>
+      </row>
+      <row>
         <col id="0" translatable="yes">Icon 120x120</col>
         <col id="1">resources/template_icon_square.svg</col>
         <col id="2">-</col>
