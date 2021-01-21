@@ -1510,6 +1510,12 @@ Effect::addHandles(KnotHolder *knotholder, SPItem *item) {
     // add handles provided by the effect's parameters (if any)
     for (auto & p : param_vector) {
         p->addKnotHolderEntities(knotholder, item);
+    }    
+    if (is_load) {
+        SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
+        if (lpeitem) {
+            sp_lpe_item_update_patheffect(lpeitem, false, false);
+        }
     }
 }
 

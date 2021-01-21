@@ -399,10 +399,6 @@ void NodeTool::selection_changed(Inkscape::Selection *sel) {
     auto items= sel->items();
     for(auto i=items.begin();i!=items.end();++i){
         SPItem *item = *i;
-        SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
-        if (lpeitem && lpeitem->hasPathEffectRecursive()) {
-            sp_lpe_item_update_patheffect(lpeitem, true, true);
-        }
         if (item) {
             gather_items(this, nullptr, item, SHAPE_ROLE_NORMAL, shapes);
         }

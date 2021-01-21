@@ -193,7 +193,18 @@ void SatellitesArrayParam::addKnotHolderEntities(KnotHolder *knotholder,
                                                  bool mirror)
 {
     if (!_last_pathvector_satellites) {
-        return;
+        // this also done because on load _last_pathvector_satellites is none. 
+        // anyway the duple caller function same code is not executed because is_load become false
+        // after LPE update
+        if (param_effect->is_load) {
+            SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
+            if (lpeitem) {
+                sp_lpe_item_update_patheffect(lpeitem, false, false);
+            }
+        }
+        if (!_last_pathvector_satellites) {
+            return;
+        }
     }
     size_t index = 0;
     for (size_t i = 0; i < _vector.size(); ++i) {

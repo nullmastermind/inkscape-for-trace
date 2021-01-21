@@ -238,6 +238,12 @@ void SPPath::set(SPAttr key, const gchar* value) {
                     this->removeAllPathEffects(false);
                 }
             }
+            // In 2020-8-15 next line is commented and added
+            // a todo to see regressions, after this in a commit this line is uncomented
+            // again this line in a MR that near 1.1 release is finaly rollbacked. 
+            // This rollback happends near release (1.1) and think is beter leave 
+            // uncomented for release as all check are done this way
+            // TODO: Comment on 1.2 branching to see issues
             sp_lpe_item_update_patheffect(this, true, true);
             break;
 
