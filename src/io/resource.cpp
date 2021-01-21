@@ -36,9 +36,6 @@ namespace IO {
 
 namespace Resource {
 
-static void get_filenames_from_path(std::vector<Glib::ustring> &files, std::string const &path,
-                                    std::vector<const char *> const &extensions = {},
-                                    std::vector<const char *> const &exclusions = {});
 
 static void get_foldernames_from_path(std::vector<Glib::ustring> &folders, std::string const &path,
                                       std::vector<const char *> const &exclusions = {});

@@ -145,6 +145,10 @@ public:
     // internal
     void                  AddInCache(font_instance *who);
 
+# ifdef _WIN32
+    void                  AddFontFilesWin32(char const *directory_path);
+# endif
+
     /// Add a directory from which to include additional fonts
     void                  AddFontsDir(char const *utf8dir);
 

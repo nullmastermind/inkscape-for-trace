@@ -29,10 +29,18 @@
 #include <pango/pango-ot.h>
 
 #include "io/sys.h"
+#include "io/resource.h"
 
 #include "libnrtype/FontFactory.h"
 #include "libnrtype/font-instance.h"
 #include "libnrtype/OpenTypeUtil.h"
+
+# ifdef _WIN32
+
+#include <glibmm.h>
+#include <windows.h>
+
+#endif
 
 typedef std::unordered_map<PangoFontDescription*, font_instance*, font_descr_hash, font_descr_equal> FaceMapType;
 
@@ -779,6 +787,23 @@ void font_factory::AddInCache(font_instance *who)
     nbEnt++;
 }
 
+# ifdef _WIN32
+void font_factory::AddFontFilesWin32(char const * directory_path )
+{
+    std::vector<const char *> allowed_ext = {"ttf","otf" };
+    std::vector<Glib::ustring> files = {};
+    Inkscape::IO::Resource::get_filenames_from_path(files,directory_path, allowed_ext,(std::vector<const char *>) {});
+    for (auto file : files) {
+        int result = AddFontResourceExA(file.c_str(),FR_PRIVATE,0);
+        if (result != 0 ) {
+            g_info("Font File: %s added sucessfully.",file.c_str());
+        } else {
+            g_warning("Font File: %s wasn't added sucessfully",file.c_str());
+        }
+    }
+}
+# endif
+
 void font_factory::AddFontsDir(char const *utf8dir)
 {
 #ifdef USE_PANGO_WIN32
@@ -791,6 +816,7 @@ void font_factory::AddFontsDir(char const *utf8dir)
 
     gchar *dir;
 # ifdef _WIN32
+    AddFontFilesWin32(utf8dir);
     dir = g_win32_locale_filename_from_utf8(utf8dir);
 # else
     dir = g_filename_from_utf8(utf8dir, -1, nullptr, nullptr, nullptr);

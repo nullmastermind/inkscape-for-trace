@@ -93,6 +93,10 @@ std::vector<Glib::ustring> get_foldernames(Glib::ustring path, std::vector<const
 void get_foldernames_from_path(std::vector<Glib::ustring> &files, Glib::ustring path,
                                std::vector<const char *> exclusions = {});
 
+void get_filenames_from_path(std::vector<Glib::ustring> &files, std::string const &path,
+                                    std::vector<const char *> const &extensions = {},
+                                    std::vector<const char *> const &exclusions = {});
+
 
 char const *profile_path();
 char *profile_path(const char *filename);
