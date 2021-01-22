@@ -46,6 +46,7 @@ rect { fill: #808080; opacity:0.5; }\
 </g>\
 </svg>";
         doc.reset(SPDocument::createNewDocFromMem(docString, static_cast<int>(strlen(docString)), false));
+        doc->ensureUpToDate();
     }
 
     ~ObjectTest() override = default;
@@ -191,5 +192,8 @@ TEST_F(ObjectTest, StyleFontSizes) {
     ASSERT_TRUE(eight != nullptr);
 
     EXPECT_EQ(eight->style->stroke_width.get_value(), Glib::ustring("50%"));
-    EXPECT_EQ(eight->style->stroke_width.computed, 1); // Is this right?
+
+    // stroke-width in percent is relative to viewport size, which is 300x150 in this example.
+    // 50% is 118.59 == ((300^2 + 150^2) / 2)^0.5 * 0.5
+    EXPECT_FLOAT_EQ(eight->style->stroke_width.computed, 118.58541);
 }
