@@ -804,7 +804,7 @@ Canvas::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr)
         // Copy old background unshifted (reduces sensation of flicker while waiting for rendering newly exposed area).
         //cr->set_operator(Cairo::Operator::OPERATOR_OVER);
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        double outline_overlay_opacity = prefs->getIntLimited("/options/rendering/outline-overlay-opacity", 50, 1, 100) / 100.0;
+        double outline_overlay_opacity = 1 - (prefs->getIntLimited("/options/rendering/outline-overlay-opacity", 50, 1, 100) / 100.0);
         cr->set_source(_backing_store, 0, 0);
         cr->paint();
         cr->save();
