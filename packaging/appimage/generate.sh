@@ -32,6 +32,15 @@ apt_bundle() {
     find *.deb -delete
 }
 
+make_ld_launcher() {
+    cat > "$2" <<EOF
+#!/bin/sh
+HERE="\$(dirname "\$(readlink -f "\${0}")")"
+exec "\${HERE}/../../lib/x86_64-linux-gnu/ld-linux-x86-64.so.2" "\${HERE}/$1" "\$@"
+EOF
+    chmod a+x "$2"
+}
+
 # Bundle all of glibc; this should eventually be done by linuxdeployqt
 apt update
 apt_bundle libc6
@@ -68,8 +77,8 @@ apt_bundle \
     gir1.2-pango-1.0
 (
     cd usr/bin
-    ln -s python${PY_VER} python3
-    ln -s python${PY_VER} python
+    make_ld_launcher "python${PY_VER}" python3
+    make_ld_launcher "python${PY_VER}" python
 )
 
 cd -
