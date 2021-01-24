@@ -184,13 +184,28 @@ DialogMultipaned::~DialogMultipaned()
 {
     // Disconnect all signals
     for_each(_connections.begin(), _connections.end(), [&](auto c) { c.disconnect(); });
-
+/*
     for (std::vector<Gtk::Widget *>::iterator it = children.begin(); it != children.end();) {
         if (dynamic_cast<DialogMultipaned *>(*it) || dynamic_cast<DialogNotebook *>(*it)) {
             delete *it;
         } else {
             it++;
         }
+    }
+*/
+
+    for (;;) {
+       auto it = std::find_if(children.begin(), children.end(), [](auto w) {
+          return dynamic_cast<DialogMultipaned*>(w) || dynamic_cast<DialogNotebook*>(w);
+       });
+       if (it != children.end()) {
+          // delete dialog multipanel or notebook; this action results in its removal from 'children'!
+          delete *it;
+       }
+       else {
+          // no more dialog panels
+          break;
+       }
     }
 
     children.clear();

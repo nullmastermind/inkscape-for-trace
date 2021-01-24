@@ -40,7 +40,7 @@ class DialogWindow : public Gtk::ApplicationWindow
 {
 public:
     DialogWindow(Gtk::Widget *page = nullptr);
-    ~DialogWindow() override{};
+    ~DialogWindow() override;
 
     void update_dialogs();
     void update_window_size_to_fit_children();
@@ -49,6 +49,8 @@ public:
     DialogContainer *get_container() { return _container; }
 
 private:
+    bool on_key_press_event(GdkEventKey* key_event) override;
+
     InkscapeApplication *_app;
     DialogContainer *_container;
     Glib::ustring _title;

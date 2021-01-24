@@ -26,6 +26,7 @@ namespace UI {
 namespace Dialog {
 
 class DialogContainer;
+class DialogWindow;
 
 /**
  * A widget that wraps a Gtk::Notebook with dialogs as pages.
@@ -48,7 +49,7 @@ public:
     // Notebook callbacks
     void close_tab_callback();
     void close_notebook_callback();
-    void pop_tab_callback();
+    DialogWindow* pop_tab_callback();
 
 private:
     // Widgets

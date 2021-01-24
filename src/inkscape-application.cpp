@@ -43,6 +43,7 @@
 #include "ui/dialog/font-substitution.h"  // Warn user about font substitution.
 #include "ui/shortcuts.h"         // Shortcuts... init
 #include "widgets/desktop-widget.h" // Close without saving dialog
+#include "ui/dialog/dialog-manager.h" // save state
 
 #include "util/units.h"           // Redimension window
 
@@ -420,6 +421,11 @@ InkscapeApplication::window_close(InkscapeWindow* window)
                 auto it2 = std::find(it->second.begin(), it->second.end(), window);
                 if (it2 != it->second.end()) {
                     it->second.erase(it2);
+                    if (is_single_window()) {
+                        // persist layout of docked and floating dialogs before deleting the last window
+                        Inkscape::UI::Dialog::DialogManager::singleton().save_dialogs_state(
+                           window->get_desktop_widget()->getContainer());
+                    }
                     delete window; // Results in call to SPDesktop::destroy()
                 } else {
                     std::cerr << "InkscapeApplication::close_window: window not found!" << std::endl;
@@ -1571,6 +1577,14 @@ static gboolean osx_quit_callback(GtkosxApplication *, InkscapeApplication *app)
     return true;
 }
 #endif
+
+// return true if there's only one InkscapeWindow left open
+bool InkscapeApplication::is_single_window() const {
+    if (_with_gui) {
+        return _documents.size() == 1;
+    }
+    return false;
+}
 
 /*
   Local Variables:

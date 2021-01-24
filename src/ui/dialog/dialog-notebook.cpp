@@ -78,7 +78,7 @@ DialogNotebook::DialogNotebook(DialogContainer *container)
     // Move to new window
     new_menu_item = Gtk::manage(new Gtk::MenuItem(_("Move Tab to New Window")));
     _conn.emplace_back(
-        new_menu_item->signal_activate().connect(sigc::mem_fun(*this, &DialogNotebook::pop_tab_callback)));
+        new_menu_item->signal_activate().connect([=]() { pop_tab_callback(); }));
     _menu.append(*new_menu_item);
 
     // Separator menu item
@@ -221,7 +221,7 @@ void DialogNotebook::close_notebook_callback()
 /**
  * Callback to move the current active tab.
  */
-void DialogNotebook::pop_tab_callback()
+DialogWindow* DialogNotebook::pop_tab_callback()
 {
     // Find page.
     Gtk::Widget *page = _notebook.get_nth_page(_notebook.get_current_page());
@@ -233,7 +233,7 @@ void DialogNotebook::pop_tab_callback()
 
     if (!page) {
         std::cerr << "DialogNotebook::pop_tab_callback: page not found!" << std::endl;
-        return;
+        return nullptr;
     }
 
     // Move page to notebook in new dialog window
@@ -242,12 +242,14 @@ void DialogNotebook::pop_tab_callback()
 
     if (_notebook.get_n_pages() == 0) {
         close_notebook_callback();
-        return;
+        return window;
     }
 
     // Update tab labels by comparing the sum of their widths to the allocation
     Gtk::Allocation allocation = get_allocation();
     on_size_allocate_scroll(allocation);
+
+    return window;
 }
 
 // ========= Signal handlers - notebook =========

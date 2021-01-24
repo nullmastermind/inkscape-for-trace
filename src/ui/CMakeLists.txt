@@ -103,6 +103,7 @@ set(ui_SRC
 	dialog/debug.cpp
 	dialog/dialog-base.cpp
 	dialog/dialog-container.cpp
+	dialog/dialog-manager.cpp
 	dialog/dialog-multipaned.cpp
 	dialog/dialog-notebook.cpp
 	dialog/dialog-window.cpp
@@ -275,6 +276,7 @@ set(ui_SRC
 	dialog/debug.h
 	dialog/dialog-base.h
 	dialog/dialog-container.h
+	dialog/dialog-manager.h
 	dialog/dialog-multipaned.h
 	dialog/dialog-notebook.h
 	dialog/dialog-window.h

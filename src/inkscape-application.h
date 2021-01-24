@@ -121,6 +121,8 @@ public:
     // void reference()   { /*printf("reference()\n"  );*/ }
     // void unreference() { /*printf("unreference()\n");*/ }
 
+    bool is_single_window() const;
+
 protected:
     bool _with_gui    = true;
     bool _batch_process = false; // Temp

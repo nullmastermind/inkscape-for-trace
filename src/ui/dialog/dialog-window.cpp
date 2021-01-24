@@ -20,12 +20,15 @@
 #include <iostream>
 
 #include "enums.h"
+#include "inkscape.h"
 #include "inkscape-application.h"
 #include "preferences.h"
 #include "ui/dialog/dialog-base.h"
 #include "ui/dialog/dialog-container.h"
 #include "ui/dialog/dialog-multipaned.h"
 #include "ui/dialog/dialog-notebook.h"
+#include "ui/dialog/dialog-manager.h"
+#include "ui/shortcuts.h"
 
 // Sizing constants
 const int MINIMUM_WINDOW_WIDTH = 210;
@@ -42,6 +45,9 @@ namespace Dialog {
 
 class DialogNotebook;
 class DialogContainer;
+
+DialogWindow::~DialogWindow() {
+}
 
 // Create a dialog window and move page from old notebook.
 DialogWindow::DialogWindow(Gtk::Widget *page)
@@ -60,8 +66,9 @@ DialogWindow::DialogWindow(Gtk::Widget *page)
 
     set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
 
-    if (page && window_above) {
-        if (auto top_win = dynamic_cast<Gtk::Window*>(page->get_toplevel())) {
+    auto desktop = SP_ACTIVE_DESKTOP;
+    if (window_above && desktop) {
+        if (Gtk::Window* top_win = desktop->getToplevel()) {
             set_transient_for(*top_win);
         }
     }
@@ -72,6 +79,12 @@ DialogWindow::DialogWindow(Gtk::Widget *page)
         return;
     }
     _app->gtk_app()->add_window(*this);
+
+    this->signal_delete_event().connect([=](GdkEventAny*) {
+       DialogManager::singleton().store_state(*this);
+       delete this;
+       return true;
+    });
 
     // ============ Theming: icons ==============
 
@@ -221,6 +234,22 @@ void DialogWindow::update_window_size_to_fit_children()
     // Resize window
     move(pos_x, pos_y);
     resize(width, height);
+}
+
+// mimic InkscapeWindow handling of shortcuts to make them work with active floating dialog window
+bool DialogWindow::on_key_press_event(GdkEventKey* key_event) {
+    auto focus = get_focus();
+    if (focus) {
+        if (focus->event(reinterpret_cast<GdkEvent*>(key_event))) {
+            return true;
+        }
+    }
+
+    if (Gtk::Window::on_key_press_event(key_event)) {
+        return true;
+    }
+
+    return Inkscape::Shortcuts::getInstance().invoke_verb(key_event, SP_ACTIVE_DESKTOP);
 }
 
 } // namespace Dialog
