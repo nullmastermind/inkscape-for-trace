@@ -641,6 +641,7 @@ static void ink_copy_generic_attributes( //
 
         // style
         "style",
+        "class",
 
         // inkscape
         "inkscape:highlight-color",
