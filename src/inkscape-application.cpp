@@ -12,6 +12,7 @@
 #include <iomanip>
 #include <cerrno>  // History file
 #include <regex>
+#include <numeric>
 
 #include <glibmm/i18n.h>  // Internationalization
 
@@ -420,12 +421,12 @@ InkscapeApplication::window_close(InkscapeWindow* window)
             if (it != _documents.end()) {
                 auto it2 = std::find(it->second.begin(), it->second.end(), window);
                 if (it2 != it->second.end()) {
-                    it->second.erase(it2);
-                    if (is_single_window()) {
+                    if (get_number_of_windows() == 1) {
                         // persist layout of docked and floating dialogs before deleting the last window
                         Inkscape::UI::Dialog::DialogManager::singleton().save_dialogs_state(
                            window->get_desktop_widget()->getContainer());
                     }
+                    it->second.erase(it2);
                     delete window; // Results in call to SPDesktop::destroy()
                 } else {
                     std::cerr << "InkscapeApplication::close_window: window not found!" << std::endl;
@@ -1578,12 +1579,15 @@ static gboolean osx_quit_callback(GtkosxApplication *, InkscapeApplication *app)
 }
 #endif
 
-// return true if there's only one InkscapeWindow left open
-bool InkscapeApplication::is_single_window() const {
+/**
+ * Return number of open Inkscape Windows (irrespective of number of documents)
+.*/
+int InkscapeApplication::get_number_of_windows() const {
     if (_with_gui) {
-        return _documents.size() == 1;
+        return std::accumulate(_documents.begin(), _documents.end(), 0,
+          [&](int sum, auto& v){ return sum + static_cast<int>(v.second.size()); });
     }
-    return false;
+    return 0;
 }
 
 /*

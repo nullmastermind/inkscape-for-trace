@@ -109,8 +109,8 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
 
     // Show dialogs after the main window, otherwise dialogs may be associated as the main window of the program.
     if (_app) {
-        // restore transient dialogs state if this is first window being opened
-        bool include_transient = _app->is_single_window();
+        // restore transient dialogs state if this is the first window being opened
+        bool include_transient = _app->get_number_of_windows() == 0;
         DialogManager::singleton().restore_dialogs_state(_desktop->getContainer(), include_transient);
     }
 

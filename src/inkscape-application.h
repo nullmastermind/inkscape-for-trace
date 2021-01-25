@@ -121,7 +121,7 @@ public:
     // void reference()   { /*printf("reference()\n"  );*/ }
     // void unreference() { /*printf("unreference()\n");*/ }
 
-    bool is_single_window() const;
+    int get_number_of_windows() const;
 
 protected:
     bool _with_gui    = true;

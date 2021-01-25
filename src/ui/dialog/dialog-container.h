@@ -44,6 +44,8 @@ class DialogWindow;
  */
 class DialogContainer : public Gtk::Box
 {
+    using parent_type = Gtk::Box;
+
 public:
     DialogContainer();
     ~DialogContainer();
@@ -66,7 +68,7 @@ public:
 
     // State saving functionality
     std::unique_ptr<Glib::KeyFile> save_container_state();
-    void load_container_state(Glib::KeyFile* keyfile);
+    void load_container_state(Glib::KeyFile* keyfile, bool include_floating);
 
     void restore_window_position(DialogWindow* window);
     void store_window_position(DialogWindow* window);
@@ -98,18 +100,11 @@ private:
     std::vector<sigc::connection> connections;
 
     // Handlers
-    void cb_on_unmap();
+    void on_unmap() override;
     DialogNotebook *prepare_drop(const Glib::RefPtr<Gdk::DragContext> context);
     void prepend_drop(const Glib::RefPtr<Gdk::DragContext> context, DialogMultipaned *column);
     void append_drop(const Glib::RefPtr<Gdk::DragContext> context, DialogMultipaned *column);
     void column_empty(DialogMultipaned *column);
-
-	 struct wnd_pos_t {
-		 int x, y, width, height;
-		 bool floating;
-	 };
-	 std::map<std::string, wnd_pos_t> dialog_window_positions;
-	 std::set<unsigned int> floating_dialogs;
 };
 
 } // namespace Dialog

@@ -89,7 +89,7 @@ DialogContainer::DialogContainer()
     add(*columns);
 
     // Should probably be moved to window.
-    connections.emplace_back(signal_unmap().connect(sigc::mem_fun(*this, &DialogContainer::cb_on_unmap)));
+   //  connections.emplace_back(signal_unmap().connect(sigc::mem_fun(*this, &DialogContainer::cb_on_unmap)));
 
     show_all_children();
 }
@@ -258,7 +258,7 @@ void DialogContainer::new_dialog(unsigned int code)
     }
 
     int dockable = prefs->getInt("/options/dialogtype/value", PREFS_DIALOGS_BEHAVIOR_DOCKABLE);
-    bool floating = DialogManager::singleton().open_floating(code);
+    bool floating = DialogManager::singleton().should_open_floating(code);
     if (dockable == PREFS_DIALOGS_BEHAVIOR_FLOATING || floating) {
         new_floating_dialog(code);
     } else {
@@ -571,12 +571,12 @@ void DialogContainer::unlink_dialog(DialogBase *dialog)
  *
  * For the keyfile format, check `save_container_state()`.
  */
-void DialogContainer::load_container_state(Glib::KeyFile* keyfile)
+void DialogContainer::load_container_state(Glib::KeyFile* keyfile, bool include_floating)
 {
     // Step 1: check if we want to load the state
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
-   //  // if it isn't dockable, all saved docked dialogs are made floating
+    // if it isn't dockable, all saved docked dialogs are made floating
     bool is_dockable =
         prefs->getInt("/options/dialogtype/value", PREFS_DIALOGS_BEHAVIOR_DOCKABLE) != PREFS_DIALOGS_BEHAVIOR_FLOATING;
 
@@ -585,6 +585,8 @@ void DialogContainer::load_container_state(Glib::KeyFile* keyfile)
 
     // Step 3: for each window, load its state. Only the first window is not floating (the others are DialogWindow)
     for (int window_idx = 0; window_idx < windows_count; ++window_idx) {
+        if (window_idx > 0 && !include_floating) break;
+
         Glib::ustring group_name = "Window" + std::to_string(window_idx);
 
         // Step 3.0: read the window parameters
@@ -906,8 +908,10 @@ std::unique_ptr<Glib::KeyFile> DialogContainer::save_container_state()
 /**
  * No zombie windows. TODO: Need to work on this as it still leaves Gtk::Window! (?)
  */
-void DialogContainer::cb_on_unmap()
+void DialogContainer::on_unmap()
 {
+    parent_type::on_unmap();
+
     // Disconnect all signals
     for_each(connections.begin(), connections.end(), [&](auto c) { c.disconnect(); });
 
