@@ -680,8 +680,8 @@ static void spdc_attach_selection(FreehandBase *dc, Inkscape::Selection */*sel*/
         // We keep it in desktop coordinates to eliminate calculation errors
         auto path = static_cast<SPPath *>(item);
         auto norm = SPCurve::copy(path->curveForEdit());
-        norm->transform((dc->white_item)->i2dt_affine());
         g_return_if_fail( norm != nullptr );
+        norm->transform((dc->white_item)->i2dt_affine());
         dc->white_curves = norm->split();
 
         // Anchor list
