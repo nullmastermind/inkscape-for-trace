@@ -2815,7 +2815,7 @@ Verb *Verb::_base_verbs[] = {
     //              N_("Switch to normal color display mode"), nullptr),
     // new ZoomVerb(SP_VERB_VIEW_COLOR_MODE_GRAYSCALE, "ViewColorModeGrayscale", N_("_Grayscale"),
     new ZoomVerb(SP_VERB_VIEW_ICON_PREVIEW, "ViewIconPreview", N_("Icon Preview"), N_("Preview Icon"),
-                 INKSCAPE_ICON("icon-preview")),
+                 INKSCAPE_ICON("dialog-icon-preview")),
 
     new DialogVerb(SP_VERB_DIALOG_PROTOTYPE, "DialogPrototype", N_("Prototype..."), N_("Prototype Dialog"),
                    INKSCAPE_ICON("document-properties")),
