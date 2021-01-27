@@ -45,12 +45,16 @@ variables:
 
 .MR: &run_for_MR
   rules:
-  - if: $CI_MERGE_REQUEST_ID
+    - if: $CI_MERGE_REQUEST_ID
 
 .master: &run_for_master
   rules:
-  - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CI_COMMIT_BRANCH == "master"
 
+.both: &run_for_both
+  rules:
+    - if: $CI_MERGE_REQUEST_ID
+    - if: $CI_COMMIT_BRANCH == "master"
 
 
 #######################
@@ -84,9 +88,7 @@ inkscape:linux:
 
 appimage:linux:
   stage: build
-  <<: *run_for_MR
-  <<: *run_for_master
-  rules:
+  <<: *run_for_both
   cache:
     key: "cache-appimage"
     paths:
@@ -196,7 +198,7 @@ check-license-headers:
 
 translations:
   stage: test
-  <<: *run_for_MR
+  <<: *run_for_both
   needs: []
   script:
     # make sure dependencies for inkscape.pot are up-to-date
