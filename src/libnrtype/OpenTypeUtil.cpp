@@ -21,6 +21,7 @@
 #include FT_SFNT_NAMES_H
 
 // Harfbuzz
+#include <harfbuzz/hb.h>
 #include <harfbuzz/hb-ft.h>
 #include <harfbuzz/hb-ot.h>
 
@@ -52,10 +53,7 @@ Glib::ustring extract_tag( guint32 *tag ) {
 }
 
 
-// TODO: Ideally, we should use the HB_VERSION_ATLEAST macro here,
-// but this was only released in harfbuzz >= 0.9.30
-// #if HB_VERSION_ATLEAST(1,2,3)
-#if HB_VERSION_MAJOR*10000 + HB_VERSION_MINOR*100 + HB_VERSION_MICRO >= 10203
+#if HB_VERSION_ATLEAST(1,2,3)  // Released Feb 2016
 void get_glyphs( hb_font_t* font, hb_set_t* set, Glib::ustring& characters) {
 
     // There is a unicode to glyph mapping function but not the inverse!
@@ -66,7 +64,7 @@ void get_glyphs( hb_font_t* font, hb_set_t* set, Glib::ustring& characters) {
             hb_font_get_nominal_glyph (font, unicode_i, &glyph);
             if (glyph == codepoint) {
                 characters += (gunichar)unicode_i;
-                continue;
+                break;
             }
         }
     }
@@ -75,16 +73,13 @@ void get_glyphs( hb_font_t* font, hb_set_t* set, Glib::ustring& characters) {
 
 // Make a list of all tables found in the GSUB
 // This list includes all tables regardless of script or language.
-void readOpenTypeGsubTable (const FT_Face ft_face,
-                            std::map<Glib::ustring, OTSubstitution>& tables
-    ) {
+// Use Harfbuzz, Pango's equivalent calls are deprecated.
+void readOpenTypeGsubTable (hb_font_t* hb_font,
+                            std::map<Glib::ustring, OTSubstitution>& tables)
+{
+    hb_face_t* hb_face = hb_font_get_face (hb_font);
 
-    // std::cout << "readOpenTypeGsubTable: Entrance: "
-    //           << (ft_face->family_name?ft_face->family_name:"null") << std::endl;
     tables.clear();
-
-    // Use Harfbuzz, Pango's equivalent calls are deprecated.
-    auto const hb_face = hb_ft_face_create(ft_face, nullptr);
 
     // First time to get size of array
     auto script_count = hb_ot_layout_table_get_script_tags(hb_face, HB_OT_TAG_GSUB, 0, nullptr, nullptr);
@@ -138,10 +133,7 @@ void readOpenTypeGsubTable (const FT_Face ft_face,
         }
     }
 
-// TODO: Ideally, we should use the HB_VERSION_ATLEAST macro here,
-// but this was only released in harfbuzz >= 0.9.30
-// #if HB_VERSION_ATLEAST(1,2,3)
-#if HB_VERSION_MAJOR*10000 + HB_VERSION_MINOR*100 + HB_VERSION_MICRO >= 10203
+#if HB_VERSION_ATLEAST(1,2,3)  // Released Feb 2016
     // Find glyphs in OpenType substitution tables ('gsub').
     // Note that pango's functions are just dummies. Must use harfbuzz.
 
@@ -199,8 +191,6 @@ void readOpenTypeGsubTable (const FT_Face ft_face,
                                                               lookup_indexes );
                 // std::cout << "  Lookup count: " << count << " total: " << lookup_count << std::endl;
 
-                hb_font_t *hb_font = hb_font_create (hb_face); // MOVE THIS OUT OF LOOPS?
-
                 for (int i = 0; i < count; ++i) {
                     hb_set_t* glyphs_before = hb_set_create();
                     hb_set_t* glyphs_input  = hb_set_create();
@@ -221,9 +211,6 @@ void readOpenTypeGsubTable (const FT_Face ft_face,
                     //           << " " << hb_set_get_population (glyphs_output)
                     //           << std::endl;
 
-                    // Without this, all functions return 0, etc.
-                    hb_ft_font_set_funcs (hb_font);
-
                     get_glyphs (hb_font, glyphs_before, tables[table.first].before);
                     get_glyphs (hb_font, glyphs_input,  tables[table.first].input );
                     get_glyphs (hb_font, glyphs_after,  tables[table.first].after );
@@ -241,8 +228,6 @@ void readOpenTypeGsubTable (const FT_Face ft_face,
 
                 } // End count (lookups)
 
-                hb_font_destroy (hb_font);
-
             } else {
                 // std::cout << "  Did not find '" << table.first << "'!" << std::endl;
             }
@@ -255,7 +240,6 @@ void readOpenTypeGsubTable (const FT_Face ft_face,
 #endif
 
     g_free(hb_scripts);
-    hb_face_destroy (hb_face);
 }
 
 // Harfbuzz now as API for variations (Version 2.2, Nov 29 2018).
@@ -334,12 +318,13 @@ void readOpenTypeFvarNamed(const FT_Face ft_face,
 #define HB_OT_TAG_SVG HB_TAG('S','V','G',' ')
 
 // Get SVG glyphs out of an OpenType font.
-void readOpenTypeSVGTable(const FT_Face ft_face,
+void readOpenTypeSVGTable(hb_font_t* hb_font,
                           std::map<int, SVGTableEntry>& glyphs) {
+
+    hb_face_t* hb_face = hb_font_get_face (hb_font);
 
     // Harfbuzz has some support for SVG fonts but it is not exposed until version 2.1 (Oct 30, 2018).
     // We do it the hard way!
-    hb_face_t *hb_face = hb_ft_face_create_cached (ft_face);
     hb_blob_t *hb_blob = hb_face_reference_table (hb_face, HB_OT_TAG_SVG);
 
     if (!hb_blob) {
@@ -355,8 +340,7 @@ void readOpenTypeSVGTable(const FT_Face ft_face,
 
     const char* data = hb_blob_get_data(hb_blob, &svg_length);
     if (!data) {
-        std::cerr << "readOpenTypeSVGTable: Failed to get data! "
-                  << (ft_face->family_name?ft_face->family_name:"Unknown family") << std::endl;
+        std::cerr << "readOpenTypeSVGTable: Failed to get data! " << std::endl;
         return;
     }
 

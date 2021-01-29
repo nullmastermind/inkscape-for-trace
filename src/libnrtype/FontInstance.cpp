@@ -27,6 +27,8 @@
 #include FT_MULTIPLE_MASTERS_H
 
 #include <pango/pangoft2.h>
+#include <harfbuzz/hb.h>
+#include <harfbuzz/hb-ft.h>
 
 #include <glibmm/regex.h>
 
@@ -206,12 +208,25 @@ void font_instance::InitTheFace(bool loadgsub)
 #endif
 
 #ifndef USE_PANGO_WIN32
-        if (loadgsub) {
-            readOpenTypeGsubTable( theFace, openTypeTables );
-            fulloaded = true;
+
+#if PANGO_VERSION_CHECK(1,44,0)  // Released Jul 2019
+        // Pango has already created HarfBuzz font under-the-hood. No need to recreate.
+        hb_font_t* hb_font = pango_font_get_hb_font(pFont); // Pango owns hb_font.
+#else
+        auto const hb_face = hb_ft_face_create(theFace, nullptr); // We own.
+        hb_font_t* hb_font = hb_font_create (hb_face);
+#endif
+
+        if (!hb_font) {
+            std::cerr << "font_instance::InitTheFace: Failed to get hb_font!" << std::endl;
+        } else {
+            if (loadgsub) {
+                readOpenTypeGsubTable (hb_font, openTypeTables);
+                fulloaded = true;
+            }
+            readOpenTypeSVGTable (hb_font, openTypeSVGGlyphs);
         }
         readOpenTypeFvarAxes(  theFace, openTypeVarAxes );
-        readOpenTypeSVGTable(  theFace, openTypeSVGGlyphs );
 
         if (openTypeSVGGlyphs.size() > 0 ) {
             fontHasSVG = true;
@@ -229,7 +244,6 @@ void font_instance::InitTheFace(bool loadgsub)
 
         char const *var = pango_font_description_get_variations( descr );
         if (var) {
-
             Glib::ustring variations(var);
 
             FT_MM_Var* mmvar = nullptr;
@@ -284,6 +298,12 @@ void font_instance::InitTheFace(bool loadgsub)
                 // FT_Done_MM_Var(mmlib, mmvar);
             }
         }
+
+#if !PANGO_VERSION_CHECK(1,44,0)  // Released Jul 2019
+        hb_font_destroy (hb_font);
+        hb_face_destroy (hb_face);
+#endif
+
 
 #endif // FreeType
 #endif // Pango

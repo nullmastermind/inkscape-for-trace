@@ -27,6 +27,8 @@
  * All three provide variable amounts of access to data.
  */
 
+struct hb_font_t;
+
 // OpenType substitution
 class OTSubstitution {
 public:
@@ -88,7 +90,7 @@ public:
 // This would be better if one had std::vector<OTSubstitution> instead of OTSubstitution where each
 // entry corresponded to one substitution (e.g. ff -> ﬀ) but Harfbuzz at the moment cannot return
 // individual substitutions. See Harfbuzz issue #673.
-void readOpenTypeGsubTable (const FT_Face ft_face,
+void readOpenTypeGsubTable (hb_font_t* hb_font,
                             std::map<Glib::ustring, OTSubstitution >& tables);
 
 void readOpenTypeFvarAxes  (const FT_Face ft_face,
@@ -97,7 +99,7 @@ void readOpenTypeFvarAxes  (const FT_Face ft_face,
 void readOpenTypeFvarNamed (const FT_Face ft_face,
                             std::map<Glib::ustring, OTVarInstance>& named);
 
-void readOpenTypeSVGTable  (const FT_Face ft_face,
+void readOpenTypeSVGTable  (hb_font_t* hb_font,
                             std::map<int, SVGTableEntry>& glyphs);
 
 #endif /* !USE_PANGO_WIND32    */
