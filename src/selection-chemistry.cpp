@@ -838,22 +838,26 @@ void ObjectSet::popFromGroup(){
         return;
     }
 
-    auto item = items().begin(); // leaving this because it will be useful for
-                                                                        // future implementation of complex pop ungrouping
-    SPItem *obj = *item;
-    SPItem *parent_group = static_cast<SPItem*>(obj->parent);
-    if (!SP_IS_GROUP(parent_group) || SP_IS_LAYER(parent_group)) {
-        selection_display_message(desktop(), Inkscape::WARNING_MESSAGE, _("Selection <b>not in a group</b>."));
+    std::set<SPObject*> grandparents;
+
+    for (auto *obj : items()) {
+        auto parent_group = dynamic_cast<SPGroup *>(obj->parent);
+        if (!parent_group || !parent_group->parent || SP_IS_LAYER(parent_group)) {
+            selection_display_message(desktop(), Inkscape::WARNING_MESSAGE, _("Selection <b>not in a group</b>."));
+            return;
+        }
+        grandparents.insert(parent_group->parent);
+    }
+
+    assert(!grandparents.empty());
+
+    if (grandparents.size() > 1) {
+        selection_display_message(desktop(), Inkscape::WARNING_MESSAGE,
+                                  _("Objects in selection must have the same grandparents."));
         return;
     }
-    if (parent_group->firstChild()->getNext() == nullptr) {
-        std::vector<SPItem*> children;
-        sp_item_group_ungroup(static_cast<SPGroup*>(parent_group), children, false);
-    }
-    else {
-        toNextLayer(true);
-        parent_group->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-    }
+
+    toLayer(*grandparents.begin(), true);
 
     if(document())
         DocumentUndo::done(document(), SP_VERB_SELECTION_UNGROUP_POP_SELECTION,
