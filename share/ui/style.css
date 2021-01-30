@@ -173,6 +173,12 @@ iconview *:hover {
     border-color: @theme_bg_color;
 }
 
+#startscreennotebook iconview *:hover{
+    background-color:@theme_selected_bg_color;
+    border-radius:5px;
+    border-width:0;
+}
+
 .inksmall {
     font-size: 11px;
 }

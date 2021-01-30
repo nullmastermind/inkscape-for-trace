@@ -208,7 +208,7 @@ StartScreen::StartScreen()
         }
         auto template_list = dynamic_cast<Gtk::IconView *>(widget);
         if (template_list) {
-            template_list->signal_item_activated().connect(sigc::hide(sigc::mem_fun(*this, &StartScreen::load_now)));
+            template_list->signal_selection_changed().connect(sigc::mem_fun(*this, &StartScreen::load_now));
         }
     }
 
