@@ -244,8 +244,10 @@ LivePathEffectEditor::selectInList(LivePathEffect::Effect* effect)
 {
     Gtk::TreeNodeChildren chi = effectlist_view.get_model()->children();
     for (Gtk::TreeIter ci = chi.begin() ; ci != chi.end(); ci++) {
-        if (ci->get_value(columns.lperef)->lpeobject->get_lpe() == effect && effectlist_view.get_selection())
+        if (ci->get_value(columns.lperef)->lpeobject->get_lpe() == effect && effectlist_view.get_selection()) {
             effectlist_view.get_selection()->select(ci);
+            break;
+        }
     }
 }
 
