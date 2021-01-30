@@ -21,6 +21,8 @@
 #include "document.h"
 
 #include "desktop.h"
+#include "desktop-style.h"
+#include "svg/svg.h"
 
 #include "text-tag-attributes.h"
 #include "text-editing.h"
@@ -640,10 +642,17 @@ bool SPFlowtext::has_internal_frame() const
 SPItem *create_flowtext_with_internal_frame (SPDesktop *desktop, Geom::Point p0, Geom::Point p1)
 {
     SPDocument *doc = desktop->getDocument();
+    auto const parent = dynamic_cast<SPItem *>(desktop->currentLayer());
+    assert(parent);
 
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
     Inkscape::XML::Node *root_repr = xml_doc->createElement("svg:flowRoot");
     root_repr->setAttribute("xml:space", "preserve"); // we preserve spaces in the text objects we create
+    root_repr->setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(parent->i2doc_affine().inverse()));
+
+    /* Set style */
+    sp_desktop_apply_style_tool(desktop, root_repr, "/tools/text", true);
+
     SPItem *ft_item = dynamic_cast<SPItem *>(desktop->currentLayer()->appendChildRepr(root_repr));
     g_assert(ft_item != nullptr);
     SPObject *root_object = doc->getObjectByRepr(root_repr);
@@ -671,10 +680,7 @@ SPItem *create_flowtext_with_internal_frame (SPDesktop *desktop, Geom::Point p0,
     Geom::Coord const w  = x1 - x0;
     Geom::Coord const h  = y1 - y0;
 
-    SPItem *item = dynamic_cast<SPItem *>(desktop->currentLayer());
-    g_assert(item != nullptr);
     rect->setPosition(x0, y0, w, h);
-    rect->doWriteTransform(item->i2doc_affine().inverse(), nullptr, true);
     rect->updateRepr();
 
     Inkscape::XML::Node *para_repr = xml_doc->createElement("svg:flowPara");

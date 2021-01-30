@@ -639,25 +639,11 @@ bool TextTool::root_handler(GdkEvent* event) {
                             SPItem *text = create_text_with_rectangle (desktop, this->p0, p1);
 
                             desktop->getSelection()->set(text);
-                            SPCSSAttr *css = sp_repr_css_attr(text->getRepr(), "style" );
-                            sp_repr_css_attr_unref(css);
 
                         } else {
                             // SVG 1.2 text
 
                             SPItem *ft = create_flowtext_with_internal_frame (desktop, this->p0, p1);
-
-                            /* Set style */
-                            sp_desktop_apply_style_tool(desktop, ft->getRepr(), "/tools/text", true);
-                            SPCSSAttr *css = sp_repr_css_attr(ft->getRepr(), "style" );
-                            Geom::Affine const local(ft->i2doc_affine());
-                            double const ex(local.descrim());
-                            if ( (ex != 0.0) && (ex != 1.0) ) {
-                                sp_css_attr_scale(css, 1/ex);
-                            }
-                            ft->setCSS(css,"style");
-                            sp_repr_css_attr_unref(css);
-                            ft->updateRepr();
 
                             desktop->getSelection()->set(ft);
                         }

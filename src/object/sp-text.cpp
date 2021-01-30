@@ -1223,10 +1223,13 @@ SPItem *create_text_with_inline_size (SPDesktop *desktop, Geom::Point p0, Geom::
 SPItem *create_text_with_rectangle (SPDesktop *desktop, Geom::Point p0, Geom::Point p1)
 {
     SPDocument *doc = desktop->getDocument();
+    auto const parent = dynamic_cast<SPItem *>(desktop->currentLayer());
+    assert(parent);
 
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
     Inkscape::XML::Node *text_repr = xml_doc->createElement("svg:text");
     text_repr->setAttribute("xml:space", "preserve"); // we preserve spaces in the text objects we create
+    text_repr->setAttributeOrRemoveIfEmpty("transform", sp_svg_transform_write(parent->i2doc_affine().inverse()));
 
     SPText *text_object = dynamic_cast<SPText *>(desktop->currentLayer()->appendChildRepr(text_repr));
     g_assert(text_object != nullptr);
@@ -1234,10 +1237,6 @@ SPItem *create_text_with_rectangle (SPDesktop *desktop, Geom::Point p0, Geom::Po
     // Invert coordinate system?
     p0 *= desktop->dt2doc();
     p1 *= desktop->dt2doc();
-
-    // Pixels to user units
-    p0 *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
-    p1 *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
 
     // Create rectangle
     Inkscape::XML::Node *rect_repr = xml_doc->createElement("svg:rect");
@@ -1260,12 +1259,6 @@ SPItem *create_text_with_rectangle (SPDesktop *desktop, Geom::Point p0, Geom::Po
     // Apply desktop style (do before adding "shape-inside").
     sp_desktop_apply_style_tool(desktop, text_repr, "/tools/text", true);
     SPCSSAttr *css = sp_repr_css_attr(text_repr, "style" );
-    Geom::Affine const local(text_object->i2doc_affine());
-    double const ex(local.descrim());
-    if ( (ex != 0.0) && (ex != 1.0) ) {
-        sp_css_attr_scale(css, 1/ex);
-    }
-
     sp_repr_css_set_property (css, "white-space", "pre");  // Respect new lines.
 
     // Link rectangle to text
