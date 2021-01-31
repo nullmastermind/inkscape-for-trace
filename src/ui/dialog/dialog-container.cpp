@@ -121,7 +121,6 @@ DialogBase *DialogContainer::dialog_factory(unsigned int code)
         return nullptr;
     }
 
-// g_warning("factory %p %d", this, code);
     switch (code) {
         case SP_VERB_DIALOG_ALIGN_DISTRIBUTE:
             return &Inkscape::UI::Dialog::AlignAndDistribute::getInstance();
