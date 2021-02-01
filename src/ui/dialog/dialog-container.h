@@ -48,7 +48,7 @@ class DialogContainer : public Gtk::Box
 
 public:
     DialogContainer();
-    ~DialogContainer();
+    ~DialogContainer() override;
 
     // Columns-related functions
     DialogMultipaned *get_columns() { return columns; }
