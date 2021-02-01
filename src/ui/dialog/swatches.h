@@ -47,7 +47,6 @@ public:
     static SwatchesPanel& getInstance();
 
     void update() override;
-    virtual SPDesktop* getDesktop() {return _currentDesktop;}
 
     virtual int getSelectedIndex() {return _currentIndex;} // temporary
 
