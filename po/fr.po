@@ -9322,7 +9322,7 @@ msgstr "Créer une transition progressive entre deux sous-chemins d'un chemin"
 
 #: ../src/live_effects/effect.cpp:243
 msgid "Hatches (rough)"
- msgstr "Hachures"
+msgstr "Hachures"
 
 #: ../src/live_effects/effect.cpp:247
 msgid "Fill the object with adjustable hatching"
