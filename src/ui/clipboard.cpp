@@ -489,7 +489,7 @@ bool ClipboardManagerImpl::paste(SPDesktop *desktop, bool in_place)
 
     // _copySelection() has put all items in groups, now ungroup them (preserves transform
     // relationships of clones, text-on-path, etc.)
-    desktop->selection->ungroup();
+    desktop->selection->ungroup(true);
 
     return true;
 }

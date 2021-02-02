@@ -371,7 +371,7 @@ public:
     void cloneOriginalPathLPE(bool allow_transforms = false);
     Inkscape::XML::Node* group();
     void popFromGroup();
-    void ungroup();
+    void ungroup(bool skip_undo = false);
     
     //z-order management
     //in selection-chemistry.cpp

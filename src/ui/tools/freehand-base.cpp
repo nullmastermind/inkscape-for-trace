@@ -518,7 +518,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
                 Inkscape::UI::ClipboardManager *cm = Inkscape::UI::ClipboardManager::get();
                 if(cm->paste(desktop,true)){
                     SPItem * pasted_clipboard = dc->selection->singleItem();
-                    dc->selection->toCurves();
+                    dc->selection->toCurves(true);
                     pasted_clipboard = dc->selection->singleItem();
                     if(pasted_clipboard){
                         Inkscape::XML::Node *pasted_clipboard_root = pasted_clipboard->getRepr();

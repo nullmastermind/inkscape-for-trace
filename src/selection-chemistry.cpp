@@ -919,7 +919,7 @@ static void ungroup_impl(ObjectSet *set)
     set->setList(new_select);
 }
 
-void ObjectSet::ungroup()
+void ObjectSet::ungroup(bool skip_undo)
 {
     if (isEmpty()) {
         if(desktop())
@@ -934,7 +934,8 @@ void ObjectSet::ungroup()
     }
 
     ungroup_impl(this);
-    if(document())
+
+    if(document() && !skip_undo)
         DocumentUndo::done(document(), SP_VERB_SELECTION_UNGROUP,
                        _("Ungroup"));
 }
