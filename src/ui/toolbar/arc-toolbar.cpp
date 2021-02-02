@@ -42,7 +42,6 @@
 #include "object/sp-namedview.h"
 
 #include "ui/icon-names.h"
-#include "ui/pref-pusher.h"
 #include "ui/tools/arc-tool.h"
 #include "ui/uxmanager.h"
 #include "ui/widget/canvas.h"
