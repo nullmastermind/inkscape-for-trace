@@ -1971,7 +1971,7 @@ SPIFilter::read( gchar const *str ) {
 const Glib::ustring SPIFilter::get_value() const
 {
     if (this->inherit) return Glib::ustring("inherit");
-    if (this->href) return this->href->getURI()->cssStr();
+    if (this->href->getURI()) return this->href->getURI()->cssStr();
     return Glib::ustring("");
 }
 
