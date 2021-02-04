@@ -7,13 +7,13 @@
 # Alexander Shopov <ash@contact.bg>, 2006.
 # Victor Dachev <vdachev@gmail.com>, 2006, 2007.
 # GIMP <vdachev@gmail.com>, 2007.
-# Стоян Димитров <stoyanster от gmail>, 2019.
+# Стоян Димитров <stoyanster от gmail>, 2019-2021
 msgid ""
 msgstr ""
 "Project-Id-Version: bg\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2019-12-02 14:57+0100\n"
-"PO-Revision-Date: 2019-12-05 16:08+0200\n"
+"PO-Revision-Date: 2021-02-04 10:00+0200\n"
 "Last-Translator: GIMP <vdachev@gmail.com>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
 "Language: bg\n"
@@ -21,7 +21,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.2.3\n"
 
 #: ../share/filters/filters.svg.h:2
 msgid "Smart Jelly"
@@ -3971,7 +3970,7 @@ msgstr ""
 
 #: ../share/templates/templates.h:1
 msgid "A4 leaflet 3-fold"
-msgstr "брошура A4 leaflet 3-fold"
+msgstr "брошура A4 с 3 сгъвки"
 
 #: ../share/templates/templates.h:1
 msgid "CD Label 120mmx120mm "
@@ -6831,7 +6830,7 @@ msgstr ""
 #: ../src/extension/internal/filter/morphology.h:167
 #: ../share/extensions/path_mesh_m2p.inx:10
 msgid "Outline"
-msgstr ""
+msgstr "Контур"
 
 #: ../src/extension/internal/filter/morphology.h:171
 msgid "Fill image"
@@ -6913,7 +6912,7 @@ msgstr ""
 
 #: ../src/extension/internal/filter/morphology.h:207
 msgid "Adds a colorizable outline"
-msgstr ""
+msgstr "Добавя контур, който може да бъде оцветен"
 
 #: ../src/extension/internal/filter/overlays.h:57
 msgid "Noise Fill"
@@ -15126,23 +15125,20 @@ msgid "Fill and Stroke"
 msgstr "Запълване и очертание"
 
 #: ../src/ui/contextmenu.cpp:391
-#, fuzzy
 msgid "Fill Color"
-msgstr "Плътен цвят"
+msgstr "Цвят на запълване"
 
 #: ../src/ui/contextmenu.cpp:398
-#, fuzzy
 msgid "Stroke Color"
-msgstr "Задаване цвят на линията"
+msgstr "Цвят очертание"
 
 #: ../src/ui/contextmenu.cpp:405
 msgid "Stroke Style"
-msgstr ""
+msgstr "Стил на очертание"
 
 #: ../src/ui/contextmenu.cpp:412
-#, fuzzy
 msgid "Object Type"
-msgstr "Обект"
+msgstr "Вид на обект"
 
 #: ../src/ui/contextmenu.cpp:419
 msgid "_Move to Layer..."
@@ -15161,19 +15157,16 @@ msgid "Release Mask"
 msgstr "Освобждаване на маска"
 
 #: ../src/ui/contextmenu.cpp:474
-#, fuzzy
 msgid "Create Clip G_roup"
-msgstr "Създаване на _клонинг"
+msgstr "Създаване на група за _изрязване"
 
 #: ../src/ui/contextmenu.cpp:481
-#, fuzzy
 msgid "Set Cl_ip"
-msgstr "Премахване на запълване"
+msgstr "Задаване на _изрязване"
 
 #: ../src/ui/contextmenu.cpp:492
-#, fuzzy
 msgid "Release C_lip"
-msgstr "_Освобождаване"
+msgstr "Отменяне на _изрязване"
 
 #: ../src/ui/contextmenu.cpp:503 ../src/verbs.cpp:2667
 msgid "_Group"
@@ -15233,7 +15226,7 @@ msgstr "_Запълване и очертание…"
 
 #: ../src/ui/contextmenu.cpp:909 ../src/verbs.cpp:3068
 msgid "_Text and Font..."
-msgstr "_Текст и шрифтове…"
+msgstr "_Текст и шрифт…"
 
 #: ../src/ui/contextmenu.cpp:916 ../src/verbs.cpp:3078
 msgid "Check Spellin_g..."
@@ -15583,7 +15576,7 @@ msgstr "Най-малкия обект"
 #: ../src/widgets/desktop-widget.cpp:1985
 #: ../share/extensions/voronoi2svg.inx:15
 msgid "Page"
-msgstr "Документа"
+msgstr "Документ"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1073
 msgid "Selection Area"
@@ -16813,7 +16806,7 @@ msgstr "<b>Разни</b>"
 
 #: ../src/ui/dialog/document-properties.cpp:537 ../src/verbs.cpp:3167
 msgid "Link Color Profile"
-msgstr "Свързване с цветен профил"
+msgstr "Свързване с цветови профил"
 
 #: ../src/ui/dialog/document-properties.cpp:604
 #: ../src/ui/dialog/document-properties.cpp:614
@@ -16827,27 +16820,27 @@ msgstr "_Премахване"
 
 #: ../src/ui/dialog/document-properties.cpp:656
 msgid "Remove linked color profile"
-msgstr "Премахване на свързания цветен профил"
+msgstr "Премахване на свързания цветови профил"
 
 #: ../src/ui/dialog/document-properties.cpp:675
 msgid "<b>Linked Color Profiles:</b>"
-msgstr ""
+msgstr "<b>Свързани цветови профили:</b>"
 
 #: ../src/ui/dialog/document-properties.cpp:677
 msgid "<b>Available Color Profiles:</b>"
-msgstr ""
+msgstr "<b>Достъпни цветови профили:</b>"
 
 #: ../src/ui/dialog/document-properties.cpp:679
 msgid "Link Profile"
-msgstr ""
+msgstr "Свърсване с профил"
 
 #: ../src/ui/dialog/document-properties.cpp:682
 msgid "Unlink Profile"
-msgstr ""
+msgstr "Премахване на профил"
 
 #: ../src/ui/dialog/document-properties.cpp:741
 msgid "Profile Name"
-msgstr ""
+msgstr "Име на профила"
 
 #: ../src/ui/dialog/document-properties.cpp:776
 msgid "External scripts"
@@ -17270,7 +17263,7 @@ msgstr "_Очертание"
 
 #: ../src/ui/dialog/fill-and-stroke.cpp:66
 msgid "Stroke st_yle"
-msgstr "_Стил на очертанието"
+msgstr "_Стил на очертание"
 
 #. TRANSLATORS: this dialog is accessible via menu Filters - Filter editor
 #: ../src/ui/dialog/filter-effects-dialog.cpp:513
@@ -19671,73 +19664,80 @@ msgstr "Възли"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:375
 msgid "Path outline"
-msgstr ""
+msgstr "Контури на пътеки"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:376
 msgid "Path outline color"
-msgstr ""
+msgstr "Цвят на контура на пътеките"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:377
 msgid "Selects the color used for showing the path outline"
-msgstr ""
+msgstr "Избира цвета, в който се показва контура на пътека"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:378
 msgid "Always show outline"
-msgstr ""
+msgstr "Показване на контур"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:379
 msgid "Show outlines for all paths, not only invisible paths"
-msgstr ""
+msgstr "Показва контури на всички пътеки не само на видимите"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:380
 msgid "Update outline when dragging nodes"
-msgstr ""
+msgstr "Обновяване на контури при влачене на възли"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:381
 msgid ""
 "Update the outline when dragging or transforming nodes; if this is off, the "
 "outline will only update when completing a drag"
 msgstr ""
+"Контурите се обновяват при влачене или трансформиране на възли. Ако е "
+"изключено контурите ще бъдат обновени след края на операцията"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:382
 msgid "Update paths when dragging nodes"
-msgstr ""
+msgstr "Обновяване на пътеки при влачене на възли"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:383
 msgid ""
 "Update paths when dragging or transforming nodes; if this is off, paths will "
 "only be updated when completing a drag"
 msgstr ""
+"Пътеките се обновяват при влачене или трансформиране на възли. Ако е "
+"изключено пътеките ще бъдат обновени след края на операцията"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:384
 msgid "Show path direction on outlines"
-msgstr ""
+msgstr "Показване посоката на пътеките върху контура"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:385
 msgid ""
 "Visualize the direction of selected paths by drawing small arrows in the "
 "middle of each outline segment"
 msgstr ""
+"Изобразява посоката на избраната пътека чрез калка стрелка в средата на "
+"всеки сегмент на контура"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:386
 msgid "Show temporary path outline"
-msgstr ""
+msgstr "Временно показване контур на пътеки"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:387
 msgid "When hovering over a path, briefly flash its outline"
-msgstr ""
+msgstr "При посочване на пътеки за кратко се показвт техните контури"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:388
 msgid "Show temporary outline for selected paths"
-msgstr ""
+msgstr "Временно показване контур при избиране на пътеки"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:389
 msgid "Show temporary outline even when a path is selected for editing"
 msgstr ""
+"Временно показване контур даже и когато пътеките са избрани за редактиране"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:391
 msgid "_Flash time:"
-msgstr ""
+msgstr "_Времетраене:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:391
 msgid ""
@@ -19745,28 +19745,32 @@ msgid ""
 "milliseconds); specify 0 to have the outline shown until mouse leaves the "
 "path"
 msgstr ""
+"Определя колко дълго (в милисекунди) контурите на пътеките ще бъдат видими "
+"след посочване. При 0 контурите ще са видими до напускане на показалеца"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:392
 msgid "Editing preferences"
-msgstr ""
+msgstr "Настройки на редакция"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:393
 msgid "Show transform handles for single nodes"
-msgstr ""
+msgstr "Манипулатори на единични възли"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:394
 msgid "Show transform handles even when only a single node is selected"
-msgstr ""
+msgstr "Показва маниуплатори даже при избран само един възел"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:395
 msgid "Deleting nodes preserves shape"
-msgstr ""
+msgstr "При изтриване на възел формата не се променя"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:396
 msgid ""
 "Move handles next to deleted nodes to resemble original shape; hold Ctrl to "
 "get the other behavior"
 msgstr ""
+"Манипулаторите на възлите в близост се наместват, така че формата да се "
+"запази. При задържане на Ctrl се получава обратното"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:399
 msgid "Tweak"
@@ -23468,7 +23472,7 @@ msgstr ""
 
 #: ../src/ui/dialog/objects.cpp:1839
 msgid "Label"
-msgstr ""
+msgstr "Етикиет"
 
 #: ../src/ui/dialog/objects.cpp:1868
 msgid "Toggle visibility of Layer, Group, or Object."
@@ -24219,13 +24223,11 @@ msgstr ""
 
 #: ../src/ui/dialog/symbols.cpp:115
 msgid "All symbol sets"
-msgstr ""
+msgstr "Всички набори от знаци"
 
 #: ../src/ui/dialog/symbols.cpp:129
-#, fuzzy
-#| msgid "Symbol"
 msgid "Symbol set"
-msgstr "Символ"
+msgstr "Нобор от знаци"
 
 #: ../src/ui/dialog/symbols.cpp:158
 msgid "Return to start search."
@@ -32859,15 +32861,15 @@ msgstr "Показва всички във всички слоеве"
 
 #: ../src/verbs.cpp:3168
 msgid "Link an ICC color profile"
-msgstr "Свързване на цветен профил на ICC"
+msgstr "Свързване на цветови профил на ICC"
 
 #: ../src/verbs.cpp:3169
 msgid "Remove Color Profile"
-msgstr "Премахване на цветен профил"
+msgstr "Премахване на цветови профил"
 
 #: ../src/verbs.cpp:3170
 msgid "Remove a linked ICC color profile"
-msgstr "Премахва свързания цветен профил на ICC"
+msgstr "Премахва свързания цветови профил на ICC"
 
 #: ../src/verbs.cpp:3172
 #, fuzzy
@@ -32957,9 +32959,9 @@ msgid ""
 "<b>Welcome to Inkscape!</b> Use shape or freehand tools to create objects; "
 "use selector (arrow) to move or transform them."
 msgstr ""
-"<b>Добре дошли в Inkscape!</b> Използвайте примитив или рисувайте наръка, "
-"така създавате обекти; използвайте инструмента за избиране (стрелка), за да "
-"ги местите и променяте формите им"
+"<b>Добре дошли в Inkscape!</b> Използвайте фигура или рисувайте наръка, така "
+"създавате обекти; използвайте инструмента за избиране (стрелка), за да ги "
+"местите и променяте формите им"
 
 #: ../src/widgets/desktop-widget.cpp:612
 msgid "Rotation. (Also Ctrl+Shift+Scroll)"
@@ -41986,208 +41988,3 @@ msgstr ""
 #: ../share/ui/units.xml:99
 msgid "Half of font height"
 msgstr ""
-
-#, fuzzy
-#~ msgid "Latin 1"
-#~ msgstr "Начало:"
-
-#~ msgid "http://wiki.inkscape.org/wiki/index.php/Release_notes/1.0"
-#~ msgstr "http://wiki.inkscape.org/wiki/index.php/Release_notes/1.0"
-
-#~ msgid "This extension overwrites the current document"
-#~ msgstr "Разширението ще презапише текущия документ"
-
-#~ msgid "Seamless Pattern Procedural"
-#~ msgstr "Процедурна безшевна шарка"
-
-#~ msgid "Import Clip Art"
-#~ msgstr "Внасяне на графична колекция"
-
-#, fuzzy
-#~ msgid "Open Clip Art Library _Server Name:"
-#~ msgstr "Име на сървъра на Open Clip Art Library:"
-
-#, fuzzy
-#~ msgid ""
-#~ "The server name of the Open Clip Art Library webdav server; it's used by "
-#~ "the Import and Export to OCAL function"
-#~ msgstr ""
-#~ "Име на Open Clip Art Library webdav сървъра. Използва се от OCAL "
-#~ "функцията за внасяне и изнасяне."
-
-#, fuzzy
-#~ msgid "Open Clip Art Library _Username:"
-#~ msgstr "Потребителско име за Open Clip Art Library:"
-
-#, fuzzy
-#~ msgid "The username used to log into Open Clip Art Library"
-#~ msgstr "Потребителското име за вход в Open Clip Art Library."
-
-#, fuzzy
-#~ msgid "Open Clip Art Library _Password:"
-#~ msgstr "Парола за Open Clip Art Library:"
-
-#, fuzzy
-#~ msgid "The password used to log into Open Clip Art Library"
-#~ msgstr "Паролата за вход в Open Clip Art Library."
-
-#, fuzzy
-#~ msgid "Open Clip Art"
-#~ msgstr "Вход за Open Clip Art"
-
-#~ msgid "no-id"
-#~ msgstr "no-id"
-
-#, fuzzy
-#~ msgid "Downloading image..."
-#~ msgstr "Обръщане на пътеките..."
-
-#, fuzzy
-#~ msgid "Could not download image"
-#~ msgstr "Не бъде извлечено във файловото име %s.\n"
-
-#, fuzzy
-#~ msgid "Could not download thumbnail file"
-#~ msgstr "Не бъде извлечено във файловото име %s.\n"
-
-#, fuzzy
-#~ msgid "No description"
-#~ msgstr "Няма описание"
-
-#, fuzzy
-#~ msgid "Searching clipart..."
-#~ msgstr "Обръщане на пътеките..."
-
-#, fuzzy
-#~ msgid "Could not connect to the Open Clip Art Library"
-#~ msgstr "Изнасяне на документа в Open Clip Art Library"
-
-#, fuzzy
-#~ msgid "Could not parse search results"
-#~ msgstr "Не могат да бъдат обработени SVG данни"
-
-#~ msgid "Search"
-#~ msgstr "Търсене"
-
-#~ msgid "Import Clip Art..."
-#~ msgstr "Внасяне на _графична колекция…"
-
-#~ msgid "Import clipart from Open Clip Art Library"
-#~ msgstr "Внася графична колекция от библиотеката Open Clip Art"
-
-#~ msgid "  location: "
-#~ msgstr "  местоположение: "
-
-#~ msgid "the extension is designed for Windows only."
-#~ msgstr "разширението е предназначено само за Windows."
-
-#~ msgid "Extension \""
-#~ msgstr "Разширението „"
-
-#, fuzzy
-#~ msgid "Bamum. "
-#~ msgstr "Средно"
-
-#~ msgctxt "Path handle tip"
-#~ msgid "<b>%s</b>: "
-#~ msgstr "<b>%s</b>: "
-
-#~ msgctxt "Path node tip"
-#~ msgid "<b>%s</b>: "
-#~ msgstr "<b>%s</b>: "
-
-#, fuzzy
-#~ msgid "Float parameter"
-#~ msgstr "<b>Параметри на ефекта</b>"
-
-#, fuzzy
-#~ msgid "Stack step:"
-#~ msgstr "Сканирания в пакета"
-
-#, fuzzy
-#~ msgid "Point param:"
-#~ msgstr "пантаграм"
-
-#, fuzzy
-#~ msgid "Path param:"
-#~ msgstr "пантаграм"
-
-#, fuzzy
-#~ msgid "Label:"
-#~ msgstr "Етикет:"
-
-#, fuzzy
-#~ msgid "Text label attached to the path"
-#~ msgstr "Пътека за поставяне по скелетната"
-
-#~ msgid "Pixel"
-#~ msgstr "Пиксел"
-
-#~ msgid "Millimeter"
-#~ msgstr "Милиметър"
-
-#~ msgid "Centimeter"
-#~ msgstr "Сантиметър"
-
-#~ msgid "Inch"
-#~ msgstr "Инч"
-
-#~ msgid "Em square"
-#~ msgstr "Em квадрат"
-
-#, fuzzy
-#~ msgid "Text units"
-#~ msgstr "Входящ текст"
-
-#~ msgid "nodeAsInXMLdialogTooltip|Delete node"
-#~ msgstr "Изтрива възела"
-
-#~ msgid "nodeAsInXMLinHistoryDialog|Delete node"
-#~ msgstr "Изтрит възел"
-
-#~ msgid "an ID was not defined for it."
-#~ msgstr "не е зададено ID."
-
-#~ msgid "there was no name defined for it."
-#~ msgstr "не е зададено име."
-
-#, fuzzy
-#~ msgid "Text size unit type:"
-#~ msgstr "Текст: промяна стила на шрифта"
-
-#~ msgid "Path: "
-#~ msgstr "Пътека: "
-
-#~ msgid "By: "
-#~ msgstr "От: "
-
-#, fuzzy
-#~ msgid "Show outer style"
-#~ msgstr "Плътност"
-
-#, fuzzy
-#~ msgid "Line:"
-#~ msgstr "Линия"
-
-#, fuzzy
-#~ msgid "Unset line height"
-#~ msgstr "Подравняване редовете надясно"
-
-#~ msgid "Adaptive"
-#~ msgstr "Адаптивен"
-
-#, fuzzy
-#~ msgid "Adjustable ☠"
-#~ msgstr "просто крива"
-
-#, fuzzy
-#~ msgid "Line Spacing Mode"
-#~ msgstr "Междуредие:"
-
-#, fuzzy
-#~ msgid "Text: Change line spacing mode"
-#~ msgstr "Текст: промяна на ориентацията"
-
-#, fuzzy
-#~ msgid "Text: Unset line height."
-#~ msgstr "Текст: промяна на равняването"
