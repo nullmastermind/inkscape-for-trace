@@ -825,13 +825,13 @@ Gtk::Box* SvgFontsDialog::glyphs_tab(){
     glyph_from_path_button.set_label(_("Get curves from selection..."));
     glyph_from_path_button.signal_clicked().connect(sigc::mem_fun(*this, &SvgFontsDialog::set_glyph_description_from_selected_path));
 
-    dynamic_cast<Gtk::CellRendererText*>( _GlyphsList.get_column_cell_renderer(0))->signal_edited().connect(
+    static_cast<Gtk::CellRendererText*>( _GlyphsList.get_column_cell_renderer(0))->signal_edited().connect(
         sigc::mem_fun(*this, &SvgFontsDialog::glyph_name_edit));
 
-    dynamic_cast<Gtk::CellRendererText*>( _GlyphsList.get_column_cell_renderer(1))->signal_edited().connect(
+    static_cast<Gtk::CellRendererText*>( _GlyphsList.get_column_cell_renderer(1))->signal_edited().connect(
         sigc::mem_fun(*this, &SvgFontsDialog::glyph_unicode_edit));
 
-    dynamic_cast<Gtk::CellRendererText*>( _GlyphsList.get_column_cell_renderer(2))->signal_edited().connect(
+    static_cast<Gtk::CellRendererText*>( _GlyphsList.get_column_cell_renderer(2))->signal_edited().connect(
         sigc::mem_fun(*this, &SvgFontsDialog::glyph_advance_edit));
 
     _glyphs_observer.signal_changed().connect(sigc::mem_fun(*this, &SvgFontsDialog::update_glyphs));

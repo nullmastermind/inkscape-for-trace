@@ -383,7 +383,9 @@ void ClipboardManagerImpl::copySymbol(Inkscape::XML::Node* symbol, gchar const* 
     SPObject *cmobj = _clipboardSPDoc->getObjectByRepr(repr);
     if (cmobj && !user_symbol) { // convert only stock symbols
         if (!Geom::are_near(scale_units, 1.0, Geom::EPSILON)) {
-            dynamic_cast<SPGroup *>(cmobj)->scaleChildItemsRec(
+            auto group = dynamic_cast<SPGroup *>(cmobj);
+            assert(group);
+            group->scaleChildItemsRec(
                 Geom::Scale(scale_units), Geom::Point(0, SP_ACTIVE_DESKTOP->getDocument()->getHeight().value("px")),
                 false);
         }

@@ -644,7 +644,7 @@ void FileSaveDialogImplGtk::fileNameChanged() {
     Glib::ustring::size_type pos = name.rfind('.');
     if ( pos == Glib::ustring::npos ) return;
     Glib::ustring ext = name.substr( pos ).casefold();
-    if (extension && Glib::ustring(dynamic_cast<Inkscape::Extension::Output *>(extension)->get_extension()).casefold() == ext ) return;
+    if (extension && Glib::ustring(static_cast<Inkscape::Extension::Output *>(extension)->get_extension()).casefold() == ext ) return;
     if (knownExtensions.find(ext) == knownExtensions.end()) return;
     fromCB = true;
     fileTypeComboBox.set_active_text(knownExtensions[ext]->get_filetypename(true));

@@ -478,7 +478,7 @@ private:
 
             for(int i = 0; i < cols; ++i) {
                 _tree.append_column_numeric_editable("", _columns.cols[i], "%.2f");
-                dynamic_cast<Gtk::CellRendererText*>(
+                static_cast<Gtk::CellRendererText*>(
                     _tree.get_column_cell_renderer(i))->signal_edited().connect(
                         sigc::mem_fun(*this, &MatrixAttr::rebind));
             }
@@ -575,8 +575,10 @@ public:
         const Widget* w = get_child();
         if(w == &_label)
             return "";
-        else
-            return dynamic_cast<const AttrWidget*>(w)->get_as_attribute();
+        if (auto attrw = dynamic_cast<const AttrWidget *>(w))
+            return attrw->get_as_attribute();
+        g_assert_not_reached();
+        return "";
     }
 
     void clear_store()
@@ -2588,7 +2590,7 @@ void FilterEffectsDialog::PrimitiveList::on_drag_end(const Glib::RefPtr<Gdk::Dra
 bool FilterEffectsDialog::PrimitiveList::on_scroll_timeout()
 {
     if(_autoscroll_y) {
-        auto a = dynamic_cast<Gtk::ScrolledWindow*>(get_parent())->get_vadjustment();
+        auto a = static_cast<Gtk::ScrolledWindow*>(get_parent())->get_vadjustment();
         double v = a->get_value() + _autoscroll_y;
 
 	if(v < 0)
@@ -2603,7 +2605,7 @@ bool FilterEffectsDialog::PrimitiveList::on_scroll_timeout()
 
 
     if(_autoscroll_x) {
-        auto a_h = dynamic_cast<Gtk::ScrolledWindow*>(get_parent())->get_hadjustment();
+        auto a_h = static_cast<Gtk::ScrolledWindow*>(get_parent())->get_hadjustment();
         double h = a_h->get_value() + _autoscroll_x;
 
 	if(h < 0)

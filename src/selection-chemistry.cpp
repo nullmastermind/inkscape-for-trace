@@ -672,7 +672,8 @@ static void sp_edit_select_all_full(SPDesktop *dt, bool force_all_layers, bool i
 
     Inkscape::Selection *selection = dt->getSelection();
 
-    g_return_if_fail(dynamic_cast<SPGroup *>(dt->currentLayer()));
+    auto layer = dynamic_cast<SPGroup *>(dt->currentLayer());
+    g_return_if_fail(layer);
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     PrefsSelectionContext inlayer = (PrefsSelectionContext) prefs->getInt("/options/kbselection/inlayer", PREFS_SELECTION_LAYER);
@@ -691,11 +692,10 @@ static void sp_edit_select_all_full(SPDesktop *dt, bool force_all_layers, bool i
 
     switch (inlayer) {
         case PREFS_SELECTION_LAYER: {
-        if ( (onlysensitive && dynamic_cast<SPItem *>(dt->currentLayer())->isLocked()) ||
-             (onlyvisible && dt->itemIsHidden(dynamic_cast<SPItem *>(dt->currentLayer()))) )
+        if ((onlysensitive && layer->isLocked()) || (onlyvisible && dt->itemIsHidden(layer)))
         return;
 
-        std::vector<SPItem*> all_items = sp_item_group_item_list(dynamic_cast<SPGroup *>(dt->currentLayer()));
+        std::vector<SPItem*> all_items = sp_item_group_item_list(layer);
 
         for (std::vector<SPItem*>::const_reverse_iterator i=all_items.rbegin();i!=all_items.rend();++i) {
             SPItem *item = *i;
@@ -784,7 +784,9 @@ Inkscape::XML::Node* ObjectSet::group() {
             Geom::Affine item_t(Geom::identity());
             if (t_str)
                 sp_svg_transform_read(t_str, &item_t);
-            item_t *= dynamic_cast<SPItem *>(doc->getObjectByRepr(current->parent()))->i2doc_affine();
+            auto parent_item = dynamic_cast<SPItem *>(doc->getObjectByRepr(current->parent()));
+            assert(parent_item);
+            item_t *= parent_item->i2doc_affine();
             // FIXME: when moving both clone and original from a transformed group (either by
             // grouping into another parent, or by cut/paste) the transform from the original's
             // parent becomes embedded into original itself, and this affects its clones. Fix
@@ -880,8 +882,8 @@ static void ungroup_impl(ObjectSet *set)
         SPUse *use = dynamic_cast<SPUse *>(item);
 
         SPItem *original = use;
-        while (dynamic_cast<SPUse *>(original)) {
-            original = dynamic_cast<SPUse *>(original)->get_original();
+        while (auto orig_use = dynamic_cast<SPUse *>(original)) {
+            original = orig_use->get_original();
         }
 
         if (groups.find(original) !=  groups.end()) {
@@ -1662,10 +1664,12 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
                                              && includes( sp_textpath_get_path_item(dynamic_cast<SPTextPath *>(item->firstChild())) ));
 
         // ...both a flowtext and its frame?
-        bool transform_flowtext_with_frame = (dynamic_cast<SPFlowtext *>(item) && includes( dynamic_cast<SPFlowtext *>(item)->get_frame(nullptr))); // (only the first frame is checked so far)
+        auto flowtext = dynamic_cast<SPFlowtext *>(item);
+        bool transform_flowtext_with_frame = flowtext && includes(flowtext->get_frame(nullptr)); // (only the first frame is checked so far)
 
         // ...both an offset and its source?
-        bool transform_offset_with_source = (dynamic_cast<SPOffset *>(item) && dynamic_cast<SPOffset *>(item)->sourceHref) && includes( sp_offset_get_source(dynamic_cast<SPOffset *>(item)) );
+        auto offset = dynamic_cast<SPOffset *>(item);
+        bool transform_offset_with_source = offset && offset->sourceHref && includes(sp_offset_get_source(offset));
 
         // If we're moving a connector, we want to detach it
         // from shapes that aren't part of the selection, but
@@ -2058,20 +2062,23 @@ std::vector<SPItem*> sp_get_same_fill_or_stroke_color(SPItem *sel, std::vector<S
                 SPPaintServer *iter_server =
                     (type == SP_FILL_COLOR) ? iter->style->getFillPaintServer() : iter->style->getStrokePaintServer();
 
-                if ((dynamic_cast<SPLinearGradient *>(sel_server) || dynamic_cast<SPRadialGradient *>(sel_server) ||
-                     (dynamic_cast<SPGradient *>(sel_server) && dynamic_cast<SPGradient *>(sel_server)->getVector()->isSwatch()))
-                    &&
-                    (dynamic_cast<SPLinearGradient *>(iter_server) || dynamic_cast<SPRadialGradient *>(iter_server) ||
-                     (dynamic_cast<SPGradient *>(iter_server) && dynamic_cast<SPGradient *>(iter_server)->getVector()->isSwatch()))) {
-                    SPGradient *sel_vector = dynamic_cast<SPGradient *>(sel_server)->getVector();
-                    SPGradient *iter_vector = dynamic_cast<SPGradient *>(iter_server)->getVector();
+                SPGradient *sel_gradient, *iter_gradient;
+                SPPattern *sel_pattern, *iter_pattern;
+
+                if ((sel_gradient = dynamic_cast<SPGradient *>(sel_server)) &&
+                    (iter_gradient = dynamic_cast<SPGradient *>(iter_server)) &&
+                    sel_gradient->getVector()->isSwatch() && //
+                    iter_gradient->getVector()->isSwatch()) {
+                    SPGradient *sel_vector = sel_gradient->getVector();
+                    SPGradient *iter_vector = iter_gradient->getVector();
                     if (sel_vector == iter_vector) {
                         match = true;
                     }
 
-                } else if (dynamic_cast<SPPattern *>(sel_server) && dynamic_cast<SPPattern *>(iter_server)) {
-                    SPPattern *sel_pat = dynamic_cast<SPPattern *>(sel_server)->rootPattern();
-                    SPPattern *iter_pat = dynamic_cast<SPPattern *>(iter_server)->rootPattern();
+                } else if ((sel_pattern = dynamic_cast<SPPattern *>(sel_server)) &&
+                           (iter_pattern = dynamic_cast<SPPattern *>(iter_server))) {
+                    SPPattern *sel_pat = sel_pattern->rootPattern();
+                    SPPattern *iter_pat = iter_pattern->rootPattern();
                     if (sel_pat == iter_pat) {
                         match = true;
                     }

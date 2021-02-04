@@ -206,10 +206,10 @@ SpinButtonToolItem::process_tab(int increment)
 
             if(tool_item) {
                 // There are now two options that we support:
-                if(dynamic_cast<SpinButtonToolItem *>(tool_item)) {
+                if (auto sb_tool_item = dynamic_cast<SpinButtonToolItem *>(tool_item)) {
                     // (1) The tool item is a SpinButtonToolItem, in which case, we just pass
                     //     focus to its spin-button
-                    dynamic_cast<SpinButtonToolItem *>(tool_item)->grab_button_focus();
+                    sb_tool_item->grab_button_focus();
                     handled = true;
                 }
                 else if(dynamic_cast<Gtk::SpinButton *>(tool_item->get_child())) {

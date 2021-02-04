@@ -121,9 +121,9 @@ text_put_on_path()
         text = new_item; // point to the new text
     }
 
-    if (SP_IS_TEXT(text)) {
+    if (auto textitem = dynamic_cast<SPText *>(text)) {
         // Replace any new lines (including sodipodi:role="line") by spaces.
-        dynamic_cast<SPText *>(text)->remove_newlines();
+        textitem->remove_newlines();
     }
 
     Inkscape::Text::Layout const *layout = te_get_layout(text);

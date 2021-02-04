@@ -293,7 +293,7 @@ Glib::RefPtr<Gdk::Pixbuf> PaintServersDialog::get_pixbuf(SPDocument *document, G
     preview_document->getRoot()->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     preview_document->ensureUpToDate();
 
-    Geom::OptRect dbox = dynamic_cast<SPItem *>(rect)->visualBounds();
+    Geom::OptRect dbox = static_cast<SPItem *>(rect)->visualBounds();
 
     if (!dbox) {
         return pixbuf;

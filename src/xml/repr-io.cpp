@@ -922,7 +922,9 @@ void sp_repr_write_stream( Node *repr, Writer &out, gint indent_level,
 {
     switch (repr->type()) {
         case Inkscape::XML::NodeType::TEXT_NODE: {
-            if( dynamic_cast<const Inkscape::XML::TextNode *>(repr)->is_CData() ) {
+            auto textnode = dynamic_cast<const Inkscape::XML::TextNode *>(repr);
+            assert(textnode);
+            if (textnode->is_CData()) {
                 // Preserve CDATA sections, not converting '&' to &amp;, etc.
                 out.printf( "<![CDATA[%s]]>", repr->content() );
             } else {

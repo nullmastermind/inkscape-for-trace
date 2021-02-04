@@ -864,7 +864,7 @@ bool Find::item_type_match (SPItem *item)
         return (all || check_texts.get_active());
 
     } else if (dynamic_cast<SPGroup *>(item) &&
-               !dynamic_cast<SPDesktop *>(_app->get_active_view())->isLayer(item)) { // never select layers!
+               !getDesktop()->isLayer(item)) { // never select layers!
         return (all || check_groups.get_active());
 
     } else if (dynamic_cast<SPUse *>(item)) {

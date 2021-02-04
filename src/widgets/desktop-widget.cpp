@@ -1476,8 +1476,8 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
         if (GTK_IS_CONTAINER(aux_toolbox)) {
             std::vector<Gtk::Widget*> ch = Glib::wrap(GTK_CONTAINER(aux_toolbox))->get_children();
             for (auto i:ch) {
-                if (GTK_IS_CONTAINER(i->gobj())) {
-                    std::vector<Gtk::Widget*> grch = dynamic_cast<Gtk::Container*>(i)->get_children();
+                if (auto container = dynamic_cast<Gtk::Container *>(i)) {
+                    std::vector<Gtk::Widget*> grch = container->get_children();
                     for (auto j:grch) {
 
                         if (!GTK_IS_WIDGET(j->gobj())) // wasn't a widget

@@ -166,7 +166,8 @@ SPDocument *open(Extension *key, gchar const *filename)
 static void
 open_internal(Extension *in_plug, gpointer in_data)
 {
-    if (!in_plug->deactivated() && dynamic_cast<Input *>(in_plug)) {
+    auto imod = dynamic_cast<Input *>(in_plug);
+    if (imod && !imod->deactivated()) {
         gpointer *parray = (gpointer *)in_data;
         gchar const *filename = (gchar const *)parray[0];
         Input **pimod = (Input **)parray[1];
@@ -174,13 +175,13 @@ open_internal(Extension *in_plug, gpointer in_data)
         // skip all the rest if we already found a function to open it
         // since they're ordered by preference now.
         if (!*pimod) {
-            gchar const *ext = dynamic_cast<Input *>(in_plug)->get_extension();
+            gchar const *ext = imod->get_extension();
 
             gchar *filenamelower = g_utf8_strdown(filename, -1);
             gchar *extensionlower = g_utf8_strdown(ext, -1);
 
             if (g_str_has_suffix(filenamelower, extensionlower)) {
-                *pimod = dynamic_cast<Input *>(in_plug);
+                *pimod = imod;
             }
 
             g_free(filenamelower);
@@ -376,7 +377,8 @@ save(Extension *key, SPDocument *doc, gchar const *filename, bool setextension, 
 static void
 save_internal(Extension *in_plug, gpointer in_data)
 {
-    if (!in_plug->deactivated() && dynamic_cast<Output *>(in_plug)) {
+    auto omod = dynamic_cast<Output *>(in_plug);
+    if (omod && !omod->deactivated()) {
         gpointer *parray = (gpointer *)in_data;
         gchar const *filename = (gchar const *)parray[0];
         Output **pomod = (Output **)parray[1];
@@ -384,13 +386,13 @@ save_internal(Extension *in_plug, gpointer in_data)
         // skip all the rest if we already found someone to save it
         // since they're ordered by preference now.
         if (!*pomod) {
-            gchar const *ext = dynamic_cast<Output *>(in_plug)->get_extension();
+            gchar const *ext = omod->get_extension();
 
             gchar *filenamelower = g_utf8_strdown(filename, -1);
             gchar *extensionlower = g_utf8_strdown(ext, -1);
 
             if (g_str_has_suffix(filenamelower, extensionlower)) {
-                *pomod = dynamic_cast<Output *>(in_plug);
+                *pomod = omod;
             }
 
             g_free(filenamelower);
