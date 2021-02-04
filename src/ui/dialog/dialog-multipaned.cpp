@@ -120,7 +120,8 @@ bool MyHandle::on_enter_notify_event(GdkEventCrossing *crossing_event)
  * The image has a specific size set up in the constructor and will not naturally shrink/hide.
  * In conclusion, we remove it from the handle and save it into an internal reference.
  */
-void MyHandle::resize_handler(Gtk::Allocation &allocation) {
+void MyHandle::resize_handler(Gtk::Allocation &allocation)
+{
     int size = (get_orientation() == Gtk::ORIENTATION_HORIZONTAL) ? allocation.get_height() : allocation.get_width();
 
     if (_cross_size > size && HANDLE_CROSS_SIZE > size && !_child) {
@@ -184,28 +185,27 @@ DialogMultipaned::~DialogMultipaned()
 {
     // Disconnect all signals
     for_each(_connections.begin(), _connections.end(), [&](auto c) { c.disconnect(); });
-/*
-    for (std::vector<Gtk::Widget *>::iterator it = children.begin(); it != children.end();) {
-        if (dynamic_cast<DialogMultipaned *>(*it) || dynamic_cast<DialogNotebook *>(*it)) {
-            delete *it;
-        } else {
-            it++;
+    /*
+        for (std::vector<Gtk::Widget *>::iterator it = children.begin(); it != children.end();) {
+            if (dynamic_cast<DialogMultipaned *>(*it) || dynamic_cast<DialogNotebook *>(*it)) {
+                delete *it;
+            } else {
+                it++;
+            }
         }
-    }
-*/
+    */
 
     for (;;) {
-       auto it = std::find_if(children.begin(), children.end(), [](auto w) {
-          return dynamic_cast<DialogMultipaned*>(w) || dynamic_cast<DialogNotebook*>(w);
-       });
-       if (it != children.end()) {
-          // delete dialog multipanel or notebook; this action results in its removal from 'children'!
-          delete *it;
-       }
-       else {
-          // no more dialog panels
-          break;
-       }
+        auto it = std::find_if(children.begin(), children.end(), [](auto w) {
+            return dynamic_cast<DialogMultipaned *>(w) || dynamic_cast<DialogNotebook *>(w);
+        });
+        if (it != children.end()) {
+            // delete dialog multipanel or notebook; this action results in its removal from 'children'!
+            delete *it;
+        } else {
+            // no more dialog panels
+            break;
+        }
     }
 
     children.clear();
@@ -544,8 +544,8 @@ void DialogMultipaned::on_size_allocate(Gtk::Allocation &allocation)
 
         if (canvas_index >= 0) { // give remaining space to canvas element
             sizes[canvas_index] += left;
-        } else { //or, if in a sub-dialogmultipaned, give it evenly to widgets
-            
+        } else { // or, if in a sub-dialogmultipaned, give it evenly to widgets
+
             int d = 0;
             for (int i = 0; i < (int)children.size(); ++i) {
                 if (expandables[i]) {
@@ -553,11 +553,11 @@ void DialogMultipaned::on_size_allocate(Gtk::Allocation &allocation)
                 }
             }
 
-            if(d>0) {
+            if (d > 0) {
                 int idx = 0;
                 for (int i = 0; i < (int)children.size(); ++i) {
                     if (expandables[i]) {
-                        sizes[i] += (left/d);
+                        sizes[i] += (left / d);
                         if (idx < (left % d))
                             sizes[i]++;
                         idx++;

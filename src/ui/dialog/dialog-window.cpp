@@ -20,14 +20,14 @@
 #include <iostream>
 
 #include "enums.h"
-#include "inkscape.h"
 #include "inkscape-application.h"
+#include "inkscape.h"
 #include "preferences.h"
 #include "ui/dialog/dialog-base.h"
 #include "ui/dialog/dialog-container.h"
+#include "ui/dialog/dialog-manager.h"
 #include "ui/dialog/dialog-multipaned.h"
 #include "ui/dialog/dialog-notebook.h"
-#include "ui/dialog/dialog-manager.h"
 #include "ui/shortcuts.h"
 
 // Sizing constants
@@ -46,8 +46,7 @@ namespace Dialog {
 class DialogNotebook;
 class DialogContainer;
 
-DialogWindow::~DialogWindow() {
-}
+DialogWindow::~DialogWindow() {}
 
 // Create a dialog window and move page from old notebook.
 DialogWindow::DialogWindow(Gtk::Widget *page)
@@ -68,7 +67,7 @@ DialogWindow::DialogWindow(Gtk::Widget *page)
 
     auto desktop = SP_ACTIVE_DESKTOP;
     if (window_above && desktop) {
-        if (Gtk::Window* top_win = desktop->getToplevel()) {
+        if (Gtk::Window *top_win = desktop->getToplevel()) {
             set_transient_for(*top_win);
         }
     }
@@ -80,10 +79,10 @@ DialogWindow::DialogWindow(Gtk::Widget *page)
     }
     _app->gtk_app()->add_window(*this);
 
-    this->signal_delete_event().connect([=](GdkEventAny*) {
-       DialogManager::singleton().store_state(*this);
-       delete this;
-       return true;
+    this->signal_delete_event().connect([=](GdkEventAny *) {
+        DialogManager::singleton().store_state(*this);
+        delete this;
+        return true;
     });
 
     // ============ Theming: icons ==============
@@ -237,10 +236,11 @@ void DialogWindow::update_window_size_to_fit_children()
 }
 
 // mimic InkscapeWindow handling of shortcuts to make them work with active floating dialog window
-bool DialogWindow::on_key_press_event(GdkEventKey* key_event) {
+bool DialogWindow::on_key_press_event(GdkEventKey *key_event)
+{
     auto focus = get_focus();
     if (focus) {
-        if (focus->event(reinterpret_cast<GdkEvent*>(key_event))) {
+        if (focus->event(reinterpret_cast<GdkEvent *>(key_event))) {
             return true;
         }
     }
