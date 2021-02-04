@@ -205,7 +205,6 @@ public:
     std::list<std::string> params;
 
 protected:
-    void _emitSignals() override;
     void _connectSignals(SPObject* object) override;
     void _releaseSignals(SPObject* object) override;
 
@@ -218,7 +217,7 @@ private:
     /** Issues modified selection signal. */
     void _emitModified(unsigned int flags);
     /** Issues changed selection signal. */
-    void _emitChanged(bool persist_selection_context = false);
+    void _emitChanged(bool persist_selection_context = false) override;
     /** returns the SPObject corresponding to an xml node (if any). */
     SPObject *_objectForXMLNode(XML::Node *repr) const;
     /** Releases an active layer object that is being removed. */

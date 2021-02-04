@@ -172,10 +172,6 @@ size_t Selection::numberOfParents() {
     return parents.size();
 }
 
-void Selection::_emitSignals() {
-    _emitChanged();
-}
-
 void Selection::_connectSignals(SPObject *object) {
     _modified_connections[object] = object->connectModified(sigc::mem_fun(*this, &Selection::_schedule_modified));
 }

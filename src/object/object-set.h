@@ -164,7 +164,7 @@ public:
         for(auto it = from; it != to; ++it) {
             _add(*it);
         }
-        _emitSignals();
+        _emitChanged();
     }
 
     /**
@@ -301,7 +301,7 @@ public:
                 add(obj, true);
             }
         }
-        _emitSignals();
+        _emitChanged();
     }
 
     /** Returns the bounding rectangle of the selection. */
@@ -460,7 +460,7 @@ public:
 protected:
     virtual void _connectSignals(SPObject* object) {};
     virtual void _releaseSignals(SPObject* object) {};
-    virtual void _emitSignals() {};
+    virtual void _emitChanged(bool persist_selection_context = false) {}
     void _add(SPObject* object);
     void _clear();
     void _remove(SPObject* object);

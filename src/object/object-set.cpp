@@ -39,7 +39,7 @@ bool ObjectSet::add(SPObject* object, bool nosignal) {
 
     _add(object);
     if (!nosignal)
-        _emitSignals();
+        _emitChanged();
     return true;
 }
 
@@ -59,14 +59,14 @@ bool ObjectSet::remove(SPObject* object) {
     // object is the top of subtree
     if (includes(object)) {
         _remove(object);
-        _emitSignals();
+        _emitChanged();
         return true;
     }
 
     // any ancestor of object is in the set
     if (_anyAncestorIsInSet(object)) {
         _removeAncestorsFromSet(object);
-        _emitSignals();
+        _emitChanged();
         return true;
     }
 
@@ -83,7 +83,7 @@ bool ObjectSet::includes(SPObject *object) {
 
 void ObjectSet::clear() {
     _clear();
-    _emitSignals();
+    _emitChanged();
 }
 
 int ObjectSet::size() {
@@ -250,8 +250,7 @@ Inkscape::XML::Node *ObjectSet::singleRepr() {
 void ObjectSet::set(SPObject *object, bool persist_selection_context) {
     _clear();
     _add(object);
-    if(dynamic_cast<Inkscape::Selection*>(this))
-        return dynamic_cast<Inkscape::Selection*>(this)->_emitChanged(persist_selection_context);
+    _emitChanged(persist_selection_context);
 }
 
 void ObjectSet::set(XML::Node *repr)
@@ -279,9 +278,7 @@ void ObjectSet::setReprList(std::vector<XML::Node*> const &list) {
             add(obj, true);
         }
     }
-    _emitSignals();
-    if(dynamic_cast<Inkscape::Selection*>(this))
-        return dynamic_cast<Inkscape::Selection*>(this)->_emitChanged();//
+    _emitChanged();
 }
 
 
