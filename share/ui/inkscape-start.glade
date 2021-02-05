@@ -892,6 +892,8 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
       <column type="gboolean"/>
       <!-- column-name small_icons -->
       <column type="gboolean"/>
+      <!-- column-name available -->
+      <column type="gboolean"/>
     </columns>
     <data>
       <row>
@@ -906,6 +908,7 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
         <col id="8">False</col>
         <col id="9">False</col>
         <col id="10">False</col>
+        <col id="11">False</col>
       </row>
       <row>
         <col id="0">symbolic</col>
@@ -919,6 +922,7 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
         <col id="8">False</col>
         <col id="9">True</col>
         <col id="10">True</col>
+        <col id="11">False</col>
       </row>
       <row>
         <col id="0">dark-color</col>
@@ -932,6 +936,7 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
         <col id="8">True</col>
         <col id="9">True</col>
         <col id="10">True</col>
+        <col id="11">False</col>
       </row>
       <row>
         <col id="0">light-color</col>
@@ -945,6 +950,7 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
         <col id="8">False</col>
         <col id="9">True</col>
         <col id="10">True</col>
+        <col id="11">False</col>
       </row>
       <row>
         <col id="0">dark-grey</col>
@@ -958,6 +964,7 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
         <col id="8">True</col>
         <col id="9">True</col>
         <col id="10">True</col>
+        <col id="11">False</col>
       </row>
       <row>
         <col id="0">light-min</col>
@@ -971,6 +978,7 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
         <col id="8">False</col>
         <col id="9">True</col>
         <col id="10">True</col>
+        <col id="11">False</col>
       </row>
     </data>
   </object>
@@ -1219,6 +1227,7 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
                         <child>
                           <object class="GtkCellRendererText" id="theme_namerenderer"/>
                           <attributes>
+                            <attribute name="sensitive">11</attribute>
                             <attribute name="text">1</attribute>
                           </attributes>
                         </child>

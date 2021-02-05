@@ -36,6 +36,7 @@ private:
     void show_toggle();
     void enlist_recent_files();
     void enlist_keys();
+    void filter_themes();
     void keyboard_changed();
     void notebook_switch(Gtk::Widget *tab, guint page_num);
 

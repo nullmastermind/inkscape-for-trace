@@ -62,6 +62,7 @@
 #include "ui/modifiers.h"
 #include "ui/widget/style-swatch.h"
 #include "ui/widget/canvas.h"
+#include "ui/themes.h"
 
 #include "widgets/desktop-widget.h"
 
@@ -1041,35 +1042,6 @@ void InkscapePreferences::initPageTools()
 #endif // WITH_LPETOOL
 }
 
-static void _inkscape_fill_gtk(const gchar *path, std::map<Glib::ustring, bool> &dark_themes)
-{
-    const gchar *dir_entry;
-    GDir *dir = g_dir_open(path, 0, NULL);
-    if (!dir)
-        return;
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Glib::ustring themename = prefs->getString("/theme/gtkTheme");
-    while ((dir_entry = g_dir_read_name(dir))) {
-        gchar *filename = g_build_filename(path, dir_entry, "gtk-3.0", "gtk.css", NULL);
-        bool has_prefer_dark = false;
-
-        Glib::ustring theme = dir_entry;
-        gchar *filenamedark = g_build_filename(path, dir_entry, "gtk-3.0", "gtk-dark.css", NULL);
-        if (g_file_test(filenamedark, G_FILE_TEST_IS_REGULAR))
-            has_prefer_dark = true;
-        if (dark_themes.find(theme) != dark_themes.end() && !has_prefer_dark) {
-            continue;
-        }
-        if (g_file_test(filename, G_FILE_TEST_IS_REGULAR)) {
-            dark_themes[theme] = has_prefer_dark;
-        }
-        g_free(filename);
-        g_free(filenamedark);
-    }
-
-    g_dir_close(dir);
-}
-
 void InkscapePreferences::get_highlight_colors(guint32 &colorsetbase, guint32 &colorsetsuccess,
                                                guint32 &colorsetwarning, guint32 &colorseterror)
 {
@@ -1627,52 +1599,7 @@ void InkscapePreferences::initPageUI()
     Glib::ustring default_theme = prefs->getString("/theme/defaultTheme");
     Glib::ustring theme = "";
     {
-        using namespace Inkscape::IO::Resource;
-        gchar *path;
-        gchar **builtin_themes;
-        guint i, j;
-        const gchar *const *dirs;
-
-        /* Builtin themes */
-        builtin_themes = g_resources_enumerate_children("/org/gtk/libgtk/theme", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
-        for (i = 0; builtin_themes[i] != NULL; i++) {
-            if (g_str_has_suffix(builtin_themes[i], "/")) {
-                theme = builtin_themes[i];
-                theme.resize(theme.size() - 1);
-                Glib::ustring theme_path = "/org/gtk/libgtk/theme";
-                theme_path += "/" + theme;
-                gchar **builtin_themes_files =
-                    g_resources_enumerate_children(theme_path.c_str(), G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
-                bool has_prefer_dark = false;
-                if (builtin_themes_files != NULL) {
-                    for (j = 0; builtin_themes_files[j] != NULL; j++) {
-                        Glib::ustring file = builtin_themes_files[j];
-                        if (file == "gtk-dark.css") {
-                            has_prefer_dark = true;
-                        }
-                    }
-                }
-                g_strfreev(builtin_themes_files);
-                dark_themes[theme] = has_prefer_dark;
-            }
-        }
-        g_strfreev(builtin_themes);
-
-        path = g_build_filename(g_get_user_data_dir(), "themes", NULL);
-        _inkscape_fill_gtk(path, dark_themes);
-        g_free(path);
-
-        path = g_build_filename(g_get_home_dir(), ".themes", NULL);
-        _inkscape_fill_gtk(path, dark_themes);
-        g_free(path);
-
-        dirs = g_get_system_data_dirs();
-        for (i = 0; dirs[i]; i++) {
-            path = g_build_filename(dirs[i], "themes", NULL);
-            _inkscape_fill_gtk(path, dark_themes);
-            g_free(path);
-        }
-
+        dark_themes = get_available_themes();
         std::vector<Glib::ustring> labels;
         std::vector<Glib::ustring> values;
         std::map<Glib::ustring, bool>::iterator it = dark_themes.begin();

@@ -24,6 +24,7 @@
 #include "io/resource.h"
 #include "ui/shortcuts.h"
 #include "ui/util.h"
+#include "ui/themes.h"
 
 #include "object/sp-namedview.h"
 
@@ -100,6 +101,7 @@ class ThemeCols: public Gtk::TreeModel::ColumnRecord {
             this->add(this->dark);
             this->add(this->symbolic);
             this->add(this->smallicons);
+            this->add(this->enabled);
         }
         Gtk::TreeModelColumn<Glib::ustring> id;
         Gtk::TreeModelColumn<Glib::ustring> name;
@@ -112,6 +114,7 @@ class ThemeCols: public Gtk::TreeModel::ColumnRecord {
         Gtk::TreeModelColumn<bool> dark;
         Gtk::TreeModelColumn<bool> symbolic;
         Gtk::TreeModelColumn<bool> smallicons;
+        Gtk::TreeModelColumn<bool> enabled;
 };
 
 /**
@@ -186,6 +189,7 @@ StartScreen::StartScreen()
     // Setup the lists of items
     enlist_recent_files();
     enlist_keys();
+    filter_themes();
     set_active_combo("themes", prefs->getString("/options/boot/theme"));
     set_active_combo("canvas", prefs->getString("/options/boot/canvas"));
 
@@ -585,6 +589,20 @@ StartScreen::canvas_changed()
 
     } catch(int e) {
         g_warning("Couldn't find canvas value.");
+    }
+}
+
+void
+StartScreen::filter_themes()
+{
+    ThemeCols cols;
+    // We need to disable themes which aren't available.
+    auto store = Glib::wrap(GTK_LIST_STORE(gtk_combo_box_get_model(themes->gobj())));
+    auto available = get_available_themes();
+
+    for(auto row : store->children()) {
+        Glib::ustring theme = row[cols.theme];
+        row[cols.enabled] = available.find(theme) != available.end();
     }
 }
 

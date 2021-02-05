@@ -15,6 +15,8 @@
 #include <fcntl.h> // _O_BINARY
 #endif
 
+#include <sys/wait.h>
+
 #include "inkscape-application.h"
 #include "path-prefix.h"
 
@@ -57,6 +59,22 @@ static void set_extensions_env()
     SetDllDirectoryW(installation_dir_w);
     g_free(installation_dir_w);
 #endif
+}
+
+/**
+ * Adds the local inkscape directory to the XDG_DATA_DIRS so themes and other Gtk
+ * resources which are specific to inkscape installations can be used.
+ */
+static void set_themes_env()
+{
+    std::string xdg_data_dirs = Glib::getenv("XDG_DATA_DIRS");
+    
+    if (xdg_data_dirs.empty()) {
+        g_warning("Packaging error: XDG_DATA_DIRS must be set in order to use custom themes. Please package Inkscape so that XDG_DATA_DIRS is set when called.");
+    } else {
+        std::string xdg_inkscape_dir = Glib::build_filename(get_inkscape_datadir(), "inkscape");
+        Glib::setenv("XDG_DATA_DIRS", xdg_inkscape_dir + G_SEARCHPATH_SEPARATOR_S + xdg_data_dirs);
+    }
 }
 
 #ifdef __APPLE__
@@ -224,6 +242,7 @@ int main(int argc, char *argv[])
     _setmode(_fileno(stdout), _O_BINARY); // binary mode seems required for this to work properly
 #endif
 
+    set_themes_env();
     set_extensions_env();
 
     auto ret = InkscapeApplication::singleton().gio_app()->run(argc, argv);

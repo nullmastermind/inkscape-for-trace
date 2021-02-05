@@ -15,6 +15,7 @@ set(ui_SRC
 	shape-editor-knotholders.cpp
 	simple-pref-pusher.cpp
 	shortcuts.cpp
+	themes.cpp
 	tool-factory.cpp
 	tools-switch.cpp
 	util.cpp
@@ -252,6 +253,7 @@ set(ui_SRC
 	shape-editor.h
 	simple-pref-pusher.h
 	shortcuts.h
+	themes.h
 	tool-factory.h
 	tools-switch.h
 	util.h
