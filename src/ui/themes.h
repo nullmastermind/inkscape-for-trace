@@ -12,7 +12,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 #ifndef UI_THEMES_H_SEEN
-#define UI_TEMES_H_SEEN
+#define UI_THEMES_H_SEEN
 
 #include <map>
 #include <cstring>
