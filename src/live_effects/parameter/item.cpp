@@ -257,7 +257,7 @@ ItemParam::linked_transformed_callback(Geom::Affine const *rel_transf, SPItem *m
                 if (!moved_lpeitem->optimizeTransforms()) {
                     sp_lpe_item->transform *= last_transform.withoutTranslation();
                 }
-            } else if(sp_lpe_item && moved_lpeitem->optimizeTransforms() && last_transform.isTranslation()) {
+            } else if(sp_lpe_item && moved_lpeitem && moved_lpeitem->optimizeTransforms() && last_transform.isTranslation()) {
                 Geom::Affine orig = sp_lpe_item->transform;
                 sp_lpe_item->transform *= orig.inverse() * last_transform.inverse() * orig;  
             }
