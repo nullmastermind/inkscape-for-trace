@@ -126,7 +126,7 @@ Transformation::Transformation()
     _notebook.append_page(_page_transform, _("Matri_x"), true);
     layoutPageTransform();
 
-    _notebook.signal_switch_page().connect(sigc::mem_fun(*this, &Transformation::onSwitchPage));
+    _tabSwitchConn = _notebook.signal_switch_page().connect(sigc::mem_fun(*this, &Transformation::onSwitchPage));
 
     // Apply separately
     pack_start(_check_apply_separately, false, false);
@@ -177,6 +177,7 @@ Transformation::Transformation()
 
 Transformation::~Transformation()
 {
+    _tabSwitchConn.disconnect();
     _selModifyConn.disconnect();
     _selChangeConn.disconnect();
 }

@@ -229,6 +229,7 @@ private:
 
     sigc::connection _selChangeConn;
     sigc::connection _selModifyConn;
+    sigc::connection _tabSwitchConn;
 };
 
 
