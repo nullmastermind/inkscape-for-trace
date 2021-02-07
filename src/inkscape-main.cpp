@@ -15,8 +15,6 @@
 #include <fcntl.h> // _O_BINARY
 #endif
 
-#include <sys/wait.h>
-
 #include "inkscape-application.h"
 #include "path-prefix.h"
 
