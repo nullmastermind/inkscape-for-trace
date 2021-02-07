@@ -825,15 +825,6 @@ Inkscape::XML::Node* ObjectSet::group() {
     return group;
 }
 
-
-static bool clone_depth_descending(gconstpointer a, gconstpointer b) {
-    SPUse *use_a = static_cast<SPUse *>(const_cast<gpointer>(a));
-    SPUse *use_b = static_cast<SPUse *>(const_cast<gpointer>(b));
-    int depth_a = use_a->cloneDepth();
-    int depth_b = use_b->cloneDepth();
-    return (depth_a==depth_b)?(a<b):(depth_a>depth_b);
-}
-
 void ObjectSet::popFromGroup(){
     if (isEmpty()) {
         selection_display_message(desktop(), Inkscape::WARNING_MESSAGE, _("<b>No objects selected</b> to pop out of group."));
@@ -867,58 +858,61 @@ void ObjectSet::popFromGroup(){
 
 }
 
+/**
+ * Finds the first clone in `objects` which references an item in `groups`.
+ * The search is recursive, the children of `objects` are searched as well.
+ * Return NULL if no such clone is found.
+ */
+template <typename Objects>
+static SPUse *find_clone_to_group(Objects const &objects, std::set<SPGroup *> const &groups)
+{
+    assert(!groups.count(nullptr));
+
+    for (auto *obj : objects) {
+        if (auto *use = dynamic_cast<SPUse *>(obj)) {
+            if (auto root = use->root()) {
+                if (groups.count(static_cast<SPGroup *>(root->clone_original))) {
+                    return use;
+                }
+            }
+        }
+
+        if (auto *use = find_clone_to_group(obj->childList(false), groups)) {
+            return use;
+        }
+    }
+
+    return nullptr;
+}
+
+/**
+ * Ungroup all groups in an object set.
+ *
+ * Clones of ungrouped groups will be unlinked.
+ *
+ * Children of groups will not be ungrouped (operation is not recursive).
+ *
+ * Unlinked clones and children of ungrouped groups will be added to the object set.
+ */
 static void ungroup_impl(ObjectSet *set)
 {
-    std::set<SPObject*> groups(set->groups().begin(),set->groups().end());
+    std::set<SPGroup *> const groups(set->groups().begin(), set->groups().end());
 
-    std::vector<SPItem*> new_select;
-    auto old_select = set->items();
-    std::vector<SPItem*> items(old_select.begin(), old_select.end());
-
-    // If any of the clones refer to the groups, unlink them and replace them with successors
-    // in the items list.
-    std::vector<SPUse*> clones_to_unlink;
-    for (auto item : items) {
-        SPUse *use = dynamic_cast<SPUse *>(item);
-
-        SPItem *original = use;
-        while (auto orig_use = dynamic_cast<SPUse *>(original)) {
-            original = orig_use->get_original();
-        }
-
-        if (groups.find(original) !=  groups.end()) {
-            clones_to_unlink.push_back(use);
+    while (auto *use = find_clone_to_group(set->items(), groups)) {
+        bool const readd = set->includes(use);
+        auto const unlinked = use->unlink();
+        if (readd) {
+            set->add(unlinked, true);
         }
     }
 
-    // Unlink clones beginning from those with highest clone depth.
-    // This way we can be sure than no additional automatic unlinking happens,
-    // and the items in the list remain valid
-    std::sort(clones_to_unlink.begin(),clones_to_unlink.end(),clone_depth_descending);
+    std::vector<SPItem *> children;
 
-    for (auto use:clones_to_unlink) {
-        std::vector<SPItem*>::iterator items_node = std::find(items.begin(),items.end(), use);
-        *items_node = use->unlink();
+    for (auto *group : groups) {
+        sp_item_group_ungroup(group, children, false);
     }
 
-    // do the actual work
-    for (auto & item : items) {
-        SPItem *obj = item;
-
-        // ungroup only the groups marked earlier
-        if (groups.find(item) != groups.end()) {
-            std::vector<SPItem*> children;
-            sp_item_group_ungroup(dynamic_cast<SPGroup *>(obj), children, false);
-            // add the items resulting from ungrouping to the selection
-            new_select.insert(new_select.end(),children.begin(),children.end());
-            item = NULL; // zero out the original pointer, which is no longer valid
-        } else {
-            // if not a group, keep in the selection
-            new_select.push_back(item);
-        }
-    }
-
-    set->setList(new_select);
+    set->addList(children);
 }
 
 void ObjectSet::ungroup(bool skip_undo)
