@@ -58,6 +58,7 @@ set(TEST_SOURCES
     sp-object-test
     object-set-test
     object-style-test
+    path-boolop-test
     rebase-hrefs-test
     style-elem-test
     style-internal-test
