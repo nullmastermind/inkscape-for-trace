@@ -82,6 +82,7 @@ public:
     void init(Glib::ustring const &prefs_path,
               double lower, double upper, double step_increment, double page_increment,
               double default_value, bool is_int, bool is_percent);
+    sigc::signal<void, double> changed_signal;
 protected:
     Glib::ustring _prefs_path;
     bool _is_int;

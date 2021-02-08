@@ -2204,7 +2204,7 @@ void InkscapePreferences::initPageIO()
     this->AddPage(_page_cms, _("Color management"), iter_io, PREFS_PAGE_IO_CMS);
 
     // Autosave options
-    _save_autosave_enable.init( _("Enable autosave (requires restart)"), "/options/autosave/enable", true);
+    _save_autosave_enable.init( _("Enable autosave"), "/options/autosave/enable", true);
     _page_autosave.add_line(false, "", _save_autosave_enable, "", _("Automatically save the current document(s) at a given interval, thus minimizing loss in case of a crash"), false);
     _save_autosave_path.init("/options/autosave/path", true);
     if (prefs->getString("/options/autosave/path").empty()) {
@@ -2217,15 +2217,10 @@ void InkscapePreferences::initPageIO()
     _save_autosave_max.init("/options/autosave/max", 1.0, 100.0, 1.0, 10.0, 10.0, true, false);
     _page_autosave.add_line(false, _("_Maximum number of autosaves:"), _save_autosave_max, "", _("Maximum number of autosaved files; use this to limit the storage space used"), false);
 
-    /* When changing the interval or enabling/disabling the autosave function,
-     * update our running configuration
-     *
-     * FIXME!
-     * AutoSave::restart() should be called AFTER the values have been changed
-     * (which cannot be guaranteed from here) - use a PrefObserver somewhere.
-     */
-    _save_autosave_enable.signal_toggled(  ).connect( sigc::ptr_fun(Inkscape::AutoSave::restart), true);
-    _save_autosave_interval.signal_changed().connect( sigc::ptr_fun(Inkscape::AutoSave::restart), true);
+    // When changing the interval or enabling/disabling the autosave function,
+    // update our running configuration
+    _save_autosave_enable.changed_signal.connect([](bool) { Inkscape::AutoSave::restart(); });
+    _save_autosave_interval.changed_signal.connect([](double) { Inkscape::AutoSave::restart(); });
 
     this->AddPage(_page_autosave, _("Autosave"), iter_io, PREFS_PAGE_IO_AUTOSAVE);
 

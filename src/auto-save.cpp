@@ -93,8 +93,8 @@ AutoSave::save()
     // Get time stamp
     std::time_t time = std::time(nullptr);
     std::tm tm = *std::localtime(&time);
-    std::stringstream ss;
-    ss << std::put_time(&tm, "%Y_%m_%d_%H_%M_%S");
+    std::stringstream datetime;
+    datetime << std::put_time(&tm, "%Y_%m_%d_%H_%M_%S");
 
     int docnum = 0;
     int autosave_max = prefs->getInt("/options/autosave/max", 10);
@@ -104,7 +104,7 @@ AutoSave::save()
 
         if (document->isModifiedSinceAutoSave()) {
 
-            std::string base_name = "inkscape-autosave-" + std::to_string(uid);
+            std::string base_name = "automatic-save-" + std::to_string(uid);
 
             // The following we do for each document (rather wasteful...) so that
             // we make room for each document that needs saving. We probably should
@@ -134,14 +134,9 @@ AutoSave::save()
             }
 
             // Construct save file path
-            std::stringstream ssf;
-            ssf << "inkscape-autosave-"
-                << std::to_string(uid) << "-"
-                << std::to_string(pid) << "-"
-                << ss.str()            << "-"
-                << std::setfill('0') << std::setw(3) << std::to_string(docnum)
-                << ".svg";
-            std::string path = Glib::build_filename(autosave_dir, ssf.str());
+            // datetime MUST happen first, otherwise the above sorting will fail
+            std::string filename = base_name + "-" + datetime.str() + "-" + std::to_string(pid) + "-" + std::to_string(docnum) + ".svg";
+            std::string path = Glib::build_filename(autosave_dir, filename.c_str());
 
             // Try to save the file
             // Following code needs to be reviewed

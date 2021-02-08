@@ -180,12 +180,12 @@ void PrefCheckButton::init(Glib::ustring const &label, Glib::ustring const &pref
 
 void PrefCheckButton::on_toggled()
 {
-    this->changed_signal.emit(this->get_active());
     if (this->get_visible()) //only take action if the user toggled it
     {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setBool(_prefs_path, this->get_active());
     }
+    this->changed_signal.emit(this->get_active());
 }
 
 void PrefRadioButton::init(Glib::ustring const &label, Glib::ustring const &prefs_path,
@@ -230,7 +230,6 @@ void PrefRadioButton::init(Glib::ustring const &label, Glib::ustring const &pref
 
 void PrefRadioButton::on_toggled()
 {
-    this->changed_signal.emit(this->get_active());
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     if (this->get_visible() && this->get_active() ) //only take action if toggled by user (to active)
@@ -240,6 +239,7 @@ void PrefRadioButton::on_toggled()
         else if ( _value_type == VAL_INT )
             prefs->setInt(_prefs_path, _int_value);
     }
+    this->changed_signal.emit(this->get_active());
 }
 
 void PrefSpinButton::init(Glib::ustring const &prefs_path,
@@ -289,6 +289,7 @@ void PrefSpinButton::on_value_changed()
             prefs->setDouble(_prefs_path, this->get_value());
         }
     }
+    this->changed_signal.emit(this->get_value());
 }
 
 void PrefSpinUnit::init(Glib::ustring const &prefs_path,
