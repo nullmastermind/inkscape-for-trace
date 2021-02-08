@@ -45,7 +45,7 @@ decltype(Modifier::_modifiers) Modifier::_modifiers {
 
     // Transform handle modifiers (applies to multiple tools)
     {Type::MOVE_CONFINE, new Modifier("move-confine", _("Move one axis only"), _("When dragging items, confine to either x or y axis."), CTRL, MOVE, DRAG)},
-    {Type::MOVE_INCREMENT, new Modifier("move-increment", _("Move in increments"), _("Move the objects by set invrements when dragging."), ALT, MOVE, DRAG)},
+    {Type::MOVE_INCREMENT, new Modifier("move-increment", _("Move in increments"), _("Move the objects by set increments when dragging."), ALT, MOVE, DRAG)},
     {Type::MOVE_SNAPPING, new Modifier("move-snapping", _("No Move Snapping"), _("Disable snapping when moving objects."), SHIFT, MOVE, DRAG)},
     {Type::TRANS_CONFINE, new Modifier("trans-confine", _("Keep aspect ratio"), _("When resizing objects, confine the aspect ratio."), CTRL, TRANSFORM, DRAG)},
     {Type::TRANS_INCREMENT, new Modifier("trans-increment", _("Transform in increments"), _("Scale, rotate or skew by set increments."), ALT, TRANSFORM, DRAG)},
