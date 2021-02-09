@@ -120,7 +120,7 @@ CalligraphyToolbar::CalligraphyToolbar(SPDesktop *desktop)
 
     /* Unit Menu */
     {
-        auto unit_menu_ti = _tracker->create_tool_item(_("Units"), _(""));
+        auto unit_menu_ti = _tracker->create_tool_item(_("Units"), "");
         add(*unit_menu_ti);
         unit_menu_ti->signal_changed_after().connect(sigc::mem_fun(*this, &CalligraphyToolbar::unit_changed));
     }
