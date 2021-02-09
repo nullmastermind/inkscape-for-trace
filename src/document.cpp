@@ -1001,14 +1001,21 @@ SPObject *SPDocument::getObjectById(gchar const *id) const
 void _getObjectsByClassRecursive(Glib::ustring const &klass, SPObject *parent, std::vector<SPObject *> &objects)
 {
     if (parent) {
-        Glib::ustring class_attribute;
         char const *temp = parent->getAttribute("class");
         if (temp) {
-            class_attribute = temp;
-        }
-
-        if (class_attribute.find( klass ) != std::string::npos) {
-            objects.push_back( parent );
+            std::istringstream classes(temp);
+            Glib::ustring token;
+            while (classes >> token) {
+                // we can have multiple class
+                if (classes.str() == " ") {
+                    token = "";
+                    continue;
+                }
+                if (token == klass) {
+                    objects.push_back(parent);
+                    break;
+                }
+            }
         }
 
         // Check children

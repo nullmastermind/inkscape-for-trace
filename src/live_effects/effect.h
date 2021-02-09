@@ -77,6 +77,7 @@ public:
     bool isOnClipboard();
     virtual void doOnApply (SPLPEItem const* lpeitem);
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
+    SPLPEItem *getLastLPEItem() const;
 
 private:
     virtual void transform_multiply(Geom::Affine const &postmul, bool set);
@@ -145,6 +146,7 @@ public:
     bool apply_to_clippath_and_mask;
     bool keep_paths; // set this to false allow retain extra generated objects, see measure line LPE
     bool is_load;
+    bool on_remove_all;
     bool refresh_widgets;
     BoolParam is_visible;
     HiddenParam lpeversion;

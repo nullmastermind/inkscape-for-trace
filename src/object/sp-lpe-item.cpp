@@ -694,6 +694,7 @@ void SPLPEItem::removeCurrentPathEffect(bool keep_paths)
     }
     if (Inkscape::LivePathEffect::Effect* effect_ = this->getCurrentLPE()) {
         effect_->keep_paths = keep_paths;
+        effect_->on_remove_all = false;
         effect_->doOnRemove(this);
         this->path_effect_list->remove(lperef); //current lpe ref is always our 'own' pointer from the path_effect_list
         this->setAttributeOrRemoveIfEmpty("inkscape:path-effect", patheffectlist_svg_string(*this->path_effect_list));
@@ -727,6 +728,7 @@ void SPLPEItem::removeAllPathEffects(bool keep_paths)
             Inkscape::LivePathEffect::Effect * lpe = lpeobj->get_lpe();
             if (lpe) {
                 lpe->keep_paths = keep_paths;
+                lpe->on_remove_all = true;
                 lpe->doOnRemove(this);
             }
         }

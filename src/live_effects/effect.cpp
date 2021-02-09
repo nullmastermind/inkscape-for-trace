@@ -1126,6 +1126,7 @@ Effect::Effect(LivePathEffectObject *lpeobject)
       show_orig_path(false),
       keep_paths(false),
       is_load(true),
+      on_remove_all(false),
       lpeobj(lpeobject),
       concatenate_before_pwd2(false),
       sp_lpe_item(nullptr),
@@ -1156,6 +1157,15 @@ Effect::getName() const
 EffectType
 Effect::effectType() const {
     return lpeobj->effecttype;
+}
+
+SPLPEItem* 
+Effect::getLastLPEItem() const {
+    auto hreflist = getLPEObj()->hrefList;
+    if (hreflist.size()) {
+        return dynamic_cast<SPLPEItem *>(hreflist.back());
+    }
+    return nullptr;
 }
 
 /**
