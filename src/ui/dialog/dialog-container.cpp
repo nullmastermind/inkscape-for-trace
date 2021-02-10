@@ -446,10 +446,13 @@ bool recreate_dialogs_from_state(const Glib::KeyFile *keyfile)
             }
         }
 
-        dialog_window->update_window_size_to_fit_children();
         if (has_position) {
             dm_restore_window_position(*dialog_window, pos);
         }
+        else {
+            dialog_window->update_window_size_to_fit_children();
+        }
+        dialog_window->show_all();
         restored = true;
     }
 
@@ -702,10 +705,13 @@ void DialogContainer::load_container_state(Glib::KeyFile *keyfile, bool include_
         }
 
         if (dialog_window) {
-            dialog_window->update_window_size_to_fit_children();
             if (has_position) {
                 dm_restore_window_position(*dialog_window, pos);
             }
+            else {
+                dialog_window->update_window_size_to_fit_children();
+            }
+            dialog_window->show_all();
         }
     }
 }
