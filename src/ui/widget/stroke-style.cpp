@@ -466,7 +466,7 @@ void StrokeStyle::markerSelectCB(MarkerComboBox *marker_combo, StrokeStyle *spw,
     auto itemlist= selection->items();
     for(auto i=itemlist.begin();i!=itemlist.end();++i){
         SPItem *item = *i;
-        if (!SP_IS_SHAPE(item) || SP_IS_RECT(item)) { // can't set marker to rect, until it's converted to using <path>
+        if (!SP_IS_SHAPE(item)) {
             continue;
         }
         Inkscape::XML::Node *selrepr = item->getRepr();
