@@ -46,3 +46,6 @@ man/*.tmp
 
 # Generated C files
 src/helper/sp-marshal.*
+
+# Ctags
+tags

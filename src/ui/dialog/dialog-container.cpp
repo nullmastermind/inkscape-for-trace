@@ -15,6 +15,7 @@
 
 #include <giomm/file.h>
 #include <glibmm/keyfile.h>
+#include <gtkmm/box.h>
 #include <gtkmm/eventbox.h>
 #include <gtkmm/image.h>
 
@@ -219,10 +220,17 @@ Gtk::Widget *DialogContainer::create_notebook_tab(Glib::ustring label_str, Glib:
 {
     Gtk::Label *label = Gtk::manage(new Gtk::Label(label_str));
     Gtk::Image *image = Gtk::manage(new Gtk::Image());
+    Gtk::Button *close = Gtk::manage(new Gtk::Button());
     image->set_from_icon_name(image_str, Gtk::ICON_SIZE_MENU);
     Gtk::Box *tab = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 2));
+    close->set_image_from_icon_name("window-close");
+    close->set_halign(Gtk::ALIGN_END);
+    close->set_tooltip_text("Close Tab");
+    close->get_style_context()->add_class("close-button");
+
     tab->set_name(label_str);
     tab->pack_start(*image);
+    tab->pack_end(*close);
     tab->pack_end(*label);
     tab->show_all();
 
