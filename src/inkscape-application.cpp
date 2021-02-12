@@ -656,7 +656,8 @@ InkscapeApplication::InkscapeApplication()
     gapp->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-ignore-filters", '\0', N_("Render objects without filters instead of rasterizing (PS/EPS/PDF)"),       ""); // xxP
     gapp->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-use-hints",       't', N_("Use stored filename and DPI hints when exporting object selected by --export-id"), ""); // Bxx
     gapp->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-background",      'b', N_("Background color for exported bitmaps (any SVG color string)"),         N_("COLOR")); // Bxx
-    gapp->add_main_option_entry(T::OPTION_TYPE_DOUBLE,   "export-background-opacity", 'y', N_("Background opacity for exported bitmaps (0.0 to 1.0, or 1 to 255)"), N_("VALUE")); // Bxx
+    // FIXME: Opacity should really be a DOUBLE, but an upstream bug means 0.0 is detected as NULL
+    gapp->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-background-opacity", 'y', N_("Background opacity for exported bitmaps (0.0 to 1.0, or 1 to 255)"), N_("VALUE")); // Bxx
     gapp->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-png-color-mode", '\0', N_("Color mode (bit depth and color type) for exported bitmaps (Gray_1/Gray_2/Gray_4/Gray_8/Gray_16/RGB_8/RGB_16/GrayAlpha_8/GrayAlpha_16/RGBA_8/RGBA_16)"), N_("COLOR-MODE")); // Bxx
 
     // Query - Geometry
@@ -1503,9 +1504,13 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
         options->lookup_value("export-background",_file_export.export_background);
     }
 
+    // FIXME: Upstream bug means DOUBLE is ignored if set to 0.0 so doesn't exist in options
     if (options->contains("export-background-opacity")) {
-        options->lookup_value("export-background-opacity", _file_export.export_background_opacity);
+        Glib::ustring opacity;
+        options->lookup_value("export-background-opacity", opacity);
+        _file_export.export_background_opacity = atof(opacity.c_str());
     }
+
     if (options->contains("export-png-color-mode")) {
         options->lookup_value("export-png-color-mode", _file_export.export_png_color_mode);
     }
