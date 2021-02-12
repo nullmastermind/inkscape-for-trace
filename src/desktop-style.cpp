@@ -410,6 +410,7 @@ sp_desktop_apply_style_tool(SPDesktop *desktop, Inkscape::XML::Node *repr, Glib:
 
     if (prefs->getBool(tool_path + "/usecurrent") && css_current) {
         sp_repr_css_unset_property(css_current, "mix-blend-mode");
+        sp_repr_css_unset_property(css_current, "filter");
         sp_repr_css_set(repr, css_current, "style");
     } else {
         SPCSSAttr *css = prefs->getInheritedStyle(tool_path + "/style");
