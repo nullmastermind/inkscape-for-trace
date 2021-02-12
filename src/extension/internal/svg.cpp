@@ -974,57 +974,37 @@ Svg::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
     bool const insert_hatch_polyfill_flag =
         prefs->getBool("/options/svgexport/hatch_insertpolyfill", true);
 
-    bool createNewDoc =
-        !exportExtensions         ||
-        transform_2_to_1_flag     ||
-        insert_text_fallback_flag ||
-        insert_mesh_polyfill_flag ||
-        insert_hatch_polyfill_flag;
+    // We used to copy the svg here if there was modification, but no need now
+    // We copy the svg document for ALL exports and saves and the extensions can
+    // decide what to do without fear.
 
     // We prune the in-use document and deliberately loose data, because there
     // is no known use for this data at the present time.
     pruneProprietaryGarbage(rdoc->root());
 
-    if (createNewDoc) {
+    // Start off with a svg 2.0 document
+    rdoc->setAttribute("standalone", "no");
+    rdoc->setAttribute("version", "2.0");
 
-        // We make a duplicate document so we don't prune the in-use document
-        // and loose data. Perhaps the user intends to save as inkscape-svg next.
-        Inkscape::XML::Document *new_rdoc = new Inkscape::XML::SimpleDocument();
+    if (!exportExtensions) {
+        pruneExtendedNamespaces(rdoc->root());
+    }
 
-        // Comments and PI nodes are not included in this duplication
-        // TODO: Move this code into xml/document.h and duplicate rdoc instead of root.
-        new_rdoc->setAttribute("standalone", "no");
-        new_rdoc->setAttribute("version", "2.0");
+    if (transform_2_to_1_flag) {
+        transform_2_to_1 (rdoc->root());
+        rdoc->setAttribute("version", "1.1");
+    }
 
-        // Get a new xml repr for the svg root node
-        Inkscape::XML::Node *root = rdoc->root()->duplicate(new_rdoc);
+    if (insert_text_fallback_flag) {
+        insert_text_fallback (rdoc->root(), doc);
+    }
 
-        // Add the duplicated svg node as the document's rdoc
-        new_rdoc->appendChild(root);
-        Inkscape::GC::release(root);
+    if (insert_mesh_polyfill_flag) {
+        insert_mesh_polyfill (rdoc->root());
+    }
 
-        if (!exportExtensions) {
-            pruneExtendedNamespaces(root);
-        }
-
-        if (transform_2_to_1_flag) {
-            transform_2_to_1 (root);
-            new_rdoc->setAttribute("version", "1.1");
-        }
-
-        if (insert_text_fallback_flag) {
-            insert_text_fallback (root, doc);
-        }
-
-        if (insert_mesh_polyfill_flag) {
-            insert_mesh_polyfill (root);
-        }
-
-        if (insert_hatch_polyfill_flag) {
-            insert_hatch_polyfill (root);
-        }
-
-        rdoc = new_rdoc;
+    if (insert_hatch_polyfill_flag) {
+        insert_hatch_polyfill (rdoc->root());
     }
 
     if (!sp_repr_save_rebased_file(rdoc, filename, SP_SVG_NS_URI,
@@ -1032,12 +1012,6 @@ Svg::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
                                    m_detachbase ? nullptr : filename)) {
         throw Inkscape::Extension::Output::save_failed();
     }
-
-    if (createNewDoc) {
-        Inkscape::GC::release(rdoc);
-    }
-
-    return;
 }
 
 } } }  /* namespace inkscape, module, implementation */

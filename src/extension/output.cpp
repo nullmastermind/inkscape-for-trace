@@ -240,9 +240,8 @@ void
 Output::save(SPDocument *doc, gchar const *filename, bool detachbase)
 {
     imp->setDetachBase(detachbase);
-    imp->save(this, doc, filename);
-
-	return;
+    auto new_doc = doc->copy();
+    imp->save(this, new_doc.get(), filename);
 }
 
 /**
