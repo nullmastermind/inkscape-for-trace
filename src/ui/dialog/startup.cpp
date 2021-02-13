@@ -317,8 +317,10 @@ StartScreen::enlist_recent_files()
             || item->has_application("inkscape")
             || item->has_application("inkscape.exe")
            ) {
-            std::string path = Glib::filename_from_uri(item->get_uri());
-            if (Glib::file_test(path, Glib::FILE_TEST_IS_REGULAR)
+            // This uri is a GVFS uri, so parse it with that or it will fail.
+            auto file = Gio::File::create_for_uri(item->get_uri());
+            std::string path = file->get_path();
+            if (!path.empty() && Glib::file_test(path, Glib::FILE_TEST_IS_REGULAR)
                 && item->get_mime_type() == "image/svg+xml") {
                 Gtk::TreeModel::Row row = *(store->append());
                 row[cols.col_name] = item->get_display_name();
