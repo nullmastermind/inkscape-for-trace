@@ -124,7 +124,7 @@ LPEMirrorSymmetry::newWidget()
             Parameter *param = *it;
             Gtk::Widget *widg = dynamic_cast<Gtk::Widget *>(param->param_newWidget());
             Glib::ustring *tip = param->param_getTooltip();
-            if (widg) {
+            if (widg && param->param_key != "split_open") {
                 vbox->pack_start(*widg, true, true, 2);
                 if (tip) {
                     widg->set_tooltip_text(*tip);
