@@ -18,6 +18,7 @@
 
 #include <2geom/path-intersection.h>
 #include <2geom/piecewise.h>
+#include <2geom/svg-path-parser.h>
 
 #include "inkscape.h"
 #include "style.h"
@@ -28,6 +29,7 @@
 #include "live_effects/parameter/enum.h"
 #include "object/sp-shape.h"
 #include "path/path-boolop.h"
+#include "path/path-util.h"
 #include "svg/svg.h"
 #include "ui/knot/knot-holder.h"
 #include "ui/knot/knot-holder-entity.h"
@@ -415,6 +417,15 @@ Geom::Path removeIntersects(Geom::Path pathin)
     return pathin;
 }
 
+static Geom::PathVector
+sp_simplify_pathvector(Geom::PathVector original_pathv, double threshold)
+{
+    Path* pathliv = Path_for_pathvector(original_pathv);
+    pathliv->ConvertEvenLines(threshold);
+    pathliv->Simplify(threshold);
+    return Geom::parse_svg_path(pathliv->svg_dump_path());
+}
+
 Geom::PathVector 
 LPEOffset::doEffect_path(Geom::PathVector const & path_in)
 {
@@ -487,7 +498,7 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
         }
     }
     for (auto pathin : closed_pathv) {
-        Geom::OptRect pbbox = pathin.boundsFast();
+        // Geom::OptRect bbox = pathin.boundsFast();
         // if (pbbox && (*pbbox).minExtent() > to_offset) {
         mix_pathv_workon.push_back(pathin);
         //}
@@ -573,7 +584,10 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
                 }
             }
             sp_flatten(outline, fill_nonZero);
+            double size = Geom::L2(Geom::bounds_fast(ret_closed)->dimensions());
+            size /= sp_lpe_item->i2doc_affine().descrim();
             ret_closed = sp_pathvector_boolop(outline, ret_closed, bool_op_diff, fill_nonZero, fill_nonZero);
+            ret_closed = sp_simplify_pathvector(ret_closed, 0.0003 * size);
         }
     }
     ret_closed.insert(ret_closed.begin(), ret_open.begin(), ret_open.end());
