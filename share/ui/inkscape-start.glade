@@ -1024,19 +1024,19 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
                 </child>
                 <child>
                   <object class="GtkLabel">
-                    <property name="width_request">100</property>
-                    <property name="height_request">80</property>
+                    <property name="width_request">150</property>
+                    <property name="height_request">120</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Welcome to</property>
+                    <property name="label" translatable="yes">Welcome</property>
                     <attributes>
                       <attribute name="font-desc" value="Linux Libertine Display 52"/>
                       <attribute name="foreground" value="#fffff1f18d8d"/>
                     </attributes>
                   </object>
                   <packing>
-                    <property name="x">78</property>
-                    <property name="y">20</property>
+                    <property name="x">75</property>
+                    <property name="y">35</property>
                   </packing>
                 </child>
                 <child>
