@@ -385,6 +385,17 @@ void
 LPEPerspectiveEnvelope::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     original_bbox(lpeitem, false, true);
+    if (Geom::are_near(boundingbox_X.min(),boundingbox_X.max()) || 
+        Geom::are_near(boundingbox_Y.min(),boundingbox_Y.max())) 
+    {
+        g_warning("Coulden`t appy perspective/envelope to a element with geometric width or height equal 0 we add a temporary bounding box to allow handle");
+        if (Geom::are_near(boundingbox_X.min(), boundingbox_X.max())) {
+            boundingbox_X = Geom::Interval(boundingbox_X.min() - 3, boundingbox_X.max() + 3);
+        }
+        if (Geom::are_near(boundingbox_Y.min(), boundingbox_Y.max())) {
+            boundingbox_Y = Geom::Interval(boundingbox_Y.min() - 3, boundingbox_Y.max() + 3);
+        }
+    }
     Geom::Line vert(Geom::Point(boundingbox_X.middle(),boundingbox_Y.max()), Geom::Point(boundingbox_X.middle(), boundingbox_Y.min()));
     Geom::Line horiz(Geom::Point(boundingbox_X.min(),boundingbox_Y.middle()), Geom::Point(boundingbox_X.max(), boundingbox_Y.middle()));
     if(vertical_mirror) {
@@ -511,6 +522,16 @@ LPEPerspectiveEnvelope::doBeforeEffect (SPLPEItem const* lpeitem)
 void
 LPEPerspectiveEnvelope::setDefaults()
 {
+    if (Geom::are_near(boundingbox_X.min(),boundingbox_X.max()) || 
+        Geom::are_near(boundingbox_Y.min(),boundingbox_Y.max())) 
+    {
+        if (Geom::are_near(boundingbox_X.min(), boundingbox_X.max())) {
+            boundingbox_X = Geom::Interval(boundingbox_X.min() - 3, boundingbox_X.max() + 3);
+        }
+        if (Geom::are_near(boundingbox_Y.min(), boundingbox_Y.max())) {
+            boundingbox_Y = Geom::Interval(boundingbox_Y.min() - 3, boundingbox_Y.max() + 3);
+        }
+    }
     Geom::Point up_left(boundingbox_X.min(), boundingbox_Y.min());
     Geom::Point up_right(boundingbox_X.max(), boundingbox_Y.min());
     Geom::Point down_left(boundingbox_X.min(), boundingbox_Y.max());
