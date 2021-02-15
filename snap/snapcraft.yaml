@@ -33,7 +33,6 @@ parts:
     source: .
     cmake-parameters:
       - '-DCMAKE_INSTALL_PREFIX='
-      - '-DCMAKE_BUILD_TYPE=Debug'
     build-packages:
       - build-essential
       - cmake
