@@ -75,6 +75,10 @@
     * "..combobright" Combo bright
     */
 
+*{
+    font-feature-settings: "tnum=1";
+}
+
 *:disabled image {
     opacity: 0.4;
 }
