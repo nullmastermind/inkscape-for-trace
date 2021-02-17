@@ -1,6 +1,8 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 version: '{branch}-{build}'
 
+image: Visual Studio 2019
+
 clone_depth: 100
 
 # do not build feature branches with open pull requests
@@ -27,16 +29,6 @@ install:
 build_script:
   - del C:\Windows\System32\libssl-*.dll C:\Windows\system32\libcrypto-*.dll
   - del C:\Windows\SysWOW64\libssl-*.dll C:\Windows\SysWOW64\libcrypto-*.dll
-
-  # for zst package format support
-  - C:\msys64\usr\bin\pacman -U http://repo.msys2.org/msys/x86_64/libzstd-1.4.4-2-x86_64.pkg.tar.xz
-                                http://repo.msys2.org/msys/x86_64/pacman-5.2.1-6-x86_64.pkg.tar.xz
-                                http://repo.msys2.org/msys/x86_64/zstd-1.4.4-2-x86_64.pkg.tar.xz
-                                %PACMAN_OPTIONS%"
-
-  # update keyring
-  - curl -O http://repo.msys2.org/msys/x86_64/msys2-keyring-1~20210213-1-any.pkg.tar.zst
-  - C:\msys64\usr\bin\bash --login -c "pacman -U $(cygpath ${APPVEYOR_BUILD_FOLDER})/msys2-keyring-1~20210213-1-any.pkg.tar.zst %PACMAN_OPTIONS%"
 
   - C:\msys64\usr\bin\pacman -Sy pacman %PACMAN_OPTIONS%
   - C:\msys64\usr\bin\pacman -Syuu %PACMAN_OPTIONS%
