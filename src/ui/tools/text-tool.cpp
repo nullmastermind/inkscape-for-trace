@@ -1625,6 +1625,12 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
                 if (opt_frame && (!opt_frame->contains(p0))) {
                     scroll = false;
                 }
+            } else if (SP_IS_FLOWTEXT(tc->text)) {
+                SPItem *frame = SP_FLOWTEXT(tc->text)->get_frame(nullptr); // first frame only
+                Geom::OptRect opt_frame = frame->geometricBounds();
+                if (opt_frame && (!opt_frame->contains(p0))) {
+                    scroll = false;
+                }
             }
 
             if (scroll) {
