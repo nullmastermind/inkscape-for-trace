@@ -177,7 +177,10 @@ SprayTool::SprayTool()
 }
 
 SprayTool::~SprayTool() {
-    object_set.clear();
+    if (!object_set.isEmpty()) {
+        object_set.clear();
+    }
+    desktop->getSelection()->restoreBackup();
     this->enableGrDrag(false);
     this->style_set_connection.disconnect();
 
@@ -236,7 +239,7 @@ void SprayTool::setup() {
     if (prefs->getBool("/tools/spray/gradientdrag")) {
         this->enableGrDrag();
     }
-
+    desktop->getSelection()->setBackup();
     sp_event_context_read(this, "distrib");
     sp_event_context_read(this, "width");
     sp_event_context_read(this, "ratio");
@@ -976,7 +979,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
     } else if (mode == SPRAY_MODE_SINGLE_PATH) {
         long setSize = boost::distance(set->items());
         SPItem *parent_item = setSize > 0 ? set->items().front() : nullptr;    // Initial object
-        SPItem *unionResult = setSize > 1 ? *(++set->items().begin()) : nullptr;    // Previous union
+        SPItem *unionResult = setSize > 1 ? set->items().back() : nullptr;    // Previous union
         SPItem *item_copied = nullptr;    // Projected object
 
         if (parent_item) {
@@ -1011,13 +1014,20 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                     item_copied->move_rel(Geom::Translate(move * desktop->doc2dt().withoutTranslation()));
 
                     // Union and duplication
-                    set->clear();
-                    set->add(item_copied);
+                    ObjectSet object_set_tmp = *desktop->getSelection();
+                    object_set_tmp.clear();
+                    object_set_tmp.add(item_copied);
                     if (unionResult) { // No need to add the very first item (initialized with NULL).
-                        set->add(unionResult);
+                        object_set_tmp.add(unionResult);
                     }
-                    set->pathUnion(true);
+                    object_set_tmp.pathUnion(true);
                     set->add(parent_item);
+                    std::vector<SPItem*> tmpitems(object_set_tmp.items().begin(), object_set_tmp.items().end());
+                    for (auto item : tmpitems) {
+                        set->add(item);
+                    }
+                    object_set_tmp.clear();
+                    tmpitems.clear();
                     Inkscape::GC::release(copy);
                     did = true;
                 }
@@ -1235,6 +1245,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
             break;
         case GDK_BUTTON_PRESS:
             if (event->button.button == 1) {
+                desktop->getSelection()->restoreBackup();
                 if (Inkscape::have_viable_layer(desktop, defaultMessageContext()) == false) {
                     return TRUE;
                 }
@@ -1369,13 +1380,13 @@ bool SprayTool::root_handler(GdkEvent* event) {
                                            SP_VERB_CONTEXT_SPRAY, _("Spray with clones"));
                         break;
                     case SPRAY_MODE_SINGLE_PATH:
-                        object_set.pathUnion(true);
                         desktop->getSelection()->add(object_set.objects().begin(), object_set.objects().end());
                         DocumentUndo::done(this->desktop->getDocument(),
                                            SP_VERB_CONTEXT_SPRAY, _("Spray in single path"));
                         break;
                 }
             }
+            desktop->getSelection()->clear();
             object_set.clear();
             break;
         }
