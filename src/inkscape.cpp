@@ -633,9 +633,16 @@ Application::crash_handler (int /*signum*/)
             char c[1024];
             g_snprintf (c, 1024, "%.256s.%s.%d.svg", docname, sptstr, count);
 
+            const char* document_uri = doc->getDocumentURI();
+            char* document_base = nullptr;
+            if (document_uri) {
+                document_base = g_path_get_dirname(document_uri);
+            }
+
             // Find a location
             const char* locations[] = {
-                doc->getDocumentBase(),
+                // Don't use getDocumentBase as that also can be unsaved template locations.
+                document_base,
                 g_get_home_dir(),
                 g_get_tmp_dir(),
                 curdir,
@@ -650,6 +657,9 @@ Application::crash_handler (int /*signum*/)
                     g_snprintf (c, 1024, "%s", filename); // we want the complete path to be stored in c (for reporting purposes)
                     break;
                 }
+            }
+            if (document_base) {
+                g_free(document_base);
             }
 
             // Save
