@@ -53,11 +53,15 @@ Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in
 
     no_doc = false;
     no_live_preview = false;
+    refresh_ext = false;
 
     if (repr != nullptr) {
 
         for (Inkscape::XML::Node *child = repr->firstChild(); child != nullptr; child = child->next()) {
             if (!strcmp(child->name(), INKSCAPE_EXTENSION_NS "effect")) {
+                if (child->attribute("refresh-extensions") && !strcmp(child->attribute("refresh-extensions"), "true")) {
+                    refresh_ext = true;
+                }
                 if (child->attribute("needs-document") && !strcmp(child->attribute("needs-document"), "false")) {
                     no_doc = true;
                 }

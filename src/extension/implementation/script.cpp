@@ -24,6 +24,7 @@
 
 #include "desktop.h"
 #include "inkscape.h"
+#include "inkscape-window.h"
 #include "path-prefix.h"
 #include "preferences.h"
 #include "script.h"
@@ -32,18 +33,21 @@
 #include "extension/db.h"
 #include "extension/effect.h"
 #include "extension/execution-env.h"
+#include "extension/init.h"
 #include "extension/input.h"
 #include "extension/output.h"
 #include "extension/system.h"
 #include "io/resource.h"
 #include "object/sp-namedview.h"
 #include "object/sp-path.h"
+#include "ui/desktop/menubar.h"
 #include "ui/dialog-events.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/multi-path-manipulator.h"
 #include "ui/tool/path-manipulator.h"
 #include "ui/tools/node-tool.h"
 #include "ui/view/view.h"
+#include "widgets/desktop-widget.h"
 #include "xml/attribute-record.h"
 #include "xml/node.h"
 
@@ -586,6 +590,16 @@ void Script::effect(Inkscape::Extension::Effect *module,
         Glib::ustring empty;
         file_listener outfile;
         execute(command, params, empty, outfile);
+
+        if (module->refresh_ext) {
+            /* Initialize the extensions */
+           Inkscape::Extension::refresh_user_extensions();
+           InkscapeWindow *window = desktop->getInkscapeWindow();
+            if (window) { // during load, SP_ACTIVE_DESKTOP may be !nullptr, but parent might still be nullptr
+                SPDesktopWidget *dtw = window->get_desktop_widget();
+                reload_menu(desktop, dtw->_menubar);
+            }
+        }
 
         return;
     }

@@ -131,7 +131,6 @@ PrefDialog::~PrefDialog ( )
     if (_effect != nullptr) {
         _effect->set_pref_dialog(nullptr);
     }
-
     return;
 }
 

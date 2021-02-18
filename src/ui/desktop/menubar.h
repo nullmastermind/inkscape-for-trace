@@ -32,6 +32,8 @@ namespace View {
 
 bool getStateFromPref(SPDesktop *dt, Glib::ustring item);
 Gtk::MenuBar* build_menubar(Inkscape::UI::View::View* view);
+void reload_menu(Inkscape::UI::View::View* view, Gtk::MenuBar* menubar);
+
 Gtk::MenuItem *get_menu_item_for_verb(unsigned int verb, Inkscape::UI::View::View *);
 
 #endif // SEEN_DESKTOP_MENUBAR_H

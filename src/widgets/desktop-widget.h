@@ -93,7 +93,7 @@ public:
     SPDesktop *desktop = nullptr;
 
     Gtk::Window *window = nullptr;
-
+    Gtk::MenuBar *_menubar;
 private:
     // Flags for ruler event handling
     bool _ruler_clicked = false; ///< True if the ruler has been clicked
@@ -113,7 +113,6 @@ private:
     Inkscape::UI::Dialog::DialogContainer *_container = nullptr;
     Inkscape::UI::Dialog::DialogMultipaned *_columns;
 
-    Gtk::MenuBar *_menubar;  // TEMP
     Gtk::Box     *_statusbar;
 
     Inkscape::UI::Dialog::SwatchesPanel *_panels;

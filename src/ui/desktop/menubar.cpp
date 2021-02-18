@@ -631,6 +631,21 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
     }
 }
 
+void
+reload_menu(Inkscape::UI::View::View* view, Gtk::MenuBar* menubar)
+{   
+    menubar->hide();
+    for (auto *widg : menubar->get_children()) {
+        menubar->remove(*widg);
+    }
+    menuitems.clear();
+    build_menu(menubar, INKSCAPE.get_menus()->parent(), view);
+    menubar->show_all();
+#ifdef GDK_WINDOWING_QUARTZ
+    sync_menubar();
+#endif
+}
+
 Gtk::MenuBar*
 build_menubar(Inkscape::UI::View::View* view)
 {

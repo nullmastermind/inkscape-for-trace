@@ -20,7 +20,8 @@ namespace Inkscape {
 namespace Extension {
 
 void init ();
-
+void load_user_extensions();
+void refresh_user_extensions();
 } } /* namespace Inkscape::Extension */
 
 #endif /* INKSCAPE_EXTENSION_INIT_H__ */

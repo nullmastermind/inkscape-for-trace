@@ -173,11 +173,22 @@ bool Dependency::check ()
             }
 #endif
 
+            // The INX directory is such a common and consistant directory, that we're just going
+            // to test it for every single type, we do specific requested checks next.
+            std::string base_directory = _extension->get_base_directory();
+            if (!base_directory.empty()) {
+                std::string absolute_location = Glib::build_filename(base_directory, location);
+                if (Glib::file_test(absolute_location, filetest)) {
+                    _absolute_location = absolute_location;
+                    break;
+                }
+            }
+
             switch (_location) {
                 case LOCATION_EXTENSIONS: {
                     // get_filename will warn if the resource isn't found, while returning an empty string.
                     std::string temploc =
-                        Inkscape::IO::Resource::get_filename_string(Inkscape::IO::Resource::EXTENSIONS, location.c_str());
+                        Inkscape::IO::Resource::get_filename_string(Inkscape::IO::Resource::EXTENSIONS, location.c_str(), false, true);
                     if (!temploc.empty()) {
                         location = temploc;
                         _absolute_location = temploc;
@@ -197,23 +208,13 @@ bool Dependency::check ()
                 } /* PASS THROUGH!!! */ // TODO: the pass-through seems wrong - either it's relative or not.
                 case LOCATION_ABSOLUTE: {
                     // TODO: should we check if the directory actually is absolute and/or sanitize the filename somehow?
-                    if (!Glib::file_test(location, filetest)) {
-                        return false;
+                    if (Glib::file_test(location, filetest)) {
+                        _absolute_location = location;
                     }
-                    _absolute_location = location;
                     break;
                 }
                 case LOCATION_INX: {
-                    std::string base_directory = _extension->get_base_directory();
-                    if (base_directory.empty()) {
-                        g_warning("Dependency '%s' requests location relative to .inx file, "
-                                  "which is unknown for extension '%s'", _string, _extension->get_id());
-                    }
-                    std::string absolute_location = Glib::build_filename(base_directory, location);
-                    if (!Glib::file_test(absolute_location, filetest)) {
-                        return false;
-                    }
-                    _absolute_location = absolute_location;
+                    // INX is always tested, it's the common default (see above)
                     break;
                 }
                 /* The default case is to look in the path */
@@ -228,8 +229,6 @@ bool Dependency::check ()
                            The default search path is the current directory */
                         path = g_strdup(G_SEARCHPATH_SEPARATOR_S);
                     }
-
-                    gchar * orig_path = path;
 
                     for (; path != nullptr;) {
                         gchar * local_path; // to have the path after detection of the separator
@@ -252,9 +251,7 @@ bool Dependency::check ()
                         }
 
                         if (Glib::file_test(final_name, filetest)) {
-                            g_free(orig_path);
                             _absolute_location = final_name;
-                            return true;
                         }
 
 #ifdef _WIN32
@@ -262,25 +259,21 @@ bool Dependency::check ()
                         // which one it is, so try all extensions glib assumes to be executable.
                         // As we can only guess here, return the version without extension if either one is found,
                         // so that we don't accidentally override (or conflict with) some g_spawn_* magic.
-                        if (_type == TYPE_EXECUTABLE) {
+                        if (_absolute_location.empty() && _type == TYPE_EXECUTABLE) {
                             static const std::vector<std::string> extensions = {".exe", ".cmd", ".bat", ".com"};
                             if (extension.empty() ||
                                     std::find(extensions.begin(), extensions.end(), extension) == extensions.end())
                             {
                                 for (auto extension : extensions) {
                                     if (Glib::file_test(final_name + extension, filetest)) {
-                                        g_free(orig_path);
                                         _absolute_location = final_name;
-                                        return true;
+                                        break;
                                     }
                                 }
                             }
                         }
 #endif
                     }
-
-                    g_free(orig_path);
-                    return false; /* Reverse logic in this one */
                 }
             } /* switch _location */
             break;
@@ -289,7 +282,8 @@ bool Dependency::check ()
             return false;
     } /* switch _type */
 
-    return true;
+    // If the above managed to set something, it's considered "existing"
+    return !_absolute_location.empty();
 }
 
 /**
