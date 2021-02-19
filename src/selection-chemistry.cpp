@@ -2816,7 +2816,7 @@ bool ObjectSet::unlinkRecursive(const bool skip_undo, const bool force) {
     bool pathoperationsunlink = prefs->getBool("/options/pathoperationsunlink/value", true);
     if (!force && !pathoperationsunlink) {
         if (desktop() && !pathoperationsunlink) {
-            desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Coulden't unlink see preference path operation unlink value."));
+            desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Couldn't unlink see preference path operation unlink value."));
         }
         return false;
     }
