@@ -1045,7 +1045,7 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
                     <property name="height_request">80</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" comment="This is a pun in English. You can translate it as 'Introducing you to freedom' or similar.">Drawing you to freedom</property>
+                    <property name="label" translatable="yes" comments="This is a pun in English. You can translate it as 'Introducing you to freedom' or similar.">Drawing you to freedom</property>
                     <attributes>
                       <attribute name="font-desc" value="Euphoria Script 27.599609375"/>
                       <attribute name="foreground" value="#ffffffffffff"/>
@@ -1991,7 +1991,7 @@ Fund Inkscape</property>
                   <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="Document format category" comment="Social Media">Social</property>
+                    <property name="label" translatable="yes" context="Document format category" comments="Social Media">Social</property>
                   </object>
                   <packing>
                     <property name="position">4</property>
