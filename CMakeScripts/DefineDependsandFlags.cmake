@@ -24,8 +24,6 @@ endif()
 if(WITH_ASAN)
     list(APPEND INKSCAPE_CXX_FLAGS "-fsanitize=address -fno-omit-frame-pointer")
     list(APPEND INKSCAPE_LIBS "-fsanitize=address")
-    list(APPEND INKSCAPE_LIBS "-Wno-mismatched-tags")
-    list(APPEND INKSCAPE_LIBS "-Wno-switch")
 else()
     # Undefine first, to suppress 'warning: "_FORTIFY_SOURCE" redefined'
     list(APPEND INKSCAPE_CXX_FLAGS "-U_FORTIFY_SOURCE")
@@ -36,6 +34,7 @@ endif()
 list(APPEND INKSCAPE_CXX_FLAGS "-fstack-protector-strong")
 list(APPEND INKSCAPE_CXX_FLAGS "-Werror=format")                # e.g.: printf("%s", std::string("foo"))
 list(APPEND INKSCAPE_CXX_FLAGS "-Werror=format-security")       # e.g.: printf(variable);
+list(APPEND INKSCAPE_CXX_FLAGS "-Wno-switch")                   # See !849 for discussion
 list(APPEND INKSCAPE_CXX_FLAGS_DEBUG "-Og")                     # -Og for _FORTIFY_SOURCE. One could add -Weffc++ here to see approx. 6000 warnings
 list(APPEND INKSCAPE_CXX_FLAGS_DEBUG "-Wcomment")
 list(APPEND INKSCAPE_CXX_FLAGS_DEBUG "-Wunused-function")
