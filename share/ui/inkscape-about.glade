@@ -110,7 +110,7 @@
               <object class="GtkLabel" id="authors-label">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="tooltip-text" translatable="yes">List of authors that contributed to the code</property>
+                <property name="tooltip-text" translatable="yes">List of authors who contributed to the code</property>
                 <property name="hexpand">True</property>
                 <property name="label" translatable="yes">Authors</property>
               </object>

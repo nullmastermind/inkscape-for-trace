@@ -4,7 +4,7 @@
  *
  * The file provides a definition of all the ways shift/ctrl/alt modifiers
  * are used in Inkscape, and allows users to customise them in keys.xml
- * 
+ *
  *//*
  * Authors:
  * 2020 Martin Owens <doctormo@geek-2.com>
@@ -33,24 +33,24 @@ decltype(Modifier::_modifiers) Modifier::_modifiers {
     {Type::CANVAS_PAN_X, new Modifier("canvas-pan-x", _("Horizontal pan"), _("Pan/Scroll left and right"), SHIFT, CANVAS, SCROLL)},
     {Type::CANVAS_ZOOM, new Modifier("canvas-zoom", _("Canvas zoom"), _("Zoom in and out with scroll wheel"), CTRL, CANVAS, SCROLL)},
     {Type::CANVAS_ROTATE, new Modifier("canvas-rotate", _("Canvas rotate"), _("Rotate the canvas with scroll wheel"), SHIFT | CTRL, CANVAS, SCROLL)},
-    
+
     // Select tool modifiers (minus transforms)
     {Type::SELECT_ADD_TO, new Modifier("select-add-to", _("Add to selection"), _("Add items to existing selection"), SHIFT, SELECT, CLICK)},
     {Type::SELECT_IN_GROUPS, new Modifier("select-in-groups", _("Select inside groups"), _("Ignore groups when selecting items"), CTRL, SELECT, CLICK)},
     {Type::SELECT_TOUCH_PATH, new Modifier("select-touch-path", _("Select with touch-path"), _("Draw a band around items to select them"), ALT, SELECT, DRAG)},
     {Type::SELECT_ALWAYS_BOX, new Modifier("select-always-box", _("Select with box"), _("Don't drag items, select more with a box"), SHIFT, SELECT, DRAG)},
     {Type::SELECT_FIRST_HIT, new Modifier("select-first-hit", _("Select the first"), _("Drag the first item the mouse hits"), CTRL, SELECT, DRAG)},
-    {Type::SELECT_FORCE_DRAG, new Modifier("select-force-drag", _("Forced Drag"), _("Drag objects even if the mouse isn't over them."), ALT, SELECT, DRAG)},
-    {Type::SELECT_CYCLE, new Modifier("select-cycle", _("Cycle through objects"), _("Scroll through objects under the cursor."), ALT, SELECT, SCROLL)},
+    {Type::SELECT_FORCE_DRAG, new Modifier("select-force-drag", _("Forced Drag"), _("Drag objects even if the mouse isn't over them"), ALT, SELECT, DRAG)},
+    {Type::SELECT_CYCLE, new Modifier("select-cycle", _("Cycle through objects"), _("Scroll through objects under the cursor"), ALT, SELECT, SCROLL)},
 
     // Transform handle modifiers (applies to multiple tools)
-    {Type::MOVE_CONFINE, new Modifier("move-confine", _("Move one axis only"), _("When dragging items, confine to either x or y axis."), CTRL, MOVE, DRAG)},
-    {Type::MOVE_INCREMENT, new Modifier("move-increment", _("Move in increments"), _("Move the objects by set increments when dragging."), ALT, MOVE, DRAG)},
-    {Type::MOVE_SNAPPING, new Modifier("move-snapping", _("No Move Snapping"), _("Disable snapping when moving objects."), SHIFT, MOVE, DRAG)},
-    {Type::TRANS_CONFINE, new Modifier("trans-confine", _("Keep aspect ratio"), _("When resizing objects, confine the aspect ratio."), CTRL, TRANSFORM, DRAG)},
-    {Type::TRANS_INCREMENT, new Modifier("trans-increment", _("Transform in increments"), _("Scale, rotate or skew by set increments."), ALT, TRANSFORM, DRAG)},
-    {Type::TRANS_OFF_CENTER, new Modifier("trans-off-center", _("Transform off center"), _("Change the center point when transforming."), SHIFT, TRANSFORM, DRAG)},
-    {Type::TRANS_SNAPPING, new Modifier("trans-snapping", _("No Transform Snapping"), _("Disable snapping when transforming objects."), SHIFT, TRANSFORM, DRAG)},
+    {Type::MOVE_CONFINE, new Modifier("move-confine", _("Move one axis only"), _("When dragging items, confine to either x or y axis"), CTRL, MOVE, DRAG)},
+    {Type::MOVE_INCREMENT, new Modifier("move-increment", _("Move in increments"), _("Move the objects by set increments when dragging"), ALT, MOVE, DRAG)},
+    {Type::MOVE_SNAPPING, new Modifier("move-snapping", _("No Move Snapping"), _("Disable snapping when moving objects"), SHIFT, MOVE, DRAG)},
+    {Type::TRANS_CONFINE, new Modifier("trans-confine", _("Keep aspect ratio"), _("When resizing objects, confine the aspect ratio"), CTRL, TRANSFORM, DRAG)},
+    {Type::TRANS_INCREMENT, new Modifier("trans-increment", _("Transform in increments"), _("Scale, rotate or skew by set increments"), ALT, TRANSFORM, DRAG)},
+    {Type::TRANS_OFF_CENTER, new Modifier("trans-off-center", _("Transform off center"), _("Change the center point when transforming"), SHIFT, TRANSFORM, DRAG)},
+    {Type::TRANS_SNAPPING, new Modifier("trans-snapping", _("No Transform Snapping"), _("Disable snapping when transforming object."), SHIFT, TRANSFORM, DRAG)},
     // Center handle click: seltrans.cpp:734 SHIFT
     // Align handle click: seltrans.cpp:1365 SHIFT
 };
@@ -66,7 +66,7 @@ decltype(Modifier::_category_names) Modifier::_category_names {
 
 /**
  * Given a Trigger, find which modifier is active (category lookup)
- * 
+ *
  * @param  trigger - The Modifier::Trigger category in the form "CANVAS | DRAG".
  * @param  button_state - The Gdk button state from an event.
  * @return - Returns the best matching modifier id by the most number of keys.

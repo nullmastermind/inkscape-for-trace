@@ -151,7 +151,7 @@ Find::Find()
     check_include_locked.set_tooltip_text(_("Include locked objects in search"));
     check_include_locked.set_active(false);
     check_ids.set_use_underline();
-    check_ids.set_tooltip_text(_("Search id name"));
+    check_ids.set_tooltip_text(_("Search ID name"));
     check_ids.set_active(true);
     check_attributename.set_use_underline();
     check_attributename.set_tooltip_text(_("Search attribute name"));

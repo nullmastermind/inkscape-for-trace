@@ -816,7 +816,7 @@ bool CommandPalette::execute_action(const ActionPtrName &action_ptr_name, const 
                 action_ptr->activate(Glib::Variant<int>::create(std::stoi(value)));
             } catch (...) {
                 if (SPDesktop *dt = SP_ACTIVE_DESKTOP; dt) {
-                    dt->messageStack()->flash(ERROR_MESSAGE, _("Invalid input! enter an integer."));
+                    dt->messageStack()->flash(ERROR_MESSAGE, _("Invalid input! Enter an integer number."));
                 }
             }
             break;
@@ -825,7 +825,7 @@ bool CommandPalette::execute_action(const ActionPtrName &action_ptr_name, const 
                 action_ptr->activate(Glib::Variant<double>::create(std::stod(value)));
             } catch (...) {
                 if (SPDesktop *dt = SP_ACTIVE_DESKTOP; dt) {
-                    dt->messageStack()->flash(ERROR_MESSAGE, _("Invalid input! enter a rational number."));
+                    dt->messageStack()->flash(ERROR_MESSAGE, _("Invalid input! Enter a decimal number."));
                 }
             }
             break;

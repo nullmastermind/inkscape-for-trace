@@ -327,7 +327,7 @@ void VPDragger::updateTip()
         else {
             // This won't make sense any more when infinite VPs are not shown on the canvas,
             // but currently we update the status message anyway
-            this->knot->tip = g_strdup_printf(ngettext("<b>Infinite</b> vanishing point shared by <b>%d</b> box",
+            this->knot->tip = g_strdup_printf(ngettext("<b>Infinite</b> vanishing point shared by the box",
                                                        "<b>Infinite</b> vanishing point shared by <b>%d</b> boxes; "
                                                        "drag with <b>Shift</b> to separate selected box(es)",
                                                        num),
@@ -336,14 +336,12 @@ void VPDragger::updateTip()
     }
     else {
         int length = this->vps.size();
-        char *desc1 = g_strdup_printf("Collection of <b>%d</b> vanishing points ", length);
-        char *desc2 = g_strdup_printf(
-            ngettext("shared by <b>%d</b> box; drag with <b>Shift</b> to separate selected box(es)",
-                     "shared by <b>%d</b> boxes; drag with <b>Shift</b> to separate selected box(es)", num),
-            num);
-        this->knot->tip = g_strconcat(desc1, desc2, NULL);
-        g_free(desc1);
-        g_free(desc2);
+        char const *tmpl = ngettext("Collection of <b>%d</b> vanishing points shared by the box; "
+                                    "drag with <b>Shift</b> to separate",
+                                    "Collection of <b>%d</b> vanishing points shared by <b>%d</b> boxes; "
+                                    "drag with <b>Shift</b> to separate",
+                                    num);
+        this->knot->tip = g_strdup_printf(tmpl, length, num);
     }
 }
 

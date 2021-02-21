@@ -149,7 +149,7 @@ static const Util::EnumData<unsigned> LineJoinTypeData[] = {
     {LINEJOIN_BEVEL, N_("Beveled"),   "bevel"},
     {LINEJOIN_ROUND, N_("Rounded"),   "round"},
 //    {LINEJOIN_EXTRP_MITER,  N_("Extrapolated"),      "extrapolated"}, // disabled because doesn't work well
-    {LINEJOIN_EXTRP_MITER_ARC, N_("Extrapolated arc"),     "extrp_arc"}, 
+    {LINEJOIN_EXTRP_MITER_ARC, N_("Extrapolated arc"),     "extrp_arc"},
     {LINEJOIN_MITER, N_("Miter"),     "miter"},
     {LINEJOIN_SPIRO, N_("Spiro"),     "spiro"},
 };
@@ -158,7 +158,7 @@ static const Util::EnumDataConverter<unsigned> LineJoinTypeConverter(LineJoinTyp
 LPEPowerStroke::LPEPowerStroke(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     offset_points(_("Offset points"), _("Offset points"), "offset_points", &wr, this),
-    not_jump(_("Not jump"), _("Not jump between further segments"), "not_jump", &wr, this, false),
+    not_jump(_("No jumping handles"), _("Allow to move handles along the path without them automatically attaching to the nearest path segment"), "not_jump", &wr, this, false),
     sort_points(_("Sort points"), _("Sort offset points according to their time value along the curve"), "sort_points", &wr, this, true),
     interpolator_type(_("Interpolator type:"), _("Determines which kind of interpolator will be used to interpolate between stroke width along the path"), "interpolator_type", InterpolatorTypeConverter, &wr, this, Geom::Interpolate::INTERP_CENTRIPETAL_CATMULLROM),
     interpolator_beta(_("Smoothness:"), _("Sets the smoothness for the CubicBezierJohan interpolator; 0 = linear interpolation, 1 = smooth"), "interpolator_beta", &wr, this, 0.2),
@@ -194,7 +194,7 @@ LPEPowerStroke::LPEPowerStroke(LivePathEffectObject *lpeobject) :
 
 LPEPowerStroke::~LPEPowerStroke() = default;
 
-void 
+void
 LPEPowerStroke::doBeforeEffect(SPLPEItem const *lpeItem)
 {
     offset_points.set_scale_width(scale_width);
@@ -390,16 +390,16 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
                         bool solok = true;
                         bool point0bad = false;
                         bool point1bad = false;
-                        if ( dot(tang2, solutions[0].point() - B[i].at0()) > 0) 
+                        if ( dot(tang2, solutions[0].point() - B[i].at0()) > 0)
                         {
                             // points[0] is bad, choose points[1]
                             point0bad = true;
                         }
-                        if ( dot(tang2, solutions[1].point() - B[i].at0()) > 0) 
-                        { 
+                        if ( dot(tang2, solutions[1].point() - B[i].at0()) > 0)
+                        {
                             // points[1] is bad, choose points[0]
                             point1bad = true;
-                        } 
+                        }
                         if (!point0bad && !point1bad ) {
                             // both points are good, choose nearest
                             sol = ( distanceSq(B[i].at0(), solutions[0].point()) < distanceSq(B[i].at0(), solutions[1].point()) ) ?
@@ -623,7 +623,7 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
         std::vector<Geom::Point> ts_close;
         //we have only one knot or overwrite before
         Geom::Point start = Geom::Point( pwd2_in.domain().min(), ts.front()[Geom::Y]);
-        Geom::Point end   = Geom::Point( pwd2_in.domain().max(), ts.front()[Geom::Y]); 
+        Geom::Point end   = Geom::Point( pwd2_in.domain().max(), ts.front()[Geom::Y]);
         if (ts.size() > 1) {
             end = Geom::Point(pwd2_in.domain().max(), 0);
             Geom::Point tmpstart(0, 0);
@@ -657,7 +657,7 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
     for (auto & t : ts) {
         t[Geom::X] *= xcoord_scaling;
     }
-    
+
     Geom::Path strokepath = interpolator->interpolateToPath(ts);
     delete interpolator;
 

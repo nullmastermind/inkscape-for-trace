@@ -2775,7 +2775,7 @@ void FilterEffectsDialog::init_settings_widgets()
     _settings_initialized = true;
 
     _filter_general_settings->type(0);
-    _filter_general_settings->add_checkbutton(true, SPAttr::AUTO_REGION, _("Automatic Region"), "true", "false", _("If unset the coordinates and dimensions won't be automatically updated."));
+    _filter_general_settings->add_checkbutton(true, SPAttr::AUTO_REGION, _("Automatic Region"), "true", "false", _("If unset, the coordinates and dimensions won't be updated automatically."));
     _filter_general_settings->add_multispinbutton(/*default x:*/ (double) -0.1, /*default y:*/ (double) -0.1, SPAttr::X, SPAttr::Y, _("Coordinates:"), -100, 100, 0.01, 0.1, 2, _("X coordinate of the left corners of filter effects region"), _("Y coordinate of the upper corners of filter effects region"));
     _filter_general_settings->add_multispinbutton(/*default width:*/ (double) 1.2, /*default height:*/ (double) 1.2, SPAttr::WIDTH, SPAttr::HEIGHT, _("Dimensions:"), 0, 1000, 0.01, 0.1, 2, _("Width of filter effects region"), _("Height of filter effects region"));
 

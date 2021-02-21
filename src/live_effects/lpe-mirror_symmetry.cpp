@@ -62,7 +62,7 @@ LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     fuse_paths(_("Fuse paths"), _("Fuse original path and mirror image into a single path"), "fuse_paths", &wr, this, false),
     oposite_fuse(_("Fuse opposite sides"), _("Picks the part on the other side of the mirror line as the original."), "oposite_fuse", &wr, this, false),
     split_items(_("Split elements"), _("Split original and mirror image into separate paths, so each can have its own style."), "split_items", &wr, this, false),
-    split_open(_("Keep open paths on split"), _("Allow keep paths open over the split line."), "split_open", &wr, this, false),
+    split_open(_("Keep open paths on split"), _("Do not automatically close paths along the split line."), "split_open", &wr, this, false),
     start_point(_("Mirror line start"), _("Start point of mirror line"), "start_point", &wr, this, _("Adjust start point of mirror line")),
     end_point(_("Mirror line end"), _("End point of mirror line"), "end_point", &wr, this, _("Adjust end point of mirror line")),
     center_point(_("Mirror line mid"), _("Center point of mirror line"), "center_point", &wr, this, _("Adjust center point of mirror line"))

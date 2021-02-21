@@ -132,7 +132,7 @@ Icon 48x48,                  48,     48, px
 ID Card (ISO 7810),       85.60,  53.98, mm
 Business Card (US),         3.5,      2, in
 Business Card (Europe),      85,     55, mm
-Business Card (Aus/NZ),      90,     55, mm
+Business Card (AU/NZ),       90,     55, mm
 Arch A,                       9,     12, in
 Arch B,                      12,     18, in
 Arch C,                      18,     24, in

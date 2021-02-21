@@ -867,7 +867,7 @@ void DocumentProperties::build_scripting()
     //# Set up the Embedded Scripts box
     _EmbeddedScriptsListStore = Gtk::ListStore::create(_EmbeddedScriptsListColumns);
     _EmbeddedScriptsList.set_model(_EmbeddedScriptsListStore);
-    _EmbeddedScriptsList.append_column(_("Script id"), _EmbeddedScriptsListColumns.idColumn);
+    _EmbeddedScriptsList.append_column(_("Script ID"), _EmbeddedScriptsListColumns.idColumn);
     _EmbeddedScriptsList.set_headers_visible(true);
 // TODO restore?    _EmbeddedScriptsList.set_fixed_height_mode(true);
 

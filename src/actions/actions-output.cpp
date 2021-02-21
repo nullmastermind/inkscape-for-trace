@@ -234,7 +234,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_output =
     {"app.export-width",              N_("Export Width"),              "Export",     N_("Set export width")                                   },
     {"app.export-height",             N_("Export Height"),             "Export",     N_("Set export height")                                  },
 
-    {"app.export-id",                 N_("Export ID"),                 "Export",     N_("Export selected id(s)")                              },
+    {"app.export-id",                 N_("Export ID"),                 "Export",     N_("Export selected ID(s)")                              },
     {"app.export-id-only",            N_("Export ID Only"),            "Export",     N_("Hide any objects not given in export-id option")     },
 
     {"app.export-plain-svg",          N_("Export Plain SVG"),          "Export",     N_("Export as plain SVG")                                },

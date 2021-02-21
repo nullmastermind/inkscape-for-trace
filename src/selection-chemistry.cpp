@@ -2816,7 +2816,7 @@ bool ObjectSet::unlinkRecursive(const bool skip_undo, const bool force) {
     bool pathoperationsunlink = prefs->getBool("/options/pathoperationsunlink/value", true);
     if (!force && !pathoperationsunlink) {
         if (desktop() && !pathoperationsunlink) {
-            desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Couldn't unlink see preference path operation unlink value."));
+            desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Unable to unlink. Check the setting for 'Unlinking Clones' in your preferences."));
         }
         return false;
     }
@@ -3004,7 +3004,7 @@ void ObjectSet::cloneOriginalPathLPE(bool allow_transforms)
             // create the new path
             clone = xml_doc->createElement("svg:path");
             clone->setAttribute("d", "M 0 0");
-                
+
         }
         if (clone) {
             // add the new clone to the top of the original's parent
