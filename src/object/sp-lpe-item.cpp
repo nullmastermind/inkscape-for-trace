@@ -253,6 +253,10 @@ bool SPLPEItem::performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape:
             // To Calculate BBox on shapes and nested LPE
             current->setCurveInsync(curve);
             // Groups have their doBeforeEffect called elsewhere
+            if (lpe->lpeversion.param_getSVGValue() != "0") { // we are on 1 or up
+                current->bbox_vis_cache_is_valid = false;
+                current->bbox_geom_cache_is_valid = false;
+            }
             if (!SP_IS_GROUP(this) && !is_clip_or_mask) {
                 lpe->doBeforeEffect_impl(this);
             }
@@ -281,7 +285,8 @@ bool SPLPEItem::performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape:
                 }
                 lpe->doAfterEffect_impl(this, curve);
             }
-            if (lpe->lpeversion.param_getSVGValue() != "0") { // we are on 1 or up
+            // we need this on slice LPE to calulate correcly effects
+            if (dynamic_cast<Inkscape::LivePathEffect::LPESlice *>(lpe)) { // we are on 1 or up
                 current->bbox_vis_cache_is_valid = false;
                 current->bbox_geom_cache_is_valid = false;
             }
