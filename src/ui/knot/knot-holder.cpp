@@ -412,14 +412,16 @@ void KnotHolder::add_hatch_knotholder()
 }
 
 void KnotHolder::add_filter_knotholder() {
-    FilterKnotHolderEntity *entity_tl = new FilterKnotHolderEntity(true);
-    FilterKnotHolderEntity *entity_br = new FilterKnotHolderEntity(false);
-    entity_tl->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_POINT, "Filter:TopLeft",
-                      _("<b>Resize</b> the filter effect region"));
-    entity_br->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_POINT, "Filter:BottomRight",
-                      _("<b>Resize</b> the filter effect region"));
-    entity.push_back(entity_tl);
-    entity.push_back(entity_br);
+    if (item->style->filter.set && !item->style->getFilter()->auto_region) {
+        FilterKnotHolderEntity *entity_tl = new FilterKnotHolderEntity(true);
+        FilterKnotHolderEntity *entity_br = new FilterKnotHolderEntity(false);
+        entity_tl->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_POINT, "Filter:TopLeft",
+                          _("<b>Resize</b> the filter effect region"));
+        entity_br->create(desktop, item, this, Inkscape::CANVAS_ITEM_CTRL_TYPE_POINT, "Filter:BottomRight",
+                          _("<b>Resize</b> the filter effect region"));
+        entity.push_back(entity_tl);
+        entity.push_back(entity_br);
+    }
 }
 
 /*

@@ -133,7 +133,12 @@ void SPFeOffset::build_renderer(Inkscape::Filters::Filter* filter) {
  */
 Geom::Rect SPFeOffset::calculate_region(Geom::Rect region)
 {
-    region *= Geom::Translate(this->dx, this->dy);
+    // Because blur caluclates it's drawing space based on the resulting region
+    // An offset will actually harm to blur's ability to draw, even though it shouldn't
+    // A future fix would require the blur to figure out it's region minus any downstream
+    // offset (this effects drop-shadows)
+    // TODO: region *= Geom::Translate(this->dx, this->dy);
+    region.unionWith(region * Geom::Translate(this->dx, this->dy));
     return region;
 }
 

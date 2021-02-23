@@ -339,10 +339,13 @@ Inkscape::XML::Node* SPFilter::write(Inkscape::XML::Document *doc, Inkscape::XML
 
 /**
  * Update the filter's region based on it's detectable href links
+ *
+ * Automatic region only updated if auto_region is false
+ * and filterUnits is not UserSpaceOnUse
  */
 void SPFilter::update_filter_all_regions()
 {
-    if (!this->auto_region)
+    if (!this->auto_region || this->filterUnits == SP_FILTER_UNITS_USERSPACEONUSE)
         return;
 
     // Combine all items into one region for updating.
@@ -364,7 +367,7 @@ void SPFilter::update_filter_all_regions()
  */
 void SPFilter::update_filter_region(SPItem *item)
 {
-    if (!this->auto_region)
+    if (!this->auto_region || this->filterUnits == SP_FILTER_UNITS_USERSPACEONUSE)
         return; // No adjustment for dead box
 
     auto region = this->get_automatic_filter_region(item);
@@ -380,15 +383,17 @@ void SPFilter::update_filter_region(SPItem *item)
  */
 Geom::Rect SPFilter::get_automatic_filter_region(SPItem *item)
 {
-    Geom::OptRect bbox = item->desktopGeometricBounds();
-    if (!bbox)
-        return Geom::Rect(); // No adjustment for dead box
+    // Calling bbox instead of visualBound() avoids re-requesting filter regions
+    Geom::OptRect v_box = item->bbox(Geom::identity(), SPItem::VISUAL_BBOX);
+    Geom::OptRect g_box = item->bbox(Geom::identity(), SPItem::GEOMETRIC_BBOX);
+    if (!v_box || !g_box) return Geom::Rect(); // No adjustment for dead box
 
-    // Turn bbox into real box and shrink it to units used in filters.
-    Geom::Rect inbox = *bbox;
-    inbox *= item->i2dt_affine().inverse();
-
-    Geom::Rect outbox = inbox;
+    // Because the filter box is in geometric bounding box units, it must ALSO
+    // take account of the visualBox, so even if the filter does NOTHING to the
+    // size of an object, we must add the difference between the geometric and
+    // visual boxes ourselves or find them cut off by renderers of all kinds.
+    Geom::Rect inbox = *g_box;
+    Geom::Rect outbox = *v_box;
     for(auto& primitive_obj: this->children) {
         auto primitive = dynamic_cast<SPFilterPrimitive *>(&primitive_obj);
         if (primitive) {
@@ -397,9 +402,10 @@ Geom::Rect SPFilter::get_automatic_filter_region(SPItem *item)
         }
     }
 
-    // Include the original bounding-box in the result
-    outbox.unionWith(inbox);
-    // Scale outbox to width/height scale of input.
+    // Include the original visual bounding-box in the result
+    outbox.unionWith(v_box);
+    // Scale outbox to width/height scale of input, this scales the geometric
+    // into the visual bounding box requiring any changes to it to re-run this.
     outbox *= Geom::Translate(-inbox.left(), -inbox.top());
     outbox *= Geom::Scale(1/inbox.width(), 1/inbox.height());
     return outbox;

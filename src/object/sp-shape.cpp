@@ -456,6 +456,10 @@ void SPShape::modified(unsigned int flags) {
         }
     }
 
+    if (flags & SP_OBJECT_MODIFIED_FLAG && style->filter.set) {
+        style->getFilter()->update_filter_all_regions();
+    }
+
     if (!_curve) {
         sp_lpe_item_update_patheffect(this, true, false);
     }
