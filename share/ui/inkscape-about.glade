@@ -320,7 +320,7 @@
                     <property name="reveal-child">True</property>
                     <child>
                       <object class="GtkButton" id="version">
-                        <property name="label" translatable="yes">$version</property>
+                        <property name="label" translatable="no">$version</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">True</property>
