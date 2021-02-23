@@ -278,7 +278,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="margin-start">10</property>
-                <property name="label" translatable="yes" context="Brief copyright notice at the footer of the About screen">© 2019 Inkscape Developers</property>
+                <property name="label" translatable="yes" context="Brief copyright notice at the footer of the About screen">© 2021 Inkscape Developers</property>
                 <property name="wrap">True</property>
                 <property name="wrap-mode">char</property>
               </object>
