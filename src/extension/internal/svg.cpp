@@ -347,7 +347,7 @@ static void remove_marker_context_paint (Inkscape::XML::Node *repr,
  * Notes:
  *   Text must have been layed out. Access via old document.
  */
-static void insert_text_fallback( Inkscape::XML::Node *repr, SPDocument *original_doc, Inkscape::XML::Node *defs = nullptr )
+static void insert_text_fallback( Inkscape::XML::Node *repr, const SPDocument *original_doc, Inkscape::XML::Node *defs = nullptr )
 {
     if (repr) {
 
@@ -958,6 +958,7 @@ Svg::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
     g_return_if_fail(doc != nullptr);
     g_return_if_fail(filename != nullptr);
     Inkscape::XML::Document *rdoc = doc->getReprDoc();
+    const SPDocument *original_doc = doc->getOriginalDocument();
 
     bool const exportExtensions = ( !mod->get_id()
       || !strcmp (mod->get_id(), SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE)
@@ -995,8 +996,8 @@ Svg::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
         rdoc->setAttribute("version", "1.1");
     }
 
-    if (insert_text_fallback_flag) {
-        insert_text_fallback (rdoc->root(), doc);
+    if (insert_text_fallback_flag && original_doc) {
+        insert_text_fallback (rdoc->root(), original_doc);
     }
 
     if (insert_mesh_polyfill_flag) {

@@ -491,6 +491,7 @@ std::unique_ptr<SPDocument> SPDocument::copy() const
     Inkscape::GC::release(root);
 
     auto doc = createDoc(new_rdoc, document_uri, document_base, document_name, keepalive, nullptr);
+    doc->_original_document = this->doRef();
     Inkscape::GC::release(new_rdoc);
 
     return std::unique_ptr<SPDocument>(doc);
@@ -612,6 +613,10 @@ std::unique_ptr<SPDocument> SPDocument::doRef()
 {
     Inkscape::GC::anchor(this);
     return std::unique_ptr<SPDocument>(this);
+}
+std::unique_ptr<SPDocument const> SPDocument::doRef() const
+{
+    return const_cast<SPDocument*>(this)->doRef();
 }
 
 /// guaranteed not to return nullptr
