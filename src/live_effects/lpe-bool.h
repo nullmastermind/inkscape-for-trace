@@ -42,15 +42,16 @@ public:
         bool_op_ex_diff = bool_op_diff,
         bool_op_ex_symdiff = bool_op_symdiff,
         bool_op_ex_cut = bool_op_cut,
-        bool_op_ex_slice = bool_op_slice,
-        bool_op_ex_slice_inside,  // like bool_op_slice, but leaves only the contour pieces inside of the cut path
-        bool_op_ex_slice_outside, // like bool_op_slice, but leaves only the contour pieces outside of the cut path
+        // bool_op_ex_slice = bool_op_slice,
+        // bool_op_ex_slice_inside,  // like bool_op_slice, but leaves only the contour pieces inside of the cut path
+        // bool_op_ex_slice_outside, // like bool_op_slice, but leaves only the contour pieces outside of the cut path
         bool_op_ex_count
     };
 
     inline friend bool_op to_bool_op(bool_op_ex val)
     {
-        assert(val <= bool_op_ex_slice);
+        //assert(val <= bool_op_ex_slice);
+        assert(val <= bool_op_ex_cut);
         return (bool_op) val;
     }
 
