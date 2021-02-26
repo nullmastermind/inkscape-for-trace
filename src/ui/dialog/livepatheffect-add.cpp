@@ -133,7 +133,7 @@ LivePathEffectAdd::LivePathEffectAdd()
     try {
         _builder = Gtk::Builder::create_from_file(gladefile);
     } catch (const Glib::Error &ex) {
-        g_warning("Glade file loading failed for filter effect dialog");
+        g_warning("Glade file loading failed for path effect dialog");
         return;
     }
     _builder->get_widget("LPEDialogSelector", _LPEDialogSelector);

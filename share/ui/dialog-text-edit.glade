@@ -26,7 +26,7 @@
               <object class="GtkLabel" id="preview_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">text</property>
+                <property name="label" translatable="no">text</property>
                 <property name="justify">center</property>
                 <property name="ellipsize">end</property>
                 <property name="single_line_mode">True</property>
@@ -64,7 +64,7 @@
               <object class="GtkLabel" id="preview_label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">text</property>
+                <property name="label" translatable="no">text</property>
                 <property name="justify">center</property>
                 <property name="ellipsize">end</property>
                 <property name="single_line_mode">True</property>

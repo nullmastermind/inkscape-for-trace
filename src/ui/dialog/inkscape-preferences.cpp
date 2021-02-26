@@ -2615,7 +2615,7 @@ void InkscapePreferences::initPageBitmaps()
     _page_bitmaps.add_line(
         true, "", _svgoutput_usesodipodiabsref, "",
         _("By default, image links are stored as relative paths whenever possible. If this option is enabled, Inkscape "
-          "will additionally add an absolute path ('sodipody:absref' attribute) to the image. This is used as a "
+          "will additionally add an absolute path ('sodipodi:absref' attribute) to the image. This is used as a "
           "fall-back for locating the linked image, for example if the SVG document has been moved on disk. Note that this "
           "will expose your directory structure in the file's source code, which can include personal information like your username."),
         false);
