@@ -640,11 +640,10 @@ reload_menu(Inkscape::UI::View::View* view, Gtk::MenuBar* menubar)
     }
     menuitems.clear();
     build_menu(menubar, INKSCAPE.get_menus()->parent(), view);
+    menubar->show_all();
 #ifdef GDK_WINDOWING_QUARTZ
     sync_menubar();
     menubar->hide();
-#else
-    menubar->show_all();
 #endif
 }
 
