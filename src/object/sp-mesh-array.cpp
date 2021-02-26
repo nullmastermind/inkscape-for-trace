@@ -638,13 +638,13 @@ SPMeshNodeArray::SPMeshNodeArray( SPMeshGradient *mg ) {
 
 
 // Copy constructor
-SPMeshNodeArray::SPMeshNodeArray( const SPMeshNodeArray& rhs ) {
+SPMeshNodeArray::SPMeshNodeArray( const SPMeshNodeArray& rhs ) :
+    nodes(rhs.nodes) // This only copies the pointers but it does size the vector of vectors.
+{
 
     built = false;
     mg = nullptr;
     draggers_valid = false;
-
-    nodes = rhs.nodes; // This only copies the pointers but it does size the vector of vectors.
 
     for( unsigned i=0; i < nodes.size(); ++i ) {
         for( unsigned j=0; j < nodes[i].size(); ++j ) {

@@ -34,14 +34,14 @@ static void sp_usepath_move_compensate(Geom::Affine const *mp, SPItem *original,
 static void sp_usepath_delete_self(SPObject *deleted, SPUsePath *offset);
 static void sp_usepath_source_modified(SPObject *iSource, guint flags, SPUsePath *offset);
 
-SPUsePath::SPUsePath(SPObject* i_owner):SPUseReference(i_owner)
+SPUsePath::SPUsePath(SPObject* i_owner): SPUseReference(i_owner),
+    originalPath(nullptr),
+    sourceDirty(false),
+    owner(i_owner),
+    sourceHref(nullptr),
+    sourceRepr(nullptr),
+    sourceObject(nullptr)
 {
-    owner=i_owner;
-    originalPath = nullptr;
-    sourceDirty=false;
-    sourceHref = nullptr;
-    sourceRepr = nullptr;
-    sourceObject = nullptr;
     _changed_connection = changedSignal().connect(sigc::bind(sigc::ptr_fun(sp_usepath_href_changed), this)); // listening to myself, this should be virtual instead
 
     user_unlink = nullptr;

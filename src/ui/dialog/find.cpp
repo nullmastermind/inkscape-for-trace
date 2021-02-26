@@ -100,6 +100,9 @@ Find::Find()
       check_offsets(_("Offsets")),
       frame_types(_("Object types")),
 
+      _left_size_group(Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL)),
+      _right_size_group(Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL)),
+
       status(""),
       button_find(_("_Find")),
       button_replace(_("_Replace All")),
@@ -122,8 +125,6 @@ Find::Find()
       hboxbutton_row(Gtk::ORIENTATION_HORIZONTAL)
 
 {
-    _left_size_group = Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL);
-    _right_size_group = Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL);
     button_find.set_use_underline();
     button_find.set_tooltip_text(_("Select all objects matching the selection criteria"));
     button_replace.set_use_underline();

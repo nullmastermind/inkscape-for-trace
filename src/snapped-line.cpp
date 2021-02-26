@@ -104,9 +104,8 @@ Inkscape::SnappedLine::SnappedLine(Geom::Point const &snapped_point, Geom::Coord
 }
 
 Inkscape::SnappedLine::SnappedLine()
+    : _normal_to_line(Geom::Point(0,0)), _point_on_line(Geom::Point(0,0))
 {
-    _normal_to_line = Geom::Point(0,0);
-    _point_on_line = Geom::Point(0,0);
     _source = SNAPSOURCE_UNDEFINED;
     _source_num = -1;
     _target = SNAPTARGET_UNDEFINED;

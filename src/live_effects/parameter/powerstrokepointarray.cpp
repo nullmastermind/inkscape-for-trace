@@ -31,11 +31,11 @@ namespace LivePathEffect {
 PowerStrokePointArrayParam::PowerStrokePointArrayParam( const Glib::ustring& label, const Glib::ustring& tip,
                         const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
                         Effect* effect)
-    : ArrayParam<Geom::Point>(label, tip, key, wr, effect, 0)
+    : ArrayParam<Geom::Point>(label, tip, key, wr, effect, 0),
+    knot_shape(Inkscape::CANVAS_ITEM_CTRL_SHAPE_DIAMOND),
+    knot_mode(Inkscape::CANVAS_ITEM_CTRL_MODE_XOR),
+    knot_color(0xff88ff00)
 {
-    knot_shape = Inkscape::CANVAS_ITEM_CTRL_SHAPE_DIAMOND;
-    knot_mode  = Inkscape::CANVAS_ITEM_CTRL_MODE_XOR;
-    knot_color = 0xff88ff00;
 }
 
 PowerStrokePointArrayParam::~PowerStrokePointArrayParam()
