@@ -1606,7 +1606,7 @@ void InkscapePreferences::initPageUI()
         // Iterate over the map using Iterator till end.
         for (std::pair<std::string, int> element : dark_themes) {
             Glib::ustring theme = element.first;
-            it++;
+            ++it;
             if (theme == default_theme) {
                 continue;
             }

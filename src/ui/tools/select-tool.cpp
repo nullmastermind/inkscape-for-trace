@@ -381,29 +381,29 @@ void SelectTool::sp_select_context_cycle_through_items(Inkscape::Selection *sele
         } else {
             next = std::find( cycling_items.begin(), cycling_items.end(), cycling_cur_item );
             g_assert (next != cycling_items.end());
-            next++;
+            ++next;
             if (next == cycling_items.end()) {
                 if ( cycling_wrap ) {
                     next = cycling_items.begin();
                 } else {
-                    next--;
+                    --next;
                 }
             }
         }
     } else { 
         if (! cycling_cur_item) {
             next = cycling_items.end();
-            next--;
+            --next;
         } else {
             next = std::find( cycling_items.begin(), cycling_items.end(), cycling_cur_item );
             g_assert (next != cycling_items.end());
             if (next == cycling_items.begin()){
                 if ( cycling_wrap ) { 
                     next = cycling_items.end();
-                    next--;
+                    --next;
                 }
             } else {
-                next--;
+                --next;
             }
         }
     }

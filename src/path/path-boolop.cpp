@@ -416,7 +416,7 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
     int curOrig;
     {
         curOrig = 0;
-        for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); l++)
+        for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); ++l)
         {
             // apply live path effects prior to performing boolean operation
             if (SP_IS_LPE_ITEM(*l)) {
@@ -469,7 +469,7 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
         theShapeA->ConvertToShape(theShape, origWind[0]);
 
         curOrig = 1;
-        for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); l++){
+        for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); ++l){
             if(*l==il[0])continue;
             originaux[curOrig]->ConvertWithBackData(0.1);
 
