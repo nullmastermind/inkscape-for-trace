@@ -98,18 +98,12 @@ void SPBox3D::release() {
 
     if (persp) {
         persp->remove_box (box);
-        /*
-        // TODO: This deletes a perspective when the last box referring to it is gone. Eventually,
-        // it would be nice to have this but currently it crashes when undoing/redoing box deletion
-        // Reason: When redoing a box deletion, the associated perspective is deleted twice, first
-        // by the following code and then again by the redo mechanism! Perhaps we should perform
-        // deletion of the perspective from another location "outside" the undo/redo mechanism?
+
         if (persp->perspective_impl->boxes.empty()) {
             SPDocument *doc = box->document;
             persp->deleteObject();
             doc->setCurrentPersp3D(Persp3D::document_first_persp(doc));
         }
-        */
     }
 
     SPGroup::release();

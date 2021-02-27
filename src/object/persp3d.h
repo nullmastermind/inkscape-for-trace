@@ -106,7 +106,7 @@ public:
     bool perspectives_coincide(Persp3D const *rhs) const;
     void absorb(Persp3D *persp2);
 
-    static Persp3D * create_xml_element (SPDocument *document, Persp3DImpl *dup = nullptr);
+    static Persp3D * create_xml_element (SPDocument *document);
     static Persp3D * document_first_persp (SPDocument *document);
 
     bool has_all_boxes_in_selection (Inkscape::ObjectSet *set) const;

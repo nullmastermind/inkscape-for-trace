@@ -106,7 +106,7 @@ static void vp_knot_moved_handler(SPKnot *knot, Geom::Point const &ppointer, gui
                 sel_boxes = sel_vp->selectedBoxes(SP_ACTIVE_DESKTOP->getSelection());
 
                 // we create a new perspective ...
-                Persp3D *new_persp = Persp3D::create_xml_element(dragger->parent->document, old_persp->perspective_impl);
+                Persp3D *new_persp = Persp3D::create_xml_element(dragger->parent->document);
 
                 /* ... unlink the boxes from the old one and
                    FIXME: We need to unlink the _un_selected boxes of each VP so that

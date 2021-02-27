@@ -197,7 +197,7 @@ void Persp3D::update(SPCtx *ctx, guint flags) {
 }
 
 Persp3D *
-Persp3D::create_xml_element(SPDocument *document, Persp3DImpl *dup) {// if dup is given, copy the attributes over
+Persp3D::create_xml_element(SPDocument *document) {
     SPDefs *defs = document->getDefs();
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     Inkscape::XML::Node *repr;
@@ -219,13 +219,6 @@ Persp3D::create_xml_element(SPDocument *document, Persp3DImpl *dup) {// if dup i
     Proj::Pt2 proj_vp_y = Proj::Pt2 (0.0,   1000.0,     0.0);
     Proj::Pt2 proj_vp_z = Proj::Pt2 (width, height/2.0, 1.0);
     Proj::Pt2 proj_origin = Proj::Pt2 (width/2.0, height/3.0, 1.0 );
-
-    if (dup) {
-        proj_vp_x = dup->tmat.column (Proj::X);
-        proj_vp_y = dup->tmat.column (Proj::Y);
-        proj_vp_z = dup->tmat.column (Proj::Z);
-        proj_origin = dup->tmat.column (Proj::W);
-    }
 
     gchar *str = nullptr;
     str = proj_vp_x.coord_string();
