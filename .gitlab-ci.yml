@@ -55,6 +55,8 @@ variables:
   rules:
     - if: $CI_MERGE_REQUEST_ID
     - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
 
 
 #######################
@@ -68,6 +70,9 @@ variables:
 inkscape:linux:
   stage: build
   rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - when: always
   cache:
     key: "cache-linux"
     paths:
@@ -128,6 +133,9 @@ inkscape:mac:
 test:linux:
   stage: test
   rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - when: always
   dependencies:
     - inkscape:linux
   needs: ["inkscape:linux"]
