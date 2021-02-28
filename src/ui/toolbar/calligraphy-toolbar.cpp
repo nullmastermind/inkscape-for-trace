@@ -165,6 +165,23 @@ CalligraphyToolbar::CalligraphyToolbar(SPDesktop *desktop)
         thinning_item->set_sensitive(true);
     }
 
+    {
+        /* Mass */
+        std::vector<Glib::ustring> labels = {_("(no inertia)"), _("(slight smoothing, default)"), _("(noticeable lagging)"), "", "", _("(maximum inertia)")};
+        std::vector<double>        values = {              0.0,                                2,                        10, 20, 50,                    100};
+        auto mass_val = prefs->getDouble("/tools/calligraphic/mass", 2.0);
+        _mass_adj = Gtk::Adjustment::create(mass_val, 0.0, 100, 1, 10.0);
+        auto mass_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("calligraphy-mass", _("Mass:"), _mass_adj, 1, 0));
+        mass_item->set_tooltip_text(_("Increase to make the pen drag behind, as if slowed by inertia"));
+        mass_item->set_custom_numeric_menu_data(values, labels);
+        mass_item->set_focus_widget(desktop->canvas);
+        _mass_adj->signal_value_changed().connect(sigc::mem_fun(*this, &CalligraphyToolbar::mass_value_changed));
+        _widget_map["mass"] = G_OBJECT(_mass_adj->gobj());
+        // ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
+        add(*mass_item);
+        mass_item->set_sensitive(true);
+    }
+
     add(* Gtk::manage(new Gtk::SeparatorToolItem()));
 
     {
@@ -265,23 +282,6 @@ CalligraphyToolbar::CalligraphyToolbar(SPDesktop *desktop)
         // ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
         add(*wiggle_item);
         wiggle_item->set_sensitive(true);
-    }
-
-    {
-        /* Mass */
-        std::vector<Glib::ustring> labels = {_("(no inertia)"), _("(slight smoothing, default)"), _("(noticeable lagging)"), "", "", _("(maximum inertia)")};
-        std::vector<double>        values = {              0.0,                                2,                        10, 20, 50,                    100};
-        auto mass_val = prefs->getDouble("/tools/calligraphic/mass", 2.0);
-        _mass_adj = Gtk::Adjustment::create(mass_val, 0.0, 100, 1, 10.0);
-        auto mass_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("calligraphy-mass", _("Mass:"), _mass_adj, 1, 0));
-        mass_item->set_tooltip_text(_("Increase to make the pen drag behind, as if slowed by inertia"));
-        mass_item->set_custom_numeric_menu_data(values, labels);
-        mass_item->set_focus_widget(desktop->canvas);
-        _mass_adj->signal_value_changed().connect(sigc::mem_fun(*this, &CalligraphyToolbar::mass_value_changed));
-        _widget_map["mass"] = G_OBJECT(_mass_adj->gobj());
-        // ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
-        add(*mass_item);
-        mass_item->set_sensitive(true);
     }
 
     show_all();
