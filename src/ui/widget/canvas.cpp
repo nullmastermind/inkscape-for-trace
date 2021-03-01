@@ -1028,15 +1028,16 @@ Canvas::paint()
     Cairo::RectangleInt crect = { _x0, _y0, _allocation.get_width(), _allocation.get_height() };
     auto draw_region = Cairo::Region::create(crect);
     draw_region->subtract(_clean_region);
-    // Is more efficent render a big rectangle than multiple ones
-    // improvements become specialy selecting items when clean region rectangles 
-    // (usualy 1 size)
-    // become a high number of rects, think because handles
-    crect = draw_region->get_extents();
-    if (!paint_rect(crect )) {
-        // Aborted
-        return false;
-    };
+
+    int n_rects = draw_region->get_num_rectangles();
+    for (int i = 0; i < n_rects; ++i) {
+        auto rect = draw_region->get_rectangle(i);
+        if (!paint_rect(rect)) {
+            // Aborted
+            return false;
+        };
+    }
+
     return true;
 }
 
