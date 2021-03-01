@@ -194,7 +194,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_canvas_snapping =
     {"doc.snap-path",                 N_("Snap Paths"),                        "Snap",  N_("Toggle snapping to paths")                           },
     {"doc.snap-path-intersection",    N_("Snap Path Intersections"),           "Snap",  N_("Toggle snapping to path intersections")              },
     {"doc.snap-node-cusp",            N_("Snap Cusp Nodes"),                   "Snap",  N_("Toggle snapping to cusp nodes, including rectangle corners")},
-    {"doc.snap-node-smooth",          N_("Snap Smoth Node"),                   "Snap",  N_("Toggle snapping to smooth nodes, including quadrant points of ellipses")},
+    {"doc.snap-node-smooth",          N_("Snap Smooth Node"),                  "Snap",  N_("Toggle snapping to smooth nodes, including quadrant points of ellipses")},
     {"doc.snap-line-midpoint",        N_("Snap Line Midpoints"),               "Snap",  N_("Toggle snapping to midpoints of lines")              },
 
     {"doc.snap-others",               N_("Snap Others"),                       "Snap",  N_("Toggle snapping to misc. points (global)")           },
