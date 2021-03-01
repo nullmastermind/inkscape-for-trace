@@ -356,9 +356,11 @@ SPDesktopWidget::SPDesktopWidget()
     dtw->_coord_status_x->set_markup("   0.00 ");
     dtw->_coord_status_y->set_markup("   0.00 ");
 
-    auto label_z = Gtk::manage(new Gtk::Label(_("Z:")));
+    // TRANSLATORS: Abbreviation for canvas zoom level
+    auto label_z = Gtk::manage(new Gtk::Label(C_("canvas", "Z:")));
     label_z->set_name("ZLabel");
-    auto label_r = Gtk::manage(new Gtk::Label(_("R:")));
+    // TRANSLATORS: Abbreviation for canvas rotation
+    auto label_r = Gtk::manage(new Gtk::Label(C_("canvas", "R:")));
     label_r->set_name("RLabel");
 
     dtw->_coord_status_x->set_halign(Gtk::ALIGN_END);

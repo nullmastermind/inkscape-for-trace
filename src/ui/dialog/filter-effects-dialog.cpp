@@ -2788,10 +2788,14 @@ void FilterEffectsDialog::init_settings_widgets()
     colmat->signal_attr_changed().connect(sigc::mem_fun(*this, &FilterEffectsDialog::update_color_matrix));
 
     _settings->type(NR_FILTER_COMPONENTTRANSFER);
-    _settings->add_componenttransfervalues(_("R:"), SPFeFuncNode::R);
-    _settings->add_componenttransfervalues(_("G:"), SPFeFuncNode::G);
-    _settings->add_componenttransfervalues(_("B:"), SPFeFuncNode::B);
-    _settings->add_componenttransfervalues(_("A:"), SPFeFuncNode::A);
+    // TRANSLATORS: Abbreviation for red color channel in RGBA
+    _settings->add_componenttransfervalues(C_("color", "R:"), SPFeFuncNode::R);
+    // TRANSLATORS: Abbreviation for green color channel in RGBA
+    _settings->add_componenttransfervalues(C_("color", "G:"), SPFeFuncNode::G);
+    // TRANSLATORS: Abbreviation for blue color channel in RGBA
+    _settings->add_componenttransfervalues(C_("color", "B:"), SPFeFuncNode::B);
+    // TRANSLATORS: Abbreviation for alpha channel in RGBA
+    _settings->add_componenttransfervalues(C_("color", "A:"), SPFeFuncNode::A);
 
     _settings->type(NR_FILTER_COMPOSITE);
     _settings->add_combo(COMPOSITE_OVER, SPAttr::OPERATOR, _("Operator:"), CompositeOperatorConverter);
