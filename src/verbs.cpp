@@ -2779,7 +2779,7 @@ Verb *Verb::_base_verbs[] = {
     // WHY ARE THE FOLLOWING ZoomVerbs???
 
     // View
-    new ZoomVerb(SP_VERB_TOGGLE_COMMAND_PALETTE, "ToggleCommandPalette", N_("Command Palette_"), N_("Show or hide the on-canvas command palette"), nullptr),
+    new ZoomVerb(SP_VERB_TOGGLE_COMMAND_PALETTE, "ToggleCommandPalette", N_("_Command Palette"), N_("Show or hide the on-canvas command palette"), nullptr),
     new ZoomVerb(SP_VERB_TOGGLE_RULERS, "ToggleRulers", N_("_Rulers"), N_("Show or hide the canvas rulers"), nullptr),
     new ZoomVerb(SP_VERB_TOGGLE_SCROLLBARS, "ToggleScrollbars", N_("Scroll_bars"),
                  N_("Show or hide the canvas scrollbars"), nullptr),
