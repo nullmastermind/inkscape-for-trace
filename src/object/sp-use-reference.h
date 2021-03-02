@@ -42,13 +42,13 @@ protected:
 
 class SPUsePath : public SPUseReference {
 public:
-    std::unique_ptr<SPCurve> originalPath;
-    bool sourceDirty;
+    std::unique_ptr<SPCurve> originalPath{nullptr};
+    bool sourceDirty{false};
 
     SPObject            *owner;
-    char                *sourceHref;
-    Inkscape::XML::Node *sourceRepr;
-    SPObject            *sourceObject;
+    char                *sourceHref{nullptr};
+    Inkscape::XML::Node *sourceRepr{nullptr};
+    SPObject            *sourceObject{nullptr};
 
     sigc::connection _modified_connection;
     sigc::connection _delete_connection;

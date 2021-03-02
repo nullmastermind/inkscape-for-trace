@@ -29,7 +29,6 @@ Inkscape::SnappedLineSegment::SnappedLineSegment(Geom::Point const &snapped_poin
 
 Inkscape::SnappedLineSegment::SnappedLineSegment()
 {
-    _point = Geom::Point(0,0);
     _source = SNAPSOURCE_UNDEFINED;
     _source_num = -1;
     _target = SNAPTARGET_UNDEFINED;
@@ -104,7 +103,6 @@ Inkscape::SnappedLine::SnappedLine(Geom::Point const &snapped_point, Geom::Coord
 }
 
 Inkscape::SnappedLine::SnappedLine()
-    : _normal_to_line(Geom::Point(0,0)), _point_on_line(Geom::Point(0,0))
 {
     _source = SNAPSOURCE_UNDEFINED;
     _source_num = -1;
@@ -115,7 +113,6 @@ Inkscape::SnappedLine::SnappedLine()
     _second_distance = Geom::infinity();
     _second_tolerance = 1;
     _second_always_snap = false;
-    _point = Geom::Point(0,0);
     _at_intersection = false;
 }
 

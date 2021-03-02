@@ -55,10 +55,10 @@ public:
               double smallerArg,
               double largerArg,
               Inkscape::Util::Unit const *unitArg):
-        name(nameArg),
-        smaller(smallerArg),
-        larger(largerArg),
-        unit(unitArg)
+        name(nameArg)
+        , smaller(smallerArg)
+        , larger(largerArg)
+        , unit(unitArg)
         {}
 
     /**
