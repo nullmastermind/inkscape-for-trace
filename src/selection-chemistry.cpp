@@ -60,6 +60,7 @@
 #include "live_effects/effect.h"
 #include "live_effects/parameter/originalpath.h"
 
+#include "filter-chemistry.h"
 #include "object/box3d.h"
 #include "object/object-set.h"
 #include "object/persp3d.h"
@@ -498,6 +499,15 @@ void ObjectSet::duplicate(bool suppressDone, bool duplicateLayer)
 
         if (!duplicateLayer || sp_repr_is_def(old_repr)) {
             parent->appendChild(copy);
+            // 1.1 COPYPASTECLONESTAMPLPEBUG
+            SPItem *newitem = dynamic_cast<SPItem *>(doc->getObjectByRepr(copy));
+            if (_desktop && newitem) {
+                remove_hidder_filter(newitem);
+                gchar * id = strdup(copy->attribute("id"));
+                copy = sp_lpe_item_remove_autoflatten(newitem, id)->getRepr();
+                g_free(id);
+            }
+            // END 1.1 COPYPASTECLONESTAMPLPEBUG fix
         } else if (sp_repr_is_layer(old_repr)) {
             parent->addChild(copy, old_repr);
         } else {

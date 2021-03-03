@@ -35,6 +35,7 @@
 #include "inkscape.h"
 #include "message-stack.h"
 #include "path-chemistry.h"
+#include "filter-chemistry.h"
 #include "selection-chemistry.h"
 #include "style.h"
 #include "text-chemistry.h"
@@ -892,9 +893,22 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
             }
             sp_repr_css_set(obj_copy, css, "style");
             sp_repr_css_attr_unref(css);
+
+            // 1.1 COPYPASTECLONESTAMPLPEBUG
+            if (_clipboardSPDoc) {
+                SPItem *newitem = dynamic_cast<SPItem *>(_clipboardSPDoc->getObjectByRepr(obj_copy));
+                if (newitem) {
+                    remove_hidder_filter(newitem);
+                    gchar *id = strdup(newitem->getId());
+                    newitem = (SPItem *)sp_lpe_item_remove_autoflatten(newitem, id);
+                    obj_copy = newitem->getRepr();
+                    g_free(id);
+                }
+            }
+            // END COPYPASTECLONESTAMPLPEBUG
+
         }
     }
-
     // copy style for Paste Style action
     if (!sorted_items.empty()) {
         SPObject *object = sorted_items[0];

@@ -502,6 +502,9 @@ void LPEBool::doBeforeEffect(SPLPEItem const *lpeitem)
     if (operand) {
         if (is_visible) {
             add_filter();
+            if (operand->getPosition() - 1 != sp_lpe_item->getPosition()) {
+                sp_lpe_item->parent->reorder(operand,sp_lpe_item);
+            } 
         } else {
             remove_filter();
         }
@@ -660,15 +663,22 @@ void LPEBool::addCanvasIndicators(SPLPEItem const * /*lpeitem*/, std::vector<Geo
 void LPEBool::doOnRemove(SPLPEItem const * /*lpeitem*/)
 {
     // set "keep paths" hook on sp-lpe-item.cpp
-    SPItem *operand = dynamic_cast<SPItem *>(operand_path.getObject());
-    if (operand) {
-        if (keep_paths) {
-            if (is_visible) {
-                operand->deleteObject(true);
-            }
-        } else {
-            if (is_visible) {
-                remove_filter();
+    std::vector<SPLPEItem *> lpeitems = getCurrrentLPEItems();
+    if (lpeitems.size() == 1) {
+        sp_lpe_item = lpeitems[0];
+        if (!sp_lpe_item->path_effects_enabled) {
+            return;
+        }
+        SPItem *operand = dynamic_cast<SPItem *>(operand_path.getObject());
+        if (operand) {
+            if (keep_paths) {
+                if (is_visible) {
+                    operand->deleteObject(true);
+                }
+            } else {
+                if (is_visible) {
+                    remove_filter();
+                }
             }
         }
     }

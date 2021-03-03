@@ -56,6 +56,7 @@ public:
     void resetStyles();
     void centerVert();
     void centerHoriz();
+    BoolParam split_items;
 
 protected:
     void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec) override;
@@ -65,7 +66,6 @@ private:
     BoolParam discard_orig_path;
     BoolParam fuse_paths;
     BoolParam oposite_fuse;
-    BoolParam split_items;
     BoolParam split_open;
     PointParam start_point;
     PointParam end_point;

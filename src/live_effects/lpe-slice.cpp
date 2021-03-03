@@ -127,8 +127,9 @@ void
 LPESlice::centerVert(){
     center_vert = true;
     refresh_widgets = true;
-    sp_lpe_item = getLastLPEItem();
-    if (sp_lpe_item) {
+    std::vector<SPLPEItem *> lpeitems = getCurrrentLPEItems();
+    if (lpeitems.size() == 1) {
+        sp_lpe_item = lpeitems[0];
         sp_lpe_item_update_patheffect(sp_lpe_item, false, false);
     }
 }
@@ -137,8 +138,9 @@ void
 LPESlice::centerHoriz(){
     center_horiz = true;
     refresh_widgets = true;
-    sp_lpe_item = getLastLPEItem();
-    if (sp_lpe_item) {
+    std::vector<SPLPEItem *> lpeitems = getCurrrentLPEItems();
+    if (lpeitems.size() == 1) {
+        sp_lpe_item = lpeitems[0];
         sp_lpe_item_update_patheffect(sp_lpe_item, false, false);
     }
 }
@@ -249,8 +251,6 @@ SPLPEItem *LPESlice::getOriginal(SPLPEItem const* lpeitem)
 
 gboolean allowreset(gpointer data)
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setBool("/live_effects/slice/block_erase", false);
     LPESlice *slice = reinterpret_cast<LPESlice *>(data);
     sp_lpe_item_update_patheffect(slice->sp_lpe_item, false, false);
     return FALSE;
@@ -273,7 +273,13 @@ LPESlice::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
     }
     LPESlice *nextslice = dynamic_cast<LPESlice *>(sp_lpe_item->getNextLPE(this));
     if (!nextslice || !nextslice->is_visible) {
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        if (boundingbox_X.isSingular() || boundingbox_Y.isSingular()) {
+            return;
+        }
+        std::vector<SPLPEItem *> lpeitems = getCurrrentLPEItems();
+        if (lpeitems.size() != 1) {
+            return;
+        }
         Glib::ustring theclass = lpeitem->getId();
         theclass += "-slice";
         //ungroup
@@ -282,7 +288,6 @@ LPESlice::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
             g_timeout_add(250, &delayupdate, this);
             return;
         } else if (!is_load && parentlpe && parentlpe != sp_lpe_item->parent) { // group
-            prefs->setBool("/live_effects/slice/block_erase", true);
             g_timeout_add(250, &allowreset, this);
             cleanup = true;
         }
@@ -330,25 +335,21 @@ LPESlice::doAfterEffect (SPLPEItem const* lpeitem, SPCurve *curve)
                 sp_lpe_item_update_patheffect(splpeitem, false, false);
             }
         }
-        if (!prefs->getBool("/live_effects/slice/block_erase", false)) {
-            for (auto item : getSPDoc()->getObjectsByClass(theclass)) {
-                SPItem *extraitem = dynamic_cast<SPItem *>(item);
-                if (extraitem) {
-                    SPLPEItem *spitem = dynamic_cast<SPLPEItem *>(extraitem);
-                    if (spitem && !sp_has_path_data(spitem, false)) {
-                        if (cleanup) {
-                            prefs->setBool("/live_effects/slice/block_erase", true);
-                            sp_lpe_item_update_patheffect(spitem, false, false);
-                            spitem->deleteObject(true);
-                            prefs->setBool("/live_effects/slice/block_erase", false);
-                        } else {
-                            originalDtoD(spitem);
-                        }
+        for (auto item : getSPDoc()->getObjectsByClass(theclass)) {
+            SPItem *extraitem = dynamic_cast<SPItem *>(item);
+            if (extraitem) {
+                SPLPEItem *spitem = dynamic_cast<SPLPEItem *>(extraitem);
+                if (spitem && !sp_has_path_data(spitem, false)) {
+                    if (cleanup) {
+                        sp_lpe_item_update_patheffect(spitem, false, false);
+                        spitem->deleteObject(true);
                     } else {
-                        SPLPEItem *splpeitem = dynamic_cast<SPLPEItem *>(extraitem);
-                        if (splpeitem && splpeitem->hasPathEffectOfType(SLICE)) {
-                            sp_lpe_item_update_patheffect(splpeitem, false, false);
-                        }
+                        originalDtoD(spitem);
+                    }
+                } else {
+                    SPLPEItem *splpeitem = dynamic_cast<SPLPEItem *>(extraitem);
+                    if (splpeitem && splpeitem->hasPathEffectOfType(SLICE)) {
+                        sp_lpe_item_update_patheffect(splpeitem, false, false);
                     }
                 }
             }
@@ -402,15 +403,17 @@ LPESlice::split(SPItem* item, SPCurve *curve, std::vector<std::pair<Geom::Line, 
             parentlpe->addChild(copy, sp_lpe_item->getRepr());
             // Retrieve the SPItem of the resulting repr.
             SPObject *sucessor = document->getObjectByRepr(copy);
-            sp_object_ref(elemref);
-            Inkscape::GC::anchor(repr);
-            elemref->deleteObject(false);
-            sucessor->setAttribute("id", elemref_id);
-            Inkscape::GC::release(repr);
-            elemref->setSuccessor(sucessor);
-            sp_object_unref(elemref);
-            elemref = dynamic_cast<SPItem *>(sucessor);
-            g_assert(item != nullptr);
+            if (sucessor) {
+                sp_object_ref(elemref);
+                Inkscape::GC::anchor(repr);
+                elemref->deleteObject(false);
+                sucessor->setAttribute("id", elemref_id);
+                Inkscape::GC::release(repr);
+                elemref->setSuccessor(sucessor);
+                sp_object_unref(elemref);
+                elemref = dynamic_cast<SPItem *>(sucessor);
+                g_assert(item != nullptr);
+            }
         }
     }
     SPItem *other = dynamic_cast<SPItem *>(elemref);
@@ -655,8 +658,11 @@ LPESlice::splititem(SPItem* item, SPCurve * curve, std::pair<Geom::Line, size_t>
                 e = Geom::Point::polar(dir + Geom::rad_from_deg(180),size_divider) + center;
                 Geom::Path divider = Geom::Path(s);
                 divider.appendNew<Geom::LineSegment>(e);
-                Geom::Crossings cs = crossings(original, divider);
                 std::vector<double> crossed;
+                if (Geom::are_near(s,e)) {
+                    continue;
+                }
+                Geom::Crossings cs = crossings(original, divider);
                 for(auto & c : cs) {
                     crossed.push_back(c.ta);
                 }
@@ -738,7 +744,7 @@ LPESlice::splititem(SPItem* item, SPCurve * curve, std::pair<Geom::Line, size_t>
                     sp_lpe_item_enable_path_effects(shape, false);
                     shape->setAttribute("inkscape:original-d", str);
                     sp_lpe_item_enable_path_effects(shape, true);
-                } else if (str == "") {
+                } else {
                     shape->setAttribute("d", str);
                 }
             }
@@ -754,12 +760,6 @@ LPESlice::doBeforeEffect (SPLPEItem const* lpeitem)
         return;
     }
     using namespace Geom;
-    for (auto item : items) {
-        SPLPEItem *splpeitem = dynamic_cast<SPLPEItem *>(getSPDoc()->getObjectById(item));
-        if (splpeitem && !splpeitem->path_effects_enabled) {
-            sp_lpe_item_enable_path_effects(splpeitem, true);
-        }
-    }
     original_bbox(lpeitem, false, true);
     Point point_a(boundingbox_X.max(), boundingbox_Y.min());
     Point point_b(boundingbox_X.max(), boundingbox_Y.max());
@@ -839,8 +839,9 @@ void LPESlice::cloneStyle(SPObject *orig, SPObject *dest)
 
 void
 LPESlice::resetStyles(){
-    sp_lpe_item = getLastLPEItem();
-    if (sp_lpe_item) {
+    std::vector<SPLPEItem *> lpeitems = getCurrrentLPEItems();
+    if (lpeitems.size() == 1) {
+        sp_lpe_item = lpeitems[0];
         LPESlice *nextslice = dynamic_cast<LPESlice *>(sp_lpe_item->getNextLPE(this));
         while (nextslice) {
             nextslice->reset = true;
@@ -863,8 +864,12 @@ void
 LPESlice::doOnRemove(SPLPEItem const* lpeitem)
 {
     items.clear();
-    sp_lpe_item = getLastLPEItem();
-    if (sp_lpe_item) {
+    std::vector<SPLPEItem *> lpeitems = getCurrrentLPEItems();
+    if (lpeitems.size() == 1) {
+        sp_lpe_item = lpeitems[0];
+        if (!sp_lpe_item->path_effects_enabled) {
+            return;
+        }
         Glib::ustring theclass = sp_lpe_item->getId();
         theclass += "-slice";
         for (auto item : getSPDoc()->getObjectsByClass(theclass)) {
@@ -876,10 +881,7 @@ LPESlice::doOnRemove(SPLPEItem const* lpeitem)
             return;
         }
         if (sp_lpe_item->countLPEOfType(SLICE) == 1 || on_remove_all) {
-            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-            if (!prefs->getBool("/live_effects/slice/block_erase", false)) {
-                processObjects(LPE_ERASE);
-            }
+            processObjects(LPE_ERASE);
         } else {
             sp_lpe_item_update_patheffect(sp_lpe_item, false, false);
         }
@@ -890,7 +892,6 @@ void
 LPESlice::doOnApply (SPLPEItem const* lpeitem)
 {
     using namespace Geom;
-
     original_bbox(lpeitem, false, true);
     LPESlice *prevslice = dynamic_cast<LPESlice *>(sp_lpe_item->getPrevLPE(this));
     if (prevslice) {
@@ -905,6 +906,7 @@ LPESlice::doOnApply (SPLPEItem const* lpeitem)
     end_point.param_setValue(point_b, true);
     end_point.param_update_default(point_b);
     center_point.param_setValue(point_c, true);
+    end_point.param_update_default(point_c);
     previous_center = center_point;
 }
 

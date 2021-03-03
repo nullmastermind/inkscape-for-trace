@@ -56,6 +56,7 @@ public:
     Inkscape::XML::Node * createPathBase(SPObject *elemref);
     void resetStyles();
     //virtual void setFusion(Geom::PathVector &path_in, Geom::Path divider, double sizeDivider);
+    BoolParam split_items;
 protected:
     void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec) override;
 
@@ -69,7 +70,6 @@ private:
     ScalarParam gap;
     BoolParam copies_to_360;
     BoolParam mirror_copies;
-    BoolParam split_items;
     Geom::Point A;
     Geom::Point B;
     Geom::Point dir;

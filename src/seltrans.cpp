@@ -33,6 +33,7 @@
 #include "mod360.h"
 #include "pure-transform.h"
 #include "selection-chemistry.h"
+#include "filter-chemistry.h"
 #include "selection.h"
 #include "seltrans-handles.h"
 #include "verbs.h"
@@ -529,7 +530,16 @@ void Inkscape::SelTrans::stamp()
             parent->addChild(copy_repr, original_repr->prev());
 
             SPItem *copy_item = (SPItem *) _desktop->getDocument()->getObjectByRepr(copy_repr);
-
+            // 1.1 COPYPASTECLONESTAMPLPEBUG
+            SPItem *newitem = dynamic_cast<SPItem *>(_desktop->getDocument()->getObjectByRepr(copy_repr));
+            if (newitem) {
+                remove_hidder_filter(newitem);
+                gchar * id = strdup(copy_item->getId());
+                copy_item = (SPItem *) sp_lpe_item_remove_autoflatten(newitem, id);
+                copy_repr = copy_item->getRepr();
+                g_free(id);
+            }
+            // END COPYPASTECLONESTAMPLPEBUG
             Geom::Affine const *new_affine;
             if (_show == SHOW_OUTLINE) {
                 Geom::Affine const i2d(original_item->i2dt_affine());

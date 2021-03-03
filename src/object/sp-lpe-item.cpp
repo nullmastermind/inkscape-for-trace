@@ -538,96 +538,109 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem, bool keep_paths,
     } else if (shape) {
         Inkscape::XML::Node *repr = lpeitem->getRepr();
         SPCurve const *c_lpe = shape->curve();
+        Glib::ustring d_str;
         if (c_lpe) {
-            auto d_str = sp_svg_write_path(c_lpe->get_pathvector());
-            {
-                if (!lpeitem->hasPathEffectRecursive() &&
-                    (!is_clip_mask ||
-                    ( is_clip_mask && force)))
-                {
-                    if (!keep_paths) {
-                        repr->removeAttribute("d");
-                        shape->setCurveBeforeLPE(nullptr);
-                    } else {
-                        const char * id = repr->attribute("id");
-                        const char * style = repr->attribute("style");
-                        // remember the position of the item
-                        gint pos = shape->getRepr()->position();
-                        // remember parent
-                        Inkscape::XML::Node *parent = shape->getRepr()->parent();
-                        // remember class
-                        char const *class_attr = shape->getRepr()->attribute("class");
-                        // remember title
-                        gchar *title = shape->title();
-                        // remember description
-                        gchar *desc = shape->desc();
-                        // remember transformation
-                        gchar const *transform_str = shape->getRepr()->attribute("transform");
-                        // Mask
-                        gchar const *mask_str = (gchar *) shape->getRepr()->attribute("mask");
-                        // Clip path
-                        gchar const *clip_str = (gchar *) shape->getRepr()->attribute("clip-path");
+            d_str = sp_svg_write_path(c_lpe->get_pathvector());
+        } else if (shape->getAttribute("d")) {
+            // when "c_lpe" is null we need to stop to allow LPE on elenments with mask and clip
+            // work properly but we need not block when doing CUT/COPY... Operatrions using original-d
+            // so if we not in this case stop execution
+            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+            bool flattening = prefs->getBool("/live_effects/flattening", false);
+            if (!flattening) {
+                return;
+            }
+            d_str = shape->getAttribute("d");
+        } else {
+            return;
+        }
+        if (!lpeitem->hasPathEffectRecursive() &&
+            (!is_clip_mask ||
+            ( is_clip_mask && force)))
+        {
+            if (!keep_paths) {
+                repr->removeAttribute("d");
+                shape->setCurveBeforeLPE(nullptr);
+            } else {
+                const char * id = repr->attribute("id");
+                const char * style = repr->attribute("style");
+                // remember the position of the item
+                gint pos = shape->getRepr()->position();
+                // remember parent
+                Inkscape::XML::Node *parent = shape->getRepr()->parent();
+                // remember class
+                char const *class_attr = shape->getRepr()->attribute("class");
+                // remember title
+                gchar *title = shape->title();
+                // remember description
+                gchar *desc = shape->desc();
+                // remember transformation
+                gchar const *transform_str = shape->getRepr()->attribute("transform");
+                // Mask
+                gchar const *mask_str = (gchar *) shape->getRepr()->attribute("mask");
+                // Clip path
+                gchar const *clip_str = (gchar *) shape->getRepr()->attribute("clip-path");
 
-                        /* Rotation center */
-                        gchar const *transform_center_x = shape->getRepr()->attribute("inkscape:transform-center-x");
-                        gchar const *transform_center_y = shape->getRepr()->attribute("inkscape:transform-center-y");
+                /* Rotation center */
+                gchar const *transform_center_x = shape->getRepr()->attribute("inkscape:transform-center-x");
+                gchar const *transform_center_y = shape->getRepr()->attribute("inkscape:transform-center-y");
 
-                        // remember highlight color
-                        guint32 highlight_color = 0;
-                        if (shape->isHighlightSet())
-                            highlight_color = shape->highlight_color();
+                // remember highlight color
+                guint32 highlight_color = 0;
+                if (shape->isHighlightSet())
+                    highlight_color = shape->highlight_color();
 
-                        // It's going to resurrect, so we delete without notifying listeners.
-                        SPDocument * doc = shape->document;
-                        shape->deleteObject(false);
-                        Inkscape::XML::Document *xml_doc = doc->getReprDoc();
-                        Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
-                        // restore id
-                        repr->setAttribute("id", id);
-                        // restore class
-                        repr->setAttribute("class", class_attr);
-                        // restore transform
-                        repr->setAttribute("transform", transform_str);
-                        // restore clip
-                        repr->setAttribute("clip-path", clip_str);
-                        // restore mask
-                        repr->setAttribute("mask", mask_str);
-                        // restore transform_center_x
-                        repr->setAttribute("inkscape:transform-center-x", transform_center_x);
-                        // restore transform_center_y
-                        repr->setAttribute("inkscape:transform-center-y", transform_center_y);
-                        //restore d
-                        repr->setAttribute("d", d_str);
-                        //restore style
-                        repr->setAttribute("style", style);
-                        // add the new repr to the parent
-                        parent->appendChild(repr);
-                        SPObject* newObj = doc->getObjectByRepr(repr);
-                        if (title && newObj) {
-                            newObj->setTitle(title);
-                            g_free(title);
-                        }
-                        if (desc && newObj) {
-                            newObj->setDesc(desc);
-                            g_free(desc);
-                        }
-                        if (highlight_color && newObj) {
-                            SP_ITEM(newObj)->setHighlightColor( highlight_color );
-                        }
-                        // move to the saved position
-                        repr->setPosition(pos > 0 ? pos : 0);
-                        Inkscape::GC::release(repr);
-                        lpeitem = dynamic_cast<SPLPEItem *>(newObj);
-                    }
-                } else {
-                    if (!keep_paths) {
-                        sp_lpe_item_update_patheffect(lpeitem, true, true);
-                    }
+                // It's going to resurrect, so we delete without notifying listeners.
+                SPDocument * doc = shape->document;
+                shape->deleteObject(false);
+                Inkscape::XML::Document *xml_doc = doc->getReprDoc();
+                Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
+                // restore id
+                repr->setAttribute("id", id);
+                // restore class
+                repr->setAttribute("class", class_attr);
+                // restore transform
+                repr->setAttribute("transform", transform_str);
+                // restore clip
+                repr->setAttribute("clip-path", clip_str);
+                // restore mask
+                repr->setAttribute("mask", mask_str);
+                // restore transform_center_x
+                repr->setAttribute("inkscape:transform-center-x", transform_center_x);
+                // restore transform_center_y
+                repr->setAttribute("inkscape:transform-center-y", transform_center_y);
+                //restore d
+                repr->setAttribute("d", d_str);
+                //restore style
+                repr->setAttribute("style", style);
+                // add the new repr to the parent
+                parent->appendChild(repr);
+                SPObject* newObj = doc->getObjectByRepr(repr);
+                if (title && newObj) {
+                    newObj->setTitle(title);
+                    g_free(title);
                 }
+                if (desc && newObj) {
+                    newObj->setDesc(desc);
+                    g_free(desc);
+                }
+                if (highlight_color && newObj) {
+                    SP_ITEM(newObj)->setHighlightColor( highlight_color );
+                }
+                // move to the saved position
+                repr->setPosition(pos > 0 ? pos : 0);
+                Inkscape::GC::release(repr);
+                lpeitem = dynamic_cast<SPLPEItem *>(newObj);
+            }
+        } else {
+            if (!keep_paths) {
+                sp_lpe_item_update_patheffect(lpeitem, true, true);
             }
         }
     }
 }
+
+
 
 void SPLPEItem::addPathEffect(std::string value, bool reset)
 {
@@ -807,6 +820,16 @@ bool SPLPEItem::hasBrokenPathEffect() const
     }
 
     return false;
+}
+
+bool SPLPEItem::hasPathEffectOfTypeRecursive(int const type, bool is_ready) const
+{
+    SPLPEItem * parent_lpe_item = dynamic_cast<SPLPEItem *>(parent);
+    if (parent_lpe_item) {
+        return hasPathEffectOfType(type, is_ready) || parent_lpe_item->hasPathEffectOfTypeRecursive(type, is_ready);
+    } else {
+        return hasPathEffectOfType(type, is_ready);
+    }
 }
 
 bool SPLPEItem::hasPathEffectOfType(int const type, bool is_ready) const
@@ -1403,6 +1426,107 @@ bool SPLPEItem::pathEffectsEnabled() const
 {
     return path_effects_enabled > 0;
 }
+
+// 1.1 COPYPASTECLONESTAMPLPEBUG
+bool SPLPEItem::autoFlattenFix() {
+    if (path_effect_list->empty()) {
+        return false;
+    }
+    for (PathEffectList::const_iterator it = path_effect_list->begin(); it != path_effect_list->end(); ++it)
+    {
+        LivePathEffectObject const *lpeobj = (*it)->lpeobject;
+        if (lpeobj) {
+            Inkscape::LivePathEffect::Effect const* lpe = lpeobj->get_lpe();
+            if (lpe) {
+                Inkscape::LivePathEffect::LPECopyRotate const *rc = dynamic_cast<Inkscape::LivePathEffect::LPECopyRotate const *>(lpe);
+                Inkscape::LivePathEffect::LPEMirrorSymmetry const *ms = dynamic_cast<Inkscape::LivePathEffect::LPEMirrorSymmetry const *>(lpe);
+                Inkscape::LivePathEffect::LPESlice const *sl = dynamic_cast<Inkscape::LivePathEffect::LPESlice const *>(lpe);
+                Inkscape::LivePathEffect::LPEBool const *bo = dynamic_cast<Inkscape::LivePathEffect::LPEBool const *>(lpe);
+                if ((rc && rc->split_items) || (ms && ms->split_items)) {
+                    return true;
+                } else if (sl || bo) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+void SPLPEItem::removeAllAutoFlatten()
+{
+    cleanupAutoFlatten();
+    if (autoFlattenFix()) {
+        sp_lpe_item_enable_path_effects(this, false);
+    }
+    SPGroup *group = dynamic_cast<SPGroup *>(this);
+    if (group) {
+        std::vector<SPItem*> item_list = sp_item_group_item_list(group);
+        for (auto iter : item_list) {
+            SPLPEItem *subitem = dynamic_cast<SPLPEItem *>(iter);
+            if (subitem) {
+                subitem->removeAllAutoFlatten();
+            }
+        }
+    }
+    if (autoFlattenFix()) {
+        SPDocument *doc = this->document;
+        gchar *id = g_strdup(this->getId());
+        removeAllPathEffects(true);
+        if (doc) {
+            SPObject *newobj = doc->getObjectById(id);
+            SPLPEItem *newlpitem = dynamic_cast<SPLPEItem *>(newobj);
+            if (newlpitem && !newlpitem->path_effects_enabled) {
+                sp_lpe_item_enable_path_effects(newlpitem, true);
+            }
+        }
+        g_free(id);
+    }
+}
+
+void SPLPEItem::cleanupAutoFlatten()
+{
+    SPGroup* group = dynamic_cast<SPGroup  *>(this);
+    if (group) {
+        std::vector<SPItem*> item_list = sp_item_group_item_list(group);
+        for (auto iter : item_list) {
+            SPLPEItem * subitem = dynamic_cast<SPLPEItem *>(iter);
+            if (subitem) {
+                subitem->cleanupAutoFlatten();
+            }
+        }
+    }
+    Glib::ustring  classes = "-slice";
+    if (getAttribute("class")) {
+        Glib::ustring classupd = getAttribute("class");
+        Glib::ustring finalclass = "";
+        for (auto classindi : Glib::Regex::split_simple(" ", classupd)) {
+            size_t pos = classindi.find(classes);
+            if (pos == Glib::ustring::npos && classindi != "UnoptimicedTransforms") {
+                if (finalclass != "") {
+                    finalclass += " ";
+                }
+                finalclass += classindi;
+            }
+        }
+        setAttribute("class", finalclass == "" ? nullptr : finalclass.c_str());
+    }
+}
+
+SPObject * sp_lpe_item_remove_autoflatten(SPItem *item, const gchar *id) {
+    SPObject *ret = nullptr;
+    SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
+    if (lpeitem) {
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        prefs->setBool("/live_effects/flattening", true);
+        lpeitem->removeAllAutoFlatten();
+        prefs->setBool("/live_effects/flattening", false);
+        // we want active document to use clipboard doc
+        ret = SP_ACTIVE_DOCUMENT->getObjectById(id);
+    }
+    return ret;
+}
+// END COPYPASTECLONESTAMPLPEBUG
 
 /*
   Local Variables:

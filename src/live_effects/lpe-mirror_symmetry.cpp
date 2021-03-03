@@ -414,13 +414,20 @@ LPEMirrorSymmetry::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
 void
 LPEMirrorSymmetry::doOnRemove (SPLPEItem const* /*lpeitem*/)
 {
-    //set "keep paths" hook on sp-lpe-item.cpp
-    if (keep_paths) {
-        processObjects(LPE_TO_OBJECTS);
-        items.clear();
-        return;
+    std::vector<SPLPEItem *> lpeitems = getCurrrentLPEItems();
+    if (lpeitems.size() == 1) {
+        sp_lpe_item = lpeitems[0];
+        if (!sp_lpe_item->path_effects_enabled) {
+            return;
+        }
+        //set "keep paths" hook on sp-lpe-item.cpp
+        if (keep_paths) {
+            processObjects(LPE_TO_OBJECTS);
+            items.clear();
+            return;
+        }
+        processObjects(LPE_ERASE);
     }
-    processObjects(LPE_ERASE);
 }
 
 void
