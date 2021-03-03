@@ -382,32 +382,13 @@ bool CommandPalette::generate_action_operation(const ActionPtrName &action_ptr_n
 
 void CommandPalette::on_search()
 {
+    _CPSuggestions->unset_sort_func();
+    _CPSuggestions->set_sort_func(sigc::mem_fun(*this, &CommandPalette::on_sort));
     _search_text = _CPFilter->get_text();
     _CPSuggestions->invalidate_filter(); // Remove old filter constraint and apply new one
     if (auto top_row = _CPSuggestions->get_row_at_y(0); top_row) {
         _CPSuggestions->select_row(*top_row); // select top row
     }
-}
-
-bool CommandPalette::on_filter_general(Gtk::ListBoxRow *child)
-{
-    if (_search_text.empty()) {
-        return true;
-    } // Every operation is visible if search text is empty
-
-    auto [CPName, CPDescription] = get_name_desc(child);
-
-    if (CPName && match_search(CPName->get_text(), _search_text)) {
-        return true;
-    }
-    if (CPName && match_search(CPName->get_tooltip_text(), _search_text)) {
-        // untranslated name
-        return true;
-    }
-    if (CPDescription && match_search(CPDescription->get_text(), _search_text)) {
-        return true;
-    }
-    return false;
 }
 
 bool CommandPalette::on_filter_full_action_name(Gtk::ListBoxRow *child)
@@ -647,13 +628,359 @@ bool CommandPalette::ask_action_parameter(const ActionPtrName &action_ptr_name)
     return true;
 }
 
-bool CommandPalette::match_search(const Glib::ustring &subject, const Glib::ustring &search)
+/**
+ * Color removal
+ */
+void CommandPalette::remove_color(Gtk::Label *label, const Glib::ustring &subject)
 {
-    // TODO: Better matching algorithm take inspiration from VS code
+    if (label->get_use_markup()) {
+        label->set_text(subject);
+    }
+}
+
+/**
+ * Color addition
+ */
+Glib::ustring make_bold(const Glib::ustring &search)
+{
+    // TODO: Add a CSS class that changes the color of the search
+    return "<span weight=\"bold\">" + search + "</span>";
+}
+
+void CommandPalette::add_color(Gtk::Label *label, const Glib::ustring &search, const Glib::ustring &subject)
+{
+    Glib::ustring text = "";
+    std::string subject_string = subject.lowercase();
+    std::string search_string = search.lowercase();
+    int j = 0;
+
+    if (search_string.length() > 7) {
+        for (char i : search_string) {
+            if (i == ' ') {
+                continue;
+            }
+            while (j < subject_string.length()) {
+                if (i == subject_string[j]) {
+                    text += make_bold(Glib::Markup::escape_text(subject.substr(j, 1)));
+                    j++;
+                    break;
+                } else {
+                    text += subject_string[j];
+                }
+                j++;
+            }
+        }
+        if (j < subject_string.length())
+            text += Glib::Markup::escape_text(subject.substr(j));
+    } else {
+        std::map<char, int> search_string_character;
+
+        for (const auto &character : search_string) {
+            search_string_character[character]++;
+        }
+
+        for (int i = 0; i < subject_string.length(); i++) {
+            if (search_string_character[subject_string[i]]) {
+                search_string_character[subject_string[i]]--;
+                text += make_bold(Glib::Markup::escape_text(subject.substr(i, 1)));
+            } else {
+                text += subject_string[i];
+            }
+        }
+    }
+
+    label->set_markup(text);
+}
+
+/**
+ * Color addition for description text
+ * Coloring complete consecutive search text in the description text
+ */
+void CommandPalette::add_color_description(Gtk::Label *label, const Glib::ustring &search)
+{
+    Glib::ustring subject = label->get_text();
+
+    Glib::ustring const subject_normalize = subject.lowercase().normalize();
+    Glib::ustring const search_normalize = search.lowercase().normalize();
+
+    auto const position = subject_normalize.find(search_normalize);
+    auto const search_length = search_normalize.size();
+
+    subject = Glib::Markup::escape_text(subject.substr(0, position)) +
+              make_bold(Glib::Markup::escape_text(subject.substr(position, search_length))) +
+              Glib::Markup::escape_text(subject.substr(position + search_length));
+
+    label->set_markup(subject);
+}
+
+/**
+ * The Searching algorithm consists of fuzzy search and fuzzy points.
+ *
+ * Ever search of the label can contain up to three subjects to search
+ * CPName text,CPName tooltip text,CPDescription text
+ *
+ * Fuzzy search searches the search text in these subjects and returns a boolean
+ * Searching of a search text as a subsequence of the subject
+ *
+ * Fuzzy points give an integer of a particular search text concerning a particular subject.
+ * Less the fuzzy point more is the precedence.
+ *
+ * Special case for CPDescription text search by searching text as a substring of the subject
+ *
+ * TODO: Adding more conditions in fuzzy points and fuzzy search for creating better user experience
+ */
+
+bool CommandPalette::fuzzy_search(const Glib::ustring &subject, const Glib::ustring &search)
+{
+    std::string subject_string = subject.lowercase();
+    std::string search_string = search.lowercase();
+
+    if (search_string.length() > 7) { // Not applying tolarence
+        for (int j = 0, i = 0; i < search_string.length(); i++) {
+            if (search_string[i] == ' ') {
+                continue;
+            }
+
+            bool alphabet_present = false;
+
+            while (j < subject_string.length()) {
+                if (search_string[i] == subject_string[j]) {
+                    alphabet_present = true;
+                    j++;
+                    break;
+                }
+                j++;
+            }
+
+            if (!alphabet_present) {
+                return false; // If not present
+            }
+        }
+    } else { // Applying tolarence
+        std::map<char, int> subject_string_character, search_string_character;
+        for (const auto &character : subject_string) {
+            subject_string_character[character]++;
+        }
+        for (const auto &character : search_string) {
+            search_string_character[character]++;
+        }
+
+        for (const auto &character : search_string_character) {
+            auto [alphabet, occurrence] = character;
+            if (subject_string_character[alphabet] < occurrence) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+/**
+ * Searching the full search_text in the subject string
+ * used for CPDescription text
+ */
+bool CommandPalette::normal_search(const Glib::ustring &subject, const Glib::ustring &search)
+{
     if (subject.lowercase().find(search.lowercase()) != -1) {
         return true;
     }
     return false;
+}
+
+/**
+ * Calculates the fuzzy_point
+ */
+int CommandPalette::fuzzy_points(const Glib::ustring &subject, const Glib::ustring &search)
+{
+    int starting_characters_no_match = 5;
+    int character_no_match = 2;
+    int cost = 1; // Taking initial cost as 1
+
+    std::string subject_string = subject.lowercase();
+    std::string search_string = search.lowercase();
+    if (search_string.length() > 7) { // Not applying tolarence
+        for (int j = 0, i = 0; i < search_string.length(); i++) {
+            if (search_string[i] == ' ') {
+                continue;
+            }
+
+            while (j < subject_string.length()) {
+                if (subject_string[j] == ' ' && search_string[i] != subject_string[j]) {
+                    if (i == 0) { // starting characters no match
+                        cost += starting_characters_no_match;
+                    } else {
+                        cost += character_no_match;
+                    }
+                }
+                j++;
+            }
+        }
+    } else { // Applying tolarence
+        std::map<char, int> search_string_character;
+
+        for (const auto &character : search_string) {
+            search_string_character[character]++;
+        }
+
+        for (const auto &character : search_string_character) {
+            auto [alphabet, occurrence] = character;
+            for (int i = 0; i < subject_string.length() && occurrence; i++) {
+                if (subject_string[i] == alphabet) {
+                    cost += i;
+                    occurrence--;
+                }
+            }
+        }
+    }
+
+    return cost;
+}
+
+int CommandPalette::on_filter_general(Gtk::ListBoxRow *child)
+{
+    auto [CPName, CPDescription] = get_name_desc(child);
+    if (CPName) {
+        remove_color(CPName, CPName->get_text());
+        remove_color(CPName, CPName->get_tooltip_text());
+    }
+    if (CPDescription) {
+        remove_color(CPDescription, CPDescription->get_text());
+    }
+
+    if (_search_text.empty()) {
+        return 1;
+    } // Every operation is visible if search text is empty
+
+    if (CPName) {
+        if (fuzzy_search(CPName->get_text(), _search_text)) {
+            add_color(CPName, _search_text, CPName->get_text());
+            return fuzzy_points(CPName->get_text(), _search_text);
+        }
+        if (fuzzy_search(CPName->get_tooltip_text(), _search_text)) {
+            add_color(CPName, _search_text, CPName->get_tooltip_text());
+            return fuzzy_points(CPName->get_tooltip_text(), _search_text);
+        }
+    }
+    if (CPDescription && normal_search(CPDescription->get_text(), _search_text)) {
+        add_color_description(CPDescription, _search_text);
+        return fuzzy_points(CPDescription->get_text(), _search_text);
+    }
+
+    return 0;
+}
+
+/**
+ * Compair different rows for order of display
+ * priority of comparison
+ * 1) CPName->get_text()
+ * 2) CPName->get_tooltip_text()
+ * 3) CPDescription->get_text()
+ */
+int CommandPalette::on_sort(Gtk::ListBoxRow *row1, Gtk::ListBoxRow *row2)
+{
+    if (_search_text.empty()) {
+        return -1;
+    } // No change in the order
+
+    auto [cp_name_1, cp_description_1] = get_name_desc(row1);
+    auto [cp_name_2, cp_description_2] = get_name_desc(row2);
+
+    int fuzzy_points_count_1 = 0, fuzzy_points_count_2 = 0;
+    int text_len_1 = 0, text_len_2 = 0;
+
+    if (cp_name_1 && cp_name_2) {
+        if (fuzzy_search(cp_name_1->get_text(), _search_text)) {
+            text_len_1 = cp_name_1->get_text().length();
+            fuzzy_points_count_1 = fuzzy_points(cp_name_1->get_text(), _search_text);
+        }
+        if (fuzzy_search(cp_name_2->get_text(), _search_text)) {
+            text_len_2 = cp_name_2->get_text().length();
+            fuzzy_points_count_2 = fuzzy_points(cp_name_2->get_text(), _search_text);
+        }
+
+        if (fuzzy_points_count_1 && fuzzy_points_count_2) {
+            if (fuzzy_points_count_1 < fuzzy_points_count_2) {
+                return -1;
+            } else if (fuzzy_points_count_1 == fuzzy_points_count_2) {
+                if (text_len_1 > text_len_2) {
+                    return 1;
+                } else {
+                    return -1;
+                }
+            } else {
+                return 1;
+            }
+        }
+
+        if (fuzzy_points_count_1 == 0 && fuzzy_points_count_2) {
+            return 1;
+        }
+        if (fuzzy_points_count_2 == 0 && fuzzy_points_count_1) {
+            return -1;
+        }
+
+        if (fuzzy_search(cp_name_1->get_tooltip_text(), _search_text)) {
+            text_len_1 = cp_name_1->get_tooltip_text().length();
+            fuzzy_points_count_1 = fuzzy_points(cp_name_1->get_tooltip_text(), _search_text);
+        }
+        if (fuzzy_search(cp_name_2->get_tooltip_text(), _search_text)) {
+            text_len_2 = cp_name_2->get_tooltip_text().length();
+            fuzzy_points_count_2 = fuzzy_points(cp_name_2->get_tooltip_text(), _search_text);
+        }
+
+        if (fuzzy_points_count_1 && fuzzy_points_count_2) {
+            if (fuzzy_points_count_1 < fuzzy_points_count_2) {
+                return -1;
+            } else if (fuzzy_points_count_1 == fuzzy_points_count_2) {
+                if (text_len_1 > text_len_2) {
+                    return 1;
+                } else {
+                    return -1;
+                }
+            } else {
+                return 1;
+            }
+        }
+
+        if (fuzzy_points_count_1 == 0 && fuzzy_points_count_2) {
+            return 1;
+        }
+        if (fuzzy_points_count_2 == 0 && fuzzy_points_count_1) {
+            return -1;
+        }
+    }
+
+    if (cp_description_1 && normal_search(cp_description_1->get_text(), _search_text)) {
+        text_len_1 = cp_description_1->get_text().length();
+        fuzzy_points_count_1 = fuzzy_points(cp_description_1->get_text(), _search_text);
+    }
+    if (cp_description_2 && normal_search(cp_description_2->get_text(), _search_text)) {
+        text_len_2 = cp_description_2->get_text().length();
+        fuzzy_points_count_2 = fuzzy_points(cp_description_2->get_text(), _search_text);
+    }
+
+    if (fuzzy_points_count_1 && fuzzy_points_count_2) {
+        if (fuzzy_points_count_1 < fuzzy_points_count_2) {
+            return -1;
+        } else if (fuzzy_points_count_1 == fuzzy_points_count_2) {
+            if (text_len_1 > text_len_2) {
+                return 1;
+            } else {
+                return -1;
+            }
+        } else {
+            return 1;
+        }
+    }
+
+    if (fuzzy_points_count_1 == 0 && fuzzy_points_count_2) {
+        return 1;
+    }
+    if (fuzzy_points_count_2 == 0 && fuzzy_points_count_1) {
+        return -1;
+    }
+
+    return 0;
 }
 
 void CommandPalette::set_mode(CPMode mode)

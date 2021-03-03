@@ -146,7 +146,7 @@ private: // Helpers
 private: // Signal handlers
     void on_search();
 
-    bool on_filter_general(Gtk::ListBoxRow *child);
+    int on_filter_general(Gtk::ListBoxRow *child);
     bool on_filter_full_action_name(Gtk::ListBoxRow *child);
     bool on_filter_recent_file(Gtk::ListBoxRow *child, bool const is_import);
 
@@ -175,8 +175,18 @@ private: // Signal handlers
     /**
      * Implements text matching logic
      */
-    bool match_search(const Glib::ustring &subject, const Glib::ustring &search);
+    bool fuzzy_search(const Glib::ustring &subject, const Glib::ustring &search);
+    bool normal_search(const Glib::ustring &subject, const Glib::ustring &search);
+    int fuzzy_points(const Glib::ustring &subject, const Glib::ustring &search);
+    int on_sort(Gtk::ListBoxRow *row1, Gtk::ListBoxRow *row2);
     void set_mode(CPMode mode);
+
+    /**
+     * Color addition in searched character
+     */
+    void add_color(Gtk::Label *label, const Glib::ustring &search, const Glib::ustring &subject);
+    void remove_color(Gtk::Label *label, const Glib::ustring &subject);
+    void add_color_description(Gtk::Label *label, const Glib::ustring &search);
 
     /**
      * Executes Action
