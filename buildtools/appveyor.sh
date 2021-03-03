@@ -70,7 +70,19 @@ cmake .. -G Ninja \
 # build
 message "--- Compiling Inkscape"
 ccache --zero-stats
-ninja || error "compilation failed"
+
+# We have 90min total. It takes about 5min to reach this line.
+# Use a timeout of 75min to make sure the cache is saved if we run out of time.
+# Without "nice -19" there would be a huge delay (~20min) between the timeout
+# and actual termination of "ninja".
+timeout --verbose 4500 nice -19 ninja || {
+    if [ $? = 124 ]; then
+        appveyor SetVariable -Name APPVEYOR_SAVE_CACHE_ON_ERROR -Value true
+        error "timed out"
+    fi
+    error "compilation failed"
+}
+
 ccache --show-stats
 appveyor SetVariable -Name APPVEYOR_SAVE_CACHE_ON_ERROR -Value true # build succeeded so it's safe to save the cache
 
