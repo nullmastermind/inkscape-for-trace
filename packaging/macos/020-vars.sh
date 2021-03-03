@@ -176,7 +176,7 @@ PYTHON_SCOUR=scour==0.37
 
 # https://pyserial.readthedocs.io/en/latest/
 # https://github.com/pyserial/pyserial
-PYTHON_PYSERIAL=pyserial==3.4
+PYTHON_PYSERIAL=pyserial==3.5
 
 ### Python: auxiliary packages #################################################
 
