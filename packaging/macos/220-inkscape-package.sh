@@ -120,7 +120,9 @@ lib_change_paths \
 ### install Python package: NumPy ##############################################
 
 pip_install $PYTHON_NUMPY
-rm $APP_BIN_DIR/f2p*
+sed -i '' '1s/.*/#!\/usr\/bin\/env python3/' $APP_BIN_DIR/f2py
+sed -i '' '1s/.*/#!\/usr\/bin\/env python3/' $APP_BIN_DIR/f2py3
+sed -i '' '1s/.*/#!\/usr\/bin\/env python3/' $APP_BIN_DIR/f2py3.8
 
 ### install Python package: PyGObject ##########################################
 
@@ -147,12 +149,13 @@ lib_change_paths \
 pip_install $PYTHON_PYSERIAL
 find $APP_LIB_DIR/python$PY3_MAJOR.$PY3_MINOR/site-packages/serial \
   -type f -name "*.pyc" -exec rm {} \;
-rm $APP_BIN_DIR/miniterm.*
+sed -i '' '1s/.*/#!\/usr\/bin\/env python3/' $APP_BIN_DIR/pyserial-miniterm
+sed -i '' '1s/.*/#!\/usr\/bin\/env python3/' $APP_BIN_DIR/pyserial-ports
 
 ### install Python package: Scour ##############################################
 
 pip_install $PYTHON_SCOUR
-rm $APP_BIN_DIR/scour
+sed -i '' '1s/.*/#!\/usr\/bin\/env python3/' $APP_BIN_DIR/scour
 
 ### remove Python cache files ##################################################
 
