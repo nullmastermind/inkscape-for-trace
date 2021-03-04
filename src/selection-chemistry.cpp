@@ -1386,6 +1386,12 @@ void ObjectSet::removeFilter()
     sp_repr_css_unset_property(css, "filter");
     sp_desktop_set_style(this, desktop(), css);
     sp_repr_css_attr_unref(css);
+    if (SPDesktop *d = desktop()) {
+        // Refreshing the current tool (by switching to same tool)
+        // will refresh tool's private information in it's selection context that
+        // depends on desktop items.
+        tools_switch(d, tools_active(d));
+    }
     if(document())
         DocumentUndo::done(document(), SP_VERB_EDIT_REMOVE_FILTER,
                        _("Remove filter"));
