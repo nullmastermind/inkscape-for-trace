@@ -1391,8 +1391,10 @@ void SPIColor::read( gchar const *str ) {
         currentcolor = true;
         if (id() == SPAttr::COLOR) {
             inherit = true;  // CSS3
-        } else {
+        } else if (style) {
             setColor( style->color.value.color );
+        } else {
+            std::cerr << "SPIColor::read(): value is 'currentColor' but 'color' not available." << std::endl;
         }
     } else {
         guint32 const rgb0 = sp_svg_read_color(str, 0xff);

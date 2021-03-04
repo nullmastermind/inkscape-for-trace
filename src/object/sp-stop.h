@@ -38,8 +38,6 @@ public:
     /// \todo fixme: Should be SPSVGPercentage
     float offset;
 
-    bool currentColor;
-
     Glib::ustring * path_string;
     //SPCurve path;
 

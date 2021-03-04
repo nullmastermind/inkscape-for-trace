@@ -32,11 +32,10 @@ SPStop::SPStop() : SPObject() {
 SPStop::~SPStop() = default;
 
 void SPStop::build(SPDocument* doc, Inkscape::XML::Node* repr) {
-    SPObject::build(doc, repr);
-
     this->readAttr(SPAttr::STYLE);
     this->readAttr(SPAttr::OFFSET);
     this->readAttr(SPAttr::STOP_PATH); // For mesh
+
     SPObject::build(doc, repr);
 }
 
@@ -144,7 +143,6 @@ SPColor SPStop::getColor() const
     if (style->stop_color.currentcolor) {
         return style->color.value.color;
     }
-    Glib::ustring color = style->stop_color.value.color.toString();
     return style->stop_color.value.color;
 }
 

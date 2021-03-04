@@ -444,10 +444,12 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     inline_size.setStylePointer(       this );
 
     // Properties that depend on 'color'
-    text_decoration_color.setStylePointer( this );
-    fill.setStylePointer(                  this );
-    stroke.setStylePointer(                this );
-    // color.setStylePointer( this ); // Doesn't need reference to self
+    text_decoration_color.setStylePointer(this);
+    fill.setStylePointer(this);
+    stroke.setStylePointer(this);
+    color.setStylePointer(this);
+    stop_color.setStylePointer(this);
+    solid_color.setStylePointer(this);
 
     // 'text_decoration' shorthand requires access to included properties.
     text_decoration.setStylePointer( this );

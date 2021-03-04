@@ -20,11 +20,17 @@
 #include "sp-defs.h"
 #include "xml/repr.h"
 #include "document.h"
+#include "attributes.h"
 
 SPDefs::SPDefs() : SPObject() {
 }
 
 SPDefs::~SPDefs() = default;
+
+void SPDefs::build(SPDocument* doc, Inkscape::XML::Node* repr) {
+    this->readAttr(SPAttr::STYLE);
+    SPObject::build(doc, repr);
+}
 
 void SPDefs::release() {
 	SPObject::release();

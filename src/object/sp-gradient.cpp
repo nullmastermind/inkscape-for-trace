@@ -270,6 +270,8 @@ void SPGradient::build(SPDocument *document, Inkscape::XML::Node *repr)
         repr->removeAttribute("inkscape:collect");
     }
 
+    this->readAttr(SPAttr::STYLE);
+
     SPPaintServer::build(document, repr);
 
     for (auto& ochild: children) {

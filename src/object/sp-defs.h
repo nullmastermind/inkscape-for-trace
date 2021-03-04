@@ -25,6 +25,7 @@ public:
 	~SPDefs() override;
 
 protected:
+        void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
 	void release() override;
 	void update(SPCtx* ctx, unsigned int flags) override;
 	void modified(unsigned int flags) override;
