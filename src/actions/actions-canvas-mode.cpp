@@ -240,6 +240,7 @@ canvas_color_manage_toggle(InkscapeWindow *win)
     SPDesktop* dt = win->get_desktop();
     auto canvas = dt->getCanvas();
     canvas->set_cms_active(state);
+    canvas->redraw_all();
 }
 
 std::vector<std::vector<Glib::ustring>> raw_data_canvas_mode =
