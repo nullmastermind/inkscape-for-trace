@@ -620,11 +620,13 @@ void Export::updateCheckbuttons ()
     gint num = (gint) boost::distance(SP_ACTIVE_DESKTOP->getSelection()->items());
     if (num >= 2) {
         batch_export.set_sensitive(true);
-        batch_export.set_label(g_strdup_printf (ngettext("B_atch export %d selected object","B_atch export %d selected objects",num), num));
     } else {
         batch_export.set_active (false);
         batch_export.set_sensitive(false);
     }
+    gchar *l = g_strdup_printf(ngettext("B_atch export %d selected object","B_atch export %d selected objects",num), num);
+    batch_export.set_label(l);
+    g_free(l);
 
     //hide_export.set_sensitive (num > 0);
 }
