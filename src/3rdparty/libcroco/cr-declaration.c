@@ -191,6 +191,7 @@ cr_declaration_parse_list_from_buf (const guchar * a_str,
         CRParser *parser = NULL;
         CRTknzr *tokenizer = NULL;
         gboolean important = FALSE;
+        gboolean first = TRUE;
 
         g_return_val_if_fail (a_str, NULL);
 
@@ -203,7 +204,7 @@ cr_declaration_parse_list_from_buf (const guchar * a_str,
                 goto cleanup;
         }
 
-        for (gboolean first = TRUE;; first = FALSE) {
+        for (;; first = FALSE) {
                 status = cr_parser_try_to_skip_spaces_and_comments (parser);
                 if (status != CR_OK)
                         goto cleanup;

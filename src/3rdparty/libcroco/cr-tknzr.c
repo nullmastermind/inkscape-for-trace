@@ -1539,13 +1539,14 @@ cr_tknzr_parse_num (CRTknzr * a_this,
                         parsed = FALSE;  /* In CSS, there must be at least
                                             one digit after `.'. */
                 } else if (!parsing_exp && (next_char == 'E' || next_char == 'e')) {
-                        PEEK_BYTE(a_this, 2, &next_char)
-                        if (next_char == '+') {
+                        guchar next_byte;
+                        PEEK_BYTE (a_this, 2, &next_byte)
+                        if (next_byte == '+') {
                                 READ_NEXT_CHAR (a_this, &cur_char);
-                        } else if (next_char == '-') {
+                        } else if (next_byte == '-') {
                                 exp_sign = -1;
                                 READ_NEXT_CHAR (a_this, &cur_char);
-                        } else if (!IS_NUM (next_char)) {
+                        } else if (!IS_NUM (next_byte)) {
                                 break;
                         }
 

@@ -194,6 +194,7 @@ empty_pseudo_class_handler (CRSelEng *const a_this,
                             CRAdditionalSel * a_sel, CRXMLNodePtr const a_node)
 {
         CRNodeIface const *node_iface = NULL;
+        CRXMLNodePtr cur_node = NULL;
 
         g_return_val_if_fail (a_this && PRIVATE (a_this)
                               && a_sel && a_sel->content.pseudo
@@ -209,7 +210,6 @@ empty_pseudo_class_handler (CRSelEng *const a_this,
         }
         node_iface = PRIVATE(a_this)->node_iface;
 
-        CRXMLNodePtr cur_node = NULL;
         cur_node = node_iface->getFirstChild (a_node);
 
         return (cur_node == NULL);
@@ -267,6 +267,7 @@ only_child_pseudo_class_handler (CRSelEng *const a_this,
 {
         CRNodeIface const *node_iface = NULL;
         CRXMLNodePtr parent = NULL;
+        CRXMLNodePtr cur_node = NULL;
 
         g_return_val_if_fail (a_this && PRIVATE (a_this)
                               && a_sel && a_sel->content.pseudo
@@ -285,8 +286,6 @@ only_child_pseudo_class_handler (CRSelEng *const a_this,
         if (!parent)
                 return FALSE;
 
-        CRXMLNodePtr cur_node = NULL;
-
         cur_node = get_first_child_element_node (node_iface, parent);
         return (cur_node == a_node &&
                 !get_next_element_node(node_iface, cur_node) );
@@ -298,6 +297,9 @@ only_of_type_pseudo_class_handler (CRSelEng *const a_this,
 {
         CRNodeIface const *node_iface = NULL;
         CRXMLNodePtr parent = NULL;
+        CRXMLNodePtr cur_node = NULL;
+        int m = 0;
+        int child = 0;
 
         g_return_val_if_fail (a_this && PRIVATE (a_this)
                               && a_sel && a_sel->content.pseudo
@@ -316,9 +318,6 @@ only_of_type_pseudo_class_handler (CRSelEng *const a_this,
         if (!parent)
                 return FALSE;
 
-        CRXMLNodePtr cur_node = NULL;
-        int m = 0;
-        int child = 0;
         cur_node = get_first_child_element_node (node_iface, parent);
 
         while (cur_node) {
@@ -368,6 +367,11 @@ first_of_type_pseudo_class_handler (CRSelEng *const a_this,
         CRNodeIface const *node_iface = NULL;
         CRXMLNodePtr parent = NULL;
 
+        // Count which child no. of type
+        CRXMLNodePtr cur_node = NULL;
+        int child = 0;
+        int found = FALSE;
+
         g_return_val_if_fail (a_this && PRIVATE (a_this)
                               && a_sel && a_sel->content.pseudo
                               && a_sel->content.pseudo
@@ -384,11 +388,6 @@ first_of_type_pseudo_class_handler (CRSelEng *const a_this,
         parent = node_iface->getParentNode (a_node);
         if (!parent)
                 return FALSE;
-
-        // Count which child no. of type
-        CRXMLNodePtr cur_node = NULL;
-        int child = 0;
-        int found = FALSE;
 
         cur_node = get_first_child_element_node (node_iface, parent);
 
@@ -416,6 +415,10 @@ last_child_pseudo_class_handler (CRSelEng *const a_this,
         CRNodeIface const *node_iface = NULL;
         CRXMLNodePtr parent = NULL;
 
+        CRXMLNodePtr cur_node = NULL;
+        int m = 0;
+        int child = 0;
+
         g_return_val_if_fail (a_this && PRIVATE (a_this)
                               && a_sel && a_sel->content.pseudo
                               && a_sel->content.pseudo
@@ -432,10 +435,6 @@ last_child_pseudo_class_handler (CRSelEng *const a_this,
         parent = node_iface->getParentNode (a_node);
         if (!parent)
                 return FALSE;
-
-        CRXMLNodePtr cur_node = NULL;
-        int m = 0;
-        int child = 0;
 
         cur_node = get_first_child_element_node (node_iface, parent);
         while (cur_node) {
@@ -456,6 +455,10 @@ last_of_type_pseudo_class_handler (CRSelEng *const a_this,
         CRNodeIface const *node_iface = NULL;
         CRXMLNodePtr parent = NULL;
 
+        CRXMLNodePtr cur_node = NULL;
+        int m = 0;
+        int child = 0;
+
         g_return_val_if_fail (a_this && PRIVATE (a_this)
                               && a_sel && a_sel->content.pseudo
                               && a_sel->content.pseudo
@@ -472,10 +475,6 @@ last_of_type_pseudo_class_handler (CRSelEng *const a_this,
         parent = node_iface->getParentNode (a_node);
         if (!parent)
                 return FALSE;
-
-        CRXMLNodePtr cur_node = NULL;
-        int m = 0;
-        int child = 0;
 
         cur_node = get_first_child_element_node (node_iface, parent);
 
@@ -500,6 +499,13 @@ nth_child_pseudo_class_handler (CRSelEng *const a_this,
         CRNodeIface const *node_iface = NULL;
         CRXMLNodePtr parent = NULL;
 
+        /* Count which child this is */
+        CRXMLNodePtr cur_node = NULL;
+        int child = 0;
+        int found = FALSE;
+        int a, b;
+        CRArguments arg;
+
         g_return_val_if_fail (a_this && PRIVATE (a_this)
                               && a_sel && a_sel->content.pseudo
                               && a_sel->content.pseudo
@@ -517,23 +523,18 @@ nth_child_pseudo_class_handler (CRSelEng *const a_this,
         if (!a_sel->content.pseudo->term)
                 return FALSE;
 
-        CRArguments arg = get_arguments_from_function (a_sel);
+        arg = get_arguments_from_function (a_sel);
 
         if (arg.a == 0 && arg.b == 0)
                 return FALSE;
 
-        int a = arg.a;
-        int b = arg.b;
+        a = arg.a;
+        b = arg.b;
 
         node_iface = PRIVATE(a_this)->node_iface;
         parent = node_iface->getParentNode (a_node);
         if (!parent)
                 return FALSE;
-
-        /* Count which child this is */
-        CRXMLNodePtr cur_node = NULL;
-        int child = 0;
-        int found = FALSE;
 
         cur_node = get_first_child_element_node (node_iface, parent);
 
@@ -562,6 +563,13 @@ nth_of_type_pseudo_class_handler (CRSelEng *const a_this,
         CRNodeIface const *node_iface = NULL;
         CRXMLNodePtr parent = NULL;
 
+        // Count which child no. of required type
+        CRXMLNodePtr cur_node = NULL;
+        int child = 0;
+        int found = FALSE;
+        int a, b;
+        CRArguments arg;
+
         g_return_val_if_fail (a_this && PRIVATE (a_this)
                               && a_sel && a_sel->content.pseudo
                               && a_sel->content.pseudo
@@ -579,23 +587,18 @@ nth_of_type_pseudo_class_handler (CRSelEng *const a_this,
         if (!a_sel->content.pseudo->term)
                 return FALSE;
 
-        CRArguments arg = get_arguments_from_function (a_sel);
+        arg = get_arguments_from_function (a_sel);
 
         if (arg.a == 0 && arg.b == 0)
                 return FALSE;
 
-        int a = arg.a;
-        int b = arg.b;
+        a = arg.a;
+        b = arg.b;
 
         node_iface = PRIVATE(a_this)->node_iface;
         parent = node_iface->getParentNode (a_node);
         if (!parent)
                 return FALSE;
-
-        // Count which child no. of required type
-        CRXMLNodePtr cur_node = NULL;
-        int child = 0;
-        int found = FALSE;
 
         cur_node = get_first_child_element_node (node_iface, parent);
 
@@ -626,6 +629,14 @@ nth_last_child_pseudo_class_handler (CRSelEng *const a_this,
         CRNodeIface const *node_iface = NULL;
         CRXMLNodePtr parent = NULL;
 
+        /* Count which child this is (child) and total number of children (m). */
+        CRXMLNodePtr cur_node = NULL;
+        int m = 0;
+        int child = 0;
+        int found = FALSE;
+        int a, b;
+        CRArguments arg;
+
         g_return_val_if_fail (a_this && PRIVATE (a_this)
                               && a_sel && a_sel->content.pseudo
                               && a_sel->content.pseudo
@@ -642,13 +653,13 @@ nth_last_child_pseudo_class_handler (CRSelEng *const a_this,
         if (!a_sel->content.pseudo->term)
                 return FALSE;
 
-        CRArguments arg = get_arguments_from_function (a_sel);
+        arg = get_arguments_from_function (a_sel);
 
         if (arg.a == 0 && arg.b == 0)
                 return FALSE;
 
-        int a = arg.a;
-        int b = arg.b;
+        a = arg.a;
+        b = arg.b;
 
         node_iface = PRIVATE(a_this)->node_iface;
         parent = node_iface->getParentNode (a_node);
@@ -656,13 +667,6 @@ nth_last_child_pseudo_class_handler (CRSelEng *const a_this,
         if (!parent) {
                 return FALSE;
         }
-
-        /* Count which child this is (child) and total number of children (m). */
-
-        CRXMLNodePtr cur_node = NULL;
-        int m = 0;
-        int child = 0;
-        int found = FALSE;
 
         cur_node = get_first_child_element_node (node_iface, parent);
 
@@ -690,6 +694,12 @@ nth_last_of_type_pseudo_class_handler (CRSelEng *const a_this,
 {
         CRNodeIface const *node_iface = NULL;
         CRXMLNodePtr parent = NULL;
+        CRXMLNodePtr cur_node = NULL;
+        int m = 0;
+        int child = 0;
+        int found = FALSE;
+        CRArguments arg;
+        int a, b;
 
         g_return_val_if_fail (a_this && PRIVATE (a_this)
                               && a_sel && a_sel->content.pseudo
@@ -707,24 +717,19 @@ nth_last_of_type_pseudo_class_handler (CRSelEng *const a_this,
         if (!a_sel->content.pseudo->term)
                 return FALSE;
 
-        CRArguments arg = get_arguments_from_function (a_sel);
+        arg = get_arguments_from_function (a_sel);
 
         if (arg.a == 0 && arg.b == 0)
                 return FALSE;
 
-        int a = arg.a;
-        int b = arg.b;
+        a = arg.a;
+        b = arg.b;
 
         node_iface = PRIVATE(a_this)->node_iface;
         parent = node_iface->getParentNode (a_node);
         if (!parent) {
                 return FALSE;
         }
-
-        CRXMLNodePtr cur_node = NULL;
-        int m = 0;
-        int child = 0;
-        int found = FALSE;
 
         cur_node = get_first_child_element_node (node_iface, parent);
 
@@ -880,12 +885,14 @@ attr_add_sel_matches_node (CRAdditionalSel * a_add_sel,
 
         for (cur_sel = a_add_sel->content.attr_sel;
              cur_sel; cur_sel = cur_sel->next) {
+                char *value;
+
                 if (!cur_sel->name
                     || !cur_sel->name->stryng
                     || !cur_sel->name->stryng->str)
                         return FALSE;
 
-                char *const value = a_node_iface->getProp (a_node, cur_sel->name->stryng->str);
+                value = a_node_iface->getProp (a_node, cur_sel->name->stryng->str);
                 if (!value)
                         goto free_and_return_false;
 
