@@ -44,14 +44,16 @@ namespace Dialog
  * Used for setting filters and options, and
  * reading them back from user selections.
  */
-enum FileDialogType {
+enum FileDialogType
+{
     SVG_TYPES,
     IMPORT_TYPES,
     EXPORT_TYPES,
+    RASTER_TYPES,
     EXE_TYPES,
     SWATCH_TYPES,
     CUSTOM_TYPE
-    };
+};
 
 /**
  * Used for returning the type selected in a SaveAs

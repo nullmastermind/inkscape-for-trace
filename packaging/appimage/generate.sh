@@ -71,6 +71,7 @@ apt_bundle \
     python3-scour \
     python3-distutils \
     python3-gi \
+    python3-pil \
     gir1.2-glib-2.0 \
     gir1.2-gtk-3.0 \
     gir1.2-gdkpixbuf-2.0 \

@@ -1572,7 +1572,9 @@ FileSaveDialogImplWin32::FileSaveDialogImplWin32(Gtk::Window &parent,
         _title_edit(NULL)
 {
     FileSaveDialog::myDocTitle = docTitle;
-    createFilterMenu();
+
+    if (dialogType != CUSTOM_TYPE)
+        createFilterMenu();
 
     /* The code below sets the default file name */
         myFilename = "";
@@ -1619,10 +1621,12 @@ void FileSaveDialogImplWin32::createFilterMenu()
 
     int filter_count = 0;
     int filter_length = 1;
+    bool is_raster = dialogType == RASTER_TYPES;
 
     for (auto omod : extension_list) {
-
-        if (omod->deactivated() || omod->is_raster()) continue;
+        // FIXME: would be nice to grey them out instead of not listing them
+        if (omod->deactivated() || (omod->is_raster() != is_raster))
+            continue;
 
         filter_count++;
 

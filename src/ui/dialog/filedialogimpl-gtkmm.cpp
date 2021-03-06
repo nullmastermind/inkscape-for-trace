@@ -501,9 +501,6 @@ FileSaveDialogImplGtk::FileSaveDialogImplGtk(Gtk::Window &parentWindow, const Gl
         myFilename = udir;
     }
 
-    //###### Add the file types menu
-    // createFilterMenu();
-
     //###### Do we want the .xxx extension automatically added?
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     fileTypeCheckbox.set_label(Glib::ustring(_("Append filename extension automatically")));
@@ -513,12 +510,11 @@ FileSaveDialogImplGtk::FileSaveDialogImplGtk(Gtk::Window &parentWindow, const Gl
         fileTypeCheckbox.set_active(prefs->getBool("/dialogs/save_as/append_extension", true));
     }
 
-    if (_dialogType != CUSTOM_TYPE)
-        createFileTypeMenu();
-
     fileTypeComboBox.set_size_request(200, 40);
     fileTypeComboBox.signal_changed().connect(sigc::mem_fun(*this, &FileSaveDialogImplGtk::fileTypeChangedCallback));
 
+    if (_dialogType != CUSTOM_TYPE)
+        createFilterMenu();
 
     childBox.pack_start(checksBox);
     childBox.pack_end(fileTypeComboBox);
@@ -665,15 +661,17 @@ void FileSaveDialogImplGtk::addFileType(Glib::ustring name, Glib::ustring patter
     fileTypeChangedCallback(); // call at least once to set the filter
 }
 
-void FileSaveDialogImplGtk::createFileTypeMenu()
+void FileSaveDialogImplGtk::createFilterMenu()
 {
     Inkscape::Extension::DB::OutputList extension_list;
     Inkscape::Extension::db.get_output_list(extension_list);
     knownExtensions.clear();
 
+    bool is_raster = _dialogType == RASTER_TYPES;
+
     for (auto omod : extension_list) {
         // FIXME: would be nice to grey them out instead of not listing them
-        if (omod->deactivated() || omod->is_raster())
+        if (omod->deactivated() || (omod->is_raster() != is_raster))
             continue;
 
         FileType type;

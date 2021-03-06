@@ -21,6 +21,7 @@
 #include <gtkmm/radiobutton.h>
 #include <gtkmm/spinbutton.h>
 
+#include "extension/output.h"
 #include "ui/dialog/dialog-base.h"
 #include "ui/widget/scrollprotected.h"
 
@@ -127,6 +128,7 @@ private:
      * Export button callback
      */
     void onExport ();
+    void _export_raster(Inkscape::Extension::Output *extension);
 
     /**
      * File Browse button callback

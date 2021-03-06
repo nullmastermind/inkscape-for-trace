@@ -72,6 +72,8 @@ struct ModuleOutputCmp {
     int n1 = 0;
     int n2 = 0;
     //                             12345678901234567890123456789012
+    if (strncmp(module1->get_id(),"org.inkscape.output.png.inkscape",  32) == 0) n1 = 1;
+    if (strncmp(module2->get_id(),"org.inkscape.output.png.inkscape",  32) == 0) n2 = 1;
     if (strncmp(module1->get_id(),"org.inkscape.output.svg.inkscape",  32) == 0) n1 = 1;
     if (strncmp(module2->get_id(),"org.inkscape.output.svg.inkscape",  32) == 0) n2 = 1;
     if (strncmp(module1->get_id(),"org.inkscape.output.svg.plain",     29) == 0) n1 = 2;

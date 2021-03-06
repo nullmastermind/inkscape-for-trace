@@ -36,6 +36,7 @@ set(extension_SRC
 	internal/metafile-print.cpp
 	internal/odf.cpp
 	internal/latex-text-renderer.cpp
+	internal/png-output.cpp
 	internal/pov-out.cpp
 	internal/svg.cpp
 	internal/svgz.cpp
@@ -123,6 +124,7 @@ set(extension_SRC
 	internal/pdfinput/pdf-input.h
 	internal/pdfinput/pdf-parser.h
 	internal/pdfinput/svg-builder.h
+	internal/png-output.h
 	internal/pov-out.h
 	internal/svg.h
 	internal/svgz.h

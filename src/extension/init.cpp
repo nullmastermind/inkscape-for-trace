@@ -44,6 +44,7 @@
 #ifdef CAIRO_HAS_PS_SURFACE
 # include "internal/cairo-ps-out.h"
 #endif
+#include "internal/png-output.h"
 #include "internal/pov-out.h"
 #include "internal/odf.h"
 #include "internal/latex-pstricks-out.h"
@@ -171,6 +172,7 @@ init()
     Internal::Emf::init();
     Internal::PrintWmf::init();
     Internal::Wmf::init();
+    Internal::PngOutput::init();
     Internal::PovOutput::init();
     Internal::OdfOutput::init();
     Internal::PrintLatex::init();

@@ -92,6 +92,7 @@
 ../src/extension/internal/latex-pstricks.cpp
 ../src/extension/internal/odf.cpp
 ../src/extension/internal/pdfinput/pdf-input.cpp
+../src/extension/internal/png-output.cpp
 ../src/extension/internal/pov-out.cpp
 ../src/extension/internal/svg.cpp
 ../src/extension/internal/svg.h
