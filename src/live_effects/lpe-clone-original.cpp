@@ -43,10 +43,10 @@ LPECloneOriginal::LPECloneOriginal(LivePathEffectObject *lpeobject)
     : Effect(lpeobject)
     , linkeditem(_("Linked Item:"), _("Item from which to take the original data"), "linkeditem", &wr, this)
     , method(_("Shape"), _("Shape linked"), "method", CLMConverter, &wr, this, CLM_D)
-    , attributes("Attributes", "Attributes linked, comma separated attributes like trasform, X, Y...",
+    , attributes(_("Attributes"), _("Attributes linked, comma separated attributes like trasform, X, Y..."),
                  "attributes", &wr, this, "")
-    , css_properties("CSS Properties",
-                       "CSS properties linked, comma separated attributes like fill, filter, opacity...",
+    , css_properties(_("CSS Properties"),
+                       _("CSS properties linked, comma separated attributes like fill, filter, opacity..."),
                        "css_properties", &wr, this, "")
     , allow_transforms(_("Allow Transforms"), _("Allow transforms"), "allow_transforms", &wr, this, true)
 {

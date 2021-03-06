@@ -25,6 +25,8 @@
 #include "svg/svg-color.h"
 #include "svg/stringstream.h"
 
+#include <glibmm/i18n.h>
+
 namespace Inkscape {
 namespace UI {
 namespace Widget {
@@ -699,11 +701,11 @@ void RegisteredVector::setPolarCoords(bool polar_coords)
 {
     _polar_coords = polar_coords;
     if (polar_coords) {
-        xwidget.setLabelText("Angle:");
-        ywidget.setLabelText("Distance:");
+        xwidget.setLabelText(_("Angle:"));
+        ywidget.setLabelText(_("Distance:"));
     } else {
-        xwidget.setLabelText("X:");
-        ywidget.setLabelText("Y:");
+        xwidget.setLabelText(_("X:"));
+        ywidget.setLabelText(_("Y:"));
     }
 }
 

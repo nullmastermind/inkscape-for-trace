@@ -1671,7 +1671,7 @@ Fund Inkscape</property>
                 <property name="layout_style">start</property>
                 <child>
                   <object class="GtkButton" id="thanks">
-                    <property name="label">Thanks!</property>
+                    <property name="label" translatable="yes">Thanks!</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_focus">True</property>
@@ -2072,7 +2072,7 @@ Fund Inkscape</property>
                 <property name="layout_style">start</property>
                 <child>
                   <object class="GtkButton" id="load">
-                    <property name="label">Load</property>
+                    <property name="label" translatable="yes">Load</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_focus">True</property>

@@ -240,6 +240,7 @@
 ../src/ui/dialog/color-item.cpp
 ../src/ui/dialog/command-palette.cpp
 ../src/ui/dialog/debug.cpp
+../src/ui/dialog/dialog-container.cpp
 ../src/ui/dialog/dialog-multipaned.cpp
 ../src/ui/dialog/dialog-notebook.cpp
 ../src/ui/dialog/dialog-window.cpp
@@ -367,6 +368,7 @@
 ../src/ui/widget/paint-selector.cpp
 ../src/ui/widget/preferences-widget.cpp
 ../src/ui/widget/random.cpp
+../src/ui/widget/registered-widget.cpp
 ../src/ui/widget/rendering-options.cpp
 ../src/ui/widget/selected-style.cpp
 ../src/ui/widget/spin-scale.cpp
