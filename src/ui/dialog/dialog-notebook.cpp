@@ -188,6 +188,14 @@ void DialogNotebook::close_tab_callback()
         _selected_page = nullptr;
     }
 
+    if (auto dialog = dynamic_cast<DialogBase*>(_notebook.get_nth_page(page_number))) {
+        // is this a dialog in a floating window?
+        if (auto window = dynamic_cast<DialogWindow*>(_container->get_toplevel())) {
+            // store state of floating dialog before it gets deleted
+            DialogManager::singleton().store_state(*window);
+        }
+    }
+
     // Remove page from notebook
     _notebook.remove_page(page_number);
 

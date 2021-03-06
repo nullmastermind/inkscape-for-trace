@@ -148,7 +148,7 @@ DialogWindow::DialogWindow(Gtk::Widget *page)
         update_dialogs();
     }
 
-    // window is created hidden; don't show it now, its size need to be restored
+    // window is created hidden; don't show it now, its size needs to be restored
 }
 
 /**
