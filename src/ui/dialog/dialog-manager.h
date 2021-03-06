@@ -46,6 +46,9 @@ public:
     // find floating window state hosting dialog 'code', if there was one
     std::shared_ptr<Glib::KeyFile> find_dialog_state(unsigned int code);
 
+    // remove dialog floating state
+    void remove_dialog_floating_state(unsigned int code);
+
     // save configuration of docked and floating dialogs
     void save_dialogs_state(DialogContainer *docking_container);
 

@@ -208,6 +208,13 @@ void DialogManager::restore_dialogs_state(DialogContainer *docking_container, bo
     }
 }
 
+void DialogManager::remove_dialog_floating_state(unsigned int code) {
+    auto it = floating_dialogs.find(code);
+    if (it != floating_dialogs.end()) {
+        floating_dialogs.erase(it);
+    }
+}
+
 } // namespace Dialog
 } // namespace UI
 } // namespace Inkscape

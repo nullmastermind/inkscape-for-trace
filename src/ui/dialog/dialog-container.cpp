@@ -557,6 +557,11 @@ void DialogContainer::link_dialog(DialogBase *dialog)
     if (window) {
         window->update_dialogs();
     }
+    else {
+        // dialog without DialogWindow has been docked; remove it's floating state
+        // so if user closes and reopens it, it shows up docked again, not floating
+        DialogManager::singleton().remove_dialog_floating_state(dialog->getVerb());
+    }
 }
 
 // Remove dialog from list.
