@@ -2,63 +2,71 @@
 
 This folder contains the scripts that make up the build pipeline for Inkscape on macOS.
 
-## Usage
+The build system being used is [JHBuild](https://gitlab.gnome.org/GNOME/jhbuild) in conjunction with our own custom moduleset based off [gtk-osx](https://gitlab.gnome.org/GNOME/gtk-osx). If you have never heard about these two, take a look at [GTK's documentation](https://www.gtk.org/docs/installations/macos/); it is important to understand that this is neither Homebrew nor MacPorts. But don't worry, everything has been automated to the point that you only have to run shell scripts.
 
-### Requirements
+## Build instructions
 
-ℹ️ _The following is bound to change as development progresses and I won't deny that there's usually more than one way to do something, but I can only support what I use myself. So feel free to experiment and deviate, but know that __it is dangerous to go alone! Take this 🗡️.___
+Building Inkscape is a two-step process:
+
+1. Setup a build environment with all the dependencies ("toolset"). There are two options:
+
+   a. Build everything from scratch. This encompasses _a lot_ of libraries and helper tools, therefore this is time consuming and can be error-prone if you don't stick to the recommendations.
+
+   __or__
+
+   b. Use a precompiled version of the toolset. You can practically fast forward to the next step.
+
+1. Build Inkscape.
+
+### Prerequisites
 
 - A __clean environment__ is key.
-  - Make sure there are no remnants from other build environments (e.g. MacPorts, Fink, Homebrew) on your system.
+  - Software and libraries installed via package managers (e.g. Homebrew, MacPorts, Fink) can cause problems depending on their installation directory.
     - Rule of thumb: clear out `/usr/local`.
-  - Use a dedicated user account to avoid any interference with the environment (e.g. no custom settings in `.profile`, `.bashrc`, etc.).
+  - Use a dedicated user account to avoid any interference with the environment.
+    - Rule of thumb: no customizations in dotfiles like `.profile`, `.bashrc` etc.
 
-- There are __version recommendations__.
+- There are __version recommendations__ based on a known working setup.
   - macOS Catalina 10.15.7
-  - Xcode 12.2
-  - OS X El Capitan 10.11 SDK from Xcode 7.3.1 (expected in `/opt/sdks/MacOSX10.11.sdk`, see `SDKROOT_DIR` in `020-vars.sh`)
+  - Xcode 12.4
+  - OS X El Capitan 10.11 SDK (from Xcode 7.3.1)
 
-- A somewhat decent __internet connection__ for all the downloads.
+- An __internet connection__ for all the downloads.
 
-### Building the toolset
+### step 1a: build the toolset
 
-ℹ️ _If you only want to build Inkscape and not the complete toolset, skip ahead to the next section!_
-
-1. Clone this repository and `cd` into `packaging/macos`.
+1. _(optional)_ Set a build directory (default: `/Users/Shared/work`).
 
    ```bash
-   git clone --depth 1 https://gitlab.com/inkscape/inkscape
-   cd inkscape/packaging/macos
+   # Don't blindly copy/paste this. No spaces allowed.
+   echo "WRK_DIR=$HOME/my_build_dir" > 005-customdir.sh
    ```
 
-2. Specify a folder where all the action is going to take place. (Please avoid spaces in paths!)
+1. _(optional)_ Set the SDK to be used (default: `xcodebuild -version -sdk macosx Path`).
 
    ```bash
-   echo "WRK_DIR=$HOME/my_build_dir" > 015-customdir.sh  # set work directory
+   # Don't blindly copy/paste this. No spaces allowed.
+   echo "SDKROOT=$HOME/MacOSX10.11.sdk" > 005-sdkroot.sh
    ```
 
-3. Build the toolset.
+1. Build the toolset.
 
    ```bash
    ./build_toolset.sh
    ```
 
-4. ☕ (Time to get a beverage - this will take a while!)
+   This will
 
-### Installing a pre-compiled toolset
+   - run all the `1nn`-prefixed scripts consecutively
+   - populate `$WRK_DIR/$TOOLSET_VER`
 
-ℹ️ _If you just built the toolset yourself, skip ahead to the next section!_
+Time for ☕, this will take a while!
 
-ℹ️ _Using `/Users/Shared/work` as `WRK_DIR` is mandatory! (This is the default, see `020-vars.sh`.)_
+### step 1b: install a precompiled toolset
 
-1. Clone this repository and `cd` into it.
+1. Acknowledge that the precompiled toolset requires `WRK_DIR=/Users/Shared/work` as build directory. (It's the default, no need to configure this.)
 
-   ```bash
-   git clone --depth 1 https://gitlab.com/inkscape/inkscape
-   cd inkscape/packaging/macos
-   ```
-
-2. Install the toolset.
+1. Install the toolset.
 
    ```bash
    ./install_toolset.sh
@@ -67,12 +75,14 @@ This folder contains the scripts that make up the build pipeline for Inkscape on
    This will
 
    - download a disk image (about 1.6 GiB) to `/Users/Shared/work/repo`
-   - mount the (read only) disk image to `/Users/Shared/work/$TOOLSET_VER`
-   - union-mount a ramdisk (3 GiB) to `/Users/Shared/work/$TOOLSET_VER`
+   - mount the (read-only) disk image to `/Users/Shared/work/$TOOLSET_VER`
+   - union mount a ramdisk (3 GiB) to `/Users/Shared/work/$TOOLSET_VER`
 
-   The mounted volumes won't show up in the Finder but you can see them using `diskutil`. Use `uninstall_toolset.sh` to eject them (`repo` will not be deleted though).
+   The mounted volumes won't show up in Finder but you can see them using `diskutil list`.
 
-### Building Inkscape
+   Once you're done building Inkscape, use `uninstall_toolset.sh` to eject them. This does not delete the contents of `/Users/Shared/work/repo`.
+
+### step 2: build Inkscape
 
 1. Build Inkscape.
 
@@ -80,11 +90,14 @@ This folder contains the scripts that make up the build pipeline for Inkscape on
    ./build_inkscape.sh
    ```
 
-   Ultimately this will produce `/Users/Shared/work/$TOOLSET_VER/artifacts/Inkscape.dmg`.
+   This will
+
+   - run all the `2nn`-prefixed scripts consecutively
+   - produce `$WRK_DIR/$TOOLSET_VER/artifacts/Inkscape.dmg`
 
 ## GitLab CI
 
-Make sure the runner fulfills the same requirements as listed in the usage section above.
+Currently this is being used on a self-hosted runner. Make sure the runner fulfills the same prerequisites as mentioned in the build instructions above.
 
 Configure a job in your `.gitlab-ci.yml` as follows:
 
@@ -100,6 +113,13 @@ buildmacos:
     paths:
       - artifacts/
 ```
+
+## known issues
+
+Besides what you may find in the issue tracker:
+
+- If you're logged in to the desktop when building the toolset, you may get multiple popups asking to install Java. They're triggered by at least `gettext` and `cmake` checking for the presence of Java during their configuration stages and can be safely ignored.
+- GitLab CI: timouts or cancelling a job makes GitLab skip the `after_script` step. This leaves the runner in an unclean state and will break the next job. If you suffer from this issue, add `packaging/macos/uninstall_toolset.sh` to the `before_script` section.
 
 ## Status
 

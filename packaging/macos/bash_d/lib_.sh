@@ -15,11 +15,10 @@ include_file echo_.sh
 
 function lib_change_path
 {
-  # This is a simple wrapper around install_name_tool to reduce the
-  # number of arguments (like $source does not have to be provided
-  # here as it can be deducted from $target).
-  # Also, the requested change can be applied to multipe binaries
-  # at once since 2-n arguments can be supplied.
+  # This is a wrapper around install_name_tool to
+  #   - reduce the number of arguments as 'source' can be deducted from 'target'
+  #   - allow using regex as library name
+  #   - apply the requested changes to multiple binaries at once
 
   local target=$1         # new path to dynamically linked library
   local binaries=${*:2}   # binaries to modify
@@ -27,16 +26,20 @@ function lib_change_path
   local source_lib=${target##*/}   # get library filename from target location
 
   for binary in $binaries; do   # won't work with spaces in paths
+    # reset ID for libraries
     if [[ $binary == *.so ]] ||
        [[ $binary == *.dylib ]] ||
        [ $(file $binary | grep "shared library" | wc -l) -eq 1 ]; then
       lib_reset_id $binary
     fi
 
-    local source=$(otool -L $binary | grep "$source_lib " | awk '{ print $1 }')
+    local source=$(otool -L $binary | grep -E "$source_lib " | awk '{ print $1 }')
     if [ -z $source ]; then
       echo_w "no $source_lib in $binary"
     else
+      # Reconstructing 'target' as it might have been specified as regex.
+      target=$(dirname $target)/$(basename $source)
+
       install_name_tool -change $source $target $binary
     fi
   done

@@ -152,5 +152,3 @@ if _jhb is None:
 # And more...
 use_local_modulesets = True
 moduleset = "inkscape.modules"
-quiet_mode = True
-progress_bar = True

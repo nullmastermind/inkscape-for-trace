@@ -4,8 +4,7 @@
 
 ### description ################################################################
 
-# Install a pre-compiled version of our JHBuild-based toolset and all the
-# required dependencies to build Inkscape.
+# Install Inkscape dependencies.
 
 ### includes ###################################################################
 
@@ -16,11 +15,21 @@ done
 
 ### settings ###################################################################
 
-# shellcheck disable=SC2034 # this is from ansi_.sh
-ANSI_TERM_ONLY=false   # use ANSI control characters even if not in terminal
-
-error_trace_enable
+# Nothing here.
 
 ### main #######################################################################
 
-toolset_install
+jhbuild build \
+  bdw-gc \
+  doubleconversion \
+  googletest \
+  gsl \
+  gspell \
+  imagemagick \
+  libcdr \
+  libsoup \
+  libvisio \
+  openjpeg \
+  openmp \
+  poppler \
+  potrace

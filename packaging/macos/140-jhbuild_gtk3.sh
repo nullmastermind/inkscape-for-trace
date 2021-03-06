@@ -4,8 +4,7 @@
 
 ### description ################################################################
 
-# Install a pre-compiled version of our JHBuild-based toolset and all the
-# required dependencies to build Inkscape.
+# Install GTK3 libraries (and their dependencies).
 
 ### includes ###################################################################
 
@@ -16,11 +15,11 @@ done
 
 ### settings ###################################################################
 
-# shellcheck disable=SC2034 # this is from ansi_.sh
-ANSI_TERM_ONLY=false   # use ANSI control characters even if not in terminal
-
-error_trace_enable
+# Nothing here.
 
 ### main #######################################################################
 
-toolset_install
+jhbuild build \
+  meta-gtk-osx-bootstrap \
+  meta-gtk-osx-gtk3 \
+  meta-gtk-osx-gtkmm3

@@ -4,8 +4,7 @@
 
 ### description ################################################################
 
-# Install a pre-compiled version of our JHBuild-based toolset and all the
-# required dependencies to build Inkscape.
+# Create disk image for distribution.
 
 ### includes ###################################################################
 
@@ -23,4 +22,17 @@ error_trace_enable
 
 ### main #######################################################################
 
-toolset_install
+# Create background for development snapshots. This is not meant for
+# official releases, those will be re-packaged manually (they also need
+# to be signed and notarized).
+convert -size 560x400 xc:transparent \
+  -font Andale-Mono -pointsize 64 -fill black \
+  -draw "text 20,60 'Inkscape'" \
+  -draw "text 20,120 '$(ink_get_version)'" \
+  -draw "text 20,180 'development'" \
+  -draw "text 20,240 'snapshot'" \
+  -draw "text 20,300 '$(ink_get_repo_shorthash)'" \
+  "$SRC_DIR"/inkscape_dmg.png
+
+# Create the disk image.
+dmgbuild_run "$ARTIFACT_DIR"/Inkscape.dmg

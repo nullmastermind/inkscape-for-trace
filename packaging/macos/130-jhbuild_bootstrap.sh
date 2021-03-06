@@ -4,8 +4,10 @@
 
 ### description ################################################################
 
-# Install a pre-compiled version of our JHBuild-based toolset and all the
-# required dependencies to build Inkscape.
+# The first step to perform with JHBuild is to run its bootstrap command.
+# After that it can be freely used to build whatever we want.
+# JHBuild has two external dependencies - Meson and Ninja - that it does not
+# fetch on its own, so we install them as well.
 
 ### includes ###################################################################
 
@@ -16,11 +18,13 @@ done
 
 ### settings ###################################################################
 
-# shellcheck disable=SC2034 # this is from ansi_.sh
-ANSI_TERM_ONLY=false   # use ANSI control characters even if not in terminal
-
-error_trace_enable
+# Nothing here.
 
 ### main #######################################################################
 
-toolset_install
+#------------------------------------------------------------- bootstrap JHBuild
+
+mkdir -p "$XDG_CACHE_HOME"
+
+# Basic bootstrapping.
+jhbuild bootstrap-gtk-osx

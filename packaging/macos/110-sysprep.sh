@@ -1,42 +1,47 @@
 #!/usr/bin/env bash
 # SPDX-License-Identifier: GPL-2.0-or-later
-#
 # This file is part of the build pipeline for Inkscape on macOS.
-#
-# ### 110-sysprep.sh ###
-# System preparation tasks.
 
-### settings and functions #####################################################
+### description ################################################################
 
-for script in $(dirname ${BASH_SOURCE[0]})/0??-*.sh; do source $script; done
+# This script performs system preparation tasks - basically the tings we need
+# to take care of before even setting up JHBuild. Performing checks
+# like running check_sys_ver are not part of this file (see bottom of
+# 010-init.sh), as that would mean that those checks are only run exactly once,
+# which is not what we want.
 
-### initial information ########################################################
+### includes ###################################################################
+
+# shellcheck disable=SC1090 # can't point to a single source here
+for script in "$(dirname "${BASH_SOURCE[0]}")"/0??-*.sh; do
+  source "$script";
+done
+
+### settings ###################################################################
+
+# Nothing here.
+
+### main #######################################################################
+
+#---------------------------------------------- print main directory and version
 
 echo_i "WRK_DIR = $WRK_DIR"
 echo_i "VER_DIR = $VER_DIR"
 
-### check for presence of SDK ##################################################
+#------------------------------------------------------------ create directories
 
-if [ ! -d $SDKROOT ]; then
-  echo_e "SDK not found: $SDKROOT"
-  exit 1
-fi
+# We need these directories early on, so we need to create them here.
 
-### create directories #########################################################
+mkdir -p "$HOME"
+mkdir -p "$PKG_DIR"
+mkdir -p "$SRC_DIR"
+mkdir -p "$TMP_DIR"
 
-for dir in $VER_DIR $TMP_DIR $HOME; do
-  mkdir -p $dir
-done
+#---------------------------------------------------------------- install ccache
 
-### install ccache #############################################################
+ccache_v4_install
+ccache_configure
 
-install_source $CCACHE_URL
-configure_make_makeinstall
+#------------------------------------------ log relevant versions to release.log
 
-cd $BIN_DIR
-ln -s ccache clang
-ln -s ccache clang++
-ln -s ccache gcc
-ln -s ccache g++
-
-configure_ccache $CCACHE_SIZE  # create directory and config file
+sys_ver_log

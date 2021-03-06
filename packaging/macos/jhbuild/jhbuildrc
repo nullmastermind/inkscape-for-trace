@@ -234,15 +234,9 @@ osx_ver()
 #
 # For most users accepting the defaults is the right course.
 
-def setup_sdk(target=_target, sdk_version=None, architectures=[_default_arch]):
+def setup_sdk(sdkdir, architectures=[_default_arch]):
 
     global use_local_modulesets
-    os.environ["MACOSX_DEPLOYMENT_TARGET"] = target
-    sdkdir = None
-    xcodepath = None
-    xcodeversion = None
-
-    sdkdir = _popen("xcrun --show-sdk-path")
 
     if sdkdir:
         environ_prepend("LDFLAGS", "-L" + sdkdir + "/usr/lib")
@@ -342,11 +336,6 @@ def setup_sdk(target=_target, sdk_version=None, architectures=[_default_arch]):
     # around the Apple-provided one not defining _libiconv_init for
     # x86_64
     append_autogenargs("gettext-fw", "--with-libiconv-prefix=" + prefix)
-
-    environ_append("CFLAGS", "-mmacosx-version-min=" + target)
-    environ_append("CXXFLAGS", "-mmacosx-version-min=" + target)
-    environ_append("OBJCFLAGS", "-mmacosx-version-min=" + target)
-    environ_append("LDFLAGS", "-mmacosx-version-min=" + target)
 
     #Overcome Python's obnoxious misconfiguration of portable builds
     if len(architectures) == 1:

@@ -114,6 +114,8 @@ inkscape:mac:
   rules:
     - if: '$CI_PROJECT_NAMESPACE == "inkscape"'
     - if: '$CI_PROJECT_NAMESPACE == "dehesselle"'
+  variables:
+    SDKROOT: /opt/sdks/MacOSX10.11.sdk
   before_script:
     # workaround: after_script doesn't run for cancelled/timed out jobs
     #             https://gitlab.com/gitlab-org/gitlab/-/issues/15603
@@ -126,7 +128,7 @@ inkscape:mac:
   artifacts:
     expire_in: 1 year
     paths:
-      - artifacts/
+      - Inkscape.dmg
 
 
 #tests, always run after building

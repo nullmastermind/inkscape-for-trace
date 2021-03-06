@@ -21,21 +21,21 @@ function _echo_message
   local args=${@:4}
 
   if [ ! -z $name ]; then
-    name=":$name"
+    name=" $name"
   fi
 
   if ansi_is_usable; then
-    echo -e "$color[$type$name]$ANSI_FG_RESET $args"
+    echo -e "$color[$type]$name$ANSI_FG_RESET $args"
   else
-    echo "[$type$name] $args"
+    echo "[$type]$name $args"
   fi
 }
 
 ### aliases ####################################################################
 
-alias echo_e='>&2 _echo_message "$FUNCNAME" "error" "$ANSI_FG_RED_BOLD"'
-alias echo_i='>&2 _echo_message "$FUNCNAME" "info" "$ANSI_FG_BLUE_BOLD"'
-alias echo_o='>&2 _echo_message "$FUNCNAME" "ok" "$ANSI_FG_GREEN_BOLD"'
+alias echo_e='>&2 _echo_message "$FUNCNAME" " error " "$ANSI_FG_RED_BOLD"'
+alias echo_i='>&2 _echo_message "$FUNCNAME" " info  " "$ANSI_FG_BLUE_BOLD"'
+alias echo_o='>&2 _echo_message "$FUNCNAME" "  ok   " "$ANSI_FG_GREEN_BOLD"'
 alias echo_w='>&2 _echo_message "$FUNCNAME" "warning" "$ANSI_FG_YELLOW_BOLD"'
 
 ### main #######################################################################

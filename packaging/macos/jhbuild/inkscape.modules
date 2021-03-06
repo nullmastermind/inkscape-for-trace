@@ -54,6 +54,18 @@
     </branch>
   </cmake>
 
+  <!-- GNU core utilities https://www.gnu.org/software/coreutils/ -->
+  <autotools
+    id="coreutils"
+    autogen-sh="configure">
+    <branch
+      module="coreutils/coreutils-8.32.tar.xz"
+      version="8.32"
+      hash="sha256:4458d8de7849df44ccab15e16b1548b285224dbba5f08fac070c1c0e0bcc4cfa"
+      repo="gnu">
+    </branch>
+  </autotools>
+
   <!-- cppunit test framework https://www.freedesktop.org/wiki/Software/cppunit/ -->
   <autotools
     id="cppunit"
@@ -85,6 +97,18 @@
     <dependencies>
       <dep package="glib"/>
     </dependencies>
+  </autotools>
+
+<!-- GNU Find Utilities https://www.gnu.org/software/findutils/ -->
+  <autotools
+    id="findutils"
+    autogen-sh="configure">
+    <branch
+      module="findutils/findutils-4.7.0.tar.xz"
+      version="4.7.0"
+      hash="sha256:c5fefbdf9858f7e4feb86f036e1247a54c79fc2d8e4b7064d5aaa1f47dfa789a"
+      repo="gnu">
+    </branch>
   </autotools>
 
   <!-- Google Testing and Mocking Framework https://github.com/google/googletest -->

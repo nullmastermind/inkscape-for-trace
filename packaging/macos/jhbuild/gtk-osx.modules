@@ -251,6 +251,7 @@
   <!-- GTK 3
 
        - 3.24.20 is the last release that builds against 10.11.
+         https://gitlab.gnome.org/GNOME/gtk/-/issues/3592
        - Building on Big Sur requires at least 3.24.23
          https://gitlab.gnome.org/GNOME/gtk-osx/-/commit/ba5af596153d1dc237d225a26c358879a099800b
   -->
