@@ -166,9 +166,8 @@ codequality:
   <<: *run_for_MR
   needs: []
   script:
-    - git fetch https://gitlab.com/inkscape/inkscape.git
     - echo "Your commit does not comply exactly with the clang-format style checker.\nPlease review the following diff or apply it with\n \$ git apply <<EOF"
-    - git diff FETCH_HEAD -U0 --no-color | clang-format-diff -p1 -style file | tee clang_format.diff
+    - git diff $CI_MERGE_REQUEST_DIFF_BASE_SHA -U0 --no-color | clang-format-diff -p1 -style file | tee clang_format.diff
     - echo "EOF"
     - if [[ -s clang_format.diff ]]; then false; fi
   allow_failure: true
@@ -184,8 +183,7 @@ codeprotect:
   <<: *run_for_MR
   needs: []
   script:
-    - git fetch https://gitlab.com/inkscape/inkscape.git
-    - git diff FETCH_HEAD -U0 --no-color src/3rdparty | tee forbidden
+    - git diff $CI_MERGE_REQUEST_DIFF_BASE_SHA -U0 --no-color src/3rdparty | tee forbidden
     - if [[ -s forbidden ]]; then echo "This commit modifies files that are in an dependency library. Make sure you update upstream first, *then* force the merge in Inkscape."; false; fi
 
 #### All files should have a licence
@@ -242,10 +240,9 @@ clangtidy:linux:
   <<: *run_for_MR
   needs: []
   script:
-    - git fetch https://gitlab.com/inkscape/inkscape.git
     # "borrow" a 3rdparty file to dump header includes
-    - git diff FETCH_HEAD --name-only -- '**.h' | sed 's!.*!#include"../../../../&"!' | tee src/3rdparty/adaptagrams/libcola/box.cpp
-    - git diff FETCH_HEAD --name-only -- '**.cpp' | tee clang_tidy_files
+    - git diff $CI_MERGE_REQUEST_DIFF_BASE_SHA --name-only -- '**.h' | sed 's!.*!#include"../../../../&"!' | tee src/3rdparty/adaptagrams/libcola/box.cpp
+    - git diff $CI_MERGE_REQUEST_DIFF_BASE_SHA --name-only -- '**.cpp' | tee clang_tidy_files
     - bash buildtools/clangtidy-helper.sh $(cat clang_tidy_files)
 
 
