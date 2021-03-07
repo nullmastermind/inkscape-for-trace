@@ -12,18 +12,19 @@ add_subdirectory(palettes)
 add_subdirectory(screens)
 add_subdirectory(symbols)
 add_subdirectory(templates)
-add_subdirectory(themes)
 add_subdirectory(pixmaps)
 add_subdirectory(tutorials)
 add_subdirectory(ui)
 add_subdirectory(doc)
 
+
+# extensions (git submodule!)
 install(DIRECTORY extensions DESTINATION ${INKSCAPE_SHARE_INSTALL}
     COMPONENT extensions
-	PATTERN ".git*" EXCLUDE
-	PATTERN "tests" EXCLUDE
-	PATTERN "*.pyc" EXCLUDE
-	)
+    PATTERN ".git*" EXCLUDE
+    PATTERN "tests" EXCLUDE
+    PATTERN "*.pyc" EXCLUDE
+)
 
 if(WIN32)
   install(CODE
@@ -33,6 +34,10 @@ if(WIN32)
 endif()
 
 
+# themes (git submodule!)
+install(DIRECTORY themes DESTINATION ${INKSCAPE_SHARE_INSTALL}
+    PATTERN ".git*" EXCLUDE
+)
 
 
 # appdata and desktop files
