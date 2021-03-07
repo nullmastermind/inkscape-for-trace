@@ -1674,7 +1674,7 @@ void InkscapePreferences::initPageUI()
         default_icon_label += " (" + default_icon_theme + ")";
         labels.emplace_back(default_icon_label);
 
-        _icon_theme.init("/theme/iconTheme", labels, values, "hicolor");
+        _icon_theme.init("/theme/iconTheme", labels, values, "Adwaita");
         _page_theme.add_line(false, _("Change icon theme:"), _icon_theme, "", "", false);
         _icon_theme.signal_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicThemeCheck));
         _sys_user_icons_dir_copy.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::ICONS, ""),

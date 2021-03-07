@@ -925,6 +925,20 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
         <col id="11">False</col>
       </row>
       <row>
+        <col id="0">symbolic-dark</col>
+        <col id="1" translatable="yes">Symbolic Adwaita Dark</col>
+        <col id="2">Adwaita</col>
+        <col id="3">hicolor</col>
+        <col id="4">0</col>
+        <col id="5">0</col>
+        <col id="6">0</col>
+        <col id="7">0</col>
+        <col id="8">True</col>
+        <col id="9">True</col>
+        <col id="10">True</col>
+        <col id="11">False</col>
+      </row>
+      <row>
         <col id="0">dark-color</col>
         <col id="1" translatable="yes">Colorful Darkness</col>
         <col id="2">Adwaita</col>

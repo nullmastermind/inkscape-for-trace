@@ -495,15 +495,14 @@ StartScreen::refresh_theme(Glib::ustring theme_name)
     settings->property_gtk_application_prefer_dark_theme() = prefs->getBool("/theme/darkTheme", true);
     settings->property_gtk_icon_theme_name() = prefs->getString("/theme/iconTheme");
 
-    if (window) {
-        if (prefs->getBool("/theme/symbolicIcons", false)) {
-            window->get_style_context()->add_class("symbolic");
-            window->get_style_context()->remove_class("regular");
-        } else {
-            window->get_style_context()->add_class("regular");
-            window->get_style_context()->remove_class("symbolic");
-        }
+    if (prefs->getBool("/theme/symbolicIcons", false)) {
+        get_style_context()->add_class("symbolic");
+        get_style_context()->remove_class("regular");
+    } else {
+        get_style_context()->add_class("regular");
+        get_style_context()->remove_class("symbolic");
     }
+
     if (INKSCAPE.colorizeprovider) {
         Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.colorizeprovider);
     }
