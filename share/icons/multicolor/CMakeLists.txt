@@ -1,6 +1,6 @@
 set(THEME multicolor)
-install(FILES "index.theme" DESTINATION ${INKSCAPE_SHARE_INSTALL}/icons/${THEME})
-install(FILES "highlights.css" DESTINATION ${INKSCAPE_SHARE_INSTALL}/icons/${THEME})
+install(FILES "index.theme" DESTINATION ${INKSCAPE_SHARE_INSTALL}/icons/${THEME} COMPONENT themes)
+install(FILES "highlights.css" DESTINATION ${INKSCAPE_SHARE_INSTALL}/icons/${THEME} COMPONENT themes)
 
 set(PIXMAP_SIZES "symbolic")
 set(CONTENT "actions")
@@ -8,7 +8,7 @@ set(CONTENT "actions")
 foreach(pixmap_size ${PIXMAP_SIZES})
   foreach(content ${CONTENT})
     FILE(GLOB PIXMAP_FILES ${CMAKE_CURRENT_SOURCE_DIR}/${pixmap_size}/${content}/*.png ${CMAKE_CURRENT_SOURCE_DIR}/${pixmap_size}/${content}/*.svg)
-    install(FILES ${PIXMAP_FILES} DESTINATION ${INKSCAPE_SHARE_INSTALL}/icons/${THEME}/${pixmap_size}/${content})
+    install(FILES ${PIXMAP_FILES} DESTINATION ${INKSCAPE_SHARE_INSTALL}/icons/${THEME}/${pixmap_size}/${content} COMPONENT themes)
   endforeach(content)
 endforeach(pixmap_size)
 

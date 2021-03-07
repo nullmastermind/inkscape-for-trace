@@ -143,6 +143,11 @@ cpack_add_component(extensions
                     DESCRIPTION "Inkscape extensions (including many import and export plugins)"
                     GROUP "group_2_inkscape_data"
                     INSTALL_TYPES full compact)
+cpack_add_component(themes
+                    DISPLAY_NAME "Themes"
+                    DESCRIPTION "Inkscape themes (look and feel including icons)"
+                    GROUP "group_2_inkscape_data"
+                    INSTALL_TYPES full compact)
 cpack_add_component(examples
                     DISPLAY_NAME "Examples"
                     DESCRIPTION "Example files created in Inkscape"
@@ -175,5 +180,3 @@ foreach(index RANGE ${length})
                         GROUP "group_3_translations"
                         INSTALL_TYPES full)
 endforeach()
-
-# TODO: Separate themes and make optional depending on size

@@ -36,6 +36,7 @@ endif()
 
 # themes (git submodule!)
 install(DIRECTORY themes DESTINATION ${INKSCAPE_SHARE_INSTALL}
+    COMPONENT themes
     PATTERN ".git*" EXCLUDE
 )
 
