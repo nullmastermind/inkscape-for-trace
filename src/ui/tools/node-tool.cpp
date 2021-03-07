@@ -273,7 +273,9 @@ void sp_update_helperpath(SPDesktop *desktop)
 
     Inkscape::UI::Tools::NodeTool *nt = dynamic_cast<Inkscape::UI::Tools::NodeTool*>(desktop->event_context);
     if (!nt) {
-        std::cerr << "sp_update_helperpath called when Node Tool not active!" << std::endl;
+        // We remove this warning and just stop execution
+        // because we are updating helper paths also from LPE dialog so we not unsure the tool used
+        // std::cerr << "sp_update_helperpath called when Node Tool not active!" << std::endl;
         return;
     }
 
