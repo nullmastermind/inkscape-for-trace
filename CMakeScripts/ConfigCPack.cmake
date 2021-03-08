@@ -73,10 +73,13 @@ file(TO_NATIVE_PATH "${CMAKE_SOURCE_DIR}/packaging/nsis/fileassoc.nsh" native_pa
 string(REPLACE "\\" "\\\\" native_path "${native_path}")
 set(CPACK_NSIS_EXTRA_PREINSTALL_COMMANDS "!include ${native_path}")
 set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "\
+  WriteRegStr SHCTX 'SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\App Paths\\\\inkscape.exe' '' '$INSTDIR\\\\bin\\\\inkscape.exe'\n\
+  WriteRegStr SHCTX 'SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\App Paths\\\\inkscape.exe' 'Path' '$INSTDIR\\\\bin'\n\
   !insertmacro APP_ASSOCIATE 'svg' 'Inkscape.SVG' 'Scalable Vector Graphics' '$INSTDIR\\\\bin\\\\inkscape.exe,0' 'Open with Inkscape' '$INSTDIR\\\\bin\\\\inkscape.exe \\\"%1\\\"'\n\
   !insertmacro APP_ASSOCIATE 'svgz' 'Inkscape.SVGZ' 'Compressed Scalable Vector Graphics' '$INSTDIR\\\\bin\\\\inkscape.exe,0' 'Open with Inkscape' '$INSTDIR\\\\bin\\\\inkscape.exe \\\"%1\\\"'\n\
   !insertmacro UPDATEFILEASSOC")
 set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "\
+  DeleteRegKey SHCTX 'SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\App Paths\\\\inkscape.exe'\n\
   !insertmacro APP_UNASSOCIATE 'svg' 'Inkscape.SVG'\n\
   !insertmacro APP_UNASSOCIATE 'svgz' 'Inkscape.SVGZ'\n\
   !insertmacro UPDATEFILEASSOC")
