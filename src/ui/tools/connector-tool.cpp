@@ -973,7 +973,7 @@ static bool cc_generic_knot_handler(GdkEvent *event, SPKnot *knot)
 
     bool consumed = false;
 
-    gchar const *knot_tip = "Click to join at this point";
+    gchar const *knot_tip = _("Click to join at this point");
     switch (event->type) {
     case GDK_ENTER_NOTIFY:
         knot->setFlag(SP_KNOT_MOUSEOVER, TRUE);
