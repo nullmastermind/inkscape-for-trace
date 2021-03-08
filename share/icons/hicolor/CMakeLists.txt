@@ -14,9 +14,6 @@ endforeach(pixmap_size)
 FILE(GLOB CURSOR_FILES ${CMAKE_CURRENT_SOURCE_DIR}/cursors/*.svg)
 install(FILES ${CURSOR_FILES} DESTINATION ${INKSCAPE_SHARE_INSTALL}/icons/${THEME}/cursors)
 
-install(FILES "../application/scalable/apps/org.inkscape.Inkscape.svg" DESTINATION ${INKSCAPE_SHARE_INSTALL}/icons/${THEME}/scalable/apps/)
-install(FILES "../application/symbolic/apps/org.inkscape.Inkscape-symbolic.svg" DESTINATION ${INKSCAPE_SHARE_INSTALL}/icons/${THEME}/symbolic/apps/)
-
 if(WIN32)
     install(CODE "execute_process(COMMAND gtk-update-icon-cache \${CMAKE_INSTALL_PREFIX}/${INKSCAPE_SHARE_INSTALL}/icons/${THEME})")
 endif()
