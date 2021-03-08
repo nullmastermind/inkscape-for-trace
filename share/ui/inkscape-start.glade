@@ -207,20 +207,20 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">A4 (Landscape)</col>
-        <col id="1">resources/template_print_landscape.svg</col>
-        <col id="2">-</col>
-        <col id="3">210mm</col>
-        <col id="4">279mm</col>
-        <col id="5">210mm x 279mm</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">A4 (Portrait)</col>
+        <col id="0" translatable="yes">A4</col>
         <col id="1">resources/template_print_portrait.svg</col>
         <col id="2">-</col>
         <col id="3">210mm</col>
         <col id="4">297mm</col>
         <col id="5">210mm x 297mm</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">A4 (Landscape)</col>
+        <col id="1">resources/template_print_landscape.svg</col>
+        <col id="2">-</col>
+        <col id="3">279mm</col>
+        <col id="4">210mm</col>
+        <col id="5">279mm x 210mm</col>
       </row>
       <row>
         <col id="0" translatable="yes">US Letter</col>
@@ -239,6 +239,14 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
         <col id="5">11in x 8.5in</col>
       </row>
       <row>
+        <col id="0" translatable="yes">A0</col>
+        <col id="1">resources/template_print_portrait.svg</col>
+        <col id="2">-</col>
+        <col id="3">841mm</col>
+        <col id="4">1189mm</col>
+        <col id="5">841mm x 1189mm</col>
+      </row>
+      <row>
         <col id="0" translatable="yes">A0 (Landscape)</col>
         <col id="1">resources/template_print_landscape.svg</col>
         <col id="2">-</col>
@@ -247,12 +255,12 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
         <col id="5">1189mm x 841mm</col>
       </row>
       <row>
-        <col id="0" translatable="yes">A0 (Portrait)</col>
+        <col id="0" translatable="yes">A1</col>
         <col id="1">resources/template_print_portrait.svg</col>
         <col id="2">-</col>
-        <col id="3">841mm</col>
-        <col id="4">1189mm</col>
-        <col id="5">841mm x 1189mm</col>
+        <col id="3">594mm</col>
+        <col id="4">841mm</col>
+        <col id="5">594mm x 841mm</col>
       </row>
       <row>
         <col id="0" translatable="yes">A1 (Landscape)</col>
@@ -263,12 +271,12 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
         <col id="5">841mm x 594mm</col>
       </row>
       <row>
-        <col id="0" translatable="yes">A1 (Portrait)</col>
+        <col id="0" translatable="yes">A2</col>
         <col id="1">resources/template_print_portrait.svg</col>
         <col id="2">-</col>
-        <col id="3">594mm</col>
-        <col id="4">841mm</col>
-        <col id="5">594mm x 841mm</col>
+        <col id="3">420mm</col>
+        <col id="4">594mm</col>
+        <col id="5">420mm x 594mm</col>
       </row>
       <row>
         <col id="0" translatable="yes">A2 (Landscape)</col>
@@ -279,12 +287,12 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
         <col id="5">594mm x 420mm</col>
       </row>
       <row>
-        <col id="0" translatable="yes">A2 (Portrait)</col>
+        <col id="0" translatable="yes">A3</col>
         <col id="1">resources/template_print_portrait.svg</col>
         <col id="2">-</col>
-        <col id="3">420mm</col>
-        <col id="4">594mm</col>
-        <col id="5">420mm x 594mm</col>
+        <col id="3">297mm</col>
+        <col id="4">420mm</col>
+        <col id="5">297mm x 420mm</col>
       </row>
       <row>
         <col id="0" translatable="yes">A3 (Landscape)</col>
@@ -295,12 +303,12 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
         <col id="5">420mm x 297mm</col>
       </row>
       <row>
-        <col id="0" translatable="yes">A3 (Portrait)</col>
+        <col id="0" translatable="yes">A5</col>
         <col id="1">resources/template_print_portrait.svg</col>
         <col id="2">-</col>
-        <col id="3">297mm</col>
-        <col id="4">420mm</col>
-        <col id="5">297mm x 420mm</col>
+        <col id="3">148mm</col>
+        <col id="4">210mm</col>
+        <col id="5">148mm x 210mm</col>
       </row>
       <row>
         <col id="0" translatable="yes">A5 (Landscape)</col>
@@ -309,14 +317,6 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
         <col id="3">210mm</col>
         <col id="4">148mm</col>
         <col id="5">210mm x 148mm</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">A5 (Portrait)</col>
-        <col id="1">resources/template_print_portrait.svg</col>
-        <col id="2">-</col>
-        <col id="3">148mm</col>
-        <col id="4">210mm</col>
-        <col id="5">148mm x 210mm</col>
       </row>
       <row>
         <col id="0" translatable="yes">Business Card AU/NZ (Landscape)</col>
