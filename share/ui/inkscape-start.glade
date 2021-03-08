@@ -921,7 +921,7 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
         <col id="7">0</col>
         <col id="8">False</col>
         <col id="9">True</col>
-        <col id="10">True</col>
+        <col id="10">False</col>
         <col id="11">False</col>
       </row>
       <row>
@@ -935,7 +935,7 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
         <col id="7">0</col>
         <col id="8">True</col>
         <col id="9">True</col>
-        <col id="10">True</col>
+        <col id="10">False</col>
         <col id="11">False</col>
       </row>
       <row>
@@ -949,7 +949,7 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
         <col id="7">#0099e6</col>
         <col id="8">True</col>
         <col id="9">True</col>
-        <col id="10">True</col>
+        <col id="10">False</col>
         <col id="11">False</col>
       </row>
       <row>
@@ -963,7 +963,7 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
         <col id="7">#0099e6</col>
         <col id="8">False</col>
         <col id="9">True</col>
-        <col id="10">True</col>
+        <col id="10">False</col>
         <col id="11">False</col>
       </row>
       <row>
@@ -977,7 +977,7 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
         <col id="7">#808080</col>
         <col id="8">True</col>
         <col id="9">True</col>
-        <col id="10">True</col>
+        <col id="10">False</col>
         <col id="11">False</col>
       </row>
       <row>
