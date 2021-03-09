@@ -1377,8 +1377,15 @@ void Export::onBrowse ()
         auto file = dialog->getFilename();
         filename_entry.set_text(Glib::filename_to_utf8(file));
         filename_entry.set_position(-1);
-        _export_raster(dynamic_cast<Inkscape::Extension::Output *>(dialog->getSelectionType()));
+        auto selection_type = dialog->getSelectionType();
+        //deleting dialog before exporting is important
+        //proper delete function should be made for dialog IMO
+        delete dialog;
+        _export_raster(dynamic_cast<Inkscape::Extension::Output *>(selection_type));
+    }else {
+        delete dialog;
     }
+
 }
 
 // TODO: Move this to nr-rect-fns.h.
