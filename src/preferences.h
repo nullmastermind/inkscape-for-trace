@@ -447,6 +447,20 @@ public:
     }
 
     /**
+     * Retrieve an UTF-8 string.
+     *
+     * @param pref_path Path to the retrieved preference.
+     * @param def_path Path to the default preference used in case empty.
+     */
+    Glib::ustring getStringOrDefault(Glib::ustring const &pref_path, Glib::ustring const &def_path) {
+        Glib::ustring val = getEntry(pref_path).getString();
+        if (val == "") {
+            return getEntry(def_path).getString();
+        }
+        return val;
+    }
+
+    /**
      * Retrieve the unit string.
      *
      * @param pref_path Path to the retrieved preference.

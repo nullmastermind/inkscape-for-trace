@@ -314,7 +314,7 @@ Glib::ustring Application::get_symbolic_colors()
     gchar colornamederror[64];
     gchar colornamed_inverse[64];
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
+    Glib::ustring themeiconname = prefs->getStringOrDefault("/theme/iconTheme", "/theme/defaultIconTheme");
     guint32 colorsetbase = 0x2E3436ff;
     guint32 colorsetbase_inverse = colorsetbase ^ 0xffffff00;
     guint32 colorsetsuccess = 0x4AD589ff;
@@ -435,23 +435,30 @@ void Application::add_gtk_css(bool only_providers)
         g_object_get(settings, "gtk-icon-theme-name", &gtkIconThemeName, NULL);
         g_object_get(settings, "gtk-theme-name", &gtkThemeName, NULL);
         g_object_get(settings, "gtk-application-prefer-dark-theme", &gtkApplicationPreferDarkTheme, NULL);
-        g_object_set(settings, "gtk-application-prefer-dark-theme",
-                     prefs->getBool("/theme/preferDarkTheme", gtkApplicationPreferDarkTheme), NULL);
-        prefs->setString("/theme/defaultTheme", Glib::ustring(gtkThemeName));
+        prefs->setBool("/theme/defaultPreferDarkTheme", gtkApplicationPreferDarkTheme);
+        prefs->setString("/theme/defaultGtkTheme", Glib::ustring(gtkThemeName));
         prefs->setString("/theme/defaultIconTheme", Glib::ustring(gtkIconThemeName));
         Glib::ustring gtkthemename = prefs->getString("/theme/gtkTheme");
         if (gtkthemename != "") {
             g_object_set(settings, "gtk-theme-name", gtkthemename.c_str(), NULL);
         } else {
-            prefs->setString("/theme/gtkTheme", Glib::ustring(gtkThemeName));
+            Glib::RefPtr<Gdk::Display> display = Gdk::Display::get_default();
+            Glib::RefPtr<Gdk::Screen>  screen = display->get_default_screen();
+            Glib::RefPtr<Gtk::IconTheme> icon_theme = Gtk::IconTheme::get_for_screen(screen);
+            Gtk::IconInfo iconinfo = icon_theme->lookup_icon("tool-pointer", 22, Gtk::ICON_LOOKUP_FORCE_SIZE);
+            prefs->setBool("/theme/symbolicIcons", iconinfo.is_symbolic());
+        }
+        bool preferdarktheme = prefs->getBool("/theme/preferDarkTheme", false);
+        if (preferdarktheme) {
+            g_object_set(settings, "gtk-application-prefer-dark-theme", true, NULL);
         }
         themeiconname = prefs->getString("/theme/iconTheme");
-        if (themeiconname != "") {
+        // legacy cleanup
+        if (themeiconname == "hicolor") {
+            prefs->setString("/theme/iconTheme", "");
+        } else if (themeiconname != "") {
             g_object_set(settings, "gtk-icon-theme-name", themeiconname.c_str(), NULL);
-        } else {
-            prefs->setString("/theme/iconTheme", Glib::ustring(gtkIconThemeName));
         }
-
     }
 
     g_free(gtkThemeName);
@@ -474,8 +481,9 @@ void Application::add_gtk_css(bool only_providers)
             contrast *= 2.5;
             shade = 1 + contrast;
         }
+        Glib::ustring current_theme = prefs->getStringOrDefault("/theme/gtkTheme", "/theme/defaultGtkTheme");
         GtkCssProvider *currentthemeprovider =
-            gtk_css_provider_get_named(prefs->getString("/theme/gtkTheme").c_str(), variant);
+            gtk_css_provider_get_named(current_theme.c_str(), variant);
         std::string cssstring = gtk_css_provider_to_string(currentthemeprovider);
         std::string appenddefined = ""; 
         if (contrast) {
@@ -510,8 +518,7 @@ void Application::add_gtk_css(bool only_providers)
         }
         Gtk::StyleContext::add_provider_for_screen(screen, styleprovider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
-
-    Glib::ustring gtkthemename = prefs->getString("/theme/gtkTheme");
+    Glib::ustring gtkthemename = prefs->getStringOrDefault("/theme/gtkTheme", "/theme/defaultGtkTheme");
     gtkthemename += ".css";
     style = get_filename(UIS, gtkthemename.c_str(), false, true);
     if (!style.empty()) {
