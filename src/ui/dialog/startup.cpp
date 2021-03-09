@@ -506,7 +506,7 @@ StartScreen::refresh_theme(Glib::ustring theme_name)
     if (INKSCAPE.colorizeprovider) {
         Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.colorizeprovider);
     }
-    if (!prefs->getBool("/theme/symbolicDefaultColors", false)) {
+    if (!prefs->getBool("/theme/symbolicDefaultHighColors", false)) {
         Gtk::CssProvider::create();
         Glib::ustring css_str = INKSCAPE.get_symbolic_colors();
         try {
@@ -546,10 +546,12 @@ StartScreen::theme_changed()
 
         // Symbolic icon colours
         if (get_color_value(row[cols.base]) == 0) {
-            prefs->setBool("/theme/symbolicDefaultColors", true);
+            prefs->setBool("/theme/symbolicDefaultBaseColors", true);
+            prefs->setBool("/theme/symbolicDefaultHighColors", true);
         } else {
             Glib::ustring prefix = "/theme/" + icons;
-            prefs->setBool("/theme/symbolicDefaultColors", false);
+            prefs->setBool("/theme/symbolicDefaultBaseColors", false);
+            prefs->setBool("/theme/symbolicDefaultHighColors", false);
             prefs->setUInt(prefix + "/symbolicBaseColor", get_color_value(row[cols.base]));
             prefs->setUInt(prefix + "/symbolicSuccessColor", get_color_value(row[cols.success]));
             prefs->setUInt(prefix + "/symbolicWarningColor", get_color_value(row[cols.warn]));

@@ -330,21 +330,21 @@ Glib::ustring Application::get_symbolic_colors()
     sp_svg_write_color(colornamederror, sizeof(colornamederror), colorseterror);
     colorsetbase_inverse = colorsetbase ^ 0xffffff00;
     sp_svg_write_color(colornamed_inverse, sizeof(colornamed_inverse), colorsetbase_inverse);
-    css_str += "*{-gtk-icon-palette: success ";
-    css_str += colornamedsuccess;
-    css_str += ", warning ";
-    css_str += colornamedwarning;
-    css_str += ", error ";
-    css_str += colornamederror;
-    css_str += ";}";
-    css_str += "#InkRuler,";
+    css_str += "@define-color warning_color " + Glib::ustring(colornamedwarning) + ";\n";
+    css_str += "@define-color error_color " + Glib::ustring(colornamederror) + ";\n";
+    css_str += "@define-color success_color " + Glib::ustring(colornamedsuccess) + ";\n";
     /* ":not(.rawstyle) > image" works only on images in first level of widget container
     if in the future we use a complex widget with more levels and we dont want to tweak the color
-    here, retaining default we can add more lines like ":not(.rawstyle) > > image" */
-    css_str += ":not(.rawstyle) > image";
-    css_str += "{color:";
-    css_str += colornamed;
-    css_str += ";}";
+    here, retaining default we can add more lines like ":not(.rawstyle) > > image" 
+    if we not override the color we use defautt theme colors*/
+    bool overridebasecolor = !prefs->getBool("/theme/symbolicDefaultBaseColors", true);
+    if (overridebasecolor) {
+        css_str += "#InkRuler,";
+        css_str += ":not(.rawstyle) > image";
+        css_str += "{color:";
+        css_str += colornamed;
+        css_str += ";}";
+    }
     css_str += ".dark .forcebright :not(.rawstyle) > image,";
     css_str += ".dark .forcebright image:not(.rawstyle),";
     css_str += ".bright .forcedark :not(.rawstyle) > image,";
@@ -356,7 +356,12 @@ Glib::ustring Application::get_symbolic_colors()
     css_str += ".inverse :not(.rawstyle) > image,";
     css_str += ".inverse image:not(.rawstyle)";
     css_str += "{color:";
-    css_str += colornamed_inverse;
+    if (overridebasecolor) {
+        css_str += colornamed_inverse;
+    } else {
+        // we override base color in this special cases using inverse color
+        css_str += "@theme_bg_color";
+    }
     css_str += ";}";
     return css_str;
 }
