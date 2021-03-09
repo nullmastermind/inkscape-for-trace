@@ -148,6 +148,7 @@ FillAndStroke::_layoutPageStrokeStyle()
 void
 FillAndStroke::showPageFill()
 {
+    blink();
     _notebook.set_current_page(0);
     _savePagePref(0);
 
@@ -156,6 +157,7 @@ FillAndStroke::showPageFill()
 void
 FillAndStroke::showPageStrokePaint()
 {
+    blink();
     _notebook.set_current_page(1);
     _savePagePref(1);
 }
@@ -163,6 +165,7 @@ FillAndStroke::showPageStrokePaint()
 void
 FillAndStroke::showPageStrokeStyle()
 {
+    blink();
     _notebook.set_current_page(2);
     _savePagePref(2);
 
