@@ -105,13 +105,23 @@
     -gtk-secondary-caret-color: @theme_fg_color;
 }
 
-.highlight{
+.highlight {
     color: @theme_fg_color;
     background-color: alpha(@theme_selected_bg_color,0.5);
     background-image: image(alpha(@theme_selected_bg_color,0.5));
     caret-color: @theme_bg_color;
     border-radius:4px;
     -gtk-secondary-caret-color: @theme_fg_color;
+}
+
+
+/* blinking border animation for dialogs */
+@keyframes blinking {
+  from { border-color: @theme_selected_fg_color; }
+  to   { border-color: @theme_selected_bg_color; }
+}
+.blink {
+  animation: blinking 333ms ease-in-out infinite;
 }
 
 

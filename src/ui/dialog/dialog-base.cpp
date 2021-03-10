@@ -66,17 +66,11 @@ void DialogBase::blink()
     if (notebook && notebook->get_is_drawable()) {
         // Switch notebook to this dialog.
         notebook->set_current_page(notebook->page_num(*this));
-
-        Glib::RefPtr<Gtk::StyleContext> style = notebook->get_style_context();
-
-        Glib::RefPtr<Gtk::CssProvider> provider = Gtk::CssProvider::create();
-        provider->load_from_data(" *.blink {border: 3px solid @selected_bg_color;}");
-        style->add_provider(provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-        style->add_class("blink");
+        notebook->get_style_context()->add_class("blink");
 
         // Add timer to turn off blink.
         sigc::slot<bool> slot = sigc::mem_fun(*this, &DialogBase::blink_off);
-        sigc::connection connection = Glib::signal_timeout().connect(slot, 500); // msec
+        sigc::connection connection = Glib::signal_timeout().connect(slot, 1000); // msec
     }
 }
 
