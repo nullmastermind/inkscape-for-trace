@@ -457,7 +457,9 @@ void SPShape::modified(unsigned int flags) {
     }
 
     if (flags & SP_OBJECT_MODIFIED_FLAG && style->filter.set) {
-        style->getFilter()->update_filter_all_regions();
+        if (auto filter = style->getFilter()) {
+            filter->update_filter_all_regions();
+        }
     }
 
     if (!_curve) {
