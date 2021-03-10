@@ -111,6 +111,11 @@ public:
     void      resetUnitType(UnitType unit_type);
 
     /**
+     * allow align text in entry.
+     */
+    void      setAlignment(double xalign);
+
+    /**
      * Sets the number and unit system.
      */
     void      setValue(double number, Glib::ustring const &units);

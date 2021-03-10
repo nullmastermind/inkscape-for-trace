@@ -228,10 +228,15 @@ void GuidelinePropertiesDialog::_setup() {
     _spin_angle.setUnit(_angle_unit_status);
 
     // position spinbuttons
-    _spin_button_x.setDigits(3);
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    size_t minimumexponent = std::min(std::abs(prefs->getInt("/options/svgoutput/minimumexponent", -8)), 5); //we limit to 5 to minimize rounding errors 
+    _spin_button_x.setDigits(minimumexponent);
+    _spin_button_x.setAlignment(1.0);
     _spin_button_x.setIncrements(1.0, 10.0);
     _spin_button_x.setRange(-1e6, 1e6);
-    _spin_button_y.setDigits(3);
+    _spin_button_y.setDigits(minimumexponent);
+    
+    _spin_button_y.setAlignment(1.0);
     _spin_button_y.setIncrements(1.0, 10.0);
     _spin_button_y.setRange(-1e6, 1e6);
 
@@ -252,6 +257,8 @@ void GuidelinePropertiesDialog::_setup() {
 
     // angle spinbutton
     _spin_angle.setDigits(3);
+    _spin_angle.setDigits(minimumexponent);
+    _spin_angle.setAlignment(1.0);
     _spin_angle.setIncrements(1.0, 10.0);
     _spin_angle.setRange(-3600., 3600.);
 
