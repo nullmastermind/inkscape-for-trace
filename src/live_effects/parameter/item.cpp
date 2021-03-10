@@ -255,7 +255,7 @@ ItemParam::linked_transformed_callback(Geom::Affine const *rel_transf, SPItem *m
             // here use moved item because sp_lpe_item never has optimized transforms because clone LPE
             if (sp_lpe_item && !selection->includes(sp_lpe_item) && moved_lpeitem && !last_transform.isTranslation()) {
                 if (!moved_lpeitem->optimizeTransforms()) {
-                    sp_lpe_item->transform *= last_transform.withoutTranslation();
+                    sp_lpe_item->transform *= last_transform;
                 }
             } else if(sp_lpe_item && moved_lpeitem && moved_lpeitem->optimizeTransforms() && last_transform.isTranslation()) {
                 Geom::Affine orig = sp_lpe_item->transform;

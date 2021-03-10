@@ -320,8 +320,8 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
             dest->getRepr()->setAttribute("inkscape:original-d", sp_svg_write_path(curve->get_pathvector()));
             attr = "";
         }
-        if (!allow_transforms) {
-           attr += Glib::ustring("transform") + Glib::ustring(",");
+        if (!allow_transforms || (g_strcmp0(linked.c_str(), id) && !is_load)) {
+            attr += Glib::ustring("transform") + Glib::ustring(",");
         }
         original_bbox(lpeitem, false, true);
         auto attributes_str = attributes.param_getSVGValue();
