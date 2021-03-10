@@ -2294,8 +2294,8 @@ void InkscapePreferences::initPageBehavior()
     auto paste_above_selected = Gtk::manage(new UI::Widget::PrefCheckButton());
     paste_above_selected->init(_("Paste above selection instead of layer-top"), "/options/pasteaboveselected", false);
     _page_select.add_line(false, "", *paste_above_selected, "",
-                          _("If checked, z-order of pasted items and imported documents is immediately above the "
-                            "current selection. Otherwise, insertion happens on top of the current layer."));
+                          _("If checked, pasted items and imported documents will be placed immediately above the "
+                            "current selection (z-order). Otherwise, insertion happens on top of all objects in the current layer."));
 
     this->AddPage(_page_select, _("Selecting"), iter_behavior, PREFS_PAGE_BEHAVIOR_SELECTING);
 
