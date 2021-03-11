@@ -2247,7 +2247,7 @@ void InkscapePreferences::initPageIO()
     this->AddPage(_page_autosave, _("Autosave"), iter_io, PREFS_PAGE_IO_AUTOSAVE);
 
     // No Result
-    _page_notfound.add_group_header("No matches were found, try another search!");
+    _page_notfound.add_group_header(_("No matches were found, try another search!"));
 }
 
 void InkscapePreferences::initPageBehavior()
@@ -3505,7 +3505,7 @@ void InkscapePreferences::show_not_found()
         _page_frame.remove();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     _current_page = &_page_notfound;
-    _page_title.set_markup("<span size='large'><b>No Results</b></span>");
+    _page_title.set_markup(_("<span size='large'><b>No Results</b></span>"));
     _page_frame.add(*_current_page);
     _current_page->show();
     this->show_all_children();
