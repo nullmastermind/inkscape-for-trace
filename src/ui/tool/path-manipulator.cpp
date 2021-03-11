@@ -407,7 +407,7 @@ void PathManipulator::copySelectedPath(Geom::PathBuilder *builder)
         for (auto &node : *subpath) {
             if (node.selected()) {
                 // The node positions are already transformed
-                if (!builder->inPath()) {
+                if (!builder->inPath() || !prev) {
                     builder->moveTo(node.position());
                 } else {
                     build_segment(*builder, prev, &node);

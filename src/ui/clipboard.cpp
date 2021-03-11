@@ -85,6 +85,7 @@
 #include "ui/tools/text-tool.h"
 #include "ui/tools/node-tool.h"
 #include "ui/tool/multi-path-manipulator.h"
+#include "ui/tool/control-point-selection.h"
 
 #include "util/units.h"
 #include "display/curve.h"
@@ -460,6 +461,9 @@ bool ClipboardManagerImpl::paste(SPDesktop *desktop, bool in_place)
             auto clipdoc = tempdoc.get();
             auto source_scale = clipdoc->getDocumentScale();
             auto target_trans = target_path->i2doc_affine();
+            // Select all nodes prior to pasting in, for later inversion.
+            node_tool->_selected_nodes->selectAll();
+
             for (auto node = clipdoc->getReprRoot()->firstChild(); node ;node = node->next()) {
                 auto source_path = SP_PATH(clipdoc->getObjectByRepr(node));
                 if (source_path) {
@@ -484,6 +488,8 @@ bool ClipboardManagerImpl::paste(SPDesktop *desktop, bool in_place)
                     target_path->setAttribute("d", str);
                 }
             }
+            // Finally we invert the selection, this selects all newly added nodes.
+            node_tool->_selected_nodes->invertSelection();
             return true;
         }
     }
