@@ -115,13 +115,20 @@
 }
 
 
-/* blinking border animation for dialogs */
-@keyframes blinking {
+/* blinking animation for dialogs */
+@keyframes blink_border {
   from { border-color: @theme_selected_fg_color; }
   to   { border-color: @theme_selected_bg_color; }
 }
-.blink {
-  animation: blinking 333ms ease-in-out infinite;
+@keyframes blink_background {
+  from { background-color: @theme_bg_color; }
+  to   { background-color: @theme_selected_bg_color; }
+}
+notebook.blink {
+  animation: blink_border 333ms ease-in-out infinite;
+}
+notebook.blink > header > tabs > tab:checked {
+  animation: blink_background 333ms ease-in-out infinite;
 }
 
 
