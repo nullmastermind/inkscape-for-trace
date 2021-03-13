@@ -259,7 +259,9 @@ void CommandPalette::append_recent_file_operation(const Glib::ustring &path, boo
         CPActionFullName->set_no_show_all();
         CPActionFullName->hide();
 
-        CPName->set_text((is_import ? _("Import") : _("Open")) + (": " + file_name));
+        auto text = (is_import ? _("Import") : _("Open")) + (": " + file_name);
+        CPName->set_text(text);
+        CPName->set_tooltip_text(text);
         CPDescription->set_text(path);
         CPDescription->set_tooltip_text(path);
 
@@ -630,9 +632,11 @@ bool CommandPalette::ask_action_parameter(const ActionPtrName &action_ptr_name)
 /**
  * Color removal
  */
-void CommandPalette::remove_color(Gtk::Label *label, const Glib::ustring &subject)
+void CommandPalette::remove_color(Gtk::Label *label, const Glib::ustring &subject, bool tooltip)
 {
-    if (label->get_use_markup()) {
+    if (tooltip) {
+        label->set_tooltip_text(subject);
+    } else if (label->get_use_markup()) {
         label->set_text(subject);
     }
 }
@@ -646,7 +650,7 @@ Glib::ustring make_bold(const Glib::ustring &search)
     return "<span weight=\"bold\">" + search + "</span>";
 }
 
-void CommandPalette::add_color(Gtk::Label *label, const Glib::ustring &search, const Glib::ustring &subject)
+void CommandPalette::add_color(Gtk::Label *label, const Glib::ustring &search, const Glib::ustring &subject, bool tooltip)
 {
     Glib::ustring text = "";
     std::string subject_string = subject.lowercase();
@@ -688,7 +692,11 @@ void CommandPalette::add_color(Gtk::Label *label, const Glib::ustring &search, c
         }
     }
 
-    label->set_markup(text);
+    if (tooltip) {
+        label->set_tooltip_markup(text);
+    } else {
+        label->set_markup(text);
+    }
 }
 
 /**
@@ -840,7 +848,7 @@ int CommandPalette::on_filter_general(Gtk::ListBoxRow *child)
     auto [CPName, CPDescription] = get_name_desc(child);
     if (CPName) {
         remove_color(CPName, CPName->get_text());
-        remove_color(CPName, CPName->get_tooltip_text());
+        remove_color(CPName, CPName->get_tooltip_text(), true);
     }
     if (CPDescription) {
         remove_color(CPDescription, CPDescription->get_text());
@@ -856,7 +864,7 @@ int CommandPalette::on_filter_general(Gtk::ListBoxRow *child)
             return fuzzy_points(CPName->get_text(), _search_text);
         }
         if (fuzzy_search(CPName->get_tooltip_text(), _search_text)) {
-            add_color(CPName, _search_text, CPName->get_tooltip_text());
+            add_color(CPName, _search_text, CPName->get_tooltip_text(), true);
             return fuzzy_points(CPName->get_tooltip_text(), _search_text);
         }
     }

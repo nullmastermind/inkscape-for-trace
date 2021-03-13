@@ -184,8 +184,8 @@ private: // Signal handlers
     /**
      * Color addition in searched character
      */
-    void add_color(Gtk::Label *label, const Glib::ustring &search, const Glib::ustring &subject);
-    void remove_color(Gtk::Label *label, const Glib::ustring &subject);
+    void add_color(Gtk::Label *label, const Glib::ustring &search, const Glib::ustring &subject, bool tooltip=false);
+    void remove_color(Gtk::Label *label, const Glib::ustring &subject, bool tooltip=false);
     void add_color_description(Gtk::Label *label, const Glib::ustring &search);
 
     /**
