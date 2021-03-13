@@ -1227,7 +1227,7 @@ bool ObjectsPanel::_handleDragDrop(const Glib::RefPtr<Gdk::DragContext>& /*conte
             if (_store->iter_is_valid(iter)) {
                 Gtk::TreeModel::Row row = *iter;
                 _dnd_target = row[_model->_colObject]; //Set the drop target
-                if ((pos == Gtk::TREE_VIEW_DROP_INTO_OR_BEFORE) or (pos == Gtk::TREE_VIEW_DROP_INTO_OR_AFTER)) {
+                if ((pos == Gtk::TREE_VIEW_DROP_INTO_OR_BEFORE) || (pos == Gtk::TREE_VIEW_DROP_INTO_OR_AFTER)) {
                     // Trying to drop into a layer or group
                     if (SP_IS_GROUP(_dnd_target)) {
                         _dnd_into = true;
@@ -1239,8 +1239,11 @@ bool ObjectsPanel::_handleDragDrop(const Glib::RefPtr<Gdk::DragContext>& /*conte
                 }
                 // If the source selection contains a layer however, then it can not be dropped ...
                 bool c1 = target_path.size() > 1;                   // .. below the top-level
-                bool c2 = SP_IS_GROUP(_dnd_target) and _dnd_into;   // .. or in any group (at the top level)
-                if (_dnd_source_includes_layer and (c1 or c2)) {
+                bool c2 = SP_IS_GROUP(_dnd_target) && _dnd_into;   // .. or in any group (at the top level)
+                if (SP_IS_GROUP(_dnd_target) && SP_GROUP(_dnd_target)->layerMode() != SPGroup::LAYER && 
+                    _dnd_source_includes_layer && 
+                    (c1 || c2)) 
+                {
                     cancel_dnd = true;
                 }
             } else {
