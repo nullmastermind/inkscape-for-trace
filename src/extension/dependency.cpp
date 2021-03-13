@@ -141,6 +141,7 @@ bool Dependency::check ()
             Extension * myext = db.get(_string);
             if (myext == nullptr) return false;
             if (myext->deactivated()) return false;
+            return true;
             break;
         }
         case TYPE_EXECUTABLE:
