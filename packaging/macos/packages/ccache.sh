@@ -32,7 +32,7 @@ function ccache_configure
     mkdir -p "$CCACHE_DIR"
 
   cat <<EOF > "$CCACHE_DIR/ccache.conf"
-base_dir = $VER_DIR
+base_dir = $WRK_DIR
 hash_dir = false
 max_size = 3.0G
 temporary_dir = $CCACHE_DIR/tmp
