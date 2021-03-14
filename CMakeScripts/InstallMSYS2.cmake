@@ -330,6 +330,13 @@ if(WIN32)
     PATTERN "*.pyc" EXCLUDE)
   install(FILES
     packaging/win32/gdb_create_backtrace.bat
-    packaging/win32/inkscape-gtk-inspector.bat
     DESTINATION bin)
+    
+  # convenience launchers
+  install(FILES
+    "packaging/win32/Run Inkscape !.bat"
+    "packaging/win32/Run Inkscape and create debug trace.bat"
+    "packaging/win32/Run Inkscape with GTK Inspector.bat"
+    DESTINATION .)
+  
 endif()
