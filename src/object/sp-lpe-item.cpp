@@ -1514,7 +1514,7 @@ void SPLPEItem::cleanupAutoFlatten()
 }
 
 SPObject * sp_lpe_item_remove_autoflatten(SPItem *item, const gchar *id) {
-    SPObject *ret = nullptr;
+    SPObject *ret = dynamic_cast<SPObject *>(item);
     SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
     if (lpeitem) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
