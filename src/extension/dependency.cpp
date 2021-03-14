@@ -174,6 +174,8 @@ bool Dependency::check ()
 #endif
 
             switch (_location) {
+                 // backwards-compatibility: location="extensions" will be deprecated as of Inkscape 1.1,
+                 //                          use location="inx" instead
                 case LOCATION_EXTENSIONS: {
                     // get_filename will warn if the resource isn't found, while returning an empty string.
                     std::string temploc =
@@ -193,15 +195,9 @@ bool Dependency::check ()
                         _absolute_location = tempdepr;
                         break;
                     }
-
-                } /* PASS THROUGH!!! */ // TODO: the pass-through seems wrong - either it's relative or not.
-                case LOCATION_ABSOLUTE: {
-                    // TODO: should we check if the directory actually is absolute and/or sanitize the filename somehow?
-                    if (!Glib::file_test(location, filetest)) {
-                        return false;
-                    }
-                    _absolute_location = location;
-                    break;
+                // PASS THROUGH!!! - also check inx location for backwards-compatibility,
+                //                   notably to make extension manager work
+                //                   (installs into subfolders of "extensions" directory)
                 }
                 case LOCATION_INX: {
                     std::string base_directory = _extension->get_base_directory();
@@ -214,6 +210,14 @@ bool Dependency::check ()
                         return false;
                     }
                     _absolute_location = absolute_location;
+                    break;
+                }
+                case LOCATION_ABSOLUTE: {
+                    // TODO: should we check if the directory actually is absolute and/or sanitize the filename somehow?
+                    if (!Glib::file_test(location, filetest)) {
+                        return false;
+                    }
+                    _absolute_location = location;
                     break;
                 }
                 /* The default case is to look in the path */
