@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2021-03-06 00:29+0000\n"
-"PO-Revision-Date: 2021-03-06 18:53+0100\n"
+"PO-Revision-Date: 2021-03-15 19:17+0100\n"
 "Last-Translator: Maren Hachmann <marenhachmann@yahoo.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -43670,7 +43670,7 @@ msgstr "Voronoi und Delaunay"
 
 #: ../share/extensions/voronoi2svg.inx:13
 msgid "Options for Voronoi diagram"
-msgstr "Optioinen für Voronoi Diagramm"
+msgstr "Optionen für Voronoi-Diagramm"
 
 #: ../share/extensions/voronoi2svg.inx:14
 msgid "Bounding box of the diagram:"
@@ -43709,8 +43709,8 @@ msgid ""
 "Select a set of objects. Their centroids will be used as the sites of the "
 "Voronoi diagram. Text objects are not handled."
 msgstr ""
-"Wählen Sie ein Set von Objekten. Ihre Flächenschwerpunkte werden wie die "
-"Seiten der Voronoi-Diagramme verwendet. Textobjekte werden nicht behandelt."
+"Es müssen mehrere Objekte ausgewählt werden, deren Flächenschwerpunkte dann"
+" als Eckpunkte für das Voronoi-Diagramm dienen. Textobjekte werden ignoriert."
 
 #: ../share/extensions/web_interactive_mockup.inx:3
 msgid "Interactive Mockup"
