@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.1 -->
+<!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkImage" id="copy-icon">
@@ -14,7 +14,7 @@
     <property name="title" translatable="yes">Inkscape. Draw freely.</property>
     <property name="resizable">False</property>
     <property name="window-position">center-always</property>
-    <property name="icon-name">help-about</property>
+    <property name="icon-name">org.inkscape.Inkscape</property>
     <property name="gravity">north</property>
     <child>
       <object class="GtkBox">
@@ -320,7 +320,7 @@
                     <property name="reveal-child">True</property>
                     <child>
                       <object class="GtkButton" id="version">
-                        <property name="label" translatable="no">$version</property>
+                        <property name="label">$version</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">True</property>
