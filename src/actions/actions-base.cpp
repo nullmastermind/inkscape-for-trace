@@ -20,7 +20,7 @@
 #include "inkscape-application.h"
 
 #include "inkscape.h"             // Inkscape::Application
-#include "inkscape-version.h"     // Inkscape version
+#include "inkscape-version-info.h"// Inkscape version
 #include "path-prefix.h"          // Extension directory
 #include "extension/init.h"       // List verbs
 #include "verbs.h"                // List verbs
@@ -32,8 +32,7 @@
 void
 print_inkscape_version()
 {
-    std::cout << "Inkscape " << Inkscape::version_string << std::endl;
-    std::cerr << "    Pango version: " << pango_version_string() << std::endl;
+    std::cout << Inkscape::inkscape_version() << std::endl;
 }
 
 void

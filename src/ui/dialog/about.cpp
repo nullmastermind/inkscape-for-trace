@@ -17,7 +17,7 @@
 #include <string>
 
 #include "document.h"
-#include "inkscape-version.h"
+#include "inkscape-version-info.h"
 #include "io/resource.h"
 #include "ui/util.h"
 #include "ui/view/svg-view-widget.h"
@@ -43,7 +43,17 @@ bool show_copy_button(Gtk::Button *button, Gtk::Label *label) {
 }
 void copy_version(Gtk::Button *button, Gtk::Label *label) {
     auto clipboard = Gtk::Clipboard::get();
-    clipboard->set_text(Inkscape::version_string);
+    clipboard->set_text(Inkscape::inkscape_version());
+    if (label) {
+        reveal_widget(button, false);
+        reveal_widget(label, true);
+        Glib::signal_timeout().connect_seconds(
+            sigc::bind(sigc::ptr_fun(&show_copy_button), button, label), 2);
+    }
+}
+void copy_debug_info(Gtk::Button *button, Gtk::Label *label) {
+    auto clipboard = Gtk::Clipboard::get();
+    clipboard->set_text(Inkscape::debug_info());
     if (label) {
         reveal_widget(button, false);
         reveal_widget(label, true);
@@ -79,9 +89,18 @@ void AboutDialog::show_about() {
         builder->get_widget("version", version);
         builder->get_widget("version-copied", label);
         if(version) {
-            version->set_label(Inkscape::version_string);
+            version->set_label(Inkscape::inkscape_version());
             version->signal_clicked().connect(
                     sigc::bind(sigc::ptr_fun(&copy_version), version, label));
+        }
+        
+        Gtk::Button *debug_info;
+        Gtk::Label *label2;
+        builder->get_widget("debug_info", debug_info);
+        builder->get_widget("debug-info-copied", label2);
+        if (debug_info) {
+            debug_info->signal_clicked().connect(
+                    sigc::bind(sigc::ptr_fun(&copy_debug_info), version, label2));
         }
 
         // Render the about screen image via inkscape SPDocument

@@ -40,6 +40,7 @@ set(inkscape_SRC
   help.cpp
   id-clash.cpp
   inkscape.cpp
+  inkscape-version-info.cpp
   layer-fns.cpp
   layer-manager.cpp
   layer-model.cpp
@@ -134,6 +135,7 @@ set(inkscape_SRC
   helper-fns.h
   id-clash.h
   inkscape-version.h
+  inkscape-version-info.h
   inkscape.h
   layer-fns.h
   layer-manager.h
