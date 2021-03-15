@@ -528,28 +528,28 @@ GlyphsPanel::GlyphsPanel()
 
     Gtk::Box *box = new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL);
 
-    entry = new Gtk::Entry();
+    entry = Glib::RefPtr<Gtk::Entry>(new Gtk::Entry());
     conn = entry->signal_changed().connect(sigc::mem_fun(*this, &GlyphsPanel::calcCanInsert));
     instanceConns.push_back(conn);
     entry->set_width_chars(18);
-    box->pack_start(*Gtk::manage(entry), Gtk::PACK_SHRINK);
+    box->pack_start(*entry.get(), Gtk::PACK_SHRINK);
 
     Gtk::Label *pad = new Gtk::Label("    ");
     box->pack_start(*Gtk::manage(pad), Gtk::PACK_SHRINK);
 
-    label = new Gtk::Label("      ");
-    box->pack_start(*Gtk::manage(label), Gtk::PACK_SHRINK);
+    label = Glib::RefPtr<Gtk::Label>(new Gtk::Label("      "));
+    box->pack_start(*label.get(), Gtk::PACK_SHRINK);
 
     pad = new Gtk::Label("");
     box->pack_start(*Gtk::manage(pad), Gtk::PACK_EXPAND_WIDGET);
 
-    insertBtn = new Gtk::Button(_("Append"));
+    insertBtn = Glib::RefPtr<Gtk::Button>(new Gtk::Button(_("Append")));
     conn = insertBtn->signal_clicked().connect(sigc::mem_fun(*this, &GlyphsPanel::insertText));
     instanceConns.push_back(conn);
     insertBtn->set_can_default();
     insertBtn->set_sensitive(false);
 
-    box->pack_end(*Gtk::manage(insertBtn), Gtk::PACK_SHRINK);
+    box->pack_end(*insertBtn.get(), Gtk::PACK_SHRINK);
     box->set_hexpand();
     table->attach( *Gtk::manage(box), 0, row, 3, 1);
 
