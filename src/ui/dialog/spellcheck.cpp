@@ -112,7 +112,7 @@ SpellCheck::SpellCheck()
         _langs = get_available_langs();
 
         if (_langs.empty()) {
-            banner_label.set_markup("<i>No dictionaries installed</i>");
+            banner_label.set_markup(Glib::ustring::compose("<i>%1</i>", _("No dictionaries installed")));
         }
     }
 
