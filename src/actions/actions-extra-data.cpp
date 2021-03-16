@@ -16,6 +16,8 @@
 
 #include <iostream>
 
+#include <glibmm/i18n.h>
+
 std::vector<Glib::ustring>
 InkActionExtraData::get_actions()
 {
@@ -27,16 +29,18 @@ InkActionExtraData::get_actions()
 }
 
 Glib::ustring
-InkActionExtraData::get_label_for_action(Glib::ustring const &action_name)
+InkActionExtraData::get_label_for_action(Glib::ustring const &action_name, bool translated)
 {
     Glib::ustring value;
     auto search = data.find(action_name);
     if (search != data.end()) {
-        value = search->second.get_label();
+        value = translated ? _(search->second.get_label().c_str())
+                           :   search->second.get_label();
     }
     return value;
 }
 
+// TODO: Section should be translatable, too
 Glib::ustring
 InkActionExtraData::get_section_for_action(Glib::ustring const &action_name) {
 
@@ -49,12 +53,13 @@ InkActionExtraData::get_section_for_action(Glib::ustring const &action_name) {
 }
 
 Glib::ustring
-InkActionExtraData::get_tooltip_for_action(Glib::ustring const &action_name) {
+InkActionExtraData::get_tooltip_for_action(Glib::ustring const &action_name, bool translated) {
 
     Glib::ustring value;
     auto search = data.find(action_name);
     if (search != data.end()) {
-        value = search->second.get_tooltip();
+        value = translated ? _(search->second.get_tooltip().c_str())
+                           :   search->second.get_tooltip();
     }
     return value;
 }

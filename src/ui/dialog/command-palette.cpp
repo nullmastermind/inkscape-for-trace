@@ -324,13 +324,12 @@ bool CommandPalette::generate_action_operation(const ActionPtrName &action_ptr_n
     // Setting CPName
     {
         auto name = action_data.get_label_for_action(action_ptr_name.second);
+        auto untranslated_name = action_data.get_label_for_action(action_ptr_name.second, false);
         if (name.empty()) {
             // If action doesn't have a label, set the name = full action name
             name = action_ptr_name.second;
+            untranslated_name = action_ptr_name.second;
         }
-
-        // FIXME: Apply actual logic
-        auto untranslated_name = name;
 
         CPName->set_text(name);
         CPName->set_tooltip_text(untranslated_name);
@@ -368,7 +367,7 @@ bool CommandPalette::generate_action_operation(const ActionPtrName &action_ptr_n
     }
 
     CPDescription->set_text(action_data.get_tooltip_for_action(action_ptr_name.second));
-    CPDescription->set_tooltip_text(action_data.get_tooltip_for_action(action_ptr_name.second));
+    CPDescription->set_tooltip_text(action_data.get_tooltip_for_action(action_ptr_name.second, false));
 
     // Add to suggestions
     if (is_suggestion) {

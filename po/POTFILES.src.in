@@ -7,6 +7,7 @@
 ../src/actions/actions-canvas-mode.cpp
 ../src/actions/actions-canvas-snapping.cpp
 ../src/actions/actions-canvas-transform.cpp
+../src/actions/actions-extra-data.cpp
 ../src/actions/actions-file.cpp
 ../src/actions/actions-object-align.cpp
 ../src/actions/actions-object.cpp

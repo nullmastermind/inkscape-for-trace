@@ -56,9 +56,9 @@ public:
 
     void add_data(std::vector<std::vector<Glib::ustring>> &raw_data);
 
-    Glib::ustring get_label_for_action(Glib::ustring const &action_name);
+    Glib::ustring get_label_for_action(Glib::ustring const &action_name, bool translated = true);
     Glib::ustring get_section_for_action(Glib::ustring const &action_name);
-    Glib::ustring get_tooltip_for_action(Glib::ustring const &action_name);
+    Glib::ustring get_tooltip_for_action(Glib::ustring const &action_name, bool translated = true);
 
 private:
     std::map<Glib::ustring, InkActionExtraDatum> data;
