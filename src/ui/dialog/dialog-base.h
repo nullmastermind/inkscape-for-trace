@@ -56,7 +56,7 @@ public:
     }
 
     // Getters and setters
-    std::string get_name() { return _name; };
+    Glib::ustring get_name() { return _name; };
     gchar const *getPrefsPath() const { return _prefs_path.data(); }
     int const &getVerb() const { return _verb_num; }
     SPDesktop *getDesktop();
@@ -64,7 +64,7 @@ public:
     void blink();
 
 protected:
-    std::string _name;               // Gtk widget name (must be set!)
+    Glib::ustring _name;             // Gtk widget name (must be set!)
     Glib::ustring const _prefs_path; // Stores characteristic path for loading/saving the dialog position.
     int _verb_num;                   // Dialog associated verb value
     InkscapeApplication *_app; // Used for state management

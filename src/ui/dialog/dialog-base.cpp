@@ -13,6 +13,7 @@
 
 #include "dialog-base.h"
 
+#include <glibmm/i18n.h>
 #include <glibmm/main.h>
 #include <glibmm/refptr.h>
 #include <gtkmm/cssprovider.h>
@@ -39,17 +40,25 @@ DialogBase::DialogBase(gchar const *prefs_path, int verb_num)
     , _verb_num(verb_num)
     , _app(InkscapeApplication::instance())
 {
-    // Get translatable name for the dialog based on the verb
+    // Derive a pretty display name for the dialog based on the verbs name.
+    // TODO: This seems fragile. Should verbs have a proper display name?
     Verb *verb = Verb::get(verb_num);
     if (verb) {
-        _name = verb->get_name();
+        // get translated verb name
+        _name = _(verb->get_name());
+
+        // remove ellipsis and mnemonics
         int pos = _name.find("...", 0);
         if (pos >= 0 && pos < _name.length() - 2) {
-            _name.replace(pos, 3, "");
+            _name.erase(pos, 3);
+        }
+        pos = _name.find("…", 0);
+        if (pos >= 0 && pos < _name.length()) {
+            _name.erase(pos, 1);
         }
         pos = _name.find("_", 0);
         if (pos >= 0 && pos < _name.length()) {
-            _name.replace(pos, 1, "");
+            _name.erase(pos, 1);
         }
     }
 
