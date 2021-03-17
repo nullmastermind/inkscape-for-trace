@@ -3206,7 +3206,7 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
         if (section.empty()) section = "Misc";
         if (section != old_section) {
             iter_group = _kb_store->append();
-            Glib::ustring name = "Actions: " + section;
+            Glib::ustring name = Glib::ustring::compose("%1: %2", _("Actions"), section);
             (*iter_group)[_kb_columns.name] = name;
             (*iter_group)[_kb_columns.shortcut] = "";
             (*iter_group)[_kb_columns.description] = "";
@@ -3223,8 +3223,10 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
             // Convert to more user friendly notation.
 
             // ::get_label shows key pad and numeric keys identically.
+            // TODO: Results in labels like "Numpad Alt+5"
             if (accel.find("KP") != Glib::ustring::npos) {
-                shortcut_label += "Num Pad ";
+                shortcut_label += _("Numpad");
+                shortcut_label += " ";
             }
             unsigned int key = 0;
             Gdk::ModifierType mod = Gdk::ModifierType(0);

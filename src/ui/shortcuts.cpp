@@ -761,7 +761,14 @@ Shortcuts::get_label(const Gtk::AccelKey& shortcut)
     Glib::ustring label;
 
     if (!shortcut.is_null()) {
-        label = Gtk::AccelGroup::get_label(shortcut.get_key(), shortcut.get_mod());
+        // ::get_label shows key pad and numeric keys identically.
+        // TODO: Results in labels like "Numpad Alt+5"
+        if (shortcut.get_abbrev().find("KP") != Glib::ustring::npos) {
+            label += _("Numpad");
+            label += " ";
+        }
+
+        label += Gtk::AccelGroup::get_label(shortcut.get_key(), shortcut.get_mod());
     }
 
     return label;
