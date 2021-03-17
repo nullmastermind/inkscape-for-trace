@@ -36,6 +36,12 @@ print_inkscape_version()
 }
 
 void
+print_debug_info()
+{
+    std::cout << Inkscape::debug_info() << std::endl;
+}
+
+void
 print_system_data_directory()
 {
     std::cout << Glib::build_filename(get_inkscape_datadir(), "inkscape") << std::endl;
@@ -222,6 +228,7 @@ std::vector<std::vector<Glib::ustring>> raw_data_base =
 {
     // clang-format off
     {"app.inkscape-version",          N_("Inkscape Version"),        "Base",       N_("Print Inkscape version and exit")                   },
+    {"app.debug-info",                N_("Debug Info"),              "Base",       N_("Print debugging information and exit")              },
     {"app.system-data-directory",     N_("System Directory"),        "Base",       N_("Print system data directory and exit")              },
     {"app.user-data-directory",       N_("User Directory"),          "Base",       N_("Print user data directory and exit")                },
     {"app.action-list",               N_("List Actions"),            "Base",       N_("Print a list of actions and exit")                  },
@@ -250,6 +257,7 @@ add_actions_base(InkscapeApplication* app)
     // Note: "radio" actions are just an easy way to set type without using templating.
     // clang-format off
     gapp->add_action(               "inkscape-version",                                    sigc::ptr_fun(&print_inkscape_version)                 );
+    gapp->add_action(               "debug-info",                                          sigc::ptr_fun(&print_debug_info)                       );
     gapp->add_action(               "system-data-directory",                               sigc::ptr_fun(&print_system_data_directory)            );
     gapp->add_action(               "user-data-directory",                                 sigc::ptr_fun(&print_user_data_directory)              );
     gapp->add_action(               "action-list",       sigc::mem_fun(app, &InkscapeApplication::print_action_list)                    );

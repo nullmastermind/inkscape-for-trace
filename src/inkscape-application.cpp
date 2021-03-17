@@ -615,6 +615,7 @@ InkscapeApplication::InkscapeApplication()
     // clang-format off
     // General
     gapp->add_main_option_entry(T::OPTION_TYPE_BOOL,     "version",                 'V', N_("Print Inkscape version"),                                                  "");
+    gapp->add_main_option_entry(T::OPTION_TYPE_BOOL,     "debug-info",             '\0', N_("Print debugging information"),                                                        "");
     gapp->add_main_option_entry(T::OPTION_TYPE_BOOL,     "system-data-directory",  '\0', N_("Print system data directory"),                                             "");
     gapp->add_main_option_entry(T::OPTION_TYPE_BOOL,     "user-data-directory",    '\0', N_("Print user data directory"),                                               "");
 
@@ -1265,6 +1266,11 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
     // These are processed first as they result in immediate program termination.
     if (options->contains("version")) {
         gapp->activate_action("inkscape-version");
+        return EXIT_SUCCESS;
+    }
+    
+    if (options->contains("debug-info")) {
+        gapp->activate_action("debug-info");
         return EXIT_SUCCESS;
     }
 
