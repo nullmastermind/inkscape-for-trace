@@ -205,13 +205,13 @@ iconview *:hover {
 }
 
 #CommandPaletteBase {
+    background-color: @theme_base_color; /* some themes don't seem to have a background color for list rows defined and would end up transparent otherwise */
     border: 5px solid @theme_bg_color;
     border-radius: 5px;
 }
 
 #CommandPaletteBase list row:not(:last-child) {
     border-bottom: 1px solid @bg_color5;
-    background-color: @theme_bg_color;
 }
 
 /* LPE Dialog add */
