@@ -3218,7 +3218,6 @@ Wmf::init ()
                 "<mimetype>image/x-wmf</mimetype>\n"
                 "<filetypename>" N_("Windows Metafiles (*.wmf)") "</filetypename>\n"
                 "<filetypetooltip>" N_("Windows Metafiles") "</filetypetooltip>\n"
-                "<output_extension>org.inkscape.output.wmf</output_extension>\n"
             "</input>\n"
         "</inkscape-extension>", new Wmf());
 

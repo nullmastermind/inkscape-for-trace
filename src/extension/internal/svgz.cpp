@@ -51,7 +51,6 @@ Svgz::init()
                 "<mimetype>image/svg+xml-compressed</mimetype>\n"
                 "<filetypename>" N_("Compressed Inkscape SVG (*.svgz)") "</filetypename>\n"
                 "<filetypetooltip>" N_("SVG file format compressed with GZip") "</filetypetooltip>\n"
-                "<output_extension>" SP_MODULE_KEY_OUTPUT_SVGZ_INKSCAPE "</output_extension>\n"
             "</input>\n"
         "</inkscape-extension>", new Svgz());
 

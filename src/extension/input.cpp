@@ -47,7 +47,6 @@ Input::Input (Inkscape::XML::Node *in_repr, Implementation::Implementation *in_i
     extension = nullptr;
     filetypename = nullptr;
     filetypetooltip = nullptr;
-    output_extension = nullptr;
 
     if (repr != nullptr) {
         Inkscape::XML::Node * child_repr;
@@ -80,10 +79,6 @@ Input::Input (Inkscape::XML::Node *in_repr, Implementation::Implementation *in_i
                         g_free (filetypetooltip);
                         filetypetooltip = g_strdup(child_repr->firstChild()->content());
                     }
-                    if (!strcmp(chname, "output_extension")) {
-                        g_free (output_extension);
-                        output_extension = g_strdup(child_repr->firstChild()->content());
-                    }
 
                     child_repr = child_repr->next();
                 }
@@ -109,7 +104,6 @@ Input::~Input ()
     g_free(extension);
     g_free(filetypename);
     g_free(filetypetooltip);
-    g_free(output_extension);
     return;
 }
 

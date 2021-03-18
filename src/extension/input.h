@@ -27,9 +27,6 @@ class Input : public Extension {
     gchar *filetypename;         /**< A userfriendly name for the file type */
     gchar *filetypetooltip;      /**< A more detailed description of the filetype */
 
-public: /* this is a hack for this release, this will be private shortly */
-    gchar *output_extension;     /**< Setting of what output extension should be used */
-
 public:
     struct open_failed : public std::exception {
         ~open_failed() noexcept override = default;

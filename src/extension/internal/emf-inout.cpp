@@ -3640,7 +3640,6 @@ Emf::init ()
                 "<mimetype>image/x-emf</mimetype>\n"
                 "<filetypename>" N_("Enhanced Metafiles (*.emf)") "</filetypename>\n"
                 "<filetypetooltip>" N_("Enhanced Metafiles") "</filetypetooltip>\n"
-                "<output_extension>org.inkscape.output.emf</output_extension>\n"
             "</input>\n"
         "</inkscape-extension>", new Emf());
     // clang-format on
