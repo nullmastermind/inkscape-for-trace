@@ -102,8 +102,12 @@ Inkscape::Pixbuf *sp_generate_internal_bitmap(SPDocument *doc, gchar const */*fi
     if (item_only) {
         hide_other_items_recursively(doc->getRoot(), item_only, dkey);
         // TODO: The following line forces 100% opacity as required by sp_asbitmap_render() in cairo-renderer.cpp
-        //       Make it conditional if 'item_only' is ever used by other callers which need to retain opacity 
-        item_only->get_arenaitem(dkey)->setOpacity(1.0);
+        //       Make it conditional if 'item_only' is ever used by other callers which need to retain opacity
+        if (item_only->get_arenaitem(dkey)) {
+            item_only->get_arenaitem(dkey)->setOpacity(1.0);
+        } else {
+            g_warning("sp_generate_internal_bitmap: trying to set opacity of non-existing arenaitem");
+        }
     }
 
     Geom::IntRect final_bbox = Geom::IntRect::from_xywh(0, 0, width, height);

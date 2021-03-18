@@ -587,13 +587,19 @@ static void sp_item_invoke_render(SPItem *item, CairoRenderContext *ctx)
     if (item->isHidden()) {
         return;
     }
-
-    if(ctx->getFilterToBitmap() && (!item->style || item->style->filter.set != 0)) {
-        // This is not necesary but for cleanup, the filter hide the item
+    if (item->style && item->style->filter.set) {
+        // cleanup only; this is not necessary but the filter hides the item anyway
         SPFilter *filt = item->style->getFilter();
         if (filt && g_strcmp0(filt->getId(), "selectable_hidder_filter") == 0) {
             return;
         }
+    }
+
+    // rasterize filtered items as per user setting
+    // however, clipPaths ignore any filters, so do *not* rasterize
+    // TODO: might apply to some degree to masks with filtered elements as well;
+    //       we need to figure out where in the stack it would be safe to rasterize
+    if (ctx->getFilterToBitmap() && item->style->filter.set && !item->isInClipPath()) {
         return sp_asbitmap_render(item, ctx);
     }
 
