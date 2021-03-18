@@ -123,7 +123,6 @@ public:
 
     Gtk::Box *    get_info_widget();
 
-    bool refresh_ext; // If true, the extension (extenson manager) wishes the extensions to be refreshed once completed.
     bool no_doc; // if true, the effect does not process SVG document at all, so no need to save, read, and watch for errors
     bool no_live_preview; // if true, the effect does not need "live preview" checkbox in its dialog
 

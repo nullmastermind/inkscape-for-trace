@@ -591,10 +591,12 @@ void Script::effect(Inkscape::Extension::Effect *module,
         file_listener outfile;
         execute(command, params, empty, outfile);
 
-        if (module->refresh_ext) {
-            /* Initialize the extensions */
-           Inkscape::Extension::refresh_user_extensions();
-           InkscapeWindow *window = desktop->getInkscapeWindow();
+        // Hack to allow for extension manager to reload extensions
+        // TODO: Find a better way to do this, e.g. implement an action and have extensions (or users)
+        //       call that instead when there's a change that requires extensions to reload
+        if (!g_strcmp0(module->get_id(), "org.inkscape.extensions.manager")) {
+            Inkscape::Extension::refresh_user_extensions();
+            InkscapeWindow *window = desktop->getInkscapeWindow();
             if (window) { // during load, SP_ACTIVE_DESKTOP may be !nullptr, but parent might still be nullptr
                 SPDesktopWidget *dtw = window->get_desktop_widget();
                 reload_menu(desktop, dtw->_menubar);
