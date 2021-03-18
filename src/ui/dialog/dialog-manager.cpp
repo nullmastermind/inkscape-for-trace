@@ -5,6 +5,8 @@
 #include <gdkmm/monitor.h>
 #include <limits>
 
+#include "io/resource.h"
+
 #include "dialog-base.h"
 #include "dialog-container.h"
 #include "dialog-window.h"
@@ -128,11 +130,6 @@ void DialogManager::save_dialogs_state(DialogContainer *docking_container)
     if (save_state == PREFS_DIALOGS_STATE_NONE)
         return;
 
-    Glib::ustring path = Glib::build_filename(Glib::get_user_cache_dir(), "inkscape");
-    if (!Glib::file_test(path, Glib::FILE_TEST_IS_DIR)) {
-        Gio::File::create_for_path(path)->make_directory_with_parents();
-    }
-
     // save state of docked dialogs and currently open floating ones
     auto keyfile = docking_container->save_container_state();
 
@@ -151,7 +148,7 @@ void DialogManager::save_dialogs_state(DialogContainer *docking_container)
     }
     keyfile->set_integer(transient_group, "count", files.size());
 
-    Glib::ustring filename = Glib::build_filename(path, dialogs_state);
+    std::string filename = Glib::build_filename(Inkscape::IO::Resource::profile_path(), dialogs_state);
     try {
         keyfile->save_to_file(filename);
     } catch (Glib::FileError &error) {
@@ -189,8 +186,8 @@ void DialogManager::restore_dialogs_state(DialogContainer *docking_container, bo
 
     try {
         auto keyfile = std::make_unique<Glib::KeyFile>();
-        Glib::ustring filepath = Glib::build_filename(Glib::get_user_cache_dir(), "inkscape", dialogs_state);
-        if (keyfile->load_from_file(filepath)) {
+        std::string filename = Glib::build_filename(Inkscape::IO::Resource::profile_path(), dialogs_state);
+        if (keyfile->load_from_file(filename)) {
             // restore visible dialogs first; that state is up-to-date
             docking_container->load_container_state(keyfile.get(), include_floating);
 
