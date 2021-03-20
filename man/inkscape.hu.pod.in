@@ -24,6 +24,7 @@ kapcsolók:
 
     -?, --help
     -V, --version
+        --debug-info
         --system-data-directory
         --user-data-directory
 
@@ -33,9 +34,10 @@ kapcsolók:
         --convert-dpi-method=MÓDSZER
         --no-convert-text-baseline-spacing
 
-    -o, --export-filename=FÁJLNÉV
+    -o, --export-filename=FILENAME
         --export-overwrite
-        --export-type=TÍPUS[,TÍPUS]*
+        --export-type=TYPE[,TYPE]*
+        --export-extension=EXTENSION-ID
 
     -C, --export-area-page
     -D, --export-area-drawing
@@ -80,18 +82,20 @@ kapcsolók:
 
 =head1 LEÍRÁS
 
-B<Inkscape> is a Free and open source vector graphics editor. It offers a
-rich set of features and is widely used for both artistic and technical
-illustrations such as cartoons, clip art, logos, typography, diagramming and
-flowcharting.  It uses vector graphics to allow for sharp printouts and
-renderings at unlimited resolution and is not bound to a fixed number of
-pixels like raster graphics. Inkscape uses the standardized B<SVG> file
-format as its main format, which is supported by many other applications
-including web browsers.
+Az B<Inkscape> egy ingyenes és nyílt forráskódú vektorgrafikus
+szerkesztő. Gazdag funkciókészletet kínál és széles körben használatos mind
+művészi, mint technikai illusztrációk – például rajzfilmek, clipart-ok,
+logók, tipográfiai elemek, diagramok és folyamatábrák –
+készítésére. Vektorgrafikát használ az éles nyomatok és korlátlan felbontású
+megjelenítés létrehozásáért és nincs rögzítve korlátozott számú pixelhez,
+mint a raszteres grafika. Az Inkscape a szabványosított B<SVG> formátumot
+használja saját formátumaként, melyet számos más alkalmazás is támogat a
+webböngészőket is beleértve.
 
-The interface is designed to be comfortable and efficient for skilled users,
-while remaining conformant to B<GNOME> standards so that users familiar with
-other GNOME applications can learn its interface rapidly.
+A felhasználói felület úgy lett tervezve, hogy komfortos és hatékony legyen
+a tapasztalt felhasználók számára, valamint a B<GNOME> szabvány követésének
+hála a más GNOME alkalmazásokban jártas felhasználók is gyorsan meg tudják
+tanulni a felületét.
 
 Az B<SVG> egy W3C szabvány 2D-s vektoros rajzoláshoz XML
 formátumban. Lehetővé teszi objektumok létrehozását pontokkal, útvonalakkal
@@ -118,6 +122,12 @@ Megjeleníti a súgóüzeneteket.
 =item B<-V>, B<--version>
 
 Megjeleníti az Inkscape verzióját és a build dátumát.
+
+=item B<--debug-info>
+
+Prints technical information including Inkscape version, dependency versions
+and operating system.  This Information is useful when debugging issues with
+Inkscape and should be included whenever filing a bug report.
 
 =item B<--system-data-directory>
 
@@ -200,9 +210,9 @@ Felülírja a bemeneti fájlt.
 
 =item B<--export-type>=I<TÍPUS[,TÍPUS]*>
 
-Megadja az exportálandó fájl típusát. Lehetséges értékek: svg, png, ps, eps,
-pdf, emf, wmf, xaml. Lehetséges egyszerre akár több fájltípusba is
-exportálni.
+Specify the file type to export. Possible values: svg, png, ps, eps, pdf,
+emf, wmf and every file type for which an export extension exists. It is
+possible to export more than one file type at a time.
 
 Mivel a PostScript nem támogatja az átlátszóságot, ezért minden az SVG-ben
 eredetileg átlátszó objektum bitkép másolattal lesz helyettesítve. Az
@@ -211,6 +221,14 @@ exportált terület a lap, melyet az L<--export-area-drawing> kapcsolóval
 lehet a rajzra módosítani.
 
 A PDF megőrzi az eredeti SVG-ben található átlátszóságokat.
+
+=item B<--export-extension>=I<EXTENSION-ID>
+
+Allows to specify an output extension that will be used for exporting, which
+is especially relevant if there is more than one export option for a given
+file type. If set, the file extension in --export-filename and --export-type
+may be omitted. Additionally, if set, only one file type may be given in
+--export-type.
 
 =item B<-C>, B<--export-area-page>
 
@@ -364,24 +382,22 @@ alkalmazva.
 
 =item B<-b> I<SZÍN>, B<--export-background>=I<SZÍN>
 
-Beállítja az exportált PNG háttérszínét. Ez bármilyen az SVG által
-támogatott színleíró karaktersorozat lehet, mint pl. a „#ff007f” vagy az
-„rgb(255, 0, 128)”. Ha ez nincs megadva, akkor a Dokumentumbeállítások
-párbeszédablakban megadott lapszín (a „sodipodi:namedview” névtér
-„pagecolor” attribútuma) lesz alkalmazva.
+Background color of exported PNG.  This may be any SVG supported color
+string, for example "#ff007f" or "rgb(255, 0, 128)".  If not set, then the
+page color set in Inkscape in the Document Properties dialog will be used
+(stored in the pagecolor= attribute of sodipodi:namedview).
 
 
 
 =item B<-y> I<ÉRTÉK>, B<--export-background-opacity>=I<ÉRTÉK>
 
-Átlátszatlanságot állít be háttérszínhez PNG exportálás esetén. Ez az érték
-lehet 0.0 és 1.0 között (a 0.0 a teljes átlátszóság, az 1.0 a teljes
-átlátszatlanság), valamint 1 és 255 között (255 jelöli a teljes
-átlátszatlanságot). Ha nincs beállítva és a -b kapcsoló sem, akkor a
-Dokumentumbeállítások párbeszédablakban megadott lapátlátszatlanság (a
-„sodipodi:namedview” névtér „inkscape:pageopacity” attribútuma) lesz
-alkalmazva. Ha nincs beállítva, de a -b kapcsoló be van kapcsolva, akkor 255
-(teljes átlátszatlanság) értékkel lesz alkalmazva.
+Opacity of the background of exported PNG.  This may be a value either
+between 0.0 and 1.0 (0.0 meaning full transparency, 1.0 full opacity) or
+greater than 1 up to 255 (255 meaning full opacity).  If not set and the -b
+option is not used, then the page opacity set in Inkscape in the Document
+Properties dialog will be used (stored in the inkscape:pageopacity=
+attribute of sodipodi:namedview).  If not set but the -b option is used,
+then the value of 255 (full opacity) will be used.
 
 =item B<-I>, B<--query-id>=I<OBJEKTUMAZONOSÍTÓ[,OBJEKTUMAZONOSÍTÓ]*>
 

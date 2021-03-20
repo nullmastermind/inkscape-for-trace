@@ -24,6 +24,7 @@ opcije:
 
     -?, --help
     -V, --version
+        --debug-info
         --system-data-directory
         --user-data-directory
 
@@ -33,9 +34,10 @@ opcije:
         --convert-dpi-method=METODA
         --no-convert-text-baseline-spacing
 
-    -o, --export-filename=DATOTEKA
+    -o, --export-filename=FILENAME
         --export-overwrite
-        --export-type=VRSTA[,VRSTA]*
+        --export-type=TYPE[,TYPE]*
+        --export-extension=EXTENSION-ID
 
     -C, --export-area-page
     -D, --export-area-drawing
@@ -118,6 +120,12 @@ Prikazuje poruku pomoći.
 
 Prikazuje Inkscape verziju i datum izgradnje.
 
+=item B<--debug-info>
+
+Prints technical information including Inkscape version, dependency versions
+and operating system.  This Information is useful when debugging issues with
+Inkscape and should be included whenever filing a bug report.
+
 =item B<--system-data-directory>
 
 Ispisuje mapu sustava u kojoj se spremaju datoteke koje se isporučuju s
@@ -194,8 +202,9 @@ Prepisuje datoteku unosa.
 
 =item B<--export-type>=I<VRSTA[,VRSTA]*>
 
-Odredi vrstu datoteke za izvoz. Moguće vrijednosti su: svg, png, ps, eps,
-pdf, emf, wmf, xaml. Moguće je izvesti više od jedne vrste istovremeno.
+Specify the file type to export. Possible values: svg, png, ps, eps, pdf,
+emf, wmf and every file type for which an export extension exists. It is
+possible to export more than one file type at a time.
 
 Misli na to, da PostScript ne dozvoljava transparenciju, tako da će svi
 transparentni objekti u originalnom SVG formatu biti izvezeni
@@ -204,6 +213,14 @@ podskupine. Zadano izvozno područje je stranica. Možeš ga odrediti i na
 crtež pomoću L<--export-area-drawing>.
 
 Misli na to, da PDF format zadržava transparentnost u izvornom SVG-u.
+
+=item B<--export-extension>=I<EXTENSION-ID>
+
+Allows to specify an output extension that will be used for exporting, which
+is especially relevant if there is more than one export option for a given
+file type. If set, the file extension in --export-filename and --export-type
+may be omitted. Additionally, if set, only one file type may be given in
+--export-type.
 
 =item B<-C>, B<--export-area-page>
 
@@ -349,22 +366,22 @@ iz naredbenog retka.
 
 =item B<-b> I<BOJA>, B<--export-background>=I<BOJA>
 
-Boja pozadine za izvezenu PNG datoteku. Može biti zadana bilo kojim nizom za
-određivanje boje, koji SVG podržava, npr. „#ff007f” ili „rgb(255, 0,
-128)”. Ako se boja ne zada, postavlja se boja, koja je određena u postavkama
-dokumenta (spremljena u pagecolor= svojstvu za sodipodi:namedview).
+Background color of exported PNG.  This may be any SVG supported color
+string, for example "#ff007f" or "rgb(255, 0, 128)".  If not set, then the
+page color set in Inkscape in the Document Properties dialog will be used
+(stored in the pagecolor= attribute of sodipodi:namedview).
 
 
 
 =item B<-y> I<VRIJEDNOST>, B<--export-background-opacity>=I<VRIJEDNOST>
 
-Neprozirnost pozadine izvezene PNG datoteke. Vrijedonst može biti između 0.0
-i 1.0 (0.0 = prozirno, 1.0 = neprozirno) ili veća od 1, sve do 255 (255 =
-neprozirno). Ako nije zadano, i ako opcija -b nije korištena, koristit će se
-neprozirnost stranice kako je zadana u Inkscapeovim postavkama za dokument
-(spremljene u inkscape:pageopacity= svojstvo od sodipodi:namedview). Ako
-nije zadano, ali je korištena opcija -b, tada će se koristiti vrijednost 255
-(neprozirno).
+Opacity of the background of exported PNG.  This may be a value either
+between 0.0 and 1.0 (0.0 meaning full transparency, 1.0 full opacity) or
+greater than 1 up to 255 (255 meaning full opacity).  If not set and the -b
+option is not used, then the page opacity set in Inkscape in the Document
+Properties dialog will be used (stored in the inkscape:pageopacity=
+attribute of sodipodi:namedview).  If not set but the -b option is used,
+then the value of 255 (full opacity) will be used.
 
 =item B<-I>, B<--query-id>=I<ID-OBJEKTA[,ID-OBJEKTA]*>
 
@@ -576,7 +593,7 @@ duplikate za 90 stupnjeva, spremi SVG i zatvori program:
 Odaberi sve objekte s oznakom elipse, rotiraj ih za 30 stupnjeva, spremi SVG
 i zatvori program:
 
-    inkscape --actions="select-via-element:ellipse;transform-rotate:30;FileSave;FileClose" --batch-process datoteka.svg
+    inkscape --actions="select-by-element:ellipse;transform-rotate:30;FileSave;FileClose" --batch-process filename.svg
 
 Izvezi objekt s ID oznakom „MojTrokut” s polu-transparetnom ljubičastom
 pozadinom u datoteku trokut_ljubičasti.png i s crvenom pozadinom u datoteku

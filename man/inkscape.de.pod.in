@@ -25,6 +25,7 @@ Optionen:
 
     -?, --help
     -V, --version
+        --debug-info
         --system-data-directory
         --user-data-directory
 
@@ -37,6 +38,7 @@ Optionen:
     -o, --export-filename=DATEINAME
         --export-overwrite
         --export-type=DATEITYP[,DATEITYP]*
+        --export-extension=ERWEITERUNGS-ID
 
     -C, --export-area-page
     -D, --export-area-drawing
@@ -80,18 +82,20 @@ Optionen:
 
 =head1 BESCHREIBUNG
 
-B<Inkscape> is a Free and open source vector graphics editor. It offers a
-rich set of features and is widely used for both artistic and technical
-illustrations such as cartoons, clip art, logos, typography, diagramming and
-flowcharting.  It uses vector graphics to allow for sharp printouts and
-renderings at unlimited resolution and is not bound to a fixed number of
-pixels like raster graphics. Inkscape uses the standardized B<SVG> file
-format as its main format, which is supported by many other applications
-including web browsers.
+B<Inkscape> ist ein Freier Open Source Editor für Vektorgrafiken. Er bietet
+vielfältige Funktionen und ist weit verbreitet bei der Bearbeitung von
+künstlerischen und technischen Illustrationen, wie z.B. Comics, Clip Arts,
+Logos, Typographie, Diagrammen und Flowcharts. Der Einsatz von
+Vektorgrafiken erlaubt gestochen scharfe Ausdrucke und Wiedergabe bei
+beliebiger Auflösung, ohne wie bei Rastergrafiken auf eine feste Anzahl von
+Bildpunkten limitiert zu sein. Inkscape verwendet das standardisierte
+B<SVG>-Dateiformat als Arbeitsformat, welches von vielen anderen Anwendungen
+und Webbrowsern unterstützt wird.
 
-The interface is designed to be comfortable and efficient for skilled users,
-while remaining conformant to B<GNOME> standards so that users familiar with
-other GNOME applications can learn its interface rapidly.
+Die Benutzeroberfläche wurde so entworfen, dass die Arbeit für erfahrene
+Nutzer komfortabel und zügig vonstatten geht, und ist gleichzeitig
+kompatibel zu den B<GNOME>-Standards, damit Nutzer, die Erfahrung mit
+anderen GNOME-Anwendungen haben, sich schnell darin zurechtfinden.
 
 B<SVG> ist ein durch den W3C standardisiertes XML-Format für
 2D-Vektor-Zeichnungen. Es ermöglicht die Definition von Objekten in der
@@ -119,6 +123,12 @@ Hilfe anzeigen
 =item B<-V>, B<--version>
 
 Inkscape-Version und Erstellungsdatum anzeigen
+
+=item B<--debug-info>
+
+Gibt technische Informationen wie Inkscape-Version, die Versionen von
+Abhängigkeiten und Betriebssystem aus. Diese Informationen sind wichtig um
+Fehler in Inkscape zu beheben und sollten Teil jedes Fehlerberichts sein.
 
 =item B<--system-data-directory>
 
@@ -203,8 +213,8 @@ die Standardausgabe (stdout) aus.
 =item B<--export-type>=I<DATEITYP[,DATEITYP]>
 
 Gibt den Dateityp für den Export an. Mögliche Werte: svg, png, ps, eps, pdf,
-emf, wmf, xaml. Es können auch mehrere Dateitypen gleichzeitig exportiert
-werden.
+emf, wmf und jeder andere Dateityp, für den eine Exporterweiterung verfügbar
+ist. Es können auch mehrere Dateitypen gleichzeitig exportiert werden.
 
 Da PostScript keine Transparenz unterstützt, werden alle transparenten
 Objekte aus dem Original-SVG automatisch in Rastergrafiken umgewandelt. Die
@@ -213,6 +223,15 @@ Standard-Exportbereich entspricht der Seitengröße, kann aber mit
 L<--export-area-drawing> auf die Zeichnung beschränkt werden.
 
 Das PDF-Format behält Transparenzen in der Originaldatei bei.
+
+=item B<--export-extension>=I<ERWEITERUNGS-ID>
+
+Ermöglicht die Angabe einer Exporterweiterung, die für den Export verwendet
+werden soll. Das ist inbesondere dann von Bedeutung, wenn für einen Dateityp
+mehr als eine Exporterweiterung verfügbar ist. Wenn gesetzt, kann die
+Dateierweiterung in --export-filename und --export-type weggelassen
+werden. Allerdings kann in diesem Fall nur ein Dateityp in --export-type
+angegeben werden.
 
 =item B<-C>, B<--export-area-page>
 
@@ -608,7 +627,7 @@ Duplikate um 90 Grad, speichert die SVG-Datei und beendet sich:
 Wählt alle Objekte des Typs Ellipse, dreht sie um 30 Grad, speichert die
 Datei und beendet sich.
 
-    inkscape --actions="select-via-element:ellipse;transform-rotate:30;FileSave;FileClose" --batch-process dateiname.svg
+    inkscape --actions="select-by-element:ellipse;transform-rotate:30;FileSave;FileClose" --batch-process dateiname.svg
 
 Exportiert das Objekt mit der ID 'MeinDreieck' mit einem halbtransparenten
 lilafarbenen Hintergrund in die Datei 'dreieck_lila.png' und mit einem roten

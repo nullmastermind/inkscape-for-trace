@@ -19,6 +19,7 @@ options:
 
     -?, --help
     -V, --version
+        --debug-info
         --system-data-directory
         --user-data-directory
 
@@ -31,6 +32,7 @@ options:
     -o, --export-filename=FILENAME
         --export-overwrite
         --export-type=TYPE[,TYPE]*
+        --export-extension=EXTENSION-ID
 
     -C, --export-area-page
     -D, --export-area-drawing
@@ -111,6 +113,12 @@ Shows a help message.
 
 Shows the Inkscape version and build date.
 
+=item B<--debug-info>
+
+Prints technical information including Inkscape version, dependency versions and operating system.
+This Information is useful when debugging issues with Inkscape and should be included whenever
+filing a bug report.
+
 =item B<--system-data-directory>
 
 Prints the system data directory where data files that ship with Inkscape are stored. This includes
@@ -181,8 +189,9 @@ Overwrites input file.
 
 =item B<--export-type>=I<TYPE[,TYPE]*>
 
-Specify the file type to export. Possible values: svg, png, ps, eps, pdf,
-emf, wmf, xaml. It is possible to export more than one file type at a time.
+Specify the file type to export. Possible values: svg, png, ps, eps, pdf, emf, wmf 
+and every file type for which an export extension exists. It is possible to export 
+more than one file type at a time.
 
 Note that PostScript does not support transparency, so any transparent
 objects in the original SVG will be automatically rasterized. Used fonts
@@ -190,6 +199,14 @@ are subset and embedded. The default export area is page; you can set it
 to drawing by L<--export-area-drawing>.
 
 Note that PDF format preserves the transparency in the original SVG.
+
+=item B<--export-extension>=I<EXTENSION-ID>
+
+Allows to specify an output extension that will be used for exporting, which
+is especially relevant if there is more than one export option for a 
+given file type. If set, the file extension in --export-filename and 
+--export-type may be omitted. Additionally, if set, only one file type 
+may be given in --export-type.
 
 =item B<-C>, B<--export-area-page>
 
@@ -332,7 +349,7 @@ command line will be used.
 
 Background color of exported PNG.  This may be any SVG supported color
 string, for example "#ff007f" or "rgb(255, 0, 128)".  If not set, then
-the page color set in Inkscape in the Document Options dialog will be
+the page color set in Inkscape in the Document Properties dialog will be
 used (stored in the pagecolor= attribute of sodipodi:namedview).
 
 
@@ -342,7 +359,7 @@ Opacity of the background of exported PNG.  This may be a value either
 between 0.0 and 1.0 (0.0 meaning full transparency, 1.0 full opacity) or
 greater than 1 up to 255 (255 meaning full opacity).  If not set and
 the -b option is not used, then the page opacity set in Inkscape in the
-Document Options dialog will be used (stored in the
+Document Properties dialog will be used (stored in the
 inkscape:pageopacity= attribute of sodipodi:namedview).  If not set but
 the -b option is used, then the value of 255 (full opacity) will be
 used.
@@ -550,7 +567,7 @@ degrees, save SVG, and quit:
 
 Select all objects with ellipse tag, rotate them 30 degrees, save the file, and quit.
 
-    inkscape --actions="select-via-element:ellipse;transform-rotate:30;FileSave;FileClose" --batch-process filename.svg
+    inkscape --actions="select-by-element:ellipse;transform-rotate:30;FileSave;FileClose" --batch-process filename.svg
 
 Export the object with the ID MyTriangle with a semi transparent purple background
 to the file triangle_purple.png and with a red background to the file triangle_red.png.
