@@ -1251,6 +1251,7 @@ void SPDesktopWidget::layoutWidgets()
         dtw->_panels->hide();
     } else {
         dtw->_panels->show_all();
+        _panels->_setDocument(desktop->doc());
     }
 
     _canvas_grid->ShowScrollbars(prefs->getBool(pref_root + "scrollbars/state", true));
