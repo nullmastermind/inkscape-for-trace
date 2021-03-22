@@ -103,7 +103,7 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
         <col id="1">default</col>
       </row>
       <row>
-        <col id="0" translatable="no">Filled by code</col>
+        <col id="0">Filled by code</col>
         <col id="1">nope</col>
       </row>
     </data>
@@ -880,14 +880,14 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
       <column type="gchararray"/>
       <!-- column-name base_color -->
       <column type="gchararray"/>
+      <!-- column-name base_color_dark -->
+      <column type="gchararray"/>
       <!-- column-name success_color -->
       <column type="gchararray"/>
       <!-- column-name warn_color -->
       <column type="gchararray"/>
       <!-- column-name error_color -->
       <column type="gchararray"/>
-      <!-- column-name dark_theme -->
-      <column type="gboolean"/>
       <!-- column-name symbolic_icons -->
       <column type="gboolean"/>
       <!-- column-name small_icons -->
@@ -898,101 +898,87 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
     <data>
       <row>
         <col id="0">classic</col>
-        <col id="1" translatable="yes">Classic Adwaita</col>
+        <col id="1" translatable="yes">Classic Inkscape (default)</col>
         <col id="2">Adwaita</col>
         <col id="3">Adwaita</col>
         <col id="4">0</col>
         <col id="5">0</col>
         <col id="6">0</col>
         <col id="7">0</col>
-        <col id="8">False</col>
+        <col id="8">0</col>
         <col id="9">False</col>
         <col id="10">False</col>
         <col id="11">False</col>
       </row>
       <row>
         <col id="0">symbolic</col>
-        <col id="1" translatable="yes">Symbolic Adwaita</col>
+        <col id="1" translatable="yes">Classic Symbolic</col>
         <col id="2">Adwaita</col>
         <col id="3">Adwaita</col>
         <col id="4">0</col>
         <col id="5">0</col>
         <col id="6">0</col>
         <col id="7">0</col>
-        <col id="8">False</col>
+        <col id="8">0</col>
         <col id="9">True</col>
         <col id="10">False</col>
         <col id="11">False</col>
       </row>
       <row>
-        <col id="0">symbolic-dark</col>
-        <col id="1" translatable="yes">Symbolic Adwaita Dark</col>
-        <col id="2">Adwaita</col>
-        <col id="3">Adwaita</col>
-        <col id="4">0</col>
-        <col id="5">0</col>
-        <col id="6">0</col>
-        <col id="7">0</col>
-        <col id="8">True</col>
-        <col id="9">True</col>
-        <col id="10">False</col>
-        <col id="11">False</col>
-      </row>
-      <row>
-        <col id="0">dark-color</col>
-        <col id="1" translatable="yes">Colorful Darkness</col>
-        <col id="2">Adwaita</col>
-        <col id="3">multicolor</col>
-        <col id="4">#ebebeb</col>
-        <col id="5">#00990a</col>
-        <col id="6">#ff1990</col>
-        <col id="7">#0099e6</col>
-        <col id="8">True</col>
-        <col id="9">True</col>
-        <col id="10">False</col>
-        <col id="11">False</col>
-      </row>
-      <row>
-        <col id="0">light-color</col>
-        <col id="1" translatable="yes">Colorful Lightness</col>
+        <col id="0">colorful</col>
+        <col id="1" translatable="yes">Colorful</col>
         <col id="2">Adwaita</col>
         <col id="3">multicolor</col>
         <col id="4">#000000</col>
-        <col id="5">#009909</col>
-        <col id="6">#ff1990</col>
-        <col id="7">#0099e6</col>
-        <col id="8">False</col>
+        <col id="5">#ebebeb</col>
+        <col id="6">#00990a</col>
+        <col id="7">#ff1990</col>
+        <col id="8">#0099e6</col>
         <col id="9">True</col>
         <col id="10">False</col>
         <col id="11">False</col>
       </row>
       <row>
-        <col id="0">dark-grey</col>
-        <col id="1" translatable="yes">Careful Darkness</col>
+        <col id="0">grayscale</col>
+        <col id="1" translatable="yes">Grayscale</col>
         <col id="2">Adwaita</col>
         <col id="3">multicolor</col>
-        <col id="4">#e5e5e5</col>
-        <col id="5">#cccccc</col>
-        <col id="6">#808080</col>
+        <col id="4">#000000</col>
+        <col id="5">#e5e5e5</col>
+        <col id="6">#cccccc</col>
         <col id="7">#808080</col>
-        <col id="8">True</col>
+        <col id="8">#808080</col>
         <col id="9">True</col>
         <col id="10">False</col>
         <col id="11">False</col>
       </row>
       <row>
-        <col id="0">light-min</col>
+        <col id="0">compacted</col>
         <col id="1" translatable="yes">Compacted (Small Screens)</col>
         <col id="2">Minwaita</col>
-        <col id="3">multicolor</col>
-        <col id="4">#000000</col>
-        <col id="5">#00990a</col>
-        <col id="6">#ff1990</col>
-        <col id="7">#0099e6</col>
-        <col id="8">False</col>
+        <col id="3">hicolor</col>
+        <col id="4">0</col>
+        <col id="5">0</col>
+        <col id="6">0</col>
+        <col id="7">0</col>
+        <col id="8">0</col>
         <col id="9">True</col>
         <col id="10">True</col>
         <col id="11">False</col>
+      </row>
+      <row>
+        <col id="0">system</col>
+        <col id="1" translatable="yes">System Default</col>
+        <col id="2"></col>
+        <col id="3"></col>
+        <col id="4">0</col>
+        <col id="5">0</col>
+        <col id="6">0</col>
+        <col id="7">0</col>
+        <col id="8">0</col>
+        <col id="9">False</col>
+        <col id="10">False</col>
+        <col id="11">True</col>
       </row>
     </data>
   </object>
@@ -1148,6 +1134,83 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
+              <object class="GtkInfoBar" id="keys_warning">
+                <property name="can_focus">False</property>
+                <property name="message_type">error</property>
+                <child internal-child="action_area">
+                  <object class="GtkButtonBox">
+                    <property name="can_focus">False</property>
+                    <property name="spacing">6</property>
+                    <property name="layout_style">end</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child internal-child="content_area">
+                  <object class="GtkBox">
+                    <property name="can_focus">False</property>
+                    <property name="spacing">16</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="stock">gtk-dialog-warning</property>
+                        <property name="icon_size">3</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">&lt;b&gt;Warning:&lt;/b&gt; Using a non-standard shortcut keyboard layout could make it harder to follow tutorials.</property>
+                        <property name="use_markup">True</property>
+                        <property name="wrap">True</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -1175,23 +1238,7 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_top">5</property>
-                        <property name="margin_bottom">5</property>
-                        <property name="label" translatable="yes">Quick Setup</property>
-                        <attributes>
-                          <attribute name="scale" value="1.2"/>
-                        </attributes>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Theme</property>
+                        <property name="label" translatable="yes">Appearance</property>
                         <property name="xalign">0</property>
                         <attributes>
                           <attribute name="scale" value="1.2"/>
@@ -1199,7 +1246,7 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
-                        <property name="top_attach">3</property>
+                        <property name="top_attach">2</property>
                       </packing>
                     </child>
                     <child>
@@ -1214,7 +1261,7 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
+                        <property name="top_attach">0</property>
                       </packing>
                     </child>
                     <child>
@@ -1229,7 +1276,7 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
-                        <property name="top_attach">2</property>
+                        <property name="top_attach">1</property>
                       </packing>
                     </child>
                     <child>
@@ -1248,7 +1295,7 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
-                        <property name="top_attach">3</property>
+                        <property name="top_attach">2</property>
                       </packing>
                     </child>
                     <child>
@@ -1267,7 +1314,8 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
-                        <property name="top_attach">2</property>
+                        <property name="top_attach">1</property>
+                        <property name="width">2</property>
                       </packing>
                     </child>
                     <child>
@@ -1383,7 +1431,8 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
-                        <property name="top_attach">4</property>
+                        <property name="top_attach">3</property>
+                        <property name="width">2</property>
                       </packing>
                     </child>
                     <child>
@@ -1410,11 +1459,49 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
-                        <property name="top_attach">1</property>
+                        <property name="top_attach">0</property>
+                        <property name="width">2</property>
                       </packing>
                     </child>
                     <child>
-                      <placeholder/>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="valign">end</property>
+                            <property name="margin_bottom">2</property>
+                            <property name="label" translatable="yes">Dark</property>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSwitch" id="dark_toggle">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="tooltip_text" translatable="yes">Set to dark theme</property>
+                            <property name="halign">center</property>
+                            <property name="valign">start</property>
+                            <property name="margin_top">2</property>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">2</property>
+                        <property name="top_attach">2</property>
+                      </packing>
                     </child>
                     <child>
                       <placeholder/>
@@ -1498,7 +1585,7 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
           <object class="GtkLabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Welcome!</property>
+            <property name="label" translatable="yes">Quick Setup</property>
           </object>
           <packing>
             <property name="tab_expand">True</property>

@@ -95,10 +95,10 @@ class ThemeCols: public Gtk::TreeModel::ColumnRecord {
             this->add(this->theme);
             this->add(this->icons);
             this->add(this->base);
+            this->add(this->base_dark);
             this->add(this->success);
             this->add(this->warn);
             this->add(this->error);
-            this->add(this->dark);
             this->add(this->symbolic);
             this->add(this->smallicons);
             this->add(this->enabled);
@@ -108,10 +108,10 @@ class ThemeCols: public Gtk::TreeModel::ColumnRecord {
         Gtk::TreeModelColumn<Glib::ustring> theme;
         Gtk::TreeModelColumn<Glib::ustring> icons;
         Gtk::TreeModelColumn<Glib::ustring> base;
+        Gtk::TreeModelColumn<Glib::ustring> base_dark;
         Gtk::TreeModelColumn<Glib::ustring> success;
         Gtk::TreeModelColumn<Glib::ustring> warn;
         Gtk::TreeModelColumn<Glib::ustring> error;
-        Gtk::TreeModelColumn<bool> dark;
         Gtk::TreeModelColumn<bool> symbolic;
         Gtk::TreeModelColumn<bool> smallicons;
         Gtk::TreeModelColumn<bool> enabled;
@@ -169,11 +169,13 @@ StartScreen::StartScreen()
     Gtk::Button* thanks = nullptr;
     Gtk::Button* show_toggle = nullptr;
     Gtk::Button* load = nullptr;
+    Gtk::Switch* dark_toggle = nullptr;
     builder->get_widget("canvas", canvas);
     builder->get_widget("keys", keys);
     builder->get_widget("save", save);
     builder->get_widget("thanks", thanks);
     builder->get_widget("show_toggle", show_toggle);
+    builder->get_widget("dark_toggle", dark_toggle);
     builder->get_widget("load", load);
 
     // Unparent to move to our dialog window.
@@ -192,11 +194,13 @@ StartScreen::StartScreen()
     filter_themes();
     set_active_combo("themes", prefs->getString("/options/boot/theme"));
     set_active_combo("canvas", prefs->getString("/options/boot/canvas"));
+    dark_toggle->set_active(prefs->getBool("/theme/darkTheme", false));
 
     // Welcome! tab
     canvas->signal_changed().connect(sigc::mem_fun(*this, &StartScreen::canvas_changed));
     keys->signal_changed().connect(sigc::mem_fun(*this, &StartScreen::keyboard_changed));
     themes->signal_changed().connect(sigc::mem_fun(*this, &StartScreen::theme_changed));
+    dark_toggle->property_active().signal_changed().connect(sigc::mem_fun(*this, &StartScreen::theme_changed));
     save->signal_clicked().connect(sigc::bind<Gtk::Button *>(sigc::mem_fun(*this, &StartScreen::notebook_next), save));
 
     // "Supported by You" tab
@@ -540,9 +544,13 @@ StartScreen::theme_changed()
         prefs->setBool("/toolbox/tools/small", row[cols.smallicons]);
         prefs->setString("/theme/gtkTheme", row[cols.theme]);
         prefs->setString("/theme/iconTheme", icons);
-        prefs->setBool("/theme/preferDarkTheme", row[cols.dark]);
-        prefs->setBool("/theme/darkTheme", row[cols.dark]);
         prefs->setBool("/theme/symbolicIcons", row[cols.symbolic]);
+
+        Gtk::Switch* dark_toggle = nullptr;
+        builder->get_widget("dark_toggle", dark_toggle);
+        bool is_dark = dark_toggle->get_active();
+        prefs->setBool("/theme/preferDarkTheme", is_dark);
+        prefs->setBool("/theme/darkTheme", is_dark);
 
         // Symbolic icon colours
         if (get_color_value(row[cols.base]) == 0) {
@@ -552,7 +560,11 @@ StartScreen::theme_changed()
             Glib::ustring prefix = "/theme/" + icons;
             prefs->setBool("/theme/symbolicDefaultBaseColors", false);
             prefs->setBool("/theme/symbolicDefaultHighColors", false);
-            prefs->setUInt(prefix + "/symbolicBaseColor", get_color_value(row[cols.base]));
+            if (is_dark) {
+                prefs->setUInt(prefix + "/symbolicBaseColor", get_color_value(row[cols.base_dark]));
+            } else {
+                prefs->setUInt(prefix + "/symbolicBaseColor", get_color_value(row[cols.base]));
+            }
             prefs->setUInt(prefix + "/symbolicSuccessColor", get_color_value(row[cols.success]));
             prefs->setUInt(prefix + "/symbolicWarningColor", get_color_value(row[cols.warn]));
             prefs->setUInt(prefix + "/symbolicErrorColor", get_color_value(row[cols.error]));
@@ -603,9 +615,30 @@ StartScreen::filter_themes()
     auto store = Glib::wrap(GTK_LIST_STORE(gtk_combo_box_get_model(themes->gobj())));
     auto available = get_available_themes();
 
+    // Detect use of custom theme here, detect defaults used in many systems.
+    auto settings = Gtk::Settings::get_default();
+    Glib::ustring theme_name = settings->property_gtk_theme_name();
+    Glib::ustring icons_name = settings->property_gtk_icon_theme_name();
+
+    bool has_system_theme = false;
+    if (theme_name != "Adwaita" || icons_name != "hicolor") {
+        has_system_theme = true;
+        /* Enable if/when we want custom to be the default.
+        if (prefs->getString("/options/boot/theme").empty()) {
+            prefs->setString("/options/boot/theme", "system")
+            theme_changed();
+        }*/
+    }
+
     for(auto row : store->children()) {
         Glib::ustring theme = row[cols.theme];
-        row[cols.enabled] = available.find(theme) != available.end();
+        if (!row[cols.enabled]) {
+            // Available themes; We only "enable" them, we don't disable them.
+            row[cols.enabled] = available.find(theme) != available.end();
+        } else if(row[cols.id] == "system" && !has_system_theme) {
+            // Disable system theme option if not available.
+            row[cols.enabled] = false;
+        }
     }
 }
 
@@ -644,7 +677,17 @@ StartScreen::keyboard_changed()
     try {
         auto row = active_combo("keys");
         auto prefs = Inkscape::Preferences::get();
-        prefs->setString("/options/kbshortcuts/shortcutfile", row[cols.col_id]);
+        Glib::ustring set_to = row[cols.col_id];
+        prefs->setString("/options/kbshortcuts/shortcutfile", set_to);
+
+        Gtk::InfoBar* keys_warning;
+        builder->get_widget("keys_warning", keys_warning);
+        if (set_to != "inkscape.xml") {
+            keys_warning->set_message_type(Gtk::MessageType::MESSAGE_WARNING);
+            keys_warning->show();
+        } else {
+            keys_warning->hide();
+        }
     } catch(int e) {
         g_warning("Couldn't find keys value.");
     }
