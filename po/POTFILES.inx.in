@@ -69,14 +69,6 @@
 ../share/extensions/image_attributes.inx
 ../share/extensions/ink2canvas.inx
 ../share/extensions/inkscape_follow_link.inx
-../share/extensions/inkscape_help_askaquestion.inx
-../share/extensions/inkscape_help_commandline.inx
-../share/extensions/inkscape_help_faq.inx
-../share/extensions/inkscape_help_keys.inx
-../share/extensions/inkscape_help_manual.inx
-../share/extensions/inkscape_help_relnotes.inx
-../share/extensions/inkscape_help_reportabug.inx
-../share/extensions/inkscape_help_svgspec.inx
 ../share/extensions/interp.inx
 ../share/extensions/interp_att_g.inx
 ../share/extensions/jessyink_autotexts.inx
@@ -125,7 +117,7 @@
 ../share/extensions/print_win32_vector.inx
 ../share/extensions/printing_marks.inx
 ../share/extensions/ps_input.inx
-../share/extensions/raster_output_jpeg.inx
+../share/extensions/raster_output_jpg.inx
 ../share/extensions/raster_output_png.inx
 ../share/extensions/raster_output_tiff.inx
 ../share/extensions/raster_output_webp.inx
