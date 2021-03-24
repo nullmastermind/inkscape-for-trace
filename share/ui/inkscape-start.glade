@@ -1024,36 +1024,38 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
                 </child>
                 <child>
                   <object class="GtkLabel">
-                    <property name="width_request">150</property>
-                    <property name="height_request">120</property>
+                    <property name="width_request">320</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Welcome</property>
                     <attributes>
-                      <attribute name="font-desc" value="Linux Libertine Display 52"/>
-                      <attribute name="foreground" value="#fffff1f18d8d"/>
+                      <attribute name="font-desc" value="Linux Libertine Display 44"/>
+                      <attribute name="foreground" value="#383865648282"/>
                     </attributes>
                   </object>
                   <packing>
-                    <property name="x">75</property>
-                    <property name="y">35</property>
+                    <property name="x">14</property>
+                    <property name="y">12</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel">
-                    <property name="width_request">100</property>
-                    <property name="height_request">80</property>
+                    <property name="width_request">309</property>
+                    <property name="height_request">92</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" comments="This is a pun in English. You can translate it as 'Introducing you to freedom' or similar.">Drawing you to freedom</property>
+                    <property name="label" translatable="yes" comments="This is a pun in English. You can translate it as 'Introducing you to freedom' or similar.">Let's set up a few things...</property>
+                    <property name="wrap">True</property>
+                    <property name="xalign">0</property>
+                    <property name="yalign">0</property>
                     <attributes>
-                      <attribute name="font-desc" value="Euphoria Script 27.599609375"/>
-                      <attribute name="foreground" value="#ffffffffffff"/>
+                      <attribute name="font-desc" value="Linux Libertine O 23"/>
+                      <attribute name="foreground" value="#383865648282"/>
                     </attributes>
                   </object>
                   <packing>
-                    <property name="x">89</property>
-                    <property name="y">130</property>
+                    <property name="x">15</property>
+                    <property name="y">65</property>
                   </packing>
                 </child>
               </object>
@@ -1097,24 +1099,6 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
                     <property name="can_focus">False</property>
                     <property name="pixbuf">../screens/start-splash.png</property>
                   </object>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="width_request">223</property>
-                    <property name="height_request">64</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Draw Freely.</property>
-                    <property name="justify">center</property>
-                    <attributes>
-                      <attribute name="font-desc" value="Euphoria Script 20.19921875"/>
-                      <attribute name="foreground" value="#000000000000"/>
-                    </attributes>
-                  </object>
-                  <packing>
-                    <property name="x">4</property>
-                    <property name="y">138</property>
-                  </packing>
                 </child>
               </object>
             </child>
