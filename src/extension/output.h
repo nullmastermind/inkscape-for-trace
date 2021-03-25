@@ -47,7 +47,8 @@ public:
     void         save (SPDocument *doc,
                        gchar const *filename,
                        bool detachbase = false);
-    void         export_raster (std::string png_filename,
+    void         export_raster (const SPDocument *doc,
+                                std::string png_filename,
                                 gchar const *filename,
                                 bool detachbase);
     bool         prefs ();

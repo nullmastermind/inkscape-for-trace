@@ -109,7 +109,11 @@ public:
     /** Find out information about the file. */
     virtual Gtk::Widget *prefs_output(Inkscape::Extension::Output *module);
     virtual void save(Inkscape::Extension::Output * /*module*/, SPDocument * /*doc*/, gchar const * /*filename*/) {}
-    virtual void export_raster(Inkscape::Extension::Output * /*module*/, std::string const /*png_file*/, gchar const * /*filename*/) {}
+    virtual void export_raster(
+            Inkscape::Extension::Output * /*module*/,
+            const SPDocument * /*doc*/,
+            std::string const /*png_file*/,
+            gchar const * /*filename*/) {}
 
     // ----- Effect functions -----
     /** Find out information about the file. */

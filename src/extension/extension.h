@@ -173,7 +173,7 @@ public:
     void          set_base_directory(std::string const &base_directory) { _base_directory = base_directory; };
     std::string   get_dependency_location(const char *name);
     const char   *get_translation(const char* msgid, const char *msgctxt=nullptr) const;
-    void          set_environment();
+    void          set_environment(const SPDocument *doc=nullptr);
     ModuleImpType get_implementation_type();
 
 /* Parameter Stuff */

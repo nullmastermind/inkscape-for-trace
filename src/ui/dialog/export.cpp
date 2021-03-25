@@ -1215,7 +1215,7 @@ void Export::_export_raster(Inkscape::Extension::Output *extension)
                 prog_dlg = nullptr;
                 if(extension->prefs()) {
                     try {
-                        extension->export_raster(png_filename, path.c_str(), false);
+                        extension->export_raster(doc, png_filename, path.c_str(), false);
                     } catch (Inkscape::Extension::Output::save_failed &e) {
                         exportSuccessful = false;
                     }

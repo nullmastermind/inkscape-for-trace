@@ -33,7 +33,8 @@ public:
 
     bool check(Inkscape::Extension::Extension *module) override { return true; };
 
-    void export_raster(Inkscape::Extension::Output *module, std::string const png_file, gchar const *filename) override;
+    void export_raster(Inkscape::Extension::Output *module,
+        const SPDocument *doc, std::string const png_file, gchar const *filename) override;
 
     static void init();
 

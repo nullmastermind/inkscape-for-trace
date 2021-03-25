@@ -252,10 +252,10 @@ Output::save(SPDocument *doc, gchar const *filename, bool detachbase)
 
 */
 void
-Output::export_raster(std::string png_filename, gchar const *filename, bool detachbase)
+Output::export_raster(const SPDocument *doc, std::string png_filename, gchar const *filename, bool detachbase)
 {
     imp->setDetachBase(detachbase);
-    imp->export_raster(this, png_filename, filename);
+    imp->export_raster(this, doc, png_filename, filename);
     return;
 }
 

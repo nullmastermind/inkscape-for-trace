@@ -454,7 +454,7 @@ void Script::save(Inkscape::Extension::Output *module,
 {
     std::list<std::string> params;
     module->paramListString(params);
-    module->set_environment();
+    module->set_environment(doc);
 
     std::string tempfilename_in;
     int tempfd_in = 0;
@@ -502,6 +502,7 @@ void Script::save(Inkscape::Extension::Output *module,
 
 
 void Script::export_raster(Inkscape::Extension::Output *module,
+             const SPDocument *doc,
              const std::string png_file,
              const gchar *filenameArg)
 {
@@ -512,7 +513,7 @@ void Script::export_raster(Inkscape::Extension::Output *module,
 
     std::list<std::string> params;
     module->paramListString(params);
-    module->set_environment();
+    module->set_environment(doc);
 
     file_listener fileout;
     int data_read = execute(command, params, png_file, fileout);
@@ -579,7 +580,7 @@ void Script::effect(Inkscape::Extension::Effect *module,
 
     std::list<std::string> params;
     module->paramListString(params);
-    module->set_environment();
+    module->set_environment(desktop->getDocument());
 
     parent_window = module->get_execution_env()->get_working_dialog();
 
