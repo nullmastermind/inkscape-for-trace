@@ -3076,7 +3076,7 @@ void ObjectSet::toMarker(bool apply)
     Geom::Affine parent_transform;
     {
         SPItem *parentItem = dynamic_cast<SPItem *>(parent);
-        if (parent) {
+        if (parentItem) {
             parent_transform = parentItem->i2doc_affine();
         } else {
             g_assert_not_reached();
