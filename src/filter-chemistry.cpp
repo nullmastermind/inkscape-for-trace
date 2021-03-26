@@ -478,7 +478,7 @@ void remove_filter_legacy_blend(SPObject *item)
         }
         if (blend && total == 2 && blurcount == 1) {
             blend->deleteObject(true);
-        } else if (total == 1) {
+        } else if (total == 1 && blurcount != 1) {
             remove_filter(item, false);
         }
     }
