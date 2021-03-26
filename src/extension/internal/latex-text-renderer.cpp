@@ -299,8 +299,14 @@ void LaTeXTextRenderer::sp_text_render(SPText *textobj)
         aligntabular = "{c}";
         break;
     }
-    Geom::Point anchor = textobj->attributes.firstXY() * transform();
-    Geom::Point pos(anchor);
+
+    Geom::Point anchor;
+    const auto baseline_anchor_point = textobj->layout.baselineAnchorPoint();
+    if (baseline_anchor_point) {
+        anchor = (*baseline_anchor_point) * transform();
+    } else {
+        g_warning("LaTeXTextRenderer::sp_text_render: baselineAnchorPoint unset, text position will be wrong. Please report the issue.");
+    }
 
     // determine color and transparency (for now, use rgb color model as it is most native to Inkscape)
     bool has_color = false; // if the item has no color set, don't force black color
@@ -342,7 +348,7 @@ void LaTeXTextRenderer::sp_text_render(SPText *textobj)
     Inkscape::SVGOStringStream os;
     os.setf(std::ios::fixed); // don't use scientific notation
 
-    os << "    \\put(" << pos[Geom::X] << "," << pos[Geom::Y] << "){";
+    os << "    \\put(" << anchor[Geom::X] << "," << anchor[Geom::Y] << "){";
     if (has_color) {
         os << "\\color[rgb]{" << SP_RGBA32_R_F(rgba) << "," << SP_RGBA32_G_F(rgba) << "," << SP_RGBA32_B_F(rgba) << "}";
     }
