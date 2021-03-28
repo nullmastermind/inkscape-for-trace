@@ -299,6 +299,8 @@ filter2D_IIR(PT *const dest, int const dstr1, int const dstr2,
              int const n1, int const n2, IIRValue const b[N+1], double const M[N*N],
              IIRValue *const tmpdata[], int const num_threads)
 {
+    assert(src && dest);
+
 #if G_BYTE_ORDER == G_LITTLE_ENDIAN
     static unsigned int const alpha_PC = PC-1;
     #define PREMUL_ALPHA_LOOP for(unsigned int c=0; c<PC-1; ++c)
@@ -374,6 +376,8 @@ filter2D_FIR(PT *const dst, int const dstr1, int const dstr2,
              PT const *const src, int const sstr1, int const sstr2,
              int const n1, int const n2, FIRValue const *const kernel, int const scr_len, int const num_threads)
 {
+    assert(src && dst);
+
     // Past pixels seen (to enable in-place operation)
     PT history[scr_len+1][PC];
 
@@ -552,7 +556,9 @@ gaussian_pass_FIR(Geom::Dim2 d, double deviation, cairo_surface_t *src, cairo_su
 void FilterGaussian::render_cairo(FilterSlot &slot)
 {
     cairo_surface_t *in = slot.getcairo(_input);
-    if (!in) return;
+    if (!(in && ink_cairo_surface_get_width(in) && ink_cairo_surface_get_height(in))) {
+        return;
+    }
 
     // We may need to transform input surface to correct color interpolation space. The input surface
     // might be used as input to another primitive but it is likely that all the primitives in a given
