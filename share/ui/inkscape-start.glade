@@ -1578,6 +1578,7 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
 If you would like to get involved and make the next version of Inkscape even better, please consider joining the Inkscape project today.&lt;/b&gt;&lt;/big&gt;</property>
                 <property name="use_markup">True</property>
                 <property name="wrap">True</property>
+                <property name="max_width_chars">50</property>
                 <property name="xalign">0</property>
               </object>
               <packing>

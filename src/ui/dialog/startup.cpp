@@ -239,6 +239,11 @@ StartScreen::StartScreen()
         notebook_switch(nullptr, 2);
     }
 
+    set_modal(true);
+    set_position(Gtk::WIN_POS_CENTER_ALWAYS);
+    property_resizable() = false;
+    set_default_size(700, 360);
+
     show();
 }
 
