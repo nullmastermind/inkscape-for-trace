@@ -424,7 +424,6 @@ ExportResult sp_export_png_file(SPDocument *doc, gchar const *filename,
     g_return_val_if_fail(height >= 1, EXPORT_ERROR);
     g_return_val_if_fail(!area.hasZeroArea(), EXPORT_ERROR);
 
-
     if (!force_overwrite && !sp_ui_overwrite_file(filename)) {
         // aborted overwrite
 	return EXPORT_ABORTED;

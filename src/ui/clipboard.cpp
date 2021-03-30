@@ -1453,16 +1453,6 @@ void ClipboardManagerImpl::_onGet(Gtk::SelectionData &sel, guint /*info*/)
         target = "image/x-inkscape-svg";
     }
 
-    Inkscape::Extension::DB::OutputList outlist;
-    Inkscape::Extension::db.get_output_list(outlist);
-    Inkscape::Extension::DB::OutputList::const_iterator out = outlist.begin();
-    for ( ; out != outlist.end() && target != (*out)->get_mimetype() ; ++out) {
-    };
-    if ( out == outlist.end() && target != "image/png") {
-        // This happens when hitting "optpng" extensions
-        return;
-    }
-
     // FIXME: Temporary hack until we add support for memory output.
     // Save to a temporary file, read it back and then set the clipboard contents
     gchar *filename = g_build_filename( g_get_user_cache_dir(), "inkscape-clipboard-export", NULL );
@@ -1475,7 +1465,9 @@ void ClipboardManagerImpl::_onGet(Gtk::SelectionData &sel, guint /*info*/)
     INKSCAPE.use_gui(false);
 
     try {
-        if (out == outlist.end() && target == "image/png")
+        // TODO: In the future we may want to detect raster image types such as jpeg
+        // and use export_raster to get the right output for some programs.
+        if (target == "image/png")
         {
             gdouble dpi = Inkscape::Util::Quantity::convert(1, "in", "px");
             guint32 bgcolor = 0x00000000;
@@ -1502,6 +1494,12 @@ void ClipboardManagerImpl::_onGet(Gtk::SelectionData &sel, guint /*info*/)
         }
         else
         {
+            Inkscape::Extension::DB::OutputList outlist;
+            Inkscape::Extension::db.get_output_list(outlist);
+            Inkscape::Extension::DB::OutputList::const_iterator out = outlist.begin();
+            for ( ; out != outlist.end() && target != (*out)->get_mimetype() ; ++out) {
+
+            };
             if (!(*out)->loaded()) {
                 // Need to load the extension.
                 (*out)->set_state(Inkscape::Extension::Extension::STATE_LOADED);
