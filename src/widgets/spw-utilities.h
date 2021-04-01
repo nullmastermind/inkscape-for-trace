@@ -22,6 +22,7 @@
 #include <glib.h>
 #include <glibmm/ustring.h>
 #include <gtk/gtk.h>
+#include <functional>
 
 namespace Gtk {
   class Label;
@@ -38,6 +39,11 @@ GtkWidget *sp_search_by_value_recursive(GtkWidget *w, gchar *key, gchar *value);
 
 Gtk::Widget * sp_search_by_name_recursive(Gtk::Widget          *parent,
                                           const Glib::ustring&  name);
+
+Gtk::Widget* sp_traverse_widget_tree(Gtk::Widget* widget, const std::function<bool (Gtk::Widget*)>& eval);
+
+Gtk::Widget* sp_find_focusable_widget(Gtk::Widget* widget);
+
 #endif
 
 /*

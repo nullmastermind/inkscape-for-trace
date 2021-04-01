@@ -148,6 +148,48 @@ GtkWidget *sp_search_by_value_recursive(GtkWidget *w, gchar *key, gchar *value)
     return nullptr;
 }
 
+/**
+ * This function traverses a tree of widgets descending into bins and containers.
+ * It stops and returns a pointer to the first child widget for which 'eval' evaluates to true.
+ * If 'eval' never returns true then this function visits all widgets and returns nullptr.
+ *
+ * \param[in] widget The widget to start traversal from - top of the tree
+ * \param[in] eval   The callback invoked for each visited widget
+ *
+ * \return The widget for which 'eval' returned true, or nullptr overwise.
+ * Note: it could be a starting widget too.
+ */
+Gtk::Widget* sp_traverse_widget_tree(Gtk::Widget* widget, const std::function<bool (Gtk::Widget*)>& eval) {
+    if (!widget) return nullptr;
+
+    if (eval(widget)) return widget;
+
+    if (auto bin = dynamic_cast<Gtk::Bin*>(widget)) {
+        return sp_traverse_widget_tree(bin->get_child(), eval);
+    }
+    else if (auto container = dynamic_cast<Gtk::Container*>(widget)) {
+        auto children = container->get_children();
+        for (auto child : children) {
+            if (auto found = sp_traverse_widget_tree(child, eval)) {
+                return found;
+            }
+        }
+    }
+
+    return nullptr;
+}
+
+/**
+ * This function traverses a tree of widgets searching for first focusable widget.
+ *
+ * \param[in] widget The widget to start traversal from - top of the tree
+ *
+ * \return The first focusable widget or nullptr if none are focusable.
+ */
+Gtk::Widget* sp_find_focusable_widget(Gtk::Widget* widget) {
+    return sp_traverse_widget_tree(widget, [](Gtk::Widget* w) { return w->get_can_focus(); });
+}
+
 /*
   Local Variables:
   mode:c++

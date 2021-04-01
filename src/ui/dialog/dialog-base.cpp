@@ -22,6 +22,11 @@
 
 #include "desktop.h"
 #include "ui/dialog/dialog-notebook.h"
+#include "ui/dialog-events.h"
+// get_latin_keyval
+#include "ui/tools/tool-base.h"
+#include "widgets/spw-utilities.h"
+#include "ui/widget/canvas.h"
 
 namespace Inkscape {
 namespace UI {
@@ -66,6 +71,17 @@ DialogBase::DialogBase(gchar const *prefs_path, int verb_num)
     property_margin().set_value(1); // Essential for dialog UI
 }
 
+bool DialogBase::on_key_press_event(GdkEventKey* key_event) {
+    switch (Inkscape::UI::Tools::get_latin_keyval(key_event)) {
+        case GDK_KEY_Escape:
+            defocus_dialog();
+            return true;
+    }
+
+    return parent_type::on_key_press_event(key_event);
+}
+
+
 /**
  * Highlight notebook where dialog already exists.
  */
@@ -80,6 +96,35 @@ void DialogBase::blink()
         // Add timer to turn off blink.
         sigc::slot<bool> slot = sigc::mem_fun(*this, &DialogBase::blink_off);
         sigc::connection connection = Glib::signal_timeout().connect(slot, 1000); // msec
+    }
+}
+
+void DialogBase::focus_dialog() {
+    if (auto window = dynamic_cast<Gtk::Window*>(get_toplevel())) {
+        window->present();
+    }
+
+    // widget that had focus, if any
+    if (auto child = get_focus_child()) {
+        child->grab_focus();
+    }
+    else {
+        // find first focusable widget
+        if (auto child = sp_find_focusable_widget(this)) {
+            child->grab_focus();
+        }
+    }
+}
+
+void DialogBase::defocus_dialog() {
+    if (auto wnd = dynamic_cast<Gtk::Window*>(get_toplevel())) {
+        // defocus floating dialog:
+        sp_dialog_defocus_cpp(wnd);
+
+        // for docked dialogs, move focus to canvas
+        if (auto desktop = getDesktop()) {
+            desktop->getCanvas()->grab_focus();
+        }
     }
 }
 

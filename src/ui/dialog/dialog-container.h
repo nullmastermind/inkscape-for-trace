@@ -105,6 +105,7 @@ private:
     void prepend_drop(const Glib::RefPtr<Gdk::DragContext> context, DialogMultipaned *column);
     void append_drop(const Glib::RefPtr<Gdk::DragContext> context, DialogMultipaned *column);
     void column_empty(DialogMultipaned *column);
+    DialogBase* find_existing_dialog(unsigned int code);
 };
 
 } // namespace Dialog
