@@ -93,7 +93,7 @@ private:
     bool _outline_sensitive = false;
     DrawingItem *_root = nullptr;
     std::set<DrawingItem *> _cached_items; // modified by DrawingItem::setCached()
-    CacheList _candidate_items;
+    CandidateList _candidate_items;        // keep this list always sorted with std::greater
 
 public:
     // TODO: remove these temporarily public members

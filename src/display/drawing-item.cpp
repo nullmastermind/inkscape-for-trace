@@ -601,8 +601,9 @@ DrawingItem::update(Geom::IntRect const &area, UpdateContext const &ctx, unsigne
             // so this will not execute (cache score threshold must be positive)
             cr.cache_size = _cacheRect()->area() * 4;
             cr.item = this;
-            _drawing._candidate_items.push_front(cr);
-            _cache_iterator = _drawing._candidate_items.begin();
+            auto it = std::lower_bound(_drawing._candidate_items.begin(), _drawing._candidate_items.end(), cr,
+                                       std::greater<CacheRecord>());
+            _cache_iterator = _drawing._candidate_items.insert(it, cr);
             _has_cache_iterator = true;
         }
 

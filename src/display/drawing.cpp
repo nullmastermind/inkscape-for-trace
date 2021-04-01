@@ -11,8 +11,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <algorithm>
-
 #include "display/drawing.h"
 #include "display/control/canvas-item-drawing.h"
 #include "nr-filter-gaussian.h"
@@ -215,8 +213,6 @@ Drawing::pick(Geom::Point const &p, double delta, unsigned flags)
 void
 Drawing::_pickItemsForCaching()
 {
-    // we cache the objects with the highest score until the budget is exhausted
-    _candidate_items.sort(std::greater<CacheRecord>());
     size_t used = 0;
     CandidateList::iterator i;
     for (i = _candidate_items.begin(); i != _candidate_items.end(); ++i) {
