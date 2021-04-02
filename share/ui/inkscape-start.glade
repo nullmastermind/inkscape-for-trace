@@ -1023,41 +1023,13 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
                   </object>
                 </child>
                 <child>
-                  <object class="GtkLabel">
-                    <property name="width_request">320</property>
+                  <object class="GtkImage" id="welcome_text1">
+                    <property name="width_request">700</property>
+                    <property name="height_request">220</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Welcome!</property>
-                    <attributes>
-                      <attribute name="font-desc" value="Raleway Ultra-Bold 45.5"/>
-                      <attribute name="foreground" value="#383865648282"/>
-                    </attributes>
+                    <property name="pixbuf" translatable="yes" comment="Do not translate this unless you have added the file to the right directory first. Format should be $file.$LANG.svg">../screens/start-welcome-text.svg</property>
                   </object>
-                  <packing>
-                    <property name="x">10</property>
-                    <property name="y">42</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="width_request">320</property>
-                    <property name="height_request">92</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" comments="This text is in a box of a fixed size.">Let's set up a few things...</property>
-                    <property name="justify">center</property>
-                    <property name="wrap">True</property>
-                    <property name="xalign">0.5</property>
-                    <property name="yalign">0</property>
-                    <attributes>
-                      <attribute name="font-desc" value="Raleway Ultra-Bold 18.9"/>
-                      <attribute name="foreground" value="#383865648282"/>
-                    </attributes>
-                  </object>
-                  <packing>
-                    <property name="x">18</property>
-                    <property name="y">87</property>
-                  </packing>
                 </child>
               </object>
             </child>
@@ -1094,8 +1066,8 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
                 <property name="can_focus">False</property>
                 <child>
                   <object class="GtkImage">
-                    <property name="width_request">100</property>
-                    <property name="height_request">80</property>
+                    <property name="width_request">700</property>
+                    <property name="height_request">220</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="pixbuf">../screens/start-splash.png</property>
