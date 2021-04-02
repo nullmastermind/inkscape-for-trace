@@ -1028,7 +1028,7 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
                     <property name="height_request">220</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="pixbuf" translatable="yes" comment="Do not translate this unless you have added the file to the right directory first. Format should be $file.$LANG.svg">../screens/start-welcome-text.svg</property>
+                    <property name="pixbuf" translatable="yes" comment="Do not translate this unless you have read the ./share/screens/TRANSLATING instructions.">../screens/start-welcome-text.svg</property>
                   </object>
                 </child>
               </object>

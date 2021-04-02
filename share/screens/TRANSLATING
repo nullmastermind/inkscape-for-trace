@@ -1,0 +1,51 @@
+# Explaination
+
+The start screen can sometimes have text placed upon it, these screens will
+appear in the po file as `../screens/start-$name-text.svg` which is rendered
+on top of the png file `../screens/start-$name.png` when the user interface
+is loaded.
+
+# Instructions
+
+Each translation should be a seperate svg file, the goal of these instructions
+is to create a translated version of the text. In this example we will be
+translating the welcome-start.svg file for Inkscape 1.1 into Japanese.
+
+## Step One: Get the file
+
+The source files are kept in the media repository here:
+
+https://gitlab.com/inkscape/vectors/content/-/tree/master/screens/welcome
+
+ 1. Navigate into the directory which has the same name as the version
+    of Inkscape you are translating. In this example `1.1`
+ 2. Install all the fonts in the fonts directory, if it exists. You don't
+    have to use these fonts, but they will let you see the original design
+    in the way it was intended.
+ 3. Download the svg file. It contains the full design, not just the text.
+    For this example we download `welcome-start.svg`
+
+## Step Two: Edit the SVG
+
+ 1. Open the svg file in inkscape, the later the better.
+ 2. Open the layers dialog in Inkscape. You should see two layers, one 
+    labeled `Text` and one `Base`. If you don't find a `Text` layer,
+    this startup graphic might not have any text to translate.
+ 3. Make sure the Text layer is visible by pressing the eye in the layers
+    dialog.
+ 4. Edit the text, try to keep to the same design, colours and spacing if
+    possible. But if you need to use a different font, reorder things or
+    make it more attractive in your language, please do.
+ 5. Convert the text to paths using `Path > Object To Path`
+ 6. Delete the Layer that is marked as `Base` so you only have the text layer.
+ 7. Run `File > Clean Document` to remove unneeded elements.
+
+## Step Three: Saving and Comitting
+
+ 1. Save as a `Plain SVG` document in the screens folder. For our example the
+    name will be `share/screens/welcome-start-text.ja.svg`
+ 2. Edit the translation in the po file so `welcome-start-text.svg` is now
+    `welcome-start-text.ja.svg`
+ 3. Add the new file and the changes to the po file using git tools (see other
+    instructions for how to commit and push merge requests or ask for help)
+
