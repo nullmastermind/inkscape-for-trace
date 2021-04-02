@@ -436,16 +436,25 @@ bool ClipboardManagerImpl::paste(SPDesktop *desktop, bool in_place)
     if ( target == CLIPBOARD_GDK_PIXBUF_TARGET ) {
         return _pasteImage(desktop->doc());
     }
-    // if there's only text, paste it into a selected text object or create a new one
-    if ( target == CLIPBOARD_TEXT_TARGET ) {
-        return _pasteText(desktop);
+    if (target == CLIPBOARD_TEXT_TARGET ) {
+        // It was text, and we did paste it. If not, continue on.
+        if (_pasteText(desktop)) {
+            return true;
+        }
+        // If the clipboard conains text/plain, but is an sg document
+        // then we'll try and detect it and then paste it if possible.
     }
 
-    // otherwise, use the import extensions
     auto tempdoc = _retrieveClipboard(target);
+
     if ( tempdoc == nullptr ) {
-        _userWarn(desktop, _("Nothing on the clipboard."));
-        return false;
+        if (target == CLIPBOARD_TEXT_TARGET ) {
+            _userWarn(desktop, _("Can't paste text outside of the text tool."));
+            return false;
+        } else {
+            _userWarn(desktop, _("Nothing on the clipboard."));
+            return false;
+        }
     }
 
     /* Special paste nodes handle; only if:
@@ -1404,7 +1413,7 @@ std::unique_ptr<SPDocument> ClipboardManagerImpl::_retrieveClipboard(Glib::ustri
 
     // there is no specific plain SVG input extension, so if we can paste the Inkscape SVG format,
     // we use the image/svg+xml mimetype to look up the input extension
-    if (target == "image/x-inkscape-svg") {
+    if (target == "image/x-inkscape-svg" || target == "text/plain") {
         target = "image/svg+xml";
     }
     // Use the EMF extension to import metafiles
