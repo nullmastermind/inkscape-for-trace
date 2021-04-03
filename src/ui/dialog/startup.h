@@ -44,7 +44,10 @@ private:
     void canvas_changed();
     void refresh_theme(Glib::ustring theme_name);
 
+    void new_now();
     void load_now();
+    void on_recent_changed();
+    void on_kind_changed(Gtk::Widget *tab, guint page_num);
 
 
 private:
@@ -55,6 +58,7 @@ private:
     Gtk::Fixed    *banners = nullptr;
     Gtk::ComboBox *themes  = nullptr;
     Gtk::TreeView *recent_treeview = nullptr;
+    Gtk::Button   *load_btn = nullptr;
 
     SPDocument* _document = nullptr;
 };

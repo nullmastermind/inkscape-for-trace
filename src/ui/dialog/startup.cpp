@@ -167,8 +167,8 @@ StartScreen::StartScreen()
     Gtk::ComboBox* keys = nullptr;
     Gtk::Button* save = nullptr;
     Gtk::Button* thanks = nullptr;
+    Gtk::Button* new_btn = nullptr;
     Gtk::Button* show_toggle = nullptr;
-    Gtk::Button* load = nullptr;
     Gtk::Switch* dark_toggle = nullptr;
     builder->get_widget("canvas", canvas);
     builder->get_widget("keys", keys);
@@ -176,7 +176,8 @@ StartScreen::StartScreen()
     builder->get_widget("thanks", thanks);
     builder->get_widget("show_toggle", show_toggle);
     builder->get_widget("dark_toggle", dark_toggle);
-    builder->get_widget("load", load);
+    builder->get_widget("load", load_btn);
+    builder->get_widget("new", new_btn);
 
     // Unparent to move to our dialog window.
     auto parent = banners->get_parent();
@@ -207,7 +208,9 @@ StartScreen::StartScreen()
     thanks->signal_clicked().connect(sigc::bind<Gtk::Button *>(sigc::mem_fun(*this, &StartScreen::notebook_next), thanks));
 
     // "Time to Draw" tab
-    recent_treeview->signal_row_activated().connect(sigc::hide(sigc::hide((sigc::mem_fun(*this, &StartScreen::load_now)))));
+    recent_treeview->signal_row_activated().connect(sigc::hide(sigc::hide((sigc::mem_fun(*this, &StartScreen::new_now)))));
+    recent_treeview->get_selection()->signal_changed().connect(sigc::mem_fun(*this, &StartScreen::on_recent_changed));
+    kinds->signal_switch_page().connect(sigc::mem_fun(*this, &StartScreen::on_kind_changed));
 
     for (auto widget : kinds->get_children()) {
         auto container = dynamic_cast<Gtk::Container *>(widget);
@@ -216,12 +219,13 @@ StartScreen::StartScreen()
         }
         auto template_list = dynamic_cast<Gtk::IconView *>(widget);
         if (template_list) {
-            template_list->signal_selection_changed().connect(sigc::mem_fun(*this, &StartScreen::load_now));
+            template_list->signal_selection_changed().connect(sigc::mem_fun(*this, &StartScreen::new_now));
         }
     }
 
     show_toggle->signal_clicked().connect(sigc::mem_fun(*this, &StartScreen::show_toggle));
-    load->signal_clicked().connect(sigc::mem_fun(*this, &StartScreen::load_now));
+    load_btn->signal_clicked().connect(sigc::mem_fun(*this, &StartScreen::load_now));
+    new_btn->signal_clicked().connect(sigc::mem_fun(*this, &StartScreen::new_now));
 
     // Reparent to our dialog window
     set_titlebar(*banners);
@@ -312,11 +316,9 @@ void
 StartScreen::enlist_recent_files()
 {
     NameIdCols cols;
-    Gtk::TreeView *recent;
-    builder->get_widget("recent_treeview", recent);
-    if (!recent) return;
+    if (!recent_treeview) return;
     // We're not sure why we have to ask C for the TreeStore object
-    auto store = Glib::wrap(GTK_LIST_STORE(gtk_tree_view_get_model(recent->gobj())));
+    auto store = Glib::wrap(GTK_LIST_STORE(gtk_tree_view_get_model(recent_treeview->gobj())));
     store->clear();
 
     Glib::RefPtr<Gtk::RecentManager> manager = Gtk::RecentManager::get_default();
@@ -340,12 +342,34 @@ StartScreen::enlist_recent_files()
 }
 
 /**
- * Called when load button clicked or item is double clicked.
+ * Called when a new recent document is selected.
  */
 void
-StartScreen::load_now()
+StartScreen::on_recent_changed()
 {
-    bool is_template = true;
+    load_btn->set_sensitive(true);
+    // TODO: In the future this is where previews and other information can be loaded.
+}
+
+/**
+ * Called when the left side tabs are changed.
+ */
+void
+StartScreen::on_kind_changed(Gtk::Widget *tab, guint page_num)
+{
+    if (page_num == 0) {
+        load_btn->show();
+    } else {
+        load_btn->hide();
+    }
+}
+
+/**
+ * Called when new button clicked or template is double clicked, or escape pressed.
+ */
+void
+StartScreen::new_now()
+{
     Glib::ustring filename = sp_file_default_template_uri();
     Glib::ustring width = "";
     Glib::ustring height = "";
@@ -353,25 +377,10 @@ StartScreen::load_now()
     // Find requested file name.
     Glib::RefPtr<Gio::File> file;
     if (kinds) {
-
         Gtk::Widget *selected_widget = kinds->get_children()[kinds->get_current_page()];
         auto container = dynamic_cast<Gtk::Container *>(selected_widget);
         if (container) {
             selected_widget = container->get_children()[0];
-        }
-
-        auto recent_list = dynamic_cast<Gtk::TreeView *>(selected_widget);
-        if (recent_list) {
-            auto iter = recent_list->get_selection()->get_selected();
-            if (iter) {
-                Gtk::TreeModel::Row row = *iter;
-                if (row) {
-                    NameIdCols cols;
-                    Glib::ustring _file = row[cols.col_id];
-                    file = Gio::File::create_for_uri(_file);
-                    is_template = false;
-                }
-            }
         }
 
         auto template_list = dynamic_cast<Gtk::IconView *>(selected_widget);
@@ -381,7 +390,6 @@ StartScreen::load_now()
                 auto iter = template_list->get_model()->get_iter(items[0]);
                 Gtk::TreeModel::Row row = *iter;
                 if (row) {
-                    is_template = true; // Already set
                     TemplateCols cols;
                     Glib::ustring template_filename = row[cols.filename];
                     if (!(template_filename == "-")) {
@@ -400,7 +408,6 @@ StartScreen::load_now()
     if (!file) {
         // Failure to open, so open up a new document instead.
         file = Gio::File::create_for_path(filename);
-        is_template = true;
     }
 
     if (!file) {
@@ -414,25 +421,47 @@ StartScreen::load_now()
     auto app = InkscapeApplication::instance();
 
     // If it was a template file, modify the document according to user's input.
-    if (!is_template) {
-        _document = app->document_open (file);
-    } else {
-        _document = app->document_new (filename);
-        auto nv = sp_document_namedview (_document, nullptr);
+    _document = app->document_new (filename);
+    auto nv = sp_document_namedview (_document, nullptr);
 
-        if (!width.empty()) {
-            // Set the width, height and default display units for the selected template
-            auto q_width = unit_table.parseQuantity(width);
-            _document->setWidthAndHeight(q_width, unit_table.parseQuantity(height), true);
-            nv->setAttribute("inkscape:document-units", q_width.unit->abbr);
-        }
-
-        DocumentUndo::clearUndo(_document);
-        _document->setModifiedSinceSave(false);
+    if (!width.empty()) {
+        // Set the width, height and default display units for the selected template
+        auto q_width = unit_table.parseQuantity(width);
+        _document->setWidthAndHeight(q_width, unit_table.parseQuantity(height), true);
+        nv->setAttribute("inkscape:document-units", q_width.unit->abbr);
     }
+
+    DocumentUndo::clearUndo(_document);
+    _document->setModifiedSinceSave(false);
 
     // We're done, hand back to app.
     response(GTK_RESPONSE_OK);
+}
+
+/**
+ * Called when load button clicked.
+ */
+void
+StartScreen::load_now()
+{
+    if (recent_treeview) {
+        auto iter = recent_treeview->get_selection()->get_selected();
+        if (iter) {
+            Gtk::TreeModel::Row row = *iter;
+            if (row) {
+                NameIdCols cols;
+                Glib::ustring _file = row[cols.col_id];
+                auto file = Gio::File::create_for_uri(_file);
+
+                // Now we have filename, open document.
+                auto app = InkscapeApplication::instance();
+                _document = app->document_open (file);
+
+                // We're done, hand back to app.
+                response(GTK_RESPONSE_OK);
+            }
+        }
+    }
 }
 
 /**
@@ -443,7 +472,7 @@ StartScreen::notebook_next(Gtk::Widget *button)
 {
     int page = tabs->get_current_page();
     if (page == 2) {
-        load_now(); // Only occurs from keypress.
+        new_now(); // Only occurs from keypress.
     } else {
         tabs->set_current_page(page + 1);
     }
@@ -459,7 +488,7 @@ StartScreen::on_key_press_event(GdkEventKey* event)
         case GDK_KEY_Escape:
             // Prevent loading any selected items
             kinds = nullptr;
-            load_now();
+            new_now();
             return true;
         case GDK_KEY_Return:
             notebook_next(nullptr);
