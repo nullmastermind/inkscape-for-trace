@@ -11,5 +11,5 @@
 ../src/live_effects/lpe-skeleton.cpp
 ../src/live_effects/lpe-test-doEffect-stack.cpp
 ../src/live_effects/lpe-text_label.cpp
-
+#
 ../share/ui/dialog-filter-editor.glade
