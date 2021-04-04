@@ -247,6 +247,8 @@ Gtk::Widget *DialogContainer::create_notebook_tab(Glib::ustring label_str, Glib:
             tlabel.replace(pos, 1, "&amp;");
         }
         tab->set_tooltip_markup(label_str + " (<b>" + tlabel + "</b>)");
+    } else {
+        tab->set_tooltip_text(label_str);
     }
 
     return cover;
