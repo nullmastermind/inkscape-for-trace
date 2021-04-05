@@ -59,7 +59,7 @@ load_svg_cursor(Glib::RefPtr<Gdk::Display> display,
 
     // Set in preferences
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Glib::ustring theme_name = prefs->getStringOrDefault("/theme/iconTheme", "/theme/defaultIconTheme");
+    Glib::ustring theme_name = prefs->getString("/theme/iconTheme", prefs->getString("/theme/defaultIconTheme", ""));
     if (!theme_name.empty()) {
         theme_names.push_back(theme_name);
     }

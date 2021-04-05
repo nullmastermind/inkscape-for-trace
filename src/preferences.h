@@ -214,7 +214,7 @@ public:
          *
          * To store a filename, convert it using Glib::filename_to_utf8().
          */
-        inline Glib::ustring getString() const;
+        inline Glib::ustring getString(Glib::ustring const &def) const;
 
        /**
          * Interpret the preference as a number followed by a unit (without space), and return this unit string.
@@ -442,23 +442,10 @@ public:
      *
      * @param pref_path Path to the retrieved preference.
      */
-    Glib::ustring getString(Glib::ustring const &pref_path) {
-        return getEntry(pref_path).getString();
+    Glib::ustring getString(Glib::ustring const &pref_path, Glib::ustring const &def = "") {
+        return getEntry(pref_path).getString(def);
     }
 
-    /**
-     * Retrieve an UTF-8 string.
-     *
-     * @param pref_path Path to the retrieved preference.
-     * @param def_path Path to the default preference used in case empty.
-     */
-    Glib::ustring getStringOrDefault(Glib::ustring const &pref_path, Glib::ustring const &def_path) {
-        Glib::ustring val = getEntry(pref_path).getString();
-        if (val == "") {
-            return getEntry(def_path).getString();
-        }
-        return val;
-    }
 
     /**
      * Retrieve the unit string.
@@ -758,13 +745,16 @@ inline double Preferences::Entry::getDoubleLimited(double def, double min, doubl
     }
 }
 
-inline Glib::ustring Preferences::Entry::getString() const
+inline Glib::ustring Preferences::Entry::getString(Glib::ustring const &def = "") const
 {
-    if (!this->isValid()) {
-        return "";
-    } else {
-        return Inkscape::Preferences::get()->_extractString(*this);
+    Glib::ustring ret = def;
+    if (this->isValid()) {
+        ret = Inkscape::Preferences::get()->_extractString(*this);
+        if (ret == "") {
+            ret = def;
+        }
     }
+    return ret;
 }
 
 inline Glib::ustring Preferences::Entry::getUnit() const

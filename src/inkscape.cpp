@@ -314,7 +314,7 @@ Glib::ustring Application::get_symbolic_colors()
     gchar colornamederror[64];
     gchar colornamed_inverse[64];
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Glib::ustring themeiconname = prefs->getStringOrDefault("/theme/iconTheme", "/theme/defaultIconTheme");
+    Glib::ustring themeiconname = prefs->getString("/theme/iconTheme", prefs->getString("/theme/defaultIconTheme", ""));
     guint32 colorsetbase = 0x2E3436ff;
     guint32 colorsetbase_inverse = colorsetbase ^ 0xffffff00;
     guint32 colorsetsuccess = 0x4AD589ff;
@@ -454,7 +454,7 @@ void Application::add_gtk_css(bool only_providers)
         }
         themeiconname = prefs->getString("/theme/iconTheme");
         // legacy cleanup
-        if (themeiconname == "hicolor") {
+        if (themeiconname == prefs->getString("/theme/defaultIconTheme")) {
             prefs->setString("/theme/iconTheme", "");
         } else if (themeiconname != "") {
             g_object_set(settings, "gtk-icon-theme-name", themeiconname.c_str(), NULL);
@@ -481,7 +481,7 @@ void Application::add_gtk_css(bool only_providers)
             contrast *= 2.5;
             shade = 1 + contrast;
         }
-        Glib::ustring current_theme = prefs->getStringOrDefault("/theme/gtkTheme", "/theme/defaultGtkTheme");
+        Glib::ustring current_theme = prefs->getString("/theme/gtkTheme", prefs->getString("/theme/defaultGtkTheme", ""));
         GtkCssProvider *currentthemeprovider =
             gtk_css_provider_get_named(current_theme.c_str(), variant);
         std::string cssstring = gtk_css_provider_to_string(currentthemeprovider);
@@ -518,7 +518,7 @@ void Application::add_gtk_css(bool only_providers)
         }
         Gtk::StyleContext::add_provider_for_screen(screen, styleprovider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
-    Glib::ustring gtkthemename = prefs->getStringOrDefault("/theme/gtkTheme", "/theme/defaultGtkTheme");
+    Glib::ustring gtkthemename = prefs->getString("/theme/gtkTheme", prefs->getString("/theme/defaultGtkTheme", ""));
     gtkthemename += ".css";
     style = get_filename(UIS, gtkthemename.c_str(), false, true);
     if (!style.empty()) {
