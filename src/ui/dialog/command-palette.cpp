@@ -652,12 +652,12 @@ Glib::ustring make_bold(const Glib::ustring &search)
 void CommandPalette::add_color(Gtk::Label *label, const Glib::ustring &search, const Glib::ustring &subject, bool tooltip)
 {
     Glib::ustring text = "";
-    std::string subject_string = subject.lowercase();
-    std::string search_string = search.lowercase();
+    Glib::ustring subject_string = subject.lowercase();
+    Glib::ustring search_string = search.lowercase();
     int j = 0;
 
     if (search_string.length() > 7) {
-        for (char i : search_string) {
+        for (gunichar i : search_string) {
             if (i == ' ') {
                 continue;
             }
@@ -667,26 +667,28 @@ void CommandPalette::add_color(Gtk::Label *label, const Glib::ustring &search, c
                     j++;
                     break;
                 } else {
-                    text += subject_string[j];
+                    text += subject[j];
                 }
                 j++;
             }
         }
-        if (j < subject_string.length())
+        if (j < subject.length()) {
             text += Glib::Markup::escape_text(subject.substr(j));
+        }
     } else {
-        std::map<char, int> search_string_character;
+        std::map<gunichar, int> search_string_character;
 
         for (const auto &character : search_string) {
             search_string_character[character]++;
         }
 
-        for (int i = 0; i < subject_string.length(); i++) {
-            if (search_string_character[subject_string[i]]) {
-                search_string_character[subject_string[i]]--;
+        int subject_length = subject_string.length();
+
+        for (int i = 0; i < subject_length; i++) {
+            if (search_string_character[subject_string[i]]--) {
                 text += make_bold(Glib::Markup::escape_text(subject.substr(i, 1)));
             } else {
-                text += subject_string[i];
+                text += subject[i];
             }
         }
     }
@@ -763,7 +765,7 @@ bool CommandPalette::fuzzy_search(const Glib::ustring &subject, const Glib::ustr
             }
         }
     } else { // Applying tolarence
-        std::map<char, int> subject_string_character, search_string_character;
+        std::map<gunichar, int> subject_string_character, search_string_character;
         for (const auto &character : subject_string) {
             subject_string_character[character]++;
         }
@@ -822,7 +824,7 @@ int CommandPalette::fuzzy_points(const Glib::ustring &subject, const Glib::ustri
             }
         }
     } else { // Applying tolarence
-        std::map<char, int> search_string_character;
+        std::map<gunichar, int> search_string_character;
 
         for (const auto &character : search_string) {
             search_string_character[character]++;
