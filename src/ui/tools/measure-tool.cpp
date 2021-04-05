@@ -1283,6 +1283,14 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, bool to_phantom,
     if (explicit_base) {
         baseAngle = atan2(*explicit_base - start_p);
         angle -= baseAngle;
+
+        // make sure that the angle is between -pi and pi.
+        if (angle > M_PI) {
+            angle -= 2 * M_PI;
+        }
+        if (angle < -M_PI) {
+            angle += 2 * M_PI;
+        }
     }
 
     std::vector<SPItem*> items;
