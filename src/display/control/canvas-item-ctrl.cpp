@@ -296,71 +296,68 @@ void CanvasItemCtrl::render(Inkscape::CanvasItemBuffer *buf)
 
     buf->cr->save();
 
-    if (_mode == CANVAS_ITEM_CTRL_MODE_XOR) {
-        // This code works regardless of source type.
+    // This code works regardless of source type.
 
-        // 1. Copy the affected part of output to a temporary surface
+    // 1. Copy the affected part of output to a temporary surface
 
-        // Size in device pixels. Does not set device scale.
-        int width  = _width  * buf->device_scale;
-        int height = _height * buf->device_scale;
-        auto work = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32, width, height);
-        cairo_surface_set_device_scale(work->cobj(), buf->device_scale, buf->device_scale); // No C++ API!
+    // Size in device pixels. Does not set device scale.
+    int width  = _width  * buf->device_scale;
+    int height = _height * buf->device_scale;
+    auto work = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32, width, height);
+    cairo_surface_set_device_scale(work->cobj(), buf->device_scale, buf->device_scale); // No C++ API!
 
-        auto cr = Cairo::Context::create(work);
-        cr->translate(-_bounds.left(), -_bounds.top());
-        cr->set_source(buf->cr->get_target(), buf->rect.left(), buf->rect.top());
-        cr->paint();
-        // static int a = 0;
-        // std::string name0 = "ctrl0_" + _name + "_" + std::to_string(a++) + ".png";
-        // work->write_to_png(name0);
+    auto cr = Cairo::Context::create(work);
+    cr->translate(-_bounds.left(), -_bounds.top());
+    cr->set_source(buf->cr->get_target(), buf->rect.left(), buf->rect.top());
+    cr->paint();
+    // static int a = 0;
+    // std::string name0 = "ctrl0_" + _name + "_" + std::to_string(a++) + ".png";
+    // work->write_to_png(name0);
 
-        // 2. Composite the control on a temporary surface
-        work->flush();
-        int strideb = work->get_stride();
-        unsigned char *pxb = work->get_data();
+    // 2. Composite the control on a temporary surface
+    work->flush();
+    int strideb = work->get_stride();
+    unsigned char *pxb = work->get_data();
 
-        // this code allow background become isolated from rendering so we can do things like outline overlay
-        cairo_pattern_t *pattern = _canvas->get_background_store()->cobj();
-        guint32 backcolor = ink_cairo_pattern_get_argb32(pattern);
-        guint32 *p = _cache;
-        for (int i = 0; i < height; ++i) {
-            guint32 *pb = reinterpret_cast<guint32*>(pxb + i*strideb);
-            for (int j = 0; j < width; ++j) {
-                guint32 base = *pb;
-                guint32 cc = *p++;
-                guint32 ac = cc & 0xff;
-                if (*pb == 0 && cc != 0) {
-                    base = backcolor;
-                }
-                if (ac == 0 && cc != 0) {
-                    *pb++ = argb32_from_rgba(cc | 0x000000ff);
+    // this code allow background become isolated from rendering so we can do things like outline overlay
+    cairo_pattern_t *pattern = _canvas->get_background_store()->cobj();
+    guint32 backcolor = ink_cairo_pattern_get_argb32(pattern);
+    guint32 *p = _cache;
+    for (int i = 0; i < height; ++i) {
+        guint32 *pb = reinterpret_cast<guint32*>(pxb + i*strideb);
+        for (int j = 0; j < width; ++j) {
+            guint32 base = *pb;
+            guint32 cc = *p++;
+            guint32 ac = cc & 0xff;
+            if (*pb == 0 && cc != 0) {
+                base = backcolor;
+            }
+            if (ac == 0 && cc != 0) {
+                *pb++ = argb32_from_rgba(cc | 0x000000ff);
+            } else if (_mode == CANVAS_ITEM_CTRL_MODE_XOR) {
+                EXTRACT_ARGB32(base, ab,rb,gb,bb)
+                guint32 ro = compose_xor(rb, (cc & 0xff000000) >> 24, ac);
+                guint32 go = compose_xor(gb, (cc & 0x00ff0000) >> 16, ac);
+                guint32 bo = compose_xor(bb, (cc & 0x0000ff00) >>  8, ac);
+                ASSEMBLE_ARGB32(px, ab,ro,go,bo)
+                *pb++ = px;
+            } else {
+                if (ac == 0) {
+                    *pb++ = base;
                 } else {
-                    EXTRACT_ARGB32(base, ab,rb,gb,bb)
-                    guint32 ro = compose_xor(rb, (cc & 0xff000000) >> 24, ac);
-                    guint32 go = compose_xor(gb, (cc & 0x00ff0000) >> 16, ac);
-                    guint32 bo = compose_xor(bb, (cc & 0x0000ff00) >>  8, ac);
-                    ASSEMBLE_ARGB32(px, ab,ro,go,bo)
-                    *pb++ = px;
+                    *pb++ = argb32_from_rgba(cc | 0x000000ff);
                 }
             }
         }
-        work->mark_dirty();
-        // std::string name1 = "ctrl1_" + _name + "_" + std::to_string(a) + ".png";
-        // work->write_to_png(name1);
-
-        // 3. Replace the affected part of output with contents of temporary surface
-        buf->cr->set_source(work, x, y);
-
-    } else {
-        // Create surface with cached bitmap and set it as source.
-        auto cache = Cairo::ImageSurface::create(reinterpret_cast<unsigned char*>(_cache),
-                                                 Cairo::FORMAT_ARGB32, _width, _height, _width*4);
-        cairo_surface_set_device_scale(cache->cobj(), buf->device_scale, buf->device_scale); // No C++ API!
-        cache->mark_dirty();
-        buf->cr->save();
-        buf->cr->set_source(cache, x, y);
     }
+    work->mark_dirty();
+    // std::string name1 = "ctrl1_" + _name + "_" + std::to_string(a) + ".png";
+    // work->write_to_png(name1);
+
+    // 3. Replace the affected part of output with contents of temporary surface
+    buf->cr->set_source(work, x, y);
+
+    
 
     buf->cr->rectangle(x, y, _width, _height);
     buf->cr->clip();
@@ -855,13 +852,8 @@ void CanvasItemCtrl::build_cache(int device_scale)
     // Get colors
     guint32 fill = 0x0;
     guint32 stroke = 0x0;
-    if (_mode == CANVAS_ITEM_CTRL_MODE_XOR) {
-        fill   = _fill;
-        stroke = _stroke;
-    } else {
-        fill   = argb32_from_rgba(_fill);
-        stroke = argb32_from_rgba(_stroke);
-    }
+    fill   = _fill;
+    stroke = _stroke;
 
     if (_shape != CANVAS_ITEM_CTRL_SHAPE_BITMAP) {
         if (_width % 2 == 0 || _height % 2 == 0) {
