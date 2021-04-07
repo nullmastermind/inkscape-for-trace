@@ -2293,7 +2293,7 @@ void InkscapePreferences::initPageBehavior()
                            _("Wrap around at start and end when cycling objects in z-order"));
 
     auto paste_above_selected = Gtk::manage(new UI::Widget::PrefCheckButton());
-    paste_above_selected->init(_("Paste above selection instead of layer-top"), "/options/pasteaboveselected", false);
+    paste_above_selected->init(_("Paste above selection instead of layer-top"), "/options/pasteaboveselected", true);
     _page_select.add_line(false, "", *paste_above_selected, "",
                           _("If checked, pasted items and imported documents will be placed immediately above the "
                             "current selection (z-order). Otherwise, insertion happens on top of all objects in the current layer."));
