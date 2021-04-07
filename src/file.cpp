@@ -937,7 +937,7 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     auto *node_after = desktop->getSelection()->topRepr();
-    if (node_after && prefs->getBool("/options/pasteaboveselected")) {
+    if (node_after && prefs->getBool("/options/paste/aboveselected", true)) {
         target_parent = node_after->parent();
     } else {
         node_after = target_parent->lastChild();
