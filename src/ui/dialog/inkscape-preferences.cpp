@@ -1139,7 +1139,7 @@ void InkscapePreferences::resetIconsColors(bool themechange)
             base_color = _symbolic_base_color.get_style_context()->get_background_color();
         }
         SPColor base_color_sp(base_color.get_red(), base_color.get_green(), base_color.get_blue());
-        //we copy higlight to not use
+        //we copy highlight to not use
         guint32 colorsetbase = base_color_sp.toRGBA32(base_color.get_alpha());
         guint32 colorsetsuccess = colorsetbase;
         guint32 colorsetwarning = colorsetbase;
@@ -1709,7 +1709,7 @@ void InkscapePreferences::initPageUI()
     _symbolic_base_colors.init(_("Use default base color for icons"), "/theme/symbolicDefaultBaseColors", true);
     _symbolic_base_colors.signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::resetIconsColorsWrapper));
     _page_theme.add_line(true, "", _symbolic_base_colors, "", "", true);
-    _symbolic_highlight_colors.init(_("Use default higlight colors for icons"), "/theme/symbolicDefaultHighColors", true);
+    _symbolic_highlight_colors.init(_("Use default highlight colors for icons"), "/theme/symbolicDefaultHighColors", true);
     _symbolic_highlight_colors.signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::resetIconsColorsWrapper));
     _page_theme.add_line(true, "", _symbolic_highlight_colors, "", "", true);
     _symbolic_base_color.init(_("Color for symbolic icons:"), "/theme/" + themeiconname + "/symbolicBaseColor",
