@@ -2994,7 +2994,7 @@ bool number_or_empy(const Glib::ustring& text) {
     if (text.empty()) {
         return true;
     }
-    double n = atof( text.c_str() );
+    double n = g_strtod(text.c_str(), nullptr);
     if (n == 0.0 && strcmp(text.c_str(), "0") != 0 && strcmp(text.c_str(), "0.0") != 0) {
         return false;
     }

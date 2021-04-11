@@ -1050,7 +1050,7 @@ void Export::_export_raster(Inkscape::Extension::Output *extension)
             const gchar *dpi_hint = item->getRepr()->attribute("inkscape:export-xdpi"); // only xdpi, ydpi is always the same now
             gdouble dpi = 0.0;
             if (dpi_hint) {
-                dpi = atof(dpi_hint);
+                dpi = g_ascii_strtod(dpi_hint, nullptr);
             }
             if (dpi == 0.0) {
                 dpi = getValue(xdpi_adj);
@@ -1272,12 +1272,12 @@ void Export::_export_raster(Inkscape::Extension::Output *extension)
                 modified = true;
             }
             temp_string = repr->attribute("inkscape:export-xdpi");
-            if (temp_string == nullptr || xdpi != atof(temp_string)) {
+            if (temp_string == nullptr || xdpi != g_ascii_strtod(temp_string, nullptr)) {
                 sp_repr_set_svg_double(repr, "inkscape:export-xdpi", xdpi);
                 modified = true;
             }
             temp_string = repr->attribute("inkscape:export-ydpi");
-            if (temp_string == nullptr || ydpi != atof(temp_string)) {
+            if (temp_string == nullptr || ydpi != g_ascii_strtod(temp_string, nullptr)) {
                 sp_repr_set_svg_double(repr, "inkscape:export-ydpi", ydpi);
                 modified = true;
             }
@@ -1317,12 +1317,12 @@ void Export::_export_raster(Inkscape::Extension::Output *extension)
                     }
                 }
                 temp_string = repr->attribute("inkscape:export-xdpi");
-                if (temp_string == nullptr || xdpi != atof(temp_string)) {
+                if (temp_string == nullptr || xdpi != g_ascii_strtod(temp_string, nullptr)) {
                     sp_repr_set_svg_double(repr, "inkscape:export-xdpi", xdpi);
                     modified = true;
                 }
                 temp_string = repr->attribute("inkscape:export-ydpi");
-                if (temp_string == nullptr || ydpi != atof(temp_string)) {
+                if (temp_string == nullptr || ydpi != g_ascii_strtod(temp_string, nullptr)) {
                     sp_repr_set_svg_double(repr, "inkscape:export-ydpi", ydpi);
                     modified = true;
                 }

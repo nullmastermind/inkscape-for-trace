@@ -224,7 +224,6 @@ private:
     void zoom_value_changed();
     void zoom_menu_handler(double factor);
     void zoom_populate_popup(Gtk::Menu *menu);
-    int rotation_input(double *new_val);
     bool rotation_output();
     void rotation_value_changed();
     void rotation_populate_popup(Gtk::Menu *menu);

@@ -324,7 +324,7 @@ void SPImage::update(SPCtx *ctx, unsigned int flags) {
             Inkscape::Pixbuf *pixbuf = nullptr;
             double svgdpi = 96;
             if (this->getRepr()->attribute("inkscape:svg-dpi")) {
-                svgdpi = atof(this->getRepr()->attribute("inkscape:svg-dpi"));
+                svgdpi = g_ascii_strtod(this->getRepr()->attribute("inkscape:svg-dpi"), nullptr);
             }
             this->dpi = svgdpi;
             pixbuf = sp_image_repr_read_image(this->getRepr()->attribute("xlink:href"),
@@ -533,7 +533,7 @@ gchar* SPImage::description() const {
         Inkscape::Pixbuf * pb = nullptr;
         double svgdpi = 96;
         if (this->getRepr()->attribute("inkscape:svg-dpi")) {
-            svgdpi = atof(this->getRepr()->attribute("inkscape:svg-dpi"));
+            svgdpi = g_ascii_strtod(this->getRepr()->attribute("inkscape:svg-dpi"), nullptr);
         }
         pb = sp_image_repr_read_image(this->getRepr()->attribute("xlink:href"),
                                       this->getRepr()->attribute("sodipodi:absref"), this->document->getDocumentBase(), svgdpi);

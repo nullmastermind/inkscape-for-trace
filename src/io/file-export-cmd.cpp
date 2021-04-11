@@ -519,7 +519,7 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string const &filename_in)
                               << "(--export-dpi, --export-width, or --export-height). "
                               << "DPI hint " << dpi_hint << " is ignored." << std::endl;
                 } else {
-                    dpi = atof(dpi_hint);
+                    dpi = g_ascii_strtod(dpi_hint, nullptr);
                 }
             } else {
                 std::cerr << "InkFileExport::do_export_png: "

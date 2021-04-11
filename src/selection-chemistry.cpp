@@ -3625,7 +3625,7 @@ void ObjectSet::getExportHints(Glib::ustring &filename, float *xdpi, float *ydpi
         if (xdpi_search) {
             dpi_string = repr->attribute("inkscape:export-xdpi");
             if (dpi_string != nullptr) {
-                *xdpi = atof(dpi_string);
+                *xdpi = g_ascii_strtod(dpi_string, nullptr);
                 xdpi_search = FALSE;
             }
         }
@@ -3633,7 +3633,7 @@ void ObjectSet::getExportHints(Glib::ustring &filename, float *xdpi, float *ydpi
         if (ydpi_search) {
             dpi_string = repr->attribute("inkscape:export-ydpi");
             if (dpi_string != nullptr) {
-                *ydpi = atof(dpi_string);
+                *ydpi = g_ascii_strtod(dpi_string, nullptr);
                 ydpi_search = FALSE;
             }
         }
@@ -3655,12 +3655,12 @@ void sp_document_get_export_hints(SPDocument *doc, Glib::ustring &filename, floa
     }
     gchar const *dpi_string = repr->attribute("inkscape:export-xdpi");
     if (dpi_string != nullptr) {
-        *xdpi = atof(dpi_string);
+        *xdpi = g_ascii_strtod(dpi_string, nullptr);
     }
 
     dpi_string = repr->attribute("inkscape:export-ydpi");
     if (dpi_string != nullptr) {
-        *ydpi = atof(dpi_string);
+        *ydpi = g_ascii_strtod(dpi_string, nullptr);
     }
 }
 

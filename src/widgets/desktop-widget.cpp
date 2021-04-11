@@ -321,7 +321,6 @@ SPDesktopWidget::SPDesktopWidget()
     dtw->_rotation_status->set_update_policy(Gtk::UPDATE_ALWAYS);
 
     // Callbacks
-    dtw->_rotation_status_input_connection  = dtw->_rotation_status->signal_input().connect(sigc::mem_fun(dtw, &SPDesktopWidget::rotation_input), false);
     dtw->_rotation_status_output_connection = dtw->_rotation_status->signal_output().connect(sigc::mem_fun(dtw, &SPDesktopWidget::rotation_output));
     dtw->_rotation_status_value_changed_connection = dtw->_rotation_status->signal_value_changed().connect(sigc::mem_fun(dtw, &SPDesktopWidget::rotation_value_changed));
     dtw->_rotation_status_populate_popup_connection = dtw->_rotation_status->signal_populate_popup().connect(sigc::mem_fun(dtw, &SPDesktopWidget::rotation_populate_popup));
@@ -1552,22 +1551,9 @@ sp_dtw_zoom_display_to_value (gdouble value)
 int
 SPDesktopWidget::zoom_input(double *new_val)
 {
-    gchar *b = g_strdup(_zoom_status->get_text().c_str());
-
-    gchar *comma = g_strstr_len (b, -1, ",");
-    if (comma) {
-        *comma = '.';
-    }
-
-    char *oldlocale = g_strdup (setlocale(LC_NUMERIC, nullptr));
-    setlocale (LC_NUMERIC, "C");
-    gdouble new_typed = atof (b);
-    setlocale (LC_NUMERIC, oldlocale);
-    g_free (oldlocale);
-    g_free (b);
-
+    double new_typed = g_strtod (_zoom_status->get_text().c_str(), nullptr);
     *new_val = sp_dtw_zoom_display_to_value (new_typed);
-    return TRUE;
+    return true;
 }
 
 bool
@@ -1697,26 +1683,6 @@ SPDesktopWidget::update_zoom()
 
 
 // ---------------------- Rotation ------------------------
-int
-SPDesktopWidget::rotation_input(double *new_val)
-{
-    auto *b = g_strdup(_rotation_status->get_text().c_str());
-
-    gchar *comma = g_strstr_len (b, -1, ",");
-    if (comma) {
-        *comma = '.';
-    }
-
-    char *oldlocale = g_strdup (setlocale(LC_NUMERIC, nullptr));
-    setlocale (LC_NUMERIC, "C");
-    gdouble new_value = atof (b);
-    setlocale (LC_NUMERIC, oldlocale);
-    g_free (oldlocale);
-    g_free (b);
-
-    *new_val = new_value;
-    return true;
-}
 
 bool
 SPDesktopWidget::rotation_output()

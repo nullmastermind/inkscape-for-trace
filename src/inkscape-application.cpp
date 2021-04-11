@@ -1514,7 +1514,7 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
     if (options->contains("export-background-opacity")) {
         Glib::ustring opacity;
         options->lookup_value("export-background-opacity", opacity);
-        _file_export.export_background_opacity = atof(opacity.c_str());
+        _file_export.export_background_opacity = Glib::Ascii::strtod(opacity);
     }
 
     if (options->contains("export-png-color-mode")) {
