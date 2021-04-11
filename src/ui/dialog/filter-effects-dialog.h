@@ -265,6 +265,7 @@ private:
     void update_filter_general_settings_view();
     void update_settings_sensitivity();
     void update_color_matrix();
+    void update_automatic_region(Gtk::CheckButton *btn);
     void update_primitive_infobox();
 
     // Primitives Info Box
@@ -293,6 +294,9 @@ private:
     class LightSourceControl;
     Settings* _settings;
     Settings* _filter_general_settings;
+
+    // General settings
+    MultiSpinButton *_region_pos, *_region_size;
 
     // Color Matrix
     ColorMatrixValues* _color_matrix_values;
