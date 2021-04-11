@@ -640,6 +640,9 @@ reload_menu(Inkscape::UI::View::View* view, Gtk::MenuBar* menubar)
     }
     menuitems.clear();
     build_menu(menubar, INKSCAPE.get_menus()->parent(), view);
+
+    shift_icons_recursive(menubar); // Find all submenus and add callback to each one.
+
     menubar->show_all();
 #ifdef GDK_WINDOWING_QUARTZ
     sync_menubar();
