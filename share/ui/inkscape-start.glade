@@ -955,7 +955,7 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
       <row>
         <col id="0">compacted</col>
         <col id="1" translatable="yes">Compacted (Small Screens)</col>
-        <col id="2">Minwaita</col>
+        <col id="2">Minwaita-Inkscape</col>
         <col id="3">hicolor</col>
         <col id="4">0</col>
         <col id="5">0</col>
