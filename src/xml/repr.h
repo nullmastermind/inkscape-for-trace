@@ -79,7 +79,6 @@ bool sp_repr_save_rebased_file(Inkscape::XML::Document *doc, char const *filenam
 SPCSSAttr *sp_repr_css_attr_new();
 void sp_repr_css_attr_unref(SPCSSAttr *css);
 SPCSSAttr *sp_repr_css_attr(Inkscape::XML::Node const *repr, char const *attr);
-SPCSSAttr *sp_repr_css_attr_parse_color_to_fill(const Glib::ustring &text);
 SPCSSAttr *sp_repr_css_attr_inherited(Inkscape::XML::Node const *repr, char const *attr);
 SPCSSAttr *sp_repr_css_attr_unset_all(SPCSSAttr *css);
 

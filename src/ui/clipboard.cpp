@@ -164,7 +164,6 @@ private:
     std::vector<SPCSSAttr*> te_selected_style;
     std::vector<unsigned> te_selected_style_positions;
     int nr_blocks = 0;
-    unsigned copied_style_length = 0;
 
 
     // we need a way to copy plain text AND remember its style;
@@ -441,7 +440,7 @@ bool ClipboardManagerImpl::paste(SPDesktop *desktop, bool in_place)
         if (_pasteText(desktop)) {
             return true;
         }
-        // If the clipboard conains text/plain, but is an sg document
+        // If the clipboard conains text/plain, but is an svg document
         // then we'll try and detect it and then paste it if possible.
     }
 
@@ -1246,73 +1245,23 @@ bool ClipboardManagerImpl::_pasteText(SPDesktop *desktop)
     if (dynamic_cast<Inkscape::UI::Tools::TextTool *>(desktop->event_context)) {
         return Inkscape::UI::Tools::sp_text_paste_inline(desktop->event_context);
     }
-    return false;
-        /* return false;
-        //apply the saved style to pasted text
-        Glib::RefPtr<Gtk::Clipboard> refClipboard = Gtk::Clipboard::get();
-        Glib::ustring const clip_text = refClipboard->wait_for_text();
-        Glib::ustring text(clip_text);
-        if(text.length() == copied_style_length)
-        {
-            Inkscape::UI::Tools::TextTool *tc = SP_TEXT_CONTEXT(desktop->event_context);
-            // we realy only want to inherit container style (to act as 0.92 and faster performance)
-            // maybe for 1.0 we can make a special type of clipboard
-            // that handle layout or maybe we can use the last desktop text style
-            // so I comment unneded code.
-            Inkscape::Text::Layout const *layout = te_get_layout(tc->text);
-            Inkscape::Text::Layout::iterator it_next;
-            Inkscape::Text::Layout::iterator it = tc->text_sel_end;
-            SPText *textitem = dynamic_cast<SPText *>(tc->text);
-            if (textitem) {
-                textitem->rebuildLayout();
-            }
-            SPFlowtext *flowtext = dynamic_cast<SPFlowtext *>(tc->text);
-            if (flowtext) {
-                flowtext->rebuildLayout();
-            }
-            // we realy only want to inherit container style
-            SPCSSAttr *css = take_style_from_item(tc->text);
-            for (int i = 0; i < nr_blocks; ++i)
-            {
-                gchar const *w = sp_repr_css_property(css, "font-size", "0px");
 
-                // Don't set font-size if it wasn't set.
-                if (w && strcmp(w, "0px") != 0) {
-                    sp_repr_css_set_property(te_selected_style[i], "font-size", w);
-                }
-            }
-
-            for (unsigned int i = 0; i < text.length(); ++i)
-                it.prevCharacter();
-
-            it_next = layout->charIndexToIterator(layout->iteratorToCharIndex(it));
-
-            for (int i = 0; i < nr_blocks; ++i)
-            {
-                for (unsigned int j = te_selected_style_positions[i]; j < te_selected_style_positions[i+1]; ++j)
-                    it_next.nextCharacter();
-
-                // sp_te_apply_style(tc->text, it, it_next, te_selected_style[i]);
-                te_update_layout_now_recursive(tc->text);
-                tc->text_sel_end = it;
-                for (unsigned int j = te_selected_style_positions[i]; j < te_selected_style_positions[i+1]; ++j)
-                    it.nextCharacter();
-            }
+    // Parse the clipboard text as if it was a color string.
+    Glib::RefPtr<Gtk::Clipboard> clipboard = Gtk::Clipboard::get();
+    Glib::ustring const clip_text = clipboard->wait_for_text();
+    if (clip_text.length() < 30) {
+        // Zero makes it impossible to paste a 100% transparent black, but it's useful.
+        guint32 const rgb0 = sp_svg_read_color(clip_text.c_str(), 0x0);
+        if (rgb0) {
+            SPCSSAttr *color_css = sp_repr_css_attr_new();
+            sp_repr_css_set_property(color_css, "fill", SPColor(rgb0).toString().c_str());
+            // In the future this could parse opacity, but sp_svg_read_color lacks this.
+            sp_repr_css_set_property(color_css, "fill-opacity", "1.0");
+            sp_desktop_set_style(desktop, color_css);
+            return true;
         }
-        return true;
-
-    }
-    // old(try to parse the text as a color and, if successful, apply it as the current style)
-    // we realy only want to inherit container style
-    // maybe for 1.0 we can make a special type of clipboard
-    // that handle layout or maybe we can use the last desktop text style
-    SPCSSAttr *css = sp_repr_css_attr_parse_color_to_fill(_clipboard->wait_for_text());
-    if (css) {
-        sp_desktop_set_style(desktop, css);
-        return true;
     }
     return false;
-    */
 }
 
 
