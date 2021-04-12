@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2021-03-14 20:46+0000\n"
-"PO-Revision-Date: 2021-03-20 11:04+0100\n"
+"PO-Revision-Date: 2021-04-12 17:41+0200\n"
 "Last-Translator: Tomáš Marný\n"
 "Language-Team: Josef Vybíral (josef.vybiral@gmail.com); Ivan Řihošek "
 "(osmdesat@seznam.cz); Tobiczech (tobiczech@gmail.com); Tomáš Marný (tomik."
@@ -3623,7 +3623,7 @@ msgstr "Děrný pásek"
 #: ../share/symbols/symbols.h:158
 msgctxt "Symbol"
 msgid "Online Storage"
-msgstr "Úložiště online"
+msgstr "Online úložiště"
 
 #: ../share/symbols/symbols.h:159
 msgctxt "Symbol"
@@ -3658,7 +3658,7 @@ msgstr "Komunikační propojení"
 #: ../share/symbols/symbols.h:165
 msgctxt "Symbol"
 msgid "Collate"
-msgstr "Shromáždění"
+msgstr "Porovnat"
 
 #: ../share/symbols/symbols.h:166
 msgctxt "Symbol"
@@ -3688,7 +3688,7 @@ msgstr "Magnetický buben (přímý přístup)"
 #: ../share/symbols/symbols.h:171
 msgctxt "Symbol"
 msgid "Offline Storage"
-msgstr "Offline uložiště"
+msgstr "Offline úložiště"
 
 #: ../share/symbols/symbols.h:172
 msgctxt "Symbol"
@@ -4129,11 +4129,11 @@ msgstr ""
 
 #: ../src/actions/actions-base.cpp:231
 msgid "Clean up Document"
-msgstr ""
+msgstr "Vyčistit dokument"
 
 #: ../src/actions/actions-base.cpp:231
 msgid "Remove unused definitions (gradients, etc.)"
-msgstr ""
+msgstr "Odebere nepoužívané definice (přechody atd.)"
 
 #: ../src/actions/actions-base.cpp:232
 msgid "Quit"
@@ -4141,15 +4141,15 @@ msgstr "Ukončit"
 
 #: ../src/actions/actions-base.cpp:232
 msgid "Immediately quit Inkscape"
-msgstr ""
+msgstr "Okamžitě ukončí Inkscape"
 
 #: ../src/actions/actions-base.cpp:234
 msgid "Import Page Number"
-msgstr ""
+msgstr "Importovat číslo stránky"
 
 #: ../src/actions/actions-base.cpp:234
 msgid "Select PDF page number to import"
-msgstr ""
+msgstr "Vyberte číslo stránky PDF, které chcete importovat"
 
 #: ../src/actions/actions-base.cpp:235
 msgid "Import DPI Method"
@@ -4209,27 +4209,27 @@ msgstr ""
 
 #: ../src/actions/actions-canvas-mode.cpp:249
 msgid "Display Mode: Normal"
-msgstr ""
+msgstr "Režim zobrazení: Normální"
 
 #: ../src/actions/actions-canvas-mode.cpp:249
 msgid "Use normal rendering mode"
-msgstr ""
+msgstr "Použít normální režim vykreslování"
 
 #: ../src/actions/actions-canvas-mode.cpp:250
 msgid "Display Mode: Outline"
-msgstr ""
+msgstr "Režim zobrazení: Obrys"
 
 #: ../src/actions/actions-canvas-mode.cpp:250
 msgid "Show only object outlines"
-msgstr ""
+msgstr "Zobrazit pouze obrysy objektu"
 
 #: ../src/actions/actions-canvas-mode.cpp:251
 msgid "Display Mode: No Filters"
-msgstr ""
+msgstr "Režim zobrazení: Bez filtrů"
 
 #: ../src/actions/actions-canvas-mode.cpp:251
 msgid "Do not render filters (for speed)"
-msgstr ""
+msgstr "Nevykreslovat filtry (kvůli rychlosti)"
 
 #: ../src/actions/actions-canvas-mode.cpp:252
 msgid "Display Mode: Hairlines"
@@ -4237,47 +4237,47 @@ msgstr "Režim zobrazení: Vlasové čáry"
 
 #: ../src/actions/actions-canvas-mode.cpp:252
 msgid "Render thin lines visibly"
-msgstr ""
+msgstr "Viditelně vykreslite tenké čáry"
 
 #: ../src/actions/actions-canvas-mode.cpp:253
 msgid "Display Mode Cycle"
-msgstr ""
+msgstr "Cyklovat režim zobrazení"
 
 #: ../src/actions/actions-canvas-mode.cpp:253
 msgid "Cycle through display modes"
-msgstr ""
+msgstr "Procházet režimy zobrazení"
 
 #: ../src/actions/actions-canvas-mode.cpp:254
 msgid "Display Mode Toggle"
-msgstr ""
+msgstr "Přepnout režim zobrazení"
 
 #: ../src/actions/actions-canvas-mode.cpp:254
 msgid "Toggle between normal and last non-normal mode"
-msgstr ""
+msgstr "Přepnout mezi normálním a posledním speciálním režimem"
 
 #: ../src/actions/actions-canvas-mode.cpp:256
 msgid "Split Mode: Normal"
-msgstr ""
+msgstr "Režim rozdělení: Normální"
 
 #: ../src/actions/actions-canvas-mode.cpp:256
 msgid "Do not split canvas"
-msgstr ""
+msgstr "Nerozdělovat plátno"
 
 #: ../src/actions/actions-canvas-mode.cpp:257
 msgid "Split Mode: Split"
-msgstr ""
+msgstr "Režim rozdělení: Rozdělení"
 
 #: ../src/actions/actions-canvas-mode.cpp:257
 msgid "Render part of the canvas in outline mode"
-msgstr ""
+msgstr "Vykreslit část plátna v režimu obrysu"
 
 #: ../src/actions/actions-canvas-mode.cpp:258
 msgid "Split Mode: X-Ray"
-msgstr ""
+msgstr "Režim rozdělení: Rentgen"
 
 #: ../src/actions/actions-canvas-mode.cpp:258
 msgid "Render a circular area in outline mode"
-msgstr ""
+msgstr "Vykreslit kruhovou oblast v režimu obrysu"
 
 #: ../src/actions/actions-canvas-mode.cpp:260
 msgid "Color Mode"
@@ -4289,11 +4289,11 @@ msgstr "Přepnout mezi normálním režimem a režimem stupňů šedi"
 
 #: ../src/actions/actions-canvas-mode.cpp:261
 msgid "Color Managed Mode"
-msgstr ""
+msgstr "Režim správy barev"
 
 #: ../src/actions/actions-canvas-mode.cpp:261
 msgid "Toggle between normal and color managed modes"
-msgstr ""
+msgstr "Přepnout mezi normálním režimem a režimem správy barev"
 
 #: ../src/actions/actions-canvas-snapping.cpp:185
 #: ../src/ui/dialog/inkscape-preferences.cpp:2403
@@ -4578,11 +4578,11 @@ msgstr "Otočit plátnem proti směru hodinových ručiček"
 
 #: ../src/actions/actions-canvas-transform.cpp:215 ../share/ui/menu-view.ui:99
 msgid "Reset Rotation"
-msgstr "Resetovat rotaci"
+msgstr "Obnovit rotaci"
 
 #: ../src/actions/actions-canvas-transform.cpp:215
 msgid "Reset canvas rotation"
-msgstr "Resetovat otáčení plátna"
+msgstr "Obnovit otáčení plátna"
 
 #: ../src/actions/actions-canvas-transform.cpp:217
 msgid "Flip Horizontal"
@@ -4602,7 +4602,7 @@ msgstr "Překlopit plátno svisle"
 
 #: ../src/actions/actions-canvas-transform.cpp:219 ../share/ui/menu-view.ui:118
 msgid "Reset Flipping"
-msgstr ""
+msgstr "Obnovit překlápění"
 
 #: ../src/actions/actions-canvas-transform.cpp:219
 msgid "Reset canvas flipping"
@@ -4618,15 +4618,15 @@ msgstr "Zamknout rotaci plátna"
 
 #: ../src/actions/actions-file.cpp:100
 msgid "File Open"
-msgstr ""
+msgstr "Otevřít soubor"
 
 #: ../src/actions/actions-file.cpp:100
 msgid "Open file"
-msgstr "Otevřít soubor"
+msgstr "Otevře soubor"
 
 #: ../src/actions/actions-file.cpp:101
 msgid "File New"
-msgstr ""
+msgstr "Nový soubor"
 
 #: ../src/actions/actions-file.cpp:101
 msgid "Open new document using template"
@@ -4634,11 +4634,11 @@ msgstr "Otevřít nový dokument pomocí šablony"
 
 #: ../src/actions/actions-file.cpp:102
 msgid "File Close"
-msgstr ""
+msgstr "Zavřít soubor"
 
 #: ../src/actions/actions-file.cpp:102
 msgid "Close active document"
-msgstr ""
+msgstr "Zavře aktivní dokument"
 
 #: ../src/actions/actions-object-align.cpp:206
 #: ../src/ui/dialog/align-and-distribute.cpp:216
@@ -4694,15 +4694,15 @@ msgstr ""
 
 #: ../src/actions/actions-object.cpp:146
 msgid "Unlink Clones"
-msgstr ""
+msgstr "Odpojit klony"
 
 #: ../src/actions/actions-object.cpp:146
 msgid "Unlink clones and symbols"
-msgstr ""
+msgstr "Odpojit klony a symboly"
 
 #: ../src/actions/actions-object.cpp:147
 msgid "Object To Path"
-msgstr ""
+msgstr "Objekt na cestu"
 
 #: ../src/actions/actions-object.cpp:147
 msgid "Convert shapes to paths"
@@ -4718,15 +4718,15 @@ msgstr "Převést tahy na cesty"
 
 #: ../src/actions/actions-object.cpp:149
 msgid "Simplify Path"
-msgstr ""
+msgstr "Zjednodušit cestu"
 
 #: ../src/actions/actions-object.cpp:149
 msgid "Simplify paths, reducing node counts"
-msgstr ""
+msgstr "Zjednodušit cesty, snižit počet uzlů"
 
 #: ../src/actions/actions-output.cpp:225
 msgid "Export Type"
-msgstr ""
+msgstr "Typ exportu"
 
 #: ../src/actions/actions-output.cpp:225
 msgid "Set export file type"
@@ -4750,11 +4750,11 @@ msgstr ""
 
 #: ../src/actions/actions-output.cpp:229
 msgid "Export Area"
-msgstr ""
+msgstr "Oblast exportu"
 
 #: ../src/actions/actions-output.cpp:229
 msgid "Set export area"
-msgstr ""
+msgstr "Nastavit exportovanou oblast"
 
 #: ../src/actions/actions-output.cpp:230
 msgid "Export Area Drawing"
@@ -4846,11 +4846,11 @@ msgstr ""
 
 #: ../src/actions/actions-output.cpp:243
 msgid "Export Text to Path"
-msgstr ""
+msgstr "Exportovat text na cestu"
 
 #: ../src/actions/actions-output.cpp:243
 msgid "Convert texts to paths in the exported file"
-msgstr ""
+msgstr "Převést texty na cesty v exportovaném souboru"
 
 #: ../src/actions/actions-output.cpp:244
 msgid "Export PS Level"
@@ -4870,7 +4870,7 @@ msgstr "Nastavit verzi PDF"
 
 #: ../src/actions/actions-output.cpp:246
 msgid "Export LaTeX"
-msgstr ""
+msgstr "Exportovat LaTeX"
 
 #: ../src/actions/actions-output.cpp:247
 msgid "Export Use Hints"
@@ -4914,11 +4914,11 @@ msgstr ""
 
 #: ../src/actions/actions-selection.cpp:239
 msgid "Clear Selection"
-msgstr ""
+msgstr "Vymazat výběr"
 
 #: ../src/actions/actions-selection.cpp:239
 msgid "Clear selection"
-msgstr ""
+msgstr "Vymaže výběr"
 
 #: ../src/actions/actions-selection.cpp:240
 #: ../src/extension/prefdialog/parameter-path.cpp:214
@@ -5003,11 +5003,11 @@ msgstr ""
 
 #: ../src/actions/actions-transform.cpp:90
 msgid "Translate"
-msgstr ""
+msgstr "Přetransformovat"
 
 #: ../src/actions/actions-transform.cpp:90
 msgid "Translate selected objects (dx,dy)"
-msgstr ""
+msgstr "Přetransformovat vybrané objekty (dx, dy)"
 
 #: ../src/actions/actions-transform.cpp:91 ../src/selection-chemistry.cpp:1946
 #: ../src/seltrans.cpp:466 ../src/ui/dialog/transformation.cpp:802
@@ -10319,7 +10319,7 @@ msgstr "Připojit cestu"
 msgid ""
 "Glue the current path's ends to a specific position on one or two other paths"
 msgstr ""
-"Konce aktuální cesty nalepte na konkrétní pozici na jedné nebo dvou dalších "
+"Konce aktuální cesty nalepit na konkrétní pozici na jedné nebo dvou dalších "
 "cestách"
 
 #: ../src/live_effects/effect.cpp:500
@@ -13348,7 +13348,7 @@ msgstr "<b>Variace uzlů</b> Posouvá uzly/úchyty"
 
 #: ../src/live_effects/lpe-roughen.cpp:163
 msgid "<b>Extra roughen</b> Add an extra layer of rough"
-msgstr "<b>Extra zdrsnění</ b> Přidává další vrstvu drsnosti"
+msgstr "<b>Extra zdrsnění</b> Přidává další vrstvu drsnosti"
 
 #: ../src/live_effects/lpe-roughen.cpp:171
 msgid "<b>Options</b> Modify options to rough"
@@ -14519,7 +14519,7 @@ msgstr "Klon"
 #: ../src/object/sp-use.cpp:248
 #, c-format
 msgid "called %s"
-msgstr ""
+msgstr "nazvaný %s"
 
 #: ../src/object/sp-use.cpp:248
 msgid "Unnamed Symbol"
@@ -15243,9 +15243,8 @@ msgid ""
 msgstr ""
 
 #: ../src/selection-chemistry.cpp:2859
-#, fuzzy
 msgid "Unlink clone recursively"
-msgstr "Od_pojit klony rekurzivně"
+msgstr "Odpojit klony rekurzivně"
 
 #: ../src/selection-chemistry.cpp:2890
 msgid ""
@@ -15470,9 +15469,8 @@ msgstr[1] " ve <b>%i</b> vrstvách"
 msgstr[2] " v <b>%i</b> vrstvách"
 
 #: ../src/selection-describer.cpp:182
-#, fuzzy
 msgid "Convert symbol to group to edit"
-msgstr "Převést obrys na křivku"
+msgstr "Převést symbol na skupinu k upravení"
 
 #: ../src/selection-describer.cpp:186
 msgid "Remove from symbols tray to edit symbol"
@@ -17062,15 +17060,15 @@ msgstr "Nastavení barvy výplně ze vzorníku"
 
 #: ../src/ui/dialog/command-palette.cpp:1068
 msgid "History mode"
-msgstr ""
+msgstr "Režim historie"
 
 #: ../src/ui/dialog/command-palette.cpp:1146
 msgid "Invalid input! Enter an integer number."
-msgstr ""
+msgstr "Neplatný vstup! Zadejte celé číslo."
 
 #: ../src/ui/dialog/command-palette.cpp:1155
 msgid "Invalid input! Enter a decimal number."
-msgstr ""
+msgstr "Neplatný vstup! Zadejte desetinné číslo."
 
 #: ../src/ui/dialog/debug.cpp:66
 msgid "Messages"
@@ -17081,6 +17079,7 @@ msgid "Capture log messages"
 msgstr "Zachytávat zprávy logu"
 
 #: ../src/ui/dialog/debug.cpp:83
+#, fuzzy
 msgid "Release log messages"
 msgstr "Zprávy záznamu o vydání"
 
@@ -17090,7 +17089,7 @@ msgstr "Zavřít kartu"
 
 #: ../src/ui/dialog/dialog-multipaned.cpp:282
 msgid "You can drop dockable dialogs here."
-msgstr ""
+msgstr "Zde můžete přetáhnout ukotvitelná dialogová okna."
 
 #: ../src/ui/dialog/dialog-notebook.cpp:74
 msgid "Close Notebook"
@@ -17098,15 +17097,15 @@ msgstr ""
 
 #: ../src/ui/dialog/dialog-notebook.cpp:80
 msgid "Move Tab to New Window"
-msgstr ""
+msgstr "Přesunout kartu do nového okna"
 
 #: ../src/ui/dialog/dialog-notebook.cpp:90
 msgid "Labels: automatic"
-msgstr ""
+msgstr "Popisky: automatické"
 
 #: ../src/ui/dialog/dialog-notebook.cpp:93
 msgid "Labels: always off"
-msgstr ""
+msgstr "Popisky: vždy vypnuté"
 
 #: ../src/ui/dialog/dialog-window.cpp:55
 msgid "Dialog Window"
@@ -17125,11 +17124,8 @@ msgid "Checkerboard background"
 msgstr "Šachovnicové pozadí"
 
 #: ../src/ui/dialog/document-properties.cpp:102
-#, fuzzy
 msgid "If set, use a colored checkerboard for the canvas background"
-msgstr ""
-"Je-li nastaveno, použijte šachovnici pro pozadí, jinak použijte barvu pozadí s "
-"plným krytím."
+msgstr "Je-li nastaveno, použít barevnou šachovnici pro pozadí plátna"
 
 #: ../src/ui/dialog/document-properties.cpp:103
 msgid "Show page _border"
@@ -17167,6 +17163,8 @@ msgid ""
 "Color of the canvas background. Note: opacity is ignored except when exporting to "
 "bitmap."
 msgstr ""
+"Barva pozadí plátna. Poznámka: průhlednost je ignorována, kromě exportu do "
+"bitmapy."
 
 #: ../src/ui/dialog/document-properties.cpp:107
 msgid "Border _color:"
@@ -20985,7 +20983,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1560
 msgid "_Zoom correction factor (in %)"
-msgstr ""
+msgstr "Korekční faktor _přiblížení (v %)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1561
 msgid ""
@@ -20993,6 +20991,9 @@ msgid ""
 "length. This information is used when zooming to 1:1, 1:2, etc., to display "
 "objects in their true sizes"
 msgstr ""
+"Upravte posuvník tak, aby se délka pravítka na obrazovce shodovala s jeho "
+"skutečnou délkou. Tyto informace se používají při přiblížení na 1:1, 1:2 atd., "
+"aby se objekty zobrazily v jejich skutečné velikosti."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1565
 msgid "Show zoom percentage corrected by factor"
@@ -21173,15 +21174,15 @@ msgstr "Použít symbolické ikony"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1717
 msgid "Use default base color for icons"
-msgstr ""
+msgstr "Pro ikony použít výchozí základní barvu"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1720
 msgid "Use default higlight colors for icons"
-msgstr ""
+msgstr "Pro ikony použít výchozí barvy zvýraznění"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1746
 msgid "Icon color base"
-msgstr ""
+msgstr "Základní barva ikony"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1747
 msgid "Base color for icons"
@@ -21189,15 +21190,15 @@ msgstr "Základní barva ikon"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1753
 msgid "Icon color highlights"
-msgstr ""
+msgstr "Barva zvýraznění ikony"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1754
 msgid "Highlight colors supported by some symbolic icon themes"
-msgstr ""
+msgstr "Zvýrazněné barvy podporované některými motivy symbolických ikon"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1760
 msgid "Reset theme colors for some symbolic icon themes"
-msgstr ""
+msgstr "Obnovit barvy motivů u některých motivů symbolických ikon"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1763
 msgctxt "Icon size"
@@ -23193,7 +23194,7 @@ msgstr "Systémové informace"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3343
 msgid "Reset Preferences"
-msgstr "Resetovat předvolby"
+msgstr "Obnovit předvolby"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:3346
 msgid "User preferences:"
@@ -32926,11 +32927,11 @@ msgstr "Otevře předvolby nástroje LPE"
 
 #: ../src/verbs.cpp:2782
 msgid "_Command Palette"
-msgstr ""
+msgstr "_Paleta příkazů"
 
 #: ../src/verbs.cpp:2782
 msgid "Show or hide the on-canvas command palette"
-msgstr ""
+msgstr "Zobrazí nebo skryje paletu příkazů na plátně"
 
 #: ../src/verbs.cpp:2783
 msgid "_Rulers"
@@ -33727,7 +33728,7 @@ msgstr ""
 
 #: ../share/ui/command-palette-operation.glade:63
 msgid "Click to Copy"
-msgstr ""
+msgstr "Kliknutím zkopírujete"
 
 #: ../share/ui/command-palette-operation.glade:86
 msgid "Ctrl+F"
@@ -33791,7 +33792,7 @@ msgstr "Nastavi_t jako výchozí"
 
 #: ../share/ui/dialog-text-edit.glade:156
 msgid "Apply"
-msgstr ""
+msgstr "Použít"
 
 #: ../share/ui/dialog-trace.glade:74
 msgid ""
@@ -34076,6 +34077,8 @@ msgid ""
 "<big><b>Do you want to get involved with Inkscape? <a href=\"https://inkscape.org/"
 "contribute/\">Check this page!</a></b></big>"
 msgstr ""
+"<big><b>Chcete se zapojit do vývoje Inkscape? <a href=\"https://inkscape.org/"
+"contribute/\">Koukněte se na tuto stránku!</a></b></big>"
 
 #: ../share/ui/inkscape-about.glade:113
 msgid "List of authors who contributed to the code"
@@ -34090,7 +34093,7 @@ msgid ""
 "<big><b>Do you want to contribute to translation activities? <a href=\"https://"
 "inkscape.org/contribute/translations/\">Join us here!</a></b></big>"
 msgstr ""
-"<big><b>Chcete přispívat svými překladatelskými aktivitami? <a href=\"https://"
+"<big><b>Chcete přispět svými překladatelskými aktivitami? <a href=\"https://"
 "inkscape.org/contribute/translations/\">Připojte se k nám zde!</a></b></big>"
 
 #: ../share/ui/inkscape-about.glade:178
@@ -34106,6 +34109,8 @@ msgid ""
 "<big><b>See the full details about the Inkscape licenses <a href=\"https://"
 "inkscape.org/about/license/\">here</a>!</b></big>"
 msgstr ""
+"<big><b>Všechny podrobnosti o licencích Inkscape najdete <a href=\"https://"
+"inkscape.org/about/license/\">tady</a>!</b></big>"
 
 #: ../share/ui/inkscape-about.glade:223
 msgid "License file failed to load."
@@ -34596,7 +34601,7 @@ msgstr "Video"
 #: ../share/ui/inkscape-start.glade:2008
 msgctxt "Document format category"
 msgid "Social"
-msgstr "Sociální"
+msgstr "Sociální sítě"
 
 #: ../share/ui/inkscape-start.glade:2066
 msgctxt "Document format category"
@@ -40106,7 +40111,7 @@ msgstr ""
 
 #: ../share/extensions/path_to_absolute.inx:3
 msgid "To Absolute"
-msgstr ""
+msgstr "Na absolutní"
 
 #: ../share/extensions/pathalongpath.inx:3
 msgid "Pattern along Path"
@@ -43168,40 +43173,6 @@ msgstr ""
 msgid "Half of font height"
 msgstr "Polovina výšky písma"
 
-#~ msgid "Shape linked"
-#~ msgstr "Propojení tvaru"
-
-#~ msgid "Use default colors for icons"
-#~ msgstr "Použít výchozí barvy pro ikony"
-
-#~ msgid "Icon color"
-#~ msgstr "Barva ikony"
-
-#~ msgid "Highlights"
-#~ msgstr "Zvýraznění"
-
-#~ msgctxt "Brief copyright notice at the footer of the About screen"
-#~ msgid "© 2019 Inkscape Developers"
-#~ msgstr "© 2019 Vývojáři Inkscape"
-
-#~ msgid "A4 (Portrait)"
-#~ msgstr "A4 (na výšku)"
-
-#~ msgid "A0 (Portrait)"
-#~ msgstr "A0 (na výšku)"
-
-#~ msgid "A1 (Portrait)"
-#~ msgstr "A1 (na výšku)"
-
-#~ msgid "A2 (Portrait)"
-#~ msgstr "A2 (na výšku)"
-
-#~ msgid "A3 (Portrait)"
-#~ msgstr "A3 (na výšku)"
-
-#~ msgid "A5 (Portrait)"
-#~ msgstr "A5 (na výšku)"
-
 #~ msgid ""
 #~ "<span weight=\"bold\" size=\"larger\">One or more extensions failed to load</"
 #~ "span>\n"
@@ -43269,6 +43240,9 @@ msgstr "Polovina výšky písma"
 
 #~ msgid "Hide linked path"
 #~ msgstr "Skrýt propojenou cestu"
+
+#~ msgid "Shape linked"
+#~ msgstr "Propojení tvaru"
 
 #~ msgid "Unify dashes"
 #~ msgstr "Sjednotit čárky"
@@ -43411,10 +43385,19 @@ msgstr "Polovina výšky písma"
 #~ msgid "Display icons"
 #~ msgstr "Zobrazení ikon"
 
+#~ msgid "Use default colors for icons"
+#~ msgstr "Použít výchozí barvy pro ikony"
+
+#~ msgid "Icon color"
+#~ msgstr "Barva ikony"
+
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1195
 #~ msgid "Base color for icons. Some icons changes need reload"
 #~ msgstr "Základní barva ikon. Některé změny ikon je třeba znovu načíst"
+
+#~ msgid "Highlights"
+#~ msgstr "Zvýraznění"
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1202
@@ -44221,6 +44204,28 @@ msgstr "Polovina výšky písma"
 
 #~ msgid "_Canvas Orientation"
 #~ msgstr "_Orientace strany"
+
+#~ msgctxt "Brief copyright notice at the footer of the About screen"
+#~ msgid "© 2019 Inkscape Developers"
+#~ msgstr "© 2019 Vývojáři Inkscape"
+
+#~ msgid "A4 (Portrait)"
+#~ msgstr "A4 (na výšku)"
+
+#~ msgid "A0 (Portrait)"
+#~ msgstr "A0 (na výšku)"
+
+#~ msgid "A1 (Portrait)"
+#~ msgstr "A1 (na výšku)"
+
+#~ msgid "A2 (Portrait)"
+#~ msgstr "A2 (na výšku)"
+
+#~ msgid "A3 (Portrait)"
+#~ msgstr "A3 (na výšku)"
+
+#~ msgid "A5 (Portrait)"
+#~ msgstr "A5 (na výšku)"
 
 #~ msgid "Print Inkscape version and exit."
 #~ msgstr "Vypsat verzi Inkscape a ukončit."
