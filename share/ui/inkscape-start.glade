@@ -458,7 +458,7 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
     <data>
       <row>
         <col id="0" translatable="yes">Desktop 1080p</col>
-        <col id="1">resources/template_desktop_landscape.svg</col>
+        <col id="1">resources/template_desktop_hd_landscape.svg</col>
         <col id="2">-</col>
         <col id="3">1920px</col>
         <col id="4">1080px</col>
@@ -466,7 +466,7 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
       </row>
       <row>
         <col id="0" translatable="yes">Desktop 2K</col>
-        <col id="1">resources/template_desktop_landscape.svg</col>
+        <col id="1">resources/template_desktop_hd_landscape.svg</col>
         <col id="2">-</col>
         <col id="3">2560px</col>
         <col id="4">1440px</col>
@@ -474,7 +474,7 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
       </row>
       <row>
         <col id="0" translatable="yes">Desktop 4K</col>
-        <col id="1">resources/template_desktop_landscape.svg</col>
+        <col id="1">resources/template_desktop_hd_landscape.svg</col>
         <col id="2">-</col>
         <col id="3">3840px</col>
         <col id="4">2160px</col>
@@ -482,7 +482,7 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
       </row>
       <row>
         <col id="0" translatable="yes">Desktop 720p</col>
-        <col id="1">resources/template_desktop_landscape.svg</col>
+        <col id="1">resources/template_desktop_hd_landscape.svg</col>
         <col id="2">-</col>
         <col id="3">1366px</col>
         <col id="4">768px</col>
