@@ -131,6 +131,7 @@ protected:
     bool _auto_export = false;
     int _pdf_page     = 1;
     int _pdf_poppler  = false;
+    bool _use_command_line_argument = false;
     InkscapeApplication();
 
     // Documents are owned by the application which is responsible for opening/saving/exporting. WIP
