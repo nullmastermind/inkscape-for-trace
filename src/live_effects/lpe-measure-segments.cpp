@@ -1154,14 +1154,6 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                         createTextLabel(pos, counter, length, angle, remove, true);
                     }
                     arrow_gap = 8 * Inkscape::Util::Quantity::convert(line_width, unit.get_abbreviation(), display_unit.c_str());
-                    SPCSSAttr *css = sp_repr_css_attr_new();
-
-                    setlocale (LC_NUMERIC, "C");
-                    double width_line =  atof(sp_repr_css_property(css,"stroke-width","-1"));
-                    setlocale (LC_NUMERIC, locale_base);
-                    if (width_line > -0.0001) {
-                         arrow_gap = 8 * Inkscape::Util::Quantity::convert(width_line, unit.get_abbreviation(), display_unit.c_str());
-                    }
                     if(flip_side) {
                        arrow_gap *= -1;
                     }
