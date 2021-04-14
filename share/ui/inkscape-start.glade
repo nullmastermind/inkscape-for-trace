@@ -1028,7 +1028,19 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
                     <property name="height_request">220</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="pixbuf" translatable="yes">../screens/start-welcome-text.svg</property>
+                    <property name="pixbuf" translatable="yes" comments="Do not translate this unless you have read the ./share/screens/TRANSLATING instructions.">../screens/start-welcome-text.svg</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">False</property>
+                    <property name="label" translatable="yes" comments="Not automatic, but will be turned into start-welcome-text.svg">Welcome!</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">False</property>
+                    <property name="label" translatable="yes" comments="Not automatic, but will be turned into start-welcome-text.svg">Let's set up a few things...</property>
                   </object>
                 </child>
               </object>
