@@ -1023,12 +1023,12 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
                   </object>
                 </child>
                 <child>
-                  <object class="GtkImage">
+                  <object class="GtkImage" id="welcome_text">
                     <property name="width_request">700</property>
                     <property name="height_request">220</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="pixbuf" translatable="yes" comments="Do not translate this unless you have read the ./share/screens/TRANSLATING instructions.">../screens/start-welcome-text.svg</property>
+                    <property name="pixbuf">../screens/start-welcome-text.svg</property>
                   </object>
                 </child>
                 <child>

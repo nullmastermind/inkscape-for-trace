@@ -198,6 +198,11 @@ StartScreen::StartScreen()
     dark_toggle->set_active(prefs->getBool("/theme/darkTheme", false));
 
     // Welcome! tab
+    std::string welcome_text_file = Resource::get_filename_string(Resource::SCREENS, "start-welcome-text.svg", true);
+    Gtk::Image *welcome_text;
+    builder->get_widget("welcome_text", welcome_text);
+    welcome_text->set(welcome_text_file);
+    
     canvas->signal_changed().connect(sigc::mem_fun(*this, &StartScreen::canvas_changed));
     keys->signal_changed().connect(sigc::mem_fun(*this, &StartScreen::keyboard_changed));
     themes->signal_changed().connect(sigc::mem_fun(*this, &StartScreen::theme_changed));
