@@ -53,7 +53,7 @@ SwatchSelector::SwatchSelector() :
     _selected_color.signal_dragged.connect(sigc::mem_fun(this, &SwatchSelector::_changedCb));
     _selected_color.signal_released.connect(sigc::mem_fun(this, &SwatchSelector::_changedCb));
     // signal_changed doesn't get called if updating shape with colour.
-    //_selected_color.signal_changed.connect(sigc::mem_fun(this, &SwatchSelector::_changedCb));
+    _selected_color.signal_changed.connect(sigc::mem_fun(this, &SwatchSelector::_changedCb));
 }
 
 SwatchSelector::~SwatchSelector()
