@@ -8295,9 +8295,8 @@ msgstr "S'està guardant el document..."
 #. TRANSLATORS: 'en' is an ISO 639-1 language code.
 #. Replace with language code for your language, i.e. the name of your .po file
 #: ../src/file.cpp:893 ../src/io/resource.cpp:154 ../src/io/resource.cpp:159
-#, fuzzy
 msgid "en"
-msgstr "Ploma"
+msgstr "ca@valencia"
 
 #: ../src/file.cpp:1163 ../src/ui/dialog/inkscape-preferences.cpp:2093
 #: ../src/ui/dialog/ocaldialogs.cpp:1087

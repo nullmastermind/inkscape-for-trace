@@ -8184,7 +8184,7 @@ msgstr "Saglabā dokumentu..."
 #. Replace with language code for your language, i.e. the name of your .po file
 #: ../src/file.cpp:895 ../src/io/resource.cpp:154 ../src/io/resource.cpp:159
 msgid "en"
-msgstr "en"
+msgstr "lv"
 
 #: ../src/file.cpp:1165 ../src/ui/dialog/inkscape-preferences.cpp:2082
 msgid "Import"

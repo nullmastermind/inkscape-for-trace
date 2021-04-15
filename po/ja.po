@@ -9203,7 +9203,7 @@ msgstr "ドキュメントを保存しています..."
 #: ../src/file.cpp:896 ../src/io/resource.cpp:173 ../src/io/resource.cpp:178
 #: ../src/verbs.cpp:2058
 msgid "en"
-msgstr "en"
+msgstr "ja"
 
 #: ../src/file.cpp:1182 ../src/ui/dialog/command-palette.cpp:262
 #: ../src/ui/dialog/inkscape-preferences.cpp:2611

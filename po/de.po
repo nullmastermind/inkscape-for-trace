@@ -9310,7 +9310,6 @@ msgstr "Es müssen keine Änderungen gespeichert werden."
 msgid "Saving document..."
 msgstr "Dokument wird gespeichert …"
 
-# !!!
 #. TRANSLATORS: 'en' is an ISO 639-1 language code.
 #. Replace with language code for your language, i.e. the name of your .po file
 #: ../src/file.cpp:896 ../src/io/resource.cpp:173 ../src/io/resource.cpp:178
