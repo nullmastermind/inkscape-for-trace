@@ -241,7 +241,7 @@
        <verb verb-id="DialogTransform" />
        <verb verb-id="DialogAlignDistribute" />
        <verb verb-id="DialogArrange" />
-       <verb verb-id="DialogPrototype" />
+       <!-- <verb verb-id="DialogPrototype" /> -->
    </submenu>
    <submenu name="_Path">
        <verb verb-id="ObjectToPath" />

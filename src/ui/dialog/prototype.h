@@ -13,6 +13,8 @@
 #ifndef SEEN_PROTOTYPE_PANEL_H
 #define SEEN_PROTOTYPE_PANEL_H
 
+#ifdef DEBUG
+
 #include <iostream>
 
 #include "selection.h"
@@ -55,6 +57,8 @@ private:
 } // namespace Dialog
 } // namespace UI
 } // namespace Inkscape
+
+#endif // DEBUG
 
 #endif // SEEN_PROTOTYPE_PANEL_H
 

@@ -157,8 +157,10 @@ DialogBase *DialogContainer::dialog_factory(unsigned int code)
             return &Inkscape::UI::Dialog::ObjectsPanel::getInstance();
         case SP_VERB_DIALOG_PAINT:
             return &Inkscape::UI::Dialog::PaintServersDialog::getInstance();
+#ifdef DEBUG
         case SP_VERB_DIALOG_PROTOTYPE:
             return &Inkscape::UI::Dialog::Prototype::getInstance();
+#endif
         case SP_VERB_DIALOG_SELECTORS:
             return &Inkscape::UI::Dialog::SelectorsDialog::getInstance();
 #if WITH_GSPELL

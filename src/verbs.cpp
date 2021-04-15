@@ -1977,7 +1977,9 @@ void DialogVerb::perform(SPAction *action, void *data)
         case SP_VERB_DIALOG_PREFERENCES:
             container->new_floating_dialog(SP_VERB_DIALOG_PREFERENCES);
             break;
+#ifdef DEBUG
         case SP_VERB_DIALOG_PROTOTYPE:
+#endif
         case SP_VERB_DIALOG_DOCPROPERTIES:
         case SP_VERB_DIALOG_FILL_STROKE:
         case SP_VERB_DIALOG_GLYPHS:
@@ -2816,9 +2818,10 @@ Verb *Verb::_base_verbs[] = {
     // new ZoomVerb(SP_VERB_VIEW_COLOR_MODE_GRAYSCALE, "ViewColorModeGrayscale", N_("_Grayscale"),
     new ZoomVerb(SP_VERB_VIEW_ICON_PREVIEW, "ViewIconPreview", N_("Icon Preview"), N_("Preview Icon"),
                  INKSCAPE_ICON("dialog-icon-preview")),
-
+#ifdef DEBUG
     new DialogVerb(SP_VERB_DIALOG_PROTOTYPE, "DialogPrototype", N_("Prototype..."), N_("Prototype Dialog"),
                    INKSCAPE_ICON("document-properties")),
+#endif
     new DialogVerb(SP_VERB_DIALOG_PREFERENCES, "DialogPreferences", N_("P_references"), N_("Edit global Inkscape preferences"),
                    INKSCAPE_ICON("preferences-system")),
     new DialogVerb(SP_VERB_DIALOG_DOCPROPERTIES, "DialogDocumentProperties", N_("_Document Properties..."),

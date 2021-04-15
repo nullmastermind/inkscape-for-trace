@@ -10,6 +10,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#ifdef DEBUG
+
 #include "prototype.h"
 
 #include "document.h"
@@ -106,6 +108,8 @@ void Prototype::on_click()
 } // namespace Dialog
 } // namespace UI
 } // namespace Inkscape
+
+#endif // DEBUG
 
 /*
   Local Variables:
