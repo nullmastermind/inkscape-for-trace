@@ -2868,7 +2868,8 @@ void ObjectSet::removeLPESRecursive(bool keep_paths) {
     }
 
     ObjectSet tmp_set(document());
-    std::vector<SPItem*> items_(items().begin(), items().end());
+    std::vector<SPItem *> items_(items().begin(), items().end());
+    std::vector<SPItem *> itemsdone_;
     for (auto& it:items_) {
         SPLPEItem *splpeitem = dynamic_cast<SPLPEItem *>(it);
         SPGroup *spgroup = dynamic_cast<SPGroup *>(it);
@@ -2876,11 +2877,23 @@ void ObjectSet::removeLPESRecursive(bool keep_paths) {
             std::vector<SPObject*> c = spgroup->childList(false);
             tmp_set.setList(c);
             tmp_set.removeLPESRecursive(keep_paths);
-        } else if (splpeitem) {
-            splpeitem->removeAllPathEffects(keep_paths);
         }
+        if (splpeitem) {
+            // Maybe the item is changed from SPShape to SPPath invalidating selection
+            // fix issue Inkscape#2321
+            char const *id = splpeitem->getAttribute("id");
+            SPDocument *document = splpeitem->document;
+            splpeitem->removeAllPathEffects(keep_paths);
+            SPItem *upditem = dynamic_cast<SPItem *>(document->getObjectById(id));
+            if (upditem) {
+                itemsdone_.push_back(upditem);
+            }
+        } else {
+            itemsdone_.push_back(it);
+        }
+        
     }
-    setList(items_);
+    setList(itemsdone_);
 }
 
 void ObjectSet::cloneOriginal()
