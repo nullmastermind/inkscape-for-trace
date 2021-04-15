@@ -146,7 +146,6 @@ protected:
     UI::Widget::RegisteredCheckButton _rcb_perp;
     UI::Widget::RegisteredCheckButton _rcb_tang;
     //---------------------------------------------------------------
-    Gtk::Button         _link_btn;
     Gtk::Button         _unlink_btn;
     class AvailableProfilesColumns : public Gtk::TreeModel::ColumnRecord
         {

@@ -484,7 +484,6 @@ void DocumentProperties::linkSelectedProfile()
         Gtk::TreeModel::iterator iter = _AvailableProfilesList.get_active();
 
         if (!iter) {
-            g_warning("No color profile available.");
             return;
         }
 
@@ -663,9 +662,6 @@ void DocumentProperties::build_cms()
     Gtk::Label *label_avail = Gtk::manage (new Gtk::Label("", Gtk::ALIGN_START));
     label_avail->set_markup (_("<b>Available Color Profiles:</b>"));
 
-    _link_btn.set_tooltip_text(_("Link Profile"));
-    docprops_style_button(_link_btn, INKSCAPE_ICON("list-add"));
-
     _unlink_btn.set_tooltip_text(_("Unlink Profile"));
     docprops_style_button(_unlink_btn, INKSCAPE_ICON("list-remove"));
 
@@ -704,12 +700,6 @@ void DocumentProperties::build_cms()
     _AvailableProfilesList.set_valign(Gtk::ALIGN_CENTER);
     _page_cms->table().attach(_AvailableProfilesList, 0, row, 1, 1);
 
-    _link_btn.set_halign(Gtk::ALIGN_CENTER);
-    _link_btn.set_valign(Gtk::ALIGN_CENTER);
-    _link_btn.set_margin_start(2);
-    _link_btn.set_margin_end(2);
-    _page_cms->table().attach(_link_btn, 1, row, 1, 1);
-
     _unlink_btn.set_halign(Gtk::ALIGN_CENTER);
     _unlink_btn.set_valign(Gtk::ALIGN_CENTER);
     _page_cms->table().attach(_unlink_btn, 2, row, 1, 1);
@@ -719,6 +709,7 @@ void DocumentProperties::build_cms()
     _AvailableProfilesList.set_model(_AvailableProfilesListStore);
     _AvailableProfilesList.pack_start(_AvailableProfilesListColumns.nameColumn);
     _AvailableProfilesList.set_row_separator_func(sigc::mem_fun(*this, &DocumentProperties::_AvailableProfilesList_separator));
+    _AvailableProfilesList.signal_changed().connect( sigc::mem_fun(*this, &DocumentProperties::linkSelectedProfile) );
 
     populate_available_profiles();
 
@@ -737,7 +728,6 @@ void DocumentProperties::build_cms()
     _LinkedProfilesListScroller.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
     _LinkedProfilesListScroller.set_size_request(-1, 90);
 
-    _link_btn.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::linkSelectedProfile));
     _unlink_btn.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::removeSelectedProfile));
 
     _LinkedProfilesList.get_selection()->signal_changed().connect( sigc::mem_fun(*this, &DocumentProperties::onColorProfileSelectRow) );
