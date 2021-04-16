@@ -774,7 +774,11 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                 PangoItem *pango_item = para.pango_items[unbroken_span.pango_item_index].item;
 
                 // Loop over glyphs in span
-                double old_delta_x = 0.0;
+#if PANGO_VERSION_CHECK(1,44,0)
+                double x_offset_cluster = 0.0; // Handle wrong glyph positioning post-1.44 Pango.
+#endif
+                double x_offset_center  = 0.0; // Handle wrong glyph positioning in pre-1.44 Pango.
+                double x_offset_advance = 0.0; // Handle wrong advance in pre-1.44 Pango.
 
 #ifdef DEBUG_GLYPH
                 std::cout << "\nGlyphs in span: x_start: " << new_span.x_start << " y_offset: " << new_span.y_offset
@@ -916,42 +920,152 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                             //    (the relative difference is correct).
                             // *  Set the advance for non-spacing-marks to 0 (as many fonts don't include vertical metrics).
 
+#if PANGO_VERSION_CHECK(1,44,0)
+                            auto hb_font = pango_font_get_hb_font (font->pFont);
+#endif
+
 #ifdef DEBUG_GLYPH
                             std::cout << "        Upright"
                                       << "  " << std::setw(6) << new_glyph.x
                                       << "  " << std::setw(6) << new_glyph.y
                                       << "  " << std::setw(6) << delta_x
-                                      << "  " << std::setw(6) << delta_y
-                                      << std::endl;
+                                      << "  " << std::setw(6) << delta_y;
+#if PANGO_VERSION_CHECK(1,44,0)
+                            char glyph_name[32];
+                            hb_font_get_glyph_name (hb_font, new_glyph.glyph, glyph_name, sizeof (glyph_name));
+                            std::cout << "  " << (glyph_name ? glyph_name : "");
+#endif
+                            std::cout << std::endl;
 #endif
 
                             if (pango_version_check(1,44,0) != nullptr) {
-                                // Pango < 1.44.0
-                                new_glyph.advance = glyph_v_advance;
+                                // Pango < 1.44.0 (pre HarfBuzz)
                                 new_glyph.x += delta_x;
-                                // Glyph reference point is center (shift left edge to center glyph).
-                                new_glyph.y -= glyph_h_advance/2.0;
-                            }
+                                new_glyph.y -= delta_y;
 
-                            new_glyph.y -= delta_y;
+                                double shift = 0;
+                                double scale_factor = PANGO_SCALE * _font_factory_size_multiplier;
+                                if (!FT_HAS_VERTICAL (font->theFace)) {
 
-                            // Adjust for alignment point (top of em box, horizontal center).
-                            new_glyph.x += new_span.line_height.ascent; // Moves baseline so em-box on grid.
-                            new_glyph.y -= new_span.font_size * (font->GetBaselines()[ dominant_baseline ] -
-                                                                 font->GetBaselines()[ SP_CSS_BASELINE_CENTRAL ] );
+                                    // If there are no vertical metrics, glyphs are vertically
+                                    // centered before base anchor to mark anchor distance is
+                                    // calculated by shaper. We must undo this!
+                                    PangoRectangle ink_rect;
+                                    PangoRectangle logical_rect;
+                                    pango_font_get_glyph_extents (font->pFont,
+                                                                  new_glyph.glyph,
+                                                                  &ink_rect,
+                                                                  &logical_rect);
 
-                            if (g_unichar_type (*iter_source_text) == G_UNICODE_NON_SPACING_MARK) {
-
-                                if (pango_version_check(1,44,0) == nullptr) {
-                                    // Pango >= 1.44
-                                    new_glyph.x -= new_span.line_height.emSize();
-                                    new_glyph.x -= delta_x;
-                                    new_glyph.x += old_delta_x;
+                                    // Shift required to move centered glyph back to proper position
+                                    // relative to baseline.
+                                    shift =
+                                        font->GetTypoAscent() +
+                                        ink_rect.y / scale_factor + // negative
+                                        (ink_rect.height / scale_factor / 2.0) -
+                                        0.5;
                                 }
-                                new_glyph.advance = 0; // Many fonts report a non-zero advance for marks, especially if the 'vmtx' table is missing.
+
+                                // Advance is wrong (horizontal width used instead of vertical)...
+                                if (g_unichar_type (*iter_source_text) != G_UNICODE_NON_SPACING_MARK) {
+
+                                    x_offset_advance = new_glyph.advance - glyph_v_advance;
+                                    new_glyph.advance = glyph_v_advance;
+
+                                    x_offset_center = shift;
+                                } else {
+                                    // Is non-spacing mark!
+                                    if (!FT_HAS_VERTICAL (font->theFace)) {
+
+                                        // If font lacks vertical metrics, all glyphs have em-box advance
+                                        // but non-spacing marks should have zero advance.
+                                        new_glyph.advance = 0;
+
+                                        // Correct for base anchor to mark anchor shift.
+                                        new_glyph.x += (x_offset_center - shift) * new_span.font_size;
+                                    }
+
+                                    // Correct for advance error.
+                                    new_glyph.x += x_offset_advance;
+                                }
+
+                                // Need to shift by horizontal to vertical origin (as we don't load glyph
+                                // with vertical metrics).
+                                new_glyph.x += font->GetTypoAscent() * new_span.font_size;
+                                new_glyph.y -= glyph_h_advance/2.0;
+
+                            } else if (pango_version_check(1,48,1) != nullptr) {
+                                // 1.44.0 <= Pango < 1.48.1 (minus sign error, mismatch between Cairo/Harfbuzz glyph placement)
+                                new_glyph.x += (glyph_width - delta_x);
+                                new_glyph.y -= delta_y;
+                            } else if (pango_version_check(1,48,4) != nullptr) {
+                                // 1.48.1 <= Pango < 1.48.4 (minus sign fix, partial fix for Cairo/Harfbuzz mismatch, but bad mark positioning)
+                                new_glyph.x += delta_x;
+                                new_glyph.y -= delta_y;
+
+#if PANGO_VERSION_CHECK(1,44,0)
+                                // Need to shift by horizontal to vertical origin. Recall Pango lays out vertical text
+                                // as horizontal text then rotates by 90 degress so y_origin -> x, x_origin -> -y.
+                                hb_position_t x_origin = 0.0;
+                                hb_position_t y_origin = 0.0;
+                                hb_font_get_glyph_v_origin (hb_font, new_glyph.glyph, &x_origin, &y_origin);
+                                std::cout << "  x_origin: " << x_origin * font_size_multiplier
+                                          << "  y_origin: " << y_origin * font_size_multiplier << std::endl;
+                                new_glyph.x += y_origin * font_size_multiplier;
+                                new_glyph.y -= x_origin * font_size_multiplier;
+#endif
                             } else {
-                                old_delta_x = delta_x;
+                                // 1.48.4 <= Pango (good mark positioning)
+                                new_glyph.x += delta_x;
+                                new_glyph.y -= delta_y;
                             }
+
+#if PANGO_VERSION_CHECK(1,44,0)
+                            // If a font has no vertical metrics, HarfBuzz using OpenType functions
+                            // (which Pango uses by default from 1.44.0) to position glyphs so that
+                            // the top of their "ink rectangle" is at the top of the "em-box". This
+                            // section of code moves each cluster (base glyph with marks) down to
+                            // match fonts with vertical metrics.
+                            hb_font_extents_t hb_font_extents_not_used;
+                            if (!hb_font_get_v_extents (hb_font, &hb_font_extents_not_used)) {
+                                // Font does not have vertical metrics!
+
+                                if (g_unichar_type (*iter_source_text) != G_UNICODE_NON_SPACING_MARK) { // Probably should include other marks!
+                                    hb_glyph_extents_t glyph_extents;
+                                    if (hb_font_get_glyph_extents (hb_font, new_glyph.glyph, &glyph_extents)) {
+
+                                        // double baseline_adjust =
+                                        //     font_instance->get_baseline(BASELINE_TEXT_BEFORE_EDGE) -
+                                        //     font_instance->get_baseline(BASELINE_ALPHABETIC);
+                                        // std::cout << "baseline_adjust: " << baseline_adjust << std::endl;
+                                        double baseline_adjust = new_span.line_height.ascent / new_span.font_size;
+                                        int hb_x_scale = 0;
+                                        int hb_y_scale = 0;
+                                        hb_font_get_scale (hb_font, &hb_x_scale, &hb_y_scale);
+                                        x_offset_cluster = ((glyph_extents.y_bearing / (double)hb_y_scale) - baseline_adjust) * new_span.font_size;
+                                    } else {
+                                        x_offset_cluster = 0.0; // Failed to find extents.
+                                    }
+                                } else {
+                                    // Is non-spacing mark!
+                                    // Many fonts report a non-zero vertical advance for marks, especially if the 'vmtx' table is missing.
+                                    new_glyph.advance = 0;
+                                }
+
+                                new_glyph.x -= x_offset_cluster;
+                            }
+#else
+                            // Pre 1.44.0
+                            if (!FT_HAS_VERTICAL (font->theFace)) {
+                                if (g_unichar_type (*iter_source_text) != G_UNICODE_NON_SPACING_MARK) { // Probably should include other marks!
+                                } else {
+                                    // Is non-spacing mark!
+                                    // Many fonts report a non-zero vertical advance for marks, especially if the 'vmtx' table is missing.
+                                    new_glyph.advance = 0;
+                                }
+                            }
+#endif
+
                         }
                     } else {
                         // Horizontal text
