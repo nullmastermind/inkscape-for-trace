@@ -1535,10 +1535,13 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
     }
 #endif
 
-    GVariant *options_var = g_variant_dict_end(options->gobj_copy());
+    GVariantDict *options_copy = options->gobj_copy();
+    GVariant *options_var = g_variant_dict_end(options_copy);
     if (g_variant_get_size(options_var) != 0) {
         _use_command_line_argument = true;
     }
+    g_variant_dict_unref(options_copy);
+    g_variant_unref(options_var);
 
     return -1; // Keep going
 }
