@@ -203,6 +203,16 @@ void SPFeImage::set(SPAttr key, gchar const *value) {
     }
 }
 
+/*
+ * Check if the object is being used in the filter's definition
+ * and returns true if it is being used (to avoid infinate loops)
+ */
+bool SPFeImage::valid_for(SPObject const *obj) const
+{
+    // SVGElem could be nullptr, but this should still work.
+    return obj && SP_ITEM(obj) != SVGElem;
+}
+
 /**
  * Receives update notifications.
  */

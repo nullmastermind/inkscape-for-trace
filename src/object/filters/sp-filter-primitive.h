@@ -51,6 +51,12 @@ public:
         /* Calculate the filter's effect on the region */
         virtual Geom::Rect calculate_region(Geom::Rect region);
 
+        /* Return true if the object should be allowed to use this filter */
+        virtual bool valid_for(SPObject const *obj) const {
+            // This is used by feImage to stop infinate loops.
+            return true;
+        };
+
 	/* Common initialization for filter primitives */
 	void renderer_common(Inkscape::Filters::FilterPrimitive *nr_prim);
 

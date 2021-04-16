@@ -617,8 +617,9 @@ static Inkscape::UI::Dialog::FileOpenDialog * selectFeImageFileInstance = nullpt
 class FileOrElementChooser : public Gtk::Box, public AttrWidget
 {
 public:
-    FileOrElementChooser(const SPAttr a)
+    FileOrElementChooser(FilterEffectsDialog& d, const SPAttr a)
         : AttrWidget(a)
+        , _dialog(d)
         , Gtk::Box(Gtk::ORIENTATION_HORIZONTAL)
     {
         pack_start(_entry, false, false);
@@ -654,13 +655,9 @@ public:
         }
     }
 
-    void set_desktop(SPDesktop* d){
-        _desktop = d;
-    }
-
 private:
-    void select_svg_element(){
-        Inkscape::Selection* sel = _desktop->getSelection();
+    void select_svg_element() {
+        Inkscape::Selection* sel = _dialog.getDesktop()->getSelection();
         if (sel->isEmpty()) return;
         Inkscape::XML::Node* node = sel->xmlNodes().front();
         if (!node || !node->matchAttributeName("id")) return;
@@ -695,7 +692,7 @@ private:
         if (!selectFeImageFileInstance) {
             selectFeImageFileInstance =
                   Inkscape::UI::Dialog::FileOpenDialog::create(
-                     *_desktop->getToplevel(),
+                     *_dialog.getDesktop()->getToplevel(),
                      open_path,
                      Inkscape::UI::Dialog::SVG_TYPES,/*TODO: any image, not just svg*/
                      (char const *)_("Select an image to be used as feImage input"));
@@ -730,7 +727,7 @@ private:
     Gtk::Entry _entry;
     Gtk::Button _fromFile;
     Gtk::Button _fromSVGElement;
-    SPDesktop* _desktop;
+    FilterEffectsDialog &_dialog;
 };
 
 class FilterEffectsDialog::Settings
@@ -944,8 +941,7 @@ public:
     // FileOrElementChooser
     FileOrElementChooser* add_fileorelement(const SPAttr attr, const Glib::ustring& label)
     {
-        FileOrElementChooser* foech = new FileOrElementChooser(attr);
-        foech->set_desktop(_dialog.getDesktop());
+        FileOrElementChooser* foech = new FileOrElementChooser(_dialog, attr);
         add_widget(foech, label);
         add_attr_widget(foech);
         return foech;
@@ -1550,13 +1546,11 @@ void FilterEffectsDialog::FilterModifier::on_selection_toggled(const Glib::ustri
         if((*iter)[_columns.sel] == 1)
             filter = nullptr;
 
-        auto itemlist= sel->items();
-        for(auto i=itemlist.begin(); itemlist.end() != i; ++i) {
-            SPItem * item = *i;
+        for (auto item : sel->items()) {
             SPStyle *style = item->style;
             g_assert(style != nullptr);
 
-            if (filter) {
+            if (filter && filter->valid_for(item)) {
                 sp_style_set_property_url(item, "filter", filter, false);
             } else {
                 ::remove_filter(item, false);

@@ -64,6 +64,9 @@ public:
     void set_filter_region(double x, double y, double width, double height);
     Geom::Rect get_automatic_filter_region(SPItem *item);
 
+    // Checks each filter primative to make sure the object won't cause issues
+    bool valid_for(SPObject const *obj) const;
+
     /** Finds image name based on it's slot number. Returns 0 for unknown slot
      * numbers. */
     char const *name_for_image(int const image) const;
