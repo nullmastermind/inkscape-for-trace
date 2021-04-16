@@ -42,6 +42,7 @@ public:
 
     static GlyphsPanel& getInstance();
 
+    void setDesktop(SPDesktop *desktop);
     void update() override;
 
 protected:
@@ -61,7 +62,7 @@ private:
     void calcCanInsert();
     void insertText();
 
-
+    SPDesktop* _desktop = nullptr;
     Glib::RefPtr<Gtk::ListStore> store;
     Gtk::IconView *iconView;
     Glib::RefPtr<Gtk::Entry> entry;

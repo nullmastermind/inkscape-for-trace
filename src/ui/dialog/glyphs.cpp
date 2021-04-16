@@ -563,37 +563,22 @@ GlyphsPanel::GlyphsPanel()
 
 GlyphsPanel::~GlyphsPanel()
 {
+    setDesktop(nullptr);
     for (auto & instanceConn : instanceConns) {
         instanceConn.disconnect();
     }
     instanceConns.clear();
-    for (auto & desktopConn : desktopConns) {
-        desktopConn.disconnect();
-    }
-    desktopConns.clear();
 }
 
-
-void GlyphsPanel::update()
+void GlyphsPanel::setDesktop(SPDesktop *desktop)
 {
-    if (!_app) {
-        std::cerr << "GlyphsPanel::update(): _app is null" << std::endl;
-        return;
-    }
-
-    SPDesktop *desktop = getDesktop();
-
-    if (!desktop) {
-        return;
-    }
-
-    {
-        {
-            for (auto & desktopConn : desktopConns) {
-                desktopConn.disconnect();
-            }
-            desktopConns.clear();
+    if ( desktop != _desktop ) {
+        for (auto & desktopConn : desktopConns) {
+            desktopConn.disconnect();
         }
+        desktopConns.clear();
+
+        _desktop = desktop;
 
         if (desktop && desktop->selection) {
             sigc::connection conn = desktop->selection->connectChanged(sigc::hide(sigc::bind(sigc::mem_fun(*this, &GlyphsPanel::readSelection), true, true)));
@@ -612,12 +597,16 @@ void GlyphsPanel::update()
     }
 }
 
+void GlyphsPanel::update()
+{
+    setDesktop(getDesktop());
+}
+
 // Append selected glyphs to selected text
 void GlyphsPanel::insertText()
 {
-    auto targetDesktop = getDesktop();
     SPItem *textItem = nullptr;
-    auto itemlist= targetDesktop->selection->items();
+    auto itemlist= _desktop->selection->items();
         for(auto i=itemlist.begin(); itemlist.end() != i; ++i) {
             if (SP_IS_TEXT(*i) || SP_IS_FLOWTEXT(*i)) {
             textItem = *i;
@@ -644,7 +633,7 @@ void GlyphsPanel::insertText()
             Glib::ustring combined = sp_te_get_string_multiline(textItem);
             combined += glyphs;
             sp_te_set_repr_text_multiline(textItem, combined.c_str());
-            DocumentUndo::done(targetDesktop->doc(), SP_VERB_CONTEXT_TEXT, _("Append text"));
+            DocumentUndo::done(_desktop->doc(), SP_VERB_CONTEXT_TEXT, _("Append text"));
         }
     }
 }
@@ -705,7 +694,7 @@ void GlyphsPanel::selectionModifiedCB(guint flags)
 void GlyphsPanel::calcCanInsert()
 {
     int items = 0;
-    auto itemlist = getDesktop()->selection->items();
+    auto itemlist = _desktop->selection->items();
     for(auto i=itemlist.begin(); itemlist.end() != i; ++i) {
         if (SP_IS_TEXT(*i) || SP_IS_FLOWTEXT(*i)) {
             ++items;
