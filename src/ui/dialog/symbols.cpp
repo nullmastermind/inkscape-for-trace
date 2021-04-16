@@ -646,10 +646,6 @@ void SymbolsDialog::iconChanged() {
     SPObject* symbol = symbol_document->getObjectById(symbol_id);
 
     if( symbol ) {
-      if( symbol_document == current_document ) {
-        // Select the symbol on the canvas so it can be manipulated
-        current_desktop->selection->set( symbol, false );
-      }
       // Find style for use in <use>
       // First look for default style stored in <symbol>
       gchar const* style = symbol->getAttribute("inkscape:symbol-style");
