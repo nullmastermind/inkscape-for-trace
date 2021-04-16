@@ -42,6 +42,7 @@ public:
     static FillAndStroke &getInstance() { return *new FillAndStroke(); }
 
     void update() override;
+    void setDesktop(SPDesktop *desktop);
 
     void showPageFill();
     void showPageStrokePaint();

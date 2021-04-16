@@ -47,8 +47,6 @@
 
 #include "ui/icon-names.h"
 #include "ui/widget/color-notebook.h"
-#include "ui/widget/gradient-selector.h"
-#include "ui/widget/swatch-selector.h"
 #include "ui/widget/scrollprotected.h"
 
 #include "widgets/widget-sizes.h"
@@ -132,16 +130,10 @@ static bool isPaintModeGradient(PaintSelector::Mode mode)
 
 GradientSelector *PaintSelector::getGradientFromData() const
 {
-    GradientSelector *grad = nullptr;
-    if (_mode == PaintSelector::MODE_SWATCH) {
-        auto swatchsel = dynamic_cast<SwatchSelector *>(_selector);
-        if (swatchsel) {
-            grad = swatchsel->getGradientSelector();
-        }
-    } else {
-        grad = dynamic_cast<GradientSelector *>(_selector);
+    if (_mode == PaintSelector::MODE_SWATCH && _selector_swatch) {
+        return _selector_swatch->getGradientSelector();
     }
-    return grad;
+    return _selector_gradient;
 }
 
 #define XPAD 4
@@ -382,9 +374,8 @@ void PaintSelector::setSwatch(SPGradient *vector)
 #endif
     setMode(MODE_SWATCH);
 
-    auto swatchsel = dynamic_cast<SwatchSelector *>(_selector);
-    if (swatchsel) {
-        swatchsel->setVector((vector) ? vector->document : nullptr, vector);
+    if (_selector_swatch) {
+        _selector_swatch->setVector((vector) ? vector->document : nullptr, vector);
     }
 }
 
@@ -484,13 +475,20 @@ void PaintSelector::pushAttrsToGradient(SPGradient *gr) const
 
 void PaintSelector::clear_frame()
 {
-    if (_selector) {
-        // This is a hack to work around GtkNotebook bug in ColorSelector. Is sends signal switch-page on destroy
-        // The widget is hidden first so it can recognize that it should not process signals from notebook child
-        _selector->set_visible(false);
-        _frame->remove(*_selector);
-        // gtk_widget_destroy(_selector);
-        //_selector = nullptr;
+    if (_selector_solid_color) {
+        _selector_solid_color->hide();
+    }
+    if (_selector_gradient) {
+        _selector_gradient->hide();
+    }
+    if (_selector_mesh) {
+        _selector_mesh->hide();
+    }
+    if (_selector_pattern) {
+        _selector_pattern->hide();
+    }
+    if (_selector_swatch) {
+        _selector_swatch->hide();
     }
 }
 
@@ -580,23 +578,23 @@ void PaintSelector::set_mode_color(PaintSelector::Mode /*mode*/)
         /* Already have color selector */
         // Do nothing
     } else {
-
         clear_frame();
+
         /* Create new color selector */
         /* Create vbox */
-        auto vb = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL, 4));
-        vb->set_homogeneous(false);
-        vb->show();
+        if (!_selector_solid_color) {
+            _selector_solid_color = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL, 4));
+            _selector_solid_color->set_homogeneous(false);
 
-        /* Color selector */
-        Gtk::Widget *color_selector = Gtk::manage(new ColorNotebook(*(_selected_color)));
-        color_selector->show();
-        vb->pack_start(*color_selector, true, true, 0);
+            /* Color selector */
+            Gtk::Widget *color_selector = Gtk::manage(new ColorNotebook(*(_selected_color)));
+            color_selector->show();
+            _selector_solid_color->pack_start(*color_selector, true, true, 0);
+            /* Pack everything to frame */
+            _frame->add(*_selector_solid_color);
+        }
 
-        /* Pack everything to frame */
-        _frame->add(*vb);
-
-        _selector = vb;
+        _selector_solid_color->show();
     }
 
     _label->set_markup(_("<b>Flat color</b>"));
@@ -629,30 +627,27 @@ void PaintSelector::set_mode_gradient(PaintSelector::Mode mode)
         // do nothing - the selector should already be a GradientSelector
     } else {
         clear_frame();
-        /* Create new gradient selector */
-        auto new_gsel = Gtk::manage(new GradientSelector());
-        new_gsel->show();
-        new_gsel->signal_grabbed().connect(sigc::mem_fun(this, &PaintSelector::gradient_grabbed));
-        new_gsel->signal_dragged().connect(sigc::mem_fun(this, &PaintSelector::gradient_dragged));
-        new_gsel->signal_released().connect(sigc::mem_fun(this, &PaintSelector::gradient_released));
-        new_gsel->signal_changed().connect(sigc::mem_fun(this, &PaintSelector::gradient_changed));
-        /* Pack everything to frame */
-        _frame->add(*new_gsel);
-        _selector = new_gsel;
+        if (!_selector_gradient) {
+            /* Create new gradient selector */
+            _selector_gradient = Gtk::manage(new GradientSelector());
+            _selector_gradient->show();
+            _selector_gradient->signal_grabbed().connect(sigc::mem_fun(this, &PaintSelector::gradient_grabbed));
+            _selector_gradient->signal_dragged().connect(sigc::mem_fun(this, &PaintSelector::gradient_dragged));
+            _selector_gradient->signal_released().connect(sigc::mem_fun(this, &PaintSelector::gradient_released));
+            _selector_gradient->signal_changed().connect(sigc::mem_fun(this, &PaintSelector::gradient_changed));
+            /* Pack everything to frame */
+            _frame->add(*_selector_gradient);
+        }
+        _selector_gradient->show();
     }
-
-    // We should now have a valid GradientSelector so we can use it
-    auto gsel = dynamic_cast<GradientSelector *>(_selector);
-
-    if (!gsel) g_warning("No GradientSelector found");
 
     /* Actually we have to set option menu history here */
     if (mode == PaintSelector::MODE_GRADIENT_LINEAR) {
-        gsel->setMode(GradientSelector::MODE_LINEAR);
+        _selector_gradient->setMode(GradientSelector::MODE_LINEAR);
         // sp_gradient_selector_set_mode(SP_GRADIENT_SELECTOR(gsel), SP_GRADIENT_SELECTOR_MODE_LINEAR);
         _label->set_markup(_("<b>Linear gradient</b>"));
     } else if (mode == PaintSelector::MODE_GRADIENT_RADIAL) {
-        gsel->setMode(GradientSelector::MODE_RADIAL);
+        _selector_gradient->setMode(GradientSelector::MODE_RADIAL);
         _label->set_markup(_("<b>Radial gradient</b>"));
     }
 
@@ -860,12 +855,11 @@ void PaintSelector::set_mode_mesh(PaintSelector::Mode mode)
     } else {
         clear_frame();
 
-        /* Create vbox */
-        _selector = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL, 4));
-        _selector->set_homogeneous(false);
-        _selector->show();
+        if (!_selector_mesh) {
+            /* Create vbox */
+            _selector_mesh = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL, 4));
+            _selector_mesh->set_homogeneous(false);
 
-        {
             auto hb = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 1));
             hb->set_homogeneous(false);
 
@@ -890,25 +884,25 @@ void PaintSelector::set_mode_mesh(PaintSelector::Mode mode)
             g_object_ref(G_OBJECT(combo));
 
             gtk_container_add(GTK_CONTAINER(hb->gobj()), combo);
-            _selector->pack_start(*hb, false, false, AUX_BETWEEN_BUTTON_GROUPS);
+            _selector_mesh->pack_start(*hb, false, false, AUX_BETWEEN_BUTTON_GROUPS);
 
             g_object_unref(G_OBJECT(store));
-        }
 
-        {
-            auto hb = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 0));
-            hb->set_homogeneous(false);
+            auto hb2 = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 0));
+            hb2->set_homogeneous(false);
+
             auto l = Gtk::manage(new Gtk::Label());
             l->set_markup(_("Use the <b>Mesh tool</b> to modify the mesh."));
             l->set_line_wrap(true);
             l->set_size_request(180, -1);
-            hb->pack_start(*l, true, true, AUX_BETWEEN_BUTTON_GROUPS);
-            _selector->pack_start(*hb, false, false, AUX_BETWEEN_BUTTON_GROUPS);
+            hb2->pack_start(*l, true, true, AUX_BETWEEN_BUTTON_GROUPS);
+            _selector_mesh->pack_start(*hb2, false, false, AUX_BETWEEN_BUTTON_GROUPS);
+            _selector_mesh->show_all();
+
+            _frame->add(*_selector_mesh);
         }
 
-        _selector->show_all();
-
-        _frame->add(*_selector);
+        _selector_mesh->show();
         _label->set_markup(_("<b>Mesh fill</b>"));
     }
 #ifdef SP_PS_VERBOSE
@@ -1184,12 +1178,11 @@ void PaintSelector::set_mode_pattern(PaintSelector::Mode mode)
     } else {
         clear_frame();
 
-        /* Create vbox */
-        _selector = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL, 4));
-        _selector->set_homogeneous(false);
-        _selector->show();
+        if (!_selector_pattern) {
+            /* Create vbox */
+            _selector_pattern = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL, 4));
+            _selector_pattern->set_homogeneous(false);
 
-        {
             auto hb = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 1));
             hb->set_homogeneous(false);
 
@@ -1214,27 +1207,25 @@ void PaintSelector::set_mode_pattern(PaintSelector::Mode mode)
             g_object_ref(G_OBJECT(_patternmenu));
 
             gtk_container_add(GTK_CONTAINER(hb->gobj()), _patternmenu);
-            _selector->pack_start(*hb, false, false, AUX_BETWEEN_BUTTON_GROUPS);
+            _selector_pattern->pack_start(*hb, false, false, AUX_BETWEEN_BUTTON_GROUPS);
 
             g_object_unref(G_OBJECT(store));
-        }
 
-        {
-            auto hb = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 0));
-            hb->set_homogeneous(false);
+            auto hb2 = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 0));
+            hb2->set_homogeneous(false);
             auto l = Gtk::manage(new Gtk::Label());
             l->set_markup(
                 _("Use the <b>Node tool</b> to adjust position, scale, and rotation of the pattern on canvas. Use "
                   "<b>Object &gt; Pattern &gt; Objects to Pattern</b> to create a new pattern from selection."));
             l->set_line_wrap(true);
             l->set_size_request(180, -1);
-            hb->pack_start(*l, true, true, AUX_BETWEEN_BUTTON_GROUPS);
-            _selector->pack_start(*hb, false, false, AUX_BETWEEN_BUTTON_GROUPS);
+            hb2->pack_start(*l, true, true, AUX_BETWEEN_BUTTON_GROUPS);
+            _selector_pattern->pack_start(*hb2, false, false, AUX_BETWEEN_BUTTON_GROUPS);
+            _selector_pattern->show_all();
+            _frame->add(*_selector_pattern);
         }
 
-        _selector->show_all();
-
-        _frame->add(*_selector);
+        _selector_pattern->show();
         _label->set_markup(_("<b>Pattern fill</b>"));
     }
 #ifdef SP_PS_VERBOSE
@@ -1339,19 +1330,21 @@ void PaintSelector::set_mode_swatch(PaintSelector::Mode mode)
         // Do nothing.  The selector is already a SwatchSelector
     } else {
         clear_frame();
-        // Create new gradient selector
-        auto swatchsel = Gtk::manage(new SwatchSelector());
-        swatchsel->show();
 
-        auto gsel = swatchsel->getGradientSelector();
-        gsel->signal_grabbed().connect(sigc::mem_fun(this, &PaintSelector::gradient_grabbed));
-        gsel->signal_dragged().connect(sigc::mem_fun(this, &PaintSelector::gradient_dragged));
-        gsel->signal_released().connect(sigc::mem_fun(this, &PaintSelector::gradient_released));
-        gsel->signal_changed().connect(sigc::mem_fun(this, &PaintSelector::gradient_changed));
+        if (!_selector_swatch) {
+            // Create new gradient selector
+            _selector_swatch = Gtk::manage(new SwatchSelector());
 
-        // Pack everything to frame
-        _frame->add(*swatchsel);
-        _selector = swatchsel;
+            auto gsel = _selector_swatch->getGradientSelector();
+            gsel->signal_grabbed().connect(sigc::mem_fun(this, &PaintSelector::gradient_grabbed));
+            gsel->signal_dragged().connect(sigc::mem_fun(this, &PaintSelector::gradient_dragged));
+            gsel->signal_released().connect(sigc::mem_fun(this, &PaintSelector::gradient_released));
+            gsel->signal_changed().connect(sigc::mem_fun(this, &PaintSelector::gradient_changed));
+
+            // Pack everything to frame
+            _frame->add(*_selector_swatch);
+        }
+        _selector_swatch->show();
         _label->set_markup(_("<b>Swatch fill</b>"));
     }
 
