@@ -177,7 +177,7 @@ public:
     bool isToolboxButtonActive (gchar const *id);
     void setToolboxPosition(Glib::ustring const& id, GtkPositionType pos);
     void setCoordinateStatus(Geom::Point p);
-    void storeDesktopPosition();
+    void storeDesktopPosition(bool store_maximize = true);
     void requestCanvasUpdate();
     void requestCanvasUpdateAndWait();
     void enableInteraction();

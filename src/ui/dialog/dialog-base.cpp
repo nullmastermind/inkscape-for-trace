@@ -69,6 +69,7 @@ DialogBase::DialogBase(gchar const *prefs_path, int verb_num)
 
     set_name(_name); // Essential for dialog functionality
     property_margin().set_value(1); // Essential for dialog UI
+    ensure_size();
 }
 
 bool DialogBase::on_key_press_event(GdkEventKey* key_event) {

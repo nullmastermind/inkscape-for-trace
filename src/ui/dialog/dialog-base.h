@@ -41,7 +41,9 @@ class DialogBase : public Gtk::Box
 
 public:
     DialogBase(gchar const *prefs_path = nullptr, int verb_num = 0);
-    ~DialogBase() override{};
+    ~DialogBase() override{
+        ensure_size();
+    };
 
     /**
      * The update() method is essential to state management. DialogBase implementations get updated whenever
@@ -53,6 +55,17 @@ public:
     {
         update();
         parent_type::on_map();
+    }
+    /*
+     * Often the dialog won't request the right size until the window has
+     * been pushed to resize all it's children. We do this on dialog creation
+     * and destruction.
+     */
+    void ensure_size()
+    {
+        if (auto desktop = getDesktop()) {
+            desktop->getToplevel()->resize_children();
+        }
     }
 
     // Getters and setters
