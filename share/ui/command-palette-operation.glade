@@ -57,7 +57,7 @@
         </child>
         <child>
           <object class="GtkButton" id="CPActionFullName">
-            <property name="label" translatable="yes">action.full-name</property>
+            <property name="label"></property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="tooltip_text" translatable="yes">Click to Copy</property>
