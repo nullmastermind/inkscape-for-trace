@@ -47,7 +47,7 @@ install(DIRECTORY themes DESTINATION ${INKSCAPE_SHARE_INSTALL}
 )
 
 
-# appdata and desktop files
+# appdata and desktop files, bash completions
 if(UNIX)
   if (ENABLE_BINRELOC)
     set(INKSCAPE_ICONPATH "\${SNAP}/share/inkscape/branding/inkscape.svg")
@@ -118,11 +118,8 @@ if(UNIX)
     DESTINATION ${SHARE_INSTALL}/applications)
   install(FILES ${CMAKE_BINARY_DIR}/org.inkscape.Inkscape.appdata.xml
     DESTINATION ${SHARE_INSTALL}/metainfo)
-  install(FILES
-    ../AUTHORS
-    ../TRANSLATORS
-    ../COPYING
-    DESTINATION ${INKSCAPE_SHARE_INSTALL}/doc)
+
+
   install(FILES
     bash-completion/completions/inkscape
     DESTINATION ${SHARE_INSTALL}/bash-completion/completions)
