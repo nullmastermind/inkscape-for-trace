@@ -142,6 +142,38 @@ inkscape:mac:
       - Inkscape.dmg
 
 
+inkscape:windows:
+  stage: build
+  tags:
+    - windows
+    - inkscape # differentiates our runner from shared runners
+  rules:
+    - *do_not_run_for_schedules
+    - if: '$CI_PROJECT_NAMESPACE == "inkscape"'
+    - if: '$CI_PROJECT_NAMESPACE == "ede123"'
+  cache:
+    key: "cache-windows"
+    paths:
+      - build/ccache
+  variables:
+    PACMAN_OPTIONS: "--needed --noconfirm --noprogressbar --overwrite \\*"
+  parallel:
+    matrix:
+      - MSYSTEM:
+          - MINGW64
+          - MINGW32
+  script:
+    - $env:CHERE_INVOKING = 'yes'  # Preserve the current working directory
+    - C:/msys64/usr/bin/bash -lc "buildtools/msys2build_GitLab.sh"
+  artifacts:
+    when: always
+    paths:
+      - build/inkscape*.7z
+      - build/inkscape*.exe
+      - build/inkscape*.msi
+      - build/testfiles.7z
+
+
 #tests, always run after building
 test:linux:
   stage: test
