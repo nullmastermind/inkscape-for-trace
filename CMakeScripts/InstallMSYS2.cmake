@@ -1,16 +1,7 @@
 if(WIN32)
   install(FILES
-    AUTHORS
-    COPYING
     NEWS.md
     README.md
-    TRANSLATORS
-	LICENSES/GPL-2.0.txt
-	LICENSES/GPL-3.0.txt
-	LICENSES/LGPL-2.1.txt
-    DESTINATION .)
-
-  install(DIRECTORY doc
     DESTINATION .)
 
   # mingw-w64 dlls
