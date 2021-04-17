@@ -906,22 +906,8 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                         } else {
                             // Upright orientation
 
-                            // This is complicated as Pango (1.44) doesn't do what is expected in
-                            // the 'x' direction (which points downward for vertical text).  If one
-                            // subtracts delta_x, Latin glyphs are aligned so their ink rectangle
-                            // is at the top of the grid, rather than their em box. The initial
-                            // character is positioned so its base is at the alignment
-                            // point. Non-spacing-marks are positioned an em-box too low.
-
-                            // What we do:
-                            // *  Ignore delta_x on first glyph, the baseline will be on grid.
-                            // *  Shift non-spacing-marks up by an embox.
-                            // *  Further shift non-spacing-marks up by the difference in delta_x's of the mark and previous character
-                            //    (the relative difference is correct).
-                            // *  Set the advance for non-spacing-marks to 0 (as many fonts don't include vertical metrics).
-
 #if PANGO_VERSION_CHECK(1,44,0)
-                            auto hb_font = pango_font_get_hb_font (font->pFont);
+                            auto hb_font = pango_font_get_hb_font(font->pFont);
 #endif
 
 #ifdef DEBUG_GLYPH
@@ -932,7 +918,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                                       << "  " << std::setw(6) << delta_y;
 #if PANGO_VERSION_CHECK(1,44,0)
                             char glyph_name[32];
-                            hb_font_get_glyph_name (hb_font, new_glyph.glyph, glyph_name, sizeof (glyph_name));
+                            hb_font_get_glyph_name(hb_font, new_glyph.glyph, glyph_name, sizeof (glyph_name));
                             std::cout << "  " << (glyph_name ? glyph_name : "");
 #endif
                             std::cout << std::endl;
@@ -945,7 +931,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
 
                                 double shift = 0;
                                 double scale_factor = PANGO_SCALE * _font_factory_size_multiplier;
-                                if (!FT_HAS_VERTICAL (font->theFace)) {
+                                if (!FT_HAS_VERTICAL(font->theFace)) {
 
                                     // If there are no vertical metrics, glyphs are vertically
                                     // centered before base anchor to mark anchor distance is
@@ -967,7 +953,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                                 }
 
                                 // Advance is wrong (horizontal width used instead of vertical)...
-                                if (g_unichar_type (*iter_source_text) != G_UNICODE_NON_SPACING_MARK) {
+                                if (g_unichar_type(*iter_source_text) != G_UNICODE_NON_SPACING_MARK) {
 
                                     x_offset_advance = new_glyph.advance - glyph_v_advance;
                                     new_glyph.advance = glyph_v_advance;
@@ -975,7 +961,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                                     x_offset_center = shift;
                                 } else {
                                     // Is non-spacing mark!
-                                    if (!FT_HAS_VERTICAL (font->theFace)) {
+                                    if (!FT_HAS_VERTICAL(font->theFace)) {
 
                                         // If font lacks vertical metrics, all glyphs have em-box advance
                                         // but non-spacing marks should have zero advance.
@@ -995,11 +981,13 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                                 new_glyph.y -= glyph_h_advance/2.0;
 
                             } else if (pango_version_check(1,48,1) != nullptr) {
-                                // 1.44.0 <= Pango < 1.48.1 (minus sign error, mismatch between Cairo/Harfbuzz glyph placement)
+                                // 1.44.0 <= Pango < 1.48.1 (minus sign error, mismatch between Cairo/Harfbuzz glyph
+                                // placement)
                                 new_glyph.x += (glyph_width - delta_x);
                                 new_glyph.y -= delta_y;
                             } else if (pango_version_check(1,48,4) != nullptr) {
-                                // 1.48.1 <= Pango < 1.48.4 (minus sign fix, partial fix for Cairo/Harfbuzz mismatch, but bad mark positioning)
+                                // 1.48.1 <= Pango < 1.48.4 (minus sign fix, partial fix for Cairo/Harfbuzz mismatch,
+                                // but bad mark positioning)
                                 new_glyph.x += delta_x;
                                 new_glyph.y -= delta_y;
 
@@ -1008,9 +996,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                                 // as horizontal text then rotates by 90 degress so y_origin -> x, x_origin -> -y.
                                 hb_position_t x_origin = 0.0;
                                 hb_position_t y_origin = 0.0;
-                                hb_font_get_glyph_v_origin (hb_font, new_glyph.glyph, &x_origin, &y_origin);
-                                std::cout << "  x_origin: " << x_origin * font_size_multiplier
-                                          << "  y_origin: " << y_origin * font_size_multiplier << std::endl;
+                                hb_font_get_glyph_v_origin(hb_font, new_glyph.glyph, &x_origin, &y_origin);
                                 new_glyph.x += y_origin * font_size_multiplier;
                                 new_glyph.y -= x_origin * font_size_multiplier;
 #endif
@@ -1027,12 +1013,13 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                             // section of code moves each cluster (base glyph with marks) down to
                             // match fonts with vertical metrics.
                             hb_font_extents_t hb_font_extents_not_used;
-                            if (!hb_font_get_v_extents (hb_font, &hb_font_extents_not_used)) {
+                            if (!hb_font_get_v_extents(hb_font, &hb_font_extents_not_used)) {
                                 // Font does not have vertical metrics!
 
-                                if (g_unichar_type (*iter_source_text) != G_UNICODE_NON_SPACING_MARK) { // Probably should include other marks!
+                                if (g_unichar_type(*iter_source_text) !=
+                                    G_UNICODE_NON_SPACING_MARK) { // Probably should include other marks!
                                     hb_glyph_extents_t glyph_extents;
-                                    if (hb_font_get_glyph_extents (hb_font, new_glyph.glyph, &glyph_extents)) {
+                                    if (hb_font_get_glyph_extents(hb_font, new_glyph.glyph, &glyph_extents)) {
 
                                         // double baseline_adjust =
                                         //     font_instance->get_baseline(BASELINE_TEXT_BEFORE_EDGE) -
@@ -1041,28 +1028,22 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                                         double baseline_adjust = new_span.line_height.ascent / new_span.font_size;
                                         int hb_x_scale = 0;
                                         int hb_y_scale = 0;
-                                        hb_font_get_scale (hb_font, &hb_x_scale, &hb_y_scale);
-                                        x_offset_cluster = ((glyph_extents.y_bearing / (double)hb_y_scale) - baseline_adjust) * new_span.font_size;
+                                        hb_font_get_scale(hb_font, &hb_x_scale, &hb_y_scale);
+                                        x_offset_cluster =
+                                            ((glyph_extents.y_bearing / (double)hb_y_scale) - baseline_adjust) *
+                                            new_span.font_size;
                                     } else {
                                         x_offset_cluster = 0.0; // Failed to find extents.
                                     }
                                 } else {
                                     // Is non-spacing mark!
-                                    // Many fonts report a non-zero vertical advance for marks, especially if the 'vmtx' table is missing.
+
+                                    // Many fonts report a non-zero vertical advance for marks, especially if the 'vmtx'
+                                    // table is missing.
                                     new_glyph.advance = 0;
                                 }
 
                                 new_glyph.x -= x_offset_cluster;
-                            }
-#else
-                            // Pre 1.44.0
-                            if (!FT_HAS_VERTICAL (font->theFace)) {
-                                if (g_unichar_type (*iter_source_text) != G_UNICODE_NON_SPACING_MARK) { // Probably should include other marks!
-                                } else {
-                                    // Is non-spacing mark!
-                                    // Many fonts report a non-zero vertical advance for marks, especially if the 'vmtx' table is missing.
-                                    new_glyph.advance = 0;
-                                }
                             }
 #endif
 
