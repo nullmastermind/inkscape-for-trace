@@ -60,6 +60,7 @@ SPGuide::SPGuide()
 
 void SPGuide::setColor(guint32 color)
 {
+    this->color = color;
     for (auto view : views) {
         view->set_stroke(color);
     }

@@ -252,7 +252,6 @@ bool sp_dt_guide_event(GdkEvent *event, Inkscape::CanvasItemGuideLine *guide_ite
                     Geom::Point const event_w(event->button.x,
                                               event->button.y);
                     Geom::Point event_dt(desktop->w2d(event_w));
-                    std::cout << "    event_w: " << event_w << ", event_dt: " << event_dt << std::endl;
                     SnapManager &m = desktop->namedview->snap_manager;
                     m.setup(desktop, true, nullptr, nullptr, guide);
                     if (drag_type == SP_DRAG_MOVE_ORIGIN) {
