@@ -26,14 +26,18 @@
 namespace Inkscape {
 namespace LivePathEffect {
 
-static const Util::EnumData<DivisionMethod> DivisionMethodData[DM_END] = { { DM_SEGMENTS, N_("By number of segments"), "segments" }, 
-                                                                           { DM_SIZE, N_("By max. segment size"), "size" } };
+static const Util::EnumData<DivisionMethod> DivisionMethodData[] = { 
+    { DM_SEGMENTS, N_("By number of segments"), "segments" }, 
+    { DM_SIZE, N_("By max. segment size"), "size" } 
+};
 static const Util::EnumDataConverter<DivisionMethod> DMConverter(DivisionMethodData, DM_END);
 
-static const Util::EnumData<HandlesMethod> HandlesMethodData[HM_END] = { { HM_ALONG_NODES, N_("Along nodes"), "along" },
-                                                                         { HM_RAND, N_("Rand"), "rand" },
-                                                                         { HM_RETRACT, N_("Retract"), "retract" },
-                                                                         { HM_SMOOTH, N_("Smooth"), "smooth" } };
+static const Util::EnumData<HandlesMethod> HandlesMethodData[] = {
+    { HM_ALONG_NODES, N_("Along nodes"), "along" },
+    { HM_RAND, N_("Rand"), "rand" },
+    { HM_RETRACT, N_("Retract"), "retract" },
+    { HM_SMOOTH, N_("Smooth"), "smooth" } 
+};
 static const Util::EnumDataConverter<HandlesMethod> HMConverter(HandlesMethodData, HM_END);
 
 LPERoughen::LPERoughen(LivePathEffectObject *lpeobject)
@@ -91,31 +95,22 @@ void LPERoughen::doOnApply(SPLPEItem const *lpeitem)
 
 
             bool valid = prefs->getEntry(pref_path).isValid();
-            Glib::ustring displace_x_str = Glib::ustring::format((*bbox).width() / 100.0);
-            Glib::ustring displace_y_str = Glib::ustring::format((*bbox).height() / 100.0);
-            Glib::ustring max_segment_size_str = Glib::ustring::format(std::min((*bbox).height(), (*bbox).width()) / 100.0);
+            Glib::ustring displace_x_str = Glib::ustring::format((*bbox).width() / 150.0);
+            Glib::ustring displace_y_str = Glib::ustring::format((*bbox).height() / 150.0);
+            Glib::ustring max_segment_size_str = Glib::ustring::format(std::min((*bbox).height(), (*bbox).width()) / 50.0);
             if (!valid) {
-                if (strcmp(key, "method") == 0) {
-                    param->param_readSVGValue("size");
-                } else if (strcmp(key, "max_segment_size") == 0) {
+                if (strcmp(key, "max_segment_size") == 0) {
                     param->param_readSVGValue(max_segment_size_str.c_str());
                 } else if (strcmp(key, "displace_x") == 0) {
                     param->param_readSVGValue(displace_x_str.c_str());
                 } else if (strcmp(key, "displace_y") == 0) {
                     param->param_readSVGValue(displace_y_str.c_str());
-                } else if (strcmp(key, "handles") == 0) {
-                    param->param_readSVGValue("along");
-                } else if (strcmp(key, "shift_nodes") == 0) {
-                    param->param_readSVGValue("true");
-                } else if (strcmp(key, "fixed_displacement") == 0) {
-                    param->param_readSVGValue("true");
-                } else if (strcmp(key, "spray_tool_friendly") == 0) {
-                    param->param_readSVGValue("true");
                 }
             }
             ++it;
         }
     }
+    lpeversion.param_setValue("1.1", true);
 }
 
 void LPERoughen::doBeforeEffect(SPLPEItem const *lpeitem)
@@ -499,7 +494,11 @@ std::unique_ptr<SPCurve> LPERoughen::jitter(Geom::Curve const *A, Geom::Point &p
                 point_a1 = A->pointAt(1.0 / 3.0) + randomize(max_length);
             }
             ray.setPoints((*cubic)[3] + point_a3, (*cubic)[2] + point_a3);
-            point_a2 = randomize(max_length, ray.angle());
+            if (lpeversion.param_getSVGValue() < "1.1") {
+                point_a2 = randomize(max_length, ray.angle());
+            } else {
+                point_a2 = randomize(max_length, false);
+            }
             prev = (*cubic)[2] + point_a2;
             out->moveto((*cubic)[0]);
             out->curveto((*cubic)[0] + point_a1, (*cubic)[2] + point_a2 + point_a3, (*cubic)[3] + point_a3);
@@ -510,7 +509,11 @@ std::unique_ptr<SPCurve> LPERoughen::jitter(Geom::Curve const *A, Geom::Point &p
                 point_a1 = A->pointAt(1.0 / 3.0) + randomize(max_length);
             }
             ray.setPoints(A->finalPoint() + point_a3, A->pointAt((1.0 / 3.0) * 2) + point_a3);
-            point_a2 = randomize(max_length, ray.angle());
+            if (lpeversion.param_getSVGValue() < "1.1") {
+                point_a2 = randomize(max_length, ray.angle());
+            } else {
+                point_a2 = randomize(max_length, false);
+            }
             prev = A->pointAt((1.0 / 3.0) * 2) + point_a2 + point_a3;
             out->moveto(A->initialPoint());
             out->curveto(A->initialPoint() + point_a1, A->pointAt((1.0 / 3.0) * 2) + point_a2 + point_a3,
