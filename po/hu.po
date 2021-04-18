@@ -9723,7 +9723,7 @@ msgstr "FÁJLNÉV"
 
 #: ../src/inkscape-application.cpp:633
 msgid ""
-"Overwrite input file (otherwise add '_out' suffix if type doesn't change"
+"Overwrite input file (otherwise add '_out' suffix if type doesn't change)"
 msgstr ""
 "Bemeneti fájl felülírása (egyébként egy „_out” utótagot ad hozzá, ha a típus "
 "nem változik)"

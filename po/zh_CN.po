@@ -9748,7 +9748,7 @@ msgstr "导出-文件名"
 
 #: ../src/inkscape-application.cpp:633
 msgid ""
-"Overwrite input file (otherwise add '_out' suffix if type doesn't change"
+"Overwrite input file (otherwise add '_out' suffix if type doesn't change)"
 msgstr ""
 
 #

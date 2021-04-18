@@ -9031,7 +9031,7 @@ msgstr "NOM DEL FITXER"
 
 #: ../src/inkscape-application.cpp:599
 msgid ""
-"Overwrite input file (otherwise add '_out' suffix if type doesn't change"
+"Overwrite input file (otherwise add '_out' suffix if type doesn't change)"
 msgstr ""
 "Sobrescriu el fitxer d'entrada (altrament afegeix el sufix '_out' si no "
 "canvia)"

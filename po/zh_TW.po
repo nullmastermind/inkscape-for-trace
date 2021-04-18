@@ -9622,7 +9622,7 @@ msgstr "檔名"
 
 #: ../src/inkscape-application.cpp:632
 msgid ""
-"Overwrite input file (otherwise add '_out' suffix if type doesn't change"
+"Overwrite input file (otherwise add '_out' suffix if type doesn't change)"
 msgstr "覆寫輸入檔案（未啟用的話，如果格式沒有更動則加入 “_out” 後綴）"
 
 #: ../src/inkscape-application.cpp:633

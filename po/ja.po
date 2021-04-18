@@ -9645,7 +9645,7 @@ msgstr "FILENAME"
 
 #: ../src/inkscape-application.cpp:632
 msgid ""
-"Overwrite input file (otherwise add '_out' suffix if type doesn't change"
+"Overwrite input file (otherwise add '_out' suffix if type doesn't change)"
 msgstr ""
 "入力ファイルを上書き (そうでない場合、タイプに変更がなければ '_out' をサ"
 "フィックスに追加"

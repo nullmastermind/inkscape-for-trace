@@ -9776,7 +9776,7 @@ msgstr "DATEINAME"
 
 #: ../src/inkscape-application.cpp:633
 msgid ""
-"Overwrite input file (otherwise add '_out' suffix if type doesn't change"
+"Overwrite input file (otherwise add '_out' suffix if type doesn't change)"
 msgstr ""
 "Eingabedatei überschreiben (sonst das Suffix '_out' anhängen, wenn der "
 "Dateityp derselbe ist)"

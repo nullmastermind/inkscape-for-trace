@@ -8982,7 +8982,7 @@ msgstr "DOSYA ADI"
 
 #: ../src/inkscape-application.cpp:599
 msgid ""
-"Overwrite input file (otherwise add '_out' suffix if type doesn't change"
+"Overwrite input file (otherwise add '_out' suffix if type doesn't change)"
 msgstr "Girdi dosyasının üzerine yaz (veya tür değişmezse '_out' ekini ekle)"
 
 #: ../src/inkscape-application.cpp:600

@@ -9774,7 +9774,7 @@ msgstr "НАЗВА_ФАЙЛА"
 
 #: ../src/inkscape-application.cpp:633
 msgid ""
-"Overwrite input file (otherwise add '_out' suffix if type doesn't change"
+"Overwrite input file (otherwise add '_out' suffix if type doesn't change)"
 msgstr ""
 "Перезаписати файл вхідних даних (інакше додати суфікс «_out», якщо тип не "
 "змінено)"

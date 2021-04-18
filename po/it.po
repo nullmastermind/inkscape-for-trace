@@ -9631,7 +9631,7 @@ msgid "FILENAME"
 msgstr "NOMEFILE"
 
 #: ../src/inkscape-application.cpp:632
-msgid "Overwrite input file (otherwise add '_out' suffix if type doesn't change"
+msgid "Overwrite input file (otherwise add '_out' suffix if type doesn't change)"
 msgstr ""
 "Sovrascrive il file in input (oppure aggiungi il suffisso '_out' se il tipo non "
 "cambia)"
