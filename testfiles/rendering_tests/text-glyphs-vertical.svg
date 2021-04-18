@@ -20,7 +20,7 @@
 
     @font-face {
       font-family: "GeomTest";
-      src: url("fonts/GeomTest.otf");
+      src: url("fonts/GeomTest-Regular.otf");
     }
 
     text {
