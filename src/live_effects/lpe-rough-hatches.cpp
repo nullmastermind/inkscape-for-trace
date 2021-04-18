@@ -264,12 +264,12 @@ LPERoughHatches::LPERoughHatches(LivePathEffectObject *lpeobject) :
     registerParameter(&back_thickness);
 
     //hatch_dist.param_set_range(0.1, Geom::infinity());
-    growth.param_set_range(0, Geom::infinity());
+    growth.param_set_range(0, std::numeric_limits<double>::max());
     dist_rdm.param_set_range(0, 99.);
-    stroke_width_top.param_set_range(0,  Geom::infinity());
-    stroke_width_bot.param_set_range(0,  Geom::infinity());
-    front_thickness.param_set_range(0, Geom::infinity());
-    back_thickness.param_set_range(0, Geom::infinity());
+    stroke_width_top.param_set_range(0, std::numeric_limits<double>::max());
+    stroke_width_bot.param_set_range(0, std::numeric_limits<double>::max());
+    front_thickness.param_set_range(0, std::numeric_limits<double>::max());
+    back_thickness.param_set_range(0, std::numeric_limits<double>::max());
 
     // hide the widgets for direction and bender vectorparams
     direction.widget_is_visible = false;

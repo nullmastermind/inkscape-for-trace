@@ -65,15 +65,15 @@ LPERoughen::LPERoughen(LivePathEffectObject *lpeobject)
     registerParameter(&shift_nodes);
     registerParameter(&fixed_displacement);
     registerParameter(&spray_tool_friendly);
-    displace_x.param_set_range(0., Geom::infinity());
-    displace_y.param_set_range(0., Geom::infinity());
-    global_randomize.param_set_range(0., Geom::infinity());
-    max_segment_size.param_set_range(0., Geom::infinity());
+    displace_x.param_set_range(0., std::numeric_limits<double>::max());
+    displace_y.param_set_range(0., std::numeric_limits<double>::max());
+    global_randomize.param_set_range(0., std::numeric_limits<double>::max());
+    max_segment_size.param_set_range(0., std::numeric_limits<double>::max());
     max_segment_size.param_set_increments(1, 1);
     max_segment_size.param_set_digits(3);
-    segments.param_set_range(1, Geom::infinity());
+    segments.param_make_integer();
+    segments.param_set_range(1, 9999);
     segments.param_set_increments(1, 1);
-    segments.param_set_digits(0);
     seed = 0;
     apply_to_clippath_and_mask = true;
 }

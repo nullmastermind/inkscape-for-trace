@@ -42,7 +42,7 @@ LPEInterpolate::LPEInterpolate(LivePathEffectObject *lpeobject)
     registerParameter(&number_of_steps);
 
     number_of_steps.param_make_integer();
-    number_of_steps.param_set_range(2, Geom::infinity());
+    number_of_steps.param_set_range(2, std::numeric_limits<gint>::max());
 }
 
 LPEInterpolate::~LPEInterpolate() = default;

@@ -216,7 +216,7 @@ LPEGears::LPEGears(LivePathEffectObject *lpeobject) :
 
     teeth.param_make_integer();
     teeth.param_set_range(3, 1e10);
-    min_radius.param_set_range(0.01, 9999.0);
+    min_radius.param_set_range(0.01, std::numeric_limits<double>::max());
     registerParameter(&teeth);
     registerParameter(&phi);
     registerParameter(&min_radius);

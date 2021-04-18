@@ -79,13 +79,13 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject)
     registerParameter(&only_selected);
     registerParameter(&hide_knots);
 
-    radius.param_set_range(0.0, Geom::infinity());
+    radius.param_set_range(0.0, std::numeric_limits<double>::max());
     radius.param_set_increments(1, 1);
     radius.param_set_digits(4);
     radius.param_set_undo(false);
-    chamfer_steps.param_set_range(1, 999);
+    chamfer_steps.param_set_range(1, std::numeric_limits<gint>::max());
     chamfer_steps.param_set_increments(1, 1);
-    chamfer_steps.param_set_digits(0);
+    chamfer_steps.param_make_integer();
     _provides_knotholder_entities = true;
     helperpath = false;
     previous_unit = Glib::ustring("");

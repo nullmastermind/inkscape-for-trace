@@ -94,11 +94,11 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     registerParameter(&mirror_copies);
     registerParameter(&split_items);
 
-    gap.param_set_range(-99999.0, 99999.0);
+    gap.param_set_range(std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max());
     gap.param_set_increments(0.01, 0.01);
     gap.param_set_digits(5);
-    num_copies.param_set_range(1, 999999);
-    num_copies.param_make_integer(true);
+    num_copies.param_set_range(1, std::numeric_limits<gint>::max());
+    num_copies.param_make_integer();
     apply_to_clippath_and_mask = true;
     previous_num_copies = num_copies;
     previous_origin = Geom::Point(0,0);

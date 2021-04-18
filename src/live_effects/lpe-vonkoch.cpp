@@ -65,9 +65,9 @@ LPEVonKoch::LPEVonKoch(LivePathEffectObject *lpeobject) :
     //registerParameter(&draw_boxes) );
     apply_to_clippath_and_mask = true;
     nbgenerations.param_make_integer();
-    nbgenerations.param_set_range(0, Geom::infinity());
+    nbgenerations.param_set_range(0, std::numeric_limits<gint>::max());
     maxComplexity.param_make_integer();
-    maxComplexity.param_set_range(0, Geom::infinity());
+    maxComplexity.param_set_range(0, std::numeric_limits<gint>::max());
 }
 
 LPEVonKoch::~LPEVonKoch()

@@ -67,14 +67,14 @@ LPETransform2Pts::LPETransform2Pts(LivePathEffectObject *lpeobject) :
     registerParameter(&lock_length);
     registerParameter(&lock_angle);
 
-    first_knot.param_make_integer(true);
+    first_knot.param_make_integer();
     first_knot.param_set_undo(false);
-    last_knot.param_make_integer(true);
+    last_knot.param_make_integer();
     last_knot.param_set_undo(false);
     helper_size.param_set_range(0, 999);
     helper_size.param_set_increments(1, 1);
     helper_size.param_set_digits(0);
-    offset.param_set_range(-999999.0, 999999.0);
+    offset.param_set_range(std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max());
     offset.param_set_increments(1, 1);
     offset.param_set_digits(2);
     stretch.param_set_range(0, 999.0);
