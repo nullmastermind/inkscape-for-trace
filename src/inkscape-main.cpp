@@ -75,6 +75,9 @@ static void set_themes_env()
         // so we can just call it directly and modify XDG_DATA_DIRS later
         auto data_dirs = Glib::get_system_data_dirs();
         xdg_data_dirs = boost::join(data_dirs, G_SEARCHPATH_SEPARATOR_S);
+#elif defined(__APPLE__)
+        // we don't know what the default is, differs for MacPorts, Homebrew, etc.
+        return;
 #else
         // initialize with glib default (don't call g_get_system_data_dirs; it's cached!)
         xdg_data_dirs = "/usr/local/share/:/usr/share/";
