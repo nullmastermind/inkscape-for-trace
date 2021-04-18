@@ -60,8 +60,25 @@ Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size)
     Glib::RefPtr<Gdk::Display> display = Gdk::Display::get_default();
     Glib::RefPtr<Gdk::Screen>  screen = display->get_default_screen();
     Glib::RefPtr<Gtk::IconTheme> icon_theme = Gtk::IconTheme::get_for_screen(screen);
+    auto prefs = Inkscape::Preferences::get();
+    if (prefs->getBool("/theme/symbolicIcons", false) && icon_name.find("-symbolic") == Glib::ustring::npos) {
+        icon_name += Glib::ustring("-symbolic");
+    }
     Gtk::IconInfo iconinfo = icon_theme->lookup_icon(icon_name, size, Gtk::ICON_LOOKUP_FORCE_SIZE);
-    Glib::RefPtr<Gdk::Pixbuf> _icon_pixbuf = iconinfo.load_icon();
+    Glib::RefPtr<Gdk::Pixbuf> _icon_pixbuf;
+    if (prefs->getBool("/theme/symbolicIcons", false)) {
+        Gtk::Window *window = SP_ACTIVE_DESKTOP->getToplevel();
+        if (window) {
+            Glib::RefPtr<Gtk::StyleContext> stylecontext = window->get_style_context();
+            bool was_symbolic = false;
+            _icon_pixbuf = iconinfo.load_symbolic(stylecontext, was_symbolic);
+        } else {
+            // we never go here
+            _icon_pixbuf = iconinfo.load_icon();
+        }
+    } else {
+        _icon_pixbuf = iconinfo.load_icon();
+    }
     return _icon_pixbuf;
 }
 
