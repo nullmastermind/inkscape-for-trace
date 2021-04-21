@@ -252,7 +252,7 @@ void Inkscape::XML::EventChgOrder::_replayOne(
 void Inkscape::XML::EventChgElementName::_replayOne(
     Inkscape::XML::NodeObserver &observer
 ) const {
-    observer.notifyElementNameChanged(*this->repr, this->new_name, this->old_name);
+    observer.notifyElementNameChanged(*this->repr, this->old_name, this->new_name);
 }
 
 Inkscape::XML::Event *
