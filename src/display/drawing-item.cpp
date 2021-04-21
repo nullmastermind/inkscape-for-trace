@@ -1215,7 +1215,7 @@ Geom::OptIntRect DrawingItem::_cacheRect()
         Geom::OptIntRect canvas = r;
         expandByScale(*canvas, 0.5);
         Geom::OptIntRect valid = Geom::intersect(canvas, _bbox);
-        if (!valid) {
+        if (!valid && _bbox) {
             valid = _bbox;
             // contract the item _bbox to get reduced size to render. $ seems good enought
             expandByScale(*valid, 0.5);
