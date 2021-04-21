@@ -300,6 +300,8 @@ void DialogContainer::new_dialog(unsigned int code, DialogNotebook *notebook)
         return;
     }
 
+    columns->ensure_multipaned_children();
+
     // Limit each container to containing one of any type of dialog.
     if (DialogBase* existing_dialog = find_existing_dialog(code)) {
         // found existing dialog; blink & exit

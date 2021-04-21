@@ -377,6 +377,15 @@ void DialogMultipaned::toggle_multipaned_children()
     queue_allocate();
 }
 
+/**
+ * Ensure that this dialog container is visible.
+ */
+void DialogMultipaned::ensure_multipaned_children()
+{
+    hide_multipaned = false;
+    queue_allocate();
+}
+
 // ****************** OVERRIDES ******************
 
 // The following functions are here to define the behavior of our custom container
