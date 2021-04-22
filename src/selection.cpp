@@ -205,6 +205,9 @@ Selection::setBackup ()
     auto items = const_cast<Selection *>(this)->items();
     for (auto iter = items.begin(); iter != items.end(); ++iter) {
         SPItem *item = *iter;
+        if(!item->getId()) {
+            continue;
+        }
         std::string selected_id;
         selected_id += "--id=";
         selected_id += item->getId();

@@ -50,6 +50,13 @@ ExecutionEnv::ExecutionEnv (Effect * effect, Inkscape::UI::View::View * doc, Imp
     _effect(effect),
     _show_working(show_working)
 {
+    SPDocument* document = _doc->doc();
+    if(document) {
+        Inkscape::DocumentUndo::setUndoSensitive(document, false);
+        document->enforceObjectIds(); // Make sure all selected objects have an ID attribute
+        Inkscape::DocumentUndo::setUndoSensitive(document, true);   
+    }
+    
     genDocCache();
 
     return;

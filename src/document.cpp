@@ -1013,6 +1013,37 @@ void SPDocument::bindObjectToId(gchar const *id, SPObject *object) {
     }
 }
 
+/**  
+ * Assign IDs to selected objects that don't have an ID attribute
+ * Checks if the object's id attribute is NULL. If it is, assign it a unique ID
+ */
+void SPDocument::enforceObjectIds()
+{
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    Inkscape::Selection *selection = desktop->getSelection();
+    bool showInfoDialog = false;
+    Glib::ustring msg = _("Selected objects require IDs.\nThe following IDs have been assigned:\n");
+    auto items = selection->items();
+    for (auto iter = items.begin(); iter != items.end(); ++iter) {
+        SPItem *item = *iter;
+        if(!item->getId())
+        {
+            // Selected object does not have an ID, so assign it a unique ID
+            gchar *id = sp_object_get_unique_id(item, nullptr);
+            item->setAttribute("id", id);
+            item->updateRepr();
+            msg += Glib::ustring::compose(_(" %1\n"), id);
+            g_free(id);
+            showInfoDialog = true;
+        }
+    }
+    if(showInfoDialog) {
+        desktop->showInfoDialog(msg);
+        setModifiedSinceSave(true);
+    }
+    return;
+}
+
 SPObject *SPDocument::getObjectById(Glib::ustring const &id) const
 {
     if (iddef.empty()) {
