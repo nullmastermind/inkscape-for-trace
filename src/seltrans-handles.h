@@ -18,6 +18,7 @@
 
 #include "enums.h"
 #include "verbs.h"
+#include "ui/modifiers.h"
 
 typedef unsigned int guint32;
 
@@ -67,13 +68,6 @@ const int AlignVerb[18] = {
 const int AlignHandleToVerb = -13;
 // Offset for moving from Left click to Shift Click
 const int AlignShiftVerb = 9;
-
-struct SPSelTransTypeInfo {
-        guint32 const *color;
-        char const *tip;
-};
-// One per handle type in order
-extern SPSelTransTypeInfo const handtypes[8];
 
 struct SPSelTransHandle;
 

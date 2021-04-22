@@ -14,18 +14,6 @@
 #define N_(x) x
 #endif
 
-// Must match SPSelTransType enum
-SPSelTransTypeInfo const handtypes[] = {
-    { DEF_COLOR, N_("<b>Squeeze or stretch</b> selection; with <b>Ctrl</b> to scale uniformly; with <b>Shift</b> to scale around rotation center") },
-    { DEF_COLOR, N_("<b>Scale</b> selection; with <b>Ctrl</b> to scale uniformly; with <b>Shift</b> to scale around rotation center") },
-    { DEF_COLOR, N_("<b>Skew</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> to skew around the opposite side") },
-    { DEF_COLOR, N_("<b>Rotate</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> to rotate around the opposite corner") },
-    { DEF_COLOR, N_("<b>Center</b> of rotation and skewing: drag to reposition; scaling with Shift also uses this center") },
-    { DEF_COLOR, N_("<b>Align</b> objects to the side clicked; <b>Shift</b> click to invert side; <b>Ctrl</b> to group whole selection.") },
-    { DEF_COLOR, N_("<b>Align</b> objects to the corner clicked; <b>Shift</b> click to invert side; <b>Ctrl</b> to group whole selection.") },
-    { DEF_COLOR, N_("<b>Align</b> objects to center; <b>Shift</b> click to center vertically instead of horizontally.") }
-};
-
 SPSelTransHandle const hands[] = {
     // clang-format off
     //center handle will be 0 so we can reference it quickly.
