@@ -154,7 +154,7 @@ StartScreen::StartScreen()
 
     // Get window from Glade file.
     builder->get_widget("start-screen-window", window);
-
+    set_name("start-screen-window");
     // Get references to various widgets used globally.
     builder->get_widget("tabs", tabs);
     builder->get_widget("kinds", kinds);

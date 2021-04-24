@@ -534,3 +534,9 @@ button.link:hover image {
     -gtk-icon-effect: dim;
 }
 
+#start-screen-window .combo {
+    padding:15px 20px;
+}
+#start-screen-window notebook > *:nth-child(2) label{
+    font-size:12px;
+}
