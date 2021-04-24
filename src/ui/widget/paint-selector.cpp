@@ -637,6 +637,9 @@ void PaintSelector::set_mode_gradient(PaintSelector::Mode mode)
             _selector_gradient->signal_changed().connect(sigc::mem_fun(this, &PaintSelector::gradient_changed));
             /* Pack everything to frame */
             _frame->add(*_selector_gradient);
+        } else {
+            // Necessary when creating new gradients via the Fill and Stroke dialog
+            _selector_gradient->setVector(nullptr, nullptr);
         }
         _selector_gradient->show();
     }
@@ -1343,6 +1346,9 @@ void PaintSelector::set_mode_swatch(PaintSelector::Mode mode)
 
             // Pack everything to frame
             _frame->add(*_selector_swatch);
+        } else {
+            // Necessary when creating new swatches via the Fill and Stroke dialog
+            _selector_swatch->setVector(nullptr, nullptr);
         }
         _selector_swatch->show();
         _label->set_markup(_("<b>Swatch fill</b>"));
