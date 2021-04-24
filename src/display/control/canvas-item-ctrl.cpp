@@ -334,19 +334,27 @@ void CanvasItemCtrl::render(Inkscape::CanvasItemBuffer *buf)
             }
             if (ac == 0 && cc != 0) {
                 *pb++ = argb32_from_rgba(cc | 0x000000ff);
+            } else if (ac == 0) {
+                *pb++ = base;
             } else if (_mode == CANVAS_ITEM_CTRL_MODE_XOR) {
                 EXTRACT_ARGB32(base, ab,rb,gb,bb)
+                // here we get canvas color and if color to draw
+                // has opacity, we override base colors
+                // flattenig canvas color
+                EXTRACT_ARGB32(backcolor, abb,rbb,gbb,bbb)
+                if (abb != ab) {
+                    rb = (ab/255.0) * rb + (1-(ab/255.0)) * rbb;
+                    gb = (ab/255.0) * gb + (1-(ab/255.0)) * gbb;
+                    bb = (ab/255.0) * bb + (1-(ab/255.0)) * bbb;
+                    ab = 255;
+                }
                 guint32 ro = compose_xor(rb, (cc & 0xff000000) >> 24, ac);
                 guint32 go = compose_xor(gb, (cc & 0x00ff0000) >> 16, ac);
                 guint32 bo = compose_xor(bb, (cc & 0x0000ff00) >>  8, ac);
                 ASSEMBLE_ARGB32(px, ab,ro,go,bo)
                 *pb++ = px;
             } else {
-                if (ac == 0) {
-                    *pb++ = base;
-                } else {
-                    *pb++ = argb32_from_rgba(cc | 0x000000ff);
-                }
+                *pb++ = argb32_from_rgba(cc | 0x000000ff);
             }
         }
     }
