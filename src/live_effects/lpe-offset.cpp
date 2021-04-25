@@ -598,7 +598,9 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
             double size = Geom::L2(Geom::bounds_fast(ret_closed)->dimensions());
             size /= sp_lpe_item->i2doc_affine().descrim();
             ret_closed = sp_pathvector_boolop(outline, ret_closed, bool_op_diff, fill_nonZero, fill_nonZero);
-            ret_closed = sp_simplify_pathvector(ret_closed, 0.0003 * size);
+            if (!liveknot) {
+                ret_closed = sp_simplify_pathvector(ret_closed, 0.0003 * size);
+            }
         }
     }
     ret_closed.insert(ret_closed.begin(), ret_open.begin(), ret_open.end());
