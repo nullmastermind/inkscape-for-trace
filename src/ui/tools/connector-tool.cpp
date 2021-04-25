@@ -818,14 +818,16 @@ void ConnectorTool::_setSubsequentPoint(Geom::Point const p)
     Avoid::Point src(o[Geom::X], o[Geom::Y]);
     Avoid::Point dst(d[Geom::X], d[Geom::Y]);
 
-    Avoid::Router *router = desktop->getDocument()->getRouter();
-    this->newConnRef = new Avoid::ConnRef(router);
-    this->newConnRef->setEndpoint(Avoid::VertID::src, src);
-    if (this->isOrthogonal)
-        this->newConnRef->setRoutingType(Avoid::ConnType_Orthogonal);
-    else
-        this->newConnRef->setRoutingType(Avoid::ConnType_PolyLine);
-    
+    if (!this->newConnRef) {
+        Avoid::Router *router = desktop->getDocument()->getRouter();
+        this->newConnRef = new Avoid::ConnRef(router);
+        this->newConnRef->setEndpoint(Avoid::VertID::src, src);
+        if (this->isOrthogonal) {
+            this->newConnRef->setRoutingType(Avoid::ConnType_Orthogonal);
+        } else {
+            this->newConnRef->setRoutingType(Avoid::ConnType_PolyLine);
+        }
+    }
     // Set new endpoint.
     this->newConnRef->setEndpoint(Avoid::VertID::tar, dst);
     // Immediately generate new routes for connector.

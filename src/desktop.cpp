@@ -531,6 +531,9 @@ SPDesktop::change_document (SPDocument *theDocument)
     /* unselect everything before switching documents */
     selection->clear();
 
+    // Reset any tool actions currently in progress.
+    setEventContext(event_context->getPrefsPath());
+
     setDocument (theDocument);
 
     /* update the rulers, connect the desktop widget's signal to the new namedview etc.
