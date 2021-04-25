@@ -454,9 +454,7 @@ void Application::add_gtk_css(bool only_providers)
             prefs->setBool("/theme/symbolicIcons", iconinfo.is_symbolic());
         }
         bool preferdarktheme = prefs->getBool("/theme/preferDarkTheme", false);
-        if (preferdarktheme) {
-            g_object_set(settings, "gtk-application-prefer-dark-theme", true, NULL);
-        }
+        g_object_set(settings, "gtk-application-prefer-dark-theme", preferdarktheme, NULL);
         themeiconname = prefs->getString("/theme/iconTheme");
         // legacy cleanup
         if (themeiconname == prefs->getString("/theme/defaultIconTheme")) {

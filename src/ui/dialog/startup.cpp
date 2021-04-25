@@ -195,7 +195,9 @@ StartScreen::StartScreen()
     filter_themes();
     set_active_combo("themes", prefs->getString("/options/boot/theme"));
     set_active_combo("canvas", prefs->getString("/options/boot/canvas"));
-    dark_toggle->set_active(prefs->getBool("/theme/darkTheme", false));
+
+    // initalise dark depending on prefs and background
+    refresh_dark_switch();
 
     // Welcome! tab
     std::string welcome_text_file = Resource::get_filename_string(Resource::SCREENS, "start-welcome-text.svg", true);
@@ -535,7 +537,7 @@ StartScreen::refresh_theme(Glib::ustring theme_name)
     auto prefs = Inkscape::Preferences::get();
 
     settings->property_gtk_theme_name() = theme_name;
-    settings->property_gtk_application_prefer_dark_theme() = prefs->getBool("/theme/darkTheme", true);
+    settings->property_gtk_application_prefer_dark_theme() = prefs->getBool("/theme/preferDarkTheme", true);
     settings->property_gtk_icon_theme_name() = prefs->getString("/theme/iconTheme");
 
     if (prefs->getBool("/theme/symbolicIcons", false)) {
@@ -560,6 +562,9 @@ StartScreen::refresh_theme(Glib::ustring theme_name)
         Gtk::StyleContext::add_provider_for_screen(screen, INKSCAPE.colorizeprovider,
                                                 GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
+    // set dark switch and disable if there is no prefer option for dark
+    refresh_dark_switch();
+
     INKSCAPE.signal_change_theme.emit();
 }
 
@@ -590,7 +595,6 @@ StartScreen::theme_changed()
         bool is_dark = dark_toggle->get_active();
         prefs->setBool("/theme/preferDarkTheme", is_dark);
         prefs->setBool("/theme/darkTheme", is_dark);
-
         // Symbolic icon colours
         if (get_color_value(row[cols.base]) == 0) {
             prefs->setBool("/theme/symbolicDefaultBaseColors", true);
@@ -609,7 +613,7 @@ StartScreen::theme_changed()
             prefs->setUInt(prefix + "/symbolicErrorColor", get_color_value(row[cols.error]));
         }
 
-        refresh_theme(row[cols.theme]);
+        refresh_theme(prefs->getString("/theme/gtkTheme", prefs->getString("/theme/defaultGtkTheme", "")));
     } catch(int e) {
         g_warning("Couldn't find theme value.");
     }
@@ -731,6 +735,34 @@ StartScreen::keyboard_changed()
     } catch(int e) {
         g_warning("Couldn't find keys value.");
     }
+}
+
+/**
+ * Set Dark Switch based on current selected theme.
+ * We will disable switch if current theme doesn't have prefer dark theme option.
+ */
+
+void StartScreen::refresh_dark_switch()
+{
+    auto prefs = Inkscape::Preferences::get();
+
+    Gtk::Container *window = dynamic_cast<Gtk::Container *>(get_toplevel());
+    bool dark = isCurrentThemeDark(window);
+    prefs->setBool("/theme/preferDarkTheme", dark);
+    prefs->setBool("/theme/darkTheme", dark);
+
+    auto themes = get_available_themes();
+    Glib::ustring current_theme = prefs->getString("/theme/gtkTheme", prefs->getString("/theme/defaultGtkTheme", ""));
+
+    Gtk::Switch *dark_toggle = nullptr;
+    builder->get_widget("dark_toggle", dark_toggle);
+
+    if (!themes[current_theme]) {
+        dark_toggle->set_sensitive(false);
+    } else {
+        dark_toggle->set_sensitive(true);
+    }
+    dark_toggle->set_active(dark);
 }
 
 } // namespace Dialog

@@ -14,13 +14,15 @@
 
 #include "themes.h"
 
-#include <map>
 #include <cstring>
+#include <gio/gio.h>
+#include <glibmm.h>
+#include <gtkmm.h>
+#include <map>
 #include <utility>
 #include <vector>
 
-#include <gio/gio.h>
-#include <glibmm.h>
+#include "preferences.h"
 
 /**
  * Inkscape fill gtk, taken from glib/gtk code with our own checks.
@@ -105,6 +107,37 @@ std::map<Glib::ustring, bool> get_available_themes()
         g_free(path);
     }
     return themes;
+}
+
+/**
+ * Check if current applied theme is dark or not by looking at style context.
+ * This is important to check system default theme is dark or not
+ * It only return True for dark and False for Bright. It does not apply any
+ * property other than preferDarkTheme, so theme should be set before calling
+ * this function as it may otherwise return outdated result.
+ */
+bool isCurrentThemeDark(Gtk::Container *window)
+{
+    bool dark = false;
+    if (window) {
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        Glib::ustring current_theme =
+            prefs->getString("/theme/gtkTheme", prefs->getString("/theme/defaultGtkTheme", ""));
+        auto settings = Gtk::Settings::get_default();
+        if (settings) {
+            settings->property_gtk_application_prefer_dark_theme() = prefs->getBool("/theme/preferDarkTheme", false);
+        }
+        dark = current_theme.find(":dark") != std::string::npos;
+        if (!dark) {
+            Glib::RefPtr<Gtk::StyleContext> stylecontext = window->get_style_context();
+            Gdk::RGBA rgba;
+            bool background_set = stylecontext->lookup_color("theme_bg_color", rgba);
+            if (background_set && (0.299 * rgba.get_red() + 0.587 * rgba.get_green() + 0.114 * rgba.get_blue()) < 0.5) {
+                dark = true;
+            }
+        }
+    }
+    return dark;
 }
 
 /*

@@ -43,6 +43,7 @@ private:
     void theme_changed();
     void canvas_changed();
     void refresh_theme(Glib::ustring theme_name);
+    void refresh_dark_switch();
 
     void new_now();
     void load_now();
