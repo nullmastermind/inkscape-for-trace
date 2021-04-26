@@ -1650,17 +1650,14 @@ Effect::defaultParamSet()
             pref_path += key;
             bool valid = prefs->getEntry(pref_path).isValid();
             const gchar * set_or_upd;
-            Glib::ustring def = Glib::ustring(_("<b>Default value:</b> ")) + defvalue + pref_path;
-            Glib::ustring ove = Glib::ustring(_("<b>Default value overridden:</b> ")) +
-                                Glib::ustring(prefs->getString(pref_path)) + pref_path;
+            Glib::ustring def = Glib::ustring(_("<b>Default value:</b> ")) + defvalue;
+            Glib::ustring ove = Glib::ustring(_("<b>Default value overridden:</b> "));
             if (valid) {
                 set_or_upd = _("Update");
                 def = "";
-                // def = Glib::ustring(_("<b>Default value:</b> <s>")) + defvalue + Glib::ustring("</s>\n");
             } else {
                 set_or_upd = _("Set");
                 ove = "";
-                // ove = Glib::ustring(_("<b>Default value overridden:</b> None\n"));
             }
             Gtk::Box * vbox_param = Gtk::manage( new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL) );
             Gtk::Box *namedicon = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
@@ -1687,8 +1684,10 @@ Effect::defaultParamSet()
             if (!valid) {
                 unset->set_sensitive(false);
             }
-            vbox_param->pack_start(*set, true, true, 2);
-            vbox_param->pack_start(*unset, true, true, 2);
+            unset->set_size_request (90, -1);
+            set->set_size_request (90, -1);
+            vbox_param->pack_end(*unset, false, true, 2);
+            vbox_param->pack_end(*set, false, true, 2);
 
             vbox_expander->pack_start(*vbox_param, true, true, 2);
         }
