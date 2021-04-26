@@ -381,7 +381,8 @@ void Preferences::setBool(Glib::ustring const &pref_path, bool value)
  */
 void Preferences::setPoint(Glib::ustring const &pref_path, Geom::Point value)
 {
-    _setRawValue(pref_path, Glib::ustring::compose("%1",value[Geom::X]) + "," + Glib::ustring::compose("%1",value[Geom::Y]));
+    setDouble(pref_path + "/x", value[Geom::X]);
+    setDouble(pref_path + "/y", value[Geom::Y]);
 }
 
 /**
@@ -777,18 +778,6 @@ bool Preferences::_extractBool(Entry const &v)
         v.value_bool = true;
         return true;
     }
-}
-
-Geom::Point Preferences::_extractPoint(Entry const &v)
-{
-    if (v.cached_point) return v.value_point;
-    v.cached_point = true;
-    gchar const *s = static_cast<gchar const *>(v._value);
-    gchar ** strarray = g_strsplit(s, ",", 2);
-    double newx = atoi(strarray[0]);
-    double newy = atoi(strarray[1]);
-    g_strfreev (strarray);
-    return Geom::Point(newx, newy);
 }
 
 int Preferences::_extractInt(Entry const &v)
