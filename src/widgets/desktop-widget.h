@@ -190,6 +190,7 @@ public:
 
 
     void updateNamedview();
+    void updateDocument();
     void update_guides_lock();
 
     // Canvas Grid Widget

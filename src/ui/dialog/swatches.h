@@ -47,13 +47,14 @@ public:
     static SwatchesPanel& getInstance();
 
     void update() override;
-    virtual void _setDocument( SPDocument *document );
+    void setDocumentIfClosed( SPDocument *document );
 
     virtual int getSelectedIndex() {return _currentIndex;} // temporary
 
 protected:
     static void handleGradientsChange(SPDocument *document);
 
+    virtual void _setDocument( SPDocument *document );
     virtual void _updateFromSelection();
     virtual void _rebuild();
 

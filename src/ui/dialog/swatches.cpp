@@ -1019,6 +1019,7 @@ void SwatchesPanel::update()
                 conn.disconnect();
             }
         }
+        _desktopConnections.clear();
 
         _currentDesktop = desktop;
 
@@ -1159,6 +1160,16 @@ void SwatchesPanel::_regItem(Gtk::MenuItem* item, int id)
     _menu->append(*item);
     item->signal_activate().connect(sigc::bind<int, int>(sigc::mem_fun(*this, &SwatchesPanel::_updateSettings), SWATCHES_SETTINGS_PALETTE, id));
     item->show();
+}
+
+/**
+ * Set the document if the swatches dialog is closed
+ */
+void SwatchesPanel::setDocumentIfClosed( SPDocument *document )
+{
+    if (_desktopConnections.empty()) {
+        _setDocument(document);
+    }
 }
 
 void SwatchesPanel::_setDocument( SPDocument *document )
