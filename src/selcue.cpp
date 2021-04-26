@@ -170,7 +170,7 @@ void Inkscape::SelCue::_newItemBboxes()
                 rect->set_stroke(0xffffffa0);
                 rect->set_shadow(0x0000c0a0, 1);
                 rect->set_dashed(true);
-                rect->set_inverted(true);
+                rect->set_inverted(false);
                 canvas_item = rect;
             }
 
