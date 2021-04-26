@@ -453,7 +453,7 @@ ZoomCorrRulerSlider::on_slider_value_changed()
         freeze = true;
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setDouble("/options/zoomcorrection/value", _slider->get_value() / 100.0);
-        _sb.set_value(_slider->get_value());
+        _sb->set_value(_slider->get_value());
         _ruler.queue_draw();
         freeze = false;
     }
@@ -466,8 +466,8 @@ ZoomCorrRulerSlider::on_spinbutton_value_changed()
     {
         freeze = true;
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        prefs->setDouble("/options/zoomcorrection/value", _sb.get_value() / 100.0);
-        _slider->set_value(_sb.get_value());
+        prefs->setDouble("/options/zoomcorrection/value", _sb->get_value() / 100.0);
+        _slider->set_value(_sb->get_value());
         _ruler.queue_draw();
         freeze = false;
     }
@@ -491,7 +491,7 @@ ZoomCorrRulerSlider::on_unit_changed() {
 
 bool ZoomCorrRulerSlider::on_mnemonic_activate ( bool group_cycling )
 {
-    return _sb.mnemonic_activate ( group_cycling );
+    return _sb->mnemonic_activate ( group_cycling );
 }
 
 
@@ -515,15 +515,16 @@ ZoomCorrRulerSlider::init(int ruler_width, int ruler_height, double lower, doubl
     _slider->set_digits(2);
 
     _slider->signal_value_changed().connect(sigc::mem_fun(*this, &ZoomCorrRulerSlider::on_slider_value_changed));
-    _sb.signal_value_changed().connect(sigc::mem_fun(*this, &ZoomCorrRulerSlider::on_spinbutton_value_changed));
+    _sb = Gtk::manage(new Inkscape::UI::Widget::SpinButton());
+    _sb->signal_value_changed().connect(sigc::mem_fun(*this, &ZoomCorrRulerSlider::on_spinbutton_value_changed));
     _unit.signal_changed().connect(sigc::mem_fun(*this, &ZoomCorrRulerSlider::on_unit_changed));
 
-    _sb.set_range (lower, upper);
-    _sb.set_increments (step_increment, 0);
-    _sb.set_value (value);
-    _sb.set_digits(2);
-    _sb.set_halign(Gtk::ALIGN_CENTER);
-    _sb.set_valign(Gtk::ALIGN_END);
+    _sb->set_range (lower, upper);
+    _sb->set_increments (step_increment, 0);
+    _sb->set_value (value);
+    _sb->set_digits(2);
+    _sb->set_halign(Gtk::ALIGN_CENTER);
+    _sb->set_valign(Gtk::ALIGN_END);
 
     _unit.set_sensitive(false);
     _unit.setUnitType(UNIT_TYPE_LINEAR);
@@ -536,7 +537,7 @@ ZoomCorrRulerSlider::init(int ruler_width, int ruler_height, double lower, doubl
     _ruler.set_hexpand(true);
     auto table = Gtk::manage(new Gtk::Grid());
     table->attach(*_slider, 0, 0, 1, 1);
-    table->attach(_sb,      1, 0, 1, 1);
+    table->attach(*_sb,      1, 0, 1, 1);
     table->attach(_ruler,   0, 1, 1, 1);
     table->attach(_unit,    1, 1, 1, 1);
 
@@ -551,7 +552,7 @@ PrefSlider::on_slider_value_changed()
         freeze = true;
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setDouble(_prefs_path, _slider->get_value());
-        _sb.set_value(_slider->get_value());
+        _sb->set_value(_slider->get_value());
         freeze = false;
     }
 }
@@ -563,15 +564,15 @@ PrefSlider::on_spinbutton_value_changed()
     {
         freeze = true;
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        prefs->setDouble(_prefs_path, _sb.get_value());
-        _slider->set_value(_sb.get_value());
+        prefs->setDouble(_prefs_path, _sb->get_value());
+        _slider->set_value(_sb->get_value());
         freeze = false;
     }
 }
 
 bool PrefSlider::on_mnemonic_activate ( bool group_cycling )
 {
-    return _sb.mnemonic_activate ( group_cycling );
+    return _sb->mnemonic_activate ( group_cycling );
 }
 
 void
@@ -592,19 +593,19 @@ PrefSlider::init(Glib::ustring const &prefs_path,
     _slider->set_value (value);
     _slider->set_digits(digits);
     _slider->signal_value_changed().connect(sigc::mem_fun(*this, &PrefSlider::on_slider_value_changed));
-
-    _sb.signal_value_changed().connect(sigc::mem_fun(*this, &PrefSlider::on_spinbutton_value_changed));
-    _sb.set_range (lower, upper);
-    _sb.set_increments (step_increment, 0);
-    _sb.set_value (value);
-    _sb.set_digits(digits);
-    _sb.set_halign(Gtk::ALIGN_CENTER);
-    _sb.set_valign(Gtk::ALIGN_END);
+    _sb = Gtk::manage(new Inkscape::UI::Widget::SpinButton());
+    _sb->signal_value_changed().connect(sigc::mem_fun(*this, &PrefSlider::on_spinbutton_value_changed));
+    _sb->set_range (lower, upper);
+    _sb->set_increments (step_increment, 0);
+    _sb->set_value (value);
+    _sb->set_digits(digits);
+    _sb->set_halign(Gtk::ALIGN_CENTER);
+    _sb->set_valign(Gtk::ALIGN_END);
 
     auto table = Gtk::manage(new Gtk::Grid());
     _slider->set_hexpand();
     table->attach(*_slider, 0, 0, 1, 1);
-    table->attach(_sb,      1, 0, 1, 1);
+    table->attach(*_sb,     1, 0, 1, 1);
 
     this->pack_start(*table, Gtk::PACK_EXPAND_WIDGET);
 }

@@ -142,7 +142,7 @@ private:
     void on_unit_changed();
     bool on_mnemonic_activate( bool group_cycling ) override;
 
-    Inkscape::UI::Widget::SpinButton _sb;
+    Inkscape::UI::Widget::SpinButton *_sb;
     UnitMenu        _unit;
     Gtk::Scale*      _slider;
     ZoomCorrRuler   _ruler;
@@ -157,13 +157,15 @@ public:
     void init(Glib::ustring const &prefs_path,
     		  double lower, double upper, double step_increment, double page_increment, double default_value, int digits);
 
+    Gtk::Scale*  getSlider() {return _slider;};
+    Inkscape::UI::Widget::SpinButton * getSpinButton() {return _sb;};
 private:
     void on_slider_value_changed();
     void on_spinbutton_value_changed();
     bool on_mnemonic_activate( bool group_cycling ) override;
 
     Glib::ustring _prefs_path;
-    Inkscape::UI::Widget::SpinButton _sb;
+    Inkscape::UI::Widget::SpinButton *_sb;
 
     Gtk::Scale*     _slider;
 
