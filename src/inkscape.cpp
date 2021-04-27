@@ -384,22 +384,17 @@ std::string sp_get_contrasted_color(std::string cssstring, std::string define, s
 
 std::string sp_tweak_background_colors(std::string cssstring, double crossfade)
 {
-    static std::regex re_no_affect("(inherit|unset|initial|none)");
+    static std::regex re_no_affect("(inherit|unset|initial|none|url)");
     static std::regex re_background_color("background-color( ){0,3}:(.*?);");
     static std::regex re_background_image("background-image( ){0,3}:(.*?\\)) *?;");
-    if (cssstring.find("background-color") != std::string::npos) {
-        std::string sub = "";
-        std::smatch m;
-        std::regex_search(cssstring, m, re_no_affect);
-        if (m.size() == 0) {
+    std::string sub = "";
+    std::smatch m;
+    std::regex_search(cssstring, m, re_no_affect);
+    if (m.size() == 0) {
+        if (cssstring.find("background-color") != std::string::npos) {
             sub = "background-color:shade($2," + Glib::ustring::format(crossfade) + ");";
             cssstring = std::regex_replace(cssstring, re_background_color, sub);
-        }
-    } else if (cssstring.find("background-image") != std::string::npos) {
-        std::string sub = "";
-        std::smatch m;
-        std::regex_search(cssstring, m, re_no_affect);
-        if (m.size() == 0) {
+        } else if (cssstring.find("background-image") != std::string::npos) {
             if (crossfade > 1) {
                 crossfade = std::clamp((int)((2 - crossfade) * 80), 0, 100);
                 sub = "background-image:cross-fade(" + Glib::ustring::format(crossfade) + "% image($2), image(@theme_bg_color));";
@@ -409,6 +404,8 @@ std::string sp_tweak_background_colors(std::string cssstring, double crossfade)
             }
             cssstring = std::regex_replace(cssstring, re_background_image, sub);
         }
+    } else {
+        cssstring = "";
     }
     return cssstring;
 }
@@ -479,8 +476,10 @@ void Application::add_gtk_css(bool only_providers)
         double contrast = (10 - themecontrast) / 40.0;
         double shade = 1 - contrast;
         const gchar *variant = nullptr;
-        if (prefs->getBool("/theme/darkTheme", false)) {
+        if (prefs->getBool("/theme/preferDarkTheme", false)) {
             variant = "dark";
+        }
+        if (prefs->getBool("/theme/darkTheme", false)) {
             contrast *= 2.5;
             shade = 1 + contrast;
         }
@@ -500,6 +499,14 @@ void Application::add_gtk_css(bool only_providers)
                 if (line.find("@define-color") != std::string::npos) {
                     colorsdefined += line;
                     colorsdefined += "\n";
+                }
+                // here we ignore most of class to parse because is in additive mode
+                // so stiles not applyed are set on previous context style
+                if (line.find(";") != std::string::npos &&
+                    line.find("background-image") == std::string::npos &&
+                    line.find("background-color") == std::string::npos)
+                {
+                    continue;
                 }
                 cssdefined += sp_tweak_background_colors(line, shade);
                 cssdefined += "\n";
