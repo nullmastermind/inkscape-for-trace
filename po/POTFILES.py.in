@@ -1,6 +1,5 @@
 ../share/extensions/convert2dashes.py
 ../share/extensions/dxf_input.py
-../share/extensions/embedimage.py
 ../share/extensions/funcplot.py
 ../share/extensions/generate_voronoi.py
 ../share/extensions/gimp_xcf.py
@@ -8,6 +7,7 @@
 ../share/extensions/hpgl_decoder.py
 ../share/extensions/hpgl_input.py
 ../share/extensions/hpgl_output.py
+../share/extensions/image_embed.py
 ../share/extensions/inkex/bezier.py
 ../share/extensions/inkex/deprecated.py
 ../share/extensions/inkex/localization.py

@@ -25,6 +25,13 @@ install(DIRECTORY extensions DESTINATION ${INKSCAPE_SHARE_INSTALL}
     PATTERN "tests" EXCLUDE
     PATTERN "*.pyc" EXCLUDE
     PATTERN "print_win32_vector.*" EXCLUDE
+    PATTERN "extension-manager-bootstrap.*" EXCLUDE
+)
+
+install(
+    FILES extensions/extension-manager-bootstrap.py extensions/extension-manager-bootstrap.inx
+    DESTINATION ${INKSCAPE_SHARE_INSTALL}/extensions
+    COMPONENT extension_manager
 )
 
 if(WIN32)

@@ -146,6 +146,12 @@ cpack_add_component(extensions
                     DESCRIPTION "Inkscape extensions (including many import and export plugins)"
                     GROUP "group_2_inkscape_data"
                     INSTALL_TYPES full compact)
+cpack_add_component(extension_manager
+                    DISPLAY_NAME "Extension Manager"
+                    DESCRIPTION "Extension manager allows user to install extensions from the inkscape website"
+                    DEPENDS "extensions"
+                    GROUP "group_2_inkscape_data"
+                    INSTALL_TYPES full compact)
 cpack_add_component(themes
                     DISPLAY_NAME "Themes"
                     DESCRIPTION "Inkscape themes (look and feel including icons)"

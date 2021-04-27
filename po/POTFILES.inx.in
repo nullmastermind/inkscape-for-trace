@@ -32,12 +32,9 @@
 ../share/extensions/dxf_input.inx
 ../share/extensions/dxf_outlines.inx
 ../share/extensions/edge3d.inx
-../share/extensions/embedimage.inx
-../share/extensions/embedselectedimages.inx
 ../share/extensions/eps_input.inx
 ../share/extensions/export_gimp_palette.inx
 ../share/extensions/extension-manager-bootstrap.inx
-../share/extensions/extractimage.inx
 ../share/extensions/extrude.inx
 ../share/extensions/fig_input.inx
 ../share/extensions/flatten.inx
@@ -67,6 +64,9 @@
 ../share/extensions/hpgl_input.inx
 ../share/extensions/hpgl_output.inx
 ../share/extensions/image_attributes.inx
+../share/extensions/image_embed.inx
+../share/extensions/image_embed_selected.inx
+../share/extensions/image_extract.inx
 ../share/extensions/ink2canvas.inx
 ../share/extensions/inkscape_follow_link.inx
 ../share/extensions/interp.inx

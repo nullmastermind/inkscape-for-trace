@@ -90,6 +90,18 @@ $ARCH-python-pyserial \
 $ARCH-python-coverage \
 $ARCH-scour
 
+# install modules needed by extensions manager
+eval pacman -S $PACMAN_OPTIONS \
+$ARCH-python-appdirs \
+$ARCH-python-msgpack \
+$ARCH-python-lockfile \
+$ARCH-python-cachecontrol \
+$ARCH-python-idna \
+$ARCH-python-urllib3 \
+$ARCH-python-chardet \
+$ARCH-python-certifi \
+$ARCH-python-requests
+
 # install Python modules not provided as MSYS2/MinGW packages
 PACKAGES=""
 for arch in $(eval echo $ARCH); do
