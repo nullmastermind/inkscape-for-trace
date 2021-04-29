@@ -163,6 +163,11 @@ public:
                                        SPIBase const *const base = nullptr ) const;
     virtual void clear() {
         set = false, inherit = false, important = false;
+        // Attr::D is a special case where the best default for it is actually ATTRIBUTE
+        // and not STYLE_PROP, this exception allows us to not have to refactor more.
+        if (id() != SPAttr::D) {
+            style_src = SPStyleSrc::STYLE_PROP;
+        }
     }
 
     virtual void cascade( const SPIBase* const parent ) = 0;

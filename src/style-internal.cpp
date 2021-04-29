@@ -169,8 +169,8 @@ void SPIBase::readIfUnset(gchar const *str, SPStyleSrc source)
     }
 
     if (!set || (has_important && !important)) {
+        read(str); // clears style_src
         style_src = source;
-        read(str);
         if (set) {
             if (has_important) {
                 important = true;
