@@ -1138,6 +1138,7 @@ void SPLPEItem::remove_child(Inkscape::XML::Node * child) {
         SPObject *ochild = this->get_child_by_repr(child);
 
         if ( ochild && SP_IS_LPE_ITEM(ochild) ) {
+            // we not need to update item because keep paths is false
             sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(ochild), false);
         }
     }

@@ -1262,10 +1262,6 @@ Effect::processObjects(LPEAction lpe_action)
     }
     sp_lpe_item_enable_path_effects(sp_lpe_item, false);
     for (auto id : items) {
-        if (id.empty()) {
-            sp_lpe_item_enable_path_effects(sp_lpe_item, true);
-            return;
-        }
         SPObject *elemref = nullptr;
         if ((elemref = document->getObjectById(id.c_str()))) {
             Inkscape::XML::Node * elemnode = elemref->getRepr();
