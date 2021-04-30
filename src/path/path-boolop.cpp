@@ -33,6 +33,8 @@
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
 
+#include "display/curve.h"
+
 #include "ui/widget/canvas.h"  // Disable drawing during op
 
 #include "svg/svg.h"
@@ -105,6 +107,42 @@ boolop_display_error_message(SPDesktop *desktop, Glib::ustring const &msg)
     }
 }
 
+/**
+ * Calculate the threshold for the given PathVector based
+ * on it's bounding box.
+ *
+ * @param path - The PathVector to calculate the threshold for.
+ * @param threshold - The starting threshold, usually 0.1
+ */
+double get_threshold(Geom::PathVector const &path, double threshold)
+{
+    auto maybe_box = path.boundsFast();
+    if (!maybe_box)
+        return threshold;
+    Geom::Rect box = *maybe_box;
+    double diagonal = Geom::distance(
+        Geom::Point(box[Geom::X].min(), box[Geom::Y].min()),
+        Geom::Point(box[Geom::X].max(), box[Geom::Y].max())
+    );
+    return threshold * (diagonal / 100);
+}
+
+/**
+ * Calculate the threshold for the given SPItem/SPShape based
+ * on it's bounding box (see PathVector get_threshold above)
+ *
+ * @param item - The SPItem to calculate the threshold for.
+ * @param threshold - The starting threshold, usually 0.1
+ */
+double get_threshold(SPItem const *item, double threshold)
+{
+    auto shape = dynamic_cast<SPShape const *>(item);
+    if (shape) {
+        return get_threshold(shape->curve()->get_pathvector(), threshold);
+    }
+    return threshold;
+}
+
 // boolean operations PathVectors A,B -> PathVector result.
 // This is derived from sp_selected_path_boolop
 // take the source paths from the file, do the operation, delete the originals and add the results
@@ -131,19 +169,20 @@ sp_pathvector_boolop(Geom::PathVector const &pathva, Geom::PathVector const &pat
     Shape *theShape = new Shape;
     Path *res = new Path;
     res->SetBackData(false);
-    Path::cut_position  *toCut=nullptr;
-    int                  nbToCut=0;
+
+    Path::cut_position *toCut=nullptr;
+    int nbToCut = 0;
 
     if ( bop == bool_op_inters || bop == bool_op_union || bop == bool_op_diff || bop == bool_op_symdiff ) {
         // true boolean op
         // get the polygons of each path, with the winding rule specified, and apply the operation iteratively
-        originaux[0]->ConvertWithBackData(0.1);
+        originaux[0]->ConvertWithBackData(get_threshold(pathva, 0.1));
 
         originaux[0]->Fill(theShape, 0);
 
         theShapeA->ConvertToShape(theShape, origWind[0]);
 
-        originaux[1]->ConvertWithBackData(0.1);
+        originaux[1]->ConvertWithBackData(get_threshold(pathvb, 0.1));
 
         originaux[1]->Fill(theShape, 1);
 
@@ -163,22 +202,17 @@ sp_pathvector_boolop(Geom::PathVector const &pathva, Geom::PathVector const &pat
 
         // the cut path needs to have the highest pathID in the back data
         // that's how the Booleen() function knows it's an edge of the cut
-
-        // FIXME: this gives poor results, the final paths are full of extraneous nodes. Decreasing
-        // ConvertWithBackData parameter below simply increases the number of nodes, so for now I
-        // left it at 1.0. Investigate replacing this by a combination of difference and
-        // intersection of the same two paths. -- bb
         {
             Path* swap=originaux[0];originaux[0]=originaux[1];originaux[1]=swap;
             int   swai=origWind[0];origWind[0]=origWind[1];origWind[1]=(fill_typ)swai;
         }
-        originaux[0]->ConvertWithBackData(0.1);
+        originaux[0]->ConvertWithBackData(get_threshold(pathva, 0.1));
 
         originaux[0]->Fill(theShape, 0);
 
         theShapeA->ConvertToShape(theShape, origWind[0]);
 
-        originaux[1]->ConvertWithBackData(0.1);
+        originaux[1]->ConvertWithBackData(get_threshold(pathvb, 0.1));
 
         originaux[1]->Fill(theShape, 1,false,false,false); //do not closeIfNeeded
 
@@ -199,11 +233,11 @@ sp_pathvector_boolop(Geom::PathVector const &pathva, Geom::PathVector const &pat
             Path* swap=originaux[0];originaux[0]=originaux[1];originaux[1]=swap;
             int   swai=origWind[0];origWind[0]=origWind[1];origWind[1]=(fill_typ)swai;
         }
-        originaux[0]->ConvertWithBackData(1.0);
+        originaux[0]->ConvertWithBackData(get_threshold(pathva, 0.1));
 
         originaux[0]->Fill(theShapeA, 0,false,false,false); // don't closeIfNeeded
 
-        originaux[1]->ConvertWithBackData(1.0);
+        originaux[1]->ConvertWithBackData(get_threshold(pathvb, 0.1));
 
         originaux[1]->Fill(theShapeA, 1,true,false,false);// don't closeIfNeeded and just dump in the shape, don't reset it
 
@@ -470,7 +504,7 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
     if ( bop == bool_op_inters || bop == bool_op_union || bop == bool_op_diff || bop == bool_op_symdiff ) {
         // true boolean op
         // get the polygons of each path, with the winding rule specified, and apply the operation iteratively
-        originaux[0]->ConvertWithBackData(0.1);
+        originaux[0]->ConvertWithBackData(get_threshold(il[0], 0.1));
 
         originaux[0]->Fill(theShape, 0);
 
@@ -479,7 +513,7 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
         curOrig = 1;
         for (auto item : il){
             if(item==il[0])continue;
-            originaux[curOrig]->ConvertWithBackData(0.1);
+            originaux[curOrig]->ConvertWithBackData(get_threshold(item, 0.1));
 
             originaux[curOrig]->Fill(theShape, curOrig);
 
@@ -544,22 +578,17 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
 
         // the cut path needs to have the highest pathID in the back data
         // that's how the Booleen() function knows it's an edge of the cut
-
-        // FIXME: this gives poor results, the final paths are full of extraneous nodes. Decreasing
-        // ConvertWithBackData parameter below simply increases the number of nodes, so for now I
-        // left it at 1.0. Investigate replacing this by a combination of difference and
-        // intersection of the same two paths. -- bb
         {
             Path* swap=originaux[0];originaux[0]=originaux[1];originaux[1]=swap;
             int   swai=origWind[0];origWind[0]=origWind[1];origWind[1]=(fill_typ)swai;
         }
-        originaux[0]->ConvertWithBackData(1.0);
+        originaux[0]->ConvertWithBackData(get_threshold(il[0], 0.1));
 
         originaux[0]->Fill(theShape, 0);
 
         theShapeA->ConvertToShape(theShape, origWind[0]);
 
-        originaux[1]->ConvertWithBackData(1.0);
+        originaux[1]->ConvertWithBackData(get_threshold(il[1], 0.1));
 
         if ((originaux[1]->pts.size() == 2) && originaux[1]->pts[0].isMoveTo && !originaux[1]->pts[1].isMoveTo)
             originaux[1]->Fill(theShape, 1,false,true,false); // see LP Bug 177956
@@ -583,11 +612,11 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
             Path* swap=originaux[0];originaux[0]=originaux[1];originaux[1]=swap;
             int   swai=origWind[0];origWind[0]=origWind[1];origWind[1]=(fill_typ)swai;
         }
-        originaux[0]->ConvertWithBackData(1.0);
+        originaux[0]->ConvertWithBackData(get_threshold(il[0], 0.1));
 
         originaux[0]->Fill(theShapeA, 0,false,false,false); // don't closeIfNeeded
 
-        originaux[1]->ConvertWithBackData(1.0);
+        originaux[1]->ConvertWithBackData(get_threshold(il[1], 0.1));
 
         originaux[1]->Fill(theShapeA, 1,true,false,false);// don't closeIfNeeded and just dump in the shape, don't reset it
 
