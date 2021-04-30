@@ -137,7 +137,7 @@ double get_threshold(Geom::PathVector const &path, double threshold)
 double get_threshold(SPItem const *item, double threshold)
 {
     auto shape = dynamic_cast<SPShape const *>(item);
-    if (shape) {
+    if (shape && shape->curve()) {
         return get_threshold(shape->curve()->get_pathvector(), threshold);
     }
     return threshold;
