@@ -40,11 +40,11 @@
     </screenshot>
   </screenshots>
   <releases>
-    <release version="1.1-beta" date="2021-03-28">
+    <release version="1.1-rc" date="2021-05-01">
       <description>
-        <p>Inkscape 1.1-beta1</p>
+        <p>Inkscape 1.1-rc</p>
         <ul>
-          <li>Beta release</li>
+          <li>Release Candidate</li>
         </ul>
       </description>
       <url>http://wiki.inkscape.org/wiki/index.php/Release_notes/1.1</url>
