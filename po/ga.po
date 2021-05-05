@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2019-10-09 15:17+0200\n"
-"PO-Revision-Date: 2021-04-10 00:25+0200\n"
+"PO-Revision-Date: 2021-05-05 23:59+0200\n"
 "Last-Translator: Seanán Ó Coistín <seananoc@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
 "Language: ga\n"
@@ -46,7 +46,6 @@ msgid "Same as Matte jelly but with more controls"
 msgstr ""
 
 #: ../share/filters/filters.svg.h:6
-#, fuzzy
 msgid "Metal Casting"
 msgstr ""
 
@@ -4713,9 +4712,8 @@ msgid "  description: "
 msgstr " cur síos: "
 
 #: ../src/extension/effect.h:70 ../src/verbs.cpp:2319
-#, fuzzy
 msgid "Extensions"
-msgstr "Roghnaigh"
+msgstr "Breiseáin"
 
 #: ../src/extension/error-file.cpp:50
 msgid ""
@@ -7308,9 +7306,8 @@ msgstr "Dún"
 #: ../share/extensions/web_transmit_att.inx:7
 #: ../share/extensions/webslicer_create_group.inx:8
 #: ../share/extensions/webslicer_export.inx:8
-#, fuzzy
 msgid "Options"
-msgstr "Roghnachais Uirlís"
+msgstr "Roghanna"
 
 #: ../src/extension/internal/filter/overlays.h:65
 #, fuzzy
@@ -7742,9 +7739,8 @@ msgid "Blend"
 msgstr "Gorm:"
 
 #: ../src/extension/internal/filter/transparency.h:56 ../src/rdf.cpp:264
-#, fuzzy
 msgid "Source:"
-msgstr "Sábháil"
+msgstr "Foinse:"
 
 #: ../src/extension/internal/filter/transparency.h:57
 msgid "Background"
@@ -8677,9 +8673,8 @@ msgid "Matrix"
 msgstr "Máthair"
 
 #: ../src/filter-enums.cpp:80
-#, fuzzy
 msgid "Saturate"
-msgstr "Sábháil"
+msgstr "Sáithigh"
 
 #: ../src/filter-enums.cpp:81
 msgid "Hue Rotate"
@@ -9386,7 +9381,7 @@ msgstr ""
 
 #: ../src/inkscape.cpp:807
 msgid "Inkscape encountered an internal error and will close now.\n"
-msgstr ""
+msgstr "Bhraith Inkscape earráid inmheánach agus dúnfar anois é.\n"
 
 #: ../src/inkscape.cpp:808
 msgid ""
@@ -9418,7 +9413,7 @@ msgstr "Leasú"
 
 #: ../src/inkview-application.cpp:74
 msgid "Launch in fullscreen mode"
-msgstr ""
+msgstr "Tosaigh i lánscáileán"
 
 #: ../src/inkview-application.cpp:75
 msgid "Search folders recursively"
@@ -10320,9 +10315,8 @@ msgid "non-zero"
 msgstr ""
 
 #: ../src/live_effects/lpe-bool.cpp:57 ../src/live_effects/lpe-bool.cpp:66
-#, fuzzy
 msgid "positive"
-msgstr "Féindheanamh"
+msgstr "dearfach"
 
 #: ../src/live_effects/lpe-bool.cpp:58
 #, fuzzy
@@ -11799,9 +11793,8 @@ msgstr ""
 
 #: ../src/live_effects/lpe-measure-segments.cpp:73
 #: ../share/extensions/frame.inx:14
-#, fuzzy
 msgid "Position"
-msgstr "Leasú"
+msgstr "Suíomh"
 
 #
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 73
@@ -13068,7 +13061,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-roughen.cpp:147
 msgid "<b>Options</b> Modify options to rough"
-msgstr ""
+msgstr "<b>Roghanna</b> Mionathraigh na roghanna chuig garbh"
 
 #: ../src/live_effects/lpe-ruler.cpp:23 ../share/extensions/restack.inx:26
 #: ../share/extensions/text_extract.inx:13
@@ -14043,7 +14036,7 @@ msgstr "%d &#215; %d: %s"
 
 #: ../src/object/sp-item-group.cpp:305 ../share/extensions/frame.inx:19
 msgid "Group"
-msgstr "Grupa"
+msgstr "Cruinnigh"
 
 #: ../src/object/sp-item-group.cpp:311 ../src/object/sp-switch.cpp:70
 #, c-format
@@ -14205,7 +14198,7 @@ msgstr ""
 #: ../share/extensions/text_titlecase.inx:10
 #: ../share/extensions/text_uppercase.inx:10
 msgid "Text"
-msgstr "Teacs"
+msgstr "Téacs"
 
 #: ../src/object/sp-text.cpp:371
 #, c-format
@@ -15063,7 +15056,7 @@ msgstr "ciseal <b>%s</b>"
 #: ../src/selection-describer.cpp:135
 #, c-format
 msgid "layer <b><i>%s</i></b>"
-msgstr ""
+msgstr "ciseal <b><i>%s</i></b>"
 
 #: ../src/selection-describer.cpp:149
 #, c-format
@@ -15245,7 +15238,7 @@ msgstr ""
 
 #: ../src/shortcuts.cpp:430 ../src/shortcuts.cpp:460
 msgid "Inkscape shortcuts (*.xml)"
-msgstr ""
+msgstr "Aicearraí Inkscape (*xml)"
 
 #: ../src/shortcuts.cpp:459
 msgid "Select a file to import"
@@ -15642,9 +15635,8 @@ msgid "Release C_lip"
 msgstr ""
 
 #: ../src/ui/contextmenu.cpp:503 ../src/verbs.cpp:2672
-#, fuzzy
 msgid "_Group"
-msgstr "Grupa"
+msgstr "_Cruinnigh"
 
 #: ../src/ui/contextmenu.cpp:574
 msgid "Create link"
@@ -15704,9 +15696,8 @@ msgid "_Fill and Stroke..."
 msgstr ""
 
 #: ../src/ui/contextmenu.cpp:909 ../src/verbs.cpp:3073
-#, fuzzy
 msgid "_Text and Font..."
-msgstr "Teacs agus Clófhoireann"
+msgstr "Téacs agus Clófhoireann..."
 
 #: ../src/ui/contextmenu.cpp:916 ../src/verbs.cpp:3083
 msgid "Check Spellin_g..."
@@ -16983,9 +16974,8 @@ msgid "Color of the page border"
 msgstr ""
 
 #: ../src/ui/dialog/document-properties.cpp:110
-#, fuzzy
 msgid "Display _units:"
-msgstr "Álbachtaí Táispeanach"
+msgstr "Aonaid taispeána:"
 
 #: ../src/ui/dialog/document-properties.cpp:114
 msgid "Show _guides"
@@ -17315,9 +17305,8 @@ msgid "<b>Content:</b>"
 msgstr "Dealaigh"
 
 #: ../src/ui/dialog/document-properties.cpp:984
-#, fuzzy
 msgid "_Save as default"
-msgstr "Dealaigh"
+msgstr "Taisc mar an réamhshocrú"
 
 #: ../src/ui/dialog/document-properties.cpp:985
 msgid "Save this metadata as the default metadata"
@@ -17835,7 +17824,7 @@ msgstr "Foinse nua solais"
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1309
 #: ../src/ui/dialog/guides.cpp:178
 msgid "_Duplicate"
-msgstr ""
+msgstr "_Déan macasamhail"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1328
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:1001 ../src/verbs.cpp:2511
@@ -17870,7 +17859,7 @@ msgstr "Cuir scagaire leis"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1697
 msgid "Duplicate filter"
-msgstr ""
+msgstr "Macasamhlaigh scagaire"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1768
 msgid "_Effect"
@@ -18391,7 +18380,7 @@ msgstr "Ro_gha"
 #: ../src/ui/dialog/find.cpp:66 ../src/ui/dialog/text-edit.cpp:67
 #: ../share/ui/menus.xml:266
 msgid "_Text"
-msgstr "_Teacs"
+msgstr "_Téacs"
 
 #: ../src/ui/dialog/find.cpp:67
 msgid "_Properties"
@@ -20549,7 +20538,7 @@ msgstr "Ísiltíris (nl)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:929
 msgid "Dzongkha (dz)"
-msgstr ""
+msgstr "Dzongkha (dz)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:930
 msgid "German (de)"
@@ -20823,7 +20812,7 @@ msgstr "Vítneaimis (vi)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1000
 msgid "Language (requires restart):"
-msgstr ""
+msgstr "An teanga (tá atosú de dhíth):"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1001
 msgid "Set the language for menus and number formats"
@@ -21273,7 +21262,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1314
 msgid "Windows"
-msgstr "Windows"
+msgstr "Fuinneoga"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1317
 msgid "Line color when zooming out"
@@ -21456,7 +21445,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1459
 msgid "Input devices"
-msgstr ""
+msgstr "Gléasanna inchuir"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1462
 #, fuzzy
@@ -22847,7 +22836,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2230
 msgid "Keyboard Shortcuts"
-msgstr ""
+msgstr "Aicearraí Méarchláir"
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 2149
@@ -22919,9 +22908,8 @@ msgid "Ignore words in all capitals, such as \"IUPAC\""
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2521
-#, fuzzy
 msgid "Spellcheck"
-msgstr "Roghnaigh"
+msgstr "Dearbháil an litriú"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2536
 msgid "Latency _skew:"
@@ -23181,7 +23169,7 @@ msgstr "Fuinneog"
 
 #: ../src/ui/dialog/input.cpp:580
 msgid "Test Area"
-msgstr "Limistéar tástala"
+msgstr "Limistéar tástála"
 
 #: ../src/ui/dialog/input.cpp:581
 msgid "Axis"
@@ -24203,9 +24191,8 @@ msgid "_Ignore once"
 msgstr "Tada"
 
 #: ../src/ui/dialog/spellcheck.cpp:101
-#, fuzzy
 msgid "_Ignore"
-msgstr "Tada"
+msgstr "_Déan neamhshuim de"
 
 #: ../src/ui/dialog/spellcheck.cpp:102
 msgid "A_dd"
@@ -24409,7 +24396,7 @@ msgstr ""
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:466
 msgid "x Height:"
-msgstr "Airde x:"
+msgstr "x-airde"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:466
 msgid ""
@@ -26253,9 +26240,8 @@ msgid "Make connectors avoid selected objects"
 msgstr ""
 
 #: ../src/ui/toolbar/connector-toolbar.cpp:85
-#, fuzzy
 msgid "Ignore"
-msgstr "Tada"
+msgstr "Déan neamhshuim de"
 
 #: ../src/ui/toolbar/connector-toolbar.cpp:86
 #: ../src/ui/tools/connector-tool.cpp:1322
@@ -30419,9 +30405,8 @@ msgid "_Portrait"
 msgstr ""
 
 #: ../src/ui/widget/page-sizer.cpp:178
-#, fuzzy
 msgid "Custom size"
-msgstr "Féindheanamh"
+msgstr "Méid saincheaptha"
 
 #: ../src/ui/widget/page-sizer.cpp:196
 msgid "Resi_ze page to content..."
@@ -31078,9 +31063,8 @@ msgstr "Dealaigh"
 
 #. TRANSLATORS: this means "The layer has been duplicated."
 #: ../src/verbs.cpp:1404
-#, fuzzy
 msgid "Duplicated layer."
-msgstr "Dealaigh"
+msgstr "Ciseal macasamhlaithe."
 
 #: ../src/verbs.cpp:1449
 msgid "Delete layer"
@@ -31162,7 +31146,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:2515
 msgid "Re_vert"
-msgstr ""
+msgstr "Ais_iompaigh"
 
 #: ../src/verbs.cpp:2516
 msgid "Revert to the last saved version of document (changes will be lost)"
@@ -31189,9 +31173,8 @@ msgid "Save a copy of the document under a new name"
 msgstr ""
 
 #: ../src/verbs.cpp:2523
-#, fuzzy
 msgid "Save Template..."
-msgstr "Sábháil Mar..."
+msgstr "Taisc an teimpléad..."
 
 #: ../src/verbs.cpp:2524
 msgid "Save a copy of the document as template"
@@ -31260,9 +31243,8 @@ msgid "Quit Inkscape"
 msgstr "Scoir ó Inkscape"
 
 #: ../src/verbs.cpp:2547
-#, fuzzy
 msgid "New from _Template..."
-msgstr "Sábháil Mar..."
+msgstr "Nua ó _theimpléad..."
 
 #: ../src/verbs.cpp:2548
 #, fuzzy
@@ -31391,9 +31373,8 @@ msgid "Remove any path effects from selected objects"
 msgstr "Roghanna Oaf"
 
 #: ../src/verbs.cpp:2579
-#, fuzzy
 msgid "_Remove Filters"
-msgstr "Sábháil comhad"
+msgstr "_Bain scagairí"
 
 #: ../src/verbs.cpp:2580
 #, fuzzy
@@ -31406,11 +31387,11 @@ msgstr ""
 
 #: ../src/verbs.cpp:2583
 msgid "Duplic_ate"
-msgstr ""
+msgstr "Macasamhlaigh"
 
 #: ../src/verbs.cpp:2583
 msgid "Duplicate Selected Objects"
-msgstr ""
+msgstr "Macasamhlaigh na nithe roghnaithe"
 
 #: ../src/verbs.cpp:2585
 #, fuzzy
@@ -31596,7 +31577,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:2632
 msgid "In_vert Selection"
-msgstr ""
+msgstr "Ais_iompaigh an rogha"
 
 #: ../src/verbs.cpp:2633
 msgid "Invert selection (unselect what is selected and select everything else)"
@@ -31665,7 +31646,7 @@ msgstr "Greamaigh"
 
 #: ../src/verbs.cpp:2656
 msgid "Raise to _Top"
-msgstr ""
+msgstr "Ardaigh chuig an mbarr"
 
 #: ../src/verbs.cpp:2656
 msgid "Raise selection to top"
@@ -31717,7 +31698,7 @@ msgstr "Roghnaigh Printéir"
 
 #: ../src/verbs.cpp:2672
 msgid "Group selected objects"
-msgstr ""
+msgstr "Cruinnigh réada roghnaithe"
 
 #: ../src/verbs.cpp:2674
 msgid "Ungroup selected groups"
@@ -32085,9 +32066,8 @@ msgid "Lower the current layer"
 msgstr ""
 
 #: ../src/verbs.cpp:2786
-#, fuzzy
 msgid "D_uplicate Current Layer"
-msgstr "Dealaigh"
+msgstr "Macasamhlaigh an ciseal reatha"
 
 #: ../src/verbs.cpp:2787
 msgid "Duplicate an existing layer"
@@ -32095,7 +32075,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:2788
 msgid "_Delete Current Layer"
-msgstr ""
+msgstr "_Scrios an ciseal reatha"
 
 #: ../src/verbs.cpp:2788
 msgid "Delete the current layer"
@@ -32138,9 +32118,8 @@ msgid "Lock all the layers"
 msgstr "Roghnaigh Printéir"
 
 #: ../src/verbs.cpp:2795
-#, fuzzy
 msgid "Lock/Unlock _other layers"
-msgstr "Dealaigh"
+msgstr "Glasáil/Díghlasáil cisil eile"
 
 #: ../src/verbs.cpp:2796
 #, fuzzy
@@ -32158,18 +32137,16 @@ msgid "Unlock all the layers"
 msgstr "Roghnaigh Printéir"
 
 #: ../src/verbs.cpp:2799
-#, fuzzy
 msgid "_Lock/Unlock Current Layer"
-msgstr "Dealaigh"
+msgstr "_Glasáil/Díghlasáil an ciseal reatha"
 
 #: ../src/verbs.cpp:2800
 msgid "Toggle lock on current layer"
 msgstr ""
 
 #: ../src/verbs.cpp:2801
-#, fuzzy
 msgid "_Show/Hide Current Layer"
-msgstr "Dealaigh"
+msgstr "_Taispeáin/Folaigh an ciseal reatha"
 
 #: ../src/verbs.cpp:2802
 msgid "Toggle visibility of current layer"
@@ -32228,7 +32205,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:2822
 msgid "_Convert to Text"
-msgstr ""
+msgstr "_Tiontaigh go téacs"
 
 #: ../src/verbs.cpp:2823
 msgid "Convert flowed text to regular text object (preserves appearance)"
@@ -32932,7 +32909,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:2997
 msgid "_Fullscreen"
-msgstr ""
+msgstr "_Lánscáileán"
 
 #: ../src/verbs.cpp:2997 ../src/verbs.cpp:3000
 msgid "Stretch this document window to full screen"
@@ -32940,7 +32917,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:2999
 msgid "Fullscreen & Focus Mode"
-msgstr ""
+msgstr "Lánscáileán ⁊ mód fócasaithe"
 
 #: ../src/verbs.cpp:3001
 msgid "Toggle _Focus Mode"
@@ -32952,7 +32929,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:3003
 msgid "Duplic_ate Window"
-msgstr ""
+msgstr "Macasamhlaigh fuinneog"
 
 #: ../src/verbs.cpp:3003
 msgid "Open a new window with the same document"
@@ -33046,9 +33023,8 @@ msgid "Toggle color-managed display for this document window"
 msgstr ""
 
 #: ../src/verbs.cpp:3034
-#, fuzzy
 msgid "Ico_n Preview..."
-msgstr "Reamhthaispeántas Nua"
+msgstr "Réamhamharc an deilbhín..."
 
 #: ../src/verbs.cpp:3035
 msgid "Open a window to preview objects at different icon resolutions"
@@ -33071,9 +33047,8 @@ msgid "Edit global Inkscape preferences"
 msgstr ""
 
 #: ../src/verbs.cpp:3043
-#, fuzzy
 msgid "_Document Properties..."
-msgstr "Álbachtaí Dealbh"
+msgstr "_Airíonna na cáipéise..."
 
 #: ../src/verbs.cpp:3044
 msgid "Edit properties of this document (to be saved with the document)"
@@ -33131,7 +33106,7 @@ msgstr "Roghanna Oaf"
 
 #: ../src/verbs.cpp:3065
 msgid "Transfor_m..."
-msgstr ""
+msgstr "Tiontaigh..."
 
 #: ../src/verbs.cpp:3066
 msgid "Precisely control objects' transformations"
@@ -33155,20 +33130,19 @@ msgstr ""
 
 #: ../src/verbs.cpp:3071
 msgid "Undo _History..."
-msgstr ""
+msgstr "Oireas na gcealaithe..."
 
 #: ../src/verbs.cpp:3071
 msgid "Undo History"
-msgstr ""
+msgstr "Oireas na gcealuithe"
 
 #: ../src/verbs.cpp:3074
 msgid "View and select font family, font size and other text properties"
 msgstr ""
 
 #: ../src/verbs.cpp:3076
-#, fuzzy
 msgid "_XML Editor..."
-msgstr "Eagarthóir XML"
+msgstr "Eagarthóir _XML..."
 
 #: ../src/verbs.cpp:3077
 msgid "View and edit the XML tree of the document"
@@ -33237,7 +33211,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:3098
 msgid "_Input Devices..."
-msgstr ""
+msgstr "_Gléasanna ionchuir..."
 
 #: ../src/verbs.cpp:3099
 msgid "Configure extended input devices, such as a graphics tablet"
@@ -33245,16 +33219,15 @@ msgstr ""
 
 #: ../src/verbs.cpp:3101
 msgid "_Extensions..."
-msgstr ""
+msgstr "_Breiseáin..."
 
 #: ../src/verbs.cpp:3102
 msgid "Query information about extensions"
 msgstr ""
 
 #: ../src/verbs.cpp:3103
-#, fuzzy
 msgid "Layer_s..."
-msgstr "Sábháil Mar..."
+msgstr "Cisil..."
 
 #: ../src/verbs.cpp:3103
 msgid "View Layers"
@@ -33287,9 +33260,8 @@ msgid "Manage, edit, and apply path effects"
 msgstr ""
 
 #: ../src/verbs.cpp:3110
-#, fuzzy
 msgid "Filter _Editor..."
-msgstr "Eagarthóir XML"
+msgstr "Eagarthóir na Scagairí..."
 
 #: ../src/verbs.cpp:3111
 msgid "Manage, edit, and apply SVG filters"
@@ -33324,7 +33296,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:3118
 msgid "About E_xtensions"
-msgstr ""
+msgstr "Maidir le breiseáin"
 
 #: ../src/verbs.cpp:3119
 msgid "Information on Inkscape extensions"
@@ -37432,9 +37404,8 @@ msgid "Save Grid"
 msgstr "Sábháil"
 
 #: ../share/extensions/gimp_xcf.inx:12
-#, fuzzy
 msgid "Save Background"
-msgstr "Dath Cúlra"
+msgstr "Taisc an cúlra"
 
 #: ../share/extensions/gimp_xcf.inx:13
 #, fuzzy
@@ -38599,7 +38570,7 @@ msgstr "http://tavmjong.free.fr/INKSCAPE/MANUAL/html/index.php"
 
 #: ../share/extensions/inkscape_help_relnotes.inx:3
 msgid "New in This Version"
-msgstr "Nithe Nua sa Leagan Seo"
+msgstr "Nithe nua sa leagan seo"
 
 #. i18n. Please don't translate link unless the page exists in your language. Add your language code to the link this way: http://wiki.inkscape.org/wiki/index.php/Release_notes/1.0/[lang]
 #: ../share/extensions/inkscape_help_relnotes.inx:7
@@ -40452,9 +40423,8 @@ msgid "Y-value of rectangle's top:"
 msgstr "Roghanna Oaf"
 
 #: ../share/extensions/param_curves.inx:15
-#, fuzzy
 msgid "Samples:"
-msgstr "Sábháil"
+msgstr "Samplaí:"
 
 #
 # File: ../share/extensions/param_curves.inx, line: 20
@@ -40723,9 +40693,8 @@ msgstr ""
 
 #: ../share/extensions/perfectboundcover.inx:17
 #: ../share/extensions/perfectboundcover.inx:26
-#, fuzzy
 msgid "Specify Width"
-msgstr "Leitheid:"
+msgstr "Sonraigh an leithead"
 
 #: ../share/extensions/perfectboundcover.inx:19
 #: ../share/extensions/perfectboundcover.inx:28
@@ -43003,7 +42972,7 @@ msgstr "Scagaire"
 
 #: ../share/ui/menus.xml:288
 msgid "Exte_nsions"
-msgstr ""
+msgstr "Breiseáin"
 
 #: ../share/ui/menus.xml:298
 #, fuzzy
