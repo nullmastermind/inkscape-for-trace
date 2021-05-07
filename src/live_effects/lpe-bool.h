@@ -65,7 +65,9 @@ private:
     EnumParam<fill_typ> fill_type_operand;
     BoolParam swap_operands;
     BoolParam rmv_inner;
-    SPItem *operand;
+    SPItem *operand = nullptr;
+    SPObject *parentlpe = nullptr;
+    Glib::ustring operand_id = "";
     HiddenParam filter;
     Geom::PathVector _hp;
     Geom::Affine prev_affine;

@@ -97,6 +97,9 @@ LPEBool::LPEBool(LivePathEffectObject *lpeobject)
     is_load = true;
     prev_affine = Geom::identity();
     operand = dynamic_cast<SPItem *>(operand_path.getObject());
+    if (operand) {
+        operand_id = operand->getId();
+    }
 }
 
 LPEBool::~LPEBool() {
@@ -459,6 +462,11 @@ void LPEBool::doBeforeEffect(SPLPEItem const *lpeitem)
     }
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     SPItem *current_operand = dynamic_cast<SPItem *>(operand_path.getObject());
+    operand =  dynamic_cast<SPItem *>(lpeitem->document->getObjectById(operand_id));
+    
+    if (!current_operand && !operand) {
+        return;
+    }
     if (!current_operand) {
         operand_path.remove_link();
         operand = nullptr;
@@ -467,7 +475,10 @@ void LPEBool::doBeforeEffect(SPLPEItem const *lpeitem)
         if (!(document->getObjectById(current_operand->getId()))) {
             operand_path.remove_link();
             operand = nullptr;
+            operand_id = "";
             current_operand = nullptr;
+        } else {
+            operand_id = current_operand->getId();
         }
     }
     SPLPEItem *operandlpe = dynamic_cast<SPLPEItem *>(operand_path.getObject());
@@ -487,6 +498,7 @@ void LPEBool::doBeforeEffect(SPLPEItem const *lpeitem)
             remove_filter();
         }
         operand = nullptr;
+        operand_id = "";
     }
     
     if (current_operand && operand != current_operand) {
@@ -513,6 +525,7 @@ void LPEBool::doBeforeEffect(SPLPEItem const *lpeitem)
 
 void LPEBool::transform_multiply(Geom::Affine const &postmul, bool /*set*/)
 {
+    operand =  dynamic_cast<SPItem *>(sp_lpe_item->document->getObjectById(operand_id));
     if (operand && !isOnClipboard()) {
         SPDesktop *desktop = SP_ACTIVE_DESKTOP;
         if (desktop && !desktop->getSelection()->includes(operand)) {
