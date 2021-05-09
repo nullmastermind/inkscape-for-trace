@@ -35,6 +35,7 @@ public:
 	void release() override;
 	void set(SPAttr key, char const* value) override;
 	void update(SPCtx *ctx, unsigned int flags) override;
+    void unSymbol();
 	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 
 	void modified(unsigned int flags) override;

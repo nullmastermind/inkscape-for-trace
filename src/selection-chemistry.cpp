@@ -3348,87 +3348,20 @@ void ObjectSet::toSymbol()
 }
 
 /*
- * Convert <symbol> to <g>. All <use> elements referencing symbol remain unchanged.
+ * Takes selected <use> that reference a symbol, and unSymbol those symbols
  */
 void ObjectSet::unSymbol()
 {
-    SPDocument *doc = document();
-    Inkscape::XML::Document *xml_doc = doc->getReprDoc();
-    // Check if something is selected.
-    if (isEmpty()) {
-        if(desktop())
-            desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select a <b>symbol</b> to extract objects from."));
-        return;
-    }
-
-    SPObject* symbol = single();
-
-    // Make sure we have only one object in selection.
-    // Require that we really have a <symbol>.
-    if( symbol == nullptr || !dynamic_cast<SPSymbol *>( symbol ))  {
-        if(desktop())
-            desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select only one <b>symbol</b> in Symbol dialog to convert to group."));
-        return;
-    }
-
-    doc->ensureUpToDate();
-
-    // Create new <g> and insert in current layer
-    Inkscape::XML::Node *group = xml_doc->createElement("svg:g");
-    //TODO: Better handle if no desktop, currently go to defs without it
-    if(desktop()) {
-        desktop()->currentLayer()->getRepr()->appendChild(group);
-    } else {
-        symbol->parent->getRepr()->appendChild(group);
-    }
-    // Move all children of symbol to group
-    std::vector<SPObject*> children = symbol->childList(false);
-
-    // Converting a group to a symbol inserts a group for non-translational transform.
-    // In converting a symbol back to a group we strip out the inserted group (or any other
-    // group that only adds a transform to the symbol content).
-    if( children.size() == 1 ) {
-        SPObject *object = children[0];
-        if ( dynamic_cast<SPGroup *>( object ) ) {
-            if( object->getAttribute("style") == nullptr ||
-                object->getAttribute("class") == nullptr ) {
-
-                group->setAttribute("transform", object->getAttribute("transform"));
-                children = object->childList(false);
+    for (const auto obj: items()) {
+        auto use = dynamic_cast<SPUse*>(obj);
+        if (use) {
+            auto sym = dynamic_cast<SPSymbol*>(use->root());
+            if (sym) {
+                sym->unSymbol();
             }
         }
     }
-
-    for (std::vector<SPObject*>::const_reverse_iterator i=children.rbegin();i!=children.rend();++i){
-        Inkscape::XML::Node *repr = (*i)->getRepr();
-        repr->parent()->removeChild(repr);
-        group->addChild(repr,nullptr);
-    }
-
-    // Copy relevant attributes
-    group->setAttribute("style", symbol->getAttribute("style"));
-    group->setAttribute("class", symbol->getAttribute("class"));
-    group->setAttribute("title", symbol->getAttribute("title"));
-    group->setAttribute("inkscape:transform-center-x",
-                        symbol->getAttribute("inkscape:transform-center-x"));
-    group->setAttribute("inkscape:transform-center-y",
-                        symbol->getAttribute("inkscape:transform-center-y"));
-
-
-    // Need to delete <symbol>; all <use> elements that referenced <symbol> should
-    // auto-magically reference <g> (if <symbol> deleted after setting <g> 'id').
-    Glib::ustring id = symbol->getAttribute("id");
-    group->setAttribute("id", id);
-    symbol->deleteObject(true);
-
-    // Change selection to new <g> element.
-    SPItem *group_item = static_cast<SPItem *>(document()->getObjectByRepr(group));
-    set(group_item);
-
-    // Clean up
-    Inkscape::GC::release(group);
-
-    DocumentUndo::done(doc, SP_VERB_EDIT_UNSYMBOL, _("Group from symbol"));
+    DocumentUndo::done(document(), SP_VERB_EDIT_UNSYMBOL, _("unSymbol all selected symbols"));
 }
 
 void ObjectSet::tile(bool apply)

@@ -483,9 +483,11 @@ void SymbolsDialog::insertSymbol() {
 }
 
 void SymbolsDialog::revertSymbol() {
-    Inkscape::Verb *verb = Inkscape::Verb::get( SP_VERB_EDIT_UNSYMBOL );
-    SPAction *action = verb->get_action(Inkscape::ActionContext( (Inkscape::UI::View::View *) current_desktop ) );
-    sp_action_perform (action, nullptr);
+    SPSymbol *s = dynamic_cast<SPSymbol*> (current_document->getObjectById(selectedSymbolId()));
+    if (s) {
+        s->unSymbol();
+    }
+    Inkscape::DocumentUndo::done(current_document, SP_VERB_EDIT_UNSYMBOL, _("Group from symbol"));
 }
 
 void SymbolsDialog::iconDragDataGet(const Glib::RefPtr<Gdk::DragContext>& /*context*/, Gtk::SelectionData& data, guint /*info*/, guint /*time*/)
