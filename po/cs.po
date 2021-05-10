@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2021-03-14 20:46+0000\n"
-"PO-Revision-Date: 2021-04-12 17:41+0200\n"
+"PO-Revision-Date: 2021-05-05 00:14+0200\n"
 "Last-Translator: Tomáš Marný\n"
 "Language-Team: Josef Vybíral (josef.vybiral@gmail.com); Ivan Řihošek "
 "(osmdesat@seznam.cz); Tobiczech (tobiczech@gmail.com); Tomáš Marný (tomik."
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: ../share/filters/filters.svg.h:2
 msgid "Smart Jelly"
@@ -34139,7 +34139,7 @@ msgstr "Verze zkopírována!"
 
 #: ../share/ui/inkscape-start.glade:57
 msgid "Dark"
-msgstr "Tmavé"
+msgstr "Tmavý"
 
 #: ../share/ui/inkscape-start.glade:66
 msgid "Light Checkerboard"
@@ -34479,23 +34479,23 @@ msgstr ""
 
 #: ../share/ui/inkscape-start.glade:901
 msgid "Classic Adwaita"
-msgstr ""
+msgstr "Klascká Adwaita"
 
 #: ../share/ui/inkscape-start.glade:915
 msgid "Symbolic Adwaita"
-msgstr ""
+msgstr "Symbolická Adwaita"
 
 #: ../share/ui/inkscape-start.glade:929
 msgid "Symbolic Adwaita Dark"
-msgstr ""
+msgstr "Symbolická tmavá Adwaita"
 
 #: ../share/ui/inkscape-start.glade:943
 msgid "Colorful Darkness"
-msgstr ""
+msgstr "Barevný tmavý"
 
 #: ../share/ui/inkscape-start.glade:957
 msgid "Colorful Lightness"
-msgstr ""
+msgstr "Barevný světlý"
 
 #: ../share/ui/inkscape-start.glade:971
 msgid "Careful Darkness"
@@ -35136,7 +35136,7 @@ msgstr "Nepodařilo se otevřít výchozí tiskárnu"
 
 #: ../share/extensions/printing_marks.py:160
 msgid "Selection is empty"
-msgstr ""
+msgstr "Výběr je prázdný"
 
 #: ../share/extensions/replace_font.py:120
 msgid ""
