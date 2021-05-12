@@ -150,6 +150,13 @@ canvas_split_mode(int value, InkscapeWindow *win)
         return;
     }
 
+    // If split mode is already set to the reqested mode, turn it off.
+    int old_value = -1;
+    saction->get_state(old_value);
+    if (value == old_value) {
+        value = (int)Inkscape::SplitMode::NORMAL;
+    }
+
     saction->change_state(value);
 
     SPDesktop* dt = win->get_desktop();
