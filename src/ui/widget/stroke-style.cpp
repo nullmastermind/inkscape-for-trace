@@ -492,6 +492,10 @@ void StrokeStyle::markerSelectCB(MarkerComboBox *marker_combo, StrokeStyle *spw,
  */
 void StrokeStyle::unitChangedCB()
 {
+    if (update) {
+        return;
+    }
+
     // If the unit selector is set to hairline, don't do the normal conversion.
     if (isHairlineSelected()) {
         scaleLine();
