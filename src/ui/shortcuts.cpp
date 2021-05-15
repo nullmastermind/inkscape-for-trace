@@ -648,11 +648,15 @@ Glib::ustring
 Shortcuts::remove_shortcut(const Gtk::AccelKey& shortcut)
 {
     // Try verb first
-    Verb *verb = shortcut_to_verb_map[shortcut];
-    if (verb) {
-        shortcut_to_verb_map.erase(shortcut);
-        primary[verb] = Gtk::AccelKey();
-        user_set[verb] = false;
+    if (auto it = shortcut_to_verb_map.find(shortcut); it != shortcut_to_verb_map.end()) {
+        auto verb = it->second;
+        shortcut_to_verb_map.erase(it);
+        auto primary_shortcut = get_shortcut_from_verb(verb);
+        // if primary shortcut is still in shortcut_to_verb_map, it is a different shortcut
+        if (shortcut_to_verb_map.find(primary_shortcut) == shortcut_to_verb_map.end()) {
+            primary.erase(verb);
+            user_set[verb] = false;
+        }
         return verb->get_id();
     }
 
@@ -687,7 +691,7 @@ Shortcuts::remove_shortcut(Glib::ustring name)
     if (verb) {
         Gtk::AccelKey shortcut = get_shortcut_from_verb(verb);
         shortcut_to_verb_map.erase(shortcut);
-        primary[verb] = Gtk::AccelKey();
+        primary.erase(verb);
         user_set[verb] = false;
         return true;
     }
