@@ -12,6 +12,7 @@
 #define INK_SHORTCUTS_H
 
 #include <map>
+#include <set>
 
 #include <giomm.h>
 #include <gtkmm.h>
@@ -82,7 +83,7 @@ public:
     Verb* get_verb_from_shortcut(const Gtk::AccelKey& shortcut);
     bool invoke_verb(GdkEventKey const *event, UI::View::View *view);
 
-    bool is_user_set(Verb* verb);
+    bool is_user_set(Gtk::AccelKey verb_shortcut);
     bool is_user_set(Glib::ustring& action);
 
     // Add/remove shortcuts
@@ -131,7 +132,7 @@ private:
     // Legacy verbs
     std::map<Gtk::AccelKey, Inkscape::Verb*, accel_key_less> shortcut_to_verb_map;
     std::map<Inkscape::Verb *, Gtk::AccelKey> primary;  // Shown in menus, etc.
-    std::map<Inkscape::Verb *, bool> user_set;
+    std::set<Gtk::AccelKey, accel_key_less> user_set;
 
     void _read(XML::Node const &keysnode, bool user_set);
 

@@ -3141,7 +3141,7 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
         (*row)[_kb_columns.description] = (verb->get_short_tip() && strlen(verb->get_short_tip() )) ? _(verb->get_short_tip()) : "";
         (*row)[_kb_columns.shortcutkey] = shortcut_key;
         (*row)[_kb_columns.id] = verb->get_id();
-        (*row)[_kb_columns.user_set] = shortcuts.is_user_set(verb);
+        (*row)[_kb_columns.user_set] = shortcuts.is_user_set(shortcut_key);
 
         if (selected_id == verb->get_id()) {
             Gtk::TreeStore::Path sel_path = _kb_filter->convert_child_path_to_path(_kb_store->get_path(row));
