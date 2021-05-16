@@ -304,6 +304,7 @@ void sp_update_helperpath(SPDesktop *desktop)
                 auto c = std::make_unique<SPCurve>();
                 std::vector<Geom::PathVector> cs = lpe->getCanvasIndicators(lpeitem);
                 for (auto &p : cs) {
+                    p *= desktop->dt2doc();
                     c->append(p);
                 }
                 if (!c->is_empty()) {
