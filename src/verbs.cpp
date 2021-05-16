@@ -40,6 +40,7 @@
 #include "gradient-drag.h"
 #include "help.h"
 #include "inkscape.h"
+#include "inkscape-version.h"
 #include "layer-fns.h"
 #include "layer-manager.h"
 #include "message-stack.h"
@@ -2059,7 +2060,7 @@ void HelpUrlVerb::perform(SPAction *action, void *data)
 
     static const char *lang = _("en");      // TODO: strip /en/ for English version?
     static const char *version = "-master"; // TODO: make this auto-updating?
-
+    const char *current_version = Inkscape::version_string_without_revision;
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_HELP_URL_ASK_QUESTION:
             url = Glib::ustring::compose("https://inkscape.org/%1/community/", lang, version);
@@ -2081,6 +2082,9 @@ void HelpUrlVerb::perform(SPAction *action, void *data)
             break;
         case SP_VERB_HELP_URL_MANUAL:
             url = "http://tavmjong.free.fr/INKSCAPE/MANUAL/html/index.php";
+            break;
+        case SP_VERB_HELP_URL_DONATE:
+            url = Glib::ustring::compose("https://inkscape.org/donate?lang=%1&version=%2", lang, current_version);
             break;
         case SP_VERB_HELP_URL_SVG11_SPEC:
             url = "http://www.w3.org/TR/SVG11/";
@@ -2915,6 +2919,7 @@ Verb *Verb::_base_verbs[] = {
                     N_("New in This Version"), nullptr),
     new HelpUrlVerb(SP_VERB_HELP_URL_REPORT_BUG, "HelpUrlReportBug", N_("Report a Bug"), N_("Report a Bug"), nullptr),
     new HelpUrlVerb(SP_VERB_HELP_URL_MANUAL, "HelpUrlManual", N_("Inkscape Manual"), N_("Inkscape Manual"), nullptr),
+    new HelpUrlVerb(SP_VERB_HELP_URL_DONATE, "HelpUrlDonate", N_("Donate"), N_("Donate to Inkscape"), nullptr),
     new HelpUrlVerb(SP_VERB_HELP_URL_SVG11_SPEC, "HelpUrlSvg11Spec", N_("SVG 1.1 Specification"),
                     N_("SVG 1.1 Specification"), nullptr),
     new HelpUrlVerb(SP_VERB_HELP_URL_SVG2_SPEC, "HelpUrlSvg2Spec", N_("SVG 2 Specification"), N_("SVG 2 Specification"),
