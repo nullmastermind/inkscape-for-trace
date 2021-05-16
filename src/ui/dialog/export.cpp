@@ -1306,16 +1306,12 @@ void Export::_export_raster(Inkscape::Extension::Output *extension)
                 {
                     docdir = Glib::path_get_dirname(docURI);
                 }
-                if (repr->attribute("id") == nullptr ||
-                        !(filename.find_last_of(repr->attribute("id")) &&
-                          ( !docURI ||
-                            (dir == docdir)))) {
-                    temp_string = repr->attribute("inkscape:export-filename");
-                    if (temp_string == nullptr || (filename != temp_string)) {
-                        repr->setAttribute("inkscape:export-filename", filename);
-                        modified = true;
-                    }
+                temp_string = repr->attribute("inkscape:export-filename");
+                if (temp_string == nullptr || (filename != temp_string)) {
+                    repr->setAttribute("inkscape:export-filename", filename);
+                    modified = true;
                 }
+
                 temp_string = repr->attribute("inkscape:export-xdpi");
                 if (temp_string == nullptr || xdpi != g_ascii_strtod(temp_string, nullptr)) {
                     sp_repr_set_svg_double(repr, "inkscape:export-xdpi", xdpi);
