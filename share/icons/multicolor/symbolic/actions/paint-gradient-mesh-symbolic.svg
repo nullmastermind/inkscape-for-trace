@@ -14,7 +14,7 @@
    height="16"
    viewBox="0 0 16 16"
    sodipodi:docname="paint-gradient-mesh-symbolic.svg"
-   inkscape:version="1.0 (4035a4fb49, 2020-05-01)">
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
   <metadata
      id="metadata14405">
     <rdf:RDF>
@@ -61,21 +61,18 @@
   <g
      inkscape:label="00349"
      id="paint-gradient-mesh">
+    <rect
+       style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:7.675;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:150, 20;stroke-dashoffset:39.1425"
+       id="rect845"
+       width="16"
+       height="16"
+       x="0"
+       y="0" />
     <path
        inkscape:connector-curvature="0"
        id="rect36986"
        d="M 0,0 H 16 V 16 H 0 Z"
        style="opacity:0;fill:none" />
-    <path
-       inkscape:connector-curvature="0"
-       id="rect36988"
-       d="M 1,1 H 8 V 8 H 1 Z"
-       style="display:none;opacity:0.6" />
-    <path
-       inkscape:connector-curvature="0"
-       id="rect36990"
-       d="m 8,8 h 7 v 7 H 8 Z"
-       style="display:none;opacity:0.6" />
     <g
        transform="matrix(1.5405115,0,0,1.5405115,-11.024485,-11.021696)"
        inkscape:label="gradeint"
