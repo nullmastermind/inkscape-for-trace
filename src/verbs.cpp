@@ -2084,7 +2084,7 @@ void HelpUrlVerb::perform(SPAction *action, void *data)
             url = "http://tavmjong.free.fr/INKSCAPE/MANUAL/html/index.php";
             break;
         case SP_VERB_HELP_URL_DONATE:
-            url = Glib::ustring::compose("https://inkscape.org/donate?lang=%1&version=%2", lang, current_version);
+            url = Glib::ustring::compose("https://inkscape.org/donate#lang=%1&version=%2", lang, current_version);
             break;
         case SP_VERB_HELP_URL_SVG11_SPEC:
             url = "http://www.w3.org/TR/SVG11/";
