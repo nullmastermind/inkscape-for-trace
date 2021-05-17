@@ -1916,6 +1916,9 @@ TextKnotHolder::TextKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderRel
                                   _("Adjust the <b>inline size</b> (line length) of the text."));
         entity.push_back(entity_inlinesize);
     }
+
+    add_pattern_knotholder();
+    add_hatch_knotholder();
 }
 
 
