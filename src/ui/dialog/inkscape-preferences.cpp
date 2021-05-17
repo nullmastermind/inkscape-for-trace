@@ -1625,13 +1625,13 @@ void InkscapePreferences::initPageUI()
     }
     _sys_user_themes_dir_copy.init(g_build_filename(g_get_user_data_dir(), "themes", NULL), _("Open themes folder"));
     _page_theme.add_line(true, _("User themes:"), _sys_user_themes_dir_copy, "", _("Location of the user’s themes"), true, Gtk::manage(new Gtk::Box()));
-    _contrast_theme.init("/theme/contrast", 1, 10, 1, 2, 10, 1);
+    //_contrast_theme.init("/theme/contrast", 1, 10, 1, 2, 10, 1);
     Gtk::Widget *space = new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL);
     space->set_size_request(_sb_width / 3, -1);
-    _page_theme.add_line(false, _("_Contrast:"), _contrast_theme, "",
-                         _("Make background brighter or darker to reduce contrast"), true, space);
-    _contrast_theme.getSlider()->signal_value_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::themeChange));
-    _contrast_theme.getSpinButton()->signal_value_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::themeChange));
+    //_page_theme.add_line(false, _("_Contrast:"), _contrast_theme, "",
+    //                   _("Make background brighter or darker to reduce contrast"), true, space);
+    //_contrast_theme.getSlider()->signal_value_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::themeChange));
+    //_contrast_theme.getSpinButton()->signal_value_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::themeChange));
     _page_theme.add_line(true, "", _dark_theme, "", _("Use dark theme"), true);
 
     if (dark_themes[current_theme]) {
