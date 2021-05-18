@@ -68,7 +68,11 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
-DialogContainer::~DialogContainer() {}
+DialogContainer::~DialogContainer() {
+    // delete columns; desktop widget deletes dialog container before it get "unrealized",
+    // so it doesn't get a chance to remove them
+    delete columns;
+}
 
 DialogContainer::DialogContainer()
 {
@@ -256,6 +260,26 @@ Gtk::Widget *DialogContainer::create_notebook_tab(Glib::ustring label_str, Glib:
     return cover;
 }
 
+// find dialog's multipaned parent; is there a better way?
+DialogMultipaned* get_dialog_parent(DialogBase* dialog) {
+    if (!dialog) return nullptr;
+
+    // dialogs are nested inside Gtk::Notebook
+    if (auto notebook = dynamic_cast<Gtk::Notebook*>(dialog->get_parent())) {
+        // notebooks are inside viewport, inside scrolled window
+        if (auto viewport = dynamic_cast<Gtk::Viewport*>(notebook->get_parent())) {
+            if (auto scroll = dynamic_cast<Gtk::ScrolledWindow*>(viewport->get_parent())) {
+                // finally get the panel
+                if (auto panel = dynamic_cast<DialogMultipaned*>(scroll->get_parent())) {
+                    return panel;
+                }
+            }
+        }
+    }
+
+    return nullptr;
+}
+
 /**
  * Add new dialog to the current container or in a floating window, based on preferences.
  */
@@ -306,6 +330,10 @@ void DialogContainer::new_dialog(unsigned int code, DialogNotebook *notebook)
 
     // Limit each container to containing one of any type of dialog.
     if (DialogBase* existing_dialog = find_existing_dialog(code)) {
+        // make sure parent window is not hidden/collapsed
+        if (auto panel = get_dialog_parent(existing_dialog)) {
+            panel->show();
+        }
         // found existing dialog; blink & exit
         existing_dialog->blink();
         return;
@@ -347,6 +375,11 @@ void DialogContainer::new_dialog(unsigned int code, DialogNotebook *notebook)
 
     // Add dialog
     notebook->add_page(*dialog, *tab, dialog->get_name());
+
+    if (auto panel = dynamic_cast<DialogMultipaned*>(notebook->get_parent())) {
+        // if panel is collapsed, show it now, or else new dialog will be mysteriously missing
+        panel->show();
+    }
 }
 
 // recreate dialogs hosted (docked) in a floating DialogWindow; window will be created
@@ -475,7 +508,7 @@ bool recreate_dialogs_from_state(const Glib::KeyFile *keyfile)
 }
 
 /**
- * Add a new floating dialog
+ * Add a new floating dialog (or reuse existing one if it's already up)
  */
 DialogWindow *DialogContainer::new_floating_dialog(unsigned int code)
 {
@@ -497,6 +530,10 @@ DialogWindow *DialogContainer::create_new_floating_dialog(unsigned int code, boo
         // found existing dialog; blink & exit
         if (blink) {
             existing_dialog->blink();
+            // show its window if it is hidden
+            if (auto window = DialogManager::singleton().find_floating_dialog_window(code)) {
+                DialogManager::singleton().set_floating_dialog_visibility(window, true);
+            }
         }
         return nullptr;
     }
@@ -532,9 +569,54 @@ DialogWindow *DialogContainer::create_new_floating_dialog(unsigned int code, boo
     return notebook->pop_tab_callback();
 }
 
+// toggle dialogs (visibility) is invoked on a top container embedded in Inkscape window
 void DialogContainer::toggle_dialogs()
 {
-    columns->toggle_multipaned_children();
+    // check how many dialog panels are visible and how many are hidden
+    // we use this info to decide what it means to toggle visibility
+    int visible = 0;
+    int hidden = 0;
+    for (auto child : columns->get_children()) {
+        // only examine panels, skip drop zones and handles
+        if (auto panel = dynamic_cast<DialogMultipaned*>(child)) {
+            if (panel->is_visible()) {
+                ++visible;
+            }
+            else {
+                ++hidden;
+            }
+        }
+    }
+
+    // next examine floating dialogs
+    auto windows = DialogManager::singleton().get_all_floating_dialog_windows();
+    for (auto wnd : windows) {
+        if (wnd->is_visible()) {
+            ++visible;
+        }
+        else {
+            ++hidden;
+        }
+    }
+
+    bool show_dialogs = true;
+    // if some dialogs are hidden, toggle will first show them;
+    // another option could be to hide all if some dialogs are visible
+    if (hidden > 0) {
+        show_dialogs = true;
+    }
+    else {
+        // if everything's visible, hide them
+        show_dialogs = false;
+    }
+
+    // set visibility of floating dialogs
+    for (auto wnd : windows) {
+        DialogManager::singleton().set_floating_dialog_visibility(wnd, show_dialogs);
+    }
+
+    // set visibility of docked dialogs
+    columns->toggle_multipaned_children(show_dialogs);
 }
 
 // Update dialogs
@@ -940,14 +1022,14 @@ std::unique_ptr<Glib::KeyFile> DialogContainer::save_container_state()
 /**
  * No zombie windows. TODO: Need to work on this as it still leaves Gtk::Window! (?)
  */
-void DialogContainer::on_unmap()
-{
-    parent_type::on_unmap();
-
+void DialogContainer::on_unrealize() {
     // Disconnect all signals
     for_each(connections.begin(), connections.end(), [&](auto c) { c.disconnect(); });
 
     delete columns;
+    columns = nullptr;
+
+    parent_type::on_unrealize();
 }
 
 // Create a new notebook and move page.

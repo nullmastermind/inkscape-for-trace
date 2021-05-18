@@ -6,7 +6,7 @@
 #include <limits>
 
 #include "io/resource.h"
-
+#include "inkscape-application.h"
 #include "dialog-base.h"
 #include "dialog-container.h"
 #include "dialog-window.h"
@@ -77,16 +77,63 @@ bool DialogManager::should_open_floating(unsigned int code)
     return floating_dialogs.count(code) > 0;
 }
 
+void DialogManager::set_floating_dialog_visibility(DialogWindow* wnd, bool show) {
+    if (!wnd) return;
+
+    if (show) {
+        if (wnd->is_visible()) return;
+
+        // wnd->present(); - not sure which one is better, show or present...
+        wnd->show();
+        _hidden_dlg_windows.erase(wnd);
+        // re-add it to application; hiding removed it
+        if (auto app = InkscapeApplication::instance()) {
+            app->gtk_app()->add_window(*wnd);
+        }
+    }
+    else {
+        if (!wnd->is_visible()) return;
+
+        _hidden_dlg_windows.insert(wnd);
+        wnd->hide();
+    }
+}
+
+std::vector<DialogWindow*> DialogManager::get_all_floating_dialog_windows() {
+    std::vector<Gtk::Window*> windows = InkscapeApplication::instance()->gtk_app()->get_windows();
+
+    std::vector<DialogWindow*> result(_hidden_dlg_windows.begin(), _hidden_dlg_windows.end());
+    for (auto wnd : windows) {
+        if (auto dlg_wnd = dynamic_cast<DialogWindow*>(wnd)) {
+            result.push_back(dlg_wnd);
+        }
+    }
+
+    return result;
+}
+
+DialogWindow* DialogManager::find_floating_dialog_window(unsigned int code) {
+    auto windows = get_all_floating_dialog_windows();
+
+    for (auto dlg_wnd : windows) {
+        if (auto container = dlg_wnd->get_container()) {
+            if (auto dlg = container->get_dialog(code)) {
+                return dlg_wnd;
+            }
+        }
+    }
+
+    return nullptr;
+}
+
 DialogBase *DialogManager::find_floating_dialog(unsigned int code)
 {
-    std::vector<Gtk::Window *> windows = InkscapeApplication::instance()->gtk_app()->get_windows();
+    auto windows = get_all_floating_dialog_windows();
 
-    for (auto wnd : windows) {
-        if (auto dlg_wnd = dynamic_cast<DialogWindow *>(wnd)) {
-            if (auto container = dlg_wnd->get_container()) {
-                if (auto dlg = container->get_dialog(code)) {
-                    return dlg;
-                }
+    for (auto dlg_wnd : windows) {
+        if (auto container = dlg_wnd->get_container()) {
+            if (auto dlg = container->get_dialog(code)) {
+                return dlg;
             }
         }
     }

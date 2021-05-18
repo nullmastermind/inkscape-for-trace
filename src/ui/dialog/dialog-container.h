@@ -100,7 +100,7 @@ private:
     std::vector<sigc::connection> connections;
 
     // Handlers
-    void on_unmap() override;
+    void on_unrealize() override;
     DialogNotebook *prepare_drop(const Glib::RefPtr<Gdk::DragContext> context);
     void prepend_drop(const Glib::RefPtr<Gdk::DragContext> context, DialogMultipaned *column);
     void append_drop(const Glib::RefPtr<Gdk::DragContext> context, DialogMultipaned *column);

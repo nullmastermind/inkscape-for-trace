@@ -6,6 +6,7 @@
 #include <glibmm/keyfile.h>
 #include <gtkmm/window.h>
 #include <map>
+#include <set>
 #include <memory>
 #include <optional>
 #include <vector>
@@ -43,6 +44,9 @@ public:
     // find instance of dialog 'code' in one of currently open floating dialog windows
     DialogBase *find_floating_dialog(unsigned int code);
 
+    // find window hosting floating dialog
+    DialogWindow* find_floating_dialog_window(unsigned int code);
+
     // find floating window state hosting dialog 'code', if there was one
     std::shared_ptr<Glib::KeyFile> find_dialog_state(unsigned int code);
 
@@ -55,6 +59,11 @@ public:
     // restore state of dialogs
     void restore_dialogs_state(DialogContainer *docking_container, bool include_floating);
 
+    // find all floating dialog windows
+    std::vector<DialogWindow*> get_all_floating_dialog_windows();
+
+    // show/hide dialog window and keep track of it
+    void set_floating_dialog_visibility(DialogWindow* wnd, bool show);
 private:
     DialogManager() = default;
     ~DialogManager() = default;
@@ -64,6 +73,7 @@ private:
 
     // transient dialog state for floating windows user closes
     std::map<unsigned int, std::shared_ptr<Glib::KeyFile>> floating_dialogs;
+    std::set<DialogWindow*> _hidden_dlg_windows;
 };
 
 } // namespace Dialog
