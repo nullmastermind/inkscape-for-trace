@@ -2030,7 +2030,7 @@ msgstr "Gris al 80%"
 #, no-c-format
 msgctxt "Palette"
 msgid "70% Gray"
-msgstr "Gris 7al 0%"
+msgstr "Gris al 70%"
 
 #: ../share/palettes/palettes.h:6
 #, no-c-format
@@ -33909,12 +33909,12 @@ msgstr ""
 " * \"Exploracions múltiples\" separa la imatge en un nombre d'escaneigs, "
 "depenent de la brillantor, la separació de color, o els nivells grisos, i en "
 "crea uns quants camins. També pot fer servir autotraçat.\n"
-" * La pestanya \"Pixel art\" permet utilitzar l'algoritme despixelitzar per "
+" * La pestanya \"Píxel art\" permet utilitzar l'algoritme despixelitzar per "
 "a vectoritzar imatges artístiques de mapa de bits.\n"
 "\n"
 "* NOTA:\n"
 "  1) Deseu el vostre treball abans de traçar\n"
-"  2) Mireu el recompte de píxels: \"Trace pixel art\" crea un camí per "
+"  2) Mireu el recompte de píxels: \"Vectoritzar píxel art\" crea un camí per "
 "píxel. No es recomana per a imatges que no són artístiques.\n"
 "  3) L'autotraçat és més lent que potrace, no és recomanable per a imatges "
 "grans. Es recomana el preprocessament de les imatges per a augmentar-ne el "
@@ -34113,11 +34113,11 @@ msgstr "Preserva els artefactes de l'àrea"
 
 #: ../share/ui/dialog-trace.glade:893
 msgid "Pixel art"
-msgstr "Utilitzar el diàleg de vectorització de píxel art"
+msgstr "Píxel art"
 
 #: ../share/ui/dialog-trace.glade:1007
 msgid "SIOX"
-msgstr "Resultat incorrecte del SIOX"
+msgstr "SIOX"
 
 #: ../share/ui/dialog-trace.glade:1011
 msgid "Cover the area you want to select as the foreground"
