@@ -884,10 +884,13 @@ Shortcuts::get_from_event(GdkEventKey const *event, bool fix)
         keyval = event->keyval;
     }
 
+    auto unused_modifiers = Gdk::ModifierType((initial_modifiers &~ consumed_modifiers)
+                                                                 & GDK_MODIFIER_MASK);
+
     // std::cout << "Shortcuts::get_from_event: End:   "
     //           << " Key: " << std::hex << keyval << " (" << (char)keyval << ")"
-    //           << " Mod: " << std::hex << (initial_modifiers &~ consumed_modifiers) << std::endl;
-    return (Gtk::AccelKey(keyval, Gdk::ModifierType(initial_modifiers &~ consumed_modifiers)));
+    //           << " Mod: " << std::hex << unused_modifiers << std::endl;
+    return (Gtk::AccelKey(keyval, unused_modifiers));
 }
 
 
