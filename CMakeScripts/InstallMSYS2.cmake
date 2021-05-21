@@ -62,6 +62,7 @@ if(WIN32)
     ${MINGW_BIN}/libicuuc[0-9]*.dll
     ${MINGW_BIN}/libidn2-[0-9]*.dll
     ${MINGW_BIN}/libintl-[0-9]*.dll
+    ${MINGW_BIN}/libjbig-[0-9]*.dll
     ${MINGW_BIN}/libjpeg-[0-9]*.dll
     ${MINGW_BIN}/liblcms2-[0-9]*.dll
     ${MINGW_BIN}/liblqr-1-[0-9]*.dll
