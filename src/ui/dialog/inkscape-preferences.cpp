@@ -3138,7 +3138,7 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
         Gtk::TreeStore::iterator row = _kb_store->append(iter_group->children());
         (*row)[_kb_columns.name] =  name;
         (*row)[_kb_columns.shortcut] = shortcut_label;
-        (*row)[_kb_columns.description] = verb->get_short_tip() ? _(verb->get_short_tip()) : "";
+        (*row)[_kb_columns.description] = (verb->get_short_tip() && strlen(verb->get_short_tip() )) ? _(verb->get_short_tip()) : "";
         (*row)[_kb_columns.shortcutkey] = shortcut_key;
         (*row)[_kb_columns.id] = verb->get_id();
         (*row)[_kb_columns.user_set] = shortcuts.is_user_set(verb);
@@ -3243,7 +3243,7 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
         auto cat_name = modifier->get_category();
         if (cat_name != old_mod_group) {
             iter_mod_group = _mod_store->append();
-            (*iter_mod_group)[_mod_columns.name] = cat_name.c_str();
+            (*iter_mod_group)[_mod_columns.name] = cat_name.empty() ? "" : _(cat_name.c_str());
             (*iter_mod_group)[_mod_columns.id] = "";
             (*iter_mod_group)[_mod_columns.description] = "";
             (*iter_mod_group)[_mod_columns.and_modifiers] = "";
@@ -3253,9 +3253,9 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
 
         // Find accelerators
         Gtk::TreeStore::iterator iter_modifier = _mod_store->append(iter_mod_group->children());
-        (*iter_modifier)[_mod_columns.name] = modifier->get_name();
+        (*iter_modifier)[_mod_columns.name] = (modifier->get_name() && strlen(modifier->get_name())) ? _(modifier->get_name()) : "";
         (*iter_modifier)[_mod_columns.id] = modifier->get_id();
-        (*iter_modifier)[_mod_columns.description] = modifier->get_description();
+        (*iter_modifier)[_mod_columns.description] = (modifier->get_description() && strlen(modifier->get_description())) ? _(modifier->get_description()) : "";
         (*iter_modifier)[_mod_columns.and_modifiers] = modifier->get_label();
         (*iter_modifier)[_mod_columns.user_set] = modifier->is_set_user();
     }
