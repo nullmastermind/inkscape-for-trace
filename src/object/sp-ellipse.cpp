@@ -668,8 +668,9 @@ void SPGenericEllipse::position_set(gdouble x, gdouble y, gdouble rx, gdouble ry
     }
 
     this->arc_type = (GenericEllipseArcType)prefs->getInt("/tools/shapes/arc/arc_type", 0);
-    if (_isSlice()) {
-        this->type = SP_GENERIC_ELLIPSE_ARC;
+    if (this->type != SP_GENERIC_ELLIPSE_ARC && _isSlice()) {
+        // force an update while creating shapes, so correct rendering is shown initially
+        updateRepr();
     }
 
     this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
