@@ -29,6 +29,7 @@
 ../share/extensions/print_win32_vector.py
 ../share/extensions/printing_marks.py
 ../share/extensions/replace_font.py
+../share/extensions/setup_typography_canvas.py
 ../share/extensions/voronoi2svg.py
 ../share/extensions/web_set_att.py
 ../share/extensions/web_transmit_att.py

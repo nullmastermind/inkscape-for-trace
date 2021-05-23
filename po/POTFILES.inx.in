@@ -128,7 +128,6 @@
 ../share/extensions/render_gear_rack.inx
 ../share/extensions/render_gears.inx
 ../share/extensions/replace_font.inx
-../share/extensions/setup_typography_canvas.py
 ../share/extensions/restack.inx
 ../share/extensions/rtree.inx
 ../share/extensions/rubberstretch.inx
