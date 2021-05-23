@@ -40,11 +40,20 @@
     </screenshot>
   </screenshots>
   <releases>
-    <release version="1.1-rc" date="2021-05-01">
+    <release version="1.1" date="2021-05-24">
       <description>
-        <p>Inkscape 1.1-rc</p>
+        <p>Inkscape 1.1</p>
         <ul>
-          <li>Release Candidate</li>
+          <li>Welcome dialog</li>
+          <li>Command palette to search for functions</li>
+          <li>Copypaste parts of paths</li>
+          <li>Complete rework of the dialog docking system</li>
+          <li>New outline overlay mode</li>
+          <li>Search field in Preferences dialog</li>
+          <li>Improved Export PNG dialog</li>
+          <li>Ability to directly export JPG, TIFF, optimized PNG, and WebP</li>
+          <li>Paste now pastes directly above selected object</li>
+          <li>Beta Extension Manager</li>
         </ul>
       </description>
       <url>http://wiki.inkscape.org/wiki/index.php/Release_notes/1.1</url>
